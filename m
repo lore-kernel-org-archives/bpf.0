@@ -1,20 +1,20 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393EAD79
-	for <bpf@vger.kernel.org>; Fri, 17 Nov 2023 19:46:58 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07D5126
+	for <bpf@vger.kernel.org>; Fri, 17 Nov 2023 19:47:00 -0800 (PST)
 Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AI2sO0u005937
-	for <bpf@vger.kernel.org>; Fri, 17 Nov 2023 19:46:58 -0800
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AI2sO11005937
+	for <bpf@vger.kernel.org>; Fri, 17 Nov 2023 19:47:00 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uemvd856j-15
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uemvd856j-20
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Fri, 17 Nov 2023 19:46:57 -0800
-Received: from twshared40933.03.prn6.facebook.com (2620:10d:c085:108::8) by
+	for <bpf@vger.kernel.org>; Fri, 17 Nov 2023 19:47:00 -0800
+Received: from twshared40933.03.prn6.facebook.com (2620:10d:c085:208::11) by
  mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.34; Fri, 17 Nov 2023 19:46:51 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 008C33BB2FF90; Fri, 17 Nov 2023 19:46:38 -0800 (PST)
+	id 3E26F3BB2FFCF; Fri, 17 Nov 2023 19:46:47 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
@@ -22,9 +22,9 @@ CC: <andrii@kernel.org>, <kernel-team@meta.com>,
         Eduard Zingerman
 	<eddyz87@gmail.com>,
         Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH v3 bpf-next 2/8] bpf: move verifier state printing code to kernel/bpf/log.c
-Date: Fri, 17 Nov 2023 19:46:17 -0800
-Message-ID: <20231118034623.3320920-3-andrii@kernel.org>
+Subject: [PATCH v3 bpf-next 6/8] bpf: omit default off=0 and imm=0 in register state log
+Date: Fri, 17 Nov 2023 19:46:21 -0800
+Message-ID: <20231118034623.3320920-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231118034623.3320920-1-andrii@kernel.org>
 References: <20231118034623.3320920-1-andrii@kernel.org>
@@ -37,952 +37,348 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: yI-mhEViY8ZECLoa0x9MXl72hMK4tnZX
-X-Proofpoint-ORIG-GUID: yI-mhEViY8ZECLoa0x9MXl72hMK4tnZX
+X-Proofpoint-GUID: 2Z4OcG3L0WpxDmErN2suGH_DSl82-uwe
+X-Proofpoint-ORIG-GUID: 2Z4OcG3L0WpxDmErN2suGH_DSl82-uwe
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-18_01,2023-11-17_01,2023-05-22_02
 
-Move a good chunk of code from verifier.c to log.c: verifier state
-verbose printing logic. This is an important and very much
-logging/debugging oriented code. It fits the overlall log.c's focus on
-verifier logging, and moving it allows to keep growing it without
-unnecessarily adding to verifier.c code that otherwise contains a core
-verification logic.
+Simplify BPF verifier log further by omitting default (and frequently
+irrelevant) off=3D0 and imm=3D0 parts for non-SCALAR_VALUE registers. As =
+can
+be seen from fixed tests, this is often a visual noise for PTR_TO_CTX
+register and even for PTR_TO_PACKET registers.
 
-There are not many shared dependencies between this code and the rest of
-verifier.c code, except a few single-line helpers for various register
-type checks and a bit of state "scratching" helpers. We move all such
-trivial helpers into include/bpf/bpf_verifier.h as static inlines.
-
-No functional changes in this patch.
+Omitting default values follows the rest of register state logic: we
+omit default values to keep verifier log succinct and to highlight
+interesting state that deviates from default one. E.g., we do the same
+for var_off, when it's unknown, which gives no additional information.
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Acked-by: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/bpf_verifier.h |  72 +++++++
- kernel/bpf/log.c             | 342 +++++++++++++++++++++++++++++
- kernel/bpf/verifier.c        | 403 -----------------------------------
- 3 files changed, 414 insertions(+), 403 deletions(-)
+ kernel/bpf/log.c                              | 10 ++---
+ .../testing/selftests/bpf/prog_tests/align.c  | 42 +++++++++----------
+ .../selftests/bpf/prog_tests/log_buf.c        |  4 +-
+ .../selftests/bpf/prog_tests/spin_lock.c      | 14 +++----
+ .../selftests/bpf/progs/exceptions_assert.c   | 10 ++---
+ 5 files changed, 39 insertions(+), 41 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index d896f3db6a22..39edc76f436e 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -783,4 +783,76 @@ static inline bool bpf_type_has_unsafe_modifiers(u32=
- type)
- 	return type_flag(type) & ~BPF_REG_TRUSTED_MODIFIERS;
- }
-=20
-+static inline bool type_is_ptr_alloc_obj(u32 type)
-+{
-+	return base_type(type) =3D=3D PTR_TO_BTF_ID && type_flag(type) & MEM_AL=
-LOC;
-+}
-+
-+static inline bool type_is_non_owning_ref(u32 type)
-+{
-+	return type_is_ptr_alloc_obj(type) && type_flag(type) & NON_OWN_REF;
-+}
-+
-+static inline bool type_is_pkt_pointer(enum bpf_reg_type type)
-+{
-+	type =3D base_type(type);
-+	return type =3D=3D PTR_TO_PACKET ||
-+	       type =3D=3D PTR_TO_PACKET_META;
-+}
-+
-+static inline bool type_is_sk_pointer(enum bpf_reg_type type)
-+{
-+	return type =3D=3D PTR_TO_SOCKET ||
-+		type =3D=3D PTR_TO_SOCK_COMMON ||
-+		type =3D=3D PTR_TO_TCP_SOCK ||
-+		type =3D=3D PTR_TO_XDP_SOCK;
-+}
-+
-+static inline void mark_reg_scratched(struct bpf_verifier_env *env, u32 =
-regno)
-+{
-+	env->scratched_regs |=3D 1U << regno;
-+}
-+
-+static inline void mark_stack_slot_scratched(struct bpf_verifier_env *en=
-v, u32 spi)
-+{
-+	env->scratched_stack_slots |=3D 1ULL << spi;
-+}
-+
-+static inline bool reg_scratched(const struct bpf_verifier_env *env, u32=
- regno)
-+{
-+	return (env->scratched_regs >> regno) & 1;
-+}
-+
-+static inline bool stack_slot_scratched(const struct bpf_verifier_env *e=
-nv, u64 regno)
-+{
-+	return (env->scratched_stack_slots >> regno) & 1;
-+}
-+
-+static inline bool verifier_state_scratched(const struct bpf_verifier_en=
-v *env)
-+{
-+	return env->scratched_regs || env->scratched_stack_slots;
-+}
-+
-+static inline void mark_verifier_state_clean(struct bpf_verifier_env *en=
-v)
-+{
-+	env->scratched_regs =3D 0U;
-+	env->scratched_stack_slots =3D 0ULL;
-+}
-+
-+/* Used for printing the entire verifier state. */
-+static inline void mark_verifier_state_scratched(struct bpf_verifier_env=
- *env)
-+{
-+	env->scratched_regs =3D ~0U;
-+	env->scratched_stack_slots =3D ~0ULL;
-+}
-+
-+const char *reg_type_str(struct bpf_verifier_env *env, enum bpf_reg_type=
- type);
-+const char *dynptr_type_str(enum bpf_dynptr_type type);
-+const char *iter_type_str(const struct btf *btf, u32 btf_id);
-+const char *iter_state_str(enum bpf_iter_state state);
-+
-+void print_verifier_state(struct bpf_verifier_env *env,
-+			  const struct bpf_func_state *state, bool print_all);
-+void print_insn_state(struct bpf_verifier_env *env, const struct bpf_fun=
-c_state *state);
-+
- #endif /* _LINUX_BPF_VERIFIER_H */
 diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index f20e1449c882..c1b257eac21b 100644
+index c209ab1ec2b5..20b4f81087da 100644
 --- a/kernel/bpf/log.c
 +++ b/kernel/bpf/log.c
-@@ -384,3 +384,345 @@ __printf(3, 4) void verbose_linfo(struct bpf_verifi=
-er_env *env,
-=20
- 	env->prev_linfo =3D linfo;
- }
-+
-+static const char *btf_type_name(const struct btf *btf, u32 id)
-+{
-+	return btf_name_by_offset(btf, btf_type_by_id(btf, id)->name_off);
-+}
-+
-+/* string representation of 'enum bpf_reg_type'
-+ *
-+ * Note that reg_type_str() can not appear more than once in a single ve=
-rbose()
-+ * statement.
-+ */
-+const char *reg_type_str(struct bpf_verifier_env *env, enum bpf_reg_type=
- type)
-+{
-+	char postfix[16] =3D {0}, prefix[64] =3D {0};
-+	static const char * const str[] =3D {
-+		[NOT_INIT]		=3D "?",
-+		[SCALAR_VALUE]		=3D "scalar",
-+		[PTR_TO_CTX]		=3D "ctx",
-+		[CONST_PTR_TO_MAP]	=3D "map_ptr",
-+		[PTR_TO_MAP_VALUE]	=3D "map_value",
-+		[PTR_TO_STACK]		=3D "fp",
-+		[PTR_TO_PACKET]		=3D "pkt",
-+		[PTR_TO_PACKET_META]	=3D "pkt_meta",
-+		[PTR_TO_PACKET_END]	=3D "pkt_end",
-+		[PTR_TO_FLOW_KEYS]	=3D "flow_keys",
-+		[PTR_TO_SOCKET]		=3D "sock",
-+		[PTR_TO_SOCK_COMMON]	=3D "sock_common",
-+		[PTR_TO_TCP_SOCK]	=3D "tcp_sock",
-+		[PTR_TO_TP_BUFFER]	=3D "tp_buffer",
-+		[PTR_TO_XDP_SOCK]	=3D "xdp_sock",
-+		[PTR_TO_BTF_ID]		=3D "ptr_",
-+		[PTR_TO_MEM]		=3D "mem",
-+		[PTR_TO_BUF]		=3D "buf",
-+		[PTR_TO_FUNC]		=3D "func",
-+		[PTR_TO_MAP_KEY]	=3D "map_key",
-+		[CONST_PTR_TO_DYNPTR]	=3D "dynptr_ptr",
-+	};
-+
-+	if (type & PTR_MAYBE_NULL) {
-+		if (base_type(type) =3D=3D PTR_TO_BTF_ID)
-+			strncpy(postfix, "or_null_", 16);
-+		else
-+			strncpy(postfix, "_or_null", 16);
-+	}
-+
-+	snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s",
-+		 type & MEM_RDONLY ? "rdonly_" : "",
-+		 type & MEM_RINGBUF ? "ringbuf_" : "",
-+		 type & MEM_USER ? "user_" : "",
-+		 type & MEM_PERCPU ? "percpu_" : "",
-+		 type & MEM_RCU ? "rcu_" : "",
-+		 type & PTR_UNTRUSTED ? "untrusted_" : "",
-+		 type & PTR_TRUSTED ? "trusted_" : ""
-+	);
-+
-+	snprintf(env->tmp_str_buf, TMP_STR_BUF_LEN, "%s%s%s",
-+		 prefix, str[base_type(type)], postfix);
-+	return env->tmp_str_buf;
-+}
-+
-+const char *dynptr_type_str(enum bpf_dynptr_type type)
-+{
-+	switch (type) {
-+	case BPF_DYNPTR_TYPE_LOCAL:
-+		return "local";
-+	case BPF_DYNPTR_TYPE_RINGBUF:
-+		return "ringbuf";
-+	case BPF_DYNPTR_TYPE_SKB:
-+		return "skb";
-+	case BPF_DYNPTR_TYPE_XDP:
-+		return "xdp";
-+	case BPF_DYNPTR_TYPE_INVALID:
-+		return "<invalid>";
-+	default:
-+		WARN_ONCE(1, "unknown dynptr type %d\n", type);
-+		return "<unknown>";
-+	}
-+}
-+
-+const char *iter_type_str(const struct btf *btf, u32 btf_id)
-+{
-+	if (!btf || btf_id =3D=3D 0)
-+		return "<invalid>";
-+
-+	/* we already validated that type is valid and has conforming name */
-+	return btf_type_name(btf, btf_id) + sizeof(ITER_PREFIX) - 1;
-+}
-+
-+const char *iter_state_str(enum bpf_iter_state state)
-+{
-+	switch (state) {
-+	case BPF_ITER_STATE_ACTIVE:
-+		return "active";
-+	case BPF_ITER_STATE_DRAINED:
-+		return "drained";
-+	case BPF_ITER_STATE_INVALID:
-+		return "<invalid>";
-+	default:
-+		WARN_ONCE(1, "unknown iter state %d\n", state);
-+		return "<unknown>";
-+	}
-+}
-+
-+static char slot_type_char[] =3D {
-+	[STACK_INVALID]	=3D '?',
-+	[STACK_SPILL]	=3D 'r',
-+	[STACK_MISC]	=3D 'm',
-+	[STACK_ZERO]	=3D '0',
-+	[STACK_DYNPTR]	=3D 'd',
-+	[STACK_ITER]	=3D 'i',
-+};
-+
-+static void print_liveness(struct bpf_verifier_env *env,
-+			   enum bpf_reg_liveness live)
-+{
-+	if (live & (REG_LIVE_READ | REG_LIVE_WRITTEN | REG_LIVE_DONE))
-+	    verbose(env, "_");
-+	if (live & REG_LIVE_READ)
-+		verbose(env, "r");
-+	if (live & REG_LIVE_WRITTEN)
-+		verbose(env, "w");
-+	if (live & REG_LIVE_DONE)
-+		verbose(env, "D");
-+}
-+
-+static void print_scalar_ranges(struct bpf_verifier_env *env,
-+				const struct bpf_reg_state *reg,
-+				const char **sep)
-+{
-+	struct {
-+		const char *name;
-+		u64 val;
-+		bool omit;
-+	} minmaxs[] =3D {
-+		{"smin",   reg->smin_value,         reg->smin_value =3D=3D S64_MIN},
-+		{"smax",   reg->smax_value,         reg->smax_value =3D=3D S64_MAX},
-+		{"umin",   reg->umin_value,         reg->umin_value =3D=3D 0},
-+		{"umax",   reg->umax_value,         reg->umax_value =3D=3D U64_MAX},
-+		{"smin32", (s64)reg->s32_min_value, reg->s32_min_value =3D=3D S32_MIN}=
-,
-+		{"smax32", (s64)reg->s32_max_value, reg->s32_max_value =3D=3D S32_MAX}=
-,
-+		{"umin32", reg->u32_min_value,      reg->u32_min_value =3D=3D 0},
-+		{"umax32", reg->u32_max_value,      reg->u32_max_value =3D=3D U32_MAX}=
-,
-+	}, *m1, *m2, *mend =3D &minmaxs[ARRAY_SIZE(minmaxs)];
-+	bool neg1, neg2;
-+
-+	for (m1 =3D &minmaxs[0]; m1 < mend; m1++) {
-+		if (m1->omit)
-+			continue;
-+
-+		neg1 =3D m1->name[0] =3D=3D 's' && (s64)m1->val < 0;
-+
-+		verbose(env, "%s%s=3D", *sep, m1->name);
-+		*sep =3D ",";
-+
-+		for (m2 =3D m1 + 2; m2 < mend; m2 +=3D 2) {
-+			if (m2->omit || m2->val !=3D m1->val)
-+				continue;
-+			/* don't mix negatives with positives */
-+			neg2 =3D m2->name[0] =3D=3D 's' && (s64)m2->val < 0;
-+			if (neg2 !=3D neg1)
-+				continue;
-+			m2->omit =3D true;
-+			verbose(env, "%s=3D", m2->name);
-+		}
-+
-+		verbose(env, m1->name[0] =3D=3D 's' ? "%lld" : "%llu", m1->val);
-+	}
-+}
-+
-+void print_verifier_state(struct bpf_verifier_env *env, const struct bpf=
-_func_state *state,
-+			  bool print_all)
-+{
-+	const struct bpf_reg_state *reg;
-+	enum bpf_reg_type t;
-+	int i;
-+
-+	if (state->frameno)
-+		verbose(env, " frame%d:", state->frameno);
-+	for (i =3D 0; i < MAX_BPF_REG; i++) {
-+		reg =3D &state->regs[i];
-+		t =3D reg->type;
-+		if (t =3D=3D NOT_INIT)
-+			continue;
-+		if (!print_all && !reg_scratched(env, i))
-+			continue;
-+		verbose(env, " R%d", i);
-+		print_liveness(env, reg->live);
-+		verbose(env, "=3D");
-+		if (t =3D=3D SCALAR_VALUE && reg->precise)
-+			verbose(env, "P");
-+		if ((t =3D=3D SCALAR_VALUE || t =3D=3D PTR_TO_STACK) &&
-+		    tnum_is_const(reg->var_off)) {
-+			/* reg->off should be 0 for SCALAR_VALUE */
-+			verbose(env, "%s", t =3D=3D SCALAR_VALUE ? "" : reg_type_str(env, t))=
+@@ -602,16 +602,14 @@ static void print_reg_state(struct bpf_verifier_env=
+ *env, const struct bpf_reg_s
+ 			  reg->map_ptr->key_size,
+ 			  reg->map_ptr->value_size);
+ 	}
+-	if (t !=3D SCALAR_VALUE)
++	if (t !=3D SCALAR_VALUE && reg->off)
+ 		verbose_a("off=3D%d", reg->off);
+ 	if (type_is_pkt_pointer(t))
+ 		verbose_a("r=3D%d", reg->range);
+ 	if (tnum_is_const(reg->var_off)) {
+-		/* Typically an immediate SCALAR_VALUE, but
+-		 * could be a pointer whose offset is too big
+-		 * for reg->off
+-		 */
+-		verbose_a("imm=3D%llx", reg->var_off.value);
++		/* a pointer register with fixed offset */
++		if (reg->var_off.value)
++			verbose_a("imm=3D%llx", reg->var_off.value);
+ 	} else {
+ 		print_scalar_ranges(env, reg, &sep);
+ 		if (!tnum_is_unknown(reg->var_off)) {
+diff --git a/tools/testing/selftests/bpf/prog_tests/align.c b/tools/testi=
+ng/selftests/bpf/prog_tests/align.c
+index 465c1c3a3d3c..4ebd0da898f5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/align.c
++++ b/tools/testing/selftests/bpf/prog_tests/align.c
+@@ -40,7 +40,7 @@ static struct bpf_align_test tests[] =3D {
+ 		},
+ 		.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
+ 		.matches =3D {
+-			{0, "R1", "ctx(off=3D0,imm=3D0)"},
++			{0, "R1", "ctx()"},
+ 			{0, "R10", "fp0"},
+ 			{0, "R3_w", "2"},
+ 			{1, "R3_w", "4"},
+@@ -68,7 +68,7 @@ static struct bpf_align_test tests[] =3D {
+ 		},
+ 		.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
+ 		.matches =3D {
+-			{0, "R1", "ctx(off=3D0,imm=3D0)"},
++			{0, "R1", "ctx()"},
+ 			{0, "R10", "fp0"},
+ 			{0, "R3_w", "1"},
+ 			{1, "R3_w", "2"},
+@@ -97,7 +97,7 @@ static struct bpf_align_test tests[] =3D {
+ 		},
+ 		.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
+ 		.matches =3D {
+-			{0, "R1", "ctx(off=3D0,imm=3D0)"},
++			{0, "R1", "ctx()"},
+ 			{0, "R10", "fp0"},
+ 			{0, "R3_w", "4"},
+ 			{1, "R3_w", "8"},
+@@ -119,7 +119,7 @@ static struct bpf_align_test tests[] =3D {
+ 		},
+ 		.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
+ 		.matches =3D {
+-			{0, "R1", "ctx(off=3D0,imm=3D0)"},
++			{0, "R1", "ctx()"},
+ 			{0, "R10", "fp0"},
+ 			{0, "R3_w", "7"},
+ 			{1, "R3_w", "7"},
+@@ -162,13 +162,13 @@ static struct bpf_align_test tests[] =3D {
+ 		},
+ 		.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
+ 		.matches =3D {
+-			{6, "R0_w", "pkt(off=3D8,r=3D8,imm=3D0)"},
++			{6, "R0_w", "pkt(off=3D8,r=3D8)"},
+ 			{6, "R3_w", "var_off=3D(0x0; 0xff)"},
+ 			{7, "R3_w", "var_off=3D(0x0; 0x1fe)"},
+ 			{8, "R3_w", "var_off=3D(0x0; 0x3fc)"},
+ 			{9, "R3_w", "var_off=3D(0x0; 0x7f8)"},
+ 			{10, "R3_w", "var_off=3D(0x0; 0xff0)"},
+-			{12, "R3_w", "pkt_end(off=3D0,imm=3D0)"},
++			{12, "R3_w", "pkt_end()"},
+ 			{17, "R4_w", "var_off=3D(0x0; 0xff)"},
+ 			{18, "R4_w", "var_off=3D(0x0; 0x1fe0)"},
+ 			{19, "R4_w", "var_off=3D(0x0; 0xff0)"},
+@@ -235,11 +235,11 @@ static struct bpf_align_test tests[] =3D {
+ 		},
+ 		.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
+ 		.matches =3D {
+-			{2, "R5_w", "pkt(off=3D0,r=3D0,imm=3D0)"},
+-			{4, "R5_w", "pkt(off=3D14,r=3D0,imm=3D0)"},
+-			{5, "R4_w", "pkt(off=3D14,r=3D0,imm=3D0)"},
+-			{9, "R2", "pkt(off=3D0,r=3D18,imm=3D0)"},
+-			{10, "R5", "pkt(off=3D14,r=3D18,imm=3D0)"},
++			{2, "R5_w", "pkt(r=3D0)"},
++			{4, "R5_w", "pkt(off=3D14,r=3D0)"},
++			{5, "R4_w", "pkt(off=3D14,r=3D0)"},
++			{9, "R2", "pkt(r=3D18)"},
++			{10, "R5", "pkt(off=3D14,r=3D18)"},
+ 			{10, "R4_w", "var_off=3D(0x0; 0xff)"},
+ 			{13, "R4_w", "var_off=3D(0x0; 0xffff)"},
+ 			{14, "R4_w", "var_off=3D(0x0; 0xffff)"},
+@@ -299,7 +299,7 @@ static struct bpf_align_test tests[] =3D {
+ 			/* Calculated offset in R6 has unknown value, but known
+ 			 * alignment of 4.
+ 			 */
+-			{6, "R2_w", "pkt(off=3D0,r=3D8,imm=3D0)"},
++			{6, "R2_w", "pkt(r=3D8)"},
+ 			{7, "R6_w", "var_off=3D(0x0; 0x3fc)"},
+ 			/* Offset is added to packet pointer R5, resulting in
+ 			 * known fixed offset, and variable offset from R6.
+@@ -337,7 +337,7 @@ static struct bpf_align_test tests[] =3D {
+ 			/* Constant offset is added to R5 packet pointer,
+ 			 * resulting in reg->off value of 14.
+ 			 */
+-			{26, "R5_w", "pkt(off=3D14,r=3D8,"},
++			{26, "R5_w", "pkt(off=3D14,r=3D8)"},
+ 			/* Variable offset is added to R5, resulting in a
+ 			 * variable offset of (4n). See comment for insn #18
+ 			 * for R4 =3D R5 trick.
+@@ -397,7 +397,7 @@ static struct bpf_align_test tests[] =3D {
+ 			/* Calculated offset in R6 has unknown value, but known
+ 			 * alignment of 4.
+ 			 */
+-			{6, "R2_w", "pkt(off=3D0,r=3D8,imm=3D0)"},
++			{6, "R2_w", "pkt(r=3D8)"},
+ 			{7, "R6_w", "var_off=3D(0x0; 0x3fc)"},
+ 			/* Adding 14 makes R6 be (4n+2) */
+ 			{8, "R6_w", "var_off=3D(0x2; 0x7fc)"},
+@@ -459,7 +459,7 @@ static struct bpf_align_test tests[] =3D {
+ 		.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
+ 		.result =3D REJECT,
+ 		.matches =3D {
+-			{3, "R5_w", "pkt_end(off=3D0,imm=3D0)"},
++			{3, "R5_w", "pkt_end()"},
+ 			/* (ptr - ptr) << 2 =3D=3D unknown, (4n) */
+ 			{5, "R5_w", "var_off=3D(0x0; 0xfffffffffffffffc)"},
+ 			/* (4n) + 14 =3D=3D (4n+2).  We blow our bounds, because
+@@ -513,7 +513,7 @@ static struct bpf_align_test tests[] =3D {
+ 			/* Calculated offset in R6 has unknown value, but known
+ 			 * alignment of 4.
+ 			 */
+-			{6, "R2_w", "pkt(off=3D0,r=3D8,imm=3D0)"},
++			{6, "R2_w", "pkt(r=3D8)"},
+ 			{8, "R6_w", "var_off=3D(0x0; 0x3fc)"},
+ 			/* Adding 14 makes R6 be (4n+2) */
+ 			{9, "R6_w", "var_off=3D(0x2; 0x7fc)"},
+@@ -566,7 +566,7 @@ static struct bpf_align_test tests[] =3D {
+ 			/* Calculated offset in R6 has unknown value, but known
+ 			 * alignment of 4.
+ 			 */
+-			{6, "R2_w", "pkt(off=3D0,r=3D8,imm=3D0)"},
++			{6, "R2_w", "pkt(r=3D8)"},
+ 			{9, "R6_w", "var_off=3D(0x0; 0x3c)"},
+ 			/* Adding 14 makes R6 be (4n+2) */
+ 			{10, "R6_w", "var_off=3D(0x2; 0x7c)"},
+@@ -659,14 +659,14 @@ static int do_test_single(struct bpf_align_test *te=
+st)
+ 			/* Check the next line as well in case the previous line
+ 			 * did not have a corresponding bpf insn. Example:
+ 			 * func#0 @0
+-			 * 0: R1=3Dctx(off=3D0,imm=3D0) R10=3Dfp0
++			 * 0: R1=3Dctx() R10=3Dfp0
+ 			 * 0: (b7) r3 =3D 2                 ; R3_w=3D2
+ 			 *
+ 			 * Sometimes it's actually two lines below, e.g. when
+ 			 * searching for "6: R3_w=3Dscalar(umax=3D255,var_off=3D(0x0; 0xff))"=
+:
+-			 *   from 4 to 6: R0_w=3Dpkt(off=3D8,r=3D8,imm=3D0) R1=3Dctx(off=3D0,=
+imm=3D0) R2_w=3Dpkt(off=3D0,r=3D8,imm=3D0) R3_w=3Dpkt_end(off=3D0,imm=3D0=
+) R10=3Dfp0
+-			 *   6: R0_w=3Dpkt(off=3D8,r=3D8,imm=3D0) R1=3Dctx(off=3D0,imm=3D0) R=
+2_w=3Dpkt(off=3D0,r=3D8,imm=3D0) R3_w=3Dpkt_end(off=3D0,imm=3D0) R10=3Dfp=
+0
+-			 *   6: (71) r3 =3D *(u8 *)(r2 +0)           ; R2_w=3Dpkt(off=3D0,r=3D=
+8,imm=3D0) R3_w=3Dscalar(umax=3D255,var_off=3D(0x0; 0xff))
++			 *   from 4 to 6: R0_w=3Dpkt(off=3D8,r=3D8) R1=3Dctx() R2_w=3Dpkt(r=3D=
+8) R3_w=3Dpkt_end() R10=3Dfp0
++			 *   6: R0_w=3Dpkt(off=3D8,r=3D8) R1=3Dctx() R2_w=3Dpkt(r=3D8) R3_w=3D=
+pkt_end() R10=3Dfp0
++			 *   6: (71) r3 =3D *(u8 *)(r2 +0)           ; R2_w=3Dpkt(r=3D8) R3_w=
+=3Dscalar(umax=3D255,var_off=3D(0x0; 0xff))
+ 			 */
+ 			while (!(p =3D strstr(line_ptr, m.reg)) || !strstr(p, m.match)) {
+ 				cur_line =3D -1;
+diff --git a/tools/testing/selftests/bpf/prog_tests/log_buf.c b/tools/tes=
+ting/selftests/bpf/prog_tests/log_buf.c
+index fe9a23e65ef4..0f7ea4d7d9f6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/log_buf.c
++++ b/tools/testing/selftests/bpf/prog_tests/log_buf.c
+@@ -78,7 +78,7 @@ static void obj_load_log_buf(void)
+ 	ASSERT_OK_PTR(strstr(libbpf_log_buf, "prog 'bad_prog': BPF program load=
+ failed"),
+ 		      "libbpf_log_not_empty");
+ 	ASSERT_OK_PTR(strstr(obj_log_buf, "DATASEC license"), "obj_log_not_empt=
+y");
+-	ASSERT_OK_PTR(strstr(good_log_buf, "0: R1=3Dctx(off=3D0,imm=3D0) R10=3D=
+fp0"),
++	ASSERT_OK_PTR(strstr(good_log_buf, "0: R1=3Dctx() R10=3Dfp0"),
+ 		      "good_log_verbose");
+ 	ASSERT_OK_PTR(strstr(bad_log_buf, "invalid access to map value, value_s=
+ize=3D16 off=3D16000 size=3D4"),
+ 		      "bad_log_not_empty");
+@@ -175,7 +175,7 @@ static void bpf_prog_load_log_buf(void)
+ 	opts.log_level =3D 2;
+ 	fd =3D bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, "good_prog", "GPL",
+ 			   good_prog_insns, good_prog_insn_cnt, &opts);
+-	ASSERT_OK_PTR(strstr(log_buf, "0: R1=3Dctx(off=3D0,imm=3D0) R10=3Dfp0")=
+, "good_log_2");
++	ASSERT_OK_PTR(strstr(log_buf, "0: R1=3Dctx() R10=3Dfp0"), "good_log_2")=
 ;
-+			verbose(env, "%lld", reg->var_off.value + reg->off);
-+		} else {
-+			const char *sep =3D "";
-+
-+			verbose(env, "%s", reg_type_str(env, t));
-+			if (base_type(t) =3D=3D PTR_TO_BTF_ID)
-+				verbose(env, "%s", btf_type_name(reg->btf, reg->btf_id));
-+			verbose(env, "(");
-+/*
-+ * _a stands for append, was shortened to avoid multiline statements bel=
-ow.
-+ * This macro is used to output a comma separated list of attributes.
-+ */
-+#define verbose_a(fmt, ...) ({ verbose(env, "%s" fmt, sep, __VA_ARGS__);=
- sep =3D ","; })
-+
-+			if (reg->id)
-+				verbose_a("id=3D%d", reg->id);
-+			if (reg->ref_obj_id)
-+				verbose_a("ref_obj_id=3D%d", reg->ref_obj_id);
-+			if (type_is_non_owning_ref(reg->type))
-+				verbose_a("%s", "non_own_ref");
-+			if (t !=3D SCALAR_VALUE)
-+				verbose_a("off=3D%d", reg->off);
-+			if (type_is_pkt_pointer(t))
-+				verbose_a("r=3D%d", reg->range);
-+			else if (base_type(t) =3D=3D CONST_PTR_TO_MAP ||
-+				 base_type(t) =3D=3D PTR_TO_MAP_KEY ||
-+				 base_type(t) =3D=3D PTR_TO_MAP_VALUE)
-+				verbose_a("ks=3D%d,vs=3D%d",
-+					  reg->map_ptr->key_size,
-+					  reg->map_ptr->value_size);
-+			if (tnum_is_const(reg->var_off)) {
-+				/* Typically an immediate SCALAR_VALUE, but
-+				 * could be a pointer whose offset is too big
-+				 * for reg->off
-+				 */
-+				verbose_a("imm=3D%llx", reg->var_off.value);
-+			} else {
-+				print_scalar_ranges(env, reg, &sep);
-+				if (!tnum_is_unknown(reg->var_off)) {
-+					char tn_buf[48];
-+
-+					tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
-+					verbose_a("var_off=3D%s", tn_buf);
-+				}
-+			}
-+#undef verbose_a
-+
-+			verbose(env, ")");
-+		}
-+	}
-+	for (i =3D 0; i < state->allocated_stack / BPF_REG_SIZE; i++) {
-+		char types_buf[BPF_REG_SIZE + 1];
-+		bool valid =3D false;
-+		int j;
-+
-+		for (j =3D 0; j < BPF_REG_SIZE; j++) {
-+			if (state->stack[i].slot_type[j] !=3D STACK_INVALID)
-+				valid =3D true;
-+			types_buf[j] =3D slot_type_char[state->stack[i].slot_type[j]];
-+		}
-+		types_buf[BPF_REG_SIZE] =3D 0;
-+		if (!valid)
-+			continue;
-+		if (!print_all && !stack_slot_scratched(env, i))
-+			continue;
-+		switch (state->stack[i].slot_type[BPF_REG_SIZE - 1]) {
-+		case STACK_SPILL:
-+			reg =3D &state->stack[i].spilled_ptr;
-+			t =3D reg->type;
-+
-+			verbose(env, " fp%d", (-i - 1) * BPF_REG_SIZE);
-+			print_liveness(env, reg->live);
-+			verbose(env, "=3D%s", t =3D=3D SCALAR_VALUE ? "" : reg_type_str(env, =
-t));
-+			if (t =3D=3D SCALAR_VALUE && reg->precise)
-+				verbose(env, "P");
-+			if (t =3D=3D SCALAR_VALUE && tnum_is_const(reg->var_off))
-+				verbose(env, "%lld", reg->var_off.value + reg->off);
-+			break;
-+		case STACK_DYNPTR:
-+			i +=3D BPF_DYNPTR_NR_SLOTS - 1;
-+			reg =3D &state->stack[i].spilled_ptr;
-+
-+			verbose(env, " fp%d", (-i - 1) * BPF_REG_SIZE);
-+			print_liveness(env, reg->live);
-+			verbose(env, "=3Ddynptr_%s", dynptr_type_str(reg->dynptr.type));
-+			if (reg->ref_obj_id)
-+				verbose(env, "(ref_id=3D%d)", reg->ref_obj_id);
-+			break;
-+		case STACK_ITER:
-+			/* only main slot has ref_obj_id set; skip others */
-+			reg =3D &state->stack[i].spilled_ptr;
-+			if (!reg->ref_obj_id)
-+				continue;
-+
-+			verbose(env, " fp%d", (-i - 1) * BPF_REG_SIZE);
-+			print_liveness(env, reg->live);
-+			verbose(env, "=3Diter_%s(ref_id=3D%d,state=3D%s,depth=3D%u)",
-+				iter_type_str(reg->iter.btf, reg->iter.btf_id),
-+				reg->ref_obj_id, iter_state_str(reg->iter.state),
-+				reg->iter.depth);
-+			break;
-+		case STACK_MISC:
-+		case STACK_ZERO:
-+		default:
-+			reg =3D &state->stack[i].spilled_ptr;
-+
-+			for (j =3D 0; j < BPF_REG_SIZE; j++)
-+				types_buf[j] =3D slot_type_char[state->stack[i].slot_type[j]];
-+			types_buf[BPF_REG_SIZE] =3D 0;
-+
-+			verbose(env, " fp%d", (-i - 1) * BPF_REG_SIZE);
-+			print_liveness(env, reg->live);
-+			verbose(env, "=3D%s", types_buf);
-+			break;
-+		}
-+	}
-+	if (state->acquired_refs && state->refs[0].id) {
-+		verbose(env, " refs=3D%d", state->refs[0].id);
-+		for (i =3D 1; i < state->acquired_refs; i++)
-+			if (state->refs[i].id)
-+				verbose(env, ",%d", state->refs[i].id);
-+	}
-+	if (state->in_callback_fn)
-+		verbose(env, " cb");
-+	if (state->in_async_callback_fn)
-+		verbose(env, " async_cb");
-+	verbose(env, "\n");
-+	if (!print_all)
-+		mark_verifier_state_clean(env);
-+}
-+
-+static inline u32 vlog_alignment(u32 pos)
-+{
-+	return round_up(max(pos + BPF_LOG_MIN_ALIGNMENT / 2, BPF_LOG_ALIGNMENT)=
-,
-+			BPF_LOG_MIN_ALIGNMENT) - pos - 1;
-+}
-+
-+void print_insn_state(struct bpf_verifier_env *env, const struct bpf_fun=
-c_state *state)
-+{
-+	if (env->prev_log_pos && env->prev_log_pos =3D=3D env->log.end_pos) {
-+		/* remove new line character */
-+		bpf_vlog_reset(&env->log, env->prev_log_pos - 1);
-+		verbose(env, "%*c;", vlog_alignment(env->prev_insn_print_pos), ' ');
-+	} else {
-+		verbose(env, "%d:", env->insn_idx);
-+	}
-+	print_verifier_state(env, state, false);
-+}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 683fdda25c13..8c2d31aa3d31 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -368,21 +368,6 @@ static void verbose_invalid_scalar(struct bpf_verifi=
-er_env *env,
- 	verbose(env, " should have been in %s\n", tn_buf);
- }
+ 	ASSERT_GE(fd, 0, "good_fd2");
+ 	if (fd >=3D 0)
+ 		close(fd);
+diff --git a/tools/testing/selftests/bpf/prog_tests/spin_lock.c b/tools/t=
+esting/selftests/bpf/prog_tests/spin_lock.c
+index ace65224286f..18d451be57c8 100644
+--- a/tools/testing/selftests/bpf/prog_tests/spin_lock.c
++++ b/tools/testing/selftests/bpf/prog_tests/spin_lock.c
+@@ -13,22 +13,22 @@ static struct {
+ 	const char *err_msg;
+ } spin_lock_fail_tests[] =3D {
+ 	{ "lock_id_kptr_preserve",
+-	  "5: (bf) r1 =3D r0                       ; R0_w=3Dptr_foo(id=3D2,ref_=
+obj_id=3D2,off=3D0,imm=3D0) "
+-	  "R1_w=3Dptr_foo(id=3D2,ref_obj_id=3D2,off=3D0,imm=3D0) refs=3D2\n6: (=
+85) call bpf_this_cpu_ptr#154\n"
++	  "5: (bf) r1 =3D r0                       ; R0_w=3Dptr_foo(id=3D2,ref_=
+obj_id=3D2) "
++	  "R1_w=3Dptr_foo(id=3D2,ref_obj_id=3D2) refs=3D2\n6: (85) call bpf_thi=
+s_cpu_ptr#154\n"
+ 	  "R1 type=3Dptr_ expected=3Dpercpu_ptr_" },
+ 	{ "lock_id_global_zero",
+-	  "; R1_w=3Dmap_value(map=3D.data.A,ks=3D4,vs=3D4,off=3D0,imm=3D0)\n2: =
+(85) call bpf_this_cpu_ptr#154\n"
++	  "; R1_w=3Dmap_value(map=3D.data.A,ks=3D4,vs=3D4)\n2: (85) call bpf_th=
+is_cpu_ptr#154\n"
+ 	  "R1 type=3Dmap_value expected=3Dpercpu_ptr_" },
+ 	{ "lock_id_mapval_preserve",
+ 	  "[0-9]\\+: (bf) r1 =3D r0                       ;"
+-	  " R0_w=3Dmap_value(id=3D1,map=3Darray_map,ks=3D4,vs=3D8,off=3D0,imm=3D=
+0)"
+-	  " R1_w=3Dmap_value(id=3D1,map=3Darray_map,ks=3D4,vs=3D8,off=3D0,imm=3D=
+0)\n"
++	  " R0_w=3Dmap_value(id=3D1,map=3Darray_map,ks=3D4,vs=3D8)"
++	  " R1_w=3Dmap_value(id=3D1,map=3Darray_map,ks=3D4,vs=3D8)\n"
+ 	  "[0-9]\\+: (85) call bpf_this_cpu_ptr#154\n"
+ 	  "R1 type=3Dmap_value expected=3Dpercpu_ptr_" },
+ 	{ "lock_id_innermapval_preserve",
+ 	  "[0-9]\\+: (bf) r1 =3D r0                      ;"
+-	  " R0=3Dmap_value(id=3D2,ks=3D4,vs=3D8,off=3D0,imm=3D0)"
+-	  " R1_w=3Dmap_value(id=3D2,ks=3D4,vs=3D8,off=3D0,imm=3D0)\n"
++	  " R0=3Dmap_value(id=3D2,ks=3D4,vs=3D8)"
++	  " R1_w=3Dmap_value(id=3D2,ks=3D4,vs=3D8)\n"
+ 	  "[0-9]\\+: (85) call bpf_this_cpu_ptr#154\n"
+ 	  "R1 type=3Dmap_value expected=3Dpercpu_ptr_" },
+ 	{ "lock_id_mismatch_kptr_kptr", "bpf_spin_unlock of different lock" },
+diff --git a/tools/testing/selftests/bpf/progs/exceptions_assert.c b/tool=
+s/testing/selftests/bpf/progs/exceptions_assert.c
+index e1e5c54a6a11..26f7d67432cc 100644
+--- a/tools/testing/selftests/bpf/progs/exceptions_assert.c
++++ b/tools/testing/selftests/bpf/progs/exceptions_assert.c
+@@ -59,7 +59,7 @@ check_assert(s64, ge, neg, INT_MIN);
 =20
--static bool type_is_pkt_pointer(enum bpf_reg_type type)
--{
--	type =3D base_type(type);
--	return type =3D=3D PTR_TO_PACKET ||
--	       type =3D=3D PTR_TO_PACKET_META;
--}
--
--static bool type_is_sk_pointer(enum bpf_reg_type type)
--{
--	return type =3D=3D PTR_TO_SOCKET ||
--		type =3D=3D PTR_TO_SOCK_COMMON ||
--		type =3D=3D PTR_TO_TCP_SOCK ||
--		type =3D=3D PTR_TO_XDP_SOCK;
--}
--
- static bool type_may_be_null(u32 type)
+ SEC("?tc")
+ __log_level(2) __failure
+-__msg(": R0=3D0 R1=3Dctx(off=3D0,imm=3D0) R2=3Dscalar(smin=3Dsmin32=3D-2=
+147483646,smax=3Dsmax32=3D2147483645) R10=3Dfp0")
++__msg(": R0=3D0 R1=3Dctx() R2=3Dscalar(smin=3Dsmin32=3D-2147483646,smax=3D=
+smax32=3D2147483645) R10=3Dfp0")
+ int check_assert_range_s64(struct __sk_buff *ctx)
  {
- 	return type & PTR_MAYBE_NULL;
-@@ -406,16 +391,6 @@ static bool reg_not_null(const struct bpf_reg_state =
-*reg)
- 		type =3D=3D PTR_TO_MEM;
- }
+ 	struct bpf_sock *sk =3D ctx->sk;
+@@ -75,7 +75,7 @@ int check_assert_range_s64(struct __sk_buff *ctx)
 =20
--static bool type_is_ptr_alloc_obj(u32 type)
--{
--	return base_type(type) =3D=3D PTR_TO_BTF_ID && type_flag(type) & MEM_AL=
-LOC;
--}
--
--static bool type_is_non_owning_ref(u32 type)
--{
--	return type_is_ptr_alloc_obj(type) && type_flag(type) & NON_OWN_REF;
--}
--
- static struct btf_record *reg_btf_record(const struct bpf_reg_state *reg=
-)
+ SEC("?tc")
+ __log_level(2) __failure
+-__msg(": R1=3Dctx(off=3D0,imm=3D0) R2=3Dscalar(smin=3Dumin=3Dsmin32=3Dum=
+in32=3D4096,smax=3Dumax=3Dsmax32=3Dumax32=3D8192,var_off=3D(0x0; 0x3fff))=
+")
++__msg(": R1=3Dctx() R2=3Dscalar(smin=3Dumin=3Dsmin32=3Dumin32=3D4096,sma=
+x=3Dumax=3Dsmax32=3Dumax32=3D8192,var_off=3D(0x0; 0x3fff))")
+ int check_assert_range_u64(struct __sk_buff *ctx)
  {
- 	struct btf_record *rec =3D NULL;
-@@ -532,83 +507,6 @@ static bool is_cmpxchg_insn(const struct bpf_insn *i=
-nsn)
- 	       insn->imm =3D=3D BPF_CMPXCHG;
- }
+ 	u64 num =3D ctx->len;
+@@ -86,7 +86,7 @@ int check_assert_range_u64(struct __sk_buff *ctx)
 =20
--/* string representation of 'enum bpf_reg_type'
-- *
-- * Note that reg_type_str() can not appear more than once in a single ve=
-rbose()
-- * statement.
-- */
--static const char *reg_type_str(struct bpf_verifier_env *env,
--				enum bpf_reg_type type)
--{
--	char postfix[16] =3D {0}, prefix[64] =3D {0};
--	static const char * const str[] =3D {
--		[NOT_INIT]		=3D "?",
--		[SCALAR_VALUE]		=3D "scalar",
--		[PTR_TO_CTX]		=3D "ctx",
--		[CONST_PTR_TO_MAP]	=3D "map_ptr",
--		[PTR_TO_MAP_VALUE]	=3D "map_value",
--		[PTR_TO_STACK]		=3D "fp",
--		[PTR_TO_PACKET]		=3D "pkt",
--		[PTR_TO_PACKET_META]	=3D "pkt_meta",
--		[PTR_TO_PACKET_END]	=3D "pkt_end",
--		[PTR_TO_FLOW_KEYS]	=3D "flow_keys",
--		[PTR_TO_SOCKET]		=3D "sock",
--		[PTR_TO_SOCK_COMMON]	=3D "sock_common",
--		[PTR_TO_TCP_SOCK]	=3D "tcp_sock",
--		[PTR_TO_TP_BUFFER]	=3D "tp_buffer",
--		[PTR_TO_XDP_SOCK]	=3D "xdp_sock",
--		[PTR_TO_BTF_ID]		=3D "ptr_",
--		[PTR_TO_MEM]		=3D "mem",
--		[PTR_TO_BUF]		=3D "buf",
--		[PTR_TO_FUNC]		=3D "func",
--		[PTR_TO_MAP_KEY]	=3D "map_key",
--		[CONST_PTR_TO_DYNPTR]	=3D "dynptr_ptr",
--	};
--
--	if (type & PTR_MAYBE_NULL) {
--		if (base_type(type) =3D=3D PTR_TO_BTF_ID)
--			strncpy(postfix, "or_null_", 16);
--		else
--			strncpy(postfix, "_or_null", 16);
--	}
--
--	snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s",
--		 type & MEM_RDONLY ? "rdonly_" : "",
--		 type & MEM_RINGBUF ? "ringbuf_" : "",
--		 type & MEM_USER ? "user_" : "",
--		 type & MEM_PERCPU ? "percpu_" : "",
--		 type & MEM_RCU ? "rcu_" : "",
--		 type & PTR_UNTRUSTED ? "untrusted_" : "",
--		 type & PTR_TRUSTED ? "trusted_" : ""
--	);
--
--	snprintf(env->tmp_str_buf, TMP_STR_BUF_LEN, "%s%s%s",
--		 prefix, str[base_type(type)], postfix);
--	return env->tmp_str_buf;
--}
--
--static char slot_type_char[] =3D {
--	[STACK_INVALID]	=3D '?',
--	[STACK_SPILL]	=3D 'r',
--	[STACK_MISC]	=3D 'm',
--	[STACK_ZERO]	=3D '0',
--	[STACK_DYNPTR]	=3D 'd',
--	[STACK_ITER]	=3D 'i',
--};
--
--static void print_liveness(struct bpf_verifier_env *env,
--			   enum bpf_reg_liveness live)
--{
--	if (live & (REG_LIVE_READ | REG_LIVE_WRITTEN | REG_LIVE_DONE))
--	    verbose(env, "_");
--	if (live & REG_LIVE_READ)
--		verbose(env, "r");
--	if (live & REG_LIVE_WRITTEN)
--		verbose(env, "w");
--	if (live & REG_LIVE_DONE)
--		verbose(env, "D");
--}
--
- static int __get_spi(s32 off)
+ SEC("?tc")
+ __log_level(2) __failure
+-__msg(": R0=3D0 R1=3Dctx(off=3D0,imm=3D0) R2=3D4096 R10=3Dfp0")
++__msg(": R0=3D0 R1=3Dctx() R2=3D4096 R10=3Dfp0")
+ int check_assert_single_range_s64(struct __sk_buff *ctx)
  {
- 	return (-off - 1) / BPF_REG_SIZE;
-@@ -678,87 +576,6 @@ static const char *btf_type_name(const struct btf *b=
-tf, u32 id)
- 	return btf_name_by_offset(btf, btf_type_by_id(btf, id)->name_off);
- }
+ 	struct bpf_sock *sk =3D ctx->sk;
+@@ -103,7 +103,7 @@ int check_assert_single_range_s64(struct __sk_buff *c=
+tx)
 =20
--static const char *dynptr_type_str(enum bpf_dynptr_type type)
--{
--	switch (type) {
--	case BPF_DYNPTR_TYPE_LOCAL:
--		return "local";
--	case BPF_DYNPTR_TYPE_RINGBUF:
--		return "ringbuf";
--	case BPF_DYNPTR_TYPE_SKB:
--		return "skb";
--	case BPF_DYNPTR_TYPE_XDP:
--		return "xdp";
--	case BPF_DYNPTR_TYPE_INVALID:
--		return "<invalid>";
--	default:
--		WARN_ONCE(1, "unknown dynptr type %d\n", type);
--		return "<unknown>";
--	}
--}
--
--static const char *iter_type_str(const struct btf *btf, u32 btf_id)
--{
--	if (!btf || btf_id =3D=3D 0)
--		return "<invalid>";
--
--	/* we already validated that type is valid and has conforming name */
--	return btf_type_name(btf, btf_id) + sizeof(ITER_PREFIX) - 1;
--}
--
--static const char *iter_state_str(enum bpf_iter_state state)
--{
--	switch (state) {
--	case BPF_ITER_STATE_ACTIVE:
--		return "active";
--	case BPF_ITER_STATE_DRAINED:
--		return "drained";
--	case BPF_ITER_STATE_INVALID:
--		return "<invalid>";
--	default:
--		WARN_ONCE(1, "unknown iter state %d\n", state);
--		return "<unknown>";
--	}
--}
--
--static void mark_reg_scratched(struct bpf_verifier_env *env, u32 regno)
--{
--	env->scratched_regs |=3D 1U << regno;
--}
--
--static void mark_stack_slot_scratched(struct bpf_verifier_env *env, u32 =
-spi)
--{
--	env->scratched_stack_slots |=3D 1ULL << spi;
--}
--
--static bool reg_scratched(const struct bpf_verifier_env *env, u32 regno)
--{
--	return (env->scratched_regs >> regno) & 1;
--}
--
--static bool stack_slot_scratched(const struct bpf_verifier_env *env, u64=
- regno)
--{
--	return (env->scratched_stack_slots >> regno) & 1;
--}
--
--static bool verifier_state_scratched(const struct bpf_verifier_env *env)
--{
--	return env->scratched_regs || env->scratched_stack_slots;
--}
--
--static void mark_verifier_state_clean(struct bpf_verifier_env *env)
--{
--	env->scratched_regs =3D 0U;
--	env->scratched_stack_slots =3D 0ULL;
--}
--
--/* Used for printing the entire verifier state. */
--static void mark_verifier_state_scratched(struct bpf_verifier_env *env)
--{
--	env->scratched_regs =3D ~0U;
--	env->scratched_stack_slots =3D ~0ULL;
--}
--
- static enum bpf_dynptr_type arg_to_dynptr_type(enum bpf_arg_type arg_typ=
-e)
+ SEC("?tc")
+ __log_level(2) __failure
+-__msg(": R1=3Dctx(off=3D0,imm=3D0) R2=3D4096 R10=3Dfp0")
++__msg(": R1=3Dctx() R2=3D4096 R10=3Dfp0")
+ int check_assert_single_range_u64(struct __sk_buff *ctx)
  {
- 	switch (arg_type & DYNPTR_TYPE_FLAG_MASK) {
-@@ -1298,226 +1115,6 @@ static void scrub_spilled_slot(u8 *stype)
- 		*stype =3D STACK_MISC;
- }
+ 	u64 num =3D ctx->len;
+@@ -114,7 +114,7 @@ int check_assert_single_range_u64(struct __sk_buff *c=
+tx)
 =20
--static void print_scalar_ranges(struct bpf_verifier_env *env,
--				const struct bpf_reg_state *reg,
--				const char **sep)
--{
--	struct {
--		const char *name;
--		u64 val;
--		bool omit;
--	} minmaxs[] =3D {
--		{"smin",   reg->smin_value,         reg->smin_value =3D=3D S64_MIN},
--		{"smax",   reg->smax_value,         reg->smax_value =3D=3D S64_MAX},
--		{"umin",   reg->umin_value,         reg->umin_value =3D=3D 0},
--		{"umax",   reg->umax_value,         reg->umax_value =3D=3D U64_MAX},
--		{"smin32", (s64)reg->s32_min_value, reg->s32_min_value =3D=3D S32_MIN}=
-,
--		{"smax32", (s64)reg->s32_max_value, reg->s32_max_value =3D=3D S32_MAX}=
-,
--		{"umin32", reg->u32_min_value,      reg->u32_min_value =3D=3D 0},
--		{"umax32", reg->u32_max_value,      reg->u32_max_value =3D=3D U32_MAX}=
-,
--	}, *m1, *m2, *mend =3D &minmaxs[ARRAY_SIZE(minmaxs)];
--	bool neg1, neg2;
--
--	for (m1 =3D &minmaxs[0]; m1 < mend; m1++) {
--		if (m1->omit)
--			continue;
--
--		neg1 =3D m1->name[0] =3D=3D 's' && (s64)m1->val < 0;
--
--		verbose(env, "%s%s=3D", *sep, m1->name);
--		*sep =3D ",";
--
--		for (m2 =3D m1 + 2; m2 < mend; m2 +=3D 2) {
--			if (m2->omit || m2->val !=3D m1->val)
--				continue;
--			/* don't mix negatives with positives */
--			neg2 =3D m2->name[0] =3D=3D 's' && (s64)m2->val < 0;
--			if (neg2 !=3D neg1)
--				continue;
--			m2->omit =3D true;
--			verbose(env, "%s=3D", m2->name);
--		}
--
--		verbose(env, m1->name[0] =3D=3D 's' ? "%lld" : "%llu", m1->val);
--	}
--}
--
--static void print_verifier_state(struct bpf_verifier_env *env,
--				 const struct bpf_func_state *state,
--				 bool print_all)
--{
--	const struct bpf_reg_state *reg;
--	enum bpf_reg_type t;
--	int i;
--
--	if (state->frameno)
--		verbose(env, " frame%d:", state->frameno);
--	for (i =3D 0; i < MAX_BPF_REG; i++) {
--		reg =3D &state->regs[i];
--		t =3D reg->type;
--		if (t =3D=3D NOT_INIT)
--			continue;
--		if (!print_all && !reg_scratched(env, i))
--			continue;
--		verbose(env, " R%d", i);
--		print_liveness(env, reg->live);
--		verbose(env, "=3D");
--		if (t =3D=3D SCALAR_VALUE && reg->precise)
--			verbose(env, "P");
--		if ((t =3D=3D SCALAR_VALUE || t =3D=3D PTR_TO_STACK) &&
--		    tnum_is_const(reg->var_off)) {
--			/* reg->off should be 0 for SCALAR_VALUE */
--			verbose(env, "%s", t =3D=3D SCALAR_VALUE ? "" : reg_type_str(env, t))=
-;
--			verbose(env, "%lld", reg->var_off.value + reg->off);
--		} else {
--			const char *sep =3D "";
--
--			verbose(env, "%s", reg_type_str(env, t));
--			if (base_type(t) =3D=3D PTR_TO_BTF_ID)
--				verbose(env, "%s", btf_type_name(reg->btf, reg->btf_id));
--			verbose(env, "(");
--/*
-- * _a stands for append, was shortened to avoid multiline statements bel=
-ow.
-- * This macro is used to output a comma separated list of attributes.
-- */
--#define verbose_a(fmt, ...) ({ verbose(env, "%s" fmt, sep, __VA_ARGS__);=
- sep =3D ","; })
--
--			if (reg->id)
--				verbose_a("id=3D%d", reg->id);
--			if (reg->ref_obj_id)
--				verbose_a("ref_obj_id=3D%d", reg->ref_obj_id);
--			if (type_is_non_owning_ref(reg->type))
--				verbose_a("%s", "non_own_ref");
--			if (t !=3D SCALAR_VALUE)
--				verbose_a("off=3D%d", reg->off);
--			if (type_is_pkt_pointer(t))
--				verbose_a("r=3D%d", reg->range);
--			else if (base_type(t) =3D=3D CONST_PTR_TO_MAP ||
--				 base_type(t) =3D=3D PTR_TO_MAP_KEY ||
--				 base_type(t) =3D=3D PTR_TO_MAP_VALUE)
--				verbose_a("ks=3D%d,vs=3D%d",
--					  reg->map_ptr->key_size,
--					  reg->map_ptr->value_size);
--			if (tnum_is_const(reg->var_off)) {
--				/* Typically an immediate SCALAR_VALUE, but
--				 * could be a pointer whose offset is too big
--				 * for reg->off
--				 */
--				verbose_a("imm=3D%llx", reg->var_off.value);
--			} else {
--				print_scalar_ranges(env, reg, &sep);
--				if (!tnum_is_unknown(reg->var_off)) {
--					char tn_buf[48];
--
--					tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
--					verbose_a("var_off=3D%s", tn_buf);
--				}
--			}
--#undef verbose_a
--
--			verbose(env, ")");
--		}
--	}
--	for (i =3D 0; i < state->allocated_stack / BPF_REG_SIZE; i++) {
--		char types_buf[BPF_REG_SIZE + 1];
--		bool valid =3D false;
--		int j;
--
--		for (j =3D 0; j < BPF_REG_SIZE; j++) {
--			if (state->stack[i].slot_type[j] !=3D STACK_INVALID)
--				valid =3D true;
--			types_buf[j] =3D slot_type_char[state->stack[i].slot_type[j]];
--		}
--		types_buf[BPF_REG_SIZE] =3D 0;
--		if (!valid)
--			continue;
--		if (!print_all && !stack_slot_scratched(env, i))
--			continue;
--		switch (state->stack[i].slot_type[BPF_REG_SIZE - 1]) {
--		case STACK_SPILL:
--			reg =3D &state->stack[i].spilled_ptr;
--			t =3D reg->type;
--
--			verbose(env, " fp%d", (-i - 1) * BPF_REG_SIZE);
--			print_liveness(env, reg->live);
--			verbose(env, "=3D%s", t =3D=3D SCALAR_VALUE ? "" : reg_type_str(env, =
-t));
--			if (t =3D=3D SCALAR_VALUE && reg->precise)
--				verbose(env, "P");
--			if (t =3D=3D SCALAR_VALUE && tnum_is_const(reg->var_off))
--				verbose(env, "%lld", reg->var_off.value + reg->off);
--			break;
--		case STACK_DYNPTR:
--			i +=3D BPF_DYNPTR_NR_SLOTS - 1;
--			reg =3D &state->stack[i].spilled_ptr;
--
--			verbose(env, " fp%d", (-i - 1) * BPF_REG_SIZE);
--			print_liveness(env, reg->live);
--			verbose(env, "=3Ddynptr_%s", dynptr_type_str(reg->dynptr.type));
--			if (reg->ref_obj_id)
--				verbose(env, "(ref_id=3D%d)", reg->ref_obj_id);
--			break;
--		case STACK_ITER:
--			/* only main slot has ref_obj_id set; skip others */
--			reg =3D &state->stack[i].spilled_ptr;
--			if (!reg->ref_obj_id)
--				continue;
--
--			verbose(env, " fp%d", (-i - 1) * BPF_REG_SIZE);
--			print_liveness(env, reg->live);
--			verbose(env, "=3Diter_%s(ref_id=3D%d,state=3D%s,depth=3D%u)",
--				iter_type_str(reg->iter.btf, reg->iter.btf_id),
--				reg->ref_obj_id, iter_state_str(reg->iter.state),
--				reg->iter.depth);
--			break;
--		case STACK_MISC:
--		case STACK_ZERO:
--		default:
--			reg =3D &state->stack[i].spilled_ptr;
--
--			for (j =3D 0; j < BPF_REG_SIZE; j++)
--				types_buf[j] =3D slot_type_char[state->stack[i].slot_type[j]];
--			types_buf[BPF_REG_SIZE] =3D 0;
--
--			verbose(env, " fp%d", (-i - 1) * BPF_REG_SIZE);
--			print_liveness(env, reg->live);
--			verbose(env, "=3D%s", types_buf);
--			break;
--		}
--	}
--	if (state->acquired_refs && state->refs[0].id) {
--		verbose(env, " refs=3D%d", state->refs[0].id);
--		for (i =3D 1; i < state->acquired_refs; i++)
--			if (state->refs[i].id)
--				verbose(env, ",%d", state->refs[i].id);
--	}
--	if (state->in_callback_fn)
--		verbose(env, " cb");
--	if (state->in_async_callback_fn)
--		verbose(env, " async_cb");
--	verbose(env, "\n");
--	if (!print_all)
--		mark_verifier_state_clean(env);
--}
--
--static inline u32 vlog_alignment(u32 pos)
--{
--	return round_up(max(pos + BPF_LOG_MIN_ALIGNMENT / 2, BPF_LOG_ALIGNMENT)=
-,
--			BPF_LOG_MIN_ALIGNMENT) - pos - 1;
--}
--
--static void print_insn_state(struct bpf_verifier_env *env,
--			     const struct bpf_func_state *state)
--{
--	if (env->prev_log_pos && env->prev_log_pos =3D=3D env->log.end_pos) {
--		/* remove new line character */
--		bpf_vlog_reset(&env->log, env->prev_log_pos - 1);
--		verbose(env, "%*c;", vlog_alignment(env->prev_insn_print_pos), ' ');
--	} else {
--		verbose(env, "%d:", env->insn_idx);
--	}
--	print_verifier_state(env, state, false);
--}
--
- /* copy array src of length n * size bytes to dst. dst is reallocated if=
- it's too
-  * small to hold src. This is different from krealloc since we don't wan=
-t to preserve
-  * the contents of dst.
+ SEC("?tc")
+ __log_level(2) __failure
+-__msg(": R1=3Dpkt(off=3D64,r=3D64,imm=3D0) R2=3Dpkt_end(off=3D0,imm=3D0)=
+ R6=3Dpkt(off=3D0,r=3D64,imm=3D0) R10=3Dfp0")
++__msg(": R1=3Dpkt(off=3D64,r=3D64) R2=3Dpkt_end() R6=3Dpkt(r=3D64) R10=3D=
+fp0")
+ int check_assert_generic(struct __sk_buff *ctx)
+ {
+ 	u8 *data_end =3D (void *)(long)ctx->data_end;
 --=20
 2.34.1
 
