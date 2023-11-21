@@ -1,43 +1,43 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YFbqwsQk"
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032A992
-	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 18:07:32 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-99bdeae1d0aso688459766b.1
-        for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 18:07:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IfqoE3h9"
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3ABDCA
+	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 18:07:35 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9fd0059a967so353101066b.1
+        for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 18:07:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700532449; x=1701137249; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700532453; x=1701137253; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vzOpEZBlHgfwx1ttrCgbtEL+22hxnr/l8skkpIvAc88=;
-        b=YFbqwsQkpBoyVVHrpnPLxsByW2SEnSnQrILejd0s5+nv77N7JCctyVpRUJ4yeJwTuW
-         1z79L1rJXtfGNyu4YcX74L4l/FqEwqqjPHxxDwuDflZwsohp2SGT+29M5mh+JrnO87Ki
-         OU76VNhmrOxANjU2JrsgTk+HOy1yBZ2Z5YjWR1xvi+tvJ01g9S/RnWQkYMPup9PXp6/l
-         2m+8XlkriCAatzpouHl2uaNQnD4zzyAhvEJiibN3SRk4245prmxRZbCgfLlMS3nnJsvp
-         7A3kP2MBMl5Cm8V+KHcBuK2ZLSquEzqdDNyAlGf3zddzcsvEsv0yV4igJClBRQ6zapiT
-         4+AA==
+        bh=tuvfwn61IVW3VhDnsOv11dwxQoD7AdJ5jVg0qt21yzs=;
+        b=IfqoE3h9MBavROWfAhh2WjGu5Ik8FhIRZohrhedAciSzyjqXe9QLNC51b4brESFxaD
+         chdpEqu7yTcDC203/ZbQkZE+4xJ2niUGTriyhSgzp+szM/9ZzvfRMcy3jrWF2VF5Td9Y
+         FzhYLJQ0FA/uhZAmd789rQMuQCzdP9jXzGXb5+fM58MXkvXSnwKxZ0tQzhy59CbPZD6U
+         SPYmbM201vnx1Y2XlCGgKS1W0THcf3O5VeZCWcxBaK9Uv2QldIhWSP6dR8InMMHmfh/v
+         WLQFahNEvjvMpa7EA/VhcNs6u3CCQAhKyPCkkP3gJhuwr8J5k+zHtse2wj98bM5j2rDI
+         w20Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700532449; x=1701137249;
+        d=1e100.net; s=20230601; t=1700532453; x=1701137253;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vzOpEZBlHgfwx1ttrCgbtEL+22hxnr/l8skkpIvAc88=;
-        b=DTi1FLQntOGvTHATBoY39MLtseSVqWhQgWNLV393H0vXqTQwzIQBP3Sl7+Xe8rS2ks
-         k25ldG36CimSyx6+vX1wMa13Har8F6QA1XleU46Ybou0aC9iezcdH1/dnDIBcso8lI5L
-         6fGnVFlUHiNUukJmHD7+1rkMmnyZA7jqaZs91OAX6H0AlxsKCIdzQY0IxSQMp3hHkHuY
-         DmBphxRsMgJiSAns7iK/y/jwQLl+cl3D5NNvvArgzpcO76h1klAOx8xqqiGzBu3zbI6I
-         hNCpAgqwps5iWp2Opg3KdNIZ+rYGc4tffM3Zh0qbyG5m3Pz76g2c1otg/04GNuzLGyCg
-         HAzg==
-X-Gm-Message-State: AOJu0YzDNCPynSTJyT34W/5fEk3u53sGUoKDHLzwCOXWIZCU//Zitf/i
-	qkewKSjgzKN9eUwzT2OjM2xUcOC/9SNMXA==
-X-Google-Smtp-Source: AGHT+IE+ijgH3ryj6ItxNvSzAv/P3BGdXUgPG0gx4Ekfpo6irZHIxOjkjbIFa17fh3UV3KIWM13l2A==
-X-Received: by 2002:a17:906:1096:b0:9e6:2dcf:e11e with SMTP id u22-20020a170906109600b009e62dcfe11emr5620637eju.5.1700532449321;
-        Mon, 20 Nov 2023 18:07:29 -0800 (PST)
+        bh=tuvfwn61IVW3VhDnsOv11dwxQoD7AdJ5jVg0qt21yzs=;
+        b=nCRT1kE0x/6KH80aFtqY2kG9o0d+HanMqS7/FE7CQBerUnN42f/9y0EvnYtdgYSpS6
+         J4wsUdZ7Xh+1xnnSykIOLPPnNHZvB93NsSDnXnV4cdDRSVUtMpCCWZfoIb/fH2KDCTD5
+         tCKwtDGWO8JhnrZNQZ4jVUwln2+5C5UXgZfipK9e3z0VnuT9HysdfpEq601YgpGq0Oz4
+         kjtSLZVTHgWgMUbzs5Px2QTdNRXeMJ822lN7rBkDcny8QZemTdbeV9icD7+eyjP3R24O
+         8mjN3dXU1gj3Y2k5tSQWOLde1oso8USQHvl4wGZ1/fQMbzEEivqv5EHDgWXjRXNdW6r/
+         L1kg==
+X-Gm-Message-State: AOJu0YwEkuI7sV//5tTbBbXv5o4y56/GRlsyyPBExToKrVyDTvy/faoc
+	XtweNWDt2WVPu2mms3pk4jMXDoY1rAUGLA==
+X-Google-Smtp-Source: AGHT+IH7jcuc1YckSSP6ncasj9KekY5U0KvIadzyZp9L1P7CNx46uy9r3wVHwrgYuEemdVAsOPwdQA==
+X-Received: by 2002:a17:907:d27:b0:9ee:462c:7924 with SMTP id gn39-20020a1709070d2700b009ee462c7924mr1555241ejc.9.1700532453074;
+        Mon, 20 Nov 2023 18:07:33 -0800 (PST)
 Received: from localhost.localdomain (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id ha7-20020a170906a88700b009fc990d9edbsm2426668ejb.192.2023.11.20.18.07.27
+        by smtp.gmail.com with ESMTPSA id ha7-20020a170906a88700b009fc990d9edbsm2426668ejb.192.2023.11.20.18.07.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Nov 2023 18:07:28 -0800 (PST)
+        Mon, 20 Nov 2023 18:07:32 -0800 (PST)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -49,9 +49,9 @@ Cc: andrii@kernel.org,
 	memxor@gmail.com,
 	awerner32@gmail.com,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf v4 05/11] bpf: extract setup_func_entry() utility function
-Date: Tue, 21 Nov 2023 04:06:55 +0200
-Message-ID: <20231121020701.26440-6-eddyz87@gmail.com>
+Subject: [PATCH bpf v4 07/11] selftests/bpf: tests for iterating callbacks
+Date: Tue, 21 Nov 2023 04:06:57 +0200
+Message-ID: <20231121020701.26440-8-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.42.1
 In-Reply-To: <20231121020701.26440-1-eddyz87@gmail.com>
 References: <20231121020701.26440-1-eddyz87@gmail.com>
@@ -63,145 +63,196 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Move code for simulated stack frame creation to a separate utility
-function. This function would be used in the follow-up change for
-callbacks handling.
+A set of test cases to check behavior of callback handling logic,
+check if verifier catches the following situations:
+- program not safe on second callback iteration;
+- program not safe on zero callback iterations;
+- infinite loop inside a callback.
+
+Verify that callback logic works for bpf_loop, bpf_for_each_map_elem,
+bpf_user_ringbuf_drain, bpf_find_vma.
 
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/verifier.c | 84 ++++++++++++++++++++++++-------------------
- 1 file changed, 48 insertions(+), 36 deletions(-)
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../bpf/progs/verifier_iterating_callbacks.c  | 147 ++++++++++++++++++
+ 2 files changed, 149 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e6e1bcfe00f5..68ee4803d3a2 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9370,11 +9370,10 @@ static int set_callee_state(struct bpf_verifier_env *env,
- 			    struct bpf_func_state *caller,
- 			    struct bpf_func_state *callee, int insn_idx);
- 
--static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
--			     int *insn_idx, int subprog,
--			     set_callee_state_fn set_callee_state_cb)
-+static int setup_func_entry(struct bpf_verifier_env *env, int subprog, int callsite,
-+			    set_callee_state_fn set_callee_state_cb,
-+			    struct bpf_verifier_state *state)
- {
--	struct bpf_verifier_state *state = env->cur_state;
- 	struct bpf_func_state *caller, *callee;
- 	int err;
- 
-@@ -9384,13 +9383,53 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		return -E2BIG;
- 	}
- 
--	caller = state->frame[state->curframe];
- 	if (state->frame[state->curframe + 1]) {
- 		verbose(env, "verifier bug. Frame %d already allocated\n",
- 			state->curframe + 1);
- 		return -EFAULT;
- 	}
- 
-+	caller = state->frame[state->curframe];
-+	callee = kzalloc(sizeof(*callee), GFP_KERNEL);
-+	if (!callee)
-+		return -ENOMEM;
-+	state->frame[state->curframe + 1] = callee;
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index e5c61aa6604a..5cfa7a6316b6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -31,6 +31,7 @@
+ #include "verifier_helper_restricted.skel.h"
+ #include "verifier_helper_value_access.skel.h"
+ #include "verifier_int_ptr.skel.h"
++#include "verifier_iterating_callbacks.skel.h"
+ #include "verifier_jeq_infer_not_null.skel.h"
+ #include "verifier_ld_ind.skel.h"
+ #include "verifier_ldsx.skel.h"
+@@ -139,6 +140,7 @@ void test_verifier_helper_packet_access(void) { RUN(verifier_helper_packet_acces
+ void test_verifier_helper_restricted(void)    { RUN(verifier_helper_restricted); }
+ void test_verifier_helper_value_access(void)  { RUN(verifier_helper_value_access); }
+ void test_verifier_int_ptr(void)              { RUN(verifier_int_ptr); }
++void test_verifier_iterating_callbacks(void)  { RUN(verifier_iterating_callbacks); }
+ void test_verifier_jeq_infer_not_null(void)   { RUN(verifier_jeq_infer_not_null); }
+ void test_verifier_ld_ind(void)               { RUN(verifier_ld_ind); }
+ void test_verifier_ldsx(void)                  { RUN(verifier_ldsx); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+new file mode 100644
+index 000000000000..fa9429f77a81
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+@@ -0,0 +1,147 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+	/* callee cannot access r0, r6 - r9 for reading and has to write
-+	 * into its own stack before reading from it.
-+	 * callee can read/write into caller's stack
-+	 */
-+	init_func_state(env, callee,
-+			/* remember the callsite, it will be used by bpf_exit */
-+			callsite,
-+			state->curframe + 1 /* frameno within this callchain */,
-+			subprog /* subprog number within this prog */);
-+	/* Transfer references to the callee */
-+	err = copy_reference_state(callee, caller);
-+	err = err ?: set_callee_state_cb(env, caller, callee, callsite);
-+	if (err)
-+		goto err_out;
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
 +
-+	/* only increment it after check_reg_arg() finished */
-+	state->curframe++;
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 8);
++	__type(key, __u32);
++	__type(value, __u64);
++} map SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_USER_RINGBUF);
++	__uint(max_entries, 8);
++} ringbuf SEC(".maps");
++
++struct vm_area_struct;
++struct bpf_map;
++
++struct buf_context {
++	char *buf;
++};
++
++struct num_context {
++	__u64 i;
++};
++
++__u8 choice_arr[2] = { 0, 1 };
++
++static int unsafe_on_2nd_iter_cb(__u32 idx, struct buf_context *ctx)
++{
++	if (idx == 0) {
++		ctx->buf = (char *)(0xDEAD);
++		return 0;
++	}
++
++	if (bpf_probe_read_user(ctx->buf, 8, (void *)(0xBADC0FFEE)))
++		return 1;
 +
 +	return 0;
-+
-+err_out:
-+	free_func_state(callee);
-+	state->frame[state->curframe + 1] = NULL;
-+	return err;
 +}
 +
-+static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
-+			     int *insn_idx, int subprog,
-+			     set_callee_state_fn set_callee_state_cb)
++SEC("?raw_tp")
++__failure __msg("R1 type=scalar expected=fp")
++int unsafe_on_2nd_iter(void *unused)
 +{
-+	struct bpf_verifier_state *state = env->cur_state;
-+	struct bpf_func_state *caller, *callee;
-+	int err;
++	char buf[4];
++	struct buf_context loop_ctx = { .buf = buf };
 +
-+	caller = state->frame[state->curframe];
- 	err = btf_check_subprog_call(env, subprog, caller->regs);
- 	if (err == -EFAULT)
- 		return err;
-@@ -9460,35 +9499,12 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		return 0;
- 	}
- 
--	callee = kzalloc(sizeof(*callee), GFP_KERNEL);
--	if (!callee)
--		return -ENOMEM;
--	state->frame[state->curframe + 1] = callee;
--
--	/* callee cannot access r0, r6 - r9 for reading and has to write
--	 * into its own stack before reading from it.
--	 * callee can read/write into caller's stack
--	 */
--	init_func_state(env, callee,
--			/* remember the callsite, it will be used by bpf_exit */
--			*insn_idx /* callsite */,
--			state->curframe + 1 /* frameno within this callchain */,
--			subprog /* subprog number within this prog */);
--
--	/* Transfer references to the callee */
--	err = copy_reference_state(callee, caller);
-+	err = setup_func_entry(env, subprog, *insn_idx, set_callee_state_cb, state);
- 	if (err)
--		goto err_out;
--
--	err = set_callee_state_cb(env, caller, callee, *insn_idx);
--	if (err)
--		goto err_out;
-+		return err;
- 
- 	clear_caller_saved_regs(env, caller->regs);
- 
--	/* only increment it after check_reg_arg() finished */
--	state->curframe++;
--
- 	/* and go analyze first insn of the callee */
- 	*insn_idx = env->subprog_info[subprog].start - 1;
- 
-@@ -9496,14 +9512,10 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		verbose(env, "caller:\n");
- 		print_verifier_state(env, caller, true);
- 		verbose(env, "callee:\n");
--		print_verifier_state(env, callee, true);
-+		print_verifier_state(env, state->frame[state->curframe], true);
- 	}
--	return 0;
- 
--err_out:
--	free_func_state(callee);
--	state->frame[state->curframe + 1] = NULL;
--	return err;
++	bpf_loop(100, unsafe_on_2nd_iter_cb, &loop_ctx, 0);
 +	return 0;
- }
- 
- int map_set_for_each_callback_args(struct bpf_verifier_env *env,
++}
++
++static int unsafe_on_zero_iter_cb(__u32 idx, struct num_context *ctx)
++{
++	ctx->i = 0;
++	return 0;
++}
++
++SEC("?raw_tp")
++__failure __msg("invalid access to map value, value_size=2 off=32 size=1")
++int unsafe_on_zero_iter(void *unused)
++{
++	struct num_context loop_ctx = { .i = 32 };
++
++	bpf_loop(100, unsafe_on_zero_iter_cb, &loop_ctx, 0);
++	return choice_arr[loop_ctx.i];
++}
++
++static int loop_detection_cb(__u32 idx, struct num_context *ctx)
++{
++	for (;;) {}
++	return 0;
++}
++
++SEC("?raw_tp")
++__failure __msg("infinite loop detected")
++int loop_detection(void *unused)
++{
++	struct num_context loop_ctx = { .i = 0 };
++
++	bpf_loop(100, loop_detection_cb, &loop_ctx, 0);
++	return 0;
++}
++
++static __always_inline __u64 oob_state_machine(struct num_context *ctx)
++{
++	switch (ctx->i) {
++	case 0:
++		ctx->i = 1;
++		break;
++	case 1:
++		ctx->i = 32;
++		break;
++	}
++	return 0;
++}
++
++static __u64 for_each_map_elem_cb(struct bpf_map *map, __u32 *key, __u64 *val, void *data)
++{
++	return oob_state_machine(data);
++}
++
++SEC("?raw_tp")
++__failure __msg("invalid access to map value, value_size=2 off=32 size=1")
++int unsafe_for_each_map_elem(void *unused)
++{
++	struct num_context loop_ctx = { .i = 0 };
++
++	bpf_for_each_map_elem(&map, for_each_map_elem_cb, &loop_ctx, 0);
++	return choice_arr[loop_ctx.i];
++}
++
++static __u64 ringbuf_drain_cb(struct bpf_dynptr *dynptr, void *data)
++{
++	return oob_state_machine(data);
++}
++
++SEC("?raw_tp")
++__failure __msg("invalid access to map value, value_size=2 off=32 size=1")
++int unsafe_ringbuf_drain(void *unused)
++{
++	struct num_context loop_ctx = { .i = 0 };
++
++	bpf_user_ringbuf_drain(&ringbuf, ringbuf_drain_cb, &loop_ctx, 0);
++	return choice_arr[loop_ctx.i];
++}
++
++static __u64 find_vma_cb(struct task_struct *task, struct vm_area_struct *vma, void *data)
++{
++	return oob_state_machine(data);
++}
++
++SEC("?raw_tp")
++__failure __msg("invalid access to map value, value_size=2 off=32 size=1")
++int unsafe_find_vma(void *unused)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct num_context loop_ctx = { .i = 0 };
++
++	bpf_find_vma(task, 0, find_vma_cb, &loop_ctx, 0);
++	return choice_arr[loop_ctx.i];
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.42.1
 
