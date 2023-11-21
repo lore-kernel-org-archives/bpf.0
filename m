@@ -1,29 +1,27 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D05BB
-	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:23:27 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E50B9
+	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:23:41 -0800 (PST)
 Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-	by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3AL08rkX008571
-	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:23:26 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by m0089730.ppops.net (PPS) with ESMTPS id 3ughre8411-3
+	by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3AL08q9J008527
+	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:23:40 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by m0089730.ppops.net (PPS) with ESMTPS id 3ughre842k-3
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:23:26 -0800
-Received: from twshared44805.48.prn1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:23:40 -0800
+Received: from twshared9518.03.prn6.facebook.com (2620:10d:c0a8:1c::1b) by
+ mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Mon, 20 Nov 2023 16:22:54 -0800
+ 15.1.2507.34; Mon, 20 Nov 2023 16:22:57 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id F0D953BD942D0; Mon, 20 Nov 2023 16:22:39 -0800 (PST)
+	id 2DDDE3BD942E0; Mon, 20 Nov 2023 16:22:44 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>,
-        Eduard Zingerman
-	<eddyz87@gmail.com>
-Subject: [PATCH v2 bpf-next 08/10] bpf: track aligned STACK_ZERO cases as imprecise spilled registers
-Date: Mon, 20 Nov 2023 16:22:19 -0800
-Message-ID: <20231121002221.3687787-9-andrii@kernel.org>
+CC: <andrii@kernel.org>, <kernel-team@meta.com>
+Subject: [PATCH v2 bpf-next 10/10] bpf: use common instruction history across all states
+Date: Mon, 20 Nov 2023 16:22:21 -0800
+Message-ID: <20231121002221.3687787-11-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231121002221.3687787-1-andrii@kernel.org>
 References: <20231121002221.3687787-1-andrii@kernel.org>
@@ -36,380 +34,372 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: -SGI0-64-LRdjGT6gKs-gh-DHT-UKpIa
-X-Proofpoint-GUID: -SGI0-64-LRdjGT6gKs-gh-DHT-UKpIa
+X-Proofpoint-ORIG-GUID: jJ32IUqeOXXTUFl6odhdZ8qiUQTZr8gR
+X-Proofpoint-GUID: jJ32IUqeOXXTUFl6odhdZ8qiUQTZr8gR
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-20_22,2023-11-20_01,2023-05-22_02
 
-Now that precision backtracing is supporting register spill/fill to/from
-stack, there is another oportunity to be exploited here: minimizing
-precise STACK_ZERO cases. With a simple code change we can rely on
-initially imprecise register spill tracking for cases when register
-spilled to stack was a known zero.
+Instead of allocating and copying instruction history each time we
+enqueue child verifier state, switch to a model where we use one common
+dynamically sized array of instruction history entries across all states.
 
-This is a very common case for initializing on the stack variables,
-including rather large structures. Often times zero has no special
-meaning for the subsequent BPF program logic and is often overwritten
-with non-zero values soon afterwards. But due to STACK_ZERO vs
-STACK_MISC tracking, such initial zero initialization actually causes
-duplication of verifier states as STACK_ZERO is clearly different than
-STACK_MISC or spilled SCALAR_VALUE register.
+The key observation for proving this is correct is that instruction
+history is only relevant while state is active, which means it either is
+a current state (and thus we are actively modifying instruction history
+and no other state can interfere with us) or we are checkpointed state
+with some children still active (either enqueued or being current).
 
-The effect of this (now) trivial change is huge, as can be seen below.
-These are differences between BPF selftests, Cilium, and Meta-internal
-BPF object files relative to previous patch in this series. You can see
-improvements ranging from single-digit percentage improvement for
-instructions and states, all the way to 50-60% reduction for some of
-Meta-internal host agent programs, and even some Cilium programs.
+In the latter case our portion of instruction history is finalized and
+won't change or grow, so as long as we keep it immutable until the state
+is finalized, we are good.
 
-For Meta-internal ones I left only the differences for largest BPF
-object files by states/instructions, as there were too many differences
-in the overall output. All the differences were improvements, reducting
-number of states and thus instructions validated.
+Now, when state is finalized and is put into state hash for potentially
+future pruning lookups, instruction history is not used anymore. This is
+because instruction history is only used by precision marking logic, and
+we never modify precision markings for finalized states.
 
-Note, Meta-internal BPF object file names are not printed below.
-Many copies of balancer_ingress are actually many different
-configurations of Katran, so they are different BPF programs, which
-explains state reduction going from -16% all the way to 31%, depending
-on BPF program logic complexity.
+So, instead of each state having its own small instruction history, we
+keep a global dynamically-sized instruction history, where each state in
+current DFS path from root to active state remembers its portion of
+instruction history.  Current state can append to this history, but
+cannot modify any of its parent histories.
 
-I also tooked a closer look at a few small-ish BPF programs to validate
-the behavior. Let's take bpf_iter_netrlink.bpf.o (first row below).
-While it's just 8 vs 5 states, verifier log is still pretty long to
-include it here. But the reduction in states is due to the following
-piece of C code:
+Because the insn_hist array can be grown through realloc, states don't
+keep pointers, they instead maintain two indices, [start, end), into
+global instruction history array. End is exclusive index, so
+`start =3D=3D end` means there is no relevant instruction history.
 
-        unsigned long ino;
+This eliminates a lot of allocations and minimizes overall memory usage.
 
-	...
-
-        sk =3D s->sk_socket;
-        if (!sk) {
-                ino =3D 0;
-        } else {
-                inode =3D SOCK_INODE(sk);
-                bpf_probe_read_kernel(&ino, sizeof(ino), &inode->i_ino);
-        }
-        BPF_SEQ_PRINTF(seq, "%-8u %-8lu\n", s->sk_drops.counter, ino);
-	return 0;
-
-You can see that in some situations `ino` is zero-initialized, while in
-others it's unknown value filled out by bpf_probe_read_kernel(). Before
-this change both branches have to be validated twice. Once with
-(precise) ino =3D=3D 0, due to eager STACK_ZERO logic, and then again for
-when ino is just STACK_MISC. But BPF_SEQ_PRINTF() doesn't care about
-precise value of ino, so with the change in this patch verifier is able
-to prune states from one of the branches, reducing number of total
-states (and instructions) required for successful validation.
-
-Similar principle applies to bigger real-world applications, just at
-a much larger scale.
-
-SELFTESTS
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
-File                                     Program                  Insns (=
-A)  Insns (B)  Insns    (DIFF)  States (A)  States (B)  States (DIFF)
----------------------------------------  -----------------------  -------=
---  ---------  ---------------  ----------  ----------  -------------
-bpf_iter_netlink.bpf.linked3.o           dump_netlink                   1=
-48        104    -44 (-29.73%)           8           5   -3 (-37.50%)
-bpf_iter_unix.bpf.linked3.o              dump_unix                     84=
-74       8404     -70 (-0.83%)         151         147    -4 (-2.65%)
-bpf_loop.bpf.linked3.o                   stack_check                    5=
-60        324   -236 (-42.14%)          42          24  -18 (-42.86%)
-local_storage_bench.bpf.linked3.o        get_local                      1=
-20         77    -43 (-35.83%)           9           6   -3 (-33.33%)
-loop6.bpf.linked3.o                      trace_virtqueue_add_sgs      101=
-67       9868    -299 (-2.94%)         226         206   -20 (-8.85%)
-pyperf600_bpf_loop.bpf.linked3.o         on_event                      48=
-72       3423  -1449 (-29.74%)         322         229  -93 (-28.88%)
-strobemeta.bpf.linked3.o                 on_event                    1806=
-97     176036   -4661 (-2.58%)        4780        4734   -46 (-0.96%)
-test_cls_redirect.bpf.linked3.o          cls_redirect                 655=
-94      65401    -193 (-0.29%)        4230        4212   -18 (-0.43%)
-test_global_func_args.bpf.linked3.o      test_cls                       1=
-45        136      -9 (-6.21%)          10           9   -1 (-10.00%)
-test_l4lb.bpf.linked3.o                  balancer_ingress              47=
-60       2612  -2148 (-45.13%)         113         102   -11 (-9.73%)
-test_l4lb_noinline.bpf.linked3.o         balancer_ingress              48=
-45       4877     +32 (+0.66%)         219         221    +2 (+0.91%)
-test_l4lb_noinline_dynptr.bpf.linked3.o  balancer_ingress              20=
-72       2087     +15 (+0.72%)          97          98    +1 (+1.03%)
-test_seg6_loop.bpf.linked3.o             __add_egr_x                  124=
-40       9975  -2465 (-19.82%)         364         353   -11 (-3.02%)
-test_tcp_hdr_options.bpf.linked3.o       estab                         25=
-58       2572     +14 (+0.55%)         179         180    +1 (+0.56%)
-test_xdp_dynptr.bpf.linked3.o            _xdp_tx_iptunnel               6=
-45        596     -49 (-7.60%)          26          24    -2 (-7.69%)
-test_xdp_noinline.bpf.linked3.o          balancer_ingress_v6           35=
-20       3516      -4 (-0.11%)         216         216    +0 (+0.00%)
-xdp_synproxy_kern.bpf.linked3.o          syncookie_tc                 826=
-61      81241   -1420 (-1.72%)        5073        5155   +82 (+1.62%)
-xdp_synproxy_kern.bpf.linked3.o          syncookie_xdp                849=
-64      82297   -2667 (-3.14%)        5130        5157   +27 (+0.53%)
-
-META-INTERNAL
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-Program                                 Insns (A)  Insns (B)  Insns      =
-(DIFF)  States (A)  States (B)  States   (DIFF)
---------------------------------------  ---------  ---------  -----------=
-------  ----------  ----------  ---------------
-balancer_ingress                            27925      23608    -4317 (-1=
-5.46%)        1488        1482      -6 (-0.40%)
-balancer_ingress                            31824      27546    -4278 (-1=
-3.44%)        1658        1652      -6 (-0.36%)
-balancer_ingress                            32213      27935    -4278 (-1=
-3.28%)        1689        1683      -6 (-0.36%)
-balancer_ingress                            32213      27935    -4278 (-1=
-3.28%)        1689        1683      -6 (-0.36%)
-balancer_ingress                            31824      27546    -4278 (-1=
-3.44%)        1658        1652      -6 (-0.36%)
-balancer_ingress                            38647      29562    -9085 (-2=
-3.51%)        2069        1835   -234 (-11.31%)
-balancer_ingress                            38647      29562    -9085 (-2=
-3.51%)        2069        1835   -234 (-11.31%)
-balancer_ingress                            40339      30792    -9547 (-2=
-3.67%)        2193        1934   -259 (-11.81%)
-balancer_ingress                            37321      29055    -8266 (-2=
-2.15%)        1972        1795    -177 (-8.98%)
-balancer_ingress                            38176      29753    -8423 (-2=
-2.06%)        2008        1831    -177 (-8.81%)
-balancer_ingress                            29193      20910    -8283 (-2=
-8.37%)        1599        1422   -177 (-11.07%)
-balancer_ingress                            30013      21452    -8561 (-2=
-8.52%)        1645        1447   -198 (-12.04%)
-balancer_ingress                            28691      24290    -4401 (-1=
-5.34%)        1545        1531     -14 (-0.91%)
-balancer_ingress                            34223      28965    -5258 (-1=
-5.36%)        1984        1875    -109 (-5.49%)
-balancer_ingress                            35481      26158    -9323 (-2=
-6.28%)        2095        1806   -289 (-13.79%)
-balancer_ingress                            35481      26158    -9323 (-2=
-6.28%)        2095        1806   -289 (-13.79%)
-balancer_ingress                            35868      26455    -9413 (-2=
-6.24%)        2140        1827   -313 (-14.63%)
-balancer_ingress                            35868      26455    -9413 (-2=
-6.24%)        2140        1827   -313 (-14.63%)
-balancer_ingress                            35481      26158    -9323 (-2=
-6.28%)        2095        1806   -289 (-13.79%)
-balancer_ingress                            35481      26158    -9323 (-2=
-6.28%)        2095        1806   -289 (-13.79%)
-balancer_ingress                            34844      29485    -5359 (-1=
-5.38%)        2036        1918    -118 (-5.80%)
-fbflow_egress                                3256       2652     -604 (-1=
-8.55%)         218         192    -26 (-11.93%)
-fbflow_ingress                               1026        944       -82 (-=
-7.99%)          70          63     -7 (-10.00%)
-sslwall_tc_egress                            8424       7360    -1064 (-1=
-2.63%)         498         458     -40 (-8.03%)
-syar_accept_protect                         15040       9539    -5501 (-3=
-6.58%)         364         220   -144 (-39.56%)
-syar_connect_tcp_v6                         15036       9535    -5501 (-3=
-6.59%)         360         216   -144 (-40.00%)
-syar_connect_udp_v4                         15039       9538    -5501 (-3=
-6.58%)         361         217   -144 (-39.89%)
-syar_connect_connect4_protect4              24805      15833    -8972 (-3=
-6.17%)         756         480   -276 (-36.51%)
-syar_lsm_file_open                         167772     151813    -15959 (-=
-9.51%)        1836        1667    -169 (-9.20%)
-syar_namespace_create_new                   14805       9304    -5501 (-3=
-7.16%)         353         209   -144 (-40.79%)
-syar_python3_detect                         17531      12030    -5501 (-3=
-1.38%)         391         247   -144 (-36.83%)
-syar_ssh_post_fork                          16412      10911    -5501 (-3=
-3.52%)         405         261   -144 (-35.56%)
-syar_enter_execve                           14728       9227    -5501 (-3=
-7.35%)         345         201   -144 (-41.74%)
-syar_enter_execveat                         14728       9227    -5501 (-3=
-7.35%)         345         201   -144 (-41.74%)
-syar_exit_execve                            16622      11121    -5501 (-3=
-3.09%)         376         232   -144 (-38.30%)
-syar_exit_execveat                          16622      11121    -5501 (-3=
-3.09%)         376         232   -144 (-38.30%)
-syar_syscalls_kill                          15288       9787    -5501 (-3=
-5.98%)         398         254   -144 (-36.18%)
-syar_task_enter_pivot_root                  14898       9397    -5501 (-3=
-6.92%)         357         213   -144 (-40.34%)
-syar_syscalls_setreuid                      16678      11177    -5501 (-3=
-2.98%)         429         285   -144 (-33.57%)
-syar_syscalls_setuid                        16678      11177    -5501 (-3=
-2.98%)         429         285   -144 (-33.57%)
-syar_syscalls_process_vm_readv              14959       9458    -5501 (-3=
-6.77%)         364         220   -144 (-39.56%)
-syar_syscalls_process_vm_writev             15757      10256    -5501 (-3=
-4.91%)         390         246   -144 (-36.92%)
-do_uprobe                                   15519      10018    -5501 (-3=
-5.45%)         373         229   -144 (-38.61%)
-edgewall                                   179715      55783  -123932 (-6=
-8.96%)       12607        3999  -8608 (-68.28%)
-bictcp_state                                 7570       4131    -3439 (-4=
-5.43%)         496         269   -227 (-45.77%)
-cubictcp_state                               7570       4131    -3439 (-4=
-5.43%)         496         269   -227 (-45.77%)
-tcp_rate_skb_delivered                        447        272     -175 (-3=
-9.15%)          29          18    -11 (-37.93%)
-kprobe__bbr_set_state                        4566       2615    -1951 (-4=
-2.73%)         209         124    -85 (-40.67%)
-kprobe__bictcp_state                         4566       2615    -1951 (-4=
-2.73%)         209         124    -85 (-40.67%)
-inet_sock_set_state                          1501       1337     -164 (-1=
-0.93%)          93          85      -8 (-8.60%)
-tcp_retransmit_skb                           1145        981     -164 (-1=
-4.32%)          67          59     -8 (-11.94%)
-tcp_retransmit_synack                        1183        951     -232 (-1=
-9.61%)          67          55    -12 (-17.91%)
-bpf_tcptuner                                 1459       1187     -272 (-1=
-8.64%)          99          80    -19 (-19.19%)
-tw_egress                                     801        776       -25 (-=
-3.12%)          69          66      -3 (-4.35%)
-tw_ingress                                    795        770       -25 (-=
-3.14%)          69          66      -3 (-4.35%)
-ttls_tc_ingress                             19025      19383      +358 (+=
-1.88%)         470         465      -5 (-1.06%)
-ttls_nat_egress                               490        299     -191 (-3=
-8.98%)          33          20    -13 (-39.39%)
-ttls_nat_ingress                              448        285     -163 (-3=
-6.38%)          32          21    -11 (-34.38%)
-tw_twfw_egress                             511127     212071  -299056 (-5=
-8.51%)       16733        8504  -8229 (-49.18%)
-tw_twfw_ingress                            500095     212069  -288026 (-5=
-7.59%)       16223        8504  -7719 (-47.58%)
-tw_twfw_tc_eg                              511113     212064  -299049 (-5=
-8.51%)       16732        8504  -8228 (-49.18%)
-tw_twfw_tc_in                              500095     212069  -288026 (-5=
-7.59%)       16223        8504  -7719 (-47.58%)
-tw_twfw_egress                              12632      12435      -197 (-=
-1.56%)         276         260     -16 (-5.80%)
-tw_twfw_ingress                             12631      12454      -177 (-=
-1.40%)         278         261     -17 (-6.12%)
-tw_twfw_tc_eg                               12595      12435      -160 (-=
-1.27%)         274         259     -15 (-5.47%)
-tw_twfw_tc_in                               12631      12454      -177 (-=
-1.40%)         278         261     -17 (-6.12%)
-tw_xdp_dump                                   266        209      -57 (-2=
-1.43%)           9           8     -1 (-11.11%)
-
-CILIUM
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
-File           Program                           Insns (A)  Insns (B)  In=
-sns     (DIFF)  States (A)  States (B)  States  (DIFF)
--------------  --------------------------------  ---------  ---------  --=
---------------  ----------  ----------  --------------
-bpf_host.o     cil_to_netdev                          6047       4578   -=
-1469 (-24.29%)         362         249  -113 (-31.22%)
-bpf_host.o     handle_lxc_traffic                     2227       1585    =
--642 (-28.83%)         156         103   -53 (-33.97%)
-bpf_host.o     tail_handle_ipv4_from_netdev           2244       1458    =
--786 (-35.03%)         163         106   -57 (-34.97%)
-bpf_host.o     tail_handle_nat_fwd_ipv4              21022      10479  -1=
-0543 (-50.15%)        1289         670  -619 (-48.02%)
-bpf_host.o     tail_handle_nat_fwd_ipv6              15433      11375   -=
-4058 (-26.29%)         905         643  -262 (-28.95%)
-bpf_host.o     tail_ipv4_host_policy_ingress          2219       1367    =
--852 (-38.40%)         161          96   -65 (-40.37%)
-bpf_host.o     tail_nodeport_nat_egress_ipv4         22460      19862   -=
-2598 (-11.57%)        1469        1293  -176 (-11.98%)
-bpf_host.o     tail_nodeport_nat_ingress_ipv4         5526       3534   -=
-1992 (-36.05%)         366         243  -123 (-33.61%)
-bpf_host.o     tail_nodeport_nat_ingress_ipv6         5132       4256    =
--876 (-17.07%)         241         219    -22 (-9.13%)
-bpf_host.o     tail_nodeport_nat_ipv6_egress          3702       3542    =
- -160 (-4.32%)         215         205    -10 (-4.65%)
-bpf_lxc.o      tail_handle_nat_fwd_ipv4              21022      10479  -1=
-0543 (-50.15%)        1289         670  -619 (-48.02%)
-bpf_lxc.o      tail_handle_nat_fwd_ipv6              15433      11375   -=
-4058 (-26.29%)         905         643  -262 (-28.95%)
-bpf_lxc.o      tail_ipv4_ct_egress                    5073       3374   -=
-1699 (-33.49%)         262         172   -90 (-34.35%)
-bpf_lxc.o      tail_ipv4_ct_ingress                   5093       3385   -=
-1708 (-33.54%)         262         172   -90 (-34.35%)
-bpf_lxc.o      tail_ipv4_ct_ingress_policy_only       5093       3385   -=
-1708 (-33.54%)         262         172   -90 (-34.35%)
-bpf_lxc.o      tail_ipv6_ct_egress                    4593       3878    =
--715 (-15.57%)         194         151   -43 (-22.16%)
-bpf_lxc.o      tail_ipv6_ct_ingress                   4606       3891    =
--715 (-15.52%)         194         151   -43 (-22.16%)
-bpf_lxc.o      tail_ipv6_ct_ingress_policy_only       4606       3891    =
--715 (-15.52%)         194         151   -43 (-22.16%)
-bpf_lxc.o      tail_nodeport_nat_ingress_ipv4         5526       3534   -=
-1992 (-36.05%)         366         243  -123 (-33.61%)
-bpf_lxc.o      tail_nodeport_nat_ingress_ipv6         5132       4256    =
--876 (-17.07%)         241         219    -22 (-9.13%)
-bpf_overlay.o  tail_handle_nat_fwd_ipv4              20524      10114  -1=
-0410 (-50.72%)        1271         638  -633 (-49.80%)
-bpf_overlay.o  tail_nodeport_nat_egress_ipv4         22718      19490   -=
-3228 (-14.21%)        1475        1275  -200 (-13.56%)
-bpf_overlay.o  tail_nodeport_nat_ingress_ipv4         5526       3534   -=
-1992 (-36.05%)         366         243  -123 (-33.61%)
-bpf_overlay.o  tail_nodeport_nat_ingress_ipv6         5132       4256    =
--876 (-17.07%)         241         219    -22 (-9.13%)
-bpf_overlay.o  tail_nodeport_nat_ipv6_egress          3638       3548    =
-  -90 (-2.47%)         209         203     -6 (-2.87%)
-bpf_overlay.o  tail_rev_nodeport_lb4                  4368       3820    =
--548 (-12.55%)         248         215   -33 (-13.31%)
-bpf_overlay.o  tail_rev_nodeport_lb6                  2867       2428    =
--439 (-15.31%)         167         140   -27 (-16.17%)
-bpf_sock.o     cil_sock6_connect                      1718       1703    =
-  -15 (-0.87%)         100          99     -1 (-1.00%)
-bpf_xdp.o      tail_handle_nat_fwd_ipv4              12917      12443    =
- -474 (-3.67%)         875         849    -26 (-2.97%)
-bpf_xdp.o      tail_handle_nat_fwd_ipv6              13515      13264    =
- -251 (-1.86%)         715         702    -13 (-1.82%)
-bpf_xdp.o      tail_lb_ipv4                          39492      36367    =
--3125 (-7.91%)        2430        2251   -179 (-7.37%)
-bpf_xdp.o      tail_lb_ipv6                          80441      78058    =
--2383 (-2.96%)        3647        3523   -124 (-3.40%)
-bpf_xdp.o      tail_nodeport_ipv6_dsr                 1038        901    =
--137 (-13.20%)          61          55     -6 (-9.84%)
-bpf_xdp.o      tail_nodeport_nat_egress_ipv4         13027      12096    =
- -931 (-7.15%)         868         809    -59 (-6.80%)
-bpf_xdp.o      tail_nodeport_nat_ingress_ipv4         7617       5900   -=
-1717 (-22.54%)         522         413  -109 (-20.88%)
-bpf_xdp.o      tail_nodeport_nat_ingress_ipv6         7575       7395    =
- -180 (-2.38%)         383         374     -9 (-2.35%)
-bpf_xdp.o      tail_rev_nodeport_lb4                  6808       6739    =
-  -69 (-1.01%)         403         396     -7 (-1.74%)
-bpf_xdp.o      tail_rev_nodeport_lb6                 16173      15847    =
- -326 (-2.02%)        1010         990    -20 (-1.98%)
-
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ include/linux/bpf_verifier.h | 19 ++++----
+ kernel/bpf/verifier.c        | 92 ++++++++++++++++--------------------
+ 2 files changed, 53 insertions(+), 58 deletions(-)
 
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 1901056ee61c..cd139a133f6e 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -311,7 +311,7 @@ struct bpf_func_state {
+=20
+ #define MAX_CALL_FRAMES 8
+=20
+-/* instruction history flags, used in bpf_jmp_history_entry.flags field =
+*/
++/* instruction history flags, used in bpf_insn_hist_entry.flags field */
+ enum {
+ 	/* instruction references stack slot through PTR_TO_STACK register;
+ 	 * we also store stack's frame number in lower 3 bits (MAX_CALL_FRAMES =
+is 8)
+@@ -329,7 +329,7 @@ enum {
+ static_assert(INSN_F_FRAMENO_MASK + 1 >=3D MAX_CALL_FRAMES);
+ static_assert(INSN_F_SPI_MASK + 1 >=3D MAX_BPF_STACK / 8);
+=20
+-struct bpf_jmp_history_entry {
++struct bpf_insn_hist_entry {
+ 	u32 idx;
+ 	/* insn idx can't be bigger than 1 million */
+ 	u32 prev_idx : 22;
+@@ -414,13 +414,14 @@ struct bpf_verifier_state {
+ 	 * See get_loop_entry() for more information.
+ 	 */
+ 	struct bpf_verifier_state *loop_entry;
+-	/* jmp history recorded from first to last.
+-	 * backtracking is using it to go from last to first.
+-	 * For most states jmp_history_cnt is [0-3].
++	/* Sub-range of env->insn_hist[] corresponding to this state's
++	 * instruction history.
++	 * Backtracking is using it to go from last to first.
++	 * For most states instruction history is short, 0-3 instructions.
+ 	 * For loops can go up to ~40.
+ 	 */
+-	struct bpf_jmp_history_entry *jmp_history;
+-	u32 jmp_history_cnt;
++	u32 insn_hist_start;
++	u32 insn_hist_end;
+ 	u32 dfs_depth;
+ };
+=20
+@@ -657,7 +658,9 @@ struct bpf_verifier_env {
+ 		int cur_stack;
+ 	} cfg;
+ 	struct backtrack_state bt;
+-	struct bpf_jmp_history_entry *cur_hist_ent;
++	struct bpf_insn_hist_entry *insn_hist;
++	struct bpf_insn_hist_entry *cur_hist_ent;
++	u32 insn_hist_cap;
+ 	u32 pass_cnt; /* number of times do_check() was called */
+ 	u32 subprog_cnt;
+ 	/* number of instructions analyzed by the verifier */
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 00e6b17b71d0..ddb0888e7453 100644
+index ddb0888e7453..5f4c238d62db 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -4405,8 +4405,7 @@ static int check_stack_write_fixed_off(struct bpf_v=
-erifier_env *env,
- 		return err;
+@@ -1292,13 +1292,6 @@ static void free_func_state(struct bpf_func_state =
+*state)
+ 	kfree(state);
+ }
 =20
- 	mark_stack_slot_scratched(env, spi);
--	if (reg && !(off % BPF_REG_SIZE) && register_is_bounded(reg) &&
--	    !register_is_null(reg) && env->bpf_capable) {
-+	if (reg && !(off % BPF_REG_SIZE) && register_is_bounded(reg) && env->bp=
-f_capable) {
- 		save_register_state(env, state, spi, reg, size);
- 		/* Break the relation on a narrowing spill. */
- 		if (fls64(reg->umax_value) > BITS_PER_BYTE * size)
-@@ -4455,7 +4454,12 @@ static int check_stack_write_fixed_off(struct bpf_=
-verifier_env *env,
- 		/* when we zero initialize stack slots mark them as such */
- 		if ((reg && register_is_null(reg)) ||
- 		    (!reg && is_bpf_st_mem(insn) && insn->imm =3D=3D 0)) {
--			/* backtracking doesn't work for STACK_ZERO yet. */
-+			/* STACK_ZERO case happened because register spill
-+			 * wasn't properly aligned at the stack slot boundary,
-+			 * so it's not a register spill anymore; force
-+			 * originating register to be precise to make
-+			 * STACK_ZERO correct for subsequent states
-+			 */
- 			err =3D mark_chain_precision(env, value_regno);
+-static void clear_jmp_history(struct bpf_verifier_state *state)
+-{
+-	kfree(state->jmp_history);
+-	state->jmp_history =3D NULL;
+-	state->jmp_history_cnt =3D 0;
+-}
+-
+ static void free_verifier_state(struct bpf_verifier_state *state,
+ 				bool free_self)
+ {
+@@ -1308,7 +1301,6 @@ static void free_verifier_state(struct bpf_verifier=
+_state *state,
+ 		free_func_state(state->frame[i]);
+ 		state->frame[i] =3D NULL;
+ 	}
+-	clear_jmp_history(state);
+ 	if (free_self)
+ 		kfree(state);
+ }
+@@ -1334,13 +1326,6 @@ static int copy_verifier_state(struct bpf_verifier=
+_state *dst_state,
+ 	struct bpf_func_state *dst;
+ 	int i, err;
+=20
+-	dst_state->jmp_history =3D copy_array(dst_state->jmp_history, src->jmp_=
+history,
+-					  src->jmp_history_cnt, sizeof(*dst_state->jmp_history),
+-					  GFP_USER);
+-	if (!dst_state->jmp_history)
+-		return -ENOMEM;
+-	dst_state->jmp_history_cnt =3D src->jmp_history_cnt;
+-
+ 	/* if dst has more stack frames then src frame, free them, this is also
+ 	 * necessary in case of exceptional exits using bpf_throw.
+ 	 */
+@@ -1357,6 +1342,8 @@ static int copy_verifier_state(struct bpf_verifier_=
+state *dst_state,
+ 	dst_state->parent =3D src->parent;
+ 	dst_state->first_insn_idx =3D src->first_insn_idx;
+ 	dst_state->last_insn_idx =3D src->last_insn_idx;
++	dst_state->insn_hist_start =3D src->insn_hist_start;
++	dst_state->insn_hist_end =3D src->insn_hist_end;
+ 	dst_state->dfs_depth =3D src->dfs_depth;
+ 	dst_state->used_as_loop_entry =3D src->used_as_loop_entry;
+ 	for (i =3D 0; i <=3D src->curframe; i++) {
+@@ -3214,11 +3201,10 @@ static bool is_jmp_point(struct bpf_verifier_env =
+*env, int insn_idx)
+ }
+=20
+ /* for any branch, call, exit record the history of jmps in the given st=
+ate */
+-static int push_jmp_history(struct bpf_verifier_env *env, struct bpf_ver=
+ifier_state *cur,
+-			    int insn_flags)
++static int push_insn_history(struct bpf_verifier_env *env, struct bpf_ve=
+rifier_state *cur,
++			     int insn_flags)
+ {
+-	u32 cnt =3D cur->jmp_history_cnt;
+-	struct bpf_jmp_history_entry *p;
++	struct bpf_insn_hist_entry *p;
+ 	size_t alloc_size;
+=20
+ 	/* combine instruction flags if we already recorded this instruction */
+@@ -3234,46 +3220,51 @@ static int push_jmp_history(struct bpf_verifier_e=
+nv *env, struct bpf_verifier_st
+ 		return 0;
+ 	}
+=20
+-	cnt++;
+-	alloc_size =3D kmalloc_size_roundup(size_mul(cnt, sizeof(*p)));
+-	p =3D krealloc(cur->jmp_history, alloc_size, GFP_USER);
+-	if (!p)
+-		return -ENOMEM;
+-	cur->jmp_history =3D p;
++	if (cur->insn_hist_end + 1 > env->insn_hist_cap) {
++		alloc_size =3D size_mul(cur->insn_hist_end + 1, sizeof(*p));
++		alloc_size =3D kmalloc_size_roundup(alloc_size);
++		p =3D krealloc(env->insn_hist, alloc_size, GFP_USER);
++		if (!p)
++			return -ENOMEM;
++		env->insn_hist =3D p;
++		env->insn_hist_cap =3D alloc_size / sizeof(*p);
++	}
+=20
+-	p =3D &cur->jmp_history[cnt - 1];
++	p =3D &env->insn_hist[cur->insn_hist_end];
+ 	p->idx =3D env->insn_idx;
+ 	p->prev_idx =3D env->prev_insn_idx;
+ 	p->flags =3D insn_flags;
+-	cur->jmp_history_cnt =3D cnt;
++	cur->insn_hist_end++;
+ 	env->cur_hist_ent =3D p;
+=20
+ 	return 0;
+ }
+=20
+-static struct bpf_jmp_history_entry *get_jmp_hist_entry(struct bpf_verif=
+ier_state *st,
+-						        u32 hist_end, int insn_idx)
++static struct bpf_insn_hist_entry *get_insn_hist_entry(struct bpf_verifi=
+er_env *env,
++						       u32 hist_end, int insn_idx)
+ {
+-	if (hist_end > 0 && st->jmp_history[hist_end - 1].idx =3D=3D insn_idx)
+-		return &st->jmp_history[hist_end - 1];
++	if (hist_end > 0 && env->insn_hist[hist_end - 1].idx =3D=3D insn_idx)
++		return &env->insn_hist[hist_end - 1];
+ 	return NULL;
+ }
+=20
+ /* Backtrack one insn at a time. If idx is not at the top of recorded
+  * history then previous instruction came from straight line execution.
+  */
+-static int get_prev_insn_idx(struct bpf_verifier_state *st, int i,
+-			     u32 *history)
++static int get_prev_insn_idx(const struct bpf_verifier_env *env,
++			     struct bpf_verifier_state *st,
++			     int insn_idx, u32 *hist_endp)
+ {
+-	u32 cnt =3D *history;
++	u32 hist_end =3D *hist_endp;
++	u32 cnt =3D hist_end - st->insn_hist_start;
+=20
+-	if (cnt && st->jmp_history[cnt - 1].idx =3D=3D i) {
+-		i =3D st->jmp_history[cnt - 1].prev_idx;
+-		(*history)--;
++	if (cnt && env->insn_hist[hist_end - 1].idx =3D=3D insn_idx) {
++		insn_idx =3D env->insn_hist[hist_end - 1].prev_idx;
++		(*hist_endp)--;
+ 	} else {
+-		i--;
++		insn_idx--;
+ 	}
+-	return i;
++	return insn_idx;
+ }
+=20
+ static const char *disasm_kfunc_name(void *data, const struct bpf_insn *=
+insn)
+@@ -3462,7 +3453,7 @@ static void fmt_stack_mask(char *buf, ssize_t buf_s=
+z, u64 stack_mask)
+  *   - *was* processed previously during backtracking.
+  */
+ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int sub=
+seq_idx,
+-			  struct bpf_jmp_history_entry *hist, struct backtrack_state *bt)
++			  struct bpf_insn_hist_entry *hist, struct backtrack_state *bt)
+ {
+ 	const struct bpf_insn_cbs cbs =3D {
+ 		.cb_call	=3D disasm_kfunc_name,
+@@ -3953,7 +3944,7 @@ static int mark_precise_scalar_ids(struct bpf_verif=
+ier_env *env, struct bpf_veri
+  * SCALARS, as well as any other registers and slots that contribute to
+  * a tracked state of given registers/stack slots, depending on specific=
+ BPF
+  * assembly instructions (see backtrack_insns() for exact instruction ha=
+ndling
+- * logic). This backtracking relies on recorded jmp_history and is able =
+to
++ * logic). This backtracking relies on recorded insn_hist and is able to
+  * traverse entire chain of parent states. This process ends only when a=
+ll the
+  * necessary registers/slots and their transitive dependencies are marke=
+d as
+  * precise.
+@@ -4070,8 +4061,8 @@ static int __mark_chain_precision(struct bpf_verifi=
+er_env *env, int regno)
+=20
+ 	for (;;) {
+ 		DECLARE_BITMAP(mask, 64);
+-		u32 history =3D st->jmp_history_cnt;
+-		struct bpf_jmp_history_entry *hist;
++		u32 hist_end =3D st->insn_hist_end;
++		struct bpf_insn_hist_entry *hist;
+=20
+ 		if (env->log.level & BPF_LOG_LEVEL2) {
+ 			verbose(env, "mark_precise: frame%d: last_idx %d first_idx %d subseq_=
+idx %d \n",
+@@ -4135,7 +4126,7 @@ static int __mark_chain_precision(struct bpf_verifi=
+er_env *env, int regno)
+ 				err =3D 0;
+ 				skip_first =3D false;
+ 			} else {
+-				hist =3D get_jmp_hist_entry(st, history, i);
++				hist =3D get_insn_hist_entry(env, hist_end, i);
+ 				err =3D backtrack_insn(env, i, subseq_idx, hist, bt);
+ 			}
+ 			if (err =3D=3D -ENOTSUPP) {
+@@ -4154,7 +4145,7 @@ static int __mark_chain_precision(struct bpf_verifi=
+er_env *env, int regno)
+ 			if (i =3D=3D first_idx)
+ 				break;
+ 			subseq_idx =3D i;
+-			i =3D get_prev_insn_idx(st, i, &history);
++			i =3D get_prev_insn_idx(env, st, i, &hist_end);
+ 			if (i >=3D env->prog->len) {
+ 				/* This can happen if backtracking reached insn 0
+ 				 * and there are still reg_mask or stack_mask
+@@ -4473,7 +4464,7 @@ static int check_stack_write_fixed_off(struct bpf_v=
+erifier_env *env,
+ 	}
+=20
+ 	if (insn_flags)
+-		return push_jmp_history(env, env->cur_state, insn_flags);
++		return push_insn_history(env, env->cur_state, insn_flags);
+ 	return 0;
+ }
+=20
+@@ -4773,7 +4764,7 @@ static int check_stack_read_fixed_off(struct bpf_ve=
+rifier_env *env,
+ 		insn_flags =3D 0; /* we are not restoring spilled register */
+ 	}
+ 	if (insn_flags)
+-		return push_jmp_history(env, env->cur_state, insn_flags);
++		return push_insn_history(env, env->cur_state, insn_flags);
+ 	return 0;
+ }
+=20
+@@ -16767,7 +16758,7 @@ static int is_state_visited(struct bpf_verifier_e=
+nv *env, int insn_idx)
+ 			 * the current state.
+ 			 */
+ 			if (is_jmp_point(env, env->insn_idx))
+-				err =3D err ? : push_jmp_history(env, cur, 0);
++				err =3D err ? : push_insn_history(env, cur, 0);
+ 			err =3D err ? : propagate_precision(env, &sl->state);
  			if (err)
  				return err;
+@@ -16866,8 +16857,8 @@ static int is_state_visited(struct bpf_verifier_e=
+nv *env, int insn_idx)
+=20
+ 	cur->parent =3D new;
+ 	cur->first_insn_idx =3D insn_idx;
++	cur->insn_hist_start =3D cur->insn_hist_end;
+ 	cur->dfs_depth =3D new->dfs_depth + 1;
+-	clear_jmp_history(cur);
+ 	new_sl->next =3D *explored_state(env, insn_idx);
+ 	*explored_state(env, insn_idx) =3D new_sl;
+ 	/* connect new state to parentage chain. Current frame needs all
+@@ -17034,7 +17025,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 		}
+=20
+ 		if (is_jmp_point(env, env->insn_idx)) {
+-			err =3D push_jmp_history(env, state, 0);
++			err =3D push_insn_history(env, state, 0);
+ 			if (err)
+ 				return err;
+ 		}
+@@ -20566,6 +20557,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_a=
+ttr *attr, bpfptr_t uattr, __u3
+ 	if (!is_priv)
+ 		mutex_unlock(&bpf_verifier_lock);
+ 	vfree(env->insn_aux_data);
++	kvfree(env->insn_hist);
+ err_free_env:
+ 	kfree(env);
+ 	return ret;
 --=20
 2.34.1
 
