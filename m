@@ -1,118 +1,127 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07E6B9
-	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:22:45 -0800 (PST)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AL0Ak09021304
-	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:22:44 -0800
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A20BB
+	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:22:50 -0800 (PST)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3AL0FPoG005059
+	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:22:49 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ughr4045t-8
+	by m0001303.ppops.net (PPS) with ESMTPS id 3ugh9g075b-12
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:22:44 -0800
+	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:22:49 -0800
 Received: from twshared29647.38.frc1.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Mon, 20 Nov 2023 16:22:30 -0800
+ 15.1.2507.34; Mon, 20 Nov 2023 16:22:42 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 265723BD94254; Mon, 20 Nov 2023 16:22:23 -0800 (PST)
+	id C6C733BD942C5; Mon, 20 Nov 2023 16:22:37 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH v2 bpf-next 00/10] Complete BPF verifier precision tracking support for register spills
-Date: Mon, 20 Nov 2023 16:22:11 -0800
-Message-ID: <20231121002221.3687787-1-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 07/10] selftests/bpf: validate zero preservation for sub-slot loads
+Date: Mon, 20 Nov 2023 16:22:18 -0800
+Message-ID: <20231121002221.3687787-8-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: hxAcmiciwfhi5mKZ2F8b5Ow6H5iztpZB
-X-Proofpoint-GUID: hxAcmiciwfhi5mKZ2F8b5Ow6H5iztpZB
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+In-Reply-To: <20231121002221.3687787-1-andrii@kernel.org>
+References: <20231121002221.3687787-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: XOelS7e4ODI85h1jKXhejxMBnB_X3_Jd
+X-Proofpoint-GUID: XOelS7e4ODI85h1jKXhejxMBnB_X3_Jd
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-20_22,2023-11-20_01,2023-05-22_02
 
-*NOTE* this patch set conflicts with a fix [0] in bpf tree, so this has to
-wait until bpf and bpf-next trees converge to be rebased. I'm still submitt=
-ing
-it for early review and discussion.
+Validate that 1-, 2-, and 4-byte loads from stack slots not aligned on
+8-byte boundary still preserve zero, when loading from all-STACK_ZERO
+sub-slots, or when stack sub-slots are covered by spilled register with
+known constant zero value.
 
-  [0] https://patchwork.kernel.org/project/netdevbpf/patch/20231110002638.4=
-168352-3-andrii@kernel.org/
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ .../selftests/bpf/progs/verifier_spill_fill.c | 62 +++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
-Add support to BPF verifier to track and support register spill/fill to/from
-stack regardless if it was done through read-only R10 register (which is the
-only form supported today), or through a general register after copying R10
-into it, while also potentially modifying offset.
-
-Once we add register this generic spill/fill support to precision
-backtracking, we can take advantage of it to stop doing eager STACK_ZERO
-conversion on register spill. Instead we can rely on (im)precision of spill=
-ed
-const zero register to improve verifier state pruning efficiency. This
-situation of using const zero register to initialize stack slots is very
-common with __builtin_memset() usage or just zero-initializing variables on
-the stack, and it causes unnecessary state duplication, as that STACK_ZERO
-knowledge is often not necessary for correctness, as those zero values are
-never used in precise context. Thus, relying on register imprecision helps
-tremendously, especially in real-world BPF programs.
-
-To make spilled const zero register behave completely equivalently to
-STACK_ZERO, we need to improve few other small pieces, which is done in the
-second part of the patch set. See individual patches for details. There are
-also two small bug fixes spotted during STACK_ZERO debugging.
-
-The patch set consists of logically three changes:
-  - patch #1 (and corresponding tests in patch #2) is fixing/impoving preci=
-sion
-    propagation for stack spills/fills. This can be landed as a stand-alone
-    improvement;
-  - patches #3 through #9 is improving verification scalability by utilizing
-    register (im)precision instead of eager STACK_ZERO. These changes depend
-    on patch #1.
-  - patch #10 is a memory efficiency improvement to how instruction/jump
-    history is tracked and maintained. It depends on patch #1, but is not
-    strictly speaking required, even though I believe it's a good long-term
-    solution to have a path-dependent per-instruction information. Kind
-    of like a path-dependent counterpart to path-agnostic insn_aux array.
-
-v1->v2:
-  - clean ups, WARN_ONCE(), insn_flags helpers added (Eduard);
-  - added more selftests for STACK_ZERO/STACK_MISC cases (Eduard);
-  - a bit more detailed explanation of effect of avoiding STACK_ZERO in fav=
-or
-    of register spill in patch #8 commit (Alexei);
-  - global shared instruction history refactoring moved to be the last patch
-    in the series to make it easier to revert it, if applied (Alexei).
-
-Andrii Nakryiko (10):
-  bpf: support non-r10 register spill/fill to/from stack in precision
-    tracking
-  selftests/bpf: add stack access precision test
-  bpf: fix check for attempt to corrupt spilled pointer
-  bpf: preserve STACK_ZERO slots on partial reg spills
-  selftests/bpf: validate STACK_ZERO is preserved on subreg spill
-  bpf: preserve constant zero when doing partial register restore
-  selftests/bpf: validate zero preservation for sub-slot loads
-  bpf: track aligned STACK_ZERO cases as imprecise spilled registers
-  selftests/bpf: validate precision logic in
-    partial_stack_load_preserves_zeros
-  bpf: use common instruction history across all states
-
- include/linux/bpf_verifier.h                  |  42 ++-
- kernel/bpf/verifier.c                         | 294 +++++++++++-------
- .../selftests/bpf/progs/verifier_spill_fill.c | 113 +++++++
- .../bpf/progs/verifier_subprog_precision.c    |  87 +++++-
- .../testing/selftests/bpf/verifier/precise.c  |  38 ++-
- 5 files changed, 423 insertions(+), 151 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/to=
+ols/testing/selftests/bpf/progs/verifier_spill_fill.c
+index 899a74ac9093..60ad2e0247b4 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
++++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+@@ -486,4 +486,66 @@ __naked void spill_subregs_preserve_stack_zero(void)
+ 	: __clobber_all);
+ }
+=20
++char single_byte_buf[1] SEC(".data.single_byte_buf");
++
++SEC("raw_tp")
++__log_level(2)
++__success
++__naked void partial_stack_load_preserves_zeros(void)
++{
++	asm volatile (
++		/* fp-8 is all STACK_ZERO */
++		"*(u64 *)(r10 -8) =3D 0;"
++
++		/* fp-16 is const zero register */
++		"r0 =3D 0;"
++		"*(u64 *)(r10 -16) =3D r0;"
++
++		/* load single U8 from non-aligned STACK_ZERO slot */
++		"r1 =3D %[single_byte_buf];"
++		"r2 =3D *(u8 *)(r10 -1);"
++		"r1 +=3D r2;" /* this should be fine */
++
++		/* load single U8 from non-aligned ZERO REG slot */
++		"r1 =3D %[single_byte_buf];"
++		"r2 =3D *(u8 *)(r10 -9);"
++		"r1 +=3D r2;" /* this should be fine */
++
++		/* load single U16 from non-aligned STACK_ZERO slot */
++		"r1 =3D %[single_byte_buf];"
++		"r2 =3D *(u16 *)(r10 -2);"
++		"r1 +=3D r2;" /* this should be fine */
++
++		/* load single U16 from non-aligned ZERO REG slot */
++		"r1 =3D %[single_byte_buf];"
++		"r2 =3D *(u16 *)(r10 -10);"
++		"r1 +=3D r2;" /* this should be fine */
++
++		/* load single U32 from non-aligned STACK_ZERO slot */
++		"r1 =3D %[single_byte_buf];"
++		"r2 =3D *(u32 *)(r10 -4);"
++		"r1 +=3D r2;" /* this should be fine */
++
++		/* load single U32 from non-aligned ZERO REG slot */
++		"r1 =3D %[single_byte_buf];"
++		"r2 =3D *(u32 *)(r10 -12);"
++		"r1 +=3D r2;" /* this should be fine */
++
++		/* for completeness, load U64 from STACK_ZERO slot */
++		"r1 =3D %[single_byte_buf];"
++		"r2 =3D *(u64 *)(r10 -8);"
++		"r1 +=3D r2;" /* this should be fine */
++
++		/* for completeness, load U64 from ZERO REG slot */
++		"r1 =3D %[single_byte_buf];"
++		"r2 =3D *(u64 *)(r10 -16);"
++		"r1 +=3D r2;" /* this should be fine */
++
++		"r0 =3D 0;"
++		"exit;"
++	:
++	: __imm_ptr(single_byte_buf)
++	: __clobber_common);
++}
++
+ char _license[] SEC("license") =3D "GPL";
 --=20
 2.34.1
 
