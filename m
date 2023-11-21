@@ -1,43 +1,43 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m89lV8dN"
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB8ACC
-	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 18:07:37 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-5446c9f3a77so7341649a12.0
-        for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 18:07:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OwJ2bX3S"
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97140F4
+	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 18:07:42 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2c87adce180so27084491fa.0
+        for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 18:07:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700532455; x=1701137255; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700532460; x=1701137260; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DiNAnHYV601OVusAzxNLJxsUpGUvfrj+rZZJBNLwZzY=;
-        b=m89lV8dNvsvo9RbivCkYAfgV2FXqV08x93WROZfTm4FQStw4yCpAJ2Tv7CvbA10OXr
-         E/rvmP+Z1n7ZcUIEprelG2j0WyGeKQuHhntvBT2oQ/BAJfdo17BMAb49/Cn4dko/lunF
-         PVh6IsaDOGSEDyGs1igGD9QmWLqsYnt6cOwGPCLgThPNEUkmuQBnQrwATpqDbWw+VRmX
-         T2qcOeONyIf279FDND7EdBu03dpmduMUmmXV1CLho4DpLV980Y+adkcPpmnC4dEswsuJ
-         sOYWGHytzf6M4l6S9CSkf4n1Zfrgwvuak6PI55HRyoZ4Bfu0+2SmMeUKfFM4zN1C0PkN
-         CdEQ==
+        bh=A0ghSxpKjD9gSMjDHKOOUuNA4BQMDyKp1g+4D9id6mg=;
+        b=OwJ2bX3S0U8AhMJ6Ux936v0ntC1gBQrG8A8k7pPjcUUPY/mlosWz5URKK7ghRig5k3
+         FqikBqLBfzjy66m4xl7Lk/dpMydwofLLGxY2n0Hvv07bw1A0vNE23Bs1Z5PB/79LCS/9
+         LyR5pZspj3fN3rPojMoqlbm2x4h+VxCz4CiTAA1LUObMzH2AqKqmcvKNZ5/2ww+1GNca
+         oCyMk/LvWthb7a7RXb9anBPGtc/JrvYsh/q5Wr8rZU+sgZJ746yJH6KkZDaCRABI5ZW9
+         7mWWCV0KRIMTTbAoIZmzoUYHcoIyNiX9DQ6BfXHKMDCQnWKa8qav6K4/TP8Z6zpvUceH
+         a81w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700532455; x=1701137255;
+        d=1e100.net; s=20230601; t=1700532460; x=1701137260;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DiNAnHYV601OVusAzxNLJxsUpGUvfrj+rZZJBNLwZzY=;
-        b=CSHFeqzn2q00ivyIQBc5ONW77P48ouR6UEqeJn8zWGByedIp+RNY4kNDZVFNnWkUOC
-         ARPq0BMRcAIcnWRkw5651wHo+NJSHxslSvh7bPNeSj1qereqcUQ0lgoX9VrHe/s9aA0m
-         HfBhVEq99QhbkGde3B6lXYVV+E6H9LD29kLoihsj0K3bxTfS+AG4ch/YvhkvzZFngPxO
-         Yy4DXctX/4BwWWmrUo6ILUJqaTPxQe5B+sIC3ekhWLJWR86jAuIY2ea/VjoNeUSwFxU9
-         p0fudozHiFO4NO9yYybRXNI1vVZWp5uIfQcpXGCMw1TQayEM3d1GhZ29/VkLY69lRR61
-         AItw==
-X-Gm-Message-State: AOJu0YzDL8OgCvUNqZHjZKE6lplmn++M6dhI4i5vEqdnYBaNLKTZChdu
-	Zn0GHYUazjFe6QdIdW6YJVR7Zz/kU1CZuw==
-X-Google-Smtp-Source: AGHT+IEkObUtgtwh1+aLyI1ySdRFuZSqwSHYcfEaWXekJAF4aI7ctjI2vGXkoUKfdZYyKEpFg2lb5A==
-X-Received: by 2002:a17:906:b1c4:b0:9e5:cef:6ff with SMTP id bv4-20020a170906b1c400b009e50cef06ffmr6801116ejb.33.1700532454980;
-        Mon, 20 Nov 2023 18:07:34 -0800 (PST)
+        bh=A0ghSxpKjD9gSMjDHKOOUuNA4BQMDyKp1g+4D9id6mg=;
+        b=KMIFBj4unHyPSWBUCGDbMJ+pcHf45FTwNAlbeuW4MpqiROGssHI4nZsndtMiW+jqgf
+         w0X9qQucKVMvBuM72hhCnClV+j2H5uqBH6hvfuCFayIzyFU/fiwA22NxkfpfFdySO6AE
+         Nfc9Rehgle42fcpway19FN4KLe8QSSitb7l3aT3FuwPP1eKdlGC8O4rIHKxb2nvhBS4o
+         va60XUQ8dOVxqVPCGSC/0DnmdUizkIvZVQeLLE16y9JVIx6XgTGrwUPWSzQ1NPSD3Tav
+         hwvC09tLkZNlI8cPnBB8fmx9G/pkIZUc2yyG8JVX2H4yhEtYlSqj/oTD8hfqMAqCCq1I
+         Zokw==
+X-Gm-Message-State: AOJu0YxMvLT6TD6zE+RyMtziZQrFyWmYoPzMd+5fz0BcEw8gqFi65gBl
+	t6LPK2W2O8eB8B8fLBXdajSl4PRDkj0+wQ==
+X-Google-Smtp-Source: AGHT+IFYcwETU5dHhGrvc3gCN48fZblIWgQc/VyfEwgg87hjnNitGdbKxtGcjAVS8cRqoPaELauK4w==
+X-Received: by 2002:a2e:9e56:0:b0:2c5:724:fd64 with SMTP id g22-20020a2e9e56000000b002c50724fd64mr5189055ljk.46.1700532460217;
+        Mon, 20 Nov 2023 18:07:40 -0800 (PST)
 Received: from localhost.localdomain (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id ha7-20020a170906a88700b009fc990d9edbsm2426668ejb.192.2023.11.20.18.07.33
+        by smtp.gmail.com with ESMTPSA id ha7-20020a170906a88700b009fc990d9edbsm2426668ejb.192.2023.11.20.18.07.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Nov 2023 18:07:33 -0800 (PST)
+        Mon, 20 Nov 2023 18:07:39 -0800 (PST)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -49,9 +49,9 @@ Cc: andrii@kernel.org,
 	memxor@gmail.com,
 	awerner32@gmail.com,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf v4 08/11] bpf: widening for callback iterators
-Date: Tue, 21 Nov 2023 04:06:58 +0200
-Message-ID: <20231121020701.26440-9-eddyz87@gmail.com>
+Subject: [PATCH bpf v4 11/11] selftests/bpf: check if max number of bpf_loop iterations is tracked
+Date: Tue, 21 Nov 2023 04:07:01 +0200
+Message-ID: <20231121020701.26440-12-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.42.1
 In-Reply-To: <20231121020701.26440-1-eddyz87@gmail.com>
 References: <20231121020701.26440-1-eddyz87@gmail.com>
@@ -63,79 +63,99 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Callbacks are similar to open coded iterators, so add imprecise
-widening logic for callback body processing. This makes callback based
-loops behave identically to open coded iterators, e.g. allowing to
-verify programs like below:
+Check that even if bpf_loop() callback simulation does not converge to
+a specific state, verification could proceed via "brute force"
+simulation of maximal number of callback calls.
 
-  struct ctx { u32 i; };
-  int cb(u32 idx, struct ctx* ctx)
-  {
-          ++ctx->i;
-          return 0;
-  }
-  ...
-  struct ctx ctx = { .i = 0 };
-  bpf_loop(100, cb, &ctx, 0);
-  ...
-
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/verifier.c | 24 ++++++++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
+ .../bpf/progs/verifier_iterating_callbacks.c  | 75 +++++++++++++++++++
+ 1 file changed, 75 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a60dfa56ebb3..2f03e6b11bb9 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9799,9 +9799,10 @@ static bool in_rbtree_lock_required_cb(struct bpf_verifier_env *env)
- 
- static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- {
--	struct bpf_verifier_state *state = env->cur_state;
-+	struct bpf_verifier_state *state = env->cur_state, *prev_st;
- 	struct bpf_func_state *caller, *callee;
- 	struct bpf_reg_state *r0;
-+	bool in_callback_fn;
- 	int err;
- 
- 	callee = state->frame[state->curframe];
-@@ -9856,7 +9857,8 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 	 * there function call logic would reschedule callback visit. If iteration
- 	 * converges is_state_visited() would prune that visit eventually.
- 	 */
--	if (callee->in_callback_fn)
-+	in_callback_fn = callee->in_callback_fn;
-+	if (in_callback_fn)
- 		*insn_idx = callee->callsite;
- 	else
- 		*insn_idx = callee->callsite + 1;
-@@ -9871,6 +9873,24 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 	 * bpf_throw, this will be done by copy_verifier_state for extra frames. */
- 	free_func_state(callee);
- 	state->frame[state->curframe--] = NULL;
-+
-+	/* for callbacks widen imprecise scalars to make programs like below verify:
-+	 *
-+	 *   struct ctx { int i; }
-+	 *   void cb(int idx, struct ctx *ctx) { ctx->i++; ... }
-+	 *   ...
-+	 *   struct ctx = { .i = 0; }
-+	 *   bpf_loop(100, cb, &ctx, 0);
-+	 *
-+	 * This is similar to what is done in process_iter_next_call() for open
-+	 * coded iterators.
-+	 */
-+	prev_st = in_callback_fn ? find_prev_entry(env, state, *insn_idx) : NULL;
-+	if (prev_st) {
-+		err = widen_imprecise_scalars(env, prev_st, state);
-+		if (err)
-+			return err;
-+	}
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+index 598c1e984b26..5905e036e0ea 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
++++ b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+@@ -164,4 +164,79 @@ int unsafe_find_vma(void *unused)
+ 	return choice_arr[loop_ctx.i];
  }
  
++static int iter_limit_cb(__u32 idx, struct num_context *ctx)
++{
++	ctx->i++;
++	return 0;
++}
++
++SEC("?raw_tp")
++__success
++int bpf_loop_iter_limit_ok(void *unused)
++{
++	struct num_context ctx = { .i = 0 };
++
++	bpf_loop(1, iter_limit_cb, &ctx, 0);
++	return choice_arr[ctx.i];
++}
++
++SEC("?raw_tp")
++__failure __msg("invalid access to map value, value_size=2 off=2 size=1")
++int bpf_loop_iter_limit_overflow(void *unused)
++{
++	struct num_context ctx = { .i = 0 };
++
++	bpf_loop(2, iter_limit_cb, &ctx, 0);
++	return choice_arr[ctx.i];
++}
++
++static int iter_limit_level2a_cb(__u32 idx, struct num_context *ctx)
++{
++	ctx->i += 100;
++	return 0;
++}
++
++static int iter_limit_level2b_cb(__u32 idx, struct num_context *ctx)
++{
++	ctx->i += 10;
++	return 0;
++}
++
++static int iter_limit_level1_cb(__u32 idx, struct num_context *ctx)
++{
++	ctx->i += 1;
++	bpf_loop(1, iter_limit_level2a_cb, ctx, 0);
++	bpf_loop(1, iter_limit_level2b_cb, ctx, 0);
++	return 0;
++}
++
++/* Check that path visiting every callback function once had been
++ * reached by verifier. Variables 'ctx{1,2}i' below serve as flags,
++ * with each decimal digit corresponding to a callback visit marker.
++ */
++SEC("socket")
++__success __retval(111111)
++int bpf_loop_iter_limit_nested(void *unused)
++{
++	struct num_context ctx1 = { .i = 0 };
++	struct num_context ctx2 = { .i = 0 };
++	__u64 a, b, c;
++
++	bpf_loop(1, iter_limit_level1_cb, &ctx1, 0);
++	bpf_loop(1, iter_limit_level1_cb, &ctx2, 0);
++	a = ctx1.i;
++	b = ctx2.i;
++	/* Force 'ctx1.i' and 'ctx2.i' precise. */
++	c = choice_arr[(a + b) % 2];
++	/* This makes 'c' zero, but neither clang nor verifier know it. */
++	c /= 10;
++	/* Make sure that verifier does not visit 'impossible' states:
++	 * enumerate all possible callback visit masks.
++	 */
++	if (a != 0 && a != 1 && a != 11 && a != 101 && a != 111 &&
++	    b != 0 && b != 1 && b != 11 && b != 101 && b != 111)
++		asm volatile ("r0 /= 0;" ::: "r0");
++	return 1000 * a + b + c;
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.42.1
 
