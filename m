@@ -1,27 +1,29 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A20BB
-	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:22:50 -0800 (PST)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3AL0FPoG005059
-	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:22:49 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by m0001303.ppops.net (PPS) with ESMTPS id 3ugh9g075b-12
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CAEC9
+	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:22:57 -0800 (PST)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AKMwvAX019752
+	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:22:57 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uggqp0fw0-4
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:22:49 -0800
-Received: from twshared29647.38.frc1.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:22:57 -0800
+Received: from twshared19681.14.frc2.facebook.com (2620:10d:c0a8:1b::2d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Mon, 20 Nov 2023 16:22:42 -0800
+ 15.1.2507.34; Mon, 20 Nov 2023 16:22:35 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id C6C733BD942C5; Mon, 20 Nov 2023 16:22:37 -0800 (PST)
+	id 7006B3BD9428F; Mon, 20 Nov 2023 16:22:31 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH v2 bpf-next 07/10] selftests/bpf: validate zero preservation for sub-slot loads
-Date: Mon, 20 Nov 2023 16:22:18 -0800
-Message-ID: <20231121002221.3687787-8-andrii@kernel.org>
+CC: <andrii@kernel.org>, <kernel-team@meta.com>,
+        Eduard Zingerman
+	<eddyz87@gmail.com>
+Subject: [PATCH v2 bpf-next 04/10] bpf: preserve STACK_ZERO slots on partial reg spills
+Date: Mon, 20 Nov 2023 16:22:15 -0800
+Message-ID: <20231121002221.3687787-5-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231121002221.3687787-1-andrii@kernel.org>
 References: <20231121002221.3687787-1-andrii@kernel.org>
@@ -34,94 +36,124 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: XOelS7e4ODI85h1jKXhejxMBnB_X3_Jd
-X-Proofpoint-GUID: XOelS7e4ODI85h1jKXhejxMBnB_X3_Jd
+X-Proofpoint-ORIG-GUID: Na5LRzdAP6_Ou4RpwHsWRZxNSOP1GgV1
+X-Proofpoint-GUID: Na5LRzdAP6_Ou4RpwHsWRZxNSOP1GgV1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-20_22,2023-11-20_01,2023-05-22_02
 
-Validate that 1-, 2-, and 4-byte loads from stack slots not aligned on
-8-byte boundary still preserve zero, when loading from all-STACK_ZERO
-sub-slots, or when stack sub-slots are covered by spilled register with
-known constant zero value.
+Instead of always forcing STACK_ZERO slots to STACK_MISC, preserve it in
+situations where this is possible. E.g., when spilling register as
+1/2/4-byte subslots on the stack, all the remaining bytes in the stack
+slot do not automatically become unknown. If we knew they contained
+zeroes, we can preserve those STACK_ZERO markers.
 
+Add a helper mark_stack_slot_misc(), similar to scrub_spilled_slot(),
+but that doesn't overwrite either STACK_INVALID nor STACK_ZERO. Note
+that we need to take into account possibility of being in unprivileged
+mode, in which case STACK_INVALID is forced to STACK_MISC for correctness=
+,
+as treating STACK_INVALID as equivalent STACK_MISC is only enabled in
+privileged mode.
+
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../selftests/bpf/progs/verifier_spill_fill.c | 62 +++++++++++++++++++
- 1 file changed, 62 insertions(+)
+ kernel/bpf/verifier.c | 28 +++++++++++++++++++++++-----
+ 1 file changed, 23 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/to=
-ols/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 899a74ac9093..60ad2e0247b4 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -486,4 +486,66 @@ __naked void spill_subregs_preserve_stack_zero(void)
- 	: __clobber_all);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 357feb27e90a..5145afb5da25 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1109,6 +1109,21 @@ static bool is_spilled_scalar_reg(const struct bpf=
+_stack_state *stack)
+ 	       stack->spilled_ptr.type =3D=3D SCALAR_VALUE;
  }
 =20
-+char single_byte_buf[1] SEC(".data.single_byte_buf");
-+
-+SEC("raw_tp")
-+__log_level(2)
-+__success
-+__naked void partial_stack_load_preserves_zeros(void)
++/* Mark stack slot as STACK_MISC, unless it is already STACK_INVALID, in=
+ which
++ * case they are equivalent, or it's STACK_ZERO, in which case we preser=
+ve
++ * more precise STACK_ZERO.
++ * Note, in uprivileged mode leaving STACK_INVALID is wrong, so we take
++ * env->allow_ptr_leaks into account and force STACK_MISC, if necessary.
++ */
++static void mark_stack_slot_misc(struct bpf_verifier_env *env, u8 *stype=
+)
 +{
-+	asm volatile (
-+		/* fp-8 is all STACK_ZERO */
-+		"*(u64 *)(r10 -8) =3D 0;"
-+
-+		/* fp-16 is const zero register */
-+		"r0 =3D 0;"
-+		"*(u64 *)(r10 -16) =3D r0;"
-+
-+		/* load single U8 from non-aligned STACK_ZERO slot */
-+		"r1 =3D %[single_byte_buf];"
-+		"r2 =3D *(u8 *)(r10 -1);"
-+		"r1 +=3D r2;" /* this should be fine */
-+
-+		/* load single U8 from non-aligned ZERO REG slot */
-+		"r1 =3D %[single_byte_buf];"
-+		"r2 =3D *(u8 *)(r10 -9);"
-+		"r1 +=3D r2;" /* this should be fine */
-+
-+		/* load single U16 from non-aligned STACK_ZERO slot */
-+		"r1 =3D %[single_byte_buf];"
-+		"r2 =3D *(u16 *)(r10 -2);"
-+		"r1 +=3D r2;" /* this should be fine */
-+
-+		/* load single U16 from non-aligned ZERO REG slot */
-+		"r1 =3D %[single_byte_buf];"
-+		"r2 =3D *(u16 *)(r10 -10);"
-+		"r1 +=3D r2;" /* this should be fine */
-+
-+		/* load single U32 from non-aligned STACK_ZERO slot */
-+		"r1 =3D %[single_byte_buf];"
-+		"r2 =3D *(u32 *)(r10 -4);"
-+		"r1 +=3D r2;" /* this should be fine */
-+
-+		/* load single U32 from non-aligned ZERO REG slot */
-+		"r1 =3D %[single_byte_buf];"
-+		"r2 =3D *(u32 *)(r10 -12);"
-+		"r1 +=3D r2;" /* this should be fine */
-+
-+		/* for completeness, load U64 from STACK_ZERO slot */
-+		"r1 =3D %[single_byte_buf];"
-+		"r2 =3D *(u64 *)(r10 -8);"
-+		"r1 +=3D r2;" /* this should be fine */
-+
-+		/* for completeness, load U64 from ZERO REG slot */
-+		"r1 =3D %[single_byte_buf];"
-+		"r2 =3D *(u64 *)(r10 -16);"
-+		"r1 +=3D r2;" /* this should be fine */
-+
-+		"r0 =3D 0;"
-+		"exit;"
-+	:
-+	: __imm_ptr(single_byte_buf)
-+	: __clobber_common);
++	if (*stype =3D=3D STACK_ZERO)
++		return;
++	if (env->allow_ptr_leaks && *stype =3D=3D STACK_INVALID)
++		return;
++	*stype =3D STACK_MISC;
 +}
 +
- char _license[] SEC("license") =3D "GPL";
+ static void scrub_spilled_slot(u8 *stype)
+ {
+ 	if (*stype !=3D STACK_INVALID)
+@@ -4314,7 +4329,8 @@ static void copy_register_state(struct bpf_reg_stat=
+e *dst, const struct bpf_reg_
+ 	dst->live =3D live;
+ }
+=20
+-static void save_register_state(struct bpf_func_state *state,
++static void save_register_state(struct bpf_verifier_env *env,
++				struct bpf_func_state *state,
+ 				int spi, struct bpf_reg_state *reg,
+ 				int size)
+ {
+@@ -4329,7 +4345,7 @@ static void save_register_state(struct bpf_func_sta=
+te *state,
+=20
+ 	/* size < 8 bytes spill */
+ 	for (; i; i--)
+-		scrub_spilled_slot(&state->stack[spi].slot_type[i - 1]);
++		mark_stack_slot_misc(env, &state->stack[spi].slot_type[i - 1]);
+ }
+=20
+ static bool is_bpf_st_mem(struct bpf_insn *insn)
+@@ -4391,7 +4407,7 @@ static int check_stack_write_fixed_off(struct bpf_v=
+erifier_env *env,
+ 	mark_stack_slot_scratched(env, spi);
+ 	if (reg && !(off % BPF_REG_SIZE) && register_is_bounded(reg) &&
+ 	    !register_is_null(reg) && env->bpf_capable) {
+-		save_register_state(state, spi, reg, size);
++		save_register_state(env, state, spi, reg, size);
+ 		/* Break the relation on a narrowing spill. */
+ 		if (fls64(reg->umax_value) > BITS_PER_BYTE * size)
+ 			state->stack[spi].spilled_ptr.id =3D 0;
+@@ -4401,7 +4417,7 @@ static int check_stack_write_fixed_off(struct bpf_v=
+erifier_env *env,
+=20
+ 		__mark_reg_known(&fake_reg, insn->imm);
+ 		fake_reg.type =3D SCALAR_VALUE;
+-		save_register_state(state, spi, &fake_reg, size);
++		save_register_state(env, state, spi, &fake_reg, size);
+ 		insn_flags =3D 0; /* not a register spill */
+ 	} else if (reg && is_spillable_regtype(reg->type)) {
+ 		/* register containing pointer is being spilled into stack */
+@@ -4414,7 +4430,7 @@ static int check_stack_write_fixed_off(struct bpf_v=
+erifier_env *env,
+ 			verbose(env, "cannot spill pointers to stack into stack frame of the =
+caller\n");
+ 			return -EINVAL;
+ 		}
+-		save_register_state(state, spi, reg, size);
++		save_register_state(env, state, spi, reg, size);
+ 	} else {
+ 		u8 type =3D STACK_MISC;
+=20
+@@ -4685,6 +4701,8 @@ static int check_stack_read_fixed_off(struct bpf_ve=
+rifier_env *env,
+ 						continue;
+ 					if (type =3D=3D STACK_MISC)
+ 						continue;
++					if (type =3D=3D STACK_ZERO)
++						continue;
+ 					if (type =3D=3D STACK_INVALID && env->allow_uninit_stack)
+ 						continue;
+ 					verbose(env, "invalid read from stack off %d+%d size %d\n",
 --=20
 2.34.1
 
