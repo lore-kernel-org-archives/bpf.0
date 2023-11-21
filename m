@@ -1,105 +1,137 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="amRS5kA/"
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7CFC8
-	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 21:23:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700544219; x=1732080219;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fl3Tmal+8MUaITF85OyuVoJV7t7A/ocR2PgT72cuTLo=;
-  b=amRS5kA/wi70Pvz/VwSdIHK7bdbpxqVKpiDm4NgYHXVGcICdsdn8PObG
-   kItV7ATLgdRwHQvXZiMJCTGjBtNsI8RCQH8ldKWMHEql+5lC50JJjX8Fd
-   quoKa0HuddjdJMuN5E+WArkSPja2ZGwfgYkCePX4nDzNohgwyXk+70X6J
-   2BuT33bkzhAsHpj6grP8Ymlk4SD2yOiY4zOkrqSF/sr3EPl+J2RrC/2HO
-   k2u2/fpV6nM+0MGiuRW71viDKj86wJ/5obMkmAA3z6UfnCEHw++yBEegy
-   1q6TCBaHOQ/NUePpAK5IrDG0OTiTSKAPikNVHIctcOfBhw6oA3JE+FWAr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="382160685"
-X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
-   d="scan'208";a="382160685"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 21:23:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
-   d="scan'208";a="14793493"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 20 Nov 2023 21:23:36 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r5JEN-0007LT-0L;
-	Tue, 21 Nov 2023 05:23:29 +0000
-Date: Tue, 21 Nov 2023 13:20:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dave Marchevsky <davemarchevsky@fb.com>, bpf@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Kernel Team <kernel-team@fb.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Dave Marchevsky <davemarchevsky@fb.com>
-Subject: Re: [PATCH v1 bpf-next 1/2] bpf: Support BPF_F_MMAPABLE task_local
- storage
-Message-ID: <202311211358.O24bsL46-lkp@intel.com>
-References: <20231120175925.733167-2-davemarchevsky@fb.com>
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="likLLOTk"
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66BA113;
+	Mon, 20 Nov 2023 21:37:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1700545049; x=1732081049;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=/zrryXpKWKQAyrCPZGj07xxabi8IACpWZDfQTkTD2cw=;
+  b=likLLOTk+eHaEyvJeOnOTUF7jmxnvAanWC8ApaH1s5HahXiTQhxg8ZQ5
+   2+yqLsYfDCxXFApE5aLzK+fNJe5q2Cc1e/nW00pRPo9N96YF+iJKyUoSw
+   ksa1sqZT892qz4RccZ7QHjus3rrU45LBLXJJ+hbwtxHSkH7iofLYfY2DU
+   I=;
+X-IronPort-AV: E=Sophos;i="6.04,215,1695686400"; 
+   d="scan'208";a="364017441"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-dc7c3f8b.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 05:37:24 +0000
+Received: from smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev (pdx2-ws-svc-p26-lb5-vlan2.pdx.amazon.com [10.39.38.66])
+	by email-inbound-relay-pdx-2c-m6i4x-dc7c3f8b.us-west-2.amazon.com (Postfix) with ESMTPS id C90CBA049D;
+	Tue, 21 Nov 2023 05:37:22 +0000 (UTC)
+Received: from EX19MTAUWA002.ant.amazon.com [10.0.7.35:39084]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.8.2:2525] with esmtp (Farcaster)
+ id 940a4e78-2f4b-4cb0-b273-910cbf05cc9c; Tue, 21 Nov 2023 05:37:22 +0000 (UTC)
+X-Farcaster-Flow-ID: 940a4e78-2f4b-4cb0-b273-910cbf05cc9c
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.39; Tue, 21 Nov 2023 05:37:22 +0000
+Received: from 88665a182662.ant.amazon.com.com (10.187.171.26) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.39;
+ Tue, 21 Nov 2023 05:37:17 +0000
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
+To: <lkp@intel.com>
+CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+	<daniel@iogearbox.net>, <davem@davemloft.net>, <dsahern@kernel.org>,
+	<edumazet@google.com>, <haoluo@google.com>, <john.fastabend@gmail.com>,
+	<jolsa@kernel.org>, <kpsingh@kernel.org>, <kuba@kernel.org>,
+	<kuniyu@amazon.com>, <llvm@lists.linux.dev>, <martin.lau@linux.dev>,
+	<mykolal@fb.com>, <netdev@vger.kernel.org>, <oe-kbuild-all@lists.linux.dev>,
+	<pabeni@redhat.com>, <sdf@google.com>, <song@kernel.org>,
+	<yonghong.song@linux.dev>
+Subject: Re: [PATCH v2 bpf-next 10/11] bpf: tcp: Support arbitrary SYN Cookie.
+Date: Mon, 20 Nov 2023 21:37:09 -0800
+Message-ID: <20231121053709.91149-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <202311211310.E8pJEsnT-lkp@intel.com>
+References: <202311211310.E8pJEsnT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231120175925.733167-2-davemarchevsky@fb.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.187.171.26]
+X-ClientProxiedBy: EX19D036UWB004.ant.amazon.com (10.13.139.170) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+Precedence: Bulk
 
-Hi Dave,
+From: kernel test robot <lkp@intel.com>
+Date: Tue, 21 Nov 2023 13:17:40 +0800
+> Hi Kuniyuki,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on bpf-next/master]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/tcp-Clean-up-reverse-xmas-tree-in-cookie_v-46-_check/20231121-063036
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> patch link:    https://lore.kernel.org/r/20231120222341.54776-11-kuniyu%40amazon.com
+> patch subject: [PATCH v2 bpf-next 10/11] bpf: tcp: Support arbitrary SYN Cookie.
+> config: arm-spear3xx_defconfig (https://download.01.org/0day-ci/archive/20231121/202311211310.E8pJEsnT-lkp@intel.com/config)
+> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311211310.E8pJEsnT-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202311211310.E8pJEsnT-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from net/core/sock.c:142:
+>    In file included from include/net/tcp.h:32:
+> >> include/net/inet_hashtables.h:472:22: error: use of undeclared identifier 'sock_pfree'
+>                            skb->destructor = sock_pfree;
+>                                              ^
 
-kernel test robot noticed the following build warnings:
+Ok, sock_pfree is available with CONFIG_INET.
 
-[auto build test WARNING on bpf-next/master]
+I'll guard the req->syncookie part in inet6?_steal_sock() by
+CONFIG_SYN_COOKIE too.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Marchevsky/bpf-Support-BPF_F_MMAPABLE-task_local-storage/20231121-020345
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20231120175925.733167-2-davemarchevsky%40fb.com
-patch subject: [PATCH v1 bpf-next 1/2] bpf: Support BPF_F_MMAPABLE task_local storage
-config: x86_64-randconfig-121-20231121 (https://download.01.org/0day-ci/archive/20231121/202311211358.O24bsL46-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311211358.O24bsL46-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311211358.O24bsL46-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> kernel/bpf/bpf_local_storage.c:30:6: sparse: sparse: symbol 'alloc_mmapable_selem_value' was not declared. Should it be static?
->> kernel/bpf/bpf_local_storage.c:291:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct bpf_local_storage_map *smap @@     got struct bpf_local_storage_map [noderef] __rcu *smap @@
-   kernel/bpf/bpf_local_storage.c:291:14: sparse:     expected struct bpf_local_storage_map *smap
-   kernel/bpf/bpf_local_storage.c:291:14: sparse:     got struct bpf_local_storage_map [noderef] __rcu *smap
-   kernel/bpf/bpf_local_storage.c: note: in included file (through include/linux/mmzone.h, include/linux/gfp.h, include/linux/umh.h, include/linux/kmod.h, ...):
-   include/linux/page-flags.h:242:46: sparse: sparse: self-comparison always evaluates to false
-
-vim +/alloc_mmapable_selem_value +30 kernel/bpf/bpf_local_storage.c
-
-    29	
-  > 30	void *alloc_mmapable_selem_value(struct bpf_local_storage_map *smap)
-    31	{
-    32		struct mem_cgroup *memcg, *old_memcg;
-    33		void *ptr;
-    34	
-    35		memcg = bpf_map_get_memcg(&smap->map);
-    36		old_memcg = set_active_memcg(memcg);
-    37		ptr = bpf_map_area_mmapable_alloc(PAGE_ALIGN(smap->map.value_size),
-    38						  NUMA_NO_NODE);
-    39		set_active_memcg(old_memcg);
-    40		mem_cgroup_put(memcg);
-    41	
-    42		return ptr;
-    43	}
-    44	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+---8<---
+diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
+index b6c0ed5a1e3c..9a67f47a5e64 100644
+--- a/include/net/inet6_hashtables.h
++++ b/include/net/inet6_hashtables.h
+@@ -120,12 +120,14 @@ struct sock *inet6_steal_sock(struct net *net, struct sk_buff *skb, int doff,
+ 		return sk;
+ 
+ 	if (sk->sk_state == TCP_NEW_SYN_RECV) {
++#if IS_ENABLED(CONFIG_SYN_COOKIE)
+ 		if (inet_reqsk(sk)->syncookie) {
+ 			*refcounted = false;
+ 			skb->sk = sk;
+ 			skb->destructor = sock_pfree;
+ 			return inet_reqsk(sk)->rsk_listener;
+ 		}
++#endif
+ 		return sk;
+ 	} else if (sk->sk_state == TCP_TIME_WAIT) {
+ 		return sk;
+diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
+index 0f4091112967..36609656a047 100644
+--- a/include/net/inet_hashtables.h
++++ b/include/net/inet_hashtables.h
+@@ -466,12 +466,14 @@ struct sock *inet_steal_sock(struct net *net, struct sk_buff *skb, int doff,
+ 		return sk;
+ 
+ 	if (sk->sk_state == TCP_NEW_SYN_RECV) {
++#if IS_ENABLED(CONFIG_SYN_COOKIE)
+ 		if (inet_reqsk(sk)->syncookie) {
+ 			*refcounted = false;
+ 			skb->sk = sk;
+ 			skb->destructor = sock_pfree;
+ 			return inet_reqsk(sk)->rsk_listener;
+ 		}
++#endif
+ 		return sk;
+ 	} else if (sk->sk_state == TCP_TIME_WAIT) {
+ 		return sk;
+---8<---
