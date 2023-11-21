@@ -1,243 +1,299 @@
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cgohCYys"
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78807CA
-	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 18:07:40 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-548d1f8b388so1930713a12.0
-        for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 18:07:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700532458; x=1701137258; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KWyRec27VAqAsP6R7xwiHTVEncNeRAdZLEoimBOTuN8=;
-        b=cgohCYyswjzT/OIpo24nfV4j/iuVRTp1E/jWzeW5WDIwpVgc3mBHfHUlAUbvwpawaB
-         ii+e1XwJFtTSrYlXIej3oT8xtC2CFNwVFe44aNGnd3jeS+iYHODhHmr4gSOtnALRP7oR
-         G6v6nRfuZ5R3lZmrATEMfs1a1Wd5b82Lb6lKC/WMEU2BJMYwzf2rr9MKJxUpuVhBTpME
-         aVH8BHdb4B9QQy66Xx/YYR2LioBGtozlLScDZJ4CpwoOuMqZW677h8lE+34ckQSrW0/l
-         EuiQodpRYqXF2Ci+pFFxgSxOw9iuhlcxrlL2oXQpQ5oPwjih3d/hWBBxBt+md6CJqxlW
-         QLMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700532458; x=1701137258;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KWyRec27VAqAsP6R7xwiHTVEncNeRAdZLEoimBOTuN8=;
-        b=VAR2dH51vg0Yh2YoCb57CsJOYZ9bW+P+BTlT794cEowLXr5Hn3TKUmWyezgijSnAfV
-         bYV6qFKP7Ya+5ZRSbsIxhXnsajHB1hIRIpeIY2SN7UY0oO2GY/muXyG21+qrOMTSzaQb
-         p/dPdz4OVx17GFPHw8wjZWZV4dinlsObcYF59wJagyXXPznDcGNwX9mqm7cK26cT28bz
-         G9RYbPvZjUwU655jAHTZxGZOmwE+x4CNeFvVsWTb3Ko6gEvPkclpJVy716c2/DICZ6T7
-         u8Vl0/15YIgbPoqIS4XLPKGAxe5HnQHyF3SBpZYKtQsX0AWKWj/d8QzeXKgY8qH2vP1b
-         B0Tw==
-X-Gm-Message-State: AOJu0YygsvaQarEUumdywS9dQXp46Q/+nP5Rm5VkHTdffIfi3yMczUcD
-	mGlizRA8r/+f7kh4jOo7gFpkaUY6eq98YQ==
-X-Google-Smtp-Source: AGHT+IEqOHZzcYGsqpYxlQ03CnBokRq59mlgXn8nrV8GVOHLfAvKk+VNcP7mOj993KYrkTN05V/+fQ==
-X-Received: by 2002:a17:906:e28b:b0:9c2:a072:78c4 with SMTP id gg11-20020a170906e28b00b009c2a07278c4mr5372859ejb.25.1700532458335;
-        Mon, 20 Nov 2023 18:07:38 -0800 (PST)
-Received: from localhost.localdomain (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id ha7-20020a170906a88700b009fc990d9edbsm2426668ejb.192.2023.11.20.18.07.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Nov 2023 18:07:37 -0800 (PST)
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org
-Cc: andrii@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	kernel-team@fb.com,
-	yonghong.song@linux.dev,
-	memxor@gmail.com,
-	awerner32@gmail.com,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf v4 10/11] bpf: keep track of max number of bpf_loop callback iterations
-Date: Tue, 21 Nov 2023 04:07:00 +0200
-Message-ID: <20231121020701.26440-11-eddyz87@gmail.com>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20231121020701.26440-1-eddyz87@gmail.com>
-References: <20231121020701.26440-1-eddyz87@gmail.com>
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1161E3
+	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 18:28:02 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4SZ7Zg38wzz4f3n5x
+	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 10:27:55 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id A266F1A059F
+	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 10:27:59 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+	by APP3 (Coremail) with SMTP id _Ch0CgC3GLepFVxl1qrjBQ--.33035S2;
+	Tue, 21 Nov 2023 10:27:57 +0800 (CST)
+Subject: Re: [PATCH bpf v2 4/5] bpf: Optimize the free of inner map
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
+ Hao Luo <haoluo@google.com>, Yonghong Song <yonghong.song@linux.dev>,
+ Daniel Borkmann <daniel@iogearbox.net>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, houtao1@huawei.com,
+ bpf@vger.kernel.org
+References: <20231113123324.3914612-1-houtao@huaweicloud.com>
+ <20231113123324.3914612-5-houtao@huaweicloud.com>
+ <b3955bcd-779e-4171-9daa-d5e2d6b9afd8@linux.dev>
+ <6250ae01-f0d0-2a2c-da3d-af4e895d306b@huaweicloud.com>
+ <467cd7b0-9b41-4db5-9646-9b044db14bf0@linux.dev>
+From: Hou Tao <houtao@huaweicloud.com>
+Message-ID: <0c1e3a93-deda-d555-efce-36cea49fe11b@huaweicloud.com>
+Date: Tue, 21 Nov 2023 10:27:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <467cd7b0-9b41-4db5-9646-9b044db14bf0@linux.dev>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID:_Ch0CgC3GLepFVxl1qrjBQ--.33035S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3GF4xWF1UWFWDuFyxuw1UAwb_yoWDJw1rpF
+	4kJFWUJrW5Xr1kJryjqw1UAFy8tr15t3WDGr18JFyUArsrXr1agr4UXFWq9r15Jr48Jr1U
+	Xr1Utry3ury7ArDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+	07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+	02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
+	GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+	wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+	7IU1zuWJUUUUU==
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-In some cases verifier can't infer convergence of the bpf_loop()
-iteration. E.g. for the following program:
+Hi,
 
-    static int cb(__u32 idx, struct num_context* ctx)
-    {
-        ctx->i++;
-        return 0;
-    }
+On 11/19/2023 7:28 AM, Martin KaFai Lau wrote:
+> On 11/18/23 5:04 AM, Hou Tao wrote:
+>>>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>>>> index ec3c90202ffe6..8faa1af4b39df 100644
+>>>> --- a/include/linux/bpf.h
+>>>> +++ b/include/linux/bpf.h
+>>>> @@ -245,6 +245,12 @@ struct bpf_list_node_kern {
+>>>>        void *owner;
+>>>>    } __attribute__((aligned(8)));
+>>>>    +enum {
+>>>> +    BPF_MAP_ACC_NORMAL_PROG_CTX = 1,
+>>>> +    BPF_MAP_ACC_SLEEPABLE_PROG_CTX = 2,
+>>>
+>>> nit. It is a bit flag. Use (1U << 0) and (1U << 1) to make it more
+>>> obvious.
+>>
+>> Will fix.
+>>>
+>>> How about renaming this to BPF_MAP_RCU_GP and BPF_MAP_RCU_TT_GP to
+>>> better reflect it is used to decide if the map_free needs to wait for
+>>> any rcu gp?
+>>
+>> OK. It is fine with me.
+>>>
+>>>> +    BPF_MAP_ACC_PROG_CTX_MASK = BPF_MAP_ACC_NORMAL_PROG_CTX |
+>>>> BPF_MAP_ACC_SLEEPABLE_PROG_CTX,
+>>>> +};
+>>>> +
+>>>>    struct bpf_map {
+>>>>        /* The first two cachelines with read-mostly members of
+>>>> which some
+>>>>         * are also accessed in fast-path (e.g. ops, max_entries).
+>>>> @@ -292,7 +298,8 @@ struct bpf_map {
+>>>>        } owner;
+>>>>        bool bypass_spec_v1;
+>>>>        bool frozen; /* write-once; write-protected by freeze_mutex */
+>>>> -    bool free_after_mult_rcu_gp;
+>>>> +    atomic_t owned_prog_ctx;
+>>>
+>>> Instead of the enum flags, this should only need a true/false value to
+>>> tell whether the outer map has ever been used by a sleepable prog or
+>>> not. may be renaming this to "atomic used_by_sleepable;"?
+>>
+>> I have considered about that. But there is maps which is only accessed
+>> in userspace (e.g. map used in BPF_PROG_BIND_MAP or maps in test_maps),
+>> so I though one bool is not enough.
+>
+> Good point.
+>
+> In this case, a nit on the name. The "prog_ctx" part in the
+> owned_prog_ctx usually means a different thing, like the "struct
+> __sk_buff". How about using this pair of names?
+>
+>      /* may be just "long" and then set_bit? */
+>     atomic_t used_in_rcu_gp;
+>     atomic_t free_by_rcu_gp;
+>
+> shortened the name by removing the "_flags" suggested in the earlier
+> comment.
 
-    SEC("?raw_tp")
-    int prog(void *_)
-    {
-        struct num_context ctx = { .i = 0 };
-        __u8 choice_arr[2] = { 0, 1 };
+Will update the names. The naming is hard, so thanks for the suggestions.
 
-        bpf_loop(2, cb, &ctx, 0);
-        return choice_arr[ctx.i];
-    }
+I have tried set_bit() and test_bit() . The reason I switched to
+atomic_or() is that the implementation will be much cleaner in
+bpf_map_fd_put_ptr(). If using set_bit(), I had to do the following
+things in bpf_map_fd_put_ptr() to atomically assign the bits in
+used_in_rcu_gp to free_by_rcu_gp:
 
-Each 'cb' simulation would eventually return to 'prog' and reach
-'return choice_arr[ctx.i]' statement. At which point ctx.i would be
-marked precise, thus forcing verifier to track multitude of separate
-states with {.i=0}, {.i=1}, ... at bpf_loop() callback entry.
+used = READ_ONCE(used_in_rcu_gp);
+if (test_bit(BPF_MAP_RCU_GP, &used))
+    set_bit(BPF_MAP_RCU_GP, &free_by_rcu_gp);
+if (test_bit(BPF_MAP_RCU_TT_GP , &used)
+    set_bit(BPF_MAP_RCU_TT_GP, &free_by_rcu_gp);
 
-This commit allows "brute force" handling for such cases by limiting
-number of callback body simulations using 'umax' value of the first
-bpf_loop() parameter.
+But for atomic_or(), only two statements are needed:
 
-For this, extend bpf_func_state with 'callback_depth' field.
-Increment this field when callback visiting state is pushed to states
-traversal stack. For frame #N it's 'callback_depth' field counts how
-many times callback with frame depth N+1 had been executed.
-Use bpf_func_state specifically to allow independent tracking of
-callback depths when multiple nested bpf_loop() calls are present.
+atomic_or(atomic_read(&used_in_rcu_gp), &free_by_rcu_gp)
 
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
----
- include/linux/bpf_verifier.h                  | 11 ++++++
- kernel/bpf/verifier.c                         | 19 ++++++++--
- .../bpf/progs/verifier_subprog_precision.c    | 35 +++++++++++++------
- 3 files changed, 53 insertions(+), 12 deletions(-)
+I could use set_bit/test_bit() if it is preferred.
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index dd326936dd6f..aa4d19d0bc94 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -301,6 +301,17 @@ struct bpf_func_state {
- 	struct tnum callback_ret_range;
- 	bool in_async_callback_fn;
- 	bool in_exception_callback_fn;
-+	/* For callback calling functions that limit number of possible
-+	 * callback executions (e.g. bpf_loop) keeps track of current
-+	 * simulated iteration number.
-+	 * Value in frame N refers to number of times callback with frame
-+	 * N+1 was simulated, e.g. for the following call:
-+	 *
-+	 *   bpf_loop(..., fn, ...); | suppose current frame is N
-+	 *                           | fn would be simulated in frame N+1
-+	 *                           | number of simulations is tracked in frame N
-+	 */
-+	u32 callback_depth;
- 
- 	/* The following fields should be last. See copy_func_state() */
- 	int acquired_refs;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2f03e6b11bb9..af2819d5c8ee 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9505,6 +9505,8 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
- 		return err;
- 
- 	callback_state->callback_unroll_depth++;
-+	callback_state->frame[callback_state->curframe - 1]->callback_depth++;
-+	caller->callback_depth = 0;
- 	return 0;
- }
- 
-@@ -10309,8 +10311,21 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		break;
- 	case BPF_FUNC_loop:
- 		update_loop_inline_state(env, meta.subprogno);
--		err = push_callback_call(env, insn, insn_idx, meta.subprogno,
--					 set_loop_callback_state);
-+		/* Verifier relies on R1 value to determine if bpf_loop() iteration
-+		 * is finished, thus mark it precise.
-+		 */
-+		err = mark_chain_precision(env, BPF_REG_1);
-+		if (err)
-+			return err;
-+		if (cur_func(env)->callback_depth < regs[BPF_REG_1].umax_value) {
-+			err = push_callback_call(env, insn, insn_idx, meta.subprogno,
-+						 set_loop_callback_state);
-+		} else {
-+			cur_func(env)->callback_depth = 0;
-+			if (env->log.level & BPF_LOG_LEVEL2)
-+				verbose(env, "frame%d bpf_loop iteration limit reached\n",
-+					env->cur_state->curframe);
-+		}
- 		break;
- 	case BPF_FUNC_dynptr_from_mem:
- 		if (regs[BPF_REG_1].type != PTR_TO_MAP_VALUE) {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-index da803cffb5ef..f61d623b1ce8 100644
---- a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-@@ -119,7 +119,23 @@ __naked int global_subprog_result_precise(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--/* First simulated path does not include callback body */
-+/* First simulated path does not include callback body,
-+ * r1 and r4 are always precise for bpf_loop() calls.
-+ */
-+__msg("9: (85) call bpf_loop#181")
-+__msg("mark_precise: frame0: last_idx 9 first_idx 9 subseq_idx -1")
-+__msg("mark_precise: frame0: parent state regs=r4 stack=:")
-+__msg("mark_precise: frame0: last_idx 8 first_idx 0 subseq_idx 9")
-+__msg("mark_precise: frame0: regs=r4 stack= before 8: (b7) r4 = 0")
-+__msg("mark_precise: frame0: last_idx 9 first_idx 9 subseq_idx -1")
-+__msg("mark_precise: frame0: parent state regs=r1 stack=:")
-+__msg("mark_precise: frame0: last_idx 8 first_idx 0 subseq_idx 9")
-+__msg("mark_precise: frame0: regs=r1 stack= before 8: (b7) r4 = 0")
-+__msg("mark_precise: frame0: regs=r1 stack= before 7: (b7) r3 = 0")
-+__msg("mark_precise: frame0: regs=r1 stack= before 6: (bf) r2 = r8")
-+__msg("mark_precise: frame0: regs=r1 stack= before 5: (bf) r1 = r6")
-+__msg("mark_precise: frame0: regs=r6 stack= before 4: (b7) r6 = 3")
-+/* r6 precision propagation */
- __msg("14: (0f) r1 += r6")
- __msg("mark_precise: frame0: last_idx 14 first_idx 9")
- __msg("mark_precise: frame0: regs=r6 stack= before 13: (bf) r1 = r7")
-@@ -134,10 +150,9 @@ __msg("17: (b7) r0 = 0")
- __msg("18: (95) exit")
- __msg("returning from callee:")
- __msg("to caller at 9:")
--/* r4 (flags) is always precise for bpf_loop() */
--__msg("frame 0: propagating r4")
-+__msg("frame 0: propagating r1,r4")
- __msg("mark_precise: frame0: last_idx 9 first_idx 9 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r4 stack= before 18: (95) exit")
-+__msg("mark_precise: frame0: regs=r1,r4 stack= before 18: (95) exit")
- __msg("from 18 to 9: safe")
- __naked int callback_result_precise(void)
- {
-@@ -264,12 +279,12 @@ __msg("15: (b7) r0 = 0")
- __msg("16: (95) exit")
- __msg("returning from callee:")
- __msg("to caller at 9:")
--/* r4 (flags) is always precise for bpf_loop(),
-+/* r1, r4 are always precise for bpf_loop(),
-  * r6 was marked before backtracking to callback body.
-  */
--__msg("frame 0: propagating r4,r6")
-+__msg("frame 0: propagating r1,r4,r6")
- __msg("mark_precise: frame0: last_idx 9 first_idx 9 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r4,r6 stack= before 16: (95) exit")
-+__msg("mark_precise: frame0: regs=r1,r4,r6 stack= before 16: (95) exit")
- __msg("mark_precise: frame1: regs= stack= before 15: (b7) r0 = 0")
- __msg("mark_precise: frame1: regs= stack= before 9: (85) call bpf_loop")
- __msg("mark_precise: frame0: parent state regs= stack=:")
-@@ -422,12 +437,12 @@ __msg("17: (b7) r0 = 0")
- __msg("18: (95) exit")
- __msg("returning from callee:")
- __msg("to caller at 10:")
--/* r4 (flags) is always precise for bpf_loop(),
-+/* r1, r4 are always precise for bpf_loop(),
-  * fp-8 was marked before backtracking to callback body.
-  */
--__msg("frame 0: propagating r4,fp-8")
-+__msg("frame 0: propagating r1,r4,fp-8")
- __msg("mark_precise: frame0: last_idx 10 first_idx 10 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r4 stack=-8 before 18: (95) exit")
-+__msg("mark_precise: frame0: regs=r1,r4 stack=-8 before 18: (95) exit")
- __msg("mark_precise: frame1: regs= stack= before 17: (b7) r0 = 0")
- __msg("mark_precise: frame1: regs= stack= before 10: (85) call bpf_loop#181")
- __msg("mark_precise: frame0: parent state regs= stack=:")
--- 
-2.42.1
+>
+>>>
+>>>> +    atomic_t may_be_accessed_prog_ctx;
+>>>
+>>> nit. rename this to "rcu_gp_flags;"
+>>
+>> Will do.
+>>>
+>>>>        s64 __percpu *elem_count;
+>>>>    };
+>>>>    diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
+>>>> index cf33630655661..e3d26a89ac5b6 100644
+>>>> --- a/kernel/bpf/map_in_map.c
+>>>> +++ b/kernel/bpf/map_in_map.c
+>>>> @@ -131,12 +131,20 @@ void bpf_map_fd_put_ptr(struct bpf_map *map,
+>>>> void *ptr, bool deferred)
+>>>>    {
+>>>>        struct bpf_map *inner_map = ptr;
+>>>>    -    /* The inner map may still be used by both non-sleepable and
+>>>> sleepable
+>>>> -     * bpf program, so free it after one RCU grace period and one
+>>>> tasks
+>>>> -     * trace RCU grace period.
+>>>> +    /* Defer the freeing of inner map according to the owner program
+>>>> +     * context of outer maps, so unnecessary multiple RCU GP waitings
+>>>> +     * can be avoided.
+>>>>         */
+>>>> -    if (deferred)
+>>>> -        WRITE_ONCE(inner_map->free_after_mult_rcu_gp, true);
+>>>> +    if (deferred) {
+>>>> +        /* owned_prog_ctx may be updated concurrently by new bpf
+>>>> program
+>>>> +         * so add smp_mb() below to ensure that reading
+>>>> owned_prog_ctx
+>>>> +         * will return the newly-set bit when the new bpf program
+>>>> finds
+>>>> +         * the inner map before it is removed from outer map.
+>>>> +         */
+>>>> +        smp_mb();
+>>>
+>>> This part took my head spinning a little, so it is better to ask. The
+>>> owned_prog_ctx is set during verification time. There are many
+>>> instructions till the prog is actually verified, attached (another
+>>> syscall) and then run to do the actual lookup(&outer_map). Is this
+>>> level of reordering practically possible?
+>>
+>> Er, I added the memory barrier due to uncertainty. According to [1],
+> My immediate thought was a more straight forward spin lock instead.
+>
+> Agree that smp_mb() works as well, ok.
+
+I see. I will keep the smp_mb().
+>
+>> syscall doesn't imply a memory barrier. And If I understand correctly,
+>> when the program is loaded and attached through bpf_sys_bpf, there will
+>> be no new syscall. >
+>> [1]:
+>> https://www.kernel.org/doc/html/latest/core-api/wrappers/memory-barriers.html
+>>
+>>
+>>>
+>>>> +        atomic_or(atomic_read(&map->owned_prog_ctx),
+>>>> +              &inner_map->may_be_accessed_prog_ctx);
+>>>> +    }
+>>>>        bpf_map_put(inner_map);
+>>>>    }
+>>>>    diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+>>>> index e2d2701ce2c45..5a7906f2b027e 100644
+>>>> --- a/kernel/bpf/syscall.c
+>>>> +++ b/kernel/bpf/syscall.c
+>>>> @@ -694,12 +694,20 @@ static void bpf_map_free_deferred(struct
+>>>> work_struct *work)
+>>>>    {
+>>>>        struct bpf_map *map = container_of(work, struct bpf_map, work);
+>>>>        struct btf_record *rec = map->record;
+>>>> +    int acc_ctx;
+>>>>          security_bpf_map_free(map);
+>>>>        bpf_map_release_memcg(map);
+>>>>    -    if (READ_ONCE(map->free_after_mult_rcu_gp))
+>>>> -        synchronize_rcu_mult(call_rcu, call_rcu_tasks_trace);
+>>>> +    acc_ctx = atomic_read(&map->may_be_accessed_prog_ctx) &
+>>>> BPF_MAP_ACC_PROG_CTX_MASK;
+>>>
+>>> The mask should not be needed.
+>>
+>> Yep. Will remove it.
+>>>
+>>>> +    if (acc_ctx) {
+>>>> +        if (acc_ctx == BPF_MAP_ACC_NORMAL_PROG_CTX)
+>>>> +            synchronize_rcu();
+>>>> +        else if (acc_ctx == BPF_MAP_ACC_SLEEPABLE_PROG_CTX)
+>>>> +            synchronize_rcu_tasks_trace();
+>>>> +        else
+>>>> +            synchronize_rcu_mult(call_rcu, call_rcu_tasks_trace);
+>>>
+>>> Is it better to add a rcu_head to the map and then use call_rcu_().
+>>> e.g. when there is many delete happened to the outer map during a
+>>> process restart to re-populate the outer map. It is relatively much
+>>> cheaper to add a rcu_head to the map comparing to adding one for each
+>>> elem. wdyt?
+>>
+>> Good idea. call_rcu() will be much cheaper than synchronize_rcu().
+>> Will do.
+>>>
+>>>> +    }
+>>>>          /* implementation dependent freeing */
+>>>>        map->ops->map_free(map);
+>>>> @@ -5326,6 +5334,9 @@ static int bpf_prog_bind_map(union bpf_attr
+>>>> *attr)
+>>>>            goto out_unlock;
+>>>>        }
+>>>>    +    /* No need to update owned_prog_ctx, because the bpf program
+>>>> doesn't
+>>>> +     * access the map.
+>>>> +     */
+>>>>        memcpy(used_maps_new, used_maps_old,
+>>>>               sizeof(used_maps_old[0]) * prog->aux->used_map_cnt);
+>>>>        used_maps_new[prog->aux->used_map_cnt] = map;
+>>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>>>> index bd1c42eb540f1..d8d5432b240dc 100644
+>>>> --- a/kernel/bpf/verifier.c
+>>>> +++ b/kernel/bpf/verifier.c
+>>>> @@ -18012,12 +18012,17 @@ static int resolve_pseudo_ldimm64(struct
+>>>> bpf_verifier_env *env)
+>>>>                    return -E2BIG;
+>>>>                }
+>>>>    +            atomic_or(env->prog->aux->sleepable ?
+>>>> BPF_MAP_ACC_SLEEPABLE_PROG_CTX :
+>>>> +                                  BPF_MAP_ACC_NORMAL_PROG_CTX,
+>>>> +                  &map->owned_prog_ctx);
+>
+> This is setting a bit. Would set_bit() work as good?
+
+Please see my reply above.
+
+>
+>>>>                /* hold the map. If the program is rejected by
+>>>> verifier,
+>>>>                 * the map will be released by release_maps() or it
+>>>>                 * will be used by the valid program until it's
+>>>> unloaded
+>>>>                 * and all maps are released in free_used_maps()
+>>>>                 */
+>>>>                bpf_map_inc(map);
+>>>> +            /* Paired with smp_mb() in bpf_map_fd_put_ptr() */
+>>>> +            smp_mb__after_atomic();
+>
+> To make it clearer, can this be moved immediately after the set_bit /
+> atomic_or above?
+
+Will do. Thanks for all the suggestions.
+>
+>>>>                  aux->map_index = env->used_map_cnt;
+>>>>                env->used_maps[env->used_map_cnt++] = map;
+>>
 
