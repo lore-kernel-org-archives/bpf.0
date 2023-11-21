@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gqh6lepc"
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244B7ED
-	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 21:19:22 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1cc394f4cdfso38104355ad.0
-        for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 21:19:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700543961; x=1701148761; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4QvWxVyLHfe1THaPjb2vgpfNpnx2h6mMp4izAMQEqjA=;
-        b=gqh6lepcyN4Kam0WNwzF9Lic2FMvlh7XwEjLXVUqwUgEfI4Ocup0KNlafZ2hO76h7Q
-         rY2bWH6/tVAiHp8jqhOXWrdrryd1hL+Ay1cs/AMlspOzoB/GlPLdLDZkbwmDg5UVEeMI
-         jKu0iTwsHYBf5+MOryR7ifb9RUXoxeC1II/bNNlE0ce1DW70RuUrA+Mv6JqVAZMvE8N2
-         DssZQ0sP9+bNtY49sn6gFB3/ceh0SRFJUa5419OFCNlmZBPqhsYnABIxeHps05G/xfH+
-         UEP7vv/wB7NqtHY3tmcADJj3FFfCiNQKz2T2dT/7tAenWDGCt740Un8RgJKbdP0ivcop
-         t8ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700543961; x=1701148761;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4QvWxVyLHfe1THaPjb2vgpfNpnx2h6mMp4izAMQEqjA=;
-        b=vAjus74LNyzo0n99fFiIG7kNHdA83RhjkjCtPMmpnSDL1vlmQBEUUEEVZfeK+zYpVO
-         EGAVjE2bGX3Vemtx5WvbsfNmiXuxTymsm0vSMQeyPXrlnIbsmJvidU1gayEKNr3J96bp
-         qMCgk+1F52KHfnPItyAb2xzPqKor8MVp2dteVcJyh9SiRVUOL0CWH8/ZOwfJo7OH5JXV
-         /GF1px+Ce7uVOUFsn+csvJ3zkpnNryJsnM3Hxv1nHhwHHN4einA6QcqUuqK8juIeDycO
-         Prhq5c7RrvRc6kymCD6K7kFatFoJiG0G0KNhTxpyBQobeWrrqlXDvx1kkmtBPOuC4WEV
-         3kNA==
-X-Gm-Message-State: AOJu0YytHyBi8/nc9Nd6Ku+sB2KdhvnLBYn7tHGJvNQCsUOFsblEowoO
-	ubeBa3WMgYRfZ3QZdFCwYDA=
-X-Google-Smtp-Source: AGHT+IEKijp1uhIVGXVGdqeBSNmpl6xivkAWqw5eHW0ZXc0aVSj2VppWNpMbqd7VR9b+YWbSYFOYHw==
-X-Received: by 2002:a17:902:6941:b0:1cc:76c4:5144 with SMTP id k1-20020a170902694100b001cc76c45144mr7531998plt.12.1700543961233;
-        Mon, 20 Nov 2023 21:19:21 -0800 (PST)
-Received: from macbook-pro-49.dhcp.thefacebook.com ([2620:10d:c090:400::4:e8eb])
-        by smtp.gmail.com with ESMTPSA id i10-20020a17090332ca00b001c9c97beb9csm6937452plr.71.2023.11.20.21.19.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Nov 2023 21:19:20 -0800 (PST)
-Date: Mon, 20 Nov 2023 21:19:17 -0800
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: Hou Tao <houtao@huaweicloud.com>
-Cc: bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>,
-	Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gepj/oud"
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098FBE7;
+	Mon, 20 Nov 2023 21:21:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700544106; x=1732080106;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U/vzE5xUw7htLBY4ClpNy7HJvmH36d/i2p290QfaiAQ=;
+  b=Gepj/oud+COkOXxPlZtd0IeNCocTwgp0HuzEvfvGF2de4/qHb6J02DIp
+   d0OdU2HClZPc/6hvwv2DY1iByMILqwvBXvg/JiMc5psxFMWbaqYmyB9XP
+   IrlX5P8vc1NjeW6Al3sjVpUP5G6YVt5b5T/AfN6PpwrkOik1Hp9ItMQlA
+   x2gMlIqe6t4Uh4R4V5AmMeFY9B8fkNPh6gOflcRPTyIBOAcNqYBOV0pwW
+   Xh0AQSQhJf405IEy3qyv6Fv0PEEtHDIhCSfWCdS8YSIzjeAiGFfAoiphZ
+   20fkQiFZtfMP7OtQSz5C8rXbiWJ5jmvxuO2oHD0qYyhKQVBlLuX9OE6Bm
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="458263438"
+X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
+   d="scan'208";a="458263438"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 21:21:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
+   d="scan'208";a="7781920"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 20 Nov 2023 21:21:40 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r5JCY-0007Ky-1x;
+	Tue, 21 Nov 2023 05:21:34 +0000
+Date: Tue, 21 Nov 2023 13:17:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuniyuki Iwashima <kuniyu@amazon.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
 	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>, houtao1@huawei.com
-Subject: Re: [PATCH bpf v2 4/5] bpf: Optimize the free of inner map
-Message-ID: <20231121051917.lbp6luone7pxqkvw@macbook-pro-49.dhcp.thefacebook.com>
-References: <20231113123324.3914612-1-houtao@huaweicloud.com>
- <20231113123324.3914612-5-houtao@huaweicloud.com>
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH v2 bpf-next 10/11] bpf: tcp: Support arbitrary SYN Cookie.
+Message-ID: <202311211310.E8pJEsnT-lkp@intel.com>
+References: <20231120222341.54776-11-kuniyu@amazon.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -60,54 +60,173 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231113123324.3914612-5-houtao@huaweicloud.com>
+In-Reply-To: <20231120222341.54776-11-kuniyu@amazon.com>
 
-On Mon, Nov 13, 2023 at 08:33:23PM +0800, Hou Tao wrote:
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index e2d2701ce2c45..5a7906f2b027e 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -694,12 +694,20 @@ static void bpf_map_free_deferred(struct work_struct *work)
->  {
->  	struct bpf_map *map = container_of(work, struct bpf_map, work);
->  	struct btf_record *rec = map->record;
-> +	int acc_ctx;
->  
->  	security_bpf_map_free(map);
->  	bpf_map_release_memcg(map);
->  
-> -	if (READ_ONCE(map->free_after_mult_rcu_gp))
-> -		synchronize_rcu_mult(call_rcu, call_rcu_tasks_trace);
+Hi Kuniyuki,
 
-The previous patch 3 is doing too much.
-There is maybe_wait_bpf_programs() that will do synchronize_rcu()
-when necessary.
-The patch 3 could do synchronize_rcu_tasks_trace() only and it will solve the issue.
+kernel test robot noticed the following build errors:
 
-> +	acc_ctx = atomic_read(&map->may_be_accessed_prog_ctx) & BPF_MAP_ACC_PROG_CTX_MASK;
-> +	if (acc_ctx) {
-> +		if (acc_ctx == BPF_MAP_ACC_NORMAL_PROG_CTX)
-> +			synchronize_rcu();
-> +		else if (acc_ctx == BPF_MAP_ACC_SLEEPABLE_PROG_CTX)
-> +			synchronize_rcu_tasks_trace();
-> +		else
-> +			synchronize_rcu_mult(call_rcu, call_rcu_tasks_trace);
+[auto build test ERROR on bpf-next/master]
 
-and this patch 4 goes to far.
-Could you add sleepable_refcnt in addition to existing refcnt that is incremented
-in outer map when it's used by sleepable prog and when sleepable_refcnt > 0
-the caller of bpf_map_free_deferred sets free_after_mult_rcu_gp.
-(which should be renamed to free_after_tasks_rcu_gp).
-Patch 3 is simpler and patch 4 is simple too.
-No need for atomic_or games.
+url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/tcp-Clean-up-reverse-xmas-tree-in-cookie_v-46-_check/20231121-063036
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20231120222341.54776-11-kuniyu%40amazon.com
+patch subject: [PATCH v2 bpf-next 10/11] bpf: tcp: Support arbitrary SYN Cookie.
+config: arm-spear3xx_defconfig (https://download.01.org/0day-ci/archive/20231121/202311211310.E8pJEsnT-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311211310.E8pJEsnT-lkp@intel.com/reproduce)
 
-In addition I'd like to see an extra patch that demonstrates this UAF
-when update/delete is done by syscall bpf prog type.
-The test case in patch 5 is doing update/delete from user space.
-If that was the only issue we could have easily extended maybe_wait_bpf_programs()
-to do synchronize_rcu_tasks_trace() and that would close the issue exposed by patch 5.
-But inner maps can indeed be updated by syscall bpf prog and since they run
-under rcu_read_lock_trace() we cannot add synchronize_rcu_tasks_trace() to
-maybe_wait_bpf_programs() because it will deadlock.
-So let's make sure we have test cases for all combinations where inner maps
-can be updated/deleted.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311211310.E8pJEsnT-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from net/core/sock.c:142:
+   In file included from include/net/tcp.h:32:
+>> include/net/inet_hashtables.h:472:22: error: use of undeclared identifier 'sock_pfree'
+                           skb->destructor = sock_pfree;
+                                             ^
+   1 error generated.
+--
+   In file included from net/core/filter.c:39:
+   In file included from include/linux/skmsg.h:13:
+   In file included from include/net/tcp.h:32:
+>> include/net/inet_hashtables.h:472:22: error: use of undeclared identifier 'sock_pfree'
+                           skb->destructor = sock_pfree;
+                                             ^
+   net/core/filter.c:11812:13: warning: declaration of 'struct tcp_cookie_attributes' will not be visible outside of this function [-Wvisibility]
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11821:24: error: invalid application of 'sizeof' to an incomplete type 'struct tcp_cookie_attributes'
+           if (attr__sz != sizeof(*attr))
+                                 ^~~~~~~
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11851:10: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           if (attr->tcp_opt.mss_clamp < min_mss) {
+               ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11856:10: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           if (attr->tcp_opt.wscale_ok &&
+               ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11857:10: error: incomplete definition of type 'struct tcp_cookie_attributes'
+               attr->tcp_opt.snd_wscale > TCP_MAX_WSCALE) {
+               ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11875:17: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           req->mss = attr->tcp_opt.mss_clamp;
+                      ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11877:25: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           ireq->snd_wscale = attr->tcp_opt.snd_wscale;
+                              ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11878:24: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           ireq->wscale_ok = attr->tcp_opt.wscale_ok;
+                             ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11879:24: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           ireq->tstamp_ok = attr->tcp_opt.tstamp_ok;
+                             ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11880:22: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           ireq->sack_ok = attr->tcp_opt.sack_ok;
+                           ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11881:21: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           ireq->ecn_ok = attr->ecn_ok;
+                          ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11883:26: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           treq->req_usec_ts = attr->usec_ts_ok;
+                               ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+>> net/core/filter.c:11887:20: error: use of undeclared identifier 'sock_pfree'
+           skb->destructor = sock_pfree;
+                             ^
+   1 warning and 13 errors generated.
+
+
+vim +/sock_pfree +472 include/net/inet_hashtables.h
+
+   451	
+   452	static inline
+   453	struct sock *inet_steal_sock(struct net *net, struct sk_buff *skb, int doff,
+   454				     const __be32 saddr, const __be16 sport,
+   455				     const __be32 daddr, const __be16 dport,
+   456				     bool *refcounted, inet_ehashfn_t *ehashfn)
+   457	{
+   458		struct sock *sk, *reuse_sk;
+   459		bool prefetched;
+   460	
+   461		sk = skb_steal_sock(skb, refcounted, &prefetched);
+   462		if (!sk)
+   463			return NULL;
+   464	
+   465		if (!prefetched)
+   466			return sk;
+   467	
+   468		if (sk->sk_state == TCP_NEW_SYN_RECV) {
+   469			if (inet_reqsk(sk)->syncookie) {
+   470				*refcounted = false;
+   471				skb->sk = sk;
+ > 472				skb->destructor = sock_pfree;
+   473				return inet_reqsk(sk)->rsk_listener;
+   474			}
+   475			return sk;
+   476		} else if (sk->sk_state == TCP_TIME_WAIT) {
+   477			return sk;
+   478		}
+   479	
+   480		if (sk->sk_protocol == IPPROTO_TCP) {
+   481			if (sk->sk_state != TCP_LISTEN)
+   482				return sk;
+   483		} else if (sk->sk_protocol == IPPROTO_UDP) {
+   484			if (sk->sk_state != TCP_CLOSE)
+   485				return sk;
+   486		} else {
+   487			return sk;
+   488		}
+   489	
+   490		reuse_sk = inet_lookup_reuseport(net, sk, skb, doff,
+   491						 saddr, sport, daddr, ntohs(dport),
+   492						 ehashfn);
+   493		if (!reuse_sk)
+   494			return sk;
+   495	
+   496		/* We've chosen a new reuseport sock which is never refcounted. This
+   497		 * implies that sk also isn't refcounted.
+   498		 */
+   499		WARN_ON_ONCE(*refcounted);
+   500	
+   501		return reuse_sk;
+   502	}
+   503	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
