@@ -1,27 +1,27 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085F4B9
-	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:23:06 -0800 (PST)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AKMwvAm019752
-	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:23:05 -0800
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1129ABA
+	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:23:16 -0800 (PST)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AKN8H6p018312
+	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:23:15 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uggqp0fw0-19
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uggutgdcu-5
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:23:05 -0800
-Received: from twshared4634.37.frc1.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Mon, 20 Nov 2023 16:23:15 -0800
+Received: from twshared19681.14.frc2.facebook.com (2620:10d:c0a8:1b::2d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Mon, 20 Nov 2023 16:22:54 -0800
+ 15.1.2507.34; Mon, 20 Nov 2023 16:22:35 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 153B83BD942DA; Mon, 20 Nov 2023 16:22:42 -0800 (PST)
+	id 4F2B13BD9427D; Mon, 20 Nov 2023 16:22:27 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH v2 bpf-next 09/10] selftests/bpf: validate precision logic in partial_stack_load_preserves_zeros
-Date: Mon, 20 Nov 2023 16:22:20 -0800
-Message-ID: <20231121002221.3687787-10-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 02/10] selftests/bpf: add stack access precision test
+Date: Mon, 20 Nov 2023 16:22:13 -0800
+Message-ID: <20231121002221.3687787-3-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231121002221.3687787-1-andrii@kernel.org>
 References: <20231121002221.3687787-1-andrii@kernel.org>
@@ -34,62 +34,119 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 1GQQgjCb7wXaptwmVV9HLm_3CARycvSi
-X-Proofpoint-GUID: 1GQQgjCb7wXaptwmVV9HLm_3CARycvSi
+X-Proofpoint-ORIG-GUID: CkILf4F8jgRStO5Li8NQcrEmrvAZiuSF
+X-Proofpoint-GUID: CkILf4F8jgRStO5Li8NQcrEmrvAZiuSF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-20_22,2023-11-20_01,2023-05-22_02
 
-Enhance partial_stack_load_preserves_zeros subtest with detailed
-precision propagation log checks. We know expect fp-16 to be spilled,
-initially imprecise, zero const register, which is later marked as
-precise even when partial stack slot load is performed, even if it's not
-a register fill (!).
+Add a new selftests that validates precision tracking for stack access
+instruction, using both r10-based and non-r10-based accesses. For
+non-r10 ones we also make sure to have non-zero var_off to validate that
+final stack offset is tracked properly in instruction history
+information inside verifier.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../selftests/bpf/progs/verifier_spill_fill.c     | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ .../bpf/progs/verifier_subprog_precision.c    | 64 +++++++++++++++++--
+ 1 file changed, 59 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/to=
-ols/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 60ad2e0247b4..e443009bf9b6 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -491,6 +491,21 @@ char single_byte_buf[1] SEC(".data.single_byte_buf")=
-;
- SEC("raw_tp")
- __log_level(2)
- __success
-+/* make sure fp-8 is all STACK_ZERO */
-+__msg("2: (7a) *(u64 *)(r10 -8) =3D 0          ; R10=3Dfp0 fp-8_w=3D0000=
-0000")
-+/* but fp-16 is spilled IMPRECISE zero const reg */
-+__msg("4: (7b) *(u64 *)(r10 -16) =3D r0        ; R0_w=3D0 R10=3Dfp0 fp-1=
-6_w=3D0")
-+/* and now check that precision propagation works even for such tricky c=
-ase */
-+__msg("9: (71) r2 =3D *(u8 *)(r10 -9)          ; R2_w=3DP0 R10=3Dfp0 fp-=
-16_w=3D0")
-+__msg("10: (0f) r1 +=3D r2")
-+__msg("mark_precise: frame0: last_idx 10 first_idx 0 subseq_idx -1")
-+__msg("mark_precise: frame0: regs=3Dr2 stack=3D before 9: (71) r2 =3D *(=
-u8 *)(r10 -9)")
-+__msg("mark_precise: frame0: regs=3D stack=3D-16 before 8: (bf) r1 =3D r=
-6")
-+__msg("mark_precise: frame0: regs=3D stack=3D-16 before 7: (0f) r1 +=3D =
-r2")
-+__msg("mark_precise: frame0: regs=3D stack=3D-16 before 6: (71) r2 =3D *=
-(u8 *)(r10 -1)")
-+__msg("mark_precise: frame0: regs=3D stack=3D-16 before 5: (bf) r1 =3D r=
-6")
-+__msg("mark_precise: frame0: regs=3D stack=3D-16 before 4: (7b) *(u64 *)=
+diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_precision=
+.c b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
+index 9b3844215a36..a796d282077a 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
++++ b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
+@@ -535,14 +535,68 @@ __naked int subprog_spill_into_parent_stack_slot_pr=
+ecise(void)
+ 	);
+ }
+=20
+-__naked __noinline __used
+-static __u64 subprog_with_checkpoint(void)
++SEC("?raw_tp")
++__success __log_level(2)
++__msg("17: (0f) r1 +=3D r0")
++__msg("mark_precise: frame0: last_idx 17 first_idx 0 subseq_idx -1")
++__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 16: (bf) r1 =3D r=
+7")
++__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 15: (27) r0 *=3D =
+4")
++__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 14: (79) r0 =3D *=
+(u64 *)(r10 -16)")
++__msg("mark_precise: frame0: regs=3D stack=3D-16 before 13: (7b) *(u64 *=
+)(r7 -8) =3D r0")
++__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 12: (79) r0 =3D *=
+(u64 *)(r8 +16)")
++__msg("mark_precise: frame0: regs=3D stack=3D-16 before 11: (7b) *(u64 *=
+)(r8 +16) =3D r0")
++__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 10: (79) r0 =3D *=
+(u64 *)(r7 -8)")
++__msg("mark_precise: frame0: regs=3D stack=3D-16 before 9: (7b) *(u64 *)=
 (r10 -16) =3D r0")
-+__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 3: (b7) r0 =3D 0"=
++__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 8: (07) r8 +=3D -=
+32")
++__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 7: (bf) r8 =3D r1=
+0")
++__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 6: (07) r7 +=3D -=
+8")
++__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 5: (bf) r7 =3D r1=
+0")
++__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 21: (95) exit")
++__msg("mark_precise: frame1: regs=3Dr0 stack=3D before 20: (bf) r0 =3D r=
+1")
++__msg("mark_precise: frame1: regs=3Dr1 stack=3D before 4: (85) call pc+1=
+5")
++__msg("mark_precise: frame0: regs=3Dr1 stack=3D before 3: (bf) r1 =3D r6=
+")
++__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 2: (b7) r6 =3D 1"=
 )
- __naked void partial_stack_load_preserves_zeros(void)
++__naked int stack_slot_aliases_precision(void)
  {
  	asm volatile (
+-		"r0 =3D 0;"
+-		/* guaranteed checkpoint if BPF_F_TEST_STATE_FREQ is used */
+-		"goto +0;"
++		"r6 =3D 1;"
++		/* pass r6 through r1 into subprog to get it back as r0;
++		 * this whole chain will have to be marked as precise later
++		 */
++		"r1 =3D r6;"
++		"call identity_subprog;"
++		/* let's setup two registers that are aliased to r10 */
++		"r7 =3D r10;"
++		"r7 +=3D -8;"			/* r7 =3D r10 - 8 */
++		"r8 =3D r10;"
++		"r8 +=3D -32;"			/* r8 =3D r10 - 32 */
++		/* now spill subprog's return value (a r6 -> r1 -> r0 chain)
++		 * a few times through different stack pointer regs, making
++		 * sure to use r10, r7, and r8 both in LDX and STX insns, and
++		 * *importantly* also using a combination of const var_off and
++		 * insn->off to validate that we record final stack slot
++		 * correctly, instead of relying on just insn->off derivation,
++		 * which is only valid for r10-based stack offset
++		 */
++		"*(u64 *)(r10 - 16) =3D r0;"
++		"r0 =3D *(u64 *)(r7 - 8);"	/* r7 - 8 =3D=3D r10 - 16 */
++		"*(u64 *)(r8 + 16) =3D r0;"	/* r8 + 16 =3D r10 - 16 */
++		"r0 =3D *(u64 *)(r8 + 16);"
++		"*(u64 *)(r7 - 8) =3D r0;"
++		"r0 =3D *(u64 *)(r10 - 16);"
++		/* get ready to use r0 as an index into array to force precision */
++		"r0 *=3D 4;"
++		"r1 =3D %[vals];"
++		/* here r0->r1->r6 chain is forced to be precise and has to be
++		 * propagated back to the beginning, including through the
++		 * subprog call and all the stack spills and loads
++		 */
++		"r1 +=3D r0;"
++		"r0 =3D *(u32 *)(r1 + 0);"
+ 		"exit;"
++		:
++		: __imm_ptr(vals)
++		: __clobber_common, "r6"
+ 	);
+ }
+=20
 --=20
 2.34.1
 
