@@ -1,27 +1,27 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2CB197
-	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:14 -0800 (PST)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AM0KwdY031348
-	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:14 -0800
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADDA197
+	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:17 -0800 (PST)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ALNMW0w030143
+	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:16 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uh4dp9eug-7
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uh65qrpnr-19
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:13 -0800
-Received: from twshared29562.14.frc2.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:16 -0800
+Received: from twshared29562.14.frc2.facebook.com (2620:10d:c0a8:1c::11) by
+ mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.34; Tue, 21 Nov 2023 17:17:11 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 943C33BE888FC; Tue, 21 Nov 2023 17:17:09 -0800 (PST)
+	id 528013BE8853D; Tue, 21 Nov 2023 17:17:01 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 05/10] selftests/bpf: add selftest validating callback result is enforced
-Date: Tue, 21 Nov 2023 17:16:51 -0800
-Message-ID: <20231122011656.1105943-6-andrii@kernel.org>
+Subject: [PATCH bpf-next 01/10] bpf: rearrange bpf_func_state fields to save a bit of memory
+Date: Tue, 21 Nov 2023 17:16:47 -0800
+Message-ID: <20231122011656.1105943-2-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231122011656.1105943-1-andrii@kernel.org>
 References: <20231122011656.1105943-1-andrii@kernel.org>
@@ -34,83 +34,133 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: EC8tRqAZ23sLh6vT5vqeIQFqlcQDUEzc
-X-Proofpoint-ORIG-GUID: EC8tRqAZ23sLh6vT5vqeIQFqlcQDUEzc
+X-Proofpoint-ORIG-GUID: hChH5dYj44OEi-akoz2RCoKvsSQhgdoi
+X-Proofpoint-GUID: hChH5dYj44OEi-akoz2RCoKvsSQhgdoi
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-21_16,2023-11-21_01,2023-05-22_02
 
-BPF verifier expects callback subprogs to return values from specified
-range (typically [0, 1]). This requires that r0 at exit is both precise
-(because we rely on specific value range) and is marked as read
-(otherwise state comparison will ignore such register as unimportant).
+It's a trivial rearrangement saving 8 bytes. We have 4 bytes of padding
+at the end which can be filled with another field without increasing
+struct bpf_func_state.
 
-Add a simple test that validates that all these conditions are enforced.
+copy_func_state() logic remains correct without any further changes.
+
+BEFORE
+=3D=3D=3D=3D=3D=3D
+struct bpf_func_state {
+        struct bpf_reg_state       regs[11];             /*     0  1320 *=
+/
+        /* --- cacheline 20 boundary (1280 bytes) was 40 bytes ago --- */
+        int                        callsite;             /*  1320     4 *=
+/
+        u32                        frameno;              /*  1324     4 *=
+/
+        u32                        subprogno;            /*  1328     4 *=
+/
+        u32                        async_entry_cnt;      /*  1332     4 *=
+/
+        bool                       in_callback_fn;       /*  1336     1 *=
+/
+
+        /* XXX 7 bytes hole, try to pack */
+
+        /* --- cacheline 21 boundary (1344 bytes) --- */
+        struct tnum                callback_ret_range;   /*  1344    16 *=
+/
+        bool                       in_async_callback_fn; /*  1360     1 *=
+/
+        bool                       in_exception_callback_fn; /*  1361    =
+ 1 */
+
+        /* XXX 2 bytes hole, try to pack */
+
+        int                        acquired_refs;        /*  1364     4 *=
+/
+        struct bpf_reference_state * refs;               /*  1368     8 *=
+/
+        int                        allocated_stack;      /*  1376     4 *=
+/
+
+        /* XXX 4 bytes hole, try to pack */
+
+        struct bpf_stack_state *   stack;                /*  1384     8 *=
+/
+
+        /* size: 1392, cachelines: 22, members: 13 */
+        /* sum members: 1379, holes: 3, sum holes: 13 */
+        /* last cacheline: 48 bytes */
+};
+
+AFTER
+=3D=3D=3D=3D=3D
+struct bpf_func_state {
+        struct bpf_reg_state       regs[11];             /*     0  1320 *=
+/
+        /* --- cacheline 20 boundary (1280 bytes) was 40 bytes ago --- */
+        int                        callsite;             /*  1320     4 *=
+/
+        u32                        frameno;              /*  1324     4 *=
+/
+        u32                        subprogno;            /*  1328     4 *=
+/
+        u32                        async_entry_cnt;      /*  1332     4 *=
+/
+        struct tnum                callback_ret_range;   /*  1336    16 *=
+/
+        /* --- cacheline 21 boundary (1344 bytes) was 8 bytes ago --- */
+        bool                       in_callback_fn;       /*  1352     1 *=
+/
+        bool                       in_async_callback_fn; /*  1353     1 *=
+/
+        bool                       in_exception_callback_fn; /*  1354    =
+ 1 */
+
+        /* XXX 1 byte hole, try to pack */
+
+        int                        acquired_refs;        /*  1356     4 *=
+/
+        struct bpf_reference_state * refs;               /*  1360     8 *=
+/
+        struct bpf_stack_state *   stack;                /*  1368     8 *=
+/
+        int                        allocated_stack;      /*  1376     4 *=
+/
+
+        /* size: 1384, cachelines: 22, members: 13 */
+        /* sum members: 1379, holes: 1, sum holes: 1 */
+        /* padding: 4 */
+        /* last cacheline: 40 bytes */
+};
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../bpf/progs/verifier_subprog_precision.c    | 45 +++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ include/linux/bpf_verifier.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_precision=
-.c b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-index db6b3143338b..65c49e56797a 100644
---- a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-@@ -117,6 +117,51 @@ __naked int global_subprog_result_precise(void)
- 	);
- }
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 39edc76f436e..f019da8bf423 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -297,16 +297,16 @@ struct bpf_func_state {
+ 	 * void foo(void) { bpf_timer_set_callback(,foo); }
+ 	 */
+ 	u32 async_entry_cnt;
+-	bool in_callback_fn;
+ 	struct tnum callback_ret_range;
++	bool in_callback_fn;
+ 	bool in_async_callback_fn;
+ 	bool in_exception_callback_fn;
 =20
-+__naked __noinline __used
-+static unsigned long loop_callback_bad()
-+{
-+	/* bpf_loop() callback that can return values outside of [0, 1] range *=
-/
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 > 1000 goto 1f;"
-+		"r0 =3D 0;"
-+	"1:"
-+		"goto +0;" /* checkpoint */
-+		/* bpf_loop() expects [0, 1] values, so branch above skipping
-+		 * r0 =3D 0; should lead to a failure, but if exit instruction
-+		 * doesn't enforce r0's precision, this callback will be
-+		 * successfully verified
-+		 */
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32)
-+		: __clobber_common
-+	);
-+}
-+
-+SEC("?raw_tp")
-+__failure __log_level(2)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("from 10 to 12: frame1: R0=3Dscalar(umin=3D1001) R10=3Dfp0 cb")
-+__msg("At callback return the register R0 has unknown scalar value shoul=
-d have been in (0x0; 0x1)")
-+__naked int callback_precise_return_fail(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"			/* nr_loops */
-+		"r2 =3D %[loop_callback_bad];"	/* callback_fn */
-+		"r3 =3D 0;"			/* callback_ctx */
-+		"r4 =3D 0;"			/* flags */
-+		"call %[bpf_loop];"
-+
-+		"r0 =3D 0;"
-+		"exit;"
-+		:
-+		: __imm_ptr(loop_callback_bad),
-+		  __imm(bpf_loop)
-+		: __clobber_common
-+	);
-+}
-+
- SEC("?raw_tp")
- __success __log_level(2)
- __msg("14: (0f) r1 +=3D r6")
+ 	/* The following fields should be last. See copy_func_state() */
+ 	int acquired_refs;
+ 	struct bpf_reference_state *refs;
+-	int allocated_stack;
+ 	struct bpf_stack_state *stack;
++	int allocated_stack;
+ };
+=20
+ struct bpf_idx_pair {
 --=20
 2.34.1
 
