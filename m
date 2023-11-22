@@ -1,27 +1,27 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38085199
-	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:19 -0800 (PST)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ALNL4at009359
-	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:18 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uh3swhvec-1
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D3C1AA
+	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:50 -0800 (PST)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AM0Yd0M028672
+	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:50 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uh3g9hwue-4
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:18 -0800
-Received: from twshared40933.03.prn6.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:50 -0800
+Received: from twshared58712.02.prn6.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.34; Tue, 21 Nov 2023 17:17:17 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id C76A43BE88941; Tue, 21 Nov 2023 17:17:13 -0800 (PST)
+	id 6D4BE3BE887CE; Tue, 21 Nov 2023 17:17:05 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 07/10] bpf: unify async callback and program retval checks
-Date: Tue, 21 Nov 2023 17:16:53 -0800
-Message-ID: <20231122011656.1105943-8-andrii@kernel.org>
+Subject: [PATCH bpf-next 03/10] bpf: enforce precision of R0 on callback return
+Date: Tue, 21 Nov 2023 17:16:49 -0800
+Message-ID: <20231122011656.1105943-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231122011656.1105943-1-andrii@kernel.org>
 References: <20231122011656.1105943-1-andrii@kernel.org>
@@ -34,110 +34,42 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: DU0UCNE0WTN2vYgasOPz1_IAGZhbeM0p
-X-Proofpoint-ORIG-GUID: DU0UCNE0WTN2vYgasOPz1_IAGZhbeM0p
+X-Proofpoint-ORIG-GUID: 7qxGNiD6cNvcCfX1QuU-FPEK07P7KWaL
+X-Proofpoint-GUID: 7qxGNiD6cNvcCfX1QuU-FPEK07P7KWaL
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-21_16,2023-11-21_01,2023-05-22_02
 
-Use common logic to verify program return values and async callback
-return values. This allows to avoid duplication of any extra steps
-necessary, like precision marking, which will be added in the next
-patch.
+Given verifier checks actual value, r0 has to be precise, so we need to
+propagate precision properly. r0 also has to be marked as read,
+otherwise subsequent state comparisons will ignore such register as
+unimportant and precision won't really help here.
 
+Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 30 ++++++++++++------------------
- 1 file changed, 12 insertions(+), 18 deletions(-)
+ kernel/bpf/verifier.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index f2bf7593289b..87d720d44e0c 100644
+index a921dba4f603..b227f23e063d 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -358,7 +358,7 @@ static void verbose_invalid_scalar(struct bpf_verifie=
-r_env *env,
- 	char tn_buf[48];
- 	bool unknown =3D true;
-=20
--	verbose(env, "At %s the register %s has", ctx, reg_name);
-+	verbose(env, "%s the register %s has", ctx, reg_name);
- 	if (reg->umin_value > 0) {
- 		verbose(env, " umin=3D%llu", reg->umin_value);
- 		unknown =3D false;
-@@ -9532,7 +9532,7 @@ static int prepare_func_exit(struct bpf_verifier_en=
-v *env, int *insn_idx)
- 		/* enforce R0 return value range */
- 		if (!retval_range_within(callee->callback_ret_range, r0)) {
- 			verbose_invalid_scalar(env, r0, callee->callback_ret_range,
--					       "callback return", "R0");
-+					       "At callback return", "R0");
- 			return -EINVAL;
+@@ -9493,6 +9493,13 @@ static int prepare_func_exit(struct bpf_verifier_e=
+nv *env, int *insn_idx)
+ 			verbose(env, "R0 not a scalar value\n");
+ 			return -EACCES;
  		}
- 	} else {
-@@ -14858,11 +14858,11 @@ static int check_ld_abs(struct bpf_verifier_env=
- *env, struct bpf_insn *insn)
-=20
- static int check_return_code(struct bpf_verifier_env *env, int regno, co=
-nst char *reg_name)
- {
-+	const char *exit_ctx =3D "At program exit";
- 	struct tnum enforce_attach_type_range =3D tnum_unknown;
- 	const struct bpf_prog *prog =3D env->prog;
- 	struct bpf_reg_state *reg;
- 	struct bpf_retval_range range =3D retval_range(0, 1);
--	struct bpf_retval_range const_0 =3D retval_range(0, 0);
- 	enum bpf_prog_type prog_type =3D resolve_prog_type(env->prog);
- 	int err;
- 	struct bpf_func_state *frame =3D env->cur_state->frame[0];
-@@ -14904,17 +14904,9 @@ static int check_return_code(struct bpf_verifier=
-_env *env, int regno, const char
-=20
- 	if (frame->in_async_callback_fn) {
- 		/* enforce return zero from async callbacks like timer */
--		if (reg->type !=3D SCALAR_VALUE) {
--			verbose(env, "In async callback the register R%d is not a known value=
- (%s)\n",
--				regno, reg_type_str(env, reg->type));
--			return -EINVAL;
--		}
--
--		if (!retval_range_within(const_0, reg)) {
--			verbose_invalid_scalar(env, reg, const_0, "async callback", reg_name)=
-;
--			return -EINVAL;
--		}
--		return 0;
-+		exit_ctx =3D "At async callback return";
-+		range =3D retval_range(0, 0);
-+		goto enforce_retval;
- 	}
-=20
- 	if (is_subprog && !frame->in_exception_callback_fn) {
-@@ -15004,15 +14996,17 @@ static int check_return_code(struct bpf_verifie=
-r_env *env, int regno, const char
- 		return 0;
- 	}
-=20
-+enforce_retval:
- 	if (reg->type !=3D SCALAR_VALUE) {
--		verbose(env, "At program exit the register R%d is not a known value (%=
-s)\n",
--			regno, reg_type_str(env, reg->type));
-+		verbose(env, "%s the register R%d is not a known value (%s)\n",
-+			exit_ctx, regno, reg_type_str(env, reg->type));
- 		return -EINVAL;
- 	}
-=20
- 	if (!retval_range_within(range, reg)) {
--		verbose_invalid_scalar(env, reg, range, "program exit", reg_name);
--		if (prog->expected_attach_type =3D=3D BPF_LSM_CGROUP &&
-+		verbose_invalid_scalar(env, reg, range, exit_ctx, reg_name);
-+		if (!is_subprog &&
-+		    prog->expected_attach_type =3D=3D BPF_LSM_CGROUP &&
- 		    prog_type =3D=3D BPF_PROG_TYPE_LSM &&
- 		    !prog->aux->attach_func_proto->type)
- 			verbose(env, "Note, BPF_LSM_CGROUP that attach to void LSM hooks can'=
-t modify return value!\n");
++
++		/* we are going to rely on register's precise value */
++		err =3D mark_reg_read(env, r0, r0->parent, REG_LIVE_READ64);
++		err =3D err ?: mark_chain_precision(env, BPF_REG_0);
++		if (err)
++			return err;
++
+ 		if (!tnum_in(range, r0->var_off)) {
+ 			verbose_invalid_scalar(env, r0, &range, "callback return", "R0");
+ 			return -EINVAL;
 --=20
 2.34.1
 
