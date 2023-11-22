@@ -1,27 +1,27 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADDA197
-	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:17 -0800 (PST)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ALNMW0w030143
-	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:16 -0800
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38085199
+	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:19 -0800 (PST)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ALNL4at009359
+	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:18 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uh65qrpnr-19
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uh3swhvec-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:16 -0800
-Received: from twshared29562.14.frc2.facebook.com (2620:10d:c0a8:1c::11) by
- mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:18 -0800
+Received: from twshared40933.03.prn6.facebook.com (2620:10d:c0a8:1b::2d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Tue, 21 Nov 2023 17:17:11 -0800
+ 15.1.2507.34; Tue, 21 Nov 2023 17:17:17 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 528013BE8853D; Tue, 21 Nov 2023 17:17:01 -0800 (PST)
+	id C76A43BE88941; Tue, 21 Nov 2023 17:17:13 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 01/10] bpf: rearrange bpf_func_state fields to save a bit of memory
-Date: Tue, 21 Nov 2023 17:16:47 -0800
-Message-ID: <20231122011656.1105943-2-andrii@kernel.org>
+Subject: [PATCH bpf-next 07/10] bpf: unify async callback and program retval checks
+Date: Tue, 21 Nov 2023 17:16:53 -0800
+Message-ID: <20231122011656.1105943-8-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231122011656.1105943-1-andrii@kernel.org>
 References: <20231122011656.1105943-1-andrii@kernel.org>
@@ -34,133 +34,110 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: hChH5dYj44OEi-akoz2RCoKvsSQhgdoi
-X-Proofpoint-GUID: hChH5dYj44OEi-akoz2RCoKvsSQhgdoi
+X-Proofpoint-GUID: DU0UCNE0WTN2vYgasOPz1_IAGZhbeM0p
+X-Proofpoint-ORIG-GUID: DU0UCNE0WTN2vYgasOPz1_IAGZhbeM0p
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-21_16,2023-11-21_01,2023-05-22_02
 
-It's a trivial rearrangement saving 8 bytes. We have 4 bytes of padding
-at the end which can be filled with another field without increasing
-struct bpf_func_state.
-
-copy_func_state() logic remains correct without any further changes.
-
-BEFORE
-=3D=3D=3D=3D=3D=3D
-struct bpf_func_state {
-        struct bpf_reg_state       regs[11];             /*     0  1320 *=
-/
-        /* --- cacheline 20 boundary (1280 bytes) was 40 bytes ago --- */
-        int                        callsite;             /*  1320     4 *=
-/
-        u32                        frameno;              /*  1324     4 *=
-/
-        u32                        subprogno;            /*  1328     4 *=
-/
-        u32                        async_entry_cnt;      /*  1332     4 *=
-/
-        bool                       in_callback_fn;       /*  1336     1 *=
-/
-
-        /* XXX 7 bytes hole, try to pack */
-
-        /* --- cacheline 21 boundary (1344 bytes) --- */
-        struct tnum                callback_ret_range;   /*  1344    16 *=
-/
-        bool                       in_async_callback_fn; /*  1360     1 *=
-/
-        bool                       in_exception_callback_fn; /*  1361    =
- 1 */
-
-        /* XXX 2 bytes hole, try to pack */
-
-        int                        acquired_refs;        /*  1364     4 *=
-/
-        struct bpf_reference_state * refs;               /*  1368     8 *=
-/
-        int                        allocated_stack;      /*  1376     4 *=
-/
-
-        /* XXX 4 bytes hole, try to pack */
-
-        struct bpf_stack_state *   stack;                /*  1384     8 *=
-/
-
-        /* size: 1392, cachelines: 22, members: 13 */
-        /* sum members: 1379, holes: 3, sum holes: 13 */
-        /* last cacheline: 48 bytes */
-};
-
-AFTER
-=3D=3D=3D=3D=3D
-struct bpf_func_state {
-        struct bpf_reg_state       regs[11];             /*     0  1320 *=
-/
-        /* --- cacheline 20 boundary (1280 bytes) was 40 bytes ago --- */
-        int                        callsite;             /*  1320     4 *=
-/
-        u32                        frameno;              /*  1324     4 *=
-/
-        u32                        subprogno;            /*  1328     4 *=
-/
-        u32                        async_entry_cnt;      /*  1332     4 *=
-/
-        struct tnum                callback_ret_range;   /*  1336    16 *=
-/
-        /* --- cacheline 21 boundary (1344 bytes) was 8 bytes ago --- */
-        bool                       in_callback_fn;       /*  1352     1 *=
-/
-        bool                       in_async_callback_fn; /*  1353     1 *=
-/
-        bool                       in_exception_callback_fn; /*  1354    =
- 1 */
-
-        /* XXX 1 byte hole, try to pack */
-
-        int                        acquired_refs;        /*  1356     4 *=
-/
-        struct bpf_reference_state * refs;               /*  1360     8 *=
-/
-        struct bpf_stack_state *   stack;                /*  1368     8 *=
-/
-        int                        allocated_stack;      /*  1376     4 *=
-/
-
-        /* size: 1384, cachelines: 22, members: 13 */
-        /* sum members: 1379, holes: 1, sum holes: 1 */
-        /* padding: 4 */
-        /* last cacheline: 40 bytes */
-};
+Use common logic to verify program return values and async callback
+return values. This allows to avoid duplication of any extra steps
+necessary, like precision marking, which will be added in the next
+patch.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/bpf_verifier.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/bpf/verifier.c | 30 ++++++++++++------------------
+ 1 file changed, 12 insertions(+), 18 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 39edc76f436e..f019da8bf423 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -297,16 +297,16 @@ struct bpf_func_state {
- 	 * void foo(void) { bpf_timer_set_callback(,foo); }
- 	 */
- 	u32 async_entry_cnt;
--	bool in_callback_fn;
- 	struct tnum callback_ret_range;
-+	bool in_callback_fn;
- 	bool in_async_callback_fn;
- 	bool in_exception_callback_fn;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index f2bf7593289b..87d720d44e0c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -358,7 +358,7 @@ static void verbose_invalid_scalar(struct bpf_verifie=
+r_env *env,
+ 	char tn_buf[48];
+ 	bool unknown =3D true;
 =20
- 	/* The following fields should be last. See copy_func_state() */
- 	int acquired_refs;
- 	struct bpf_reference_state *refs;
--	int allocated_stack;
- 	struct bpf_stack_state *stack;
-+	int allocated_stack;
- };
+-	verbose(env, "At %s the register %s has", ctx, reg_name);
++	verbose(env, "%s the register %s has", ctx, reg_name);
+ 	if (reg->umin_value > 0) {
+ 		verbose(env, " umin=3D%llu", reg->umin_value);
+ 		unknown =3D false;
+@@ -9532,7 +9532,7 @@ static int prepare_func_exit(struct bpf_verifier_en=
+v *env, int *insn_idx)
+ 		/* enforce R0 return value range */
+ 		if (!retval_range_within(callee->callback_ret_range, r0)) {
+ 			verbose_invalid_scalar(env, r0, callee->callback_ret_range,
+-					       "callback return", "R0");
++					       "At callback return", "R0");
+ 			return -EINVAL;
+ 		}
+ 	} else {
+@@ -14858,11 +14858,11 @@ static int check_ld_abs(struct bpf_verifier_env=
+ *env, struct bpf_insn *insn)
 =20
- struct bpf_idx_pair {
+ static int check_return_code(struct bpf_verifier_env *env, int regno, co=
+nst char *reg_name)
+ {
++	const char *exit_ctx =3D "At program exit";
+ 	struct tnum enforce_attach_type_range =3D tnum_unknown;
+ 	const struct bpf_prog *prog =3D env->prog;
+ 	struct bpf_reg_state *reg;
+ 	struct bpf_retval_range range =3D retval_range(0, 1);
+-	struct bpf_retval_range const_0 =3D retval_range(0, 0);
+ 	enum bpf_prog_type prog_type =3D resolve_prog_type(env->prog);
+ 	int err;
+ 	struct bpf_func_state *frame =3D env->cur_state->frame[0];
+@@ -14904,17 +14904,9 @@ static int check_return_code(struct bpf_verifier=
+_env *env, int regno, const char
+=20
+ 	if (frame->in_async_callback_fn) {
+ 		/* enforce return zero from async callbacks like timer */
+-		if (reg->type !=3D SCALAR_VALUE) {
+-			verbose(env, "In async callback the register R%d is not a known value=
+ (%s)\n",
+-				regno, reg_type_str(env, reg->type));
+-			return -EINVAL;
+-		}
+-
+-		if (!retval_range_within(const_0, reg)) {
+-			verbose_invalid_scalar(env, reg, const_0, "async callback", reg_name)=
+;
+-			return -EINVAL;
+-		}
+-		return 0;
++		exit_ctx =3D "At async callback return";
++		range =3D retval_range(0, 0);
++		goto enforce_retval;
+ 	}
+=20
+ 	if (is_subprog && !frame->in_exception_callback_fn) {
+@@ -15004,15 +14996,17 @@ static int check_return_code(struct bpf_verifie=
+r_env *env, int regno, const char
+ 		return 0;
+ 	}
+=20
++enforce_retval:
+ 	if (reg->type !=3D SCALAR_VALUE) {
+-		verbose(env, "At program exit the register R%d is not a known value (%=
+s)\n",
+-			regno, reg_type_str(env, reg->type));
++		verbose(env, "%s the register R%d is not a known value (%s)\n",
++			exit_ctx, regno, reg_type_str(env, reg->type));
+ 		return -EINVAL;
+ 	}
+=20
+ 	if (!retval_range_within(range, reg)) {
+-		verbose_invalid_scalar(env, reg, range, "program exit", reg_name);
+-		if (prog->expected_attach_type =3D=3D BPF_LSM_CGROUP &&
++		verbose_invalid_scalar(env, reg, range, exit_ctx, reg_name);
++		if (!is_subprog &&
++		    prog->expected_attach_type =3D=3D BPF_LSM_CGROUP &&
+ 		    prog_type =3D=3D BPF_PROG_TYPE_LSM &&
+ 		    !prog->aux->attach_func_proto->type)
+ 			verbose(env, "Note, BPF_LSM_CGROUP that attach to void LSM hooks can'=
+t modify return value!\n");
 --=20
 2.34.1
 
