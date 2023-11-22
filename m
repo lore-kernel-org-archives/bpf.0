@@ -1,81 +1,84 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="BFalt9Z/";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KRc5j5oI"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="rC5vATeK";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Om7uyCE+"
 Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DD8A4;
-	Wed, 22 Nov 2023 10:21:08 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-	by mailnew.nyi.internal (Postfix) with ESMTP id EAAFC58055A;
-	Wed, 22 Nov 2023 13:21:07 -0500 (EST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BD51AB;
+	Wed, 22 Nov 2023 10:21:12 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailnew.nyi.internal (Postfix) with ESMTP id 7333258071E;
+	Wed, 22 Nov 2023 13:21:11 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Wed, 22 Nov 2023 13:21:07 -0500
+  by compute3.internal (MEProxy); Wed, 22 Nov 2023 13:21:11 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
 	:cc:content-transfer-encoding:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to; s=fm3; t=1700677267; x=
-	1700684467; bh=WA5yo16lMwft5CPh1GKorx1eBd7zIhQykMs+an4tdPA=; b=B
-	Falt9Z/i6QDvEudBODypdblGWf4C34f3e4zwjOAQAJYvtG3NBAW/lttl0hmKGUeG
-	sNezz1XKkZ/AIymaW2ZFOfEkh4f18HNcUlXP8z1IW3mu40BXMl5gIqMnFisWpei5
-	wCQzNtoPT9vhlBlv2zb22siDC1cy6H5QHW/6pmizxoUcxHx/sJaFWoxH/A5+XY6L
-	BM9dL0enMkHhEhq3vtgYM1/BL4KdboEhM+yhErOu/H5eSMiAWBlv5cf33JMpwLlc
-	kOc3Pvm1NSFrywV7RPM7Ckd6tBDjlVwVlrRPpbCF/hcpJ8ysFSRZDpSL7yZheKg/
-	cNbCN7/tvbAhYzsZfa/kQ==
+	:reply-to:sender:subject:subject:to:to; s=fm3; t=1700677271; x=
+	1700684471; bh=MkiWZ7hndeUKcl/hIWbjV8IQ3kJNfZ+yq9JosgeOxnU=; b=r
+	C5vATeKuhOW93dtcUKH8UClKCfjzF9Xl4bA1RFgGxj4x2Z/V0laY/04WwqJPq6Ad
+	r28Y4QVdadBBSD5RVGoYZ13ZFEDERoDtoJyZpZfd3IYyqMy8lOwzToqb2la/SDfx
+	3fvZo3l3hsKpmbbLk0+LhBOO/lr2AEG5yrTLaPM5qOmrKpwQGbkiwyFQsbCy0EXl
+	+fjuncUUzp318ZSwX1n0gML9TXAzYvF/P4IahnPdtPg5fD+w/vF1MUPmolNuh0xQ
+	GPYsmMoGG0yvy6JQLvvDEw/KxMJYlyme/dCEPWxRXcE36hZhx1Pv4VPDc3vCBT0d
+	31MDYZbgkCky8BRxwIdhg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1700677267; x=
-	1700684467; bh=WA5yo16lMwft5CPh1GKorx1eBd7zIhQykMs+an4tdPA=; b=K
-	Rc5j5oIkr3tswv0HQiFshjicajn2sHsLWPsKJGIMQAJDgz2B1m2TsFTyzCNiPxI1
-	9QLbTpjgW2vFhfRa5COk6mDiGCwTMrMBT+qc2amMJkpk4cXIfdabLJ2X2rIL3UKG
-	cz3VlgBpHATCeysbLosMdm8hnV4JJpdOzAp4/kqKY0GIYHqyeMz2CQaid3OQkTH8
-	RaDYAYcgaTaECpH0/l09+rok7/sg5A4a7OiWjjR7kcplE+cTZNOGTDRTWOT9Xgvm
-	TwJR12Qn7tqtMW4nWNHJbS8bCrwbC8ZZccg8lf0SSUnCxs9IJLgIg5j80zFSt+5/
-	nAERvz0dCSY6Huo37VJpQ==
-X-ME-Sender: <xms:k0ZeZQsn2xP9wXPxvDwEKXrTI_PLkZwziWX5ARqBzqvfb6nj53JSrg>
-    <xme:k0ZeZdedfSlwZSLehNjyDtUqAR-Pbre8KoVF3qdNka6Jkgx5YKyuGTUW3nL2heMs0
-    WvKgOqazrHrkjvlUA>
-X-ME-Received: <xmr:k0ZeZby233F7jLsWHs9eNDQE9_KaNC4GisfmY4F3wy2w0l0Y5p9wVYUo0pn4EcNHMLL_YZgUlcct55ZHRBaNxwIsUb7II4gTIxzHPvIC-WHAWw>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1700677271; x=
+	1700684471; bh=MkiWZ7hndeUKcl/hIWbjV8IQ3kJNfZ+yq9JosgeOxnU=; b=O
+	m7uyCE+97C8ZSq/6OKBwWyKEv9gWkvbTgMlQEwaFo6d0wXG7ky4shzpSKmmYkVmr
+	ZVnEDlNVXE6M/quKpBnxMl4F7OgTrq84wLH6JP7DfhbYnn12BSnbZkTaRu1SivfF
+	VUJao4vmqHLyHgPZQiTtNaovT+QAWLLTxzJ31oAAF/u/+9DBat2JMnB6bDFMvpkT
+	MPK1pI2Fi8Dr5qikEv/dNTvVDQjeoBfVZdCNUXjGEVyrEHAvUFAMoxT+ff6ixRRR
+	5WqRAnardiLg5vDzdeDb8gBw+MdvC0JiuPkuy5MOJDxgAV2K3GaLJDVAyVecYIWO
+	dxfMLb4pdJRs7Zq4VlN9g==
+X-ME-Sender: <xms:l0ZeZTE8tlyliDsDO6nJF6yB4-9n1Hxeh3VBHkcV7uZcoWLrWBW2xA>
+    <xme:l0ZeZQXDzXbdPZwlmmxQOXl6HNtmmVoipOT3Xr5yeknlSaVnrtiyGLwaQmZLww036
+    5CGpfnSoFeYt0kPkw>
+X-ME-Received: <xmr:l0ZeZVLfzoiy6e6IUYzeBOZM64YzOhQFxjo-CeBjswqYCk8tZQElRF1LlO6oi_qN9ltrSay_sLnodvomndf8nNofzImIG0WpOLpODYOhc5lJkA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudehuddguddutdcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdefhedmnecujfgurhephf
     fvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcu
     oegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpefgfefggeejhfduie
     ekvdeuteffleeifeeuvdfhheejleejjeekgfffgefhtddtteenucevlhhushhtvghrufhi
-    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:k0ZeZTMioTyb-cmY7SVevCTVFyD2TbMpaH9lH3nD_1go2ch2SQfKvA>
-    <xmx:k0ZeZQ8mnZIFD1M-tkXT6ajzgrqWa0AAEGi1lCNdB0_FV1WSGwsDgg>
-    <xmx:k0ZeZbVK1TUoIxqOV_RjLs22cIazstoJJUlixQRx9qTJ9NZWFqGRoA>
-    <xmx:k0ZeZbhHRMPrs8-fQRwJKnGtSpLEQOfj526ntuMoEdzoVtmTQ0MnxQ>
+    iigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:l0ZeZREuNF294xuSzhD6lAHt_Nm1M5EJKy08xIrIP8iX-kTuggJLQQ>
+    <xmx:l0ZeZZWnigLssRFcHmdKjL0nUzrlf4VaT5WJaCDtszIa7joOx3XbPQ>
+    <xmx:l0ZeZcPU29sNi1LwktVFAbRNMyIx-O4zaLnYe7TVLXZq43sh8SdyWA>
+    <xmx:l0ZeZfFC2uN9Ytr1PmSOGkCKdEOnEp793N9kct-9NZYUluUxrEijkA>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Nov 2023 13:21:06 -0500 (EST)
+ 22 Nov 2023 13:21:09 -0500 (EST)
 From: Daniel Xu <dxu@dxuuu.xyz>
-To: shuah@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
+To: john.fastabend@gmail.com,
+	davem@davemloft.net,
 	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	kuba@kernel.org,
+	andrii@kernel.org,
+	shuah@kernel.org,
 	steffen.klassert@secunet.com,
 	antony.antony@secunet.com,
 	alexei.starovoitov@gmail.com
-Cc: mykolal@fb.com,
-	martin.lau@linux.dev,
+Cc: martin.lau@linux.dev,
 	song@kernel.org,
 	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
 	kpsingh@kernel.org,
 	sdf@google.com,
 	haoluo@google.com,
 	jolsa@kernel.org,
+	mykolal@fb.com,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	devel@linux-ipsec.org,
-	netdev@vger.kernel.org
-Subject: [PATCH ipsec-next v1 5/7] bpf: selftests: test_tunnel: Use vmlinux.h declarations
-Date: Wed, 22 Nov 2023 11:20:26 -0700
-Message-ID: <c5f6a6686e1472e17014f5d015c8dacade9f053e.1700676682.git.dxu@dxuuu.xyz>
+	netdev@vger.kernel.org,
+	devel@linux-ipsec.org
+Subject: [PATCH ipsec-next v1 7/7] bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
+Date: Wed, 22 Nov 2023 11:20:28 -0700
+Message-ID: <84111ba0ea652a7013df520c151d40d400401e9c.1700676682.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.42.1
 In-Reply-To: <cover.1700676682.git.dxu@dxuuu.xyz>
 References: <cover.1700676682.git.dxu@dxuuu.xyz>
@@ -87,104 +90,139 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-vmlinux.h declarations are more ergnomic, especially when working with
-kfuncs. The uapi headers are often incomplete for kfunc definitions.
+This commit extends test_tunnel selftest to test the new XDP xfrm state
+lookup kfunc.
 
 Co-developed-by: Antony Antony <antony.antony@secunet.com>
 Signed-off-by: Antony Antony <antony.antony@secunet.com>
 Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 ---
- .../selftests/bpf/progs/bpf_tracing_net.h     |  1 +
- .../selftests/bpf/progs/test_tunnel_kern.c    | 48 ++++---------------
- 2 files changed, 9 insertions(+), 40 deletions(-)
+ .../selftests/bpf/progs/test_tunnel_kern.c    | 49 +++++++++++++++++++
+ tools/testing/selftests/bpf/test_tunnel.sh    | 12 +++--
+ 2 files changed, 57 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
-index 0b793a102791..1bdc680b0e0e 100644
---- a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
-@@ -26,6 +26,7 @@
- #define IPV6_AUTOFLOWLABEL	70
- 
- #define TC_ACT_UNSPEC		(-1)
-+#define TC_ACT_OK		0
- #define TC_ACT_SHOT		2
- 
- #define SOL_TCP			6
 diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-index f66af753bbbb..3065a716544d 100644
+index ec7e04e012ae..17bf9ce28460 100644
 --- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
 +++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-@@ -6,62 +6,30 @@
-  * modify it under the terms of version 2 of the GNU General Public
-  * License as published by the Free Software Foundation.
-  */
--#include <stddef.h>
--#include <string.h>
--#include <arpa/inet.h>
--#include <linux/bpf.h>
--#include <linux/if_ether.h>
--#include <linux/if_packet.h>
--#include <linux/if_tunnel.h>
--#include <linux/ip.h>
--#include <linux/ipv6.h>
--#include <linux/icmp.h>
--#include <linux/types.h>
--#include <linux/socket.h>
--#include <linux/pkt_cls.h>
--#include <linux/erspan.h>
--#include <linux/udp.h>
-+#include "vmlinux.h"
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_endian.h>
-+#include "bpf_kfuncs.h"
-+#include "bpf_tracing_net.h"
- 
- #define log_err(__ret) bpf_printk("ERROR line:%d ret:%d\n", __LINE__, __ret)
- 
--#define VXLAN_UDP_PORT 4789
-+#define VXLAN_UDP_PORT		4789
-+#define ETH_P_IP		0x0800
-+#define PACKET_HOST		0
-+#define TUNNEL_CSUM		bpf_htons(0x01)
-+#define TUNNEL_KEY		bpf_htons(0x04)
- 
- /* Only IPv4 address assigned to veth1.
-  * 172.16.1.200
-  */
- #define ASSIGNED_ADDR_VETH1 0xac1001c8
- 
--struct geneve_opt {
--	__be16	opt_class;
--	__u8	type;
--	__u8	length:5;
--	__u8	r3:1;
--	__u8	r2:1;
--	__u8	r1:1;
--	__u8	opt_data[8]; /* hard-coded to 8 byte */
--};
--
- struct vxlanhdr {
- 	__be32 vx_flags;
- 	__be32 vx_vni;
- } __attribute__((packed));
- 
--struct vxlan_metadata {
--	__u32     gbp;
--};
--
--struct bpf_fou_encap {
--	__be16 sport;
--	__be16 dport;
--};
--
--enum bpf_fou_encap_type {
--	FOU_BPF_ENCAP_FOU,
--	FOU_BPF_ENCAP_GUE,
--};
--
- int bpf_skb_set_fou_encap(struct __sk_buff *skb_ctx,
+@@ -35,6 +35,10 @@ int bpf_skb_set_fou_encap(struct __sk_buff *skb_ctx,
  			  struct bpf_fou_encap *encap, int type) __ksym;
  int bpf_skb_get_fou_encap(struct __sk_buff *skb_ctx,
+ 			  struct bpf_fou_encap *encap) __ksym;
++struct xfrm_state *
++bpf_xdp_get_xfrm_state(struct xdp_md *ctx, struct bpf_xfrm_state_opts *opts,
++		       u32 opts__sz) __ksym;
++void bpf_xdp_xfrm_state_release(struct xfrm_state *x) __ksym;
+ 
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_ARRAY);
+@@ -948,4 +952,49 @@ int xfrm_get_state(struct __sk_buff *skb)
+ 	return TC_ACT_OK;
+ }
+ 
++SEC("xdp")
++int xfrm_get_state_xdp(struct xdp_md *xdp)
++{
++	struct bpf_xfrm_state_opts opts = {};
++	struct xfrm_state *x = NULL;
++	struct ip_esp_hdr *esph;
++	struct bpf_dynptr ptr;
++	u8 esph_buf[8] = {};
++	u8 iph_buf[20] = {};
++	struct iphdr *iph;
++	u32 off;
++
++	if (bpf_dynptr_from_xdp(xdp, 0, &ptr))
++		goto out;
++
++	off = sizeof(struct ethhdr);
++	iph = bpf_dynptr_slice(&ptr, off, iph_buf, sizeof(iph_buf));
++	if (!iph || iph->protocol != IPPROTO_ESP)
++		goto out;
++
++	off += sizeof(struct iphdr);
++	esph = bpf_dynptr_slice(&ptr, off, esph_buf, sizeof(esph_buf));
++	if (!esph)
++		goto out;
++
++	opts.netns_id = BPF_F_CURRENT_NETNS,
++	opts.daddr.a4 = iph->daddr;
++	opts.spi = esph->spi;
++	opts.proto = IPPROTO_ESP;
++	opts.family = AF_INET;
++
++	x = bpf_xdp_get_xfrm_state(xdp, &opts, sizeof(opts));
++	if (!x || opts.error)
++		goto out;
++
++	if (!x->replay_esn)
++		goto out;
++
++	bpf_printk("replay-window %d\n", x->replay_esn->replay_window);
++out:
++	if (x)
++		bpf_xdp_xfrm_state_release(x);
++	return XDP_PASS;
++}
++
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
+index dd3c79129e87..17d263681c71 100755
+--- a/tools/testing/selftests/bpf/test_tunnel.sh
++++ b/tools/testing/selftests/bpf/test_tunnel.sh
+@@ -528,7 +528,7 @@ setup_xfrm_tunnel()
+ 	# at_ns0 -> root
+ 	ip netns exec at_ns0 \
+ 		ip xfrm state add src 172.16.1.100 dst 172.16.1.200 proto esp \
+-			spi $spi_in_to_out reqid 1 mode tunnel \
++			spi $spi_in_to_out reqid 1 mode tunnel replay-window 42 \
+ 			auth-trunc 'hmac(sha1)' $auth 96 enc 'cbc(aes)' $enc
+ 	ip netns exec at_ns0 \
+ 		ip xfrm policy add src 10.1.1.100/32 dst 10.1.1.200/32 dir out \
+@@ -537,7 +537,7 @@ setup_xfrm_tunnel()
+ 	# root -> at_ns0
+ 	ip netns exec at_ns0 \
+ 		ip xfrm state add src 172.16.1.200 dst 172.16.1.100 proto esp \
+-			spi $spi_out_to_in reqid 2 mode tunnel \
++			spi $spi_out_to_in reqid 2 mode tunnel replay-window 42 \
+ 			auth-trunc 'hmac(sha1)' $auth 96 enc 'cbc(aes)' $enc
+ 	ip netns exec at_ns0 \
+ 		ip xfrm policy add src 10.1.1.200/32 dst 10.1.1.100/32 dir in \
+@@ -553,14 +553,14 @@ setup_xfrm_tunnel()
+ 	# root namespace
+ 	# at_ns0 -> root
+ 	ip xfrm state add src 172.16.1.100 dst 172.16.1.200 proto esp \
+-		spi $spi_in_to_out reqid 1 mode tunnel \
++		spi $spi_in_to_out reqid 1 mode tunnel replay-window 42 \
+ 		auth-trunc 'hmac(sha1)' $auth 96  enc 'cbc(aes)' $enc
+ 	ip xfrm policy add src 10.1.1.100/32 dst 10.1.1.200/32 dir in \
+ 		tmpl src 172.16.1.100 dst 172.16.1.200 proto esp reqid 1 \
+ 		mode tunnel
+ 	# root -> at_ns0
+ 	ip xfrm state add src 172.16.1.200 dst 172.16.1.100 proto esp \
+-		spi $spi_out_to_in reqid 2 mode tunnel \
++		spi $spi_out_to_in reqid 2 mode tunnel replay-window 42 \
+ 		auth-trunc 'hmac(sha1)' $auth 96  enc 'cbc(aes)' $enc
+ 	ip xfrm policy add src 10.1.1.200/32 dst 10.1.1.100/32 dir out \
+ 		tmpl src 172.16.1.200 dst 172.16.1.100 proto esp reqid 2 \
+@@ -585,6 +585,8 @@ test_xfrm_tunnel()
+ 	tc qdisc add dev veth1 clsact
+ 	tc filter add dev veth1 proto ip ingress bpf da object-pinned \
+ 		${BPF_PIN_TUNNEL_DIR}/xfrm_get_state
++	ip link set dev veth1 xdpdrv pinned \
++		${BPF_PIN_TUNNEL_DIR}/xfrm_get_state_xdp
+ 	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
+ 	sleep 1
+ 	grep "reqid 1" ${TRACE}
+@@ -593,6 +595,8 @@ test_xfrm_tunnel()
+ 	check_err $?
+ 	grep "remote ip 0xac100164" ${TRACE}
+ 	check_err $?
++	grep "replay-window 42" ${TRACE}
++	check_err $?
+ 	cleanup
+ 
+ 	if [ $ret -ne 0 ]; then
 -- 
 2.42.1
 
