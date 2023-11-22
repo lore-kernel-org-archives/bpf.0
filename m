@@ -1,57 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="fWMKENtY";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="BOUl/rwQ"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="B+X9C77J";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="XxsmaB38"
 Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBF41B9;
-	Wed, 22 Nov 2023 10:21:05 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 87DA158034F;
-	Wed, 22 Nov 2023 13:21:04 -0500 (EST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BD4A2;
+	Wed, 22 Nov 2023 10:21:10 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+	by mailnew.nyi.internal (Postfix) with ESMTP id 9102758071C;
+	Wed, 22 Nov 2023 13:21:09 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 22 Nov 2023 13:21:04 -0500
+  by compute2.internal (MEProxy); Wed, 22 Nov 2023 13:21:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
 	:cc:content-transfer-encoding:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to; s=fm3; t=1700677264; x=
-	1700684464; bh=pAXMuw36t4A5a6iy5D+iXmBn9GlBmIUIyg5Iqf95p7I=; b=f
-	WMKENtYhXbTeI2PbKCiatC9Tzw91bHej/Dcc5zPpOUTJtwujIzZI38FTSVynRHQZ
-	wvSlgXN1cWJK5vFYohWU0Xd8HGsILYeCsSqYRy0NSjxMjNdQMOYa5RWuzV9wfVsD
-	/diMeZLGKhEv+DFyd+mK4Jcj2k4fpWAx8as99zf9FXISiWle+0zufWAxK/h4rjhM
-	A2O6S/Q+yrmX7wtzx+qb6i3CM8nmIQaQYG8H+XU3BkzlCGWdjpTCC5qay8qBYgh/
-	O3XP9z1N8e0dKGYe2iutqH46kRpKr9wgIe8VMNPGbjOzaWl5kjrphEhpa/92BVTs
-	DVFfgqFUU761A6veKvLRA==
+	:reply-to:sender:subject:subject:to:to; s=fm3; t=1700677269; x=
+	1700684469; bh=FuK4bS9tTFjezD3GdPwdW0QDdO9NNWltDhOsenLHkyk=; b=B
+	+X9C77JGH3b1jTsp6qm22PCvhJHboU5I/AIyQsdtB9+1Qy66Kd6gmgDVGi7QCjg8
+	axDkALIr3THvEO4neF5rzKw6uMDZ+HCdRTIk12UDDj3CYdpy8LSBdCoIHGmKS4I+
+	e+A2CLmQvixxmunJaeu9vvvDaI+A9jTFxXv3bPqKexp+SGalgRnoFDyS2YOIETkM
+	czdl1wVDn0fKAcd6wA5gj/9qr47QVFBYZrdHNQSmv+cfQU2ez7Pni2BB2JRsY6/u
+	ZcItv7XBi2p7w1HAlzXDgHWnlZgS98dh3zYYu0sKY4xgzZXzQqk0dtLDXjVUmP/A
+	LdqTfaSIc3Zp5/amSXLKQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1700677264; x=
-	1700684464; bh=pAXMuw36t4A5a6iy5D+iXmBn9GlBmIUIyg5Iqf95p7I=; b=B
-	OUl/rwQ71o6LTPAGfnbdb7yt2tzHLcVY+feh/mbDVlTzinAGZO14hjxHEf2whgGb
-	Jjv70ovgUvzyuHgb3Afo/67RlSm+riohjlSdhF0VCyxTSv8u4E0FZJkmK2rr0muD
-	bEX8ab1Wig+Vf9N0/3mgJFqcqAMkLQxPvsoEH8DBwTKbLfS4jsrekfkP7/v39GfS
-	l+VfqI3TjRluZhcPai1iaw69lMiX0OJTsumNqcrqb2/7evD5Jppi0zRCZq52G5Sl
-	qcTtA+v3y2hwCM45LIdLBSxavaxSkeRmVs25/zFAluABAdTeDaM35lrnRQHqAZIF
-	IO9e2RLzIy9npIcb/Jd7w==
-X-ME-Sender: <xms:kEZeZWF9ugO6MwFfOlAbcUJO3LhkUpfDmJytgwsLXcBPl5H8I8Iwhg>
-    <xme:kEZeZXWkbh6xCuUm8JPnvrGL3F3F2r8ueqL0JqYD5LueRdj8ALVUOTh6kSy1PxEGQ
-    o79dEQSLyHzsuJGDQ>
-X-ME-Received: <xmr:kEZeZQJ8GWb00iQN-FkZyFCUYret6eZwuKjkG7GKIz4egFI7nzHh7C87kfXfywcZKKkotNnPB1wIdJ_9LnHNDvMva2onEvl9_wAcLbhbQnu7OA>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1700677269; x=
+	1700684469; bh=FuK4bS9tTFjezD3GdPwdW0QDdO9NNWltDhOsenLHkyk=; b=X
+	xsmaB38ivKpsZWBP+/F0rQNi4Hd/4NUJJFChk5ZSYlKyu92A6/13jn09nEJX652p
+	o2uw33xx1iMo81dEUOLGFX+jUzA4dPEmaTRkz/M/YQSCR4+gOmSzHmnoZgQWZ8bH
+	9i55uwqFLhi1MPrTAyCpVwiGxha8ysPuonbBcv3OY4GoxCMftxcYP6HBNa9fxuEP
+	4SJN2B3dx7471qBk4NH/O9SNYHJY0x6klCWQLW/VKM40OPvD5sQc3jKvBaTY8zr8
+	CzKeiHOUwcyduJpvpPAm7I6vLaGRsQD0EkWD9nN4klnnUTi78Avd2HqvxEFkJMkW
+	EkGFIbKEWhxuN3SPuB5sg==
+X-ME-Sender: <xms:lUZeZbxRLBQ2rStXg-zzyE3ATBwRHZ_ACMXjWrCYVd4iRDssV31miA>
+    <xme:lUZeZTTRkxG9H6PKSGOaaT2Tol8ZTtwWGn7iOTbMk_tUospvJPkLabowq30JEuspN
+    v0cOosnFe6TkB3yOg>
+X-ME-Received: <xmr:lUZeZVUjNTWth-ERQVBEfQFSSwLdbnkLGVXnhkRsWxMne_mLX4NxoAUO3yIXxNB2tLOAeIyPEc4liiIWnQptJDJCqOFXCAMmbSZ_iuV97dFuQQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudehuddguddutdcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdefhedmnecujfgurhephf
     fvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcu
-    oegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeevtdekjeffkefgfe
-    fhvefffeetgfeuueeutdetjeduudehheeiffdvgefhhfevhfenucffohhmrghinhepghhi
-    thhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:kEZeZQEF_7DuYmEpcLoQ3tKuf6FtONnvAgvGVCtJR-EX5e36qvTnTQ>
-    <xmx:kEZeZcXLQzKV5q_kpir9SeRsXwh8vuqbVIU3zDcuEFfJnqW-5n0UEg>
-    <xmx:kEZeZTNdc4BePZKzNr9DvPPgno44FfQe67lrp0lkWrgaq0N9O2NbIg>
-    <xmx:kEZeZXZ3YNNqSRgF6KXRCZ15XA-AOBxjmNGmIdyMFAaN-KAGmrU9iQ>
+    oegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpefgfefggeejhfduie
+    ekvdeuteffleeifeeuvdfhheejleejjeekgfffgefhtddtteenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:lUZeZVjVnfIgIby6ZPRyxzUFoN10_RZYyHzQpjBl6sUlRI4GmMFJfw>
+    <xmx:lUZeZdCqRFQSKGptDzS3fXIplyqNKN0yLK1LSHxBGOFiez5Rql63Cg>
+    <xmx:lUZeZeI2Wusn5oPnUfV_89dAA5tTEd9rpxLN-TvVI_n-e2iNfzrXSg>
+    <xmx:lUZeZcV5HpZepT61911RSEfDbgKQhne8tLOl0VebSKwsx6fMKmuaEw>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Nov 2023 13:21:02 -0500 (EST)
+ 22 Nov 2023 13:21:08 -0500 (EST)
 From: Daniel Xu <dxu@dxuuu.xyz>
 To: shuah@kernel.org,
 	daniel@iogearbox.net,
@@ -74,9 +73,9 @@ Cc: mykolal@fb.com,
 	linux-kernel@vger.kernel.org,
 	devel@linux-ipsec.org,
 	netdev@vger.kernel.org
-Subject: [PATCH ipsec-next v1 3/7] bpf: selftests: test_tunnel: Use ping -6 over ping6
-Date: Wed, 22 Nov 2023 11:20:24 -0700
-Message-ID: <4c6de574f5de959ca5af77f4463e119186ac3202.1700676682.git.dxu@dxuuu.xyz>
+Subject: [PATCH ipsec-next v1 6/7] bpf: selftests: test_tunnel: Disable CO-RE relocations
+Date: Wed, 22 Nov 2023 11:20:27 -0700
+Message-ID: <391d524c496acc97a8801d8bea80976f58485810.1700676682.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.42.1
 In-Reply-To: <cover.1700676682.git.dxu@dxuuu.xyz>
 References: <cover.1700676682.git.dxu@dxuuu.xyz>
@@ -88,86 +87,35 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The ping6 binary went away over 7 years ago [0].
+Switching to vmlinux.h definitions seems to make the verifier very
+unhappy with bitfield accesses. The error is:
 
-[0]: https://github.com/iputils/iputils/commit/ebad35fee3de851b809c7b72ccc654a72b6af61d
+    ; md.u.md2.dir = direction;
+    33: (69) r1 = *(u16 *)(r2 +11)
+    misaligned stack access off (0x0; 0x0)+-64+11 size 2
+
+It looks like disabling CO-RE relocations seem to make the error go
+away.
 
 Co-developed-by: Antony Antony <antony.antony@secunet.com>
 Signed-off-by: Antony Antony <antony.antony@secunet.com>
 Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 ---
- tools/testing/selftests/bpf/test_tunnel.sh | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/progs/test_tunnel_kern.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
-index 2dec7dbf29a2..85ba39992461 100755
---- a/tools/testing/selftests/bpf/test_tunnel.sh
-+++ b/tools/testing/selftests/bpf/test_tunnel.sh
-@@ -295,13 +295,13 @@ test_ip6gre()
- 	add_ip6gretap_tunnel
- 	attach_bpf $DEV ip6gretap_set_tunnel ip6gretap_get_tunnel
- 	# underlay
--	ping6 $PING_ARG ::11
-+	ping -6 $PING_ARG ::11
- 	# overlay: ipv4 over ipv6
- 	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
- 	ping $PING_ARG 10.1.1.100
- 	check_err $?
- 	# overlay: ipv6 over ipv6
--	ip netns exec at_ns0 ping6 $PING_ARG fc80::200
-+	ip netns exec at_ns0 ping -6 $PING_ARG fc80::200
- 	check_err $?
- 	cleanup
- 
-@@ -324,13 +324,13 @@ test_ip6gretap()
- 	add_ip6gretap_tunnel
- 	attach_bpf $DEV ip6gretap_set_tunnel ip6gretap_get_tunnel
- 	# underlay
--	ping6 $PING_ARG ::11
-+	ping -6 $PING_ARG ::11
- 	# overlay: ipv4 over ipv6
- 	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
- 	ping $PING_ARG 10.1.1.100
- 	check_err $?
- 	# overlay: ipv6 over ipv6
--	ip netns exec at_ns0 ping6 $PING_ARG fc80::200
-+	ip netns exec at_ns0 ping -6 $PING_ARG fc80::200
- 	check_err $?
- 	cleanup
- 
-@@ -376,7 +376,7 @@ test_ip6erspan()
- 	config_device
- 	add_ip6erspan_tunnel $1
- 	attach_bpf $DEV ip4ip6erspan_set_tunnel ip4ip6erspan_get_tunnel
--	ping6 $PING_ARG ::11
-+	ping -6 $PING_ARG ::11
- 	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
- 	check_err $?
- 	cleanup
-@@ -474,7 +474,7 @@ test_ipip6()
- 	ip link set dev veth1 mtu 1500
- 	attach_bpf $DEV ipip6_set_tunnel ipip6_get_tunnel
- 	# underlay
--	ping6 $PING_ARG ::11
-+	ping -6 $PING_ARG ::11
- 	# ip4 over ip6
- 	ping $PING_ARG 10.1.1.100
- 	check_err $?
-@@ -502,11 +502,11 @@ test_ip6ip6()
- 	ip link set dev veth1 mtu 1500
- 	attach_bpf $DEV ip6ip6_set_tunnel ip6ip6_get_tunnel
- 	# underlay
--	ping6 $PING_ARG ::11
-+	ping -6 $PING_ARG ::11
- 	# ip6 over ip6
--	ping6 $PING_ARG 1::11
-+	ping -6 $PING_ARG 1::11
- 	check_err $?
--	ip netns exec at_ns0 ping6 $PING_ARG 1::22
-+	ip netns exec at_ns0 ping -6 $PING_ARG 1::22
- 	check_err $?
- 	cleanup
- 
+diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+index 3065a716544d..ec7e04e012ae 100644
+--- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
++++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+@@ -6,6 +6,7 @@
+  * modify it under the terms of version 2 of the GNU General Public
+  * License as published by the Free Software Foundation.
+  */
++#define BPF_NO_PRESERVE_ACCESS_INDEX
+ #include "vmlinux.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_endian.h>
 -- 
 2.42.1
 
