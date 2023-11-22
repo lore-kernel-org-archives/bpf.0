@@ -1,107 +1,112 @@
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D12DD
-	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:21:47 -0800 (PST)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AM0FFro017824
-	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:21:47 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uh6xbrckj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:21:46 -0800
-Received: from twshared34392.14.frc2.facebook.com (2620:10d:c0a8:1c::1b) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Tue, 21 Nov 2023 17:19:30 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id F06713BE88955; Tue, 21 Nov 2023 17:17:17 -0800 (PST)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 09/10] selftests/bpf: validate async callback return value check correctness
-Date: Tue, 21 Nov 2023 17:16:55 -0800
-Message-ID: <20231122011656.1105943-10-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231122011656.1105943-1-andrii@kernel.org>
-References: <20231122011656.1105943-1-andrii@kernel.org>
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hwCsdM2z"
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A6C12C;
+	Tue, 21 Nov 2023 17:41:14 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-6cbb71c3020so264777b3a.1;
+        Tue, 21 Nov 2023 17:41:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700617273; x=1701222073; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wZkVnSThHSQ0nduxa23VteQPHRdj2Ex/elZXOf6IRxQ=;
+        b=hwCsdM2zxxJ5EjZy88b7OGh/WAkqreYdl2vZV+JsgrpGgSlXRKlRhKwf/GqMIAyvjx
+         mLORQM7zVddznURZsWaMQIseNG6TfCoGpxBj7yX7hyJJocFFymkOuLm1Rw4Uxat/URow
+         bhSpbMHmEKubjYyetZGQFZQkiP0P1tPR8z1lIu3MIMn7+cdyJKnvPpLVZdFe4NFBb03D
+         ngic5VpYtEal4ixYE/Efms/RTOi0fQUbywZ/ASoQqDiWL+7SBXtjuTzGuYgY6dDqX0q8
+         Idlyk69apU5YfCijVxUCslEjDgUf5gdvQL7K+BqnnTc3KbqaeigrQpMPjndgBKv7Inhr
+         2oGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700617273; x=1701222073;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wZkVnSThHSQ0nduxa23VteQPHRdj2Ex/elZXOf6IRxQ=;
+        b=gDL3CQKpHqZVKAcj/YZao+1+wtjq7cJ59cG6HKi3H5x9+OD7Dbv2m1KtMd6/YFoQff
+         daJFlym0J8nZY5eomy1Gp/wUTwENPuNhgvwKn8T/RQXPbA+QzuUqVecVDmSc/30y1h8M
+         rrWzXPNSnGG/oxgfW9heSBOHYHtY+9rpEUWNfAl1jCvKckzSieLyqs/msYijnNReJ+89
+         m2FCp+6CpMgI0kItLhcoXqi2JLcSEA2Z3gjsD5/jSdsFAd33OelyhxJlbg3ghs5zGWU9
+         2+PiA4XdFeXHCcEH3camGIitmWkhJAbYkbeTY4hDmp5FlHU8sC8C1OUAj4YC9XRK0uWZ
+         Lt9g==
+X-Gm-Message-State: AOJu0YxVszJF+4pNlTco84lW9YGkHVAIgr4lNdbGPNNq7dZyHgxnn5Xw
+	NBirWT0nr5dGEZ8ooKMxcyg=
+X-Google-Smtp-Source: AGHT+IHAMbcH80Qv38sfnNHrOUL21YxFpmpRBj4ZbJPJ09PEy1rp7PPEr4++1O5WoMpvW2iMsf+Omg==
+X-Received: by 2002:a05:6a21:a59b:b0:187:962d:746b with SMTP id gd27-20020a056a21a59b00b00187962d746bmr1839947pzc.9.1700617273489;
+        Tue, 21 Nov 2023 17:41:13 -0800 (PST)
+Received: from macbook-pro-49.dhcp.thefacebook.com ([2620:10d:c090:400::4:da69])
+        by smtp.gmail.com with ESMTPSA id v4-20020aa78504000000b006cb884c0362sm5005865pfn.87.2023.11.21.17.41.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Nov 2023 17:41:12 -0800 (PST)
+Date: Tue, 21 Nov 2023 17:41:07 -0800
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+	jolsa@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	samitolvanen@google.com, keescook@chromium.org, nathan@kernel.org,
+	ndesaulniers@google.com, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, jpoimboe@kernel.org, joao@overdrivepizza.com,
+	mark.rutland@arm.com
+Subject: Re: [PATCH 0/2] x86/bpf: Fix FineIBT vs eBPF
+Message-ID: <20231122014107.p5zf4o6kjanypla4@macbook-pro-49.dhcp.thefacebook.com>
+References: <20231120144642.591358648@infradead.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: Oygp_bgxP85kQiaTw_Fz6U7YX4vLSK3S
-X-Proofpoint-ORIG-GUID: Oygp_bgxP85kQiaTw_Fz6U7YX4vLSK3S
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-21_16,2023-11-21_01,2023-05-22_02
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231120144642.591358648@infradead.org>
 
-Adjust timer/timer_ret_1 test to validate more carefully verifier logic
-of enforcing async callback return value. This test will pass only if
-return result is marked precise and read.
+On Mon, Nov 20, 2023 at 03:46:42PM +0100, Peter Zijlstra wrote:
+> Hi!
+> 
+> There's a problem with FineIBT and eBPF using __nocfi when
+> CONFIG_BPF_JIT_ALWAYS_ON=n, in which case the __nocfi indirect call can target
+> a normal function like __bpf_prog_run32().
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- .../selftests/bpf/progs/timer_failure.c       | 29 ++++++++++++++-----
- 1 file changed, 22 insertions(+), 7 deletions(-)
+The lack (or partially broken) cfi in the kernel built with
+CONFIG_BPF_JIT_ALWAYS_ON=n is probably the last of people security concerns.
+We introduced CONFIG_BPF_JIT_ALWAYS_ON=y to remove the interpreter,
+since mere presence of _any_ interpreter in the kernel (bpf and any other)
+is an attack vector. As it was demonstrated during spectre days an interpreter
+sitting in executable part of vmlinux .text tremendously helps to craft
+a speculative execution exploit.
 
-diff --git a/tools/testing/selftests/bpf/progs/timer_failure.c b/tools/te=
-sting/selftests/bpf/progs/timer_failure.c
-index 9000da1e2120..a8dab6697810 100644
---- a/tools/testing/selftests/bpf/progs/timer_failure.c
-+++ b/tools/testing/selftests/bpf/progs/timer_failure.c
-@@ -21,17 +21,32 @@ struct {
- 	__type(value, struct elem);
- } timer_map SEC(".maps");
-=20
--static int timer_cb_ret1(void *map, int *key, struct bpf_timer *timer)
-+__naked __noinline __used
-+static unsigned long timer_cb_ret_bad()
- {
--	if (bpf_get_smp_processor_id() % 2)
--		return 1;
--	else
--		return 0;
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 > 1000 goto 1f;"
-+		"r0 =3D 0;"
-+	"1:"
-+		"goto +0;" /* checkpoint */
-+		/* async callback is expected to return 0, so branch above
-+		 * skipping r0 =3D 0; should lead to a failure, but if exit
-+		 * instruction doesn't enforce r0's precision, this callback
-+		 * will be successfully verified
-+		 */
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32)
-+		: __clobber_common
-+	);
- }
-=20
- SEC("fentry/bpf_fentry_test1")
- __failure __msg("should have been in [0, 0]")
--int BPF_PROG2(test_ret_1, int, a)
-+__log_level(2)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+int BPF_PROG2(test_bad_ret, int, a)
- {
- 	int key =3D 0;
- 	struct bpf_timer *timer;
-@@ -39,7 +54,7 @@ int BPF_PROG2(test_ret_1, int, a)
- 	timer =3D bpf_map_lookup_elem(&timer_map, &key);
- 	if (timer) {
- 		bpf_timer_init(timer, &timer_map, CLOCK_BOOTTIME);
--		bpf_timer_set_callback(timer, timer_cb_ret1);
-+		bpf_timer_set_callback(timer, timer_cb_ret_bad);
- 		bpf_timer_start(timer, 1000, 0);
- 	}
-=20
---=20
-2.34.1
+Anyway, motivation aside, more comments in the patch 2...
 
+> Specifically the various preambles look like:
+> 
+>    FineIBT				JIT
+> 
+>    __cfi_foo:
+>       endbr64
+>       subl	$hash, %r10d
+>       jz	1f
+>       ud2
+>    1: nop
+>    foo:					foo:
+>       osp nop3				   endbr64
+>       ...				   ...
+> 
+> So while bpf_dispatcher_*_func() does a __nocfi call to foo()+0 and this
+> matches what the JIT generates, it does not work for regular FineIBT functions,
+> since their +0 endbr got poisoned and things go *boom*.
+> 
+> Cure this by teaching the BPF JIT about all the various CFI forms. Notably this
+> removes the last __nocfi call on x86.
+> 
+> If the BPF folks agree (and the robots don't find fail) I'd like to take this
+> through the x86 tree, because I have a few more patches that turn the non-fatal
+> 'osp nop3' poison into a 4 byte ud1 instruction which is rather fatal. As a
+> result this problem will also surface on !IBT hardware.
+> 
