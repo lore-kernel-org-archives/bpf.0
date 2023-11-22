@@ -1,27 +1,27 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB221A3
-	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:52 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DC8197
+	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:53 -0800 (PST)
 Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ALKK8Zv018592
-	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:52 -0800
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AM0Yd0U028672
+	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:53 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uh3g9hwub-12
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uh3g9hwue-12
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:51 -0800
-Received: from twshared11278.41.prn1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Tue, 21 Nov 2023 17:17:52 -0800
+Received: from twshared29647.38.frc1.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Tue, 21 Nov 2023 17:17:26 -0800
+ 15.1.2507.34; Tue, 21 Nov 2023 17:17:24 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 069073BE88963; Tue, 21 Nov 2023 17:17:20 -0800 (PST)
+	id DFF4D3BE88949; Tue, 21 Nov 2023 17:17:15 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 10/10] selftests/bpf: adjust global_func15 test to validate prog exit precision
-Date: Tue, 21 Nov 2023 17:16:56 -0800
-Message-ID: <20231122011656.1105943-11-andrii@kernel.org>
+Subject: [PATCH bpf-next 08/10] bpf: enforce precision of R0 on program/async callback return
+Date: Tue, 21 Nov 2023 17:16:54 -0800
+Message-ID: <20231122011656.1105943-9-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231122011656.1105943-1-andrii@kernel.org>
 References: <20231122011656.1105943-1-andrii@kernel.org>
@@ -34,59 +34,36 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: zLOFdcGFEV9kvwK3j0Gr-qa3EYFVC6L1
-X-Proofpoint-GUID: zLOFdcGFEV9kvwK3j0Gr-qa3EYFVC6L1
+X-Proofpoint-ORIG-GUID: jrsvB_HcupPxzChiLG2XCNZHg-7wRjpX
+X-Proofpoint-GUID: jrsvB_HcupPxzChiLG2XCNZHg-7wRjpX
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-21_16,2023-11-21_01,2023-05-22_02
 
-Add one more subtest to  global_func15 selftest to validate that
-verifier properly marks r0 as precise and avoids erroneous state pruning
-of the branch that has return value outside of expected [0, 1] value.
+Given we enforce a valid range for program and async callback return
+value, we must mark R0 as precise to avoid incorrect state pruning.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../selftests/bpf/progs/test_global_func15.c  | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ kernel/bpf/verifier.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_global_func15.c b/too=
-ls/testing/selftests/bpf/progs/test_global_func15.c
-index f80207480e8a..fc24d1e1f287 100644
---- a/tools/testing/selftests/bpf/progs/test_global_func15.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_func15.c
-@@ -22,3 +22,32 @@ int global_func15(struct __sk_buff *skb)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 87d720d44e0c..1a0a545aec9c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -15003,6 +15003,10 @@ static int check_return_code(struct bpf_verifier=
+_env *env, int regno, const char
+ 		return -EINVAL;
+ 	}
 =20
- 	return v;
- }
++	err =3D mark_chain_precision(env, regno);
++	if (err)
++		return err;
 +
-+SEC("cgroup_skb/ingress")
-+__failure __msg("At program exit the register R0 has ")
-+__log_level(2) __flag(BPF_F_TEST_STATE_FREQ)
-+__naked int global_func15_tricky_pruning(void)
-+{
-+	asm volatile (
-+		"r0 =3D 1;"
-+		"*(u64 *)(r10 -8) =3D r0;"
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 > 1000 goto 1f;"
-+		"r0 =3D 1;"
-+	"1:"
-+		"goto +0;" /* checkpoint */
-+		/* cgroup_skb/ingress program is expected to return [0, 1]
-+		 * values, so branch above makes sure that in a fallthrough
-+		 * case we have a valid 1 stored in R0 register, but in
-+		 * a branch case we assign some random value to R0.  So if
-+		 * there is something wrong with precision tracking for R0 at
-+		 * program exit, we might erronenously prune branch case,
-+		 * because R0 in fallthrough case is imprecise (and thus any
-+		 * value is valid from POV of verifier is_state_equal() logic)
-+		 */
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32)
-+		: __clobber_common
-+	);
-+}
+ 	if (!retval_range_within(range, reg)) {
+ 		verbose_invalid_scalar(env, reg, range, exit_ctx, reg_name);
+ 		if (!is_subprog &&
 --=20
 2.34.1
 
