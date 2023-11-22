@@ -1,193 +1,121 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k7Jtoo2h"
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72ABAD50
-	for <bpf@vger.kernel.org>; Wed, 22 Nov 2023 05:48:58 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-a00f67f120aso323247766b.2
-        for <bpf@vger.kernel.org>; Wed, 22 Nov 2023 05:48:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IcsUGyv3"
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F92419D;
+	Wed, 22 Nov 2023 06:16:20 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-6c431b91b2aso5928761b3a.1;
+        Wed, 22 Nov 2023 06:16:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700660937; x=1701265737; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+wTOUdmVRfoZRe3TwNvBuMk3+gy4xmj3oNwPwLVNCfY=;
-        b=k7Jtoo2hf1wX7m/SSx9C0BX6BIrhcPR18g8t1E2/fY8sTOoHDQDs7yctXBA2p39Y6I
-         lRmvypn8RhwSuqd1cNBRT9Z/jsLiZJe8GabVgwzO1Vp0vpHhR57inJFngX6nFsArzLNX
-         LKyPOXhFKIkQ+bYATjzrvLOv+3uYTuQcpD+flz5uSLtyzimTqAfWKGiin7ghkzmepr5S
-         DhRDWIbpfB20CFo1i5BRDUL+KqYtFqu8Fw2aZudBevJk0x5+xWyb21FH/BUg2VQIsXfy
-         gy+XG60WamyXUXsRULmI6Rdx2JBVlKOQ1+z9MGtlFqnsNXxioBMS/RRLGxi6PsvY2DOp
-         pZVw==
+        d=gmail.com; s=20230601; t=1700662580; x=1701267380; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wEKF8LLG6U3WOQ+0Jd5b+JaDhInk2g16roqp0OT/5iQ=;
+        b=IcsUGyv3r72G7slMp6GHDoKK55hqMYE20fFUiAi8OSjJ8/uLEFNZt45bDDUpcWcBvJ
+         36CenbaP70wYGtrI6iJUGliE4sdqHXKJsS57Hxsd0MGqQTePI03LLRkE9gYBlq7oaL7G
+         Aj5g4B+KG3jPCNhugmjgDlhzNB2Nw+S1dq4AzA1ociIPzQphfsU+7UWXIApRK5DiY9E6
+         aHTaPat5qyBgIvTSxMtQvzy9T+NjDQG14Tz9h5AbD+pHJfXLGEcrTlaI9h37dO2v9R0I
+         tfsUg9tHIhLldBrGMfZscQgZlMX7TtLfNRLn0CgiUgD7CX9Byq7GEDyKydGJj1lMAP12
+         qoBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700660937; x=1701265737;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+wTOUdmVRfoZRe3TwNvBuMk3+gy4xmj3oNwPwLVNCfY=;
-        b=ipNYEm8Y+PgTXnyO/4Dyo6y3wRE5EK2YOquZNYSn8fgWh98zOuNatFGmWBPykyYTMM
-         IdNvyHVHl1jpUquGoThoQrnIcYnIAI9VteoaTdmY/nabQ4ZB9gJxsiyUifbdEWd4FMVd
-         KyjZlj8jPiuOz96LL0XIxzqG2VWYy5259Ei2++sAMBmEtG7nZQZmtiDSswXm7okBiTYB
-         v4NNmwetS+2goJPVAzrJoIRGTiHraInpxxAuvKgCzPnz4Wf66ro4rb8TRTCNduOFR/Kk
-         lVNLQGVeowrwSbDZVUkHRQfjpT5XtzcZyAftWYhXaP4gruFxaP+wYpU3CtNyVMQE+78h
-         FIfA==
-X-Gm-Message-State: AOJu0YzDek/thWpItSUwet1m2OWlkLd3hgoAZw6VLVJDFY/3U/LQjk0n
-	Ab/pT54NJR6uIdDs13G8TBE=
-X-Google-Smtp-Source: AGHT+IHXdwxtEsMt/ucbsT2Q8vcwg4DU2jaEtPwQjhAei/oheE9B/xjW14Xlrj5Zqgl6DUY5gbQsVA==
-X-Received: by 2002:a17:907:c204:b0:9fc:b083:e549 with SMTP id ti4-20020a170907c20400b009fcb083e549mr2483435ejc.54.1700660936442;
-        Wed, 22 Nov 2023 05:48:56 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id h19-20020a170906591300b00a047f065fa6sm772001ejq.206.2023.11.22.05.48.55
+        d=1e100.net; s=20230601; t=1700662580; x=1701267380;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wEKF8LLG6U3WOQ+0Jd5b+JaDhInk2g16roqp0OT/5iQ=;
+        b=h4r8Zab0vnwXRZ/34lr8FeKgaDnW5nIivUTEIaWCMqX4tspHhEdpgr5PcSRI5vqPIW
+         H6Kz25LQM29cK/UlaHAVfLawK5rerrZ9ip6lnvu4xWcZ39DQoD0eu2Nq5EXlYN6qe4GU
+         DE4VsbNtsFRwjgQL19zjdxiPhrHb98COzSsefqOEEFDW1F+qhX6dyF9HF3MEylOgOFel
+         to0EztWx6WyHu0DmXmk8zwLM35HrBbO9WEjbAi7jRfAARFCiEDz1n8iCjX6FHaVPLj+g
+         XO37QPB7efTTaYEL0jH9KIF+j8i6U6LzvOCY1pv0mNd/Ay9A1fysulbflhja2hYnL9lL
+         t7OA==
+X-Gm-Message-State: AOJu0YwPdlsN/+jftZo9U6iHGBO6p/1RFaqlDLcXYzloZs4hqan5dYX0
+	vFJrXjm6D7d0n1Ip7W0O2/8=
+X-Google-Smtp-Source: AGHT+IHaW2MTTY6XpXzARVPEMKHa87mJ8Yxq3K7qITmUxY6o2gfygIc8izDK27aA06ZWTKsysRRh+w==
+X-Received: by 2002:a05:6a20:e126:b0:187:7917:189d with SMTP id kr38-20020a056a20e12600b001877917189dmr2568042pzb.29.1700662579836;
+        Wed, 22 Nov 2023 06:16:19 -0800 (PST)
+Received: from vultr.guest ([2001:19f0:ac01:a71:5400:4ff:fea8:5687])
+        by smtp.gmail.com with ESMTPSA id p18-20020a63fe12000000b0058988954686sm9356260pgh.90.2023.11.22.06.16.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Nov 2023 05:48:56 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 22 Nov 2023 14:48:54 +0100
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@chromium.org>,
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
-	Yafang Shao <laoar.shao@gmail.com>
-Subject: Re: [PATCHv3 bpf-next 3/6] bpf: Add link_info support for uprobe
- multi link
-Message-ID: <ZV4GxrqnrvxBppC/@krava>
-References: <20231120145639.3179656-1-jolsa@kernel.org>
- <20231120145639.3179656-4-jolsa@kernel.org>
- <CAEf4BzY0EpOorNs2Vm0ijeYsL7doAf4-mQBoz6y1xpWb2bWY6Q@mail.gmail.com>
+        Wed, 22 Nov 2023 06:16:19 -0800 (PST)
+From: Yafang Shao <laoar.shao@gmail.com>
+To: akpm@linux-foundation.org,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	omosnace@redhat.com,
+	mhocko@suse.com
+Cc: linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org,
+	bpf@vger.kernel.org,
+	ligang.bdlg@bytedance.com,
+	Yafang Shao <laoar.shao@gmail.com>,
+	"Huang, Ying" <ying.huang@intel.com>
+Subject: [RFC PATCH v2 1/6] mm, doc: Add doc for MPOL_F_NUMA_BALANCING
+Date: Wed, 22 Nov 2023 14:15:54 +0000
+Message-Id: <20231122141559.4228-2-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.39.3
+In-Reply-To: <20231122141559.4228-1-laoar.shao@gmail.com>
+References: <20231122141559.4228-1-laoar.shao@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzY0EpOorNs2Vm0ijeYsL7doAf4-mQBoz6y1xpWb2bWY6Q@mail.gmail.com>
 
-On Tue, Nov 21, 2023 at 10:41:24AM -0800, Andrii Nakryiko wrote:
-> On Mon, Nov 20, 2023 at 6:57 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > Adding support to get uprobe_link details through bpf_link_info
-> > interface.
-> >
-> > Adding new struct uprobe_multi to struct bpf_link_info to carry
-> > the uprobe_multi link details.
-> >
-> > The uprobe_multi.count is passed from user space to denote size
-> > of array fields (offsets/ref_ctr_offsets/cookies). The actual
-> > array size is stored back to uprobe_multi.count (allowing user
-> > to find out the actual array size) and array fields are populated
-> > up to the user passed size.
-> >
-> > All the non-array fields (path/count/flags/pid) are always set.
-> >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  include/uapi/linux/bpf.h       | 10 +++++
-> >  kernel/trace/bpf_trace.c       | 72 ++++++++++++++++++++++++++++++++++
-> >  tools/include/uapi/linux/bpf.h | 10 +++++
-> >  3 files changed, 92 insertions(+)
-> >
-> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > index 7a5498242eaa..a63b5eb7f9ec 100644
-> > --- a/include/uapi/linux/bpf.h
-> > +++ b/include/uapi/linux/bpf.h
-> > @@ -6562,6 +6562,16 @@ struct bpf_link_info {
-> >                         __u32 flags;
-> >                         __u64 missed;
-> >                 } kprobe_multi;
-> > +               struct {
-> > +                       __aligned_u64 path;
-> > +                       __aligned_u64 offsets;
-> > +                       __aligned_u64 ref_ctr_offsets;
-> > +                       __aligned_u64 cookies;
-> > +                       __u32 path_size; /* in/out: real path size on success */
-> > +                       __u32 count; /* in/out: uprobe_multi offsets/ref_ctr_offsets/cookies count */
-> > +                       __u32 flags;
-> > +                       __u32 pid;
-> > +               } uprobe_multi;
-> >                 struct {
-> >                         __u32 type; /* enum bpf_perf_event_type */
-> >                         __u32 :32;
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index ad0323f27288..ca453b642819 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> > @@ -3044,6 +3044,7 @@ struct bpf_uprobe_multi_link {
-> >         u32 cnt;
-> >         struct bpf_uprobe *uprobes;
-> >         struct task_struct *task;
-> > +       u32 flags;
-> 
-> this fits better after cnt to avoid increasing the size of
-> bpf_uprobe_multi_link, please it move up
+The document on MPOL_F_NUMA_BALANCING was missed in the initial commit
+The MPOL_F_NUMA_BALANCING document was inadvertently omitted from the
+initial commit bda420b98505 ("numa balancing: migrate on fault among
+multiple bound nodes")
 
-ok
+Let's ensure its inclusion.
 
-> 
-> >  };
-> >
-> >  struct bpf_uprobe_multi_run_ctx {
-> > @@ -3083,9 +3084,79 @@ static void bpf_uprobe_multi_link_dealloc(struct bpf_link *link)
-> >         kfree(umulti_link);
-> >  }
-> >
-> > +static int bpf_uprobe_multi_link_fill_link_info(const struct bpf_link *link,
-> > +                                               struct bpf_link_info *info)
-> > +{
-> > +       u64 __user *uref_ctr_offsets = u64_to_user_ptr(info->uprobe_multi.ref_ctr_offsets);
-> > +       u64 __user *ucookies = u64_to_user_ptr(info->uprobe_multi.cookies);
-> > +       u64 __user *uoffsets = u64_to_user_ptr(info->uprobe_multi.offsets);
-> > +       u64 __user *upath = u64_to_user_ptr(info->uprobe_multi.path);
-> > +       u32 upath_size = info->uprobe_multi.path_size;
-> > +       struct bpf_uprobe_multi_link *umulti_link;
-> > +       u32 ucount = info->uprobe_multi.count;
-> > +       int err = 0, i;
-> > +       long left;
-> > +
-> > +       if (!upath ^ !upath_size)
-> > +               return -EINVAL;
-> > +
-> > +       if ((uoffsets || uref_ctr_offsets || ucookies) && !ucount)
-> > +               return -EINVAL;
-> > +
-> > +       umulti_link = container_of(link, struct bpf_uprobe_multi_link, link);
-> > +       info->uprobe_multi.count = umulti_link->cnt;
-> > +       info->uprobe_multi.flags = umulti_link->flags;
-> > +       info->uprobe_multi.pid = umulti_link->task ?
-> > +                                task_pid_nr_ns(umulti_link->task, task_active_pid_ns(current)) : 0;
-> > +
-> > +       if (upath) {
-> > +               char *p, *buf;
-> > +
-> > +               upath_size = min_t(u32, upath_size, PATH_MAX);
-> > +
-> > +               buf = kmalloc(upath_size, GFP_KERNEL);
-> > +               if (!buf)
-> > +                       return -ENOMEM;
-> > +               p = d_path(&umulti_link->path, buf, upath_size);
-> > +               if (IS_ERR(p)) {
-> > +                       kfree(buf);
-> > +                       return -ENOSPC;
-> > +               }
-> > +               upath_size = buf + upath_size - p;
-> > +               left = copy_to_user(upath, p, upath_size);
-> > +               kfree(buf);
-> > +               if (left)
-> > +                       return -EFAULT;
-> > +               info->uprobe_multi.path_size = upath_size - 1 /* NULL */;
-> 
-> why subtract zero terminating byte? I think we should drop this -1 and
-> return filled out buffer content size, including zero terminator.
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+Cc: "Huang, Ying" <ying.huang@intel.com>
+---
+ .../admin-guide/mm/numa_memory_policy.rst     | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-I wanted to return the same as strlen would:
+diff --git a/Documentation/admin-guide/mm/numa_memory_policy.rst b/Documentation/admin-guide/mm/numa_memory_policy.rst
+index eca38fa81e0f..19071b71979c 100644
+--- a/Documentation/admin-guide/mm/numa_memory_policy.rst
++++ b/Documentation/admin-guide/mm/numa_memory_policy.rst
+@@ -332,6 +332,33 @@ MPOL_F_RELATIVE_NODES
+ 	MPOL_PREFERRED policies that were created with an empty nodemask
+ 	(local allocation).
+ 
++MPOL_F_NUMA_BALANCING (since Linux 5.12)
++        When operating in MPOL_BIND mode, enables NUMA balancing for tasks,
++        contingent upon kernel support. This feature optimizes page
++        placement within the confines of the specified memory binding
++        policy. The addition of the MPOL_F_NUMA_BALANCING flag augments the
++        control mechanism for NUMA balancing:
++
++        - The sysctl knob numa_balancing governs global activation or
++          deactivation of NUMA balancing.
++
++        - Even if sysctl numa_balancing is enabled, NUMA balancing remains
++          disabled by default for memory areas or applications utilizing
++          explicit memory policies.
++
++        - The MPOL_F_NUMA_BALANCING flag facilitates NUMA balancing
++          activation for applications employing explicit memory policies
++          (MPOL_BIND).
++
++        This flags enables various optimizations for page placement through
++        NUMA balancing. For instance, when an application's memory is bound
++        to multiple nodes (MPOL_BIND), the hint page fault handler attempts
++        to migrate accessed pages to reduce cross-node access if the
++        accessing node aligns with the policy nodemask.
++
++        If the flag isn't supported by the kernel, or is used with mode
++        other than MPOL_BIND, -1 is returned and errno is set to EINVAL.
++
+ Memory Policy Reference Counting
+ ================================
+ 
+-- 
+2.30.1 (Apple Git-130)
 
-       The strlen() function calculates the length of the string pointed to by s, excluding the terminating null byte ('\0').
-
-either way works for me, but perhaps we should document it in the uapi header
-
-jirka
