@@ -1,111 +1,162 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E54Rc0DF"
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F50C1;
-	Wed, 22 Nov 2023 22:39:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700721590; x=1732257590;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=sNJFJlh3rji6zudwDz3TzUsgtizbU6T+kzRcilJIPLk=;
-  b=E54Rc0DFgbn8lGZBk7GcFCC/uTQwbxLXJZsxCdmW0d8f33+D3X3vtVp6
-   5OAMwdEL4j4DOxKKsqfo3cwilBln7Q/sP8vx/4TwSGBPJgCgjLsnPJ04a
-   hZUDQcGFnq6ZSGaq1AQnyBces4YVadcgmh70jwrCyJYvO8QtoEbQPkJEe
-   YpCZSMll0NfIFAEGq6BNN8VJTACFhjKifRgqEzBlC+TR60SjsGELqTrqT
-   /tE52A0cEk5iq+iYnZRPM9fJhSHdUFIWzp4E0BuOXwyChFxrqaZpTnaP1
-   dNjHuEAt8C1wJUshSz5JGTMuvbPdODTkiAPv56LCh0T7FC4tG9A2JhTRz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="456542538"
-X-IronPort-AV: E=Sophos;i="6.04,220,1695711600"; 
-   d="scan'208";a="456542538"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 22:39:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,220,1695711600"; 
-   d="scan'208";a="8751510"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 22:39:47 -0800
-From: "Huang, Ying" <ying.huang@intel.com>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: akpm@linux-foundation.org,  paul@paul-moore.com,  jmorris@namei.org,
-  serge@hallyn.com,  omosnace@redhat.com,  mhocko@suse.com,
-  linux-mm@kvack.org,  linux-security-module@vger.kernel.org,
-  bpf@vger.kernel.org,  ligang.bdlg@bytedance.com
-Subject: Re: [RFC PATCH v2 1/6] mm, doc: Add doc for MPOL_F_NUMA_BALANCING
-In-Reply-To: <20231122141559.4228-2-laoar.shao@gmail.com> (Yafang Shao's
-	message of "Wed, 22 Nov 2023 14:15:54 +0000")
-References: <20231122141559.4228-1-laoar.shao@gmail.com>
-	<20231122141559.4228-2-laoar.shao@gmail.com>
-Date: Thu, 23 Nov 2023 14:37:45 +0800
-Message-ID: <87edgh7z5y.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="BctS3ayv"
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448CEF9;
+	Wed, 22 Nov 2023 23:20:01 -0800 (PST)
+Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id A7B06100068;
+	Thu, 23 Nov 2023 10:19:58 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru A7B06100068
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
+	s=mail; t=1700723998;
+	bh=eohC8GA+wehGLdFcqpgwGNVkXeQrwyMu8sDPWJjxuws=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+	b=BctS3ayvecYTInoSh1lwgOzm2DdEKF2KMLmskK4h6IC4F2Hxd+q09bxZ6mDF+h+d3
+	 ZWP3VPjnhKUJUrC5u7qQA/UvaFCyunHVf7axluxqnKlkUCAkuC8Xw1rO9Etw4+akQ+
+	 ATdW6/hI5INmGcA+ijok1tsYabF5N6AF3dTu0cDBEPzaNRFF+bX2qeEcRh/+z5pBnq
+	 WkTQ8NrLhGV6TRrXUSFCH8MOclE2DsEnw3n783nNKXq9I/0VyTCmTFmUmeyaY85vvq
+	 LAuwmsJO+MhtQdn8uFdxIT41FLKR19+DQCzZUxd/EATnc0YtZcstXwI0DVbBRYqKBD
+	 NoBWQTUKpVf3w==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.sberdevices.ru (Postfix) with ESMTPS;
+	Thu, 23 Nov 2023 10:19:58 +0300 (MSK)
+Received: from localhost.localdomain (100.64.160.123) by
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Thu, 23 Nov 2023 10:19:58 +0300
+From: Dmitry Rokosov <ddrokosov@salutedevices.com>
+To: <hannes@cmpxchg.org>, <mhocko@kernel.org>, <roman.gushchin@linux.dev>,
+	<shakeelb@google.com>, <muchun.song@linux.dev>, <akpm@linux-foundation.org>
+CC: <kernel@sberdevices.ru>, <rockosov@gmail.com>, <cgroups@vger.kernel.org>,
+	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+	Dmitry Rokosov <ddrokosov@salutedevices.com>
+Subject: [PATCH v3 1/3] samples: introduce new samples subdir for cgroup
+Date: Thu, 23 Nov 2023 10:19:43 +0300
+Message-ID: <20231123071945.25811-2-ddrokosov@salutedevices.com>
+X-Mailer: git-send-email 2.36.0
+In-Reply-To: <20231123071945.25811-1-ddrokosov@salutedevices.com>
+References: <20231123071945.25811-1-ddrokosov@salutedevices.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 181550 [Nov 23 2023]
+X-KSMG-AntiSpam-Version: 6.0.0.2
+X-KSMG-AntiSpam-Envelope-From: ddrokosov@salutedevices.com
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 3 0.3.3 e5c6a18a9a9bff0226d530c5b790210c0bd117c8, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;100.64.160.123:7.1.2;p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1;salutedevices.com:7.1.1;lore.kernel.org:7.1.1, FromAlignment: s, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2023/11/23 06:48:00
+X-KSMG-LinksScanning: Clean, bases: 2023/11/23 06:48:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/11/23 04:50:00 #22507336
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-Yafang Shao <laoar.shao@gmail.com> writes:
+Move the cgroup_event_listener for cgroup v1 to the samples directory.
+This suggestion was proposed by Andrew Morton during the discussion [1].
 
-> The document on MPOL_F_NUMA_BALANCING was missed in the initial commit
-> The MPOL_F_NUMA_BALANCING document was inadvertently omitted from the
-> initial commit bda420b98505 ("numa balancing: migrate on fault among
-> multiple bound nodes")
->
-> Let's ensure its inclusion.
->
-> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> Cc: "Huang, Ying" <ying.huang@intel.com>
+Links:
+    [1] - https://lore.kernel.org/all/20231106140934.3f5d4960141562fe8da53906@linux-foundation.org/
 
-LGTM, Thanks!
+Signed-off-by: Dmitry Rokosov <ddrokosov@salutedevices.com>
+---
+ MAINTAINERS                                       |  1 +
+ samples/Kconfig                                   |  6 ++++++
+ samples/Makefile                                  |  1 +
+ samples/cgroup/Makefile                           |  5 +++++
+ {tools => samples}/cgroup/cgroup_event_listener.c |  0
+ tools/cgroup/Makefile                             | 11 -----------
+ 6 files changed, 13 insertions(+), 11 deletions(-)
+ create mode 100644 samples/cgroup/Makefile
+ rename {tools => samples}/cgroup/cgroup_event_listener.c (100%)
+ delete mode 100644 tools/cgroup/Makefile
 
-Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d516295978a4..6a0a580c34dc 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5243,6 +5243,7 @@ L:	linux-mm@kvack.org
+ S:	Maintained
+ F:	mm/memcontrol.c
+ F:	mm/swap_cgroup.c
++F:	samples/cgroup/*
+ F:	tools/testing/selftests/cgroup/memcg_protection.m
+ F:	tools/testing/selftests/cgroup/test_kmem.c
+ F:	tools/testing/selftests/cgroup/test_memcontrol.c
+diff --git a/samples/Kconfig b/samples/Kconfig
+index bf49ed0d7362..339c8e2ee749 100644
+--- a/samples/Kconfig
++++ b/samples/Kconfig
+@@ -287,6 +287,12 @@ config SAMPLE_KMEMLEAK
+           Build a sample program which have explicitly leaks memory to test
+           kmemleak
+ 
++config SAMPLE_CGROUP
++	bool "Build cgroup sample code"
++	depends on CGROUPS && CC_CAN_LINK && HEADERS_INSTALL
++	help
++	  Build samples that demonstrate the usage of the cgroup API.
++
+ source "samples/rust/Kconfig"
+ 
+ endif # SAMPLES
+diff --git a/samples/Makefile b/samples/Makefile
+index 0a551c2b33f4..b85fa64390c5 100644
+--- a/samples/Makefile
++++ b/samples/Makefile
+@@ -3,6 +3,7 @@
+ 
+ subdir-$(CONFIG_SAMPLE_AUXDISPLAY)	+= auxdisplay
+ subdir-$(CONFIG_SAMPLE_ANDROID_BINDERFS) += binderfs
++subdir-$(CONFIG_SAMPLE_CGROUP) += cgroup
+ obj-$(CONFIG_SAMPLE_CONFIGFS)		+= configfs/
+ obj-$(CONFIG_SAMPLE_CONNECTOR)		+= connector/
+ obj-$(CONFIG_SAMPLE_FANOTIFY_ERROR)	+= fanotify/
+diff --git a/samples/cgroup/Makefile b/samples/cgroup/Makefile
+new file mode 100644
+index 000000000000..deef4530f5e7
+--- /dev/null
++++ b/samples/cgroup/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++
++userprogs-always-y += cgroup_event_listener
++
++userccflags += -I usr/include
+diff --git a/tools/cgroup/cgroup_event_listener.c b/samples/cgroup/cgroup_event_listener.c
+similarity index 100%
+rename from tools/cgroup/cgroup_event_listener.c
+rename to samples/cgroup/cgroup_event_listener.c
+diff --git a/tools/cgroup/Makefile b/tools/cgroup/Makefile
+deleted file mode 100644
+index ffca068e4a76..000000000000
+--- a/tools/cgroup/Makefile
++++ /dev/null
+@@ -1,11 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-# Makefile for cgroup tools
+-
+-CFLAGS = -Wall -Wextra
+-
+-all: cgroup_event_listener
+-%: %.c
+-	$(CC) $(CFLAGS) -o $@ $^
+-
+-clean:
+-	$(RM) cgroup_event_listener
+-- 
+2.36.0
 
-> ---
->  .../admin-guide/mm/numa_memory_policy.rst     | 27 +++++++++++++++++++
->  1 file changed, 27 insertions(+)
->
-> diff --git a/Documentation/admin-guide/mm/numa_memory_policy.rst b/Documentation/admin-guide/mm/numa_memory_policy.rst
-> index eca38fa81e0f..19071b71979c 100644
-> --- a/Documentation/admin-guide/mm/numa_memory_policy.rst
-> +++ b/Documentation/admin-guide/mm/numa_memory_policy.rst
-> @@ -332,6 +332,33 @@ MPOL_F_RELATIVE_NODES
->  	MPOL_PREFERRED policies that were created with an empty nodemask
->  	(local allocation).
->  
-> +MPOL_F_NUMA_BALANCING (since Linux 5.12)
-> +        When operating in MPOL_BIND mode, enables NUMA balancing for tasks,
-> +        contingent upon kernel support. This feature optimizes page
-> +        placement within the confines of the specified memory binding
-> +        policy. The addition of the MPOL_F_NUMA_BALANCING flag augments the
-> +        control mechanism for NUMA balancing:
-> +
-> +        - The sysctl knob numa_balancing governs global activation or
-> +          deactivation of NUMA balancing.
-> +
-> +        - Even if sysctl numa_balancing is enabled, NUMA balancing remains
-> +          disabled by default for memory areas or applications utilizing
-> +          explicit memory policies.
-> +
-> +        - The MPOL_F_NUMA_BALANCING flag facilitates NUMA balancing
-> +          activation for applications employing explicit memory policies
-> +          (MPOL_BIND).
-> +
-> +        This flags enables various optimizations for page placement through
-> +        NUMA balancing. For instance, when an application's memory is bound
-> +        to multiple nodes (MPOL_BIND), the hint page fault handler attempts
-> +        to migrate accessed pages to reduce cross-node access if the
-> +        accessing node aligns with the policy nodemask.
-> +
-> +        If the flag isn't supported by the kernel, or is used with mode
-> +        other than MPOL_BIND, -1 is returned and errno is set to EINVAL.
-> +
->  Memory Policy Reference Counting
->  ================================
-
---
-Best Regards,
-Huang, Ying
