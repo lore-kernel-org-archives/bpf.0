@@ -1,265 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4407010D9
-	for <bpf@vger.kernel.org>; Thu, 23 Nov 2023 20:00:15 -0800 (PST)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AO0UPXD016881
-	for <bpf@vger.kernel.org>; Thu, 23 Nov 2023 20:00:15 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ujhbbrkqs-8
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 23 Nov 2023 20:00:14 -0800
-Received: from twshared58712.02.prn6.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 23 Nov 2023 19:59:55 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id D57413C05794C; Thu, 23 Nov 2023 19:59:42 -0800 (PST)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>,
-        Eduard Zingerman
-	<eddyz87@gmail.com>
-Subject: [PATCH v2 bpf-next 2/3] bpf: validate global subprogs lazily
-Date: Thu, 23 Nov 2023 19:59:36 -0800
-Message-ID: <20231124035937.403208-3-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231124035937.403208-1-andrii@kernel.org>
-References: <20231124035937.403208-1-andrii@kernel.org>
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y5Ydvlkv"
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62728D41;
+	Thu, 23 Nov 2023 23:00:13 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id e9e14a558f8ab-35beca6d020so5866975ab.0;
+        Thu, 23 Nov 2023 23:00:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700809212; x=1701414012; darn=vger.kernel.org;
+        h=user-agent:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZXdh8tpsNpRvWJuL2gnv/V4so3ONge/pXC2S/Uan+Xo=;
+        b=Y5Ydvlkvy0p+mnHdojtSk9h8tzqlY7NhcFqSyyBWrkHAUnZvVtabneiYOvA8bqultc
+         NWsdFk/ocHZnVt4VwOkNHA0UK+yn9lm4ROUCU3b5VChtIJLaL5ajD3FSwDvpJxwNaZ8Z
+         oxCbW3P3aOWB59Rfubf8UhbCBtRVO5eBNFenHli2uyITlOXcJnL5rwUK7zhqx8C8YrRq
+         k/K8Hei7dvJ/7EVZRm3j4CcD/+7spCoziBiIWzb16w7hOd1+BbQ7NMhZnM2GHn73RI9R
+         cZ6hNfgCCnB+PgVAcQEb0uwRVKQiCXepwtEQ8qIUoT7x59soCjBElPGIqFj30mfv+sXS
+         qc1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700809213; x=1701414013;
+        h=user-agent:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZXdh8tpsNpRvWJuL2gnv/V4so3ONge/pXC2S/Uan+Xo=;
+        b=rOONgQiotsRLgAyTCJwSEjakQSbEUUCQKDFzzMk+l73Mx7YB5FmupzVLfqiPeiUxEE
+         8Y0IqiE3EQxCbrQdEzHulKBQRRayRo8WbGW1zvudVAY60QB4zrSOq7gFCTgZVYu76CMN
+         0HzNATq8BuxEUilQO8oNb/FpySwpTu62IgUf8W1Orn3A5ig654jq7Ywr+osH2d2GG3Ef
+         p0JiYkHr9UV/5UmaOQx6mQvj20fh0Jshbil5G6DqKhZJ0/ffC5KaFzfS5xjdz69PnngT
+         7hgPiuZ3RIWg5RiMMr3KRAR4j4JWn5aAovNCYbuBqpt6erVADK5LUXDCuFCqXqu+KACP
+         ipvQ==
+X-Gm-Message-State: AOJu0Yz+ELYogypTnS5Qn4wo/1IGLiRyOI7a1dkhqMwesuUg483qSnfG
+	LlTfD38OdH0DGMzm8p+LOXQ=
+X-Google-Smtp-Source: AGHT+IE91gO2XXNpvxMhHuRKUQe2+x8IIaKdsfR1Jfq7+lY6iQTS0rpBqpgRi6EKugVjkqBVsf7RZA==
+X-Received: by 2002:a05:6e02:12e5:b0:35b:4731:15f3 with SMTP id l5-20020a056e0212e500b0035b473115f3mr2294682iln.10.1700809212619;
+        Thu, 23 Nov 2023 23:00:12 -0800 (PST)
+Received: from libra05 ([143.248.188.128])
+        by smtp.gmail.com with ESMTPSA id 16-20020aa79150000000b006c2fcb25c15sm2226501pfi.162.2023.11.23.23.00.08
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 23 Nov 2023 23:00:12 -0800 (PST)
+Date: Fri, 24 Nov 2023 16:00:06 +0900
+From: Yewon Choi <woni9911@gmail.com>
+To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jonathan Lemon <jonathan.lemon@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: threeearcat@gmail.com
+Subject: xdp/xsk.c: missing read memory barrier in xsk_poll()
+Message-ID: <20231124070005.GA10393@libra05>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: Z9siqZPVukiwOq2j7g9077UjRRKvQO9D
-X-Proofpoint-ORIG-GUID: Z9siqZPVukiwOq2j7g9077UjRRKvQO9D
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-23_15,2023-11-22_01,2023-05-22_02
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 
-Slightly change BPF verifier logic around eagerness and order of global
-subprog validation. Instead of going over every global subprog eagerly
-and validating it before main (entry) BPF program is verified, turn it
-around. Validate main program first, mark subprogs that were called from
-main program for later verification, but otherwise assume it is valid.
-Afterwards, go over marked global subprogs and validate those,
-potentially marking some more global functions as being called. Continue
-this process until all (transitively) callable global subprogs are
-validated. It's a BFS traversal at its heart and will always converge.
+Hello, 
 
-This is an important change because it allows to feature-gate some
-subprograms that might not be verifiable on some older kernel, depending
-on supported set of features.
+We found some possibility of missing read memory barrier in xsk_poll(),
+so we would like to ask to check it.
 
-E.g., at some point, global functions were allowed to accept a pointer
-to memory, which size is identified by user-provided type.
-Unfortunately, older kernels don't support this feature. With BPF CO-RE
-approach, the natural way would be to still compile BPF object file once
-and guard calls to this global subprog with some CO-RE check or using
-.rodata variables. That's what people do to guard usage of new helpers
-or kfuncs, and any other new BPF-side feature that might be missing on
-old kernels.
+commit e6762c8b adds two smp_rmb() in xsk_mmap(), which are paired with
+smp_wmb() in XDP_UMEM_REG and xsk_init_queue each. The later one is
+added in order to prevent reordering between reading of q and reading
+of q->ring.
+One example in simplied code is:
 
-That's currently impossible to do with global subprogs, unfortunately,
-because they are eagerly and unconditionally validated. This patch set
-aims to change this, so that in the future when global funcs gain new
-features, those can be guarded using BPF CO-RE techniques in the same
-fashion as any other new kernel feature.
+xsk_mmap():
+	if (offset == XDP_PGOFF_RX_RING) {
+		q = READ_ONCE(xs->rx);
+	}
+	...
+	if (!q)
+		return -EINVAL;
 
-Two selftests had to be adjusted in sync with these changes.
+	/* Matches the smp_wmb() in xsk_init_queue */
+	smp_rmb();
+	...
+	return remap_vmalloc_range(vma, q->ring, 0);
 
-test_global_func12 relied on eager global subprog validation failing
-before main program failure is detected (unknown return value). Fix by
-making sure that main program is always valid.
+Also, the similar logic exists in xsk_poll() without smp_rmb().
 
-verifier_subprog_precision's parent_stack_slot_precise subtest relied on
-verifier checkpointing heuristic to do a checkpoint at instruction #5,
-but that's no longer true because we don't have enough jumps validated
-before reaching insn #5 due to global subprogs being validated later.
+xsk_poll():
+	...
+	if (xs->rx && !xskq_prod_is_empty(xs->rx))
+		mask |= EPOLLIN | EPOLLRDNORM;
+	if (xs->tx && xsk_tx_writeable(xs))
+		mask |= EPOLLOUT | EPOLLWRNORM;
 
-Other than that, no changes, as one would expect.
+xskq_prod_is_empty():
+	return READ_ONCE(q->ring->consumer) && ...
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- include/linux/bpf.h                           |  2 +
- kernel/bpf/verifier.c                         | 48 ++++++++++++++++---
- .../selftests/bpf/progs/test_global_func12.c  |  4 +-
- .../bpf/progs/verifier_subprog_precision.c    |  4 +-
- 4 files changed, 48 insertions(+), 10 deletions(-)
+To be consistent, I think that smp_rmb() is needed between
+xs->rx and !xsq_prod_is_empty() and the same applies for xs->tx.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 258ba232e302..eb447b0a9423 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1347,6 +1347,8 @@ static inline bool bpf_prog_has_trampoline(const st=
-ruct bpf_prog *prog)
- struct bpf_func_info_aux {
- 	u16 linkage;
- 	bool unreliable;
-+	bool called : 1;
-+	bool verified : 1;
- };
-=20
- enum bpf_jit_poke_reason {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a2939ebf2638..8e7b6072e3f4 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -434,6 +434,11 @@ static const char *subprog_name(const struct bpf_ver=
-ifier_env *env, int subprog)
- 	return btf_type_name(env->prog->aux->btf, info->type_id);
- }
-=20
-+static struct bpf_func_info_aux *subprog_aux(const struct bpf_verifier_e=
-nv *env, int subprog)
-+{
-+	return &env->prog->aux->func_info_aux[subprog];
-+}
-+
- static bool reg_may_point_to_spin_lock(const struct bpf_reg_state *reg)
- {
- 	return btf_record_has_field(reg_btf_record(reg), BPF_SPIN_LOCK);
-@@ -9290,6 +9295,8 @@ static int check_func_call(struct bpf_verifier_env =
-*env, struct bpf_insn *insn,
-=20
- 		verbose(env, "Func#%d ('%s') is global and assumed valid.\n",
- 			subprog, sub_name);
-+		/* mark global subprog for verifying after main prog */
-+		subprog_aux(env, subprog)->called =3D true;
- 		clear_caller_saved_regs(env, caller->regs);
-=20
- 		/* All global functions return a 64-bit SCALAR_VALUE */
-@@ -19873,8 +19880,11 @@ static int do_check_common(struct bpf_verifier_e=
-nv *env, int subprog, bool is_ex
- 	return ret;
- }
-=20
--/* Verify all global functions in a BPF program one by one based on thei=
-r BTF.
-- * All global functions must pass verification. Otherwise the whole prog=
-ram is rejected.
-+/* Lazily verify all global functions based on their BTF, if they are ca=
-lled
-+ * from main BPF program or any of subprograms transitively.
-+ * BPF global subprogs called from dead code are not validated.
-+ * All callable global functions must pass verification.
-+ * Otherwise the whole program is rejected.
-  * Consider:
-  * int bar(int);
-  * int foo(int f)
-@@ -19893,14 +19903,26 @@ static int do_check_common(struct bpf_verifier_=
-env *env, int subprog, bool is_ex
- static int do_check_subprogs(struct bpf_verifier_env *env)
- {
- 	struct bpf_prog_aux *aux =3D env->prog->aux;
--	int i, ret;
-+	struct bpf_func_info_aux *sub_aux;
-+	int i, ret, new_cnt;
-=20
- 	if (!aux->func_info)
- 		return 0;
-=20
-+	/* exception callback is presumed to be always called */
-+	if (env->exception_callback_subprog)
-+		subprog_aux(env, env->exception_callback_subprog)->called =3D true;
-+
-+again:
-+	new_cnt =3D 0;
- 	for (i =3D 1; i < env->subprog_cnt; i++) {
--		if (aux->func_info_aux[i].linkage !=3D BTF_FUNC_GLOBAL)
-+		if (!subprog_is_global(env, i))
-+			continue;
-+
-+		sub_aux =3D subprog_aux(env, i);
-+		if (!sub_aux->called || sub_aux->verified)
- 			continue;
-+
- 		env->insn_idx =3D env->subprog_info[i].start;
- 		WARN_ON_ONCE(env->insn_idx =3D=3D 0);
- 		ret =3D do_check_common(env, i, env->exception_callback_subprog =3D=3D=
- i);
-@@ -19910,7 +19932,21 @@ static int do_check_subprogs(struct bpf_verifier=
-_env *env)
- 			verbose(env, "Func#%d ('%s') is safe for any args that match its prot=
-otype\n",
- 				i, subprog_name(env, i));
- 		}
-+
-+		/* We verified new global subprog, it might have called some
-+		 * more global subprogs that we haven't verified yet, so we
-+		 * need to do another pass over subprogs to verify those.
-+		 */
-+		sub_aux->verified =3D true;
-+		new_cnt++;
- 	}
-+
-+	/* We can't loop forever as we verify at least one global subprog on
-+	 * each pass.
-+	 */
-+	if (new_cnt)
-+		goto again;
-+
- 	return 0;
- }
-=20
-@@ -20556,8 +20592,8 @@ int bpf_check(struct bpf_prog **prog, union bpf_a=
-ttr *attr, bpfptr_t uattr, __u3
- 	if (ret < 0)
- 		goto skip_full_check;
-=20
--	ret =3D do_check_subprogs(env);
--	ret =3D ret ?: do_check_main(env);
-+	ret =3D do_check_main(env);
-+	ret =3D ret ?: do_check_subprogs(env);
-=20
- 	if (ret =3D=3D 0 && bpf_prog_is_offloaded(env->prog->aux))
- 		ret =3D bpf_prog_offload_finalize(env);
-diff --git a/tools/testing/selftests/bpf/progs/test_global_func12.c b/too=
-ls/testing/selftests/bpf/progs/test_global_func12.c
-index 7f159d83c6f6..6e03d42519a6 100644
---- a/tools/testing/selftests/bpf/progs/test_global_func12.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_func12.c
-@@ -19,5 +19,7 @@ int global_func12(struct __sk_buff *skb)
- {
- 	const struct S s =3D {.x =3D skb->len };
-=20
--	return foo(&s);
-+	foo(&s);
-+
-+	return 1;
- }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_precision=
-.c b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-index f61d623b1ce8..b5efcaeaa1ae 100644
---- a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-@@ -370,12 +370,10 @@ __naked int parent_stack_slot_precise(void)
- SEC("?raw_tp")
- __success __log_level(2)
- __msg("9: (0f) r1 +=3D r6")
--__msg("mark_precise: frame0: last_idx 9 first_idx 6")
-+__msg("mark_precise: frame0: last_idx 9 first_idx 0")
- __msg("mark_precise: frame0: regs=3Dr6 stack=3D before 8: (bf) r1 =3D r7=
-")
- __msg("mark_precise: frame0: regs=3Dr6 stack=3D before 7: (27) r6 *=3D 4=
-")
- __msg("mark_precise: frame0: regs=3Dr6 stack=3D before 6: (79) r6 =3D *(=
-u64 *)(r10 -8)")
--__msg("mark_precise: frame0: parent state regs=3D stack=3D-8:")
--__msg("mark_precise: frame0: last_idx 5 first_idx 0")
- __msg("mark_precise: frame0: regs=3D stack=3D-8 before 5: (85) call pc+6=
-")
- __msg("mark_precise: frame0: regs=3D stack=3D-8 before 4: (b7) r1 =3D 0"=
-)
- __msg("mark_precise: frame0: regs=3D stack=3D-8 before 3: (7b) *(u64 *)(=
-r10 -8) =3D r6")
---=20
-2.34.1
+Could you check this please?
+If a patch is needed, we will send them.
 
+
+Best Regards,
+Yewon Choi
