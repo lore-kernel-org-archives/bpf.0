@@ -1,131 +1,144 @@
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="DYcv1TwT"
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00BA518E
-	for <bpf@vger.kernel.org>; Fri, 24 Nov 2023 02:39:51 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5441305cbd1so2358162a12.2
-        for <bpf@vger.kernel.org>; Fri, 24 Nov 2023 02:39:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1700822390; x=1701427190; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=E3CbeSPBGv/93N4a58P9G5/aucfGqzwYdA8+uNojSvY=;
-        b=DYcv1TwT5fs8XfXra8ZEiJCyb+l2cmBxN70cbKCLxIWKC34jBcN6SeAAus/IF+W9VO
-         TuFuMNOR4uWeKHKCEEqy6ULlxfY8gcTeJr4GTdkJprtwz//mTRttXSKBHy97TaZ+oIRV
-         8f6myOv0kbiZLL+HK93CAtzHu8F3SZ3YBkutaaApqvOmNLM95DLuyHjehIZ326Z36bFW
-         TrLd6Dm4EdEhc/kQ65/dDlS8XpJK1x0Wkz/uyA1UosIBTVnZ1iKNZAb7m+tYsAWIPiJm
-         Jx95XcJlHwdRDzjPLH11mnwkvTp676EvG9GZoM6BpyfbCUzT4DcefXK9NMadHlNbmNUo
-         hXNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700822390; x=1701427190;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E3CbeSPBGv/93N4a58P9G5/aucfGqzwYdA8+uNojSvY=;
-        b=IZUXAYdJLX2kdeWRu2iLLLxnh2gQdNOz5eWed2cL6W6XwwzCpJvdc8tSn7ozpdMrmg
-         4axNjFQTZDK3vtd7tNzDqoOVNXYKBonM3njk+lBbVxD+7UR/EbHKVSnIulksZb1O+9dn
-         dWMWmLMuCA+BsTz2YNimHYtbjMhuK8rQ9zZ+M2LTAVUJvh+dS0sACUzmTuP6ZBi7bRC5
-         qi4l/ORIvZGZNaENFeUKYpFYAciUSO6pBIaS6KmjqKNFCSvI5AIduUJPxDI3JLbFyZbs
-         DkSUFVk3Ebk26tB7u3vN8pmDGS26r9ygBYM7NtBZXZEe6L/PvKZN4y5XKZLxFO4u01fi
-         MyKQ==
-X-Gm-Message-State: AOJu0YzU0/5GlwoVXGlkF0l0Ta9tH94Yk8yhCrz4wlrqAEN6ootJUaNM
-	Zc7gjnY5fqtyqbWOG4CQy2ECVg==
-X-Google-Smtp-Source: AGHT+IHBQS9u0x8xZRIF1tYnmQbgx7Tl8spe3HLfZnEj6pYZl4ExuWUKfoudSxw3WaKk/G1xMy0J/w==
-X-Received: by 2002:a50:9312:0:b0:53e:3b8f:8a58 with SMTP id m18-20020a509312000000b0053e3b8f8a58mr1968390eda.11.1700822390310;
-        Fri, 24 Nov 2023 02:39:50 -0800 (PST)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id i12-20020a056402054c00b00548851486d8sm1638589edx.44.2023.11.24.02.39.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Nov 2023 02:39:49 -0800 (PST)
-Date: Fri, 24 Nov 2023 11:39:48 +0100
-From: Jiri Pirko <jiri@resnulli.us>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Edward Cree <ecree.xilinx@gmail.com>,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197BF10F4
+	for <bpf@vger.kernel.org>; Fri, 24 Nov 2023 03:29:31 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4ScCS62QTCz4f3k68
+	for <bpf@vger.kernel.org>; Fri, 24 Nov 2023 19:29:26 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 1BC891A016F
+	for <bpf@vger.kernel.org>; Fri, 24 Nov 2023 19:29:29 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+	by APP1 (Coremail) with SMTP id cCh0CgDn6xEUiWBloME3Bw--.31197S5;
+	Fri, 24 Nov 2023 19:29:28 +0800 (CST)
+From: Hou Tao <houtao@huaweicloud.com>
+To: bpf@vger.kernel.org
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>, netdev@vger.kernel.org,
-	deb.chatterjee@intel.com, anjali.singhai@intel.com,
-	Vipin.Jain@amd.com, namrata.limaye@intel.com, tom@sipanda.io,
-	mleitner@redhat.com, Mahesh.Shirshyad@amd.com,
-	tomasz.osinski@intel.com, xiyou.wangcong@gmail.com,
-	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-	vladbu@nvidia.com, horms@kernel.org, bpf@vger.kernel.org,
-	khalidm@nvidia.com, toke@redhat.com, mattyk@nvidia.com,
-	dan.daly@intel.com, chris.sommers@keysight.com,
-	john.andy.fingerhut@intel.com
-Subject: Re: [PATCH net-next v8 00/15] Introducing P4TC
-Message-ID: <ZWB9dF8/Uk2iP2uy@nanopsycho>
-References: <ZV7y9JG0d4id8GeG@nanopsycho>
- <CAM0EoMkOvEnPmw=0qye9gWAqgbZjaTYZhiho=qmG1x4WiQxkxA@mail.gmail.com>
- <ZV9U+zsMM5YqL8Cx@nanopsycho>
- <CAM0EoMnFB0hgcVFj3=QN4114HiQy46uvYJKqa7=p2VqJTwqBsg@mail.gmail.com>
- <ZV9csgFAurzm+j3/@nanopsycho>
- <CAM0EoMkgD10dFvgtueDn7wjJTFTQX6_mkA4Kwr04Dnwp+S-u-A@mail.gmail.com>
- <ZV9vfYy42G0Fk6m4@nanopsycho>
- <CAM0EoMkC6+hJ0fb9zCU8bcKDjpnz5M0kbKZ=4GGAMmXH4_W8rg@mail.gmail.com>
- <0d1d37f9-1ef1-4622-409e-a976c8061a41@gmail.com>
- <20231123105305.7edeab94@kernel.org>
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	houtao1@huawei.com
+Subject: [PATCH bpf v3 1/6] bpf: Check rcu_read_lock_trace_held() before calling bpf map helpers
+Date: Fri, 24 Nov 2023 19:30:28 +0800
+Message-Id: <20231124113033.503338-2-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20231124113033.503338-1-houtao@huaweicloud.com>
+References: <20231124113033.503338-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231123105305.7edeab94@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgDn6xEUiWBloME3Bw--.31197S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxCFWUXFWUXr45tFy3Kw1fCrg_yoW5ZF4xpF
+	y09a4Fkr1jqFsrZ3yYva92yry5Ka90ganrJws7Ww4YvF4UWFn7XryxJFnIvF98KrWUAr48
+	Z3W2qwnrA348Aa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
+	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
+	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+	0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2mL9UUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-Thu, Nov 23, 2023 at 07:53:05PM CET, kuba@kernel.org wrote:
->On Thu, 23 Nov 2023 17:53:42 +0000 Edward Cree wrote:
->> The kernel doesn't like to trust offload blobs from a userspace compiler,
->>  because it has no way to be sure that what comes out of the compiler
->>  matches the rules/tables/whatever it has in the SW datapath.
->> It's also a support nightmare because it's basically like each user
->>  compiling their own device firmware.  
->
->Practically speaking every high speed NIC runs a huge binary blob of FW.
->First, let's acknowledge that as reality.
+From: Hou Tao <houtao1@huawei.com>
 
-True, but I believe we need to diferenciate:
-1) vendor created, versioned, signed binary fw blob
-2) user compiled on demand, blob
+These three bpf_map_{lookup,update,delete}_elem() helpers are also
+available for sleepable bpf program, so add the corresponding lock
+assertion for sleepable bpf program, otherwise the following warning
+will be reported when a sleepable bpf program manipulates bpf map under
+interpreter mode (aka bpf_jit_enable=0):
 
-I look at 2) as on "a configuration" of some sort.
+  WARNING: CPU: 3 PID: 4985 at kernel/bpf/helpers.c:40 ......
+  CPU: 3 PID: 4985 Comm: test_progs Not tainted 6.6.0+ #2
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996) ......
+  RIP: 0010:bpf_map_lookup_elem+0x54/0x60
+  ......
+  Call Trace:
+   <TASK>
+   ? __warn+0xa5/0x240
+   ? bpf_map_lookup_elem+0x54/0x60
+   ? report_bug+0x1ba/0x1f0
+   ? handle_bug+0x40/0x80
+   ? exc_invalid_op+0x18/0x50
+   ? asm_exc_invalid_op+0x1b/0x20
+   ? __pfx_bpf_map_lookup_elem+0x10/0x10
+   ? rcu_lockdep_current_cpu_online+0x65/0xb0
+   ? rcu_is_watching+0x23/0x50
+   ? bpf_map_lookup_elem+0x54/0x60
+   ? __pfx_bpf_map_lookup_elem+0x10/0x10
+   ___bpf_prog_run+0x513/0x3b70
+   __bpf_prog_run32+0x9d/0xd0
+   ? __bpf_prog_enter_sleepable_recur+0xad/0x120
+   ? __bpf_prog_enter_sleepable_recur+0x3e/0x120
+   bpf_trampoline_6442580665+0x4d/0x1000
+   __x64_sys_getpgid+0x5/0x30
+   ? do_syscall_64+0x36/0xb0
+   entry_SYSCALL_64_after_hwframe+0x6e/0x76
+   </TASK>
 
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ kernel/bpf/helpers.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
->
->Second, there is no equivalent for arbitrary packet parsing in the
->kernel proper. Offload means take something form the host and put it
->on the device. If there's nothing in the kernel, we can't consider
->the new functionality an offload.
->
->I understand that "we offload SW functionality" is our general policy,
->but we should remember why this policy is in place, and not
->automatically jump to the conclusion.
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 56b0c1f678ee..f43038931935 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -32,12 +32,13 @@
+  *
+  * Different map implementations will rely on rcu in map methods
+  * lookup/update/delete, therefore eBPF programs must run under rcu lock
+- * if program is allowed to access maps, so check rcu_read_lock_held in
+- * all three functions.
++ * if program is allowed to access maps, so check rcu_read_lock_held() or
++ * rcu_read_lock_trace_held() in all three functions.
+  */
+ BPF_CALL_2(bpf_map_lookup_elem, struct bpf_map *, map, void *, key)
+ {
+-	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_bh_held());
++	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held() &&
++		     !rcu_read_lock_bh_held());
+ 	return (unsigned long) map->ops->map_lookup_elem(map, key);
+ }
+ 
+@@ -53,7 +54,8 @@ const struct bpf_func_proto bpf_map_lookup_elem_proto = {
+ BPF_CALL_4(bpf_map_update_elem, struct bpf_map *, map, void *, key,
+ 	   void *, value, u64, flags)
+ {
+-	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_bh_held());
++	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held() &&
++		     !rcu_read_lock_bh_held());
+ 	return map->ops->map_update_elem(map, key, value, flags);
+ }
+ 
+@@ -70,7 +72,8 @@ const struct bpf_func_proto bpf_map_update_elem_proto = {
+ 
+ BPF_CALL_2(bpf_map_delete_elem, struct bpf_map *, map, void *, key)
+ {
+-	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_bh_held());
++	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held() &&
++		     !rcu_read_lock_bh_held());
+ 	return map->ops->map_delete_elem(map, key);
+ }
+ 
+-- 
+2.29.2
 
-It is in place to have well defined SW definition of what devices
-offloads.
-
-
->
->>  At least normally with device firmware the driver side is talking to
->>  something with narrow/fixed semantics and went through upstream
->>  review, even if the firmware side is still a black box.
->
->We should be buildings things which are useful and open (as in
->extensible by people "from the street"). With that in mind, to me,
->a more practical approach would be to try to figure out a common
->and rigid FW interface for expressing the parsing graph.
-
-Hmm, could you elaborate a bit more on this one please?
-
->
->But that's an interface going from the binary blob to the kernel.
->
->> Just to prove I'm not playing favourites: this is *also* a problem with
->>  eBPF offloads like Nanotubes, and I'm not convinced we have a viable
->>  solution yet.
->
->BPF offloads are actual offloads. Config/state is in the kernel,
->you need to pop it out to user space, then prove that it's what
->user intended.
