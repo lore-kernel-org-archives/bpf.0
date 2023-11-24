@@ -1,16 +1,16 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F2510F1
-	for <bpf@vger.kernel.org>; Fri, 24 Nov 2023 03:29:31 -0800 (PST)
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4ScCS66KNWz4f3jHt
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52FB210CA
+	for <bpf@vger.kernel.org>; Fri, 24 Nov 2023 03:29:32 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4ScCS6614mz4f3k69
 	for <bpf@vger.kernel.org>; Fri, 24 Nov 2023 19:29:26 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 9CA881A069A
-	for <bpf@vger.kernel.org>; Fri, 24 Nov 2023 19:29:28 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 96F731A016F
+	for <bpf@vger.kernel.org>; Fri, 24 Nov 2023 19:29:29 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP1 (Coremail) with SMTP id cCh0CgDn6xEUiWBloME3Bw--.31197S4;
-	Fri, 24 Nov 2023 19:29:26 +0800 (CST)
+	by APP1 (Coremail) with SMTP id cCh0CgDn6xEUiWBloME3Bw--.31197S6;
+	Fri, 24 Nov 2023 19:29:29 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -25,10 +25,12 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	houtao1@huawei.com
-Subject: [PATCH bpf v3 0/6] bpf: Fix the release of inner map
-Date: Fri, 24 Nov 2023 19:30:27 +0800
-Message-Id: <20231124113033.503338-1-houtao@huaweicloud.com>
+Subject: [PATCH bpf v3 2/6] bpf: Add map and need_defer parameters to .map_fd_put_ptr()
+Date: Fri, 24 Nov 2023 19:30:29 +0800
+Message-Id: <20231124113033.503338-3-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20231124113033.503338-1-houtao@huaweicloud.com>
+References: <20231124113033.503338-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -36,98 +38,185 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgDn6xEUiWBloME3Bw--.31197S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxAry7Zw1rCF1kKw1fKw4rZrb_yoW5KFy8pF
-	WrKr45Kr4ktry2qwnrGw47Xa4Syws5Ga4Ygr13Gr4rA3y5XryfZryIgFW5uF9xCrZ3tryF
-	vw1ayas5G34DZFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
-	c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-	026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
-	0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
-	vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-	jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-TRANSID:cCh0CgDn6xEUiWBloME3Bw--.31197S6
+X-Coremail-Antispam: 1UD129KBjvJXoW3GF4kAw13Ww4rWF43WFWxJFb_yoW7Kr1kpF
+	WrKF42kw4kXF4UX3yrAw4kurWYyw1fZ345CF95Ka4Fvr15Xr9rXF4kGa9xGry5W3ykGF4q
+	yFnrtryFk348ArDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
+	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+	0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFa9-UUUUU
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-Hi,
+map is the pointer of outer map, and need_defer needs some explanation.
+need_defer tells the implementation to defer the reference release of
+the passed element and ensure that the element is still alive before
+the bpf program, which may manipulate it, exits.
 
-The patchset aims to fix the release of inner map in map array or map
-htab. The release of inner map is different with normal map. For normal
-map, the map is released after the bpf program which uses the map is
-destroyed, because the bpf program tracks the used maps. However bpf
-program can not track the used inner map because these inner map may be
-updated or deleted dynamically, and for now the ref-counter of inner map
-is decreased after the inner map is remove from outer map, so the inner
-map may be freed before the bpf program, which is accessing the inner
-map, exits and there will be use-after-free problem as demonstrated by
-patch #5.
+The following three cases will invoke map_fd_put_ptr() and different
+need_defer values will be passed to these callers:
 
-The patchset fixes the problem by deferring the release of inner map.
-The freeing of inner map is deferred according to the sleepable
-attributes of the bpf programs which own the outer map. Patch #1 fixes
-the warning when running the newly-added selftest under interpreter
-mode. Patch #2 adds more parameters to .map_fd_put_ptr() to prepare for
-the fix. Patch #3 fixes the potential use-after-free problem by using
-call_rcu_tasks_trace() and call_rcu() to waiting for one tasks trace RCU
-GP and one RCU GP unconditionally. Patch #4 optimizes the free of inner
-map by removing the unnecessary RCU GP waiting. Patch #5 adds a selftest
-to demonstrate the potential use-after-free problem. Patch #6 updates a
-selftest to update outer map in syscall bpf program.
+1) release the reference of the old element in the map during map update
+   or map deletion. The release must be deferred, otherwise the bpf
+   program may incur use-after-free problem, so need_defer needs to be
+   true.
+2) release the reference of the to-be-added element in the error path of
+   map update. The to-be-added element is not visible to any bpf
+   program, so it is OK to pass false for need_defer parameter.
+3) release the references of all elements in the map during map release.
+   Any bpf program which has access to the map must have been exited and
+   released, so need_defer=false will be OK.
 
-Please see individual patches for more details. And comments are always
-welcome.
+These two parameters will be used by the following patches to fix the
+potential use-after-free problem for map-in-map.
 
-Change Log:
-v3:
-  * multiple variable renamings (Martin)
-  * define BPF_MAP_RCU_GP/BPF_MAP_RCU_TT_GP as bit (Martin)
-  * use call_rcu() and its variants instead of synchronize_rcu() (Martin)
-  * remove unnecessary mask in bpf_map_free_deferred() (Martin)
-  * place atomic_or() and the related smp_mb() together (Martin)
-  * add patch #6 to demonstrate that updating outer map in syscall
-    program is dead-lock free (Alexei)
-  * update comments about the memory barrier in bpf_map_fd_put_ptr()
-  * update commit message for patch #3 and #4 to describe more details
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ include/linux/bpf.h     |  6 +++++-
+ kernel/bpf/arraymap.c   | 12 +++++++-----
+ kernel/bpf/hashtab.c    |  6 +++---
+ kernel/bpf/map_in_map.c |  2 +-
+ kernel/bpf/map_in_map.h |  2 +-
+ 5 files changed, 17 insertions(+), 11 deletions(-)
 
-v2: https://lore.kernel.org/bpf/20231113123324.3914612-1-houtao@huaweicloud.com
-  * defer the invocation of ops->map_free() instead of bpf_map_put() (Martin)
-  * update selftest to make it being reproducible under JIT mode (Martin)
-  * remove unnecessary preparatory patches
-
-v1: https://lore.kernel.org/bpf/20231107140702.1891778-1-houtao@huaweicloud.com
-
-
-Hou Tao (6):
-  bpf: Check rcu_read_lock_trace_held() before calling bpf map helpers
-  bpf: Add map and need_defer parameters to .map_fd_put_ptr()
-  bpf: Defer the free of inner map when necessary
-  bpf: Optimize the free of inner map
-  selftests/bpf: Add test cases for inner map
-  selftests/bpf: Test outer map update operations in syscall program
-
- include/linux/bpf.h                           |  19 ++-
- kernel/bpf/arraymap.c                         |  12 +-
- kernel/bpf/hashtab.c                          |   6 +-
- kernel/bpf/helpers.c                          |  13 +-
- kernel/bpf/map_in_map.c                       |  22 ++-
- kernel/bpf/map_in_map.h                       |   2 +-
- kernel/bpf/syscall.c                          |  43 +++++-
- kernel/bpf/verifier.c                         |   4 +
- .../selftests/bpf/prog_tests/map_in_map.c     | 141 ++++++++++++++++++
- .../selftests/bpf/prog_tests/syscall.c        |  30 +++-
- .../selftests/bpf/progs/access_map_in_map.c   |  93 ++++++++++++
- tools/testing/selftests/bpf/progs/syscall.c   |  91 ++++++++++-
- 12 files changed, 444 insertions(+), 32 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/map_in_map.c
- create mode 100644 tools/testing/selftests/bpf/progs/access_map_in_map.c
-
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 6762dac3ef76..6f68ac24bb9a 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -106,7 +106,11 @@ struct bpf_map_ops {
+ 	/* funcs called by prog_array and perf_event_array map */
+ 	void *(*map_fd_get_ptr)(struct bpf_map *map, struct file *map_file,
+ 				int fd);
+-	void (*map_fd_put_ptr)(void *ptr);
++	/* If need_defer is true, the implementation should guarantee that
++	 * the to-be-put element is still alive before the bpf program, which
++	 * may manipulate it, exists.
++	 */
++	void (*map_fd_put_ptr)(struct bpf_map *map, void *ptr, bool need_defer);
+ 	int (*map_gen_lookup)(struct bpf_map *map, struct bpf_insn *insn_buf);
+ 	u32 (*map_fd_sys_lookup_elem)(void *ptr);
+ 	void (*map_seq_show_elem)(struct bpf_map *map, void *key,
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 2058e89b5ddd..bd90c3c09032 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -867,7 +867,7 @@ int bpf_fd_array_map_update_elem(struct bpf_map *map, struct file *map_file,
+ 	}
+ 
+ 	if (old_ptr)
+-		map->ops->map_fd_put_ptr(old_ptr);
++		map->ops->map_fd_put_ptr(map, old_ptr, true);
+ 	return 0;
+ }
+ 
+@@ -890,7 +890,7 @@ static long fd_array_map_delete_elem(struct bpf_map *map, void *key)
+ 	}
+ 
+ 	if (old_ptr) {
+-		map->ops->map_fd_put_ptr(old_ptr);
++		map->ops->map_fd_put_ptr(map, old_ptr, true);
+ 		return 0;
+ 	} else {
+ 		return -ENOENT;
+@@ -913,8 +913,9 @@ static void *prog_fd_array_get_ptr(struct bpf_map *map,
+ 	return prog;
+ }
+ 
+-static void prog_fd_array_put_ptr(void *ptr)
++static void prog_fd_array_put_ptr(struct bpf_map *map, void *ptr, bool deferred)
+ {
++	/* bpf_prog is freed after one RCU or tasks trace grace period */
+ 	bpf_prog_put(ptr);
+ }
+ 
+@@ -1239,8 +1240,9 @@ static void *perf_event_fd_array_get_ptr(struct bpf_map *map,
+ 	return ee;
+ }
+ 
+-static void perf_event_fd_array_put_ptr(void *ptr)
++static void perf_event_fd_array_put_ptr(struct bpf_map *map, void *ptr, bool deferred)
+ {
++	/* bpf_perf_event is freed after one RCU grace period */
+ 	bpf_event_entry_free_rcu(ptr);
+ }
+ 
+@@ -1294,7 +1296,7 @@ static void *cgroup_fd_array_get_ptr(struct bpf_map *map,
+ 	return cgroup_get_from_fd(fd);
+ }
+ 
+-static void cgroup_fd_array_put_ptr(void *ptr)
++static void cgroup_fd_array_put_ptr(struct bpf_map *map, void *ptr, bool deferred)
+ {
+ 	/* cgroup_put free cgrp after a rcu grace period */
+ 	cgroup_put(ptr);
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index fd8d4b0addfc..5b9146fa825f 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -897,7 +897,7 @@ static void htab_put_fd_value(struct bpf_htab *htab, struct htab_elem *l)
+ 
+ 	if (map->ops->map_fd_put_ptr) {
+ 		ptr = fd_htab_map_get_ptr(map, l);
+-		map->ops->map_fd_put_ptr(ptr);
++		map->ops->map_fd_put_ptr(map, ptr, true);
+ 	}
+ }
+ 
+@@ -2484,7 +2484,7 @@ static void fd_htab_map_free(struct bpf_map *map)
+ 		hlist_nulls_for_each_entry_safe(l, n, head, hash_node) {
+ 			void *ptr = fd_htab_map_get_ptr(map, l);
+ 
+-			map->ops->map_fd_put_ptr(ptr);
++			map->ops->map_fd_put_ptr(map, ptr, false);
+ 		}
+ 	}
+ 
+@@ -2525,7 +2525,7 @@ int bpf_fd_htab_map_update_elem(struct bpf_map *map, struct file *map_file,
+ 
+ 	ret = htab_map_update_elem(map, key, &ptr, map_flags);
+ 	if (ret)
+-		map->ops->map_fd_put_ptr(ptr);
++		map->ops->map_fd_put_ptr(map, ptr, false);
+ 
+ 	return ret;
+ }
+diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
+index cd5eafaba97e..7d5754d18fd0 100644
+--- a/kernel/bpf/map_in_map.c
++++ b/kernel/bpf/map_in_map.c
+@@ -127,7 +127,7 @@ void *bpf_map_fd_get_ptr(struct bpf_map *map,
+ 	return inner_map;
+ }
+ 
+-void bpf_map_fd_put_ptr(void *ptr)
++void bpf_map_fd_put_ptr(struct bpf_map *map, void *ptr, bool deferred)
+ {
+ 	/* ptr->ops->map_free() has to go through one
+ 	 * rcu grace period by itself.
+diff --git a/kernel/bpf/map_in_map.h b/kernel/bpf/map_in_map.h
+index bcb7534afb3c..7d61602354de 100644
+--- a/kernel/bpf/map_in_map.h
++++ b/kernel/bpf/map_in_map.h
+@@ -13,7 +13,7 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd);
+ void bpf_map_meta_free(struct bpf_map *map_meta);
+ void *bpf_map_fd_get_ptr(struct bpf_map *map, struct file *map_file,
+ 			 int ufd);
+-void bpf_map_fd_put_ptr(void *ptr);
++void bpf_map_fd_put_ptr(struct bpf_map *map, void *ptr, bool need_defer);
+ u32 bpf_map_fd_sys_lookup_elem(void *ptr);
+ 
+ #endif
 -- 
 2.29.2
 
