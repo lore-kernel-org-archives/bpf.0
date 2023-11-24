@@ -1,55 +1,51 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="CSlCy3vm"
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018DAD71
-	for <bpf@vger.kernel.org>; Fri, 24 Nov 2023 05:53:44 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-a02d91ab195so274358166b.3
-        for <bpf@vger.kernel.org>; Fri, 24 Nov 2023 05:53:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="KHw3bi9v"
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8331721
+	for <bpf@vger.kernel.org>; Fri, 24 Nov 2023 05:54:35 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-a04196fc957so286315766b.2
+        for <bpf@vger.kernel.org>; Fri, 24 Nov 2023 05:54:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1700834022; x=1701438822; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1700834073; x=1701438873; darn=vger.kernel.org;
         h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
          :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=bPYBdZ4ItIfXHITMkeTq4Bl+yk6j2zAle2zwSmDGCiE=;
-        b=CSlCy3vmpAK9Xa7vG2XkYYMDhnrzFMUw+MmjZ4KxW/Ey+9J6AuuuLtWeZtUlglp0A2
-         N3UyMGKB1/oXNRpAgYguNX8r8vntT/u5leSwEcJD+nubCnDa2S7kOh4aL6XPLEctDnFP
-         ApbYgL9iqUwI/XWzCJ3i7kwf61KGbg/5aJoT+0MfOW9ocK+M5yKFo6IxRYWxQ6RvSnPR
-         oN/1ZN2iVdpT1ObltM80a7L+N+IZO5gEjgYgT4Ichr8e1IcKqigv5kiTkDMBizekrx4+
-         60P/ZFTj22nTq4EEEBrNgc6XTxrWEHK6XvSH+Te90E41iqyam9ByGhKxMBMl+8NfNxZ9
-         wSHA==
+        bh=Z9eHy0dSzicYIzKgQVzxAaUPEW0o6COLRRR+CISGa0o=;
+        b=KHw3bi9vyfIZ/IANzBSmrpqD7ybQmPQlbNd9bKzZ3EQdiR7G8ZKhhlmg5lAVXGEIVi
+         n4H2ZZjvNTac8BYc+6eDodbvA/wbqazVwpLRYG9zeAF7LCGjrX6jKwfozqWjAhsVqjbC
+         E7C+Q+eI4kzSf4AHa7/rWgnDUZYj2bOwd1HAmeVQ6xkEJ9DNymbKVZPKR6tug7Yd20G9
+         Bbkop3m2ANY5Ybfpay/b0rD9PwkjSVQb/pKlmaLAk1BgOpKwwflSGACqXbLQwZb8ecmB
+         1QWkvhP6gOK9Z3rQNQW7cd9LT+YMgzdgxaUNIxPK8bxS9kqLRzMf8LRrAfxdGLzcVx/A
+         MW3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700834022; x=1701438822;
+        d=1e100.net; s=20230601; t=1700834073; x=1701438873;
         h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
          :user-agent:references:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bPYBdZ4ItIfXHITMkeTq4Bl+yk6j2zAle2zwSmDGCiE=;
-        b=g+/NDrIkO6U5I4pnR/wihWA8sQ+7ufsndZef1SktLpEKXcGth5u41CGDnWBiUpL2tG
-         fFFFgraijwy4ZEPuBKEWT9WXo9blkb2DKv7GNA0nazM+Oqnsp5FeYve7HfPdBpJ/oG6u
-         YRN/aRZp0eGPKKkfUFUa8FCBEbIMWq0hob55mXSh49Dw2kxfBsv1IpcZANrhh8YbqXBy
-         N7HclevsvZP7ofrwmfGw4CNMstaVASVy2pKVDoEF7lIT81cuSzicrj2Znj0gts7lGyhf
-         gQUePSi3nB7CTGOi7SOgbIKXndMWpcCcBZB/yIqMP/IO1XVR0AYu6W+WOxTeMcG0dm6Q
-         LYHQ==
-X-Gm-Message-State: AOJu0YzXPekdnYQyplLH2yc/hzX7CSi9Zg9/Z9WCcHpCE01uQWAm02Vq
-	Dob0gZc18XB2XKHXbxe3NVnOX/mXTIOfGc6lxlA=
-X-Google-Smtp-Source: AGHT+IHT1u7eoX5hY4Xg63LmKH9zDr2fIVDbIuCFbsbxe+I7C5HM3eY56BlqM8wGTordlZj6XssmTQ==
-X-Received: by 2002:a17:907:9009:b0:9fe:458e:a814 with SMTP id ay9-20020a170907900900b009fe458ea814mr1915902ejc.21.1700834022459;
-        Fri, 24 Nov 2023 05:53:42 -0800 (PST)
+        bh=Z9eHy0dSzicYIzKgQVzxAaUPEW0o6COLRRR+CISGa0o=;
+        b=eqRJglZ58PMPhf7lFGkIZfBcpPCAEBLeTS/Wylcm6cip4tp2sqFTyscUXaOq/UlTXQ
+         1P8TLliWDlNuZ2aTsZsbIztRD2DYcqPO4EBMpRsuj+N63KKZX4pyv3q+r/2E0c8bnleC
+         MqdTti4st8GpjNM1uoh7YjlDYxBYSWdkluXifoRIy+RlUdvf80Nnv2GDz5lLogAvX6DI
+         Lnx31g8LMfuMHKp2gh8icgC/BzSoFC3cSrp8HJV0lD7atk4RDHET1BfHrxYuFIf23x8m
+         8QbRCat7UwutK82Orvl/0sEMOc+FfFIwKJ+dZee/Mo4yB+ah3PvikUBlcXjAa3c4xv5R
+         OWqg==
+X-Gm-Message-State: AOJu0YyxNWOxh2IY3Tb9Fd6JBYPkmfIbkZhs02p1N3Y+Faz0QbA9ma92
+	0LqV2JoURvhAAwDA4uU/+h3NmyeM1Y5r5i0GGoY=
+X-Google-Smtp-Source: AGHT+IECeVHyYjcvdwu9fK7q92eBt+GRWg3vMwoSJ12YV9YONcne+klrN3G9LlX5FElx0hXFwRCs7Q==
+X-Received: by 2002:a17:906:4557:b0:a04:a111:4901 with SMTP id s23-20020a170906455700b00a04a1114901mr2449120ejq.18.1700834073619;
+        Fri, 24 Nov 2023 05:54:33 -0800 (PST)
 Received: from cloudflare.com (79.184.209.104.ipv4.supernova.orange.pl. [79.184.209.104])
-        by smtp.gmail.com with ESMTPSA id kg16-20020a17090776f000b00a0371c6cc23sm2092349ejc.95.2023.11.24.05.53.41
+        by smtp.gmail.com with ESMTPSA id bk25-20020a170906b0d900b00a0a2553ec99sm286978ejb.65.2023.11.24.05.54.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Nov 2023 05:53:41 -0800 (PST)
+        Fri, 24 Nov 2023 05:54:32 -0800 (PST)
 References: <20231122192452.335312-1-john.fastabend@gmail.com>
- <20231122192452.335312-2-john.fastabend@gmail.com>
- <ZV+07PlDoxrcAn9c@pop-os.localdomain>
 User-agent: mu4e 1.6.10; emacs 28.3
 From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Cong Wang <xiyou.wangcong@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, martin.lau@kernel.org,
- bpf@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH bpf v2 1/2] bpf: sockmap, af_unix stream sockets need to
- hold ref for pair sock
-Date: Fri, 24 Nov 2023 14:43:24 +0100
-In-reply-to: <ZV+07PlDoxrcAn9c@pop-os.localdomain>
-Message-ID: <87zfz32r6j.fsf@cloudflare.com>
+To: John Fastabend <john.fastabend@gmail.com>
+Cc: martin.lau@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH bpf v2 0/2]  sockmap fix for KASAN_VMALLOC and af_unix
+Date: Fri, 24 Nov 2023 14:53:52 +0100
+In-reply-to: <20231122192452.335312-1-john.fastabend@gmail.com>
+Message-ID: <87v89r2r54.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -58,46 +54,31 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-
-On Thu, Nov 23, 2023 at 12:24 PM -08, Cong Wang wrote:
-> On Wed, Nov 22, 2023 at 11:24:51AM -0800, John Fastabend wrote:
->> AF_UNIX stream sockets are a paired socket. So sending on one of the pairs
->> will lookup the paired socket as part of the send operation. It is possible
->> however to put just one of the pairs in a BPF map. This currently
->> increments the refcnt on the sock in the sockmap to ensure it is not
->> free'd by the stack before sockmap cleans up its state and stops any
->> skbs being sent/recv'd to that socket.
->> 
->> But we missed a case. If the peer socket is closed it will be
->> free'd by the stack. However, the paired socket can still be
->> referenced from BPF sockmap side because we hold a reference
->> there. Then if we are sending traffic through BPF sockmap to
->> that socket it will try to dereference the free'd pair in its
->> send logic creating a use after free.  And following splat,
+On Wed, Nov 22, 2023 at 11:24 AM -08, John Fastabend wrote:
+> The af_unix tests in sockmap_listen causes a splat from KASAN_VMALLOC.
+> Fix it here and include an extra test to catch case where both pairs
+> of the af_unix socket are included in a BPF sockmap.
 >
-> Hmm, how could it pass the SOCK_DEAD test in unix_stream_sendmsg()?
+> Also it seems the test infra is not passing type through correctly when
+> testing unix_inet_redir_to_connected. Unfortunately, the simple fix
+> also caused some CI tests to fail so investigating that now.
 >
-> 2285                 unix_state_lock(other);
-> 2286
-> 2287                 if (sock_flag(other, SOCK_DEAD) ||
-> 2288                     (other->sk_shutdown & RCV_SHUTDOWN))
-> 2289                         goto pipe_err_free;
+> v2: drop changes to dgram side its fine per Jakub's point it graps a
+>     reference on the peer socket from each sendmsg.
+>
+> John Fastabend (2):
+>   bpf: sockmap, af_unix stream sockets need to hold ref for pair sock
+>   bpf: sockmap, add af_unix test with both sockets in map
+>
+>  include/linux/skmsg.h                         |  1 +
+>  include/net/af_unix.h                         |  1 +
+>  net/core/skmsg.c                              |  2 +
+>  net/unix/af_unix.c                            |  2 -
+>  net/unix/unix_bpf.c                           |  5 +++
+>  .../selftests/bpf/prog_tests/sockmap_listen.c | 39 ++++++++++++++++---
+>  .../selftests/bpf/progs/test_sockmap_listen.c |  7 ++++
+>  7 files changed, 49 insertions(+), 8 deletions(-)
 
-The quoted UAF happens after unix_state_unlock(other):
+Short of the nit pointed out by Yonghong Song:
 
-  2285                  unix_state_lock(other);
-  2286
-  2287                  if (sock_flag(other, SOCK_DEAD) ||
-  2288                      (other->sk_shutdown & RCV_SHUTDOWN))
-  2289                          goto pipe_err_free;
-  2290
-  2291                  maybe_add_creds(skb, sock, other);
-  2292                  scm_stat_add(other, skb);
-  2293                  skb_queue_tail(&other->sk_receive_queue, skb);
-  2294                  unix_state_unlock(other);
-  2295                  other->sk_data_ready(other); <-- UAF
-
-Although, I think I saw it happen at unix_state_lock(other) as well.
-
-We don't hold a ref on other, so we're racing with __sock_release /
-unix_release_sock.
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
