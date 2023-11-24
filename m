@@ -1,73 +1,143 @@
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NSwkSnum"
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD6FD59
-	for <bpf@vger.kernel.org>; Thu, 23 Nov 2023 19:39:36 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9c41e95efcbso198813166b.3
-        for <bpf@vger.kernel.org>; Thu, 23 Nov 2023 19:39:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700797175; x=1701401975; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8AxM/397NlPzNRK/H7SySe3WL2qSduvfIVBxrFcCqxM=;
-        b=NSwkSnumK9FHP8EZ51xbUtsECFfSJJQaoEyZcAmKEp8NML4KrP3iIrhrY9KU9IAx3f
-         oTcZ+kLEWQAKpZrAnrnBiQDNMIUFoLJd0OnZsun13wozujTsjxWZuMzudSD265S6UYZ8
-         UjyASo9tqzXLmZZHrn6IV0oSSRyWRN/dpr6URxUMFLF0MrXswY98Sz58pODx9GBt/4yy
-         WadpsAWZ7Ujtwz864f6qz2QwPtPJ+rRBpJ3lxe+7H2jbgr/T61xg7kmgAEl9ysQOJM7Q
-         PoEwkItvXz3eQg8KAYiv7RGa6mNfndIo9kUnuHyCKDfsUET0lLz8tXt3HaC2wnBthbii
-         MV6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700797175; x=1701401975;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8AxM/397NlPzNRK/H7SySe3WL2qSduvfIVBxrFcCqxM=;
-        b=PhuzPkCV6knZkpOPu8oscSX+DkBjzckNEQdRa1+osi+A5qAb6awRx2XYZJIwQ1RVdp
-         5eN8+v4MGqQQ9RFcAsXz7L3NYUskab1EllcMtoxvnqhv/PKOcjtYAPiOufIwIm9HAy+1
-         aQ8w9wVD4kY2GPFnvDuH0GBty8BdGwipmdRCUKxMFTV+uurjJNxdRvcPaNNCjsTJZEu6
-         Dz9YDJ/TcvjHmcsiN/oSl8kBs9Mu+9cNHAdT/hP2kdcbtVWZVZxHfLBOlvrKC4owEzI8
-         wRAwuNzhEEpmk3VTgp6gHTe6yk+dV45SzJp9lFn9ljFQjsoxIbpxE2mfJN7dx8tPRg70
-         zGgg==
-X-Gm-Message-State: AOJu0Yyogk5YcNLAdbgkoHXIrEIoWXkW7T+SnkyDYTXMGPkts8OYr1Nz
-	uXkZf0pAtjK7iQIAZhyL//wkD6mJotYLuIyhii0qlQsU
-X-Google-Smtp-Source: AGHT+IEUiSHmVFOH900LpL1fGMinfbPh2+sNZxj3mU0avhbn6jL+kewljnM+6e8kqaCdzSZtJhrQdj9phYTDAMpgWYE=
-X-Received: by 2002:a17:906:74c2:b0:a01:a1d0:9431 with SMTP id
- z2-20020a17090674c200b00a01a1d09431mr805399ejl.1.1700797174905; Thu, 23 Nov
- 2023 19:39:34 -0800 (PST)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3F0D43
+	for <bpf@vger.kernel.org>; Thu, 23 Nov 2023 19:59:52 -0800 (PST)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AO3e31w028771
+	for <bpf@vger.kernel.org>; Thu, 23 Nov 2023 19:59:52 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ujjnygagg-3
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Thu, 23 Nov 2023 19:59:51 -0800
+Received: from twshared51573.38.frc1.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Thu, 23 Nov 2023 19:59:49 -0800
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+	id C713B3C057946; Thu, 23 Nov 2023 19:59:40 -0800 (PST)
+From: Andrii Nakryiko <andrii@kernel.org>
+To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <martin.lau@kernel.org>
+CC: <andrii@kernel.org>, <kernel-team@meta.com>,
+        Eduard Zingerman
+	<eddyz87@gmail.com>
+Subject: [PATCH v2 bpf-next 1/3] bpf: emit global subprog name in verifier logs
+Date: Thu, 23 Nov 2023 19:59:35 -0800
+Message-ID: <20231124035937.403208-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231124035937.403208-1-andrii@kernel.org>
+References: <20231124035937.403208-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231122011656.1105943-1-andrii@kernel.org> <20231122011656.1105943-3-andrii@kernel.org>
- <20231123014416.sm2pcgsfiptan6wf@MacBook-Pro-49.local.dhcp.thefacebook.com>
-In-Reply-To: <20231123014416.sm2pcgsfiptan6wf@MacBook-Pro-49.local.dhcp.thefacebook.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 23 Nov 2023 19:39:23 -0800
-Message-ID: <CAEf4BzZj9p7jsp8EkR+NzEZsnnAxqecT_JC+aPGNFYh9r-0tNA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 02/10] bpf: provide correct register name for
- exception callback retval check
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, martin.lau@kernel.org, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: NM7zTzOu4DavnlHP0c7ilCD_Zv-6dUOI
+X-Proofpoint-ORIG-GUID: NM7zTzOu4DavnlHP0c7ilCD_Zv-6dUOI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-23_15,2023-11-22_01,2023-05-22_02
 
-On Wed, Nov 22, 2023 at 5:44=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Nov 21, 2023 at 05:16:48PM -0800, Andrii Nakryiko wrote:
-> >  SEC("?fentry/bpf_check")
-> > -__failure __msg("At program exit the register R0 has value (0x40; 0x0)=
-")
-> > +__failure __msg("At program exit the register R1 has value (0x40; 0x0)=
-")
->
-> While at it...
-> should we change tnum_strn() to print it as normal constant when mask=3D=
-=3D0 ?
+We have the name, instead of emitting just func#N to identify global
+subprog, augment verifier log messages with actual function name to make
+it more user-friendly.
 
-sure, I can add that as another patch, because I suspect even more
-tests would have to be adjusted
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ kernel/bpf/verifier.c | 35 ++++++++++++++++++++++++-----------
+ 1 file changed, 24 insertions(+), 11 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 405da1f9e724..a2939ebf2638 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -339,6 +339,11 @@ struct bpf_kfunc_call_arg_meta {
+=20
+ struct btf *btf_vmlinux;
+=20
++static const char *btf_type_name(const struct btf *btf, u32 id)
++{
++	return btf_name_by_offset(btf, btf_type_by_id(btf, id)->name_off);
++}
++
+ static DEFINE_MUTEX(bpf_verifier_lock);
+ static DEFINE_MUTEX(bpf_percpu_ma_lock);
+=20
+@@ -418,6 +423,17 @@ static bool subprog_is_global(const struct bpf_verif=
+ier_env *env, int subprog)
+ 	return aux && aux[subprog].linkage =3D=3D BTF_FUNC_GLOBAL;
+ }
+=20
++static const char *subprog_name(const struct bpf_verifier_env *env, int =
+subprog)
++{
++	struct bpf_func_info *info;
++
++	if (!env->prog->aux->func_info)
++		return "";
++
++	info =3D &env->prog->aux->func_info[subprog];
++	return btf_type_name(env->prog->aux->btf, info->type_id);
++}
++
+ static bool reg_may_point_to_spin_lock(const struct bpf_reg_state *reg)
+ {
+ 	return btf_record_has_field(reg_btf_record(reg), BPF_SPIN_LOCK);
+@@ -587,11 +603,6 @@ static int iter_get_spi(struct bpf_verifier_env *env=
+, struct bpf_reg_state *reg,
+ 	return stack_slot_obj_get_spi(env, reg, "iter", nr_slots);
+ }
+=20
+-static const char *btf_type_name(const struct btf *btf, u32 id)
+-{
+-	return btf_name_by_offset(btf, btf_type_by_id(btf, id)->name_off);
+-}
+-
+ static enum bpf_dynptr_type arg_to_dynptr_type(enum bpf_arg_type arg_typ=
+e)
+ {
+ 	switch (arg_type & DYNPTR_TYPE_FLAG_MASK) {
+@@ -9269,13 +9280,16 @@ static int check_func_call(struct bpf_verifier_en=
+v *env, struct bpf_insn *insn,
+ 	if (err =3D=3D -EFAULT)
+ 		return err;
+ 	if (subprog_is_global(env, subprog)) {
++		const char *sub_name =3D subprog_name(env, subprog);
++
+ 		if (err) {
+-			verbose(env, "Caller passes invalid args into func#%d\n", subprog);
++			verbose(env, "Caller passes invalid args into func#%d ('%s')\n",
++				subprog, sub_name);
+ 			return err;
+ 		}
+=20
+-		if (env->log.level & BPF_LOG_LEVEL)
+-			verbose(env, "Func#%d is global and valid. Skipping.\n", subprog);
++		verbose(env, "Func#%d ('%s') is global and assumed valid.\n",
++			subprog, sub_name);
+ 		clear_caller_saved_regs(env, caller->regs);
+=20
+ 		/* All global functions return a 64-bit SCALAR_VALUE */
+@@ -19893,9 +19907,8 @@ static int do_check_subprogs(struct bpf_verifier_=
+env *env)
+ 		if (ret) {
+ 			return ret;
+ 		} else if (env->log.level & BPF_LOG_LEVEL) {
+-			verbose(env,
+-				"Func#%d is safe for any args that match its prototype\n",
+-				i);
++			verbose(env, "Func#%d ('%s') is safe for any args that match its prot=
+otype\n",
++				i, subprog_name(env, i));
+ 		}
+ 	}
+ 	return 0;
+--=20
+2.34.1
+
