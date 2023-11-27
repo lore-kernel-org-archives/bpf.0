@@ -1,41 +1,41 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YGy2yYij"
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F93D5B
-	for <bpf@vger.kernel.org>; Mon, 27 Nov 2023 11:03:39 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5cd2100f467so57975607b3.1
-        for <bpf@vger.kernel.org>; Mon, 27 Nov 2023 11:03:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ddfi+4eH"
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC40D5F
+	for <bpf@vger.kernel.org>; Mon, 27 Nov 2023 11:03:40 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1cfaeab7dafso28631205ad.1
+        for <bpf@vger.kernel.org>; Mon, 27 Nov 2023 11:03:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701111818; x=1701716618; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1701111820; x=1701716620; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AIZwWc9a6llwfy/GJ9Hn1wyFbDKHqDafvICOFwSzkaA=;
-        b=YGy2yYijMlf1v8lscnCk8S1rmGLTo7DiO65mq6NyRR2ESO+ajSQwgHBpCOnynb7D/R
-         MwM4dUZLQ+WmRRieTObi0dzgLnUxpLAndzP8Z7XuFDKwEjOShU4eDlndqNBlI6wXI8zN
-         D4rySoLVPPpQJPvWn0WQzgal6VSprZ8t50aDw4jBPOlJqJWTZbqAkzUBQ7/XSDXnIPBX
-         p+c1q4nibtRjHzQKH+XSyrVepe2k1MU0UkGzn3FvM/DXCkTtMFg2pRK6VT29+lUf1Am9
-         jZoqIeWGgRQ91m3MsUW7e4DhhwBQJg+c7Aj7xww7hKwPnqgcGLNztsf4W6qi8TaaCexJ
-         G3wQ==
+        bh=RPaN4vg9SQDJHqYebN2/xKdXNgaWBfzTAU2wIw8MN1M=;
+        b=ddfi+4eHj5Wh4pGNj6IGvkv/wNLWH1oB//3Sxg0otVK4lJIjv1wJ5KczsyN+aHmlsM
+         dCjY/htveE0GjdbkkNe5PSQwQZv2s440K1Vc86xhnXlhT6JUZIzJy8m/h5tPL62vhyTx
+         Vh/ovvgjVH6qy2l16PVb1cs4vir6+Lmsf7SrqIv8U3JEJ6OaLChTZwGwFaOdfubF53x0
+         w/43esw5uXq6kvoK2tWBhHJGoUqxzDDguTepi0yWc6PN+ojepYnY59LuBB69N0enIEWO
+         Dpk5WBWa8YckW5Yfhofgt0UVXJOnB/V7N78rO+nbuExwp3/4NzfgJ/n6C/8XCv7EV1DU
+         wmpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701111818; x=1701716618;
+        d=1e100.net; s=20230601; t=1701111820; x=1701716620;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AIZwWc9a6llwfy/GJ9Hn1wyFbDKHqDafvICOFwSzkaA=;
-        b=qDhtrOSp3ZziGceEoEmeSnT8f3/TvnW5FIV8fnXLpkr8U/WwCQf34XbOmzCZSZtDuN
-         WYkRiE6I/Ni6S3/wN36PULzjgKbPPboXQOqipTU3a2i5YiDjh7FYBaE7Xc6RU2nBvWFJ
-         TuyS/DXc3dxc5Rr5zU/Hz7YrED3CpOT08C32hAaKt6zxmOcSz+5emUhtB+dJXUf8KsBy
-         jEN6otgRvKSaEqz3nYK/Ik0PG4mJdTHWDiyX/gS3aiGWt9aVsqG+5dQ7DUtpirsbNhkd
-         oZeq8a/z80tsI4r2MzUe3gBja+z3zSPSeC/Qk8lahyb2aRdncybk0nJiToEY8xS4bcaU
-         57qg==
-X-Gm-Message-State: AOJu0Ywzjl4Gp2w7qXiZdBvwihyYWvdqfPhmmjdvCuddDsd2e0V2Au9w
-	rgldgwocvW5u8GAoN/2UcbPg5DiwZLISmvi5h0prpFCDawotX3tIFXiyvfmYkA5D0M7rvjNtpf6
-	F+GQlSyhccH5dJSUz7cBYMtGOUtS5A3Kmf6FX5xygodngwtN8mQ==
-X-Google-Smtp-Source: AGHT+IE8EPn2D8FiPemXYIFXefsg8Tsk7m3Yd2lEnAXCBSDAZJZtgbnRhsMN5Z+iMFgisc45OHcT14o=
+        bh=RPaN4vg9SQDJHqYebN2/xKdXNgaWBfzTAU2wIw8MN1M=;
+        b=k7ywXRVCxa3JEM0LwMTtVfHEGie+S9fn6n3DCZIu+l1WRnhF/lkpghXz2XLOM1EvWq
+         QWPEGfKreyyBeJ8mkEZcHRvblTPFdPj5i4Dz7IVfcdRpFzq1zxlrNi8sS0mJ2QC+LWx0
+         UFX/i7NSMA7AEKYOg77LdwjOTPJ0827VTheZhsbbQirWNIdPU40bJS163EWxB25K4p0q
+         rKuKrdzjVCmAO2Qt8DNeoiDyByTY7bY+vN3XXahkotCPa4lyznogzNf6s1Z+2ciId5zi
+         6wb5LKj1lh7YmvI0MaeHJ+fl19uWzejKEWkuCgWUzKzKUQTv/+6xvJZyuy8VOeApvCNP
+         JeeQ==
+X-Gm-Message-State: AOJu0Yx+wVJdP+ULknsDsVNz1muJuksztR5ryoGl+ppjEsbtKGnJAzyL
+	75Ckq81kX2JYGyPuv80gtJ0ZcmxQC1n1TcLTmugG3Y8W/4+PJjiPfgkni36r/IF1w3Lffj6Q5XY
+	gFNdMZgHF5nKcI51A+dorIfPCjmNT677PBvb0+TcE4XKM+MmHsg==
+X-Google-Smtp-Source: AGHT+IFBTjrElYjTEV9WQEofymDfgw7+CwNBeZf4OoRmbs32unp/IJ0ulmfxZYSw4cDD/GY5fzng/uo=
 X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a05:690c:3209:b0:5cc:234f:1860 with SMTP id
- ff9-20020a05690c320900b005cc234f1860mr371027ywb.3.1701111818184; Mon, 27 Nov
- 2023 11:03:38 -0800 (PST)
-Date: Mon, 27 Nov 2023 11:03:15 -0800
+ (user=sdf job=sendgmr) by 2002:a17:902:b948:b0:1cc:cc77:94ed with SMTP id
+ h8-20020a170902b94800b001cccc7794edmr2695776pls.10.1701111819885; Mon, 27 Nov
+ 2023 11:03:39 -0800 (PST)
+Date: Mon, 27 Nov 2023 11:03:16 -0800
 In-Reply-To: <20231127190319.1190813-1-sdf@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -45,8 +45,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231127190319.1190813-1-sdf@google.com>
 X-Mailer: git-send-email 2.43.0.rc1.413.gea7ed67945-goog
-Message-ID: <20231127190319.1190813-10-sdf@google.com>
-Subject: [PATCH bpf-next v6 09/13] selftests/xsk: Support tx_metadata_len
+Message-ID: <20231127190319.1190813-11-sdf@google.com>
+Subject: [PATCH bpf-next v6 10/13] selftests/bpf: Add csum helpers
 From: Stanislav Fomichev <sdf@google.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
@@ -58,54 +58,71 @@ Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
 	xdp-hints@xdp-project.net
 Content-Type: text/plain; charset="UTF-8"
 
-Add new config field and propagate to UMEM registration setsockopt.
+Checksum helpers will be used to calculate pseudo-header checksum in
+AF_XDP metadata selftests.
+
+The helpers are mirroring existing kernel ones:
+- csum_tcpudp_magic : IPv4 pseudo header csum
+- csum_ipv6_magic : IPv6 pseudo header csum
+- csum_fold : fold csum and do one's complement
 
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- tools/testing/selftests/bpf/xsk.c | 3 +++
- tools/testing/selftests/bpf/xsk.h | 1 +
- 2 files changed, 4 insertions(+)
+ tools/testing/selftests/bpf/network_helpers.h | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/xsk.c b/tools/testing/selftests/bpf/xsk.c
-index e574711eeb84..25d568abf0f2 100644
---- a/tools/testing/selftests/bpf/xsk.c
-+++ b/tools/testing/selftests/bpf/xsk.c
-@@ -115,6 +115,7 @@ static void xsk_set_umem_config(struct xsk_umem_config *cfg,
- 		cfg->frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
- 		cfg->frame_headroom = XSK_UMEM__DEFAULT_FRAME_HEADROOM;
- 		cfg->flags = XSK_UMEM__DEFAULT_FLAGS;
-+		cfg->tx_metadata_len = 0;
- 		return;
- 	}
- 
-@@ -123,6 +124,7 @@ static void xsk_set_umem_config(struct xsk_umem_config *cfg,
- 	cfg->frame_size = usr_cfg->frame_size;
- 	cfg->frame_headroom = usr_cfg->frame_headroom;
- 	cfg->flags = usr_cfg->flags;
-+	cfg->tx_metadata_len = usr_cfg->tx_metadata_len;
- }
- 
- static int xsk_set_xdp_socket_config(struct xsk_socket_config *cfg,
-@@ -252,6 +254,7 @@ int xsk_umem__create(struct xsk_umem **umem_ptr, void *umem_area,
- 	mr.chunk_size = umem->config.frame_size;
- 	mr.headroom = umem->config.frame_headroom;
- 	mr.flags = umem->config.flags;
-+	mr.tx_metadata_len = umem->config.tx_metadata_len;
- 
- 	err = setsockopt(umem->fd, SOL_XDP, XDP_UMEM_REG, &mr, sizeof(mr));
- 	if (err) {
-diff --git a/tools/testing/selftests/bpf/xsk.h b/tools/testing/selftests/bpf/xsk.h
-index 771570bc3731..93c2cc413cfc 100644
---- a/tools/testing/selftests/bpf/xsk.h
-+++ b/tools/testing/selftests/bpf/xsk.h
-@@ -200,6 +200,7 @@ struct xsk_umem_config {
- 	__u32 frame_size;
- 	__u32 frame_headroom;
- 	__u32 flags;
-+	__u32 tx_metadata_len;
- };
- 
- int xsk_attach_xdp_program(struct bpf_program *prog, int ifindex, u32 xdp_flags);
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index 34f1200a781b..94b9be24e39b 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -71,4 +71,47 @@ struct nstoken;
+  */
+ struct nstoken *open_netns(const char *name);
+ void close_netns(struct nstoken *token);
++
++static __u16 csum_fold(__u32 csum)
++{
++	csum = (csum & 0xffff) + (csum >> 16);
++	csum = (csum & 0xffff) + (csum >> 16);
++
++	return (__u16)~csum;
++}
++
++static inline __sum16 csum_tcpudp_magic(__be32 saddr, __be32 daddr,
++					__u32 len, __u8 proto,
++					__wsum csum)
++{
++	__u64 s = csum;
++
++	s += (__u32)saddr;
++	s += (__u32)daddr;
++	s += htons(proto + len);
++	s = (s & 0xffffffff) + (s >> 32);
++	s = (s & 0xffffffff) + (s >> 32);
++
++	return csum_fold((__u32)s);
++}
++
++static inline __sum16 csum_ipv6_magic(const struct in6_addr *saddr,
++				      const struct in6_addr *daddr,
++					__u32 len, __u8 proto,
++					__wsum csum)
++{
++	__u64 s = csum;
++	int i;
++
++	for (i = 0; i < 4; i++)
++		s += (__u32)saddr->s6_addr32[i];
++	for (i = 0; i < 4; i++)
++		s += (__u32)daddr->s6_addr32[i];
++	s += htons(proto + len);
++	s = (s & 0xffffffff) + (s >> 32);
++	s = (s & 0xffffffff) + (s >> 32);
++
++	return csum_fold((__u32)s);
++}
++
+ #endif
 -- 
 2.43.0.rc1.413.gea7ed67945-goog
 
