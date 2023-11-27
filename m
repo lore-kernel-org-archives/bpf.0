@@ -1,153 +1,86 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YGHmdEGV"
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8411A1
-	for <bpf@vger.kernel.org>; Mon, 27 Nov 2023 10:49:54 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-a00cbb83c80so634396866b.0
-        for <bpf@vger.kernel.org>; Mon, 27 Nov 2023 10:49:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701110993; x=1701715793; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PC1/1Ly7dYLfGmB8PqMUwU+jBCCIQ+KSicEDDatCNdE=;
-        b=YGHmdEGVrUDqCYX9Qf/T0RUpFlGdV22p1BBUUzM1L3CPaFgjYxstaHRQRTNCmOBNQ/
-         /Wy+bIDh3j/c5ucK7H3kU3ORrqo4cgPpANKWvm4uPV6k67jqf7CRYeNHlA3doiiiq/+V
-         rw9m3HhsrjTuSFA3RT77sGbVMA6UAT5NpuQ1Ms+gVSXbT7pEaIQF9EDaY0eZ3eibnUjQ
-         SgOxJjyveY5KPDCu2OgiFDj9DwHWBRFLxcV/Fb7MgKaI1jTZ5Jiu1ZeIWVu53P0mDlNR
-         vAVSYKr0j9co+Iz95FZ686PEY2vnqMW02MxuL4vBCAIM2sdMhXQqkcj1mJWG8UV4Mu8w
-         iw/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701110993; x=1701715793;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PC1/1Ly7dYLfGmB8PqMUwU+jBCCIQ+KSicEDDatCNdE=;
-        b=o5UCPCY1zNu/np8hgkHutnNuUNtLE7ev8Kgr306TefpJkV52N3MrYnlyESPoo4Md85
-         ssuhhthKVHxfpfVMowQdyUXpcawVrkmb8BBb3vDfPL5AR1Sbn7tWmWdBbO09vN6pH1Fz
-         6n8EYWzDStJsn7qJPHVS5+jdnHAJ1leeNOlhZ0QBSFJ4FlIw7b+DY5DAqXsYFwQbNM+m
-         FGdXDCXXlgo0O20j+ZfJmln6kfh9FqQqVcXL3+OjcA+6o75D94aoLjg2VwBrbaAM5/dM
-         RYmLiXfF8UT3cnZyHrL+iNuambY5w3YRbSs49Gb8wsG0gomPcpSE7rnXESNhzN2o7vG6
-         t1Eg==
-X-Gm-Message-State: AOJu0YzgShgbsJ1azLYSpXN7BbpqtWPt3CEIfoxuRghgqfVMHkI6yIMt
-	68ghqP+RVACnuZO96ePkgEXzMMWcqggjOm1mK5ngMZ4kNDw=
-X-Google-Smtp-Source: AGHT+IF4hqMvXyAl1ImHhcFPoz7dqVW/Vy8PqYeY6WUD4X6yfMzadvlJ4NyhPzxZLggBDvAICcIO6pwCw5YXla3CIhE=
-X-Received: by 2002:a17:906:10dc:b0:9be:7b67:1674 with SMTP id
- v28-20020a17090610dc00b009be7b671674mr9723778ejv.3.1701110993041; Mon, 27 Nov
- 2023 10:49:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HBIBKxFM"
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959B81A1;
+	Mon, 27 Nov 2023 10:51:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701111102; x=1732647102;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fFpHfP4ITdLtgR0u/kz6TTamJSgRwMGF34hlG9l1BU0=;
+  b=HBIBKxFMLIrqxD3Nm7iwEe8xtkGmiia1YbG3QyskUsyzcMUQZciGYrUT
+   fsB0kFkc1fhgv7aYzDza8eFqf4KIMS1/JgdEnqJMaAennCzRkkTo6mtH7
+   inarQNKt6esBnjG2pEEb0sMAcRX9/99A91Ae1/pVJyKdBP/0V3xRxsscg
+   C8Ot7iKDkimkbZaoCAHy6uAwa81G4ze0OwGr6YaXtTvmcsW3/Pxzeppxq
+   FQ7zuOAYtWM8kabMOr2RQk1l6RKgC3M6ZcS7wAtsR7jMtR22znoIITxL0
+   ETtcoFJNPNmRAVvholcNhHxj5hzI27KnN+x/C0d3dbWlACbf0NLONQqvg
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="389921339"
+X-IronPort-AV: E=Sophos;i="6.04,231,1695711600"; 
+   d="scan'208";a="389921339"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2023 10:51:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,231,1695711600"; 
+   d="scan'208";a="16376300"
+Received: from irvmail002.ir.intel.com ([10.43.11.120])
+  by orviesa001.jf.intel.com with ESMTP; 27 Nov 2023 10:51:38 -0800
+Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id B002838D80;
+	Mon, 27 Nov 2023 18:33:48 +0000 (GMT)
+From: Larysa Zaremba <larysa.zaremba@intel.com>
+To: bpf@vger.kernel.org
+Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
+	netdev@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Magnus Karlsson <magnus.karlsson@gmail.com>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Aleksander Lobakin <aleksander.lobakin@intel.com>
+Subject: [PATCH bpf-next v3 0/2] Allow data_meta size > 32
+Date: Mon, 27 Nov 2023 19:32:14 +0100
+Message-ID: <20231127183216.269958-1-larysa.zaremba@intel.com>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231127050342.1945270-1-yonghong.song@linux.dev>
-In-Reply-To: <20231127050342.1945270-1-yonghong.song@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 27 Nov 2023 10:49:41 -0800
-Message-ID: <CAEf4BzZYydzYLCyPYxsUQ1OhMnnHw7f+mmErzNQFXubZCj8t9w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Fix a few selftest failures due to llvm18 change
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com, 
-	Martin KaFai Lau <martin.lau@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, Nov 26, 2023 at 9:04=E2=80=AFPM Yonghong Song <yonghong.song@linux.=
-dev> wrote:
->
-> With latest upstream llvm18, the following test cases failed:
->   $ ./test_progs -j
->   #13/2    bpf_cookie/multi_kprobe_link_api:FAIL
->   #13/3    bpf_cookie/multi_kprobe_attach_api:FAIL
->   #13      bpf_cookie:FAIL
->   #77      fentry_fexit:FAIL
->   #78/1    fentry_test/fentry:FAIL
->   #78      fentry_test:FAIL
->   #82/1    fexit_test/fexit:FAIL
->   #82      fexit_test:FAIL
->   #112/1   kprobe_multi_test/skel_api:FAIL
->   #112/2   kprobe_multi_test/link_api_addrs:FAIL
->   ...
->   #112     kprobe_multi_test:FAIL
->   #356/17  test_global_funcs/global_func17:FAIL
->   #356     test_global_funcs:FAIL
->
-> Further analysis shows llvm upstream patch [1] is responsible
-> for the above failures. For example, for function bpf_fentry_test7()
-> in net/bpf/test_run.c, without [1], the asm code is:
->   0000000000000400 <bpf_fentry_test7>:
->      400: f3 0f 1e fa                   endbr64
->      404: e8 00 00 00 00                callq   0x409 <bpf_fentry_test7+0=
-x9>
->      409: 48 89 f8                      movq    %rdi, %rax
->      40c: c3                            retq
->      40d: 0f 1f 00                      nopl    (%rax)
-> and with [1], the asm code is:
->   0000000000005d20 <bpf_fentry_test7.specialized.1>:
->     5d20: e8 00 00 00 00                callq   0x5d25 <bpf_fentry_test7.=
-specialized.1+0x5>
->     5d25: c3                            retq
-> and <bpf_fentry_test7.specialized.1> is called instead of <bpf_fentry_tes=
-t7>
-> and this caused test failures for #13/#77 etc. except #356.
->
-> For test case #356/17, with [1] (progs/test_global_func17.c)),
-> the main prog looks like:
->   0000000000000000 <global_func17>:
->        0:       b4 00 00 00 2a 00 00 00 w0 =3D 0x2a
->        1:       95 00 00 00 00 00 00 00 exit
-> which passed verification while the test itself expects a verification
-> failure.
->
-> Let us add 'barrier_var' style asm code in both places to prevent
-> function specialization which caused selftests failure.
->
->   [1] https://github.com/llvm/llvm-project/pull/72903
->
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->  net/bpf/test_run.c                                     | 2 +-
->  tools/testing/selftests/bpf/progs/test_global_func17.c | 1 +
->  2 files changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index c9fdcc5cdce1..711cf5d59816 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -542,7 +542,7 @@ struct bpf_fentry_test_t {
->
->  int noinline bpf_fentry_test7(struct bpf_fentry_test_t *arg)
->  {
-> -       asm volatile ("");
-> +       asm volatile ("": "+r"(arg));
->         return (long)arg;
->  }
->
-> diff --git a/tools/testing/selftests/bpf/progs/test_global_func17.c b/too=
-ls/testing/selftests/bpf/progs/test_global_func17.c
-> index a32e11c7d933..5de44b09e8ec 100644
-> --- a/tools/testing/selftests/bpf/progs/test_global_func17.c
-> +++ b/tools/testing/selftests/bpf/progs/test_global_func17.c
-> @@ -5,6 +5,7 @@
->
->  __noinline int foo(int *p)
->  {
-> +       barrier_var(p);
->         return p ? (*p =3D 42) : 0;
->  }
->
+Currently, there is no reason for data_meta to be limited to 32 bytes.
+Loosen this limitation and make maximum meta size 252.
 
-I recently stumbled upon no_clone ([0]) and no_ipa ([1]) attributes.
-Should we consider using those here instead?
+Also, modify the selftest, so test_xdp_context_error does not complain
+about the unexpected success.
 
-  [0] https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#in=
-dex-noclone-function-attribute
-  [1] https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#in=
-dex-noipa-function-attribute
+v2->v3:
+* Fix main patch author
+* Add selftests path
 
+v1->v2:
+* replace 'typeof(metalen)' with the actual type
 
-> --
-> 2.34.1
->
+Aleksander Lobakin (1):
+  net, xdp: allow metadata > 32
+
+Larysa Zaremba (1):
+  selftests/bpf: increase invalid metadata size
+
+ include/linux/skbuff.h                              | 13 ++++++++-----
+ include/net/xdp.h                                   |  7 ++++++-
+ .../selftests/bpf/prog_tests/xdp_context_test_run.c |  4 ++--
+ 3 files changed, 16 insertions(+), 8 deletions(-)
+
+-- 
+2.41.0
+
