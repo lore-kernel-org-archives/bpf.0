@@ -1,28 +1,28 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5339910C3
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2318D63
 	for <bpf@vger.kernel.org>; Mon, 27 Nov 2023 11:05:17 -0800 (PST)
 Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARIBmti004484
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARIBmtk004484
 	for <bpf@vger.kernel.org>; Mon, 27 Nov 2023 11:05:17 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3umsc8ucmx-11
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3umsc8ucmx-13
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
 	for <bpf@vger.kernel.org>; Mon, 27 Nov 2023 11:05:17 -0800
-Received: from twshared58712.02.prn6.facebook.com (2620:10d:c085:108::8) by
+Received: from twshared11278.41.prn1.facebook.com (2620:10d:c085:208::11) by
  mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Mon, 27 Nov 2023 11:04:41 -0800
+ 15.1.2507.34; Mon, 27 Nov 2023 11:04:44 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id C61493C35FC22; Mon, 27 Nov 2023 11:04:34 -0800 (PST)
+	id D6A7D3C35FC39; Mon, 27 Nov 2023 11:04:38 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <paul@paul-moore.com>,
         <brauner@kernel.org>
 CC: <linux-fsdevel@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
         <keescook@chromium.org>, <kernel-team@meta.com>, <sargun@sargun.me>
-Subject: [PATCH v11 bpf-next 12/17] libbpf: add bpf_token_create() API
-Date: Mon, 27 Nov 2023 11:04:04 -0800
-Message-ID: <20231127190409.2344550-13-andrii@kernel.org>
+Subject: [PATCH v11 bpf-next 14/17] libbpf: add BPF token support to bpf_btf_load() API
+Date: Mon, 27 Nov 2023 11:04:06 -0800
+Message-ID: <20231127190409.2344550-15-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231127190409.2344550-1-andrii@kernel.org>
 References: <20231127190409.2344550-1-andrii@kernel.org>
@@ -35,96 +35,66 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: EJlOt1UAsk4tHiRAVh6MRI18vuUBMEUF
-X-Proofpoint-ORIG-GUID: EJlOt1UAsk4tHiRAVh6MRI18vuUBMEUF
+X-Proofpoint-GUID: NLr_IJDWX7-B5-7oEGCNOvDLb64XfgXu
+X-Proofpoint-ORIG-GUID: NLr_IJDWX7-B5-7oEGCNOvDLb64XfgXu
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-27_17,2023-11-27_01,2023-05-22_02
 
-Add low-level wrapper API for BPF_TOKEN_CREATE command in bpf() syscall.
+Allow user to specify token_fd for bpf_btf_load() API that wraps
+kernel's BPF_BTF_LOAD command. This allows loading BTF from unprivileged
+process as long as it has BPF token allowing BPF_BTF_LOAD command, which
+can be created and delegated by privileged process.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/bpf.c      | 17 +++++++++++++++++
- tools/lib/bpf/bpf.h      | 24 ++++++++++++++++++++++++
- tools/lib/bpf/libbpf.map |  1 +
- 3 files changed, 42 insertions(+)
+ tools/lib/bpf/bpf.c | 4 +++-
+ tools/lib/bpf/bpf.h | 3 ++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 9dc9625651dc..d4019928a864 100644
+index 1653b64b7015..544ae2376b6b 100644
 --- a/tools/lib/bpf/bpf.c
 +++ b/tools/lib/bpf/bpf.c
-@@ -1287,3 +1287,20 @@ int bpf_prog_bind_map(int prog_fd, int map_fd,
- 	ret =3D sys_bpf(BPF_PROG_BIND_MAP, &attr, attr_sz);
- 	return libbpf_err_errno(ret);
- }
+@@ -1184,7 +1184,7 @@ int bpf_raw_tracepoint_open(const char *name, int p=
+rog_fd)
+=20
+ int bpf_btf_load(const void *btf_data, size_t btf_size, struct bpf_btf_l=
+oad_opts *opts)
+ {
+-	const size_t attr_sz =3D offsetofend(union bpf_attr, btf_log_true_size)=
+;
++	const size_t attr_sz =3D offsetofend(union bpf_attr, btf_token_fd);
+ 	union bpf_attr attr;
+ 	char *log_buf;
+ 	size_t log_size;
+@@ -1209,6 +1209,8 @@ int bpf_btf_load(const void *btf_data, size_t btf_s=
+ize, struct bpf_btf_load_opts
+=20
+ 	attr.btf =3D ptr_to_u64(btf_data);
+ 	attr.btf_size =3D btf_size;
++	attr.btf_token_fd =3D OPTS_GET(opts, token_fd, 0);
 +
-+int bpf_token_create(int bpffs_fd, struct bpf_token_create_opts *opts)
-+{
-+	const size_t attr_sz =3D offsetofend(union bpf_attr, token_create);
-+	union bpf_attr attr;
-+	int fd;
-+
-+	if (!OPTS_VALID(opts, bpf_token_create_opts))
-+		return libbpf_err(-EINVAL);
-+
-+	memset(&attr, 0, attr_sz);
-+	attr.token_create.bpffs_fd =3D bpffs_fd;
-+	attr.token_create.flags =3D OPTS_GET(opts, flags, 0);
-+
-+	fd =3D sys_bpf_fd(BPF_TOKEN_CREATE, &attr, attr_sz);
-+	return libbpf_err_errno(fd);
-+}
+ 	/* log_level =3D=3D 0 and log_buf !=3D NULL means "try loading without
+ 	 * log_buf, but retry with log_buf and log_level=3D1 on error", which i=
+s
+ 	 * consistent across low-level and high-level BTF and program loading
 diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index d0f53772bdc0..e49254c9f68f 100644
+index ae2136f596b4..4b0f25e97b0d 100644
 --- a/tools/lib/bpf/bpf.h
 +++ b/tools/lib/bpf/bpf.h
-@@ -640,6 +640,30 @@ struct bpf_test_run_opts {
- LIBBPF_API int bpf_prog_test_run_opts(int prog_fd,
- 				      struct bpf_test_run_opts *opts);
+@@ -133,9 +133,10 @@ struct bpf_btf_load_opts {
+ 	 * If kernel doesn't support this feature, log_size is left unchanged.
+ 	 */
+ 	__u32 log_true_size;
++	__u32 token_fd;
+ 	size_t :0;
+ };
+-#define bpf_btf_load_opts__last_field log_true_size
++#define bpf_btf_load_opts__last_field token_fd
 =20
-+struct bpf_token_create_opts {
-+	size_t sz; /* size of this struct for forward/backward compatibility */
-+	__u32 flags;
-+	size_t :0;
-+};
-+#define bpf_token_create_opts__last_field flags
-+
-+/**
-+ * @brief **bpf_token_create()** creates a new instance of BPF token der=
-ived
-+ * from specified BPF FS mount point.
-+ *
-+ * BPF token created with this API can be passed to bpf() syscall for
-+ * commands like BPF_PROG_LOAD, BPF_MAP_CREATE, etc.
-+ *
-+ * @param bpffs_fd FD for BPF FS instance from which to derive a BPF tok=
-en
-+ * instance.
-+ * @param opts optional BPF token creation options, can be NULL
-+ *
-+ * @return BPF token FD > 0, on success; negative error code, otherwise =
-(errno
-+ * is also set to the error code)
-+ */
-+LIBBPF_API int bpf_token_create(int bpffs_fd,
-+				struct bpf_token_create_opts *opts);
-+
- #ifdef __cplusplus
- } /* extern "C" */
- #endif
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 91c5aef7dae7..df7657b65c47 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -401,6 +401,7 @@ LIBBPF_1.3.0 {
- 		bpf_program__attach_netkit;
- 		bpf_program__attach_tcx;
- 		bpf_program__attach_uprobe_multi;
-+		bpf_token_create;
- 		ring__avail_data_size;
- 		ring__consume;
- 		ring__consumer_pos;
+ LIBBPF_API int bpf_btf_load(const void *btf_data, size_t btf_size,
+ 			    struct bpf_btf_load_opts *opts);
 --=20
 2.34.1
 
