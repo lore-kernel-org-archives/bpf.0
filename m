@@ -1,41 +1,41 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4PvLDmPl"
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FDED5D
-	for <bpf@vger.kernel.org>; Mon, 27 Nov 2023 11:03:34 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-28525981a55so4788969a91.1
-        for <bpf@vger.kernel.org>; Mon, 27 Nov 2023 11:03:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YGy2yYij"
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F93D5B
+	for <bpf@vger.kernel.org>; Mon, 27 Nov 2023 11:03:39 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5cd2100f467so57975607b3.1
+        for <bpf@vger.kernel.org>; Mon, 27 Nov 2023 11:03:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701111814; x=1701716614; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1701111818; x=1701716618; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=99qVGEnNEQZ0Ub6NY42NFhmi4pNAJrO1wmYriAMOllE=;
-        b=4PvLDmPlZoP9x2c6EE2CeEQ3xJyFqpq6tQvQHcwqsSu+B/DfaRPrOQBCug46/nuEWA
-         MgUMsufYSklRmUVJ6D4Wj+vyYaipVEQUZA8ywZA/lpSq6hpyOCoUymPkGdimBYSayN1T
-         ZcjaiSX00TcWVKDGfLaz3lU7uqtsYcN06/zrWp4G2XVdCkQrmmD3kdB6dM3qB95sNTK7
-         9p05aAWOcIP59u6e6Wo0pjsQliIEt3huBacaL1fiSFNlAzlWmhR7xfUzplsp6z0Usuxp
-         gvHgvfR8vxkp432D9lk3iuTVDiTuIFwDUuKi5CAUA6+Ke7hhAmtmvgXdxTmwtLDRhbm9
-         AI+A==
+        bh=AIZwWc9a6llwfy/GJ9Hn1wyFbDKHqDafvICOFwSzkaA=;
+        b=YGy2yYijMlf1v8lscnCk8S1rmGLTo7DiO65mq6NyRR2ESO+ajSQwgHBpCOnynb7D/R
+         MwM4dUZLQ+WmRRieTObi0dzgLnUxpLAndzP8Z7XuFDKwEjOShU4eDlndqNBlI6wXI8zN
+         D4rySoLVPPpQJPvWn0WQzgal6VSprZ8t50aDw4jBPOlJqJWTZbqAkzUBQ7/XSDXnIPBX
+         p+c1q4nibtRjHzQKH+XSyrVepe2k1MU0UkGzn3FvM/DXCkTtMFg2pRK6VT29+lUf1Am9
+         jZoqIeWGgRQ91m3MsUW7e4DhhwBQJg+c7Aj7xww7hKwPnqgcGLNztsf4W6qi8TaaCexJ
+         G3wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701111814; x=1701716614;
+        d=1e100.net; s=20230601; t=1701111818; x=1701716618;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=99qVGEnNEQZ0Ub6NY42NFhmi4pNAJrO1wmYriAMOllE=;
-        b=McIzjU67B3NS2kGIWb0k+aL9DjIxbo7sYjzzhea23mp6hgxo/2m026eJ41IyKKi1bz
-         9M9tz8WopfTmSJWzfEUPgDko0HqaCIxRetk5S+LaYARX7+olT3+2Mc7eNmGY46KSVZ47
-         VHGsmyZ51kcKgPSu7/8y0L6FP1WiXakr9cEhH4+YE4WKs+hDcUTFASAv6cwHD44rz8zs
-         rc0QJFH77EgP6fz3On/E90VaMqcu1h7+g2NC+r4fHOpOA8ZdcJMcQC+wUH76nn6DE/9G
-         GteSKp/KTrjf9upGn5+5g/DpAZWHbWZzY5Gwn/VSvGy/Sruwbo+5ze0a3HMT8MgX/yiT
-         jq4Q==
-X-Gm-Message-State: AOJu0Yy64A0cwtKyQfwb2T4iIHSEWmDW7svS2yBicMjbqyynrMncpnaB
-	191K5BstMp2x+yhtUjt0rW/WyPA3u3a6cevMTxBBGZCcMxIb4IWJ8/N/NX60JPIfQpMEMKrwxgC
-	gX5plxKP7WMfUPl2qzw/LW3yhkEzv815EXmv1S8HNoe7wG7xHCw==
-X-Google-Smtp-Source: AGHT+IF4LeF4F6ujUaxMms+ifKigtIl1GqgRBxF8gPMPkhkgaMo0syeBjyEJ09ROh5SanlMUaHBbGMU=
+        bh=AIZwWc9a6llwfy/GJ9Hn1wyFbDKHqDafvICOFwSzkaA=;
+        b=qDhtrOSp3ZziGceEoEmeSnT8f3/TvnW5FIV8fnXLpkr8U/WwCQf34XbOmzCZSZtDuN
+         WYkRiE6I/Ni6S3/wN36PULzjgKbPPboXQOqipTU3a2i5YiDjh7FYBaE7Xc6RU2nBvWFJ
+         TuyS/DXc3dxc5Rr5zU/Hz7YrED3CpOT08C32hAaKt6zxmOcSz+5emUhtB+dJXUf8KsBy
+         jEN6otgRvKSaEqz3nYK/Ik0PG4mJdTHWDiyX/gS3aiGWt9aVsqG+5dQ7DUtpirsbNhkd
+         oZeq8a/z80tsI4r2MzUe3gBja+z3zSPSeC/Qk8lahyb2aRdncybk0nJiToEY8xS4bcaU
+         57qg==
+X-Gm-Message-State: AOJu0Ywzjl4Gp2w7qXiZdBvwihyYWvdqfPhmmjdvCuddDsd2e0V2Au9w
+	rgldgwocvW5u8GAoN/2UcbPg5DiwZLISmvi5h0prpFCDawotX3tIFXiyvfmYkA5D0M7rvjNtpf6
+	F+GQlSyhccH5dJSUz7cBYMtGOUtS5A3Kmf6FX5xygodngwtN8mQ==
+X-Google-Smtp-Source: AGHT+IE8EPn2D8FiPemXYIFXefsg8Tsk7m3Yd2lEnAXCBSDAZJZtgbnRhsMN5Z+iMFgisc45OHcT14o=
 X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:90a:ee8d:b0:27d:2cf5:7eb1 with SMTP id
- i13-20020a17090aee8d00b0027d2cf57eb1mr2904712pjz.4.1701111814269; Mon, 27 Nov
- 2023 11:03:34 -0800 (PST)
-Date: Mon, 27 Nov 2023 11:03:13 -0800
+ (user=sdf job=sendgmr) by 2002:a05:690c:3209:b0:5cc:234f:1860 with SMTP id
+ ff9-20020a05690c320900b005cc234f1860mr371027ywb.3.1701111818184; Mon, 27 Nov
+ 2023 11:03:38 -0800 (PST)
+Date: Mon, 27 Nov 2023 11:03:15 -0800
 In-Reply-To: <20231127190319.1190813-1-sdf@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -45,8 +45,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231127190319.1190813-1-sdf@google.com>
 X-Mailer: git-send-email 2.43.0.rc1.413.gea7ed67945-goog
-Message-ID: <20231127190319.1190813-8-sdf@google.com>
-Subject: [PATCH bpf-next v6 07/13] xsk: Validate xsk_tx_metadata flags
+Message-ID: <20231127190319.1190813-10-sdf@google.com>
+Subject: [PATCH bpf-next v6 09/13] selftests/xsk: Support tx_metadata_len
 From: Stanislav Fomichev <sdf@google.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
@@ -58,80 +58,54 @@ Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
 	xdp-hints@xdp-project.net
 Content-Type: text/plain; charset="UTF-8"
 
-Accept only the flags that the kernel knows about to make
-sure we can extend this field in the future. Note that only
-in XDP_COPY mode we propagate the error signal back to the user
-(via sendmsg). For zerocopy mode we silently skip the metadata
-for the descriptors that have wrong flags (since we process
-the descriptors deep in the driver).
+Add new config field and propagate to UMEM registration setsockopt.
 
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- include/net/xdp_sock_drv.h | 23 ++++++++++++++++++++++-
- net/xdp/xsk.c              |  4 ++++
- 2 files changed, 26 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/xsk.c | 3 +++
+ tools/testing/selftests/bpf/xsk.h | 1 +
+ 2 files changed, 4 insertions(+)
 
-diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
-index e2558ac3e195..81e02de3f453 100644
---- a/include/net/xdp_sock_drv.h
-+++ b/include/net/xdp_sock_drv.h
-@@ -165,12 +165,28 @@ static inline void *xsk_buff_raw_get_data(struct xsk_buff_pool *pool, u64 addr)
- 	return xp_raw_get_data(pool, addr);
+diff --git a/tools/testing/selftests/bpf/xsk.c b/tools/testing/selftests/bpf/xsk.c
+index e574711eeb84..25d568abf0f2 100644
+--- a/tools/testing/selftests/bpf/xsk.c
++++ b/tools/testing/selftests/bpf/xsk.c
+@@ -115,6 +115,7 @@ static void xsk_set_umem_config(struct xsk_umem_config *cfg,
+ 		cfg->frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
+ 		cfg->frame_headroom = XSK_UMEM__DEFAULT_FRAME_HEADROOM;
+ 		cfg->flags = XSK_UMEM__DEFAULT_FLAGS;
++		cfg->tx_metadata_len = 0;
+ 		return;
+ 	}
+ 
+@@ -123,6 +124,7 @@ static void xsk_set_umem_config(struct xsk_umem_config *cfg,
+ 	cfg->frame_size = usr_cfg->frame_size;
+ 	cfg->frame_headroom = usr_cfg->frame_headroom;
+ 	cfg->flags = usr_cfg->flags;
++	cfg->tx_metadata_len = usr_cfg->tx_metadata_len;
  }
  
-+#define XDP_TXMD_FLAGS_VALID ( \
-+		XDP_TXMD_FLAGS_TIMESTAMP | \
-+		XDP_TXMD_FLAGS_CHECKSUM | \
-+	0)
-+
-+static inline bool xsk_buff_valid_tx_metadata(struct xsk_tx_metadata *meta)
-+{
-+	return !(meta->flags & ~XDP_TXMD_FLAGS_VALID);
-+}
-+
- static inline struct xsk_tx_metadata *xsk_buff_get_metadata(struct xsk_buff_pool *pool, u64 addr)
- {
-+	struct xsk_tx_metadata *meta;
-+
- 	if (!pool->tx_metadata_len)
- 		return NULL;
+ static int xsk_set_xdp_socket_config(struct xsk_socket_config *cfg,
+@@ -252,6 +254,7 @@ int xsk_umem__create(struct xsk_umem **umem_ptr, void *umem_area,
+ 	mr.chunk_size = umem->config.frame_size;
+ 	mr.headroom = umem->config.frame_headroom;
+ 	mr.flags = umem->config.flags;
++	mr.tx_metadata_len = umem->config.tx_metadata_len;
  
--	return xp_raw_get_data(pool, addr) - pool->tx_metadata_len;
-+	meta = xp_raw_get_data(pool, addr) - pool->tx_metadata_len;
-+	if (unlikely(!xsk_buff_valid_tx_metadata(meta)))
-+		return NULL; /* no way to signal the error to the user */
-+
-+	return meta;
- }
+ 	err = setsockopt(umem->fd, SOL_XDP, XDP_UMEM_REG, &mr, sizeof(mr));
+ 	if (err) {
+diff --git a/tools/testing/selftests/bpf/xsk.h b/tools/testing/selftests/bpf/xsk.h
+index 771570bc3731..93c2cc413cfc 100644
+--- a/tools/testing/selftests/bpf/xsk.h
++++ b/tools/testing/selftests/bpf/xsk.h
+@@ -200,6 +200,7 @@ struct xsk_umem_config {
+ 	__u32 frame_size;
+ 	__u32 frame_headroom;
+ 	__u32 flags;
++	__u32 tx_metadata_len;
+ };
  
- static inline void xsk_buff_dma_sync_for_cpu(struct xdp_buff *xdp, struct xsk_buff_pool *pool)
-@@ -332,6 +348,11 @@ static inline void *xsk_buff_raw_get_data(struct xsk_buff_pool *pool, u64 addr)
- 	return NULL;
- }
- 
-+static inline bool xsk_buff_valid_tx_metadata(struct xsk_tx_metadata *meta)
-+{
-+	return false;
-+}
-+
- static inline struct xsk_tx_metadata *xsk_buff_get_metadata(struct xsk_buff_pool *pool, u64 addr)
- {
- 	return NULL;
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index e83ade32f1fd..d66ba9d6154f 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -728,6 +728,10 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
- 			}
- 
- 			meta = buffer - xs->pool->tx_metadata_len;
-+			if (unlikely(!xsk_buff_valid_tx_metadata(meta))) {
-+				err = -EINVAL;
-+				goto free_err;
-+			}
- 
- 			if (meta->flags & XDP_TXMD_FLAGS_CHECKSUM) {
- 				if (unlikely(meta->request.csum_start +
+ int xsk_attach_xdp_program(struct bpf_program *prog, int ifindex, u32 xdp_flags);
 -- 
 2.43.0.rc1.413.gea7ed67945-goog
 
