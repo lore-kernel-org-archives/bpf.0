@@ -1,100 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8077119A6
-	for <bpf@vger.kernel.org>; Tue, 28 Nov 2023 16:39:48 -0800 (PST)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AT07NHe019945
-	for <bpf@vger.kernel.org>; Tue, 28 Nov 2023 16:39:48 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3untfq068y-4
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 28 Nov 2023 16:39:48 -0800
-Received: from twshared19982.14.prn3.facebook.com (2620:10d:c0a8:1c::1b) by
- mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Tue, 28 Nov 2023 16:39:45 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id D9B3F3C47F98C; Tue, 28 Nov 2023 16:36:40 -0800 (PST)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>,
-        Eduard Zingerman
-	<eddyz87@gmail.com>
-Subject: [PATCH v2 bpf-next 09/10] selftests/bpf: adjust global_func15 test to validate prog exit precision
-Date: Tue, 28 Nov 2023 16:36:19 -0800
-Message-ID: <20231129003620.1049610-10-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231129003620.1049610-1-andrii@kernel.org>
-References: <20231129003620.1049610-1-andrii@kernel.org>
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dZRB8DAj"
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB357F5;
+	Tue, 28 Nov 2023 17:26:00 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-5c2066accc5so4215763a12.3;
+        Tue, 28 Nov 2023 17:26:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701221160; x=1701825960; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SVOFTCg/xZX2VkbDOt6Fpz6uOzcvRQ3a4F6VRrWEkpU=;
+        b=dZRB8DAjPP0rzl+m8tI+W+qfMXGeyI7c6RPwHMw/ahuKDnC29dkegJYZzv2eQeO3Ou
+         cSc4smqg9xxWxWfSlbFitjUYbiFdaNBNxXtspEPODYUD/3vktS4svcaiGistlgdyrYA+
+         laDdp6bYVVn5qHegZjU1q7ktNJzwUgUx0M61gLlH7ce2njZWBZbtSTmqmY3LCGYAYbtG
+         HXEM+Cv6+o+Qi8SPoWrZLkMX8eo7mkkgrLOvpPXpYOBlXy+6/9sd1upRdKoB9MAAJ0BJ
+         6gTZ3yp9f6CEVBkycvE55q87c0IU12slvkxzNvNJZEWOOn+Y+tMbtFb4BRrxFWLYaZmU
+         /3CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701221160; x=1701825960;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SVOFTCg/xZX2VkbDOt6Fpz6uOzcvRQ3a4F6VRrWEkpU=;
+        b=anSwhm8f1dxEPT90XRH7dIg0sFTSzBTmfULkjDlTrkzZCFxa5m/aR7BrhGJMpZheYA
+         JBzte/NyV0l1FywNfT/vyMRGuJqUcHfG2czeoe7H6KoNHe8W/Vw5FegTsmJvnLJa16dt
+         Wzs4sUsQnfRdAkBkHV7JyYWffc4Qr1vfTv3xhVbqu1L214u/DvcHn9SvFu3SngrF4+/B
+         w0BWQ5Cqd3aWOt715KV255SL9t90pb8tkumRSanCmLhC820oCGmIFRtSKzuHFjI4f6it
+         FfqzLvWUWV5VZ5z7nYasFcmC6LDGTNjvAitoxqNcfsN6d3gDA0hX+qIz9s5cLtykswlG
+         M7og==
+X-Gm-Message-State: AOJu0YwOyp2JphO4niGjQcwylBNQilVmq+txAVLx1rDHA3xYVz96uAd+
+	pdQW0Z10S0g7xC8dNgum0sw=
+X-Google-Smtp-Source: AGHT+IEQhA9RfxAKATEO7MpYaUFnB5Crfa8RCeYldiz63/kgE6FE1YSDWyD9IEqSlqAh0wDdjJ4qAw==
+X-Received: by 2002:a17:90b:3ec3:b0:285:9424:4a4e with SMTP id rm3-20020a17090b3ec300b0028594244a4emr15445544pjb.38.1701221160080;
+        Tue, 28 Nov 2023 17:26:00 -0800 (PST)
+Received: from john.lan ([2605:59c8:148:ba10:9a79:36c7:502e:91e9])
+        by smtp.gmail.com with ESMTPSA id gb23-20020a17090b061700b00285114454b4sm122757pjb.22.2023.11.28.17.25.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Nov 2023 17:25:59 -0800 (PST)
+From: John Fastabend <john.fastabend@gmail.com>
+To: martin.lau@kernel.org,
+	jakub@cloudflare.com
+Cc: john.fastabend@gmail.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf v4 0/2] sockmap fix for KASAN_VMALLOC and af_unix
+Date: Tue, 28 Nov 2023 17:25:55 -0800
+Message-Id: <20231129012557.95371-1-john.fastabend@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: dKC7FeTcb0B-8EdPbH6Gwt2Pe65X0dWy
-X-Proofpoint-ORIG-GUID: dKC7FeTcb0B-8EdPbH6Gwt2Pe65X0dWy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-28_26,2023-11-27_01,2023-05-22_02
+Content-Transfer-Encoding: 8bit
 
-Add one more subtest to  global_func15 selftest to validate that
-verifier properly marks r0 as precise and avoids erroneous state pruning
-of the branch that has return value outside of expected [0, 1] value.
+The af_unix tests in sockmap_listen causes a splat from KASAN_VMALLOC.
+Fix it here and include an extra test to catch case where both pairs
+of the af_unix socket are included in a BPF sockmap.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- .../selftests/bpf/progs/test_global_func15.c  | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
+Also it seems the test infra is not passing type through correctly when
+testing unix_inet_redir_to_connected. Unfortunately, the simple fix
+also caused some CI tests to fail so investigating that now.
 
-diff --git a/tools/testing/selftests/bpf/progs/test_global_func15.c b/too=
-ls/testing/selftests/bpf/progs/test_global_func15.c
-index f80207480e8a..d81781eba1b6 100644
---- a/tools/testing/selftests/bpf/progs/test_global_func15.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_func15.c
-@@ -22,3 +22,35 @@ int global_func15(struct __sk_buff *skb)
-=20
- 	return v;
- }
-+
-+SEC("cgroup_skb/ingress")
-+__log_level(2) __flag(BPF_F_TEST_STATE_FREQ)
-+__failure
-+/* check that fallthrough code path marks r0 as precise */
-+__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 2: (b7) r0 =3D 1"=
-)
-+/* check that branch code path marks r0 as precise */
-+__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 0: (85) call bpf_=
-get_prandom_u32#7")
-+__msg("At program exit the register R0 has ")
-+__naked int global_func15_tricky_pruning(void)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 > 1000 goto 1f;"
-+		"r0 =3D 1;"
-+	"1:"
-+		"goto +0;" /* checkpoint */
-+		/* cgroup_skb/ingress program is expected to return [0, 1]
-+		 * values, so branch above makes sure that in a fallthrough
-+		 * case we have a valid 1 stored in R0 register, but in
-+		 * a branch case we assign some random value to R0.  So if
-+		 * there is something wrong with precision tracking for R0 at
-+		 * program exit, we might erronenously prune branch case,
-+		 * because R0 in fallthrough case is imprecise (and thus any
-+		 * value is valid from POV of verifier is_state_equal() logic)
-+		 */
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32)
-+		: __clobber_common
-+	);
-+}
---=20
-2.34.1
+v4: forgot to commit typo fix add that now (CI build failed)
+v3: drop unnecessary assignment (Martin) and rebase on latest selftests.
+v2: drop changes to dgram side its fine per Jakub's point it graps a
+    reference on the peer socket from each sendmsg.
+
+John Fastabend (2):
+  bpf: sockmap, af_unix stream sockets need to hold ref for pair sock
+  bpf: sockmap, add af_unix test with both sockets in map
+
+ include/linux/skmsg.h                         |  1 +
+ include/net/af_unix.h                         |  1 +
+ net/core/skmsg.c                              |  2 +
+ net/unix/af_unix.c                            |  2 -
+ net/unix/unix_bpf.c                           |  5 ++
+ .../selftests/bpf/prog_tests/sockmap_listen.c | 51 +++++++++++++++----
+ .../selftests/bpf/progs/test_sockmap_listen.c |  7 +++
+ 7 files changed, 56 insertions(+), 13 deletions(-)
+
+-- 
+2.33.0
 
