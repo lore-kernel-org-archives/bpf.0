@@ -1,118 +1,152 @@
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359D119AC
-	for <bpf@vger.kernel.org>; Tue, 28 Nov 2023 16:36:52 -0800 (PST)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ASIYxrt007520
-	for <bpf@vger.kernel.org>; Tue, 28 Nov 2023 16:36:52 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3unnky29f6-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 28 Nov 2023 16:36:51 -0800
-Received: from twshared19681.14.frc2.facebook.com (2620:10d:c0a8:1c::1b) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Tue, 28 Nov 2023 16:36:50 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id A09A33C47F968; Tue, 28 Nov 2023 16:36:38 -0800 (PST)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>,
-        Eduard Zingerman
-	<eddyz87@gmail.com>
-Subject: [PATCH v2 bpf-next 08/10] selftests/bpf: validate async callback return value check correctness
-Date: Tue, 28 Nov 2023 16:36:18 -0800
-Message-ID: <20231129003620.1049610-9-andrii@kernel.org>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DCDCA35;
+	Wed, 29 Nov 2023 00:37:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SipIV3Ha"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05C1DC433C7;
+	Wed, 29 Nov 2023 00:37:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701218223;
+	bh=kdIRsKLRcIcA0iXyzdZN/aSUQG54RXIUtB60difygWo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=SipIV3HaFQi80qqa2I8P40D9b/jgcVX5MugptQclkwT+2sJU3MX9SOUZAaoNWf6wr
+	 h0Qmh9cUYgLXoRJzoHZ84uposyk7nFV7QQNQotTZaRQT8dMcm/wHICfpVHFNF02KC1
+	 evegJYuvlVnL+CYhHhTy3i3GEKpQcEJBE4vSsegfWnMrsQdlRBv/KY0s3TMlsJ9YAD
+	 XHYVFHfr3bd0GMKof8LmXIDhSe0QNKmyi3Axe5Pg3kONEsWsnKnvyuCrxr9KaTORfL
+	 YDIbVCbmcMIE6rPzxndt1gHZNJuwadd8aCHn0hlh9O0H/niirZsgkZZids6BokQJof
+	 07Cr41GLx51uw==
+From: Song Liu <song@kernel.org>
+To: bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	fsverity@lists.linux.dev
+Cc: ebiggers@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	brauner@kernel.org,
+	viro@zeniv.linux.org.uk,
+	casey@schaufler-ca.com,
+	amir73il@gmail.com,
+	kpsingh@kernel.org,
+	roberto.sassu@huawei.com,
+	kernel-team@meta.com,
+	Song Liu <song@kernel.org>
+Subject: [PATCH v14 bpf-next 0/6] bpf: File verification with LSM and fsverity
+Date: Tue, 28 Nov 2023 16:36:50 -0800
+Message-Id: <20231129003656.1165061-1-song@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231129003620.1049610-1-andrii@kernel.org>
-References: <20231129003620.1049610-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 506-3BJzISragLInfukzIVf0TTDPBYwr
-X-Proofpoint-GUID: 506-3BJzISragLInfukzIVf0TTDPBYwr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-28_26,2023-11-27_01,2023-05-22_02
+Content-Transfer-Encoding: 8bit
 
-Adjust timer/timer_ret_1 test to validate more carefully verifier logic
-of enforcing async callback return value. This test will pass only if
-return result is marked precise and read.
+Changes v13 => v14:
+1. Add "static" for bpf_fs_kfunc_set.
+2. Add Acked-by from Christian Brauner.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- .../selftests/bpf/progs/timer_failure.c       | 36 ++++++++++++++-----
- 1 file changed, 28 insertions(+), 8 deletions(-)
+Changes v12 => v13:
+1. Only keep 4/9 through 9/9 of v12, as the first 3 patches already
+   applied;
+2. Use new macro __bpf_kfunc_[start|end]_defs().
 
-diff --git a/tools/testing/selftests/bpf/progs/timer_failure.c b/tools/te=
-sting/selftests/bpf/progs/timer_failure.c
-index 9000da1e2120..312a7af7e072 100644
---- a/tools/testing/selftests/bpf/progs/timer_failure.c
-+++ b/tools/testing/selftests/bpf/progs/timer_failure.c
-@@ -21,17 +21,37 @@ struct {
- 	__type(value, struct elem);
- } timer_map SEC(".maps");
-=20
--static int timer_cb_ret1(void *map, int *key, struct bpf_timer *timer)
-+__naked __noinline __used
-+static unsigned long timer_cb_ret_bad()
- {
--	if (bpf_get_smp_processor_id() % 2)
--		return 1;
--	else
--		return 0;
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 > 1000 goto 1f;"
-+		"r0 =3D 0;"
-+	"1:"
-+		"goto +0;" /* checkpoint */
-+		/* async callback is expected to return 0, so branch above
-+		 * skipping r0 =3D 0; should lead to a failure, but if exit
-+		 * instruction doesn't enforce r0's precision, this callback
-+		 * will be successfully verified
-+		 */
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32)
-+		: __clobber_common
-+	);
- }
-=20
- SEC("fentry/bpf_fentry_test1")
--__failure __msg("should have been in [0, 0]")
--int BPF_PROG2(test_ret_1, int, a)
-+__log_level(2)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__failure
-+/* check that fallthrough code path marks r0 as precise */
-+__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 22: (b4) w0 =3D 0=
-")
-+/* check that branch code path marks r0 as precise */
-+__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 24: (85) call bpf=
-_get_prandom_u32#7")
-+__msg("should have been in [0, 0]")
-+int BPF_PROG2(test_bad_ret, int, a)
- {
- 	int key =3D 0;
- 	struct bpf_timer *timer;
-@@ -39,7 +59,7 @@ int BPF_PROG2(test_ret_1, int, a)
- 	timer =3D bpf_map_lookup_elem(&timer_map, &key);
- 	if (timer) {
- 		bpf_timer_init(timer, &timer_map, CLOCK_BOOTTIME);
--		bpf_timer_set_callback(timer, timer_cb_ret1);
-+		bpf_timer_set_callback(timer, timer_cb_ret_bad);
- 		bpf_timer_start(timer, 1000, 0);
- 	}
-=20
---=20
+Changes v11 => v12:
+1. Fix typo (data_ptr => sig_ptr) in bpf_get_file_xattr().
+
+Changes v10 => v11:
+1. Let __bpf_dynptr_data() return const void *. (Andrii)
+2. Optimize code to reuse output from __bpf_dynptr_size(). (Andrii)
+3. Add __diag_ignore_all("-Wmissing-declarations") for kfunc definition.
+4. Fix an off indentation. (Andrii)
+
+Changes v9 => v10:
+1. Remove WARN_ON_ONCE() from check_reg_const_str. (Alexei)
+
+Changes v8 => v9:
+1. Fix test_progs kfunc_dynptr_param/dynptr_data_null.
+
+Changes v7 => v8:
+1. Do not use bpf_dynptr_slice* in the kernel. Add __bpf_dynptr_data* and
+   use them in ther kernel. (Andrii)
+
+Changes v6 => v7:
+1. Change "__const_str" annotation to "__str". (Alexei, Andrii)
+2. Add KF_TRUSTED_ARGS flag for both new kfuncs. (KP)
+3. Only allow bpf_get_file_xattr() to read xattr with "user." prefix.
+4. Add Acked-by from Eric Biggers.
+
+Changes v5 => v6:
+1. Let fsverity_init_bpf() return void. (Eric Biggers)
+2. Sort things in alphabetic orders. (Eric Biggers)
+
+Changes v4 => v5:
+1. Revise commit logs. (Alexei)
+
+Changes v3 => v4:
+1. Fix error reported by CI.
+2. Update comments of bpf_dynptr_slice* that they may return error pointer.
+
+Changes v2 => v3:
+1. Rebase and resolve conflicts.
+
+Changes v1 => v2:
+1. Let bpf_get_file_xattr() use const string for arg "name". (Alexei)
+2. Add recursion prevention with allowlist. (Alexei)
+3. Let bpf_get_file_xattr() use __vfs_getxattr() to avoid recursion,
+   as vfs_getxattr() calls into other LSM hooks.
+4. Do not use dynptr->data directly, use helper insteadd. (Andrii)
+5. Fixes with bpf_get_fsverity_digest. (Eric Biggers)
+6. Add documentation. (Eric Biggers)
+7. Fix some compile warnings. (kernel test robot)
+
+This set enables file verification with BPF LSM and fsverity.
+
+In this solution, fsverity is used to provide reliable and efficient hash
+of files; and BPF LSM is used to implement signature verification (against
+asymmetric keys), and to enforce access control.
+
+This solution can be used to implement access control in complicated cases.
+For example: only signed python binary and signed python script and access
+special files/devices/ports.
+
+Thanks,
+Song
+
+Song Liu (6):
+  bpf: Add kfunc bpf_get_file_xattr
+  bpf, fsverity: Add kfunc bpf_get_fsverity_digest
+  Documentation/bpf: Add documentation for filesystem kfuncs
+  selftests/bpf: Sort config in alphabetic order
+  selftests/bpf: Add tests for filesystem kfuncs
+  selftests/bpf: Add test that uses fsverity and xattr to sign a file
+
+ Documentation/bpf/fs_kfuncs.rst               |  21 +++
+ Documentation/bpf/index.rst                   |   1 +
+ fs/verity/fsverity_private.h                  |  10 ++
+ fs/verity/init.c                              |   1 +
+ fs/verity/measure.c                           |  84 +++++++++
+ kernel/trace/bpf_trace.c                      |  67 +++++++
+ tools/testing/selftests/bpf/bpf_kfuncs.h      |  10 ++
+ tools/testing/selftests/bpf/config            |   3 +-
+ .../selftests/bpf/prog_tests/fs_kfuncs.c      | 132 ++++++++++++++
+ .../bpf/prog_tests/verify_pkcs7_sig.c         | 163 +++++++++++++++++-
+ .../selftests/bpf/progs/test_fsverity.c       |  46 +++++
+ .../selftests/bpf/progs/test_get_xattr.c      |  37 ++++
+ .../selftests/bpf/progs/test_sig_in_xattr.c   |  82 +++++++++
+ .../bpf/progs/test_verify_pkcs7_sig.c         |   8 +-
+ .../testing/selftests/bpf/verify_sig_setup.sh |  25 +++
+ 15 files changed, 681 insertions(+), 9 deletions(-)
+ create mode 100644 Documentation/bpf/fs_kfuncs.rst
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/fs_kfuncs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_fsverity.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_get_xattr.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sig_in_xattr.c
+
+--
 2.34.1
-
