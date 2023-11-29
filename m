@@ -1,29 +1,29 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FBF19AA
-	for <bpf@vger.kernel.org>; Tue, 28 Nov 2023 16:36:38 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E560519A7
+	for <bpf@vger.kernel.org>; Tue, 28 Nov 2023 16:36:36 -0800 (PST)
 Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AT0Hw7T016790
-	for <bpf@vger.kernel.org>; Tue, 28 Nov 2023 16:36:37 -0800
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AT0Hw7Q016790
+	for <bpf@vger.kernel.org>; Tue, 28 Nov 2023 16:36:36 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3unjs3uvxx-6
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3unjs3uvxx-3
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 28 Nov 2023 16:36:37 -0800
-Received: from twshared4634.37.frc1.facebook.com (2620:10d:c085:108::8) by
+	for <bpf@vger.kernel.org>; Tue, 28 Nov 2023 16:36:36 -0800
+Received: from twshared68648.02.prn6.facebook.com (2620:10d:c085:208::11) by
  mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Tue, 28 Nov 2023 16:36:37 -0800
+ 15.1.2507.34; Tue, 28 Nov 2023 16:36:35 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 7B4513C47F928; Tue, 28 Nov 2023 16:36:29 -0800 (PST)
+	id 43EB53C47F904; Tue, 28 Nov 2023 16:36:23 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>,
         Eduard Zingerman
 	<eddyz87@gmail.com>
-Subject: [PATCH v2 bpf-next 04/10] selftests/bpf: add selftest validating callback result is enforced
-Date: Tue, 28 Nov 2023 16:36:14 -0800
-Message-ID: <20231129003620.1049610-5-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 01/10] bpf: provide correct register name for exception callback retval check
+Date: Tue, 28 Nov 2023 16:36:11 -0800
+Message-ID: <20231129003620.1049610-2-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231129003620.1049610-1-andrii@kernel.org>
 References: <20231129003620.1049610-1-andrii@kernel.org>
@@ -36,91 +36,119 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: xBl2rpa18f4bvZkPKQM3Jkuw_75YBZXs
-X-Proofpoint-GUID: xBl2rpa18f4bvZkPKQM3Jkuw_75YBZXs
+X-Proofpoint-ORIG-GUID: MWeaRjtHEKuvt1RMwZlBDnWnfYrjJ08N
+X-Proofpoint-GUID: MWeaRjtHEKuvt1RMwZlBDnWnfYrjJ08N
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-28_26,2023-11-27_01,2023-05-22_02
 
-BPF verifier expects callback subprogs to return values from specified
-range (typically [0, 1]). This requires that r0 at exit is both precise
-(because we rely on specific value range) and is marked as read
-(otherwise state comparison will ignore such register as unimportant).
-
-Add a simple test that validates that all these conditions are enforced.
+bpf_throw() is checking R1, so let's report R1 in the log.
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../bpf/progs/verifier_subprog_precision.c    | 50 +++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ kernel/bpf/verifier.c                                | 12 ++++++------
+ .../testing/selftests/bpf/progs/exceptions_assert.c  |  2 +-
+ tools/testing/selftests/bpf/progs/exceptions_fail.c  |  2 +-
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_precision=
-.c b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-index b5efcaeaa1ae..f0aa44bd3eb4 100644
---- a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-@@ -117,6 +117,56 @@ __naked int global_subprog_result_precise(void)
- 	);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 8e7b6072e3f4..25b9d470957e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11805,7 +11805,7 @@ static int fetch_kfunc_meta(struct bpf_verifier_e=
+nv *env,
+ 	return 0;
  }
 =20
-+__naked __noinline __used
-+static unsigned long loop_callback_bad()
-+{
-+	/* bpf_loop() callback that can return values outside of [0, 1] range *=
-/
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 > 1000 goto 1f;"
-+		"r0 =3D 0;"
-+	"1:"
-+		"goto +0;" /* checkpoint */
-+		/* bpf_loop() expects [0, 1] values, so branch above skipping
-+		 * r0 =3D 0; should lead to a failure, but if exit instruction
-+		 * doesn't enforce r0's precision, this callback will be
-+		 * successfully verified
-+		 */
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32)
-+		: __clobber_common
-+	);
-+}
-+
-+SEC("?raw_tp")
-+__failure __log_level(2)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+/* check that fallthrough code path marks r0 as precise */
-+__msg("mark_precise: frame1: regs=3Dr0 stack=3D before 11: (b7) r0 =3D 0=
-")
-+/* check that we have branch code path doing its own validation */
-+__msg("from 10 to 12: frame1: R0=3Dscalar(umin=3D1001) R10=3Dfp0 cb")
-+/* check that branch code path marks r0 as precise, before failing */
-+__msg("mark_precise: frame1: regs=3Dr0 stack=3D before 9: (85) call bpf_=
-get_prandom_u32#7")
-+__msg("At callback return the register R0 has unknown scalar value shoul=
-d have been in (0x0; 0x1)")
-+__naked int callback_precise_return_fail(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"			/* nr_loops */
-+		"r2 =3D %[loop_callback_bad];"	/* callback_fn */
-+		"r3 =3D 0;"			/* callback_ctx */
-+		"r4 =3D 0;"			/* flags */
-+		"call %[bpf_loop];"
-+
-+		"r0 =3D 0;"
-+		"exit;"
-+		:
-+		: __imm_ptr(loop_callback_bad),
-+		  __imm(bpf_loop)
-+		: __clobber_common
-+	);
-+}
-+
- SEC("?raw_tp")
- __success __log_level(2)
- /* First simulated path does not include callback body,
+-static int check_return_code(struct bpf_verifier_env *env, int regno);
++static int check_return_code(struct bpf_verifier_env *env, int regno, co=
+nst char *reg_name);
+=20
+ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_ins=
+n *insn,
+ 			    int *insn_idx_p)
+@@ -11942,7 +11942,7 @@ static int check_kfunc_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn,
+ 		 * to bpf_throw becomes the return value of the program.
+ 		 */
+ 		if (!env->exception_callback_subprog) {
+-			err =3D check_return_code(env, BPF_REG_1);
++			err =3D check_return_code(env, BPF_REG_1, "R1");
+ 			if (err < 0)
+ 				return err;
+ 		}
+@@ -14972,7 +14972,7 @@ static int check_ld_abs(struct bpf_verifier_env *=
+env, struct bpf_insn *insn)
+ 	return 0;
+ }
+=20
+-static int check_return_code(struct bpf_verifier_env *env, int regno)
++static int check_return_code(struct bpf_verifier_env *env, int regno, co=
+nst char *reg_name)
+ {
+ 	struct tnum enforce_attach_type_range =3D tnum_unknown;
+ 	const struct bpf_prog *prog =3D env->prog;
+@@ -15026,7 +15026,7 @@ static int check_return_code(struct bpf_verifier_=
+env *env, int regno)
+ 		}
+=20
+ 		if (!tnum_in(const_0, reg->var_off)) {
+-			verbose_invalid_scalar(env, reg, &const_0, "async callback", "R0");
++			verbose_invalid_scalar(env, reg, &const_0, "async callback", reg_name=
+);
+ 			return -EINVAL;
+ 		}
+ 		return 0;
+@@ -15126,7 +15126,7 @@ static int check_return_code(struct bpf_verifier_=
+env *env, int regno)
+ 	}
+=20
+ 	if (!tnum_in(range, reg->var_off)) {
+-		verbose_invalid_scalar(env, reg, &range, "program exit", "R0");
++		verbose_invalid_scalar(env, reg, &range, "program exit", reg_name);
+ 		if (prog->expected_attach_type =3D=3D BPF_LSM_CGROUP &&
+ 		    prog_type =3D=3D BPF_PROG_TYPE_LSM &&
+ 		    !prog->aux->attach_func_proto->type)
+@@ -17410,7 +17410,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 					continue;
+ 				}
+=20
+-				err =3D check_return_code(env, BPF_REG_0);
++				err =3D check_return_code(env, BPF_REG_0, "R0");
+ 				if (err)
+ 					return err;
+ process_bpf_exit:
+diff --git a/tools/testing/selftests/bpf/progs/exceptions_assert.c b/tool=
+s/testing/selftests/bpf/progs/exceptions_assert.c
+index 49efaed143fc..575e7dd719c4 100644
+--- a/tools/testing/selftests/bpf/progs/exceptions_assert.c
++++ b/tools/testing/selftests/bpf/progs/exceptions_assert.c
+@@ -125,7 +125,7 @@ int check_assert_generic(struct __sk_buff *ctx)
+ }
+=20
+ SEC("?fentry/bpf_check")
+-__failure __msg("At program exit the register R0 has value (0x40; 0x0)")
++__failure __msg("At program exit the register R1 has value (0x40; 0x0)")
+ int check_assert_with_return(void *ctx)
+ {
+ 	bpf_assert_with(!ctx, 64);
+diff --git a/tools/testing/selftests/bpf/progs/exceptions_fail.c b/tools/=
+testing/selftests/bpf/progs/exceptions_fail.c
+index 8c0ef2742208..81ead7512ba2 100644
+--- a/tools/testing/selftests/bpf/progs/exceptions_fail.c
++++ b/tools/testing/selftests/bpf/progs/exceptions_fail.c
+@@ -308,7 +308,7 @@ int reject_set_exception_cb_bad_ret1(void *ctx)
+ }
+=20
+ SEC("?fentry/bpf_check")
+-__failure __msg("At program exit the register R0 has value (0x40; 0x0) s=
+hould")
++__failure __msg("At program exit the register R1 has value (0x40; 0x0) s=
+hould")
+ int reject_set_exception_cb_bad_ret2(void *ctx)
+ {
+ 	bpf_throw(64);
 --=20
 2.34.1
 
