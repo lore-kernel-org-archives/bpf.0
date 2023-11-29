@@ -1,27 +1,29 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867BA1998
-	for <bpf@vger.kernel.org>; Tue, 28 Nov 2023 16:36:50 -0800 (PST)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ASIXlBd018705
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E18519A6
+	for <bpf@vger.kernel.org>; Tue, 28 Nov 2023 16:36:51 -0800 (PST)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ASLuPsJ006500
 	for <bpf@vger.kernel.org>; Tue, 28 Nov 2023 16:36:50 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3unnkgj97c-2
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3unq52sga9-9
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 28 Nov 2023 16:36:49 -0800
-Received: from twshared19982.14.prn3.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Tue, 28 Nov 2023 16:36:50 -0800
+Received: from twshared15232.14.prn3.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Tue, 28 Nov 2023 16:36:49 -0800
+ 15.1.2507.34; Tue, 28 Nov 2023 16:36:47 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id EC3663C47F99C; Tue, 28 Nov 2023 16:36:42 -0800 (PST)
+	id 81CBC3C47F955; Tue, 28 Nov 2023 16:36:33 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH v2 bpf-next 10/10] bpf: simplify tnum output if a fully known constant
-Date: Tue, 28 Nov 2023 16:36:20 -0800
-Message-ID: <20231129003620.1049610-11-andrii@kernel.org>
+CC: <andrii@kernel.org>, <kernel-team@meta.com>,
+        Eduard Zingerman
+	<eddyz87@gmail.com>
+Subject: [PATCH v2 bpf-next 06/10] bpf: unify async callback and program retval checks
+Date: Tue, 28 Nov 2023 16:36:16 -0800
+Message-ID: <20231129003620.1049610-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231129003620.1049610-1-andrii@kernel.org>
 References: <20231129003620.1049610-1-andrii@kernel.org>
@@ -34,121 +36,111 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: RSeDUIdhy3NRTtTQUwUWoGVxQVO43DQL
-X-Proofpoint-ORIG-GUID: RSeDUIdhy3NRTtTQUwUWoGVxQVO43DQL
+X-Proofpoint-GUID: 5zLTuE9Lq_JmUiP1cUGTMf9HN0hTSWTR
+X-Proofpoint-ORIG-GUID: 5zLTuE9Lq_JmUiP1cUGTMf9HN0hTSWTR
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-28_26,2023-11-27_01,2023-05-22_02
 
-Emit tnum representation as just a constant if all bits are known.
-Use decimal-vs-hex logic to determine exact format of emitted
-constant value, just like it's done for register range values.
-For that move tnum_strn() to kernel/bpf/log.c to reuse decimal-vs-hex
-determination logic and constants.
+Use common logic to verify program return values and async callback
+return values. This allows to avoid duplication of any extra steps
+necessary, like precision marking, which will be added in the next
+patch.
 
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/log.c                                    | 13 +++++++++++++
- kernel/bpf/tnum.c                                   |  6 ------
- .../bpf/progs/verifier_direct_packet_access.c       |  2 +-
- .../testing/selftests/bpf/progs/verifier_int_ptr.c  |  2 +-
- .../selftests/bpf/progs/verifier_stack_ptr.c        |  4 ++--
- 5 files changed, 17 insertions(+), 10 deletions(-)
+ kernel/bpf/verifier.c | 30 ++++++++++++------------------
+ 1 file changed, 12 insertions(+), 18 deletions(-)
 
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index 3505f3e5ae96..55d019f30e91 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -539,6 +539,19 @@ static void verbose_snum(struct bpf_verifier_env *en=
-v, s64 num)
- 		verbose(env, "%#llx", num);
- }
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0df8e53f2ecb..576d4250ea59 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -367,7 +367,7 @@ static void verbose_invalid_scalar(struct bpf_verifie=
+r_env *env,
+ {
+ 	bool unknown =3D true;
 =20
-+int tnum_strn(char *str, size_t size, struct tnum a)
-+{
-+	/* print as a constant, if tnum is fully known */
-+	if (a.mask =3D=3D 0) {
-+		if (is_unum_decimal(a.value))
-+			return snprintf(str, size, "%llu", a.value);
-+		else
-+			return snprintf(str, size, "%#llx", a.value);
-+	}
-+	return snprintf(str, size, "(%#llx; %#llx)", a.value, a.mask);
-+}
-+EXPORT_SYMBOL_GPL(tnum_strn);
-+
- static void print_scalar_ranges(struct bpf_verifier_env *env,
- 				const struct bpf_reg_state *reg,
- 				const char **sep)
-diff --git a/kernel/bpf/tnum.c b/kernel/bpf/tnum.c
-index f4c91c9b27d7..9dbc31b25e3d 100644
---- a/kernel/bpf/tnum.c
-+++ b/kernel/bpf/tnum.c
-@@ -172,12 +172,6 @@ bool tnum_in(struct tnum a, struct tnum b)
- 	return a.value =3D=3D b.value;
- }
+-	verbose(env, "At %s the register %s has", ctx, reg_name);
++	verbose(env, "%s the register %s has", ctx, reg_name);
+ 	if (reg->umin_value > 0) {
+ 		verbose(env, " umin=3D%llu", reg->umin_value);
+ 		unknown =3D false;
+@@ -9610,7 +9610,7 @@ static int prepare_func_exit(struct bpf_verifier_en=
+v *env, int *insn_idx)
+ 		/* enforce R0 return value range */
+ 		if (!retval_range_within(callee->callback_ret_range, r0)) {
+ 			verbose_invalid_scalar(env, r0, callee->callback_ret_range,
+-					       "callback return", "R0");
++					       "At callback return", "R0");
+ 			return -EINVAL;
+ 		}
+ 		if (!calls_callback(env, callee->callsite)) {
+@@ -14993,11 +14993,11 @@ static int check_ld_abs(struct bpf_verifier_env=
+ *env, struct bpf_insn *insn)
 =20
--int tnum_strn(char *str, size_t size, struct tnum a)
--{
--	return snprintf(str, size, "(%#llx; %#llx)", a.value, a.mask);
--}
--EXPORT_SYMBOL_GPL(tnum_strn);
+ static int check_return_code(struct bpf_verifier_env *env, int regno, co=
+nst char *reg_name)
+ {
++	const char *exit_ctx =3D "At program exit";
+ 	struct tnum enforce_attach_type_range =3D tnum_unknown;
+ 	const struct bpf_prog *prog =3D env->prog;
+ 	struct bpf_reg_state *reg;
+ 	struct bpf_retval_range range =3D retval_range(0, 1);
+-	struct bpf_retval_range const_0 =3D retval_range(0, 0);
+ 	enum bpf_prog_type prog_type =3D resolve_prog_type(env->prog);
+ 	int err;
+ 	struct bpf_func_state *frame =3D env->cur_state->frame[0];
+@@ -15039,17 +15039,9 @@ static int check_return_code(struct bpf_verifier=
+_env *env, int regno, const char
+=20
+ 	if (frame->in_async_callback_fn) {
+ 		/* enforce return zero from async callbacks like timer */
+-		if (reg->type !=3D SCALAR_VALUE) {
+-			verbose(env, "In async callback the register R%d is not a known value=
+ (%s)\n",
+-				regno, reg_type_str(env, reg->type));
+-			return -EINVAL;
+-		}
 -
- int tnum_sbin(char *str, size_t size, struct tnum a)
- {
- 	size_t n;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_direct_packet_acc=
-ess.c b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
-index 99a23dea8233..be95570ab382 100644
---- a/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
-@@ -411,7 +411,7 @@ l0_%=3D:	r0 =3D 0;						\
+-		if (!retval_range_within(const_0, reg)) {
+-			verbose_invalid_scalar(env, reg, const_0, "async callback", reg_name)=
+;
+-			return -EINVAL;
+-		}
+-		return 0;
++		exit_ctx =3D "At async callback return";
++		range =3D retval_range(0, 0);
++		goto enforce_retval;
+ 	}
 =20
- SEC("tc")
- __description("direct packet access: test17 (pruning, alignment)")
--__failure __msg("misaligned packet access off 2+(0x0; 0x0)+15+-4 size 4"=
-)
-+__failure __msg("misaligned packet access off 2+0+15+-4 size 4")
- __flag(BPF_F_STRICT_ALIGNMENT)
- __naked void packet_access_test17_pruning_alignment(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_int_ptr.c b/tools=
-/testing/selftests/bpf/progs/verifier_int_ptr.c
-index b054f9c48143..74d9cad469d9 100644
---- a/tools/testing/selftests/bpf/progs/verifier_int_ptr.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_int_ptr.c
-@@ -67,7 +67,7 @@ __naked void ptr_to_long_half_uninitialized(void)
+ 	if (is_subprog && !frame->in_exception_callback_fn) {
+@@ -15139,15 +15131,17 @@ static int check_return_code(struct bpf_verifie=
+r_env *env, int regno, const char
+ 		return 0;
+ 	}
 =20
- SEC("cgroup/sysctl")
- __description("ARG_PTR_TO_LONG misaligned")
--__failure __msg("misaligned stack access off (0x0; 0x0)+-20+0 size 8")
-+__failure __msg("misaligned stack access off 0+-20+0 size 8")
- __naked void arg_ptr_to_long_misaligned(void)
- {
- 	asm volatile ("					\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c b/too=
-ls/testing/selftests/bpf/progs/verifier_stack_ptr.c
-index e0f77e3e7869..417c61cd4b19 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
-@@ -37,7 +37,7 @@ __naked void ptr_to_stack_store_load(void)
++enforce_retval:
+ 	if (reg->type !=3D SCALAR_VALUE) {
+-		verbose(env, "At program exit the register R%d is not a known value (%=
+s)\n",
+-			regno, reg_type_str(env, reg->type));
++		verbose(env, "%s the register R%d is not a known value (%s)\n",
++			exit_ctx, regno, reg_type_str(env, reg->type));
+ 		return -EINVAL;
+ 	}
 =20
- SEC("socket")
- __description("PTR_TO_STACK store/load - bad alignment on off")
--__failure __msg("misaligned stack access off (0x0; 0x0)+-8+2 size 8")
-+__failure __msg("misaligned stack access off 0+-8+2 size 8")
- __failure_unpriv
- __naked void load_bad_alignment_on_off(void)
- {
-@@ -53,7 +53,7 @@ __naked void load_bad_alignment_on_off(void)
-=20
- SEC("socket")
- __description("PTR_TO_STACK store/load - bad alignment on reg")
--__failure __msg("misaligned stack access off (0x0; 0x0)+-10+8 size 8")
-+__failure __msg("misaligned stack access off 0+-10+8 size 8")
- __failure_unpriv
- __naked void load_bad_alignment_on_reg(void)
- {
+ 	if (!retval_range_within(range, reg)) {
+-		verbose_invalid_scalar(env, reg, range, "program exit", reg_name);
+-		if (prog->expected_attach_type =3D=3D BPF_LSM_CGROUP &&
++		verbose_invalid_scalar(env, reg, range, exit_ctx, reg_name);
++		if (!is_subprog &&
++		    prog->expected_attach_type =3D=3D BPF_LSM_CGROUP &&
+ 		    prog_type =3D=3D BPF_PROG_TYPE_LSM &&
+ 		    !prog->aux->attach_func_proto->type)
+ 			verbose(env, "Note, BPF_LSM_CGROUP that attach to void LSM hooks can'=
+t modify return value!\n");
 --=20
 2.34.1
 
