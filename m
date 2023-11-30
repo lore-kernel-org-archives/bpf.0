@@ -1,191 +1,170 @@
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B33D1A3
-	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 06:00:21 -0800 (PST)
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4SgyWP3557z4f3jqr
-	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 22:00:17 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 5A8AC1A0B65
-	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 22:00:18 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP1 (Coremail) with SMTP id cCh0CgBXWhBslWhlJ5NxCQ--.49902S8;
-	Thu, 30 Nov 2023 22:00:18 +0800 (CST)
-From: Hou Tao <houtao@huaweicloud.com>
-To: bpf@vger.kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Song Liu <song@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	houtao1@huawei.com
-Subject: [PATCH bpf v4 4/7] bpf: Defer the free of inner map when necessary
-Date: Thu, 30 Nov 2023 22:01:17 +0800
-Message-Id: <20231130140120.1736235-5-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20231130140120.1736235-1-houtao@huaweicloud.com>
-References: <20231130140120.1736235-1-houtao@huaweicloud.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606593C694;
+	Thu, 30 Nov 2023 14:06:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fXFH6GC4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4BBCC433C8;
+	Thu, 30 Nov 2023 14:05:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701353161;
+	bh=Uxb8lq8gQHpjrno1KoUwg1Mus2BJGIAIKr4LDCZRUNs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fXFH6GC4ec+qG45QCOxHIa7R+/kEhagCw+QYo9IaZmHN4naDQl9a+72pdSrS9y61w
+	 dPPw+2YkiAVNC5XfuOtK8joEFE7mCCmo4a3sqfprj6+tjY4Epemz2n6nEeuVJ3HbEB
+	 WY1TzV+YzZUJZzZC/Pl868iTHzZp0F0zWFUFh17nlw8PvAM9vWfHFpCH/RPKo8Mdsu
+	 ND/sMLJXGzwbHwE82YKWjsjkGkWeK2VSnWqvt1RPU50ojF8fof4vZO00nZMxz1JplS
+	 sYHtUB/AAbkfbgrpBldubTOhddobm4aSsjgKGr9eNkIbhFosXiS1mxFxKi9FFx2PM1
+	 R1khGriFf0JRQ==
+Date: Thu, 30 Nov 2023 15:05:56 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, paul@paul-moore.com,
+	linux-fsdevel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, keescook@chromium.org,
+	kernel-team@meta.com, sargun@sargun.me
+Subject: Re: [PATCH v11 bpf-next 03/17] bpf: introduce BPF token object
+Message-ID: <20231130-schaukeln-knurren-7fddaf4c0494@brauner>
+References: <20231127190409.2344550-1-andrii@kernel.org>
+ <20231127190409.2344550-4-andrii@kernel.org>
+ <CAEf4BzauJjmqMdgqBrsvmXjATj4s6Om94BV471LwwdmJpx3PjQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgBXWhBslWhlJ5NxCQ--.49902S8
-X-Coremail-Antispam: 1UD129KBjvJXoWxZr4UGry7GFWkur4xXrWrXwb_yoWrtF15pF
-	Z8K34rCw40qr429rZxZa17ZrWYyw4fW34DGas5Ga4Yyrn8Wr9Fv3W0gFy5AF15Ar4kJrW2
-	vrnIg34FkayUZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY
-	6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
-	CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13l1DUUUUU==
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+In-Reply-To: <CAEf4BzauJjmqMdgqBrsvmXjATj4s6Om94BV471LwwdmJpx3PjQ@mail.gmail.com>
 
-From: Hou Tao <houtao1@huawei.com>
+On Tue, Nov 28, 2023 at 04:05:36PM -0800, Andrii Nakryiko wrote:
+> On Mon, Nov 27, 2023 at 11:06 AM Andrii Nakryiko <andrii@kernel.org> wrote:
+> >
+> > Add new kind of BPF kernel object, BPF token. BPF token is meant to
+> > allow delegating privileged BPF functionality, like loading a BPF
+> > program or creating a BPF map, from privileged process to a *trusted*
+> > unprivileged process, all while having a good amount of control over which
+> > privileged operations could be performed using provided BPF token.
+> >
+> > This is achieved through mounting BPF FS instance with extra delegation
+> > mount options, which determine what operations are delegatable, and also
+> > constraining it to the owning user namespace (as mentioned in the
+> > previous patch).
+> >
+> > BPF token itself is just a derivative from BPF FS and can be created
+> > through a new bpf() syscall command, BPF_TOKEN_CREATE, which accepts BPF
+> > FS FD, which can be attained through open() API by opening BPF FS mount
+> > point. Currently, BPF token "inherits" delegated command, map types,
+> > prog type, and attach type bit sets from BPF FS as is. In the future,
+> > having an BPF token as a separate object with its own FD, we can allow
+> > to further restrict BPF token's allowable set of things either at the
+> > creation time or after the fact, allowing the process to guard itself
+> > further from unintentionally trying to load undesired kind of BPF
+> > programs. But for now we keep things simple and just copy bit sets as is.
+> >
+> > When BPF token is created from BPF FS mount, we take reference to the
+> > BPF super block's owning user namespace, and then use that namespace for
+> > checking all the {CAP_BPF, CAP_PERFMON, CAP_NET_ADMIN, CAP_SYS_ADMIN}
+> > capabilities that are normally only checked against init userns (using
+> > capable()), but now we check them using ns_capable() instead (if BPF
+> > token is provided). See bpf_token_capable() for details.
+> >
+> > Such setup means that BPF token in itself is not sufficient to grant BPF
+> > functionality. User namespaced process has to *also* have necessary
+> > combination of capabilities inside that user namespace. So while
+> > previously CAP_BPF was useless when granted within user namespace, now
+> > it gains a meaning and allows container managers and sys admins to have
+> > a flexible control over which processes can and need to use BPF
+> > functionality within the user namespace (i.e., container in practice).
+> > And BPF FS delegation mount options and derived BPF tokens serve as
+> > a per-container "flag" to grant overall ability to use bpf() (plus further
+> > restrict on which parts of bpf() syscalls are treated as namespaced).
+> >
+> > Note also, BPF_TOKEN_CREATE command itself requires ns_capable(CAP_BPF)
+> > within the BPF FS owning user namespace, rounding up the ns_capable()
+> > story of BPF token.
+> >
+> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > ---
+> >  include/linux/bpf.h            |  41 +++++++
+> >  include/uapi/linux/bpf.h       |  37 ++++++
+> >  kernel/bpf/Makefile            |   2 +-
+> >  kernel/bpf/inode.c             |  17 ++-
+> >  kernel/bpf/syscall.c           |  17 +++
+> >  kernel/bpf/token.c             | 209 +++++++++++++++++++++++++++++++++
+> >  tools/include/uapi/linux/bpf.h |  37 ++++++
+> >  7 files changed, 350 insertions(+), 10 deletions(-)
+> >  create mode 100644 kernel/bpf/token.c
+> >
+> 
+> [...]
+> 
+> > +int bpf_token_create(union bpf_attr *attr)
+> > +{
+> > +       struct bpf_mount_opts *mnt_opts;
+> > +       struct bpf_token *token = NULL;
+> > +       struct user_namespace *userns;
+> > +       struct inode *inode;
+> > +       struct file *file;
+> > +       struct path path;
+> > +       struct fd f;
+> > +       umode_t mode;
+> > +       int err, fd;
+> > +
+> > +       f = fdget(attr->token_create.bpffs_fd);
+> > +       if (!f.file)
+> > +               return -EBADF;
+> > +
+> > +       path = f.file->f_path;
+> > +       path_get(&path);
+> > +       fdput(f);
+> > +
+> > +       if (path.dentry != path.mnt->mnt_sb->s_root) {
+> > +               err = -EINVAL;
+> > +               goto out_path;
+> > +       }
+> > +       if (path.mnt->mnt_sb->s_op != &bpf_super_ops) {
+> > +               err = -EINVAL;
+> > +               goto out_path;
+> > +       }
+> > +       err = path_permission(&path, MAY_ACCESS);
+> > +       if (err)
+> > +               goto out_path;
+> > +
+> > +       userns = path.dentry->d_sb->s_user_ns;
+> > +       /*
+> > +        * Enforce that creators of BPF tokens are in the same user
+> > +        * namespace as the BPF FS instance. This makes reasoning about
+> > +        * permissions a lot easier and we can always relax this later.
+> > +        */
+> > +       if (current_user_ns() != userns) {
+> > +               err = -EPERM;
+> > +               goto out_path;
+> > +       }
 
-When updating or deleting an inner map in map array or map htab, the map
-may still be accessed by non-sleepable program or sleepable program.
-However bpf_map_fd_put_ptr() decreases the ref-counter of the inner map
-directly through bpf_map_put(), if the ref-counter is the last one
-(which is true for most cases), the inner map will be freed by
-ops->map_free() in a kworker. But for now, most .map_free() callbacks
-don't use synchronize_rcu() or its variants to wait for the elapse of a
-RCU grace period, so after the invocation of ops->map_free completes,
-the bpf program which is accessing the inner map may incur
-use-after-free problem.
+I should note that the reason I'm saying it makes reasoning about
+permissions easier is that this here guarantees that:
 
-Fix the free of inner map by invoking bpf_map_free_deferred() after both
-one RCU grace period and one tasks trace RCU grace period if the inner
-map has been removed from the outer map before. The deferment is
-accomplished by using call_rcu() or call_rcu_tasks_trace() when
-releasing the last ref-counter of bpf map. The newly-added rcu_head
-field in bpf_map shares the same storage space with work field to
-reduce the size of bpf_map.
+file->f_cred->user_ns == file->f_path.dentry->d_sb->s_user_ns
 
-Fixes: bba1dc0b55ac ("bpf: Remove redundant synchronize_rcu.")
-Fixes: 638e4b825d52 ("bpf: Allows per-cpu maps and map-in-map in sleepable programs")
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
- include/linux/bpf.h     |  7 ++++++-
- kernel/bpf/map_in_map.c | 11 ++++++++---
- kernel/bpf/syscall.c    | 32 +++++++++++++++++++++++++++-----
- 3 files changed, 41 insertions(+), 9 deletions(-)
+So cases where you would need to check that you have permissions in the
+openers userns are equivalent to checking permissions in the token's and
+therefore bpffs' userns.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 6f68ac24bb9a..15a6bb951b70 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -276,7 +276,11 @@ struct bpf_map {
- 	 */
- 	atomic64_t refcnt ____cacheline_aligned;
- 	atomic64_t usercnt;
--	struct work_struct work;
-+	/* rcu is used before freeing and work is only used during freeing */
-+	union {
-+		struct work_struct work;
-+		struct rcu_head rcu;
-+	};
- 	struct mutex freeze_mutex;
- 	atomic64_t writecnt;
- 	/* 'Ownership' of program-containing map is claimed by the first program
-@@ -292,6 +296,7 @@ struct bpf_map {
- 	} owner;
- 	bool bypass_spec_v1;
- 	bool frozen; /* write-once; write-protected by freeze_mutex */
-+	bool free_after_mult_rcu_gp;
- 	s64 __percpu *elem_count;
- };
- 
-diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
-index 2dfeb5835e16..3248ff5d8161 100644
---- a/kernel/bpf/map_in_map.c
-+++ b/kernel/bpf/map_in_map.c
-@@ -129,10 +129,15 @@ void *bpf_map_fd_get_ptr(struct bpf_map *map,
- 
- void bpf_map_fd_put_ptr(struct bpf_map *map, void *ptr, bool need_defer)
- {
--	/* ptr->ops->map_free() has to go through one
--	 * rcu grace period by itself.
-+	struct bpf_map *inner_map = ptr;
-+
-+	/* The inner map may still be used by both non-sleepable and sleepable
-+	 * bpf program, so free it after one RCU grace period and one tasks
-+	 * trace RCU grace period.
- 	 */
--	bpf_map_put(ptr);
-+	if (need_defer)
-+		WRITE_ONCE(inner_map->free_after_mult_rcu_gp, true);
-+	bpf_map_put(inner_map);
- }
- 
- u32 bpf_map_fd_sys_lookup_elem(void *ptr)
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index a144eb286974..88882cb58121 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -718,6 +718,28 @@ static void bpf_map_put_uref(struct bpf_map *map)
- 	}
- }
- 
-+static void bpf_map_free_in_work(struct bpf_map *map)
-+{
-+	INIT_WORK(&map->work, bpf_map_free_deferred);
-+	/* Avoid spawning kworkers, since they all might contend
-+	 * for the same mutex like slab_mutex.
-+	 */
-+	queue_work(system_unbound_wq, &map->work);
-+}
-+
-+static void bpf_map_free_rcu_gp(struct rcu_head *rcu)
-+{
-+	bpf_map_free_in_work(container_of(rcu, struct bpf_map, rcu));
-+}
-+
-+static void bpf_map_free_mult_rcu_gp(struct rcu_head *rcu)
-+{
-+	if (rcu_trace_implies_rcu_gp())
-+		bpf_map_free_rcu_gp(rcu);
-+	else
-+		call_rcu(rcu, bpf_map_free_rcu_gp);
-+}
-+
- /* decrement map refcnt and schedule it for freeing via workqueue
-  * (underlying map implementation ops->map_free() might sleep)
-  */
-@@ -727,11 +749,11 @@ void bpf_map_put(struct bpf_map *map)
- 		/* bpf_map_free_id() must be called first */
- 		bpf_map_free_id(map);
- 		btf_put(map->btf);
--		INIT_WORK(&map->work, bpf_map_free_deferred);
--		/* Avoid spawning kworkers, since they all might contend
--		 * for the same mutex like slab_mutex.
--		 */
--		queue_work(system_unbound_wq, &map->work);
-+
-+		if (READ_ONCE(map->free_after_mult_rcu_gp))
-+			call_rcu_tasks_trace(&map->rcu, bpf_map_free_mult_rcu_gp);
-+		else
-+			bpf_map_free_in_work(map);
- 	}
- }
- EXPORT_SYMBOL_GPL(bpf_map_put);
--- 
-2.29.2
+> 
+> Hey Christian,
+> 
+> I've added stricter userns check as discussed on previous revision,
+> and a few lines above fixed BPF FS root check (path.dentry !=
+> path.mnt->mnt_sb->s_root). Hopefully that addresses the remaining
+> concerns you've had.
+> 
+> I'd appreciate it if you could take another look to double check if
+> I'm not messing anything up, and if it all looks good, can I please
+> get an ack from you? Thank you!
 
+I'll take a look.
