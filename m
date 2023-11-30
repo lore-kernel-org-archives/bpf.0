@@ -1,28 +1,28 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B043110FA
-	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 10:52:58 -0800 (PST)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AUHMF4N029929
-	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 10:52:58 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3upxqt8npt-2
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A685D10DF
+	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 10:53:02 -0800 (PST)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AUEeBwp021506
+	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 10:53:02 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3upp3uc7g1-16
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 10:52:58 -0800
-Received: from twshared15232.14.prn3.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 10:53:02 -0800
+Received: from twshared21997.42.prn1.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 30 Nov 2023 10:52:56 -0800
+ 15.1.2507.34; Thu, 30 Nov 2023 10:52:58 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 3B6FF3C602914; Thu, 30 Nov 2023 10:52:47 -0800 (PST)
+	id 977D53C60295E; Thu, 30 Nov 2023 10:52:53 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <paul@paul-moore.com>,
         <brauner@kernel.org>
 CC: <linux-fsdevel@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
         <keescook@chromium.org>, <kernel-team@meta.com>, <sargun@sargun.me>
-Subject: [PATCH v12 bpf-next 08/17] bpf: consistently use BPF token throughout BPF verifier logic
-Date: Thu, 30 Nov 2023 10:52:20 -0800
-Message-ID: <20231130185229.2688956-9-andrii@kernel.org>
+Subject: [PATCH v12 bpf-next 11/17] bpf,lsm: add BPF token LSM hooks
+Date: Thu, 30 Nov 2023 10:52:23 -0800
+Message-ID: <20231130185229.2688956-12-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231130185229.2688956-1-andrii@kernel.org>
 References: <20231130185229.2688956-1-andrii@kernel.org>
@@ -35,166 +35,294 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: m26Pql6CK0D0qjGOmBPZaWISQKW2cKH2
-X-Proofpoint-ORIG-GUID: m26Pql6CK0D0qjGOmBPZaWISQKW2cKH2
+X-Proofpoint-GUID: HXjbmrADOYW78G4HqAxCAHTUayg4RQKz
+X-Proofpoint-ORIG-GUID: HXjbmrADOYW78G4HqAxCAHTUayg4RQKz
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-30_18,2023-11-30_01,2023-05-22_02
 
-Remove remaining direct queries to perfmon_capable() and bpf_capable()
-in BPF verifier logic and instead use BPF token (if available) to make
-decisions about privileges.
+Wire up bpf_token_create and bpf_token_free LSM hooks, which allow to
+allocate LSM security blob (we add `void *security` field to struct
+bpf_token for that), but also control who can instantiate BPF token.
+This follows existing pattern for BPF map and BPF prog.
 
+Also add security_bpf_token_allow_cmd() and security_bpf_token_capable()
+LSM hooks that allow LSM implementation to control and negate (if
+necessary) BPF token's delegation of a specific bpf_cmd and capability,
+respectively.
+
+Acked-by: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/bpf.h    | 16 ++++++++--------
- include/linux/filter.h |  2 +-
- kernel/bpf/arraymap.c  |  2 +-
- kernel/bpf/core.c      |  2 +-
- kernel/bpf/verifier.c  | 13 ++++++-------
- net/core/filter.c      |  4 ++--
- 6 files changed, 19 insertions(+), 20 deletions(-)
+ include/linux/bpf.h           |  3 ++
+ include/linux/lsm_hook_defs.h |  5 +++
+ include/linux/security.h      | 25 +++++++++++++++
+ kernel/bpf/bpf_lsm.c          |  4 +++
+ kernel/bpf/token.c            | 18 +++++++----
+ security/security.c           | 60 +++++++++++++++++++++++++++++++++++
+ 6 files changed, 109 insertions(+), 6 deletions(-)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index eaeb9a71bc5d..a615b1a2c4e7 100644
+index a615b1a2c4e7..f17be2c4c1ee 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -2189,24 +2189,24 @@ extern int sysctl_unprivileged_bpf_disabled;
+@@ -1593,6 +1593,9 @@ struct bpf_token {
+ 	u64 allowed_maps;
+ 	u64 allowed_progs;
+ 	u64 allowed_attachs;
++#ifdef CONFIG_SECURITY
++	void *security;
++#endif
+ };
 =20
- bool bpf_token_capable(const struct bpf_token *token, int cap);
+ struct bpf_struct_ops_value;
+diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.=
+h
+index adb25cc63ce3..3fdd00b452ac 100644
+--- a/include/linux/lsm_hook_defs.h
++++ b/include/linux/lsm_hook_defs.h
+@@ -404,6 +404,11 @@ LSM_HOOK(void, LSM_RET_VOID, bpf_map_free, struct bp=
+f_map *map)
+ LSM_HOOK(int, 0, bpf_prog_load, struct bpf_prog *prog, union bpf_attr *a=
+ttr,
+ 	 struct bpf_token *token)
+ LSM_HOOK(void, LSM_RET_VOID, bpf_prog_free, struct bpf_prog *prog)
++LSM_HOOK(int, 0, bpf_token_create, struct bpf_token *token, union bpf_at=
+tr *attr,
++	 struct path *path)
++LSM_HOOK(void, LSM_RET_VOID, bpf_token_free, struct bpf_token *token)
++LSM_HOOK(int, 0, bpf_token_cmd, const struct bpf_token *token, enum bpf_=
+cmd cmd)
++LSM_HOOK(int, 0, bpf_token_capable, const struct bpf_token *token, int c=
+ap)
+ #endif /* CONFIG_BPF_SYSCALL */
 =20
--static inline bool bpf_allow_ptr_leaks(void)
-+static inline bool bpf_allow_ptr_leaks(const struct bpf_token *token)
- {
--	return perfmon_capable();
-+	return bpf_token_capable(token, CAP_PERFMON);
- }
+ LSM_HOOK(int, 0, locked_down, enum lockdown_reason what)
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 08fd777cbe94..00809d2d5c38 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -32,6 +32,7 @@
+ #include <linux/string.h>
+ #include <linux/mm.h>
+ #include <linux/sockptr.h>
++#include <linux/bpf.h>
 =20
--static inline bool bpf_allow_uninit_stack(void)
-+static inline bool bpf_allow_uninit_stack(const struct bpf_token *token)
- {
--	return perfmon_capable();
-+	return bpf_token_capable(token, CAP_PERFMON);
- }
+ struct linux_binprm;
+ struct cred;
+@@ -2031,6 +2032,11 @@ extern void security_bpf_map_free(struct bpf_map *=
+map);
+ extern int security_bpf_prog_load(struct bpf_prog *prog, union bpf_attr =
+*attr,
+ 				  struct bpf_token *token);
+ extern void security_bpf_prog_free(struct bpf_prog *prog);
++extern int security_bpf_token_create(struct bpf_token *token, union bpf_=
+attr *attr,
++				     struct path *path);
++extern void security_bpf_token_free(struct bpf_token *token);
++extern int security_bpf_token_cmd(const struct bpf_token *token, enum bp=
+f_cmd cmd);
++extern int security_bpf_token_capable(const struct bpf_token *token, int=
+ cap);
+ #else
+ static inline int security_bpf(int cmd, union bpf_attr *attr,
+ 					     unsigned int size)
+@@ -2065,6 +2071,25 @@ static inline int security_bpf_prog_load(struct bp=
+f_prog *prog, union bpf_attr *
 =20
--static inline bool bpf_bypass_spec_v1(void)
-+static inline bool bpf_bypass_spec_v1(const struct bpf_token *token)
- {
--	return cpu_mitigations_off() || perfmon_capable();
-+	return cpu_mitigations_off() || bpf_token_capable(token, CAP_PERFMON);
- }
-=20
--static inline bool bpf_bypass_spec_v4(void)
-+static inline bool bpf_bypass_spec_v4(const struct bpf_token *token)
- {
--	return cpu_mitigations_off() || perfmon_capable();
-+	return cpu_mitigations_off() || bpf_token_capable(token, CAP_PERFMON);
- }
-=20
- int bpf_map_new_fd(struct bpf_map *map, int flags);
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index a4953fafc8cb..14354605ad26 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1139,7 +1139,7 @@ static inline bool bpf_jit_blinding_enabled(struct =
-bpf_prog *prog)
- 		return false;
- 	if (!bpf_jit_harden)
- 		return false;
--	if (bpf_jit_harden =3D=3D 1 && bpf_capable())
-+	if (bpf_jit_harden =3D=3D 1 && bpf_token_capable(prog->aux->token, CAP_=
-BPF))
- 		return false;
-=20
- 	return true;
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 2058e89b5ddd..f0c64df6b6ff 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -82,7 +82,7 @@ static struct bpf_map *array_map_alloc(union bpf_attr *=
-attr)
- 	bool percpu =3D attr->map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY;
- 	int numa_node =3D bpf_map_attr_numa_node(attr);
- 	u32 elem_size, index_mask, max_entries;
--	bool bypass_spec_v1 =3D bpf_bypass_spec_v1();
-+	bool bypass_spec_v1 =3D bpf_bypass_spec_v1(NULL);
- 	u64 array_size, mask64;
- 	struct bpf_array *array;
-=20
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index e4122334bfd9..fa229fe03a04 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -675,7 +675,7 @@ static bool bpf_prog_kallsyms_candidate(const struct =
-bpf_prog *fp)
- void bpf_prog_kallsyms_add(struct bpf_prog *fp)
- {
- 	if (!bpf_prog_kallsyms_candidate(fp) ||
--	    !bpf_capable())
-+	    !bpf_token_capable(fp->aux->token, CAP_BPF))
- 		return;
-=20
- 	bpf_prog_ksym_set_addr(fp);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8e7b6072e3f4..0dd39ed0b68f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -20509,7 +20509,12 @@ int bpf_check(struct bpf_prog **prog, union bpf_=
-attr *attr, bpfptr_t uattr, __u3
- 	env->prog =3D *prog;
- 	env->ops =3D bpf_verifier_ops[env->prog->type];
- 	env->fd_array =3D make_bpfptr(attr->fd_array, uattr.is_kernel);
--	is_priv =3D bpf_capable();
+ static inline void security_bpf_prog_free(struct bpf_prog *prog)
+ { }
 +
-+	env->allow_ptr_leaks =3D bpf_allow_ptr_leaks(env->prog->aux->token);
-+	env->allow_uninit_stack =3D bpf_allow_uninit_stack(env->prog->aux->toke=
-n);
-+	env->bypass_spec_v1 =3D bpf_bypass_spec_v1(env->prog->aux->token);
-+	env->bypass_spec_v4 =3D bpf_bypass_spec_v4(env->prog->aux->token);
-+	env->bpf_capable =3D is_priv =3D bpf_token_capable(env->prog->aux->toke=
-n, CAP_BPF);
++static inline int security_bpf_token_create(struct bpf_token *token, uni=
+on bpf_attr *attr,
++				     struct path *path)
++{
++	return 0;
++}
++
++static inline void security_bpf_token_free(struct bpf_token *token)
++{ }
++
++static inline int security_bpf_token_cmd(const struct bpf_token *token, =
+enum bpf_cmd cmd)
++{
++	return 0;
++}
++
++static inline int security_bpf_token_capable(const struct bpf_token *tok=
+en, int cap)
++{
++	return 0;
++}
+ #endif /* CONFIG_SECURITY */
+ #endif /* CONFIG_BPF_SYSCALL */
 =20
- 	bpf_get_btf_vmlinux();
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index 9e4e615f11eb..7d2f96413a57 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -265,6 +265,10 @@ BTF_ID(func, bpf_lsm_bpf_map_free)
+ BTF_ID(func, bpf_lsm_bpf_prog)
+ BTF_ID(func, bpf_lsm_bpf_prog_load)
+ BTF_ID(func, bpf_lsm_bpf_prog_free)
++BTF_ID(func, bpf_lsm_bpf_token_create)
++BTF_ID(func, bpf_lsm_bpf_token_free)
++BTF_ID(func, bpf_lsm_bpf_token_cmd)
++BTF_ID(func, bpf_lsm_bpf_token_capable)
+ BTF_ID(func, bpf_lsm_bprm_check_security)
+ BTF_ID(func, bpf_lsm_bprm_committed_creds)
+ BTF_ID(func, bpf_lsm_bprm_committing_creds)
+diff --git a/kernel/bpf/token.c b/kernel/bpf/token.c
+index 5a51e6b8f6bf..17212efcde60 100644
+--- a/kernel/bpf/token.c
++++ b/kernel/bpf/token.c
+@@ -7,6 +7,7 @@
+ #include <linux/idr.h>
+ #include <linux/namei.h>
+ #include <linux/user_namespace.h>
++#include <linux/security.h>
 =20
-@@ -20541,12 +20546,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_=
-attr *attr, bpfptr_t uattr, __u3
- 	if (attr->prog_flags & BPF_F_ANY_ALIGNMENT)
- 		env->strict_alignment =3D false;
-=20
--	env->allow_ptr_leaks =3D bpf_allow_ptr_leaks();
--	env->allow_uninit_stack =3D bpf_allow_uninit_stack();
--	env->bypass_spec_v1 =3D bpf_bypass_spec_v1();
--	env->bypass_spec_v4 =3D bpf_bypass_spec_v4();
--	env->bpf_capable =3D bpf_capable();
--
- 	if (is_priv)
- 		env->test_state_freq =3D attr->prog_flags & BPF_F_TEST_STATE_FREQ;
- 	env->test_reg_invariants =3D attr->prog_flags & BPF_F_TEST_REG_INVARIAN=
-TS;
-diff --git a/net/core/filter.c b/net/core/filter.c
-index bce53685d39a..3424947f1db2 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -8566,7 +8566,7 @@ static bool cg_skb_is_valid_access(int off, int siz=
-e,
- 		return false;
- 	case bpf_ctx_range(struct __sk_buff, data):
- 	case bpf_ctx_range(struct __sk_buff, data_end):
--		if (!bpf_capable())
-+		if (!bpf_token_capable(prog->aux->token, CAP_BPF))
- 			return false;
- 		break;
+ bool bpf_token_capable(const struct bpf_token *token, int cap)
+ {
+@@ -14,10 +15,9 @@ bool bpf_token_capable(const struct bpf_token *token, =
+int cap)
+ 	 * token's userns is *exactly* the same as current user's userns
+ 	 */
+ 	if (token && current_user_ns() =3D=3D token->userns) {
+-		if (ns_capable(token->userns, cap))
+-			return true;
+-		if (cap !=3D CAP_SYS_ADMIN && ns_capable(token->userns, CAP_SYS_ADMIN)=
+)
+-			return true;
++		if (ns_capable(token->userns, cap) ||
++		    (cap !=3D CAP_SYS_ADMIN && ns_capable(token->userns, CAP_SYS_ADMIN=
+)))
++			return security_bpf_token_capable(token, cap) =3D=3D 0;
  	}
-@@ -8578,7 +8578,7 @@ static bool cg_skb_is_valid_access(int off, int siz=
-e,
- 		case bpf_ctx_range_till(struct __sk_buff, cb[0], cb[4]):
- 			break;
- 		case bpf_ctx_range(struct __sk_buff, tstamp):
--			if (!bpf_capable())
-+			if (!bpf_token_capable(prog->aux->token, CAP_BPF))
- 				return false;
- 			break;
- 		default:
+ 	/* otherwise fallback to capable() checks */
+ 	return capable(cap) || (cap !=3D CAP_SYS_ADMIN && capable(CAP_SYS_ADMIN=
+));
+@@ -30,6 +30,7 @@ void bpf_token_inc(struct bpf_token *token)
+=20
+ static void bpf_token_free(struct bpf_token *token)
+ {
++	security_bpf_token_free(token);
+ 	put_user_ns(token->userns);
+ 	kvfree(token);
+ }
+@@ -186,6 +187,10 @@ int bpf_token_create(union bpf_attr *attr)
+ 	token->allowed_progs =3D mnt_opts->delegate_progs;
+ 	token->allowed_attachs =3D mnt_opts->delegate_attachs;
+=20
++	err =3D security_bpf_token_create(token, attr, &path);
++	if (err)
++		goto out_token;
++
+ 	fd =3D get_unused_fd_flags(O_CLOEXEC);
+ 	if (fd < 0) {
+ 		err =3D fd;
+@@ -233,8 +238,9 @@ bool bpf_token_allow_cmd(const struct bpf_token *toke=
+n, enum bpf_cmd cmd)
+ 	 */
+ 	if (!token || current_user_ns() !=3D token->userns)
+ 		return false;
+-
+-	return token->allowed_cmds & (1ULL << cmd);
++	if (!(token->allowed_cmds & (1ULL << cmd)))
++		return false;
++	return security_bpf_token_cmd(token, cmd) =3D=3D 0;
+ }
+=20
+ bool bpf_token_allow_map_type(const struct bpf_token *token, enum bpf_ma=
+p_type type)
+diff --git a/security/security.c b/security/security.c
+index ad24cf36da94..088a79c35c26 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -5201,6 +5201,55 @@ int security_bpf_prog_load(struct bpf_prog *prog, =
+union bpf_attr *attr,
+ 	return call_int_hook(bpf_prog_load, 0, prog, attr, token);
+ }
+=20
++/**
++ * security_bpf_token_create() - Check if creating of BPF token is allow=
+ed
++ * @token: BPF token object
++ * @attr: BPF syscall attributes used to create BPF token
++ * @path: path pointing to BPF FS mount point from which BPF token is cr=
+eated
++ *
++ * Do a check when the kernel instantiates a new BPF token object from B=
+PF FS
++ * instance. This is also the point where LSM blob can be allocated for =
+LSMs.
++ *
++ * Return: Returns 0 on success, error on failure.
++ */
++int security_bpf_token_create(struct bpf_token *token, union bpf_attr *a=
+ttr,
++			      struct path *path)
++{
++	return call_int_hook(bpf_token_create, 0, token, attr, path);
++}
++
++/**
++ * security_bpf_token_cmd() - Check if BPF token is allowed to delegate
++ * requested BPF syscall command
++ * @token: BPF token object
++ * @cmd: BPF syscall command requested to be delegated by BPF token
++ *
++ * Do a check when the kernel decides whether provided BPF token should =
+allow
++ * delegation of requested BPF syscall command.
++ *
++ * Return: Returns 0 on success, error on failure.
++ */
++int security_bpf_token_cmd(const struct bpf_token *token, enum bpf_cmd c=
+md)
++{
++	return call_int_hook(bpf_token_cmd, 0, token, cmd);
++}
++
++/**
++ * security_bpf_token_capable() - Check if BPF token is allowed to deleg=
+ate
++ * requested BPF-related capability
++ * @token: BPF token object
++ * @cap: capabilities requested to be delegated by BPF token
++ *
++ * Do a check when the kernel decides whether provided BPF token should =
+allow
++ * delegation of requested BPF-related capabilities.
++ *
++ * Return: Returns 0 on success, error on failure.
++ */
++int security_bpf_token_capable(const struct bpf_token *token, int cap)
++{
++	return call_int_hook(bpf_token_capable, 0, token, cap);
++}
++
+ /**
+  * security_bpf_map_free() - Free a bpf map's LSM blob
+  * @map: bpf map
+@@ -5222,6 +5271,17 @@ void security_bpf_prog_free(struct bpf_prog *prog)
+ {
+ 	call_void_hook(bpf_prog_free, prog);
+ }
++
++/**
++ * security_bpf_token_free() - Free a BPF token's LSM blob
++ * @token: BPF token struct
++ *
++ * Clean up the security information stored inside BPF token.
++ */
++void security_bpf_token_free(struct bpf_token *token)
++{
++	call_void_hook(bpf_token_free, token);
++}
+ #endif /* CONFIG_BPF_SYSCALL */
+=20
+ /**
 --=20
 2.34.1
 
