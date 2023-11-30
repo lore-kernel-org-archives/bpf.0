@@ -1,16 +1,16 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738B61B4
-	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 06:00:22 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0AC198
+	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 06:00:20 -0800 (PST)
 Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4SgyWR0SL9z4f3k6M
-	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 22:00:19 +0800 (CST)
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4SgyWJ5GZSz4f3lVs
+	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 22:00:12 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 017291A0DDD
-	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 22:00:20 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 467621A0DA7
+	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 22:00:17 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP1 (Coremail) with SMTP id cCh0CgBXWhBslWhlJ5NxCQ--.49902S11;
-	Thu, 30 Nov 2023 22:00:19 +0800 (CST)
+	by APP1 (Coremail) with SMTP id cCh0CgBXWhBslWhlJ5NxCQ--.49902S6;
+	Thu, 30 Nov 2023 22:00:17 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -26,9 +26,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	John Fastabend <john.fastabend@gmail.com>,
 	"Paul E . McKenney" <paulmck@kernel.org>,
 	houtao1@huawei.com
-Subject: [PATCH bpf v4 7/7] selftests/bpf: Test outer map update operations in syscall program
-Date: Thu, 30 Nov 2023 22:01:20 +0800
-Message-Id: <20231130140120.1736235-8-houtao@huaweicloud.com>
+Subject: [PATCH bpf v4 2/7] bpf: Add map and need_defer parameters to .map_fd_put_ptr()
+Date: Thu, 30 Nov 2023 22:01:15 +0800
+Message-Id: <20231130140120.1736235-3-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20231130140120.1736235-1-houtao@huaweicloud.com>
 References: <20231130140120.1736235-1-houtao@huaweicloud.com>
@@ -39,227 +39,185 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgBXWhBslWhlJ5NxCQ--.49902S11
-X-Coremail-Antispam: 1UD129KBjvJXoW3WF4kXr1kJFW7KryxtF17Awb_yoW7Kry8pa
-	yrGa4UtF4rXF43Gry8Xa17WayfKF1vg343trsrtw1YvFnrXr1SqFyIgay7tF13WrZ3Zr4F
-	vay7trZ5Aw4UZFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAI
-	cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
-	IEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFgAwUUUUU
+X-CM-TRANSID:cCh0CgBXWhBslWhlJ5NxCQ--.49902S6
+X-Coremail-Antispam: 1UD129KBjvJXoW3GF4kAw13Ww4rWF43WFWxJFb_yoW7Kr4fpF
+	WrKF429w4kXF4UX3yrAa1kurWYyw1fX345CF95Ka4FvryrXr97XF1kGa9xGry5W3ykGF4D
+	AFnrtryFk348ArDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
+	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+	0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFa9-UUUUU
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-Syscall program is running with rcu_read_lock_trace being held, so if
-bpf_map_update_elem() or bpf_map_delete_elem() invokes
-synchronize_rcu_tasks_trace() when operating on an outer map, there will
-be dead-lock, so add a test to guarantee that it is dead-lock free.
+map is the pointer of outer map, and need_defer needs some explanation.
+need_defer tells the implementation to defer the reference release of
+the passed element and ensure that the element is still alive before
+the bpf program, which may manipulate it, exits.
+
+The following three cases will invoke map_fd_put_ptr() and different
+need_defer values will be passed to these callers:
+
+1) release the reference of the old element in the map during map update
+   or map deletion. The release must be deferred, otherwise the bpf
+   program may incur use-after-free problem, so need_defer needs to be
+   true.
+2) release the reference of the to-be-added element in the error path of
+   map update. The to-be-added element is not visible to any bpf
+   program, so it is OK to pass false for need_defer parameter.
+3) release the references of all elements in the map during map release.
+   Any bpf program which has access to the map must have been exited and
+   released, so need_defer=false will be OK.
+
+These two parameters will be used by the following patches to fix the
+potential use-after-free problem for map-in-map.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- .../selftests/bpf/prog_tests/syscall.c        | 30 +++++-
- tools/testing/selftests/bpf/progs/syscall.c   | 91 ++++++++++++++++++-
- 2 files changed, 114 insertions(+), 7 deletions(-)
+ include/linux/bpf.h     |  6 +++++-
+ kernel/bpf/arraymap.c   | 12 +++++++-----
+ kernel/bpf/hashtab.c    |  6 +++---
+ kernel/bpf/map_in_map.c |  2 +-
+ kernel/bpf/map_in_map.h |  2 +-
+ 5 files changed, 17 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/syscall.c b/tools/testing/selftests/bpf/prog_tests/syscall.c
-index f4d40001155a..0be8301c0ffd 100644
---- a/tools/testing/selftests/bpf/prog_tests/syscall.c
-+++ b/tools/testing/selftests/bpf/prog_tests/syscall.c
-@@ -12,7 +12,7 @@ struct args {
- 	int btf_fd;
- };
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 6762dac3ef76..6f68ac24bb9a 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -106,7 +106,11 @@ struct bpf_map_ops {
+ 	/* funcs called by prog_array and perf_event_array map */
+ 	void *(*map_fd_get_ptr)(struct bpf_map *map, struct file *map_file,
+ 				int fd);
+-	void (*map_fd_put_ptr)(void *ptr);
++	/* If need_defer is true, the implementation should guarantee that
++	 * the to-be-put element is still alive before the bpf program, which
++	 * may manipulate it, exists.
++	 */
++	void (*map_fd_put_ptr)(struct bpf_map *map, void *ptr, bool need_defer);
+ 	int (*map_gen_lookup)(struct bpf_map *map, struct bpf_insn *insn_buf);
+ 	u32 (*map_fd_sys_lookup_elem)(void *ptr);
+ 	void (*map_seq_show_elem)(struct bpf_map *map, void *key,
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 2058e89b5ddd..f9aed5909d6e 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -867,7 +867,7 @@ int bpf_fd_array_map_update_elem(struct bpf_map *map, struct file *map_file,
+ 	}
  
--void test_syscall(void)
-+static void test_syscall_load_prog(void)
- {
- 	static char verifier_log[8192];
- 	struct args ctx = {
-@@ -32,7 +32,7 @@ void test_syscall(void)
- 	if (!ASSERT_OK_PTR(skel, "skel_load"))
- 		goto cleanup;
- 
--	prog_fd = bpf_program__fd(skel->progs.bpf_prog);
-+	prog_fd = bpf_program__fd(skel->progs.load_prog);
- 	err = bpf_prog_test_run_opts(prog_fd, &tattr);
- 	ASSERT_EQ(err, 0, "err");
- 	ASSERT_EQ(tattr.retval, 1, "retval");
-@@ -53,3 +53,29 @@ void test_syscall(void)
- 	if (ctx.btf_fd > 0)
- 		close(ctx.btf_fd);
- }
-+
-+static void test_syscall_update_outer_map(void)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	struct syscall *skel;
-+	int err, prog_fd;
-+
-+	skel = syscall__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_load"))
-+		goto cleanup;
-+
-+	prog_fd = bpf_program__fd(skel->progs.update_outer_map);
-+	err = bpf_prog_test_run_opts(prog_fd, &opts);
-+	ASSERT_EQ(err, 0, "err");
-+	ASSERT_EQ(opts.retval, 1, "retval");
-+cleanup:
-+	syscall__destroy(skel);
-+}
-+
-+void test_syscall(void)
-+{
-+	if (test__start_subtest("load_prog"))
-+		test_syscall_load_prog();
-+	if (test__start_subtest("update_outer_map"))
-+		test_syscall_update_outer_map();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/syscall.c b/tools/testing/selftests/bpf/progs/syscall.c
-index e550f728962d..23058abbaabd 100644
---- a/tools/testing/selftests/bpf/progs/syscall.c
-+++ b/tools/testing/selftests/bpf/progs/syscall.c
-@@ -6,9 +6,15 @@
- #include <bpf/bpf_tracing.h>
- #include <../../../tools/include/linux/filter.h>
- #include <linux/btf.h>
-+#include <string.h>
-+#include <errno.h>
- 
- char _license[] SEC("license") = "GPL";
- 
-+struct bpf_map {
-+	int id;
-+}  __attribute__((preserve_access_index));
-+
- struct args {
- 	__u64 log_buf;
- 	__u32 log_size;
-@@ -27,6 +33,32 @@ struct args {
- 	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_INT, 0, 0), sz), \
- 	BTF_INT_ENC(encoding, bits_offset, bits)
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, int);
-+	__type(value, union bpf_attr);
-+	__uint(max_entries, 1);
-+} bpf_attr_array SEC(".maps");
-+
-+struct inner_map_type {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(key_size, 4);
-+	__uint(value_size, 4);
-+	__uint(max_entries, 1);
-+} inner_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__type(key, int);
-+	__type(value, int);
-+	__uint(max_entries, 1);
-+	__array(values, struct inner_map_type);
-+} outer_array_map SEC(".maps") = {
-+	.values = {
-+		[0] = &inner_map,
-+	},
-+};
-+
- static int btf_load(void)
- {
- 	struct btf_blob {
-@@ -58,7 +90,7 @@ static int btf_load(void)
+ 	if (old_ptr)
+-		map->ops->map_fd_put_ptr(old_ptr);
++		map->ops->map_fd_put_ptr(map, old_ptr, true);
+ 	return 0;
  }
  
- SEC("syscall")
--int bpf_prog(struct args *ctx)
-+int load_prog(struct args *ctx)
- {
- 	static char license[] = "GPL";
- 	static struct bpf_insn insns[] = {
-@@ -94,8 +126,8 @@ int bpf_prog(struct args *ctx)
- 	map_create_attr.max_entries = ctx->max_entries;
- 	map_create_attr.btf_fd = ret;
+@@ -890,7 +890,7 @@ static long fd_array_map_delete_elem(struct bpf_map *map, void *key)
+ 	}
  
--	prog_load_attr.license = (long) license;
--	prog_load_attr.insns = (long) insns;
-+	prog_load_attr.license = (unsigned long)license;
-+	prog_load_attr.insns = (unsigned long)insns;
- 	prog_load_attr.log_buf = ctx->log_buf;
- 	prog_load_attr.log_size = ctx->log_size;
- 	prog_load_attr.log_level = 1;
-@@ -107,8 +139,8 @@ int bpf_prog(struct args *ctx)
- 	insns[3].imm = ret;
- 
- 	map_update_attr.map_fd = ret;
--	map_update_attr.key = (long) &key;
--	map_update_attr.value = (long) &value;
-+	map_update_attr.key = (unsigned long)&key;
-+	map_update_attr.value = (unsigned long)&value;
- 	ret = bpf_sys_bpf(BPF_MAP_UPDATE_ELEM, &map_update_attr, sizeof(map_update_attr));
- 	if (ret < 0)
- 		return ret;
-@@ -119,3 +151,52 @@ int bpf_prog(struct args *ctx)
- 	ctx->prog_fd = ret;
- 	return 1;
+ 	if (old_ptr) {
+-		map->ops->map_fd_put_ptr(old_ptr);
++		map->ops->map_fd_put_ptr(map, old_ptr, true);
+ 		return 0;
+ 	} else {
+ 		return -ENOENT;
+@@ -913,8 +913,9 @@ static void *prog_fd_array_get_ptr(struct bpf_map *map,
+ 	return prog;
  }
-+
-+SEC("syscall")
-+int update_outer_map(void *ctx)
-+{
-+	int zero = 0, ret = 0, outer_fd = -1, inner_fd = -1, err;
-+	const int attr_sz = sizeof(union bpf_attr);
-+	union bpf_attr *attr;
-+
-+	attr = bpf_map_lookup_elem((struct bpf_map *)&bpf_attr_array, &zero);
-+	if (!attr)
-+		goto out;
-+
-+	memset(attr, 0, attr_sz);
-+	attr->map_id = ((struct bpf_map *)&outer_array_map)->id;
-+	outer_fd = bpf_sys_bpf(BPF_MAP_GET_FD_BY_ID, attr, attr_sz);
-+	if (outer_fd < 0)
-+		goto out;
-+
-+	memset(attr, 0, attr_sz);
-+	attr->map_type = BPF_MAP_TYPE_ARRAY;
-+	attr->key_size = 4;
-+	attr->value_size = 4;
-+	attr->max_entries = 1;
-+	inner_fd = bpf_sys_bpf(BPF_MAP_CREATE, attr, attr_sz);
-+	if (inner_fd < 0)
-+		goto out;
-+
-+	memset(attr, 0, attr_sz);
-+	attr->map_fd = outer_fd;
-+	attr->key = (unsigned long)&zero;
-+	attr->value = (unsigned long)&inner_fd;
-+	err = bpf_sys_bpf(BPF_MAP_UPDATE_ELEM, attr, attr_sz);
-+	if (err)
-+		goto out;
-+
-+	memset(attr, 0, attr_sz);
-+	attr->map_fd = outer_fd;
-+	attr->key = (unsigned long)&zero;
-+	err = bpf_sys_bpf(BPF_MAP_DELETE_ELEM, attr, attr_sz);
-+	if (err)
-+		goto out;
-+	ret = 1;
-+out:
-+	if (inner_fd >= 0)
-+		bpf_sys_close(inner_fd);
-+	if (outer_fd >= 0)
-+		bpf_sys_close(outer_fd);
-+	return ret;
-+}
+ 
+-static void prog_fd_array_put_ptr(void *ptr)
++static void prog_fd_array_put_ptr(struct bpf_map *map, void *ptr, bool need_defer)
+ {
++	/* bpf_prog is freed after one RCU or tasks trace grace period */
+ 	bpf_prog_put(ptr);
+ }
+ 
+@@ -1239,8 +1240,9 @@ static void *perf_event_fd_array_get_ptr(struct bpf_map *map,
+ 	return ee;
+ }
+ 
+-static void perf_event_fd_array_put_ptr(void *ptr)
++static void perf_event_fd_array_put_ptr(struct bpf_map *map, void *ptr, bool need_defer)
+ {
++	/* bpf_perf_event is freed after one RCU grace period */
+ 	bpf_event_entry_free_rcu(ptr);
+ }
+ 
+@@ -1294,7 +1296,7 @@ static void *cgroup_fd_array_get_ptr(struct bpf_map *map,
+ 	return cgroup_get_from_fd(fd);
+ }
+ 
+-static void cgroup_fd_array_put_ptr(void *ptr)
++static void cgroup_fd_array_put_ptr(struct bpf_map *map, void *ptr, bool need_defer)
+ {
+ 	/* cgroup_put free cgrp after a rcu grace period */
+ 	cgroup_put(ptr);
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index fd8d4b0addfc..5b9146fa825f 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -897,7 +897,7 @@ static void htab_put_fd_value(struct bpf_htab *htab, struct htab_elem *l)
+ 
+ 	if (map->ops->map_fd_put_ptr) {
+ 		ptr = fd_htab_map_get_ptr(map, l);
+-		map->ops->map_fd_put_ptr(ptr);
++		map->ops->map_fd_put_ptr(map, ptr, true);
+ 	}
+ }
+ 
+@@ -2484,7 +2484,7 @@ static void fd_htab_map_free(struct bpf_map *map)
+ 		hlist_nulls_for_each_entry_safe(l, n, head, hash_node) {
+ 			void *ptr = fd_htab_map_get_ptr(map, l);
+ 
+-			map->ops->map_fd_put_ptr(ptr);
++			map->ops->map_fd_put_ptr(map, ptr, false);
+ 		}
+ 	}
+ 
+@@ -2525,7 +2525,7 @@ int bpf_fd_htab_map_update_elem(struct bpf_map *map, struct file *map_file,
+ 
+ 	ret = htab_map_update_elem(map, key, &ptr, map_flags);
+ 	if (ret)
+-		map->ops->map_fd_put_ptr(ptr);
++		map->ops->map_fd_put_ptr(map, ptr, false);
+ 
+ 	return ret;
+ }
+diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
+index cd5eafaba97e..2dfeb5835e16 100644
+--- a/kernel/bpf/map_in_map.c
++++ b/kernel/bpf/map_in_map.c
+@@ -127,7 +127,7 @@ void *bpf_map_fd_get_ptr(struct bpf_map *map,
+ 	return inner_map;
+ }
+ 
+-void bpf_map_fd_put_ptr(void *ptr)
++void bpf_map_fd_put_ptr(struct bpf_map *map, void *ptr, bool need_defer)
+ {
+ 	/* ptr->ops->map_free() has to go through one
+ 	 * rcu grace period by itself.
+diff --git a/kernel/bpf/map_in_map.h b/kernel/bpf/map_in_map.h
+index bcb7534afb3c..7d61602354de 100644
+--- a/kernel/bpf/map_in_map.h
++++ b/kernel/bpf/map_in_map.h
+@@ -13,7 +13,7 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd);
+ void bpf_map_meta_free(struct bpf_map *map_meta);
+ void *bpf_map_fd_get_ptr(struct bpf_map *map, struct file *map_file,
+ 			 int ufd);
+-void bpf_map_fd_put_ptr(void *ptr);
++void bpf_map_fd_put_ptr(struct bpf_map *map, void *ptr, bool need_defer);
+ u32 bpf_map_fd_sys_lookup_elem(void *ptr);
+ 
+ #endif
 -- 
 2.29.2
 
