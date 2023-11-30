@@ -1,177 +1,191 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RJ09unx4"
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08936D50;
-	Thu, 30 Nov 2023 10:04:18 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-a011e9bf336so173888866b.3;
-        Thu, 30 Nov 2023 10:04:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701367456; x=1701972256; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gdrcCqNOeGaX8nRiVZ0kuDo8oSBz6AvGcrMALAwkn2E=;
-        b=RJ09unx4M7h+GuRAris2yEnIDIQyRRXK7xOsZrzniHvOt+kmGEyes7Jy9UF/xEy32J
-         09u7fY95FaA/ZPzQZvPbeA4vCscXLS7ZMaSRxiBn9tgw1iIjSybNpgv3FWCsECAzkgI+
-         6LkHYRkGPHg1hPfV7LDy1Ig511meMCvDuKmQ98yc/HdKmQ5vCrRKV9aUtZnjtVhc+Ysq
-         mrp4a51XQYpO7SY2qNdWmnP6ofNEKKo8Cdicbc3BBqrsZnAFvkNfXTpvHZXeVCdIYnF1
-         mNvZHL9mhsCIiOGEHfHwhO2j/2Yd7opbpKFS0m8xakAu2B20vgZdhvRwDT5muVPzpiej
-         eAdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701367456; x=1701972256;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gdrcCqNOeGaX8nRiVZ0kuDo8oSBz6AvGcrMALAwkn2E=;
-        b=kS0SMZY4g99/q06YxFm+jZ3nLK8TuLE9F+A3nrJjSiuDqs2o8LSAvN9yjVzbQf2dy9
-         2dEzrqaYe9WSNwhCYixQmMNgpOUa7yp6QQ13HZbH7yMOhtyOMH7cwHWo05A5iBJRYHRl
-         AoW+3GPTw5HOrWW7RibwqrvmIaPXq2SJxqxdmzyd7xdPomE4rwwW6m3dvVxJsDQjOc4r
-         1bmzAyMCFRIUDHu3nbS6cuFhAUSg8aEZwWEK2hGIJxbBQIlWaLyN0RJP+ojf4sfRH4+T
-         aj/lwC4YEMUrXnttLtqvRitWNpyvf50O2+Q8r43IugVCsFIRlDQqC6fg97yg5cbuIJrx
-         qr3g==
-X-Gm-Message-State: AOJu0YxHerCx7R4IxsOegSuGd/oklp/1sJ1nL3AMZNzzKdj0mR9oi13b
-	dfvKwzpDnXYw70BDeaKOmR+wDoqAEydk7oTw2mZH46AY
-X-Google-Smtp-Source: AGHT+IEu6Fr0dqU4fzAJQwVeYTuRr7gEcBms+52y3BUpy6n6FgG7Jf9/2fgWYQ5cep9MRJBWoqtok5f8KAbPTzO1Clc=
-X-Received: by 2002:a17:906:5306:b0:a18:c553:21cb with SMTP id
- h6-20020a170906530600b00a18c55321cbmr11407ejo.19.1701367375112; Thu, 30 Nov
- 2023 10:02:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="h7EerN8f";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CE3/bb8J"
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5A710FA;
+	Thu, 30 Nov 2023 10:08:32 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.nyi.internal (Postfix) with ESMTP id 5D7ED5C0322;
+	Thu, 30 Nov 2023 13:08:32 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 30 Nov 2023 13:08:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm3; t=1701367712; x=1701454112; bh=9z
+	3uJU+Hi5KH4UzL0oER4ME1Qi2Yb8XEo51IkVsy0gY=; b=h7EerN8faAB17E4ILq
+	ZIZVbEY7zPwMtiNqL2KIdPC9eagTZEgzm1MtW6RiyDbu0Jt6tJz5v4Vqt67JQWJm
+	FHsW1qP2+rm009mZs+fYUm3BlLQMPt2Ceb1oPyxSY3/XIlGLa8SHIq66GUmZ4VyG
+	/NkkkdrOqbYrixunq0lkNLiTJfgEn+gvy0kLZHD7iNi5orSWrqifnbqphAIW2r8f
+	fet5UVQcjA1AMlIDRK8Y/VYBxiggVSU12MmEYKU/cpL1pgj1BTuXl9dBwD2ma/su
+	c6PG6TGY6/Xl6us3bidZOo6H7Ygsf8BFywiDb7ph9aFSAMqQYu2c9aH77Hhvq0k/
+	djZw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1701367712; x=1701454112; bh=9z3uJU+Hi5KH4
+	UzL0oER4ME1Qi2Yb8XEo51IkVsy0gY=; b=CE3/bb8JRXoF06z43ggo3eodWcMzd
+	HlX0VKnvWJUESTOkKajLpoJEdjGIwQcEsJQKThxKQpl0gHBzQyz15UPlACHC1p1n
+	fnPWnEVuPnnMGxegaTxPY+au30ACoNvhWldsZ9llrpIYtfba9oHCg8P7RW/e0KrW
+	nkzI6lOD4YCijiDqn8PYMR/MDv0IZ7CPAm6vmY3+dnhlj5hNnh85hjLUXKovwh6Z
+	oz6IHw4yciXKz0CrDIYArk/Y/8t9Mj9dM9DVNIWpgR5MLbwxRjJBBg7abrMbvDhr
+	Py+QtrCTxChTcxWRScpgBFR8clfSd24QwSL+wICnAafFY1wvVH2gPO4DA==
+X-ME-Sender: <xms:ns9oZQDrZkfxa-EWqNR_fOBJJ4_NcKpy3YKWyvXSTvnLHBw344-DqA>
+    <xme:ns9oZSgr6sn6oBVKWs0MYPJgfbIIlzjxAskQW8g7RiA9j1-QwH6s5zNtcS8oNwjkr
+    sEgYkSRDbsLzWqSew>
+X-ME-Received: <xmr:ns9oZTmousuvPPHhp9ehWOMKyGbm6kFD-HSwgIWRk5n0j-Zy4JTHE2QETyn7gpam0_WN-Uf7Eiq-GIW1gJ8ciwRNGisP5OEyfV9zZYM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeijedguddtkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdefhedmnecujfgurhepff
+    fhvfevuffkfhggtggujgesthdtsfdttddtvdenucfhrhhomhepffgrnhhivghlucgiuhcu
+    oegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeefffeffefhtdefgf
+    fgleevueekgfeltdefleevgffhjeefveekkeejhfdtveevudenucffohhmrghinhepqhgv
+    mhhurdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:ns9oZWxCDDmnepTWR5WAfJtsI6hXfhvlcxyNzyoNfYhSCaQqdO_ttQ>
+    <xmx:ns9oZVQUuW0okS6jqNtfyZ77RtufopI2FB1atZOClv_Cl---yILM-Q>
+    <xmx:ns9oZRa8ZxbHz2m3kTSF2ubUUmEeqcnjw1QnCxQ4fxtmDiflX8jEKA>
+    <xmx:oM9oZULs-FkcSj14zxnBm7rJr3LzNRgrpCsiDkMOXqNgifNGqQcRHA>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 30 Nov 2023 13:08:29 -0500 (EST)
+Date: Thu, 30 Nov 2023 11:08:28 -0700
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: "D. Wythe" <alibuda@linux.alibaba.com>
+Cc: pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	coreteam@netfilter.org, netfilter-devel@vger.kernel.org, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org
+Subject: Re: [PATCH net] net/netfilter: bpf: fix bad registration on nf_defrag
+Message-ID: <jyuh3mrw2x4ev53trb7spctljr62fyrjqpgkgbh7ng4tfhimxm@kalweu7l5gbk>
+References: <1701329003-14564-1-git-send-email-alibuda@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231127190409.2344550-1-andrii@kernel.org> <20231127190409.2344550-3-andrii@kernel.org>
- <20231130-zivildienst-weckt-4888b2689eea@brauner>
-In-Reply-To: <20231130-zivildienst-weckt-4888b2689eea@brauner>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 30 Nov 2023 10:02:43 -0800
-Message-ID: <CAEf4BzY6+tOpi+2vx9xdS0M1qC0NvnVhM8LDaakXkCc7n4CO1w@mail.gmail.com>
-Subject: Re: [PATCH v11 bpf-next 02/17] bpf: add BPF token delegation mount
- options to BPF FS
-To: Christian Brauner <brauner@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	paul@paul-moore.com, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, keescook@chromium.org, 
-	kernel-team@meta.com, sargun@sargun.me
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1701329003-14564-1-git-send-email-alibuda@linux.alibaba.com>
 
-On Thu, Nov 30, 2023 at 6:18=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
->
-> On Mon, Nov 27, 2023 at 11:03:54AM -0800, Andrii Nakryiko wrote:
-> > Add few new mount options to BPF FS that allow to specify that a given
-> > BPF FS instance allows creation of BPF token (added in the next patch),
-> > and what sort of operations are allowed under BPF token. As such, we ge=
-t
-> > 4 new mount options, each is a bit mask
-> >   - `delegate_cmds` allow to specify which bpf() syscall commands are
-> >     allowed with BPF token derived from this BPF FS instance;
-> >   - if BPF_MAP_CREATE command is allowed, `delegate_maps` specifies
-> >     a set of allowable BPF map types that could be created with BPF tok=
-en;
-> >   - if BPF_PROG_LOAD command is allowed, `delegate_progs` specifies
-> >     a set of allowable BPF program types that could be loaded with BPF =
-token;
-> >   - if BPF_PROG_LOAD command is allowed, `delegate_attachs` specifies
-> >     a set of allowable BPF program attach types that could be loaded wi=
-th
-> >     BPF token; delegate_progs and delegate_attachs are meant to be used
-> >     together, as full BPF program type is, in general, determined
-> >     through both program type and program attach type.
-> >
-> > Currently, these mount options accept the following forms of values:
-> >   - a special value "any", that enables all possible values of a given
-> >   bit set;
-> >   - numeric value (decimal or hexadecimal, determined by kernel
-> >   automatically) that specifies a bit mask value directly;
-> >   - all the values for a given mount option are combined, if specified
-> >   multiple times. E.g., `mount -t bpf nodev /path/to/mount -o
-> >   delegate_maps=3D0x1 -o delegate_maps=3D0x2` will result in a combined=
- 0x3
-> >   mask.
-> >
-> > Ideally, more convenient (for humans) symbolic form derived from
-> > corresponding UAPI enums would be accepted (e.g., `-o
-> > delegate_progs=3Dkprobe|tracepoint`) and I intend to implement this, bu=
-t
-> > it requires a bunch of UAPI header churn, so I postponed it until this
-> > feature lands upstream or at least there is a definite consensus that
-> > this feature is acceptable and is going to make it, just to minimize
-> > amount of wasted effort and not increase amount of non-essential code t=
-o
-> > be reviewed.
-> >
-> > Attentive reader will notice that BPF FS is now marked as
-> > FS_USERNS_MOUNT, which theoretically makes it mountable inside non-init
-> > user namespace as long as the process has sufficient *namespaced*
-> > capabilities within that user namespace. But in reality we still
-> > restrict BPF FS to be mountable only by processes with CAP_SYS_ADMIN *i=
-n
-> > init userns* (extra check in bpf_fill_super()). FS_USERNS_MOUNT is adde=
-d
-> > to allow creating BPF FS context object (i.e., fsopen("bpf")) from
-> > inside unprivileged process inside non-init userns, to capture that
-> > userns as the owning userns. It will still be required to pass this
-> > context object back to privileged process to instantiate and mount it.
-> >
-> > This manipulation is important, because capturing non-init userns as th=
-e
-> > owning userns of BPF FS instance (super block) allows to use that usern=
-s
-> > to constraint BPF token to that userns later on (see next patch). So
-> > creating BPF FS with delegation inside unprivileged userns will restric=
-t
-> > derived BPF token objects to only "work" inside that intended userns,
-> > making it scoped to a intended "container". Also, setting these
-> > delegation options requires capable(CAP_SYS_ADMIN), so unprivileged
-> > process cannot set this up without involvement of a privileged process.
-> >
-> > There is a set of selftests at the end of the patch set that simulates
-> > this sequence of steps and validates that everything works as intended.
-> > But careful review is requested to make sure there are no missed gaps i=
-n
-> > the implementation and testing.
-> >
-> > This somewhat subtle set of aspects is the result of previous
-> > discussions ([0]) about various user namespace implications and
-> > interactions with BPF token functionality and is necessary to contain
-> > BPF token inside intended user namespace.
-> >
-> >   [0] https://lore.kernel.org/bpf/20230704-hochverdient-lehne-eeb9eeef7=
-85e@brauner/
-> >
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > ---
->
-> I still think this is a little weird because this isn't really
-> unprivileged bpf and it isn't really safe bpf as well.
->
-> All this does is allow an administrator to punch a big fat hole into an
-> unprivileged container so workloads get to play with their favorite toy.
->
-> I think that having a way to have signed bpf programs in addition to
-> this would be much more interesting to generic workloads that don't know
-> who or what they can trust.
+On Thu, Nov 30, 2023 at 03:23:23PM +0800, D. Wythe wrote:
+> From: "D. Wythe" <alibuda@linux.alibaba.com>
+> 
+> We should pass a pointer to global_hook to the get_proto_defrag_hook()
+> instead of its value, since the passed value won't be updated even if
+> the request module was loaded successfully.
+> 
+> Log:
+> 
+> [   54.915713] nf_defrag_ipv4 has bad registration
 
-Absolutely, that is the trust part of the puzzle. Song's LSM+fsverity
-patch set is a step in that direction.
+Gah, I really thought I had tested this codepath.
 
->
-> And there's a few things to remember:
->
-> * This absolutely isn't a safety mechanism.
-> * This absolutely isn't safe to enable generically in containers.
+> [   54.915779] WARNING: CPU: 3 PID: 6323 at net/netfilter/nf_bpf_link.c:62 get_proto_defrag_hook+0x137/0x160
+> [   54.915835] CPU: 3 PID: 6323 Comm: fentry Kdump: loaded Tainted: G            E      6.7.0-rc2+ #35
+> [   54.915839] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
+> [   54.915841] RIP: 0010:get_proto_defrag_hook+0x137/0x160
+> [   54.915844] Code: 4f 8c e8 2c cf 68 ff 80 3d db 83 9a 01 00 0f 85 74 ff ff ff 48 89 ee 48 c7 c7 8f 12 4f 8c c6 05 c4 83 9a 01 01 e8 09 ee 5f ff <0f> 0b e9 57 ff ff ff 49 8b 3c 24 4c 63 e5 e8 36 28 6c ff 4c 89 e0
+> [   54.915849] RSP: 0018:ffffb676003fbdb0 EFLAGS: 00010286
+> [   54.915852] RAX: 0000000000000023 RBX: ffff9596503d5600 RCX: ffff95996fce08c8
+> [   54.915854] RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI: ffff95996fce08c0
+> [   54.915855] RBP: ffffffff8c4f12de R08: 0000000000000000 R09: 00000000fffeffff
+> [   54.915859] R10: ffffb676003fbc70 R11: ffffffff8d363ae8 R12: 0000000000000000
+> [   54.915861] R13: ffffffff8e1f75c0 R14: ffffb676003c9000 R15: 00007ffd15e78ef0
+> [   54.915864] FS:  00007fb6e9cab740(0000) GS:ffff95996fcc0000(0000) knlGS:0000000000000000
+> [   54.915867] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   54.915868] CR2: 00007ffd15e75c40 CR3: 0000000101e62006 CR4: 0000000000360ef0
+> [   54.915870] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [   54.915871] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [   54.915873] Call Trace:
+> [   54.915891]  <TASK>
+> [   54.915894]  ? __warn+0x84/0x140
+> [   54.915905]  ? get_proto_defrag_hook+0x137/0x160
+> [   54.915908]  ? __report_bug+0xea/0x100
+> [   54.915925]  ? report_bug+0x2b/0x80
+> [   54.915928]  ? handle_bug+0x3c/0x70
+> [   54.915939]  ? exc_invalid_op+0x18/0x70
+> [   54.915942]  ? asm_exc_invalid_op+0x1a/0x20
+> [   54.915948]  ? get_proto_defrag_hook+0x137/0x160
+> [   54.915950]  bpf_nf_link_attach+0x1eb/0x240
+> [   54.915953]  link_create+0x173/0x290
+> [   54.915969]  __sys_bpf+0x588/0x8f0
+> [   54.915974]  __x64_sys_bpf+0x20/0x30
+> [   54.915977]  do_syscall_64+0x45/0xf0
+> [   54.915989]  entry_SYSCALL_64_after_hwframe+0x6e/0x76
+> [   54.915998] RIP: 0033:0x7fb6e9daa51d
+> [   54.916001] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 2b 89 0c 00 f7 d8 64 89 01 48
+> [   54.916003] RSP: 002b:00007ffd15e78ed8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+> [   54.916006] RAX: ffffffffffffffda RBX: 00007ffd15e78fc0 RCX: 00007fb6e9daa51d
+> [   54.916007] RDX: 0000000000000040 RSI: 00007ffd15e78ef0 RDI: 000000000000001c
+> [   54.916009] RBP: 000000000000002d R08: 00007fb6e9e73a60 R09: 0000000000000001
+> [   54.916010] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000006
+> [   54.916012] R13: 0000000000000006 R14: 0000000000000000 R15: 0000000000000000
+> [   54.916014]  </TASK>
+> [   54.916015] ---[ end trace 0000000000000000 ]---
+> 
+> Fixes: 91721c2d02d3 ("netfilter: bpf: Support BPF_F_NETFILTER_IP_DEFRAG in netfilter link")
+> Signed-off-by: D. Wythe <alibuda@linux.alibaba.com>
+> ---
+>  net/netfilter/nf_bpf_link.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/net/netfilter/nf_bpf_link.c b/net/netfilter/nf_bpf_link.c
+> index e502ec0..0e4beae 100644
+> --- a/net/netfilter/nf_bpf_link.c
+> +++ b/net/netfilter/nf_bpf_link.c
+> @@ -31,7 +31,7 @@ struct bpf_nf_link {
+>  #if IS_ENABLED(CONFIG_NF_DEFRAG_IPV4) || IS_ENABLED(CONFIG_NF_DEFRAG_IPV6)
+>  static const struct nf_defrag_hook *
+>  get_proto_defrag_hook(struct bpf_nf_link *link,
+> -		      const struct nf_defrag_hook __rcu *global_hook,
+> +		      const struct nf_defrag_hook __rcu **ptr_global_hook,
+>  		      const char *mod)
+>  {
+>  	const struct nf_defrag_hook *hook;
+> @@ -39,7 +39,7 @@ struct bpf_nf_link {
+>  
+>  	/* RCU protects us from races against module unloading */
+>  	rcu_read_lock();
+> -	hook = rcu_dereference(global_hook);
+> +	hook = rcu_dereference(*ptr_global_hook);
+>  	if (!hook) {
+>  		rcu_read_unlock();
+>  		err = request_module(mod);
+> @@ -47,7 +47,7 @@ struct bpf_nf_link {
+>  			return ERR_PTR(err < 0 ? err : -EINVAL);
+>  
+>  		rcu_read_lock();
+> -		hook = rcu_dereference(global_hook);
+> +		hook = rcu_dereference(*ptr_global_hook);
+>  	}
+>  
+>  	if (hook && try_module_get(hook->owner)) {
+> @@ -78,7 +78,7 @@ static int bpf_nf_enable_defrag(struct bpf_nf_link *link)
+>  	switch (link->hook_ops.pf) {
+>  #if IS_ENABLED(CONFIG_NF_DEFRAG_IPV4)
+>  	case NFPROTO_IPV4:
+> -		hook = get_proto_defrag_hook(link, nf_defrag_v4_hook, "nf_defrag_ipv4");
+> +		hook = get_proto_defrag_hook(link, &nf_defrag_v4_hook, "nf_defrag_ipv4");
+>  		if (IS_ERR(hook))
+>  			return PTR_ERR(hook);
+>  
+> @@ -87,7 +87,7 @@ static int bpf_nf_enable_defrag(struct bpf_nf_link *link)
+>  #endif
+>  #if IS_ENABLED(CONFIG_NF_DEFRAG_IPV6)
+>  	case NFPROTO_IPV6:
+> -		hook = get_proto_defrag_hook(link, nf_defrag_v6_hook, "nf_defrag_ipv6");
+> +		hook = get_proto_defrag_hook(link, &nf_defrag_v6_hook, "nf_defrag_ipv6");
+>  		if (IS_ERR(hook))
+>  			return PTR_ERR(hook);
+>  
+> -- 
+> 1.8.3.1
+> 
 
-100% agreed, this should be used only with trusted workloads (however
-the trust is established in any particular setup: signing, fsverity,
-whatnot)
+I think I've convinced myself this is right.
 
-> * This is a workaround and not a solution to unprivileged bpf.
->
-> And this is an ACK solely on the code of this patch, not the concept.
-> Acked-by: Christian Brauner <brauner@kernel.org> (reluctantly)
-
-Thank you anyways! I appreciate your efforts to make sure this doesn't
-create unintended security holes.
+Acked-by: Daniel Xu <dxu@dxuuu.xyz>
