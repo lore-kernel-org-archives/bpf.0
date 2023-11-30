@@ -1,28 +1,28 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69EB194
-	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 10:53:10 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FFF10E2
+	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 10:53:12 -0800 (PST)
 Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AUEeBRm021440
-	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 10:53:10 -0800
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AUEeBRq021440
+	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 10:53:12 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3upp3uc7hf-6
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3upp3uc7hf-10
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 10:53:10 -0800
-Received: from twshared15991.38.frc1.facebook.com (2620:10d:c085:108::8) by
+	for <bpf@vger.kernel.org>; Thu, 30 Nov 2023 10:53:12 -0800
+Received: from twshared15991.38.frc1.facebook.com (2620:10d:c085:208::11) by
  mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.34; Thu, 30 Nov 2023 10:53:07 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 054CC3C602970; Thu, 30 Nov 2023 10:52:57 -0800 (PST)
+	id 718B03C60299A; Thu, 30 Nov 2023 10:53:03 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <paul@paul-moore.com>,
         <brauner@kernel.org>
 CC: <linux-fsdevel@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
         <keescook@chromium.org>, <kernel-team@meta.com>, <sargun@sargun.me>
-Subject: [PATCH v12 bpf-next 13/17] libbpf: add BPF token support to bpf_map_create() API
-Date: Thu, 30 Nov 2023 10:52:25 -0800
-Message-ID: <20231130185229.2688956-14-andrii@kernel.org>
+Subject: [PATCH v12 bpf-next 15/17] libbpf: add BPF token support to bpf_prog_load() API
+Date: Thu, 30 Nov 2023 10:52:27 -0800
+Message-ID: <20231130185229.2688956-16-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231130185229.2688956-1-andrii@kernel.org>
 References: <20231130185229.2688956-1-andrii@kernel.org>
@@ -35,60 +35,57 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: DhgXzXSZ9wTatlivZAI48o5OWFJljlll
-X-Proofpoint-ORIG-GUID: DhgXzXSZ9wTatlivZAI48o5OWFJljlll
+X-Proofpoint-GUID: K94PsQbEWnB8ucNme7u7yCUP2nAtKPpq
+X-Proofpoint-ORIG-GUID: K94PsQbEWnB8ucNme7u7yCUP2nAtKPpq
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-30_18,2023-11-30_01,2023-05-22_02
 
-Add ability to provide token_fd for BPF_MAP_CREATE command through
-bpf_map_create() API.
+Wire through token_fd into bpf_prog_load().
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/bpf.c | 4 +++-
- tools/lib/bpf/bpf.h | 5 ++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ tools/lib/bpf/bpf.c | 3 ++-
+ tools/lib/bpf/bpf.h | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index d4019928a864..1653b64b7015 100644
+index 544ae2376b6b..f4e1da3c6d5f 100644
 --- a/tools/lib/bpf/bpf.c
 +++ b/tools/lib/bpf/bpf.c
-@@ -169,7 +169,7 @@ int bpf_map_create(enum bpf_map_type map_type,
- 		   __u32 max_entries,
- 		   const struct bpf_map_create_opts *opts)
+@@ -234,7 +234,7 @@ int bpf_prog_load(enum bpf_prog_type prog_type,
+ 		  const struct bpf_insn *insns, size_t insn_cnt,
+ 		  struct bpf_prog_load_opts *opts)
  {
--	const size_t attr_sz =3D offsetofend(union bpf_attr, map_extra);
-+	const size_t attr_sz =3D offsetofend(union bpf_attr, map_token_fd);
- 	union bpf_attr attr;
- 	int fd;
+-	const size_t attr_sz =3D offsetofend(union bpf_attr, log_true_size);
++	const size_t attr_sz =3D offsetofend(union bpf_attr, prog_token_fd);
+ 	void *finfo =3D NULL, *linfo =3D NULL;
+ 	const char *func_info, *line_info;
+ 	__u32 log_size, log_level, attach_prog_fd, attach_btf_obj_fd;
+@@ -263,6 +263,7 @@ int bpf_prog_load(enum bpf_prog_type prog_type,
+ 	attr.prog_flags =3D OPTS_GET(opts, prog_flags, 0);
+ 	attr.prog_ifindex =3D OPTS_GET(opts, prog_ifindex, 0);
+ 	attr.kern_version =3D OPTS_GET(opts, kern_version, 0);
++	attr.prog_token_fd =3D OPTS_GET(opts, token_fd, 0);
 =20
-@@ -198,6 +198,8 @@ int bpf_map_create(enum bpf_map_type map_type,
- 	attr.numa_node =3D OPTS_GET(opts, numa_node, 0);
- 	attr.map_ifindex =3D OPTS_GET(opts, map_ifindex, 0);
-=20
-+	attr.map_token_fd =3D OPTS_GET(opts, token_fd, 0);
-+
- 	fd =3D sys_bpf_fd(BPF_MAP_CREATE, &attr, attr_sz);
- 	return libbpf_err_errno(fd);
- }
+ 	if (prog_name && kernel_supports(NULL, FEAT_PROG_NAME))
+ 		libbpf_strlcpy(attr.prog_name, prog_name, sizeof(attr.prog_name));
 diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index e49254c9f68f..ae2136f596b4 100644
+index 4b0f25e97b0d..991b86bfe7e4 100644
 --- a/tools/lib/bpf/bpf.h
 +++ b/tools/lib/bpf/bpf.h
-@@ -51,8 +51,11 @@ struct bpf_map_create_opts {
-=20
- 	__u32 numa_node;
- 	__u32 map_ifindex;
-+
+@@ -105,9 +105,10 @@ struct bpf_prog_load_opts {
+ 	 * If kernel doesn't support this feature, log_size is left unchanged.
+ 	 */
+ 	__u32 log_true_size;
 +	__u32 token_fd;
-+	size_t :0;
+ 	size_t :0;
  };
--#define bpf_map_create_opts__last_field map_ifindex
-+#define bpf_map_create_opts__last_field token_fd
+-#define bpf_prog_load_opts__last_field log_true_size
++#define bpf_prog_load_opts__last_field token_fd
 =20
- LIBBPF_API int bpf_map_create(enum bpf_map_type map_type,
- 			      const char *map_name,
+ LIBBPF_API int bpf_prog_load(enum bpf_prog_type prog_type,
+ 			     const char *prog_name, const char *license,
 --=20
 2.34.1
 
