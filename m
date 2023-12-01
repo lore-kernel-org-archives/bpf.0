@@ -1,98 +1,141 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DJbXSE17"
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA61F3
-	for <bpf@vger.kernel.org>; Fri,  1 Dec 2023 06:33:30 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-54c4f95e27fso969677a12.1
-        for <bpf@vger.kernel.org>; Fri, 01 Dec 2023 06:33:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701441208; x=1702046008; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DGyky3IM+4wNEDcPOrSpBIpZb9HMLjXYHRCp+rzVQSs=;
-        b=DJbXSE17tvvCfeNDHgSrDMLM4WDVWJkNgw+wt2KMLhmxktZERzlV6/lzP2dwNZho6Y
-         93pv4iD5kNNJstDh04i5Q7D1OETrFcWdQzHLRuzh3EzX0xla3TS22PuPdxOLE7TdxYkF
-         iMn+jTNpDV8mAdC54KNBUw1Zth1+Z6tGA400XkclvYKQFd32W0lvKuvHCCSmK0eiTTaO
-         5eei3+9XaZRAcnW9U5ZewfN02uMDFlto7pec8FaHwDuk7+pv37VRMuHvHVnjlwP4Oh9b
-         Awnxt9XwQLOHmd0PZtQ5DgGiN/PSBE2ymMD0w/uAW13d795JbbE89Kq132T3Yu74+6iQ
-         /pow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701441208; x=1702046008;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DGyky3IM+4wNEDcPOrSpBIpZb9HMLjXYHRCp+rzVQSs=;
-        b=HmXsZg5sIALy8OOfHfllkYob9Vn7WWEHORJbTXuHz4VMlgAWp+f7v+GaLFULvOUVo0
-         DpiID+COHR/O4oiz8zGGFsfRedij+uGJ4mlu8X3GFCnMHNdriGUzIwUodARQN8svv7z2
-         YIbXiTn+5Gkc+1fMxUlEblGAVW80XLoa1vDQdhfA6LPwtAGkkd7brpB1gUQmUmDTufi/
-         S0Pzu2mkdaAm/ESsm32m0byJvZi9LrN2Y2/jBvf52niQhu4qdOrxpaJ9xMFVu2TNyRUX
-         Fqr7FHDgVVfDa9Iis1/GmhBoN9e2fsiYw0RmEtKDryeG+FBeyxpt8e7VLXO54a/iqt9U
-         sfRw==
-X-Gm-Message-State: AOJu0Yzfuy7w8/FlInyx9k7gxPy6V/N5EOrc21VrlQqfyGMtRQjmQeU8
-	WtxwwHbc6Cci90bKx+wVw3A=
-X-Google-Smtp-Source: AGHT+IGu4LqRamiKG+QjEtZnSnUOdRvCiIx1SOnRnuKssm1aF5PChWH7Nd1H5ATXI8W/ekA6vftvIw==
-X-Received: by 2002:a50:d4c4:0:b0:530:74ed:fc8a with SMTP id e4-20020a50d4c4000000b0053074edfc8amr1171930edj.41.1701441208280;
-        Fri, 01 Dec 2023 06:33:28 -0800 (PST)
-Received: from erthalion ([2a00:20:6005:5771:fa16:54ff:fe6e:2940])
-        by smtp.gmail.com with ESMTPSA id q26-20020aa7da9a000000b00542db304680sm1676339eds.63.2023.12.01.06.33.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Dec 2023 06:33:27 -0800 (PST)
-Date: Fri, 1 Dec 2023 15:29:49 +0100
-From: Dmitry Dolgov <9erthalion6@gmail.com>
-To: Artem Savkov <asavkov@redhat.com>
-Cc: Song Liu <song@kernel.org>, bpf@vger.kernel.org, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-	yonghong.song@linux.dev, dan.carpenter@linaro.org,
-	olsajiri@gmail.com
-Subject: Re: [PATCH bpf-next v4 1/3] bpf: Relax tracing prog recursive attach
- rules
-Message-ID: <20231201142949.wjw7rrmdeansm3mc@erthalion>
-References: <20231129195240.19091-1-9erthalion6@gmail.com>
- <20231129195240.19091-2-9erthalion6@gmail.com>
- <CAPhsuW6J+ZN7KQdxm+2=ZcGGkWohcQxeNS+nNjE5r0K-jdq=FQ@mail.gmail.com>
- <20231130100851.fymwxhwevd3t5d7m@ddolgov.remote.csb>
- <CAPhsuW7Yif_mhaUsiwSFyUD7Pv4sz163DBz73EDhnTGMhwdApg@mail.gmail.com>
- <20231130204134.4i4tloaylxrkrnrt@erthalion.local>
- <ZWmtfZlTq2hBn5zp@wtfbox.lan>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MAJKmm7P"
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9ED4D6C
+	for <bpf@vger.kernel.org>; Fri,  1 Dec 2023 06:40:54 -0800 (PST)
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B1EeOAK032737;
+	Fri, 1 Dec 2023 14:40:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=2ZvMr38UTQSlW05O40ou7eqAcgOr36AG6FUvjGXGOMU=;
+ b=MAJKmm7Pg6xZlv/uWPpb1qNHR6xQ+eUi3UuM1FPejkf9TE7eeauGMSMXN2mi2oYPXsQj
+ vPB4hZE+Z/tkRw4mmUt3g1NMDrIu5Fb25HEpE9Ex3UZfXp16y86Cx66sUH8EJdZnxPSG
+ RIqXENekKjEJhLjsZdQxJrqqGzZm/i/ISL0KtKYldxA/7/vi/MTjE9tBO1L3OuUe7gOr
+ BNv8OjpAY0ynJcw9dKsTjGhaYEOr011L9ZmvAzVZUZUeZQhUlZUKjofd5uwFfyG8dQ5M
+ BTXBeIB3UFbUoDOK3jClWn6UISlH9SXlB29O6aXiVPsY8ZGWtwhdMEiczYBEibkn6Mv4 mw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3uqh8rg9wu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 01 Dec 2023 14:40:31 +0000
+Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3B1EQpFT024196;
+	Fri, 1 Dec 2023 14:40:30 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3uqh8rg94n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 01 Dec 2023 14:40:29 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3B1Djr1P002651;
+	Fri, 1 Dec 2023 14:36:29 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3ukv8p5j0f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 01 Dec 2023 14:36:29 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3B1EaRgS27984240
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 1 Dec 2023 14:36:27 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 35C3620043;
+	Fri,  1 Dec 2023 14:36:27 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EA03720040;
+	Fri,  1 Dec 2023 14:36:26 +0000 (GMT)
+Received: from [9.155.200.166] (unknown [9.155.200.166])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  1 Dec 2023 14:36:26 +0000 (GMT)
+Message-ID: <59c3a7732d729c36c4134fc47723042e3bdafada.camel@linux.ibm.com>
+Subject: Re: [PATCHv2 bpf 1/2] bpf: Add checkip argument to
+ bpf_arch_text_poke
+From: Ilya Leoshkevich <iii@linux.ibm.com>
+To: Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu
+ <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend
+ <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, Stanislav
+ Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Xu Kuohai
+ <xukuohai@huawei.com>,
+        Will Deacon <will@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>,
+        Pu Lehui <pulehui@huawei.com>,
+        =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        Lee Jones
+ <lee@kernel.org>
+Date: Fri, 01 Dec 2023 15:36:26 +0100
+In-Reply-To: <20231128092850.1545199-2-jolsa@kernel.org>
+References: <20231128092850.1545199-1-jolsa@kernel.org>
+	 <20231128092850.1545199-2-jolsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZWmtfZlTq2hBn5zp@wtfbox.lan>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: W4zWhAdBwOIBRyLONIg92-UlEx6w_c6a
+X-Proofpoint-GUID: OLWfVbv9cDgNS643JNcj1fAQfZx8Gcd3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-01_12,2023-11-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=879
+ lowpriorityscore=0 priorityscore=1501 bulkscore=0 mlxscore=0 clxscore=1015
+ spamscore=0 impostorscore=0 malwarescore=0 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311060000
+ definitions=main-2312010101
 
-> On Fri, Dec 01, 2023 at 10:55:09AM +0100, Artem Savkov wrote:
-> On Thu, Nov 30, 2023 at 09:41:34PM +0100, Dmitry Dolgov wrote:
-> > > On Thu, Nov 30, 2023 at 12:19:31PM -0800, Song Liu wrote:
-> > > > All in all I've decided that more elaborated approach is slightly
-> > > > better. But if everyone in the community agrees that less
-> > > > "defensiveness" is not an issue and verifier could be simply made less
-> > > > restrictive, I'm fine with that. What do you think?
-> > >
-> > > I think the follower_cnt check is not necessary, and may cause confusions.
-> > > For tracing programs, we are very specific on "which function(s) are we
-> > > tracing". So I don't think circular attachment can be a real issue. Do we
-> > > have potential use cases that make the circular attach possible?
-> >
-> > At the moment no, nothing like that in sight. Ok, you've convinced me --
-> > plus since nobody has yet actively mentioned that potential cycle
-> > prevention is nice to have, I can drop follower_cnt and the
-> > corresponding check in the verifier.
->
-> If you are worried about potential future situations where cyclic
-> attaches are possible would it make sense to add a test that checks if
-> this fails?
+T24gVHVlLCAyMDIzLTExLTI4IGF0IDEwOjI4ICswMTAwLCBKaXJpIE9sc2Egd3JvdGU6Cj4gV2Ug
+bmVlZCB0byBiZSBhYmxlIHRvIHNraXAgaXAgYWRkcmVzcyBjaGVjayBmb3IgY2FsbGVyIGluIGZv
+bGxvd2luZwo+IGNoYW5nZXMuIEFkZGluZyBjaGVja2lwIGFyZ3VtZW50IHRvIGFsbG93IHRoYXQu
+Cj4gCj4gU2lnbmVkLW9mZi1ieTogSmlyaSBPbHNhIDxqb2xzYUBrZXJuZWwub3JnPgo+IC0tLQo+
+IMKgYXJjaC9hcm02NC9uZXQvYnBmX2ppdF9jb21wLmPCoMKgIHzCoCAzICsrLQo+IMKgYXJjaC9y
+aXNjdi9uZXQvYnBmX2ppdF9jb21wNjQuYyB8wqAgNSArKystLQo+IMKgYXJjaC9zMzkwL25ldC9i
+cGZfaml0X2NvbXAuY8KgwqDCoCB8wqAgMyArKy0KPiDCoGFyY2gveDg2L25ldC9icGZfaml0X2Nv
+bXAuY8KgwqDCoMKgIHwgMjQgKysrKysrKysrKysrKy0tLS0tLS0tLS0tCj4gwqBpbmNsdWRlL2xp
+bnV4L2JwZi5owqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCAyICstCj4gwqBrZXJuZWwvYnBm
+L2FycmF5bWFwLmPCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgOCArKysrLS0tLQo+IMKga2VybmVs
+L2JwZi9jb3JlLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCAyICstCj4gwqBrZXJu
+ZWwvYnBmL3RyYW1wb2xpbmUuY8KgwqDCoMKgwqDCoMKgwqAgfCAxMiArKysrKystLS0tLS0KPiDC
+oDggZmlsZXMgY2hhbmdlZCwgMzIgaW5zZXJ0aW9ucygrKSwgMjcgZGVsZXRpb25zKC0pCgpbLi4u
+XQoKPiAtLS0gYS9hcmNoL3g4Ni9uZXQvYnBmX2ppdF9jb21wLmMKPiArKysgYi9hcmNoL3g4Ni9u
+ZXQvYnBmX2ppdF9jb21wLmMKPiBAQCAtNDM1LDE5ICs0MzUsMjEgQEAgc3RhdGljIGludCBfX2Jw
+Zl9hcmNoX3RleHRfcG9rZSh2b2lkICppcCwgZW51bQo+IGJwZl90ZXh0X3Bva2VfdHlwZSB0LAo+
+IMKgfQo+IMKgCj4gwqBpbnQgYnBmX2FyY2hfdGV4dF9wb2tlKHZvaWQgKmlwLCBlbnVtIGJwZl90
+ZXh0X3Bva2VfdHlwZSB0LAo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgdm9pZCAqb2xkX2FkZHIsIHZvaWQgKm5ld19hZGRyKQo+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdm9pZCAqb2xkX2FkZHIsIHZvaWQgKm5ld19hZGRy
+LCBib29sIGNoZWNraXApCj4gwqB7Cj4gLcKgwqDCoMKgwqDCoMKgaWYgKCFpc19rZXJuZWxfdGV4
+dCgobG9uZylpcCkgJiYKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqAgIWlzX2JwZl90ZXh0X2FkZHJl
+c3MoKGxvbmcpaXApKQo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAvKiBCUEYgcG9r
+aW5nIGluIG1vZHVsZXMgaXMgbm90IHN1cHBvcnRlZCAqLwo+IC3CoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqByZXR1cm4gLUVJTlZBTDsKPiArwqDCoMKgwqDCoMKgwqBpZiAoY2hlY2tpcCkg
+ewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoIWlzX2tlcm5lbF90ZXh0KChs
+b25nKWlwKSAmJgo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgIWlzX2Jw
+Zl90ZXh0X2FkZHJlc3MoKGxvbmcpaXApKQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgLyogQlBGIHBva2luZyBpbiBtb2R1bGVzIGlzIG5vdCBzdXBwb3J0
+ZWQgKi8KPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJl
+dHVybiAtRUlOVkFMOwo+IMKgCj4gLcKgwqDCoMKgwqDCoMKgLyoKPiAtwqDCoMKgwqDCoMKgwqAg
+KiBTZWUgZW1pdF9wcm9sb2d1ZSgpLCBmb3IgSUJUIGJ1aWxkcyB0aGUgdHJhbXBvbGluZSBob29r
+IGlzCj4gcHJlY2VkZWQKPiAtwqDCoMKgwqDCoMKgwqAgKiB3aXRoIGFuIEVOREJSIGluc3RydWN0
+aW9uLgo+IC3CoMKgwqDCoMKgwqDCoCAqLwo+IC3CoMKgwqDCoMKgwqDCoGlmIChpc19lbmRicigq
+KHUzMiAqKWlwKSkKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaXAgKz0gRU5EQlJf
+SU5TTl9TSVpFOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAvKgo+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBTZWUgZW1pdF9wcm9sb2d1ZSgpLCBmb3IgSUJUIGJ1
+aWxkcyB0aGUgdHJhbXBvbGluZQo+IGhvb2sgaXMgcHJlY2VkZWQKPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgICogd2l0aCBhbiBFTkRCUiBpbnN0cnVjdGlvbi4KPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgICovCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oGlmIChpc19lbmRicigqKHUzMiAqKWlwKSkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoGlwICs9IEVOREJSX0lOU05fU0laRTsKCkRvIHdlIHJlYWxseSB3
+YW50IHRvIHNraXAgdGhlIElQIGFkanVzdG1lbnQgdG9vPwoKPiArwqDCoMKgwqDCoMKgwqB9Cj4g
+wqAKPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIF9fYnBmX2FyY2hfdGV4dF9wb2tlKGlwLCB0LCBv
+bGRfYWRkciwgbmV3X2FkZHIpOwo+IMKgfQoKWy4uLl0K
 
-Do you mean a test that cyclic attachment doesn't work due to the
-current limitations (not the one in verifier)? Sounds interesting, but
-I'm hesitant to add such a test -- it would verify a property that is
-more like a side effect of e.g. having attach_prog_fd at prog load, and
-most likely will be either incomplete or flaky.
-
-At the moment I'm pretty convinced that even if the future changes will
-make cycles possible, it's something that has to be discussed at the
-point when such change will land, and it's fine for now to simplify
-things.
