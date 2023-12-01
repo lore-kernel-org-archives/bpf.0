@@ -1,68 +1,172 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gPxB7u9D"
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67561700
-	for <bpf@vger.kernel.org>; Fri,  1 Dec 2023 06:25:23 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-a1a22b7f519so76143366b.2
-        for <bpf@vger.kernel.org>; Fri, 01 Dec 2023 06:25:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701440722; x=1702045522; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1G+1KDDtZY0ZAy0sDJUrklL0CIlj8MUddz//nOg7B/4=;
-        b=gPxB7u9D6g4K7JV50EcpsQva05kXYoL9zWRkCTnRihAzWfr7XgCqh0gbygHbBD5rT5
-         ISLQ3VqQCBSGO7XNf65TuPUNtUVnrgOjto8y1BrLRweqxpJsbbxMc8Vrr9m5DRxYmD/B
-         iN+XSfx0OUAwyl2jdRBdUUxAysvrIdxqrX/dG52qM7oxDGabe416IFBPi3w3QQKbvS0z
-         2NdOHa2gC74jdU95gW9eTwBdLFDbZ+UNBDxDm+vScJ7jRQMBQPHhKECpSSV8HgZHcJIr
-         fC1foueMb9K5O//5TbThwCdUjfkmopIqKkUW6siFs1Ip8JdCGwyBRUcl2DcMMMhsBHcK
-         o1dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701440722; x=1702045522;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1G+1KDDtZY0ZAy0sDJUrklL0CIlj8MUddz//nOg7B/4=;
-        b=en4qHW8MRRoV74DwDHch5/m6cyIcbgfVFc7EJxJK0Xn+69126NgWRP0uYHZGpr3G5h
-         /rS/+WSacNRumUj4xQ2XOUfa4Qtj08P0ObDrkKZ5KAoR4rHtlcghsp6wS7VLGZ/N/7SS
-         AQilI+tk0WeXpB9xiym5SsfSQqpKGR1HVkwuZ9wkEU3v/5zkDBTHzpXpfnYtUuWQ0ddC
-         +b42AVdJrTMsy2SnAKUITd8uC1jIAlCxBBnydZUISnfM900y2l1WspzZ1pHmH60BqAjC
-         usHA0KywHpGlWhZNCaUrIlRbcrHHGUgcIEL5ALYeqc3shbZpq4rID1W0WE/mxWGXWv5I
-         c1Ng==
-X-Gm-Message-State: AOJu0YyTZIjh4w8KvwDBvOKBDmej6JK8RqKrwnmGpgC/QSY44TL96Xjh
-	8mivTkYONlb2T6yMdOYxZiQ=
-X-Google-Smtp-Source: AGHT+IGHOzcbgzHQPWq2jOfnYU9f+Y+XeQick5aVzv76FG9NflCvMnM6cNvTcgdSLWPXW14+e1OjAQ==
-X-Received: by 2002:a17:906:2288:b0:a19:740a:5885 with SMTP id p8-20020a170906228800b00a19740a5885mr486992eja.41.1701440722125;
-        Fri, 01 Dec 2023 06:25:22 -0800 (PST)
-Received: from erthalion ([2a00:20:6005:5771:fa16:54ff:fe6e:2940])
-        by smtp.gmail.com with ESMTPSA id jg41-20020a170907972900b00a046a773175sm1946384ejc.122.2023.12.01.06.25.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Dec 2023 06:25:21 -0800 (PST)
-Date: Fri, 1 Dec 2023 15:21:43 +0100
-From: Dmitry Dolgov <9erthalion6@gmail.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="LuHKOrva"
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B9310F3
+	for <bpf@vger.kernel.org>; Fri,  1 Dec 2023 06:32:25 -0800 (PST)
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B1EUfIF024642;
+	Fri, 1 Dec 2023 14:32:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=4tLagUnOMdekCY60heBr/HX29EYimT3PFCkGgoz/pgk=;
+ b=LuHKOrvarHli5UMYSFBEHEZA8UCoPd45Kd+/lq/H8tC8GEKvjfPS8TKzUvoghqe0aQX1
+ lw15jUzPI2f1bqraSFS5BLVeww2OnQ+R4asrGAudyRNK+TNeSqPaSM+StnERF9GCLxse
+ XzHwW156HrxLwb3j+fAIogyUpsQfFnbedb5WLjqDAuXy3VN4NAp0yY0+CYsr0YMMH5sg
+ Q6uog1PZ3ZeKcHsPjlnZ9Kxq64E8KivYFBqyMhvU29+rVpzpgfetvqQfEM+/pPgnlPkP
+ DOtCnNuzwuFSj7N+L6M2LrggCwlS9R8MrY1JvZ1r6xdfeQYNPgjOuorezq8k8d0b4gtR VA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3uqh1v0js5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 01 Dec 2023 14:32:01 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3B1EUgdO024812;
+	Fri, 1 Dec 2023 14:32:00 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3uqh1v0jrs-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 01 Dec 2023 14:32:00 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3B1Dp4Rp000739;
+	Fri, 1 Dec 2023 14:31:59 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3uku8tnu2f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 01 Dec 2023 14:31:59 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3B1EVvhd22348376
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 1 Dec 2023 14:31:57 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C93402004D;
+	Fri,  1 Dec 2023 14:31:57 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6EAC520043;
+	Fri,  1 Dec 2023 14:31:57 +0000 (GMT)
+Received: from [9.155.200.166] (unknown [9.155.200.166])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  1 Dec 2023 14:31:57 +0000 (GMT)
+Message-ID: <a3e9cb8d96b663e9c110bdd6b90bdd37b92028d7.camel@linux.ibm.com>
+Subject: Re: [PATCHv2 bpf 0/2] bpf: Fix prog_array_map_poke_run map poke
+ update
+From: Ilya Leoshkevich <iii@linux.ibm.com>
 To: Jiri Olsa <olsajiri@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-	yonghong.song@linux.dev, dan.carpenter@linaro.org
-Subject: Re: [PATCH bpf-next v4 3/3] bpf, selftest/bpf: Fix re-attachment
- branch in bpf_tracing_prog_attach
-Message-ID: <20231201142143.i66qvk262a7zqg2h@erthalion>
-References: <20231129195240.19091-1-9erthalion6@gmail.com>
- <20231129195240.19091-4-9erthalion6@gmail.com>
- <ZWim7zRLA-cgVQpr@krava>
- <ZWkNBR-1RF8r4deG@krava>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann
+ <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>, Song Liu
+ <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>, John Fastabend
+ <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, Stanislav
+ Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Xu Kuohai
+ <xukuohai@huawei.com>,
+        Will Deacon <will@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>,
+        Pu Lehui <pulehui@huawei.com>,
+        =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        Lee Jones
+ <lee@kernel.org>
+Date: Fri, 01 Dec 2023 15:31:57 +0100
+In-Reply-To: <ZWnb8ptRW1DW6JLp@krava>
+References: <20231128092850.1545199-1-jolsa@kernel.org>
+	 <22e3824bce10a895b1c9ce33ed7473561d288e69.camel@linux.ibm.com>
+	 <ZWc7OHnLux47RpOr@krava> <ZWnb8ptRW1DW6JLp@krava>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 3IXZQY5BSG55KhLhJETqZTqoJAwQaKK0
+X-Proofpoint-ORIG-GUID: kyngso6S9ZpCa7liIQAxEJ-F1PFBCQ88
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZWkNBR-1RF8r4deG@krava>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-01_12,2023-11-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ mlxscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
+ priorityscore=1501 adultscore=0 clxscore=1015 mlxlogscore=820
+ suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311060000 definitions=main-2312010100
 
-> On Thu, Nov 30, 2023 at 11:30:29PM +0100, Jiri Olsa wrote:
-> AFAICS we can't do anything here, because program was loaded for tgt_prog but we
-> have no way to find out which one.. so return -EINVAL, like in the patch below
+On Fri, 2023-12-01 at 14:13 +0100, Jiri Olsa wrote:
+> On Wed, Nov 29, 2023 at 02:23:04PM +0100, Jiri Olsa wrote:
+> > On Tue, Nov 28, 2023 at 11:44:33PM +0100, Ilya Leoshkevich wrote:
+> > > On Tue, 2023-11-28 at 10:28 +0100, Jiri Olsa wrote:
+> > > > hi,
+> > > > this patchset fixes the issue reported in [0].
+> > > >=20
+> > > > For the actual fix in patch 2 I'm changing bpf_arch_text_poke
+> > > > to
+> > > > allow to skip
+> > > > ip address check in patch 1. I considered adding separate
+> > > > function
+> > > > for that,
+> > > > but because each arch implementation is bit different, adding
+> > > > extra
+> > > > arg seemed
+> > > > like better option.
+> > > >=20
+> > > > v2 changes:
+> > > > =C2=A0 - make it work for other archs
+> > > >=20
+> > > > thanks,
+> > > > jirka
+> > > >=20
+> > > >=20
+> > > > [0]
+> > > > https://syzkaller.appspot.com/bug?extid=3D97a4fe20470e9bc30810
+> > > > ---
+> > > > Jiri Olsa (2):
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bpf: Add checkip argument to bpf_arc=
+h_text_poke
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bpf, x64: Fix prog_array_map_poke_ru=
+n map poke update
+> > > >=20
+> > > > =C2=A0arch/arm64/net/bpf_jit_comp.c=C2=A0=C2=A0 |=C2=A0 3 ++-
+> > > > =C2=A0arch/riscv/net/bpf_jit_comp64.c |=C2=A0 5 +++--
+> > > > =C2=A0arch/s390/net/bpf_jit_comp.c=C2=A0=C2=A0=C2=A0 |=C2=A0 3 ++-
+> > > > =C2=A0arch/x86/net/bpf_jit_comp.c=C2=A0=C2=A0=C2=A0=C2=A0 | 24 ++++=
++++++++++-----------
+> > > > =C2=A0include/linux/bpf.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 2 +-
+> > > > =C2=A0kernel/bpf/arraymap.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 | 31 +++++++++++--------------
+> > > > ------
+> > > > =C2=A0kernel/bpf/core.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 2 +-
+> > > > =C2=A0kernel/bpf/trampoline.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 | 12 ++++++------
+> > > > =C2=A08 files changed, 39 insertions(+), 43 deletions(-)
+> > >=20
+> > > Would it be possible to add a minimized version of the reproducer
+> > > as a
+> > > testcase?
+> >=20
+> > there's reproducer I used in here:
+> > =C2=A0 https://syzkaller.appspot.com/text?tag=3DReproC&x=3D1397180f6800=
+00
+> >=20
+> > I can try, but not sure I'll be able to come up with something that
+> > would fit as testcase.. I'll check
+>=20
+> the test below reproduces it for me.. the only tricky part is that
+> I need to repeat the loop 10 times to trigger that on my setup..
+> which is not terrible, but not great for a test I think
+>=20
+> jirka
 
-Yep, makes sense. Is that fine if I include this patch into the series
-with you as an author, with signed-off and everything?
+The test looks useful to me. I think having magic repetition counts
+like this 10 here is almost inevitable when trying to reproduce race
+conditions. The test also runs quickly for me. You can have my
+
+Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
+
+in case you decide to make a formal patch.
