@@ -1,15 +1,15 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B349100
-	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 06:03:27 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93915FD
+	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 06:03:26 -0800 (PST)
 Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4SkQP43F5Lz4f3lD6
-	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 22:03:20 +0800 (CST)
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4SkQP708gKz4f3jqC
+	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 22:03:23 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 1FF291A09B4
-	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 22:03:25 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 0D2301A01A5
+	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 22:03:24 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP1 (Coremail) with SMTP id cCh0CgBHShAl3G1l+wflCg--.13401S10;
-	Mon, 04 Dec 2023 22:03:24 +0800 (CST)
+	by APP1 (Coremail) with SMTP id cCh0CgBHShAl3G1l+wflCg--.13401S8;
+	Mon, 04 Dec 2023 22:03:23 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -25,9 +25,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	John Fastabend <john.fastabend@gmail.com>,
 	"Paul E . McKenney" <paulmck@kernel.org>,
 	houtao1@huawei.com
-Subject: [PATCH bpf v5 6/7] selftests/bpf: Add test cases for inner map
-Date: Mon,  4 Dec 2023 22:04:24 +0800
-Message-Id: <20231204140425.1480317-7-houtao@huaweicloud.com>
+Subject: [PATCH bpf v5 4/7] bpf: Defer the free of inner map when necessary
+Date: Mon,  4 Dec 2023 22:04:22 +0800
+Message-Id: <20231204140425.1480317-5-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20231204140425.1480317-1-houtao@huaweicloud.com>
 References: <20231204140425.1480317-1-houtao@huaweicloud.com>
@@ -38,10 +38,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgBHShAl3G1l+wflCg--.13401S10
-X-Coremail-Antispam: 1UD129KBjvJXoW3Wry8uw1fGw15KrWkGrWUtwb_yoWftry5pF
-	WrCry3CrW8JrWUXw4Uta17uFW8Krs5Ww1UtanYkr15ZF1DWr9xXrZ7WFWUXF13urWkAryF
-	93ZFyay8G3ykAFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:cCh0CgBHShAl3G1l+wflCg--.13401S8
+X-Coremail-Antispam: 1UD129KBjvJXoWxZr4UGry7GFWkur4xXrWrXwb_yoWrtF15pF
+	Z8K34rCw40qr429rZxZa17ZrWYyw4fW34DGas5Ga4Yyrn8Wr9Fv3W0gFy5AF15Ar4kJrW2
+	vrnIg34FkayUZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUBab4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -52,349 +52,139 @@ X-Coremail-Antispam: 1UD129KBjvJXoW3Wry8uw1fGw15KrWkGrWUtwb_yoWftry5pF
 	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
 	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
 	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY
+	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY
 	6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
 	CY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZo7tUUUUU=
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-Add test cases to test the race between the destroy of inner map due to
-map-in-map update and the access of inner map in bpf program. The
-following 4 combinations are added:
-(1) array map in map array + bpf program
-(2) array map in map array + sleepable bpf program
-(3) array map in map htab + bpf program
-(4) array map in map htab + sleepable bpf program
+When updating or deleting an inner map in map array or map htab, the map
+may still be accessed by non-sleepable program or sleepable program.
+However bpf_map_fd_put_ptr() decreases the ref-counter of the inner map
+directly through bpf_map_put(), if the ref-counter is the last one
+(which is true for most cases), the inner map will be freed by
+ops->map_free() in a kworker. But for now, most .map_free() callbacks
+don't use synchronize_rcu() or its variants to wait for the elapse of a
+RCU grace period, so after the invocation of ops->map_free completes,
+the bpf program which is accessing the inner map may incur
+use-after-free problem.
 
-Before applying the fixes, when running `./test_prog -a map_in_map`, the
-following error was reported:
+Fix the free of inner map by invoking bpf_map_free_deferred() after both
+one RCU grace period and one tasks trace RCU grace period if the inner
+map has been removed from the outer map before. The deferment is
+accomplished by using call_rcu() or call_rcu_tasks_trace() when
+releasing the last ref-counter of bpf map. The newly-added rcu_head
+field in bpf_map shares the same storage space with work field to
+reduce the size of bpf_map.
 
-  ==================================================================
-  BUG: KASAN: slab-use-after-free in array_map_update_elem+0x48/0x3e0
-  Read of size 4 at addr ffff888114f33824 by task test_progs/1858
-
-  CPU: 1 PID: 1858 Comm: test_progs Tainted: G           O     6.6.0+ #7
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996) ......
-  Call Trace:
-   <TASK>
-   dump_stack_lvl+0x4a/0x90
-   print_report+0xd2/0x620
-   kasan_report+0xd1/0x110
-   __asan_load4+0x81/0xa0
-   array_map_update_elem+0x48/0x3e0
-   bpf_prog_be94a9f26772f5b7_access_map_in_array+0xe6/0xf6
-   trace_call_bpf+0x1aa/0x580
-   kprobe_perf_func+0xdd/0x430
-   kprobe_dispatcher+0xa0/0xb0
-   kprobe_ftrace_handler+0x18b/0x2e0
-   0xffffffffc02280f7
-  RIP: 0010:__x64_sys_getpgid+0x1/0x30
-  ......
-   </TASK>
-
-  Allocated by task 1857:
-   kasan_save_stack+0x26/0x50
-   kasan_set_track+0x25/0x40
-   kasan_save_alloc_info+0x1e/0x30
-   __kasan_kmalloc+0x98/0xa0
-   __kmalloc_node+0x6a/0x150
-   __bpf_map_area_alloc+0x141/0x170
-   bpf_map_area_alloc+0x10/0x20
-   array_map_alloc+0x11f/0x310
-   map_create+0x28a/0xb40
-   __sys_bpf+0x753/0x37c0
-   __x64_sys_bpf+0x44/0x60
-   do_syscall_64+0x36/0xb0
-   entry_SYSCALL_64_after_hwframe+0x6e/0x76
-
-  Freed by task 11:
-   kasan_save_stack+0x26/0x50
-   kasan_set_track+0x25/0x40
-   kasan_save_free_info+0x2b/0x50
-   __kasan_slab_free+0x113/0x190
-   slab_free_freelist_hook+0xd7/0x1e0
-   __kmem_cache_free+0x170/0x260
-   kfree+0x9b/0x160
-   kvfree+0x2d/0x40
-   bpf_map_area_free+0xe/0x20
-   array_map_free+0x120/0x2c0
-   bpf_map_free_deferred+0xd7/0x1e0
-   process_one_work+0x462/0x990
-   worker_thread+0x370/0x670
-   kthread+0x1b0/0x200
-   ret_from_fork+0x3a/0x70
-   ret_from_fork_asm+0x1b/0x30
-
-  Last potentially related work creation:
-   kasan_save_stack+0x26/0x50
-   __kasan_record_aux_stack+0x94/0xb0
-   kasan_record_aux_stack_noalloc+0xb/0x20
-   __queue_work+0x331/0x950
-   queue_work_on+0x75/0x80
-   bpf_map_put+0xfa/0x160
-   bpf_map_fd_put_ptr+0xe/0x20
-   bpf_fd_array_map_update_elem+0x174/0x1b0
-   bpf_map_update_value+0x2b7/0x4a0
-   __sys_bpf+0x2551/0x37c0
-   __x64_sys_bpf+0x44/0x60
-   do_syscall_64+0x36/0xb0
-   entry_SYSCALL_64_after_hwframe+0x6e/0x76
-
+Fixes: bba1dc0b55ac ("bpf: Remove redundant synchronize_rcu.")
+Fixes: 638e4b825d52 ("bpf: Allows per-cpu maps and map-in-map in sleepable programs")
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- .../selftests/bpf/prog_tests/map_in_map.c     | 141 ++++++++++++++++++
- .../selftests/bpf/progs/access_map_in_map.c   |  93 ++++++++++++
- 2 files changed, 234 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/map_in_map.c
- create mode 100644 tools/testing/selftests/bpf/progs/access_map_in_map.c
+ include/linux/bpf.h     |  7 ++++++-
+ kernel/bpf/map_in_map.c | 11 ++++++++---
+ kernel/bpf/syscall.c    | 32 +++++++++++++++++++++++++++-----
+ 3 files changed, 41 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_in_map.c b/tools/testing/selftests/bpf/prog_tests/map_in_map.c
-new file mode 100644
-index 000000000000..d2a10eb4e5b5
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/map_in_map.c
-@@ -0,0 +1,141 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2023. Huawei Technologies Co., Ltd */
-+#define _GNU_SOURCE
-+#include <unistd.h>
-+#include <sys/syscall.h>
-+#include <test_progs.h>
-+#include <bpf/btf.h>
-+#include "access_map_in_map.skel.h"
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 6f68ac24bb9a..15a6bb951b70 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -276,7 +276,11 @@ struct bpf_map {
+ 	 */
+ 	atomic64_t refcnt ____cacheline_aligned;
+ 	atomic64_t usercnt;
+-	struct work_struct work;
++	/* rcu is used before freeing and work is only used during freeing */
++	union {
++		struct work_struct work;
++		struct rcu_head rcu;
++	};
+ 	struct mutex freeze_mutex;
+ 	atomic64_t writecnt;
+ 	/* 'Ownership' of program-containing map is claimed by the first program
+@@ -292,6 +296,7 @@ struct bpf_map {
+ 	} owner;
+ 	bool bypass_spec_v1;
+ 	bool frozen; /* write-once; write-protected by freeze_mutex */
++	bool free_after_mult_rcu_gp;
+ 	s64 __percpu *elem_count;
+ };
+ 
+diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
+index 2dfeb5835e16..3248ff5d8161 100644
+--- a/kernel/bpf/map_in_map.c
++++ b/kernel/bpf/map_in_map.c
+@@ -129,10 +129,15 @@ void *bpf_map_fd_get_ptr(struct bpf_map *map,
+ 
+ void bpf_map_fd_put_ptr(struct bpf_map *map, void *ptr, bool need_defer)
+ {
+-	/* ptr->ops->map_free() has to go through one
+-	 * rcu grace period by itself.
++	struct bpf_map *inner_map = ptr;
 +
-+struct thread_ctx {
-+	pthread_barrier_t barrier;
-+	int outer_map_fd;
-+	int start, abort;
-+	int loop, err;
-+};
-+
-+static int wait_for_start_or_abort(struct thread_ctx *ctx)
++	/* The inner map may still be used by both non-sleepable and sleepable
++	 * bpf program, so free it after one RCU grace period and one tasks
++	 * trace RCU grace period.
+ 	 */
+-	bpf_map_put(ptr);
++	if (need_defer)
++		WRITE_ONCE(inner_map->free_after_mult_rcu_gp, true);
++	bpf_map_put(inner_map);
+ }
+ 
+ u32 bpf_map_fd_sys_lookup_elem(void *ptr)
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index a144eb286974..88882cb58121 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -718,6 +718,28 @@ static void bpf_map_put_uref(struct bpf_map *map)
+ 	}
+ }
+ 
++static void bpf_map_free_in_work(struct bpf_map *map)
 +{
-+	while (!ctx->start && !ctx->abort)
-+		usleep(1);
-+	return ctx->abort ? -1 : 0;
++	INIT_WORK(&map->work, bpf_map_free_deferred);
++	/* Avoid spawning kworkers, since they all might contend
++	 * for the same mutex like slab_mutex.
++	 */
++	queue_work(system_unbound_wq, &map->work);
 +}
 +
-+static void *update_map_fn(void *data)
++static void bpf_map_free_rcu_gp(struct rcu_head *rcu)
 +{
-+	struct thread_ctx *ctx = data;
-+	int loop = ctx->loop, err = 0;
-+
-+	if (wait_for_start_or_abort(ctx) < 0)
-+		return NULL;
-+	pthread_barrier_wait(&ctx->barrier);
-+
-+	while (loop-- > 0) {
-+		int fd, zero = 0;
-+
-+		fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, NULL, 4, 4, 1, NULL);
-+		if (fd < 0) {
-+			err |= 1;
-+			pthread_barrier_wait(&ctx->barrier);
-+			continue;
-+		}
-+
-+		/* Remove the old inner map */
-+		if (bpf_map_update_elem(ctx->outer_map_fd, &zero, &fd, 0) < 0)
-+			err |= 2;
-+		close(fd);
-+		pthread_barrier_wait(&ctx->barrier);
-+	}
-+
-+	ctx->err = err;
-+
-+	return NULL;
++	bpf_map_free_in_work(container_of(rcu, struct bpf_map, rcu));
 +}
 +
-+static void *access_map_fn(void *data)
++static void bpf_map_free_mult_rcu_gp(struct rcu_head *rcu)
 +{
-+	struct thread_ctx *ctx = data;
-+	int loop = ctx->loop;
-+
-+	if (wait_for_start_or_abort(ctx) < 0)
-+		return NULL;
-+	pthread_barrier_wait(&ctx->barrier);
-+
-+	while (loop-- > 0) {
-+		/* Access the old inner map */
-+		syscall(SYS_getpgid);
-+		pthread_barrier_wait(&ctx->barrier);
-+	}
-+
-+	return NULL;
++	if (rcu_trace_implies_rcu_gp())
++		bpf_map_free_rcu_gp(rcu);
++	else
++		call_rcu(rcu, bpf_map_free_rcu_gp);
 +}
 +
-+static void test_map_in_map_access(const char *prog_name, const char *map_name)
-+{
-+	struct access_map_in_map *skel;
-+	struct bpf_map *outer_map;
-+	struct bpf_program *prog;
-+	struct thread_ctx ctx;
-+	pthread_t tid[2];
-+	int err;
+ /* decrement map refcnt and schedule it for freeing via workqueue
+  * (underlying map implementation ops->map_free() might sleep)
+  */
+@@ -727,11 +749,11 @@ void bpf_map_put(struct bpf_map *map)
+ 		/* bpf_map_free_id() must be called first */
+ 		bpf_map_free_id(map);
+ 		btf_put(map->btf);
+-		INIT_WORK(&map->work, bpf_map_free_deferred);
+-		/* Avoid spawning kworkers, since they all might contend
+-		 * for the same mutex like slab_mutex.
+-		 */
+-		queue_work(system_unbound_wq, &map->work);
 +
-+	skel = access_map_in_map__open();
-+	if (!ASSERT_OK_PTR(skel, "access_map_in_map open"))
-+		return;
-+
-+	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
-+	if (!ASSERT_OK_PTR(prog, "find program"))
-+		goto out;
-+	bpf_program__set_autoload(prog, true);
-+
-+	outer_map = bpf_object__find_map_by_name(skel->obj, map_name);
-+	if (!ASSERT_OK_PTR(outer_map, "find map"))
-+		goto out;
-+
-+	err = access_map_in_map__load(skel);
-+	if (!ASSERT_OK(err, "access_map_in_map load"))
-+		goto out;
-+
-+	err = access_map_in_map__attach(skel);
-+	if (!ASSERT_OK(err, "access_map_in_map attach"))
-+		goto out;
-+
-+	skel->bss->tgid = getpid();
-+
-+	memset(&ctx, 0, sizeof(ctx));
-+	pthread_barrier_init(&ctx.barrier, NULL, 2);
-+	ctx.outer_map_fd = bpf_map__fd(outer_map);
-+	ctx.loop = 4;
-+
-+	err = pthread_create(&tid[0], NULL, update_map_fn, &ctx);
-+	if (!ASSERT_OK(err, "close_thread"))
-+		goto out;
-+
-+	err = pthread_create(&tid[1], NULL, access_map_fn, &ctx);
-+	if (!ASSERT_OK(err, "read_thread")) {
-+		ctx.abort = 1;
-+		pthread_join(tid[0], NULL);
-+		goto out;
-+	}
-+
-+	ctx.start = 1;
-+	pthread_join(tid[0], NULL);
-+	pthread_join(tid[1], NULL);
-+
-+	ASSERT_OK(ctx.err, "err");
-+out:
-+	access_map_in_map__destroy(skel);
-+}
-+
-+void test_map_in_map(void)
-+{
-+	if (test__start_subtest("acc_map_in_array"))
-+		test_map_in_map_access("access_map_in_array", "outer_array_map");
-+	if (test__start_subtest("sleepable_acc_map_in_array"))
-+		test_map_in_map_access("sleepable_access_map_in_array", "outer_array_map");
-+	if (test__start_subtest("acc_map_in_htab"))
-+		test_map_in_map_access("access_map_in_htab", "outer_htab_map");
-+	if (test__start_subtest("sleepable_acc_map_in_htab"))
-+		test_map_in_map_access("sleepable_access_map_in_htab", "outer_htab_map");
-+}
-+
-diff --git a/tools/testing/selftests/bpf/progs/access_map_in_map.c b/tools/testing/selftests/bpf/progs/access_map_in_map.c
-new file mode 100644
-index 000000000000..1126871c2ebd
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/access_map_in_map.c
-@@ -0,0 +1,93 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2023. Huawei Technologies Co., Ltd */
-+#include <linux/bpf.h>
-+#include <time.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#include "bpf_misc.h"
-+
-+struct inner_map_type {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(key_size, 4);
-+	__uint(value_size, 4);
-+	__uint(max_entries, 1);
-+} inner_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__type(key, int);
-+	__type(value, int);
-+	__uint(max_entries, 1);
-+	__array(values, struct inner_map_type);
-+} outer_array_map SEC(".maps") = {
-+	.values = {
-+		[0] = &inner_map,
-+	},
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH_OF_MAPS);
-+	__type(key, int);
-+	__type(value, int);
-+	__uint(max_entries, 1);
-+	__array(values, struct inner_map_type);
-+} outer_htab_map SEC(".maps") = {
-+	.values = {
-+		[0] = &inner_map,
-+	},
-+};
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int tgid = 0;
-+
-+static int acc_map_in_map(void *outer_map)
-+{
-+	int i, key, value = 0xdeadbeef;
-+	void *inner_map;
-+
-+	if ((bpf_get_current_pid_tgid() >> 32) != tgid)
-+		return 0;
-+
-+	/* Find nonexistent inner map */
-+	key = 1;
-+	inner_map = bpf_map_lookup_elem(outer_map, &key);
-+	if (inner_map)
-+		return 0;
-+
-+	/* Find the old inner map */
-+	key = 0;
-+	inner_map = bpf_map_lookup_elem(outer_map, &key);
-+	if (!inner_map)
-+		return 0;
-+
-+	/* Wait for the old inner map to be replaced */
-+	for (i = 0; i < 2048; i++)
-+		bpf_map_update_elem(inner_map, &key, &value, 0);
-+
-+	return 0;
-+}
-+
-+SEC("?kprobe/" SYS_PREFIX "sys_getpgid")
-+int access_map_in_array(void *ctx)
-+{
-+	return acc_map_in_map(&outer_array_map);
-+}
-+
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+int sleepable_access_map_in_array(void *ctx)
-+{
-+	return acc_map_in_map(&outer_array_map);
-+}
-+
-+SEC("?kprobe/" SYS_PREFIX "sys_getpgid")
-+int access_map_in_htab(void *ctx)
-+{
-+	return acc_map_in_map(&outer_htab_map);
-+}
-+
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+int sleepable_access_map_in_htab(void *ctx)
-+{
-+	return acc_map_in_map(&outer_htab_map);
-+}
++		if (READ_ONCE(map->free_after_mult_rcu_gp))
++			call_rcu_tasks_trace(&map->rcu, bpf_map_free_mult_rcu_gp);
++		else
++			bpf_map_free_in_work(map);
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(bpf_map_put);
 -- 
 2.29.2
 
