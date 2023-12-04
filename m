@@ -1,26 +1,26 @@
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E7AC3
-	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 15:40:09 -0800 (PST)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-	by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3B4MQC8Z020118
-	for <bpf@vger.kernel.org>; Mon, 4 Dec 2023 15:40:08 -0800
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54E2113
+	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 15:40:17 -0800 (PST)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B4KGl7U008058
+	for <bpf@vger.kernel.org>; Mon, 4 Dec 2023 15:40:17 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-	by m0089730.ppops.net (PPS) with ESMTPS id 3us9fbxxbs-17
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3urr81bfe2-7
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 04 Dec 2023 15:40:08 -0800
-Received: from twshared51573.38.frc1.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Mon, 04 Dec 2023 15:40:17 -0800
+Received: from twshared11278.41.prn1.facebook.com (2620:10d:c0a8:1c::1b) by
+ mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Mon, 4 Dec 2023 15:39:53 -0800
+ 15.1.2507.34; Mon, 4 Dec 2023 15:40:14 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 652DE3C972657; Mon,  4 Dec 2023 15:39:49 -0800 (PST)
+	id 24FFE3C97273E; Mon,  4 Dec 2023 15:39:59 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 07/13] bpf: prepare btf_prepare_func_args() for handling static subprogs
-Date: Mon, 4 Dec 2023 15:39:25 -0800
-Message-ID: <20231204233931.49758-8-andrii@kernel.org>
+Subject: [PATCH bpf-next 12/13] libbpf: add __arg_xxx macros for annotating global func args
+Date: Mon, 4 Dec 2023 15:39:30 -0800
+Message-ID: <20231204233931.49758-13-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231204233931.49758-1-andrii@kernel.org>
 References: <20231204233931.49758-1-andrii@kernel.org>
@@ -33,137 +33,40 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: jwjE1z16mJBIt1pBpGXwRDRduRNoWyec
-X-Proofpoint-GUID: jwjE1z16mJBIt1pBpGXwRDRduRNoWyec
+X-Proofpoint-GUID: ED6hu61Q2a3i-PhlOaoyJ5aKSEW_4YCu
+X-Proofpoint-ORIG-GUID: ED6hu61Q2a3i-PhlOaoyJ5aKSEW_4YCu
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-12-04_22,2023-12-04_01,2023-05-22_02
 
-Generalize btf_prepare_func_args() to support both global and static
-subprogs. We are going to utilize this property in the next patch,
-reusing btf_prepare_func_args() for subprog call logic instead of
-reparsing BTF information in a completely separate implementation.
-
-btf_prepare_func_args() now detects whether subprog is global or static
-makes slight logic adjustments for static func cases, like not failing
-fatally (-EFAULT) for conditions that are allowable for static subprogs.
-
-Somewhat subtle (but major!) difference is the handling of pointer argume=
-nts.
-Both global and static functions need to handle special context
-arguments (which are pointers to predefined type names), but static
-subprogs give up on any other pointers, falling back to marking subprog
-as "unreliable", disabling the use of BTF type information altogether.
-
-For global functions, though, we are assuming that such pointers to
-unrecognized types are just pointers to fixed-sized memory region (or
-error out if size cannot be established, like for `void *` pointers).
-
-This patch accommodates these small differences and sets up a stage for
-refactoring in the next patch, eliminating a separate BTF-based parsing
-logic in btf_check_func_arg_match().
+Add a set of __arg_xxx macros which can be used to augment BPF global
+subprogs/functions with extra information for use by BPF verifier.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/bpf_verifier.h |  5 +++++
- kernel/bpf/btf.c             | 18 +++++++++---------
- kernel/bpf/verifier.c        |  5 -----
- 3 files changed, 14 insertions(+), 14 deletions(-)
+ tools/lib/bpf/bpf_helpers.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 23d054c9d1c8..45eb7b5e4601 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -701,6 +701,11 @@ struct bpf_verifier_env {
- 	char tmp_str_buf[TMP_STR_BUF_LEN];
- };
+diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+index 77ceea575dc7..6e3f24f569b7 100644
+--- a/tools/lib/bpf/bpf_helpers.h
++++ b/tools/lib/bpf/bpf_helpers.h
+@@ -188,6 +188,15 @@ enum libbpf_tristate {
+ 	!!sym;											\
+ })
 =20
-+static inline struct bpf_func_info_aux *subprog_aux(struct bpf_verifier_=
-env *env, int subprog)
-+{
-+	return &env->prog->aux->func_info_aux[subprog];
-+}
++#define __arg_nonnull __attribute((btf_decl_tag("arg:nonnull")))
 +
- static inline struct bpf_subprog_info *subprog_info(struct bpf_verifier_=
-env *env, int subprog)
- {
- 	return &env->subprog_info[subprog];
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index bd430a8b842e..525ba044e967 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6913,6 +6913,7 @@ int btf_check_subprog_call(struct bpf_verifier_env =
-*env, int subprog,
-  */
- int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
- {
-+	bool is_global =3D subprog_aux(env, subprog)->linkage =3D=3D BTF_FUNC_G=
-LOBAL;
- 	struct bpf_subprog_info *sub =3D subprog_info(env, subprog);
- 	struct bpf_verifier_log *log =3D &env->log;
- 	struct bpf_prog *prog =3D env->prog;
-@@ -6926,14 +6927,15 @@ int btf_prepare_func_args(struct bpf_verifier_env=
- *env, int subprog)
- 	if (sub->args_cached)
- 		return 0;
-=20
--	if (!prog->aux->func_info ||
--	    prog->aux->func_info_aux[subprog].linkage !=3D BTF_FUNC_GLOBAL) {
-+	if (!prog->aux->func_info) {
- 		bpf_log(log, "Verifier bug\n");
- 		return -EFAULT;
- 	}
-=20
- 	btf_id =3D prog->aux->func_info[subprog].type_id;
- 	if (!btf_id) {
-+		if (!is_global) /* not fatal for static funcs */
-+			return -EINVAL;
- 		bpf_log(log, "Global functions need valid BTF\n");
- 		return -EFAULT;
- 	}
-@@ -6989,16 +6991,14 @@ int btf_prepare_func_args(struct bpf_verifier_env=
- *env, int subprog)
- 			sub->args[i].arg_type =3D ARG_SCALAR;
- 			continue;
- 		}
--		if (btf_type_is_ptr(t)) {
-+		if (btf_type_is_ptr(t) && btf_get_prog_ctx_type(log, btf, t, prog_type=
-, i)) {
-+			sub->args[i].arg_type =3D ARG_PTR_TO_CTX;
-+			continue;
-+		}
-+		if (is_global && btf_type_is_ptr(t)) {
- 			u32 mem_size;
-=20
--			if (btf_get_prog_ctx_type(log, btf, t, prog_type, i)) {
--				sub->args[i].arg_type =3D ARG_PTR_TO_CTX;
--				continue;
--			}
--
- 			t =3D btf_type_skip_modifiers(btf, t->type, NULL);
--
- 			ref_t =3D btf_resolve_size(btf, t, &mem_size);
- 			if (IS_ERR(ref_t)) {
- 				bpf_log(log,
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 642260d277ce..2e74bc90adf3 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -437,11 +437,6 @@ static const char *subprog_name(const struct bpf_ver=
-ifier_env *env, int subprog)
- 	return btf_type_name(env->prog->aux->btf, info->type_id);
- }
-=20
--static struct bpf_func_info_aux *subprog_aux(const struct bpf_verifier_e=
-nv *env, int subprog)
--{
--	return &env->prog->aux->func_info_aux[subprog];
--}
--
- static void mark_subprog_exc_cb(struct bpf_verifier_env *env, int subpro=
-g)
- {
- 	struct bpf_subprog_info *info =3D subprog_info(env, subprog);
++#define __arg_ctx __attribute__((btf_decl_tag("arg:ctx")))
++#define __arg_dynptr __attribute__((btf_decl_tag("arg:dynptr")))
++
++#define __arg_pkt_meta __attribute__((btf_decl_tag("arg:pkt_meta")))
++#define __arg_pkt_data __attribute__((btf_decl_tag("arg:pkt_data")))
++#define __arg_pkt_end __attribute__((btf_decl_tag("arg:pkt_end")))
++
+ #ifndef ___bpf_concat
+ #define ___bpf_concat(a, b) a ## b
+ #endif
 --=20
 2.34.1
 
