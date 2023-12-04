@@ -1,88 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ogvbZv28"
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEB3D5
-	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 11:18:40 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id 46e09a7af769-6d852e06b07so1729139a34.3
-        for <bpf@vger.kernel.org>; Mon, 04 Dec 2023 11:18:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701717520; x=1702322320; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VWNzZv699g9WmaMge8Xt2XGWr8M2fBvBoGU1E608xn8=;
-        b=ogvbZv288l9hOeOHP58Zsi8eOI/g8vnxaXwHTjoqELNgUGTZgezgFk8KTjOp/RoZmW
-         BUgwfSSHi+95sYPbKRxXNe3SBZHlJV5b8I4OyPrFAII4FClPXkyvp+sucAIs5ATbMw1p
-         m1iQJ/9Pl1KNn6Ye0XjtCFzhIKMLx6f5mF5bwrFR9dyEgPoq82kZzZiDmGuFFu/pOn2o
-         A+PcH7g7LKPt8qT+J2SAOxG5++6Iut2Fbt7iV71mBD2pOt2p3XqPEeexJiFraWg1/Wz7
-         bvsRLwqVld+vT2Z7FUQQlIFANn00FnRQ+2td9V1obTI2aXDM9boRIyJoNZGEaW3qlf7W
-         WrEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701717520; x=1702322320;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VWNzZv699g9WmaMge8Xt2XGWr8M2fBvBoGU1E608xn8=;
-        b=mMC5Xe1BiFsYmdsptKeG3ytTg+CFacRbnOfyCbt5Ae+xw8Q30/Cq4mytDQfOjVZo6x
-         Qi8iOB9EkHbKFXQjSyvXBudpPQQo3SMEe5tuQImZy8C+I+0N+l/i0/Iy1BQtS83Al+d5
-         J5VqNvpQT2cmBCuYJXmaehYh6ntk5Q7qsNVSRElBPSS+BBxR1aRFhxEblQfSaj0jS2nC
-         yQAjB7O1S5rNHtJ9oJorN22JnU5a5zy6XT+7KzoU0ucXS0MAHOUigNcF6V8QyE2rBoQ1
-         g4kaI9Aq8zFMEA2+W+YliHYQoKbordmkNv/8m5lQIOLRsM7acQbFVCSq1m9nnE2cxgJo
-         SJZA==
-X-Gm-Message-State: AOJu0YxMNrWSC0Q9+VrNDpON0OaCN6zLV5W748cDMZKnWGR3YrZK8zOo
-	Q5pXCrsBbDUYCgG3K7pqhxMixO2S07q4cBUhCxvdQQ==
-X-Google-Smtp-Source: AGHT+IHyqGlUNEc09zfk+7C7spFR2KrAlLytNjHQMZMVaTcBh0jkMo0aAva0Taxeji7L30FkvzDde4ybRx0p4piiiZw=
-X-Received: by 2002:a9d:4d02:0:b0:6d8:75a8:8455 with SMTP id
- n2-20020a9d4d02000000b006d875a88455mr2668679otf.50.1701717519644; Mon, 04 Dec
- 2023 11:18:39 -0800 (PST)
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A82111
+	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 11:26:15 -0800 (PST)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B4JFa9o001715
+	for <bpf@vger.kernel.org>; Mon, 4 Dec 2023 11:26:14 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3usmcwr9gp-13
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Mon, 04 Dec 2023 11:26:14 -0800
+Received: from twshared51573.38.frc1.facebook.com (2620:10d:c0a8:1c::11) by
+ mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Mon, 4 Dec 2023 11:26:09 -0800
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+	id 6668B3C94B7F6; Mon,  4 Dec 2023 11:26:08 -0800 (PST)
+From: Andrii Nakryiko <andrii@kernel.org>
+To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <martin.lau@kernel.org>
+CC: <andrii@kernel.org>, <kernel-team@meta.com>
+Subject: [PATCH v3 bpf-next 03/10] bpf: fix check for attempt to corrupt spilled pointer
+Date: Mon, 4 Dec 2023 11:25:54 -0800
+Message-ID: <20231204192601.2672497-4-andrii@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231204192601.2672497-1-andrii@kernel.org>
+References: <20231204192601.2672497-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231130133630.192490507@infradead.org> <20231130134204.026354676@infradead.org>
-In-Reply-To: <20231130134204.026354676@infradead.org>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 4 Dec 2023 11:18:03 -0800
-Message-ID: <CABCJKufv1z0-+an7iws8J2v-c_Jg1Nfu47Um9rhCnVLxQfC6ug@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] cfi: Flip headers
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-	davem@davemloft.net, dsahern@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@google.com, haoluo@google.com, jolsa@kernel.org, 
-	Arnd Bergmann <arnd@arndb.de>, keescook@chromium.org, nathan@kernel.org, 
-	ndesaulniers@google.com, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev, jpoimboe@kernel.org, 
-	joao@overdrivepizza.com, mark.rutland@arm.com
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: _Z8wM2gEbTFdDrXt6SYhUEHJ8OzfCLKA
+X-Proofpoint-ORIG-GUID: _Z8wM2gEbTFdDrXt6SYhUEHJ8OzfCLKA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-04_18,2023-12-04_01,2023-05-22_02
 
-On Thu, Nov 30, 2023 at 5:43=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> Normal include order is that linux/foo.h should include asm/foo.h, CFI ha=
-s it
-> the wrong way around.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  arch/riscv/include/asm/cfi.h |    3 ++-
->  arch/riscv/kernel/cfi.c      |    2 +-
->  arch/x86/include/asm/cfi.h   |    3 ++-
->  arch/x86/kernel/cfi.c        |    4 ++--
->  include/asm-generic/Kbuild   |    1 +
->  include/asm-generic/cfi.h    |    5 +++++
->  include/linux/cfi.h          |    1 +
->  7 files changed, 14 insertions(+), 5 deletions(-)
+When register is spilled onto a stack as a 1/2/4-byte register, we set
+slot_type[BPF_REG_SIZE - 1] (plus potentially few more below it,
+depending on actual spill size). So to check if some stack slot has
+spilled register we need to consult slot_type[7], not slot_type[0].
 
-Looks good to me, thanks!
+To avoid the need to remember and double-check this in the future, just
+use is_spilled_reg() helper.
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+Fixes: 638f5b90d460 ("bpf: reduce verifier memory consumption")
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Sami
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 4f8a3c77eb80..73315e2f20d9 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4431,7 +4431,7 @@ static int check_stack_write_fixed_off(struct bpf_v=
+erifier_env *env,
+ 	 * so it's aligned access and [off, off + size) are within stack limits
+ 	 */
+ 	if (!env->allow_ptr_leaks &&
+-	    state->stack[spi].slot_type[0] =3D=3D STACK_SPILL &&
++	    is_spilled_reg(&state->stack[spi]) &&
+ 	    size !=3D BPF_REG_SIZE) {
+ 		verbose(env, "attempt to corrupt spilled pointer on stack\n");
+ 		return -EACCES;
+--=20
+2.34.1
+
