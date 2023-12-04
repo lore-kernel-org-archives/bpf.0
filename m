@@ -1,26 +1,26 @@
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD02C3
-	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 15:40:00 -0800 (PST)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-	by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3B4MQC8F020118
-	for <bpf@vger.kernel.org>; Mon, 4 Dec 2023 15:39:59 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by m0089730.ppops.net (PPS) with ESMTPS id 3us9fbxxbs-3
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8BD102
+	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 15:40:01 -0800 (PST)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B4NZZrN020399
+	for <bpf@vger.kernel.org>; Mon, 4 Dec 2023 15:40:01 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3usmcwt3y7-4
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 04 Dec 2023 15:39:59 -0800
-Received: from twshared17205.35.frc1.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Mon, 04 Dec 2023 15:40:00 -0800
+Received: from twshared15991.38.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Mon, 4 Dec 2023 15:39:51 -0800
+ 15.1.2507.34; Mon, 4 Dec 2023 15:39:56 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id CCC173C9725D0; Mon,  4 Dec 2023 15:39:37 -0800 (PST)
+	id 860613C972692; Mon,  4 Dec 2023 15:39:53 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 02/13] bpf: emit more dynptr information in verifier log
-Date: Mon, 4 Dec 2023 15:39:20 -0800
-Message-ID: <20231204233931.49758-3-andrii@kernel.org>
+Subject: [PATCH bpf-next 09/13] bpf: reuse subprog argument parsing logic for subprog call checks
+Date: Mon, 4 Dec 2023 15:39:27 -0800
+Message-ID: <20231204233931.49758-10-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231204233931.49758-1-andrii@kernel.org>
 References: <20231204233931.49758-1-andrii@kernel.org>
@@ -33,102 +33,213 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 4bkGqfqlApZhsb5RwvW4Ksf8vyWBAJdU
-X-Proofpoint-GUID: 4bkGqfqlApZhsb5RwvW4Ksf8vyWBAJdU
+X-Proofpoint-GUID: oOayLafCZt3zhgpwQvHTzwP2UtRuwn2J
+X-Proofpoint-ORIG-GUID: oOayLafCZt3zhgpwQvHTzwP2UtRuwn2J
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-12-04_22,2023-12-04_01,2023-05-22_02
 
-Emit dynptr type for CONST_PTR_TO_DYNPTR register. Also emit id,
-ref_obj_id, and dynptr_id fields for STACK_DYNPTR stack slots.
+Remove duplicated BTF parsing logic when it comes to subprog call check.
+Instead, use (potentially cached) results of btf_prepare_func_args() to
+abstract away expectations of each subprog argument in generic terms
+(e.g., "this is pointer to context", or "this is a pointer to memory of
+size X"), and then use those simple high-level argument type
+expectations to validate actual register states to check if they match
+expectations.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/log.c | 25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+ kernel/bpf/verifier.c                         | 109 ++++++------------
+ .../selftests/bpf/progs/test_global_func5.c   |   2 +-
+ 2 files changed, 37 insertions(+), 74 deletions(-)
 
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index 61d7d23a0118..594a234f122b 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -628,6 +628,12 @@ static bool type_is_map_ptr(enum bpf_reg_type t) {
- 	}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2103f94b605b..5787b7fd16ba 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9214,21 +9214,23 @@ static int setup_func_entry(struct bpf_verifier_e=
+nv *env, int subprog, int calls
+ 	return err;
  }
 =20
-+/*
-+ * _a stands for append, was shortened to avoid multiline statements bel=
-ow.
-+ * This macro is used to output a comma separated list of attributes.
-+ */
-+#define verbose_a(fmt, ...) ({ verbose(env, "%s" fmt, sep, ##__VA_ARGS__=
-); sep =3D ","; })
-+
- static void print_reg_state(struct bpf_verifier_env *env,
- 			    const struct bpf_func_state *state,
- 			    const struct bpf_reg_state *reg)
-@@ -643,11 +649,6 @@ static void print_reg_state(struct bpf_verifier_env =
-*env,
- 		verbose_snum(env, reg->var_off.value + reg->off);
- 		return;
- 	}
--/*
-- * _a stands for append, was shortened to avoid multiline statements bel=
-ow.
-- * This macro is used to output a comma separated list of attributes.
-- */
--#define verbose_a(fmt, ...) ({ verbose(env, "%s" fmt, sep, ##__VA_ARGS__=
-); sep =3D ","; })
+-static int btf_check_func_arg_match(struct bpf_verifier_env *env,
++static int btf_check_func_arg_match(struct bpf_verifier_env *env, int su=
+bprog,
+ 				    const struct btf *btf, u32 func_id,
+-				    struct bpf_reg_state *regs,
+-				    bool ptr_to_mem_ok)
++				    struct bpf_reg_state *regs)
+ {
+-	enum bpf_prog_type prog_type =3D resolve_prog_type(env->prog);
++	struct bpf_subprog_info *sub =3D subprog_info(env, subprog);
+ 	struct bpf_verifier_log *log =3D &env->log;
+-	const char *func_name, *ref_tname;
+-	const struct btf_type *t, *ref_t;
+-	const struct btf_param *args;
+-	u32 i, nargs, ref_id;
++	const char *func_name;
++	const struct btf_type *fn_t;
++	u32 i;
+ 	int ret;
 =20
- 	verbose(env, "%s", reg_type_str(env, t));
- 	if (t =3D=3D PTR_TO_STACK) {
-@@ -686,6 +687,8 @@ static void print_reg_state(struct bpf_verifier_env *=
-env,
- 		verbose_a("sz=3D");
- 		verbose_unum(env, reg->mem_size);
+-	t =3D btf_type_by_id(btf, func_id);
+-	if (!t || !btf_type_is_func(t)) {
++	ret =3D btf_prepare_func_args(env, subprog);
++	if (ret)
++		return ret;
++
++	fn_t =3D btf_type_by_id(btf, func_id);
++	if (!fn_t || !btf_type_is_func(fn_t)) {
+ 		/* These checks were already done by the verifier while loading
+ 		 * struct bpf_func_info or in add_kfunc_call().
+ 		 */
+@@ -9236,79 +9238,43 @@ static int btf_check_func_arg_match(struct bpf_ve=
+rifier_env *env,
+ 			func_id);
+ 		return -EFAULT;
  	}
-+	if (t =3D=3D CONST_PTR_TO_DYNPTR)
-+		verbose_a("type=3D%s",  dynptr_type_str(reg->dynptr.type));
- 	if (tnum_is_const(reg->var_off)) {
- 		/* a pointer register with fixed offset */
- 		if (reg->var_off.value) {
-@@ -702,8 +705,6 @@ static void print_reg_state(struct bpf_verifier_env *=
-env,
+-	func_name =3D btf_name_by_offset(btf, t->name_off);
+-
+-	t =3D btf_type_by_id(btf, t->type);
+-	if (!t || !btf_type_is_func_proto(t)) {
+-		bpf_log(log, "Invalid BTF of func %s\n", func_name);
+-		return -EFAULT;
+-	}
+-	args =3D (const struct btf_param *)(t + 1);
+-	nargs =3D btf_type_vlen(t);
+-	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
+-		bpf_log(log, "Function %s has %d > %d args\n", func_name, nargs,
+-			MAX_BPF_FUNC_REG_ARGS);
+-		return -EINVAL;
+-	}
++	func_name =3D btf_name_by_offset(btf, fn_t->name_off);
+=20
+ 	/* check that BTF function arguments match actual types that the
+ 	 * verifier sees.
+ 	 */
+-	for (i =3D 0; i < nargs; i++) {
+-		enum bpf_arg_type arg_type =3D ARG_DONTCARE;
++	for (i =3D 0; i < sub->arg_cnt; i++) {
+ 		u32 regno =3D i + 1;
+ 		struct bpf_reg_state *reg =3D &regs[regno];
++		struct bpf_subprog_arg_info *arg =3D &sub->args[i];
+=20
+-		t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
+-		if (btf_type_is_scalar(t)) {
+-			if (reg->type =3D=3D SCALAR_VALUE)
+-				continue;
+-			bpf_log(log, "R%d is not a scalar\n", regno);
+-			return -EINVAL;
+-		}
+-
+-		if (!btf_type_is_ptr(t)) {
+-			bpf_log(log, "Unrecognized arg#%d type %s\n",
+-				i, btf_type_str(t));
+-			return -EINVAL;
+-		}
+-
+-		ref_t =3D btf_type_skip_modifiers(btf, t->type, &ref_id);
+-		ref_tname =3D btf_name_by_offset(btf, ref_t->name_off);
+-
+-		ret =3D check_func_arg_reg_off(env, reg, regno, arg_type);
+-		if (ret < 0)
+-			return ret;
+-
+-		if (btf_get_prog_ctx_type(log, btf, t, prog_type, i)) {
++		if (arg->arg_type =3D=3D ARG_SCALAR) {
++			if (reg->type !=3D SCALAR_VALUE) {
++				bpf_log(log, "R%d is not a scalar\n", regno);
++				return -EINVAL;
++			}
++		} else if (arg->arg_type =3D=3D ARG_PTR_TO_CTX) {
++			ret =3D check_func_arg_reg_off(env, reg, regno, ARG_DONTCARE);
++			if (ret < 0)
++				return ret;
+ 			/* If function expects ctx type in BTF check that caller
+ 			 * is passing PTR_TO_CTX.
+ 			 */
+ 			if (reg->type !=3D PTR_TO_CTX) {
+-				bpf_log(log,
+-					"arg#%d expected pointer to ctx, but got %s\n",
+-					i, btf_type_str(t));
+-				return -EINVAL;
+-			}
+-		} else if (ptr_to_mem_ok) {
+-			const struct btf_type *resolve_ret;
+-			u32 type_size;
+-
+-			resolve_ret =3D btf_resolve_size(btf, ref_t, &type_size);
+-			if (IS_ERR(resolve_ret)) {
+-				bpf_log(log,
+-					"arg#%d reference type('%s %s') size cannot be determined: %ld\n",
+-					i, btf_type_str(ref_t), ref_tname,
+-					PTR_ERR(resolve_ret));
++				bpf_log(log, "arg#%d expects pointer to ctx\n", i);
+ 				return -EINVAL;
+ 			}
++		} else if (base_type(arg->arg_type) =3D=3D ARG_PTR_TO_MEM) {
++			ret =3D check_func_arg_reg_off(env, reg, regno, ARG_DONTCARE);
++			if (ret < 0)
++				return ret;
+=20
+-			if (check_mem_reg(env, reg, regno, type_size))
++			if (check_mem_reg(env, reg, regno, arg->mem_size))
+ 				return -EINVAL;
+ 		} else {
+-			bpf_log(log, "reg type unsupported for arg#%d function %s#%d\n", i,
+-				func_name, func_id);
+-			return -EINVAL;
++			bpf_log(log, "verifier bug: unrecognized arg#%d type %d\n",
++				i, arg->arg_type);
++			return -EFAULT;
  		}
  	}
- 	verbose(env, ")");
+=20
+@@ -9322,12 +9288,11 @@ static int btf_check_func_arg_match(struct bpf_ve=
+rifier_env *env,
+  * 0 - BTF matches with what bpf_reg_state expects.
+  * Only PTR_TO_CTX and SCALAR_VALUE states are recognized.
+  */
+-static int btf_check_subprog_call(struct bpf_verifier_env *env, int subp=
+rog,
+-			          struct bpf_reg_state *regs)
++int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
++			   struct bpf_reg_state *regs)
+ {
+ 	struct bpf_prog *prog =3D env->prog;
+ 	struct btf *btf =3D prog->aux->btf;
+-	bool is_global;
+ 	u32 btf_id;
+ 	int err;
+=20
+@@ -9341,9 +9306,7 @@ static int btf_check_subprog_call(struct bpf_verifi=
+er_env *env, int subprog,
+ 	if (prog->aux->func_info_aux[subprog].unreliable)
+ 		return -EINVAL;
+=20
+-	is_global =3D prog->aux->func_info_aux[subprog].linkage =3D=3D BTF_FUNC=
+_GLOBAL;
+-	err =3D btf_check_func_arg_match(env, btf, btf_id, regs, is_global);
 -
--#undef verbose_a
++	err =3D btf_check_func_arg_match(env, subprog, btf, btf_id, regs);
+ 	/* Compiler optimizations can remove arguments from static functions
+ 	 * or mismatched type can be passed into a global function.
+ 	 * In such cases mark the function as unreliable from BTF point of view=
+.
+diff --git a/tools/testing/selftests/bpf/progs/test_global_func5.c b/tool=
+s/testing/selftests/bpf/progs/test_global_func5.c
+index cc55aedaf82d..257c0569ff98 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_func5.c
++++ b/tools/testing/selftests/bpf/progs/test_global_func5.c
+@@ -26,7 +26,7 @@ int f3(int val, struct __sk_buff *skb)
  }
 =20
- void print_verifier_state(struct bpf_verifier_env *env, const struct bpf=
-_func_state *state,
-@@ -727,6 +728,7 @@ void print_verifier_state(struct bpf_verifier_env *en=
-v, const struct bpf_func_st
- 	}
- 	for (i =3D 0; i < state->allocated_stack / BPF_REG_SIZE; i++) {
- 		char types_buf[BPF_REG_SIZE + 1];
-+		const char *sep =3D "";
- 		bool valid =3D false;
- 		u8 slot_type;
- 		int j;
-@@ -765,9 +767,14 @@ void print_verifier_state(struct bpf_verifier_env *e=
-nv, const struct bpf_func_st
-=20
- 			verbose(env, " fp%d", (-i - 1) * BPF_REG_SIZE);
- 			print_liveness(env, reg->live);
--			verbose(env, "=3Ddynptr_%s", dynptr_type_str(reg->dynptr.type));
-+			verbose(env, "=3Ddynptr_%s(", dynptr_type_str(reg->dynptr.type));
-+			if (reg->id)
-+				verbose_a("id=3D%d", reg->id);
- 			if (reg->ref_obj_id)
--				verbose(env, "(ref_id=3D%d)", reg->ref_obj_id);
-+				verbose_a("ref_id=3D%d", reg->ref_obj_id);
-+			if (reg->dynptr_id)
-+				verbose_a("dynptr_id=3D%d", reg->dynptr_id);
-+			verbose(env, ")");
- 			break;
- 		case STACK_ITER:
- 			/* only main slot has ref_obj_id set; skip others */
+ SEC("tc")
+-__failure __msg("expected pointer to ctx, but got PTR")
++__failure __msg("expects pointer to ctx")
+ int global_func5(struct __sk_buff *skb)
+ {
+ 	return f1(skb) + f2(2, skb) + f3(3, skb);
 --=20
 2.34.1
 
