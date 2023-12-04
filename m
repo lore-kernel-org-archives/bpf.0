@@ -1,27 +1,31 @@
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42589CA
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97448AC
 	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 11:26:33 -0800 (PST)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-	by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3B4JQSjp024219
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B4JFaiw001722
 	for <bpf@vger.kernel.org>; Mon, 4 Dec 2023 11:26:32 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by m0089730.ppops.net (PPS) with ESMTPS id 3us9fbw31f-4
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3usmcwr9n7-7
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
 	for <bpf@vger.kernel.org>; Mon, 04 Dec 2023 11:26:32 -0800
-Received: from twshared11278.41.prn1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
+Received: from twshared19681.14.frc2.facebook.com (2620:10d:c0a8:1b::2d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Mon, 4 Dec 2023 11:26:09 -0800
+ 15.1.2507.34; Mon, 4 Dec 2023 11:26:30 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 3855C3C94B7AF; Mon,  4 Dec 2023 11:26:02 -0800 (PST)
+	id 0DA7B3C94B8C0; Mon,  4 Dec 2023 11:26:17 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH v3 bpf-next 00/10] Complete BPF verifier precision tracking support for register spills
-Date: Mon, 4 Dec 2023 11:25:51 -0800
-Message-ID: <20231204192601.2672497-1-andrii@kernel.org>
+CC: <andrii@kernel.org>, <kernel-team@meta.com>,
+        Eduard Zingerman
+	<eddyz87@gmail.com>
+Subject: [PATCH v3 bpf-next 06/10] bpf: preserve constant zero when doing partial register restore
+Date: Mon, 4 Dec 2023 11:25:57 -0800
+Message-ID: <20231204192601.2672497-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231204192601.2672497-1-andrii@kernel.org>
+References: <20231204192601.2672497-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -31,96 +35,73 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 6H-5_X96a6KLJZt8qP--wGksPtOKcb5X
-X-Proofpoint-GUID: 6H-5_X96a6KLJZt8qP--wGksPtOKcb5X
+X-Proofpoint-GUID: IqHuqta-ns3ipA7P1Rfr1wN8RAx4Ao3M
+X-Proofpoint-ORIG-GUID: IqHuqta-ns3ipA7P1Rfr1wN8RAx4Ao3M
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-12-04_18,2023-12-04_01,2023-05-22_02
 
-Add support to BPF verifier to track and support register spill/fill to/f=
-rom
-stack regardless if it was done through read-only R10 register (which is =
-the
-only form supported today), or through a general register after copying R=
-10
-into it, while also potentially modifying offset.
+Similar to special handling of STACK_ZERO, when reading 1/2/4 bytes from
+stack from slot that has register spilled into it and that register has
+a constant value zero, preserve that zero and mark spilled register as
+precise for that. This makes spilled const zero register and STACK_ZERO
+cases equivalent in their behavior.
 
-Once we add register this generic spill/fill support to precision
-backtracking, we can take advantage of it to stop doing eager STACK_ZERO
-conversion on register spill. Instead we can rely on (im)precision of spi=
-lled
-const zero register to improve verifier state pruning efficiency. This
-situation of using const zero register to initialize stack slots is very
-common with __builtin_memset() usage or just zero-initializing variables =
-on
-the stack, and it causes unnecessary state duplication, as that STACK_ZER=
-O
-knowledge is often not necessary for correctness, as those zero values ar=
-e
-never used in precise context. Thus, relying on register imprecision help=
-s
-tremendously, especially in real-world BPF programs.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ kernel/bpf/verifier.c | 25 +++++++++++++++++++++----
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
-To make spilled const zero register behave completely equivalently to
-STACK_ZERO, we need to improve few other small pieces, which is done in t=
-he
-second part of the patch set. See individual patches for details. There a=
-re
-also two small bug fixes spotted during STACK_ZERO debugging.
-
-The patch set consists of logically three changes:
-  - patch #1 (and corresponding tests in patch #2) is fixing/impoving pre=
-cision
-    propagation for stack spills/fills. This can be landed as a stand-alo=
-ne
-    improvement;
-  - patches #3 through #9 is improving verification scalability by utiliz=
-ing
-    register (im)precision instead of eager STACK_ZERO. These changes dep=
-end
-    on patch #1.
-  - patch #10 is a memory efficiency improvement to how instruction/jump
-    history is tracked and maintained. It depends on patch #1, but is not
-    strictly speaking required, even though I believe it's a good long-te=
-rm
-    solution to have a path-dependent per-instruction information. Kind
-    of like a path-dependent counterpart to path-agnostic insn_aux array.
-
-v2->v3:
-  - BPF_ST instruction workaround (Eduard);
-  - force dereference in added tests to catch problems (Eduard);
-  - some commit message massaging (Alexei);
-v1->v2:
-  - clean ups, WARN_ONCE(), insn_flags helpers added (Eduard);
-  - added more selftests for STACK_ZERO/STACK_MISC cases (Eduard);
-  - a bit more detailed explanation of effect of avoiding STACK_ZERO in f=
-avor
-    of register spill in patch #8 commit (Alexei);
-  - global shared instruction history refactoring moved to be the last pa=
-tch
-    in the series to make it easier to revert it, if applied (Alexei).
-
-Andrii Nakryiko (10):
-  bpf: support non-r10 register spill/fill to/from stack in precision
-    tracking
-  selftests/bpf: add stack access precision test
-  bpf: fix check for attempt to corrupt spilled pointer
-  bpf: preserve STACK_ZERO slots on partial reg spills
-  selftests/bpf: validate STACK_ZERO is preserved on subreg spill
-  bpf: preserve constant zero when doing partial register restore
-  selftests/bpf: validate zero preservation for sub-slot loads
-  bpf: track aligned STACK_ZERO cases as imprecise spilled registers
-  selftests/bpf: validate precision logic in
-    partial_stack_load_preserves_zeros
-  bpf: use common instruction history across all states
-
- include/linux/bpf_verifier.h                  |  42 ++-
- kernel/bpf/verifier.c                         | 297 +++++++++++-------
- .../selftests/bpf/progs/verifier_spill_fill.c | 124 ++++++++
- .../bpf/progs/verifier_subprog_precision.c    |  87 ++++-
- .../testing/selftests/bpf/verifier/precise.c  |  38 ++-
- 5 files changed, 435 insertions(+), 153 deletions(-)
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e96c53d0a112..0ef76a63ccd1 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4767,22 +4767,39 @@ static int check_stack_read_fixed_off(struct bpf_=
+verifier_env *env,
+ 				copy_register_state(&state->regs[dst_regno], reg);
+ 				state->regs[dst_regno].subreg_def =3D subreg_def;
+ 			} else {
++				int spill_cnt =3D 0, zero_cnt =3D 0;
++
+ 				for (i =3D 0; i < size; i++) {
+ 					type =3D stype[(slot - i) % BPF_REG_SIZE];
+-					if (type =3D=3D STACK_SPILL)
++					if (type =3D=3D STACK_SPILL) {
++						spill_cnt++;
+ 						continue;
++					}
+ 					if (type =3D=3D STACK_MISC)
+ 						continue;
+-					if (type =3D=3D STACK_ZERO)
++					if (type =3D=3D STACK_ZERO) {
++						zero_cnt++;
+ 						continue;
++					}
+ 					if (type =3D=3D STACK_INVALID && env->allow_uninit_stack)
+ 						continue;
+ 					verbose(env, "invalid read from stack off %d+%d size %d\n",
+ 						off, i, size);
+ 					return -EACCES;
+ 				}
+-				mark_reg_unknown(env, state->regs, dst_regno);
+-				insn_flags =3D 0; /* not restoring original register state */
++
++				if (spill_cnt =3D=3D size &&
++				    tnum_is_const(reg->var_off) && reg->var_off.value =3D=3D 0) {
++					__mark_reg_const_zero(&state->regs[dst_regno]);
++					/* this IS register fill, so keep insn_flags */
++				} else if (zero_cnt =3D=3D size) {
++					/* similarly to mark_reg_stack_read(), preserve zeroes */
++					__mark_reg_const_zero(&state->regs[dst_regno]);
++					insn_flags =3D 0; /* not restoring original register state */
++				} else {
++					mark_reg_unknown(env, state->regs, dst_regno);
++					insn_flags =3D 0; /* not restoring original register state */
++				}
+ 			}
+ 			state->regs[dst_regno].live |=3D REG_LIVE_WRITTEN;
+ 		} else if (dst_regno >=3D 0) {
 --=20
 2.34.1
 
