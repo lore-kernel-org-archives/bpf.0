@@ -1,71 +1,82 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="f0qpg284";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UKTEbC2c"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="c0OTYxpp";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="2EZLbM7X"
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB009111;
-	Mon,  4 Dec 2023 12:56:55 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailout.nyi.internal (Postfix) with ESMTP id 80A3B5C00B3;
-	Mon,  4 Dec 2023 15:56:52 -0500 (EST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E80D138;
+	Mon,  4 Dec 2023 12:56:57 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 9504C5C0238;
+	Mon,  4 Dec 2023 15:56:56 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 04 Dec 2023 15:56:52 -0500
+  by compute6.internal (MEProxy); Mon, 04 Dec 2023 15:56:56 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
 	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to; s=fm3; t=1701723412; x=1701809812; bh=8GB/ov08iH
-	jvBVcUgI6yH23procKO/e3iFK3yc6WqUI=; b=f0qpg284bJpVVw1nPh/TnrCzv3
-	Gx2cCAU90XK8Vn4wuO26c1FdbQozmMDNw6d3By+luF4UAEclBr9QqmJJSNmoaWSe
-	dghTKz7p5ao5uzWQ90LABJsuJqxZo3vblOBqenXnXYRMo4jsrJLTZbr+BSHN9juk
-	F6mO5KJRC9PH2Gh4MgzKMLPE5a9NuWnCXR+aNudgkKzTnk2x2wouNWj0VG6m/1FY
-	osZ692+6onWHgaKIiz9zhHUFsVMvyL8aM8JsSIeQywvDstLK10cFYBvUAlEyBfKW
-	/nUBBhmdltV/avoZypJk0B8aqj0obuyz2/vM7Nr7G+GbGQDMKFQKHgms/9Mw==
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to; s=fm3; t=1701723416; x=
+	1701809816; bh=UcXo1ArXPqQ9bSXiMAigIass8f59dei4sHavEoNqsjQ=; b=c
+	0OTYxpp26YKzc32ZOiRJF//hyv+3DhxRi7QfGrwB0zs0s5UFfcPRBJLf1vQ5Sq+o
+	WfqSka+3EKQx7EgLlHJ2sJPMnYKWLts0ITDv2ZuFKh6zXjSkOLd+AyTw8kw5iZij
+	Tte6OTJPANmkM+9g03vuD+m2DhN0ViNQX230e9j4vGWXmJDcZ+gt46b+0Ls/5hGy
+	192j6YeoavpycENV2pEK4A2CVQx+1eZWvQleIlSL804SqVj0uByArBQKnOBa7AQs
+	Y91e7a+hAiNqGIJTgIeBuaKnDRXfgi9kCo+ypYj6ngukz21dsJdVHKggDPjxwfYZ
+	1LzUKz1/e4c7Yju6UzK8A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1701723412; x=1701809812; bh=8GB/ov08iHjvB
-	VcUgI6yH23procKO/e3iFK3yc6WqUI=; b=UKTEbC2c27b9X/4abi4DjkBrcB+03
-	f+ducKIrmHS/cNvKIEtaWqz8KYtr3KieTOM9OgrSmNnvQJmqXdsZZoeBQjGnXCJd
-	96c+Cv7eCfcgHRQSpbL9VXJxmJMHfVKt3YlEiUBuPYDbW0+w6nKFmC7vOuvPFXBZ
-	f8gVpflf98HKM6/DM2zo5bo50SEkHYUieVZqhREYQWLfAjcKUEiOvyrHtva8wHoS
-	NhS44dpbEcTSpbZSJGOrIklLC6xAYMy7PKeXNEV3skcX6UOhkmY/Gl7+492d/qPE
-	bYeZScmVy5Jq8Hhp27Tqn8H4MWc6R3lZ4CbW/hIpaR2aLQhovy/38e1OQ==
-X-ME-Sender: <xms:FD1uZYv_KetGYMWakHdAqH9jCWJN7W-oDkolZy2r5n8K8KFqCcHyVA>
-    <xme:FD1uZVfMkkLL-dYVBYDo1Pc1-g3BPwuUqrZ6ALFwPG9BZtRv0JDm5-BQfq7dU1lwh
-    5Jzn1ebJBZDqB2X_w>
-X-ME-Received: <xmr:FD1uZTyDqwU8yuaaxqSxd5wDctbaAl-A6QyL5nJswiorb5IFYygsL0feLY57BdiyLgXa3nCH6Tx0mgZL_yuVMI1o_8s-QUh99K_8xmhe3-M>
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1701723416; x=
+	1701809816; bh=UcXo1ArXPqQ9bSXiMAigIass8f59dei4sHavEoNqsjQ=; b=2
+	EZLbM7XdJ77A2rIAaZN0pdUhDtynCbJCX3TwVdaGivcTey1LwXKQZQXkwfqaWbDF
+	WMuXbku35SVwOTxTNwQ2OiBSZBoPPQa63W48hzIBdE102n6bvm/ai5y1mwFQiCRk
+	TVQGBxUILiR+qb8Y/qb9CIpYuTNNW5vS0pkzkgApfNxQRDXA3dcrEW0BpuUfCTSA
+	K2/m8pk98r98akzxzrMs3LzFpMJqkvKjKeyTXk+ghmlc0wxnoTY0yl9jN/QR6uOi
+	pWwls3cAatqcL5uG3QHuy6//xDfIRdxxdEB8Yyv/QNpMr6W141ifg7ufTLmAWlRr
+	q4rvXX2izNAfDuZIuQmiw==
+X-ME-Sender: <xms:GD1uZS1qnhTt2dSEez7TZ37Oh4C4vzhCdyteAlR-AdLtzhN-5CzX9g>
+    <xme:GD1uZVG_SUq_0xwINiDxyWiK-TBIxSaI_EI8pp_pJPIo4E6HorJGo8qj4wd2Bg12F
+    dJ6e9w7iMTYU8BHnQ>
+X-ME-Received: <xmr:GD1uZa6TVXdC50VTzPR7XMZHWIKt4a_GOQoBK88x4c4zFtJxx7NqAroXMTvy33d7OEs2cPzWKyHYXM5cgjoILrmtbx7u0IgQ3knBOjMSfeE>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudejiedgudeggecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculddvfedmnecujfgurhephf
-    fvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
-    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeeikeehudegteevuddthf
-    eilefhjefgueeuueffveevheeggfeufeejfeeuudekfeenucffohhmrghinhepihgvthhf
-    rdhorhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:FD1uZbM0IsrvwIyX70QLs1E167i6An8PHqCk_KlHVn1jNrPbz1Nzkg>
-    <xmx:FD1uZY8GMdeLBalgSYt343IglU5Ep0BSvPQ-Duvj05_hl-Ct1TnfnA>
-    <xmx:FD1uZTXhfjqxYahnQxTJDzhD8Mzz1Xl-HcxP6dGo-3HrmdYS8fb8yg>
-    <xmx:FD1uZTboSbWyQ3clRaELqJGRcLHUzDhj38AsKU66QLVwO6X9fV8yPw>
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enfghrlhcuvffnffculdefhedmnecujfgurhephffvvefufffkofgjfhgggfestdekredt
+    redttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
+    enucggtffrrghtthgvrhhnpefgfefggeejhfduieekvdeuteffleeifeeuvdfhheejleej
+    jeekgfffgefhtddtteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:GD1uZT2haf-ugO1Cbokod6hIgnY2vcyK-opZujVADbJF30oIjaJIGA>
+    <xmx:GD1uZVE5Vm0OvFqKa1dAYoW8bdx3zqSf2S6XBwxOhAeIwNx0G_hXvA>
+    <xmx:GD1uZc_Jx5o-NJSYsM0ynN9j4qSELoEevez1YyoNg9vyWVlVxTCEyw>
+    <xmx:GD1uZbWuA25p1yLkXsLBg_ThwPqmYUXNA2_1lxcvl6L0xgruYjMDAA>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 4 Dec 2023 15:56:51 -0500 (EST)
+ 4 Dec 2023 15:56:54 -0500 (EST)
 From: Daniel Xu <dxu@dxuuu.xyz>
-To: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	llvm@lists.linux.dev,
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	davem@davemloft.net,
+	Herbert Xu <herbert@gondor.apana.org.au>,
 	steffen.klassert@secunet.com,
+	pabeni@redhat.com,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	kuba@kernel.org,
+	edumazet@google.com,
 	antony.antony@secunet.com,
 	alexei.starovoitov@gmail.com,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com
-Cc: devel@linux-ipsec.org
-Subject: [PATCH bpf-next v4 00/10] Add bpf_xdp_get_xfrm_state() kfunc
-Date: Mon,  4 Dec 2023 13:56:20 -0700
-Message-ID: <cover.1701722991.git.dxu@dxuuu.xyz>
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	devel@linux-ipsec.org
+Subject: [PATCH bpf-next v4 02/10] bpf: xfrm: Add bpf_xdp_get_xfrm_state() kfunc
+Date: Mon,  4 Dec 2023 13:56:22 -0700
+Message-ID: <e0e2fc6161ceccfbb1075d367bcc37871012072d.1701722991.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.42.1
+In-Reply-To: <cover.1701722991.git.dxu@dxuuu.xyz>
+References: <cover.1701722991.git.dxu@dxuuu.xyz>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -74,80 +85,175 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patchset adds two kfunc helpers, bpf_xdp_get_xfrm_state() and
-bpf_xdp_xfrm_state_release() that wrap xfrm_state_lookup() and
-xfrm_state_put(). The intent is to support software RSS (via XDP) for
-the ongoing/upcoming ipsec pcpu work [0]. Recent experiments performed
-on (hopefully) reproducible AWS testbeds indicate that single tunnel
-pcpu ipsec can reach line rate on 100G ENA nics.
+This commit adds an unstable kfunc helper to access internal xfrm_state
+associated with an SA. This is intended to be used for the upcoming
+IPsec pcpu work to assign special pcpu SAs to a particular CPU. In other
+words: for custom software RSS.
 
-Note this patchset only tests/shows generic xfrm_state access. The
-"secret sauce" (if you can really even call it that) involves accessing
-a soon-to-be-upstreamed pcpu_num field in xfrm_state. Early example is
-available here [1].
+That being said, the function that this kfunc wraps is fairly generic
+and used for a lot of xfrm tasks. I'm sure people will find uses
+elsewhere over time.
 
-[0]: https://datatracker.ietf.org/doc/draft-ietf-ipsecme-multi-sa-performance/03/
-[1]: https://github.com/danobi/xdp-tools/blob/e89a1c617aba3b50d990f779357d6ce2863ecb27/xdp-bench/xdp_redirect_cpumap.bpf.c#L385-L406
+Co-developed-by: Antony Antony <antony.antony@secunet.com>
+Signed-off-by: Antony Antony <antony.antony@secunet.com>
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+---
+ include/net/xfrm.h     |   9 ++++
+ net/xfrm/xfrm_bpf.c    | 102 +++++++++++++++++++++++++++++++++++++++++
+ net/xfrm/xfrm_policy.c |   2 +
+ 3 files changed, 113 insertions(+)
 
-Changes from v3:
-* Place all xfrm bpf integrations in xfrm_bpf.c
-* Avoid using nval as a temporary
-* Rebase to bpf-next
-* Remove extraneous __failure_unpriv annotation for verifier tests
-
-Changes from v2:
-* Fix/simplify BPF_CORE_WRITE_BITFIELD() algorithm
-* Added verifier tests for bitfield writes
-* Fix state leakage across test_tunnel subtests
-
-Changes from v1:
-* Move xfrm tunnel tests to test_progs
-* Fix writing to opts->error when opts is invalid
-* Use __bpf_kfunc_start_defs()
-* Remove unused vxlanhdr definition
-* Add and use BPF_CORE_WRITE_BITFIELD() macro
-* Make series bisect clean
-
-Changes from RFCv2:
-* Rebased to ipsec-next
-* Fix netns leak
-
-Changes from RFCv1:
-* Add Antony's commit tags
-* Add KF_ACQUIRE and KF_RELEASE semantics
-
-
-Daniel Xu (10):
-  xfrm: bpf: Move xfrm_interface_bpf.c to xfrm_bpf.c
-  bpf: xfrm: Add bpf_xdp_get_xfrm_state() kfunc
-  bpf: xfrm: Add bpf_xdp_xfrm_state_release() kfunc
-  libbpf: Add BPF_CORE_WRITE_BITFIELD() macro
-  bpf: selftests: test_loader: Support __btf_path() annotation
-  libbpf: selftests: Add verifier tests for CO-RE bitfield writes
-  bpf: selftests: test_tunnel: Setup fresh topology for each subtest
-  bpf: selftests: test_tunnel: Use vmlinux.h declarations
-  bpf: selftests: Move xfrm tunnel test to test_progs
-  bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
-
- include/net/xfrm.h                            |   9 +
- net/xfrm/Makefile                             |   7 +-
- net/xfrm/xfrm_bpf.c                           | 232 ++++++++++++++++++
- net/xfrm/xfrm_interface_bpf.c                 | 110 ---------
- net/xfrm/xfrm_policy.c                        |   2 +
- tools/lib/bpf/bpf_core_read.h                 |  32 +++
- .../selftests/bpf/prog_tests/test_tunnel.c    | 162 +++++++++++-
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- tools/testing/selftests/bpf/progs/bpf_misc.h  |   1 +
- .../selftests/bpf/progs/bpf_tracing_net.h     |   1 +
- .../selftests/bpf/progs/test_tunnel_kern.c    | 138 ++++++-----
- .../bpf/progs/verifier_bitfield_write.c       | 100 ++++++++
- tools/testing/selftests/bpf/test_loader.c     |   7 +
- tools/testing/selftests/bpf/test_tunnel.sh    |  92 -------
- 14 files changed, 624 insertions(+), 271 deletions(-)
- create mode 100644 net/xfrm/xfrm_bpf.c
- delete mode 100644 net/xfrm/xfrm_interface_bpf.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_bitfield_write.c
-
+diff --git a/include/net/xfrm.h b/include/net/xfrm.h
+index c9bb0f892f55..1d107241b901 100644
+--- a/include/net/xfrm.h
++++ b/include/net/xfrm.h
+@@ -2190,4 +2190,13 @@ static inline int register_xfrm_interface_bpf(void)
+ 
+ #endif
+ 
++#if IS_ENABLED(CONFIG_DEBUG_INFO_BTF)
++int register_xfrm_state_bpf(void);
++#else
++static inline int register_xfrm_state_bpf(void)
++{
++	return 0;
++}
++#endif
++
+ #endif	/* _NET_XFRM_H */
+diff --git a/net/xfrm/xfrm_bpf.c b/net/xfrm/xfrm_bpf.c
+index 3d3018b87f96..3d6cac7345ca 100644
+--- a/net/xfrm/xfrm_bpf.c
++++ b/net/xfrm/xfrm_bpf.c
+@@ -6,9 +6,11 @@
+  */
+ 
+ #include <linux/bpf.h>
++#include <linux/btf.h>
+ #include <linux/btf_ids.h>
+ 
+ #include <net/dst_metadata.h>
++#include <net/xdp.h>
+ #include <net/xfrm.h>
+ 
+ #if IS_BUILTIN(CONFIG_XFRM_INTERFACE) || \
+@@ -112,3 +114,103 @@ int __init register_xfrm_interface_bpf(void)
+ }
+ 
+ #endif /* xfrm interface */
++
++/* bpf_xfrm_state_opts - Options for XFRM state lookup helpers
++ *
++ * Members:
++ * @error      - Out parameter, set for any errors encountered
++ *		 Values:
++ *		   -EINVAL - netns_id is less than -1
++ *		   -EINVAL - opts__sz isn't BPF_XFRM_STATE_OPTS_SZ
++ *		   -ENONET - No network namespace found for netns_id
++ * @netns_id	- Specify the network namespace for lookup
++ *		 Values:
++ *		   BPF_F_CURRENT_NETNS (-1)
++ *		     Use namespace associated with ctx
++ *		   [0, S32_MAX]
++ *		     Network Namespace ID
++ * @mark	- XFRM mark to match on
++ * @daddr	- Destination address to match on
++ * @spi		- Security parameter index to match on
++ * @proto	- L3 protocol to match on
++ * @family	- L3 protocol family to match on
++ */
++struct bpf_xfrm_state_opts {
++	s32 error;
++	s32 netns_id;
++	u32 mark;
++	xfrm_address_t daddr;
++	__be32 spi;
++	u8 proto;
++	u16 family;
++};
++
++enum {
++	BPF_XFRM_STATE_OPTS_SZ = sizeof(struct bpf_xfrm_state_opts),
++};
++
++__bpf_kfunc_start_defs();
++
++/* bpf_xdp_get_xfrm_state - Get XFRM state
++ *
++ * Parameters:
++ * @ctx	- Pointer to ctx (xdp_md) in XDP program
++ *		    Cannot be NULL
++ * @opts	- Options for lookup (documented above)
++ *		    Cannot be NULL
++ * @opts__sz	- Length of the bpf_xfrm_state_opts structure
++ *		    Must be BPF_XFRM_STATE_OPTS_SZ
++ */
++__bpf_kfunc struct xfrm_state *
++bpf_xdp_get_xfrm_state(struct xdp_md *ctx, struct bpf_xfrm_state_opts *opts, u32 opts__sz)
++{
++	struct xdp_buff *xdp = (struct xdp_buff *)ctx;
++	struct net *net = dev_net(xdp->rxq->dev);
++	struct xfrm_state *x;
++
++	if (!opts || opts__sz < sizeof(opts->error))
++		return NULL;
++
++	if (opts__sz != BPF_XFRM_STATE_OPTS_SZ) {
++		opts->error = -EINVAL;
++		return NULL;
++	}
++
++	if (unlikely(opts->netns_id < BPF_F_CURRENT_NETNS)) {
++		opts->error = -EINVAL;
++		return NULL;
++	}
++
++	if (opts->netns_id >= 0) {
++		net = get_net_ns_by_id(net, opts->netns_id);
++		if (unlikely(!net)) {
++			opts->error = -ENONET;
++			return NULL;
++		}
++	}
++
++	x = xfrm_state_lookup(net, opts->mark, &opts->daddr, opts->spi,
++			      opts->proto, opts->family);
++
++	if (opts->netns_id >= 0)
++		put_net(net);
++
++	return x;
++}
++
++__bpf_kfunc_end_defs();
++
++BTF_SET8_START(xfrm_state_kfunc_set)
++BTF_ID_FLAGS(func, bpf_xdp_get_xfrm_state, KF_RET_NULL | KF_ACQUIRE)
++BTF_SET8_END(xfrm_state_kfunc_set)
++
++static const struct btf_kfunc_id_set xfrm_state_xdp_kfunc_set = {
++	.owner = THIS_MODULE,
++	.set   = &xfrm_state_kfunc_set,
++};
++
++int __init register_xfrm_state_bpf(void)
++{
++	return register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP,
++					 &xfrm_state_xdp_kfunc_set);
++}
+diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
+index c13dc3ef7910..1b7e75159727 100644
+--- a/net/xfrm/xfrm_policy.c
++++ b/net/xfrm/xfrm_policy.c
+@@ -4218,6 +4218,8 @@ void __init xfrm_init(void)
+ #ifdef CONFIG_XFRM_ESPINTCP
+ 	espintcp_init();
+ #endif
++
++	register_xfrm_state_bpf();
+ }
+ 
+ #ifdef CONFIG_AUDITSYSCALL
 -- 
 2.42.1
 
