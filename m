@@ -1,15 +1,15 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11883FE
-	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 06:03:27 -0800 (PST)
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4SkQP740Ytz4f3jq8
-	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 22:03:23 +0800 (CST)
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592DCF3
+	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 06:03:26 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4SkQP52Jdmz4f3kFv
+	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 22:03:21 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 90F9F1A01A5
-	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 22:03:24 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 7A0901A0C18
+	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 22:03:23 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP1 (Coremail) with SMTP id cCh0CgBHShAl3G1l+wflCg--.13401S9;
-	Mon, 04 Dec 2023 22:03:24 +0800 (CST)
+	by APP1 (Coremail) with SMTP id cCh0CgBHShAl3G1l+wflCg--.13401S7;
+	Mon, 04 Dec 2023 22:03:23 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -25,9 +25,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	John Fastabend <john.fastabend@gmail.com>,
 	"Paul E . McKenney" <paulmck@kernel.org>,
 	houtao1@huawei.com
-Subject: [PATCH bpf v5 5/7] bpf: Optimize the free of inner map
-Date: Mon,  4 Dec 2023 22:04:23 +0800
-Message-Id: <20231204140425.1480317-6-houtao@huaweicloud.com>
+Subject: [PATCH bpf v5 3/7] bpf: Set need_defer as false when clearing fd array during map free
+Date: Mon,  4 Dec 2023 22:04:21 +0800
+Message-Id: <20231204140425.1480317-4-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20231204140425.1480317-1-houtao@huaweicloud.com>
 References: <20231204140425.1480317-1-houtao@huaweicloud.com>
@@ -38,156 +38,138 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgBHShAl3G1l+wflCg--.13401S9
-X-Coremail-Antispam: 1UD129KBjvJXoWxGF1fZFyfZFW5KF1fCr47twb_yoW7JF4xpF
-	45KrW8Gr4vqF43u34DAw48Z34rJws5K3y5Gas5CryFyrsxW348Xry8GFW5AFn0vF4kJF40
-	vr1agrWYk3y3ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBab4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY
-	6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
-	CY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZo7tUUUUU=
+X-CM-TRANSID:cCh0CgBHShAl3G1l+wflCg--.13401S7
+X-Coremail-Antispam: 1UD129KBjvJXoWxAw13trWDJFW7Cr4Dtw47Jwb_yoWrWFW5pF
+	yktr4Uurs5Jr43Ww4rXa95W3s0yrn5Xw4DJF9Yy34YyFyfWr93ZF4xGa48Krn09a48ZrnF
+	9F42y397Gay0krDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAI
+	w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+	0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1c4S7UUUUU==
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-When removing the inner map from the outer map, the inner map will be
-freed after one RCU grace period and one RCU tasks trace grace
-period, so it is certain that the bpf program, which may access the
-inner map, has exited before the inner map is freed.
+Both map deletion operation, map release and map free operation use
+fd_array_map_delete_elem() to remove the element from fd array and
+need_defer is always true in fd_array_map_delete_elem(). For the map
+deletion operation and map release operation, need_defer=true is
+necessary, because the bpf program, which accesses the element in fd
+array, may still alive. However for map free operation, it is certain
+that the bpf program which owns the fd array has already been exited, so
+setting need_defer as false is appropriate for map free operation.
 
-However there is no need to wait for one RCU tasks trace grace period if
-the outer map is only accessed by non-sleepable program. So adding
-sleepable_refcnt in bpf_map and increasing sleepable_refcnt when adding
-the outer map into env->used_maps for sleepable program. Although the
-max number of bpf program is INT_MAX - 1, the number of bpf programs
-which are being loaded may be greater than INT_MAX, so using atomic64_t
-instead of atomic_t for sleepable_refcnt. When removing the inner map
-from the outer map, using sleepable_refcnt to decide whether or not a
-RCU tasks trace grace period is needed before freeing the inner map.
+So fix it by adding need_defer parameter to bpf_fd_array_map_clear() and
+adding a new helper __fd_array_map_delete_elem() to handle the map
+deletion, map release and map free operations correspondingly.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- include/linux/bpf.h     |  2 ++
- kernel/bpf/core.c       |  4 ++++
- kernel/bpf/map_in_map.c | 14 +++++++++-----
- kernel/bpf/syscall.c    |  8 ++++++++
- kernel/bpf/verifier.c   |  4 +++-
- 5 files changed, 26 insertions(+), 6 deletions(-)
+ kernel/bpf/arraymap.c | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 15a6bb951b70..4a78cc0c81c8 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -297,6 +297,8 @@ struct bpf_map {
- 	bool bypass_spec_v1;
- 	bool frozen; /* write-once; write-protected by freeze_mutex */
- 	bool free_after_mult_rcu_gp;
-+	bool free_after_rcu_gp;
-+	atomic64_t sleepable_refcnt;
- 	s64 __percpu *elem_count;
- };
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index f9aed5909d6e..4a4a67956e21 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -871,7 +871,7 @@ int bpf_fd_array_map_update_elem(struct bpf_map *map, struct file *map_file,
+ 	return 0;
+ }
  
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index cd3afe57ece3..4b813da8d6c0 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2664,12 +2664,16 @@ void __bpf_free_used_maps(struct bpf_prog_aux *aux,
- 			  struct bpf_map **used_maps, u32 len)
+-static long fd_array_map_delete_elem(struct bpf_map *map, void *key)
++static long __fd_array_map_delete_elem(struct bpf_map *map, void *key, bool need_defer)
  {
- 	struct bpf_map *map;
-+	bool sleepable;
- 	u32 i;
+ 	struct bpf_array *array = container_of(map, struct bpf_array, map);
+ 	void *old_ptr;
+@@ -890,13 +890,18 @@ static long fd_array_map_delete_elem(struct bpf_map *map, void *key)
+ 	}
  
-+	sleepable = aux->sleepable;
- 	for (i = 0; i < len; i++) {
- 		map = used_maps[i];
- 		if (map->ops->map_poke_untrack)
- 			map->ops->map_poke_untrack(map, aux);
-+		if (sleepable)
-+			atomic64_dec(&map->sleepable_refcnt);
- 		bpf_map_put(map);
+ 	if (old_ptr) {
+-		map->ops->map_fd_put_ptr(map, old_ptr, true);
++		map->ops->map_fd_put_ptr(map, old_ptr, need_defer);
+ 		return 0;
+ 	} else {
+ 		return -ENOENT;
  	}
  }
-diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
-index 3248ff5d8161..8ef269e66ba5 100644
---- a/kernel/bpf/map_in_map.c
-+++ b/kernel/bpf/map_in_map.c
-@@ -131,12 +131,16 @@ void bpf_map_fd_put_ptr(struct bpf_map *map, void *ptr, bool need_defer)
- {
- 	struct bpf_map *inner_map = ptr;
  
--	/* The inner map may still be used by both non-sleepable and sleepable
--	 * bpf program, so free it after one RCU grace period and one tasks
--	 * trace RCU grace period.
-+	/* Defer the freeing of inner map according to the sleepable attribute
-+	 * of bpf program which owns the outer map, so unnecessary waiting for
-+	 * RCU tasks trace grace period can be avoided.
++static long fd_array_map_delete_elem(struct bpf_map *map, void *key)
++{
++	return __fd_array_map_delete_elem(map, key, true);
++}
++
+ static void *prog_fd_array_get_ptr(struct bpf_map *map,
+ 				   struct file *map_file, int fd)
+ {
+@@ -925,13 +930,13 @@ static u32 prog_fd_array_sys_lookup_elem(void *ptr)
+ }
+ 
+ /* decrement refcnt of all bpf_progs that are stored in this map */
+-static void bpf_fd_array_map_clear(struct bpf_map *map)
++static void bpf_fd_array_map_clear(struct bpf_map *map, bool need_defer)
+ {
+ 	struct bpf_array *array = container_of(map, struct bpf_array, map);
+ 	int i;
+ 
+ 	for (i = 0; i < array->map.max_entries; i++)
+-		fd_array_map_delete_elem(map, &i);
++		__fd_array_map_delete_elem(map, &i, need_defer);
+ }
+ 
+ static void prog_array_map_seq_show_elem(struct bpf_map *map, void *key,
+@@ -1110,7 +1115,7 @@ static void prog_array_map_clear_deferred(struct work_struct *work)
+ {
+ 	struct bpf_map *map = container_of(work, struct bpf_array_aux,
+ 					   work)->map;
+-	bpf_fd_array_map_clear(map);
++	bpf_fd_array_map_clear(map, true);
+ 	bpf_map_put(map);
+ }
+ 
+@@ -1260,7 +1265,7 @@ static void perf_event_fd_array_release(struct bpf_map *map,
+ 	for (i = 0; i < array->map.max_entries; i++) {
+ 		ee = READ_ONCE(array->ptrs[i]);
+ 		if (ee && ee->map_file == map_file)
+-			fd_array_map_delete_elem(map, &i);
++			__fd_array_map_delete_elem(map, &i, true);
+ 	}
+ 	rcu_read_unlock();
+ }
+@@ -1268,7 +1273,7 @@ static void perf_event_fd_array_release(struct bpf_map *map,
+ static void perf_event_fd_array_map_free(struct bpf_map *map)
+ {
+ 	if (map->map_flags & BPF_F_PRESERVE_ELEMS)
+-		bpf_fd_array_map_clear(map);
++		bpf_fd_array_map_clear(map, false);
+ 	fd_array_map_free(map);
+ }
+ 
+@@ -1304,7 +1309,7 @@ static void cgroup_fd_array_put_ptr(struct bpf_map *map, void *ptr, bool need_de
+ 
+ static void cgroup_fd_array_free(struct bpf_map *map)
+ {
+-	bpf_fd_array_map_clear(map);
++	bpf_fd_array_map_clear(map, false);
+ 	fd_array_map_free(map);
+ }
+ 
+@@ -1349,7 +1354,7 @@ static void array_of_map_free(struct bpf_map *map)
+ 	 * is protected by fdget/fdput.
  	 */
--	if (need_defer)
--		WRITE_ONCE(inner_map->free_after_mult_rcu_gp, true);
-+	if (need_defer) {
-+		if (atomic64_read(&map->sleepable_refcnt))
-+			WRITE_ONCE(inner_map->free_after_mult_rcu_gp, true);
-+		else
-+			WRITE_ONCE(inner_map->free_after_rcu_gp, true);
-+	}
- 	bpf_map_put(inner_map);
+ 	bpf_map_meta_free(map->inner_map_meta);
+-	bpf_fd_array_map_clear(map);
++	bpf_fd_array_map_clear(map, false);
+ 	fd_array_map_free(map);
  }
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 88882cb58121..7ba10570ca97 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -750,8 +750,11 @@ void bpf_map_put(struct bpf_map *map)
- 		bpf_map_free_id(map);
- 		btf_put(map->btf);
- 
-+		WARN_ON_ONCE(atomic64_read(&map->sleepable_refcnt));
- 		if (READ_ONCE(map->free_after_mult_rcu_gp))
- 			call_rcu_tasks_trace(&map->rcu, bpf_map_free_mult_rcu_gp);
-+		else if (READ_ONCE(map->free_after_rcu_gp))
-+			call_rcu(&map->rcu, bpf_map_free_rcu_gp);
- 		else
- 			bpf_map_free_in_work(map);
- 	}
-@@ -5343,6 +5346,11 @@ static int bpf_prog_bind_map(union bpf_attr *attr)
- 		goto out_unlock;
- 	}
- 
-+	/* The bpf program will not access the bpf map, but for the sake of
-+	 * simplicity, increase sleepable_refcnt for sleepable program as well.
-+	 */
-+	if (prog->aux->sleepable)
-+		atomic64_inc(&map->sleepable_refcnt);
- 	memcpy(used_maps_new, used_maps_old,
- 	       sizeof(used_maps_old[0]) * prog->aux->used_map_cnt);
- 	used_maps_new[prog->aux->used_map_cnt] = map;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6da370a047fe..0c018cedf47e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -18051,10 +18051,12 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
- 				return -E2BIG;
- 			}
- 
-+			if (env->prog->aux->sleepable)
-+				atomic64_inc(&map->sleepable_refcnt);
- 			/* hold the map. If the program is rejected by verifier,
- 			 * the map will be released by release_maps() or it
- 			 * will be used by the valid program until it's unloaded
--			 * and all maps are released in free_used_maps()
-+			 * and all maps are released in bpf_free_used_maps()
- 			 */
- 			bpf_map_inc(map);
  
 -- 
 2.29.2
