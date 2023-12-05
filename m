@@ -1,28 +1,28 @@
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8741F10DD
-	for <bpf@vger.kernel.org>; Tue,  5 Dec 2023 10:43:22 -0800 (PST)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B5IfMcL015699
-	for <bpf@vger.kernel.org>; Tue, 5 Dec 2023 10:43:21 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3usxjtn4eg-16
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB4D10E0
+	for <bpf@vger.kernel.org>; Tue,  5 Dec 2023 10:43:24 -0800 (PST)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B5FgtE2014591
+	for <bpf@vger.kernel.org>; Tue, 5 Dec 2023 10:43:24 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3usrmmqbgt-6
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 05 Dec 2023 10:43:21 -0800
-Received: from twshared15991.38.frc1.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Tue, 05 Dec 2023 10:43:23 -0800
+Received: from twshared51573.38.frc1.facebook.com (2620:10d:c0a8:1b::2d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.34; Tue, 5 Dec 2023 10:43:18 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id D9EF43CA17064; Tue,  5 Dec 2023 10:43:14 -0800 (PST)
+	id C2D853CA17035; Tue,  5 Dec 2023 10:43:05 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>,
         Eduard Zingerman
 	<eddyz87@gmail.com>
-Subject: [PATCH v4 bpf-next 09/10] selftests/bpf: validate precision logic in partial_stack_load_preserves_zeros
-Date: Tue, 5 Dec 2023 10:42:47 -0800
-Message-ID: <20231205184248.1502704-10-andrii@kernel.org>
+Subject: [PATCH v4 bpf-next 05/10] selftests/bpf: validate STACK_ZERO is preserved on subreg spill
+Date: Tue, 5 Dec 2023 10:42:43 -0800
+Message-ID: <20231205184248.1502704-6-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231205184248.1502704-1-andrii@kernel.org>
 References: <20231205184248.1502704-1-andrii@kernel.org>
@@ -35,65 +35,81 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: FdHx6wp6xQjwpSpWBG4E9HS1acRLPuYE
-X-Proofpoint-ORIG-GUID: FdHx6wp6xQjwpSpWBG4E9HS1acRLPuYE
+X-Proofpoint-ORIG-GUID: aeB89lFmSrsTe1libjsATSuzgMb8FkDG
+X-Proofpoint-GUID: aeB89lFmSrsTe1libjsATSuzgMb8FkDG
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-12-05_14,2023-12-05_01,2023-05-22_02
 
-Enhance partial_stack_load_preserves_zeros subtest with detailed
-precision propagation log checks. We know expect fp-16 to be spilled,
-initially imprecise, zero const register, which is later marked as
-precise even when partial stack slot load is performed, even if it's not
-a register fill (!).
+Add tests validating that STACK_ZERO slots are preserved when slot is
+partially overwritten with subregister spill.
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../selftests/bpf/progs/verifier_spill_fill.c    | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ .../selftests/bpf/progs/verifier_spill_fill.c | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/to=
 ols/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 41fd61299eab..df4920da3472 100644
+index 6115520154e3..d9dabae81176 100644
 --- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -495,6 +495,22 @@ char single_byte_buf[1] SEC(".data.single_byte_buf")=
-;
- SEC("raw_tp")
- __log_level(2)
- __success
-+/* make sure fp-8 is all STACK_ZERO */
-+__msg("2: (7a) *(u64 *)(r10 -8) =3D 0          ; R10=3Dfp0 fp-8_w=3D0000=
-0000")
-+/* but fp-16 is spilled IMPRECISE zero const reg */
-+__msg("4: (7b) *(u64 *)(r10 -16) =3D r0        ; R0_w=3D0 R10=3Dfp0 fp-1=
-6_w=3D0")
-+/* and now check that precision propagation works even for such tricky c=
-ase */
-+__msg("10: (71) r2 =3D *(u8 *)(r10 -9)         ; R2_w=3DP0 R10=3Dfp0 fp-=
-16_w=3D0")
-+__msg("11: (0f) r1 +=3D r2")
-+__msg("mark_precise: frame0: last_idx 11 first_idx 0 subseq_idx -1")
-+__msg("mark_precise: frame0: regs=3Dr2 stack=3D before 10: (71) r2 =3D *=
-(u8 *)(r10 -9)")
-+__msg("mark_precise: frame0: regs=3D stack=3D-16 before 9: (bf) r1 =3D r=
-6")
-+__msg("mark_precise: frame0: regs=3D stack=3D-16 before 8: (73) *(u8 *)(=
-r1 +0) =3D r2")
-+__msg("mark_precise: frame0: regs=3D stack=3D-16 before 7: (0f) r1 +=3D =
-r2")
-+__msg("mark_precise: frame0: regs=3D stack=3D-16 before 6: (71) r2 =3D *=
-(u8 *)(r10 -1)")
-+__msg("mark_precise: frame0: regs=3D stack=3D-16 before 5: (bf) r1 =3D r=
-6")
-+__msg("mark_precise: frame0: regs=3D stack=3D-16 before 4: (7b) *(u64 *)=
-(r10 -16) =3D r0")
-+__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 3: (b7) r0 =3D 0"=
-)
- __naked void partial_stack_load_preserves_zeros(void)
- {
- 	asm volatile (
+@@ -4,6 +4,7 @@
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ #include "bpf_misc.h"
++#include <../../../tools/include/linux/filter.h>
+=20
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_RINGBUF);
+@@ -450,4 +451,43 @@ l0_%=3D:	r1 >>=3D 16;					\
+ 	: __clobber_all);
+ }
+=20
++SEC("raw_tp")
++__log_level(2)
++__success
++__msg("fp-8=3D0m??mmmm")
++__msg("fp-16=3D00mm??mm")
++__msg("fp-24=3D00mm???m")
++__naked void spill_subregs_preserve_stack_zero(void)
++{
++	asm volatile (
++		"call %[bpf_get_prandom_u32];"
++
++		/* 32-bit subreg spill with ZERO, MISC, and INVALID */
++		".8byte %[fp1_u8_st_zero];"   /* ZERO, LLVM-18+: *(u8 *)(r10 -1) =3D 0=
+; */
++		"*(u8 *)(r10 -2) =3D r0;"       /* MISC */
++		/* fp-3 and fp-4 stay INVALID */
++		"*(u32 *)(r10 -8) =3D r0;"
++
++		/* 16-bit subreg spill with ZERO, MISC, and INVALID */
++		".8byte %[fp10_u16_st_zero];" /* ZERO, LLVM-18+: *(u16 *)(r10 -10) =3D=
+ 0; */
++		"*(u16 *)(r10 -12) =3D r0;"     /* MISC */
++		/* fp-13 and fp-14 stay INVALID */
++		"*(u16 *)(r10 -16) =3D r0;"
++
++		/* 8-bit subreg spill with ZERO, MISC, and INVALID */
++		".8byte %[fp18_u16_st_zero];" /* ZERO, LLVM-18+: *(u16 *)(r18 -10) =3D=
+ 0; */
++		"*(u16 *)(r10 -20) =3D r0;"     /* MISC */
++		/* fp-21, fp-22, and fp-23 stay INVALID */
++		"*(u8 *)(r10 -24) =3D r0;"
++
++		"r0 =3D 0;"
++		"exit;"
++	:
++	: __imm(bpf_get_prandom_u32),
++	  __imm_insn(fp1_u8_st_zero, BPF_ST_MEM(BPF_B, BPF_REG_FP, -1, 0)),
++	  __imm_insn(fp10_u16_st_zero, BPF_ST_MEM(BPF_H, BPF_REG_FP, -10, 0)),
++	  __imm_insn(fp18_u16_st_zero, BPF_ST_MEM(BPF_H, BPF_REG_FP, -18, 0))
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") =3D "GPL";
 --=20
 2.34.1
 
