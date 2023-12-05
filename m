@@ -1,124 +1,69 @@
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5A4107;
-	Mon,  4 Dec 2023 18:10:59 -0800 (PST)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0VxsMv1R_1701742256;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VxsMv1R_1701742256)
-          by smtp.aliyun-inc.com;
-          Tue, 05 Dec 2023 10:10:56 +0800
-Message-ID: <1701740897.6795166-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH net-next] tcp: add tracepoints for data send/recv/acked
-Date: Tue, 5 Dec 2023 09:48:17 +0800
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To: Eric Dumazet <edumazet@google.com>
-Cc: netdev@vger.kernel.org,
- rostedt@goodmis.org,
- mhiramat@kernel.org,
- mathieu.desnoyers@efficios.com,
- davem@davemloft.net,
- dsahern@kernel.org,
- kuba@kernel.org,
- pabeni@redhat.com,
- martin.lau@linux.dev,
- linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org,
- dust.li@linux.alibaba.com,
- alibuda@linux.alibaba.com,
- guwen@linux.alibaba.com,
- hengqi@linux.alibaba.com,
- Philo Lu <lulie@linux.alibaba.com>
-References: <20231204114322.9218-1-lulie@linux.alibaba.com>
- <CANn89iKUHQHA2wHw9k1SiazJf7ag7i4Tz+FPutgu870teVw_Bg@mail.gmail.com>
-In-Reply-To: <CANn89iKUHQHA2wHw9k1SiazJf7ag7i4Tz+FPutgu870teVw_Bg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jl7jH0OH"
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC215107;
+	Mon,  4 Dec 2023 18:14:07 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-40c09f5a7cfso21214345e9.0;
+        Mon, 04 Dec 2023 18:14:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701742446; x=1702347246; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TLYOJitG6MsmYZ52J6r5K0brTXqqI1z2ZXUGcmpI7uQ=;
+        b=jl7jH0OHdO7iMSsDaWMnUAf6nDTlxwbTrB+DGcIyFgTZIrDFYe6GvxQ2FgYAhB4lvL
+         L7fbEEqHIA/GGOWD3nL5GPalBuH1yXbkvwTRvP7c+fKXOwcHqE64wYBAdVWytSm9VPar
+         PpsUubKIGLbXf7jYK3VztPezsoii7x8gi2NF/F6wJ55hW178zeJhAinA16zkA9fmLHEK
+         dSpq/F0W4ge4FKHwLpMEjOJRMuOklLB5lvWmjET8sbt5JWiQnSTnz7Pkk+OPXRDHqJsw
+         T0NMrhwqHve0yZI1BeRXQ4BiZzYnkR41AeurCqJsRVOGlNMK1hAPRQgbgTEwELhKfq2r
+         vAKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701742446; x=1702347246;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TLYOJitG6MsmYZ52J6r5K0brTXqqI1z2ZXUGcmpI7uQ=;
+        b=H9UXUAGUCX1D5cwESOUa1qw5W2RHKsWteZpoz6bWk+wlP8bcC4b+EYGXXnrvEG7XsW
+         FeBaC/yGqBMP67oj0Kkj9RpY5PnqN/07ktUeRt5h5n0jh1kOhKmcGNiXyDqS/OxN7mGF
+         4PFnM4hvTUlsflzQ6iCekIdJoNktTCO1ODpR+PSdMK8/NlQiEsUCgFUrupGt5k3VcetK
+         lbov1OuayaHknXt0ApWnJif6uimfuC/5ZGLd5Mk8YBAEK3LYv3QS5qAlOcDtlu62E+YW
+         XRIAQzQiq/s5rupH1TZVUHpYd0ZxBNwqnZsZLuEDD1qdq463bS3KFdFyLyncnAi51aWv
+         7BaQ==
+X-Gm-Message-State: AOJu0Yxg4SmftDLwRlJOYP6Zz5asBsg55tfi1yPncmC0YZnjGdgM+idl
+	spTzVU2jevc0GwapL9J2q2tbcbK1qsgZh+yw0lo=
+X-Google-Smtp-Source: AGHT+IHPexNKUJ22o+YlNP4qkph2kU0vWUYC1l2LYSKbQX5qjGBQpVF11/+hlFiOTTfeouXuFa0sCKH2UF+tDOZDGnI=
+X-Received: by 2002:adf:f3d1:0:b0:333:2fd2:6f7a with SMTP id
+ g17-20020adff3d1000000b003332fd26f7amr4050306wrp.132.1701742446148; Mon, 04
+ Dec 2023 18:14:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20231205013420.88067-1-kuniyu@amazon.com> <20231205013420.88067-4-kuniyu@amazon.com>
+In-Reply-To: <20231205013420.88067-4-kuniyu@amazon.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 4 Dec 2023 18:13:55 -0800
+Message-ID: <CAADnVQKY74ynj8PB62Wf4xgDN6sC=VawQwy5V3YbRx-2tbcwNw@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 3/3] selftest: bpf: Test bpf_sk_assign_tcp_reqsk().
+To: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: Eric Dumazet <edumazet@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 4 Dec 2023 13:28:21 +0100, Eric Dumazet <edumazet@google.com> wrote:
-> On Mon, Dec 4, 2023 at 12:43=E2=80=AFPM Philo Lu <lulie@linux.alibaba.com=
+On Mon, Dec 4, 2023 at 5:36=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazon.com=
 > wrote:
-> >
-> > Add 3 tracepoints, namely tcp_data_send/tcp_data_recv/tcp_data_acked,
-> > which will be called every time a tcp data packet is sent, received, and
-> > acked.
-> > tcp_data_send: called after a data packet is sent.
-> > tcp_data_recv: called after a data packet is receviced.
-> > tcp_data_acked: called after a valid ack packet is processed (some sent
-> > data are ackknowledged).
-> >
-> > We use these callbacks for fine-grained tcp monitoring, which collects
-> > and analyses every tcp request/response event information. The whole
-> > system has been described in SIGMOD'18 (see
-> > https://dl.acm.org/doi/pdf/10.1145/3183713.3190659 for details). To
-> > achieve this with bpf, we require hooks for data events that call bpf
-> > prog (1) when any data packet is sent/received/acked, and (2) after
-> > critical tcp state variables have been updated (e.g., snd_una, snd_nxt,
-> > rcv_nxt). However, existing bpf hooks cannot meet our requirements.
-> > Besides, these tracepoints help to debug tcp when data send/recv/acked.
 >
-> This I do not understand.
->
-> >
-> > Though kretprobe/fexit can also be used to collect these information,
-> > they will not work if the kernel functions get inlined. Considering the
-> > stability, we prefer tracepoint as the solution.
->
-> I dunno, this seems quite weak to me. I see many patches coming to add
-> tracing in the stack, but no patches fixing any issues.
+> +static __always_inline int tcp_load_headers(struct tcp_syncookie *ctx)
 
+...
 
-We have implemented a mechanism to split the request and response from the =
-TCP
-connection using these "hookers", which can handle various protocols such as
-HTTP, HTTPS, Redis, and MySQL. This mechanism allows us to record important
-information about each request and response, including the amount of data
-uploaded, the time taken by the server to handle the request, and the time =
-taken
-for the client to receive the response. This mechanism has been running
-internally for many years and has proven to be very useful.
+> +static __always_inline int tcp_reload_headers(struct tcp_syncookie *ctx)
 
-One of the main benefits of this mechanism is that it helps in locating the
-source of any issues or problems that may arise. For example, if there is a
-problem with the network, the application, or the machine, we can use this
-mechanism to identify and isolate the issue.
-
-TCP has long been a challenge when it comes to tracking the transmission of=
- data
-on the network. The application can only confirm that it has sent a certain
-amount of data to the kernel, but it has limited visibility into whether the
-client has actually received this data. Our mechanism addresses this issue =
-by
-providing insights into the amount of data received by the client and the t=
-ime
-it was received. Furthermore, we can also detect any packet loss or delays
-caused by the server.
-
-https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7912288961/973=
-2df025beny.svg
-
-So, we do not want to add some tracepoint to do some unknow debug.
-We have a clear goal. debugging is just an incidental capability.
-
-Thanks.
-
-
->
-> It really looks like : We do not know how TCP stack works, we do not
-> know if there is any issue,
-> let us add trace points to help us to make forward progress in our analys=
-is.
->
-> These tracepoints will not tell how many segments/bytes were
-> sent/acked/received, I really do not see
-> how we will avoid adding in the future more stuff, forcing the
-> compiler to save more state
-> just in case the tracepoint needs the info.
->
-> The argument of "add minimal info", so that we can silently add more
-> stuff in the future "for free" is not something I buy.
->
-> I very much prefer that you make sure the stuff you need is not
-> inlined, so that standard kprobe/kretprobe facility can be used.
+please remove __always_inline here and in all other places.
+The generated code will be much better =3D=3D faster and the verifier
+should be able to understand it.
