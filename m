@@ -1,89 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 684C71C15
-	for <bpf@vger.kernel.org>; Tue,  5 Dec 2023 02:08:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MBaXPANA"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 28776C433CA;
-	Tue,  5 Dec 2023 02:08:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701742099;
-	bh=Jm/B+Od7jQDtUTIKrNOSTUZV3iOkK4hPjU8Hpu1uh14=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=MBaXPANAEAKW+hkEKn1xJaJEVZq4OAW2uCvLGZAkx6lGucj68KRKTGWvAGdvClLH2
-	 uXAQs1Hc7YAK94mipgLUe0HyJAKV6Cf8NtMmeC01WN/HahERrLynbtyagv4a53s9Qx
-	 EnhUgRHLk65PkCuGLsoadIkphQtd7/lcSY5YlB7N71F5NVyuR/3AT8klpHAm/d0K5z
-	 EVOvsEobqtVOq15tVyDWJOfGFiTgAl5KhY0JvgJLzXv/g3/64BZm0fjFSryqecZsD8
-	 vP56+eoI6nE58T0TWhz+Iu1+yvuRt0SRorGBz8ZXiF0Gr7tF7ODy/1IgrSQKPMJ55y
-	 yQPpDzzDt2oYQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0CDFBDD4EF1;
-	Tue,  5 Dec 2023 02:08:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5A4107;
+	Mon,  4 Dec 2023 18:10:59 -0800 (PST)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0VxsMv1R_1701742256;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VxsMv1R_1701742256)
+          by smtp.aliyun-inc.com;
+          Tue, 05 Dec 2023 10:10:56 +0800
+Message-ID: <1701740897.6795166-1-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH net-next] tcp: add tracepoints for data send/recv/acked
+Date: Tue, 5 Dec 2023 09:48:17 +0800
+From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To: Eric Dumazet <edumazet@google.com>
+Cc: netdev@vger.kernel.org,
+ rostedt@goodmis.org,
+ mhiramat@kernel.org,
+ mathieu.desnoyers@efficios.com,
+ davem@davemloft.net,
+ dsahern@kernel.org,
+ kuba@kernel.org,
+ pabeni@redhat.com,
+ martin.lau@linux.dev,
+ linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org,
+ dust.li@linux.alibaba.com,
+ alibuda@linux.alibaba.com,
+ guwen@linux.alibaba.com,
+ hengqi@linux.alibaba.com,
+ Philo Lu <lulie@linux.alibaba.com>
+References: <20231204114322.9218-1-lulie@linux.alibaba.com>
+ <CANn89iKUHQHA2wHw9k1SiazJf7ag7i4Tz+FPutgu870teVw_Bg@mail.gmail.com>
+In-Reply-To: <CANn89iKUHQHA2wHw9k1SiazJf7ag7i4Tz+FPutgu870teVw_Bg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v5 0/7] bpf: Fix the release of inner map
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170174209904.18867.7610457582102890894.git-patchwork-notify@kernel.org>
-Date: Tue, 05 Dec 2023 02:08:19 +0000
-References: <20231204140425.1480317-1-houtao@huaweicloud.com>
-In-Reply-To: <20231204140425.1480317-1-houtao@huaweicloud.com>
-To: Hou Tao <houtao@huaweicloud.com>
-Cc: bpf@vger.kernel.org, martin.lau@linux.dev, alexei.starovoitov@gmail.com,
- andrii@kernel.org, song@kernel.org, haoluo@google.com,
- yonghong.song@linux.dev, daniel@iogearbox.net, kpsingh@kernel.org,
- sdf@google.com, jolsa@kernel.org, john.fastabend@gmail.com,
- paulmck@kernel.org, houtao1@huawei.com
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Mon,  4 Dec 2023 22:04:18 +0800 you wrote:
-> From: Hou Tao <houtao1@huawei.com>
-> 
-> Hi,
-> 
-> The patchset aims to fix the release of inner map in map array or map
-> htab. The release of inner map is different with normal map. For normal
-> map, the map is released after the bpf program which uses the map is
-> destroyed, because the bpf program tracks the used maps. However bpf
-> program can not track the used inner map because these inner map may be
-> updated or deleted dynamically, and for now the ref-counter of inner map
-> is decreased after the inner map is remove from outer map, so the inner
-> map may be freed before the bpf program, which is accessing the inner
-> map, exits and there will be use-after-free problem as demonstrated by
-> patch #6.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf,v5,1/7] bpf: Check rcu_read_lock_trace_held() before calling bpf map helpers
-    https://git.kernel.org/bpf/bpf-next/c/169410eba271
-  - [bpf,v5,2/7] bpf: Add map and need_defer parameters to .map_fd_put_ptr()
-    https://git.kernel.org/bpf/bpf-next/c/20c20bd11a07
-  - [bpf,v5,3/7] bpf: Set need_defer as false when clearing fd array during map free
-    https://git.kernel.org/bpf/bpf-next/c/79d93b3c6ffd
-  - [bpf,v5,4/7] bpf: Defer the free of inner map when necessary
-    https://git.kernel.org/bpf/bpf-next/c/876673364161
-  - [bpf,v5,5/7] bpf: Optimize the free of inner map
-    https://git.kernel.org/bpf/bpf-next/c/af66bfd3c853
-  - [bpf,v5,6/7] selftests/bpf: Add test cases for inner map
-    https://git.kernel.org/bpf/bpf-next/c/1624918be84a
-  - [bpf,v5,7/7] selftests/bpf: Test outer map update operations in syscall program
-    https://git.kernel.org/bpf/bpf-next/c/e3dd40828534
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+On Mon, 4 Dec 2023 13:28:21 +0100, Eric Dumazet <edumazet@google.com> wrote:
+> On Mon, Dec 4, 2023 at 12:43=E2=80=AFPM Philo Lu <lulie@linux.alibaba.com=
+> wrote:
+> >
+> > Add 3 tracepoints, namely tcp_data_send/tcp_data_recv/tcp_data_acked,
+> > which will be called every time a tcp data packet is sent, received, and
+> > acked.
+> > tcp_data_send: called after a data packet is sent.
+> > tcp_data_recv: called after a data packet is receviced.
+> > tcp_data_acked: called after a valid ack packet is processed (some sent
+> > data are ackknowledged).
+> >
+> > We use these callbacks for fine-grained tcp monitoring, which collects
+> > and analyses every tcp request/response event information. The whole
+> > system has been described in SIGMOD'18 (see
+> > https://dl.acm.org/doi/pdf/10.1145/3183713.3190659 for details). To
+> > achieve this with bpf, we require hooks for data events that call bpf
+> > prog (1) when any data packet is sent/received/acked, and (2) after
+> > critical tcp state variables have been updated (e.g., snd_una, snd_nxt,
+> > rcv_nxt). However, existing bpf hooks cannot meet our requirements.
+> > Besides, these tracepoints help to debug tcp when data send/recv/acked.
+>
+> This I do not understand.
+>
+> >
+> > Though kretprobe/fexit can also be used to collect these information,
+> > they will not work if the kernel functions get inlined. Considering the
+> > stability, we prefer tracepoint as the solution.
+>
+> I dunno, this seems quite weak to me. I see many patches coming to add
+> tracing in the stack, but no patches fixing any issues.
 
 
+We have implemented a mechanism to split the request and response from the =
+TCP
+connection using these "hookers", which can handle various protocols such as
+HTTP, HTTPS, Redis, and MySQL. This mechanism allows us to record important
+information about each request and response, including the amount of data
+uploaded, the time taken by the server to handle the request, and the time =
+taken
+for the client to receive the response. This mechanism has been running
+internally for many years and has proven to be very useful.
+
+One of the main benefits of this mechanism is that it helps in locating the
+source of any issues or problems that may arise. For example, if there is a
+problem with the network, the application, or the machine, we can use this
+mechanism to identify and isolate the issue.
+
+TCP has long been a challenge when it comes to tracking the transmission of=
+ data
+on the network. The application can only confirm that it has sent a certain
+amount of data to the kernel, but it has limited visibility into whether the
+client has actually received this data. Our mechanism addresses this issue =
+by
+providing insights into the amount of data received by the client and the t=
+ime
+it was received. Furthermore, we can also detect any packet loss or delays
+caused by the server.
+
+https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7912288961/973=
+2df025beny.svg
+
+So, we do not want to add some tracepoint to do some unknow debug.
+We have a clear goal. debugging is just an incidental capability.
+
+Thanks.
+
+
+>
+> It really looks like : We do not know how TCP stack works, we do not
+> know if there is any issue,
+> let us add trace points to help us to make forward progress in our analys=
+is.
+>
+> These tracepoints will not tell how many segments/bytes were
+> sent/acked/received, I really do not see
+> how we will avoid adding in the future more stuff, forcing the
+> compiler to save more state
+> just in case the tracepoint needs the info.
+>
+> The argument of "add minimal info", so that we can silently add more
+> stuff in the future "for free" is not something I buy.
+>
+> I very much prefer that you make sure the stuff you need is not
+> inlined, so that standard kprobe/kretprobe facility can be used.
