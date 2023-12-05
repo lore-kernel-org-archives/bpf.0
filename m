@@ -1,158 +1,82 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC801A2
-	for <bpf@vger.kernel.org>; Tue,  5 Dec 2023 10:45:46 -0800 (PST)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B5FexJu009691
-	for <bpf@vger.kernel.org>; Tue, 5 Dec 2023 10:45:46 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ut2n0ukjk-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 05 Dec 2023 10:45:45 -0800
-Received: from twshared68648.02.prn6.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Tue, 5 Dec 2023 10:45:43 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 9E1123CA16FED; Tue,  5 Dec 2023 10:43:00 -0800 (PST)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>,
-        Eduard Zingerman
-	<eddyz87@gmail.com>
-Subject: [PATCH v4 bpf-next 04/10] bpf: preserve STACK_ZERO slots on partial reg spills
-Date: Tue, 5 Dec 2023 10:42:42 -0800
-Message-ID: <20231205184248.1502704-5-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231205184248.1502704-1-andrii@kernel.org>
-References: <20231205184248.1502704-1-andrii@kernel.org>
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JEEiAfJX"
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C8F1BF
+	for <bpf@vger.kernel.org>; Tue,  5 Dec 2023 10:49:59 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2c9f57d9952so43202561fa.3
+        for <bpf@vger.kernel.org>; Tue, 05 Dec 2023 10:49:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701802198; x=1702406998; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9T7gaq3g3xpUZlL0V+HU0XCAc1PbTafrJHtPKk2bamI=;
+        b=JEEiAfJXwBpMh2WNQ4eX57Yczqbs9+KbTFKs57xMWqV7LZJPgqXT1jFyIt/mjZmkyr
+         X8p20VifDz5nysupSwJJ3ZEwym/gochbqmuBstD8tBsMeEg2qu8d7hf8GYCzShFx6Oi1
+         IE9dicUIb46cBnM++ORIh5lBq3rOPnGeRC6fqlxzPlSvOSkCFE3QlK0w18NgoUCWKpki
+         LJVFCBURsIcSeB5StYvKPz4ogpkRLR9WwPtl/G8jFitHC/cZ46jkktf/YrklYYp8qiGL
+         2DVFXpQ722mH+4CYHGEcTh+X6217gDCdATa4LvFquP5MgtGTXGW5WmyfaND5Z1E0/ESs
+         T7pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701802198; x=1702406998;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9T7gaq3g3xpUZlL0V+HU0XCAc1PbTafrJHtPKk2bamI=;
+        b=JG9ugoqeUpYAkJb303sPAcN63aC0oraAfrV0jLwHfxyw3BEqL8/K8f68X4tB/j5oe9
+         qEFK2HSX3wQplv8nu/V8o3rt5i5KQk8AMkeMWUScU+ixVdHM0e8ikg/YqDEyWVijcYAn
+         1Nc+/Rp9//u0YBSeVCqoCQarHQcSOmLQA5BovC3GFpPiDkzPnnaWnVF01r9qUD25+iyH
+         f7wEr009SWMIrf0tO+W+zHkCR+FQXq33OXqZamNcdAOA0YYt+68RVO8s78jvYMhOH4+D
+         BVWyRUbpzhfB/4vKoRrIipbvowZQSAyjPqS8FhJeec/mTNxkev+2i6F3b+RjP40fPmsh
+         Qc4A==
+X-Gm-Message-State: AOJu0Yx52gtg25vFyUpnq7TOrRsPYXUYcvgpaqrYJGvAKt8sCK/PGspK
+	S5ho22mY2GEEyX/MIDuXKKw=
+X-Google-Smtp-Source: AGHT+IHS09sJzE6Q4K886UT/gi/6TcLIAGeDAbDw+QdOrj3BQKqFSc/fSu6jriwlK9y3w7Ajifmbzw==
+X-Received: by 2002:a05:651c:146:b0:2ca:e10:af71 with SMTP id c6-20020a05651c014600b002ca0e10af71mr1377874ljd.10.1701802197626;
+        Tue, 05 Dec 2023 10:49:57 -0800 (PST)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id b10-20020a2e894a000000b002c9fbb50770sm918803ljk.90.2023.12.05.10.49.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Dec 2023 10:49:57 -0800 (PST)
+Message-ID: <534cdf2646333c301d80f731bd08424a15b20eca.camel@gmail.com>
+Subject: Re: [PATCH v3 bpf-next 03/10] bpf: fix check for attempt to corrupt
+ spilled pointer
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  bpf@vger.kernel.org, daniel@iogearbox.net,
+ martin.lau@kernel.org,  kernel-team@meta.com
+Date: Tue, 05 Dec 2023 20:49:56 +0200
+In-Reply-To: <CAEf4BzbK-D0+WU8A--+43TXb2rgUgNPaUs3Dbg4Rz1_hL6A_tw@mail.gmail.com>
+References: <20231204192601.2672497-1-andrii@kernel.org>
+	 <20231204192601.2672497-4-andrii@kernel.org>
+	 <3fca38fdfd975f735e3dd31930637cfbc70948f4.camel@gmail.com>
+	 <CAEf4BzZ0Ao7EF4PodPBxTdQphEt-_ezZyNDOzqds2XfXYpjsHg@mail.gmail.com>
+	 <6875401e502049bfdfa128fc7bf37fabe5314e2f.camel@gmail.com>
+	 <CAEf4Bzb8LouFSSX5DED_ucgq_xuhukE1BQ7y=hxY0c17Nq4T+Q@mail.gmail.com>
+	 <7aa8af01db4fdcbedab376423d3960c22016aba3.camel@gmail.com>
+	 <CAEf4BzbK-D0+WU8A--+43TXb2rgUgNPaUs3Dbg4Rz1_hL6A_tw@mail.gmail.com>
+Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.1 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: bW-g0UTnD7HfobVfBYbY9Ujm4iqY9HDy
-X-Proofpoint-GUID: bW-g0UTnD7HfobVfBYbY9Ujm4iqY9HDy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-05_14,2023-12-05_01,2023-05-22_02
 
-Instead of always forcing STACK_ZERO slots to STACK_MISC, preserve it in
-situations where this is possible. E.g., when spilling register as
-1/2/4-byte subslots on the stack, all the remaining bytes in the stack
-slot do not automatically become unknown. If we knew they contained
-zeroes, we can preserve those STACK_ZERO markers.
+On Tue, 2023-12-05 at 10:30 -0800, Andrii Nakryiko wrote:
+[...]
+> > 'type !=3D SCALAR_VALUE' makes sense as well.
+> > Do you plan to add this check as a part of current patch?
+>=20
+> nope :) this will turn into another retval patch set story. Feel free
+> to follow up if you care enough about this, though!
 
-Add a helper mark_stack_slot_misc(), similar to scrub_spilled_slot(),
-but that doesn't overwrite either STACK_INVALID nor STACK_ZERO. Note
-that we need to take into account possibility of being in unprivileged
-mode, in which case STACK_INVALID is forced to STACK_MISC for correctness=
-,
-as treating STACK_INVALID as equivalent STACK_MISC is only enabled in
-privileged mode.
-
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/verifier.c | 28 +++++++++++++++++++++++-----
- 1 file changed, 23 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3edca06de9fd..93de39a6e36e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1144,6 +1144,21 @@ static bool is_spilled_scalar_reg(const struct bpf=
-_stack_state *stack)
- 	       stack->spilled_ptr.type =3D=3D SCALAR_VALUE;
- }
-=20
-+/* Mark stack slot as STACK_MISC, unless it is already STACK_INVALID, in=
- which
-+ * case they are equivalent, or it's STACK_ZERO, in which case we preser=
-ve
-+ * more precise STACK_ZERO.
-+ * Note, in uprivileged mode leaving STACK_INVALID is wrong, so we take
-+ * env->allow_ptr_leaks into account and force STACK_MISC, if necessary.
-+ */
-+static void mark_stack_slot_misc(struct bpf_verifier_env *env, u8 *stype=
-)
-+{
-+	if (*stype =3D=3D STACK_ZERO)
-+		return;
-+	if (env->allow_ptr_leaks && *stype =3D=3D STACK_INVALID)
-+		return;
-+	*stype =3D STACK_MISC;
-+}
-+
- static void scrub_spilled_slot(u8 *stype)
- {
- 	if (*stype !=3D STACK_INVALID)
-@@ -4386,7 +4401,8 @@ static void copy_register_state(struct bpf_reg_stat=
-e *dst, const struct bpf_reg_
- 	dst->live =3D live;
- }
-=20
--static void save_register_state(struct bpf_func_state *state,
-+static void save_register_state(struct bpf_verifier_env *env,
-+				struct bpf_func_state *state,
- 				int spi, struct bpf_reg_state *reg,
- 				int size)
- {
-@@ -4401,7 +4417,7 @@ static void save_register_state(struct bpf_func_sta=
-te *state,
-=20
- 	/* size < 8 bytes spill */
- 	for (; i; i--)
--		scrub_spilled_slot(&state->stack[spi].slot_type[i - 1]);
-+		mark_stack_slot_misc(env, &state->stack[spi].slot_type[i - 1]);
- }
-=20
- static bool is_bpf_st_mem(struct bpf_insn *insn)
-@@ -4463,7 +4479,7 @@ static int check_stack_write_fixed_off(struct bpf_v=
-erifier_env *env,
- 	mark_stack_slot_scratched(env, spi);
- 	if (reg && !(off % BPF_REG_SIZE) && register_is_bounded(reg) &&
- 	    !register_is_null(reg) && env->bpf_capable) {
--		save_register_state(state, spi, reg, size);
-+		save_register_state(env, state, spi, reg, size);
- 		/* Break the relation on a narrowing spill. */
- 		if (fls64(reg->umax_value) > BITS_PER_BYTE * size)
- 			state->stack[spi].spilled_ptr.id =3D 0;
-@@ -4473,7 +4489,7 @@ static int check_stack_write_fixed_off(struct bpf_v=
-erifier_env *env,
-=20
- 		__mark_reg_known(&fake_reg, insn->imm);
- 		fake_reg.type =3D SCALAR_VALUE;
--		save_register_state(state, spi, &fake_reg, size);
-+		save_register_state(env, state, spi, &fake_reg, size);
- 		insn_flags =3D 0; /* not a register spill */
- 	} else if (reg && is_spillable_regtype(reg->type)) {
- 		/* register containing pointer is being spilled into stack */
-@@ -4486,7 +4502,7 @@ static int check_stack_write_fixed_off(struct bpf_v=
-erifier_env *env,
- 			verbose(env, "cannot spill pointers to stack into stack frame of the =
-caller\n");
- 			return -EINVAL;
- 		}
--		save_register_state(state, spi, reg, size);
-+		save_register_state(env, state, spi, reg, size);
- 	} else {
- 		u8 type =3D STACK_MISC;
-=20
-@@ -4757,6 +4773,8 @@ static int check_stack_read_fixed_off(struct bpf_ve=
-rifier_env *env,
- 						continue;
- 					if (type =3D=3D STACK_MISC)
- 						continue;
-+					if (type =3D=3D STACK_ZERO)
-+						continue;
- 					if (type =3D=3D STACK_INVALID && env->allow_uninit_stack)
- 						continue;
- 					verbose(env, "invalid read from stack off %d+%d size %d\n",
---=20
-2.34.1
-
+Well, it's a regression. On the other hand at my old job we considered
+that feature does not exist if it's not covered by a test.
+I'll do a follow-up.
