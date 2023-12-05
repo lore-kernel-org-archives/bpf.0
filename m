@@ -1,86 +1,115 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="irguSMCs"
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B2A113
-	for <bpf@vger.kernel.org>; Mon,  4 Dec 2023 17:48:26 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-332c46d5988so3998847f8f.1
-        for <bpf@vger.kernel.org>; Mon, 04 Dec 2023 17:48:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L08xTNSk"
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B495B4;
+	Mon,  4 Dec 2023 17:59:08 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-40c0fc1cf3dso6016395e9.0;
+        Mon, 04 Dec 2023 17:59:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701740904; x=1702345704; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701741547; x=1702346347; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DdbJtEo+51qY/ppUYxcysb55DeSZaXaMbvP46a6/r40=;
-        b=irguSMCsKRTl7TJ5T0leF+940uk0NYKbqhN4v1g1MOowv2aCt9A9lAmF5ED8eKj9fQ
-         iyg6KAiRtKNxha7GCAM9kD0EdAbnYkX5CjHoCSOQfyuEohP887B/JrqRM0rJ/zTW8DcF
-         rsfalXXGRY6cVXMZqFUrHcx/MBFfX3/DMNXe4r+xdnsedTJ1SEctqZ9h283soMFyD8qi
-         N6PFH7q2N5hVY9leYf+DdKeT5KPJblUypkKvBPBbpBIMleHCBhpWpv/JOZS5BH+D/rSA
-         SdRbPCBDptE90JvLvS0jsflj3qND09nEHmvhl9qLNM4J/KIdREhef2fsLdnuGFFmxgXo
-         ou6w==
+        bh=fDBKOw3s0R/x34Gl0DdYfEHhp4k1EOz2IyOuhxx/RDw=;
+        b=L08xTNSk5eQU3t+7yuY8dwHJdDqcp5qOVAX9qAPdQOSwnMydAxATTumbVZFOd1LZpk
+         r02QCDg1fTg1Df6oenFxYMTCgt7XJGwkCZPG7FSF/YMHRioeDLY2Ki0N/5Vju9iERrIE
+         xzZq7GI749vs977WligIkSl9yzhFPi7ZFgaJL6WaxGK7al7ZaNEIn5tc11ZLsIgkAQdP
+         YAIRZhwXsfH46ls8en6WagtJChHaClBOO7PQXiqyAWQ5zmof17sXgXqRRRoNi5ZHevqq
+         w/56GAH+2kjIYj1DNYaq8Rl9wnUngWNMdQzTKagxr0a1e00PNOlXGL/Vg6viuwhnvqOv
+         N/vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701740904; x=1702345704;
+        d=1e100.net; s=20230601; t=1701741547; x=1702346347;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DdbJtEo+51qY/ppUYxcysb55DeSZaXaMbvP46a6/r40=;
-        b=AXTYonL6gf4Ikb060GDuSpD4ykRaVP5IgM5HlfF+14XvlTrpA52ZLBSwpg+DXqkMaG
-         aLEEtMx/nXb+50WyzedpwGIWzTyhmQmEuKx6jxEiE4jhrCLlsU1O2LkgDZt8jZvHpzmM
-         aVGFIdfKznYSrY71yMSz8z/p+JdSExy74lcJlGzUJF9pIgtosyAncmMF16pdUOU+Qz80
-         u4fpW+A0X5aZWn7OIKqqQLoOTFS/xNVxzqk3Lqg7hb8BbyfZx8jKXCEx84MGNtHzkjyb
-         c9BByo6QnOmlFVvDkK0UJk2t9/Rg6bPDQyQBEfd86XzjLwuMOFyGi01rbez1FDQ1OHla
-         iZRQ==
-X-Gm-Message-State: AOJu0Ywwm3OcLqBjYY4D6+DxU6jAyfFIaST7pXvkzriDvT3yIO2pXA1d
-	bdHfalMpTNcSWQE2Jjv0EUm+2vbX7FQKREzTMWDlbstQ
-X-Google-Smtp-Source: AGHT+IHnX2ozhFToCtrpxSEijwICqTnfVhMoLI7v6pKCn1Cfhnsagd3jCUGeMM7DeAtxE/Z/oyBG/Ek5djmnKmZWAHA=
-X-Received: by 2002:a5d:4cc7:0:b0:333:4287:868b with SMTP id
- c7-20020a5d4cc7000000b003334287868bmr2115722wrt.129.1701740904481; Mon, 04
- Dec 2023 17:48:24 -0800 (PST)
+        bh=fDBKOw3s0R/x34Gl0DdYfEHhp4k1EOz2IyOuhxx/RDw=;
+        b=HJVpVMBTspDPqLc2iozaFr23k9CsV4CMgIEGZsrNBTq3IroTKnEwCjK0iNl2Gj0Lo8
+         i8/czbeFjtwjo35g+ri/FEAWsThaK/jfXHvws2jeuMUUZCPwnjaMsqETsPkcD7lYUIIq
+         4KePO3CnMMkWkj/OmG7JEOScyLz2f5Q+QdFfNVavhNdXCQ5pxzUXO1mQjdsAzoq/hqNR
+         kh4WKhnMM4hyS6VCbF/a5c72K+C5Pnmx8oSQNxxjd6jHyHYSxhG/CTQHAV8RQfNIDEOW
+         bn5PRegh+ul4SFWIxKg3JV88N9OsX+w+cYsC7+JB/ta9l/1beZji/HTTtO01Ob92Fc5U
+         3b5Q==
+X-Gm-Message-State: AOJu0YyjWSKQgzs+qGx8XSzjGD0ezxrWl7kz0fgNwMf9hUXTAJoyx3Wl
+	MnZwB11yxWjOGEXgio9kRejknr1I79ajWlUg8gI=
+X-Google-Smtp-Source: AGHT+IH3pk98r8xDa4KBJTXsK/VMAwQZ79RDLUR+lRWE7jhLBQZJl49OL7x+1il/lGY6CVzmTDIbZ5teWIODtZG4zyg=
+X-Received: by 2002:a05:600c:444a:b0:40b:5e21:d36f with SMTP id
+ v10-20020a05600c444a00b0040b5e21d36fmr31135wmn.120.1701741546663; Mon, 04 Dec
+ 2023 17:59:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231130140120.1736235-1-houtao@huaweicloud.com>
- <20231130140120.1736235-8-houtao@huaweicloud.com> <20231203190410.qcyu3qmdkxavim2t@macbook-pro-49.dhcp.thefacebook.com>
- <db491a00-81ad-9c9b-7ab1-e75742730994@huaweicloud.com>
-In-Reply-To: <db491a00-81ad-9c9b-7ab1-e75742730994@huaweicloud.com>
+References: <cover.1701722991.git.dxu@dxuuu.xyz> <a385991bb4f36133e15d6eacb72ed22a3c02da16.1701722991.git.dxu@dxuuu.xyz>
+In-Reply-To: <a385991bb4f36133e15d6eacb72ed22a3c02da16.1701722991.git.dxu@dxuuu.xyz>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 4 Dec 2023 17:48:13 -0800
-Message-ID: <CAADnVQJLqcgrjbocEP7107Wf76bpni-ip4h44sKzuuZGr1KzFQ@mail.gmail.com>
-Subject: Re: [PATCH bpf v4 7/7] selftests/bpf: Test outer map update
- operations in syscall program
-To: Hou Tao <houtao@huaweicloud.com>
-Cc: bpf <bpf@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>, Hao Luo <haoluo@google.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, "Paul E . McKenney" <paulmck@kernel.org>, 
-	Hou Tao <houtao1@huawei.com>
+Date: Mon, 4 Dec 2023 17:58:55 -0800
+Message-ID: <CAADnVQJXtSNGuZGNfNSD2Or8hfhrxtO_cL1GckHMXc401Rg+kw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 01/10] xfrm: bpf: Move xfrm_interface_bpf.c to xfrm_bpf.c
+To: Daniel Xu <dxu@dxuuu.xyz>
+Cc: "David S. Miller" <davem@davemloft.net>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Steffen Klassert <steffen.klassert@secunet.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Eric Dumazet <edumazet@google.com>, antony.antony@secunet.com, 
+	Yonghong Song <yonghong.song@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
+	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>, devel@linux-ipsec.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 4, 2023 at 1:12=E2=80=AFAM Hou Tao <houtao@huaweicloud.com> wro=
-te:
+On Mon, Dec 4, 2023 at 12:56=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
 >
-> Hi,
+> This commit moves the contents of xfrm_interface_bpf.c into a new file,
+> xfrm_bpf.c This is in preparation for adding more xfrm kfuncs. We'd like
+> to keep all the bpf integrations in a single file.
 >
-> On 12/4/2023 3:04 AM, Alexei Starovoitov wrote:
-> > On Thu, Nov 30, 2023 at 10:01:20PM +0800, Hou Tao wrote:
-> >>
-> >> -    prog_load_attr.license =3D (long) license;
-> >> -    prog_load_attr.insns =3D (long) insns;
-> >> +    prog_load_attr.license =3D (unsigned long)license;
-> >> +    prog_load_attr.insns =3D (unsigned long)insns;
-> > Maybes keep it as (long) ?
-> > There are plenty of case where we cast a pointer to (long) because
-> > it's less verbose. Signedness shouldn't really matter.
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> ---
+>  net/xfrm/Makefile                             |  7 +------
+>  net/xfrm/{xfrm_interface_bpf.c =3D> xfrm_bpf.c} | 12 ++++++++----
+>  2 files changed, 9 insertions(+), 10 deletions(-)
+>  rename net/xfrm/{xfrm_interface_bpf.c =3D> xfrm_bpf.c} (88%)
 >
-> It matters for 32-bits host. Because insns and license are the pointers
-> in kernel space, so the MSB of these pointer must be 1 under 32-bits
-> host. Assuming the value of license is 0xc000-0000, if using (u64)(long)
-> to cast the value of license, the final value will be
-> 0xffff-ffff-c000-0000, instead of 0x0000-0000-c000-0000.
+> diff --git a/net/xfrm/Makefile b/net/xfrm/Makefile
+> index cd47f88921f5..29fff452280d 100644
+> --- a/net/xfrm/Makefile
+> +++ b/net/xfrm/Makefile
+> @@ -5,12 +5,6 @@
+>
+>  xfrm_interface-$(CONFIG_XFRM_INTERFACE) +=3D xfrm_interface_core.o
+>
+> -ifeq ($(CONFIG_XFRM_INTERFACE),m)
+> -xfrm_interface-$(CONFIG_DEBUG_INFO_BTF_MODULES) +=3D xfrm_interface_bpf.=
+o
+> -else ifeq ($(CONFIG_XFRM_INTERFACE),y)
+> -xfrm_interface-$(CONFIG_DEBUG_INFO_BTF) +=3D xfrm_interface_bpf.o
+> -endif
+> -
+>  obj-$(CONFIG_XFRM) :=3D xfrm_policy.o xfrm_state.o xfrm_hash.o \
+>                       xfrm_input.o xfrm_output.o \
+>                       xfrm_sysctl.o xfrm_replay.o xfrm_device.o
+> @@ -21,3 +15,4 @@ obj-$(CONFIG_XFRM_USER_COMPAT) +=3D xfrm_compat.o
+>  obj-$(CONFIG_XFRM_IPCOMP) +=3D xfrm_ipcomp.o
+>  obj-$(CONFIG_XFRM_INTERFACE) +=3D xfrm_interface.o
+>  obj-$(CONFIG_XFRM_ESPINTCP) +=3D espintcp.o
+> +obj-$(CONFIG_DEBUG_INFO_BTF) +=3D xfrm_bpf.o
+...
+> +#if IS_BUILTIN(CONFIG_XFRM_INTERFACE) || \
+> +    (IS_MODULE(CONFIG_XFRM_INTERFACE) && IS_ENABLED(CONFIG_DEBUG_INFO_BT=
+F_MODULES))
+> +
+>  /* bpf_xfrm_info - XFRM metadata information
+>   *
+>   * Members:
+> @@ -108,3 +110,5 @@ int __init register_xfrm_interface_bpf(void)
+>         return register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS,
+>                                          &xfrm_interface_kfunc_set);
+>  }
+> +
+> +#endif /* xfrm interface */
 
-but on 32-bit host upper bits will be ignored anyway.
-The kernel will cast aligned_u64 to (void*) first.
+imo the original approach was cleaner.
+#ifdefs in .c should be avoided when possible.
+But I'm not going to insist.
+
+ipsec folks please ack the first 3 patches.
