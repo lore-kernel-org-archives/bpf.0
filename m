@@ -1,42 +1,43 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mzV9fod0"
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705FB10CC;
-	Wed,  6 Dec 2023 15:27:10 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6ce972ac39dso63014b3a.3;
-        Wed, 06 Dec 2023 15:27:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LjK5CoDM"
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC24310D9;
+	Wed,  6 Dec 2023 15:27:14 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6ce72730548so67806b3a.1;
+        Wed, 06 Dec 2023 15:27:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701905230; x=1702510030; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fX2TomnDpcWa9Rf5bjJuYqn4PKTx3fdJMigTAusfJvA=;
-        b=mzV9fod0Q14L2zaqaJJFNaSYstZfhCxbjhu7DHaz3kZ8LQbaCnKFGtLV/QMC/BXNRS
-         dUijB6WmmzKmc9pw6gIvaKwbSl0ELir54e70dxPQ3ZwGFkmzwv27PojDo4mNTp4tmekc
-         2QHqNQwBzI4CdrKjA92Jdzmrm2gNlKiKDqZ2yjZcLFvT7KcWTRe/eYJZglOoIa785pHG
-         9NxjPqpyMVGqpE93BmL93QicPLGI8srPQaY2TVnQ7d8r50q0prPGNTQs8MhQ1ovuhjvq
-         b6LdEDCBuJ58BiFcuuZAwnk+5B/pI2vSKJkvmYJZ3CtJ6RIpUI8GAx2TRMGrn5fF7LBo
-         PJqw==
+        d=gmail.com; s=20230601; t=1701905234; x=1702510034; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iU9vkG8RfkaspO5yaBB9jJ83C8HW3ck1RxQ3+5By3Po=;
+        b=LjK5CoDMoyZeU9lwlTTY0+xgrwPvveLMP2ys0vOqgl0xrzYRj+YQg2JFJubmZkXM3h
+         Of7yMJYVWe/wd60t+RxxOdR1ikMIZr1xCxnfEwhmMkU5/Lzak3BdV73AAJHvJrh5nmOo
+         Wx/6eK4UNIYfRsHITR3NzQN+7DQUhYqNAT9z9C7Wv6M+EeslVlAOpAgEs2Aw6u/9Alt4
+         mJmNmnX140WgXMOKry3Lp2aeeAlzc0fQgbVSKG04+07JAF5C8SyD4AZpazvkldXdJvQr
+         3lcJVmPYUeyUgJc9OSf10k/syN9IpGDMTKWPlX7e9ZlKhAcqAlL+X4xdL9MfqX+KBLe0
+         BPKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701905230; x=1702510030;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fX2TomnDpcWa9Rf5bjJuYqn4PKTx3fdJMigTAusfJvA=;
-        b=T964g7QLuJbhgKsyQz4RkvBXfpNperC+19Tf3NqSxyCnylJSJJbg4up4fCkFOAkAYj
-         InOGhvDDLll/axwPRZfGSY5ogHP7Vy7wlRnZhZ6Gn97XTm95zABcdsXpAtAIZqI1K1z8
-         IfPPNZ++CsklD1kW9Et/37zdY1eXNNt04nZzKKA8ELTtf7S7YuW6uO6brnl5dx/Xiz5n
-         K6E/pRD0zszVtMHQCf8sHB7Svp0nYIoXbfbNLPv1G1IQOU3o4dTBEQQawYTK5v2jfI1Q
-         IxxboHPXYvXFK2D1hzkDdIi+VMMElkPNNz33jvUjb3ETC26ignDCr7PN3q4aUC4SOOY3
-         Z11Q==
-X-Gm-Message-State: AOJu0YzB8Pobclte3RtJAjxZ4RWufHrdaH/NOELsPRdg0G82IknVyRUe
-	/uhO5qAptXAgETY4rvv27HQ=
-X-Google-Smtp-Source: AGHT+IH97bKNklJ+bTgsJXkY2/Z74iquDLTg/8+BXT6ocb14RFZTDU9ggOR0/q+PoZnDkzDdL3+B1A==
-X-Received: by 2002:a05:6a00:2302:b0:6ce:1001:2f0e with SMTP id h2-20020a056a00230200b006ce10012f0emr1411103pfh.4.1701905229706;
-        Wed, 06 Dec 2023 15:27:09 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701905234; x=1702510034;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iU9vkG8RfkaspO5yaBB9jJ83C8HW3ck1RxQ3+5By3Po=;
+        b=e+UbW3VfHhDE9jrF5LhxXuQ2ytmKJ3rOhBq+t/BcLAp2zgrm4wBaGfpYfzMdcIQzWG
+         WiJ3sCubYs4eZxeAv1p7VCt3Z087olc2zVwpIqXpEJgLHsi/hOiMxnxrwMmJM60VOw4s
+         G16ohih+n1SQIH5CXzD/AtApQ3hy7KOFHvuNVXwvmRvDTg0C41YBFEmq1VXiPMXgUjyI
+         DEnPZJNTykbWYflv3F8q2TVTiAkJ0BKjUhR/VAnau/42e8vNa2gHhl8409vdprI1Vry+
+         06V7EFZ6mrm8LoGgeAKlFy5Tt4CPNq7lb0MjCNy4E6AS/og/nzdYz/+/moDXx+I59RvM
+         ntjQ==
+X-Gm-Message-State: AOJu0YxFXQowYcs6fxVgZ3eh49RlC+YzUYoVBgOsJWVSsst3D/KW/KJr
+	BXoSU87RX4bsCY+Y260o21M=
+X-Google-Smtp-Source: AGHT+IH5xOQG0TpivXQIeKLMVAq48E78zG0YLW/mNgi8skexCddKCgpMOe41BE4rSXW04mUngeVqNw==
+X-Received: by 2002:a05:6a21:33aa:b0:18c:1570:49fb with SMTP id yy42-20020a056a2133aa00b0018c157049fbmr2167975pzb.50.1701905234161;
+        Wed, 06 Dec 2023 15:27:14 -0800 (PST)
 Received: from john.. ([98.97.116.78])
-        by smtp.gmail.com with ESMTPSA id ka18-20020a056a00939200b006ce91d27c72sm58545pfb.175.2023.12.06.15.27.07
+        by smtp.gmail.com with ESMTPSA id ka18-20020a056a00939200b006ce91d27c72sm58545pfb.175.2023.12.06.15.27.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Dec 2023 15:27:08 -0800 (PST)
+        Wed, 06 Dec 2023 15:27:12 -0800 (PST)
 From: John Fastabend <john.fastabend@gmail.com>
 To: kuba@kernel.org,
 	jannh@google.com,
@@ -45,10 +46,12 @@ Cc: john.fastabend@gmail.com,
 	borisp@nvidia.com,
 	bpf@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH net 0/2] fixes for ktls
-Date: Wed,  6 Dec 2023 15:27:04 -0800
-Message-Id: <20231206232706.374377-1-john.fastabend@gmail.com>
+Subject: [PATCH net 2/2] bpf: sockmap, updating the sg structure should also update curr
+Date: Wed,  6 Dec 2023 15:27:06 -0800
+Message-Id: <20231206232706.374377-3-john.fastabend@gmail.com>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20231206232706.374377-1-john.fastabend@gmail.com>
+References: <20231206232706.374377-1-john.fastabend@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,16 +60,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Couple fixes for TLS and BPF interactions.
+Curr pointer should be updated when the sg structure is shifted.
 
-John Fastabend (2):
-  net: tls, update curr on splice as well
-  bpf: sockmap, updating the sg structure should also update curr
-
+Fixes: 7246d8ed4dcce ("bpf: helper to pop data from messages")
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+---
  net/core/filter.c | 19 +++++++++++++++++++
- net/tls/tls_sw.c  |  2 ++
- 2 files changed, 21 insertions(+)
+ 1 file changed, 19 insertions(+)
 
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 7e4d7c3bcc84..1737884be52f 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2602,6 +2602,22 @@ BPF_CALL_2(bpf_msg_cork_bytes, struct sk_msg *, msg, u32, bytes)
+ 	return 0;
+ }
+ 
++static void sk_msg_reset_curr(struct sk_msg *msg)
++{
++	u32 i = msg->sg.start;
++	u32 len = 0;
++
++	do {
++		len += sk_msg_elem(msg, i)->length;
++		sk_msg_iter_var_next(i);
++		if (len >= msg->sg.size)
++			break;
++	} while (i != msg->sg.end);
++
++	msg->sg.curr = i;
++	msg->sg.copybreak = 0;
++}
++
+ static const struct bpf_func_proto bpf_msg_cork_bytes_proto = {
+ 	.func           = bpf_msg_cork_bytes,
+ 	.gpl_only       = false,
+@@ -2721,6 +2737,7 @@ BPF_CALL_4(bpf_msg_pull_data, struct sk_msg *, msg, u32, start,
+ 		      msg->sg.end - shift + NR_MSG_FRAG_IDS :
+ 		      msg->sg.end - shift;
+ out:
++	sk_msg_reset_curr(msg);
+ 	msg->data = sg_virt(&msg->sg.data[first_sge]) + start - offset;
+ 	msg->data_end = msg->data + bytes;
+ 	return 0;
+@@ -2857,6 +2874,7 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg, u32, start,
+ 		msg->sg.data[new] = rsge;
+ 	}
+ 
++	sk_msg_reset_curr(msg);
+ 	sk_msg_compute_data_pointers(msg);
+ 	return 0;
+ }
+@@ -3025,6 +3043,7 @@ BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg, u32, start,
+ 
+ 	sk_mem_uncharge(msg->sk, len - pop);
+ 	msg->sg.size -= (len - pop);
++	sk_msg_reset_curr(msg);
+ 	sk_msg_compute_data_pointers(msg);
+ 	return 0;
+ }
 -- 
 2.33.0
 
