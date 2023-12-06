@@ -1,120 +1,110 @@
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F5536B03;
+	Wed,  6 Dec 2023 12:41:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VmSKk7RH"
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94041BD7;
-	Wed,  6 Dec 2023 03:53:39 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id e9e14a558f8ab-35d57e88c1dso19129375ab.2;
-        Wed, 06 Dec 2023 03:53:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701863619; x=1702468419; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4xIMBRdh82imgCh973bdcamdD/YLqs+vICvueMisFQc=;
-        b=VmSKk7RHxfAGfx0Yz/gvKA9tjufJMGJhEIftHn2WP3FXTmqzwEb66swj5VPirsLZlb
-         +j+VhUeupyHi7zf2CKPIQUSuODvN23dsst/1Oye36VWr6MA1mcYOxNbcCGhUrPJZhjCM
-         j52X6+0Y5pehWjmZzM0Xh6vJvIvxbQKD9pYPfm38pATQ1KoQ+5CwHdYnLEua0YtYNPUJ
-         fcC7ygogMiPLiObt9x4pNMkkZ7urpI2b2fzrUCAAU4TzkyRyWNBeIlslWFe6kvZ/Whvf
-         ld9LH+FOAiOeYI+0Zdq8xVGK8h+pGXzHBS1352JclLHXdK1cmJGPW6qAfuLw48ZQQoMT
-         ZimQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701863619; x=1702468419;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4xIMBRdh82imgCh973bdcamdD/YLqs+vICvueMisFQc=;
-        b=jvD7z5Rh4eFpIi0KjWZ1w9k4wuDUTfyzCpdHOOl70SgwXccXYWDaSewQDfcwp9MK2v
-         s0MBTcXmkHgXhRiM2lg95G5h4qb/ohKCER0jP3JclRWrUg9Ru2vL9QBF6GadCcX17bf4
-         qDTk26fShCckK6swTjXSMFtgZqaPA8yAHpahpMdC/GQiar0s2j9E9QLV4Z/vUAMZ+s2y
-         nzloy6ghSPgR7RFYnp7l1tDah2zYsh6sp/ZzvA5B1C7XUTihdp5XCBcOawv8R/fIyE/i
-         BXxZK7qchBXBfD/FKLHspRbhVdJIMiL9U40kbTjPRNewWOSXf5R8sLnEI6OhtLgbm/Mh
-         rPTQ==
-X-Gm-Message-State: AOJu0Yy9LnS8DXTK+lBV5E56LiVl/LrVYC11SzmfKcjtXgzHzUI0BMso
-	41ELSfWhSyZ19q46Re2dDws=
-X-Google-Smtp-Source: AGHT+IFmyUtIFQyTLGY/estMEYNpl0cpZDFzVOq9R39UkG1aP5kdgy5VEaxsAaX//S/i35tj75ak7A==
-X-Received: by 2002:a92:d8c1:0:b0:35c:cc4c:e01f with SMTP id l1-20020a92d8c1000000b0035ccc4ce01fmr786066ilo.6.1701863619221;
-        Wed, 06 Dec 2023 03:53:39 -0800 (PST)
-Received: from vultr.guest ([149.28.194.201])
-        by smtp.gmail.com with ESMTPSA id n15-20020a638f0f000000b005c6801efa0fsm5484665pgd.28.2023.12.06.03.53.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Dec 2023 03:53:38 -0800 (PST)
-From: Yafang Shao <laoar.shao@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	tj@kernel.org
-Cc: bpf@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next 2/3] selftests/bpf: Add a new cgroup helper open_classid()
-Date: Wed,  6 Dec 2023 11:53:25 +0000
-Message-Id: <20231206115326.4295-3-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20231206115326.4295-1-laoar.shao@gmail.com>
-References: <20231206115326.4295-1-laoar.shao@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IXZKc3TC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 799C4C433C7;
+	Wed,  6 Dec 2023 12:41:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701866515;
+	bh=eBOOC6krlP+hwCu843ZBKuiZDnhcHwwF7steokZIiOE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=IXZKc3TCBOVUeEfq1pemp51TtIlKtKLdFz865ZjYKS48t4GyyAF4H1F9I/tAf4iig
+	 J5kvi3etslX0n+lL9CDEZKKIUbNvDLuEEY9S++jh3KBwKy7ua7rGzXsxgA/a4ivI0I
+	 gJjCNOeFx5S5YiCszvP9FD3W1EsQ6D5NJZSP5TI9FHSHGEQf8yrofu2X+mINQ/Z/7S
+	 aUXcZygTtYH+O7aYL7cEs1gU+zKvNQg0j3uwC1MjgzVw98yKpM42fd8yYjcgA++eZa
+	 kHmIRLvecXB/riiSdYy6KoZcj9c1g3o7e+36/iBhaEQNS9+5OAYNK1gPb3r32Q7qP7
+	 uU8hGqpDf/xIg==
+Message-ID: <4b9804e2-42f0-4aed-b191-2abe24390e37@kernel.org>
+Date: Wed, 6 Dec 2023 13:41:49 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 net-next 2/2] xdp: add multi-buff support for xdp
+ running in generic mode
+Content-Language: en-US
+To: Jakub Kicinski <kuba@kernel.org>, Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: aleksander.lobakin@intel.com, netdev@vger.kernel.org,
+ davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ lorenzo.bianconi@redhat.com, bpf@vger.kernel.org, toke@redhat.com,
+ willemdebruijn.kernel@gmail.com, jasowang@redhat.com, sdf@google.com
+References: <cover.1701437961.git.lorenzo@kernel.org>
+ <c9ee1db92c8baa7806f8949186b43ffc13fa01ca.1701437962.git.lorenzo@kernel.org>
+ <20231201194829.428a96da@kernel.org> <ZW3zvEbI6o4ydM_N@lore-desk>
+ <20231204120153.0d51729a@kernel.org> <ZW-tX9EAnbw9a2lF@lore-desk>
+ <20231205155849.49af176c@kernel.org>
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <20231205155849.49af176c@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-This new helper allows us to obtain the fd of a net_cls cgroup, which will
-be utilized in the subsequent patch.
 
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-Acked-by: Tejun Heo <tj@kernel.org>
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
----
- tools/testing/selftests/bpf/cgroup_helpers.c | 16 ++++++++++++++++
- tools/testing/selftests/bpf/cgroup_helpers.h |  1 +
- 2 files changed, 17 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
-index 5aa133b..19be9c6 100644
---- a/tools/testing/selftests/bpf/cgroup_helpers.c
-+++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-@@ -689,3 +689,19 @@ int get_cgroup1_hierarchy_id(const char *subsys_name)
- 	fclose(file);
- 	return found ? id : -1;
- }
-+
-+/**
-+ * open_classid() - Open a cgroupv1 net_cls classid
-+ *
-+ * This function expects the cgroup work dir to be already created, as we
-+ * open it here.
-+ *
-+ * On success, it returns the file descriptor. On failure it returns -1.
-+ */
-+int open_classid(void)
-+{
-+	char cgroup_workdir[PATH_MAX + 1];
-+
-+	format_classid_path(cgroup_workdir);
-+	return open(cgroup_workdir, O_RDONLY);
-+}
-diff --git a/tools/testing/selftests/bpf/cgroup_helpers.h b/tools/testing/selftests/bpf/cgroup_helpers.h
-index ee05364..5028451 100644
---- a/tools/testing/selftests/bpf/cgroup_helpers.h
-+++ b/tools/testing/selftests/bpf/cgroup_helpers.h
-@@ -33,6 +33,7 @@ int write_cgroup_file_parent(const char *relative_path, const char *file,
- int set_classid(void);
- int join_classid(void);
- unsigned long long get_classid_cgroup_id(void);
-+int open_classid(void);
- 
- int setup_classid_environment(void);
- void cleanup_classid_environment(void);
--- 
-1.8.3.1
+On 12/6/23 00:58, Jakub Kicinski wrote:
+> On Wed, 6 Dec 2023 00:08:15 +0100 Lorenzo Bianconi wrote:
+>> v00 (NS:ns0 - 192.168.0.1/24) <---> (NS:ns1 - 192.168.0.2/24) v01 ==(XDP_REDIRECT)==> v10 (NS:ns1 - 192.168.1.1/24) <---> (NS:ns2 - 192.168.1.2/24) v11
+>>
+>> - v00: iperf3 client (pinned on core 0)
+>> - v11: iperf3 server (pinned on core 7)
+>>
+>> net-next veth codebase (page_pool APIs):
+>> =======================================
+>> - MTU  1500: ~ 5.42 Gbps
+>> - MTU  8000: ~ 14.1 Gbps
+>> - MTU 64000: ~ 18.4 Gbps
+>>
+>> net-next veth codebase + page_frag_cahe APIs [0]:
+>> =================================================
+>> - MTU  1500: ~ 6.62 Gbps
+>> - MTU  8000: ~ 14.7 Gbps
+>> - MTU 64000: ~ 19.7 Gbps
+>>
+>> xdp_generic codebase + page_frag_cahe APIs (current proposed patch):
+>> ====================================================================
+>> - MTU  1500: ~ 6.41 Gbps
+>> - MTU  8000: ~ 14.2 Gbps
+>> - MTU 64000: ~ 19.8 Gbps
+>>
+>> xdp_generic codebase + page_frag_cahe APIs [1]:
+>> ===============================================
+> 
+> This one should say page pool?
+> 
+>> - MTU  1500: ~ 5.75 Gbps
+>> - MTU  8000: ~ 15.3 Gbps
+>> - MTU 64000: ~ 21.2 Gbps
+>>
+>> It seems page_pool APIs are working better for xdp_generic codebase
+>> (except MTU 1500 case) while page_frag_cache APIs are better for
+>> veth driver. What do you think? Am I missing something?
+> 
+> IDK the details of veth XDP very well but IIUC they are pretty much
+> the same. Are there any clues in perf -C 0 / 7?
+> 
+>> [0] Here I have just used napi_alloc_frag() instead of
+>> page_pool_dev_alloc_va()/page_pool_dev_alloc() in
+>> veth_convert_skb_to_xdp_buff()
+>>
+>> [1] I developed this PoC to use page_pool APIs for xdp_generic code:
+> 
+> Why not put the page pool in softnet_data?
 
+First I thought cool that Jakub is suggesting softnet_data, which will
+make page_pool (PP) even more central as the netstacks memory layer.
+
+BUT then I realized that PP have a weakness, which is the return/free
+path that need to take a normal spin_lock, as that can be called from
+any CPU (unlike the RX/alloc case).  Thus, I fear that making multiple
+devices share a page_pool via softnet_data, increase the chance of lock
+contention when packets are "freed" returned/recycled.
+
+--Jesper
+
+p.s. PP have the page_pool_put_page_bulk() API, but only XDP 
+(NIC-drivers) leverage this.
