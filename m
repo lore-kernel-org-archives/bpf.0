@@ -1,43 +1,43 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i1Z1vMZ6"
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32018D5E;
-	Wed,  6 Dec 2023 17:40:18 -0800 (PST)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-5d400779f16so1404817b3.0;
-        Wed, 06 Dec 2023 17:40:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N1S4MaCR"
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9214D59
+	for <bpf@vger.kernel.org>; Wed,  6 Dec 2023 17:40:21 -0800 (PST)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5d4f71f7e9fso1675197b3.0
+        for <bpf@vger.kernel.org>; Wed, 06 Dec 2023 17:40:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701913217; x=1702518017; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701913220; x=1702518020; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=L3/VdCHn7GZRTrQJgUYbGudL9xZfyRC/xONJaJsSwmo=;
-        b=i1Z1vMZ6aSvvS41eCNhyrqqDWaGFrwdaYFg50gXdFhBB5h8RoQrOFdh1qLveSriWHX
-         NrU/8AAoLl/TYQCZScsE+FojgnKjO9Hxe5m1fxvN/0QGMa16k1BZryCmdpExt5wyfddl
-         ywSuWF6Pcc6tmgeeOxvkNplzDLInsaCVbbQlJGoY5cqdM4UPa05AMUG8appPBxl1ZAto
-         2qawKh4tmTOOGuQ9bQSvw0n6VFxR4x9FE8NJ7XFgoYqn1Qj3sfqfJrT7eP+yIJYGL8Fp
-         BYGcYK4gO03kwktMWOj9umzoUSgLvdhq3r+Gskws7FNnvGj0qe74QKFMwzNFNQXGMxr/
-         xCGA==
+        bh=0acVKzFK0l5xHCXVGmgKp6gPcv7+cgFgaMCBNwj/ibY=;
+        b=N1S4MaCRpvdUEipX80KlxjriGCLTOcdMNJlzFthDwZu37O36nKDhSkIlAqy0rOBsJB
+         WWcl2lh2f2goYkEiEA5yZQ0guIzDpIE14EpquE0wV9PzlHXP0V+7IYJA5HopLLwGaTSu
+         Pp/uOxFEo4LVUcVHfGXfXOuVNXyjNdA6SEOE4zPkYmQhai1uRBfqP1BGjf+w11SGkKLV
+         dmv7l+W63nq4A4e0CyN8jN56BM4jHn3q78j1l5JtVzovJJW/BKZbQ2D9f90Y4qWRJAhG
+         lX1xMzdgO4si+MGI0Uke6sw3QYTmO1pFJ/w/0kKNgTylzzWX3ZoyZpnVFCZfKIdQcH3c
+         cweg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701913217; x=1702518017;
+        d=1e100.net; s=20230601; t=1701913220; x=1702518020;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=L3/VdCHn7GZRTrQJgUYbGudL9xZfyRC/xONJaJsSwmo=;
-        b=XMR4dhNUgDLYD7b2o1SnxBxzZ6ojyKw7IS8mEkdfM7GB78nMBC4BtHrUuDSvuUXCQw
-         0EWYdV/oAKPRtYzTWlH5bXJ6GdWoVixsCUrAy+PWvSj7mm6ZsWuRxWcrA5JQs5YmJlsa
-         7lpWYq1nLOBga8Sq/ygACZlM27EITpgOldENd0M7TPTu0buRSh4UOKRIip8F9l5Nm5QV
-         PSsFVi+xa+6Piv10TN/VV0Tc89ATuVPg89TRuSuIA0bi/+P58cGm/9wqTWkSsUV93wLE
-         n4Cxbo8W6gJD95JwCXDH812vJFs6qaIcYjHISmEPrdoxqMwMq4yFG8Y3S6CgL8JJPK1T
-         QSRg==
-X-Gm-Message-State: AOJu0YwKd/ue8bk818GTqJ7l6xTyzqnSt3iL2rjUG/pSLYX7C5mU4S1+
-	uXDnPzo16IyaBg/yH+dPRokMVllRQfg=
-X-Google-Smtp-Source: AGHT+IGay7KtKB9Du6Sb1w2hV5Hx7XBvArnZIoddPTOS9L9oXbMxJ2wyBVIXb/kKVi1IkBdTXtVLIg==
-X-Received: by 2002:a0d:eb44:0:b0:5d7:1a33:5ae5 with SMTP id u65-20020a0deb44000000b005d71a335ae5mr2638202ywe.50.1701913216863;
-        Wed, 06 Dec 2023 17:40:16 -0800 (PST)
+        bh=0acVKzFK0l5xHCXVGmgKp6gPcv7+cgFgaMCBNwj/ibY=;
+        b=u062z+qicefHvNiMZWHIjHQXypcAjItgW+PwebNnUpPDBWcNGUtdO0NJPkfSrrzlCm
+         Oie2vqTx5GQAJSskT8uXvaOQ9B6DBrCSFMly4OMpRlYJ5hHaNptU04bnMTuRIj3OR50p
+         P3JX7vW4gUcvV9H6d/86lo7DkrDuQAO/Fughgv37bWkMmlqpYt3b/OyZH6sHnPurQe//
+         BbsWwUgHx7/tn8gYChOoV6/f2OZjDpWjIXyehQzBQ+NvrkpNApy/KbaQOY9U0Z9ZgKsB
+         tdwhW096D/PDu71wrjF1AI2CJvxmKV/VcJantv9fS2SSGd5vXx2SdazITQbBDZPMUsMB
+         4N3g==
+X-Gm-Message-State: AOJu0YzWJ7cwhx0vkMmX6fvVPiaU33CMBs9sv2iigTjuk6oirRMgYZb7
+	UdFu/3gpTOd/G+5algHbie0qanpQbcw=
+X-Google-Smtp-Source: AGHT+IEhTdp2JwKjSZMLxAkjePWl69QIFn2N/mWFlo3gN1bnKCqCwdAMH6U1JC7+Ypbh1aN5dTzHSA==
+X-Received: by 2002:a05:690c:732:b0:5d7:1940:dd7c with SMTP id bt18-20020a05690c073200b005d71940dd7cmr1512577ywb.82.1701913220410;
+        Wed, 06 Dec 2023 17:40:20 -0800 (PST)
 Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:c8f2:3a3b:3003:f559])
-        by smtp.gmail.com with ESMTPSA id v134-20020a81488c000000b005d997db3b2fsm60768ywa.23.2023.12.06.17.40.15
+        by smtp.gmail.com with ESMTPSA id v134-20020a81488c000000b005d997db3b2fsm60768ywa.23.2023.12.06.17.40.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Dec 2023 17:40:16 -0800 (PST)
+        Wed, 06 Dec 2023 17:40:20 -0800 (PST)
 From: thinker.li@gmail.com
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -48,11 +48,10 @@ To: bpf@vger.kernel.org,
 	drosen@google.com
 Cc: sinquersw@gmail.com,
 	kuifeng@meta.com,
-	Kui-Feng Lee <thinker.li@gmail.com>,
-	netdev@vger.kernel.org
-Subject: [PATCH bpf-next v12 10/14] bpf, net: switch to dynamic registration
-Date: Wed,  6 Dec 2023 17:39:46 -0800
-Message-Id: <20231207013950.1689269-11-thinker.li@gmail.com>
+	Kui-Feng Lee <thinker.li@gmail.com>
+Subject: [PATCH bpf-next v12 13/14] selftests/bpf: test case for register_bpf_struct_ops().
+Date: Wed,  6 Dec 2023 17:39:49 -0800
+Message-Id: <20231207013950.1689269-14-thinker.li@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231207013950.1689269-1-thinker.li@gmail.com>
 References: <20231207013950.1689269-1-thinker.li@gmail.com>
@@ -66,474 +65,282 @@ Content-Transfer-Encoding: 8bit
 
 From: Kui-Feng Lee <thinker.li@gmail.com>
 
-Replace the static list of struct_ops types with per-btf struct_ops_tab to
-enable dynamic registration.
+Create a new struct_ops type called bpf_testmod_ops within the bpf_testmod
+module. When a struct_ops object is registered, the bpf_testmod module will
+invoke test_2 from the module.
 
-Both bpf_dummy_ops and bpf_tcp_ca now utilize the registration function
-instead of being listed in bpf_struct_ops_types.h.
-
-Cc: netdev@vger.kernel.org
 Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
 ---
- include/linux/bpf.h               | 28 ++++++++--
- include/linux/btf.h               |  2 +
- kernel/bpf/bpf_struct_ops.c       | 90 ++++++++++---------------------
- kernel/bpf/bpf_struct_ops_types.h | 12 -----
- kernel/bpf/btf.c                  | 49 +++++++++++++++--
- net/bpf/bpf_dummy_struct_ops.c    | 13 ++++-
- net/ipv4/bpf_tcp_ca.c             | 14 +++--
- 7 files changed, 119 insertions(+), 89 deletions(-)
- delete mode 100644 kernel/bpf/bpf_struct_ops_types.h
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 52 +++++++++++
+ .../selftests/bpf/bpf_testmod/bpf_testmod.h   |  5 +
+ .../bpf/prog_tests/test_struct_ops_module.c   | 92 +++++++++++++++++++
+ .../selftests/bpf/progs/struct_ops_module.c   | 30 ++++++
+ .../selftests/bpf/progs/testmod_unload.c      | 25 +++++
+ 5 files changed, 204 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_module.c
+ create mode 100644 tools/testing/selftests/bpf/progs/testmod_unload.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index bc4279cd61e9..fdfceae25e08 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1651,7 +1651,6 @@ struct bpf_struct_ops_desc {
- #if defined(CONFIG_BPF_JIT) && defined(CONFIG_BPF_SYSCALL)
- #define BPF_MODULE_OWNER ((void *)((0xeB9FUL << 2) + POISON_POINTER_DELTA))
- const struct bpf_struct_ops_desc *bpf_struct_ops_find(struct btf *btf, u32 type_id);
--void bpf_struct_ops_init(struct btf *btf, struct bpf_verifier_log *log);
- bool bpf_struct_ops_get(const void *kdata);
- void bpf_struct_ops_put(const void *kdata);
- int bpf_struct_ops_map_sys_lookup_elem(struct bpf_map *map, void *key,
-@@ -1697,10 +1696,6 @@ static inline const struct bpf_struct_ops_desc *bpf_struct_ops_find(struct btf *
- {
- 	return NULL;
- }
--static inline void bpf_struct_ops_init(struct btf *btf,
--				       struct bpf_verifier_log *log)
--{
--}
- static inline bool bpf_try_module_get(const void *data, struct module *owner)
- {
- 	return try_module_get(owner);
-@@ -3239,6 +3234,14 @@ static inline bool bpf_is_subprog(const struct bpf_prog *prog)
- 	return prog->aux->func_idx != 0;
- }
- 
-+int register_bpf_struct_ops(struct bpf_struct_ops *st_ops);
-+
-+#define REGISTER_BPF_STRUCT_OPS(st_ops, type) \
-+({					      \
-+	BTF_STRUCT_OPS_TYPE_EMIT(type);	      \
-+	register_bpf_struct_ops(st_ops);      \
-+})
-+
- enum bpf_struct_ops_state {
- 	BPF_STRUCT_OPS_STATE_INIT,
- 	BPF_STRUCT_OPS_STATE_INUSE,
-@@ -3251,4 +3254,19 @@ struct bpf_struct_ops_common_value {
- 	enum bpf_struct_ops_state state;
- };
- 
-+/* bpf_struct_ops_##_name (e.g. bpf_struct_ops_tcp_congestion_ops) is
-+ * the map's value exposed to the userspace and its btf-type-id is
-+ * stored at the map->btf_vmlinux_value_type_id.
-+ *
-+ */
-+#define DEFINE_STRUCT_OPS_VALUE_TYPE(_name)			\
-+struct bpf_struct_ops_##_name {					\
-+	struct bpf_struct_ops_common_value common;		\
-+	struct _name data ____cacheline_aligned_in_smp;		\
-+}
-+
-+int bpf_struct_ops_desc_init(struct bpf_struct_ops_desc *st_ops_desc,
-+			     struct btf *btf,
-+			     struct bpf_verifier_log *log);
-+
- #endif /* _LINUX_BPF_H */
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index e2f4b85cf82a..cabab3db5216 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -12,6 +12,8 @@
- #include <uapi/linux/bpf.h>
- 
- #define BTF_TYPE_EMIT(type) ((void)(type *)0)
-+#define BTF_STRUCT_OPS_TYPE_EMIT(type) \
-+	((void)(struct bpf_struct_ops_##type *)0)
- #define BTF_TYPE_EMIT_ENUM(enum_val) ((void)enum_val)
- 
- /* These need to be macros, as the expressions are used in assembler input */
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index e8415b6b6d2b..9ca166c79d19 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -61,35 +61,6 @@ static DEFINE_MUTEX(update_mutex);
- #define VALUE_PREFIX "bpf_struct_ops_"
- #define VALUE_PREFIX_LEN (sizeof(VALUE_PREFIX) - 1)
- 
--/* bpf_struct_ops_##_name (e.g. bpf_struct_ops_tcp_congestion_ops) is
-- * the map's value exposed to the userspace and its btf-type-id is
-- * stored at the map->btf_vmlinux_value_type_id.
-- *
-- */
--#define BPF_STRUCT_OPS_TYPE(_name)				\
--extern struct bpf_struct_ops bpf_##_name;			\
--								\
--struct bpf_struct_ops_##_name {					\
--	struct bpf_struct_ops_common_value common;		\
--	struct _name data ____cacheline_aligned_in_smp;		\
--};
--#include "bpf_struct_ops_types.h"
--#undef BPF_STRUCT_OPS_TYPE
--
--enum {
--#define BPF_STRUCT_OPS_TYPE(_name) BPF_STRUCT_OPS_TYPE_##_name,
--#include "bpf_struct_ops_types.h"
--#undef BPF_STRUCT_OPS_TYPE
--	__NR_BPF_STRUCT_OPS_TYPE,
--};
--
--static struct bpf_struct_ops_desc bpf_struct_ops[] = {
--#define BPF_STRUCT_OPS_TYPE(_name)				\
--	[BPF_STRUCT_OPS_TYPE_##_name] = { .st_ops = &bpf_##_name },
--#include "bpf_struct_ops_types.h"
--#undef BPF_STRUCT_OPS_TYPE
--};
--
- const struct bpf_verifier_ops bpf_struct_ops_verifier_ops = {
- };
- 
-@@ -144,9 +115,9 @@ static bool is_valid_value_type(struct btf *btf, s32 value_id,
- 	return true;
- }
- 
--static void bpf_struct_ops_desc_init(struct bpf_struct_ops_desc *st_ops_desc,
--				     struct btf *btf,
--				     struct bpf_verifier_log *log)
-+int bpf_struct_ops_desc_init(struct bpf_struct_ops_desc *st_ops_desc,
-+			     struct btf *btf,
-+			     struct bpf_verifier_log *log)
- {
- 	struct bpf_struct_ops *st_ops = st_ops_desc->st_ops;
- 	const struct btf_member *member;
-@@ -160,7 +131,7 @@ static void bpf_struct_ops_desc_init(struct bpf_struct_ops_desc *st_ops_desc,
- 	    sizeof(value_name)) {
- 		pr_warn("struct_ops name %s is too long\n",
- 			st_ops->name);
--		return;
-+		return -EINVAL;
- 	}
- 	sprintf(value_name, "%s%s", VALUE_PREFIX, st_ops->name);
- 
-@@ -169,13 +140,13 @@ static void bpf_struct_ops_desc_init(struct bpf_struct_ops_desc *st_ops_desc,
- 	if (type_id < 0) {
- 		pr_warn("Cannot find struct %s in %s\n",
- 			st_ops->name, btf_get_name(btf));
--		return;
-+		return -EINVAL;
- 	}
- 	t = btf_type_by_id(btf, type_id);
- 	if (btf_type_vlen(t) > BPF_STRUCT_OPS_MAX_NR_MEMBERS) {
- 		pr_warn("Cannot support #%u members in struct %s\n",
- 			btf_type_vlen(t), st_ops->name);
--		return;
-+		return -EINVAL;
- 	}
- 
- 	value_id = btf_find_by_name_kind(btf, value_name,
-@@ -183,10 +154,10 @@ static void bpf_struct_ops_desc_init(struct bpf_struct_ops_desc *st_ops_desc,
- 	if (value_id < 0) {
- 		pr_warn("Cannot find struct %s in %s\n",
- 			value_name, btf_get_name(btf));
--		return;
-+		return -EINVAL;
- 	}
- 	if (!is_valid_value_type(btf, value_id, t, value_name))
--		return;
-+		return -EINVAL;
- 
- 	for_each_member(i, t, member) {
- 		const struct btf_type *func_proto;
-@@ -195,13 +166,13 @@ static void bpf_struct_ops_desc_init(struct bpf_struct_ops_desc *st_ops_desc,
- 		if (!*mname) {
- 			pr_warn("anon member in struct %s is not supported\n",
- 				st_ops->name);
--			break;
-+			return -EOPNOTSUPP;
- 		}
- 
- 		if (__btf_member_bitfield_size(t, member)) {
- 			pr_warn("bit field member %s in struct %s is not supported\n",
- 				mname, st_ops->name);
--			break;
-+			return -EOPNOTSUPP;
- 		}
- 
- 		func_proto = btf_type_resolve_func_ptr(btf,
-@@ -213,7 +184,7 @@ static void bpf_struct_ops_desc_init(struct bpf_struct_ops_desc *st_ops_desc,
- 					   &st_ops->func_models[i])) {
- 			pr_warn("Error in parsing func ptr %s in struct %s\n",
- 				mname, st_ops->name);
--			break;
-+			return -EINVAL;
- 		}
- 	}
- 
-@@ -221,6 +192,7 @@ static void bpf_struct_ops_desc_init(struct bpf_struct_ops_desc *st_ops_desc,
- 		if (st_ops->init(btf)) {
- 			pr_warn("Error in init bpf_struct_ops %s\n",
- 				st_ops->name);
-+			return -EINVAL;
- 		} else {
- 			st_ops_desc->type_id = type_id;
- 			st_ops_desc->type = t;
-@@ -229,35 +201,24 @@ static void bpf_struct_ops_desc_init(struct bpf_struct_ops_desc *st_ops_desc,
- 								 value_id);
- 		}
- 	}
--}
- 
--void bpf_struct_ops_init(struct btf *btf, struct bpf_verifier_log *log)
--{
--	struct bpf_struct_ops_desc *st_ops_desc;
--	u32 i;
--
--	/* Ensure BTF type is emitted for "struct bpf_struct_ops_##_name" */
--#define BPF_STRUCT_OPS_TYPE(_name) BTF_TYPE_EMIT(struct bpf_struct_ops_##_name);
--#include "bpf_struct_ops_types.h"
--#undef BPF_STRUCT_OPS_TYPE
--
--	for (i = 0; i < ARRAY_SIZE(bpf_struct_ops); i++) {
--		st_ops_desc = &bpf_struct_ops[i];
--		bpf_struct_ops_desc_init(st_ops_desc, btf, log);
--	}
-+	return 0;
- }
- 
- static const struct bpf_struct_ops_desc *
- bpf_struct_ops_find_value(struct btf *btf, u32 value_id)
- {
-+	const struct bpf_struct_ops_desc *st_ops_list;
- 	unsigned int i;
-+	u32 cnt = 0;
- 
--	if (!value_id || !btf)
-+	if (!value_id)
- 		return NULL;
- 
--	for (i = 0; i < ARRAY_SIZE(bpf_struct_ops); i++) {
--		if (bpf_struct_ops[i].value_id == value_id)
--			return &bpf_struct_ops[i];
-+	st_ops_list = btf_get_struct_ops(btf, &cnt);
-+	for (i = 0; i < cnt; i++) {
-+		if (st_ops_list[i].value_id == value_id)
-+			return &st_ops_list[i];
- 	}
- 
- 	return NULL;
-@@ -266,14 +227,17 @@ bpf_struct_ops_find_value(struct btf *btf, u32 value_id)
- const struct bpf_struct_ops_desc *
- bpf_struct_ops_find(struct btf *btf, u32 type_id)
- {
-+	const struct bpf_struct_ops_desc *st_ops_list;
- 	unsigned int i;
-+	u32 cnt;
- 
--	if (!type_id || !btf)
-+	if (!type_id)
- 		return NULL;
- 
--	for (i = 0; i < ARRAY_SIZE(bpf_struct_ops); i++) {
--		if (bpf_struct_ops[i].type_id == type_id)
--			return &bpf_struct_ops[i];
-+	st_ops_list = btf_get_struct_ops(btf, &cnt);
-+	for (i = 0; i < cnt; i++) {
-+		if (st_ops_list[i].type_id == type_id)
-+			return &st_ops_list[i];
- 	}
- 
- 	return NULL;
-diff --git a/kernel/bpf/bpf_struct_ops_types.h b/kernel/bpf/bpf_struct_ops_types.h
-deleted file mode 100644
-index 5678a9ddf817..000000000000
---- a/kernel/bpf/bpf_struct_ops_types.h
-+++ /dev/null
-@@ -1,12 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/* internal file - do not include directly */
--
--#ifdef CONFIG_BPF_JIT
--#ifdef CONFIG_NET
--BPF_STRUCT_OPS_TYPE(bpf_dummy_ops)
--#endif
--#ifdef CONFIG_INET
--#include <net/tcp.h>
--BPF_STRUCT_OPS_TYPE(tcp_congestion_ops)
--#endif
--#endif
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index edbe3cbf2dcc..5545dee3ff54 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -19,6 +19,7 @@
- #include <linux/bpf_verifier.h>
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+index 91907b321f91..804a67bbb479 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
++#include <linux/bpf.h>
  #include <linux/btf.h>
  #include <linux/btf_ids.h>
-+#include <linux/bpf.h>
- #include <linux/bpf_lsm.h>
- #include <linux/skmsg.h>
- #include <linux/perf_event.h>
-@@ -5792,8 +5793,6 @@ struct btf *btf_parse_vmlinux(void)
- 	/* btf_parse_vmlinux() runs under bpf_verifier_lock */
- 	bpf_ctx_convert.t = btf_type_by_id(btf, bpf_ctx_convert_btf_id[0]);
+ #include <linux/error-injection.h>
+@@ -520,11 +521,61 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_static_unused_arg)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_offset)
+ BTF_SET8_END(bpf_testmod_check_kfunc_ids)
  
--	bpf_struct_ops_init(btf, log);
--
- 	refcount_set(&btf->refcnt, 1);
- 
- 	err = btf_alloc_id(btf);
-@@ -8621,11 +8620,21 @@ bool btf_type_ids_nocast_alias(struct bpf_verifier_log *log,
- 	return !strncmp(reg_name, arg_name, cmp_len);
- }
- 
-+#ifndef CONFIG_BPF_JIT
-+int bpf_struct_ops_desc_init(struct bpf_struct_ops_desc *st_ops_desc,
-+			     struct btf *btf,
-+			     struct bpf_verifier_log *log)
++DEFINE_STRUCT_OPS_VALUE_TYPE(bpf_testmod_ops);
++
++static int bpf_testmod_ops_init(struct btf *btf)
 +{
-+	return -ENOTSUPP;
++	return 0;
 +}
-+#endif /* CONFIG_BPF_JIT */
 +
- static int
--btf_add_struct_ops(struct btf *btf, struct bpf_struct_ops *st_ops)
-+btf_add_struct_ops(struct btf *btf, struct bpf_struct_ops *st_ops,
-+		   struct bpf_verifier_log *log)
- {
- 	struct btf_struct_ops_tab *tab, *new_tab;
--	int i;
-+	int i, err;
- 
- 	if (!btf)
- 		return -ENOENT;
-@@ -8662,6 +8671,10 @@ btf_add_struct_ops(struct btf *btf, struct bpf_struct_ops *st_ops)
- 
- 	tab->ops[btf->struct_ops_tab->cnt].st_ops = st_ops;
- 
-+	err = bpf_struct_ops_desc_init(&tab->ops[btf->struct_ops_tab->cnt], btf, log);
-+	if (err)
-+		return err;
-+
- 	btf->struct_ops_tab->cnt++;
- 
- 	return 0;
-@@ -8677,3 +8690,31 @@ const struct bpf_struct_ops_desc *btf_get_struct_ops(struct btf *btf, u32 *ret_c
- 	*ret_cnt = btf->struct_ops_tab->cnt;
- 	return (const struct bpf_struct_ops_desc *)btf->struct_ops_tab->ops;
- }
-+
-+int register_bpf_struct_ops(struct bpf_struct_ops *st_ops)
++static bool bpf_testmod_ops_is_valid_access(int off, int size,
++					    enum bpf_access_type type,
++					    const struct bpf_prog *prog,
++					    struct bpf_insn_access_aux *info)
 +{
-+	struct bpf_verifier_log *log;
-+	struct btf *btf;
-+	int err = 0;
++	return bpf_tracing_btf_ctx_access(off, size, type, prog, info);
++}
 +
-+	btf = btf_get_module_btf(st_ops->owner);
-+	if (!btf)
-+		return -EINVAL;
++static int bpf_testmod_ops_init_member(const struct btf_type *t,
++				       const struct btf_member *member,
++				       void *kdata, const void *udata)
++{
++	return 0;
++}
 +
-+	log = kzalloc(sizeof(*log), GFP_KERNEL | __GFP_NOWARN);
-+	if (!log) {
-+		err = -ENOMEM;
-+		goto errout;
+ static const struct btf_kfunc_id_set bpf_testmod_kfunc_set = {
+ 	.owner = THIS_MODULE,
+ 	.set   = &bpf_testmod_check_kfunc_ids,
+ };
+ 
++static const struct bpf_verifier_ops bpf_testmod_verifier_ops = {
++	.is_valid_access = bpf_testmod_ops_is_valid_access,
++};
++
++static int bpf_dummy_reg(void *kdata)
++{
++	struct bpf_testmod_ops *ops = kdata;
++	int r;
++
++	r = ops->test_2(4, 3);
++
++	return 0;
++}
++
++static void bpf_dummy_unreg(void *kdata)
++{
++}
++
++struct bpf_struct_ops bpf_bpf_testmod_ops = {
++	.verifier_ops = &bpf_testmod_verifier_ops,
++	.init = bpf_testmod_ops_init,
++	.init_member = bpf_testmod_ops_init_member,
++	.reg = bpf_dummy_reg,
++	.unreg = bpf_dummy_unreg,
++	.name = "bpf_testmod_ops",
++	.owner = THIS_MODULE,
++};
++
+ extern int bpf_fentry_test1(int a);
+ 
+ static int bpf_testmod_init(void)
+@@ -535,6 +586,7 @@ static int bpf_testmod_init(void)
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_testmod_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_testmod_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_testmod_kfunc_set);
++	ret = ret ?: REGISTER_BPF_STRUCT_OPS(&bpf_bpf_testmod_ops, bpf_testmod_ops);
+ 	if (ret < 0)
+ 		return ret;
+ 	if (bpf_fentry_test1(0) < 0)
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
+index f32793efe095..ca5435751c79 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
+@@ -28,4 +28,9 @@ struct bpf_iter_testmod_seq {
+ 	int cnt;
+ };
+ 
++struct bpf_testmod_ops {
++	int (*test_1)(void);
++	int (*test_2)(int a, int b);
++};
++
+ #endif /* _BPF_TESTMOD_H */
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+new file mode 100644
+index 000000000000..55a4c6ed92aa
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+@@ -0,0 +1,92 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
++#include <test_progs.h>
++#include <time.h>
++
++#include "struct_ops_module.skel.h"
++#include "testmod_unload.skel.h"
++
++static void test_regular_load(void)
++{
++	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts);
++	struct struct_ops_module *skel;
++	struct testmod_unload *skel_unload;
++	struct bpf_link *link_map_free = NULL;
++	struct bpf_link *link;
++	int err, i;
++
++	skel = struct_ops_module__open_opts(&opts);
++	if (!ASSERT_OK_PTR(skel, "struct_ops_module_open"))
++		return;
++
++	err = struct_ops_module__load(skel);
++	if (!ASSERT_OK(err, "struct_ops_module_load"))
++		goto cleanup;
++
++	link = bpf_map__attach_struct_ops(skel->maps.testmod_1);
++	ASSERT_OK_PTR(link, "attach_test_mod_1");
++
++	/* test_2() will be called from bpf_dummy_reg() in bpf_testmod.c */
++	ASSERT_EQ(skel->bss->test_2_result, 7, "test_2_result");
++
++	bpf_link__destroy(link);
++
++cleanup:
++	skel_unload = testmod_unload__open_and_load();
++
++	if (ASSERT_OK_PTR(skel_unload, "testmod_unload_open"))
++		link_map_free = bpf_program__attach(skel_unload->progs.trace_map_free);
++	struct_ops_module__destroy(skel);
++
++	if (!ASSERT_OK_PTR(link_map_free, "create_link_map_free"))
++		return;
++
++	/* Wait for the struct_ops map to be freed. Struct_ops maps hold a
++	 * refcount to the module btf. And, this function unloads and then
++	 * loads bpf_testmod. Without waiting the map to be freed, the next
++	 * test may fail to unload the bpf_testmod module since the map is
++	 * still holding a refcnt to the module.
++	 */
++	for (i = 0; i < 10; i++) {
++		if (skel_unload->bss->bpf_testmod_put)
++			break;
++		usleep(100000);
++	}
++	ASSERT_EQ(skel_unload->bss->bpf_testmod_put, 1, "map_free");
++
++	bpf_link__destroy(link_map_free);
++	testmod_unload__destroy(skel_unload);
++}
++
++static void test_load_without_module(void)
++{
++	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts);
++	struct struct_ops_module *skel;
++	int err;
++
++	err = unload_bpf_testmod(false);
++	if (!ASSERT_OK(err, "unload_bpf_testmod"))
++		return;
++
++	skel = struct_ops_module__open_opts(&opts);
++	if (!ASSERT_OK_PTR(skel, "struct_ops_module_open"))
++		goto cleanup;
++	err = struct_ops_module__load(skel);
++	ASSERT_ERR(err, "struct_ops_module_load");
++
++	struct_ops_module__destroy(skel);
++
++cleanup:
++	/* Without this, the next test may fail */
++	load_bpf_testmod(false);
++}
++
++void serial_test_struct_ops_module(void)
++{
++	if (test__start_subtest("regular_load"))
++		test_regular_load();
++
++	if (test__start_subtest("load_without_module"))
++		test_load_without_module();
++}
++
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_module.c b/tools/testing/selftests/bpf/progs/struct_ops_module.c
+new file mode 100644
+index 000000000000..cb305d04342f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/struct_ops_module.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "../bpf_testmod/bpf_testmod.h"
++
++char _license[] SEC("license") = "GPL";
++
++int test_2_result = 0;
++
++SEC("struct_ops/test_1")
++int BPF_PROG(test_1)
++{
++	return 0xdeadbeef;
++}
++
++SEC("struct_ops/test_2")
++int BPF_PROG(test_2, int a, int b)
++{
++	test_2_result = a + b;
++	return a + b;
++}
++
++SEC(".struct_ops.link")
++struct bpf_testmod_ops testmod_1 = {
++	.test_1 = (void *)test_1,
++	.test_2 = (void *)test_2,
++};
++
+diff --git a/tools/testing/selftests/bpf/progs/testmod_unload.c b/tools/testing/selftests/bpf/progs/testmod_unload.c
+new file mode 100644
+index 000000000000..bb17914ecca3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/testmod_unload.c
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_core_read.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") = "GPL";
++
++int bpf_testmod_put = 0;
++
++SEC("fentry/__bpf_struct_ops_map_free")
++int BPF_PROG(trace_map_free, struct bpf_map *map)
++{
++	static const char name[] = "testmod_1";
++	int i;
++
++	for (i = 0; i < sizeof(name); i++) {
++		if (map->name[i] != name[i])
++			return 0;
 +	}
 +
-+	log->level = BPF_LOG_KERNEL;
++	bpf_testmod_put = 1;
 +
-+	err = btf_add_struct_ops(btf, st_ops, log);
-+
-+errout:
-+	kfree(log);
-+	btf_put(btf);
-+
-+	return err;
++	return 0;
 +}
-+EXPORT_SYMBOL_GPL(register_bpf_struct_ops);
-diff --git a/net/bpf/bpf_dummy_struct_ops.c b/net/bpf/bpf_dummy_struct_ops.c
-index ffa224053a6c..65a89580d5d2 100644
---- a/net/bpf/bpf_dummy_struct_ops.c
-+++ b/net/bpf/bpf_dummy_struct_ops.c
-@@ -7,7 +7,7 @@
- #include <linux/bpf.h>
- #include <linux/btf.h>
- 
--extern struct bpf_struct_ops bpf_bpf_dummy_ops;
-+static struct bpf_struct_ops bpf_bpf_dummy_ops;
- 
- /* A common type for test_N with return value in bpf_dummy_ops */
- typedef int (*dummy_ops_test_ret_fn)(struct bpf_dummy_ops_state *state, ...);
-@@ -223,11 +223,13 @@ static int bpf_dummy_reg(void *kdata)
- 	return -EOPNOTSUPP;
- }
- 
-+DEFINE_STRUCT_OPS_VALUE_TYPE(bpf_dummy_ops);
-+
- static void bpf_dummy_unreg(void *kdata)
- {
- }
- 
--struct bpf_struct_ops bpf_bpf_dummy_ops = {
-+static struct bpf_struct_ops bpf_bpf_dummy_ops = {
- 	.verifier_ops = &bpf_dummy_verifier_ops,
- 	.init = bpf_dummy_init,
- 	.check_member = bpf_dummy_ops_check_member,
-@@ -235,4 +237,11 @@ struct bpf_struct_ops bpf_bpf_dummy_ops = {
- 	.reg = bpf_dummy_reg,
- 	.unreg = bpf_dummy_unreg,
- 	.name = "bpf_dummy_ops",
-+	.owner = THIS_MODULE,
- };
-+
-+static int __init bpf_dummy_struct_ops_init(void)
-+{
-+	return REGISTER_BPF_STRUCT_OPS(&bpf_bpf_dummy_ops, bpf_dummy_ops);
-+}
-+late_initcall(bpf_dummy_struct_ops_init);
-diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
-index 3c8b76578a2a..69f0e8961628 100644
---- a/net/ipv4/bpf_tcp_ca.c
-+++ b/net/ipv4/bpf_tcp_ca.c
-@@ -12,7 +12,7 @@
- #include <net/bpf_sk_storage.h>
- 
- /* "extern" is to avoid sparse warning.  It is only used in bpf_struct_ops.c. */
--extern struct bpf_struct_ops bpf_tcp_congestion_ops;
-+static struct bpf_struct_ops bpf_tcp_congestion_ops;
- 
- static u32 unsupported_ops[] = {
- 	offsetof(struct tcp_congestion_ops, get_info),
-@@ -277,7 +277,9 @@ static int bpf_tcp_ca_validate(void *kdata)
- 	return tcp_validate_congestion_control(kdata);
- }
- 
--struct bpf_struct_ops bpf_tcp_congestion_ops = {
-+DEFINE_STRUCT_OPS_VALUE_TYPE(tcp_congestion_ops);
-+
-+static struct bpf_struct_ops bpf_tcp_congestion_ops = {
- 	.verifier_ops = &bpf_tcp_ca_verifier_ops,
- 	.reg = bpf_tcp_ca_reg,
- 	.unreg = bpf_tcp_ca_unreg,
-@@ -287,10 +289,16 @@ struct bpf_struct_ops bpf_tcp_congestion_ops = {
- 	.init = bpf_tcp_ca_init,
- 	.validate = bpf_tcp_ca_validate,
- 	.name = "tcp_congestion_ops",
-+	.owner = THIS_MODULE,
- };
- 
- static int __init bpf_tcp_ca_kfunc_init(void)
- {
--	return register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &bpf_tcp_ca_kfunc_set);
-+	int ret;
-+
-+	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &bpf_tcp_ca_kfunc_set);
-+	ret = ret ?: REGISTER_BPF_STRUCT_OPS(&bpf_tcp_congestion_ops, tcp_congestion_ops);
-+
-+	return ret;
- }
- late_initcall(bpf_tcp_ca_kfunc_init);
 -- 
 2.34.1
 
