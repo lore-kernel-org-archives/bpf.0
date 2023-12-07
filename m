@@ -1,43 +1,43 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bqq/RW3h"
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C838D44
-	for <bpf@vger.kernel.org>; Wed,  6 Dec 2023 17:40:08 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-5cbcfdeaff3so1623997b3.0
-        for <bpf@vger.kernel.org>; Wed, 06 Dec 2023 17:40:08 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z7NM5dbk"
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6D5D5E
+	for <bpf@vger.kernel.org>; Wed,  6 Dec 2023 17:40:11 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5d226f51f71so1506387b3.3
+        for <bpf@vger.kernel.org>; Wed, 06 Dec 2023 17:40:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701913207; x=1702518007; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701913210; x=1702518010; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Km4TXXSd+uwocwonn71lwEI7U13N596mmYzVO8jal0Q=;
-        b=bqq/RW3htgUrRrqiDRN07bqD/t3gipiv852cFOjXAqqzDbSaJ5Ep/fDmAeq4v8tONn
-         XRdBT+gvYNWXXb8yAcxrHlic5mSyCsh3RlbbRcSPLgY5d/yhIi0PRErIexRM1t0WwwVA
-         J0lwuR7xHSDbCgyBfsgj8g5uZRKwpKljZEh9zoopenQK7rUS/zkBV0wxgXdVmnj8tJI7
-         s0KDWFXvh8m6xh434kAxxk/5VybXWKYA1mo2qMeaFr7XbKkgFWiGffqqlIi8SjbnC0P5
-         R6KfsLUvTikdUcAD2OtRzNT2xlnaw9cYlT81NrjYb2xUks6G/4ouob54+B9/NSCyCH52
-         EWcg==
+        bh=JmACXT60MQXvHQSw2TSPD/2h/eubxhIjthBeSg/9uI0=;
+        b=Z7NM5dbk90uNFZ5E+Sx7aOn2/6SHUOS0izD6BxuJcCVP9WI9uhZIokjcbcxzXET6o/
+         hT5J/uxk2T9zPy+hR3mgNrqoZRbIVrY5WmiuVv59Q/wR6XN2lMWj5uW9aIEUftoNjD0Q
+         nowA1JF/gibx6Q+v8AnaNpDSOlO2qusZt3Uq/zVL7Jxbpv7zq8T5nSai6jfGHCTZ0Whl
+         xYX/6ZBg8Wtkdvp7kmxGi6i/qY9K3CnHHIB7pkoQ1wlomxVLvKBAOdtnYhTXIhnD18jD
+         98fxL15jszYpDTIxkt8kzoULcx0Oun4/ZTmU1YCxxa5XThFupBGtstxEAoEGzdsHgoPU
+         viZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701913207; x=1702518007;
+        d=1e100.net; s=20230601; t=1701913210; x=1702518010;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Km4TXXSd+uwocwonn71lwEI7U13N596mmYzVO8jal0Q=;
-        b=qiwVCR774llPYCLPROJQCrrLN3ojSakOcSPXQOS0XsLBkLGKeKRcNnDTb0VafcxeeN
-         M2wIpW0LYZd8BImZUxra32LhPK/5OXbGusFhaqfkmBgbroAMsy03v2FgrU4TJKFXvCZX
-         xtXVkXEtS8YbqXiv8oCfSRafysDum53O1GowODuwscZ/p9BvyqN9t9VcyWGEfABwz2Ng
-         dj/otoz/q7i0GmeNxHHs5/VsiRGINLYU20xDCtiYn1ZzMlVJc1dwkAx5/e2l8Z/er6nL
-         hwJ3XTMctDPCEE0+nhJiU77unowx9SV8UcnevGNHig40fbFuOYAJk+J5umw/1bfzayk0
-         emAw==
-X-Gm-Message-State: AOJu0YwmhgNpiZuAng6qsK7ph/EpXFqwacwfMDeynYvZN9crIXmCDi8B
-	Pnr80bw87VYJqyTFmdZ1p/fYYR9ExDU=
-X-Google-Smtp-Source: AGHT+IHoPKTzSmOGvUQL80R8cUAkqwVYUCgSjowDCWWs61TDDrMiJiRmyVoTrV1Yy6tog5u57p1U4Q==
-X-Received: by 2002:a81:af61:0:b0:5d2:9344:e623 with SMTP id x33-20020a81af61000000b005d29344e623mr1663338ywj.40.1701913207016;
-        Wed, 06 Dec 2023 17:40:07 -0800 (PST)
+        bh=JmACXT60MQXvHQSw2TSPD/2h/eubxhIjthBeSg/9uI0=;
+        b=Ja9TEB8yjNqv7j2HXLYjhikZO/xyTAoK0K7ldFk1KMXT2GuZIIEEfo2w7Occj6kFzX
+         /6HZZYBfljjbCrKnNZSMtq9h8Mp4TB58wfNCgDSO1nyAItdR66rIbEcEgYTgOo0bsGmT
+         EbSZw94BnavkwxUbeyNECt9zu5+O71ihZDGg7Rhi+VrdjDemzYXBPH1fqGR4VGhh6Eah
+         FWXh+8NeI1ynskVkcLj9TLTvaiqknh0HetM8rhQOz1/WQSp1Hc4V7glDx3PYUNC6lKy+
+         qU9Cd4y6ckYj1gTE70K4qY1ikwou3Pg1yKV+mtCgDbeSmLOFf8R/k6YDGqdJeJUu92t+
+         JAmg==
+X-Gm-Message-State: AOJu0Yw1MYKijN3ztUwnN6l8jhKe4IK3T4uuffE8lLMQo5H208yxDZUp
+	ddd4vSIaQRTFqFdFLjKk6ivpfecalKk=
+X-Google-Smtp-Source: AGHT+IFVv7GvzO7vHboHDX6Lt3AdaTpXcrIFvS3snX4sLMoFEuU4LmoNQoLe2pgm6zW/BELLZ8jx9w==
+X-Received: by 2002:a81:4f87:0:b0:5d7:1940:dd85 with SMTP id d129-20020a814f87000000b005d71940dd85mr1850493ywb.91.1701913209730;
+        Wed, 06 Dec 2023 17:40:09 -0800 (PST)
 Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:c8f2:3a3b:3003:f559])
-        by smtp.gmail.com with ESMTPSA id v134-20020a81488c000000b005d997db3b2fsm60768ywa.23.2023.12.06.17.40.05
+        by smtp.gmail.com with ESMTPSA id v134-20020a81488c000000b005d997db3b2fsm60768ywa.23.2023.12.06.17.40.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Dec 2023 17:40:06 -0800 (PST)
+        Wed, 06 Dec 2023 17:40:09 -0800 (PST)
 From: thinker.li@gmail.com
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -49,9 +49,9 @@ To: bpf@vger.kernel.org,
 Cc: sinquersw@gmail.com,
 	kuifeng@meta.com,
 	Kui-Feng Lee <thinker.li@gmail.com>
-Subject: [PATCH bpf-next v12 02/14] bpf: get type information with BPF_ID_LIST
-Date: Wed,  6 Dec 2023 17:39:38 -0800
-Message-Id: <20231207013950.1689269-3-thinker.li@gmail.com>
+Subject: [PATCH bpf-next v12 04/14] bpf: add struct_ops_tab to btf.
+Date: Wed,  6 Dec 2023 17:39:40 -0800
+Message-Id: <20231207013950.1689269-5-thinker.li@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231207013950.1689269-1-thinker.li@gmail.com>
 References: <20231207013950.1689269-1-thinker.li@gmail.com>
@@ -65,71 +65,144 @@ Content-Transfer-Encoding: 8bit
 
 From: Kui-Feng Lee <thinker.li@gmail.com>
 
-Get ready to remove bpf_struct_ops_init() in the future. By using
-BPF_ID_LIST, it is possible to gather type information while building
-instead of runtime.
+Maintain a registry of registered struct_ops types in the per-btf (module)
+struct_ops_tab. This registry allows for easy lookup of struct_ops types
+that are registered by a specific module.
+
+It is a preparation work for supporting kernel module struct_ops in a
+latter patch. Each struct_ops will be registered under its own kernel
+module btf and will be stored in the newly added btf->struct_ops_tab. The
+bpf verifier and bpf syscall (e.g. prog and map cmd) can find the
+struct_ops and its btf type/size/id... information from
+btf->struct_ops_tab.
 
 Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
 ---
- kernel/bpf/bpf_struct_ops.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+ include/linux/btf.h |  5 ++++
+ kernel/bpf/btf.c    | 73 +++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 78 insertions(+)
 
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index 813220c58cd3..409ab0327469 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -108,7 +108,12 @@ const struct bpf_prog_ops bpf_struct_ops_prog_ops = {
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index 1d852dad7473..e2f4b85cf82a 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -584,4 +584,9 @@ static inline bool btf_type_is_struct_ptr(struct btf *btf, const struct btf_type
+ 	return btf_type_is_struct(t);
+ }
+ 
++struct bpf_struct_ops_desc;
++
++const struct bpf_struct_ops_desc *
++btf_get_struct_ops(struct btf *btf, u32 *ret_cnt);
++
  #endif
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 6935a88ed190..edbe3cbf2dcc 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -241,6 +241,12 @@ struct btf_id_dtor_kfunc_tab {
+ 	struct btf_id_dtor_kfunc dtors[];
  };
  
--static const struct btf_type *module_type;
-+BTF_ID_LIST(st_ops_ids)
-+BTF_ID(struct, module)
-+
-+enum {
-+	IDX_MODULE_ID,
++struct btf_struct_ops_tab {
++	u32 cnt;
++	u32 capacity;
++	struct bpf_struct_ops_desc ops[];
 +};
++
+ struct btf {
+ 	void *data;
+ 	struct btf_type **types;
+@@ -258,6 +264,7 @@ struct btf {
+ 	struct btf_kfunc_set_tab *kfunc_set_tab;
+ 	struct btf_id_dtor_kfunc_tab *dtor_kfunc_tab;
+ 	struct btf_struct_metas *struct_meta_tab;
++	struct btf_struct_ops_tab *struct_ops_tab;
  
- static void bpf_struct_ops_init_one(struct bpf_struct_ops *st_ops,
- 				    struct btf *btf,
-@@ -197,7 +202,6 @@ static void bpf_struct_ops_init_one(struct bpf_struct_ops *st_ops,
- void bpf_struct_ops_init(struct btf *btf, struct bpf_verifier_log *log)
+ 	/* split BTF support */
+ 	struct btf *base_btf;
+@@ -1688,11 +1695,20 @@ static void btf_free_struct_meta_tab(struct btf *btf)
+ 	btf->struct_meta_tab = NULL;
+ }
+ 
++static void btf_free_struct_ops_tab(struct btf *btf)
++{
++	struct btf_struct_ops_tab *tab = btf->struct_ops_tab;
++
++	kfree(tab);
++	btf->struct_ops_tab = NULL;
++}
++
+ static void btf_free(struct btf *btf)
  {
- 	struct bpf_struct_ops *st_ops;
--	s32 module_id;
- 	u32 i;
+ 	btf_free_struct_meta_tab(btf);
+ 	btf_free_dtor_kfunc_tab(btf);
+ 	btf_free_kfunc_set_tab(btf);
++	btf_free_struct_ops_tab(btf);
+ 	kvfree(btf->types);
+ 	kvfree(btf->resolved_sizes);
+ 	kvfree(btf->resolved_ids);
+@@ -8604,3 +8620,60 @@ bool btf_type_ids_nocast_alias(struct bpf_verifier_log *log,
  
- 	/* Ensure BTF type is emitted for "struct bpf_struct_ops_##_name" */
-@@ -205,13 +209,6 @@ void bpf_struct_ops_init(struct btf *btf, struct bpf_verifier_log *log)
- #include "bpf_struct_ops_types.h"
- #undef BPF_STRUCT_OPS_TYPE
- 
--	module_id = btf_find_by_name_kind(btf, "module", BTF_KIND_STRUCT);
--	if (module_id < 0) {
--		pr_warn("Cannot find struct module in %s\n", btf_get_name(btf));
--		return;
--	}
--	module_type = btf_type_by_id(btf, module_id);
--
- 	for (i = 0; i < ARRAY_SIZE(bpf_struct_ops); i++) {
- 		st_ops = bpf_struct_ops[i];
- 		bpf_struct_ops_init_one(st_ops, btf, log);
-@@ -381,6 +378,7 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 	struct bpf_struct_ops_map *st_map = (struct bpf_struct_ops_map *)map;
- 	const struct bpf_struct_ops *st_ops = st_map->st_ops;
- 	struct bpf_struct_ops_value *uvalue, *kvalue;
-+	const struct btf_type *module_type;
- 	const struct btf_member *member;
- 	const struct btf_type *t = st_ops->type;
- 	struct bpf_tramp_links *tlinks;
-@@ -428,6 +426,7 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 	image = st_map->image;
- 	image_end = st_map->image + PAGE_SIZE;
- 
-+	module_type = btf_type_by_id(btf_vmlinux, st_ops_ids[IDX_MODULE_ID]);
- 	for_each_member(i, t, member) {
- 		const struct btf_type *mtype, *ptype;
- 		struct bpf_prog *prog;
+ 	return !strncmp(reg_name, arg_name, cmp_len);
+ }
++
++static int
++btf_add_struct_ops(struct btf *btf, struct bpf_struct_ops *st_ops)
++{
++	struct btf_struct_ops_tab *tab, *new_tab;
++	int i;
++
++	if (!btf)
++		return -ENOENT;
++
++	/* Assume this function is called for a module when the module is
++	 * loading.
++	 */
++
++	tab = btf->struct_ops_tab;
++	if (!tab) {
++		tab = kzalloc(offsetof(struct btf_struct_ops_tab, ops[4]),
++			      GFP_KERNEL);
++		if (!tab)
++			return -ENOMEM;
++		tab->capacity = 4;
++		btf->struct_ops_tab = tab;
++	}
++
++	for (i = 0; i < tab->cnt; i++)
++		if (tab->ops[i].st_ops == st_ops)
++			return -EEXIST;
++
++	if (tab->cnt == tab->capacity) {
++		new_tab = krealloc(tab,
++				   offsetof(struct btf_struct_ops_tab,
++					    ops[tab->capacity * 2]),
++				   GFP_KERNEL);
++		if (!new_tab)
++			return -ENOMEM;
++		tab = new_tab;
++		tab->capacity *= 2;
++		btf->struct_ops_tab = tab;
++	}
++
++	tab->ops[btf->struct_ops_tab->cnt].st_ops = st_ops;
++
++	btf->struct_ops_tab->cnt++;
++
++	return 0;
++}
++
++const struct bpf_struct_ops_desc *btf_get_struct_ops(struct btf *btf, u32 *ret_cnt)
++{
++	if (!btf)
++		return NULL;
++	if (!btf->struct_ops_tab)
++		return NULL;
++
++	*ret_cnt = btf->struct_ops_tab->cnt;
++	return (const struct bpf_struct_ops_desc *)btf->struct_ops_tab->ops;
++}
 -- 
 2.34.1
 
