@@ -1,103 +1,184 @@
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iINqlfTk"
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3631A198C
-	for <bpf@vger.kernel.org>; Thu,  7 Dec 2023 13:58:32 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-a1caddd6d28so193825466b.1
-        for <bpf@vger.kernel.org>; Thu, 07 Dec 2023 13:58:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701986310; x=1702591110; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=A7A+asTY8B4TwHgYJ0A4zcHFWRGEh9vFEKmpb47AAdY=;
-        b=iINqlfTkgNUvHawO19GUx9UnqUQXr5QOXfxgI7zRNf0P/pcHtXNsF1+TOllc1BBAvc
-         4+BVPM2RPQY2A00FuaKitxnonjN/zB92KRQghYMa4QbUxtgckodPXbt5bKr1UsyxBDtJ
-         /Tk0j+a8lmUHVhgGuDvkncvkPcb0638ZAF7SdsWf+T88aBqyj7RsmtA5rJC031C+OusF
-         Y1myWq7psyh3144MYyQkSTKuDb7ZNN48wrOZtzarnRzmJ5A7bFmf/YbpIF0zXRU3f46a
-         ZdZKMf8y82pQndIK0aPpruBJCJlqW29p6DnbsSfC9Bcui00pYmPM6O8dQ8MCnpoktzNR
-         KzFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701986310; x=1702591110;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A7A+asTY8B4TwHgYJ0A4zcHFWRGEh9vFEKmpb47AAdY=;
-        b=Akb44O1avgMPAlI8u3jw0YgfjsEn8g6nYx570RGOfN2/iTxRYOJ5nuGuokRbyUc0u6
-         8uJhXbmnBcjr9x4F8vkreAihyKsrSTa/wX5I4V3QQYLh6eenyfPOr1V5lrPkUFOnd7VE
-         b4yp/i/1LhFp7Iw0u5g7JWa0NQ2jJ0PSDrPnZ1Zi/gRABprATmwoXX/hj8X3nrzsZMIL
-         rc6Hj2159R39okXjoqacPPR9mNUuU0iPAm83eK2t/lFRfA9Z5P98LkHdAN9KIxrucWod
-         d6GX1MJWsTH9zgEwzcXOPjD7rmMxs0m978a/sSwGAjYD5e0pRvV6f9IR81Wn1chL8veA
-         EKEw==
-X-Gm-Message-State: AOJu0YyBFU+r1StjXn3fjpIdL9R3caO9ducbYZB8zYwGnYHAy5LqJ3zJ
-	W4KxZ05RYcmuLGwJ1oRVtEnZq8uOJeAshE5ikM1wvvkQP/JE8A==
-X-Google-Smtp-Source: AGHT+IGZXf6WOkEX6X8AP5w3ygUr5M/mI2eYwnyTa14T3waY8m1U2KAnqmjErxcGbhagQ1pAX3xl6geSU7k9zmXdxU0=
-X-Received: by 2002:a17:906:2458:b0:a19:a19b:423b with SMTP id
- a24-20020a170906245800b00a19a19b423bmr1455026ejb.166.1701986310346; Thu, 07
- Dec 2023 13:58:30 -0800 (PST)
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D91199E
+	for <bpf@vger.kernel.org>; Thu,  7 Dec 2023 14:28:10 -0800 (PST)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B7JqbN2012075
+	for <bpf@vger.kernel.org>; Thu, 7 Dec 2023 14:28:10 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uudj5vntn-4
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Thu, 07 Dec 2023 14:28:10 -0800
+Received: from twshared4634.37.frc1.facebook.com (2620:10d:c0a8:1b::30) by
+ mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Thu, 7 Dec 2023 14:28:07 -0800
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+	id B9B4A3CC5459E; Thu,  7 Dec 2023 14:28:01 -0800 (PST)
+From: Andrii Nakryiko <andrii@kernel.org>
+To: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <paul@paul-moore.com>,
+        <brauner@kernel.org>
+CC: <linux-fsdevel@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+        <keescook@chromium.org>, <kernel-team@meta.com>, <sargun@sargun.me>
+Subject: [PATCH RFC bpf-next 3/3] selftests/bpf: utilize string values for delegate_xxx mount options
+Date: Thu, 7 Dec 2023 14:27:55 -0800
+Message-ID: <20231207222755.3920286-4-andrii@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231207222755.3920286-1-andrii@kernel.org>
+References: <20231207222755.3920286-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Andrei Matei <andreimatei1@gmail.com>
-Date: Thu, 7 Dec 2023 16:58:18 -0500
-Message-ID: <CABWLsesOeyfiUuV_Mgz3xJ0WfNVeNunRQZsN5Esv-aqNO3iT-Q@mail.gmail.com>
-Subject: [bug report] until recently, code for bpf_loop callbacks using stack
- for ctx was mangled by verifier
-To: Eduard Zingerman <eddyz87@gmail.com>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>
-Cc: Andrew Werner <andrew@dataexmachina.dev>, kernel-team@dataexmachina.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: ugK2Oha5SqPziVfi_QIKZcFTbsGWeQQd
+X-Proofpoint-ORIG-GUID: ugK2Oha5SqPziVfi_QIKZcFTbsGWeQQd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-07_17,2023-12-07_01,2023-05-22_02
 
-Hello bpf,
+Use both hex-based and string-based way to specify delegate mount
+options for BPF FS.
 
-We have run into a verifier issue that had us scratching our heads for a while.
-The issues has been fixed by Eduard's recent series reworking the verification
-of bpf_loop callbacks ("verify callbacks as if they are called unknown number
-of times") [1]. I'm not sure if this kind of consequences of the bug that
-prompted those patches was understood; we reported the bug originally in [2]
-and we certainly did not understand it. The point of this message is to
-consider the backporting of that series (or perhaps of a more targeted fix); if
-those patches are already slated to be backported, or if what I'm describing is
-old news for everyone, maybe you can stop reading and sorry for the noise.
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ .../testing/selftests/bpf/prog_tests/token.c  | 43 +++++++++++--------
+ 1 file changed, 26 insertions(+), 17 deletions(-)
 
-The symptom that we've encountered is an instruction from the input assembly
-being erroneously dropped by the verifier. The verifier thinks that one branch
-of a conditional jump is never taken (and thus the test and one branch are
-eliminated), when in reality it most certainly is. This is similar to
-miscompilation and so quite bad for unsuspecting code. In contrast, the bug
-report in [2] only imagined that programs can pass verification when they
-shouldn't, not that they'll be "miscompiled".
+diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testi=
+ng/selftests/bpf/prog_tests/token.c
+index dc03790c6272..ec59c81c54b5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/token.c
++++ b/tools/testing/selftests/bpf/prog_tests/token.c
+@@ -55,14 +55,22 @@ static int restore_priv_caps(__u64 old_caps)
+ 	return cap_enable_effective(old_caps, NULL);
+ }
+=20
+-static int set_delegate_mask(int fs_fd, const char *key, __u64 mask)
++static int set_delegate_mask(int fs_fd, const char *key, __u64 mask, con=
+st char *mask_str)
+ {
+ 	char buf[32];
+ 	int err;
+=20
+-	snprintf(buf, sizeof(buf), "0x%llx", (unsigned long long)mask);
++	if (!mask_str) {
++		if (mask =3D=3D ~0ULL) {
++			mask_str =3D "any";
++		} else {
++			snprintf(buf, sizeof(buf), "0x%llx", (unsigned long long)mask);
++			mask_str =3D buf;
++		}
++	}
++
+ 	err =3D sys_fsconfig(fs_fd, FSCONFIG_SET_STRING, key,
+-			   mask =3D=3D ~0ULL ? "any" : buf, 0);
++			   mask_str, 0);
+ 	if (err < 0)
+ 		err =3D -errno;
+ 	return err;
+@@ -72,6 +80,7 @@ static int set_delegate_mask(int fs_fd, const char *key=
+, __u64 mask)
+=20
+ struct bpffs_opts {
+ 	__u64 cmds;
++	const char *cmds_str;
+ 	__u64 maps;
+ 	__u64 progs;
+ 	__u64 attachs;
+@@ -93,16 +102,16 @@ static int materialize_bpffs_fd(int fs_fd, struct bp=
+ffs_opts *opts)
+ 	int mnt_fd, err;
+=20
+ 	/* set up token delegation mount options */
+-	err =3D set_delegate_mask(fs_fd, "delegate_cmds", opts->cmds);
++	err =3D set_delegate_mask(fs_fd, "delegate_cmds", opts->cmds, opts->cmd=
+s_str);
+ 	if (!ASSERT_OK(err, "fs_cfg_cmds"))
+ 		return err;
+-	err =3D set_delegate_mask(fs_fd, "delegate_maps", opts->maps);
++	err =3D set_delegate_mask(fs_fd, "delegate_maps", opts->maps, NULL);
+ 	if (!ASSERT_OK(err, "fs_cfg_maps"))
+ 		return err;
+-	err =3D set_delegate_mask(fs_fd, "delegate_progs", opts->progs);
++	err =3D set_delegate_mask(fs_fd, "delegate_progs", opts->progs, NULL);
+ 	if (!ASSERT_OK(err, "fs_cfg_progs"))
+ 		return err;
+-	err =3D set_delegate_mask(fs_fd, "delegate_attachs", opts->attachs);
++	err =3D set_delegate_mask(fs_fd, "delegate_attachs", opts->attachs, NUL=
+L);
+ 	if (!ASSERT_OK(err, "fs_cfg_attachs"))
+ 		return err;
+=20
+@@ -284,13 +293,13 @@ static void child(int sock_fd, struct bpffs_opts *o=
+pts, child_callback_fn callba
+ 	}
+=20
+ 	/* ensure unprivileged child cannot set delegation options */
+-	err =3D set_delegate_mask(fs_fd, "delegate_cmds", 0x1);
++	err =3D set_delegate_mask(fs_fd, "delegate_cmds", 0x1, NULL);
+ 	ASSERT_EQ(err, -EPERM, "delegate_cmd_eperm");
+-	err =3D set_delegate_mask(fs_fd, "delegate_maps", 0x1);
++	err =3D set_delegate_mask(fs_fd, "delegate_maps", 0x1, NULL);
+ 	ASSERT_EQ(err, -EPERM, "delegate_maps_eperm");
+-	err =3D set_delegate_mask(fs_fd, "delegate_progs", 0x1);
++	err =3D set_delegate_mask(fs_fd, "delegate_progs", 0x1, NULL);
+ 	ASSERT_EQ(err, -EPERM, "delegate_progs_eperm");
+-	err =3D set_delegate_mask(fs_fd, "delegate_attachs", 0x1);
++	err =3D set_delegate_mask(fs_fd, "delegate_attachs", 0x1, NULL);
+ 	ASSERT_EQ(err, -EPERM, "delegate_attachs_eperm");
+=20
+ 	/* pass BPF FS context object to parent */
+@@ -314,22 +323,22 @@ static void child(int sock_fd, struct bpffs_opts *o=
+pts, child_callback_fn callba
+ 	}
+=20
+ 	/* ensure unprivileged child cannot reconfigure to set delegation optio=
+ns */
+-	err =3D set_delegate_mask(fs_fd, "delegate_cmds", ~0ULL);
++	err =3D set_delegate_mask(fs_fd, "delegate_cmds", 0, "any");
+ 	if (!ASSERT_EQ(err, -EPERM, "delegate_cmd_eperm_reconfig")) {
+ 		err =3D -EINVAL;
+ 		goto cleanup;
+ 	}
+-	err =3D set_delegate_mask(fs_fd, "delegate_maps", ~0ULL);
++	err =3D set_delegate_mask(fs_fd, "delegate_maps", 0, "any");
+ 	if (!ASSERT_EQ(err, -EPERM, "delegate_maps_eperm_reconfig")) {
+ 		err =3D -EINVAL;
+ 		goto cleanup;
+ 	}
+-	err =3D set_delegate_mask(fs_fd, "delegate_progs", ~0ULL);
++	err =3D set_delegate_mask(fs_fd, "delegate_progs", 0, "any");
+ 	if (!ASSERT_EQ(err, -EPERM, "delegate_progs_eperm_reconfig")) {
+ 		err =3D -EINVAL;
+ 		goto cleanup;
+ 	}
+-	err =3D set_delegate_mask(fs_fd, "delegate_attachs", ~0ULL);
++	err =3D set_delegate_mask(fs_fd, "delegate_attachs", 0, "any");
+ 	if (!ASSERT_EQ(err, -EPERM, "delegate_attachs_eperm_reconfig")) {
+ 		err =3D -EINVAL;
+ 		goto cleanup;
+@@ -647,7 +656,7 @@ void test_token(void)
+ {
+ 	if (test__start_subtest("map_token")) {
+ 		struct bpffs_opts opts =3D {
+-			.cmds =3D 1ULL << BPF_MAP_CREATE,
++			.cmds_str =3D "BPF_MAP_CREATE",
+ 			.maps =3D 1ULL << BPF_MAP_TYPE_STACK,
+ 		};
+=20
+@@ -662,7 +671,7 @@ void test_token(void)
+ 	}
+ 	if (test__start_subtest("prog_token")) {
+ 		struct bpffs_opts opts =3D {
+-			.cmds =3D 1ULL << BPF_PROG_LOAD,
++			.cmds_str =3D "BPF_PROG_LOAD",
+ 			.progs =3D 1ULL << BPF_PROG_TYPE_XDP,
+ 			.attachs =3D 1ULL << BPF_XDP,
+ 		};
+--=20
+2.34.1
 
-The issue is as follows: before Eduard's patches, the callback passed to
-bpf_loop() is verified as if it is only executed once. As such, the state that
-the verifier knows about the data referenced by the callback_ctx pointer only
-takes into account the possible values of the respective data before the loop
-starts; the verifier *does not* take into account the fact that the loop might
-execute multiple times and mutate that data referenced by the ctx pointer. The
-way this leads to garbage code is:
-- inside ctx, you can have a pointer to the stack
-- before the first iteration, the respective stack slot is known by the
-  verifier to be 0
-- the loop callback also has a conditional branch on the respective stack slot
-  being != 0
-- the loop callback sometimes mutates the respective stack slot
-- the verifier assumes that the branch is never taken (so it never verifies
-  it), and so the test and the branch are elided by opt_remove_dead_code()
-  because the `seen` flag on the branch's instructions is not set
-
-The mitigation on kernels before the fix, I guess, would be to not reference
-stack memory from the `ctx`. Instead, limit yourself to map data whose values
-are always unknown to the verifier.
-
-If Eduard's patch cannot be backported, I had a random thought that perhaps
-dead-code elimination could be partially disabled (perhaps only for loop
-callbacks, ignoring the functions that the callbacks call).
-
-Thanks,
-
-- Andrei
-
-
-[1] https://lore.kernel.org/bpf/20231121020701.26440-1-eddyz87@gmail.com/
-[2] https://lore.kernel.org/bpf/CA+vRuzPChFNXmouzGG+wsy=6eMcfr1mFG0F3g7rbg-sedGKW3w@mail.gmail.com/
