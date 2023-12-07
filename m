@@ -1,262 +1,234 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9341723
-	for <bpf@vger.kernel.org>; Thu,  7 Dec 2023 14:28:23 -0800 (PST)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B7GsOsC024915
-	for <bpf@vger.kernel.org>; Thu, 7 Dec 2023 14:28:23 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uu4htqkav-15
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 07 Dec 2023 14:28:22 -0800
-Received: from twshared15991.38.frc1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 7 Dec 2023 14:28:11 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id AB4973CC5458F; Thu,  7 Dec 2023 14:27:59 -0800 (PST)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <paul@paul-moore.com>,
-        <brauner@kernel.org>
-CC: <linux-fsdevel@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
-        <keescook@chromium.org>, <kernel-team@meta.com>, <sargun@sargun.me>
-Subject: [PATCH RFC bpf-next 2/3] bpf: extend parsing logic for BPF FS delegate_cmds mount option
-Date: Thu, 7 Dec 2023 14:27:54 -0800
-Message-ID: <20231207222755.3920286-3-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231207222755.3920286-1-andrii@kernel.org>
-References: <20231207222755.3920286-1-andrii@kernel.org>
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jVgyz74E"
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F26A4;
+	Thu,  7 Dec 2023 14:32:20 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6cebbf51742so700864b3a.1;
+        Thu, 07 Dec 2023 14:32:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701988340; x=1702593140; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FMK5oBL7ZRsz2fIyOpAup+LzkwMHF1v8UfcRl/00pW4=;
+        b=jVgyz74EA9YH/e4wrnkTRiHle/tsmvlkMVnLqgH1lxIVScjA3FikU1u43v3s/EzfQq
+         Zr/ecCxEnYHKU/nXMEX5gA4Fq5EYYvmFzrGxfEyFwPjbEGwYevQj5rePgrd8knjYMmf2
+         q9yt8xDujDUoDO28aDKxtZni5kEQpQJuoxA0wSZRI2QliMncJCQELAmTBn3/l9eAQJv6
+         3hY69XiCZgS247+wfWC143F4KKR9rgFKKBoiPkxkT1uxROf2HW6HNhTr+8McNJ31fN/b
+         TCC5vr5GK72isb8xmBs+IRjrXXDghPD6CAv0BvKUR3naFmm6rq3jQaQ9yvU3ZlnZ32gG
+         VjZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701988340; x=1702593140;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FMK5oBL7ZRsz2fIyOpAup+LzkwMHF1v8UfcRl/00pW4=;
+        b=ACFE++F2HEFynL4/M62Vr9U2xW2Myx1UkqEuIZ7KJOKIC+Y2nhLC9waVl95MoCj354
+         +fbWH680PZnfiu3/FeYY6h528CrBJ0JFEt1tOUlJ70303bSJzdwYCJRDl9EWUL2M7dGq
+         YRav+LrpWclHGn/usLia4PMZ6j9b69ihMMwMYj+tQe4BI8Jwzn5B/2fJKRzmzTWelZUM
+         QRdBiGbSpJ07Kp+YTHf9A3f7zryvcvWm/bsHpvif1ilKmNWaHMMgNNSZXq20NWN04El2
+         h6Mp1qv06JGZ+r8Suv01GJMDdDC06bQgi2rew7qwLNBbkKT5I/wt6yOwwleiuIDpmp5P
+         2y+Q==
+X-Gm-Message-State: AOJu0YzLOYZ8ssCNt9PbIeYotQJ/XEkkjZcKAzmu9VydgmBs0yrC+eUp
+	Rq/E6HkGYS++6FugHAAYCKU=
+X-Google-Smtp-Source: AGHT+IGjndnK2BCYLCyacoFwmyubc38b0BJwGWZc02r4foqXNC19yYWn9LMik7KGPp42sJmibTCaIg==
+X-Received: by 2002:a05:6a00:238c:b0:6ce:939e:bed6 with SMTP id f12-20020a056a00238c00b006ce939ebed6mr3760900pfc.34.1701988340144;
+        Thu, 07 Dec 2023 14:32:20 -0800 (PST)
+Received: from MacBook-Pro-49.local ([2620:10d:c090:500::7:6fe4])
+        by smtp.gmail.com with ESMTPSA id gx4-20020a056a001e0400b006cbb71186f7sm286775pfb.29.2023.12.07.14.32.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Dec 2023 14:32:19 -0800 (PST)
+Date: Thu, 7 Dec 2023 14:32:12 -0800
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>, 
+	Song Liu <songliubraving@meta.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, 
+	"David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Sami Tolvanen <samitolvanen@google.com>, 
+	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, linux-riscv <linux-riscv@lists.infradead.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Joao Moreira <joao@overdrivepizza.com>, Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
+Message-ID: <ivhrgimonsvy3tyj5iidoqmlcyqvtsh2ay3cm3ouemsdbvjzs4@6jlt6zv55tgh>
+References: <20231204111128.GV8262@noisy.programming.kicks-ass.net>
+ <20231204125239.GA1319@noisy.programming.kicks-ass.net>
+ <ZW4LjmUKj1q6RWdL@krava>
+ <20231204181614.GA7299@noisy.programming.kicks-ass.net>
+ <20231204183354.GC7299@noisy.programming.kicks-ass.net>
+ <CAADnVQJwU5fCLcjBWM9zBY6jUcnME3+p=vvdgKK9FiLPWvXozg@mail.gmail.com>
+ <20231206163814.GB36423@noisy.programming.kicks-ass.net>
+ <20231206183713.GA35897@noisy.programming.kicks-ass.net>
+ <zu5eb2robdqnp2ojwaxjhnglcummrnjaqbw6krdds6qac3bql2@5zx46c2s6ez4>
+ <20231207093105.GA28727@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: kFGuTxD0xVnsrhmVv1rZ9I9ecJ0GD9t5
-X-Proofpoint-ORIG-GUID: kFGuTxD0xVnsrhmVv1rZ9I9ecJ0GD9t5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-07_17,2023-12-07_01,2023-05-22_02
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231207093105.GA28727@noisy.programming.kicks-ass.net>
 
-Besides already supported special "any" value and hex bit mask, support
-string-based parsing of enum bpf_cmd values based on exact enumerator
-names. We use __BPF_CMD_MAPPER macro to generate a lookup table. So
-"BPF_PROG_LOAD" and "BPF_MAP_CREATE" are valid values to specify for
-delegate_cmds options.
+On Thu, Dec 07, 2023 at 10:31:05AM +0100, Peter Zijlstra wrote:
+> On Wed, Dec 06, 2023 at 01:39:43PM -0800, Alexei Starovoitov wrote:
+> 
+> 
+> > All is ok until kCFI comes into picture.
+> > Here we probably need to teach arch_prepare_bpf_trampoline() to emit
+> > different __kcfi_typeid depending on kernel function proto,
+> > so that caller hash checking logic won't be tripped.
+> > I suspect that requires to reverse engineer an algorithm of computing kcfi from clang.
+> > other ideas?
+> 
+> I was going to try and extend bpf_struct_ops with a pointer, this
+> pointer will point to a struct of the right type with all ops filled out
+> as stubs.
 
-A bunch of code changes are setting up generic routines which will make
-similar support for delegate_maps, delegate_progs, and delegate_attachs
-mount options trivial to add once we have similar mapper macros for
-respective enums.
+Right. Something like this, but it's more nuanced.
 
-Besides supporting string values, we also support multiple values
-specified at the same time, using colon (':') separator.
+The bpf_struct_ops concept is a generic mechanism to provide bpf-based callback
+to any set of kernel callbacks.
 
-There are corresponding changes on bpf_show_options side to use known
-values to print them in human-readable format, falling back to hex mask
-printing, if there are any unrecognized bits (which shouldn't happen for
-delegate_cmds, but is necessary for the same routing to be able to
-handle other delegate_xxx options).
+bpf tcp CC plugs into:
+struct tcp_congestion_ops {
+        /* do new cwnd calculation (required) */
+        void (*cong_avoid)(struct sock *sk, u32 ack, u32 acked);
 
-Example below shows various ways to specify delegate_cmds options
-through mount command and how mount options are printed back:
+        /* call before changing ca_state (optional) */
+        void (*set_state)(struct sock *sk, u8 new_state);
 
-  $ sudo mkdir -p /sys/fs/bpf/token
-  $ sudo mount -t bpf bpffs /sys/fs/bpf/token \
-               -o delegate_cmds=3DBPF_PROG_LOAD \
-               -o delegate_cmds=3DBPF_MAP_CREATE \
-               -o delegate_cmds=3DBPF_TOKEN_CREATE:BPF_BTF_LOAD:BPF_LINK_=
-CREATE
-  $ mount | grep token
-  bpffs on /sys/fs/bpf/token type bpf (rw,relatime,delegate_cmds=3DBPF_MA=
-P_CREATE:BPF_PROG_LOAD:BPF_BTF_LOAD:BPF_LINK_CREATE:BPF_TOKEN_CREATE)
+        /* call when cwnd event occurs (optional) */
+        void (*cwnd_event)(struct sock *sk, enum tcp_ca_event ev);
+  ...
+};
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/inode.c | 127 ++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 96 insertions(+), 31 deletions(-)
+and from bpf side we don't touch tcp kernel bits at all.
+tcp stack doesn't know whether it's calling bpf based CC or builtin CC or CC provided by kernel module.
 
-diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-index 5359a0929c35..20b2d170fc0b 100644
---- a/kernel/bpf/inode.c
-+++ b/kernel/bpf/inode.c
-@@ -595,6 +595,54 @@ struct bpf_prog *bpf_prog_get_type_path(const char *=
-name, enum bpf_prog_type typ
- }
- EXPORT_SYMBOL(bpf_prog_get_type_path);
-=20
-+#define __BPF_KV_FN(name, val) { #name, val },
-+static const struct constant_table cmd_kvs[] =3D {
-+	__BPF_CMD_MAPPER(__BPF_KV_FN)
-+	{}
-+};
-+static const struct constant_table map_kvs[] =3D {
-+	{}
-+};
-+static const struct constant_table prog_kvs[] =3D {
-+	{}
-+};
-+static const struct constant_table attach_kvs[] =3D {
-+	{}
-+};
-+#undef __BPF_KV_FN
-+
-+static void seq_print_delegate_opts(struct seq_file *m,
-+				    const char *opt_name,
-+				    const struct constant_table *tbl,
-+				    u64 delegate_msk, u64 any_msk)
-+{
-+	bool first =3D true;
-+	u64 msk;
-+	int i;
-+
-+	delegate_msk &=3D any_msk; /* clear unknown bits */
-+
-+	if (delegate_msk =3D=3D 0)
-+		return;
-+
-+	if (delegate_msk =3D=3D any_msk) {
-+		seq_printf(m, ",%s=3Dany", opt_name);
-+		return;
-+	}
-+
-+	seq_printf(m, ",%s", opt_name);
-+	for (i =3D 0; cmd_kvs[i].name; i++) {
-+		msk =3D 1ULL << cmd_kvs[i].value;
-+		if (delegate_msk & msk) {
-+			seq_printf(m, "%c%s", first ? '=3D' : ':', cmd_kvs[i].name);
-+			delegate_msk &=3D ~msk;
-+			first =3D false;
-+		}
-+	}
-+	if (delegate_msk)
-+		seq_printf(m, "%c0x%llx", first ? '=3D' : ':', delegate_msk);
-+}
-+
- /*
-  * Display the mount options in /proc/mounts.
-  */
-@@ -608,28 +656,17 @@ static int bpf_show_options(struct seq_file *m, str=
-uct dentry *root)
- 		seq_printf(m, ",mode=3D%o", mode);
-=20
- 	mask =3D (1ULL << __MAX_BPF_CMD) - 1;
--	if ((opts->delegate_cmds & mask) =3D=3D mask)
--		seq_printf(m, ",delegate_cmds=3Dany");
--	else if (opts->delegate_cmds)
--		seq_printf(m, ",delegate_cmds=3D0x%llx", opts->delegate_cmds);
-+	seq_print_delegate_opts(m, "delegate_cmds", cmd_kvs, opts->delegate_cmd=
-s, mask);
-=20
- 	mask =3D (1ULL << __MAX_BPF_MAP_TYPE) - 1;
--	if ((opts->delegate_maps & mask) =3D=3D mask)
--		seq_printf(m, ",delegate_maps=3Dany");
--	else if (opts->delegate_maps)
--		seq_printf(m, ",delegate_maps=3D0x%llx", opts->delegate_maps);
-+	seq_print_delegate_opts(m, "delegate_maps", map_kvs, opts->delegate_map=
-s, mask);
-=20
- 	mask =3D (1ULL << __MAX_BPF_PROG_TYPE) - 1;
--	if ((opts->delegate_progs & mask) =3D=3D mask)
--		seq_printf(m, ",delegate_progs=3Dany");
--	else if (opts->delegate_progs)
--		seq_printf(m, ",delegate_progs=3D0x%llx", opts->delegate_progs);
-+	seq_print_delegate_opts(m, "delegate_progs", prog_kvs, opts->delegate_p=
-rogs, mask);
-=20
- 	mask =3D (1ULL << __MAX_BPF_ATTACH_TYPE) - 1;
--	if ((opts->delegate_attachs & mask) =3D=3D mask)
--		seq_printf(m, ",delegate_attachs=3Dany");
--	else if (opts->delegate_attachs)
--		seq_printf(m, ",delegate_attachs=3D0x%llx", opts->delegate_attachs);
-+	seq_print_delegate_opts(m, "delegate_attachs", attach_kvs, opts->delega=
-te_attachs, mask);
-+
- 	return 0;
- }
-=20
-@@ -673,7 +710,6 @@ static int bpf_parse_param(struct fs_context *fc, str=
-uct fs_parameter *param)
- 	struct bpf_mount_opts *opts =3D fc->s_fs_info;
- 	struct fs_parse_result result;
- 	int opt, err;
--	u64 msk;
-=20
- 	opt =3D fs_parse(fc, bpf_fs_parameters, param, &result);
- 	if (opt < 0) {
-@@ -700,26 +736,55 @@ static int bpf_parse_param(struct fs_context *fc, s=
-truct fs_parameter *param)
- 	case OPT_DELEGATE_CMDS:
- 	case OPT_DELEGATE_MAPS:
- 	case OPT_DELEGATE_PROGS:
--	case OPT_DELEGATE_ATTACHS:
--		if (strcmp(param->string, "any") =3D=3D 0) {
--			msk =3D ~0ULL;
--		} else {
--			err =3D kstrtou64(param->string, 0, &msk);
--			if (err)
--				return err;
-+	case OPT_DELEGATE_ATTACHS: {
-+		const struct constant_table *kvs;
-+		u64 *delegate_msk, msk =3D 0;
-+		char *p;
-+		int val;
-+
-+		switch (opt) {
-+		case OPT_DELEGATE_CMDS:
-+			delegate_msk =3D &opts->delegate_cmds;
-+			kvs =3D cmd_kvs;
-+			break;
-+		case OPT_DELEGATE_MAPS:
-+			delegate_msk =3D &opts->delegate_maps;
-+			kvs =3D map_kvs;
-+			break;
-+		case OPT_DELEGATE_PROGS:
-+			delegate_msk =3D &opts->delegate_progs;
-+			kvs =3D prog_kvs;
-+			break;
-+		case OPT_DELEGATE_ATTACHS:
-+			delegate_msk =3D &opts->delegate_attachs;
-+			kvs =3D attach_kvs;
-+			break;
-+		default:
-+			return -EINVAL;
- 		}
-+
-+		while ((p =3D strsep(&param->string, ":"))) {
-+			if (strcmp(p, "any") =3D=3D 0) {
-+				msk |=3D ~0ULL;
-+			} else if ((val =3D lookup_constant(kvs, p, -1)) >=3D 0) {
-+				msk |=3D 1ULL << val;
-+			} else {
-+				err =3D kstrtou64(p, 0, &msk);
-+				if (err)
-+					return err;
-+			}
-+		}
-+
- 		/* Setting delegation mount options requires privileges */
- 		if (msk && !capable(CAP_SYS_ADMIN))
- 			return -EPERM;
--		switch (opt) {
--		case OPT_DELEGATE_CMDS: opts->delegate_cmds |=3D msk; break;
--		case OPT_DELEGATE_MAPS: opts->delegate_maps |=3D msk; break;
--		case OPT_DELEGATE_PROGS: opts->delegate_progs |=3D msk; break;
--		case OPT_DELEGATE_ATTACHS: opts->delegate_attachs |=3D msk; break;
--		default: return -EINVAL;
--		}
-+
-+		*delegate_msk |=3D msk;
- 		break;
- 	}
-+	default:
-+		/* ignore unknown mount options */
-+	}
-=20
- 	return 0;
- }
---=20
-2.34.1
+bpf struct_ops mechanim is a zero cost extension to potentially any kernel mechanism
+that is already setup with callbacks. tcp_congestion_ops is one of them.
 
+The allowlisting of tcp_congestion_ops for bpf use is done in net/ipv4/bpf_tcp_ca.c via:
+
+struct bpf_struct_ops bpf_tcp_congestion_ops = {
+        ...
+        .reg = bpf_tcp_ca_reg,
+        .unreg = bpf_tcp_ca_unreg,
+        ...
+        .name = "tcp_congestion_ops",
+};
+static int bpf_tcp_ca_reg(void *kdata)
+{
+        return tcp_register_congestion_control(kdata);
+}
+and
+ int tcp_register_congestion_control(struct tcp_congestion_ops *type);
+is a normal TCP CC registration routine that is used by all CCs.
+
+The bpf struct_ops infra prepares everything inside
+'struct tcp_congestion_ops' that makes it indistinguishable from normal kernel CC,
+except kCFI part. sadly.
+
+The kCFI challenge is that clang may not generate any __cfi + __kcfi_typeid at all.
+Like if vmlinux doesn't have any TCP CCs built-in there will be no kCFI hashes
+in the kernel that represent a required hash to call cong_avoid, set_state, cwnd_event.
+
+At the callsite like in net/ipv4/tcp_input.c
+  icsk->icsk_ca_ops->cong_avoid(sk, ack, acked);
+the clang will compute the kcfi hash, but there will be no __cfi symbol in vmlinux.
+
+If there was one we could teach the verifier to look for __kcfi...cong_avoid
+in kallsyms, then read cfi hash from there and populate it into generated asm
+in arch_prepare_bpf_trampoline.
+
+So I'm thinking to do this:
+
+diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
+index c7bbd8f3c708..afaadc2c0827 100644
+--- a/net/ipv4/bpf_tcp_ca.c
++++ b/net/ipv4/bpf_tcp_ca.c
+@@ -283,6 +283,12 @@ struct bpf_struct_ops bpf_tcp_congestion_ops = {
+        .name = "tcp_congestion_ops",
+ };
+
++/* never accessed, here for clang kCFI only */
++extern void __kcfi_cong_avoid(struct sock *sk, u32 ack, u32 acked);
++__ADDRESSABLE(__kcfi_cong_avoid);
++extern void __kcfi_set_state(struct sock *sk, u8 new_state);
++__ADDRESSABLE(__kcfi_set_state);
+
+To force kcfi generation and then teach struct_ops infra to look
+for __kcfi_typeid___kcfi_##callbackname in kallsyms,
+read kcfi from there and populate into bpf trampoline.
+
+Since kcfi and bpf are not working well, I believe it's bpf folks job to fix it.
+Especially since it's starting to look bpf infra heavy.
+
+If you're interested I can, of course, point to relevant bits in kernel/bpf/bpf_struct_ops.c
+that would need to be extended to support such kcfi_typeid search,
+but I think it's my job to fix it.
+
+If I get stuck, I'll ask for help.
+
+I also researched a different approach.
+llvm does the following to compute the kcfi hash:
+
+llvm::ConstantInt *CodeGenModule::CreateKCFITypeId(QualType T) {
+  if (auto *FnType = T->getAs<FunctionProtoType>())
+    T = getContext().getFunctionType(
+        FnType->getReturnType(), FnType->getParamTypes(),
+        FnType->getExtProtoInfo().withExceptionSpec(EST_None));
+
+  std::string OutName;
+  llvm::raw_string_ostream Out(OutName);
+  getCXXABI().getMangleContext().mangleCanonicalTypeName(
+      T, Out, getCodeGenOpts().SanitizeCfiICallNormalizeIntegers);
+
+  if (getCodeGenOpts().SanitizeCfiICallNormalizeIntegers)
+    Out << ".normalized";
+
+  return llvm::ConstantInt::get(Int32Ty,
+                                static_cast<uint32_t>(llvm::xxHash64(OutName)));
+}
+
+xxhash is already available in the kernel.
+We can add type mangling logic and convert prototype of cong_avoid, set_state, etc
+(that are already available in vmlinux BTF) into a mangled string and
+apply xxhash on that string.
+This way we wouldn't need to add __kcfi stubs to net/ipv4/bpf_tcp_ca.c.
+kcfi will be computed on demand.
+
+> > 
+> > This case is easier to make work with kCFI.
+> > The JIT will use:
+> > cfi_bpf_hash:
+> >       .long   __kcfi_typeid___bpf_prog_runX  
+> > like your patch already does.
+> > And will use
+> > extern u64 __bpf_callback_fn(u64, u64, u64, u64, u64);
+> > cfi_bpf_subprog_hash:
+> >       .long   __kcfi_typeid___bpf_callback_fn
+> > to JIT all subprogs. See bpf_is_subprog().
+> 
+> Aaah!, yes it should be trivial to use another hash value when
+> is_subprog in emit_prologue().
+
+Great. I'll wait for your respin and then will start building "kcfi for struct-ops"
+via one of the two approaches above.
+
+> Yes, we can do that. Plans have changed on my side too -- I'm taking a 6
+> week break soon, so I'll do whatever I can before I'm out, and then
+> continue from whatever state I find when I get back.
+
+6 weeks! Nice. Enjoy the long break.
+Last time I took 3 week PTO in a row I got bored after week 2 and went back to hacking :)
