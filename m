@@ -1,116 +1,174 @@
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1502239AF3;
+	Fri,  8 Dec 2023 17:48:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OxPnUljG"
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C59173B
-	for <bpf@vger.kernel.org>; Fri,  8 Dec 2023 09:46:43 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-333630e9e43so2380147f8f.2
-        for <bpf@vger.kernel.org>; Fri, 08 Dec 2023 09:46:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702057602; x=1702662402; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TJ1U+u5MsU+xBs/Q82IvJvfIhtv3q453JDYwSQm9w/0=;
-        b=OxPnUljGVxaPa2evDeXzaLytIy2ytgusCnApD2PDfsrT4gxDzhS7hh2afSRkIzwu0G
-         YNrHm53DLYdpYkPKqzkzM41K1jvCLICB/eb0kjnIv2Id+Qkx0h58zw7c+INsvm1vTVoP
-         p3N/CR7ZtXpTJVKvdGKIR2XTRBAwfhMqkqQoJfJGvuRP4XToCDL0bYX7fyZN2jhNpWzH
-         WpFFlVu3hcYq4qtOK11MZYgMumJJ5oHYHUH2nUPQfeHiK4xUSE66DU2SU9D8cZ0bA1H/
-         V8GQRkldoIk7y1OmzLJ9H9Y5b3OXCTAwse5hY1TjAp4tGCmoU460/XINqtW8aNAsW540
-         esUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702057602; x=1702662402;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TJ1U+u5MsU+xBs/Q82IvJvfIhtv3q453JDYwSQm9w/0=;
-        b=wHOGSX1cAhRTddreRGCviXlsHo3YhKAQyup/VnSlYkts/UM3tyC0U5V/LQo767kb6F
-         rGzaNq2t2UbAtN9Niti1HKRr+UmKo3w1S5A04NrqDrtG2riqet77nkwdgeP3IvdaSFTu
-         TTc5fu8tscDt/rsTsKRtANrSej7bEvS1XNIgwqQHCxZKNjrThOKVy+mHyM3T3J0InDHQ
-         1Ti7XNPYfNiPJgNREbXFAhH3n8qZOtg9Mm/+fVdeRntxhYDi3JW2Cz0gMTcUuKewMnsC
-         Xb850d+PZonCMnZhxg3u5LIpXQ32wq1Ae9AoqD7lCOL0IXCiogBfS0XbV3273ac0CQ6t
-         pNKQ==
-X-Gm-Message-State: AOJu0YzI8h9piIWll74lGS72iEuTOS/AihxRCIvZMG5CmB6GFIPRgrjt
-	PN9Gq/40IBSV7Ci2D3B8xk9jiTHa0LtEgZwZ+uU=
-X-Google-Smtp-Source: AGHT+IHZEXhXJIO2Cm8vsNKdaX4U7DCBv1W9FoqQWQ7Oo9amz0XgGht1J5z6mONYopBTt3MTdiU7Bzc2qnYY500C02Y=
-X-Received: by 2002:adf:e44c:0:b0:32d:bb4a:525c with SMTP id
- t12-20020adfe44c000000b0032dbb4a525cmr188563wrm.14.1702057601593; Fri, 08 Dec
- 2023 09:46:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vG3IUgCI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C2B6C433C7;
+	Fri,  8 Dec 2023 17:48:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702057715;
+	bh=QhXQPyvQgWIfvDkbSx67u+Zj6uEqAYuquxDBwKePCJE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=vG3IUgCI7Vl1Ae7jqY3QTraWz66PaiSD+WpG1WvnBrANgyZraJ2iA8SAnKT3INQU1
+	 LVtpqSYOJ9jbHnCfywwcF7ri2RUAha1/EgX+42PNhDgQRuFRKz3ra0rg1DtBj9H9KJ
+	 RoNZsIGJ2YbO1TilE2f329bwgtfBR5Lg+IvgWvF0hqn/2yhF5oFSu2vNWsFAk0b/gZ
+	 rTidktVHR0u7SzSqDA9u7ShRYuFqrCmUFLY6J8SOVqhfrC6mUBoqKWEYdaBAQ9nADl
+	 6hzrOGEKkLY9HhwOn/M1/P6d9j/R6K2mTpn1xHIzAf+7KIiRibqlj8BlKFQi4kS5ym
+	 tFNg+JaK/IVqA==
+Message-ID: <5752508c-f7bc-44ac-8778-c807b2ee5831@kernel.org>
+Date: Fri, 8 Dec 2023 10:48:33 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231208000531.19179-1-eddyz87@gmail.com> <012efc61-e067-4c21-8cab-47dec9bbaf0c@linux.dev>
- <0275c6985bcb299890da7ea7fb96642802cdcdbe.camel@gmail.com> <85a5312a-ba79-4e1d-b1be-434a7fe64cf0@linux.dev>
-In-Reply-To: <85a5312a-ba79-4e1d-b1be-434a7fe64cf0@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 8 Dec 2023 09:46:30 -0800
-Message-ID: <CAADnVQK-RP-rOq2cGOSRt614td536Kp+9c=moNH_pen0EY2FUA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/1] use preserve_static_offset in bpf uapi headers
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Kernel Team <kernel-team@fb.com>, "Jose E. Marchesi" <jose.marchesi@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [net-next v1 06/16] netdev: support binding dma-buf to netdevice
+Content-Language: en-US
+To: Mina Almasry <almasrymina@google.com>,
+ Shailend Chand <shailend@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Jeroen de Borst <jeroendb@google.com>,
+ Praveen Kaligineedi <pkaligineedi@google.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann
+ <arnd@arndb.de>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Yunsheng Lin <linyunsheng@huawei.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeelb@google.com>, Willem de Bruijn <willemb@google.com>,
+ Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20231208005250.2910004-1-almasrymina@google.com>
+ <20231208005250.2910004-7-almasrymina@google.com>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <20231208005250.2910004-7-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Dec 8, 2023 at 9:30=E2=80=AFAM Yonghong Song <yonghong.song@linux.d=
-ev> wrote:
->
->
-> On 12/8/23 6:34 AM, Eduard Zingerman wrote:
-> > On Thu, 2023-12-07 at 18:28 -0800, Yonghong Song wrote:
-> > [...]
-> >> All context types are defined in include/linux/bpf_types.h.
-> >> The context type bpf_nf_ctx is missing.
-> > convert_ctx_access() is not applied for bpf_nf_ctx. Searching through
-> > kernel code shows that BPF programs access this structure directly
-> > (net/netfilter/nf_bpf_link.c):
-> >
-> >      static unsigned int nf_hook_run_bpf(void *bpf_prog, struct sk_buff=
- *skb,
-> >                          const struct nf_hook_state *s)
-> >      {
-> >          const struct bpf_prog *prog =3D bpf_prog;
-> >          struct bpf_nf_ctx ctx =3D {
-> >              .state =3D s,
-> >              .skb =3D skb,
-> >          };
-> >
-> >          return bpf_prog_run(prog, &ctx);
-> >      }
-> >
-> > I added __bpf_ctx only for types that are subject to convert_ctx_access=
-()
-> > transformation. On the other hand, applying it to each context type
-> > should not hurt either. Which way would you prefer?
-> >
-> > [...]
-> >
-> >>> How to add the same definitions in vmlinux.h is an open question,
-> >>> and most likely requires bpftool modification:
-> >>> - Hard code generation of __bpf_ctx based on type names?
-> >>> - Mark context types with some special
-> >>>     __attribute__((btf_decl_tag("preserve_static_offset")))
-> >>>     and convert it to __attribute__((preserve_static_offset))?
-> >> The number of context types is limited, I would just go through
-> >> the first approach with hard coding the list of ctx types and
-> >> mark them with preserve_static_offset attribute in vmlinux.h.
-> > Tbh, I'm with Alan here, generic approach seems a tad nicer.
-> > Lets collect some more votes :)
->
-> I just want to propose to have less work :-) since we are only dealing
-> with a few structs in bpf domain. Note that eventually generated
-> vmlinux.h will be the same whether we use 'hard code' approach or the
-> decl_tag approach. The difference is just how to do it: - dwarf/btf with
-> decl tag -> bpftool vmlinux.h gen, or - dwarf/btf without decl tag +
-> hardcoded bpf ctx info -> bpftool vmlinux.h gen If we intends to cover
-> all uapi data structures (to prevent unnecessary CORE relocation, esp.
-> for troublesome bitfield operations), hardcoded approach won't work and
-> we may have to go to decl tag approach.
+On 12/7/23 5:52 PM, Mina Almasry wrote:
+> +
+> +static int netdev_restart_rx_queue(struct net_device *dev, int rxq_idx)
+> +{
+> +	void *new_mem;
+> +	void *old_mem;
+> +	int err;
+> +
+> +	if (!dev || !dev->netdev_ops)
+> +		return -EINVAL;
+> +
+> +	if (!dev->netdev_ops->ndo_queue_stop ||
+> +	    !dev->netdev_ops->ndo_queue_mem_free ||
+> +	    !dev->netdev_ops->ndo_queue_mem_alloc ||
+> +	    !dev->netdev_ops->ndo_queue_start)
+> +		return -EOPNOTSUPP;
+> +
+> +	new_mem = dev->netdev_ops->ndo_queue_mem_alloc(dev, rxq_idx);
+> +	if (!new_mem)
+> +		return -ENOMEM;
+> +
+> +	err = dev->netdev_ops->ndo_queue_stop(dev, rxq_idx, &old_mem);
+> +	if (err)
+> +		goto err_free_new_mem;
+> +
+> +	err = dev->netdev_ops->ndo_queue_start(dev, rxq_idx, new_mem);
+> +	if (err)
+> +		goto err_start_queue;
+> +
+> +	dev->netdev_ops->ndo_queue_mem_free(dev, old_mem);
+> +
+> +	return 0;
+> +
+> +err_start_queue:
+> +	dev->netdev_ops->ndo_queue_start(dev, rxq_idx, old_mem);
+> +
+> +err_free_new_mem:
+> +	dev->netdev_ops->ndo_queue_mem_free(dev, new_mem);
+> +
+> +	return err;
+> +}
+> +
+> +/* Protected by rtnl_lock() */
+> +static DEFINE_XARRAY_FLAGS(netdev_dmabuf_bindings, XA_FLAGS_ALLOC1);
+> +
+> +void netdev_unbind_dmabuf(struct netdev_dmabuf_binding *binding)
+> +{
+> +	struct netdev_rx_queue *rxq;
+> +	unsigned long xa_idx;
+> +	unsigned int rxq_idx;
+> +
+> +	if (!binding)
+> +		return;
+> +
+> +	if (binding->list.next)
+> +		list_del(&binding->list);
+> +
+> +	xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
+> +		if (rxq->binding == binding) {
+> +			/* We hold the rtnl_lock while binding/unbinding
+> +			 * dma-buf, so we can't race with another thread that
+> +			 * is also modifying this value. However, the driver
+> +			 * may read this config while it's creating its
+> +			 * rx-queues. WRITE_ONCE() here to match the
+> +			 * READ_ONCE() in the driver.
+> +			 */
+> +			WRITE_ONCE(rxq->binding, NULL);
+> +
+> +			rxq_idx = get_netdev_rx_queue_index(rxq);
+> +
+> +			netdev_restart_rx_queue(binding->dev, rxq_idx);
 
-+1 for simplicity of "hard code" approach.
-We've stopped adding new uapi "mirror" structs like __sk_buff long ago.
-The number of structs that need ctx rewrite will not increase.
+Blindly restarting a queue when a dmabuf is heavy handed. If the dmabuf
+has no outstanding references (ie., no references in the RxQ), then no
+restart is needed.
+
+> +		}
+> +	}
+> +
+> +	xa_erase(&netdev_dmabuf_bindings, binding->id);
+> +
+> +	netdev_dmabuf_binding_put(binding);
+> +}
+> +
+> +int netdev_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
+> +				struct netdev_dmabuf_binding *binding)
+> +{
+> +	struct netdev_rx_queue *rxq;
+> +	u32 xa_idx;
+> +	int err;
+> +
+> +	rxq = __netif_get_rx_queue(dev, rxq_idx);
+> +
+> +	if (rxq->binding)
+> +		return -EEXIST;
+> +
+> +	err = xa_alloc(&binding->bound_rxq_list, &xa_idx, rxq, xa_limit_32b,
+> +		       GFP_KERNEL);
+> +	if (err)
+> +		return err;
+> +
+> +	/* We hold the rtnl_lock while binding/unbinding dma-buf, so we can't
+> +	 * race with another thread that is also modifying this value. However,
+> +	 * the driver may read this config while it's creating its * rx-queues.
+> +	 * WRITE_ONCE() here to match the READ_ONCE() in the driver.
+> +	 */
+> +	WRITE_ONCE(rxq->binding, binding);
+> +
+> +	err = netdev_restart_rx_queue(dev, rxq_idx);
+
+Similarly, here binding a dmabuf to a queue. I was expecting the dmabuf
+binding to add entries to the page pool for the queue. If the pool was
+previously empty, then maybe the queue needs to be "started" in the
+sense of creating with h/w or just pushing buffers into the queue and
+moving the pidx.
+
+
