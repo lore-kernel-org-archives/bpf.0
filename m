@@ -1,69 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="UbHNqkRu"
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D58419A2;
-	Fri,  8 Dec 2023 09:22:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=V28FqpOL+oZWPnnuXFJFyawoJ5nIS3QYSrjANXac/eI=; b=UbHNqkRus+VeXqxGP09vb359cH
-	2Q/ZEqAjQU4IsYvHCMQxbyYEYrxhTuo3gNlyMc13ZpTy7FurwxlfYnyeyVDkDjthklMDFdHv1pk2O
-	iWXktzpJ3MHht6J+8CJzFNs4XhJWPpe7r1gsueyYfHT+aGpqaquovUgnsujDTcrKtmsVXQZhAkhX3
-	MSmklMcr0V/IrT3Kb9WlygDyHLhiA9akWeqV9GmCO7S6JlbTqOHzZSk9q8AEFWqokE4RFo3ShjLBN
-	Wc6sCSMhme6ocjs7BtVEOFRgo4Ltt1gOhE8YN6Q1c3Mrfepb5uEV/MLWuqzaQ0TRqBEzEgKeY6qtL
-	tiKWKUbQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1rBeXw-0069mX-TN; Fri, 08 Dec 2023 17:21:53 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 89F2A3003F0; Fri,  8 Dec 2023 18:21:52 +0100 (CET)
-Date: Fri, 8 Dec 2023 18:21:52 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
-	Song Liu <songliubraving@meta.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Arnd Bergmann <arnd@arndb.de>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-riscv <linux-riscv@lists.infradead.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Network Development <netdev@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
-Message-ID: <20231208172152.GD36716@noisy.programming.kicks-ass.net>
-References: <20231204181614.GA7299@noisy.programming.kicks-ass.net>
- <20231204183354.GC7299@noisy.programming.kicks-ass.net>
- <CAADnVQJwU5fCLcjBWM9zBY6jUcnME3+p=vvdgKK9FiLPWvXozg@mail.gmail.com>
- <20231206163814.GB36423@noisy.programming.kicks-ass.net>
- <20231206183713.GA35897@noisy.programming.kicks-ass.net>
- <zu5eb2robdqnp2ojwaxjhnglcummrnjaqbw6krdds6qac3bql2@5zx46c2s6ez4>
- <20231207093105.GA28727@noisy.programming.kicks-ass.net>
- <ivhrgimonsvy3tyj5iidoqmlcyqvtsh2ay3cm3ouemsdbvjzs4@6jlt6zv55tgh>
- <20231208102940.GB28727@noisy.programming.kicks-ass.net>
- <20231208134041.GD28727@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PRQFkbvp"
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8667E121;
+	Fri,  8 Dec 2023 09:30:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702056616; x=1733592616;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+gB2Q0J8HX6MQGePWap2KwWwhmh91nZTU2F3h3jDrQg=;
+  b=PRQFkbvp2z3GeXIPrT5nKHzF/QnUTbxW6mF/eWWdFTijcgLZz+wp4SL8
+   3kpLmPCKoxYNMnhbpmYLF4l5Hju50oTtJeIZLY6hwpGwT9U9Ls3VMiju9
+   vGfO19TsdoXx3cE+6/yevmGPBC7Vxm6htinRyCWo97n9w8QiuYL1tKpC9
+   ig1N3sfr15iTM3V8EFy0u/JjlBRcUtqqtZES0dKgSqj2Ysiazyt8wQWME
+   vCSPh4iLLwBBXMwRlz/71ri/7gszn7FohTKrY5YqNqa/e4evW/E5XRr4+
+   D4iutKMzMpC4QnPSIq1HVlWkLinsL6F0xgnqY4vJ/kSE0GiWvo/qmEv2+
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10918"; a="13132794"
+X-IronPort-AV: E=Sophos;i="6.04,261,1695711600"; 
+   d="scan'208";a="13132794"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2023 09:30:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10918"; a="806467994"
+X-IronPort-AV: E=Sophos;i="6.04,261,1695711600"; 
+   d="scan'208";a="806467994"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 08 Dec 2023 09:30:12 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rBefy-000E6q-1w;
+	Fri, 08 Dec 2023 17:30:10 +0000
+Date: Sat, 9 Dec 2023 01:29:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, bpf@vger.kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, magnus.karlsson@intel.com, bjorn@kernel.org,
+	maciej.fijalkowski@intel.com, echaudro@redhat.com,
+	lorenzo@kernel.org
+Subject: Re: [PATCH bpf 2/3] net: fix usage of multi-buffer BPF helper for ZC
+ AF_XDP
+Message-ID: <202312090104.6EOsoGVa-lkp@intel.com>
+References: <20231208112945.313687-3-maciej.fijalkowski@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,32 +51,84 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231208134041.GD28727@noisy.programming.kicks-ass.net>
+In-Reply-To: <20231208112945.313687-3-maciej.fijalkowski@intel.com>
 
-On Fri, Dec 08, 2023 at 02:40:41PM +0100, Peter Zijlstra wrote:
-> On Fri, Dec 08, 2023 at 11:29:40AM +0100, Peter Zijlstra wrote:
-> > The only problem I now have is the one XXX, I'm not entirely sure what
-> > signature to use there.
-> 
-> > @@ -119,6 +119,7 @@ int bpf_struct_ops_test_run(struct bpf_p
-> >  	op_idx = prog->expected_attach_type;
-> >  	err = bpf_struct_ops_prepare_trampoline(tlinks, link,
-> >  						&st_ops->func_models[op_idx],
-> > +						/* XXX */ NULL,
-> >  						image, image + PAGE_SIZE);
-> >  	if (err < 0)
-> >  		goto out;
-> 
-> Duh, that should ofcourse be something of dummy_ops_test_ret_fn type.
-> Let me go fix that.
+Hi Maciej,
 
-Next one.. bpf_obj_free_fields: field->kptr.dtor(xchg_field);
+kernel test robot noticed the following build errors:
 
-The one that trips is bpf_cgroup_release().
+[auto build test ERROR on bpf/master]
 
-objtool doesn't think the address of that function 'escapes' and
-'helpfully' seals that function, and then BPF thinks it does escape and
-manages the above indirect call and *boom*.
+url:    https://github.com/intel-lab-lkp/linux/commits/Maciej-Fijalkowski/xsk-recycle-buffer-in-case-Rx-queue-was-full/20231208-193306
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
+patch link:    https://lore.kernel.org/r/20231208112945.313687-3-maciej.fijalkowski%40intel.com
+patch subject: [PATCH bpf 2/3] net: fix usage of multi-buffer BPF helper for ZC AF_XDP
+config: i386-buildonly-randconfig-003-20231208 (https://download.01.org/0day-ci/archive/20231209/202312090104.6EOsoGVa-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231209/202312090104.6EOsoGVa-lkp@intel.com/reproduce)
 
-How can I tell which functions escape according to BPF such that I might
-teach objtool this?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312090104.6EOsoGVa-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/core/filter.c:4102:3: error: call to undeclared function 'xsk_buff_get_tail'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   xsk_buff_get_tail(xdp)->data_end -= shrink;
+                   ^
+   net/core/filter.c:4102:3: note: did you mean 'xsk_buff_get_frag'?
+   include/net/xdp_sock_drv.h:324:32: note: 'xsk_buff_get_frag' declared here
+   static inline struct xdp_buff *xsk_buff_get_frag(struct xdp_buff *first)
+                                  ^
+>> net/core/filter.c:4102:27: error: member reference type 'int' is not a pointer
+                   xsk_buff_get_tail(xdp)->data_end -= shrink;
+                   ~~~~~~~~~~~~~~~~~~~~~~  ^
+   net/core/filter.c:4115:14: error: call to undeclared function 'xsk_buff_get_tail'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           zc_frag = xsk_buff_get_tail(xdp);
+                                     ^
+>> net/core/filter.c:4115:12: error: incompatible integer to pointer conversion assigning to 'struct xdp_buff *' from 'int' [-Wint-conversion]
+                           zc_frag = xsk_buff_get_tail(xdp);
+                                   ^ ~~~~~~~~~~~~~~~~~~~~~~
+>> net/core/filter.c:4117:4: error: call to undeclared function 'xsk_buff_tail_del'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           xsk_buff_tail_del(zc_frag);
+                           ^
+   5 errors generated.
+
+
+vim +/xsk_buff_get_tail +4102 net/core/filter.c
+
+  4097	
+  4098	static void __shrink_data(struct xdp_buff *xdp, struct xdp_mem_info *mem_info,
+  4099				  skb_frag_t *frag, int shrink)
+  4100	{
+  4101		if (mem_info->type == MEM_TYPE_XSK_BUFF_POOL)
+> 4102			xsk_buff_get_tail(xdp)->data_end -= shrink;
+  4103		skb_frag_size_sub(frag, shrink);
+  4104	}
+  4105	
+  4106	static bool shrink_data(struct xdp_buff *xdp, skb_frag_t *frag, int shrink)
+  4107	{
+  4108		struct xdp_mem_info *mem_info = &xdp->rxq->mem;
+  4109	
+  4110		if (skb_frag_size(frag) == shrink) {
+  4111			struct page *page = skb_frag_page(frag);
+  4112			struct xdp_buff *zc_frag = NULL;
+  4113	
+  4114			if (mem_info->type == MEM_TYPE_XSK_BUFF_POOL) {
+> 4115				zc_frag = xsk_buff_get_tail(xdp);
+  4116				xdp_buff_clear_frags_flag(zc_frag);
+> 4117				xsk_buff_tail_del(zc_frag);
+  4118			}
+  4119	
+  4120			__xdp_return(page_address(page), mem_info, false, zc_frag);
+  4121			return true;
+  4122		}
+  4123		__shrink_data(xdp, mem_info, frag, shrink);
+  4124		return false;
+  4125	}
+  4126	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
