@@ -1,70 +1,90 @@
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55D91724
-	for <bpf@vger.kernel.org>; Fri,  8 Dec 2023 05:16:30 -0800 (PST)
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-6d83f218157so2722161a34.1
-        for <bpf@vger.kernel.org>; Fri, 08 Dec 2023 05:16:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702041390; x=1702646190;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y1ZnogWDCGCEoUA9e+jdzgHOyFmOK6aq9lqo84rsReo=;
-        b=bvy/aBIjG0Q758247XK0XcB+/FcjDAiNVnH+4H8yMYdctnP8wBIq4lyoPbjtgZdVrP
-         HGS0zSEHIL3dZKSReVGXAg6fMVd3S3RfVsWz4s/LpaX5zHg8xk7Mw7+jzOVC2/Ec7MGF
-         wAjz9cQlla8vmdvgX4PHToCy2KmPSmn3Gf8d6lA6D8bBX6Z2BaJVJ4Lr1OFTWmOUQ1KI
-         dHl4P7CiVg4YWHUF1qobOglJZoUodymcoISw1qPPCyBKUWhcoMROOj32eyrPxYJjYivi
-         xMGPCYlHgJavqBia6Z6tkQArFUlIgjIy20MN/gjxIvKC6shPTaWBhRfZD0YA0hCy+zXR
-         CzlA==
-X-Gm-Message-State: AOJu0YxyyPES7O7NGjbT/LG+w+p1qydTVS+r8HaVBTkf9yBnjbPSPCQS
-	0C0Lv4CPrbDFEjGx0A+rqeDFzoYUm2upt12/cCzSb9thaDR/
-X-Google-Smtp-Source: AGHT+IFm89qWspx5hE1KkOqbc5xL8CVQegKBBnrK/YE6EPOpmiRKLhqfxYTT/RI+RD6RFqa8oV9hi/uPIONbkPgWG85/BxYpnF+a
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3D41CA81;
+	Fri,  8 Dec 2023 13:41:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rYftDdRO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F08B5C433C8;
+	Fri,  8 Dec 2023 13:41:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702042886;
+	bh=iw7AZIJ/HJKYatG6312tRTjIKLjBbSHjSe1T5NGECQM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rYftDdROJXoaI/Jn/GPYBGoyH3/829Gl5qFur6JUJ6zdo7RBLZMSUj/cMVWFEnj7H
+	 7IbDdS0VB7rHXQbYOgM4QI9jkA8l/6jBuS2HQbMUr2WmnCW8nKRkfoO4stnhJBe9j4
+	 6mlrkQ3ANYZPzqmTqc51l08PUKVxzzmGoVS3Y+NdCkb9t/CZcfcnGy5tZfv5+K0z4O
+	 rvY2YHR94O9KbAJFRPi1IsVV+3G742E29qDf1bzZYy1ZI1DBusScIUddmgmEa0tWsc
+	 oo529eVoDA3yWzE8AyALmhgtisod0H3BCsmZgU1fK0Kzju3giOUt8hn0IToE0ZYXMS
+	 zE9oj2/YDZ9pA==
+Date: Fri, 8 Dec 2023 14:41:21 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, paul@paul-moore.com,
+	linux-fsdevel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, keescook@chromium.org,
+	kernel-team@meta.com, sargun@sargun.me
+Subject: Re: [PATCH v12 bpf-next 03/17] bpf: introduce BPF token object
+Message-ID: <20231208-besessen-vibrieren-4e963e3ca3ba@brauner>
+References: <20231130185229.2688956-1-andrii@kernel.org>
+ <20231130185229.2688956-4-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6830:33e7:b0:6d9:e9da:d786 with SMTP id
- i7-20020a05683033e700b006d9e9dad786mr710228otu.3.1702041390080; Fri, 08 Dec
- 2023 05:16:30 -0800 (PST)
-Date: Fri, 08 Dec 2023 05:16:30 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000072e8c7060bff64cf@google.com>
-Subject: [syzbot] Monthly bpf report (Dec 2023)
-From: syzbot <syzbot+listfafd4fe0e0bf9b4d93f3@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, linux-kernel@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231130185229.2688956-4-andrii@kernel.org>
 
-Hello bpf maintainers/developers,
+On Thu, Nov 30, 2023 at 10:52:15AM -0800, Andrii Nakryiko wrote:
+> Add new kind of BPF kernel object, BPF token. BPF token is meant to
+> allow delegating privileged BPF functionality, like loading a BPF
+> program or creating a BPF map, from privileged process to a *trusted*
+> unprivileged process, all while having a good amount of control over which
+> privileged operations could be performed using provided BPF token.
+> 
+> This is achieved through mounting BPF FS instance with extra delegation
+> mount options, which determine what operations are delegatable, and also
+> constraining it to the owning user namespace (as mentioned in the
+> previous patch).
+> 
+> BPF token itself is just a derivative from BPF FS and can be created
+> through a new bpf() syscall command, BPF_TOKEN_CREATE, which accepts BPF
+> FS FD, which can be attained through open() API by opening BPF FS mount
+> point. Currently, BPF token "inherits" delegated command, map types,
+> prog type, and attach type bit sets from BPF FS as is. In the future,
+> having an BPF token as a separate object with its own FD, we can allow
+> to further restrict BPF token's allowable set of things either at the
+> creation time or after the fact, allowing the process to guard itself
+> further from unintentionally trying to load undesired kind of BPF
+> programs. But for now we keep things simple and just copy bit sets as is.
+> 
+> When BPF token is created from BPF FS mount, we take reference to the
+> BPF super block's owning user namespace, and then use that namespace for
+> checking all the {CAP_BPF, CAP_PERFMON, CAP_NET_ADMIN, CAP_SYS_ADMIN}
+> capabilities that are normally only checked against init userns (using
+> capable()), but now we check them using ns_capable() instead (if BPF
+> token is provided). See bpf_token_capable() for details.
+> 
+> Such setup means that BPF token in itself is not sufficient to grant BPF
+> functionality. User namespaced process has to *also* have necessary
+> combination of capabilities inside that user namespace. So while
+> previously CAP_BPF was useless when granted within user namespace, now
+> it gains a meaning and allows container managers and sys admins to have
+> a flexible control over which processes can and need to use BPF
+> functionality within the user namespace (i.e., container in practice).
+> And BPF FS delegation mount options and derived BPF tokens serve as
+> a per-container "flag" to grant overall ability to use bpf() (plus further
+> restrict on which parts of bpf() syscalls are treated as namespaced).
+> 
+> Note also, BPF_TOKEN_CREATE command itself requires ns_capable(CAP_BPF)
+> within the BPF FS owning user namespace, rounding up the ns_capable()
+> story of BPF token.
+> 
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
 
-This is a 31-day syzbot report for the bpf subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/bpf
-
-During the period, 4 new issues were detected and 0 were fixed.
-In total, 10 issues are still open and 199 have been fixed so far.
-
-Some of the still happening issues:
-
-Ref Crashes Repro Title
-<1> 14      Yes   BUG: unable to handle kernel NULL pointer dereference in sk_msg_recvmsg
-                  https://syzkaller.appspot.com/bug?extid=84f695756ed0c4bb3aba
-<2> 2       Yes   INFO: rcu detected stall in sys_newfstatat (4)
-                  https://syzkaller.appspot.com/bug?extid=1c02a56102605204445c
-<3> 1       Yes   INFO: rcu detected stall in sys_unshare (9)
-                  https://syzkaller.appspot.com/bug?extid=872bccd9a68c6ba47718
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
+Same concerns as in the other mail. For the bpf_token_create() code,
+Acked-by: Christian Brauner <brauner@kernel.org>
