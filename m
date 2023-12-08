@@ -1,161 +1,254 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="anFV4EKn"
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39250AC;
-	Fri,  8 Dec 2023 14:46:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=9AtZTt6OGfjsPDJQOtDfx5Cu6irtFkmWZMjDyBOLAY8=; b=anFV4EKnBK8gQJUQaPbHBdGbmh
-	b2Y7tMQ6hHkQDT5vgOGk/97h6xyIa4MDZnDQV4WFLZMH0Moc2XQBReqMlEddNf22x5eaw0zAoXtGq
-	dyQwgTqMZqIOn/1N4xYUukkUwd2BIl/rwN+ayXO0Y2NWwvxlGU3Yxjp8/bdR9jO8fTnclXdXuFPiN
-	/eQ1qV70Ux813zNWm90BtR+BVtsuhQ7+lpHQtd95lVHbKAbeBGyJQhSdn2Nf39E/FRT7aa1T5sy3K
-	KtlIjlSiXtHdzhKo1SHrWhL9Azqgm2vU4mbnqe/RW5vhus/b8/1CvhOM+ExeLbzwwDLJKGTkrTFIZ
-	Ez+2V7qQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rBjba-006iqm-2j;
-	Fri, 08 Dec 2023 22:46:00 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id C66943003F0; Fri,  8 Dec 2023 23:45:57 +0100 (CET)
-Date: Fri, 8 Dec 2023 23:45:57 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
-	Song Liu <songliubraving@meta.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Arnd Bergmann <arnd@arndb.de>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-riscv <linux-riscv@lists.infradead.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Network Development <netdev@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
-Message-ID: <20231208224557.GH36716@noisy.programming.kicks-ass.net>
-References: <20231207093105.GA28727@noisy.programming.kicks-ass.net>
- <ivhrgimonsvy3tyj5iidoqmlcyqvtsh2ay3cm3ouemsdbvjzs4@6jlt6zv55tgh>
- <20231208102940.GB28727@noisy.programming.kicks-ass.net>
- <20231208134041.GD28727@noisy.programming.kicks-ass.net>
- <20231208172152.GD36716@noisy.programming.kicks-ass.net>
- <CAADnVQKsnZfFomQ4wTZz=jMZW5QCV2XiXVsi64bghHkAjJtcmA@mail.gmail.com>
- <20231208203535.GG36716@noisy.programming.kicks-ass.net>
- <CAADnVQJzCw=qcG+jHBYG0q0SxLPkwghni0wpgV4A4PkpgVbGPw@mail.gmail.com>
- <20231208205241.GK28727@noisy.programming.kicks-ass.net>
- <CAADnVQL3KsJONShsstDq5jrpbc_4FOU-VQPJgDCt50N9asoFzA@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IciT/WQG"
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [IPv6:2001:41d0:1004:224b::b6])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABA810D2
+	for <bpf@vger.kernel.org>; Fri,  8 Dec 2023 14:55:51 -0800 (PST)
+Message-ID: <35510021-8c55-455b-894f-6b7656f8b8d4@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1702076150;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hYZ6wUpAA2diajEV+4wVlpbop/QH8EhfTAWtI/yI1M0=;
+	b=IciT/WQGN12cl3mzUMYuhUrJQTp1IOr+UCv4AdWowNSJJBmKLnOOEnhQRf+8Cdd4lP7zvl
+	WK/ZZIvBsYcNKKVeIq34J0kwE20P3s5HuTmgIz/7EN8Qxn48lBNYafIH7+WfuOOCVEZISQ
+	cHKYXQdhOoj6DAlZk+uBSZ1XcKt4ZJE=
+Date: Fri, 8 Dec 2023 14:55:42 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQL3KsJONShsstDq5jrpbc_4FOU-VQPJgDCt50N9asoFzA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 6/7] bpf: Only call maybe_wait_bpf_programs()
+ when at least one map operation succeeds
+Content-Language: en-GB
+To: Hou Tao <houtao@huaweicloud.com>, bpf@vger.kernel.org
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
+ Hao Luo <haoluo@google.com>, Daniel Borkmann <daniel@iogearbox.net>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ houtao1@huawei.com
+References: <20231208102355.2628918-1-houtao@huaweicloud.com>
+ <20231208102355.2628918-7-houtao@huaweicloud.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20231208102355.2628918-7-houtao@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Dec 08, 2023 at 12:58:01PM -0800, Alexei Starovoitov wrote:
-> On Fri, Dec 8, 2023 at 12:52 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Fri, Dec 08, 2023 at 12:41:03PM -0800, Alexei Starovoitov wrote:
-> > > On Fri, Dec 8, 2023 at 12:35 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > > > -__bpf_kfunc void bpf_task_release(struct task_struct *p)
-> > > > +__bpf_kfunc void bpf_task_release(void *p)
-> > >
-> > > Yeah. That won't work. We need a wrapper.
-> > > Since bpf prog is also calling it directly.
-> > > In progs/task_kfunc_common.h
-> > > void bpf_task_release(struct task_struct *p) __ksym;
-> > >
-> > > than later both libbpf and the verifier check that
-> > > what bpf prog is calling actually matches the proto
-> > > of what is in the kernel.
-> > > Effectively we're doing strong prototype check at load time.
-> >
-> > I'm still somewhat confused on how this works, where does BPF get the
-> > address of the function from? and what should I call the wrapper?
-> 
-> It starts with
-> register_btf_id_dtor_kfuncs() that takes a set of btf_ids:
-> {btf_id_of_type, btf_id_of_dtor_function}, ...
-> 
-> Then based on btf_id_of_dtor_function we find its type proto, name, do checks,
-> and eventually:
-> addr = kallsyms_lookup_name(dtor_func_name);
-> field->kptr.dtor = (void *)addr;
-> 
-> bpf_task_release(struct task_struct *p) would need to stay as-is,
-> but we can have a wrapper
-> void bpf_task_release_dtor(void *p)
-> {
->   bpf_task_release(p);
-> }
-> 
-> And adjust the above lookup with extra "_dtor" suffix.
-> 
-> > > btw instead of EXPORT_SYMBOL_GPL(bpf_task_release)
-> > > can __ADDRESSABLE be used ?
-> > > Since it's not an export symbol.
-> >
-> > No __ADDRESSABLE() is expressly ignored, but we have IBT_NOSEAL() that
-> > should do it. I'll rename the thing and lift it out of x86 to avoid
-> > breaking all other arch builds.
-> 
-> Makes sense.
 
-Ok, did that. Current patches (on top of bpf-next) are here:
+On 12/8/23 2:23 AM, Hou Tao wrote:
+> From: Hou Tao <houtao1@huawei.com>
+>
+> There is no need to call maybe_wait_bpf_programs() if all operations in
+> batched update, deletion, or lookup_and_deletion fail. So only call
+> maybe_wait_bpf_programs() if at least one map operation succeeds.
+>
+> Similar with uattr->batch.count which is used to return the number of
+> succeeded map operations to userspace application, use attr->batch.count
+> to record the number of succeeded map operations in kernel. Sometimes
+> these two number may be different. For example, in
+> __htab_map_lookup_and_delete_batch(do_delete=true), it is possible that
+> 10 items in current bucket have been successfully deleted, but copying
+> the deleted keys to userspace application fails, attr->batch.count will
+> be 10 but uattr->batch.count will be 0 instead.
+>
+> Signed-off-by: Hou Tao <houtao1@huawei.com>
+> ---
+>   include/linux/bpf.h  | 14 +++++++-------
+>   kernel/bpf/hashtab.c | 20 +++++++++++---------
+>   kernel/bpf/syscall.c | 21 ++++++++++++++-------
+>   3 files changed, 32 insertions(+), 23 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index f7aa255c634f..a0c4d696a231 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -81,17 +81,17 @@ struct bpf_map_ops {
+>   	int (*map_get_next_key)(struct bpf_map *map, void *key, void *next_key);
+>   	void (*map_release_uref)(struct bpf_map *map);
+>   	void *(*map_lookup_elem_sys_only)(struct bpf_map *map, void *key);
+> -	int (*map_lookup_batch)(struct bpf_map *map, const union bpf_attr *attr,
+> +	int (*map_lookup_batch)(struct bpf_map *map, union bpf_attr *attr,
+>   				union bpf_attr __user *uattr);
+>   	int (*map_lookup_and_delete_elem)(struct bpf_map *map, void *key,
+>   					  void *value, u64 flags);
+>   	int (*map_lookup_and_delete_batch)(struct bpf_map *map,
+> -					   const union bpf_attr *attr,
+> +					   union bpf_attr *attr,
+>   					   union bpf_attr __user *uattr);
+>   	int (*map_update_batch)(struct bpf_map *map, struct file *map_file,
+> -				const union bpf_attr *attr,
+> +				union bpf_attr *attr,
+>   				union bpf_attr __user *uattr);
+> -	int (*map_delete_batch)(struct bpf_map *map, const union bpf_attr *attr,
+> +	int (*map_delete_batch)(struct bpf_map *map, union bpf_attr *attr,
+>   				union bpf_attr __user *uattr);
+>   
+>   	/* funcs callable from userspace and from eBPF programs */
+> @@ -2095,13 +2095,13 @@ void bpf_map_area_free(void *base);
+>   bool bpf_map_write_active(const struct bpf_map *map);
+>   void bpf_map_init_from_attr(struct bpf_map *map, union bpf_attr *attr);
+>   int  generic_map_lookup_batch(struct bpf_map *map,
+> -			      const union bpf_attr *attr,
+> +			      union bpf_attr *attr,
+>   			      union bpf_attr __user *uattr);
+>   int  generic_map_update_batch(struct bpf_map *map, struct file *map_file,
+> -			      const union bpf_attr *attr,
+> +			      union bpf_attr *attr,
+>   			      union bpf_attr __user *uattr);
+>   int  generic_map_delete_batch(struct bpf_map *map,
+> -			      const union bpf_attr *attr,
+> +			      union bpf_attr *attr,
+>   			      union bpf_attr __user *uattr);
+>   struct bpf_map *bpf_map_get_curr_or_next(u32 *id);
+>   struct bpf_prog *bpf_prog_get_curr_or_next(u32 *id);
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index 5b9146fa825f..b777bd8d4f8d 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -1673,7 +1673,7 @@ static int htab_lru_percpu_map_lookup_and_delete_elem(struct bpf_map *map,
+>   
+>   static int
+>   __htab_map_lookup_and_delete_batch(struct bpf_map *map,
+> -				   const union bpf_attr *attr,
+> +				   union bpf_attr *attr,
+>   				   union bpf_attr __user *uattr,
+>   				   bool do_delete, bool is_lru_map,
+>   				   bool is_percpu)
+> @@ -1708,6 +1708,7 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
+>   	if (!max_count)
+>   		return 0;
+>   
+> +	attr->batch.count = 0;
+>   	if (put_user(0, &uattr->batch.count))
+>   		return -EFAULT;
+>   
+> @@ -1845,6 +1846,7 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
+>   		}
+>   		dst_key += key_size;
+>   		dst_val += value_size;
+> +		attr->batch.count++;
+>   	}
+>   
+>   	htab_unlock_bucket(htab, b, batch, flags);
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/cfi
+[...]
 
-(really should try and write better changelogs, but it's too late)
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index efda2353a7d5..d2641e51a1a7 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -1695,7 +1695,7 @@ static int map_get_next_key(union bpf_attr *attr)
+>   }
+>   
+>   int generic_map_delete_batch(struct bpf_map *map,
+> -			     const union bpf_attr *attr,
+> +			     union bpf_attr *attr,
+>   			     union bpf_attr __user *uattr)
+>   {
+>   	void __user *keys = u64_to_user_ptr(attr->batch.keys);
+> @@ -1715,6 +1715,7 @@ int generic_map_delete_batch(struct bpf_map *map,
+>   	if (!max_count)
+>   		return 0;
+>   
+> +	attr->batch.count = 0;
+>   	if (put_user(0, &uattr->batch.count))
+>   		return -EFAULT;
+>   
+> @@ -1742,6 +1743,8 @@ int generic_map_delete_batch(struct bpf_map *map,
+>   			break;
+>   		cond_resched();
+>   	}
+> +
+> +	attr->batch.count = cp;
+>   	if (copy_to_user(&uattr->batch.count, &cp, sizeof(cp)))
+>   		err = -EFAULT;
+>   
+> @@ -1751,7 +1754,7 @@ int generic_map_delete_batch(struct bpf_map *map,
+>   }
+>   
+>   int generic_map_update_batch(struct bpf_map *map, struct file *map_file,
+> -			     const union bpf_attr *attr,
+> +			     union bpf_attr *attr,
+>   			     union bpf_attr __user *uattr)
+>   {
+>   	void __user *values = u64_to_user_ptr(attr->batch.values);
+> @@ -1774,6 +1777,7 @@ int generic_map_update_batch(struct bpf_map *map, struct file *map_file,
+>   	if (!max_count)
+>   		return 0;
+>   
+> +	attr->batch.count = 0;
+>   	if (put_user(0, &uattr->batch.count))
+>   		return -EFAULT;
+>   
+> @@ -1802,6 +1806,7 @@ int generic_map_update_batch(struct bpf_map *map, struct file *map_file,
+>   		cond_resched();
+>   	}
+>   
+> +	attr->batch.count = cp;
+>   	if (copy_to_user(&uattr->batch.count, &cp, sizeof(cp)))
+>   		err = -EFAULT;
+>   
+> @@ -1813,9 +1818,8 @@ int generic_map_update_batch(struct bpf_map *map, struct file *map_file,
+>   
+>   #define MAP_LOOKUP_RETRIES 3
+>   
+> -int generic_map_lookup_batch(struct bpf_map *map,
+> -				    const union bpf_attr *attr,
+> -				    union bpf_attr __user *uattr)
+> +int generic_map_lookup_batch(struct bpf_map *map, union bpf_attr *attr,
+> +			     union bpf_attr __user *uattr)
+>   {
+>   	void __user *uobatch = u64_to_user_ptr(attr->batch.out_batch);
+>   	void __user *ubatch = u64_to_user_ptr(attr->batch.in_batch);
+> @@ -1838,6 +1842,7 @@ int generic_map_lookup_batch(struct bpf_map *map,
+>   	if (!max_count)
+>   		return 0;
+>   
+> +	attr->batch.count = 0;
+>   	if (put_user(0, &uattr->batch.count))
+>   		return -EFAULT;
+>   
+> @@ -1903,6 +1908,7 @@ int generic_map_lookup_batch(struct bpf_map *map,
+>   	if (err == -EFAULT)
+>   		goto free_buf;
+>   
+> +	attr->batch.count = cp;
 
-The test_progs thing still doesn't run to completion, the next problem
-seems to be bpf_throw():
+You don't need to change generic_map_lookup_batch() here. It won't trigger
+maybe_wait_bpf_programs().
 
-[  247.720159]  ? die+0xa4/0xd0
-[  247.720216]  ? do_trap+0xa5/0x180
-[  247.720281]  ? __cfi_bpf_prog_8ac473954ac6d431_F+0xd/0x10
-[  247.720368]  ? __cfi_bpf_prog_8ac473954ac6d431_F+0xd/0x10
-[  247.720459]  ? do_error_trap+0xba/0x120
-[  247.720525]  ? __cfi_bpf_prog_8ac473954ac6d431_F+0xd/0x10
-[  247.720614]  ? handle_invalid_op+0x2c/0x40
-[  247.720684]  ? __cfi_bpf_prog_8ac473954ac6d431_F+0xd/0x10
-[  247.720775]  ? exc_invalid_op+0x38/0x60
-[  247.720840]  ? asm_exc_invalid_op+0x1a/0x20
-[  247.720909]  ? 0xffffffffc001ba54
-[  247.720971]  ? __cfi_bpf_prog_8ac473954ac6d431_F+0xd/0x10
-[  247.721063]  ? bpf_throw+0x9b/0xf0
-[  247.721126]  ? bpf_test_run+0x108/0x350
-[  247.721191]  ? bpf_prog_5555714b685bf0cf_exception_throw_always_1+0x26/0x26
-[  247.721301]  ? bpf_test_run+0x108/0x350
-[  247.721368]  bpf_test_run+0x212/0x350
-[  247.721433]  ? slab_build_skb+0x22/0x110
-[  247.721503]  bpf_prog_test_run_skb+0x347/0x4a0
+>   	if ((copy_to_user(&uattr->batch.count, &cp, sizeof(cp)) ||
+>   		    (cp && copy_to_user(uobatch, prev_key, map->key_size))))
+>   		err = -EFAULT;
+> @@ -4926,7 +4932,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+>   		err = fn(__VA_ARGS__);		\
+>   	} while (0)
+>   
+> -static int bpf_map_do_batch(const union bpf_attr *attr,
+> +static int bpf_map_do_batch(union bpf_attr *attr,
+>   			    union bpf_attr __user *uattr,
+>   			    int cmd)
+>   {
+> @@ -4966,7 +4972,8 @@ static int bpf_map_do_batch(const union bpf_attr *attr,
+>   		BPF_DO_BATCH(map->ops->map_delete_batch, map, attr, uattr);
+>   err_put:
+>   	if (has_write) {
+> -		maybe_wait_bpf_programs(map);
+> +		if (attr->batch.count)
+> +			maybe_wait_bpf_programs(map);
 
-But I'm too tired to think staight. Is  this a bpf_callback_t vs
-bpf_exception_cb difference?
+Your code logic sounds correct but I feel you are optimizing for extreme
+corner cases. In really esp production environment, a fault with something
+like copy_to_user() should be extremely rare. So in my opinion, this optimization
+is not needed.
 
-I'll prod more later. Zzzz..
+>   		bpf_map_write_active_dec(map);
+>   	}
+>   	fdput(f);
