@@ -1,15 +1,15 @@
 Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3AF0172B
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F12C170F
 	for <bpf@vger.kernel.org>; Fri,  8 Dec 2023 02:22:54 -0800 (PST)
 Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4SmnJp07l5z4f3kGJ
-	for <bpf@vger.kernel.org>; Fri,  8 Dec 2023 18:22:50 +0800 (CST)
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4SmnJn08rNz4f3kG8
+	for <bpf@vger.kernel.org>; Fri,  8 Dec 2023 18:22:49 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 565F01A076A
-	for <bpf@vger.kernel.org>; Fri,  8 Dec 2023 18:22:52 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 5774A1A035F
+	for <bpf@vger.kernel.org>; Fri,  8 Dec 2023 18:22:51 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP1 (Coremail) with SMTP id cCh0CgCnqxF57nJlY85LDA--.46390S6;
-	Fri, 08 Dec 2023 18:22:52 +0800 (CST)
+	by APP1 (Coremail) with SMTP id cCh0CgCnqxF57nJlY85LDA--.46390S4;
+	Fri, 08 Dec 2023 18:22:51 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -24,12 +24,10 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	houtao1@huawei.com
-Subject: [PATCH bpf-next 2/7] bpf: Call maybe_wait_bpf_programs() only once for generic_map_update_batch()
-Date: Fri,  8 Dec 2023 18:23:50 +0800
-Message-Id: <20231208102355.2628918-3-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next 0/7] bpf: Fixes for maybe_wait_bpf_programs()
+Date: Fri,  8 Dec 2023 18:23:48 +0800
+Message-Id: <20231208102355.2628918-1-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20231208102355.2628918-1-houtao@huaweicloud.com>
-References: <20231208102355.2628918-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,66 +35,60 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgCnqxF57nJlY85LDA--.46390S6
-X-Coremail-Antispam: 1UD129KBjvJXoWrtry7JFyUZw1kCr4UWFy8Zrb_yoW8Jry3pF
-	Z5K348Kr4Fgr4j9rsIqa1j9wnIyr4DGw1fKFs2yrWFvwnrX393Kr1F9ayv9F1Y9r4ktrWY
-	qryIvrWrK3y8ZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
-	0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
-	JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwI
-	xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-	Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
-	IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
-	6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UC9aPUUUUU=
+X-CM-TRANSID:cCh0CgCnqxF57nJlY85LDA--.46390S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4rWrWxZFy5Wry8Ww15Arb_yoW8WryUpF
+	Zag343KF18GrnFkr43A3yjv3s0yr4ktw1xJr1ayry0qwsrZFy09ry8KanYy345ArWftF4F
+	qry8trn3Kw1UAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+	c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+	026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+	0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+	vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+	jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-Just like commit 9087c6ff8dfe ("bpf: Call maybe_wait_bpf_programs() only
-once from generic_map_delete_batch()"), there is also no need to call
-maybe_wait_bpf_programs() for each update in batched update, so only
-call it once in generic_map_update_batch().
+Hi,
 
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
- kernel/bpf/syscall.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+The patch set aims to fix the problems found when inspecting the code
+related with maybe_wait_bpf_programs().
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 71d869f74236..9d9bb82e6062 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -203,7 +203,6 @@ static int bpf_map_update_value(struct bpf_map *map, struct file *map_file,
- 		rcu_read_unlock();
- 	}
- 	bpf_enable_instrumentation();
--	maybe_wait_bpf_programs(map);
- 
- 	return err;
- }
-@@ -1561,6 +1560,7 @@ static int map_update_elem(union bpf_attr *attr, bpfptr_t uattr)
- 	}
- 
- 	err = bpf_map_update_value(map, f.file, key, value, attr->flags);
-+	maybe_wait_bpf_programs(map);
- 
- 	kvfree(value);
- free_key:
-@@ -1800,6 +1800,8 @@ int generic_map_update_batch(struct bpf_map *map, struct file *map_file,
- 
- 	kvfree(value);
- 	kvfree(key);
-+
-+	maybe_wait_bpf_programs(map);
- 	return err;
- }
- 
+Patch #1 removes unnecessary invocation of maybe_wait_bpf_programs().
+Patch #2 calls maybe_wait_bpf_programs() only once for batched update.
+Patch #3 adds the missed waiting when doing batched lookup_deletion on
+htab of maps. Patch #4 does wait only if the update or deletion
+operation succeeds. Patch #5 fixes the value of batch.count when memory
+allocation fails. Patch #6 does the similar thing as patch #4, except it
+fixes the problem for batched map operations. Patch #7 handles sleepable
+BPF program in maybe_wait_bpf_programs(), but it doesn't handle the bpf
+syscall from syscall program.
+
+Please see individual patches for more details. Comments are always
+welcome.
+
+Hou Tao (7):
+  bpf: Remove unnecessary wait from bpf_map_copy_value()
+  bpf: Call maybe_wait_bpf_programs() only once for
+    generic_map_update_batch()
+  bpf: Add missed maybe_wait_bpf_programs() for htab of maps
+  bpf: Only call maybe_wait_bpf_programs() when map operation succeeds
+  bpf: Set uattr->batch.count as zero before batched update or deletion
+  bpf: Only call maybe_wait_bpf_programs() when at least one map
+    operation succeeds
+  bpf: Wait for sleepable BPF program in maybe_wait_bpf_programs()
+
+ include/linux/bpf.h  | 14 +++++------
+ kernel/bpf/hashtab.c | 20 ++++++++-------
+ kernel/bpf/syscall.c | 60 +++++++++++++++++++++++++++++++-------------
+ 3 files changed, 61 insertions(+), 33 deletions(-)
+
 -- 
 2.29.2
 
