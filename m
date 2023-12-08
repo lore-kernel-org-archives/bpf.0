@@ -1,74 +1,78 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440FC39ACC
-	for <bpf@vger.kernel.org>; Fri,  8 Dec 2023 17:40:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gl+aUEkG"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B00FEC433C9;
-	Fri,  8 Dec 2023 17:40:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702057223;
-	bh=QWhvnecDQHsSaXh1TXP016NGyva6puMd5hngwy14e1A=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=gl+aUEkGPwTZV9V8E7sXAPFMgVXZdNBzTUASVKUbdAwvD1NO8NBvvjRYx2fAUxjN9
-	 exjo+hOzkBII5sUkYzXgvQLFBs+Yp1u5TznvFoyRe381Z8y7jxmfP8de0OLsq61usY
-	 Us5t/vAq6TubNMrtkY7yd94vO/q81fbVGCVxojvD2G3RHS+uY02eMupLaglp+gkWhE
-	 en0sX2G4QTvNoqaqSTNrYkwEpVNLX83c/XOcajTPrIkdWIwyfCNuV9TGJHK3Q2T9oy
-	 Nzk4a9O9ZWof9u1qELuyV8MNRIWVGzkM8nwYJgHEolwYcxhB3cCZUOeNFRNqtiLVVG
-	 sWH4O7T4JKf2Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 96EC6C04E24;
-	Fri,  8 Dec 2023 17:40:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="aRwePcmV"
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B91B199C
+	for <bpf@vger.kernel.org>; Fri,  8 Dec 2023 09:46:42 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-db547d3631fso2710839276.1
+        for <bpf@vger.kernel.org>; Fri, 08 Dec 2023 09:46:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1702057601; x=1702662401; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UNmsRcekZnRxXQ5gy0OoeOtUGR4cju8EsG3DYT+pGXY=;
+        b=aRwePcmVFuOElIT1QeoaNrfMpBDa6VmcmkJ6HrlPxZTkAHcgqGE+i8qY0IeMG55cpt
+         fgr8MRfowGJ+nYV197y2HIWZXuAjoORIBtQU/JzhF35fbYaVMlHKzrR7f2KYsrwa4vel
+         +0bJTdqt2qtLIyETz8Ew6WmBhtRHb6WNPl4WsWTQBHFCGuA1JEHQvLWphkY6E+Xe9HCR
+         TXtQc/zwsSpEyjysx8ftv8GRiGRc2tLQzO/KqLFT2P2usYEQxwHfYBc2Id9UWiHI27EG
+         sCB5wUa2tyR4U0wSoOpOIOi5kLX7szc2P1MQa1hvtlMMWEN5U1uCKgh/BWOSZKabwu8m
+         xdQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702057602; x=1702662402;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UNmsRcekZnRxXQ5gy0OoeOtUGR4cju8EsG3DYT+pGXY=;
+        b=ojzVd+ivQFzL09etKkjaeKzCKH0eb/g4YXVM6SScR8iicWwJFdxb2GW6iDJ48GKKEx
+         N+pL1F0rQVdLrMqW64kiQTMpray2j725GNlhBaVVo2Px2hm9VV9r5opN1CgurYWK1cBf
+         b0K4Bkwzswwv+ydNdvzV8I2rLElkKVLgbS2FUxMje958bTswY1K8/xx52i/TpJ8sE+oy
+         UcAF6vTbolmkxsemIccn0JwbKRTczCXPHkBRSURCTZTNs7NnAsKoxx2ukIGQPvREZLqS
+         STF4T1s1hy9+h1CYM6YQowCHVSh4z6TckNiOjC8He4CiJNqkBhBqUBSDqIdbxcvd4vjX
+         2i+Q==
+X-Gm-Message-State: AOJu0YzEqldPShIw8+VLyhiHQSImsDuqKDLJtsivQvqJFAtPoJGpKBcH
+	zPAQFoBkuTJoFiulPNO37OhLXzyMaOeZjg18j1xz
+X-Google-Smtp-Source: AGHT+IGVz2uXoWS24Jy5RIDh4XGLvWvVwWltqnctCKFZl7+o06Fu4ZlQulisdeRIiHEcRAT1q5xdn+vhjGtgbDfA1/c=
+X-Received: by 2002:a25:ad1b:0:b0:daf:b23c:8619 with SMTP id
+ y27-20020a25ad1b000000b00dafb23c8619mr287890ybi.51.1702057601724; Fri, 08 Dec
+ 2023 09:46:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: Load vmlinux btf for any struct_ops map
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170205722361.30055.15108519957098973880.git-patchwork-notify@kernel.org>
-Date: Fri, 08 Dec 2023 17:40:23 +0000
-References: <20231208061704.400463-1-void@manifault.com>
-In-Reply-To: <20231208061704.400463-1-void@manifault.com>
-To: David Vernet <void@manifault.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org,
- linux-kernel@vger.kernel.org, kernel-team@meta.com, tj@kernel.org
+References: <20231110222038.1450156-1-kpsingh@kernel.org> <20231110222038.1450156-6-kpsingh@kernel.org>
+ <202312080934.6D172E5@keescook>
+In-Reply-To: <202312080934.6D172E5@keescook>
+From: Paul Moore <paul@paul-moore.com>
+Date: Fri, 8 Dec 2023 12:46:30 -0500
+Message-ID: <CAHC9VhTOze46yxPUURQ+4F1XiSEVhrTsZvYfVAZGLgXj0F9jOA@mail.gmail.com>
+Subject: Re: [PATCH v8 5/5] security: Add CONFIG_SECURITY_HOOK_LIKELY
+To: Kees Cook <keescook@chromium.org>
+Cc: KP Singh <kpsingh@kernel.org>, linux-security-module@vger.kernel.org, 
+	bpf@vger.kernel.org, casey@schaufler-ca.com, song@kernel.org, 
+	daniel@iogearbox.net, ast@kernel.org, renauld@google.com, pabeni@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Fri, Dec 8, 2023 at 12:36=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
+rote:
+> On Fri, Nov 10, 2023 at 11:20:37PM +0100, KP Singh wrote:
+> > [...]
+> > ---
+> >  security/Kconfig | 11 +++++++++++
+> >  1 file changed, 11 insertions(+)
+>
+> Did something go missing from this patch? I don't see anything depending
+> on CONFIG_SECURITY_HOOK_LIKELY (I think this was working in v7, though?)
+>
+> Regardless, Paul, please take patches 1-4, they bring us measurable
+> speed-ups across the board.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+As I mentioned when you were poking me off-list, this is in my review
+queue and I will get to it when it reaches the top.  I can promise you
+that continued nudging doesn't move the patchset further up in the
+queue, it actually has the opposite effect.
 
-On Fri,  8 Dec 2023 00:17:03 -0600 you wrote:
-> In libbpf, when determining whether we need to load vmlinux btf, we're
-> currently (among other things) checking whether there is any struct_ops
-> program present in the object. This works for most realistic struct_ops
-> maps, as a struct_ops map is of course typically composed of one or more
-> struct_ops programs. However, that technically need not be the case. A
-> struct_ops interface could be defined which allows a map to be specified
-> which one or more non-prog fields, and which provides default behavior
-> if no struct_ops progs is actually provided otherwise. For sched_ext,
-> for example, you technically only need to specify the name of the
-> scheduler in the struct_ops map, with the core scheduler logic providing
-> default behavior if no prog is actually specified.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next] bpf: Load vmlinux btf for any struct_ops map
-    https://git.kernel.org/bpf/bpf-next/c/8b7b0e5fe47d
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+--=20
+paul-moore.com
