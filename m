@@ -1,40 +1,40 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Sx3jBrZI"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tItI9ksJ"
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D416173B
-	for <bpf@vger.kernel.org>; Thu,  7 Dec 2023 16:53:12 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5d7e7e10231so9953557b3.1
-        for <bpf@vger.kernel.org>; Thu, 07 Dec 2023 16:53:12 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D71C1739
+	for <bpf@vger.kernel.org>; Thu,  7 Dec 2023 16:53:16 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5d3bdbf1fb5so17506717b3.2
+        for <bpf@vger.kernel.org>; Thu, 07 Dec 2023 16:53:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701996792; x=1702601592; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1701996795; x=1702601595; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6PanYp2ouKVS9w/roipcdSrUh/6HC+Cc/BaaByD7oTA=;
-        b=Sx3jBrZI4T6YrKjUMUH9z0Sz2AvSxc2M8OH4NsG9eDH8mI9chEIQSDiBDrj/B//ONR
-         KobKTJieRbC9h93UyUSAkwX/hdomluyklANx3EKcOOEHr/gPEgIXuigX3BDDVF7lcg/4
-         hMxosGqRiEEcqWGvcIrPoVVKx88cq9Gry0tOdicDTyKrzOxO7NV4B5foeHRE6rUIjk5P
-         tZXLbxSLdhn7gUJbhYeXb8thl/h/peSjQVW+f1Z0WRI9RI6V3AeYEs+QsxakxFxBYpqf
-         H2qYoH/bfwaIyvKwVpPut3S6+G6AbR1i0tdlkyOZ47a+lUugZ/V3KG1v0P9Pf56kbU6p
-         k8Pw==
+        bh=lPnDX1rYMAtCe+hQ8qdPonfWEnFnkE5EPZQcdSbkY2c=;
+        b=tItI9ksJxKZZeSA4cIlz1awMH257FvktV3a5FQasmksOiVe6EDUTdc38DlVmY9AMUv
+         1yUbt++nhyY11JmQKVKMdqq/CKI60A8ETh2zdhXhofyLY1NvfvxI27vAS+LaBEfcsC0m
+         dMAr4tkoEokr4qCBaTMo4v6nkfqhHxyI7j+wwuw3MRT2niwmzCRi6fGzm0jpDy+wGnvE
+         PZvJaSLBlM5QaFpeBtM0oCVky9+C8Jg5N9L//cguRIlLlMuU524zOQUz7g3+6xyaACVK
+         H4SLrLLPCGbX164C9j9lRBfetzidTop22PysOSNLg7487MDm0dggC/tegdH5rd8KCgry
+         Sp0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701996792; x=1702601592;
+        d=1e100.net; s=20230601; t=1701996795; x=1702601595;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6PanYp2ouKVS9w/roipcdSrUh/6HC+Cc/BaaByD7oTA=;
-        b=IslkkSjImABBWaA5lPnMzAeBMkVL4i6HJM0oaSlgT2sexe3C/NJTfIFUyhVums2vj0
-         q4uSUJ0gBvXplDCuBsPWiUbJ9749tJ8Dt9CRUej2eKmPjwgWZ9FhCQh4xooIqRKgDLSv
-         0ytk10Fr1Kt6KPoxao/Xtfqw3J9njypNOuPY9l4wC0CKUiyU+1j2il2e7/okLKwAENfg
-         aDnUx5oeG4YYUtDkjkIwcmpsYj3Paae+rOJVg5F9T8irXWd5JXs4lHDiszZUi51u3CFU
-         dB5vFnal0WR7MyAzY997XH5rSnDdYI6t5C1pWx2I6qUkw7gjbTlqHQNTUUdZCCSaV3R0
-         bvow==
-X-Gm-Message-State: AOJu0YyJH83EYaEkZNOdbdWyDvcdCdddgdOHy8X/k9KpVxv42Jpy98pA
-	MXxNLs4fQQQb4fKKQoR5P6LOaxIkWR+/WZvtdQ==
-X-Google-Smtp-Source: AGHT+IGDrGdzKCZeXxHvoevYHR+XyV2uxTFS42twCXRztl0Uu67zB8k7EQNOQjn97TY+B0DF6/AXdEuat+JKehFLBw==
+        bh=lPnDX1rYMAtCe+hQ8qdPonfWEnFnkE5EPZQcdSbkY2c=;
+        b=C/TVWTf1Bmf6cyVAheWBeYyhhQE+7KxSGkZPWA8W+bwunFOLr5SW+H47+oPBCrapBS
+         4M42lTSObm7+BrElwdwley2DWKS3wX0+i5UYy0Up88aHGQ29KBua5KqJKQu8MAY+cwHw
+         IvqkOcOGPyiSaT+EvJtGtcatiaNmRIdxSgUacAICT0/6TSR4pdun7216CV10PGiPiFUT
+         H7yZdWPFv7E/C4Aysn/xy+liYCh14FJUxg5btHe9xZO1DSzZ4mGNAv+Ybm50+AwHf2Li
+         7kamXnS/RGpTYVAUa0NSeDRzhedILpndnWiEN0jAzA4hQokbIBlTPdxM4g955td14tjK
+         61sw==
+X-Gm-Message-State: AOJu0YxqHcTWk4SF31DP9EGDUeqXOo0crSgHkBBCT8TZeYEJo3t4fv1B
+	ClwV7VnsXqYhkN619nmpRUoMMlBMTSQXeD1qYw==
+X-Google-Smtp-Source: AGHT+IEKP0wg/owThAA3/mC6Vxrn1R6Pw24Bozp4eJkoXp2s6/m2Qgw2X1bYwO4di4FgizGGC3rWfu0KjgUDlNjaXA==
 X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2c4:200:f1cf:c733:235b:9fff])
- (user=almasrymina job=sendgmr) by 2002:a0d:e208:0:b0:5d9:340c:292d with SMTP
- id l8-20020a0de208000000b005d9340c292dmr1876ywe.4.1701996791753; Thu, 07 Dec
- 2023 16:53:11 -0800 (PST)
-Date: Thu,  7 Dec 2023 16:52:39 -0800
+ (user=almasrymina job=sendgmr) by 2002:a05:690c:4707:b0:5d4:ce2:e908 with
+ SMTP id gz7-20020a05690c470700b005d40ce2e908mr53364ywb.3.1701996795620; Thu,
+ 07 Dec 2023 16:53:15 -0800 (PST)
+Date: Thu,  7 Dec 2023 16:52:41 -0800
 In-Reply-To: <20231208005250.2910004-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -44,8 +44,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231208005250.2910004-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
-Message-ID: <20231208005250.2910004-9-almasrymina@google.com>
-Subject: [net-next v1 08/16] memory-provider: dmabuf devmem memory provider
+Message-ID: <20231208005250.2910004-11-almasrymina@google.com>
+Subject: [net-next v1 10/16] page_pool: don't release iov on elevanted refcount
 From: Mina Almasry <almasrymina@google.com>
 To: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
@@ -60,273 +60,68 @@ Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.ne
 	David Ahern <dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
 	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
 	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>, 
-	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Implement a memory provider that allocates dmabuf devmem page_pool_iovs.
+Currently the page_pool behavior is that a page is considered for
+recycling only once, the first time __page_pool_put_page() is called on
+it.
 
-The provider receives a reference to the struct netdev_dmabuf_binding
-via the pool->mp_priv pointer. The driver needs to set this pointer for
-the provider in the page_pool_params.
+This works because in practice the net stack only holds 1 reference to
+the skb frags. In that case, the page_pool recycling works as expected,
+as the skb frags will have 1 reference on the pages from the net stack
+when __page_pool_put_page() is called (if the driver is not holding
+extra references for recycling), and so the page will be recycled.
 
-The provider obtains a reference on the netdev_dmabuf_binding which
-guarantees the binding and the underlying mapping remains alive until
-the provider is destroyed.
+However, this is not compatible with devmem TCP. For devmem TCP, the net
+stack holds 2 references for each frag, 1 reference is part of the SKB,
+and the second reference is for the user holding the frag until they
+call SO_DEVMEM_DONTNEED. This causes a bug in the page_pool recycling
+where, when the skb is freed, the reference count goes from 2->1, the
+page_pool sees a pending reference, releases the page, and so no devmem
+iovs get recycled.
 
-Usage of PP_FLAG_DMA_MAP is required for this memory provide such that
-the page_pool can provide the driver with the dma-addrs of the devmem.
+To fix this, don't release iovs on elevated refcount.
 
-Support for PP_FLAG_DMA_SYNC_DEV is omitted for simplicity.
-
-Signed-off-by: Willem de Bruijn <willemb@google.com>
-Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
 Signed-off-by: Mina Almasry <almasrymina@google.com>
-
 ---
+ net/core/page_pool.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-v1:
-- static_branch check in page_is_page_pool_iov() (Willem & Paolo).
-- PP_DEVMEM -> PP_IOV (David).
-- Require PP_FLAG_DMA_MAP (Jakub).
-
----
- include/net/page_pool/helpers.h | 47 +++++++++++++++++
- include/net/page_pool/types.h   |  9 ++++
- net/core/page_pool.c            | 89 ++++++++++++++++++++++++++++++++-
- 3 files changed, 144 insertions(+), 1 deletion(-)
-
-diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
-index 8bfc2d43efd4..00197f14aa87 100644
---- a/include/net/page_pool/helpers.h
-+++ b/include/net/page_pool/helpers.h
-@@ -53,6 +53,8 @@
- #define _NET_PAGE_POOL_HELPERS_H
- 
- #include <net/page_pool/types.h>
-+#include <net/net_debug.h>
-+#include <net/devmem.h>
- 
- #ifdef CONFIG_PAGE_POOL_STATS
- /* Deprecated driver-facing API, use netlink instead */
-@@ -92,6 +94,11 @@ static inline unsigned int page_pool_iov_idx(const struct page_pool_iov *ppiov)
- 	return ppiov - page_pool_iov_owner(ppiov)->ppiovs;
- }
- 
-+static inline u32 page_pool_iov_binding_id(const struct page_pool_iov *ppiov)
-+{
-+	return page_pool_iov_owner(ppiov)->binding->id;
-+}
-+
- static inline dma_addr_t
- page_pool_iov_dma_addr(const struct page_pool_iov *ppiov)
- {
-@@ -107,6 +114,46 @@ page_pool_iov_binding(const struct page_pool_iov *ppiov)
- 	return page_pool_iov_owner(ppiov)->binding;
- }
- 
-+static inline int page_pool_iov_refcount(const struct page_pool_iov *ppiov)
-+{
-+	return refcount_read(&ppiov->refcount);
-+}
-+
-+static inline void page_pool_iov_get_many(struct page_pool_iov *ppiov,
-+					  unsigned int count)
-+{
-+	refcount_add(count, &ppiov->refcount);
-+}
-+
-+void __page_pool_iov_free(struct page_pool_iov *ppiov);
-+
-+static inline void page_pool_iov_put_many(struct page_pool_iov *ppiov,
-+					  unsigned int count)
-+{
-+	if (!refcount_sub_and_test(count, &ppiov->refcount))
-+		return;
-+
-+	__page_pool_iov_free(ppiov);
-+}
-+
-+/* page pool mm helpers */
-+
-+DECLARE_STATIC_KEY_FALSE(page_pool_mem_providers);
-+static inline bool page_is_page_pool_iov(const struct page *page)
-+{
-+	return static_branch_unlikely(&page_pool_mem_providers) &&
-+	       (unsigned long)page & PP_IOV;
-+}
-+
-+static inline struct page_pool_iov *page_to_page_pool_iov(struct page *page)
-+{
-+	if (page_is_page_pool_iov(page))
-+		return (struct page_pool_iov *)((unsigned long)page & ~PP_IOV);
-+
-+	DEBUG_NET_WARN_ON_ONCE(true);
-+	return NULL;
-+}
-+
- /**
-  * page_pool_dev_alloc_pages() - allocate a page.
-  * @pool:	pool from which to allocate
-diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.h
-index 44faee7a7b02..136930a238de 100644
---- a/include/net/page_pool/types.h
-+++ b/include/net/page_pool/types.h
-@@ -134,8 +134,15 @@ struct memory_provider_ops {
- 	bool (*release_page)(struct page_pool *pool, struct page *page);
- };
- 
-+extern const struct memory_provider_ops dmabuf_devmem_ops;
-+
- /* page_pool_iov support */
- 
-+/*  We overload the LSB of the struct page pointer to indicate whether it's
-+ *  a page or page_pool_iov.
-+ */
-+#define PP_IOV 0x01UL
-+
- /* Owner of the dma-buf chunks inserted into the gen pool. Each scatterlist
-  * entry from the dmabuf is inserted into the genpool as a chunk, and needs
-  * this owner struct to keep track of some metadata necessary to create
-@@ -159,6 +166,8 @@ struct page_pool_iov {
- 	struct dmabuf_genpool_chunk_owner *owner;
- 
- 	refcount_t refcount;
-+
-+	struct page_pool *pp;
- };
- 
- struct page_pool {
 diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index f5c84d2a4510..423c88564a00 100644
+index f0148d66371b..dc2a148f5b06 100644
 --- a/net/core/page_pool.c
 +++ b/net/core/page_pool.c
-@@ -12,6 +12,7 @@
- 
- #include <net/page_pool/helpers.h>
- #include <net/xdp.h>
-+#include <net/netdev_rx_queue.h>
- 
- #include <linux/dma-direction.h>
- #include <linux/dma-mapping.h>
-@@ -20,12 +21,15 @@
- #include <linux/poison.h>
- #include <linux/ethtool.h>
- #include <linux/netdevice.h>
-+#include <linux/genalloc.h>
-+#include <net/devmem.h>
- 
- #include <trace/events/page_pool.h>
- 
- #include "page_pool_priv.h"
- 
--static DEFINE_STATIC_KEY_FALSE(page_pool_mem_providers);
-+DEFINE_STATIC_KEY_FALSE(page_pool_mem_providers);
-+EXPORT_SYMBOL(page_pool_mem_providers);
- 
- #define DEFER_TIME (msecs_to_jiffies(1000))
- #define DEFER_WARN_INTERVAL (60 * HZ)
-@@ -175,6 +179,7 @@ static void page_pool_producer_unlock(struct page_pool *pool,
- static int page_pool_init(struct page_pool *pool,
- 			  const struct page_pool_params *params)
- {
-+	struct netdev_dmabuf_binding *binding = NULL;
- 	unsigned int ring_qsize = 1024; /* Default */
- 	int err;
- 
-@@ -237,6 +242,14 @@ static int page_pool_init(struct page_pool *pool,
- 	/* Driver calling page_pool_create() also call page_pool_destroy() */
- 	refcount_set(&pool->user_cnt, 1);
- 
-+	if (pool->p.queue)
-+		binding = READ_ONCE(pool->p.queue->binding);
+@@ -731,6 +731,29 @@ __page_pool_put_page(struct page_pool *pool, struct page *page,
+ 		/* Page found as candidate for recycling */
+ 		return page;
+ 	}
 +
-+	if (binding) {
-+		pool->mp_ops = &dmabuf_devmem_ops;
-+		pool->mp_priv = binding;
++	if (page_is_page_pool_iov(page)) {
++		/* With devmem TCP and ppiovs, we can't release pages if the
++		 * refcount is > 1. This is because the net stack holds
++		 * 2 references:
++		 *	- 1 for the skb, and
++		 *	- 1 for the user until they call SO_DEVMEM_DONTNEED.
++		 * Releasing pages for elevated refcounts completely disables
++		 * page_pool recycling. Instead, simply don't release pages and
++		 * the next call to napi_pp_put_page() via SO_DEVMEM_DONTNEED
++		 * will consider the page again for recycling. As a result,
++		 * devmem TCP incompatible with drivers doing refcnt based
++		 * recycling unless those drivers:
++		 *
++		 * - don't mark skb_mark_for_recycle()
++		 * - are sure to release the last reference with
++		 *   page_pool_put_full_page() to consider the page for
++		 *   page_pool recycling.
++		 */
++		page_pool_page_put_many(page, 1);
++		return NULL;
 +	}
 +
- 	if (pool->mp_ops) {
- 		err = pool->mp_ops->init(pool);
- 		if (err) {
-@@ -1020,3 +1033,77 @@ void page_pool_update_nid(struct page_pool *pool, int new_nid)
- 	}
- }
- EXPORT_SYMBOL(page_pool_update_nid);
-+
-+void __page_pool_iov_free(struct page_pool_iov *ppiov)
-+{
-+	if (WARN_ON(ppiov->pp->mp_ops != &dmabuf_devmem_ops))
-+		return;
-+
-+	netdev_free_dmabuf(ppiov);
-+}
-+EXPORT_SYMBOL_GPL(__page_pool_iov_free);
-+
-+/*** "Dmabuf devmem memory provider" ***/
-+
-+static int mp_dmabuf_devmem_init(struct page_pool *pool)
-+{
-+	struct netdev_dmabuf_binding *binding = pool->mp_priv;
-+
-+	if (!binding)
-+		return -EINVAL;
-+
-+	if (!(pool->p.flags & PP_FLAG_DMA_MAP))
-+		return -EOPNOTSUPP;
-+
-+	if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
-+		return -EOPNOTSUPP;
-+
-+	netdev_dmabuf_binding_get(binding);
-+	return 0;
-+}
-+
-+static struct page *mp_dmabuf_devmem_alloc_pages(struct page_pool *pool,
-+						 gfp_t gfp)
-+{
-+	struct netdev_dmabuf_binding *binding = pool->mp_priv;
-+	struct page_pool_iov *ppiov;
-+
-+	ppiov = netdev_alloc_dmabuf(binding);
-+	if (!ppiov)
-+		return NULL;
-+
-+	ppiov->pp = pool;
-+	pool->pages_state_hold_cnt++;
-+	trace_page_pool_state_hold(pool, (struct page *)ppiov,
-+				   pool->pages_state_hold_cnt);
-+	return (struct page *)((unsigned long)ppiov | PP_IOV);
-+}
-+
-+static void mp_dmabuf_devmem_destroy(struct page_pool *pool)
-+{
-+	struct netdev_dmabuf_binding *binding = pool->mp_priv;
-+
-+	netdev_dmabuf_binding_put(binding);
-+}
-+
-+static bool mp_dmabuf_devmem_release_page(struct page_pool *pool,
-+					  struct page *page)
-+{
-+	struct page_pool_iov *ppiov;
-+
-+	if (WARN_ON_ONCE(!page_is_page_pool_iov(page)))
-+		return false;
-+
-+	ppiov = page_to_page_pool_iov(page);
-+	page_pool_iov_put_many(ppiov, 1);
-+	/* We don't want the page pool put_page()ing our page_pool_iovs. */
-+	return false;
-+}
-+
-+const struct memory_provider_ops dmabuf_devmem_ops = {
-+	.init			= mp_dmabuf_devmem_init,
-+	.destroy		= mp_dmabuf_devmem_destroy,
-+	.alloc_pages		= mp_dmabuf_devmem_alloc_pages,
-+	.release_page		= mp_dmabuf_devmem_release_page,
-+};
-+EXPORT_SYMBOL(dmabuf_devmem_ops);
+ 	/* Fallback/non-XDP mode: API user have elevated refcnt.
+ 	 *
+ 	 * Many drivers split up the page into fragments, and some
 -- 
 2.43.0.472.g3155946c3a-goog
 
