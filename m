@@ -1,52 +1,52 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mqrl8e3d"
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428DF1712
-	for <bpf@vger.kernel.org>; Thu,  7 Dec 2023 19:25:30 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-425952708afso7669961cf.0
-        for <bpf@vger.kernel.org>; Thu, 07 Dec 2023 19:25:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UKfPD1UV"
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E60D1712
+	for <bpf@vger.kernel.org>; Thu,  7 Dec 2023 19:25:33 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-4259cd18f85so2546481cf.3
+        for <bpf@vger.kernel.org>; Thu, 07 Dec 2023 19:25:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702005929; x=1702610729; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702005932; x=1702610732; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FFq4wNtT7zE3Gz+c8yblUyyecsVM1ncUZIroLE/6ru8=;
-        b=Mqrl8e3dL+S5QAerMQlY8UikG93YFQy4pRXw5juKnXuie8ExEECSXD8At3Q11Gtwxi
-         nYyv+bNd/iMZybWfDIlHAtS2uav31MhS9MWkHERFe8PnPykMpC3OySt89J14ktSIYrD4
-         HsgO6TVkqwX8gnrnxpmMl9dldDE31gjxtUqylj2PoLw4k2IwMRREeP7TgHESxE0H6AMk
-         zIT6VdLiLbDLc+YLGapUOE180mJJMRmP9cKIW6s0wCcYVYO6sYKX36pAWGNwJHImUn1F
-         dZvqTPEZsmyOTWCn3orHFgg88vAXHNX8x9ivLlE6QWv+kWA0YzIL1BFv1zyNviAKMOep
-         kF7w==
+        bh=dXfZYb2/FBAU3Oc7Jc6HA1dp32VQc1zzYbSIQHUxODM=;
+        b=UKfPD1UVv1ybRfgCpV74pVDpsvv+HD+axqPSBnIAhWgfV2TBdpuVM8ppiPN5FjS17m
+         mRzhimeyS046r2du9XxakQWkiqQc2pIqeVziUpVdBvsynazmMuZ3EBx4OycEwBy+kWMM
+         bAFUkwnXc7uslKGUfLWRU5Jh97dvFtVubr9/X9fyZWZK0GjqGot67us2TOJ5DUNoarLq
+         q1dGdo+jT5MdaBrfsgheB5qecxJau7dyBR1kSLkgcW2gPkRbUjHo2GJ3quEzICtKQZ6V
+         7FDjK2UOyUWRTpYyRjc1ITgm7wmX8a/moHQyjSOuSDv4417f84zdFRosKz7mdUlMi8i6
+         AyLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702005929; x=1702610729;
+        d=1e100.net; s=20230601; t=1702005932; x=1702610732;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FFq4wNtT7zE3Gz+c8yblUyyecsVM1ncUZIroLE/6ru8=;
-        b=B0ibkaBx6c0b/zlfrxJagSEr+0tB0gNWxlx1VVnZSgGDsrAjAtPfNrobW8l6IKxsQL
-         1H7PPRrXd6/buz0o0NlQvHqKuwmoTc/B5HZVQ8DPU6ykX8RM335VwFD1hVpSUew3DoSy
-         Oh9xsA7juMbTMKgHNHQPgLQE1IZZCObQMi1+zOa4oXNbBVbQSUtev4gBfXBmhvZHG8kl
-         1GxpuohVpY7Mq9gTmIXZO+T0ZuvA1m7tQEcIsdTPyq5AYOMLC8K7QXVhFvCNd56g20e/
-         j+0R/nyYIOiCQybZrU2r9UMyzNYOgoUy++xtJNh09Ct1HIr+rm8KpTPJsV3Flx4J5o9f
-         KjSw==
-X-Gm-Message-State: AOJu0YwYpqeTqDqvvTv6+mxCQxuvW5BNAv/P7PBhIQdZaCRhq1coftvZ
-	7OBTaGoj8WHtZr40LiCZuf+7Qk2pKsAP+w==
-X-Google-Smtp-Source: AGHT+IF8w5GgNutVhGQyYJT+11Iw8eUiu+s5PHlWbp6gY1StnHIJzsDqX9IkVB7kduxQ7rfv8HvIPQ==
-X-Received: by 2002:ac8:7f02:0:b0:403:abf5:6865 with SMTP id f2-20020ac87f02000000b00403abf56865mr377847qtk.18.1702005928943;
-        Thu, 07 Dec 2023 19:25:28 -0800 (PST)
+        bh=dXfZYb2/FBAU3Oc7Jc6HA1dp32VQc1zzYbSIQHUxODM=;
+        b=md8JUZNDAHFuXixtK+BIuYJ5b2j3hC2jyeX3dICvFopL3Xx3Jj11hkb5ixgPWiKb4s
+         18QvPP4+1NE0qeY8hAPY/7DoSHMns4jhR6lgJ/0/qOAPK1pBi4AUXtqmHyiDa5cZ088A
+         pHx6x0uPTMdHQpZuBnUeMkIT8PBsKbDv2pA/7hR1VK0CH+I3Sd3Qszqv41kgAic6bfzZ
+         6/mJtqVbmfihcUXfnJWdBDAqrKb0zzWJuiKFDXkLTiWBXx6/j4vvxdIjURkl7/fqKpgp
+         FuJNzhUowxE+t9W76zxD7c4Gysrkz/fjeiHHXlOOhg8g9mgSu4bQp8oFPMxZwP0lqPKB
+         MY/Q==
+X-Gm-Message-State: AOJu0Yzm6d/oRzeiVytCJvUAQ379qpfIAjSDj/4rpO/nBPa3ceJ06Yux
+	hvLU5wBLgF5TQrB6826lYBS9Zak46K7F1w==
+X-Google-Smtp-Source: AGHT+IH1Q25aOTfqluTf4zuKIIChHRPpJispg1vAmWG9Eg49SW1YNrd2F0ydoCb+WHiKUqIjpsiTAg==
+X-Received: by 2002:a05:622a:15d1:b0:425:4043:7651 with SMTP id d17-20020a05622a15d100b0042540437651mr4061845qty.121.1702005931844;
+        Thu, 07 Dec 2023 19:25:31 -0800 (PST)
 Received: from andrei-framework.verizon.net ([2600:4041:599b:1100:2b9f:d631:c5b3:a90f])
-        by smtp.gmail.com with ESMTPSA id l2-20020ac848c2000000b00424030566b5sm448266qtr.17.2023.12.07.19.25.28
+        by smtp.gmail.com with ESMTPSA id l2-20020ac848c2000000b00424030566b5sm448266qtr.17.2023.12.07.19.25.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Dec 2023 19:25:28 -0800 (PST)
+        Thu, 07 Dec 2023 19:25:31 -0800 (PST)
 From: Andrei Matei <andreimatei1@gmail.com>
 To: bpf@vger.kernel.org
 Cc: sunhao.th@gmail.com,
 	andrii.nakryiko@gmail.com,
 	eddyz87@gmail.com,
 	Andrei Matei <andreimatei1@gmail.com>
-Subject: [PATCH bpf-next v5 1/3] bpf: add some comments to stack representation
-Date: Thu,  7 Dec 2023 22:25:17 -0500
-Message-Id: <20231208032519.260451-2-andreimatei1@gmail.com>
+Subject: [PATCH bpf-next v5 3/3] bpf: minor cleanup around stack bounds
+Date: Thu,  7 Dec 2023 22:25:19 -0500
+Message-Id: <20231208032519.260451-4-andreimatei1@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20231208032519.260451-1-andreimatei1@gmail.com>
 References: <20231208032519.260451-1-andreimatei1@gmail.com>
@@ -58,48 +58,45 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add comments to the datastructure tracking the stack state, as the
-mapping between each stack slot and where its state is stored is not
-entirely obvious.
+Push the rounding up of stack offsets into the function responsible for
+growing the stack, rather than relying on all the callers to do it.
+Uncertainty about whether the callers did it or not tripped up people in
+a previous review.
 
 Signed-off-by: Andrei Matei <andreimatei1@gmail.com>
 ---
- include/linux/bpf_verifier.h | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ kernel/bpf/verifier.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index bada59812e00..314b679fb494 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -321,7 +321,17 @@ struct bpf_func_state {
- 	/* The following fields should be last. See copy_func_state() */
- 	int acquired_refs;
- 	struct bpf_reference_state *refs;
-+	/* The state of the stack. Each element of the array describes BPF_REG_SIZE
-+	 * (i.e. 8) bytes worth of stack memory.
-+	 * stack[0] represents bytes [*(r10-8)..*(r10-1)]
-+	 * stack[1] represents bytes [*(r10-16)..*(r10-9)]
-+	 * ...
-+	 * stack[allocated_stack/8 - 1] represents [*(r10-allocated_stack)..*(r10-allocated_stack+7)]
-+	 */
- 	struct bpf_stack_state *stack;
-+	/* Size of the current stack, in bytes. The stack state is tracked below, in
-+	 * `stack`. allocated_stack is always a multiple of BPF_REG_SIZE.
-+	 */
- 	int allocated_stack;
- };
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index de1e29fa467e..fb690539d5f6 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1264,7 +1264,11 @@ static int resize_reference_state(struct bpf_func_state *state, size_t n)
+  */
+ static int grow_stack_state(struct bpf_verifier_env *env, struct bpf_func_state *state, int size)
+ {
+-	size_t old_n = state->allocated_stack / BPF_REG_SIZE, n = size / BPF_REG_SIZE;
++	size_t old_n = state->allocated_stack / BPF_REG_SIZE, n;
++
++	/* The stack size is always a multiple of BPF_REG_SIZE. */
++	size = round_up(size, BPF_REG_SIZE);
++	n = size / BPF_REG_SIZE;
  
-@@ -658,6 +668,10 @@ struct bpf_verifier_env {
- 	int exception_callback_subprog;
- 	bool explore_alu_limits;
- 	bool allow_ptr_leaks;
-+	/* Allow access to uninitialized stack memory. Writes with fixed offset are
-+	 * always allowed, so this refers to reads (with fixed or variable offset),
-+	 * to writes with variable offset and to indirect (helper) accesses.
+ 	if (old_n >= n)
+ 		return 0;
+@@ -6638,7 +6642,10 @@ static int check_stack_access_within_bounds(
+ 		return err;
+ 	}
+ 
+-	return grow_stack_state(env, state, round_up(-min_off, BPF_REG_SIZE));
++	/* Note that there is no stack access with offset zero, so the needed stack
++	 * size is -min_off, not -min_off+1.
 +	 */
- 	bool allow_uninit_stack;
- 	bool bpf_capable;
- 	bool bypass_spec_v1;
++	return grow_stack_state(env, state, -min_off /* size */);
+ }
+ 
+ /* check whether memory at (regno + off) is accessible for t = (read | write)
 -- 
 2.40.1
 
