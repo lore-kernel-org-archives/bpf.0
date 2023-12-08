@@ -1,40 +1,40 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vBRsbNqo"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CARj6FzP"
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B196171A
-	for <bpf@vger.kernel.org>; Thu,  7 Dec 2023 16:53:14 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5d10f5bf5d9so15541107b3.3
-        for <bpf@vger.kernel.org>; Thu, 07 Dec 2023 16:53:14 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673111988
+	for <bpf@vger.kernel.org>; Thu,  7 Dec 2023 16:53:18 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5d988d69812so18524347b3.0
+        for <bpf@vger.kernel.org>; Thu, 07 Dec 2023 16:53:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701996794; x=1702601594; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1701996797; x=1702601597; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/frlnDGiPBjsiHjgXvPuD20HndGYXPjOBYCQWwtD/DY=;
-        b=vBRsbNqot8epSwQSXKoU0GSDp5CGWwhdLD5KF0Qt9Mu9kp72t7wzVIhS5MEJqxZ2BV
-         QpX80+/4QvpUwor0wDW2xagZ8shlZhTdIE3lbCZE4fW+zt6/iDKWxhD/GQCewRV5IAu8
-         mhTjQfoNpeth0A1An06Kybm2KqhDr25iDXtBku2PNArFTqimTVJKv4bi7z5y9wnzEWcp
-         riL6zGtHKWcDIDCjS129E+dN9BiKnipPShGT0lXrtm4jBFMfRczWpCbxS/rAAU0o8tF2
-         +ciQqTqyb9+LJYefdGuVJuOfWuBQUwa+OwQbjyiYsFY+Bdi7bwPNNMbkUlkWEeH+sIcU
-         NavA==
+        bh=ffR5lRGBwRWz92voabMKfnUxOBX9ei9jc/R/TuPbdfY=;
+        b=CARj6FzPCQ1sS6YCVmsJB2NuIjXU5lWVvtkUA/k/Ll427ms3YefKFgMH2SMQQf4uBm
+         Y2ixiCLENlCGWmGmNRwE04NsaWWaoc4v0jHlbOrFkzgIyF6Pu+sLahVyJ5wZPPRlSi4L
+         kLQRg9ZKrOYxNvgxMBRA/rmTJwWc4ML4fjSMjZRL50MXqbO50Ww/Kf4PZtBI4Q1sNKsS
+         7nI8xXGI/uXnpLQUYfGgpCCEL7LIrUJhauFjUzSAypMIPyixSiMFc2VlLXB8UKV9yYkX
+         ZP3x0ifY9/bD9o8CH1cl3tnMc12Q65gmXLdDzgfdTONQe3SLK3C9tEsoS2nOSd2zRAxy
+         g3Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701996794; x=1702601594;
+        d=1e100.net; s=20230601; t=1701996797; x=1702601597;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/frlnDGiPBjsiHjgXvPuD20HndGYXPjOBYCQWwtD/DY=;
-        b=i4saPe8COEPoL3JyY+i1qWEZAboH0idRhGD+/s5ub/NHgz67b5g+zUIQcg622NkdWG
-         s7YX1dMoB9KTgbm/LcIiOMXLf7Dg7yge+BPORQAg/LDiYuC4+wW02GGIsicT0sT7D5fT
-         xXfpzYhAt/rcfiaMoIgftkEr50KbCEH82QQ0zNiQgEeQpKinJ27yvG8nRxMtAZOkVMk7
-         fvHMsrWEuyGxzUz49EEuJZCuGVDpXRFn0IuTZvfifQzq8fWpxyNmmbDvDVUIjDUht8LE
-         SKqDJYYcCWlvzbz/663vzEVGQif7KYZW/kJ5uM8x8Bk0f/scAvpeCnY9i9alyilGmWVr
-         N5kg==
-X-Gm-Message-State: AOJu0YxbSRmDlBRS3K1k/W2rKaNaEPA+JW3mi4MbD0ECtSQ04gBqs37X
-	E4sQOBirEKSPmRdkRj8Vt37UoA7EPEVGT82yMA==
-X-Google-Smtp-Source: AGHT+IEcVPz+c8f4+/XYi0qcn9xsa1Cmt6IzSmVdFx7S2IQm9w3Fp7tQK/S+bZFjz2BteYqKPoVID4eAqxK5vujUCQ==
+        bh=ffR5lRGBwRWz92voabMKfnUxOBX9ei9jc/R/TuPbdfY=;
+        b=lvrcBH3tgPlCe58Lmds6CMElgfdrzGXBi9NvSw+UOKFSqgQcxPBy/TVltHLb+5oEYp
+         98evAi80K+CuEwKMTQdG7JSYIxrOoFH2mT1PmMQoGHGjj5rsKlRwgwuQ+qokzz6PCykg
+         3BSE64sX6ra01yEOKMLWe99NIVTpZ/OKchDKgzjWXKM7reIV1kgAGXQM3VfCghc5uPaI
+         23huseqxsPsRXP8WWpZv3Cb6e+zFWL4+HBMLLZU+JhDH/wU8/cEEB97pUonB8lYZXNjt
+         Rk9KewLgefAU27pvGLcTO8TZ76Hfu86vej2WAwr3f8tRBf9D/vRPlP0FjVD+CU8BB6yo
+         ndSg==
+X-Gm-Message-State: AOJu0Yx6HDc1T9aM2Pc6P59nGPrh532WPWw0ZltVz6411h0IO4IjlKw0
+	UXpYQWZ2kwAppklAGt4csbGwIIghvF75hQGqdg==
+X-Google-Smtp-Source: AGHT+IH8QZVgyP79RbEsqH0j0RL1Mpin9iL/UFr2+o7Otvdv7pJ6u3sBW0Y9+P6SJHsoq2x+yqVIWLpUXWuYkWSTkw==
 X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2c4:200:f1cf:c733:235b:9fff])
- (user=almasrymina job=sendgmr) by 2002:a05:690c:2893:b0:5d3:b449:e58e with
- SMTP id ee19-20020a05690c289300b005d3b449e58emr47990ywb.6.1701996793843; Thu,
- 07 Dec 2023 16:53:13 -0800 (PST)
-Date: Thu,  7 Dec 2023 16:52:40 -0800
+ (user=almasrymina job=sendgmr) by 2002:a25:ccd5:0:b0:daf:6333:17c3 with SMTP
+ id l204-20020a25ccd5000000b00daf633317c3mr42079ybf.1.1701996797568; Thu, 07
+ Dec 2023 16:53:17 -0800 (PST)
+Date: Thu,  7 Dec 2023 16:52:42 -0800
 In-Reply-To: <20231208005250.2910004-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -44,8 +44,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231208005250.2910004-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
-Message-ID: <20231208005250.2910004-10-almasrymina@google.com>
-Subject: [net-next v1 09/16] page_pool: device memory support
+Message-ID: <20231208005250.2910004-12-almasrymina@google.com>
+Subject: [net-next v1 11/16] net: support non paged skb frags
 From: Mina Almasry <almasrymina@google.com>
 To: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
@@ -63,328 +63,175 @@ Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.ne
 	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Overload the LSB of struct page* to indicate that it's a page_pool_iov.
+Make skb_frag_page() fail in the case where the frag is not backed
+by a page, and fix its relevant callers to handle this case.
 
-Refactor mm calls on struct page* into helpers, and add page_pool_iov
-handling on those helpers. Modify callers of these mm APIs with calls to
-these helpers instead.
-
-In areas where struct page* is dereferenced, add a check for special
-handling of page_pool_iov.
+Correctly handle skb_frag refcounting in the page_pool_iovs case.
 
 Signed-off-by: Mina Almasry <almasrymina@google.com>
 
----
-
-v1:
-- Disable fragmentation support for iov properly.
-- fix napi_pp_put_page() path (Yunsheng).
 
 ---
- include/net/page_pool/helpers.h | 78 ++++++++++++++++++++++++++++++++-
- net/core/page_pool.c            | 67 ++++++++++++++++++++--------
- net/core/skbuff.c               | 28 +++++++-----
- 3 files changed, 141 insertions(+), 32 deletions(-)
 
-diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
-index 00197f14aa87..2d4e0a2c5620 100644
---- a/include/net/page_pool/helpers.h
-+++ b/include/net/page_pool/helpers.h
-@@ -154,6 +154,64 @@ static inline struct page_pool_iov *page_to_page_pool_iov(struct page *page)
- 	return NULL;
+Changes in v1:
+- Fix illegal_highdma() (Yunsheng).
+- Rework napi_pp_put_page() slightly to reduce code churn (Willem).
+
+---
+ include/linux/skbuff.h | 42 +++++++++++++++++++++++++++++++++++-------
+ net/core/dev.c         |  3 ++-
+ net/core/gro.c         |  2 +-
+ net/core/skbuff.c      |  3 +++
+ net/ipv4/tcp.c         |  3 +++
+ 5 files changed, 44 insertions(+), 9 deletions(-)
+
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index b370eb8d70f7..851f448d2181 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -37,6 +37,8 @@
+ #endif
+ #include <net/net_debug.h>
+ #include <net/dropreason-core.h>
++#include <net/page_pool/types.h>
++#include <net/page_pool/helpers.h>
+ 
+ /**
+  * DOC: skb checksums
+@@ -3414,15 +3416,38 @@ static inline void skb_frag_off_copy(skb_frag_t *fragto,
+ 	fragto->bv_offset = fragfrom->bv_offset;
  }
  
-+static inline int page_pool_page_ref_count(struct page *page)
++/* Returns true if the skb_frag contains a page_pool_iov. */
++static inline bool skb_frag_is_page_pool_iov(const skb_frag_t *frag)
 +{
-+	if (page_is_page_pool_iov(page))
-+		return page_pool_iov_refcount(page_to_page_pool_iov(page));
-+
-+	return page_ref_count(page);
-+}
-+
-+static inline void page_pool_page_get_many(struct page *page,
-+					   unsigned int count)
-+{
-+	if (page_is_page_pool_iov(page))
-+		return page_pool_iov_get_many(page_to_page_pool_iov(page),
-+					      count);
-+
-+	return page_ref_add(page, count);
-+}
-+
-+static inline void page_pool_page_put_many(struct page *page,
-+					   unsigned int count)
-+{
-+	if (page_is_page_pool_iov(page))
-+		return page_pool_iov_put_many(page_to_page_pool_iov(page),
-+					      count);
-+
-+	if (count > 1)
-+		page_ref_sub(page, count - 1);
-+
-+	put_page(page);
-+}
-+
-+static inline bool page_pool_page_is_pfmemalloc(struct page *page)
-+{
-+	if (page_is_page_pool_iov(page))
-+		return false;
-+
-+	return page_is_pfmemalloc(page);
-+}
-+
-+static inline bool page_pool_page_is_pref_nid(struct page *page, int pref_nid)
-+{
-+	/* Assume page_pool_iov are on the preferred node without actually
-+	 * checking...
-+	 *
-+	 * This check is only used to check for recycling memory in the page
-+	 * pool's fast paths. Currently the only implementation of page_pool_iov
-+	 * is dmabuf device memory. It's a deliberate decision by the user to
-+	 * bind a certain dmabuf to a certain netdev, and the netdev rx queue
-+	 * would not be able to reallocate memory from another dmabuf that
-+	 * exists on the preferred node, so, this check doesn't make much sense
-+	 * in this case. Assume all page_pool_iovs can be recycled for now.
-+	 */
-+	if (page_is_page_pool_iov(page))
-+		return true;
-+
-+	return page_to_nid(page) == pref_nid;
++	return page_is_page_pool_iov(frag->bv_page);
 +}
 +
  /**
-  * page_pool_dev_alloc_pages() - allocate a page.
-  * @pool:	pool from which to allocate
-@@ -304,6 +362,10 @@ static inline long page_pool_defrag_page(struct page *page, long nr)
- {
- 	long ret;
- 
-+	/* fragmentation support hasn't been added to ppiov yet */
-+	if (WARN_ON_ONCE(page_is_page_pool_iov(page)))
-+		return 0;
-+
- 	/* If nr == pp_frag_count then we have cleared all remaining
- 	 * references to the page:
- 	 * 1. 'n == 1': no need to actually overwrite it.
-@@ -347,7 +409,8 @@ static inline long page_pool_defrag_page(struct page *page, long nr)
- static inline bool page_pool_is_last_frag(struct page *page)
- {
- 	/* If page_pool_defrag_page() returns 0, we were the last user */
--	return page_pool_defrag_page(page, 1) == 0;
-+	return page_is_page_pool_iov(page) ||
-+	       page_pool_defrag_page(page, 1) == 0;
- }
- 
- /**
-@@ -434,7 +497,12 @@ static inline void page_pool_free_va(struct page_pool *pool, void *va,
+  * skb_frag_page - retrieve the page referred to by a paged fragment
+  * @frag: the paged fragment
+  *
+- * Returns the &struct page associated with @frag.
++ * Returns the &struct page associated with @frag. Returns NULL if this frag
++ * has no associated page.
   */
- static inline dma_addr_t page_pool_get_dma_addr(struct page *page)
+ static inline struct page *skb_frag_page(const skb_frag_t *frag)
  {
--	dma_addr_t ret = page->dma_addr;
-+	dma_addr_t ret;
+-	return frag->bv_page;
++	if (!page_is_page_pool_iov(frag->bv_page))
++		return frag->bv_page;
 +
-+	if (page_is_page_pool_iov(page))
-+		return page_pool_iov_dma_addr(page_to_page_pool_iov(page));
++	return NULL;
++}
 +
-+	ret = page->dma_addr;
++/**
++ * skb_frag_page_pool_iov - retrieve the page_pool_iov referred to by fragment
++ * @frag: the fragment
++ *
++ * Returns the &struct page_pool_iov associated with @frag. Returns NULL if this
++ * frag has no associated page_pool_iov.
++ */
++static inline struct page_pool_iov *
++skb_frag_page_pool_iov(const skb_frag_t *frag)
++{
++	return page_to_page_pool_iov(frag->bv_page);
+ }
  
- 	if (PAGE_POOL_32BIT_ARCH_WITH_64BIT_DMA)
- 		ret <<= PAGE_SHIFT;
-@@ -444,6 +512,12 @@ static inline dma_addr_t page_pool_get_dma_addr(struct page *page)
- 
- static inline bool page_pool_set_dma_addr(struct page *page, dma_addr_t addr)
+ /**
+@@ -3433,7 +3458,7 @@ static inline struct page *skb_frag_page(const skb_frag_t *frag)
+  */
+ static inline void __skb_frag_ref(skb_frag_t *frag)
  {
-+	/* page_pool_iovs are mapped and their dma-addr can't be modified. */
-+	if (page_is_page_pool_iov(page)) {
-+		DEBUG_NET_WARN_ON_ONCE(true);
-+		return false;
-+	}
-+
- 	if (PAGE_POOL_32BIT_ARCH_WITH_64BIT_DMA) {
- 		page->dma_addr = addr >> PAGE_SHIFT;
+-	get_page(skb_frag_page(frag));
++	page_pool_page_get_many(frag->bv_page, 1);
+ }
  
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index 423c88564a00..f0148d66371b 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -346,7 +346,7 @@ static struct page *page_pool_refill_alloc_cache(struct page_pool *pool)
- 		if (unlikely(!page))
- 			break;
- 
--		if (likely(page_to_nid(page) == pref_nid)) {
-+		if (likely(page_pool_page_is_pref_nid(page, pref_nid))) {
- 			pool->alloc.cache[pool->alloc.count++] = page;
- 		} else {
- 			/* NUMA mismatch;
-@@ -391,7 +391,15 @@ static void page_pool_dma_sync_for_device(struct page_pool *pool,
- 					  struct page *page,
- 					  unsigned int dma_sync_size)
+ /**
+@@ -3453,13 +3478,13 @@ bool napi_pp_put_page(struct page *page, bool napi_safe);
+ static inline void
+ napi_frag_unref(skb_frag_t *frag, bool recycle, bool napi_safe)
  {
--	dma_addr_t dma_addr = page_pool_get_dma_addr(page);
-+	dma_addr_t dma_addr;
-+
-+	/* page_pool_iov memory provider do not support PP_FLAG_DMA_SYNC_DEV */
-+	if (page_is_page_pool_iov(page)) {
-+		DEBUG_NET_WARN_ON_ONCE(true);
-+		return;
-+	}
-+
-+	dma_addr = page_pool_get_dma_addr(page);
- 
- 	dma_sync_size = min(dma_sync_size, pool->p.max_len);
- 	dma_sync_single_range_for_device(pool->p.dev, dma_addr,
-@@ -403,6 +411,12 @@ static bool page_pool_dma_map(struct page_pool *pool, struct page *page)
- {
- 	dma_addr_t dma;
- 
-+	if (page_is_page_pool_iov(page)) {
-+		/* page_pool_iovs are already mapped */
-+		DEBUG_NET_WARN_ON_ONCE(true);
-+		return true;
-+	}
-+
- 	/* Setup DMA mapping: use 'struct page' area for storing DMA-addr
- 	 * since dma_addr_t can be either 32 or 64 bits and does not always fit
- 	 * into page private data (i.e 32bit cpu with 64bit DMA caps)
-@@ -434,22 +448,33 @@ static bool page_pool_dma_map(struct page_pool *pool, struct page *page)
- static void page_pool_set_pp_info(struct page_pool *pool,
- 				  struct page *page)
- {
--	page->pp = pool;
--	page->pp_magic |= PP_SIGNATURE;
+-	struct page *page = skb_frag_page(frag);
 -
--	/* Ensuring all pages have been split into one fragment initially:
--	 * page_pool_set_pp_info() is only called once for every page when it
--	 * is allocated from the page allocator and page_pool_fragment_page()
--	 * is dirtying the same cache line as the page->pp_magic above, so
--	 * the overhead is negligible.
--	 */
--	page_pool_fragment_page(page, 1);
-+	if (!page_is_page_pool_iov(page)) {
-+		page->pp = pool;
-+		page->pp_magic |= PP_SIGNATURE;
-+
-+		/* Ensuring all pages have been split into one fragment
-+		 * initially:
-+		 * page_pool_set_pp_info() is only called once for every page
-+		 * when it is allocated from the page allocator and
-+		 * page_pool_fragment_page() is dirtying the same cache line as
-+		 * the page->pp_magic above, so * the overhead is negligible.
-+		 */
-+		page_pool_fragment_page(page, 1);
-+	} else {
-+		page_to_page_pool_iov(page)->pp = pool;
-+	}
-+
- 	if (pool->has_init_callback)
- 		pool->slow.init_callback(page, pool->slow.init_arg);
+ #ifdef CONFIG_PAGE_POOL
+-	if (recycle && napi_pp_put_page(page, napi_safe))
++	if (recycle && napi_pp_put_page(frag->bv_page, napi_safe))
+ 		return;
++	page_pool_page_put_many(frag->bv_page, 1);
++#else
++	put_page(skb_frag_page(frag));
+ #endif
+-	put_page(page);
  }
  
- static void page_pool_clear_pp_info(struct page *page)
+ /**
+@@ -3499,6 +3524,9 @@ static inline void skb_frag_unref(struct sk_buff *skb, int f)
+  */
+ static inline void *skb_frag_address(const skb_frag_t *frag)
  {
-+	if (page_is_page_pool_iov(page)) {
-+		page_to_page_pool_iov(page)->pp = NULL;
-+		return;
-+	}
-+
- 	page->pp_magic = 0;
- 	page->pp = NULL;
- }
-@@ -664,7 +689,7 @@ static bool page_pool_recycle_in_cache(struct page *page,
- 		return false;
- 	}
- 
--	/* Caller MUST have verified/know (page_ref_count(page) == 1) */
-+	/* Caller MUST have verified/know (page_pool_page_ref_count(page) == 1) */
- 	pool->alloc.cache[pool->alloc.count++] = page;
- 	recycle_stat_inc(pool, cached);
- 	return true;
-@@ -689,9 +714,10 @@ __page_pool_put_page(struct page_pool *pool, struct page *page,
- 	 * refcnt == 1 means page_pool owns page, and can recycle it.
- 	 *
- 	 * page is NOT reusable when allocated when system is under
--	 * some pressure. (page_is_pfmemalloc)
-+	 * some pressure. (page_pool_page_is_pfmemalloc)
- 	 */
--	if (likely(page_ref_count(page) == 1 && !page_is_pfmemalloc(page))) {
-+	if (likely(page_pool_page_ref_count(page) == 1 &&
-+		   !page_pool_page_is_pfmemalloc(page))) {
- 		/* Read barrier done in page_ref_count / READ_ONCE */
- 
- 		if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
-@@ -806,7 +832,8 @@ static struct page *page_pool_drain_frag(struct page_pool *pool,
- 	if (likely(page_pool_defrag_page(page, drain_count)))
- 		return NULL;
- 
--	if (page_ref_count(page) == 1 && !page_is_pfmemalloc(page)) {
-+	if (page_pool_page_ref_count(page) == 1 &&
-+	    !page_pool_page_is_pfmemalloc(page)) {
- 		if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
- 			page_pool_dma_sync_for_device(pool, page, -1);
- 
-@@ -840,6 +867,10 @@ struct page *page_pool_alloc_frag(struct page_pool *pool,
- 	if (WARN_ON(size > max_size))
- 		return NULL;
- 
-+	/* page_pool_iov's don't currently support fragmentation */
-+	if (WARN_ON_ONCE(pool->mp_ops == &dmabuf_devmem_ops))
++	if (!skb_frag_page(frag))
 +		return NULL;
 +
- 	size = ALIGN(size, dma_get_cache_alignment());
- 	*offset = pool->frag_offset;
+ 	return page_address(skb_frag_page(frag)) + skb_frag_off(frag);
+ }
  
-@@ -882,9 +913,9 @@ static void page_pool_empty_ring(struct page_pool *pool)
- 	/* Empty recycle ring */
- 	while ((page = ptr_ring_consume_bh(&pool->ring))) {
- 		/* Verify the refcnt invariant of cached pages */
--		if (!(page_ref_count(page) == 1))
-+		if (!(page_pool_page_ref_count(page) == 1))
- 			pr_crit("%s() page_pool refcnt %d violation\n",
--				__func__, page_ref_count(page));
-+				__func__, page_pool_page_ref_count(page));
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 30667e4c3b95..1ae9257df441 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -3709,8 +3709,9 @@ static int illegal_highdma(struct net_device *dev, struct sk_buff *skb)
+ 	if (!(dev->features & NETIF_F_HIGHDMA)) {
+ 		for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
+ 			skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
++			struct page *page = skb_frag_page(frag);
  
- 		page_pool_return_page(pool, page);
+-			if (PageHighMem(skb_frag_page(frag)))
++			if (page && PageHighMem(page))
+ 				return 1;
+ 		}
  	}
+diff --git a/net/core/gro.c b/net/core/gro.c
+index 0759277dc14e..42d7f6755f32 100644
+--- a/net/core/gro.c
++++ b/net/core/gro.c
+@@ -376,7 +376,7 @@ static inline void skb_gro_reset_offset(struct sk_buff *skb, u32 nhoff)
+ 	NAPI_GRO_CB(skb)->frag0 = NULL;
+ 	NAPI_GRO_CB(skb)->frag0_len = 0;
+ 
+-	if (!skb_headlen(skb) && pinfo->nr_frags &&
++	if (!skb_headlen(skb) && pinfo->nr_frags && skb_frag_page(frag0) &&
+ 	    !PageHighMem(skb_frag_page(frag0)) &&
+ 	    (!NET_IP_ALIGN || !((skb_frag_off(frag0) + nhoff) & 3))) {
+ 		NAPI_GRO_CB(skb)->frag0 = skb_frag_address(frag0);
 diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index b157efea5dea..07f802f1adf1 100644
+index 07f802f1adf1..2ce64f57a0f6 100644
 --- a/net/core/skbuff.c
 +++ b/net/core/skbuff.c
-@@ -896,19 +896,23 @@ bool napi_pp_put_page(struct page *page, bool napi_safe)
- 	bool allow_direct = false;
- 	struct page_pool *pp;
+@@ -2999,6 +2999,9 @@ static bool __skb_splice_bits(struct sk_buff *skb, struct pipe_inode_info *pipe,
+ 	for (seg = 0; seg < skb_shinfo(skb)->nr_frags; seg++) {
+ 		const skb_frag_t *f = &skb_shinfo(skb)->frags[seg];
  
--	page = compound_head(page);
--
--	/* page->pp_magic is OR'ed with PP_SIGNATURE after the allocation
--	 * in order to preserve any existing bits, such as bit 0 for the
--	 * head page of compound page and bit 1 for pfmemalloc page, so
--	 * mask those bits for freeing side when doing below checking,
--	 * and page_is_pfmemalloc() is checked in __page_pool_put_page()
--	 * to avoid recycling the pfmemalloc page.
--	 */
--	if (unlikely((page->pp_magic & ~0x3UL) != PP_SIGNATURE))
--		return false;
-+	if (!page_is_page_pool_iov(page)) {
-+		page = compound_head(page);
-+
-+		/* page->pp_magic is OR'ed with PP_SIGNATURE after the allocation
-+		 * in order to preserve any existing bits, such as bit 0 for the
-+		 * head page of compound page and bit 1 for pfmemalloc page, so
-+		 * mask those bits for freeing side when doing below checking,
-+		 * and page_is_pfmemalloc() is checked in __page_pool_put_page()
-+		 * to avoid recycling the pfmemalloc page.
-+		 */
-+		if (unlikely((page->pp_magic & ~0x3UL) != PP_SIGNATURE))
++		if (WARN_ON_ONCE(!skb_frag_page(f)))
 +			return false;
- 
--	pp = page->pp;
-+		pp = page->pp;
-+	} else {
-+		pp = page_to_page_pool_iov(page)->pp;
-+	}
- 
- 	/* Allow direct recycle if we have reasons to believe that we are
- 	 * in the same context as the consumer would run, so there's
++
+ 		if (__splice_segment(skb_frag_page(f),
+ 				     skb_frag_off(f), skb_frag_size(f),
+ 				     offset, len, spd, false, sk, pipe))
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 70a1bafbefba..e22681c4bfac 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -2157,6 +2157,9 @@ static int tcp_zerocopy_receive(struct sock *sk,
+ 			break;
+ 		}
+ 		page = skb_frag_page(frags);
++		if (WARN_ON_ONCE(!page))
++			break;
++
+ 		prefetchw(page);
+ 		pages[pages_to_map++] = page;
+ 		length += PAGE_SIZE;
 -- 
 2.43.0.472.g3155946c3a-goog
 
