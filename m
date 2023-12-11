@@ -1,299 +1,141 @@
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A21D4E601;
+	Mon, 11 Dec 2023 17:40:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="IDD5FiNd"
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81945EA
-	for <bpf@vger.kernel.org>; Mon, 11 Dec 2023 09:34:58 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2ca00dffc23so59265101fa.2
-        for <bpf@vger.kernel.org>; Mon, 11 Dec 2023 09:34:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1702316096; x=1702920896; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NdntKpoFqEp565dhKg1sipm9uz6YZ2T0KuB0vGO17X4=;
-        b=IDD5FiNdk8G5ShXCcmbO74sNPQt6a6KAwiVf+jV0aaXrTVT3t1sLoWqPSkK4kQ5FPa
-         LDCImOtpdxH7u4j8/dPFfij99W2uIgZV/nyAwutwHL2ZXmg6blCl1BsH5Zyzx958ksoD
-         2eSqH6i7B7/T+lulICxjx3PyBdLiDm+QxEQc+HIokH+I2xMPWW+a50K1tiWaxdVFzJ0t
-         ohTlZTPADKQSanTCSK3I30odqjSYBsTdEtkSIn/mxBMy5GIyLbmLsWyUBpSwUEL8lZF/
-         jzbF/8M9e7RUY8dgGBsF8ocmsZ/cYcuWt2bokQkKqhAiz8n2d7zoIjJPMVP3xtl5nv9j
-         dZyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702316096; x=1702920896;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NdntKpoFqEp565dhKg1sipm9uz6YZ2T0KuB0vGO17X4=;
-        b=Iwdrz399U460ZPiQsPWJ5It6k/meKUGv4eTcyoJvzQnVUxJfQgp3NFr+zsTg1DY008
-         7QF2/PaJ8frcD6IHdqaWmNLl0dWDPULrlGaCFTN/VIdYNfs9c+q/sKJ/LTpjQyEYkVGB
-         IdBaYb3szZosMz0aZVuE21TBnlfah9HuV5qUe4YimQBKL3LR36m5KsBfpcp8X8C6p0qx
-         9fOG0u3sp3pnYZob1jncbMpxdykVOSOQLZ+eEu0/M4K0L+s2x3UsS3RdZ0zN9VvkNiok
-         eyqYLaPz4+EXYpjWgmD0hkHYLUhxbjt8CQkofb6n5ahIlBpNtf7NeGGlQCu0gtTuqjdN
-         tTxQ==
-X-Gm-Message-State: AOJu0YxFOO8y6DmInkNZBVlt6QoNYanqqNtXF28JgrwV7Q9DQwjdetEC
-	B4ztiFDaSYCTbD4OzGF5LJcJ2Q==
-X-Google-Smtp-Source: AGHT+IEUifuKCuhx+BOn5jaBiE7KhjVAiRTio474dljS05Eg0bsVyB9zQoitCqgX1srL22+FbFYf7A==
-X-Received: by 2002:a19:6555:0:b0:50b:fa2e:4bce with SMTP id c21-20020a196555000000b0050bfa2e4bcemr2079599lfj.9.1702316096512;
-        Mon, 11 Dec 2023 09:34:56 -0800 (PST)
-Received: from zh-lab-node-5 ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id th19-20020a1709078e1300b00a1bda8db043sm5027770ejc.120.2023.12.11.09.34.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Dec 2023 09:34:55 -0800 (PST)
-Date: Mon, 11 Dec 2023 17:31:31 +0000
-From: Anton Protopopov <aspsk@isovalent.com>
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 6/7] libbpf: BPF Static Keys support
-Message-ID: <ZXdHc7xoAVf1g4a9@zh-lab-node-5>
-References: <20231206141030.1478753-7-aspsk@isovalent.com>
- <CAADnVQ+BRbJN1A9_fjDTXh0=VM5x6oGVgtcB1JB7K8TM5+6i5Q@mail.gmail.com>
- <ZXNCB5sEendzNj6+@zh-lab-node-5>
- <CAEf4Bzai9X2xQGjEOZvkSkx7ZB9CSSk4oTxoksTVSBoEvR4UsA@mail.gmail.com>
- <CAADnVQJtWVE9+rA2232P4g7ktUJ_+Nfwo+MYpv=6p7+Z9J20hw@mail.gmail.com>
- <bef79c65-e89a-4219-8c8b-750c60e1f2b4@linux.dev>
- <CAADnVQJd1aUFzznLhwNvkN+zot-u3=4A16utY93HoLJrP_vo3w@mail.gmail.com>
- <85aa91f9-d5c0-4e7b-950d-475da7787f64@linux.dev>
- <CAADnVQKZjmwxo0cBiHcp3FkAAmJT850qQJ5_=fAhfOKniJM2Kw@mail.gmail.com>
- <3682c649-6a6a-4f66-b4fa-fbcbb774ae94@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ILT7ZiPQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28A99C433C8;
+	Mon, 11 Dec 2023 17:40:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702316424;
+	bh=hOU4jYl2zjD7dm4WiF388gDlJNEcYLRmL4FrrPgk5yA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ILT7ZiPQGYhBDRi5b3lf2uIdYB4fRbuh2WtUGL5lqBhOSH9SQvJlRI4vIBz2v17S+
+	 blGaty3kzjUowjXu+vwC+cpgSyt00WKM35hBVSFNoLhiDqRYp1qNOKsm9iz9+8yiST
+	 Q7K6KPtg6FMORGKJpZx3r5qFsWADIKZ7z27AI70Za4hAoGh4qLSigaBPpfhbzDtG4B
+	 WegId6wDnidKSJcRZAEmY6Gsyb2qXOjKSyhqb3S+T2soCbbL8ZCGJnTGo/vdm3VtFH
+	 5din7ZlxT5L0DDzybGDn3dJwXQ4AqFpESE3FPPogtTM2eGc+sDPJnDgua4TycmkKSN
+	 p4xYROwwpkw+g==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-50bef9b7a67so5378236e87.1;
+        Mon, 11 Dec 2023 09:40:24 -0800 (PST)
+X-Gm-Message-State: AOJu0YzJcd3YEJQ+ACZdrqlHk0GTTyqjPJZRsUdvkqqPNe2zlYKaxz51
+	2qxhxzSHuFpFiIVtjJjx7ryxgkkPkIYrvW+S2VY=
+X-Google-Smtp-Source: AGHT+IFTGNQtSpFmM7O8UeOW1n7sWiGpQ/OA3GeoRRIZNv3WRNPCLATv59ZjIlJ2ZFi1fcYwSJZuwHeltryOcI6rOhc=
+X-Received: by 2002:a2e:b046:0:b0:2ca:34cd:77e4 with SMTP id
+ d6-20020a2eb046000000b002ca34cd77e4mr1895908ljl.103.1702316422374; Mon, 11
+ Dec 2023 09:40:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3682c649-6a6a-4f66-b4fa-fbcbb774ae94@linux.dev>
+References: <20231015141644.260646-1-akihiko.odaki@daynix.com>
+ <CAADnVQLfUDmgYng8Cw1hiZOMfWNWLjbn7ZGc4yOEz-XmeFEz5Q@mail.gmail.com>
+ <2594bb24-74dc-4785-b46d-e1bffcc3e7ed@daynix.com> <CAADnVQ+J+bOtvEfdvgUse_Rr07rM5KOZ5DtAmHDgRmi70W68+g@mail.gmail.com>
+ <CACGkMEs22078F7rSLEz6eQabkZZ=kujSONUNMThZz5Gp=YiidQ@mail.gmail.com>
+ <CAADnVQLt8NWvP8qGWMPx=12PwWWE69P7aS2dbm=khAJkCnJEoQ@mail.gmail.com>
+ <9a4853ad-5ef4-4b15-a49e-9edb5ae4468e@daynix.com> <6253fb6b-9a53-484a-9be5-8facd46c051e@daynix.com>
+ <CAPhsuW5JYoM-Mkehdy=FQsG1nvjbYGzwRZx8BkpG1P7cHdD=eQ@mail.gmail.com>
+ <dba89d4b-84aa-4c9f-b016-56fd3ade04b2@daynix.com> <CAPhsuW5KLgt_gsih7zi+T99iYVbt7hk7=OCwYzin-H3=OhF54Q@mail.gmail.com>
+ <a1f09866-a443-4f74-8025-6cdb32eb1d2c@daynix.com> <CAPhsuW4o5o41a+jVjgGP+Ck3eUD8w6coLXMTYewXKJYmciLLnQ@mail.gmail.com>
+ <664003d3-aadb-4938-80f6-67fab1c9dcdd@daynix.com> <d30a038b-d10f-468d-8879-478a6c5b814b@daynix.com>
+ <CAPhsuW5CMYiOMUDCgfQyo=K31igZZ+BgXyL6yfq1OG3r2CzQ4g@mail.gmail.com> <49a5b971-ae97-4118-ae20-f651ad14bed7@daynix.com>
+In-Reply-To: <49a5b971-ae97-4118-ae20-f651ad14bed7@daynix.com>
+From: Song Liu <song@kernel.org>
+Date: Mon, 11 Dec 2023 09:40:10 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW7E6Dyp8VTiuwbreB18Lt93n9Fa2hdd2sEschUDzgQiSg@mail.gmail.com>
+Message-ID: <CAPhsuW7E6Dyp8VTiuwbreB18Lt93n9Fa2hdd2sEschUDzgQiSg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/7] bpf: Introduce BPF_PROG_TYPE_VNET_HASH
+To: Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Jason Wang <jasowang@redhat.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, kvm@vger.kernel.org, 
+	virtualization@lists.linux-foundation.org, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Dec 09, 2023 at 10:32:42PM -0800, Yonghong Song wrote:
-> 
-> On 12/9/23 9:18 AM, Alexei Starovoitov wrote:
-> > On Fri, Dec 8, 2023 at 9:05 PM Yonghong Song <yonghong.song@linux.dev> wrote:
-> > > 
-> > > On 12/8/23 8:25 PM, Alexei Starovoitov wrote:
-> > > > On Fri, Dec 8, 2023 at 8:15 PM Yonghong Song <yonghong.song@linux.dev> wrote:
-> > > > > On 12/8/23 8:05 PM, Alexei Starovoitov wrote:
-> > > > > > On Fri, Dec 8, 2023 at 2:04 PM Andrii Nakryiko
-> > > > > > <andrii.nakryiko@gmail.com> wrote:
-> > > > > > > I feel like embedding some sort of ID inside the instruction is very..
-> > > > > > > unusual, shall we say?
-> > > > > > yeah. no magic numbers inside insns pls.
-> > > > > > 
-> > > > > > I don't like JA_CFG name, since I read CFG as control flow graph,
-> > > > > > while you probably meant CFG as configurable.
-> > > > > > How about BPF_JA_OR_NOP ?
-> > > > > > Then in combination with BPF_JMP or BPF_JMP32 modifier
-> > > > > > the insn->off|imm will be used.
-> > > > > > 1st bit in src_reg can indicate the default action: nop or jmp.
-> > > > > > In asm it may look like asm("goto_or_nop +5")
-> > > > > How does the C source code looks like in order to generate
-> > > > > BPF_JA_OR_NOP insn? Any source examples?
-> > > > It will be in inline asm only. The address of that insn will
-> > > > be taken either via && or via asm (".long %l[label]").
-> > > >   From llvm pov both should go through the same relo creation logic. I hope :)
-> > > A hack in llvm below with an example, could you check whether the C
-> > > syntax and object dump result
-> > > is what you want to see?
-> > Thank you for the ultra quick llvm diff!
-> > 
-> > > diff --git a/llvm/lib/Target/BPF/AsmParser/BPFAsmParser.cpp
-> > > b/llvm/lib/Target/BPF/AsmParser/BPFAsmParser.cpp
-> > > index 90697c6645be..38b1cbc31f9a 100644
-> > > --- a/llvm/lib/Target/BPF/AsmParser/BPFAsmParser.cpp
-> > > +++ b/llvm/lib/Target/BPF/AsmParser/BPFAsmParser.cpp
-> > > @@ -231,6 +231,7 @@ public:
-> > >            .Case("call", true)
-> > >            .Case("goto", true)
-> > >            .Case("gotol", true)
-> > > +        .Case("goto_or_nop", true)
-> > >            .Case("*", true)
-> > >            .Case("exit", true)
-> > >            .Case("lock", true)
-> > > @@ -259,6 +260,7 @@ public:
-> > >            .Case("bswap64", true)
-> > >            .Case("goto", true)
-> > >            .Case("gotol", true)
-> > > +        .Case("goto_or_nop", true)
-> > >            .Case("ll", true)
-> > >            .Case("skb", true)
-> > >            .Case("s", true)
-> > > diff --git a/llvm/lib/Target/BPF/BPFInstrInfo.td
-> > > b/llvm/lib/Target/BPF/BPFInstrInfo.td
-> > > index 5972c9d49c51..a953d10429bf 100644
-> > > --- a/llvm/lib/Target/BPF/BPFInstrInfo.td
-> > > +++ b/llvm/lib/Target/BPF/BPFInstrInfo.td
-> > > @@ -592,6 +592,19 @@ class BRANCH<BPFJumpOp Opc, string OpcodeStr,
-> > > list<dag> Pattern>
-> > >      let BPFClass = BPF_JMP;
-> > >    }
-> > > 
-> > > +class BRANCH_OR_NOP<BPFJumpOp Opc, string OpcodeStr, list<dag> Pattern>
-> > > +    : TYPE_ALU_JMP<Opc.Value, BPF_K.Value,
-> > > +                   (outs),
-> > > +                   (ins brtarget:$BrDst),
-> > > +                   !strconcat(OpcodeStr, " $BrDst"),
-> > > +                   Pattern> {
-> > > +  bits<16> BrDst;
-> > > +
-> > > +  let Inst{47-32} = BrDst;
-> > > +  let Inst{31-0} = 1;
-> > > +  let BPFClass = BPF_JMP;
-> > > +}
-> > > +
-> > >    class BRANCH_LONG<BPFJumpOp Opc, string OpcodeStr, list<dag> Pattern>
-> > >        : TYPE_ALU_JMP<Opc.Value, BPF_K.Value,
-> > >                       (outs),
-> > > @@ -632,6 +645,7 @@ class CALLX<string OpcodeStr>
-> > >    let isBranch = 1, isTerminator = 1, hasDelaySlot=0, isBarrier = 1 in {
-> > >      def JMP : BRANCH<BPF_JA, "goto", [(br bb:$BrDst)]>;
-> > >      def JMPL : BRANCH_LONG<BPF_JA, "gotol", []>;
-> > > +  def JMP_OR_NOP : BRANCH_OR_NOP<BPF_JA, "goto_or_nop", []>;
-> > I was thinking of burning the new 0xE opcode for it,
-> > but you're right. It's a flavor of existing JA insn and it's indeed
-> > better to just use src_reg=1 bit to indicate so.
-> 
-> Right, using src_reg to indicate a new flavor of JA insn sounds
-> a good idea. My previously-used 'imm' field is a pure hack.
-> 
-> > 
-> > We probably need to use the 2nd bit of src_reg to indicate its default state
-> > (jmp or fallthrough).
-> 
-> Good point.
-> 
-> > 
-> > >           asm volatile goto ("r0 = 0; \
-> > >                               goto_or_nop %l[label]; \
-> > >                               r2 = 2; \
-> > >                               r3 = 3; \
-> > Not sure how to represent the default state in assembly though.
-> > "goto_or_nop" defaults to goto
-> > "nop_or_goto" default to nop
-> > ?
-> > 
-> > Do we need "gotol" for imm32 or will it be automatic?
-> 
-> It won't be automatic.
-> 
-> At the end of this email, I will show the new change
-> to have gotol_or_nop and nop_or_gotol insn and an example
+On Sun, Dec 10, 2023 at 9:04=E2=80=AFPM Akihiko Odaki <akihiko.odaki@daynix=
+.com> wrote:
+>
+[...]
+> >
+> > I don't think we can provide stability guarantees before seeing somethi=
+ng
+> > being used in the field. How do we know it will be useful forever? If a
+> > couple years later, there is only one person using it somewhere in the
+> > world, why should we keep supporting it? If there are millions of virtu=
+al
+> > machines using it, why would you worry about it being removed?
+>
+> I have a different opinion about providing stability guarantees; I
+> believe it is safe to provide such a guarantee without actual use in a
+> field. We develop features expecting there are real uses, and if it
+> turns out otherwise, we can break the stated guarantee since there is no
+> real use cases anyway. It is fine even breaking UAPIs in such a case,
+> which is stated in Documentation/admin-guide/reporting-regressions.rst.
+>
+> So I rather feel easy about guaranteeing UAPI stability; we can just
+> guarantee the UAPI-level stability for a particular kfunc and use it
+> from QEMU expecting the stability. If the feature is found not useful,
+> QEMU and the kernel can just remove it.
 
-Thanks a lot Yonghong! May I ask you to send a full patch for LLVM
-(with gotol) so that I can test it?
+It appears that we more or less agree that this feature may not be
+something we will support forever.
 
-Overall, I think that JA + flags in SRC_REG is indeed better than a
-new instruction, as a new code is not used.
+> I'm more concerned about the other case, which means that there will be
+> wide uses of this feature. A kernel developer may assume the stability
+> of the interface is like one of kernel internal APIs
+> (Documentation/bpf/kfuncs.rst says kfuncs are like EXPORT_SYMBOL_GPL)
+> and decide to change it, breaking old QEMU binaries and that's something
+> I would like to avoid.
+>
+> Regarding the breakage scenario, I think we can avoid the kfuncs removal
+> just by saying "we won't remove them". I'm more worried the case that a
+> change in the BPF kfunc infrastucture requires to recompile the binary.
+>
+> So, in short, I don't think we can say "kfuncs are like
+> EXPORT_SYMBOL_GPL" and "you can freely use kfuncs in a normal userspace
+> application like QEMU" at the same time.
+>
+> >
+[...]
+>
+> >
+> > I would recommend you give option 2 a try and share the code. This is
+> > probably the best way to move the discussion forward.
+>
+> I'd like to add a documentation change to say the added kfuncs are
+> exceptional cases that are not like EXPORT_SYMBOL_GPL in that case. Will
+> it work?
 
-This looks for me that two bits aren't enough, and the third is
-required, as the second bit seems to be overloaded:
+It will not.
 
-  * bit 1 indicates that this is a "JA_MAYBE"
-  * bit 2 indicates a jump or nop (i.e., the current state)
+The BPF community had a lot of discussions about the stability of BPF APIs,=
+ for
+example in [1]. Therefore, this is not a light decision.
 
-However, we also need another bit which indicates what to do with the
-instruction when we issue [an abstract] command
+AFAICT, what is being proposed in this RFC is way less stable than many kfu=
+ncs
+we added recently. We are not changing the stability guarantee for this. Le=
+t's
+invest our time wisely and work on more meaningful things, for example, a
+prototype that may actually get accepted.
 
-  flip_branch_on_or_off(branch, 0/1)
+Thanks,
+Song
 
-Without this information (and in the absense of external meta-data on
-how to patch the branch) we can't determine what a given (BPF, not
-jitted) program currently does. For example, if we issue
-
-  flip_branch_on_or_off(branch, 0)
-
-then we can't reflect this in the xlated program by setting the second
-bit to jmp/off. Again, JITted program is fine, but it will be
-desynchronized from xlated in term of logic (some instructions will be
-mapped as NOP -> x86_JUMP, others as NOP -> x86_NOP).
-
-In my original patch we kept this triplet as
-
-  (offset to indicate a "special jump", JA+0/JA+OFF, Normal/Inverse)
-
-> to show it in asm. But there is an issue here.
-> In my example, the compiler (more specifically
-> the InstCombine pass) moved some code after
-> the 'label' to before the 'label'. Not exactly
-> sure how to prevent this. Maybe current
-> 'asm goto' already have a way to handle
-> this. Will investigate this later.
-> 
-> 
-> =========================
-> 
-> $ cat t.c
-> int bar(void);
-> int foo1()
-> {
->         int a, b;
->         asm volatile goto ("r0 = 0; \
->                             gotol_or_nop %l[label]; \
->                             r2 = 2; \
->                             r3 = 3; \
->                            "::::label);
->         a = bar();
-> label:
->         b = 20 * a;
->         return b;
-> }
-> int foo2()
-> {
->         int a, b;
->         asm volatile goto ("r0 = 0; \
->                             nop_or_gotol %l[label]; \
->                             r2 = 2; \
->                             r3 = 3; \
->                            "::::label);
->         a = bar();
-> label:
->         b = 20 * a;
->         return b;
-> }
-> $ clang --target=bpf -O2 -g -c t.c
-> $ llvm-objdump -S t.o
-> 
-> t.o:    file format elf64-bpf
-> 
-> Disassembly of section .text:
-> 
-> 0000000000000000 <foo1>:
-> ; {
->        0:       b7 00 00 00 00 00 00 00 r0 = 0x0
-> ;       asm volatile goto ("r0 = 0; \
->        1:       b7 00 00 00 00 00 00 00 r0 = 0x0
->        2:       06 10 00 00 04 00 00 00 gotol_or_nop +0x4 <LBB0_2>
->        3:       b7 02 00 00 02 00 00 00 r2 = 0x2
->        4:       b7 03 00 00 03 00 00 00 r3 = 0x3
-> ;       a = bar();
->        5:       85 10 00 00 ff ff ff ff call -0x1
-> ;       b = 20 * a;
->        6:       27 00 00 00 14 00 00 00 r0 *= 0x14
-> 
-> 0000000000000038 <LBB0_2>:
-> ;       return b;
->        7:       95 00 00 00 00 00 00 00 exit
-> 
-> 0000000000000040 <foo2>:
-> ; {
->        8:       b7 00 00 00 00 00 00 00 r0 = 0x0
-> ;       asm volatile goto ("r0 = 0; \
->        9:       b7 00 00 00 00 00 00 00 r0 = 0x0
->       10:       06 20 00 00 04 00 00 00 nop_or_gotol +0x4 <LBB1_2>
->       11:       b7 02 00 00 02 00 00 00 r2 = 0x2
->       12:       b7 03 00 00 03 00 00 00 r3 = 0x3
-> ;       a = bar();
->       13:       85 10 00 00 ff ff ff ff call -0x1
-> ;       b = 20 * a;
->       14:       27 00 00 00 14 00 00 00 r0 *= 0x14
-> 
-> 0000000000000078 <LBB1_2>:
-> ;       return b;
->       15:       95 00 00 00 00 00 00 00 exit
-> 
+[1] https://lore.kernel.org/bpf/20221207205537.860248-1-joannelkoong@gmail.=
+com/
