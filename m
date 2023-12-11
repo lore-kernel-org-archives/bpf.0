@@ -1,74 +1,103 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ixn9cLBV"
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B56FAC
-	for <bpf@vger.kernel.org>; Mon, 11 Dec 2023 10:52:55 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2c9ea37ac87so66445871fa.3
-        for <bpf@vger.kernel.org>; Mon, 11 Dec 2023 10:52:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m4ODy+Os"
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3409B
+	for <bpf@vger.kernel.org>; Mon, 11 Dec 2023 11:09:13 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3335397607dso5455109f8f.1
+        for <bpf@vger.kernel.org>; Mon, 11 Dec 2023 11:09:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702320773; x=1702925573; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4v6TGj/sTZeSwAouIJCM+wEU6bvB2qUVQKKDLymwJGY=;
-        b=ixn9cLBVkOUheYI0rrvDlCNCN10PfUFzlojkFdC4XpeX7CGlYVNDA5cDhPMILxf5qt
-         dLG0RP3iDcNrjGVbNaQQLLZWzvaUQDtI52Gw3tBX7HRW8ASP065Sf52b9+QFEKfDIXCQ
-         xfwYLLBaYEmeLiS+nrOPqNoCP1EKpHtgvfYpNpsMsYLIIigCCw3M6iUpMc+MyBesXb0N
-         AKNSQ+raLXJ22jQCLid3q0rwqQKE1lsfeHwWRp09KL8i7cLCXsJcfuHXaNidshl/NuRu
-         FVaZu3VqT49gp6L4fziWZ9hlJsZgo/z2HfYPu0s8hNgtJqtfoil9CzvCL0LuAVXGlSAH
-         M/hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702320773; x=1702925573;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1702321752; x=1702926552; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4v6TGj/sTZeSwAouIJCM+wEU6bvB2qUVQKKDLymwJGY=;
-        b=eHMJ1xbKn7N8OMsio3XGc+XxZvR2aCANPAZHOk0ndTaIW3yYY8VQMT70ScyZfz8uly
-         ok1BtcJIA1NdT9lYirDma/ct377z0Bgv2HY8RfgbxvPsvGDefU3rBTvtnwiNfosUmxxs
-         HPYNwmzL5I/XsPD0UCBw9OsVcO6ylPSNb0vAar/Lx0CIdIiddyU7aQQ28xtGuDzS9uQ6
-         dK6CfvqU+g4n04ECLUsmlY/r4HY5LsDq16PcXLXU1LjsyN5EAcjWVdS931g09eIz91X2
-         xW9MBpPydwSldY3cpENQQICbZB7dk3lSvsphMnc/76sFaz7Jfp9XuA17muJ6uH9DAeRn
-         ZhRA==
-X-Gm-Message-State: AOJu0YwQBeLu50Lo3IBOX7y/oFsHv7OBmrsbSm9LjJgts2kqx3hwC27L
-	/DZh9oADV5rUiykOcAp35f4=
-X-Google-Smtp-Source: AGHT+IF3GzcfmJH1A8mmYyLGHVcFvOObGZBkJ6Nuz+OmUmt5zeQ9q1ZXl9AFsWR19E8bAVkhLzStjw==
-X-Received: by 2002:a2e:bc23:0:b0:2cc:1d5f:9ec0 with SMTP id b35-20020a2ebc23000000b002cc1d5f9ec0mr1430657ljf.27.1702320773073;
-        Mon, 11 Dec 2023 10:52:53 -0800 (PST)
-Received: from erthalion.local (dslb-178-012-113-064.178.012.pools.vodafone-ip.de. [178.12.113.64])
-        by smtp.gmail.com with ESMTPSA id r10-20020a508d8a000000b0054cb88a353dsm3875948edh.14.2023.12.11.10.52.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Dec 2023 10:52:52 -0800 (PST)
-Date: Mon, 11 Dec 2023 19:49:08 +0100
-From: Dmitry Dolgov <9erthalion6@gmail.com>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-	yonghong.song@linux.dev, dan.carpenter@linaro.org,
-	asavkov@redhat.com
-Subject: Re: [PATCH bpf-next v7 1/4] bpf: Relax tracing prog recursive attach
- rules
-Message-ID: <20231211184908.qhfdspfb77ttm2zw@erthalion.local>
-References: <20231208185557.8477-1-9erthalion6@gmail.com>
- <20231208185557.8477-2-9erthalion6@gmail.com>
- <ZXcA4KxoaDagJPjc@krava>
+        bh=5/lc4HMpq98kucR5uqvamjrVU33nMccQN3znljsg+tI=;
+        b=m4ODy+OsHysOTERNcCUTmB/RhdhBsLEnvhVkSOT9UHbMpOwM+yqzhuy5fOJxi3EboF
+         nnakR2TKCikiYGBgkbLWDpXNEnzRiNpYKkiZH8+5w0F7kjnCLlTChowfFvPVKNa5TspO
+         feFr2WuX7+wXbnO7YlMVUGMDOHXcqL5/YnOWBzM5nu7H1L8wx2XaxoTyMI+8ecfwUDEI
+         HzyM6YxYBgJh2s5dHybR6tMcOjYJQO/B/FS27xCAx/omGsFlTQtRjUf8tVXtNr5Mi8+0
+         zWica3persX18PsJCELiwf8Mk2etax8nfNKxbEeZL6Urc8pFt86cs0z5ODxoXwLbBytB
+         I8Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702321752; x=1702926552;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5/lc4HMpq98kucR5uqvamjrVU33nMccQN3znljsg+tI=;
+        b=Kyf7+OuPsh2VwBTajn/bHya7Y4l4ZXdkVTyJI68kpgODiHUkuuSTc6Z0W2DaF8ol1/
+         KOO2qe8I5J40UmmASiCzvXeV+OUTneVJdcP+lRMpP8looao+FajWuPEjzUoX+RWve8a8
+         eUN0AFe+eDENfjSsStwjG8Ecqnt4zCsU9RAhKaPUpGcvf/Hlmc/uwTxDdG4L42zdrDTd
+         PjxUp2yIJnOuRlvb2fXDBS/kmS90ihpBIv1rLIuIt0X7bQmgMYslTDEXHYuYKVCep4F+
+         LqyhuCqGPrDQdDsqvQp+UvSuhE1tlfdiXXZPoNW0YCrbKnFUBVfwanOpd+x6O+Cysocz
+         npaQ==
+X-Gm-Message-State: AOJu0Ywvl0xOpAppEGRCk3zNlBFB8Se5Q8i8b5xsYg6vDEwsqr1uqwt8
+	a8+NYRGpMqijGiDAlqexgVEo0GkBv1bL01FLRZg=
+X-Google-Smtp-Source: AGHT+IFn3tTo+HlUuFs4pAUt2Yg99jlJ0ismZf50Vgq0A38cCXeqX+NPNolemdvzJS0pf5wfD6SDvMV9rPmAsrnM+P4=
+X-Received: by 2002:a05:6000:44:b0:333:3c19:d3d2 with SMTP id
+ k4-20020a056000004400b003333c19d3d2mr2340168wrx.31.1702321751681; Mon, 11 Dec
+ 2023 11:09:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZXcA4KxoaDagJPjc@krava>
+References: <20231206141030.1478753-7-aspsk@isovalent.com> <CAADnVQ+BRbJN1A9_fjDTXh0=VM5x6oGVgtcB1JB7K8TM5+6i5Q@mail.gmail.com>
+ <ZXNCB5sEendzNj6+@zh-lab-node-5> <CAEf4Bzai9X2xQGjEOZvkSkx7ZB9CSSk4oTxoksTVSBoEvR4UsA@mail.gmail.com>
+ <CAADnVQJtWVE9+rA2232P4g7ktUJ_+Nfwo+MYpv=6p7+Z9J20hw@mail.gmail.com>
+ <bef79c65-e89a-4219-8c8b-750c60e1f2b4@linux.dev> <CAADnVQJd1aUFzznLhwNvkN+zot-u3=4A16utY93HoLJrP_vo3w@mail.gmail.com>
+ <85aa91f9-d5c0-4e7b-950d-475da7787f64@linux.dev> <CAADnVQKZjmwxo0cBiHcp3FkAAmJT850qQJ5_=fAhfOKniJM2Kw@mail.gmail.com>
+ <3682c649-6a6a-4f66-b4fa-fbcbb774ae94@linux.dev> <ZXdHc7xoAVf1g4a9@zh-lab-node-5>
+In-Reply-To: <ZXdHc7xoAVf1g4a9@zh-lab-node-5>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 11 Dec 2023 11:08:59 -0800
+Message-ID: <CAADnVQLvduKOxNWgruC0TUOzxVVg-Bp8RButfN9nWgQ_DdCC2A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 6/7] libbpf: BPF Static Keys support
+To: Anton Protopopov <aspsk@isovalent.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jiri Olsa <jolsa@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> On Mon, Dec 11, 2023 at 01:30:24PM +0100, Jiri Olsa wrote:
-> > +	/* Bookkeeping for managing the prog attachment chain */
-> > +	if (tgt_prog &&
-> > +		prog->type == BPF_PROG_TYPE_TRACING &&
-> > +		tgt_prog->type == BPF_PROG_TYPE_TRACING)
-> > +		prog->aux->attach_tracing_prog = true;
+On Mon, Dec 11, 2023 at 9:34=E2=80=AFAM Anton Protopopov <aspsk@isovalent.c=
+om> wrote:
 >
-> wrong indentation in here, please check the if conditions around
+>
+> This looks for me that two bits aren't enough, and the third is
+> required, as the second bit seems to be overloaded:
+>
+>   * bit 1 indicates that this is a "JA_MAYBE"
+>   * bit 2 indicates a jump or nop (i.e., the current state)
+>
+> However, we also need another bit which indicates what to do with the
+> instruction when we issue [an abstract] command
+>
+>   flip_branch_on_or_off(branch, 0/1)
+>
+> Without this information (and in the absense of external meta-data on
+> how to patch the branch) we can't determine what a given (BPF, not
+> jitted) program currently does. For example, if we issue
+>
+>   flip_branch_on_or_off(branch, 0)
+>
+> then we can't reflect this in the xlated program by setting the second
+> bit to jmp/off. Again, JITted program is fine, but it will be
+> desynchronized from xlated in term of logic (some instructions will be
+> mapped as NOP -> x86_JUMP, others as NOP -> x86_NOP).
 
-I'm a bit confused here, why is the indentation here wrong? IIUC "if"
-predicates have to be aligned on the same column, with padding where
-needed. Or is it always necessary to expand the last tab with spaces?
+Not following the need for the 3rd bit.
+The 2nd bit is not only the initial state, but the current state too.
+
+when user space does static_branch_enable it will set the 2nd bit to 1
+(if it wasn't set) and will text_poke_bp the code.
+xlated will be always in sync with JITed.
+No ambiguity.
+
+An annoying part is that bpf insn stream is read only, so we cannot
+really write that 2nd bit. We can virtually write it.
+Seeing nop or jmp in JITed code would mean the bit is 0 or 1.
+So xlated dump will report it.
+
+Separately the kernel doesn't have static_branch_switch/flip command.
+It's only enable or disable. I think it's better to keep it the same way.
