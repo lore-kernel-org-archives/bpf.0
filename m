@@ -1,35 +1,49 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0AAE4
-	for <bpf@vger.kernel.org>; Sun, 10 Dec 2023 23:37:45 -0800 (PST)
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4SpYVq6hHYz4f3kFg
-	for <bpf@vger.kernel.org>; Mon, 11 Dec 2023 15:37:39 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 5B6E11A0C05
-	for <bpf@vger.kernel.org>; Mon, 11 Dec 2023 15:37:42 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP1 (Coremail) with SMTP id cCh0CgDn6xFBvHZlF2ZYDQ--.7860S6;
-	Mon, 11 Dec 2023 15:37:42 +0800 (CST)
-From: Hou Tao <houtao@huaweicloud.com>
-To: bpf@vger.kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Song Liu <song@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	houtao1@huawei.com
-Subject: [PATCH bpf-next v2 2/2] bpf: Use GFP_KERNEL in bpf_event_entry_gen()
-Date: Mon, 11 Dec 2023 15:38:43 +0800
-Message-Id: <20231211073843.1888058-3-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20231211073843.1888058-1-houtao@huaweicloud.com>
-References: <20231211073843.1888058-1-houtao@huaweicloud.com>
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="prOU6ah4"
+Received: from smtp-fw-52003.amazon.com (smtp-fw-52003.amazon.com [52.119.213.152])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF5CDB;
+	Sun, 10 Dec 2023 23:38:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1702280283; x=1733816283;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=G27pj8LYHdnN7TKoSD97L7HFiQjzVPM+Haa/cXT3hMM=;
+  b=prOU6ah4Sqh3jmlMGUXNo8NGeQWo1I6Vdl5R4SM+Y32S9leTyD2C4xcZ
+   5C57PbWiRouRi4VvAiwCrgPPwjd/2dfm+fNiQF2sJtwr5HcniR7adCDYr
+   GTPqyigSNqpskhczSDDK7Dih8tphCn8PT98zmnYh2wKzUwYnQm0VmeyYN
+   I=;
+X-IronPort-AV: E=Sophos;i="6.04,267,1695686400"; 
+   d="scan'208";a="624434067"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-94edd59b.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-52003.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2023 07:38:01 +0000
+Received: from smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev (pdx2-ws-svc-p26-lb5-vlan3.pdx.amazon.com [10.39.38.70])
+	by email-inbound-relay-pdx-2c-m6i4x-94edd59b.us-west-2.amazon.com (Postfix) with ESMTPS id 3ADB140D40;
+	Mon, 11 Dec 2023 07:38:00 +0000 (UTC)
+Received: from EX19MTAUWB001.ant.amazon.com [10.0.21.151:60319]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.19.169:2525] with esmtp (Farcaster)
+ id 2e4ae004-9cf3-424b-9709-d828856ce276; Mon, 11 Dec 2023 07:37:59 +0000 (UTC)
+X-Farcaster-Flow-ID: 2e4ae004-9cf3-424b-9709-d828856ce276
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Mon, 11 Dec 2023 07:37:59 +0000
+Received: from 88665a182662.ant.amazon.com (10.119.13.105) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Mon, 11 Dec 2023 07:37:55 +0000
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
+To: Eric Dumazet <edumazet@google.com>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>
+CC: Kuniyuki Iwashima <kuniyu@amazon.com>, Kuniyuki Iwashima
+	<kuni1840@gmail.com>, <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+Subject: [PATCH v5 bpf-next 2/6] tcp: Move skb_steal_sock() to request_sock.h
+Date: Mon, 11 Dec 2023 16:36:46 +0900
+Message-ID: <20231211073650.90819-3-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20231211073650.90819-1-kuniyu@amazon.com>
+References: <20231211073650.90819-1-kuniyu@amazon.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,51 +51,106 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgDn6xFBvHZlF2ZYDQ--.7860S6
-X-Coremail-Antispam: 1UD129KBjvdXoWrZw4xCFWfXr47Zr47urWfKrg_yoWftrb_Wa
-	y8Zr98Grs8GFnIqr1j93y0grZ3trWrW3WrurWSqr9xZF98W3W8Ar1kAry5Z34DXrWxCrZ0
-	kr9aqr4kZw1Y9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbfkYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r15M2
-	8IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK
-	021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r
-	4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
-	0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
-	JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwI
-	xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-	Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
-	IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
-	6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-	AFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFa9-UUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D038UWB001.ant.amazon.com (10.13.139.148) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+Precedence: Bulk
 
-From: Hou Tao <houtao1@huawei.com>
+We will support arbitrary SYN Cookie with BPF.
 
-rcu_read_lock() is no longer held when invoking bpf_event_entry_gen()
-which is called by perf_event_fd_array_get_ptr(), so using GFP_KERNEL
-instead of GFP_ATOMIC to reduce the possibility of failures due to
-out-of-memory.
+If BPF prog validates ACK and kfunc allocates a reqsk, it will
+be carried to TCP stack as skb->sk with req->syncookie 1.
 
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
-Signed-off-by: Hou Tao <houtao1@huawei.com>
+In skb_steal_sock(), we need to check inet_reqsk(sk)->syncookie
+to see if the reqsk is created by kfunc.  However, inet_reqsk()
+is not available in sock.h.
+
+Let's move skb_steal_sock() to request_sock.h.
+
+While at it, we refactor skb_steal_sock() so it returns early if
+skb->sk is NULL to minimise the following patch.
+
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 ---
- kernel/bpf/arraymap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/net/request_sock.h | 28 ++++++++++++++++++++++++++++
+ include/net/sock.h         | 25 -------------------------
+ 2 files changed, 28 insertions(+), 25 deletions(-)
 
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 6cf47bcb7b83..5c3e4ee7c948 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -1197,7 +1197,7 @@ static struct bpf_event_entry *bpf_event_entry_gen(struct file *perf_file,
- {
- 	struct bpf_event_entry *ee;
+diff --git a/include/net/request_sock.h b/include/net/request_sock.h
+index 144c39db9898..26c630c40abb 100644
+--- a/include/net/request_sock.h
++++ b/include/net/request_sock.h
+@@ -83,6 +83,34 @@ static inline struct sock *req_to_sk(struct request_sock *req)
+ 	return (struct sock *)req;
+ }
  
--	ee = kzalloc(sizeof(*ee), GFP_ATOMIC);
-+	ee = kzalloc(sizeof(*ee), GFP_KERNEL);
- 	if (ee) {
- 		ee->event = perf_file->private_data;
- 		ee->perf_file = perf_file;
++/**
++ * skb_steal_sock - steal a socket from an sk_buff
++ * @skb: sk_buff to steal the socket from
++ * @refcounted: is set to true if the socket is reference-counted
++ * @prefetched: is set to true if the socket was assigned from bpf
++ */
++static inline struct sock *skb_steal_sock(struct sk_buff *skb,
++					  bool *refcounted, bool *prefetched)
++{
++	struct sock *sk = skb->sk;
++
++	if (!sk) {
++		*prefetched = false;
++		*refcounted = false;
++		return NULL;
++	}
++
++	*prefetched = skb_sk_is_prefetched(skb);
++	if (*prefetched)
++		*refcounted = sk_is_refcounted(sk);
++	else
++		*refcounted = true;
++
++	skb->destructor = NULL;
++	skb->sk = NULL;
++	return sk;
++}
++
+ static inline struct request_sock *
+ reqsk_alloc(const struct request_sock_ops *ops, struct sock *sk_listener,
+ 	    bool attach_listener)
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 1d6931caf0c3..0ed77af38000 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -2838,31 +2838,6 @@ sk_is_refcounted(struct sock *sk)
+ 	return !sk_fullsock(sk) || !sock_flag(sk, SOCK_RCU_FREE);
+ }
+ 
+-/**
+- * skb_steal_sock - steal a socket from an sk_buff
+- * @skb: sk_buff to steal the socket from
+- * @refcounted: is set to true if the socket is reference-counted
+- * @prefetched: is set to true if the socket was assigned from bpf
+- */
+-static inline struct sock *
+-skb_steal_sock(struct sk_buff *skb, bool *refcounted, bool *prefetched)
+-{
+-	if (skb->sk) {
+-		struct sock *sk = skb->sk;
+-
+-		*refcounted = true;
+-		*prefetched = skb_sk_is_prefetched(skb);
+-		if (*prefetched)
+-			*refcounted = sk_is_refcounted(sk);
+-		skb->destructor = NULL;
+-		skb->sk = NULL;
+-		return sk;
+-	}
+-	*prefetched = false;
+-	*refcounted = false;
+-	return NULL;
+-}
+-
+ /* Checks if this SKB belongs to an HW offloaded socket
+  * and whether any SW fallbacks are required based on dev.
+  * Check decrypted mark in case skb_orphan() cleared socket.
 -- 
-2.29.2
+2.30.2
 
