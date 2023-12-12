@@ -1,245 +1,284 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XeI+ATa+"
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED94D3
-	for <bpf@vger.kernel.org>; Tue, 12 Dec 2023 12:27:25 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-50bf1de91c6so772e87.1
-        for <bpf@vger.kernel.org>; Tue, 12 Dec 2023 12:27:25 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EBII8CWq"
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52A2AD
+	for <bpf@vger.kernel.org>; Tue, 12 Dec 2023 13:17:42 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1d053c45897so54848225ad.2
+        for <bpf@vger.kernel.org>; Tue, 12 Dec 2023 13:17:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702412843; x=1703017643; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1702415862; x=1703020662; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1r0l9UDH82X/QRijiq/v0dYWas+IVhPxoge2Q6dptEs=;
-        b=XeI+ATa+LdAkHqn1BjFTeJsitxU1zxpjBgkEu8WDKbZNjPhNQtcp57vQoaVKy0kVg8
-         EkFa9fjlHwGU3mvHzRftpGIcAG1ucOaUu6a3rukDYzYIQzBotRmViaGf5Dh2UmLcxSKZ
-         HS38soueUWtlavoqmdkkl+Zm1h8x7D5LwKO5GCgp18xmtIBK7BtJxvYb0oxLzkLYQNXb
-         ZdpeUxBGOA2uS6BrvctKMJKTMR9RVgx5qGmoZ/cN/9yEc3RjxC4KCSqyF2E6Q6z7tmKT
-         ntSzFy0YlgAvbTSZ9SYl8Qqf5cyC1AzJGURXdWDOPnA0JP6FywFNJ4JWkdJ7MQtUU9LH
-         dncg==
+        bh=YgP6QDGYW90+EPtUKh6hhExTw/nr/8L1WXYuh71GNlI=;
+        b=EBII8CWqTewHCYUKQvaukG1zWeJjB2pl/RbMg+j8fFcvUq11md9ygurXaQ0F8RZJRd
+         QN9d/19YNp3UbZ8oh9br9LCWCn2S3HP6xRQ592cXogzBEjuqKMlAo7D2tjJgS0BmhQwY
+         x3edF44sbx8FhzObBflU+lF0Lssb3eOq3JnHc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702412843; x=1703017643;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1702415862; x=1703020662;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1r0l9UDH82X/QRijiq/v0dYWas+IVhPxoge2Q6dptEs=;
-        b=FixQ7iB1SpbnP5KQ1D/jUCxOmQgZ5dKF4uOtee8TAPLbVMjSHlzT+JKKxFG/Oe+Lqk
-         QwnolCypasXvXhDcQj7Kbv1fIKF6BZId/j8f05oJOYlyY5uWzgJfOe0wT3SxQuzX3L3Z
-         D/a6qCynLaBWxoOL2vV4cYYKmAMVKjUq1PDP2uvpiQ7CKZzYygyCgmGS/WsrxfU2y7Qa
-         98DNNA9nGLBKhWs117a82Sh7KQ7cmgcfgaCuXqRZxk1/JzqKZGHgNV/iNNmS2P3ynhIV
-         teMbo5u5555Vcbbgl62gMnIMLGgDVBg3agdl37EHIWaLIltOnOO1CwExwDm5bdDgPFv9
-         GVeg==
-X-Gm-Message-State: AOJu0Yzx/fsrX1YAEwjdKex80bBrLfR3ygvidok5kDxtywCz1Cd4DDWk
-	KI2G33A9VxddpQES6+CUMsvi8mWwxJXS1RzXqWZwUA==
-X-Google-Smtp-Source: AGHT+IFoY3ALLkdAR2gE36RzhwyUHqDnvxbMLYh3kdlzIKhmBLpUUVJzQp4hNvBUkf9+POe7DeKZkWl1v5OD3OMGjW0=
-X-Received: by 2002:a19:4f07:0:b0:50b:fcb7:15af with SMTP id
- d7-20020a194f07000000b0050bfcb715afmr233274lfb.3.1702412843308; Tue, 12 Dec
- 2023 12:27:23 -0800 (PST)
+        bh=YgP6QDGYW90+EPtUKh6hhExTw/nr/8L1WXYuh71GNlI=;
+        b=cx+mqrxssHqNlbd30O3pGOr7/0YRMtvz5J161dAf5CUKu5RnDn4qEeXWMaVNmwxru6
+         LDkJq1TWRzqDY9cpwV3OVEeI3Yia5L4xZJVEldyedEKF1m+TDLBFXLXWJM4H6O8PZhxD
+         n9aQD/7O25XBznVir5+p/24EaDnpw85WLDqfK6RTmNrFjaOmg2Lr4cvbjCeuBzIDN3YB
+         hHrU2SXY87ok9NRBi81he9JZFRFE0DusproCvhYmmUJFApUnoNR9OY4/VNnsEEYu+AQe
+         A7gVgmc0eJ7Oyh+8L7oQbC2Rqjkg5IVqr/R9Fe+inHi/3+8UiYxC62SA3/KaVf0K0pTW
+         mQsA==
+X-Gm-Message-State: AOJu0YxDUe8OmQgSXi2E5644QNouQLg7JFOpy2t/IUmNCHadAbOJPCNL
+	UxEa0BdloF81/nbF7u74hVjTpA==
+X-Google-Smtp-Source: AGHT+IFjDgIDgEDyV0NYMtC7wrznCUmiU5/lWSweOP8HyZzQAO0+By9K4rXrnLgAr+Ii7qKKdIvgKg==
+X-Received: by 2002:a17:902:e74e:b0:1cc:5e1b:98b5 with SMTP id p14-20020a170902e74e00b001cc5e1b98b5mr7270093plf.66.1702415862230;
+        Tue, 12 Dec 2023 13:17:42 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id g14-20020a1709029f8e00b001cf7c07be50sm9052322plq.58.2023.12.12.13.17.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Dec 2023 13:17:41 -0800 (PST)
+From: Kees Cook <keescook@chromium.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Kees Cook <keescook@chromium.org>,
+	Tejun Heo <tj@kernel.org>,
+	Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Waiman Long <longman@redhat.com>,
+	cgroups@vger.kernel.org,
+	Azeem Shaikh <azeemshaikh38@gmail.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH v3 3/3] kernfs: Convert kernfs_path_from_node_locked() from strlcpy() to strscpy()
+Date: Tue, 12 Dec 2023 13:17:40 -0800
+Message-Id: <20231212211741.164376-3-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231212211606.make.155-kees@kernel.org>
+References: <20231212211606.make.155-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231129060211.1890454-1-irogers@google.com> <20231129060211.1890454-7-irogers@google.com>
- <94e3745c-8c2b-bdf3-f331-1cbe56574d48@arm.com>
-In-Reply-To: <94e3745c-8c2b-bdf3-f331-1cbe56574d48@arm.com>
-From: Ian Rogers <irogers@google.com>
-Date: Tue, 12 Dec 2023 12:27:11 -0800
-Message-ID: <CAP-5=fUWtgNMGWowN2+qnV5FV3viHd=kPqiwXUeEtkQAzabLGw@mail.gmail.com>
-Subject: Re: [PATCH v1 06/14] libperf cpumap: Add any, empty and min helpers
-To: James Clark <james.clark@arm.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Mike Leach <mike.leach@linaro.org>, 
-	Leo Yan <leo.yan@linaro.org>, John Garry <john.g.garry@oracle.com>, 
-	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Kajol Jain <kjain@linux.ibm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Alexandre Ghiti <alexghiti@rivosinc.com>, 
-	Atish Patra <atishp@rivosinc.com>, "Steinar H. Gunderson" <sesse@google.com>, 
-	Yang Jihong <yangjihong1@huawei.com>, Yang Li <yang.lee@linux.alibaba.com>, 
-	Changbin Du <changbin.du@huawei.com>, Sandipan Das <sandipan.das@amd.com>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, Paran Lee <p4ranlee@gmail.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Huacai Chen <chenhuacai@kernel.org>, 
-	Yanteng Si <siyanteng@loongson.cn>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, coresight@lists.linaro.org, 
-	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8042; i=keescook@chromium.org;
+ h=from:subject; bh=shZXUYfHvcn83JB9rTJeaRzUZqZ1UgzjWRrQTVCVtxU=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBleM30G+t8NV/vyHSFzjkC+K+Zj47yXA4kAs33K
+ S4H3DoxNmuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZXjN9AAKCRCJcvTf3G3A
+ JkyTEAConGhiBLHsocQ8sbSwq6RTnjeVAFv2A72J5kJK8MHW3sFiydk6ragXK0H4NjhddAT6k9R
+ Iwpc+sAMeXtC5LSHlbkxzwxmAmTpvdZ0+HkpGNofYnO1GRBS2tNZQBx2xovmaBZGLhI3uL1S2Mf
+ uFy1jEp7IRjwOUbM1zHWV4bM+TLIxRHQDtwtec7aUCS9kz92muBO+LZI8wOqu3//0chhPA/oJYK
+ OmIQjfULUR5a/IzcHJAYVXdcRoDKXwclSWSFPM/lbR+ZX7XOdatfwteancUB7mA3VqMASoK6jzD
+ /WWodvOyGvMywKDybb9iVwPwLdcDqi6f6YRwUsKHrO1PU0X/vaRreWv0AW+McpdjcGDDak159n5
+ dLG/EkNlTRggxw61NNRmjuUIplvXSnvWAMjv1qumw8iiEzajnLTxs+d3rF7yWOneFFWz8cuucBs
+ T6q984RP+2VM4dWIU9dRcdMhF4+sfRiXBnCq95xZcrcakrbEqaZ1G6JMiaKn+pTpTGFBrSw9CAT
+ 91oa2XERahlLlqpV8VMm0QS8tptziqLPqdU3+jQq45xdbDLw4g26B01O8G9PkgXEBkYxNXi2CfE
+ mc85dyxzgFB/wBjBPh0kEN9HaDc4FwRSQ25SkObRCYaStboeynzw51FRZV/pJz/aF6MJJlMUqNu aYQ0Cy79yRW6wZg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 12, 2023 at 7:06=E2=80=AFAM James Clark <james.clark@arm.com> w=
-rote:
->
->
->
-> On 29/11/2023 06:02, Ian Rogers wrote:
-> > Additional helpers to better replace
-> > perf_cpu_map__has_any_cpu_or_is_empty.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/lib/perf/cpumap.c              | 27 +++++++++++++++++++++++++++
-> >  tools/lib/perf/include/perf/cpumap.h | 16 ++++++++++++++++
-> >  tools/lib/perf/libperf.map           |  4 ++++
-> >  3 files changed, 47 insertions(+)
-> >
-> > diff --git a/tools/lib/perf/cpumap.c b/tools/lib/perf/cpumap.c
-> > index 49fc98e16514..7403819da8fd 100644
-> > --- a/tools/lib/perf/cpumap.c
-> > +++ b/tools/lib/perf/cpumap.c
-> > @@ -316,6 +316,19 @@ bool perf_cpu_map__has_any_cpu_or_is_empty(const s=
-truct perf_cpu_map *map)
-> >       return map ? __perf_cpu_map__cpu(map, 0).cpu =3D=3D -1 : true;
-> >  }
-> >
-> > +bool perf_cpu_map__is_any_cpu_or_is_empty(const struct perf_cpu_map *m=
-ap)
-> > +{
-> > +     if (!map)
-> > +             return true;
-> > +
-> > +     return __perf_cpu_map__nr(map) =3D=3D 1 && __perf_cpu_map__cpu(ma=
-p, 0).cpu =3D=3D -1;
-> > +}
->
-> I'm struggling to understand the relevance of the difference between
-> has_any and is_any I see that there is a slight difference, but could it
-> not be refactored out so we only need one?
+One of the last remaining users of strlcpy() in the kernel is
+kernfs_path_from_node_locked(), which passes back the problematic "length
+we _would_ have copied" return value to indicate truncation.  Convert the
+chain of all callers to use the negative return value (some of which
+already doing this explicitly). All callers were already also checking
+for negative return values, so the risk to missed checks looks very low.
 
-Yep, that's what these changes are working toward. For has any the set
-{-1, 0, 1} would return true while is any will return false.
-Previously the has any behavior was called "empty" which I think is
-actively misleading.
+In this analysis, it was found that cgroup1_release_agent() actually
+didn't handle the "too large" condition, so this is technically also a
+bug fix. :)
 
-> Do you ever get an 'any' map that has more than 1 entry? It's quite a
-> subtle difference that is_any returns false if the first one is 'any'
-> but then there are subsequent entries. Whereas has_any would return
-> true. I'm not sure if future readers would be able to appreciate that.
->
-> I see has_any is only used twice, both on evlist->all_cpus. Is there
-> something about that member that means it could have a map that has an
-> 'any' mixed with CPUs? Wouldn't that have the same result as a normal
-> 'any' anyway?
+Here's the chain of callers, and resolution identifying each one as now
+handling the correct return value:
 
-The dummy event may be opened on any CPU but then a particular event
-may be opened on certain CPUs. We merge CPU maps in places like evlist
-so that we can iterate the appropriate CPUs for events and
-open/enable/disable/close all events on a certain CPU at the same time
-(we also set the affinity to that CPU to avoid IPIs). What I'm hoping
-to do in these changes is reduce the ambiguity, the corner cases are
-by their nature unusual.
+kernfs_path_from_node_locked()
+        kernfs_path_from_node()
+                pr_cont_kernfs_path()
+                        returns void
+                kernfs_path()
+                        sysfs_warn_dup()
+                                return value ignored
+                        cgroup_path()
+                                blkg_path()
+                                        bfq_bic_update_cgroup()
+                                                return value ignored
+                                TRACE_IOCG_PATH()
+                                        return value ignored
+                                TRACE_CGROUP_PATH()
+                                        return value ignored
+                                perf_event_cgroup()
+                                        return value ignored
+                                task_group_path()
+                                        return value ignored
+                                damon_sysfs_memcg_path_eq()
+                                        return value ignored
+                                get_mm_memcg_path()
+                                        return value ignored
+                                lru_gen_seq_show()
+                                        return value ignored
+                        cgroup_path_from_kernfs_id()
+                                return value ignored
+                cgroup_show_path()
+                        already converted "too large" error to negative value
+                cgroup_path_ns_locked()
+                        cgroup_path_ns()
+                                bpf_iter_cgroup_show_fdinfo()
+                                        return value ignored
+                                cgroup1_release_agent()
+                                        wasn't checking "too large" error
+                        proc_cgroup_show()
+                                already converted "too large" to negative value
 
-An example of a corner case is, uncore events often get opened just on
-CPU 0 but on a multi-socket system you may have a CPU 32 that also
-needs to open the event. Previous code treated the CPU map index and
-value it contained pretty interchangeably. This is often fine for the
-core PMU but is clearly wrong in this uncore case, {0, 32} has indexes
-0 and 1 but those indexes don't match the CPU numbers. The case of -1
-has often previously been called dummy but I'm trying to call it the
-"any CPU" case to match the perf_event_open man page (I'm hoping it
-also makes it less ambiguous with any CPU being used with a particular
-event like cycles, calling it dummy makes the event sound like it may
-have sideband data). The difference between "all CPUs" and "any CPU"
-is that an evsel for all CPUs would need the event opening
-individually on each CPU, while any CPU events are a single open call.
-Any CPU is only valid to perf_event_open if a PID is specified.
-Depending on the set up there could be overlaps in what they count but
-hopefully it is clearer what the distinction is. I believe the case of
-"any CPU" and specific CPU numbers is more common with aux buffers and
-Adrian has mentioned needing it for intel-pt.
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Zefan Li <lizefan.x@bytedance.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Waiman Long <longman@redhat.com>
+Cc: cgroups@vger.kernel.org
+Co-developed-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+Link: https://lore.kernel.org/r/20231116192127.1558276-3-keescook@chromium.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ fs/kernfs/dir.c           | 34 +++++++++++++++++-----------------
+ kernel/cgroup/cgroup-v1.c |  2 +-
+ kernel/cgroup/cgroup.c    |  4 ++--
+ kernel/cgroup/cpuset.c    |  2 +-
+ 4 files changed, 21 insertions(+), 21 deletions(-)
 
-Thanks,
-Ian
+diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
+index 8c0e5442597e..8ec73f6cf6ec 100644
+--- a/fs/kernfs/dir.c
++++ b/fs/kernfs/dir.c
+@@ -127,7 +127,7 @@ static struct kernfs_node *kernfs_common_ancestor(struct kernfs_node *a,
+  *
+  * [3] when @kn_to is %NULL result will be "(null)"
+  *
+- * Return: the length of the full path.  If the full length is equal to or
++ * Return: the length of the constructed path.  If the path would have been
+  * greater than @buflen, @buf contains the truncated path with the trailing
+  * '\0'.  On error, -errno is returned.
+  */
+@@ -138,16 +138,17 @@ static int kernfs_path_from_node_locked(struct kernfs_node *kn_to,
+ 	struct kernfs_node *kn, *common;
+ 	const char parent_str[] = "/..";
+ 	size_t depth_from, depth_to, len = 0;
++	ssize_t copied;
+ 	int i, j;
+ 
+ 	if (!kn_to)
+-		return strlcpy(buf, "(null)", buflen);
++		return strscpy(buf, "(null)", buflen);
+ 
+ 	if (!kn_from)
+ 		kn_from = kernfs_root(kn_to)->kn;
+ 
+ 	if (kn_from == kn_to)
+-		return strlcpy(buf, "/", buflen);
++		return strscpy(buf, "/", buflen);
+ 
+ 	common = kernfs_common_ancestor(kn_from, kn_to);
+ 	if (WARN_ON(!common))
+@@ -158,18 +159,19 @@ static int kernfs_path_from_node_locked(struct kernfs_node *kn_to,
+ 
+ 	buf[0] = '\0';
+ 
+-	for (i = 0; i < depth_from; i++)
+-		len += strlcpy(buf + len, parent_str,
+-			       len < buflen ? buflen - len : 0);
++	for (i = 0; i < depth_from; i++) {
++		copied = strscpy(buf + len, parent_str, buflen - len);
++		if (copied < 0)
++			return copied;
++		len += copied;
++	}
+ 
+ 	/* Calculate how many bytes we need for the rest */
+ 	for (i = depth_to - 1; i >= 0; i--) {
+ 		for (kn = kn_to, j = 0; j < i; j++)
+ 			kn = kn->parent;
+-		len += strlcpy(buf + len, "/",
+-			       len < buflen ? buflen - len : 0);
+-		len += strlcpy(buf + len, kn->name,
+-			       len < buflen ? buflen - len : 0);
++
++		len += scnprintf(buf + len, buflen - len, "/%s", kn->name);
+ 	}
+ 
+ 	return len;
+@@ -214,7 +216,7 @@ int kernfs_name(struct kernfs_node *kn, char *buf, size_t buflen)
+  * path (which includes '..'s) as needed to reach from @from to @to is
+  * returned.
+  *
+- * Return: the length of the full path.  If the full length is equal to or
++ * Return: the length of the constructed path.  If the path would have been
+  * greater than @buflen, @buf contains the truncated path with the trailing
+  * '\0'.  On error, -errno is returned.
+  */
+@@ -265,12 +267,10 @@ void pr_cont_kernfs_path(struct kernfs_node *kn)
+ 	sz = kernfs_path_from_node(kn, NULL, kernfs_pr_cont_buf,
+ 				   sizeof(kernfs_pr_cont_buf));
+ 	if (sz < 0) {
+-		pr_cont("(error)");
+-		goto out;
+-	}
+-
+-	if (sz >= sizeof(kernfs_pr_cont_buf)) {
+-		pr_cont("(name too long)");
++		if (sz == -E2BIG)
++			pr_cont("(name too long)");
++		else
++			pr_cont("(error)");
+ 		goto out;
+ 	}
+ 
+diff --git a/kernel/cgroup/cgroup-v1.c b/kernel/cgroup/cgroup-v1.c
+index 76db6c67e39a..9cb00ebe9ac6 100644
+--- a/kernel/cgroup/cgroup-v1.c
++++ b/kernel/cgroup/cgroup-v1.c
+@@ -802,7 +802,7 @@ void cgroup1_release_agent(struct work_struct *work)
+ 		goto out_free;
+ 
+ 	ret = cgroup_path_ns(cgrp, pathbuf, PATH_MAX, &init_cgroup_ns);
+-	if (ret < 0 || ret >= PATH_MAX)
++	if (ret < 0)
+ 		goto out_free;
+ 
+ 	argv[0] = agentbuf;
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 4b9ff41ca603..8d2674c6aaef 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -1893,7 +1893,7 @@ int cgroup_show_path(struct seq_file *sf, struct kernfs_node *kf_node,
+ 	len = kernfs_path_from_node(kf_node, ns_cgroup->kn, buf, PATH_MAX);
+ 	spin_unlock_irq(&css_set_lock);
+ 
+-	if (len >= PATH_MAX)
++	if (len == -E2BIG)
+ 		len = -ERANGE;
+ 	else if (len > 0) {
+ 		seq_escape(sf, buf, " \t\n\\");
+@@ -6301,7 +6301,7 @@ int proc_cgroup_show(struct seq_file *m, struct pid_namespace *ns,
+ 		if (cgroup_on_dfl(cgrp) || !(tsk->flags & PF_EXITING)) {
+ 			retval = cgroup_path_ns_locked(cgrp, buf, PATH_MAX,
+ 						current->nsproxy->cgroup_ns);
+-			if (retval >= PATH_MAX)
++			if (retval == -E2BIG)
+ 				retval = -ENAMETOOLONG;
+ 			if (retval < 0)
+ 				goto out_unlock;
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 615daaf87f1f..fb29158ae825 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -4941,7 +4941,7 @@ int proc_cpuset_show(struct seq_file *m, struct pid_namespace *ns,
+ 	retval = cgroup_path_ns(css->cgroup, buf, PATH_MAX,
+ 				current->nsproxy->cgroup_ns);
+ 	css_put(css);
+-	if (retval >= PATH_MAX)
++	if (retval == -E2BIG)
+ 		retval = -ENAMETOOLONG;
+ 	if (retval < 0)
+ 		goto out_free;
+-- 
+2.34.1
 
-> > +
-> > +bool perf_cpu_map__is_empty(const struct perf_cpu_map *map)
-> > +{
-> > +     return map =3D=3D NULL;
-> > +}
-> > +
-> >  int perf_cpu_map__idx(const struct perf_cpu_map *cpus, struct perf_cpu=
- cpu)
-> >  {
-> >       int low, high;
-> > @@ -372,6 +385,20 @@ bool perf_cpu_map__has_any_cpu(const struct perf_c=
-pu_map *map)
-> >       return map && __perf_cpu_map__cpu(map, 0).cpu =3D=3D -1;
-> >  }
-> >
-> > +struct perf_cpu perf_cpu_map__min(const struct perf_cpu_map *map)
-> > +{
-> > +     struct perf_cpu cpu, result =3D {
-> > +             .cpu =3D -1
-> > +     };
-> > +     int idx;
-> > +
-> > +     perf_cpu_map__for_each_cpu_skip_any(cpu, idx, map) {
-> > +             result =3D cpu;
-> > +             break;
-> > +     }
-> > +     return result;
-> > +}
-> > +
-> >  struct perf_cpu perf_cpu_map__max(const struct perf_cpu_map *map)
-> >  {
-> >       struct perf_cpu result =3D {
-> > diff --git a/tools/lib/perf/include/perf/cpumap.h b/tools/lib/perf/incl=
-ude/perf/cpumap.h
-> > index dbe0a7352b64..523e4348fc96 100644
-> > --- a/tools/lib/perf/include/perf/cpumap.h
-> > +++ b/tools/lib/perf/include/perf/cpumap.h
-> > @@ -50,6 +50,22 @@ LIBPERF_API int perf_cpu_map__nr(const struct perf_c=
-pu_map *cpus);
-> >   * perf_cpu_map__has_any_cpu_or_is_empty - is map either empty or has =
-the "any CPU"/dummy value.
-> >   */
-> >  LIBPERF_API bool perf_cpu_map__has_any_cpu_or_is_empty(const struct pe=
-rf_cpu_map *map);
-> > +/**
-> > + * perf_cpu_map__is_any_cpu_or_is_empty - is map either empty or the "=
-any CPU"/dummy value.
-> > + */
-> > +LIBPERF_API bool perf_cpu_map__is_any_cpu_or_is_empty(const struct per=
-f_cpu_map *map);
-> > +/**
-> > + * perf_cpu_map__is_empty - does the map contain no values and it does=
-n't
-> > + *                          contain the special "any CPU"/dummy value.
-> > + */
-> > +LIBPERF_API bool perf_cpu_map__is_empty(const struct perf_cpu_map *map=
-);
-> > +/**
-> > + * perf_cpu_map__min - the minimum CPU value or -1 if empty or just th=
-e "any CPU"/dummy value.
-> > + */
-> > +LIBPERF_API struct perf_cpu perf_cpu_map__min(const struct perf_cpu_ma=
-p *map);
-> > +/**
-> > + * perf_cpu_map__max - the maximum CPU value or -1 if empty or just th=
-e "any CPU"/dummy value.
-> > + */
-> >  LIBPERF_API struct perf_cpu perf_cpu_map__max(const struct perf_cpu_ma=
-p *map);
-> >  LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, str=
-uct perf_cpu cpu);
-> >  LIBPERF_API bool perf_cpu_map__equal(const struct perf_cpu_map *lhs,
-> > diff --git a/tools/lib/perf/libperf.map b/tools/lib/perf/libperf.map
-> > index 10b3f3722642..2aa79b696032 100644
-> > --- a/tools/lib/perf/libperf.map
-> > +++ b/tools/lib/perf/libperf.map
-> > @@ -10,6 +10,10 @@ LIBPERF_0.0.1 {
-> >               perf_cpu_map__nr;
-> >               perf_cpu_map__cpu;
-> >               perf_cpu_map__has_any_cpu_or_is_empty;
-> > +             perf_cpu_map__is_any_cpu_or_is_empty;
-> > +             perf_cpu_map__is_empty;
-> > +             perf_cpu_map__has_any_cpu;
-> > +             perf_cpu_map__min;
-> >               perf_cpu_map__max;
-> >               perf_cpu_map__has;
-> >               perf_thread_map__new_array;
