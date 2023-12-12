@@ -1,123 +1,82 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="WOZlfRw9"
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 191DEDB
-	for <bpf@vger.kernel.org>; Tue, 12 Dec 2023 13:17:44 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-5c66e7eafabso5134241a12.0
-        for <bpf@vger.kernel.org>; Tue, 12 Dec 2023 13:17:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1702415864; x=1703020664; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f0qCHVo7XzgiM/gOkeUKMtC009iJZbF6DLauLv10AR0=;
-        b=WOZlfRw9wQcJVZU/DcREddJjA4kuDbVQF2DFHbCFVR9mI7ZlShplJ0MQo8eOvD8B/p
-         hD+hgaEgYfIlJXfDf0IJUF+OWGiCFz3h/TKZ8EV61Pz/sg3alLeUsJV6UdZGWx2PP1rI
-         63gDiQTni9P+W5M4ftrKbVUksn0xHUKES0A+A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702415864; x=1703020664;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f0qCHVo7XzgiM/gOkeUKMtC009iJZbF6DLauLv10AR0=;
-        b=IBrU4MP3p9a5LK57Eog+isONkXAtiDQLmQZ1sQBqxnu8BcvnORXQaX43iOvuBkttOF
-         E5V/M9h9lmzZEhC6NnTmYvoEv79wtfl4/Rjempp0/EUartLyLKH4TJRo/+lNM77yusOP
-         Vg7/UlVjkrvrDMTY4Wm1s3q69QM8DqaigRxpxUlZq5aj1ax0cjY4nKaCSNaOlGj0RU3p
-         pULVPF3iTjvQdA3Jrv+g6vcgUbG4WV5p0rENUfqrBhI1Sv1mqOt9wJ/xOXOeDK+7Imim
-         xqpm50gC9oB0buiQaM44dNmGaJLWEDWf0vttdyQTpQ8ooaHuQJJLilcbSM7PZG6qDz/D
-         vZYg==
-X-Gm-Message-State: AOJu0YyDATF4Nq2WndqbojvqCEdc+v+zrTw+SDqHPv2fzjpeUshWjCEM
-	lXu62jRPv/IEoU+xb0fYQKniNw==
-X-Google-Smtp-Source: AGHT+IH0jtWZUf2hGPaaxQrJqxuBCy5YRYRX5P8B4FrkUSNzU8QibCISdfs+bItVAVMNJIeIAj6vqQ==
-X-Received: by 2002:a05:6a20:1483:b0:18c:9855:e949 with SMTP id o3-20020a056a20148300b0018c9855e949mr5672480pzi.15.1702415864415;
-        Tue, 12 Dec 2023 13:17:44 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id t14-20020a63eb0e000000b005ac384b71cbsm8583878pgh.60.2023.12.12.13.17.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Dec 2023 13:17:41 -0800 (PST)
-From: Kees Cook <keescook@chromium.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Kees Cook <keescook@chromium.org>,
-	Tejun Heo <tj@kernel.org>,
-	Azeem Shaikh <azeemshaikh38@gmail.com>,
-	Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Waiman Long <longman@redhat.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH v3 1/3] kernfs: Convert kernfs_walk_ns() from strlcpy() to strscpy()
-Date: Tue, 12 Dec 2023 13:17:38 -0800
-Message-Id: <20231212211741.164376-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231212211606.make.155-kees@kernel.org>
-References: <20231212211606.make.155-kees@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qGtsPQEN"
+Received: from out-185.mta1.migadu.com (out-185.mta1.migadu.com [95.215.58.185])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2DDAF
+	for <bpf@vger.kernel.org>; Tue, 12 Dec 2023 13:39:35 -0800 (PST)
+Message-ID: <bff66df3-bd32-445a-89a8-b6208d87ae0c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1702417173;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OtHkWtKDZIWRGM6nVH86yaMWVlRAw9f0SdqaAaLKyZA=;
+	b=qGtsPQENdOH+G71L28+xdAbGkjR9UT4Nz9cSXDw3zPa/1KxeXgjJhx0UuAlkc2swA/4m0H
+	Lz8Tm+CM+dw3292rpfWTedmYs7pVlIpjTroOhDHQdUcVoMh3/RKp6TtHl2GZieQWHThF9l
+	8GeMFsd0HIE3vXX4hw0am7ujbKWe6Cw=
+Date: Tue, 12 Dec 2023 13:39:26 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1627; i=keescook@chromium.org;
- h=from:subject; bh=KaMikVVf9IlMYxhWSymwvYJ80Grx9jhkkXD92Gcwols=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBleM3zg8fq+Kgz91M5MgN0iGKTEy9c1pTW6k2g3
- Om7gwyq3vSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZXjN8wAKCRCJcvTf3G3A
- JiEbD/9sPG6e4XUmGL/t2yQxqs/Tot72LHnqAm/mN/d6Ly5AAAqHsoFvek/mQG8wTg0lCNknNj1
- YF1q7adAapgFepvZU8OXC+tWuPzPLcG3o8K6Sgkeir5yl9fwIzvjt/J0dJZoYYENLHghz4BAKXi
- rzcIQJGt+KoQ1kgGjloXVMlL9LG0DZtXjSoBCd9a5u77yL2JMD/XxJt/ttDsxn52o+ts7JLolAo
- YKyCkIpgJbBrALTTmUjiOCIh1UJzxnQFkN2EtES96fjl+CVDIg/8tmBk5AZZDTh66MQ75dbLi6I
- +1n+T71e3pcJDw97P1Hfd7QmLBAQSSNgTD8DemX7IVA52zA01seskFB9mwF/8GYRzvm1TJisAqM
- PeNcVIyvLDfy1ahMBfJszaBkCqnOmmwjVGfSLGhtq93fVgtjaD4zfyP0UtsNFTVVbjQ9tU84hev
- 7dd6XddCX4RE6UvGt8qoPYZRUlkfb84C+zWvymEA2Gn/eaq8y5odSWRlXl3WFPW3XDvilS4fER6
- qrMi85l+bsuNtfTSIwl/x6YCRX3j3zmPwmaI6n8VA3xjMNARhArAAAdpCpG2TjocSWY1ZOID5OX
- xUkJTCaX7P1h/qoC1gVn2OIdWrbRnbsAXSNrAplbX1sBjWSnBCAUqNNmxw93lDSSn/pSyBZGigO UaMJYSmjnQJhdiw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf] selftests/bpf: Relax time_tai test for equal
+ timestamps in tai_forward
+Content-Language: en-GB
+To: YiFei Zhu <zhuyifei@google.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Stanislav Fomichev <sdf@google.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Andrii Nakryiko
+ <andrii@kernel.org>, Song Liu <songliubraving@fb.com>,
+ Kurt Kanzenbach <kurt@linutronix.de>
+References: <20231212182911.3784108-1-zhuyifei@google.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20231212182911.3784108-1-zhuyifei@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-strlcpy() reads the entire source buffer first. This read may exceed
-the destination size limit. This is both inefficient and can lead
-to linear read overflows if a source string is not NUL-terminated[1].
-Additionally, it returns the size of the source string, not the
-resulting size of the destination string. In an effort to remove strlcpy()
-completely[2], replace strlcpy() here with strscpy().
 
-Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy [1]
-Link: https://github.com/KSPP/linux/issues/89 [2]
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Azeem Shaikh <azeemshaikh38@gmail.com>
-Link: https://lore.kernel.org/r/20231116192127.1558276-1-keescook@chromium.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- fs/kernfs/dir.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On 12/12/23 10:29 AM, YiFei Zhu wrote:
+> We're observing test flakiness on an arm64 platform which might not
+> have timestamps as precise as x86. The test log looks like:
+>
+>    test_time_tai:PASS:tai_open 0 nsec
+>    test_time_tai:PASS:test_run 0 nsec
+>    test_time_tai:PASS:tai_ts1 0 nsec
+>    test_time_tai:PASS:tai_ts2 0 nsec
+>    test_time_tai:FAIL:tai_forward unexpected tai_forward: actual 1702348135471494160 <= expected 1702348135471494160
+>    test_time_tai:PASS:tai_gettime 0 nsec
+>    test_time_tai:PASS:tai_future_ts1 0 nsec
+>    test_time_tai:PASS:tai_future_ts2 0 nsec
+>    test_time_tai:PASS:tai_range_ts1 0 nsec
+>    test_time_tai:PASS:tai_range_ts2 0 nsec
+>    #199     time_tai:FAIL
+>
+> This patch changes ASSERT_GT to ASSERT_GE in the tai_forward assertion
+> so that equal timestamps are permitted.
+>
+> Fixes: 64e15820b987 ("selftests/bpf: Add BPF-helper test for CLOCK_TAI access")
+> Signed-off-by: YiFei Zhu <zhuyifei@google.com>
+> ---
+>   tools/testing/selftests/bpf/prog_tests/time_tai.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/time_tai.c b/tools/testing/selftests/bpf/prog_tests/time_tai.c
+> index a31119823666..f45af1b0ef2c 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/time_tai.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/time_tai.c
+> @@ -56,7 +56,7 @@ void test_time_tai(void)
+>   	ASSERT_NEQ(ts2, 0, "tai_ts2");
+>   
+>   	/* TAI is moving forward only */
+> -	ASSERT_GT(ts2, ts1, "tai_forward");
+> +	ASSERT_GE(ts2, ts1, "tai_forward");
 
-diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
-index 8b2bd65d70e7..37353901ede1 100644
---- a/fs/kernfs/dir.c
-+++ b/fs/kernfs/dir.c
-@@ -850,16 +850,16 @@ static struct kernfs_node *kernfs_walk_ns(struct kernfs_node *parent,
- 					  const unsigned char *path,
- 					  const void *ns)
- {
--	size_t len;
-+	ssize_t len;
- 	char *p, *name;
- 
- 	lockdep_assert_held_read(&kernfs_root(parent)->kernfs_rwsem);
- 
- 	spin_lock_irq(&kernfs_pr_cont_lock);
- 
--	len = strlcpy(kernfs_pr_cont_buf, path, sizeof(kernfs_pr_cont_buf));
-+	len = strscpy(kernfs_pr_cont_buf, path, sizeof(kernfs_pr_cont_buf));
- 
--	if (len >= sizeof(kernfs_pr_cont_buf)) {
-+	if (len < 0) {
- 		spin_unlock_irq(&kernfs_pr_cont_lock);
- 		return NULL;
- 	}
--- 
-2.34.1
+Can we guard the new change with arm64 specific macro?
 
+>   
+>   	/* Check for future */
+>   	ret = clock_gettime(CLOCK_TAI, &now_tai);
