@@ -1,8 +1,8 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F54AA
-	for <bpf@vger.kernel.org>; Tue, 12 Dec 2023 14:31:17 -0800 (PST)
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A09CE
+	for <bpf@vger.kernel.org>; Tue, 12 Dec 2023 14:33:25 -0800 (PST)
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 2EF392B68D7E5; Tue, 12 Dec 2023 14:31:06 -0800 (PST)
+	id 08E792B68D7BB; Tue, 12 Dec 2023 14:31:00 -0800 (PST)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -10,9 +10,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 5/5] selftests/bpf: Cope with 512 bytes limit with bpf_global_percpu_ma
-Date: Tue, 12 Dec 2023 14:31:06 -0800
-Message-Id: <20231212223106.2138881-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 4/5] bpf: Limit up to 512 bytes for bpf_global_percpu_ma allocation
+Date: Tue, 12 Dec 2023 14:31:00 -0800
+Message-Id: <20231212223100.2138537-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231212223040.2135547-1-yonghong.song@linux.dev>
 References: <20231212223040.2135547-1-yonghong.song@linux.dev>
@@ -24,89 +24,51 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-In the previous patch, the maximum data size for bpf_global_percpu_ma
-is 512 bytes. This breaks selftest test_bpf_ma. Let us adjust it
-accordingly. Also added a selftest to capture the verification failure
-when the allocation size (adjusted by memory allocator) is greater than 5=
-12.
+For percpu data structure allocation with bpf_global_percpu_ma,
+the maximum data size is 4K. But for a system with large
+number of cpus, bigger data size (e.g., 2K, 4K) might consume
+a lot of memory. For example, the percpu memory consumption
+with unit size 2K and 1024 cpus will be 2K * 1K * 1k =3D 2GB
+memory.
+
+We should discourage such usage. Let us limit the maximum data
+size to be 512 for bpf_global_percpu_ma allocation.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/progs/percpu_alloc_fail.c    | 18 ++++++++++++++++++
- .../testing/selftests/bpf/progs/test_bpf_ma.c  |  9 ---------
- 2 files changed, 18 insertions(+), 9 deletions(-)
+ kernel/bpf/verifier.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c b/tool=
-s/testing/selftests/bpf/progs/percpu_alloc_fail.c
-index 1a891d30f1fe..d4c8a924e875 100644
---- a/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
-+++ b/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
-@@ -17,6 +17,10 @@ struct val_with_rb_root_t {
- 	struct bpf_spin_lock lock;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0c55fe4451e1..e5cb6b7526b6 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -43,6 +43,8 @@ static const struct bpf_verifier_ops * const bpf_verifi=
+er_ops[] =3D {
  };
 =20
-+struct val_600b_t {
-+	char b[600];
-+};
-+
- struct elem {
- 	long sum;
- 	struct val_t __percpu_kptr *pc;
-@@ -161,4 +165,18 @@ int BPF_PROG(test_array_map_7)
- 	return 0;
- }
+ struct bpf_mem_alloc bpf_global_percpu_ma;
++#define LLIST_NODE_SZ sizeof(struct llist_node)
++#define BPF_GLOBAL_PERCPU_MA_MAX_SIZE  (512 - LLIST_NODE_SZ)
 =20
-+SEC("?fentry.s/bpf_fentry_test1")
-+__failure __msg("bpf_percpu_obj_new type size (600) is greater than 504"=
-)
-+int BPF_PROG(test_array_map_8)
-+{
-+	struct val_600b_t __percpu_kptr *p;
-+
-+	p =3D bpf_percpu_obj_new(struct val_600b_t);
-+	if (!p)
-+		return 0;
-+
-+	bpf_percpu_obj_drop(p);
-+	return 0;
-+}
-+
- char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_ma.c b/tools/test=
-ing/selftests/bpf/progs/test_bpf_ma.c
-index b685a4aba6bd..68cba55eb828 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_ma.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_ma.c
-@@ -188,9 +188,6 @@ DEFINE_ARRAY_WITH_PERCPU_KPTR(128);
- DEFINE_ARRAY_WITH_PERCPU_KPTR(192);
- DEFINE_ARRAY_WITH_PERCPU_KPTR(256);
- DEFINE_ARRAY_WITH_PERCPU_KPTR(512);
--DEFINE_ARRAY_WITH_PERCPU_KPTR(1024);
--DEFINE_ARRAY_WITH_PERCPU_KPTR(2048);
--DEFINE_ARRAY_WITH_PERCPU_KPTR(4096);
+ /* bpf_check() is a static code analyzer that walks eBPF program
+  * instruction by instruction and updates register/stack state.
+@@ -12091,6 +12093,11 @@ static int check_kfunc_call(struct bpf_verifier_=
+env *env, struct bpf_insn *insn,
+ 				}
 =20
- SEC("?fentry/" SYS_PREFIX "sys_nanosleep")
- int test_batch_alloc_free(void *ctx)
-@@ -259,9 +256,6 @@ int test_batch_percpu_alloc_free(void *ctx)
- 	CALL_BATCH_PERCPU_ALLOC_FREE(192, 128, 6);
- 	CALL_BATCH_PERCPU_ALLOC_FREE(256, 128, 7);
- 	CALL_BATCH_PERCPU_ALLOC_FREE(512, 64, 8);
--	CALL_BATCH_PERCPU_ALLOC_FREE(1024, 32, 9);
--	CALL_BATCH_PERCPU_ALLOC_FREE(2048, 16, 10);
--	CALL_BATCH_PERCPU_ALLOC_FREE(4096, 8, 11);
-=20
- 	return 0;
- }
-@@ -283,9 +277,6 @@ int test_percpu_free_through_map_free(void *ctx)
- 	CALL_BATCH_PERCPU_ALLOC(192, 128, 6);
- 	CALL_BATCH_PERCPU_ALLOC(256, 128, 7);
- 	CALL_BATCH_PERCPU_ALLOC(512, 64, 8);
--	CALL_BATCH_PERCPU_ALLOC(1024, 32, 9);
--	CALL_BATCH_PERCPU_ALLOC(2048, 16, 10);
--	CALL_BATCH_PERCPU_ALLOC(4096, 8, 11);
-=20
- 	return 0;
- }
+ 				if (meta.func_id =3D=3D special_kfunc_list[KF_bpf_percpu_obj_new_imp=
+l]) {
++					if (ret_t->size > BPF_GLOBAL_PERCPU_MA_MAX_SIZE) {
++						verbose(env, "bpf_percpu_obj_new type size (%d) is greater than %l=
+u\n",
++							ret_t->size, BPF_GLOBAL_PERCPU_MA_MAX_SIZE);
++						return -EINVAL;
++					}
+ 					mutex_lock(&bpf_percpu_ma_lock);
+ 					err =3D bpf_mem_alloc_percpu_unit_init(&bpf_global_percpu_ma, ret_t=
+->size);
+ 					mutex_unlock(&bpf_percpu_ma_lock);
 --=20
 2.34.1
 
