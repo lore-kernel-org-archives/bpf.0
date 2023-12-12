@@ -1,185 +1,444 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PYQYOlBD"
-Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFBEDC;
-	Mon, 11 Dec 2023 18:16:01 -0800 (PST)
-Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-5d4f71f7e9fso50692207b3.0;
-        Mon, 11 Dec 2023 18:16:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nVigoiXO"
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D79268C
+	for <bpf@vger.kernel.org>; Mon, 11 Dec 2023 18:32:49 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-40c2d50bfbfso24391735e9.0
+        for <bpf@vger.kernel.org>; Mon, 11 Dec 2023 18:32:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702347360; x=1702952160; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1702348340; x=1702953140; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7bAjE3baVrRo4/1Vx4v8GLgpMDVpdz7g2ycdmGyOX1k=;
-        b=PYQYOlBDCHM/ElKH0G50fytd4R/0Ddb7DyaQzTR2BlyqthO0dgVE/Nd0NOdUB6nlWn
-         mXVK/lTEeAqBYfsVYEs5oe2thvun4Gl5MR7CcfCiaiTp2P3p2R2zmcLSVFw9MtO701x/
-         pPaC62FgrtzTA+pdry3WfMUdITiS/JK6aXMC/lhn0HBQHE5bQjsoQ+p2mqL4Vfr3p7MG
-         bUJ1bAWuRbdA2F3UOd3893J9q6WqhJJvtMEKkzv2B7kPuSIpZ1h2cgE0QuX+0eSNTsbb
-         Lky261q6QI9h29K8JSpFgcIOXQyqi1GdGyOzZQPlCRf2qyFGHkN4kD/TL261aItFnNCt
-         qK0g==
+        bh=Oqxt9UpM3lXEQA9Ql/9MZ7PSiBm36QeDH3GLKGuDpKA=;
+        b=nVigoiXOQAU+TUEVozvMSl+sna8SJZmbh4OoIIDyVEBR3QY7xnp77KFgxekZXWDkBN
+         tRhv04+ccfEOS99Cb8stqKaSt5GvY23hesluVkjhjEX5ICVbKjUDB33rEB67NTLUUpjR
+         Jg9j/+b/RcV/GT3OiR3iMV3yRXsKb1GoG7kKeyllHWwIf1u67LqqRjCkMVsgY+1sOg4N
+         CRXzOOSV5omHe6EhsJZLzqdgk7/DbZNQemxJ5MOZ2nbp3W7oSZ+rFgxzgMS6bQsMyqvj
+         xQfqtFSOpPy/fKHKzyr0FsIScaoJ8Vc0fxxPS/5EHCfT/ChO/jxjCE2hAO1UXs+va+R3
+         GfTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702347360; x=1702952160;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1702348340; x=1702953140;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7bAjE3baVrRo4/1Vx4v8GLgpMDVpdz7g2ycdmGyOX1k=;
-        b=xKZuobtLM+eovlqvxmkSO1fmbSKUsjqpx+y4ibDKoY6Zc8gn2d48usGtwM4MAT3AKT
-         +4SwNHAhFsXv7LBteWt4wekOPi4wnPzJTgitsCS5ZhRnJLizcwrxL94k1l/ioVkru6e0
-         V05seHwfxxC90qn1B91ftUxkeM6yMgNprlnkm3FFBfPcIeYtyXBL2LQIhj38ld03UTfA
-         H+AY4AA9wFnsJFrag5ciC9X6WZKHVXMY6Cz1eXcYcDVHERwmpEHdMeIKvnFQj75CZj4r
-         9ZDofcRvKil51sHmHSnpUp8gKPtfP9bqVqSvsSUoBqAKCYHeiPcbxSx0IkJEasYLxCia
-         RZPA==
-X-Gm-Message-State: AOJu0YwEjMnhjxaNNXOF4yVo1pXpa10qgJ0nQv8FZ53T7WRXILOFLubM
-	PSN9NgREtFHrobs05kc1VQqjT5ATEIBSPsvymT0=
-X-Google-Smtp-Source: AGHT+IEYUyLvw9c+mHMwkLxM1UZ1Jw8iW1DGz6JnOYejP7gOCE/U6/M00nWkyQ9EsA/C1gEI/7B9mclagQ+lcOUQcJ0=
-X-Received: by 2002:a25:aa01:0:b0:db7:dacf:6211 with SMTP id
- s1-20020a25aa01000000b00db7dacf6211mr3149791ybi.99.1702347360532; Mon, 11 Dec
- 2023 18:16:00 -0800 (PST)
+        bh=Oqxt9UpM3lXEQA9Ql/9MZ7PSiBm36QeDH3GLKGuDpKA=;
+        b=PkSCiu14LcWpSS2s1u8QBwf7DEw/ED5oQzjR31cWxo/ZOPQhmjCgZYqQylsGwc/wsp
+         tajD7HsP6inDAdmkDA0o1+v9/7KMzEZ/n06TaxOmHyX+zB54NwDp0vpaC5pLRlyFQhP8
+         RJkO+oIgneJMlMYT+znIMKC8mqdOsw2H47y6qXHQN+19rL4owP8uBcvSSfDMIIu6Huz8
+         gl9KTK4DNfYae0z45ne7S8BCQCR9qdbO7U6hDPjU2ZE/WXH8u6q9WXo+iWLRzZIkkqvu
+         t3lIhbyDcvSOF7f9U0QV6pQetQ9UgHCRbCKLRhmE0CKU3UQ0R+ynyB1dkpG7srR72cqV
+         yHVA==
+X-Gm-Message-State: AOJu0Yxi4Nz8jfB8tgRzg93gMwNEocE7B3Xm8wXJ15zGlVjFGFWkLia8
+	R0SG1AZPHDCKpim5XgK2jTmd/xd6tD4=
+X-Google-Smtp-Source: AGHT+IEIkgKglFHV6nuHuBoE6qvejl+RsIgDB7k3M93t2DutSWl2jUxcNDjEUEL2tXf3Yxw0nFEd9g==
+X-Received: by 2002:a05:600c:1910:b0:40c:2654:5704 with SMTP id j16-20020a05600c191000b0040c26545704mr2720719wmq.20.1702348339706;
+        Mon, 11 Dec 2023 18:32:19 -0800 (PST)
+Received: from localhost.localdomain (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id e12-20020adfe38c000000b003332fa77a0fsm9659900wrm.21.2023.12.11.18.32.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Dec 2023 18:32:19 -0800 (PST)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org
+Cc: andrii@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	kernel-team@fb.com,
+	yonghong.song@linux.dev,
+	quentin@isovalent.com,
+	alan.maguire@oracle.com,
+	Eduard Zingerman <eddyz87@gmail.com>
+Subject: [RFC v2 1/3] bpf: Mark virtual BPF context structures as preserve_static_offset
+Date: Tue, 12 Dec 2023 04:31:34 +0200
+Message-ID: <20231212023136.7021-2-eddyz87@gmail.com>
+X-Mailer: git-send-email 2.42.1
+In-Reply-To: <20231212023136.7021-1-eddyz87@gmail.com>
+References: <20231212023136.7021-1-eddyz87@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231210130001.2050847-1-menglong8.dong@gmail.com> <CAEf4BzYUKkpFa5dp4Ye7jzK1RhYtS6Yv55GH18U21Qi6xxQetg@mail.gmail.com>
-In-Reply-To: <CAEf4BzYUKkpFa5dp4Ye7jzK1RhYtS6Yv55GH18U21Qi6xxQetg@mail.gmail.com>
-From: Menglong Dong <menglong8.dong@gmail.com>
-Date: Tue, 12 Dec 2023 10:15:49 +0800
-Message-ID: <CADxym3ZZ2uV45Ra_vKSEK68qdnAiL-6XpNO2hSfUtyj3OeypwA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: make the verifier trace the "not qeual" for regs
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	john.fastabend@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com, 
-	haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 12, 2023 at 3:16=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Sun, Dec 10, 2023 at 5:00=E2=80=AFAM Menglong Dong <menglong8.dong@gma=
-il.com> wrote:
-> >
-> > We can derive some new information for BPF_JNE in regs_refine_cond_op()=
-.
-> > Take following code for example:
-> >
-> >   /* The type of "a" is u16 */
-> >   if (a > 0 && a < 100) {
-> >     /* the range of the register for a is [0, 99], not [1, 99],
-> >      * and will cause the following error:
-> >      *
-> >      *   invalid zero-sized read
-> >      *
-> >      * as a can be 0.
-> >      */
-> >     bpf_skb_store_bytes(skb, xx, xx, a, 0);
-> >   }
-> >
-> > In the code above, "a > 0" will be compiled to "jmp xxx if a =3D=3D 0".=
- In the
-> > TRUE branch, the dst_reg will be marked as known to 0. However, in the
-> > fallthrough(FALSE) branch, the dst_reg will not be handled, which makes
-> > the [min, max] for a is [0, 99], not [1, 99].
-> >
-> > For BPF_JNE, we can reduce the range of the dst reg if the src reg is a
-> > const and is exactly the edge of the dst reg.
-> >
-> > Signed-off-by: Menglong Dong <menglong8.dong@gmail.com>
-> > ---
-> >  kernel/bpf/verifier.c | 45 ++++++++++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 44 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 727a59e4a647..7b074ac93190 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -1764,6 +1764,40 @@ static void __mark_reg_const_zero(struct bpf_reg=
-_state *reg)
-> >         reg->type =3D SCALAR_VALUE;
-> >  }
-> >
-> > +#define CHECK_REG_MIN(value)                   \
-> > +do {                                           \
-> > +       if ((value) =3D=3D (typeof(value))imm)      \
-> > +               value++;                        \
-> > +} while (0)
-> > +
-> > +#define CHECK_REG_MAX(value)                   \
-> > +do {                                           \
-> > +       if ((value) =3D=3D (typeof(value))imm)      \
-> > +               value--;                        \
-> > +} while (0)
-> > +
-> > +static void mark_reg32_not_equal(struct bpf_reg_state *reg, u64 imm)
-> > +{
-> > +               CHECK_REG_MIN(reg->s32_min_value);
-> > +               CHECK_REG_MAX(reg->s32_max_value);
-> > +               CHECK_REG_MIN(reg->u32_min_value);
-> > +               CHECK_REG_MAX(reg->u32_max_value);
-> > +}
-> > +
-> > +static void mark_reg_not_equal(struct bpf_reg_state *reg, u64 imm)
-> > +{
-> > +               CHECK_REG_MIN(reg->smin_value);
-> > +               CHECK_REG_MAX(reg->smax_value);
-> > +
-> > +               CHECK_REG_MIN(reg->umin_value);
-> > +               CHECK_REG_MAX(reg->umax_value);
-> > +
-> > +               CHECK_REG_MIN(reg->s32_min_value);
-> > +               CHECK_REG_MAX(reg->s32_max_value);
-> > +               CHECK_REG_MIN(reg->u32_min_value);
-> > +               CHECK_REG_MAX(reg->u32_max_value);
-> > +}
->
-> please don't use macros for this, this code is tricky enough without
-> having to jump around double-checking what exactly macros are doing.
-> Just code it explicitly.
->
+Add __attribute__((preserve_static_offset)) for the following BPF
+related structures:
+- __sk_buff (*)
+- bpf_cgroup_dev_ctx (*)
+- bpf_nf_ctx
+- bpf_perf_event_data (*)
+- bpf_raw_tracepoint_args
+- bpf_sk_lookup (*)
+- bpf_sock (*)
+- bpf_sock_addr (*)
+- bpf_sock_ops (*)
+- bpf_sockopt (*)
+- bpf_sysctl (*)
+- sk_msg_md (*)
+- sk_reuseport_md (*)
+- xdp_md (*)
 
-Okay!
+Access to structures marked with (*) is rewritten by BPF verifier.
+(See verifier.c:convert_ctx_access). The rewrite requires that offsets
+used in access to fields of these structures are constant values.
+For the rest of the structures verifier just disallows access
+via modified context pointer in the following code path:
 
-> Also I don't see the need for mark_reg32_not_equal() and
-> mark_reg_not_equal() helper functions, there is just one place where
-> this logic is going to be called from, so let's add code right there.
->
+  check_mem_access
+    check_ptr_off_reg
+      __check_ptr_off_reg
+        if (!fixed_off_ok && reg->off)
+          "dereference of modified %s ptr R%d off=%d disallowed\n"
 
-Yeah, you are right. And I just found that you have already
-implemented the test case for this logic in reg_bounds.c/range_cond().
-I wonder why this logic is not implemented in the verifier yet?
-Am I missing something?
+Attribute preserve_static_offset [0] is a hint to clang that
+ensures that constant offsets are used.
 
-Thanks!
-Menglong Dong
+Type 'pt_regs' is not handled yet.
 
-> > +
-> >  static void mark_reg_known_zero(struct bpf_verifier_env *env,
-> >                                 struct bpf_reg_state *regs, u32 regno)
-> >  {
-> > @@ -14332,7 +14366,16 @@ static void regs_refine_cond_op(struct bpf_reg=
-_state *reg1, struct bpf_reg_state
-> >                 }
-> >                 break;
-> >         case BPF_JNE:
-> > -               /* we don't derive any new information for inequality y=
-et */
-> > +               /* try to recompute the bound of reg1 if reg2 is a cons=
-t and
-> > +                * is exactly the edge of reg1.
-> > +                */
-> > +               if (is_reg_const(reg2, is_jmp32)) {
-> > +                       val =3D reg_const_value(reg2, is_jmp32);
-> > +                       if (is_jmp32)
-> > +                               mark_reg32_not_equal(reg1, val);
-> > +                       else
-> > +                               mark_reg_not_equal(reg1, val);
-> > +               }
-> >                 break;
-> >         case BPF_JSET:
-> >                 if (!is_reg_const(reg2, is_jmp32))
-> > --
-> > 2.39.2
-> >
+[0] https://clang.llvm.org/docs/AttributeReference.html#preserve-static-offset
+
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+---
+ include/net/netfilter/nf_bpf_link.h       | 10 ++++++-
+ include/uapi/linux/bpf.h                  | 32 ++++++++++++++---------
+ include/uapi/linux/bpf_perf_event.h       | 10 ++++++-
+ tools/include/uapi/linux/bpf.h            | 32 ++++++++++++++---------
+ tools/include/uapi/linux/bpf_perf_event.h | 10 ++++++-
+ 5 files changed, 67 insertions(+), 27 deletions(-)
+
+diff --git a/include/net/netfilter/nf_bpf_link.h b/include/net/netfilter/nf_bpf_link.h
+index 6c984b0ea838..e5555b1ac55d 100644
+--- a/include/net/netfilter/nf_bpf_link.h
++++ b/include/net/netfilter/nf_bpf_link.h
+@@ -1,9 +1,15 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ 
++#if __has_attribute(preserve_static_offset) && defined(__bpf__)
++#define __bpf_ctx __attribute__((preserve_static_offset))
++#else
++#define __bpf_ctx
++#endif
++
+ struct bpf_nf_ctx {
+ 	const struct nf_hook_state *state;
+ 	struct sk_buff *skb;
+-};
++} __bpf_ctx;
+ 
+ #if IS_ENABLED(CONFIG_NETFILTER_BPF_LINK)
+ int bpf_nf_link_attach(const union bpf_attr *attr, struct bpf_prog *prog);
+@@ -13,3 +19,5 @@ static inline int bpf_nf_link_attach(const union bpf_attr *attr, struct bpf_prog
+ 	return -EOPNOTSUPP;
+ }
+ #endif
++
++#undef __bpf_ctx
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index e0545201b55f..f533301de5e4 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -69,6 +69,12 @@ enum {
+ /* BPF has 10 general purpose 64-bit registers and stack frame. */
+ #define MAX_BPF_REG	__MAX_BPF_REG
+ 
++#if __has_attribute(preserve_static_offset) && defined(__bpf__)
++#define __bpf_ctx __attribute__((preserve_static_offset))
++#else
++#define __bpf_ctx
++#endif
++
+ struct bpf_insn {
+ 	__u8	code;		/* opcode */
+ 	__u8	dst_reg:4;	/* dest register */
+@@ -6190,7 +6196,7 @@ struct __sk_buff {
+ 	__u8  tstamp_type;
+ 	__u32 :24;		/* Padding, future use. */
+ 	__u64 hwtstamp;
+-};
++} __bpf_ctx;
+ 
+ struct bpf_tunnel_key {
+ 	__u32 tunnel_id;
+@@ -6271,7 +6277,7 @@ struct bpf_sock {
+ 	__u32 dst_ip6[4];
+ 	__u32 state;
+ 	__s32 rx_queue_mapping;
+-};
++} __bpf_ctx;
+ 
+ struct bpf_tcp_sock {
+ 	__u32 snd_cwnd;		/* Sending congestion window		*/
+@@ -6379,7 +6385,7 @@ struct xdp_md {
+ 	__u32 rx_queue_index;  /* rxq->queue_index  */
+ 
+ 	__u32 egress_ifindex;  /* txq->dev->ifindex */
+-};
++} __bpf_ctx;
+ 
+ /* DEVMAP map-value layout
+  *
+@@ -6429,7 +6435,7 @@ struct sk_msg_md {
+ 	__u32 size;		/* Total size of sk_msg */
+ 
+ 	__bpf_md_ptr(struct bpf_sock *, sk); /* current socket */
+-};
++} __bpf_ctx;
+ 
+ struct sk_reuseport_md {
+ 	/*
+@@ -6468,7 +6474,7 @@ struct sk_reuseport_md {
+ 	 */
+ 	__bpf_md_ptr(struct bpf_sock *, sk);
+ 	__bpf_md_ptr(struct bpf_sock *, migrating_sk);
+-};
++} __bpf_ctx;
+ 
+ #define BPF_TAG_SIZE	8
+ 
+@@ -6678,7 +6684,7 @@ struct bpf_sock_addr {
+ 				 * Stored in network byte order.
+ 				 */
+ 	__bpf_md_ptr(struct bpf_sock *, sk);
+-};
++} __bpf_ctx;
+ 
+ /* User bpf_sock_ops struct to access socket values and specify request ops
+  * and their replies.
+@@ -6761,7 +6767,7 @@ struct bpf_sock_ops {
+ 				 * been written yet.
+ 				 */
+ 	__u64 skb_hwtstamp;
+-};
++} __bpf_ctx;
+ 
+ /* Definitions for bpf_sock_ops_cb_flags */
+ enum {
+@@ -7034,11 +7040,11 @@ struct bpf_cgroup_dev_ctx {
+ 	__u32 access_type;
+ 	__u32 major;
+ 	__u32 minor;
+-};
++} __bpf_ctx;
+ 
+ struct bpf_raw_tracepoint_args {
+ 	__u64 args[0];
+-};
++} __bpf_ctx;
+ 
+ /* DIRECT:  Skip the FIB rules and go to FIB table associated with device
+  * OUTPUT:  Do lookup from egress perspective; default is ingress
+@@ -7245,7 +7251,7 @@ struct bpf_sysctl {
+ 	__u32	file_pos;	/* Sysctl file position to read from, write to.
+ 				 * Allows 1,2,4-byte read an 4-byte write.
+ 				 */
+-};
++} __bpf_ctx;
+ 
+ struct bpf_sockopt {
+ 	__bpf_md_ptr(struct bpf_sock *, sk);
+@@ -7256,7 +7262,7 @@ struct bpf_sockopt {
+ 	__s32	optname;
+ 	__s32	optlen;
+ 	__s32	retval;
+-};
++} __bpf_ctx;
+ 
+ struct bpf_pidns_info {
+ 	__u32 pid;
+@@ -7280,7 +7286,7 @@ struct bpf_sk_lookup {
+ 	__u32 local_ip6[4];	/* Network byte order */
+ 	__u32 local_port;	/* Host byte order */
+ 	__u32 ingress_ifindex;		/* The arriving interface. Determined by inet_iif. */
+-};
++} __bpf_ctx;
+ 
+ /*
+  * struct btf_ptr is used for typed pointer representation; the
+@@ -7406,4 +7412,6 @@ struct bpf_iter_num {
+ 	__u64 __opaque[1];
+ } __attribute__((aligned(8)));
+ 
++#undef __bpf_ctx
++
+ #endif /* _UAPI__LINUX_BPF_H__ */
+diff --git a/include/uapi/linux/bpf_perf_event.h b/include/uapi/linux/bpf_perf_event.h
+index eb1b9d21250c..608e366877fc 100644
+--- a/include/uapi/linux/bpf_perf_event.h
++++ b/include/uapi/linux/bpf_perf_event.h
+@@ -10,10 +10,18 @@
+ 
+ #include <asm/bpf_perf_event.h>
+ 
++#if __has_attribute(preserve_static_offset) && defined(__bpf__)
++#define __bpf_ctx __attribute__((preserve_static_offset))
++#else
++#define __bpf_ctx
++#endif
++
+ struct bpf_perf_event_data {
+ 	bpf_user_pt_regs_t regs;
+ 	__u64 sample_period;
+ 	__u64 addr;
+-};
++} __bpf_ctx;
++
++#undef __bpf_ctx
+ 
+ #endif /* _UAPI__LINUX_BPF_PERF_EVENT_H__ */
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index e0545201b55f..f533301de5e4 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -69,6 +69,12 @@ enum {
+ /* BPF has 10 general purpose 64-bit registers and stack frame. */
+ #define MAX_BPF_REG	__MAX_BPF_REG
+ 
++#if __has_attribute(preserve_static_offset) && defined(__bpf__)
++#define __bpf_ctx __attribute__((preserve_static_offset))
++#else
++#define __bpf_ctx
++#endif
++
+ struct bpf_insn {
+ 	__u8	code;		/* opcode */
+ 	__u8	dst_reg:4;	/* dest register */
+@@ -6190,7 +6196,7 @@ struct __sk_buff {
+ 	__u8  tstamp_type;
+ 	__u32 :24;		/* Padding, future use. */
+ 	__u64 hwtstamp;
+-};
++} __bpf_ctx;
+ 
+ struct bpf_tunnel_key {
+ 	__u32 tunnel_id;
+@@ -6271,7 +6277,7 @@ struct bpf_sock {
+ 	__u32 dst_ip6[4];
+ 	__u32 state;
+ 	__s32 rx_queue_mapping;
+-};
++} __bpf_ctx;
+ 
+ struct bpf_tcp_sock {
+ 	__u32 snd_cwnd;		/* Sending congestion window		*/
+@@ -6379,7 +6385,7 @@ struct xdp_md {
+ 	__u32 rx_queue_index;  /* rxq->queue_index  */
+ 
+ 	__u32 egress_ifindex;  /* txq->dev->ifindex */
+-};
++} __bpf_ctx;
+ 
+ /* DEVMAP map-value layout
+  *
+@@ -6429,7 +6435,7 @@ struct sk_msg_md {
+ 	__u32 size;		/* Total size of sk_msg */
+ 
+ 	__bpf_md_ptr(struct bpf_sock *, sk); /* current socket */
+-};
++} __bpf_ctx;
+ 
+ struct sk_reuseport_md {
+ 	/*
+@@ -6468,7 +6474,7 @@ struct sk_reuseport_md {
+ 	 */
+ 	__bpf_md_ptr(struct bpf_sock *, sk);
+ 	__bpf_md_ptr(struct bpf_sock *, migrating_sk);
+-};
++} __bpf_ctx;
+ 
+ #define BPF_TAG_SIZE	8
+ 
+@@ -6678,7 +6684,7 @@ struct bpf_sock_addr {
+ 				 * Stored in network byte order.
+ 				 */
+ 	__bpf_md_ptr(struct bpf_sock *, sk);
+-};
++} __bpf_ctx;
+ 
+ /* User bpf_sock_ops struct to access socket values and specify request ops
+  * and their replies.
+@@ -6761,7 +6767,7 @@ struct bpf_sock_ops {
+ 				 * been written yet.
+ 				 */
+ 	__u64 skb_hwtstamp;
+-};
++} __bpf_ctx;
+ 
+ /* Definitions for bpf_sock_ops_cb_flags */
+ enum {
+@@ -7034,11 +7040,11 @@ struct bpf_cgroup_dev_ctx {
+ 	__u32 access_type;
+ 	__u32 major;
+ 	__u32 minor;
+-};
++} __bpf_ctx;
+ 
+ struct bpf_raw_tracepoint_args {
+ 	__u64 args[0];
+-};
++} __bpf_ctx;
+ 
+ /* DIRECT:  Skip the FIB rules and go to FIB table associated with device
+  * OUTPUT:  Do lookup from egress perspective; default is ingress
+@@ -7245,7 +7251,7 @@ struct bpf_sysctl {
+ 	__u32	file_pos;	/* Sysctl file position to read from, write to.
+ 				 * Allows 1,2,4-byte read an 4-byte write.
+ 				 */
+-};
++} __bpf_ctx;
+ 
+ struct bpf_sockopt {
+ 	__bpf_md_ptr(struct bpf_sock *, sk);
+@@ -7256,7 +7262,7 @@ struct bpf_sockopt {
+ 	__s32	optname;
+ 	__s32	optlen;
+ 	__s32	retval;
+-};
++} __bpf_ctx;
+ 
+ struct bpf_pidns_info {
+ 	__u32 pid;
+@@ -7280,7 +7286,7 @@ struct bpf_sk_lookup {
+ 	__u32 local_ip6[4];	/* Network byte order */
+ 	__u32 local_port;	/* Host byte order */
+ 	__u32 ingress_ifindex;		/* The arriving interface. Determined by inet_iif. */
+-};
++} __bpf_ctx;
+ 
+ /*
+  * struct btf_ptr is used for typed pointer representation; the
+@@ -7406,4 +7412,6 @@ struct bpf_iter_num {
+ 	__u64 __opaque[1];
+ } __attribute__((aligned(8)));
+ 
++#undef __bpf_ctx
++
+ #endif /* _UAPI__LINUX_BPF_H__ */
+diff --git a/tools/include/uapi/linux/bpf_perf_event.h b/tools/include/uapi/linux/bpf_perf_event.h
+index eb1b9d21250c..608e366877fc 100644
+--- a/tools/include/uapi/linux/bpf_perf_event.h
++++ b/tools/include/uapi/linux/bpf_perf_event.h
+@@ -10,10 +10,18 @@
+ 
+ #include <asm/bpf_perf_event.h>
+ 
++#if __has_attribute(preserve_static_offset) && defined(__bpf__)
++#define __bpf_ctx __attribute__((preserve_static_offset))
++#else
++#define __bpf_ctx
++#endif
++
+ struct bpf_perf_event_data {
+ 	bpf_user_pt_regs_t regs;
+ 	__u64 sample_period;
+ 	__u64 addr;
+-};
++} __bpf_ctx;
++
++#undef __bpf_ctx
+ 
+ #endif /* _UAPI__LINUX_BPF_PERF_EVENT_H__ */
+-- 
+2.42.1
+
