@@ -1,80 +1,105 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fKv4tslN"
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFB3A8;
-	Tue, 12 Dec 2023 05:07:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Xbzg90/bq4JsbK+dNE7Eb/swVSGtySgf43OD8igrkzw=; b=fKv4tslN6ob6fVBvqGgRBleUK3
-	ixwy1JJ4P+Dc6t/nAbUZeYdRQy05gz2GKaQOhGEI3/K7k80k40bsrIwIHldZt5RwiCD+XcSaBlfrX
-	fU361clZ1RiKJY7+55mDsoc4Lb41E9t0PDs7z254jvFOegx2oAjVMr6IKS6JEXsisdpFxiqntc2S+
-	5L+fZtwVp3sfL+Rkzsk8oP7uf40+jvMr1+kIHrDUu5f4BbCx1E8oP0jtA43OTru5hy9rWJR5dZeep
-	1lsXlmqM7P8///m8p0g2ZcYJy6A+nF7smgZ0dkmFvIGG4x6rDFKrtZIE4ji20a5Q8zEqoDvz8g3Kf
-	+5KRU6OA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1rD2U2-00Bkt3-0U;
-	Tue, 12 Dec 2023 13:07:34 +0000
-Date: Tue, 12 Dec 2023 05:07:34 -0800
-From: Christoph Hellwig <hch@infradead.org>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Mina Almasry <almasrymina@google.com>,
-	Shailend Chand <shailend@google.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>, David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeelb@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Kaiyuan Zhang <kaiyuanz@google.com>,
-	Christoph Hellwig <hch@infradead.org>
-Subject: Re: [net-next v1 08/16] memory-provider: dmabuf devmem memory
- provider
-Message-ID: <ZXhbFi42YClOVhQ7@infradead.org>
-References: <20231208005250.2910004-1-almasrymina@google.com>
- <20231208005250.2910004-9-almasrymina@google.com>
- <20231212122535.GA3029808@nvidia.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N15Vzw1O"
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D484B3;
+	Tue, 12 Dec 2023 05:14:15 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-3b9f11fee25so704664b6e.1;
+        Tue, 12 Dec 2023 05:14:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702386854; x=1702991654; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=stDkgdoFk0XfmYwjrEqVrLdT/Qh3MCip8pO7lUFKZX8=;
+        b=N15Vzw1O7q07AGFIFRPfh+yCQHEmyfvMvBzOx5u/1ys5y/44pbZZ/tDDLz3agnFH8v
+         LRRNvkb9ajUlLsfmFVzy3o9tDnjmNhtIZGmNs/Tg6Qod8pxqdcExBtW/kO+qSGBCx3d1
+         vZlm+1dUqcsYxcZyo+zKniRd6twvF9nj2DSd6tfKHPeh5waoq75SDSPmtZLUGPAgTZoP
+         z/GhGcULi3wXaMnox6aiXxAf6Z9K5Vm6l4Yk75AVFiF3YwIDnxKxExwUsXBrBSwBE2VW
+         PpTmEQXJHVsFy+1Wa50C3QJtEVENpBTXz2sbzUQMQw1PruG66n37Tv7Dn6DU4hH4gltb
+         QE9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702386854; x=1702991654;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=stDkgdoFk0XfmYwjrEqVrLdT/Qh3MCip8pO7lUFKZX8=;
+        b=Jn5rjaLxIhMuxbwXhCrmi5OJs705jz6rpw9nQQqnn84aORdrM/fGTcUvizGoQfy643
+         MxY0ZBvdO2TN/h+ro5yyndpTMGLrB/hmCXTttNQduGFeobXy2+1+9p8TbrQFDJhaAU5/
+         gePcwpy+Y4iy3Ujces/Rfll2dmq61ttWh6M5Vm8v3lPdelmPevzY/sFY2y3v8vV3Z7hY
+         JRsA5n++9uc6oP95RUnUJE0vO2d6GhTq86vtCSPcp8o9/fO0XixxWxHfY2CYnVHHxina
+         m4e147In2JQWYbVXGbaDP1CG+hHuR5v0Oe8YCzamwP8xneUYeka64bXnnxVc8WoBtVhf
+         xe0g==
+X-Gm-Message-State: AOJu0Yz7P/P+z48ic/OjWmLZhlAKbZgSbgrDf2IMBZJoxKIB3+bIZNpR
+	Pf2J+1X1Ym9usxAzwaZXiHzaXihjw+7Lo1qOTHQ=
+X-Google-Smtp-Source: AGHT+IE3wz9HTHyYZ4+Lo9d8+GOwzJctb4smYkI63Bkdba2mY6t3XVYydLAQHDNX0sIllWcM4QY28mDDUJ0FCNZGGFE=
+X-Received: by 2002:a05:6358:71b:b0:16e:4d4c:68a2 with SMTP id
+ e27-20020a056358071b00b0016e4d4c68a2mr10370064rwj.2.1702386854289; Tue, 12
+ Dec 2023 05:14:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231212122535.GA3029808@nvidia.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20231212125713.336271-1-maciej.fijalkowski@intel.com> <20231212125713.336271-2-maciej.fijalkowski@intel.com>
+In-Reply-To: <20231212125713.336271-2-maciej.fijalkowski@intel.com>
+From: Magnus Karlsson <magnus.karlsson@gmail.com>
+Date: Tue, 12 Dec 2023 14:14:02 +0100
+Message-ID: <CAJ8uoz3XnapArhHjb1yX5q7YrFUgrO2mWgvDDsTBVzTCr=Yzxw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf 1/3] xsk: recycle buffer in case Rx queue was full
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, netdev@vger.kernel.org, magnus.karlsson@intel.com, 
+	bjorn@kernel.org, echaudro@redhat.com, lorenzo@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Dec 12, 2023 at 08:25:35AM -0400, Jason Gunthorpe wrote:
-> > +static inline struct page_pool_iov *page_to_page_pool_iov(struct page *page)
-> > +{
-> > +	if (page_is_page_pool_iov(page))
-> > +		return (struct page_pool_iov *)((unsigned long)page & ~PP_IOV);
-> > +
-> > +	DEBUG_NET_WARN_ON_ONCE(true);
-> > +	return NULL;
-> > +}
-> 
-> We already asked not to do this, please do not allocate weird things
-> can call them 'struct page' when they are not. It undermines the
-> maintainability of the mm to have things mis-typed like
-> this. Introduce a new type for your thing so the compiler can check it
-> properly.
+On Tue, 12 Dec 2023 at 13:58, Maciej Fijalkowski
+<maciej.fijalkowski@intel.com> wrote:
+>
+> Add missing xsk_buff_free() call when __xsk_rcv_zc() failed to produce
+> descriptor to XSK Rx queue.
 
-Yes.  Or even better avoid this mess entirely..
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+
+> Fixes: 24ea50127ecf ("xsk: support mbuf on ZC RX")
+> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> ---
+>  net/xdp/xsk.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+>
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 281d49b4fca4..bd4abb200fa9 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -167,8 +167,10 @@ static int xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
+>                 contd = XDP_PKT_CONTD;
+>
+>         err = __xsk_rcv_zc(xs, xskb, len, contd);
+> -       if (err || likely(!frags))
+> -               goto out;
+> +       if (err)
+> +               goto err;
+> +       if (likely(!frags))
+> +               return 0;
+>
+>         xskb_list = &xskb->pool->xskb_list;
+>         list_for_each_entry_safe(pos, tmp, xskb_list, xskb_list_node) {
+> @@ -177,11 +179,13 @@ static int xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
+>                 len = pos->xdp.data_end - pos->xdp.data;
+>                 err = __xsk_rcv_zc(xs, pos, len, contd);
+>                 if (err)
+> -                       return err;
+> +                       goto err;
+>                 list_del(&pos->xskb_list_node);
+>         }
+>
+> -out:
+> +       return 0;
+> +err:
+> +       xsk_buff_free(xdp);
+>         return err;
+>  }
+>
+> --
+> 2.34.1
+>
+>
