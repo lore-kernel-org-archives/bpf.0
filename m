@@ -1,8 +1,8 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8725DC
-	for <bpf@vger.kernel.org>; Tue, 12 Dec 2023 14:31:08 -0800 (PST)
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F54AA
+	for <bpf@vger.kernel.org>; Tue, 12 Dec 2023 14:31:17 -0800 (PST)
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 9F2422B68D7A0; Tue, 12 Dec 2023 14:30:55 -0800 (PST)
+	id 2EF392B68D7E5; Tue, 12 Dec 2023 14:31:06 -0800 (PST)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -10,9 +10,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 3/5] bpf: Refill only one percpu element in memalloc
-Date: Tue, 12 Dec 2023 14:30:55 -0800
-Message-Id: <20231212223055.2138132-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 5/5] selftests/bpf: Cope with 512 bytes limit with bpf_global_percpu_ma
+Date: Tue, 12 Dec 2023 14:31:06 -0800
+Message-Id: <20231212223106.2138881-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231212223040.2135547-1-yonghong.song@linux.dev>
 References: <20231212223040.2135547-1-yonghong.song@linux.dev>
@@ -24,40 +24,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Typically for percpu map element or data structure, once allocated,
-most operations are lookup or in-place update. Deletion are really
-rare. Currently, for percpu data strcture, 4 elements will be
-refilled if the size is <=3D 256. Let us just do with one element
-for percpu data. For example, for size 256 and 128 cpus, the
-potential saving will be 3 * 256 * 128 * 128 =3D 12MB.
+In the previous patch, the maximum data size for bpf_global_percpu_ma
+is 512 bytes. This breaks selftest test_bpf_ma. Let us adjust it
+accordingly. Also added a selftest to capture the verification failure
+when the allocation size (adjusted by memory allocator) is greater than 5=
+12.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/memalloc.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ .../selftests/bpf/progs/percpu_alloc_fail.c    | 18 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/test_bpf_ma.c  |  9 ---------
+ 2 files changed, 18 insertions(+), 9 deletions(-)
 
-diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
-index 84987e97fd0a..a1d718ee264d 100644
---- a/kernel/bpf/memalloc.c
-+++ b/kernel/bpf/memalloc.c
-@@ -483,11 +483,15 @@ static void init_refill_work(struct bpf_mem_cache *=
-c)
+diff --git a/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c b/tool=
+s/testing/selftests/bpf/progs/percpu_alloc_fail.c
+index 1a891d30f1fe..d4c8a924e875 100644
+--- a/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
++++ b/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
+@@ -17,6 +17,10 @@ struct val_with_rb_root_t {
+ 	struct bpf_spin_lock lock;
+ };
 =20
- static void prefill_mem_cache(struct bpf_mem_cache *c, int cpu)
- {
-+	int cnt =3D 1;
++struct val_600b_t {
++	char b[600];
++};
 +
- 	/* To avoid consuming memory assume that 1st run of bpf
- 	 * prog won't be doing more than 4 map_update_elem from
- 	 * irq disabled region
- 	 */
--	alloc_bulk(c, c->unit_size <=3D 256 ? 4 : 1, cpu_to_node(cpu), false);
-+	if (!c->percpu_size && c->unit_size <=3D 256)
-+		cnt =3D 4;
-+	alloc_bulk(c, cnt, cpu_to_node(cpu), false);
+ struct elem {
+ 	long sum;
+ 	struct val_t __percpu_kptr *pc;
+@@ -161,4 +165,18 @@ int BPF_PROG(test_array_map_7)
+ 	return 0;
  }
 =20
- static int check_obj_size(struct bpf_mem_cache *c, unsigned int idx)
++SEC("?fentry.s/bpf_fentry_test1")
++__failure __msg("bpf_percpu_obj_new type size (600) is greater than 504"=
+)
++int BPF_PROG(test_array_map_8)
++{
++	struct val_600b_t __percpu_kptr *p;
++
++	p =3D bpf_percpu_obj_new(struct val_600b_t);
++	if (!p)
++		return 0;
++
++	bpf_percpu_obj_drop(p);
++	return 0;
++}
++
+ char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/test_bpf_ma.c b/tools/test=
+ing/selftests/bpf/progs/test_bpf_ma.c
+index b685a4aba6bd..68cba55eb828 100644
+--- a/tools/testing/selftests/bpf/progs/test_bpf_ma.c
++++ b/tools/testing/selftests/bpf/progs/test_bpf_ma.c
+@@ -188,9 +188,6 @@ DEFINE_ARRAY_WITH_PERCPU_KPTR(128);
+ DEFINE_ARRAY_WITH_PERCPU_KPTR(192);
+ DEFINE_ARRAY_WITH_PERCPU_KPTR(256);
+ DEFINE_ARRAY_WITH_PERCPU_KPTR(512);
+-DEFINE_ARRAY_WITH_PERCPU_KPTR(1024);
+-DEFINE_ARRAY_WITH_PERCPU_KPTR(2048);
+-DEFINE_ARRAY_WITH_PERCPU_KPTR(4096);
+=20
+ SEC("?fentry/" SYS_PREFIX "sys_nanosleep")
+ int test_batch_alloc_free(void *ctx)
+@@ -259,9 +256,6 @@ int test_batch_percpu_alloc_free(void *ctx)
+ 	CALL_BATCH_PERCPU_ALLOC_FREE(192, 128, 6);
+ 	CALL_BATCH_PERCPU_ALLOC_FREE(256, 128, 7);
+ 	CALL_BATCH_PERCPU_ALLOC_FREE(512, 64, 8);
+-	CALL_BATCH_PERCPU_ALLOC_FREE(1024, 32, 9);
+-	CALL_BATCH_PERCPU_ALLOC_FREE(2048, 16, 10);
+-	CALL_BATCH_PERCPU_ALLOC_FREE(4096, 8, 11);
+=20
+ 	return 0;
+ }
+@@ -283,9 +277,6 @@ int test_percpu_free_through_map_free(void *ctx)
+ 	CALL_BATCH_PERCPU_ALLOC(192, 128, 6);
+ 	CALL_BATCH_PERCPU_ALLOC(256, 128, 7);
+ 	CALL_BATCH_PERCPU_ALLOC(512, 64, 8);
+-	CALL_BATCH_PERCPU_ALLOC(1024, 32, 9);
+-	CALL_BATCH_PERCPU_ALLOC(2048, 16, 10);
+-	CALL_BATCH_PERCPU_ALLOC(4096, 8, 11);
+=20
+ 	return 0;
+ }
 --=20
 2.34.1
 
