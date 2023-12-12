@@ -1,105 +1,108 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N15Vzw1O"
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D484B3;
-	Tue, 12 Dec 2023 05:14:15 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-3b9f11fee25so704664b6e.1;
-        Tue, 12 Dec 2023 05:14:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ApIsWLvV"
+Received: from mail-oo1-xc44.google.com (mail-oo1-xc44.google.com [IPv6:2607:f8b0:4864:20::c44])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09419A8;
+	Tue, 12 Dec 2023 05:15:32 -0800 (PST)
+Received: by mail-oo1-xc44.google.com with SMTP id 006d021491bc7-590a2a963baso2155443eaf.2;
+        Tue, 12 Dec 2023 05:15:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702386854; x=1702991654; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=stDkgdoFk0XfmYwjrEqVrLdT/Qh3MCip8pO7lUFKZX8=;
-        b=N15Vzw1O7q07AGFIFRPfh+yCQHEmyfvMvBzOx5u/1ys5y/44pbZZ/tDDLz3agnFH8v
-         LRRNvkb9ajUlLsfmFVzy3o9tDnjmNhtIZGmNs/Tg6Qod8pxqdcExBtW/kO+qSGBCx3d1
-         vZlm+1dUqcsYxcZyo+zKniRd6twvF9nj2DSd6tfKHPeh5waoq75SDSPmtZLUGPAgTZoP
-         z/GhGcULi3wXaMnox6aiXxAf6Z9K5Vm6l4Yk75AVFiF3YwIDnxKxExwUsXBrBSwBE2VW
-         PpTmEQXJHVsFy+1Wa50C3QJtEVENpBTXz2sbzUQMQw1PruG66n37Tv7Dn6DU4hH4gltb
-         QE9Q==
+        d=gmail.com; s=20230601; t=1702386931; x=1702991731; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Tlr6Isxfo0VAkoIC5C/TmG4WBg0mKgqYVQoYoM3bP8=;
+        b=ApIsWLvVgaWZXoBBEEg1N/ai8y8vkK8J8oqkJ1jAGXK5u2WanGfPXzlXLwigzpCjHi
+         oa+5kSIAmbUxxcRRYxwJL/fsr3QblKePeAjBqjEa5zJkZc0CUMikElz6ZV3e1s9AyCPK
+         XfX9EExW8awH9G/UA9LMCfEu9XnUydzK0TVzw2daixHJNZN2ty2rmWJvW190mG9nZse9
+         7wYgi69uYhZuTYX7CtoledSdcYz8czlYPq1/EwR2DAcTll7MlwRc5nrekeSz27TXQI5F
+         lAfg50ZOmlctnS1KyqRkaUHiYLB5CE0/g0r7FdAEXtHOIBwEsSO1WgAKp079lhAC5k4v
+         2uXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702386854; x=1702991654;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1702386931; x=1702991731;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=stDkgdoFk0XfmYwjrEqVrLdT/Qh3MCip8pO7lUFKZX8=;
-        b=Jn5rjaLxIhMuxbwXhCrmi5OJs705jz6rpw9nQQqnn84aORdrM/fGTcUvizGoQfy643
-         MxY0ZBvdO2TN/h+ro5yyndpTMGLrB/hmCXTttNQduGFeobXy2+1+9p8TbrQFDJhaAU5/
-         gePcwpy+Y4iy3Ujces/Rfll2dmq61ttWh6M5Vm8v3lPdelmPevzY/sFY2y3v8vV3Z7hY
-         JRsA5n++9uc6oP95RUnUJE0vO2d6GhTq86vtCSPcp8o9/fO0XixxWxHfY2CYnVHHxina
-         m4e147In2JQWYbVXGbaDP1CG+hHuR5v0Oe8YCzamwP8xneUYeka64bXnnxVc8WoBtVhf
-         xe0g==
-X-Gm-Message-State: AOJu0Yz7P/P+z48ic/OjWmLZhlAKbZgSbgrDf2IMBZJoxKIB3+bIZNpR
-	Pf2J+1X1Ym9usxAzwaZXiHzaXihjw+7Lo1qOTHQ=
-X-Google-Smtp-Source: AGHT+IE3wz9HTHyYZ4+Lo9d8+GOwzJctb4smYkI63Bkdba2mY6t3XVYydLAQHDNX0sIllWcM4QY28mDDUJ0FCNZGGFE=
-X-Received: by 2002:a05:6358:71b:b0:16e:4d4c:68a2 with SMTP id
- e27-20020a056358071b00b0016e4d4c68a2mr10370064rwj.2.1702386854289; Tue, 12
- Dec 2023 05:14:14 -0800 (PST)
+        bh=2Tlr6Isxfo0VAkoIC5C/TmG4WBg0mKgqYVQoYoM3bP8=;
+        b=vq0vfu2JYOWDB1Iq/FGA0YU9Ew6HEtsywxrJ+SEGVtPVMsssF1B6mM6Gz6geIR6HQ+
+         6y+rrQxFK4mC2+ShjAgHSq25+3gFLuQASCf4SppGrfEGjt6Jbbqp0Prwe4aBMzVqJ4T3
+         PzLy/IxMxUDfqevNpKCBhbmPOItlOFagpmre0bx+5khjekbaj9Dn2Rf6uNO9stdXUycO
+         kH30j7Ox10cyrl91pCHb2u9WuAWs97j7itDPpECSZ82KFOZ8RURT4wwaoSQh5wDKEjlj
+         Uo71wPf9os/Ga13K7bn1NM6PJyKBWIOfbCS2OPH+ldiIVv1DFs6sdt0L4p3bFjOE3hbt
+         FtXw==
+X-Gm-Message-State: AOJu0YxFAcMU+L/acQ3U1vgN8NrpDQl9DXHkYP9ONiTx3FKdfFYUhf1A
+	qfxJiSy00Q+mZqPwjtlPXO0=
+X-Google-Smtp-Source: AGHT+IF7PQtN+v6kqLCKt2uAXW/3k9UAzdlm/zMH+0rvmBCA/ikFfct6c1Mx8I7JdkL0dsQOaSFD/A==
+X-Received: by 2002:a05:6358:7e03:b0:170:ef25:aa5c with SMTP id o3-20020a0563587e0300b00170ef25aa5cmr670918rwm.17.1702386931118;
+        Tue, 12 Dec 2023 05:15:31 -0800 (PST)
+Received: from localhost.localdomain ([43.129.244.20])
+        by smtp.gmail.com with ESMTPSA id x20-20020aa793b4000000b006c4d2479bf8sm8095026pff.51.2023.12.12.05.15.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Dec 2023 05:15:30 -0800 (PST)
+From: Menglong Dong <menglong8.dong@gmail.com>
+To: andrii@kernel.org,
+	yonghong.song@linux.dev
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	kpsingh@kernel.org,
+	sdf@google.com,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Menglong Dong <menglong8.dong@gmail.com>
+Subject: [PATCH net-next v2 0/2] bpf: support to trace BPF_JNE
+Date: Tue, 12 Dec 2023 21:10:29 +0800
+Message-Id: <20231212131031.3088661-1-menglong8.dong@gmail.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212125713.336271-1-maciej.fijalkowski@intel.com> <20231212125713.336271-2-maciej.fijalkowski@intel.com>
-In-Reply-To: <20231212125713.336271-2-maciej.fijalkowski@intel.com>
-From: Magnus Karlsson <magnus.karlsson@gmail.com>
-Date: Tue, 12 Dec 2023 14:14:02 +0100
-Message-ID: <CAJ8uoz3XnapArhHjb1yX5q7YrFUgrO2mWgvDDsTBVzTCr=Yzxw@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf 1/3] xsk: recycle buffer in case Rx queue was full
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, netdev@vger.kernel.org, magnus.karlsson@intel.com, 
-	bjorn@kernel.org, echaudro@redhat.com, lorenzo@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, 12 Dec 2023 at 13:58, Maciej Fijalkowski
-<maciej.fijalkowski@intel.com> wrote:
->
-> Add missing xsk_buff_free() call when __xsk_rcv_zc() failed to produce
-> descriptor to XSK Rx queue.
+For now, the reg bounds is not handled for BPF_JNE case, which can cause
+the failure of following case:
 
-Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+  /* The type of "a" is u16 */
+  if (a > 0 && a < 100) {
+    /* the range of the register for a is [0, 99], not [1, 99],
+     * and will cause the following error:
+     *
+     *   invalid zero-sized read
+     *
+     * as a can be 0.
+     */
+    bpf_skb_store_bytes(skb, xx, xx, a, 0);
+  }
 
-> Fixes: 24ea50127ecf ("xsk: support mbuf on ZC RX")
-> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> ---
->  net/xdp/xsk.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
->
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 281d49b4fca4..bd4abb200fa9 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -167,8 +167,10 @@ static int xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
->                 contd = XDP_PKT_CONTD;
->
->         err = __xsk_rcv_zc(xs, xskb, len, contd);
-> -       if (err || likely(!frags))
-> -               goto out;
-> +       if (err)
-> +               goto err;
-> +       if (likely(!frags))
-> +               return 0;
->
->         xskb_list = &xskb->pool->xskb_list;
->         list_for_each_entry_safe(pos, tmp, xskb_list, xskb_list_node) {
-> @@ -177,11 +179,13 @@ static int xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
->                 len = pos->xdp.data_end - pos->xdp.data;
->                 err = __xsk_rcv_zc(xs, pos, len, contd);
->                 if (err)
-> -                       return err;
-> +                       goto err;
->                 list_del(&pos->xskb_list_node);
->         }
->
-> -out:
-> +       return 0;
-> +err:
-> +       xsk_buff_free(xdp);
->         return err;
->  }
->
-> --
-> 2.34.1
->
->
+In the code above, "a > 0" will be compiled to "jmp xxx if a == 0". In the
+TRUE branch, the dst_reg will be marked as known to 0. However, in the
+fallthrough(FALSE) branch, the dst_reg will not be handled, which makes
+the [min, max] for a is [0, 99], not [1, 99].
+
+In the 1st patch, we reduce the range of the dst reg if the src reg is a
+const and is exactly the edge of the dst reg For BPF_JNE.
+
+In the 2nd patch, we just activate the test case for this logic in
+range_cond(), which is committed by Andrii in the
+commit 8863238993e2 ("selftests/bpf: BPF register range bounds tester").
+
+Changes since v1:
+- simplify the code in the 1st patch
+- introduce the 2nd patch for the testing
+
+Menglong Dong (2):
+  bpf: make the verifier trace the "not qeual" for regs
+  selftests/bpf: activate the OP_NE login in range_cond()
+
+ kernel/bpf/verifier.c                         | 29 ++++++++++++++++++-
+ .../selftests/bpf/prog_tests/reg_bounds.c     |  7 +----
+ 2 files changed, 29 insertions(+), 7 deletions(-)
+
+-- 
+2.39.2
+
