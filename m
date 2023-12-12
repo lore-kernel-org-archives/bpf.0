@@ -1,21 +1,27 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A09CE
-	for <bpf@vger.kernel.org>; Tue, 12 Dec 2023 14:33:25 -0800 (PST)
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 08E792B68D7BB; Tue, 12 Dec 2023 14:31:00 -0800 (PST)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 4/5] bpf: Limit up to 512 bytes for bpf_global_percpu_ma allocation
-Date: Tue, 12 Dec 2023 14:31:00 -0800
-Message-Id: <20231212223100.2138537-1-yonghong.song@linux.dev>
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6407AA
+	for <bpf@vger.kernel.org>; Tue, 12 Dec 2023 14:53:59 -0800 (PST)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BCLg7f5002091
+	for <bpf@vger.kernel.org>; Tue, 12 Dec 2023 14:53:59 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uxkk95hg9-6
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Tue, 12 Dec 2023 14:53:59 -0800
+Received: from twshared10507.42.prn1.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Tue, 12 Dec 2023 14:53:58 -0800
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+	id F3BDE3D0C37DB; Tue, 12 Dec 2023 14:53:44 -0800 (PST)
+From: Andrii Nakryiko <andrii@kernel.org>
+To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <martin.lau@kernel.org>
+CC: <andrii@kernel.org>, <kernel-team@meta.com>
+Subject: [PATCH bpf-next] selftests/bpf: fix compiler warnings in RELEASE=1 mode
+Date: Tue, 12 Dec 2023 14:53:43 -0800
+Message-ID: <20231212225343.1723081-1-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231212223040.2135547-1-yonghong.song@linux.dev>
-References: <20231212223040.2135547-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -23,52 +29,53 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: t7cPptOUgieUpsKjLqZne9qtVJM4__9t
+X-Proofpoint-ORIG-GUID: t7cPptOUgieUpsKjLqZne9qtVJM4__9t
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-12_12,2023-12-12_01,2023-05-22_02
 
-For percpu data structure allocation with bpf_global_percpu_ma,
-the maximum data size is 4K. But for a system with large
-number of cpus, bigger data size (e.g., 2K, 4K) might consume
-a lot of memory. For example, the percpu memory consumption
-with unit size 2K and 1024 cpus will be 2K * 1K * 1k =3D 2GB
-memory.
+When compiling BPF selftests with RELEASE=3D1, we get two new
+warnings, which are treated as errors. Fix them.
 
-We should discourage such usage. Let us limit the maximum data
-size to be 512 for bpf_global_percpu_ma allocation.
-
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/testing/selftests/bpf/veristat.c        | 2 +-
+ tools/testing/selftests/bpf/xdp_hw_metadata.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 0c55fe4451e1..e5cb6b7526b6 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -43,6 +43,8 @@ static const struct bpf_verifier_ops * const bpf_verifi=
-er_ops[] =3D {
- };
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selft=
+ests/bpf/veristat.c
+index 1d418d66e375..244d4996e06e 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -1254,7 +1254,7 @@ static int cmp_join_stat(const struct verif_stats_j=
+oin *s1,
+ 			 bool asc, bool abs)
+ {
+ 	const char *str1 =3D NULL, *str2 =3D NULL;
+-	double v1, v2;
++	double v1 =3D 0.0, v2 =3D 0.0;
+ 	int cmp =3D 0;
 =20
- struct bpf_mem_alloc bpf_global_percpu_ma;
-+#define LLIST_NODE_SZ sizeof(struct llist_node)
-+#define BPF_GLOBAL_PERCPU_MA_MAX_SIZE  (512 - LLIST_NODE_SZ)
-=20
- /* bpf_check() is a static code analyzer that walks eBPF program
-  * instruction by instruction and updates register/stack state.
-@@ -12091,6 +12093,11 @@ static int check_kfunc_call(struct bpf_verifier_=
-env *env, struct bpf_insn *insn,
- 				}
-=20
- 				if (meta.func_id =3D=3D special_kfunc_list[KF_bpf_percpu_obj_new_imp=
-l]) {
-+					if (ret_t->size > BPF_GLOBAL_PERCPU_MA_MAX_SIZE) {
-+						verbose(env, "bpf_percpu_obj_new type size (%d) is greater than %l=
-u\n",
-+							ret_t->size, BPF_GLOBAL_PERCPU_MA_MAX_SIZE);
-+						return -EINVAL;
-+					}
- 					mutex_lock(&bpf_percpu_ma_lock);
- 					err =3D bpf_mem_alloc_percpu_unit_init(&bpf_global_percpu_ma, ret_t=
-->size);
- 					mutex_unlock(&bpf_percpu_ma_lock);
+ 	fetch_join_stat_value(s1, id, var, &str1, &v1);
+diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testin=
+g/selftests/bpf/xdp_hw_metadata.c
+index 3291625ba4fb..c69c08933fdd 100644
+--- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+@@ -79,7 +79,7 @@ static int open_xsk(int ifindex, struct xsk *xsk, __u32=
+ queue_id)
+ 		.flags =3D XSK_UMEM__DEFAULT_FLAGS,
+ 		.tx_metadata_len =3D sizeof(struct xsk_tx_metadata),
+ 	};
+-	__u32 idx;
++	__u32 idx =3D 0;
+ 	u64 addr;
+ 	int ret;
+ 	int i;
 --=20
 2.34.1
 
