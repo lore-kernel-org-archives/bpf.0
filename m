@@ -1,118 +1,138 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="A1inhCL9"
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [IPv6:2001:41d0:1004:224b::b5])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E22AF
-	for <bpf@vger.kernel.org>; Wed, 13 Dec 2023 08:59:40 -0800 (PST)
-Message-ID: <6960ef41-fe22-4297-adc7-c85264288b6d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1702486777;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=p4lJ6fuy6gVgOBLJgySJCzr4DpnAgH48SfeJ2oQaas8=;
-	b=A1inhCL90hXyszEVY0knTkLQ/A4/3UIByKIh3eamKJfjCkdCG6PcVsh9j0f3y2gNyDIzPQ
-	SwWY3FuNgxxpjGm06LZu4YviM+nKHDMxGRJfSDmQJDzw2qqwM9l3oYy4MNIt3X4z9mgpEj
-	8QxbZSU2G6ruY81+VFFeNt4dzBwTc6w=
-Date: Wed, 13 Dec 2023 08:59:26 -0800
+	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="U+pkM0Cw";
+	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="U+pkM0Cw";
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OoLuFdXR"
+Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17271B3
+	for <bpf@vger.kernel.org>; Wed, 13 Dec 2023 09:00:29 -0800 (PST)
+Received: from ietfa.amsl.com (localhost [IPv6:::1])
+	by ietfa.amsl.com (Postfix) with ESMTP id 9513FC15107F
+	for <bpf@vger.kernel.org>; Wed, 13 Dec 2023 09:00:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
+	t=1702486829; bh=3Wy6pYTnDyFpM2qs1SMxdzsJ53kAzfqo1dL3PaFK+y0=;
+	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
+	b=U+pkM0CwSnelUGfwybG5E6YOAHMED/IR8XKKKM824meA3bNOo/ku9ii8BOZ30USws
+	 8onA0kWzsji1vZdwGlKILscXZl4CVMqiKW9mEQacwjYrR0CefiwBgSjV6FnNBQOXdt
+	 HVC6XuIUNi295B0ut23k1y9Hdij3NYVYJ/0Q97mE=
+X-Mailbox-Line: From bpf-bounces@ietf.org  Wed Dec 13 09:00:29 2023
+Received: from ietfa.amsl.com (localhost [IPv6:::1])
+	by ietfa.amsl.com (Postfix) with ESMTP id 27709C14F5F1;
+	Wed, 13 Dec 2023 09:00:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
+	t=1702486829; bh=3Wy6pYTnDyFpM2qs1SMxdzsJ53kAzfqo1dL3PaFK+y0=;
+	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
+	b=U+pkM0CwSnelUGfwybG5E6YOAHMED/IR8XKKKM824meA3bNOo/ku9ii8BOZ30USws
+	 8onA0kWzsji1vZdwGlKILscXZl4CVMqiKW9mEQacwjYrR0CefiwBgSjV6FnNBQOXdt
+	 HVC6XuIUNi295B0ut23k1y9Hdij3NYVYJ/0Q97mE=
+Received: from localhost (localhost [127.0.0.1])
+ by ietfa.amsl.com (Postfix) with ESMTP id 80C7AC14CEF9;
+ Wed, 13 Dec 2023 08:59:26 -0800 (PST)
+X-Virus-Scanned: amavisd-new at amsl.com
+X-Spam-Score: -2.104
+X-Spam-Level: 
+Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
+ header.d=infradead.org
+Received: from mail.ietf.org ([50.223.129.194])
+ by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4L7SFPw-ScjG; Wed, 13 Dec 2023 08:59:22 -0800 (PST)
+Received: from bombadil.infradead.org (bombadil.infradead.org
+ [IPv6:2607:7c80:54:3::133])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by ietfa.amsl.com (Postfix) with ESMTPS id E18C6C14F5F1;
+ Wed, 13 Dec 2023 08:59:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+ :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+ Content-Transfer-Encoding:Content-ID:Content-Description;
+ bh=orJVMjR7jVrNlAzsEKDkXK8eWd/iVLh2GJI+1vlzcZI=; b=OoLuFdXREyYJSC98gCRXNJf3Oc
+ To9wO83VrGXwHTbr8e7g/BLeNIfJlvokP/HUY0j1Lgz1RjceHzfYfABfgOIbQCWqrvhWFcAeHWtLi
+ 1CzjYl3VEajIWuQw0bYjypFz+8bMfgpLoAtvqnR7l/LHd0nAQitWdsmTJ966faGl5teC7Hjtiw0xX
+ MpJa/UNLPpUKYSQ2IY6Q3+1784fq3cPKPkRe7qpqz36LNrl51MsimVsYBTQC2pU8PVTnhkrI5W3tj
+ Ilim5PxeB4rva8AGMBJtpZm7Fi0WJh0cACScPmlSGH0LT8R+YWwQYqVq5OgRt99JAx5+WTRaCus8Y
+ ZFKCqazg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat
+ Linux)) id 1rDSZo-00FWSp-1s; Wed, 13 Dec 2023 16:59:16 +0000
+Date: Wed, 13 Dec 2023 08:59:16 -0800
+From: Christoph Hellwig <hch@infradead.org>
+To: David Vernet <void@manifault.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Dave Thaler <dthaler1968=40googlemail.com@dmarc.ietf.org>,
+ Christoph Hellwig <hch@infradead.org>, bpf@ietf.org,
+ bpf <bpf@vger.kernel.org>
+Message-ID: <ZXni5GGX8iI+fN7t@infradead.org>
+References: <20231127201817.GB5421@maniforge>
+ <072101da2558$fe5f5020$fb1df060$@gmail.com>
+ <20231207215152.GA168514@maniforge>
+ <CAADnVQ+Mhe6ean6J3vH1ugTyrgWNxupLoFfwKu6-U=3R8i1TNQ@mail.gmail.com>
+ <20231212214532.GB1222@maniforge>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH v3 1/3] bpf: cgroup: Introduce helper
- cgroup_bpf_current_enabled()
-Content-Language: en-GB
-To: =?UTF-8?Q?Michael_Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>,
- Christian Brauner <brauner@kernel.org>,
- Alexander Mikhalitsyn <alexander@mihalicyn.com>,
- Alexei Starovoitov <ast@kernel.org>, Paul Moore <paul@paul-moore.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Quentin Monnet <quentin@isovalent.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>, Miklos Szeredi
- <miklos@szeredi.hu>, Amir Goldstein <amir73il@gmail.com>,
- "Serge E. Hallyn" <serge@hallyn.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-security-module@vger.kernel.org, gyroidos@aisec.fraunhofer.de,
- Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-References: <20231213143813.6818-1-michael.weiss@aisec.fraunhofer.de>
- <20231213143813.6818-2-michael.weiss@aisec.fraunhofer.de>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20231213143813.6818-2-michael.weiss@aisec.fraunhofer.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Disposition: inline
+In-Reply-To: <20231212214532.GB1222@maniforge>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by
+ bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/fSgrV7MrHmC0_yXROILd5Sm7nnw>
+Subject: Re: [Bpf] BPF ISA conformance groups
+X-BeenThere: bpf@ietf.org
+X-Mailman-Version: 2.1.39
+Precedence: list
+List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
+List-Post: <mailto:bpf@ietf.org>
+List-Help: <mailto:bpf-request@ietf.org?subject=help>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Errors-To: bpf-bounces@ietf.org
+Sender: "Bpf" <bpf-bounces@ietf.org>
+Message-ID: <20231213165916.opGuJNrEyHPXrGuQ_PGNIOIO71SKUZ-IIDthzSO6elE@z>
 
+On Tue, Dec 12, 2023 at 03:45:32PM -0600, David Vernet wrote:
+> > I think we should do just two categories: legacy and the rest,
+> > since any scheme will be flawed and infinite bikeshedding will ensue.
+> 
+> If we do this, then aren't we forcing every vendor that adds BPF support
+> to support every single instruction if they want to be compliant?
 
-On 12/13/23 6:38 AM, Michael Weiß wrote:
-> This helper can be used to check if a cgroup-bpf specific program is
-> active for the current task.
->
-> Signed-off-by: Michael Weiß <michael.weiss@aisec.fraunhofer.de>
-> Reviewed-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-> ---
->   include/linux/bpf-cgroup.h |  2 ++
->   kernel/bpf/cgroup.c        | 14 ++++++++++++++
->   2 files changed, 16 insertions(+)
->
-> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-> index a789266feac3..7cb49bde09ff 100644
-> --- a/include/linux/bpf-cgroup.h
-> +++ b/include/linux/bpf-cgroup.h
-> @@ -191,6 +191,8 @@ static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
->   	return array != &bpf_empty_prog_array.hdr;
->   }
->   
-> +bool cgroup_bpf_current_enabled(enum cgroup_bpf_attach_type type);
-> +
->   /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
->   #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)			      \
->   ({									      \
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 491d20038cbe..9007165abe8c 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -24,6 +24,20 @@
->   DEFINE_STATIC_KEY_ARRAY_FALSE(cgroup_bpf_enabled_key, MAX_CGROUP_BPF_ATTACH_TYPE);
->   EXPORT_SYMBOL(cgroup_bpf_enabled_key);
->   
-> +bool cgroup_bpf_current_enabled(enum cgroup_bpf_attach_type type)
-> +{
-> +	struct cgroup *cgrp;
-> +	struct bpf_prog_array *array;
-> +
-> +	rcu_read_lock();
-> +	cgrp = task_dfl_cgroup(current);
-> +	rcu_read_unlock();
-> +
-> +	array = rcu_access_pointer(cgrp->bpf.effective[type]);
+Yes, you do.  And if we have use cases and implementation restrictions
+that ask for not supporting some that would be the biggest reason to
+have more groups.  I brough up some examples where we don't need e.g.
+atomics.  I've not really heard from implementor that implementing
+the instructions is a burden for them, though.
 
-This seems wrong here. The cgrp could become invalid once leaving
-rcu critical section.
+> I think it's reasonable to expect that if you require an atomic add,
+> that you may also require the other atomic instructions as well and that
+> it would be logical to group them together, yes. I believe that
+> Netronome supports all of the atomic instructions, as one example. If
+> you're providing a BPF runtime in an environment where atomic adds are
+> required, I think it stands to reason that you should probably support
+> the other atomics as well, no?
 
-> +	return array != &bpf_empty_prog_array.hdr;
+Agreed.
 
-I guess you need include 'array' usage as well in the rcu cs.
-So overall should look like:
+> From my perspective, the reason that we want conformance groups is
+> purely for compliance and cross compatibility. If someone has a BPF
+> program that does some class of operations, then conformance groups
+> inform them about whether their prog will be able to run on some vendor
+> implementation of BPF.
 
-	rcu_read_lock();
-	cgrp = task_dfl_cgroup(current);
-	array = rcu_access_pointer(cgrp->bpf.effective[type]);
-	bpf_prog_exists = array != &bpf_empty_prog_array.hdr;
-	rcu_read_unlock();
+Yes.
 
-	return bpf_prog_exists;
+> FWIW, my perspective is that we should be aiming to enable compliance.
+> I don't see any reason why a BPF prog that's offloaded to a NIC to do
+> packet filtering shouldn't be able to e.g. run on multiple devices.
+> That certainly won't be the case for every type of BPF program, but
+> classifying groups of instructions does seem prudent.
 
-> +}
-> +EXPORT_SYMBOL(cgroup_bpf_current_enabled);
-> +
->   /* __always_inline is necessary to prevent indirect call through run_prog
->    * function pointer.
->    */
+100% agreed.
+
+-- 
+Bpf mailing list
+Bpf@ietf.org
+https://www.ietf.org/mailman/listinfo/bpf
