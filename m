@@ -1,118 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AD4A610B;
-	Thu, 14 Dec 2023 06:27:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OLfCLKMV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 262DDC433C8;
-	Thu, 14 Dec 2023 06:27:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702535264;
-	bh=jCIF91qtDA+ZEemkBo11x9McQ7w6uFe00P7r8p+aNPc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OLfCLKMVmfm4FvlW6f9rzDdFrIJXc9NVwo8lyjxEmGPCLKMB+q5s5r8p04kk5BMJM
-	 N5inpFK7IRJjGnWpMJx5ekByzFuldxl12CU/nxmV3pDAzTKssl7WNNNp9+kJ4YDXNt
-	 zi7UWJW6klo9/1YSSrL31LbUcOqA46d7whIOxM0PvDpa5WH5162jXd9OFTDCe4GNJD
-	 1aaYbKJjaUVKgc2oP4/Uw9s9+5BLEKn4p1ODIv2MweI08wA5yzyLPMJI734I8L1QrQ
-	 +4YBCzIRwhns3lqdHyWUK26IabO7QJ0Rglu4Vj1ppOyVL8X8iPcdNvdNAn6Avzc2GK
-	 DCd4l/otJcPnw==
-Message-ID: <ecf4ec04-4ed6-483c-8ffe-1fc319ee6aa4@kernel.org>
-Date: Wed, 13 Dec 2023 22:27:40 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zsdu44nm"
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF28DB7;
+	Wed, 13 Dec 2023 22:28:38 -0800 (PST)
+Received: by mail-ot1-x342.google.com with SMTP id 46e09a7af769-6da16eab6fcso3145755a34.3;
+        Wed, 13 Dec 2023 22:28:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702535318; x=1703140118; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DACrLAWMgkdWOj6IS64GGQr5aAGYXSH/tnwt+3cBGmE=;
+        b=Zsdu44nmfZvBRgJsZBZQgtI3hXMPq6tS2T5oBJ+rUho4v4tJ9vGD8RZ6psoU8rKxgt
+         rTbu7P21lpsfNf1O/LL8IP+jLUXEE+4eZP7CeNqNwjGRtQXb6qI+vkv7XxQ9Wns5XSf7
+         vI9o1Qtaxl01S1+mnqOXb64UwqjGecxPXE0ae5WFh74aRYwaJJGxGjjMVmFNNGDoQUZw
+         qkRaJDw/Q67bpILd5wr1X8l5uxDiOMgO0ihd8bPlNMgOSFbIPTi+4CFNOKIhYHPD8sGf
+         ZbNpnracPCpwV8Ie7CI3EXp+WCpxJIiRcHleD37SOJ2Hjxj6JWyds5/tTx95txJWKQxg
+         DmBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702535318; x=1703140118;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DACrLAWMgkdWOj6IS64GGQr5aAGYXSH/tnwt+3cBGmE=;
+        b=KNs+WGYIu8bYNCsWmZdFQeE694o7NU7YK5Mi7+totwx5FUWiMuYZZrBYG6xZxdUHGV
+         ooAqILpNNr13Ym1Jm+Db+sI8Esy9zTgk+upa/S6Rlt51XVBADBgLAl4PGiNZUkNz93Ei
+         IGf3RB2/G7vj+s0/tEMSITYc2op/h8qYwz9RIhYCyJrUTzPLVi3hGyMbaVZuRmYUt+Zy
+         ILU/iC4Uz+uDGos4ykdY40rjbHtZgsV1doZZE5434VWCD/BaOpZi/6sJ0GKmw5+pRvnf
+         GzLspSM9Cc3vwnuIhOu6xmpvfSuRZ8AJkQfRfetW5eqakEzTnms4ch+fQgm2QqI7I58b
+         MCqw==
+X-Gm-Message-State: AOJu0YyO9Yffd3R3Bz0pRPWgG/3U+it6IL8oEZebIx/6PAr8P4C2NYnN
+	mKJoE7xJjDblbGqgRrebphI=
+X-Google-Smtp-Source: AGHT+IGc+XSLEwAysJ/H6XUnxDX2fwwVEBl4Vm5agEu1aA3vS9QI53pf03vr2XUVPiVCYs0opkMChw==
+X-Received: by 2002:a05:6808:1307:b0:3b9:ee89:541b with SMTP id y7-20020a056808130700b003b9ee89541bmr11183525oiv.28.1702535317951;
+        Wed, 13 Dec 2023 22:28:37 -0800 (PST)
+Received: from localhost.localdomain ([43.129.244.20])
+        by smtp.gmail.com with ESMTPSA id z7-20020a63e107000000b005af08f65227sm10744770pgh.80.2023.12.13.22.28.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Dec 2023 22:28:37 -0800 (PST)
+From: Menglong Dong <menglong8.dong@gmail.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	yonghong.song@linux.dev
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	kpsingh@kernel.org,
+	sdf@google.com,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Menglong Dong <menglong8.dong@gmail.com>
+Subject: [PATCH bpf-next v3 0/2] bpf: support to track BPF_JNE
+Date: Thu, 14 Dec 2023 14:24:32 +0800
+Message-Id: <20231214062434.3565630-1-menglong8.dong@gmail.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH net-next v1 1/4] vsock/virtio: use skb_frag_page()
- helper
-Content-Language: en-US
-To: Mina Almasry <almasrymina@google.com>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Michael Chan <michael.chan@broadcom.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, Wei Fang <wei.fang@nxp.com>,
- Shenwei Wang <shenwei.wang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>,
- NXP Linux Team <linux-imx@nxp.com>, Jeroen de Borst <jeroendb@google.com>,
- Praveen Kaligineedi <pkaligineedi@google.com>,
- Shailend Chand <shailend@google.com>, Yisen Zhuang
- <yisen.zhuang@huawei.com>, Salil Mehta <salil.mehta@huawei.com>,
- Jesse Brandeburg <jesse.brandeburg@intel.com>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Marcin Wojtas <mw@semihalf.com>, Russell King <linux@armlinux.org.uk>,
- Sunil Goutham <sgoutham@marvell.com>, Geetha sowjanya <gakula@marvell.com>,
- Subbaraya Sundeep <sbhatta@marvell.com>, hariprasad <hkelam@marvell.com>,
- Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
- Sean Wang <sean.wang@mediatek.com>, Mark Lee <Mark-MC.Lee@mediatek.com>,
- Lorenzo Bianconi <lorenzo@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
- Horatiu Vultur <horatiu.vultur@microchip.com>, UNGLinuxDriver@microchip.com,
- "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, Jassi Brar <jaswinder.singh@linaro.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Jose Abreu <joabreu@synopsys.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Siddharth Vadapalli <s-vadapalli@ti.com>,
- Ravi Gunasekaran <r-gunasekaran@ti.com>, Roger Quadros <rogerq@kernel.org>,
- Jiawen Wu <jiawenwu@trustnetic.com>, Mengyuan Lou
- <mengyuanlou@net-swift.com>, Ronak Doshi <doshir@vmware.com>,
- VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
- Ryder Lee <ryder.lee@mediatek.com>, Shayne Chen <shayne.chen@mediatek.com>,
- Kalle Valo <kvalo@kernel.org>, Juergen Gross <jgross@suse.com>,
- Stefano Stabellini <sstabellini@kernel.org>,
- Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>,
- Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
- =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jason Gunthorpe <jgg@nvidia.com>, Shakeel Butt <shakeelb@google.com>,
- Yunsheng Lin <linyunsheng@huawei.com>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-References: <20231214020530.2267499-1-almasrymina@google.com>
- <20231214020530.2267499-2-almasrymina@google.com>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <20231214020530.2267499-2-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 12/13/23 7:05 PM, Mina Almasry wrote:
-> diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
-> index af5bab1acee1..bd0b413dfa3f 100644
-> --- a/net/vmw_vsock/virtio_transport.c
-> +++ b/net/vmw_vsock/virtio_transport.c
-> @@ -153,7 +153,7 @@ virtio_transport_send_pkt_work(struct work_struct *work)
->  				 * 'virt_to_phys()' later to fill the buffer descriptor.
->  				 * We don't touch memory at "virtual" address of this page.
->  				 */
-> -				va = page_to_virt(skb_frag->bv_page);
-> +				va = page_to_virt(skb_frag_page(skb_frag));
->  				sg_init_one(sgs[out_sg],
->  					    va + skb_frag->bv_offset,
+For now, the reg bounds is not handled for BPF_JNE case, which can cause
+the failure of following case:
 
-offset should not be open coded either.
+  /* The type of "a" is u16 */
+  if (a > 0 && a < 100) {
+    /* the range of the register for a is [0, 99], not [1, 99],
+     * and will cause the following error:
+     *
+     *   invalid zero-sized read
+     *
+     * as a can be 0.
+     */
+    bpf_skb_store_bytes(skb, xx, xx, a, 0);
+  }
 
->  					    skb_frag->bv_len);
+In the code above, "a > 0" will be compiled to "jmp xxx if a == 0". In the
+TRUE branch, the dst_reg will be marked as known to 0. However, in the
+fallthrough(FALSE) branch, the dst_reg will not be handled, which makes
+the [min, max] for a is [0, 99], not [1, 99].
+
+In the 1st patch, we reduce the range of the dst reg if the src reg is a
+const and is exactly the edge of the dst reg For BPF_JNE.
+
+In the 2nd patch, we just activate the test case for this logic in
+range_cond(), which is committed by Andrii in the
+commit 8863238993e2 ("selftests/bpf: BPF register range bounds tester").
+
+Changes since v2:
+- fix a typo in the subject of the 1st patch
+- add some comments to the 1st patch, as Eduard advised
+- add some cases to the "crafted_cases"
+
+Changes since v1:
+- simplify the code in the 1st patch
+- introduce the 2nd patch for the testing
+
+Menglong Dong (2):
+  bpf: make the verifier tracks the "not equal" for regs
+  selftests/bpf: activate the OP_NE login in range_cond()
+
+ kernel/bpf/verifier.c                         | 38 ++++++++++++++++++-
+ .../selftests/bpf/prog_tests/reg_bounds.c     | 25 +++++++++---
+ 2 files changed, 56 insertions(+), 7 deletions(-)
+
+-- 
+2.39.2
 
