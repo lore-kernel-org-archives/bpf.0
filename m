@@ -1,141 +1,108 @@
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773BF671E0;
-	Thu, 14 Dec 2023 23:06:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5FC6DD12
+	for <bpf@vger.kernel.org>; Thu, 14 Dec 2023 23:07:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="ZaqCIeQG";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HL2/33ak"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id 5C4013200B63;
-	Thu, 14 Dec 2023 17:56:46 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 14 Dec 2023 17:56:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1702594605; x=
-	1702681005; bh=XQshBmyjBQf6RY2CAow1bMPPx+5T2NN0wUXPXm8LOKg=; b=Z
-	aqCIeQGurRCTM7hZ4iasVKc9O2LQIFe3ei2Nwew2C94utMf/LqvJBaqQXRpSIEgk
-	foprlzpuWhEp05gaiT8q4QVRqDiM6QbVuznut8EaFBCbDcwa8LiQGzSWcVoJbbuQ
-	sy8mNs4TkSXXZ5zyzzDJaW55lyeB3GpHckAZFYJAYDrm89soUw9wbdmPGTVy85Lm
-	XbeF5Y711R6W/m5BFmkkWusaW+xxEmFr7wZz6eOs4UaAlJ9BU/LPSlG/eKojVhwi
-	alqplz4xrwzNmSkgWGMBu1kslSoOxh6QR1m9w4biCkIRAHxSPVmnTOzC+jaiELjh
-	DJ01GHj9SQwi7cwyFDc4A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1702594605; x=
-	1702681005; bh=XQshBmyjBQf6RY2CAow1bMPPx+5T2NN0wUXPXm8LOKg=; b=H
-	L2/33akpJKh8LYF5lXkV20iIT64GK82zts3RPdoHgfTXn5QEyoRgN3kypilVZl3e
-	4JweKZNSf8eixcUGwZG+eRfpGCa4XREDl8EBUhitaDT9AVHJINRpy3lompY2rFjx
-	fW6fuMPKTbh2Xy8yEl6YZmsm4UbmAfkcPGVonCcRSZsPXu4iyIGaEjz00pbmalWD
-	bO3RtbRkM5a2S8zRlcksHCR6ObFTon5rNTPwDEuyYjh0qPsN5JYqXe0+eGkN4bCh
-	d4ZOTq+yUXhPbKnveTHHHL253UHad5815ixrPY+Ilq17j2DLSQqqIPRjR+oNqIzY
-	Vx4tGA+buvC+HzYrpUvTg==
-X-ME-Sender: <xms:LYh7ZcQ8b4ZcMEH_ADmm4j06O23hK7-bbJWcmXTV2qEBQ2S3_nbWAg>
-    <xme:LYh7ZZwTm3JKClqnlmQ9QROs2bcTv0HkZYVCR5BUua_Hfl2aNRPFhijvwCQZNheDV
-    UeQ8RjERl2_Ditj7A>
-X-ME-Received: <xmr:LYh7ZZ3Z1XIHDACbXx1D_6GzYpK7IwVURSBJxmBhWlSWSjU-GYJeAtPjfJk4N9TOC8Q286ImzHPDIXZq2WjgSf0kB8cz3Joe_07iV-kcIrs_MA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvddttddgtdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
-    evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
-    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgfegjefhudeike
-    dvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecuvehluhhsthgvrhfuihii
-    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:LYh7ZQAiMA5g8Z3Ssox1UQ_HXFkbX-6BnjyJxrPyhh7BlraicJCYzg>
-    <xmx:LYh7ZVg-Tt2-AcMQoqh3PG1hw9NaPq-bmOhqlshVL33htq-ubnCJcw>
-    <xmx:LYh7Zco3WtCCht2bPIxcNj9y6Dy4l6hIlHE2s7RILuU2E4f7ES525Q>
-    <xmx:LYh7ZdyLGIktnC7tRM1--jZX23KFULGj3K7hVn7uTcq16aPYG9qGcQ>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 14 Dec 2023 17:56:44 -0500 (EST)
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	shuah@kernel.org,
-	memxor@gmail.com
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	mykolal@fb.com,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 2/3] bpf: selftests: Add bpf_assert_if() and bpf_assert_with_if() macros
-Date: Thu, 14 Dec 2023 15:56:26 -0700
-Message-ID: <97ada80f3aaaeb16bf97e31a8fc204513b4fb6a9.1702594357.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <cover.1702594357.git.dxu@dxuuu.xyz>
-References: <cover.1702594357.git.dxu@dxuuu.xyz>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GsDUiVX7"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a22fb5f71d9so9501166b.0
+        for <bpf@vger.kernel.org>; Thu, 14 Dec 2023 15:07:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702595223; x=1703200023; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DHV4VlyPZxPUGjIupqzGuMiIqAkqes/m8oWnmE9Z6fM=;
+        b=GsDUiVX7+GGbWEH0wewZSVJDaje6ISEUxrG5klYD5JTP29TLI/nIZdK/U3/K22klPm
+         jWNDts6iJOXvk7MEgUr8cfvWhWH+/KI3KXuLiuOJjMjviuVmTQTjjR16tHcJmqtQPy28
+         P3wOohhy8wr03ee9snfsf3L9A6BxX6G1/Hp2Fg+WWp97qqvdDmqcoiHN24A5bwNj4TB7
+         G7O7vxxkvBRXZ3MqZfYbjdBIH/YMeLwEITuQix20mT9vZRyo9ct9uyVpGSx8nlT31FLG
+         f/9ww0nZpcgra3z5NIvheyeNqMgp+zJhTrTmCXZaTH6iwd3uEUw3onmYAwxhodIb1Pf/
+         hs0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702595223; x=1703200023;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DHV4VlyPZxPUGjIupqzGuMiIqAkqes/m8oWnmE9Z6fM=;
+        b=aFf6Nooi5/7/2rtkCguUuKsnhMIKsGRf3wuqoba9OL5HeD1D4q8ufH1K2D3mIn27bH
+         ejlwD2pZWMdKgcHDL0zRW9YjNrIIydzg+KetfDzCEmzoic2jlXrmW/f5Hzy7BTXIRwbS
+         T4iAndgHwLJ6GASrwTQuGjAc34AGDRHdqbPjzwDSVODF5sgjK29a3nsZzaclBnhYyOpM
+         nRWuKfcgjRaJbOu6EXNV3vW0Xoj1WKp0b1dmZ4Kf6PD5MIQTLT9fcM0Tw1HmlZg61nku
+         66YJuadSUXYiGH/iriWd8J9ox6W/8VJF89zkJ8DMJv7sSQ2cnkwNpk89SG3Rz66ieqVi
+         fkUQ==
+X-Gm-Message-State: AOJu0YxQJvSHCBIzWOLXMcK9yp8ziJAuAgPuKzw8tuKyok7yHLnN3ktp
+	+h88InASz/BAXjqfbVLWICmqmbNKou10SK4K0eql3q/V
+X-Google-Smtp-Source: AGHT+IE53vKvxwmOoMkW6QFnVitxcGDKT4BSmnZv5Kp2v5DEdCOGfUaae4cnhhqVDfhRJRmbHtEBk2Uj+N4JAQ81Xws=
+X-Received: by 2002:a50:8e06:0:b0:54c:48aa:cd18 with SMTP id
+ 6-20020a508e06000000b0054c48aacd18mr9106530edw.40.1702594749879; Thu, 14 Dec
+ 2023 14:59:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231214225016.1209867-1-andrii@kernel.org> <CAEf4BzZVS-U28tswb8P5scO8aXKCd4cteS=-r4xHvyXb2XVz7A@mail.gmail.com>
+In-Reply-To: <CAEf4BzZVS-U28tswb8P5scO8aXKCd4cteS=-r4xHvyXb2XVz7A@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 14 Dec 2023 14:58:57 -0800
+Message-ID: <CAEf4BzbXBH5nTrDPNaPecG5WmeRHANCxFhBD7zLU_bbV-=96Lg@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 0/2] BPF FS mount options parsing follow ups
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	martin.lau@kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-These macros are a temporary stop-gap until bpf exceptions support
-unwinding acquired entities. Basically these macros act as if they take
-a callback which only get executed if the assertion fails.
+On Thu, Dec 14, 2023 at 2:56=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Thu, Dec 14, 2023 at 2:50=E2=80=AFPM Andrii Nakryiko <andrii@kernel.or=
+g> wrote:
+> >
+> > Original BPF token patch set ([0]) added delegate_xxx mount options whi=
+ch
+> > supported only special "any" value and hexadecimal bitmask. This patch =
+set
+> > attempts to make specifying and inspecting these mount options more
+> > human-friendly by supporting string constants matching corresponding bp=
+f_cmd,
+> > bpf_map_type, bpf_prog_type, and bpf_attach_type enumerators.
+> >
+> > This implementation relies on BTF information to find all supported sym=
+bolic
+> > names. If kernel wasn't built with BTF, BPF FS will still support "any"=
+ and
+> > hex-based mask.
+> >
+> >   [0] https://patchwork.kernel.org/project/netdevbpf/list/?series=3D805=
+707&state=3D*
+> >
+> > v1->v2:
+> >   - strip BPF_, BPF_MAP_TYPE_, and BPF_PROG_TYPE_ prefixes,
+> >     do case-insensitive comparison, normalize to lower case (Alexei).
+> >
+>
+> Argh, patches are actually from v1, sorry, rebase troubles. Will send
+> v3 with the proper version of the code.
 
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- .../testing/selftests/bpf/bpf_experimental.h  | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Nope, sorry, never mind, it's all good and the correct version of the
+code. Gmail confused me. Sorry for the noise.
 
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index 1386baf9ae4a..d63f415bef26 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -263,6 +263,17 @@ extern void bpf_throw(u64 cookie) __ksym;
-  */
- #define bpf_assert(cond) if (!(cond)) bpf_throw(0);
- 
-+/* Description
-+ *	Assert that a conditional expression is true. If false, runs code in the
-+ *	body before throwing.
-+ * Returns
-+ *	Void.
-+ * Throws
-+ *	An exception with the value zero when the assertion fails.
-+ */
-+#define bpf_assert_if(cond) \
-+	for (int ___i = 0, ___j = !!(cond); !(___j) && !___i; bpf_throw(0), ___i++)
-+
- /* Description
-  *	Assert that a conditional expression is true.
-  * Returns
-@@ -272,6 +283,17 @@ extern void bpf_throw(u64 cookie) __ksym;
-  */
- #define bpf_assert_with(cond, value) if (!(cond)) bpf_throw(value);
- 
-+/* Description
-+ *	Assert that a conditional expression is true. If false, runs code in the
-+ *	body before throwing.
-+ * Returns
-+ *	Void.
-+ * Throws
-+ *	An exception with the given value when the assertion fails.
-+ */
-+#define bpf_assert_with_if(cond, value) \
-+	for (int ___i = 0, ___j = !!(cond); !(___j) && !___i; bpf_throw(value), ___i++)
-+
- /* Description
-  *	Assert that LHS is equal to RHS. This statement updates the known value
-  *	of LHS during verification. Note that RHS must be a constant value, and
--- 
-2.42.1
 
+>
+>
+> > Andrii Nakryiko (2):
+> >   bpf: support symbolic BPF FS delegation mount options
+> >   selftests/bpf: utilize string values for delegate_xxx mount options
+> >
+> >  kernel/bpf/inode.c                            | 249 +++++++++++++++---
+> >  .../testing/selftests/bpf/prog_tests/token.c  |  52 ++--
+> >  2 files changed, 243 insertions(+), 58 deletions(-)
+> >
+> > --
+> > 2.34.1
+> >
