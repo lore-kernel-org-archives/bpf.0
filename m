@@ -1,81 +1,82 @@
 Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7749266AA4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7741F66AA2;
 	Thu, 14 Dec 2023 23:06:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="Ylob5p1y";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Z8QNha96"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="qw1HvdCM";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ZDZ1H6Gk"
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.west.internal (Postfix) with ESMTP id 3FEE73200B6C;
-	Thu, 14 Dec 2023 17:56:50 -0500 (EST)
+	by mailout.west.internal (Postfix) with ESMTP id A3EC43200AC7;
+	Thu, 14 Dec 2023 17:56:42 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Thu, 14 Dec 2023 17:56:51 -0500
+  by compute6.internal (MEProxy); Thu, 14 Dec 2023 17:56:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
 	:cc:content-transfer-encoding:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1702594609; x=
-	1702681009; bh=L/0CxpH+ItkIN3jpcTP0mXpLYvcBH1FSKHM4RQL+UFM=; b=Y
-	lob5p1y1K4j5mjBFalFycAkqaKaqz1FROzRP7NWkpEROFzy1e6SUuDGfMro/YXW7
-	FhjzgdFCa70PDXuds5aDqFaw53gjddDbSraAF+MhTKm+OBFDkEqWZYP1r6c891Eu
-	FJWJVU5C7/K2myRzOSiegHkravmvJMcDxiaXJ6CkUOmpjIBvUWg+7vPkUaNfMEKM
-	FuKCwOHLdM13dBAyjrwKm8RnC2fZ1umgcmm8JCbTaVGb3pocHmib/cVoNatQ+/Vz
-	vXFOKXun5v8LjJFAJfq/UncZ12je4stK9I/h1Nmdxj7tnM88vWM/U1eLll66IDan
-	9utJ5oH21kB+ke8oFAjbQ==
+	:reply-to:subject:subject:to:to; s=fm3; t=1702594602; x=
+	1702681002; bh=j9Ha1GrnJezE3gDkgIKe3fTLm5nM7RqyU/VzWdgR9ds=; b=q
+	w1HvdCMhxFqoIWiBQ7RqO5XhjutACfA9pn5Sp3DAShbPXJmO/iOY4ZnKwx49xeoz
+	sCs4mI27pihMqKGADLlYZBit+2QJpRkD5i3V2rm4T2Ln975py8J4PZB9YROndd79
+	00l9fIi4zcjmLPc0jOsSXh8dzWZVeCAwJD8F8IxVreFOBvsjQd1/XiPA+y1z6Bo2
+	dPcA/m+CxMEONWV7KxNaBVpzCByBRCTn+c8GyiYgXJDS4nJlCMK3E5K8u8959xqO
+	ax0eg5iveTRk2G0Q8g9u/XOJkBFimGobyC79Vi6zdC62yA9lviD+xmJdMpDpYUOM
+	kAuHii98CtC4AhnU7Hsxg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1702594609; x=
-	1702681009; bh=L/0CxpH+ItkIN3jpcTP0mXpLYvcBH1FSKHM4RQL+UFM=; b=Z
-	8QNha96yOnxWRQSSo1nDSWCFHxIJmkn9MYYFdco3NpHSKLe7MimAxTTHpGymneOn
-	6MLJI4IF8TJ8zEAsdWP2cfpFR/ZM0Ylfphy0HLodutXTIGujX395+upYWsL81wjN
-	x4X1XBmlD06f2OGrC8XYdP/an6b2s7OxfZT2O0Tb4tc+slGTmn1JDgj3YXKCMSes
-	MmZy09onNnLpBo7i0Ymd/NPcL3o/jfSlfa/sSXXYhk5lntMpOwlYrHqd/HDTcvj2
-	dfV8Vt2frgzhmGOpTJc64fq1jV/Yfp5O90iOOTlcLZKNa3ErJgfCC8YgNbjUJNea
-	G6x1YfFa1llnZqwqWOQ9g==
-X-ME-Sender: <xms:MYh7ZQqLDB2aFxr89_HkEd6e3cq0Wq3s2oYc23imxhwnSxJyufausA>
-    <xme:MYh7ZWpLcMT2FG8HKhZtzDOZOnwTfYJ-Ehk5ypqMJDsLju30yDxuOsGtgvo3ZMp6N
-    XFyB7PHxhwllgh3NA>
-X-ME-Received: <xmr:MYh7ZVOwqfCC0ikk9qKO-0kxnNZA5yPPKhDlUlAElT3Ee86lUD1XZcLAvClPnryRyHO4dnSsmnLJkgIsBqJajer8jqxaEJFORjaY3chb12XbUg>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1702594602; x=
+	1702681002; bh=j9Ha1GrnJezE3gDkgIKe3fTLm5nM7RqyU/VzWdgR9ds=; b=Z
+	DZ1H6Gk/IvJofYnIfaaitzCwf/JQXlJ/MlPeBGwXS/8TWgRkNQxP/njPMK+lOWpc
+	3vtTx4MFuz0Nbe4fQG2vvlVYuBbC3pk10tbRTSrBy2czyM+8BcWPAv9QjmJSoKCB
+	awmLoaYH5lUqSL0hbUCUjx0CkfFAiBIZ2EhdUcWlJE3aqATESwhMlvVurxsrkCZ1
+	3VSxH6zgI+pbT6J1NKOz5kxB5+go/ITKRxn5yY5wlI6LbuFNDMOjshjSCXEZrLPL
+	02kOPKJK9c7jpUuPo/jaNUzAAB5+nnZB8B0d+N4nJmfo+r9kWD+GmTN2TsDCSmQZ
+	muTIB/u/JHDRKyfpOO/RQ==
+X-ME-Sender: <xms:KYh7Zes3LzkLt3NgW61R1Rf3MhmFtVzDndKai34jSk6fd72u2ifgHg>
+    <xme:KYh7ZTcN8mOcpVdJJOqzpdN5rOhiSR5dIl_2PUAPlUVWRkoMYYXp5UErV9upTW6pV
+    JBoJoNHVrDxcXq6Jg>
+X-ME-Received: <xmr:KYh7ZZxiA959vEJnTRFQbAy5hTmnOaiiXAnwqkpROf2L2hrh-066Q3iNdugMBhiIU3NdAuJheGc7QHcb4kulxYYV_LytjB-zAKhK3WvKD1Hi9w>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvddttddgtdefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
     evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
     ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgfegjefhudeike
     dvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecuvehluhhsthgvrhfuihii
-    vgepudenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:MYh7ZX4RErih6CpEIXgwZdIR6kbw54fNJlOzLCY5goNPZdi2WZ2IeQ>
-    <xmx:MYh7Zf5q1Dtpd4DySwptq0vLjSXnv8SgsYGel5GxGz75mF5mrsOnyw>
-    <xmx:MYh7ZXheoLhmCso0xSoVNLdNqLXG-udhneYFW3JI2FM7EUIQuD9X1w>
-    <xmx:MYh7Zequa_MbO1bt_NrTOInc1lRx5EOcjMrxGTC9VeeL3mk--b8QXA>
+    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:Koh7ZZOQvAYpW8D9a2qzSuE7prjDVf9BuwPthkD_WCcUtAUUfGgBLQ>
+    <xmx:Koh7Ze9k9UV_CLTtYSTOmc1uIsTWY6E_YteMm1dwZyrBjRZ1gJ3LvA>
+    <xmx:Koh7ZRVQZREUylOIDJ7E_-27qbzSDZBJxKJK17eUbEL_xpLOGAJF_w>
+    <xmx:Koh7ZeM0DDul-3JuICpLVygcKnNr57Vt3GutdwwJktETj_Yehghizg>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 14 Dec 2023 17:56:48 -0500 (EST)
+ 14 Dec 2023 17:56:40 -0500 (EST)
 From: Daniel Xu <dxu@dxuuu.xyz>
-To: ast@kernel.org,
+To: hawk@kernel.org,
+	ast@kernel.org,
 	daniel@iogearbox.net,
+	kuba@kernel.org,
+	john.fastabend@gmail.com,
 	andrii@kernel.org,
-	shuah@kernel.org,
+	davem@davemloft.net,
 	memxor@gmail.com
-Cc: mykolal@fb.com,
-	martin.lau@linux.dev,
+Cc: martin.lau@linux.dev,
 	song@kernel.org,
 	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
 	kpsingh@kernel.org,
 	sdf@google.com,
 	haoluo@google.com,
 	jolsa@kernel.org,
 	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 3/3] bpf: selftests: Test bpf_assert_if() and bpf_assert_with_if()
-Date: Thu, 14 Dec 2023 15:56:27 -0700
-Message-ID: <b94a4280fb281f13cba3cc314f4c20a34138e6a6.1702594357.git.dxu@dxuuu.xyz>
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next 1/3] bpf: xdp: Register generic_kfunc_set with XDP programs
+Date: Thu, 14 Dec 2023 15:56:25 -0700
+Message-ID: <d07d4614b81ca6aada44fcb89bb6b618fb66e4ca.1702594357.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.42.1
 In-Reply-To: <cover.1702594357.git.dxu@dxuuu.xyz>
 References: <cover.1702594357.git.dxu@dxuuu.xyz>
@@ -87,101 +88,31 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add some positive and negative test cases that exercise the "callback"
-semantics.
+Registering generic_kfunc_set with XDP programs enables some of the
+newer BPF features inside XDP -- namely tree based data structures and
+BPF exceptions.
+
+The current motivation for this commit is to enable assertions inside
+XDP bpf progs. Assertions are a standard and useful tool to encode
+intent.
 
 Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 ---
- .../selftests/bpf/prog_tests/exceptions.c     |  5 ++
- .../testing/selftests/bpf/progs/exceptions.c  | 61 +++++++++++++++++++
- 2 files changed, 66 insertions(+)
+ kernel/bpf/helpers.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-index 516f4a13013c..a41113d72d0d 100644
---- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
-+++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-@@ -83,6 +83,11 @@ static void test_exceptions_success(void)
- 	RUN_SUCCESS(exception_assert_range_with, 1);
- 	RUN_SUCCESS(exception_bad_assert_range, 0);
- 	RUN_SUCCESS(exception_bad_assert_range_with, 10);
-+	RUN_SUCCESS(exception_assert_if_body_not_executed, 2);
-+	RUN_SUCCESS(exception_bad_assert_if_body_executed, 1);
-+	RUN_SUCCESS(exception_bad_assert_if_throws, 0);
-+	RUN_SUCCESS(exception_assert_with_if_body_not_executed, 3);
-+	RUN_SUCCESS(exception_bad_assert_with_if_body_executed, 2);
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index b3be5742d6f1..b0b485126a76 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2630,6 +2630,7 @@ static int __init kfunc_init(void)
  
- #define RUN_EXT(load_ret, attach_err, expr, msg, after_link)			  \
- 	{									  \
-diff --git a/tools/testing/selftests/bpf/progs/exceptions.c b/tools/testing/selftests/bpf/progs/exceptions.c
-index 2811ee842b01..e61cb794a305 100644
---- a/tools/testing/selftests/bpf/progs/exceptions.c
-+++ b/tools/testing/selftests/bpf/progs/exceptions.c
-@@ -365,4 +365,65 @@ int exception_bad_assert_range_with(struct __sk_buff *ctx)
- 	return 1;
- }
- 
-+SEC("tc")
-+int exception_assert_if_body_not_executed(struct __sk_buff *ctx)
-+{
-+	u64 time = bpf_ktime_get_ns();
-+
-+	bpf_assert_if(time != 0) {
-+		return 1;
-+	}
-+
-+	return 2;
-+}
-+
-+SEC("tc")
-+int exception_bad_assert_if_body_executed(struct __sk_buff *ctx)
-+{
-+	u64 time = bpf_ktime_get_ns();
-+
-+	bpf_assert_if(time == 0) {
-+		return 1;
-+	}
-+
-+	return 2;
-+}
-+
-+SEC("tc")
-+int exception_bad_assert_if_throws(struct __sk_buff *ctx)
-+{
-+	u64 time = bpf_ktime_get_ns();
-+
-+	bpf_assert_if(time == 0) {
-+	}
-+
-+	return 2;
-+}
-+
-+SEC("tc")
-+int exception_assert_with_if_body_not_executed(struct __sk_buff *ctx)
-+{
-+	u64 time = bpf_ktime_get_ns();
-+	int ret = 1;
-+
-+	bpf_assert_with_if(time != 0, ret) {
-+		ret = 2;
-+	}
-+
-+	return 3;
-+}
-+
-+SEC("tc")
-+int exception_bad_assert_with_if_body_executed(struct __sk_buff *ctx)
-+{
-+	u64 time = bpf_ktime_get_ns();
-+	int ret = 1;
-+
-+	bpf_assert_with_if(time == 0, ret) {
-+		ret = 2;
-+	}
-+
-+	return 3;
-+}
-+
- char _license[] SEC("license") = "GPL";
+ 	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &generic_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &generic_kfunc_set);
++	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &generic_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &generic_kfunc_set);
+ 	ret = ret ?: register_btf_id_dtor_kfuncs(generic_dtors,
+ 						  ARRAY_SIZE(generic_dtors),
 -- 
 2.42.1
 
