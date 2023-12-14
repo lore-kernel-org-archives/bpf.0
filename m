@@ -1,200 +1,118 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 065386C6C8
-	for <bpf@vger.kernel.org>; Thu, 14 Dec 2023 23:13:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BEMCKCl009831
-	for <bpf@vger.kernel.org>; Thu, 14 Dec 2023 14:50:43 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3v00ev4rc4-7
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 14 Dec 2023 14:50:42 -0800
-Received: from twshared2123.40.prn1.facebook.com (2620:10d:c0a8:1c::1b) by
- mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 14 Dec 2023 14:50:40 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id ABF463D2A7840; Thu, 14 Dec 2023 14:50:28 -0800 (PST)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>,
-        John Fastabend
-	<john.fastabend@gmail.com>
-Subject: [PATCH v2 bpf-next 2/2] selftests/bpf: utilize string values for delegate_xxx mount options
-Date: Thu, 14 Dec 2023 14:50:16 -0800
-Message-ID: <20231214225016.1209867-3-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231214225016.1209867-1-andrii@kernel.org>
-References: <20231214225016.1209867-1-andrii@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B48F6C6D0
+	for <bpf@vger.kernel.org>; Thu, 14 Dec 2023 23:18:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="KapZNrUP"
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-6d9ac148ca3so112164a34.0
+        for <bpf@vger.kernel.org>; Thu, 14 Dec 2023 15:18:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1702595924; x=1703200724; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=b0oETvX0aTkLzmG8FImfzT7xcxi5q4ncJHmqU5g7274=;
+        b=KapZNrUPp1pbkAxaOlTDPs8OaWgB9RAPeg144O5Qs31VdR3J+LcZjFno8NIapaRgVJ
+         nZCFXAgR1/kFbvRZERJb5UlFIoXp4wZO4Yr7d5roGfOIgHhkobEYRth/3giT4+eKxSyX
+         HkI7NR+dmXLtJUhTRTpXjlNM10oPm3LYI6Xj+jbL5VyAd5lZVIkEuh4EnQUG6TzS2Wwx
+         RgZ0f2eYHscqpjJghpvAhCB0dAgIHMMoy/zuaQmKoOnXgmkHF4mZ7zqQ5t5ncoYWizzX
+         Yd5KufodsoJ7cNdL3/XfQua921RgSlMSMZgbuq6su4Wascc7ffY5nx5JGCogJCcqihMv
+         9JJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702595924; x=1703200724;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b0oETvX0aTkLzmG8FImfzT7xcxi5q4ncJHmqU5g7274=;
+        b=hyqQpFaNwN5ZvT2b5Ikzw+Os+D8c/7uNwsM5Ld7vnHiFcE5XHDXHwo1BVvzEkDB3vh
+         597f5R5gjbt4J4XGPn8Ti3V+oAfKEh8woC5gQMsIiDra9k3m7YgGcqjRWFr5AgPfGjvO
+         NIJFstAc2zVORhVxA8ATklWF8ah4F1KrL0Sii6o4gMr3a5DYbc6LQndqGeeMtREhN9gc
+         kcxblXS15MPZBEThmQrj7lpW/VpLMBoN5heMER9HPC0QdJXchrE1uxTKnmo4TMzibL4K
+         UKMdX4kiEICJYUTRcVNywzEwbgJugmN0YRVx5mrwDw5/rD0H4DH2JEOSGOdlOtvDIE0B
+         A8+A==
+X-Gm-Message-State: AOJu0YxVRU+3SZvOJiQv05RxqC6qhfI/OfPtPfppya/QAOzfnx3aBaHA
+	2GhV4c6xWXYPLhNNwLHJH/2zuw==
+X-Google-Smtp-Source: AGHT+IHU6o+cki1YVvnE+9X9E/ODNsU7SGC6cfB6JPU4w5tZxS4la3CBRG46Du9+4KZO1hBLz/5XyA==
+X-Received: by 2002:a05:6870:d611:b0:203:5cca:4bb with SMTP id a17-20020a056870d61100b002035cca04bbmr962078oaq.69.1702595924074;
+        Thu, 14 Dec 2023 15:18:44 -0800 (PST)
+Received: from ?IPV6:2a03:83e0:1256:2:c51:2090:e106:83fa? ([2620:10d:c090:500::7:618c])
+        by smtp.gmail.com with ESMTPSA id b15-20020aa7870f000000b006cdd507ca2esm12310455pfo.167.2023.12.14.15.18.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Dec 2023 15:18:43 -0800 (PST)
+Message-ID: <2dcfb90d-2cac-4297-aaec-173c559369f3@davidwei.uk>
+Date: Thu, 14 Dec 2023 15:18:41 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: Qx-nB0u1hd5CCPzS7ka1tIzbYfJ0YOLL
-X-Proofpoint-ORIG-GUID: Qx-nB0u1hd5CCPzS7ka1tIzbYfJ0YOLL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-14_15,2023-12-14_01,2023-05-22_02
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] bnxt_en: do not map packet buffers twice
+Content-Language: en-GB
+To: Michael Chan <michael.chan@broadcom.com>, davem@davemloft.net
+Cc: netdev@vger.kernel.org, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, bpf@vger.kernel.org, hawk@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, john.fastabend@gmail.com,
+ Andy Gospodarek <andrew.gospodarek@broadcom.com>,
+ Somnath Kotur <somnath.kotur@broadcom.com>
+References: <20231214213138.98095-1-michael.chan@broadcom.com>
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20231214213138.98095-1-michael.chan@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Use both hex-based and string-based way to specify delegate mount
-options for BPF FS.
+On 2023-12-14 13:31, Michael Chan wrote:
+> From: Andy Gospodarek <andrew.gospodarek@broadcom.com>
+> 
+> Remove double-mapping of DMA buffers as it can prevent page pool entries
+> from being freed.  Mapping is managed by page pool infrastructure and
+> was previously managed by the driver in __bnxt_alloc_rx_page before
+> allowing the page pool infrastructure to manage it.
+> 
+> Fixes: 578fcfd26e2a ("bnxt_en: Let the page pool manage the DMA mapping")
+> Reviewed-by: Somnath Kotur <somnath.kotur@broadcom.com>
+> Signed-off-by: Andy Gospodarek <andrew.gospodarek@broadcom.com>
+> Signed-off-by: Michael Chan <michael.chan@broadcom.com>
+> ---
+>  drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c | 11 ++---------
+>  1 file changed, 2 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+> index 96f5ca778c67..8cb9a99154aa 100644
+> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+> @@ -59,7 +59,6 @@ struct bnxt_sw_tx_bd *bnxt_xmit_bd(struct bnxt *bp,
+>  	for (i = 0; i < num_frags ; i++) {
+>  		skb_frag_t *frag = &sinfo->frags[i];
+>  		struct bnxt_sw_tx_bd *frag_tx_buf;
+> -		struct pci_dev *pdev = bp->pdev;
+>  		dma_addr_t frag_mapping;
+>  		int frag_len;
+>  
+> @@ -73,16 +72,10 @@ struct bnxt_sw_tx_bd *bnxt_xmit_bd(struct bnxt *bp,
+>  		txbd = &txr->tx_desc_ring[TX_RING(prod)][TX_IDX(prod)];
+>  
+>  		frag_len = skb_frag_size(frag);
+> -		frag_mapping = skb_frag_dma_map(&pdev->dev, frag, 0,
+> -						frag_len, DMA_TO_DEVICE);
+> -
+> -		if (unlikely(dma_mapping_error(&pdev->dev, frag_mapping)))
+> -			return NULL;
+> -
+> -		dma_unmap_addr_set(frag_tx_buf, mapping, frag_mapping);
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- .../testing/selftests/bpf/prog_tests/token.c  | 52 ++++++++++++-------
- 1 file changed, 32 insertions(+), 20 deletions(-)
+If this is no longer set, what would happen to dma_unmap_single() in
+bnxt_tx_int_xdp() that is then reading `mapping` via dma_unmap_addr()?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testi=
-ng/selftests/bpf/prog_tests/token.c
-index 548aeb91ab0d..b5dce630e0e1 100644
---- a/tools/testing/selftests/bpf/prog_tests/token.c
-+++ b/tools/testing/selftests/bpf/prog_tests/token.c
-@@ -66,14 +66,22 @@ static int restore_priv_caps(__u64 old_caps)
- 	return cap_enable_effective(old_caps, NULL);
- }
-=20
--static int set_delegate_mask(int fs_fd, const char *key, __u64 mask)
-+static int set_delegate_mask(int fs_fd, const char *key, __u64 mask, con=
-st char *mask_str)
- {
- 	char buf[32];
- 	int err;
-=20
--	snprintf(buf, sizeof(buf), "0x%llx", (unsigned long long)mask);
-+	if (!mask_str) {
-+		if (mask =3D=3D ~0ULL) {
-+			mask_str =3D "any";
-+		} else {
-+			snprintf(buf, sizeof(buf), "0x%llx", (unsigned long long)mask);
-+			mask_str =3D buf;
-+		}
-+	}
-+
- 	err =3D sys_fsconfig(fs_fd, FSCONFIG_SET_STRING, key,
--			   mask =3D=3D ~0ULL ? "any" : buf, 0);
-+			   mask_str, 0);
- 	if (err < 0)
- 		err =3D -errno;
- 	return err;
-@@ -86,6 +94,10 @@ struct bpffs_opts {
- 	__u64 maps;
- 	__u64 progs;
- 	__u64 attachs;
-+	const char *cmds_str;
-+	const char *maps_str;
-+	const char *progs_str;
-+	const char *attachs_str;
- };
-=20
- static int create_bpffs_fd(void)
-@@ -104,16 +116,16 @@ static int materialize_bpffs_fd(int fs_fd, struct b=
-pffs_opts *opts)
- 	int mnt_fd, err;
-=20
- 	/* set up token delegation mount options */
--	err =3D set_delegate_mask(fs_fd, "delegate_cmds", opts->cmds);
-+	err =3D set_delegate_mask(fs_fd, "delegate_cmds", opts->cmds, opts->cmd=
-s_str);
- 	if (!ASSERT_OK(err, "fs_cfg_cmds"))
- 		return err;
--	err =3D set_delegate_mask(fs_fd, "delegate_maps", opts->maps);
-+	err =3D set_delegate_mask(fs_fd, "delegate_maps", opts->maps, opts->map=
-s_str);
- 	if (!ASSERT_OK(err, "fs_cfg_maps"))
- 		return err;
--	err =3D set_delegate_mask(fs_fd, "delegate_progs", opts->progs);
-+	err =3D set_delegate_mask(fs_fd, "delegate_progs", opts->progs, opts->p=
-rogs_str);
- 	if (!ASSERT_OK(err, "fs_cfg_progs"))
- 		return err;
--	err =3D set_delegate_mask(fs_fd, "delegate_attachs", opts->attachs);
-+	err =3D set_delegate_mask(fs_fd, "delegate_attachs", opts->attachs, opt=
-s->attachs_str);
- 	if (!ASSERT_OK(err, "fs_cfg_attachs"))
- 		return err;
-=20
-@@ -295,13 +307,13 @@ static void child(int sock_fd, struct bpffs_opts *o=
-pts, child_callback_fn callba
- 	}
-=20
- 	/* ensure unprivileged child cannot set delegation options */
--	err =3D set_delegate_mask(fs_fd, "delegate_cmds", 0x1);
-+	err =3D set_delegate_mask(fs_fd, "delegate_cmds", 0x1, NULL);
- 	ASSERT_EQ(err, -EPERM, "delegate_cmd_eperm");
--	err =3D set_delegate_mask(fs_fd, "delegate_maps", 0x1);
-+	err =3D set_delegate_mask(fs_fd, "delegate_maps", 0x1, NULL);
- 	ASSERT_EQ(err, -EPERM, "delegate_maps_eperm");
--	err =3D set_delegate_mask(fs_fd, "delegate_progs", 0x1);
-+	err =3D set_delegate_mask(fs_fd, "delegate_progs", 0x1, NULL);
- 	ASSERT_EQ(err, -EPERM, "delegate_progs_eperm");
--	err =3D set_delegate_mask(fs_fd, "delegate_attachs", 0x1);
-+	err =3D set_delegate_mask(fs_fd, "delegate_attachs", 0x1, NULL);
- 	ASSERT_EQ(err, -EPERM, "delegate_attachs_eperm");
-=20
- 	/* pass BPF FS context object to parent */
-@@ -325,22 +337,22 @@ static void child(int sock_fd, struct bpffs_opts *o=
-pts, child_callback_fn callba
- 	}
-=20
- 	/* ensure unprivileged child cannot reconfigure to set delegation optio=
-ns */
--	err =3D set_delegate_mask(fs_fd, "delegate_cmds", ~0ULL);
-+	err =3D set_delegate_mask(fs_fd, "delegate_cmds", 0, "any");
- 	if (!ASSERT_EQ(err, -EPERM, "delegate_cmd_eperm_reconfig")) {
- 		err =3D -EINVAL;
- 		goto cleanup;
- 	}
--	err =3D set_delegate_mask(fs_fd, "delegate_maps", ~0ULL);
-+	err =3D set_delegate_mask(fs_fd, "delegate_maps", 0, "any");
- 	if (!ASSERT_EQ(err, -EPERM, "delegate_maps_eperm_reconfig")) {
- 		err =3D -EINVAL;
- 		goto cleanup;
- 	}
--	err =3D set_delegate_mask(fs_fd, "delegate_progs", ~0ULL);
-+	err =3D set_delegate_mask(fs_fd, "delegate_progs", 0, "any");
- 	if (!ASSERT_EQ(err, -EPERM, "delegate_progs_eperm_reconfig")) {
- 		err =3D -EINVAL;
- 		goto cleanup;
- 	}
--	err =3D set_delegate_mask(fs_fd, "delegate_attachs", ~0ULL);
-+	err =3D set_delegate_mask(fs_fd, "delegate_attachs", 0, "any");
- 	if (!ASSERT_EQ(err, -EPERM, "delegate_attachs_eperm_reconfig")) {
- 		err =3D -EINVAL;
- 		goto cleanup;
-@@ -933,8 +945,8 @@ void test_token(void)
- {
- 	if (test__start_subtest("map_token")) {
- 		struct bpffs_opts opts =3D {
--			.cmds =3D 1ULL << BPF_MAP_CREATE,
--			.maps =3D 1ULL << BPF_MAP_TYPE_STACK,
-+			.cmds_str =3D "map_create",
-+			.maps_str =3D "stack",
- 		};
-=20
- 		subtest_userns(&opts, userns_map_create);
-@@ -948,9 +960,9 @@ void test_token(void)
- 	}
- 	if (test__start_subtest("prog_token")) {
- 		struct bpffs_opts opts =3D {
--			.cmds =3D 1ULL << BPF_PROG_LOAD,
--			.progs =3D 1ULL << BPF_PROG_TYPE_XDP,
--			.attachs =3D 1ULL << BPF_XDP,
-+			.cmds_str =3D "PROG_LOAD",
-+			.progs_str =3D "XDP",
-+			.attachs_str =3D "xdp",
- 		};
-=20
- 		subtest_userns(&opts, userns_prog_load);
---=20
-2.34.1
-
+> -
+>  		flags = frag_len << TX_BD_LEN_SHIFT;
+>  		txbd->tx_bd_len_flags_type = cpu_to_le32(flags);
+> +		frag_mapping = page_pool_get_dma_addr(skb_frag_page(frag)) +
+> +			       skb_frag_off(frag);
+>  		txbd->tx_bd_haddr = cpu_to_le64(frag_mapping);
+>  
+>  		len = frag_len;
