@@ -1,35 +1,35 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E197547F7F;
-	Fri, 15 Dec 2023 17:10:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACD1B59E59;
+	Fri, 15 Dec 2023 17:10:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bu//WPoJ";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="IFHcLtVI"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JtWcWrlR";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NzCo4hAy"
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1702660239;
+	s=2020; t=1702660241;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+0HJJPub1Rbn3MJWlEsGP0R+kJz2sY8/FL1YHZqJTPQ=;
-	b=bu//WPoJj1s+CyuzY9fCzuWUPNElBTG0mDAue5MtksSZ/nlXc3JYfccn6tG0UR7/s9bLcB
-	TyHwPF9rL6/pk9aAThq84QZ/O0PPk1BIhRiaV+wWrm874nalOaix3eDsDuVspKXyfMpQsX
-	SEP7qczM42BqZeYaUbDx8DFkqux75/XmDcmsMW8XVXUoArSSTH/2/SLlrKU/Y/BeoEFJ1G
-	niUm3L0GNIf2r6tGor3HgSQ2mPyJbN54p8y9ylbMz9svBrqSDE0+Rvfj8QwFQ3UWZybFQ3
-	9KKmqHpMn8OyR/lDx/Ew+Azv1ohXTln9Yj3vk5ZeyQyuhF5aBTxjwvDJbtZIEw==
+	bh=zae3m1cO9fSJoSwUDjCnhvMwaD0Cp7wkXYtacLoccYI=;
+	b=JtWcWrlRr/Yw4kQ1UWySiE1WnFklIBcg9wCnilSSfcJDNnaXHknsfFQ2hm3Wg/ONikWDB+
+	WRxCE/Tc1oj8/5Vra+uDd80anJKj5JKArhylRiQWeqOiu9dGS2spg5Z1FiJFb7PYir9ZLl
+	YgPOBKKzrgsCa96PnNswic05kIQ/rUSbCdeqFC5thljdEb55zV5ywwfj1sceBkMTCRU0p4
+	y7xHwZ+cy0+IUt7MuLeHRIi5cN42VqdLlD8SLMT0QybC5HYV7wrPuUzJG43qDI9Xt9mesD
+	1NDCCGSXDR+g3yntLA8aFfivSR8gLveMOz0FQOgX4TMdKDdRnyy3zgJi+xJuvw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1702660239;
+	s=2020e; t=1702660241;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+0HJJPub1Rbn3MJWlEsGP0R+kJz2sY8/FL1YHZqJTPQ=;
-	b=IFHcLtVItNS1jqIMdMN6dYTNqvyEKzMDmeSXBvDnw0eZeuYwuQGT7alkK3RqsOXKSI1Vp9
-	o+kMgK4SkJMS6CBw==
+	bh=zae3m1cO9fSJoSwUDjCnhvMwaD0Cp7wkXYtacLoccYI=;
+	b=NzCo4hAyNx+4VtNSo05p7oXiKzL7azy7XiXo4Ljk4IPRdRDvvQB9bLy3+o8Xz+b/cRIMks
+	tfLo+tJk/hEPGUCQ==
 To: linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -46,32 +46,31 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Will Deacon <will@kernel.org>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
 	"K. Y. Srinivasan" <kys@microsoft.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
 	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
 	Dexuan Cui <decui@microsoft.com>,
+	Dimitris Michailidis <dmichail@fungible.com>,
+	Felix Fietkau <nbd@nbd.name>,
 	Haiyang Zhang <haiyangz@microsoft.com>,
-	Hao Luo <haoluo@google.com>,
+	Horatiu Vultur <horatiu.vultur@microchip.com>,
+	Jeroen de Borst <jeroendb@google.com>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
+	John Crispin <john@phrozen.org>,
 	John Fastabend <john.fastabend@gmail.com>,
-	Juergen Gross <jgross@suse.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Song Liu <song@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Stefano Stabellini <sstabellini@kernel.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Mark Lee <Mark-MC.Lee@mediatek.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>,
+	Sean Wang <sean.wang@mediatek.com>,
+	Shailend Chand <shailend@google.com>,
+	UNGLinuxDriver@microchip.com,
 	Wei Liu <wei.liu@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
 	bpf@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	xen-devel@lists.xenproject.org
-Subject: [PATCH net-next 16/24] net: netkit, veth, tun, virt*: Use nested-BH locking for XDP redirect.
-Date: Fri, 15 Dec 2023 18:07:35 +0100
-Message-ID: <20231215171020.687342-17-bigeasy@linutronix.de>
+	linux-hyperv@vger.kernel.org,
+	linux-mediatek@lists.infradead.org
+Subject: [PATCH net-next 19/24] net: fungible, gve, mtk, microchip, mana: Use nested-BH locking for XDP redirect.
+Date: Fri, 15 Dec 2023 18:07:38 +0100
+Message-ID: <20231215171020.687342-20-bigeasy@linutronix.de>
 In-Reply-To: <20231215171020.687342-1-bigeasy@linutronix.de>
 References: <20231215171020.687342-1-bigeasy@linutronix.de>
 Precedence: bulk
@@ -106,235 +105,118 @@ free/ alloc of memory, =E2=80=A6) would happen outside of the locked sectio=
 n.
 
 Cc: "K. Y. Srinivasan" <kys@microsoft.com>
-Cc: "Michael S. Tsirkin" <mst@redhat.com>
 Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Cc: Dexuan Cui <decui@microsoft.com>
+Cc: Dimitris Michailidis <dmichail@fungible.com>
+Cc: Felix Fietkau <nbd@nbd.name>
 Cc: Haiyang Zhang <haiyangz@microsoft.com>
-Cc: Hao Luo <haoluo@google.com>
+Cc: Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc: Jeroen de Borst <jeroendb@google.com>
 Cc: Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: John Crispin <john@phrozen.org>
 Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: Juergen Gross <jgross@suse.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Nikolay Aleksandrov <razor@blackwall.org>
-Cc: Song Liu <song@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Stefano Stabellini <sstabellini@kernel.org>
+Cc: Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: Mark Lee <Mark-MC.Lee@mediatek.com>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: Praveen Kaligineedi <pkaligineedi@google.com>
+Cc: Sean Wang <sean.wang@mediatek.com>
+Cc: Shailend Chand <shailend@google.com>
+Cc: UNGLinuxDriver@microchip.com
 Cc: Wei Liu <wei.liu@kernel.org>
-Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-Cc: virtualization@lists.linux.dev
-Cc: xen-devel@lists.xenproject.org
+Cc: linux-hyperv@vger.kernel.org
+Cc: linux-mediatek@lists.infradead.org
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- drivers/net/hyperv/netvsc_bpf.c |  1 +
- drivers/net/netkit.c            | 13 +++++++----
- drivers/net/tun.c               | 28 +++++++++++++----------
- drivers/net/veth.c              | 40 ++++++++++++++++++++-------------
- drivers/net/virtio_net.c        |  1 +
- drivers/net/xen-netfront.c      |  1 +
- 6 files changed, 52 insertions(+), 32 deletions(-)
+ drivers/net/ethernet/fungible/funeth/funeth_rx.c     |  1 +
+ drivers/net/ethernet/google/gve/gve_rx.c             | 12 +++++++-----
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c          |  1 +
+ drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c |  1 +
+ drivers/net/ethernet/microsoft/mana/mana_bpf.c       |  1 +
+ 5 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/hyperv/netvsc_bpf.c b/drivers/net/hyperv/netvsc_bp=
-f.c
-index 4a9522689fa4f..55f8ca92ca199 100644
---- a/drivers/net/hyperv/netvsc_bpf.c
-+++ b/drivers/net/hyperv/netvsc_bpf.c
-@@ -58,6 +58,7 @@ u32 netvsc_run_xdp(struct net_device *ndev, struct netvsc=
-_channel *nvchan,
+diff --git a/drivers/net/ethernet/fungible/funeth/funeth_rx.c b/drivers/net=
+/ethernet/fungible/funeth/funeth_rx.c
+index 7e2584895de39..e7b1382545908 100644
+--- a/drivers/net/ethernet/fungible/funeth/funeth_rx.c
++++ b/drivers/net/ethernet/fungible/funeth/funeth_rx.c
+@@ -152,6 +152,7 @@ static void *fun_run_xdp(struct funeth_rxq *q, skb_frag=
+_t *frags, void *buf_va,
+ 	xdp_prepare_buff(&xdp, buf_va, FUN_XDP_HEADROOM, skb_frag_size(frags) -
+ 			 (FUN_RX_TAILROOM + FUN_XDP_HEADROOM), false);
 =20
- 	memcpy(xdp->data, data, len);
++	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
+ 	xdp_prog =3D READ_ONCE(q->xdp_prog);
+ 	act =3D bpf_prog_run_xdp(xdp_prog, &xdp);
+=20
+diff --git a/drivers/net/ethernet/google/gve/gve_rx.c b/drivers/net/etherne=
+t/google/gve/gve_rx.c
+index 73655347902d2..504c8ef761a33 100644
+--- a/drivers/net/ethernet/google/gve/gve_rx.c
++++ b/drivers/net/ethernet/google/gve/gve_rx.c
+@@ -779,11 +779,13 @@ static void gve_rx(struct gve_rx_ring *rx, netdev_fea=
+tures_t feat,
+ 				 page_info->page_offset, GVE_RX_PAD,
+ 				 len, false);
+ 		old_data =3D xdp.data;
+-		xdp_act =3D bpf_prog_run_xdp(xprog, &xdp);
+-		if (xdp_act !=3D XDP_PASS) {
+-			gve_xdp_done(priv, rx, &xdp, xprog, xdp_act);
+-			ctx->total_size +=3D frag_size;
+-			goto finish_ok_pkt;
++		scoped_guard(local_lock_nested_bh, &bpf_run_lock.redirect_lock) {
++			xdp_act =3D bpf_prog_run_xdp(xprog, &xdp);
++			if (xdp_act !=3D XDP_PASS) {
++				gve_xdp_done(priv, rx, &xdp, xprog, xdp_act);
++				ctx->total_size +=3D frag_size;
++				goto finish_ok_pkt;
++			}
+ 		}
+=20
+ 		page_info->pad +=3D xdp.data - old_data;
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethe=
+rnet/mediatek/mtk_eth_soc.c
+index 3cf6589cfdacf..477a74ee18c0a 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -1946,6 +1946,7 @@ static u32 mtk_xdp_run(struct mtk_eth *eth, struct mt=
+k_rx_ring *ring,
+ 	if (!prog)
+ 		goto out;
 =20
 +	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
  	act =3D bpf_prog_run_xdp(prog, xdp);
-=20
- 	switch (act) {
-diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
-index 39171380ccf29..fbcf78477bda8 100644
---- a/drivers/net/netkit.c
-+++ b/drivers/net/netkit.c
-@@ -80,8 +80,15 @@ static netdev_tx_t netkit_xmit(struct sk_buff *skb, stru=
-ct net_device *dev)
- 	netkit_prep_forward(skb, !net_eq(dev_net(dev), dev_net(peer)));
- 	skb->dev =3D peer;
- 	entry =3D rcu_dereference(nk->active);
--	if (entry)
--		ret =3D netkit_run(entry, skb, ret);
-+	if (entry) {
-+		scoped_guard(local_lock_nested_bh, &bpf_run_lock.redirect_lock) {
-+			ret =3D netkit_run(entry, skb, ret);
-+			if (ret =3D=3D NETKIT_REDIRECT) {
-+				dev_sw_netstats_tx_add(dev, 1, len);
-+				skb_do_redirect(skb);
-+			}
-+		}
-+	}
- 	switch (ret) {
- 	case NETKIT_NEXT:
- 	case NETKIT_PASS:
-@@ -95,8 +102,6 @@ static netdev_tx_t netkit_xmit(struct sk_buff *skb, stru=
-ct net_device *dev)
- 		}
- 		break;
- 	case NETKIT_REDIRECT:
--		dev_sw_netstats_tx_add(dev, 1, len);
--		skb_do_redirect(skb);
- 		break;
- 	case NETKIT_DROP:
- 	default:
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index afa5497f7c35c..fe0d31f11e4b6 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -1708,16 +1708,18 @@ static struct sk_buff *tun_build_skb(struct tun_str=
-uct *tun,
- 		xdp_init_buff(&xdp, buflen, &tfile->xdp_rxq);
- 		xdp_prepare_buff(&xdp, buf, pad, len, false);
-=20
--		act =3D bpf_prog_run_xdp(xdp_prog, &xdp);
--		if (act =3D=3D XDP_REDIRECT || act =3D=3D XDP_TX) {
--			get_page(alloc_frag->page);
--			alloc_frag->offset +=3D buflen;
--		}
--		err =3D tun_xdp_act(tun, xdp_prog, &xdp, act);
--		if (err < 0) {
--			if (act =3D=3D XDP_REDIRECT || act =3D=3D XDP_TX)
--				put_page(alloc_frag->page);
--			goto out;
-+		scoped_guard(local_lock_nested_bh, &bpf_run_lock.redirect_lock) {
-+			act =3D bpf_prog_run_xdp(xdp_prog, &xdp);
-+			if (act =3D=3D XDP_REDIRECT || act =3D=3D XDP_TX) {
-+				get_page(alloc_frag->page);
-+				alloc_frag->offset +=3D buflen;
-+			}
-+			err =3D tun_xdp_act(tun, xdp_prog, &xdp, act);
-+			if (err < 0) {
-+				if (act =3D=3D XDP_REDIRECT || act =3D=3D XDP_TX)
-+					put_page(alloc_frag->page);
-+				goto out;
-+			}
- 		}
-=20
- 		if (err =3D=3D XDP_REDIRECT)
-@@ -2460,8 +2462,10 @@ static int tun_xdp_one(struct tun_struct *tun,
- 		xdp_init_buff(xdp, buflen, &tfile->xdp_rxq);
- 		xdp_set_data_meta_invalid(xdp);
-=20
--		act =3D bpf_prog_run_xdp(xdp_prog, xdp);
--		ret =3D tun_xdp_act(tun, xdp_prog, xdp, act);
-+		scoped_guard(local_lock_nested_bh, &bpf_run_lock.redirect_lock) {
-+			act =3D bpf_prog_run_xdp(xdp_prog, xdp);
-+			ret =3D tun_xdp_act(tun, xdp_prog, xdp, act);
-+		}
- 		if (ret < 0) {
- 			put_page(virt_to_head_page(xdp->data));
- 			return ret;
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 977861c46b1fe..c69e5ff9f8795 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -624,7 +624,18 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_=
-rq *rq,
- 		xdp->rxq =3D &rq->xdp_rxq;
- 		vxbuf.skb =3D NULL;
-=20
--		act =3D bpf_prog_run_xdp(xdp_prog, xdp);
-+		scoped_guard(local_lock_nested_bh, &bpf_run_lock.redirect_lock) {
-+			act =3D bpf_prog_run_xdp(xdp_prog, xdp);
-+			if (act =3D=3D XDP_REDIRECT) {
-+				orig_frame =3D *frame;
-+				xdp->rxq->mem =3D frame->mem;
-+				if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
-+					frame =3D &orig_frame;
-+					stats->xdp_drops++;
-+					goto err_xdp;
-+				}
-+			}
-+		}
-=20
- 		switch (act) {
- 		case XDP_PASS:
-@@ -644,13 +655,6 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_=
-rq *rq,
- 			rcu_read_unlock();
- 			goto xdp_xmit;
- 		case XDP_REDIRECT:
--			orig_frame =3D *frame;
--			xdp->rxq->mem =3D frame->mem;
--			if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
--				frame =3D &orig_frame;
--				stats->rx_drops++;
--				goto err_xdp;
--			}
- 			stats->xdp_redirect++;
- 			rcu_read_unlock();
- 			goto xdp_xmit;
-@@ -857,7 +861,18 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq=
- *rq,
- 	orig_data =3D xdp->data;
- 	orig_data_end =3D xdp->data_end;
-=20
--	act =3D bpf_prog_run_xdp(xdp_prog, xdp);
-+	scoped_guard(local_lock_nested_bh, &bpf_run_lock.redirect_lock) {
-+		act =3D bpf_prog_run_xdp(xdp_prog, xdp);
-+		if (act =3D=3D XDP_REDIRECT) {
-+			veth_xdp_get(xdp);
-+			consume_skb(skb);
-+			xdp->rxq->mem =3D rq->xdp_mem;
-+			if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
-+				stats->rx_drops++;
-+				goto err_xdp;
-+			}
-+		}
-+	}
-=20
  	switch (act) {
  	case XDP_PASS:
-@@ -875,13 +890,6 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq=
- *rq,
- 		rcu_read_unlock();
- 		goto xdp_xmit;
- 	case XDP_REDIRECT:
--		veth_xdp_get(xdp);
--		consume_skb(skb);
--		xdp->rxq->mem =3D rq->xdp_mem;
--		if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
--			stats->rx_drops++;
--			goto err_xdp;
--		}
- 		stats->xdp_redirect++;
- 		rcu_read_unlock();
- 		goto xdp_xmit;
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index d16f592c2061f..5e362c4604239 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -1010,6 +1010,7 @@ static int virtnet_xdp_handler(struct bpf_prog *xdp_p=
-rog, struct xdp_buff *xdp,
- 	int err;
- 	u32 act;
-=20
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c b/drivers=
+/net/ethernet/microchip/lan966x/lan966x_xdp.c
+index 9ee61db8690b4..026311af07f9e 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+@@ -84,6 +84,7 @@ int lan966x_xdp_run(struct lan966x_port *port, struct pag=
+e *page, u32 data_len)
+ 	xdp_prepare_buff(&xdp, page_address(page),
+ 			 IFH_LEN_BYTES + XDP_PACKET_HEADROOM,
+ 			 data_len - IFH_LEN_BYTES, false);
 +	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
- 	act =3D bpf_prog_run_xdp(xdp_prog, xdp);
- 	u64_stats_inc(&stats->xdp_packets);
-=20
-diff --git a/drivers/net/xen-netfront.c b/drivers/net/xen-netfront.c
-index ad29f370034e4..e3daa8cdeb84e 100644
---- a/drivers/net/xen-netfront.c
-+++ b/drivers/net/xen-netfront.c
-@@ -978,6 +978,7 @@ static u32 xennet_run_xdp(struct netfront_queue *queue,=
- struct page *pdata,
- 	xdp_prepare_buff(xdp, page_address(pdata), XDP_PACKET_HEADROOM,
- 			 len, false);
+ 	act =3D bpf_prog_run_xdp(xdp_prog, &xdp);
+ 	switch (act) {
+ 	case XDP_PASS:
+diff --git a/drivers/net/ethernet/microsoft/mana/mana_bpf.c b/drivers/net/e=
+thernet/microsoft/mana/mana_bpf.c
+index 23b1521c0df96..d465b1dd9fca0 100644
+--- a/drivers/net/ethernet/microsoft/mana/mana_bpf.c
++++ b/drivers/net/ethernet/microsoft/mana/mana_bpf.c
+@@ -93,6 +93,7 @@ u32 mana_run_xdp(struct net_device *ndev, struct mana_rxq=
+ *rxq,
+ 	xdp_init_buff(xdp, PAGE_SIZE, &rxq->xdp_rxq);
+ 	xdp_prepare_buff(xdp, buf_va, XDP_PACKET_HEADROOM, pkt_len, false);
 =20
 +	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
  	act =3D bpf_prog_run_xdp(prog, xdp);
- 	switch (act) {
- 	case XDP_TX:
+=20
+ 	rx_stats =3D &rxq->stats;
 --=20
 2.43.0
 
