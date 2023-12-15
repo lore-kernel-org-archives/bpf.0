@@ -1,35 +1,35 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C733347F70;
-	Fri, 15 Dec 2023 17:10:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2086D56381;
+	Fri, 15 Dec 2023 17:10:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="kxpWYJqX";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="4ONn61AS"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="EBbpW7sF";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Kx2HJ8gu"
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1702660238;
+	s=2020; t=1702660240;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=68SK6EotaqjMnRph5nBAaqz3Anc2eC7HqiBtHzcWqsI=;
-	b=kxpWYJqXc+JexNk4+1gG07K3aKtXIaBxWZT8hQxb8qabTV1hHvbxQN1NvlD6oCkgKJmojI
-	Ff39JeNPX68PV4KP1XCMG4apuGbIhq0eQwEd3cgrC2X6wdDo5TqDSQlV+e72oBQSppabUE
-	2P1lowUHo+2AW8ymIncIxQ0dicnF3T+LfNIqlu/mdkeInfOuVkV5OS54uDG7y7krQk5T8g
-	k3P8WQdLNnnPsoMNQ7Q5zYHusXXC8tETpZ89r1ghuu7i4Xj2UzIWV3B7SUatnqrFCNWJRK
-	10sc4OFrCP4ud9LW9o49OHgA7kXGf82t+g+uc9lkZVMlY+4rn7og2eJRqZlNBQ==
+	bh=y7c3Sac8dmyVQ4hqle9rQ/Ik/z8HPOaNJezqWJL8Lx4=;
+	b=EBbpW7sFFbB1fi7zZJOMAUqG0fNWpdhwl+36f6JGSng5DX9KJ7mc98Fyk438SZJrVm4iUZ
+	E+SHLTy48qAfEBKBD1d9wXOsK8FbeZGL2mbWbt6SdXjnxo2n691PJM1JgDNyR/jJbP+cq+
+	YSDqoeMtMqK07aMmirlvGm+ltUZdcDVte8qc0vM6fZlFkXvCyTdEWMA5Vm4bit+yg0OSbc
+	Np9oF9XObiwHU0wKk6QMUBgINODSjQiQcLH/5NLDf9MccsV3WqkfDY65FNxafa5nczHAR2
+	5IH2apHHbikJJ8gIPoCcQlDFV8KsJeq+AZ1wJ3FKwH1cLLO+nT6TrUikc7nbfQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1702660238;
+	s=2020e; t=1702660240;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=68SK6EotaqjMnRph5nBAaqz3Anc2eC7HqiBtHzcWqsI=;
-	b=4ONn61ASttN9N3mS72Y00QjbBGAkjiduZ/+5Yn3pkVdxQqe1fitnHIMeMzEi4DvsASU3ez
-	aeVXFCXLaAQwS6DQ==
+	bh=y7c3Sac8dmyVQ4hqle9rQ/Ik/z8HPOaNJezqWJL8Lx4=;
+	b=Kx2HJ8guXixJQvIThAGi9sONmjTWLdYavjuJOXtz876lDz/n34peXGd9z+zsaDJwBf/tv4
+	Uvg8tcNSC4J+MYCA==
 To: linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -46,25 +46,20 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Will Deacon <will@kernel.org>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
 	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Cong Wang <xiyou.wangcong@gmail.com>,
-	Hao Luo <haoluo@google.com>,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
+	Clark Wang <xiaoning.wang@nxp.com>,
+	Claudiu Manoil <claudiu.manoil@nxp.com>,
+	Ioana Ciornei <ioana.ciornei@nxp.com>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Jiri Pirko <jiri@resnulli.us>,
 	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Ronak Doshi <doshir@vmware.com>,
-	Song Liu <song@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
+	Madalin Bucur <madalin.bucur@nxp.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Shenwei Wang <shenwei.wang@nxp.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Wei Fang <wei.fang@nxp.com>,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next 15/24] net: Use nested-BH locking for XDP redirect.
-Date: Fri, 15 Dec 2023 18:07:34 +0100
-Message-ID: <20231215171020.687342-16-bigeasy@linutronix.de>
+Subject: [PATCH net-next 18/24] net: Freescale: Use nested-BH locking for XDP redirect.
+Date: Fri, 15 Dec 2023 18:07:37 +0100
+Message-ID: <20231215171020.687342-19-bigeasy@linutronix.de>
 In-Reply-To: <20231215171020.687342-1-bigeasy@linutronix.de>
 References: <20231215171020.687342-1-bigeasy@linutronix.de>
 Precedence: bulk
@@ -99,205 +94,128 @@ free/ alloc of memory, =E2=80=A6) would happen outside of the locked sectio=
 n.
 
 Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Cong Wang <xiyou.wangcong@gmail.com>
-Cc: Hao Luo <haoluo@google.com>
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>
+Cc: Clark Wang <xiaoning.wang@nxp.com>
+Cc: Claudiu Manoil <claudiu.manoil@nxp.com>
+Cc: Ioana Ciornei <ioana.ciornei@nxp.com>
 Cc: Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Jiri Pirko <jiri@resnulli.us>
 Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Ronak Doshi <doshir@vmware.com>
-Cc: Song Liu <song@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>
+Cc: Madalin Bucur <madalin.bucur@nxp.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Shenwei Wang <shenwei.wang@nxp.com>
+Cc: Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: Wei Fang <wei.fang@nxp.com>
 Cc: bpf@vger.kernel.org
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- drivers/net/vmxnet3/vmxnet3_xdp.c |  1 +
- kernel/bpf/cpumap.c               |  2 ++
- net/bpf/test_run.c                | 11 ++++++++---
- net/core/dev.c                    |  3 +++
- net/core/filter.c                 |  1 +
- net/core/lwt_bpf.c                |  2 ++
- net/sched/cls_api.c               |  2 ++
- 7 files changed, 19 insertions(+), 3 deletions(-)
+ .../net/ethernet/freescale/dpaa/dpaa_eth.c    |  1 +
+ .../net/ethernet/freescale/dpaa2/dpaa2-eth.c  |  1 +
+ .../net/ethernet/freescale/dpaa2/dpaa2-xsk.c  | 30 ++++++++++---------
+ drivers/net/ethernet/freescale/enetc/enetc.c  |  1 +
+ drivers/net/ethernet/freescale/fec_main.c     |  1 +
+ 5 files changed, 20 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/net/vmxnet3/vmxnet3_xdp.c b/drivers/net/vmxnet3/vmxnet=
-3_xdp.c
-index 80ddaff759d47..18bce98fd2e31 100644
---- a/drivers/net/vmxnet3/vmxnet3_xdp.c
-+++ b/drivers/net/vmxnet3/vmxnet3_xdp.c
-@@ -257,6 +257,7 @@ vmxnet3_run_xdp(struct vmxnet3_rx_queue *rq, struct xdp=
-_buff *xdp,
+diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c b/drivers/net/e=
+thernet/freescale/dpaa/dpaa_eth.c
+index dcbc598b11c6c..8adc766282fde 100644
+--- a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
++++ b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+@@ -2597,6 +2597,7 @@ static u32 dpaa_run_xdp(struct dpaa_priv *priv, struc=
+t qm_fd *fd, void *vaddr,
+ 	}
+ #endif
+=20
++	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
+ 	xdp_act =3D bpf_prog_run_xdp(xdp_prog, &xdp);
+=20
+ 	/* Update the length and the offset of the FD */
+diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c b/drivers/net=
+/ethernet/freescale/dpaa2/dpaa2-eth.c
+index 888509cf1f210..08be35a3e3de7 100644
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+@@ -442,6 +442,7 @@ static u32 dpaa2_eth_run_xdp(struct dpaa2_eth_priv *pri=
+v,
+ 	xdp_prepare_buff(&xdp, vaddr + offset, XDP_PACKET_HEADROOM,
+ 			 dpaa2_fd_get_len(fd), false);
+=20
++	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
+ 	xdp_act =3D bpf_prog_run_xdp(xdp_prog, &xdp);
+=20
+ 	/* xdp.data pointer may have changed */
+diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-xsk.c b/drivers/net=
+/ethernet/freescale/dpaa2/dpaa2-xsk.c
+index 051748b997f3f..e3ae9de6b0a34 100644
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-xsk.c
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-xsk.c
+@@ -56,23 +56,25 @@ static u32 dpaa2_xsk_run_xdp(struct dpaa2_eth_priv *pri=
+v,
+ 	xdp_buff->rxq =3D &ch->xdp_rxq;
+=20
+ 	xsk_buff_dma_sync_for_cpu(xdp_buff, ch->xsk_pool);
+-	xdp_act =3D bpf_prog_run_xdp(xdp_prog, xdp_buff);
++	scoped_guard(local_lock_nested_bh, &bpf_run_lock.redirect_lock) {
++		xdp_act =3D bpf_prog_run_xdp(xdp_prog, xdp_buff);
+=20
+-	/* xdp.data pointer may have changed */
+-	dpaa2_fd_set_offset(fd, xdp_buff->data - vaddr);
+-	dpaa2_fd_set_len(fd, xdp_buff->data_end - xdp_buff->data);
++		/* xdp.data pointer may have changed */
++		dpaa2_fd_set_offset(fd, xdp_buff->data - vaddr);
++		dpaa2_fd_set_len(fd, xdp_buff->data_end - xdp_buff->data);
+=20
+-	if (likely(xdp_act =3D=3D XDP_REDIRECT)) {
+-		err =3D xdp_do_redirect(priv->net_dev, xdp_buff, xdp_prog);
+-		if (unlikely(err)) {
+-			ch->stats.xdp_drop++;
+-			dpaa2_eth_recycle_buf(priv, ch, addr);
+-		} else {
+-			ch->buf_count--;
+-			ch->stats.xdp_redirect++;
++		if (likely(xdp_act =3D=3D XDP_REDIRECT)) {
++			err =3D xdp_do_redirect(priv->net_dev, xdp_buff, xdp_prog);
++			if (unlikely(err)) {
++				ch->stats.xdp_drop++;
++				dpaa2_eth_recycle_buf(priv, ch, addr);
++			} else {
++				ch->buf_count--;
++				ch->stats.xdp_redirect++;
++			}
++
++			goto xdp_redir;
+ 		}
+-
+-		goto xdp_redir;
+ 	}
+=20
+ 	switch (xdp_act) {
+diff --git a/drivers/net/ethernet/freescale/enetc/enetc.c b/drivers/net/eth=
+ernet/freescale/enetc/enetc.c
+index cffbf27c4656b..d516b28815af4 100644
+--- a/drivers/net/ethernet/freescale/enetc/enetc.c
++++ b/drivers/net/ethernet/freescale/enetc/enetc.c
+@@ -1578,6 +1578,7 @@ static int enetc_clean_rx_ring_xdp(struct enetc_bdr *=
+rx_ring,
+ 			rx_byte_cnt +=3D VLAN_HLEN;
+ 		rx_byte_cnt +=3D xdp_get_buff_len(&xdp_buff);
+=20
++		guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
+ 		xdp_act =3D bpf_prog_run_xdp(prog, &xdp_buff);
+=20
+ 		switch (xdp_act) {
+diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethern=
+et/freescale/fec_main.c
+index c3b7694a74851..335b1e307d468 100644
+--- a/drivers/net/ethernet/freescale/fec_main.c
++++ b/drivers/net/ethernet/freescale/fec_main.c
+@@ -1587,6 +1587,7 @@ fec_enet_run_xdp(struct fec_enet_private *fep, struct=
+ bpf_prog *prog,
+ 	int err;
  	u32 act;
 =20
- 	rq->stats.xdp_packets++;
 +	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
  	act =3D bpf_prog_run_xdp(prog, xdp);
- 	page =3D virt_to_page(xdp->data_hard_start);
 =20
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 8a0bb80fe48a3..c26d49bb78679 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -144,6 +144,7 @@ static void cpu_map_bpf_prog_run_skb(struct bpf_cpu_map=
-_entry *rcpu,
- 	int err;
-=20
- 	list_for_each_entry_safe(skb, tmp, listp, list) {
-+		guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
- 		act =3D bpf_prog_run_generic_xdp(skb, &xdp, rcpu->prog);
- 		switch (act) {
- 		case XDP_PASS:
-@@ -182,6 +183,7 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_map_=
-entry *rcpu,
- 	struct xdp_buff xdp;
- 	int i, nframes =3D 0;
-=20
-+	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
- 	xdp_set_return_frame_no_direct();
- 	xdp.rxq =3D &rxq;
-=20
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index c9fdcc5cdce10..db8f7eb35c6ca 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -293,6 +293,7 @@ static int xdp_test_run_batch(struct xdp_test_data *xdp=
-, struct bpf_prog *prog,
- 	batch_sz =3D min_t(u32, repeat, xdp->batch_size);
-=20
- 	local_bh_disable();
-+	local_lock_nested_bh(&bpf_run_lock.redirect_lock);
- 	xdp_set_return_frame_no_direct();
-=20
- 	for (i =3D 0; i < batch_sz; i++) {
-@@ -348,6 +349,9 @@ static int xdp_test_run_batch(struct xdp_test_data *xdp=
-, struct bpf_prog *prog,
- 	}
-=20
- out:
-+	xdp_clear_return_frame_no_direct();
-+	local_unlock_nested_bh(&bpf_run_lock.redirect_lock);
-+
- 	if (redirect)
- 		xdp_do_flush();
- 	if (nframes) {
-@@ -356,7 +360,6 @@ static int xdp_test_run_batch(struct xdp_test_data *xdp=
-, struct bpf_prog *prog,
- 			err =3D ret;
- 	}
-=20
--	xdp_clear_return_frame_no_direct();
- 	local_bh_enable();
- 	return err;
- }
-@@ -417,10 +420,12 @@ static int bpf_test_run(struct bpf_prog *prog, void *=
-ctx, u32 repeat,
- 	do {
- 		run_ctx.prog_item =3D &item;
- 		local_bh_disable();
--		if (xdp)
-+		if (xdp) {
-+			guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
- 			*retval =3D bpf_prog_run_xdp(prog, ctx);
--		else
-+		} else {
- 			*retval =3D bpf_prog_run(prog, ctx);
-+		}
- 		local_bh_enable();
- 	} while (bpf_test_timer_continue(&t, 1, repeat, &ret, time));
- 	bpf_reset_run_ctx(old_ctx);
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 5a0f6da7b3ae5..5ba7509e88752 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -3993,6 +3993,7 @@ sch_handle_ingress(struct sk_buff *skb, struct packet=
-_type **pt_prev, int *ret,
- 		*pt_prev =3D NULL;
- 	}
-=20
-+	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
- 	qdisc_skb_cb(skb)->pkt_len =3D skb->len;
- 	tcx_set_ingress(skb, true);
-=20
-@@ -4045,6 +4046,7 @@ sch_handle_egress(struct sk_buff *skb, int *ret, stru=
-ct net_device *dev)
- 	if (!entry)
- 		return skb;
-=20
-+	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
- 	/* qdisc_skb_cb(skb)->pkt_len & tcx_set_ingress() was
- 	 * already set by the caller.
- 	 */
-@@ -5008,6 +5010,7 @@ int do_xdp_generic(struct bpf_prog *xdp_prog, struct =
-sk_buff *skb)
- 		u32 act;
- 		int err;
-=20
-+		guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
- 		act =3D netif_receive_generic_xdp(skb, &xdp, xdp_prog);
- 		if (act !=3D XDP_PASS) {
- 			switch (act) {
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 7c9653734fb60..72a7812f933a1 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4241,6 +4241,7 @@ static const struct bpf_func_proto bpf_xdp_adjust_met=
-a_proto =3D {
-  */
- void xdp_do_flush(void)
- {
-+	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
- 	__dev_flush();
- 	__cpu_map_flush();
- 	__xsk_map_flush();
-diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-index a94943681e5aa..74b88e897a7e3 100644
---- a/net/core/lwt_bpf.c
-+++ b/net/core/lwt_bpf.c
-@@ -44,6 +44,7 @@ static int run_lwt_bpf(struct sk_buff *skb, struct bpf_lw=
-t_prog *lwt,
- 	 * BPF prog and skb_do_redirect().
- 	 */
- 	local_bh_disable();
-+	local_lock_nested_bh(&bpf_run_lock.redirect_lock);
- 	bpf_compute_data_pointers(skb);
- 	ret =3D bpf_prog_run_save_cb(lwt->prog, skb);
-=20
-@@ -76,6 +77,7 @@ static int run_lwt_bpf(struct sk_buff *skb, struct bpf_lw=
-t_prog *lwt,
- 		break;
- 	}
-=20
-+	local_unlock_nested_bh(&bpf_run_lock.redirect_lock);
- 	local_bh_enable();
-=20
- 	return ret;
-diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
-index 1976bd1639863..da61b99bc558f 100644
---- a/net/sched/cls_api.c
-+++ b/net/sched/cls_api.c
-@@ -23,6 +23,7 @@
- #include <linux/jhash.h>
- #include <linux/rculist.h>
- #include <linux/rhashtable.h>
-+#include <linux/bpf.h>
- #include <net/net_namespace.h>
- #include <net/sock.h>
- #include <net/netlink.h>
-@@ -3925,6 +3926,7 @@ struct sk_buff *tcf_qevent_handle(struct tcf_qevent *=
-qe, struct Qdisc *sch, stru
-=20
- 	fl =3D rcu_dereference_bh(qe->filter_chain);
-=20
-+	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
- 	switch (tcf_classify(skb, NULL, fl, &cl_res, false)) {
- 	case TC_ACT_SHOT:
- 		qdisc_qstats_drop(sch);
+ 	/* Due xdp_adjust_tail and xdp_adjust_head: DMA sync for_device cover
 --=20
 2.43.0
 
