@@ -1,109 +1,124 @@
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B0C418C19
-	for <bpf@vger.kernel.org>; Fri, 15 Dec 2023 10:06:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Ss4cJ0VWtz4f3knv
-	for <bpf@vger.kernel.org>; Fri, 15 Dec 2023 18:06:08 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id A4B861A0992
-	for <bpf@vger.kernel.org>; Fri, 15 Dec 2023 18:06:10 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP1 (Coremail) with SMTP id cCh0CgBHlQsLJXxlJTfVDg--.54090S6;
-	Fri, 15 Dec 2023 18:06:10 +0800 (CST)
-From: Hou Tao <houtao@huaweicloud.com>
-To: bpf@vger.kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Song Liu <song@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	xingwei lee <xrivendell7@gmail.com>,
-	houtao1@huawei.com
-Subject: [PATCH bpf-next v3 2/5] bpf: Limit the number of kprobes when attaching program to multiple kprobes
-Date: Fri, 15 Dec 2023 18:07:05 +0800
-Message-Id: <20231215100708.2265609-3-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20231215100708.2265609-1-houtao@huaweicloud.com>
-References: <20231215100708.2265609-1-houtao@huaweicloud.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDAD518C1D
+	for <bpf@vger.kernel.org>; Fri, 15 Dec 2023 10:10:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R551e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=lulie@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VyXOVE6_1702635051;
+Received: from 30.221.128.158(mailfrom:lulie@linux.alibaba.com fp:SMTPD_---0VyXOVE6_1702635051)
+          by smtp.aliyun-inc.com;
+          Fri, 15 Dec 2023 18:10:52 +0800
+Message-ID: <23bcab0e-bec1-4edd-b45a-0142ebcda41a@linux.alibaba.com>
+Date: Fri, 15 Dec 2023 18:10:51 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: Question about bpf perfbuf/ringbuf: pinned in backend with
+ overwriting
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, song@kernel.org, andrii@kernel.org, ast@kernel.org,
+ Daniel Borkmann <daniel@iogearbox.net>, xuanzhuo@linux.alibaba.com,
+ dust.li@linux.alibaba.com, guwen@linux.alibaba.com,
+ alibuda@linux.alibaba.com, hengqi@linux.alibaba.com,
+ Nathan Slingerland <slinger@meta.com>, "rihams@meta.com" <rihams@meta.com>,
+ Alan Maguire <alan.maguire@oracle.com>
+References: <3dd9114c-599f-46b2-84b9-abcfd2dcbe33@linux.alibaba.com>
+ <c3c47250-2923-c376-4f5e-ddaf148bbf32@oracle.com>
+ <CAEf4BzZOBdV9vxV6Gr9b5pQ8+M6tPVnHdmELWqOd5jdcL=KpiA@mail.gmail.com>
+ <23691bb5-9688-4e93-a98c-1024e8a8fc62@linux.alibaba.com>
+ <CAEf4BzaQv23wzgmmoSFBja7Syp3m3fRrfzWkFobQ4NNisDTEyA@mail.gmail.com>
+From: Philo Lu <lulie@linux.alibaba.com>
+In-Reply-To: <CAEf4BzaQv23wzgmmoSFBja7Syp3m3fRrfzWkFobQ4NNisDTEyA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgBHlQsLJXxlJTfVDg--.54090S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7AFWDXF4xCF1fAr1DJF13Jwb_yoW8Xr4rpF
-	1Dta4q9r4rXF4xKan5Zws5Zry0vanxW3y7JFsrXr9xAa17Xws5WF12grWjgF1Fv395Gayx
-	JFZ2q34jqrZrZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
-	0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
-	JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwI
-	xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-	Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
-	IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
-	6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-	AFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFa9-UUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-From: Hou Tao <houtao1@huawei.com>
 
-An abnormally big cnt may also be assigned to kprobe_multi.cnt when
-attaching multiple kprobes. It will trigger the following warning in
-kvmalloc_node():
 
-	if (unlikely(size > INT_MAX)) {
-	    WARN_ON_ONCE(!(flags & __GFP_NOWARN));
-	    return NULL;
-	}
+On 2023/12/14 07:35, Andrii Nakryiko wrote:
+> On Mon, Dec 11, 2023 at 4:39 AM Philo Lu <lulie@linux.alibaba.com> wrote:
+>>
+>>
+>>
+>> On 2023/12/9 06:32, Andrii Nakryiko wrote:
+>>> On Thu, Dec 7, 2023 at 6:49 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+>>>>
+>>>> On 07/12/2023 13:15, Philo Lu wrote:
+>>>>> Hi all. I have a question when using perfbuf/ringbuf in bpf. I will
+>>>>> appreciate it if you give me any advice.
+>>>>>
+>>>>> Imagine a simple case: the bpf program output a log (some tcp
+>>>>> statistics) to user every time a packet is received, and the user
+>>>>> actively read the logs if he wants. I do not want to keep a user process
+>>>>> alive, waiting for outputs of the buffer. User can read the buffer as
+>>>>> need. BTW, the order does not matter.
+>>>>>
+>>>>> To conclude, I hope the buffer performs like relayfs: (1) no need for
+>>>>> user process to receive logs, and the user may read at any time (and no
+>>>>> wakeup would be better); (2) old data can be overwritten by new ones.
+>>>>>
+>>>>> Currently, it seems that perfbuf and ringbuf cannot satisfy both: (i)
+>>>>> ringbuf: only satisfies (1). However, if data arrive when the buffer is
+>>>>> full, the new data will be lost, until the buffer is consumed. (ii)
+>>>>> perfbuf: only satisfies (2). But user cannot access the buffer after the
+>>>>> process who creates it (including perf_event.rb via mmap) exits.
+>>>>> Specifically, I can use BPF_F_PRESERVE_ELEMS flag to keep the
+>>>>> perf_events, but I do not know how to get the buffer again in a new
+>>>>> process.
+>>>>>
+>>>>> In my opinion, this can be solved by either of the following: (a) add
+>>>>> overwrite support in ringbuf (maybe a new flag for reserve), but we have
+>>>>> to address synchronization between kernel and user, especially under
+>>>>> variable data size, because when overwriting occurs, kernel has to
+>>>>> update the consumer posi too; (b) implement map_fd_sys_lookup_elem for
+>>>>> perfbuf to expose fds to user via map_lookup_elem syscall, and a
+>>>>> mechanism is need to preserve perf_event->rb when process exits
+>>>>> (otherwise the buffer will be freed by perf_mmap_close). I am not sure
+>>>>> if they are feasible, and which is better. If not, perhaps we can
+>>>>> develop another mechanism to achieve this?
+>>>>>
+>>>>
+>>>> There was an RFC a while back focused on supporting BPF ringbuf
+>>>> over-writing [1]; at the time, Andrii noted some potential issues that
+>>>> might be exposed by doing multiple ringbuf reserves to overfill the
+>>>> buffer within the same program.
+>>>>
+>>>
+>>> Correct. I don't think it's possible to correctly and safely support
+>>> overwriting with BPF ringbuf that has variable-sized elements.
+>>>
+>>> We'll need to implement MPMC ringbuf (probably with fixed sized
+>>> element size) to be able to support this.
+>>>
+>>
+>> Thank you very much!
+>>
+>> If it is indeed difficult with ringbuf, maybe I can implement a new type
+>> of bpf map based on relay interface [1]? e.g., init relay during map
+>> creating, write into it with bpf helper, and then user can access to it
+>> in filesystem. I think it will be a simple but useful map for
+>> overwritable data transfer.
+> 
+> I don't know much about relay, tbh. Give it a try, I guess.
+> Alternatively, we need better and faster implementation of
+> BPF_MAP_TYPE_QUEUE, which seems like the data structure that can
+> support overwriting and generally be a fixed elementa size
+> alternative/complement to BPF ringbuf.
+> 
 
-Fix the warning by limiting the maximal number of kprobes in
-bpf_kprobe_multi_link_attach(). If the number of kprobes is greater than
-MAX_KPROBE_MULTI_CNT, the attachment will fail and return -E2BIG.
+Thank you for your reply. I am afraid BPF_MAP_TYPE_QUEUE cannot get rid 
+of locking overheads with concurrent reading and writing by design, and 
+a lockless buffer like relay fits better to our case. So I will try it :)
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Fixes: 0dcac2725406 ("bpf: Add multi kprobe link")
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
- kernel/trace/bpf_trace.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 75c05aea9fd9..97c0c49c40a0 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -43,6 +43,7 @@
- 	rcu_dereference_protected(p, lockdep_is_held(&bpf_event_mutex))
- 
- #define MAX_UPROBE_MULTI_CNT (1U << 20)
-+#define MAX_KPROBE_MULTI_CNT (1U << 20)
- 
- #ifdef CONFIG_MODULES
- struct bpf_trace_module {
-@@ -2972,6 +2973,8 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
- 	cnt = attr->link_create.kprobe_multi.cnt;
- 	if (!cnt)
- 		return -EINVAL;
-+	if (cnt > MAX_KPROBE_MULTI_CNT)
-+		return -E2BIG;
- 
- 	size = cnt * sizeof(*addrs);
- 	addrs = kvmalloc_array(cnt, sizeof(*addrs), GFP_KERNEL);
--- 
-2.29.2
-
+>>
+>> [1]
+>> https://github.com/torvalds/linux/blob/master/Documentation/filesystems/relay.rst
+>>
+>>>> Alan
+>>>>
+>>>> [1]
+>>>> https://lore.kernel.org/lkml/20220906195656.33021-2-flaniel@linux.microsoft.com/
