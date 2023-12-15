@@ -1,35 +1,35 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2816AB83;
-	Fri, 15 Dec 2023 17:10:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6581A68EA5;
+	Fri, 15 Dec 2023 17:10:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SRSorbBE";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bKkDOU1m"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="TYv7u/T4";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="lf1fVdIK"
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1702660243;
+	s=2020; t=1702660242;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wD16ISNyde986dSZRGGV32udEpTGLhg+lI5u4jYKrqw=;
-	b=SRSorbBEjdXTPPsLCYBR3BfHZUztde0viH5AXb6BnrVRO+dRpLMHGwt39krhGG0dIGg2gc
-	U/GPYQC8QIJryAvWdpneFKRQPe6h9ZTqEWdzui8QpFNXWEeO85TAeVO/cv65RLccd4/YRK
-	WzlvjMKRk5knp71bJzfOBYegir5nHiJNyJqFAqoY8QhtCasD/8/viDwUyU06Aoa/DCR6yt
-	/Bo5pe68KaOdpzj5Ej1RmwGXZF6GFCUwJ4j6BVvHO/0/fuqfNBRqPARUavf+TmVV9muEYn
-	DgRMLZwgTHliPnTc22SgXQvtzytCGCuEBcYzPMfFPZaWDtx9BK4682g+Lzyb7w==
+	bh=9BAPa61nrUkvF9kin2QlytisOZ8fHoxcWneIX+0cXsk=;
+	b=TYv7u/T4NUdVyr2Zgb8Yhqj2raw2Fd69uqS3OekrLnSTm+ac88enFS+j3yRgRUIfgED46N
+	MqEWqW1ql/22EbvsSQMma9oZWOpk3zL46jcOsnY1Zi4OpqqHtZxNOCjnQVCneb0kOvZJWl
+	kv5OZ+NXxjQtTphUKIfvGfMXRsklQ1839OFgDyetf4foAsjLHyfWPVgqQCteQeO3KEkwVG
+	0MtXUNhB2w3kqH8FUvycRlikaVobLDW15Ev3xJDyBgncu8+WSwv4IGvmGhUcBA1LwaXKWR
+	XDDRxC68yYYTneuQgD72rYifAGKX2eBuFhKf63YtwCYbfOM6Zp5YqmN8CdP8Hg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1702660243;
+	s=2020e; t=1702660242;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wD16ISNyde986dSZRGGV32udEpTGLhg+lI5u4jYKrqw=;
-	b=bKkDOU1m4UEsf1ODMNSff2+rozRNCsjhcGgYFGGAkJKSnk1VerHLACuMKMr3ry8mJ6DtKt
-	6a997HCgOHDcT6Dw==
+	bh=9BAPa61nrUkvF9kin2QlytisOZ8fHoxcWneIX+0cXsk=;
+	b=lf1fVdIK+nJARYZChG8KwxA0xcBHX3Z/QPi8BIqVM2uTB4jFpq4H/uMpDzoDB9LTVW7JRP
+	9x9KbsNjnlGsjZDg==
 To: linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -46,20 +46,21 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Will Deacon <will@kernel.org>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
 	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Hao Luo <haoluo@google.com>,
+	Edward Cree <ecree.xilinx@gmail.com>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	bpf@vger.kernel.org
-Subject: [PATCH net-next 24/24] net: bpf: Add lockdep assert for the redirect process.
-Date: Fri, 15 Dec 2023 18:07:43 +0100
-Message-ID: <20231215171020.687342-25-bigeasy@linutronix.de>
+	Leon Romanovsky <leon@kernel.org>,
+	Louis Peens <louis.peens@corigine.com>,
+	Martin Habets <habetsm.xilinx@gmail.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	bpf@vger.kernel.org,
+	linux-net-drivers@amd.com,
+	linux-rdma@vger.kernel.org,
+	oss-drivers@corigine.com
+Subject: [PATCH net-next 22/24] net: mellanox, nfp, sfc: Use nested-BH locking for XDP redirect.
+Date: Fri, 15 Dec 2023 18:07:41 +0100
+Message-ID: <20231215171020.687342-23-bigeasy@linutronix.de>
 In-Reply-To: <20231215171020.687342-1-bigeasy@linutronix.de>
 References: <20231215171020.687342-1-bigeasy@linutronix.de>
 Precedence: bulk
@@ -68,116 +69,155 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-The users of bpf_redirect_info should lock the access by acquiring the
-nested BH-lock bpf_run_lock.redirect_lock. This lock should be acquired
-before the first usage (bpf_prog_run_xdp()) and dropped after the last
-user in the context (xdp_do_redirect()).
+The per-CPU variables used during bpf_prog_run_xdp() invocation and
+later during xdp_do_redirect() rely on disabled BH for their protection.
+Without locking in local_bh_disable() on PREEMPT_RT these data structure
+require explicit locking.
 
-Current user in tree have been audited and updated.
+This is a follow-up on the previous change which introduced
+bpf_run_lock.redirect_lock and uses it now within drivers.
 
-Add lockdep annonation to ensure new user acquire the lock.
+The simple way is to acquire the lock before bpf_prog_run_xdp() is
+invoked and hold it until the end of function.
+This does not always work because some drivers (cpsw, atlantic) invoke
+xdp_do_flush() in the same context.
+Acquiring the lock in bpf_prog_run_xdp() and dropping in
+xdp_do_redirect() (without touching drivers) does not work because not
+all driver, which use bpf_prog_run_xdp(), do support XDP_REDIRECT (and
+invoke xdp_do_redirect()).
+
+Ideally the minimal locking scope would be bpf_prog_run_xdp() +
+xdp_do_redirect() and everything else (error recovery, DMA unmapping,
+free/ alloc of memory, =E2=80=A6) would happen outside of the locked sectio=
+n.
 
 Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Hao Luo <haoluo@google.com>
+Cc: Edward Cree <ecree.xilinx@gmail.com>
 Cc: Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: Jiri Olsa <jolsa@kernel.org>
 Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Song Liu <song@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: Louis Peens <louis.peens@corigine.com>
+Cc: Martin Habets <habetsm.xilinx@gmail.com>
+Cc: Saeed Mahameed <saeedm@nvidia.com>
+Cc: Tariq Toukan <tariqt@nvidia.com>
 Cc: bpf@vger.kernel.org
+Cc: linux-net-drivers@amd.com
+Cc: linux-rdma@vger.kernel.org
+Cc: oss-drivers@corigine.com
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- include/net/xdp.h |  1 +
- net/core/filter.c | 11 +++++++++++
- 2 files changed, 12 insertions(+)
+ drivers/net/ethernet/mellanox/mlx4/en_rx.c       | 1 +
+ drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c | 1 +
+ drivers/net/ethernet/netronome/nfp/nfd3/dp.c     | 3 ++-
+ drivers/net/ethernet/netronome/nfp/nfd3/xsk.c    | 1 +
+ drivers/net/ethernet/netronome/nfp/nfdk/dp.c     | 3 ++-
+ drivers/net/ethernet/sfc/rx.c                    | 1 +
+ drivers/net/ethernet/sfc/siena/rx.c              | 1 +
+ 7 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 349c36fb5fd8f..cdeab175abf18 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -493,6 +493,7 @@ static inline void xdp_clear_features_flag(struct net_d=
-evice *dev)
- static __always_inline u32 bpf_prog_run_xdp(const struct bpf_prog *prog,
- 					    struct xdp_buff *xdp)
- {
-+	lockdep_assert_held(this_cpu_ptr(&bpf_run_lock.redirect_lock));
- 	/* Driver XDP hooks are invoked within a single NAPI poll cycle and thus
- 	 * under local_bh_disable(), which provides the needed RCU protection
- 	 * for accessing map entries.
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 72a7812f933a1..a2f97503ed578 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2495,6 +2495,7 @@ int skb_do_redirect(struct sk_buff *skb)
- 	struct net_device *dev;
- 	u32 flags =3D ri->flags;
+diff --git a/drivers/net/ethernet/mellanox/mlx4/en_rx.c b/drivers/net/ether=
+net/mellanox/mlx4/en_rx.c
+index a09b6e05337d9..c0a3ac3405bc5 100644
+--- a/drivers/net/ethernet/mellanox/mlx4/en_rx.c
++++ b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
+@@ -833,6 +833,7 @@ int mlx4_en_process_rx_cq(struct net_device *dev, struc=
+t mlx4_en_cq *cq, int bud
+ 			mxbuf.ring =3D ring;
+ 			mxbuf.dev =3D dev;
 =20
-+	lockdep_assert_held(this_cpu_ptr(&bpf_run_lock.redirect_lock));
- 	dev =3D dev_get_by_index_rcu(net, ri->tgt_index);
- 	ri->tgt_index =3D 0;
- 	ri->flags =3D 0;
-@@ -2525,6 +2526,8 @@ BPF_CALL_2(bpf_redirect, u32, ifindex, u64, flags)
- {
- 	struct bpf_redirect_info *ri =3D this_cpu_ptr(&bpf_redirect_info);
++			guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
+ 			act =3D bpf_prog_run_xdp(xdp_prog, &mxbuf.xdp);
 =20
-+	lockdep_assert_held(this_cpu_ptr(&bpf_run_lock.redirect_lock));
-+
- 	if (unlikely(flags & (~(BPF_F_INGRESS) | BPF_F_REDIRECT_INTERNAL)))
- 		return TC_ACT_SHOT;
+ 			length =3D mxbuf.xdp.data_end - mxbuf.xdp.data;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net=
+/ethernet/mellanox/mlx5/core/en/xdp.c
+index 7decc81ed33a9..b4e3c6a5a6da6 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+@@ -269,6 +269,7 @@ bool mlx5e_xdp_handle(struct mlx5e_rq *rq,
+ 	u32 act;
+ 	int err;
 =20
-@@ -2546,6 +2549,8 @@ BPF_CALL_2(bpf_redirect_peer, u32, ifindex, u64, flag=
-s)
- {
- 	struct bpf_redirect_info *ri =3D this_cpu_ptr(&bpf_redirect_info);
++	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
+ 	act =3D bpf_prog_run_xdp(prog, xdp);
+ 	switch (act) {
+ 	case XDP_PASS:
+diff --git a/drivers/net/ethernet/netronome/nfp/nfd3/dp.c b/drivers/net/eth=
+ernet/netronome/nfp/nfd3/dp.c
+index 17381bfc15d72..a041b55514aa3 100644
+--- a/drivers/net/ethernet/netronome/nfp/nfd3/dp.c
++++ b/drivers/net/ethernet/netronome/nfp/nfd3/dp.c
+@@ -1011,7 +1011,8 @@ static int nfp_nfd3_rx(struct nfp_net_rx_ring *rx_rin=
+g, int budget)
+ 					 pkt_off - NFP_NET_RX_BUF_HEADROOM,
+ 					 pkt_len, true);
 =20
-+	lockdep_assert_held(this_cpu_ptr(&bpf_run_lock.redirect_lock));
-+
- 	if (unlikely(flags))
- 		return TC_ACT_SHOT;
+-			act =3D bpf_prog_run_xdp(xdp_prog, &xdp);
++			scoped_guard(local_lock_nested_bh, &bpf_run_lock.redirect_lock)
++				act =3D bpf_prog_run_xdp(xdp_prog, &xdp);
 =20
-@@ -2568,6 +2573,8 @@ BPF_CALL_4(bpf_redirect_neigh, u32, ifindex, struct b=
-pf_redir_neigh *, params,
- {
- 	struct bpf_redirect_info *ri =3D this_cpu_ptr(&bpf_redirect_info);
+ 			pkt_len =3D xdp.data_end - xdp.data;
+ 			pkt_off +=3D xdp.data - orig_data;
+diff --git a/drivers/net/ethernet/netronome/nfp/nfd3/xsk.c b/drivers/net/et=
+hernet/netronome/nfp/nfd3/xsk.c
+index 45be6954d5aae..38f2d4c2b5b7c 100644
+--- a/drivers/net/ethernet/netronome/nfp/nfd3/xsk.c
++++ b/drivers/net/ethernet/netronome/nfp/nfd3/xsk.c
+@@ -216,6 +216,7 @@ nfp_nfd3_xsk_rx(struct nfp_net_rx_ring *rx_ring, int bu=
+dget,
+ 			}
+ 		}
 =20
-+	lockdep_assert_held(this_cpu_ptr(&bpf_run_lock.redirect_lock));
-+
- 	if (unlikely((plen && plen < sizeof(*params)) || flags))
- 		return TC_ACT_SHOT;
++		guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
+ 		act =3D bpf_prog_run_xdp(xdp_prog, xrxbuf->xdp);
 =20
-@@ -4287,6 +4294,8 @@ u32 xdp_master_redirect(struct xdp_buff *xdp)
- 	struct net_device *master, *slave;
- 	struct bpf_redirect_info *ri =3D this_cpu_ptr(&bpf_redirect_info);
+ 		pkt_len =3D xrxbuf->xdp->data_end - xrxbuf->xdp->data;
+diff --git a/drivers/net/ethernet/netronome/nfp/nfdk/dp.c b/drivers/net/eth=
+ernet/netronome/nfp/nfdk/dp.c
+index 8d78c6faefa8a..af0a36c4fb018 100644
+--- a/drivers/net/ethernet/netronome/nfp/nfdk/dp.c
++++ b/drivers/net/ethernet/netronome/nfp/nfdk/dp.c
+@@ -1130,7 +1130,8 @@ static int nfp_nfdk_rx(struct nfp_net_rx_ring *rx_rin=
+g, int budget)
+ 					 pkt_off - NFP_NET_RX_BUF_HEADROOM,
+ 					 pkt_len, true);
 =20
-+	lockdep_assert_held(this_cpu_ptr(&bpf_run_lock.redirect_lock));
-+
- 	master =3D netdev_master_upper_dev_get_rcu(xdp->rxq->dev);
- 	slave =3D master->netdev_ops->ndo_xdp_get_xmit_slave(master, xdp);
- 	if (slave && slave !=3D xdp->rxq->dev) {
-@@ -4394,6 +4403,7 @@ int xdp_do_redirect(struct net_device *dev, struct xd=
-p_buff *xdp,
- 	struct bpf_redirect_info *ri =3D this_cpu_ptr(&bpf_redirect_info);
- 	enum bpf_map_type map_type =3D ri->map_type;
+-			act =3D bpf_prog_run_xdp(xdp_prog, &xdp);
++			scoped_guard(local_lock_nested_bh, &bpf_run_lock.redirect_lock)
++				act =3D bpf_prog_run_xdp(xdp_prog, &xdp);
 =20
-+	lockdep_assert_held(this_cpu_ptr(&bpf_run_lock.redirect_lock));
- 	if (map_type =3D=3D BPF_MAP_TYPE_XSKMAP)
- 		return __xdp_do_redirect_xsk(ri, dev, xdp, xdp_prog);
+ 			pkt_len =3D xdp.data_end - xdp.data;
+ 			pkt_off +=3D xdp.data - orig_data;
+diff --git a/drivers/net/ethernet/sfc/rx.c b/drivers/net/ethernet/sfc/rx.c
+index f77a2d3ef37ec..3712d29150af5 100644
+--- a/drivers/net/ethernet/sfc/rx.c
++++ b/drivers/net/ethernet/sfc/rx.c
+@@ -291,6 +291,7 @@ static bool efx_do_xdp(struct efx_nic *efx, struct efx_=
+channel *channel,
+ 	xdp_prepare_buff(&xdp, *ehp - EFX_XDP_HEADROOM, EFX_XDP_HEADROOM,
+ 			 rx_buf->len, false);
 =20
-@@ -4408,6 +4418,7 @@ int xdp_do_redirect_frame(struct net_device *dev, str=
-uct xdp_buff *xdp,
- 	struct bpf_redirect_info *ri =3D this_cpu_ptr(&bpf_redirect_info);
- 	enum bpf_map_type map_type =3D ri->map_type;
++	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
+ 	xdp_act =3D bpf_prog_run_xdp(xdp_prog, &xdp);
 =20
-+	lockdep_assert_held(this_cpu_ptr(&bpf_run_lock.redirect_lock));
- 	if (map_type =3D=3D BPF_MAP_TYPE_XSKMAP)
- 		return __xdp_do_redirect_xsk(ri, dev, xdp, xdp_prog);
+ 	offset =3D (u8 *)xdp.data - *ehp;
+diff --git a/drivers/net/ethernet/sfc/siena/rx.c b/drivers/net/ethernet/sfc=
+/siena/rx.c
+index 98d3c0743c0f5..6bfc4cd1c83e0 100644
+--- a/drivers/net/ethernet/sfc/siena/rx.c
++++ b/drivers/net/ethernet/sfc/siena/rx.c
+@@ -291,6 +291,7 @@ static bool efx_do_xdp(struct efx_nic *efx, struct efx_=
+channel *channel,
+ 	xdp_prepare_buff(&xdp, *ehp - EFX_XDP_HEADROOM, EFX_XDP_HEADROOM,
+ 			 rx_buf->len, false);
 =20
++	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
+ 	xdp_act =3D bpf_prog_run_xdp(xdp_prog, &xdp);
+=20
+ 	offset =3D (u8 *)xdp.data - *ehp;
 --=20
 2.43.0
 
