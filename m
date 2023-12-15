@@ -1,124 +1,184 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2362B13B120
-	for <bpf@vger.kernel.org>; Fri, 15 Dec 2023 22:35:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D9018ED8
+	for <bpf@vger.kernel.org>; Fri, 15 Dec 2023 22:39:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="auwRW8vf"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=g0wYx3/xM2TZ/nXqp823en+/RVdFuLUiNMUkzmRmKeM=; b=auwRW8vfZvnbznwppsVqf781Nv
-	g3WpMwa+4uHAfG6bdbnGY4E2GzauOKngYSovCcRQz1ML4CXJX0+tLITUXliAojG4wnisNfb2kelcQ
-	oKWD/pH0D0tj2Syy2xNqF814c2Bw35wUWtXRpRW71Tj8hK+kzuVSM4Nk4K5bPLgeX7PIfEh0F+FS3
-	ElpW3J0Yn8gXrk5eXgaoC4/z4iK4pwKGgiWSFgBscZDhnBZBH3wH/TE0o3T+yLlSw935z+fL86Gm5
-	c0/JDmHT3n6wVEaMkT5li5xcZ/23w458mG5OR8QHqWaVoixg22dMZDC8G5VbvY4hvYIm0CPRNzP5W
-	pq+m04AQ==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rEGXZ-0006XE-78; Fri, 15 Dec 2023 23:20:17 +0100
-Received: from [178.197.248.25] (helo=linux.home)
-	by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rEGXY-0005eg-GZ; Fri, 15 Dec 2023 23:20:16 +0100
-Subject: Re: [PATCH bpf-next v3] bpf: Include pid, uid and comm in audit
- output
-To: Dave Tucker <dave@dtucker.co.uk>, bpf@vger.kernel.org
-Cc: Dave Tucker <datucker@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Yafang Shao <laoar.shao@gmail.com>
-References: <3636f52d-f343-45e5-88c6-3c7e28e87a45@linux.dev>
- <20231215174639.1034164-1-dave@dtucker.co.uk>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <96e41142-1c86-f7ab-67dc-47e6d9da362b@iogearbox.net>
-Date: Fri, 15 Dec 2023 23:20:15 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hlq0OBaz"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-55193d5e8cdso1390761a12.1
+        for <bpf@vger.kernel.org>; Fri, 15 Dec 2023 14:39:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702679961; x=1703284761; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QJIRgALtyoWUfCUQBDX8zPjiI5uj832KhlzRV2lZRCU=;
+        b=hlq0OBazraZ5bkoRRQiHDjkf+ktAALJTxidWARchG43eKUajghghqUzVhDiXjMhSv9
+         lNrvR0isQRK5tK9l6xxYiVh5Bw3O/GfPzxY6IeVrDVyVQC+aqWB+DvkvzjcH8Yag5F04
+         XLK1nz+rQ2KHx8ARku24rZ0lfng5pr9N3iderACHE8v8mSAYptX+pzVM55c1l0z3RntZ
+         wJhfHPOAhtCmizijUHfUDptx7cLnEbNbULArwfy7i026dcxv41HBQl2zT2CgFlTgaSAS
+         +j5IaCJncZoXuYJTL3rrxHa5Z1L4OB+SxyIrdN6I5MnaQSSUPTj1rQ2k2ThVlnnjGqTY
+         xHaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702679961; x=1703284761;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QJIRgALtyoWUfCUQBDX8zPjiI5uj832KhlzRV2lZRCU=;
+        b=GhlxhimRmH0DzSN66dXwIKK1N0BsAJ2qw/1X1iPFdQYSRkhaYNURTwfJ9F4s8IYI5L
+         ooqFcZED73VYw7vbbmz2ygVNC5D6Mc3pRuPBfzk0r8E8Fj1OP8yt0Skmz+Ea7iQqE5q7
+         MSLA5YFZGaA9fR9+RFHatMGyohknwpxHtvWH5hIrZYx8rAtEr5Qs9Q1kDZDmWjHY2UpR
+         UyAayqwjQ6HsIKakEpktBvnMDO7QkfibXKk0+CMbz+rZupawW9v3Xbjo/vt7+6B4jTHI
+         lY10Ikb0mxjA3iMZMfo/0WMiHQ4YxVYIjT3IllfNqPCpSYkzFVi0loMYhHVpGu3Bj0km
+         o3/g==
+X-Gm-Message-State: AOJu0YyWXBP2nMHaNbansp3FkKkFqj9Q/6Stm9j1Iav/Hp27LeS32QdP
+	VgEkpcHxyvfcas6/KEypwvZcRJ6pr/ECH/gS9Zs=
+X-Google-Smtp-Source: AGHT+IFnZimnLbXJ7dxgZwGvnDABkvNMO3CgmjlzFAw1Q+VIpIi/ex606lfLbJhC0ISalu7u4wnuTry1QpVOo3Mqp8w=
+X-Received: by 2002:a50:d5d6:0:b0:551:cff9:dae3 with SMTP id
+ g22-20020a50d5d6000000b00551cff9dae3mr3452202edj.72.1702679960605; Fri, 15
+ Dec 2023 14:39:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20231215174639.1034164-1-dave@dtucker.co.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27124/Fri Dec 15 10:58:28 2023)
+References: <3dd9114c-599f-46b2-84b9-abcfd2dcbe33@linux.alibaba.com>
+ <c3c47250-2923-c376-4f5e-ddaf148bbf32@oracle.com> <CAEf4BzZOBdV9vxV6Gr9b5pQ8+M6tPVnHdmELWqOd5jdcL=KpiA@mail.gmail.com>
+ <23691bb5-9688-4e93-a98c-1024e8a8fc62@linux.alibaba.com> <CAEf4BzaQv23wzgmmoSFBja7Syp3m3fRrfzWkFobQ4NNisDTEyA@mail.gmail.com>
+ <23bcab0e-bec1-4edd-b45a-0142ebcda41a@linux.alibaba.com>
+In-Reply-To: <23bcab0e-bec1-4edd-b45a-0142ebcda41a@linux.alibaba.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 15 Dec 2023 14:39:07 -0800
+Message-ID: <CAEf4BzYBqwDQ8LeyrQSOh+G8eofy1mN=j=DVrj5DkYovFW64Jw@mail.gmail.com>
+Subject: Re: Question about bpf perfbuf/ringbuf: pinned in backend with overwriting
+To: Philo Lu <lulie@linux.alibaba.com>
+Cc: bpf@vger.kernel.org, song@kernel.org, andrii@kernel.org, ast@kernel.org, 
+	Daniel Borkmann <daniel@iogearbox.net>, xuanzhuo@linux.alibaba.com, 
+	dust.li@linux.alibaba.com, guwen@linux.alibaba.com, alibuda@linux.alibaba.com, 
+	hengqi@linux.alibaba.com, Nathan Slingerland <slinger@meta.com>, 
+	"rihams@meta.com" <rihams@meta.com>, Alan Maguire <alan.maguire@oracle.com>, 
+	Dmitry Vyukov <dvyukov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 12/15/23 6:46 PM, Dave Tucker wrote:
-> Current output from auditd is as follows:
-> 
-> time->Wed Dec 13 21:39:24 2023
-> type=BPF msg=audit(1702503564.519:11241): prog-id=439 op=LOAD
-> 
-> This only tells you that a BPF program was loaded, but without
-> any context. If we include the prog-name, pid, uid and comm we get
-> output as follows:
-> 
-> time->Wed Dec 13 21:59:59 2023
-> type=BPF msg=audit(1702504799.156:99528): op=UNLOAD prog-id=50092
-> 	prog-name="test" pid=27279 uid=0 comm="new_name"
-> 
-> With pid, uid a system administrator has much better context
-> over which processes and user loaded which eBPF programs.
-> comm is useful since processes may be short-lived.
-> 
-> Signed-off-by: Dave Tucker <dave@dtucker.co.uk>
-> ---
-> 
-> Changes:
-> 
-> v2->v3:
->    - Revert replacing in_irq() with in_hardirq()
->    - Revert removal of in_irq() check from bpf_audit_prog since it may
->      also be called in the sofirq or nmi contexts
-> 
-> v1->v2:
->    - Move 'op' to the front of the audit messages
->    - Add 'prog-name' to the audit messages
->    - Replace deprecated in_irq() with in_hardirq()
->    - Remove in_irq() check from bpf_audit_prog since it's always called
->      from the task context
->    - Only populate pid, uid and comm if not in a kthread
-> 
+On Fri, Dec 15, 2023 at 2:10=E2=80=AFAM Philo Lu <lulie@linux.alibaba.com> =
+wrote:
+>
+>
+>
+> On 2023/12/14 07:35, Andrii Nakryiko wrote:
+> > On Mon, Dec 11, 2023 at 4:39=E2=80=AFAM Philo Lu <lulie@linux.alibaba.c=
+om> wrote:
+> >>
+> >>
+> >>
+> >> On 2023/12/9 06:32, Andrii Nakryiko wrote:
+> >>> On Thu, Dec 7, 2023 at 6:49=E2=80=AFAM Alan Maguire <alan.maguire@ora=
+cle.com> wrote:
+> >>>>
+> >>>> On 07/12/2023 13:15, Philo Lu wrote:
+> >>>>> Hi all. I have a question when using perfbuf/ringbuf in bpf. I will
+> >>>>> appreciate it if you give me any advice.
+> >>>>>
+> >>>>> Imagine a simple case: the bpf program output a log (some tcp
+> >>>>> statistics) to user every time a packet is received, and the user
+> >>>>> actively read the logs if he wants. I do not want to keep a user pr=
+ocess
+> >>>>> alive, waiting for outputs of the buffer. User can read the buffer =
+as
+> >>>>> need. BTW, the order does not matter.
+> >>>>>
+> >>>>> To conclude, I hope the buffer performs like relayfs: (1) no need f=
+or
+> >>>>> user process to receive logs, and the user may read at any time (an=
+d no
+> >>>>> wakeup would be better); (2) old data can be overwritten by new one=
+s.
+> >>>>>
+> >>>>> Currently, it seems that perfbuf and ringbuf cannot satisfy both: (=
+i)
+> >>>>> ringbuf: only satisfies (1). However, if data arrive when the buffe=
+r is
+> >>>>> full, the new data will be lost, until the buffer is consumed. (ii)
+> >>>>> perfbuf: only satisfies (2). But user cannot access the buffer afte=
+r the
+> >>>>> process who creates it (including perf_event.rb via mmap) exits.
+> >>>>> Specifically, I can use BPF_F_PRESERVE_ELEMS flag to keep the
+> >>>>> perf_events, but I do not know how to get the buffer again in a new
+> >>>>> process.
+> >>>>>
+> >>>>> In my opinion, this can be solved by either of the following: (a) a=
+dd
+> >>>>> overwrite support in ringbuf (maybe a new flag for reserve), but we=
+ have
+> >>>>> to address synchronization between kernel and user, especially unde=
+r
+> >>>>> variable data size, because when overwriting occurs, kernel has to
+> >>>>> update the consumer posi too; (b) implement map_fd_sys_lookup_elem =
+for
+> >>>>> perfbuf to expose fds to user via map_lookup_elem syscall, and a
+> >>>>> mechanism is need to preserve perf_event->rb when process exits
+> >>>>> (otherwise the buffer will be freed by perf_mmap_close). I am not s=
+ure
+> >>>>> if they are feasible, and which is better. If not, perhaps we can
+> >>>>> develop another mechanism to achieve this?
+> >>>>>
+> >>>>
+> >>>> There was an RFC a while back focused on supporting BPF ringbuf
+> >>>> over-writing [1]; at the time, Andrii noted some potential issues th=
+at
+> >>>> might be exposed by doing multiple ringbuf reserves to overfill the
+> >>>> buffer within the same program.
+> >>>>
+> >>>
+> >>> Correct. I don't think it's possible to correctly and safely support
+> >>> overwriting with BPF ringbuf that has variable-sized elements.
+> >>>
+> >>> We'll need to implement MPMC ringbuf (probably with fixed sized
+> >>> element size) to be able to support this.
+> >>>
+> >>
+> >> Thank you very much!
+> >>
+> >> If it is indeed difficult with ringbuf, maybe I can implement a new ty=
+pe
+> >> of bpf map based on relay interface [1]? e.g., init relay during map
+> >> creating, write into it with bpf helper, and then user can access to i=
+t
+> >> in filesystem. I think it will be a simple but useful map for
+> >> overwritable data transfer.
+> >
+> > I don't know much about relay, tbh. Give it a try, I guess.
+> > Alternatively, we need better and faster implementation of
+> > BPF_MAP_TYPE_QUEUE, which seems like the data structure that can
+> > support overwriting and generally be a fixed elementa size
+> > alternative/complement to BPF ringbuf.
+> >
+>
+> Thank you for your reply. I am afraid BPF_MAP_TYPE_QUEUE cannot get rid
+> of locking overheads with concurrent reading and writing by design, and
 
-Aside from what Alexei mentioned, looking back at commit bae141f54be83
-("bpf: Emit audit messages upon successful prog load and unload"), don't
-you already have this information at hand? Quote from commit msg:
+I disagree, I think [0] from Dmitry Vyukov is one way to implement
+lock-free BPF_MAP_TYPE_QUEUE. I don't know how easy it would be to
+implement overwriting support, but it would be worth considering.
 
-Raw example output:
+  [0] https://www.1024cores.net/home/lock-free-algorithms/queues/bounded-mp=
+mc-queue
 
-       # auditctl -D
-       # auditctl -a always,exit -F arch=x86_64 -S bpf
-       # ausearch --start recent -m 1334
-       ...
-       ----
-       time->Wed Nov 27 16:04:13 2019
-       type=PROCTITLE msg=audit(1574867053.120:84664): proctitle="./bpf"
-       type=SYSCALL msg=audit(1574867053.120:84664): arch=c000003e syscall=321   \
-         success=yes exit=3 a0=5 a1=7ffea484fbe0 a2=70 a3=0 items=0 ppid=7477    \
-         pid=12698 auid=1001 uid=1001 gid=1001 euid=1001 suid=1001 fsuid=1001    \
-         egid=1001 sgid=1001 fsgid=1001 tty=pts2 ses=4 comm="bpf"                \
-         exe="/home/jolsa/auditd/audit-testsuite/tests/bpf/bpf"                  \
-         subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=(null)
-       type=UNKNOWN[1334] msg=audit(1574867053.120:84664): prog-id=76 op=LOAD
-       ----
-       time->Wed Nov 27 16:04:13 2019
-       type=UNKNOWN[1334] msg=audit(1574867053.120:84665): prog-id=76 op=UNLOAD
-       ...
 
-Thanks,
-Daniel
+
+> a lockless buffer like relay fits better to our case. So I will try it :)
+>
+> >>
+> >> [1]
+> >> https://github.com/torvalds/linux/blob/master/Documentation/filesystem=
+s/relay.rst
+> >>
+> >>>> Alan
+> >>>>
+> >>>> [1]
+> >>>> https://lore.kernel.org/lkml/20220906195656.33021-2-flaniel@linux.mi=
+crosoft.com/
