@@ -1,22 +1,23 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90DF8EBD
-	for <bpf@vger.kernel.org>; Fri, 15 Dec 2023 00:12:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0435382
+	for <bpf@vger.kernel.org>; Fri, 15 Dec 2023 00:14:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 406F52B862860; Thu, 14 Dec 2023 16:12:27 -0800 (PST)
+	id C6EC62B862783; Thu, 14 Dec 2023 16:11:58 -0800 (PST)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v2 6/6] selftests/bpf: Cope with 512 bytes limit with bpf_global_percpu_ma
-Date: Thu, 14 Dec 2023 16:12:27 -0800
-Message-Id: <20231215001227.3254314-1-yonghong.song@linux.dev>
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Hou Tao <houtao1@huawei.com>
+Subject: [PATCH bpf-next v2 1/6] bpf: Refactor to have a memalloc cache destroying function
+Date: Thu, 14 Dec 2023 16:11:58 -0800
+Message-Id: <20231215001158.3251863-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231215001152.3249146-1-yonghong.song@linux.dev>
 References: <20231215001152.3249146-1-yonghong.song@linux.dev>
@@ -28,88 +29,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-In the previous patch, the maximum data size for bpf_global_percpu_ma
-is 512 bytes. This breaks selftest test_bpf_ma. Let us adjust it
-accordingly. Also added a selftest to capture the verification failure
-when the allocation size is greater than 512.
+The function, named as bpf_mem_alloc_destroy_cache(), will be used
+in the subsequent patch.
 
+Acked-by: Hou Tao <houtao1@huawei.com>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/progs/percpu_alloc_fail.c    | 18 ++++++++++++++++++
- .../testing/selftests/bpf/progs/test_bpf_ma.c  |  9 ---------
- 2 files changed, 18 insertions(+), 9 deletions(-)
+ kernel/bpf/memalloc.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c b/tool=
-s/testing/selftests/bpf/progs/percpu_alloc_fail.c
-index 1a891d30f1fe..f2b8eb2ff76f 100644
---- a/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
-+++ b/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
-@@ -17,6 +17,10 @@ struct val_with_rb_root_t {
- 	struct bpf_spin_lock lock;
- };
-=20
-+struct val_600b_t {
-+	char b[600];
-+};
-+
- struct elem {
- 	long sum;
- 	struct val_t __percpu_kptr *pc;
-@@ -161,4 +165,18 @@ int BPF_PROG(test_array_map_7)
- 	return 0;
+diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
+index 6a51cfe4c2d6..75068167e745 100644
+--- a/kernel/bpf/memalloc.c
++++ b/kernel/bpf/memalloc.c
+@@ -618,6 +618,13 @@ static void drain_mem_cache(struct bpf_mem_cache *c)
+ 	free_all(llist_del_all(&c->waiting_for_gp), percpu);
  }
 =20
-+SEC("?fentry.s/bpf_fentry_test1")
-+__failure __msg("bpf_percpu_obj_new type size (600) is greater than 512"=
-)
-+int BPF_PROG(test_array_map_8)
++static void bpf_mem_alloc_destroy_cache(struct bpf_mem_cache *c)
 +{
-+	struct val_600b_t __percpu_kptr *p;
-+
-+	p =3D bpf_percpu_obj_new(struct val_600b_t);
-+	if (!p)
-+		return 0;
-+
-+	bpf_percpu_obj_drop(p);
-+	return 0;
++	WRITE_ONCE(c->draining, true);
++	irq_work_sync(&c->refill_work);
++	drain_mem_cache(c);
 +}
 +
- char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_ma.c b/tools/test=
-ing/selftests/bpf/progs/test_bpf_ma.c
-index b685a4aba6bd..68cba55eb828 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_ma.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_ma.c
-@@ -188,9 +188,6 @@ DEFINE_ARRAY_WITH_PERCPU_KPTR(128);
- DEFINE_ARRAY_WITH_PERCPU_KPTR(192);
- DEFINE_ARRAY_WITH_PERCPU_KPTR(256);
- DEFINE_ARRAY_WITH_PERCPU_KPTR(512);
--DEFINE_ARRAY_WITH_PERCPU_KPTR(1024);
--DEFINE_ARRAY_WITH_PERCPU_KPTR(2048);
--DEFINE_ARRAY_WITH_PERCPU_KPTR(4096);
-=20
- SEC("?fentry/" SYS_PREFIX "sys_nanosleep")
- int test_batch_alloc_free(void *ctx)
-@@ -259,9 +256,6 @@ int test_batch_percpu_alloc_free(void *ctx)
- 	CALL_BATCH_PERCPU_ALLOC_FREE(192, 128, 6);
- 	CALL_BATCH_PERCPU_ALLOC_FREE(256, 128, 7);
- 	CALL_BATCH_PERCPU_ALLOC_FREE(512, 64, 8);
--	CALL_BATCH_PERCPU_ALLOC_FREE(1024, 32, 9);
--	CALL_BATCH_PERCPU_ALLOC_FREE(2048, 16, 10);
--	CALL_BATCH_PERCPU_ALLOC_FREE(4096, 8, 11);
-=20
- 	return 0;
- }
-@@ -283,9 +277,6 @@ int test_percpu_free_through_map_free(void *ctx)
- 	CALL_BATCH_PERCPU_ALLOC(192, 128, 6);
- 	CALL_BATCH_PERCPU_ALLOC(256, 128, 7);
- 	CALL_BATCH_PERCPU_ALLOC(512, 64, 8);
--	CALL_BATCH_PERCPU_ALLOC(1024, 32, 9);
--	CALL_BATCH_PERCPU_ALLOC(2048, 16, 10);
--	CALL_BATCH_PERCPU_ALLOC(4096, 8, 11);
-=20
- 	return 0;
- }
+ static void check_mem_cache(struct bpf_mem_cache *c)
+ {
+ 	WARN_ON_ONCE(!llist_empty(&c->free_by_rcu_ttrace));
+@@ -723,9 +730,7 @@ void bpf_mem_alloc_destroy(struct bpf_mem_alloc *ma)
+ 		rcu_in_progress =3D 0;
+ 		for_each_possible_cpu(cpu) {
+ 			c =3D per_cpu_ptr(ma->cache, cpu);
+-			WRITE_ONCE(c->draining, true);
+-			irq_work_sync(&c->refill_work);
+-			drain_mem_cache(c);
++			bpf_mem_alloc_destroy_cache(c);
+ 			rcu_in_progress +=3D atomic_read(&c->call_rcu_ttrace_in_progress);
+ 			rcu_in_progress +=3D atomic_read(&c->call_rcu_in_progress);
+ 		}
+@@ -740,9 +745,7 @@ void bpf_mem_alloc_destroy(struct bpf_mem_alloc *ma)
+ 			cc =3D per_cpu_ptr(ma->caches, cpu);
+ 			for (i =3D 0; i < NUM_CACHES; i++) {
+ 				c =3D &cc->cache[i];
+-				WRITE_ONCE(c->draining, true);
+-				irq_work_sync(&c->refill_work);
+-				drain_mem_cache(c);
++				bpf_mem_alloc_destroy_cache(c);
+ 				rcu_in_progress +=3D atomic_read(&c->call_rcu_ttrace_in_progress);
+ 				rcu_in_progress +=3D atomic_read(&c->call_rcu_in_progress);
+ 			}
 --=20
 2.34.1
 
