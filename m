@@ -1,32 +1,32 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B02D7E4
-	for <bpf@vger.kernel.org>; Fri, 15 Dec 2023 01:13:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D5C36F
+	for <bpf@vger.kernel.org>; Fri, 15 Dec 2023 01:14:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BF0eIZt026727
-	for <bpf@vger.kernel.org>; Thu, 14 Dec 2023 17:13:56 -0800
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3BEMrIBr019722
+	for <bpf@vger.kernel.org>; Thu, 14 Dec 2023 17:14:00 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3v0cf8r6h7-5
+	by m0001303.ppops.net (PPS) with ESMTPS id 3v0avv8xb0-5
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 14 Dec 2023 17:13:56 -0800
-Received: from twshared10507.42.prn1.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Thu, 14 Dec 2023 17:14:00 -0800
+Received: from twshared19681.14.frc2.facebook.com (2620:10d:c0a8:1b::30) by
+ mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 14 Dec 2023 17:13:50 -0800
+ 15.1.2507.34; Thu, 14 Dec 2023 17:13:56 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 6F5C13D2CCED2; Thu, 14 Dec 2023 17:13:39 -0800 (PST)
+	id C5E123D2CCF9F; Thu, 14 Dec 2023 17:13:53 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>,
         Eduard Zingerman
 	<eddyz87@gmail.com>
-Subject: [PATCH v3 bpf-next 02/10] bpf: reuse btf_prepare_func_args() check for main program BTF validation
-Date: Thu, 14 Dec 2023 17:13:26 -0800
-Message-ID: <20231215011334.2307144-3-andrii@kernel.org>
+Subject: [PATCH v3 bpf-next 09/10] selftests/bpf: add global subprog annotation tests
+Date: Thu, 14 Dec 2023 17:13:33 -0800
+Message-ID: <20231215011334.2307144-10-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231215011334.2307144-1-andrii@kernel.org>
 References: <20231215011334.2307144-1-andrii@kernel.org>
@@ -39,268 +39,145 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: sk92RkomnJyUnrfgYwAGhbYbAMvXYpL6
-X-Proofpoint-GUID: sk92RkomnJyUnrfgYwAGhbYbAMvXYpL6
+X-Proofpoint-ORIG-GUID: FQTC_Bj1XC2-zz1in_1VimebuoZPR87B
+X-Proofpoint-GUID: FQTC_Bj1XC2-zz1in_1VimebuoZPR87B
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-12-14_17,2023-12-14_01,2023-05-22_02
 
-Instead of btf_check_subprog_arg_match(), use btf_prepare_func_args()
-logic to validate "trustworthiness" of main BPF program's BTF information=
-,
-if it is present.
-
-We ignored results of original BTF check anyway, often times producing
-confusing and ominously-sounding "reg type unsupported for arg#0
-function" message, which has no apparent effect on program correctness
-and verification process.
-
-All the -EFAULT returning sanity checks are already performed in
-check_btf_info_early(), so there is zero reason to have this duplication
-of logic between btf_check_subprog_call() and btf_check_subprog_arg_match=
-().
-Dropping btf_check_subprog_arg_match() simplifies
-btf_check_func_arg_match() further removing `bool processing_call` flag.
-
-One subtle bit that was done by btf_check_subprog_arg_match() was
-potentially marking main program's BTF as unreliable. We do this
-explicitly now with a dedicated simple check, preserving the original
-behavior, but now based on well factored btf_prepare_func_args() logic.
+Add test cases to validate semantics of global subprog argument
+annotations:
+  - non-null pointers;
+  - context argument;
+  - const dynptr passing;
+  - packet pointers (data, metadata, end).
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/bpf.h                           |  2 -
- kernel/bpf/btf.c                              | 50 ++-----------------
- kernel/bpf/verifier.c                         | 25 +++++-----
- .../selftests/bpf/prog_tests/log_fixup.c      |  4 +-
- .../selftests/bpf/progs/cgrp_kfunc_failure.c  |  2 +-
- .../selftests/bpf/progs/task_kfunc_failure.c  |  2 +-
- 6 files changed, 19 insertions(+), 66 deletions(-)
+ .../bpf/progs/verifier_global_subprogs.c      | 99 ++++++++++++++++++-
+ 1 file changed, 95 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 12490de06dbb..cf80cfe9f0be 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2491,8 +2491,6 @@ int btf_distill_func_proto(struct bpf_verifier_log =
-*log,
- 			   struct btf_func_model *m);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c=
+ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+index bd696a431244..9eeb2d89cda8 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
++++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+@@ -1,12 +1,11 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
 =20
- struct bpf_reg_state;
--int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subpro=
-g,
--				struct bpf_reg_state *regs);
- int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
- 			   struct bpf_reg_state *regs);
- int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog);
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index be2104e5f2f5..33d9a1c73f6e 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6768,8 +6768,7 @@ int btf_check_type_match(struct bpf_verifier_log *l=
-og, const struct bpf_prog *pr
- static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 				    const struct btf *btf, u32 func_id,
- 				    struct bpf_reg_state *regs,
--				    bool ptr_to_mem_ok,
--				    bool processing_call)
-+				    bool ptr_to_mem_ok)
- {
- 	enum bpf_prog_type prog_type =3D resolve_prog_type(env->prog);
- 	struct bpf_verifier_log *log =3D &env->log;
-@@ -6842,7 +6841,7 @@ static int btf_check_func_arg_match(struct bpf_veri=
-fier_env *env,
- 					i, btf_type_str(t));
- 				return -EINVAL;
- 			}
--		} else if (ptr_to_mem_ok && processing_call) {
-+		} else if (ptr_to_mem_ok) {
- 			const struct btf_type *resolve_ret;
- 			u32 type_size;
+-#include <stdbool.h>
+-#include <errno.h>
+-#include <string.h>
+-#include <linux/bpf.h>
++#include <vmlinux.h>
+ #include <bpf/bpf_helpers.h>
+ #include "bpf_misc.h"
++#include "xdp_metadata.h"
++#include "bpf_kfuncs.h"
 =20
-@@ -6867,55 +6866,12 @@ static int btf_check_func_arg_match(struct bpf_ve=
-rifier_env *env,
- 	return 0;
+ int arr[1];
+ int unkn_idx;
+@@ -98,4 +97,96 @@ int unguarded_unsupp_global_called(void)
+ 	return global_unsupp(&x);
  }
 =20
--/* Compare BTF of a function declaration with given bpf_reg_state.
-- * Returns:
-- * EFAULT - there is a verifier bug. Abort verification.
-- * EINVAL - there is a type mismatch or BTF is not available.
-- * 0 - BTF matches with what bpf_reg_state expects.
-- * Only PTR_TO_CTX and SCALAR_VALUE states are recognized.
-- */
--int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subpro=
-g,
--				struct bpf_reg_state *regs)
--{
--	struct bpf_prog *prog =3D env->prog;
--	struct btf *btf =3D prog->aux->btf;
--	bool is_global;
--	u32 btf_id;
--	int err;
--
--	if (!prog->aux->func_info)
--		return -EINVAL;
--
--	btf_id =3D prog->aux->func_info[subprog].type_id;
--	if (!btf_id)
--		return -EFAULT;
--
--	if (prog->aux->func_info_aux[subprog].unreliable)
--		return -EINVAL;
--
--	is_global =3D prog->aux->func_info_aux[subprog].linkage =3D=3D BTF_FUNC=
-_GLOBAL;
--	err =3D btf_check_func_arg_match(env, btf, btf_id, regs, is_global, fal=
-se);
--
--	/* Compiler optimizations can remove arguments from static functions
--	 * or mismatched type can be passed into a global function.
--	 * In such cases mark the function as unreliable from BTF point of view=
-.
--	 */
--	if (err)
--		prog->aux->func_info_aux[subprog].unreliable =3D true;
--	return err;
--}
--
- /* Compare BTF of a function call with given bpf_reg_state.
-  * Returns:
-  * EFAULT - there is a verifier bug. Abort verification.
-  * EINVAL - there is a type mismatch or BTF is not available.
-  * 0 - BTF matches with what bpf_reg_state expects.
-  * Only PTR_TO_CTX and SCALAR_VALUE states are recognized.
-- *
-- * NOTE: the code is duplicated from btf_check_subprog_arg_match()
-- * because btf_check_func_arg_match() is still doing both. Once that
-- * function is split in 2, we can call from here btf_check_subprog_arg_m=
-atch()
-- * first, and then treat the calling part in a new code path.
-  */
- int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
- 			   struct bpf_reg_state *regs)
-@@ -6937,7 +6893,7 @@ int btf_check_subprog_call(struct bpf_verifier_env =
-*env, int subprog,
- 		return -EINVAL;
-=20
- 	is_global =3D prog->aux->func_info_aux[subprog].linkage =3D=3D BTF_FUNC=
-_GLOBAL;
--	err =3D btf_check_func_arg_match(env, btf, btf_id, regs, is_global, tru=
-e);
-+	err =3D btf_check_func_arg_match(env, btf, btf_id, regs, is_global);
-=20
- 	/* Compiler optimizations can remove arguments from static functions
- 	 * or mismatched type can be passed into a global function.
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c0ac68d81356..540e4336290a 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19875,6 +19875,7 @@ static void free_states(struct bpf_verifier_env *=
-env)
- static int do_check_common(struct bpf_verifier_env *env, int subprog)
- {
- 	bool pop_log =3D !(env->log.level & BPF_LOG_LEVEL2);
-+	struct bpf_subprog_info *sub =3D subprog_info(env, subprog);
- 	struct bpf_verifier_state *state;
- 	struct bpf_reg_state *regs;
- 	int ret, i;
-@@ -19901,9 +19902,9 @@ static int do_check_common(struct bpf_verifier_en=
-v *env, int subprog)
- 	state->first_insn_idx =3D env->subprog_info[subprog].start;
- 	state->last_insn_idx =3D -1;
-=20
++long stack[128];
 +
- 	regs =3D state->frame[state->curframe]->regs;
- 	if (subprog || env->prog->type =3D=3D BPF_PROG_TYPE_EXT) {
--		struct bpf_subprog_info *sub =3D subprog_info(env, subprog);
- 		const char *sub_name =3D subprog_name(env, subprog);
- 		struct bpf_subprog_arg_info *arg;
- 		struct bpf_reg_state *reg;
-@@ -19950,21 +19951,19 @@ static int do_check_common(struct bpf_verifier_=
-env *env, int subprog)
- 			}
- 		}
- 	} else {
-+		/* if main BPF program has associated BTF info, validate that
-+		 * it's matching expected signature, and otherwise mark BTF
-+		 * info for main program as unreliable
-+		 */
-+		if (env->prog->aux->func_info_aux) {
-+			ret =3D btf_prepare_func_args(env, 0);
-+			if (ret || sub->arg_cnt !=3D 1 || sub->args[0].arg_type !=3D ARG_PTR_=
-TO_CTX)
-+				env->prog->aux->func_info_aux[0].unreliable =3D true;
-+		}
++__weak int subprog_nullable_ptr_bad(int *p)
++{
++	return (*p) * 2; /* bad, missing null check */
++}
 +
- 		/* 1st arg to a function */
- 		regs[BPF_REG_1].type =3D PTR_TO_CTX;
- 		mark_reg_known_zero(env, regs, BPF_REG_1);
--		ret =3D btf_check_subprog_arg_match(env, subprog, regs);
--		if (ret =3D=3D -EFAULT)
--			/* unlikely verifier bug. abort.
--			 * ret =3D=3D 0 and ret < 0 are sadly acceptable for
--			 * main() function due to backward compatibility.
--			 * Like socket filter program may be written as:
--			 * int bpf_prog(struct pt_regs *ctx)
--			 * and never dereference that ctx in the program.
--			 * 'struct pt_regs' is a type mismatch for socket
--			 * filter that should be using 'struct __sk_buff'.
--			 */
--			goto out;
- 	}
-=20
- 	ret =3D do_check(env);
-diff --git a/tools/testing/selftests/bpf/prog_tests/log_fixup.c b/tools/t=
-esting/selftests/bpf/prog_tests/log_fixup.c
-index effd78b2a657..7a3fa2ff567b 100644
---- a/tools/testing/selftests/bpf/prog_tests/log_fixup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/log_fixup.c
-@@ -169,9 +169,9 @@ void test_log_fixup(void)
- 	if (test__start_subtest("bad_core_relo_trunc_none"))
- 		bad_core_relo(0, TRUNC_NONE /* full buf */);
- 	if (test__start_subtest("bad_core_relo_trunc_partial"))
--		bad_core_relo(300, TRUNC_PARTIAL /* truncate original log a bit */);
-+		bad_core_relo(280, TRUNC_PARTIAL /* truncate original log a bit */);
- 	if (test__start_subtest("bad_core_relo_trunc_full"))
--		bad_core_relo(210, TRUNC_FULL  /* truncate also libbpf's message patch=
- */);
-+		bad_core_relo(220, TRUNC_FULL  /* truncate also libbpf's message patch=
- */);
- 	if (test__start_subtest("bad_core_relo_subprog"))
- 		bad_core_relo_subprog();
- 	if (test__start_subtest("missing_map"))
-diff --git a/tools/testing/selftests/bpf/progs/cgrp_kfunc_failure.c b/too=
-ls/testing/selftests/bpf/progs/cgrp_kfunc_failure.c
-index 0fa564a5cc5b..9fe9c4a4e8f6 100644
---- a/tools/testing/selftests/bpf/progs/cgrp_kfunc_failure.c
-+++ b/tools/testing/selftests/bpf/progs/cgrp_kfunc_failure.c
-@@ -78,7 +78,7 @@ int BPF_PROG(cgrp_kfunc_acquire_fp, struct cgroup *cgrp=
-, const char *path)
- }
-=20
- SEC("kretprobe/cgroup_destroy_locked")
--__failure __msg("reg type unsupported for arg#0 function")
-+__failure __msg("calling kernel function bpf_cgroup_acquire is not allow=
-ed")
- int BPF_PROG(cgrp_kfunc_acquire_unsafe_kretprobe, struct cgroup *cgrp)
- {
- 	struct cgroup *acquired;
-diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c b/too=
-ls/testing/selftests/bpf/progs/task_kfunc_failure.c
-index dcdea3127086..ad88a3796ddf 100644
---- a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-+++ b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-@@ -248,7 +248,7 @@ int BPF_PROG(task_kfunc_from_pid_no_null_check, struc=
-t task_struct *task, u64 cl
- }
-=20
- SEC("lsm/task_free")
--__failure __msg("reg type unsupported for arg#0 function")
-+__failure __msg("R1 must be a rcu pointer")
- int BPF_PROG(task_kfunc_from_lsm_task_free, struct task_struct *task)
- {
- 	struct task_struct *acquired;
++SEC("?raw_tp")
++__failure __log_level(2)
++__msg("invalid mem access 'mem_or_null'")
++int arg_tag_nullable_ptr_fail(void *ctx)
++{
++	int x =3D 42;
++
++	return subprog_nullable_ptr_bad(&x);
++}
++
++__noinline __weak int subprog_nonnull_ptr_good(int *p1 __arg_nonnull, in=
+t *p2 __arg_nonnull)
++{
++	return (*p1) * (*p2); /* good, no need for NULL checks */
++}
++
++int x =3D 47;
++
++SEC("?raw_tp")
++__success __log_level(2)
++int arg_tag_nonnull_ptr_good(void *ctx)
++{
++	int y =3D 74;
++
++	return subprog_nonnull_ptr_good(&x, &y);
++}
++
++/* this global subprog can be now called from many types of entry progs,=
+ each
++ * with different context type
++ */
++__weak int subprog_ctx_tag(void *ctx __arg_ctx)
++{
++	return bpf_get_stack(ctx, stack, sizeof(stack), 0);
++}
++
++SEC("?raw_tp")
++__success __log_level(2)
++int arg_tag_ctx_raw_tp(void *ctx)
++{
++	return subprog_ctx_tag(ctx);
++}
++
++SEC("?tp")
++__success __log_level(2)
++int arg_tag_ctx_tp(void *ctx)
++{
++	return subprog_ctx_tag(ctx);
++}
++
++SEC("?kprobe")
++__success __log_level(2)
++int arg_tag_ctx_kprobe(void *ctx)
++{
++	return subprog_ctx_tag(ctx);
++}
++
++__weak int subprog_dynptr(struct bpf_dynptr *dptr)
++{
++	long *d, t, buf[1] =3D {};
++
++	d =3D bpf_dynptr_data(dptr, 0, sizeof(long));
++	if (!d)
++		return 0;
++
++	t =3D *d + 1;
++
++	d =3D bpf_dynptr_slice(dptr, 0, &buf, sizeof(long));
++	if (!d)
++		return t;
++
++	t =3D *d + 2;
++
++	return t;
++}
++
++SEC("?xdp")
++__success __log_level(2)
++int arg_tag_dynptr(struct xdp_md *ctx)
++{
++	struct bpf_dynptr dptr;
++
++	bpf_dynptr_from_xdp(ctx, 0, &dptr);
++
++	return subprog_dynptr(&dptr);
++}
++
+ char _license[] SEC("license") =3D "GPL";
 --=20
 2.34.1
 
