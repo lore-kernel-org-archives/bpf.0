@@ -1,12 +1,12 @@
 Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D1D6FA4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2CDC6FA3
 	for <bpf@vger.kernel.org>; Mon, 18 Dec 2023 06:30:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 7E6D92BB1F6A1; Sun, 17 Dec 2023 22:30:31 -0800 (PST)
+	id 1CA462BB1F6E3; Sun, 17 Dec 2023 22:30:41 -0800 (PST)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -14,10 +14,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v4 0/7] bpf: Reduce memory usage for bpf_global_percpu_ma
-Date: Sun, 17 Dec 2023 22:30:31 -0800
-Message-Id: <20231218063031.3037929-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v4 2/7] bpf: Add objcg to bpf_mem_alloc
+Date: Sun, 17 Dec 2023 22:30:41 -0800
+Message-Id: <20231218063041.3039560-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231218063031.3037929-1-yonghong.song@linux.dev>
+References: <20231218063031.3037929-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -26,63 +28,75 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Currently when a bpf program intends to allocate memory for percpu kptr,
-the verifier will call bpf_mem_alloc_init() to prefill all supported
-unit sizes and this caused memory consumption very big for large number
-of cpus. For example, for 128-cpu system, the total memory consumption
-with initial prefill is ~175MB. Things will become worse for systems
-with even more cpus.
+The objcg is a bpf_mem_alloc level property since all bpf_mem_cache's
+are with the same objcg. This patch made such a property explicit.
+The next patch will use this property to save and restore objcg
+for percpu unit allocator.
 
-Patch 1 avoids unnecessary extra percpu memory allocation.
-Patch 2 adds objcg to bpf_mem_alloc at init stage so objcg can be
-associated with root cgroup and objcg can be passed to later
-bpf_mem_alloc_percpu_unit_init().
-Patch 3 addresses memory consumption issue by avoiding to prefill
-with all unit sizes, i.e. only prefilling with user specified size.
-Patch 4 further reduces memory consumption by limiting the
-number of prefill entries for percpu memory allocation.
-Patch 5 rejects percpu memory allocation with bpf_global_percpu_ma
-when allocation size is greater than 512 bytes.
-Patch 6 fixed test_bpf_ma test due to Patch 5.
-Patch 7 added one test to show the verification failure log message.
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ include/linux/bpf_mem_alloc.h |  1 +
+ kernel/bpf/memalloc.c         | 11 ++++++-----
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-Changelogs:
-  v3 -> v4:
-    . Add objcg to bpf_mem_alloc during init stage.
-    . Initialize objcg at init stage but use it in bpf_mem_alloc_percpu_u=
-nit_init().
-    . Remove check_obj_size() in bpf_mem_alloc_percpu_unit_init().
-  v2 -> v3:
-    . Clear the bpf_mem_cache if prefill fails.
-    . Change test_bpf_ma percpu allocation tests to use bucket_size
-      as allocation size instead of bucket_size - 8.
-    . Remove __GFP_ZERO flag from __alloc_percpu_gfp() call.
-  v1 -> v2:
-    . Avoid unnecessary extra percpu memory allocation.
-    . Add a separate function to do bpf_global_percpu_ma initialization
-    . promote.
-    . Promote function static 'sizes' array to file static.
-    . Add comments to explain to refill only one item for percpu alloc.
-
-Yonghong Song (7):
-  bpf: Avoid unnecessary extra percpu memory allocation
-  bpf: Add objcg to bpf_mem_alloc
-  bpf: Allow per unit prefill for non-fix-size percpu memory allocator
-  bpf: Refill only one percpu element in memalloc
-  bpf: Limit up to 512 bytes for bpf_global_percpu_ma allocation
-  selftests/bpf: Cope with 512 bytes limit with bpf_global_percpu_ma
-  selftests/bpf: Add a selftest with > 512-byte percpu allocation size
-
- include/linux/bpf.h                           |  2 +-
- include/linux/bpf_mem_alloc.h                 |  8 ++
- kernel/bpf/core.c                             |  8 +-
- kernel/bpf/memalloc.c                         | 90 ++++++++++++++++---
- kernel/bpf/verifier.c                         | 36 ++++----
- .../selftests/bpf/prog_tests/test_bpf_ma.c    | 20 +++--
- .../selftests/bpf/progs/percpu_alloc_fail.c   | 18 ++++
- .../testing/selftests/bpf/progs/test_bpf_ma.c | 34 +++----
- 8 files changed, 160 insertions(+), 56 deletions(-)
-
+diff --git a/include/linux/bpf_mem_alloc.h b/include/linux/bpf_mem_alloc.=
+h
+index bb1223b21308..acef8c808599 100644
+--- a/include/linux/bpf_mem_alloc.h
++++ b/include/linux/bpf_mem_alloc.h
+@@ -11,6 +11,7 @@ struct bpf_mem_caches;
+ struct bpf_mem_alloc {
+ 	struct bpf_mem_caches __percpu *caches;
+ 	struct bpf_mem_cache __percpu *cache;
++	struct obj_cgroup *objcg;
+ 	bool percpu;
+ 	struct work_struct work;
+ };
+diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
+index 00e101c2a68b..dfde9d9a3e1d 100644
+--- a/kernel/bpf/memalloc.c
++++ b/kernel/bpf/memalloc.c
+@@ -544,6 +544,7 @@ int bpf_mem_alloc_init(struct bpf_mem_alloc *ma, int =
+size, bool percpu)
+ 		if (memcg_bpf_enabled())
+ 			objcg =3D get_obj_cgroup_from_current();
+ #endif
++		ma->objcg =3D objcg;
+ 		for_each_possible_cpu(cpu) {
+ 			c =3D per_cpu_ptr(pc, cpu);
+ 			c->unit_size =3D unit_size;
+@@ -564,6 +565,7 @@ int bpf_mem_alloc_init(struct bpf_mem_alloc *ma, int =
+size, bool percpu)
+ #ifdef CONFIG_MEMCG_KMEM
+ 	objcg =3D get_obj_cgroup_from_current();
+ #endif
++	ma->objcg =3D objcg;
+ 	for_each_possible_cpu(cpu) {
+ 		cc =3D per_cpu_ptr(pcc, cpu);
+ 		for (i =3D 0; i < NUM_CACHES; i++) {
+@@ -729,9 +731,8 @@ void bpf_mem_alloc_destroy(struct bpf_mem_alloc *ma)
+ 			rcu_in_progress +=3D atomic_read(&c->call_rcu_ttrace_in_progress);
+ 			rcu_in_progress +=3D atomic_read(&c->call_rcu_in_progress);
+ 		}
+-		/* objcg is the same across cpus */
+-		if (c->objcg)
+-			obj_cgroup_put(c->objcg);
++		if (ma->objcg)
++			obj_cgroup_put(ma->objcg);
+ 		destroy_mem_alloc(ma, rcu_in_progress);
+ 	}
+ 	if (ma->caches) {
+@@ -747,8 +748,8 @@ void bpf_mem_alloc_destroy(struct bpf_mem_alloc *ma)
+ 				rcu_in_progress +=3D atomic_read(&c->call_rcu_in_progress);
+ 			}
+ 		}
+-		if (c->objcg)
+-			obj_cgroup_put(c->objcg);
++		if (ma->objcg)
++			obj_cgroup_put(ma->objcg);
+ 		destroy_mem_alloc(ma, rcu_in_progress);
+ 	}
+ }
 --=20
 2.34.1
 
