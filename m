@@ -1,102 +1,182 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F16837D08;
-	Tue, 19 Dec 2023 17:32:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 072254B159
+	for <bpf@vger.kernel.org>; Tue, 19 Dec 2023 18:10:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tjPJ7AQy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B3FEC433C7;
-	Tue, 19 Dec 2023 17:32:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703007155;
-	bh=DOLY6rWmqh5ec0k9/aGUb6iYDuhsCvDc9FcVXRqGXm4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tjPJ7AQyB069VymZHh3C1d/6yI3kNKO1rlQSK0aQhGEFqUitPJlnxGqWupu8g1RZy
-	 lZs635rpWABVBGTNxfMl09sax+fbBUJ2fUCAAa77MkhVxbIculES3iUEMK2zyLKc+q
-	 04g90wUmD3iof+0tOyTYK92MOs8CazWjav/9DA/lP9Il7wX1FspTWTNo8h48KktKti
-	 cjuMEtb5Rs5UzIUSLotj7plo5xgCtYvKGveZVw6eno1iUEnQO7GJxIMAxCvAjsY0B7
-	 dRhOHEZrYy8dQ0vmhBjrtqTQrPaGwVSvOhI3xPOWVoPhwRGxw6c0PGkl863m05QFR8
-	 ahtIEWe5pafRw==
-Date: Tue, 19 Dec 2023 18:32:31 +0100
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Eric Dumazet <edumazet@google.com>
-Cc: netdev@vger.kernel.org, lorenzo.bianconi@redhat.com,
-	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-	bpf@vger.kernel.org, hawk@kernel.org, toke@redhat.com,
-	willemdebruijn.kernel@gmail.com, jasowang@redhat.com,
-	sdf@google.com
-Subject: Re: [PATCH v5 net-next 1/3] net: introduce page_pool pointer in
- softnet_data percpu struct
-Message-ID: <ZYHTr-26328RpBDf@lore-desk>
-References: <cover.1702563810.git.lorenzo@kernel.org>
- <b1432fc51c694f1be8daabb19773744fcee13cf1.1702563810.git.lorenzo@kernel.org>
- <CANn89iKytnOU3_mR2RidXE74ad3x9QdWxGf+OZei4tpL8Wvcbw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="Y8xOiDBc"
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-7b72192f7a1so134395439f.1
+        for <bpf@vger.kernel.org>; Tue, 19 Dec 2023 10:10:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1703009410; x=1703614210; darn=vger.kernel.org;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lMm17hdBABlvAAX+Jp30S5DFYwbSvzQKlSkr+nKcGZk=;
+        b=Y8xOiDBcVTcDaZkfPUd5mjBXhwpfvtLjlCytWhEioqB/ZENL69qgNfwBxTTUk00QiR
+         5VVguZfjTwpccHLX8E9ypUyFBeAjoqPqiCupAm+eh54U2/ncxoOwrF5O4p+XdiV3Wfuu
+         w/6JqQP+1Vpd+HKuvEOTKx/BkIm0lbNuchXMFvDKKzTw/rcZQmCo1LBNYMHUGp7OzaVM
+         6yHrpqBdpzV/WyggxOPGgn1KQoSV8AuYGqOdubi8iJmtztJWfHDeZxcwpUe9KDbQ9aC8
+         OHrz5on2WpfFNg8OIgEhGFdQHZCBG65aAFim0ZDTQf/13Kl8Dpwn8j/uDGWquNBvA9Lz
+         NWnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703009410; x=1703614210;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lMm17hdBABlvAAX+Jp30S5DFYwbSvzQKlSkr+nKcGZk=;
+        b=xVKHAblWN0vfmkSqkU0O/Po2B8eUvh14U0Q+JsInLlJP6+hPLV1Hu5+ArVu3ccqwfp
+         r+N/Puvj0z4TltCdJdsmGh+zd79khgVgYiY5PH0SrgH0peUU7NvtnPrg73Fn5uX78Y85
+         BMQtZc0hOzO5eXvq6HhcyskKINSjJkfmLp6X3qTGgbPIoG0QLJoV3WZ8hVUK1u1Du20i
+         3unfblwnaGB1N+qd5fObvUhBnf2g8JnrTjK5CzXcX71ejSIfAXtxuqXKARh6N69Z7dSK
+         invG7YSeQMrinl2/jACtLOzsJd+ECx+TU5F/UTXU3LeGi25CIJlxGoNyRgSfKBRWsp41
+         jWYA==
+X-Gm-Message-State: AOJu0YyBAvpvltUoqrLqEZbXIItNPWvpwub2lgFlTgszVmZSRUPg3yMQ
+	YVbYg7Rjwd2WuZDNtOs5mwQ=
+X-Google-Smtp-Source: AGHT+IEhQqJUfiNDfm9kkCk4z2PTctMDc+zGKUmjHSgfspNLWEtaSnc0LKSN7fA9oImITrwb0j5S2Q==
+X-Received: by 2002:a5e:df06:0:b0:7b4:37db:9fe1 with SMTP id f6-20020a5edf06000000b007b437db9fe1mr1406301ioq.10.1703009409844;
+        Tue, 19 Dec 2023 10:10:09 -0800 (PST)
+Received: from ArmidaleLaptop (c-67-170-74-237.hsd1.wa.comcast.net. [67.170.74.237])
+        by smtp.gmail.com with ESMTPSA id f9-20020a05660215c900b007b34b18c31esm6671939iow.50.2023.12.19.10.10.08
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 19 Dec 2023 10:10:09 -0800 (PST)
+From: dthaler1968@googlemail.com
+X-Google-Original-From: <dthaler1968@gmail.com>
+To: "'Alexei Starovoitov'" <alexei.starovoitov@gmail.com>,
+	"'Christoph Hellwig'" <hch@infradead.org>
+Cc: "'David Vernet'" <void@manifault.com>,
+	<bpf@ietf.org>,
+	"'bpf'" <bpf@vger.kernel.org>,
+	"'Jakub Kicinski'" <kuba@kernel.org>
+References: <20231207215152.GA168514@maniforge> <CAADnVQ+Mhe6ean6J3vH1ugTyrgWNxupLoFfwKu6-U=3R8i1TNQ@mail.gmail.com> <20231212214532.GB1222@maniforge> <157b01da2d46$b7453e20$25cfba60$@gmail.com> <CAADnVQKd7X1v6CwCa2MyJjQkN8hKsHJ_g9Kk5CwWSbp9+1_3zw@mail.gmail.com> <20231212233555.GA53579@maniforge> <CAADnVQJ-JwNTY5fW-oXdTur9aDrv2NQoreTH3yYZemVBVtq9fQ@mail.gmail.com> <20231213185603.GA1968@maniforge> <CAADnVQLOjByUKJNyLdvDzwuegtjZFwrttHft_1o8BoyDCXQvDQ@mail.gmail.com> <20231214174437.GA2853@maniforge> <ZXvkS4qmRMZqlWhA@infradead.org> <CAADnVQ+ExRC_RavN_sbuOmuwyP6+HKnV9bFjJOseORBaVw0Jcg@mail.gmail.com>
+In-Reply-To: <CAADnVQ+ExRC_RavN_sbuOmuwyP6+HKnV9bFjJOseORBaVw0Jcg@mail.gmail.com>
+Subject: RE: [Bpf] BPF ISA conformance groups
+Date: Tue, 19 Dec 2023 10:10:07 -0800
+Message-ID: <09dc01da32a6$99c97e50$cd5c7af0$@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="CbQoNBFBfWs13DN6"
-Content-Disposition: inline
-In-Reply-To: <CANn89iKytnOU3_mR2RidXE74ad3x9QdWxGf+OZei4tpL8Wvcbw@mail.gmail.com>
-
-
---CbQoNBFBfWs13DN6
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain;
+	charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQKoHfZj5uHVGAGiwHvRzOg12FLYygKw8KxkAzczMysBTloCHQIk6QWGAWJPEj4BybpNsgH6K/FdAa4N7FEApYq+pQJboihlAe8iqfCubA4ykA==
+Content-Language: en-us
 
-> On Thu, Dec 14, 2023 at 3:30=E2=80=AFPM Lorenzo Bianconi <lorenzo@kernel.=
-org> wrote:
-> >
-> > Allocate percpu page_pools in softnet_data.
-> > Moreover add cpuid filed in page_pool struct in order to recycle the
-> > page in the page_pool "hot" cache if napi_pp_put_page() is running on
-> > the same cpu.
-> > This is a preliminary patch to add xdp multi-buff support for xdp runni=
-ng
-> > in generic mode.
-> >
-> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > ---
-> >  include/linux/netdevice.h       |  1 +
-> >  include/net/page_pool/helpers.h |  5 +++++
-> >  include/net/page_pool/types.h   |  1 +
-> >  net/core/dev.c                  | 39 ++++++++++++++++++++++++++++++++-
-> >  net/core/page_pool.c            |  5 +++++
-> >  net/core/skbuff.c               |  5 +++--
-> >  6 files changed, 53 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> > index 1b935ee341b4..30b6a3f601fe 100644
-> > --- a/include/linux/netdevice.h
-> > +++ b/include/linux/netdevice.h
-> > @@ -3319,6 +3319,7 @@ struct softnet_data {
-> >         int                     defer_count;
-> >         int                     defer_ipi_scheduled;
-> >         struct sk_buff          *defer_list;
-> > +       struct page_pool        *page_pool;
-> >         call_single_data_t      defer_csd;
-> >  };
+> -----Original Message-----
+> From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Sent: Monday, December 18, 2023 5:15 PM
+> To: Christoph Hellwig <hch@infradead.org>
+> Cc: David Vernet <void@manifault.com>; Dave Thaler
+> <dthaler1968@googlemail.com>; bpf@ietf.org; bpf <bpf@vger.kernel.org>;
+> Jakub Kicinski <kuba@kernel.org>
+> Subject: Re: [Bpf] BPF ISA conformance groups
 >=20
-> This field should be put elsewhere, not in this contended cache line.
+> On Thu, Dec 14, 2023 at 9:29=E2=80=AFPM Christoph Hellwig =
+<hch@infradead.org>
+> wrote:
+> >
+> > We need the concept in the spec just to allow future extensability.
+>=20
+> Completely agree that the concept of the groups is necessary.
+>=20
+> I'm arguing that what was proposed:
+> 1. "basic": all instructions not covered by another group below.
+> 2. "atomic": all Atomic operations.
+> 3. "divide": all division and modulo operations.
+> 4. "legacy": all legacy packet access instructions (deprecated).
+> 5. "map": 64-bit immediate instructions that deal with map fds or map
+> indices.
+> 6. "code": 64-bit immediate instruction that has a "code pointer" =
+type.
+> 7. "func": program-local functions.
+>=20
+> logically makes sense, but might not work for HW (based on the history =
+of nfp
+> offload).
+> imo "basic" and "legacy" won't work either.
+> So it's a lesser evil.
+>=20
+> Anyway, let's look at:
+>=20
+>    | BPF_CALL | 0x8   | 0x0 | call helper         | see Helper        =
+|
+>    |          |       |     | function by address | functions         =
+|
+>    |          |       |     |                     | (Section 3.3.1)   =
+|
+>    =
++----------+-------+-----+---------------------+-------------------+
+>    | BPF_CALL | 0x8   | 0x1 | call PC +=3D imm      | see =
+Program-local |
+>    |          |       |     |                     | functions         =
+|
+>    |          |       |     |                     | (Section 3.3.2)   =
+|
+>    =
++----------+-------+-----+---------------------+-------------------+
+>    | BPF_CALL | 0x8   | 0x2 | call helper         | see Helper        =
+|
+>    |          |       |     | function by BTF ID  | functions         =
+|
+>    |          |       |     |                     | (Section 3.3.
+>=20
+> Having separate category 7 for single insn BPF_CALL 0x8 0x1 while =
+keeping 0x8
+> 0x0 and 0x8 0x2 in "basic" seems just as logical as having atomic_add =
+insn in
+> "basic" instead of "atomic".
 
-ack, I think we could add a percpu dedicated pointer for it.
+If a platform exposes no helper functions, then 0x8 0x0 and 0x8 0x2 have =
+no
+meaning and in my view don't need a separate conformance group since a
+program using them would fail the verifier anyway.
 
-Regards,
-Lorenzo
+0x8 0x1 on the other hand wouldn't be invalid just due to the imm value,
+and so tools (compiler, verifier, whatever) need some other way to know =
+whether
+it's supported, hence the conformance group.
 
---CbQoNBFBfWs13DN6
-Content-Type: application/pgp-signature; name="signature.asc"
+> Then we have several kinds of ld_imm64. Sounds like the idea is to =
+split 0x18
+> 0x4 into "code" and the rest into "map" group?
+> Is it logical or not?
 
------BEGIN PGP SIGNATURE-----
+I don't know of another easy way for a tool like a compiler (LLVM, gcc, =
+rust compiler,
+etc.) to know whether map instructions are legal or not. =20
 
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZYHTrwAKCRA6cBh0uS2t
-rBAFAP4ijVWyw72BYaRqhg68zQNqUWJ+kMkRtWwAsGew9NjQmgEAqGpMs7dKz4YQ
-V6jwoyX9cgiJcBC2j7/htNO/0C11Tgc=
-=lP2u
------END PGP SIGNATURE-----
+That said, I think map_val() is problematic for a cross-platform =
+compiler...
+https://elixir.bootlin.com/linux/latest/source/Documentation/bpf/linux-no=
+tes.rst says
+"Linux only supports the 'map_val(map)' operation on array maps with a =
+single element."
+Now if one platform supports it on one type of map and another platform =
+doesn't, then
+the compiler has to magically know whether to allow this optimization =
+(compared to
+requiring using a helper function to access the map value) or not.
 
---CbQoNBFBfWs13DN6--
+> Maybe we should do risc-v like group instead?
+> Just these 4:
+> - Base Integer Instruction Set, 32-bit
+> - Base Integer Instruction Set, 64-bit
+
+If there's platforms that would support one of the above and not the =
+other
+(are there?) then I agree splitting them would make sense.
+
+> - Integer Multiplication and Division
+> - Atomic Instructions
+>=20
+> And that's it. The rest of risc-v groups have no equivalent in bpf =
+isa.
+
+Dave
+
