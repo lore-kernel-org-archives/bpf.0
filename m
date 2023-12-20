@@ -1,88 +1,188 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B4E156DD
-	for <bpf@vger.kernel.org>; Wed, 20 Dec 2023 03:15:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B912E8BEB
+	for <bpf@vger.kernel.org>; Wed, 20 Dec 2023 03:28:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eJ+LlchS"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-33678156e27so455451f8f.1
-        for <bpf@vger.kernel.org>; Tue, 19 Dec 2023 19:15:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gidj2hWw"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3363aa1b7d2so5000536f8f.0
+        for <bpf@vger.kernel.org>; Tue, 19 Dec 2023 19:28:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703042154; x=1703646954; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1703042902; x=1703647702; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=v/CrLnxMRSrvlfnjGyC6iy0wIbb6Nuyt+sfPMzhghKE=;
-        b=eJ+LlchSAzw0qcXafzH7Q7oA5Mfyl1jrTYaC420ZhXU5c713vZh7alwi+Ta4p2y8hM
-         xvnDj4Phca84oRU6s7eE+VGfuLdsEGdfRl+sbDBOa4fZODlvos2ggd+PqNuuG74Ka8Kh
-         x68kfiuPcfFp+PorgB5HlRFQCf34wyF/2Czy0aaJAiCWDAdTcGdfqFZe6a8FDjTDfy7s
-         2vuffGifAYub7H/WQSTw/rjBNnrRVQF74tbfOyvztL6rR3mUk1Hd90nTRdU5dLkEsfqv
-         0B5UPbCej4Rrr78j13YU+S37X1w4iFtTRvrdIwVXRqQpQTLzaNY3fMbfpgYyOSMuARuP
-         912A==
+        bh=Y9POoxbdNum3UVcHqKRpm9QHWYivjj/110SpNeUmOkA=;
+        b=gidj2hWw31oVF9BAbAj984zdLfyl05JluRIxzZkOcWM9AsyPW6U55AHLUhHzNdORsX
+         r35wGW96tn66kvJQNoVtjRCxUezJQpA3oNK/eEFWO8wRVLEZrh1Vtm/hMoaxH4oy0el+
+         FOEcpgurD7DG5R2w5QoHvlwQ5cAwB+7yeYJh3WZEIUwyTwOeUK6bXk1h17xykrcMjcpE
+         m2/SO+oPJPzsXa9bdMujbXQFTLOOQPtiBXyzOBe/m2PrR1D8B6WyUZwBtFrxZiTbAiUO
+         yxsRPhJhV409W2JL19/kOMbmCMFi2bfMzyrP3tlUfgsEUgdA5d+r4siVBjcvOnvlirro
+         sd6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703042154; x=1703646954;
+        d=1e100.net; s=20230601; t=1703042902; x=1703647702;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=v/CrLnxMRSrvlfnjGyC6iy0wIbb6Nuyt+sfPMzhghKE=;
-        b=n/QRCNyaxGPJALO41PkqRfiZjS+WogopwMuRhaWI+jlG0SdT7hrzxiUi7yf6cFV0MF
-         bEILXXZBX/MsVmnR/LUEcY/T0oW1tlLG3KdV6jp+cySI6lgOhEx0fovFP6R22wixcsHO
-         cd/xkko5HnnmOCavW+vc/fXrYTKsjXAaRGCYNS3pu1gAuhFT38ZD71FPShMH/Aanjgr1
-         Y3q7CKI88VqPebX/8oLTHjLV2MF5DzFjq4QgSYlgT2Yix00lC8F8H7aYPi2XE8EsU4Ms
-         uskfhWw2Rh5QTQVK5LY0e/XQchKSqqyGPqPOl1iHfY9GiFqvqTuTIITVdBilmtr6QKqJ
-         IVhw==
-X-Gm-Message-State: AOJu0Yy//wDBfYgSyetXjpa0nTjJ7P8/LWL6av/34LdhaIfM1ASArpQu
-	zWF2rFzpBRt0zKaNX6g+HCFmTSJIkXNJx2/Qt9c=
-X-Google-Smtp-Source: AGHT+IGkzwnTsTL67YampZx1yDCiX3p2+KcS6sn+10w+zwu888uNrQMAo92Gm4sz9VZIJtnzJb49NemM28sLTHQgP+I=
-X-Received: by 2002:adf:edc3:0:b0:336:6f9e:fb7f with SMTP id
- v3-20020adfedc3000000b003366f9efb7fmr1396697wro.0.1703042154413; Tue, 19 Dec
- 2023 19:15:54 -0800 (PST)
+        bh=Y9POoxbdNum3UVcHqKRpm9QHWYivjj/110SpNeUmOkA=;
+        b=xG4vOXtV8GWnOODiJBLtzT38tfE291mhYZlKWSLmWiQgXvtF8lgHD6JxLbr0O+gtmZ
+         b21tGvJI+1LNUFrlkmXkEbQXDI+S0DpZnTbZnQgEtaQVEjheNgmyl+oZSgyIRFDxXMm0
+         nyxhNIuvviQikoi05wgLMktFRGk1gCJ3uf4q98QA1UMhzwLhKwq4hma/zjfpzPY4RMJD
+         Ft323PHT1oWJkfs5DIg0tBmGuB2Ec66dFGN0FpzBvsvDkDoOTbxrzplk1fya4hW+QGDe
+         RwtO0hk3x3zAyg7PD7AeYGspfFqSXKkXMmu25ePa3x608ru+ItkVCBeXDjwaL4l/CMJW
+         04Yw==
+X-Gm-Message-State: AOJu0YxSVTJUZdr4ZC4Fh7k9k2CQeMY8+LYiBtjRLTUBmxcvq4Nh1vBT
+	mpTFr7i6r1BZNf9NIn/c7+jGak9UBxDkJNIZxms=
+X-Google-Smtp-Source: AGHT+IEePuYmZLehmROlU5HnWN74KQqvOsRUHfYU7b7m+KYIHIwiAoxXQeQqIpcVQVMc0XTFAKATuyiGPoVnQdmKqAk=
+X-Received: by 2002:a5d:50c7:0:b0:336:7050:a4d1 with SMTP id
+ f7-20020a5d50c7000000b003367050a4d1mr965616wrt.194.1703042901602; Tue, 19 Dec
+ 2023 19:28:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <67b0a25f-b75b-453c-9dde-17adf527a14a@app.fastmail.com>
-In-Reply-To: <67b0a25f-b75b-453c-9dde-17adf527a14a@app.fastmail.com>
+References: <20231207215152.GA168514@maniforge> <CAADnVQ+Mhe6ean6J3vH1ugTyrgWNxupLoFfwKu6-U=3R8i1TNQ@mail.gmail.com>
+ <20231212214532.GB1222@maniforge> <157b01da2d46$b7453e20$25cfba60$@gmail.com>
+ <CAADnVQKd7X1v6CwCa2MyJjQkN8hKsHJ_g9Kk5CwWSbp9+1_3zw@mail.gmail.com>
+ <20231212233555.GA53579@maniforge> <CAADnVQJ-JwNTY5fW-oXdTur9aDrv2NQoreTH3yYZemVBVtq9fQ@mail.gmail.com>
+ <20231213185603.GA1968@maniforge> <CAADnVQLOjByUKJNyLdvDzwuegtjZFwrttHft_1o8BoyDCXQvDQ@mail.gmail.com>
+ <20231214174437.GA2853@maniforge> <ZXvkS4qmRMZqlWhA@infradead.org>
+ <CAADnVQ+ExRC_RavN_sbuOmuwyP6+HKnV9bFjJOseORBaVw0Jcg@mail.gmail.com> <09dc01da32a6$99c97e50$cd5c7af0$@gmail.com>
+In-Reply-To: <09dc01da32a6$99c97e50$cd5c7af0$@gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 19 Dec 2023 19:15:42 -0800
-Message-ID: <CAADnVQLYafmCffxbpxcTFf09W6XqgXCRH6V4gpRL+82+OMMVMA@mail.gmail.com>
-Subject: Re: Dynamic kfunc discovery
-To: Daniel Xu <dxu@dxuuu.xyz>
-Cc: "bpf@vger.kernel.org" <bpf@vger.kernel.org>, Quentin Monnet <quentin@isovalent.com>
+Date: Tue, 19 Dec 2023 19:28:10 -0800
+Message-ID: <CAADnVQ+Kb20aUZdcqSh5eF-_dzpHWcpjAtYpLgg5Fqog=g7hpA@mail.gmail.com>
+Subject: Re: [Bpf] BPF ISA conformance groups
+To: Dave Thaler <dthaler1968@googlemail.com>
+Cc: Christoph Hellwig <hch@infradead.org>, David Vernet <void@manifault.com>, bpf@ietf.org, 
+	bpf <bpf@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 19, 2023 at 9:29=E2=80=AFAM Daniel Xu <dxu@dxuuu.xyz> wrote:
+On Tue, Dec 19, 2023 at 10:10=E2=80=AFAM <dthaler1968@googlemail.com> wrote=
+:
 >
-> Hi,
+> > -----Original Message-----
+> > From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> > Sent: Monday, December 18, 2023 5:15 PM
+> > To: Christoph Hellwig <hch@infradead.org>
+> > Cc: David Vernet <void@manifault.com>; Dave Thaler
+> > <dthaler1968@googlemail.com>; bpf@ietf.org; bpf <bpf@vger.kernel.org>;
+> > Jakub Kicinski <kuba@kernel.org>
+> > Subject: Re: [Bpf] BPF ISA conformance groups
+> >
+> > On Thu, Dec 14, 2023 at 9:29=E2=80=AFPM Christoph Hellwig <hch@infradea=
+d.org>
+> > wrote:
+> > >
+> > > We need the concept in the spec just to allow future extensability.
+> >
+> > Completely agree that the concept of the groups is necessary.
+> >
+> > I'm arguing that what was proposed:
+> > 1. "basic": all instructions not covered by another group below.
+> > 2. "atomic": all Atomic operations.
+> > 3. "divide": all division and modulo operations.
+> > 4. "legacy": all legacy packet access instructions (deprecated).
+> > 5. "map": 64-bit immediate instructions that deal with map fds or map
+> > indices.
+> > 6. "code": 64-bit immediate instruction that has a "code pointer" type.
+> > 7. "func": program-local functions.
+> >
+> > logically makes sense, but might not work for HW (based on the history =
+of nfp
+> > offload).
+> > imo "basic" and "legacy" won't work either.
+> > So it's a lesser evil.
+> >
+> > Anyway, let's look at:
+> >
+> >    | BPF_CALL | 0x8   | 0x0 | call helper         | see Helper        |
+> >    |          |       |     | function by address | functions         |
+> >    |          |       |     |                     | (Section 3.3.1)   |
+> >    +----------+-------+-----+---------------------+-------------------+
+> >    | BPF_CALL | 0x8   | 0x1 | call PC +=3D imm      | see Program-local=
+ |
+> >    |          |       |     |                     | functions         |
+> >    |          |       |     |                     | (Section 3.3.2)   |
+> >    +----------+-------+-----+---------------------+-------------------+
+> >    | BPF_CALL | 0x8   | 0x2 | call helper         | see Helper        |
+> >    |          |       |     | function by BTF ID  | functions         |
+> >    |          |       |     |                     | (Section 3.3.
+> >
+> > Having separate category 7 for single insn BPF_CALL 0x8 0x1 while keepi=
+ng 0x8
+> > 0x0 and 0x8 0x2 in "basic" seems just as logical as having atomic_add i=
+nsn in
+> > "basic" instead of "atomic".
 >
-> I was chatting w/ Quentin [0] about how bpftool could:
->
-> 1. Support a "feature dump" of all supported kfuncs on running kernel
-> 2. Generate vmlinux.h with kfunc prototypes
->
-> I had another idea this morning so I thought I'd bounce it around
-> on the list in case others had better ones. 3 vague ideas:
->
-> 1. Add a BTF type tag annotation in __bpf_kfunc macro. This would
->    let bpftool parse BTF to do discovery. It would be fairly clean and
->    straightforward, except that I don't think GCC supports these type
->    tags. So only clang-built-linux would work.
->
-> 2. Do the same thing as above, except rather than tagging src code,
->    teach pahole about the .BTF_ids section in vmlinux. pahole could then
->    construct BTF with the appropriate type tags.
+> If a platform exposes no helper functions, then 0x8 0x0 and 0x8 0x2 have =
+no
+> meaning and in my view don't need a separate conformance group since a
+> program using them would fail the verifier anyway.
 
-resolve_btfids knows about all of them already.
-The best is to teach bpftool about them as well.
-It can look for BTF_SET8_START and there it can find btf_ids
-of all kfuncs.
-From there it can generate them into vmlinux.h
+Right, but bringing the verifier into the "compliance picture"
+makes the ISA standard incomplete.
+Same can be said about nfp compliance. It's compliant with an ISA,
+but the verifier will reject things it doesn't support.
+The instruction groups need to be binary from compliance pov
+without external input.
 
-We wanted kfuncs to appear in vmlinux.h for quite some time,
-but no one had cycles to do it.
-Still an awesome feature to have.
+I think if we move one call 8 1 into a separate group we
+better move all call flavors into the same group or have 3 groups
+for 3 different flavors of calls.
+
+> 0x8 0x1 on the other hand wouldn't be invalid just due to the imm value,
+> and so tools (compiler, verifier, whatever) need some other way to know w=
+hether
+> it's supported, hence the conformance group.
+>
+> > Then we have several kinds of ld_imm64. Sounds like the idea is to spli=
+t 0x18
+> > 0x4 into "code" and the rest into "map" group?
+> > Is it logical or not?
+>
+> I don't know of another easy way for a tool like a compiler (LLVM, gcc, r=
+ust compiler,
+> etc.) to know whether map instructions are legal or not.
+>
+> That said, I think map_val() is problematic for a cross-platform compiler=
+...
+> https://elixir.bootlin.com/linux/latest/source/Documentation/bpf/linux-no=
+tes.rst says
+> "Linux only supports the 'map_val(map)' operation on array maps with a si=
+ngle element."
+> Now if one platform supports it on one type of map and another platform d=
+oesn't, then
+> the compiler has to magically know whether to allow this optimization (co=
+mpared to
+> requiring using a helper function to access the map value) or not.
+
+Compiler has no idea.
+All ld_imm64 and call insns look the same. The compiler emits
+them the same way.
+The src_reg encoding is what libbpf does based on compiler relocations.
+
+Then the verifier checks them differently and later JIT sees
+_all_ ld_imm64 as one type of instruction.
+Same with call insn. To x86/arm64/riscv JITs there is only one BPF CALL ins=
+n.
+
+>
+> > Maybe we should do risc-v like group instead?
+> > Just these 4:
+> > - Base Integer Instruction Set, 32-bit
+> > - Base Integer Instruction Set, 64-bit
+>
+> If there's platforms that would support one of the above and not the othe=
+r
+> (are there?) then I agree splitting them would make sense.
+
+nfp is an example. It kinda sorta supports 64-bit, but very much
+prefers 32.
+All 32-bit architectures is another example.
+They JIT nicely all 32-bit ops and struggle with 64.
