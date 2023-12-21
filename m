@@ -1,132 +1,150 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
+Received: from out-175.mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0357BE4B
-	for <bpf@vger.kernel.org>; Thu, 21 Dec 2023 07:07:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74985D309
+	for <bpf@vger.kernel.org>; Thu, 21 Dec 2023 07:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="PKiuYFYr";
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="Q+Tp+w2+";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="L7G4Gowp"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 255D0C05E02D
-	for <bpf@vger.kernel.org>; Wed, 20 Dec 2023 23:07:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1703142464; bh=Vgm0Yrkfobs3zpmxb/uJjXX0IoRM3FSdLxtTpT5OthE=;
-	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=PKiuYFYrQyyc0ydYEiXtO4rpT6rsCEbBj90NaAr4k8L3rMnNTFhLiWvgsTdm2bbIx
-	 KGfohw5joF30DMFRQqSG9SCi/vNCgC73oJCAOjAfTuOdYDKo62ojdZYWI1aSaiPRE4
-	 FAa5XOzxMzs+qDnli1Xa5qfsp7iKUADYpsdKypn4=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Wed Dec 20 23:07:43 2023
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id CA1E1C0900A8;
-	Wed, 20 Dec 2023 23:07:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1703142463; bh=Vgm0Yrkfobs3zpmxb/uJjXX0IoRM3FSdLxtTpT5OthE=;
-	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=Q+Tp+w2+r+zLvvhlyia18+3g1GSohgsLhn5URo/OtMssfotC82LLoVqALgB90rpGq
-	 MLDGSb8F/e7OaCromhz/1n+jJNA8/CiC0NVxOTbGdpranz08eJmCOT46XhPnHGf6m6
-	 xqtLXE3iL8YntLvDeeCS9afiSmrEvR5GzuqEcIkY=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id F04BBC0900D3
- for <bpf@ietfa.amsl.com>; Wed, 20 Dec 2023 23:01:12 -0800 (PST)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -7.105
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=infradead.org
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HVYEj-6h9RWh for <bpf@ietfa.amsl.com>;
- Wed, 20 Dec 2023 23:01:08 -0800 (PST)
-Received: from bombadil.infradead.org (bombadil.infradead.org
- [IPv6:2607:7c80:54:3::133])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 93E18C0900CD
- for <bpf@ietf.org>; Wed, 20 Dec 2023 23:01:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
- :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
- Content-Transfer-Encoding:Content-ID:Content-Description;
- bh=WgSuIT2NBDUdtfjNASaE2uehI2DEDcypBzqXZftgAyg=; b=L7G4GowpweruwUNjOpHQHGWnQt
- nkIVACetLM8oNAg1XLNz7/ZRx21aDdnpvXOTiVNUKTdR/lnBfEUsrcAUQGOqu/MJzwbCoA9wsqPP/
- eYm9u9pBpLQbxlUFSJBHa83xOKSswFABdULrxS73hN0Z/bYDtx1LXXGjkzyTdO88tN9SK89+X3TMN
- cAdQ2R29itShT3hg67Qk5hJfibI1TBf8kx2vvXLvhNk0c3khKyHUjBY0p5/IJrdYBsJqQY0p0yppY
- fcR33/xxRrp8aJGzFmx1S+WhvTyYuhsodrb9Ye70JJ6jXSdYrvKOTJu+dk8ZNoEDNXi+GYYdfoOc8
- MuVfR1rw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat
- Linux)) id 1rGD3D-001sAi-2y; Thu, 21 Dec 2023 07:00:59 +0000
-Date: Wed, 20 Dec 2023 23:00:59 -0800
-From: Christoph Hellwig <hch@infradead.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Dave Thaler <dthaler1968@googlemail.com>,
- Christoph Hellwig <hch@infradead.org>,
- David Vernet <void@manifault.com>, bpf@ietf.org,
- bpf <bpf@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>
-Message-ID: <ZYPiq6ijLaMl/QD8@infradead.org>
-References: <CAADnVQKd7X1v6CwCa2MyJjQkN8hKsHJ_g9Kk5CwWSbp9+1_3zw@mail.gmail.com>
- <20231212233555.GA53579@maniforge>
- <CAADnVQJ-JwNTY5fW-oXdTur9aDrv2NQoreTH3yYZemVBVtq9fQ@mail.gmail.com>
- <20231213185603.GA1968@maniforge>
- <CAADnVQLOjByUKJNyLdvDzwuegtjZFwrttHft_1o8BoyDCXQvDQ@mail.gmail.com>
- <20231214174437.GA2853@maniforge> <ZXvkS4qmRMZqlWhA@infradead.org>
- <CAADnVQ+ExRC_RavN_sbuOmuwyP6+HKnV9bFjJOseORBaVw0Jcg@mail.gmail.com>
- <09dc01da32a6$99c97e50$cd5c7af0$@gmail.com>
- <CAADnVQ+Kb20aUZdcqSh5eF-_dzpHWcpjAtYpLgg5Fqog=g7hpA@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="s86fa2ez"
+Message-ID: <ea395971-25f0-4b5c-8303-1620154e9b9d@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1703142969;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4inj7ND6rBRq7WMmjXP/p0GFXM9N/aYAzJgAPliGyOg=;
+	b=s86fa2ezd6EKpi3QxRPLk2ugkDwcbWRnKtTZ0h4ThvxDlVkXpBMiX8HVEkWHOlJoM0bpiV
+	Nz7C35gjLkEJFz8+KT6fVRCwHib1IFQWgDQ730LTEwAeDUJZ0a3YEs5StvVXVW5F/x6FNf
+	fBZ1tKuqzJFrGGxJ6rEnD2IY4ewRJ3g=
+Date: Wed, 20 Dec 2023 23:16:04 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAADnVQ+Kb20aUZdcqSh5eF-_dzpHWcpjAtYpLgg5Fqog=g7hpA@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by
- bombadil.infradead.org. See http://www.infradead.org/rpr.html
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/47ce-wXvAx4YobsmJly7GPbGNmU>
-Subject: Re: [Bpf] BPF ISA conformance groups
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-Content-Type: text/plain; charset="us-ascii"
+Subject: Re: [PATCH bpf-next v5 3/8] bpf: Allow per unit prefill for
+ non-fix-size percpu memory allocator
+To: Hou Tao <houtao@huaweicloud.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+ Martin KaFai Lau <martin.lau@kernel.org>
+References: <20231221045954.1969955-1-yonghong.song@linux.dev>
+ <20231221050010.1971932-1-yonghong.song@linux.dev>
+ <58e11994-6f73-20de-eab8-f4d7a4f71d80@huaweicloud.com>
+Content-Language: en-GB
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <58e11994-6f73-20de-eab8-f4d7a4f71d80@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-Message-ID: <20231221070059.TWeRkhAxx3hNrGdDg2uJ_kcSfCbQo_AT8rRPYuAf2fk@z>
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Dec 19, 2023 at 07:28:10PM -0800, Alexei Starovoitov wrote:
-> Right, but bringing the verifier into the "compliance picture"
-> makes the ISA standard incomplete.
-> Same can be said about nfp compliance. It's compliant with an ISA,
-> but the verifier will reject things it doesn't support.
 
-Yes, that's a good point.  Especially for anything call related I think
-it's fine to say they are a mandatory part of the basic some coarse
-group, but a given program type might not support it, but that is
-enforced by the verifier as the compiler should not have to known about
-the program type.
+On 12/20/23 10:26 PM, Hou Tao wrote:
+> Hi,
+>
+> On 12/21/2023 1:00 PM, Yonghong Song wrote:
+>> Commit 41a5db8d8161 ("Add support for non-fix-size percpu mem allocation")
+>> added support for non-fix-size percpu memory allocation.
+>> Such allocation will allocate percpu memory for all buckets on all
+>> cpus and the memory consumption is in the order to quadratic.
+>> For example, let us say, 4 cpus, unit size 16 bytes, so each
+>> cpu has 16 * 4 = 64 bytes, with 4 cpus, total will be 64 * 4 = 256 bytes.
+>> Then let us say, 8 cpus with the same unit size, each cpu
+>> has 16 * 8 = 128 bytes, with 8 cpus, total will be 128 * 8 = 1024 bytes.
+>> So if the number of cpus doubles, the number of memory consumption
+>> will be 4 times. So for a system with large number of cpus, the
+>> memory consumption goes up quickly with quadratic order.
+>> For example, for 4KB percpu allocation, 128 cpus. The total memory
+>> consumption will 4KB * 128 * 128 = 64MB. Things will become
+>> worse if the number of cpus is bigger (e.g., 512, 1024, etc.)
+>>
+>> In Commit 41a5db8d8161, the non-fix-size percpu memory allocation is
+>> done in boot time, so for system with large number of cpus, the initial
+>> percpu memory consumption is very visible. For example, for 128 cpu
+>> system, the total percpu memory allocation will be at least
+>> (16 + 32 + 64 + 96 + 128 + 196 + 256 + 512 + 1024 + 2048 + 4096)
+>>    * 128 * 128 = ~138MB.
+>> which is pretty big. It will be even bigger for larger number of cpus.
+> SNIP
+>> +
+>>   static void drain_mem_cache(struct bpf_mem_cache *c)
+>>   {
+>>   	bool percpu = !!c->percpu_size;
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index f13008d27f35..08f9a49cc11c 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -12141,20 +12141,6 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>   				if (meta.func_id == special_kfunc_list[KF_bpf_obj_new_impl] && !bpf_global_ma_set)
+>>   					return -ENOMEM;
+>>   
+>> -				if (meta.func_id == special_kfunc_list[KF_bpf_percpu_obj_new_impl]) {
+>> -					if (!bpf_global_percpu_ma_set) {
+>> -						mutex_lock(&bpf_percpu_ma_lock);
+>> -						if (!bpf_global_percpu_ma_set) {
+>> -							err = bpf_mem_alloc_init(&bpf_global_percpu_ma, 0, true);
+>> -							if (!err)
+>> -								bpf_global_percpu_ma_set = true;
+>> -						}
+>> -						mutex_unlock(&bpf_percpu_ma_lock);
+>> -						if (err)
+>> -							return err;
+>> -					}
+>> -				}
+>> -
+>>   				if (((u64)(u32)meta.arg_constant.value) != meta.arg_constant.value) {
+>>   					verbose(env, "local type ID argument must be in range [0, U32_MAX]\n");
+>>   					return -EINVAL;
+>> @@ -12175,6 +12161,26 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>   					return -EINVAL;
+>>   				}
+>>   
+>> +				if (meta.func_id == special_kfunc_list[KF_bpf_percpu_obj_new_impl]) {
+>> +					if (!bpf_global_percpu_ma_set) {
+>> +						mutex_lock(&bpf_percpu_ma_lock);
+>> +						if (!bpf_global_percpu_ma_set) {
+>> +							err = bpf_mem_alloc_percpu_init(&bpf_global_percpu_ma);
+> Because ma->objcg is assigned as get_obj_cgroup_from_current(), so I
+> think the memory account will be incorrect, right ? Maybe we should pass
+> objcg to bpf_mem_alloc_percpu_init() explicit. For root memcg, I think
+> the objcg is NULL.
 
-> All ld_imm64 and call insns look the same. The compiler emits
-> them the same way.
-> The src_reg encoding is what libbpf does based on compiler relocations.
-> 
-> Then the verifier checks them differently and later JIT sees
-> _all_ ld_imm64 as one type of instruction.
-> Same with call insn. To x86/arm64/riscv JITs there is only one BPF CALL insn.
+You are correct. Calling bpf_mem_alloc_percpu_init() in init stage
+is exactly the reason to have proper root memcg for objcg. Sorry I missed it.
 
-Yup.  Another case for ISA supported vs program type supported (and
-enforced by the verifier).
+I remembered I indeed traced it a few days ago and indeed it is NULL.
+There are three ways to resolve this:
+    1 Just do 'ma->objcg = NULL' unconditionally in bpf_mem_alloc_percpu_init().
+    2 Second, we can remember objcg = bpf_mem_alloc_percpu_init() at init stage,
+      e.g., in bpf_global_ma_init() init function (core.c), and later it can
+      be used in bpf_mem_alloc_percpu_init().
+    3 Still do bpf_mem_alloc_percpu_init() at init stage to initialize ma->objcg
+      properly. But delay __alloc_percpu_gfp() later when verifier found a call
+      to bpf_percpu_obj_new(). We could add a call bpf_mem_alloc_percpu_init_caches()
+      to do __alloc_percpu_grp().
 
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
+I prefer option 3, what do you think?
+
+>> +							if (!err)
+>> +								bpf_global_percpu_ma_set = true;
+>> +						}
+>> +						mutex_unlock(&bpf_percpu_ma_lock);
+>> +						if (err)
+>> +							return err;
+>> +					}
+>> +
+>> +					mutex_lock(&bpf_percpu_ma_lock);
+>> +					err = bpf_mem_alloc_percpu_unit_init(&bpf_global_percpu_ma, ret_t->size);
+>> +					mutex_unlock(&bpf_percpu_ma_lock);
+>> +					if (err)
+>> +						return err;
+>> +				}
+>> +
+>>   				struct_meta = btf_find_struct_meta(ret_btf, ret_btf_id);
+>>   				if (meta.func_id == special_kfunc_list[KF_bpf_percpu_obj_new_impl]) {
+>>   					if (!__btf_type_is_scalar_struct(env, ret_btf, ret_t, 0)) {
+>
