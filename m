@@ -1,23 +1,22 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 412F88F52
-	for <bpf@vger.kernel.org>; Thu, 21 Dec 2023 05:00:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 146AD8F52
+	for <bpf@vger.kernel.org>; Thu, 21 Dec 2023 05:03:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 042C42BD13BB0; Wed, 20 Dec 2023 21:00:37 -0800 (PST)
+	id 07A902BD13B2F; Wed, 20 Dec 2023 21:00:20 -0800 (PST)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Hou Tao <houtao1@huawei.com>
-Subject: [PATCH bpf-next v5 8/8] selftests/bpf: Add a selftest with > 512-byte percpu allocation size
-Date: Wed, 20 Dec 2023 21:00:36 -0800
-Message-Id: <20231221050036.1973766-1-yonghong.song@linux.dev>
+	Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next v5 5/8] bpf: Use smaller low/high marks for percpu allocation
+Date: Wed, 20 Dec 2023 21:00:20 -0800
+Message-Id: <20231221050020.1972567-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231221045954.1969955-1-yonghong.song@linux.dev>
 References: <20231221045954.1969955-1-yonghong.song@linux.dev>
@@ -29,51 +28,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Add a selftest to capture the verification failure when the allocation
-size is greater than 512.
+Currently, refill low/high marks are set with the assumption
+of normal non-percpu memory allocation. For example, for
+an allocation size 256, for non-percpu memory allocation,
+low mark is 32 and high mark is 96, resulting in the
+batch allocation of 48 elements and the allocated memory
+will be 48 * 256 =3D 12KB for this particular cpu.
+Assuming an 128-cpu system, the total memory consumption
+across all cpus will be 12K * 128 =3D 1.5MB memory.
 
-Acked-by: Hou Tao <houtao1@huawei.com>
+This might be okay for non-percpu allocation, but may not be
+good for percpu allocation, which will consume 1.5MB * 128 =3D 192MB
+memory in the worst case if every cpu has a chance of memory
+allocation.
+
+In practice, percpu allocation is very rare compared to
+non-percpu allocation. So let us have smaller low/high marks
+which can avoid unnecessary memory consumption.
+
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/progs/percpu_alloc_fail.c    | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ kernel/bpf/memalloc.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c b/tool=
-s/testing/selftests/bpf/progs/percpu_alloc_fail.c
-index 1a891d30f1fe..f2b8eb2ff76f 100644
---- a/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
-+++ b/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
-@@ -17,6 +17,10 @@ struct val_with_rb_root_t {
- 	struct bpf_spin_lock lock;
- };
-=20
-+struct val_600b_t {
-+	char b[600];
-+};
-+
- struct elem {
- 	long sum;
- 	struct val_t __percpu_kptr *pc;
-@@ -161,4 +165,18 @@ int BPF_PROG(test_array_map_7)
- 	return 0;
- }
-=20
-+SEC("?fentry.s/bpf_fentry_test1")
-+__failure __msg("bpf_percpu_obj_new type size (600) is greater than 512"=
-)
-+int BPF_PROG(test_array_map_8)
-+{
-+	struct val_600b_t __percpu_kptr *p;
-+
-+	p =3D bpf_percpu_obj_new(struct val_600b_t);
-+	if (!p)
-+		return 0;
-+
-+	bpf_percpu_obj_drop(p);
-+	return 0;
-+}
-+
- char _license[] SEC("license") =3D "GPL";
+diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
+index 99fa201d350b..984c83ecace9 100644
+--- a/kernel/bpf/memalloc.c
++++ b/kernel/bpf/memalloc.c
+@@ -464,11 +464,17 @@ static void notrace irq_work_raise(struct bpf_mem_c=
+ache *c)
+  * consume ~ 11 Kbyte per cpu.
+  * Typical case will be between 11K and 116K closer to 11K.
+  * bpf progs can and should share bpf_mem_cache when possible.
++ *
++ * Percpu allocation is typically rare. To avoid potential unnecessary l=
+arge
++ * memory consumption, set low_mark =3D 1 and high_mark =3D 3, resulting=
+ in c->batch =3D 1.
+  */
+ static void init_refill_work(struct bpf_mem_cache *c)
+ {
+ 	init_irq_work(&c->refill_work, bpf_mem_refill);
+-	if (c->unit_size <=3D 256) {
++	if (c->percpu_size) {
++		c->low_watermark =3D 1;
++		c->high_watermark =3D 3;
++	} else if (c->unit_size <=3D 256) {
+ 		c->low_watermark =3D 32;
+ 		c->high_watermark =3D 96;
+ 	} else {
 --=20
 2.34.1
 
