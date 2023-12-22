@@ -1,14 +1,14 @@
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15A5418631;
-	Fri, 22 Dec 2023 12:21:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8601799C;
+	Fri, 22 Dec 2023 12:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=lulie@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0Vz-mQOA_1703247709;
-Received: from localhost(mailfrom:lulie@linux.alibaba.com fp:SMTPD_---0Vz-mQOA_1703247709)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=lulie@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0Vz-mQNX_1703247706;
+Received: from localhost(mailfrom:lulie@linux.alibaba.com fp:SMTPD_---0Vz-mQNX_1703247706)
           by smtp.aliyun-inc.com;
-          Fri, 22 Dec 2023 20:21:51 +0800
+          Fri, 22 Dec 2023 20:21:47 +0800
 From: Philo Lu <lulie@linux.alibaba.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -32,12 +32,10 @@ Cc: ast@kernel.org,
 	guwen@linux.alibaba.com,
 	hengqi@linux.alibaba.com,
 	shung-hsi.yu@suse.com
-Subject: [PATCH bpf-next 2/3] bpf: implement map_update_elem to init relay file
-Date: Fri, 22 Dec 2023 20:21:45 +0800
-Message-Id: <20231222122146.65519-3-lulie@linux.alibaba.com>
+Subject: [PATCH bpf-next 0/3] bpf: introduce BPF_MAP_TYPE_RELAY
+Date: Fri, 22 Dec 2023 20:21:43 +0800
+Message-Id: <20231222122146.65519-1-lulie@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
-In-Reply-To: <20231222122146.65519-1-lulie@linux.alibaba.com>
-References: <20231222122146.65519-1-lulie@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,75 +44,54 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-map_update_elem is used to create relay files and bind them with the
-relay channel, which is created with BPF_MAP_CREATE. This allows users
-to set a custom directory name. It must be used with key=NULL and
-flag=0.
+The patch set introduce a new type of map, BPF_MAP_TYPE_RELAY, based on
+relay interface [0]. It provides a way for persistent and overwritable data
+transfer.
 
-Here is an example:
-```
-struct {
-__uint(type, BPF_MAP_TYPE_RELAY);
-__uint(max_entries, 4096);
-} my_relay SEC(".maps");
-...
-char dir_name[] = "relay_test";
-bpf_map_update_elem(map_fd, NULL, dir_name, 0);
-```
+As stated in [0], relay is a efficient method for log and data transfer.
+And the interface is simple enough so that we can implement and use this
+type of map with current map interfaces. Besides we need a new helper
+bpf_relay_output to output data to user, similar with bpf_ringbuf_output.
 
-Then, directory `/sys/kerenl/debug/relay_test` will be created, which
-includes files of my_relay0...my_relay[#cpu]. Each represents a per-cpu
-buffer with size 8 * 4096 B (there are 8 subbufs by default, each with
-size 4096B).
+We need this map because currently neither ringbuf nor perfbuf satisfies
+the requirements of relatively long-term consistent tracing, where the bpf
+program keeps writing into the buffer without any bundled reader, and the
+buffer supports overwriting. For users, they just run the bpf program to
+collect data, and are able to read as need. The detailed discussion can be
+found at [1].
 
-Signed-off-by: Philo Lu <lulie@linux.alibaba.com>
----
- kernel/bpf/relaymap.c | 32 +++++++++++++++++++++++++++++++-
- 1 file changed, 31 insertions(+), 1 deletion(-)
+The buffer is exposed to users as per-cpu files in debugfs, supporting read
+and mmap, and it is up to users how to formulate and read it, either
+through a program with mmap or just `cat`. Specifically, the files are
+created as "/sys/kerenl/debug/<dirname>/<mapname>#cpu", where the <dirname>
+is defined with map_update_elem (Note that we do not need to implement
+actual elem operators for relay_map).
 
-diff --git a/kernel/bpf/relaymap.c b/kernel/bpf/relaymap.c
-index d0adc7f67758..588c8de0a4bd 100644
---- a/kernel/bpf/relaymap.c
-+++ b/kernel/bpf/relaymap.c
-@@ -117,7 +117,37 @@ static void *relay_map_lookup_elem(struct bpf_map *map, void *key)
- static long relay_map_update_elem(struct bpf_map *map, void *key, void *value,
- 				   u64 flags)
- {
--	return -EOPNOTSUPP;
-+	struct bpf_relay_map *rmap;
-+	struct dentry *parent;
-+	int err;
-+
-+	if (unlikely(flags))
-+		return -EINVAL;
-+
-+	if (unlikely(key))
-+		return -EINVAL;
-+
-+	rmap = container_of(map, struct bpf_relay_map, map);
-+
-+	/* The directory already exists */
-+	if (rmap->relay_chan->has_base_filename)
-+		return -EEXIST;
-+
-+	/* Setup relay files. Note that the directory name passed as value should
-+	 * not be longer than map->value_size, including the '\0' at the end.
-+	 */
-+	((char *)value)[map->value_size - 1] = '\0';
-+	parent = debugfs_create_dir(value, NULL);
-+	if (IS_ERR_OR_NULL(parent))
-+		return PTR_ERR(parent);
-+
-+	err = relay_late_setup_files(rmap->relay_chan, map->name, parent);
-+	if (err) {
-+		debugfs_remove_recursive(parent);
-+		return err;
-+	}
-+
-+	return 0;
- }
- 
- static long relay_map_delete_elem(struct bpf_map *map, void *key)
--- 
+If this map is acceptable, other parts including docs, libbpf support,
+selftests, and benchmarks (if need) will be added in the following version.
+
+[0]
+https://github.com/torvalds/linux/blob/master/Documentation/filesystems/relay.rst
+[1]
+https://lore.kernel.org/bpf/20231219122850.433be151@gandalf.local.home/T/
+
+Philo Lu (3):
+  bpf: implement relay map basis
+  bpf: implement map_update_elem to init relay file
+  bpf: introduce bpf_relay_output helper
+
+ include/linux/bpf.h       |   1 +
+ include/linux/bpf_types.h |   3 +
+ include/uapi/linux/bpf.h  |  17 +++
+ kernel/bpf/Makefile       |   3 +
+ kernel/bpf/helpers.c      |   4 +
+ kernel/bpf/relaymap.c     | 213 ++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/syscall.c      |   1 +
+ kernel/bpf/verifier.c     |   8 ++
+ kernel/trace/bpf_trace.c  |   4 +
+ 9 files changed, 254 insertions(+)
+ create mode 100644 kernel/bpf/relaymap.c
+
+--
 2.32.0.3.g01195cf9f
 
