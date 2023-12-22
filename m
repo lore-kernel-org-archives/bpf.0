@@ -1,12 +1,12 @@
 Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8101E184C
-	for <bpf@vger.kernel.org>; Fri, 22 Dec 2023 03:17:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E8E0ECE
+	for <bpf@vger.kernel.org>; Fri, 22 Dec 2023 03:17:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 021E42BD99355; Thu, 21 Dec 2023 19:17:40 -0800 (PST)
+	id 5027D2BD99397; Thu, 21 Dec 2023 19:17:50 -0800 (PST)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -15,9 +15,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>,
 	Hou Tao <houtao1@huawei.com>
-Subject: [PATCH bpf-next v6 2/8] bpf: Add objcg to bpf_mem_alloc
-Date: Thu, 21 Dec 2023 19:17:39 -0800
-Message-Id: <20231222031739.1288590-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v6 4/8] bpf: Refill only one percpu element in memalloc
+Date: Thu, 21 Dec 2023 19:17:50 -0800
+Message-Id: <20231222031750.1289290-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231222031729.1287957-1-yonghong.song@linux.dev>
 References: <20231222031729.1287957-1-yonghong.song@linux.dev>
@@ -29,76 +29,45 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The objcg is a bpf_mem_alloc level property since all bpf_mem_cache's
-are with the same objcg. This patch made such a property explicit.
-The next patch will use this property to save and restore objcg
-for percpu unit allocator.
+Typically for percpu map element or data structure, once allocated,
+most operations are lookup or in-place update. Deletion are really
+rare. Currently, for percpu data strcture, 4 elements will be
+refilled if the size is <=3D 256. Let us just do with one element
+for percpu data. For example, for size 256 and 128 cpus, the
+potential saving will be 3 * 256 * 128 * 128 =3D 12MB.
 
 Acked-by: Hou Tao <houtao1@huawei.com>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf_mem_alloc.h |  1 +
- kernel/bpf/memalloc.c         | 11 ++++++-----
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ kernel/bpf/memalloc.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/bpf_mem_alloc.h b/include/linux/bpf_mem_alloc.=
-h
-index bb1223b21308..acef8c808599 100644
---- a/include/linux/bpf_mem_alloc.h
-+++ b/include/linux/bpf_mem_alloc.h
-@@ -11,6 +11,7 @@ struct bpf_mem_caches;
- struct bpf_mem_alloc {
- 	struct bpf_mem_caches __percpu *caches;
- 	struct bpf_mem_cache __percpu *cache;
-+	struct obj_cgroup *objcg;
- 	bool percpu;
- 	struct work_struct work;
- };
 diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
-index 288ec4a967d0..4a21050f0359 100644
+index f71da07eb8a0..a8ee6fb8401c 100644
 --- a/kernel/bpf/memalloc.c
 +++ b/kernel/bpf/memalloc.c
-@@ -523,6 +523,7 @@ int bpf_mem_alloc_init(struct bpf_mem_alloc *ma, int =
-size, bool percpu)
- 		if (memcg_bpf_enabled())
- 			objcg =3D get_obj_cgroup_from_current();
- #endif
-+		ma->objcg =3D objcg;
- 		for_each_possible_cpu(cpu) {
- 			c =3D per_cpu_ptr(pc, cpu);
- 			c->unit_size =3D unit_size;
-@@ -542,6 +543,7 @@ int bpf_mem_alloc_init(struct bpf_mem_alloc *ma, int =
-size, bool percpu)
- #ifdef CONFIG_MEMCG_KMEM
- 	objcg =3D get_obj_cgroup_from_current();
- #endif
-+	ma->objcg =3D objcg;
- 	for_each_possible_cpu(cpu) {
- 		cc =3D per_cpu_ptr(pcc, cpu);
- 		for (i =3D 0; i < NUM_CACHES; i++) {
-@@ -691,9 +693,8 @@ void bpf_mem_alloc_destroy(struct bpf_mem_alloc *ma)
- 			rcu_in_progress +=3D atomic_read(&c->call_rcu_ttrace_in_progress);
- 			rcu_in_progress +=3D atomic_read(&c->call_rcu_in_progress);
- 		}
--		/* objcg is the same across cpus */
--		if (c->objcg)
--			obj_cgroup_put(c->objcg);
-+		if (ma->objcg)
-+			obj_cgroup_put(ma->objcg);
- 		destroy_mem_alloc(ma, rcu_in_progress);
- 	}
- 	if (ma->caches) {
-@@ -709,8 +710,8 @@ void bpf_mem_alloc_destroy(struct bpf_mem_alloc *ma)
- 				rcu_in_progress +=3D atomic_read(&c->call_rcu_in_progress);
- 			}
- 		}
--		if (c->objcg)
--			obj_cgroup_put(c->objcg);
-+		if (ma->objcg)
-+			obj_cgroup_put(ma->objcg);
- 		destroy_mem_alloc(ma, rcu_in_progress);
- 	}
+@@ -485,11 +485,16 @@ static void init_refill_work(struct bpf_mem_cache *=
+c)
+=20
+ static void prefill_mem_cache(struct bpf_mem_cache *c, int cpu)
+ {
+-	/* To avoid consuming memory assume that 1st run of bpf
+-	 * prog won't be doing more than 4 map_update_elem from
+-	 * irq disabled region
++	int cnt =3D 1;
++
++	/* To avoid consuming memory, for non-percpu allocation, assume that
++	 * 1st run of bpf prog won't be doing more than 4 map_update_elem from
++	 * irq disabled region if unit size is less than or equal to 256.
++	 * For all other cases, let us just do one allocation.
+ 	 */
+-	alloc_bulk(c, c->unit_size <=3D 256 ? 4 : 1, cpu_to_node(cpu), false);
++	if (!c->percpu_size && c->unit_size <=3D 256)
++		cnt =3D 4;
++	alloc_bulk(c, cnt, cpu_to_node(cpu), false);
  }
+=20
+ /* When size !=3D 0 bpf_mem_cache for each cpu.
 --=20
 2.34.1
 
