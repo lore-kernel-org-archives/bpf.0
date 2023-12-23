@@ -1,187 +1,109 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 727198F79
-	for <bpf@vger.kernel.org>; Sat, 23 Dec 2023 10:39:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Sy0zH5RKnz4f3jsh
-	for <bpf@vger.kernel.org>; Sat, 23 Dec 2023 18:39:39 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 9E81C1A036B
-	for <bpf@vger.kernel.org>; Sat, 23 Dec 2023 18:39:42 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP1 (Coremail) with SMTP id cCh0CgCH1QvquIZljMSpEQ--.5375S5;
-	Sat, 23 Dec 2023 18:39:42 +0800 (CST)
-From: Hou Tao <houtao@huaweicloud.com>
-To: bpf@vger.kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Song Liu <song@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	houtao1@huawei.com
-Subject: [PATCH bpf-next v2 1/3] bpf: Support inlining bpf_kptr_xchg() helper
-Date: Sat, 23 Dec 2023 18:40:40 +0800
-Message-Id: <20231223104042.1432300-2-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20231223104042.1432300-1-houtao@huaweicloud.com>
-References: <20231223104042.1432300-1-houtao@huaweicloud.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6969A8F75
+	for <bpf@vger.kernel.org>; Sat, 23 Dec 2023 11:15:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=I-love.SAKURA.ne.jp
+Received: from fsav117.sakura.ne.jp (fsav117.sakura.ne.jp [27.133.134.244])
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 3BNBFSTP051661
+	for <bpf@vger.kernel.org>; Sat, 23 Dec 2023 20:15:28 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav117.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav117.sakura.ne.jp);
+ Sat, 23 Dec 2023 20:15:28 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav117.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+	(authenticated bits=0)
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 3BNBFSBK051657
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO)
+	for <bpf@vger.kernel.org>; Sat, 23 Dec 2023 20:15:28 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <f53342c8-ac93-46ab-afd3-a72ffeaca617@I-love.SAKURA.ne.jp>
+Date: Sat, 23 Dec 2023 20:15:28 +0900
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgCH1QvquIZljMSpEQ--.5375S5
-X-Coremail-Antispam: 1UD129KBjvJXoWxCrW5CF48GF1xXF1xtw4DXFb_yoWruF48pF
-	Z8tryfKr4qq3WkA3srJan7Zry5Zw48C342gFnrury8A3W2qas7Xa4kK3Z0q3s8tr1UKa4F
-	yr1j9rZI93s8XFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
-	0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
-	JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwI
-	xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-	Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
-	IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
-	6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jn9N3UUUUU=
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+User-Agent: Mozilla Thunderbird
+Subject: Fwd: [PATCH] security: new security_file_ioctl_compat() hook
+References: <CALcwBGC9LzzdJeq3SWy9F3g5A32s5uSvJZae4j+rwNQqqLHCKg@mail.gmail.com>
+Content-Language: en-US
+To: bpf <bpf@vger.kernel.org>
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <CALcwBGC9LzzdJeq3SWy9F3g5A32s5uSvJZae4j+rwNQqqLHCKg@mail.gmail.com>
+X-Forwarded-Message-Id: <CALcwBGC9LzzdJeq3SWy9F3g5A32s5uSvJZae4j+rwNQqqLHCKg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Hou Tao <houtao1@huawei.com>
+Does anything need to be updated for the BPF LSM or
+does it auto-magically pick up new hooks?
 
-The motivation of inlining bpf_kptr_xchg() comes from the performance
-profiling of bpf memory allocator benchmark. The benchmark uses
-bpf_kptr_xchg() to stash the allocated objects and to pop the stashed
-objects for free. After inling bpf_kptr_xchg(), the performance for
-object free on 8-CPUs VM increases about 2%~10%. The inline also has
-downside: both the kasan and kcsan checks on the pointer will be
-unavailable.
+-------- Forwarded Message --------
+References: <20230906102557.3432236-1-alpic@google.com> <20231219090909.2827497-1-alpic@google.com>
+In-Reply-To: <20231219090909.2827497-1-alpic@google.com>
+From: Alfred Piccioni <alpic@google.com>
+Date: Tue, 19 Dec 2023 10:10:38 +0100
+Message-ID: <CALcwBGC9LzzdJeq3SWy9F3g5A32s5uSvJZae4j+rwNQqqLHCKg@mail.gmail.com>
+Subject: Re: [PATCH] security: new security_file_ioctl_compat() hook
+To: Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, Eric Paris <eparis@parisplace.org>
+Cc: linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, stable@vger.kernel.org, selinux@vger.kernel.org, linux-kernel@vger.kernel.org
 
-bpf_kptr_xchg() can be inlined by converting the calling of
-bpf_kptr_xchg() into an atomic_xchg() instruction. But the conversion
-depends on two conditions:
-1) JIT backend supports atomic_xchg() on pointer-sized word
-2) For the specific arch, the implementation of xchg is the same as
-   atomic_xchg() on pointer-sized words.
+Thanks for taking the time to review! Apologies for the number of
+small mistakes.
 
-It seems most 64-bit JIT backends satisfies these two conditions. But
-as a precaution, defining a weak function bpf_jit_supports_ptr_xchg()
-to state whether such conversion is safe and only supporting inline for
-64-bit host.
+> s/syscal/syscall/
+> Might to consider checking using codespell to catch such things
+> although it is imperfect.
 
-For x86-64, it supports BPF_XCHG atomic operation and both xchg() and
-atomic_xchg() use arch_xchg() to implement the exchange, so enabling the
-inline of bpf_kptr_xchg() on x86-64 first.
+Fixed, loaded codespell.
 
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
- arch/x86/net/bpf_jit_comp.c |  5 +++++
- include/linux/filter.h      |  1 +
- kernel/bpf/core.c           | 10 ++++++++++
- kernel/bpf/helpers.c        |  1 +
- kernel/bpf/verifier.c       | 17 +++++++++++++++++
- 5 files changed, 34 insertions(+)
+> Paul doesn't like C++-style comments so rewrite using kernel coding
+> style for multi-line comments or drop.
+> I don't think kernel coding style strictly prohibits use for
+> single-line comments and it isn't detected by checkpatch.pl but he has
+> previously
+> raised this on other patches. I actually like the C++-style comments
+> for one-liners especially for comments at the end of a line of code
+> but Paul is the maintainer so he gets the final word.
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 8b7f4de69917..f798e2c22cd6 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -3247,3 +3247,8 @@ void bpf_arch_poke_desc_update(struct bpf_jit_poke_descriptor *poke,
- 		BUG_ON(ret < 0);
- 	}
- }
-+
-+bool bpf_jit_supports_ptr_xchg(void)
-+{
-+	return true;
-+}
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 68fb6c8142fe..35f067fd3840 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -955,6 +955,7 @@ bool bpf_jit_supports_subprog_tailcalls(void);
- bool bpf_jit_supports_kfunc_call(void);
- bool bpf_jit_supports_far_kfunc_call(void);
- bool bpf_jit_supports_exceptions(void);
-+bool bpf_jit_supports_ptr_xchg(void);
- void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp), void *cookie);
- bool bpf_helper_changes_pkt_data(void *func);
- 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index ea6843be2616..fbb1d95a9b44 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2925,6 +2925,16 @@ bool __weak bpf_jit_supports_far_kfunc_call(void)
- 	return false;
- }
- 
-+/* Return TRUE if the JIT backend satisfies the following two conditions:
-+ * 1) JIT backend supports atomic_xchg() on pointer-sized words.
-+ * 2) Under the specific arch, the implementation of xchg() is the same
-+ *    as atomic_xchg() on pointer-sized words.
-+ */
-+bool __weak bpf_jit_supports_ptr_xchg(void)
-+{
-+	return false;
-+}
-+
- /* To execute LD_ABS/LD_IND instructions __bpf_prog_run() may call
-  * skb_copy_bits(), so provide a weak definition of it for NET-less config.
-  */
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index be72824f32b2..e04ca1af8927 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1414,6 +1414,7 @@ BPF_CALL_2(bpf_kptr_xchg, void *, map_value, void *, ptr)
- {
- 	unsigned long *kptr = map_value;
- 
-+	/* This helper may be inlined by verifier. */
- 	return xchg(kptr, (unsigned long)ptr);
- }
- 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a376eb609c41..69895194b3c2 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19790,6 +19790,23 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			continue;
- 		}
- 
-+		/* Implement bpf_kptr_xchg inline */
-+		if (prog->jit_requested && BITS_PER_LONG == 64 &&
-+		    insn->imm == BPF_FUNC_kptr_xchg &&
-+		    bpf_jit_supports_ptr_xchg()) {
-+			insn_buf[0] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_2);
-+			insn_buf[1] = BPF_ATOMIC_OP(BPF_DW, BPF_XCHG, BPF_REG_1, BPF_REG_0, 0);
-+			cnt = 2;
-+
-+			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
-+			if (!new_prog)
-+				return -ENOMEM;
-+
-+			delta    += cnt - 1;
-+			env->prog = prog = new_prog;
-+			insn      = new_prog->insnsi + i + delta;
-+			continue;
-+		}
- patch_call_imm:
- 		fn = env->ops->get_func_proto(insn->imm, env->prog);
- 		/* all functions that have prototype and verifier allowed
--- 
-2.29.2
+Changed to /**/ style comments. No particular preference on my side
+for comment structure, just used to C++/Java style.
+
+> Sorry, missed this the first time but cut-and-paste error above:
+> s/GETFLAGS/SETFLAGS/
+
+Egads. Fixed.
+
+> Also, IIRC, Paul prefers putting a pair of parentheses after function
+> names to distinguish them, so in the subject line
+> and description it should be security_file_ioctl_compat() and
+> security_file_ioctl(), and you should put a patch version
+> in the [PATCH] prefix e.g. [PATCH v3] to make clear that it is a later
+> version, and usually one doesn't capitalize SELinux
+> or the leading verb in the subject line (just "selinux: introduce").
+
+Changed title to lower-case, prefixed with security, changed slightly
+to fit in summary with new parentheses. Added [PATCH V3] to the
+subject.
+
+> Actually, since this spans more than just SELinux, the prefix likely
+> needs to reflect that (e.g. security: introduce ...)
+> and the patch should go to the linux-security-module mailing list too
+> and perhaps linux-fsdevel for the ioctl change.
+
+Added cc 'selinux@vger.kernel.org' and cc
+'linux-kernel@vger.kernel.org'. Thanks!
+
+> I didn't do an audit but does anything need to be updated for the BPF
+> LSM or does it auto-magically pick up new hooks?
+
+I'm unsure. I looked through the BPF LSM and I can't see any way it's
+picking up the file_ioctl hook to begin with. It appears to me
+skimming through the code that it automagically picks it up, but I'm
+not willing to bet the kernel on it.
+
+Do you know who would be a good person to ask about this to make sure?
 
