@@ -1,14 +1,14 @@
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1BE125CB;
-	Fri, 29 Dec 2023 07:31:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CCBB125D8;
+	Fri, 29 Dec 2023 07:31:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R721e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VzQyW8D_1703835090;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VzQyW8D_1703835090)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VzQyWBn_1703835097;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VzQyWBn_1703835097)
           by smtp.aliyun-inc.com;
-          Fri, 29 Dec 2023 15:31:30 +0800
+          Fri, 29 Dec 2023 15:31:38 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -24,9 +24,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	John Fastabend <john.fastabend@gmail.com>,
 	virtualization@lists.linux-foundation.org,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v3 18/27] virtio_net: xsk: tx: handle the transmitted xsk buffer
-Date: Fri, 29 Dec 2023 15:30:59 +0800
-Message-Id: <20231229073108.57778-19-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v3 25/27] virtio_net: xsk: rx: free the unused xsk buffer
+Date: Fri, 29 Dec 2023 15:31:06 +0800
+Message-Id: <20231229073108.57778-26-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20231229073108.57778-1-xuanzhuo@linux.alibaba.com>
 References: <20231229073108.57778-1-xuanzhuo@linux.alibaba.com>
@@ -39,171 +39,34 @@ MIME-Version: 1.0
 X-Git-Hash: 20112a26898d
 Content-Transfer-Encoding: 8bit
 
-virtnet_free_old_xmit distinguishes three type ptr(skb, xdp frame, xsk
-buffer) by the last bits of the pointer.
+Since this will be called in other circumstances(freeze), we must check
+whether it is xsk's buffer in this function. It cannot be judged outside
+this function.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio/virtio_net.h | 30 ++++++++++++++++++++++++++----
- drivers/net/virtio/xsk.c        | 33 ++++++++++++++++++++++++++-------
- drivers/net/virtio/xsk.h        |  5 +++++
- 3 files changed, 57 insertions(+), 11 deletions(-)
+ drivers/net/virtio/main.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/net/virtio/virtio_net.h b/drivers/net/virtio/virtio_net.h
-index 82a56d640b11..f8b8f4f5b8b3 100644
---- a/drivers/net/virtio/virtio_net.h
-+++ b/drivers/net/virtio/virtio_net.h
-@@ -214,6 +214,11 @@ struct virtnet_info {
- 	struct failover *failover;
- };
+diff --git a/drivers/net/virtio/main.c b/drivers/net/virtio/main.c
+index b1567f0746e8..cc0194c14c98 100644
+--- a/drivers/net/virtio/main.c
++++ b/drivers/net/virtio/main.c
+@@ -3962,6 +3962,14 @@ void virtnet_rq_free_unused_bufs(struct virtqueue *vq)
+ 	rq = &vi->rq[i];
  
-+static inline bool virtnet_is_skb_ptr(void *ptr)
-+{
-+	return !((unsigned long)ptr & (VIRTIO_XDP_FLAG | VIRTIO_XSK_FLAG));
-+}
+ 	while ((buf = virtqueue_detach_unused_buf(vq)) != NULL) {
++		if (rq->xsk.pool) {
++			struct xdp_buff *xdp;
 +
- static inline bool virtnet_is_xdp_frame(void *ptr)
- {
- 	return (unsigned long)ptr & VIRTIO_XDP_FLAG;
-@@ -224,6 +229,9 @@ static inline struct xdp_frame *virtnet_ptr_to_xdp(void *ptr)
- 	return (struct xdp_frame *)((unsigned long)ptr & ~VIRTIO_XDP_FLAG);
- }
- 
-+static inline u32 virtnet_ptr_to_xsk(void *ptr);
-+void virtnet_xsk_completed(struct virtnet_sq *sq, int num);
++			xdp = (struct xdp_buff *)buf;
++			xsk_buff_free(xdp);
++			continue;
++		}
 +
- static inline void virtnet_sq_unmap_buf(struct virtnet_sq *sq, struct virtio_dma_head *dma)
- {
- 	int i;
-@@ -239,8 +247,8 @@ static inline void virtnet_sq_unmap_buf(struct virtnet_sq *sq, struct virtio_dma
- 	dma->next = 0;
- }
+ 		if (virtqueue_get_dma_premapped(rq->vq))
+ 			virtnet_rq_unmap(rq, buf, 0);
  
--static inline void virtnet_free_old_xmit(struct virtnet_sq *sq, bool in_napi,
--					 u64 *bytes, u64 *packets)
-+static inline void __virtnet_free_old_xmit(struct virtnet_sq *sq, bool in_napi,
-+					   u64 *bytes, u64 *packets, u64 *xsk)
- {
- 	struct virtio_dma_head *dma;
- 	unsigned int len;
-@@ -257,23 +265,37 @@ static inline void virtnet_free_old_xmit(struct virtnet_sq *sq, bool in_napi,
- 	while ((ptr = virtqueue_get_buf_ctx_dma(sq->vq, &len, dma, NULL)) != NULL) {
- 		virtnet_sq_unmap_buf(sq, dma);
- 
--		if (!virtnet_is_xdp_frame(ptr)) {
-+		if (virtnet_is_skb_ptr(ptr)) {
- 			struct sk_buff *skb = ptr;
- 
- 			pr_debug("Sent skb %p\n", skb);
- 
- 			*bytes += skb->len;
- 			napi_consume_skb(skb, in_napi);
--		} else {
-+		} else if (virtnet_is_xdp_frame(ptr)) {
- 			struct xdp_frame *frame = virtnet_ptr_to_xdp(ptr);
- 
- 			*bytes += xdp_get_frame_len(frame);
- 			xdp_return_frame(frame);
-+		} else {
-+			*bytes += virtnet_ptr_to_xsk(ptr);
-+			(*xsk)++;
- 		}
- 		(*packets)++;
- 	}
- }
- 
-+static inline void virtnet_free_old_xmit(struct virtnet_sq *sq, bool in_napi,
-+					 u64 *bytes, u64 *packets)
-+{
-+	u64 xsknum = 0;
-+
-+	__virtnet_free_old_xmit(sq, in_napi, bytes, packets, &xsknum);
-+
-+	if (xsknum)
-+		virtnet_xsk_completed(sq, xsknum);
-+}
-+
- static inline bool virtnet_is_xdp_raw_buffer_queue(struct virtnet_info *vi, int q)
- {
- 	if (q < (vi->curr_queue_pairs - vi->xdp_queue_pairs))
-diff --git a/drivers/net/virtio/xsk.c b/drivers/net/virtio/xsk.c
-index 9e5523ff5707..0c6a8f92ae38 100644
---- a/drivers/net/virtio/xsk.c
-+++ b/drivers/net/virtio/xsk.c
-@@ -73,9 +73,13 @@ bool virtnet_xsk_xmit(struct virtnet_sq *sq, struct xsk_buff_pool *pool,
- {
- 	struct virtnet_info *vi = sq->vq->vdev->priv;
- 	u64 bytes = 0, packets = 0, kicks = 0;
-+	u64 xsknum = 0;
- 	int sent;
- 
--	virtnet_free_old_xmit(sq, true, &bytes, &packets);
-+	/* Avoid to wakeup napi meanless, so call __virtnet_free_old_xmit. */
-+	__virtnet_free_old_xmit(sq, true, &bytes, &packets, &xsknum);
-+	if (xsknum)
-+		xsk_tx_completed(sq->xsk.pool, xsknum);
- 
- 	sent = virtnet_xsk_xmit_batch(sq, pool, budget, &kicks);
- 
-@@ -95,6 +99,16 @@ bool virtnet_xsk_xmit(struct virtnet_sq *sq, struct xsk_buff_pool *pool,
- 	return sent == budget;
- }
- 
-+static void xsk_wakeup(struct virtnet_sq *sq)
-+{
-+	if (napi_if_scheduled_mark_missed(&sq->napi))
-+		return;
-+
-+	local_bh_disable();
-+	virtnet_vq_napi_schedule(&sq->napi, sq->vq);
-+	local_bh_enable();
-+}
-+
- int virtnet_xsk_wakeup(struct net_device *dev, u32 qid, u32 flag)
- {
- 	struct virtnet_info *vi = netdev_priv(dev);
-@@ -108,14 +122,19 @@ int virtnet_xsk_wakeup(struct net_device *dev, u32 qid, u32 flag)
- 
- 	sq = &vi->sq[qid];
- 
--	if (napi_if_scheduled_mark_missed(&sq->napi))
--		return 0;
-+	xsk_wakeup(sq);
-+	return 0;
-+}
- 
--	local_bh_disable();
--	virtnet_vq_napi_schedule(&sq->napi, sq->vq);
--	local_bh_enable();
-+void virtnet_xsk_completed(struct virtnet_sq *sq, int num)
-+{
-+	xsk_tx_completed(sq->xsk.pool, num);
- 
--	return 0;
-+	/* If this is called by rx poll, start_xmit and xdp xmit we should
-+	 * wakeup the tx napi to consume the xsk tx queue, because the tx
-+	 * interrupt may not be triggered.
-+	 */
-+	xsk_wakeup(sq);
- }
- 
- static int virtnet_rq_bind_xsk_pool(struct virtnet_info *vi, struct virtnet_rq *rq,
-diff --git a/drivers/net/virtio/xsk.h b/drivers/net/virtio/xsk.h
-index 1bd19dcda649..7ebc9bda7aee 100644
---- a/drivers/net/virtio/xsk.h
-+++ b/drivers/net/virtio/xsk.h
-@@ -14,6 +14,11 @@ static inline void *virtnet_xsk_to_ptr(u32 len)
- 	return (void *)(p | VIRTIO_XSK_FLAG);
- }
- 
-+static inline u32 virtnet_ptr_to_xsk(void *ptr)
-+{
-+	return ((unsigned long)ptr) >> VIRTIO_XSK_FLAG_OFFSET;
-+}
-+
- int virtnet_xsk_pool_setup(struct net_device *dev, struct netdev_bpf *xdp);
- bool virtnet_xsk_xmit(struct virtnet_sq *sq, struct xsk_buff_pool *pool,
- 		      int budget);
 -- 
 2.32.0.3.g01195cf9f
 
