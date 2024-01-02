@@ -1,30 +1,30 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FE7E1640A
-	for <bpf@vger.kernel.org>; Tue,  2 Jan 2024 19:01:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8C21640A
+	for <bpf@vger.kernel.org>; Tue,  2 Jan 2024 19:01:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 402IZRWY030510
-	for <bpf@vger.kernel.org>; Tue, 2 Jan 2024 11:01:15 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3vc9sn4hpm-12
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+	by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 402IZKHB017852
+	for <bpf@vger.kernel.org>; Tue, 2 Jan 2024 11:01:25 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by m0089730.ppops.net (PPS) with ESMTPS id 3vc0ecpsqc-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 02 Jan 2024 11:01:15 -0800
-Received: from twshared20528.39.frc1.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Tue, 02 Jan 2024 11:01:24 -0800
+Received: from twshared21997.42.prn1.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Tue, 2 Jan 2024 11:01:08 -0800
+ 15.1.2507.34; Tue, 2 Jan 2024 11:01:23 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 45E263DF0162C; Tue,  2 Jan 2024 11:01:06 -0800 (PST)
+	id A011D3DF0165E; Tue,  2 Jan 2024 11:01:14 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>, Jiri Olsa <jolsa@kernel.org>
-Subject: [PATCH v2 bpf-next 4/9] libbpf: don't rely on map->fd as an indicator of map being created
-Date: Tue, 2 Jan 2024 11:00:50 -0800
-Message-ID: <20240102190055.1602698-5-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 6/9] libbpf: move exception callbacks assignment logic into relocation step
+Date: Tue, 2 Jan 2024 11:00:52 -0800
+Message-ID: <20240102190055.1602698-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240102190055.1602698-1-andrii@kernel.org>
 References: <20240102190055.1602698-1-andrii@kernel.org>
@@ -37,205 +37,238 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 6CiKddrPoldY_g4YvUhI0JFAVCO1QP0a
-X-Proofpoint-ORIG-GUID: 6CiKddrPoldY_g4YvUhI0JFAVCO1QP0a
+X-Proofpoint-GUID: yp-r8JIqtmid3XKTql3kwBZLplzBgSgh
+X-Proofpoint-ORIG-GUID: yp-r8JIqtmid3XKTql3kwBZLplzBgSgh
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-01-02_06,2024-01-02_01,2023-05-22_02
 
-With the upcoming switch to preallocated placeholder FDs for maps,
-switch various getters/setter away from checking map->fd. Use
-map_is_created() helper that detect whether BPF map can be modified based
-on map->obj->loaded state, with special provision for maps set up with
-bpf_map__reuse_fd().
+Move the logic of finding and assigning exception callback indices from
+BTF sanitization step to program relocations step, which seems more
+logical and will unblock moving BTF loading to after relocation step.
 
-For backwards compatibility, we take map_is_created() into account in
-bpf_map__fd() getter as well. This way before bpf_object__load() phase
-bpf_map__fd() will always return -1, just as before the changes in
-subsequent patches adding stable map->fd placeholders.
+Exception callbacks discovery and assignment has no dependency on BTF
+being loaded into the kernel, it only uses BTF information. It does need
+to happen before subprogram relocations happen, though. Which is why the
+split.
 
-We also get rid of all internal uses of bpf_map__fd() getter, as it's
-more oriented for uses external to libbpf. The above map_is_created()
-check actually interferes with some of the internal uses, if map FD is
-fetched through bpf_map__fd().
+No functional changes.
 
 Acked-by: Jiri Olsa <jolsa@kernel.org>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 42 +++++++++++++++++++++++++++---------------
- 1 file changed, 27 insertions(+), 15 deletions(-)
+ tools/lib/bpf/libbpf.c | 165 +++++++++++++++++++++--------------------
+ 1 file changed, 85 insertions(+), 80 deletions(-)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index a0cf57b59b6a..f29cfb344f80 100644
+index e0085aef17d7..d44aea1cc428 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -5184,6 +5184,11 @@ static int bpf_object_populate_internal_map(struct=
- bpf_object *obj, struct bpf_m
-=20
- static void bpf_map_destroy(struct bpf_map *map);
-=20
-+static bool map_is_created(const struct bpf_map *map)
-+{
-+	return map->obj->loaded || map->reused;
-+}
-+
- static int bpf_object_create_map(struct bpf_object *obj, struct bpf_map =
-*map, bool is_inner)
- {
- 	LIBBPF_OPTS(bpf_map_create_opts, create_attr);
-@@ -5215,7 +5220,7 @@ static int bpf_object_create_map(struct bpf_object =
-*obj, struct bpf_map *map, bo
- 					map->name, err);
- 				return err;
- 			}
--			map->inner_map_fd =3D bpf_map__fd(map->inner_map);
-+			map->inner_map_fd =3D map->inner_map->fd;
+@@ -3172,86 +3172,6 @@ static int bpf_object_sanitize_and_load_btf(struct=
+ bpf_object *obj)
  		}
- 		if (map->inner_map_fd >=3D 0)
- 			create_attr.inner_map_fd =3D map->inner_map_fd;
-@@ -5298,7 +5303,7 @@ static int init_map_in_map_slots(struct bpf_object =
-*obj, struct bpf_map *map)
- 			continue;
+ 	}
 =20
- 		targ_map =3D map->init_slots[i];
--		fd =3D bpf_map__fd(targ_map);
-+		fd =3D targ_map->fd;
-=20
- 		if (obj->gen_loader) {
- 			bpf_gen__populate_outer_map(obj->gen_loader,
-@@ -7112,7 +7117,7 @@ static int bpf_object_load_prog(struct bpf_object *=
-obj, struct bpf_program *prog
- 				if (map->libbpf_type !=3D LIBBPF_MAP_RODATA)
- 					continue;
-=20
--				if (bpf_prog_bind_map(ret, bpf_map__fd(map), NULL)) {
-+				if (bpf_prog_bind_map(ret, map->fd, NULL)) {
- 					cp =3D libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
- 					pr_warn("prog '%s': failed to bind map '%s': %s\n",
- 						prog->name, map->real_name, cp);
-@@ -9575,7 +9580,11 @@ int libbpf_attach_type_by_name(const char *name,
-=20
- int bpf_map__fd(const struct bpf_map *map)
- {
--	return map ? map->fd : libbpf_err(-EINVAL);
-+	if (!map)
-+		return libbpf_err(-EINVAL);
-+	if (!map_is_created(map))
-+		return -1;
-+	return map->fd;
+-	if (!kernel_supports(obj, FEAT_BTF_DECL_TAG))
+-		goto skip_exception_cb;
+-	for (i =3D 0; i < obj->nr_programs; i++) {
+-		struct bpf_program *prog =3D &obj->programs[i];
+-		int j, k, n;
+-
+-		if (prog_is_subprog(obj, prog))
+-			continue;
+-		n =3D btf__type_cnt(obj->btf);
+-		for (j =3D 1; j < n; j++) {
+-			const char *str =3D "exception_callback:", *name;
+-			size_t len =3D strlen(str);
+-			struct btf_type *t;
+-
+-			t =3D btf_type_by_id(obj->btf, j);
+-			if (!btf_is_decl_tag(t) || btf_decl_tag(t)->component_idx !=3D -1)
+-				continue;
+-
+-			name =3D btf__str_by_offset(obj->btf, t->name_off);
+-			if (strncmp(name, str, len))
+-				continue;
+-
+-			t =3D btf_type_by_id(obj->btf, t->type);
+-			if (!btf_is_func(t) || btf_func_linkage(t) !=3D BTF_FUNC_GLOBAL) {
+-				pr_warn("prog '%s': exception_callback:<value> decl tag not applied =
+to the main program\n",
+-					prog->name);
+-				return -EINVAL;
+-			}
+-			if (strcmp(prog->name, btf__str_by_offset(obj->btf, t->name_off)))
+-				continue;
+-			/* Multiple callbacks are specified for the same prog,
+-			 * the verifier will eventually return an error for this
+-			 * case, hence simply skip appending a subprog.
+-			 */
+-			if (prog->exception_cb_idx >=3D 0) {
+-				prog->exception_cb_idx =3D -1;
+-				break;
+-			}
+-
+-			name +=3D len;
+-			if (str_is_empty(name)) {
+-				pr_warn("prog '%s': exception_callback:<value> decl tag contains emp=
+ty value\n",
+-					prog->name);
+-				return -EINVAL;
+-			}
+-
+-			for (k =3D 0; k < obj->nr_programs; k++) {
+-				struct bpf_program *subprog =3D &obj->programs[k];
+-
+-				if (!prog_is_subprog(obj, subprog))
+-					continue;
+-				if (strcmp(name, subprog->name))
+-					continue;
+-				/* Enforce non-hidden, as from verifier point of
+-				 * view it expects global functions, whereas the
+-				 * mark_btf_static fixes up linkage as static.
+-				 */
+-				if (!subprog->sym_global || subprog->mark_btf_static) {
+-					pr_warn("prog '%s': exception callback %s must be a global non-hidd=
+en function\n",
+-						prog->name, subprog->name);
+-					return -EINVAL;
+-				}
+-				/* Let's see if we already saw a static exception callback with the =
+same name */
+-				if (prog->exception_cb_idx >=3D 0) {
+-					pr_warn("prog '%s': multiple subprogs with same name as exception c=
+allback '%s'\n",
+-					        prog->name, subprog->name);
+-					return -EINVAL;
+-				}
+-				prog->exception_cb_idx =3D k;
+-				break;
+-			}
+-
+-			if (prog->exception_cb_idx >=3D 0)
+-				continue;
+-			pr_warn("prog '%s': cannot find exception callback '%s'\n", prog->nam=
+e, name);
+-			return -ENOENT;
+-		}
+-	}
+-skip_exception_cb:
+-
+ 	sanitize =3D btf_needs_sanitization(obj);
+ 	if (sanitize) {
+ 		const void *raw_data;
+@@ -6628,6 +6548,88 @@ static void bpf_object_sort_relos(struct bpf_objec=
+t *obj)
+ 	}
  }
 =20
- static bool map_uses_real_name(const struct bpf_map *map)
-@@ -9611,7 +9620,7 @@ enum bpf_map_type bpf_map__type(const struct bpf_ma=
-p *map)
-=20
- int bpf_map__set_type(struct bpf_map *map, enum bpf_map_type type)
- {
--	if (map->fd >=3D 0)
-+	if (map_is_created(map))
- 		return libbpf_err(-EBUSY);
- 	map->def.type =3D type;
- 	return 0;
-@@ -9624,7 +9633,7 @@ __u32 bpf_map__map_flags(const struct bpf_map *map)
-=20
- int bpf_map__set_map_flags(struct bpf_map *map, __u32 flags)
- {
--	if (map->fd >=3D 0)
-+	if (map_is_created(map))
- 		return libbpf_err(-EBUSY);
- 	map->def.map_flags =3D flags;
- 	return 0;
-@@ -9637,7 +9646,7 @@ __u64 bpf_map__map_extra(const struct bpf_map *map)
-=20
- int bpf_map__set_map_extra(struct bpf_map *map, __u64 map_extra)
- {
--	if (map->fd >=3D 0)
-+	if (map_is_created(map))
- 		return libbpf_err(-EBUSY);
- 	map->map_extra =3D map_extra;
- 	return 0;
-@@ -9650,7 +9659,7 @@ __u32 bpf_map__numa_node(const struct bpf_map *map)
-=20
- int bpf_map__set_numa_node(struct bpf_map *map, __u32 numa_node)
- {
--	if (map->fd >=3D 0)
-+	if (map_is_created(map))
- 		return libbpf_err(-EBUSY);
- 	map->numa_node =3D numa_node;
- 	return 0;
-@@ -9663,7 +9672,7 @@ __u32 bpf_map__key_size(const struct bpf_map *map)
-=20
- int bpf_map__set_key_size(struct bpf_map *map, __u32 size)
- {
--	if (map->fd >=3D 0)
-+	if (map_is_created(map))
- 		return libbpf_err(-EBUSY);
- 	map->def.key_size =3D size;
- 	return 0;
-@@ -9747,7 +9756,7 @@ static int map_btf_datasec_resize(struct bpf_map *m=
-ap, __u32 size)
-=20
- int bpf_map__set_value_size(struct bpf_map *map, __u32 size)
- {
--	if (map->fd >=3D 0)
-+	if (map->obj->loaded || map->reused)
- 		return libbpf_err(-EBUSY);
-=20
- 	if (map->mmaped) {
-@@ -9788,8 +9797,11 @@ __u32 bpf_map__btf_value_type_id(const struct bpf_=
-map *map)
- int bpf_map__set_initial_value(struct bpf_map *map,
- 			       const void *data, size_t size)
- {
-+	if (map->obj->loaded || map->reused)
-+		return libbpf_err(-EBUSY);
++static int bpf_prog_assign_exc_cb(struct bpf_object *obj, struct bpf_pro=
+gram *prog)
++{
++	const char *str =3D "exception_callback:";
++	size_t pfx_len =3D strlen(str);
++	int i, j, n;
 +
- 	if (!map->mmaped || map->libbpf_type =3D=3D LIBBPF_MAP_KCONFIG ||
--	    size !=3D map->def.value_size || map->fd >=3D 0)
-+	    size !=3D map->def.value_size)
- 		return libbpf_err(-EINVAL);
-=20
- 	memcpy(map->mmaped, data, size);
-@@ -9816,7 +9828,7 @@ __u32 bpf_map__ifindex(const struct bpf_map *map)
-=20
- int bpf_map__set_ifindex(struct bpf_map *map, __u32 ifindex)
++	if (!obj->btf || !kernel_supports(obj, FEAT_BTF_DECL_TAG))
++		return 0;
++
++	n =3D btf__type_cnt(obj->btf);
++	for (i =3D 1; i < n; i++) {
++		const char *name;
++		struct btf_type *t;
++
++		t =3D btf_type_by_id(obj->btf, i);
++		if (!btf_is_decl_tag(t) || btf_decl_tag(t)->component_idx !=3D -1)
++			continue;
++
++		name =3D btf__str_by_offset(obj->btf, t->name_off);
++		if (strncmp(name, str, pfx_len) !=3D 0)
++			continue;
++
++		t =3D btf_type_by_id(obj->btf, t->type);
++		if (!btf_is_func(t) || btf_func_linkage(t) !=3D BTF_FUNC_GLOBAL) {
++			pr_warn("prog '%s': exception_callback:<value> decl tag not applied t=
+o the main program\n",
++				prog->name);
++			return -EINVAL;
++		}
++		if (strcmp(prog->name, btf__str_by_offset(obj->btf, t->name_off)) !=3D=
+ 0)
++			continue;
++		/* Multiple callbacks are specified for the same prog,
++		 * the verifier will eventually return an error for this
++		 * case, hence simply skip appending a subprog.
++		 */
++		if (prog->exception_cb_idx >=3D 0) {
++			prog->exception_cb_idx =3D -1;
++			break;
++		}
++
++		name +=3D pfx_len;
++		if (str_is_empty(name)) {
++			pr_warn("prog '%s': exception_callback:<value> decl tag contains empt=
+y value\n",
++				prog->name);
++			return -EINVAL;
++		}
++
++		for (j =3D 0; j < obj->nr_programs; j++) {
++			struct bpf_program *subprog =3D &obj->programs[j];
++
++			if (!prog_is_subprog(obj, subprog))
++				continue;
++			if (strcmp(name, subprog->name) !=3D 0)
++				continue;
++			/* Enforce non-hidden, as from verifier point of
++			 * view it expects global functions, whereas the
++			 * mark_btf_static fixes up linkage as static.
++			 */
++			if (!subprog->sym_global || subprog->mark_btf_static) {
++				pr_warn("prog '%s': exception callback %s must be a global non-hidde=
+n function\n",
++					prog->name, subprog->name);
++				return -EINVAL;
++			}
++			/* Let's see if we already saw a static exception callback with the s=
+ame name */
++			if (prog->exception_cb_idx >=3D 0) {
++				pr_warn("prog '%s': multiple subprogs with same name as exception ca=
+llback '%s'\n",
++					prog->name, subprog->name);
++				return -EINVAL;
++			}
++			prog->exception_cb_idx =3D j;
++			break;
++		}
++
++		if (prog->exception_cb_idx >=3D 0)
++			continue;
++
++		pr_warn("prog '%s': cannot find exception callback '%s'\n", prog->name=
+, name);
++		return -ENOENT;
++	}
++
++	return 0;
++}
++
+ static int
+ bpf_object_relocate(struct bpf_object *obj, const char *targ_btf_path)
  {
--	if (map->fd >=3D 0)
-+	if (map_is_created(map))
- 		return libbpf_err(-EBUSY);
- 	map->map_ifindex =3D ifindex;
- 	return 0;
-@@ -9921,7 +9933,7 @@ bpf_object__find_map_fd_by_name(const struct bpf_ob=
-ject *obj, const char *name)
- static int validate_map_op(const struct bpf_map *map, size_t key_sz,
- 			   size_t value_sz, bool check_value_sz)
- {
--	if (map->fd <=3D 0)
-+	if (!map_is_created(map)) /* map is not yet created */
- 		return -ENOENT;
+@@ -6688,6 +6690,9 @@ bpf_object_relocate(struct bpf_object *obj, const c=
+har *targ_btf_path)
+ 			return err;
+ 		}
 =20
- 	if (map->def.key_size !=3D key_sz) {
-@@ -12374,7 +12386,7 @@ int bpf_link__update_map(struct bpf_link *link, c=
-onst struct bpf_map *map)
- 	__u32 zero =3D 0;
- 	int err;
-=20
--	if (!bpf_map_is_struct_ops(map) || map->fd < 0)
-+	if (!bpf_map_is_struct_ops(map) || !map_is_created(map))
- 		return -EINVAL;
-=20
- 	st_ops_link =3D container_of(link, struct bpf_link_struct_ops, link);
-@@ -13276,7 +13288,7 @@ int bpf_object__load_skeleton(struct bpf_object_s=
-keleton *s)
- 	for (i =3D 0; i < s->map_cnt; i++) {
- 		struct bpf_map *map =3D *s->maps[i].map;
- 		size_t mmap_sz =3D bpf_map_mmap_sz(map->def.value_size, map->def.max_e=
-ntries);
--		int prot, map_fd =3D bpf_map__fd(map);
-+		int prot, map_fd =3D map->fd;
- 		void **mmaped =3D s->maps[i].mmaped;
-=20
- 		if (!mmaped)
++		err =3D bpf_prog_assign_exc_cb(obj, prog);
++		if (err)
++			return err;
+ 		/* Now, also append exception callback if it has not been done already=
+. */
+ 		if (prog->exception_cb_idx >=3D 0) {
+ 			struct bpf_program *subprog =3D &obj->programs[prog->exception_cb_idx=
+];
 --=20
 2.34.1
 
