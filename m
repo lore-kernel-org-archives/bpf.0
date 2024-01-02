@@ -1,33 +1,25 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E88A16422
-	for <bpf@vger.kernel.org>; Tue,  2 Jan 2024 19:01:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 402IZJRd002349
-	for <bpf@vger.kernel.org>; Tue, 2 Jan 2024 11:01:36 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3vc9pavjqg-16
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 02 Jan 2024 11:01:36 -0800
-Received: from twshared15991.38.frc1.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Tue, 2 Jan 2024 11:01:30 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id C502C3DF0166F; Tue,  2 Jan 2024 11:01:18 -0800 (PST)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>, Jiri Olsa <jolsa@kernel.org>
-Subject: [PATCH v2 bpf-next 8/9] libbpf: implement __arg_ctx fallback logic
-Date: Tue, 2 Jan 2024 11:00:54 -0800
-Message-ID: <20240102190055.1602698-9-andrii@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E489615AD2
+	for <bpf@vger.kernel.org>; Tue,  2 Jan 2024 19:07:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+	id 191E62C3C8262; Tue,  2 Jan 2024 11:07:26 -0800 (PST)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Martin KaFai Lau <kafai@fb.com>
+Subject: [PATCH bpf-next] bpf: Track aligned st store as imprecise spilled registers
+Date: Tue,  2 Jan 2024 11:07:26 -0800
+Message-Id: <20240102190726.2017424-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240102190055.1602698-1-andrii@kernel.org>
-References: <20240102190055.1602698-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,402 +27,120 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 4mChaFpVGN7mjTnFzZ2ftlHeWQsMzmvK
-X-Proofpoint-GUID: 4mChaFpVGN7mjTnFzZ2ftlHeWQsMzmvK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-02_06,2024-01-02_01,2023-05-22_02
 
-Out of all special global func arg tag annotations, __arg_ctx is
-practically is the most immediately useful and most critical to have
-working across multitude kernel version, if possible. This would allow
-end users to write much simpler code if __arg_ctx semantics worked for
-older kernels that don't natively understand btf_decl_tag("arg:ctx") in
-verifier logic.
+With patch set [1], precision backtracing supports register spill/fill
+to/from the stack. The patch [2] allows initial imprecise register spill
+with content 0. This is a common case for cpuv3 and lower for
+initializing the stack variables with pattern
+  r1 =3D 0
+  *(u64 *)(r10 - 8) =3D r1
+and the [2] has demonstrated good verification improvement.
 
-Luckily, it is possible to ensure __arg_ctx works on old kernels through
-a bit of extra work done by libbpf, at least in a lot of common cases.
+For cpuv4, the initialization could be
+  *(u64 *)(r10 - 8) =3D 0
+The current verifier marks the r10-8 contents with STACK_ZERO.
+Similar to [2], let us permit the above insn to behave like
+imprecise register spill which can reduce number of verified states.
 
-To explain the overall idea, we need to go back at how context argument
-was supported in global funcs before __arg_ctx support was added. This
-was done based on special struct name checks in kernel. E.g., for
-BPF_PROG_TYPE_PERF_EVENT the expectation is that argument type `struct
-bpf_perf_event_data *` mark that argument as PTR_TO_CTX. This is all
-good as long as global function is used from the same BPF program types
-only, which is often not the case. If the same subprog has to be called
-from, say, kprobe and perf_event program types, there is no single
-definition that would satisfy BPF verifier. Subprog will have context
-argument either for kprobe (if using bpf_user_pt_regs_t struct name) or
-perf_event (with bpf_perf_event_data struct name), but not both.
+I checked cpuv3 and cpuv4 with and without this patch.
+There is no change for cpuv3 since '*(u64 *)(r10 - 8) =3D 0'
+is only generated with cpuv4.
 
-This limitation was the reason to add btf_decl_tag("arg:ctx"), making
-the actual argument type not important, so that user can just define
-"generic" signature:
+For cpuv4:
+$ ../veristat -C old.cpuv4.csv new.cpuv4.csv -e file,prog,insns,states -s=
+ '|insns_diff|'
+File                                                   Program           =
+                                    Insns (A)  Insns (B)  Insns    (DIFF)=
+  States (A)  States (B)  States (DIFF)
+-----------------------------------------------------  ------------------=
+----------------------------------  ---------  ---------  ---------------=
+  ----------  ----------  -------------
+pyperf600_bpf_loop.bpf.linked3.o                       on_event          =
+                                         6066       4889  -1177 (-19.40%)=
+         403         321  -82 (-20.35%)
+xdp_synproxy_kern.bpf.linked3.o                        syncookie_tc      =
+                                        12412      11719    -693 (-5.58%)=
+         345         330   -15 (-4.35%)
+xdp_synproxy_kern.bpf.linked3.o                        syncookie_xdp     =
+                                        12478      11794    -684 (-5.48%)=
+         346         331   -15 (-4.34%)
+test_cls_redirect.bpf.linked3.o                        cls_redirect      =
+                                        35483      35387     -96 (-0.27%)=
+        2179        2177    -2 (-0.09%)
+local_storage_bench.bpf.linked3.o                      get_local         =
+                                          228        168    -60 (-26.32%)=
+          17          14   -3 (-17.65%)
+test_l4lb_noinline.bpf.linked3.o                       balancer_ingress  =
+                                         4494       4522     +28 (+0.62%)=
+         217         219    +2 (+0.92%)
+test_l4lb_noinline_dynptr.bpf.linked3.o                balancer_ingress  =
+                                         1432       1455     +23 (+1.61%)=
+          92          94    +2 (+2.17%)
+verifier_iterating_callbacks.bpf.linked3.o             widening          =
+                                           52         41    -11 (-21.15%)=
+           4           3   -1 (-25.00%)
+test_xdp_noinline.bpf.linked3.o                        balancer_ingress_v=
+6                                        3462       3458      -4 (-0.12%)=
+         216         216    +0 (+0.00%)
+...
 
-  __noinline int global_subprog(void *ctx __arg_ctx) { ... }
+test_l4lb_noinline and test_l4lb_noinline_dynptr has minor regression, bu=
+t
+pyperf600_bpf_loop and local_storage_bench gets pretty good improvement.
 
-I won't belabor how libbpf is implementing subprograms, see a huge
-comment next to bpf_object_relocate_calls() function. The idea is that
-each main/entry BPF program gets its own copy of global_subprog's code
-appended.
+  [1] https://lore.kernel.org/all/20231205184248.1502704-1-andrii@kernel.=
+org/
+  [2] https://lore.kernel.org/all/20231205184248.1502704-9-andrii@kernel.=
+org/
 
-This per-program copy of global subprog code *and* associated func_info
-.BTF.ext information, pointing to FUNC -> FUNC_PROTO BTF type chain
-allows libbpf to simulate __arg_ctx behavior transparently, even if the
-kernel doesn't yet support __arg_ctx annotation natively.
-
-The idea is straightforward: each time we append global subprog's code
-and func_info information, we adjust its FUNC -> FUNC_PROTO type
-information, if necessary (that is, libbpf can detect the presence of
-btf_decl_tag("arg:ctx") just like BPF verifier would do it).
-
-The rest is just mechanical and somewhat painful BTF manipulation code.
-It's painful because we need to clone FUNC -> FUNC_PROTO, instead of
-reusing it, as same FUNC -> FUNC_PROTO chain might be used by another
-main BPF program within the same BPF object, so we can't just modify it
-in-place (and cloning BTF types within the same struct btf object is
-painful due to constant memory invalidation, see comments in code).
-Uploaded BPF object's BTF information has to work for all BPF
-programs at the same time.
-
-Once we have FUNC -> FUNC_PROTO clones, we make sure that instead of
-using some `void *ctx` parameter definition, we have an expected `struct
-bpf_perf_event_data *ctx` definition (as far as BPF verifier and kernel
-is concerned), which will mark it as context for BPF verifier. Same
-global subprog relocated and copied into another main BPF program will
-get different type information according to main program's type. It all
-works out in the end in a completely transparent way for end user.
-
-Libbpf maintains internal program type -> expected context struct name
-mapping internally. Note, not all BPF program types have named context
-struct, so this approach won't work for such programs (just like it
-didn't before __arg_ctx). So native __arg_ctx is still important to have
-in kernel to have generic context support across all BPF program types.
-
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- tools/lib/bpf/libbpf.c | 257 ++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 251 insertions(+), 6 deletions(-)
+ kernel/bpf/verifier.c                                   | 2 +-
+ tools/testing/selftests/bpf/progs/verifier_spill_fill.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index d5f5c1a8f543..edd80fd2728e 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -6152,7 +6152,7 @@ reloc_prog_func_and_line_info(const struct bpf_obje=
-ct *obj,
- 	int err;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index a376eb609c41..17ad0228270e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4491,7 +4491,7 @@ static int check_stack_write_fixed_off(struct bpf_v=
+erifier_env *env,
+ 		if (fls64(reg->umax_value) > BITS_PER_BYTE * size)
+ 			state->stack[spi].spilled_ptr.id =3D 0;
+ 	} else if (!reg && !(off % BPF_REG_SIZE) && is_bpf_st_mem(insn) &&
+-		   insn->imm !=3D 0 && env->bpf_capable) {
++		   env->bpf_capable) {
+ 		struct bpf_reg_state fake_reg =3D {};
 =20
- 	/* no .BTF.ext relocation if .BTF.ext is missing or kernel doesn't
--	 * supprot func/line info
-+	 * support func/line info
- 	 */
- 	if (!obj->btf_ext || !kernel_supports(obj, FEAT_BTF_FUNC))
- 		return 0;
-@@ -6630,8 +6630,245 @@ static int bpf_prog_assign_exc_cb(struct bpf_obje=
-ct *obj, struct bpf_program *pr
- 	return 0;
- }
-=20
--static int
--bpf_object_relocate(struct bpf_object *obj, const char *targ_btf_path)
-+static struct {
-+	enum bpf_prog_type prog_type;
-+	const char *ctx_name;
-+} global_ctx_map[] =3D {
-+	{ BPF_PROG_TYPE_CGROUP_DEVICE,           "bpf_cgroup_dev_ctx" },
-+	{ BPF_PROG_TYPE_CGROUP_SKB,              "__sk_buff" },
-+	{ BPF_PROG_TYPE_CGROUP_SOCK,             "bpf_sock" },
-+	{ BPF_PROG_TYPE_CGROUP_SOCK_ADDR,        "bpf_sock_addr" },
-+	{ BPF_PROG_TYPE_CGROUP_SOCKOPT,          "bpf_sockopt" },
-+	{ BPF_PROG_TYPE_CGROUP_SYSCTL,           "bpf_sysctl" },
-+	{ BPF_PROG_TYPE_FLOW_DISSECTOR,          "__sk_buff" },
-+	{ BPF_PROG_TYPE_KPROBE,                  "bpf_user_pt_regs_t" },
-+	{ BPF_PROG_TYPE_LWT_IN,                  "__sk_buff" },
-+	{ BPF_PROG_TYPE_LWT_OUT,                 "__sk_buff" },
-+	{ BPF_PROG_TYPE_LWT_SEG6LOCAL,           "__sk_buff" },
-+	{ BPF_PROG_TYPE_LWT_XMIT,                "__sk_buff" },
-+	{ BPF_PROG_TYPE_NETFILTER,               "bpf_nf_ctx" },
-+	{ BPF_PROG_TYPE_PERF_EVENT,              "bpf_perf_event_data" },
-+	{ BPF_PROG_TYPE_RAW_TRACEPOINT,          "bpf_raw_tracepoint_args" },
-+	{ BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE, "bpf_raw_tracepoint_args" },
-+	{ BPF_PROG_TYPE_SCHED_ACT,               "__sk_buff" },
-+	{ BPF_PROG_TYPE_SCHED_CLS,               "__sk_buff" },
-+	{ BPF_PROG_TYPE_SK_LOOKUP,               "bpf_sk_lookup" },
-+	{ BPF_PROG_TYPE_SK_MSG,                  "sk_msg_md" },
-+	{ BPF_PROG_TYPE_SK_REUSEPORT,            "sk_reuseport_md" },
-+	{ BPF_PROG_TYPE_SK_SKB,                  "__sk_buff" },
-+	{ BPF_PROG_TYPE_SOCK_OPS,                "bpf_sock_ops" },
-+	{ BPF_PROG_TYPE_SOCKET_FILTER,           "__sk_buff" },
-+	{ BPF_PROG_TYPE_XDP,                     "xdp_md" },
-+	/* all other program types don't have "named" context structs */
-+};
-+
-+static int clone_func_btf_info(struct btf *btf, int orig_fn_id, struct b=
-pf_program *prog)
-+{
-+	int fn_id, fn_proto_id, ret_type_id, orig_proto_id;
-+	int i, err, arg_cnt, name_off;
-+	struct btf_type *fn_t, *fn_proto_t, *t;
-+	struct btf_param *p;
-+
-+	/* caller already validated FUNC -> FUNC_PROTO validity */
-+	fn_t =3D btf_type_by_id(btf, orig_fn_id);
-+	fn_proto_t =3D btf_type_by_id(btf, fn_t->type);
-+
-+	/* Note that each btf__add_xxx() operation invalidates
-+	 * all btf_type and string pointers, so we need to be
-+	 * very careful when cloning BTF types. BTF type
-+	 * pointers have to be always refetched. And to avoid
-+	 * problems with invalidated string pointers, we
-+	 * add empty strings initially, then just fix up
-+	 * name_off offsets in place. Offsets are stable for
-+	 * existing strings, so that works out.
-+	 */
-+	name_off =3D fn_t->name_off; /* we are about to invalidate fn_t */
-+	ret_type_id =3D fn_proto_t->type; /* and fn_proto_t as well */
-+	arg_cnt =3D btf_vlen(fn_proto_t);
-+	orig_proto_id =3D fn_t->type; /* original FUNC_PROTO ID */
-+
-+	/* clone FUNC first, btf__add_func() enforces
-+	 * non-empty name, so use entry program's name as
-+	 * a placeholder, which we replace immediately
-+	 */
-+	fn_id =3D btf__add_func(btf, prog->name, btf_func_linkage(fn_t), fn_t->=
-type);
-+	if (fn_id < 0)
-+		return -EINVAL;
-+
-+	fn_t =3D btf_type_by_id(btf, fn_id);
-+	fn_t->name_off =3D name_off; /* reuse original string */
-+	fn_t->type =3D fn_id + 1; /* we can predict FUNC_PROTO ID */
-+
-+	/* clone FUNC_PROTO and its params now */
-+	fn_proto_id =3D btf__add_func_proto(btf, ret_type_id);
-+	if (fn_proto_id < 0)
-+		return -EINVAL;
-+
-+	for (i =3D 0; i < arg_cnt; i++) {
-+		/* copy original parameter data */
-+		t =3D btf_type_by_id(btf, orig_proto_id);
-+		p =3D &btf_params(t)[i];
-+		name_off =3D p->name_off;
-+
-+		err =3D btf__add_func_param(btf, "", p->type);
-+		if (err)
-+			return err;
-+
-+		fn_proto_t =3D btf_type_by_id(btf, fn_proto_id);
-+		p =3D &btf_params(fn_proto_t)[i];
-+		p->name_off =3D name_off; /* use remembered str offset */
-+	}
-+
-+	return fn_id;
-+}
-+
-+/* Check if main program or global subprog's function prototype has `arg=
-:ctx`
-+ * argument tags, and, if necessary, substitute correct type to match wh=
-at BPF
-+ * verifier would expect, taking into account specific program type. Thi=
-s
-+ * allows to support __arg_ctx tag transparently on old kernels that don=
-'t yet
-+ * have a native support for it in the verifier, making user's life much
-+ * easier.
-+ */
-+static int bpf_program_fixup_func_info(struct bpf_object *obj, struct bp=
-f_program *prog)
-+{
-+	const char *ctx_name =3D NULL, *ctx_tag =3D "arg:ctx";
-+	struct bpf_func_info_min *func_rec;
-+	struct btf_type *fn_t, *fn_proto_t;
-+	struct btf *btf =3D obj->btf;
-+	const struct btf_type *t;
-+	struct btf_param *p;
-+	int ptr_id =3D 0, struct_id, tag_id, orig_fn_id;
-+	int i, n, arg_idx, arg_cnt, err, rec_idx;
-+	int *orig_ids;
-+
-+	/* no .BTF.ext, no problem */
-+	if (!obj->btf_ext || !prog->func_info)
-+		return 0;
-+
-+	/* some BPF program types just don't have named context structs, so
-+	 * this fallback mechanism doesn't work for them
-+	 */
-+	for (i =3D 0; i < ARRAY_SIZE(global_ctx_map); i++) {
-+		if (global_ctx_map[i].prog_type !=3D prog->type)
-+			continue;
-+		ctx_name =3D global_ctx_map[i].ctx_name;
-+		break;
-+	}
-+	if (!ctx_name)
-+		return 0;
-+
-+	/* remember original func BTF IDs to detect if we already cloned them *=
-/
-+	orig_ids =3D calloc(prog->func_info_cnt, sizeof(*orig_ids));
-+	if (!orig_ids)
-+		return -ENOMEM;
-+	for (i =3D 0; i < prog->func_info_cnt; i++) {
-+		func_rec =3D prog->func_info + prog->func_info_rec_size * i;
-+		orig_ids[i] =3D func_rec->type_id;
-+	}
-+
-+	/* go through each DECL_TAG with "arg:ctx" and see if it points to one
-+	 * of our subprogs; if yes and subprog is global and needs adjustment,
-+	 * clone and adjust FUNC -> FUNC_PROTO combo
-+	 */
-+	for (i =3D 1, n =3D btf__type_cnt(btf); i < n; i++) {
-+		/* only DECL_TAG with "arg:ctx" value are interesting */
-+		t =3D btf__type_by_id(btf, i);
-+		if (!btf_is_decl_tag(t))
-+			continue;
-+		if (strcmp(btf__str_by_offset(btf, t->name_off), ctx_tag) !=3D 0)
-+			continue;
-+
-+		/* only global funcs need adjustment, if at all */
-+		orig_fn_id =3D t->type;
-+		fn_t =3D btf_type_by_id(btf, orig_fn_id);
-+		if (!btf_is_func(fn_t) || btf_func_linkage(fn_t) !=3D BTF_FUNC_GLOBAL)
-+			continue;
-+
-+		/* sanity check FUNC -> FUNC_PROTO chain, just in case */
-+		fn_proto_t =3D btf_type_by_id(btf, fn_t->type);
-+		if (!fn_proto_t || !btf_is_func_proto(fn_proto_t))
-+			continue;
-+
-+		/* find corresponding func_info record */
-+		func_rec =3D NULL;
-+		for (rec_idx =3D 0; rec_idx < prog->func_info_cnt; rec_idx++) {
-+			if (orig_ids[rec_idx] =3D=3D t->type) {
-+				func_rec =3D prog->func_info + prog->func_info_rec_size * rec_idx;
-+				break;
-+			}
-+		}
-+		/* current main program doesn't call into this subprog */
-+		if (!func_rec)
-+			continue;
-+
-+		/* some more sanity checking of DECL_TAG */
-+		arg_cnt =3D btf_vlen(fn_proto_t);
-+		arg_idx =3D btf_decl_tag(t)->component_idx;
-+		if (arg_idx < 0 || arg_idx >=3D arg_cnt)
-+			continue;
-+
-+		/* check if existing parameter already matches verifier expectations *=
-/
-+		p =3D &btf_params(fn_proto_t)[arg_idx];
-+		t =3D skip_mods_and_typedefs(btf, p->type, NULL);
-+		if (btf_is_ptr(t) &&
-+		    (t =3D skip_mods_and_typedefs(btf, t->type, NULL)) &&
-+		    btf_is_struct(t) &&
-+		    strcmp(btf__str_by_offset(btf, t->name_off), ctx_name) =3D=3D 0) {
-+			continue; /* no need for fix up */
-+		}
-+
-+		/* clone fn/fn_proto, unless we already did it for another arg */
-+		if (func_rec->type_id =3D=3D orig_fn_id) {
-+			int fn_id;
-+
-+			fn_id =3D clone_func_btf_info(btf, orig_fn_id, prog);
-+			if (fn_id < 0) {
-+				err =3D fn_id;
-+				goto err_out;
-+			}
-+
-+			/* point func_info record to a cloned FUNC type */
-+			func_rec->type_id =3D fn_id;
-+		}
-+
-+		/* create PTR -> STRUCT type chain to mark PTR_TO_CTX argument;
-+		 * we do it just once per main BPF program, as all global
-+		 * funcs share the same program type, so need only PTR ->
-+		 * STRUCT type chain
-+		 */
-+		if (ptr_id =3D=3D 0) {
-+			struct_id =3D btf__add_struct(btf, ctx_name, 0);
-+			ptr_id =3D btf__add_ptr(btf, struct_id);
-+			if (ptr_id < 0 || struct_id < 0) {
-+				err =3D -EINVAL;
-+				goto err_out;
-+			}
-+		}
-+
-+		/* for completeness, clone DECL_TAG and point it to cloned param */
-+		tag_id =3D btf__add_decl_tag(btf, ctx_tag, func_rec->type_id, arg_idx)=
-;
-+		if (tag_id < 0) {
-+			err =3D -EINVAL;
-+			goto err_out;
-+		}
-+
-+		/* all the BTF manipulations invalidated pointers, refetch them */
-+		fn_t =3D btf_type_by_id(btf, func_rec->type_id);
-+		fn_proto_t =3D btf_type_by_id(btf, fn_t->type);
-+
-+		/* fix up type ID pointed to by param */
-+		p =3D &btf_params(fn_proto_t)[arg_idx];
-+		p->type =3D ptr_id;
-+	}
-+
-+	free(orig_ids);
-+	return 0;
-+err_out:
-+	free(orig_ids);
-+	return err;
-+}
-+
-+static int bpf_object_relocate(struct bpf_object *obj, const char *targ_=
-btf_path)
- {
- 	struct bpf_program *prog;
- 	size_t i, j;
-@@ -6712,19 +6949,28 @@ bpf_object_relocate(struct bpf_object *obj, const=
- char *targ_btf_path)
- 			}
- 		}
- 	}
--	/* Process data relos for main programs */
- 	for (i =3D 0; i < obj->nr_programs; i++) {
- 		prog =3D &obj->programs[i];
- 		if (prog_is_subprog(obj, prog))
- 			continue;
- 		if (!prog->autoload)
- 			continue;
-+
-+		/* Process data relos for main programs */
- 		err =3D bpf_object_relocate_data(obj, prog);
- 		if (err) {
- 			pr_warn("prog '%s': failed to relocate data references: %d\n",
- 				prog->name, err);
- 			return err;
- 		}
-+
-+		/* Fix up .BTF.ext information, if necessary */
-+		err =3D bpf_program_fixup_func_info(obj, prog);
-+		if (err) {
-+			pr_warn("prog '%s': failed to perform .BTF.ext fix ups: %d\n",
-+				prog->name, err);
-+			return err;
-+		}
- 	}
-=20
- 	return 0;
-@@ -7436,8 +7682,7 @@ static int bpf_program_record_relos(struct bpf_prog=
-ram *prog)
- 	return 0;
- }
-=20
--static int
--bpf_object_load_progs(struct bpf_object *obj, int log_level)
-+static int bpf_object_load_progs(struct bpf_object *obj, int log_level)
- {
- 	struct bpf_program *prog;
- 	size_t i;
+ 		__mark_reg_known(&fake_reg, insn->imm);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/to=
+ols/testing/selftests/bpf/progs/verifier_spill_fill.c
+index 39fe3372e0e0..05de3de56e79 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
++++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+@@ -496,13 +496,13 @@ SEC("raw_tp")
+ __log_level(2)
+ __success
+ /* make sure fp-8 is all STACK_ZERO */
+-__msg("2: (7a) *(u64 *)(r10 -8) =3D 0          ; R10=3Dfp0 fp-8_w=3D0000=
+0000")
++__msg("2: (7a) *(u64 *)(r10 -8) =3D 0          ; R10=3Dfp0 fp-8_w=3D0")
+ /* but fp-16 is spilled IMPRECISE zero const reg */
+ __msg("4: (7b) *(u64 *)(r10 -16) =3D r0        ; R0_w=3D0 R10=3Dfp0 fp-1=
+6_w=3D0")
+ /* validate that assigning R2 from STACK_ZERO doesn't mark register
+  * precise immediately; if necessary, it will be marked precise later
+  */
+-__msg("6: (71) r2 =3D *(u8 *)(r10 -1)          ; R2_w=3D0 R10=3Dfp0 fp-8=
+_w=3D00000000")
++__msg("6: (71) r2 =3D *(u8 *)(r10 -1)          ; R2_w=3D0 R10=3Dfp0 fp-8=
+_w=3D0")
+ /* similarly, when R2 is assigned from spilled register, it is initially
+  * imprecise, but will be marked precise later once it is used in precis=
+e context
+  */
 --=20
 2.34.1
 
