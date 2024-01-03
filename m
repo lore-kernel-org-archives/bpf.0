@@ -1,238 +1,276 @@
-Received: from mx0b-00823401.pphosted.com (mx0b-00823401.pphosted.com [148.163.152.46])
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD3341DA23
-	for <bpf@vger.kernel.org>; Wed,  3 Jan 2024 21:55:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=motorola.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=motorola.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=motorola.com header.i=@motorola.com header.b="5+Pqed04"
-Received: from pps.filterd (m0355091.ppops.net [127.0.0.1])
-	by mx0b-00823401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 403C8S2K026707;
-	Wed, 3 Jan 2024 18:56:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com; h=
-	from:to:cc:subject:date:message-id:content-type
-	:content-transfer-encoding:mime-version; s=DKIM202306; bh=vqzjzW
-	jZu9rO3aGKW/yPR1jTOaAjWmgnnc3WiG+zlHU=; b=5+Pqed04wX5LqCDmV08h9U
-	COTbGk3JuS2xolqMjKO6xT5Cd2ckAU8IGCCoZpwgKTA5rmj1wJat+p/jESUcUz1d
-	cvWNG56dNf8eoCku0PtafUZWNj5ToEKZzG3Ip37QLwTG4MISbXnOf80wTXOxKjnJ
-	6puATOUUSxKcfK34NSeSb9vnRuCbgX7pfsja7HZRf9YvvZIdmrWRuKFHw9g1oStR
-	edyH2sWXodXUNmzvhuqeEUBwXPpULa/4Yk+tORTk6vlp87W7x5bNi/7H3uYfkvxx
-	JtvZYeAiM2w5ITTNMp2H6dlWhT06KRigDrzNg25Wjagtj7h++uNwnlxNXuaQ0xag
-	==
-Received: from apc01-psa-obe.outbound.protection.outlook.com (mail-psaapc01lp2040.outbound.protection.outlook.com [104.47.26.40])
-	by mx0b-00823401.pphosted.com (PPS) with ESMTPS id 3vd7aw0nc0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 03 Jan 2024 18:56:05 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QtVEsTMjXLVPvrq5qZ6FGMEczOCgKFX3dLO7pbXP/BOp7WT5Y3B+R+cbYp70mxRug3HAOoGMMwZ2gz7Bs12q4F1yfINmXkE91OVBr+Y3BkDlFwH2vYfmgq+uXu6YmBw4XPTfGzyREd1jzLC08aGmwYo/mtfZPU/AFJZ1aPPBcD4OvVC4tJat7AYqDc49xkIugV0jpe28WEsS3fVGLmcBKvCIU3WfeBNKq6KHEzsyXQvpVzSZmU10AD/bXeQUa2lr7KHIC7RZVFsfE7sJtQms3asHiUTfyuKrUZv71gXKYxFO6WBeIV9kUhWrjK99KVtDGJesXmHDOguuvOr7VKcXkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vqzjzWjZu9rO3aGKW/yPR1jTOaAjWmgnnc3WiG+zlHU=;
- b=SkfXegjURMAV42f5H1NkRLzfPZrmlQcvF5h9J+UyQmOvgvtnwPzTVA8PMJU3XJTp8AahwWO2CW+Qf7bBHWEHNsab6K9PEsJpueykjGe+NLOF820cA9+pS8+oa86F/UAeIpOMYZdjeiOIMe2iUr3svEyxP5Q9BR3z4enap/CYVpyX5aPgmoSdbqXH5LcdO5oo24mRtvBPBFeXCJJB7lXNQhS6AUxdPjC8hplbNovY/hL0GkFf85uxWlED2qmK+iGSWxb+JGPvY8AhGFYM5e40q8POeIvAn4g0+vHD9fqQyCz1YuPhdztfV9SYU8goaYpKmJl7uOVwzsvHh2qIey0BLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=motorola.com; dmarc=pass action=none header.from=motorola.com;
- dkim=pass header.d=motorola.com; arc=none
-Received: from SEZPR03MB6786.apcprd03.prod.outlook.com (2603:1096:101:66::5)
- by KL1PR0302MB5412.apcprd03.prod.outlook.com (2603:1096:820:36::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.13; Wed, 3 Jan
- 2024 18:56:01 +0000
-Received: from SEZPR03MB6786.apcprd03.prod.outlook.com
- ([fe80::c0d5:21be:6c82:e5f6]) by SEZPR03MB6786.apcprd03.prod.outlook.com
- ([fe80::c0d5:21be:6c82:e5f6%6]) with mapi id 15.20.7159.013; Wed, 3 Jan 2024
- 18:56:01 +0000
-From: Maxwell Bland <mbland@motorola.com>
-To: "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-CC: Andrew Wheeler <awheeler@motorola.com>,
-        =?utf-8?B?U2FtbXkgQlMyIFF1ZSB8IOmYmeaWjOeUnw==?= <quebs2@motorola.com>,
-        "di_jin@brown.edu" <di_jin@brown.edu>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "vpk@cs.brown.edu" <vpk@cs.brown.edu>,
-        "v.atlidakis@gmail.com"
-	<v.atlidakis@gmail.com>
-Subject: [PATCH 1/2] Adding BPF NX
-Thread-Topic: [PATCH 1/2] Adding BPF NX
-Thread-Index: Ado+dbT9jfWatuBPQB+UpA/3vxssOw==
-Date: Wed, 3 Jan 2024 18:56:00 +0000
-Message-ID: 
- <SEZPR03MB6786385FE7630DC906EB0BFAB4602@SEZPR03MB6786.apcprd03.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SEZPR03MB6786:EE_|KL1PR0302MB5412:EE_
-x-ms-office365-filtering-correlation-id: add1d9ea-78bf-4132-0ea1-08dc0c8da0f7
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 
- S/6JiQdqqFD6ryfRZuKgrkKVTqtnWlhHaGs+7VBRwzFj+Ok2wMh8W8n5mH23z0DVc/nT/V0KdOdjyLaELOAmulnlrFx02T4k34X5+aEPPdc6Db6eXfHqywP0H7MzKy6jcuaQDwygZdgHmVwb/euUvgNl3q3exExLQ2Fa3yMK3v6oXNFZO6BYb6f12CJsqS4EHARd6PZa+1gSIbc2Q/9VRJMyv6tY08Z42P3dazyWwC5+ZGB9jgK/bvYHTMHTzTUcuB1PHZfPxWp9Gluia4RF3lBzB6+zMv4/M1aA86XF0bLV0Pl3jREnpVFHxnwg0OXXEJuFkfhMZuH+FOeJTOkFS0d+6SPaiJk2BCH9jAV0NWtHrC+k0AdDJwPFJzLwtaKS3y/J6B4nHk7vYX6bYxHQqqyVYesS6y5bVv0eA47E43rH1BY1VdRclf94mZr5ihMK14K8Y4T7Uju+uSx+6Egx/rINGXyuYiBHqwaiFOS6HQRxzQ5f+Wu9gQBgV350N+Dof6JKAlgQeuZd5hU1d7eLgoPyrr0BtAVIrtVOK3uHlveZxLQUyl0uP9Lhcebvvww5G2WZQGt9Us2iin4s1n3JHbPcsaXb8zyCpU1BdJbDp9UA0NEz26rJS1Coa7O6iChmkP1f3VexPSEHyLam/VeZcZSwYdXxf1fUBae7MECAnno=
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR03MB6786.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(39860400002)(346002)(136003)(376002)(366004)(230922051799003)(64100799003)(451199024)(186009)(1800799012)(2906002)(52536014)(8936002)(4326008)(8676002)(5660300002)(54906003)(316002)(66446008)(66946007)(38070700009)(66476007)(64756008)(66556008)(76116006)(6916009)(82960400001)(86362001)(122000001)(38100700002)(26005)(9686003)(6506007)(478600001)(71200400001)(7696005)(33656002)(83380400001)(41300700001)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?utf-8?B?QXExOWY1OFdLUnc5NHkwSUdIQnIxS0pMM3B3Mm4wTDVZRElEOU92dFVJcEFi?=
- =?utf-8?B?eHV4c3M0R0t4UkRlUjJkdXFpbGcwYXI1Qm5vZi9ZYU5acjVXRjJaYnh6blZC?=
- =?utf-8?B?enI4ZktXOVk2RHdjSzlBN1N2VWFnNWJaU0dPZ1QxQXdwc0tkOUxtQm52eW5S?=
- =?utf-8?B?WVZTZFpJdkx3VUkxL0tFSW15SEtHb09KbXlzRU5TblBqM3VEK3NrR3I1c2Zu?=
- =?utf-8?B?OXBWVTNQVDdlSDVuT3RabWdnS01NMFBSLzcyUXRHcDJqQkJCa2VrQkZKbC9z?=
- =?utf-8?B?ZkIwYWZUZnRSUlVYc2pjelRzY3ZrbWMrSW40bGJ4ampOTzVuUzJBK3gxQ3ph?=
- =?utf-8?B?ek5TMysrdVdQbXJ6OUZ1ZmxkUm5HQ3RmUWdSYlpzbFdqaERERWJkdW42ZDgv?=
- =?utf-8?B?aU5RVStUQmx6ZUs3eHdJYTUzMWZ6T29zbExDR2tDRjM3UFlhVDhUUS9iRXhj?=
- =?utf-8?B?a0tjMG41dGxKaklZVkVrUE8rRy9zK2hIRi9uQzdxcmZWblpoU01vYnBOdVAw?=
- =?utf-8?B?WXIyVlJsZUk5SWd1OXFtY3E0OUJNVlJpbHZreTlJViswRVdRbkJuZ3FYNUla?=
- =?utf-8?B?S2FoblRTcmZvZmR4TGpLeWtiV0hWcWt5NTVBNXpjS3c1dWg3OStNUVQ0cXJx?=
- =?utf-8?B?L2tURmowWFptN2s4MC9mUlVlWnowWFRnbCtXc295RGRUTTU5c0RMc0dKdVFG?=
- =?utf-8?B?REl6eGFsRW1GUldaQjgwNzRPV29RVGVuNVZUT1NVTTJ3eDI4NVVwK0JnUVBI?=
- =?utf-8?B?SDByemVkY0VlenAwQ0tYLzFnakNYa1NGSWdFR3Frd255bkR3YitYN0xrenNW?=
- =?utf-8?B?clcxNC9lMUhFR29Ra2pHL3RFNXhWdEhudk5DV2s5MmY1VEFsVFlmOURRNVpW?=
- =?utf-8?B?WDM4VWVqcWkyVG1HQzBUc1B5SGpLYUFuOGpLcVZsSkpSdklYTEoxL1FTMXcx?=
- =?utf-8?B?dnF3c1krUU5kTlhaQ2J0SGRnRCtIS3hnTko3eE95QUM0N2FxT3YrQW8vMzUx?=
- =?utf-8?B?QkI1QXlmdmpiZERjc1VLYzFHM0tTc252Y3JRY1M4N08yUFFMNU1VL2ZxMVJk?=
- =?utf-8?B?djRjNmZnbkV0MFdaWjdiTEFvVzZaSmthUzN1b1U2clBqaGo3emdxUG9tVEpU?=
- =?utf-8?B?dUZkUTVNLzduSFVxQWtGMjFiTTRLT0xPMGpRNkFFK3VTZGNXMmVHaGN6YW9H?=
- =?utf-8?B?dGpCZkp3VFVjZVJPcE1NN3pTVHh5OVEzQUtFOUY5MmdobXFxUFBjSzh3L3kz?=
- =?utf-8?B?R3oxK25qQlNycDh6NDYwRGZEN0Y4U3NFZ1Q3cVp5Qk13REpmUmJUTFpFUkI1?=
- =?utf-8?B?S25FZlA3Z0x4SGdna0VHUSs0SXh0OG85aVRMYndtN0hzc3hwaTF0NzVrSXNr?=
- =?utf-8?B?WlRIaFIxY0NlZlY1d2dROUN6WlMrUGRBR2ZJRkdMOEd5L2VTL1VjVFVWT1dI?=
- =?utf-8?B?U1lndEQvVEZWUmtUZ0dBS2hKb2tjT1dKSjZ4V3Z2MHBvSWRORGI4ZGM4bWNr?=
- =?utf-8?B?Sk91ZnhtbzVEd0w2bm9MU1dJdE1ZZ0lHaFZ3NGcxUTczdDNJbXlPSU5Rb2ZC?=
- =?utf-8?B?d1FkZ0dxWlozaVlEUUV5V0hsYWE4ZTUyckt5SzZ0OG9WcDU2aE81SWtmZklu?=
- =?utf-8?B?dzFWTDF0MnZRODJ5QkVLOWFJVGN1b2YvM1AzRnc5cTJFcDJzaDFSRWNiaElM?=
- =?utf-8?B?YzF1eU5JWVdHblgzNi9qT2FqR2JEYnEwZ1MwUE9FU2MwVXBmSzFUV1loQk1T?=
- =?utf-8?B?cHFVNkd1bWU0VjJHclBLQkdsNGg3NkJ2Uk5IbENHZlJ4OE4rSmlKclBXclF2?=
- =?utf-8?B?RzFWbHZUbjNUNDlGL3QxY3J5M1prQitUUFVCeGQyaW4wb0Z0UEs4ZE1saHYw?=
- =?utf-8?B?dmxOS2VEMzArcFBrNG1rNGZRT2xnTEJqWTRrdE5jRDdzU0NJamhuR2FsYi9R?=
- =?utf-8?B?OWhsZTZzakNqblduVkxKU0RzTFNjNlZkTy9PZnh6bjZKdEtiUGgxQ3RtS0xs?=
- =?utf-8?B?TVFId2lyT2s2YmFyL3B4OVc0cHM5T01TcjJkVktnM3lqcFlaREhMUDZURkpZ?=
- =?utf-8?B?eUMvNVl2OE8xVVZ3cnRvem9SWTJWUVpHNUJyeXV0OXAvWEVyQjdPQ1JhcFhr?=
- =?utf-8?Q?Brrg=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8CF1DA4A
+	for <bpf@vger.kernel.org>; Wed,  3 Jan 2024 22:20:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 403Gitcw028091
+	for <bpf@vger.kernel.org>; Wed, 3 Jan 2024 14:20:44 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by m0001303.ppops.net (PPS) with ESMTPS id 3vd5qtmhjj-3
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Wed, 03 Jan 2024 14:20:43 -0800
+Received: from twshared24631.38.frc1.facebook.com (2620:10d:c0a8:1c::1b) by
+ mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Wed, 3 Jan 2024 14:20:41 -0800
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+	id E2BE13DF9EA45; Wed,  3 Jan 2024 14:20:34 -0800 (PST)
+From: Andrii Nakryiko <andrii@kernel.org>
+To: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <paul@paul-moore.com>,
+        <brauner@kernel.org>, <torvalds@linuxfoundation.org>
+CC: <linux-fsdevel@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+        <kernel-team@meta.com>
+Subject: [PATCH bpf-next 00/29] BPF token
+Date: Wed, 3 Jan 2024 14:20:05 -0800
+Message-ID: <20240103222034.2582628-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.34.1
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: eYOBf6VCg2-XzWK8AAB9LZm4cjl3LR3b
+X-Proofpoint-ORIG-GUID: eYOBf6VCg2-XzWK8AAB9LZm4cjl3LR3b
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: motorola.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR03MB6786.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: add1d9ea-78bf-4132-0ea1-08dc0c8da0f7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jan 2024 18:56:00.9838
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5c7d0b28-bdf8-410c-aa93-4df372b16203
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LpH51uYDIVrgjwxS82hpx1UEj7gvhCINM1RrXosEGmJ6DI5tpqLsv6RvfgZWBUTNm3hKWJiDzgfT1jlqk39KWQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0302MB5412
-X-Proofpoint-ORIG-GUID: AudrD0C79z3WOBLsxPdQZlu90KqBwBtT
-X-Proofpoint-GUID: AudrD0C79z3WOBLsxPdQZlu90KqBwBtT
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-02_01,2023-11-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- impostorscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0
- mlxlogscore=896 spamscore=0 clxscore=1011 priorityscore=1501
- suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2311290000 definitions=main-2401030153
+ definitions=2024-01-03_08,2024-01-03_01,2023-05-22_02
 
-RnJvbTogVGVudXQgPHRlbnV0QE5pb2JpdW0+DQpTdWJqZWN0OiBbUEFUQ0ggMS8yXSBBZGRpbmcg
-QlBGIE5YDQoNClJlc2VydmUgYSBtZW1vcnkgcmVnaW9uIGZvciBCUEYgcHJvZ3JhbSwgYW5kIGNo
-ZWNrIGZvciBpdCBpbiB0aGUgaW50ZXJwcmV0ZXIuIFRoaXMgc2ltdWxhdGUgdGhlIGVmZmVjdA0K
-b2Ygbm9uLWV4ZWN1dGFibGUgbWVtb3J5IGZvciBCUEYgZXhlY3V0aW9uLg0KDQpTaWduZWQtb2Zm
-LWJ5OiBNYXh3ZWxsIEJsYW5kIDxtYmxhbmRAbW90b3JvbGEuY29tPg0KLS0tDQphcmNoL3g4Ni9p
-bmNsdWRlL2FzbS9wZ3RhYmxlXzY0X3R5cGVzLmggfCAgOSArKysrKysrKysNCiBhcmNoL3g4Ni9t
-bS9mYXVsdC5jICAgICAgICAgICAgICAgICAgICAgfCAgNiArKysrKy0NCiBrZXJuZWwvYnBmL0tj
-b25maWcgICAgICAgICAgICAgICAgICAgICAgfCAxNiArKysrKysrKysrKysrKysNCiBrZXJuZWwv
-YnBmL2NvcmUuYyAgICAgICAgICAgICAgICAgICAgICAgfCAzNSArKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKystLS0NCiA0IGZpbGVzIGNoYW5nZWQsIDYyIGluc2VydGlvbnMoKyksIDQgZGVs
-ZXRpb25zKC0pDQoNCmRpZmYgLS1naXQgYS9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9wZ3RhYmxlXzY0
-X3R5cGVzLmggYi9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9wZ3RhYmxlXzY0X3R5cGVzLmgNCmluZGV4
-IDM4YjU0Yjk5MmYzMi4uYWQxMTY1MWViMDczIDEwMDY0NA0KLS0tIGEvYXJjaC94ODYvaW5jbHVk
-ZS9hc20vcGd0YWJsZV82NF90eXBlcy5oDQorKysgYi9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9wZ3Rh
-YmxlXzY0X3R5cGVzLmgNCkBAIC0xMjMsNiArMTIzLDkgQEAgZXh0ZXJuIHVuc2lnbmVkIGludCBw
-dHJzX3Blcl9wNGQ7DQogDQogI2RlZmluZSBfX1ZNQUxMT0NfQkFTRV9MNAkweGZmZmZjOTAwMDAw
-MDAwMDBVTA0KICNkZWZpbmUgX19WTUFMTE9DX0JBU0VfTDUgCTB4ZmZhMDAwMDAwMDAwMDAwMFVM
-DQorI2lmZGVmIENPTkZJR19CUEZfTlgNCisjZGVmaW5lIF9fQlBGX1ZCQVNFCQkweGZmZmZlYjAw
-MDAwMDAwMDBVTA0KKyNlbmRpZg0KIA0KICNkZWZpbmUgVk1BTExPQ19TSVpFX1RCX0w0CTMyVUwN
-CiAjZGVmaW5lIFZNQUxMT0NfU0laRV9UQl9MNQkxMjgwMFVMDQpAQCAtMTY5LDYgKzE3MiwxMiBA
-QCBleHRlcm4gdW5zaWduZWQgaW50IHB0cnNfcGVyX3A0ZDsNCiAjZGVmaW5lIFZNQUxMT0NfUVVB
-UlRFUl9TSVpFCSgoVk1BTExPQ19TSVpFX1RCIDw8IDQwKSA+PiAyKQ0KICNkZWZpbmUgVk1BTExP
-Q19FTkQJCShWTUFMTE9DX1NUQVJUICsgVk1BTExPQ19RVUFSVEVSX1NJWkUgLSAxKQ0KIA0KKyNp
-ZmRlZiBDT05GSUdfQlBGX05YDQorI2RlZmluZSBCUEZfU0laRV9HQgkJNTEyVUwNCisjZGVmaW5l
-IEJQRl9WU1RBUlQJCV9fQlBGX1ZCQVNFDQorI2RlZmluZSBCUEZfVkVORAkJKEJQRl9WU1RBUlQg
-KyBfQUMoQlBGX1NJWkVfR0IgPDwgMzAsIFVMKSkNCisjZW5kaWYgLyogQ09ORklHX0JQRl9OWCAq
-Lw0KKw0KIC8qDQogICogdm1hbGxvYyBtZXRhZGF0YSBhZGRyZXNzZXMgYXJlIGNhbGN1bGF0ZWQg
-YnkgYWRkaW5nIHNoYWRvdy9vcmlnaW4gb2Zmc2V0cw0KICAqIHRvIHZtYWxsb2MgYWRkcmVzcy4N
-CmRpZmYgLS1naXQgYS9hcmNoL3g4Ni9tbS9mYXVsdC5jIGIvYXJjaC94ODYvbW0vZmF1bHQuYw0K
-aW5kZXggYWI3NzhlYWMxOTUyLi5jZmI2M2VmNzIxNjggMTAwNjQ0DQotLS0gYS9hcmNoL3g4Ni9t
-bS9mYXVsdC5jDQorKysgYi9hcmNoL3g4Ni9tbS9mYXVsdC5jDQpAQCAtMjM1LDcgKzIzNSwxMSBA
-QCBzdGF0aWMgbm9pbmxpbmUgaW50IHZtYWxsb2NfZmF1bHQodW5zaWduZWQgbG9uZyBhZGRyZXNz
-KQ0KIAlwdGVfdCAqcHRlX2s7DQogDQogCS8qIE1ha2Ugc3VyZSB3ZSBhcmUgaW4gdm1hbGxvYyBh
-cmVhOiAqLw0KLQlpZiAoIShhZGRyZXNzID49IFZNQUxMT0NfU1RBUlQgJiYgYWRkcmVzcyA8IFZN
-QUxMT0NfRU5EKSkNCisJaWYgKCEoYWRkcmVzcyA+PSBWTUFMTE9DX1NUQVJUICYmIGFkZHJlc3Mg
-PCBWTUFMTE9DX0VORCkNCisjaWZkZWYgQlBGX05YDQorCQkmJiAhKGFkZHJlc3MgPj0gQlBGX1ZT
-VEFSVCAmJiBhZGRyZXNzIDwgQlBGX1ZFTkQpDQorI2VuZGlmDQorCSkNCiAJCXJldHVybiAtMTsN
-CiANCiAJLyoNCmRpZmYgLS1naXQgYS9rZXJuZWwvYnBmL0tjb25maWcgYi9rZXJuZWwvYnBmL0tj
-b25maWcNCmluZGV4IDZhOTA2ZmY5MzAwNi4uNzE2MGRjYWFhNThhIDEwMDY0NA0KLS0tIGEva2Vy
-bmVsL2JwZi9LY29uZmlnDQorKysgYi9rZXJuZWwvYnBmL0tjb25maWcNCkBAIC04Niw2ICs4Niwy
-MiBAQCBjb25maWcgQlBGX1VOUFJJVl9ERUZBVUxUX09GRg0KIA0KIAkgIElmIHlvdSBhcmUgdW5z
-dXJlIGhvdyB0byBhbnN3ZXIgdGhpcyBxdWVzdGlvbiwgYW5zd2VyIFkuDQogDQorY29uZmlnIEJQ
-Rl9IQVJERU5JTkcNCisJYm9vbCAiRW5hYmxlIEJQRiBpbnRlcnByZXRlciBoYXJkZW5pbmciDQor
-CXNlbGVjdCBCUEYNCisJZGVwZW5kcyBvbiBYODZfNjQgJiYgIVJBTkRPTUlaRV9NRU1PUlkgJiYg
-IUJQRl9KSVRfQUxXQVlTX09ODQorCWRlZmF1bHQgbg0KKwloZWxwDQorCSAgRW5oYW5jZSBicGYg
-aW50ZXJwcmV0ZXIncyBzZWN1cml0eQ0KKw0KK2NvbmZpZyBCUEZfTlgNCitib29sICJFbmFibGUg
-YnBmIE5YIg0KKwlkZXBlbmRzIG9uIEJQRl9IQVJERU5JTkcgJiYgIURZTkFNSUNfTUVNT1JZX0xB
-WU9VVA0KKwlkZWZhdWx0IG4NCisJaGVscA0KKwkgIEFsbG9jYXRlIGVCUEYgcHJvZ3JhbXMgaW4g
-c2VwZXJhdGUgYXJlYSBhbmQgbWFrZSBzdXJlIHRoZQ0KKwkgIGludGVycHJldGVkIHByb2dyYW1z
-IGFyZSBpbiB0aGUgcmVnaW9uLg0KKw0KIHNvdXJjZSAia2VybmVsL2JwZi9wcmVsb2FkL0tjb25m
-aWciDQogDQogY29uZmlnIEJQRl9MU00NCmRpZmYgLS1naXQgYS9rZXJuZWwvYnBmL2NvcmUuYyBi
-L2tlcm5lbC9icGYvY29yZS5jDQppbmRleCBmZTI1NGFlMDM1ZmUuLjU2ZDllOGQ0YTZkZSAxMDA2
-NDQNCi0tLSBhL2tlcm5lbC9icGYvY29yZS5jDQorKysgYi9rZXJuZWwvYnBmL2NvcmUuYw0KQEAg
-LTg4LDYgKzg4LDM0IEBAIHZvaWQgKmJwZl9pbnRlcm5hbF9sb2FkX3BvaW50ZXJfbmVnX2hlbHBl
-cihjb25zdCBzdHJ1Y3Qgc2tfYnVmZiAqc2tiLCBpbnQgaywgdW5zDQogCXJldHVybiBOVUxMOw0K
-IH0NCiANCisjaWZkZWYgQ09ORklHX0JQRl9OWA0KKyNkZWZpbmUgQlBGX01FTU9SWV9BTElHTiBy
-b3VuZHVwX3Bvd19vZl90d28oc2l6ZW9mKHN0cnVjdCBicGZfcHJvZykgKyBcDQorCQlCUEZfTUFY
-SU5TTlMgKiBzaXplb2Yoc3RydWN0IGJwZl9pbnNuKSkNCitzdGF0aWMgdm9pZCAqX19icGZfdm1h
-bGxvYyh1bnNpZ25lZCBsb25nIHNpemUsIGdmcF90IGdmcF9tYXNrKQ0KK3sNCisJcmV0dXJuIF9f
-dm1hbGxvY19ub2RlX3JhbmdlKHNpemUsIEJQRl9NRU1PUllfQUxJR04sIEJQRl9WU1RBUlQsIEJQ
-Rl9WRU5ELA0KKwkJCWdmcF9tYXNrLCBQQUdFX0tFUk5FTCwgMCwgTlVNQV9OT19OT0RFLA0KKwkJ
-CV9fYnVpbHRpbl9yZXR1cm5fYWRkcmVzcygwKSk7DQorfQ0KKw0KK3N0YXRpYyB2b2lkIGJwZl9p
-bnNuX2NoZWNrX3JhbmdlKGNvbnN0IHN0cnVjdCBicGZfaW5zbiAqaW5zbikNCit7DQorCWlmICgo
-dW5zaWduZWQgbG9uZylpbnNuIDwgQlBGX1ZTVEFSVA0KKwkJCXx8ICh1bnNpZ25lZCBsb25nKWlu
-c24gPj0gQlBGX1ZFTkQgLSBzaXplb2Yoc3RydWN0IGJwZl9pbnNuKSkNCisJCUJVRygpOw0KK30N
-CisNCisjZWxzZQ0KK3N0YXRpYyB2b2lkICpfX2JwZl92bWFsbG9jKHVuc2lnbmVkIGxvbmcgc2l6
-ZSwgZ2ZwX3QgZ2ZwX21hc2spDQorew0KKwlyZXR1cm4gX192bWFsbG9jKHNpemUsIGdmcF9tYXNr
-KTsNCit9DQorDQorc3RhdGljIHZvaWQgYnBmX2luc25fY2hlY2tfcmFuZ2UoY29uc3Qgc3RydWN0
-IGJwZl9pbnNuICppbnNuKQ0KK3sNCit9DQorI2VuZGlmIC8qIENPTkZJR19CUEZfTlggKi8NCisN
-CiBzdHJ1Y3QgYnBmX3Byb2cgKmJwZl9wcm9nX2FsbG9jX25vX3N0YXRzKHVuc2lnbmVkIGludCBz
-aXplLCBnZnBfdCBnZnBfZXh0cmFfZmxhZ3MpDQogew0KIAlnZnBfdCBnZnBfZmxhZ3MgPSBicGZf
-bWVtY2dfZmxhZ3MoR0ZQX0tFUk5FTCB8IF9fR0ZQX1pFUk8gfCBnZnBfZXh0cmFfZmxhZ3MpOw0K
-QEAgLTk1LDcgKzEyMyw3IEBAIHN0cnVjdCBicGZfcHJvZyAqYnBmX3Byb2dfYWxsb2Nfbm9fc3Rh
-dHModW5zaWduZWQgaW50IHNpemUsIGdmcF90IGdmcF9leHRyYV9mbGFnDQogCXN0cnVjdCBicGZf
-cHJvZyAqZnA7DQogDQogCXNpemUgPSByb3VuZF91cChzaXplLCBQQUdFX1NJWkUpOw0KLQlmcCA9
-IF9fdm1hbGxvYyhzaXplLCBnZnBfZmxhZ3MpOw0KKwlmcCA9IF9fYnBmX3ZtYWxsb2Moc2l6ZSwg
-Z2ZwX2ZsYWdzKTsNCiAJaWYgKGZwID09IE5VTEwpDQogCQlyZXR1cm4gTlVMTDsNCiANCkBAIC0y
-NDYsNyArMjc0LDcgQEAgc3RydWN0IGJwZl9wcm9nICpicGZfcHJvZ19yZWFsbG9jKHN0cnVjdCBi
-cGZfcHJvZyAqZnBfb2xkLCB1bnNpZ25lZCBpbnQgc2l6ZSwNCiAJaWYgKHBhZ2VzIDw9IGZwX29s
-ZC0+cGFnZXMpDQogCQlyZXR1cm4gZnBfb2xkOw0KIA0KLQlmcCA9IF9fdm1hbGxvYyhzaXplLCBn
-ZnBfZmxhZ3MpOw0KKwlmcCA9IF9fYnBmX3ZtYWxsb2Moc2l6ZSwgZ2ZwX2ZsYWdzKTsNCiAJaWYg
-KGZwKSB7DQogCQltZW1jcHkoZnAsIGZwX29sZCwgZnBfb2xkLT5wYWdlcyAqIFBBR0VfU0laRSk7
-DQogCQlmcC0+cGFnZXMgPSBwYWdlczsNCkBAIC0xMzgwLDcgKzE0MDgsNyBAQCBzdGF0aWMgc3Ry
-dWN0IGJwZl9wcm9nICpicGZfcHJvZ19jbG9uZV9jcmVhdGUoc3RydWN0IGJwZl9wcm9nICpmcF9v
-dGhlciwNCiAJZ2ZwX3QgZ2ZwX2ZsYWdzID0gR0ZQX0tFUk5FTCB8IF9fR0ZQX1pFUk8gfCBnZnBf
-ZXh0cmFfZmxhZ3M7DQogCXN0cnVjdCBicGZfcHJvZyAqZnA7DQogDQotCWZwID0gX192bWFsbG9j
-KGZwX290aGVyLT5wYWdlcyAqIFBBR0VfU0laRSwgZ2ZwX2ZsYWdzKTsNCisJZnAgPSBfX2JwZl92
-bWFsbG9jKGZwX290aGVyLT5wYWdlcyAqIFBBR0VfU0laRSwgZ2ZwX2ZsYWdzKTsNCiAJaWYgKGZw
-ICE9IE5VTEwpIHsNCiAJCS8qIGF1eC0+cHJvZyBzdGlsbCBwb2ludHMgdG8gdGhlIGZwX290aGVy
-IG9uZSwgc28NCiAJCSAqIHdoZW4gcHJvbW90aW5nIHRoZSBjbG9uZSB0byB0aGUgcmVhbCBwcm9n
-cmFtLA0KQEAgLTE2OTUsNiArMTcyMyw3IEBAIHN0YXRpYyB1NjQgX19fYnBmX3Byb2dfcnVuKHU2
-NCAqcmVncywgY29uc3Qgc3RydWN0IGJwZl9pbnNuICppbnNuKQ0KICNkZWZpbmUgQ09OVF9KTVAg
-KHsgaW5zbisrOyBnb3RvIHNlbGVjdF9pbnNuOyB9KQ0KIA0KIHNlbGVjdF9pbnNuOg0KKwlicGZf
-aW5zbl9jaGVja19yYW5nZShpbnNuKTsNCiAJZ290byAqanVtcHRhYmxlW2luc24tPmNvZGVdOw0K
-IA0KIAkvKiBFeHBsaWNpdGx5IG1hc2sgdGhlIHJlZ2lzdGVyLWJhc2VkIHNoaWZ0IGFtb3VudHMg
-d2l0aCA2MyBvciAzMQ0K
+This patch set is a combination of three BPF token-related patch sets ([0],
+[1], [2]) with fixes ([3]) to kernel-side token_fd passing APIs incorporated
+into relevant patches, and necessary libbpf and BPF selftests side adjustme=
+nts.
+
+This patch set introduces an ability to delegate a subset of BPF subsystem
+functionality from privileged system-wide daemon (e.g., systemd or any other
+container manager) through special mount options for userns-bound BPF FS to
+a *trusted* unprivileged application. Trust is the key here. This
+functionality is not about allowing unconditional unprivileged BPF usage.
+Establishing trust, though, is completely up to the discretion of respective
+privileged application that would create and mount a BPF FS instance with
+delegation enabled, as different production setups can and do achieve it
+through a combination of different means (signing, LSM, code reviews, etc),
+and it's undesirable and infeasible for kernel to enforce any particular way
+of validating trustworthiness of particular process.
+
+The main motivation for this work is a desire to enable containerized BPF
+applications to be used together with user namespaces. This is currently
+impossible, as CAP_BPF, required for BPF subsystem usage, cannot be namespa=
+ced
+or sandboxed, as a general rule. E.g., tracing BPF programs, thanks to BPF
+helpers like bpf_probe_read_kernel() and bpf_probe_read_user() can safely r=
+ead
+arbitrary memory, and it's impossible to ensure that they only read memory =
+of
+processes belonging to any given namespace. This means that it's impossible=
+ to
+have a mechanically verifiable namespace-aware CAP_BPF capability, and as s=
+uch
+another mechanism to allow safe usage of BPF functionality is necessary.
+
+BPF FS delegation mount options and BPF token derived from such BPF FS inst=
+ance
+is such a mechanism. Kernel makes no assumption about what "trusted"
+constitutes in any particular case, and it's up to specific privileged
+applications and their surrounding infrastructure to decide that. What kern=
+el
+provides is a set of APIs to setup and mount special BPF FS instance and
+derive BPF tokens from it. BPF FS and BPF token are both bound to its owning
+userns and in such a way are constrained inside intended container. Users c=
+an
+then pass BPF token FD to privileged bpf() syscall commands, like BPF map
+creation and BPF program loading, to perform such operations without having
+init userns privileges.
+
+This version incorporates feedback and suggestions ([4]) received on earlier
+iterations of BPF token approach, and instead of allowing to create BPF tok=
+ens
+directly assuming capable(CAP_SYS_ADMIN), we instead enhance BPF FS to acce=
+pt
+a few new delegation mount options. If these options are used and BPF FS it=
+self
+is properly created, set up, and mounted inside the user namespaced contain=
+er,
+user application is able to derive a BPF token object from BPF FS instance,=
+ and
+pass that token to bpf() syscall. As explained in patch #3, BPF token itself
+doesn't grant access to BPF functionality, but instead allows kernel to do
+namespaced capabilities checks (ns_capable() vs capable()) for CAP_BPF,
+CAP_PERFMON, CAP_NET_ADMIN, and CAP_SYS_ADMIN, as applicable. So it forms o=
+ne
+half of a puzzle and allows container managers and sys admins to have safe =
+and
+flexible configuration options: determining which containers get delegation=
+ of
+BPF functionality through BPF FS, and then which applications within such
+containers are allowed to perform bpf() commands, based on namespaces
+capabilities.
+
+Previous attempt at addressing this very same problem ([5]) attempted to
+utilize authoritative LSM approach, but was conclusively rejected by upstre=
+am
+LSM maintainers. BPF token concept is not changing anything about LSM
+approach, but can be combined with LSM hooks for very fine-grained security
+policy. Some ideas about making BPF token more convenient to use with LSM (=
+in
+particular custom BPF LSM programs) was briefly described in recent LSF/MM/=
+BPF
+2023 presentation ([6]). E.g., an ability to specify user-provided data
+(context), which in combination with BPF LSM would allow implementing a very
+dynamic and fine-granular custom security policies on top of BPF token. In =
+the
+interest of minimizing API surface area and discussions this was relegated =
+to
+follow up patches, as it's not essential to the fundamental concept of
+delegatable BPF token.
+
+It should be noted that BPF token is conceptually quite similar to the idea=
+ of
+/dev/bpf device file, proposed by Song a while ago ([7]). The biggest
+difference is the idea of using virtual anon_inode file to hold BPF token a=
+nd
+allowing multiple independent instances of them, each (potentially) with its
+own set of restrictions. And also, crucially, BPF token approach is not usi=
+ng
+any special stateful task-scoped flags. Instead, bpf() syscall accepts
+token_fd parameters explicitly for each relevant BPF command. This addresses
+main concerns brought up during the /dev/bpf discussion, and fits better wi=
+th
+overall BPF subsystem design.
+
+Second part of this patch set adds full support for BPF token in libbpf's B=
+PF
+object high-level API. Good chunk of the changes rework libbpf feature
+detection internals, which are the most affected by BPF token presence.
+
+Besides internal refactorings, libbpf allows to pass location of BPF FS from
+which BPF token should be created by libbpf. This can be done explicitly th=
+ough
+a new bpf_object_open_opts.bpf_token_path field. But we also add implicit B=
+PF
+token creation logic to BPF object load step, even without any explicit
+involvement of the user. If the environment is setup properly, BPF token wi=
+ll
+be created transparently and used implicitly. This allows for all existing
+application to gain BPF token support by just linking with latest version of
+libbpf library. No source code modifications are required.  All that under
+assumption that privileged container management agent properly set up defau=
+lt
+BPF FS instance at /sys/bpf/fs to allow BPF token creation.
+
+libbpf adds support to override default BPF FS location for BPF token creat=
+ion
+through LIBBPF_BPF_TOKEN_PATH envvar knowledge. This allows admins or conta=
+iner
+managers to mount BPF token-enabled BPF FS at non-standard location without=
+ the
+need to coordinate with applications.  LIBBPF_BPF_TOKEN_PATH can also be us=
+ed
+to disable BPF token implicit creation by setting it to an empty value.
+
+  [0] https://patchwork.kernel.org/project/netdevbpf/list/?series=3D805707&=
+state=3D*
+  [1] https://patchwork.kernel.org/project/netdevbpf/list/?series=3D810260&=
+state=3D*
+  [2] https://patchwork.kernel.org/project/netdevbpf/list/?series=3D809800&=
+state=3D*
+  [3] https://patchwork.kernel.org/project/netdevbpf/patch/20231219053150.3=
+36991-1-andrii@kernel.org/
+  [4] https://lore.kernel.org/bpf/20230704-hochverdient-lehne-eeb9eeef785e@=
+brauner/
+  [5] https://lore.kernel.org/bpf/20230412043300.360803-1-andrii@kernel.org/
+  [6] http://vger.kernel.org/bpfconf2023_material/Trusted_unprivileged_BPF_=
+LSFMM2023.pdf
+  [7] https://lore.kernel.org/bpf/20190627201923.2589391-2-songliubraving@f=
+b.com/
+
+Andrii Nakryiko (29):
+  bpf: align CAP_NET_ADMIN checks with bpf_capable() approach
+  bpf: add BPF token delegation mount options to BPF FS
+  bpf: introduce BPF token object
+  bpf: add BPF token support to BPF_MAP_CREATE command
+  bpf: add BPF token support to BPF_BTF_LOAD command
+  bpf: add BPF token support to BPF_PROG_LOAD command
+  bpf: take into account BPF token when fetching helper protos
+  bpf: consistently use BPF token throughout BPF verifier logic
+  bpf,lsm: refactor bpf_prog_alloc/bpf_prog_free LSM hooks
+  bpf,lsm: refactor bpf_map_alloc/bpf_map_free LSM hooks
+  bpf,lsm: add BPF token LSM hooks
+  libbpf: add bpf_token_create() API
+  libbpf: add BPF token support to bpf_map_create() API
+  libbpf: add BPF token support to bpf_btf_load() API
+  libbpf: add BPF token support to bpf_prog_load() API
+  selftests/bpf: add BPF token-enabled tests
+  bpf,selinux: allocate bpf_security_struct per BPF token
+  bpf: fail BPF_TOKEN_CREATE if no delegation option was set on BPF FS
+  bpf: support symbolic BPF FS delegation mount options
+  selftests/bpf: utilize string values for delegate_xxx mount options
+  libbpf: split feature detectors definitions from cached results
+  libbpf: further decouple feature checking logic from bpf_object
+  libbpf: move feature detection code into its own file
+  libbpf: wire up token_fd into feature probing logic
+  libbpf: wire up BPF token support at BPF object level
+  selftests/bpf: add BPF object loading tests with explicit token
+    passing
+  selftests/bpf: add tests for BPF object load with implicit token
+  libbpf: support BPF token path setting through LIBBPF_BPF_TOKEN_PATH
+    envvar
+  selftests/bpf: add tests for LIBBPF_BPF_TOKEN_PATH envvar
+
+ drivers/media/rc/bpf-lirc.c                   |   2 +-
+ include/linux/bpf.h                           |  85 +-
+ include/linux/filter.h                        |   2 +-
+ include/linux/lsm_hook_defs.h                 |  15 +-
+ include/linux/security.h                      |  43 +-
+ include/uapi/linux/bpf.h                      |  54 +
+ kernel/bpf/Makefile                           |   2 +-
+ kernel/bpf/arraymap.c                         |   2 +-
+ kernel/bpf/bpf_lsm.c                          |  15 +-
+ kernel/bpf/cgroup.c                           |   6 +-
+ kernel/bpf/core.c                             |   3 +-
+ kernel/bpf/helpers.c                          |   6 +-
+ kernel/bpf/inode.c                            | 276 ++++-
+ kernel/bpf/syscall.c                          | 228 +++-
+ kernel/bpf/token.c                            | 271 +++++
+ kernel/bpf/verifier.c                         |  13 +-
+ kernel/trace/bpf_trace.c                      |   2 +-
+ net/core/filter.c                             |  36 +-
+ net/ipv4/bpf_tcp_ca.c                         |   2 +-
+ net/netfilter/nf_bpf_link.c                   |   2 +-
+ security/security.c                           | 101 +-
+ security/selinux/hooks.c                      |  47 +-
+ tools/include/uapi/linux/bpf.h                |  55 +
+ tools/lib/bpf/Build                           |   2 +-
+ tools/lib/bpf/bpf.c                           |  41 +-
+ tools/lib/bpf/bpf.h                           |  37 +-
+ tools/lib/bpf/btf.c                           |  10 +-
+ tools/lib/bpf/elf.c                           |   2 -
+ tools/lib/bpf/features.c                      | 503 +++++++++
+ tools/lib/bpf/libbpf.c                        | 557 ++--------
+ tools/lib/bpf/libbpf.h                        |  21 +-
+ tools/lib/bpf/libbpf.map                      |   1 +
+ tools/lib/bpf/libbpf_internal.h               |  36 +-
+ tools/lib/bpf/libbpf_probes.c                 |  11 +-
+ tools/lib/bpf/str_error.h                     |   3 +
+ .../selftests/bpf/prog_tests/libbpf_probes.c  |   4 +
+ .../selftests/bpf/prog_tests/libbpf_str.c     |   6 +
+ .../testing/selftests/bpf/prog_tests/token.c  | 997 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/priv_map.c  |  13 +
+ tools/testing/selftests/bpf/progs/priv_prog.c |  13 +
+ 40 files changed, 2884 insertions(+), 641 deletions(-)
+ create mode 100644 kernel/bpf/token.c
+ create mode 100644 tools/lib/bpf/features.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/token.c
+ create mode 100644 tools/testing/selftests/bpf/progs/priv_map.c
+ create mode 100644 tools/testing/selftests/bpf/progs/priv_prog.c
+
+--=20
+2.34.1
+
