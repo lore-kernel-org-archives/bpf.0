@@ -1,31 +1,31 @@
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F395820DE3
-	for <bpf@vger.kernel.org>; Wed,  3 Jan 2024 22:23:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A32020DF8
+	for <bpf@vger.kernel.org>; Wed,  3 Jan 2024 22:23:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 403Gkf55023135
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 403Gkf57023135
 	for <bpf@vger.kernel.org>; Wed, 3 Jan 2024 14:23:53 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3vcvqhf425-2
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3vcvqhf425-4
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 03 Jan 2024 14:23:52 -0800
-Received: from twshared44805.48.prn1.facebook.com (2620:10d:c0a8:1c::1b) by
+	for <bpf@vger.kernel.org>; Wed, 03 Jan 2024 14:23:53 -0800
+Received: from twshared44805.48.prn1.facebook.com (2620:10d:c0a8:1b::2d) by
  mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.34; Wed, 3 Jan 2024 14:23:45 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 2518D3DF9EB32; Wed,  3 Jan 2024 14:21:06 -0800 (PST)
+	id 869C33DF9EB96; Wed,  3 Jan 2024 14:21:21 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <paul@paul-moore.com>,
         <brauner@kernel.org>, <torvalds@linuxfoundation.org>
 CC: <linux-fsdevel@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
         <kernel-team@meta.com>
-Subject: [PATCH bpf-next 14/29] libbpf: add BPF token support to bpf_btf_load() API
-Date: Wed, 3 Jan 2024 14:20:19 -0800
-Message-ID: <20240103222034.2582628-15-andrii@kernel.org>
+Subject: [PATCH bpf-next 20/29] selftests/bpf: utilize string values for delegate_xxx mount options
+Date: Wed, 3 Jan 2024 14:20:25 -0800
+Message-ID: <20240103222034.2582628-21-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240103222034.2582628-1-andrii@kernel.org>
 References: <20240103222034.2582628-1-andrii@kernel.org>
@@ -38,73 +38,162 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: j2r5cSEZvqi6nLuafXP4OK-9IqLWHzGF
-X-Proofpoint-ORIG-GUID: j2r5cSEZvqi6nLuafXP4OK-9IqLWHzGF
+X-Proofpoint-GUID: PT3s8ki0rWOQq4zzjLry8-Pzr3RDKzRV
+X-Proofpoint-ORIG-GUID: PT3s8ki0rWOQq4zzjLry8-Pzr3RDKzRV
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-01-03_08,2024-01-03_01,2023-05-22_02
 
-Allow user to specify token_fd for bpf_btf_load() API that wraps
-kernel's BPF_BTF_LOAD command. This allows loading BTF from unprivileged
-process as long as it has BPF token allowing BPF_BTF_LOAD command, which
-can be created and delegated by privileged process.
+Use both hex-based and string-based way to specify delegate mount
+options for BPF FS.
 
-Wire through new btf_flags as well, so that user can provide
-BPF_F_TOKEN_FD flag, if necessary.
-
+Acked-by: John Fastabend <john.fastabend@gmail.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/bpf.c | 6 +++++-
- tools/lib/bpf/bpf.h | 5 ++++-
- 2 files changed, 9 insertions(+), 2 deletions(-)
+ .../testing/selftests/bpf/prog_tests/token.c  | 52 ++++++++++++-------
+ 1 file changed, 32 insertions(+), 20 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 1653b64b7015..cf250cb1d5ef 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -1184,7 +1184,7 @@ int bpf_raw_tracepoint_open(const char *name, int p=
-rog_fd)
+diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testi=
+ng/selftests/bpf/prog_tests/token.c
+index 5394a0c880a9..185ed2f79315 100644
+--- a/tools/testing/selftests/bpf/prog_tests/token.c
++++ b/tools/testing/selftests/bpf/prog_tests/token.c
+@@ -55,14 +55,22 @@ static int restore_priv_caps(__u64 old_caps)
+ 	return cap_enable_effective(old_caps, NULL);
+ }
 =20
- int bpf_btf_load(const void *btf_data, size_t btf_size, struct bpf_btf_l=
-oad_opts *opts)
+-static int set_delegate_mask(int fs_fd, const char *key, __u64 mask)
++static int set_delegate_mask(int fs_fd, const char *key, __u64 mask, con=
+st char *mask_str)
  {
--	const size_t attr_sz =3D offsetofend(union bpf_attr, btf_log_true_size)=
-;
-+	const size_t attr_sz =3D offsetofend(union bpf_attr, btf_token_fd);
- 	union bpf_attr attr;
- 	char *log_buf;
- 	size_t log_size;
-@@ -1209,6 +1209,10 @@ int bpf_btf_load(const void *btf_data, size_t btf_=
-size, struct bpf_btf_load_opts
+ 	char buf[32];
+ 	int err;
 =20
- 	attr.btf =3D ptr_to_u64(btf_data);
- 	attr.btf_size =3D btf_size;
+-	snprintf(buf, sizeof(buf), "0x%llx", (unsigned long long)mask);
++	if (!mask_str) {
++		if (mask =3D=3D ~0ULL) {
++			mask_str =3D "any";
++		} else {
++			snprintf(buf, sizeof(buf), "0x%llx", (unsigned long long)mask);
++			mask_str =3D buf;
++		}
++	}
 +
-+	attr.btf_flags =3D OPTS_GET(opts, btf_flags, 0);
-+	attr.btf_token_fd =3D OPTS_GET(opts, token_fd, 0);
-+
- 	/* log_level =3D=3D 0 and log_buf !=3D NULL means "try loading without
- 	 * log_buf, but retry with log_buf and log_level=3D1 on error", which i=
-s
- 	 * consistent across low-level and high-level BTF and program loading
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index ae2136f596b4..fde54ea08e6f 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -133,9 +133,12 @@ struct bpf_btf_load_opts {
- 	 * If kernel doesn't support this feature, log_size is left unchanged.
- 	 */
- 	__u32 log_true_size;
-+
-+	__u32 btf_flags;
-+	__u32 token_fd;
- 	size_t :0;
+ 	err =3D sys_fsconfig(fs_fd, FSCONFIG_SET_STRING, key,
+-			   mask =3D=3D ~0ULL ? "any" : buf, 0);
++			   mask_str, 0);
+ 	if (err < 0)
+ 		err =3D -errno;
+ 	return err;
+@@ -75,6 +83,10 @@ struct bpffs_opts {
+ 	__u64 maps;
+ 	__u64 progs;
+ 	__u64 attachs;
++	const char *cmds_str;
++	const char *maps_str;
++	const char *progs_str;
++	const char *attachs_str;
  };
--#define bpf_btf_load_opts__last_field log_true_size
-+#define bpf_btf_load_opts__last_field token_fd
 =20
- LIBBPF_API int bpf_btf_load(const void *btf_data, size_t btf_size,
- 			    struct bpf_btf_load_opts *opts);
+ static int create_bpffs_fd(void)
+@@ -93,16 +105,16 @@ static int materialize_bpffs_fd(int fs_fd, struct bp=
+ffs_opts *opts)
+ 	int mnt_fd, err;
+=20
+ 	/* set up token delegation mount options */
+-	err =3D set_delegate_mask(fs_fd, "delegate_cmds", opts->cmds);
++	err =3D set_delegate_mask(fs_fd, "delegate_cmds", opts->cmds, opts->cmd=
+s_str);
+ 	if (!ASSERT_OK(err, "fs_cfg_cmds"))
+ 		return err;
+-	err =3D set_delegate_mask(fs_fd, "delegate_maps", opts->maps);
++	err =3D set_delegate_mask(fs_fd, "delegate_maps", opts->maps, opts->map=
+s_str);
+ 	if (!ASSERT_OK(err, "fs_cfg_maps"))
+ 		return err;
+-	err =3D set_delegate_mask(fs_fd, "delegate_progs", opts->progs);
++	err =3D set_delegate_mask(fs_fd, "delegate_progs", opts->progs, opts->p=
+rogs_str);
+ 	if (!ASSERT_OK(err, "fs_cfg_progs"))
+ 		return err;
+-	err =3D set_delegate_mask(fs_fd, "delegate_attachs", opts->attachs);
++	err =3D set_delegate_mask(fs_fd, "delegate_attachs", opts->attachs, opt=
+s->attachs_str);
+ 	if (!ASSERT_OK(err, "fs_cfg_attachs"))
+ 		return err;
+=20
+@@ -284,13 +296,13 @@ static void child(int sock_fd, struct bpffs_opts *o=
+pts, child_callback_fn callba
+ 	}
+=20
+ 	/* ensure unprivileged child cannot set delegation options */
+-	err =3D set_delegate_mask(fs_fd, "delegate_cmds", 0x1);
++	err =3D set_delegate_mask(fs_fd, "delegate_cmds", 0x1, NULL);
+ 	ASSERT_EQ(err, -EPERM, "delegate_cmd_eperm");
+-	err =3D set_delegate_mask(fs_fd, "delegate_maps", 0x1);
++	err =3D set_delegate_mask(fs_fd, "delegate_maps", 0x1, NULL);
+ 	ASSERT_EQ(err, -EPERM, "delegate_maps_eperm");
+-	err =3D set_delegate_mask(fs_fd, "delegate_progs", 0x1);
++	err =3D set_delegate_mask(fs_fd, "delegate_progs", 0x1, NULL);
+ 	ASSERT_EQ(err, -EPERM, "delegate_progs_eperm");
+-	err =3D set_delegate_mask(fs_fd, "delegate_attachs", 0x1);
++	err =3D set_delegate_mask(fs_fd, "delegate_attachs", 0x1, NULL);
+ 	ASSERT_EQ(err, -EPERM, "delegate_attachs_eperm");
+=20
+ 	/* pass BPF FS context object to parent */
+@@ -314,22 +326,22 @@ static void child(int sock_fd, struct bpffs_opts *o=
+pts, child_callback_fn callba
+ 	}
+=20
+ 	/* ensure unprivileged child cannot reconfigure to set delegation optio=
+ns */
+-	err =3D set_delegate_mask(fs_fd, "delegate_cmds", ~0ULL);
++	err =3D set_delegate_mask(fs_fd, "delegate_cmds", 0, "any");
+ 	if (!ASSERT_EQ(err, -EPERM, "delegate_cmd_eperm_reconfig")) {
+ 		err =3D -EINVAL;
+ 		goto cleanup;
+ 	}
+-	err =3D set_delegate_mask(fs_fd, "delegate_maps", ~0ULL);
++	err =3D set_delegate_mask(fs_fd, "delegate_maps", 0, "any");
+ 	if (!ASSERT_EQ(err, -EPERM, "delegate_maps_eperm_reconfig")) {
+ 		err =3D -EINVAL;
+ 		goto cleanup;
+ 	}
+-	err =3D set_delegate_mask(fs_fd, "delegate_progs", ~0ULL);
++	err =3D set_delegate_mask(fs_fd, "delegate_progs", 0, "any");
+ 	if (!ASSERT_EQ(err, -EPERM, "delegate_progs_eperm_reconfig")) {
+ 		err =3D -EINVAL;
+ 		goto cleanup;
+ 	}
+-	err =3D set_delegate_mask(fs_fd, "delegate_attachs", ~0ULL);
++	err =3D set_delegate_mask(fs_fd, "delegate_attachs", 0, "any");
+ 	if (!ASSERT_EQ(err, -EPERM, "delegate_attachs_eperm_reconfig")) {
+ 		err =3D -EINVAL;
+ 		goto cleanup;
+@@ -658,8 +670,8 @@ void test_token(void)
+ {
+ 	if (test__start_subtest("map_token")) {
+ 		struct bpffs_opts opts =3D {
+-			.cmds =3D 1ULL << BPF_MAP_CREATE,
+-			.maps =3D 1ULL << BPF_MAP_TYPE_STACK,
++			.cmds_str =3D "map_create",
++			.maps_str =3D "stack",
+ 		};
+=20
+ 		subtest_userns(&opts, userns_map_create);
+@@ -673,9 +685,9 @@ void test_token(void)
+ 	}
+ 	if (test__start_subtest("prog_token")) {
+ 		struct bpffs_opts opts =3D {
+-			.cmds =3D 1ULL << BPF_PROG_LOAD,
+-			.progs =3D 1ULL << BPF_PROG_TYPE_XDP,
+-			.attachs =3D 1ULL << BPF_XDP,
++			.cmds_str =3D "PROG_LOAD",
++			.progs_str =3D "XDP",
++			.attachs_str =3D "xdp",
+ 		};
+=20
+ 		subtest_userns(&opts, userns_prog_load);
 --=20
 2.34.1
 
