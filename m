@@ -1,30 +1,30 @@
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A0D184F
-	for <bpf@vger.kernel.org>; Thu,  4 Jan 2024 01:39:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3902A1849
+	for <bpf@vger.kernel.org>; Thu,  4 Jan 2024 01:39:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 403GjYd6025603
-	for <bpf@vger.kernel.org>; Wed, 3 Jan 2024 17:39:11 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3vda6tbu73-4
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 403GiLdG020285
+	for <bpf@vger.kernel.org>; Wed, 3 Jan 2024 17:39:12 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3vda7m3ve7-14
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 03 Jan 2024 17:39:10 -0800
-Received: from twshared17891.15.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Wed, 03 Jan 2024 17:39:12 -0800
+Received: from twshared68648.02.prn6.facebook.com (2620:10d:c0a8:1b::2d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Wed, 3 Jan 2024 17:39:08 -0800
+ 15.1.2507.34; Wed, 3 Jan 2024 17:39:07 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id A047E3DFAFE7B; Wed,  3 Jan 2024 17:39:01 -0800 (PST)
+	id CF6B63DFAFE89; Wed,  3 Jan 2024 17:39:05 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>, Jiri Olsa <jolsa@kernel.org>
-Subject: [PATCH v3 bpf-next 5/9] libbpf: move exception callbacks assignment logic into relocation step
-Date: Wed, 3 Jan 2024 17:38:43 -0800
-Message-ID: <20240104013847.3875810-6-andrii@kernel.org>
+Subject: [PATCH v3 bpf-next 7/9] libbpf: implement __arg_ctx fallback logic
+Date: Wed, 3 Jan 2024 17:38:45 -0800
+Message-ID: <20240104013847.3875810-8-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240104013847.3875810-1-andrii@kernel.org>
 References: <20240104013847.3875810-1-andrii@kernel.org>
@@ -37,238 +37,390 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: j6jpYnNS_-XUhk1UODJfwhyo515Vw_A7
-X-Proofpoint-ORIG-GUID: j6jpYnNS_-XUhk1UODJfwhyo515Vw_A7
+X-Proofpoint-GUID: lXW84nX4syZNEidWt3L91c_DgT90g9hb
+X-Proofpoint-ORIG-GUID: lXW84nX4syZNEidWt3L91c_DgT90g9hb
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-01-03_10,2024-01-03_01,2023-05-22_02
 
-Move the logic of finding and assigning exception callback indices from
-BTF sanitization step to program relocations step, which seems more
-logical and will unblock moving BTF loading to after relocation step.
+Out of all special global func arg tag annotations, __arg_ctx is
+practically is the most immediately useful and most critical to have
+working across multitude kernel version, if possible. This would allow
+end users to write much simpler code if __arg_ctx semantics worked for
+older kernels that don't natively understand btf_decl_tag("arg:ctx") in
+verifier logic.
 
-Exception callbacks discovery and assignment has no dependency on BTF
-being loaded into the kernel, it only uses BTF information. It does need
-to happen before subprogram relocations happen, though. Which is why the
-split.
+Luckily, it is possible to ensure __arg_ctx works on old kernels through
+a bit of extra work done by libbpf, at least in a lot of common cases.
 
-No functional changes.
+To explain the overall idea, we need to go back at how context argument
+was supported in global funcs before __arg_ctx support was added. This
+was done based on special struct name checks in kernel. E.g., for
+BPF_PROG_TYPE_PERF_EVENT the expectation is that argument type `struct
+bpf_perf_event_data *` mark that argument as PTR_TO_CTX. This is all
+good as long as global function is used from the same BPF program types
+only, which is often not the case. If the same subprog has to be called
+from, say, kprobe and perf_event program types, there is no single
+definition that would satisfy BPF verifier. Subprog will have context
+argument either for kprobe (if using bpf_user_pt_regs_t struct name) or
+perf_event (with bpf_perf_event_data struct name), but not both.
+
+This limitation was the reason to add btf_decl_tag("arg:ctx"), making
+the actual argument type not important, so that user can just define
+"generic" signature:
+
+  __noinline int global_subprog(void *ctx __arg_ctx) { ... }
+
+I won't belabor how libbpf is implementing subprograms, see a huge
+comment next to bpf_object_relocate_calls() function. The idea is that
+each main/entry BPF program gets its own copy of global_subprog's code
+appended.
+
+This per-program copy of global subprog code *and* associated func_info
+.BTF.ext information, pointing to FUNC -> FUNC_PROTO BTF type chain
+allows libbpf to simulate __arg_ctx behavior transparently, even if the
+kernel doesn't yet support __arg_ctx annotation natively.
+
+The idea is straightforward: each time we append global subprog's code
+and func_info information, we adjust its FUNC -> FUNC_PROTO type
+information, if necessary (that is, libbpf can detect the presence of
+btf_decl_tag("arg:ctx") just like BPF verifier would do it).
+
+The rest is just mechanical and somewhat painful BTF manipulation code.
+It's painful because we need to clone FUNC -> FUNC_PROTO, instead of
+reusing it, as same FUNC -> FUNC_PROTO chain might be used by another
+main BPF program within the same BPF object, so we can't just modify it
+in-place (and cloning BTF types within the same struct btf object is
+painful due to constant memory invalidation, see comments in code).
+Uploaded BPF object's BTF information has to work for all BPF
+programs at the same time.
+
+Once we have FUNC -> FUNC_PROTO clones, we make sure that instead of
+using some `void *ctx` parameter definition, we have an expected `struct
+bpf_perf_event_data *ctx` definition (as far as BPF verifier and kernel
+is concerned), which will mark it as context for BPF verifier. Same
+global subprog relocated and copied into another main BPF program will
+get different type information according to main program's type. It all
+works out in the end in a completely transparent way for end user.
+
+Libbpf maintains internal program type -> expected context struct name
+mapping internally. Note, not all BPF program types have named context
+struct, so this approach won't work for such programs (just like it
+didn't before __arg_ctx). So native __arg_ctx is still important to have
+in kernel to have generic context support across all BPF program types.
 
 Acked-by: Jiri Olsa <jolsa@kernel.org>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 165 +++++++++++++++++++++--------------------
- 1 file changed, 85 insertions(+), 80 deletions(-)
+ tools/lib/bpf/libbpf.c | 256 ++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 252 insertions(+), 4 deletions(-)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index a58569b7e4bf..01d45f0c40d0 100644
+index 836986974de3..c5a42ac309fd 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -3192,86 +3192,6 @@ static int bpf_object__sanitize_and_load_btf(struc=
-t bpf_object *obj)
- 		}
- 	}
+@@ -6181,7 +6181,7 @@ reloc_prog_func_and_line_info(const struct bpf_obje=
+ct *obj,
+ 	int err;
 =20
--	if (!kernel_supports(obj, FEAT_BTF_DECL_TAG))
--		goto skip_exception_cb;
--	for (i =3D 0; i < obj->nr_programs; i++) {
--		struct bpf_program *prog =3D &obj->programs[i];
--		int j, k, n;
--
--		if (prog_is_subprog(obj, prog))
--			continue;
--		n =3D btf__type_cnt(obj->btf);
--		for (j =3D 1; j < n; j++) {
--			const char *str =3D "exception_callback:", *name;
--			size_t len =3D strlen(str);
--			struct btf_type *t;
--
--			t =3D btf_type_by_id(obj->btf, j);
--			if (!btf_is_decl_tag(t) || btf_decl_tag(t)->component_idx !=3D -1)
--				continue;
--
--			name =3D btf__str_by_offset(obj->btf, t->name_off);
--			if (strncmp(name, str, len))
--				continue;
--
--			t =3D btf_type_by_id(obj->btf, t->type);
--			if (!btf_is_func(t) || btf_func_linkage(t) !=3D BTF_FUNC_GLOBAL) {
--				pr_warn("prog '%s': exception_callback:<value> decl tag not applied =
-to the main program\n",
--					prog->name);
--				return -EINVAL;
--			}
--			if (strcmp(prog->name, btf__str_by_offset(obj->btf, t->name_off)))
--				continue;
--			/* Multiple callbacks are specified for the same prog,
--			 * the verifier will eventually return an error for this
--			 * case, hence simply skip appending a subprog.
--			 */
--			if (prog->exception_cb_idx >=3D 0) {
--				prog->exception_cb_idx =3D -1;
--				break;
--			}
--
--			name +=3D len;
--			if (str_is_empty(name)) {
--				pr_warn("prog '%s': exception_callback:<value> decl tag contains emp=
-ty value\n",
--					prog->name);
--				return -EINVAL;
--			}
--
--			for (k =3D 0; k < obj->nr_programs; k++) {
--				struct bpf_program *subprog =3D &obj->programs[k];
--
--				if (!prog_is_subprog(obj, subprog))
--					continue;
--				if (strcmp(name, subprog->name))
--					continue;
--				/* Enforce non-hidden, as from verifier point of
--				 * view it expects global functions, whereas the
--				 * mark_btf_static fixes up linkage as static.
--				 */
--				if (!subprog->sym_global || subprog->mark_btf_static) {
--					pr_warn("prog '%s': exception callback %s must be a global non-hidd=
-en function\n",
--						prog->name, subprog->name);
--					return -EINVAL;
--				}
--				/* Let's see if we already saw a static exception callback with the =
-same name */
--				if (prog->exception_cb_idx >=3D 0) {
--					pr_warn("prog '%s': multiple subprogs with same name as exception c=
-allback '%s'\n",
--					        prog->name, subprog->name);
--					return -EINVAL;
--				}
--				prog->exception_cb_idx =3D k;
--				break;
--			}
--
--			if (prog->exception_cb_idx >=3D 0)
--				continue;
--			pr_warn("prog '%s': cannot find exception callback '%s'\n", prog->nam=
-e, name);
--			return -ENOENT;
--		}
--	}
--skip_exception_cb:
--
- 	sanitize =3D btf_needs_sanitization(obj);
- 	if (sanitize) {
- 		const void *raw_data;
-@@ -6661,6 +6581,88 @@ static void bpf_object__sort_relos(struct bpf_obje=
-ct *obj)
- 	}
+ 	/* no .BTF.ext relocation if .BTF.ext is missing or kernel doesn't
+-	 * supprot func/line info
++	 * support func/line info
+ 	 */
+ 	if (!obj->btf_ext || !kernel_supports(obj, FEAT_BTF_FUNC))
+ 		return 0;
+@@ -6663,8 +6663,247 @@ static int bpf_prog_assign_exc_cb(struct bpf_obje=
+ct *obj, struct bpf_program *pr
+ 	return 0;
  }
 =20
-+static int bpf_prog_assign_exc_cb(struct bpf_object *obj, struct bpf_pro=
-gram *prog)
+-static int
+-bpf_object__relocate(struct bpf_object *obj, const char *targ_btf_path)
++static struct {
++	enum bpf_prog_type prog_type;
++	const char *ctx_name;
++} global_ctx_map[] =3D {
++	{ BPF_PROG_TYPE_CGROUP_DEVICE,           "bpf_cgroup_dev_ctx" },
++	{ BPF_PROG_TYPE_CGROUP_SKB,              "__sk_buff" },
++	{ BPF_PROG_TYPE_CGROUP_SOCK,             "bpf_sock" },
++	{ BPF_PROG_TYPE_CGROUP_SOCK_ADDR,        "bpf_sock_addr" },
++	{ BPF_PROG_TYPE_CGROUP_SOCKOPT,          "bpf_sockopt" },
++	{ BPF_PROG_TYPE_CGROUP_SYSCTL,           "bpf_sysctl" },
++	{ BPF_PROG_TYPE_FLOW_DISSECTOR,          "__sk_buff" },
++	{ BPF_PROG_TYPE_KPROBE,                  "bpf_user_pt_regs_t" },
++	{ BPF_PROG_TYPE_LWT_IN,                  "__sk_buff" },
++	{ BPF_PROG_TYPE_LWT_OUT,                 "__sk_buff" },
++	{ BPF_PROG_TYPE_LWT_SEG6LOCAL,           "__sk_buff" },
++	{ BPF_PROG_TYPE_LWT_XMIT,                "__sk_buff" },
++	{ BPF_PROG_TYPE_NETFILTER,               "bpf_nf_ctx" },
++	{ BPF_PROG_TYPE_PERF_EVENT,              "bpf_perf_event_data" },
++	{ BPF_PROG_TYPE_RAW_TRACEPOINT,          "bpf_raw_tracepoint_args" },
++	{ BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE, "bpf_raw_tracepoint_args" },
++	{ BPF_PROG_TYPE_SCHED_ACT,               "__sk_buff" },
++	{ BPF_PROG_TYPE_SCHED_CLS,               "__sk_buff" },
++	{ BPF_PROG_TYPE_SK_LOOKUP,               "bpf_sk_lookup" },
++	{ BPF_PROG_TYPE_SK_MSG,                  "sk_msg_md" },
++	{ BPF_PROG_TYPE_SK_REUSEPORT,            "sk_reuseport_md" },
++	{ BPF_PROG_TYPE_SK_SKB,                  "__sk_buff" },
++	{ BPF_PROG_TYPE_SOCK_OPS,                "bpf_sock_ops" },
++	{ BPF_PROG_TYPE_SOCKET_FILTER,           "__sk_buff" },
++	{ BPF_PROG_TYPE_XDP,                     "xdp_md" },
++	/* all other program types don't have "named" context structs */
++};
++
++static int clone_func_btf_info(struct btf *btf, int orig_fn_id, struct b=
+pf_program *prog)
 +{
-+	const char *str =3D "exception_callback:";
-+	size_t pfx_len =3D strlen(str);
-+	int i, j, n;
++	int fn_id, fn_proto_id, ret_type_id, orig_proto_id;
++	int i, err, arg_cnt, fn_name_off, linkage;
++	struct btf_type *fn_t, *fn_proto_t, *t;
++	struct btf_param *p;
 +
-+	if (!obj->btf || !kernel_supports(obj, FEAT_BTF_DECL_TAG))
-+		return 0;
++	/* caller already validated FUNC -> FUNC_PROTO validity */
++	fn_t =3D btf_type_by_id(btf, orig_fn_id);
++	fn_proto_t =3D btf_type_by_id(btf, fn_t->type);
 +
-+	n =3D btf__type_cnt(obj->btf);
-+	for (i =3D 1; i < n; i++) {
-+		const char *name;
-+		struct btf_type *t;
++	/* Note that each btf__add_xxx() operation invalidates
++	 * all btf_type and string pointers, so we need to be
++	 * very careful when cloning BTF types. BTF type
++	 * pointers have to be always refetched. And to avoid
++	 * problems with invalidated string pointers, we
++	 * add empty strings initially, then just fix up
++	 * name_off offsets in place. Offsets are stable for
++	 * existing strings, so that works out.
++	 */
++	fn_name_off =3D fn_t->name_off; /* we are about to invalidate fn_t */
++	linkage =3D btf_func_linkage(fn_t);
++	orig_proto_id =3D fn_t->type; /* original FUNC_PROTO ID */
++	ret_type_id =3D fn_proto_t->type; /* fn_proto_t will be invalidated */
++	arg_cnt =3D btf_vlen(fn_proto_t);
 +
-+		t =3D btf_type_by_id(obj->btf, i);
-+		if (!btf_is_decl_tag(t) || btf_decl_tag(t)->component_idx !=3D -1)
-+			continue;
++	/* clone FUNC_PROTO and its params */
++	fn_proto_id =3D btf__add_func_proto(btf, ret_type_id);
++	if (fn_proto_id < 0)
++		return -EINVAL;
 +
-+		name =3D btf__str_by_offset(obj->btf, t->name_off);
-+		if (strncmp(name, str, pfx_len) !=3D 0)
-+			continue;
++	for (i =3D 0; i < arg_cnt; i++) {
++		int name_off;
 +
-+		t =3D btf_type_by_id(obj->btf, t->type);
-+		if (!btf_is_func(t) || btf_func_linkage(t) !=3D BTF_FUNC_GLOBAL) {
-+			pr_warn("prog '%s': exception_callback:<value> decl tag not applied t=
-o the main program\n",
-+				prog->name);
-+			return -EINVAL;
-+		}
-+		if (strcmp(prog->name, btf__str_by_offset(obj->btf, t->name_off)) !=3D=
- 0)
-+			continue;
-+		/* Multiple callbacks are specified for the same prog,
-+		 * the verifier will eventually return an error for this
-+		 * case, hence simply skip appending a subprog.
-+		 */
-+		if (prog->exception_cb_idx >=3D 0) {
-+			prog->exception_cb_idx =3D -1;
-+			break;
-+		}
++		/* copy original parameter data */
++		t =3D btf_type_by_id(btf, orig_proto_id);
++		p =3D &btf_params(t)[i];
++		name_off =3D p->name_off;
 +
-+		name +=3D pfx_len;
-+		if (str_is_empty(name)) {
-+			pr_warn("prog '%s': exception_callback:<value> decl tag contains empt=
-y value\n",
-+				prog->name);
-+			return -EINVAL;
-+		}
-+
-+		for (j =3D 0; j < obj->nr_programs; j++) {
-+			struct bpf_program *subprog =3D &obj->programs[j];
-+
-+			if (!prog_is_subprog(obj, subprog))
-+				continue;
-+			if (strcmp(name, subprog->name) !=3D 0)
-+				continue;
-+			/* Enforce non-hidden, as from verifier point of
-+			 * view it expects global functions, whereas the
-+			 * mark_btf_static fixes up linkage as static.
-+			 */
-+			if (!subprog->sym_global || subprog->mark_btf_static) {
-+				pr_warn("prog '%s': exception callback %s must be a global non-hidde=
-n function\n",
-+					prog->name, subprog->name);
-+				return -EINVAL;
-+			}
-+			/* Let's see if we already saw a static exception callback with the s=
-ame name */
-+			if (prog->exception_cb_idx >=3D 0) {
-+				pr_warn("prog '%s': multiple subprogs with same name as exception ca=
-llback '%s'\n",
-+					prog->name, subprog->name);
-+				return -EINVAL;
-+			}
-+			prog->exception_cb_idx =3D j;
-+			break;
-+		}
-+
-+		if (prog->exception_cb_idx >=3D 0)
-+			continue;
-+
-+		pr_warn("prog '%s': cannot find exception callback '%s'\n", prog->name=
-, name);
-+		return -ENOENT;
-+	}
-+
-+	return 0;
-+}
-+
- static int
- bpf_object__relocate(struct bpf_object *obj, const char *targ_btf_path)
- {
-@@ -6721,6 +6723,9 @@ bpf_object__relocate(struct bpf_object *obj, const =
-char *targ_btf_path)
- 			return err;
- 		}
-=20
-+		err =3D bpf_prog_assign_exc_cb(obj, prog);
++		err =3D btf__add_func_param(btf, "", p->type);
 +		if (err)
 +			return err;
- 		/* Now, also append exception callback if it has not been done already=
-. */
- 		if (prog->exception_cb_idx >=3D 0) {
- 			struct bpf_program *subprog =3D &obj->programs[prog->exception_cb_idx=
-];
++
++		fn_proto_t =3D btf_type_by_id(btf, fn_proto_id);
++		p =3D &btf_params(fn_proto_t)[i];
++		p->name_off =3D name_off; /* use remembered str offset */
++	}
++
++	/* clone FUNC now, btf__add_func() enforces non-empty name, so use
++	 * entry program's name as a placeholder, which we replace immediately
++	 * with original name_off
++	 */
++	fn_id =3D btf__add_func(btf, prog->name, linkage, fn_proto_id);
++	if (fn_id < 0)
++		return -EINVAL;
++
++	fn_t =3D btf_type_by_id(btf, fn_id);
++	fn_t->name_off =3D fn_name_off; /* reuse original string */
++
++	return fn_id;
++}
++
++/* Check if main program or global subprog's function prototype has `arg=
+:ctx`
++ * argument tags, and, if necessary, substitute correct type to match wh=
+at BPF
++ * verifier would expect, taking into account specific program type. Thi=
+s
++ * allows to support __arg_ctx tag transparently on old kernels that don=
+'t yet
++ * have a native support for it in the verifier, making user's life much
++ * easier.
++ */
++static int bpf_program_fixup_func_info(struct bpf_object *obj, struct bp=
+f_program *prog)
++{
++	const char *ctx_name =3D NULL, *ctx_tag =3D "arg:ctx";
++	struct bpf_func_info_min *func_rec;
++	struct btf_type *fn_t, *fn_proto_t;
++	struct btf *btf =3D obj->btf;
++	const struct btf_type *t;
++	struct btf_param *p;
++	int ptr_id =3D 0, struct_id, tag_id, orig_fn_id;
++	int i, n, arg_idx, arg_cnt, err, rec_idx;
++	int *orig_ids;
++
++	/* no .BTF.ext, no problem */
++	if (!obj->btf_ext || !prog->func_info)
++		return 0;
++
++	/* some BPF program types just don't have named context structs, so
++	 * this fallback mechanism doesn't work for them
++	 */
++	for (i =3D 0; i < ARRAY_SIZE(global_ctx_map); i++) {
++		if (global_ctx_map[i].prog_type !=3D prog->type)
++			continue;
++		ctx_name =3D global_ctx_map[i].ctx_name;
++		break;
++	}
++	if (!ctx_name)
++		return 0;
++
++	/* remember original func BTF IDs to detect if we already cloned them *=
+/
++	orig_ids =3D calloc(prog->func_info_cnt, sizeof(*orig_ids));
++	if (!orig_ids)
++		return -ENOMEM;
++	for (i =3D 0; i < prog->func_info_cnt; i++) {
++		func_rec =3D prog->func_info + prog->func_info_rec_size * i;
++		orig_ids[i] =3D func_rec->type_id;
++	}
++
++	/* go through each DECL_TAG with "arg:ctx" and see if it points to one
++	 * of our subprogs; if yes and subprog is global and needs adjustment,
++	 * clone and adjust FUNC -> FUNC_PROTO combo
++	 */
++	for (i =3D 1, n =3D btf__type_cnt(btf); i < n; i++) {
++		/* only DECL_TAG with "arg:ctx" value are interesting */
++		t =3D btf__type_by_id(btf, i);
++		if (!btf_is_decl_tag(t))
++			continue;
++		if (strcmp(btf__str_by_offset(btf, t->name_off), ctx_tag) !=3D 0)
++			continue;
++
++		/* only global funcs need adjustment, if at all */
++		orig_fn_id =3D t->type;
++		fn_t =3D btf_type_by_id(btf, orig_fn_id);
++		if (!btf_is_func(fn_t) || btf_func_linkage(fn_t) !=3D BTF_FUNC_GLOBAL)
++			continue;
++
++		/* sanity check FUNC -> FUNC_PROTO chain, just in case */
++		fn_proto_t =3D btf_type_by_id(btf, fn_t->type);
++		if (!fn_proto_t || !btf_is_func_proto(fn_proto_t))
++			continue;
++
++		/* find corresponding func_info record */
++		func_rec =3D NULL;
++		for (rec_idx =3D 0; rec_idx < prog->func_info_cnt; rec_idx++) {
++			if (orig_ids[rec_idx] =3D=3D t->type) {
++				func_rec =3D prog->func_info + prog->func_info_rec_size * rec_idx;
++				break;
++			}
++		}
++		/* current main program doesn't call into this subprog */
++		if (!func_rec)
++			continue;
++
++		/* some more sanity checking of DECL_TAG */
++		arg_cnt =3D btf_vlen(fn_proto_t);
++		arg_idx =3D btf_decl_tag(t)->component_idx;
++		if (arg_idx < 0 || arg_idx >=3D arg_cnt)
++			continue;
++
++		/* check if existing parameter already matches verifier expectations *=
+/
++		p =3D &btf_params(fn_proto_t)[arg_idx];
++		t =3D skip_mods_and_typedefs(btf, p->type, NULL);
++		if (btf_is_ptr(t) &&
++		    (t =3D skip_mods_and_typedefs(btf, t->type, NULL)) &&
++		    btf_is_struct(t) &&
++		    strcmp(btf__str_by_offset(btf, t->name_off), ctx_name) =3D=3D 0) {
++			continue; /* no need for fix up */
++		}
++
++		/* clone fn/fn_proto, unless we already did it for another arg */
++		if (func_rec->type_id =3D=3D orig_fn_id) {
++			int fn_id;
++
++			fn_id =3D clone_func_btf_info(btf, orig_fn_id, prog);
++			if (fn_id < 0) {
++				err =3D fn_id;
++				goto err_out;
++			}
++
++			/* point func_info record to a cloned FUNC type */
++			func_rec->type_id =3D fn_id;
++		}
++
++		/* create PTR -> STRUCT type chain to mark PTR_TO_CTX argument;
++		 * we do it just once per main BPF program, as all global
++		 * funcs share the same program type, so need only PTR ->
++		 * STRUCT type chain
++		 */
++		if (ptr_id =3D=3D 0) {
++			struct_id =3D btf__add_struct(btf, ctx_name, 0);
++			ptr_id =3D btf__add_ptr(btf, struct_id);
++			if (ptr_id < 0 || struct_id < 0) {
++				err =3D -EINVAL;
++				goto err_out;
++			}
++		}
++
++		/* for completeness, clone DECL_TAG and point it to cloned param */
++		tag_id =3D btf__add_decl_tag(btf, ctx_tag, func_rec->type_id, arg_idx)=
+;
++		if (tag_id < 0) {
++			err =3D -EINVAL;
++			goto err_out;
++		}
++
++		/* all the BTF manipulations invalidated pointers, refetch them */
++		fn_t =3D btf_type_by_id(btf, func_rec->type_id);
++		fn_proto_t =3D btf_type_by_id(btf, fn_t->type);
++
++		/* fix up type ID pointed to by param */
++		p =3D &btf_params(fn_proto_t)[arg_idx];
++		p->type =3D ptr_id;
++	}
++
++	free(orig_ids);
++	return 0;
++err_out:
++	free(orig_ids);
++	return err;
++}
++
++static int bpf_object__relocate(struct bpf_object *obj, const char *targ=
+_btf_path)
+ {
+ 	struct bpf_program *prog;
+ 	size_t i, j;
+@@ -6745,19 +6984,28 @@ bpf_object__relocate(struct bpf_object *obj, cons=
+t char *targ_btf_path)
+ 			}
+ 		}
+ 	}
+-	/* Process data relos for main programs */
+ 	for (i =3D 0; i < obj->nr_programs; i++) {
+ 		prog =3D &obj->programs[i];
+ 		if (prog_is_subprog(obj, prog))
+ 			continue;
+ 		if (!prog->autoload)
+ 			continue;
++
++		/* Process data relos for main programs */
+ 		err =3D bpf_object__relocate_data(obj, prog);
+ 		if (err) {
+ 			pr_warn("prog '%s': failed to relocate data references: %d\n",
+ 				prog->name, err);
+ 			return err;
+ 		}
++
++		/* Fix up .BTF.ext information, if necessary */
++		err =3D bpf_program_fixup_func_info(obj, prog);
++		if (err) {
++			pr_warn("prog '%s': failed to perform .BTF.ext fix ups: %d\n",
++				prog->name, err);
++			return err;
++		}
+ 	}
+=20
+ 	return 0;
 --=20
 2.34.1
 
