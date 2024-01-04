@@ -1,74 +1,70 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C635EDD;
-	Thu,  4 Jan 2024 01:00:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UlTb4gSS"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D6995C433CB;
-	Thu,  4 Jan 2024 01:00:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704330033;
-	bh=FewGRaz0guvopeeGoS8vRCKya63jqoP/f1Dc08/JWyY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=UlTb4gSS6VTYhbNB0Gmy4vdfoqyRFyysObdCeNcOOD4OSTVDQa0ToTY5vmqMuHYIG
-	 61WWvif97sUEChzIN/w3E54d/zwaZ6Z0oftalF8gXxwzwaHCz7O19+Z3PxgGkvXyHf
-	 4nH9LzyrxqyOOrQY1BWA5nxtugxZPV6ANN+BYJ48RUV9Ivh+qu3YMUHlVOozyQlZjD
-	 8u2Ob5iNFqNe54BiZF9f1x/PPuTaJKDTFLAeJnvfbzXtAUo9zYELHSAyKVBEpYsZxz
-	 gHKMMAVx64yT7R35teS9o7A/GE7bYBJxgwl8+oOLTHWMTrEcMw36sRQyR2S3Kl/+mJ
-	 7Uxr68VHobW/w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BCF17DCB6D8;
-	Thu,  4 Jan 2024 01:00:33 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626CD1852
+	for <bpf@vger.kernel.org>; Thu,  4 Jan 2024 01:38:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 403MFV2Z003308
+	for <bpf@vger.kernel.org>; Wed, 3 Jan 2024 17:38:56 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3vdg740xug-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Wed, 03 Jan 2024 17:38:56 -0800
+Received: from twshared68648.02.prn6.facebook.com (2620:10d:c0a8:1c::1b) by
+ mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Wed, 3 Jan 2024 17:38:55 -0800
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+	id 546513DFAFE47; Wed,  3 Jan 2024 17:38:53 -0800 (PST)
+From: Andrii Nakryiko <andrii@kernel.org>
+To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <martin.lau@kernel.org>
+CC: <andrii@kernel.org>, <kernel-team@meta.com>, Jiri Olsa <jolsa@kernel.org>
+Subject: [PATCH v3 bpf-next 1/9] libbpf: make uniform use of btf__fd() accessor inside libbpf
+Date: Wed, 3 Jan 2024 17:38:39 -0800
+Message-ID: <20240104013847.3875810-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240104013847.3875810-1-andrii@kernel.org>
+References: <20240104013847.3875810-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf 0/5] fix sockmap + stream  af_unix memleak
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170433003377.5757.720867555256604448.git-patchwork-notify@kernel.org>
-Date: Thu, 04 Jan 2024 01:00:33 +0000
-References: <20231221232327.43678-1-john.fastabend@gmail.com>
-In-Reply-To: <20231221232327.43678-1-john.fastabend@gmail.com>
-To: John Fastabend <john.fastabend@gmail.com>
-Cc: jakub@cloudflare.com, rivendell7@gmail.com, kuniyu@amazon.com,
- bpf@vger.kernel.org, netdev@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: D7pUr9lCt3rAZe9X3Ylr33oYtejlvYsG
+X-Proofpoint-GUID: D7pUr9lCt3rAZe9X3Ylr33oYtejlvYsG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-03_10,2024-01-03_01,2023-05-22_02
 
-Hello:
+It makes future grepping and code analysis a bit easier.
 
-This series was applied to bpf/bpf-next.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/libbpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, 21 Dec 2023 15:23:22 -0800 you wrote:
-> There was a memleak when streaming af_unix sockets were inserted into
-> multiple sockmap slots and/or maps. This is because each insert would
-> call a proto update operatino and these must be allowed to be called
-> multiple times. The streaming af_unix implementation recently added
-> a refcnt to handle a use after free issue, however it introduced a
-> memleak when inserted into multiple maps.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf,1/5] bpf: sockmap, fix proto update hook to avoid dup calls
-    https://git.kernel.org/bpf/bpf-next/c/16b2f264983d
-  - [bpf,2/5] bpf: sockmap, added comments describing update proto rules
-    https://git.kernel.org/bpf/bpf-next/c/7865dfb1eb94
-  - [bpf,3/5] bpf: sockmap, add tests for proto updates many to single map
-    https://git.kernel.org/bpf/bpf-next/c/8c1b382a555a
-  - [bpf,4/5] bpf: sockmap, add tests for proto updates single socket to many map
-    https://git.kernel.org/bpf/bpf-next/c/f1300467dd9f
-  - [bpf,5/5] bpf: sockmap, add tests for proto updates replace socket
-    https://git.kernel.org/bpf/bpf-next/c/bdbca46d3f84
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index ebcfb2147fbd..f1521a400f02 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -7050,7 +7050,7 @@ static int bpf_object_load_prog(struct bpf_object *=
+obj, struct bpf_program *prog
+ 	load_attr.prog_ifindex =3D prog->prog_ifindex;
+=20
+ 	/* specify func_info/line_info only if kernel supports them */
+-	btf_fd =3D bpf_object__btf_fd(obj);
++	btf_fd =3D btf__fd(obj->btf);
+ 	if (btf_fd >=3D 0 && kernel_supports(obj, FEAT_BTF_FUNC)) {
+ 		load_attr.prog_btf_fd =3D btf_fd;
+ 		load_attr.func_info =3D prog->func_info;
+--=20
+2.34.1
 
