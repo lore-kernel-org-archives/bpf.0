@@ -1,28 +1,28 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E49DF2377D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A162377E;
 	Thu,  4 Jan 2024 15:02:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gklngGQ1"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 66FA8C433AB;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rJosMr+e"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 92CFCC4AF5D;
 	Thu,  4 Jan 2024 15:02:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1704380565;
-	bh=2ickuhWADD9IxCGKb1fYeXbFIjF9zMg4rP1V5pxGMmA=;
+	bh=rztlto8eEbJ+Snp+e1X4/9BzW9/7AlNu0SuQr3dKr6Y=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=gklngGQ1aLNM0gz+K/bgVHMHs2tbn7Gx6WBtO/jezsDdOB0LnPUgN37wF17so7rrH
-	 YfLZdwSwCOW1ZNyZttvPsoGQBtT/pxcfsMwGtCuXv5Pzl/4iO/M7pKzz1VTYisLuKH
-	 loIbDpj8S+3MiSUWQw87IIzLCXbUAWBs+cDCudq7rWuVWzvR2Qh0xt2E8ONwgCSgNH
-	 /UqZtBMSoXCbJqYDjAd2W2RA+GgdU2zSJaiRNGaASZfU4IbGVSNMsz2OKr0UsWg7Tt
-	 RvQ/HqWjD97TpEk7JqFVkk1sh0BeC9aibrZgtPew0SrPlKwdEBjWtOTyVnXxxFqZDK
-	 17/2Rt9p1DFTA==
+	b=rJosMr+ehRG/C2guKa2lmEkTDfQWd5W3U8g4xdyzMBtPGAGdQ7oygvRVw4wbnDsZu
+	 JNrnyz6Dj4Gu6JGXLwUspUakqNyqgz9W4Ccv12H6B3OKBRctIO+0f78d3X1j1i3lNw
+	 WCr2OvgIh036faAKWZ194es1Mutt698yFao/RVeMwiIxmMGbdf952Fh8w6Evj4KPVO
+	 lTuJ9dFErNeMw0BNsU2RTSwEJrCwh6XpmUOuTS2ckb1FFr5SRuwceBkM+5dgxuIc3V
+	 I0fOOcrPU/9c14wJHoAkkwvdcYpasKSPKgRwvVDBE7rWPyhe/lPWCee6EcPHfT/ytf
+	 VQJg3rP96OqHw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 483B7C4707C;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75F24C47079;
 	Thu,  4 Jan 2024 15:02:45 +0000 (UTC)
 From: Joel Granados via B4 Relay <devnull+j.granados.samsung.com@kernel.org>
-Date: Thu, 04 Jan 2024 16:02:24 +0100
-Subject: [PATCH v2 03/10] ftrace: Remove the now superfluous sentinel
+Date: Thu, 04 Jan 2024 16:02:26 +0100
+Subject: [PATCH v2 05/10] seccomp: Remove the now superfluous sentinel
  elements from ctl_table array
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -33,7 +33,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 Message-Id:
- <20240104-jag-sysctl_remove_empty_elem_kernel-v2-3-836cc04e00ec@samsung.com>
+ <20240104-jag-sysctl_remove_empty_elem_kernel-v2-5-836cc04e00ec@samsung.com>
 References:
  <20240104-jag-sysctl_remove_empty_elem_kernel-v2-0-836cc04e00ec@samsung.com>
 In-Reply-To:
@@ -69,18 +69,17 @@ Cc: linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
  linux-fsdevel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
  bpf@vger.kernel.org, Joel Granados <j.granados@samsung.com>
 X-Mailer: b4 0.13-dev-86aa5
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1508;
- i=j.granados@samsung.com; h=from:subject:message-id;
- bh=I9hNdzlwwvGhli848fLvwLS5D8HcBUTWZ1m3n0fKYkE=;
- b=owEB7QES/pANAwAKAbqXzVK3lkFPAcsmYgBllsiQ+iIfUGpB6FEaBvtcGH6q/CsuMZch60gJQ
- GICfiR4okWJAbMEAAEKAB0WIQSuRwlXJeYxJc7LJ5C6l81St5ZBTwUCZZbIkAAKCRC6l81St5ZB
- TxGhDACSRjgkbQ3wyuVeDzSykMrr5lCOo9YiD3YURRMPSxtcjn2ZwMGtvvb9K01XglDnxom8qpf
- gkhHSC6F/JUcVQRlFec9ZrsljdYBKC07mRU3OUdovVNtj+X19130gU+RwSZzyGEIebnVoGWTC3u
- QXIQ8LdsMdFcPySwC1GF7gr2FfmN26XY8D66vwgagg0sdathOv1qvd0X0+rkEZil+FEii16d9h0
- Rn50vRm5eZKB7m6Ujtn+lqnIMCFGjEV4+cNDr0qjos40HXX0j2na5VJMeA7lNnZYOsGxEGc0+jb
- WtcsNHjV+Kezh3JdK+buz/bfvW0VEZZF+9rrrZhmNKJ/3RB6rEFab08nh0NNeOxMqbFxnFgzz4B
- eMc7OZoq/3a4GnDYtZvmosVz5RjQSfkIEMUyob4C5jqeq+kRdlpa0TkwGj0DXmK+hTR9Ka+dc0B
- 43l0TNu/GDEm1Ptt+VDnmGRclsw4zk+hK5stlbFKJLJYHJG4L5c2PMsnmMfE/VkbbYzx0=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=933; i=j.granados@samsung.com;
+ h=from:subject:message-id; bh=z6EeWSeb/wAILeyqvWIX8FMlRbwGB4xwjlfltNsIiys=;
+ b=owEB7QES/pANAwAKAbqXzVK3lkFPAcsmYgBllsiQF0oBNt6LJkb+zVY5GGJCeSKg2G1eOlNY/
+ U9hMugX/3qJAbMEAAEKAB0WIQSuRwlXJeYxJc7LJ5C6l81St5ZBTwUCZZbIkAAKCRC6l81St5ZB
+ T7e6DACU+v+qIRdOgR0Vmu/bybMMTZLCFfSEqP2vKHZSh37Ah76SyGQpohwFYIlyBeOBBnPNVyJ
+ w8p0UWOfIBTtC+RGTtt2n0ijQHCmzEUBwd2OS+8KyEGACtGvfQ/HTz0ohTLF+dkeSuN36ne0Pc/
+ 5e7X+WCLZT9/SrcD0xsDhmm1eBnRUVHbBwQVfRVipKlX1xm3KrnZmSfeC5RrFvx0C5HJrJeJ/lA
+ /hKTvsd4Lz3IMWylzkkAgqXGSjXjftqgJUEkAHGjptsRIAFAOuOvPq/UN6RctFRocbfHGq4y2is
+ jGLLoDYRoLk43HuSXfJlB2y+a4pRp77W8ZH2uzwJkinqJpEMfHIHKB4zlq/sXgYIpyt0m7FMEK+
+ diaryq9MeBCXKGs6k1+XLcyj/vWSI1KAYrB2xLVuKd2dsT+dFwovPvTkPayLoVRQusHMPEWXJAg
+ /b49Ubys+BjHCNculOLNQoH4Nm+SfvkyVDsf6IrMme51A2DKU3QkWmvfzwebLsO9PnjAE=
 X-Developer-Key: i=j.granados@samsung.com; a=openpgp;
  fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
 X-Endpoint-Received:
@@ -96,40 +95,26 @@ will reduce the overall build time size of the kernel and run time
 memory bloat by ~64 bytes per sentinel (further information Link :
 https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
 
-Remove sentinel elements from ftrace_sysctls and user_event_sysctls
+Remove sentinel element from seccomp_sysctl_table.
 
-Acked-by: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Acked-by: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Acked-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Joel Granados <j.granados@samsung.com>
 ---
- kernel/trace/ftrace.c            | 1 -
- kernel/trace/trace_events_user.c | 1 -
- 2 files changed, 2 deletions(-)
+ kernel/seccomp.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 8de8bec5f366..fd40d02a23c7 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -8264,7 +8264,6 @@ static struct ctl_table ftrace_sysctls[] = {
- 		.mode           = 0644,
- 		.proc_handler   = ftrace_enable_sysctl,
- 	},
--	{}
- };
- 
- static int __init ftrace_sysctl_init(void)
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index 9365ce407426..b15a103bb11d 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -2746,7 +2746,6 @@ static struct ctl_table user_event_sysctls[] = {
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index 255999ba9190..b727b4351c1b 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -2445,7 +2445,6 @@ static struct ctl_table seccomp_sysctl_table[] = {
  		.mode		= 0644,
- 		.proc_handler	= set_max_user_events_sysctl,
+ 		.proc_handler	= seccomp_actions_logged_handler,
  	},
--	{}
+-	{ }
  };
  
- static int __init trace_events_user_init(void)
+ static int __init seccomp_sysctl_init(void)
 
 -- 
 2.30.2
