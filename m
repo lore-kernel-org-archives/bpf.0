@@ -1,124 +1,141 @@
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ACE41852
-	for <bpf@vger.kernel.org>; Thu,  4 Jan 2024 01:41:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 403GkY16022919
-	for <bpf@vger.kernel.org>; Wed, 3 Jan 2024 17:41:56 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3vcvqhg1bp-4
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 03 Jan 2024 17:41:55 -0800
-Received: from twshared34392.14.frc2.facebook.com (2620:10d:c0a8:1c::1b) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Wed, 3 Jan 2024 17:41:53 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 67D1C3DFAFE97; Wed,  3 Jan 2024 17:39:07 -0800 (PST)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>, Jiri Olsa <jolsa@kernel.org>
-Subject: [PATCH v3 bpf-next 8/9] selftests/bpf: add arg:ctx cases to test_global_funcs tests
-Date: Wed, 3 Jan 2024 17:38:46 -0800
-Message-ID: <20240104013847.3875810-9-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240104013847.3875810-1-andrii@kernel.org>
-References: <20240104013847.3875810-1-andrii@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E65491878
+	for <bpf@vger.kernel.org>; Thu,  4 Jan 2024 01:41:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mfGRZLyi"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-336746c7b6dso33515f8f.0
+        for <bpf@vger.kernel.org>; Wed, 03 Jan 2024 17:41:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704332518; x=1704937318; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=owFicmdt8Z93Mo23mHgHl5yM/Cxr8Gr0qCbKIRDU3lI=;
+        b=mfGRZLyiYbf4Xmx7Bi3n3albXVNJT2LDvZDLh1gQe9upBqJD0Ir8LnvircChLpaKsg
+         prDlBZhQkmI25hE4virrx4cHFy8sHfsGRC7/NJXjRAZbD3Linkkus2fttdueCAQzZQLO
+         6tbm72xmgigoT4frsEIv0gXfIaly+EWCLhRM2JqEvC7mDWv+570hR4BHPHYGhImKLMpj
+         BdXQm2O0Qo3vHso785Qd3qD28NDMQtoZA2NGHbY077JREGtdWXML1LH3ykTPrFBI1xeJ
+         QVwzuyRVPabGgx619jW5FDHS3F2en9XE0CgxBxhglDvA/9X+YIAgd14KRk8+EfoWYIpg
+         pskQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704332518; x=1704937318;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=owFicmdt8Z93Mo23mHgHl5yM/Cxr8Gr0qCbKIRDU3lI=;
+        b=Fi2SdKujLlHhYdWbe5m8hMI6XrEm8t0TNolIiw5wtGaku8BLi5kSOyYrZ1mVUeBf2u
+         GeUMBapyO3ThwIYIk5kWsSbhPsrNutN9Hot1JYrEOiDgjTnnKMTgYnFX9VG/QMPoNPqA
+         Q/VK9W9mQT7Z1Sz4Xtg7Yu6MbvQAwv7QmJCpwYRC98Cl9w1i+MA32WlGAUAtDTgpw3Iq
+         8NoY8zJlLPJiO523asgiiuJZhF6SWMjkZgxeGhAYab0YWY95hu0605HhuCrwWEaMZ2qp
+         qUqkdV24O+WwMaJdLWcNcGTyj8AwXLL/TQVfF1l+UFwo+AAGohvH6HRRph0ruv0vXB/H
+         58kg==
+X-Gm-Message-State: AOJu0YzM1+YQjXXVjaZ94ScwBZas5myXqWv6xH/e1ZJ5HInbXuSyeh8Z
+	ex+udlDJJwfd/zehGLZ46t7iu/IOmcmvPyLOWkc=
+X-Google-Smtp-Source: AGHT+IGPfmRNDH7z1kBV73btG7eMWN5Z3iShUNpkF3qAFkZvK9c5NcfF3TsZz701hlzdgHYSyhsGUjszX8hsX1BB/yA=
+X-Received: by 2002:a5d:66cb:0:b0:337:39c7:2a3 with SMTP id
+ k11-20020a5d66cb000000b0033739c702a3mr3355655wrw.129.1704332517937; Wed, 03
+ Jan 2024 17:41:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <TYZPR03MB679243A8E626CC796CB7BDBDB461A@TYZPR03MB6792.apcprd03.prod.outlook.com>
+ <CAKOkDnNAQSrWxsJBrcLV7ReaQkX_BHX+EAn69e0cpe9b=FAsUg@mail.gmail.com>
+ <CAKOkDnPnNE=MNP-1_8=T9vw6Ox80OAJmKonzpDO4abW8Dz9JwA@mail.gmail.com> <SEZPR03MB67865F9167DABCA16AA6811BB4602@SEZPR03MB6786.apcprd03.prod.outlook.com>
+In-Reply-To: <SEZPR03MB67865F9167DABCA16AA6811BB4602@SEZPR03MB6786.apcprd03.prod.outlook.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 3 Jan 2024 17:41:46 -0800
+Message-ID: <CAADnVQJCxFt2R=fbqx1T_03UioAsBO4UXYGh58kJaYHDpMHyxw@mail.gmail.com>
+Subject: Re: [External] Fwd: BPF-NX+CFI is a good upstreaming candidate
+To: Maxwell Bland <mbland@motorola.com>
+Cc: "Jin, Di" <di_jin@brown.edu>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"v.atlidakis@gmail.com" <v.atlidakis@gmail.com>, "vpk@cs.brown.edu" <vpk@cs.brown.edu>, 
+	Andrew Wheeler <awheeler@motorola.com>, =?UTF-8?B?U2FtbXkgQlMyIFF1ZSB8IOmYmeaWjOeUnw==?= <quebs2@motorola.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: 6QhEK5OGBCSDuarX3xbgMPd_y7A681mn
-X-Proofpoint-ORIG-GUID: 6QhEK5OGBCSDuarX3xbgMPd_y7A681mn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-03_10,2024-01-03_01,2023-05-22_02
 
-Add a few extra cases of global funcs with context arguments. This time
-rely on "arg:ctx" decl_tag (__arg_ctx macro), but put it next to
-"classic" cases where context argument has to be of an exact type that
-BPF verifier expects (e.g., bpf_user_pt_regs_t for kprobe/uprobe).
+On Wed, Jan 3, 2024 at 3:45=E2=80=AFPM Maxwell Bland <mbland@motorola.com> =
+wrote:
+>
+> > -----Original Message-----
+> > From: Jin, Di <di_jin@brown.edu>
+> > Sent: Wednesday, January 3, 2024 4:39 PM
+> > To: bpf@vger.kernel.org
+> > Subject: [External] Fwd: BPF-NX+CFI is a good upstreaming candidate
+> >
+> > ---------- Forwarded message ---------
+> > From: Jin, Di <di_jin@brown.edu>
+> > Date: Wed, Jan 3, 2024 at 5:19=E2=80=AFPM
+> > Subject: Re: BPF-NX+CFI is a good upstreaming candidate
+> > To: Maxwell Bland <mbland@motorola.com>
+> > Cc: v.atlidakis@gmail.com <v.atlidakis@gmail.com>, vpk@cs.brown.edu
+> > <vpk@cs.brown.edu>, dborkman@kernel.org <dborkman@kernel.org>, lsf-
+> > pc@lists.linux-foundation.org <lsf-pc@lists.linux-foundation.org>,
+> > bpf@vger.kernel.org <bpf@vger.kernel.org>, Andrew Wheeler
+> > <awheeler@motorola.com>, Sammy BS2 Que | =E9=98=99=E6=96=8C=E7=94=9F
+> > <quebs2@motorola.com>
+> >
+> >
+> > Dear all,
+> >
+> > There are a couple of noteworthy things about the patches:
+> > 1. They currently don't work with CONFIG_RANDOMIZE_MEMORY, which
+> > should probably be addressed.
+> > 2. BPF-CFI tries to ensure the interpreter starts from the correct offs=
+et under
+> > code-reuse attacks, which means it needs some form of control flow inte=
+grity.
+> > Here we are enforcing that with the state of a read-only variable, whic=
+h is
+> > toggled by temporarily disabling the WP bit. This also introduces the p=
+roblem
+> > of having to disable interrupt during the interpreter's execution other=
+wise the
+> > variable will be in the wrong state during interrupt. In the paper we o=
+ptimized
+> > away the toggling of the WP bit by some trick involving turning off pro=
+tection
+> > like SMAP during the interpreter's execution, which is faster in terms =
+of
+> > performance, but the security trade-off is a bit more subtle. The argum=
+ent
+> > being that SMAP (or PAN) are contributing very marginally when BPF
+> > programs are being executed, since the things they are defending agains=
+t,
+> > namely user-controlled memory content, are already present in the execu=
+tion
+> > context. This version of BPF-CFI should incur almost no overhead. The W=
+P bit
+> > toggling version I don't have numbers at hand.
+> >
+> > @Maxwell: If you are not in a hurry (I will need a couple of days) I ca=
+n
+> > generate a set of patches that are compatible for patch submission (pro=
+per
+> > name and email address, signoff, formatting, etc.), during which I can =
+also get
+> > some performance numbers. We can discuss authorship depending on how
+> > much you want to adapt these patches.
+> >
+> > Regards,
+> > Di Jin
+>
+> Hi Di Jin,
+>
+> Thanks! I sent some formatted patches for review a bit earlier today. See=
+ https://lore.kernel.org/bpf/SEZPR03MB678610EEBA5140BAA4D1F13EB4602@SEZPR03=
+MB6786.apcprd03.prod.outlook.com/. There was great feedback from Alexei Sta=
+rovoitov on the issue of Spectre effecting the interpreter when JIT is enab=
+led, so there is a mutual conflict with any hardening options which disable=
+ JIT. This seems to be a major barrier.
 
-Colocating all these cases separately from other global func args that
-rely on arg:xxx decl tags (in verifier_global_subprogs.c) allows for
-simpler backwards compatibility testing on old kernels. All the cases in
-test_global_func_ctx_args.c are supposed to work on older kernels, which
-was manually validated during development.
-
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- .../bpf/progs/test_global_func_ctx_args.c     | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/test_global_func_ctx_args.=
-c b/tools/testing/selftests/bpf/progs/test_global_func_ctx_args.c
-index 7faa8eef0598..9a06e5eb1fbe 100644
---- a/tools/testing/selftests/bpf/progs/test_global_func_ctx_args.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_func_ctx_args.c
-@@ -102,3 +102,52 @@ int perf_event_ctx(void *ctx)
- {
- 	return perf_event_ctx_subprog(ctx);
- }
-+
-+/* this global subprog can be now called from many types of entry progs,=
- each
-+ * with different context type
-+ */
-+__weak int subprog_ctx_tag(void *ctx __arg_ctx)
-+{
-+	return bpf_get_stack(ctx, stack, sizeof(stack), 0);
-+}
-+
-+struct my_struct { int x; };
-+
-+__weak int subprog_multi_ctx_tags(void *ctx1 __arg_ctx,
-+				  struct my_struct *mem,
-+				  void *ctx2 __arg_ctx)
-+{
-+	if (!mem)
-+		return 0;
-+
-+	return bpf_get_stack(ctx1, stack, sizeof(stack), 0) +
-+	       mem->x +
-+	       bpf_get_stack(ctx2, stack, sizeof(stack), 0);
-+}
-+
-+SEC("?raw_tp")
-+__success __log_level(2)
-+int arg_tag_ctx_raw_tp(void *ctx)
-+{
-+	struct my_struct x =3D { .x =3D 123 };
-+
-+	return subprog_ctx_tag(ctx) + subprog_multi_ctx_tags(ctx, &x, ctx);
-+}
-+
-+SEC("?perf_event")
-+__success __log_level(2)
-+int arg_tag_ctx_perf(void *ctx)
-+{
-+	struct my_struct x =3D { .x =3D 123 };
-+
-+	return subprog_ctx_tag(ctx) + subprog_multi_ctx_tags(ctx, &x, ctx);
-+}
-+
-+SEC("?kprobe")
-+__success __log_level(2)
-+int arg_tag_ctx_kprobe(void *ctx)
-+{
-+	struct my_struct x =3D { .x =3D 123 };
-+
-+	return subprog_ctx_tag(ctx) + subprog_multi_ctx_tags(ctx, &x, ctx);
-+}
---=20
-2.34.1
-
+Not quite. The presence of _any_ interpreter in the kernel text is
+a problem regardless of whether JIT-ing is enabled or not.
+In bpf case we can always use JIT and remove the interpreter from vmlinux.
+Hence "JIT always on" is a security fix.
