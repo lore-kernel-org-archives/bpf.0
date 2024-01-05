@@ -1,123 +1,161 @@
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9E92286B9
-	for <bpf@vger.kernel.org>; Fri,  5 Jan 2024 10:47:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4T60X51jmlz4f3jHg
-	for <bpf@vger.kernel.org>; Fri,  5 Jan 2024 18:47:17 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 91EA21A0946
-	for <bpf@vger.kernel.org>; Fri,  5 Jan 2024 18:47:20 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP1 (Coremail) with SMTP id cCh0CgAXZw013pdlA+1eFg--.49979S4;
-	Fri, 05 Jan 2024 18:47:19 +0800 (CST)
-From: Hou Tao <houtao@huaweicloud.com>
-To: bpf@vger.kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Song Liu <song@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A662C866
+	for <bpf@vger.kernel.org>; Fri,  5 Jan 2024 12:40:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kKiggGu/"
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2cd37c0b8e5so1590331fa.3
+        for <bpf@vger.kernel.org>; Fri, 05 Jan 2024 04:40:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704458428; x=1705063228; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=e9xylIBBAQXzAFQAicy5nw4p6iD5j3rKJwt/VNt0O4o=;
+        b=kKiggGu/eeg5C6/r9ff/aR9M0zc7Gaf56GneG0QTf/B29qHVqyx7Y1Mmv3sgwQLm25
+         kzin95X4WyEiuWrMICewSb1YIDS6dBz2eqSnFwtVFjzn4Q2KjRKKb9YMj4LHC63d3pjH
+         MghCp9nrOgLMWZjKSQt6OGVNwFJkN9p3oKEsa03s8aKoCqtzU3WAfqyV8qbOyC4GKGTI
+         0fkHedJqIc+5vmmVEvuVEewCaGtNSxIU7fjhSG4Co4OvL+jIuEAhua9ccVnBxuNTyREg
+         busGbY/LT3b/I9ju/4mEYwZ9FoxdAGELRU8tjo5sViRcQ3bEmNIgxHoXMRZg+D2WbwcD
+         ZhrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704458428; x=1705063228;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e9xylIBBAQXzAFQAicy5nw4p6iD5j3rKJwt/VNt0O4o=;
+        b=Z8yg2t+Xzj5IGY2CV5Bs5nYy9IfoLFibtktwKQl+FwGIjDbO1StNBsL3u1ao/ACZls
+         bjwqWFWFRNHWtBZUUJFbGkUC9Ic7Nwy+bQnoVLA5X+lgEAJsFNvshf9oZjF++k44sBtC
+         wbeiOE8pbwcxp4QSo/74OCKbiJW5i+iKPjAHe0PaWGD4r7UXeAf1+nCa6CwD5kpJsy/5
+         UlUQrEzDKe1SiVdH+PkprROt7O1Hnm2eZ1XGSMrVbEfeyPmMOr1TK+5yGzaB18lyC8rG
+         DnZO7HUog1j/R7b3A2CBdFQVXBrIQl1MNcHrTTbK/DLbBvwc+5OWSVvJk8Rsi1/TxWtY
+         Uyww==
+X-Gm-Message-State: AOJu0YwfdQrgJJWL1VeJf1Um6n4Se3NyMAg7ODmRCCuUhOc5Zjt8BO8f
+	wt4wyaMkIVDYJL9pp1pEttA=
+X-Google-Smtp-Source: AGHT+IGj/m0KdG396Q9BYFRZktCXcQo4IsSUVfMPxFi/WW4BkdOrGiZysD+WSxvlrvajaLnQ6/N9lA==
+X-Received: by 2002:a19:ae1a:0:b0:50e:7f5e:59b with SMTP id f26-20020a19ae1a000000b0050e7f5e059bmr985351lfc.60.1704458428022;
+        Fri, 05 Jan 2024 04:40:28 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id n8-20020a170906724800b00a26a5f83cecsm841630ejk.79.2024.01.05.04.40.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jan 2024 04:40:27 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 5 Jan 2024 13:40:25 +0100
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Leon Hwang <hffilwlqm@gmail.com>, bpf <bpf@vger.kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	houtao1@huawei.com
-Subject: [PATCH bpf-next v3 0/3] bpf: inline bpf_kptr_xchg()
-Date: Fri,  5 Jan 2024 18:48:16 +0800
-Message-Id: <20240105104819.3916743-1-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
+	Andrii Nakryiko <andrii@kernel.org>,
+	"Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	Ilya Leoshkevich <iii@linux.ibm.com>,
+	Hengqi Chen <hengqi.chen@gmail.com>, kernel-patches-bot@fb.com
+Subject: Re: [PATCH bpf-next 2/4] bpf, x64: Fix tailcall hierarchy
+Message-ID: <ZZf4uXuSvFq1JwU1@krava>
+References: <20240104142226.87869-1-hffilwlqm@gmail.com>
+ <20240104142226.87869-3-hffilwlqm@gmail.com>
+ <CAADnVQJ1szry9P00wweVDu4d0AQoM_49qT-_ueirvggAiCZrpw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgAXZw013pdlA+1eFg--.49979S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxCrW5JFWUtFWUKryDXF4rAFb_yoW5Xw43pa
-	yft343Kr42qFy2kw43GwnFqa4Fyws5Wry5Xr1fA3sYy3WUZFy8Xr1fKrWF9r9xWFZ0gFyr
-	Ar1I9rySk3WktFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
-	cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-	IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-	42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
-	IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-	87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+In-Reply-To: <CAADnVQJ1szry9P00wweVDu4d0AQoM_49qT-_ueirvggAiCZrpw@mail.gmail.com>
 
-From: Hou Tao <houtao1@huawei.com>
+On Thu, Jan 04, 2024 at 08:15:36PM -0800, Alexei Starovoitov wrote:
+> On Thu, Jan 4, 2024 at 6:23 AM Leon Hwang <hffilwlqm@gmail.com> wrote:
+> >
+> >
+> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> > index fe30b9ebb8de4..67fa337fc2e0c 100644
+> > --- a/arch/x86/net/bpf_jit_comp.c
+> > +++ b/arch/x86/net/bpf_jit_comp.c
+> > @@ -259,7 +259,7 @@ struct jit_context {
+> >  /* Number of bytes emit_patch() needs to generate instructions */
+> >  #define X86_PATCH_SIZE         5
+> >  /* Number of bytes that will be skipped on tailcall */
+> > -#define X86_TAIL_CALL_OFFSET   (11 + ENDBR_INSN_SIZE)
+> > +#define X86_TAIL_CALL_OFFSET   (22 + ENDBR_INSN_SIZE)
+> >
+> >  static void push_r12(u8 **pprog)
+> >  {
+> > @@ -406,14 +406,21 @@ static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf,
+> >          */
+> >         emit_nops(&prog, X86_PATCH_SIZE);
+> >         if (!ebpf_from_cbpf) {
+> > -               if (tail_call_reachable && !is_subprog)
+> > +               if (tail_call_reachable && !is_subprog) {
+> >                         /* When it's the entry of the whole tailcall context,
+> >                          * zeroing rax means initialising tail_call_cnt.
+> >                          */
+> > -                       EMIT2(0x31, 0xC0); /* xor eax, eax */
+> > -               else
+> > -                       /* Keep the same instruction layout. */
+> > -                       EMIT2(0x66, 0x90); /* nop2 */
+> > +                       EMIT2(0x31, 0xC0);       /* xor eax, eax */
+> > +                       EMIT1(0x50);             /* push rax */
+> > +                       /* Make rax as ptr that points to tail_call_cnt. */
+> > +                       EMIT3(0x48, 0x89, 0xE0); /* mov rax, rsp */
+> > +                       EMIT1_off32(0xE8, 2);    /* call main prog */
+> > +                       EMIT1(0x59);             /* pop rcx, get rid of tail_call_cnt */
+> > +                       EMIT1(0xC3);             /* ret */
+> > +               } else {
+> > +                       /* Keep the same instruction size. */
+> > +                       emit_nops(&prog, 13);
+> > +               }
+> 
+> I'm afraid the extra call breaks stack unwinding and many other things.
+> The proper frame needs to be setup (push rbp; etc)
+> and 'leave' + emit_return() is used.
+> Plain 'ret' is not ok.
+> x86_call_depth_emit_accounting() needs to be used too.
+> That will make X86_TAIL_CALL_OFFSET adjustment very complicated.
+> Also the fix doesn't address the stack size issue.
+> We shouldn't allow all the extra frames at run-time.
+> 
+> The tail_cnt_ptr approach is interesting but too heavy,
+> since arm64, s390 and other JITs would need to repeat it with equally
+> complicated calculations in TAIL_CALL_OFFSET.
+> 
+> The fix should really be thought through for all JITs. Not just x86.
+> 
+> I'm thinking whether we should do the following instead:
+> 
+> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+> index 0bdbbbeab155..0b45571559be 100644
+> --- a/kernel/bpf/arraymap.c
+> +++ b/kernel/bpf/arraymap.c
+> @@ -910,7 +910,7 @@ static void *prog_fd_array_get_ptr(struct bpf_map *map,
+>         if (IS_ERR(prog))
+>                 return prog;
+> 
+> -       if (!bpf_prog_map_compatible(map, prog)) {
+> +       if (!bpf_prog_map_compatible(map, prog) || prog->aux->func_cnt) {
+>                 bpf_prog_put(prog);
+>                 return ERR_PTR(-EINVAL);
+>         }
+> 
+> This will stop stack growth, but it will break a few existing tests.
+> I feel it's a price worth paying.
+> 
+> John, Daniel,
+> 
+> do you see anything breaking on cilium side if we disallow
+> progs with subprogs to be inserted in prog_array ?
 
-Hi,
+FWIW tetragon should be ok with this.. we use few subprograms in
+hubble, but most of them are not called from tail called programs
 
-The motivation of inlining bpf_kptr_xchg() comes from the performance
-profiling of bpf memory allocator benchmark [1]. The benchmark uses
-bpf_kptr_xchg() to stash the allocated objects and to pop the stashed
-objects for free. After inling bpf_kptr_xchg(), the performance for
-object free on 8-CPUs VM increases about 2%~10%. However the performance
-gain comes with costs: both the kasan and kcsan checks on the pointer
-will be unavailable. Initially the inline is implemented in do_jit() for
-x86-64 directly, but I think it will more portable to implement the
-inline in verifier.
+jirka
 
-Patch #1 supports inlining bpf_kptr_xchg() helper and enables it on
-x86-4. Patch #2 factors out a helper for newly-added test in patch #3.
-Patch #3 tests whether the inlining of bpf_kptr_xchg() is expected.
-Please see individual patches for more details. And comments are always
-welcome.
-
-Change Log:
-v3:
-  * rebased on bpf-next tree
-  * patch 1 & 2: Add Rvb-by and Ack-by tags from Eduard
-  * patch 3: use inline assembly and naked function instead of c code
-             (suggested by Eduard)
-
-v2: https://lore.kernel.org/bpf/20231223104042.1432300-1-houtao@huaweicloud.com/
-  * rebased on bpf-next tree
-  * drop patch #1 in v1 due to discussion in [2]
-  * patch #1: add the motivation in the commit message, merge patch #1
-              and #3 into the new patch in v2. (Daniel)
-  * patch #2/#3: newly-added patch to test the inlining of
-                 bpf_kptr_xchg() (Eduard)
-
-v1: https://lore.kernel.org/bpf/95b8c2cd-44d5-5fe1-60b5-7e8218779566@huaweicloud.com/
-
-[1]: https://lore.kernel.org/bpf/20231221141501.3588586-1-houtao@huaweicloud.com/
-[2]: https://lore.kernel.org/bpf/fd94efb9-4a56-c982-dc2e-c66be5202cb7@huaweicloud.com/
-
-Hou Tao (3):
-  bpf: Support inlining bpf_kptr_xchg() helper
-  selftests/bpf: Factor out get_xlated_program() helper
-  selftests/bpf: Test the inlining of bpf_kptr_xchg()
-
- arch/x86/net/bpf_jit_comp.c                   |  5 ++
- include/linux/filter.h                        |  1 +
- kernel/bpf/core.c                             | 10 ++++
- kernel/bpf/helpers.c                          |  1 +
- kernel/bpf/verifier.c                         | 17 +++++++
- .../selftests/bpf/prog_tests/ctx_rewrite.c    | 44 ----------------
- .../bpf/prog_tests/kptr_xchg_inline.c         | 51 +++++++++++++++++++
- .../selftests/bpf/progs/kptr_xchg_inline.c    | 48 +++++++++++++++++
- tools/testing/selftests/bpf/test_verifier.c   | 47 +----------------
- tools/testing/selftests/bpf/testing_helpers.c | 42 +++++++++++++++
- tools/testing/selftests/bpf/testing_helpers.h |  6 +++
- 11 files changed, 183 insertions(+), 89 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/kptr_xchg_inline.c
- create mode 100644 tools/testing/selftests/bpf/progs/kptr_xchg_inline.c
-
--- 
-2.29.2
-
+> 
+> Other alternatives?
+> 
