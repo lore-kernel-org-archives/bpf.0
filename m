@@ -1,176 +1,373 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DDFC56450
-	for <bpf@vger.kernel.org>; Mon,  8 Jan 2024 21:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dmarc.ietf.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB7856443
+	for <bpf@vger.kernel.org>; Mon,  8 Jan 2024 21:46:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="cBIt4aYL";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="FgdZY0Kj";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="Y3q63QMd"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 488BEC2D8F51
-	for <bpf@vger.kernel.org>; Mon,  8 Jan 2024 13:42:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1704750161; bh=B+Dkyl84WnE95vmRnerDPH9doqtGIIhw7HPnTrhmnVM=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=cBIt4aYLTznEn4Z4YFg1mfx+M2o1dehru8tE/wycF7WUKowkXuYrxAts2lkxo038b
-	 9Jq5Pmr8qrRuuHiD6BFF1JTf4exM4pFU/6//l2/cXh8LpX6f4VhcxFzxZzvIDOHjZl
-	 82TFJB52k5DJ1rh35rXhzch7OqB0c29K+yiAxkSM=
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
- by ietfa.amsl.com (Postfix) with ESMTP id 36138C06F6AB;
- Mon,  8 Jan 2024 13:42:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
- t=1704750161; bh=B+Dkyl84WnE95vmRnerDPH9doqtGIIhw7HPnTrhmnVM=;
- h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
- List-Post:List-Help:List-Subscribe;
- b=FgdZY0Kj2DxEMn7Rnzo3m+rMj1vyimA/L5aLiG1M82rinAbBk8L6W6rMUUIhFvKej
- RCukQrlnAe2lJdchhaq9OB5O8NHAg9ER828ustsT/K/f6IDtlSJ7EFc9+FXnUhXcxO
- sm+4LHgLLymoA4PoDNd3gB0cLwqbZKRc8bLCSsHs=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 2E6EAC06F6AB
- for <bpf@ietfa.amsl.com>; Mon,  8 Jan 2024 13:42:40 -0800 (PST)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -1.855
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=googlemail.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hmJU9BbebXkI for <bpf@ietfa.amsl.com>;
- Mon,  8 Jan 2024 13:42:36 -0800 (PST)
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com
- [IPv6:2607:f8b0:4864:20::1035])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 649CAC18DBBF
- for <bpf@ietf.org>; Mon,  8 Jan 2024 13:42:36 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id
- 98e67ed59e1d1-28c0df4b42eso2193802a91.1
- for <bpf@ietf.org>; Mon, 08 Jan 2024 13:42:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1704750156; x=1705354956; darn=ietf.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Om0H2b9haCAXEMP5FMDOFAJIVidhFwipddb5hPJUKls=;
- b=Y3q63QMdaGxrcJYS9zhLNSXvyxabtbGaRoFYSGvPKVvfWTltW2km7XUFPqJAhL5F1W
- 1T7Y+JBvdimuRizuqqoFVGTSRWaojBOo48jyoTjf+ufZ1SKoX4JHT1ZSPK+ZtmFS1C7c
- 9rWPLgNZzrj+GpwYUsKncfZA5buAk+5AXo+xoENXH/SxL6ceYsIxqDWr3U59j60ipsfd
- 0nIDp/Jxwt1wsJDyEaFHz/MVn0vam6qrsYQxw/R/jujPzTXkn+cCzIeiELeDaq2X0MEr
- TWJZDZ7De4Ve7a16jjD69VA6ae63lN+Qngymtr+wMthmvgnts0hGq4szlpnLe9RtDOxv
- //Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704750156; x=1705354956;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Om0H2b9haCAXEMP5FMDOFAJIVidhFwipddb5hPJUKls=;
- b=jOHNhm/cSaHudw47iMHMRI6uSfwHNhPi6vR9bbmlz5fYvzGEcsAUodE+WNBcZc7FSo
- FI0flnREgbipen7wnAXFmaFuGXgo8vQN+g8l41P5hPsBtM/0++SQk6/cMWUVK8QyUJB1
- bO5WsnVPbcl4ULLUWU25595hk4IN6I7kriZDX2o1lA55utPc5WZpXkiDPWZy/BiYu5XJ
- +JQ7KI0+wghSRZG+qxmPytJaUN/7ARxIfkCxuH3DM4HnLjSyXDmfRb4G31F6qTmJt8Lh
- ztdFYSxXi1WSpEN3Uxo/bLgzspUs/KkVuOvO3u0frDPaa8CeXlekKFDBIBAl20kkE7eO
- 8Z6w==
-X-Gm-Message-State: AOJu0YyTvxKk4+ox1h050Pf9DE84kID8dmVS6KyJ4SvWzPR5H77WsL45
- gVQo3c/RGg4hgVCE90nMXZc=
-X-Google-Smtp-Source: AGHT+IGqQ6p8gcYov8oECSdLI5LOB0wUi9ASVwIz98KzjcZzSG4XyOh009NeniuMLGNZ0eMDSnbgfw==
-X-Received: by 2002:a17:90a:2bce:b0:28c:f3f9:ccb7 with SMTP id
- n14-20020a17090a2bce00b0028cf3f9ccb7mr426217pje.41.1704750155693; 
- Mon, 08 Jan 2024 13:42:35 -0800 (PST)
-Received: from ubuntu2310.lan (c-67-170-74-237.hsd1.wa.comcast.net.
- [67.170.74.237]) by smtp.gmail.com with ESMTPSA id
- 23-20020a17090a01d700b0028098225450sm7668476pjd.1.2024.01.08.13.42.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 08 Jan 2024 13:42:35 -0800 (PST)
-X-Google-Original-From: Dave Thaler <dthaler1968@gmail.com>
-To: bpf@vger.kernel.org
-Cc: bpf@ietf.org,
-	Dave Thaler <dthaler1968@gmail.com>
-Date: Mon,  8 Jan 2024 13:42:31 -0800
-Message-ID: <20240108214231.5280-1-dthaler1968@gmail.com>
-X-Mailer: git-send-email 2.40.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r/hzpUoM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53D29C433C7
+	for <bpf@vger.kernel.org>; Mon,  8 Jan 2024 21:46:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704750368;
+	bh=L5GDSCI6j6iVMqBDZIzIJg9Yhoz5lRKqvhQwlE3F6GE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=r/hzpUoMelaCeUkArHfi4QLT/cJWj9myglVbE8oM0/xJzSKfPAXYbaThpIBgF70G9
+	 itR/EsrDg7UsSmqmV1Xzhq5XYfeZsJ/xyGojJBaUucZSBa9aEZhYuhopVS9dhbYVtX
+	 LMG1+lY7Go2Z6DOmsHe8LImCOR0BqGAMRe/ZAbvgD+BR44UvSwPk4pmflsjDQU6I0U
+	 FhJluhQlPgkqzzsrmaX9wgXxCMrGktpaosDXcgvkyqoUzfVMZbgazwqc1mQJdr1xjt
+	 bgo8XkzREd257ysE/uagA7VIekjP7GRJ7vCDNg/xDX72lAaaICRmB//aLiKeJe2/F9
+	 bOA0eUNSHUElQ==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-50ea9daac4cso2302215e87.3
+        for <bpf@vger.kernel.org>; Mon, 08 Jan 2024 13:46:08 -0800 (PST)
+X-Gm-Message-State: AOJu0YwYJ7mc9tELVGrNt3WjeWzPi30TliTbwzulUFppZbsdFbWnAvdL
+	nTAXzzxUNgFQszHPUVHlfzkehKiRhxuzYJnWd+o=
+X-Google-Smtp-Source: AGHT+IEtIONCvIHAZkc4PlKbW5+a/upRQB+Jg7RTpx9wbYoOSjZ+OmFl3B8vq1S5GTJdJgkuaVl5ojbkZqJ9KO1sjFs=
+X-Received: by 2002:a05:6512:3119:b0:50e:778b:8b36 with SMTP id
+ n25-20020a056512311900b0050e778b8b36mr1583923lfb.120.1704750366335; Mon, 08
+ Jan 2024 13:46:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/X923xaQ2ixm60GgIHXpC_fwbjkA>
-Subject: [Bpf] [PATCH bpf-next] Introduce concept of conformance groups
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-X-Original-From: Dave Thaler <dthaler1968@googlemail.com>
-From: Dave Thaler <dthaler1968=40googlemail.com@dmarc.ietf.org>
-Message-ID: <20240108214231.48RQxkpxeJZN8pvpkomebV1AeJcV4n6NtAkrRjJ_ZGA@z>
+References: <20231221141501.3588586-1-houtao@huaweicloud.com> <20231221141501.3588586-3-houtao@huaweicloud.com>
+In-Reply-To: <20231221141501.3588586-3-houtao@huaweicloud.com>
+From: Song Liu <song@kernel.org>
+Date: Mon, 8 Jan 2024 13:45:54 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5_9Tt6HLD_LFddS6egKK92WK6TWpz+X1mfi10FHzPskg@mail.gmail.com>
+Message-ID: <CAPhsuW5_9Tt6HLD_LFddS6egKK92WK6TWpz+X1mfi10FHzPskg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add benchmark for bpf memory allocator
+To: Hou Tao <houtao@huaweicloud.com>
+Cc: bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Hao Luo <haoluo@google.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	Daniel Borkmann <daniel@iogearbox.net>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, houtao1@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The discussion of what the actual conformance groups should be
-is still in progress, so this is just part 1 which only uses
-"legacy" for deprecated instructions and "basic" for everything
-else.  Subsequent patches will add more groups as discussion
-continues.
+On Thu, Dec 21, 2023 at 6:14=E2=80=AFAM Hou Tao <houtao@huaweicloud.com> wr=
+ote:
+>
+> From: Hou Tao <houtao1@huawei.com>
+>
+[...]
+>
+> The following is the test results conducted on a 8-CPU VM with 16GB memor=
+y:
+>
+> $ for i in 1 4 8; do ./bench -w3 -d10 bpf_ma -p${i} -a; done |grep Summar=
+y
+> Summary: per-prod alloc 11.29 =C2=B1 0.14M/s free 33.76 =C2=B1 0.33M/s, t=
+otal memory usage    0.01 =C2=B1 0.00MiB
+> Summary: per-prod alloc  7.49 =C2=B1 0.12M/s free 34.42 =C2=B1 0.56M/s, t=
+otal memory usage    0.03 =C2=B1 0.00MiB
+> Summary: per-prod alloc  6.66 =C2=B1 0.08M/s free 34.27 =C2=B1 0.41M/s, t=
+otal memory usage    0.06 =C2=B1 0.00MiB
+>
+> $ for i in 1 4 8; do ./bench -w3 -d10 bpf_ma -p${i} -a --percpu; done |gr=
+ep Summary
+> Summary: per-prod alloc 14.64 =C2=B1 0.60M/s free 36.94 =C2=B1 0.35M/s, t=
+otal memory usage  188.02 =C2=B1 7.43MiB
+> Summary: per-prod alloc 12.39 =C2=B1 1.32M/s free 36.40 =C2=B1 0.38M/s, t=
+otal memory usage  808.90 =C2=B1 25.56MiB
+> Summary: per-prod alloc 10.80 =C2=B1 0.17M/s free 35.45 =C2=B1 0.25M/s, t=
+otal memory usage 2330.24 =C2=B1 480.56MiB
 
-Signed-off-by: Dave Thaler <dthaler1968@gmail.com>
----
- .../bpf/standardization/instruction-set.rst   | 26 ++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+This is not likely related to this patch, but do we expect this much
+memory usage?
+I guess the 2.3GiB number is from bigger ALLOC_OBJ_SIZE and
+ALLOC_BATCH_CNT? I am getting 0 MiB with this test on my VM.
 
-diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
-index 245b6defc..eb0f234a8 100644
---- a/Documentation/bpf/standardization/instruction-set.rst
-+++ b/Documentation/bpf/standardization/instruction-set.rst
-@@ -97,6 +97,28 @@ Definitions
-     A:          10000110
-     B: 11111111 10000110
- 
-+Conformance groups
-+------------------
-+
-+An implementation does not need to support all instructions specified in this
-+document (e.g., deprecated instructions).  Instead, a number of conformance
-+groups are specified.  An implementation must support the "basic" conformance
-+group and may support additional conformance groups, where supporting a
-+conformance group means it must support all instructions in that conformance
-+group.
-+
-+The use of named conformance groups enables interoperability between a runtime
-+that executes instructions, and tools as such compilers that generate
-+instructions for the runtime.  Thus, capability discovery in terms of
-+conformance groups might be done manually by users or automatically by tools.
-+
-+Each conformance group has a short ASCII label (e.g., "basic") that
-+corresponds to a set of instructions that are mandatory.  That is, each
-+instruction has one or more conformance groups of which it is a member.
-+
-+The "basic" conformance group includes all instructions defined in this
-+specification unless otherwise noted.
-+
- Instruction encoding
- ====================
- 
-@@ -610,4 +632,6 @@ Legacy BPF Packet access instructions
- 
- BPF previously introduced special instructions for access to packet data that were
- carried over from classic BPF. However, these instructions are
--deprecated and should no longer be used.
-+deprecated and should no longer be used.  All legacy packet access
-+instructions belong to the "legacy" conformance group instead of the "basic"
-+conformance group.
--- 
-2.40.1
+>
+> Signed-off-by: Hou Tao <houtao1@huawei.com>
+> ---
+>  tools/testing/selftests/bpf/Makefile          |   2 +
+>  tools/testing/selftests/bpf/bench.c           |   4 +
+>  tools/testing/selftests/bpf/bench.h           |   7 +
+>  .../selftests/bpf/benchs/bench_bpf_ma.c       | 273 ++++++++++++++++++
+>  .../selftests/bpf/progs/bench_bpf_ma.c        | 222 ++++++++++++++
 
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
+Maybe add a run_bench_bpf_ma.sh script in selftests/bpf/benchs?
+
+>  5 files changed, 508 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_ma.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/bench_bpf_ma.c
+>
+[...]
+> diff --git a/tools/testing/selftests/bpf/bench.h b/tools/testing/selftest=
+s/bpf/bench.h
+> index a6fcf111221f..206cf3de5df2 100644
+> --- a/tools/testing/selftests/bpf/bench.h
+> +++ b/tools/testing/selftests/bpf/bench.h
+> @@ -53,6 +53,13 @@ struct bench_res {
+>                         unsigned long gp_ct;
+>                         unsigned int stime;
+>                 } rcu;
+> +               struct {
+> +                       unsigned long alloc;
+> +                       unsigned long free;
+
+nit: maybe add _ct or _cnt postfix to match "rcu" above or the skel?
+
+> +                       unsigned long alloc_ns;
+> +                       unsigned long free_ns;
+> +                       unsigned long mem_bytes;
+> +               } ma;
+>         };
+>  };
+>
+[...]
+> +
+> +static void bpf_ma_validate(void)
+> +{
+> +}
+
+Empty validate() function seems not necessary.
+
+[...]
+
+> +
+> +static void bpf_ma_report_final(struct bench_res res[], int res_cnt)
+> +{
+> +       double mem_mean =3D 0.0, mem_stddev =3D 0.0;
+> +       double alloc_mean =3D 0.0, alloc_stddev =3D 0.0;
+> +       double free_mean =3D 0.0, free_stddev =3D 0.0;
+> +       double alloc_ns =3D 0.0, free_ns =3D 0.0;
+> +       int i;
+> +
+> +       for (i =3D 0; i < res_cnt; i++) {
+> +               alloc_ns +=3D res[i].ma.alloc_ns;
+> +               free_ns +=3D res[i].ma.free_ns;
+> +       }
+> +       for (i =3D 0; i < res_cnt; i++) {
+> +               if (alloc_ns)
+> +                       alloc_mean +=3D res[i].ma.alloc * 1000.0 / alloc_=
+ns;
+> +               if (free_ns)
+> +                       free_mean +=3D res[i].ma.free * 1000.0 / free_ns;
+> +               mem_mean +=3D res[i].ma.mem_bytes / 1048576.0 / (0.0 + re=
+s_cnt);
+> +       }
+> +       if (res_cnt > 1) {
+> +               for (i =3D 0; i < res_cnt; i++) {
+> +                       double sample;
+> +
+> +                       sample =3D res[i].ma.alloc_ns ? res[i].ma.alloc *=
+ 1000.0 /
+> +                                                     res[i].ma.alloc_ns =
+: 0.0;
+> +                       alloc_stddev +=3D (alloc_mean - sample) * (alloc_=
+mean - sample) /
+> +                                       (res_cnt - 1.0);
+> +
+> +                       sample =3D res[i].ma.free_ns ? res[i].ma.free * 1=
+000.0 /
+> +                                                    res[i].ma.free_ns : =
+0.0;
+> +                       free_stddev +=3D (free_mean - sample) * (free_mea=
+n - sample) /
+> +                                      (res_cnt - 1.0);
+> +
+> +                       sample =3D res[i].ma.mem_bytes / 1048576.0;
+> +                       mem_stddev +=3D (mem_mean - sample) * (mem_mean -=
+ sample) /
+> +                                     (res_cnt - 1.0);
+> +               }
+
+nit: We can probably refactor common code for stddev calculation into
+some helpers.
+
+> +               alloc_stddev =3D sqrt(alloc_stddev);
+> +               free_stddev =3D sqrt(free_stddev);
+> +               mem_stddev =3D sqrt(mem_stddev);
+> +       }
+> +
+> +       printf("Summary: per-prod alloc %7.2lf \u00B1 %3.2lfM/s free %7.2=
+lf \u00B1 %3.2lfM/s, "
+> +              "total memory usage %7.2lf \u00B1 %3.2lfMiB\n",
+> +              alloc_mean, alloc_stddev, free_mean, free_stddev,
+> +              mem_mean, mem_stddev);
+> +}
+> +
+> +const struct bench bench_bpf_mem_alloc =3D {
+> +       .name =3D "bpf_ma",
+> +       .argp =3D &bench_bpf_mem_alloc_argp,
+> +       .validate =3D bpf_ma_validate,
+> +       .setup =3D bpf_ma_setup,
+> +       .producer_thread =3D bpf_ma_producer,
+> +       .measure =3D bpf_ma_measure,
+> +       .report_progress =3D bpf_ma_report_progress,
+> +       .report_final =3D bpf_ma_report_final,
+> +};
+> diff --git a/tools/testing/selftests/bpf/progs/bench_bpf_ma.c b/tools/tes=
+ting/selftests/bpf/progs/bench_bpf_ma.c
+
+[...]
+
+> +
+> +/* Return the number of allocated objects */
+> +static __always_inline unsigned int batch_alloc(struct bpf_map *map)
+> +{
+> +       struct bin_data *old, *new;
+> +       struct map_value *value;
+> +       unsigned int i, key;
+> +
+> +       for (i =3D 0; i < ALLOC_BATCH_CNT; i++) {
+> +               key =3D i;
+> +               value =3D bpf_map_lookup_elem(map, &key);
+> +               if (!value)
+> +                       return i;
+> +
+> +               new =3D bpf_obj_new(typeof(*new));
+> +               if (!new)
+> +                       return i;
+> +
+> +               old =3D bpf_kptr_xchg(&value->data, new);
+> +               if (old)
+> +                       bpf_obj_drop(old);
+> +       }
+> +
+> +       return ALLOC_BATCH_CNT;
+> +}
+> +
+> +/* Return the number of freed objects */
+> +static __always_inline unsigned int batch_free(struct bpf_map *map)
+> +{
+> +       struct map_value *value;
+> +       unsigned int i, key;
+> +       void *old;
+> +
+> +       for (i =3D 0; i < ALLOC_BATCH_CNT; i++) {
+> +               key =3D i;
+> +               value =3D bpf_map_lookup_elem(map, &key);
+> +               if (!value)
+> +                       return i;
+> +
+> +               old =3D bpf_kptr_xchg(&value->data, NULL);
+> +               if (!old)
+> +                       return i;
+> +               bpf_obj_drop(old);
+> +       }
+> +
+> +       return ALLOC_BATCH_CNT;
+> +}
+> +
+> +/* Return the number of allocated objects */
+> +static __always_inline unsigned int batch_percpu_alloc(struct bpf_map *m=
+ap)
+> +{
+> +       struct percpu_bin_data *old, *new;
+> +       struct percpu_map_value *value;
+> +       unsigned int i, key;
+> +
+> +       for (i =3D 0; i < ALLOC_BATCH_CNT; i++) {
+> +               key =3D i;
+> +               value =3D bpf_map_lookup_elem(map, &key);
+> +               if (!value)
+> +                       return i;
+> +
+> +               new =3D bpf_percpu_obj_new(typeof(*new));
+> +               if (!new)
+> +                       return i;
+> +
+> +               old =3D bpf_kptr_xchg(&value->data, new);
+> +               if (old)
+> +                       bpf_percpu_obj_drop(old);
+> +       }
+> +
+> +       return ALLOC_BATCH_CNT;
+> +}
+> +
+> +/* Return the number of freed objects */
+> +static __always_inline unsigned int batch_percpu_free(struct bpf_map *ma=
+p)
+> +{
+> +       struct percpu_map_value *value;
+> +       unsigned int i, key;
+> +       void *old;
+> +
+> +       for (i =3D 0; i < ALLOC_BATCH_CNT; i++) {
+> +               key =3D i;
+> +               value =3D bpf_map_lookup_elem(map, &key);
+> +               if (!value)
+> +                       return i;
+> +
+> +               old =3D bpf_kptr_xchg(&value->data, NULL);
+> +               if (!old)
+> +                       return i;
+> +               bpf_percpu_obj_drop(old);
+> +       }
+> +
+> +       return ALLOC_BATCH_CNT;
+> +}
+
+nit: These four functions have quite duplicated code. We can probably
+refactor them a bit.
+
+> +
+> +SEC("?fentry/" SYS_PREFIX "sys_getpgid")
+> +int bench_batch_alloc_free(void *ctx)
+> +{
+> +       u64 start, delta;
+> +       unsigned int cnt;
+> +       void *map;
+
+s/void */struct bpf_map */?
+
+> +       int key;
+> +
+> +       key =3D bpf_get_smp_processor_id();
+> +       map =3D bpf_map_lookup_elem((void *)&outer_array, &key);
+> +       if (!map)
+> +               return 0;
+> +
+> +       start =3D bpf_ktime_get_boot_ns();
+> +       cnt =3D batch_alloc(map);
+> +       delta =3D bpf_ktime_get_boot_ns() - start;
+> +       __sync_fetch_and_add(&alloc_cnt, cnt);
+> +       __sync_fetch_and_add(&alloc_ns, delta);
+> +
+> +       start =3D bpf_ktime_get_boot_ns();
+> +       cnt =3D batch_free(map);
+> +       delta =3D bpf_ktime_get_boot_ns() - start;
+> +       __sync_fetch_and_add(&free_cnt, cnt);
+> +       __sync_fetch_and_add(&free_ns, delta);
+> +
+> +       return 0;
+> +}
+> +
+> +SEC("?fentry/" SYS_PREFIX "sys_getpgid")
+> +int bench_batch_percpu_alloc_free(void *ctx)
+> +{
+> +       u64 start, delta;
+> +       unsigned int cnt;
+> +       void *map;
+
+ditto
+
+> +       int key;
+> +
+> +       key =3D bpf_get_smp_processor_id();
+> +       map =3D bpf_map_lookup_elem((void *)&percpu_outer_array, &key);
+> +       if (!map)
+> +               return 0;
+> +
+> +       start =3D bpf_ktime_get_boot_ns();
+> +       cnt =3D batch_percpu_alloc(map);
+> +       delta =3D bpf_ktime_get_boot_ns() - start;
+> +       __sync_fetch_and_add(&alloc_cnt, cnt);
+> +       __sync_fetch_and_add(&alloc_ns, delta);
+> +
+> +       start =3D bpf_ktime_get_boot_ns();
+> +       cnt =3D batch_percpu_free(map);
+> +       delta =3D bpf_ktime_get_boot_ns() - start;
+> +       __sync_fetch_and_add(&free_cnt, cnt);
+> +       __sync_fetch_and_add(&free_ns, delta);
+> +
+> +       return 0;
+> +}
+
+nit: ditto duplicated code.
