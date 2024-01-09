@@ -1,136 +1,78 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EBB439FE5;
-	Tue,  9 Jan 2024 15:36:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E00374C5
+	for <bpf@vger.kernel.org>; Tue,  9 Jan 2024 16:10:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ywhli+63"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-33761e291c1so1773590f8f.0;
-        Tue, 09 Jan 2024 07:36:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704814579; x=1705419379; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Uoyz0fX05VFZUA0YqL9VDmTIjZubn+1o1Tubn/qOGIQ=;
-        b=Ywhli+630+H5SS8G8SdP1TgmtDG/N/PFkP2WGwB56asraV+ksNO+EQ+Nd63U29BAbU
-         fSWUwniKDPXC92LKRHrteNS3OxqKE8EQmyz9ciQdzSl1/bSzQqMArWwl4MIDw80JhIF0
-         c/Fnf+H+GpVfZx79mUQkH2XY1llzmOX3YX9f2zX2ndpK3KLJLjmqcII44z0j1yL0j+eO
-         t67668S4U0KHxsGVPtEetlCLC3xyNDxQfi3sFop+epuH1ri4FJs4LLx56Say1DLzk2qY
-         SU6zQH2ihIkCaUx5jVAxR61/E0gWEia9X41U1kOp4z3CcMJAZGuGkTyfeKSOVI3rA6/l
-         PYdQ==
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-427c4bf6017so25059111cf.0
+        for <bpf@vger.kernel.org>; Tue, 09 Jan 2024 08:10:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704814579; x=1705419379;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Uoyz0fX05VFZUA0YqL9VDmTIjZubn+1o1Tubn/qOGIQ=;
-        b=JieGXoKZP7k3rk6YPPWHfixkbKRotT7DbtHPiIDd7T5qHFDza36BU4ezZtpMhsXh94
-         VkfEbOz2hKMQvTqbTHEtqcJs8UtUgR0YcRhpKynwa/kI64NSETaar8OJ1t1QxYvWrrQ3
-         R8zx/zjY89SgKzAMJIaQEN9RM+gkBS64XhivyMdqm4xqkOOc3xddjKpY93w34z72kqq4
-         AAJLD9P1sG97NqMhmvhLIRS+qoFLkdmoEDUmVhe4ybcwQJ9ndUys46N5o+ygGkF13SsV
-         N+K4hiQjw2N45pVVMOKStpg0wggSZBbvJXRqvXamIuXO6U6qtquzZ4ToAPCH6rZGaM67
-         IHgQ==
-X-Gm-Message-State: AOJu0YxCCM27bXFYGTlNNmxIZ0Nxzz+IUei2UEE3mjw0J83tqFy6OeDx
-	ajb3sOuzaSQlh1JF3+i2dBhYW4IU1g==
-X-Google-Smtp-Source: AGHT+IFF0m5AF5RduXEuT8dKBFZD9iSqrXMBvW+29jCDOiEUyuHNHIbAu0bVFq7vtE0jEW+OG0UyyA==
-X-Received: by 2002:a5d:6349:0:b0:336:641d:626c with SMTP id b9-20020a5d6349000000b00336641d626cmr476091wrw.61.1704814578883;
-        Tue, 09 Jan 2024 07:36:18 -0800 (PST)
-Received: from staff-net-cx-3510.intern.ethz.ch (2001-67c-10ec-5784-8000--1bd.net6.ethz.ch. [2001:67c:10ec:5784:8000::1bd])
-        by smtp.gmail.com with ESMTPSA id j25-20020adfb319000000b0033672cfca96sm2682295wrd.89.2024.01.09.07.36.18
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 09 Jan 2024 07:36:18 -0800 (PST)
-From: Hao Sun <sunhao.th@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ppenkov@google.com,
-	willemb@google.com,
-	ast@kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hao Sun <sunhao.th@gmail.com>
-Subject: [PATCH] bpf: Reject variable offset alu on PTR_TO_FLOW_KEYS
-Date: Tue,  9 Jan 2024 16:36:09 +0100
-Message-ID: <20240109153609.10185-1-sunhao.th@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1704816653; x=1705421453;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OjHBEaHdSWTXb4kkRiKmuiZT+NrTmZbIpDxetZWh61Q=;
+        b=TarB4hQCDhezduTAYiCDKDOheNeI+kowp6QoZc0VNs/vjSPx38KughUIodZBr9fvkd
+         Hl3dhxFP18hX11opz3yCnGzPGQeOCWCwUEf58P85BPHNU9LUZvNbUZJGvn7IikHplWWO
+         DIixVWjbI+oaUzvB6k1PzwYrzn+p9ZI/0m6MZajVhY8lpAfx/SIIHwIBRxcgaySDuAfo
+         gUvt90lK4WZFZFuPG70/2Kf5tbZZYE4H0I0XE7lzSKstC6h2wxFV5f0Oo6Iz4XQD/sLh
+         yC7JDVy64p7QWKZ1009o3iXZzAhMJ7NhfRa4kr2ltEusd9xFFcd0Ci7nObXju9uSSOgx
+         kUnQ==
+X-Gm-Message-State: AOJu0YyXs32XFwcBo0DHS5h5BhxfSuBrcOIf+xUPzy2IZ/pvUTPZiUk1
+	uuMF4bEF4tl2fJb9loJFSuw=
+X-Google-Smtp-Source: AGHT+IGBqw1cmDw2DclhEzdS/UFv8UIi6ctTp3CrKjlzcyvgrEiB//yI4t6hxIL8RvF8CvT3nJ61Lw==
+X-Received: by 2002:ac8:588a:0:b0:425:8a27:4bef with SMTP id t10-20020ac8588a000000b004258a274befmr8169503qta.34.1704816653533;
+        Tue, 09 Jan 2024 08:10:53 -0800 (PST)
+Received: from maniforge (c-24-1-27-177.hsd1.il.comcast.net. [24.1.27.177])
+        by smtp.gmail.com with ESMTPSA id ch6-20020a05622a40c600b004299d5ee4f9sm984072qtb.13.2024.01.09.08.10.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jan 2024 08:10:53 -0800 (PST)
+Date: Tue, 9 Jan 2024 10:10:49 -0600
+From: David Vernet <void@manifault.com>
+To: Dave Thaler <dthaler1968=40googlemail.com@dmarc.ietf.org>
+Cc: bpf@vger.kernel.org, bpf@ietf.org, Dave Thaler <dthaler1968@gmail.com>
+Subject: Re: [Bpf] [PATCH bpf-next] Introduce concept of conformance groups
+Message-ID: <20240109161049.GA79024@maniforge>
+References: <20240108214231.5280-1-dthaler1968@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="y9U2/K0VhlYetP/p"
+Content-Disposition: inline
+In-Reply-To: <20240108214231.5280-1-dthaler1968@gmail.com>
+User-Agent: Mutt/2.2.12 (2023-09-09)
 
-For PTR_TO_FLOW_KEYS, check_flow_keys_access() only uses fixed off
-for validation. However, variable offset ptr alu is not prohibited
-for this ptr kind. So the variable offset is not checked.
 
-The following prog is accepted:
-func#0 @0
-0: R1=ctx() R10=fp0
-0: (bf) r6 = r1                       ; R1=ctx() R6_w=ctx()
-1: (79) r7 = *(u64 *)(r6 +144)        ; R6_w=ctx() R7_w=flow_keys()
-2: (b7) r8 = 1024                     ; R8_w=1024
-3: (37) r8 /= 1                       ; R8_w=scalar()
-4: (57) r8 &= 1024                    ; R8_w=scalar(smin=smin32=0,
-smax=umax=smax32=umax32=1024,var_off=(0x0; 0x400))
-5: (0f) r7 += r8
-mark_precise: frame0: last_idx 5 first_idx 0 subseq_idx -1
-mark_precise: frame0: regs=r8 stack= before 4: (57) r8 &= 1024
-mark_precise: frame0: regs=r8 stack= before 3: (37) r8 /= 1
-mark_precise: frame0: regs=r8 stack= before 2: (b7) r8 = 1024
-6: R7_w=flow_keys(smin=smin32=0,smax=umax=smax32=umax32=1024,var_off
-=(0x0; 0x400)) R8_w=scalar(smin=smin32=0,smax=umax=smax32=umax32=1024,
-var_off=(0x0; 0x400))
-6: (79) r0 = *(u64 *)(r7 +0)          ; R0_w=scalar()
-7: (95) exit
+--y9U2/K0VhlYetP/p
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This prog loads flow_keys to r7, and adds the variable offset r8
-to r7, and finally causes out-of-bounds access:
+On Mon, Jan 08, 2024 at 01:42:31PM -0800, Dave Thaler wrote:
+> The discussion of what the actual conformance groups should be
+> is still in progress, so this is just part 1 which only uses
+> "legacy" for deprecated instructions and "basic" for everything
+> else.  Subsequent patches will add more groups as discussion
+> continues.
+>=20
+> Signed-off-by: Dave Thaler <dthaler1968@gmail.com>
 
-BUG: unable to handle page fault for address: ffffc90014c80038
-...
-Call Trace:
- <TASK>
- bpf_dispatcher_nop_func include/linux/bpf.h:1231 [inline]
- __bpf_prog_run include/linux/filter.h:651 [inline]
- bpf_prog_run include/linux/filter.h:658 [inline]
- bpf_prog_run_pin_on_cpu include/linux/filter.h:675 [inline]
- bpf_flow_dissect+0x15f/0x350 net/core/flow_dissector.c:991
- bpf_prog_test_run_flow_dissector+0x39d/0x620 net/bpf/test_run.c:1359
- bpf_prog_test_run kernel/bpf/syscall.c:4107 [inline]
- __sys_bpf+0xf8f/0x4560 kernel/bpf/syscall.c:5475
- __do_sys_bpf kernel/bpf/syscall.c:5561 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5559 [inline]
- __x64_sys_bpf+0x73/0xb0 kernel/bpf/syscall.c:5559
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0x3f/0x110 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x63/0x6b
+Acked-by: David Vernet <void@manifault.com>
 
-Fix this by rejecting ptr alu with variable offset on flow_keys.
-Applying the patch makes the program rejected with "R7 pointer
-arithmetic on flow_keys prohibited"
+--y9U2/K0VhlYetP/p
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Fixes: d58e468b1112 ("flow_dissector: implements flow dissector BPF hook")
-Signed-off-by: Hao Sun <sunhao.th@gmail.com>
----
- kernel/bpf/verifier.c | 4 ++++
- 1 file changed, 4 insertions(+)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index adbf330d364b..65f598694d55 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12826,6 +12826,10 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 	}
- 
- 	switch (base_type(ptr_reg->type)) {
-+	case PTR_TO_FLOW_KEYS:
-+		if (known)
-+			break;
-+		fallthrough;
- 	case CONST_PTR_TO_MAP:
- 		/* smin_val represents the known value */
- 		if (known && smin_val == 0 && opcode == BPF_ADD)
--- 
-2.34.1
+iHUEARYIAB0WIQRBxU1So5MTLwphjdFZ5LhpZcTzZAUCZZ1wCQAKCRBZ5LhpZcTz
+ZNvkAP4k0oNAU9M55irsV/VVDiH+6Jk3IUpHNEA3MvR/N7yy4QD/XGn/Ezb0dxXK
+OhwWh6U96BYhqEKNoC54oUxYATkVhAA=
+=TSRE
+-----END PGP SIGNATURE-----
 
+--y9U2/K0VhlYetP/p--
