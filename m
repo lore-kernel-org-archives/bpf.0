@@ -1,24 +1,24 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70CAED7
-	for <bpf@vger.kernel.org>; Fri, 12 Jan 2024 02:40:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7093805;
+	Fri, 12 Jan 2024 02:40:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mzaHOINR"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3296CC433C7;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m/3KIfp4"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 401C4C43394;
 	Fri, 12 Jan 2024 02:40:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1705027227;
-	bh=upp1NwSzjhfQcc1hpr3QwgM4YMInuPYJhVhpRfSX/iw=;
+	bh=S8orNQ0y9sofYNNwZuu4YYDCMO/aUbAa6rRqNguxkMs=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=mzaHOINRF/wkThbiXGbmCLm+FYoLsH4Pk2q5qxoFpdejIgiNZlLOTMOvnyMRIL9pR
-	 kBKR+I0hnNsA0bjjg1fLQxKeXKmIMN1sv1cY7XjGvVtTZWh4bj5MncrA3ucDdKTaaN
-	 qqr2EdIUm/KZiR5Sm+GLWgdYJWm0Vf2gGupwAxTxMLHCDLlJRwZcREdyxmS+a+OEIr
-	 wUKKASb2+4Rt01myb8bpn8VI7c7ZrJDZx39d4A7oSHuY6jwnFdflVP8lH+2eXs36JP
-	 mb+7g4WU73NX7kZeGA6/L4ttlvRKgfNqxy6YdfOjdzrGFBE9UTjXewpk4R0g4SDpoz
-	 bOSQvm9E6t7lQ==
+	b=m/3KIfp46udw+3KO/OnEfTO0J2p4AmDQPZk3k9nKm2nUOcVv/3ZgklxmW8eDtnnB3
+	 kJ3TPDvMAj5ljKSImLa3q9CujLCmWHIzjTbaD7VXcd/jJP5k1AReNe20DTK7CrRBDA
+	 2DmjYCiI00jv7XR2EcZLH1tT8gPEp/WLo4qlKuIav1Azfipy9rgPMjIgko+HrKURRR
+	 kvYzPD87rL3WYosBfNjR3YX2ljhwuxFAGVGlzaHx8GvF60Cdh9zypZKGB/oAp1z5d/
+	 2iDBtACmZEuV8/6+VbysMBsBm4XtcX7ld5pWAiqs/GQUmj/5kQ89G1Ei3ZXvhuHZxA
+	 axx1yTh4+FEmA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 17477D8C96C;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2779DD8C974;
 	Fri, 12 Jan 2024 02:40:27 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -28,52 +28,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 0/8] PTR_TO_BTF_ID arguments in global subprogs
+Subject: Re: [PATCH bpf-next] net: filter: fix spelling mistakes
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <170502722709.15005.11239108129933936591.git-patchwork-notify@kernel.org>
+ <170502722715.15005.9426847097531619379.git-patchwork-notify@kernel.org>
 Date: Fri, 12 Jan 2024 02:40:27 +0000
-References: <20240105000909.2818934-1-andrii@kernel.org>
-In-Reply-To: <20240105000909.2818934-1-andrii@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@kernel.org, kernel-team@meta.com, davemarchevsky@meta.com
+References: <20240106065545.16855-1-rdunlap@infradead.org>
+In-Reply-To: <20240106065545.16855-1-rdunlap@infradead.org>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: netdev@vger.kernel.org, patches@lists.linux.dev, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Thu,  4 Jan 2024 16:09:01 -0800 you wrote:
-> This patch set follows recent changes that added btf_decl_tag-based argument
-> annotation support for global subprogs. This time we add ability to pass
-> PTR_TO_BTF_ID (BTF-aware kernel pointers) arguments into global subprograms.
-> We support explicitly trusted and untrusted arguments. Legacy semi-trusted
-> variant is not supported.
+On Fri,  5 Jan 2024 22:55:45 -0800 you wrote:
+> Fix spelling errors as reported by codespell.
 > 
-> Patches #2 through #4 do preparatory refactorings to add support for multiple
-> tags per argument. This is important for being able to use modifiers like
-> __arg_nonnull together with trusted/untrusted arguments.
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: bpf@vger.kernel.org
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,1/8] selftests/bpf: fix test_loader check message
-    https://git.kernel.org/bpf/bpf-next/c/7c5f9568564a
-  - [bpf-next,2/8] bpf: make sure scalar args don't accept __arg_nonnull tag
-    https://git.kernel.org/bpf/bpf-next/c/ca3950495684
-  - [bpf-next,3/8] bpf: prepare btf_prepare_func_args() for multiple tags per argument
-    https://git.kernel.org/bpf/bpf-next/c/5436740cc03d
-  - [bpf-next,4/8] bpf: support multiple tags per argument
-    https://git.kernel.org/bpf/bpf-next/c/6a21d4e515f5
-  - [bpf-next,5/8] bpf: add __arg_trusted and __arg_untrusted global func tags
-    (no matching commit)
-  - [bpf-next,6/8] libbpf: add __arg_trusted and __arg_untrusted annotation macros
-    (no matching commit)
-  - [bpf-next,7/8] libbpf: add bpf_core_cast() macro
-    (no matching commit)
-  - [bpf-next,8/8] selftests/bpf: add trusted/untrusted global subprog arg tests
-    (no matching commit)
+  - [bpf-next] net: filter: fix spelling mistakes
+    https://git.kernel.org/bpf/bpf-next/c/8f8382623c75
 
 You are awesome, thank you!
 -- 
