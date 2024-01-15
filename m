@@ -1,117 +1,161 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from wp716.webpack.hosteurope.de (wp716.webpack.hosteurope.de [80.237.130.238])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F9711773B;
-	Mon, 15 Jan 2024 13:12:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4TDBrJ6v2zzvTtj;
-	Mon, 15 Jan 2024 20:52:48 +0800 (CST)
-Received: from kwepemd100009.china.huawei.com (unknown [7.221.188.135])
-	by mail.maildlp.com (Postfix) with ESMTPS id 915D81402E0;
-	Mon, 15 Jan 2024 20:53:56 +0800 (CST)
-Received: from ultra.huawei.com (10.90.53.71) by
- kwepemd100009.china.huawei.com (7.221.188.135) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1258.28; Mon, 15 Jan 2024 20:53:55 +0800
-From: Pu Lehui <pulehui@huawei.com>
-To: <bpf@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<netdev@vger.kernel.org>
-CC: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>, Alexei Starovoitov
-	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
-	<andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
-	<song@kernel.org>, Yonghong Song <yhs@fb.com>, John Fastabend
-	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
-	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>, Conor Dooley <conor@kernel.org>, Luke
- Nelson <luke.r.nels@gmail.com>, Pu Lehui <pulehui@huawei.com>, Pu Lehui
-	<pulehui@huaweicloud.com>
-Subject: [PATCH bpf-next v3 1/6] riscv, bpf: Unify 32-bit sign-extension to emit_sextw
-Date: Mon, 15 Jan 2024 12:54:22 +0000
-Message-ID: <20240115125427.2914015-2-pulehui@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240115125427.2914015-1-pulehui@huawei.com>
-References: <20240115125427.2914015-1-pulehui@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1F7F1757D;
+	Mon, 15 Jan 2024 13:42:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=alumni.tu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=alumni.tu-berlin.de
+Received: from dynamic-2a01-0c23-606a-b500-b981-1935-c9f7-1531.c23.pool.telefonica.de ([2a01:c23:606a:b500:b981:1935:c9f7:1531] helo=jt.fritz.box); authenticated
+	by wp716.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	id 1rPNEg-0006AL-4K; Mon, 15 Jan 2024 14:42:42 +0100
+From: =?UTF-8?q?J=C3=B6rn-Thorben=20Hinz?= <j-t.hinz@alumni.tu-berlin.de>
+To: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: =?UTF-8?q?J=C3=B6rn-Thorben=20Hinz?= <j-t.hinz@alumni.tu-berlin.de>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Deepa Dinamani <deepa.kernel@gmail.com>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Subject: [PATCH bpf-next] bpf: Allow setting SO_TIMESTAMPING* with bpf_setsockopt()
+Date: Mon, 15 Jan 2024 14:41:10 +0100
+Message-Id: <20240115134110.11624-1-j-t.hinz@alumni.tu-berlin.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemd100009.china.huawei.com (7.221.188.135)
+X-bounce-key: webpack.hosteurope.de;j-t.hinz@alumni.tu-berlin.de;1705326171;87aeb70d;
+X-HE-SMSGID: 1rPNEg-0006AL-4K
 
-For code unification, add emit_sextw wrapper to unify all the 32-bit
-sign-extension operations.
+A BPF application, e.g., a TCP congestion control, might benefit from or
+even require precise (=hardware) packet timestamps. These timestamps are
+already available through __sk_buff.hwtstamp and
+bpf_sock_ops.skb_hwtstamp, but could not be requested: BPF programs were
+not allowed to set SO_TIMESTAMPING* on sockets.
 
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
-Acked-by: Björn Töpel <bjorn@kernel.org>
+Enable BPF programs to actively request the generation of timestamps
+from a stream socket. The also required ioctl(SIOCSHWTSTAMP) on the
+network device must still be done separately, in user space.
+
+This patch had previously been submitted in a two-part series (first
+link below). The second patch has been independently applied in commit
+7f6ca95d16b9 ("net: Implement missing getsockopt(SO_TIMESTAMPING_NEW)")
+(second link below).
+
+On the earlier submission, there was the open question whether to only
+allow, thus enforce, SO_TIMESTAMPING_NEW in this patch:
+
+For a BPF program, this won't make a difference: A timestamp, when
+accessed through the fields mentioned above, is directly read from
+skb_shared_info.hwtstamps, independent of the places where NEW/OLD is
+relevant. See bpf_convert_ctx_access() besides others.
+
+I am unsure, though, when it comes to the interconnection of user space
+and BPF "space", when both are interested in the timestamps. I think it
+would cause an unsolvable conflict when user space is bound to use
+SO_TIMESTAMPING_OLD with a BPF program only allowed to set
+SO_TIMESTAMPING_NEW *on the same socket*? Please correct me if I'm
+mistaken.
+
+Link: https://lore.kernel.org/lkml/20230703175048.151683-1-jthinz@mailbox.tu-berlin.de/
+Link: https://lore.kernel.org/all/20231221231901.67003-1-jthinz@mailbox.tu-berlin.de/
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Deepa Dinamani <deepa.kernel@gmail.com>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Signed-off-by: Jörn-Thorben Hinz <j-t.hinz@alumni.tu-berlin.de>
 ---
- arch/riscv/net/bpf_jit.h        |  5 +++++
- arch/riscv/net/bpf_jit_comp64.c | 10 +++++-----
- 2 files changed, 10 insertions(+), 5 deletions(-)
+ include/uapi/linux/bpf.h                            | 3 ++-
+ net/core/filter.c                                   | 2 ++
+ tools/include/uapi/linux/bpf.h                      | 3 ++-
+ tools/testing/selftests/bpf/progs/bpf_tracing_net.h | 2 ++
+ tools/testing/selftests/bpf/progs/setget_sockopt.c  | 4 ++++
+ 5 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
-index a5ce1ab76ece..f9f8d86e762f 100644
---- a/arch/riscv/net/bpf_jit.h
-+++ b/arch/riscv/net/bpf_jit.h
-@@ -1087,6 +1087,11 @@ static inline void emit_subw(u8 rd, u8 rs1, u8 rs2, struct rv_jit_context *ctx)
- 		emit(rv_subw(rd, rs1, rs2), ctx);
- }
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 754e68ca8744..8825d0648efe 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -2734,7 +2734,8 @@ union bpf_attr {
+  * 		  **SO_RCVBUF**, **SO_SNDBUF**, **SO_MAX_PACING_RATE**,
+  * 		  **SO_PRIORITY**, **SO_RCVLOWAT**, **SO_MARK**,
+  * 		  **SO_BINDTODEVICE**, **SO_KEEPALIVE**, **SO_REUSEADDR**,
+- * 		  **SO_REUSEPORT**, **SO_BINDTOIFINDEX**, **SO_TXREHASH**.
++ * 		  **SO_REUSEPORT**, **SO_BINDTOIFINDEX**, **SO_TXREHASH**,
++ * 		  **SO_TIMESTAMPING_NEW**, **SO_TIMESTAMPING_OLD**.
+  * 		* **IPPROTO_TCP**, which supports the following *optname*\ s:
+  * 		  **TCP_CONGESTION**, **TCP_BPF_IW**,
+  * 		  **TCP_BPF_SNDCWND_CLAMP**, **TCP_SAVE_SYN**,
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 8c9f67c81e22..4f5280874fd8 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5144,6 +5144,8 @@ static int sol_socket_sockopt(struct sock *sk, int optname,
+ 	case SO_MAX_PACING_RATE:
+ 	case SO_BINDTOIFINDEX:
+ 	case SO_TXREHASH:
++	case SO_TIMESTAMPING_NEW:
++	case SO_TIMESTAMPING_OLD:
+ 		if (*optlen != sizeof(int))
+ 			return -EINVAL;
+ 		break;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 7f24d898efbb..09eaafa6ab43 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -2734,7 +2734,8 @@ union bpf_attr {
+  * 		  **SO_RCVBUF**, **SO_SNDBUF**, **SO_MAX_PACING_RATE**,
+  * 		  **SO_PRIORITY**, **SO_RCVLOWAT**, **SO_MARK**,
+  * 		  **SO_BINDTODEVICE**, **SO_KEEPALIVE**, **SO_REUSEADDR**,
+- * 		  **SO_REUSEPORT**, **SO_BINDTOIFINDEX**, **SO_TXREHASH**.
++ * 		  **SO_REUSEPORT**, **SO_BINDTOIFINDEX**, **SO_TXREHASH**,
++ * 		  **SO_TIMESTAMPING_NEW**, **SO_TIMESTAMPING_OLD**.
+  * 		* **IPPROTO_TCP**, which supports the following *optname*\ s:
+  * 		  **TCP_CONGESTION**, **TCP_BPF_IW**,
+  * 		  **TCP_BPF_SNDCWND_CLAMP**, **TCP_SAVE_SYN**,
+diff --git a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
+index 1bdc680b0e0e..95f5f169819e 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
++++ b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
+@@ -15,8 +15,10 @@
+ #define SO_RCVLOWAT		18
+ #define SO_BINDTODEVICE		25
+ #define SO_MARK			36
++#define SO_TIMESTAMPING_OLD     37
+ #define SO_MAX_PACING_RATE	47
+ #define SO_BINDTOIFINDEX	62
++#define SO_TIMESTAMPING_NEW     65
+ #define SO_TXREHASH		74
+ #define __SO_ACCEPTCON		(1 << 16)
  
-+static inline void emit_sextw(u8 rd, u8 rs, struct rv_jit_context *ctx)
-+{
-+	emit_addiw(rd, rs, 0, ctx);
-+}
-+
- #endif /* __riscv_xlen == 64 */
+diff --git a/tools/testing/selftests/bpf/progs/setget_sockopt.c b/tools/testing/selftests/bpf/progs/setget_sockopt.c
+index 7a438600ae98..54205d10793c 100644
+--- a/tools/testing/selftests/bpf/progs/setget_sockopt.c
++++ b/tools/testing/selftests/bpf/progs/setget_sockopt.c
+@@ -48,6 +48,10 @@ static const struct sockopt_test sol_socket_tests[] = {
+ 	{ .opt = SO_MARK, .new = 0xeb9f, .expected = 0xeb9f, },
+ 	{ .opt = SO_MAX_PACING_RATE, .new = 0xeb9f, .expected = 0xeb9f, },
+ 	{ .opt = SO_TXREHASH, .flip = 1, },
++	{ .opt = SO_TIMESTAMPING_NEW, .new = SOF_TIMESTAMPING_RX_HARDWARE,
++		.expected = SOF_TIMESTAMPING_RX_HARDWARE, },
++	{ .opt = SO_TIMESTAMPING_OLD, .new = SOF_TIMESTAMPING_RX_HARDWARE,
++		.expected = SOF_TIMESTAMPING_RX_HARDWARE, },
+ 	{ .opt = 0, },
+ };
  
- void bpf_jit_build_prologue(struct rv_jit_context *ctx);
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 58dc64dd94a8..73f8a0938ada 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -417,8 +417,8 @@ static void emit_zext_32_rd_rs(u8 *rd, u8 *rs, struct rv_jit_context *ctx)
- 
- static void emit_sext_32_rd_rs(u8 *rd, u8 *rs, struct rv_jit_context *ctx)
- {
--	emit_addiw(RV_REG_T2, *rd, 0, ctx);
--	emit_addiw(RV_REG_T1, *rs, 0, ctx);
-+	emit_sextw(RV_REG_T2, *rd, ctx);
-+	emit_sextw(RV_REG_T1, *rs, ctx);
- 	*rd = RV_REG_T2;
- 	*rs = RV_REG_T1;
- }
-@@ -433,7 +433,7 @@ static void emit_zext_32_rd_t1(u8 *rd, struct rv_jit_context *ctx)
- 
- static void emit_sext_32_rd(u8 *rd, struct rv_jit_context *ctx)
- {
--	emit_addiw(RV_REG_T2, *rd, 0, ctx);
-+	emit_sextw(RV_REG_T2, *rd, ctx);
- 	*rd = RV_REG_T2;
- }
- 
-@@ -1103,7 +1103,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			emit_srai(rd, RV_REG_T1, 64 - insn->off, ctx);
- 			break;
- 		case 32:
--			emit_addiw(rd, rs, 0, ctx);
-+			emit_sextw(rd, rs, ctx);
- 			break;
- 		}
- 		if (!is64 && !aux->verifier_zext)
-@@ -1503,7 +1503,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		 * as t1 is used only in comparison against zero.
- 		 */
- 		if (!is64 && imm < 0)
--			emit_addiw(RV_REG_T1, RV_REG_T1, 0, ctx);
-+			emit_sextw(RV_REG_T1, RV_REG_T1, ctx);
- 		e = ctx->ninsns;
- 		rvoff -= ninsns_rvoff(e - s);
- 		emit_branch(BPF_JNE, RV_REG_T1, RV_REG_ZERO, rvoff, ctx);
 -- 
-2.34.1
+2.39.2
 
