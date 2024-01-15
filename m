@@ -1,206 +1,102 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669261B5AA;
-	Mon, 15 Jan 2024 22:08:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8B601AADB
+	for <bpf@vger.kernel.org>; Mon, 15 Jan 2024 23:21:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="EWLhrreO"
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40FEOQP0002617;
-	Mon, 15 Jan 2024 14:08:19 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=PbW9lm3Hm509IJ92WErvuFAfIoq3sCqG7oXnAe9h1v4=;
- b=EWLhrreOl6x848TvjWaxeJ+HZ2naZwL1y04OSaMT4bmcHD65eHlG3OuoQnldcXqLgkzB
- dhr2G+egvDds7y0AFRMhV3r6CX9RKRL6o1feS5y44BzUeGFXP30XjXZmmWlEACc0aC74
- eCC6iH+BIqFY2xVriebVC+srPh97wfZaZYQRk6MDQ0f7eQLDqIu7BYMSdlWAg2SVfHnO
- N6cRKBHgsDyzD2UVSStzMmDFugnKoSuNMmp7pVr65p7F0ubec8uW4PJ2mkbrvsNjpqKh
- SjiWQPfzaP+SGbmT3p7I+QlFBjdPZw95yOz2KCVFKqi5GkB9STlVip1a82WqHKdvRaNy fQ== 
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3vn5ve2fn9-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Mon, 15 Jan 2024 14:08:18 -0800
-Received: from devvm4158.cln0.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server id
- 15.1.2507.35; Mon, 15 Jan 2024 14:08:14 -0800
-From: Vadim Fedorenko <vadfed@meta.com>
-To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-        Jakub Kicinski
-	<kuba@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Andrii Nakryiko
-	<andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, Mykola Lysenko
-	<mykolal@fb.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-CC: Vadim Fedorenko <vadfed@meta.com>, <netdev@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <bpf@vger.kernel.org>,
-        Victor Stewart
-	<v@nametag.social>
-Subject: [PATCH bpf-next v8 2/3] bpf: crypto: add skcipher to bpf crypto
-Date: Mon, 15 Jan 2024 14:08:02 -0800
-Message-ID: <20240115220803.1973440-2-vadfed@meta.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20240115220803.1973440-1-vadfed@meta.com>
-References: <20240115220803.1973440-1-vadfed@meta.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F0DNwMNs"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1d5c1c1cf58so12450505ad.1
+        for <bpf@vger.kernel.org>; Mon, 15 Jan 2024 15:21:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705360869; x=1705965669; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k+RpXudObUBdGh/+5FP8MAEZSlhz5UTeYcefOqi5t54=;
+        b=F0DNwMNsT1FRB9thCnpFWCLw5QOZsYUTM9p1PD+aZ844GllteU3cNe2YitYcKxrVL3
+         d2JRhi64Gwj6VAMmgZxStYjfvLRZ12a4ACPV28VEYLMHAr89+41D0geKFuWGJ4YHMGNF
+         5+SCbEsRVTZ1N3Bp43rwOcHYm22ZSKd1+HSXErq0ElTItBA0ExUvD8Q/oY5ABe6IVw9g
+         aKf2zkzLemTVTXvPkW6gCF9tX9xW/Z0LY5a+xdrfLBpG4upUmASWN8lnxfZkWO3fGrZs
+         ekH1SLawlv8E24g/ZCYEDIiQIb5/gN/fATbGex3Ju3OrBG9d6+zPeGu5P8dvgc59VzuH
+         vsCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705360869; x=1705965669;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k+RpXudObUBdGh/+5FP8MAEZSlhz5UTeYcefOqi5t54=;
+        b=qyGcNQ/rTieBwQGyV58Xovga+pGRtBzuvoXRlKnUUkm9tcuXpiHf0/KeZB22WjF+Il
+         rI4LM6JSRSWuT06DiRSqct4O+mu7Co8HXXQlaX0KQITpLOLgeAh3PZSW6wq31lloAEEo
+         And4n9sX0ZCH+XRonhXecxVY5ntiF3QoQbFB7dy6XD0dIef4N/OcbSu2yndCUwxhrRnP
+         kb4uNbIKRZ99BcCgJdR7hHQ3zx3/Fi0rTxD4px1qRW2ikB/VR7L2N5l/ycI5DLd8K1ph
+         7pTL2/uO72QAMsqBVFecGyLI9EKiNUABK1myA6vO4HqDjdy/NKYQhrywGpcJdjsmBtEt
+         2jGg==
+X-Gm-Message-State: AOJu0YzMc/n1qwUPhrHm3gOZncx6+RoyetjE7N1RvAjCdwg2PEOvOtnx
+	T+VfXELcqNJPTPBQXQThtnF34C9EO7w=
+X-Google-Smtp-Source: AGHT+IF9j26UcwG1AAedbmp6oRH6fvd2TbhIvqhG7RrfjVoTt09YFtbWTpTgxx265j5gZqVrGiLszw==
+X-Received: by 2002:a17:902:eb84:b0:1d4:ceab:58b9 with SMTP id q4-20020a170902eb8400b001d4ceab58b9mr8925721plg.40.1705360868747;
+        Mon, 15 Jan 2024 15:21:08 -0800 (PST)
+Received: from localhost ([98.97.116.126])
+        by smtp.gmail.com with ESMTPSA id jz3-20020a170903430300b001d4b0ae7052sm8127013plb.135.2024.01.15.15.21.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jan 2024 15:21:07 -0800 (PST)
+Date: Mon, 15 Jan 2024 15:21:06 -0800
+From: John Fastabend <john.fastabend@gmail.com>
+To: Victor Stewart <v@nametag.social>, 
+ bpf <bpf@vger.kernel.org>, 
+ Vadim Fedorenko <vadfed@meta.com>
+Message-ID: <65a5bde2c4e31_2eaef20845@john.notmuch>
+In-Reply-To: <CAM1kxwi9FMUr3vOqZeRe3FjuvwQgdW-8g0HGLL5fU2tOOjRfYA@mail.gmail.com>
+References: <CAM1kxwj533vwyxNvCPgXK2p=CxVszOm4T4g0YzaFhWPGATS0RA@mail.gmail.com>
+ <CAM1kxwi9FMUr3vOqZeRe3FjuvwQgdW-8g0HGLL5fU2tOOjRfYA@mail.gmail.com>
+Subject: Re: [RFC bpf-next] crypto for unsleepable progs + new persistent bpf
+ map for kernel api structs
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: QpYG2gH4EkdA3tQEZooDtzMHgyvUboKI
-X-Proofpoint-ORIG-GUID: QpYG2gH4EkdA3tQEZooDtzMHgyvUboKI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-15_15,2024-01-15_03,2023-05-22_02
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Implement skcipher crypto in BPF crypto framework.
+Victor Stewart wrote:
+> On Sat, Jan 13, 2024 at 2:31=E2=80=AFPM Victor Stewart <v@nametag.socia=
+l> wrote:
+> >
+> > i was just brainstorming at Vadim off mailing list about my desire to=
+ do AES
+> > decryption of QUIC connection IDs in an XDP program, RE his pending
+> > bpf crypto api patch series:
+> >
+> > https://lore.kernel.org/bpf/20231202010604.1877561-1-vadfed@meta.com/=
 
-Signed-off-by: Vadim Fedorenko <vadfed@meta.com>
----
-v7 -> v8:
-- Move bpf_crypto_skcipher.c to crypto and make it part of
-  skcipher module. This way looks more natural and makes bpf crypto
-  proper modular. MAINTAINERS files is adjusted to make bpf part
-  belong to BPF maintainers.
-v6 - v7:
-- style issues
-v6:
-- introduce new file
----
- MAINTAINERS                  |  8 ++++
- crypto/Makefile              |  3 ++
- crypto/bpf_crypto_skcipher.c | 82 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 93 insertions(+)
- create mode 100644 crypto/bpf_crypto_skcipher.c
+> >
+> > i'm hoping to gather some thoughts on the below two roadblocks:
+> >
+> >
+> > (1) crypto for preemption disabled bpf programs
+> >
+> > as he mentioned in the comments of 1/3 and to me directly, a non slee=
+pable
+> > bpf program is not allowed to allocate a crypto context.
+> >
+> > is it possible for this restriction to be lifted?
+> >
+> > if not what safeguards would be required to lift it?
+> >
+> > worst case maybe an API could be added for userspace to initialize th=
+e
+> > context, as userspace must provide the key anyway.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c36618d4659e..ae788357c56d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3753,6 +3753,14 @@ F:	kernel/bpf/tnum.c
- F:	kernel/bpf/trampoline.c
- F:	kernel/bpf/verifier.c
- 
-+BPF [CRYPTO]
-+M:	Vadim Fedorenko <vadim.fedorenko@linux.dev>
-+L:	bpf@vger.kernel.org
-+S:	Maintained
-+F:	crypto/bpf_crypto_skcipher.c
-+F:	include/linux/bpf_crypto.h
-+F:	kernel/bpf/crypto.c
-+
- BPF [DOCUMENTATION] (Related to Standardization)
- R:	David Vernet <void@manifault.com>
- L:	bpf@vger.kernel.org
-diff --git a/crypto/Makefile b/crypto/Makefile
-index 408f0a1f9ab9..538124f8bf8a 100644
---- a/crypto/Makefile
-+++ b/crypto/Makefile
-@@ -20,6 +20,9 @@ crypto_skcipher-y += lskcipher.o
- crypto_skcipher-y += skcipher.o
- 
- obj-$(CONFIG_CRYPTO_SKCIPHER2) += crypto_skcipher.o
-+ifeq ($(CONFIG_BPF_SYSCALL),y)
-+obj-$(CONFIG_CRYPTO_SKCIPHER2) += bpf_crypto_skcipher.o
-+endif
- 
- obj-$(CONFIG_CRYPTO_SEQIV) += seqiv.o
- obj-$(CONFIG_CRYPTO_ECHAINIV) += echainiv.o
-diff --git a/crypto/bpf_crypto_skcipher.c b/crypto/bpf_crypto_skcipher.c
-new file mode 100644
-index 000000000000..e0b32cf7f002
---- /dev/null
-+++ b/crypto/bpf_crypto_skcipher.c
-@@ -0,0 +1,82 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2023 Meta, Inc */
-+#include <linux/types.h>
-+#include <linux/module.h>
-+#include <linux/bpf_crypto.h>
-+#include <crypto/skcipher.h>
-+
-+static void *bpf_crypto_lskcipher_alloc_tfm(const char *algo)
-+{
-+	return crypto_alloc_lskcipher(algo, 0, 0);
-+}
-+
-+static void bpf_crypto_lskcipher_free_tfm(void *tfm)
-+{
-+	crypto_free_lskcipher(tfm);
-+}
-+
-+static int bpf_crypto_lskcipher_has_algo(const char *algo)
-+{
-+	return crypto_has_skcipher(algo, CRYPTO_ALG_TYPE_LSKCIPHER, CRYPTO_ALG_TYPE_MASK);
-+}
-+
-+static int bpf_crypto_lskcipher_setkey(void *tfm, const u8 *key, unsigned int keylen)
-+{
-+	return crypto_lskcipher_setkey(tfm, key, keylen);
-+}
-+
-+static u32 bpf_crypto_lskcipher_get_flags(void *tfm)
-+{
-+	return crypto_lskcipher_get_flags(tfm);
-+}
-+
-+static unsigned int bpf_crypto_lskcipher_ivsize(void *tfm)
-+{
-+	return crypto_lskcipher_ivsize(tfm);
-+}
-+
-+static unsigned int bpf_crypto_lskcipher_statesize(void *tfm)
-+{
-+	return crypto_lskcipher_statesize(tfm);
-+}
-+
-+static int bpf_crypto_lskcipher_encrypt(void *tfm, const u8 *src, u8 *dst,
-+					unsigned int len, u8 *siv)
-+{
-+	return crypto_lskcipher_encrypt(tfm, src, dst, len, siv);
-+}
-+
-+static int bpf_crypto_lskcipher_decrypt(void *tfm, const u8 *src, u8 *dst,
-+					unsigned int len, u8 *siv)
-+{
-+	return crypto_lskcipher_decrypt(tfm, src, dst, len, siv);
-+}
-+
-+static const struct bpf_crypto_type bpf_crypto_lskcipher_type = {
-+	.alloc_tfm	= bpf_crypto_lskcipher_alloc_tfm,
-+	.free_tfm	= bpf_crypto_lskcipher_free_tfm,
-+	.has_algo	= bpf_crypto_lskcipher_has_algo,
-+	.setkey		= bpf_crypto_lskcipher_setkey,
-+	.encrypt	= bpf_crypto_lskcipher_encrypt,
-+	.decrypt	= bpf_crypto_lskcipher_decrypt,
-+	.ivsize		= bpf_crypto_lskcipher_ivsize,
-+	.statesize	= bpf_crypto_lskcipher_statesize,
-+	.get_flags	= bpf_crypto_lskcipher_get_flags,
-+	.owner		= THIS_MODULE,
-+	.name		= "skcipher",
-+};
-+
-+static int __init bpf_crypto_skcipher_init(void)
-+{
-+	return bpf_crypto_register_type(&bpf_crypto_lskcipher_type);
-+}
-+
-+static void __exit bpf_crypto_skcipher_exit(void)
-+{
-+	int err = bpf_crypto_unregister_type(&bpf_crypto_lskcipher_type);
-+	WARN_ON_ONCE(err);
-+}
-+
-+module_init(bpf_crypto_skcipher_init);
-+module_exit(bpf_crypto_skcipher_exit);
-+MODULE_LICENSE("GPL");
--- 
-2.39.3
+I'm trying to understand why this is "worst case" to setup the context
+from userspace? Perhaps naively I haven't tried to code this up, but
+it seems like a sensible workflow to have userspace generate the key and
+also setup the context. Then have fastpath (XDP) use the context for
+decrypting?
 
+Thanks,
+John=
