@@ -1,19 +1,19 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B50F171C2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2025171CC;
 	Mon, 15 Jan 2024 13:12:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4TDCGZ2G0nz4f3jqc;
-	Mon, 15 Jan 2024 21:12:06 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4TDCGX0pgWz4f3kp0;
+	Mon, 15 Jan 2024 21:12:04 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 684F41A0B62;
-	Mon, 15 Jan 2024 21:12:08 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id C31601A0172;
+	Mon, 15 Jan 2024 21:12:07 +0800 (CST)
 Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP4 (Coremail) with SMTP id gCh0CgBnu20iL6VlSeWtAw--.15591S7;
-	Mon, 15 Jan 2024 21:12:08 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgBnu20iL6VlSeWtAw--.15591S2;
+	Mon, 15 Jan 2024 21:12:03 +0800 (CST)
 From: Pu Lehui <pulehui@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
@@ -35,12 +35,10 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	Luke Nelson <luke.r.nels@gmail.com>,
 	Pu Lehui <pulehui@huawei.com>,
 	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH RESEND bpf-next v3 5/6] riscv, bpf: Optimize sign-extention mov insns with Zbb support
-Date: Mon, 15 Jan 2024 13:12:34 +0000
-Message-Id: <20240115131235.2914289-6-pulehui@huaweicloud.com>
+Subject: [PATCH RESEND bpf-next v3 0/6] Zbb support and code simplification for RV64 JIT
+Date: Mon, 15 Jan 2024 13:12:29 +0000
+Message-Id: <20240115131235.2914289-1-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240115131235.2914289-1-pulehui@huaweicloud.com>
-References: <20240115131235.2914289-1-pulehui@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,88 +47,56 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgBnu20iL6VlSeWtAw--.15591S7
-X-Coremail-Antispam: 1UD129KBjvJXoW7KryDur1xJF48AF18JFy5Arb_yoW8CF1kpF
-	WUGrn3CrWvqF1fKF9xtF47Wr15GF4vvF17KF47K398ta1Iqr4DGw1Fkw12yF98GFy8W3Wr
-	WFWjkry3C3Wvva7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPI14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-	kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-	z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-	4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
-	3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-	IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-	M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
-	kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIx
-	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAF
-	wI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
-	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUl
-	2NtUUUUU=
+X-CM-TRANSID:gCh0CgBnu20iL6VlSeWtAw--.15591S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4xJFy3CFyfZry8GF4DArb_yoW8Jw4Dpa
+	93Ary3Gr1rtr1fXwsayw17Gr1rKF4Fqr13Jry2qw18AF42vFyFkFyFgw4Fyas8GFZ3WryU
+	Zr9rtF13G3WjvaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvY14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+	6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+	n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wryl
+	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+	AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v2
+	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
+	Ul-eOUUUUU=
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-From: Pu Lehui <pulehui@huawei.com>
+Add Zbb support [0] to optimize code size and performance of RV64 JIT.
+Meanwhile, adjust the code for unification and simplification. Tests
+test_bpf.ko and test_verifier have passed, as well as the relative
+testcases of test_progs*.
 
-Add 8-bit and 16-bit sign-extention wraper with Zbb support to optimize
-sign-extension mov instructions.
+Link: https://github.com/riscv/riscv-bitmanip/releases/download/1.0.0/bitmanip-1.0.0-38-g865e7a7.pdf [0]
 
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
-Acked-by: Björn Töpel <bjorn@kernel.org>
----
- arch/riscv/net/bpf_jit.h        | 22 ++++++++++++++++++++++
- arch/riscv/net/bpf_jit_comp64.c |  5 +++--
- 2 files changed, 25 insertions(+), 2 deletions(-)
+v3 resend:
+- resend for mail be treated as spam.
 
-diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
-index 51f6d214086f..b00c5c0591d2 100644
---- a/arch/riscv/net/bpf_jit.h
-+++ b/arch/riscv/net/bpf_jit.h
-@@ -1119,6 +1119,28 @@ static inline void emit_subw(u8 rd, u8 rs1, u8 rs2, struct rv_jit_context *ctx)
- 		emit(rv_subw(rd, rs1, rs2), ctx);
- }
- 
-+static inline void emit_sextb(u8 rd, u8 rs, struct rv_jit_context *ctx)
-+{
-+	if (rvzbb_enabled()) {
-+		emit(rvzbb_sextb(rd, rs), ctx);
-+		return;
-+	}
-+
-+	emit_slli(rd, rs, 56, ctx);
-+	emit_srai(rd, rd, 56, ctx);
-+}
-+
-+static inline void emit_sexth(u8 rd, u8 rs, struct rv_jit_context *ctx)
-+{
-+	if (rvzbb_enabled()) {
-+		emit(rvzbb_sexth(rd, rs), ctx);
-+		return;
-+	}
-+
-+	emit_slli(rd, rs, 48, ctx);
-+	emit_srai(rd, rd, 48, ctx);
-+}
-+
- static inline void emit_sextw(u8 rd, u8 rs, struct rv_jit_context *ctx)
- {
- 	emit_addiw(rd, rs, 0, ctx);
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index d90784674677..18bbf8122eb3 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1073,9 +1073,10 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			emit_mv(rd, rs, ctx);
- 			break;
- 		case 8:
-+			emit_sextb(rd, rs, ctx);
-+			break;
- 		case 16:
--			emit_slli(RV_REG_T1, rs, 64 - insn->off, ctx);
--			emit_srai(rd, RV_REG_T1, 64 - insn->off, ctx);
-+			emit_sexth(rd, rs, ctx);
- 			break;
- 		case 32:
- 			emit_sextw(rd, rs, ctx);
+v3:
+- Change to early-exit code style and make code more explicit.
+
+v2: https://lore.kernel.org/bpf/20230919035839.3297328-1-pulehui@huaweicloud.com
+- Add runtime detection for Zbb instructions.
+- Correct formatting issues detected by checkpatch.
+
+v1: https://lore.kernel.org/bpf/20230913153413.1446068-1-pulehui@huaweicloud.com
+
+Pu Lehui (6):
+  riscv, bpf: Unify 32-bit sign-extension to emit_sextw
+  riscv, bpf: Unify 32-bit zero-extension to emit_zextw
+  riscv, bpf: Simplify sext and zext logics in branch instructions
+  riscv, bpf: Add necessary Zbb instructions
+  riscv, bpf: Optimize sign-extention mov insns with Zbb support
+  riscv, bpf: Optimize bswap insns with Zbb support
+
+ arch/riscv/net/bpf_jit.h        | 134 ++++++++++++++++++++
+ arch/riscv/net/bpf_jit_comp64.c | 210 +++++++++++---------------------
+ 2 files changed, 205 insertions(+), 139 deletions(-)
+
 -- 
 2.34.1
 
