@@ -1,14 +1,14 @@
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E4B111A9;
-	Tue, 16 Jan 2024 07:59:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88DB111AB;
+	Tue, 16 Jan 2024 07:59:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0W-lSOZH_1705391964;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W-lSOZH_1705391964)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0W-lNYOL_1705391967;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W-lNYOL_1705391967)
           by smtp.aliyun-inc.com;
-          Tue, 16 Jan 2024 15:59:25 +0800
+          Tue, 16 Jan 2024 15:59:27 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "Michael S. Tsirkin" <mst@redhat.com>,
@@ -24,10 +24,12 @@ Cc: "Michael S. Tsirkin" <mst@redhat.com>,
 	John Fastabend <john.fastabend@gmail.com>,
 	virtualization@lists.linux.dev,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next 0/5] virtio-net: sq support premapped mode
-Date: Tue, 16 Jan 2024 15:59:19 +0800
-Message-Id: <20240116075924.42798-1-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next 2/5] virtio_ring: virtqueue_disable_and_recycle let the callback detach bufs
+Date: Tue, 16 Jan 2024 15:59:21 +0800
+Message-Id: <20240116075924.42798-3-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
+In-Reply-To: <20240116075924.42798-1-xuanzhuo@linux.alibaba.com>
+References: <20240116075924.42798-1-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,108 +39,196 @@ MIME-Version: 1.0
 X-Git-Hash: e56718642c76
 Content-Transfer-Encoding: 8bit
 
-This is the second part of virtio-net support AF_XDP zero copy.
+Now, inside virtqueue_disable_and_recycle, the recycle() just has two
+parameters(vq, buf) after detach operate.
 
-The whole patch set
-http://lore.kernel.org/all/20231229073108.57778-1-xuanzhuo@linux.alibaba.com
+But if we are in premapped mode, we may need to get some dma info when
+detach buf like virtqueue_get_buf_ctx_dma().
 
-## About the branch
+So we call recycle directly, this callback detaches bufs self. It should
+complete the work of detaching all the unused buffers.
 
-This patch set is pushed to the net-next branch, but some patches are about
-virtio core. Because the entire patch set for virtio-net to support AF_XDP
-should be pushed to net-next, I hope these patches will be merged into net-next
-with the virtio core maintains's Acked-by.
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+---
+ drivers/net/virtio/main.c    | 60 +++++++++++++++++++-----------------
+ drivers/virtio/virtio_ring.c | 10 +++---
+ include/linux/virtio.h       |  4 +--
+ 3 files changed, 38 insertions(+), 36 deletions(-)
 
-============================================================================
-
-## AF_XDP
-
-XDP socket(AF_XDP) is an excellent bypass kernel network framework. The zero
-copy feature of xsk (XDP socket) needs to be supported by the driver. The
-performance of zero copy is very good. mlx5 and intel ixgbe already support
-this feature, This patch set allows virtio-net to support xsk's zerocopy xmit
-feature.
-
-At present, we have completed some preparation:
-
-1. vq-reset (virtio spec and kernel code)
-2. virtio-core premapped dma
-3. virtio-net xdp refactor
-
-So it is time for Virtio-Net to complete the support for the XDP Socket
-Zerocopy.
-
-Virtio-net can not increase the queue num at will, so xsk shares the queue with
-kernel.
-
-On the other hand, Virtio-Net does not support generate interrupt from driver
-manually, so when we wakeup tx xmit, we used some tips. If the CPU run by TX
-NAPI last time is other CPUs, use IPI to wake up NAPI on the remote CPU. If it
-is also the local CPU, then we wake up napi directly.
-
-This patch set includes some refactor to the virtio-net to let that to support
-AF_XDP.
-
-## performance
-
-ENV: Qemu with vhost-user(polling mode).
-Host CPU: Intel(R) Xeon(R) Platinum 8163 CPU @ 2.50GHz
-
-### virtio PMD in guest with testpmd
-
-testpmd> show port stats all
-
- ######################## NIC statistics for port 0 ########################
- RX-packets: 19531092064 RX-missed: 0     RX-bytes: 1093741155584
- RX-errors: 0
- RX-nombuf: 0
- TX-packets: 5959955552 TX-errors: 0     TX-bytes: 371030645664
-
-
- Throughput (since last show)
- Rx-pps:   8861574     Rx-bps:  3969985208
- Tx-pps:   8861493     Tx-bps:  3969962736
- ############################################################################
-
-### AF_XDP PMD in guest with testpmd
-
-testpmd> show port stats all
-
-  ######################## NIC statistics for port 0  ########################
-  RX-packets: 68152727   RX-missed: 0          RX-bytes:  3816552712
-  RX-errors: 0
-  RX-nombuf:  0
-  TX-packets: 68114967   TX-errors: 33216      TX-bytes:  3814438152
-
-  Throughput (since last show)
-  Rx-pps:      6333196          Rx-bps:   2837272088
-  Tx-pps:      6333227          Tx-bps:   2837285936
-  ############################################################################
-
-But AF_XDP consumes more CPU for tx and rx napi(100% and 86%).
-
-## maintain
-
-I am currently a reviewer for virtio-net. I commit to maintain AF_XDP support in
-virtio-net.
-
-Please review.
-
-Thanks.
-Xuan Zhuo (5):
-  virtio_ring: introduce virtqueue_get_buf_ctx_dma()
-  virtio_ring: virtqueue_disable_and_recycle let the callback detach
-    bufs
-  virtio_ring: introduce virtqueue_detach_unused_buf_dma()
-  virtio_ring: introduce virtqueue_get_dma_premapped()
-  virtio_net: sq support premapped mode
-
- drivers/net/virtio/main.c       | 177 ++++++++++++++++++------
- drivers/net/virtio/virtio_net.h |  13 +-
- drivers/virtio/virtio_ring.c    | 235 ++++++++++++++++++++++++--------
- include/linux/virtio.h          |  22 ++-
- 4 files changed, 340 insertions(+), 107 deletions(-)
-
---
+diff --git a/drivers/net/virtio/main.c b/drivers/net/virtio/main.c
+index ac3a529c7729..186b2cf5d8fc 100644
+--- a/drivers/net/virtio/main.c
++++ b/drivers/net/virtio/main.c
+@@ -150,7 +150,8 @@ struct virtio_net_common_hdr {
+ 	};
+ };
+ 
+-static void virtnet_sq_free_unused_buf(struct virtqueue *vq, void *buf);
++static void virtnet_rq_free_unused_bufs(struct virtqueue *vq);
++static void virtnet_sq_free_unused_bufs(struct virtqueue *vq);
+ 
+ static bool is_xdp_frame(void *ptr)
+ {
+@@ -587,20 +588,6 @@ static void virtnet_rq_set_premapped(struct virtnet_info *vi)
+ 	}
+ }
+ 
+-static void virtnet_rq_unmap_free_buf(struct virtqueue *vq, void *buf)
+-{
+-	struct virtnet_info *vi = vq->vdev->priv;
+-	struct virtnet_rq *rq;
+-	int i = vq2rxq(vq);
+-
+-	rq = &vi->rq[i];
+-
+-	if (rq->do_dma)
+-		virtnet_rq_unmap(rq, buf, 0);
+-
+-	virtnet_rq_free_buf(vi, rq, buf);
+-}
+-
+ static void free_old_xmit(struct virtnet_sq *sq, bool in_napi)
+ {
+ 	u64 bytes = 0, packets = 0;
+@@ -2244,7 +2231,7 @@ static int virtnet_rx_resize(struct virtnet_info *vi,
+ 		cancel_work_sync(&rq->dim.work);
+ 	}
+ 
+-	err = virtqueue_resize(rq->vq, ring_num, virtnet_rq_unmap_free_buf);
++	err = virtqueue_resize(rq->vq, ring_num, virtnet_rq_free_unused_bufs);
+ 	if (err)
+ 		netdev_err(vi->dev, "resize rx fail: rx queue index: %d err: %d\n", qindex, err);
+ 
+@@ -2283,7 +2270,7 @@ static int virtnet_tx_resize(struct virtnet_info *vi,
+ 
+ 	__netif_tx_unlock_bh(txq);
+ 
+-	err = virtqueue_resize(sq->vq, ring_num, virtnet_sq_free_unused_buf);
++	err = virtqueue_resize(sq->vq, ring_num, virtnet_sq_free_unused_bufs);
+ 	if (err)
+ 		netdev_err(vi->dev, "resize tx fail: tx queue index: %d err: %d\n", qindex, err);
+ 
+@@ -4026,31 +4013,48 @@ static void free_receive_page_frags(struct virtnet_info *vi)
+ 		}
+ }
+ 
+-static void virtnet_sq_free_unused_buf(struct virtqueue *vq, void *buf)
++static void virtnet_sq_free_unused_bufs(struct virtqueue *vq)
+ {
+-	if (!is_xdp_frame(buf))
+-		dev_kfree_skb(buf);
+-	else
+-		xdp_return_frame(ptr_to_xdp(buf));
++	void *buf;
++
++	while ((buf = virtqueue_detach_unused_buf(vq)) != NULL) {
++		if (!is_xdp_frame(buf))
++			dev_kfree_skb(buf);
++		else
++			xdp_return_frame(ptr_to_xdp(buf));
++	}
+ }
+ 
+-static void free_unused_bufs(struct virtnet_info *vi)
++static void virtnet_rq_free_unused_bufs(struct virtqueue *vq)
+ {
++	struct virtnet_info *vi = vq->vdev->priv;
++	struct virtnet_rq *rq;
++	int i = vq2rxq(vq);
+ 	void *buf;
++
++	rq = &vi->rq[i];
++
++	while ((buf = virtqueue_detach_unused_buf(vq)) != NULL) {
++		if (rq->do_dma)
++			virtnet_rq_unmap(rq, buf, 0);
++
++		virtnet_rq_free_buf(vi, rq, buf);
++	}
++}
++
++static void free_unused_bufs(struct virtnet_info *vi)
++{
+ 	int i;
+ 
+ 	for (i = 0; i < vi->max_queue_pairs; i++) {
+ 		struct virtqueue *vq = vi->sq[i].vq;
+-		while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
+-			virtnet_sq_free_unused_buf(vq, buf);
++		virtnet_sq_free_unused_bufs(vq);
+ 		cond_resched();
+ 	}
+ 
+ 	for (i = 0; i < vi->max_queue_pairs; i++) {
+ 		struct virtqueue *vq = vi->rq[i].vq;
+-
+-		while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
+-			virtnet_rq_unmap_free_buf(vq, buf);
++		virtnet_rq_free_unused_bufs(vq);
+ 		cond_resched();
+ 	}
+ }
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index 82f72428605b..ecbaf7568251 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -2198,11 +2198,10 @@ static int virtqueue_resize_packed(struct virtqueue *_vq, u32 num)
+ }
+ 
+ static int virtqueue_disable_and_recycle(struct virtqueue *_vq,
+-					 void (*recycle)(struct virtqueue *vq, void *buf))
++					 void (*recycle)(struct virtqueue *vq))
+ {
+ 	struct vring_virtqueue *vq = to_vvq(_vq);
+ 	struct virtio_device *vdev = vq->vq.vdev;
+-	void *buf;
+ 	int err;
+ 
+ 	if (!vq->we_own_ring)
+@@ -2218,8 +2217,7 @@ static int virtqueue_disable_and_recycle(struct virtqueue *_vq,
+ 	if (err)
+ 		return err;
+ 
+-	while ((buf = virtqueue_detach_unused_buf(_vq)) != NULL)
+-		recycle(_vq, buf);
++	recycle(_vq);
+ 
+ 	return 0;
+ }
+@@ -2814,7 +2812,7 @@ EXPORT_SYMBOL_GPL(vring_create_virtqueue_dma);
+  *
+  */
+ int virtqueue_resize(struct virtqueue *_vq, u32 num,
+-		     void (*recycle)(struct virtqueue *vq, void *buf))
++		     void (*recycle)(struct virtqueue *vq))
+ {
+ 	struct vring_virtqueue *vq = to_vvq(_vq);
+ 	int err;
+@@ -2905,7 +2903,7 @@ EXPORT_SYMBOL_GPL(virtqueue_set_dma_premapped);
+  * -EPERM: Operation not permitted
+  */
+ int virtqueue_reset(struct virtqueue *_vq,
+-		    void (*recycle)(struct virtqueue *vq, void *buf))
++		    void (*recycle)(struct virtqueue *vq))
+ {
+ 	struct vring_virtqueue *vq = to_vvq(_vq);
+ 	int err;
+diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+index 572aecec205b..7a5e9ea7d420 100644
+--- a/include/linux/virtio.h
++++ b/include/linux/virtio.h
+@@ -115,9 +115,9 @@ dma_addr_t virtqueue_get_avail_addr(const struct virtqueue *vq);
+ dma_addr_t virtqueue_get_used_addr(const struct virtqueue *vq);
+ 
+ int virtqueue_resize(struct virtqueue *vq, u32 num,
+-		     void (*recycle)(struct virtqueue *vq, void *buf));
++		     void (*recycle)(struct virtqueue *vq));
+ int virtqueue_reset(struct virtqueue *vq,
+-		    void (*recycle)(struct virtqueue *vq, void *buf));
++		    void (*recycle)(struct virtqueue *vq));
+ 
+ /**
+  * struct virtio_device - representation of a device using virtio
+-- 
 2.32.0.3.g01195cf9f
 
