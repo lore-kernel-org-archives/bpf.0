@@ -1,137 +1,133 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA79820327
-	for <bpf@vger.kernel.org>; Tue, 16 Jan 2024 22:34:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79A925621
+	for <bpf@vger.kernel.org>; Tue, 16 Jan 2024 22:38:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705444500; cv=none; b=P+nuY0Mjf6uR23+/jE9BRSFm1aU2xhazW5EkS8x7qMFMDvl5aBqTYFBxNoKuBL6G+Fbbsup8nPMLoKHlokYJnXph+SecWuyi0oKeevpKa8ybwG8rUUJx7kgpsKhgR3eWAlWOhOS+BhB0ZKyAcoI8/V8pDBpyNJZlJCwLqQv6ghg=
+	t=1705444694; cv=none; b=bSDYvv3laV9+g8oXjVzsJQOsHxqIkEZ8OD9JaVJL/f4lEFjmvnZSAXo/QWWAzlW384FqNZbJsi8gtR6M7Lz/7G3unAUoMJS37Uu91DaVQcpld9kZui/+GMJny3EdF5xVLbD3xKEidUPazeUPqKYqso6UukeaTIFQGL7tBncGJ2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705444500; c=relaxed/simple;
-	bh=2Jp8Tfu3Xgenajb6b5CDcpqZiSU4nF0sudrLJCthzzE=;
-	h=Received:DKIM-Signature:X-Mailbox-Line:Received:DKIM-Signature:
-	 X-Original-To:Delivered-To:Received:X-Virus-Scanned:X-Spam-Flag:
-	 X-Spam-Score:X-Spam-Level:X-Spam-Status:Received:Received:
-	 Message-ID:DKIM-Signature:Date:MIME-Version:Content-Language:To:
-	 References:X-Report-Abuse:From:In-Reply-To:X-Migadu-Flow:
-	 Archived-At:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Transfer-Encoding:Content-Type:Errors-To:
-	 Sender; b=KrVtvVhqtoNoiXRv6xIN9Q8SojdULF8L27kWDtrP6FT1ByV7rhI7zlX6ktTF+dmUQT76NkkMvVUlPXfAwuS56J6cLPbdcc6MYVMRqHl7XnaGV4GICuu7pd/MqSEumhTD8VSd4DK84z3PLhWpTEjqFVCYxahtGrTc1LbGrzT+//Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=qFo2ccrY; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=qFo2ccrY; dkim=fail (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ifCR5QY1 reason="signature verification failed"; arc=none smtp.client-ip=50.223.129.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	s=arc-20240116; t=1705444694; c=relaxed/simple;
+	bh=+Ol1TsVDaenjDAH1p/oZNW+kEXvXLkZpD2lLaJuDBX8=;
+	h=Message-ID:DKIM-Signature:Date:MIME-Version:Subject:
+	 Content-Language:X-Report-Abuse:From:To:Cc:References:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Migadu-Flow; b=hgUxkXA17ZNBYc+VDOE0KhOAPQQPFlYy1VrzC7fHL609I942nGLw/61pQZVt9VXfUtEE868qNNd8jf5CUgo7fwZdhP6/eh+0YDfmeIGzpkjTE3H0m8/BOf5K5I9HhDXE8CeJKTZfPJkEmV6DWOv3UglVd4xOhJk/+5zUJwZb4DY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mPu6EAqc; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="qFo2ccrY";
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="qFo2ccrY";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ifCR5QY1"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 86F07C1519B6
-	for <bpf@vger.kernel.org>; Tue, 16 Jan 2024 14:34:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1705444495; bh=2Jp8Tfu3Xgenajb6b5CDcpqZiSU4nF0sudrLJCthzzE=;
-	h=Date:To:References:From:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=qFo2ccrYlHpZwQ8SC2Ld3Y45BPR0uVnOQWljtNXJv5+EKFNtEE198YCGQ3ctIKuKp
-	 D8vJQi2/Gb8YH9qs+TQZ0VrmprEDMNKIwTwn885vyJ6T6DRqDHU0xYj8oLG0venSoy
-	 9ulhopxdu+5TsECuNmEewTgRq7c8a4RSVlbRMOLY=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Tue Jan 16 14:34:55 2024
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 5C4DBC14F6B6;
-	Tue, 16 Jan 2024 14:34:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1705444495; bh=2Jp8Tfu3Xgenajb6b5CDcpqZiSU4nF0sudrLJCthzzE=;
-	h=Date:To:References:From:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=qFo2ccrYlHpZwQ8SC2Ld3Y45BPR0uVnOQWljtNXJv5+EKFNtEE198YCGQ3ctIKuKp
-	 D8vJQi2/Gb8YH9qs+TQZ0VrmprEDMNKIwTwn885vyJ6T6DRqDHU0xYj8oLG0venSoy
-	 9ulhopxdu+5TsECuNmEewTgRq7c8a4RSVlbRMOLY=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 273CFC14F6B6
- for <bpf@ietfa.amsl.com>; Tue, 16 Jan 2024 14:34:54 -0800 (PST)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -2.106
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (1024-bit key)
- header.d=linux.dev
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EW22fkXbIoSM for <bpf@ietfa.amsl.com>;
- Tue, 16 Jan 2024 14:34:50 -0800 (PST)
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com
- [91.218.175.170])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id D7C6EC14F6B2
- for <bpf@ietf.org>; Tue, 16 Jan 2024 14:34:49 -0800 (PST)
-Message-ID: <829aa552-b04e-4f08-9874-b3f929741852@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mPu6EAqc"
+Message-ID: <5ee27f31-aa11-4a3d-af78-7a79aa0a6440@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
- t=1705444487;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=tD7mYbb36coY16gdm3pTDas+pwkT1RfWonfbtkgowcE=;
- b=ifCR5QY1nc65IDFVJ+MtyctFO5P+rpD/2lOGmvMiX+aXzWurlAsZm4zoADOmQ8C9mfT/uv
- 2b7YLjt4N9MVosj6F+QW8QwzrJtLmMJhYitioFnYwU4v0U58XpiZdptuPI9A/54p+gG2ZZ
- ygtmHM6fM1Pc5Ry32ohxkxKeyniZY70=
-Date: Tue, 16 Jan 2024 14:34:41 -0800
+	t=1705444691;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bD0JPp4KZ0vNqoprMhDUUwBhiZtz3k03zDOCY5Doans=;
+	b=mPu6EAqcNTHIxEFlZaYQkBIx63ANWjrpOv1tDHoTz3mgYq9D8c4IVvt+chdWV4Rc7XkBAj
+	f8g8aF3h0YmSxIuGuxnkdoyhazlNjn/fhpyADYJ+O+khhhIriZOPYar5P/c1ChOFBBTGIU
+	6U/i/XpwcFNssUGqlsUvCCYTjNNUI4c=
+Date: Tue, 16 Jan 2024 14:38:08 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Language: en-GB
-To: dthaler1968@googlemail.com, bpf@ietf.org, bpf@vger.kernel.org
-References: <085f01da48bb$fe0c3cb0$fa24b610$@gmail.com>
- <08ab01da48be$603541a0$209fc4e0$@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and
- include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <08ab01da48be$603541a0$209fc4e0$@gmail.com>
+Subject: Re: flaky tc_redirect/tc_redirect_dtime
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@kernel.org>, bpf <bpf@vger.kernel.org>
+References: <CAADnVQJ_Xwk7xp-AybVC7dtSqRnbo1Lkw1Y+vQ+_w6UJTPvhKw@mail.gmail.com>
+ <8af7e87c-1103-44b7-a0eb-1a28f52666a2@linux.dev>
+In-Reply-To: <8af7e87c-1103-44b7-a0eb-1a28f52666a2@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/Ct8YTfSYGBC1OwQPT6rWzEJ8TSo>
-Subject: Re: [Bpf] Sign extension ISA question
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-Message-ID: <20240116223441.Lik407Qog773W5MWn9IXIyB4k_hpO6f1q5KIM0Xo0-8@z>
 
+On 1/15/24 7:09 AM, Martin KaFai Lau wrote:
+> On 1/13/24 1:09 PM, Alexei Starovoitov wrote:
+>> Hi Martin,
+>>
+>> I remember you tried to fix tc_redirect/tc_redirect_dtime flakiness,
+>> but it is still flaky.
+>> Just running test_progs -t tc_redirect/tc_redirect_dtime
+>> in a loop it will fail after 30-50 iterations in my VM and always with:
+>>
+>> test_inet_dtime:PASS:setns src 0 nsec
+>> (network_helpers.c:253: errno: Operation now in progress) Failed to
+>> connect to server
 
-On 1/16/24 12:55 PM, dthaler1968@googlemail.com wrote:
-> (Resending since a spam filter seems to have blocked the first attempt.)
->
-> Is there any semantic difference between the following two instructions?
->
-> {.opcode = BPF_ALU64 | BPF_MOV | BPF_K, .offset = 0, .imm = -1}
+This is likely caused by the missing the accept() due to the new "goto again;". 
+The acceptq is full, server drops the SYN, the second client connect() then 
+becomes in-progress or timed out.
 
-This is supported. Sign extension of -1 will be put into ALU64 reg.
+It is different from what usually happened in the CI: 
+https://github.com/kernel-patches/bpf/actions/runs/7495413543/job/20406821195
 
->
-> {.opcode = BPF_ALU64 | BPF_MOVSX | BPF_K, .offset = 32, .imm = -1}
+2024-01-12T00:46:14.2454623Z (network_helpers.c:253: errno: No route to host) 
+Failed to connect to server
 
-This is not supported. BPF_MOVSX only supports register extension.
-We should make it clear in the doc.
+"errno: No route to host" should be EHOSTUNREACH returned from the connect().
 
->
->  From my reading both of them treat imm as a signed 32-bit number and
-> sign-extend it to 64 bits.
->
-> Dave
->
->
+It is usually the very first connect(). The later connects to the same IPv6 
+address are fine. It could be some delay in the routing entry or in the source 
+address coming up but I don't spot anything useful now. I can't reproduce in my 
+local environment. I will try a little harder. If I cannot find anything, I will 
+post a patch to add some tracing to narrow it down further.
 
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
+>> close_netns:PASS:setns 0 nsec
+>> test_inet_dtime:FAIL:connect_to_fd unexpected connect_to_fd: actual -1
+>> < expected 0
+>>
+>> I've added this hack:
+>> +again:
+>>          nstoken = open_netns(NS_SRC);
+>>          if (!ASSERT_OK_PTR(nstoken, "setns src"))
+>>                  goto done;
+>> @@ -573,6 +575,11 @@ static void test_inet_dtime(int family, int type,
+>> const char *addr, __u16 port)
+>>          if (!ASSERT_GE(client_fd, 0, "connect_to_fd"))
+>>                  goto done;
+>>
+>> +       if (i++ < 1000 && 0) {
+>> +               printf("XXXX %d\n", i);
+>> +               close(client_fd);
+>> +               goto again;
+>> +       }
+>>
+>> and realized that only the first connect can succeed.
+>> The 2nd connect always fails.
+>> So I suspect bpf prog sees first stray packet, acts on it,
+>> but the actual connect request comes 2nd and it fails.
+>>
+>> I tried to understand what's going on inside bpf prog,
+>> but the test is too complicated.
+>> Please take a look when you have a chance.
+>>
+>> I also added:
+>> @@ -857,7 +864,7 @@ static void test_tc_redirect_dtime(struct
+>> netns_setup_result *setup_result)
+>>                  goto done;
+>>
+>>          test_tcp_clear_dtime(skel);
+>> -
+>> +if (0) {
+>>          test_tcp_dtime(skel, AF_INET, true);
+>>          test_tcp_dtime(skel, AF_INET6, true);
+>>          test_udp_dtime(skel, AF_INET, true);
+>> @@ -878,7 +885,7 @@ static void test_tc_redirect_dtime(struct
+>> netns_setup_result *setup_result)
+>>          test_tcp_dtime(skel, AF_INET6, false);
+>>          test_udp_dtime(skel, AF_INET, false);
+>>          test_udp_dtime(skel, AF_INET6, false);
+>> -
+>> +}
+>> to speed up a test a bit.
+> 
+> Thanks for the tips to reproduce it. I will look into it.
+> 
+
