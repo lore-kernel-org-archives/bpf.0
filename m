@@ -1,163 +1,222 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABDB51E4BD
-	for <bpf@vger.kernel.org>; Thu, 18 Jan 2024 23:46:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DA71EB36
+	for <bpf@vger.kernel.org>; Thu, 18 Jan 2024 23:46:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705621562; cv=none; b=d1ncdkEIaA3TgPqkrD2o+F0Nf10Noz7dXO76BnS5H4EL4FUAoMfmxtWuNtN7WKLANUvDEWvPztV6wNn/A92M9WU0qbzUdytYjGQrhxiFVEqXNTy7XNLbH6YHrmqRnvNS0+v8jn7ts0QETS1CKppt0drozP9HLMpYy+Xtw92Ab+Q=
+	t=1705621584; cv=none; b=hkwHLvx2c+6eLZPEGNbhX2Qe1Obi85o8sA35SFUdjVZz3Hbzq7Y7O2KetPTOUFcKjEtfIcpl4UF/aKBymzQqJCX1T+9ZrRk6HF2STvWCUgMU8Pzii+Ov3SVTv45Xm4HRB5NThhrIw7ZPp6VyhOUcGUiH9Wt6tXLxKIpcfOZxFYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705621562; c=relaxed/simple;
-	bh=7CkwApv1eeqCiH094mtHnkOhS/NrBlOaNfCKPeMCsnA=;
-	h=Date:From:To:Cc:Message-ID:References:MIME-Version:In-Reply-To:
-	 Subject:Content-Type; b=WDjFqJ9Oy2jc2cO+EIKUxmIkfn2glU0ho2A1wbgNSzZWRTz1mWgBvmo1LQbI0q7/qe/yzmykGW0/LYbtdRpPWd37FqIjb8ZDSDxcOmArQBg8E68eTZjU+qR1+Duiysh9wp5uHJpUfLOJLHFesp9LaArwQlVbDaNDogI62dgrtOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=WZIabCyr; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=dcZEE0uX; arc=none smtp.client-ip=50.223.129.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	s=arc-20240116; t=1705621584; c=relaxed/simple;
+	bh=Xl0h5L2fd25neAAROHrFTgoHIROMVMw/vprFzb05CwU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TqV+RtCkiF5mfdzttp6kdPK6zV6Su6HHp/VybG9WAHjX39y9JD05Ed8aXV34YYOh3AJzui9m2UkWEj3gmsnK99dtK2jtwEKLfKv+4j3G2qloakdZv/55lmroJfBd5B5EQojZ/ShJFbczvZ+WgKFUGI4ViZGLWOR4M7ta/WSCylM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iGZTSTqV; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="WZIabCyr";
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="dcZEE0uX"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 09D47C14CF1D
-	for <bpf@vger.kernel.org>; Thu, 18 Jan 2024 15:46:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1705621560; bh=7CkwApv1eeqCiH094mtHnkOhS/NrBlOaNfCKPeMCsnA=;
-	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=WZIabCyr+qzZC2/7RqB+etkLd2NkfsYA7Ohx0Nyy8zFLgaCxi3qovqpuj2JDbQ+Er
-	 JCUDmBhL74XUV8kuWMjsRlAZdUomsrB3hif+qBQSZkffn8ob6P8Kh/DUkN8c16JgCd
-	 BPwP+wifGln+AGiSr43KA4wtffXMXaC+ajkZ0MtI=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Thu Jan 18 15:45:59 2024
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id DF30AC14F6E4;
-	Thu, 18 Jan 2024 15:45:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1705621559; bh=7CkwApv1eeqCiH094mtHnkOhS/NrBlOaNfCKPeMCsnA=;
-	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=dcZEE0uXR91Hv/TR7ZaR/jo8+g09R+bAMJ4mTTK0Q3NotWSLK7Po54oqTqWIMfSxp
-	 lUE7BJh1w+gzAVBJp0z+BvPE/10F4z8GFwkuxPtgjgQPylGI7+JoGVNUmIiun/+UhJ
-	 8d/Qe6xxBtO5EytDObpr1M/w9cvnhoFPq9SiX2gk=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 94CBAC14F738
- for <bpf@ietfa.amsl.com>; Thu, 18 Jan 2024 15:45:58 -0800 (PST)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -1.407
-X-Spam-Level: 
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MKqHcGb4sXLv for <bpf@ietfa.amsl.com>;
- Thu, 18 Jan 2024 15:45:54 -0800 (PST)
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com
- [209.85.167.175])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 65662C14F602
- for <bpf@ietf.org>; Thu, 18 Jan 2024 15:45:52 -0800 (PST)
-Received: by mail-oi1-f175.google.com with SMTP id
- 5614622812f47-3bb9d54575cso182204b6e.2
- for <bpf@ietf.org>; Thu, 18 Jan 2024 15:45:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705621551; x=1706226351;
- h=user-agent:in-reply-to:content-disposition:mime-version:references
- :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=lD1WcXOmAacBezmh0ne+DCmg7yQK+EEyNaUDf1ah3c0=;
- b=EUlh59XREkjHUuT//pPOJ1/FjEcQ+lXUm/+4sePZuBqP7g30AoZYnWaSThFjQMii8M
- 06pJUNlVDiu5jLTFsTV3ooGicikluLuwPcfYwiLIoULYYllVNL5wDLSx7DLTuTi9XbH9
- 7o1uv+NDgep5KRavxmYvaROj6BnSMf7N6OS/HHzZXHKIFnQqEFZJDaSZEEq7VrgGz23D
- 7Qt8/bhOpIaU9BgYehKF0JBnjKYnVFL40pVQHj2Zd93yVf873p/04bQLRHQgkX9j6FG6
- 1wbJZjsgPqruWqyDtzTjqbO5+bBfKLWJn/u8MfbVTWIEWF6AgtORgq6UYgfUHP8iWYN7
- 92gw==
-X-Gm-Message-State: AOJu0YzwypzapoKShbHbNOojVdPJfQJ/fi4s0RauxcP0wnE1gTRX8vTE
- ZFFJstd+AStVK4b7DleQrzzrSZ2XBsEvQ559XuIPG5yNZGrrzDqJ
-X-Google-Smtp-Source: AGHT+IFMZFuMqplydlVFsKEo5oZ02dOzRxnUN8VVDq4akmfcmB88XbNEAd+eOuICsqOuoyJ9TnL69g==
-X-Received: by 2002:a05:6808:1287:b0:3bd:9800:522c with SMTP id
- a7-20020a056808128700b003bd9800522cmr1847985oiw.3.1705621551562; 
- Thu, 18 Jan 2024 15:45:51 -0800 (PST)
-Received: from maniforge (c-24-1-27-177.hsd1.il.comcast.net. [24.1.27.177])
- by smtp.gmail.com with ESMTPSA id
- he23-20020a05622a601700b0042a09928c10sm2555346qtb.33.2024.01.18.15.45.50
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 18 Jan 2024 15:45:50 -0800 (PST)
-Date: Thu, 18 Jan 2024 17:45:48 -0600
-From: David Vernet <void@manifault.com>
-To: Dave Thaler <dthaler1968=40googlemail.com@dmarc.ietf.org>
-Cc: bpf@vger.kernel.org, bpf@ietf.org, Dave Thaler <dthaler1968@gmail.com>
-Message-ID: <20240118234548.GA879563@maniforge>
-References: <20240118232954.27206-1-dthaler1968@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iGZTSTqV"
+Message-ID: <7e1e4aec-c33f-4d71-9add-5f15849f9075@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1705621580;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=p9OGzjQPgJu4t0WSdVN1Nr01hknLaU+f3FB7bQRkZeE=;
+	b=iGZTSTqVWG4v+jEZKHP7doU12AA2XSfUmD1IoFrOV8kc9NTP6bjPbiltooSa2FHSBavZMf
+	Gd1wYSG95rg5DqiHGLkDd8/QJXYaTkg7bqVRZsCQQ0kGjmXSpOZWyUG2sNp1QmLeoobjPA
+	GH4IwF8USxGnpkvqvOsPzPINfWC9Iko=
+Date: Thu, 18 Jan 2024 15:46:12 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240118232954.27206-1-dthaler1968@gmail.com>
-User-Agent: Mutt/2.2.12 (2023-09-09)
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/CuEzpN0LcIjB0x70rYV8fQpPHaM>
-Subject: Re: [Bpf] [PATCH bpf-next] bpf,
- docs: Clarify that MOVSX is only for BPF_X not BPF_K
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-Content-Type: multipart/mixed; boundary="===============0344829766216758031=="
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-Message-ID: <20240118234548.yCiffF7fiHuZ8wmw4LeV88VogH3q8qQ70P8lcqin9E8@z>
-
-
---===============0344829766216758031==
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="lcMjBK8GJPtDYmvr"
-Content-Disposition: inline
-
-
---lcMjBK8GJPtDYmvr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Jan 18, 2024 at 03:29:54PM -0800, Dave Thaler wrote:
-> Per discussion on the mailing list at
-> https://mailarchive.ietf.org/arch/msg/bpf/uQiqhURdtxV_ZQOTgjCdm-seh74/
-> the MOVSX operation is only defined to support register extension.
->=20
-> The document didn't previously state this and incorrectly implied
-> that one could use an immediate value.
->=20
-> Signed-off-by: Dave Thaler <dthaler1968@gmail.com>
-
-Acked-by: David Vernet <void@manifault.com>
-
---lcMjBK8GJPtDYmvr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQRBxU1So5MTLwphjdFZ5LhpZcTzZAUCZam4LAAKCRBZ5LhpZcTz
-ZOQHAP9jnnEL4ycoLA7xRNG9ulw63+NnQRtlJAuql2vC4p4V0QD/WQxPmYpC4p81
-uZ6Crcy2OkJqIlOE5AdFBoN9iQBcnAI=
-=zQ1F
------END PGP SIGNATURE-----
-
---lcMjBK8GJPtDYmvr--
-
-
---===============0344829766216758031==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Subject: Re: [PATCH v3 bpf-next 3/3] selftests/bpf: Add selftests for cpumask
+ iter
+Content-Language: en-GB
+To: Yafang Shao <laoar.shao@gmail.com>, ast@kernel.org, daniel@iogearbox.net,
+ john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+ song@kernel.org, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+ jolsa@kernel.org, tj@kernel.org
+Cc: bpf@vger.kernel.org, lkp@intel.com
+References: <20240117024823.4186-1-laoar.shao@gmail.com>
+ <20240117024823.4186-4-laoar.shao@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20240117024823.4186-4-laoar.shao@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+X-Migadu-Flow: FLOW_OUT
 
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
 
---===============0344829766216758031==--
+On 1/16/24 6:48 PM, Yafang Shao wrote:
+> Within the BPF program, we leverage the cgroup iterator to iterate through
+> percpu runqueue data, specifically the 'nr_running' metric. Subsequently
+>   we expose this data to userspace by means of a sequence file.
+>
+> The CPU affinity for the cpumask is determined by the PID of a task:
+>
+> - PID of the init task (PID 1)
+>    We typically don't set CPU affinity for init task and thus we can iterate
+>    across all possible CPUs. However, in scenarios where you've set CPU
+>    affinity for the init task, you should set the cpumask of your current
+>    task to full-F. Then proceed to iterate through all possible CPUs using
 
+Wat is full-F? It would be good if you can clarify in the commit message.
+
+>    the current task.
+> - PID of a task with defined CPU affinity
+>    The aim here is to iterate through a specific cpumask. This scenario
+>    aligns with tasks residing within a cpuset cgroup.
+> - Invalid PID (e.g., PID -1)
+>    No cpumask is available in this case.
+>
+> The result as follows,
+>    #65/1    cpumask_iter/init_pid:OK
+>    #65/2    cpumask_iter/invalid_pid:OK
+>    #65/3    cpumask_iter/self_pid_one_cpu:OK
+>    #65/4    cpumask_iter/self_pid_multi_cpus:OK
+>    #65      cpumask_iter:OK
+>    Summary: 1/4 PASSED, 0 SKIPPED, 0 FAILED
+>
+> CONFIG_PSI=y is required for this testcase.
+>
+> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> ---
+>   tools/testing/selftests/bpf/config            |   1 +
+>   .../selftests/bpf/prog_tests/cpumask_iter.c   | 134 ++++++++++++++++++
+>   .../selftests/bpf/progs/cpumask_common.h      |   3 +
+>   .../selftests/bpf/progs/test_cpumask_iter.c   |  56 ++++++++
+>   4 files changed, 194 insertions(+)
+>   create mode 100644 tools/testing/selftests/bpf/prog_tests/cpumask_iter.c
+>   create mode 100644 tools/testing/selftests/bpf/progs/test_cpumask_iter.c
+>
+> diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+> index c125c441abc7..9c42568ed376 100644
+> --- a/tools/testing/selftests/bpf/config
+> +++ b/tools/testing/selftests/bpf/config
+> @@ -78,6 +78,7 @@ CONFIG_NF_CONNTRACK_MARK=y
+>   CONFIG_NF_DEFRAG_IPV4=y
+>   CONFIG_NF_DEFRAG_IPV6=y
+>   CONFIG_NF_NAT=y
+> +CONFIG_PSI=y
+>   CONFIG_RC_CORE=y
+>   CONFIG_SECURITY=y
+>   CONFIG_SECURITYFS=y
+> diff --git a/tools/testing/selftests/bpf/prog_tests/cpumask_iter.c b/tools/testing/selftests/bpf/prog_tests/cpumask_iter.c
+> new file mode 100644
+> index 000000000000..984d01d09d79
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/cpumask_iter.c
+> @@ -0,0 +1,134 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2024 Yafang Shao <laoar.shao@gmail.com> */
+> +
+> +#define _GNU_SOURCE
+> +#include <sched.h>
+> +#include <stdio.h>
+> +#include <unistd.h>
+> +
+> +#include <test_progs.h>
+> +#include "cgroup_helpers.h"
+> +#include "test_cpumask_iter.skel.h"
+> +
+> +static void verify_percpu_data(struct bpf_link *link, int nr_cpu_exp, int nr_running_exp)
+> +{
+> +	int iter_fd, len, item, nr_running, psi_running, nr_cpus;
+> +	static char buf[128];
+
+why static?
+
+> +	size_t left;
+> +	char *p;
+> +
+> +	iter_fd = bpf_iter_create(bpf_link__fd(link));
+> +	if (!ASSERT_GE(iter_fd, 0, "iter_fd"))
+> +		return;
+> +
+> +	memset(buf, 0, sizeof(buf));
+> +	left = ARRAY_SIZE(buf);
+> +	p = buf;
+> +	while ((len = read(iter_fd, p, left)) > 0) {
+> +		p += len;
+> +		left -= len;
+> +	}
+> +
+> +	item = sscanf(buf, "nr_running %u nr_cpus %u psi_running %u\n",
+> +		      &nr_running, &nr_cpus, &psi_running);
+> +	if (nr_cpu_exp == -1) {
+> +		ASSERT_EQ(item, -1, "seq_format");
+> +		goto out;
+> +	}
+> +
+> +	ASSERT_EQ(item, 3, "seq_format");
+> +	ASSERT_GE(nr_running, nr_running_exp, "nr_running");
+> +	ASSERT_GE(psi_running, nr_running_exp, "psi_running");
+> +	ASSERT_EQ(nr_cpus, nr_cpu_exp, "nr_cpus");
+> +
+> +	/* read() after iter finishes should be ok. */
+> +	if (len == 0)
+> +		ASSERT_OK(read(iter_fd, buf, sizeof(buf)), "second_read");
+
+The above 'if' statement is irrelevant to the main purpose of this test
+and can be removed.
+
+> +
+> +out:
+> +	close(iter_fd);
+> +}
+> +
+> +void test_cpumask_iter(void)
+> +{
+> +	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
+> +	int nr_possible, cgrp_fd, pid, err, cnt, i;
+> +	struct test_cpumask_iter *skel = NULL;
+
+= NULL is not needed.
+
+> +	union bpf_iter_link_info linfo;
+> +	int cpu_ids[] = {1, 3, 4, 5};
+> +	struct bpf_link *link;
+> +	cpu_set_t set;
+> +
+> +	skel = test_cpumask_iter__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "test_for_each_cpu__open_and_load"))
+> +		return;
+> +
+> +	if (setup_cgroup_environment())
+> +		goto destroy;
+> +
+> +	/* Utilize the cgroup iter */
+> +	cgrp_fd = get_root_cgroup();
+> +	if (!ASSERT_GE(cgrp_fd, 0, "create cgrp"))
+> +		goto cleanup;
+> +
+> +	memset(&linfo, 0, sizeof(linfo));
+> +	linfo.cgroup.cgroup_fd = cgrp_fd;
+> +	linfo.cgroup.order = BPF_CGROUP_ITER_SELF_ONLY;
+> +	opts.link_info = &linfo;
+> +	opts.link_info_len = sizeof(linfo);
+> +
+> +	link = bpf_program__attach_iter(skel->progs.cpu_cgroup, &opts);
+> +	if (!ASSERT_OK_PTR(link, "attach_iter"))
+> +		goto close_fd;
+> +
+> +	skel->bss->target_pid = 1;
+> +	/* In case init task is set CPU affinity */
+> +	err = sched_getaffinity(1, sizeof(set), &set);
+> +	if (!ASSERT_OK(err, "setaffinity"))
+> +		goto close_fd;
+
+goto free_link.
+
+> +
+> +	cnt = CPU_COUNT(&set);
+> +	nr_possible = bpf_num_possible_cpus();
+> +	if (test__start_subtest("init_pid"))
+> +		/* curent task is running. */
+> +		verify_percpu_data(link, cnt, cnt == nr_possible ? 1 : 0);
+[...]
