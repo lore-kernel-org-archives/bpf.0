@@ -1,27 +1,28 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7263A3CF4B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59D63CF4D
 	for <bpf@vger.kernel.org>; Fri, 19 Jan 2024 10:24:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705659879; cv=none; b=EmtCV25NGRQ5U7/ZTjLjjjPBkh1CxpYM/f4MEBth6Vqq4U26RGwCxuyzQcNKQfz3IwJL20U/skQjS3I45J2qyI3w7vFgKpRC0aVPKm9jn6zciCpgNVW0p442ADfTLF5Exgfw3Y5Oj91mk/3VSDJBvNsxQUWrK3kRWOh94F5GJ0g=
+	t=1705659879; cv=none; b=D+Z9xuJb7i9uPOYxvkuas07uJHodMXSoTnZIojNc7aikN39TWMC45+3TiGM6rBZqfctiM79VVULEFIlbWLDm/cXnZiegDOpKQb5qgxFldPnGaFRlbpEXuvdjgAJoC77PffJvxj56spgdcfYzUnlGwursSE+8EfQrJgMDqGsjvkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1705659879; c=relaxed/simple;
-	bh=DtbjQTcTZjqo5Te7YgwoOyM5D4AuPWXGFH4onXClE1M=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=luC/58f9WKZXFTvX1OHEHzXDRw2EergZtrbBobuiUktlt6d0Y6i4u7c4I4BNp8vHHFcKyZPZra3q71dW/jd/4GTSx+ITdzI5kd+8egs+MsVaWSpZxkRVbdGywUlMJtdIiWXaCfXZMCd7Gy4OzvkhG0tsJAF/On1ZsfdPQ/8W3ow=
+	bh=stDQedbKdjVFV8FqfacxrEbr3uLqXi1WzEC19v5Vups=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ha4nIL5qgXn5pmMUsuWfKNLTA8iSQHf612474LWugKE4zU4Er+PszY8nt7t/W9E9lNIrBG6GEY0xd22NKXPfsw5Xlgml1k8D7BGMH6r/GihoXIIsmc1O2O4maLfA+sn931FfOnU+BNWIbZXpoE7mLvSGNqFgBAw0n/BWz7WQYUc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4TGbMH3MFHz4f3m6f
-	for <bpf@vger.kernel.org>; Fri, 19 Jan 2024 18:24:27 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4TGbMJ5K86z4f3mHg
+	for <bpf@vger.kernel.org>; Fri, 19 Jan 2024 18:24:28 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 9E8491A0172
-	for <bpf@vger.kernel.org>; Fri, 19 Jan 2024 18:24:33 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id E30941A0A7D
+	for <bpf@vger.kernel.org>; Fri, 19 Jan 2024 18:24:34 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP1 (Coremail) with SMTP id cCh0CgBXKBHfTapl+I07BQ--.50408S4;
-	Fri, 19 Jan 2024 18:24:33 +0800 (CST)
+	by APP1 (Coremail) with SMTP id cCh0CgBXKBHfTapl+I07BQ--.50408S6;
+	Fri, 19 Jan 2024 18:24:34 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -39,10 +40,12 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
 	houtao1@huawei.com
-Subject: [PATCH bpf-next 0/2] Enable the inline of kptr_xchg for arm64
-Date: Fri, 19 Jan 2024 18:25:27 +0800
-Message-Id: <20240119102529.99581-1-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Enable kptr_xchg_inline test for arm64
+Date: Fri, 19 Jan 2024 18:25:29 +0800
+Message-Id: <20240119102529.99581-3-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20240119102529.99581-1-houtao@huaweicloud.com>
+References: <20240119102529.99581-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,42 +53,48 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgBXKBHfTapl+I07BQ--.50408S4
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY87kC6x804xWl14x267AKxVW5JVWrJwAF
-	c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
-	0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xv
-	wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
-	x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
-	64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
-	1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628v
-	n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wryl
-	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-	AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
-	3rcDUUUUU==
+X-CM-TRANSID:cCh0CgBXKBHfTapl+I07BQ--.50408S6
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xw48WFW8uF4xAry8uF4fAFb_yoWfGwbE9r
+	4jqr1DAFWkAF92qr18C3ZxWrWIkw4xWrZxJrWkWr12yw1aqw45JFWvk34DJayfurZxXFy2
+	qF4DJayfAw42kjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbfkYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r15M2
+	8IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK
+	021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r
+	4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
+	0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
+	JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwI
+	xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
+	Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7
+	IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
+	6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
+	AFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFa9-UUUUU
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-Hi,
+Now arm64 bpf jit has enable bpf_jit_supports_ptr_xchg(), so enable
+the test for arm64 as well.
 
-The patch set is just a follow-up for "bpf: inline bpf_kptr_xchg()". It
-enables the inline of bpf_kptr_xchg() and kptr_xchg_inline test for
-arm64.
-
-Please see individual patches for more details. And comments are always
-welcome.
-
-Hou Tao (2):
-  bpf, arm64: Enable the inline of bpf_kptr_xchg()
-  selftests/bpf: Enable kptr_xchg_inline test for arm64
-
- arch/arm64/net/bpf_jit_comp.c                             | 5 +++++
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
  tools/testing/selftests/bpf/prog_tests/kptr_xchg_inline.c | 2 +-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/kptr_xchg_inline.c b/tools/testing/selftests/bpf/prog_tests/kptr_xchg_inline.c
+index 5a4bee1cf9707..15144943e88b7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kptr_xchg_inline.c
++++ b/tools/testing/selftests/bpf/prog_tests/kptr_xchg_inline.c
+@@ -13,7 +13,7 @@ void test_kptr_xchg_inline(void)
+ 	unsigned int cnt;
+ 	int err;
+ 
+-#if !defined(__x86_64__)
++#if !(defined(__x86_64__) || defined(__aarch64__))
+ 	test__skip();
+ 	return;
+ #endif
 -- 
 2.29.2
 
