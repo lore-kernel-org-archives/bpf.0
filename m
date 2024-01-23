@@ -1,149 +1,217 @@
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50C045C8E4;
-	Tue, 23 Jan 2024 10:43:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7693744C8B
+	for <bpf@vger.kernel.org>; Tue, 23 Jan 2024 10:44:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706006623; cv=none; b=dyLm8iyM/D31isPdegCWWeuOZ6A+FoSxQI6S+bHFF4DjJXzvFBPRBvxEnGUTQCCBnkW55Clf/zMm8s1Q1FA5d9IepSwM99KpaqkHp8FbSMGLE7JO1fXdtXaWN5t3plJ5axpTtHKCWx5wen2zbWkhQ+OsGMFBe9fj3HpCyeDrByE=
+	t=1706006645; cv=none; b=B/4LF2Wb3QDwP/DONp4JllPLIGe53tlkg5eUv/ATxWPGD4m+9wcbrtSX5QVvpa6l4d7kfOzYCY6XghW1NAa4KBZYQ32ZFBN5w9WTYn2Xm0d/VxO5T1f+572s6VXIUoUQzpQhe2yFJ9LzrDsvTmP8amJWuNGBYw4dlSOVux1dIpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706006623; c=relaxed/simple;
-	bh=vzNLwrmmYhN7STFc+TXskif/GgqEExZ6ensAP1JUYjQ=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ISNXDRCgHf4uL/CgSigLvP/qM+s4j5bb+36Efv2V7lLP9/iw95GapWAJiXOupAaY83OQODAJ6ceoWG9VYH4iJIAehYUL6D4QplXePuGOmNp9nMVZWi+Zh+buH6HyYIxB7lHfVFk+fgO7AahZppsEQIrhp2hTw3i7VfLpFTISQxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.17])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4TK3YR5zBhz1Q89Q;
-	Tue, 23 Jan 2024 18:41:47 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id 92A341A0172;
-	Tue, 23 Jan 2024 18:43:31 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 23 Jan 2024 18:43:31 +0800
-From: Yunsheng Lin <linyunsheng@huawei.com>
-To: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Yunsheng Lin
-	<linyunsheng@huawei.com>, Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper
- Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<bpf@vger.kernel.org>
-Subject: [PATCH net-next v3 0/5] remove page frag implementation in vhost_net
-Date: Tue, 23 Jan 2024 18:42:45 +0800
-Message-ID: <20240123104250.9103-1-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.33.0
+	s=arc-20240116; t=1706006645; c=relaxed/simple;
+	bh=owjwXZ4lDmhtd+6GYl0HthmiP7pYxi+Tot3nEKdu/5I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QZzoNAeCc1clMIab1rr08o9z3BJmJrvl5WwGhQTsthmUGVvNrdq2ntETPITHXa/Tf5tl7GcJQP0fyVax5961+8T5GMWcV+npz/jOQET3eCr9TfEdetECPBzhGmHFVLmo5OHhbDKFtOWIMwY52VhcHZ2/HlE2AY/xBbHZKub1Onc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=v7kov1za; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="v7kov1za"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-40e9d4ab5f3so44865445e9.2
+        for <bpf@vger.kernel.org>; Tue, 23 Jan 2024 02:44:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706006642; x=1706611442; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7sEz8Ayy15queeSCtOxrmiZSqSLdn/Cd3vOQwxygfPk=;
+        b=v7kov1zao9Mh1dbm3M/hehldOSeDLzd5gmNO3aW9pn7t/Sc6Uf3+gE9jLtkPwiXmXy
+         czB0BgbdMpnztAvsxvqNtFeJkMynhbS//HF+ak6DoFcEB/7GaVeOql01Mg1Ebdy7nlaV
+         hjwNTneOw9MQBKywZiecjcdfEVllXWJpLnZ7ctPplLY94vQkDZSJKMGFW+PofjMN5ae1
+         gTCRLImXSXyYUU324n6MH+FskQ05MAhXhcm1EemSCgvhIJlRSHsd1OAExmu6gqwvwFiN
+         pojIAGdq/K3ywSDoVbKeJO5KrFLu+WbDck95p50GvENSkDJ0F6Bfr8UJnmEgnTRbvg0k
+         TDVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706006642; x=1706611442;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7sEz8Ayy15queeSCtOxrmiZSqSLdn/Cd3vOQwxygfPk=;
+        b=otVeHICyidp0swOGnUb0PdGoXr5IbcRi1+BHUFz+9KMHnihzp4TI3r9xsLiaWnPWjM
+         kq0N+9UuOn8z4cQUo1XYlO1/ZpZZKTVzQSRfYWwYD4WfVx9W6b2Z+niXCKWqEuwZMKrD
+         5oxpVAG8ghNXSREpb5I+9PPNtyzOR4DHJuz2xae2tIUdzFv3F9cVUL+hNdizVDGYyqYK
+         oV0p+836pfIWaBiD9svbZv2o8Yl3/Lu2OebGHwHLuam3i4eDqJ+dULBN/zhzah1VXEhq
+         1zZ9QuG78OJ/LLN+yPuOT+i/AimaS+FTisKGr/9qDsakZqPag1CcCXLhSbKSLp9iNtTM
+         +mug==
+X-Gm-Message-State: AOJu0Yxlkxz7HqKQwuaTZ4pWMb0tJ3Qlv4vY4LO1IWe8Y0j5s8GNNl4H
+	2ryRgQxbF8ZJCNyknOK8Xl4cyKSnwA/FtZjR3iWMKpKjpq2qMTgfUu+bSMQOZPQ=
+X-Google-Smtp-Source: AGHT+IFXchbiBU9NxhPx5agpTc0hv7An/mAWKrbtob1lskchIRR+egyxl8gr+R4XOWqEjGh43JnE8A==
+X-Received: by 2002:a05:600c:3ba2:b0:40e:5f54:b909 with SMTP id n34-20020a05600c3ba200b0040e5f54b909mr409259wms.88.1706006641645;
+        Tue, 23 Jan 2024 02:44:01 -0800 (PST)
+Received: from localhost ([102.140.209.237])
+        by smtp.gmail.com with ESMTPSA id e30-20020a5d595e000000b00339237a2752sm9798658wri.33.2024.01.23.02.44.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jan 2024 02:44:01 -0800 (PST)
+Date: Tue, 23 Jan 2024 13:43:58 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: daniel@iogearbox.net,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: bpf@vger.kernel.org, Mathias Krause <minipli@grsecurity.net>
+Subject: [bug report] bpf: Add fd-based tcx multi-prog infra with link support
+Message-ID: <c46a511a-0335-44f5-b6ae-6ad71d6ef012@moroto.mountain>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500005.china.huawei.com (7.185.36.74)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Currently there are three implementations for page frag:
+Hello Daniel Borkmann and Benjamin Tissoires,
 
-1. mm/page_alloc.c: net stack seems to be using it in the
-   rx part with 'struct page_frag_cache' and the main API
-   being page_frag_alloc_align().
-2. net/core/sock.c: net stack seems to be using it in the
-   tx part with 'struct page_frag' and the main API being
-   skb_page_frag_refill().
-3. drivers/vhost/net.c: vhost seems to be using it to build
-   xdp frame, and it's implementation seems to be a mix of
-   the above two.
+I've included both warnings because they're sort of related and
+hopefully it will save time to have this discussion in one thread.  I
+recently added fdget() to my Smatch check for CVE-2023-1838 type
+warnings and it generated the following output.  I'm not an expert on
+this stuff, I'm just a monkey see, monkey do programmer.  I've filtered
+out the obvious false positives but I'm not sure about these.
 
-This patchset tries to unfiy the page frag implementation a
-little bit by unifying gfp bit for order 3 page allocation
-and replacing page frag implementation in vhost.c with the
-one in page_alloc.c.
+The patch e420bed02507: "bpf: Add fd-based tcx multi-prog infra with
+link support" from Jul 19, 2023 and f5c27da4e3c8 ("HID: initial BPF
+implementation") from Nov 3, 2022 introduce the following static
+checker warnings:
 
-After this patchset, we are not only able to unify the page
-frag implementation a little, but also able to have about
-0.5% performance boost testing by using the vhost_net_test
-introduced in the last patch.
+drivers/hid/bpf/hid_bpf_dispatch.c:287 hid_bpf_attach_prog() warn: double fget(): 'prog_fd'
+drivers/hid/bpf/hid_bpf_jmp_table.c:427 __hid_bpf_attach_prog() warn: fd re-used after fget(): 'prog_fd'
+kernel/bpf/syscall.c:3985 bpf_prog_detach() warn: double fget(): 'attr->attach_bpf_fd'
+kernel/bpf/syscall.c:3988 bpf_prog_detach() warn: double fget(): 'attr->attach_bpf_fd'
+kernel/bpf/syscall.c:3991 bpf_prog_detach() warn: double fget(): 'attr->attach_bpf_fd'
+kernel/bpf/syscall.c:4001 bpf_prog_detach() warn: double fget(): 'attr->attach_bpf_fd'
 
-Before this patchset:
-Performance counter stats for './vhost_net_test' (10 runs):
+drivers/hid/bpf/hid_bpf_dispatch.c
+   256  noinline int
+   257  hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags)
+   258  {
+   259          struct hid_device *hdev;
+   260          struct device *dev;
+   261          int fd, err, prog_type = hid_bpf_get_prog_attach_type(prog_fd);
+                                                                      ^^^^^^^
+fdget() here
 
-     305325.78 msec task-clock                       #    1.738 CPUs utilized               ( +-  0.12% )
-       1048668      context-switches                 #    3.435 K/sec                       ( +-  0.00% )
-            11      cpu-migrations                   #    0.036 /sec                        ( +- 17.64% )
-            33      page-faults                      #    0.108 /sec                        ( +-  0.49% )
-  244651819491      cycles                           #    0.801 GHz                         ( +-  0.43% )  (64)
-   64714638024      stalled-cycles-frontend          #   26.45% frontend cycles idle        ( +-  2.19% )  (67)
-   30774313491      stalled-cycles-backend           #   12.58% backend cycles idle         ( +-  7.68% )  (70)
-  201749748680      instructions                     #    0.82  insn per cycle
-                                              #    0.32  stalled cycles per insn     ( +-  0.41% )  (66.76%)
-   65494787909      branches                         #  214.508 M/sec                       ( +-  0.35% )  (64)
-    4284111313      branch-misses                    #    6.54% of all branches             ( +-  0.45% )  (66)
+   262  
+   263          if (!hid_bpf_ops)
+   264                  return -EINVAL;
+   265  
+   266          if (prog_type < 0)
+   267                  return prog_type;
+   268  
+   269          if (prog_type >= HID_BPF_PROG_TYPE_MAX)
 
-       175.699 +- 0.189 seconds time elapsed  ( +-  0.11% )
+We're doing checks to ensure that prog_type is correct
 
+   270                  return -EINVAL;
+   271  
+   272          if ((flags & ~HID_BPF_FLAG_MASK))
+   273                  return -EINVAL;
+   274  
+   275          dev = bus_find_device(hid_bpf_ops->bus_type, NULL, &hid_id, device_match_id);
+   276          if (!dev)
+   277                  return -EINVAL;
+   278  
+   279          hdev = to_hid_device(dev);
+   280  
+   281          if (prog_type == HID_BPF_PROG_TYPE_DEVICE_EVENT) {
+   282                  err = hid_bpf_allocate_event_data(hdev);
+   283                  if (err)
+   284                          return err;
+   285          }
+   286  
+   287          fd = __hid_bpf_attach_prog(hdev, prog_type, prog_fd, flags);
+                                                            ^^^^^^^
+But then we look it up again so it's not necessarily the same file.
 
-After this patchset:
-Performance counter stats for './vhost_net_test' (10 runs):
+   288          if (fd < 0)
+   289                  return fd;
+   290  
+   291          if (prog_type == HID_BPF_PROG_TYPE_RDESC_FIXUP) {
+   292                  err = hid_bpf_reconnect(hdev);
+   293                  if (err) {
+   294                          close_fd(fd);
+   295                          return err;
+   296                  }
+   297          }
+   298  
+   299          return fd;
+   300  }
 
-     303974.38 msec task-clock                       #    1.739 CPUs utilized               ( +-  0.14% )
-       1048807      context-switches                 #    3.450 K/sec                       ( +-  0.00% )
-            14      cpu-migrations                   #    0.046 /sec                        ( +- 12.86% )
-            33      page-faults                      #    0.109 /sec                        ( +-  0.46% )
-  251289376347      cycles                           #    0.827 GHz                         ( +-  0.32% )  (60)
-   67885175415      stalled-cycles-frontend          #   27.01% frontend cycles idle        ( +-  0.48% )  (63)
-   27809282600      stalled-cycles-backend           #   11.07% backend cycles idle         ( +-  0.36% )  (71)
-  195543234672      instructions                     #    0.78  insn per cycle
-                                              #    0.35  stalled cycles per insn     ( +-  0.29% )  (69.04%)
-   62423183552      branches                         #  205.357 M/sec                       ( +-  0.48% )  (67)
-    4135666632      branch-misses                    #    6.63% of all branches             ( +-  0.63% )  (67)
+kernel/bpf/syscall.c
+    3956 static int bpf_prog_detach(const union bpf_attr *attr)
+    3957 {
+    3958         struct bpf_prog *prog = NULL;
+    3959         enum bpf_prog_type ptype;
+    3960         int ret;
+    3961 
+    3962         if (CHECK_ATTR(BPF_PROG_DETACH))
+    3963                 return -EINVAL;
+    3964 
+    3965         ptype = attach_type_to_prog_type(attr->attach_type);
+    3966         if (bpf_mprog_supported(ptype)) {
+    3967                 if (ptype == BPF_PROG_TYPE_UNSPEC)
+    3968                         return -EINVAL;
+    3969                 if (attr->attach_flags & ~BPF_F_ATTACH_MASK_MPROG)
+    3970                         return -EINVAL;
+    3971                 if (attr->attach_bpf_fd) {
+    3972                         prog = bpf_prog_get_type(attr->attach_bpf_fd, ptype);
+                                                          ^^^^^^^^^^^^^^^^^^^
+From my understanding then this prog might not be the same prog which
+we detach from later...
 
-       174.764 +- 0.214 seconds time elapsed  ( +-  0.12% )
+    3973                         if (IS_ERR(prog))
+    3974                                 return PTR_ERR(prog);
+    3975                 }
+    3976         } else if (attr->attach_flags ||
+    3977                    attr->relative_fd ||
+    3978                    attr->expected_revision) {
+    3979                 return -EINVAL;
+    3980         }
+    3981 
+    3982         switch (ptype) {
+    3983         case BPF_PROG_TYPE_SK_MSG:
+    3984         case BPF_PROG_TYPE_SK_SKB:
+--> 3985                 ret = sock_map_prog_detach(attr, ptype);
+                                                    ^^^^
+here.  Because instead of re-using prog we look it up again.
 
-Changelog:
-V3:
-1. Add __page_frag_alloc_align() which is passed with the align mask
-   the original function expected as suggested by Alexander.
-2. Drop patch 3 in v2 suggested by Alexander.
-3. Reorder patch 4 & 5 in v2 suggested by Alexander.
+    3986                 break;
+    3987         case BPF_PROG_TYPE_LIRC_MODE2:
+    3988                 ret = lirc_prog_detach(attr);
+    3989                 break;
+    3990         case BPF_PROG_TYPE_FLOW_DISSECTOR:
+    3991                 ret = netns_bpf_prog_detach(attr, ptype);
+    3992                 break;
+    3993         case BPF_PROG_TYPE_CGROUP_DEVICE:
+    3994         case BPF_PROG_TYPE_CGROUP_SKB:
+    3995         case BPF_PROG_TYPE_CGROUP_SOCK:
+    3996         case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
+    3997         case BPF_PROG_TYPE_CGROUP_SOCKOPT:
+    3998         case BPF_PROG_TYPE_CGROUP_SYSCTL:
+    3999         case BPF_PROG_TYPE_SOCK_OPS:
+    4000         case BPF_PROG_TYPE_LSM:
+    4001                 ret = cgroup_bpf_prog_detach(attr, ptype);
+    4002                 break;
+    4003         case BPF_PROG_TYPE_SCHED_CLS:
+    4004                 if (attr->attach_type == BPF_TCX_INGRESS ||
+    4005                     attr->attach_type == BPF_TCX_EGRESS)
+    4006                         ret = tcx_prog_detach(attr, prog);
+    4007                 else
+    4008                         ret = netkit_prog_detach(attr, prog);
+    4009                 break;
+    4010         default:
+    4011                 ret = -EINVAL;
+    4012         }
+    4013 
+    4014         if (prog)
+    4015                 bpf_prog_put(prog);
+    4016         return ret;
+    4017 }
 
-Note that placing this gfp flags handing for order 3 page in an inline
-function is not considered, as we may be able to unify the page_frag
-and page_frag_cache handling.
-
-V2: Change 'xor'd' to 'masked off', add vhost tx testing for
-    vhost_net_test.
-
-V1: Fix some typo, drop RFC tag and rebase on latest net-next.
-
-
-Yunsheng Lin (5):
-  mm/page_alloc: modify page_frag_alloc_align() to accept align as an
-    argument
-  page_frag: unify gfp bits for order 3 page allocation
-  net: introduce page_frag_cache_drain()
-  vhost/net: remove vhost_net_page_frag_refill()
-  tools: virtio: introduce vhost_net_test
-
- drivers/net/ethernet/google/gve/gve_main.c |  11 +-
- drivers/net/ethernet/mediatek/mtk_wed_wo.c |  17 +-
- drivers/nvme/host/tcp.c                    |   7 +-
- drivers/nvme/target/tcp.c                  |   4 +-
- drivers/vhost/net.c                        |  91 +---
- include/linux/gfp.h                        |  16 +-
- mm/page_alloc.c                            |  22 +-
- net/core/skbuff.c                          |   6 +-
- net/core/sock.c                            |   2 +-
- tools/virtio/.gitignore                    |   1 +
- tools/virtio/Makefile                      |   8 +-
- tools/virtio/vhost_net_test.c              | 576 +++++++++++++++++++++
- 12 files changed, 647 insertions(+), 114 deletions(-)
- create mode 100644 tools/virtio/vhost_net_test.c
-
--- 
-2.33.0
-
+regards,
+dan carpenter
