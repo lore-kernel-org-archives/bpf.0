@@ -1,43 +1,64 @@
-Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15495D8F9;
-	Tue, 23 Jan 2024 10:44:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 544B114A96
+	for <bpf@vger.kernel.org>; Tue, 23 Jan 2024 12:08:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706006684; cv=none; b=WkrjquOdVS8mASe2z+GO3yz8sDMeSbNORBdxfzjfDWq3L3V3Vb9ATCRDw9uspGdOrbPblf04u20NzgEZfoZC3uafpqPKFOfgI+gwKdHS+DLxlYvgxoPw8qrRjsDisrXSEPDPr3IgsznfNyisQL4blVDNYgikyLsR/pknrbwR0RY=
+	t=1706011691; cv=none; b=KOoobEbiOKzFSnqp6UpiKixn0GiEdfNcvukfE2AV9SHTRfqbFBrTLZfttp134WWILQGjoWZyX9YYgpSJfk64DOkVW6xDNUiLKkWY+Fmy4c0M4z8BYTgg02JyCtz7rKSLFvWao9jcl8q4o8rChjEtpW82PW8SUbJPvnxxhUULM9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706006684; c=relaxed/simple;
-	bh=EkOVPmyG8AwI1ztH4WPEnwo5N1dm4jflvATq8fvXt7Q=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BVfmewf1jWaKcHr4QVyXGuDjDw84eMN6IQatHhBdcu98KgQtC5tWdNjRUJw3emNb0tEffnU4bjkHtSDdz7ApEDNqe20SGkPu1/I9HsclWxhq7AhIYQjJuK8hHhT7b4k/E1MlzeQ+GkeumBAVu/3wjAZTH/ayFnSHDOL5I40epOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4TK3cD0jRxz1vsXm;
-	Tue, 23 Jan 2024 18:44:12 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id BB2491400DD;
-	Tue, 23 Jan 2024 18:44:18 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 23 Jan 2024 18:43:40 +0800
-From: Yunsheng Lin <linyunsheng@huawei.com>
-To: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Yunsheng Lin
-	<linyunsheng@huawei.com>, Jason Wang <jasowang@redhat.com>, "Michael S.
- Tsirkin" <mst@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>, <kvm@vger.kernel.org>,
-	<virtualization@lists.linux.dev>, <bpf@vger.kernel.org>
-Subject: [PATCH net-next v3 4/5] vhost/net: remove vhost_net_page_frag_refill()
-Date: Tue, 23 Jan 2024 18:42:49 +0800
-Message-ID: <20240123104250.9103-5-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20240123104250.9103-1-linyunsheng@huawei.com>
-References: <20240123104250.9103-1-linyunsheng@huawei.com>
+	s=arc-20240116; t=1706011691; c=relaxed/simple;
+	bh=qvx5DR1gIOoWwHlELzA6AuAKRxJCm45tUv43ko/em3o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OUVqApLicSC1gL4W0qvOwhmLyXfhJY6X/MYQEhb6CiN72CvuENSuTs1TAJQ2ahNLZKpmX4BGwUJW2k7b9Id1Q/JQpjh0+iHJxsHqBUqv7Vbas0hvSkTnHFH3TvyPrsXwYCx4WJF9QcA5azSOqEiQz7GJvksRqwAnYJhKJz/LIb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aLo32G1C; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aLo32G1C"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706011689;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YHLQIQqLV5TO5BCt8/mmmzMIG7ygOOBAOoLbOZmzcNc=;
+	b=aLo32G1CZ4a5S1V+a5J/j3o93c0Bk3pqEarZbJvPjw1lTpJ/ATORxh81fAAFJRv+mib9qN
+	ivB6/1hVQdTblt/fyg1YV1Kxrl2pGBwKrbrW0CfjuZzqJgdlczSzJDxe0Q51qJZJGv5Qsu
+	6HE3DWGuNua9tvoQ2tpI7FfEEs+Sw+w=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-635-MNJeEAktMIayWPLxDZxAwQ-1; Tue, 23 Jan 2024 07:08:05 -0500
+X-MC-Unique: MNJeEAktMIayWPLxDZxAwQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5D67A86F129;
+	Tue, 23 Jan 2024 12:08:04 +0000 (UTC)
+Received: from fedora.brq.redhat.com (unknown [10.43.17.8])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 109FB40C106C;
+	Tue, 23 Jan 2024 12:08:01 +0000 (UTC)
+From: Viktor Malik <vmalik@redhat.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Viktor Malik <vmalik@redhat.com>,
+	Alexey Dobriyan <adobriyan@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: [PATCH bpf-next] tools/resolve_btfids: fix cross-compilation to non-host endianness
+Date: Tue, 23 Jan 2024 13:07:59 +0100
+Message-ID: <20240123120759.1865189-1-vmalik@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,193 +66,102 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500005.china.huawei.com (7.185.36.74)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
 
-The page frag in vhost_net_page_frag_refill() uses the
-'struct page_frag' from skb_page_frag_refill(), but it's
-implementation is similar to page_frag_alloc_align() now.
+The .BTF_ids section is pre-filled with zeroed BTF ID entries during the
+build and afterwards patched by resolve_btfids with correct values.
+Since resolve_btfids always writes in host-native endianness, it relies
+on libelf to do the translation when the target ELF is cross-compiled to
+a different endianness (this was introduced in commit 61e8aeda9398
+("bpf: Fix libelf endian handling in resolv_btfids")).
 
-This patch removes vhost_net_page_frag_refill() by using
-'struct page_frag_cache' instead of 'struct page_frag',
-and allocating frag using page_frag_alloc_align().
+Unfortunately, the translation will corrupt the flags fields of SET8
+entries because these were written during vmlinux compilation and are in
+the correct endianness already. This will lead to numerous selftests
+failures such as:
 
-The added benefit is that not only unifying the page frag
-implementation a little, but also having about 0.5% performance
-boost testing by using the vhost_net_test introduced in the
-last patch.
+    $ sudo ./test_verifier 502 502
+    #502/p sleepable fentry accept FAIL
+    Failed to load prog 'Invalid argument'!
+    bpf_fentry_test1 is not sleepable
+    verification time 34 usec
+    stack depth 0
+    processed 0 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
+    Summary: 0 PASSED, 0 SKIPPED, 1 FAILED
 
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
+Since it's not possible to instruct libelf to translate just certain
+values, let's manually bswap the flags in resolve_btfids when needed, so
+that libelf then translates everything correctly.
+
+Fixes: ef2c6f370a63 ("tools/resolve_btfids: Add support for 8-byte BTF sets")
+Signed-off-by: Viktor Malik <vmalik@redhat.com>
 ---
- drivers/vhost/net.c | 91 ++++++++++++++-------------------------------
- 1 file changed, 27 insertions(+), 64 deletions(-)
+ tools/bpf/resolve_btfids/main.c | 35 +++++++++++++++++++++++++++++++--
+ 1 file changed, 33 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-index e574e21cc0ca..4b2fcb228a0a 100644
---- a/drivers/vhost/net.c
-+++ b/drivers/vhost/net.c
-@@ -141,10 +141,8 @@ struct vhost_net {
- 	unsigned tx_zcopy_err;
- 	/* Flush in progress. Protected by tx vq lock. */
- 	bool tx_flush;
--	/* Private page frag */
--	struct page_frag page_frag;
--	/* Refcount bias of page frag */
--	int refcnt_bias;
-+	/* Private page frag cache */
-+	struct page_frag_cache pf_cache;
- };
- 
- static unsigned vhost_net_zcopy_mask __read_mostly;
-@@ -655,41 +653,6 @@ static bool tx_can_batch(struct vhost_virtqueue *vq, size_t total_len)
- 	       !vhost_vq_avail_empty(vq->dev, vq);
+diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+index 27a23196d58e..440d3d066ce4 100644
+--- a/tools/bpf/resolve_btfids/main.c
++++ b/tools/bpf/resolve_btfids/main.c
+@@ -646,18 +646,31 @@ static int cmp_id(const void *pa, const void *pb)
+ 	return *a - *b;
  }
  
--static bool vhost_net_page_frag_refill(struct vhost_net *net, unsigned int sz,
--				       struct page_frag *pfrag, gfp_t gfp)
--{
--	if (pfrag->page) {
--		if (pfrag->offset + sz <= pfrag->size)
--			return true;
--		__page_frag_cache_drain(pfrag->page, net->refcnt_bias);
--	}
--
--	pfrag->offset = 0;
--	net->refcnt_bias = 0;
--	if (SKB_FRAG_PAGE_ORDER) {
--		/* Avoid direct reclaim but allow kswapd to wake */
--		pfrag->page = alloc_pages((gfp & ~__GFP_DIRECT_RECLAIM) |
--					  __GFP_COMP | __GFP_NOWARN |
--					  __GFP_NORETRY | __GFP_NOMEMALLOC,
--					  SKB_FRAG_PAGE_ORDER);
--		if (likely(pfrag->page)) {
--			pfrag->size = PAGE_SIZE << SKB_FRAG_PAGE_ORDER;
--			goto done;
--		}
--	}
--	pfrag->page = alloc_page(gfp);
--	if (likely(pfrag->page)) {
--		pfrag->size = PAGE_SIZE;
--		goto done;
--	}
--	return false;
--
--done:
--	net->refcnt_bias = USHRT_MAX;
--	page_ref_add(pfrag->page, USHRT_MAX - 1);
--	return true;
--}
--
- #define VHOST_NET_RX_PAD (NET_IP_ALIGN + NET_SKB_PAD)
- 
- static int vhost_net_build_xdp(struct vhost_net_virtqueue *nvq,
-@@ -699,7 +662,6 @@ static int vhost_net_build_xdp(struct vhost_net_virtqueue *nvq,
- 	struct vhost_net *net = container_of(vq->dev, struct vhost_net,
- 					     dev);
- 	struct socket *sock = vhost_vq_get_backend(vq);
--	struct page_frag *alloc_frag = &net->page_frag;
- 	struct virtio_net_hdr *gso;
- 	struct xdp_buff *xdp = &nvq->xdp[nvq->batched_xdp];
- 	struct tun_xdp_hdr *hdr;
-@@ -710,6 +672,7 @@ static int vhost_net_build_xdp(struct vhost_net_virtqueue *nvq,
- 	int sock_hlen = nvq->sock_hlen;
- 	void *buf;
- 	int copied;
-+	int ret;
- 
- 	if (unlikely(len < nvq->sock_hlen))
- 		return -EFAULT;
-@@ -719,18 +682,17 @@ static int vhost_net_build_xdp(struct vhost_net_virtqueue *nvq,
- 		return -ENOSPC;
- 
- 	buflen += SKB_DATA_ALIGN(len + pad);
--	alloc_frag->offset = ALIGN((u64)alloc_frag->offset, SMP_CACHE_BYTES);
--	if (unlikely(!vhost_net_page_frag_refill(net, buflen,
--						 alloc_frag, GFP_KERNEL)))
-+	buf = page_frag_alloc_align(&net->pf_cache, buflen, GFP_KERNEL,
-+				    SMP_CACHE_BYTES);
-+	if (unlikely(!buf))
- 		return -ENOMEM;
- 
--	buf = (char *)page_address(alloc_frag->page) + alloc_frag->offset;
--	copied = copy_page_from_iter(alloc_frag->page,
--				     alloc_frag->offset +
--				     offsetof(struct tun_xdp_hdr, gso),
--				     sock_hlen, from);
--	if (copied != sock_hlen)
--		return -EFAULT;
-+	copied = copy_from_iter(buf + offsetof(struct tun_xdp_hdr, gso),
-+				sock_hlen, from);
-+	if (copied != sock_hlen) {
-+		ret = -EFAULT;
-+		goto err;
-+	}
- 
- 	hdr = buf;
- 	gso = &hdr->gso;
-@@ -743,27 +705,30 @@ static int vhost_net_build_xdp(struct vhost_net_virtqueue *nvq,
- 			       vhost16_to_cpu(vq, gso->csum_start) +
- 			       vhost16_to_cpu(vq, gso->csum_offset) + 2);
- 
--		if (vhost16_to_cpu(vq, gso->hdr_len) > len)
--			return -EINVAL;
-+		if (vhost16_to_cpu(vq, gso->hdr_len) > len) {
-+			ret = -EINVAL;
-+			goto err;
-+		}
- 	}
- 
- 	len -= sock_hlen;
--	copied = copy_page_from_iter(alloc_frag->page,
--				     alloc_frag->offset + pad,
--				     len, from);
--	if (copied != len)
--		return -EFAULT;
-+	copied = copy_from_iter(buf + pad, len, from);
-+	if (copied != len) {
-+		ret = -EFAULT;
-+		goto err;
-+	}
- 
- 	xdp_init_buff(xdp, buflen, NULL);
- 	xdp_prepare_buff(xdp, buf, pad, len, true);
- 	hdr->buflen = buflen;
- 
--	--net->refcnt_bias;
--	alloc_frag->offset += buflen;
--
- 	++nvq->batched_xdp;
- 
- 	return 0;
++static int need_bswap(int elf_byte_order)
++{
++	return __BYTE_ORDER == __LITTLE_ENDIAN && elf_byte_order != ELFDATA2LSB ||
++	       __BYTE_ORDER == __BIG_ENDIAN && elf_byte_order != ELFDATA2MSB;
++}
 +
-+err:
-+	page_frag_free(buf);
-+	return ret;
- }
+ static int sets_patch(struct object *obj)
+ {
+ 	Elf_Data *data = obj->efile.idlist;
+ 	int *ptr = data->d_buf;
+ 	struct rb_node *next;
++	GElf_Ehdr ehdr;
++
++	if (gelf_getehdr(obj->efile.elf, &ehdr) == NULL) {
++		pr_err("FAILED cannot get ELF header: %s\n",
++			elf_errmsg(-1));
++		return -1;
++	}
  
- static void handle_tx_copy(struct vhost_net *net, struct socket *sock)
-@@ -1353,8 +1318,7 @@ static int vhost_net_open(struct inode *inode, struct file *f)
- 			vqs[VHOST_NET_VQ_RX]);
+ 	next = rb_first(&obj->sets);
+ 	while (next) {
+-		unsigned long addr, idx;
++		unsigned long addr, idx, flags;
+ 		struct btf_id *id;
+ 		int *base;
+-		int cnt;
++		int cnt, i;
  
- 	f->private_data = n;
--	n->page_frag.page = NULL;
--	n->refcnt_bias = 0;
-+	n->pf_cache.va = NULL;
+ 		id   = rb_entry(next, struct btf_id, rb_node);
+ 		addr = id->addr[0];
+@@ -679,6 +692,24 @@ static int sets_patch(struct object *obj)
  
+ 		qsort(base, cnt, id->is_set8 ? sizeof(uint64_t) : sizeof(int), cmp_id);
+ 
++		/*
++		 * When ELF endianness does not match endianness of the host,
++		 * libelf will do the translation when updating the ELF. This,
++		 * however, corrupts SET8 flags which are already in the target
++		 * endianness. So, let's bswap them to the host endianness and
++		 * libelf will then correctly translate everything.
++		 */
++		if (id->is_set8 && need_bswap(ehdr.e_ident[EI_DATA])) {
++			for (i = 0; i < cnt; i++) {
++				/*
++				 * header and entries are 8-byte, flags is the
++				 * second half of an entry
++				 */
++				flags = idx + (i + 1) * 2 + 1;
++				ptr[flags] = bswap_32(ptr[flags]);
++			}
++		}
++
+ 		next = rb_next(next);
+ 	}
  	return 0;
- }
-@@ -1422,8 +1386,7 @@ static int vhost_net_release(struct inode *inode, struct file *f)
- 	kfree(n->vqs[VHOST_NET_VQ_RX].rxq.queue);
- 	kfree(n->vqs[VHOST_NET_VQ_TX].xdp);
- 	kfree(n->dev.vqs);
--	if (n->page_frag.page)
--		__page_frag_cache_drain(n->page_frag.page, n->refcnt_bias);
-+	page_frag_cache_drain(&n->pf_cache);
- 	kvfree(n);
- 	return 0;
- }
 -- 
-2.33.0
+2.43.0
 
