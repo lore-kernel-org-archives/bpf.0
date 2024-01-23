@@ -1,27 +1,28 @@
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C0CD5C917;
-	Tue, 23 Jan 2024 10:32:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB4015C8F5;
+	Tue, 23 Jan 2024 10:32:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706005935; cv=none; b=AAnPMaqNn3oSVM2EAZq2GNjVcs1j0QDCM0qTWXXA4c92VfHo0w1xfZTPPPR80aSOrG1R/XHFBUJV8EgjY7pXrVHpc+ZOMmNpxUA2qtjczilYy/9kVK+k1k1P8tSEpcoJyz8lq6IvUKlOFrrYe04ezRQNxcQcUGnEWR57S8ahwq0=
+	t=1706005935; cv=none; b=j4yqNneCMP7+BQh1qWzojyZvxH4pOoEPx/jET0vj51xATF3pus3lfMQ7pdYq7QmYZYLo9PGN4YtOvS/GDb105eUb8HGBxs5IXiLUv4zkK5B/i2meM8lHo6vR6UxRcQ3Y8CDlZkiGkU7GGTJw214VKVwUr0xuN2YSO6fGNCw6FAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1706005935; c=relaxed/simple;
-	bh=jdMRE8lFMQG8fdBwiSq4AL+aa9l5xL9dqapHhgCB238=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hA4zZ7Jm0jDmad2ZNoRS1DY9a9gDIDgh/uJwmg9uJeF7hexKAwG2MClobhT0+dGbhVL7sgri+cW5/ugCrGe1QaCkjPYNQy9xFmWEuOscuRna9EYzYm+GeX4g9oa+CSLvKXMQkCKWKhah4yz58BhzZNcpblrNg2NuDv1Gd7qCPd4=
+	bh=1B+0XeBZt6BNXLdTmwUPFZo9vm5DlNu7CRKkxa61WHs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=PqdJd8vewivj17Uqu3aYkehKj0RJmESajHXlVj78WoI+TTvJY6EBGkNhQkp7878C6wg+tOQqgQoagPgIiyjsJDA71KRhM87OCebgvpJoju0cHiaLPrlJDRaWc+nHT1fvAxGeLprUsc9mb5I3FDuTzeLHMtEsssPDF1jfRJQBTgQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4TK3L60HvVz4f3m6r;
-	Tue, 23 Jan 2024 18:31:58 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4TK3LB27wyz4f3jpl;
+	Tue, 23 Jan 2024 18:32:02 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 4FF3D1A01E9;
+	by mail.maildlp.com (Postfix) with ESMTP id 9934E1A0281;
 	Tue, 23 Jan 2024 18:32:04 +0800 (CST)
 Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP2 (Coremail) with SMTP id Syh0CgBHaQyfla9ldy79Bg--.53064S2;
-	Tue, 23 Jan 2024 18:32:01 +0800 (CST)
+	by APP2 (Coremail) with SMTP id Syh0CgBHaQyfla9ldy79Bg--.53064S5;
+	Tue, 23 Jan 2024 18:32:04 +0800 (CST)
 From: Pu Lehui <pulehui@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
@@ -43,10 +44,12 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	Luke Nelson <luke.r.nels@gmail.com>,
 	Pu Lehui <pulehui@huawei.com>,
 	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf-next 0/3] Use bpf_prog_pack for RV64 bpf trampoline
-Date: Tue, 23 Jan 2024 10:32:38 +0000
-Message-Id: <20240123103241.2282122-1-pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next 3/3] riscv, bpf: Use bpf_prog_pack for RV64 bpf trampoline
+Date: Tue, 23 Jan 2024 10:32:41 +0000
+Message-Id: <20240123103241.2282122-4-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240123103241.2282122-1-pulehui@huaweicloud.com>
+References: <20240123103241.2282122-1-pulehui@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,24 +57,27 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgBHaQyfla9ldy79Bg--.53064S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kr43KF1rCFy8Ww4xtw1DZFb_yoW8Gw15pF
-	43uw13Cr4jqr9rWrZ3Wa18Zr1Sqw48u3y7Gr9rt34rCasYvFy8ZrnYgr4rAFWrGr95uw1r
-	Zryj9ry5ua4UZ3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9a14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-	Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
-	0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
-	zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
-	4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_
-	WFyUJwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJr
-	UvcSsGvfC2KfnxnUUI43ZEXa7VUbmsjUUUUUU==
+X-CM-TRANSID:Syh0CgBHaQyfla9ldy79Bg--.53064S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxZFy8Zry7tr43Ar1rXF4ruFg_yoWrWF4kpF
+	s3Gw1ak3ykXr15ta4kJr4UZF1ay3ykW3sxGr9xG3yxCFZ8Xr98GFyrKrWYvFWFkryj9r18
+	AF4qvFn8u3WUJaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUP014x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
+	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
+	0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+	IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+	Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
+	xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
+	6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2
+	Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
+	Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJw
+	CI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUbJ73DUU
+	UUU==
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+
+From: Pu Lehui <pulehui@huawei.com>
 
 We used bpf_prog_pack to aggregate bpf programs into huge page to
 relieve the iTLB pressure on the system. We can apply it to bpf
@@ -84,25 +90,108 @@ during dry run, but during real patching it may be optimized to 1
 instruction due to distance. This is no problem as it does not overflow
 the allocated RO image.
 
-Tests about regular trampoline and struct_ops trampoline have passed, as
-well as "test_verifier" with no failure cases.
-
 Link: https://lore.kernel.org/all/20231206224054.492250-1-song@kernel.org [0]
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ arch/riscv/net/bpf_jit_comp64.c | 59 ++++++++++++++++++++++++---------
+ 1 file changed, 44 insertions(+), 15 deletions(-)
 
-Pu Lehui (3):
-  bpf: Use precise image size for struct_ops trampoline
-  bpf: Keep im address consistent between dry run and real patching
-  riscv, bpf: Use bpf_prog_pack for RV64 bpf trampoline
-
- arch/arm64/net/bpf_jit_comp.c   |  7 ++--
- arch/riscv/net/bpf_jit_comp64.c | 66 +++++++++++++++++++++++----------
- arch/s390/net/bpf_jit_comp.c    |  7 ++--
- arch/x86/net/bpf_jit_comp.c     |  7 ++--
- include/linux/bpf.h             |  4 +-
- kernel/bpf/bpf_struct_ops.c     |  4 +-
- kernel/bpf/trampoline.c         | 43 +++++++++++----------
- 7 files changed, 81 insertions(+), 57 deletions(-)
-
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index 5c4e0ac389d0..903f724cd785 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -961,7 +961,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+ 			goto out;
+ 		emit_sd(RV_REG_FP, -retval_off, RV_REG_A0, ctx);
+ 		emit_sd(RV_REG_FP, -(retval_off - 8), regmap[BPF_REG_0], ctx);
+-		im->ip_after_call = ctx->insns + ctx->ninsns;
++		im->ip_after_call = ctx->ro_insns + ctx->ninsns;
+ 		/* 2 nops reserved for auipc+jalr pair */
+ 		emit(rv_nop(), ctx);
+ 		emit(rv_nop(), ctx);
+@@ -982,7 +982,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+ 	}
+ 
+ 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+-		im->ip_epilogue = ctx->insns + ctx->ninsns;
++		im->ip_epilogue = ctx->ro_insns + ctx->ninsns;
+ 		emit_imm(RV_REG_A0, (const s64)im, ctx);
+ 		ret = emit_call((const u64)__bpf_tramp_exit, true, ctx);
+ 		if (ret)
+@@ -1044,31 +1044,60 @@ int arch_bpf_trampoline_size(struct bpf_tramp_image *im, const struct btf_func_m
+ 	return ret < 0 ? ret : ninsns_rvoff(ctx.ninsns);
+ }
+ 
+-int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
+-				void *image_end, const struct btf_func_model *m,
++void *arch_alloc_bpf_trampoline(unsigned int size)
++{
++	return bpf_prog_pack_alloc(size, bpf_fill_ill_insns);
++}
++
++void arch_free_bpf_trampoline(void *image, unsigned int size)
++{
++	bpf_prog_pack_free(image, size);
++}
++
++void arch_protect_bpf_trampoline(void *image, unsigned int size)
++{
++}
++
++void arch_unprotect_bpf_trampoline(void *image, unsigned int size)
++{
++}
++
++int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *ro_image,
++				void *ro_image_end, const struct btf_func_model *m,
+ 				u32 flags, struct bpf_tramp_links *tlinks,
+ 				void *func_addr)
+ {
+ 	int ret;
++	void *image, *tmp;
+ 	struct rv_jit_context ctx;
++	u32 size = ro_image_end - ro_image;
++
++	image = kvmalloc(size, GFP_KERNEL);
++	if (!image)
++		return -ENOMEM;
+ 
+ 	ctx.ninsns = 0;
+-	/*
+-	 * The bpf_int_jit_compile() uses a RW buffer (ctx.insns) to write the
+-	 * JITed instructions and later copies it to a RX region (ctx.ro_insns).
+-	 * It also uses ctx.ro_insns to calculate offsets for jumps etc. As the
+-	 * trampoline image uses the same memory area for writing and execution,
+-	 * both ctx.insns and ctx.ro_insns can be set to image.
+-	 */
+ 	ctx.insns = image;
+-	ctx.ro_insns = image;
++	ctx.ro_insns = ro_image;
+ 	ret = __arch_prepare_bpf_trampoline(im, m, tlinks, func_addr, flags, &ctx);
+ 	if (ret < 0)
+-		return ret;
++		goto out;
+ 
+-	bpf_flush_icache(ctx.insns, ctx.insns + ctx.ninsns);
++	if (WARN_ON(size < ninsns_rvoff(ctx.ninsns))) {
++		ret = -E2BIG;
++		goto out;
++	}
+ 
+-	return ninsns_rvoff(ret);
++	tmp = bpf_arch_text_copy(ro_image, image, size);
++	if (IS_ERR(tmp)) {
++		ret = PTR_ERR(tmp);
++		goto out;
++	}
++
++	bpf_flush_icache(ro_image, ro_image + size);
++out:
++	kvfree(image);
++	return ret < 0 ? ret : size;
+ }
+ 
+ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
 -- 
 2.34.1
 
