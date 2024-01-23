@@ -1,284 +1,157 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F765465E
-	for <bpf@vger.kernel.org>; Tue, 23 Jan 2024 23:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FA7253E19
+	for <bpf@vger.kernel.org>; Tue, 23 Jan 2024 23:29:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706051723; cv=none; b=fak37XorI9P5iwcx+MNJ136S8uSOuy6hCGN6l89Ue+74zlbTZUvsFYQrOi4LA5SDctS+6aE+SHJ4fdtpLMQfrpcJpcAP5Ml4C3DQKZ+og1cdHA09sW+y/n2oWL/qBFUzqEM+Wn5gxaJaqfrSQZDlPiGeJi3s7/Q1rLvSnpT0Wmo=
+	t=1706052586; cv=none; b=KzPrDHDiyQRIXjSs0Lmlz2w4oB2f1qveuedl9xaQu5uZeBVINiPFwpea5fvvKOLZaA7EE+dPtav+COBMmFL2Gutd8gzLI6osQg8TZBKuKKrLIlo4bpZDgHgd7EGQ0PUJFzzrrIo/woJlSSiyeqf+1opb35YlnxsNWDDZpdbjKdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706051723; c=relaxed/simple;
-	bh=uBJk0rqIZ+nmf9AbSOah+fJhFYLXD0xM6VMVhtHE50c=;
-	h=To:Cc:References:In-Reply-To:Date:Message-ID:MIME-Version:Subject:
-	 Content-Type:From; b=NdywYgXAijc9zOjuDu8Bw59JPiQOAcoD+rPdeLCBd9XN3w1iVyYCWcrWHQxoowJScwMGss/XEmaG0GdYPfvvzyJtJVg9CP3bP1kxj0w7k5J/CJNHXom8p+yjD/UizKt8V47lOve2K8gEbxACsCTyUWryOv5SoGs+V2c5bNQRGcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dmarc.ietf.org; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=Sgh5QG5C; dkim=fail (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=kDm5pEPL reason="signature verification failed"; dkim=fail (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=RO/B3KIe reason="signature verification failed"; arc=none smtp.client-ip=50.223.129.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dmarc.ietf.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	s=arc-20240116; t=1706052586; c=relaxed/simple;
+	bh=nV0JiYpVt2Qdrm6m9BfivzkMbxM8shwReWuIgOB6vhE=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type; b=lSkZufChrbt3LAfqvzYSmvquBs3Ks0CZu4dWLwA+hppjhPk/FonEqw5bn8NQKvFovyJI2mlACD3jHWNvEPPpaNi8BQBcKgPZa2z9S3xedla/klcSzN/P2fL2dUhtoUOkaflo3EFLYh4bMXRwSDGtssgEr0IL22g5e4DlVnW2n6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=Ai2X0rCl; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="Sgh5QG5C";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="kDm5pEPL";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="RO/B3KIe"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 775A2C15107E
-	for <bpf@vger.kernel.org>; Tue, 23 Jan 2024 15:15:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1706051719; bh=uBJk0rqIZ+nmf9AbSOah+fJhFYLXD0xM6VMVhtHE50c=;
-	h=To:Cc:References:In-Reply-To:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=Sgh5QG5CTW2ALZdm3VH2BGdCh3EY3bWYGoF+p+z6v+CYcAgJ+8Tvdd7NahNWoqEHD
-	 XwSbm7jLi0Q1IZMnTXNa/2SKRPTO+yEjD+loZRoZLKHmBADgHXqxiENOD/xoxcENm+
-	 ktElf3lmFez0cgyxC2R3mVTurz1dDBzlNjLvvm3o=
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
- by ietfa.amsl.com (Postfix) with ESMTP id 35C7FC14CF09;
- Tue, 23 Jan 2024 15:15:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
- t=1706051719; bh=uBJk0rqIZ+nmf9AbSOah+fJhFYLXD0xM6VMVhtHE50c=;
- h=From:To:Cc:References:In-Reply-To:Date:Subject:List-Id:
- List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
- b=kDm5pEPLPwnAHSO0nKObfaoolnb5JO35hZihbErnTm3SODei94LN7pQW84QE19yjy
- PuoHbJIlGcar9kjWfEVBCaqPACdormGnS6PuhMF1oQUso6m9H3y24gDQKTapRvvyfK
- BCrh25GJnxbBwi/DjvgcoeEvtAk2ywj6MDOvDYQU=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 26107C14CF09
- for <bpf@ietfa.amsl.com>; Tue, 23 Jan 2024 15:15:18 -0800 (PST)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -1.855
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=googlemail.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v5yhJYLbvN_l for <bpf@ietfa.amsl.com>;
- Tue, 23 Jan 2024 15:15:13 -0800 (PST)
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com
- [IPv6:2607:f8b0:4864:20::429])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 906C3C14F749
- for <bpf@ietf.org>; Tue, 23 Jan 2024 15:15:13 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id
- d2e1a72fcca58-6dbb003be79so4234938b3a.0
- for <bpf@ietf.org>; Tue, 23 Jan 2024 15:15:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="Ai2X0rCl"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-29026523507so3718886a91.0
+        for <bpf@vger.kernel.org>; Tue, 23 Jan 2024 15:29:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1706051712; x=1706656512; darn=ietf.org;
- h=content-language:thread-index:content-transfer-encoding
- :mime-version:message-id:date:subject:in-reply-to:references:cc:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=fZsPWFi0DkghszaEQJ3umNHAJEjOSzjsjB52xKFrixo=;
- b=RO/B3KIe70sJ2s989xdb++nYMZx1Zm8N2rGk6qlCakUa0GWt7cFWIRpkWSKEo9R/2Z
- AMH4AdIzX4EnPAF/JbDyGy/HDgcB2Qk9+9q/2NOsSjRy81PIueEbPoNdr+NYvI2WCgDo
- bJ9BD8yjt7bDiZapcU2L+pdhiZS6l/S2QC6ZjycX1dFpilCF0wzLdAevOpW4A61O6Fvu
- DL1v2VJ0LoDTolFbbiGPHM9qovBnxD0F6Antkd6n2I+iWomeKSjsy4sDUXmXVKAkQSso
- jOyLIO0xTybUHb6XlgtqgoYw4WMLmHd/XLGVSXt5wkhvwj4dOsYUVDrXvs08moVbyKeW
- cjpg==
+        d=googlemail.com; s=20230601; t=1706052585; x=1706657385; darn=vger.kernel.org;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uxp7csI7GVkKVo3iyFT9bVz+XlkrKNjW2GUNPvl/QNw=;
+        b=Ai2X0rClPHv66BL69uBxID9JFqfwcKZrToKrdZbqa82PbtVQighVOlRo4bOkEFzVmS
+         KdCBxNs8I/YAYX5q5p9K7QO9KTUfRegfroHRn29Q9pQ4UYbbnsIHiigQdfQ+Iz8IoLE3
+         Sf18t/Q5z8/x+n7Cbqe5CX8PrmfmNHJgngJTakEgj1Nj7pIxRKj8LmK596oqmF8zu3l/
+         C5nVNvxtpqXfLDtooiwn9An5fDvDxRFEuyLThJmEW1WXGbJ31aAf7CJMZSYkzmNK4vHm
+         zv+IbBYZLOyhwdw/kE8/Nkk/eLzdOOPj/wFDzl8fAu49YEaOAHFwZ0g8odxUrIH1JgSc
+         +d+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706051712; x=1706656512;
- h=content-language:thread-index:content-transfer-encoding
- :mime-version:message-id:date:subject:in-reply-to:references:cc:to
- :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=fZsPWFi0DkghszaEQJ3umNHAJEjOSzjsjB52xKFrixo=;
- b=VbGKdUbAg8Wxmpii/9R/f3uGpSO9saNAygyF46e1vSHjmbsY49nPbtI9HqizQEBCZK
- NvragUxk56DEz/PKSdSfPZOKAPaOcwjaDvbl8AwWgXMsCDqoLlSIW9JgFf4ktc+1ekty
- vyT8Cc4Lwd3RvGK7Q07hoywR4VBoU1uDquFmg4fzDrEmZVUSvtQSoB+PaPgs0CQlJaGl
- 7fMDCEaz6spSzAHD/d1JEsiExObjlRoH3ynp6ap1edYyHuw+upAURIxmCJwooSAq5/8R
- oZlsSt/fRvDAeUYW62Wx/AHF6GH5b0UUB91lTJAvGl0FjCDDjMvO/rsAkQ0RwDntVwvd
- UIyg==
-X-Gm-Message-State: AOJu0YwbyetX+NunRWfbxAf+A8uTGAu+SbLwabPD62wUw+xRlkNM5k4p
- 6dsRo5bEldoOytjMaY++VFJcS20vVLL9HcYdcnkxP3OH0XVUsCnz8reAYA+3PA4=
-X-Google-Smtp-Source: AGHT+IGzfsXIQbLrPPJkFRU/fb/bmorOZSGrsZfqVMXM/+L3Ts2mtlFXug10aZ0MenlYaPp7Mbw0ng==
-X-Received: by 2002:a05:6a00:b95:b0:6db:d315:3781 with SMTP id
- g21-20020a056a000b9500b006dbd3153781mr419483pfj.20.1706051712383; 
- Tue, 23 Jan 2024 15:15:12 -0800 (PST)
-Received: from ArmidaleLaptop (c-67-170-74-237.hsd1.wa.comcast.net.
- [67.170.74.237]) by smtp.gmail.com with ESMTPSA id
- y137-20020a62ce8f000000b006dd7ae4cd1fsm2031313pfg.49.2024.01.23.15.15.11
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Tue, 23 Jan 2024 15:15:12 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706052585; x=1706657385;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uxp7csI7GVkKVo3iyFT9bVz+XlkrKNjW2GUNPvl/QNw=;
+        b=M1vwcUnhW0UnMP91mpa/T2w4c8Hqo5Qeq7msHMbPYouHoImNEmEwAIxbVa4PapwuyI
+         wPtZYt3D0nvePSi+SeYzy8HAcpK3J+y9DPGjKoA32WBuNWrvu82EQoFAg7ctmn4/x92r
+         k5vmlfsb2S8/bDfQ8KtQVR6MZDA/Yfjut6fQHBhnfnJuy5FZBp+pj9+3t43+RfGjtgFl
+         vG5kIJCnPpX0ZpstoGzXO4DQ1mSkfXdOdwgqMWeyuIGKNC64xdDsr04yjXJOamAWgjwA
+         xAWbIDc91I96XsVniwBPjz0+HFRxJiIo/CLqvIL04rQs6LbuESugW/Lw9fuwYXOSQk3n
+         HKPg==
+X-Gm-Message-State: AOJu0YwaxYBNK5v2cuNzXQiCzI600fJ6QfNxtJ0t0o9WMBCOXSzbEvOM
+	Nf3liAel0ohoct4aysfLS66gUA3YBuAdtZm3A9jL1Gp3UWd8jng6
+X-Google-Smtp-Source: AGHT+IEGvt/yImDo8Ob1k0Z4lY994xLw3f+pk6Sv7zqAkcyFvFUUx3Hd7wrrrOUxBx08cxEdejrjvQ==
+X-Received: by 2002:a17:90a:f614:b0:290:6c4:ad45 with SMTP id bw20-20020a17090af61400b0029006c4ad45mr3688918pjb.39.1706052584666;
+        Tue, 23 Jan 2024 15:29:44 -0800 (PST)
+Received: from ArmidaleLaptop (c-67-170-74-237.hsd1.wa.comcast.net. [67.170.74.237])
+        by smtp.gmail.com with ESMTPSA id nc15-20020a17090b37cf00b0028feef1f7adsm12227727pjb.50.2024.01.23.15.29.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Jan 2024 15:29:44 -0800 (PST)
+From: dthaler1968@googlemail.com
 X-Google-Original-From: <dthaler1968@gmail.com>
 To: "'David Vernet'" <void@manifault.com>,
-	<dthaler1968@googlemail.com>
-Cc: <bpf@ietf.org>,
-	<bpf@vger.kernel.org>,
-	<jose.marchesi@oracle.com>
-References: <1b5d01da4e1b$95506b50$bff141f0$@gmail.com>
- <20240123213100.GA221838@maniforge>
- <1e9101da4e44$e24a1720$a6de4560$@gmail.com>
- <20240123215214.GC221862@maniforge>
-In-Reply-To: <20240123215214.GC221862@maniforge>
-Date: Tue, 23 Jan 2024 15:15:09 -0800
-Message-ID: <1f6101da4e52$032b11d0$09813570$@gmail.com>
+	"'Jose E. Marchesi'" <jose.marchesi@oracle.com>
+Cc: "'Alexei Starovoitov'" <alexei.starovoitov@gmail.com>,
+	"'Christoph Hellwig'" <hch@infradead.org>,
+	<bpf@ietf.org>,
+	"'bpf'" <bpf@vger.kernel.org>,
+	"'Jakub Kicinski'" <kuba@kernel.org>,
+	<david.faust@oracle.com>
+References: <20231214174437.GA2853@maniforge> <ZXvkS4qmRMZqlWhA@infradead.org> <CAADnVQ+ExRC_RavN_sbuOmuwyP6+HKnV9bFjJOseORBaVw0Jcg@mail.gmail.com> <09dc01da32a6$99c97e50$cd5c7af0$@gmail.com> <CAADnVQ+Kb20aUZdcqSh5eF-_dzpHWcpjAtYpLgg5Fqog=g7hpA@mail.gmail.com> <ZYPiq6ijLaMl/QD8@infradead.org> <20240105220711.GA1001999@maniforge> <ZZwcC7nZiZ+OV1ST@infradead.org> <CAADnVQLMo0M675T89gu9v_wSR+GbQmu4ajWjwgWK9aCNkJPsaQ@mail.gmail.com> <874jfm68ok.fsf@oracle.com> <20240123213948.GA221862@maniforge>
+In-Reply-To: <20240123213948.GA221862@maniforge>
+Subject: RE: [Bpf] BPF ISA conformance groups
+Date: Tue, 23 Jan 2024 15:29:41 -0800
+Message-ID: <1f8301da4e54$0b0ad690$212083b0$@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQEMYhjceuFr/KIoMYEnffEkkY0NOwHLV0EHAKl61oMBPW6XvrJmTNEA
+Thread-Index: AQClir6lI1sScEFfIiSZU+wYPRcfRwJboihlAe8iqfAB/zVPlgJHtDdIAuBp+8cCBQmzlAH9CezDAX+HGP0B/YYFwQJ+11wssqYPW3A=
 Content-Language: en-us
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/mFj2oV1-Ajt2uSbK-HJIld-wlrU>
-Subject: Re: [Bpf] Standardizing BPF assembly language?
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-X-Original-From: dthaler1968@googlemail.com
-From: dthaler1968=40googlemail.com@dmarc.ietf.org
-Message-ID: <20240123231509.OvIczfTg2EWVVqwy1VEz72y8120rEgTTWcVF17isnH8@z>
 
 > -----Original Message-----
 > From: David Vernet <void@manifault.com>
-> Sent: Tuesday, January 23, 2024 1:52 PM
-> To: dthaler1968@googlemail.com
-> Cc: bpf@ietf.org; bpf@vger.kernel.org; jose.marchesi@oracle.com
-> Subject: Re: [Bpf] Standardizing BPF assembly language?
-> 
-> On Tue, Jan 23, 2024 at 01:41:10PM -0800, dthaler1968@googlemail.com
+> Sent: Tuesday, January 23, 2024 1:40 PM
+> To: Jose E. Marchesi <jose.marchesi@oracle.com>
+> Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>; Christoph =
+Hellwig
+> <hch@infradead.org>; Dave Thaler <dthaler1968@googlemail.com>;
+> bpf@ietf.org; bpf <bpf@vger.kernel.org>; Jakub Kicinski =
+<kuba@kernel.org>;
+> david.faust@oracle.com
+> Subject: Re: [Bpf] BPF ISA conformance groups
+>=20
+> On Tue, Jan 09, 2024 at 12:35:39PM +0100, Jose E. Marchesi wrote:
+> >
+> > > On Mon, Jan 8, 2024 at 8:00=E2=80=AFAM Christoph Hellwig =
+<hch@infradead.org>
 > wrote:
-> > > -----Original Message-----
-> > > From: David Vernet <void@manifault.com>
-> > > Sent: Tuesday, January 23, 2024 1:31 PM
-> > > To: dthaler1968@googlemail.com
-> > > Cc: bpf@ietf.org; bpf@vger.kernel.org; jose.marchesi@oracle.com
-> > > Subject: Re: [Bpf] Standardizing BPF assembly language?
+> > >>
+> > >> On Fri, Jan 05, 2024 at 04:07:11PM -0600, David Vernet wrote:
+> > >> >
+> > >> > So how do we want to move forward here? It sounds like we're
+> > >> > leaning toward's Alexei's proposal of having:
+> > >> >
+> > >> > - Base Integer Instruction Set, 32-bit
+> > >> > - Base Integer Instruction Set, 64-bit
+> > >> > - Integer Multiplication and Division
+> > >> > - Atomic Instructions
+> > >>
+> > >> As in the 64-bit integer set would be an add-on to the first one
+> > >> which is the core set?  In that case that's fine with me, but the
+> > >> above wording is a bit suboptimal.
 > > >
-> > > On Tue, Jan 23, 2024 at 08:45:32AM -0800,
-> > > dthaler1968=40googlemail.com@dmarc.ietf.org wrote:
-> > > > At LSF/MM/BPF 2023, Jose gave a presentation about BPF assembly
-> > > > language
-(http://vger.kernel.org/bpfconf2023_material/compiled_bpf.txt).
-> > > >
-> > > > Jose wrote in that link:
-> > > > > There are two dialects of BPF assembler in use today:
-> > > > >
-> > > > > - A "pseudo-c" dialect (originally "BPF verifier format")
-> > > > >  : r1 = *(u64 *)(r2 + 0x00f0)
-> > > > >  : if r1 > 2 goto label
-> > > > >  : lock *(u32 *)(r2 + 10) += r3
-> > > > >
-> > > > > - An "assembler-like" dialect
-> > > > >  : ldxdw %r1, [%r2 + 0x00f0]
-> > > > >  : jgt %r1, 2, label
-> > > > >  : xaddw [%r2 + 2], r3
-> > > >
-> > > > During Jose's talk, I discovered that uBPF didn't quote match the
-> > > > second dialect and submitted a bug report.  By the time the
-> > > > conference was over, uBPF had been updated to match GCC, so that
-> > > > discussion worked to reduce the number of variants.
-> > > >
-> > > > As more instructions get added and supported by more tools and
-> > > > compilers there's the risk of even more variants unless it's
-> > standardized.
-> > > >
-> > > > Hence I'd recommend that BPF assembly language get documented in
-> > > > some WG draft.  If folks agree with that premise, the first
-> > > > question is
-> > > > then: which document?
+> > > yes.
+> > > Here is how I was thinking about the grouping:
+> > > 32-bit set: all 32-bit instructions those with BPF_ALU and =
+BPF_JMP32
+> > > and load/store.
 > > >
-> > > > One possible answer would be the ISA document that specifies the
-> > > > instructions, since that would the IANA registry could list the
-> > > > assembly for each instruction, and any future documents that add
-> > > > instructions would necessarily need to specify the assembly for
-> > > > them, preventing variants from springing up for new instructions.
+> > > 64-bit set: above plus BPF_ALU64 and BPF_JMP.
 > > >
-> > > I'm not opposed to this, but would strongly prefer that we do it as
-> > > an
-> > extension
-> > > if we go this route to avoid scope creep for the first iteration.
+> > > The idea is to allow for clean 32-bit HW offloads.
+> > > We can introduce a compiler flag that will only use such
+> > > instructions and will error when 64-bit math is needed.
+> > > Details need to be thought through, of course.
+> > > Right now I'm not sure whether we need to reduce sizeof(void*) to =
+4
+> > > in such a case or normal 8 will still work, but from ISA =
+perspective
+> > > everything is ready. 32-bit subregisters fit well.
+> > > The compiler work plus additional verifier smartness is needed, =
+but
+> > > the end result should be very nice.
+> > > Offload of bpf programs into 32-bit embedded devices will be =
+possible.
 > >
-> > If the first iteration does not have it, then presumably the initial
-> > IANA registry would not have it either, since this iteration creates
-> > the registry and the rules for it.
-> >
-> > That's doable, but may continue to proliferate more and more variants
-> > until it is addressed.
-> 
-> The same could be said for any new instructions that are added while we
-sort
-> out standardizing the assembly language as well, no?
+> > This is very interesting.
+> this is necessarily something we need to figure out now. Hopefully =
+this is all
+> stuff we can iron out once we start to really sink our teeth into the =
+ABI doc.
 
-Yes, that was my point.  If the initial ISA spec at time of publication
-includes the
-assembly language then there's no issue.
+"Integer Multiplication and Division" in this thread doesn't seem to =
+separate
+between 32-bit vs 64-bit.  Is the proposal that multiplication/division =
+is ok
+to require 64-bit operations?  I had expected one rationale for the =
+32bit
+multiplication/division instructions is to accommodate 32-bit-only
+implementations.   So should we have separate groups for 32-bit vs
+64-bit for the multiplication/division instructions?
 
-Not saying we have to wait, just that this which document to put it in is
-what the WG should agree on in my view.
-
-> > If it's in another document, do you agree it would still fall under
-> > the existing charter bullet about "defining the instructions"
-> > > [PS] the BPF instruction set architecture (ISA) that defines the
-> > > instructions and low-level virtual machine for BPF programs,
-> > ?
-> 
-> I wouldn't say it's illogical to group assembly language in this bucket,
-but I
-> would say that defining the assembly language does not need to be tied at
-the
-> hip with defining instruction encodings and semantics. So my answer is
-"yes, I
-> think it belongs here", but I also don't think it's necessary or desirable
-for the
-> first iteration.
-> 
-> > > > A second question would be, which dialect(s) to standardize.
-> > > > Jose's link above argues that the second dialect should be the one
-> > > > standardized (tools are free to support multiple dialects for
-> > > > backwards compat if they want).  See the link for rationale.
-> > >
-> > > My recollection was that the outcome of that discussion is that we
-> > > were
-> > going
-> > > to continue to support both. If we wanted to standardize, I have a
-> > > hard
-> > time
-> > > seeing any other way other than to standardize both dialects unless
-> > there's
-> > > been a significant change in sentiment since LSFMM.
-> >
-> > If "standardize both", does that mean neither is mandatory and each
-> > tool is free to pick one or the other?  And would the IANA registry
-> > require a document adding any new instructions to specify the assembly
-> > in both dialects?
-> 
-> Well, if we're standardizing on both, then yes I think it would be
-mandatory for
-> a tool to support both, and I think instructions would require assembly
-for both
-> dialects. Practically speaking that's already what's happening, no? Both
-dialects
-> are already pervasive, so it seems unlikely that a tool would succeed
-without
-> supporting both regardless.
-
-There's plenty of counter examples of things that exist (whether they
-"succeed"
-or not depends on the definition of succeed) that support or supported
-neither.
-E.g., uBPF prior to Jose's talk.
-
-> To Jose's point (pasted below), there are of course drawbacks:
-> 
-> > - Expensive :: it makes it very difficult to reuse infrastructure.
-> > - Problematic :: dis/assemblers, CGEN, LaTeX, editors, IDEs, etc.
-> > - Ambiguous :: with both GAS and llvm/MCParser: symbol assignments.
-> > - Pervasive :: because of the inline asm.
-> 
-> I think it would be a lot simpler to standardize on only a single dialect,
-but I also
-> think the standard should reflect how BPF is being used in practice.
+Similar question goes for the atomic instructions, i.e., should we
+have separate conformance groups for 32-bit vs 64-bit atomics?=20
 
 Dave
 
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
