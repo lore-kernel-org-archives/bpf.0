@@ -1,187 +1,301 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B124881206
-	for <bpf@vger.kernel.org>; Tue, 23 Jan 2024 16:45:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0508E7FBDD
+	for <bpf@vger.kernel.org>; Tue, 23 Jan 2024 17:20:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706028348; cv=none; b=aIehSWUrIJ0hQOqcUFuBJ5OrMFs6DJB41d0IwnZPL6xIk3lilhh6Sk/ukmC7Pj1FJbwi3cy0lSb3HIqzsARyKORxqUX7A5Q7onM384mFbLsYHhY+2GzcpXAmpS3N+SiZsWjE2DJgK5RL/kdxLJHTss1WbYBmjA9Li8xCI1Sfids=
+	t=1706030412; cv=none; b=O0uLbtiUyoxEStbqzv5fzkBWb30azV2Q6ZD+rbXfkJYverQOd2PNp7ElMwtJCQObM7TWrSzZ/dUXx9///a+Lz9ba8D5GroMK7PbgJheX1Z4ygT3sDTn0qh8eUghM1fDm8J7qxx+tr6VXqJt2wYwViD81ABfnfo5syXM1OTfts9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706028348; c=relaxed/simple;
-	bh=lDu9G+Ff1dW60mYYsxwbBoAuFgmg5Ly1VlO6i5Y7QGg=;
-	h=To:Cc:Date:Message-ID:MIME-Version:Subject:Content-Type:From; b=JUpHHgBK7i/X1x+nNwnapd9OLKqkf0uPj6GsPcZbJdOnKNCHi5S5dDQA8LmfXENL4DPDuwO8aFM351GlTHSTfzw3tav9Paw6WToMpLb3aSob9V0gkIrgL/fBRh8NOUnlzlt5eI11AnsFCvJerXCO7md1sIQrAj8R/5Uno2exobc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dmarc.ietf.org; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=i//HiCk7; dkim=fail (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=ve0mp93k reason="signature verification failed"; dkim=fail (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=LA4JVKEw reason="signature verification failed"; arc=none smtp.client-ip=50.223.129.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dmarc.ietf.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	s=arc-20240116; t=1706030412; c=relaxed/simple;
+	bh=GqymZgwTked5+XNhT6X0WKV3KEZw+S/QGN2w+C+BhhM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WKFXVVDS8WzYuipvIIn6Shxx4oU+WBxZrheMDBDbPrH0an1ytp6pIBIUzw0X/bIbPp2zDoVHuvXCYqRn+cr6XBFUkAsR1B+e7uMzsuxjCuU6ppaFUBX1fQqkJXamJS4UePADVBtynKZI3DTdDBKxPS0m/jbJJW5Crc6Tos+4PP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NKnPYWI4; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="i//HiCk7";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="ve0mp93k";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="LA4JVKEw"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id A3B89C1654F2
-	for <bpf@vger.kernel.org>; Tue, 23 Jan 2024 08:45:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1706028340; bh=lDu9G+Ff1dW60mYYsxwbBoAuFgmg5Ly1VlO6i5Y7QGg=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=i//HiCk7wcQl6Br4DqZHlnErwDb+ROcGlykgdscFimZk3fBAQ4clnXJhHyJy7sJf/
-	 aFD5X03PDy1sviEPAf3WcymetF+J6iTDD3p6HKbUA+qSrOVw3ys+9Vv+1IQMwfhJOO
-	 PK/pG9FNgTjEHmfJLqZXtoT4LeVqYcLLySJdeQ6Y=
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
- by ietfa.amsl.com (Postfix) with ESMTP id 6DAECC14F736;
- Tue, 23 Jan 2024 08:45:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
- t=1706028340; bh=lDu9G+Ff1dW60mYYsxwbBoAuFgmg5Ly1VlO6i5Y7QGg=;
- h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
- List-Post:List-Help:List-Subscribe;
- b=ve0mp93kPZ5eTJrIeUwQVxH5FTmTEPKzueEpxN5+mrXo8YqFDoiFjLex13OP0dEKD
- hMeaZOFAfm8UiP0ywYAwQ3I2VJifeojHj1lMQZBZverJU8WGYN8bfM89JpvA4yoqRx
- BK4kjeu4IefejROxNSmKnNw0b34AJwjPgEt4LyyQ=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id DEF7FC14F736
- for <bpf@ietfa.amsl.com>; Tue, 23 Jan 2024 08:45:39 -0800 (PST)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -1.855
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=googlemail.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 58FfEVfkxpuw for <bpf@ietfa.amsl.com>;
- Tue, 23 Jan 2024 08:45:36 -0800 (PST)
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com
- [IPv6:2607:f8b0:4864:20::629])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 0FE02C14F711
- for <bpf@ietf.org>; Tue, 23 Jan 2024 08:45:35 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id
- d9443c01a7336-1d746856d85so14001485ad.0
- for <bpf@ietf.org>; Tue, 23 Jan 2024 08:45:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1706028335; x=1706633135; darn=ietf.org;
- h=content-language:thread-index:content-transfer-encoding
- :mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
- :date:message-id:reply-to;
- bh=hJeeRlgxsANlNz0Rt6d8ZvxzmvGfpTKOibTWewiQ6bE=;
- b=LA4JVKEwiVWq1UAzSr+pVCLD+CwFbDNszOLnYB3kVczOmLWvjDxEAqHCWZ4mJFl91l
- VEyBkeEyeyCV0CElWdqG8anuh09JssrP04LIdKKvQGBtHQnUZFP5slrDGQyhnPMVIuND
- UlswgE4fDv6+JZyP3dsR8of9eX3tEygGvF0qd6moPpyUkJHWe4rrwP099oxmeKgP1rww
- yfdu8VZ181tVNgJvf+uHG+mT5/tx+Qp+wrfET3mBthQRLzKEIWfCFc61oTE/XMHoVVJh
- dEmpr/QjSCURY1lxw5m79Aj0+Cf96PzvsrLSmGAQiy7LgLqrICNq+tkcuFTql3dCGAuF
- xzmA==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NKnPYWI4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706030410;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qvMnjthq+Awy01sI4P4BVpc1Pmq9uYsd26Z4T84XqXs=;
+	b=NKnPYWI4nX05AJVap+0HADL02l0zNEFRzu9RZzd3+V7p6quy+kMtET7gegtqIN5Mh6WXPu
+	CrLeqBco4G5d1GQZddjUIgmyhS7oDbHdzn/PTwAEfFnFz/bmPt0DQolr2LB7iwNacNrNDx
+	fHBbpVFDFMIMalnIctg6oK3nZ408v0o=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-665-G-6JPXK2NPKlfKDO7KvcpA-1; Tue, 23 Jan 2024 12:20:05 -0500
+X-MC-Unique: G-6JPXK2NPKlfKDO7KvcpA-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a28f6a78b83so259796066b.1
+        for <bpf@vger.kernel.org>; Tue, 23 Jan 2024 09:20:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706028335; x=1706633135;
- h=content-language:thread-index:content-transfer-encoding
- :mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=hJeeRlgxsANlNz0Rt6d8ZvxzmvGfpTKOibTWewiQ6bE=;
- b=tx6OKZ7x4Qe516xGNBTpilUyc11eDmAnAbt9P/Mil6pwtjC+59m4abPloGEV3aWSx+
- cdK6CC54ZAuyauOWCQSlJkGx1MV0oEFaPaBPRsw4175wFUc/EZE0TtyK8YGJ1CnWK0J/
- ZsGBzZ2I9ImRYarFoEgnPdWhIpVmonRzP1IoDlJoiTSTADuZZ3uz4W+OsFLyOk0LBXxc
- ESzQ1rABoSF4n0nRjlCDqmCYfSfZ+Z7neYR/HLCVCUgLQT3Ryx+4zAp4+8MhlD4l4bzU
- 0/NIcK/j1tdvgTByMlCAwiceKRSQodyZBgWpVE3o0OtiQMrcAhFkkLI1Xiks4J/sLZAs
- HdAQ==
-X-Gm-Message-State: AOJu0Yw8cz4RC0lF4RYKf0j/4CtCNEWMT9KPgE/x/0i1JpN7aPEuLEZV
- lNAo6ZLyb4ONyqLmS/dLb0RtyNgI+C20+ZgfwKxoX7nvQwzEM+2+XYiyDfqOC94=
-X-Google-Smtp-Source: AGHT+IH5YOleyWPKHKBftw+0ZioHtNO2oUluCSxlv4Wypt1/y5qBh/9M6rgZ/7N0ez8IC7oUZ9wG4Q==
-X-Received: by 2002:a17:902:d2ca:b0:1d7:6e2d:db5d with SMTP id
- n10-20020a170902d2ca00b001d76e2ddb5dmr1038301plc.40.1706028334876; 
- Tue, 23 Jan 2024 08:45:34 -0800 (PST)
-Received: from ArmidaleLaptop (c-67-170-74-237.hsd1.wa.comcast.net.
- [67.170.74.237]) by smtp.gmail.com with ESMTPSA id
- s4-20020a170902988400b001d7180b107fsm7618936plp.228.2024.01.23.08.45.33
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Tue, 23 Jan 2024 08:45:34 -0800 (PST)
-X-Google-Original-From: <dthaler1968@gmail.com>
-To: <bpf@ietf.org>
-Cc: <bpf@vger.kernel.org>
-Date: Tue, 23 Jan 2024 08:45:32 -0800
-Message-ID: <1b5d01da4e1b$95506b50$bff141f0$@gmail.com>
+        d=1e100.net; s=20230601; t=1706030400; x=1706635200;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qvMnjthq+Awy01sI4P4BVpc1Pmq9uYsd26Z4T84XqXs=;
+        b=d7qWnRe6JvREZNyOLhCTD/VJebkwZeXOX5MeuPeTRa8bz8SEwGpbFHzMFHATGcVN5M
+         LCThaQ+OIAY/3cwhlpH7/7+OiztMjOpbiLbWtTTz5I90DQVpb3RlsPoidLh6YQZKWhMO
+         KvJov1IRsJ1pxREjtZUOw+YNMTFt6JtVYDlC+WJwyWreRoIyyGnuxps4hwxXavC2cQpR
+         U6FCLnTG5lID+oduKnJnVv3OnEPEoMCa83eCtmPgyHRoEIN41nzMVN79aqAKdxAJGYPl
+         dXgFCqkzix56UfjoFY4WyA6FzNurjVTYWP73sDRfqAm8b0WmafLGMLY3lYaq1N/OGOJb
+         JTLw==
+X-Gm-Message-State: AOJu0Yxg9574KjnLNHNBS8ks/K1NNH3vynnPdtRxzjWYU+a6IcrzYZjz
+	WlqvmX/h+v88wbjWVJ6valxpfIUVHPkiTuyV6FfuQfEKLqt9ZKI/sSdzkZdntaLPER+RKyuy89P
+	8v91PdZXKJsKVkFPQASJGdphmj6KJ8F/0QiNnGGnr8svt7xgE29Eqvg2tts+NWaNCTuTdEw+5if
+	T32nTdItlm/80Gw64g6Bufogc3
+X-Received: by 2002:a17:906:1188:b0:a28:fa54:ff4a with SMTP id n8-20020a170906118800b00a28fa54ff4amr118352eja.22.1706030400514;
+        Tue, 23 Jan 2024 09:20:00 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEPOZl83YA2N8qsXe+qnAtEJFZwHFDV6hE8rnu3gGAIBnZ2b7P9KgV8ewZkza2RLuFLKFPszeLOMUaeUTluRPg=
+X-Received: by 2002:a17:906:1188:b0:a28:fa54:ff4a with SMTP id
+ n8-20020a170906118800b00a28fa54ff4amr118344eja.22.1706030400161; Tue, 23 Jan
+ 2024 09:20:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AdpOGXKikUBFay9kQuqigSHEQGpbcw==
-Content-Language: en-us
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/Chk8V9G-i2NTEUahw3HntrRC7N0>
-Subject: [Bpf] Standardizing BPF assembly language?
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-X-Original-From: dthaler1968@googlemail.com
-From: dthaler1968=40googlemail.com@dmarc.ietf.org
-Message-ID: <20240123164532.rNgLuThIBbJ4pBg1tOCacM5AyM2JMpdXaHiVxhrC2Zw@z>
+References: <20240123-b4-hid-bpf-fixes-v1-0-aa1fac734377@kernel.org> <20240123-b4-hid-bpf-fixes-v1-1-aa1fac734377@kernel.org>
+In-Reply-To: <20240123-b4-hid-bpf-fixes-v1-1-aa1fac734377@kernel.org>
+From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date: Tue, 23 Jan 2024 18:19:48 +0100
+Message-ID: <CAO-hwJJcYuJ18rfRHCy4UH5_A=dSZCWKwo3YwvAgs+RqEP88Zg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] HID: bpf: remove double fdget()
+To: Benjamin Tissoires <bentiss@kernel.org>
+Cc: Jiri Kosina <jikos@kernel.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-At LSF/MM/BPF 2023, Jose gave a presentation about BPF assembly
-language (http://vger.kernel.org/bpfconf2023_material/compiled_bpf.txt).
-
-Jose wrote in that link:
-> There are two dialects of BPF assembler in use today:
+On Tue, Jan 23, 2024 at 5:41=E2=80=AFPM Benjamin Tissoires <bentiss@kernel.=
+org> wrote:
 >
-> - A "pseudo-c" dialect (originally "BPF verifier format")
->  : r1 = *(u64 *)(r2 + 0x00f0)
->  : if r1 > 2 goto label
->  : lock *(u32 *)(r2 + 10) += r3
+> When the kfunc hid_bpf_attach_prog() is called, we called twice fdget():
+> one for fetching the type of the bpf program, and one for actually
+> attaching the program to the device.
 >
-> - An "assembler-like" dialect
->  : ldxdw %r1, [%r2 + 0x00f0]
->  : jgt %r1, 2, label
->  : xaddw [%r2 + 2], r3
+> The problem is that between those two calls, we have no guarantees that
+> the prog_fd is still the same file descriptor for the given program.
+>
+> Solve this by calling bpf_prog_get() earlier, and use this to fetch the
+> program type.
+>
+> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Link: https://lore.kernel.org/bpf/CAO-hwJJ8vh8JD3-P43L-_CLNmPx0hWj44aom0O=
+838vfP4=3D_1CA@mail.gmail.com/T/#t
+> Cc: stable@vger.kernel.org
 
-During Jose's talk, I discovered that uBPF didn't quote match the second
-dialect
-and submitted a bug report.  By the time the conference was over, uBPF had
-been updated to match GCC, so that discussion worked to reduce the number of
-variants.
+Sigh, I forgot:
 
-As more instructions get added and supported by more tools and compilers
-there's the risk of even more variants unless it's standardized.
+Fixes: f5c27da4e3c8 ("HID: initial BPF implementation")
 
-Hence I'd recommend that BPF assembly language get documented in some WG
-draft.  If folks agree with that premise, the first question is then: which
-document?
-One possible answer would be the ISA document that specifies the
-instructions,
-since that would the IANA registry could list the assembly for each
-instruction,
-and any future documents that add instructions would necessarily need to
-specify
-the assembly for them, preventing variants from springing up for new
-instructions.
+Cheers,
+Benjamin
 
-A second question would be, which dialect(s) to standardize.  Jose's link
-above
-argues that the second dialect should be the one standardized (tools are
-free to
-support multiple dialects for backwards compat if they want).  See the link
-for
-rationale.
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+> ---
+>  drivers/hid/bpf/hid_bpf_dispatch.c  | 66 ++++++++++++++++++++++++-------=
+------
+>  drivers/hid/bpf/hid_bpf_dispatch.h  |  4 +--
+>  drivers/hid/bpf/hid_bpf_jmp_table.c | 20 ++---------
+>  3 files changed, 49 insertions(+), 41 deletions(-)
+>
+> diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf=
+_dispatch.c
+> index d9ef45fcaeab..5111d1fef0d3 100644
+> --- a/drivers/hid/bpf/hid_bpf_dispatch.c
+> +++ b/drivers/hid/bpf/hid_bpf_dispatch.c
+> @@ -241,6 +241,39 @@ int hid_bpf_reconnect(struct hid_device *hdev)
+>         return 0;
+>  }
+>
+> +static int do_hid_bpf_attach_prog(struct hid_device *hdev, int prog_fd, =
+struct bpf_prog *prog,
+> +                                 __u32 flags)
+> +{
+> +       int fd, err, prog_type;
+> +
+> +       prog_type =3D hid_bpf_get_prog_attach_type(prog);
+> +       if (prog_type < 0)
+> +               return prog_type;
+> +
+> +       if (prog_type >=3D HID_BPF_PROG_TYPE_MAX)
+> +               return -EINVAL;
+> +
+> +       if (prog_type =3D=3D HID_BPF_PROG_TYPE_DEVICE_EVENT) {
+> +               err =3D hid_bpf_allocate_event_data(hdev);
+> +               if (err)
+> +                       return err;
+> +       }
+> +
+> +       fd =3D __hid_bpf_attach_prog(hdev, prog_type, prog_fd, prog, flag=
+s);
+> +       if (fd < 0)
+> +               return fd;
+> +
+> +       if (prog_type =3D=3D HID_BPF_PROG_TYPE_RDESC_FIXUP) {
+> +               err =3D hid_bpf_reconnect(hdev);
+> +               if (err) {
+> +                       close_fd(fd);
+> +                       return err;
+> +               }
+> +       }
+> +
+> +       return fd;
+> +}
+> +
+>  /**
+>   * hid_bpf_attach_prog - Attach the given @prog_fd to the given HID devi=
+ce
+>   *
+> @@ -257,18 +290,13 @@ noinline int
+>  hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags)
+>  {
+>         struct hid_device *hdev;
+> +       struct bpf_prog *prog;
+>         struct device *dev;
+> -       int fd, err, prog_type =3D hid_bpf_get_prog_attach_type(prog_fd);
+> +       int fd;
+>
+>         if (!hid_bpf_ops)
+>                 return -EINVAL;
+>
+> -       if (prog_type < 0)
+> -               return prog_type;
+> -
+> -       if (prog_type >=3D HID_BPF_PROG_TYPE_MAX)
+> -               return -EINVAL;
+> -
+>         if ((flags & ~HID_BPF_FLAG_MASK))
+>                 return -EINVAL;
+>
+> @@ -278,23 +306,17 @@ hid_bpf_attach_prog(unsigned int hid_id, int prog_f=
+d, __u32 flags)
+>
+>         hdev =3D to_hid_device(dev);
+>
+> -       if (prog_type =3D=3D HID_BPF_PROG_TYPE_DEVICE_EVENT) {
+> -               err =3D hid_bpf_allocate_event_data(hdev);
+> -               if (err)
+> -                       return err;
+> -       }
+> +       /*
+> +        * take a ref on the prog itself, it will be released
+> +        * on errors or when it'll be detached
+> +        */
+> +       prog =3D bpf_prog_get(prog_fd);
+> +       if (IS_ERR(prog))
+> +               return PTR_ERR(prog);
+>
+> -       fd =3D __hid_bpf_attach_prog(hdev, prog_type, prog_fd, flags);
+> +       fd =3D do_hid_bpf_attach_prog(hdev, prog_fd, prog, flags);
+>         if (fd < 0)
+> -               return fd;
+> -
+> -       if (prog_type =3D=3D HID_BPF_PROG_TYPE_RDESC_FIXUP) {
+> -               err =3D hid_bpf_reconnect(hdev);
+> -               if (err) {
+> -                       close_fd(fd);
+> -                       return err;
+> -               }
+> -       }
+> +               bpf_prog_put(prog);
+>
+>         return fd;
+>  }
+> diff --git a/drivers/hid/bpf/hid_bpf_dispatch.h b/drivers/hid/bpf/hid_bpf=
+_dispatch.h
+> index 63dfc8605cd2..fbe0639d09f2 100644
+> --- a/drivers/hid/bpf/hid_bpf_dispatch.h
+> +++ b/drivers/hid/bpf/hid_bpf_dispatch.h
+> @@ -12,9 +12,9 @@ struct hid_bpf_ctx_kern {
+>
+>  int hid_bpf_preload_skel(void);
+>  void hid_bpf_free_links_and_skel(void);
+> -int hid_bpf_get_prog_attach_type(int prog_fd);
+> +int hid_bpf_get_prog_attach_type(struct bpf_prog *prog);
+>  int __hid_bpf_attach_prog(struct hid_device *hdev, enum hid_bpf_prog_typ=
+e prog_type, int prog_fd,
+> -                         __u32 flags);
+> +                         struct bpf_prog *prog, __u32 flags);
+>  void __hid_bpf_destroy_device(struct hid_device *hdev);
+>  int hid_bpf_prog_run(struct hid_device *hdev, enum hid_bpf_prog_type typ=
+e,
+>                      struct hid_bpf_ctx_kern *ctx_kern);
+> diff --git a/drivers/hid/bpf/hid_bpf_jmp_table.c b/drivers/hid/bpf/hid_bp=
+f_jmp_table.c
+> index eca34b7372f9..12f7cebddd73 100644
+> --- a/drivers/hid/bpf/hid_bpf_jmp_table.c
+> +++ b/drivers/hid/bpf/hid_bpf_jmp_table.c
+> @@ -333,15 +333,10 @@ static int hid_bpf_insert_prog(int prog_fd, struct =
+bpf_prog *prog)
+>         return err;
+>  }
+>
+> -int hid_bpf_get_prog_attach_type(int prog_fd)
+> +int hid_bpf_get_prog_attach_type(struct bpf_prog *prog)
+>  {
+> -       struct bpf_prog *prog =3D NULL;
+> -       int i;
+>         int prog_type =3D HID_BPF_PROG_TYPE_UNDEF;
+> -
+> -       prog =3D bpf_prog_get(prog_fd);
+> -       if (IS_ERR(prog))
+> -               return PTR_ERR(prog);
+> +       int i;
+>
+>         for (i =3D 0; i < HID_BPF_PROG_TYPE_MAX; i++) {
+>                 if (hid_bpf_btf_ids[i] =3D=3D prog->aux->attach_btf_id) {
+> @@ -350,8 +345,6 @@ int hid_bpf_get_prog_attach_type(int prog_fd)
+>                 }
+>         }
+>
+> -       bpf_prog_put(prog);
+> -
+>         return prog_type;
+>  }
+>
+> @@ -388,19 +381,13 @@ static const struct bpf_link_ops hid_bpf_link_lops =
+=3D {
+>  /* called from syscall */
+>  noinline int
+>  __hid_bpf_attach_prog(struct hid_device *hdev, enum hid_bpf_prog_type pr=
+og_type,
+> -                     int prog_fd, __u32 flags)
+> +                     int prog_fd, struct bpf_prog *prog, __u32 flags)
+>  {
+>         struct bpf_link_primer link_primer;
+>         struct hid_bpf_link *link;
+> -       struct bpf_prog *prog =3D NULL;
+>         struct hid_bpf_prog_entry *prog_entry;
+>         int cnt, err =3D -EINVAL, prog_table_idx =3D -1;
+>
+> -       /* take a ref on the prog itself */
+> -       prog =3D bpf_prog_get(prog_fd);
+> -       if (IS_ERR(prog))
+> -               return PTR_ERR(prog);
+> -
+>         mutex_lock(&hid_bpf_attach_lock);
+>
+>         link =3D kzalloc(sizeof(*link), GFP_USER);
+> @@ -467,7 +454,6 @@ __hid_bpf_attach_prog(struct hid_device *hdev, enum h=
+id_bpf_prog_type prog_type,
+>   err_unlock:
+>         mutex_unlock(&hid_bpf_attach_lock);
+>
+> -       bpf_prog_put(prog);
+>         kfree(link);
+>
+>         return err;
+>
+> --
+> 2.43.0
+>
 
-Thoughts?
-
-Dave
-
-
-
-
-
-
-
-
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
