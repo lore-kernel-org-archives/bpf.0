@@ -1,187 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55E2F82D7C;
-	Tue, 23 Jan 2024 16:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F8B8003E
+	for <bpf@vger.kernel.org>; Tue, 23 Jan 2024 16:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706028063; cv=none; b=EnG0X/8qw6dLaRzL/zEjVQ2SrAT+5IM5VpJ2yu4AGUVHOsYf8ZeGXTHeon8wKnESOsDq7GZtoHg2J1cNZZelY0F/EsVTTniFjjcXsQKTOYy+cUNqt4xbR/E7lo0r+WK0SWsW0hga7S7q6vlvXAFsJ7OsKC7uP3J3vToVy3SPW/I=
+	t=1706028337; cv=none; b=t42ktFZDw5MV56uPk37VNJMs7SeeSzHFX6WJCflKjQNDjSYQQD8u6PlvXhgbJ+00m1BrvvrpORxvJ+nzdXlFtcHN553tC2GwpQEC9xq9VO5a0VzPjMUxIefYUQUgbkzaPE3zAjL+wfjfDqInzlfZ2J0LGEPPqc6PEcIlKUV7Inc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706028063; c=relaxed/simple;
-	bh=k8S+SH5DCWnhTkXa53WVFA61i4bptiV+YN7U96SThXg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eteccKHG5XfjUJCNJJobhcZc3N12WkfgXZNMbY9yKBXpudJk5AVXGB8cIjsrAUkxQvulXYfmSGSBzMumqI5nt59Jh613f8MkJESbhvC2R+KHbVtlgtpDK+Lj4H8g3f1FU+XCsOwfSjJdOavpp+zX66dgjBmKf+6qiTS1iQLr+nY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zfhb0bcm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706028337; c=relaxed/simple;
+	bh=dRFUgGo5pvYYX7PbjaDmbyD1PuEmwTtMqyMUOf26NRQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WycwgRgrzgbpDludL3hm1JoW2PvbynKx9kKVrgxUf7BEM3YH22a2H/9y9z1M2IKdhZKR84ray32WmXwLbDmjRmM9AI9TQj6xqAAyxGo3hXenDmXeYtIgr3D8XMn2b10UgYWbsqtAooEr9ZwjGemsv65bzVBdIza97DPk0FsFdsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=UG0iJbJw; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zfhb0bcm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D597C43394;
-	Tue, 23 Jan 2024 16:41:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706028062;
-	bh=k8S+SH5DCWnhTkXa53WVFA61i4bptiV+YN7U96SThXg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Zfhb0bcmmpNNXl1tRUjGGrIxhWExV75hs6steNvB46IBMMwsJtf/0gv+gnLnMfAov
-	 eNSonxBFI7udiXbyi88HCdnylw06odPVuK01sIRFLtjRlyuLYI4Z215ghLpAti5zxR
-	 FhxAb6DekkMMfB+loBiaqPC0zA72IkRBy3t0nmOqz1lrzdl+7dgZ/o6Q8FreAW5Vuq
-	 Cw/2lIPsKyGZ64Bn0vFWNaPsstOfbjTNeyyDkCXrBPnATOhpfQIWQxiBDLJezVcXIO
-	 5gJlqc6c/hJGwXMPfCX4cOqmx6pjf4ktY6wpfgJa0EoqFtmXhlFC0k8eckAKgmWQjZ
-	 1yjGX+9jjm27w==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Tue, 23 Jan 2024 17:40:44 +0100
-Subject: [PATCH 2/2] HID: bpf: use __bpf_kfunc instead of noinline
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="UG0iJbJw"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1d72f71f222so15475245ad.1
+        for <bpf@vger.kernel.org>; Tue, 23 Jan 2024 08:45:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1706028335; x=1706633135; darn=vger.kernel.org;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hJeeRlgxsANlNz0Rt6d8ZvxzmvGfpTKOibTWewiQ6bE=;
+        b=UG0iJbJwjoTkKhZPdVmcsqqmFG5o+Rbd3UTZYE2WG2wkK3FTlEzVi5n/FZ/yHWKGeL
+         1AXMV5FyqZEtlKuPmgHE0TEz8gxe4rloTH8L2eCI+nslOAzIziIZ6OXIPo69GXAykpnS
+         ohBDvitUTpBATspqmoRuOuoJ2GVcmAkl1ECshMDujlqCmbziARIqRhtUi7l8mLFYmi3l
+         qhAjDoajqHx694pLNA8kxkLSrJUIbRJUKfN958AT2mEOkAyt4XUoh3hurK9DKkhuwN3m
+         kQj8LOz5zqaVq0fyijH4WLQtR3AW5cupKUCrN8iqIGuzp1PcMXaddl+9E4YilxdvVOa+
+         0xug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706028335; x=1706633135;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hJeeRlgxsANlNz0Rt6d8ZvxzmvGfpTKOibTWewiQ6bE=;
+        b=uGD2BaPhe2inLaOz6/p16srhenwjOMPgSxZxH/09bqkhyKU3YT7f5YFRnjOXa/Hzfg
+         ra+Y0ELXfsEsaF67VHsSTBOkAEREJEPOkT9UsGQtwztOQvqEIpDSsu8CqCKLeGNNtfa3
+         /wRZY+wXmxhmWi0d6PLmKvPhx7WhT3GnOppbggmgweldZ2V4Gpc4dp5/HN7sGKiGO26Q
+         BMqqG9yqQWK9O9Rr/k4O3xlM5RMEdgK0j2k0KqV4k4xfGAeUAUFEg9XKoxdasgvQHb5p
+         jTZs8N6UusKslCkf6xb81BIX6mM9Y+PdJCOO2yCLQurNhXXyfUJP1lB1ubniEFgZuqH6
+         6leQ==
+X-Gm-Message-State: AOJu0YwawOS0zo2xwwj1NDtWenYMTmcUnBmp++cU6BPbOIobAgZbGJ8o
+	JDwQXTIUm+j5NM5OG5ihGuN0u0hVcnLNJtU0C8o2WAPsX01A2J+i98fjMFizujU=
+X-Google-Smtp-Source: AGHT+IH5YOleyWPKHKBftw+0ZioHtNO2oUluCSxlv4Wypt1/y5qBh/9M6rgZ/7N0ez8IC7oUZ9wG4Q==
+X-Received: by 2002:a17:902:d2ca:b0:1d7:6e2d:db5d with SMTP id n10-20020a170902d2ca00b001d76e2ddb5dmr1038301plc.40.1706028334876;
+        Tue, 23 Jan 2024 08:45:34 -0800 (PST)
+Received: from ArmidaleLaptop (c-67-170-74-237.hsd1.wa.comcast.net. [67.170.74.237])
+        by smtp.gmail.com with ESMTPSA id s4-20020a170902988400b001d7180b107fsm7618936plp.228.2024.01.23.08.45.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Jan 2024 08:45:34 -0800 (PST)
+From: dthaler1968@googlemail.com
+X-Google-Original-From: <dthaler1968@gmail.com>
+To: <bpf@ietf.org>
+Cc: <bpf@vger.kernel.org>
+Subject: Standardizing BPF assembly language?
+Date: Tue, 23 Jan 2024 08:45:32 -0800
+Message-ID: <1b5d01da4e1b$95506b50$bff141f0$@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain;
+	charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240123-b4-hid-bpf-fixes-v1-2-aa1fac734377@kernel.org>
-References: <20240123-b4-hid-bpf-fixes-v1-0-aa1fac734377@kernel.org>
-In-Reply-To: <20240123-b4-hid-bpf-fixes-v1-0-aa1fac734377@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>, 
- Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
- Dan Carpenter <dan.carpenter@linaro.org>, 
- Daniel Borkmann <daniel@iogearbox.net>
-Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1706028056; l=4626;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=k8S+SH5DCWnhTkXa53WVFA61i4bptiV+YN7U96SThXg=;
- b=Inil0fQhKQFZtbu547ZVCCFw83S3vcuZ5g+odjPhLN7Fq//HjtK3YoCZ7xV6xbvHSaTQWy9wm
- 2navsiW7JaSAFcpU1GuMeRJEsJ2CYXKwNIBW4toGoRedOlB5xdtFvUM
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AdpOGXKikUBFay9kQuqigSHEQGpbcw==
+Content-Language: en-us
 
-Follow the docs at Documentation/bpf/kfuncs.rst:
-- declare the function with `__bpf_kfunc`
-- disables missing prototype warnings, which allows to remove them from
-  include/linux/hid-bpf.h
+At LSF/MM/BPF 2023, Jose gave a presentation about BPF assembly
+language (http://vger.kernel.org/bpfconf2023_material/compiled_bpf.txt).
 
-Removing the prototypes is not an issue because we currently have to
-redeclare them when writing the BPF program. They will eventually be
-generated by bpftool directly AFAIU.
+Jose wrote in that link:
+> There are two dialects of BPF assembler in use today:
+>
+> - A "pseudo-c" dialect (originally "BPF verifier format")
+>  : r1 = *(u64 *)(r2 + 0x00f0)
+>  : if r1 > 2 goto label
+>  : lock *(u32 *)(r2 + 10) += r3
+>
+> - An "assembler-like" dialect
+>  : ldxdw %r1, [%r2 + 0x00f0]
+>  : jgt %r1, 2, label
+>  : xaddw [%r2 + 2], r3
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
----
- drivers/hid/bpf/hid_bpf_dispatch.c | 22 +++++++++++++++++-----
- include/linux/hid_bpf.h            | 11 -----------
- 2 files changed, 17 insertions(+), 16 deletions(-)
+During Jose's talk, I discovered that uBPF didn't quote match the second
+dialect
+and submitted a bug report.  By the time the conference was over, uBPF had
+been updated to match GCC, so that discussion worked to reduce the number of
+variants.
 
-diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
-index 5111d1fef0d3..119e4f03df55 100644
---- a/drivers/hid/bpf/hid_bpf_dispatch.c
-+++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-@@ -143,6 +143,11 @@ u8 *call_hid_bpf_rdesc_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *s
- }
- EXPORT_SYMBOL_GPL(call_hid_bpf_rdesc_fixup);
- 
-+/* Disables missing prototype warnings */
-+__diag_push();
-+__diag_ignore_all("-Wmissing-prototypes",
-+		  "Global kfuncs as their definitions will be in BTF");
-+
- /**
-  * hid_bpf_get_data - Get the kernel memory pointer associated with the context @ctx
-  *
-@@ -152,7 +157,7 @@ EXPORT_SYMBOL_GPL(call_hid_bpf_rdesc_fixup);
-  *
-  * @returns %NULL on error, an %__u8 memory pointer on success
-  */
--noinline __u8 *
-+__bpf_kfunc __u8 *
- hid_bpf_get_data(struct hid_bpf_ctx *ctx, unsigned int offset, const size_t rdwr_buf_size)
- {
- 	struct hid_bpf_ctx_kern *ctx_kern;
-@@ -167,6 +172,7 @@ hid_bpf_get_data(struct hid_bpf_ctx *ctx, unsigned int offset, const size_t rdwr
- 
- 	return ctx_kern->data + offset;
- }
-+__diag_pop(); /* missing prototype warnings */
- 
- /*
-  * The following set contains all functions we agree BPF programs
-@@ -274,6 +280,11 @@ static int do_hid_bpf_attach_prog(struct hid_device *hdev, int prog_fd, struct b
- 	return fd;
- }
- 
-+/* Disables missing prototype warnings */
-+__diag_push();
-+__diag_ignore_all("-Wmissing-prototypes",
-+		  "Global kfuncs as their definitions will be in BTF");
-+
- /**
-  * hid_bpf_attach_prog - Attach the given @prog_fd to the given HID device
-  *
-@@ -286,7 +297,7 @@ static int do_hid_bpf_attach_prog(struct hid_device *hdev, int prog_fd, struct b
-  * is pinned to the BPF file system).
-  */
- /* called from syscall */
--noinline int
-+__bpf_kfunc int
- hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags)
- {
- 	struct hid_device *hdev;
-@@ -328,7 +339,7 @@ hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags)
-  *
-  * @returns A pointer to &struct hid_bpf_ctx on success, %NULL on error.
-  */
--noinline struct hid_bpf_ctx *
-+__bpf_kfunc struct hid_bpf_ctx *
- hid_bpf_allocate_context(unsigned int hid_id)
- {
- 	struct hid_device *hdev;
-@@ -359,7 +370,7 @@ hid_bpf_allocate_context(unsigned int hid_id)
-  * @ctx: the HID-BPF context to release
-  *
-  */
--noinline void
-+__bpf_kfunc void
- hid_bpf_release_context(struct hid_bpf_ctx *ctx)
- {
- 	struct hid_bpf_ctx_kern *ctx_kern;
-@@ -380,7 +391,7 @@ hid_bpf_release_context(struct hid_bpf_ctx *ctx)
-  *
-  * @returns %0 on success, a negative error code otherwise.
-  */
--noinline int
-+__bpf_kfunc int
- hid_bpf_hw_request(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz,
- 		   enum hid_report_type rtype, enum hid_class_request reqtype)
- {
-@@ -448,6 +459,7 @@ hid_bpf_hw_request(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz,
- 	kfree(dma_data);
- 	return ret;
- }
-+__diag_pop(); /* missing prototype warnings */
- 
- /* our HID-BPF entrypoints */
- BTF_SET8_START(hid_bpf_fmodret_ids)
-diff --git a/include/linux/hid_bpf.h b/include/linux/hid_bpf.h
-index 840cd254172d..7118ac28d468 100644
---- a/include/linux/hid_bpf.h
-+++ b/include/linux/hid_bpf.h
-@@ -77,17 +77,6 @@ enum hid_bpf_attach_flags {
- int hid_bpf_device_event(struct hid_bpf_ctx *ctx);
- int hid_bpf_rdesc_fixup(struct hid_bpf_ctx *ctx);
- 
--/* Following functions are kfunc that we export to BPF programs */
--/* available everywhere in HID-BPF */
--__u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx, unsigned int offset, const size_t __sz);
--
--/* only available in syscall */
--int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags);
--int hid_bpf_hw_request(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz,
--		       enum hid_report_type rtype, enum hid_class_request reqtype);
--struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id);
--void hid_bpf_release_context(struct hid_bpf_ctx *ctx);
--
- /*
-  * Below is HID internal
-  */
+As more instructions get added and supported by more tools and compilers
+there's the risk of even more variants unless it's standardized.
 
--- 
-2.43.0
+Hence I'd recommend that BPF assembly language get documented in some WG
+draft.  If folks agree with that premise, the first question is then: which
+document?
+One possible answer would be the ISA document that specifies the
+instructions,
+since that would the IANA registry could list the assembly for each
+instruction,
+and any future documents that add instructions would necessarily need to
+specify
+the assembly for them, preventing variants from springing up for new
+instructions.
+
+A second question would be, which dialect(s) to standardize.  Jose's link
+above
+argues that the second dialect should be the one standardized (tools are
+free to
+support multiple dialects for backwards compat if they want).  See the link
+for
+rationale.
+
+Thoughts?
+
+Dave
+
+
+
+
+
+
+
 
