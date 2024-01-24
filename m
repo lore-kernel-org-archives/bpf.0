@@ -1,86 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7599E15A8;
-	Wed, 24 Jan 2024 01:53:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 936E715C4
+	for <bpf@vger.kernel.org>; Wed, 24 Jan 2024 02:08:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706061199; cv=none; b=lv59mDnjFSVZsk7K6LuyanhV2a91/ojA+KkYDl4sD5E49RMhxRWFR4FTWdOaAzQfibxzbm72ESMUuMSqbYeCYJV3BNhtfLbCXnFcuS31hGjG3VGT2wjq2jUNhPM63ViYrJTWP0xVeMuYJZ5wU2GRQL2erPTB1Nq8o+0no4dgeXc=
+	t=1706062084; cv=none; b=CbfJJ8M2wBH3DrOruMbCoaTKnL+bt8nex5i6bQCYq+gg+VZ7BrWNk7e2PIT9eqNHecXcedxXDCBHsPZAzDwOAn13MFecD3rOs7xqEUrn/zga2q8H6czPOrGBNH667ymYup+1VFKHUdxh3zu9MMCcBNS/RI4pZb0WLKZ0SeDvjzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706061199; c=relaxed/simple;
-	bh=j7t27oDh4HaoBk4FY5/kZ5s13IHwgzwGRrYuqruPWvU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W63Y8tJKDa1nZjDTEl1kd2KERPA8lT0/gA1RjgdbvEx6HrLjNg3jAIsGok4HaDP5cYgbFihxJLtGpZGIbGKWxN2qqUM071PPp4mpbA3Bcl8Kcl3cWxKN8Jh8R3oAjEUHGHqwdg+NEaYs3CGRcnTAvqEhuq0S86lxDyhfYNRfW24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B5uHJrNT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706062084; c=relaxed/simple;
+	bh=ORDqmNyoFiNfL8xBf2GJYatc3BnkgRqqdKYZIsEvWdA=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type; b=CphNJnqGOieeR3RLDUnL7tLFvJo0BmtnyX8jfo9CbQbU3NYw1MdI9H+PEVn0seBopUs+fxK8Tr4lP1N7QMlnHXbwpdb8cD3DiIYFgQS//HpCkAkv8506kn/kG2dDXxpYuXAY56MR7L1N+4qc8/x6BOSEGseb9PYco28wWx9Ba/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=B5/fHKkk; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B5uHJrNT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6449BC433F1;
-	Wed, 24 Jan 2024 01:53:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706061199;
-	bh=j7t27oDh4HaoBk4FY5/kZ5s13IHwgzwGRrYuqruPWvU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=B5uHJrNTvjF5HvVIugTHGBxI9nLqYC/rqpC9F5gZFUgGvPgGbEgEYUAOPS7gAxvcN
-	 3BymLIhn7JRSGm7BOgxMcMvbZUHSvJojMvPxTRXZIUutj/OhY84/e2W7TVAkZaWDLK
-	 4vtGnEPk9ItHuXdYMcgpU3nmFzJBfUxEdZrma5EzV3x3fKekUegd8YNh3QDnCyxgvJ
-	 hn/iv9uNYsO6byDoho3gUCrqiIUbx/jAFlD/sdAUGrlYrBsal2Ft9TjvAJYuPAZuVk
-	 UiL8HJ5ga0q+eNk5SbaMhveZrcGjRiCGhlnkZpFxPJ7uWm99uUxeB+OhZEXhH4yJrd
-	 xrj7N9OMhsFAg==
-Date: Tue, 23 Jan 2024 17:53:17 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, netdev@vger.kernel.org, magnus.karlsson@intel.com,
- bjorn@kernel.org, echaudro@redhat.com, lorenzo@kernel.org,
- martin.lau@linux.dev, tirthendu.sarkar@intel.com, john.fastabend@gmail.com,
- horms@kernel.org
-Subject: Re: [PATCH v5 bpf 03/11] xsk: fix usage of multi-buffer BPF helpers
- for ZC XDP
-Message-ID: <20240123175317.730c2e21@kernel.org>
-In-Reply-To: <20240122221610.556746-4-maciej.fijalkowski@intel.com>
-References: <20240122221610.556746-1-maciej.fijalkowski@intel.com>
-	<20240122221610.556746-4-maciej.fijalkowski@intel.com>
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="B5/fHKkk"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1d7431e702dso20883495ad.1
+        for <bpf@vger.kernel.org>; Tue, 23 Jan 2024 18:08:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1706062083; x=1706666883; darn=vger.kernel.org;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/XBycsmOrT3bPgt7CXEBezh1Q8tlHI1tmL3p2LUsFeQ=;
+        b=B5/fHKkkktHyvbdZ26YB+DHLqHQPatLqdSH20BwTSOzm6Jcj9LGW5FisikvBqXArTB
+         ZLGvYp+VuAgwMPlvbWAJmCbV4LAwzFSVVVe2Yz0l4nwU4uabtx+QMNmB5LKUZ4wRk78r
+         v7jqwz9YuKkdtdEkXRcsbqDxscCSKOklXqtbffAku7O/gJs71GLFF7JVqr2Bnob7fRz7
+         Ko2FpctJK542N7BYmEowJvAtGXQEBm1AGhNBzYqn1ofpRSsxDXBvuhoNmnLkbxN5ZLDV
+         zTROZXlJ2cHluCGuNUhKwNg1cHRXV01tLG6Lty3YAaygAB4B/wwtSVhcFOPTDozdJKwQ
+         HnRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706062083; x=1706666883;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/XBycsmOrT3bPgt7CXEBezh1Q8tlHI1tmL3p2LUsFeQ=;
+        b=JPP3FTVBNxHOJ9ecbOGREGxGMZIHLB+n7nFYiRlvV1JrIQNnpdb8zCmZYIOs02h+M+
+         XI5jiOhfZVf7uHb3uHYouoJdGc27nopJxE0RhAv4Z5pZzQ5BkXzcxydoS3pQ3Pxxztd5
+         rwYAL/B0j2SC9nUmvGDC46ZsuuysRpetgf22uEEJyHfaS+3skY2EmAKG/pM2fXqZn5Uk
+         kjlVHTjY5RewrUPWR9nuykin+CPlUkeVDv7JRmg+I7qlhT+jEX2aeoD0Nyc4FsYeQuk8
+         RG20rpKJVNznD72VvrBXOhKjag2/lmJWyxT4a0NaM40HZm9RAE/0LtX452BPYpjzgMBM
+         o1/w==
+X-Gm-Message-State: AOJu0YwTk7cU8FOilYTlqkMQ9lwQHviolPZXKo/ZwTd55eSpVDJyhMMV
+	j1I2lanxd+KmXOONIGQqpM7fFKeqckAbD85HtVJZ1MXuwOYW6CxCtgVEMdg4xDs=
+X-Google-Smtp-Source: AGHT+IFBrU/DdjpTF353OfC2q068MHkFzjYadPpIr6jKXMcF4yamv570KZBeB1h/DKECir6y8mixNw==
+X-Received: by 2002:a17:903:2289:b0:1d7:7d1a:7697 with SMTP id b9-20020a170903228900b001d77d1a7697mr149527plh.68.1706062082778;
+        Tue, 23 Jan 2024 18:08:02 -0800 (PST)
+Received: from ArmidaleLaptop (c-67-170-74-237.hsd1.wa.comcast.net. [67.170.74.237])
+        by smtp.gmail.com with ESMTPSA id l12-20020a170902d04c00b001d73416e65bsm5714924pll.63.2024.01.23.18.08.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Jan 2024 18:08:02 -0800 (PST)
+From: dthaler1968@googlemail.com
+X-Google-Original-From: <dthaler1968@gmail.com>
+To: "'Yonghong Song'" <yonghong.song@linux.dev>
+Cc: <bpf@ietf.org>,
+	<bpf@vger.kernel.org>
+References: <085f01da48bb$fe0c3cb0$fa24b610$@gmail.com> <08ab01da48be$603541a0$209fc4e0$@gmail.com> <829aa552-b04e-4f08-9874-b3f929741852@linux.dev> <095f01da48e8$611687d0$23439770$@gmail.com> <4dfb0d6a-aa48-4d96-82f0-09a960b1012f@linux.dev>
+In-Reply-To: <4dfb0d6a-aa48-4d96-82f0-09a960b1012f@linux.dev>
+Subject: Jump instructions clarification
+Date: Tue, 23 Jan 2024 18:07:59 -0800
+Message-ID: <1fc001da4e6a$2848cad0$78da6070$@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AdpOaiE2G19UI2d1RC+MLdhE7be0bA==
+Content-Language: en-us
 
-On Mon, 22 Jan 2024 23:16:02 +0100 Maciej Fijalkowski wrote:
->  
-> +static void __shrink_data(struct xdp_buff *xdp, struct xdp_mem_info *mem_info,
-> +			  skb_frag_t *frag, int shrink)
-> +{
-> +	if (mem_info->type == MEM_TYPE_XSK_BUFF_POOL)
-> +		xsk_buff_get_tail(xdp)->data_end -= shrink;
-> +	skb_frag_size_sub(frag, shrink);
+Hi Yonghong,
 
-nit: this has just one caller, why not inline these 3 lines?
+The MOVSX clarification is now merged, but I just found another similar =
+question for you
+regarding jump instructions.
 
-> +}
-> +
-> +static bool shrink_data(struct xdp_buff *xdp, skb_frag_t *frag, int shrink)
+For BPF_CALL (same question for src=3D0, src=3D1, and src=3D2),
+are both BPF_JMP and BPF_JMP32 legal?  If so, is there a semantic =
+difference?
+If not, then again I think the doc needs clarification.
 
-nit: prefix the function name, please
+BPF_JA's use of imm already has a note that it's BPF_JMP32 class only,
+but what about BPF_CALL's use of imm?
 
-> +{
-> +	struct xdp_mem_info *mem_info = &xdp->rxq->mem;
-> +
-> +	if (skb_frag_size(frag) == shrink) {
-> +		struct page *page = skb_frag_page(frag);
-> +		struct xdp_buff *zc_frag = NULL;
-> +
-> +		if (mem_info->type == MEM_TYPE_XSK_BUFF_POOL) {
-> +			zc_frag = xsk_buff_get_tail(xdp);
-> +
-> +			xsk_buff_del_tail(zc_frag);
-> +		}
-> +
-> +		__xdp_return(page_address(page), mem_info, false, zc_frag);
-> +		return true;
-> +	}
-> +	__shrink_data(xdp, mem_info, frag, shrink);
-> +	return false;
+Similarly about comparisons like BPF_JEQ etc when BPF_K is set.=20
+E.g., is BPF_JEQ | BPF_K | BPF_JMP permitted?  The document currently
+has no restriction against it, but if it's permitted, the meaning is not =
+explained.
+
+Dave
+
+
