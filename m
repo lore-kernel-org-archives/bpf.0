@@ -1,45 +1,45 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28EDC77F36;
-	Wed, 24 Jan 2024 19:16:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C71D5132C10;
+	Wed, 24 Jan 2024 19:16:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706123801; cv=none; b=foxr2BEA/5n88asnbHn/nN6n5WxOEUGEywfp/IjXXiEjMyLoOo/55CuLhdLckpZFQRqSIyl4cGtEfRHx+CXQL/o6fKhbGuPM4sLQX4atmKa5Bolz1jvkyhjjYR8xUFQQY1W3oozBA46nrt7E17mnD7ShnAFN1ihiOZz5f66/VVY=
+	t=1706123802; cv=none; b=pEf2jJAM1vUyC3p5Ap3K6IdHa83cQK24SDI5ltwtYdhqT+ettSl948npkXgFoXkIpuOh0LItFg3Je7c5LRhWQ+hEn9NuSTcJc98NNTYymzeu6FLrisU4uIPkxPynINWDjVfKD3ULPBqQlDgDiQ8H7qQtDs573l/FgIcukZqdKEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706123801; c=relaxed/simple;
-	bh=hlJ2jk4G+4dJqG8yPko+43XpIbZYkLDAguLvaR80XaE=;
+	s=arc-20240116; t=1706123802; c=relaxed/simple;
+	bh=o6Ad2dll/DITDdqWWDrw6egZKCJJPJ/TOiIIkYtMEjo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=E28okT99qtQe5bWQJI+mE466B6V4NmBBfzuau3b1w/NRc77ZizJcdrpVrSvsxjIso5Tu/BHGpLJkD6d/7T72usZc78RXI+FvDCaMu/MDGjyyvwzGz0qho9AO16RLvRKm6Dg8+lR4XkV2/UIXvjLGTVsH+QYemVie2BPdVuM40NE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KN1yzfEG; arc=none smtp.client-ip=198.175.65.15
+	 MIME-Version; b=d24eYdHK4OQ5k4xHZpiD7SH2pSZ16JlgdIw4680RopSAVlqA4Q90OeiR9Zq6xddn1ucBG7K2260sHb3ocd4kfPaMXg44il8+PudXCTz8Hk3wM6pnC05YYwexfYJFTjulMDU5PjPW8hh0YO53MepKax9VSSA112Sd4dBNgGgO8gA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bi0pGsY1; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KN1yzfEG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bi0pGsY1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706123799; x=1737659799;
+  t=1706123801; x=1737659801;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=hlJ2jk4G+4dJqG8yPko+43XpIbZYkLDAguLvaR80XaE=;
-  b=KN1yzfEGeDN9VJmvuLZe0OXs+GdE2QVHG7GglhVeN4XDsEGMhQoKqmTq
-   a/vBR/U8t4mN4w5iYrpYhKlN3L/XPk0GaGbbIXfR+uSGOBZkpIEIzDYV4
-   OLWlPe02YZbjDOCM5A09Zn8goOjVmLUtoHhe9dgUK5cpm4r16CcIGYvIj
-   dOp1HH3rWyBiUa35AkeHkpwELjlDYPoeBFrVRbKZiL7GGYzroUouv1q59
-   qpP05bCpna2NM9nEwP4NtZWCJlP01lMttGas4GaTt8w/v39QlDFwo85bf
-   cfmnyMjEvS0Sm4FyB0HKwyihd2j80WgWla5hCT1y0rIF0PAX5U09hYaBu
+  bh=o6Ad2dll/DITDdqWWDrw6egZKCJJPJ/TOiIIkYtMEjo=;
+  b=bi0pGsY1g0JvEHUXTi1fFt4QolxpamWd7pTY2soivi+sidPNlS30B9cQ
+   odZY/EKZfdATz/nuCjrAp2h5GmjsFBiQA6mxhLfhUBhom2fhnkb+/sgSo
+   gBGbPeP4r1BeM4BWqWbdhm7Cg2QsWr152fuILFbIO0WiBpAL/sHCpLfMT
+   czNmK1IvzCVi1D68xVdD0FbFXyrxt5RbZgV56qtozkDomBRzDHg1s/Ddn
+   Y00WvBhFk9KB91/1KniQlAWq7Y2qiOsLyS8W6pX4lmV4XhSE33Yg0aS4z
+   6mCwAVh9lv9AHfwYZ0fUAgopfDCRW32SXuc1u6HzXGYaVP9QH7/CnW0cU
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="1823053"
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="1823117"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="1823053"
+   d="scan'208";a="1823117"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2024 11:16:30 -0800
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2024 11:16:38 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="820553466"
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="820553483"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="820553466"
+   d="scan'208";a="820553483"
 Received: from boxer.igk.intel.com ([10.102.20.173])
-  by orsmga001.jf.intel.com with ESMTP; 24 Jan 2024 11:16:26 -0800
+  by orsmga001.jf.intel.com with ESMTP; 24 Jan 2024 11:16:33 -0800
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -56,9 +56,9 @@ Cc: netdev@vger.kernel.org,
 	john.fastabend@gmail.com,
 	horms@kernel.org,
 	kuba@kernel.org
-Subject: [PATCH v6 bpf 05/11] i40e: handle multi-buffer packets that are shrunk by xdp prog
-Date: Wed, 24 Jan 2024 20:15:56 +0100
-Message-Id: <20240124191602.566724-6-maciej.fijalkowski@intel.com>
+Subject: [PATCH v6 bpf 07/11] intel: xsk: initialize skb_frag_t::bv_offset in ZC drivers
+Date: Wed, 24 Jan 2024 20:15:58 +0100
+Message-Id: <20240124191602.566724-8-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20240124191602.566724-1-maciej.fijalkowski@intel.com>
 References: <20240124191602.566724-1-maciej.fijalkowski@intel.com>
@@ -70,163 +70,51 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Tirthendu Sarkar <tirthendu.sarkar@intel.com>
+Ice and i40e ZC drivers currently set offset of a frag within
+skb_shared_info to 0, which is incorrect. xdp_buffs that come from
+xsk_buff_pool always have 256 bytes of a headroom, so they need to be
+taken into account to retrieve xdp_buff::data via skb_frag_address().
+Otherwise, bpf_xdp_frags_increase_tail() would be starting its job from
+xdp_buff::data_hard_start which would result in overwriting existing
+payload.
 
-XDP programs can shrink packets by calling the bpf_xdp_adjust_tail()
-helper function. For multi-buffer packets this may lead to reduction of
-frag count stored in skb_shared_info area of the xdp_buff struct. This
-results in issues with the current handling of XDP_PASS and XDP_DROP
-cases.
-
-For XDP_PASS, currently skb is being built using frag count of
-xdp_buffer before it was processed by XDP prog and thus will result in
-an inconsistent skb when frag count gets reduced by XDP prog. To fix
-this, get correct frag count while building the skb instead of using
-pre-obtained frag count.
-
-For XDP_DROP, current page recycling logic will not reuse the page but
-instead will adjust the pagecnt_bias so that the page can be freed. This
-again results in inconsistent behavior as the page refcnt has already
-been changed by the helper while freeing the frag(s) as part of
-shrinking the packet. To fix this, only adjust pagecnt_bias for buffers
-that are stillpart of the packet post-xdp prog run.
-
-Fixes: e213ced19bef ("i40e: add support for XDP multi-buffer Rx")
-Reported-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Tirthendu Sarkar <tirthendu.sarkar@intel.com>
+Fixes: 1c9ba9c14658 ("i40e: xsk: add RX multi-buffer support")
+Fixes: 1bbc04de607b ("ice: xsk: add RX multi-buffer support")
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- drivers/net/ethernet/intel/i40e/i40e_txrx.c | 40 ++++++++++++---------
- 1 file changed, 23 insertions(+), 17 deletions(-)
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c | 3 ++-
+ drivers/net/ethernet/intel/ice/ice_xsk.c   | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-index 971ba3322038..1f0a0f13a334 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-@@ -2087,7 +2087,8 @@ static void i40e_put_rx_buffer(struct i40e_ring *rx_ring,
- static void i40e_process_rx_buffs(struct i40e_ring *rx_ring, int xdp_res,
- 				  struct xdp_buff *xdp)
- {
--	u32 next = rx_ring->next_to_clean;
-+	u32 nr_frags = xdp_get_shared_info_from_buff(xdp)->nr_frags;
-+	u32 next = rx_ring->next_to_clean, i = 0;
- 	struct i40e_rx_buffer *rx_buffer;
- 
- 	xdp->flags = 0;
-@@ -2100,10 +2101,10 @@ static void i40e_process_rx_buffs(struct i40e_ring *rx_ring, int xdp_res,
- 		if (!rx_buffer->page)
- 			continue;
- 
--		if (xdp_res == I40E_XDP_CONSUMED)
--			rx_buffer->pagecnt_bias++;
--		else
-+		if (xdp_res != I40E_XDP_CONSUMED)
- 			i40e_rx_buffer_flip(rx_buffer, xdp->frame_sz);
-+		else if (i++ <= nr_frags)
-+			rx_buffer->pagecnt_bias++;
- 
- 		/* EOP buffer will be put in i40e_clean_rx_irq() */
- 		if (next == rx_ring->next_to_process)
-@@ -2117,20 +2118,20 @@ static void i40e_process_rx_buffs(struct i40e_ring *rx_ring, int xdp_res,
-  * i40e_construct_skb - Allocate skb and populate it
-  * @rx_ring: rx descriptor ring to transact packets on
-  * @xdp: xdp_buff pointing to the data
-- * @nr_frags: number of buffers for the packet
-  *
-  * This function allocates an skb.  It then populates it with the page
-  * data from the current receive descriptor, taking care to set up the
-  * skb correctly.
-  */
- static struct sk_buff *i40e_construct_skb(struct i40e_ring *rx_ring,
--					  struct xdp_buff *xdp,
--					  u32 nr_frags)
-+					  struct xdp_buff *xdp)
- {
- 	unsigned int size = xdp->data_end - xdp->data;
- 	struct i40e_rx_buffer *rx_buffer;
-+	struct skb_shared_info *sinfo;
- 	unsigned int headlen;
- 	struct sk_buff *skb;
-+	u32 nr_frags = 0;
- 
- 	/* prefetch first cache line of first page */
- 	net_prefetch(xdp->data);
-@@ -2168,6 +2169,10 @@ static struct sk_buff *i40e_construct_skb(struct i40e_ring *rx_ring,
- 	memcpy(__skb_put(skb, headlen), xdp->data,
- 	       ALIGN(headlen, sizeof(long)));
- 
-+	if (unlikely(xdp_buff_has_frags(xdp))) {
-+		sinfo = xdp_get_shared_info_from_buff(xdp);
-+		nr_frags = sinfo->nr_frags;
-+	}
- 	rx_buffer = i40e_rx_bi(rx_ring, rx_ring->next_to_clean);
- 	/* update all of the pointers */
- 	size -= headlen;
-@@ -2187,9 +2192,8 @@ static struct sk_buff *i40e_construct_skb(struct i40e_ring *rx_ring,
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+index 82aca0d16a3e..11500003af0d 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+@@ -414,7 +414,8 @@ i40e_add_xsk_frag(struct i40e_ring *rx_ring, struct xdp_buff *first,
  	}
  
- 	if (unlikely(xdp_buff_has_frags(xdp))) {
--		struct skb_shared_info *sinfo, *skinfo = skb_shinfo(skb);
-+		struct skb_shared_info *skinfo = skb_shinfo(skb);
+ 	__skb_fill_page_desc_noacc(sinfo, sinfo->nr_frags++,
+-				   virt_to_page(xdp->data_hard_start), 0, size);
++				   virt_to_page(xdp->data_hard_start),
++				   XDP_PACKET_HEADROOM, size);
+ 	sinfo->xdp_frags_size += size;
+ 	xsk_buff_add_frag(xdp);
  
--		sinfo = xdp_get_shared_info_from_buff(xdp);
- 		memcpy(&skinfo->frags[skinfo->nr_frags], &sinfo->frags[0],
- 		       sizeof(skb_frag_t) * nr_frags);
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index d9073a618ad6..8b81a1677045 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -825,7 +825,8 @@ ice_add_xsk_frag(struct ice_rx_ring *rx_ring, struct xdp_buff *first,
+ 	}
  
-@@ -2212,17 +2216,17 @@ static struct sk_buff *i40e_construct_skb(struct i40e_ring *rx_ring,
-  * i40e_build_skb - Build skb around an existing buffer
-  * @rx_ring: Rx descriptor ring to transact packets on
-  * @xdp: xdp_buff pointing to the data
-- * @nr_frags: number of buffers for the packet
-  *
-  * This function builds an skb around an existing Rx buffer, taking care
-  * to set up the skb correctly and avoid any memcpy overhead.
-  */
- static struct sk_buff *i40e_build_skb(struct i40e_ring *rx_ring,
--				      struct xdp_buff *xdp,
--				      u32 nr_frags)
-+				      struct xdp_buff *xdp)
- {
- 	unsigned int metasize = xdp->data - xdp->data_meta;
-+	struct skb_shared_info *sinfo;
- 	struct sk_buff *skb;
-+	u32 nr_frags;
+ 	__skb_fill_page_desc_noacc(sinfo, sinfo->nr_frags++,
+-				   virt_to_page(xdp->data_hard_start), 0, size);
++				   virt_to_page(xdp->data_hard_start),
++				   XDP_PACKET_HEADROOM, size);
+ 	sinfo->xdp_frags_size += size;
+ 	xsk_buff_add_frag(xdp);
  
- 	/* Prefetch first cache line of first page. If xdp->data_meta
- 	 * is unused, this points exactly as xdp->data, otherwise we
-@@ -2231,6 +2235,11 @@ static struct sk_buff *i40e_build_skb(struct i40e_ring *rx_ring,
- 	 */
- 	net_prefetch(xdp->data_meta);
- 
-+	if (unlikely(xdp_buff_has_frags(xdp))) {
-+		sinfo = xdp_get_shared_info_from_buff(xdp);
-+		nr_frags = sinfo->nr_frags;
-+	}
-+
- 	/* build an skb around the page buffer */
- 	skb = napi_build_skb(xdp->data_hard_start, xdp->frame_sz);
- 	if (unlikely(!skb))
-@@ -2243,9 +2252,6 @@ static struct sk_buff *i40e_build_skb(struct i40e_ring *rx_ring,
- 		skb_metadata_set(skb, metasize);
- 
- 	if (unlikely(xdp_buff_has_frags(xdp))) {
--		struct skb_shared_info *sinfo;
--
--		sinfo = xdp_get_shared_info_from_buff(xdp);
- 		xdp_update_skb_shared_info(skb, nr_frags,
- 					   sinfo->xdp_frags_size,
- 					   nr_frags * xdp->frame_sz,
-@@ -2589,9 +2595,9 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_ring, int budget,
- 			total_rx_bytes += size;
- 		} else {
- 			if (ring_uses_build_skb(rx_ring))
--				skb = i40e_build_skb(rx_ring, xdp, nfrags);
-+				skb = i40e_build_skb(rx_ring, xdp);
- 			else
--				skb = i40e_construct_skb(rx_ring, xdp, nfrags);
-+				skb = i40e_construct_skb(rx_ring, xdp);
- 
- 			/* drop if we failed to retrieve a buffer */
- 			if (!skb) {
 -- 
 2.34.1
 
