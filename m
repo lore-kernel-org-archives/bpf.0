@@ -1,133 +1,78 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from mx07lb.world4you.com (mx07lb.world4you.com [81.19.149.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E335411198
-	for <bpf@vger.kernel.org>; Thu, 25 Jan 2024 22:35:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E29711185;
+	Thu, 25 Jan 2024 22:44:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.149.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706222104; cv=none; b=aNDA+0hDmIhFAK1FM0UCoZLMZt4hDpxzgvTYYVQzRfEUApOMkwBo8jIu0wYjUzwBzl22HBr/T+pLJp84sjwbyAdzp4ufHXjRQMB3rSWDwko4sp8n9TeVoS/g6NpiBlfcjzDce0PW7Epxf05/19y1w/6hA33IazvZrmQaz+6WVNs=
+	t=1706222697; cv=none; b=T2Na/5xZKmpsqk1GD/MnsxwWugz3AfcCjSLBWj7mv5C0jpXRl/2Katx/MoKWOb8Msp2K1zsRAoPm1zXd0DZLYJVyIdP8e4PMbFgPkTTzdUHZaRgoCwSO7T8MuGYLvd1SYeKcPOga+a6/jM5Q7vbpDg0SmXd0l13tsJ9W8Ye1rlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706222104; c=relaxed/simple;
-	bh=QjRL4Lk5HuY4dVTiSx8FBdwbiQ0YMbtGB8QHYiNAY2I=;
+	s=arc-20240116; t=1706222697; c=relaxed/simple;
+	bh=mu300rQScOKkio8Mf2THNoDHU3+wIHUglcmCOY1wbj4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ciq68L0B98EzsWyB3LGTewYFFOz0SkdDL2any+oQe4eAkd90ElgIsGFILSTkoTctm25eu2wXD93uRNANWUtOHXmvWQ3c4D1bDGIGMeKfns7gpq9NF3Zhp2ch83FE58F14sDqyz+dJcLAXiLIywj39u2HnyNc+FaNDWQIJcxZ5Ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wtzgWT5L; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=FsVQaSE6wU2Dwq7HOlUiocNlO+XDHtcGMlnr1FhInGxJE4izEfIHGLkOVmpoxUovJr/A19khm+wVqsS6fuRYUIVRTfVeBXNuFU7UE77zssyGVdLtIh9CgNMMWPfM7/rKLHKM0ciC0F8lFJ1KjhpFFOOW4KAnj5G12KcZsTszoVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com; spf=pass smtp.mailfrom=engleder-embedded.com; dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b=fjgNPb1k; arc=none smtp.client-ip=81.19.149.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=engleder-embedded.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wtzgWT5L"
-Message-ID: <cec469f4-2fd0-479a-8919-0d5578687fb2@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1706222099;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3VzS1vt3EtrBAK2HSrfT6Y50voBH4lEx0F/Lw8xZM2M=;
-	b=wtzgWT5LTkRp2WrBIhRy7sO7hmnbBZqcOjMT8tTrhe71/FP+70vIqM4XKn27NrqSYdKoM3
-	E6F/jTVuouhXLpdawNbgUQVPLQv4K1u7ZMpZ4qsgn5ulBZV75N0guGW62B5W/gz8/1P3Pv
-	EGVjC+iRhS/rPAQEHvUFwOoNC/WHDSQ=
-Date: Thu, 25 Jan 2024 14:34:49 -0800
+	dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b="fjgNPb1k"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=NeiUlbZNbRqE8MzxdONDlFkXjRIeAJLMSda+xK9MwfM=; b=fjgNPb1kts3MQ42h+vOHuuM/9L
+	uhNDOc9apVvgM5F8QOwLjhBaxww91uhkz9t7WmZKD9+gCrnGVY+8524gMP3Y4QoGyRZ31ZtulS10q
+	pMy51u3OJX+2Y2kF1sBa6ctbNBIWS3USX4fbgXnO9WgRpdIEZ0/RKtBoen/qjg/+2hnA=;
+Received: from [88.117.59.234] (helo=[10.0.0.160])
+	by mx07lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <gerhard@engleder-embedded.com>)
+	id 1rT7bl-00086f-1O;
+	Thu, 25 Jan 2024 22:50:01 +0100
+Message-ID: <4fe10d68-e48c-446f-96f7-157b85b1a6fb@engleder-embedded.com>
+Date: Thu, 25 Jan 2024 22:50:00 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v8 1/3] bpf: make common crypto API for TC/XDP
- programs
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net 2/2] tsnep: Fix XDP_RING_NEED_WAKEUP for empty fill
+ ring
+To: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org
+Cc: davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+ bjorn@kernel.org, magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
+ jonathan.lemon@gmail.com
+References: <20240123200918.61219-1-gerhard@engleder-embedded.com>
+ <20240123200918.61219-3-gerhard@engleder-embedded.com>
+ <41a9cd95c940aeb418f45a1d4e3ff4b0e8f62d5a.camel@redhat.com>
 Content-Language: en-US
-To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
- Vadim Fedorenko <vadfed@meta.com>
-Cc: netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
- bpf@vger.kernel.org, Victor Stewart <v@nametag.social>,
- Jakub Kicinski <kuba@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Herbert Xu <herbert@gondor.apana.org.au>
-References: <20240115220803.1973440-1-vadfed@meta.com>
- <3d2d5f4e-c554-4648-bcec-839d83585123@linux.dev>
- <a682b902-37a2-4d43-8f39-56ca213f6663@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <a682b902-37a2-4d43-8f39-56ca213f6663@linux.dev>
+From: Gerhard Engleder <gerhard@engleder-embedded.com>
+In-Reply-To: <41a9cd95c940aeb418f45a1d4e3ff4b0e8f62d5a.camel@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 7bit
+X-AV-Do-Run: Yes
 
-On 1/25/24 3:19 AM, Vadim Fedorenko wrote:
-> On 25/01/2024 01:10, Martin KaFai Lau wrote:
->> On 1/15/24 2:08 PM, Vadim Fedorenko wrote:
->>> +static int bpf_crypto_crypt(const struct bpf_crypto_ctx *ctx,
->>> +                const struct bpf_dynptr_kern *src,
->>> +                struct bpf_dynptr_kern *dst,
->>> +                const struct bpf_dynptr_kern *siv,
->>> +                bool decrypt)
->>> +{
->>> +    u32 src_len, dst_len, siv_len;
->>> +    const u8 *psrc;
->>> +    u8 *pdst, *piv;
->>> +    int err;
->>> +
->>> +    if (ctx->type->get_flags(ctx->tfm) & CRYPTO_TFM_NEED_KEY)
->>
->> nit. Does the indirect call get_flags() return different values?
->> Should it be rejected earlier, e.g. in bpf_crypto_ctx_create()?
+On 25.01.24 12:06, Paolo Abeni wrote:
+> On Tue, 2024-01-23 at 21:09 +0100, Gerhard Engleder wrote:
+>> +	if (xsk_uses_need_wakeup(rx->xsk_pool)) {
+>> +		int desc_available = tsnep_rx_desc_available(rx);
+>> +
+>> +		if (desc_available)
+>> +			xsk_set_rx_need_wakeup(rx->xsk_pool);
+>> +		else
+>> +			xsk_clear_rx_need_wakeup(rx->xsk_pool);
+>> +	}
+>>   }
+>>   
+>>   static bool tsnep_pending(struct tsnep_queue *queue)
 > 
-> Well, that is the common pattern in crypto subsys to check flags.
-> But after looking at it second time, I think I have to refactor this
-> part. CRYPTO_TFM_NEED_KEY is set during tfm creation if algo requires
-> the key. And it's freed when the key setup is successful. As there is no
-> way bpf programs can modify tfm directly we can move this check to
-> bpf_crypto_ctx_create() to key setup part and avoid indirect call in this place.
->>
->>> +        return -EINVAL;
->>> +
->>> +    if (__bpf_dynptr_is_rdonly(dst))
->>> +        return -EINVAL;
->>> +
->>> +    siv_len = __bpf_dynptr_size(siv);
->>> +    src_len = __bpf_dynptr_size(src);
->>> +    dst_len = __bpf_dynptr_size(dst);
->>> +    if (!src_len || !dst_len)
->>> +        return -EINVAL;
->>> +
->>> +    if (siv_len != (ctx->type->ivsize(ctx->tfm) + 
->>> ctx->type->statesize(ctx->tfm)))
->>
->> Same here, two indirect calls per en/decrypt kfunc call. Does the return value 
->> change?
-> 
-> I have to check the size of IV provided by the caller, and then to avoid
-> indirect calls I have to store these values somewhere in ctx. It gives a
-> direct access to these values to bpf programs, which can potentially
-> abuse them. Not sure if it's good to open such opportunity.
+> The patch LGTM, but there is a very similar chunk of code in
+> tsnep_rx_poll_zc(). You should consider a net-next follow-up
+> consolidating the code in a common helper.
 
-I don't think it makes any difference considering tfm has already been 
-accessible in ctx->tfm. A noob question, what secret is in the siv len?
-
-btw, unrelated, based on the selftest in patch 3, is it supporting any siv_len > 
-0 for now?
-
-> 
->>
->>> +        return -EINVAL;
->>> +
->>> +    psrc = __bpf_dynptr_data(src, src_len);
->>> +    if (!psrc)
->>> +        return -EINVAL;
->>> +    pdst = __bpf_dynptr_data_rw(dst, dst_len);
->>> +    if (!pdst)
->>> +        return -EINVAL;
->>> +
->>> +    piv = siv_len ? __bpf_dynptr_data_rw(siv, siv_len) : NULL;
->>> +    if (siv_len && !piv)
->>> +        return -EINVAL;
->>> +
->>> +    err = decrypt ? ctx->type->decrypt(ctx->tfm, psrc, pdst, src_len, piv)
->>> +              : ctx->type->encrypt(ctx->tfm, psrc, pdst, src_len, piv);
->>> +
->>> +    return err;
->>> +}
->>
-> 
-
+I will do. Thanks!
