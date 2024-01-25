@@ -1,267 +1,116 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 121496FAD;
-	Thu, 25 Jan 2024 02:35:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B00CF6ABA
+	for <bpf@vger.kernel.org>; Thu, 25 Jan 2024 02:51:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706150108; cv=none; b=LVJJjc70RAZtjLVCyD8Uq2nX6XrXDPJmz52YC1b3U4Sr6Lb5WmPuQhqGXSHEa3DakCOYZBrDF7OylRIp2ahsHYxAlNg565y1d/0BsRMzsj3KSBlTrj3qYvKDaDvAetzyk0kOizlyWN9OmDvsw/lFqT94kAZX3ulx9/pJNo+LJ0E=
+	t=1706151091; cv=none; b=YlIIyuRSDJiuBgar/h14oTiCyZiCevBiNKc6D/flvEnqZYskgGnXRhkpK5twNzwx40KhMiWxF2ltNavfOOzKsa4nvJ0iwRPZQR8JG8y9V2EmmXqJ6muCNATyptRi9hADuDGn7bCKHDZK5Z343xv3o43B04g679ptahqdmrHQ/9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706150108; c=relaxed/simple;
-	bh=oZB+rnSbNrbRk4wjrjm8hwRt9npaPT1zlo6uV1C7jBE=;
+	s=arc-20240116; t=1706151091; c=relaxed/simple;
+	bh=OWHCaxty9B+6FiBjuIuGiPARETmu69uFU32tT9X+OM0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TCj0nZPYL3Ax+5WJa0b8lM8YlOrXTVfiguF5h4OCkPQz8p8SA9lwxzOVtjCDgM/xhXp3YxusWZBcHo09+W36J+dajmcWkkmvvYDayqr5HLaNaMcsv5XyibZd5zF+Fc0SJbA+dFovLDp8aHtPqQhBkdYIgXlKNcaf7lW1WY61HiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FQSQVDqJ; arc=none smtp.client-ip=209.85.221.52
+	 To:Cc:Content-Type; b=E+VnOLjXFjcBamzlQyhdyjL0STKl8F7vgK0jMQ+WVTl65c4yCkxhN9/eOL1zFn5acCLmfxvQConAMmnUHhsoPhn3kRm5H45qOJ7uHqojMjMx1a+lnsc3saWQJNmYZtqi1JLUOyVL4BxYz9HTLiAX0CZEKWOS6GVVmEGFLmCO5wQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GTC3uz0k; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FQSQVDqJ"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-337d99f9cdfso5258863f8f.0;
-        Wed, 24 Jan 2024 18:35:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GTC3uz0k"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-339237092dcso4447851f8f.3
+        for <bpf@vger.kernel.org>; Wed, 24 Jan 2024 18:51:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706150105; x=1706754905; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706151088; x=1706755888; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UalBL1KksrfmBSIphDpJ0OaRMGhEKAxnBVdciCrs4XE=;
-        b=FQSQVDqJ8I6l9c2HOv7z5NNslTKXBwfoYJRfXKARfVUOmcY5OkG2VxPE15OgBPQ/DX
-         sJenj2jdje95N7pT2E3W+8U4QOoKKrJ3bxV7pGygxHKXP4XywjlnLqsRQDLQQ4ocUIJK
-         XbEyb+Up2XiF4pgrzDGmL7USStK93MRGi9It2iRZ6pAX0XNiCGYU5GnU8t2/+KK8GJ/r
-         1nQy0G1TKYIz5nbOtDI6pc/NaqbZAdrGkSk59MZw/Ka0GDZRoEFJneSFt6c7p4khVSWt
-         DmCmGcfdroLmGQN9tq55JyBbyzyeMyuPzUd35RWALehHr0PTRsTSaXnJIV31hnpNInqT
-         GT3g==
+        bh=brWuhPv08m5IHqo2Fx2aVHV5rCfwWbI9NZG9MaN0KwU=;
+        b=GTC3uz0kqt39ZF1MuX14BG61BqFam9CWnJ1hVsFrEp/c4HYTO98VpKtX2xRBwVz3Cm
+         jQlkqthFa0MnGJKYJi5noDUag5sN7xsy6Xi2mfJzh0QgMYSOAGcAYYKuWBGUQTMEFa7/
+         KKyYOWdPbsfZcDYfntTFYXXQZWIIDy0emnfWOA7aUK3tqYYxVC0lBAp/Iz9FkVr93IOk
+         YA36Hma/IZZ+LPNvjJr/bv4T7Lsri8TX3W/Dt44vQxryAo4+41GhHOtXl2VDpd0STaB2
+         FnS52nLCwsWA7bhtOWhdMgxhDLunaelolH7dY8Fu//gCXRbIp1ahwjAx1FcR4DQ3dOdW
+         lF2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706150105; x=1706754905;
+        d=1e100.net; s=20230601; t=1706151088; x=1706755888;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UalBL1KksrfmBSIphDpJ0OaRMGhEKAxnBVdciCrs4XE=;
-        b=nhBr9NnW8psbensYUPHdctjCmkXnhJUETzj0aaH8V+TQ+EOL+DxAkFhU9rOMVgNBPq
-         rU3bbe1RwBPXXSJCRVXPW2z13UnHHGyJdIV5K70xug3uk+ItT/hepnoKMi7CuEzBmYH9
-         zje9t+Ko5kqjSNoH5At5VxNonMOd+2O0XK0N+1R3r2El3knrzhQJ9lCB1/bDmFDzNUL1
-         AlRwRwED5mCQhotw/tyC8tdkLdh4sUgwgd30XZmG/PrIVu66vM9tUcFECWFzNgb15Y/q
-         194otfV2LXP5rFOYWadFtyqDNv71B5Ea5ytEoQdBKwEKm4gM4Eg9LkL65por229wQlqM
-         osSw==
-X-Gm-Message-State: AOJu0YxFpJDVUOLc0cOBX4CvXXc4dHU1O//qrHf1GIBB/urPl1NiEQ8h
-	bGoJ5TW9bcUyf0mv7gWfa3MvQwQrdzsqz6xJsdCpSUP9tVA+sXE2fhAi9UVClDd6I0TmP1UfAid
-	iJFOLQDbKco8Bsm/zUj809S7md1w=
-X-Google-Smtp-Source: AGHT+IGDzSrhufVoRNE2fXRGZnsr5pi4JBJdAN8QI72PY4YftYfoWgIBPtleEOK2p463fu9lj9F+JurNTKMXt98dfc0=
-X-Received: by 2002:a5d:6448:0:b0:336:ebf3:b8fa with SMTP id
- d8-20020a5d6448000000b00336ebf3b8famr142862wrw.83.1706150104485; Wed, 24 Jan
- 2024 18:35:04 -0800 (PST)
+        bh=brWuhPv08m5IHqo2Fx2aVHV5rCfwWbI9NZG9MaN0KwU=;
+        b=Ury5QndZzeMUH0kno4hWYYFes4XmGGoIWERlgj8VAzExDrXB3LYszWmsX+2k9lClTj
+         iKZRVbWnjrDI6uGafeB6XFROrPxLXZykVnrZfbCYmxbRuWIW5XA+sQy+sdC4/3jmvEz7
+         AQBPHY4zA7BCGKHoRDmQMzJZBPoXD/78/4tF7gcVhZwdRJ1Swx2xKAlFZ8Jyhz+egMtN
+         BS47r1Fa1ZuKcpuODKN/1rcUFfBW/O0QbFFvlbYMrwRKT8ObWERkXPZk9DQhbAcbBLBU
+         D3XOAn+/phgwSbF97YhAc7apbKvxqSIMb/CxkGQCaIq9YbITb/Gq02wbJLDH76SeLudl
+         XDrw==
+X-Gm-Message-State: AOJu0YyqqUX6a/vIVcuVmQ7frBtxBJQ3rZCuO5ImvMtJgDJg9gp6nj43
+	uB0IZzMILhxHHNQhmmnY9wZwgOglGTgsnyWo8eq12AmsaUHY6/zw0xf3OlmerDKdN/tXU4oD7G1
+	X3iPilxW6ayBOGYlmgbTqXOSVNBM=
+X-Google-Smtp-Source: AGHT+IF4VAHiiFinwZ6qaHTmt83F1jaKQA1bfTfDoTM/+zm9H1I/M2FBjrQ5st+f4+BQZl7+SsJ0C8QCgzuOh8UaIPQ=
+X-Received: by 2002:adf:f549:0:b0:337:2994:15b1 with SMTP id
+ j9-20020adff549000000b00337299415b1mr106934wrp.135.1706151087602; Wed, 24 Jan
+ 2024 18:51:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240124191602.566724-1-maciej.fijalkowski@intel.com>
- <20240124191602.566724-5-maciej.fijalkowski@intel.com> <f1ce06fd-30da-405e-8082-e35a9a88c5bd@amd.com>
-In-Reply-To: <f1ce06fd-30da-405e-8082-e35a9a88c5bd@amd.com>
+References: <1b5d01da4e1b$95506b50$bff141f0$@gmail.com> <20240123213100.GA221838@maniforge>
+ <1e9101da4e44$e24a1720$a6de4560$@gmail.com> <20240123215214.GC221862@maniforge>
+In-Reply-To: <20240123215214.GC221862@maniforge>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 24 Jan 2024 18:34:52 -0800
-Message-ID: <CAADnVQ+7qB44dGT4xkMPRrxNJrY-MFVU8E=jPiD+_CXvL6Didw@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf 04/11] ice: work on pre-XDP prog frag count
-To: Brett Creeley <bcreeley@amd.com>
-Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Network Development <netdev@vger.kernel.org>, 
-	"Karlsson, Magnus" <magnus.karlsson@intel.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	Eelco Chaudron <echaudro@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, "Sarkar, Tirthendu" <tirthendu.sarkar@intel.com>, 
-	John Fastabend <john.fastabend@gmail.com>, Simon Horman <horms@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>
+Date: Wed, 24 Jan 2024 18:51:16 -0800
+Message-ID: <CAADnVQLFc+32+5yTrONYhw-HGheYRK2nSEgMoteXdwc_Q2Tw1Q@mail.gmail.com>
+Subject: Re: [Bpf] Standardizing BPF assembly language?
+To: David Vernet <void@manifault.com>
+Cc: Dave Thaler <dthaler1968@googlemail.com>, bpf@ietf.org, bpf <bpf@vger.kernel.org>, 
+	"Jose E. Marchesi" <jose.marchesi@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 24, 2024 at 6:26=E2=80=AFPM Brett Creeley <bcreeley@amd.com> wr=
-ote:
->
->
->
-> On 1/24/2024 11:15 AM, Maciej Fijalkowski wrote:
-> > Caution: This message originated from an External Source. Use proper ca=
-ution when opening attachments, clicking links, or responding.
-> >
-> >
-> > Fix an OOM panic in XDP_DRV mode when a XDP program shrinks a
-> > multi-buffer packet by 4k bytes and then redirects it to an AF_XDP
-> > socket.
-> >
-> > Since support for handling multi-buffer frames was added to XDP, usage
-> > of bpf_xdp_adjust_tail() helper within XDP program can free the page
-> > that given fragment occupies and in turn decrease the fragment count
-> > within skb_shared_info that is embedded in xdp_buff struct. In current
-> > ice driver codebase, it can become problematic when page recycling logi=
-c
-> > decides not to reuse the page. In such case, __page_frag_cache_drain()
-> > is used with ice_rx_buf::pagecnt_bias that was not adjusted after
-> > refcount of page was changed by XDP prog which in turn does not drain
-> > the refcount to 0 and page is never freed.
-> >
-> > To address this, let us store the count of frags before the XDP program
-> > was executed on Rx ring struct. This will be used to compare with
-> > current frag count from skb_shared_info embedded in xdp_buff. A smaller
-> > value in the latter indicates that XDP prog freed frag(s). Then, for
-> > given delta decrement pagecnt_bias for XDP_DROP verdict.
-> >
-> > While at it, let us also handle the EOP frag within
-> > ice_set_rx_bufs_act() to make our life easier, so all of the adjustment=
+On Tue, Jan 23, 2024 at 1:52=E2=80=AFPM David Vernet <void@manifault.com> w=
+rote:
+> > > > A second question would be, which dialect(s) to standardize.  Jose'=
 s
-> > needed to be applied against freed frags are performed in the single
-> > place.
+> > > > link above argues that the second dialect should be the one
+> > > > standardized (tools are free to support multiple dialects for
+> > > > backwards compat if they want).  See the link for rationale.
+> > >
+> > > My recollection was that the outcome of that discussion is that we we=
+re
+> > going
+> > > to continue to support both. If we wanted to standardize, I have a ha=
+rd
+> > time
+> > > seeing any other way other than to standardize both dialects unless
+> > there's
+> > > been a significant change in sentiment since LSFMM.
 > >
-> > Fixes: 2fba7dc5157b ("ice: Add support for XDP multi-buffer on Rx side"=
-)
-> > Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
-> > Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> > ---
-> >   drivers/net/ethernet/intel/ice/ice_txrx.c     | 14 ++++++---
-> >   drivers/net/ethernet/intel/ice/ice_txrx.h     |  1 +
-> >   drivers/net/ethernet/intel/ice/ice_txrx_lib.h | 31 +++++++++++++-----=
--
-> >   3 files changed, 32 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/et=
-hernet/intel/ice/ice_txrx.c
-> > index 74d13cc5a3a7..0c9b4aa8a049 100644
-> > --- a/drivers/net/ethernet/intel/ice/ice_txrx.c
-> > +++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
-> > @@ -603,9 +603,7 @@ ice_run_xdp(struct ice_rx_ring *rx_ring, struct xdp=
-_buff *xdp,
-> >                  ret =3D ICE_XDP_CONSUMED;
-> >          }
-> >   exit:
-> > -       rx_buf->act =3D ret;
-> > -       if (unlikely(xdp_buff_has_frags(xdp)))
-> > -               ice_set_rx_bufs_act(xdp, rx_ring, ret);
-> > +       ice_set_rx_bufs_act(xdp, rx_ring, ret);
-> >   }
-> >
-> >   /**
-> > @@ -893,14 +891,17 @@ ice_add_xdp_frag(struct ice_rx_ring *rx_ring, str=
-uct xdp_buff *xdp,
-> >          }
-> >
-> >          if (unlikely(sinfo->nr_frags =3D=3D MAX_SKB_FRAGS)) {
-> > -               if (unlikely(xdp_buff_has_frags(xdp)))
-> > -                       ice_set_rx_bufs_act(xdp, rx_ring, ICE_XDP_CONSU=
-MED);
-> > +               ice_set_rx_bufs_act(xdp, rx_ring, ICE_XDP_CONSUMED);
-> >                  return -ENOMEM;
-> >          }
-> >
-> >          __skb_fill_page_desc_noacc(sinfo, sinfo->nr_frags++, rx_buf->p=
-age,
-> >                                     rx_buf->page_offset, size);
-> >          sinfo->xdp_frags_size +=3D size;
-> > +       /* remember frag count before XDP prog execution; bpf_xdp_adjus=
-t_tail()
-> > +        * can pop off frags but driver has to handle it on its own
-> > +        */
-> > +       rx_ring->nr_frags =3D sinfo->nr_frags;
-> >
-> >          if (page_is_pfmemalloc(rx_buf->page))
-> >                  xdp_buff_set_frag_pfmemalloc(xdp);
-> > @@ -1251,6 +1252,7 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring,=
- int budget)
-> >
-> >                  xdp->data =3D NULL;
-> >                  rx_ring->first_desc =3D ntc;
-> > +               rx_ring->nr_frags =3D 0;
-> >                  continue;
-> >   construct_skb:
-> >                  if (likely(ice_ring_uses_build_skb(rx_ring)))
-> > @@ -1266,10 +1268,12 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_rin=
-g, int budget)
-> >                                                      ICE_XDP_CONSUMED);
-> >                          xdp->data =3D NULL;
-> >                          rx_ring->first_desc =3D ntc;
-> > +                       rx_ring->nr_frags =3D 0;
-> >                          break;
-> >                  }
-> >                  xdp->data =3D NULL;
-> >                  rx_ring->first_desc =3D ntc;
-> > +               rx_ring->nr_frags =3D 0;
-> >
-> >                  stat_err_bits =3D BIT(ICE_RX_FLEX_DESC_STATUS0_RXE_S);
-> >                  if (unlikely(ice_test_staterr(rx_desc->wb.status_error=
-0,
-> > diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.h b/drivers/net/et=
-hernet/intel/ice/ice_txrx.h
-> > index b3379ff73674..af955b0e5dc5 100644
-> > --- a/drivers/net/ethernet/intel/ice/ice_txrx.h
-> > +++ b/drivers/net/ethernet/intel/ice/ice_txrx.h
-> > @@ -358,6 +358,7 @@ struct ice_rx_ring {
-> >          struct ice_tx_ring *xdp_ring;
-> >          struct ice_rx_ring *next;       /* pointer to next ring in q_v=
-ector */
-> >          struct xsk_buff_pool *xsk_pool;
-> > +       u32 nr_frags;
-> >          dma_addr_t dma;                 /* physical address of ring */
-> >          u16 rx_buf_len;
-> >          u8 dcb_tc;                      /* Traffic class of ring */
-> > diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.h b/drivers/ne=
-t/ethernet/intel/ice/ice_txrx_lib.h
-> > index 762047508619..afcead4baef4 100644
-> > --- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.h
-> > +++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.h
-> > @@ -12,26 +12,39 @@
-> >    * act: action to store onto Rx buffers related to XDP buffer parts
-> >    *
-> >    * Set action that should be taken before putting Rx buffer from firs=
-t frag
-> > - * to one before last. Last one is handled by caller of this function =
-as it
-> > - * is the EOP frag that is currently being processed. This function is
-> > - * supposed to be called only when XDP buffer contains frags.
-> > + * to the last.
-> >    */
-> >   static inline void
-> >   ice_set_rx_bufs_act(struct xdp_buff *xdp, const struct ice_rx_ring *r=
-x_ring,
-> >                      const unsigned int act)
-> >   {
-> > -       const struct skb_shared_info *sinfo =3D xdp_get_shared_info_fro=
-m_buff(xdp);
-> > -       u32 first =3D rx_ring->first_desc;
-> > -       u32 nr_frags =3D sinfo->nr_frags;
-> > +       u32 sinfo_frags =3D xdp_get_shared_info_from_buff(xdp)->nr_frag=
-s;
-> > +       u32 nr_frags =3D rx_ring->nr_frags + 1;
-> > +       u32 idx =3D rx_ring->first_desc;
-> >          u32 cnt =3D rx_ring->count;
-> >          struct ice_rx_buf *buf;
-> >
-> >          for (int i =3D 0; i < nr_frags; i++) {
-> > -               buf =3D &rx_ring->rx_buf[first];
-> > +               buf =3D &rx_ring->rx_buf[idx];
-> >                  buf->act =3D act;
-> >
-> > -               if (++first =3D=3D cnt)
-> > -                       first =3D 0;
-> > +               if (++idx =3D=3D cnt)
-> > +                       idx =3D 0;
-> > +       }
-> > +
-> > +       /* adjust pagecnt_bias on frags freed by XDP prog */
-> > +       if (sinfo_frags < rx_ring->nr_frags && act =3D=3D ICE_XDP_CONSU=
-MED) {
-> > +               u32 delta =3D rx_ring->nr_frags - sinfo_frags;
-> > +
-> > +               while (delta) {
-> > +                       if (idx =3D=3D 0)
-> > +                               idx =3D cnt - 1;
-> > +                       else
-> > +                               idx--;
-> > +                       buf =3D &rx_ring->rx_buf[idx];
-> > +                       buf->pagecnt_bias--;
-> > +                       delta--;
-> > +               }
+> > If "standardize both", does that mean neither is mandatory and each too=
+l
+> > is free to pick one or the other?  And would the IANA registry require =
+a
+> > document
+> > adding any new instructions to specify the assembly in both dialects?
 >
-> Nit, but the function name ice_set_rx_bufs_act() doesn't completely
-> align with what it's doing anymore due to the additional pagecnt_bias
-> changes.
+> Well, if we're standardizing on both, then yes I think it would be
+> mandatory for a tool to support both, and I think instructions would
+> require assembly for both dialects.
 
-The patch set was applied. Please advise whether this can stay as-is
-or follow up is absolutely necessary.
+I think it's obvious that there is no way we will add gcc's flavor
+of asm to kernel and llvm.
+
+> Practically speaking that's already
+> what's happening, no? Both dialects are already pervasive,
+
+They are not. There are thousands of lines of asm written in pseudo-c
+used in production applications and probably only ubpf/tests and gcc/tests
+in that other asm, since gcc bpf support is not yet in the released gcc ver=
+sion.
+
+There is also this asm flavor:
+https://github.com/Xilinx-CNS/ebpf_asm
+
+Which is different from pseudo-c and ubpf asm.
+
+I don't think asm syntax should be an IETF draft.
