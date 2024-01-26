@@ -1,67 +1,63 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD18A944
-	for <bpf@vger.kernel.org>; Fri, 26 Jan 2024 03:26:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 092AA14A8D
+	for <bpf@vger.kernel.org>; Fri, 26 Jan 2024 04:00:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706239575; cv=none; b=gya+/ZxtMCkUnDFryYNZ0Y7uApwPXp/3XF26C/sbK3RLeM8oy0zJ2aAQlshSq9d84L/ApWb4bIN5GRMCZ3+ezDczElr7IIA3PEsCos+Gqa31MyE8A7M/MBfiFfeUJvvw3IW3m+G+7WxCY/s6HbGuVhA11KlsBQ8ATnSrVCB+hro=
+	t=1706241658; cv=none; b=NF/QK8jMkV0hozPpie+WKjiRISBnOtD/vOROz208DDH/fjeijcjIdY8bWv9BZ6QSUIevL8bTRG6ayrNRQMyXsYLOhMOFp9CqH7TBuuuoPiPdGPl6unHp1tcJRw6Ku2309gMHRdDmeTYsuGiprtFURRXqbqtcxWCtglESyHFPr9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706239575; c=relaxed/simple;
-	bh=K/5IKUJwNENhC36vnIdxJ13MbiHWkQO+1Nf5Ecz7Vgc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jJVd/mOa6BgbdBGWvSSppbMYqSe1Y3jO0PBtqDg3cEI5xkTVuKbd8TtCB32eVzI01nUmopTlnu0dI7SItq4iYSZ+dO+AbafaL9XhC2YPJfLaLwufo2Nh++7Dk+n1giIUUN9k9KodRPwdFHzlr0AiXfB1puUamB2eNuUb23L14Xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DUlv393L; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1706241658; c=relaxed/simple;
+	bh=3B1nfAzvBW0dyLVuEMc65aJUE6HiHmUjue5wN21BxKo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PzlWOtQJfXo3onxSWzz+dtt1EJotvsZHBIC4VnqH785H8CZT4A26SKdCAQYyb09+PjjhI3+2UYDOfauG+xhpqP/ct+Gi6iLrKU9aFqHWo4oi2cAQ0DAHONriHYwu8Ao90SS1b9S9QqE9C6b2Zo90LyUlDNEBSi5czDJY685fSAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=Atw6zlfX; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DUlv393L"
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2cf3ea86423so12170491fa.1
-        for <bpf@vger.kernel.org>; Thu, 25 Jan 2024 19:26:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="Atw6zlfX"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-290d59df3f0so2856194a91.2
+        for <bpf@vger.kernel.org>; Thu, 25 Jan 2024 20:00:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706239571; x=1706844371; darn=vger.kernel.org;
+        d=googlemail.com; s=20230601; t=1706241656; x=1706846456; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oqF2tHMly/pY01Q5kWiQakhWjb5ZSNXelLXiXMWZK5Y=;
-        b=DUlv393LVrbu+E5yhc2gBfsQm2AHanaNq4QiVGXbtWzsdklvDgM6Kk5BvuNiv/wMPE
-         wuGHvxGW2ctnFKY59y6PIEmydpxfHu3LIMhWyc7at8noRvN4O7oyhNNcHCqX1WQ8wGHX
-         aJpWpG/lOMI70wq2OHU3zPxM1yICSf6qb9MmMzdmAVfyNLDTztIFXFxi+8p9uAvRoVQ0
-         WdZ4amzfg6ZyTCMXC69QbaZKihaUvOTElAdTX0XukJcY/T4EdtGUHz8IWxRZqYCy/4M4
-         sRByFMLen0PJ8TgH07Qutu0P4kdohs0DvFj7sP2jD/SQfmYHm5LbAUb3gtwqtDPN+1C8
-         WgrQ==
+        bh=F0x31n0EPtABRR56/sibSB0ELoGXe+A/qk2xER5E7aU=;
+        b=Atw6zlfXxhFpIp2/CWmzrC5WtR3eTGSBpE748Jb8hwOMEPJXYCNdm0QmcER1K5q78D
+         S7nk6JUiX77rPajBTeiwR5iyuGRze1Lqm8U+vg4zOkNcpXRFIEy56L18nQmY3XsrytHj
+         +yl6o4B/wIy10W356gv8zcP9SgpYZuRFF5CgJDL2lZS6ErW8JDLIM1HEgpDKtiUb80pc
+         Co+jjLBS8Hqqolif1pq4YWY0Wan71Uk5kkMHzZQF4bJUiO2nw6e8VltjfcG4H0frjBE1
+         FCQx24llgUKUSsUVQpQ7EA76MzK9l3m51tyS7H2IUgzVNcd9avP9CViu7dldm1YDm1YY
+         ru+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706239571; x=1706844371;
+        d=1e100.net; s=20230601; t=1706241656; x=1706846456;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oqF2tHMly/pY01Q5kWiQakhWjb5ZSNXelLXiXMWZK5Y=;
-        b=tzBGuo1TKHTvCfcEyytHcNyisHKmpO8ZGrmEUmIsdcRqdNzo1oftpFxSPbJ89cC+nh
-         /4qVX/dUHjiw+fUizecnwWUXDFcofjJq9SBlEUCsW2PnFmae9/saRCu/LfXvNSCWKQl+
-         3tDNP//esAAbqq7x9spqFpTdlWqbHAHSpzZRFIKs1JhmS2eRd2rWyvRt4e4jX/DmtmaV
-         RoAzM6+WCknfKjxcmyeWlWWqO/eQizNv0HQ3YdnN2kHIGXt4Gin8vq1KBgXgcuSptskN
-         iF19cVIEum3oietbP4XLZKV+mP65XhnOmQDRgHaJwTVfx5Al/qpgCsWCoEZBfuZEsXDl
-         3Bag==
-X-Gm-Message-State: AOJu0Yzm8xnncakiA2tv87OSffGVvX0qnSTsfjTYHU+QxjY4Tou/Xdeg
-	1EJW1/BWdlzq7LV7deKBaj1uNPV3sUZIU0vydYM2blitbXSg0SwyI5pD2jX9
-X-Google-Smtp-Source: AGHT+IGGxJN6rY8nyKHR45A3oddpBx+wLAv51Dh8AHYfM6czNGJEIq2R+U522XA6VKCDxPOnOPR8/A==
-X-Received: by 2002:a05:651c:140f:b0:2cd:df43:9544 with SMTP id u15-20020a05651c140f00b002cddf439544mr265179lje.97.1706239570835;
-        Thu, 25 Jan 2024 19:26:10 -0800 (PST)
-Received: from localhost.localdomain (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id b11-20020aa7c6cb000000b005593c83bdafsm145816eds.45.2024.01.25.19.26.09
+        bh=F0x31n0EPtABRR56/sibSB0ELoGXe+A/qk2xER5E7aU=;
+        b=PZLu0Huqfh6V57uQ9NdfMJbEnObwS52NPegZJkL0RRUgy60UexQjC5gfyARgLM6vTe
+         I3Xhkn/V4NsZIUHr6VXbemvtLTY+bOBWsUN9IukVB8rXh8b7ksUTw67p9RtRtRFir8A3
+         U8sJ7LCg8+Nld9BhfO2mYVCea3H07Zo1ou9bHBByRnEKLfSUVjYEmed7iGN0aX0gtlWb
+         yPbMsq7kpN6NqwEFzkqv2C3Ob5VR8cCJABJZ6JztHf2fP5fsj5JM5ENSUN8YH6OmYqVG
+         erw0ioPnDS2LPPmZxX7QadmSx/U9+9rxofcpYeW8yTHUD6dT7PDicS0SodUEzf2hWHaS
+         xpew==
+X-Gm-Message-State: AOJu0Yw8TbFKGpmZway2N6DqwPRuz3ckUFaY9EoqdQXt409HS6/A97tU
+	ZGfhlBusRsJk4DllwXJ+ybJXhWa+Vp6WEn3ne30u8ct7mUm9rV2y3X8H9Am7xFg=
+X-Google-Smtp-Source: AGHT+IGvqszPt/mStnydxNWexu1RZXFyTu1pyTnXJMLN5VPaWle/TBh7mfq4wLUW7667ON/mxf5WHA==
+X-Received: by 2002:a17:90b:3842:b0:290:415d:4a46 with SMTP id nl2-20020a17090b384200b00290415d4a46mr560630pjb.66.1706241655978;
+        Thu, 25 Jan 2024 20:00:55 -0800 (PST)
+Received: from ubuntu2310.lan (c-67-170-74-237.hsd1.wa.comcast.net. [67.170.74.237])
+        by smtp.gmail.com with ESMTPSA id jz6-20020a170903430600b001d74502d261sm250863plb.115.2024.01.25.20.00.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jan 2024 19:26:10 -0800 (PST)
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org
-Cc: andrii@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	kernel-team@fb.com,
-	yonghong.song@linux.dev,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next] bpf: One more maintainer for libbpf and BPF selftests
-Date: Fri, 26 Jan 2024 05:25:54 +0200
-Message-ID: <20240126032554.9697-1-eddyz87@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Thu, 25 Jan 2024 20:00:55 -0800 (PST)
+From: Dave Thaler <dthaler1968@googlemail.com>
+X-Google-Original-From: Dave Thaler <dthaler1968@gmail.com>
+To: bpf@vger.kernel.org
+Cc: bpf@ietf.org,
+	Dave Thaler <dthaler1968@gmail.com>
+Subject: [PATCH bpf-next] bpf, docs: Clarify definitions of various instructions
+Date: Thu, 25 Jan 2024 20:00:50 -0800
+Message-Id: <20240126040050.8464-1-dthaler1968@gmail.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,48 +66,99 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-I've been working on BPF verifier, BPF selftests and, to some extent,
-libbpf, for some time. As suggested by Andrii and Alexei,
-I humbly ask to add me to maintainers list:
-- As reviewer   for BPF [GENERAL]
-- As maintainer for BPF [LIBRARY]
-- As maintainer for BPF [SELFTESTS]
+Clarify definitions of several instructions:
+* BPF_NEG does not support BPF_X
+* BPF_CALL does not support BPF_JMP32 or BPF_X
+* BPF_EXIT does not support BPF_X
+* BPF_JA does not support BPF_X (was implied but not explicitly stated)
 
-This patch adds dedicated entries to MAINTAINERS.
+Also fix a typo in the wide instruction figure where
+the field is actually named "opcode" not "code".
 
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Dave Thaler <dthaler1968@gmail.com>
 ---
- MAINTAINERS | 3 +++
- 1 file changed, 3 insertions(+)
+ .../bpf/standardization/instruction-set.rst   | 51 ++++++++++---------
+ 1 file changed, 27 insertions(+), 24 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8709c7cd3656..0707eeea689a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3792,6 +3792,7 @@ M:	Alexei Starovoitov <ast@kernel.org>
- M:	Daniel Borkmann <daniel@iogearbox.net>
- M:	Andrii Nakryiko <andrii@kernel.org>
- R:	Martin KaFai Lau <martin.lau@linux.dev>
-+R:	Eduard Zingerman <eddyz87@gmail.com>
- R:	Song Liu <song@kernel.org>
- R:	Yonghong Song <yonghong.song@linux.dev>
- R:	John Fastabend <john.fastabend@gmail.com>
-@@ -3852,6 +3853,7 @@ F:	net/unix/unix_bpf.c
+diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
+index d17a96c62..af43227b6 100644
+--- a/Documentation/bpf/standardization/instruction-set.rst
++++ b/Documentation/bpf/standardization/instruction-set.rst
+@@ -174,12 +174,12 @@ and imm containing the high 32 bits of the immediate value.
+ This is depicted in the following figure::
  
- BPF [LIBRARY] (libbpf)
- M:	Andrii Nakryiko <andrii@kernel.org>
-+M:	Eduard Zingerman <eddyz87@gmail.com>
- L:	bpf@vger.kernel.org
- S:	Maintained
- F:	tools/lib/bpf/
-@@ -3909,6 +3911,7 @@ F:	security/bpf/
+         basic_instruction
+-  .-----------------------------.
+-  |                             |
+-  code:8 regs:8 offset:16 imm:32 unused:32 imm:32
+-                                 |              |
+-                                 '--------------'
+-                                pseudo instruction
++  .------------------------------.
++  |                              |
++  opcode:8 regs:8 offset:16 imm:32 unused:32 imm:32
++                                   |              |
++                                   '--------------'
++                                  pseudo instruction
  
- BPF [SELFTESTS] (Test Runners & Infrastructure)
- M:	Andrii Nakryiko <andrii@kernel.org>
-+M:	Eduard Zingerman <eddyz87@gmail.com>
- R:	Mykola Lysenko <mykolal@fb.com>
- L:	bpf@vger.kernel.org
- S:	Maintained
+ Thus the 64-bit immediate value is constructed as follows:
+ 
+@@ -320,6 +320,9 @@ bit operands, and zeroes the remaining upper 32 bits.
+ operands into 64 bit operands.  Unlike other arithmetic instructions,
+ ``BPF_MOVSX`` is only defined for register source operands (``BPF_X``).
+ 
++The ``BPF_NEG`` instruction is only defined when the source bit is clear
++(``BPF_K``).
++
+ Shift operations use a mask of 0x3F (63) for 64-bit operations and 0x1F (31)
+ for 32-bit operations.
+ 
+@@ -375,27 +378,27 @@ Jump instructions
+ otherwise identical operations.
+ The 'code' field encodes the operation as below:
+ 
+-========  =====  ===  ===========================================  =========================================
+-code      value  src  description                                  notes
+-========  =====  ===  ===========================================  =========================================
+-BPF_JA    0x0    0x0  PC += offset                                 BPF_JMP class
+-BPF_JA    0x0    0x0  PC += imm                                    BPF_JMP32 class
++========  =====  ===  ===============================  =============================================
++code      value  src  description                      notes
++========  =====  ===  ===============================  =============================================
++BPF_JA    0x0    0x0  PC += offset                     BPF_JMP | BPF_K only
++BPF_JA    0x0    0x0  PC += imm                        BPF_JMP32 | BPF_K only
+ BPF_JEQ   0x1    any  PC += offset if dst == src
+-BPF_JGT   0x2    any  PC += offset if dst > src                    unsigned
+-BPF_JGE   0x3    any  PC += offset if dst >= src                   unsigned
++BPF_JGT   0x2    any  PC += offset if dst > src        unsigned
++BPF_JGE   0x3    any  PC += offset if dst >= src       unsigned
+ BPF_JSET  0x4    any  PC += offset if dst & src
+ BPF_JNE   0x5    any  PC += offset if dst != src
+-BPF_JSGT  0x6    any  PC += offset if dst > src                    signed
+-BPF_JSGE  0x7    any  PC += offset if dst >= src                   signed
+-BPF_CALL  0x8    0x0  call helper function by address              see `Helper functions`_
+-BPF_CALL  0x8    0x1  call PC += imm                               see `Program-local functions`_
+-BPF_CALL  0x8    0x2  call helper function by BTF ID               see `Helper functions`_
+-BPF_EXIT  0x9    0x0  return                                       BPF_JMP only
+-BPF_JLT   0xa    any  PC += offset if dst < src                    unsigned
+-BPF_JLE   0xb    any  PC += offset if dst <= src                   unsigned
+-BPF_JSLT  0xc    any  PC += offset if dst < src                    signed
+-BPF_JSLE  0xd    any  PC += offset if dst <= src                   signed
+-========  =====  ===  ===========================================  =========================================
++BPF_JSGT  0x6    any  PC += offset if dst > src        signed
++BPF_JSGE  0x7    any  PC += offset if dst >= src       signed
++BPF_CALL  0x8    0x0  call helper function by address  BPF_JMP | BPF_K only, see `Helper functions`_
++BPF_CALL  0x8    0x1  call PC += imm                   BPF_JMP | BPF_K only, see `Program-local functions`_
++BPF_CALL  0x8    0x2  call helper function by BTF ID   BPF_JMP | BPF_K only, see `Helper functions`_
++BPF_EXIT  0x9    0x0  return                           BPF_JMP | BPF_K only
++BPF_JLT   0xa    any  PC += offset if dst < src        unsigned
++BPF_JLE   0xb    any  PC += offset if dst <= src       unsigned
++BPF_JSLT  0xc    any  PC += offset if dst < src        signed
++BPF_JSLE  0xd    any  PC += offset if dst <= src       signed
++========  =====  ===  ===============================  =============================================
+ 
+ The BPF program needs to store the return value into register R0 before doing a
+ ``BPF_EXIT``.
 -- 
-2.43.0
+2.40.1
 
