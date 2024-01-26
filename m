@@ -1,172 +1,92 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA4DCEC3
-	for <bpf@vger.kernel.org>; Fri, 26 Jan 2024 01:12:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A443C64F
+	for <bpf@vger.kernel.org>; Fri, 26 Jan 2024 01:39:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706231543; cv=none; b=dOwL550qz8BHZLhqfKo2v4w+bkZVmLBqufPfKegppdcyzCC9K1WsuaTqSPG59C8RpMHERtR4NxaRAJ3e1s7N+Gn0a8PkW8ZVRZ6sEQuVeYnCMS08/f3s7xf/Dby8QpbwIHrWhbQtkZZQy0e97TJnYzVN5bZrb44cjNiy9G3SzyM=
+	t=1706233199; cv=none; b=Ez/KspZYjnQUY/cXEEBxCYkyDv6s9axeQeF+0+PpWyvNO/FLzbpOelmTFVJWbZKfRO/52BM2E7uu7zH3o7qEQI7y16torS2NlgvgLORD4efPjqHxRyT3w1YuOeKMnymQERCQ6hMfmmfbHgEkoksSDFwkQdEOz426bxZLzTKt90I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706231543; c=relaxed/simple;
-	bh=QlugC674/rwJ2gGnTBgHgoBMzyw8qRZUPIdQTtSMfOI=;
-	h=To:Cc:References:In-Reply-To:Date:Message-ID:MIME-Version:Subject:
-	 Content-Type:From; b=n772zs2Yha57A9g3ndG3cW7xAgBzuadhSPfXNaMTvofSENuSvCaI3wdt3c7e4ADHkulQkTtC5aa0JZrkgZbYCZVbXNeiUiLHCRU2dA2P4ro1GC0rAivl5MDf9i98GjBCDv4nT/kywaUsPxO5sxzOlDoquPXF6amQmKpCQRdbyg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dmarc.ietf.org; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=GSJ3x6sf; dkim=fail (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=jIqQJxQA reason="signature verification failed"; dkim=fail (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=jdCq6F4g reason="signature verification failed"; arc=none smtp.client-ip=50.223.129.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dmarc.ietf.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="GSJ3x6sf";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="jIqQJxQA";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="jdCq6F4g"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id F1705C14F739
-	for <bpf@vger.kernel.org>; Thu, 25 Jan 2024 17:12:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1706231534; bh=QlugC674/rwJ2gGnTBgHgoBMzyw8qRZUPIdQTtSMfOI=;
-	h=To:Cc:References:In-Reply-To:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=GSJ3x6sfz9Zw3RznmqmOAcX3IPGuJ1iYHGjahSUw5XvnhVCiHdbUC24C/+zCRSSeu
-	 nZpLljU6ZwwsQakNp6PcqYZgh+HI18cvLIcaM9Ea+iSbyMDMyBBd8f7Q3TfAWdm1o3
-	 x32Xad51vucFWjkGmhQJpQXf7V7c3t65nbpnn6CY=
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
- by ietfa.amsl.com (Postfix) with ESMTP id C6449C14F68B;
- Thu, 25 Jan 2024 17:12:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
- t=1706231534; bh=QlugC674/rwJ2gGnTBgHgoBMzyw8qRZUPIdQTtSMfOI=;
- h=From:To:Cc:References:In-Reply-To:Date:Subject:List-Id:
- List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
- b=jIqQJxQAAJJYN59nyjQck2yl9gnLqFMK7kN8vLPwh2MqGHbjKDk4AeVGoCqqNJd3q
- wgOWfwOSk0777aU4VQ7z3bVh9xrZLBsVMTDfEIgxFrZxWl0OicYnaHWZarFwmT5TRB
- 1km8uGYGsKpWLa8ZA3flWSz/jBctqY20iD3CrhwA=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id C3530C14F68B
- for <bpf@ietfa.amsl.com>; Thu, 25 Jan 2024 17:12:13 -0800 (PST)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -5.456
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=googlemail.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wXPamH2_fpM1 for <bpf@ietfa.amsl.com>;
- Thu, 25 Jan 2024 17:12:09 -0800 (PST)
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com
- [IPv6:2607:f8b0:4864:20::42d])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id EE9B2C14F60A
- for <bpf@ietf.org>; Thu, 25 Jan 2024 17:12:09 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id
- d2e1a72fcca58-6dddee3ba13so63998b3a.1
- for <bpf@ietf.org>; Thu, 25 Jan 2024 17:12:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1706231529; x=1706836329; darn=ietf.org;
- h=content-language:thread-index:content-transfer-encoding
- :mime-version:message-id:date:subject:in-reply-to:references:cc:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=8/LRa5c0xfQcPoEI3iLfcaoTA9F5YlClSHNNttrrjsM=;
- b=jdCq6F4ghzA992LnR0JQiORb0atN/y0GC8w+5OXIdnm9Fv2rb163YYM7n04mqy4Chq
- OnJ+4WrtPSfOqIqeptCG1eGT31UTk+QS/snthAjr2aWoM4Z9muaKFRr9sqs9Zbm6wUab
- cavVB8h3sJdX4LtFaVWf6AQDOvaek0iobLFNd3u/tTKFFxgzyhwcCCAlSNoJTpXTVrfA
- phbX1S6/8VhzakIceJI1TeBnXnSz5vZEgQSSVrKsXgR2bw9fy1XmdULvpDhESHlLW3BI
- 0/J1dwQDV0QiDiuDZXRsMjKA8KmVZNAet7l9pIQ1HjeuKaK4aJOl0N5ars2mitXo3HOo
- 0ATw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706231529; x=1706836329;
- h=content-language:thread-index:content-transfer-encoding
- :mime-version:message-id:date:subject:in-reply-to:references:cc:to
- :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=8/LRa5c0xfQcPoEI3iLfcaoTA9F5YlClSHNNttrrjsM=;
- b=UoZ0dEZ1sG1QVZAvhXTHu6rmGBd2JpdnfefpDVFWZiHAeDgj2FaMzH6+zR0womEFk4
- 4Otw1fkCgrpuByQhoNFENp71s50hxBrvTvgLXacex60VUcnz+QFMV6vuVx7eeE4zCmO6
- lEolGfYKTF39MSEgpU549sYcmgbf9/Xj2pNuaOdTkbBN9tO2tHQwL/xiKl7xedyTVf3H
- MUawkQMOXZePefYRlvUFBbursZtBfFAaPtsuWBb184BINPdpp2X8ScDNZyudlLpTxQES
- p/q/vJJU5LVu1RNvF61F6AZzAadETBWAEl9CgP6sPiWy4qzwa5ZvcL5zYUgubWnZz/fp
- boXQ==
-X-Gm-Message-State: AOJu0Yz7Ty+B8pF7qjw5YbFFVuWCpR9FtwZJ8ev1YjnOon4dVRUJiWzc
- VME4zBpYy/eViryEoxhsJbXJvWF9nMm04diUYxYrxqMD1IIUY81Pn4zBOokNUAE=
-X-Google-Smtp-Source: AGHT+IHzEz+JTEOln91glJ8FbdhNkrzxT+c1Upo2SxzYjgolCXfJTg036g84IbwqMEakq0S+S0g1eA==
-X-Received: by 2002:a05:6a20:8e04:b0:19b:435a:a265 with SMTP id
- y4-20020a056a208e0400b0019b435aa265mr547317pzj.52.1706231528651; 
- Thu, 25 Jan 2024 17:12:08 -0800 (PST)
-Received: from ArmidaleLaptop (c-67-170-74-237.hsd1.wa.comcast.net.
- [67.170.74.237]) by smtp.gmail.com with ESMTPSA id
- pq11-20020a17090b3d8b00b0028e01ddb6c2sm154964pjb.12.2024.01.25.17.12.07
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Thu, 25 Jan 2024 17:12:08 -0800 (PST)
-X-Google-Original-From: <dthaler1968@gmail.com>
-To: "'Yonghong Song'" <yonghong.song@linux.dev>
-Cc: <bpf@ietf.org>,
-	<bpf@vger.kernel.org>
-References: <085f01da48bb$fe0c3cb0$fa24b610$@gmail.com>
- <08ab01da48be$603541a0$209fc4e0$@gmail.com>
- <829aa552-b04e-4f08-9874-b3f929741852@linux.dev>
- <095f01da48e8$611687d0$23439770$@gmail.com>
- <4dfb0d6a-aa48-4d96-82f0-09a960b1012f@linux.dev>
- <1fc001da4e6a$2848cad0$78da6070$@gmail.com>
- <9d077ed4-6a30-49db-8160-83d8c525ff3e@linux.dev>
-In-Reply-To: <9d077ed4-6a30-49db-8160-83d8c525ff3e@linux.dev>
-Date: Thu, 25 Jan 2024 17:12:05 -0800
-Message-ID: <259a01da4ff4$adfe9c50$09fbd4f0$@gmail.com>
+	s=arc-20240116; t=1706233199; c=relaxed/simple;
+	bh=yJ9CMkYXFUN6jMJMM3NSfqxCnsIm4HoLVbzO8R74gUQ=;
+	h=Subject:To:References:Cc:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=BVFbmk6PsVxBpZgjSGqPvSo1QRja5cSHAwuXoUdhHXhLqvyl2UxMAZew7dxtPsL4GDKT/cPe3kbylEWU4CPPDBr74/uSZDSytM4GTS709ukp/Qodlyf2BsWnHLQTMJ4Pw6SHsklEj5EOYEpeJyyrvS8ehwQxZp+lglxKdHGf+I0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8BxHOtqDbNlJAIGAA--.11265S3;
+	Fri, 26 Jan 2024 09:39:54 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx7c5qDbNlS9kaAA--.50715S3;
+	Fri, 26 Jan 2024 09:39:54 +0800 (CST)
+Subject: Re: Add missing line break in test_verifier
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+References: <c318466f-ffd7-6bdf-9d95-93a952106bd5@loongson.cn>
+ <CAEf4BzYCOFEuLB53v=qsuW3poSE+O4R58U+824riQV1BzF2i_g@mail.gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <e6ecaf05-2a8c-bdca-1b30-3c6b5fb83c6d@loongson.cn>
+Date: Fri, 26 Jan 2024 09:39:54 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AdpP87ojFjdXkSD3TMCG8PsKBCFdrw==
-Content-Language: en-us
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/a3mPMDnp6Y_yREfRj6OMtvFJy3o>
-Subject: [Bpf] 64-bit immediate instructions clarification
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-X-Original-From: dthaler1968@googlemail.com
-From: dthaler1968=40googlemail.com@dmarc.ietf.org
-Message-ID: <20240126011205.cewhhRXIKCB7T1-i6fbLaHFwIc2Yi-ya_e8xVykE0so@z>
+In-Reply-To: <CAEf4BzYCOFEuLB53v=qsuW3poSE+O4R58U+824riQV1BzF2i_g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8Bx7c5qDbNlS9kaAA--.50715S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrur4kXw4kuFW5AF1kGrW5CFX_yoWkArb_Wr
+	4UCwnrC3s8ZFnxAF4xK3Zxu395GwsIgrWkCr4DWw13try8t3Z8Ga109F18ZayrWa9xJFZF
+	vFsYyF1fAr15CosvyTuYvTs0mTUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUb-8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
+	JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
+	xG64xvF2IEw4CE5I8CrVC2j2WlYx0EF7xvrVAajcxG14v26r1j6r4UMcIj6xIIjxv20xvE
+	14v26r126r1DMcIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y4
+	8IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
+	6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
+	C2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_
+	JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
+	WUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
+	daVFxhVjvjDU0xZFpf9x07j1_M-UUUUU=
 
-The spec defines:
-> As discussed below in `64-bit immediate instructions`_, a 64-bit immediate
-> instruction uses a 64-bit immediate value that is constructed as follows.
-> The 64 bits following the basic instruction contain a pseudo instruction
-> using the same format but with opcode, dst_reg, src_reg, and offset all set to zero,
-> and imm containing the high 32 bits of the immediate value.
-[...]
-> imm64 = (next_imm << 32) | imm
 
-The 64-bit immediate instructions section then says:
-> Instructions with the ``BPF_IMM`` 'mode' modifier use the wide instruction
-> encoding defined in `Instruction encoding`_, and use the 'src' field of the
-> basic instruction to hold an opcode subtype.
 
-Some instructions then nicely state how to use the full 64 bit immediate value, such as
-> BPF_IMM | BPF_DW | BPF_LD  0x18    0x0  dst = imm64                                integer      integer
-> BPF_IMM | BPF_DW | BPF_LD  0x18    0x2  dst = map_val(map_by_fd(imm)) + next_imm   map fd       data pointer
-> BPF_IMM | BPF_DW | BPF_LD  0x18    0x6  dst = map_val(map_by_idx(imm)) + next_imm  map index    data pointer
+On 01/26/2024 05:59 AM, Andrii Nakryiko wrote:
+> On Wed, Jan 24, 2024 at 7:13 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>>
+>> Hi Andrii,
+>>
+>> There was a line break at the end of printf() in the original patch [1],
+>> but it is missing with small change in the git tree. Would you be able
+>> to squash below trivial change into the current commit [2]?
+>>
+>> diff --git a/tools/testing/selftests/bpf/test_verifier.c
+>> b/tools/testing/selftests/bpf/test_verifier.c
+>> index e1a1dfe8d7fa..df04bda1c927 100644
+>> --- a/tools/testing/selftests/bpf/test_verifier.c
+>> +++ b/tools/testing/selftests/bpf/test_verifier.c
+>> @@ -1527,7 +1527,7 @@ static void do_test_single(struct bpf_test *test,
+>> bool unpriv,
+>>          int i, err;
+>>
+>>          if ((test->flags & F_NEEDS_JIT_ENABLED) && jit_disabled) {
+>> -               printf("SKIP (requires BPF JIT)");
+>> +               printf("SKIP (requires BPF JIT)\n");
+>
+> Yeah, my bad, missed adding \n when fixing up message. I don't think
+> we can fix this up anymore, would you be able to send this as a proper
+> patch and we can apply this?
 
-Others don't:
-> BPF_IMM | BPF_DW | BPF_LD  0x18    0x1  dst = map_by_fd(imm)                       map fd       map
-> BPF_IMM | BPF_DW | BPF_LD  0x18    0x3  dst = var_addr(imm)                        variable id  data pointer
-> BPF_IMM | BPF_DW | BPF_LD  0x18    0x4  dst = code_addr(imm)                       integer      code pointer
-> BPF_IMM | BPF_DW | BPF_LD  0x18    0x5  dst = map_by_idx(imm)                      map index    map
+OK, will do it as soon as possible.
 
-How is next_imm used in those four?  Must it be 0?  Or can it be anything and it's ignored?
-Or is it used for something?
+Thanks,
+Tiezhu
 
-Dave
-
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
