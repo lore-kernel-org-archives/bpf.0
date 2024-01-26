@@ -1,85 +1,64 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC87DBE65
-	for <bpf@vger.kernel.org>; Fri, 26 Jan 2024 05:10:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23ED2BA2D
+	for <bpf@vger.kernel.org>; Fri, 26 Jan 2024 05:12:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706245825; cv=none; b=csXcwC3GkqgEaVe4OiFLCPdNsdYeZqNzXb77PqC1xCHgIm2AP7SOedjC2aaMqJltzACRNuPIc+/CGqm5xeP31N8gfzFV7Aq7Y8hpHgX+f74Y4BRwn3JwcivHfjN45MOxbBH3ylIzbkDrREvgrf+qKdbADe38ZBIrw5rpoNIUg2M=
+	t=1706245950; cv=none; b=Q/Va5EpASgr/hqY20ryXy5iAvSH1fRLYBTaLKvk21Y13xxLNABxjLa7WwCDJlSCygwTchIr2c88x1Gz6QgqCgTOyfR04LlOpOIhZu77T74RrHWDMpH8LU9u7kOdH3Suk80dTpKLusMG9T/kbEkiSzYzpd9WUUWyXCK6Qri+cIik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706245825; c=relaxed/simple;
-	bh=B73X4JGB8PX4r9P7dYFRnVA377hiy6r3bE2jKuqvsSc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Q4w3XMSyqX05m7gl64EsoVlwl4FN+yrQwOKtJjVa+2VpqKAOkl1kkz2wi0uCjXFy+wL9xgD+4cX3MecYhRM7Z3vCwEPr/jENoYS2AMfkAOr4GRiG/XtxFCS21GL8XO6Aq6wBUY1+qYtaEuQBYAvb28RCxvv4nCKyd4xSgQSB5cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H6xWtiz/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706245950; c=relaxed/simple;
+	bh=YcThGL3ya6LgHZTsllu1U6305lplcDWet/H7XFgjp2Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RXRNrX1zUqPUN3shmT/xGoJWg3wmFGMzjOrZGHTKCLwrRc4K3aZd/yf1ZzuJXfwrhuSrk3Y6KJf8bowb4cHyHSeRGZY8iRy7y9PyAypefuV2h++TKpG3GmS6nZABa6zAIGSQLfv/MOUUnxIXY5lIeKfGZYtMQH594OTBB08J5Wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eAwg1tWu; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H6xWtiz/"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2275EC433F1;
-	Fri, 26 Jan 2024 05:10:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706245825;
-	bh=B73X4JGB8PX4r9P7dYFRnVA377hiy6r3bE2jKuqvsSc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=H6xWtiz/Xga+XJCmq5V/n15bfZbuzs70ohz1IKAFPd+p0GSq1tXE5ia/UUchB5B/c
-	 BM+zhPDqoUZHP7vW5Rg2AYATkvd9SgFE6XRLK4/EscR/H+R97HXV9nBZlbeb75yAFi
-	 IHyqsPtWgaTT8zSMKt3n9bbNw7O6Wfvv0qjEIdLbHvPtawfh/bnszrHegst9xNFmG7
-	 Kt6omQJBLoETW8sO6We3bKaYrfIQAuq74CA6wGLfSDuBF8ji8eRggld6lDK/xPJJZm
-	 VMjJDCArPiUcPYBKRmNyYIC+C4rhrS9AxTC5yjCQ4CcUxbhvu+crX2RayZtBlnHcui
-	 i/26+37P3HczQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 09B0FD8C961;
-	Fri, 26 Jan 2024 05:10:25 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eAwg1tWu"
+Message-ID: <68a15df5-dbb8-481a-812e-2b361dc2a915@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1706245944;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YcThGL3ya6LgHZTsllu1U6305lplcDWet/H7XFgjp2Q=;
+	b=eAwg1tWumUo30cBWqH9icBru2E5Zaz9t9cIlCCyGUu8tSi8TwaWMeZP1aosUdpVVUjwT+D
+	x9FEpG2gVLvxVeLbICPt/dePnRBl6ssxo8nYGSrRDKfVIh6UDHYsKvL9ajPejkqy1IbYkF
+	ocAZPPmje4ItVXnEm/1AFKVlHzxFXU8=
+Date: Thu, 25 Jan 2024 21:12:16 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] bpf: Fix error checks against
- bpf_get_btf_vmlinux().
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170624582503.12691.10460466496481678509.git-patchwork-notify@kernel.org>
-Date: Fri, 26 Jan 2024 05:10:25 +0000
-References: <20240126023113.1379504-1-thinker.li@gmail.com>
-In-Reply-To: <20240126023113.1379504-1-thinker.li@gmail.com>
-To: Kui-Feng Lee <thinker.li@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev,
- song@kernel.org, kernel-team@meta.com, andrii@kernel.org,
- sinquersw@gmail.com, kuifeng@meta.com,
- syzbot+88f0aafe5f950d7489d7@syzkaller.appspotmail.com,
- syzbot+1336f3d4b10bcda75b89@syzkaller.appspotmail.com
+Subject: Re: [PATCH bpf-next] bpf, docs: Clarify definitions of various
+ instructions
+Content-Language: en-GB
+To: Dave Thaler <dthaler1968@googlemail.com>, bpf@vger.kernel.org
+Cc: bpf@ietf.org, Dave Thaler <dthaler1968@gmail.com>
+References: <20240126040050.8464-1-dthaler1968@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20240126040050.8464-1-dthaler1968@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
 
-This patch was applied to bpf/bpf-next.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
+On 1/25/24 8:00 PM, Dave Thaler wrote:
+> Clarify definitions of several instructions:
+> * BPF_NEG does not support BPF_X
+> * BPF_CALL does not support BPF_JMP32 or BPF_X
+> * BPF_EXIT does not support BPF_X
+> * BPF_JA does not support BPF_X (was implied but not explicitly stated)
+>
+> Also fix a typo in the wide instruction figure where
+> the field is actually named "opcode" not "code".
+>
+> Signed-off-by: Dave Thaler <dthaler1968@gmail.com>
 
-On Thu, 25 Jan 2024 18:31:13 -0800 you wrote:
-> From: Kui-Feng Lee <thinker.li@gmail.com>
-> 
-> Check whether the returned pointer is NULL. Previously, it was assumed that
-> an error code would be returned if BTF is not available or fails to
-> parse. However, it actually returns NULL if BTF is disabled.
-> 
-> In the function check_struct_ops_btf_id(), we have stopped using
-> btf_vmlinux as a backup because attach_btf is never null when attach_btf_id
-> is set. However, the function test_libbpf_probe_prog_types() in
-> libbpf_probes.c does not set both attach_btf_obj_fd and attach_btf_id,
-> resulting in attach_btf being null, and it expects ENOTSUPP as a
-> result. So, if attach_btf_id is not set, it will return ENOTSUPP.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v2] bpf: Fix error checks against bpf_get_btf_vmlinux().
-    https://git.kernel.org/bpf/bpf-next/c/e6be8cd5d3cf
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
