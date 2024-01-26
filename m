@@ -1,27 +1,28 @@
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5521B942;
-	Fri, 26 Jan 2024 11:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 735FF1B943;
+	Fri, 26 Jan 2024 11:53:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706270041; cv=none; b=qiA+AjB95WKqqN5DbgKPJ0IOhmLCWfb+IkNqHUMMXPsJ00afitB18PaP11UwXLY3hFwcuOgZTlOGYF2R+XeXmWpr//5llLnUDC8Jjbg/+5b2gJldUhoflG685c6jGx1M9gM7hO/sDJvpCNLcqz22NGiqX+0BEVKhUj3S5c4i3ys=
+	t=1706270041; cv=none; b=pDAW2EA1ZY1k6yJnfSzH6xtmsYcUPTYvZ6sWx531i+Z9J9v006GtcKdmx4NHlye0bgvkxCOaGE4j9Wz8RaofnAO/sHSagXzk8/iqNgEw6Qf737vIUwQp8001m0wROtvKsLaEjp+F40vAYPMIIJa3sHT4WNhCIXPXxF83vSOo67U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1706270041; c=relaxed/simple;
-	bh=R4KIdldmuAPxvE+dKo2d3Bmt5lX4dAInQbxjdGrFa6E=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZU6dfsN7Q8xFgaG/1YvxJ/vTK8LkXGq3ITZPKXYf9ONjFq5T4/6wfdWZmpx8CY4KNyoHpwN8vQAvMKb7IRGpXJo+gCi/gLBxhEBu4VFtCLKos3arqsMJFI6vCHA4iiHWrq+RAgobESFPmDnNH9/G9RnC3l+5bLueoDlZMjhJGQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	bh=frgwAcR5N7KIoz7M7+riTCKsR1N7Znj38szEnJrDEXw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=MdLd4kUeUTkdmkPRg9cULZjCLoABqbhP/r7UaZ4M9HteEy8GKfXhvEe+w8ACb+ESo7fvXqKCmFNhS4mcuBW0y0YWceoH85a3cDrqdg28yUFdeTzeRzMBZo9esVvLdGgDHBw7mPXxn8N8g4Cc51pdoYs0YtAPLV8eFY14FyeibuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4TLx1D2kqXz4f3jqC;
-	Fri, 26 Jan 2024 19:53:52 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4TLx1C6zmyz4f3l7f;
+	Fri, 26 Jan 2024 19:53:51 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id C374E1A0232;
-	Fri, 26 Jan 2024 19:53:54 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id EE1A61A0172;
+	Fri, 26 Jan 2024 19:53:55 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP1 (Coremail) with SMTP id cCh0CgBHZQ42nbNllmgoCA--.1892S4;
-	Fri, 26 Jan 2024 19:53:53 +0800 (CST)
+	by APP1 (Coremail) with SMTP id cCh0CgBHZQ42nbNllmgoCA--.1892S6;
+	Fri, 26 Jan 2024 19:53:55 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: x86@kernel.org,
 	bpf@vger.kernel.org
@@ -38,10 +39,12 @@ Cc: Dave Hansen <dave.hansen@linux.intel.com>,
 	Sohil Mehta <sohil.mehta@intel.com>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	houtao1@huawei.com
-Subject: [PATCH bpf v2 0/3] Fix the read of vsyscall page through bpf
-Date: Fri, 26 Jan 2024 19:54:20 +0800
-Message-Id: <20240126115423.3943360-1-houtao@huaweicloud.com>
+Subject: [PATCH bpf v2 2/3] x86/mm: Disallow vsyscall page read for copy_from_kernel_nofault()
+Date: Fri, 26 Jan 2024 19:54:22 +0800
+Message-Id: <20240126115423.3943360-3-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20240126115423.3943360-1-houtao@huaweicloud.com>
+References: <20240126115423.3943360-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,74 +52,108 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgBHZQ42nbNllmgoCA--.1892S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxJr4rKrWUGF13trWkAr43Wrg_yoW8tFWDpa
-	y8A343Kr4rKFy3Ar43W3srZayrAwn5tF47Wrn7Wr1rZ3y7XFyFvryIga4Yqr9xAF9xKryY
-	vr4ftFykG3Wjqa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
-	c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-	026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
-	0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
-	vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-	jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-TRANSID:cCh0CgBHZQ42nbNllmgoCA--.1892S6
+X-Coremail-Antispam: 1UD129KBjvJXoWxCryUKF1fGF45GF1fCFWDtwb_yoW5Kr15pa
+	y5C3y3KFsYyr1UAanFq3409ayrJ3W0kF45Wr1vvry5Za17WFn0yrWkWa4vqrWDAFnFgrWx
+	WwsFyrWqqw1UXaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
+	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+	0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFa9-UUUUU
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-Hi,
+When trying to use copy_from_kernel_nofault() to read vsyscall page
+through a bpf program, the following oops was reported:
 
-As reported by syzboot [1] and [2], when trying to read vsyscall page
-by using bpf_probe_read_kernel() or bpf_probe_read(), oops may happen.
+  BUG: unable to handle page fault for address: ffffffffff600000
+  #PF: supervisor read access in kernel mode
+  #PF: error_code(0x0000) - not-present page
+  PGD 3231067 P4D 3231067 PUD 3233067 PMD 3235067 PTE 0
+  Oops: 0000 [#1] PREEMPT SMP PTI
+  CPU: 1 PID: 20390 Comm: test_progs ...... 6.7.0+ #58
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996) ......
+  RIP: 0010:copy_from_kernel_nofault+0x6f/0x110
+  ......
+  Call Trace:
+   <TASK>
+   ? copy_from_kernel_nofault+0x6f/0x110
+   bpf_probe_read_kernel+0x1d/0x50
+   bpf_prog_2061065e56845f08_do_probe_read+0x51/0x8d
+   trace_call_bpf+0xc5/0x1c0
+   perf_call_bpf_enter.isra.0+0x69/0xb0
+   perf_syscall_enter+0x13e/0x200
+   syscall_trace_enter+0x188/0x1c0
+   do_syscall_64+0xb5/0xe0
+   entry_SYSCALL_64_after_hwframe+0x6e/0x76
+   </TASK>
+  ......
+  ---[ end trace 0000000000000000 ]---
 
-Thomas Gleixner had proposed a test patch [3], but it seems that no
-formal patch is posted after about one month [4], so I post it instead
-and add an Originally-by tag in patch #2.
+It seems the occurrence of oops depends on SMAP feature of CPU. It
+happens as follow: a bpf program uses bpf_probe_read_kernel() to read
+from vsyscall page, bpf_probe_read_kernel() invokes
+copy_from_kernel_nofault() in turn and then invokes __get_user_asm().
+Because the vsyscall page address is not readable for kernel space,
+a page fault exception is triggered accordingly, handle_page_fault()
+considers the vsyscall page address as a userspace address instead of a
+kernel space address, so the fix-up set-up by bpf isn't applied. Because
+the CPU has SMAP feature and the access happens in kernel mode, so
+page_fault_oops() is invoked and an oops happens. If these is no SMAP
+feature, the fix-up set-up by bpf will be applied and
+copy_from_kernel_nofault() will return -EFAULT instead.
 
-Patch #1 makes is_vsyscall_vaddr() being a common helper. Patch #2 fixes
-the problem by disallowing vsyscall page read for
-copy_from_kernel_nofault(). Patch #3 adds one test case to ensure the
-read of vsyscall page through bpf is rejected. Please see individual
-patches for more details.
+Considering handle_page_fault() has already considered the vsyscall page
+address as a userspace address, fix the problem by disallowing vsyscall
+page read for copy_from_kernel_nofault().
 
-Comments are always welcome.
+Originally-by: Thomas Gleixner <tglx@linutronix.de>
+Reported-by: syzbot+72aa0161922eba61b50e@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/bpf/CAG48ez06TZft=ATH1qh2c5mpS5BT8UakwNkzi6nvK5_djC-4Nw@mail.gmail.com
+Reported-by: xingwei lee <xrivendell7@gmail.com>
+Closes: https://lore.kernel.org/bpf/CABOYnLynjBoFZOf3Z4BhaZkc5hx_kHfsjiW+UWLoB=w33LvScw@mail.gmail.com
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ arch/x86/mm/maccess.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-[1]: https://lore.kernel.org/bpf/CAG48ez06TZft=ATH1qh2c5mpS5BT8UakwNkzi6nvK5_djC-4Nw@mail.gmail.com/
-[2]: https://lore.kernel.org/bpf/CABOYnLynjBoFZOf3Z4BhaZkc5hx_kHfsjiW+UWLoB=w33LvScw@mail.gmail.com/
-[3]: https://lore.kernel.org/bpf/87r0jwquhv.ffs@tglx/
-[4]: https://lore.kernel.org/bpf/e24b125c-8ff4-9031-6c53-67ff2e01f316@huaweicloud.com/
-
-Change Log:
-v2:
-  * move is_vsyscall_vaddr to asm/vsyscall.h instead (Sohil)
-  * elaborate on the reason for disallowing of vsyscall page read in
-    copy_from_kernel_nofault_allowed() (Sohil)
-  * update the commit message of patch #2 to more clearly explain how
-    the oops occurs. (Sohil)
-  * update the commit message of patch #3 to explain the expected return
-    values of various bpf helpers (Yonghong)
-
-v1: https://lore.kernel.org/bpf/20240119073019.1528573-1-houtao@huaweicloud.com/
-
-Hou Tao (3):
-  x86/mm: Move is_vsyscall_vaddr() into asm/vsyscall.h
-  x86/mm: Disallow vsyscall page read for copy_from_kernel_nofault()
-  selftest/bpf: Test the read of vsyscall page under x86-64
-
- arch/x86/include/asm/vsyscall.h               | 10 ++++
- arch/x86/mm/fault.c                           |  9 ---
- arch/x86/mm/maccess.c                         |  9 +++
- .../selftests/bpf/prog_tests/read_vsyscall.c  | 57 +++++++++++++++++++
- .../selftests/bpf/progs/read_vsyscall.c       | 45 +++++++++++++++
- 5 files changed, 121 insertions(+), 9 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/read_vsyscall.c
- create mode 100644 tools/testing/selftests/bpf/progs/read_vsyscall.c
-
+diff --git a/arch/x86/mm/maccess.c b/arch/x86/mm/maccess.c
+index 6993f026adec9..d9272e1db5224 100644
+--- a/arch/x86/mm/maccess.c
++++ b/arch/x86/mm/maccess.c
+@@ -3,6 +3,8 @@
+ #include <linux/uaccess.h>
+ #include <linux/kernel.h>
+ 
++#include <asm/vsyscall.h>
++
+ #ifdef CONFIG_X86_64
+ bool copy_from_kernel_nofault_allowed(const void *unsafe_src, size_t size)
+ {
+@@ -15,6 +17,13 @@ bool copy_from_kernel_nofault_allowed(const void *unsafe_src, size_t size)
+ 	if (vaddr < TASK_SIZE_MAX + PAGE_SIZE)
+ 		return false;
+ 
++	/* Also consider the vsyscall page as userspace address. Otherwise,
++	 * reading the vsyscall page in copy_from_kernel_nofault() may
++	 * trigger an oops due to an unhandled page fault.
++	 */
++	if (is_vsyscall_vaddr(vaddr))
++		return false;
++
+ 	/*
+ 	 * Allow everything during early boot before 'x86_virt_bits'
+ 	 * is initialized.  Needed for instruction decoding in early
 -- 
 2.29.2
 
