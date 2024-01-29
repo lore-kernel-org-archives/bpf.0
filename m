@@ -1,138 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3AEA61673;
-	Mon, 29 Jan 2024 13:05:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF130633E1
+	for <bpf@vger.kernel.org>; Mon, 29 Jan 2024 13:05:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706533518; cv=none; b=idu00dDRKRmJfF7HxQZu1Vd5z/tuYxYXCYxc6JU+DVf6EVZCz5uCAuyhE6IxkUQ496DI5WnghfxcQkgHWFYb8Lrbxve6vopUMFjTmjC3dEQu9FinD+oe8z+/v5IKNX6egQq7freYWf/zvZBpyveDEhzK2SC6IV+I+7CMVryIfto=
+	t=1706533524; cv=none; b=sXl0H8z7v+kIgVbNXbpl5+sEblxpHXGTI97hBla7Q/bF20tSWZe9IxC4bQCEnj9RGzlkccKW0+dV3StRyYqAbzjkgrF67KsOJ6skFz8lrgcm6EnlM+fyW9XFz4FWLVU6saV4EbBaydUflXu1q/wD4GOMrUOFs+KwJHlwbMl47RA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706533518; c=relaxed/simple;
-	bh=hWDEomf8s1NSZ88LHI2h/eMgx2/+Wu9+L2VlrPLQc6g=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QanZExPnY38aZRqKZE03o63/XesxzfrPB69SkTpuqQNbHEyYZcSYyJiKh/TCJY+cdz/P39ABVVLOGZgRMujj6uwVVNQq+diGE6DDRbwV8qm6R467ga0pBZ4T5IUrye9SQat86Bqwfc8TZgnt5aqdzfRXDoqWlbU+Ad96kM9zptQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U3gq8D+w; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1706533524; c=relaxed/simple;
+	bh=jhSXJBAa4IAI3G0hqBJhMzYpQuBKW9LSRNp5pHW1sMw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DYyNyAQNbzkQO28QfdxileyOHklQqmWua85Fpe8KOeOJFSHwbwJ9WCMmOA2gFWskkRlFSAEaEVmcCuuO5tvqtQDiE3s7XtsZLTRWvIQqJIxhyik1TXfahLnXbRfgOM7yeFlZZrwpCo5fwInQ1aYLpSRzv76IcAp+kidrFdU4z/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=anHH/X2R; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U3gq8D+w"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706533517; x=1738069517;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hWDEomf8s1NSZ88LHI2h/eMgx2/+Wu9+L2VlrPLQc6g=;
-  b=U3gq8D+w5UUddwBeltLUyJk3yRe4ES3MaAjXn/h1n2dzw0sM0kJvPNYe
-   MHFv7Dx5Y+HWICz6BJl6jPNnB+R7a02rWhWMDwTlvxdHuLlNPg5wTTPMp
-   ZaCrg848mCmNk2VeVSJJXIJnAT/8qbWFxc4aLnR1DVZ68UeQC7XGSqPAl
-   4bkkIyZGkTZyCFKrZHA3rUensNrMiTQlkpCoGwYQ04DXM78Sg6kdbAmke
-   GQUrJe0SC1WmbJTJmUwvPXJpnBdkGpTNX0aqBRP/HG1+79QswqElqKgV1
-   k7ODhgKSC5hZY3F1FEb+iupsjcq8wE7Biyexp1PRyyCvMAbvSPSdIBIjz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="21473237"
-X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
-   d="scan'208";a="21473237"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 05:05:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="907106707"
-X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
-   d="scan'208";a="907106707"
-Received: from yongliang-ubuntu20-ilbpg12.png.intel.com ([10.88.229.33])
-  by fmsmga002.fm.intel.com with ESMTP; 29 Jan 2024 05:05:08 -0800
-From: Choong Yong Liang <yong.liang.choong@linux.intel.com>
-To: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-	David E Box <david.e.box@linux.intel.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mark Gross <markgross@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <Jose.Abreu@synopsys.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Andrew Halaney <ahalaney@redhat.com>,
-	Simon Horman <simon.horman@corigine.com>,
-	Serge Semin <fancer.lancer@gmail.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Voon Wei Feng <weifeng.voon@intel.com>,
-	Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-	Lai Peter Jun Ann <jun.ann.lai@intel.com>,
-	Abdul Rahim Faizal <faizal.abdul.rahim@intel.com>
-Subject: [PATCH net-next v4 01/11] net: phylink: publish ethtool link modes that supported and advertised
-Date: Mon, 29 Jan 2024 21:02:43 +0800
-Message-Id: <20240129130253.1400707-2-yong.liang.choong@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240129130253.1400707-1-yong.liang.choong@linux.intel.com>
-References: <20240129130253.1400707-1-yong.liang.choong@linux.intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="anHH/X2R"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706533521;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jhSXJBAa4IAI3G0hqBJhMzYpQuBKW9LSRNp5pHW1sMw=;
+	b=anHH/X2R6zypXx4Hh4eREXzPMR+WrYLnx/7r/ale4SlEUkJxwelFfCQ0YXMsix+pHzSNKw
+	kwGifTjGGVmGeFWpJ97wt2mGXxdMNoeYqSkgr1R3uRhOrpBKTYy2DTmUQmuvSNdITSQCb2
+	wdfWOiwLOAhzt4SWFTSYw7UjHabBjog=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-610-VJ04MFEgPS-DzSP2jFxbyA-1; Mon, 29 Jan 2024 08:05:17 -0500
+X-MC-Unique: VJ04MFEgPS-DzSP2jFxbyA-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-40e49906305so23606335e9.2
+        for <bpf@vger.kernel.org>; Mon, 29 Jan 2024 05:05:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706533516; x=1707138316;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jhSXJBAa4IAI3G0hqBJhMzYpQuBKW9LSRNp5pHW1sMw=;
+        b=tfw1DwX649hnJbBFNnV8UUHgqRw9eqY46GM/J4FnKpxNpdvys+X4Im/dqiaLWoB1mb
+         7Dlj7lj8BTLCUw3UGKYkKVz+FvVtIZp9CW9Wx5y/QTJw+4LrC5cq3HLJHUOgZuE0XJzO
+         UxszRmfuJ8LADqftPwGpjoVPLZJG7iHHXAwNkqVaK0vkqQ57WJJD5ZxhuTQywD+iZIze
+         xes8lvz5AuLbxik3DXcTG9v4MgIQm/txEhhetT83V0RsDIKkp5vnrmjLgE1ZIpS3bY/R
+         AM8AvqUttP5eiSvIwxBxkk1/BGVvfgjiybtf+JGIi8dBobdPr0CAHaTOOyp6UgjRq0ku
+         dkkA==
+X-Gm-Message-State: AOJu0YxcrJg7jjUmbwr6zxx7F8BvIBJAxa/fVGCFGaWenO5Z3D86ASIw
+	8bQOgl08sr9nVeoJ8xjG45UPu62CPUvtw/zRKB+qYMEFO1cj5IYBfvokYJu9jJ8GJnazPR/zKK/
+	BRZjLxQ+8cpQ2HygzfWyzxq2K7rktqJpFGjd/tZV8survAHdySQ==
+X-Received: by 2002:adf:ea51:0:b0:33a:e89f:1dc5 with SMTP id j17-20020adfea51000000b0033ae89f1dc5mr2668848wrn.23.1706533516577;
+        Mon, 29 Jan 2024 05:05:16 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGU83hZ2kx/bGUSTN6uw3JgXRUj/C6gYltlkxClcBEqa8p9rlT/xqzClncFGJThJD88kRnF0w==
+X-Received: by 2002:adf:ea51:0:b0:33a:e89f:1dc5 with SMTP id j17-20020adfea51000000b0033ae89f1dc5mr2668828wrn.23.1706533516337;
+        Mon, 29 Jan 2024 05:05:16 -0800 (PST)
+Received: from localhost (net-93-71-3-198.cust.vodafonedsl.it. [93.71.3.198])
+        by smtp.gmail.com with ESMTPSA id c17-20020a5d5291000000b00337d980a68asm5721310wrv.106.2024.01.29.05.05.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jan 2024 05:05:15 -0800 (PST)
+Date: Mon, 29 Jan 2024 14:05:14 +0100
+From: Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
+To: Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Cc: Lorenzo Bianconi <lorenzo@kernel.org>, netdev@vger.kernel.org,
+	davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+	pabeni@redhat.com, bpf@vger.kernel.org,
+	willemdebruijn.kernel@gmail.com, jasowang@redhat.com,
+	sdf@google.com, hawk@kernel.org, ilias.apalodimas@linaro.org
+Subject: Re: [PATCH v6 net-next 0/5] add multi-buff support for xdp running
+ in generic mode
+Message-ID: <ZbeiijYT0ZodYq4p@lore-desk>
+References: <cover.1706451150.git.lorenzo@kernel.org>
+ <87msso1f9e.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="QapcWhyXNDEADOc1"
+Content-Disposition: inline
+In-Reply-To: <87msso1f9e.fsf@toke.dk>
 
-Adding the allow_switch_interface flag to publish all the ethtool
-link modes that can be supported and advertised.
 
-This will allow the interface switching based on different ethtool
-link modes.
+--QapcWhyXNDEADOc1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
----
- drivers/net/phy/phylink.c | 9 +++++----
- include/linux/phylink.h   | 1 +
- 2 files changed, 6 insertions(+), 4 deletions(-)
+> Lorenzo Bianconi <lorenzo@kernel.org> writes:
+>=20
+> > Introduce multi-buffer support for xdp running in generic mode not alwa=
+ys
+> > linearizing the skb in netif_receive_generic_xdp routine.
+> > Introduce page_pool in softnet_data structure
+>=20
+> This last line is not accurate anymore... :)
 
-diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-index ed0b4ccaa6a6..38ee2624169c 100644
---- a/drivers/net/phy/phylink.c
-+++ b/drivers/net/phy/phylink.c
-@@ -1839,10 +1839,11 @@ static int phylink_validate_phy(struct phylink *pl, struct phy_device *phy,
- 	 * against all interface modes, which may lead to more ethtool link
- 	 * modes being advertised than are actually supported.
- 	 */
--	if (phy->is_c45 && state->rate_matching == RATE_MATCH_NONE &&
--	    state->interface != PHY_INTERFACE_MODE_RXAUI &&
--	    state->interface != PHY_INTERFACE_MODE_XAUI &&
--	    state->interface != PHY_INTERFACE_MODE_USXGMII)
-+	if ((phy->is_c45 && state->rate_matching == RATE_MATCH_NONE &&
-+	     state->interface != PHY_INTERFACE_MODE_RXAUI &&
-+	     state->interface != PHY_INTERFACE_MODE_XAUI &&
-+	     state->interface != PHY_INTERFACE_MODE_USXGMII) ||
-+	     pl->config->allow_switch_interface)
- 		state->interface = PHY_INTERFACE_MODE_NA;
- 
- 	return phylink_validate(pl, supported, state);
-diff --git a/include/linux/phylink.h b/include/linux/phylink.h
-index d589f89c612c..b362d3231aa4 100644
---- a/include/linux/phylink.h
-+++ b/include/linux/phylink.h
-@@ -151,6 +151,7 @@ struct phylink_config {
- 	bool poll_fixed_state;
- 	bool mac_managed_pm;
- 	bool ovr_an_inband;
-+	bool allow_switch_interface;
- 	void (*get_fixed_state)(struct phylink_config *config,
- 				struct phylink_link_state *state);
- 	DECLARE_PHY_INTERFACE_MASK(supported_interfaces);
--- 
-2.34.1
+ack, I just copied it from v5. I will fix it.
+
+Regards,
+Lorenzo
+
+>=20
+> -Toke
+>=20
+
+--QapcWhyXNDEADOc1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZbeiigAKCRA6cBh0uS2t
+rLRSAQDLhngsfTJ/SkubtC4AZWQp8GJbJge2crWzr7Bday/t1AD/Z7x2KgJQgCnx
+R3gJ2Z0WLiPby+RIC7SQmLmT9l/YXQ8=
+=aIyH
+-----END PGP SIGNATURE-----
+
+--QapcWhyXNDEADOc1--
 
