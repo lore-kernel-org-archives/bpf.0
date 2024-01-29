@@ -1,210 +1,180 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B0860EC9
-	for <bpf@vger.kernel.org>; Mon, 29 Jan 2024 13:04:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0800612C1;
+	Mon, 29 Jan 2024 13:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706533487; cv=none; b=Qgjx+BgSO3QCJkamOgsUm+zWTSRFKveNa13YheMXOEFpC0s9pE/2Zh7fthHCgZZia7NShzDRJQQBbnfK+UH9dWXBD5DOf8Wg9hRiw9lnzej9EP//0EHPnxBqN4hDZDwYdHKjKBCA7a0jB/sZk9A/lqJq/4rBmcKCLdjTU+Yp1KU=
+	t=1706533510; cv=none; b=drIPFCHI/XrJrf0MIV7zjKesOrseFdC6+DAaaTIXievYEN6OqPwpKBRpaEDdW8OaUGcQR8pZYzG1VezC/yIJ9gsGrEKShht2b0hnLKlxiQ/3g501Osq18TUOXqeL4l50Yxql7kQ3qP2eEISwfW+uD0yFuZTWVgx5ztCJORrGsT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706533487; c=relaxed/simple;
-	bh=hUDcLPxTWBVh758l5satDFc80w73JtYQL5IlyNLMEXY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tnt/rpdn3Xw7ztpTVbmfAASs7tNrR9nWdinJSgnx5XesexBBmgrwK7s4uzdb7pzRvk89aIfQ0xFLhYSqs68Uo69/bDfPVyhIxM6c4bPg3XdhQKrL7CTQr+9iv6wSeTAhNqZLO3/UoyloVYWyNkz2Qk9KWtTcJ/8srTcNTX0HOIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SuyLjV0x; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1706533510; c=relaxed/simple;
+	bh=xyoHfqTNIOjnNDp1+5s08f5WV/yjrMhPn3StDt1Ourk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MqAFemFATLkY9FaeNqpzDk/ORh9PlNFhj7gR29iVxtRDvaH8VJ+7vLyBYBhUy0V0PtMsvFg1wFDT8yilsO6t/fRwfzo3Djro4XC9NwguyR7ByVvoEG+lcHiT+sSD6MZ0yzTnKsskQwY+Rlc3RC/BciWPPEE0/JEWM15239c1R8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XSNhTc4K; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SuyLjV0x"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706533483;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5u9+rqZEDkYDVIagmMTSVu3GUhA/FISTOqo0Vf+Xld8=;
-	b=SuyLjV0xvflXYZOt1xN60q84XK4k6SzyGZTl9nZ9Gk9Iyl0p2SkAHswcaF/z841eB+nMzd
-	mClr5f4xsOUF7HZYv1YKA5GrHFZcKjFtMB2F84iIwZstyFW9zavjrQA6kXNTOGPbDxC9zE
-	6foz43+I6vnTEnEjsBiTRhz8iLAWm8E=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-28-k4HOXeA8MmOtKgULMHBKzg-1; Mon, 29 Jan 2024 08:04:41 -0500
-X-MC-Unique: k4HOXeA8MmOtKgULMHBKzg-1
-Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-511160618abso430291e87.3
-        for <bpf@vger.kernel.org>; Mon, 29 Jan 2024 05:04:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706533480; x=1707138280;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5u9+rqZEDkYDVIagmMTSVu3GUhA/FISTOqo0Vf+Xld8=;
-        b=rgQSePIf56KVlwuYu8uXpQ+uihF8xs/Ot6ZBea0PUEWQ3FjEwNI9W4axJ1dDK7WK9t
-         6GQwkaCzS0HdjqT/ZqR1yk0wgkF/eXNJSxWdOV+hviHF4Op5j2ednt6sz8fFGJbh+kEy
-         0kQGCNa8dXSmKSqHJH4HbEVUur/cZ1wnL993q72qQOjkfSyniyk4HbeZWxgW29CS33bA
-         iiKY7lVsG4tow4a1QY05DGXrqI+kA8OqJrsveb/i1b6YkoV7QA27aDv/e2zCcB2iDXIu
-         POL9VG8IAEmZ12Ys4fDiDsp1Uzzmf4a8OiETuRCMapB3f5NuKu4Va83GRYy8krTGRZj3
-         9W2w==
-X-Gm-Message-State: AOJu0Yx6AZfEuEKGuWBfBvx5YhiieN2Ar9QCM4TXUtjs3F5MuAg8Sxgd
-	dsr37L2vJMGkioBc6pkSgUSv9OtWpwOTx22c1Qv89hh8uAy2CSRL8RC9z41AU6ha8pUXsASjVVN
-	Tjqhhkl2T/nq/3tinDDRarp32MD61Eh14xyjUc0ikLrsqawhHrQ==
-X-Received: by 2002:a05:6512:390a:b0:511:e7d:7ccb with SMTP id a10-20020a056512390a00b005110e7d7ccbmr2091529lfu.67.1706533479981;
-        Mon, 29 Jan 2024 05:04:39 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEPuLeGuj0HqqLM0ujALnFVdJ8umbAk2oV1aS/oyJ3j0StOqm/I4MZvQjNS8hiY44ql48oEhQ==
-X-Received: by 2002:a05:6512:390a:b0:511:e7d:7ccb with SMTP id a10-20020a056512390a00b005110e7d7ccbmr2091511lfu.67.1706533479607;
-        Mon, 29 Jan 2024 05:04:39 -0800 (PST)
-Received: from localhost (net-93-71-3-198.cust.vodafonedsl.it. [93.71.3.198])
-        by smtp.gmail.com with ESMTPSA id fa6-20020a05600c518600b0040ee8765901sm8323688wmb.43.2024.01.29.05.04.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jan 2024 05:04:39 -0800 (PST)
-Date: Mon, 29 Jan 2024 14:04:37 +0100
-From: Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-To: Yunsheng Lin <linyunsheng@huawei.com>
-Cc: Lorenzo Bianconi <lorenzo@kernel.org>, netdev@vger.kernel.org,
-	davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
-	pabeni@redhat.com, bpf@vger.kernel.org, toke@redhat.com,
-	willemdebruijn.kernel@gmail.com, jasowang@redhat.com,
-	sdf@google.com, hawk@kernel.org, ilias.apalodimas@linaro.org
-Subject: Re: [PATCH v6 net-next 1/5] net: add generic per-cpu page_pool
- allocator
-Message-ID: <ZbeiZaUrWoj39_LZ@lore-desk>
-References: <cover.1706451150.git.lorenzo@kernel.org>
- <5b0222d3df382c22fe0fa96154ae7b27189f7ecd.1706451150.git.lorenzo@kernel.org>
- <f6273e01-a826-4182-a5b5-564b51f2d9ae@huawei.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XSNhTc4K"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706533508; x=1738069508;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xyoHfqTNIOjnNDp1+5s08f5WV/yjrMhPn3StDt1Ourk=;
+  b=XSNhTc4KraK/Z1LJ2Cv3S2WiOqaZRp5IpPFGF8i4PZljXra0i3lCQI3I
+   4ENCSHhTFbT2Tc3lReFmAR+2gOSGa9xiFKVO5MHVoMTL2VF8xSFSQ1tTG
+   A7qM1E2PnNtcoQBy9eT5GwMhCAT7yiWkrDkvnDiIrhulsKyH5TDYg+Jhn
+   njMOjndu6Txn9cf82XFntXIgNjJ937g0cp4ielavuvKJuYJN6m990Kuf/
+   gV7pbwWcf10iusQUcCWusv9ewKVvgYVX9bnk8Rm58BW3wjuKncmU5kARw
+   yQb+aLIfQi6LHAZEkXM1cEjmOqU5QOpx1ACSz+sztrVIXEyXRS+yDph/m
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="21473130"
+X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
+   d="scan'208";a="21473130"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 05:05:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="907106700"
+X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
+   d="scan'208";a="907106700"
+Received: from yongliang-ubuntu20-ilbpg12.png.intel.com ([10.88.229.33])
+  by fmsmga002.fm.intel.com with ESMTP; 29 Jan 2024 05:04:59 -0800
+From: Choong Yong Liang <yong.liang.choong@linux.intel.com>
+To: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+	David E Box <david.e.box@linux.intel.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mark Gross <markgross@kernel.org>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jose Abreu <Jose.Abreu@synopsys.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Andrew Halaney <ahalaney@redhat.com>,
+	Simon Horman <simon.horman@corigine.com>,
+	Serge Semin <fancer.lancer@gmail.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Voon Wei Feng <weifeng.voon@intel.com>,
+	Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+	Lai Peter Jun Ann <jun.ann.lai@intel.com>,
+	Abdul Rahim Faizal <faizal.abdul.rahim@intel.com>
+Subject: [PATCH net-next v4 00/11] Enable SGMII and 2500BASEX interface mode switching for Intel platforms
+Date: Mon, 29 Jan 2024 21:02:42 +0800
+Message-Id: <20240129130253.1400707-1-yong.liang.choong@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="t7HFx7zhTzopyoJv"
-Content-Disposition: inline
-In-Reply-To: <f6273e01-a826-4182-a5b5-564b51f2d9ae@huawei.com>
+Content-Transfer-Encoding: 8bit
 
+From: Choong Yong Liang <yong.liang.choong@intel.com>
 
---t7HFx7zhTzopyoJv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+At the start of link initialization, the 'allow_switch_interface' flag is
+set to true. Based on 'allow_switch_interface' flag, the interface mode is
+configured to PHY_INTERFACE_MODE_NA within the 'phylink_validate_phy'
+function. This setting allows all ethtool link modes that are supported and
+advertised will be published. Then interface mode switching occurs based on
+the selection of different link modes.
 
-> On 2024/1/28 22:20, Lorenzo Bianconi wrote:
->=20
-> >  #ifdef CONFIG_LOCKDEP
-> >  /*
-> >   * register_netdevice() inits txq->_xmit_lock and sets lockdep class
-> > @@ -11686,6 +11690,27 @@ static void __init net_dev_struct_check(void)
-> >   *
-> >   */
-> > =20
-> > +#define SD_PAGE_POOL_RING_SIZE	256
->=20
-> I might missed that if there is a reason we choose 256 here, do we
-> need to use different value for differe page size, for 64K page size,
-> it means we might need to reserve 16MB memory for each CPU.
+During the interface mode change, the 'phylink_major_config' function
+will be triggered in phylink. The modification of the following functions
+will be triggered to support the switching between SGMII and 2500BASEX
+interfaces for the Intel platform.
 
-honestly I have not spent time on it, most of the current page_pool users s=
-et
-pool_size to 256. Anyway, do you mean something like:
+- mac_get_pcs_neg_mode: A new function that selects the PCS negotiation
+  mode according to the interface mode.
+- mac_select_pcs: Destroys and creates a new PCS according to the
+  interface mode.
+- mac_finish: Configures the SerDes according to the interface mode.
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index f70fb6cad2b2..3934a3fc5c45 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -11806,12 +11806,11 @@ static void __init net_dev_struct_check(void)
-  *
-  */
-=20
--#define SD_PAGE_POOL_RING_SIZE	256
- static int net_page_pool_alloc(int cpuid)
- {
- #if IS_ENABLED(CONFIG_PAGE_POOL)
- 	struct page_pool_params page_pool_params =3D {
--		.pool_size =3D SD_PAGE_POOL_RING_SIZE,
-+		.pool_size =3D PAGE_SIZE < SZ_64K ? 256 : 16,
- 		.nid =3D NUMA_NO_NODE,
- 	};
- 	struct page_pool *pp_ptr;
+With the above changes, the code will work as follows during the
+interface mode change. The PCS and PCS negotiation mode will be selected
+for PCS configuration according to the interface mode. Then, the MAC
+driver will perform SerDes configuration on the 'mac_finish' based on the
+interface mode. During the SerDes configuration, the selected interface
+mode will identify TSN lane registers from FIA and then send IPC commands
+to the Power Management Controller (PMC) through the PMC driver/API.
+PMC will act as a proxy to program the PLL registers.
 
->=20
-> > +static int net_page_pool_alloc(int cpuid)
-> > +{
-> > +#if IS_ENABLED(CONFIG_PAGE_POOL)
-> > +	struct page_pool_params page_pool_params =3D {
-> > +		.pool_size =3D SD_PAGE_POOL_RING_SIZE,
-> > +		.nid =3D NUMA_NO_NODE,
-> > +	};
-> > +	struct page_pool *pp_ptr;
-> > +
-> > +	pp_ptr =3D page_pool_create_percpu(&page_pool_params, cpuid);
-> > +	if (IS_ERR(pp_ptr)) {
-> > +		pp_ptr =3D NULL;
->=20
-> unnecessary NULL setting?
+Change log:
+v1 -> v2: 
+ - Add static to pmc_lpm_modes declaration
+ - Add cur_link_an_mode to the kernel doc
+ - Combine 2 commits i.e. "stmmac: intel: Separate driver_data of ADL-N
+ from TGL" and "net: stmmac: Add 1G/2.5G auto-negotiation
+ support for ADL-N" into 1 commit.
 
-ack, I will get rid of it.
+v2 -> v3:
+ - Create `pmc_ipc.c` file for `intel_pmc_ipc()` function and 
+ allocate the file in `arch/x86/platform/intel/` directory.
+ - Update phylink's AN mode during phy interface change and 
+ not exposing phylink's AN mode into phylib.
+ 
+ v3 -> v4:
+ - Introduce `allow_switch_interface` flag to have all ethtool 
+ link modes that are supported and advertised will be published.
+ - Introduce `mac_get_pcs_neg_mode` function that selects the PCS 
+ negotiation mode according to the interface mode.
+ - Remove pcs-xpcs.c changes and handle pcs during `mac_select_pcs`
+ function
+ - Configure SerDes base on the interface on `mac_finish` function.
 
->=20
-> > +		return -ENOMEM;
-> > +	}
-> > +
-> > +	per_cpu(page_pool, cpuid) =3D pp_ptr;
-> > +#endif
-> > +	return 0;
-> > +}
-> > +
-> >  /*
-> >   *       This is called single threaded during boot, so no need
-> >   *       to take the rtnl semaphore.
-> > @@ -11738,6 +11763,9 @@ static int __init net_dev_init(void)
-> >  		init_gro_hash(&sd->backlog);
-> >  		sd->backlog.poll =3D process_backlog;
-> >  		sd->backlog.weight =3D weight_p;
-> > +
-> > +		if (net_page_pool_alloc(i))
-> > +			goto out;
-> >  	}
-> > =20
-> >  	dev_boot_phase =3D 0;
-> > @@ -11765,6 +11793,18 @@ static int __init net_dev_init(void)
-> >  	WARN_ON(rc < 0);
-> >  	rc =3D 0;
-> >  out:
-> > +	if (rc < 0) {
-> > +		for_each_possible_cpu(i) {
-> > +			struct page_pool *pp_ptr =3D this_cpu_read(page_pool);
->=20
-> this_cpu_read() -> per_cpu_ptr()?
+Choong Yong Liang (9):
+  net: phylink: publish ethtool link modes that supported and advertised
+  net: stmmac: provide allow_switch_interface flag
+  net: phylink: provide mac_get_pcs_neg_mode() function
+  net: phylink: add phylink_pcs_neg_mode() declaration into phylink.h
+  net: stmmac: select PCS negotiation mode according to the interface
+    mode
+  net: stmmac: resetup XPCS according to the new interface mode
+  net: stmmac: configure SerDes on mac_finish
+  stmmac: intel: interface switching support for EHL platform
+  stmmac: intel: interface switching support for ADL-N platform
 
-ack, I will fix it.
+David E. Box (1):
+  arch: x86: Add IPC mailbox accessor function and add SoC register
+    access
 
-Regards,
-Lorenzo
+Tan, Tee Min (1):
+  stmmac: intel: configure SerDes according to the interface mode
 
->=20
-> > +
-> > +			if (!pp_ptr)
-> > +				continue;
-> > +
-> > +			page_pool_destroy(pp_ptr);
-> > +			per_cpu(page_pool, i) =3D NULL;
-> > +		}
-> > +	}
-> > +
-> >  	return rc;
-> >  }
->=20
->=20
+ MAINTAINERS                                   |   2 +
+ arch/x86/Kconfig                              |   9 +
+ arch/x86/platform/intel/Makefile              |   1 +
+ arch/x86/platform/intel/pmc_ipc.c             |  75 ++++++
+ drivers/net/ethernet/stmicro/stmmac/Kconfig   |   1 +
+ .../net/ethernet/stmicro/stmmac/dwmac-intel.c | 233 ++++++++++++++++--
+ .../net/ethernet/stmicro/stmmac/dwmac-intel.h |  81 ++++++
+ drivers/net/ethernet/stmicro/stmmac/stmmac.h  |   2 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c |  48 +++-
+ .../net/ethernet/stmicro/stmmac/stmmac_mdio.c |   7 +-
+ drivers/net/phy/phylink.c                     |  30 ++-
+ include/linux/phylink.h                       |   9 +
+ .../linux/platform_data/x86/intel_pmc_ipc.h   |  34 +++
+ include/linux/stmmac.h                        |   6 +
+ 14 files changed, 506 insertions(+), 32 deletions(-)
+ create mode 100644 arch/x86/platform/intel/pmc_ipc.c
+ create mode 100644 include/linux/platform_data/x86/intel_pmc_ipc.h
 
---t7HFx7zhTzopyoJv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZbeiZQAKCRA6cBh0uS2t
-rPrfAQDWVTEyiJb6xP1bIrl2vekhXG29VwHF7IKXJC/eup9Y0AEA6EqHOog0YCva
-u7qA1QY4Kmy11xuk24H3A4HBd+UkwgQ=
-=QKN6
------END PGP SIGNATURE-----
-
---t7HFx7zhTzopyoJv--
+-- 
+2.34.1
 
