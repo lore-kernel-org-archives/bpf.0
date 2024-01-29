@@ -1,150 +1,120 @@
-Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E5F155319;
-	Mon, 29 Jan 2024 16:15:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=77.93.223.253
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED719155A2D
+	for <bpf@vger.kernel.org>; Mon, 29 Jan 2024 16:15:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.111.4.26
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706544936; cv=none; b=Pngrw7KrJdrp78WWff13oERzFq9ISFZN6NqgUb2q3pwiYnptBTwlPLf8iEiFg81+8B8szkz61YcB4gQ4X1ZkZg5lCLrB7fvNHoFmQpev9vWCZhmCBiXcnqh+nI49OAsPj/VxK8o6K/4X210WC3l50CiPKuG5SeTCb3jWO7CKeqQ=
+	t=1706544953; cv=none; b=H73kI5M+g4PYFgJjot/7oDpbqyuAlR/CVap7WkgdnDmYEH/vbrOhAgPKoUvh5IYDN4qzP/5RUiYj7N+RNS3Z4TcKK7530j6VpJ1yxBvG5xRq1SItSd8nM1j98IfC0oWAGjygWARiz7OWwo8IPI2v5Rxu5Z/a07+85DGy2unPhsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706544936; c=relaxed/simple;
-	bh=XAncuxs4rWD0OgmCqhjg24NGRyoTVI4B/LGYumcx7eU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WP08A5KD6b8vun3bEBQxV0k9gYJZ1sz60SjCS9qJaCMDrevcTxsCGeKuEUV8TuabNxru0GPYSRPMjFKvFAi98FyokaqH1EYzUN9kWlNPT/pgAVLt21YQAPp//xVdap8LayxPa2SNY9kJd4jpz3twKk2uYjXQ4vkn0RR92dhqeW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tesarici.cz; spf=pass smtp.mailfrom=tesarici.cz; dkim=pass (2048-bit key) header.d=tesarici.cz header.i=@tesarici.cz header.b=dsleu72F; arc=none smtp.client-ip=77.93.223.253
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tesarici.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tesarici.cz
+	s=arc-20240116; t=1706544953; c=relaxed/simple;
+	bh=96Rzyfvad8NVNoN4YxNwRlg9KwplkkCMh3mRc5NLO1s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HoZYqijHvbCSbqbnXFXt+SkBtloR0+N4LFMruP9iXMLSWiuuPoDQGB59cQMUvDwLNLBqkvqFoROuM+3QGJ5pQNUjNUA4o6aEWh2EzkRbyALL4U34HA001NSxD/mNw6y8emmwo0kJOfYfa/GzmKsAdEbpyIKrqayP10rQ2BD6RkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=kRXCDl+f; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=KRlVmv8M; arc=none smtp.client-ip=66.111.4.26
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tesarici.cz header.i=@tesarici.cz header.b="dsleu72F"
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by bee.tesarici.cz (Postfix) with ESMTPSA id 99EDE19B10F;
-	Mon, 29 Jan 2024 17:15:30 +0100 (CET)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-	t=1706544931; bh=XAncuxs4rWD0OgmCqhjg24NGRyoTVI4B/LGYumcx7eU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=dsleu72FyCpv2CVdZyOQ4qDP2dZxSOW2DxhiwEuIAxvWK2xXzcttGrNMuyn8VEXrj
-	 vF+F3MH82nP2XXx3t99+8r32fIBfyWy4gJjX6z+MGy1Aa1qV9PmnC1nuUNyQi6r6Ip
-	 EBkj3x+443gUm2azpuoNmXFwcDSHesZf6ETCscfiUi9cUSnrj2wpHRfMoA/ATMfSGs
-	 6QYnTA43RJlBVMt4i5+iY+BX9qMYMK5yhvH0Cxqs1P936iNBTE3RMslIm4Cgng+l9U
-	 syNNzLeprlQ30L+LIWVhFi5ZhSIEAMFx9bv0UaopqEx6iWtXj9NwG/07Oy94+WX7iY
-	 vSgKH1payk+Bw==
-Date: Mon, 29 Jan 2024 17:15:29 +0100
-From: Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To: Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc: Robin Murphy <robin.murphy@arm.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
- <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Christoph Hellwig
- <hch@lst.de>, Marek Szyprowski <m.szyprowski@samsung.com>, Joerg Roedel
- <joro@8bytes.org>, Will Deacon <will@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Alexander Duyck <alexanderduyck@fb.com>,
- <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <iommu@lists.linux.dev>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next 2/7] dma: avoid expensive redundant calls for
- sync operations
-Message-ID: <20240129171529.09cf6b65@meshulam.tesarici.cz>
-In-Reply-To: <6059bf0c-cfe6-41dd-8672-584c9c13b902@intel.com>
-References: <20240126135456.704351-1-aleksander.lobakin@intel.com>
-	<20240126135456.704351-3-aleksander.lobakin@intel.com>
-	<0f6f550c-3eee-46dc-8c42-baceaa237610@arm.com>
-	<7ff3cf5d-b3ff-4b52-9031-30a1cb71c0c9@intel.com>
-	<0cf72c00-21d9-4f1a-be14-80336da5dff4@arm.com>
-	<20240126194819.147cb4e2@meshulam.tesarici.cz>
-	<6059bf0c-cfe6-41dd-8672-584c9c13b902@intel.com>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.39; x86_64-suse-linux-gnu)
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="kRXCDl+f";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KRlVmv8M"
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.nyi.internal (Postfix) with ESMTP id E6FB85C016A;
+	Mon, 29 Jan 2024 11:15:50 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Mon, 29 Jan 2024 11:15:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1706544950; x=1706631350; bh=+WDgkjTf/d
+	wZjp76TFG5vzjXoAXti/T9+y55u6gfJ+M=; b=kRXCDl+fR7nF/E7nRHT4wYWY0J
+	b1AxguysSyV9M81elDqZbT7PQjj+OCyUJGAi1/Sqb/4yu9Rf27nIeKeqJPkyVIVZ
+	oZEydrijSehLCrH1RsgAGQQM3lFnbdnLT+CIgFtTL2aqBtpe3x9yO5N6vfvEZyE2
+	C1Z0RZ/HkeQCxrAwUjuJ+bn+oP5eMlfVvYAKUNjR986PotXFy5bUwiweEYTv5jPX
+	altBBVoLEWDm0cP2q9twn0gsZlR7jvaUEO12kTN/7CCtdWJoywPERfrUK4E2c0hi
+	+voHtrAac/YNV5lPfK1EosEVa/oWT+gQnZi3PMQF9X9ZDyTFpXfb/jY8kKtw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1706544950; x=1706631350; bh=+WDgkjTf/dwZjp76TFG5vzjXoAXt
+	i/T9+y55u6gfJ+M=; b=KRlVmv8MANIKRpkvz/7c2auzssRMv8EdIul7koTlERPS
+	5+j4uBp7g+cQd4H1AF+W90SVr5SwrV2KPv8hCMGURub33Kp8fWJoamvNsMR5FfI0
+	Xq36r2jgZ6DIPs6qbi9a0qJAuXp6e6/lWDmptCyuUY9vGYL1TZO81qGcAwu9GN+y
+	aD/XhSlfTyxESimGEiqGBaCrdkUsuA6GrgwRCU9N7iHXd5DU0MQpA17ZhYccWemG
+	Zz0IhSv1UYtac8rTmcOpqpkAuxc1HvrLTOGpVrgyVg5kkt18alvYAUvMN3Ej1pDV
+	no/cdzyfjE08xD3tVthpmkUPxFqdJDYMyPhjt4KbOg==
+X-ME-Sender: <xms:Ns-3ZSDou-NVJe-XccYtdrRlyytF_lp6H_s5yqDB3c_Sqdyj54lenw>
+    <xme:Ns-3ZcixBM9qJhWcTRT37w9fyPdkwH_Ki8BVzkUqHGAQVSfue_dFJL8_aNQtDli12
+    vaElqQcXz6IjnDrlQ>
+X-ME-Received: <xmr:Ns-3ZVm6eaiaNSkOgq67V7PyvMRyRulmiEelQ4jG-mBII8WTgYrX0quBaMc57aOhChwSk8fchjE1Dil8TQQz1_tCSByZN1aYXAHSJes>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrfedtgedgjeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdljedtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdfstddt
+    tddvnecuhfhrohhmpeffrghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihiieqne
+    cuggftrfgrthhtvghrnhepvdefkeetuddufeeigedtheefffekuedukeehudffudfffffg
+    geeitdetgfdvhfdvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:Ns-3ZQy6L1YH6qvfjbZcARxHY2AACqR_8i9Ge1k4eqgUrdGSZARIqA>
+    <xmx:Ns-3ZXTDzLrOBfkDmR1_KUrZhv8cGwd_SOhCfL-FuLxq8saiyq3CJQ>
+    <xmx:Ns-3ZbYMoMg72JuWY45v9K8xn_DD8rpNhRx6b3CCx49BSrMDPNbcYw>
+    <xmx:Ns-3ZWGVcySqGG-1aJzRp2sCjfk89_eQqNH9xcKw4cKvwXz1DiNGTw>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 29 Jan 2024 11:15:49 -0500 (EST)
+Date: Mon, 29 Jan 2024 09:15:48 -0700
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Alan Maguire <alan.maguire@oracle.com>, jolsa@kernel.org, 
+	quentin@isovalent.com, andrii.nakryiko@gmail.com, ast@kernel.org, daniel@iogearbox.net, 
+	bpf@vger.kernel.org
+Subject: Re: [PATCH dwarves v3] pahole: Inject kfunc decl tags into BTF
+Message-ID: <6wjvzdisn364fpoxruc5aefes5ujvgqcys4axp3sglk5mas4ot@vb6d5sqtsj2t>
+References: <0f25134ec999e368478c4ca993b3b729c2a03383.1706491733.git.dxu@dxuuu.xyz>
+ <49da8aff-1ec7-b908-2167-ee499e7a857a@oracle.com>
+ <Zbe1DfHjhZHwIKha@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zbe1DfHjhZHwIKha@kernel.org>
 
-On Mon, 29 Jan 2024 15:36:35 +0100
-Alexander Lobakin <aleksander.lobakin@intel.com> wrote:
+Hi Alan, Arnaldo,
 
-> From: Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz>
-> Date: Fri, 26 Jan 2024 19:48:19 +0100
->=20
-> > On Fri, 26 Jan 2024 17:21:24 +0000
-> > Robin Murphy <robin.murphy@arm.com> wrote:
-> >  =20
-> >> On 26/01/2024 4:45 pm, Alexander Lobakin wrote: =20
-> >>> From: Robin Murphy <robin.murphy@arm.com>
-> >>> Date: Fri, 26 Jan 2024 15:48:54 +0000
-> >>>    =20
-> >>>> On 26/01/2024 1:54 pm, Alexander Lobakin wrote:   =20
-> >>>>> From: Eric Dumazet <edumazet@google.com>
-> >>>>>
-> >>>>> Quite often, NIC devices do not need dma_sync operations on x86_64
-> >>>>> at least.
-> >>>>> Indeed, when dev_is_dma_coherent(dev) is true and
-> >>>>> dev_use_swiotlb(dev) is false, iommu_dma_sync_single_for_cpu()
-> >>>>> and friends do nothing.
-> >>>>>
-> >>>>> However, indirectly calling them when CONFIG_RETPOLINE=3Dy consumes=
- about
-> >>>>> 10% of cycles on a cpu receiving packets from softirq at ~100Gbit r=
-ate.
-> >>>>> Even if/when CONFIG_RETPOLINE is not set, there is a cost of about =
-3%.
-> >>>>>
-> >>>>> Add dev->skip_dma_sync boolean which is set during the device
-> >>>>> initialization depending on the setup: dev_is_dma_coherent() for di=
-rect
-> >>>>> DMA, !(sync_single_for_device || sync_single_for_cpu) or positive r=
-esult
-> >>>>> from the new callback, dma_map_ops::can_skip_sync for non-NULL DMA =
-ops.
-> >>>>> Then later, if/when swiotlb is used for the first time, the flag
-> >>>>> is turned off, from swiotlb_tbl_map_single().   =20
-> >>>>
-> >>>> I think you could probably just promote the dma_uses_io_tlb flag from
-> >>>> SWIOTLB_DYNAMIC to a general SWIOTLB thing to serve this purpose now=
-.   =20
-> >>>
-> >>> Nice catch!
-> >>>    =20
-> >>>>
-> >>>> Similarly I don't think a new op is necessary now that we have
-> >>>> dma_map_ops.flags. A simple static flag to indicate that sync may be=
-> skipped under the same conditions as implied for dma-direct - i.e.
-> >>>> dev_is_dma_coherent(dev) && !dev->dma_use_io_tlb - seems like it oug=
-ht
-> >>>> to suffice.   =20
-> >>>
-> >>> In my initial implementation, I used a new dma_map_ops flag, but then=
- I
-> >>> realized different DMA ops may require or not require syncing under
-> >>> different conditions, not only dev_is_dma_coherent().
-> >>> Or am I wrong and they would always be the same?   =20
-> >>
-> >> I think it's safe to assume that, as with P2P support, this will only=
-=20
-> >> matter for dma-direct and iommu-dma for the foreseeable future, and=20
-> >> those do currently share the same conditions as above. Thus we may as=
-=20
-> >> well keep things simple for now, and if anything ever does have cause =
-to=20
-> >> change, it can be the future's problem to keep this mechanism working =
-as=20
-> >> intended. =20
-> >=20
-> > Can we have a comment that states this assumption along with the flag?
-> > Because when it breaks, it will keep someone cursing for days why DMA
-> > sometimes fails on their device before they find out it's not synced. =
-=20
->=20
-> BTW, dma_skip_sync is set right before driver->probe(), so that if any
-> problematic device appears, it could easily be fixed by adding one line
-> to its probe callback.
+On Mon, Jan 29, 2024 at 11:24:13AM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Mon, Jan 29, 2024 at 01:05:05PM +0000, Alan Maguire escreveu:
+> > This should probably be a BTF feature supported by --btf_features; that
+> > way we'd have a mechanism to switch it off if needed. Can you look at
+> > adding a "tag_kfunc" or whatever name suits into the btf_features[]
+> > array in pahole.c?  Something like:
+>  
+> > 	BTF_FEATURE(tag_kfunc, btf_tag_kfunc, false),
+>  
+> > You'll also then need to add a btf_tag_kfunc boolean field to
+> > struct conf_load, and generation of kfunc tags should then be guarded by
+>  
+> > if (conf_load->btf_tag_kfunc)
+>  
+> > ...so that the tags are added conditionally depending on whether
+> > the user wants them.
+>  
+> > Then if a user specifies --btf_features=all or some subset of BTF
+> > features including "tag_kfunc" they will get kfunc tags.
+> 
+> Agreed.
 
-Ah, perfect!
+Ack. Will add for next rev.
 
-Petr T
+>  
+> > We probably should also move to using --btf_features instead of the
+> > current combination of "--" parameters when pahole is bumped to v1.26.
+> 
+> Alan, talking about that, I guess we better tag v1.26 before merging
+> this new kfunc work, wdyt?
+> 
+> - Arnaldo
