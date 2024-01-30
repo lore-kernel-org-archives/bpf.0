@@ -1,78 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03DE88121B
-	for <bpf@vger.kernel.org>; Tue, 30 Jan 2024 15:20:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6EC82D71
+	for <bpf@vger.kernel.org>; Tue, 30 Jan 2024 15:51:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706628026; cv=none; b=d6YNjVED7JQC+t6NGZbN8bwNfrRozJVvaW/+q79x4PojQ4Ricd99duv/qdFtw3L5HBt/cOKHBnsKXC6Qop5wLoNJqODPnDAU0bgAcgNaJliyLTKVgxqf6fyLySupZRcg7LcG+fcg/SfSDYVVcXP0H/wkmu9eef4GMIAsOuCx8Y8=
+	t=1706629875; cv=none; b=n/PPaebUMJUEjCcmAUxLJAx+xd/VL+z5E5Q7Hx7u9iqfAhrfWksLP+McCDVrctrEA/4aMrcp4MYeT5eSAP2gpmOSPjhvkUqxGjSKdRhoudDiRinTMZbWVJlbTAz6dHSkRcfDQoSGEEtyq7N8CUnmOP1SgCFbZIYu8tWd5vTiJj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706628026; c=relaxed/simple;
-	bh=PboZhfahKHok0Lx2zbG4dg0j1iTJoDyweylsXjHHH0A=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=FYjEFylBK39Sz4+WiaHSSOXvv7o7xnDm+nTATWJHyWzaLo4vyYCXm+cPAV9rfE7pty9O1vifJQufXqZ88IBe4wnsb6iRDcRXpdxd/cPyJ2qLcWazp7wV1oaC6Aay4H2vn9fMWgW2ki/aB9YeYTHNHDM6m7gJAG8FGv3HX58o6lg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ayho5h1N; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706629875; c=relaxed/simple;
+	bh=1SK/iKFF9dC7WFtjoWd2U6NyLxJHyjytFSMwsPlwNvA=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type; b=I1ngDLT3QPLD0LVRFxAyYUkwVe7qFs/4usLcCrqYswuD09d+GGR6t65PDbUmgjIuGHXCGJM7Qjdi4/P+KLB1Bx7sXeNrqgRy3kVkTO6dg9jqOd8QR10l4QoehyprljSs8CHkVfRXsVuSB3fmYT6A1uxIjiu3cYW7zasuJO5tLzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=ObP/XYAP; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ayho5h1N"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 86E62C43609;
-	Tue, 30 Jan 2024 15:20:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706628025;
-	bh=PboZhfahKHok0Lx2zbG4dg0j1iTJoDyweylsXjHHH0A=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=ayho5h1NsPIlsYce30LZwhFb+0kXHsJIrU7jTFnU8sgVDsQdHIvCZqAYlsJa2V6Pc
-	 IljhaQlZoCUuNc3nTB6AVmgQ5XzNI26UAL9unLqWZaN6ege30rYYytzrxuOTffoLwt
-	 /yuC2gVD9CWDRbb60brHoVHffY5DmGTzuIhuXVVu18N8TRYIzuH1Eiyj1xXllUJ+oU
-	 zP2OIIjlNQH3Rlzm1my3ot0uNfhywxCwpy86UhbX3708acId6KSsXmUMnrVtDtWizG
-	 d+X75BY5f+vA4J/vnaTmZ0CGiho5IhQI7ODRUdoHkMNHOJOG5jc3W3yxVgOalXPelf
-	 paMw+UOFe2x0g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6B6FAC3274C;
-	Tue, 30 Jan 2024 15:20:25 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="ObP/XYAP"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-295c67ab2ccso276747a91.1
+        for <bpf@vger.kernel.org>; Tue, 30 Jan 2024 07:51:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1706629873; x=1707234673; darn=vger.kernel.org;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7E/5TJk4Pep3kQ6nkb6rj/0pdrJMBWMVdz1Vy5fVW38=;
+        b=ObP/XYAPLNsNKX4CEN+EoPC/IdFqkQXFdtoJLOEJn4Z8k1bc5mQPW6XohOuXWbwjLC
+         DUWtvGzPfKV40o1g24ZTYldI8dAixry+wLARjv8HKvAKgXjpz1tRzpOVbrqyj6GU330G
+         fnQLL+3ona69d6kSS8xCNxXhhNOkfsJIt4fPYBB1t7myinYHmT8uEnh5t/AL+0WsCocF
+         RzOvn99K0RKYGIOIWDswBUqnYu5dW5jPOiFG++gIIi839XKkCNhBCSHw6lxUTkjrFqLC
+         /tbfhBacxCWt5dPgSvjitR/T7wG07Q9Cmod8JWozCbJ9DWHeYdjRd5H4YKCC2iAV2+HA
+         +JMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706629873; x=1707234673;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7E/5TJk4Pep3kQ6nkb6rj/0pdrJMBWMVdz1Vy5fVW38=;
+        b=Fu6LGG+ML9dKgexw+huB479S9aC2nzcfd8tsAYBzMUC6a0cuzGRFC9+S2ptDy+5Dx8
+         DXVkvrI2fBPbv3YaPQGB0vQBaVJymWPhez+nvsvIhsztI/1s4CTfvPnNW6TKYNlV0ANa
+         WL+CtDnqHwQCNc4yDmmiWkQ4bORebhC4Y1dRsHccoVvdR3vy1pTaFOBkPzN6EXhzBdRn
+         1qN3+vkN5HKGF+T5qlIV2UwqP1PVbKg/+9HB7U3ZyxhqSpSv/MXSeI/SYj4liYf72iuU
+         P56NmwJbStwr9n7qcZ/qdZA0saKKLUuJsrMbG872otgyR8w7s7Zpcsq4fLIyCJF4gwI1
+         xrTw==
+X-Gm-Message-State: AOJu0YwMRH+58DKusJIdEB63ZKV4flZ3jg0L8tmGfzPQEHgewe3NEhAD
+	I6rs3IHeBOGwmcSdbJvS8LBhyfm19hFOVwfonQ2oFvUCpqlgY9HILRNznt0zyBw=
+X-Google-Smtp-Source: AGHT+IHu0AUuj+hcdj2wLEm4SeFw6qt2hN83uk88jDPyRFA870GoEYnHTFj8sii+6FsC+Q0uF6zZOA==
+X-Received: by 2002:a17:90b:88c:b0:290:ab28:807e with SMTP id bj12-20020a17090b088c00b00290ab28807emr4522196pjb.41.1706629872901;
+        Tue, 30 Jan 2024 07:51:12 -0800 (PST)
+Received: from ArmidaleLaptop (c-67-170-74-237.hsd1.wa.comcast.net. [67.170.74.237])
+        by smtp.gmail.com with ESMTPSA id in24-20020a17090b439800b00295be790dfesm1327061pjb.17.2024.01.30.07.51.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 30 Jan 2024 07:51:12 -0800 (PST)
+From: dthaler1968@googlemail.com
+X-Google-Original-From: <dthaler1968@gmail.com>
+To: "'Alexei Starovoitov'" <alexei.starovoitov@gmail.com>
+Cc: "'Jose E. Marchesi'" <jose.marchesi@oracle.com>,
+	"'Yonghong Song'" <yonghong.song@linux.dev>,
+	<bpf@ietf.org>,
+	"'bpf'" <bpf@vger.kernel.org>
+References: <006601da5151$a22b2bb0$e6818310$@gmail.com> <877cjutxe9.fsf@oracle.com> <8734uitx3m.fsf@oracle.com> <01e601da51b7$92c4ffa0$b84efee0$@gmail.com> <CAADnVQK8JegsSxgbQbO=DR71cRgkvN-y9LH_ZQYxmj1a-hCz5g@mail.gmail.com>
+In-Reply-To: <CAADnVQK8JegsSxgbQbO=DR71cRgkvN-y9LH_ZQYxmj1a-hCz5g@mail.gmail.com>
+Subject: RE: [Bpf] ISA: BPF_MSH and deprecated packet access instructions
+Date: Tue, 30 Jan 2024 07:51:10 -0800
+Message-ID: <071b01da5394$260dba30$72292e90$@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: build type-punning BPF selftests with
- -fno-strict-aliasing
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170662802543.4509.10516985875114662334.git-patchwork-notify@kernel.org>
-Date: Tue, 30 Jan 2024 15:20:25 +0000
-References: <20240130110343.11217-1-jose.marchesi@oracle.com>
-In-Reply-To: <20240130110343.11217-1-jose.marchesi@oracle.com>
-To: Jose E. Marchesi <jose.marchesi@oracle.com>
-Cc: bpf@vger.kernel.org, yhs@meta.com, eddyz87@gmail.com,
- david.faust@oracle.com, cupertino.miranda@oracle.com
+Content-Type: text/plain;
+	charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-us
+Thread-Index: AQI/mTVZUZpeNhzShIl9oGl01BkM9QGkD3DnAsdGbroCN+NFGgGJMAgqr+aSAyA=
 
-Hello:
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+[...]
+> > Although the Linux verifier doesn't support them, the fact that gcc
+> > does support them tells me that it's probably safest to list the DW
+> > and LDX variants as deprecated as well, which is what the draft
+> > already did in the appendix so that's good (nothing to change there, =
+I
+> > think).
+>=20
+> DW never existed in classic bpf, so abs/ind never had DW flavor.
+> If some assembler/compiler decided to "support" them it's on them.
+> The standard must not list such things as deprecated. They never =
+existed. So
+> nothing is deprecated.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+Ack, I will remove the ABS/IND + DW lines from the appendix.
 
-On Tue, 30 Jan 2024 12:03:43 +0100 you wrote:
-> A few BPF selftests perform type punning and they may break strict
-> aliasing rules, which are exploited by both GCC and clang by default
-> while optimizing.  This can lead to broken compiled programs.
-> 
-> This patch disables strict aliasing for these particular tests, by
-> mean of the -fno-strict-aliasing command line option.  This will make
-> sure these tests are optimized properly even if some strict aliasing
-> rule gets violated.
-> 
-> [...]
+> Same with MSH. BPF_LDX | BPF_MSH | BPF_B is the only insn ever =
+existed.
+> It's a legacy insn. Just like abs/ind.
 
-Here is the summary with links:
-  - [bpf-next] bpf: build type-punning BPF selftests with -fno-strict-aliasing
-    https://git.kernel.org/bpf/bpf-next/c/27a90b14b93d
+Should it be listed in the legacy conformance group then?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Currently it's not mentioned in instruction-set.rst at all, so the =
+opcode
+is available to use by any new instruction.  If we do list it in =
+instruction-set.rst
+then, like abs/ind, it will be avoided by anyone proposing new =
+instructions.
 
+Dave
 
