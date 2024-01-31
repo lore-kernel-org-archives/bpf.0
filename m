@@ -1,207 +1,131 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58020208C1
-	for <bpf@vger.kernel.org>; Wed, 31 Jan 2024 21:07:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BB4639851
+	for <bpf@vger.kernel.org>; Wed, 31 Jan 2024 21:26:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706735264; cv=none; b=RMS24EpCECeyBV0OT5A35d+KRZ/QtFpExlAV8X5+a8siQrQ/984K6w15tJWVOX90b34BRW3tHaXtRaAZYdbvJ+sBFqlJ4Bs7urZqgEfDyrCcVtt6mkYMn9BYEcRX4stTHaQAL++3r8C1Y22ew8F+XnbnTypZfNC0QSd0CFH9UOI=
+	t=1706736391; cv=none; b=Z9sKhXRZUsnXA7l8i1ypiCdGQITde6eUO4bRsXCXr0dFOJHw1bCZ974Ez+gtzUkUiR+1uJCKsV5NKpUL+9P3L3fcjZjrF22C1aWIIeWN1VgEW3wkb6ibw2U9mGlgy9DYkf/3rs18PcIz+gSsJptbCof9WfonRM4RGE0WzHUzuoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706735264; c=relaxed/simple;
-	bh=t8F0bp3/XLsg1qz5Sf+JKdHv5rIhgGsGN9UMqCiRuv0=;
-	h=To:Cc:References:In-Reply-To:Date:Message-ID:MIME-Version:Subject:
-	 Content-Type:From; b=pie8w5mouzzV026TzzzU3kvgxBbnLryNmvzez/SV52e7KDF54UYMe4v36LSdNBer88p611tP2/F+ZfDdMKkNfjAr8l8eHK/BTP9ZBTUWE/xVS+7/wfinrm04rWNQEBLWH6zC41HQ4NK7j0fpAw8mnMRLly7lG+troNd4bavZBnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dmarc.ietf.org; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=RPpckab1; dkim=fail (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=iwY45hg/ reason="signature verification failed"; dkim=fail (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=P68qOWWa reason="signature verification failed"; arc=none smtp.client-ip=50.223.129.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dmarc.ietf.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	s=arc-20240116; t=1706736391; c=relaxed/simple;
+	bh=ULpcU/1TIn5c0lUjmlZOtbUTfKgaEnUmmototxkV9xA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hun5B534x07oxbLCj7OaRGJMFpp0ts0Lhbm6zwUVrvsfM4+zEIlthx+whFybXxiAcZ3QrfoVYppzgJE0Ss1pYuNvt9A7tXk3pJnWZLPqJ8buPsVPz6WwY+Yvzc76ecPbiNH7O7ZCcsB+Nh15P0Znj0EcuH/FLrCV4DvI6ZwnoqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GfukBuZb; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="RPpckab1";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="iwY45hg/";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="P68qOWWa"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id AC2C2C14F70C
-	for <bpf@vger.kernel.org>; Wed, 31 Jan 2024 13:07:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1706735261; bh=t8F0bp3/XLsg1qz5Sf+JKdHv5rIhgGsGN9UMqCiRuv0=;
-	h=To:Cc:References:In-Reply-To:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=RPpckab1sjj5K9ig68fl8X2OVE0ntbXPGR1mSeRlO1R1LkvRDmE6+65h5ZPx8gGwp
-	 7Qn7NYZLE6MmC35MUNhGpD7gC3oE0Ol1g/ah3GMHon2YXjQVLo67RKsaAfwzAInI9Z
-	 ymrtUeXR5rFmdfMk05p2JRNpqxKGIJAsGQQcsvLA=
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
- by ietfa.amsl.com (Postfix) with ESMTP id 9460DC14F682;
- Wed, 31 Jan 2024 13:07:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
- t=1706735261; bh=t8F0bp3/XLsg1qz5Sf+JKdHv5rIhgGsGN9UMqCiRuv0=;
- h=From:To:Cc:References:In-Reply-To:Date:Subject:List-Id:
- List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
- b=iwY45hg/I6bA+YSzkqY/8VkrxhHTbvYCbU1yOw2UuSG11Wecvievr8EBpwXK0FF3b
- IJhAOF4ok1IMj03hxTf+h5W+RtZfL9rOoHwqarYoliae5JiF77786NSCewov+Q8bdH
- z8XwLWsUb2O4lZcEJn2GwKcduldNndeUBzyeaTiE=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 87643C14F602
- for <bpf@ietfa.amsl.com>; Wed, 31 Jan 2024 13:07:40 -0800 (PST)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -1.855
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=googlemail.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k_Knyd3dBysv for <bpf@ietfa.amsl.com>;
- Wed, 31 Jan 2024 13:07:36 -0800 (PST)
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com
- [IPv6:2607:f8b0:4864:20::629])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 1967FC14F682
- for <bpf@ietf.org>; Wed, 31 Jan 2024 13:07:36 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id
- d9443c01a7336-1d7431e702dso2158055ad.1
- for <bpf@ietf.org>; Wed, 31 Jan 2024 13:07:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GfukBuZb"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3394b892691so82635f8f.1
+        for <bpf@vger.kernel.org>; Wed, 31 Jan 2024 13:26:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1706735255; x=1707340055; darn=ietf.org;
- h=thread-index:content-language:content-transfer-encoding
- :mime-version:message-id:date:subject:in-reply-to:references:cc:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=Dw1LX+ZFVIgrafnYqjC0jzokl66M1v8G3kvRIrEAPI0=;
- b=P68qOWWaY1KWTr/X7Qq8uZO8/+X604BdJ4Q+WoLkrFL/rqW8/FtKA2Pgrzqs+EOKyI
- 5tif0oTVOyJRg08TSY/e6KIxUuEFSSl3tpkanMTBYR+tTJ9M9Tf718WRqScuGYz97wDi
- Pzd2/14alwNcgMK/t63P3KHhE2tDpjdhiaNQHL1DArbnDER+VTta5U9mKK0C85fbfoXS
- RWv+Ua3XyKhjO2xPCbrkDHNYWcuUI8GW04REWyN4qD+7YQT1Ld8YToVwmqTwDyjfB4ZK
- B9vo5Bp8Sa77TUPBus2/5184H9nYHsQsskU/54MkLQYR4ieQi+8mkrnZkMqDgg7OTxBd
- EaYA==
+        d=gmail.com; s=20230601; t=1706736387; x=1707341187; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bmXE/zA2tQPT63xOvGuLd3DNscD1babk6AzaC2F081s=;
+        b=GfukBuZbfmAD8FFF20A4orliyw5lzU4h1MNPSFwmRZIqwaqSfZ2J1mmaaH769PJVvD
+         dq6Xtlu8fzV60LdRucSq58MxSslvOxEvj5eNz7f0qxKGcbwqBFJsNXIt+SZ/JJ5m8UAv
+         7Yv+BAm7HrQqyUHiOgwB/wmMw47RkYb/a5xI9o/XzYSAVMTKRUuHN64C6E84jZtvs56g
+         eHRPlcdeh2sWr4bsLN9C4l0QdLm5v2RRaZTdwSpwBUcNSnshYcyu0eJLc0rf9Gop0ESy
+         lsWJp6kF9XB3+r3Tf4U+RsG8UDSiP/jTYzcDyhKy3o3RRWFqNPfC+5s2UgMctsH+SDoM
+         51AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706735255; x=1707340055;
- h=thread-index:content-language:content-transfer-encoding
- :mime-version:message-id:date:subject:in-reply-to:references:cc:to
- :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=Dw1LX+ZFVIgrafnYqjC0jzokl66M1v8G3kvRIrEAPI0=;
- b=bPVnuffOw7EMCkVbU6H6iEGO1vUaAfDPacPcxxbjAACe87yRY/uPVfZ8Omm/0lKJj1
- 7b/zM8mhMjwFvqa8lUq7sGS9tDvBl6jA8yfeIqwhNjV1Q/1/Rn2fTLq8P+l3tf+JahhW
- B+Ew28FOstEWtYj1tIobicTmdvOkZDGVWj8/Kfu2chFaoWJeML55Mxqrq25TmCKUXbD/
- sNevIh05LDP9FsKG1dOtaJJ5ZWAlUxDhW+vBl4Z1BxNTfXZhtdqziEw+LM6dbk34KR72
- cKm2G8/1850Cb/HMi8ToGsyYfe08GJcXMbxIzNeFOAJyNkdphlK+nBbcEQ2VzB5oUTqy
- bE0w==
-X-Gm-Message-State: AOJu0Yy3VM0JwjzT8Lxk2k4sSkjMTOmNNZcTy4QCLgawgbHHOSizrOkl
- V1bWmSIKlxx5eAgVQY/ahM8JKkkoHgbWl56+79ocXd7Gxfao0zmc
-X-Google-Smtp-Source: AGHT+IF5S807DOfcTfpp+v/W0Aye9P2y0DsuqML6OlDnp9rN4VCczfwQwvro0nBZD4jqi+zjj41ABg==
-X-Received: by 2002:a17:902:ec82:b0:1d8:a782:6cc9 with SMTP id
- x2-20020a170902ec8200b001d8a7826cc9mr3652020plg.16.1706735254983; 
- Wed, 31 Jan 2024 13:07:34 -0800 (PST)
-Received: from ArmidaleLaptop (c-67-170-74-237.hsd1.wa.comcast.net.
- [67.170.74.237]) by smtp.gmail.com with ESMTPSA id
- jk7-20020a170903330700b001d8e5a3be8asm5849831plb.259.2024.01.31.13.07.33
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Wed, 31 Jan 2024 13:07:34 -0800 (PST)
-X-Google-Original-From: <dthaler1968@gmail.com>
-To: "'David Vernet'" <void@manifault.com>,
- "'Dave Thaler'" <dthaler1968=40googlemail.com@dmarc.ietf.org>
-Cc: <bpf@vger.kernel.org>, <bpf@ietf.org>, <kuba@kernel.org>,
- <jose.marchesi@oracle.com>, <hch@infradead.org>, <ast@kernel.org>
-References: <20240127170314.15881-1-dthaler1968@gmail.com>
- <20240129210423.GB753614@maniforge> <20240131192646.GB1051028@maniforge>
-In-Reply-To: <20240131192646.GB1051028@maniforge>
-Date: Wed, 31 Jan 2024 13:07:31 -0800
-Message-ID: <0ce001da5489$8216dc80$86449580$@gmail.com>
+        d=1e100.net; s=20230601; t=1706736387; x=1707341187;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bmXE/zA2tQPT63xOvGuLd3DNscD1babk6AzaC2F081s=;
+        b=eBdz4xQHHA8z+Iyo1awA7WMEEfOZ1WJphT4dzi8gCcr+FSfLcZeHW1uuXb537O++Nz
+         0cOZz+W9GoXMjGXjc4KPbFcOdUSHmWdbqzhWOTmXtzXMW67Rj19eWHZAx0sE+UKECQ/J
+         u2/B/wqVBTzSZU0V04rkDIUQuQRufmhOaF8QghPbobw4V7o5bi9GDEoVEpzpxwIa4qRp
+         N5Suf767wJKmY4+7XqIcIGOlRo/nyz1L8JT2+uGgxeeH8EjBal7h/L+6LVpm6nC2BwGb
+         54LDEnpzJMe7rkKcL4MgnJWu8v0DQ0FlDM8Do02067v2d0gvZyb1gIsdiQvSAUGdJBkH
+         1Z6w==
+X-Gm-Message-State: AOJu0YzrzIEaY94lGEI633Ajnf/DZshzJelPhEeqLZNu7ZGYh8KwAleS
+	sIIcnEN+HboTL5fd7ffNPs4SHjjkJ9fxiKW9kCegvtXvs3NNpC9cLDM634/8
+X-Google-Smtp-Source: AGHT+IEMwSA6GR+eUKLroleu+nwedoZmGcHf5q6j6izyd4dYWQuHOs9vGPwT6Dm4g47/zL1D+6B/Lg==
+X-Received: by 2002:adf:e8c2:0:b0:33a:f277:8f6 with SMTP id k2-20020adfe8c2000000b0033af27708f6mr5273446wrn.14.1706736387134;
+        Wed, 31 Jan 2024 13:26:27 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXypFzjBBFsyofm5t9NXwpvCMpIj88LqysTVEDUXkuBP/IRLO4/q1rPQrE26oVWEWt/q+R5zgOCX+hGVM8G/e9ryJ+xekx/xM0ydz8WdzpAy7w6HIv9q64UZNCOIdsSSnQbJ3te/dn+dMjGfPoqNvbLmVL64aphB/+fbL5cvvxcgPBLxiUEDv+HAeqd95XShGgYInXOON01vRugjiG+GisvN+PGo+HxeB5dMQ==
+Received: from localhost.localdomain (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id n5-20020a056000170500b0033aef083fbfsm8619995wrc.31.2024.01.31.13.26.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Jan 2024 13:26:26 -0800 (PST)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org
+Cc: andrii@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	kernel-team@fb.com,
+	yonghong.song@linux.dev,
+	Eduard Zingerman <eddyz87@gmail.com>
+Subject: [PATCH bpf-next] [libbpf] remove unnecessary null check in kernel_supports()
+Date: Wed, 31 Jan 2024 23:26:15 +0200
+Message-ID: <20240131212615.20112-1-eddyz87@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-us
-Thread-Index: AQJpLjBt+wHlyPZMEEMiFiltNz6/8AG1jGS4Ap1WwKSvtB9JUA==
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/FepO_8h6gPpzqvYFcSj2TassbXA>
-Subject: Re: [Bpf] [PATCH bpf-next] bpf,
- docs: Expand set of initial conformance groups
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-X-Original-From: dthaler1968@googlemail.com
-From: dthaler1968=40googlemail.com@dmarc.ietf.org
-Message-ID: <20240131210731.syBLqBqaLgD-jzi9fKB2BrBbilMb2czY-NmsfL2SaJE@z>
+Content-Transfer-Encoding: 8bit
 
-David Vernet <void@manifault.com> wrote: 
-[...]
-> > > +  as being in the base64 conformance group.
-> > > +* atom32: includes 32-bit atomic operation instructions (see `Atomic
-> operations`_).
-> > > +* atom64: includes atom32, plus 64-bit atomic operation instructions.
-> > > +* div32: includes 32-bit division and modulo instructions.
-> >
-> > Did we want to separate division and modulo? It looks like Netronome
-> > doesn't support modulo [0], presumably because it's not as useful as
-> > in tracing.
-> >
-> > Jakub -- can you confirm? If so, how difficult would it have been to
-> > add modulo support, and do you think it would have provided any value?
-> >
-> > [0]:
-> > https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/net
-> > ronome/nfp/bpf/jit.c#L3421
-> 
-> I spoke about this offline with Jakub. It turns out that there was
-actually
-> neither division nor modulo in the silicon. They only supported division
-by the
-> kernel's reciprocal division library. We could choose to apply Netronome's
-> choice to the standard, but I really don't think we should.  Kuba pointed
-out
-> that Netronome is old silicon, and that most vendors today would likely
-start
-> with RISC-V.
-> 
-> To that point, I believe the most prudent thing is to just mirror the
-smallest
-> riscv32 instruction-set granularity for our conformance groups.
-> For the case of multiplication, division, and modulo, this would be the
-"M"
-> standard extension for Integer Multiplication and Division, which provides
-> signed and unsigned multiplication, division, and modulo instructions.
-> 
-> My suggestion is for us to mirror this exactly, here. I think the contours
-set by
-> RISC-V are much stronger data points for what will make sense for vendors
-than
-> what Netronome did on what at this point is rather old silicon.
-> 
-> How do we feel about having divmul32/64 conformance groups? Thus
-> removing multiplication from the base32/64 groups. This would leave us
-> with:
-> 
-> - base{32/64}   (reflecting RV32I and RV64I plus our call instructions,
-> 		 which logically fit here given that RISC-V control flow
-> 		 instructions are in RV{32,64}I as well)
-> - divmul{32/64} (the "M" instruction set provides both 32 and 64 bit
-> 		 versions of MUL(W), DIV{U}(W), and REM{U}(W)
-> 		 instructions respectively)
-> - atom{32/64}   (the "A" extension provides 32 and 64 bit instructions
-> 		 for R32 and R64 respectively, just like with div/mod)
-> - legacy
-> 
-> This to me seems like both the most logical layout of instructions, as
-well as the
-> least likely to cause pain for vendors given the precedence that's already
-been
-> set by RISC-V.
+After recent changes, Coverity complained about inconsistent null
+checks in kernel_supports() function:
 
-This sounds fine to me.
+    kernel_supports(const struct bpf_object *obj, ...)
+    ...
+    // var_compare_op: Comparing obj to null implies that obj might be null
+    if (obj && obj->gen_loader)
+        return true;
 
-Dave
+    // var_deref_op: Dereferencing null pointer obj
+    if (obj->token_fd)
+        return feat_supported(obj->feat_cache, feat_id);
+    ...
 
+- The original null check was introduced by commit [0],
+  which introduced a call `kernel_supports(NULL, ...)`
+  in function bump_rlimit_memlock();
+- This call was refactored to use `feat_supported(NULL, ...)`
+  in commit [1].
+
+Looking at all places where kernel_supports() is called:
+- there is either `obj->...` access before the call;
+- or `obj` comes from `prog->obj` expression, where `prog` comes from
+  enumeration of programs in `obj`;
+- or `obj` comes from `prog->obj`, where `prog` is a parameter to one
+  of the API functions:
+  - bpf_program__attach_kprobe_opts;
+  - bpf_program__attach_kprobe;
+  - bpf_program__attach_ksyscall.
+
+Assuming correct API usage, it appears that `obj` can never be null
+when passed to kernel_supports(). Silence the Coverity warning by
+removing redundant null check.
+
+[0] e542f2c4cd16 ("libbpf: Auto-bump RLIMIT_MEMLOCK if kernel needs it for BPF")
+[1] d6dd1d49367a ("libbpf: Further decouple feature checking logic from bpf_object")
+
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+---
+ tools/lib/bpf/libbpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index db65ea59a05a..f6953d7faff1 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -4661,7 +4661,7 @@ bpf_object__probe_loading(struct bpf_object *obj)
+ 
+ bool kernel_supports(const struct bpf_object *obj, enum kern_feature_id feat_id)
+ {
+-	if (obj && obj->gen_loader)
++	if (obj->gen_loader)
+ 		/* To generate loader program assume the latest kernel
+ 		 * to avoid doing extra prog_load, map_create syscalls.
+ 		 */
 -- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
+2.43.0
+
