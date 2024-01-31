@@ -1,189 +1,142 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C6037143
-	for <bpf@vger.kernel.org>; Wed, 31 Jan 2024 19:02:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 006A33E481
+	for <bpf@vger.kernel.org>; Wed, 31 Jan 2024 19:26:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706727737; cv=none; b=LHdZkh1zuo6D4rH96DpAVXyOTXfQwccwza52e7C6dKduolA7YoOB//zr3SmJ17WSswHZ/wipQo77N5pV2P1jK5U6TUSaLogVIj2zwA6IbgOTdCmYZMvBJWBEBUZJ50SqJEpr3wKvt9UuVu+G/C3KYaXPB3JJVYJs10mFRKKpC3I=
+	t=1706729212; cv=none; b=I/UJsIbCrabiqYOpYmRgI0jVgGA0DDFhyAwn+k6I51XAe4ZIo7YasqdtPAZxI4jCI48f6GM9ctFZYZEHky08U4ce/bgBTgm8XkHDIAGekNDERVtrRsKZcRtjr3uH1rpFaqFhrEJNEUEMycFfInHLkAqYKduMLUftPsBN6Zvydec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706727737; c=relaxed/simple;
-	bh=hYAd+dIyvO0iv9s0m2ZQoM6L842HL0kf8WmxccdK/hc=;
-	h=Date:From:To:Cc:Message-ID:References:MIME-Version:In-Reply-To:
-	 Subject:Content-Type; b=W0tD7NxwIPl1jgBA1qGOiayOMCHgaNFYYkWo1+mQO9fSmnCIPJLpPrKcZ1f4kwYkIsYMtwsfSFexKOEmlyCVThnIQfm3EZ26liv9kobhIjKSJynQM/ynYdbhSBdt/n4GsvwgbXMezIMc7845sY7VExMJyE7GIqDVkjZWv4+waO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=Jrg0ppwd; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=AH0ZcVsc; arc=none smtp.client-ip=50.223.129.194
+	s=arc-20240116; t=1706729212; c=relaxed/simple;
+	bh=otsOcoN4efWMd8+/aqp+VjvERo6SSCgR9PA5Ez/7QvQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BPGooDdZXw6qWCLp1DK+Yw08AU9rm/gETnDEfOdgY0q19FTJplCxrGyVlNFP0hZUkMwK0BhQ13EsdFLpK5tOPuk6vexfu1jehkW7TuCZlK9t+nO2KDMNrxEsi6MgIXI1gR3P354FmqATCe/Uq0SCzLdF7jXtCLAeqjWheihbpYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="Jrg0ppwd";
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="AH0ZcVsc"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 12B8FC151552
-	for <bpf@vger.kernel.org>; Wed, 31 Jan 2024 11:02:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1706727735; bh=hYAd+dIyvO0iv9s0m2ZQoM6L842HL0kf8WmxccdK/hc=;
-	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=Jrg0ppwdEz2rzS9VDpeEeb4g7HncWXjeeosMUNDyTIvlSzSuME5k1bVyjt4Gy5+DQ
-	 aGnDHRz4zJoGLb28BI7Grdrhte09I1HCFdDA2YvfDv0kO5Di0b7IXXt2mqnWCEfMkQ
-	 XfHOFKSmtllAtJuzD7Y/ce5E1wOxAyPFNo8monnc=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Wed Jan 31 11:02:14 2024
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id A6D4BC14F694;
-	Wed, 31 Jan 2024 11:02:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1706727734; bh=hYAd+dIyvO0iv9s0m2ZQoM6L842HL0kf8WmxccdK/hc=;
-	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=AH0ZcVscPqO4z4K1XPIWf7T5kHjP6MApjIaCjQJZLy7smATQXGkC+cRsYlkngJ8jF
-	 zYai+Avcb9uHHwrdQna9ICteZ1n0NXTUCO/kX0yznOcym5F7z/DV2syHo7uuz4kl3x
-	 3OW9T3NLYe/tu3IcLYD9g7mvl7pZ0WHgGkXCKXO4=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id B56F6C14F694
- for <bpf@ietfa.amsl.com>; Wed, 31 Jan 2024 11:02:13 -0800 (PST)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -1.408
-X-Spam-Level: 
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zUOSoJF1NShO for <bpf@ietfa.amsl.com>;
- Wed, 31 Jan 2024 11:02:09 -0800 (PST)
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com
- [209.85.219.42])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 50B2CC14F690
- for <bpf@ietf.org>; Wed, 31 Jan 2024 11:02:09 -0800 (PST)
-Received: by mail-qv1-f42.google.com with SMTP id
- 6a1803df08f44-68c444f9272so665576d6.3
- for <bpf@ietf.org>; Wed, 31 Jan 2024 11:02:09 -0800 (PST)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-68c420bf6f1so633866d6.1
+        for <bpf@vger.kernel.org>; Wed, 31 Jan 2024 11:26:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1706727728; x=1707332528;
- h=user-agent:in-reply-to:content-disposition:mime-version:references
- :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=A5bdkigbuy7N+F/Uijz9a8VNffb/p+LEpN18kynpP2M=;
- b=YhWKW/DDpqxCqwCV3Qxf02M+rGZk3Xrlj3KH5GlRkkdRfLU91FDfVWhmHOVSp25iv5
- yj9aHH6RLhONEIHSIg0N0ulRXImYDu8asnXgOtJKZ4NuswzU/67H3od4dFdbFxVOELNT
- xtoSmgs1R348nS5ZmWquX8swrcNG8OZwqzSCHbw9Wck71zBgq2NE0sRSltIwXKPy9LMJ
- k2GgN/UiTqxF8ViiEw1a0kbYcngEFyN5W9hAlgYBi20Pq3VBQG+n97ZoGSieJE35FJam
- +fpurZcjEpR6ZGdKGt8iB1g1UNSOB/R02MeykOiY7hvOciG4WURg2nM+0H+cDyBn8LBH
- E0Vg==
-X-Gm-Message-State: AOJu0Yw2rsuuH1R7Lozqv3xchp+YmVAdox1xC5OXDPqdV4dPhhP+M5CW
- fIH5rejLyAdz1HAlGEFvn9kONE12Di73paUnHZ+YqKnWeif03/3F
-X-Google-Smtp-Source: AGHT+IEeP5S/pkX5AQxhNAbmTLSh/uhIxaH/MnJFLyUprEkLc0ypmUIIR5S3tL5ski0P/LL+e7RXEg==
-X-Received: by 2002:ad4:5962:0:b0:68c:60d6:a937 with SMTP id
- eq2-20020ad45962000000b0068c60d6a937mr230191qvb.36.1706727728141; 
- Wed, 31 Jan 2024 11:02:08 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706729210; x=1707334010;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TkMsnANZ4IJr/ZYEeRJg4AsRHEEumMvRVV3AQD441vA=;
+        b=Mp0pzEny0rottCIcrbgjFm4R/CtEOzqvBRzvI3O/DOvPYowkD0DhZpNw3ZdH69mstJ
+         fqTp4+KudKcL1o9a3+c+lhsizZIyVuqHpZwMbSqiBPPu1egZGjTeG327Q5PXrdu41VnY
+         MdChqKtTEfEGhqPeZZ8pQKYKeOJDGrHzZf0BtPmx2e9/yG41PR2ktlTr7eDP32XdOHEi
+         xJNXdbG+d0I4amksK01URNzNFQVRG9mRt5w5h2ezAy96VSVPtgZbymJrTNVf6zQHR6Qj
+         ZLIJ/BJprYHDJGuO2bSudv/FKyj9V0eJAW7V7ElZpjjz4e5r0CBJ9q3SK7nQUf35j9pQ
+         TTvg==
+X-Gm-Message-State: AOJu0Ywh1ku2dwMPJccRIAwj2J3nIRwPLy8h2tDCU7yod5P3vIiFHi+5
+	xyeVSjGCsHY6snEQjWdOX2VNEkvvcXO4+atjWzUicRKLitWvQYby
+X-Google-Smtp-Source: AGHT+IEWDVgu6fry9QFJ/uard0h2oaa1nYsUEzRF/gAuSDoIyO5gBJYqezsaExptBSE+6qMDchyksw==
+X-Received: by 2002:a05:6214:ca9:b0:68c:444e:2bea with SMTP id s9-20020a0562140ca900b0068c444e2beamr6470270qvs.6.1706729209588;
+        Wed, 31 Jan 2024 11:26:49 -0800 (PST)
 Received: from maniforge (c-24-1-27-177.hsd1.il.comcast.net. [24.1.27.177])
- by smtp.gmail.com with ESMTPSA id
- pc19-20020a056214489300b0068c6e9fa24asm738125qvb.10.2024.01.31.11.02.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 31 Jan 2024 11:02:07 -0800 (PST)
-Date: Wed, 31 Jan 2024 13:02:05 -0600
+        by smtp.gmail.com with ESMTPSA id og7-20020a056214428700b0068688a2964asm2723571qvb.113.2024.01.31.11.26.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Jan 2024 11:26:49 -0800 (PST)
+Date: Wed, 31 Jan 2024 13:26:46 -0600
 From: David Vernet <void@manifault.com>
-To: Dave Thaler <dthaler1968@googlemail.com>
-Cc: bpf@vger.kernel.org, bpf@ietf.org, Dave Thaler <dthaler1968@gmail.com>
-Message-ID: <20240131190205.GA1051028@maniforge>
-References: <20240131033759.3634-1-dthaler1968@gmail.com>
+To: Dave Thaler <dthaler1968=40googlemail.com@dmarc.ietf.org>
+Cc: bpf@vger.kernel.org, bpf@ietf.org, Dave Thaler <dthaler1968@gmail.com>,
+	kuba@kernel.org, jose.marchesi@oracle.com, hch@infradead.org,
+	ast@kernel.org
+Subject: Re: [Bpf] [PATCH bpf-next] bpf, docs: Expand set of initial
+ conformance groups
+Message-ID: <20240131192646.GB1051028@maniforge>
+References: <20240127170314.15881-1-dthaler1968@gmail.com>
+ <20240129210423.GB753614@maniforge>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240131033759.3634-1-dthaler1968@gmail.com>
-User-Agent: Mutt/2.2.12 (2023-09-09)
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/TTNQ6PH4IrfeIVrzHDS9o9enNqU>
-Subject: Re: [Bpf] [PATCH bpf-next] bpf,
- docs: Clarify which legacy packet instructions existed
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-Content-Type: multipart/mixed; boundary="===============8977976739319502278=="
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-Message-ID: <20240131190205.PkwI7htGx9Skf_BUUvZpb1mfxpdsjUkPewt-YtoVFc4@z>
-
-
---===============8977976739319502278==
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="RVDUcJLDIDs2OQxF"
+	protocol="application/pgp-signature"; boundary="1O6UFeeW7Xhx2khh"
 Content-Disposition: inline
+In-Reply-To: <20240129210423.GB753614@maniforge>
+User-Agent: Mutt/2.2.12 (2023-09-09)
 
 
---RVDUcJLDIDs2OQxF
+--1O6UFeeW7Xhx2khh
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 30, 2024 at 07:37:59PM -0800, Dave Thaler wrote:
-> As discussed in mailing list discussion at
-> https://mailarchive.ietf.org/arch/msg/bpf/5LnnKm093cGpOmDI9TnLQLBXyys/
-> this patch updates the "Legacy BPF Packet access instructions"
-> section to clarify which instructions are deprecated (vs which
-> were never defined and so are not deprecated).
->=20
-> Signed-off-by: Dave Thaler <dthaler1968@gmail.com>
+On Mon, Jan 29, 2024 at 03:04:23PM -0600, David Vernet wrote:
 
-Acked-by: David Vernet <void@manifault.com>
+[...]
 
-> ---
->  Documentation/bpf/standardization/instruction-set.rst | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> > +  as being in the base64 conformance group.
+> > +* atom32: includes 32-bit atomic operation instructions (see `Atomic o=
+perations`_).
+> > +* atom64: includes atom32, plus 64-bit atomic operation instructions.
+> > +* div32: includes 32-bit division and modulo instructions.
 >=20
-> diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Docu=
-mentation/bpf/standardization/instruction-set.rst
-> index af43227b6..cf08337bf 100644
-> --- a/Documentation/bpf/standardization/instruction-set.rst
-> +++ b/Documentation/bpf/standardization/instruction-set.rst
-> @@ -635,7 +635,9 @@ Legacy BPF Packet access instructions
->  -------------------------------------
-> =20
->  BPF previously introduced special instructions for access to packet data=
- that were
-> -carried over from classic BPF. However, these instructions are
-> +carried over from classic BPF. These instructions used an instruction
-> +class of BPF_LD, a size modifier of BPF_W, BPF_H, or BPF_B, and a
-> +mode modifier of BPF_ABS or BPF_IND.  However, these instructions are
->  deprecated and should no longer be used.  All legacy packet access
->  instructions belong to the "legacy" conformance group instead of the "ba=
-sic"
->  conformance group.
-> --=20
-> 2.40.1
+> Did we want to separate division and modulo? It looks like Netronome
+> doesn't support modulo [0], presumably because it's not as useful as in
+> tracing.
 >=20
+> Jakub -- can you confirm? If so, how difficult would it have been to add
+> modulo support, and do you think it would have provided any value?
 >=20
+> [0]: https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/n=
+etronome/nfp/bpf/jit.c#L3421
 
---RVDUcJLDIDs2OQxF
+I spoke about this offline with Jakub. It turns out that there was
+actually neither division nor modulo in the silicon. They only supported
+division by the kernel's reciprocal division library. We could choose to
+apply Netronome's choice to the standard, but I really don't think we
+should.  Kuba pointed out that Netronome is old silicon, and that most
+vendors today would likely start with RISC-V.
+
+To that point, I believe the most prudent thing is to just mirror the
+smallest riscv32 instruction-set granularity for our conformance groups.
+For the case of multiplication, division, and modulo, this would be the
+"M" standard extension for Integer Multiplication and Division, which
+provides signed and unsigned multiplication, division, and modulo
+instructions.
+
+My suggestion is for us to mirror this exactly, here. I think the
+contours set by RISC-V are much stronger data points for what will make
+sense for vendors than what Netronome did on what at this point is
+rather old silicon.
+
+How do we feel about having divmul32/64 conformance groups? Thus
+removing multiplication from the base32/64 groups. This would leave us
+with:
+
+- base{32/64}   (reflecting RV32I and RV64I plus our call instructions,
+		 which logically fit here given that RISC-V control flow
+		 instructions are in RV{32,64}I as well)
+- divmul{32/64} (the "M" instruction set provides both 32 and 64 bit
+		 versions of MUL(W), DIV{U}(W), and REM{U}(W)
+		 instructions respectively)
+- atom{32/64}   (the "A" extension provides 32 and 64 bit instructions
+		 for R32 and R64 respectively, just like with div/mod)
+- legacy
+
+This to me seems like both the most logical layout of instructions, as
+well as the least likely to cause pain for vendors given the precedence
+that's already been set by RISC-V.
+
+[...]
+
+Thanks,
+David
+
+--1O6UFeeW7Xhx2khh
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEARYKAB0WIQRBxU1So5MTLwphjdFZ5LhpZcTzZAUCZbqZLQAKCRBZ5LhpZcTz
-ZP4XAP9ajU67OpR72qyWAYboNvT837yFd0QSmrVt2ts+FwehQQEAov2OkfQQ/FZ7
-qi2RY81j38xzo7m3rRCE3e+Ds8KdGQY=
-=874j
+iHUEARYKAB0WIQRBxU1So5MTLwphjdFZ5LhpZcTzZAUCZbqe9gAKCRBZ5LhpZcTz
+ZNJEAQDTbR9dUbZjNHmp/wxqRHSY0rI8fl+xN11WUt2mdmzdgAD+IMTI72phHgtF
+5NOect/LdyRdKvU+ZWIfqCYU2SjeFgk=
+=XCjY
 -----END PGP SIGNATURE-----
 
---RVDUcJLDIDs2OQxF--
-
-
---===============8977976739319502278==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
-
---===============8977976739319502278==--
-
+--1O6UFeeW7Xhx2khh--
