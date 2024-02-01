@@ -1,52 +1,55 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85D7E53363;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F7F553366;
 	Thu,  1 Feb 2024 13:09:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706792990; cv=none; b=kC4Ms7a9X17xkhP5LcOKTXCrWlzql6Fla9LC9fy5JDDQPCwm06wOYTLE67jsYEst7q+kSf9zbrVbYR4cpT/khrJwOlKGzxYkcbEreWZuxes03MP1o4O4dLVAGpTn1J1CvPmzQFPJD+lst5eIqPmmKr0K+dYmwu7DCk5QefAR8U0=
+	t=1706792991; cv=none; b=QtLvZBOtXMaOA2Nni5YvJTDL3NVWgWVijj6FlTNHvo0qDB9FpXl/0jiBiF+tfGjjRyqoBgTHQ5BCYHL5By8nnKZgfOT1rcHIFcC/QrTwSNOgvRYj/cAZ8D4dVB0d4GTuR9yREyx8707Qv+nE+bSO0CQcLC9//9u1G+SUPBRVkwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706792990; c=relaxed/simple;
-	bh=TtPjt/x5e69CeWXDn7QeqQ1izpa9yi+Ue9HOIxIVdD8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jtC2fPBIc8MgGoh2uYO/9fKbPI26pVtKBdLMJpKYDHDBjT9aR2f+BlU0ojGl2/F6l+14JgJ5t05kZhpAoHrne5Szu7YX18/m71mMk/G0/dVmRJavx3eqhVbnLGrmlf3y58MjQEG1+F6hchfgikWgJ2NWmv2AY7YU7PYbln5BeRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=k2fm2hyG; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=k2fm2hyG; arc=none smtp.client-ip=195.135.223.131
+	s=arc-20240116; t=1706792991; c=relaxed/simple;
+	bh=pISfP3Hzv5P7bazKFw8x24gFRtSxfRqfs11zSQ5Dbys=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QwtqHdyl0rftnpE3LY+M/lzS5p/vzu86qzmxXW+pynJRFi/TwNSNrRjClIQ36Xc8VuOYtTckF3M3uBsNhgz5FTO/Jd58L0/zSSQkMDCE78SyUZVGEoSscQUKl84Y38TWUK84cC7T3AV+GoEpNEKytgfsgRHHquPG2++CRISMa50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=UijMuGJp; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=UijMuGJp; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="k2fm2hyG";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="k2fm2hyG"
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="UijMuGJp";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="UijMuGJp"
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 9CE8A1FBB1;
-	Thu,  1 Feb 2024 13:09:45 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 1711722147;
+	Thu,  1 Feb 2024 13:09:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1706792985; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1706792986; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=0PVDSYqJ1G0wsY/wIF6aCbRfwUggmS4ekfVfUCAcpvM=;
-	b=k2fm2hyGE6CxZcd2Y/GRhIFRm+yVvlhxpRO+J4FX7YqxZzWuz9MMDZwAO4tq7f/26ozDql
-	VNLxPX0MUUoq2huRB3r7KadFyndwNj1AEak2CaF8VwYHEWVEYKmSGVYA1m4Y44aa2fCK5J
-	uUqxkTZ1CWHGOpNiU6D6fS7o+EZMCPs=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IUKCAfTVoUrxB4zijGrDV9tJzwRsfCTR6KHiqfmXiK8=;
+	b=UijMuGJpe3SfxW+1Pa+kKELvVKpcKljLUpGWkDPuIdt2hhb8Afa0MOKc6+aRoPYgiXmE+w
+	QZ19FIitBTazsJrm0EudoeUJnyouGtG98vHV8Vb9Xdh8tWq4zURVKEM3a4RQeM0nsSGXzi
+	OqCTVdI248guWFEpigsz/SDL0N3sJC0=
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1706792985; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1706792986; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=0PVDSYqJ1G0wsY/wIF6aCbRfwUggmS4ekfVfUCAcpvM=;
-	b=k2fm2hyGE6CxZcd2Y/GRhIFRm+yVvlhxpRO+J4FX7YqxZzWuz9MMDZwAO4tq7f/26ozDql
-	VNLxPX0MUUoq2huRB3r7KadFyndwNj1AEak2CaF8VwYHEWVEYKmSGVYA1m4Y44aa2fCK5J
-	uUqxkTZ1CWHGOpNiU6D6fS7o+EZMCPs=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IUKCAfTVoUrxB4zijGrDV9tJzwRsfCTR6KHiqfmXiK8=;
+	b=UijMuGJpe3SfxW+1Pa+kKELvVKpcKljLUpGWkDPuIdt2hhb8Afa0MOKc6+aRoPYgiXmE+w
+	QZ19FIitBTazsJrm0EudoeUJnyouGtG98vHV8Vb9Xdh8tWq4zURVKEM3a4RQeM0nsSGXzi
+	OqCTVdI248guWFEpigsz/SDL0N3sJC0=
 Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 788CD1329F;
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id E4EBF13A04;
 	Thu,  1 Feb 2024 13:09:45 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id 25DkHBmYu2VafgAAn2gu4w
+	id GOnBNxmYu2VafgAAn2gu4w
 	(envelope-from <mkoutny@suse.com>); Thu, 01 Feb 2024 13:09:45 +0000
 From: =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
 To: netdev@vger.kernel.org,
@@ -77,10 +80,12 @@ Cc: "David S . Miller" <davem@davemloft.net>,
 	Stephen Hemminger <stephen@networkplumber.org>,
 	Simon Horman <horms@kernel.org>,
 	Pedro Tammela <pctammela@mojatatu.com>
-Subject: [PATCH v5 0/4] net/sched: Load modules via alias
-Date: Thu,  1 Feb 2024 14:09:39 +0100
-Message-ID: <20240201130943.19536-1-mkoutny@suse.com>
+Subject: [PATCH v5 4/4] net/sched: Remove alias of sch_clsact
+Date: Thu,  1 Feb 2024 14:09:43 +0100
+Message-ID: <20240201130943.19536-5-mkoutny@suse.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240201130943.19536-1-mkoutny@suse.com>
+References: <20240201130943.19536-1-mkoutny@suse.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -89,14 +94,16 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Authentication-Results: smtp-out2.suse.de;
-	none
 X-Spam-Level: 
-X-Spam-Score: -1.80
-X-Spamd-Result: default: False [-1.80 / 50.00];
+X-Spamd-Bar: /
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=UijMuGJp
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-0.58 / 50.00];
 	 ARC_NA(0.00)[];
 	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 BAYES_HAM(-3.00)[100.00%];
+	 R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	 BAYES_HAM(-1.57)[92.20%];
 	 FROM_HAS_DN(0.00)[];
 	 TO_DN_SOME(0.00)[];
 	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
@@ -104,141 +111,49 @@ X-Spamd-Result: default: False [-1.80 / 50.00];
 	 TAGGED_RCPT(0.00)[];
 	 MIME_GOOD(-0.10)[text/plain];
 	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 R_RATELIMIT(0.00)[to_ip_from(RLk7of1183i6tu11bgyseu9iy5)];
+	 R_RATELIMIT(0.00)[to_ip_from(RLogq4uai3psdy7gygdsfysmzr)];
 	 RCVD_COUNT_THREE(0.00)[3];
 	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 DKIM_TRACE(0.00)[suse.com:+];
+	 MX_GOOD(-0.01)[];
 	 RCPT_COUNT_TWELVE(0.00)[28];
 	 MID_CONTAINS_FROM(1.00)[];
 	 FUZZY_BLOCKED(0.00)[rspamd.com];
 	 FROM_EQ_ENVFROM(0.00)[];
 	 MIME_TRACE(0.00)[0:+];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
 	 FREEMAIL_CC(0.00)[davemloft.net,google.com,kernel.org,redhat.com,mojatatu.com,gmail.com,resnulli.us,iogearbox.net,linux.dev,toke.dk,intel.com,networkplumber.org];
 	 RCVD_TLS_ALL(0.00)[];
 	 SUSPICIOUS_RECIPS(1.50)[]
+X-Spam-Score: -0.58
+X-Rspamd-Queue-Id: 1711722147
 X-Spam-Flag: NO
 
-These modules may be loaded lazily without user's awareness and
-control. Add respective aliases to modules and request them under these
-aliases so that modprobe's blacklisting mechanism (through aliases)
-works for them. (The same pattern exists e.g. for filesystem
-modules.)
+The module sch_ingress stands out among net/sched modules
+because it provides multiple act/sch functionalities in a single .ko.
+They have aliases to make autoloading work for any of the provided
+functionalities.
 
-For example (before the change):
-  $ tc filter add dev lo parent 10: protocol ip prio 10 handle 1: cgroup
-  # cls_cgroup module is loaded despite a `blacklist cls_cgroup` entry
-  # in /etc/modprobe.d/*.conf
+Since the autoloading was changed to uniformly request any functionality
+under its alias, the non-systemic aliases can be removed now (i.e.
+assuming the alias were only used to ensure autoloading).
 
-After the change:
-  $ tc filter add dev lo parent 10: protocol ip prio 10 handle 1: cgroup
-  Error: TC classifier not found.
-  We have an error talking to the kernel
-  # explicit/acknowledged (privileged) action is needed
-  $ modprobe cls_cgroup
-  # blacklist entry won't apply to this direct modprobe, module is
-  # loaded with awareness
+Signed-off-by: Michal Koutný <mkoutny@suse.com>
+---
+ net/sched/sch_ingress.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-A considered alternative was invoking `modprobe -b` always from
-request_module(), however, dismissed as too intrusive and slightly
-confusing in favor of the precedented aliases (the commit 7f78e0351394
-("fs: Limit sys_mount to only request filesystem modules.").
-
-User experience suffers in both alternatives. Its improvement is
-orthogonal to blacklist honoring.
-
-Changes from v1 (https://lore.kernel.org/r/20231121175640.9981-1-mkoutny@suse.com)
-- Treat sch_ and act_ modules analogously to cls_
-
-Changes from v2 (https://lore.kernel.org/r/20231206192752.18989-1-mkoutny@suse.com)
-- reorganized commits (one generated commit + manual pre-/post- work)
-- used alias names more fitting the existing net- aliases
-- more info in commit messages and cover letter
-- rebased on current master
-
-Changes from v3 (https://lore.kernel.org/r/20240112180646.13232-1-mkoutny@suse.com)
-- rebase on netdev/net-next/main
-- correct aliases in cls_* modules (wrong sed)
-- replace repeated prefix strings with a macro
-- patch also request_module call in qdisc_set_default()
-
-Changes from v4 (https://lore.kernel.org/r/20240123135242.11430-1-mkoutny@suse.com)
-- update example in cover letter to existing module (cls_tcindex->cls_cgroup)
-  - tested that ':-)
-- remove __stringify in alias macro, net-cls-cgroup instead of net-cls-"cgroup"
-- pass correct argument to request_module() (Simon)
-- rebased on netdev-next/main
-
-Michal Koutný (4):
-  net/sched: Add helper macros with module names
-  net/sched: Add module aliases for cls_,sch_,act_ modules
-  net/sched: Load modules via their alias
-  net/sched: Remove alias of sch_clsact
-
- include/net/act_api.h      | 2 ++
- include/net/pkt_cls.h      | 2 ++
- include/net/pkt_sched.h    | 2 ++
- net/sched/act_api.c        | 2 +-
- net/sched/act_bpf.c        | 1 +
- net/sched/act_connmark.c   | 1 +
- net/sched/act_csum.c       | 1 +
- net/sched/act_ct.c         | 1 +
- net/sched/act_ctinfo.c     | 1 +
- net/sched/act_gact.c       | 1 +
- net/sched/act_gate.c       | 1 +
- net/sched/act_ife.c        | 1 +
- net/sched/act_mirred.c     | 1 +
- net/sched/act_mpls.c       | 1 +
- net/sched/act_nat.c        | 1 +
- net/sched/act_pedit.c      | 1 +
- net/sched/act_police.c     | 1 +
- net/sched/act_sample.c     | 1 +
- net/sched/act_simple.c     | 1 +
- net/sched/act_skbedit.c    | 1 +
- net/sched/act_skbmod.c     | 1 +
- net/sched/act_tunnel_key.c | 1 +
- net/sched/act_vlan.c       | 1 +
- net/sched/cls_api.c        | 2 +-
- net/sched/cls_basic.c      | 1 +
- net/sched/cls_bpf.c        | 1 +
- net/sched/cls_cgroup.c     | 1 +
- net/sched/cls_flow.c       | 1 +
- net/sched/cls_flower.c     | 1 +
- net/sched/cls_fw.c         | 1 +
- net/sched/cls_matchall.c   | 1 +
- net/sched/cls_route.c      | 1 +
- net/sched/cls_u32.c        | 1 +
- net/sched/sch_api.c        | 4 ++--
- net/sched/sch_cake.c       | 1 +
- net/sched/sch_cbs.c        | 1 +
- net/sched/sch_choke.c      | 1 +
- net/sched/sch_codel.c      | 1 +
- net/sched/sch_drr.c        | 1 +
- net/sched/sch_etf.c        | 1 +
- net/sched/sch_ets.c        | 1 +
- net/sched/sch_fq.c         | 1 +
- net/sched/sch_fq_codel.c   | 1 +
- net/sched/sch_gred.c       | 1 +
- net/sched/sch_hfsc.c       | 1 +
- net/sched/sch_hhf.c        | 1 +
- net/sched/sch_htb.c        | 1 +
- net/sched/sch_ingress.c    | 3 ++-
- net/sched/sch_mqprio.c     | 1 +
- net/sched/sch_multiq.c     | 1 +
- net/sched/sch_netem.c      | 1 +
- net/sched/sch_pie.c        | 1 +
- net/sched/sch_plug.c       | 1 +
- net/sched/sch_prio.c       | 1 +
- net/sched/sch_qfq.c        | 1 +
- net/sched/sch_red.c        | 1 +
- net/sched/sch_sfb.c        | 1 +
- net/sched/sch_sfq.c        | 1 +
- net/sched/sch_skbprio.c    | 1 +
- net/sched/sch_taprio.c     | 1 +
- net/sched/sch_tbf.c        | 1 +
- 61 files changed, 66 insertions(+), 5 deletions(-)
-
-
-base-commit: 644c64318de0df5f4ea9f00e4b8cc262b343a93f
+diff --git a/net/sched/sch_ingress.c b/net/sched/sch_ingress.c
+index 48a800131e99..c2ef9dcf91d2 100644
+--- a/net/sched/sch_ingress.c
++++ b/net/sched/sch_ingress.c
+@@ -370,6 +370,5 @@ static void __exit ingress_module_exit(void)
+ module_init(ingress_module_init);
+ module_exit(ingress_module_exit);
+ 
+-MODULE_ALIAS("sch_clsact");
+ MODULE_LICENSE("GPL");
+ MODULE_DESCRIPTION("Ingress and clsact based ingress and egress qdiscs");
 -- 
 2.43.0
 
