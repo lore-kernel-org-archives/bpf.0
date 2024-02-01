@@ -1,27 +1,26 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA251157E9E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2195FEE0;
 	Thu,  1 Feb 2024 08:33:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706776386; cv=none; b=V3affC1GVviWZFUeccUk5XJeXRqOOrICYmWOdqsH+D1YaYB40EAeqIkeMbGYKbxzcXXVoh79GY8yC6YJo58GXCkKbvXnXPq9AKBGXzl8/yb61jZ8R3uyNbPyQ2QShkaBA4cZwBZwCPRZuU9wSQ3cxV8KZuuxch6MZPIJtThqWb0=
+	t=1706776387; cv=none; b=Q9NMeae+nOFUtVGEWjAkLOfPnTrQCD21kvWipRww/pGVxF/U5fgv0PcL/YW6YNpSmQ3xCM045FcFNpJ3zNfGxQ5e7rBWgjrhudyR+u85CPuJ/8M9tQ21m2B0GiUbjSs3cFhdfJGgx/Ts60lDWVEcrekLLKOvQQP5w0P1OFwUfBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706776386; c=relaxed/simple;
-	bh=wI/5/UcJZ1KapYx8YjRRhRE29mK5U1H5JPGqCr5qWPw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Wja471jiGrgzYm/yeJbLGgAMZrnL2y9jgJXevEXytKwIxWV3OPQWCwkCGBVxyoS0RvuRDDvBFZ3AYlVN7/kpI54RVkm2BiDPB/C3afqJCEH8x+8obnEvZPU+RjpR7Po2T2MCN+YTHxoo7oo2KNEaBM2dhY2bLtDeLgi+JZDmZwk=
+	s=arc-20240116; t=1706776387; c=relaxed/simple;
+	bh=oqIuwDqNdMvwX1a3rGy4OU174/ZwuKHgR2gSBHuWnCc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=NPtAk7tKAb8c1AEimt05zu56x1AvJJKkMuhVAoIkWeOCNuFFYGS/mZ1qjN48sFcgrOggnw/vkgSkw9vxa9YmLlnutDTTKMHfoGv0o+D2bP53uX36qHSf7WBG3xMTBRixRhr5lRqn+aoBgWB+VfW4cQBe/Lwm33gwA6FU4/83KSY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4TQXGf1zLBz4f3k6C;
-	Thu,  1 Feb 2024 16:32:58 +0800 (CST)
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4TQXGd6yQ7z4f3jZ0;
+	Thu,  1 Feb 2024 16:32:57 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id D53841A0283;
+	by mail.maildlp.com (Postfix) with ESMTP id 8B1781A027B;
 	Thu,  1 Feb 2024 16:33:00 +0800 (CST)
 Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP4 (Coremail) with SMTP id gCh0CgA3PnA8V7tlRXylCg--.9426S5;
+	by APP4 (Coremail) with SMTP id gCh0CgA3PnA8V7tlRXylCg--.9426S2;
 	Thu, 01 Feb 2024 16:33:00 +0800 (CST)
 From: Pu Lehui <pulehui@huaweicloud.com>
 To: bpf@vger.kernel.org,
@@ -44,12 +43,10 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	Luke Nelson <luke.r.nels@gmail.com>,
 	Pu Lehui <pulehui@huawei.com>,
 	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf-next v3 3/4] riscv, bpf: Add RV_TAILCALL_OFFSET macro to format tailcall offset
-Date: Thu,  1 Feb 2024 08:33:50 +0000
-Message-Id: <20240201083351.943121-4-pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next v3 0/4] Mixing bpf2bpf and tailcalls for RV64
+Date: Thu,  1 Feb 2024 08:33:47 +0000
+Message-Id: <20240201083351.943121-1-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240201083351.943121-1-pulehui@huaweicloud.com>
-References: <20240201083351.943121-1-pulehui@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -58,71 +55,62 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgA3PnA8V7tlRXylCg--.9426S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7WrW5JFW5uFyxXrW8ArykGrg_yoW8AF1xpF
-	4UCwn3uF9Yqr18Cry7AF4DWa1YkFn0qF47GrW3CrW3G3ZF9rykG3WDK3yYvry5CFy8Jr18
-	Jryq9w1fC34kArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPY14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
-	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-	0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-	IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-	Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
-	xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
-	6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2
-	Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
-	Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr
-	1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUCXdbU
-	UUUU=
+X-CM-TRANSID:gCh0CgA3PnA8V7tlRXylCg--.9426S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cr48AFWUJrWkGw4xXw47urg_yoW8AryDpa
+	y3ur13Gr4vqryxCw42ya18Ja4rGF4fZ3W3Cr13tw1Fya1UCFyqgF1xGFWFqFyUZFZa934j
+	vr4YqFs8CayUZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv014x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+	Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1
+	22NtUUUUU==
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-From: Pu Lehui <pulehui@huawei.com>
+In the current RV64 JIT, if we just don't initialize the TCC in subprog,
+the TCC can be propagated from the parent process to the subprocess, but
+the TCC of the parent process cannot be restored when the subprocess
+exits. Since the RV64 TCC is initialized before saving the callee saved
+registers into the stack, we cannot use the callee saved register to
+pass the TCC, otherwise the original value of the callee saved register
+will be destroyed. So we implemented mixing bpf2bpf and tailcalls
+similar to x86_64, i.e. using a non-callee saved register to transfer
+the TCC between functions, and saving that register to the stack to
+protect the TCC value. At the same time, we also consider the scenario
+of mixing trampoline.
 
-Add RV_TAILCALL_OFFSET macro to format tailcall offset, and correct the
-relevant comments.
+In addition, some code cleans are also attached to this patchset.
 
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
-Acked-by: Björn Töpel <bjorn@kernel.org>
----
- arch/riscv/net/bpf_jit_comp64.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Tests test_bpf.ko and test_verifier have passed, as well as the relative
+testcases of test_progs*.
 
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 74f995abf2c2..3516d425c5eb 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -13,7 +13,9 @@
- #include <asm/patch.h>
- #include "bpf_jit.h"
- 
--#define RV_FENTRY_NINSNS 2
-+#define RV_FENTRY_NINSNS	2
-+/* fentry and TCC init insns will be skipped on tailcall */
-+#define RV_TAILCALL_OFFSET	((RV_FENTRY_NINSNS + 1) * 4)
- 
- #define RV_REG_TCC RV_REG_A6
- #define RV_REG_TCC_SAVED RV_REG_S6 /* Store A6 in S6 if program do calls */
-@@ -260,8 +262,7 @@ static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
- 	if (!is_tail_call)
- 		emit_addiw(RV_REG_A0, RV_REG_A5, 0, ctx);
- 	emit_jalr(RV_REG_ZERO, is_tail_call ? RV_REG_T3 : RV_REG_RA,
--		  is_tail_call ? (RV_FENTRY_NINSNS + 1) * 4 : 0, /* skip reserved nops and TCC init */
--		  ctx);
-+		  is_tail_call ? RV_TAILCALL_OFFSET : 0, ctx);
- }
- 
- static void emit_bcc(u8 cond, u8 rd, u8 rs, int rvoff,
-@@ -382,7 +383,7 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
- 	off = ninsns_rvoff(tc_ninsn - (ctx->ninsns - start_insn));
- 	emit_branch(BPF_JEQ, RV_REG_T2, RV_REG_ZERO, off, ctx);
- 
--	/* goto *(prog->bpf_func + 4); */
-+	/* goto *(prog->bpf_func + RV_TAILCALL_OFFSET); */
- 	off = offsetof(struct bpf_prog, bpf_func);
- 	if (is_12b_check(off, insn))
- 		return -1;
+v3:
+- Remove duplicate RV_REG_TCC load in epiloguei. (Björn Töpel)
+
+v2: https://lore.kernel.org/bpf/20240130040958.230673-1-pulehui@huaweicloud.com
+- Fix emit restore RV_REG_TCC double times when `flags & BPF_TRAMP_F_CALL_ORIG`
+- Use bpf_is_subprog helper
+
+v1: https://lore.kernel.org/bpf/20230919035711.3297256-1-pulehui@huaweicloud.com
+
+Pu Lehui (4):
+  riscv, bpf: Remove redundant ctx->offset initialization
+  riscv, bpf: Using kvcalloc to allocate cache buffer
+  riscv, bpf: Add RV_TAILCALL_OFFSET macro to format tailcall offset
+  riscv, bpf: Mixing bpf2bpf and tailcalls
+
+ arch/riscv/net/bpf_jit.h        |   1 +
+ arch/riscv/net/bpf_jit_comp64.c | 101 +++++++++++++-------------------
+ arch/riscv/net/bpf_jit_core.c   |   9 +--
+ 3 files changed, 45 insertions(+), 66 deletions(-)
+
 -- 
 2.34.1
 
