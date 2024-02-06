@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD74745DE
-	for <bpf@vger.kernel.org>; Tue,  6 Feb 2024 04:00:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B0673199
+	for <bpf@vger.kernel.org>; Tue,  6 Feb 2024 04:10:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707192027; cv=none; b=koHKZB8hYKPdBFxdt6MnwGhlWPoFjOgG3bYdofDoXBzbBTOi9qEJYzYPjpudGNUGXyORSBtbbdhMVRVgaxnOUDvjvBcKOPtykoRKNDVHB2Y5NCL9ee15EnHL1wbOBgsQprv0IIFL5f3NI+ARgC7y7PYf2aIfkG+nVF/V7k+dugU=
+	t=1707192627; cv=none; b=aJVF7vPCKjfxWNhZf5glqwvY1de/AAuQcWl+4AlEwtngs2t4MqKOV1sVIGci5KWhVO+QX4k9CEp7RjDKi2IOD4Fu1anUdzYKpg2rHNa8iMo81vuBsAq1pPMY713waI+eqSsZxcMOklRmReC5iDSu75WTpgAlQTroNNzooCycaoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707192027; c=relaxed/simple;
-	bh=v/40idZaDk7QIHj3qvtRLhekGWgHHrgVcG94ZdP+txg=;
+	s=arc-20240116; t=1707192627; c=relaxed/simple;
+	bh=77/Ga4nbbBTrxzxafVQjPTEzpScRCO2UEMhJXlC9PWY=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=YIsdLmk1x/BWa2fFrqRoWelW/9dNouIxBwGCnBZD/6AwJ4CdPw9H+fu6ychYU3yIyTuAtTxK+4yBkKen8NO+xetccFIoXS6Ueq7YN5iR6fhqoKsXEMKd4zgXXf3d3ilSL5oQcf6s2MsHt1G/x+sEy2qMAjNUSdNbRsT4sgeYKDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QCQveWWU; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=g64wnmYQg3g1o5l9dZ1RdYkbNFojFMKjYOvyRDMobPe9DBH06ixNX6Zp/0TSMd8qj/NdS8G3IhT/iPuSejwYsM/DyGTlhzsep9UP66LkgCu+uOlQpm1ZZWl9Dl83oc3VlXrNq8kGoqENCund/ohK0+M23HlEGjqslDCusO92zKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=if/30gBx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QCQveWWU"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 05D9BC43390;
-	Tue,  6 Feb 2024 04:00:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="if/30gBx"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 66BE4C43390;
+	Tue,  6 Feb 2024 04:10:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707192027;
-	bh=v/40idZaDk7QIHj3qvtRLhekGWgHHrgVcG94ZdP+txg=;
+	s=k20201202; t=1707192626;
+	bh=77/Ga4nbbBTrxzxafVQjPTEzpScRCO2UEMhJXlC9PWY=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=QCQveWWU9RfOU/AzDchkb7LkTc3hfpJbG1S5sJBxhhyf06YYoEHIKRnFIK3vNbqwJ
-	 TZMJDmeME5wgzny8ph5qQI+Rw5QlgJf9asHtBr2GwmnwXdfvH/ijOYFpehPa41dR9q
-	 EencjUA0Lsa6ly6IfFq4WVqGEE80issOqxmZGjgIG20HJM0zlZFB7ixD1DJYyT+xTT
-	 96vD2l7fYf8VXQ6s0aRPEcActmOXmqCdL+stJ+bfkixLTvSvC6JCeMHUxMZAX5AXC9
-	 KMYvOSVRFFZxZRfCQFvmMt4zNsb5/JmJEstZNOB65o+El11SVpKzQBenFVwo+GAUjg
-	 VU2IBfMheTgZQ==
+	b=if/30gBxbRMzvl9sLfN8qxY/Azh7eDlrbSlDd7oihxIURgF6bs0JqMlPXODHALCPf
+	 E14/A1gf3jBHrCxpqCut/3MthdT6JLkq6eukgQrnoWXfnJpVD+ga+U6SH0rq16f/7c
+	 L6Pm7MLYtXvY/RGhaP93dQvKAhSiJl561tX2zR25z3P8ab+dKw2SrgsOTLKdzf+YWg
+	 7t8CDGMucydC+OFcv2D4CMv6tVaVb+bwcoLhrPlciiFodSnwN5AO5VixHcYrUk5dn6
+	 UvwxJcwaUUF0HEFdnIU7BBa+sT4mz5w5QuDYBOsBG6PVkxrSukyWI5WW2wJGmshxue
+	 zRJV4b4j5Waag==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E4D6EE2F2F9;
-	Tue,  6 Feb 2024 04:00:26 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4C61EE2F2F9;
+	Tue,  6 Feb 2024 04:10:26 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,41 +37,39 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/2] Enable static subprog calls in spin lock
- critical sections
+Subject: Re: [PATCH bpf-next v2 0/2] Transfer RCU lock state across subprog calls
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <170719202692.25774.2285679305015952977.git-patchwork-notify@kernel.org>
-Date: Tue, 06 Feb 2024 04:00:26 +0000
-References: <20240204222349.938118-1-memxor@gmail.com>
-In-Reply-To: <20240204222349.938118-1-memxor@gmail.com>
+ <170719262630.31872.2248639771567354367.git-patchwork-notify@kernel.org>
+Date: Tue, 06 Feb 2024 04:10:26 +0000
+References: <20240205055646.1112186-1-memxor@gmail.com>
+In-Reply-To: <20240205055646.1112186-1-memxor@gmail.com>
 To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, martin.lau@kernel.org, brho@google.com,
- void@manifault.com, tj@kernel.org
+ daniel@iogearbox.net, martin.lau@kernel.org, yonghong.song@linux.dev,
+ laoar.shao@gmail.com, void@manifault.com, tj@kernel.org
 
 Hello:
 
 This series was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Sun,  4 Feb 2024 22:23:47 +0000 you wrote:
-> This set allows a BPF program to make a call to a static subprog within
-> a bpf_spin_lock critical section. This problem has been hit in sched-ext
-> and ghOSt [0] as well, and is mostly an annoyance which is worked around
-> by inling the static subprog into the critical section.
-> 
-> In case of sched-ext, there are a lot of other helper/kfunc calls that
-> need to be allow listed for the support to be complete, but a separate
-> follow up will deal with that.
+On Mon,  5 Feb 2024 05:56:44 +0000 you wrote:
+> David suggested during the discussion in [0] that we should handle RCU
+> locks in a similar fashion to spin locks where the verifier understands
+> when a lock held in a caller is released in callee, or lock taken in
+> callee is released in a caller, or the callee is called within a lock
+> critical section. This set extends the same semantics to RCU read locks
+> and adds a few selftests to verify correct behavior. This issue has also
+> come up for sched-ext programs.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v2,1/2] bpf: Allow calling static subprogs while holding a bpf_spin_lock
-    https://git.kernel.org/bpf/bpf-next/c/a44b1334aadd
-  - [bpf-next,v2,2/2] selftests/bpf: Add test for static subprog call in lock cs
-    https://git.kernel.org/bpf/bpf-next/c/e8699c4ff85b
+  - [bpf-next,v2,1/2] bpf: Transfer RCU lock state between subprog calls
+    https://git.kernel.org/bpf/bpf-next/c/6fceea0fa59f
+  - [bpf-next,v2,2/2] selftests/bpf: Add tests for RCU lock transfer between subprogs
+    https://git.kernel.org/bpf/bpf-next/c/8be6a0147af3
 
 You are awesome, thank you!
 -- 
