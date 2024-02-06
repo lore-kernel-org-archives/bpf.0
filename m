@@ -1,158 +1,89 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7CB84FB3
-	for <bpf@vger.kernel.org>; Tue,  6 Feb 2024 06:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09037127B54
+	for <bpf@vger.kernel.org>; Tue,  6 Feb 2024 06:33:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707201028; cv=none; b=adG/jLnbSXhYJHrovmvvEZkBR00yVEGHtpfdwgYDMVgba/QHslMgAJmrY1yPtqa678CPST608831vrXRG2TGWt1u1c18T+GI8muh9mhZLcr+WJhVbMvDf6yF1NcZ3FW6xXy0ckK3NlW+/Sh6iRgnF7KexOR56smKbVyw6u7XZk4=
+	t=1707201197; cv=none; b=r1tY7lmI5kQ0QpKtqEqdZej7OFlmnehjEL1oDIne24sXmKJPHJ59U6nYbHMa17rB4lnwsKrcChQBvan7xvQObYyxvU65Bp55+1J8Lhj3hpnawcePZXbfDfXEZSzExWKreH0pKgA4hTxKarB5gGsJbMj7tZGlR6dLhtBIQsLTjYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707201028; c=relaxed/simple;
-	bh=VXj++i7nyYto3t3v9LrjlKE0DoXN9X2yupMQklinfQc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YuvZumwPjO4QQUuruta2DTo1Nxoh/T43RfiuIAH3thllp+RGZfDDVVrkNkJxb9TFvDvEKKJJeo2sdi8Qw7ccROfqvrPulYWxu2QTYbr7fQV2VWRToUKA4QOcDMqE/KlJNPZs22uq1uL/iu/U8P1qbsh41aIVMT77llyOZfAvOWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id EAD7F2D65FB95; Mon,  5 Feb 2024 22:30:10 -0800 (PST)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next] selftests/bpf: Fix flaky test verif_scale_strobemeta_subprogs
-Date: Mon,  5 Feb 2024 22:30:10 -0800
-Message-Id: <20240206063010.1352503-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1707201197; c=relaxed/simple;
+	bh=4ET0fyLHVJEsDuQ9gH+PgSGGLVCtzDZ/Qwsv8HecTvM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eDz67yPSvyPrWF/wVD2gNol/PszdHU22hRGe6159yl6Q/LIQNyc/KTBVfs75tCUU+qWe2SWAL2FbVMhyhiKrRACAXvvSyfrQ5uJWEUfJJDiUswA0nrGFlb9aR8/IXx7V4k2IPPcYM9rTHgpKljvHgACZ6aLSnLkM4EpmdFnPlro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-42aa241b91aso45394481cf.1
+        for <bpf@vger.kernel.org>; Mon, 05 Feb 2024 22:33:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707201195; x=1707805995;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4ET0fyLHVJEsDuQ9gH+PgSGGLVCtzDZ/Qwsv8HecTvM=;
+        b=bptsW5juoVSzRfjtqVgbmYLhd2015nFliSH8Q0XcFVS4/HZA/yb2lUEh1Otgb95kmj
+         TXU0glHyOv7LDgC5lAB6gYKNrxKVshyAkLoLUFPi3wx/SfdAfCN8oXkkDI66pNK0VYOd
+         fvsftmcKJ0Jw2+eea8idEJBLjgKtkgE433ngw4O0W/3S7PYaHF1KjyUgVf9erqrrUvwE
+         Y21Q4V2zvth+hmuZDO8oSdyCDsbSqCaA6K5h2hYvWvxYLX8olDrmP7hKocFJ1Q9XhOmF
+         rUN5vb+UDMz83ZKjrzuyLjHIN1SGRIQ+6xcpPi7ahEQ8rfNkc8VdgeND8TkYnDm+aunN
+         Hnxg==
+X-Gm-Message-State: AOJu0YxdzWHGYXvRPxKmoInfLhz+wOgshvBjUZRN6BgGoNvUjQyu3/1G
+	XUHogygYCQXtNw0hGmumTXgun3ftuQwiaqF1aig3usx8VFyAVhj82FY6suZ/hPOnTQ==
+X-Google-Smtp-Source: AGHT+IHIRpR2kv+KQ945cd5bHIRJBmHF8XN8dyszKd/8chzZkMG0Hj6hmihDCixwYond2AIV0Y6orQ==
+X-Received: by 2002:a05:6214:29e7:b0:68c:67aa:c071 with SMTP id jv7-20020a05621429e700b0068c67aac071mr1707656qvb.18.1707201194807;
+        Mon, 05 Feb 2024 22:33:14 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWPTUZ4n807PuML7vdqZPlmkUpyLyTSfKywlu6unlF/na/5RORbbXuuGOMZIo+GxzZlypnAlYydOX1JQSMNqSdMhW/kynkb0asocW0Ex24CfwjCVQ==
+Received: from maniforge.lan (c-24-1-27-177.hsd1.il.comcast.net. [24.1.27.177])
+        by smtp.gmail.com with ESMTPSA id k17-20020a0cf591000000b0068cabcec402sm752286qvm.134.2024.02.05.22.33.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Feb 2024 22:33:14 -0800 (PST)
+Date: Tue, 6 Feb 2024 00:33:12 -0600
+From: David Vernet <void@manifault.com>
+To: Dave Thaler <dthaler1968=40googlemail.com@dmarc.ietf.org>
+Cc: bpf@vger.kernel.org, bpf@ietf.org, Dave Thaler <dthaler1968@gmail.com>
+Subject: Re: [Bpf] [PATCH bpf-next] bpf, docs: Fix typos in
+ instructions-set.rst
+Message-ID: <20240206063312.GA853677@maniforge.lan>
+References: <20240206045146.4965-1-dthaler1968@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="c5d2i3HwTslNSlo6"
+Content-Disposition: inline
+In-Reply-To: <20240206045146.4965-1-dthaler1968@gmail.com>
+User-Agent: Mutt/2.2.12 (2023-09-09)
+
+
+--c5d2i3HwTslNSlo6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-With latest llvm19, I hit the following selftest failures with
+On Mon, Feb 05, 2024 at 08:51:46PM -0800, Dave Thaler wrote:
+> * "imm32" should just be "imm"
+> * Add blank line to fix formatting error reported by Stephen Rothwell [0]
+>=20
+> [0]: https://lore.kernel.org/bpf/20240206153301.4ead0bad@canb.auug.org.au=
+/T/#u
+>=20
+> Signed-off-by: Dave Thaler <dthaler1968@gmail.com>
 
-  $ ./test_progs -j
-  libbpf: prog 'on_event': BPF program load failed: Permission denied
-  libbpf: prog 'on_event': -- BEGIN PROG LOAD LOG --
-  combined stack size of 4 calls is 544. Too large
-  verification time 1344153 usec
-  stack depth 24+440+0+32
-  processed 51008 insns (limit 1000000) max_states_per_insn 19 total_stat=
-es 1467 peak_states 303 mark_read 146
-  -- END PROG LOAD LOG --
-  libbpf: prog 'on_event': failed to load: -13
-  libbpf: failed to load object 'strobemeta_subprogs.bpf.o'
-  scale_test:FAIL:expect_success unexpected error: -13 (errno 13)
-  #498     verif_scale_strobemeta_subprogs:FAIL
+Acked-by: David Vernet <void@manifault.com>
 
-The verifier complains too big of the combined stack size (544 bytes) whi=
-ch
-exceeds the maximum stack limit 512. This is a regression from llvm19 ([1=
-]).
+--c5d2i3HwTslNSlo6
+Content-Type: application/pgp-signature; name="signature.asc"
 
-In the above error log, the original stack depth is 24+440+0+32.
-To satisfy interpreter's need, in verifier the stack depth is adjusted to
-32+448+32+32=3D544 which exceeds 512, hence the error. The same adjusted
-stack size is also used for jit case.
+-----BEGIN PGP SIGNATURE-----
 
-But the jitted codes could use smaller stack size.
+iHUEARYKAB0WIQRBxU1So5MTLwphjdFZ5LhpZcTzZAUCZcHSpwAKCRBZ5LhpZcTz
+ZHxeAP455nv23Xpw/MAANLnxpIjuwgPetqhgZ6AIxG+k43yZYQD+IPt+WEGEK+Bj
+vgOFFNAgPBu0bC6jODdq1ytVizlX+Q4=
+=FRCI
+-----END PGP SIGNATURE-----
 
-  $ egrep -r stack_depth | grep round_up
-  arm64/net/bpf_jit_comp.c:       ctx->stack_size =3D round_up(prog->aux-=
->stack_depth, 16);
-  loongarch/net/bpf_jit.c:        bpf_stack_adjust =3D round_up(ctx->prog=
-->aux->stack_depth, 16);
-  powerpc/net/bpf_jit_comp.c:     cgctx.stack_size =3D round_up(fp->aux->=
-stack_depth, 16);
-  riscv/net/bpf_jit_comp32.c:             round_up(ctx->prog->aux->stack_=
-depth, STACK_ALIGN);
-  riscv/net/bpf_jit_comp64.c:     bpf_stack_adjust =3D round_up(ctx->prog=
-->aux->stack_depth, 16);
-  s390/net/bpf_jit_comp.c:        u32 stack_depth =3D round_up(fp->aux->s=
-tack_depth, 8);
-  sparc/net/bpf_jit_comp_64.c:            stack_needed +=3D round_up(stac=
-k_depth, 16);
-  x86/net/bpf_jit_comp.c:         EMIT3_off32(0x48, 0x81, 0xEC, round_up(=
-stack_depth, 8));
-  x86/net/bpf_jit_comp.c: int tcc_off =3D -4 - round_up(stack_depth, 8);
-  x86/net/bpf_jit_comp.c:                     round_up(stack_depth, 8));
-  x86/net/bpf_jit_comp.c: int tcc_off =3D -4 - round_up(stack_depth, 8);
-  x86/net/bpf_jit_comp.c:         EMIT3_off32(0x48, 0x81, 0xC4, round_up(=
-stack_depth, 8));
-
-In the above, STACK_ALIGN in riscv/net/bpf_jit_comp32.c is defined as 16.
-So stack is aligned in either 8 or 16, x86/s390 having 8-byte stack align=
-ment and
-the rest having 16-byte alignment.
-
-This patch calculates total stack depth based on 16-byte alignment if jit=
- is requested.
-For the above failing case, the new stack size will be 32+448+0+32=3D512 =
-and no verification
-failure. llvm19 regression will be discussed separately in llvm upstream.
-
-  [1] https://lore.kernel.org/bpf/32bde0f0-1881-46c9-931a-673be566c61d@li=
-nux.dev/
-
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- kernel/bpf/verifier.c | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ddaf09db1175..10e33d49ca21 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5812,6 +5812,17 @@ static int check_ptr_alignment(struct bpf_verifier=
-_env *env,
- 					   strict);
- }
-=20
-+static int round_up_stack_depth(struct bpf_verifier_env *env, int stack_=
-depth)
-+{
-+	if (env->prog->jit_requested)
-+		return round_up(stack_depth, 16);
-+
-+	/* round up to 32-bytes, since this is granularity
-+	 * of interpreter stack size
-+	 */
-+	return round_up(max_t(u32, stack_depth, 1), 32);
-+}
-+
- /* starting from main bpf function walk all instructions of the function
-  * and recursively walk all callees that given function can call.
-  * Ignore jump and exit insns.
-@@ -5855,10 +5866,8 @@ static int check_max_stack_depth_subprog(struct bp=
-f_verifier_env *env, int idx)
- 			depth);
- 		return -EACCES;
- 	}
--	/* round up to 32-bytes, since this is granularity
--	 * of interpreter stack size
--	 */
--	depth +=3D round_up(max_t(u32, subprog[idx].stack_depth, 1), 32);
-+
-+	depth +=3D round_up_stack_depth(env, subprog[idx].stack_depth);
- 	if (depth > MAX_BPF_STACK) {
- 		verbose(env, "combined stack size of %d calls is %d. Too large\n",
- 			frame + 1, depth);
-@@ -5952,7 +5961,7 @@ static int check_max_stack_depth_subprog(struct bpf=
-_verifier_env *env, int idx)
- 	 */
- 	if (frame =3D=3D 0)
- 		return 0;
--	depth -=3D round_up(max_t(u32, subprog[idx].stack_depth, 1), 32);
-+	depth -=3D round_up_stack_depth(env, subprog[idx].stack_depth);
- 	frame--;
- 	i =3D ret_insn[frame];
- 	idx =3D ret_prog[frame];
---=20
-2.34.1
-
+--c5d2i3HwTslNSlo6--
