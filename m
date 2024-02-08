@@ -1,181 +1,333 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABBE96F09C
-	for <bpf@vger.kernel.org>; Thu,  8 Feb 2024 11:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707390680; cv=none; b=a1Z6Sv085QJvbw6pJhtJN2iYOH8rrDA2y3H7+fDZ0GXTX8wtyCyAI4piDIMv6XxTt4Ua0E9lK4WaOp3CWg2HLvRskhnmoCSmU/J+DDI4Iynp4IXRE9stiZCV4EEd6RCunObuTKK1jEEOmp3O2Kf2HMSM0Zu5Yf7hn1jSNxGs9NM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707390680; c=relaxed/simple;
-	bh=SfsTIEYF5nz9Cb0cxRhXXrzdoVThlSmayIKOjaXCU0k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=soMbm0Ge6EfkW3dZ99Jr85pmuDvBKsA3/Nq8HriIiu2KBvOs6dqY4Smz6lSi7Na+/uP8yqRN2+PSsPmekGT96Ejzz1HY/9b2Fo95AlNDoaOMeOrsIGOn4R24wLyf4GbasFr0pFOhzRD2dv+YfTmDCs1nBKlrYxy5YRbhvhLFdV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=RpawQ/8o; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 850D276401
+	for <bpf@vger.kernel.org>; Thu,  8 Feb 2024 11:32:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707391958; cv=fail; b=SecQpFwvkgsCXpL+A5KgkCIFWm+0fHrM/dUNrEe9pZqbC4YWb8I2UyQJ5KTRIJKNyQnsClk6RiZ0tA50L5IrWz+J29hzZdsHNZWbEovyk30IVqWuLpE9Nrz/R1X70/1gVeXdbXKNoC9ADQfp0NMdfTDdQEtCqeJCY0L/VbxjYh4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707391958; c=relaxed/simple;
+	bh=EyCsTXMa1eYgzgbisbe0rjroYD8sOFxzqi53taU46M4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 Content-Type:MIME-Version; b=RFYqxEoVoewDA915IljyZxfU/tRQNDTyKPmhySbk1AvNwNzP7aHS6oYoyfjTdEsQq/0eCDNgZgnQlFVMR0V+2pPBH+nySJypjlCGzXu0QCk/3vXt+6aCWwTeFfKJ3h4kv1mJmlwu9VLphkyNlBjkZhghl0O2PgvxA1WFXvUNygw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=I7njbOhQ; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=e/WdmiSi; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="RpawQ/8o"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-337cc8e72f5so1178402f8f.1
-        for <bpf@vger.kernel.org>; Thu, 08 Feb 2024 03:11:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="I7njbOhQ";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="e/WdmiSi"
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4188xFEC025976;
+	Thu, 8 Feb 2024 11:32:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : in-reply-to : references : date : message-id : content-type :
+ mime-version; s=corp-2023-11-20;
+ bh=d583iADP2xaGKBvF18yHz5HWDNRHwrMmIcfEqj54Hq8=;
+ b=I7njbOhQmIkV+Q9Z4Brmc0hedTv6giITAgf4EhxHZVGNnpOZZGcvYzw8mHea2vlrvZcr
+ FMvYCHMHwN93sExwZQYScnFQxNsOYtys2f0F6QNCiR24vUULeFeYs94kOAP2cN2B8NNv
+ ES0fUbp7C4VMPlxazp1nUDG/JZBuG9C1cUiHBgviyMhcMtVFYUrLSjdPZ2Lm4bilhyFk
+ VdFdJwmC5wzaMemeHjBm9YecuN/fh/dWDy2xbwQIrMyv6YI80EwrZCkKxY/UOBgmPZMt
+ DfxP6VYeNXBAZEcAbwUoEm59iQu4vRujhIvSHP2Ec192h0y/mkICifGp5UHdo+0+bprn Wg== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3w1d3ume6q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 08 Feb 2024 11:32:27 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 418Adfe5007036;
+	Thu, 8 Feb 2024 11:32:26 GMT
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2041.outbound.protection.outlook.com [104.47.57.41])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3w1bxavhs8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 08 Feb 2024 11:32:26 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FVwC8FAGmLZCPpe1EtgOjQ9i0t/+r2gGNKZKlz7AuI9gAvkSip4RnlgyfCitd63FeXtL05fdq8FO4AJPnjAvXrGT/lgTdHp5o17JXGGVhxW6/jE3cSVGhiIbxyIFWV19WUinLx54ev2UDP431lQLp3FnAYhmQ/L7U2NhxsOKeB0KOIA8Ly8YyKBNd0bRBwB5tXR7B+fEwQivR/Dv/TLG9ZJlMAWCBNUhSl2k7/W260/YEXOozt3/k3XYmf8pdmsdxEXW2Cg7vfPyepOnvXucS4/0B6IKz3k/qFK7s/wnKMw+Cl5J9jC2PwZ6AQbATgS46BsUvOz110/fhoqghBnpYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d583iADP2xaGKBvF18yHz5HWDNRHwrMmIcfEqj54Hq8=;
+ b=NnfNSgMbXgkkKwkXI6Ofr/8W29dHAEb2IwLg2SvarxYWFhaNv75rbFzj6wPR7wFlGNqLrElujfHuwFaDj0BQl2SWSe9K0LSSxn3qXPoTzpQ9I2qnk7mTMLWrcuY18bbbjsqKavNdhbNUwW0t6UPe25nQZW3CL/cb7a0ktFQrVj3OAWtohpFdhDzmOPBF5eDF501jq8P+OVmEUptzYR1Qz/23MjN6Z8XQpkREUmSn/ER3zV8G7k0gzppVWvAI92eT2WvDODib6zCD08Es/OAhr0WYticYeXADVAWf1/SkpHicQbAf6dH1j9giSGSeWJr9v/CpWZp+FymhMPI1wKb1Mg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1707390677; x=1707995477; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=uLungcIawGR5RKZ1xMpgR9j3eOWGEPnwLuycn02votM=;
-        b=RpawQ/8oT8gls/l3m+ceJKysw+6JB9qLq27xuNPKInyfFMyQA7a51OUYasfKZViDEK
-         OFUT1Cci5OWxs64oRbRg9+xsmrFDhIqim4MFoGyvHKLPhzXg45sZ/Vw3pS9InLTYcrhG
-         1rKBzrVPv+02mRaU3FScNsoSBu3SS9c2fHy+vJaA92bifZfUj3L/krhvjovNRkBRX3hQ
-         Q/WjU55SQmwEAS3f9dZBeaBy5nHLZ6ov+LnXjO6ZjzZvOXduDl8PJZnYiImwpIAipCiP
-         wBLOsynW/yXJ+0jhDaL9S3BqG6fWpHP6ZDks4OB9NlrWxG0f4lpCDwpgNBAC8CFtW5Dv
-         lHaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707390677; x=1707995477;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uLungcIawGR5RKZ1xMpgR9j3eOWGEPnwLuycn02votM=;
-        b=KQ3KDdfjU7JJYEz56+H9Y2ZF34lcR3FyNGXBoT91alFw8vU/54KwpIRUO560rMY1bZ
-         p+OmmWX8ynLoGKEr/o80hPqBXnBZLR/my2/JKl/8tkgNrGWcz8p3Itid6X+EE8fJZQgR
-         cnhsMtAhEAFlfCMplfWj4y0w2FBvjH22fFMiMQO8D71W5yGcncIIvnZvPe/FA/Rmt2lS
-         Kv7ekMajVzO++Vwa7HXARAwerZVaHCtXaGZzgZkYJuX/gWswqVdwM+AT1IH+48upLPza
-         rEDga7vNTKyduc16raQZSzoelqXA9G5Qf4McSddXlQ2iU00IJcEfcYkKomfArV2x03MH
-         4RaA==
-X-Forwarded-Encrypted: i=1; AJvYcCWbqlfMm/IdzQQpLppoSypX2iKBg3JlkN4pyZ2jbvZhI5hybCPtbJzNS0z+Ca6Hy68jXBUcVARiPJlyHEQEEQc0dsd6
-X-Gm-Message-State: AOJu0YxXxFHlLwlaTXQYIDqBmeSwpgiv7Hk9w2CFWUS93eLaesCPaYer
-	pNQIEN6tD9WPHbPC9NuMy8KJfDNasPeQMGAY1ncI5fPj/S26IhSH+tOud4ryY/yZEJVm+bHvHBo
-	Qxro=
-X-Google-Smtp-Source: AGHT+IHLglhKgGocjyASmxuHjCTXorDnJQviSvZscEK+ECro+sNP403bwwSTnK3jlrz/BP6zJBxqmQ==
-X-Received: by 2002:a5d:4523:0:b0:33b:1ac8:aebe with SMTP id j3-20020a5d4523000000b0033b1ac8aebemr6662615wra.44.1707390676816;
-        Thu, 08 Feb 2024 03:11:16 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXHzJunG4+ST11GIvcMB8h3tle36jsYY7zgo/0qCBKRzD55dhnillPU8IXnK8FKdmWEK8JKx3zGXb2FdjWvZDqHJ3jV+v/wF6RQCYALFkgULtbvUFMuUQLR74c1RYCDgqsitzevdpgq5Q5cDCP9PKUC48y2HvkmIVgzoU+sweCCxpojhsOF4z4GGh3Xmm/ESnDRAs5XRA9zHBQ4BDASYoHjEqvfKQvSSjDReEGfNyItJCtD/OqDk1RRrlBwLAiCZEWpBBBeMeprzG4EnIn2UbBbEl1OQtEeMLOfz03t0Es7LI8ceymmW2w=
-Received: from zh-lab-node-5 ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id c14-20020adfe70e000000b0033b4b4a216asm3367529wrm.14.2024.02.08.03.11.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Feb 2024 03:11:16 -0800 (PST)
-Date: Thu, 8 Feb 2024 11:05:10 +0000
-From: Anton Protopopov <aspsk@isovalent.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Stanislav Fomichev <sdf@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH v1 bpf-next 3/9] bpf: expose how xlated insns map to
- jitted insns
-Message-ID: <ZcS1ZruKKZ1euzlb@zh-lab-node-5>
-References: <20240202162813.4184616-1-aspsk@isovalent.com>
- <20240202162813.4184616-4-aspsk@isovalent.com>
- <CAADnVQLnk=UyKBkRAC1tNkiaF7C4+FG7V-b2xrR3oa_E4+QX7Q@mail.gmail.com>
- <ZcIDqnXFjsWYyu1G@zh-lab-node-5>
- <CAADnVQLfidjTWa4+kyRH-qC29gbGvFsRJHu6smcaL0Yk0HqgmA@mail.gmail.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=d583iADP2xaGKBvF18yHz5HWDNRHwrMmIcfEqj54Hq8=;
+ b=e/WdmiSiYXZ6bneGuNLPby6pyXGYSZXubTG5f6Nvo+GZxil3EcXeDlAlMNLA/P/Fmml+2okDLj1AKjJmqyM8M2VMTSkhF+geVIW+qQ3b33Y+4Lvxr0+LuyLYNLddOE5cdIuryEl8cR02sUml6ynec6t0q1qjH8RER2/vgJvYgHo=
+Received: from DM6PR10MB3113.namprd10.prod.outlook.com (2603:10b6:5:1a7::12)
+ by PH0PR10MB5732.namprd10.prod.outlook.com (2603:10b6:510:14e::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.36; Thu, 8 Feb
+ 2024 11:32:24 +0000
+Received: from DM6PR10MB3113.namprd10.prod.outlook.com
+ ([fe80::cafd:c8d6:e2c3:3a1]) by DM6PR10MB3113.namprd10.prod.outlook.com
+ ([fe80::cafd:c8d6:e2c3:3a1%4]) with mapi id 15.20.7270.024; Thu, 8 Feb 2024
+ 11:32:24 +0000
+From: "Jose E. Marchesi" <jose.marchesi@oracle.com>
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, Yonghong Song <yhs@meta.com>,
+        Eduard Zingerman
+ <eddyz87@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        david.faust@oracle.com, cupertino.miranda@oracle.com
+Subject: Re: [PATCH bpf-next] bpf: abstract loop unrolling pragmas in BPF
+ selftests
+In-Reply-To: <c3d29d43-ffa3-47e5-9e44-9114f650bfc4@linux.dev> (Yonghong Song's
+	message of "Wed, 7 Feb 2024 13:45:00 -0800")
+References: <20240207101253.11420-1-jose.marchesi@oracle.com>
+	<c3d29d43-ffa3-47e5-9e44-9114f650bfc4@linux.dev>
+Date: Thu, 08 Feb 2024 12:32:20 +0100
+Message-ID: <87h6ijfayj.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+Content-Type: text/plain
+X-ClientProxiedBy: AM0PR02CA0079.eurprd02.prod.outlook.com
+ (2603:10a6:208:154::20) To DM6PR10MB3113.namprd10.prod.outlook.com
+ (2603:10b6:5:1a7::12)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQLfidjTWa4+kyRH-qC29gbGvFsRJHu6smcaL0Yk0HqgmA@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR10MB3113:EE_|PH0PR10MB5732:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0ee4db7f-6528-401a-e401-08dc28999f0c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	YDbmFpi5ft4VVwrp8hYJnDqbEoALIhEUp8AiGPFwr2wUu265HoYE9DdzyqrFU7EQ7ci5ATxByUuPKlwvxOQ9JXQjjXWf+9PSWoty/6iKInWBzQES6uYpdmRk2Nhmp+b0dlg1s3SMhi83LP9KM8FCDkpNmWkK7k2wDJVckLTBy5TGB3OnrGsVlmIuPEZsqqyjhIVmPlRyHMeQK5CV2Ie2fm4Hfel4lk18OIv4n1iK++tUYyZcWg5cpP0BhT4D+xv+JoX0piVlnhRYQhETMbi0cRoNj44EFb8Jh0aDAXkvYEO/S/sSMp3uiV9+KrDSkKyxdrA+kYzlJhWUHCgmeuX2IM2e/Cxlwlw5q6P+FeAGWk5dXz1DNPXv7KMGy7MZrocSrQHk0eZdoQDkjQHxvcVqtlwz6PRDvPDoX9gHX/TsqwVP2d3mt4ZHACyyCbMXoaVyl2aSvLtNcvYd8yy5FkkROHGyN7y+4kYZgcLxr94dqtwbr/beL97F9bDfB9r+L+dkAKthoggRXb2Git5WmcNiW+LS58aDBtB2h6/uod170YY6zTaCz/Fyb7NCRPj17dTl
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB3113.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(376002)(396003)(366004)(346002)(136003)(230922051799003)(1800799012)(186009)(451199024)(64100799003)(38100700002)(6506007)(53546011)(6666004)(83380400001)(86362001)(26005)(41300700001)(6512007)(107886003)(2616005)(66946007)(6486002)(4326008)(36756003)(8676002)(8936002)(2906002)(478600001)(5660300002)(54906003)(316002)(66556008)(66476007)(6916009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?CdrzgpctU823ZRAlRCJbRFfe+BTMhxonR5hfD1x5bUx5s/5FEXt9MyXm1Ztu?=
+ =?us-ascii?Q?X7VZCEQjIpZj5YGIw1huxFd2qJZR8F8zx68aMnOhjxy+kaqnPGH6CumUHkKN?=
+ =?us-ascii?Q?lNOQY/gkYahm+G6F6ZTMRRbxhMfE7IK820nW5bNdUFoDqOFcySxbiHa1vq6z?=
+ =?us-ascii?Q?bbEvJriAmW6Uoi/DS6SVvctYM8Ha3UJ98LBmobd3vu33V4+HncNjPSoQT896?=
+ =?us-ascii?Q?j2hl5iOKIQPDggZd3xzWO+je6Ithjf4Rc4qCOsOovwtuiZR133HmRAEDg6Ri?=
+ =?us-ascii?Q?OZ/m2ocvYGPZDIixaxq7usZXd3qCfsLaWEt4jtWWwxyPrCq60dDreYSjX2H2?=
+ =?us-ascii?Q?+ADxaA/BbtsQfhbe4c/LSK1IsfXmcoV2XyaNE8b8xiNNsV3/akYzCjlZ32ku?=
+ =?us-ascii?Q?HpcBzjbwUbYINW9ShHu9PSCNDfkz48O6tDyXnPQaEjuB8srgwPdf1eIY82nb?=
+ =?us-ascii?Q?+byQdd2dxWyvIoGPBRmrQQT1D2XOSrlGgZkInisPXULWXf7KtJuQ1vVJR00B?=
+ =?us-ascii?Q?z/9NJab5L52ODG1WoWJNQkXLvpg5F8BSXGASSX9sCHZr++UhCvIPa4L9NyTV?=
+ =?us-ascii?Q?Oo40aOdFg2tjI8+KoQABUYIWqN/yQ3IeAbUwYfN0Iuy6jlQ+5XDsYzQH3o+A?=
+ =?us-ascii?Q?X3tovAAecQInpw0mGb0t6yUsP3OTAyl/3IHVaNQ5yxuEairSJ4PwQI+nsVd4?=
+ =?us-ascii?Q?UAwClVWvP407xQmG1ORR9ykYEsDIgEd63dAOwZKSUHw8xANCCKrf83zBhnPY?=
+ =?us-ascii?Q?tHFG+whAHHf9QCgi7Q8ZGZb1V34ZfB852Js5mLTYovMG73Oq+DwYshF8pM/r?=
+ =?us-ascii?Q?Ic2/VUEBiuv92NtGa+joxECyL7spezazs4pJjn42/TWbrh6Gnp9aO2XNKzpb?=
+ =?us-ascii?Q?VHCqVTlW1H1puRGxiCTF3YxzLB3y9Snis9I9ji1FhngMU/p04jSHVmmNRXjd?=
+ =?us-ascii?Q?VMMdqA0gSDfxTW57QGnB6hNuAMUr3KMT76mJWCU+jFn07A/xRq0Rl6AvOlat?=
+ =?us-ascii?Q?f13v4YzQwSmzWu+VOtoTnTv8NM+MX8yb2xpWQo5CEow/1vUmCfBJuuoOgNpV?=
+ =?us-ascii?Q?qYllY7S4oC/dghtM8k25LJiL6ITK6dcK/2blKszvuRmTRtkZf4AGV3TMcljL?=
+ =?us-ascii?Q?Ey1EvNOiLqonmmDKlGAqVBRr1ircMdFU1Rh54NdSNnviY8TBL1/fTdWPoJck?=
+ =?us-ascii?Q?D9fwDm+x6J9ePg9aehRELmg0lLumRJB0HPJaOXpLUfbYpattBHTEmdqAAsas?=
+ =?us-ascii?Q?BfSvGzZDyzliBiqjp5Ka5kgUAoJL9IB6rCxoHpG3p150AkM8PtAbmjfNmtKq?=
+ =?us-ascii?Q?zuruGK6d5FAZQkjAy7yoW0gmUK9Yw0mAO3E20S5lsMKCFUwK1xd81OTcizP6?=
+ =?us-ascii?Q?T+fNZIrUM/BknMsJeVup026Qvq02VJhWqpYHEl4uPJWyreP/mbNV5zVZJkP4?=
+ =?us-ascii?Q?PU+Og1+0jNjFaW5Xo7m9WcmQR4bvPgR41x57Y33ElUYnxxT+md0Qk8FFbwhN?=
+ =?us-ascii?Q?0Vvjq8+Z20dHnigydN9NAxt6RT/yd7ULogSVNaCI+QBVRLWCoAYJucL6Qpvu?=
+ =?us-ascii?Q?8uCcbCC/BaJxcn206MVcdtVSQY0Jo0vQqE0mXUhxeol6wPUv7tPTyJQKSMHC?=
+ =?us-ascii?Q?YQ=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	9I0de54/RuhyDeTh7nONZEl4uzsk1puJ7ZlL8MV8qgRthlpRVsLP+lvSysA4LHz4a+a4L7js+FYdE3xwipSAlJ7erEykJb24uVQp/SUi9Si5VxtreG/h01DY4brM6fY2NlbaWpABXcIHJqIhOyxBk0lZEOumhAju4uxzVpONqkACqdxIrNbsOJuNeiOrxGtfHUCd14eZdwQFFjDkgMcKzi1LGc6eUp1W+19+XUSOrPjlo/I4wk4twwiTKNKViqiKWj4VGAmyuBtsW0E2TSy9po5PtqzXpUhqIc/zoay23Lu7cDSvFdKdJfBO1xTXxTTL/S9jhrjclP7JJHI6VZC1YEqLM52NYaaxuLQOhNS+lo88kMaFbr/xQqCFPfOVqgIY8JECf6DXzr+QznON+jd4fes5EnAvYasIZuY8jNHLotKob39aBHvEQD6xugjlL00ENdqDn8WpDMenRk1BxSsJjHu2qFIsTGVawczIECwf7tX7AIhwF+5qBNnQRB2EdN95spPtB2VEUZfCqk3jqeoEt7nt538qTKtCPwllgLYaqaFIBfqqaFSPf8ByG+BL8b3vwg6pOYZq5ooobIHPrqgdoimmQmfWjoG4xSonBbY/zS4=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ee4db7f-6528-401a-e401-08dc28999f0c
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB3113.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2024 11:32:24.5315
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: C6Pn9oYJVHOb4aQrfjnNc8QetEYPWoCMCLdh6hEmxSOaS2D0gCWagM2QuYiBa1FPSVkr46b4l9QfBi4Tz+8W/j3o0G9RMhxitIRkv9GXqls=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5732
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-08_03,2024-02-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0
+ mlxlogscore=999 bulkscore=0 mlxscore=0 adultscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402080060
+X-Proofpoint-ORIG-GUID: gjPnCPU92SLuiPUsbFR0FGaHAU6dGV51
+X-Proofpoint-GUID: gjPnCPU92SLuiPUsbFR0FGaHAU6dGV51
 
-On Tue, Feb 06, 2024 at 06:26:12PM -0800, Alexei Starovoitov wrote:
-> On Tue, Feb 6, 2024 at 2:08 AM Anton Protopopov <aspsk@isovalent.com> wrote:
-> >
-> > On Mon, Feb 05, 2024 at 05:09:51PM -0800, Alexei Starovoitov wrote:
-> > > On Fri, Feb 2, 2024 at 8:34 AM Anton Protopopov <aspsk@isovalent.com> wrote:
-> > > >
-> > > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > > > index 4def3dde35f6..bdd6be718e82 100644
-> > > > --- a/include/linux/bpf.h
-> > > > +++ b/include/linux/bpf.h
-> > > > @@ -1524,6 +1524,13 @@ struct bpf_prog_aux {
-> > > >         };
-> > > >         /* an array of original indexes for all xlated instructions */
-> > > >         u32 *orig_idx;
-> > > > +       /* for every xlated instruction point to all generated jited
-> > > > +        * instructions, if allocated
-> > > > +        */
-> > > > +       struct {
-> > > > +               u32 off;        /* local offset in the jitted code */
-> > > > +               u32 len;        /* the total len of generated jit code */
-> > > > +       } *xlated_to_jit;
-> > >
-> > > Simply put Nack to this approach.
-> > >
-> > > Patches 2 and 3 add an extreme amount of memory overhead.
-> > >
-> > > As we discussed during office hours we need a "pointer to insn" concept
-> > > aka "index on insn".
-> > > The verifier would need to track that such things exist and adjust
-> > > indices of insns when patching affects those indices.
-> > >
-> > > For every static branch there will be one such "pointer to insn".
-> > > Different algorithms can be used to keep them correct.
-> > > The simplest 'lets iterate over all such pointers and update them'
-> > > during patch_insn() may even be ok to start.
-> > >
-> > > Such "pointer to insn" won't add any memory overhead.
-> > > When patch+jit is done all such "pointer to insn" are fixed value.
-> >
-> > Ok, thanks for looking, this makes sense.
-> 
-> Before jumping into coding I think it would be good to discuss
-> the design first.
-> I'm thinking such "address of insn" will be similar to
-> existing "address of subprog",
-> which is encoded in ld_imm64 as BPF_PSEUDO_FUNC.
-> "address of insn" would be a bit more involved to track
-> during JIT and likely trivial during insn patching,
-> since we're already doing imm adjustment for pseudo_func.
-> So that part of design is straightforward.
-> Implementation in the kernel and libbpf can copy paste from pseudo_func too.
 
-To implement the "primitive version" of static branches, where the
-only API is `static_branch_update(xlated off, on/off)` the only
-requirement is to build `xlated -> jitted` mapping (which is done
-in JIT, after the verification). This can be done in a simplified
-version of this patch, without xlated->orig mapping and with
-xlated->jit mapping only done to gotol_or_nop instructions.
+> On 2/7/24 2:12 AM, Jose E. Marchesi wrote:
+>> Some BPF tests use loop unrolling compiler pragmas that are clang
+>> specific and not supported by GCC.  These pragmas, along with their
+>> GCC equivalences are:
+>>
+>>    #pragma clang loop unroll_count(N)
+>>    #pragma GCC unroll N
+>>
+>>    #pragma clang loop unroll(full)
+>>    #pragma GCC unroll 65534
+>>
+>>    #pragma clang loop unroll(disable)
+>>    #pragma GCC unroll 1
+>>
+>>    #pragma unroll [aka #pragma clang loop unroll(enable)]
+>>    There is no GCC equivalence, and it seems to me that this clang
+>>    pragma may be only useful when building without -funroll-loops to
+>>    enable the optimization in particular loops.  In GCC -funroll-loops
+>>    is enabled with -O2 and higher.  If this is also true in clang,
+>>    perhaps these pragmas in selftests are redundant?
+>
+> You are right, at -O2 level, loop unrolling is enabled by default.
+> So I think '#pragma unroll' can be removed since gcc also has
+> loop unrolling enabled by default at -O2.
+>
+> Your patch has a conflict with latest bpf-next. Please rebase it
+> on top of bpf-next, remove '#pragma unroll' support and resubmit.
+> Thanks!
 
-The "address of insn" appears when we want to provide a more
-higher-level API when some object (in user-space or in kernel) keeps
-track of one or more gotol_or_nop instructions so that after the
-program load this controlling object has a list of xlated offsets.
-But this would be a follow-up to the initial static branches patch.
+Note profiler.inc.h contains code like:
 
-> The question is whether such "address of insn" should be allowed
-> in the data section. If so, we need to brainstorm how to
-> do it cleanly.
-> We had various hacks for similar things in the past. Like prog_array.
-> Let's not repeat such mistakes.
+  #ifdef UNROLL
+  	__pragma_loop_unroll
+  #endif
+ 	for (int i = 0; i < ARRAY_SIZE(arr_struct->array); i++) {
 
-So, data section is required for implementing jump tables? Like,
-to add a new PTR_TO_LABEL or PTR_TO_INSN data type, and a
-corresponding "ptr to insn" object for every occurence of &&label,
-which will be adjusted during verification.
-Looks to me like this one doesn't require any more API than specifying
-a list of &&label occurencies on program load.
+And then it is inluded by several test programs, which define (or not)
+UNROLL:
 
-For "static keys" though (a feature on top of this patch series) we
-need to have access to the corresponding set of adjusted pointers.
+profiler1.c:
 
-Isn't this enough to add something like an array of
+  #define UNROLL
+  #include "profiler.inc.h"
 
-  struct insn_ptr {
-      u32 type; /* LABEL, STATIC_BRANCH,... */
-      u32 insn_off; /* original offset on load */
-      union {
-          struct label {...};
-          struct st_branch { u32 key_id, ..};
-      };
-  };
+profiler2.c:
 
-to load attrs and then get the xlated list after the program is
-loaded? Then no new maps/APIs are needed and this can be extended.
+  /* undef #define UNROLL */
+  #include "profiler.inc.h"
+
+In contrast, in pyperf.h or strobemeta.h we find code like:
+
+  #ifdef NO_UNROLL
+  	__pragma_loop_no_unroll
+  #endif /* NO_UNROLL */
+  	for (int i = 0; i < STROBE_MAX_STRS; ++i) {
+
+And then programs including it define NO_UNROLL to disable unrolling.
+
+If -funroll-oops is enabled with -O2 and BPF programs are always built
+with -O2, then not defining UNROLL for profiler.inc.h, seems like
+basically a no-op to me, because unrolling will still happen. This is
+assuming that #pragma unroll in clang doesn't activates more aggressive
+inlining.
+
+>>
+>> This patch adds a new header progs/bpf_compiler.h that defines the
+>> following macros, which correspond to each pair of compiler-specific
+>> pragmas above:
+>>
+>>    __pragma_loop_unroll_count(N)
+>>    __pragma_loop_unroll_full
+>>    __pragma_loop_no_unroll
+>>    __pragma_loop_unroll
+>>
+>> The selftests using loop unrolling pragmas are then changed to include
+>> the header and use these macros in place of the explicit pragmas.
+>>
+>> Tested in bpf-next master.
+>> No regressions.
+>>
+>> Signed-off-by: Jose E. Marchesi <jose.marchesi@oracle.com>
+>> Cc: Yonghong Song <yhs@meta.com>
+>> Cc: Eduard Zingerman <eddyz87@gmail.com>
+>> Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+>> Cc: david.faust@oracle.com
+>> Cc: cupertino.miranda@oracle.com
+>> ---
+>>   .../selftests/bpf/progs/bpf_compiler.h        | 33 +++++++++++++++++++
+>>   tools/testing/selftests/bpf/progs/iters.c     |  5 +--
+>>   tools/testing/selftests/bpf/progs/loop4.c     |  4 ++-
+>>   .../selftests/bpf/progs/profiler.inc.h        | 17 +++++-----
+>>   tools/testing/selftests/bpf/progs/pyperf.h    |  7 ++--
+>>   .../testing/selftests/bpf/progs/strobemeta.h  | 18 +++++-----
+>>   .../selftests/bpf/progs/test_cls_redirect.c   |  5 +--
+>>   .../selftests/bpf/progs/test_lwt_seg6local.c  |  6 ++--
+>>   .../selftests/bpf/progs/test_seg6_loop.c      |  4 ++-
+>>   .../selftests/bpf/progs/test_skb_ctx.c        |  4 ++-
+>>   .../selftests/bpf/progs/test_sysctl_loop1.c   |  6 ++--
+>>   .../selftests/bpf/progs/test_sysctl_loop2.c   |  6 ++--
+>>   .../selftests/bpf/progs/test_sysctl_prog.c    |  6 ++--
+>>   .../selftests/bpf/progs/test_tc_tunnel.c      |  4 ++-
+>>   tools/testing/selftests/bpf/progs/test_xdp.c  |  3 +-
+>>   .../selftests/bpf/progs/test_xdp_loop.c       |  3 +-
+>>   .../selftests/bpf/progs/test_xdp_noinline.c   |  5 +--
+>>   .../selftests/bpf/progs/xdp_synproxy_kern.c   |  6 ++--
+>>   .../testing/selftests/bpf/progs/xdping_kern.c |  3 +-
+>>   19 files changed, 103 insertions(+), 42 deletions(-)
+>>   create mode 100644 tools/testing/selftests/bpf/progs/bpf_compiler.h
+>>
+>> diff --git a/tools/testing/selftests/bpf/progs/bpf_compiler.h b/tools/testing/selftests/bpf/progs/bpf_compiler.h
+>> new file mode 100644
+>> index 000000000000..a7c343dc82e6
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/bpf_compiler.h
+>> @@ -0,0 +1,33 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +#ifndef __BPF_COMPILER_H__
+>> +#define __BPF_COMPILER_H__
+>> +
+>> +#define DO_PRAGMA_(X) _Pragma(#X)
+>> +
+>> +#if __clang__
+>> +#define __pragma_loop_unroll DO_PRAGMA_(clang loop unroll(enable))
+>> +#else
+>> +/* In GCC -funroll-loops, which is enabled with -O2, should have the
+>> +   same impact than the loop-unroll-enable pragma above.  */
+>> +#define __pragma_loop_unroll
+>> +#endif
+>> +
+>> +#if __clang__
+>> +#define __pragma_loop_unroll_count(N) DO_PRAGMA_(clang loop unroll_count(N))
+>> +#else
+>> +#define __pragma_loop_unroll_count(N) DO_PRAGMA_(GCC unroll N)
+>> +#endif
+>> +
+>> +#if __clang__
+>> +#define __pragma_loop_unroll_full DO_PRAGMA_(clang loop unroll(full))
+>> +#else
+>> +#define __pragma_loop_unroll_full DO_PRAGMA_(GCC unroll 65534)
+>> +#endif
+>> +
+>> +#if __clang__
+>> +#define __pragma_loop_no_unroll DO_PRAGMA_(clang loop unroll(disable))
+>> +#else
+>> +#define __pragma_loop_no_unroll DO_PRAGMA_(GCC unroll 1)
+>> +#endif
+>> +
+>> +#endif
+>> diff --git a/tools/testing/selftests/bpf/progs/iters.c b/tools/testing/selftests/bpf/progs/iters.c
+>> index 225f02dd66d0..3db416606f2f 100644
+>> --- a/tools/testing/selftests/bpf/progs/iters.c
+>> +++ b/tools/testing/selftests/bpf/progs/iters.c
+>> @@ -5,6 +5,7 @@
+>>   #include <linux/bpf.h>
+>>   #include <bpf/bpf_helpers.h>
+>>   #include "bpf_misc.h"
+>> +#include "bpf_compiler.h"
+>>     #define ARRAY_SIZE(x) (int)(sizeof(x) / sizeof((x)[0]))
+>>   @@ -183,7 +184,7 @@ int iter_pragma_unroll_loop(const void *ctx)
+>>   	MY_PID_GUARD();
+>>     	bpf_iter_num_new(&it, 0, 2);
+>> -#pragma nounroll
+>> +	__pragma_loop_no_unroll
+>>   	for (i = 0; i < 3; i++) {
+>>   		v = bpf_iter_num_next(&it);
+>>   		bpf_printk("ITER_BASIC: E3 VAL: i=%d v=%d", i, v ? *v : -1);
+>> @@ -238,7 +239,7 @@ int iter_multiple_sequential_loops(const void *ctx)
+>>   	bpf_iter_num_destroy(&it);
+>>     	bpf_iter_num_new(&it, 0, 2);
+>> -#pragma nounroll
+>> +	__pragma_loop_no_unroll
+>>   	for (i = 0; i < 3; i++) {
+>>   		v = bpf_iter_num_next(&it);
+>>   		bpf_printk("ITER_BASIC: E3 VAL: i=%d v=%d", i, v ? *v : -1);
+>
+> [...]
