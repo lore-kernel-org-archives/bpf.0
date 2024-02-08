@@ -1,147 +1,158 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFE3625770
-	for <bpf@vger.kernel.org>; Thu,  8 Feb 2024 18:55:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 296E9364B7
+	for <bpf@vger.kernel.org>; Thu,  8 Feb 2024 18:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707418511; cv=none; b=JFnQ69TswsD10fOBqnNjeiX+acQ8kRURVcBYnhz3Vc+hg5cHTvp77hlUBcLZMJpHmnfwcj4ZlKJatWCvAjNkYXaNET2YZio9qXxlibVzNMvZZIZAmc1tbfwKyb+rww48TJ2ILH8eRKcGFbQbnosVElZ7EagYRwfeywlPTJvyQXY=
+	t=1707418588; cv=none; b=uF8H8AKjQDIPTkJJHbw8tFRVHQs24DsoYOiN1XH5HHMmuup3df6B9yj1Ly6Kc/cvER/woPnwC6aM8skL3gI4v0R4dacbGKwXYoQsZMFEmiACwvxq8uA8PlgEPqvGS6+4upiZsiI9X5DczWcixnl5d1xcGAd3ojSoKgqn9iRqOso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707418511; c=relaxed/simple;
-	bh=3rJyjwMNNrH2iNqVCF0mR45yFkn1beJfKK5dX2nhNg4=;
+	s=arc-20240116; t=1707418588; c=relaxed/simple;
+	bh=EAPUV4eQDE045bPk1qkljNvfmiW5700wIZ8y8OfY/S8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QWZeZyck0yJxLusRWLDZdiabEpPxtFdPyzrXzgPkFV0Ig2qCV7FZo8maPbSV59yRS7fN0pV8BbTfSPSYXm49Rq2BEGzpH0nOK+V6vvq9GXjDqme07JgnqMr4CBvjbi1ZjEOpHPrbxlISru43M1oeivOo8BOafMm3XD79gjX5r3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FW65OVqq; arc=none smtp.client-ip=209.85.216.43
+	 To:Cc:Content-Type; b=IKSZaqztf2o66gdO6OSYnzv/mKHpEwaEFDEIRpJiV8Tmfz3XIDzjEpixUbu3U0PyJTCTMnLOveae+NtyiqyQiCYJs6mWfVhIb19PEBxNKyS66dQZhVoi5mJbgLjgw4nC48C/9YL3EHFMcPO9A5TFiKwdCZEmqJTsNkE4MGn07xM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=APibbuL/; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FW65OVqq"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-290ec261a61so109129a91.0
-        for <bpf@vger.kernel.org>; Thu, 08 Feb 2024 10:55:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="APibbuL/"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-296717ccc2aso959036a91.1
+        for <bpf@vger.kernel.org>; Thu, 08 Feb 2024 10:56:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707418509; x=1708023309; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1707418586; x=1708023386; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SWXbZgKWtvijsMvDIT+yzcg24ikiAe312anPEYmIWVc=;
-        b=FW65OVqquOOsUvu3k/9JgVQC722KKsg3Mt+h6i6lcWMv/j3M79LmY1DLEFSkZTF9D2
-         Y91rOFSBFfMhLXJLa421FtxtZwodjBACzxsyybxDRACNAIGIeOO1jDiJUSz7odZ6bjZw
-         WNy2LvR0lNK/fTd+qIgsqQ1EwXVavmF/Vyk2bCH9UxC1cT3gvlWcxahjQb1FiRKn+dKk
-         L13OglsRtnHhFEjPQgP9poBOr5AlKOc5svNcS4dl/oSKP+k5ClX/AWY7TDhm3kWfT/tE
-         xx7M0ojAwq+WxMvudmTVjhD0DM1wJ8v5sC9xi8bmw5RCfrI4oWQLeEqdmJL/LS8ftqoG
-         oYhw==
+        bh=XhQ88eL4fk1cfo3XQWJOhOltM20VLquDz9bXCJI039Y=;
+        b=APibbuL/ThKrbX8rWgik/I+dQGOg+BIa064MJhwCjGxuGEjnlc4F+hX/ihhjl9CH2H
+         iYPC6Q27PnN2avzj2Mpdw7ZDd815BIcLvEUqi9s66i3QJ8lYPY1pb8OKWwAwBr7iuy1n
+         kqX6LJnLsC2uX0R1qNFxzocVCzDrXPyXfvFhsgzOGPaSW7kPS+OEV9sk8gUtfHHqnKz2
+         WEA3z2JLo3gvlkpHeFWeLJkGD6ZRTkEU20IbdkjO6s3JUODpOYyim72PUoBjjcgO1/8x
+         Zx4kJCxxS5OHqECo2VrehlTf3cf+yE05vmG6KWEFiRZBrHSOnnvtOAdmYiRff0Ir/mwE
+         Gsxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707418509; x=1708023309;
+        d=1e100.net; s=20230601; t=1707418586; x=1708023386;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SWXbZgKWtvijsMvDIT+yzcg24ikiAe312anPEYmIWVc=;
-        b=kyKDz8FCmQOft/lBgFuVDMKQEKrdkJi8PybJg/0Vg//IjoukHqjslMB6h26inCDHDB
-         a/FIPJ4rJtAmsmwSHgO7LwmavxbAx3NG+I8IKzPt5+zt3qu8s4GTEQjtfMKer17QpLTF
-         S7d/2QjkkYBPI0cJ/Ex0zPSkk+ztikh4xmGKY8lB8yZgepZpch5TGV1tA3HWY+2E3VrQ
-         Yp3+qKrz99NGGMh+0pLEq7ma6E7SnS+cpOyIVHm+61a3IRhvgIGzmH5C6MbPgFZkZ0TR
-         eh4VlVpIT/iDhTSzFlhys8hPtUFV+fe2ir4WYzctgeSUhL6vjYe7d8EJDR+PrPkGYTmm
-         9n/w==
-X-Gm-Message-State: AOJu0YyL/4NDHIMq0zKPSSvi4SyAYQvwueo++Ayr0UgTISph6dpBKJli
-	/t1xTmCmGgdOQpAhJMuNJCvlx/2UgVEm2SeUUlx75b3XRO8ytUV6POxjZ/tp5ch5eI/89fdAH8a
-	ZVun7BJGBW3t9oB58VYzf7WAGccCk6rn7
-X-Google-Smtp-Source: AGHT+IEK8ovRbD8PpPYg56udbFYc4wM458hlpGpgSiG3OaqqQ2JuFv/0m7UvKEm66AWvFQsQCyA41JMRXrzCaqxuMaM=
-X-Received: by 2002:a17:90b:e96:b0:296:bf9:dc6b with SMTP id
- fv22-20020a17090b0e9600b002960bf9dc6bmr139779pjb.27.1707418508724; Thu, 08
- Feb 2024 10:55:08 -0800 (PST)
+        bh=XhQ88eL4fk1cfo3XQWJOhOltM20VLquDz9bXCJI039Y=;
+        b=gOcijrajFQW33hYBfnLJBOZQ+zCdFGE8Doz3S+YpSBm7rW5bh5vSt6JcEy6XuvFI6g
+         THI3utWOcMnWawOmL/7gsXlNMSBJ0fKjAOLILVU0RL/ekFv2WNv3GvtB5bUTk5LPvan9
+         rTgPoIhBaMbSjiiX5qKB8fgxG7Uqr2/b6Qa6dFQO6KPAFhk4AeKIx/oeskvpfjrtG/Ao
+         U3qVr4SEcX7j271lwtYmMUPNj/msobvdFX9hHSWu2mDOTkMcuiWxktYHWn+PJooOzQmz
+         2SuiqT6mxiBA4uHStIUT52XfC4+6tzVJ9kSnJix2O78GazmnjHk4UE5EyAKY6Bn+ukF5
+         7kCw==
+X-Forwarded-Encrypted: i=1; AJvYcCUH5N0QnAzo1EPBxcQulhayRMYcrHt5YJRUiy9ah3PnX3Z1Oxig3gBf4UiwvXZUokodGEwUMnodwANRHHcI6vzXsI95
+X-Gm-Message-State: AOJu0YxtHVj/S8WfpiDlGAvOsN85q5JANLuWA+AAczAdlUhU84j8Pj+t
+	+xf8CnXlhs6aF7s+edOJiSvKeoTKL254AZ4HZyO+h3tz2GX7Gu6/wQ1tYQmbwDdKpFSt4aDsdZK
+	MhfqDUHLlqPiaeq4WBNgsHueDyeoDnBLM
+X-Google-Smtp-Source: AGHT+IGXnzL/rWYCutvd130J4cmNqv1f5YDK2XMrbombYZYGTZgWIgP4lXhT7njTwHAbZHdHqRAwLh5eI4VkiTVUWyk=
+X-Received: by 2002:a17:90a:e54b:b0:296:cfe7:98ca with SMTP id
+ ei11-20020a17090ae54b00b00296cfe798camr5936881pjb.9.1707418586439; Thu, 08
+ Feb 2024 10:56:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240206220441.38311-1-alexei.starovoitov@gmail.com>
- <20240206220441.38311-12-alexei.starovoitov@gmail.com> <CAEf4Bza9gNXfGXuQnvWnoYNA08enBCkqn9uyHtBNdTpZRvn7og@mail.gmail.com>
- <CAADnVQKjkba_wiUJ9wps_k8+TYu_q3Ai5oQ1mnZQmpv+pnPfFw@mail.gmail.com>
- <CAEf4BzYvgHoBQ0KNFOWoK8XOvRTzGNBM1QsS=zR5iPTq-Z+=4g@mail.gmail.com> <CAADnVQJ-rrx-_tC5ek_wyhNdFw2Ya6o3eN_hpdgFswT=CfuXnA@mail.gmail.com>
-In-Reply-To: <CAADnVQJ-rrx-_tC5ek_wyhNdFw2Ya6o3eN_hpdgFswT=CfuXnA@mail.gmail.com>
+References: <20240208090906.56337-1-laoar.shao@gmail.com> <20240208090906.56337-4-laoar.shao@gmail.com>
+ <4e79dc07-ba34-49e3-92fe-a5f2c96045ee@linux.dev>
+In-Reply-To: <4e79dc07-ba34-49e3-92fe-a5f2c96045ee@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 8 Feb 2024 10:54:57 -0800
-Message-ID: <CAEf4BzZqsX6W33ZXm8Wt+RsBXyYx3em5gQpB_0U8CNaeNL5KFQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 11/16] libbpf: Add support for bpf_arena.
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Eddy Z <eddyz87@gmail.com>, Tejun Heo <tj@kernel.org>, 
-	Barret Rhoden <brho@google.com>, Johannes Weiner <hannes@cmpxchg.org>, linux-mm <linux-mm@kvack.org>, 
-	Kernel Team <kernel-team@fb.com>
+Date: Thu, 8 Feb 2024 10:56:14 -0800
+Message-ID: <CAEf4BzZQARf_n5YxfiuL=jKXrA8-=iFWmXe_X1jEi-QXnAQj-g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/3] libbpf: Check the return value of bpf_iter_<type>_new()
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: Yafang Shao <laoar.shao@gmail.com>, ast@kernel.org, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev, 
+	eddyz87@gmail.com, song@kernel.org, kpsingh@kernel.org, sdf@google.com, 
+	haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 8, 2024 at 10:45=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Thu, Feb 8, 2024 at 9:43=E2=80=AFAM Yonghong Song <yonghong.song@linux.d=
+ev> wrote:
 >
-> On Thu, Feb 8, 2024 at 10:29=E2=80=AFAM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
+>
+> On 2/8/24 1:09 AM, Yafang Shao wrote:
+> > On success, bpf_iter_<type>_new() return 0. On failure, it returns ERR.
+> > We'd better check the return value of it.
+>
+> Not sure whether this patch is necessary or not.
+>
+> I checked:
+>    bpf_iter_num_{new,next}
+>    bpf_iter_task_vma_{new,next}
+>    bpf_iter_css_task_{new,next}
+>
+> It looks like the convention is for *_next() return NULL or not
+> instead of relying on return value of _new() to decide whether to
+> proceed or not. Maybe Andrii can clarify.
+
+Yes, exactly. if bpf_iter_xxx_new() failed, subsequent
+bpf_iter_xxx_next() should return NULL and bpf_iter_xxx_destroy() will
+be a no-op as well. So yes, there is no need for extra error checking
+here.
+
+>
 > >
-> > On Wed, Feb 7, 2024 at 5:38=E2=80=AFPM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Wed, Feb 7, 2024 at 5:15=E2=80=AFPM Andrii Nakryiko
-> > > <andrii.nakryiko@gmail.com> wrote:
-> > > >
-> > > > On Tue, Feb 6, 2024 at 2:05=E2=80=AFPM Alexei Starovoitov
-> > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > >
-> > > > > From: Alexei Starovoitov <ast@kernel.org>
-> > > > >
-> > > > > mmap() bpf_arena right after creation, since the kernel needs to
-> > > > > remember the address returned from mmap. This is user_vm_start.
-> > > > > LLVM will generate bpf_arena_cast_user() instructions where
-> > > > > necessary and JIT will add upper 32-bit of user_vm_start
-> > > > > to such pointers.
-> > > > >
-> > > > > Use traditional map->value_size * map->max_entries to calculate m=
-map sz,
-> > > > > though it's not the best fit.
-> > > >
-> > > > We should probably make bpf_map_mmap_sz() aware of specific map typ=
-e
-> > > > and do different calculations based on that. It makes sense to have
-> > > > round_up(PAGE_SIZE) for BPF map arena, and use just just value_size=
- or
-> > > > max_entries to specify the size (fixing the other to be zero).
-> > >
-> > > I went with value_size =3D=3D key_size =3D=3D 8 in order to be able t=
-o extend
-> > > it in the future and allow map_lookup/update/delete to do something
-> > > useful. Ex: lookup/delete can behave just like arena_alloc/free_pages=
-.
-> > >
-> > > Are you proposing to force key/value_size to zero ?
+> > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> > ---
+> >   tools/lib/bpf/bpf_helpers.h | 16 ++++++++++++----
+> >   1 file changed, 12 insertions(+), 4 deletions(-)
 > >
-> > Yeah, I was thinking either (value_size=3D<size-in-bytes> and
-> > max_entries=3D0) or (value_size=3D0 and max_entries=3D<size-in-bytes>).=
- The
-> > latter is what we do for BPF ringbuf, for example.
->
-> Ouch. since map_update_elem() does:
->         value_size =3D bpf_map_value_size(map);
->         value =3D kvmemdup_bpfptr(uvalue, value_size);
-> ...
-> static inline void *kvmemdup_bpfptr(bpfptr_t src, size_t len)
-> {
->         void *p =3D kvmalloc(len, GFP_USER | __GFP_NOWARN);
->
->         if (!p)
->                 return ERR_PTR(-ENOMEM);
->         if (copy_from_bpfptr(p, src, len)) {
-> ...
->         if (unlikely(!size))
->                 return ZERO_SIZE_PTR;
->
-> and it's probably crashing the kernel.
-
-You mean when doing this from SYSCALL program?
-
->
-> Looks like we have fixes to do anyway :(
-
-Yeah, it's kind of weird to first read key/value "memory", and then
-getting -ENOTSUP for maps that don't support lookup/update. We should
-error out sooner.
+> > diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+> > index 79eaa581be98..2cd2428e3bc6 100644
+> > --- a/tools/lib/bpf/bpf_helpers.h
+> > +++ b/tools/lib/bpf/bpf_helpers.h
+> > @@ -133,6 +133,15 @@
+> >   # define __bpf_unreachable()        __builtin_trap()
+> >   #endif
+> >
+> > +#ifndef __must_check
+> > +#define __must_check __attribute__((warn_unused_result))
+> > +#endif
+> > +
+> > +static inline void * __must_check ERR_PTR(long error)
+> > +{
+> > +     return (void *) error;
+> > +}
+> > +
+> >   /*
+> >    * Helper function to perform a tail call with a constant/immediate m=
+ap slot.
+> >    */
+> > @@ -340,14 +349,13 @@ extern void bpf_iter_num_destroy(struct bpf_iter_=
+num *it) __weak __ksym;
+> >       /* initialize and define destructor */                           =
+                       \
+> >       struct bpf_iter_##type ___it __attribute__((aligned(8), /* enforc=
+e, just in case */,    \
+> >                                                   cleanup(bpf_iter_##ty=
+pe##_destroy))),       \
+> > -     /* ___p pointer is just to call bpf_iter_##type##_new() *once* to=
+ init ___it */         \
+> >                              *___p __attribute__((unused)) =3D (       =
+                         \
+> > -                                     bpf_iter_##type##_new(&___it, ##a=
+rgs),                  \
+> >       /* this is a workaround for Clang bug: it currently doesn't emit =
+BTF */                 \
+> >       /* for bpf_iter_##type##_destroy() when used from cleanup() attri=
+bute */                \
+> > -                                     (void)bpf_iter_##type##_destroy, =
+(void *)0);            \
+> > +                                     (void)bpf_iter_##type##_destroy, =
+                       \
+> > +                                     ERR_PTR(bpf_iter_##type##_new(&__=
+_it, ##args)));        \
+> >       /* iteration and termination check */                            =
+                       \
+> > -     (((cur) =3D bpf_iter_##type##_next(&___it)));                    =
+                         \
+> > +     ((!___p) && ((cur) =3D bpf_iter_##type##_next(&___it)));         =
+                         \
+> >   )
+> >   #endif /* bpf_for_each */
+> >
