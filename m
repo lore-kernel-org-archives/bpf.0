@@ -1,64 +1,66 @@
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6F35663;
-	Fri,  9 Feb 2024 02:50:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53DF84C89
+	for <bpf@vger.kernel.org>; Fri,  9 Feb 2024 03:29:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707447053; cv=none; b=IaFVUCOSVNv5bQGtSBRpEw28Gkc/FWArorK14JP6vjWVFiMjY3VER9hC99VumYeph6+G4HLnLw3nEcHan5ZyL6Z3qLm6bMBhvyNtArfoBRHWVemRPKVsCbUZx/SMIBkxVrc4fb5MUskTqEJLgYfLda2UT3nXoViDGWfK46/HAhU=
+	t=1707449359; cv=none; b=YLZNxJFGDPDMjJZoeMwD+zJCWTnOsdXtd0ELOlmRDg8XlMgNbDoh/o15t6/4wQIOgcYW09y9oMe0dF4XWLi/tlwRHivjN9xskJdZyZ9ogyL2upFBCNgo9IZwd85xcYdWhZhqGPi5LAK9WmMb7CZBCP+bVJtATPm8vv9641G/mk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707447053; c=relaxed/simple;
-	bh=7afYQWsKUrAcpAeznLizU1hFIZ9xJ5fDSzGextpy+8c=;
+	s=arc-20240116; t=1707449359; c=relaxed/simple;
+	bh=2DUaRib+tNUB/asNb4vB4P49u+cpzOyMtGinC6pI7gQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I7nxmZgt8bukDocjlfMUwIFX5kxy4FEJzJO2iS0sfeIYdqWED1gu86XANaYCyeqwjC5A8/IYUhj7gz70eaJf7+tnlGaBsDtVO/fWfruXqo2VWdSXdj/q9cc/xCIuiIIqTY1A1S+X5ZuF6Umai2lp2ZXqWiaDZMHGamUmjB77vMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hPSh6adM; arc=none smtp.client-ip=209.85.219.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=L8KNidtkcNc0/gf92r2cdxvDZBbOoOdsFC+8JxVCXuzXiUdulMOe7j1DOr5xs65LoOC0/KfzMoYTrTcQvgC86dfuGXPDBIGkiyNeSxvwTr+2tBiy1Evl7/N+C4L6+A5X3/qvkukEZMPhRdIWcVRVNTG84OUi8aZ6tykJLUNbp94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wdcy3yLo; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hPSh6adM"
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-68009cb4669so2265676d6.1;
-        Thu, 08 Feb 2024 18:50:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707447051; x=1708051851; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nj9opqbQ5/AcFYVCj/vP5eercGB3ykX399OJ84biNsE=;
-        b=hPSh6adMMw8Qio8TJYQ0ehXbSTBcDfsILTDctSLk9WxjlyoGnvyhiWGD84mHjQti5D
-         oLW/4JiKX3/+HsTiJEKWRRqd1Fw4DcD7iAHFdS/HFbD7C5HDiDy7CN4nA9z82ODZfToh
-         LzztFw189W48KXchlaooJcPwB5JKVEl+p+Kh6aBC/DnmM7zJChucc4sv7iwmIKeJ6Zv0
-         p5Q9U25q3o/auQ0oQe6tikfHIt9Gl3KglQa7kbWIW+a/wOxcYZUp4HPxEIaelZEMRusc
-         iKPrNIPwOZqiumZXwwt+jMp+5th107ZsD0KZOpLyD76enA28U5bQ4zNh/CU5xwkK9jw9
-         +3vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707447051; x=1708051851;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nj9opqbQ5/AcFYVCj/vP5eercGB3ykX399OJ84biNsE=;
-        b=ukVr9GLSkRzTtTGTESPaId/CXwglS8hYNN0KGr+wvAsZg4Hl9QcSm1JJBSXRL+PshV
-         7jWG0NftwXJFzg41wSyvCkyY3xRLP6GCQbnosDzBzw9B0YAeXcLxzttdFQaM7we/LjcZ
-         w6kpo0UR5yIZA4aFXJE1kasJR6WpWLzkrCmCsGczF+otou4sRFZuYcaXAxo5rH3MKOrJ
-         oIwJa2cLfX4gJAAbk6Xm7KfPvsDrIxxfba/zD5Tqr8zagZmyaovSiS2FO/2z3KP69Y7z
-         y6ipPpUSO9IuDlBd1Gj3Sw9G/Cf/+zZhNOfhYhdz8ml60tfkVc8C5TUGday4GXo11qSl
-         IRKA==
-X-Gm-Message-State: AOJu0YyldLR2d5xrHmCFoBWbKOUu1Ij0sLyt8OaXi+pEdxyrHKaMurb+
-	ShY7kfOVuU3TgBldwOBCU00n88TRQpPcQO845GEGCUpNip5Jw+tc
-X-Google-Smtp-Source: AGHT+IHkcvpt/oyuKL6dZTMlzk4EHfqgduaB3NjUqo79ofdNrhbIIjXXee3ZA5FrNviknnwSYi3Baw==
-X-Received: by 2002:a0c:aa1b:0:b0:68c:c249:4c47 with SMTP id d27-20020a0caa1b000000b0068cc2494c47mr309388qvb.28.1707447050935;
-        Thu, 08 Feb 2024 18:50:50 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUCIynohXxMMivTiDa/ehKzYq04RxDtgYQ5miiPimefr/7rpfEkzDi+j/XRJyXugl4AHYteurMru3C+cEwE/G52cmFX0FtYQ7OKLjzn
-Received: from localhost ([2601:8c:502:14f0:acdd:1182:de4a:7f88])
-        by smtp.gmail.com with ESMTPSA id lr9-20020a0562145bc900b0068cd399760fsm163333qvb.61.2024.02.08.18.50.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Feb 2024 18:50:50 -0800 (PST)
-Date: Thu, 8 Feb 2024 16:50:49 -0500
-From: Oliver Crumrine <ozlinuxc@gmail.com>
-To: Stanislav Fomichev <sdf@google.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: remove check before __cgroup_bpf_run_filter_skb
-Message-ID: <3htegzrugq4xwlizizsaku6g2pzwhndcnxxxmji4fvblisiuro@icvcsa3mky3w>
-References: <ngc7klapduckb67tsymb3blu2wlmdsjo4pa4gbaivgxezbwzxp@v7akqu7gbwl4>
- <ZcV1GgitdBUIcKJT@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wdcy3yLo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707449357; x=1738985357;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2DUaRib+tNUB/asNb4vB4P49u+cpzOyMtGinC6pI7gQ=;
+  b=Wdcy3yLoJgsek/7S2KepBIQVT2RxxIU3HMgZDc5ZIhSOpAVB8tZtKNTs
+   CgluQuoNfrcYohLGc29ofVpAxhcCjALZWFrQmYGR4y7IHwSGcsif+4inA
+   aUmWmXiXO79WiNpzjbAQWPxJzSRKdo/x/hSq7npENhZCK8+LA2hrbS76e
+   35y0yWCfKrPiZT7wJUFlj/DLday4E/W4wWKdL67AGu9qFGgZ1WfPCD0La
+   cedQAP/WST63iesHgC/ZEeQS1SItpSuJYc2Xq7FDG8zBU0uAjtwSC0rm+
+   aYT1E6GEnzTIVL4u17paoBaDl0ozocQ3B6Cfbi4UqBQ92oOSv9wg1UPxE
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="1259223"
+X-IronPort-AV: E=Sophos;i="6.05,255,1701158400"; 
+   d="scan'208";a="1259223"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 19:29:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,255,1701158400"; 
+   d="scan'208";a="6610135"
+Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 08 Feb 2024 19:29:11 -0800
+Received: from kbuild by 01f0647817ea with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rYHZd-0004MM-2q;
+	Fri, 09 Feb 2024 03:29:09 +0000
+Date: Fri, 9 Feb 2024 11:28:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Geliang Tang <geliang@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Matthieu Baerts <matttbe@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, Geliang Tang <tanggeliang@kylinos.cn>,
+	bpf@vger.kernel.org, mptcp@lists.linux.dev
+Subject: Re: [PATCH bpf-next v3 1/2] bpf, btf: Add register_check_missing_btf
+ helper
+Message-ID: <202402091146.VUsU5iPl-lkp@intel.com>
+References: <6dfe28c4045e1a3d31b3ba60dde31c7650ac66df.1707029682.git.tanggeliang@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,15 +69,86 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZcV1GgitdBUIcKJT@google.com>
+In-Reply-To: <6dfe28c4045e1a3d31b3ba60dde31c7650ac66df.1707029682.git.tanggeliang@kylinos.cn>
 
-On Thu, Feb 08, 2024 at 04:43:06PM -0800, Stanislav Fomichev wrote:
-> The check is here to make sure we only run this hook on non-req sockets.
-> Dropping it would mean we'd be running the hook on the listeners
-> instead. I don't think we want that.
+Hi Geliang,
 
-You are correct that we don't want to run the code on listeners. However
-the check for that is in the function this macro calls,
-__cgroup_bpf_run_filter_skb (the check is on line 1367 of
-kernel/bpf/cgroup.c, for 6.8.0-rc3). The check doesn't need to be done
-twice, so it can be removed in this macro. 
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Geliang-Tang/bpf-btf-Add-register_check_missing_btf-helper/20240204-150130
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/6dfe28c4045e1a3d31b3ba60dde31c7650ac66df.1707029682.git.tanggeliang%40kylinos.cn
+patch subject: [PATCH bpf-next v3 1/2] bpf, btf: Add register_check_missing_btf helper
+config: x86_64-buildonly-randconfig-004-20240209 (https://download.01.org/0day-ci/archive/20240209/202402091146.VUsU5iPl-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240209/202402091146.VUsU5iPl-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402091146.VUsU5iPl-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   kernel/bpf/btf.c: In function 'btf_seq_show':
+   kernel/bpf/btf.c:7287:22: warning: function 'btf_seq_show' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+    7287 |  seq_vprintf((struct seq_file *)show->target, fmt, args);
+         |                      ^~~~~~~~
+   kernel/bpf/btf.c: In function 'btf_snprintf_show':
+   kernel/bpf/btf.c:7324:2: warning: function 'btf_snprintf_show' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+    7324 |  len = vsnprintf(show->target, ssnprintf->len_left, fmt, args);
+         |  ^~~
+   In file included from include/asm-generic/bug.h:22,
+                    from arch/x86/include/asm/bug.h:87,
+                    from include/linux/bug.h:5,
+                    from arch/x86/include/asm/paravirt.h:19,
+                    from arch/x86/include/asm/cpuid.h:62,
+                    from arch/x86/include/asm/processor.h:19,
+                    from include/linux/sched.h:13,
+                    from include/linux/ptrace.h:6,
+                    from include/uapi/asm-generic/bpf_perf_event.h:4,
+                    from ./arch/x86/include/generated/uapi/asm/bpf_perf_event.h:1,
+                    from include/uapi/linux/bpf_perf_event.h:11,
+                    from kernel/bpf/btf.c:6:
+   kernel/bpf/btf.c: In function 'register_check_missing_btf':
+>> kernel/bpf/btf.c:7751:11: error: dereferencing pointer to incomplete type 'const struct module'
+    7751 |     module->name, msg);
+         |           ^~
+   include/linux/printk.h:427:19: note: in definition of macro 'printk_index_wrap'
+     427 |   _p_func(_fmt, ##__VA_ARGS__);    \
+         |                   ^~~~~~~~~~~
+   include/linux/printk.h:508:2: note: in expansion of macro 'printk'
+     508 |  printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+         |  ^~~~~~
+   kernel/bpf/btf.c:7750:4: note: in expansion of macro 'pr_warn'
+    7750 |    pr_warn("allow module %s BTF mismatch, skip register %s\n",
+         |    ^~~~~~~
+
+
+vim +7751 kernel/bpf/btf.c
+
+  7741	
+  7742	static int register_check_missing_btf(const struct module *module, const char *msg)
+  7743	{
+  7744		if (!module && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
+  7745			pr_err("missing vmlinux BTF, cannot register %s\n", msg);
+  7746			return -ENOENT;
+  7747		}
+  7748		if (module && IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES)) {
+  7749			if (IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH)) {
+  7750				pr_warn("allow module %s BTF mismatch, skip register %s\n",
+> 7751					module->name, msg);
+  7752				return 0;
+  7753			}
+  7754			pr_err("missing module %s BTF, cannot register %s\n", module->name, msg);
+  7755			return -ENOENT;
+  7756		}
+  7757		return 0;
+  7758	}
+  7759	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
