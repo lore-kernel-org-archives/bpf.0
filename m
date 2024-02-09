@@ -1,95 +1,78 @@
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4F11C10;
-	Fri,  9 Feb 2024 20:34:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE85567A;
+	Fri,  9 Feb 2024 20:36:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707510842; cv=none; b=G9SLpSLuoLbBUZdS22UnLKUaIy6s/j3deQHkB7966XPQQrSDl04wx+0DMVUxyxF6IJoQn/HLwAIgpesYIbOzu4ETy6tZBcQBDrDacR0eXzRsbr7zJcJZzBqZpCZE5eOuKsu3v78WeR/JeH24eVPEUyNpz4NWn2w/cxntxgwQgBA=
+	t=1707510981; cv=none; b=iJzhKeklek8QBbZy7+g1ouIR54yII/GPwIFLe6FRkY/2LK8AUxvAOZ582J1o8Q2KbvlJ5OPH2H+IUs9mfQv78FpZMb6rse2V3YyAdlCFeBIjIg7rtqYVq53hKqt5JZaSw04zFR5ilsWJr37ZW+eGhZjHxjsMj2HkbpfCAaAUJlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707510842; c=relaxed/simple;
-	bh=1ogBZFQd6sL61caG1BlkDBPnoyUz7gjPoCogwYbksng=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QjnEVACdHXvvsXrOLXeYTlwN6DGNa7vCPSUUTy2fTwZ+xNUYG3zpMCGf8K8GESO+YGvEblj8sx9XGDhghTqGiEaXxDQa0UVdsmwJlB0zv1M6yiMdZgpjXmPx3s2OxeXlCzb+FsG/5Mc23pWGzvRRXikSWxiXZroH7UuvrIjeMBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TTKmemSa; arc=none smtp.client-ip=209.85.160.47
+	s=arc-20240116; t=1707510981; c=relaxed/simple;
+	bh=TTxo07X6sjchqjn/ZO+xDj0utJMepBk4YhePX1jznug=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j3a3cbzwtX1xbASPRmLgl//7Ug2KWIDBfhRLzo6EC7oyTAkMzs1mrJr5p07AwXmaoB4YAwK201zz0AhV5+rALGiE0rdv0iuMKNbMtBRTgDHbRZiXA5FCkz0Zh+m5lraAKj/MZMgflnUvDEZ7hgO98RCt1eO8l570g4Fq9/MtpSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cv/d6sw1; arc=none smtp.client-ip=209.85.160.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TTKmemSa"
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-21a01c100a3so488053fac.1;
-        Fri, 09 Feb 2024 12:34:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cv/d6sw1"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-42a8a398cb2so7688851cf.1;
+        Fri, 09 Feb 2024 12:36:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707510840; x=1708115640; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iZqjoegvw+SzrDkzyeo9ooIPTOeMlg28K29K/qT3XeI=;
-        b=TTKmemSa2V1d350vvC0t0odzUr6yop9PEP9R6c4wzrg/BAtKn+RGOsm7sLcHzLWFHr
-         XtmTTyRdQ3Rp27ktViku5ifNmqY9Ma2BsIgRxij7VUxIDwXSH0gZ4IvBML+TlxCk96bq
-         e9vCQ94wDQWAmgfaU/p5FDNkY0LwDm4FwRFijcEArFaylXm6nNfYFl9Ikma8zu4CK59T
-         rCaQnPiPrR2HPGMRvhUtFMjYB4pYjIfZijRgRxliuK/rn5L2qOkXsxEiBoFaf9C6DFUl
-         ICsqpZnebSsvU2QNbJ1wHO7pREIExguk1M5TWDBnewXd502Sj4Ui2czVCyVnIE2KEKaZ
-         OTog==
+        d=gmail.com; s=20230601; t=1707510979; x=1708115779; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NfH4Jtpravkp5AYub7HNZjiUrbB+WZLSTKhuDr6IUEM=;
+        b=cv/d6sw1X+XT6juZsHd5CiJu+hA4u5PQDdiTiPloPUwLunJqvd2JX/wDsG5I/w2mjK
+         8O11lxoixGhnv1zvTnyViXd0BATRv3sfgrGmKox1PAihy+OIv1u3c/vRdX8weBK6AArh
+         EkO0eOdD3fir6yvOrJGKQYyj9TMnVDAsAuFPmdNaeImKkCG2ssdiyDcg0iLVmfGUioRu
+         PfsYvIzt5xGM/RbY+56loBXhvVJQDMKzyQJhG7vF6WNZ43B5eYWgTpx+R2cht9wb0d87
+         wcYvLw8UDLrQ4a5MYkNvDTCf7em+R4vBB7RKMgI3XXIILZTjW1cC26z8y5ForgqQ703+
+         J4ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707510840; x=1708115640;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iZqjoegvw+SzrDkzyeo9ooIPTOeMlg28K29K/qT3XeI=;
-        b=fv1/VxK7Ku6SgCpqD3efGr8u1amer7h+ii+UQTc2xy4KyGKCXte+CY63/hzgz/lNqO
-         OCbK6amHMr5NoLoaj7XdLM4aGHspKdrWdUZ7xe004234QyxmB9+fmViEPOr733i5J5HU
-         h81zW0gUwuDVJ+oHXWPNH8MPdlUkuAx3tFhcPWJMZ9NkOy+1pHwxXrzC6mynPBiHcsmF
-         lviJu7LtO/OfjsfmCkplOLy5fNlKtZk8RETbGLA53QxuQqNfHDziDgaAhfrrfAAp449y
-         cDfgnYvjsophFME+Cin7Cwc0Om3gbQQCmo0sP14RWsV2OF5Pk42Y6323rc3ZGAPdC7L+
-         I8BQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVR9tEA/j6jR/K1EaL29jAP2iMEQtFYmogOXhYeNSBbDd1H9t+qzoJZKXPiCPWppKyewCBwMC5+tfrncLosoNA8X4ZvBwVC3uFT2dQM
-X-Gm-Message-State: AOJu0Yy8qc2d9ua8MGr1wYB2nZnLcU7wfQiMn+GY25CAfB/eYko1lcOn
-	GEs6eerddmodDuWjqo3NHMr6+7wYXGTmkBrS2vAkAG4JSZ467LSK
-X-Google-Smtp-Source: AGHT+IH+JtzVLPK2oDa5ykRgpy6tbjR/0HethViNZhIDO8ORD95I76PCvVDjC4dkJo3F7R777iZL4g==
-X-Received: by 2002:a05:6870:d38d:b0:219:7f2b:1f2c with SMTP id k13-20020a056870d38d00b002197f2b1f2cmr372613oag.37.1707510840246;
-        Fri, 09 Feb 2024 12:34:00 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU+nu5IRiZnmLmV1wfOgutttMwrXqQ0jMoIa/VTE+Yy+JYzU3HYFz1h48ngH0C406qP75sCzUomM9CylimiJv7L8bkSeUB4xgQ76fBc7fpfQsNtht4mo8qdBmYNX+p56Ti5OenMTBvrlocBTuuVcbDVUZab1eK2
-Received: from ?IPV6:2600:1700:6cf8:1240:f93c:6396:3149:ee35? ([2600:1700:6cf8:1240:f93c:6396:3149:ee35])
-        by smtp.gmail.com with ESMTPSA id b23-20020ac844d7000000b0042be6d99d22sm983327qto.59.2024.02.09.12.33.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Feb 2024 12:33:59 -0800 (PST)
-Message-ID: <fe9f9fa2-8308-422f-b47f-951b0d7875a4@gmail.com>
-Date: Fri, 9 Feb 2024 12:33:58 -0800
+        d=1e100.net; s=20230601; t=1707510979; x=1708115779;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NfH4Jtpravkp5AYub7HNZjiUrbB+WZLSTKhuDr6IUEM=;
+        b=oWjKpNHf9BWo39Ll9bEDZquMS0qgcJFzLB6nHDNUNWQq+84MPLY40nWdQwBPhJAZnx
+         ywIV0XYTq//kGbzhIseOfBV6aR6lYUM4UyBRCHcU7CoW1ht4IvYJbcPulXqrFxZW72ig
+         Df2cl/aXUjGANToxzqp3C+Elm5quLBgMhWYl5wAJzObVL4DffdiFP4M+dp6DdhMfw1Xy
+         dfyHNc5ueI70KmSMOfPkXbyNGauVHsPAKr5Hml8agx9IpJX8c5bvCvu10mvIZVLaTCxh
+         o2CoqN2+tj4nNi5c5qpnbQt7vVJ0w2BlJQompqxlidJD2reWs8OgmGd7RuFFJiRjEZp6
+         62eg==
+X-Forwarded-Encrypted: i=1; AJvYcCVsSMXju7TaZfJh66uUlQypTriSNPbQ2qfH2cK9X5DhMwVAAXocgq/1Q+9oDjCkqqD4bS/NU5fpet1ygLA4IwabJtlN4RwF+woi2SRI
+X-Gm-Message-State: AOJu0YwYNbg3VsuUMO2ejN6X09hV5lJALWj0nt61MZWT6pPo4DecHtIg
+	EDUtOpyDozlheANY8p7DhW6+dcaZ9yiq0ZjklzZfqssRyEOXj7R8hU44kcrQ
+X-Google-Smtp-Source: AGHT+IFJCV+LX+O60sVrcOE89eBffljDoowypfR69DU5PSC/+VDdkF2KOxSBCWVk0jElAeNj08marA==
+X-Received: by 2002:ac8:588a:0:b0:42a:db63:2bae with SMTP id t10-20020ac8588a000000b0042adb632baemr429126qta.7.1707510978865;
+        Fri, 09 Feb 2024 12:36:18 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUXQUt0V6QsGGEmNEgLxJbi6bTb97p680u/j+cL8w62icyhXCfphB4GZSlLtooGX0Gaa1i3/Fj9s+R7CLOxTMnvGGXwCNnqN60+QSr2
+Received: from localhost ([2601:8c:502:14f0:acdd:1182:de4a:7f88])
+        by smtp.gmail.com with ESMTPSA id y14-20020a05622a120e00b0042c22902ca2sm985008qtx.81.2024.02.09.12.36.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Feb 2024 12:36:18 -0800 (PST)
+Date: Fri, 9 Feb 2024 10:36:16 -0500
+From: Oliver Crumrine <ozlinuxc@gmail.com>
+To: Stanislav Fomichev <sdf@google.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: remove check before __cgroup_bpf_run_filter_skb
+Message-ID: <cjpbt7mytlmzq7gggvzkyvuglta2nknx3p5ab65y5feb5duyl4@ckej3n5szda3>
+References: <ngc7klapduckb67tsymb3blu2wlmdsjo4pa4gbaivgxezbwzxp@v7akqu7gbwl4>
+ <ZcV1GgitdBUIcKJT@google.com>
+ <3htegzrugq4xwlizizsaku6g2pzwhndcnxxxmji4fvblisiuro@icvcsa3mky3w>
+ <ZcZ2ObDxRwZ-hKLb@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] net: remove check before __cgroup_bpf_run_filter_skb
-Content-Language: en-US
-To: Stanislav Fomichev <sdf@google.com>, Oliver Crumrine <ozlinuxc@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, thinker.li@gmail.com
-References: <ngc7klapduckb67tsymb3blu2wlmdsjo4pa4gbaivgxezbwzxp@v7akqu7gbwl4>
- <ZcV1GgitdBUIcKJT@google.com>
- <3htegzrugq4xwlizizsaku6g2pzwhndcnxxxmji4fvblisiuro@icvcsa3mky3w>
- <ZcZ2ObDxRwZ-hKLb@google.com>
-From: Kui-Feng Lee <sinquersw@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <ZcZ2ObDxRwZ-hKLb@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-
-
-On 2/9/24 11:00, Stanislav Fomichev wrote:
-> On 02/08, Oliver Crumrine wrote:
->> On Thu, Feb 08, 2024 at 04:43:06PM -0800, Stanislav Fomichev wrote:
->>> The check is here to make sure we only run this hook on non-req sockets.
->>> Dropping it would mean we'd be running the hook on the listeners
->>> instead. I don't think we want that.
->>
->> You are correct that we don't want to run the code on listeners. However
->> the check for that is in the function this macro calls,
->> __cgroup_bpf_run_filter_skb (the check is on line 1367 of
->> kernel/bpf/cgroup.c, for 6.8.0-rc3). The check doesn't need to be done
->> twice, so it can be removed in this macro.
-> 
+On Fri, Feb 09, 2024 at 11:00:09AM -0800, Stanislav Fomichev wrote:
 > Maybe we should instead remove "(!sk || !sk_fullsock(sk))" check from
 > __cgroup_bpf_run_filter_skb? BPF_CGROUP_RUN_PROG_INET_EGRESS makes
 > care of all those corner conditions. We just need to add those checks to
@@ -97,7 +80,6 @@ On 2/9/24 11:00, Stanislav Fomichev wrote:
 > 
 > Let me also CC Kui-Feng, he was touching this part recently in commit
 > 223f5f79f2ce ("bpf, net: Check skb ownership against full socket.").
-> 
 
-Adding those checks in BPF_CGROUP_RUN_PROG_INET_INGRESS makes sense
-to me if the point here is saving CPU cycles during runtime.
+Completely agree with this -- it would be best from a performance
+standpoint. I will send out a v2 of this patch in a few hours.
