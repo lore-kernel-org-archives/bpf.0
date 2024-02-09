@@ -1,157 +1,101 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C611805F;
-	Fri,  9 Feb 2024 21:59:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD119364AE;
+	Fri,  9 Feb 2024 23:01:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707515970; cv=none; b=TvjfGFGEdG7y7meMmV47Yka/O5pYqtnd5oSB4BMyUh/hBJ/ZLGjbXEkGOp8bieDmoM2+z8sIjcHASpZ2/GcCDSZQSO03wwXaRtfQ5EvsqHCfn44AvSGu6jsXkPy+th9wizMVa5/fW8tiET0+rYekjYTi789KrwK8IVAdom1BBfw=
+	t=1707519667; cv=none; b=nlvQOW3B+PScDSdCq9vHqu3nMxQW9YT6+X3dM/aSuBI9JeQ1L67JSCrrPRl2rGI31UIYLBVJ9GEhxz04Q9HMNupA1Dmy/8Kg6cy9yGN8kB45tNp95tT9eWldQg4uU9gpsm0dw8TowQoaQl/mTK8b9tMQDDadXZWowdKla129i2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707515970; c=relaxed/simple;
-	bh=RXhRagBEmxcAWAdk66koZjCY6GUUlZi4pspGJ5Vbzp0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=qI9AstF2EGvhe7d5nKt5LUHhBdQce7iSwBIXnxi7rxRBQ4GYqtK4BmyrXfcH37ccs4fYJL4nZOZkotP2urV5wQzngEwOmJzrsbjNFCQGblA/MDnh4ZDGUfQqspp4LZZcsUv+BB9XKJdbBMwys34+KqYV+RGiZmvGwibL1EHhnx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DhtswKwt; arc=none smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1707519667; c=relaxed/simple;
+	bh=f/s6qNu01ILKzMwDnVjntUiAteO3NPuo/Rty/dlQ9Ks=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oLdxlF7FqNPiul8BD/xz20fnB9ef3xU3ky1ZeRvuxWOI/i2f/HUiengzF3DOMPrq3CKnJ3oGbuNxlMg9IAn5qnbOUV7YHDKOyRhU0nWIa5arwXO7lUHRWPsYmtsnnHC086+reZNDb9Y9vyKdhoXxQq3JGZg+IjXyFTE6R/Fvsos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=OXm3sJna; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DhtswKwt"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-42c3a75c172so9837071cf.2;
-        Fri, 09 Feb 2024 13:59:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707515968; x=1708120768; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tK7fVyjGu887guJVNi6Q/bCg6d8p04V5VmJM+r28A38=;
-        b=DhtswKwtYO0LXYOufodEYSyCt0QgP9dKpvunDL9U0bCJriOj29vtsRgBktmnY7bxaH
-         zaeoQCMwBHQv1u/hnaiiylOf0qOWOqPjOh4g96GD1Y9/lhJzSwdw16YuKRYj2YLCxJVA
-         R8EurnRbRFqFcPPASdZ1flEq7IMx5zFJUnJe2/UXS5YrwRkGU8uJ9mvW5ut2en0bPayR
-         1ZRvHyPturrRGYNBbB/ASaQNa/0xmQRdkewJX1+MsNh1GyaNJdN1IKOIQ3eYohJSHaKx
-         GcIBrChKdERm8chT4C07ANyeVB9xTRVhmMb+rWUW1qNulbnOJX1j2h6200J2lrMGsZtb
-         E0yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707515968; x=1708120768;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tK7fVyjGu887guJVNi6Q/bCg6d8p04V5VmJM+r28A38=;
-        b=vzPNJBL2yuXsaM1xMrDtWQJ+HNrGcYXDpbawup34zD5U2G0CLOiwkwltAiaCxBqsmV
-         MCzrpNxdM70JSn458UGwgEarBXlOyKaOygEr4TbV+dCvYk5LX0FminG6i1EaAtgBpNSv
-         sfC+cTr/Ofhm9NqCXXmDap4rjuMxl6uuwU0azPoeHbQ3kjFRKrxKy4sA05/Qo4JGK+jn
-         0il4wt6M8DwUyyTXX3f72gb8FzDXRP7WVh3O/3nh7tP6fe5hQQZ8nnhISFTVa8SNAImJ
-         sKKHsY/5xoSzGSzKVCaTojn6qK37Opy++XkXA3uH9LYNbwMs3ZwS/gFRhsV15PZqXGIM
-         TM5A==
-X-Forwarded-Encrypted: i=1; AJvYcCU3jvPLuI/kF2kQ5peosGDaspJPHGbd0JbBfqEwKf4MJATqX3AYa67AUap7T5SFp6fSQZfPA01UPyJNVQBveuo40C3bpPuxnXdUQdoL
-X-Gm-Message-State: AOJu0YwwHod4fl36efOmbsED5SMs+wJf60ME8P0vDUkQNSbXlUJJ5Zft
-	y4TFLckxlELNXQvNtwPlLjugQrO8acq3VAh6g16KeTKkFYQOgqR6
-X-Google-Smtp-Source: AGHT+IH/X5qewuwE5hTAVtdoV6q2wL9qUEHsL8ep/L5fZ2BFYrFJw20FXx+8c62p93twGhLif6X6Cg==
-X-Received: by 2002:a05:622a:c5:b0:42b:f341:f8aa with SMTP id p5-20020a05622a00c500b0042bf341f8aamr526958qtw.21.1707515968168;
-        Fri, 09 Feb 2024 13:59:28 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWBTjDRx0bT3Hl1WGYI6wh7E2pWW1vYwr/pfl1HubkoXVFu5A3Axd32R9owUk2XXfS9WZC78Zvr4B7Qb4QpvYT8qbNTAj1jyYn/xA4uF8hihQsr+HmwEabF2aFLl9XGQrYMmXdatxS+1UMvKxVaxq242JwOC9YYJcgPU8J2XWz9WH0Dewk9XMAbp0Dkp7w5oWTPyOjbGppty4yO1XmSxq0AYs3b7AYRpc97M8lharxigznuhUXnMhGv/cF3nhtDdf+oYEIjlHsmoHKw0gJWYsEx5v+HmBV5/felWmOE38jwJq+i1bxsD4+0LFR1RXneONTpzUHPY7A24Gkhk7ifWT50ShlUo+O0FLhewVUXb8qvzbhQ1vXkSdqiJvBAAprByms4DCgqsP056S73K5uB
-Received: from localhost ([2601:8c:502:14f0:acdd:1182:de4a:7f88])
-        by smtp.gmail.com with ESMTPSA id f11-20020ac8470b000000b0042ab72fd47esm1039844qtp.34.2024.02.09.13.59.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Feb 2024 13:59:27 -0800 (PST)
-Date: Fri, 9 Feb 2024 11:59:25 -0500
-From: Oliver Crumrine <ozlinuxc@gmail.com>
-To: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, sinquersw@gmail.com
-Subject: [PATCH v2] net: remove check in __cgroup_bpf_run_filter_skb
-Message-ID: <adwssgplvtrgagjw5ftcc5ogpq2nz4pp722wzn3yt2jnql6odf@peiwrqaoyil2>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OXm3sJna"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=gmacEVrfRMHpA0+533PB1RmxTePlSp6iAq0RpqSnWnI=; b=OXm3sJna4lSQPcZxFk6OnEORw7
+	xT+pdCOtmocB7lgsq4fifo8HXHZCM8MB77iHgPvVkyATuK93E6oOup88vp/vYGj24EmkolGCdMg+A
+	8V/G/i+lZ2Ei9z4IKebndbi3DfKbVEqxKJ3ndMQEA5N/VaZmh6D55toso81e4e0+5EJpbVpam2j39
+	u0jMvJAlwqS71Z8YXCp8TW8VfWLZmx/Rsm400tn2seunqlz3Xu2+3xgyuAemKuw9n/8qi+51o2VgK
+	0IKdoaxBYR8J3qJm1olZsBLRVJckwgsZ1vlGeTMnpTBT0aqGnl8Coytb/zwqGDHY8iqwfhISg79YB
+	DiQknORQ==;
+Received: from [50.53.50.0] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rYZrU-00000000q1k-1hGw;
+	Fri, 09 Feb 2024 23:00:48 +0000
+Message-ID: <e8378ba2-ccd1-48fe-973d-38986fc0716d@infradead.org>
+Date: Fri, 9 Feb 2024 15:00:44 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="adabdr3lq45rmeih"
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 02/13] security: Introduce the digest_cache LSM
+Content-Language: en-US
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
+ paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, mic@digikod.net
+Cc: linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+ linux-integrity@vger.kernel.org, wufan@linux.microsoft.com,
+ pbrobinson@gmail.com, zbyszek@in.waw.pl, hch@lst.de, mjg59@srcf.ucam.org,
+ pmatilai@redhat.com, jannh@google.com, dhowells@redhat.com,
+ jikos@kernel.org, mkoutny@suse.com, ppavlu@suse.com, petr.vorel@gmail.com,
+ petrtesarik@huaweicloud.com, Roberto Sassu <roberto.sassu@huawei.com>
+References: <20240209140917.846878-1-roberto.sassu@huaweicloud.com>
+ <20240209140917.846878-3-roberto.sassu@huaweicloud.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20240209140917.846878-3-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+Hi--
 
---adabdr3lq45rmeih
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2/9/24 06:09, Roberto Sassu wrote:
+> diff --git a/security/digest_cache/Kconfig b/security/digest_cache/Kconfig
+> new file mode 100644
+> index 000000000000..0c47d5151f07
+> --- /dev/null
+> +++ b/security/digest_cache/Kconfig
+> @@ -0,0 +1,17 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +config SECURITY_DIGEST_CACHE
+> +	bool "Digest_cache LSM"
+> +	default n
+> +	help
+> +	   This option enables an LSM maintaining a cache of digests
+> +	   (e.g. of file content or metadata).
+> +
+> +	   This LSM can support other kernel components in making access
+> +	   control decisions.
+> +
 
-Originally, this patch removed a redundant check in
-BPF_CGROUP_RUN_PROG_INET_EGRESS, as the check was already being done in
-the function it called, __cgroup_bpf_run_filter_skb. For v2, it was
-reccomended that I remove the check from __cgroup_bpf_run_filter_skb,
-and add the checks to the other macro that calls that function,
-BPF_CGROUP_RUN_PROG_INET_INGRESS.
+nit:  -ESTYLE.
+coding-style.rst says:
 
-To sum it up, checking that the socket exists and that it is a full
-socket is now part of both macros BPF_CGROUP_RUN_PROG_INET_EGRESS and
-BPF_CGROUP_RUN_PROG_INET_INGRESS, and it is no longer part of the
-function they call, __cgroup_bpf_run_filter_skb.
+Lines under a ``config`` definition
+are indented with one tab, while help text is indented an additional two
+spaces.
 
-Signed-off-by: Oliver Crumrine <ozlinuxc@gmail.com>
+> +config DIGEST_LIST_DEFAULT_PATH
+> +	string
+> +	default "/etc/digest_lists"
+> +	help
+> +	   Default directory where digest_cache LSM expects to find digest
+> +	   lists.
 
-v1->v2: Addressed feedback about where check should be removed.
+Same comment for patch 03/13.
+Same comment for patch 04/13.
 
----
- include/linux/bpf-cgroup.h | 7 ++++---
- kernel/bpf/cgroup.c        | 3 ---
- 2 files changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index a789266feac3..b28dc0ff4218 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -195,10 +195,11 @@ static inline bool cgroup_bpf_sock_enabled(struct soc=
-k *sk,
- #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)			      \
- ({									      \
- 	int __ret =3D 0;							      \
--	if (cgroup_bpf_enabled(CGROUP_INET_INGRESS) &&			      \
--	    cgroup_bpf_sock_enabled(sk, CGROUP_INET_INGRESS))		      \
-+	if (cgroup_bpf_enabled(CGROUP_INET_INGRESS) &&			      \
-+	    cgroup_bpf_sock_enabled(sk, CGROUP_INET_INGRESS) && sk &&	      \
-+	    sk_fullsock(sk))						      \
- 		__ret =3D __cgroup_bpf_run_filter_skb(sk, skb,		      \
--						    CGROUP_INET_INGRESS);     \
-+						    CGROUP_INET_INGRESS);     \
- 									      \
- 	__ret;								      \
- })
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 491d20038cbe..644bfb39cf9d 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -1364,9 +1364,6 @@ int __cgroup_bpf_run_filter_skb(struct sock *sk,
- 	struct cgroup *cgrp;
- 	int ret;
-=20
--	if (!sk || !sk_fullsock(sk))
--		return 0;
--
- 	if (sk->sk_family !=3D AF_INET && sk->sk_family !=3D AF_INET6)
- 		return 0;
-=20
---=20
-2.43.0
-
-
---adabdr3lq45rmeih
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEE16z70XZtqMhb/BJHifZEXNYDnHAFAmXGWekACgkQifZEXNYD
-nHDFsg/+LFfMdY0hV8/Lf6dT3g9oo2CJ78Flqg6d/Moe0kEEjcVwnFkfjxFwH//T
-4Pw7Qvwq1YQ6MVqL/KAZHLUGiVQuQZEnzHtHwSYOgShdfesbDVq/ang3XfrST2ZQ
-qlx6QqvCEYWpfjESgjWC6e7SNxoPuSkNrpWOJsZYvE9ZWCS3Ppc7V350EVKUmvTN
-lKEwidgDSbZk2rZZKozpVhJya8vyUsJ5OXAkNfZWDetiN2syfEPXS49I/svaF3Jh
-Lk4DUO6/6lDhcr4vQUnvZAb672HOPmqlRR5Mh9K/DX+0kkwWjw+l22SS1j4Iatkj
-Z5ctMLPGXgKwV26TZeSzCJ/tEl4/tdsTUspQ1fky/G9JBGRGhx3tmusHSqZpKJjF
-daBULbrYMNsrYoLAE8jk16JSOO3u4CYDJOGaFiKa7hyqPbduKI1D/7kKoKmUHTJB
-3U3C5VFfQBulcf8wA+bH5hkbWz7+RC7YKhM1Orfb598pQOpdsX6ljf+EQxgO0hOd
-siMb0T3HonoAnZEhtp77xqWrTxc9gWpTkfuyrjrk0r6I8BI4YBK9PqplhvCSu5eN
-sXzIA2L5V6eKQ2+9vi2W5Ehpx9RZMvSplFewnXzdbZJvKeKZfAGE1kKzEMHxCE1I
-WmDzzrv7B9LtCEhmqrpyvyTv0xcSQxj3p8wBBwvq8ninBuwEYWQ=
-=qSMx
------END PGP SIGNATURE-----
-
---adabdr3lq45rmeih--
+-- 
+#Randy
