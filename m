@@ -1,65 +1,65 @@
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C6B2185E;
-	Sat, 10 Feb 2024 00:47:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60912EAE8
+	for <bpf@vger.kernel.org>; Sat, 10 Feb 2024 00:49:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707526063; cv=none; b=VxgaPaVJpR62rkjZeCKb37MBDPG3AUOvgc+yfsT6jVRQWCj0PkbF145MImJSMdSvwx++gqCIKGMB4zWl3bf2upvDVXLxFAkDHV3ObI5PQK762nbZ3BzegW8YdZq9+i6gNqoHlxgeiCaL32PA7ZRjw6xbd1ADJlAXNtMo52PP94w=
+	t=1707526142; cv=none; b=nD+yEQViQXHWxbeT+qkjnBjkLTKv3fj34BXaPKT3Q9RDD/IgwCOaLYo91irEy0vXdXxGdCN6fpb1Xx03mYARmHYcGYFfjE1LGgm0AtkO2QrwNu09ucM9U5nGAOQn8YEiJ251c4mOuqybvNhImYHMo1YQTL+BkulzY/bxvMDn5UQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707526063; c=relaxed/simple;
-	bh=3GkM8TGREygwBB1OKJjChwJhWO6bfKjIxm42ycxuJ+Q=;
+	s=arc-20240116; t=1707526142; c=relaxed/simple;
+	bh=hrEhIt0za4zXX+4YcZvr59C24AojcEa8uuOYHTznHjw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LOK51zeCaYHN/h6AFe1UuCni190AWgizvcL6pFexKTKpCqIDfvcaleoI8mTCQC1o+8yDXNIWSBCkpAfpY3+LP1pFmu9m+TBf81L97DbOtfSLI0P97oKUOh5D6tAR1h98u2CbyOzUFNyaaKhIC8zg1Z0J0QGou1ruJfaMk3Folrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L/NAL2NX; arc=none smtp.client-ip=209.85.222.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=uIqI6jjbZe+Lra7p7dEFNx32lzc1uAEz+H/vUKO8W4iVAPJ2moKj/lpLavs+mVFO5MiwsyuZl3DrAeruv8Y1HW+ZRO8haftHQOKdEH831NYL38t9Nl/Hy1OGKJyYHJcUfhUsTFpFHeKlGBsHC9yHEgVXJSNpNPGwSZpp9LRQkWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=hlUkaadt; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L/NAL2NX"
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-783dc658bd9so72364685a.1;
-        Fri, 09 Feb 2024 16:47:42 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="hlUkaadt"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1d9bd8fa49eso12410135ad.1
+        for <bpf@vger.kernel.org>; Fri, 09 Feb 2024 16:49:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707526061; x=1708130861; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1707526141; x=1708130941; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3GkM8TGREygwBB1OKJjChwJhWO6bfKjIxm42ycxuJ+Q=;
-        b=L/NAL2NXQH20vzpZkUHK6lVI7hUwSj8UqM2f652dcFNjgy9cHHAyFrF89IewtI5DLE
-         48LzeX3esmvDrTkto9Jy1bO9iAcyTi7lFg4d8r1oZ97VpZyPJG2hCCtuIgrb02JIWuph
-         fgaehnTkm3cRWhREzj+0JdWLHcoXjwfsXkaC3SyFDmWTcCgoaEFpDkoBmD8o3YBxiDlF
-         FO51hVpiXzPx24WubRV5C6tfFgDMzayD7bzpWTj4TV+yzPGbOT8dwO69twecrIIkJTK9
-         LgJzMLN2sbHC646NeI8SmoXuPfejjwzM14rgoid60MW3U47YjOYs3hFLgo7R1Wa+UHzM
-         6Z9Q==
+        bh=xhIOsBixkq6X+I5UtLFYmEvlA1q4nQi2Uk71zOMtrW4=;
+        b=hlUkaadtwYDpofzNbUrSFlSfW4QPT7DehDRAeXEGwQQ3YKAh66LeMQaUf2u9raSBwn
+         hurC/Y7sOQ+PyWV+fz8A00w2KaTAkkTpfRfGrRJBRjzFcJS5yHvRT6785IFQcq8W+1Im
+         oZ6oZ7XLhZ4RIPUMEq1o6d2SowNNHktGoh4OI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707526061; x=1708130861;
+        d=1e100.net; s=20230601; t=1707526141; x=1708130941;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3GkM8TGREygwBB1OKJjChwJhWO6bfKjIxm42ycxuJ+Q=;
-        b=tG4grdWoLFau62jIAjpBfaA3WJis7KE653PbZWAgYOu8LQuQSOOiLypoAN8XqPD29E
-         N6pBWTY+KzwPARix+m4Y+EcxeTlWjBmUpDeD8kXv5KLRA1T8fTTFseMRLhOlhmm3kW+/
-         Ii5IS6ZwnB3q5GTYFj9J3bfmXkU+rciVTH1h5Wvhci4dfvaMUuJrGiYigzIT11XHKp7N
-         HY1xVk7xDTh9/imdrIH7zFtJ09kr23VVW7n1jA1L8ckwtbYZ+IxDzLa7lbhXioUoWgqC
-         KjW1UjXatFFat8NYyLa9oExWh73MfRxCboVB+5G8MG2mTnSS6nXQwjpe+5v7Lwrtdb3b
-         A0nA==
-X-Gm-Message-State: AOJu0YzNoUM7+CXa2Dp4du88lqrV1XhSP5c4DkqTwfOU2vgZA1e7IZDe
-	w7SqDdIcFZB0mD9F/TKpfGsGf6ZH0JNXJDapwL9q5Q2/W3bimU8N
-X-Google-Smtp-Source: AGHT+IEiS2PSanma8pRBIGOiyOV6412n5dDFOflinxf+2y5W7ZlHiwSDwM6Zt5PtTSKWQgA5kQa1cQ==
-X-Received: by 2002:a05:620a:4e:b0:783:f7b0:375d with SMTP id t14-20020a05620a004e00b00783f7b0375dmr957691qkt.70.1707526061337;
-        Fri, 09 Feb 2024 16:47:41 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU7gPGXLyOKCP8EfUdS24xzv7mM/YMcqNnGU21HT+mfX0SoqikCwgJxtRrHq7Xx5cWwWBf9rXicClDOWNUvLpu8X8Azc07uNkFvUSKJ
-Received: from localhost ([2601:8c:502:14f0:acdd:1182:de4a:7f88])
-        by smtp.gmail.com with ESMTPSA id qb1-20020a05620a650100b007858a9032c8sm218107qkn.24.2024.02.09.16.47.40
+        bh=xhIOsBixkq6X+I5UtLFYmEvlA1q4nQi2Uk71zOMtrW4=;
+        b=ZCTUPl4bRN7Jc8Y1Nto/vmc2sqUNg+ZxtWR2yKzfoTgQYwIswe133JGhlHDcbR8LNY
+         rf3RvUSpkNqqcDItob3jGurmYFyyBJs7C0MYaWsNNQOWHBQzFA10v3hHAiqfN+Tvj+MG
+         gcrPnN7OrBJaiFk+AZe8mFgl2oIWudeEAB/LlR87ps6HiGyoewayPvGbVD/AHIi/HsBp
+         73naanudcE4kjpA8HcjuotD9HLutAbj9cJ6C4tcLsYDzH/vSIJ34vACFv0taYFP/Wbvg
+         ZZH6WjGOpITD8vk5bx9dGTlA+wGOHsdqqubtPc+p/2BXcUq4SPYy3doaB53FXm48h4xe
+         TXpA==
+X-Gm-Message-State: AOJu0YzJrvQ/8XcH60gq9BVWzhsLmJr9NNRGNx33pWbryls19OYQHo9J
+	x0eU83cIyaK5WWQnH9peGfE9LAP5bjOCf6gaGDJ4lulRTeIpGMg8qBaaDmCNaA==
+X-Google-Smtp-Source: AGHT+IGqFQmp48EV/HeK/ohKlHb7zxUA5fEEZHeG+9UTzYyujZAJTn94wWRhwDxrqBopNav53lCKsg==
+X-Received: by 2002:a17:902:ea09:b0:1d9:b8cb:3665 with SMTP id s9-20020a170902ea0900b001d9b8cb3665mr1167619plg.36.1707526140735;
+        Fri, 09 Feb 2024 16:49:00 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVI0SOI2E3VC0AE0of9/MYFRR0yVYQzthkFmv0JW7fA/SJQhhnnI3Nj5OEsNvrtNcdRFhHpOf5u+C3DGYEj7y1QmZKG9DqmJxhSLGKUmKRtiym081eBwXvmlPvnPoRFbYozaBCVcEzpfdzvKL5XsE6na+cvYGSIz8z/iw3GGz5NgMjZyC8x1ylmlUU500p9eC7PsDUz3qdjaUJ4lDemv8WJ00f0xgTx30k9IBXOA4ukuDuItip5wN0tqF2XRRURTeOK4zFlkc/U1xMHtLiGXHCiJxbOfRkGuI6qbhSgFvTKnpkPDxwJIq+B0WYaKEtx/pSF/bhP69oEmAjzAfeoA5ZDA9/FFXosjMJlFihIuYBkey/d
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id h3-20020a170902748300b001d9eef9892asm2062122pll.174.2024.02.09.16.49.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Feb 2024 16:47:41 -0800 (PST)
-Date: Fri, 9 Feb 2024 14:47:38 -0500
-From: Oliver Crumrine <ozlinuxc@gmail.com>
-To: Stanislav Fomichev <sdf@google.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 bpf-next] net: remove check in
- __cgroup_bpf_run_filter_skb
-Message-ID: <e2po4x54ouafemogi3uaft2i25qieamr7oizisz5gutcfyzt4i@zyrbjb4cddfs>
-References: <5ac3e6uwvhdujq6tywb6b5bh5flqln6d7kedmcbvhyp55jp4yo@65pnej6e2ub6>
- <Zca80Uetl26BsICU@google.com>
+        Fri, 09 Feb 2024 16:49:00 -0800 (PST)
+Date: Fri, 9 Feb 2024 16:48:59 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: masahiroy@kernel.org, nicolas@fjasle.eu, ndesaulniers@google.com,
+	morbo@google.com, justinstitt@google.com, maskray@google.com,
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] kbuild: Fix changing ELF file type for output of gen_btf
+ for big endian
+Message-ID: <202402091648.2B8D95062B@keescook>
+References: <20240208-fix-elf-type-btf-vmlinux-bin-o-big-endian-v1-1-cb3112491edc@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,13 +68,46 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zca80Uetl26BsICU@google.com>
+In-Reply-To: <20240208-fix-elf-type-btf-vmlinux-bin-o-big-endian-v1-1-cb3112491edc@kernel.org>
 
-On Fri, Feb 09, 2024 at 04:01:21PM -0800, Stanislav Fomichev wrote:
-> The bot still can't git-am it. And I can't either. Did you somehow
-> manually mangle that part above? The original line has less trailing spaces
-> than what your diff source has, look at:
-I literally saw the bot issue and the spaces just before you sent this.
-> Can you drop this part? Let the idents stay broken :-)
-Just did. Didn't manually edit the patch so I don't exactly know how
-that happened, but thanks for pointing it out.
+On Thu, Feb 08, 2024 at 01:21:06PM -0700, Nathan Chancellor wrote:
+> Commit 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
+> changed the ELF type of .btf.vmlinux.bin.o from ET_EXEC to ET_REL via
+> dd, which works fine for little endian platforms:
+> 
+>    00000000  7f 45 4c 46 02 01 01 00  00 00 00 00 00 00 00 00  |.ELF............|
+>   -00000010  03 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |................|
+>   +00000010  01 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |................|
+> 
+> However, for big endian platforms, it changes the wrong byte, resulting
+> in an invalid ELF file type, which ld.lld rejects:
+> 
+>    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF............|
+>   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+>   +00000010  01 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+> 
+>   Type:                              <unknown>: 103
+> 
+>   ld.lld: error: .btf.vmlinux.bin.o: unknown file type
+> 
+> Fix this by using a different seek value for dd when targeting big
+> endian, so that the correct byte gets changed and everything works
+> correctly for all linkers.
+> 
+>    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF............|
+>   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+>   +00000010  00 01 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+> 
+>   Type:                              REL (Relocatable file)
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
+> Link: https://github.com/llvm/llvm-project/pull/75643
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+
+Yeah, looks good to me.
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-- 
+Kees Cook
