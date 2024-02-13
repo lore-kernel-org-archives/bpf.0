@@ -1,230 +1,219 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6572D60266
-	for <bpf@vger.kernel.org>; Tue, 13 Feb 2024 17:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11F15FF1A;
+	Tue, 13 Feb 2024 17:53:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707846714; cv=none; b=bAOFKc4mfqNK02YTyEnbygC1MewFKmYtVN5F0PgcyTtgR3/bsQJWk47ekW2UDKiR19XZ906WD/wXFgso0sjFDTJ39Ma8Nd005ksNzwUNWCVRfIUJR9l6PHihY8H8uQa4QlL5G+tUYklXLKhQk0Ozpd16o60YnfpB47so7xCjrcM=
+	t=1707846816; cv=none; b=CmyehDEm0Iyivi0RaJoSpi7FPMJr1qovghkDHICniYCfSDb0Vnx31EPhPqXq095Vx9z7STIa+1xvnaCEJ82eJiXaBMKN68i36dYa9lS+OkHEI159mT7ayiNFiAYCrSzfTKhcgnabLShQVspt8441zkO1VqTdqFrHNRVHv4tBOXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707846714; c=relaxed/simple;
-	bh=8FzUQOE5Jot2BOmqHVlAcg8ZWShUOCnovDAh1nEwaNc=;
-	h=To:Cc:Date:Message-Id:MIME-Version:Subject:Content-Type:From; b=D6exxDKxjY/f+OG4NmhMAKIxbfiOihohz0kmLWcJu+KrJ7DF/FvIOnrahNcfnUPwFO8bCgo9D9zjq2TYPo0UKL7bSWzHsNXPhFMDaBfN2IW40vmMvedSlfwZSuSJ6bHRyq+fWvN8kvL8/EDOd7839WAngNUt5OPjfS1dzjt2rjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dmarc.ietf.org; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=Cz8U0CN9; dkim=fail (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=agJJ3tDy reason="signature verification failed"; dkim=fail (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=ELOYrGph reason="signature verification failed"; arc=none smtp.client-ip=50.223.129.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dmarc.ietf.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="Cz8U0CN9";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="agJJ3tDy";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="ELOYrGph"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id BCC9CC18DB88
-	for <bpf@vger.kernel.org>; Tue, 13 Feb 2024 09:51:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1707846711; bh=8FzUQOE5Jot2BOmqHVlAcg8ZWShUOCnovDAh1nEwaNc=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Cz8U0CN9whT77XYuFmPoVDM94DtIUblrxUQJ+436lRjjOv0wOSFDeaBLc6C04tR1j
-	 tEeKDy01dcGy2pURdN6FC0oasQx83+w9twdafGhxgi+AaCslrM37Afxqnf0wGhwHz1
-	 OWnl9lb5uwFe1BKMJDNznkzmAB7sNXek6ekONOOo=
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
- by ietfa.amsl.com (Postfix) with ESMTP id 5CFEFC1519A5;
- Tue, 13 Feb 2024 09:51:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
- t=1707846711; bh=8FzUQOE5Jot2BOmqHVlAcg8ZWShUOCnovDAh1nEwaNc=;
- h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
- List-Post:List-Help:List-Subscribe;
- b=agJJ3tDywfQOPeCgwOBGdUG5qjrwFH7PNdG92SDAp2UmLqW+aaiLCLvMq45ieHSha
- JXoU8x9EvAOuU50xzDq8jSufLmRlZ/z49dKx3KDli+XSczMREk8DpVbC1O2YNgKc5M
- ZacV8+KlSdF+Um/P4diZIojR07OUDqKQWcA0GxYU=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id EDE60C1519A5
- for <bpf@ietfa.amsl.com>; Tue, 13 Feb 2024 09:51:49 -0800 (PST)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -1.855
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=googlemail.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QlCxO8msGNN6 for <bpf@ietfa.amsl.com>;
- Tue, 13 Feb 2024 09:51:45 -0800 (PST)
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com
- [IPv6:2607:f8b0:4864:20::531])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id DC47BC1519A2
- for <bpf@ietf.org>; Tue, 13 Feb 2024 09:51:45 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id
- 41be03b00d2f7-53fbf2c42bfso3452696a12.3
- for <bpf@ietf.org>; Tue, 13 Feb 2024 09:51:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1707846705; x=1708451505; darn=ietf.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=xP4JsOS2OzdsWVGPv2viY9EHxIt/q541G/godrI0sxc=;
- b=ELOYrGphI75pqy/E0estbpJ3yIRQWquXD5mIjug/wlW+lbA+eKP+QuV4XBiYGlJWxl
- eakux53Pn01l8Ys/Fgw3POKcLsT8lyi31dYegDTagtc7b7Z9K6WGGVm1Tozs4E9XdyMz
- 8Gu4RIoLtMQar0U9JhwsKz976qY+p7EAPzOzmQR2UsAaYGKN7yWvbsVrihwt8uROEhti
- 9hrga8XbTLKCuFxBrI0HxVjPMi3MXdSTFvtDK+Fm7DGfBfPL8nLv+m9dZ1TuwC74gXhq
- JHLSQTL7xba+fCAM0RhUE8HcgCeC5o5GNrmxwkXRIuRgbThirv0ljyUQvmEv3nwlhs/J
- 2TQA==
+	s=arc-20240116; t=1707846816; c=relaxed/simple;
+	bh=7WcguzORNUncVMI8yVHuEyVH6gHiNRJ99ytpWlcFL3k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VFPulARuy5GG+2UZfnnTrY2phOCEqMJpJCPIPijJI1mFkHFIqdSUsa3NpJmDZI4kzngTrXt55TB+kJpEP/NJtC8vsJ4CeG6YEl+ecW0v7/cQFXJe7ae8pYICeeQJNLbgBLZq2CVrwWF6fC2Q5QbOnhZRLyENeM1uStXNsE56yeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-5ce07cf1e5dso3560604a12.2;
+        Tue, 13 Feb 2024 09:53:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1707846705; x=1708451505;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=xP4JsOS2OzdsWVGPv2viY9EHxIt/q541G/godrI0sxc=;
- b=Te6h+pKb+O+UJiP2DpDvYJ8tnr+cb3pxZdYTUaEFZ3m5WYPuAT7thuDzV7WUNJOi2H
- vd8EjWtjdr4E+UOGEm7o6vG9hweBdoII2GoI8iWPoYcbovB3VxglWBTaNKp4zWJNTRfT
- d1LFFCPS8fJeD5lIfLa0BNJPJoqI6/eupGrfDcoA3m1B0O5YVeqItvGuMYWA/+8sw4Kt
- yKbc3/Nd+A/vPkIVT6wXtIFFw8kDbA+KALErPO/2jYGCGTYLE+sv5ULJk4K3FSPZ5n1V
- 5q74YKlZujGr/WmaKdOuprLMKa88yrVWv0rPhrN8WEOhlCBg+s+RM6oGN4TYRTcIT23b
- LBKA==
-X-Gm-Message-State: AOJu0YxvN2Xi83CgvmpaJ8cuXicTjN/jjw/1gvKqWYhOdiLKpALV2JZA
- b3vpB2teMQjZaIfYaiIXYSInKWQiz7gaTsyZCwR58aNSC8MghEIs
-X-Google-Smtp-Source: AGHT+IGb9/b3CiFodftXfJfR1UvsvqZa1aD1kL4rcHsyjo2Km/tOC59Fo60EhN5tp/KiBhtXuHLqfA==
-X-Received: by 2002:a05:6a21:3183:b0:19e:425e:ec56 with SMTP id
- za3-20020a056a21318300b0019e425eec56mr369548pzb.24.1707846705010; 
- Tue, 13 Feb 2024 09:51:45 -0800 (PST)
-X-Forwarded-Encrypted: i=1;
- AJvYcCUIBuICiQmWto6Dmhmg3vyltLZZRerONcXcm6zhUGN0oj8XpGR63Ej42YYHvAITMHDgUGHg5IhTVQwBQeOvaFS3O0W1lRM=
-Received: from ubuntu2310.lan (c-67-170-74-237.hsd1.wa.comcast.net.
- [67.170.74.237]) by smtp.gmail.com with ESMTPSA id
- u5-20020a056a00124500b006e03efbcb3esm7600905pfi.73.2024.02.13.09.51.43
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 13 Feb 2024 09:51:44 -0800 (PST)
-X-Google-Original-From: Dave Thaler <dthaler1968@gmail.com>
-To: bpf@vger.kernel.org
-Cc: bpf@ietf.org,
-	Dave Thaler <dthaler1968@gmail.com>
-Date: Tue, 13 Feb 2024 09:51:41 -0800
-Message-ID: <20240213175141.10347-1-dthaler1968@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        d=1e100.net; s=20230601; t=1707846814; x=1708451614;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jIAYX2by5VkQGQHZUnXlAIcJ91jHMtAdkIYxHslLShk=;
+        b=GIOl3Sa7sIotJN2x0eqwE3AVPICmLFiM3IuAHdp0szAgWJybgpKNwLtzpCX2nBT/jk
+         hTDJLZnuypxczgjgbDSorE2fRP1CMKQCDZ07gp/FqMbSCxfLW/Mwvf3crGP8lX+VuzLS
+         +KWbJORmtQJe5ksx4GEUja99NXESkNTJPxSCUxunyAhEIKPemdUB10Ve3YNssZl3Guy7
+         dZvqifJA4aPr6vuQf7hi5CUWT7uMPQi2IVCbZAv6REvKGZn+Zv1Uj8xZ40H5dnLLmVAk
+         A6VMl50K50rC7FVBEV79KUeQAj0pXrOFcpSoQAVZXYKPG7vmTeeOz2YxTJZVTk/+mUTW
+         8RlA==
+X-Forwarded-Encrypted: i=1; AJvYcCUxVtfvAvV2MVOU4+TaJvC9BNjlSSzlN2uOdyqe0yKVT6XeOkXLapZ/npd0mq3Sw/8xAx5oTfShJLeiEWHKF1AUpivj4MmLCZY9O79JxzYKXk7UnTV5Pw6ejLSpZ0ibrI1rfFLLoccb89UfgjH0pXjjD1JmbnbLPDnuK8lNuxrpv032XA==
+X-Gm-Message-State: AOJu0YzbsdCjDU4kRq5WbCWkbGvjys1rxzzc/4bieu9fa72P5tGAu6TE
+	nj70df0MZOwFHTdENEViRwlVkEfXRdBzszyhPe1pebZZtbfk4hMQwgj9m4qQT6/prY34OkRMQHM
+	P8kKOnM4GYL4fjoG635uXU7Og2Lw=
+X-Google-Smtp-Source: AGHT+IG/7yPnHipxkvG4GDwHRmNgX66LCK7NFEi9SYooQTwor/KSzpLbexwipqs0oK/vZHTUoy/+Fp9QbVLRF1qnt4I=
+X-Received: by 2002:a05:6a20:21ca:b0:19e:a9bf:d51a with SMTP id
+ p10-20020a056a2021ca00b0019ea9bfd51amr272928pzb.32.1707846813997; Tue, 13 Feb
+ 2024 09:53:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/JzJ06NTMAGIVL0ceP8LrfM_6mtk>
-Subject: [Bpf] [PATCH bpf-next v3] bpf,
- docs: Add callx instructions in new conformance group
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-X-Original-From: Dave Thaler <dthaler1968@googlemail.com>
-From: Dave Thaler <dthaler1968=40googlemail.com@dmarc.ietf.org>
-Message-ID: <20240213175141.3s_6yirK-xNlM0kuwsEWGKlwkKFPsu8yC2nacDHGTt8@z>
+References: <20240207223639.3139601-1-irogers@google.com> <CAM9d7chBixXozCQztM2WKGbfs_8C70vy6ROzKpwLSqq-upz5iQ@mail.gmail.com>
+ <CAP-5=fUVkaq3dDoeMYYEN1N-ghnL-GiP8PV3N3pWpjQKpDTCHw@mail.gmail.com>
+ <CAP-5=fXs8=HvjGpkLwuZBi0Hh8jtmz7=0Tp7HRgU8FOFN0GZvg@mail.gmail.com>
+ <CAM9d7choe-CruqcdkLMPC1Eu4Oca0CBaaq-uiCd=csiLY60NBw@mail.gmail.com> <CAP-5=fXAkbnpKpkCM8soy7pHzCZZJ8VWYrd9ewFtZoaoA6vZnQ@mail.gmail.com>
+In-Reply-To: <CAP-5=fXAkbnpKpkCM8soy7pHzCZZJ8VWYrd9ewFtZoaoA6vZnQ@mail.gmail.com>
+From: Namhyung Kim <namhyung@kernel.org>
+Date: Tue, 13 Feb 2024 09:53:21 -0800
+Message-ID: <CAM9d7cgGGw20t+VqzCd31CDUqo4roihknyH=2+_7CHuFhHh5fQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] maps memory improvements and fixes
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Song Liu <song@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Liam Howlett <liam.howlett@oracle.com>, 
+	Colin Ian King <colin.i.king@gmail.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
+	Artem Savkov <asavkov@redhat.com>, Changbin Du <changbin.du@huawei.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
+	Yang Jihong <yangjihong1@huawei.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
+	James Clark <james.clark@arm.com>, Leo Yan <leo.yan@linaro.org>, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-* Add a "callx" conformance group
-* Add callx rows to table
-* Update helper function to section to be agnostic between BPF_K vs
-  BPF_X
-* Rename "legacy" conformance group to "packet"
+On Mon, Feb 12, 2024 at 12:22=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
+ote:
+>
+> On Mon, Feb 12, 2024 at 12:10=E2=80=AFPM Namhyung Kim <namhyung@kernel.or=
+g> wrote:
+> >
+> > On Sat, Feb 10, 2024 at 10:08=E2=80=AFAM Ian Rogers <irogers@google.com=
+> wrote:
+> > >
+> > > On Fri, Feb 9, 2024 at 6:46=E2=80=AFPM Ian Rogers <irogers@google.com=
+> wrote:
+> > > >
+> > > > On Thu, Feb 8, 2024 at 9:44=E2=80=AFAM Namhyung Kim <namhyung@kerne=
+l.org> wrote:
+> > > > >
+> > > > > Hi Ian,
+> > > > >
+> > > > > On Wed, Feb 7, 2024 at 2:37=E2=80=AFPM Ian Rogers <irogers@google=
+.com> wrote:
+> > > > > >
+> > > > > > First 6 patches from:
+> > > > > > https://lore.kernel.org/lkml/20240202061532.1939474-1-irogers@g=
+oogle.com/
+> > > > > >
+> > > > > > v2. Fix NO_LIBUNWIND=3D1 build issue.
+> > > > > >
+> > > > > > Ian Rogers (6):
+> > > > > >   perf maps: Switch from rbtree to lazily sorted array for addr=
+esses
+> > > > > >   perf maps: Get map before returning in maps__find
+> > > > > >   perf maps: Get map before returning in maps__find_by_name
+> > > > > >   perf maps: Get map before returning in maps__find_next_entry
+> > > > > >   perf maps: Hide maps internals
+> > > > > >   perf maps: Locking tidy up of nr_maps
+> > > > >
+> > > > > Now I see a perf test failure on the vmlinux test:
+> > > > >
+> > > > > $ sudo ./perf test -v vmlinux
+> > > > >   1: vmlinux symtab matches kallsyms                             =
+    :
+> > > > > --- start ---
+> > > > > test child forked, pid 4164115
+> > > > > /proc/{kallsyms,modules} inconsistency while looking for
+> > > > > "[__builtin__kprobes]" module!
+> > > > > /proc/{kallsyms,modules} inconsistency while looking for
+> > > > > "[__builtin__kprobes]" module!
+> > > > > /proc/{kallsyms,modules} inconsistency while looking for
+> > > > > "[__builtin__ftrace]" module!
+> > > > > Looking at the vmlinux_path (8 entries long)
+> > > > > Using /usr/lib/debug/boot/vmlinux-6.5.13-1rodete2-amd64 for symbo=
+ls
+> > > > > perf: Segmentation fault
+> > > > > Obtained 16 stack frames.
+> > > > > ./perf(+0x1b7dcd) [0x55c40be97dcd]
+> > > > > ./perf(+0x1b7eb7) [0x55c40be97eb7]
+> > > > > /lib/x86_64-linux-gnu/libc.so.6(+0x3c510) [0x7f33d7a5a510]
+> > > > > ./perf(+0x1c2e9c) [0x55c40bea2e9c]
+> > > > > ./perf(+0x1c43f6) [0x55c40bea43f6]
+> > > > > ./perf(+0x1c4649) [0x55c40bea4649]
+> > > > > ./perf(+0x1c46d3) [0x55c40bea46d3]
+> > > > > ./perf(+0x1c7303) [0x55c40bea7303]
+> > > > > ./perf(+0x1c70b5) [0x55c40bea70b5]
+> > > > > ./perf(+0x1c73e6) [0x55c40bea73e6]
+> > > > > ./perf(+0x11833e) [0x55c40bdf833e]
+> > > > > ./perf(+0x118f78) [0x55c40bdf8f78]
+> > > > > ./perf(+0x103d49) [0x55c40bde3d49]
+> > > > > ./perf(+0x103e75) [0x55c40bde3e75]
+> > > > > ./perf(+0x1044c0) [0x55c40bde44c0]
+> > > > > ./perf(+0x104de0) [0x55c40bde4de0]
+> > > > > test child interrupted
+> > > > > ---- end ----
+> > > > > vmlinux symtab matches kallsyms: FAILED!
+> > > >
+> > > > Ah, tripped over a latent bug summarized in this part of an asan st=
+ack trace:
+> > > > ```
+> > > > freed by thread T0 here:
+> > > >    #0 0x7fa13bcd74b5 in __interceptor_realloc
+> > > > ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:85
+> > > >    #1 0x561d66377713 in __maps__insert util/maps.c:353
+> > > >    #2 0x561d66377b89 in maps__insert util/maps.c:413
+> > > >    #3 0x561d6652911d in dso__process_kernel_symbol util/symbol-elf.=
+c:1460
+> > > >    #4 0x561d6652aaae in dso__load_sym_internal util/symbol-elf.c:16=
+75
+> > > >    #5 0x561d6652b6dc in dso__load_sym util/symbol-elf.c:1771
+> > > >    #6 0x561d66321a4e in dso__load util/symbol.c:1914
+> > > >    #7 0x561d66372cd9 in map__load util/map.c:353
+> > > >    #8 0x561d663730e7 in map__find_symbol_by_name_idx util/map.c:397
+> > > >    #9 0x561d663731e7 in map__find_symbol_by_name util/map.c:410
+> > > >    #10 0x561d66378208 in maps__find_symbol_by_name_cb util/maps.c:5=
+24
+> > > >    #11 0x561d66377f49 in maps__for_each_map util/maps.c:471
+> > > >    #12 0x561d663784a0 in maps__find_symbol_by_name util/maps.c:546
+> > > >    #13 0x561d662093e8 in machine__find_kernel_symbol_by_name util/m=
+achine.h:243
+> > > >    #14 0x561d6620abbd in test__vmlinux_matches_kallsyms
+> > > > tests/vmlinux-kallsyms.c:330
+> > > > ...
+> > > > ```
+> > > > dso__process_kernel_symbol rewrites the kernel maps here:
+> > > > https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-nex=
+t.git/tree/tools/perf/util/symbol-elf.c#n1378
+> > > > which resizes the maps_by_address array causing the maps__for_each_=
+map
+> > > > iteration in frame 11 to be iterating over a stale/freed value.
+> > > >
+> > > > The most correct solutions would be to clone the maps_by_address ar=
+ray
+> > > > prior to iteration, or reference count maps_by_address and its size=
+.
+> > > > Neither of these solutions particularly appeal, so just reloading t=
+he
+> > > > maps_by_address and size on each iteration also fixes the problem, =
+but
+> > > > possibly causes some maps to be skipped/repeated. I think this is
+> > > > acceptable correctness for the performance.
+> >
+> > Can we move map__load() out of maps__for_each_map() ?
+> > I think the callback should just return the map and break the loop.
+> > And it can call the map__load() out of the read lock.
+>
+> It would need a rewrite of map__find_symbol_by_name which is being
+> called by a callback from maps__find_symbol_by_name. Perhaps an
+> initial pass to ensure everything is loaded and a safe version of the
+> loop that copies the maps_by_address ahead of copying it. It'd be of a
+> scope that'd be worth its own patch set.
 
-Based on mailing list discussion at
-https://mailarchive.ietf.org/arch/msg/bpf/l5tNEgL-Wo7qSEuaGssOl5VChKk/
+Right, let's do it in a separate work.
 
-v1->v2: Incorporated feedback from Will Hawkins
+>
+> > >
+> > > An aside, shouldn't taking a write lock to modify the maps deadlock
+> > > with holding the read lock for iteration? Well no because
+> > > perf_singlethreaded is true for the test:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.=
+git/tree/tools/perf/util/rwsem.c#n17
+> > > Another perf_singlethreaded considered evil :-) Note, just getting ri=
+d
+> > > of perf_singlethreaded means latent bugs like this will pop up and
+> > > will need resolution.
+> >
+> > Yeah, maybe.  How about turning it on in the test code?
+>
+> Agreed, but I think it should be a follow up.
 
-v2->v3: Use "dst" not "imm" field
+Sounds good.
 
-Signed-off-by: Dave Thaler <dthaler1968@gmail.com>
----
- .../bpf/standardization/instruction-set.rst   | 31 ++++++++++++-------
- 1 file changed, 20 insertions(+), 11 deletions(-)
-
-diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
-index bdfe0cd0e..4bba656b6 100644
---- a/Documentation/bpf/standardization/instruction-set.rst
-+++ b/Documentation/bpf/standardization/instruction-set.rst
-@@ -127,7 +127,7 @@ This document defines the following conformance groups:
- * divmul32: includes 32-bit division, multiplication, and modulo instructions.
- * divmul64: includes divmul32, plus 64-bit division, multiplication,
-   and modulo instructions.
--* legacy: deprecated packet access instructions.
-+* packet: deprecated packet access instructions.
- 
- Instruction encoding
- ====================
-@@ -404,9 +404,12 @@ BPF_JSET  0x4    any  PC += offset if dst & src
- BPF_JNE   0x5    any  PC += offset if dst != src
- BPF_JSGT  0x6    any  PC += offset if dst > src        signed
- BPF_JSGE  0x7    any  PC += offset if dst >= src       signed
--BPF_CALL  0x8    0x0  call helper function by address  BPF_JMP | BPF_K only, see `Helper functions`_
-+BPF_CALL  0x8    0x0  call_by_address(imm)             BPF_JMP | BPF_K only
-+BPF_CALL  0x8    0x0  call_by_address(dst)             BPF_JMP | BPF_X only
- BPF_CALL  0x8    0x1  call PC += imm                   BPF_JMP | BPF_K only, see `Program-local functions`_
--BPF_CALL  0x8    0x2  call helper function by BTF ID   BPF_JMP | BPF_K only, see `Helper functions`_
-+BPF_CALL  0x8    0x1  call PC += dst                   BPF_JMP | BPF_X only, see `Program-local functions`_
-+BPF_CALL  0x8    0x2  call_by_btfid(imm)               BPF_JMP | BPF_K only
-+BPF_CALL  0x8    0x2  call_by_btfid(dst)               BPF_JMP | BPF_X only
- BPF_EXIT  0x9    0x0  return                           BPF_JMP | BPF_K only
- BPF_JLT   0xa    any  PC += offset if dst < src        unsigned
- BPF_JLE   0xb    any  PC += offset if dst <= src       unsigned
-@@ -414,6 +417,11 @@ BPF_JSLT  0xc    any  PC += offset if dst < src        signed
- BPF_JSLE  0xd    any  PC += offset if dst <= src       signed
- ========  =====  ===  ===============================  =============================================
- 
-+where
-+
-+* call_by_address(value) means to call a helper function by the address specified by 'value' (see `Helper functions`_ for details)
-+* call_by_btfid(value) means to call a helper function by the BTF ID specified by 'value' (see `Helper functions`_ for details)
-+
- The BPF program needs to store the return value into register R0 before doing a
- ``BPF_EXIT``.
- 
-@@ -438,8 +446,9 @@ specified by the 'imm' field. A > 16-bit conditional jump may be
- converted to a < 16-bit conditional jump plus a 32-bit unconditional
- jump.
- 
--All ``BPF_CALL`` and ``BPF_JA`` instructions belong to the
--base32 conformance group.
-+All ``BPF_CALL | BPF_X`` instructions belong to the callx
-+conformance group.  All other ``BPF_CALL`` instructions and all
-+``BPF_JA`` instructions belong to the base32 conformance group.
- 
- Helper functions
- ~~~~~~~~~~~~~~~~
-@@ -447,13 +456,13 @@ Helper functions
- Helper functions are a concept whereby BPF programs can call into a
- set of function calls exposed by the underlying platform.
- 
--Historically, each helper function was identified by an address
--encoded in the imm field.  The available helper functions may differ
--for each program type, but address values are unique across all program types.
-+Historically, each helper function was identified by an address.
-+The available helper functions may differ for each program type,
-+but address values are unique across all program types.
- 
- Platforms that support the BPF Type Format (BTF) support identifying
--a helper function by a BTF ID encoded in the imm field, where the BTF ID
--identifies the helper name and type.
-+a helper function by a BTF ID, where the BTF ID identifies the helper
-+name and type.
- 
- Program-local functions
- ~~~~~~~~~~~~~~~~~~~~~~~
-@@ -660,4 +669,4 @@ carried over from classic BPF. These instructions used an instruction
- class of BPF_LD, a size modifier of BPF_W, BPF_H, or BPF_B, and a
- mode modifier of BPF_ABS or BPF_IND.  However, these instructions are
- deprecated and should no longer be used.  All legacy packet access
--instructions belong to the "legacy" conformance group.
-+instructions belong to the "packet" conformance group.
--- 
-2.40.1
-
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
+Thanks,
+Namhyung
