@@ -1,165 +1,221 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5B960872
-	for <bpf@vger.kernel.org>; Tue, 13 Feb 2024 19:40:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AB9C60B94
+	for <bpf@vger.kernel.org>; Tue, 13 Feb 2024 19:51:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707853239; cv=none; b=eBIefx5qCTnTTlDmSsO26jub7oma87RrJ9wQR5ZwPGbjwmblR0uLue0y7CKZ/bWAr3ol3Urwayna6QNUoONr55RRQwZlERN0BhcjQGd833oEkVH9If1w5C3fo+EfPWymucq/7A9OSeVQ/zybvV4IiyMICl0ZJDgBaMkL1UGrpzo=
+	t=1707853893; cv=none; b=GcsISBDCOG3Te6Il1PHnsugo2Tf1oZL8nflYzqpE91lBYVJ7htLqAXI3zGyY8fgd4xgklsnnaL9CX/sOoLeWVnMqL7/K9Wr6f/L+mRdWuSqKbJ236MFJ3y0c6vHKRDYkNvVZ5nrelMr16qzJADQsJQWYFcSI3ySvT5cWhUNBa4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707853239; c=relaxed/simple;
-	bh=EMDZDJ6MELx53K8NB9rlFARuuHR4sMMxiBsl5Bym0oY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IBCraCbxJUrggnQiI3lLKx42XIVo2hYzqm6TC1q2pG5D0mdNgcKMDoPwuePHowSQifM+K/ju0duIb9IpSuWqu3fReOHlNR2MLfzYwvP5yOi2Lq5S1QxrN0ZFLGixPjJbs9npw7YVP8Y1beMXfqn1P5R1FI4mVWgjaJKOfDAGVmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PXurQbXQ; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1707853893; c=relaxed/simple;
+	bh=Tg5MsaFqKcll3WJwQ+ui4v5KYHONfl+5tZRSv1SPzR0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=acmPghQ0F0MPG8aGx1NzWXOo0Q5SQj64vzy7XYqfjPS0ejlPzp4BLxMD2HPkXAp0SstBlW8l24tXU5qqtiAHiT5HMfufP5PV1ShlOEd2X/VFF82oRg52inUFLxQD785yMQMGc0Tdt2ZdJIybR0aNkrE4YAu/9qoM4BiwwzOcZls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gDEY51uA; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PXurQbXQ"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-5d8df34835aso65405a12.0
-        for <bpf@vger.kernel.org>; Tue, 13 Feb 2024 11:40:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707853237; x=1708458037; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qRIJP4PHER+Y1XjKhzIxWYDIFSvs1fl6l/TKq1vbQis=;
-        b=PXurQbXQQynp54XwwBIvliDbYdjAEcRu8kjLlvPHMtHRRzZnLHP9vB2fk2vEe+NOTA
-         LmulSnUUUqDBCRdm7P5sAe4vw8NuIKX4cf6dDmv/uq+QVntDixIGc981iS4tP8T6qOb/
-         NHcmqJyo20sXIW2jSJdxuFeqMsK8BZKlVbozac4JWt9HG5QvjZ725WiAI7H5VL+ZsGfW
-         TQ+lC2Ei2O7UsZ8RZlqfLhZ0zt6rDS978nd/c7qwpbC5J+Vik0dv0P8ixXqu+nh5o9uX
-         UlFbuWW0SdYNWBLGyuQECa42N7B1enkn1pdwvBHlHpFYHKrGdHwQTRgdJS2rJl6IKbkj
-         Yhgg==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gDEY51uA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707853890;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Tg5MsaFqKcll3WJwQ+ui4v5KYHONfl+5tZRSv1SPzR0=;
+	b=gDEY51uAgp6iNPEsGD3Mb8bsLgypd6QFtgz3kXcnzFdyehoOPpVuHk0b8nXpmaxfiPYodU
+	jwgZfVOC9dGMq9KEKRzGEm3MBfOqrwEwfH2dd06ah/pUxI0H+2VFU6MWaxK+FdfveXD6Kw
+	gziTozI/3le0dr7BxWOQbJC72h9ecOA=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-642-W_gFGfxnP3eAVO-AmLgbsA-1; Tue, 13 Feb 2024 14:51:28 -0500
+X-MC-Unique: W_gFGfxnP3eAVO-AmLgbsA-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a3c177d4fe7so182300366b.2
+        for <bpf@vger.kernel.org>; Tue, 13 Feb 2024 11:51:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707853237; x=1708458037;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1707853887; x=1708458687;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qRIJP4PHER+Y1XjKhzIxWYDIFSvs1fl6l/TKq1vbQis=;
-        b=kda5s1pqGRFYEvLi6XPTrOz5/LFzCbeTvkocpTOi5yVtPw2/zoxwVUJTS2tEGdsdvC
-         NSLd8/oOOcQrvBtSfDNYQefJJPBgl4+k2XRfxCJ9fwJa1+CrycFyhzIe9xybYRMlAyGw
-         sCJn1uG7h+H5BbMxmIFcVtngKoJjli2cSbfPtYiASF1C4L+wo7mhs8dL7toIKe0jzYHw
-         SldCDDhvE8XlgLZ1lGEbV2lOpuJOntn1ECXSh/cWzlM9xCFhJzVDvQwTBnfbKSemMXn1
-         JKpsqCeoQykJ79ZnlyWNvWKflHOMAeyQfOTubi6uy/viaX9871Rm+ixmYj2hbjvP6lZB
-         MCWg==
-X-Gm-Message-State: AOJu0Yza0a4w4zrykK+sD4a8T2aEYS1je+96VkKqeqmlZWfy10GM5jmU
-	qfCK4UmC8ANePjoQkt/aRzSWx8ZZtXmVSsoaYmPe266xDFczKrcVG+L/MgAfq3bE7Katcg7AiZn
-	C+s91SsLUi9Qq1rmcNXeTwnZLAm4=
-X-Google-Smtp-Source: AGHT+IHONfe4PEvCOGdrGL/RywBm2zBuc+Kba+fswUVN65DWuFyBzONM5UvMvpHp2KuBd5xIYWFyYy9QgfTYU/hAQmc=
-X-Received: by 2002:a17:90b:4f8e:b0:296:4e2f:a680 with SMTP id
- qe14-20020a17090b4f8e00b002964e2fa680mr5153292pjb.10.1707853236840; Tue, 13
- Feb 2024 11:40:36 -0800 (PST)
+        bh=Tg5MsaFqKcll3WJwQ+ui4v5KYHONfl+5tZRSv1SPzR0=;
+        b=Ag3axItnkHkoRkXGW4uB3RjWveY0f6LUjlew77TZ1SiPj+HVMhRVHKBnsNkkv7zs6a
+         ANmeQlwMEx4T5cUtvAGfAp2xQCXWy2XtHZo4sHc7yQag4oiL4kXOOtZfKPBy2tfutpvV
+         tpc7RcoibrjJ4uvjPwJFy/pZ+QFLfD9EOVN2CfGwHfqitPJA2jQ0CxhZul9Xk4QW1rDv
+         EFtQyMNwLJVjI3ikKWOOqwZGDdPBRidITlRzJw7nJ3N4mxpiV/zCnaOu7HmvjxN0dqkW
+         QgXeXAAUGlt370VDEUujHiwwpcXGMs1WGY9wa/IknT4dr3q1Cn3fFWIYMOtcSqD0Z03A
+         gWiA==
+X-Forwarded-Encrypted: i=1; AJvYcCUdjf3A7grTXOxyHR/dkBZY7wZ3Vbx+ct0KZ1/324Iop3DxmSQNZ2rRZecY7VYcR/RdG4Vxc8MARP9OBBksNp9yRdP+
+X-Gm-Message-State: AOJu0YwgCwzom1tDzgH+G+8XbadPgi4p1OcB5O1z+PhGMFiUiSwVCEgU
+	mvL++4qikmlwsp0WnhBNes0u9sJBnTtowg4XdjeL65FI0KQHJ/E9qKY9V2+rNVRUm+ZV44MQ1RM
+	uksJf2llLwEkZ1go98HcB7opt906lKatPQ2+Wuer9Bjp2kGikWg==
+X-Received: by 2002:a05:6402:1cb8:b0:562:50e8:6ee4 with SMTP id cz24-20020a0564021cb800b0056250e86ee4mr40879edb.35.1707853887543;
+        Tue, 13 Feb 2024 11:51:27 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHP+QVjOgTJsSEOm+C1OKWk1I48GuAsDIQjHIkXhl5MbZk9on3eQ1nH0trSu94tyk1bm40KWg==
+X-Received: by 2002:a05:6402:1cb8:b0:562:50e8:6ee4 with SMTP id cz24-20020a0564021cb800b0056250e86ee4mr40854edb.35.1707853887208;
+        Tue, 13 Feb 2024 11:51:27 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUi1vpllgnapDRdjcC78q+niYoasUsrFPOAiQ6LkfiADjrKhfTJiHmOobSo4WalnyZDiF+/YuSFXFCH7aQHVMo2n+AHz5/KpW64Ssb7y+33PzSHOFOhYnbFA1+FxRbrbuqEQ7J419oJzeOwfpdfaQ3OYNt4iA9CM4LVhANOmauuzt2RR/8TV24lXnLEgATzcUFsXfus/4WLI8PW2esejO5PFgMjA+wfAi9rywr4X8dTW7ugTBVU/Pnk1BX797PfMJA8QBJP0Pl5ZrXnwHOMv/jqOwOXd5kng2OSppY1E8CfdU13/sx+4Cz0zx4fplhwCVAr53NcY0jgV50NTAyZOXm+ZRf4s5ZwUW64IDZzThvRx+OGRw81x1Qv8jLiQuElQd5DvkC3YRw0k+my/b0T84+zBvaKgv5FQBa8YPA8jMdbGeJOsTVtkTfGuQBCCVnvd7EgNv2QVTuKCrulgThFTWcqJG4emd0f+fC8tQ7onXZcu52rqY/ff7VNqpIBFVlTjQ1nJYjuKFAGAc4Pralja7cffAYhTYXZkzHWLGyqysRHCjcDmJm12yB+n7HST4f/BItbu4p4o0O1g4463WbrggfFHFTPuEhn8MaPsQs4EslkwSJulnDsAh9vCg4KwOSKqWv2MQi/sYJhgdgFwHe0swP6QxeE99I/PzDxIb/+7DeRayeeB5CYiX2v0rEr6MJnW3M=
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id j2-20020aa7de82000000b005621b45daffsm138386edv.28.2024.02.13.11.51.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Feb 2024 11:51:26 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 620B010F56C8; Tue, 13 Feb 2024 20:51:26 +0100 (CET)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Benjamin Tissoires
+ <bentiss@kernel.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Benjamin Tissoires
+ <benjamin.tissoires@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+ <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Jiri Kosina
+ <jikos@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <shuah@kernel.org>, bpf <bpf@vger.kernel.org>, LKML
+ <linux-kernel@vger.kernel.org>, "open list:HID CORE LAYER"
+ <linux-input@vger.kernel.org>, "open list:DOCUMENTATION"
+ <linux-doc@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH RFC bpf-next 0/9] allow HID-BPF to do device IOs
+In-Reply-To: <CAP01T75Giw_5j0RXaaxX0rDzCcXXZgmHrw7QZ_Ayib8rHgunBQ@mail.gmail.com>
+References: <20240209-hid-bpf-sleepable-v1-0-4cc895b5adbd@kernel.org>
+ <87bk8pve2z.fsf@toke.dk>
+ <CAO-hwJ+UeaBydN9deA8KBbgBiC_UCt6oXX-wGnNuSr8fhUrkXw@mail.gmail.com>
+ <875xyxva9u.fsf@toke.dk>
+ <CAO-hwJLvEGNRXc8G2PR+AQ6kJg+k5YqSt3F7LCSc0zWnmFfe5g@mail.gmail.com>
+ <87r0hhfudh.fsf@toke.dk>
+ <CAO-hwJLxkt=THKBjxDA6KZsC5h52rCXZ-2RNKPCiYMHNjhQJNg@mail.gmail.com>
+ <CAADnVQKt7zu2OY0xHCkTb=KSXO33Xj8H4vVYMqP51ZJ_Kj1sZA@mail.gmail.com>
+ <zybv26nmqtmyghakbebwxanzgzsfm6brvi7qw3ljoh4dijbjki@ub7atnumzuhy>
+ <CAP01T75Giw_5j0RXaaxX0rDzCcXXZgmHrw7QZ_Ayib8rHgunBQ@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Tue, 13 Feb 2024 20:51:26 +0100
+Message-ID: <877cj8f8ht.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240208215422.110920-1-yonghong.song@linux.dev> <20240208215427.111319-1-yonghong.song@linux.dev>
-In-Reply-To: <20240208215427.111319-1-yonghong.song@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 13 Feb 2024 11:40:25 -0800
-Message-ID: <CAEf4BzamGPs45fFTDW4P_Ymm3bZ+Z0yP4JBPZHgefYbc5DgapA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Add a negative test for
- stack accounting in jit mode
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com, 
-	Martin KaFai Lau <martin.lau@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 8, 2024 at 1:54=E2=80=AFPM Yonghong Song <yonghong.song@linux.d=
-ev> wrote:
->
-> The new test is very similar to test_global_func1.c, but
-> is modified to fail on jit mode.
->
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->  .../bpf/prog_tests/test_global_funcs.c        |  3 ++
->  .../selftests/bpf/progs/test_global_func18.c  | 44 +++++++++++++++++++
->  2 files changed, 47 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/progs/test_global_func18.=
-c
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c b=
-/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
-> index a3a41680b38e..dccbf2213135 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
-> @@ -18,6 +18,7 @@
->  #include "test_global_func15.skel.h"
->  #include "test_global_func16.skel.h"
->  #include "test_global_func17.skel.h"
-> +#include "test_global_func18.skel.h"
->  #include "test_global_func_ctx_args.skel.h"
->
->  #include "bpf/libbpf_internal.h"
-> @@ -140,6 +141,8 @@ void test_test_global_funcs(void)
->  {
->         if (!env.jit_enabled) {
->                 RUN_TESTS(test_global_func1);
-> +       } else {
-> +               RUN_TESTS(test_global_func18);
->         }
->
->         RUN_TESTS(test_global_func2);
-> diff --git a/tools/testing/selftests/bpf/progs/test_global_func18.c b/too=
-ls/testing/selftests/bpf/progs/test_global_func18.c
-> new file mode 100644
-> index 000000000000..d1aa3b2c68fe
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_global_func18.c
-> @@ -0,0 +1,44 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
-> +#include <stddef.h>
-> +#include <linux/bpf.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include "bpf_misc.h"
-> +
-> +#define MAX_STACK1 (512 - 3 * 32 + 8)
-> +#define MAX_STACK2 (3 * 32)
-> +
-> +__attribute__ ((noinline))
+Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
 
-nit: we have __noinline defined, let's use it as a less verbose option?
+> On Tue, 13 Feb 2024 at 18:46, Benjamin Tissoires <bentiss@kernel.org> wro=
+te:
+>>
+>> On Feb 12 2024, Alexei Starovoitov wrote:
+>> > On Mon, Feb 12, 2024 at 10:21=E2=80=AFAM Benjamin Tissoires
+>> > <benjamin.tissoires@redhat.com> wrote:
+>> > >
+>> > > On Mon, Feb 12, 2024 at 6:46=E2=80=AFPM Toke H=C3=B8iland-J=C3=B8rge=
+nsen <toke@redhat.com> wrote:
+>> > > >
+>> > > > Benjamin Tissoires <benjamin.tissoires@redhat.com> writes:
+>> > > >
+>> [...]
+>> > I agree that workqueue delegation fits into the bpf_timer concept and
+>> > a lot of code can and should be shared.
+>>
+>> Thanks Alexei for the detailed answer. I've given it an attempt but stil=
+l can not
+>> figure it out entirely.
+>>
+>> > All the lessons(bugs) learned with bpf_timer don't need to be re-disco=
+vered :)
+>> > Too bad, bpf_timer_set_callback() doesn't have a flag argument,
+>> > so we need a new kfunc to set a sleepable callback.
+>> > Maybe
+>> > bpf_timer_set_sleepable_cb() ?
+>>
+>> OK. So I guess I should drop Toke's suggestion with the bpf_timer_ini() =
+flag?
+>>
+>> > The verifier will set is_async_cb =3D true for it (like it does for re=
+gular cb-s).
+>> > And since prog->aux->sleepable is kinda "global" we need another
+>> > per subprog flag:
+>> > bool is_sleepable: 1;
+>>
+>> done (in push_callback_call())
+>>
+>> >
+>> > We can factor out a check "if (prog->aux->sleepable)" into a helper
+>> > that will check that "global" flag and another env->cur_state->in_slee=
+pable
+>> > flag that will work similar to active_rcu_lock.
+>>
+>> done (I think), cf patch 2 below
+>>
+>> > Once the verifier starts processing subprog->is_sleepable
+>> > it will set cur_state->in_sleepable =3D true;
+>> > to make all subprogs called from that cb to be recognized as sleepable=
+ too.
+>>
+>> That's the point I don't know where to put the new code.
+>>
+>
+> I think that would go in the already existing special case for
+> push_async_cb where you get the verifier state of the async callback.
+> You can make setting the boolean in that verifier state conditional on
+> whether it's your kfunc/helper you're processing taking a sleepable
+> callback.
+>
+>> It seems the best place would be in do_check(), but I am under the impre=
+ssion
+>> that the code of the callback is added at the end of the instruction lis=
+t, meaning
+>> that I do not know where it starts, and which subprog index it correspon=
+ds to.
+>>
+>> >
+>> > A bit of a challenge is what to do with global subprogs,
+>> > since they're verified lazily. They can be called from
+>> > sleepable and non-sleepable contex. Should be solvable.
+>>
+>> I must confess this is way over me (and given that I didn't even managed=
+ to make
+>> the "easy" case working, that might explain things a little :-P )
+>>
+>
+> I think it will be solvable but made somewhat difficult by the fact
+> that even if we mark subprog_info of some global_func A as
+> in_sleepable, so that we explore it as sleepable during its
+> verification, we might encounter later another global_func that calls
+> a global func, already explored as non-sleepable, in sleepable
+> context. In this case I think we need to redo the verification of that
+> global func as sleepable once again. It could be that it is called
+> from both non-sleepable and sleepable contexts, so both paths
+> (in_sleepable =3D true, and in_sleepable =3D false) need to be explored,
+> or we could reject such cases, but it might be a little restrictive.
+>
+> Some common helper global func unrelated to caller context doing some
+> auxiliary work, called from sleepable timer callback and normal main
+> subprog might be an example where rejection will be prohibitive.
+>
+> An approach might be to explore main and global subprogs once as we do
+> now, and then keep a list of global subprogs that need to be revisited
+> as in_sleepable (due to being called from a sleepable context) and
+> trigger do_check_common for them again, this might have to be repeated
+> as the list grows on each iteration, but eventually we will have
+> explored all of them as in_sleepable if need be, and the loop will
+> end. Surely, this trades off logical simplicity of verifier code with
+> redoing verification of global subprogs again.
+>
+> To add items to such a list, for each global subprog we encounter that
+> needs to be analyzed as in_sleepable, we will also collect all its
+> callee global subprogs by walking its instructions (a bit like
+> check_max_stack_depth does).
 
-> +int f1(struct __sk_buff *skb)
-> +{
-> +       return skb->len;
-> +}
-> +
-> +int f3(int, struct __sk_buff *skb, int);
-> +
-> +__attribute__ ((noinline))
-> +int f2(int val, struct __sk_buff *skb)
-> +{
-> +       volatile char buf[MAX_STACK1] =3D {};
-> +
-> +       __sink(buf[MAX_STACK1 - 1]);
-> +
-> +       return f1(skb) + f3(val, skb, 1);
-> +}
-> +
-> +__attribute__ ((noinline))
-> +int f3(int val, struct __sk_buff *skb, int var)
-> +{
-> +       volatile char buf[MAX_STACK2] =3D {};
-> +
-> +       __sink(buf[MAX_STACK2 - 1]);
-> +
-> +       return skb->ifindex * val * var;
-> +}
-> +
-> +SEC("tc")
-> +__failure __msg("combined stack size of 3 calls is 528")
-> +int global_func18(struct __sk_buff *skb)
-> +{
-> +       return f1(skb) + f2(2, skb) + f3(3, skb, 4);
-> +}
-> --
-> 2.39.3
->
->
+Sorry if I'm being dense, but why is all this needed if it's already
+possible to just define the timer callback from a program type that
+allows sleeping, and then set the actual timeout from a different
+program that is not sleepable? Isn't the set_sleepable_cb() kfunc just a
+convenience then? Or did I misunderstand and it's not actually possible
+to mix callback/timer arming from different program types?
+
+-Toke
+
