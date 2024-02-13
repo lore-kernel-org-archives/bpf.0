@@ -1,169 +1,184 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C85BE5A
-	for <bpf@vger.kernel.org>; Tue, 13 Feb 2024 01:24:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12E5B2230F;
+	Tue, 13 Feb 2024 01:43:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707787449; cv=none; b=O6wZs4Oxj5OIjDj14cdvzT3U6iooZzCs6Hz/XGKMRYEaa9Eb/UNHoLnBioGVjf8+xfht2FLL8PGH3GzljnDeJBMtUqNbYwJSlK9Hbf8yL8hjpb2rBvXLjAj+t8PpCZM994PRpHQx9K0Isp9Gc1AKO86isuLbKV93TQcIZwWZGbU=
+	t=1707788623; cv=none; b=Y8rJNVBfLJO+KGWq2MFU8eNoJ0rBrBwafqEY1Nz84AOBSlZddpzNKqG3o/q9MQnhO5goj3twOAQTNHV7CNGJpVNCU8Vc3wewuSobJHw2kJfMn/7JD7HszOhjJMd3gJlYBgmLEySvuzhzVknad7O3sBYoaI4Shp/ra1vPiKVWZ7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707787449; c=relaxed/simple;
-	bh=JRYsKmACQecY7a+0WrDQDddJK+Bm8FiJAo644CawpDY=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:In-Reply-To:
-	 Subject:Content-Type; b=af1Q0swIMAQYIoDQbmWVGPlDIh/SmlG2x9n8Pm607exIpavpH8bUxbar3KMmUvwj0wjDR420RpEoBBURcGMedY70t8vpiudEBpxFKO72wfJ4N1nPAEZVuivF8rhNurE0dhsgUYwPiyXshmJQfgBrFsHUD1Jb5K4Lfa0JkaGxmcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=j5E+iGg4; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=ex+NCjVr; dkim=fail (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WlvVa2Ip reason="signature verification failed"; arc=none smtp.client-ip=50.223.129.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	s=arc-20240116; t=1707788623; c=relaxed/simple;
+	bh=t8TXcZ6NhQgxyBUbvrpf5ZlhAgGpNr73upNRAj1P3Qo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SITirq/S7x53fzuI0FKPKb6oAo/FPIyoWuVhseEeOgmuLhiMHFWFed2NGspgaMokUeNxM8scAQtxK5e5BUlBwtf0X4yfCZLHHJBidPdaJEvkxSg+/JHzJKJrk9f1bRcJE94wa+7ND1T8+pQIj4yWbrQYiaoDfLmlOko1K89aH+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ABxGmm4z; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="j5E+iGg4";
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="ex+NCjVr";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WlvVa2Ip"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 31F57C18DBB9
-	for <bpf@vger.kernel.org>; Mon, 12 Feb 2024 17:24:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1707787446; bh=JRYsKmACQecY7a+0WrDQDddJK+Bm8FiJAo644CawpDY=;
-	h=Date:To:Cc:References:From:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=j5E+iGg42txPPGs0pMFwJpCfSD27UtuJq0pvP2FX5+CALarSZ5/Psf8Gru72a0QYR
-	 rN/eZacVkx2PZXH5JHA1aAFFg+EfJuHYcmxlxYjMQJ7CL6+rCJpsGo3cyO+Npkr7Y2
-	 1VhlLomPgrbJJkf44uamqK+gfXBFPAzEeafhml7U=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Mon Feb 12 17:24:05 2024
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id A01E2C15199D;
-	Mon, 12 Feb 2024 17:24:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1707787445; bh=JRYsKmACQecY7a+0WrDQDddJK+Bm8FiJAo644CawpDY=;
-	h=Date:To:Cc:References:From:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=ex+NCjVr5FYlgyUn+PueHfS8xVQi8TB+iWmCFRiQxBcebII/oHsiQn60cU99fZY+I
-	 RbR3GVNi3qPBfGy/Dm81HhEBCO8EFfq7bWnei1ewB3/44DpO0NpAs4kQqS6lNrl8rc
-	 yj/upGAZg1AmJeyWl0bHolxy5iDBhEFAFpO3CHhg=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 1073FC15199D
- for <bpf@ietfa.amsl.com>; Mon, 12 Feb 2024 17:24:04 -0800 (PST)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -2.107
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (1024-bit key)
- header.d=linux.dev
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xD2kbLUyyy0F for <bpf@ietfa.amsl.com>;
- Mon, 12 Feb 2024 17:23:59 -0800 (PST)
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com
- [95.215.58.183])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id DDC11C151522
- for <bpf@ietf.org>; Mon, 12 Feb 2024 17:23:58 -0800 (PST)
-Message-ID: <d3b89acf-fb83-4bdf-84e1-6c4a77f3ad36@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
- t=1707787436;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=texyvZ/XwQWQWgeYnioyP/KDLsoY6O6tqmtEXOQYBhA=;
- b=WlvVa2Ipfmn6PvwSHK1ow3JeoLl5XOG7dboDAVvT0YfAbKt1O+kxkO4NLkNgejgNbu7l2R
- /hPnLmJtAIT3CUWu8EcMrP0Fra76P7MxR5fUFyYJwWSvp62ojnBLgRn/c/P/m9z3Y8/B5c
- 5l+RTkk+uRH7/PokGWcjYwAWb3W/CgA=
-Date: Mon, 12 Feb 2024 17:23:47 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ABxGmm4z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1EB1C43390;
+	Tue, 13 Feb 2024 01:43:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707788622;
+	bh=t8TXcZ6NhQgxyBUbvrpf5ZlhAgGpNr73upNRAj1P3Qo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ABxGmm4zwRbmkkt8nLZgz90d34z4u1wyOIvnabnHBQ7uLt9TgcPcHnzBPbtr1/pdY
+	 xSmOkXCWyfYvthnRfWyFbbMrHyTCCMT9gExsSv1uaN5mmCLnDj6wzyjPg5a9xerfmA
+	 1TkzE/4/vyT3zrX4MbyaqkOGnlOY/XnFgv9mLzyY2r+R85z4O6AbJGY9lY046mQY2F
+	 QnfQyHVDMa1Hc2mbGMIVTA1HTK4U+rhfI7N/NPsfYrwXF746oFZF94Sb3ojALkEOw6
+	 kItDaxa5/rMY8C8qL8J1+to1Uzq8zGOaInTvDIREREpisjsp2AL9ZYJmyj11fstlpW
+	 vlb0/sMEZUQ4A==
+Date: Mon, 12 Feb 2024 18:43:40 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: nicolas@fjasle.eu, ndesaulniers@google.com, morbo@google.com,
+	justinstitt@google.com, keescook@chromium.org, maskray@google.com,
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] kbuild: Fix changing ELF file type for output of gen_btf
+ for big endian
+Message-ID: <20240213014340.GA3329682@dev-arch.thelio-3990X>
+References: <20240208-fix-elf-type-btf-vmlinux-bin-o-big-endian-v1-1-cb3112491edc@kernel.org>
+ <CAK7LNAT1+K87M2f_8enCydaKgDPLP9E1ex-as85eC2hB49bkBA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Language: en-GB
-To: dthaler1968@googlemail.com, "'Jose E. Marchesi'" <jose.marchesi@oracle.com>
-Cc: bpf@vger.kernel.org, bpf@ietf.org
-References: <20240212211310.8282-1-dthaler1968@gmail.com>
- <87le7ptlsq.fsf@oracle.com> <b5072dfb-ab2b-40eb-891e-630a02c58fe8@linux.dev>
- <036301da5dfd$be7d1b30$3b775190$@gmail.com>
- <a81da29b-b671-484a-8f3d-743f1dac44f1@linux.dev>
- <03a801da5e1a$8d0274c0$a7075e40$@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and
- include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <03a801da5e1a$8d0274c0$a7075e40$@gmail.com>
-X-Migadu-Flow: FLOW_OUT
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/0uYKMxxx86ImNhEYGi1yzAZBxvM>
-Subject: Re: [Bpf] [PATCH bpf-next v2] bpf,
- docs: Add callx instructions in new conformance group
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-Message-ID: <20240213012347.-U1mM4qAjZBcB3emcsr-34mzhXaVrAUMCvS9hjT2Mnw@z>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK7LNAT1+K87M2f_8enCydaKgDPLP9E1ex-as85eC2hB49bkBA@mail.gmail.com>
 
+On Tue, Feb 13, 2024 at 09:55:07AM +0900, Masahiro Yamada wrote:
+> On Fri, Feb 9, 2024 at 5:21 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > Commit 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
+> > changed the ELF type of .btf.vmlinux.bin.o from ET_EXEC to ET_REL via
+> > dd, which works fine for little endian platforms:
+> >
+> >    00000000  7f 45 4c 46 02 01 01 00  00 00 00 00 00 00 00 00  |.ELF............|
+> >   -00000010  03 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |................|
+> 
+> I am afraid this dump is confusing.
+> 
+> The byte stream "03 00" is ET_DYN, as specified in ELF:
+> 
+>   Name        Value
+>   ------------------
+>   ET_REL        1
+>   ET_EXEC       2
+>   ET_DYN        3
+> 
+> It disagrees with your commit message "from ET_EXEC to ET_REL"
+> 
+> The dump for the old ELF was "02 00", wasn't it?
 
-On 2/12/24 5:18 PM, dthaler1968@googlemail.com wrote:
->> -----Original Message-----
->> From: Yonghong Song <yonghong.song@linux.dev>
->> Sent: Monday, February 12, 2024 2:49 PM
->> To: dthaler1968@googlemail.com; 'Jose E. Marchesi'
->> <jose.marchesi@oracle.com>; 'Dave Thaler'
->> <dthaler1968=40googlemail.com@dmarc.ietf.org>
->> Cc: bpf@vger.kernel.org; bpf@ietf.org
->> Subject: Re: [Bpf] [PATCH bpf-next v2] bpf, docs: Add callx instructions in new
->> conformance group
->>
->>
->> On 2/12/24 1:52 PM, dthaler1968@googlemail.com wrote:
->>>> -----Original Message-----
->>>> From: Yonghong Song <yonghong.song@linux.dev>
->>>> Sent: Monday, February 12, 2024 1:49 PM
->>>> To: Jose E. Marchesi <jose.marchesi@oracle.com>; Dave Thaler
->>>> <dthaler1968=40googlemail.com@dmarc.ietf.org>
->>>> Cc: bpf@vger.kernel.org; bpf@ietf.org; Dave Thaler
->>>> <dthaler1968@gmail.com>
->>>> Subject: Re: [Bpf] [PATCH bpf-next v2] bpf, docs: Add callx
->>>> instructions in new conformance group
->>>>
->>>>
->>>> On 2/12/24 1:28 PM, Jose E. Marchesi wrote:
->>>>>> +BPF_CALL  0x8    0x1  call PC += reg_val(imm)          BPF_JMP | BPF_X
->>>> only, see `Program-local functions`_
->>>>> If the instruction requires a register operand, why not using one of
->>>>> the register fields?  Is there any reason for not doing that?
->>>> Talked to Alexei and we think using dst_reg for the register for
->>>> callx insn is better. I will craft a llvm patch for this today. Thanks!
->>> Why dst_reg instead of src_reg?
->>> BPF_X is supposed to mean use src_reg.
->> Let us use dst_reg. Currently, for BPF_K, we have src_reg for a bunch of flags
->> (pseudo call, kfunc call, etc.). So for BPF_X, let us preserve this property as
->> well in case in the future we will introduce variants for callx.
-> Ah yes, that makes sense.
->
->> The following is the llvm diff:
->>
->> https://github.com/llvm/llvm-project/pull/81546
-> Which llvm release is it targeted for?
-> 18.1.0-rc3? 18.1.1?  later?
+No, I have not manually edited or changed these diffs from hexdumping
+the .o files. The little endian one was from arm64 and the big endian
+one was from s390. Perhaps this is some difference between the
+toolchains? I don't recall which one I used in this case, pretty sure it
+was GNU though. I can just remove "from ET_EXEC" from the commit message
+if that would help make it less confusing.
 
-llvm19
+> >   +00000010  01 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |................|
+> >
+> > However, for big endian platforms, it changes the wrong byte, resulting
+> > in an invalid ELF file type, which ld.lld rejects:
+> 
+> Fangrui pointed out this is true for inutils >= 2.35
 
->
->>> But this thread is about reserving/documenting the existing practice,
->>> since anyone trying to use it would run into interop issues because
->>> of existing clang.   Should we document both and list one as deprecated?
->> I think just documenting the new encoding is good enough. But other
->> people can chime in just in case that I missed something.
-> Ok.
->
-> Dave
->
+Not for this particular error, which occurs because e_type is not a
+valid value. If it was true for binutils, we would have seen this issue
+sooner.
 
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
+> >
+> >    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF............|
+> >   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+> >   +00000010  01 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+> 
+>  -  00 02
+>  +  01 02
+
+See above.
+
+> >
+> >   Type:                              <unknown>: 103
+> >
+> >   ld.lld: error: .btf.vmlinux.bin.o: unknown file type
+> >
+> > Fix this by using a different seek value for dd when targeting big
+> > endian, so that the correct byte gets changed and everything works
+> > correctly for all linkers.
+> >
+> >    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF............|
+> >   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+> 
+> Ditto.
+
+See above.
+
+> >   +00000010  00 01 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+> >
+> >   Type:                              REL (Relocatable file)
+> >
+> > Cc: stable@vger.kernel.org
+> > Fixes: 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
+> > Link: https://github.com/llvm/llvm-project/pull/75643
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >  scripts/link-vmlinux.sh | 11 +++++++++--
+> >  1 file changed, 9 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> > index a432b171be82..8a9f48b3cb32 100755
+> > --- a/scripts/link-vmlinux.sh
+> > +++ b/scripts/link-vmlinux.sh
+> > @@ -135,8 +135,15 @@ gen_btf()
+> >         ${OBJCOPY} --only-section=.BTF --set-section-flags .BTF=alloc,readonly \
+> >                 --strip-all ${1} ${2} 2>/dev/null
+> >         # Change e_type to ET_REL so that it can be used to link final vmlinux.
+> > -       # Unlike GNU ld, lld does not allow an ET_EXEC input.
+> > -       printf '\1' | dd of=${2} conv=notrunc bs=1 seek=16 status=none
+> > +       # Unlike GNU ld, lld does not allow an ET_EXEC input. Make sure the correct
+> > +       # byte gets changed with big endian platforms, otherwise e_type may be an
+> > +       # invalid value.
+> > +       if is_enabled CONFIG_CPU_BIG_ENDIAN; then
+> > +               seek=17
+> > +       else
+> > +               seek=16
+> > +       fi
+> > +       printf '\1' | dd of=${2} conv=notrunc bs=1 seek=${seek} status=none
+> >  }
+> >
+> >  # Create ${2} .S file with all symbols from the ${1} object file
+> 
+> Do you want to send v2 to update the commit description?
+> 
+
+I don't think a v2 is necessary for the commit description...
+
+> The current code will work, but another approach might be to
+> update both byte 16 and byte 17 because e_type is a 16-bit field.
+> 
+> It works without relying on the MSB of the previous e_type being zero.
+> The comment does not need updating because the intention is obvious
+> from the code.
+> 
+> if is_enabled CONFIG_CPU_BIG_ENDIAN; then
+>         et_rel='\0\1'
+> else
+>         et_rel='\1\0'
+> fi
+> 
+> printf "${et_rel}" | dd of=${2} conv=notrunc bs=1 seek=16 status=none
+
+but I do like this suggested change because I was thinking that updating
+the single bit could be fragile at some point. I'll send a v2 with that
+and a slightly updated commit message shortly. Because it is
+substantially different from v1, I won't carry forward all the tags I
+received but I hope people will take a look at v2 and provide them
+again.
+
+Thanks a lot for taking a look!
+Nathan
