@@ -1,161 +1,225 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E355577C;
-	Tue, 13 Feb 2024 13:29:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B25BE58105
+	for <bpf@vger.kernel.org>; Tue, 13 Feb 2024 14:21:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707830968; cv=none; b=SnjbfHahzFzMvu8/Llxp678Rtk7+tLPOmpXRQL6s6Yms/HFaEwh5byHneUPJPdFzGvFlLkNHuUD+npXQdd/H/LGYjNJSWYfRWOXVyPXNdWATOKd3vcEc5M4zqTM/RRHs+CQUUbgIEksbrVNNnfbuanyc5crWbA0Cj2x7gvPY77k=
+	t=1707834109; cv=none; b=HbMR76G9wyzQp3aMf3wnJLsmOqE5f/96vT+RyZSpPhgQ10wp/BIfX6hztyjsTihbns0bQ2R8PqezCwM5DV50OpLaN3UXsErJTsK95L8PsJ5wyAi/1zw+hl92ti/S6SCoocpadDjU7iEE2UhA3Tgw7H4G6q8b/uKj4kBsaTKW2Ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707830968; c=relaxed/simple;
-	bh=S2uYMqOrZ63NG8/je4DIvWdofi03vpAm3WmCTXF4nDs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fV8FeXq9YtgQm+5+WOppo0kc7Y7vEycIZRV/N8//vIJLOhEAxxMT4xDUNeyptIGKNwKj8KCHghvudQ65VhBLkVJqapXd/hJH7Ltcyju1zUkQpymMXs/qu0alD6tHzezp1fFKEZJKqqtsXBeq95AS/o3v6WcPa9CidUOoC0Dnss0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ipLzlSDG; arc=none smtp.client-ip=209.85.208.47
+	s=arc-20240116; t=1707834109; c=relaxed/simple;
+	bh=JzMkutfl7oTzBvv9x1fmJ05kglU/COGNDqlOjWb3CGk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=MwXl5ZT01+PkwVJDTytFjh7KoXc+xIvskc5I2ECqj/BoysD0TU+uTxuyeHXdGZElkF6SoDnA29LiwxZOPKggU8Rw6551PQISG2cYxYnUOFr3ZuDms/V5DKwud8BGjqnalqalAJ+JzHKt46TlaYXK1mkOb8HIzb0EtKyJIfL3K1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZB/170gw; arc=none smtp.client-ip=209.85.208.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ipLzlSDG"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-562117d3dbfso195302a12.1;
-        Tue, 13 Feb 2024 05:29:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZB/170gw"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-56001d49cc5so5489410a12.2
+        for <bpf@vger.kernel.org>; Tue, 13 Feb 2024 06:21:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707830965; x=1708435765; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zFkfsfcQj3EYz0HghFi199sukal5EHX9cCiPBab+av8=;
-        b=ipLzlSDGzoX8Vz4cX5XnWHuff2FUxd5SOx+KD6+NH9mUOdjtAUGC6zP/R5Uu5Kj+E3
-         yWiRMuq2iesqpMj0QkOa3TLiiWUFvAcOEl1ePBnCuAmyK1HejNxS3I4gPKCHbJiMvHNl
-         r+K9ciFtxh023dq4lGX1BSBWkHxMPbGQ3TDCYWTV6r57Zs42KZPPclPmf6P7PCeTUw9x
-         IAl3Xdea0JO1ejGzjjXTURz7cnEAjASPnjuSxLgcTSBqwoug7ghomN9hIF3QvPQ18bw3
-         jNQ69RFAHOQXFhN60pFT/LUGBDBNvSdyo0X7D9PpWhFloy5eFHhD3CP9ZS2bRxiAR9e0
-         MjTg==
+        d=gmail.com; s=20230601; t=1707834106; x=1708438906; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=HZ0mG5JsJwuGoJTo0oxXsut5g7kgIj9gkyrUWgPoOxU=;
+        b=ZB/170gwkMIXCMcLvqMXQ9geNfCD2DiRT/Qv4fBjd2IkH2MDFXSE9eGXD3kwdVheb/
+         HRYVx+Vb891iyBqK7E139bDfZe/bgfFCjiNN5PZtgYw266uXqQx/9muuvscrA/yTLZDM
+         Rxb4oPlMT52xJ4OOabxGAzJrAGBF1FYeK8go4RIp7nP9aCxd8hdwlr1v+zWaHycwrKFz
+         QwwRbL3txhh5i/4VtrP/vqaIY4rkjq8HO/7l/NEgwHhC71sLM4HanAm2IlXyrjf0F2V7
+         StUASsUMFktB6EULXwaxjNXhYjyUwHaxkgXHUd4RfzGf8iOIE89HS8057EtT8YAFruCi
+         eEKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707830965; x=1708435765;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1707834106; x=1708438906;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zFkfsfcQj3EYz0HghFi199sukal5EHX9cCiPBab+av8=;
-        b=cOSQNTx119krJSUpU5d+p+mlu2ywS34J6c5qHRRrVsuf4jL9MAguZjFcWPyTPd656D
-         8AQT2E1XjS4Q5+tcWfTPduXdxL3H/GsMOt3eRdt3EMiwIveqzn3lqSni025oDhHP3BUt
-         wq8xXUslzpzhOhORT5qzh4E9HAfILa0Xy2473shE2IwwTwoFJMife0Y3owPyFQY6pbyv
-         nJiJiMqmUvcSgcD3qtaEk76PN85E2tnytcU6h9KN7ULUcEYNffvMo0d38XH5kP5olAam
-         8jfW74zEl5oUZ/vGGWKOMSfAs20uatb2hIyEGLsNJh9zGPrimQWqUCIhyiXrhKmF+CXn
-         hf3g==
-X-Forwarded-Encrypted: i=1; AJvYcCWrKQnCUssqu3rwXPzrd1qkV8och7wpPTJqA7fZ/DQoJMao5/ujmeZZj6LH93YU7ZblqYJ5WMHB8zPrPBbZpuVrE+3EqX3inR+NFOpoJay7dB92BuphOYoJgQRa+YmnR3xV5TaJ81zJj4VwBwbdpak8I7lLyEYvhsenErFp056HCwtaTyf/CbIfEBQGQN3RVDY32ZN1NIaa5EfRQYUKLgn/DHlBvNEEwiAz4b/tuLxBL7M6NuYf3Z8bflw4uhhplBq5OXkLXH6QDnL5KTJlUrjafqQn26eRF+Ofws1W/4wjI0J4S4SJBmcPAF/wqU4yC170N5Z3ktYqUwbcaEPScZYcx8dNqtEChlX8UjGeQcblAwLP5ux1kc2Py/11XZd8AHbzNeWeitxoKCOsc0AEWRkC4iBoXscjW4EIsl/d+r0zCZB6nwuBNSSTYuXEJB7goal48MoEJz2Db21OPF3x37B0AdoONEU/igT5bmfbiQ2IFoTZuPf7+rKMkI72/ht/pF1ptajLww==
-X-Gm-Message-State: AOJu0YzpFLhHUEWn6Dq0By+sdHcAR5+4e6vZspZxP+XBg0hIBPtVZvZJ
-	Mdg+3Bg92Lu4T+yRjC4Z9jE0/9xvd8kmOXqni9tADxnke59+mcSY
-X-Google-Smtp-Source: AGHT+IGAaHK3Sc+4l2nceOylDioj03KTZYisiZzBNDf0QqrfnPjsS5gVAqMxT1CZy/sHMpkrQYQHTA==
-X-Received: by 2002:a17:907:9608:b0:a3c:d535:39b4 with SMTP id gb8-20020a170907960800b00a3cd53539b4mr2812254ejc.9.1707830964861;
-        Tue, 13 Feb 2024 05:29:24 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUAx0oFGv8fB8fAq7b4SaoJ1hkmfp3uRl+/+fWTscotDvrWHCHXLoRxfjmKebhxzaOp3oxyPgCcBy0wUW20nGfcHDfKvRtEVCBS5GMpx8HXIHoIIZMS6tP/VX099E08YFCUDuCULizMEnqQPd1i3pKNIDm55WsBNPz+QhIoaSX7ZFh72jKyCoa/amNFGhou++pfV+8YwZ2G+iSP9cnlYVHdylj+4X4J8yWRtWXX86jElRP8t/wE8pBpbYSrQOXQkKZC054KciMa6FURknOG0VlXdC0zp6ZuNvVs9CBiiFkRg+DpmEMQXqYWkhkv4yajMT0pumZHd9eBNJSCmXW+vX7/5Y7C+7qkpJXiJKz8j16QLsdpngzR8AXEYmkEC9mrljQ2qx2Uhf41HTaD45Ry/g8pZuMKJrnmXQ9XLrlDUHGHpVa5vMb/VpXYM0MX3wyEKSkBPn9WaxUHLCzuGEpSs4WQ18r7An+vsFd+e8kSbUhrIET4qj5kolbXe6g24ua4jN6md+Aek5+o8ZKZbFFueWGHcDlwIGrMxBopiiwcsibAijsP5b6ASTAPNQJbwSkKDd7Iv3h3GQ8E11aFoWyv5GC4lOpTFJVkrmvqK+P6SQqmsZhYG3SaaqodTQu0imQwcfkfN7B+ACpJ9uAKlKD3Dw0RgwAksL4zO+wWutuLiqMU4JAtWP153NOjVWQzg1bwYvvy52JSOLKxmdbbth1bOJOxn6FlT5/nbQVz51EHzTC6lw4ox1I2zht1n4/pXvC4xJMyQm5LTy5aX4s9LmAqDUthV9ozliVnKX1wcX2x81SYpQRV+q41d4NethsIuQTU2Ruz5p7bLd0LUUCo1w5qiRkNvVsYH13WxW6rA4YDENQs8F446oIN/ku79kaRptVl0Lva5vqnk3MUnZLnpMV70VqOX4zcmX35IyvdxW67Yf8MDXj8F/OCINzsJpFdiTmZlqjivJ
- m8Z42xDWPt1Ba9H9tb9tPjRDLBd4st4Hcyg2svskzdCdAkPcAa+7wE97qvwfc2NlGS594TjKcJNHcP8uWQHqRcG9MKdFvKUQi5K4Yx7/O+Z84C8r4t2DD596gEUR83otfc9AIEDhgTigpPbmG50ZfjCdk3F8yw6j8etrDcjqrYh4vc5ekJWbAZSIopGyRzXI4aAmCqPWw4sUmqZgbLlSSYbjpe9a32jEJQUWsYgoAPXKb9gebtHfRlySE/0SsQNhCBfZebL28mKl6U/8HhaTcio+qP0Qpf6LeAccr+QpnbqnPAc3XcEaGO0CXVFbb/7fUR/b9AUkPijwDgjwlScg+IVVymbuFOyTfBYxART1X01/ib6XlltUbAskeZwd1nCBIZlS8S3h+4EPpKwdC873ok2ZFaYD9UX9T2pxClQTPGV1cJOKWFYAp8VTG4gM0OMgK3l4ZxjvbO0GtCoZs4FytGj6Efn1+Vi+vml6fpoWKPbu3VcW78o+R8TwxB9cYuHOMWskd+chMBSWkNAEpn6dhBxYV88HAs3p+7Mv1ftWzYOmwrDOzTPf6msY+M+SJNyrsdRC4aujSEetlZVrwLxEq4aFRcEnCQMs5Oh0ocQ1HMGCXwsBeFb8mo/MLE+mDYnVmG1vI6VS58tk5B8xg/IfMMml78r0vQiu751j5ao+tWo75K1Ma4CXeIJy9XDr9mStFHCYpZ8Xk66GhkBASkiUu31WX3xD/AGf4EuM4NM6LTuj6OqdwTUuN2hpbg2hfsdEZeB5cchVr2/dNvrvI/ZWsi77TMoyxmlpZuBW+T4Hu9Yi3c+8dT
-Received: from ?IPV6:2620:10d:c096:310::23d8? ([2620:10d:c092:600::1:a107])
-        by smtp.gmail.com with ESMTPSA id ss3-20020a170907c00300b00a3d1c0a3d5dsm221682ejc.63.2024.02.13.05.29.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Feb 2024 05:29:24 -0800 (PST)
-Message-ID: <dd4a6633-36d0-4654-a5e1-2824de29c130@gmail.com>
-Date: Tue, 13 Feb 2024 13:19:43 +0000
+        bh=HZ0mG5JsJwuGoJTo0oxXsut5g7kgIj9gkyrUWgPoOxU=;
+        b=XEG3srB+MO08e9gpx7Mf/7FG5lfibuCOxcbv5PUmGKwmj3V+eJY4U+iJFjxIbfJegl
+         JdkWoILe6kUZLJONBLjUEl14Z+PTZ6YIxV0yeBSovIjWdNxZwThm9jU4zrbW7NmoCdCu
+         HExF0uTbml1WnL/wKZHWLE7ZG27WA9dD5XukmaawrCJbUPIHvJpjq01fYjK0ub5qHzkj
+         8+f6/66zQwme9Cmnf5WGcjsKVCLhYOP13dBWbUCxakrZnAC8mDbfm+7CSoyzPjLC+L83
+         UUV6Z3bzwHrE5WXEnBYg1fBoWvE8CYqgYrs4m6H2mrZFEPa4VeMfLIPE5ZpFkMstcQoO
+         1xoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXuhHwR7xAK3LFuJ1ofRScQKXw5Xt+H18fRp76g9pTgxWnhrZ2/g5Ns+RvlJtL/0Tnv5JgIWpIhUSDkj5DF9vVML+KK
+X-Gm-Message-State: AOJu0Yx1RnRKbzniU6/Ldqou1CyJIymNwZ8fPwUCMtT0ifZsHV8QNVyP
+	wsZuMEAHuYHY8k9BZ1P0cBAco6p6rs344YzAQHOuw5jtlH+jKm+a
+X-Google-Smtp-Source: AGHT+IGORlpQjyvuGeaP5l6JCqSzY2PVpiF/doB8PwwK/02cJedrTEsXfNArjNmaWhB8hgYZ6sjDZw==
+X-Received: by 2002:a17:906:46d2:b0:a3c:bf99:123c with SMTP id k18-20020a17090646d200b00a3cbf99123cmr3772285ejs.23.1707834105651;
+        Tue, 13 Feb 2024 06:21:45 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXoYZ2TDYybvbzIbULOaE2PxeBlIOy1M0tOFHX7KEzf1dqjxTp3CkPa6ewFzFS4oljefIfpkgs+JfR9ZbTpkuMZHoGm/UwLBf1pGDUyF9AN76VLozmwOy5W7QCkXlOk1cj0+Ltv0G5a9SplDG8d3nCOxYv8QzHJZHGedmZMMVE5VK0A/yMUnxcpiuAPhWqpmVl+7GM4AkOG7VUWu2quIktQgof948JS
+Received: from [192.168.1.94] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id vg14-20020a170907d30e00b00a3ceecd6cfbsm948090ejc.56.2024.02.13.06.21.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Feb 2024 06:21:45 -0800 (PST)
+Message-ID: <925915504557d991bf9b576a362e0ef4a8953795.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 2/3] bpf: check bpf_func_state->callback_depth
+ when pruning states
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org, 
+	ast@kernel.org
+Cc: andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, 
+	kernel-team@fb.com, kuniyu@amazon.com
+Date: Tue, 13 Feb 2024 16:21:44 +0200
+In-Reply-To: <fdf38873-a1e2-4a16-974b-ea2f265e08e1@linux.dev>
+References: <20240212143832.28838-1-eddyz87@gmail.com>
+	 <20240212143832.28838-3-eddyz87@gmail.com>
+	 <fdf38873-a1e2-4a16-974b-ea2f265e08e1@linux.dev>
+Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=mQGNBGKNNQEBDACwcUNXZOGTzn4rr7Sd18SA5Wv0Wna/ONE0ZwZEx+sIjyGrPOIhR14/DsOr3ZJer9UJ/WAJwbxOBj6E5Y2iF7grehljNbLr/jMjzPJ+hJpfOEAb5xjCB8xIqDoric1WRcCaRB+tDSk7jcsIIiMish0diTK3qTdu4MB6i/sh4aeFs2nifkNi3LdBuk8Xnk+RJHRoKFJ+C+EoSmQPuDQIRaF9N2m4yO0eG36N8jLwvUXnZzGvHkphoQ9ztbRJp58oh6xT7uH62m98OHbsVgzYKvHyBu/IU2ku5kVG9pLrFp25xfD4YdlMMkJH6l+jk+cpY0cvMTS1b6/g+1fyPM+uzD8Wy+9LtZ4PHwLZX+t4ONb/48i5AKq/jSsb5HWdciLuKEwlMyFAihZamZpEj+9n91NLPX4n7XeThXHaEvaeVVl4hfW/1Qsao7l1YjU/NCHuLaDeH4U1P59bagjwo9d1n5/PESeuD4QJFNqW+zkmE4tmyTZ6bPV6T5xdDRHeiITGc00AEQEAAbQkRWR1YXJkIFppbmdlcm1hbiA8ZWRkeXo4N0BnbWFpbC5jb20+iQHUBBMBCgA+FiEEx+6LrjApQyqnXCYELgxleklgRAkFAmKNNQECGwMFCQPCZwAFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQLgxleklgRAlWZAv/cJ5v3zlEyP0/jMKQBqbVCCHTirPEw+nqxbkeSO6r2FUds0NnGA9a6NPOpBH+qW7a6+n6q3sIbvH7jlss4pzLI7LYlDC6z+egTv7KR5X1xFrY1uR5UGs1beAjnzYeV2hK4yqRUfygsT0Wk5e4FiNBv4+DUZ8r0cNDkO6swJxU55DO21mcteC147+4aDoHZ40R0tsAu+brDGSSoOPpb0RWVsEf9XOBJqWWA+T7mluw
+ nYzhLWGcczc6J71q1Dje0l5vIPaSFOgwmWD4DA+WvuxM/shH4rtWeodbv iCTce6yYIygHgUAtJcHozAlgRrL0jz44cggBTcoeXp/atckXK546OugZPnl00J3qmm5uWAznU6T5YDv2vCvAMEbz69ib+kHtnOSBvR0Jb86UZZqSb4ATfwMOWe9htGTjKMb0QQOLK0mTcrk/TtymaG+T4Fsos0kgrxqjgfrxxEhYcVNW8v8HISmFGFbqsJmFbVtgk68BcU0wgF8oFxo7u+XYQDdKbI1uQGNBGKNNQEBDADbQIdo8L3sdSWGQtu+LnFqCZoAbYurZCmUjLV3df1b+sg+GJZvVTmMZnzDP/ADufcbjopBBjGTRAY4L76T2niu2EpjclMMM3mtrOc738Kr3+RvPjUupdkZ1ZEZaWpf4cZm+4wH5GUfyu5pmD5WXX2i1r9XaUjeVtebvbuXWmWI1ZDTfOkiz/6Z0GDSeQeEqx2PXYBcepU7S9UNWttDtiZ0+IH4DZcvyKPUcK3tOj4u8GvO3RnOrglERzNCM/WhVdG1+vgU9fXO83TB/PcfAsvxYSie7u792s/I+yA4XKKh82PSTvTzg2/4vEDGpI9yubkfXRkQN28w+HKF5qoRB8/L1ZW/brlXkNzA6SveJhCnH7aOF0Yezl6TfX27w1CW5Xmvfi7X33V/SPvo0tY1THrO1c+bOjt5F+2/K3tvejmXMS/I6URwa8n1e767y5ErFKyXAYRweE9zarEgpNZTuSIGNNAqK+SiLLXt51G7P30TVavIeB6s2lCt1QKt62ccLqUAEQEAAYkBvAQYAQoAJhYhBMfui64wKUMqp1wmBC4MZXpJYEQJBQJijTUBAhsMBQkDwmcAAAoJEC4MZXpJYEQJkRAMAKNvWVwtXm/WxWoiLnXyF2WGXKoDe5+itTLvBmKcV/b1OKZF1s90V7WfSBz712eFAynEzyeezPbwU8QBiTpZcHXwQni3IYKvsh7s
+ t1iq+gsfnXbPz5AnS598ScZI1oP7OrPSFJkt/z4acEbOQDQs8aUqrd46PV jsdqGvKnXZxzylux29UTNby4jTlz9pNJM+wPrDRmGfchLDUmf6CffaUYCbu4FiId+9+dcTCDvxbABRy1C3OJ8QY7cxfJ+pEZW18fRJ0XCl/fiV/ecAOfB3HsqgTzAn555h0rkFgay0hAvMU/mAW/CFNSIxV397zm749ZNLA0L2dMy1AKuOqH+/B+/ImBfJMDjmdyJQ8WU/OFRuGLdqOd2oZrA1iuPIa+yUYyZkaZfz/emQwpIL1+Q4p1R/OplA4yc301AqruXXUcVDbEB+joHW3hy5FwK5t5OwTKatrSJBkydSF9zdXy98fYzGniRyRA65P0Ix/8J3BYB4edY2/w0Ip/mdYsYQljBY0A==
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH net-next v5 08/14] memory-provider: dmabuf devmem
- memory provider
-Content-Language: en-US
-To: Mina Almasry <almasrymina@google.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>,
- Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>,
- Praveen Kaligineedi <pkaligineedi@google.com>,
- Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20231218024024.3516870-1-almasrymina@google.com>
- <20231218024024.3516870-9-almasrymina@google.com>
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20231218024024.3516870-9-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 12/18/23 02:40, Mina Almasry wrote:
-> Implement a memory provider that allocates dmabuf devmem in the form of
-> net_iov.
-> 
-> The provider receives a reference to the struct netdev_dmabuf_binding
-> via the pool->mp_priv pointer. The driver needs to set this pointer for
-> the provider in the net_iov.
-> 
-> The provider obtains a reference on the netdev_dmabuf_binding which
-> guarantees the binding and the underlying mapping remains alive until
-> the provider is destroyed.
-> 
-> Usage of PP_FLAG_DMA_MAP is required for this memory provide such that
-> the page_pool can provide the driver with the dma-addrs of the devmem.
-> 
-> Support for PP_FLAG_DMA_SYNC_DEV is omitted for simplicity & p.order !=
-> 0.
-> 
-> Signed-off-by: Willem de Bruijn <willemb@google.com>
-> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> 
-> ---
-...
-> +
-> +static bool mp_dmabuf_devmem_release_page(struct page_pool *pool,
-> +					  struct netmem *netmem)
-> +{
-> +	WARN_ON_ONCE(!netmem_is_net_iov(netmem));
-> +
-> +	page_pool_clear_pp_info(netmem);
-> +
-> +	netdev_free_dmabuf(netmem_to_net_iov(netmem));
-> +
-> +	/* We don't want the page pool put_page()ing our net_iovs. */
-> +	return false;
-> +}
-> +
-> +const struct memory_provider_ops dmabuf_devmem_ops = {
-> +	.init			= mp_dmabuf_devmem_init,
-> +	.destroy		= mp_dmabuf_devmem_destroy,
-> +	.alloc_pages		= mp_dmabuf_devmem_alloc_pages,
-> +	.release_page		= mp_dmabuf_devmem_release_page,
-> +};
-> +EXPORT_SYMBOL(dmabuf_devmem_ops);
+On Mon, 2024-02-12 at 17:20 -0800, Yonghong Song wrote:
+[...]
 
-It might make sense to move all these functions together with
-new code from core/dev.c into a new file
+Hi Yonghong,
 
--- 
-Pavel Begunkov
+Thank you for the feedback, I put updated description at the end of
+the email, below are the answers to your questions.
+
+> > - (0) {7P,7,7}
+>=20
+> Why we have '7P' here?
+
+Precision is propagated because of the check in the "-> to end" branch,
+made it more clear in the updated description.
+
+> >    - (3) {7P,7,7}
+>=20
+> So here when (3) is hit, we have callback_depth=C2=A0 =3D 1, right?
+
+Yes, made callback depth explicit.
+
+> >      - (0) {7P,7,42} (checkpoint #1):
+>=20
+> So for below (3)/(2)/(1) we have callback_depth =3D 2, right?
+
+Yes.
+=20
+> >        - (3) {7P,7,42}
+> >          - (0) {7P,7,42}   -> to end
+> >        - (2) {7P,7,42}
+> >          - (0) {7P,42,42}  -> to end
+> >        - (1) {7P,7,42} (checkpoint #2)
+> >          - (0) {42P,7P,42} -> to end
+> >    - (2) {7P,7,7}
+>=20
+> So now we back to callback_depth =3D 1.
+
+Yes.
+
+[...]
+
+> > While the last branch of the tree has callback_depth of 0, and thus
+> > could yet explore the state {42,42,7} if not pruned prematurely.
+>=20
+> which 'last branch'?
+
+Gave it a name.
+
+> It would be good if the commit message mentions what will change
+> for the above digram if this commit is applied, so people can understand
+> why this commit helps.
+
+Added.
+
+--- 8< ---------------------------------
+
+    struct ctx {
+    	__u64 a;
+    	__u64 b;
+    	__u64 c;
+    };
+
+    static void loop_cb(int i, struct ctx *ctx)
+    {
+    	/* assume that generated code is "fallthrough-first":
+    	 * if ... =3D=3D 1 goto
+    	 * if ... =3D=3D 2 goto
+    	 * <default>
+    	 */
+    	switch (bpf_get_prandom_u32()) {
+    	case 1:  /* 1 */ ctx->a =3D 42; return 0; break;
+    	case 2:  /* 2 */ ctx->b =3D 42; return 0; break;
+    	default: /* 3 */ ctx->c =3D 42; return 0; break;
+    	}
+    }
+
+    SEC("tc")
+    __failure
+    __flag(BPF_F_TEST_STATE_FREQ)
+    int test(struct __sk_buff *skb)
+    {
+    	struct ctx ctx =3D { 7, 7, 7 };
+
+    	/* 0 */ bpf_loop(2, loop_cb, &ctx, 0);
+    	if (/* 4 */ ctx.a =3D=3D 42 && ctx.b =3D=3D 42 && ctx.c =3D=3D 7)
+    		/* 5 */ asm volatile("r0 /=3D 0;":::"r0");
+    	/* 6 */ return 0;
+    }
+
+Prior to this commit verifier built the following checkpoint tree for
+this example:
+
+ .------------------------------------- checkpoint / state name
+ |    .-------------------------------- code point number
+ |    |   .---------------------------- stack state {ctx.a,ctx.b,ctx.c}
+ |    |   |        .------------------- callback depth in frame #0
+ v    v   v        v
+   - (0) {7P,7P,7},depth=3D0
+     - (3) {7P,7,7},depth=3D1
+(a)    - (0) {7P,7,42},depth=3D1
+         - (3) {7P,7,42},depth=3D2
+           - (0) {7P,7,42},depth=3D2      loop terminates because of depth =
+limit
+             - (4) {7P,7,42},depth=3D0    predicted false, ctx.a marked pre=
+cise
+             - (6) exit
+         - (2) {7P,7,42},depth=3D2
+           - (0) {7P,42,42},depth=3D2     loop terminates because of depth =
+limit
+             - (4) {7P,42,42},depth=3D0   predicted false, ctx.a marked pre=
+cise
+             - (6) exit
+(b)      - (1) {7P,7P,42},depth=3D2
+           - (0) {42P,7P,42},depth=3D2    loop terminates because of depth =
+limit
+             - (4) {42P,7P,42},depth=3D0  predicted false, ctx.{a,b} marked=
+ precise
+             - (6) exit
+     - (2) {7P,7,7},depth=3D1
+       - (0) {7P,42,7},depth=3D1          considered safe, pruned using che=
+ckpoint (a)
+(c)  - (1) {7,7,7},depth=3D1              considered safe, pruned using che=
+ckpoint (b)
+
+Here checkpoint (b) has callback_depth of 2, meaning that it would
+never reach state {42,42,7}.
+While checkpoint (c) has callback_depth of 1, and thus
+could yet explore the state {42,42,7} if not pruned prematurely.
+This commit makes forbids such premature pruning,
+allowing verifier to explore states sub-tree starting at (c):
+
+(c)  - (1) {7,7,7P},depth=3D1
+       - (0) {42P,7,7P},depth=3D1
+         ...
+         - (2) {42,7,7},depth=3D2
+           - (0) {42,42,7},depth=3D2      loop terminates because of depth =
+limit
+             - (4) {42,42,7},depth=3D0    predicted true, ctx.{a,b,c} marke=
+d precise
+               - (5) division by zero
+
+--------------------------------- >8 ---
+
+Wdyt?
