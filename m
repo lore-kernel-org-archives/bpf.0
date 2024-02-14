@@ -1,84 +1,41 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FEBF8564A
-	for <bpf@vger.kernel.org>; Wed, 14 Feb 2024 17:40:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C596E8527B
+	for <bpf@vger.kernel.org>; Wed, 14 Feb 2024 17:41:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707932449; cv=none; b=SE/PqsPGS7wgEZnabxYLaiNhBOMB9t6dFKPq0lnU6whY6kEsGfZB1RXR2tw0+NEPoz9TW7bwBFpGiEmOhRnv6tZv4d/09NLoxbz2cPTyT5JClQ56di2FV+8/c+8KYHKErpPn3lM6VW+okaefwx9xqnGfl6V6aI8ICkbPrsCUOFg=
+	t=1707932466; cv=none; b=B25ZfsaPZyJST/8NNQgqQ5YKYz+q9kOtj+unJtM9uGo/T4lckeyPltmRR2qywTF4z/ArWIXgOzUoyGmKYvvkejYWsFIEfwKes/2dZglK5kb8D3etqEjYVyHcdaLGITjPpSOY56md0NUw7uI/0Jow6MWKgLf5VfD5Cr/Df/wG+lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707932449; c=relaxed/simple;
-	bh=PX2QIRe/Ic85BaGVX4Y1MwT3KJ9EiLQ96IEJSBjyAmE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MnrFyiJ3MdIt7mACB0Q+2eRvMHab4QohJgby1NlEGCz++4PzZHqGFeAxThiJuKJgDLTfdyYUN58Yut6JxAN/VesI/WaYuyHIAirvGsXy10Rpjl2kNgdJZaBe08SNX83tiQ8ddPa05V05C1il61pJ7zT9Xs3yFk+SyDk33w7sX9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylehuey.com; spf=pass smtp.mailfrom=kylehuey.com; dkim=pass (2048-bit key) header.d=kylehuey.com header.i=@kylehuey.com header.b=OPM2+jI5; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylehuey.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylehuey.com
+	s=arc-20240116; t=1707932466; c=relaxed/simple;
+	bh=btWyZeKqUEPAusEEv6qMCONeZN32RnSHUx4v/zijVEg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=stndGxGR1BxEBTyy27yJnhi0bRHRDFBXu4zyX887s2h4F7UJp78MrzpOWfUVi6hyyiIlRBR5oHHye5ivwXxsz6JYv9mzXuxUpQlzK/WlXvMbov0Mu2XuN60pSZ8K15+q421bk+xntbhgSjuEgnVI0Croajr81SNKZMxFIcToh5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YLTzfkA0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kylehuey.com header.i=@kylehuey.com header.b="OPM2+jI5"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6e09a890341so20378b3a.3
-        for <bpf@vger.kernel.org>; Wed, 14 Feb 2024 09:40:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google; t=1707932447; x=1708537247; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HG1Z9345f9l/NkzG8Y/mlPsfRpv6azyFKs0IWGP/jfI=;
-        b=OPM2+jI5a1lsGQN7mpklD9h+LInX4e/9Kti3Ophc6GHXLnrZIOULn5dEbwoQ+cnVSM
-         /LsWpst9DYAO7/0u9Uz0o9wnwtFGILz9q0YRJvKVNfmG0Jl5aqKvirnRNa5OUWa8B1GP
-         SR5yGTs9QKvKp5Js+L7mzTpFNSZ3eJxEAYSFdvIr+twcCP+Le1AT6LQx+UWbpQMZQAN8
-         SVPyITIlvaUcFzbyLV9AMY7dzZHIQCDVthQwfXelaRmMkwC95H+OG+sUTSbWpfiCu+ns
-         CaITZlwXfkv6RMcdQ7UAgaKHQFCEHRhTs+xBtgga0XFo4XdmmTMdXRsIzUFjM1LfEOYj
-         m/+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707932447; x=1708537247;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HG1Z9345f9l/NkzG8Y/mlPsfRpv6azyFKs0IWGP/jfI=;
-        b=s0AC5VVlo2Uf+p5r08O2YSjk/+aorKNlb1HGHgP9ONzEurgtP+b0CqZp8dTI912dUb
-         Zihzybr5zJC6j+dxILFHHUh0Cpw12xIAgCPkL3sr2qGeiQIsTQEpRIADEDq/b/+Dmyxl
-         BR7i+YvcjWzON3RpHqV+BUI5209mgu5iyQMmrjiV47pid4wORY4IYxEv8PH7J6FQc5hy
-         MWiDS5Ck0mD3VtFVFbI4LjFM3mpciAqngBHfWoF/pi1STjQWJdUy8t5QUP+NuGdhxpm0
-         HWolPCROIZSzu+3hTVByY7ogkPKLSdUHPdJmHIKkRx36N6Jm1bFYlVXwN1mTXzBClAZz
-         GUkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVyyt1wF26lCA26uCsG0hfJMpWgq1M1KQh7H4Jj4yFYXFnuDK6AYSim/2waYyUw2onNQIEP1z8vGjHiai5dVz051SA0
-X-Gm-Message-State: AOJu0Yx2DkqP+c8b0SQbjJMKVeuwQtXNkdetiJrRqrJogDbq4hziWylZ
-	MsQSB1F5EyDIa3y5OmZbmIW4o8SC2eDyZiaR5HCL8ZUJR40gj++SfH75I2v/0A==
-X-Google-Smtp-Source: AGHT+IENtoExpR4R0UgDDuR65Iu+tEswvgeW9/vs4xc1NOLROh77IEBzJgo5ubBcFQUYKsn2dOKbyw==
-X-Received: by 2002:a05:6a20:5a05:b0:19e:34ea:36ab with SMTP id jz5-20020a056a205a0500b0019e34ea36abmr2596022pzb.16.1707932446967;
-        Wed, 14 Feb 2024 09:40:46 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXCVm9x2c70Y3aUaKd5dJ9CyzyMqThObPmrRdxYZr+tKeNMU1F1t+87B11jHOCr3NjPSIjrc8unAoIFwG9j0ZWYfOUjq8Y//B8Ho60+jtM9/uIvVF7wEczEsKXfEZdbu4k/Y9gDo56B4zs5WTz7e8HU/vqmCrH6Z6MWpoEhr0laUxGnMeEoblbsvak/hKw7m0PitxNEgtda/ZfHIx0dItrJ+KMd2YuYqP6+nIRaMrV0tkWBYd60QoHOrxAP1b91xYjlvSOiS+hrHyKD+87Vj1ixhRsn3cZeOHk/i5mZamezp2z0CE4R0OzfEWoHj2rf9Ebdhn1/cnVD7Y+EXw1jOIXyYLZaQiQ2HfJEXyp/cgEvJd9nuISq0xMvVvHjqsdlKV2SDcOmjp1mCfBjDHkRZLt2pQEMu/cQUcGGi9PpWFjBJ0N3u1KcM3kfAj3rOcfBr8ouBYBh3YG/6Dn+nmnZP3fQNVfkKmR6Ilx/c0SR4B7kSy7dcKwVlQwpXqUThPCp6ernnDjQJbXCLoZAo4D5a47aC5fgS7he5A8wX+LihWY1lh8=
-Received: from zhadum.home.kylehuey.com (c-76-126-33-191.hsd1.ca.comcast.net. [76.126.33.191])
-        by smtp.gmail.com with ESMTPSA id p5-20020aa78605000000b006e0874cbaefsm9567604pfn.27.2024.02.14.09.40.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Feb 2024 09:40:46 -0800 (PST)
-From: Kyle Huey <me@kylehuey.com>
-X-Google-Original-From: Kyle Huey <khuey@kylehuey.com>
-To: Kyle Huey <khuey@kylehuey.com>,
-	linux-kernel@vger.kernel.org,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Marco Elver <elver@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Robert O'Callahan <robert@ocallahan.org>,
-	Song Liu <song@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	linux-perf-users@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [RESEND PATCH v5 3/4] perf/bpf: Allow a bpf program to suppress all sample side effects
-Date: Wed, 14 Feb 2024 09:39:34 -0800
-Message-Id: <20240214173950.18570-4-khuey@kylehuey.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240214173950.18570-1-khuey@kylehuey.com>
-References: <20240214173950.18570-1-khuey@kylehuey.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YLTzfkA0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45266C433F1;
+	Wed, 14 Feb 2024 17:41:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707932466;
+	bh=btWyZeKqUEPAusEEv6qMCONeZN32RnSHUx4v/zijVEg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=YLTzfkA0HsgTnjn/0yUkr3ES98BP0wub/KeS1AmOfo/cH/rDUA3Z12bLr/neHKOJQ
+	 WGUnEX/kBub70hettKax+xXHplCsOqbhQp22Wx+FJdgm6lzFJkR7F93FE1XHnJiN3v
+	 nKUtaUtDL5FwhAtP5BKp5a7uIKePJdV+4RIPxn0m2IFtlLm+wfgbiUA0KE+67iec9L
+	 lhL47S7GJq84s7Sx92y5ImBeQ8CDS2jhoSjhPM9VJXC5AY/iyP+WXzMPYeCgei/UeH
+	 v8CT+DWpoAaAtoHjaAD2gH4uvumQp2FyTN/MmkNSIVNW0jillzAZcRLOMiTU2Pk96x
+	 GfLB1sZ1C++YA==
+From: Andrii Nakryiko <andrii@kernel.org>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@kernel.org
+Cc: andrii@kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next] bpf: improve duplicate source code line detection
+Date: Wed, 14 Feb 2024 09:41:00 -0800
+Message-Id: <20240214174100.2847419-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -87,47 +44,146 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Returning zero from a bpf program attached to a perf event already
-suppresses any data output. Return early from __perf_event_overflow() in
-this case so it will also suppress event_limit accounting, SIGTRAP
-generation, and F_ASYNC signalling.
+Verifier log avoids printing the same source code line multiple times
+when a consecutive block of BPF assembly instructions are covered by the
+same original (C) source code line. This greatly improves verifier log
+legibility.
 
-Signed-off-by: Kyle Huey <khuey@kylehuey.com>
-Acked-by: Song Liu <song@kernel.org>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+Unfortunately, this check is imperfect and in production applications it
+quite often happens that verifier log will have multiple duplicated
+source lines emitted, for no apparently good reason. E.g., this is
+excerpt from a real-world BPF application (with register states omitted
+for clarity):
+
+BEFORE
+======
+; for (int i = 0; i < STROBE_MAX_MAP_ENTRIES; ++i) { @ strobemeta_probe.bpf.c:394
+5369: (07) r8 += 2                    ;
+5370: (07) r7 += 16                   ;
+; for (int i = 0; i < STROBE_MAX_MAP_ENTRIES; ++i) { @ strobemeta_probe.bpf.c:394
+5371: (07) r9 += 1                    ;
+5372: (79) r4 = *(u64 *)(r10 -32)     ;
+; for (int i = 0; i < STROBE_MAX_MAP_ENTRIES; ++i) { @ strobemeta_probe.bpf.c:394
+5373: (55) if r9 != 0xf goto pc+2
+; if (i >= map->cnt) @ strobemeta_probe.bpf.c:396
+5376: (79) r1 = *(u64 *)(r10 -40)     ;
+5377: (79) r1 = *(u64 *)(r1 +8)       ;
+; if (i >= map->cnt) @ strobemeta_probe.bpf.c:396
+5378: (dd) if r1 s<= r9 goto pc-5     ;
+; descr->key_lens[i] = 0; @ strobemeta_probe.bpf.c:398
+5379: (b4) w1 = 0                     ;
+5380: (6b) *(u16 *)(r8 -30) = r1      ;
+; task, data, off, STROBE_MAX_STR_LEN, map->entries[i].key); @ strobemeta_probe.bpf.c:400
+5381: (79) r3 = *(u64 *)(r7 -8)       ;
+5382: (7b) *(u64 *)(r10 -24) = r6     ;
+; task, data, off, STROBE_MAX_STR_LEN, map->entries[i].key); @ strobemeta_probe.bpf.c:400
+5383: (bc) w6 = w6                    ;
+; barrier_var(payload_off); @ strobemeta_probe.bpf.c:280
+5384: (bf) r2 = r6                    ;
+5385: (bf) r1 = r4                    ;
+
+As can be seen, line 394 is emitted thrice, 396 is emitted twice, and
+line 400 is duplicated as well. Note that there are no intermingling
+other lines of source code in between these duplicates, so the issue is
+not compiler reordering assembly instruction such that multiple original
+source code lines are in effect.
+
+It becomes more obvious what's going on if we look at *full* original line info
+information (using btfdump for this, [0]):
+
+  #2764: line: insn #5363 --> 394:3 @ ./././strobemeta_probe.bpf.c
+            for (int i = 0; i < STROBE_MAX_MAP_ENTRIES; ++i) {
+  #2765: line: insn #5373 --> 394:21 @ ./././strobemeta_probe.bpf.c
+            for (int i = 0; i < STROBE_MAX_MAP_ENTRIES; ++i) {
+  #2766: line: insn #5375 --> 394:47 @ ./././strobemeta_probe.bpf.c
+            for (int i = 0; i < STROBE_MAX_MAP_ENTRIES; ++i) {
+  #2767: line: insn #5377 --> 394:3 @ ./././strobemeta_probe.bpf.c
+            for (int i = 0; i < STROBE_MAX_MAP_ENTRIES; ++i) {
+  #2768: line: insn #5378 --> 414:10 @ ./././strobemeta_probe.bpf.c
+            return off;
+
+We can see that there are four line info records covering
+instructions #5363 through #5377 (instruction indices are shifted due to
+subprog instruction being appended to main program), all of them are
+pointing to the same C source code line #394. But each of them points to
+a different part of that line, which is denoted by differing column
+numbers (3, 21, 47, 3).
+
+But verifier log doesn't distinguish between parts of the same source code line
+and doesn't emit this column number information, so for end user it's just a
+repetitive visual noise. So let's improve the detection of repeated source code
+line and avoid this.
+
+With the changes in this patch, we get this output for the same piece of BPF
+program log:
+
+AFTER
+=====
+; for (int i = 0; i < STROBE_MAX_MAP_ENTRIES; ++i) { @ strobemeta_probe.bpf.c:394
+5369: (07) r8 += 2                    ;
+5370: (07) r7 += 16                   ;
+5371: (07) r9 += 1                    ;
+5372: (79) r4 = *(u64 *)(r10 -32)     ;
+5373: (55) if r9 != 0xf goto pc+2
+; if (i >= map->cnt) @ strobemeta_probe.bpf.c:396
+5376: (79) r1 = *(u64 *)(r10 -40)     ;
+5377: (79) r1 = *(u64 *)(r1 +8)       ;
+5378: (dd) if r1 s<= r9 goto pc-5     ;
+; descr->key_lens[i] = 0; @ strobemeta_probe.bpf.c:398
+5379: (b4) w1 = 0                     ;
+5380: (6b) *(u16 *)(r8 -30) = r1      ;
+; task, data, off, STROBE_MAX_STR_LEN, map->entries[i].key); @ strobemeta_probe.bpf.c:400
+5381: (79) r3 = *(u64 *)(r7 -8)       ;
+5382: (7b) *(u64 *)(r10 -24) = r6     ;
+5383: (bc) w6 = w6                    ;
+; barrier_var(payload_off); @ strobemeta_probe.bpf.c:280
+5384: (bf) r2 = r6                    ;
+5385: (bf) r1 = r4                    ;
+
+All the duplication is gone and the log is cleaner and less distracting.
+
+  [0] https://github.com/anakryiko/btfdump
+
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/events/core.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ kernel/bpf/log.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 24a718e7eb98..a329bec42c4d 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -9574,6 +9574,11 @@ static int __perf_event_overflow(struct perf_event *event,
+diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+index cc789efc7f43..c702c3a42958 100644
+--- a/kernel/bpf/log.c
++++ b/kernel/bpf/log.c
+@@ -362,15 +362,28 @@ __printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
+ 				  u32 insn_off,
+ 				  const char *prefix_fmt, ...)
+ {
+-	const struct bpf_line_info *linfo;
++	const struct bpf_line_info *linfo, *prev_linfo;
+ 	const struct btf *btf;
+ 	const char *s, *fname;
  
- 	ret = __perf_event_account_interrupt(event, throttle);
+ 	if (!bpf_verifier_log_needed(&env->log))
+ 		return;
  
-+#ifdef CONFIG_BPF_SYSCALL
-+	if (event->prog && !bpf_overflow_handler(event, data, regs))
-+		return ret;
-+#endif
++	prev_linfo = env->prev_linfo;
+ 	linfo = find_linfo(env, insn_off);
+-	if (!linfo || linfo == env->prev_linfo)
++	if (!linfo || linfo == prev_linfo)
++		return;
 +
- 	/*
- 	 * XXX event_limit might not quite work as expected on inherited
- 	 * events
-@@ -9623,10 +9628,7 @@ static int __perf_event_overflow(struct perf_event *event,
- 		irq_work_queue(&event->pending_irq);
- 	}
++	/* It often happens that two separate linfo records point to the same
++	 * source code line, but have differing column numbers. Given verifier
++	 * log doesn't emit column information, from user perspective we just
++	 * end up emitting the same source code line twice unnecessarily.
++	 * So instead check that previous and current linfo record point to
++	 * the same file (file_name_offs match) and the same line number, and
++	 * avoid emitting duplicated source code line in such case.
++	 */
++	if (prev_linfo && linfo->file_name_off == prev_linfo->file_name_off &&
++	    BPF_LINE_INFO_LINE_NUM(linfo->line_col) == BPF_LINE_INFO_LINE_NUM(prev_linfo->line_col))
+ 		return;
  
--#ifdef CONFIG_BPF_SYSCALL
--	if (!(event->prog && !bpf_overflow_handler(event, data, regs)))
--#endif
--		READ_ONCE(event->overflow_handler)(event, data, regs);
-+	READ_ONCE(event->overflow_handler)(event, data, regs);
- 
- 	if (*perf_event_fasync(event) && event->pending_kill) {
- 		event->pending_wakeup = 1;
+ 	if (prefix_fmt) {
 -- 
-2.34.1
+2.39.3
 
