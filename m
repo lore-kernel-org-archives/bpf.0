@@ -1,37 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E43133402;
-	Thu, 15 Feb 2024 16:10:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ECD1129A9D
+	for <bpf@vger.kernel.org>; Thu, 15 Feb 2024 16:25:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708013402; cv=none; b=WAXvpHSx4+ti3+ygXjPsro5jW+iWhKPS33VoP0yzemekeJAOUV8xpZlqSEoOKn4RqXzjrSj3ZCDYs/0I5pcepOnDYDgbM0TKmA/Ghk0yWksd2v3/giKYclsjY39G5OKA9BpHangDaT/jb+CBFvOEsguX4RRi/zARlajcVRMPkdk=
+	t=1708014351; cv=none; b=quCWppXHncgvpIpnfGxU++/doT8I0VTfh37092XQM9jWBllF1+KJAE4u8srHVUyVR/YMzLP9CrgsJANbG8EkOKtLe5L0doBIykHYsVV5T0hP9GA7CuGssyJ/AIe1pbxJANnQ5gowqBGSHAQjKSS0tAYsaUAGeGuya40TVLL5n3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708013402; c=relaxed/simple;
-	bh=u0TeSmVIJ93SBLQ3hOzzlF7PCXukg0LB0O2Qw6z3JqQ=;
+	s=arc-20240116; t=1708014351; c=relaxed/simple;
+	bh=BFQaw/4XIyBrKC2uUCTt8tZzMhNjsNgOGjnn8HpMqOY=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=piMeRWhnZL52394OAs/9KG53l2MLOehGF4EL/GdrS38H7qycj2Jj+ytpuxcAPzSG+dW2audfuNQ0E2+P5/Umy4vwAnTh1csBd1U81DXr3b9NCYJM/vNSSD3uD5x1MHQdWDyxqc8umGwyZRo9gcCkHyr3pIyZSFk09qelKhNSNlc=
+	 MIME-Version:Content-Type; b=Z5OvNmsrsNfOtpKQDm0pF1t+eddK8cEsZjFvLVSzqFLx7iuciceDsryDu0YqUNDzDogTc25bqYSnhrw6CdgiPBAWAlbNVTS4ova5EPwFawX8iD6QoKeY8icBZyzBLWjHJXx4rOpZI6Q1yunsfT39S49Q3EGah3skBAW52t9W4jM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DF52C433F1;
-	Thu, 15 Feb 2024 16:10:00 +0000 (UTC)
-Date: Thu, 15 Feb 2024 11:11:34 -0500
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D26F2C433C7;
+	Thu, 15 Feb 2024 16:25:48 +0000 (UTC)
+Date: Thu, 15 Feb 2024 11:27:22 -0500
 From: Steven Rostedt <rostedt@goodmis.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Florent Revest
- <revest@chromium.org>, linux-trace-kernel@vger.kernel.org, LKML
- <linux-kernel@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
- bpf <bpf@vger.kernel.org>, Sven Schnelle <svens@linux.ibm.com>, Alexei
- Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Arnaldo
- Carvalho de Melo <acme@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Alan Maguire <alan.maguire@oracle.com>, Mark Rutland
- <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>, Thomas
- Gleixner <tglx@linutronix.de>, Guo Ren <guoren@kernel.org>
-Subject: Re: [PATCH v7 28/36] tracing: Add ftrace_partial_regs() for
- converting ftrace_regs to pt_regs
-Message-ID: <20240215111134.7bfd1408@gandalf.local.home>
-In-Reply-To: <170723236068.502590.9568421023325291255.stgit@devnote2>
-References: <170723204881.502590.11906735097521170661.stgit@devnote2>
-	<170723236068.502590.9568421023325291255.stgit@devnote2>
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+ Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, John
+ Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@chromium.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, "Masami
+ Hiramatsu (Google)" <mhiramat@kernel.org>, Viktor Malik <vmalik@redhat.com>
+Subject: Re: [PATCH RFC bpf-next 0/4] bpf: Add support to attach return prog
+ in kprobe multi
+Message-ID: <20240215112722.2120471e@gandalf.local.home>
+In-Reply-To: <Zc0op6a3ZrI7JD9z@krava>
+References: <20240207153550.856536-1-jolsa@kernel.org>
+	<CAEf4BzZdPJWUiu9yNMsecB-tq0tHCLhrSF47b=w23fPevg=EWg@mail.gmail.com>
+	<ZceWuIgsmiLYyCxQ@krava>
+	<CAEf4Bzb6sPXAtDVke=CtCXev0mxhfgEG_O-xUA-e9-8NnbBtJQ@mail.gmail.com>
+	<ZctcEpz3fHK4RqUX@krava>
+	<CAEf4BzY_UBNe4ONqKGg5VtA-nY-ozgpQ=Du1+8ipQNnZ+JKCew@mail.gmail.com>
+	<ZcvadcwSA37sfDk4@krava>
+	<Zc0op6a3ZrI7JD9z@krava>
 X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -42,23 +46,24 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed,  7 Feb 2024 00:12:40 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+On Wed, 14 Feb 2024 21:55:03 +0100
+Jiri Olsa <olsajiri@gmail.com> wrote:
 
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Add ftrace_partial_regs() which converts the ftrace_regs to pt_regs.
-> If the architecture defines its own ftrace_regs, this copies partial
-> registers to pt_regs and returns it. If not, ftrace_regs is the same as
-> pt_regs and ftrace_partial_regs() will return ftrace_regs::regs.
 
-This says what this patch is doing and not why it is doing it.
+> Masami,
+> we recently discussed the possibility to store data between entry/return probe,
+> IIUC your current patchset [0] allows that, but it seems to be shared across all
+> the tracers for the given function (__ftrace_return_to_handler).. is the plan to
+> make the shadow stack per tracer and function? /cc Steven
+
+The shadow stack is per task, but it saves unique data per tracer per function.
+
+It allows up to 16 different tracers attached to function graph tracing at
+a time, as there is a limited shadow stack size, which all the attached
+tracers use. Now you can create your own shadow stack per user (bpf
+program?) and have a single registered function graph user that will demux
+the data coming in and out of the function.
 
 -- Steve
 
-> 
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Acked-by: Florent Revest <revest@chromium.org>
-> ---
->  Changes from previous series: NOTHING, just forward ported.
-> ---
+
