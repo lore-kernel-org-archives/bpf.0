@@ -1,174 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 266841870;
-	Thu, 15 Feb 2024 03:07:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8EB5398
+	for <bpf@vger.kernel.org>; Thu, 15 Feb 2024 03:07:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707966450; cv=none; b=nrbplWpLAeS3oB0zZYsGE07Qk4l9BdeKazPjeaGqadsn3zilxZgN3ci35wtoxJnJLKfzcYpPAcjFzvIOZEbZCm+DErN26x9FnaaX9zyizNdPCAD4wxyh/0IZRDuLRiyxPUSQxbt996Qu3elL7Y4cFgIiF2Tv6QkZ8zOJojfAO3w=
+	t=1707966454; cv=none; b=WLVSOKYn2JogJyhtJ8dyBaNwwYBSyUCPsQHLXbpzFh1BhBMnEBG7Q6wU8nyhU/mavM7A87o90mBa1up6MivMmL7UEbeckaoOUjxBOmJ7Kn/hnVPLMeyFGSI1Ckzyt2nd9+UkvsbJND9FnBA9kMk5WxtpGncOYQyDC2pyUc1hWOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707966450; c=relaxed/simple;
-	bh=qwwasO+1xBKjEezC6aXWqJJmEG8jQepQBuZ9KNK5I8Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RKehzgzwOshpO00cl4Ct58VMa6Tt20Ge51ZfXi1gahESQaQyYp74+GCIskN/W3ck7f6LwI7LQCygDW/0oOyuRQsB+iJbll/mnNL7+azK9YvulOgs02SLeqaus+IxMogySsDEGY+Hy34mn98ymw0b4WeH2kj347obGCKkT/E54bY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=heb5Zclc; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1707966454; c=relaxed/simple;
+	bh=iWTjOwhllXjQc9b84748H0YbmSvOj1ddaEZYy3Wodos=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kG3P1MDk8t5nPdGTBtiHjoNKmX+BS+uKLjJRIMX+Xs88sqUW7eJ90UEfQ5QqM7n/9a25uAh/P5lJDPZMmXw1zyC2vWjRRJmI0lQY6gy4l6nceSLuDIg1niW6b4rAfI6kcCl3G2mFYeLcshsWyt5DJV66Q1nxq2BsIz+hUqqwths=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TsFGJ0XL; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="heb5Zclc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707966450; x=1739502450;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qwwasO+1xBKjEezC6aXWqJJmEG8jQepQBuZ9KNK5I8Y=;
-  b=heb5ZclcVvK5Havye35ORgU/HuR1tlGUYPHV9B7NPewpumBoEIBGWKRf
-   Yus6w3PNaTnWaXlrUOod08VjgnDaoA93ig4cGaoOv5Z/c7JcY2JNguwC7
-   kjRB2DXhlngi/7H9F8eu1ABKkFVgiQE9jkH1zkr83s5do2GnpXS0C+7lw
-   kF0/XzfKM/Z0nU+P8pUGJNWbSGYdCuBZAJj2dGPNcYRuYUzh/pwa/BL4O
-   A5NCjC+c1JAdfDmqxJim1nAaE9MEB3Tx0NK2n9dacQjCeCSoFY8QpQDqu
-   n5jDDJxusdaLTBfrqjR/3ot+5Gx9reUO5VsP3Dfj2jL3krr20cUypzvtM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10984"; a="19461201"
-X-IronPort-AV: E=Sophos;i="6.06,161,1705392000"; 
-   d="scan'208";a="19461201"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 19:07:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,161,1705392000"; 
-   d="scan'208";a="3385643"
-Received: from yongliang-ubuntu20-ilbpg12.png.intel.com ([10.88.229.33])
-  by fmviesa009.fm.intel.com with ESMTP; 14 Feb 2024 19:07:21 -0800
-From: Choong Yong Liang <yong.liang.choong@linux.intel.com>
-To: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-	David E Box <david.e.box@linux.intel.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mark Gross <markgross@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <Jose.Abreu@synopsys.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Andrew Halaney <ahalaney@redhat.com>,
-	Serge Semin <fancer.lancer@gmail.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Voon Wei Feng <weifeng.voon@intel.com>,
-	Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-	Lai Peter Jun Ann <jun.ann.lai@intel.com>,
-	Abdul Rahim Faizal <faizal.abdul.rahim@intel.com>
-Subject: [PATCH net-next v5 0/9] Enable SGMII and 2500BASEX interface mode switching for Intel platforms
-Date: Thu, 15 Feb 2024 11:04:50 +0800
-Message-Id: <20240215030500.3067426-1-yong.liang.choong@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TsFGJ0XL"
+Message-ID: <77fbe6f8-b1df-44a2-a177-d3b9faba5482@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1707966449;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=p77/DaUTwYPoKQzXGliqzeByk1ybNdKc+Kp24OgIFNw=;
+	b=TsFGJ0XLo56agIwU895W68esWa6UoQblPuYWNcwvKMZcRaESIs3ExBkpjfkuFgdLcMKzdb
+	W9UTLmkjhv7KE8hxEZE9PRzV4d3ZNYUiB+rFRCEmBJ8A853NxN+Zkjh4i431H8WMxUerTv
+	3qGPgoYgpyGJTwKefKxnrgxW4LK0dqY=
+Date: Wed, 14 Feb 2024 19:07:14 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [LSF/MM/BPF TOPIC] Segmented Stacks for BPF Programs
+Content-Language: en-GB
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Tejun Heo <tj@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, David Vernet <void@manifault.com>,
+ lsf-pc <lsf-pc@lists.linux-foundation.org>
+References: <a15f6a20-c902-4057-a1a9-8259a225bb8b@linux.dev>
+ <CAADnVQJwN_NvjM2121urjutY3FqtzHxNWyGPWQzyzhCmFmDDzQ@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAADnVQJwN_NvjM2121urjutY3FqtzHxNWyGPWQzyzhCmFmDDzQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-From: root <root@YongLiang-Ubuntu20-iLBPG12.png.intel.com>
 
-During the interface mode change, the 'phylink_major_config' function
-will be triggered in phylink. The modification of the following functions
-will be triggered to support the switching between SGMII and 2500BASEX
-interfaces mode for the Intel platform.
+On 2/14/24 6:20 PM, Alexei Starovoitov wrote:
+> On Wed, Feb 14, 2024 at 11:53 AM Yonghong Song <yonghong.song@linux.dev> wrote:
+>> For each active kernel thread, the thread stack size is 2*PAGE_SIZE ([1]).
+>> Each bpf program has a maximum stack size 512 bytes to avoid
+>> overflowing the thread stack. But nested bpf programs may post
+>> a challenge to avoid stack overflow.
+>>
+>> For example, currently we already allow nested bpf
+>> programs esp in tracing, i.e.,
+>>     Prog_A
+>>       -> Call Helper_B
+>>         -> Call Func_C
+>>           -> fentry program is called due to Func_C.
+>>             -> Call Helper_D and then Func_E
+>>               -> fentry due to Func_E
+>>                 -> ...
+>> If we have too many bpf programs in the chain and each bpf program
+>> has close to 512 byte stack size, it could overflow the kernel thread
+>> stack.
+>>
+>> Another more practical potential use case is from a discussion between
+>> Alexei and Tejun. It is possible for a complex scheduler like sched-ext,
+>> we could have BPF prog hierarchy like below:
+>>                          Prog_1 (at system level)
+>>             Prog_Numa_1    Prog_Numa_2 ...  Prog_Numa_4
+>>          Prog_LLC_1 Prog_LLC_2 ...
+>>        Prog_CPU_1 ...
+>>
+>> Basically, the top bpf program (Prog_1) will call Prog_Numa_* programs
+>>
+>> through a kfunc to collect information from programs in each numa node.
+>> Each Prog_Numa_* program will call Prog_LLC_* programs to collect
+>> information from programs in each llc domain in that particular
+>> numa node, etc. The same for Prog_LLC_* vs. Prog_CPU_*.
+>> Now we have four level nested bpf programs.
+>>
+>> The proposed approach is to allocate stack from heap for
+>> each bpf program. That way, we do not need to worry about
+>> kernel stack overflow. Such an approach is called
+>> segmented stacks ([2]) in clang/gcc/go etc.
+>>
+>> Obviously there are some drawbacks for segmented stack approach:
+>>    - some performance degradation, so this approach may not for everyone.
+>>    - stack backtracking,  kernel changes are necessary.
+> I suspect segmented stacks the way compilers do them are not suitable
+> for bpf progs, since they break backtraces and backtrace is a crucial
+> feature that must work even when there are kernel bugs.
+> How about we keep call/ret, save/restore of callee saved regs
+> in the normal stack, but use a parallel memory (per-cpu or some other)
+> for bpf prog needs. What bpf prog thinks of stack will be in that memory
+> while the call chain will remain correct.
+>  From bpf prog pov the stack is where bpf_reg_r10 points to.
+> It doesn't have to be in the kernel stack. Shadow memory will work.
 
-- mac_get_pcs_neg_mode: A new function that selects the PCS negotiation
-  mode according to the interface mode.
-- xpcs_do_config: Re-initiate clause 37 auto-negotiation for SGMII interface
-  mode to perform auto-negotiation.
-- mac_finish: Configures the SerDes according to the interface mode.
+Thanks for suggestions. Make sense. This will resolve backtrace
+issue. Let me experiment with this approach.
 
-With the above changes, the code will work as follows during the
-interface mode change. The PCS and PCS negotiation mode will be selected
-for PCS configuration according to the interface mode. Then, the MAC
-driver will perform SerDes configuration on the 'mac_finish' based on the
-interface mode. During the SerDes configuration, the selected interface
-mode will identify TSN lane registers from FIA and then send IPC commands
-to the Power Management Controller (PMC) through the PMC driver/API.
-PMC will act as a proxy to program the PLL registers.
+>
+> Let's also call it something else than "segmented stack" to avoid
+> confusion.
 
-Change log:
-v1 -> v2: 
- - Add static to pmc_lpm_modes declaration
- - Add cur_link_an_mode to the kernel doc
- - Combine 2 commits i.e. "stmmac: intel: Separate driver_data of ADL-N
- from TGL" and "net: stmmac: Add 1G/2.5G auto-negotiation
- support for ADL-N" into 1 commit.
-
-v2 -> v3:
- - Create `pmc_ipc.c` file for `intel_pmc_ipc()` function and 
- allocate the file in `arch/x86/platform/intel/` directory.
- - Update phylink's AN mode during phy interface change and 
- not exposing phylink's AN mode into phylib.
- 
- v3 -> v4:
- - Introduce `allow_switch_interface` flag to have all ethtool 
- link modes that are supported and advertised will be published.
- - Introduce `mac_get_pcs_neg_mode` function that selects the PCS 
- negotiation mode according to the interface mode.
- - Remove pcs-xpcs.c changes and handle pcs during `mac_select_pcs`
- function
- - Configure SerDes base on the interface on `mac_finish` function.
- 
- v4 -> v5:
- - remove 'allow_switch_interface' related patches.
- - remove 'mac_select_pcs' related patches.
- - add a soft reset according to XPCS datasheet for re-initiate Clause 37
- auto-negotiation when switching to SGMII interface mode.
-
-Choong Yong Liang (7):
-  net: phylink: provide mac_get_pcs_neg_mode() function
-  net: phylink: add phylink_pcs_neg_mode() declaration into phylink.h
-  net: stmmac: select PCS negotiation mode according to the interface
-    mode
-  net: pcs: xpcs: re-initiate clause 37 Auto-negotiation
-  net: stmmac: configure SerDes on mac_finish
-  stmmac: intel: interface switching support for EHL platform
-  stmmac: intel: interface switching support for ADL-N platform
-
-David E. Box (1):
-  arch: x86: Add IPC mailbox accessor function and add SoC register
-    access
-
-Tan, Tee Min (1):
-  stmmac: intel: configure SerDes according to the interface mode
-
- MAINTAINERS                                   |   2 +
- arch/x86/Kconfig                              |   9 +
- arch/x86/platform/intel/Makefile              |   1 +
- arch/x86/platform/intel/pmc_ipc.c             |  75 ++++++
- drivers/net/ethernet/stmicro/stmmac/Kconfig   |   2 +
- .../net/ethernet/stmicro/stmmac/dwmac-intel.c | 233 ++++++++++++++++--
- .../net/ethernet/stmicro/stmmac/dwmac-intel.h |  81 ++++++
- .../net/ethernet/stmicro/stmmac/stmmac_main.c |  30 +++
- drivers/net/pcs/pcs-xpcs.c                    |  62 ++++-
- drivers/net/phy/phylink.c                     |  21 +-
- include/linux/phylink.h                       |   8 +
- .../linux/platform_data/x86/intel_pmc_ipc.h   |  34 +++
- include/linux/stmmac.h                        |   5 +
- 13 files changed, 538 insertions(+), 25 deletions(-)
- create mode 100644 arch/x86/platform/intel/pmc_ipc.c
- create mode 100644 include/linux/platform_data/x86/intel_pmc_ipc.h
-
--- 
-2.34.1
+Indeed, "segmented stack" terminoloty is not appropriate any more since 
+the original stack is backtracable. Will think of a different one.
 
