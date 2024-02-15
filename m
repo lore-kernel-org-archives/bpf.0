@@ -1,269 +1,168 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B5212FF63
-	for <bpf@vger.kernel.org>; Thu, 15 Feb 2024 13:16:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9404212FF88
+	for <bpf@vger.kernel.org>; Thu, 15 Feb 2024 13:26:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708003007; cv=none; b=XYgL2FF8tU/gqitgZFxMA1K7ds/ClQwClEZ9CC+GLOY/OqA/sEN5Zu701HR63naySzPo8yTo3Q1f7uQ8D6+jlEf6W+DJq5ZW2vPNtJMZIDMKMLkdjjBJZRgbD/GKzx8m0hnfOuTJ0iAb56x77QMhtiu17QqSK+FTZZto1H0ymXo=
+	t=1708003604; cv=none; b=i1kJMBjxxHiR7UbT88f1oemAiw9xwpobbqHHRkf9wUKDTcKXH9hgWSmO3Q6ETLKLGzb0XRjqMGVdv9X2e1YKf8XHjA3b2tpW4atV9YVo+mhZQfzFoQTvd7aR74dIvmqMHE9XfXeRd+NZNnf+atu5fKCQEQ+185alhyFZkh6iUhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708003007; c=relaxed/simple;
-	bh=VEIju5TUcEp97GzypWRD4thmoyoSsowpEB1lp6A2IeQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o99IolTOGkafowyhd+D6FsKekZWKwt6lwzYEU+x77xj2wpgK03X6qg74mBN2JSIwRjyszdzWyPsJtFi8OZ8tlpZEhrSLgloWSrJ0w/yi0DKKl9VGiYHTnUkAJD/GfnkZCx6xlcP53YEQ9OsUYG6PMOp7v78YO2hrpITCsfNoEsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OnCDQfvv; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1708003604; c=relaxed/simple;
+	bh=z+o5iOnXAyRBzVGt5Tc6uCVeHlkYoqCfK8Ac6jiEb6M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=avG32fwHpTIhksHSPsffE8IyxF+iBlCZTFM9yYYkJmp3H/NSlegVoIRI/EZoAsVU4CSwRJj3tRTKsRJCUCRRyOL/+jfu0dUXEs/vZiiGD3VwVgorq7LLvQFSTwAwNRIB8x9G4nR9wN3sO2AgNMM19Q46V4UQFZTkCNpxmAd+y78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aJ5ovC8y; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OnCDQfvv"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6da4a923b1bso786127b3a.2
-        for <bpf@vger.kernel.org>; Thu, 15 Feb 2024 05:16:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708003005; x=1708607805; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HZKsx2Z/h/NW4KybRtx2hvp0c5P8jUpTVELuRFYJ8s0=;
-        b=OnCDQfvvAISKUta+2koJDl4OcYUROEnD1K5A9ongUrKEiyiE6fbq2pqcS8KVQFk25U
-         5+qsmvZ5Nj3rQQxPgDDjDpERz3n512hLALzsFZmjIglao/0Ucg0uPtRCwke2+W8f8b8o
-         RGgK/aS9on3zRyd3vraDtwAjOwFT1wiUe2xUOkTj3uT/BJzGDLHzJxJ3iOHX1fvQPrT9
-         rImGbPbPBPtIl7GhMcecICZnWKDLT530oG9wGM9c2ph2Datf55pgVXfojQQ6853FsDp3
-         5eSbBMzAjIHcCqgP6MYyt1i/BnFBs/ujEHe/Iy44AsYOocpBzsJFtkdSPV6C/2IlQKcr
-         4+BA==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aJ5ovC8y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1708003601;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Tv8iEvuALyULMFKYPzlVkSrmB4LE1yRmY8GywglSPNM=;
+	b=aJ5ovC8yhtUd4LaTAWMXJwBIRoM0UGP7N4V2LiyM1ugPcrIGCrB8YRQMDRJO1ocqA5+FU2
+	+wuzwZJ/wxNXHk2w6Q2YBmdIjmHE8c8k5WiNYzsc1678ltoFjnpEOaxEQHfZOPxnPsYiuA
+	GT4WErhu0yPHU06J8I0lr9KX389QBsI=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-570-gKNbBUZ6ND2KH7AIDBZVDw-1; Thu, 15 Feb 2024 08:26:40 -0500
+X-MC-Unique: gKNbBUZ6ND2KH7AIDBZVDw-1
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-559391de41bso639172a12.3
+        for <bpf@vger.kernel.org>; Thu, 15 Feb 2024 05:26:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708003005; x=1708607805;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HZKsx2Z/h/NW4KybRtx2hvp0c5P8jUpTVELuRFYJ8s0=;
-        b=M5CY6gAgMlHFRLuLvlJghYWBm6XEG/tAH6/XDmOo5LDpc1BcRlrYLcK2FZ0d00buom
-         mT1fs3MpZBNMA1WsQ4koJn6fBAfZ2VyX8EEXzm0YjLhy2CvY5bC4mBhErlUO8kKI0VDL
-         ErWdUAMtmSbykQSh4cv9wLftF0WaTafcOKTUYiWicL5DAa2GHlVjpVxV6wLno6Y9egS7
-         lLnVvLgpYERc/Nxo6s8NLm8h7y9G6k7KgBR9RgH1K6dWCXpDzZDoj4MqGE2+wULvu2HJ
-         uKnRctU3h8ZmwgPfXxVRYTamRUarm95yHx/T0FQYGEnLd8itL2iYdDNrec9aIMbRkizz
-         rEMA==
-X-Gm-Message-State: AOJu0YxWwPbElc2bpu10fK9odNtMVZWax6lzFMdoQ1VoOkFChJp2Mlh3
-	0EG44ltS6iUD2zLYxBklmmVx81/FWoFGRF5S/1UgLDj7DOaQgOB3
-X-Google-Smtp-Source: AGHT+IE4Kp2yLMRqDGF80sNqTCvBHHnxZuaMXGGFp8TbR5Q1wdyBr8cxvYIPSNdMXva7mETGakNsWw==
-X-Received: by 2002:a05:6a21:151b:b0:1a0:6eb4:76e1 with SMTP id nq27-20020a056a21151b00b001a06eb476e1mr2290728pzb.4.1708003004991;
-        Thu, 15 Feb 2024 05:16:44 -0800 (PST)
-Received: from [172.20.10.5] ([111.65.46.187])
-        by smtp.gmail.com with ESMTPSA id x64-20020a638643000000b005dc816b2369sm1333062pgd.28.2024.02.15.05.16.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Feb 2024 05:16:44 -0800 (PST)
-Message-ID: <81607ab3-a7f5-4ad1-98c2-771c73bfb55c@gmail.com>
-Date: Thu, 15 Feb 2024 21:16:37 +0800
+        d=1e100.net; s=20230601; t=1708003599; x=1708608399;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Tv8iEvuALyULMFKYPzlVkSrmB4LE1yRmY8GywglSPNM=;
+        b=WSBNQtTe3YQhRShS2oUAi6Jvvhu6U2vZShjSZw4Io89qM3rb6VkSj4igI3nRqMp/Zl
+         jyzdnvw2WEy95l8EZBX5pCaPoAoIXtZyg7rAQF01WueEMJhRec2XhUKxWT1yzODASqT5
+         cf3S5VWv2gB8enQyxb+uZ83GV5cQ9dIOrt5IE2/1CUTe2lpC7neLIoFI+qo3R8hior1J
+         rLmBl2Y+Hk4wzyrcwuoBBlRFQEAqvtzPjPOVVzZCa5VdTQaV0zSScolPyIOBKeer5qx8
+         dmXsSLx+vmtjQzOKUqA7KZR9hnYvQWJx3ji5UDd6VbxB+ju69+ZGY8xiyNn76L9/OjAb
+         hYFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX1raaBXvoDpaHE15LsBzhsNS8XAi6DxUIT1GcPGuA0NGGl2MVc52wFIDgF/jpnhfjhjbQJX4M6BXKrBPo6QDynxwVj
+X-Gm-Message-State: AOJu0YyTuYUB4zTCVHpBZyKDJWt2TEUmGbQITwRsE8nhkgL5TNN1zViX
+	dfJjokqG/wjtN1kzfcD2i0lF6cJRidGFI7Va4CaKWnJlRjSaXQ+X20CK2DvoGYYxmsoi9ab0mSZ
+	+BDblAQf5uExjmlTxkTHI57QMcvF5gVUFt5ODdPUfMl2Yw3+eVA==
+X-Received: by 2002:a05:6402:1a42:b0:562:71:8105 with SMTP id bf2-20020a0564021a4200b0056200718105mr1175805edb.11.1708003599257;
+        Thu, 15 Feb 2024 05:26:39 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHPf/ND7jD6kLW9EkMyz5hznD/WCdWi9FJ5Pk1ElHBJ0YDMzOQcRFnXqZQMypPf5OuMvSf+UA==
+X-Received: by 2002:a05:6402:1a42:b0:562:71:8105 with SMTP id bf2-20020a0564021a4200b0056200718105mr1175796edb.11.1708003599040;
+        Thu, 15 Feb 2024 05:26:39 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id de8-20020a056402308800b00562149c7bf4sm534659edb.48.2024.02.15.05.26.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Feb 2024 05:26:38 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 025BC10F59B9; Thu, 15 Feb 2024 14:26:37 +0100 (CET)
+From: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>
+Cc: Alexander Lobakin <aleksander.lobakin@intel.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH net-next 1/3] net: Register system page pool as an XDP memory model
+Date: Thu, 15 Feb 2024 14:26:30 +0100
+Message-ID: <20240215132634.474055-2-toke@redhat.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240215132634.474055-1-toke@redhat.com>
+References: <20240215132634.474055-1-toke@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/4] bpf, x64: Fix tailcall hierarchy
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, Ilya Leoshkevich <iii@linux.ibm.com>,
- Hengqi Chen <hengqi.chen@gmail.com>, kernel-patches-bot@fb.com
-References: <20240104142226.87869-1-hffilwlqm@gmail.com>
- <20240104142226.87869-3-hffilwlqm@gmail.com>
- <CAADnVQJ1szry9P00wweVDu4d0AQoM_49qT-_ueirvggAiCZrpw@mail.gmail.com>
- <7af3f9c6-d25a-4ca5-9e15-c1699adcf7ab@gmail.com>
- <CAADnVQLOswL3BY1s0B28wRZH1PU675S6_2=XknjZKNgyJ=yDxw@mail.gmail.com>
-From: Leon Hwang <hffilwlqm@gmail.com>
-In-Reply-To: <CAADnVQLOswL3BY1s0B28wRZH1PU675S6_2=XknjZKNgyJ=yDxw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+To make the system page pool usable as a source for allocating XDP
+frames, we need to register it with xdp_reg_mem_model(), so that page
+return works correctly. This is done in preparation for using the system
+page pool for the XDP live frame mode in BPF_TEST_RUN; for the same
+reason, make the per-cpu variable non-static so we can access it from
+the test_run code as well.
 
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ include/linux/netdevice.h |  1 +
+ net/core/dev.c            | 13 ++++++++++++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
-On 2024/2/15 07:16, Alexei Starovoitov wrote:
-> On Tue, Feb 13, 2024 at 9:47 PM Leon Hwang <hffilwlqm@gmail.com> wrote:
->>
->>
->>
->> On 2024/1/5 12:15, Alexei Starovoitov wrote:
->>> On Thu, Jan 4, 2024 at 6:23 AM Leon Hwang <hffilwlqm@gmail.com> wrote:
->>>>
->>>>
->>>
->>> Other alternatives?
->>
->> I've finish the POC of an alternative, which passed all tailcall
->> selftests including these tailcall hierarchy ones.
->>
->> In this alternative, I use a new bpf_prog_run_ctx to wrap the original
->> ctx and the tcc_ptr, then get the tcc_ptr and recover the original ctx
->> in JIT.
->>
->> Then, to avoid breaking runtime with tailcall on other arch, I add an
->> arch-related check bpf_jit_supports_tail_call_cnt_ptr() to determin
->> whether to use bpf_prog_run_ctx.
->>
-
-[SNIP]
-
->> +
->> +       if (bpf_jit_supports_tail_call_cnt_ptr() && prog->jited)
->> +               ret = dfunc(&run_ctx, prog->insnsi, prog->bpf_func);
->> +       else
->> +               ret = dfunc(ctx, prog->insnsi, prog->bpf_func);
-> 
-> This is no good either.
-> We cannot introduce two extra run-time checks before calling every bpf prog.
-> The solution must be overhead free for common cases.
-> 
-> Can we switch to percpu tail_call_cnt instead of on stack and %rax tricks ?
-> 
-
-Good idea to use percpu tail_call_cnt.
-
-I did another POC to use percpu tail_call_cnt, which passed all tailcall
-selftests too.
-
-In this POC, in order to prepare tcc_ptr at the prologue of x86 JIT,
-it's to call bpf_tail_call_cnt_prepare() to get the pointer that points
-to percpu tail_call_cnt, and to store the pointer to %rax meanwhile.
-
-Here's the diff:
-
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 4065bdcc5b2a4..fc1df6a7d87c9 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -241,6 +241,8 @@ int bpf_arch_text_invalidate(void *dst, size_t len)
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index c541550b0e6e..e1dfdf0c4075 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3345,6 +3345,7 @@ static inline void input_queue_tail_incr_save(struct softnet_data *sd,
  }
-
- struct jit_context {
-+	int prologue_tail_call_offset;
-+
- 	int cleanup_addr; /* Epilogue code offset */
-
- 	/*
-@@ -250,6 +252,8 @@ struct jit_context {
- 	 */
- 	int tail_call_direct_label;
- 	int tail_call_indirect_label;
-+
-+	bool tail_call_reachable;
- };
-
- /* Maximum number of bytes emitted while JITing one eBPF insn */
-@@ -259,7 +263,7 @@ struct jit_context {
- /* Number of bytes emit_patch() needs to generate instructions */
- #define X86_PATCH_SIZE		5
- /* Number of bytes that will be skipped on tailcall */
--#define X86_TAIL_CALL_OFFSET	(22 + ENDBR_INSN_SIZE)
-+#define X86_TAIL_CALL_OFFSET	(14 + ENDBR_INSN_SIZE)
-
- static void push_r12(u8 **pprog)
+ 
+ DECLARE_PER_CPU_ALIGNED(struct softnet_data, softnet_data);
++DECLARE_PER_CPU_ALIGNED(struct page_pool *, system_page_pool);
+ 
+ static inline int dev_recursion_level(void)
  {
-@@ -389,6 +393,19 @@ static void emit_cfi(u8 **pprog, u32 hash)
- 	*pprog = prog;
- }
-
-+DEFINE_PER_CPU(u32, bpf_tail_call_cnt);
-+
-+__attribute__((used))
-+static u32 *bpf_tail_call_cnt_prepare(void)
-+{
-+	u32 *tcc_ptr = this_cpu_ptr(&bpf_tail_call_cnt);
-+
-+	/* Initialise tail_call_cnt. */
-+	*tcc_ptr = 0;
-+
-+	return tcc_ptr;
-+}
-+
- /*
-  * Emit x86-64 prologue code for BPF program.
-  * bpf_tail_call helper will skip the first X86_TAIL_CALL_OFFSET bytes
-@@ -396,7 +413,7 @@ static void emit_cfi(u8 **pprog, u32 hash)
+diff --git a/net/core/dev.c b/net/core/dev.c
+index d8dd293a7a27..cdb916a647e7 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -428,7 +428,7 @@ EXPORT_PER_CPU_SYMBOL(softnet_data);
+  * PP consumers must pay attention to run APIs in the appropriate context
+  * (e.g. NAPI context).
   */
- static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf,
- 			  bool tail_call_reachable, bool is_subprog,
--			  bool is_exception_cb)
-+			  bool is_exception_cb, struct jit_context *ctx)
- {
- 	u8 *prog = *pprog;
-
-@@ -406,21 +423,15 @@ static void emit_prologue(u8 **pprog, u32
-stack_depth, bool ebpf_from_cbpf,
- 	 */
- 	emit_nops(&prog, X86_PATCH_SIZE);
- 	if (!ebpf_from_cbpf) {
--		if (tail_call_reachable && !is_subprog) {
--			/* When it's the entry of the whole tailcall context,
--			 * zeroing rax means initialising tail_call_cnt.
--			 */
--			EMIT2(0x31, 0xC0);       /* xor eax, eax */
--			EMIT1(0x50);             /* push rax */
--			/* Make rax as ptr that points to tail_call_cnt. */
--			EMIT3(0x48, 0x89, 0xE0); /* mov rax, rsp */
--			EMIT1_off32(0xE8, 2);    /* call main prog */
--			EMIT1(0x59);             /* pop rcx, get rid of tail_call_cnt */
--			EMIT1(0xC3);             /* ret */
--		} else {
--			/* Keep the same instruction size. */
--			emit_nops(&prog, 13);
--		}
-+		/* These 5-bytes nops is prepared to emit_call() to call
-+		 * bpf_tail_call_cnt_prepare later.
-+		 *
-+		 * After calling bpf_tail_call_cnt_prepare, %rax will be
-+		 * the tail_call_cnt pointer that points to an initialised
-+		 * PER-CPU tail_call_cnt.
-+		 */
-+		ctx->prologue_tail_call_offset = prog - *pprog;
-+		emit_nops(&prog, X86_PATCH_SIZE);
- 	}
- 	/* Exception callback receives FP as third parameter */
- 	if (is_exception_cb) {
-@@ -583,6 +594,17 @@ static void emit_return(u8 **pprog, u8 *ip)
- 	*pprog = prog;
- }
-
-+static void bpf_tail_call_prologue_fixup(u8 *image, struct bpf_prog *prog,
-+					 struct jit_context *ctx)
-+{
-+	bool ebpf_from_cbpf = bpf_prog_was_classic(prog);
-+	u8 *ip = image + ctx->prologue_tail_call_offset;
-+
-+	if (!ebpf_from_cbpf && ctx->tail_call_reachable && !bpf_is_subprog(prog))
-+		__bpf_arch_text_poke(ip, BPF_MOD_CALL, NULL,
-+				     bpf_tail_call_cnt_prepare);
-+}
-+
+-static DEFINE_PER_CPU_ALIGNED(struct page_pool *, system_page_pool);
++DEFINE_PER_CPU_ALIGNED(struct page_pool *, system_page_pool);
+ 
+ #ifdef CONFIG_LOCKDEP
  /*
-  * Generate the following code:
-  *
-@@ -1165,10 +1187,12 @@ static int do_jit(struct bpf_prog *bpf_prog, int
-*addrs, u8 *image, u8 *rw_image
+@@ -11739,12 +11739,20 @@ static int net_page_pool_create(int cpuid)
+ 		.pool_size = SYSTEM_PERCPU_PAGE_POOL_SIZE,
+ 		.nid = NUMA_NO_NODE,
+ 	};
++	struct xdp_mem_info info;
+ 	struct page_pool *pp_ptr;
++	int err;
+ 
+ 	pp_ptr = page_pool_create_percpu(&page_pool_params, cpuid);
+ 	if (IS_ERR(pp_ptr))
+ 		return -ENOMEM;
+ 
++	err = xdp_reg_mem_model(&info, MEM_TYPE_PAGE_POOL, pp_ptr);
++	if (err) {
++		page_pool_destroy(pp_ptr);
++		return err;
++	}
++
+ 	per_cpu(system_page_pool, cpuid) = pp_ptr;
+ #endif
+ 	return 0;
+@@ -11834,12 +11842,15 @@ static int __init net_dev_init(void)
+ out:
+ 	if (rc < 0) {
+ 		for_each_possible_cpu(i) {
++			struct xdp_mem_info mem = { .type = MEM_TYPE_PAGE_POOL };
+ 			struct page_pool *pp_ptr;
+ 
+ 			pp_ptr = per_cpu(system_page_pool, i);
+ 			if (!pp_ptr)
+ 				continue;
+ 
++			mem.id = pp_ptr->xdp_mem_id;
++			xdp_unreg_mem_model(&mem);
+ 			page_pool_destroy(pp_ptr);
+ 			per_cpu(system_page_pool, i) = NULL;
+ 		}
+-- 
+2.43.0
 
- 	/* tail call's presence in current prog implies it is reachable */
- 	tail_call_reachable |= tail_call_seen;
-+	ctx->tail_call_reachable = tail_call_reachable;
-
- 	emit_prologue(&prog, bpf_prog->aux->stack_depth,
- 		      bpf_prog_was_classic(bpf_prog), tail_call_reachable,
--		      bpf_is_subprog(bpf_prog), bpf_prog->aux->exception_cb);
-+		      bpf_is_subprog(bpf_prog), bpf_prog->aux->exception_cb,
-+		      ctx);
- 	/* Exception callback will clobber callee regs for its own use, and
- 	 * restore the original callee regs from main prog's stack frame.
- 	 */
-@@ -3097,6 +3121,7 @@ struct bpf_prog *bpf_int_jit_compile(struct
-bpf_prog *prog)
- 			}
-
- 			bpf_tail_call_direct_fixup(prog);
-+			bpf_tail_call_prologue_fixup(image, prog, &ctx);
- 		} else {
- 			jit_data->addrs = addrs;
- 			jit_data->ctx = ctx;
-
-Thanks,
-Leon
