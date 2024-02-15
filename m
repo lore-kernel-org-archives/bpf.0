@@ -1,148 +1,122 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018D513399E;
-	Thu, 15 Feb 2024 16:27:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A376A1DFE4
+	for <bpf@vger.kernel.org>; Thu, 15 Feb 2024 16:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708014447; cv=none; b=rYNlXKBL5IrnTfegumx/DLSmrDgCAYMdmY5ANZ8jXYGbEJqVB9QXOye5bJBVS+d7NgEbmlWZnW/hpg7/FCAxdMBuhOwvQIS2qgixuLlNyZm9ESvU2CYpFB05u5dUDgUCCgB7y72Bee50B/EkzBjK+0zpx+iNS6sqJBR8WfdcpE8=
+	t=1708014710; cv=none; b=ixuqawfV1gD9edW4F5Ioi/0Xb3KEuGOV6aATs3V+VQRrSJT9ZXwy8qJV/8Rc36ZXtWtTfAX6wiRsbFc+zb6yfWIT9f7DKUT6RfvkGTcQcmxQu4kJrEtE7Q1VewZ9P7/wJ2NYLS21Voobq2wJcZn6lxcPchq9X4dTBwy9OxRcpgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708014447; c=relaxed/simple;
-	bh=CyRI1uCzCoGWcjKACcwDD3OCyQCqdt4SPHYVdoOyQ1A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CI5iDFmU55BTUuyGe+7/o9kEZijUHkK3oXFhZc2ufWt0+XnSSaqIy39MiHAeSPN7LaSxZzIc9dCGlpbLSYGT0K0IYhLwA1lMTOyOCa1hichXRsPztjuRNusXFViawbycDOAEOeL5yGU8W9cjsaRcavtmOadQ0kZrNvdlBPeJppQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=O3eXekOJ; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	s=arc-20240116; t=1708014710; c=relaxed/simple;
+	bh=8hTW03EyvJOfj796PBbP80vFWEaALIJjSyNkTfzLZ7g=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HjseSz8OU8VgHwKPwK6RgSFJW2yaDrmZ+TLV6oczNsWjDLN0dww7hNKf7ef92Vo2NShQfcyPE/96rJYX3bhzsLWANlRZEWZvtVdTa0TSjwbBHvolfSNFJ5cUVMChNncfGPKDkD5m99f1MbnccEMvNPUBW1YsZjWiCGYimjsv61A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ligqpZZO; arc=none smtp.client-ip=209.85.166.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="O3eXekOJ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=EWZIyim+Tuvyt3wOnNkE0nCb5ATARobWhzBcyG/FuL0=; b=O3eXekOJVXDVMI39FdMDQkdpcQ
-	PyjL5Dp5oG/MIRx71Pmy9Oi9Hqr6Y5DXH1kPsFJECm5WupOzQxQbOVHAWtYrJvcQR6gWYx+INfcsj
-	RgJ5BhvXhBy8LpAGO6Bn9EVL+nCHFpRakzgLNGrKYS6chsqYXFfNQMp5Nd1DEibb8RGpESJD22vtb
-	mxLpMMerGDK7pWuuZvnrxKzUtE77cgbAHo+Sa3QVBQX9uYcpWwISHvv0IwKzm14Mn+ILqGbTXFctw
-	zuJqNDDoa8H2VHQp77/Mb+L9J5ruUXBZddwARnpiVsfxS6tP/jxZCuvDl3nVDDB7Iy5CRJ2DGWnBp
-	sIXX7vsQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:50496)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1raeZg-0004Qb-2H;
-	Thu, 15 Feb 2024 16:27:00 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1raeZb-0004pl-Eb; Thu, 15 Feb 2024 16:26:55 +0000
-Date: Thu, 15 Feb 2024 16:26:55 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Choong Yong Liang <yong.liang.choong@linux.intel.com>
-Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-	David E Box <david.e.box@linux.intel.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mark Gross <markgross@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <Jose.Abreu@synopsys.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Andrew Halaney <ahalaney@redhat.com>,
-	Serge Semin <fancer.lancer@gmail.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
-	Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-	Lai Peter Jun Ann <jun.ann.lai@intel.com>,
-	Abdul Rahim Faizal <faizal.abdul.rahim@intel.com>
-Subject: Re: [PATCH net-next v5 1/9] net: phylink: provide
- mac_get_pcs_neg_mode() function
-Message-ID: <Zc47T/qv8Xg2SA21@shell.armlinux.org.uk>
-References: <20240215030500.3067426-1-yong.liang.choong@linux.intel.com>
- <20240215030500.3067426-2-yong.liang.choong@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ligqpZZO"
+Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-7baa8da5692so50494139f.0
+        for <bpf@vger.kernel.org>; Thu, 15 Feb 2024 08:31:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708014708; x=1708619508; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=liqOngPWYl+OBSYvx1rf/M5jGtaRuPUoggsqvGkAQhU=;
+        b=ligqpZZO7DcpoOSauYcEvipQ1C0ToxUVY+lfm4FVSPq9rnsUxYt1rgrUPi3JsrMlzm
+         R/nWMarfg8tbFAsodW8/2VaywZENV4isPSrRNVPSVV0185jo0OF0O4kNV/2PbhQKQbyt
+         maKH+JdlxQOgbL1OVmT+ZLFWoApAQJMWrSdEP6D9u/D5XmMo8fVILRzXP91NinZ4NJNE
+         HONc4KsFmx7o+HVotQw6og8nEu1cXPhOeXq34PzLscBty6XS0sB0+sIhZCSDtUrBgClR
+         JKEpw3uzI5koS1CGd3F775agydoRMWF28CH6XTxT+4i2o55QG3+Z/spkLsTRPJUT7bsE
+         cK7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708014708; x=1708619508;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=liqOngPWYl+OBSYvx1rf/M5jGtaRuPUoggsqvGkAQhU=;
+        b=Rmrr3DwUc932SDDfie4qNOUgKJuKoFcnMZCpbQVuwU/jYQjZzRaJF6+RRrrqjCIAJd
+         ERC+uOn0NHx2dNobULI/yeCxDyl1jsZNtm8OgF8LdA3kLRGpiouwiZSMen7dhDsFTRf+
+         qE5p+Gzty/3khqBAhQQeJuQdFNR+4rg6AqtUIs9ecg1O8+fiDfVckaEPzvix//4Oelv8
+         2Cwy8WAwtFuBOZ0IiieSjYroXi4uGKqx9ydXhAowidznacVJvIkXVTX5o9O09vKQ2+Xd
+         IPKR3ckySGKCsYBKs8aHIv9CVflaHrg6C3PiPnW5je5NLYFf83BMdRnTjctPQRt5R/nV
+         0fdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVQaKmpFf+qbNn1l/Ta9C/K6UGYe51XYmDkXx8cTP3YLjAz1uscZ53aaJdM+V/zKyN4AcXV0llyt1fq4ckm36HK81ID
+X-Gm-Message-State: AOJu0YwzKKEb8qYarXM47F+pDtHudzOiJcV/SbNM6u1BiOPcfkeyXKg5
+	ZkKO6LpJbpPFb/lONkPM/t+nf2oxbdZG9Ny51hUwF6tLJYDR/ZQu
+X-Google-Smtp-Source: AGHT+IG6F1HLx0HMViVnJnS49/r26RG0T3z7SrGZz5NacVH3gXVsuO6tBWiNj8zUv3dyVac7/ZKR5w==
+X-Received: by 2002:a6b:7b47:0:b0:7c4:9545:824f with SMTP id m7-20020a6b7b47000000b007c49545824fmr2332060iop.5.1708014707694;
+        Thu, 15 Feb 2024 08:31:47 -0800 (PST)
+Received: from [192.168.1.94] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id c3-20020a6bfd03000000b007c4883809f6sm400311ioi.18.2024.02.15.08.31.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Feb 2024 08:31:47 -0800 (PST)
+Message-ID: <8cb6e0ffa4810396ef618bfc92449dfd54d47043.camel@gmail.com>
+Subject: Re: [RFC PATCH v1 06/14] bpf: Adjust frame descriptor pc on
+ instruction patching
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai
+ Lau <martin.lau@kernel.org>, David Vernet <void@manifault.com>,  Tejun Heo
+ <tj@kernel.org>, Raj Sahu <rjsu26@vt.edu>, Dan Williams <djwillia@vt.edu>,
+ Rishabh Iyer <rishabh.iyer@epfl.ch>, Sanidhya Kashyap
+ <sanidhya.kashyap@epfl.ch>
+Date: Thu, 15 Feb 2024 18:31:43 +0200
+In-Reply-To: <20240201042109.1150490-7-memxor@gmail.com>
+References: <20240201042109.1150490-1-memxor@gmail.com>
+	 <20240201042109.1150490-7-memxor@gmail.com>
+Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240215030500.3067426-2-yong.liang.choong@linux.intel.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Thu, Feb 15, 2024 at 11:04:51AM +0800, Choong Yong Liang wrote:
-> Phylink invokes the 'mac_get_pcs_neg_mode' function during interface mode
-> switching and initial startup.
-> 
-> This function is optional; if 'phylink_pcs_neg_mode' fails to accurately
-> reflect the current PCS negotiation mode, the MAC driver can determine the
-> mode based on the interface mode, current link negotiation mode, and
-> advertising link mode.
-> 
-> For instance, if the interface switches from 2500baseX to SGMII mode,
-> and the current link mode is MLO_AN_PHY, calling 'phylink_pcs_neg_mode'
-> would yield PHYLINK_PCS_NEG_OUTBAND. Since the MAC and PCS driver require
-> PHYLINK_PCS_NEG_INBAND_ENABLED, the 'mac_get_pcs_neg_mode' function
-> will calculate the mode based on the interface, current link negotiation
-> mode, and advertising link mode, returning PHYLINK_PCS_NEG_OUTBAND to
-> enable the PCS to configure the correct settings.
+On Thu, 2024-02-01 at 04:21 +0000, Kumar Kartikeya Dwivedi wrote:
 
-This paragraph doesn't make sense - at least to me. It first talks about
-requiring PHYLINK_PCS_NEG_INBAND_ENABLED when in SGMII mode. On this:
+[...]
 
-1) are you sure that the hardware can't be programmed for the SGMII
-symbol repititions? 
+> +static int adjust_subprog_frame_descs_after_remove(struct bpf_verifier_e=
+nv *env, u32 off, u32 cnt)
+> +{
+> +	for (int i =3D 0; i < env->subprog_cnt; i++) {
+> +		struct bpf_exception_frame_desc_tab *fdtab =3D subprog_info(env, i)->f=
+dtab;
+> +
+> +		if (!fdtab)
+> +			continue;
+> +		for (int j =3D 0; j < fdtab->cnt; j++) {
+> +			/* Part of a subprog_info whose instructions were removed partially, =
+but the fdtab remained. */
+> +			if (fdtab->desc[j]->pc >=3D off && fdtab->desc[j]->pc < off + cnt) {
+> +				void *p =3D fdtab->desc[j];
+> +				if (j < fdtab->cnt - 1)
+> +					memmove(fdtab->desc + j, fdtab->desc + j + 1, sizeof(fdtab->desc[0]=
+) * (fdtab->cnt - j - 1));
+> +				kfree(p);
 
-2) what happens if you're paired with a PHY (e.g. on a SFP module)
-which uses SGMII but has no capability of providing the inband data?
-(They do exist.) If your hardware truly does require inband data, it
-is going to be fundamentally inoperative with these modules.
+Is it necessary to release btf references for desc entries that are removed=
+?
+Those that were grabbed by add_used_btf() in gen_exception_frame_desc_iter_=
+entry().
 
-Next, you then talk about returning PHYLINK_PCS_NEG_OUTBAND for the
-"correct settings". How does this relate to the first part where you
-basically describe the problem as SGMII requring inband? Basically
-the two don't follow.
+> +				fdtab->cnt--;
+> +				j--;
+> +			}
+> +			if (fdtab->desc[j]->pc >=3D off + cnt)
+> +				fdtab->desc[j]->pc -=3D cnt;
+> +		}
+> +	}
+> +	return 0;
+> +}
+> +
 
-How, from a design point of view, because this fundamentally allows
-drivers to change how the system behaves, it will allow radically
-different behaviours for the same parameters between different drivers.
-I am opposed to that - I want to see a situation where we have uniform
-behaviour for the same configuration, and where hardware doesn't
-support something, we have some way to indicate that via some form
-of capabilities.
-
-The issue of whether 2500base-X has inband or not is a long standing
-issue, and there are arguments (and hardware) that take totally
-opposing views on this. There is hardware where 2500base-X inband
-_must_ be used or the link doesn't come up. There is also hardware
-where 2500base-X inband is not "supported" in documentation but works
-in practice. There is also hardware where 2500base-X inband doesn't
-work. The whole thing is a total mess (thanks IEEE 802.3 for not
-getting on top of this early enough... and what's now stated in 802.3
-for 2500base-X is now irrelevant because they were too late to the
-party.)
-
-I haven't been able to look at this issue over the last few weeks
-because of being at a summit, and then suffering with flu and its
-recovery. However, I have been working on how we can identify the
-capabilities of the PCS and PHY w.r.t. inband support in various
-interface modes, and how we can handle the result. That work is
-ongoing (as and when I have a clear head from after-flu effects.)
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+[...]
