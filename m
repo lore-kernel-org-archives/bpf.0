@@ -1,287 +1,104 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A201213699A
-	for <bpf@vger.kernel.org>; Thu, 15 Feb 2024 10:40:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A57912881A
+	for <bpf@vger.kernel.org>; Thu, 15 Feb 2024 10:50:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707993602; cv=none; b=QIbkm4/nfFiSU2c1RKokoOkWBASEPu9tG57laPZMUC86EesX3NA2IYczNmlcS2+5mFEEiOCz+1S3hwM5HFaKn1yWf24iNCeIZBhEZmtjfsS9mgBlskUkGjtogbWybbhYM/Ov+Tv8mGz0Ba9T4ZeDLPeyzGQuG8MEDQaX77rvYRg=
+	t=1707994202; cv=none; b=rZp0eENaLHyTjSqpk4PzgwUyJ2pCIkm8xwQ2Jil8+9X0Ga8n6Echw7f3lrfKgveCTOvQUIo+xUXYFwg8nhCss8T6Xfrv+2ElLwPlVgnR6v3amlNmj81VeZ4yfU4PwJRGQZMKq4tZgUQsBvbnwglsnHQ8jq8G7OhkIF/TIvxJ/0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707993602; c=relaxed/simple;
-	bh=sIn7ntggYTGoSRtIVBaHZzG27AVLz9PNpeuEa5swXs4=;
+	s=arc-20240116; t=1707994202; c=relaxed/simple;
+	bh=xy4XXrTofRkhuzqJ2OfzNGWp44wXcuVzYggYIeQJMuQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I1TmpFsTIqUxbg4FOGgFpDdP4xcSALZLEiYttVyYKyrqE1TXS3+hSPqFDiySC5bmoHVKZ0pFITC/Rk5c+NsAXK2Illtabcs5F8MJ78CZMRHocgcehqmwx0vKa7kidAZ5JtU/OMIXRVjJcxj57yeFbGdUYX2hRpOgfewoRTL9oB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Je7Zb/T+; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=nJ0KMlSLCWBHU2OVb4ISF86wAve22hpBXy1qNsXMX1tPm8l65OSiNBxWXqTsD2/6Yx4jDL4hnVY8mV0kJ0DV/J+5A8p04glPHrs9zAf2TaSj02J1Uevo/NTP7uIpT4C3bhxSAf9Zts886i01fgDC1THFTslgU5laRHeBoWJHIcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aa4QMyfY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Je7Zb/T+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D014C433F1;
-	Thu, 15 Feb 2024 10:40:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aa4QMyfY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FAB8C43390;
+	Thu, 15 Feb 2024 10:50:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707993602;
-	bh=sIn7ntggYTGoSRtIVBaHZzG27AVLz9PNpeuEa5swXs4=;
+	s=k20201202; t=1707994202;
+	bh=xy4XXrTofRkhuzqJ2OfzNGWp44wXcuVzYggYIeQJMuQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Je7Zb/T+SN6lgJEbbxn+dL4kt/YqL7+OW5ZudRXFpCn5WxPoF0yuDcbxgUDp8MtW3
-	 nhGgsn/MYudK1KdlxrZDeXWT8dYwlpbI91Ye3TJsQya+p/JSOQJy+uQxSMIW+oTpiS
-	 Gx6BAdM7amwXbFXTZe8SZ0ufHBy5J07EG0uKIVsFOqx7MFKLg31g8XM/afWL4fBfRi
-	 /IhoQ9B4AthdgmoPlozlVcA3soWaPB7gfFwQZI1KI5EAuvfeywMH3CpQDVzVO5TEzU
-	 H9CHPZ924xOWA+0KOmo8vuskR4D1P5kawBD9FolAdaCKFVsshPrniMAaXjWJ9zcFk4
-	 ZeKJYXFLm/4dg==
-Date: Thu, 15 Feb 2024 16:07:12 +0530
+	b=aa4QMyfYRtA3plzFYEq0UQIFe7S7YJuGZusvxfcgDWMzTkGixh5940xndyzPkNBTi
+	 8E2WUYQNnQaKCK/j3DpsMjFq6uXC/mZXFKiqUta1mOpEmhKQbHIaSdHJbY/gGrZ8T7
+	 7/SDvQ/y/+uhA7ALoHJeyAHHlmWTKC95pR7megBDCkk0MnvxdRF+K4M8g58sakOpTd
+	 qF6+7fzC4KTjr1dCMb/77RGzkOwerZ2/e4Rt1xzlEoD4B05RC8yWzztbY0efh0f+zU
+	 lsoQgn0UdKgX+jG8vtsGOx7J2e116HH5fZZlag/qYAbjMvpKOGlQfhmKQbtJLeYcz0
+	 0hyYlEPrSerIA==
+Date: Thu, 15 Feb 2024 16:14:54 +0530
 From: Naveen N Rao <naveen@kernel.org>
-To: Hari Bathini <hbathini@linux.ibm.com>
-Cc: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, bpf@vger.kernel.org, 
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Hari Bathini <hbathini@linux.ibm.com>, 
+	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
 	Song Liu <songliubraving@fb.com>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
 	Martin KaFai Lau <martin.lau@linux.dev>
-Subject: Re: [PATCH v2 1/2] powerpc/bpf: ensure module addresses are supported
-Message-ID: <bsrdswaublna5mrrf4kvvimmrpd45eitg7eacmuk773z2pgdp5@laxsuelbuapz>
+Subject: Re: [PATCH v2 2/2] powerpc/bpf: enable kfunc call
+Message-ID: <jago3vhogcn4dy7jxbjlm5dy2y4fh3a6xe7jiwkasof5wwp4is@pqdwcq36mj2v>
 References: <20240201171249.253097-1-hbathini@linux.ibm.com>
+ <20240201171249.253097-2-hbathini@linux.ibm.com>
+ <4dd99601-6990-444c-af23-95cb3f7b156b@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240201171249.253097-1-hbathini@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4dd99601-6990-444c-af23-95cb3f7b156b@csgroup.eu>
 
-On Thu, Feb 01, 2024 at 10:42:48PM +0530, Hari Bathini wrote:
-> Currently, bpf jit code on powerpc assumes all the bpf functions and
-> helpers to be kernel text. This is false for kfunc case, as function
-> addresses are mostly module addresses in that case. Ensure module
-> addresses are supported to enable kfunc support.
-
-I don't think that statement is entirely accurate. Our current 
-assumptions are still correct in the sense that:
-1. all BPF helpers are part of core kernel text, calls to which are 
-generated in bpf_jit_emit_func_call_hlp().
-2. bpf-to-bpf calls go out to module area where the JIT output of BPF 
-subprogs are written to, handled by bpf_jit_emit_func_call_rel().
-
-kfunc calls add another variant where BPF progs can call directly into a 
-kernel function (similar to a BPF helper call), except for the fact that 
-the said function could be in a kernel module.
-
-> 
-> Assume kernel text address for programs with no kfunc call to optimize
-> instruction sequence in that case. Add a check to error out if this
-> assumption ever changes in the future.
-> 
-> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
-> ---
-> 
-> Changes in v2:
-> * Using bpf_prog_has_kfunc_call() to decide whether to use optimized
->   instruction sequence or not as suggested by Naveen.
+On Tue, Feb 13, 2024 at 07:54:27AM +0000, Christophe Leroy wrote:
 > 
 > 
->  arch/powerpc/net/bpf_jit.h        |   5 +-
->  arch/powerpc/net/bpf_jit_comp.c   |   4 +-
->  arch/powerpc/net/bpf_jit_comp32.c |   8 ++-
->  arch/powerpc/net/bpf_jit_comp64.c | 109 ++++++++++++++++++++++++------
->  4 files changed, 97 insertions(+), 29 deletions(-)
+> Le 01/02/2024 à 18:12, Hari Bathini a écrit :
+> > With module addresses supported, override bpf_jit_supports_kfunc_call()
+> > to enable kfunc support. Module address offsets can be more than 32-bit
+> > long, so override bpf_jit_supports_far_kfunc_call() to enable 64-bit
+> > pointers.
 > 
-> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
-> index cdea5dccaefe..fc56ee0ee9c5 100644
-> --- a/arch/powerpc/net/bpf_jit.h
-> +++ b/arch/powerpc/net/bpf_jit.h
-> @@ -160,10 +160,11 @@ static inline void bpf_clear_seen_register(struct codegen_context *ctx, int i)
->  }
->  
->  void bpf_jit_init_reg_mapping(struct codegen_context *ctx);
-> -int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *ctx, u64 func);
-> +int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *ctx, u64 func,
-> +			       bool has_kfunc_call);
->  int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct codegen_context *ctx,
->  		       u32 *addrs, int pass, bool extra_pass);
-> -void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx);
-> +void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx, bool has_kfunc_call);
->  void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx);
->  void bpf_jit_realloc_regs(struct codegen_context *ctx);
->  int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg, long exit_addr);
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-> index 0f9a21783329..7b4103b4c929 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
-> @@ -163,7 +163,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
->  	 * update ctgtx.idx as it pretends to output instructions, then we can
->  	 * calculate total size from idx.
->  	 */
-> -	bpf_jit_build_prologue(NULL, &cgctx);
-> +	bpf_jit_build_prologue(NULL, &cgctx, bpf_prog_has_kfunc_call(fp));
->  	addrs[fp->len] = cgctx.idx * 4;
->  	bpf_jit_build_epilogue(NULL, &cgctx);
->  
-> @@ -192,7 +192,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
->  		/* Now build the prologue, body code & epilogue for real. */
->  		cgctx.idx = 0;
->  		cgctx.alt_exit_addr = 0;
-> -		bpf_jit_build_prologue(code_base, &cgctx);
-> +		bpf_jit_build_prologue(code_base, &cgctx, bpf_prog_has_kfunc_call(fp));
->  		if (bpf_jit_build_body(fp, code_base, fcode_base, &cgctx, addrs, pass,
->  				       extra_pass)) {
->  			bpf_arch_text_copy(&fhdr->size, &hdr->size, sizeof(hdr->size));
-> diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
-> index 2f39c50ca729..447747e51a58 100644
-> --- a/arch/powerpc/net/bpf_jit_comp32.c
-> +++ b/arch/powerpc/net/bpf_jit_comp32.c
-> @@ -123,7 +123,7 @@ void bpf_jit_realloc_regs(struct codegen_context *ctx)
->  	}
->  }
->  
-> -void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
-> +void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx, bool has_kfunc_call)
->  {
->  	int i;
->  
-> @@ -201,7 +201,8 @@ void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx)
->  }
->  
->  /* Relative offset needs to be calculated based on final image location */
-> -int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *ctx, u64 func)
-> +int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *ctx, u64 func,
-> +			       bool has_kfunc_call)
->  {
->  	s32 rel = (s32)func - (s32)(fimage + ctx->idx);
->  
-> @@ -1054,7 +1055,8 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
->  				EMIT(PPC_RAW_STW(bpf_to_ppc(BPF_REG_5), _R1, 12));
->  			}
->  
-> -			ret = bpf_jit_emit_func_call_rel(image, fimage, ctx, func_addr);
-> +			ret = bpf_jit_emit_func_call_rel(image, fimage, ctx, func_addr,
-> +							 bpf_prog_has_kfunc_call(fp));
->  			if (ret)
->  				return ret;
->  
-> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-> index 79f23974a320..385a5df1670c 100644
-> --- a/arch/powerpc/net/bpf_jit_comp64.c
-> +++ b/arch/powerpc/net/bpf_jit_comp64.c
-> @@ -122,12 +122,17 @@ void bpf_jit_realloc_regs(struct codegen_context *ctx)
->  {
->  }
->  
-> -void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
-> +void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx, bool has_kfunc_call)
->  {
->  	int i;
->  
->  #ifndef CONFIG_PPC_KERNEL_PCREL
-> -	if (IS_ENABLED(CONFIG_PPC64_ELF_ABI_V2))
-> +	/*
-> +	 * If the program doesn't have a kfunc call, all BPF helpers are part of kernel text
-> +	 * and all BPF programs/functions utilize the kernel TOC. So, optimize the
-> +	 * instruction sequence by using kernel toc in r2 for that case.
-> +	 */
-> +	if (!has_kfunc_call && IS_ENABLED(CONFIG_PPC64_ELF_ABI_V2))
->  		EMIT(PPC_RAW_LD(_R2, _R13, offsetof(struct paca_struct, kernel_toc)));
+> What's the impact on PPC32 ? There are no 64-bit pointers on PPC32.
 
-I don't think this is the correct approach. As far as I can see, we can 
-still retain the current function calling sequence utilizing TOC even 
-when a kfunc call is present. More on that below...
+Looking at commit 1cf3bfc60f98 ("bpf: Support 64-bit pointers to 
+kfuncs"), which added bpf_jit_supports_far_kfunc_call(), that does look 
+to be very specific to platforms where module addresses are farther than 
+s32. This is true for powerpc 64-bit, but shouldn't be needed for 
+32-bit.
 
->  #endif
->  
-> @@ -202,12 +207,17 @@ void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx)
->  	EMIT(PPC_RAW_BLR());
->  }
->  
-> -static int bpf_jit_emit_func_call_hlp(u32 *image, struct codegen_context *ctx, u64 func)
-> +static int bpf_jit_emit_func_call_hlp(u32 *image, struct codegen_context *ctx, u64 func,
-> +				      bool has_kfunc_call)
->  {
->  	unsigned long func_addr = func ? ppc_function_entry((void *)func) : 0;
->  	long reladdr;
->  
-> -	if (WARN_ON_ONCE(!core_kernel_text(func_addr)))
-> +	/*
-> +	 * If the program doesn't have a kfunc call, all BPF helpers are assumed to be part of
-> +	 * kernel text. Don't proceed if that assumption ever changes in future.
-> +	 */
-> +	if (!has_kfunc_call && WARN_ON_ONCE(!core_kernel_text(func_addr)))
->  		return -EINVAL;
+> 
+> > 
+> > Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
+> > ---
+> > 
+> > * No changes since v1.
+> > 
+> > 
+> >   arch/powerpc/net/bpf_jit_comp.c | 10 ++++++++++
+> >   1 file changed, 10 insertions(+)
+> > 
+> > diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+> > index 7b4103b4c929..f896a4213696 100644
+> > --- a/arch/powerpc/net/bpf_jit_comp.c
+> > +++ b/arch/powerpc/net/bpf_jit_comp.c
+> > @@ -359,3 +359,13 @@ void bpf_jit_free(struct bpf_prog *fp)
+> >   
+> >   	bpf_prog_unlock_free(fp);
+> >   }
+> > +
+> > +bool bpf_jit_supports_kfunc_call(void)
+> > +{
+> > +	return true;
+> > +}
+> > +
+> > +bool bpf_jit_supports_far_kfunc_call(void)
+> > +{
+> > +	return true;
+> > +}
 
-Rather than pass around the presence of a kfunc call in a particular BPF 
-prog, I think we should be able to update bpf_jit_emit_func_call_hlp() 
-to handle module addresses. That way, existing calling sequence can 
-continue to be used for BPF helpers and other BPF functions.
-
-bpf_jit_get_func_addr() should return the correct function address for a 
-kfunc call. So, all we need here is to check if that address belongs to 
-a module and use a different instruction sequence for that:
-- for pcrel and elf abiv2, we can simply load the full address using 
-  PPC_LI64() and use that, rather than utilizing the TOC. Note that we 
-  will need to use the GEP here so the target function can setup its own 
-  TOC. For elf abiv2, we will need an additional instruction after the 
-  bctrl() to load the kernel toc from paca.
-- for elf abiv1, we will need to load the function address and toc value 
-  from the function descriptor, followed by restoring kernel toc like 
-  above.
-
-For kfunc calls to core kernel functions, we should be able to retain 
-existing sequence using TOC.
-
->  
->  	if (IS_ENABLED(CONFIG_PPC_KERNEL_PCREL)) {
-> @@ -225,30 +235,55 @@ static int bpf_jit_emit_func_call_hlp(u32 *image, struct codegen_context *ctx, u
->  		EMIT(PPC_RAW_BCTR());
->  
->  	} else {
-> -		reladdr = func_addr - kernel_toc_addr();
-> -		if (reladdr > 0x7FFFFFFF || reladdr < -(0x80000000L)) {
-> -			pr_err("eBPF: address of %ps out of range of kernel_toc.\n", (void *)func);
-> -			return -ERANGE;
-> -		}
-> +		if (has_kfunc_call) {
-> +#ifdef PPC64_ELF_ABI_v1
-> +			/* func points to the function descriptor */
-> +			PPC_LI64(b2p[TMP_REG_2], func);
-> +			/* Load actual entry point from function descriptor */
-> +			PPC_BPF_LL(b2p[TMP_REG_1], b2p[TMP_REG_2], 0);
-> +			/* ... and move it to CTR */
-> +			EMIT(PPC_RAW_MTCTR(b2p[TMP_REG_1]));
-> +			/*
-> +			 * Load TOC from function descriptor at offset 8.
-> +			 * We can clobber r2 since we get called through a
-> +			 * function pointer (so caller will save/restore r2)
-> +			 * and since we don't use a TOC ourself.
-> +			 */
-> +			PPC_BPF_LL(2, b2p[TMP_REG_2], 8);
-> +#else
-> +			/* We can clobber r12 */
-> +			PPC_LI64(12, func);
-> +			EMIT(PPC_RAW_MTCTR(12));
-> +#endif
-> +		} else {
-> +			reladdr = func_addr - kernel_toc_addr();
-> +			if (reladdr > 0x7FFFFFFF || reladdr < -(0x80000000L)) {
-> +				pr_err("eBPF: address of %ps out of range of kernel_toc.\n",
-> +				       (void *)func);
-> +				return -ERANGE;
-> +			}
->  
-> -		EMIT(PPC_RAW_ADDIS(_R12, _R2, PPC_HA(reladdr)));
-> -		EMIT(PPC_RAW_ADDI(_R12, _R12, PPC_LO(reladdr)));
-> -		EMIT(PPC_RAW_MTCTR(_R12));
-> +			EMIT(PPC_RAW_ADDIS(_R12, _R2, PPC_HA(reladdr)));
-> +			EMIT(PPC_RAW_ADDI(_R12, _R12, PPC_LO(reladdr)));
-> +			EMIT(PPC_RAW_MTCTR(_R12));
-> +		}
->  		EMIT(PPC_RAW_BCTRL());
->  	}
->  
->  	return 0;
->  }
->  
-> -int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *ctx, u64 func)
-> +int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *ctx, u64 func,
-> +			       bool has_kfunc_call)
->  {
-
-This function shouldn't need any changes since this is only for calling 
-other bpf progs.
+I am not sure there is value in keeping this as a separate patch since 
+all support code for kfunc calls is introduced in an earlier patch.  
+Consider folding this into the previous patch.
 
 - Naveen
-
