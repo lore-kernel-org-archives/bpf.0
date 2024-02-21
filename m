@@ -1,124 +1,110 @@
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-185.mta1.migadu.com (out-185.mta1.migadu.com [95.215.58.185])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41FDE7C097
-	for <bpf@vger.kernel.org>; Wed, 21 Feb 2024 16:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E777FBD2
+	for <bpf@vger.kernel.org>; Wed, 21 Feb 2024 16:40:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708533143; cv=none; b=qnm9039uJ5s1C2L9Ckg65FBvQKhEuv+ItbSdiACrN0dIGq1Wn1y4qZCUIw6Ud/0GEoJEM+5VWlJBvybQXVvuxSfYbqJQYHkoouHvn7Z29liQcIpzCURrI1uZr2kB+4YvsuIixNMTZTx/yiQlgX3HktewACDFj3+alLbeM6zVacU=
+	t=1708533628; cv=none; b=QGjLHoAkQXdq3Zz55lNZwc64W/GAQPgmzDnT0gN8XzS/yHZzbw0G1VEXVR3xwj8guE/STa8+n51/xDVWO+y0PwKJymJW+4ZwFgZWQnXtmirhCJ6b7I9L8Yo+lNHih2e0tsX4F+uAJvVJzq3jcJkerISMM6Q3Gqho3HVZe3cQYD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708533143; c=relaxed/simple;
-	bh=GQFkeIWwGqIjlekC4ujQt1TpQpHwp6nEQABEN+jNJWk=;
+	s=arc-20240116; t=1708533628; c=relaxed/simple;
+	bh=B0QVccvhP5DSJ7jRYCUOThk+g1DbqlNo23fvmmawcsg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tBOK8GCPdo9ySth0lkdo1AF63x0hX/oNhPDoTsNLyub2CzUosYvS1wORuIIWNGn1uQkjNs3zI18LF5TxJvVM/U6/kFoEaVqsX7CE61Yusj05yR3h/Sweb0tPqxBvPJSW9TP/vat+YJi+OCMlHqtZc1ReJfPVfr9UKuxFJFw9HvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U0FrWQ+u; arc=none smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=in1wMifdE47mkKwxshQUiR3HTEolgJWEygnhdiew4ZNIe44aMNqlNLEk/Rd6mVQEQ+vJZn53unlbI5u3AAoUGd8Ry4LcZOtJrt9Km/y5c7GsUX54IHIAConMRYwtiE1kRdP9nRW/1sqLDfQzWFg1coeOpANRPwrmKSMkPGJkstI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ni/GQJhO; arc=none smtp.client-ip=95.215.58.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U0FrWQ+u"
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-60821136c5aso27255117b3.1
-        for <bpf@vger.kernel.org>; Wed, 21 Feb 2024 08:32:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708533141; x=1709137941; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u7JXVQFwBDndUh5fJidwUl/Gbzg8C+3RZcO5hzxgkGg=;
-        b=U0FrWQ+u7EOpoobDQ/VRFfe8BVKlhxafvsRK3b+ddsH8aQmAETTmjg185499tEgDa6
-         dld0anlcEsARTRf59WinQ5D/DlcWXOujfLKKoj6FD/lyx/ky75Xk0oUnZfarru5MiOdX
-         UXKQuvXimS6K8iclTa69j5fIgpqOjp+DLmnav4IB9mf2PnUZD1kn4Y0/J+JX4Ezi5nSW
-         OHS23QwcIgYhz3vuT8jiRydcEt/hmAg50PGzmPeknA3FtcNnG2AOhhk82fyArm2YbKdP
-         VOh8l28baf5Et4/U/mx3osNX1z3NCnrfvYirpldW3L/dKcPMeguJzgizS04hnprUGYKv
-         58Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708533141; x=1709137941;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u7JXVQFwBDndUh5fJidwUl/Gbzg8C+3RZcO5hzxgkGg=;
-        b=GndwmgWAvgR85/pa3vnAzt+vm+MNBt6nL6+hq9cgK9q3go/fq9kvdM7oWPLYnNQHod
-         BAqJkf+oCQuyhdVX9ZQuATqrMSGh+gDjRVbZZbKXn+wZyI91tdhG2G5LtBjlNv5pax+F
-         akeU6hMaLD1DdcupWDW6P9K/JrwG9KOdAK+v+XJy5Yb5htykgGBxiRhgZAj0id4vgksn
-         juxVQFHSSb7gIg87k2GsSIMlWZEmFw++I8YcTchA+2uzEeyQTozlS38yGnl8soa4u5kn
-         kmae+iaZnfT+NFqwsI/8awh1/ul73DDRX1bm4drvN6i1i6+4Oal8KTMEttLD2wp5Fyp1
-         0jDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUeFmEZVFbCscYGD1RMct9SO6W9Hkf7/1WTL+xgQyq4yNf+9+4lvvbvc3oOUODQYb4Yv+Z+Pcqs/w3ZVhl1AtCyGd8M
-X-Gm-Message-State: AOJu0Yyz7nuIh2tHHs2W0MHqKPdeeiK5UkZ5L6pCQKit4Zoz1dkb7sFo
-	t1Bb1iZeQCBLm0wlmKFD6/M/btw58qzNmYNS4SrUxPaJCV7AQzat
-X-Google-Smtp-Source: AGHT+IFuQobJmlWxI0DveKOl9L1vVIydrk9/2hqsnH4kMVzICDtQWfl77xcI7DbCv19t0aSmR8OuOg==
-X-Received: by 2002:a81:8d50:0:b0:608:4e3f:f8a with SMTP id w16-20020a818d50000000b006084e3f0f8amr6611689ywj.31.1708533139587;
-        Wed, 21 Feb 2024 08:32:19 -0800 (PST)
-Received: from ?IPV6:2600:1700:6cf8:1240:bc3b:b762:a625:955f? ([2600:1700:6cf8:1240:bc3b:b762:a625:955f])
-        by smtp.gmail.com with ESMTPSA id gi2-20020a05690c424200b0060893443e56sm89054ywb.75.2024.02.21.08.32.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Feb 2024 08:32:19 -0800 (PST)
-Message-ID: <923db0bc-cd9c-4c67-a477-cb9b12a58eb2@gmail.com>
-Date: Wed, 21 Feb 2024 08:32:17 -0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ni/GQJhO"
+Message-ID: <9d44ba5b-19c8-4bb4-8f9a-0187d190274a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1708533624;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7ISfsKUpDfaG9BkgG/vcBYKBNCmixJoSAY6YNl9RbRQ=;
+	b=Ni/GQJhOGcMZwAR51HfeCinHpCOjk59TlQEI/HZKW18VlouMDnkGMbdALFT1YKMVDeecs4
+	M3SS2Y2jEr90VlYeRst6iTqhsQXejopvJEne8700DJvn9Li6Vp4c9kwaCdFi7wRAF3M9ws
+	gFQWU9ZZUbKzKjqXGRV++6mAKwHowsQ=
+Date: Wed, 21 Feb 2024 08:40:19 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 1/5] libbpf: expose resolve_func_ptr() through
- libbpf_internal.h.
-Content-Language: en-US
-To: Quentin Monnet <quentin@isovalent.com>, thinker.li@gmail.com,
- bpf@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev, song@kernel.org,
- kernel-team@meta.com, andrii@kernel.org
-Cc: kuifeng@meta.com
-References: <20240221012329.1387275-1-thinker.li@gmail.com>
- <20240221012329.1387275-2-thinker.li@gmail.com>
- <fc37d1cd-6fbe-4507-b496-2a2dd622934f@isovalent.com>
-From: Kui-Feng Lee <sinquersw@gmail.com>
-In-Reply-To: <fc37d1cd-6fbe-4507-b496-2a2dd622934f@isovalent.com>
+Subject: Re: [PATCH bpf-next] bpf: Shrink size of struct bpf_map/bpf_array.
+Content-Language: en-GB
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+ kernel-team@fb.com
+References: <20240220235001.57411-1-alexei.starovoitov@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20240220235001.57411-1-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
 
+On 2/20/24 3:50 PM, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+>
+> Back in 2018 the commit be95a845cc44 ("bpf: avoid false sharing of map refcount with max_entries")
+> added ____cacheline_aligned to "struct bpf_map" to make sure that fields like
+> refcnt don't share a cache line with max_entries that is used to bounds check
+> map access. That was done to make spectre style attacks harder. The main
+> mitigation is done via code similar to array_index_nospec(), of course.
+> This was an additional precaution.
+> It increased the size of "struct bpf_map" a little, but it's affect
+> on all other maps (like array) is significant, since "struct bpf_map" is
+> typically the first member in other map types.
+>
+> Undo this ____cacheline_aligned tag. Instead move freeze_mutex field around,
+> so that refcnt and max_entries are still in different cache lines.
+>
+> The main effect is seen in sizeof(struct bpf_array) that reduces from 320 to 248 bytes.
+>
+> BEFORE:
+>
+> struct bpf_map {
+> 	const struct bpf_map_ops  * ops;                 /*     0     8 */
+> 	...
+> 	char                       name[16];             /*    96    16 */
+>
+> 	/* XXX 16 bytes hole, try to pack */
+>
+> 	/* --- cacheline 2 boundary (128 bytes) --- */
+> 	atomic64_t refcnt __attribute__((__aligned__(64))); /*   128     8 */
+> 	...
+> 	/* size: 256, cachelines: 4, members: 30 */
+> 	/* sum members: 232, holes: 1, sum holes: 16 */
+> 	/* padding: 8 */
+> 	/* paddings: 1, sum paddings: 2 */
+> } __attribute__((__aligned__(64)));
+>
+> struct bpf_array {
+> 	struct bpf_map             map;                  /*     0   256 */
+> 	...
+> 	/* size: 320, cachelines: 5, members: 5 */
+> 	/* padding: 48 */
+> 	/* paddings: 1, sum paddings: 8 */
+> } __attribute__((__aligned__(64)));
+>
+> AFTER:
+>
+> struct bpf_map {
+> 	/* size: 232, cachelines: 4, members: 30 */
+> 	/* paddings: 1, sum paddings: 2 */
+> 	/* last cacheline: 40 bytes */
+> };
+> struct bpf_array {
+> 	/* size: 248, cachelines: 4, members: 5 */
+> 	/* last cacheline: 56 bytes */
+> };
+>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-On 2/21/24 03:49, Quentin Monnet wrote:
-> 2024-02-21 01:23 UTC+0000 ~ thinker.li@gmail.com
->> From: Kui-Feng Lee <thinker.li@gmail.com>
->>
->> bpftool is going to reuse this helper function to support shadow types of
->> struct_ops maps.
->>
->> Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
->> ---
->>   tools/lib/bpf/libbpf.c          | 2 +-
->>   tools/lib/bpf/libbpf_internal.h | 1 +
->>   2 files changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
->> index 01f407591a92..ef8fd20f33ca 100644
->> --- a/tools/lib/bpf/libbpf.c
->> +++ b/tools/lib/bpf/libbpf.c
->> @@ -2145,7 +2145,7 @@ skip_mods_and_typedefs(const struct btf *btf, __u32 id, __u32 *res_id)
->>   	return t;
->>   }
->>   
->> -static const struct btf_type *
->> +const struct btf_type *
->>   resolve_func_ptr(const struct btf *btf, __u32 id, __u32 *res_id)
->>   {
->>   	const struct btf_type *t;
->> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
->> index ad936ac5e639..aec6d57fe5d1 100644
->> --- a/tools/lib/bpf/libbpf_internal.h
->> +++ b/tools/lib/bpf/libbpf_internal.h
->> @@ -234,6 +234,7 @@ struct btf_type;
->>   struct btf_type *btf_type_by_id(const struct btf *btf, __u32 type_id);
->>   const char *btf_kind_str(const struct btf_type *t);
->>   const struct btf_type *skip_mods_and_typedefs(const struct btf *btf, __u32 id, __u32 *res_id);
->> +const struct btf_type *resolve_func_ptr(const struct btf *btf, __u32 id, __u32 *res_id);
-> 
-> If you respin, please add a comment to mention we expose it to bpftool
-> (see bpf_core_add_cands() in the same file), to avoid people trying to
-> remove it from the header file in a clean-up attempt.
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
-No problem
-
-> 
-> Quentin
