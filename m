@@ -1,118 +1,192 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA53182D8F;
-	Wed, 21 Feb 2024 17:30:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24AFC1C20
+	for <bpf@vger.kernel.org>; Wed, 21 Feb 2024 17:35:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708536644; cv=none; b=g8LuG/gwI0UnIy0ilNShZucZOzd53i864m5apw6Iwm1kmUAalgWUoscs91wZTDXzzgI4UOVZ3eaHjC6cJasNRRRqet+iNh4UgGTCUMaiBMZ+v4Dgdje6YCkrp5hrtPo1bpELVUbhYNmXXTzefIWyjN8Vi78Zu+nqhZbhe6TBMbU=
+	t=1708536941; cv=none; b=RSK32isIDgpPcSG2dPQ5o3mZfmK7bOCovuUXB+Y8UIXcvFL9s7DYWUc37ILymwYYTN2aIM8b3UqG1eFPQhhMX1lZmb/tJD+PvsyOSM9EipXbngtozkk9n3T2muJex98mrEewwhKSSOnQ2nRcv+PviltKQGr5csBseV66EAhLlx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708536644; c=relaxed/simple;
-	bh=VVJKBus/4hY3nazwz3pZiLEtUFESTJ1fNiTVxhfAPy8=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=fM4QWwqusHPWuR64guH1A3efrUEKvGoTV2hf6QwWhtIbxyKJHSPtHI05wGN/01WX9XHMqAW3TMUZb2G7/YuSUCq7YBaJuDq1fKeXXX3cBVKaGrWc4zqaNoOM36K7kw/Yf0I5dnPBBKypgX/rwJDMwALkOVQAqThqrS5eQX/mM38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Wbi6jkdu; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1708536941; c=relaxed/simple;
+	bh=aUhT0quApuIm3PO4kFgyAAxM9KL9DzcAopSqegYFazE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=q0pYftYts9T0xTfLxXLy75AbVaAuZ8CiDd4uj6cJT5nrD7MQ2P+9OR/FzcffrP/vzRf8IN3QUKsSpMkDu+vYUURywImw+nLAJto+0r0uXSFg6miN0vSlgOoyPD393TltHtMSibLDc7ebDkzaPge8ekZ0NBmSDt9gfSlFT+fEt3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=KCPPjU5l; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Wbi6jkdu"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=I87YIZpurdfl8CTcBVVyeB1j4NeBVQcdCIaP0A3iopg=; b=Wbi6jkduFDxsAg3gq98PHpUcSq
-	aPM+WXH/eyj6E6cMlenpE90+cdly1BVWqZB6ONVaiY8julWfqqoG3pUFl+AvtS7xqybQALkdyiCOo
-	CrpduV0kwBnHP7w1Gvgch5neon/t/NXjK/tlNZVS07pUouiNswnCxjD9E1yMqrgCouzrEvUQrPdPC
-	PvmbhlVxxThM7yvKKISOPzDuh4Z7w3ewE/LNdN/HqMkOSRwqdey/VluqZaJhG70tBSln8j4TL4IKe
-	J8K250ppqDuGsZv87Q1bPknz68dtbZaAutZ01j6/Cxg/QAuaRWMs3tl9BP+p1AMPgMLRbm2StSITl
-	Fns2ykmw==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rcqQU-000DLL-Kx; Wed, 21 Feb 2024 18:30:34 +0100
-Received: from [178.197.249.13] (helo=linux.home)
-	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rcqQT-003ehV-20;
-	Wed, 21 Feb 2024 18:30:33 +0100
-Subject: Re: [PATCH bpf-next 1/2] bpf: Take return from set_memory_ro() into
- account with bpf_prog_lock_ro()
-To: Christophe Leroy <christophe.leroy@csgroup.eu>,
- Hengqi Chen <hengqi.chen@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- Kees Cook <keescook@chromium.org>,
- "linux-hardening @ vger . kernel . org" <linux-hardening@vger.kernel.org>
-References: <135feeafe6fe8d412e90865622e9601403c42be5.1708253445.git.christophe.leroy@csgroup.eu>
- <CAEyhmHT8H3AXyOKMc3eQSdM2+1UDETJDPyEQ0-AEb6E8pt9LTg@mail.gmail.com>
- <4d53e0f9-cfee-4877-8b56-9f258c8325f6@csgroup.eu>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <2abc14fc-a19e-8205-c54f-a87c11ebd5be@iogearbox.net>
-Date: Wed, 21 Feb 2024 18:30:32 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="KCPPjU5l"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-5d8ddbac4fbso5713172a12.0
+        for <bpf@vger.kernel.org>; Wed, 21 Feb 2024 09:35:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1708536939; x=1709141739; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wpj+dPbs6Bu1AaIzKNJqZxlV6H6VhuRxK9TUVjicr9s=;
+        b=KCPPjU5lxOB8O6S7ZmSm6kQGP4e52CCViy9dsD8IluggsUtVQTdxlHvibuiL63VN1E
+         PrJs1gnuzlUDIanKL7qVq4PI9NTcyeixH6TtStM0QkxDCWuQoYbRrHCJL71oBzyDwifd
+         NFKI2onxd2s1ASUCrm0W1ievwhLkznyAVYEbjX7xzxFINX0Zh5SFFgeJrUBD5FKT5x0M
+         gYwSqh+I1zQIlmvZ8/q109G2mEgTp1NQDlqXrifkfSk9gdrwYbTf6cWC1EHwizmOSch2
+         uC37WlXyiuA/+vTXfuKr4zeJ+/kjGqDzZqg0ZTtnD2GZuv9HGcxXG0P25IdUBrQq9dhN
+         UhWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708536939; x=1709141739;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Wpj+dPbs6Bu1AaIzKNJqZxlV6H6VhuRxK9TUVjicr9s=;
+        b=td878E5uj9W19wZTX+kDSShoyUkOyMhjueyMJIY+hvJ0xGDoqkgWrL107fwW/axgjy
+         fXeb4YTNP++mqR28x1K5FiW7WqPKkgTeqvka06Je51iI7e7vtaaziv1vVq3c2vS73gGc
+         2+k4zzzhr8i0+gvcjjQAEOutTHThbvENN/+i/EiZMCPAvdfr8PHireMWFPmqcWeIMUxu
+         Av9Td1S02Sq1YEoehx6nbDttmw1jOSOKIYGpdBzdTskQaOC2udP44H79cLnZUQ7Q0X7a
+         6bBKjWT6FY3MJ5uxmgJxUtsyFecbcSysX/0r7ajn8aeB2+BgzY43+6uNUetU4x8UzzSI
+         iI9w==
+X-Gm-Message-State: AOJu0YwG905k5q9KP93esORmL37rrmymdCDIohzQi47lb/auOkI2HRqx
+	5XEpPJyNwCT6rmJ73xZaNtq/05Yeh31mcYPH3mRg4tDqKMASCQ93a9Ar15m9zMQ=
+X-Google-Smtp-Source: AGHT+IEhw3qZ/ySFNjXs7jxgsLM6rU4BeheA9SRanQkzz8/Fs4zHlksf1nSq+sce6lrLdARGxAhu0Q==
+X-Received: by 2002:a05:6a21:1394:b0:1a0:9e45:1537 with SMTP id oa20-20020a056a21139400b001a09e451537mr10368905pzb.30.1708536939122;
+        Wed, 21 Feb 2024 09:35:39 -0800 (PST)
+Received: from ubuntu2310.lan (c-67-170-74-237.hsd1.wa.comcast.net. [67.170.74.237])
+        by smtp.gmail.com with ESMTPSA id h24-20020aa786d8000000b006e04553a4c5sm7343197pfo.52.2024.02.21.09.35.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Feb 2024 09:35:38 -0800 (PST)
+From: Dave Thaler <dthaler1968@googlemail.com>
+X-Google-Original-From: Dave Thaler <dthaler1968@gmail.com>
+To: bpf@vger.kernel.org
+Cc: bpf@ietf.org,
+	Dave Thaler <dthaler1968@gmail.com>
+Subject: [PATCH bpf-next] bpf, docs: Fix typos in instruction-set.rst
+Date: Wed, 21 Feb 2024 09:35:35 -0800
+Message-Id: <20240221173535.16601-1-dthaler1968@gmail.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <4d53e0f9-cfee-4877-8b56-9f258c8325f6@csgroup.eu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27192/Wed Feb 21 10:23:23 2024)
 
-On 2/19/24 7:39 AM, Christophe Leroy wrote:
-> 
-> 
-> Le 19/02/2024 à 02:40, Hengqi Chen a écrit :
->> [Vous ne recevez pas souvent de courriers de hengqi.chen@gmail.com. Découvrez pourquoi ceci est important à https://aka.ms/LearnAboutSenderIdentification ]
->>
->> Hello Christophe,
->>
->> On Sun, Feb 18, 2024 at 6:55 PM Christophe Leroy
->> <christophe.leroy@csgroup.eu> wrote:
->>>
->>> set_memory_ro() can fail, leaving memory unprotected.
->>>
->>> Check its return and take it into account as an error.
->>>
->>
->> I don't see a cover letter for this series, could you describe how
->> set_memory_ro() could fail.
->> (Most callsites of set_memory_ro() didn't check the return values)
-> 
-> Yeah, there is no cover letter because as explained in patch 2 the two
-> patches are autonomous. The only reason why I sent it as a series is
-> because the patches both modify include/linux/filter.h in two places
-> that are too close to each other.
-> 
-> I should have added a link to https://github.com/KSPP/linux/issues/7
-> See that link for detailed explanation.
-> 
-> If we take powerpc as an exemple, set_memory_ro() is a frontend to
-> change_memory_attr(). When you look at change_memory_attr() you see it
-> can return -EINVAL in two cases. Then it calls
-> apply_to_existing_page_range(). When you go down the road you see you
-> can get -EINVAL or -ENOMEM from that function or its callees.
+* "BPF ADD" should be "BPF_ADD".
+* "src" should be "src_reg" in several places.  The latter is the field name
+  in the instruction.  The former refers to the value of the register, or the
+  immediate.
+* Add '' around field names in one sentence, for consistency with the rest
+  of the document.
 
-By that logic, don't you have the same issue when undoing all of this?
-E.g. take arch_protect_bpf_trampoline() / arch_unprotect_bpf_trampoline()
-which is not covered in here, but what happens if you set it first to ro
-and later the setting back to rw fails? How would the error path there
-look like? It's something you cannot recover.
+Signed-off-by: Dave Thaler <dthaler1968@gmail.com>
+---
+ .../bpf/standardization/instruction-set.rst   | 72 +++++++++----------
+ 1 file changed, 36 insertions(+), 36 deletions(-)
 
-Thanks,
-Daniel
+diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
+index 868d9f617..56b5e7dad 100644
+--- a/Documentation/bpf/standardization/instruction-set.rst
++++ b/Documentation/bpf/standardization/instruction-set.rst
+@@ -178,7 +178,7 @@ Unused fields shall be cleared to zero.
+ As discussed below in `64-bit immediate instructions`_, a 64-bit immediate
+ instruction uses two 32-bit immediate values that are constructed as follows.
+ The 64 bits following the basic instruction contain a pseudo instruction
+-using the same format but with opcode, dst_reg, src_reg, and offset all set to zero,
++using the same format but with 'opcode', 'dst_reg', 'src_reg', and 'offset' all set to zero,
+ and imm containing the high 32 bits of the immediate value.
+ 
+ This is depicted in the following figure::
+@@ -392,27 +392,27 @@ otherwise identical operations, and indicates the base64 conformance
+ group unless otherwise specified.
+ The 'code' field encodes the operation as below:
+ 
+-========  =====  ===  ===============================  =============================================
+-code      value  src  description                      notes
+-========  =====  ===  ===============================  =============================================
+-BPF_JA    0x0    0x0  PC += offset                     BPF_JMP | BPF_K only
+-BPF_JA    0x0    0x0  PC += imm                        BPF_JMP32 | BPF_K only
+-BPF_JEQ   0x1    any  PC += offset if dst == src
+-BPF_JGT   0x2    any  PC += offset if dst > src        unsigned
+-BPF_JGE   0x3    any  PC += offset if dst >= src       unsigned
+-BPF_JSET  0x4    any  PC += offset if dst & src
+-BPF_JNE   0x5    any  PC += offset if dst != src
+-BPF_JSGT  0x6    any  PC += offset if dst > src        signed
+-BPF_JSGE  0x7    any  PC += offset if dst >= src       signed
+-BPF_CALL  0x8    0x0  call helper function by address  BPF_JMP | BPF_K only, see `Helper functions`_
+-BPF_CALL  0x8    0x1  call PC += imm                   BPF_JMP | BPF_K only, see `Program-local functions`_
+-BPF_CALL  0x8    0x2  call helper function by BTF ID   BPF_JMP | BPF_K only, see `Helper functions`_
+-BPF_EXIT  0x9    0x0  return                           BPF_JMP | BPF_K only
+-BPF_JLT   0xa    any  PC += offset if dst < src        unsigned
+-BPF_JLE   0xb    any  PC += offset if dst <= src       unsigned
+-BPF_JSLT  0xc    any  PC += offset if dst < src        signed
+-BPF_JSLE  0xd    any  PC += offset if dst <= src       signed
+-========  =====  ===  ===============================  =============================================
++========  =====  =======  ===============================  =============================================
++code      value  src_reg  description                      notes
++========  =====  =======  ===============================  =============================================
++BPF_JA    0x0    0x0      PC += offset                     BPF_JMP | BPF_K only
++BPF_JA    0x0    0x0      PC += imm                        BPF_JMP32 | BPF_K only
++BPF_JEQ   0x1    any      PC += offset if dst == src
++BPF_JGT   0x2    any      PC += offset if dst > src        unsigned
++BPF_JGE   0x3    any      PC += offset if dst >= src       unsigned
++BPF_JSET  0x4    any      PC += offset if dst & src
++BPF_JNE   0x5    any      PC += offset if dst != src
++BPF_JSGT  0x6    any      PC += offset if dst > src        signed
++BPF_JSGE  0x7    any      PC += offset if dst >= src       signed
++BPF_CALL  0x8    0x0      call helper function by address  BPF_JMP | BPF_K only, see `Helper functions`_
++BPF_CALL  0x8    0x1      call PC += imm                   BPF_JMP | BPF_K only, see `Program-local functions`_
++BPF_CALL  0x8    0x2      call helper function by BTF ID   BPF_JMP | BPF_K only, see `Helper functions`_
++BPF_EXIT  0x9    0x0      return                           BPF_JMP | BPF_K only
++BPF_JLT   0xa    any      PC += offset if dst < src        unsigned
++BPF_JLE   0xb    any      PC += offset if dst <= src       unsigned
++BPF_JSLT  0xc    any      PC += offset if dst < src        signed
++BPF_JSLE  0xd    any      PC += offset if dst <= src       signed
++========  =====  =======  ===============================  =============================================
+ 
+ The BPF program needs to store the return value into register R0 before doing a
+ ``BPF_EXIT``.
+@@ -568,7 +568,7 @@ BPF_XOR   0xa0   atomic xor
+ 
+   *(u32 *)(dst + offset) += src
+ 
+-``BPF_ATOMIC | BPF_DW | BPF_STX`` with 'imm' = BPF ADD means::
++``BPF_ATOMIC | BPF_DW | BPF_STX`` with 'imm' = BPF_ADD means::
+ 
+   *(u64 *)(dst + offset) += src
+ 
+@@ -601,24 +601,24 @@ and loaded back to ``R0``.
+ -----------------------------
+ 
+ Instructions with the ``BPF_IMM`` 'mode' modifier use the wide instruction
+-encoding defined in `Instruction encoding`_, and use the 'src' field of the
++encoding defined in `Instruction encoding`_, and use the 'src_reg' field of the
+ basic instruction to hold an opcode subtype.
+ 
+ The following table defines a set of ``BPF_IMM | BPF_DW | BPF_LD`` instructions
+-with opcode subtypes in the 'src' field, using new terms such as "map"
++with opcode subtypes in the 'src_reg' field, using new terms such as "map"
+ defined further below:
+ 
+-=========================  ======  ===  =========================================  ===========  ==============
+-opcode construction        opcode  src  pseudocode                                 imm type     dst type
+-=========================  ======  ===  =========================================  ===========  ==============
+-BPF_IMM | BPF_DW | BPF_LD  0x18    0x0  dst = (next_imm << 32) | imm               integer      integer
+-BPF_IMM | BPF_DW | BPF_LD  0x18    0x1  dst = map_by_fd(imm)                       map fd       map
+-BPF_IMM | BPF_DW | BPF_LD  0x18    0x2  dst = map_val(map_by_fd(imm)) + next_imm   map fd       data pointer
+-BPF_IMM | BPF_DW | BPF_LD  0x18    0x3  dst = var_addr(imm)                        variable id  data pointer
+-BPF_IMM | BPF_DW | BPF_LD  0x18    0x4  dst = code_addr(imm)                       integer      code pointer
+-BPF_IMM | BPF_DW | BPF_LD  0x18    0x5  dst = map_by_idx(imm)                      map index    map
+-BPF_IMM | BPF_DW | BPF_LD  0x18    0x6  dst = map_val(map_by_idx(imm)) + next_imm  map index    data pointer
+-=========================  ======  ===  =========================================  ===========  ==============
++=========================  ======  =======  =========================================  ===========  ==============
++opcode construction        opcode  src_reg  pseudocode                                 imm type     dst type
++=========================  ======  =======  =========================================  ===========  ==============
++BPF_IMM | BPF_DW | BPF_LD  0x18    0x0      dst = (next_imm << 32) | imm               integer      integer
++BPF_IMM | BPF_DW | BPF_LD  0x18    0x1      dst = map_by_fd(imm)                       map fd       map
++BPF_IMM | BPF_DW | BPF_LD  0x18    0x2      dst = map_val(map_by_fd(imm)) + next_imm   map fd       data pointer
++BPF_IMM | BPF_DW | BPF_LD  0x18    0x3      dst = var_addr(imm)                        variable id  data pointer
++BPF_IMM | BPF_DW | BPF_LD  0x18    0x4      dst = code_addr(imm)                       integer      code pointer
++BPF_IMM | BPF_DW | BPF_LD  0x18    0x5      dst = map_by_idx(imm)                      map index    map
++BPF_IMM | BPF_DW | BPF_LD  0x18    0x6      dst = map_val(map_by_idx(imm)) + next_imm  map index    data pointer
++=========================  ======  =======  =========================================  ===========  ==============
+ 
+ where
+ 
+-- 
+2.40.1
+
