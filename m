@@ -1,123 +1,179 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D345485950
-	for <bpf@vger.kernel.org>; Wed, 21 Feb 2024 18:27:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DEC80C07
+	for <bpf@vger.kernel.org>; Wed, 21 Feb 2024 19:05:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708540026; cv=none; b=deuKk/sPZxtfEgsGFdbLxYL0wPQ5bNkoNYweMcxHMY3NxWUaLOGloCq6jq4kCPPZ2oS8sGgHjJhetsCYJGz/CPuFh/wZQsE2tYXHAaNkL6dMWd5C3MwgaPCC9bZDqRuGnZt8xy151PSSfaIp54b+IsVNQ7z2kmp9OcGq7+TaDHU=
+	t=1708542324; cv=none; b=sSZhfw2EgchVc+MBuPhIeb+0oSWVxJVmZ1YdthjzTloINyrKCYiZRfQ5AlptCizOGZnwUkemoXE4N81eFAKACN1ryIyy8PLoh2GgMkUws/MUsFLkdXoS/MiBSbgnWoY3CAj9VdUAi3m5rjybwAPx3PvRRv/f32UiL1C331wWB7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708540026; c=relaxed/simple;
-	bh=yHv4YLihaI4wjBJjCVU/hu18mkRLgE84I+vpF5Fdl/0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BSnqKKRQNZzEu3D83ClL+wqBxkLqLJOhmjhUEoo5BWNwnoRN83l8fJQ6mS6shLIigwITeHm/jeZxOKrBXywoOrwqCLB1zntg4qlrVs9NPQkuQJtN9SbC9mDv/z2dTBkcv9ogeTorimTJTSTDaFjO3YghuU/mUaxFhW0juBtttyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F4ZxiS5W; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1708542324; c=relaxed/simple;
+	bh=xOybeqGeBhqzTbfq3rJ46av/vPgv+KF1TyNR3xSHbQ0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nr06Y+qtveTiGrbmP1G6ib5ofHyuuZAqBTiJsNAJ2iBXz4hQUlUoY3EUsAehy3T63HLGvWVpnJG5xP/wTylhHUAXCMYE1yoZeUloEkOoUcUk2C5o6as5VSNiun4dtxi70IHWOOzh40eGlMajJao3p2yWO5L28T9DpuDqDK1a4Y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kmuEcNpo; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F4ZxiS5W"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708540025; x=1740076025;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yHv4YLihaI4wjBJjCVU/hu18mkRLgE84I+vpF5Fdl/0=;
-  b=F4ZxiS5WDdE/+RGDZ5fnb3TXay4mU1I1crJXXusIag322pIUAzLA0shf
-   DK4AAQhWzZN5TVAN5k0mcKFZ2qR6vYaPhUbDy3zUjbf9tVbzLe9R+69W4
-   27PPctnE0q0YnSUGx3Zdziy0bu4XygL7VQYwXfemHcTDvn98Ww53N7Rky
-   +AnjaMKEP4sXz/1apP1NmuKaj5bRTE0VPrqSugAW+FyW6ZfvUPIMbdoRY
-   8NhyrEabXfqE/Cym8lhxsWbUI963apLMMcOzJEMZBK0XaOTEKBRtsSGos
-   f/iY7+tWoecA4hkT6PBmQ100u24uEL7BxVJAXRctC14xEY4C4+UWrCMPZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10991"; a="6495324"
-X-IronPort-AV: E=Sophos;i="6.06,176,1705392000"; 
-   d="scan'208";a="6495324"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2024 10:27:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,176,1705392000"; 
-   d="scan'208";a="5383021"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 21 Feb 2024 10:26:57 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rcrIS-0005ae-1U;
-	Wed, 21 Feb 2024 18:26:26 +0000
-Date: Thu, 22 Feb 2024 02:25:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Maxwell Bland <mbland@motorola.com>,
-	linux-arm-kernel@lists.infradead.org
-Cc: oe-kbuild-all@lists.linux.dev, gregkh@linuxfoundation.org,
-	agordeev@linux.ibm.com, akpm@linux-foundation.org,
-	andreyknvl@gmail.com, andrii@kernel.org, aneesh.kumar@kernel.org,
-	aou@eecs.berkeley.edu, ardb@kernel.org, arnd@arndb.de,
-	ast@kernel.org, borntraeger@linux.ibm.com, bpf@vger.kernel.org,
-	brauner@kernel.org, catalin.marinas@arm.com,
-	christophe.leroy@csgroup.eu, cl@linux.com, daniel@iogearbox.net,
-	dave.hansen@linux.intel.com, david@redhat.com, dennis@kernel.org,
-	dvyukov@google.com, glider@google.com, gor@linux.ibm.com,
-	guoren@kernel.org, haoluo@google.com, hca@linux.ibm.com,
-	hch@infradead.org, john.fastabend@gmail.com, jolsa@kernel.org
-Subject: Re: [PATCH 1/4] mm/vmalloc: allow arch-specific vmalloc_node
- overrides
-Message-ID: <202402220229.5xZWdZBK-lkp@intel.com>
-References: <20240220203256.31153-2-mbland@motorola.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kmuEcNpo"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-41275855dc4so7271585e9.0
+        for <bpf@vger.kernel.org>; Wed, 21 Feb 2024 11:05:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708542321; x=1709147121; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Sja2zbt3rEOa8Avi/qXGyDB6MFdPpzWjHQILVKnQ8bk=;
+        b=kmuEcNpoHl+jv6OHbBWIrwa9xIfZbTG7onIBsiYztM8Q5ZTIJXXmcyHW5yRPVq9qV9
+         6EzBTojFx+95oEDFjV4pMrEFCTzGPzihuDuiXcerzgv+6UsTW/d8V+zXF8LBsBkEV8we
+         h2b9YR1eGYt79CX8E/klTecx+MGXGpyUlzZittjOYJDcdLuK+9DkM7okj5am61fINlG6
+         hFHXLSZJ2pU8Y3jAY+CtpdjA2fr6/Jp4xf0f+LNyo7/buS1kB851wdo6APXrAvsRY46Q
+         4mDZ+4UZji4+a7RXCgiSKmRTkPpfxGVZLJtOYHEwdhlfx6CHZFunChhVN7FcUSgQqCKu
+         20Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708542321; x=1709147121;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Sja2zbt3rEOa8Avi/qXGyDB6MFdPpzWjHQILVKnQ8bk=;
+        b=WGcRcA6CkLr/dyKkavaR8q0blLBxYXMFYAGbFEUUsGJi+zZ4+Byc/3XSF0A1AgbiU3
+         MwlIBFFDu1AXzpovLgnQ/Z5KuiDZCEfZiqlXxWQazoihztzleUahk0EWXskqI/pKj5rG
+         bhiMMpYjYl1PlmarI/S7JEtQlooC7LSVZYe8z7cNiMzlmMzgzLp0/CRyIMqPMPQLJ0Ai
+         /HB5aowgLq2q61mOK3dF5w4TXKqbStiVkndtU3W7cedu5rGjUSJQgo/0F5FPDT0yu0ju
+         N+OptHvbE3Br4oPDxsOC5ApcROms8TmTT7B4xpOGj+IHm85fRlmMCZUiZJitNOnffvjP
+         MCdA==
+X-Gm-Message-State: AOJu0Yzmfoa4UGTQsNTZSdHCZ0bDpOTGTqpVCrtitPqXneDD2V4Vdrt+
+	ucKkVGgi3vMdEwohn1kOo27WvAP3To5JksSb+Gy4R7Ys1c2UW/6K+wBVSjo7D/rFEQZGf5qQJ+3
+	NKhI5hrfMS3CD593Gec/mvjmGUYo=
+X-Google-Smtp-Source: AGHT+IH4OpfT+YGkYMhhDR2Euz6SXzY0iXevzboZ2yy0+99M/24qMSrjS4feQAc65Yt0v7PKH3ikGlt3+TSDGVKxUiM=
+X-Received: by 2002:a5d:5402:0:b0:33d:3b19:a2c3 with SMTP id
+ g2-20020a5d5402000000b0033d3b19a2c3mr8327469wrv.57.1708542320538; Wed, 21 Feb
+ 2024 11:05:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240220203256.31153-2-mbland@motorola.com>
+References: <20240220192613.8840-1-alexei.starovoitov@gmail.com> <ZdWPjmwi8D0n01HP@infradead.org>
+In-Reply-To: <ZdWPjmwi8D0n01HP@infradead.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 21 Feb 2024 11:05:09 -0800
+Message-ID: <CAADnVQLrUpJizoVeYjFwSEPg1Eo=ACR-Gf5LWhD=c-KnnOTKuA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] mm: Introduce vm_area_[un]map_pages().
+To: Christoph Hellwig <hch@infradead.org>
+Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Barret Rhoden <brho@google.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Lorenzo Stoakes <lstoakes@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Uladzislau Rezki <urezki@gmail.com>, linux-mm <linux-mm@kvack.org>, Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Maxwell,
+On Tue, Feb 20, 2024 at 9:52=E2=80=AFPM Christoph Hellwig <hch@infradead.or=
+g> wrote:
+>
+> On Tue, Feb 20, 2024 at 11:26:13AM -0800, Alexei Starovoitov wrote:
+> > From: Alexei Starovoitov <ast@kernel.org>
+> >
+> > vmap() API is used to map a set of pages into contiguous kernel virtual=
+ space.
+> >
+> > BPF would like to extend the vmap API to implement a lazily-populated
+> > contiguous kernel virtual space which size and start address is fixed e=
+arly.
+> >
+> > The vmap API has functions to request and release areas of kernel addre=
+ss space:
+> > get_vm_area() and free_vm_area().
+>
+> As said before I really hate growing more get_vm_area and
+> free_vm_area outside the core vmalloc code.  We have a few of those
+> mostly due to ioremap (which is beeing consolidate) and executable code
+> allocation (which there have been various attempts at consolidation,
+> and hopefully one finally succeeds..).  So let's take a step back and
+> think how we can do that without it.
 
-kernel test robot noticed the following build errors:
+There are also xen grant tables that grab the range with get_vm_area(),
+but manage it on their own. It's not an ioremap case.
+It looks to me the vmalloc address range has different kinds of areas
+already: vmalloc, vmap, ioremap, xen.
 
-[auto build test ERROR on b401b621758e46812da61fa58a67c3fd8d91de0d]
+Maybe we can do:
+diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+index 7d112cc5f2a3..633c7b643daa 100644
+--- a/include/linux/vmalloc.h
++++ b/include/linux/vmalloc.h
+@@ -28,6 +28,7 @@ struct iov_iter;              /* in uio.h */
+ #define VM_MAP_PUT_PAGES       0x00000200      /* put pages and free
+array in vfree */
+ #define VM_ALLOW_HUGE_VMAP     0x00000400      /* Allow for huge
+pages on archs with HAVE_ARCH_HUGE_VMALLOC */
++#define VM_BPF                 0x00000800      /* bpf_arena pages */
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maxwell-Bland/mm-vmalloc-allow-arch-specific-vmalloc_node-overrides/20240221-043458
-base:   b401b621758e46812da61fa58a67c3fd8d91de0d
-patch link:    https://lore.kernel.org/r/20240220203256.31153-2-mbland%40motorola.com
-patch subject: [PATCH 1/4] mm/vmalloc: allow arch-specific vmalloc_node overrides
-config: m68k-allnoconfig (https://download.01.org/0day-ci/archive/20240222/202402220229.5xZWdZBK-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240222/202402220229.5xZWdZBK-lkp@intel.com/reproduce)
++static inline struct vm_struct *get_bpf_vm_area(unsigned long size)
++{
++       return get_vm_area(size, VM_BPF);
++}
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402220229.5xZWdZBK-lkp@intel.com/
+and enforce that flag in vm_area_[un]map_pages() ?
 
-All errors (new ones prefixed by >>):
+vmallocinfo can display it or skip it.
+Things like find_vm_area() can do something different with such an area
+(if that was the concern).
 
->> mm/nommu.c:160:7: error: conflicting types for '__vmalloc_node'; have 'void *(long unsigned int,  long unsigned int,  gfp_t,  int,  const void *)' {aka 'void *(long unsigned int,  long unsigned int,  unsigned int,  int,  const void *)'}
-     160 | void *__vmalloc_node(unsigned long size, unsigned long align, gfp_t gfp_mask,
-         |       ^~~~~~~~~~~~~~
-   In file included from include/asm-generic/io.h:994,
-                    from arch/m68k/include/asm/io.h:14,
-                    from arch/m68k/include/asm/pgtable_no.h:14,
-                    from arch/m68k/include/asm/pgtable.h:6,
-                    from include/linux/pgtable.h:6,
-                    from include/linux/mm.h:29,
-                    from mm/nommu.c:20:
-   include/linux/vmalloc.h:152:7: note: previous declaration of '__vmalloc_node' with type 'void *(long unsigned int,  long unsigned int,  gfp_t,  long unsigned int,  int,  const void *)' {aka 'void *(long unsigned int,  long unsigned int,  unsigned int,  long unsigned int,  int,  const void *)'}
-     152 | void *__vmalloc_node(unsigned long size, unsigned long align, gfp_t gfp_mask,
-         |       ^~~~~~~~~~~~~~
+> For the dynamically growing part do you need a special allocator or
+> can we just go straight to the page allocator and implement this
+> in common code?
 
+It's a bit special allocator that is using maple tree to manage
+range within 4G region and
+alloc_pages_node(GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT)
+to grab pages.
+With extra dance:
+        memcg =3D bpf_map_get_memcg(map);
+        old_memcg =3D set_active_memcg(memcg);
+to make sure memcg accounting is done the common way for all bpf maps.
 
-vim +160 mm/nommu.c
+The tricky bpf specific part is a computation of pgoff,
+since it's a shared memory region between user space and bpf prog.
+The lower 32-bits of the pointer have to be the same for user space and bpf=
+.
 
-041de93ff86fc5 Christoph Hellwig 2020-06-01  159  
-2b9059489c839e Christoph Hellwig 2020-06-01 @160  void *__vmalloc_node(unsigned long size, unsigned long align, gfp_t gfp_mask,
-2b9059489c839e Christoph Hellwig 2020-06-01  161  		int node, const void *caller)
-a7c3e901a46ff5 Michal Hocko      2017-05-08  162  {
-2b9059489c839e Christoph Hellwig 2020-06-01  163  	return __vmalloc(size, gfp_mask);
-a7c3e901a46ff5 Michal Hocko      2017-05-08  164  }
-a7c3e901a46ff5 Michal Hocko      2017-05-08  165  
+Not much changed in the patch since the earlier thread.
+Either find it in your email or here:
+https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git/commit/?h=3Dare=
+na&id=3D364c9b5d233d775728ec2bf3b4168fa6909e58d1
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Are you suggesting the api like:
+
+struct vm_struct *area =3D get_sparse_vm_area(size);
+vm_area_alloc_pages(struct vm_struct *area, ulong addr, int page_cnt,
+int numa_id);
+
+and vm_area_alloc_pages() will allocate pages and vmap_pages_range()
+them while all code in mm/vmalloc.c ?
+
+I can give it a shot.
+
+The ugly part is bpf_map_get_memcg() would need to be passed in somehow.
+
+Another bpf specific bit is the guard pages before and after 4G range
+and such vm_area_alloc_pages() would need to skip them.
+
+> > For BPF use case the area_size will be 4Gbyte plus 64Kbyte of guard pag=
+es and
+> > area->addr known and fixed at the program verification time.
+>
+> How is this ever going to to work on 32-bit platforms?
+
+bpf_arena requires 64bit and mmu.
+
+ifeq ($(CONFIG_MMU)$(CONFIG_64BIT),yy)
+obj-$(CONFIG_BPF_SYSCALL) +=3D arena.o
+endif
+
+and special JIT support too.
+
+With bpf_arena we can finally deprecate a bunch of things like bloom
+filter bpf map, etc.
