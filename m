@@ -1,139 +1,108 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC17E5684
-	for <bpf@vger.kernel.org>; Wed, 21 Feb 2024 01:31:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3060C566A;
+	Wed, 21 Feb 2024 02:04:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708479100; cv=none; b=KV2TfAXrJ/f5zwb3FCrn+K+Bb+HcWyVzSHojnWVTFw2ZE0Aj0iMt5/lkiKWHscwgHHMEhCixFlUfvytWHVD6Ij+icVV971zKmKknEO+Eg55JWfD4OUeX0Sih6y//wjBgVkMrnx/auTiUtlZZ+75ZWh8lcCoBunqWqV02wE/p1Y0=
+	t=1708481094; cv=none; b=VDY3JThvtujuGnnnhjDZKoebxQt907BsZZisx6U1NKYdL4/LFT7OMTyYO3npp1KwaggbgwcnhzPQCDV0SSUqgLp8VWF1sEkiD/ZwhF0C/uZNJ1vhJs5PUFenMzLzo15V/DMlQy/ZEMbd+jsP6lEefEAajyaS5/27MN3YbvDMzbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708479100; c=relaxed/simple;
-	bh=fhbfkIN5wAhNc9HTeKolpxP5Ornlg+oQJDYS6W/CqDo=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=O4mixFYF/P+WhmL68Np2tPjNwdMO+eexozo43+agO5HN37wbWsgH+f0Hph8SnpHkpQ97wJh8YVz7UTUJ3OTDwkbj/G2zApgoqS7A8bPGalR5zTWxrWz5L/Hox6IStZbQMbRL7YjWVS2Z1DTxh5iB/pINh7VI0Gf0wVGuBd8bV08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=ya7xmQFp; arc=none smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1708481094; c=relaxed/simple;
+	bh=ORbxc1aLPAjWIc3vkR5GtdqUtX005SNYWEsxv9OAOk8=;
+	h=Message-ID:Subject:Date:From:To:Cc:References:In-Reply-To; b=I2WwqGHMgkKBchRCY5FkxBw66RzZcOvvW/W3M0WOgz/17siDBvNFQbc2xYMdGuxoFxCw7O37+QufNbYFw9WFiiechoEIDYLdn/l2LlO66Njero0F/k1oSszpSFkICQ5e0abrynF9DX0qAXKvvlJgKhitUlhcYBelBHDT5tT0jgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=sbiMOEKn; arc=none smtp.client-ip=115.124.30.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="ya7xmQFp"
-Received: from pps.filterd (m0354655.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41KK7HY2027620;
-	Wed, 21 Feb 2024 01:01:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding:content-type; s=default; bh=HBBOaU1zE
-	82xQnhq8k1L4btrIhfz2uvaYV8xuG2OX6Y=; b=ya7xmQFpc33v7mgYRHtity2XX
-	v54mN5r7QWxukCinYYk7O+/m8R0nwM1G5lBHvJ/pk8eRvnUAt+Fsb6kX36ly/9Ur
-	nGqZFM0Z9c+l2E5oWZrOrBQ+kIh4jDayVsm93wowXDc/LA9CAzebcTN9esBjqQtg
-	qh6CgYB0oyYHwgQ4vyh7PwLJLMeYeX1SAoOPjhjv6VJtvJoKFC+loxn5NXDNQCWn
-	rNtTHuMxqGEG47Lf7nT1/FCs6iDz/wXszJIZpv+cmDzbFRZX3f+cCAL2WZv2yfv1
-	zytaviEgELOO/M9936rtaUOAQ8025f3ttvn2MP0yNeotCXPwvgY+IJUoFrMtA==
-Received: from 04wpexch06.crowdstrike.sys (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 3wd21t8kpy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Feb 2024 01:01:46 +0000 (GMT)
-Received: from LL-556NGK3.crowdstrike.sys (10.100.11.122) by
- 04wpexch06.crowdstrike.sys (10.100.11.99) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Wed, 21 Feb 2024 01:01:44 +0000
-From: Martin Kelly <martin.kelly@crowdstrike.com>
-To: <bpf@vger.kernel.org>
-CC: Yonghong Song <yonghong.song@linux.dev>,
-        Alexei Starovoitov
-	<ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko
-	<andrii@kernel.org>,
-        Martin Kelly <martin.kelly@crowdstrike.com>
-Subject: [PATCH bpf] libbpf: clarify batch lookup semantics
-Date: Tue, 20 Feb 2024 17:00:57 -0800
-Message-ID: <20240221010057.1061333-1-martin.kelly@crowdstrike.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="sbiMOEKn"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1708481089; h=Message-ID:Subject:Date:From:To;
+	bh=ORbxc1aLPAjWIc3vkR5GtdqUtX005SNYWEsxv9OAOk8=;
+	b=sbiMOEKn8YsHac7GFd2HpFkPp/HOfaG+QEE9BieQi/hhLVUhFJ7rmqrhU424MQvVrn0mxTjDTdk4MpsxcIzPFtU3cw3u/0GLit+rcLWYL1xhJZxH6osDXJHKl/q45G0sOC1B2Yb8vcCsOxJNeZQnoQCUxEIBetRhstw6k8N7NoE=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R921e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=36;SR=0;TI=SMTPD_---0W0yFyS._1708481086;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W0yFyS._1708481086)
+          by smtp.aliyun-inc.com;
+          Wed, 21 Feb 2024 10:04:47 +0800
+Message-ID: <1708481025.1893313-1-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH vhost 07/17] virtio: find_vqs: pass struct instead of multi parameters
+Date: Wed, 21 Feb 2024 10:03:45 +0800
+From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To: Halil Pasic <pasic@linux.ibm.com>
+Cc: Jason Wang <jasowang@redhat.com>,
+ virtualization@lists.linux.dev,
+ Richard Weinberger <richard@nod.at>,
+ Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ "Michael S. Tsirkin" <mst@redhat.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>,
+ Hans de Goede <hdegoede@redhat.com>,
+ =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Vadim Pasternak <vadimp@nvidia.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Mathieu Poirier <mathieu.poirier@linaro.org>,
+ Cornelia Huck <cohuck@redhat.com>,
+ Eric Farman <farman@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>,
+ Vasily Gorbik <gor@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>,
+ Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Benjamin Berg <benjamin.berg@intel.com>,
+ Yang Li <yang.lee@linux.alibaba.com>,
+ linux-um@lists.infradead.org,
+ netdev@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org,
+ linux-remoteproc@vger.kernel.org,
+ linux-s390@vger.kernel.org,
+ kvm@vger.kernel.org,
+ bpf@vger.kernel.org,
+ Halil Pasic <pasic@linux.ibm.com>
+References: <20240130114224.86536-1-xuanzhuo@linux.alibaba.com>
+ <20240130114224.86536-8-xuanzhuo@linux.alibaba.com>
+ <CACGkMEvb4N8kthr4qWXrLOh9v422OYhrYU6hQejusw-e5EacPw@mail.gmail.com>
+ <1706756442.5524123-1-xuanzhuo@linux.alibaba.com>
+ <20240220151815.5c867cce.pasic@linux.ibm.com>
+In-Reply-To: <20240220151815.5c867cce.pasic@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH12.crowdstrike.sys (10.100.11.116) To
- 04wpexch06.crowdstrike.sys (10.100.11.99)
-X-Disclaimer: USA
-X-Proofpoint-ORIG-GUID: qMWw5PaowjtWkghwoKEDNzalhFZtd4J9
-X-Proofpoint-GUID: qMWw5PaowjtWkghwoKEDNzalhFZtd4J9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-20_06,2024-02-20_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=756 phishscore=0 bulkscore=0 lowpriorityscore=0 clxscore=1015
- malwarescore=0 mlxscore=0 suspectscore=0 spamscore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2402210006
 
-The batch lookup APIs copy key memory into out_batch, which is then
-supplied in later calls to in_batch. Thus both parameters need to point
-to memory large enough to hold a single key (other than an initial NULL
-in_batch). For many maps, keys are pointer sized or less, but for larger
-maps, it's important to point to a larger block of memory to avoid
-memory corruption.
+On Tue, 20 Feb 2024 15:18:15 +0100, Halil Pasic <pasic@linux.ibm.com> wrote:
+> On Thu, 1 Feb 2024 11:00:42 +0800
+> Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
+>
+> > > > And squish the parameters from transport to a structure.
+> > >
+> > > The patch did more than what is described here, it also switch to use
+> > > a structure for vring_create_virtqueue() etc.
+> > >
+> > > Is it better to split?
+> >
+> > Sure.
+>
+> I understand there will be a v2. From virtio-ccw perspective I have
+> no objections.
 
-Document these semantics to clarify the API.
+The next version is v1.
 
-Signed-off-by: Martin Kelly <martin.kelly@crowdstrike.com>
----
- include/uapi/linux/bpf.h |  5 ++++-
- tools/lib/bpf/bpf.h      | 15 ++++++++++-----
- 2 files changed, 14 insertions(+), 6 deletions(-)
+That is posted.
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index d96708380e52..dae613b8778a 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -617,7 +617,10 @@ union bpf_iter_link_info {
-  *		to NULL to begin the batched operation. After each subsequent
-  *		**BPF_MAP_LOOKUP_BATCH**, the caller should pass the resultant
-  *		*out_batch* as the *in_batch* for the next operation to
-- *		continue iteration from the current point.
-+ *		continue iteration from the current point. Both *in_batch* and
-+ *		*out_batch* must point to memory large enough to hold a key,
-+ *		except for maps of type **BPF_MAP_TYPE_HASH**, for which batch
-+ *		parameters must be at least 4 bytes wide regardless of key size.
-  *
-  *		The *keys* and *values* are output parameters which must point
-  *		to memory large enough to hold *count* items based on the key
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index ab2570d28aec..c7e918ab0a60 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -190,10 +190,13 @@ LIBBPF_API int bpf_map_delete_batch(int fd, const void *keys,
- /**
-  * @brief **bpf_map_lookup_batch()** allows for batch lookup of BPF map elements.
-  *
-- * The parameter *in_batch* is the address of the first element in the batch to read.
-- * *out_batch* is an output parameter that should be passed as *in_batch* to subsequent
-- * calls to **bpf_map_lookup_batch()**. NULL can be passed for *in_batch* to indicate
-- * that the batched lookup starts from the beginning of the map.
-+ * The parameter *in_batch* is the address of the first element in the batch to
-+ * read. *out_batch* is an output parameter that should be passed as *in_batch*
-+ * to subsequent calls to **bpf_map_lookup_batch()**. NULL can be passed for
-+ * *in_batch* to indicate that the batched lookup starts from the beginning of
-+ * the map. Both *in_batch* and *out_batch* must point to memory large enough to
-+ * hold a single key, except for maps of type **BPF_MAP_TYPE_HASH**, for which
-+ * the memory pointed to must be at least 4 bytes wide regardless of key size.
-  *
-  * The *keys* and *values* are output parameters which must point to memory large enough to
-  * hold *count* items based on the key and value size of the map *map_fd*. The *keys*
-@@ -226,7 +229,9 @@ LIBBPF_API int bpf_map_lookup_batch(int fd, void *in_batch, void *out_batch,
-  *
-  * @param fd BPF map file descriptor
-  * @param in_batch address of the first element in batch to read, can pass NULL to
-- * get address of the first element in *out_batch*
-+ * get address of the first element in *out_batch*. If not NULL, must be large
-+ * enough to hold a key. For **BPF_MAP_TYPE_HASH**, must be large enough to hold
-+ * 4 bytes.
-  * @param out_batch output parameter that should be passed to next call as *in_batch*
-  * @param keys pointer to an array of *count* keys
-  * @param values pointer to an array large enough for *count* values
--- 
-2.34.1
+http://lore.kernel.org/all/20240202093951.120283-8-xuanzhuo@linux.alibaba.com
+http://lore.kernel.org/all/20240202093951.120283-9-xuanzhuo@linux.alibaba.com
 
+Thanks.
+
+
+>
+> Regards,
+> Halil
