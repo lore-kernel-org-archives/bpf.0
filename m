@@ -1,168 +1,175 @@
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2066.outbound.protection.outlook.com [40.107.241.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA012D60B
-	for <bpf@vger.kernel.org>; Tue, 27 Feb 2024 21:47:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709070434; cv=none; b=ML5PyElLhlg1t2KdA3cIaQQQ0daLm5jrV3Noz79khyxluGG/fc4ZUb5jZadwffo33/G/eEKb8H6dRuS1fvvh13RJrtJdmc/5psaYOOkhVx4C9g1DQhJT+D4tHgBElB2M/MUJUWG2DRzn8VLdETuuTyhtF7+0dNFKfAkMc/DNmEM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709070434; c=relaxed/simple;
-	bh=5LUNI+L7P3y+V91/39RTW2K4GnSFsQLInpmfjv7PuVc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VDRXFON0N3vPxhL+YXKMNmb2cvtYrKfFlYvk0ZfqtLVM4lS7pKt9dyywTm8HU/UVcCV99A6kb584bRPsD3kWzSkAiM76s2QtJ++vvgsbXiOGiL72fG9AdrnMPOgv8dDhuIyXKHv/uiIUSUvDdlH7o5V5U+ePw4V2K9S4Sgi2Op0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QIeT0/bI; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56DEF14EFFB;
+	Tue, 27 Feb 2024 21:47:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.241.66
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709070459; cv=fail; b=pqV5T90GZnI/w6PXT4HETtuSyp22RtqIyY5ehxbDSAGZhzWyp5qooiv+2x9mPE63JNpfuoBoqPw89qaA2lIW5njo54hOM0pWRqHupeVByMk6emUKwzPZysDsU3ncSOv4T7krnsaNdkH0w7KsgKvpDl+jfMD0cYFDPByimofSjiU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709070459; c=relaxed/simple;
+	bh=BUvBpo74+DLhrF8mimLHw09RlH+/kIlxHOLLFJNqLW0=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=f03RHi7JAFwAt+GRPmmyPffc7DH4HX9IHfn6MTku4zEGiCxDsrvZW9didE3blxssvbEjcmO2F0pjmzrs3Hflt0Q1Pc5kHP2/rSHgrywFRo4aYSm5vlRGWg9Npah//TEtxDrxwiazvsepHDK7KdUibstqnXhF56rDrfGIlwy0Fbs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=IDqXtw/G; arc=fail smtp.client-ip=40.107.241.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QIeT0/bI"
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-608841dfcafso44803887b3.2
-        for <bpf@vger.kernel.org>; Tue, 27 Feb 2024 13:47:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709070432; x=1709675232; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Z3k+FPzNBlXbp2ho45iP9PWwLvfSm4PQl3LPAgvYQ0M=;
-        b=QIeT0/bISAHU6amftJsrfrPCrmeXHuMkb48qkDf6WVhf63HY7Lp2Lv9tpA8CgXs/dI
-         N0Dv/CjrvmTFxDW5kjTbjtgu9UEy08LPx1AXC9eSzZr0vhTRbcYef9vErNyBOewxweEZ
-         jedbwRpw1gbX4Z6w1nTnoitY5hONLT/ChEjVusLcixUceQgrDtxKme121GQ8rmslk43R
-         wLTXWp6qIS92DZrtAE0YGvUmVouSs5D2JyHs+p31BcDEUOUuYrW4boFqjJoNu3nWrqIu
-         LMFBc2sypFPzZ2DamdgVBNH3shIEy2eVNw643M6f/39i6nyHpIEcqOIBlzx8O/iE4Wnv
-         b4Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709070432; x=1709675232;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z3k+FPzNBlXbp2ho45iP9PWwLvfSm4PQl3LPAgvYQ0M=;
-        b=G623zJr0RY9kFE2APxnytWwVvzqCfFsMs93sa/HOR74O1ByLpT5D7Ejb8Kgq9s73pa
-         0rbRP/5dPkc5wJj53dijjprVskp2luCuGYO0hOEoVlW2MidXnkovmPsXSbcxgoy2m5/C
-         l6512XavzRfkaUUg1jhhWyedIAR3b5i6ybByOeu2hcmKFjIygVA9iXYXMFi+qzbHBrYV
-         lr0aM0jUzqMwONh/yicQM2OKfM6TcL1Y56Ctzjjx5u48SEGk0kLSafDphftwIy0paQzR
-         qP18owrx8qZEdPzyLoimdS9+qmABsDWR8jiXxMwddRlSYNzdnZtyvuVanVjGbEfvN+ue
-         fBpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWegPP3ZOIabOHakwXrqdwV2Yc4qtRoHvhYJ+yPF/zwvzNQ9YndrZ/As/o3XO5d6bxe/Q5qy/DjOrfBZgEN39op9WTA
-X-Gm-Message-State: AOJu0Yz9YCIfGhymrwAY+Ge14lfH61vvpEOzI7CGtIJWWaQq+I08gBK6
-	GROnEAhpSMKB7dPutSV7ZmZKXMFFid3crC6IbYl8BTpcw8FB0jmzuf6dMg0P
-X-Google-Smtp-Source: AGHT+IFTUwiJNyWOsbzTp6pRpgB9m0eUC6Glae9hWMuyLisZlQCovQbtlX2+eLTEXgevQKBmCwMkQg==
-X-Received: by 2002:a81:ae54:0:b0:607:76c6:4ed9 with SMTP id g20-20020a81ae54000000b0060776c64ed9mr3594745ywk.41.1709070431797;
-        Tue, 27 Feb 2024 13:47:11 -0800 (PST)
-Received: from ?IPV6:2600:1700:6cf8:1240:76a2:1c3:c564:933e? ([2600:1700:6cf8:1240:76a2:1c3:c564:933e])
-        by smtp.gmail.com with ESMTPSA id h127-20020a0df785000000b00607cea349f5sm2011206ywf.36.2024.02.27.13.47.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Feb 2024 13:47:11 -0800 (PST)
-Message-ID: <fdac1d86-9e30-46b3-a1b7-5878dd49b1b8@gmail.com>
-Date: Tue, 27 Feb 2024 13:47:09 -0800
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="IDqXtw/G"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M0tGejxqAXRto4ihJFLOiI0O6O5o8GSJ1Vk6xP5hJ31Mk2YJ2rbWwceEhCpJFhnL8hMGhxu7qkdjlwa1P7jpt64p4DJOyhZuBI7xTU8dnIQSZih8vMYFZGSswJfmN1RTJIzIGakOtTayOXUBmzSk296c2/R3q+hVIhVcisYJTBWe3XS4a1QcyGtxmVZ8/z4U62Hp7KP3o4kgpzVH5bJ9ZMN66WVGfSMxgjfndbpjrwC0Dsj2l0Ivz9tm9VzyMtEdDfafe0cgx7rUPaeRkCs3G9G/+hbrTwK0i/IUCcaSAmIVz4HwTChemQ95l5IsnvqsBPan56Labf+wAhduOfWFaw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KqoBmyQXcFBt8flbMZmAASgdohwNZKvW6qeZg1nT5N4=;
+ b=dwuIlfHTkQmEMB9btsH0VXumFFs3AiM6cAsnSHdX0EGz3706EQRpUyi+QtBHICfG07+4gKmEeDsOnkVubNwDztNTjkUH5kxktKBmHghJIsYKFG+Qrty7jo4TDiLn9eV7fQK8uD+ah/VT12ZD1cRdoeEJi0Y8JIkEQewy9Zl2E1vRfMP2D9sBrt6O7cUHGe8fpovaewga7elpc4yPq7pB3x4LQby4Ynn8U6kpUPmgCrXlTYsUBSPvZ3/bMyGUcbyDiUa8LJZ5cwWw3xt8ofBbdl9+RpnRlYBHZG1KIXN+MgMl2vXxtvNPfUureBbazRPf9e5ujoyZXdEEtmcVDjbwbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KqoBmyQXcFBt8flbMZmAASgdohwNZKvW6qeZg1nT5N4=;
+ b=IDqXtw/GsKGTlibOg5BkO7JS0Tk3bDoW/srH867V+gheZ2/Xfh7v8vg91YOTvGY2EcZ2Is1E7YkVYyz6Cwxex0T7h9RhzG7rIoldLAID4nAMmrO/CMcdS3ZPFfIA8eHIJ/jRK0NRue53vrc9O0p6AIOHIOlpypZnq6a4fubvlvA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by AS8PR04MB7893.eurprd04.prod.outlook.com (2603:10a6:20b:2ab::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.36; Tue, 27 Feb
+ 2024 21:47:33 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9af4:87e:d74:94aa]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9af4:87e:d74:94aa%7]) with mapi id 15.20.7316.035; Tue, 27 Feb 2024
+ 21:47:33 +0000
+From: Frank Li <Frank.Li@nxp.com>
+Subject: [PATCH 0/6] PCI: imx6: rename\clean up and add lut information for
+ imx95
+Date: Tue, 27 Feb 2024 16:47:07 -0500
+Message-Id: <20240227-pci2_upstream-v1-0-b952f8333606@nxp.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFxY3mUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDIyNz3YLkTKP40oLikqLUxFxdg+SUFEPLRENTQzNjJaCegqLUtMwKsHn
+ RsbW1ANxHDhdfAAAA
+To: Richard Zhu <hongxing.zhu@nxp.com>, 
+ Lucas Stach <l.stach@pengutronix.de>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+ Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, Liam Girdwood <lgirdwood@gmail.com>, 
+ Mark Brown <broonie@kernel.org>
+Cc: linux-pci@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, Frank Li <Frank.Li@nxp.com>
+X-Mailer: b4 0.13-dev-c87ef
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1709070448; l=1386;
+ i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
+ bh=BUvBpo74+DLhrF8mimLHw09RlH+/kIlxHOLLFJNqLW0=;
+ b=/COSutiSizDVukBnCL81SDZ05CpoeJpsKXZ4+iTRexpuwW9CgvIlths9zHOMqJtiE6iavHDVq
+ XbJ8+/SnWJ4AG6oj+/SQD9QWjMw9k0ze9XfW30GHKsRaDLLyD0oAX5y
+X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
+ pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
+X-ClientProxiedBy: BYAPR11CA0050.namprd11.prod.outlook.com
+ (2603:10b6:a03:80::27) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v1 1/8] libbpf: allow version suffixes (___smth)
- for struct_ops types
-Content-Language: en-US
-To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org, ast@kernel.org
-Cc: andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
- kernel-team@fb.com, yonghong.song@linux.dev, void@manifault.com
-References: <20240227204556.17524-1-eddyz87@gmail.com>
- <20240227204556.17524-2-eddyz87@gmail.com>
-From: Kui-Feng Lee <sinquersw@gmail.com>
-In-Reply-To: <20240227204556.17524-2-eddyz87@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|AS8PR04MB7893:EE_
+X-MS-Office365-Filtering-Correlation-Id: 31d013cf-287e-4c92-b9f6-08dc37ddb41b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	USATNL/js28UHJQn+MLtKempDCMgkw5AtUXJrJiym9TaWx7H0iLcYYdwzeQR8+uEn1Hge4aRZe4YEBrUVSi27FnbMVxAySOjs0O7uywBLvubZHkjqSF7D4MVilGyoy66UAfagRDsTJ2uVXAjEbMOl8e7siZ0Psa9LcvOSUOP3X9yVU6xVNB3f4gULge2/8hXNvO5fiGt1OC937JOTlQCAwZbSNmIjvplqvGCuXuvN0urzxgmOo36kgf+S0uFTIn2QTYTNAKXdqvPmSCCCZiVULkrC0Pyphz8MgxlgKc82YtSkj0lG4VviVvW6tuqeN7TvwWLqr0xWxZg4LwGDxDwaOBV0y/pU3ThkPdnV/RUqcpocWjz3kKuj4MecOKgG7eZB2v90C8wb0OmilstT+JM6hCyDr19BTUsS9aEmukoT4V+3tjvPj7zSVq2eRUF2a2cbtq+Tgl9eyZmankPHnFjq+mYrPy+50JyCX82oT6wTX3DLZpte1J+KHWI69aMzGP3LfEvUxLpZpxJu94DRnMhCdi8GiRRiKJn/iTjP4Kyog1USfY2VDY/JfEElabekYqL2BIj/rAwWTGFD119G9iW10ffW3QZPtA9gZTZ7ZDMl83W0/zLKGS5Qm9cPdbPRE4ySKwytOPI4d+kohv47/zeMyCSXLrj4HltVHyGLoUYMCCFZocwsk+DqS8GYxVkqdTJjXYpOAi3og1NMZAuO4NMI9g1zQL/pIDLrx3BZ5Khf0g=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(921011)(38350700005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?VU5QUloreWdYR1EwN3RFdTgwMHExNjhVRTNSalkxdHhURWRUNXp3THFydXVS?=
+ =?utf-8?B?c0ZtRzhXUkg0ZzNCM0FZQU9UMmxyZXdpbTMvcDV1RElVWG56Z2dpU2VlWlAv?=
+ =?utf-8?B?c3ovZlFvNTRkdkoydDhmc0hwdHZnT0RxR0VKSnFXSGtSRk1JVnNNWkFiVE92?=
+ =?utf-8?B?REl5Y0hPWVZGbWdoN29pdlYwV0dseHpIelhpYXNzTHFtbXpVczBBOXZuWlFV?=
+ =?utf-8?B?OUt4b2lOSjQxYUxkL3FUUEo1Q2k0OUcwZHJ5akE5ME92VVFodkNRNVVCTndR?=
+ =?utf-8?B?MjBZUXovM0xTaHFReDhaTDVHOUxWTkxBWWJSSXpBUCtPbDRqcWNjbFhDMjNN?=
+ =?utf-8?B?Wk9hb3hGemZyOCtNd2lua0pETHRUejUyTXNQVnhVME9FWm5meFY1ckg0Z0FH?=
+ =?utf-8?B?V1JtRE9VME1mU01Tb3RlUkFlaEVTT21rRk43enE5VkIwUnRuRjBUNkVUdnFS?=
+ =?utf-8?B?K2dUK0FjQ1VDbHpQVzlFa0RmWmNZeUw2MXZYblIvOGltcXB0RW5LL1h6UEpF?=
+ =?utf-8?B?UDhpMmhpcE5URnY4OEtobS9zWldDNktjY2ZnSFBqeG1YUGFZYkhOaFROSWE1?=
+ =?utf-8?B?cTFJS0lUZHZSRkxMVXpPTXgrb29oSlV4TnBtRExIT0FRM0loMkQxSnBwQWc1?=
+ =?utf-8?B?cDNhd0NaZisxazl0d0ZtL0pBTmo3MlRkN2ZITFBJSG82aXRGckVDUDVFYVZ3?=
+ =?utf-8?B?M2VnS2p3NG1iK25hbnkxamZkQmlPSTJlTUoyY0VRVWluOUxtbVRORENrcWIz?=
+ =?utf-8?B?eWNHT1dwbzFLT09ncDNNVHNIRC9NSWlYSS9OQVE3QWtmalcrT0ROQ2pVNWJw?=
+ =?utf-8?B?ZnZIV2NZSW1mSDNCYk42STJpWXNNdDdvbStpVXNhL3REaXpFVkxTR1J1eDRT?=
+ =?utf-8?B?dzM2amVyaFRFdDhaUGE2TWRybjlqbzM4OS9OckZBeWVrTm56RUhGaStPZlky?=
+ =?utf-8?B?cVJKd0p5bUNzRXAyS0ZzbjIyUnVNWTdibXRmc2xCSWpudkhLcjJjak1aamZL?=
+ =?utf-8?B?ZEVyYkZxTVc2RTFKK05JcjNsRWpJc0pxZkw2UHJKTWxraUEvS1p4ZUZqOEk2?=
+ =?utf-8?B?SnVydmZTcXQwUTBhTWw1S0EyRktFVUowZDdqTEk1cU1aY1daVXQya2pva3NR?=
+ =?utf-8?B?MFJJS1VnUWQ2ZlhLMzlWR0lRTFJCV1pWY2dKN3dxUFNQdHlFMUlHelp5Ynd2?=
+ =?utf-8?B?Q0dITHRkcFk0TW85T2ppL2NaK2NWdHBkTm43UWlyVmoyYUUwVTJFQnQzcDRo?=
+ =?utf-8?B?QUlqajFmak56Z01FdEQ5YUh2VzhWMDNEV25tTCtTR3Izb2lEKzkyNWVNbUxM?=
+ =?utf-8?B?SjczbjhKN0l2SUFOVkcwOWIzRXpVeUxWNEMwMWp1ckhwNllhbWNELzNrd1lL?=
+ =?utf-8?B?aEhTWllQcTdqTWtuLzZLNUFCbnoybnRHUllVd0Q5S3lyQVJES0RrVVFnSVFZ?=
+ =?utf-8?B?RmJSblEzZFJTQXRWUFFjMGlydHRoOWNmZ3FTb0NmbkZTeU5EV0FoTUZXcXR1?=
+ =?utf-8?B?SlFtYzZua2JDT1c3UjZDR2hPUVBQZm1yWlBlK3pMc2JmdWxtTmRxKzE3Z29F?=
+ =?utf-8?B?YlFLVHZpR1R3RUtod054VEFzQ0RhR0ZwZFp3Zm5kdU55cmRJNklJblNabHZB?=
+ =?utf-8?B?eXdxSFBHMjhVVkphUEN0eDlVOVJsVmo4ay9Ga2xwdW92QmFvSW4yRUJlK00y?=
+ =?utf-8?B?bUtzUm50SFFJMWowNkpmUlVJR2wvTGFXaTZHUFA1YXdxQ1FiakUvSjUxMlh3?=
+ =?utf-8?B?Yk9XREJlOFF1TlBqbVpIVmtEeXNUcHNESzUzNVZsQ0poL0RIM2JRbWNyRzRM?=
+ =?utf-8?B?MGNlUVhUMUNmaEEzMy9wN1Y1bnlEZUxMNVVqWkdCc3lNSGhmVGNnYWZWMlNB?=
+ =?utf-8?B?OE1DN2xpYk1qVXR5bUVLOVZDTVhpaDNzd3ZMYWNwSno5c0RGWjBFZHpLakt5?=
+ =?utf-8?B?MWxnT00wU2c2WncxRmp1amFnUU5uYUIyZFdVRE9LVmVvRTdOY3QvT1E3bys2?=
+ =?utf-8?B?NjJxWnMxaGEweFJEWC9wclBmVDM2TDJwR2c3N0xPa3BEV2Z3QXFleE9wUC9W?=
+ =?utf-8?B?bFJNSHYreDVXYzRqZUR5aHA1MlM5SU5NWFhxd0VtcWhSa3RzNEh1SEdkVHNQ?=
+ =?utf-8?Q?pY/hTRPf1owmPONapBbQ0vOig?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31d013cf-287e-4c92-b9f6-08dc37ddb41b
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2024 21:47:32.9938
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: P+7IK6YZpw9T4qknB8mploLDh1zrdBPkK8ZqVq4xwhvZnIVQN3PqUX5CTihewgLEqSpwrzPQ2rqtwPGy27Q1+w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7893
 
+imx6 actaully for all imx chips (imx6*, imx7*, imx8*, imx9*). To avoid     
+confuse, rename all imx6_* to imx_*, IMX6_* to IMX_*. pci-imx6.c to        
+pci-imx.c to avoid confuse.                                                
 
+Using callback to reduce switch case for core reset and refclk.            
 
-On 2/27/24 12:45, Eduard Zingerman wrote:
-> E.g. allow the following struct_ops definitions:
-> 
->      struct bpf_testmod_ops___v1 { int (*test)(void); };
->      struct bpf_testmod_ops___v2 { int (*test)(void); };
-> 
->      SEC(".struct_ops.link")
->      struct bpf_testmod_ops___v1 a = { .test = ... }
->      SEC(".struct_ops.link")
->      struct bpf_testmod_ops___v2 b = { .test = ... }
-> 
-> Where both bpf_testmod_ops__v1 and bpf_testmod_ops__v2 would be
-> resolved as 'struct bpf_testmod_ops' from kernel BTF.
-> 
-> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-> ---
->   tools/lib/bpf/libbpf.c | 22 +++++++++++++++++-----
->   1 file changed, 17 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 01f407591a92..abe663927013 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -948,7 +948,7 @@ static int find_btf_by_prefix_kind(const struct btf *btf, const char *prefix,
->   				   const char *name, __u32 kind);
->   
->   static int
-> -find_struct_ops_kern_types(struct bpf_object *obj, const char *tname,
-> +find_struct_ops_kern_types(struct bpf_object *obj, const char *tname_raw,
->   			   struct module_btf **mod_btf,
->   			   const struct btf_type **type, __u32 *type_id,
->   			   const struct btf_type **vtype, __u32 *vtype_id,
-> @@ -957,15 +957,21 @@ find_struct_ops_kern_types(struct bpf_object *obj, const char *tname,
->   	const struct btf_type *kern_type, *kern_vtype;
->   	const struct btf_member *kern_data_member;
->   	struct btf *btf;
-> -	__s32 kern_vtype_id, kern_type_id;
-> +	__s32 kern_vtype_id, kern_type_id, err;
-> +	char *tname;
->   	__u32 i;
->   
-> +	tname = strndup(tname_raw, bpf_core_essential_name_len(tname_raw));
-> +	if (!tname)
-> +		return -ENOMEM;
-> +
->   	kern_type_id = find_ksym_btf_id(obj, tname, BTF_KIND_STRUCT,
->   					&btf, mod_btf);
->   	if (kern_type_id < 0) {
->   		pr_warn("struct_ops init_kern: struct %s is not found in kernel BTF\n",
->   			tname);
-> -		return kern_type_id;
-> +		err = kern_type_id;
-> +		goto err_out;
->   	}
->   	kern_type = btf__type_by_id(btf, kern_type_id);
->   
-> @@ -979,7 +985,8 @@ find_struct_ops_kern_types(struct bpf_object *obj, const char *tname,
->   	if (kern_vtype_id < 0) {
->   		pr_warn("struct_ops init_kern: struct %s%s is not found in kernel BTF\n",
->   			STRUCT_OPS_VALUE_PREFIX, tname);
-> -		return kern_vtype_id;
-> +		err = kern_vtype_id;
-> +		goto err_out;
->   	}
->   	kern_vtype = btf__type_by_id(btf, kern_vtype_id);
->   
-> @@ -997,7 +1004,8 @@ find_struct_ops_kern_types(struct bpf_object *obj, const char *tname,
->   	if (i == btf_vlen(kern_vtype)) {
->   		pr_warn("struct_ops init_kern: struct %s data is not found in struct %s%s\n",
->   			tname, STRUCT_OPS_VALUE_PREFIX, tname);
-> -		return -EINVAL;
-> +		err = -EINVAL;
-> +		goto err_out;
->   	}
->   
->   	*type = kern_type;
-> @@ -1007,6 +1015,10 @@ find_struct_ops_kern_types(struct bpf_object *obj, const char *tname,
->   	*data_member = kern_data_member;
+Add imx95 iommux and its stream id information.                            
 
-Where is going to free tname when it successes?
+Base on linux-pci/controller/imx
 
->   
->   	return 0;
-> +
-> +err_out:
-> +	free(tname);
-> +	return err;
->   }
->   
->   static bool bpf_map__is_struct_ops(const struct bpf_map *map)
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+Frank Li (6):
+      PCI: imx6: Rename imx6_* with imx_*
+      PCI: imx6: Rename pci-imx6.c and PCI_IMX6 config
+      MAINTAINERS: pci: imx: update imx6* to imx* since rename driver file
+      PCI: imx: Simplify switch-case logic by involve set_ref_clk callback
+      PCI: imx: Simplify switch-case logic by involve core_reset callback
+      PCI: imx: Config look up table(LUT) to support MSI ITS and IOMMU for i.MX95
+
+ MAINTAINERS                                        |    4 +-
+ drivers/pci/controller/dwc/Kconfig                 |   14 +-
+ drivers/pci/controller/dwc/Makefile                |    2 +-
+ .../pci/controller/dwc/{pci-imx6.c => pci-imx.c}   | 1115 +++++++++++---------
+ 4 files changed, 654 insertions(+), 481 deletions(-)
+---
+base-commit: b73259dcd67094e883104a0390852695caf3f999
+change-id: 20240227-pci2_upstream-0cdd19a15163
+
+Best regards,
+-- 
+Frank Li <Frank.Li@nxp.com>
+
