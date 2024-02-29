@@ -1,160 +1,118 @@
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC277D412
-	for <bpf@vger.kernel.org>; Thu, 29 Feb 2024 18:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C6A137A;
+	Thu, 29 Feb 2024 18:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709231426; cv=none; b=RYoWigTqMonJ2EXhAipGv8bGaADx3EQMaVKpSmi0uJC7rwa8lo6RfesjKZqJfVnf5cD7xOr6XyaH1IIgZEble7kNTXqSeV4wIhcI8G3EVn51/sg1ZbiDjqUso3yRNSZfYOdF7nrUuYDaICEa69PECe4FI6U3CaYKXlg4gqGrQ8k=
+	t=1709231489; cv=none; b=WNyW8Z8kx5FaFAISlcsTZZLL9pyRMTu6j4WEonh0yJ3/tPMbvUe+SK3mzdF68bICG5A7PufZXO6oCVbJGpxCWw7RY3cVX+VD5TAKScgyzUF740s5j58PttC8O2gMsjAI8BuEHgkUpoi6DDUiDrxTIbUEVlsL7h14bhEyjNr8vI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709231426; c=relaxed/simple;
-	bh=fIDzt/zIvmS+WF3x2U2l/YsvsBtPs1hW02ywHV62az0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RwlSbNrCVMisv2whiI9cL+c2f2UZqbFqWWiPgOoqChiYmsNABh7mNK8TxJp109x7TL+nI+4E+zT12yh5Lbtvv7dwfqypeCKUS0bTv0V96WxHcfLrcVyvk0DhA5gqQ5EfaZiipuz7+mO+UnmBWtcHDrGVq1cqvO9jkogbXDUlZes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=EPJm0YDP; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	s=arc-20240116; t=1709231489; c=relaxed/simple;
+	bh=kVQBBG8K+hDcFi7OSyJAb1VmE5J43rZTZM807TYsBKA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BMLaaiLKVircJ2dp8DDiIE8H1YhjevSbFfA5FehfaiNGZRheWdA0BFQuTpl2cztkvIuM1tZwQ6xAtEs0J97TdFVAgCODZPn4OxyqvO/S26bakV4HvfRl19H1E0titjo5CWtArDdjummVuLaQNxB3uyRddebXYhHzHpVDO5hTmdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=l8mPdTAS; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=VBN3PkA9; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="EPJm0YDP"
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6096ff3e4abso8653617b3.0
-        for <bpf@vger.kernel.org>; Thu, 29 Feb 2024 10:30:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1709231424; x=1709836224; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=baWFsDRpOZwDlTtI3eTOs150HYfeSnKMsWGIClmqta0=;
-        b=EPJm0YDPS1zhGGUUemd7s6UZZTtLW1oyfisnj9dcQcELyAWHVJB3tkUqoo7JTGLtyn
-         1ZX0d4nLtCpJwQX/2FgUOHHU6yu2mz83icrhkw1Kv4I8Gw5GKE6KvltnTKT4q5AWkAlG
-         0ltN6WhU9SLHHpPyBhSyUyhM6sDisFpZIeW56Q+q5Cpyx2WW+Acz8l4W0T3eI84OTI+S
-         tMiFjmN3xoUWbp37JZQv/luPmS+PfOGAWq7pG4pj+LA9Dt+xF2d9/vqhJ17FSyOU4tSv
-         f42g2DS7lkzlGuGKtFwKYh7gHpPJ0S+8Q/QsF0MSLclFmt10R16WPCrt6aucSN9Bw4cY
-         7keA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709231424; x=1709836224;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=baWFsDRpOZwDlTtI3eTOs150HYfeSnKMsWGIClmqta0=;
-        b=AM1vPR8gzR31PytLqVXWNbpAC45n4bBP7KSvtdAyUOykGvDalpqj+QbnB6lPUda8tu
-         adXfJ4/QVc0xVR8lAfci6NTxRznUsnTgXblUz7vWrMFsV00jJU/Zln1TjwvtVDdAfXYu
-         S2Fd2XPJdYmLlMIa8eWucgC3ND+hN47hleFsrt/2ys+6bHoABchOGoQczIw5UU25qXJD
-         h/qV4IkFtoQTifDdclsQPG/QkN5emBmzabmsXnc3BWYp5Lzl5YftlAhZBNGCuwj6GL9Y
-         HEwIO9/LpUgg6AvmmHaQ3cBmpC2DOWzfU1V3z8Nf8Be/oNU947nZwLtNLImWPyrFM5mU
-         EArw==
-X-Forwarded-Encrypted: i=1; AJvYcCXug16E96v09vAmfwL+yT6l7/LbfMHIN4hWvBdqBi/r8gH1hNW1DpriMjqQC6a7oT8d8Cx3DnAqUqGjddVk4Ebt1Lvb
-X-Gm-Message-State: AOJu0YwTbVzOA+Ni4EDK7XwMqcfXFu6oLTUlwVN9rIbBvO+vModAhMls
-	HoFtuYcZ50caU4nTymnATJThuLHCtWtEexaXpaJgoBWfCgW7LJMZVv+yOLKrNfvnqmGtijXu4zQ
-	IHmSCDc2kzAsaG80Vlv0yvwnszRyaWgVFEmsA
-X-Google-Smtp-Source: AGHT+IHl+58LUxZ7t8QCrt7A9iFSCpNrVrsb8JlTdK4KXwKB/PkdvoaELedDm0lfkCY0ELUtzetRIR8WzH/GlSdPnLo=
-X-Received: by 2002:a81:a0c3:0:b0:609:2c2a:1115 with SMTP id
- x186-20020a81a0c3000000b006092c2a1115mr3116390ywg.30.1709231423855; Thu, 29
- Feb 2024 10:30:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="l8mPdTAS";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="VBN3PkA9"
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1709231486;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=2ghJABFM1TMIbzRqLTziilHNZM/la1mEMF6DVsm8KTY=;
+	b=l8mPdTASf6JTitOVtaeF/6Ea9NFJgZ+zLcUzrQvkPx09S3GD6DTWUnYkR8EW1HIj02PpO4
+	Xvlz9e233YrpVYmmXEqvVuVJbNW1/nlFJU3RYNTUhDU4HocoX2MivDNKZc+rPI0i8/S40g
+	8D8TraiA446cR0f3vrWp5PCBe67AQ6l4BwEb/fqKEoN0HgyVZZ8dn1jFQ5GfPKtAgaFD4j
+	CyXKzo4504Q6OX9tUW6QE7vNAp2496L2aspt/lS48VecVVS5ayG4LSO54B7ctc5W1BOCFr
+	zrx4rFSVzE33234V1YEbDd9ZXWaKVTl/jDv4uGT1Iz6nrXrUxu6ZLlw2FmpYSg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1709231486;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=2ghJABFM1TMIbzRqLTziilHNZM/la1mEMF6DVsm8KTY=;
+	b=VBN3PkA9k94JvHmpHEk+qjVGEUQ37tkg1ToHf9ABvlC1Q56uUU9rmXJXqvCZhT9Ai/XfPI
+	tGKKVOhLJ3nwmqBA==
+To: bpf@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Jonathan Lemon <jonathan.lemon@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Song Liu <song@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: [PATCH RFC v2 net-next 0/2] Use per-task storage for XDP-redirects on PREEMPT_RT
+Date: Thu, 29 Feb 2024 19:17:54 +0100
+Message-ID: <20240229183109.646865-1-bigeasy@linutronix.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240225165447.156954-1-jhs@mojatatu.com> <20240225165447.156954-4-jhs@mojatatu.com>
- <327b473d9f6ae5e44391f75a022e4dca90a20c43.camel@redhat.com>
-In-Reply-To: <327b473d9f6ae5e44391f75a022e4dca90a20c43.camel@redhat.com>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Thu, 29 Feb 2024 13:30:12 -0500
-Message-ID: <CAM0EoMniTMq+mYqSg4DbOfsbOMc7BGkV7Z6PdA+j_214PLPOeQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v12 03/15] net/sched: act_api: Update
- tc_action_ops to account for P4 actions
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, deb.chatterjee@intel.com, anjali.singhai@intel.com, 
-	namrata.limaye@intel.com, tom@sipanda.io, mleitner@redhat.com, 
-	Mahesh.Shirshyad@amd.com, Vipin.Jain@amd.com, tomasz.osinski@intel.com, 
-	jiri@resnulli.us, xiyou.wangcong@gmail.com, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, vladbu@nvidia.com, horms@kernel.org, 
-	khalidm@nvidia.com, toke@redhat.com, daniel@iogearbox.net, 
-	victor@mojatatu.com, pctammela@mojatatu.com, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 29, 2024 at 11:19=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wr=
-ote:
->
-> On Sun, 2024-02-25 at 11:54 -0500, Jamal Hadi Salim wrote:
-> > The initialisation of P4TC action instances require access to a struct
-> > p4tc_act (which appears in later patches) to help us to retrieve
-> > information like the P4 action parameters etc. In order to retrieve
-> > struct p4tc_act we need the pipeline name or id and the action name or =
-id.
-> > Also recall that P4TC action IDs are P4 and are net namespace specific =
-and
-> > not global like standard tc actions.
-> > The init callback from tc_action_ops parameters had no way of
-> > supplying us that information. To solve this issue, we decided to creat=
-e a
-> > new tc_action_ops callback (init_ops), that provies us with the
-> > tc_action_ops  struct which then provides us with the pipeline and acti=
-on
-> > name.
->
-> The new init ops looks a bit unfortunate. I *think* it would be better
-> adding the new argument to the existing init op
->
+In [0] I introduced explicit locking for resources which are otherwise
+locked implicit locked by local_bh_disable() and this protections goes
+away if the lock in local_bh_disable() is removed on PREEMPT_RT.
 
-Our initial goal was to avoid creating a much larger patch by changing
-any other action's code and we observe that ->init() already has 8
-params already ;-> And only dynamic actions need this extra extension.
-If you still feel the change is needed, sure we can make that change.
+There was a big complained once it came to the locking of XDP related
+resources during XDP-redirect because it was mostly per-packet and the
+locking, even not contended, was seen as a problem [1]. Another XDP
+related problem was that I also touched every NIC-driver using XDP. This
+complicated the "how to write a NIC driver" further.
 
-> > In addition we add a new refcount to struct tc_action_ops called
-> > dyn_ref, which accounts for how many action instances we have of a spec=
-ific
-> > action.
-> >
-> > Co-developed-by: Victor Nogueira <victor@mojatatu.com>
-> > Signed-off-by: Victor Nogueira <victor@mojatatu.com>
-> > Co-developed-by: Pedro Tammela <pctammela@mojatatu.com>
-> > Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
-> > Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
-> > Reviewed-by: Vlad Buslov <vladbu@nvidia.com>
-> > Reviewed-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-> > ---
-> >  include/net/act_api.h |  6 ++++++
-> >  net/sched/act_api.c   | 14 +++++++++++---
-> >  2 files changed, 17 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/include/net/act_api.h b/include/net/act_api.h
-> > index c839ff57c..69be5ed83 100644
-> > --- a/include/net/act_api.h
-> > +++ b/include/net/act_api.h
-> > @@ -109,6 +109,7 @@ struct tc_action_ops {
-> >       char    kind[ACTNAMSIZ];
-> >       enum tca_id  id; /* identifier should match kind */
-> >       unsigned int    net_id;
-> > +     refcount_t p4_ref;
-> >       size_t  size;
-> >       struct module           *owner;
-> >       int     (*act)(struct sk_buff *, const struct tc_action *,
-> > @@ -120,6 +121,11 @@ struct tc_action_ops {
-> >                       struct nlattr *est, struct tc_action **act,
-> >                       struct tcf_proto *tp,
-> >                       u32 flags, struct netlink_ext_ack *extack);
-> > +     /* This should be merged with the original init action */
-> > +     int     (*init_ops)(struct net *net, struct nlattr *nla,
-> > +                         struct nlattr *est, struct tc_action **act,
-> > +                        struct tcf_proto *tp, struct tc_action_ops *op=
-s,
->
-> shouldn't the 'ops' argument be 'const'?
->
+To solve both problems I was thinking about an alternative and ended up
+with moving the data structure from per-CPU to per-task on PREEMPT_RT.
+Instead of adding it to task_struct, I added a pointer there and setup
+the struct on stack. In my debug build on x86-64 the struct
+bpf_xdp_storage has 112 bytes and collected the per-CPU ressources.
 
-As it is right now this would be hard to do because we carry around a
-refcnt in that struct. We will think about it..
+I've been benchmark the outcome on !RT. I meassured 14,880,077 pkt/s
+with pktgen + "xdp-bench drop" on a ixgbe which is the interface limit.
+I then lowered the clockspeed of the CPU (on the RX side) and received
+approx between 12,156,279 and 12,476,759 pkt/s. The results were not
+consistent and varied between runs mostly in that range with and without
+the patches.
 
+v1=E2=80=A6v2 https://lore.kernel.org/all/20240213145923.2552753-1-bigeasy@=
+linutronix.de
+  - Renamed the container struct from xdp_storage to bpf_net_context. Sugge=
+sted
+    by Toke H=C3=B8iland-J=C3=B8rgensen.
+  - Use the container struct also on !PREEMPT_RT builds. Store the pointer =
+to
+    the on-stack struct in a per-CPU variable. Suggested by Toke
+    H=C3=B8iland-J=C3=B8rgensen.
 
-cheers,
-jamal
+I'm posting here only two patches which replace the XDP redirect part
+(patches 14 to 24) from the original series.
 
+[0] https://lore.kernel.org/all/20231215171020.687342-1-bigeasy@linutronix.=
+de/
+[1] https://lore.kernel.org/all/CAADnVQKJBpvfyvmgM29FLv+KpLwBBRggXWzwKzaCT9=
+U-4bgxjA@mail.gmail.com/
+[2] https://lore.kernel.org/all/20231215145059.3b42ee35@kernel.org
 
-> Thanks,
->
-> Paolo
->
+Sebastian
+
