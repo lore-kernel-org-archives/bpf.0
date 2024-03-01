@@ -1,213 +1,390 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3945514295
-	for <bpf@vger.kernel.org>; Fri,  1 Mar 2024 22:05:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7770F14295
+	for <bpf@vger.kernel.org>; Fri,  1 Mar 2024 22:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709330707; cv=none; b=ng5et+8WqjoYQJ1TCg1TLpkavfiMtjoabkvH9wt2eC0rqwMeA63jiJJu3kflMoDiToE73jlWCmCBlPjbYnit7FYs7xqoep6ZZ8aByWh+8Slm3eeA3fBWyf6NjVmqF7S4GvR/HPZ0bU4WjPnsKPaf78UU9qwn+8rXYecyiv/mnNs=
+	t=1709330823; cv=none; b=WZQXm+Vtto7woICUGFKJmja9GOochjLfVSV8tfZMiy+H5jDfucuh5N94Bi0Xw1yZR3ASarWD1YgF6paGJEIUTWOA5MDtmxjyMJ6d0FHgISpN4wtpgfm7UoZrMO3PByeLNCzZepVsFRc9JnP4pX39xW1aBRYEWwouUJxF69Z3z6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709330707; c=relaxed/simple;
-	bh=SeZ2zpZcFWxppa7SrHOKaEF9qJ7s3Wi2z9N2OxzfGtI=;
-	h=Date:From:To:Cc:Message-ID:References:MIME-Version:In-Reply-To:
-	 Subject:Content-Type; b=UspY4vO9XN6disBCOeA9LZxkzSq9Bsih6BZcKZP9bQ5K/2Klc35fkr/Mc0KmTjUpOIug4r6UqqhnVA2V5Fysz1lDg1bg8vB4X46v7azC6cxrII4rbNOafLmZZJBG8jQr7iW6kKevHfbyS1B6W/aN+htDsnad9bvl+yCxLNACg04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=htlfc/rb; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=htlfc/rb; arc=none smtp.client-ip=50.223.129.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	s=arc-20240116; t=1709330823; c=relaxed/simple;
+	bh=rqOcfH9Xy5l7aB2wSAs/mYs6v14Oe9tgJuCVyCvr8m8=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=paJYZFcfyrfDvTKFgZSzCpxLK8J/d4yfMWdrnK5x2MTz+ZLlYlFoCyYx2nV4zwodpBbngzM0vxt52Qc44uAeu57leKksmprmiCZWzkKTQSPb1IUb1+YtZeUZ+jqpaykYeEgK6udLYAz8aUK9JZqZVoY2zqJEerl4O082yTkqz7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F5KMYFJU; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="htlfc/rb";
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="htlfc/rb"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 7B205C14F6BB
-	for <bpf@vger.kernel.org>; Fri,  1 Mar 2024 14:05:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1709330705; bh=SeZ2zpZcFWxppa7SrHOKaEF9qJ7s3Wi2z9N2OxzfGtI=;
-	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=htlfc/rbtUimaHfcIK/h/22i0q8msx8VfXUgWoQO3AIh+lX5WifcsFTo4mvrA8QET
-	 1eJ1qVZ0igrTxRzqn2C32ssrzFk7yY0m8UjVFuRSZp+fCAq8vuqY21ADO7FgMNqDeo
-	 byQZhxn0Dau6g9ufT/FrAgueNo45zFB7jsJOuPyU=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Fri Mar  1 14:05:05 2024
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id DBAEEC14F616;
-	Fri,  1 Mar 2024 14:05:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1709330705; bh=SeZ2zpZcFWxppa7SrHOKaEF9qJ7s3Wi2z9N2OxzfGtI=;
-	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=htlfc/rbtUimaHfcIK/h/22i0q8msx8VfXUgWoQO3AIh+lX5WifcsFTo4mvrA8QET
-	 1eJ1qVZ0igrTxRzqn2C32ssrzFk7yY0m8UjVFuRSZp+fCAq8vuqY21ADO7FgMNqDeo
-	 byQZhxn0Dau6g9ufT/FrAgueNo45zFB7jsJOuPyU=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 0208CC14F616
- for <bpf@ietfa.amsl.com>; Fri,  1 Mar 2024 14:05:04 -0800 (PST)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -1.409
-X-Spam-Level: 
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MAi022_FNweD for <bpf@ietfa.amsl.com>;
- Fri,  1 Mar 2024 14:05:03 -0800 (PST)
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com
- [209.85.219.41])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 7A69FC14F614
- for <bpf@ietf.org>; Fri,  1 Mar 2024 14:05:03 -0800 (PST)
-Received: by mail-qv1-f41.google.com with SMTP id
- 6a1803df08f44-68f571be9ddso19993376d6.0
- for <bpf@ietf.org>; Fri, 01 Mar 2024 14:05:03 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F5KMYFJU"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-29996cc6382so2095803a91.3
+        for <bpf@vger.kernel.org>; Fri, 01 Mar 2024 14:07:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709330821; x=1709935621; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E51ZeEbGIGMgp71rEk7y5d3jRmxkYJEQBtqqVhG5kHE=;
+        b=F5KMYFJUCfJU0YLfJc8HxAhyOAeq+Z3WEb8gFS27nxYnmSa3figpvNNh8zEvLhRlMG
+         BCuvFYQOSF4napko7Bg1ulW4uEDoPgcoSlFxpCIesZm0oO9tLWIr/Pwp8odlbzdvr+av
+         0a2NpWEbXvElyQSjPAAbWD+LXVfI1ypGAWq12jq8yomMr4+FbSL+XlX8VsPP6ao+VI6z
+         dFG7ddFGTWyN8ctYuulisAEWRMF9Rv7vj3XrW6FiS7uNcW8sY/qHfTcnUnmSPxqJNSJr
+         oy7DDEJ5zj4hDORCudJGDFPZHD8sIa3V9hw33j0zDOsKHlz/kkuZN9ErDvbM7Jfg+8xZ
+         lyGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709330702; x=1709935502;
- h=user-agent:in-reply-to:content-disposition:mime-version:references
- :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=jSlI/TtzoUdkSg2iVSWhH6rf3DTlysvwHka0FGU92Po=;
- b=aW0SVv90pn3Ey501BxUop+xS3vYeJ6zTIvArdr+gEjtfrsHWgb8gwHGPvMKeWcTGde
- ZYeWuXJsbDmHHkdX9vNGosNz8CEOIGO/3vhZdfv3JGGqgCnvZyLOcbfHSkJs532RhNYC
- jwSchVV4bvQclSwx/rqkI+USUD/5ihzbIGXBTSVQZsIdAoH/DAYalMyzdTCIhK9I5x6s
- GRQeMaXslzuUW2DADVOaaJ9c8SZyWMTDomRQ7kKhgbqorH0Z0RMRlfI8GEoGuQhMEgPP
- nJf6iTZ/T2Uabn19IPorE9nFUs5ZBGRWvVg2GwGaoLqltlDFpAfmSA6roI0rG7qAmR3B
- kdwA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVz/qbVarh0bOtiW5c3IBhS0bgWo+Qnruw3MzDnKtsiAyOtKyyWZY76MFeUgyRPa6yHIs+h1DTApDWxV70=
-X-Gm-Message-State: AOJu0Yy0/vjtKJL/GRduMMAM3sroyaz1stovchpwPZltTFZUKjtjqNbG
- WuG3EuhD1k4oxp4nm45lmUeMAcKrw31H+sVrWPOPqHu3i1ltN6vwuKFsXvxc
-X-Google-Smtp-Source: AGHT+IEZfRAHIwXSxE3s1/cBCxuP4GRbSr2X8JngG1vqHJDaxMk5Nzupf0+XawsNBIh5ri7nvMMnjQ==
-X-Received: by 2002:a0c:9c0f:0:b0:68f:62c8:39d3 with SMTP id
- v15-20020a0c9c0f000000b0068f62c839d3mr2741134qve.56.1709330702354; 
- Fri, 01 Mar 2024 14:05:02 -0800 (PST)
-Received: from maniforge (c-24-1-27-177.hsd1.il.comcast.net. [24.1.27.177])
- by smtp.gmail.com with ESMTPSA id
- oi4-20020a05621443c400b0068f11ceb309sm804621qvb.128.2024.03.01.14.05.00
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 01 Mar 2024 14:05:00 -0800 (PST)
-Date: Fri, 1 Mar 2024 16:04:58 -0600
-From: David Vernet <void@manifault.com>
-To: dthaler1968@googlemail.com
-Cc: bpf@vger.kernel.org, bpf@ietf.org
-Message-ID: <20240301220458.GC192865@maniforge>
-References: <20240301192020.15644-1-dthaler1968@gmail.com>
- <20240301214929.GB192865@maniforge>
- <236501da6c23$30b03380$92109a80$@gmail.com>
+        d=1e100.net; s=20230601; t=1709330821; x=1709935621;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=E51ZeEbGIGMgp71rEk7y5d3jRmxkYJEQBtqqVhG5kHE=;
+        b=K+9uGsscMAut62F45UjX3mnXezmizTYjkohXWRdM02zZV3i1FDDQtmrIJsrkjqQnGL
+         IXcDgKV6VP3bOMLeJ8A1T/O5WLEMTKys6Ua61K/YiVKea/i0Ysmdg6BFmw4LpxfhGkBo
+         LQlSY/SlqdnSkqPBcXUq0M8Ysc9AcT/9ZhxNcQfyWUTgtqhgf2EodEeUcjBaoZ8G2Qah
+         +ogv7Hl3RoGe94rknAAAb6OCnPKZFd2gKAcH0Ggo++BLT+a7mFNDcAd1NH5m7ySvCNpM
+         wFiVAEkthMh4rISBE5b1c2D6faCw3XlNpOWl9fut8XTvU6vJ/xU+7lkQcfdyGzbckBkv
+         i2NQ==
+X-Gm-Message-State: AOJu0YxTsaxIPIeHRbsC4hHDml8Z8VpWUycujMlpvZl6FSbjQPCbRUp7
+	LL7wnvUq4NphNRPaRo9yPM+XKyE8JkmjjXcX+Bb3BqGCotOIEKRL
+X-Google-Smtp-Source: AGHT+IErovCG0GJtDs6yRlwk48EoZzsLCOx5QU4aarA4DIDlnnLCh/XrF7JaKDxaub0jraLeo4mUJg==
+X-Received: by 2002:a17:90a:9f8b:b0:29a:7bec:32a0 with SMTP id o11-20020a17090a9f8b00b0029a7bec32a0mr2622474pjp.49.1709330820641;
+        Fri, 01 Mar 2024 14:07:00 -0800 (PST)
+Received: from localhost ([98.97.43.160])
+        by smtp.gmail.com with ESMTPSA id nd16-20020a17090b4cd000b0029b035682d7sm4318765pjb.9.2024.03.01.14.06.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Mar 2024 14:07:00 -0800 (PST)
+Date: Fri, 01 Mar 2024 14:06:59 -0800
+From: John Fastabend <john.fastabend@gmail.com>
+To: John Fastabend <john.fastabend@gmail.com>, 
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+ John Fastabend <john.fastabend@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@kernel.org>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Eddy Z <eddyz87@gmail.com>, 
+ Kernel Team <kernel-team@fb.com>
+Message-ID: <65e251831582f_8e09c208a@john.notmuch>
+In-Reply-To: <65e24cff4c626_76bd22088e@john.notmuch>
+References: <20240301033734.95939-1-alexei.starovoitov@gmail.com>
+ <20240301033734.95939-5-alexei.starovoitov@gmail.com>
+ <65e230d4670d9_5dcfe20885@john.notmuch>
+ <CAADnVQKKFxioLAqLPNq7mvt4GOHpC0j80-SUYzYQkpno3d+49Q@mail.gmail.com>
+ <65e24cff4c626_76bd22088e@john.notmuch>
+Subject: Re: [PATCH v3 bpf-next 4/4] selftests/bpf: Test may_goto
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <236501da6c23$30b03380$92109a80$@gmail.com>
-User-Agent: Mutt/2.2.12 (2023-09-09)
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/2P-9UyRDRy8LuLF5HzatVri7d0M>
-Subject: Re: [Bpf] [PATCH bpf-next] bpf,
- docs: Use IETF format for field definitions in instruction-set.rst
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-Content-Type: multipart/mixed; boundary="===============0478657805867491358=="
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-Message-ID: <20240301220458.hLz4k23x4JmFolSfZz_e-LoDiknSSBfQlafu5kutx-s@z>
-
-
---===============0478657805867491358==
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="h+bXX5nS0hEPOju2"
-Content-Disposition: inline
-
-
---h+bXX5nS0hEPOju2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 01, 2024 at 01:55:34PM -0800, dthaler1968@googlemail.com wrote:
-> David Vernet <void@manifault.com> wrote:
-> [...]=20
-> > Very glad that we were able to do this before sending to WG last call.
-> Thank
-> > you, Dave. I left a couple of comments below but here's my AB:
-> >=20
-> > Acked-by: David Vernet <void@manifault.com>
-> [...]
-> > > -``BPF_ADD | BPF_X | BPF_ALU`` means::
-> > > +``{ADD, X, ALU}``, where 'code'=3D``ADD``, 'source'=3D``X``, and
-> 'class'=3D``ALU``,
-> > means::
-> >=20
-> > For some reason ``ADD``, ``X`` and ``ALU`` aren't rendering correctly w=
-hen
-> > built with sphinx. It looks like we need to do this:
-> [...]=20
-> > -``{ADD, X, ALU}``, where 'code'=3D``ADD``, 'source'=3D``X``, and
-> 'class'=3D``ALU``,
-> > means::
-> > +``{ADD, X, ALU}``, where 'code' =3D ``ADD``, 'source' =3D ``X``, and '=
-class'
-> =3D
-> > ``ALU``, means::
->=20
-> Ack.  Do you want me to submit a v2 now with that change or hold off for a
-> bit?  Keep in mind the deadline for submitting a draft before the meeting=
- is
-> end-of-day Monday.
+John Fastabend wrote:
+> Alexei Starovoitov wrote:
+> > On Fri, Mar 1, 2024 at 11:47=E2=80=AFAM John Fastabend <john.fastaben=
+d@gmail.com> wrote:
+> > >
+> > > Alexei Starovoitov wrote:
+> > > > From: Alexei Starovoitov <ast@kernel.org>
+> > > >
+> > > > Add tests for may_goto instruction via cond_break macro.
+> > > >
+> > > > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> > > > ---
+> > > >  tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
+> > > >  .../bpf/progs/verifier_iterating_callbacks.c  | 72 +++++++++++++=
++++++-
+> > > >  2 files changed, 70 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/t=
+esting/selftests/bpf/DENYLIST.s390x
+> > > > index 1a63996c0304..c6c31b960810 100644
+> > > > --- a/tools/testing/selftests/bpf/DENYLIST.s390x
+> > > > +++ b/tools/testing/selftests/bpf/DENYLIST.s390x
+> > > > @@ -3,3 +3,4 @@
+> > > >  exceptions                            # JIT does not support cal=
+ling kfunc bpf_throw                                (exceptions)
+> > > >  get_stack_raw_tp                         # user_stack corrupted =
+user stack                                             (no backchain user=
+space)
+> > > >  stacktrace_build_id                      # compare_map_keys stac=
+kid_hmap vs. stackmap err -2 errno 2                   (?)
+> > > > +verifier_iter/cond_break
+> > > > diff --git a/tools/testing/selftests/bpf/progs/verifier_iterating=
+_callbacks.c b/tools/testing/selftests/bpf/progs/verifier_iterating_callb=
+acks.c
+> > > > index 5905e036e0ea..8476dc47623f 100644
+> > > > --- a/tools/testing/selftests/bpf/progs/verifier_iterating_callba=
+cks.c
+> > > > +++ b/tools/testing/selftests/bpf/progs/verifier_iterating_callba=
+cks.c
+> > > > @@ -1,8 +1,6 @@
+> > > >  // SPDX-License-Identifier: GPL-2.0
+> > > > -
+> > > > -#include <linux/bpf.h>
+> > > > -#include <bpf/bpf_helpers.h>
+> > > >  #include "bpf_misc.h"
+> > > > +#include "bpf_experimental.h"
+> > > >
+> > > >  struct {
+> > > >       __uint(type, BPF_MAP_TYPE_ARRAY);
+> > > > @@ -239,4 +237,72 @@ int bpf_loop_iter_limit_nested(void *unused)=
 
-I think we can hold off until other people review.
+> > > >       return 1000 * a + b + c;
+> > > >  }
+> > > >
+> > > > +#define ARR_SZ 1000000
+> > > > +int zero;
+> > > > +char arr[ARR_SZ];
+> > > > +
+> > > > +SEC("socket")
+> > > > +__success __retval(0xd495cdc0)
+> > > > +int cond_break1(const void *ctx)
+> > > > +{
+> > > > +     unsigned int i;
+> > > > +     unsigned int sum =3D 0;
+> > > > +
+> > > > +     for (i =3D zero; i < ARR_SZ; cond_break, i++)
+> > > > +             sum +=3D i;
+> > > > +     for (i =3D zero; i < ARR_SZ; i++) {
+> > > > +             barrier_var(i);
+> > > > +             sum +=3D i + arr[i];
+> > > > +             cond_break;
+> > > > +     }
+> > > > +
+> > > > +     return sum;
+> > > > +}
+> > > > +
+> > > > +SEC("socket")
+> > > > +__success __retval(999000000)
+> > > > +int cond_break2(const void *ctx)
+> > > > +{
+> > > > +     int i, j;
+> > > > +     int sum =3D 0;
+> > > > +
+> > > > +     for (i =3D zero; i < 1000; cond_break, i++)
+> > > > +             for (j =3D zero; j < 1000; j++) {
+> > > > +                     sum +=3D i + j;
+> > > > +                     cond_break;
+> > > > +             }
+> > > > +
+> > > > +     return sum;
+> > > > +}
+> > > > +
+> > > > +static __noinline int loop(void)
+> > > > +{
+> > > > +     int i, sum =3D 0;
+> > > > +
+> > > > +     for (i =3D zero; i <=3D 1000000; i++, cond_break)
+> > > > +             sum +=3D i;
+> > > > +
+> > > > +     return sum;
+> > > > +}
+> > > > +
+> > > > +SEC("socket")
+> > > > +__success __retval(0x6a5a2920)
+> > > > +int cond_break3(const void *ctx)
+> > > > +{
+> > > > +     return loop();
+> > > > +}
+> > > > +
+> > > > +SEC("socket")
+> > > > +__success __retval(0x800000) /* BPF_MAX_LOOPS */
+> > > > +int cond_break4(const void *ctx)
+> > > > +{
+> > > > +     int cnt =3D 0;
+> > > > +
+> > > > +     for (;;) {
+> > > > +             cond_break;
+> > > > +             cnt++;
+> > > > +     }
+> > > > +     return cnt;
+> > > > +}
+> > >
+> > > I found this test illustrative to show how the cond_break which
+> > =
 
->=20
-> [...]
-> > > -``BPF_XOR | BPF_K | BPF_ALU64`` means::
-> > > +``{XOR, K, ALU64}`` means::
-> >=20
-> > I do certainly personally prefer the notation that was there before, but
-> if this
-> > more closely matches IETF norms then LGTM.
->=20
-> The notation before assumed the values were full byte values so you could=
- OR
-> them together.  When they're not full byte values (and they're not in IETF
-> convention), OR'ing makes no sense.
+> > ohh. I shouldn't have exposed this implementation detail
+> > in the test. I'll adjust it in the next revision.
+> > =
 
-Yep
+> > > is to me "feels" like a global hidden iterator appears to not
+> > > be reinitialized across calls?
+> > ...
+> > > I guess this is by design but I sort of expected each
+> > > call to have its own context. It does make some sense to
+> > > limit main and all calls to a max loop count so not
+> > > complaining. Maybe consider adding the test? I at least
+> > > thought it helped.
+> > =
 
-> The proposed {} notation matches the C struct initialization convention a=
-s a
-> precedent.
+> > At the moment each subprog has its own hidden counter,
+> =
 
-Makes sense
+> aha that is how I read the patch1 as well. But I'm trying to follow
+> why I get two different answers here.
+> =
 
-Thanks,
-David
+> Below passes all good the total there in break5 is 2xMAX_LOOPS which
+> is what I expect from above and reading patch. If I trace the code
+> I have two subprogs and each does fixup,
+> =
 
---h+bXX5nS0hEPOju2
-Content-Type: application/pgp-signature; name="signature.asc"
+>    insn_buf[j] =3D BPF_ST_MEM(BPF_DW, BPF_REG_FP,
+>      -subprogs[i].stack_depth + j * 8, BPF_MAX_LOOPS);
+> =
 
------BEGIN PGP SIGNATURE-----
+> This is the good one.
+> =
 
-iHUEARYKAB0WIQRBxU1So5MTLwphjdFZ5LhpZcTzZAUCZeJRCgAKCRBZ5LhpZcTz
-ZOTZAQC3/6y6QAd8sEHhGDc9qW1EeTQrEijx2MFR86SslQvzRQEA2fLLW7MrjTp3
-L57SqdZ7KJ2qiS9flrlZ2BZKv6LrGgE=
-=NPUf
------END PGP SIGNATURE-----
+>  __noinline int full_loop(void)
+>  {
+> 	int cnt =3D 0;
+> =
 
---h+bXX5nS0hEPOju2--
+> 	for (;;) {
+> 		cond_break;
+> 		cnt++;
+> 	}
+> =
 
+> 	for (;;) {
+> 		cond_break;
+> 		cnt++;
+> 	}
+> =
 
---===============0478657805867491358==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+> 	bpf_printk("cnt=3D=3D%d\n", cnt);
+> 	return cnt;
+>  }
+> =
 
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
+>  SEC("socket")
+>  __success __retval(16777216)
+>  int cond_break5(const void *ctx)
+>  {
+> 	int cnt =3D 0;
+> =
 
---===============0478657805867491358==--
+> 	for (;;) {
+> 		cond_break;
+> 		cnt++;
+> 	}
+> =
+
+> 	cnt +=3D full_loop();
+> =
+
+> 	for (;;) {
+> 		cond_break;
+> 		cnt++;
+> 	}
+> 	return cnt;
+>  }
+> =
+
+> But adding static fails :( which I didn't expect. Is it obvious
+> why this is the case?
+> =
+
+> static  __noinline int full_loop(void)
+>  {
+> 	int cnt =3D 0;
+> =
+
+> 	for (;;) {
+> 		cond_break;
+> 		cnt++;
+> 	}
+> =
+
+> 	for (;;) {
+> 		cond_break;
+> 		cnt++;
+> 	}
+> =
+
+> 	bpf_printk("cnt=3D=3D%d\n", cnt);
+> 	return cnt;
+>  }
+> =
+
+>  SEC("socket")
+>  __success __retval(16777216)
+>  int cond_break5(const void *ctx)
+>  {
+> 	int cnt =3D 0;
+> =
+
+> 	for (;;) {
+> 		cond_break;
+> 		cnt++;
+> 	}
+> =
+
+> 	cnt +=3D full_loop();
+> =
+
+> 	for (;;) {
+> 		cond_break;
+> 		cnt++;
+> 	}
+> 	return cnt;
+>  }
+> =
+
+> From verifier side story is slightly different. There are still
+> two subprogs, but for subprog[0] has stack_slots=3D=3D0? Debugging
+> now but maybe its obvious what that static is doing to you.
+
+That was a typo its subprog[1] with stack_slots =3D=3D 0. Also
+tracing insn it seems in nonstatic case we hit multiple
+insn->code (BPF_JMP| BPF_JMA) but in the static case only
+find the first one. Object file seems to have multiples
+though. I need to drop for the rest of the afternoon most
+likely, but will try to see what sort of silly thing I did
+later today or worse case Monday.
+
+> k
+> > but we might have different limits per program type.
+> > Like sleepable might be allowed to loop longer.
+> > The actual limit of BPF_MAX_LOOPS is a random number.
+> > The bpf prog shouldn't rely on any particular loop count.
+> > Most likely we'll add a watchdog soon and will start cancelling
+> > bpf progs that were on cpu for more than a second
+> > regardless of number of iterations.
+> > Arena faults will be causing loops to terminate too.
+> > And so on.
+> > In other words "cond_break" is a contract between
+> > the verifier and the program. The verifier allows the
+> > program to loop assuming it's behaving well,
+> > but reserves the right to terminate it.
+> > So bpf author can assume that cond_break is a nop
+> > if their program is well formed.
+> > The loops with discoverable iteration count like
+> > for (i =3D 0; i < 1000; i++)
+> > are not really a target use case for cond_break.
+> > It's mainly for loops that may have unbounded looping,
+> > but should terminate quickly when code is correct.
+> > Like walking a link list or strlen().
+> =
+
+> Yep we do this a lot and just create some artifical upper
+> bound so this is nicer for sure. Lots of Tetragon code reads
+> =
+
+> =
+
+>    for (i =3D 0; i < MAX_LOOP; i++) {
+>      do_stuff
+>      if (exit_cond)
+>        break;
+>   } =
+
+> =
+
+> .John
+
 
