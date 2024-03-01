@@ -1,189 +1,181 @@
-Received: from mail-ed1-f68.google.com (mail-ed1-f68.google.com [209.85.208.68])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C610D3987B
-	for <bpf@vger.kernel.org>; Fri,  1 Mar 2024 15:06:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A896BFDE;
+	Fri,  1 Mar 2024 15:24:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709305611; cv=none; b=QWQHm3EMMidXmZE/5CpVvo9p/fWsEiMrR1KXMkaQzBWqBQlUNroF5kYlgX15wMgD1eqoCSSgPYVLKr2qtF/GaJHD0+JdcLgKqvlI638Lh/AziByeqOjfEMqxhh5dgz26lmGwn+YoQKqpf8Ec3iToNaJ4Jg6+kkEephOKicHve+4=
+	t=1709306674; cv=none; b=F9NxyOsV5ncyDL6YhT15cfYEoQRFYAuu7RBmeZ08zq+tDa2Zvd2Vv8M57nBTcsixR/kU3ts2erHKl+03T+ob2uTNTIPB3o541vadSXhV0JyelbRsL8ed/VKmSjQ02NuCuVtjX2TX/SoYObFIYnTvHjTtSQzOvnROO0E5ldWRjVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709305611; c=relaxed/simple;
-	bh=Cy009/vj2yFSUAK4JL7zCWDxH9GpKuPEZfyi2myxI+s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QtqnHtII7oPkhjAm2//eu/NlpDvRpR3UXE0qL2HyUIgXT3rnz1QBJAoQGUibs19ew++HCHSx4V6JiAcy7x0TxNISG2eguGDAWX/Kq7v0dct8nHzfohRfRctOHCcjZDIZJVY8UCMDEkjMktH38GsjA1c8I44qd2e6+j0tLt9APpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lRYhYKKd; arc=none smtp.client-ip=209.85.208.68
+	s=arc-20240116; t=1709306674; c=relaxed/simple;
+	bh=33/sPwUCVGJBaZBqwstRiFLOxGbB42pYs5Iiv3cqK7o=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M/dceocY31wK/Lujs3v3xj358Ms1Jz5jazV3/jZFIvLXbyg3QBbc5axi1vJ8hZMlaSuCpya4AAfbEuRDhAnxL6hn+7cR6cDyZxHZq6lCu2zAxRqWD71LYMjyprww5Ob0xTMgQO23s9qmxsbS+B47puqdB97Q3UBAgKE9AB2qGkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e+RP8+ky; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lRYhYKKd"
-Received: by mail-ed1-f68.google.com with SMTP id 4fb4d7f45d1cf-565d1656c12so3929573a12.1
-        for <bpf@vger.kernel.org>; Fri, 01 Mar 2024 07:06:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e+RP8+ky"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a4429c556efso372364666b.0;
+        Fri, 01 Mar 2024 07:24:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709305608; x=1709910408; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cy009/vj2yFSUAK4JL7zCWDxH9GpKuPEZfyi2myxI+s=;
-        b=lRYhYKKd/kpDsvc0GqKK8e05oJZIql8VHal6d/DSyPgfarEMWOPnLFiJG6OlffVGsH
-         UG595bgUylhbXQ8uZhM2QrA4rmskzbHnmmQDzlLYaEHIumAzDIje1cSx/ffReKqvMeiP
-         +wVrmhSu5/S95JvxMSyaIlmg2LPKHClo176OChbKkc/C5XsQBm1WQdJfnNLlvsWV+MdY
-         jpSqf1bzDDvGZWG7Migdhnjr50ziPqTakOucsY+e9H5SduV1RdXBk3kf9qXmuH6xLVkg
-         L3V5xtXTHdfpGqqkJqm2FLMvQtlkIGhKPUGjgDvgwG8LGT5rDDTmgE1mo+pp11lf7iNQ
-         ibdg==
+        d=gmail.com; s=20230601; t=1709306670; x=1709911470; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=brg+65tHP59HmD9Vnjm4p9WorCcCtyt7c+xm8JLyK9c=;
+        b=e+RP8+ky0ywyO7Yv8Tr7Zxg+YDbxHh8f3GD1ilDFkRajKosOa59kt6vUgCdZHRn3I/
+         OBqWXpnH77u3ljyLTJczh+f531nw3gvcpiP3x11IEh+z5EgzJQYT+1zzLQntkHLgpUEb
+         u1tQs31pDjWIYnecTfLoVk/QT3IIyXEv8MzPPydBGQ/9JCfmVWvkHBw9H7/ziR2hnLPK
+         FdUzciWgjQC7xjDiJBo/h/NrMeU5FYQhQ1BS66HpPq/To7I58BhtpG+r1mY2FnVfhU4b
+         9dSTMCEBh3vMxApBZHwzIxedBN9N/jy+SVpwy+Gn3CtjgV5hG96oRHp47HcUuY8XuUXn
+         XY3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709305608; x=1709910408;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cy009/vj2yFSUAK4JL7zCWDxH9GpKuPEZfyi2myxI+s=;
-        b=hZc4Hex/YlRfaQKpwX8WDVdJaCSbR8jGfbf0t9Bl72vP4WIKm6PCVwwlXifbabd1dZ
-         YXNhkDtM+N2HXMVm0tFNzCjKcGpoMN4DeQ6IsC04h31NArHOVuMJ5DTWHVWCYX6gFubs
-         pDfxWdrir/48rNmZtJLCy5AE8a0EzGM/8HaTjFrQCdKlVvaZ1N7meMw4BeZgso9ItM0i
-         fDpYvhqm+prJpeUy69BB8YIspMcgC/Snb2VeLQP8RzIdQLjliiLq6PIpdszYKmeBwjGA
-         GBK6IDnUD44hCOFK2lKDMRKlG5kxp7Ick8VhX1WnI68bzh5vNQvPl/fb7kattQFQAu6y
-         3iHA==
-X-Forwarded-Encrypted: i=1; AJvYcCUQcAQ9GTXMz8IA1t4Zg7qlANdEXqRDYBMRSTH6silXJo+7iawZyxqO/BrT5Naa7vyPDxHIB3CdlQgGCYUVxb43nrqm
-X-Gm-Message-State: AOJu0YwXQCL9OHYBrczKWiXlmkAiGEq0IxWEBd2m/VYz09ACmcsTa5GR
-	C9bxcAFwZvzKvC0okYbBWsO4FBhOLA8jtB2tIvXtKpB7xf8NbTYjOMB4ZSCuvKtL9xCTfEyvSWe
-	LSY/bZLXQ33iGaf4Pt1OHJ794InauUMik58E=
-X-Google-Smtp-Source: AGHT+IFcPgEJItzfXo5SCf4RdZRXQEGyBEx3M8fo18iG/UNfiV/QKJ2pZuYq9gNuc2NzEi5F5b/p+zmu+93e/XqMIZE=
-X-Received: by 2002:a50:c8cb:0:b0:561:3b53:d0af with SMTP id
- k11-20020a50c8cb000000b005613b53d0afmr1615835edh.12.1709305607958; Fri, 01
- Mar 2024 07:06:47 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709306670; x=1709911470;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=brg+65tHP59HmD9Vnjm4p9WorCcCtyt7c+xm8JLyK9c=;
+        b=ep1ldovrCPP0N+tAJjgFZCRn/Ur4D5jJuJnWl3d2E6soF84lvk8hibAvdqPV166e+p
+         VwwThh/DuKJCAgCiUxhPgLgXm6oa2Ncz+F6ONwEW1szFh9mJ6MdgS5YqjhOtFAXJN3Ce
+         vQFb45Tqk1zYVdfqlmq0maxubfo0spvEfk0jAcTXr5oNQN5x8WkrXbA1mWLA7AqibTxg
+         It1EXYGAn6sSrR7Eohe9UgcPC4flj4LTinSPfiy60a7ZDAOig4EUlgrFp9dFI5kBek2y
+         z/HS7xIXPKo4M0vD5LWrzIDjufoDdQLcb6yxjjE7h9XVfWPM+dCsZLcwe4ok33XzRu1O
+         G9KQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXLLp4RycvBUKFy/s8B+Mu3HKGW4O5tV7O/40dAolsaGQ9U4Umg29Pvob89M3pwRerodTQDaLvXP9IQGicDi0+XnuTJQOnNxlctLv/14tNdAB32xz/ftyDSgjeabA==
+X-Gm-Message-State: AOJu0YxJ2UPYuYwybQWSSVNNAKcTfYH6BiKdFHkBXmIZfolJHgR+ob2f
+	57QLX4YnmC0E25/F3f6URvAtJK4cGNU0LPD3ZAFZDDqHdr5Gwn84
+X-Google-Smtp-Source: AGHT+IGdIg1Fx/66nR8+ZiIAK3H+G2ZRWvuAhhWWmjqq3C/K278FtYNFGDreQe+XJHjJbBgQv/xGFg==
+X-Received: by 2002:a17:906:2c57:b0:a43:ff8c:6d9c with SMTP id f23-20020a1709062c5700b00a43ff8c6d9cmr1866346ejh.56.1709306669484;
+        Fri, 01 Mar 2024 07:24:29 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id ot7-20020a170906ccc700b00a43c3e5e008sm1786296ejb.205.2024.03.01.07.24.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Mar 2024 07:24:29 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 1 Mar 2024 16:24:27 +0100
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: acme@redhat.com, dwarves@vger.kernel.org, bpf@vger.kernel.org,
+	John Hubbard <jhubbard@nvidia.com>, Jiri Olsa <olsajiri@gmail.com>
+Subject: Re: [PATCH dwarves] btf_encoder: dynamically allocate the vars array
+ for percpu variables
+Message-ID: <ZeHzK52IeDx2aZfP@krava>
+References: <20240301124106.735693-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAMB2axOYHKLQhR9b50oVgvUDXeo573amqpiXRot51_JZQcFuiw@mail.gmail.com>
- <CAP01T76R0bqdNK+LkObuVTej_TRwEB9HnvwJaTTsRrr1Y8_WmA@mail.gmail.com>
- <878r34ejv1.fsf@toke.dk> <CAMB2axO3B-ziNt9AFM+Xkr1H0WQzzhaThi1PO-xKcGP3cNtxQQ@mail.gmail.com>
- <87le729h9l.fsf@toke.dk> <CAMB2axOvfVfFFrmAkJanpJN8-W1j+XmuJcsgzvd-9WRWeqrCEw@mail.gmail.com>
-In-Reply-To: <CAMB2axOvfVfFFrmAkJanpJN8-W1j+XmuJcsgzvd-9WRWeqrCEw@mail.gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Fri, 1 Mar 2024 16:06:11 +0100
-Message-ID: <CAP01T74B54OXbnk9eAzLvhQJWEc=Q50ys66zS7uMpDbVG_o2cw@mail.gmail.com>
-Subject: Re: [LSF/MM/BPF TOPIC] bpf qdisc
-To: Amery Hung <ameryhung@gmail.com>
-Cc: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
-	lsf-pc@lists.linux-foundation.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240301124106.735693-1-alan.maguire@oracle.com>
 
-On Fri, 1 Mar 2024 at 16:01, Amery Hung <ameryhung@gmail.com> wrote:
->
-> On Fri, Mar 1, 2024 at 6:08=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen <=
-toke@redhat.com> wrote:
-> >
-> > Amery Hung <ameryhung@gmail.com> writes:
-> >
-> > > On Wed, Feb 28, 2024 at 6:36=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgen=
-sen <toke@redhat.com> wrote:
-> > >>
-> > >> Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
-> > >>
-> > >> > On Mon, 26 Feb 2024 at 19:04, Amery Hung <ameryhung@gmail.com> wro=
-te:
-> > >> >>
-> > >> >> Hi all,
-> > >> >>
-> > >> >> I would like to discuss bpf qdisc in the BPF track. As we now try=
- to
-> > >> >> support bpf qdisc using struct_ops, we found some limitations of
-> > >> >> bpf/struct_ops. While some have been discussed briefly on the mai=
-ling
-> > >> >> list, we can discuss in more detail to make struct_ops a more
-> > >> >> generic/palatable approach to replace kernel functions.
-> > >> >>
-> > >> >> In addition, I would like to discuss supporting adding kernel obj=
-ects
-> > >> >> to bpf_list/rbtree, which may have performance benefits in some
-> > >> >> applications and can improve the programming experience. The curr=
-ent
-> > >> >> bpf fq in the RFC has a 6% throughput loss compared to the native
-> > >> >> counterpart due to memory allocation in enqueue() to store skb kp=
-tr.
-> > >> >> With a POC I wrote that allows adding skb to bpf_list, the throug=
-hput
-> > >> >> becomes comparable. We can discuss the approach and other potenti=
-al
-> > >> >> use cases.
-> > >> >>
-> > >> >
-> > >> > When discussing this with Toke (Cc'd) long ago for the XDP queuein=
-g
-> > >> > patch set, we discussed the same thing, in that the sk_buff alread=
-y
-> > >> > has space for a list or rbnode due to it getting queued in other
-> > >> > layers (TCP OoO queue, qdiscs, etc.) so it would make sense to tea=
-ch
-> > >> > the verifier that it is a valid bpf_list_node and bpf_rb_node and
-> > >> > allow inserting it as an element into a BPF list or rbtree. Back t=
-hen
-> > >> > we didn't add that as the posting only used the PIFO map.
-> > >> >
-> > >> > I think not only sk_buff, you can do a similar thing with xdp_buff=
- as
-> > >> > well.
-> > >>
-> > >> Yeah, I agree that allowing skbs to be inserted directly into a BPF
-> > >> rbtree would make a lot of sense if it can be done safely. I am less
-> > >> sure about xdp_frames, mostly for performance reasons, but if it doe=
-s
-> > >> turn out to be useful whichever mechanism we add for skbs should be
-> > >> fairly straight forward to reuse.
-> > >>
-> > >> > The verifier side changes should be fairly minimal, just allowing =
-the
-> > >> > use of a known kernel type as the contained object in a list or
-> > >> > rbtree, and the field pointing to this allowlisted list or rbnode.
-> > >>
-> > >> I think one additional concern here is how we ensure that an skb has
-> > >> been correctly removed from any rbtrees it sits in before it is bein=
-g
-> > >> transmitted to another part of the stack?
-> > >
-> > > I think one solution is to disallow shared ownership of skb in
-> > > multiple lists or rbtrees. That is, users should not be able to
-> > > acquire the reference of an skb from the ctx more than once in
-> > > ".enqueue" or using bpf_refcount_acquire().
-> >
-> > Can the verifier enforce this, even across multiple enqueue/dequeue
-> > calls? Not sure if acquiring a refcount ensures that the rbtree entry
-> > has been cleared?
-> >
-> > Basically, I'm worried about a dequeue() op that does something like:
-> >
-> > skb =3D rbtree_head();
-> > // skb->rbnode is not cleared
-> > return skb; // stack will keep processing it
-> >
-> > I'm a little fuzzy on how the bpf rbtree stuff works, though, so maybe
-> > the verifier is already ensuring that a node cannot be read from a tree
-> > without being properly cleared from it?
-> >
->
-> I see what you are saying now, and thanks Kumar for the clarification!
->
-> I was thinking about how to prevent an skb from being added to lists
-> and rbtrees at the same time, since list and rbnode share the same
-> space. Hence the suggestion.
->
+On Fri, Mar 01, 2024 at 12:41:06PM +0000, Alan Maguire wrote:
+> Use consistent method across allocating function and per-cpu variable
+> representations, based around (re)allocating the arrays based on demand.
+> This avoids issues where the number of per-CPU variables exceeds the
+> hardcoded limit.
+> 
+> Reported-by: John Hubbard <jhubbard@nvidia.com>
+> Suggested-by: Jiri Olsa <olsajiri@gmail.com>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> Tested-by: John Hubbard <jhubbard@nvidia.com>
 
-In BPF qdisc programs, you could teach the verifier that the skb has
-reference semantics (ref_obj_id > 0),
-in such a case once you push it into a list or rbtree, the program
-will lose ownership of the skb and all pointers same as the skb will
-be marked invalid.
-You could use some peek helper to look at it, but will never have an
-skb with program ownership until you pop it back from a list or
-rbtree.
+Acked/Tested-by: Jiri Olsa <jolsa@kernel.org>
 
-In the XDP queueing series, we taught the verifier to have reference
-semantics for xdp_md in the dequeue program, and then return such a
-pointer from the program back to the kernel.
-The changes to allow PTR_TO_PACKET accesses were also fairly simple,
-the verifier just needs to know that comparison of data, data_end can
-only be done for pkt pointers coming from the same xdp_md (as there
-can be multiple in the same program at a time).
+thanks,
+jirka
+
+> ---
+>  btf_encoder.c | 38 +++++++++++++++++++++++++++++---------
+>  1 file changed, 29 insertions(+), 9 deletions(-)
+> 
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index fd04008..a43d702 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -50,8 +50,6 @@ struct elf_function {
+>  	struct btf_encoder_state state;
+>  };
+>  
+> -#define MAX_PERCPU_VAR_CNT 4096
+> -
+>  struct var_info {
+>  	uint64_t    addr;
+>  	const char *name;
+> @@ -80,8 +78,9 @@ struct btf_encoder {
+>  			  is_rel;
+>  	uint32_t	  array_index_id;
+>  	struct {
+> -		struct var_info vars[MAX_PERCPU_VAR_CNT];
+> +		struct var_info *vars;
+>  		int		var_cnt;
+> +		int		allocated;
+>  		uint32_t	shndx;
+>  		uint64_t	base_addr;
+>  		uint64_t	sec_sz;
+> @@ -983,6 +982,16 @@ static int functions_cmp(const void *_a, const void *_b)
+>  #define max(x, y) ((x) < (y) ? (y) : (x))
+>  #endif
+>  
+> +static void *reallocarray_grow(void *ptr, int *nmemb, size_t size)
+> +{
+> +	int new_nmemb = max(1000, *nmemb * 3 / 2);
+> +	void *new = realloc(ptr, new_nmemb * size);
+> +
+> +	if (new)
+> +		*nmemb = new_nmemb;
+> +	return new;
+> +}
+> +
+>  static int btf_encoder__collect_function(struct btf_encoder *encoder, GElf_Sym *sym)
+>  {
+>  	struct elf_function *new;
+> @@ -995,8 +1004,9 @@ static int btf_encoder__collect_function(struct btf_encoder *encoder, GElf_Sym *
+>  		return 0;
+>  
+>  	if (encoder->functions.cnt == encoder->functions.allocated) {
+> -		encoder->functions.allocated = max(1000, encoder->functions.allocated * 3 / 2);
+> -		new = realloc(encoder->functions.entries, encoder->functions.allocated * sizeof(*encoder->functions.entries));
+> +		new = reallocarray_grow(encoder->functions.entries,
+> +					&encoder->functions.allocated,
+> +					sizeof(*encoder->functions.entries));
+>  		if (!new) {
+>  			/*
+>  			 * The cleanup - delete_functions is called
+> @@ -1439,10 +1449,17 @@ static int btf_encoder__collect_percpu_var(struct btf_encoder *encoder, GElf_Sym
+>  	if (!encoder->is_rel)
+>  		addr -= encoder->percpu.base_addr;
+>  
+> -	if (encoder->percpu.var_cnt == MAX_PERCPU_VAR_CNT) {
+> -		fprintf(stderr, "Reached the limit of per-CPU variables: %d\n",
+> -			MAX_PERCPU_VAR_CNT);
+> -		return -1;
+> +	if (encoder->percpu.var_cnt == encoder->percpu.allocated) {
+> +		struct var_info *new;
+> +
+> +		new = reallocarray_grow(encoder->percpu.vars,
+> +					&encoder->percpu.allocated,
+> +					sizeof(*encoder->percpu.vars));
+> +		if (!new) {
+> +			fprintf(stderr, "Failed to allocate memory for variables\n");
+> +			return -1;
+> +		}
+> +		encoder->percpu.vars = new;
+>  	}
+>  	encoder->percpu.vars[encoder->percpu.var_cnt].addr = addr;
+>  	encoder->percpu.vars[encoder->percpu.var_cnt].sz = size;
+> @@ -1720,6 +1737,9 @@ void btf_encoder__delete(struct btf_encoder *encoder)
+>  	encoder->functions.allocated = encoder->functions.cnt = 0;
+>  	free(encoder->functions.entries);
+>  	encoder->functions.entries = NULL;
+> +	encoder->percpu.allocated = encoder->percpu.var_cnt = 0;
+> +	free(encoder->percpu.vars);
+> +	encoder->percpu.vars = NULL;
+>  
+>  	free(encoder);
+>  }
+> -- 
+> 2.39.3
+> 
