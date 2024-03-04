@@ -1,210 +1,100 @@
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B075CDC8;
-	Mon,  4 Mar 2024 17:00:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ABD75C90F
+	for <bpf@vger.kernel.org>; Mon,  4 Mar 2024 17:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709571655; cv=none; b=W/kQV+NjGenVAfqOZL1twVtP2HNAGiEfj8oifM/cf7em7pKIDoaO3m5GxjaFZmTCSDfpVnQgHyEbe4fsRyGc1SLV61PWakW5rfSUbta34kgPvZqTArWjfT+OX0miYoCXfvwYuYUwRC9KqVx+nRuNllsLLADKAnmNLpRpUK53Irw=
+	t=1709571956; cv=none; b=ZT5FtKLd3I2OhVcnbdFlGRyh7GfecG1N3RV0m2PJtmxVTuU0R4Fdh2OJcvw0H+7iCq+WbTgx+50iCK1FAzcRwN6/TexdSA4L1jQPJMFIbdxls9b8nzdfFOh8miCfn88OSuyDU73GwHdluT4gQCvSAyJCyXLWcZ9VlaJmYIXnQKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709571655; c=relaxed/simple;
-	bh=Laz43/toJ+CkA+jWC7gzQOwmXAzKZT27uTX7HYmngHk=;
+	s=arc-20240116; t=1709571956; c=relaxed/simple;
+	bh=tw2KTPemyZyi222MX3sziGGfQJy6wHdjZUTTF+KiOSY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IXmnpAXIV+tGt+uoP1SNBG8N8OnvkjfniutkmG4iefTKHUXc16RmiQepmqVgo3dYoGA1oTnDTI/QAgh6LcARPJBi2u8A3KIjsVp91fkWqOyhClPcuazJOMLpo/E1/7OP33z7jjnAyoZZk7AB5WgCDcJ/ZGPzUwswcIa74AmT474=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+	 To:Cc:Content-Type; b=nLaJH1dZrwiN+wqaTXBDRIUub1AWctuYz7P4+1JGcQ5dnUGVAQSeVL/mnQNbUqRdZCnpDMsaIsQ2hUW+a6wZZpdFC07+DyAGlahVl38PmPqBL4JbqdH2xy5fx2QQ28GTJQa3a3sjz729I91Qc0whhN0+a9nc4vYdCPVZvFX1C9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yl1MyU4B; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6e447c39525so1139148a34.0;
-        Mon, 04 Mar 2024 09:00:53 -0800 (PST)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yl1MyU4B"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-33d38c9ca5bso2376352f8f.2
+        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 09:05:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709571953; x=1710176753; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SKDJoniJlb1Y7Lve6HZtXVf9kI3aIcrvEdXe1UbGU2A=;
+        b=Yl1MyU4BBKNAjSAZ2y715tzUhP2LZYt3RBetA3LM/uRSty2qNNNOgmio8NUTnkYGHx
+         Ar9cZ9wlTNTpMudIkOZ8XF9z+0XI6E/7kFSW+DRC9mSs9txUfFsnVHKTz0prEC3lntAs
+         HTWi30vApxrYgdttS3dlKhNp8vrrhZVyiSr80KJfThGQRldQQCUQtN3EL8VB7fabGM+y
+         q63P1KmGjmVMwICbZ8Rwm89izUb3egJ4JufdVKwmdDhHiwxhmSyfLAa/uaIdM8ZiNQfa
+         FHad/+V3B4e8yhHRf33Qcoyrk8ROc1P2B0OSWBJyyQ2o/LrMxGisNs+skwQ+yHJ0rXgi
+         uNIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709571653; x=1710176453;
+        d=1e100.net; s=20230601; t=1709571953; x=1710176753;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=a+zuvGq2BylT2luj+C31yYI14tYn4jtwnQpoH9GR+z0=;
-        b=NOhQftf0MWO2yLWUFPJO+HCoBdMkilyGnobiJ7bszvmd8vsSLssWQGaSvqzfLNs9vH
-         5WQo6stSSlKvzKikXVV4ptLMwS3c7eP2amdqe+FZmXj7oRtJcVUgw+YxKnNS5gIVRd1q
-         yH+xWidx1z1tsMrw/zuJlnZq1+pQQoNzntxZkNtQqs/LQE4lmoPg8BDY43wRuvuIGK6D
-         i1FdoaldivtODGeU3nWFs3LyactF+AZwQwjZTjb/wt2FbUxRgKre8ncf+rgBz6gaMISo
-         LfTlgdth5GL+WEKBdRkkT+fwPHS7UuvGJv++Sg6lJUJL6v5weX+TDCNw8E4Gi73golTf
-         h31w==
-X-Forwarded-Encrypted: i=1; AJvYcCUPaY530fBMxgcKm5CYNw2ZSdqkK14+NHGhChvvS0fyjR6oaha1da/HgO2UhZayV+9pQEqIZ1AnVCWyY673Ifkj9INJGv4HjBlS/n39e/ObTCIA1m5C5xtMNhNf9LUWii3uLwefunAht44lc+SYbeyYLbpUpe6yEWbhU6kT6chtwNyw6r3sEJSvVzHboTgfPWbwjM5eHsHNQaABq9xY
-X-Gm-Message-State: AOJu0YxSvXNV4DrDYnn9vEa4C6VKgvsf+SWi4Y0m/chmZAoFMpF+t8xe
-	QfihEm9m06uwt/nFsYkvALqWMn5IFZPF1UuBave5umMD7+DDFwqOQJTnOUm8FLuLHg/5Z4s8NV+
-	Uvronl0/qgP15yh+z49WQNEuwpmE=
-X-Google-Smtp-Source: AGHT+IFe5CoLXdwTWZri+YmoaUAb2RrxHFWOYb+z81FLv8KNl6eWpiBkok49CDccKobp+XPkEfFzP7Vg9gzmNS+oABo=
-X-Received: by 2002:a05:6870:3913:b0:21e:c50a:5e91 with SMTP id
- b19-20020a056870391300b0021ec50a5e91mr10750683oap.0.1709571652985; Mon, 04
- Mar 2024 09:00:52 -0800 (PST)
+        bh=SKDJoniJlb1Y7Lve6HZtXVf9kI3aIcrvEdXe1UbGU2A=;
+        b=lgGsWJmp0lx6JQM2e7smYBXg71CKZvEgE2h0xVNme80mJlr9/NSsAAIPd67bGeCiej
+         kK0QowV6dN3Fki/IBr8Vg5uXml6G6u/3FSFZw96S5U+3LQ5BQIRWxgZj8UxjArR31gXn
+         FgPwStybmSYPR0moal4rRxo3Y3nplm2vhS+eGHHXAZog8ixbNPO94g4Agvq2/6JIYroZ
+         yB7FXMun/av7TYJaCIgJ+kahRouAsT5oI4F4JiVk2g0PaMc6rDgT2Br3eDf46puX7Gua
+         9uXzSmQW3oZCF6JmOPvkr9ItPRgqQbYhrwG2/u5THSNRu1X68zCG97gffRMEWCNzRbZD
+         LgDg==
+X-Gm-Message-State: AOJu0YzCbkmqBZI3QLK/+X1lc4/J5QIBk7yej0lf1WpXWCA2oj4BNOuV
+	4AqReN54yV+ZzP83PaV3s/dwrPD2BPIvCq0xLdxIZHwcHo8fwqXZNB2EjA6tAPpZI+9dpBYb4SQ
+	SdJFo0vzw3NSqUiEUzJ7i+61GPWU=
+X-Google-Smtp-Source: AGHT+IFFOxBqElwbetEw959W3ih4kYDuvgJeG0m1www75tlV9V5vSA4MGElmyZ0pFpXKdrae+ANZz6LJivR0I5JWah8=
+X-Received: by 2002:adf:9c8b:0:b0:33d:47d6:c159 with SMTP id
+ d11-20020adf9c8b000000b0033d47d6c159mr6804323wre.12.1709571953320; Mon, 04
+ Mar 2024 09:05:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAJZ5v0grDNJkEcgw+34SBmNFL7qhSTz8ydC7BSkM7DiCatkKSA@mail.gmail.com>
- <20240304155138.GA482969@bhelgaas> <CAJZ5v0jS_x7=joXkHuuqQhO-FqkhGi44o-Nq-1FGhPQ5-1VhnQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jS_x7=joXkHuuqQhO-FqkhGi44o-Nq-1FGhPQ5-1VhnQ@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 4 Mar 2024 18:00:41 +0100
-Message-ID: <CAJZ5v0idOkeod9-RmnNGCwMGG+9nYi8eJSBpQYWJnv=N+eVoWg@mail.gmail.com>
-Subject: Re: [PATCH v3] driver core: Cancel scheduled pm_runtime_idle() on
- device removal
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>, gregkh@linuxfoundation.org, 
-	bhelgaas@google.com, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Ricky Wu <ricky_wu@realtek.com>, Kees Cook <keescook@chromium.org>, 
-	Tony Luck <tony.luck@intel.com>, "Guilherme G. Piccoli" <gpiccoli@igalia.com>, 
-	linux-hardening@vger.kernel.org, bpf@vger.kernel.org
+References: <20240302020010.95393-1-alexei.starovoitov@gmail.com> <270f01da6e53$63e93620$2bbba260$@gmail.com>
+In-Reply-To: <270f01da6e53$63e93620$2bbba260$@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 4 Mar 2024 09:05:42 -0800
+Message-ID: <CAADnVQJRzLTs6mDTSofCgCxoR8jv8C30g_hHJREM8+fQpXe_Xw@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 0/4] bpf: Introduce may_goto and cond_break
+To: Dave Thaler <dthaler1968@googlemail.com>
+Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Eddy Z <eddyz87@gmail.com>, 
+	John Fastabend <john.fastabend@gmail.com>, Kernel Team <kernel-team@fb.com>, bpf@ietf.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 4, 2024 at 5:41=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
-> wrote:
+On Mon, Mar 4, 2024 at 8:45=E2=80=AFAM <dthaler1968@googlemail.com> wrote:
 >
-> On Mon, Mar 4, 2024 at 4:51=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org>=
- wrote:
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+> [...]
+> > Alexei Starovoitov (4):
+> >   bpf: Introduce may_goto instruction
+> >   bpf: Recognize that two registers are safe when their ranges match
+> >   bpf: Add cond_break macro
+> >   selftests/bpf: Test may_goto
 > >
-> > On Mon, Mar 04, 2024 at 03:38:38PM +0100, Rafael J. Wysocki wrote:
-> > > On Thu, Feb 29, 2024 at 7:23=E2=80=AFAM Kai-Heng Feng
-> > > <kai.heng.feng@canonical.com> wrote:
-> > > >
-> > > > When inserting an SD7.0 card to Realtek card reader, the card reade=
-r
-> > > > unplugs itself and morph into a NVMe device. The slot Link down on =
-hot
-> > > > unplugged can cause the following error:
-> > > >
-> > > > pcieport 0000:00:1c.0: pciehp: Slot(8): Link Down
-> > > > BUG: unable to handle page fault for address: ffffb24d403e5010
-> > > > PGD 100000067 P4D 100000067 PUD 1001fe067 PMD 100d97067 PTE 0
-> > > > Oops: 0000 [#1] PREEMPT SMP PTI
-> > > > CPU: 3 PID: 534 Comm: kworker/3:10 Not tainted 6.4.0 #6
-> > > > Hardware name: To Be Filled By O.E.M. To Be Filled By O.E.M./H370M =
-Pro4, BIOS P3.40 10/25/2018
-> > > > Workqueue: pm pm_runtime_work
-> > > > RIP: 0010:ioread32+0x2e/0x70
-> > > ...
-> > > > Call Trace:
-> > > >  <TASK>
-> > > >  ? show_regs+0x68/0x70
-> > > >  ? __die_body+0x20/0x70
-> > > >  ? __die+0x2b/0x40
-> > > >  ? page_fault_oops+0x160/0x480
-> > > >  ? search_bpf_extables+0x63/0x90
-> > > >  ? ioread32+0x2e/0x70
-> > > >  ? search_exception_tables+0x5f/0x70
-> > > >  ? kernelmode_fixup_or_oops+0xa2/0x120
-> > > >  ? __bad_area_nosemaphore+0x179/0x230
-> > > >  ? bad_area_nosemaphore+0x16/0x20
-> > > >  ? do_kern_addr_fault+0x8b/0xa0
-> > > >  ? exc_page_fault+0xe5/0x180
-> > > >  ? asm_exc_page_fault+0x27/0x30
-> > > >  ? ioread32+0x2e/0x70
-> > > >  ? rtsx_pci_write_register+0x5b/0x90 [rtsx_pci]
-> > > >  rtsx_set_l1off_sub+0x1c/0x30 [rtsx_pci]
-> > > >  rts5261_set_l1off_cfg_sub_d0+0x36/0x40 [rtsx_pci]
-> > > >  rtsx_pci_runtime_idle+0xc7/0x160 [rtsx_pci]
-> > > >  ? __pfx_pci_pm_runtime_idle+0x10/0x10
-> > > >  pci_pm_runtime_idle+0x34/0x70
-> > > >  rpm_idle+0xc4/0x2b0
-> > > >  pm_runtime_work+0x93/0xc0
-> > > >  process_one_work+0x21a/0x430
-> > > >  worker_thread+0x4a/0x3c0
-> > > ...
-> >
-> > > > This happens because scheduled pm_runtime_idle() is not cancelled.
-> > >
-> > > But rpm_resume() changes dev->power.request to RPM_REQ_NONE and if
-> > > pm_runtime_work() sees this, it will not run rpm_idle().
-> > >
-> > > However, rpm_resume() doesn't deactivate the autosuspend timer if it
-> > > is running (see the comment in rpm_resume() regarding this), so it ma=
-y
-> > > queue up a runtime PM work later.
-> > >
-> > > If this is not desirable, you need to stop the autosuspend timer
-> > > explicitly in addition to calling pm_runtime_get_sync().
-> >
-> > I don't quite follow all this.  I think the race is between
-> > rtsx_pci_remove() (not resume) and rtsx_pci_runtime_idle().
+> >  include/linux/bpf_verifier.h                  |   2 +
+> >  include/uapi/linux/bpf.h                      |   1 +
+> >  kernel/bpf/core.c                             |   1 +
+> >  kernel/bpf/disasm.c                           |   3 +
+> >  kernel/bpf/verifier.c                         | 280 +++++++++++++-----
+> >  tools/include/uapi/linux/bpf.h                |   1 +
+> >  tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
+> >  .../testing/selftests/bpf/bpf_experimental.h  |  12 +
+> > .../bpf/progs/verifier_iterating_callbacks.c  | 103 ++++++-
+> >  9 files changed, 330 insertions(+), 74 deletions(-)
 >
-> I think so too and the latter is not expected to run.
->
-> >   rtsx_pci_remove()
-> >   {
-> >     pm_runtime_get_sync()
-> >     pm_runtime_forbid()
-> >     ...
-> >
-> > If this is an rtsx bug, what exactly should be added to
-> > rtsx_pci_remove()?
-> >
-> > Is there ever a case where we want any runtime PM work to happen
-> > during or after a driver .remove()?  If not, maybe the driver core
-> > should prevent that, which I think is basically what this patch does.
->
-> No, it is not, because it doesn't actually prevent the race from
-> occurring, it just narrows the window quite a bit.
->
-> It would be better to call pm_runtime_dont_use_autosuspend() instead
-> of pm_runtime_barrier().
->
-> > If this is an rtsx driver bug, I'm concerned there may be many other
-> > drivers with a similar issue.  rtsx exercises this path more than most
-> > because the device switches between card reader and NVMe SSD using
-> > hotplug add/remove based on whether an SD card is inserted (see [1]).
->
-> This is a valid concern, so it is mostly a matter of where to disable
-> autosuspend.
->
-> It may be the driver core in principle, but note that it calls
-> ->remove() after invoking pm_runtime_put_sync(), so why would it
-> disable autosuspend when it allows runtime PM to race with device
-> removal in general?
->
-> Another way might be to add a pm_runtime_dont_use_autosuspend() call
-> at the beginning of pci_device_remove().
->
-> Or just remove the optimization in question from rpm_resume() which is
-> quite confusing and causes people to make assumptions that lead to
-> incorrect behavior in this particular case.
+> Don't we also need to add may_goto to instruction-set.rst?
 
-Well, scratch this.
+If it was a real insn it would be too early to update the standard,
+since it's not in any kernel release yet.
 
-If rpm_idle() is already running at the time rpm_resume() is called,
-the latter may return right away without waiting, which is incorrect.
-
-rpm_resume() needs to wait for the "idle" callback to complete, so
-this (again, modulo GMail-induced whitespace mangling) should help:
-
----
- drivers/base/power/runtime.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-Index: linux-pm/drivers/base/power/runtime.c
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
---- linux-pm.orig/drivers/base/power/runtime.c
-+++ linux-pm/drivers/base/power/runtime.c
-@@ -798,7 +798,8 @@ static int rpm_resume(struct device *dev
-     }
-
-     if (dev->power.runtime_status =3D=3D RPM_RESUMING ||
--        dev->power.runtime_status =3D=3D RPM_SUSPENDING) {
-+        dev->power.runtime_status =3D=3D RPM_SUSPENDING ||
-+        dev->power.idle_notification) {
-         DEFINE_WAIT(wait);
-
-         if (rpmflags & (RPM_ASYNC | RPM_NOWAIT)) {
-@@ -826,7 +827,8 @@ static int rpm_resume(struct device *dev
-             prepare_to_wait(&dev->power.wait_queue, &wait,
-                     TASK_UNINTERRUPTIBLE);
-             if (dev->power.runtime_status !=3D RPM_RESUMING &&
--                dev->power.runtime_status !=3D RPM_SUSPENDING)
-+                dev->power.runtime_status !=3D RPM_SUSPENDING &&
-+                !dev->power.idle_notification)
-                 break;
-
-             spin_unlock_irq(&dev->power.lock);
+But more importantly it's a pseudo insn. CPUs/JITs won't see it.
+I think we need a different document for such pseudo instructions.
+Same thing for upcoming nop_or_goto pseudo insn.
