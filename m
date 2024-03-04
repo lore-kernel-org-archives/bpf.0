@@ -1,191 +1,210 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E3BA20
-	for <bpf@vger.kernel.org>; Mon,  4 Mar 2024 16:59:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B075CDC8;
+	Mon,  4 Mar 2024 17:00:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709571586; cv=none; b=YB+O3BpXP052aPGtgVjErz9y9tzYB2sjOucaaQj27qf8+PXQl3BVp24Ci6xd4OrcXDjLo3ffE9DQst3i9vUUSuXxST1BDkHIFQO7mSPFS5BhW8QPyKYT1PfYVOHAuTGBN4igEMRZOuDtyveKGCvBwaJuj1QgHg9zojSXfVZbqDI=
+	t=1709571655; cv=none; b=W/kQV+NjGenVAfqOZL1twVtP2HNAGiEfj8oifM/cf7em7pKIDoaO3m5GxjaFZmTCSDfpVnQgHyEbe4fsRyGc1SLV61PWakW5rfSUbta34kgPvZqTArWjfT+OX0miYoCXfvwYuYUwRC9KqVx+nRuNllsLLADKAnmNLpRpUK53Irw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709571586; c=relaxed/simple;
-	bh=kLgf2M6nCFfvshzmhjI7IER92XhqOB7eY/bMxJgQj2Q=;
+	s=arc-20240116; t=1709571655; c=relaxed/simple;
+	bh=Laz43/toJ+CkA+jWC7gzQOwmXAzKZT27uTX7HYmngHk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GPr3vTWAoOWf4ppk3F7KnD7zf8XnrLhbdJrSFMPMnXxYo2tuPGjHIeIOtviayiV/3xvCHNQajWBbpci9XjsBrP8jNPiZ+/QA1lOoerPYZ98/rKpNRq6VibqVq9zmA0PHR2bYfILhzZTHB+WEY5L5YRI6zVCguLO1Hyd9R1yX0u8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nOID8jv6; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	 To:Cc:Content-Type; b=IXmnpAXIV+tGt+uoP1SNBG8N8OnvkjfniutkmG4iefTKHUXc16RmiQepmqVgo3dYoGA1oTnDTI/QAgh6LcARPJBi2u8A3KIjsVp91fkWqOyhClPcuazJOMLpo/E1/7OP33z7jjnAyoZZk7AB5WgCDcJ/ZGPzUwswcIa74AmT474=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nOID8jv6"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-33e17fc5aceso2211376f8f.0
-        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 08:59:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709571583; x=1710176383; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6J6CCP1VE5xbUKcamGbJTBhZtHY0km0aywURxVwfMEQ=;
-        b=nOID8jv6365OXnF7dE8im7D7FuW1JA1WGaZOF5RkSg2o9rAae+lvgFKEoGNFRsLclx
-         p/bAca5QVYwIoFFJtQaF05+2s3C1KkVFSbM8kyZgA3ppyhwniZ5/V4W++samGy0gzpJf
-         0MVJH1cIUtelP7NW0lD2GfTz51GGfkZ24IZjNpK7oTzj2UK89prEqZsqapA2lSWki0Ft
-         lPzyfFJp+6fv/v6805VxCD+DIkzZKTQ1/bvdEX1fB4bHpUzJAhBjLTtn/riAEw7jkAAD
-         yTN0UVPIrUUWSJhuZN+umRLA78qNdhKgHITn6ZF3QYlQJXhew+/lrvY7BTn/b8q81L+n
-         PMLw==
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6e447c39525so1139148a34.0;
+        Mon, 04 Mar 2024 09:00:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709571583; x=1710176383;
+        d=1e100.net; s=20230601; t=1709571653; x=1710176453;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6J6CCP1VE5xbUKcamGbJTBhZtHY0km0aywURxVwfMEQ=;
-        b=FxC5SBH67kucAovgNAL7OZQrmZcdapPR6BGla4ABXhScBv16+M6q6YAFucPbWZGBcT
-         OPsXgtjriGrT53jSIlLSclEk7JuYRWVVvDbntY2TfLtv/8/ol4MiLLtmrzLYgjH+mB44
-         rQVSFmw2toFI2wo5HJ4zicfilxUWDkwdJ8Lf6YagD8883IwQGOiawVi7w3eNgB/qUvvo
-         Ml0MkcNhRNSdlyXSV9AlOubxZfXmJcXSls8wgQr0fA8abUaepgdJREuKbq3wNeRH2lHr
-         BhXwVDglRY1jJtFvXuAAvegThueeBxXpZJvx35SuflRO9JaqrjfdVI/wOaDZah9S0lb8
-         JjhQ==
-X-Gm-Message-State: AOJu0YwB+wstEyEvF+tGIn3MEGPnASc+bPlqJYXmbHAaFkxkHwsKkCiZ
-	lggTa3GQGyHOQvC1jjVBMP36wzTJyfbHmHF/PTRhDJ/ToHPh9QKDmDcgRieoKfu3Q4X+vb5gMFM
-	kZLZZokmm9yxNH5OitsbPoRasymABmJm5BaM=
-X-Google-Smtp-Source: AGHT+IFyIkyZkoBv+eaKMULCh82L4RxMYV+/FTdlBS8lss1bCUhBJNTmOi7AJhHUHjTEno5PfPCpU1YbvctVT6u02Uc=
-X-Received: by 2002:adf:9599:0:b0:33d:c5c7:45ed with SMTP id
- p25-20020adf9599000000b0033dc5c745edmr71232wrp.3.1709571582631; Mon, 04 Mar
- 2024 08:59:42 -0800 (PST)
+        bh=a+zuvGq2BylT2luj+C31yYI14tYn4jtwnQpoH9GR+z0=;
+        b=NOhQftf0MWO2yLWUFPJO+HCoBdMkilyGnobiJ7bszvmd8vsSLssWQGaSvqzfLNs9vH
+         5WQo6stSSlKvzKikXVV4ptLMwS3c7eP2amdqe+FZmXj7oRtJcVUgw+YxKnNS5gIVRd1q
+         yH+xWidx1z1tsMrw/zuJlnZq1+pQQoNzntxZkNtQqs/LQE4lmoPg8BDY43wRuvuIGK6D
+         i1FdoaldivtODGeU3nWFs3LyactF+AZwQwjZTjb/wt2FbUxRgKre8ncf+rgBz6gaMISo
+         LfTlgdth5GL+WEKBdRkkT+fwPHS7UuvGJv++Sg6lJUJL6v5weX+TDCNw8E4Gi73golTf
+         h31w==
+X-Forwarded-Encrypted: i=1; AJvYcCUPaY530fBMxgcKm5CYNw2ZSdqkK14+NHGhChvvS0fyjR6oaha1da/HgO2UhZayV+9pQEqIZ1AnVCWyY673Ifkj9INJGv4HjBlS/n39e/ObTCIA1m5C5xtMNhNf9LUWii3uLwefunAht44lc+SYbeyYLbpUpe6yEWbhU6kT6chtwNyw6r3sEJSvVzHboTgfPWbwjM5eHsHNQaABq9xY
+X-Gm-Message-State: AOJu0YxSvXNV4DrDYnn9vEa4C6VKgvsf+SWi4Y0m/chmZAoFMpF+t8xe
+	QfihEm9m06uwt/nFsYkvALqWMn5IFZPF1UuBave5umMD7+DDFwqOQJTnOUm8FLuLHg/5Z4s8NV+
+	Uvronl0/qgP15yh+z49WQNEuwpmE=
+X-Google-Smtp-Source: AGHT+IFe5CoLXdwTWZri+YmoaUAb2RrxHFWOYb+z81FLv8KNl6eWpiBkok49CDccKobp+XPkEfFzP7Vg9gzmNS+oABo=
+X-Received: by 2002:a05:6870:3913:b0:21e:c50a:5e91 with SMTP id
+ b19-20020a056870391300b0021ec50a5e91mr10750683oap.0.1709571652985; Mon, 04
+ Mar 2024 09:00:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240302020010.95393-1-alexei.starovoitov@gmail.com>
- <20240302020010.95393-2-alexei.starovoitov@gmail.com> <6f76f6661061b091be3798c8e8b8c2f04d529e43.camel@gmail.com>
-In-Reply-To: <6f76f6661061b091be3798c8e8b8c2f04d529e43.camel@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 4 Mar 2024 08:59:31 -0800
-Message-ID: <CAADnVQ+jeW66Y_X3KKWgvZJykX2Yy_mz26EZzWDy52DbsgmchA@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 1/4] bpf: Introduce may_goto instruction
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, John Fastabend <john.fastabend@gmail.com>, 
-	Kernel Team <kernel-team@fb.com>
+References: <CAJZ5v0grDNJkEcgw+34SBmNFL7qhSTz8ydC7BSkM7DiCatkKSA@mail.gmail.com>
+ <20240304155138.GA482969@bhelgaas> <CAJZ5v0jS_x7=joXkHuuqQhO-FqkhGi44o-Nq-1FGhPQ5-1VhnQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jS_x7=joXkHuuqQhO-FqkhGi44o-Nq-1FGhPQ5-1VhnQ@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 4 Mar 2024 18:00:41 +0100
+Message-ID: <CAJZ5v0idOkeod9-RmnNGCwMGG+9nYi8eJSBpQYWJnv=N+eVoWg@mail.gmail.com>
+Subject: Re: [PATCH v3] driver core: Cancel scheduled pm_runtime_idle() on
+ device removal
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>, gregkh@linuxfoundation.org, 
+	bhelgaas@google.com, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Ricky Wu <ricky_wu@realtek.com>, Kees Cook <keescook@chromium.org>, 
+	Tony Luck <tony.luck@intel.com>, "Guilherme G. Piccoli" <gpiccoli@igalia.com>, 
+	linux-hardening@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 4, 2024 at 3:55=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com>=
+On Mon, Mar 4, 2024 at 5:41=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
+> wrote:
+>
+> On Mon, Mar 4, 2024 at 4:51=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org>=
  wrote:
->
-> On Fri, 2024-03-01 at 18:00 -0800, Alexei Starovoitov wrote:
-> > From: Alexei Starovoitov <ast@kernel.org>
 > >
-> > Introduce may_goto instruction that acts on a hidden bpf_iter_num, so t=
-hat
-> > bpf_iter_num_new(), bpf_iter_num_destroy() don't need to be called expl=
-icitly.
-> > It can be used in any normal "for" or "while" loop, like
+> > On Mon, Mar 04, 2024 at 03:38:38PM +0100, Rafael J. Wysocki wrote:
+> > > On Thu, Feb 29, 2024 at 7:23=E2=80=AFAM Kai-Heng Feng
+> > > <kai.heng.feng@canonical.com> wrote:
+> > > >
+> > > > When inserting an SD7.0 card to Realtek card reader, the card reade=
+r
+> > > > unplugs itself and morph into a NVMe device. The slot Link down on =
+hot
+> > > > unplugged can cause the following error:
+> > > >
+> > > > pcieport 0000:00:1c.0: pciehp: Slot(8): Link Down
+> > > > BUG: unable to handle page fault for address: ffffb24d403e5010
+> > > > PGD 100000067 P4D 100000067 PUD 1001fe067 PMD 100d97067 PTE 0
+> > > > Oops: 0000 [#1] PREEMPT SMP PTI
+> > > > CPU: 3 PID: 534 Comm: kworker/3:10 Not tainted 6.4.0 #6
+> > > > Hardware name: To Be Filled By O.E.M. To Be Filled By O.E.M./H370M =
+Pro4, BIOS P3.40 10/25/2018
+> > > > Workqueue: pm pm_runtime_work
+> > > > RIP: 0010:ioread32+0x2e/0x70
+> > > ...
+> > > > Call Trace:
+> > > >  <TASK>
+> > > >  ? show_regs+0x68/0x70
+> > > >  ? __die_body+0x20/0x70
+> > > >  ? __die+0x2b/0x40
+> > > >  ? page_fault_oops+0x160/0x480
+> > > >  ? search_bpf_extables+0x63/0x90
+> > > >  ? ioread32+0x2e/0x70
+> > > >  ? search_exception_tables+0x5f/0x70
+> > > >  ? kernelmode_fixup_or_oops+0xa2/0x120
+> > > >  ? __bad_area_nosemaphore+0x179/0x230
+> > > >  ? bad_area_nosemaphore+0x16/0x20
+> > > >  ? do_kern_addr_fault+0x8b/0xa0
+> > > >  ? exc_page_fault+0xe5/0x180
+> > > >  ? asm_exc_page_fault+0x27/0x30
+> > > >  ? ioread32+0x2e/0x70
+> > > >  ? rtsx_pci_write_register+0x5b/0x90 [rtsx_pci]
+> > > >  rtsx_set_l1off_sub+0x1c/0x30 [rtsx_pci]
+> > > >  rts5261_set_l1off_cfg_sub_d0+0x36/0x40 [rtsx_pci]
+> > > >  rtsx_pci_runtime_idle+0xc7/0x160 [rtsx_pci]
+> > > >  ? __pfx_pci_pm_runtime_idle+0x10/0x10
+> > > >  pci_pm_runtime_idle+0x34/0x70
+> > > >  rpm_idle+0xc4/0x2b0
+> > > >  pm_runtime_work+0x93/0xc0
+> > > >  process_one_work+0x21a/0x430
+> > > >  worker_thread+0x4a/0x3c0
+> > > ...
 > >
-> >   for (i =3D zero; i < cnt; cond_break, i++) {
+> > > > This happens because scheduled pm_runtime_idle() is not cancelled.
+> > >
+> > > But rpm_resume() changes dev->power.request to RPM_REQ_NONE and if
+> > > pm_runtime_work() sees this, it will not run rpm_idle().
+> > >
+> > > However, rpm_resume() doesn't deactivate the autosuspend timer if it
+> > > is running (see the comment in rpm_resume() regarding this), so it ma=
+y
+> > > queue up a runtime PM work later.
+> > >
+> > > If this is not desirable, you need to stop the autosuspend timer
+> > > explicitly in addition to calling pm_runtime_get_sync().
 > >
-> > The verifier recognizes that may_goto is used in the program,
-> > reserves additional 8 bytes of stack, initializes them in subprog
-> > prologue, and replaces may_goto instruction with:
-> > aux_reg =3D *(u64 *)(fp - 40)
-> > if aux_reg =3D=3D 0 goto pc+off
-> > aux_reg +=3D 1
-> > *(u64 *)(fp - 40) =3D aux_reg
+> > I don't quite follow all this.  I think the race is between
+> > rtsx_pci_remove() (not resume) and rtsx_pci_runtime_idle().
 >
-> [...]
+> I think so too and the latter is not expected to run.
 >
-> Modulo instruction validation issue you pointed out offlist I don't
-> see any obvious issues with this patch. Two notes below.
+> >   rtsx_pci_remove()
+> >   {
+> >     pm_runtime_get_sync()
+> >     pm_runtime_forbid()
+> >     ...
+> >
+> > If this is an rtsx bug, what exactly should be added to
+> > rtsx_pci_remove()?
+> >
+> > Is there ever a case where we want any runtime PM work to happen
+> > during or after a driver .remove()?  If not, maybe the driver core
+> > should prevent that, which I think is basically what this patch does.
 >
-> [...]
+> No, it is not, because it doesn't actually prevent the race from
+> occurring, it just narrows the window quite a bit.
 >
-> > @@ -19406,7 +19466,10 @@ static int do_misc_fixups(struct bpf_verifier_=
-env *env)
-> >       struct bpf_insn insn_buf[16];
-> >       struct bpf_prog *new_prog;
-> >       struct bpf_map *map_ptr;
-> > -     int i, ret, cnt, delta =3D 0;
-> > +     int i, ret, cnt, delta =3D 0, cur_subprog =3D 0;
-> > +     struct bpf_subprog_info *subprogs =3D env->subprog_info;
-> > +     u16 stack_depth =3D subprogs[cur_subprog].stack_depth;
-> > +     u16 stack_depth_extra =3D 0;
+> It would be better to call pm_runtime_dont_use_autosuspend() instead
+> of pm_runtime_barrier().
 >
-> Note: optimize_bpf_loop() has very similar logic,
->       but there stack_depth is rounded up:
+> > If this is an rtsx driver bug, I'm concerned there may be many other
+> > drivers with a similar issue.  rtsx exercises this path more than most
+> > because the device switches between card reader and NVMe SSD using
+> > hotplug add/remove based on whether an SD card is inserted (see [1]).
 >
->         u16 stack_depth =3D subprogs[cur_subprog].stack_depth;
->         u16 stack_depth_roundup =3D round_up(stack_depth, 8) - stack_dept=
-h;
->         u16 stack_depth_extra =3D 0;
->         ...
->         stack_depth_extra =3D BPF_REG_SIZE * 3 + stack_depth_roundup;
+> This is a valid concern, so it is mostly a matter of where to disable
+> autosuspend.
 >
-> And stack base for tmp variables is computed as "-(stack_depth + stack_de=
-pth_extra)".
+> It may be the driver core in principle, but note that it calls
+> ->remove() after invoking pm_runtime_put_sync(), so why would it
+> disable autosuspend when it allows runtime PM to race with device
+> removal in general?
+>
+> Another way might be to add a pm_runtime_dont_use_autosuspend() call
+> at the beginning of pci_device_remove().
+>
+> Or just remove the optimization in question from rpm_resume() which is
+> quite confusing and causes people to make assumptions that lead to
+> incorrect behavior in this particular case.
 
-I did a sloppy review when I landed your
-commit 1ade23711971 ("bpf: Inline calls to bpf_loop when callback is known"=
-)
-round_up is unnecessary.
-The stack is always incremented in power of 8.
-See grow_stack_state().
+Well, scratch this.
 
-> >
-> >       if (env->seen_exception && !env->exception_callback_subprog) {
-> >               struct bpf_insn patch[] =3D {
-> > @@ -19426,7 +19489,7 @@ static int do_misc_fixups(struct bpf_verifier_e=
-nv *env)
-> >               mark_subprog_exc_cb(env, env->exception_callback_subprog)=
-;
-> >       }
-> >
-> > -     for (i =3D 0; i < insn_cnt; i++, insn++) {
-> > +     for (i =3D 0; i < insn_cnt;) {
-> >               /* Make divide-by-zero exceptions impossible. */
-> >               if (insn->code =3D=3D (BPF_ALU64 | BPF_MOD | BPF_X) ||
-> >                   insn->code =3D=3D (BPF_ALU64 | BPF_DIV | BPF_X) ||
->
-> [...]
->
-> > @@ -19950,6 +20033,39 @@ static int do_misc_fixups(struct bpf_verifier_=
-env *env)
-> >                       return -EFAULT;
-> >               }
-> >               insn->imm =3D fn->func - __bpf_call_base;
-> > +next_insn:
-> > +             if (subprogs[cur_subprog + 1].start =3D=3D i + delta + 1)=
- {
-> > +                     subprogs[cur_subprog].stack_depth +=3D stack_dept=
-h_extra;
-> > +                     subprogs[cur_subprog].stack_extra =3D stack_depth=
-_extra;
-> > +                     cur_subprog++;
-> > +                     stack_depth =3D subprogs[cur_subprog].stack_depth=
-;
-> > +                     stack_depth_extra =3D 0;
-> > +             }
-> > +             i++; insn++;
-> > +     }
-> > +
-> > +     env->prog->aux->stack_depth =3D subprogs[0].stack_depth;
-> > +     for (i =3D 0; i < env->subprog_cnt; i++) {
-> > +             int subprog_start =3D subprogs[i].start, j;
-> > +             int stack_slots =3D subprogs[i].stack_extra / 8;
-> > +
-> > +             if (stack_slots >=3D ARRAY_SIZE(insn_buf)) {
-> > +                     verbose(env, "verifier bug: stack_extra is too la=
-rge\n");
-> > +                     return -EFAULT;
-> > +             }
-> > +
-> > +             /* Add insns to subprog prologue to zero init extra stack=
- */
-> > +             for (j =3D 0; j < stack_slots; j++)
-> > +                     insn_buf[j] =3D BPF_ST_MEM(BPF_DW, BPF_REG_FP,
-> > +                                              -subprogs[i].stack_depth=
- + j * 8, BPF_MAX_LOOPS);
->
-> Nit: the comment says that stack is zero initialized,
->      while it is actually set to BPF_MAX_LOOPS.
+If rpm_idle() is already running at the time rpm_resume() is called,
+the latter may return right away without waiting, which is incorrect.
 
-Good catch. Will fix.
+rpm_resume() needs to wait for the "idle" callback to complete, so
+this (again, modulo GMail-induced whitespace mangling) should help:
+
+---
+ drivers/base/power/runtime.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+Index: linux-pm/drivers/base/power/runtime.c
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+--- linux-pm.orig/drivers/base/power/runtime.c
++++ linux-pm/drivers/base/power/runtime.c
+@@ -798,7 +798,8 @@ static int rpm_resume(struct device *dev
+     }
+
+     if (dev->power.runtime_status =3D=3D RPM_RESUMING ||
+-        dev->power.runtime_status =3D=3D RPM_SUSPENDING) {
++        dev->power.runtime_status =3D=3D RPM_SUSPENDING ||
++        dev->power.idle_notification) {
+         DEFINE_WAIT(wait);
+
+         if (rpmflags & (RPM_ASYNC | RPM_NOWAIT)) {
+@@ -826,7 +827,8 @@ static int rpm_resume(struct device *dev
+             prepare_to_wait(&dev->power.wait_queue, &wait,
+                     TASK_UNINTERRUPTIBLE);
+             if (dev->power.runtime_status !=3D RPM_RESUMING &&
+-                dev->power.runtime_status !=3D RPM_SUSPENDING)
++                dev->power.runtime_status !=3D RPM_SUSPENDING &&
++                !dev->power.idle_notification)
+                 break;
+
+             spin_unlock_irq(&dev->power.lock);
