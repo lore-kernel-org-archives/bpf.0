@@ -1,102 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2057.outbound.protection.outlook.com [40.107.6.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74847A159;
-	Mon,  4 Mar 2024 20:18:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709583495; cv=none; b=mwn9uEhFogpa80tf8uUb1RhF0QmD6t11oj/2toIlU4JBbetbXBUe6FEjNMJNBj4Pxb4cClkAr0vBrLEtmuhw3BUR/y4IRHKeK4qx0Y7+OEFfYJu3l1IaQaSyL4tXR32OXisy9TtYwbYctj9Pn+QnAIoMvd8RKCGBsWNUoYvB128=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709583495; c=relaxed/simple;
-	bh=K23JakM1P875wWRg3o7Bh9hwijeqRnaAhC1ZmI9DT6M=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cA9aS7433uGEzdqz1TmuE3VLiy3H/h+kcHd5+/H5ZUn4Pf8D72KQ6+SBLCma90fr6bJ4leKHd4qQjfcco+C7Jn3sQafBwSdZbCPcu57WtoC+3INPi6+0bqio8u5yp1rMvw3ynP+ZuvwzL0Xd0B1VsdDADba0eDVVFJOS3q4+k0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B2B3YVVc; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 200384AEF9;
+	Mon,  4 Mar 2024 20:25:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.6.57
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709583942; cv=fail; b=NZDJ9W2yjspxZxpTRbpp2nvreAYHFbNRoLuXljllJTgSvmS7OiMYcZkwXP1BqTvGPKavwl9iGB9Y68Me9kuTHgyvfIqKy7bhab53cBy0E2TFDwIr5yKsyrYvGpaH83DV2zYVsp7dFwLRg707fUT0KkOzHIdskvumeQKMQwVg3AY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709583942; c=relaxed/simple;
+	bh=kSZuJ7yjz0SmRaBg2SqUCXkBSOFoRX5eYh3tDSgjj2M=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=jmqjQTGWlO7SF1JLbg3wNdKHC7gT1410Th+kCrNiI0ySbGfgket67bgwZt1XPSx+IHD31d20uVHYkwhttHW/RW6S68y+A2lXhpzFbfHCoiQoPr7mlW07ll9tu0/mawB/UhPzjru28mXbTmAh0CyL2c7xaMXMtDW5K8XT0sKzS4c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=J2uL9NOS; arc=fail smtp.client-ip=40.107.6.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B2B3YVVc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BA78C433C7;
-	Mon,  4 Mar 2024 20:18:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709583494;
-	bh=K23JakM1P875wWRg3o7Bh9hwijeqRnaAhC1ZmI9DT6M=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=B2B3YVVcAg8euaTwpzEAd/U1Mfwf7tB4GGnKpAL4c6DXaH40QiIQ8sYrV5qR7+UNK
-	 C8zI9NZMUp7WlD+6qbngi8mvkFAi+XcB9ErtTWwyNV/ycwg05fSduQlzjkc0jnd0W5
-	 egCdnN3hqWDnxz8bgKq6JrPnhW7z0RvpKAbKUpeec5M7+i3bz/UBKSX9LfFYcal1ji
-	 W0+aYPH//qKinG+K2Q6nCD2ce0ihyUojtNDEwtrlHeyptlPAbV32/1cpywzyVY+lEP
-	 ddoCM8rh0mguz99kr5Uf2hJ3swvLeJgDO67JnUX90jEsAT5URs/hMALGoj8oQWVSKT
-	 6RzPIKvoD7PyQ==
-Date: Mon, 4 Mar 2024 12:18:12 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Jamal Hadi Salim <jhs@mojatatu.com>
-Cc: Tom Herbert <tom@sipanda.io>, John Fastabend <john.fastabend@gmail.com>,
- "Singhai, Anjali" <anjali.singhai@intel.com>, Paolo Abeni
- <pabeni@redhat.com>, Linux Kernel Network Developers
- <netdev@vger.kernel.org>, "Chatterjee, Deb" <deb.chatterjee@intel.com>,
- "Limaye, Namrata" <namrata.limaye@intel.com>, Marcelo Ricardo Leitner
- <mleitner@redhat.com>, "Shirshyad, Mahesh" <Mahesh.Shirshyad@amd.com>,
- "Jain, Vipin" <Vipin.Jain@amd.com>, "Osinski, Tomasz"
- <tomasz.osinski@intel.com>, Jiri Pirko <jiri@resnulli.us>, Cong Wang
- <xiyou.wangcong@gmail.com>, "David S . Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Vlad Buslov <vladbu@nvidia.com>, Simon
- Horman <horms@kernel.org>, Khalid Manaa <khalidm@nvidia.com>, Toke
- =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>, Daniel Borkmann
- <daniel@iogearbox.net>, Victor Nogueira <victor@mojatatu.com>, "Tammela,
- Pedro" <pctammela@mojatatu.com>, "Daly, Dan" <dan.daly@intel.com>, Andy
- Fingerhut <andy.fingerhut@gmail.com>, "Sommers, Chris"
- <chris.sommers@keysight.com>, Matty Kadosh <mattyk@nvidia.com>, bpf
- <bpf@vger.kernel.org>
-Subject: Re: Hardware Offload discussion WAS(Re: [PATCH net-next v12 00/15]
- Introducing P4TC (series 1)
-Message-ID: <20240304121812.450dda4c@kernel.org>
-In-Reply-To: <CAM0EoMnpZuC_fdzXj5+seXo3GT9rrf1txc45tB=gie4cf-Zqeg@mail.gmail.com>
-References: <20240225165447.156954-1-jhs@mojatatu.com>
-	<b28f2f7900dc7bad129ad67621b2f7746c3b2e18.camel@redhat.com>
-	<CO1PR11MB49931E501B20F32681F917CD935F2@CO1PR11MB4993.namprd11.prod.outlook.com>
-	<65e106305ad8b_43ad820892@john.notmuch>
-	<CAM0EoM=r1UDnkp-csPdrz6nBt7o3fHUncXKnO7tB_rcZAcbrDg@mail.gmail.com>
-	<CAOuuhY8qbsYCjdUYUZv8J3jz8HGXmtxLmTDP6LKgN5uRVZwMnQ@mail.gmail.com>
-	<20240301090020.7c9ebc1d@kernel.org>
-	<CAM0EoM=-hzSNxOegHqhAQD7qoAR2CS3Dyh-chRB+H7C7TQzmow@mail.gmail.com>
-	<20240301173214.3d95e22b@kernel.org>
-	<CAM0EoM=NEB25naGtz=YaOt6BDoiv4RpDw27Y=btMZAMGeYB5bg@mail.gmail.com>
-	<CAM0EoM=8GG-zCaopaUDMkvqemrZQUtaVRTMrWA6z=xrdYxG9+g@mail.gmail.com>
-	<20240302192747.371684fb@kernel.org>
-	<CAM0EoMncuPvUsRwE+Ajojgg-8JD+1oJ7j2Rw+7oN60MjjAHV-g@mail.gmail.com>
-	<CAOuuhY8pgxqCg5uTXzetTt5sd8RzOfLPYF8ksLjoUhkKyqr56w@mail.gmail.com>
-	<CAM0EoMnpZuC_fdzXj5+seXo3GT9rrf1txc45tB=gie4cf-Zqeg@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="J2uL9NOS"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eaUGSHTy7o6WTKGK8EYWqqEB057HZP/KhyP2AF+46reMaa2OHWyElBVxNfV2O1N2BfxB22zmSqdGvjBKtg5MqwYiou8sIsb9mI6rMkiuRJZNF4oxsH13hkYuovS+cloq9fjZrZu2yiuamYe9VzvMqcPhSpmtT4hFB/xVlyXTeQR8ikJ1R9/G4F7Loiaqbj4KqP2cyJEWkZCbYkw+/9sm7NLxuckjz7nsK38GBEPIBoPfg3pDsDCvYu12MU1h6ZLPvnuCF6gk9l6yvtdrdnPBVcg19hb66h396ZYMSa4LYplv01zZ0TN1zoUS7KiFvv2X6E0YXVV+a0NxYcpAH8WqDQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=j5daHgqslTggQTuwBIrtuq8GRDm/QytOmJQJcHi1Wrc=;
+ b=Mp34FJIdcJ/Q6W9d6z7t8r0PWnRM6vFLMLVoYxiFl9bviAdiq0ZVe5kZ0W+bjBou28GvUpwOmVilko37U1jWs8tn/xE/e24m5WU+j0QLeWjC9LoSU6Tn+ujvwlzomEHdURtACr7d9a9dWqNDZg1PHFnHC3pzZw7VidmhWO6G02LwYiLT2fFP0+mAlIf4aFbImAum1sQ59k8Eq8xpc8fK50HKI0XA0+3ZVF8fGr46gsOfZZ9SDQL2ePwGWiRWnkD4JKvQdWme7BgoZ/1Xicad2Eeh61TsJt9pCsc8f6mXGLmRpOFW7fduAvlh7P/5gaSHa4Qqi2e701a6K+kwi69+Bg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=j5daHgqslTggQTuwBIrtuq8GRDm/QytOmJQJcHi1Wrc=;
+ b=J2uL9NOSkXeX8Zj6Hp+JaYUvkc+sq1frq9JdTRnPcsyGCpDdmbPWWPxrYys6x3rRwSyEmjBZD9v8qhdkwp6lTENmrMaIE4PFXAFkeBcG88S1EeyeR7yj6ZlWw6yiUnCpEodW8QkZSrj8rZzUr7CxIS/3fAtsFLu8mCYRRxajr0w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by AS8PR04MB7557.eurprd04.prod.outlook.com (2603:10a6:20b:294::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.39; Mon, 4 Mar
+ 2024 20:25:36 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::3168:91:27c6:edf6]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::3168:91:27c6:edf6%3]) with mapi id 15.20.7339.033; Mon, 4 Mar 2024
+ 20:25:36 +0000
+From: Frank Li <Frank.Li@nxp.com>
+Subject: [PATCH v2 0/6] PCI: imx6: rename\clean up and add lut information
+ for imx95
+Date: Mon, 04 Mar 2024 15:25:05 -0500
+Message-Id: <20240304-pci2_upstream-v2-0-ad07c5eb6d67@nxp.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACEu5mUC/3XMQQ7CIBCF4as0sxYDg0XrynuYxiBQO4sCgdrUN
+ Nxd7N7l/5L3bZBdIpfh2myQ3EKZgq+BhwbMqP3LMbK1ATmeOOKZRUP4eMc8J6cnxo21otOiFUp
+ C/cTkBlp3797XHinPIX12fhG/9Z+0CMbZs2txuEgpFVc3v8ajCRP0pZQvzAyl2agAAAA=
+To: Richard Zhu <hongxing.zhu@nxp.com>, 
+ Lucas Stach <l.stach@pengutronix.de>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+ Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, Liam Girdwood <lgirdwood@gmail.com>, 
+ Mark Brown <broonie@kernel.org>
+Cc: linux-pci@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, Frank Li <Frank.Li@nxp.com>
+X-Mailer: b4 0.13-dev-c87ef
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1709583932; l=1486;
+ i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
+ bh=kSZuJ7yjz0SmRaBg2SqUCXkBSOFoRX5eYh3tDSgjj2M=;
+ b=UnsqG/eFANVjuUcZODJ7yDIMsFKqWvf+sqG7cjIUROAMRVwgAP6M8C3FOedot+cXt6Gm1T/Zp
+ t40bUIslJKsB/n4ssK80ffKecZ6tGtfk9iUjBgWxkEfEd9jgDYgFhLs
+X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
+ pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
+X-ClientProxiedBy: SN7PR04CA0118.namprd04.prod.outlook.com
+ (2603:10b6:806:122::33) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|AS8PR04MB7557:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1a555078-7859-420f-2854-08dc3c893fdb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	wP8bjdMzNWktJbn3ImaTx/RtRF+pXWfbHfJUHmoqj7ncRTYRadRrG/yRVs6aEGP7gWamUdWUy2xl/TjiEFWb8regw7yDY7dMzhDpl9FDng4HyScGH44H20SQiV/gPKgkZeMc6qbTIdmls/FnW5CiT+BBqom24TP0ktiLOvuLxxoBBuLC9w6sA8ZbitjGdrAwl1mpn/JoTfRy3MNRf0Qr5KmLqiajpJdb0QIju1wDyqP0/JxrlXtML6zvuKQ0gYBKQKemoEDW09Sdpscf23qVD3du0an5obLLSYJq0EXdPBgxKJuLm+A74qVq3X4F+LgM90oxlzZtEBTKssZz9ASgZgzzut1KZcNVpKgcp8fHwD6OUi88eA7RVHB8jHXeTOSVSnRogSZKixsDczQIAnNrJrj/5WEM9s3o6UK1BP69jJIfqP3xR6PIAblrysPZTKUZOsaT80spZ9hGBh0IF3p/1e2bXOm1DystFV3KkCf3ploHc5JBsV31nXJ/CSt7oFBFASMPKz1TGhQGVUli5WFqSjeetUfP9ybdcxIllRo50+177kxu9yEvJHyXUt4B8GYu6+dQDhQGLqvLhS3cRPryDBczaUKWwoESagwudyVp2aVDCymKG5/wOFmbdLiULMKDHn3wk+5jYnoJTgsARZ06Aw+zZkZFizqJw1LnXwCsbUhQ3qNmZkPiakcdRc4+9NGO
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(921011)(38350700005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UW5zUVdvWmUrN2NRa3YyTWlqUGV2d0tZMHpVRzhVYmYzRXdqV0hrZ1FmUUpz?=
+ =?utf-8?B?VlZMRjIxM2ExUStjUHNtRnk4NVRBVGxiVkY3NHczeFJ5NXNoenY5K3hyS3FE?=
+ =?utf-8?B?SlEvZ2VBMENpV1hKMEdCSEhjTFJkNlFRcUgxV1VTZ3IrS2lXazZSU2toRGZQ?=
+ =?utf-8?B?RDR2N00ydjFxeTBXZ2xzZWNIRFFWMWs5VEtJemtTUVg2ek9hRU5xOHhXUXh3?=
+ =?utf-8?B?Ym43dElvaitKeFdPdi9rbXpmRXFWL3dRZGRBUEQ4Z1lLQjlQb1pjVDFLYUhi?=
+ =?utf-8?B?WkI2a3hGc0pKVGxaamlVMW93UFQ3bnZKWFZsSHZPRlJRcUZLd0xrQldDTmUr?=
+ =?utf-8?B?YjQ1dy9zMUFzS3RaNzNpY0xqVmZaR0tsSmxIVldwaFcvZ2ZneXJhME9Tdm91?=
+ =?utf-8?B?NzRwbmxWRjBKRlc3UEQ2RHBZUnVseHVTWHVxMG9iTjJ4ZHI5UXBFaFIvbk9v?=
+ =?utf-8?B?Snpkc3JSYStjcXVqQmkzMU13b3Ixd20rYVVjYmlGd21oSnYraDNaaHliaGRK?=
+ =?utf-8?B?M3BZZjFKUFF6T3padis2N3NBZzJtZnhnVEY2ZHZXdnlERmI1UXFlWGF2SFpY?=
+ =?utf-8?B?Y2REalhSZHNic3dnMWVJYVhkVnlQa3p3cXRQTlJuVmZuSENsL0piTHR3L0dU?=
+ =?utf-8?B?aDBwUjBvSEkveUdtT2VHV0RFcHFBSnQ3K0Y1QnF6TVEvQUs1U3lNdHkrVTR5?=
+ =?utf-8?B?Wk5nT1laeElJV2tMbjlZeGVzREZvZHlnajYvMFlvOCtFNEdRd2lLeElnWTNi?=
+ =?utf-8?B?dE14MW1sN2lVWWg0VFBlUGlrRExScHMxUFg0NjFhQmgvZTVMZEp4d2V2cFdv?=
+ =?utf-8?B?Z2dVSkREL3EyaXdMOGRzT1ZGTkNNY1VWdjVNL1VjTjBGTUp1ZVV6bW53M1VW?=
+ =?utf-8?B?S0pDUXVKVXdUblR2R1dFRHc1M0NFcU9IdkNIbG5qMCtMa05RN3N0ZGVvWGJk?=
+ =?utf-8?B?eDVqZ043dllHWjJ2WEY0SURidklGTEVSaE41SFdGTXQyTFFCVVk4aktQc2Nl?=
+ =?utf-8?B?T1haZTk4NmdzR1hrMVcva2VXU0ZVR3NoNnVISlJJTExrMnZUYTVOb3NYeG1n?=
+ =?utf-8?B?YzFTSFJkUVUyT0pLWnpTRExPcXlyb0duRnFrRU5RUFBKK0Fza2FpRkYzRHZz?=
+ =?utf-8?B?cWMxeTdkcktVZE90UkRZdGgyVWNieXV6UWpNcDRMMkowQTdJZW5mUTk4VWdC?=
+ =?utf-8?B?TmRicEd5WVNwU0FIdThjblQraW1tOTBQZnAzVkFGRmVEcjh0NXJqNS9PS2o1?=
+ =?utf-8?B?bVI2Mnp5UXhwQTROUGJmWkVoWkh3RmtMUWZmZUQ3cUxaRms4V2V4SmlCcjNs?=
+ =?utf-8?B?TExrMEUxVERQRHUybmpmdVRnbGJReUxURTlOL1RGakJIdHRldHFBL210TWZm?=
+ =?utf-8?B?TER3eWJyelJaeGZXcGt4ZFhwRWdhbFh1ZXhkZzVsczRGWmdZc3RWRzZoWHpt?=
+ =?utf-8?B?TytaUHlheVR4cDhmM2NjU05XN09PNXUxQW1XeG50THBaVmIvKzJ2SlFQNGFP?=
+ =?utf-8?B?OUtZNkhScFlMNHVWTlhOMGJVaGVFNUJhWjdlNWZkbldsUW4rMXgrSHlUVzgw?=
+ =?utf-8?B?NnkzczgrOUxQL0JUT0NoQjFLeDEzY2RKRHFKc0xZN25NeGdGY2Y0bmpJQnVq?=
+ =?utf-8?B?VEZiME5VdTd3TThNeFJ1RVpUM2tTMHRYRWhZdnpXcTZLMWUyRlY0MlUyRlVG?=
+ =?utf-8?B?VHdDcVZXNmljeTdJZjhjSElqNzZELzBNY3NyekNuK3VHNFB1V2NMYkRVMitn?=
+ =?utf-8?B?cjMrVmhGek1Od1BzVzA1U2toY0FYT0F5V09nMkJQU1U3eVB1bmxkWVdOeEFy?=
+ =?utf-8?B?Y1hNM0Z2enNCY3BsUkNzWEpOUkJ6Wk0rZEVRZ1R3cmVBVjFOWGZpcHdydmR2?=
+ =?utf-8?B?cm1rOWJiUkdRMEZXd1YyT29vOFY0b2RxZGhsWnlVWE5SVjBtUWJ6YXJKTlhx?=
+ =?utf-8?B?TlU3RXgzWTlGaUNNWFRDd2ZsdVNGYXNXajdHSmFCUkRoZjdZdU5BSGg0ZTV6?=
+ =?utf-8?B?WFBBLy9zYW03RnBVTm1Uc1pBaG54bzFZeW5Ka2dlWWg1SXRrcTJaU29WQVZx?=
+ =?utf-8?B?MWJKOEJUUHp0QlVpTkNpUTBnTGlyWE44TmdXRUZzVFZDaHZwSXN2WDlkR3R4?=
+ =?utf-8?Q?BpDg=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a555078-7859-420f-2854-08dc3c893fdb
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2024 20:25:36.0141
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DAlchNrOqHTKo8O+3kVlzoQa253T2oNiInLD13oMdYsoopQXqusdDrEwgWa0EttFopz0eW4YvDYbFTkD7chGWw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7557
 
-On Sun, 3 Mar 2024 14:04:11 -0500 Jamal Hadi Salim wrote:
-> > At
-> > this point in its lifetime, eBPF had far more examples of real world
-> > use cases publically available. That being said, there's nothing
-> > unique about P4 supporting the network calculator. We could just as
-> > easily write this in eBPF (either plain C or P4)  and "offload" it to
-> > an ARM core on a SmartNIC.  
-> 
-> With current port speeds hitting 800gbps you want to use Arm cores as
-> your offload engine?;-> Running the generated ebpf on the arm core is
-> a valid P4 target.  i.e there is no contradiction.
-> Note: P4 is a DSL specialized for datapath definition; it is not a
-> competition to ebpf, two different worlds. I see ebpf as an
-> infrastructure tool, nothing more.
+imx6 actaully for all imx chips (imx6*, imx7*, imx8*, imx9*). To avoid     
+confuse, rename all imx6_* to imx_*, IMX6_* to IMX_*. pci-imx6.c to        
+pci-imx.c to avoid confuse.                                                
 
-I wonder how much we're benefiting of calling this thing P4 and how
-much we should focus on filling in the tech gaps.
-Exactly like you said, BPF is not competition, but neither does 
-the kernel "support P4", any more than it supports bpftrace and:
+Using callback to reduce switch case for core reset and refclk.            
 
-$ git grep --files-with-matches bpftrace
-Documentation/bpf/redirect.rst
-tools/testing/selftests/bpf/progs/test_xdp_attach_fail.c
+Add imx95 iommux and its stream id information.                            
 
-Filling in tech gaps would also help DPP, IDK how much DPP is based 
-or using P4, neither should I have to care, frankly :S
+Base on linux-pci/controller/imx
+
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+Changes in v2:
+- remove file to 'pcie-imx.c'
+- keep CONFIG unchange.
+- Link to v1: https://lore.kernel.org/r/20240227-pci2_upstream-v1-0-b952f8333606@nxp.com
+
+---
+Frank Li (6):
+      PCI: imx6: Rename imx6_* with imx_*
+      PCI: imx6: Rename pci-imx6.c to pcie-imx.c
+      MAINTAINERS: pci: imx: update imx6* to imx* since rename driver file
+      PCI: imx: Simplify switch-case logic by involve set_ref_clk callback
+      PCI: imx: Simplify switch-case logic by involve core_reset callback
+      PCI: imx: Config look up table(LUT) to support MSI ITS and IOMMU for i.MX95
+
+ MAINTAINERS                                        |    4 +-
+ drivers/pci/controller/dwc/Makefile                |    2 +-
+ .../pci/controller/dwc/{pci-imx6.c => pcie-imx.c}  | 1115 +++++++++++---------
+ 3 files changed, 647 insertions(+), 474 deletions(-)
+---
+base-commit: 0a580c33494a7d293ff0d34cf4db4af107070ccf
+change-id: 20240227-pci2_upstream-0cdd19a15163
+
+Best regards,
+-- 
+Frank Li <Frank.Li@nxp.com>
+
