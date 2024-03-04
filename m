@@ -1,142 +1,86 @@
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468E93D3BD;
-	Mon,  4 Mar 2024 13:58:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E250B3D9E;
+	Mon,  4 Mar 2024 14:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709560705; cv=none; b=Cr6IeApt5l7BRsQ95ABICjhl0fLPV7FpvH9SkdNIQFFtyyujrwF6D0yJiFVftdifXtCaQJWf/6iTDi0lHxmWBWzMdk46m4Fkx0M5LnsFt4D1M0Qhw+I8p3nJdc9ocN1Q2qwxH3u5AqgLEuxZlWie23CnHgPItdPIM9w/WWx36so=
+	t=1709561427; cv=none; b=N7724+S1dNq+lWxTfozZ379sw57raW3oxkrdaDS70wmM4E7Ae8ac4IpN9nFlkh32W7Fm0kEOqrelZhnrRiHh3958n6ywj8Bsw5EOjLv1VgIg5tV+r/ERBJpkokvKwXB6J2G2uIF3WkyYxGQPdGoRPfO5BtlFoRoJkwrczHZH9JU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709560705; c=relaxed/simple;
-	bh=GIIoMXTb+jubmj3EvUmA/6kXLnrIGswSSlxeQCgWaHw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CVCtZCQ1E1DBLKH7VaW7w3wEW+fIZ6R6qKxwNjuR++Ibn0L1bdt/hAJoc6+naAbNpcmghuuYQS0yuv/wXs78TZK1hYWpob0N07GyylnkuWThcEc6v9dI/V4KS+xJfeslnxKdL6wxAHg9HjNyPmk5vcJyH4Z6NExtutYWJF31AEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LTSXzAjr; arc=none smtp.client-ip=209.85.219.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709561427; c=relaxed/simple;
+	bh=e3vwrozgYttFesjrkEkiWY1DOGCdGg097X1QMijHh14=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=S+viYT8hO8bXXRE55o85xo09yAraVOyvAly0Ne3QZ5QADpDHA6IbMs+dfKsrtbOKo5Uuh9jGx+hXLGovRUvKKgUTZKARzAK5JXT2F8rklMZ1wMsoCRzEafJlgimie39QXR7fAvvHG/VOzLVI5ij2woDdYR3GiCMBTB+sJ9z30VA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=foYRdYyx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LTSXzAjr"
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-68f5d962aadso2100526d6.1;
-        Mon, 04 Mar 2024 05:58:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709560702; x=1710165502; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Plfy//rsylxMHB4eQxxysPEOJTihZRQSC1sBjCrslCI=;
-        b=LTSXzAjr5T2pA1fLBXSUmg9IqBFqVc2Trw45wOJkGun2tiX125T5P1St2wC3xvhKdr
-         hoGWPm2Z+hJXg4RloQ9oigePEt9yZqOuNd8m8TFklhkKIoXwCgfn5I1txeDqzR0J1uVB
-         ITOGvTKyTJKf1jkEwnGB/EQHEqzep0wWw7p9lLwTrGIDbLIN6NuX8cFv41zOwYheoGH9
-         1CnayWgPreFY1e6FMzHpIF3a7ruyWG1uT1JXQPbmrpTUvQxDXbfqKJdiOoAEJSW/HYgL
-         QiVcLx4WcC6KlINUt1OhsrSf7voPmuVeGmwEhrrWaDAiyzCibbzhtciZ0vAhzFnp7h0n
-         MlzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709560702; x=1710165502;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Plfy//rsylxMHB4eQxxysPEOJTihZRQSC1sBjCrslCI=;
-        b=sulBeOy8qnQQB4+3cJm3rn5X9EC3bEQ2g0hHXVe52kNWJ/5jIR/vY4/8pwVtUkNHsO
-         ROE2Px7gJMU0E62+PC24r11BHyRDsS8YkMdTAGhyXNlnJs3ADaVO8Jr6ke/x5HoTM0zp
-         7CUzHPrLP5AIDWljuKw8oGE62e1hyrpufIN6CNnC7M0azSckviofiOiv028ZVUidPfi8
-         ZKrz+ugWqG+X1GwMA9zO6P0/wXU9QLribHrWIhH++OSe+IspyoJVzIO+AM+irwDW/2IE
-         bRFWF4NAL4QcdA45YrnaQTXYQs2Ukc2W2CqHv/Lqznoa3RvtyvlcaNbGPY1aMAL1U/MA
-         5a2A==
-X-Forwarded-Encrypted: i=1; AJvYcCUgblLIh2cOFGLVs3EXTFIjsiX4Dm3tPFXwvUiuxUXG4gPTccg3JpJwrUSl4gESv32CmOOU+EgbIL8z94VS3udPy/PuZvUxJkHgi3/zgQNGthY+WdydUjUpTWlTuI8RH+hZ07teq6D0FXnTOBlFPCsF/zGGgPbRLhwk0pWPc4+Ju2Q5QwUiDi+PfeWArowZ
-X-Gm-Message-State: AOJu0YyPGLfwWKJ2LZIhQ9eR0jTjlltzu5ReXTsqES9AkTpVSW4SNqC6
-	soJpaDAUxl1Sjjb0jumyiSZi1096cRqsd+jC3tlLRcmo03JXkH/hKnRmvrBVhW9S7xyEat7Bvyh
-	+shJNgTLnGr1Z4aYh5FD+q7fwzVk=
-X-Google-Smtp-Source: AGHT+IHVsvq0lEKFqn6fHC7GP6xP5UnPXqrWeVUiUt2RohzlqrCuJl+Isr9qbkGFJVhgPQdYWTGuml8Vs9zhghbXs5M=
-X-Received: by 2002:a05:6214:1bc7:b0:690:3c85:c5b with SMTP id
- m7-20020a0562141bc700b006903c850c5bmr10351360qvc.3.1709560702082; Mon, 04 Mar
- 2024 05:58:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="foYRdYyx"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AE089C433C7;
+	Mon,  4 Mar 2024 14:10:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709561426;
+	bh=e3vwrozgYttFesjrkEkiWY1DOGCdGg097X1QMijHh14=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=foYRdYyxuUzzlnIK0ysZ+/h7LUP5HkwK3+MztotHFXqWWcsxXxuQL0fgW7QTDWLW1
+	 JiE+/i9DxUhHjkBW0PbYjUDlGNTMNdkitPb1uftZ6yrBVA/XU7g80EDqeImTKoh9kH
+	 DzUYAyuDPYXw95glklTZ7nWh3xHQ5cKcg6jSvnh6lRpDi8tGN3hFi4PQsskNy7Bw7K
+	 5HMm0o+gpW7U2Tj6iTX1tZTHlmFFJbE6MpZhcMfHL5WWuzkOfvO3kysX9ieU5Ght+C
+	 LSAsbtMHEny5mQc99MKLsZAMX0Lf9D+C0nVjZBbbXYZ4XdSJ84ZDBDSjaJN6eNu16+
+	 8bzq4osx4vG/A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 90C7FC595C4;
+	Mon,  4 Mar 2024 14:10:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1709118325-120336-1-git-send-email-wangyunjian@huawei.com>
- <75b6f7686c03519a1aaeb461618070747890143b.camel@redhat.com> <55ef319de7084614b1883018f69de1eb@huawei.com>
-In-Reply-To: <55ef319de7084614b1883018f69de1eb@huawei.com>
-From: Magnus Karlsson <magnus.karlsson@gmail.com>
-Date: Mon, 4 Mar 2024 14:58:11 +0100
-Message-ID: <CAJ8uoz0xjdw7iHjP9=9wFPq21A6LdcYuGZBgwUKRemzkB5XoNg@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 1/3] xsk: Remove non-zero 'dma_page' check in xp_assign_dev
-To: wangyunjian <wangyunjian@huawei.com>
-Cc: Paolo Abeni <pabeni@redhat.com>, "mst@redhat.com" <mst@redhat.com>, 
-	"willemdebruijn.kernel@gmail.com" <willemdebruijn.kernel@gmail.com>, 
-	"jasowang@redhat.com" <jasowang@redhat.com>, "kuba@kernel.org" <kuba@kernel.org>, 
-	"bjorn@kernel.org" <bjorn@kernel.org>, "magnus.karlsson@intel.com" <magnus.karlsson@intel.com>, 
-	"maciej.fijalkowski@intel.com" <maciej.fijalkowski@intel.com>, 
-	"jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>, "davem@davemloft.net" <davem@davemloft.net>, 
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
-	"virtualization@lists.linux.dev" <virtualization@lists.linux.dev>, xudingke <xudingke@huawei.com>, 
-	"liwei (DT)" <liwei395@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH iwl-next,v3 0/2] XDP Tx Hardware Timestamp for igc driver
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170956142658.15074.12322285485014543685.git-patchwork-notify@kernel.org>
+Date: Mon, 04 Mar 2024 14:10:26 +0000
+References: <20240303083225.1184165-1-yoong.siang.song@intel.com>
+In-Reply-To: <20240303083225.1184165-1-yoong.siang.song@intel.com>
+To: Song Yoong Siang <yoong.siang.song@intel.com>
+Cc: jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ richardcochran@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, john.fastabend@gmail.com, sdf@google.com,
+ vinicius.gomes@intel.com, florian.bezdeka@siemens.com, andrii@kernel.org,
+ eddyz87@gmail.com, mykolal@fb.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, haoluo@google.com,
+ jolsa@kernel.org, shuah@kernel.org, intel-wired-lan@lists.osuosl.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, xdp-hints@xdp-project.net
 
-On Thu, 29 Feb 2024 at 13:52, wangyunjian <wangyunjian@huawei.com> wrote:
->
-> > -----Original Message-----
-> > From: Paolo Abeni [mailto:pabeni@redhat.com]
-> > Sent: Thursday, February 29, 2024 6:43 PM
-> > To: wangyunjian <wangyunjian@huawei.com>; mst@redhat.com;
-> > willemdebruijn.kernel@gmail.com; jasowang@redhat.com; kuba@kernel.org;
-> > bjorn@kernel.org; magnus.karlsson@intel.com; maciej.fijalkowski@intel.com;
-> > jonathan.lemon@gmail.com; davem@davemloft.net
-> > Cc: bpf@vger.kernel.org; netdev@vger.kernel.org;
-> > linux-kernel@vger.kernel.org; kvm@vger.kernel.org;
-> > virtualization@lists.linux.dev; xudingke <xudingke@huawei.com>; liwei (DT)
-> > <liwei395@huawei.com>
-> > Subject: Re: [PATCH net-next v2 1/3] xsk: Remove non-zero 'dma_page' check in
-> > xp_assign_dev
-> >
-> > On Wed, 2024-02-28 at 19:05 +0800, Yunjian Wang wrote:
-> > > Now dma mappings are used by the physical NICs. However the vNIC maybe
-> > > do not need them. So remove non-zero 'dma_page' check in
-> > > xp_assign_dev.
-> > >
-> > > Signed-off-by: Yunjian Wang <wangyunjian@huawei.com>
-> > > ---
-> > >  net/xdp/xsk_buff_pool.c | 7 -------
-> > >  1 file changed, 7 deletions(-)
-> > >
-> > > diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c index
-> > > ce60ecd48a4d..a5af75b1f43c 100644
-> > > --- a/net/xdp/xsk_buff_pool.c
-> > > +++ b/net/xdp/xsk_buff_pool.c
-> > > @@ -219,16 +219,9 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
-> > >     if (err)
-> > >             goto err_unreg_pool;
-> > >
-> > > -   if (!pool->dma_pages) {
-> > > -           WARN(1, "Driver did not DMA map zero-copy buffers");
-> > > -           err = -EINVAL;
-> > > -           goto err_unreg_xsk;
-> > > -   }
-> >
-> > This would unconditionally remove an otherwise valid check for most NIC. What
-> > about let the driver declare it wont need DMA map with a
-> > (pool?) flag.
->
-> This check is redundant. The NIC's driver determines whether a DMA map is required.
-> If the NIC'driver requires the DMA map, it uses the xsk_pool_dma_map function, which
-> initializes the DMA map and performs a check.
+Hello:
 
-Just to provide some context: I put this check there many years ago to
-guard against a zero-copy driver writer forgetting to call
-xsk_pool_dma_map() during the implementation phase. A working driver
-will always have pool->dma_pages != NULL. If you both think that this
-check is too much of a precaution, then I have no problem getting rid
-of it. Just thought that a text warning would be nicer than a crash
-later.
+This series was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-Thanks: Magnus
+On Sun,  3 Mar 2024 16:32:23 +0800 you wrote:
+> Implemented XDP transmit hardware timestamp metadata for igc driver.
+> 
+> This patchset is tested with tools/testing/selftests/bpf/xdp_hw_metadata
+> on Intel ADL-S platform. Below are the test steps and results.
+> 
+> Test Step 1: Run xdp_hw_metadata app
+>  sudo ./xdp_hw_metadata <iface> > /dev/shm/result.log
+> 
+> [...]
 
-> Thanks
->
-> >
-> > Cheers,
-> >
-> > Paolo
->
+Here is the summary with links:
+  - [iwl-next,v3,1/2] selftests/bpf: xdp_hw_metadata reduce sleep interval
+    https://git.kernel.org/bpf/bpf-next/c/01031fd47305
+  - [iwl-next,v3,2/2] igc: Add Tx hardware timestamp request for AF_XDP zero-copy packet
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
