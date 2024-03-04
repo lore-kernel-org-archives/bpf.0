@@ -1,56 +1,56 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DBB67C6CC
-	for <bpf@vger.kernel.org>; Mon,  4 Mar 2024 22:52:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9193C28
+	for <bpf@vger.kernel.org>; Mon,  4 Mar 2024 22:52:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709592743; cv=none; b=fMpOcfRR/eFTmf91yrplygqb43eWu9aT9PdN4d/cldS/XFZHiqg10bBWAMNpQ+t17qlwJ+fhkVwD+uUQEjO9mWYmk1BOIRguSQGPbmjljwF1/qdz2vc/61uFobAFLxHfUAHEwX3mbVISfgxzaVhJlVs59qIEB8KsMhr7wRcfHlQ=
+	t=1709592745; cv=none; b=r7WeP8DioWmf2eC8Tx0Q+IQ9SBScHG2Vu/t0qu8Bo6MNSkcGoNntZvlfVo7Dfj9t0rUAz2H4hWP1751ZUHiTgbo5etcCRjSB/q74B40DHR3w5Ul7bpfIXHG2w2SaGgWth/QYdnw36sX6zGZFJQ7d8Nv229xlE14N2At4hO/B3wU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709592743; c=relaxed/simple;
-	bh=rgeR5HXu6PVieluBU162i6nCCXzBbmEaYvdlsL5tCIE=;
+	s=arc-20240116; t=1709592745; c=relaxed/simple;
+	bh=mRYN8GtA6AeeXnAhta3PiFUwUUHqt9j+YgCCrPA4m70=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RmyeMyBAib2mnDyQHdqknANhUc1vWUzQdSWdW23lkVQYlIjGRwMUskNszWyBIO5woEV7tM+3n0l4DsLk6AepXMdn6oHTJ0HBuVR8JqHz3TfEeX3QyB4xbW0AlXXvVJxCsOtVHEziK73L7w1iQ3NqWhmRYVlpRiPn240YV5TZ0es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N9m5jBkQ; arc=none smtp.client-ip=209.85.208.42
+	 MIME-Version; b=NOWn+DlhUbshvlu2/Vab7jai6GL1zpNTyPRiWzUrio9ide/jq9Zuym8tv83EbNtI31YnWEzpqQje/zsgQvp8YcoXsD5Xb2bs+EVaUeIvMYrVF1MChNkmiq6u2p+wWpdClPPyxOjSRm6XdkglU0p1+C4IDFnLZjmAh/x2noDmLaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gCXopT6c; arc=none smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N9m5jBkQ"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5673b5a356eso32930a12.0
-        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 14:52:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gCXopT6c"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a452877ddcaso217444366b.3
+        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 14:52:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709592740; x=1710197540; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709592742; x=1710197542; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WD6I0hZklvWavGPzFQiptXUz9ryuUA4HQRXZZhbveEQ=;
-        b=N9m5jBkQT7oPz4TgM4oJKOKa61kWPH7W9hvZjdKo78n6/fNpdeCFI0kgLCJ3MGHK65
-         cPtdo7EPPBYiS5pYW3Cp6xjI0BEHohRbNiTqlujLmGsT2sUH32SFNLsVMwXEx2Wn4phE
-         XrZ78kpNaEBgIApIMFn86kdyiI0WsWbfA+VzGgcJcsjTLYe9S2iL366+TlEuqexWSu7S
-         ncMSylHBx1xJqRu0OEFKCPUcATMrrP+0R3wMehxL4nlQrUgm6xX08YDzJZ9NW8aRbwri
-         xuXrH+ZV0KKyoU2k3/5+WnpnvALKeppDeR0G+O1qc5lNYb1I3wXtTwAG6N0ZwgwTKemB
-         nlsw==
+        bh=STdOP0ZXMuxwmEzVVyhK+2jyJZme+i5PFKTMGolq9lE=;
+        b=gCXopT6cdMVBtxx4c2qFmiH7lXvGOPtXx065lAepqYC3HE2Ctgid3SuCos/ftYOYdb
+         lbV4XWYIMSHFs1f6ZWdcCzjBmgCEvW++oP87LN64muhbHe6+Sf3kiz7B0neXSqW/bi0q
+         wvG2a/iviJy4PrG1if4xuLOm6/URBxghawU8vNqFS9nRQyDTqe1qa2Lz84MxD54ezw1f
+         M+kUQd4VnUGJnm62VxBt2cc5xi5EGFRQf7B6R6KAY6hrhT9TXMR5GLTAsZzQSo5ESvWZ
+         RhfXC2ycRQc+9gUAdEKgl0QImBG0bvZSJQb3sJqb/QJGrOOIfn4fHdcrtzhd2pDaE3QN
+         xOQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709592740; x=1710197540;
+        d=1e100.net; s=20230601; t=1709592742; x=1710197542;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WD6I0hZklvWavGPzFQiptXUz9ryuUA4HQRXZZhbveEQ=;
-        b=XgbBYDXMFCT1M95AKHFnLoW7wU1Z9IPGt4p+zagYCQeilgUGtwb7iDGOwCt5wTzxhs
-         DDCpjPSKi1rSHsJxOUtIe1B1nmqJcPbOfrY0QYCtrGiPK3tT60rdvfZ5XPBUPanA2yF0
-         AyVdeMh8fWqZ1tAJcpmq6BG5UXo9OSCNoEp2qop2rwVyIm50Z9274kRzwmdQhiFYQy6s
-         ezX/tYkVsA5yyKRoerRCg+FOH4fPLKwU73kSX+P0QXt9iDlZ0wKa9r4BgeUUsQ/qLtB0
-         d5Q45AdOuP0j5Dnig1//RxWkC1uSVmYATU5EgWBr0yOC6nJ6lBJuJjont0iBAnlwx+6J
-         OK4w==
-X-Gm-Message-State: AOJu0YyB/iuBJSIxR5xkhtuET6f0OGc8IMtfzz5BeIjc1YjCCkAhV4Rh
-	zfkUpmpyjPUafdTr4ccC9wI4YfSuSOgcJ2aMj3S0cyCGyrBBQXQUlYJrYQvZ
-X-Google-Smtp-Source: AGHT+IGb+FrI3+cKGVuARdasJN2MBQYW7adUbqqhUKpRCyhvVwmg8A2f+ZzzeKRuIO/DCEywhavEPA==
-X-Received: by 2002:a17:906:4108:b0:a45:4416:1fa4 with SMTP id j8-20020a170906410800b00a4544161fa4mr2784010ejk.40.1709592740408;
-        Mon, 04 Mar 2024 14:52:20 -0800 (PST)
+        bh=STdOP0ZXMuxwmEzVVyhK+2jyJZme+i5PFKTMGolq9lE=;
+        b=GnGJ9BIDVPvf6b4y94FCEJ6QDhniu82ocNRZPdtghskvmoL4pzZ9hv19P8iGd5Zjwk
+         bFOhzdGtWVZ2ubDAsCI+1V/OLrzA1w+dVc8g+aWJSOe3YfcmwVGivFWFNv8F7KghsMko
+         OjC+XtNr2FOotgPmGUnUXrnm13UAPrS7YM6NHzkmRhG/UPH4vNS7Z6l5Pq8B3U5Q3rmG
+         Y9QemLOTKxltBr5ZKMhSJrTLb7ssBPVSCh1lmEWJYM6n2ddLc+U4F7MyD7HCEid6LNRo
+         UEe8kqGNGFzdpp938IFFU9B6cUt0RVq27ATVi6FPpLVXYEnEA/z2X/6F29MIdxrmg+RY
+         1qqQ==
+X-Gm-Message-State: AOJu0YwdHcT6P7kPCqA3mrio/pqP/rXjBOZI3RfV7uYBqi7VG3VBpOmE
+	yDAWix/IJNBDNWzh5pN7Ae7DDOnmrKu4NyD7Jqz3MBRq4oznjall12ncOLjm
+X-Google-Smtp-Source: AGHT+IFR8DWddPzI2l5n/KP3S6eobXIampEjq1SkwvT4O2uz/4X0jrlho2bGgB/BGveskieouWwdsw==
+X-Received: by 2002:a17:906:a450:b0:a45:a797:75ab with SMTP id cb16-20020a170906a45000b00a45a79775abmr60391ejb.3.1709592741834;
+        Mon, 04 Mar 2024 14:52:21 -0800 (PST)
 Received: from localhost.localdomain (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id qx22-20020a170906fcd600b00a4302eb448dsm5315499ejb.134.2024.03.04.14.52.19
+        by smtp.gmail.com with ESMTPSA id qx22-20020a170906fcd600b00a4302eb448dsm5315499ejb.134.2024.03.04.14.52.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Mar 2024 14:52:19 -0800 (PST)
+        Mon, 04 Mar 2024 14:52:21 -0800 (PST)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -62,9 +62,9 @@ Cc: andrii@kernel.org,
 	void@manifault.com,
 	sinquersw@gmail.com,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v3 10/15] libbpf: replace elf_state->st_ops_* fields with SEC_ST_OPS sec_type
-Date: Tue,  5 Mar 2024 00:51:51 +0200
-Message-ID: <20240304225156.24765-11-eddyz87@gmail.com>
+Subject: [PATCH bpf-next v3 11/15] libbpf: struct_ops in SEC("?.struct_ops") and SEC("?.struct_ops.link")
+Date: Tue,  5 Mar 2024 00:51:52 +0200
+Message-ID: <20240304225156.24765-12-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240304225156.24765-1-eddyz87@gmail.com>
 References: <20240304225156.24765-1-eddyz87@gmail.com>
@@ -76,173 +76,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The next patch would add two new section names for struct_ops maps.
-To make working with multiple struct_ops sections more convenient:
-- remove fields like elf_state->st_ops_{shndx,link_shndx};
-- mark section descriptions hosting struct_ops as
-  elf_sec_desc->sec_type == SEC_ST_OPS;
+Allow using two new section names for struct_ops maps:
+- SEC("?.struct_ops")
+- SEC("?.struct_ops.link")
 
-After these changes struct_ops sections could be processed uniformly
-by iterating bpf_object->efile.secs entries.
+To specify maps that have bpf_map->autocreate == false after open.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/lib/bpf/libbpf.c | 62 ++++++++++++++++++++++--------------------
- 1 file changed, 33 insertions(+), 29 deletions(-)
+ tools/lib/bpf/libbpf.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index ce39ae34fec0..4ef3902e65db 100644
+index 4ef3902e65db..c0212244bdf7 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -612,6 +612,7 @@ enum sec_type {
- 	SEC_BSS,
- 	SEC_DATA,
- 	SEC_RODATA,
-+	SEC_ST_OPS,
- };
+@@ -497,6 +497,8 @@ struct bpf_struct_ops {
+ #define KSYMS_SEC ".ksyms"
+ #define STRUCT_OPS_SEC ".struct_ops"
+ #define STRUCT_OPS_LINK_SEC ".struct_ops.link"
++#define OPT_STRUCT_OPS_SEC "?.struct_ops"
++#define OPT_STRUCT_OPS_LINK_SEC "?.struct_ops.link"
  
- struct elf_sec_desc {
-@@ -627,8 +628,6 @@ struct elf_state {
- 	Elf *elf;
- 	Elf64_Ehdr *ehdr;
- 	Elf_Data *symbols;
--	Elf_Data *st_ops_data;
--	Elf_Data *st_ops_link_data;
- 	size_t shstrndx; /* section index for section name strings */
- 	size_t strtabidx;
- 	struct elf_sec_desc *secs;
-@@ -637,8 +636,7 @@ struct elf_state {
- 	__u32 btf_maps_sec_btf_id;
- 	int text_shndx;
- 	int symbols_shndx;
--	int st_ops_shndx;
--	int st_ops_link_shndx;
-+	bool has_st_ops;
- };
+ enum libbpf_map_type {
+ 	LIBBPF_MAP_UNSPEC,
+@@ -1324,6 +1326,15 @@ static int init_struct_ops_maps(struct bpf_object *obj, const char *sec_name,
+ 			return -ENOMEM;
+ 		map->btf_value_type_id = type_id;
  
- struct usdt_manager;
-@@ -1268,7 +1266,7 @@ static int bpf_object__init_kern_struct_ops_maps(struct bpf_object *obj)
- }
- 
- static int init_struct_ops_maps(struct bpf_object *obj, const char *sec_name,
--				int shndx, Elf_Data *data, __u32 map_flags)
-+				int shndx, Elf_Data *data)
- {
- 	const struct btf_type *type, *datasec;
- 	const struct btf_var_secinfo *vsi;
-@@ -1330,7 +1328,8 @@ static int init_struct_ops_maps(struct bpf_object *obj, const char *sec_name,
++		/* Follow same convention as for programs autoload:
++		 * SEC("?.struct_ops") means map is not created by default.
++		 */
++		if (sec_name[0] == '?') {
++			map->autocreate = false;
++			/* from now on forget there was ? in section name */
++			sec_name++;
++		}
++
+ 		map->def.type = BPF_MAP_TYPE_STRUCT_OPS;
  		map->def.key_size = sizeof(int);
  		map->def.value_size = type->size;
- 		map->def.max_entries = 1;
--		map->def.map_flags = map_flags;
-+		map->def.map_flags = strcmp(sec_name, STRUCT_OPS_LINK_SEC) == 0
-+				   ? BPF_F_LINK : 0;
- 
- 		map->st_ops = calloc(1, sizeof(*map->st_ops));
- 		if (!map->st_ops)
-@@ -1365,15 +1364,25 @@ static int init_struct_ops_maps(struct bpf_object *obj, const char *sec_name,
- 
- static int bpf_object_init_struct_ops(struct bpf_object *obj)
- {
--	int err;
-+	const char *sec_name;
-+	int sec_idx, err;
- 
--	err = init_struct_ops_maps(obj, STRUCT_OPS_SEC, obj->efile.st_ops_shndx,
--				   obj->efile.st_ops_data, 0);
--	err = err ?: init_struct_ops_maps(obj, STRUCT_OPS_LINK_SEC,
--					  obj->efile.st_ops_link_shndx,
--					  obj->efile.st_ops_link_data,
--					  BPF_F_LINK);
--	return err;
-+	for (sec_idx = 0; sec_idx < obj->efile.sec_cnt; ++sec_idx) {
-+		struct elf_sec_desc *desc = &obj->efile.secs[sec_idx];
-+
-+		if (desc->sec_type != SEC_ST_OPS)
-+			continue;
-+
-+		sec_name = elf_sec_name(obj, elf_sec_by_idx(obj, sec_idx));
-+		if (!sec_name)
-+			return -LIBBPF_ERRNO__FORMAT;
-+
-+		err = init_struct_ops_maps(obj, sec_name, sec_idx, desc->data);
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
- }
- 
- static struct bpf_object *bpf_object__new(const char *path,
-@@ -1411,8 +1420,6 @@ static struct bpf_object *bpf_object__new(const char *path,
- 	obj->efile.obj_buf = obj_buf;
- 	obj->efile.obj_buf_sz = obj_buf_sz;
- 	obj->efile.btf_maps_shndx = -1;
--	obj->efile.st_ops_shndx = -1;
--	obj->efile.st_ops_link_shndx = -1;
- 	obj->kconfig_map_idx = -1;
- 
- 	obj->kern_version = get_kernel_version();
-@@ -1429,8 +1436,6 @@ static void bpf_object__elf_finish(struct bpf_object *obj)
- 	elf_end(obj->efile.elf);
- 	obj->efile.elf = NULL;
- 	obj->efile.symbols = NULL;
--	obj->efile.st_ops_data = NULL;
--	obj->efile.st_ops_link_data = NULL;
- 
- 	zfree(&obj->efile.secs);
- 	obj->efile.sec_cnt = 0;
-@@ -2975,14 +2980,13 @@ static int bpf_object__sanitize_btf(struct bpf_object *obj, struct btf *btf)
- static bool libbpf_needs_btf(const struct bpf_object *obj)
- {
- 	return obj->efile.btf_maps_shndx >= 0 ||
--	       obj->efile.st_ops_shndx >= 0 ||
--	       obj->efile.st_ops_link_shndx >= 0 ||
-+	       obj->efile.has_st_ops ||
- 	       obj->nr_extern > 0;
- }
- 
- static bool kernel_needs_btf(const struct bpf_object *obj)
- {
--	return obj->efile.st_ops_shndx >= 0 || obj->efile.st_ops_link_shndx >= 0;
-+	return obj->efile.has_st_ops;
- }
- 
- static int bpf_object__init_btf(struct bpf_object *obj,
-@@ -3683,12 +3687,12 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
- 				sec_desc->sec_type = SEC_RODATA;
+@@ -3688,7 +3699,9 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
  				sec_desc->shdr = sh;
  				sec_desc->data = data;
--			} else if (strcmp(name, STRUCT_OPS_SEC) == 0) {
--				obj->efile.st_ops_data = data;
--				obj->efile.st_ops_shndx = idx;
--			} else if (strcmp(name, STRUCT_OPS_LINK_SEC) == 0) {
--				obj->efile.st_ops_link_data = data;
--				obj->efile.st_ops_link_shndx = idx;
-+			} else if (strcmp(name, STRUCT_OPS_SEC) == 0 ||
-+				   strcmp(name, STRUCT_OPS_LINK_SEC) == 0) {
-+				sec_desc->sec_type = SEC_ST_OPS;
-+				sec_desc->shdr = sh;
-+				sec_desc->data = data;
-+				obj->efile.has_st_ops = true;
- 			} else {
- 				pr_info("elf: skipping unrecognized data section(%d) %s\n",
- 					idx, name);
-@@ -7001,12 +7005,12 @@ static int bpf_object__collect_relos(struct bpf_object *obj)
- 		data = sec_desc->data;
- 		idx = shdr->sh_info;
- 
--		if (shdr->sh_type != SHT_REL) {
-+		if (shdr->sh_type != SHT_REL || idx < 0 || idx >= obj->efile.sec_cnt) {
- 			pr_warn("internal error at %d\n", __LINE__);
- 			return -LIBBPF_ERRNO__INTERNAL;
- 		}
- 
--		if (idx == obj->efile.st_ops_shndx || idx == obj->efile.st_ops_link_shndx)
-+		if (obj->efile.secs[idx].sec_type == SEC_ST_OPS)
- 			err = bpf_object__collect_st_ops_relos(obj, shdr, data);
- 		else if (idx == obj->efile.btf_maps_shndx)
- 			err = bpf_object__collect_map_relos(obj, shdr, data);
+ 			} else if (strcmp(name, STRUCT_OPS_SEC) == 0 ||
+-				   strcmp(name, STRUCT_OPS_LINK_SEC) == 0) {
++				   strcmp(name, STRUCT_OPS_LINK_SEC) == 0 ||
++				   strcmp(name, OPT_STRUCT_OPS_SEC) == 0 ||
++				   strcmp(name, OPT_STRUCT_OPS_LINK_SEC) == 0) {
+ 				sec_desc->sec_type = SEC_ST_OPS;
+ 				sec_desc->shdr = sh;
+ 				sec_desc->data = data;
+@@ -3708,6 +3721,8 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 			if (!section_have_execinstr(obj, targ_sec_idx) &&
+ 			    strcmp(name, ".rel" STRUCT_OPS_SEC) &&
+ 			    strcmp(name, ".rel" STRUCT_OPS_LINK_SEC) &&
++			    strcmp(name, ".rel" OPT_STRUCT_OPS_SEC) &&
++			    strcmp(name, ".rel" OPT_STRUCT_OPS_LINK_SEC) &&
+ 			    strcmp(name, ".rel" MAPS_ELF_SEC)) {
+ 				pr_info("elf: skipping relo section(%d) %s for section(%d) %s\n",
+ 					idx, name, targ_sec_idx,
 -- 
 2.43.0
 
