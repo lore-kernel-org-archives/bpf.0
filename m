@@ -1,200 +1,101 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 125083B797
-	for <bpf@vger.kernel.org>; Mon,  4 Mar 2024 13:02:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495A738DEA
+	for <bpf@vger.kernel.org>; Mon,  4 Mar 2024 13:13:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709557334; cv=none; b=ZdTd1ex/SOURjwaib9H8rOkNoQbwFWAEpiWpXOBvBSIO+qIIpl8dJ72ReanDlzmBeVk8IsCiSaXVWKsi3fec5okoUh8JeNwK7bAX7w+BSvhZ6bLLbtcR2PwGsQgadlnhWWtPev823JvbMdH0IXXtjbdi4mocbCFfp5kZdAx3f9s=
+	t=1709558014; cv=none; b=NbOjnvu8KktivCRZyYu50jYuy6GYQwbTDymFqXZWJmyiICIn2uXucNnnI/JIvpqEBKZT9ulOfJm/ZEa/Gf+OoS1cc+5UFn/iA8Ijg76LeSf//WnX3OpQgGVvxPu8EQqyriWnNGkqhqx8xyoDYktGKdMmr2lrzficErJuvaq2msM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709557334; c=relaxed/simple;
-	bh=5M5V0DDCogKvRGIeGUSdnfpMyYAEumhFT9WYEfVcLyA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=eM4NUTeqWsj7wTMy5/goSsC8pZWGCoCSxWecTbGzA+YUVhwvwnrW/FCY/Uu+imzfyn4FJQtY7tg2K5qoFbS0T8tGSMlf0J4ZBR3EQRIV+kV0EWvjs+SXFhcYp6Baufd/syUU3IB7hnkXQbio0xDirZn0WCDvFQPLzvzer5u7reg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=emTwkf0P; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1709558014; c=relaxed/simple;
+	bh=MI838sloP2oLq5Vtfr+J9Gc6CMTwPAK5DbX1re6Uk+o=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=E2GFg9uOxsE1aHZAsYJnp8OCx8VidYXLi97h4Jb9vnEWeMY3/Nva1bqqIH4ZIT4D12/TY73SPNO3Iw7kag29N/WXxSu+o4UuKuV8kEITOVO3K1ENqZjvBfWdbFancSmmVRbziIlSOsm3NcvZkFwyDDDjIFYUOPUui/wJyxTa2w0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZomSyrwE; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="emTwkf0P"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1709557332;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dAOwLpzxgUMqOOg0669y1n3/EdHToBJ2IPeng0bW5dw=;
-	b=emTwkf0Pt52GVffFUmRYDStUkX93wchwSpYgzi/A6Q6BL1/GFOdzZBBoAOdpORED4Ru7vk
-	upBB59xJgsBZNcLtnxVL69AFC3OZ8HExMkWa6EBbIt58tmyVCRLlRAxW4yf97X2cJaHWWn
-	uj7udLEy6GQsJMtjHHpbEdwsF788mG4=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-146-IqmcSASAMzi2_bF_DG4j9A-1; Mon, 04 Mar 2024 08:02:10 -0500
-X-MC-Unique: IqmcSASAMzi2_bF_DG4j9A-1
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-a45190fd2fcso79385066b.0
-        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 05:02:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZomSyrwE"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5643ae47cd3so6121097a12.3
+        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 05:13:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709558011; x=1710162811; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=xLB1Zh/9xc9omLfGt+RhOzb47FrTVRgl9O1R9wHG/XA=;
+        b=ZomSyrwEG+4oVDZTQet3K+uAuea0I3pEvHGojuvUYPAGgwbKYHeOphIwoI1euYkMzO
+         URDbFnSmHV0Pi/iiM8RCb+RTS7Hg1ERTLvIAtEsQ0w1szLkRKVCPu3Dn0aB5LHDcoYVO
+         zQs64gUhwe+X7fYuI/vpx7VN/A/J6bPiMTqAORZTPaGnKNpIHeDivaf57xSKkwD4g9Il
+         eucOY/hEOUihCv3xnI5WhqnrIVyoqi22WJcpr3EvDR6KdDSC7puITgI+t/jO+xl39R8N
+         kVit+Gn6bfP9yhuHi8adIeTWBwfaXMrH4nusprHLAUf5S/ne5AAL9SXion51EqUM1zbz
+         5DIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709557329; x=1710162129;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dAOwLpzxgUMqOOg0669y1n3/EdHToBJ2IPeng0bW5dw=;
-        b=xMeRaVhVXUGgcVoZFIlJSZJCsSoWHe3D4mDrXs+qIMof7s4Rz4ltzYf6kjmz8cVzSz
-         zWGc/Sq5/AXPlaZlWj6TMu3ImrkHCuBgxxzxVMZCAYpMgGvgTL+CCrm0NH88S3ZxNq2X
-         nrRVsO7//56bzZivxIoNCa73oz+/NN2ot3U6ghf+urby0jR64QxdGjGkQSIiyHnbvH67
-         pN+vsapZDSs8/pNKfThJA2ln0tm51JuawLy5cPwWzQ+xX5SpNWH9NrwHySLvBwMBrCZo
-         CTVcKVdGR9k7T7N2zjEa6PNLfOZhgPJ3LnOzMZKJuDFe8TATm7aELIiYaq1+DTjBZp9N
-         3a/w==
-X-Forwarded-Encrypted: i=1; AJvYcCUbs0KH+qexvEeaXOqo6AUsdHPzzOcDMaeXUm5pW50wAeUpnnmaVJQ0x0+u6T218Itm2U4FkDK3YZJbuasIamkIx8wQ
-X-Gm-Message-State: AOJu0YyJoxNA9T5M/z2IRoko2gvkNd3GSZIlRPm/+GOma8wImZOsV/nU
-	klSYups+rTppgkh5HBGC1uZYXs2hq8PKuJhqrLnjtRefyz5WUKdP4rNvA0EV9DJm6Wkg1OvC1H2
-	PvC/qSTgaEODnY/stqzzy9n1tctt04QYlCRsNDGFRZP62aWHGcQ==
-X-Received: by 2002:a17:906:c355:b0:a3e:7d36:62b1 with SMTP id ci21-20020a170906c35500b00a3e7d3662b1mr6522004ejb.46.1709557329563;
-        Mon, 04 Mar 2024 05:02:09 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IETE0MIw9GAw5FGZ8OHOSQsq0enWqFqm0Jab1zJM3q5ByFZ5FivbKUkBulc1DyUzkfMlJ7buQ==
-X-Received: by 2002:a17:906:c355:b0:a3e:7d36:62b1 with SMTP id ci21-20020a170906c35500b00a3e7d3662b1mr6521976ejb.46.1709557329098;
-        Mon, 04 Mar 2024 05:02:09 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id h21-20020a170906111500b00a45464679b1sm1122035eja.127.2024.03.04.05.02.08
+        d=1e100.net; s=20230601; t=1709558011; x=1710162811;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xLB1Zh/9xc9omLfGt+RhOzb47FrTVRgl9O1R9wHG/XA=;
+        b=v939htXO5EysQ8/LMk+dU29OGPj4WCyBZTiNWGP9XMUiMrBktPj74YKUwW+PBi9K1v
+         EMmL69M7iMdd+hVcUZOZy3rDb4IdjoHpEBwM9juP73/LuY7wXwOCzfRbywQeXXok/joS
+         maSNSRuXLsW5ftJgKBsnGfM2lUNhQ8U6lrd7Jf4rLvYeg6Xf0TkWaFRgiVNXmh7x5O8M
+         cv1m6OpptkQ8ZC8sgYg/wuWIjLF9LwA53Uw9VZhVzpnGJmxkq6LG0+G6CS+yzCXb3L/i
+         4dSSLrKVindTGbM6IfRX6OkiE6W29csO7Cs4wjhFc2Hej9ZqXpI7jn6G6xGaMBuV9rZz
+         zEnQ==
+X-Gm-Message-State: AOJu0Yxb41ZMazvAk/4Ivs1ke7Tprw9O0UXbvOIeBmwRJbmz0yG1Y7NL
+	oOshQHefWGdMAYFsJiEWYe8wtfZdZ+lwhzrT5/SWH9u78k/TS6Hj
+X-Google-Smtp-Source: AGHT+IGSgEnqJZ7pWNnUXglO6av+lQpIYRjAl2mw+6WqvgiSMGfDi6MGDsoQHY8fMdquT1sfDDkp9A==
+X-Received: by 2002:a05:6402:903:b0:566:95e3:1759 with SMTP id g3-20020a056402090300b0056695e31759mr5541727edz.26.1709558011366;
+        Mon, 04 Mar 2024 05:13:31 -0800 (PST)
+Received: from [192.168.1.94] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id i17-20020aa7c9d1000000b00567566227a5sm921585edt.18.2024.03.04.05.13.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Mar 2024 05:02:08 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 614EF112EDBF; Mon,  4 Mar 2024 14:02:08 +0100 (CET)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
- <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, "David S. Miller"
- <davem@davemloft.net>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf v2 2/2] bpf: Fix hashtab overflow check on 32-bit
- arches
-In-Reply-To: <CAADnVQLzVJRut0v2dQPbBUDW971Fd-EjkOf0pyLh5-W7wYwiYA@mail.gmail.com>
-References: <20240229112250.13723-1-toke@redhat.com>
- <20240229112250.13723-3-toke@redhat.com>
- <CAADnVQJTEo8c1=vs8avDakMKYjBopVXKNQ5f=bgrBSqELZhBow@mail.gmail.com>
- <65e10367cb393_33719208c2@john.notmuch> <878r32b04u.fsf@toke.dk>
- <CAADnVQLzVJRut0v2dQPbBUDW971Fd-EjkOf0pyLh5-W7wYwiYA@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Mon, 04 Mar 2024 14:02:08 +0100
-Message-ID: <87plwa6tgv.fsf@toke.dk>
+        Mon, 04 Mar 2024 05:13:30 -0800 (PST)
+Message-ID: <564df7e8c14864641c2f57a5283de53c746ea047.camel@gmail.com>
+Subject: Re: [PATCH] bpf: check mem for dynptr type
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Haojian Zhuang <haojian.zhuang@linaro.org>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>
+Date: Mon, 04 Mar 2024 15:13:29 +0200
+In-Reply-To: <ZeXGTP3ZIFRPGFCG@hackbox2.linaro.org>
+References: <20240303023732.1390919-1-haojian.zhuang@linaro.org>
+	 <07f7315efef78b7a19dec16b59b74b15f7b97dd6.camel@gmail.com>
+	 <ZeXGTP3ZIFRPGFCG@hackbox2.linaro.org>
+Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+On Mon, 2024-03-04 at 13:02 +0000, Haojian Zhuang wrote:
+[...]
 
-> On Fri, Mar 1, 2024 at 4:35=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen <=
-toke@redhat.com> wrote:
->>
->> John Fastabend <john.fastabend@gmail.com> writes:
->>
->> > Alexei Starovoitov wrote:
->> >> On Thu, Feb 29, 2024 at 3:23=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgen=
-sen <toke@redhat.com> wrote:
->> >> >
->> >> > The hashtab code relies on roundup_pow_of_two() to compute the numb=
-er of
->> >> > hash buckets, and contains an overflow check by checking if the res=
-ulting
->> >> > value is 0. However, on 32-bit arches, the roundup code itself can =
-overflow
->> >> > by doing a 32-bit left-shift of an unsigned long value, which is un=
-defined
->> >> > behaviour, so it is not guaranteed to truncate neatly. This was tri=
-ggered
->> >> > by syzbot on the DEVMAP_HASH type, which contains the same check, c=
-opied
->> >> > from the hashtab code. So apply the same fix to hashtab, by moving =
-the
->> >> > overflow check to before the roundup.
->> >> >
->> >> > The hashtab code also contained a check that prevents the total all=
-ocation
->> >> > size for the buckets from overflowing a 32-bit value, but since all=
- the
->> >> > allocation code uses u64s, this does not really seem to be necessar=
-y, so
->> >> > drop it and keep only the strict overflow check of the n_buckets va=
-riable.
->> >> >
->> >> > Fixes: daaf427c6ab3 ("bpf: fix arraymap NULL deref and missing over=
-flow and zero size checks")
->> >> > Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->> >> > ---
->> >> >  kernel/bpf/hashtab.c | 10 +++++-----
->> >> >  1 file changed, 5 insertions(+), 5 deletions(-)
->> >> >
->> >> > diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
->> >> > index 03a6a2500b6a..4caf8dab18b0 100644
->> >> > --- a/kernel/bpf/hashtab.c
->> >> > +++ b/kernel/bpf/hashtab.c
->> >> > @@ -499,8 +499,6 @@ static struct bpf_map *htab_map_alloc(union bpf=
-_attr *attr)
->> >> >                                                           num_possi=
-ble_cpus());
->> >> >         }
->> >> >
->> >> > -       /* hash table size must be power of 2 */
->> >> > -       htab->n_buckets =3D roundup_pow_of_two(htab->map.max_entrie=
-s);
->> >> >
->> >> >         htab->elem_size =3D sizeof(struct htab_elem) +
->> >> >                           round_up(htab->map.key_size, 8);
->> >> > @@ -510,11 +508,13 @@ static struct bpf_map *htab_map_alloc(union b=
-pf_attr *attr)
->> >> >                 htab->elem_size +=3D round_up(htab->map.value_size,=
- 8);
->> >> >
->> >> >         err =3D -E2BIG;
->> >> > -       /* prevent zero size kmalloc and check for u32 overflow */
->> >> > -       if (htab->n_buckets =3D=3D 0 ||
->> >> > -           htab->n_buckets > U32_MAX / sizeof(struct bucket))
->> >> > +       /* prevent overflow in roundup below */
->> >> > +       if (htab->map.max_entries > U32_MAX / 2 + 1)
->> >> >                 goto free_htab;
->> >>
->> >> No. We cannot artificially reduce max_entries that will break real us=
-ers.
->> >> Hash table with 4B elements is not that uncommon.
->>
->> Erm, huh? The existing code has the n_buckets > U32_MAX / sizeof(struct
->> bucket) check, which limits max_entries to 134M (0x8000000). This patch
->> is *increasing* the maximum allowable size by a factor of 16 (to 2.1B or
->> 0x80000000).
->>
->> > Agree how about return E2BIG in these cases (32bit arch and overflow) =
-and
->> > let user figure it out. That makes more sense to me.
->>
->> Isn't that exactly what this patch does? What am I missing here?
->
-> I see. Then what are you fixing?
-> roundup_pow_of_two() will return 0 and existing code is fine as-is.
+> Yes, I'm referring to bpf_user_ringbuf_drain() helper function.
+>=20
+> Yes, I should extend bpf/progs/user_ringbuf_success.c. And it could be
+> loaded by bpf/prog_tests/user_ringbuf.c.
 
-On 64-bit arches it will, yes. On 32-bit arches it ends up doing a
-32-bit left-shift (1UL << 32) of a 32-bit type (unsigned long), which is
-UB, so there's no guarantee that it truncates down to 0. And it seems at
-least on arm32 it does not: syzbot managed to trigger a crash in the
-DEVMAP_HASH code by creating a map with more than 0x80000000 entries:
+Before doing so, could you please share example you have in mind?
 
-https://lore.kernel.org/r/000000000000ed666a0611af6818@google.com
+> But I failed to find the binary of user_ringbuf.c after bpf test cases
+> built. And there're no binaries for the test cases in bpf/prog_tests
+> directory. How to make use of these test cases? I failed to find
+> documents on it. Could you help to share any tips to me? Thanks
 
-This patch just preemptively applies the same fix to the hashtab code,
-since I could not find any reason why it shouldn't be possible to hit
-the same issue there. I haven't actually managed to trigger a crash
-there, though (I don't have any arm32 hardware to test this on), so in
-that sense it's a bit theoretical for hashtab. So up to you if you want
-to take this, but even if you don't, could you please apply the first
-patch? That does fix the issue reported by syzbot (cf the
-reported-and-tested-by tag).
+The binary that runs tests is called "test_progs" and is compiled
+using target "test_progs" under "tools/testing/selftests/bpf" directory.
+Specific tests could be run using commands like:
+- "./test_progs -a user_ringbuf" (to run all subtests in the group);
+- "./test_progs -a user_ringbuf/test_user_ringbuf_loop"
+  (to run one subtest from the group).
 
--Toke
-
+I have an old writeup on setting up local testing environment,
+if you need it I can update and share it.
