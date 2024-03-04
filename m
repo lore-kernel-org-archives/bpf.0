@@ -1,159 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F25C747793;
-	Mon,  4 Mar 2024 15:51:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35A64C635
+	for <bpf@vger.kernel.org>; Mon,  4 Mar 2024 16:16:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709567501; cv=none; b=h2l8FoNhRhW7Jz81BtB09fUi7n+yve4YeJh3uoyjsYws5EFo/UfZygZgoDouMMiaR7EopdYL7Osh3mdtMO1WNh69Y8+eB6dWYVurCU0cV1TpgMW/ZdXa+ip5YcgGeVTvSkSdozXbJKDVlr/i4SK7JOEz+nakUzoBr+vVa26fPEc=
+	t=1709569016; cv=none; b=duyLkB5E05BF3bz+D5s7FD/pTQFVY7gxj6fIxDjQA8CMq9hNlShIFbRXSLzK48jRA22aIdOJe1kcCldmPZbz0VZbIOLbLMNz2NnLy9RpQ8MVigH6eaC7vOsh9m+vC/PkJ6Q599V1fKUTSs42BgRpOHwhqpobX36lmZ6/bvcoKtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709567501; c=relaxed/simple;
-	bh=c+8XYXTL4MNDkZflKTWBzR1Wk2Ypz56BlkcuwFEXZhc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=F13VxvXhV7E9dx7PLYfP3VrG2UJmoMGEjsG9IdrG3yNOGO3yuLqjMEVq3vFHdDE3PbM/jmJ1w/gqo/J0tLBD9gV7HM8YUC84IV7BlNWV4VchkoeaawVr6GBXohnC9gYOB3MXxytuoNceQG28r1LRFmuiA/5cVFzzH4bmFxYwZco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kk42QveN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1709569016; c=relaxed/simple;
+	bh=4qX90gAaeAFrZRINJudmZ0QqdDhJAmm6o0qc1B/GWAM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=takYY2XUKsFJHgbXnra7csOTQhFeSwIJP8/kyDYoGrG3efGijjJOxS4bi1AVaifCDuQTcuz5I4kxAgQkrvUsHcJnZs1d1dRSJhamGq+IewcSIfBHVu7CG/5E/p/IBw3dabHMHjnEhR1Cyw/eUYQUSmDzqoxO80L7n6Psh1zyKqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=MoTW53kM; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kk42QveN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44784C433C7;
-	Mon,  4 Mar 2024 15:51:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709567500;
-	bh=c+8XYXTL4MNDkZflKTWBzR1Wk2Ypz56BlkcuwFEXZhc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=kk42QveNYWswu6Cne4CcCQ3NKRd8OSuCmtYXC+2wpbtLZf4gPV1H/XXREaZ7AKlLF
-	 0uXBJhrkiNJjJnTQGMwP42tFVzNHRauOLuQryNkOgU1dkytxhyzOxGXKZ4LwyqIi6y
-	 Cx4qnPxwQVj7T2CeUZqQA/o4MD79tUopgx61rU5eouVPcDPA4/EZwyYdahLRPDFkOV
-	 wPA2BPOZWst75iRJrhZ8KSxINI5yI1L28rPcapdSaJys/ZzSM5ABgDiOj+3PTHfUdt
-	 QhSBd3EHrKAWIMf7w2Lyn37NLpMQI8Vf4U1jTAesqIfGtJG36hTFnPZF5NXtDFn7ih
-	 w9EQBxT4aKofw==
-Date: Mon, 4 Mar 2024 09:51:38 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>, gregkh@linuxfoundation.org,
-	bhelgaas@google.com, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Ricky Wu <ricky_wu@realtek.com>,
-	Kees Cook <keescook@chromium.org>, Tony Luck <tony.luck@intel.com>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	linux-hardening@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v3] driver core: Cancel scheduled pm_runtime_idle() on
- device removal
-Message-ID: <20240304155138.GA482969@bhelgaas>
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="MoTW53kM"
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5131c48055cso4612838e87.1
+        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 08:16:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1709569012; x=1710173812; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CdaQvHwf+ypTWs9CggIGE65EMaPW1/VFzdPOqyKDsys=;
+        b=MoTW53kMZVcrVCLu/YQstYE4WEbBX3gmujRjc8U3j437q9pstrWz8W/TjdzN4qtLsm
+         sc7RUTWf+NWTZR+QZfrL7wWAqhXgR/TBQJ9gmJyZ/dn0rPImZ6YOETetzviUh+pdQqxd
+         fvN5Cpv6JbD8wFM3yS8bBqCygF0daj5nMvvhuVdDSq8nmqlTgF97fgFO2xB8MAx92bBy
+         IAn/RIAJrPDRfkato24SdHlnGBdG61+fIcxwGbcbGSZMTeZ40SWTp6p2LhlRlzbP0KQZ
+         G7ADPSkf8BEJVy30z+TpxSWf/GGfWaksNY3kNWyzGJlm2tOgeRWDau9WoRm9k3YZ/dg5
+         Kqyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709569012; x=1710173812;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CdaQvHwf+ypTWs9CggIGE65EMaPW1/VFzdPOqyKDsys=;
+        b=Zg79ErPL+OxtHe0sPXoC66bNlh4ayfyBKRCnwEQgC/WIn0fJo70oSKDDizkUiGzN6j
+         Ox9iFeNVUdclnd3tiS/yD4QSbS27WdQG9s/W8zF/pKc/MitU6xp+3Vc8Sc95bTEdiJ+J
+         xp/II7tyB3STZ9FeVgAAab3EuMWtAP0L9MG456UM154vN+/c9BZtxSwbKeZfauGSS3PX
+         sYdEmtoDMlGpPfMEZx6mgPxkKJN8hfPy9VQcRnmIp02uDgDziNwrCXlxqyt1UpZMheW1
+         qNfZVCRtz2Gkeg8kXDza9z/0Of9enC8e2659NjCInlu78lMSRMT25dLrasKLNYHybw7J
+         zNWA==
+X-Forwarded-Encrypted: i=1; AJvYcCVIi4O8Q3WOtppiFFtG+B/nrQWmLc8nZZfH8ufWHZ4JDgJ/k1uvJ3sMM8PG84q6DzXO/MmmCERHNpJNXlfTNnaNXOyJ
+X-Gm-Message-State: AOJu0Ywe6n+hGFyl7Ey5UQgwSNlJC6o163Mzmf6+evn6kjsI0b4tD0aT
+	7DnAszFbaz4Eb1iHwNzfVbbHupoDSXsstV4jCBwHmSSAoH38+KO5jPc3gYoVBrM=
+X-Google-Smtp-Source: AGHT+IHyM3uVBBXYWUwq/rKQH24A4FuocxVtTgvm3M0iSLCuJw6g5bXx5w3HG6HcSOEzQFYA4xHIZQ==
+X-Received: by 2002:a05:6512:251:b0:512:d877:df6f with SMTP id b17-20020a056512025100b00512d877df6fmr5958110lfo.2.1709569011686;
+        Mon, 04 Mar 2024 08:16:51 -0800 (PST)
+Received: from [192.168.1.70] ([84.102.31.43])
+        by smtp.gmail.com with ESMTPSA id i27-20020a170906265b00b00a441c8c56d0sm5000056ejc.218.2024.03.04.08.16.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Mar 2024 08:16:51 -0800 (PST)
+Message-ID: <52952362-dea8-40ec-a0f3-2bdbe26cb83f@baylibre.com>
+Date: Mon, 4 Mar 2024 17:16:48 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0grDNJkEcgw+34SBmNFL7qhSTz8ydC7BSkM7DiCatkKSA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] net: ethernet: ti: am65-cpsw: Add minimal XDP
+ support
+Content-Language: en-US
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Russell King <linux@armlinux.org.uk>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linaro-mm-sig@lists.linaro.org
+References: <20240223-am65-cpsw-xdp-basic-v2-0-01c6caacabb6@baylibre.com>
+ <20240223-am65-cpsw-xdp-basic-v2-2-01c6caacabb6@baylibre.com>
+ <356f4dd4-eb0e-49fa-a9eb-4dffbe5c7e7c@lunn.ch>
+From: Julien Panis <jpanis@baylibre.com>
+In-Reply-To: <356f4dd4-eb0e-49fa-a9eb-4dffbe5c7e7c@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 04, 2024 at 03:38:38PM +0100, Rafael J. Wysocki wrote:
-> On Thu, Feb 29, 2024 at 7:23 AM Kai-Heng Feng
-> <kai.heng.feng@canonical.com> wrote:
-> >
-> > When inserting an SD7.0 card to Realtek card reader, the card reader
-> > unplugs itself and morph into a NVMe device. The slot Link down on hot
-> > unplugged can cause the following error:
-> >
-> > pcieport 0000:00:1c.0: pciehp: Slot(8): Link Down
-> > BUG: unable to handle page fault for address: ffffb24d403e5010
-> > PGD 100000067 P4D 100000067 PUD 1001fe067 PMD 100d97067 PTE 0
-> > Oops: 0000 [#1] PREEMPT SMP PTI
-> > CPU: 3 PID: 534 Comm: kworker/3:10 Not tainted 6.4.0 #6
-> > Hardware name: To Be Filled By O.E.M. To Be Filled By O.E.M./H370M Pro4, BIOS P3.40 10/25/2018
-> > Workqueue: pm pm_runtime_work
-> > RIP: 0010:ioread32+0x2e/0x70
-> ...
-> > Call Trace:
-> >  <TASK>
-> >  ? show_regs+0x68/0x70
-> >  ? __die_body+0x20/0x70
-> >  ? __die+0x2b/0x40
-> >  ? page_fault_oops+0x160/0x480
-> >  ? search_bpf_extables+0x63/0x90
-> >  ? ioread32+0x2e/0x70
-> >  ? search_exception_tables+0x5f/0x70
-> >  ? kernelmode_fixup_or_oops+0xa2/0x120
-> >  ? __bad_area_nosemaphore+0x179/0x230
-> >  ? bad_area_nosemaphore+0x16/0x20
-> >  ? do_kern_addr_fault+0x8b/0xa0
-> >  ? exc_page_fault+0xe5/0x180
-> >  ? asm_exc_page_fault+0x27/0x30
-> >  ? ioread32+0x2e/0x70
-> >  ? rtsx_pci_write_register+0x5b/0x90 [rtsx_pci]
-> >  rtsx_set_l1off_sub+0x1c/0x30 [rtsx_pci]
-> >  rts5261_set_l1off_cfg_sub_d0+0x36/0x40 [rtsx_pci]
-> >  rtsx_pci_runtime_idle+0xc7/0x160 [rtsx_pci]
-> >  ? __pfx_pci_pm_runtime_idle+0x10/0x10
-> >  pci_pm_runtime_idle+0x34/0x70
-> >  rpm_idle+0xc4/0x2b0
-> >  pm_runtime_work+0x93/0xc0
-> >  process_one_work+0x21a/0x430
-> >  worker_thread+0x4a/0x3c0
-> ...
+On 3/1/24 17:38, Andrew Lunn wrote:
+> On Fri, Mar 01, 2024 at 04:02:53PM +0100, Julien Panis wrote:
+>> This patch adds XDP (eXpress Data Path) support to TI AM65 CPSW
+>> Ethernet driver. The following features are implemented:
+>> - NETDEV_XDP_ACT_BASIC (XDP_PASS, XDP_TX, XDP_DROP, XDP_ABORTED)
+>> - NETDEV_XDP_ACT_REDIRECT (XDP_REDIRECT)
+>> - NETDEV_XDP_ACT_NDO_XMIT (ndo_xdp_xmit callback)
+>>
+>> The page pool memory model is used to get better performance.
+> Do you have any benchmark numbers? It should help with none XDP
+> traffic as well. So maybe iperf numbers before and after?
+>
+> 	Andrew
 
-> > This happens because scheduled pm_runtime_idle() is not cancelled.
-> 
-> But rpm_resume() changes dev->power.request to RPM_REQ_NONE and if
-> pm_runtime_work() sees this, it will not run rpm_idle().
-> 
-> However, rpm_resume() doesn't deactivate the autosuspend timer if it
-> is running (see the comment in rpm_resume() regarding this), so it may
-> queue up a runtime PM work later.
-> 
-> If this is not desirable, you need to stop the autosuspend timer
-> explicitly in addition to calling pm_runtime_get_sync().
+OK, I will add benchmark numbers in the next version.
 
-I don't quite follow all this.  I think the race is between
-rtsx_pci_remove() (not resume) and rtsx_pci_runtime_idle().
+I will also fix a potential issue with TX buffer type, which is not properly
+handled in this v2. It should be set for each buffer, I think (instead of just
+being set for the tx channel before initiating xmit).
 
-  rtsx_pci_remove()
-  {
-    pm_runtime_get_sync()
-    pm_runtime_forbid()
-    ...
+Julien
 
-If this is an rtsx bug, what exactly should be added to
-rtsx_pci_remove()?
-
-Is there ever a case where we want any runtime PM work to happen
-during or after a driver .remove()?  If not, maybe the driver core
-should prevent that, which I think is basically what this patch does.
-
-If this is an rtsx driver bug, I'm concerned there may be many other
-drivers with a similar issue.  rtsx exercises this path more than most
-because the device switches between card reader and NVMe SSD using
-hotplug add/remove based on whether an SD card is inserted (see [1]).
-
-[1] https://lore.kernel.org/r/20231019143504.GA25140@wunner.de
-
-> > So before releasing the device, stop all runtime power managements by
-> > using pm_runtime_barrier() to fix the issue.
-> >
-> > Link: https://lore.kernel.org/all/2ce258f371234b1f8a1a470d5488d00e@realtek.com/
-> > Cc: Ricky Wu <ricky_wu@realtek.com>
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > ---
-> > v3:
-> >   Move the change the device driver core.
-> >
-> > v2:
-> >   Cover more cases than just pciehp.
-> >
-> >  drivers/base/dd.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-> > index 85152537dbf1..38c815e2b3a2 100644
-> > --- a/drivers/base/dd.c
-> > +++ b/drivers/base/dd.c
-> > @@ -1244,6 +1244,7 @@ static void __device_release_driver(struct device *dev, struct device *parent)
-> >
-> >         drv = dev->driver;
-> >         if (drv) {
-> > +               pm_runtime_barrier(dev);
-> 
-> This prevents the crash from occurring because pm_runtime_barrier()
-> calls pm_runtime_deactivate_timer() unconditionally AFAICS.
