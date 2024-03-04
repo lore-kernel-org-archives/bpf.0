@@ -1,231 +1,113 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A1961E4A2
-	for <bpf@vger.kernel.org>; Mon,  4 Mar 2024 23:24:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B3DC1E4A2
+	for <bpf@vger.kernel.org>; Mon,  4 Mar 2024 23:37:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709594691; cv=none; b=d/0NJjdCnZ9RxwoXzy4hNIdBnhWOrdH71A8OpaZsbOG2u2qnHD2P0JDjvnJ+86wjf2jefhaPnstrqw6qy5x4U8AVCkhwBuxq5KCbTysik12y3lpO8AnpxmM3cxB4qXssI0LPdfy0LwaxnexPFZcc+Z2DVeVADm7xW8HG/N4LJXw=
+	t=1709595440; cv=none; b=DjJi6EJETAef+CeKKAd6r7xgb79Dy7Ns1pAkAZM3wSHYKSQb7gJZcsBEhcjiQpN75HZZpLP+LEYQ+MTuK6mwGC2MutlGQjukc+INPnxoamVUEqh78bpz+Dheizx1kzQrkXa4mdPwWF4gGFcutSfDBiX83ByhrQHeq6VzqQou8co=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709594691; c=relaxed/simple;
-	bh=UWquCOXdSTsI2tChPH6N2GVOeQkfTaMyZ8hrQ1/x5lg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Du4XegK7XX0FSfdjEyVkpKh5s9RYOEEl4JrgGsNIBlglasvTpKUsh3UPx0NqJKgKZJ93uVBg4iVxnE/vphahaje824XtJR8w2keDmqnUl/gHcmoDKeOI1UThGcWDK2CA6Zk73bd25QJCK9dNdrAhw6XcQdE7GdwFfoccJcGgYsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Rurf5AiR; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com
+	s=arc-20240116; t=1709595440; c=relaxed/simple;
+	bh=gMKz88dKP3BuhSltEA4TyRL1IYRiHIW6WsMh0ihkW9g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=k1Z6htXLH0FfNaNkmTd4ovj0RU1FBi88GlBC3IeTn5V9ZGTNi2vCpLDUyqWo38kwMD8QWFwwN1WmvflmyexoFevTM5zLOa25BMcF1Im4VNUtTYrSh3Kt/2CBHro84QNSgoy4zvD5n3CpEPsquw/UKt/dX1/NfSlD+EllnB3vAdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gJWQBQa+; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Rurf5AiR"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6096493f3d3so65751347b3.2
-        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 15:24:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gJWQBQa+"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6e5b1c6daa3so3562640b3a.1
+        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 15:37:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709594687; x=1710199487; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UWquCOXdSTsI2tChPH6N2GVOeQkfTaMyZ8hrQ1/x5lg=;
-        b=Rurf5AiRaZCtbMN6pDXOygiOTLjPj/U4qKrrt3SOrqMp5ZJ+NI09Mu4KablOAbqzf8
-         r6VM+GrNUg2DwLOMEIm1lCVHKWyHzNQ0rzj3lxX3K/xnZvSIGceuDn6rqdqGxu9KXFeC
-         IlITuvUKiTxXydBpikri9uS7ICN5tF5JbQEid9Pb8ls4YBO/LZFikL8/gIrY7xnd20lX
-         dog9i9Ub95UsEUlSekXCbg4CCURt7A5tKkd3W0ogFVCqZ6lCjPDJnNh3VnVJb3BWRKeR
-         OX9nqV5Ji6a3EUnc23l1B1Gv9p3M+DlkqZp97FDZJI7Lp53u1ZMhhX11E0TvO2NNGIG9
-         1DeQ==
+        d=gmail.com; s=20230601; t=1709595439; x=1710200239; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gMKz88dKP3BuhSltEA4TyRL1IYRiHIW6WsMh0ihkW9g=;
+        b=gJWQBQa+5dnjei1ZLX1RaDHrpMaVBW1gYhbWEs6JmI/aNzAkk1mw63U7hPjxmZh+Bf
+         dMV1QRp4BIVE3l3VSVANGsBYVs08wMdjeh2r1x/6dQNQSOJ1GJ3kUlPxgZd2AJ+Kro6v
+         2Feus9vw2qUPtSyDqS8VvkXC1G67ExZNTMpJjWVYb+GmYIjQDGUhu/E1Vd/tSsZETFXC
+         DE94uAj71Di31OFd6QaYROFrLHn3SNo8aGBBXuuIqxn04hemW11asyiVcTHmKgBCAHXe
+         vY1/za516361jtU0VwN2Tm9HGdQqsuxpiMNBPYiKLZ0ZQQ5ZoqU5Vaae1zwyNEdjKYrx
+         5GbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709594687; x=1710199487;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=UWquCOXdSTsI2tChPH6N2GVOeQkfTaMyZ8hrQ1/x5lg=;
-        b=Rv5p2ticTB3deQRa4Z9bCHpEWm5gcjYBohaM92+cZ4AyMUfdffe2q1Yo7bpo9ACG6V
-         TinuMch4Oe/dNmQO0M1j3SmeMXbYhN7aWpLrX+iiUQvOQPiF+REOVqn2A0P29s4HRC71
-         vCvIbqrAsp+z64ONFDfLeYXxqgFRFGzNko+/JQDKYuCMNyyAso+rDwaHlR+Hl6Pje6li
-         Of0VFjl2xsx9E1NUGGeVaPB8GmqvyXBAxyGvNdLAt2eh+S2/eOs3nne6EsJ1ZJ+2VeJm
-         GMTwMulfce54Lp0uYRAgOpS7iobWh9X9zWolj6hpxC8aaEGUpnfbXUJCvDefAfTaAL8g
-         fTHg==
-X-Forwarded-Encrypted: i=1; AJvYcCUm66ei7wwyi+beZT22fjixkRedxpcvrd309RP23KeYHLKnod/j8jg30xAU+BOLrPUpWfJadhRj0kwS6Y7KdvPY9sXg
-X-Gm-Message-State: AOJu0YwDkPud2qzp7o2CWJipziUDQ0Vinw1SJXbOblK1mV0PYyAlQ3db
-	ESj+20UUdI0V9ISTk8hOnlWXzqrOXkB+IMZPm8TP5OoDwJQhnrLQQaTBAke8MWel/g==
-X-Google-Smtp-Source: AGHT+IFJ6PJ8CB8/mMToVcJTohliDzBtwWcLZfG57Uh0k4NZFAPwz+WFaEDePKFqlcRrLFTjzIsV91w=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a05:6902:70d:b0:dc6:c94e:fb85 with SMTP id
- k13-20020a056902070d00b00dc6c94efb85mr362801ybt.2.1709594687281; Mon, 04 Mar
- 2024 15:24:47 -0800 (PST)
-Date: Mon, 4 Mar 2024 15:24:45 -0800
-In-Reply-To: <CAOuuhY8ieZav-Bgmn5x9OqYGnG4jQgVBhpsz5mz_iBoCZLgs_A@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1709595439; x=1710200239;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gMKz88dKP3BuhSltEA4TyRL1IYRiHIW6WsMh0ihkW9g=;
+        b=ewOHO8i64tTNu9THsK8xHWspSco9opSJ2+aMAVaoL4j7CpfgiTcSWMD8Gp960s47Pt
+         bEOMQw7B1nzVt9WHKar8B1bni9Blz4Y9T7pKSRsUr7DIQWtujQpMVQ75l9RLls1cie3U
+         TvSkvLqCG18TZEfhrCVDXwgqaTGEUc+QT6SapB6lLDHrOYMW1ot+UPgmr9dpErhdomcF
+         Un0h541DP/HkZ4ILEF9AJCBr4XWUiSvC2BRzWxrbp+GrKyQHSQPG4s/gUWGV8cTSeVi4
+         KA2sCAO4D8GQz2BjcE59n1h1Ou10v8vNdZLWyUTiQ0RQbacIuuzVsZFYpTQrtZ0n0phK
+         24pw==
+X-Gm-Message-State: AOJu0YxlPpwekSFrZZdGaJyMaCStmKiCuzpEY4NC+ePLHwayUEi+rrRE
+	J27bnC/iBvN54vZZYHCN9eldy36udxkWv8iflyxAyXWAlH3OQ0oVNMmeaChh/2FsEhB6RWT19pw
+	Xib2ZpUKOlPlQaWeJE+efrJSUFuhZvE7i
+X-Google-Smtp-Source: AGHT+IE1COPCDzd27PCLJWVCTyLf2HFTFDMlR+pRqr/iD+8t/MkDjYSuvsWcJiRhkn1Ijv5CJ3XqYZ1exmC00/S9NLw=
+X-Received: by 2002:a05:6a20:394a:b0:1a1:41a3:9b54 with SMTP id
+ r10-20020a056a20394a00b001a141a39b54mr215611pzg.32.1709595438701; Mon, 04 Mar
+ 2024 15:37:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <CAM0EoM=r1UDnkp-csPdrz6nBt7o3fHUncXKnO7tB_rcZAcbrDg@mail.gmail.com>
- <CAOuuhY8qbsYCjdUYUZv8J3jz8HGXmtxLmTDP6LKgN5uRVZwMnQ@mail.gmail.com>
- <20240301090020.7c9ebc1d@kernel.org> <CAM0EoM=-hzSNxOegHqhAQD7qoAR2CS3Dyh-chRB+H7C7TQzmow@mail.gmail.com>
- <20240301173214.3d95e22b@kernel.org> <CAOuuhY8fnpEEBb8z-1mQmvHtfZQwgQnXk3=op-Xk108Pts8ohA@mail.gmail.com>
- <20240302191530.22353670@kernel.org> <CAOuuhY_senZbdC2cVU9kfDww_bT+a_VkNaDJYRk4_fMbJW17sQ@mail.gmail.com>
- <ZeY6r9cm4pdW9WNC@google.com> <CAOuuhY8ieZav-Bgmn5x9OqYGnG4jQgVBhpsz5mz_iBoCZLgs_A@mail.gmail.com>
-Message-ID: <ZeZYPWecammoABY0@google.com>
-Subject: Re: [PATCH net-next v12 00/15] Introducing P4TC (series 1)
-From: Stanislav Fomichev <sdf@google.com>
-To: Tom Herbert <tom@sipanda.io>
-Cc: Jakub Kicinski <kuba@kernel.org>, Jamal Hadi Salim <jhs@mojatatu.com>, 
-	John Fastabend <john.fastabend@gmail.com>, anjali.singhai@intel.com, 
-	Paolo Abeni <pabeni@redhat.com>, 
-	Linux Kernel Network Developers <netdev@vger.kernel.org>, deb.chatterjee@intel.com, namrata.limaye@intel.com, 
-	mleitner@redhat.com, Mahesh.Shirshyad@amd.com, Vipin.Jain@amd.com, 
-	tomasz.osinski@intel.com, Jiri Pirko <jiri@resnulli.us>, 
-	Cong Wang <xiyou.wangcong@gmail.com>, davem@davemloft.net, edumazet@google.com, 
-	Vlad Buslov <vladbu@nvidia.com>, horms@kernel.org, khalidm@nvidia.com, 
-	"Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?=" <toke@redhat.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Victor Nogueira <victor@mojatatu.com>, pctammela@mojatatu.com, dan.daly@intel.com, 
-	andy.fingerhut@gmail.com, chris.sommers@keysight.com, mattyk@nvidia.com, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+References: <20240222005005.31784-1-eddyz87@gmail.com> <20240222005005.31784-3-eddyz87@gmail.com>
+ <CAEf4BzZdDoaVw28RahC+8hV+kReYjTdfJQdaMXJEkUUgih8j2Q@mail.gmail.com>
+ <b1b259639635e9328bbbbc8e0683b14242f177e2.camel@gmail.com>
+ <CAEf4BzZjps4+teYzWw8=8Jg0M59bCVRaB_0zLNTmfveBQ63C3Q@mail.gmail.com> <7d48c3fe1e4ccc4622a082ea3f3c25ca79be4086.camel@gmail.com>
+In-Reply-To: <7d48c3fe1e4ccc4622a082ea3f3c25ca79be4086.camel@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 4 Mar 2024 15:37:06 -0800
+Message-ID: <CAEf4BzYzJ68mQ=x_Y6TM-a71fUvPHZrZFKbzh90YqUZmXsU=Gw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/4] bpf: track find_equal_scalars history on
+ per-instruction level
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
+	yonghong.song@linux.dev, sunhao.th@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On 03/04, Tom Herbert wrote:
-> On Mon, Mar 4, 2024 at 1:19=E2=80=AFPM Stanislav Fomichev <sdf@google.com=
-> wrote:
+On Fri, Mar 1, 2024 at 9:44=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com>=
+ wrote:
+>
+> On Fri, 2024-03-01 at 09:34 -0800, Andrii Nakryiko wrote:
+> [...]
+>
+> > As I mentioned in offline conversation, I wonder if it's better and
+> > less error-prone to do linked register processing in backtrack_insn()
+> > not just for conditional jumps, for all instructions? Whenever we
+> > currently do bpf_set_reg(), we can first check if there are linked
+> > registers and they contain a register we are about to set precise. If
+> > that's the case, set all of them precise.
 > >
-> > On 03/03, Tom Herbert wrote:
-> > > On Sat, Mar 2, 2024 at 7:15=E2=80=AFPM Jakub Kicinski <kuba@kernel.or=
-g> wrote:
-> > > >
-> > > > On Fri, 1 Mar 2024 18:20:36 -0800 Tom Herbert wrote:
-> > > > > This is configurability versus programmability. The table driven
-> > > > > approach as input (configurability) might work fine for generic
-> > > > > match-action tables up to the point that tables are expressive en=
-ough
-> > > > > to satisfy the requirements. But parsing doesn't fall into the ta=
-ble
-> > > > > driven paradigm: parsers want to be *programmed*. This is why we
-> > > > > removed kParser from this patch set and fell back to eBPF for par=
-sing.
-> > > > > But the problem we quickly hit that eBPF is not offloadable to ne=
-twork
-> > > > > devices, for example when we compile P4 in an eBPF parser we've l=
-ost
-> > > > > the declarative representation that parsers in the devices could
-> > > > > consume (they're not CPUs running eBPF).
-> > > > >
-> > > > > I think the key here is what we mean by kernel offload. When we d=
-o
-> > > > > kernel offload, is it the kernel implementation or the kernel
-> > > > > functionality that's being offloaded? If it's the latter then we =
-have
-> > > > > a lot more flexibility. What we'd need is a safe and secure way t=
-o
-> > > > > synchronize with that offload device that precisely supports the
-> > > > > kernel functionality we'd like to offload. This can be done if bo=
-th
-> > > > > the kernel bits and programmed offload are derived from the same
-> > > > > source (i.e. tag source code with a sha-1). For example, if someo=
-ne
-> > > > > writes a parser in P4, we can compile that into both eBPF and a P=
-4
-> > > > > backend using independent tool chains and program download. At
-> > > > > runtime, the kernel can safely offload the functionality of the e=
-BPF
-> > > > > parser to the device if it matches the hash to that reported by t=
-he
-> > > > > device
-> > > >
-> > > > Good points. If I understand you correctly you're saying that parse=
-rs
-> > > > are more complex than just a basic parsing tree a'la u32.
-> > >
-> > > Yes. Parsing things like TLVs, GRE flag field, or nested protobufs
-> > > isn't conducive to u32. We also want the advantages of compiler
-> > > optimizations to unroll loops, squash nodes in the parse graph, etc.
-> > >
-> > > > Then we can take this argument further. P4 has grown to encompass a=
- lot
-> > > > of functionality of quite complex devices. How do we square that wi=
-th
-> > > > the kernel functionality offload model. If the entire device is mod=
-eled,
-> > > > including f.e. TSO, an offload would mean that the user has to writ=
-e
-> > > > a TSO implementation which they then load into TC? That seems odd.
-> > > >
-> > > > IOW I don't quite know how to square in my head the "total
-> > > > functionality" with being a TC-based "plugin".
-> > >
-> > > Hi Jakub,
-> > >
-> > > I believe the solution is to replace kernel code with eBPF in cases
-> > > where we need programmability. This effectively means that we would
-> > > ship eBPF code as part of the kernel. So in the case of TSO, the
-> > > kernel would include a standard implementation in eBPF that could be
-> > > compiled into the kernel by default. The restricted C source code is
-> > > tagged with a hash, so if someone wants to offload TSO they could
-> > > compile the source into their target and retain the hash. At runtime
-> > > it's a matter of querying the driver to see if the device supports th=
-e
-> > > TSO program the kernel is running by comparing hash values. Scaling
-> > > this, a device could support a catalogue of programs: TSO, LRO,
-> > > parser, IPtables, etc., If the kernel can match the hash of its eBPF
-> > > code to one reported by the driver then it can assume functionality i=
-s
-> > > offloadable. This is an elaboration of "device features", but instead
-> > > of the device telling us they think they support an adequate GRO
-> > > implementation by reporting NETIF_F_GRO, the device would tell the
-> > > kernel that they not only support GRO but they provide identical
-> > > functionality of the kernel GRO (which IMO is the first requirement o=
-f
-> > > kernel offload).
-> > >
-> > > Even before considering hardware offload, I think this approach
-> > > addresses a more fundamental problem to make the kernel programmable.
-> > > Since the code is in eBPF, the kernel can be reprogrammed at runtime
-> > > which could be controlled by TC. This allows local customization of
-> > > kernel features, but also is the simplest way to "patch" the kernel
-> > > with security and bug fixes (nobody is ever excited to do a kernel
-> >
-> > [..]
-> >
-> > > rebase in their datacenter!). Flow dissector is a prime candidate for
-> > > this, and I am still planning to replace it with an all eBPF program
-> > > (https://netdevconf.info/0x15/slides/16/Flow%20dissector_PANDA%20pars=
-er.pdf).
-> >
-> > So you're suggesting to bundle (and extend)
-> > tools/testing/selftests/bpf/progs/bpf_flow.c? We were thinking along
-> > similar lines here. We load this program manually right now, shipping
-> > and autoloading with the kernel will be easer.
->=20
-> Hi Stanislav,
->=20
-> Yes, I envision that we would have a standard implementation of
-> flow-dissector in eBPF that is shipped with the kernel and autoloaded.
-> However, for the front end source I want to move away from imperative
-> code. As I mentioned in the presentation flow_dissector.c is spaghetti
-> code and has been prone to bugs over the years especially whenever
-> someone adds support for a new fringe protocol (I take the liberty to
-> call it spaghetti code since I'm partially responsible for creating
-> this mess ;-) ).
->=20
-> The problem is that parsers are much better represented by a
-> declarative rather than an imperative representation. To that end, we
-> defined PANDA which allows constructing a parser (parse graph) in data
-> structures in C. We use the "PANDA parser" to compile C to restricted
-> C code which looks more like eBPF in imperative code. With this method
-> we abstract out all the bookkeeping that was often the source of bugs
-> (like pulling up skbufs, checking length limits, etc.). The other
-> advantage is that we're able to find a lot more optimizations if we
-> start with a right representation of the problem.
->=20
-> If you're interested, the video presentation on this is in
-> https://www.youtube.com/watch?v=3DzVnmVDSEoXc.
+> > That would make it unnecessary to have this "before BPF_X|BPF_K"
+> > checks, I think.
+>
+> It should not be a problem to do bt_set_equal_scalars() at the
+> beginning of backtrack_insn().
+> Same way, I can put the after call at the end of backtrack_insn().
+> Is this what you have in mind?
 
-Oh, yeah, I've seen this one. Agreed that the C implementation is not
-pleasant and generating a parser from some declarative spec is a better
-idea.
+Not exactly. It was more a proposal to change the current use of
+bt_set_reg() with bt_set_linked_regs(), which would take into account
+linked registers. And do it throughout the entire backtrack_insn(),
+regardless of specific instruction being backtracked. I think that
+would eliminate the need to have bt_set_equal_scalars() before
+instruction as well.
 
-From my pow, the biggest win we get from making bpf flow dissector
-pluggable is the fact that we can now actually write some tests for it
-(and, maybe, fuzz it?). We should also probably spend more time properly
-defining the behavior of the existing C implementation. We've seen
-some interesting bugs like this one:
-https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=
-=3D9fa02892857ae2b3b699630e5ede28f72106e7e7
+>
+> > It might be sufficient to process just conditional jumps given today's
+> > use of linked registers, but is there any downside to doing it across
+> > all instructions? Are you worried about regression in number of states
+> > due to precision? Or performance?
+>
+> Changing position for bt_set_equal_scalars() calls should not affect
+> anything semantically at the moment. Changes to backtracking state
+> would be done only if some linked registers are present in 'hist' and
+> that would be true only for conditional jumps.
+> Maybe some more CPU cycles but I don't think that would be noticeable.
