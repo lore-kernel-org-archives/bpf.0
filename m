@@ -1,145 +1,173 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A38DEFC1B
-	for <bpf@vger.kernel.org>; Mon,  4 Mar 2024 21:02:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9973F79F2
+	for <bpf@vger.kernel.org>; Mon,  4 Mar 2024 21:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709586159; cv=none; b=aH+CzS3fZp3T9vUygF6tcLLg+X/1LevkJYcTlc2+z3mbAe7A7OPkENndn7txaeyjJxh57As4QClhDrBdutRVxQZzvU3zJ7ew2488vvIzbCMltwtDsgClkrBNrLY+OqTNe/89HqYHlU+RZJW8CDkznroWeT9vW5pylJef2+iw4dM=
+	t=1709587152; cv=none; b=fM/X1hxgO2GjtkoFPgI4i2P8kqa/1dftK+SE5SNRVGbsWRuHP46kA30s3zynhIrnQEjmcaI1pHnBgp3XFhMYSv9UflpRZSMgR1YDoC4SUiCpjW8mgcItCo+N19Sxd+bd0SZdJlPSIZQa8E4waJDNBM5z/SJQmhqBAkRwi4ARmRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709586159; c=relaxed/simple;
-	bh=luncRuA5vnipV4goB+3N1vMZbt0W17n3b0q6Qp2JXUM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ptFHjEh+YlJzBmqgyzXcp9+XX7L2EN7WU6y5NT8N6PsoTmoju17FC+pkCNGfaA0a1AfcDtKy1MvOHYnI8S3AMDnBYwu//o3AhvpsXLOw73iebzc7AzJryfMZjICW0+/EfKVqLfIwR8OcfwC7xDjeTrK5jVG+Mp96WUD2FFBSz74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=rkPTOepc; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	s=arc-20240116; t=1709587152; c=relaxed/simple;
+	bh=k3sS1xa9FcOHJXVg0/nwKOU7OeW6fzkb7LbKTkTXG50=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=c0Gsd4hjdo003nSgn/78SeLXwI2OVcV6XRapuP21fM7lSah8J12mNEXij/YqNmmB+PMZ6Czi15wa6/s3cNO/DRZsVV1yGsNt4goTa8X9N4y+IbA4aIpZbZma+lJDkjG9tPJvSwHwUuU+VsledqLXKefZq+0ivZqwEQeehpueH9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=q4r2D+Sg; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="rkPTOepc"
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-60982a6d8a7so45244877b3.0
-        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 13:02:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="q4r2D+Sg"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-6e5c8030ab3so3242848b3a.1
+        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 13:19:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1709586156; x=1710190956; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RPnN3dFBTc28GNlG9yE073G/8kEzjDecpdpv6G1vFFE=;
-        b=rkPTOepcsnPuoFhGX5b0Edx+Lrt55lqqrpG5J3ectCXddIk/v3x67EKlBVyc71akeO
-         aQjcbeWVe2J81yYQ5avDCnuspn03nf06xqLRMLuMqg+hQzXhiK/AYpEmFdnwIEwqffUo
-         WzUa21oi1epQcEkYN/m4sP6ZyvE7RPZJHg5K+Q4stUB7pogfbNwje+CVt3lKyStG0rkC
-         CisMT9Fare5Ul/KRtPF2WROnxKqtrdy09QfRCLb0iRxHU3TNFw8BfY+/OxI8U6/xNr4n
-         GqKaC9Ee/wbmZnm2G9WeO3m3YQ/WuKhj9U5EUGbZY+9thYfnodMmonSvKJ1+aQxRf5Rn
-         oKRw==
+        d=google.com; s=20230601; t=1709587150; x=1710191950; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k3sS1xa9FcOHJXVg0/nwKOU7OeW6fzkb7LbKTkTXG50=;
+        b=q4r2D+SgFjmOA3dNDSXQcTM3I/8AB4IH9R8QAPbsjr2IG0MyFzErpfL5yUx9aypJbG
+         JtfH3XcUcWUkLJSiBCGy8WLTO0cv02JaxLgmXvk7YrebuApq8K6IxslzA5ikF5+gIugc
+         /aIV1/ljeyjuSY+IO1gHEclNugNstVQAdIGyUQRzBNS9ijlOhWuXuggGDXx+j+Ew995X
+         vNPs3yUt7EqF/1VMrJy0p5PBiZcEWqqZ8vaaOh3O8fLHcEt9tQyLwkz46N49Nad3iRwX
+         FB3lJspsWuHf4pD8KZw4DE1ORuXECsJx+XLbhDaRTZLXenDmYUrNgBUbxJFmcRjT5h2J
+         5Rzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709586156; x=1710190956;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RPnN3dFBTc28GNlG9yE073G/8kEzjDecpdpv6G1vFFE=;
-        b=U0GYaxkert3aPRA5JthmX659eXaY0bXk9KRnkIDI2d8EY5Y0/egPaPI2eO4wOjK8ax
-         ET28YdknS0qkgTMARtERgRQqLAKE3ERPDKtO5TIXtGGHqGw4D6n1jyzLigiiZ9OCoVNf
-         XMembaYfDtBRc8FfgwiBupbGA4t/JwyXtqjk8SQKpkFK6p/q5o/pwksqZewWvWDUwhmh
-         f9Y1ZVMoCsMONCOLTc3ViFQi9N3WdZCbbPlbaoL0sopmshiEreNt/W9YQFjjw+QsCAZY
-         niyw5YMvBSM5CPfKS2LS+wMMCcpMeytr28yIE2YSSygisT7GzCVLWDuUOMhXId0XcSsT
-         LqQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCULf9fDHlK/A4/uxFLex1t0ZA+86GOa5acUrYdHtcK1lmRTMVTLuYGRbzSVDamhLi6//iTw3j04mDpJ7yuQkH9WI5FC
-X-Gm-Message-State: AOJu0YznMF7K7QKvUUoP0ePDF0u8ObX92SugdPRlx/pmMUnSgSoKl72T
-	TW82lHjW5wpigR5aidw9+168zhY+b2ye/pIvkpSDuZG3zs/dwimjISq8uyYlraXJHVbW4a5ASx4
-	pj/KV+Oe51DYMVc0jytOOWwrMXYqARxRpYEAe
-X-Google-Smtp-Source: AGHT+IE8+zvwn1VLt4AntJbEDZpwulZRwNBONFfaY5c9Rma66osS7yNg6dlMa+s/AXZX/uIn/0Biky9M0uXeMbhZxbk=
-X-Received: by 2002:a81:4ac2:0:b0:607:850e:7583 with SMTP id
- x185-20020a814ac2000000b00607850e7583mr9052659ywa.38.1709586156622; Mon, 04
- Mar 2024 13:02:36 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709587150; x=1710191950;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=k3sS1xa9FcOHJXVg0/nwKOU7OeW6fzkb7LbKTkTXG50=;
+        b=dPDqKRKizICAmdcHc9f5NdaWgCI7OHSXK8PU/qPWnwkiVcCLYewDGbqjw6CvqaZuU8
+         XmF5I6caYGj8VyPkub6wI2BJtkEqi46BSm1/4Rh1+8N/VGQ9DvyVwcm7hq9ej+vsiCw1
+         qSu7s8PHgMGJkW0XOMvuu3U5jNVM+2ijQc/RVWNvTANBrABrqsIkIr7uA7iKQOU2V8JJ
+         7aCOfMC6syqU9UlXsVOChyImRtk8x5PlXrlqd5Ql6EvpjE5dknszULmkimNqrrf1Rw/F
+         t5VCfXZymXIQ6a795AhwAyjIadlkwACLw8z46TVNhVuQiFjsOnfHedkHzYIjuxhxl+Yx
+         /WhA==
+X-Forwarded-Encrypted: i=1; AJvYcCVQruvSJrE7msEoWtkdyMbIh6HsL67oz6xzBIUJeEhxBtZfjXc5JMN8h4/RTXa0wUXUiKTBBBo8PX1Hg/7v/Dsx2tW4
+X-Gm-Message-State: AOJu0YwiNOu55vh8HDcgWHRMzfO32IopK2gSU8LqLtApUNutToyQUzlb
+	95tJ6I9Qije2KBhwUni/rTC0aj/b5VeDeCLjL1SUpH4kdqe/htNZm726AzaOYmdRhg==
+X-Google-Smtp-Source: AGHT+IFOfiDgOh8WUWMiJcCbvTlXfunkE/C3+awrmxdSfPyg0d0LpSx2jGuMg5PqEbIg55wzy3DbnaU=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a05:6a00:1808:b0:6e5:9a0a:b66a with SMTP id
+ y8-20020a056a00180800b006e59a0ab66amr586699pfa.3.1709587150006; Mon, 04 Mar
+ 2024 13:19:10 -0800 (PST)
+Date: Mon, 4 Mar 2024 13:19:08 -0800
+In-Reply-To: <CAOuuhY_senZbdC2cVU9kfDww_bT+a_VkNaDJYRk4_fMbJW17sQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240225165447.156954-1-jhs@mojatatu.com> <b28f2f7900dc7bad129ad67621b2f7746c3b2e18.camel@redhat.com>
- <CO1PR11MB49931E501B20F32681F917CD935F2@CO1PR11MB4993.namprd11.prod.outlook.com>
+Mime-Version: 1.0
+References: <CO1PR11MB49931E501B20F32681F917CD935F2@CO1PR11MB4993.namprd11.prod.outlook.com>
  <65e106305ad8b_43ad820892@john.notmuch> <CAM0EoM=r1UDnkp-csPdrz6nBt7o3fHUncXKnO7tB_rcZAcbrDg@mail.gmail.com>
  <CAOuuhY8qbsYCjdUYUZv8J3jz8HGXmtxLmTDP6LKgN5uRVZwMnQ@mail.gmail.com>
  <20240301090020.7c9ebc1d@kernel.org> <CAM0EoM=-hzSNxOegHqhAQD7qoAR2CS3Dyh-chRB+H7C7TQzmow@mail.gmail.com>
- <20240301173214.3d95e22b@kernel.org> <CAM0EoM=NEB25naGtz=YaOt6BDoiv4RpDw27Y=btMZAMGeYB5bg@mail.gmail.com>
- <CAM0EoM=8GG-zCaopaUDMkvqemrZQUtaVRTMrWA6z=xrdYxG9+g@mail.gmail.com>
- <20240302192747.371684fb@kernel.org> <CAM0EoMncuPvUsRwE+Ajojgg-8JD+1oJ7j2Rw+7oN60MjjAHV-g@mail.gmail.com>
- <CAOuuhY8pgxqCg5uTXzetTt5sd8RzOfLPYF8ksLjoUhkKyqr56w@mail.gmail.com>
- <CAM0EoMnpZuC_fdzXj5+seXo3GT9rrf1txc45tB=gie4cf-Zqeg@mail.gmail.com> <20240304121812.450dda4c@kernel.org>
-In-Reply-To: <20240304121812.450dda4c@kernel.org>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Mon, 4 Mar 2024 16:02:24 -0500
-Message-ID: <CAM0EoM=NuPeTbopi7XprLuVavNT8dKHApBxzdkFqNcRvO=pPwA@mail.gmail.com>
-Subject: Re: Hardware Offload discussion WAS(Re: [PATCH net-next v12 00/15]
- Introducing P4TC (series 1)
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Tom Herbert <tom@sipanda.io>, John Fastabend <john.fastabend@gmail.com>, 
-	"Singhai, Anjali" <anjali.singhai@intel.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Linux Kernel Network Developers <netdev@vger.kernel.org>, "Chatterjee, Deb" <deb.chatterjee@intel.com>, 
-	"Limaye, Namrata" <namrata.limaye@intel.com>, Marcelo Ricardo Leitner <mleitner@redhat.com>, 
-	"Shirshyad, Mahesh" <Mahesh.Shirshyad@amd.com>, "Jain, Vipin" <Vipin.Jain@amd.com>, 
-	"Osinski, Tomasz" <tomasz.osinski@intel.com>, Jiri Pirko <jiri@resnulli.us>, 
-	Cong Wang <xiyou.wangcong@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Vlad Buslov <vladbu@nvidia.com>, Simon Horman <horms@kernel.org>, 
-	Khalid Manaa <khalidm@nvidia.com>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Victor Nogueira <victor@mojatatu.com>, 
-	"Tammela, Pedro" <pctammela@mojatatu.com>, "Daly, Dan" <dan.daly@intel.com>, 
-	Andy Fingerhut <andy.fingerhut@gmail.com>, "Sommers, Chris" <chris.sommers@keysight.com>, 
-	Matty Kadosh <mattyk@nvidia.com>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+ <20240301173214.3d95e22b@kernel.org> <CAOuuhY8fnpEEBb8z-1mQmvHtfZQwgQnXk3=op-Xk108Pts8ohA@mail.gmail.com>
+ <20240302191530.22353670@kernel.org> <CAOuuhY_senZbdC2cVU9kfDww_bT+a_VkNaDJYRk4_fMbJW17sQ@mail.gmail.com>
+Message-ID: <ZeY6r9cm4pdW9WNC@google.com>
+Subject: Re: [PATCH net-next v12 00/15] Introducing P4TC (series 1)
+From: Stanislav Fomichev <sdf@google.com>
+To: Tom Herbert <tom@sipanda.io>
+Cc: Jakub Kicinski <kuba@kernel.org>, Jamal Hadi Salim <jhs@mojatatu.com>, 
+	John Fastabend <john.fastabend@gmail.com>, anjali.singhai@intel.com, 
+	Paolo Abeni <pabeni@redhat.com>, 
+	Linux Kernel Network Developers <netdev@vger.kernel.org>, deb.chatterjee@intel.com, namrata.limaye@intel.com, 
+	mleitner@redhat.com, Mahesh.Shirshyad@amd.com, Vipin.Jain@amd.com, 
+	tomasz.osinski@intel.com, Jiri Pirko <jiri@resnulli.us>, 
+	Cong Wang <xiyou.wangcong@gmail.com>, davem@davemloft.net, edumazet@google.com, 
+	Vlad Buslov <vladbu@nvidia.com>, horms@kernel.org, khalidm@nvidia.com, 
+	"Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?=" <toke@redhat.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Victor Nogueira <victor@mojatatu.com>, pctammela@mojatatu.com, dan.daly@intel.com, 
+	andy.fingerhut@gmail.com, chris.sommers@keysight.com, mattyk@nvidia.com, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 4, 2024 at 3:18=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wro=
-te:
->
-> On Sun, 3 Mar 2024 14:04:11 -0500 Jamal Hadi Salim wrote:
-> > > At
-> > > this point in its lifetime, eBPF had far more examples of real world
-> > > use cases publically available. That being said, there's nothing
-> > > unique about P4 supporting the network calculator. We could just as
-> > > easily write this in eBPF (either plain C or P4)  and "offload" it to
-> > > an ARM core on a SmartNIC.
+On 03/03, Tom Herbert wrote:
+> On Sat, Mar 2, 2024 at 7:15=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> w=
+rote:
 > >
-> > With current port speeds hitting 800gbps you want to use Arm cores as
-> > your offload engine?;-> Running the generated ebpf on the arm core is
-> > a valid P4 target.  i.e there is no contradiction.
-> > Note: P4 is a DSL specialized for datapath definition; it is not a
-> > competition to ebpf, two different worlds. I see ebpf as an
-> > infrastructure tool, nothing more.
->
-> I wonder how much we're benefiting of calling this thing P4 and how
-> much we should focus on filling in the tech gaps.
+> > On Fri, 1 Mar 2024 18:20:36 -0800 Tom Herbert wrote:
+> > > This is configurability versus programmability. The table driven
+> > > approach as input (configurability) might work fine for generic
+> > > match-action tables up to the point that tables are expressive enough
+> > > to satisfy the requirements. But parsing doesn't fall into the table
+> > > driven paradigm: parsers want to be *programmed*. This is why we
+> > > removed kParser from this patch set and fell back to eBPF for parsing=
+.
+> > > But the problem we quickly hit that eBPF is not offloadable to networ=
+k
+> > > devices, for example when we compile P4 in an eBPF parser we've lost
+> > > the declarative representation that parsers in the devices could
+> > > consume (they're not CPUs running eBPF).
+> > >
+> > > I think the key here is what we mean by kernel offload. When we do
+> > > kernel offload, is it the kernel implementation or the kernel
+> > > functionality that's being offloaded? If it's the latter then we have
+> > > a lot more flexibility. What we'd need is a safe and secure way to
+> > > synchronize with that offload device that precisely supports the
+> > > kernel functionality we'd like to offload. This can be done if both
+> > > the kernel bits and programmed offload are derived from the same
+> > > source (i.e. tag source code with a sha-1). For example, if someone
+> > > writes a parser in P4, we can compile that into both eBPF and a P4
+> > > backend using independent tool chains and program download. At
+> > > runtime, the kernel can safely offload the functionality of the eBPF
+> > > parser to the device if it matches the hash to that reported by the
+> > > device
+> >
+> > Good points. If I understand you correctly you're saying that parsers
+> > are more complex than just a basic parsing tree a'la u32.
+>=20
+> Yes. Parsing things like TLVs, GRE flag field, or nested protobufs
+> isn't conducive to u32. We also want the advantages of compiler
+> optimizations to unroll loops, squash nodes in the parse graph, etc.
+>=20
+> > Then we can take this argument further. P4 has grown to encompass a lot
+> > of functionality of quite complex devices. How do we square that with
+> > the kernel functionality offload model. If the entire device is modeled=
+,
+> > including f.e. TSO, an offload would mean that the user has to write
+> > a TSO implementation which they then load into TC? That seems odd.
+> >
+> > IOW I don't quite know how to square in my head the "total
+> > functionality" with being a TC-based "plugin".
+>=20
+> Hi Jakub,
+>=20
+> I believe the solution is to replace kernel code with eBPF in cases
+> where we need programmability. This effectively means that we would
+> ship eBPF code as part of the kernel. So in the case of TSO, the
+> kernel would include a standard implementation in eBPF that could be
+> compiled into the kernel by default. The restricted C source code is
+> tagged with a hash, so if someone wants to offload TSO they could
+> compile the source into their target and retain the hash. At runtime
+> it's a matter of querying the driver to see if the device supports the
+> TSO program the kernel is running by comparing hash values. Scaling
+> this, a device could support a catalogue of programs: TSO, LRO,
+> parser, IPtables, etc., If the kernel can match the hash of its eBPF
+> code to one reported by the driver then it can assume functionality is
+> offloadable. This is an elaboration of "device features", but instead
+> of the device telling us they think they support an adequate GRO
+> implementation by reporting NETIF_F_GRO, the device would tell the
+> kernel that they not only support GRO but they provide identical
+> functionality of the kernel GRO (which IMO is the first requirement of
+> kernel offload).
+>=20
+> Even before considering hardware offload, I think this approach
+> addresses a more fundamental problem to make the kernel programmable.
+> Since the code is in eBPF, the kernel can be reprogrammed at runtime
+> which could be controlled by TC. This allows local customization of
+> kernel features, but also is the simplest way to "patch" the kernel
+> with security and bug fixes (nobody is ever excited to do a kernel
 
-We are implementing based on the P4 standard specification. I fear it
-is confusing to call it something else if everyone else is calling it
-P4 (including the vendors whose devices are being targeted in case of
-offload).
-If the name is an issue, sure we can change.
-It just so happens that TC has similar semantics to P4 (match action
-tables) - hence the name P4TC and implementation encompassing code
-that fits nicely with TC.
+[..]
 
-> Exactly like you said, BPF is not competition, but neither does
-> the kernel "support P4", any more than it supports bpftrace and:
->
+> rebase in their datacenter!). Flow dissector is a prime candidate for
+> this, and I am still planning to replace it with an all eBPF program
+> (https://netdevconf.info/0x15/slides/16/Flow%20dissector_PANDA%20parser.p=
+df).
 
-Like i said if name is an issue, let's change the name;->
-
-> $ git grep --files-with-matches bpftrace
-> Documentation/bpf/redirect.rst
-> tools/testing/selftests/bpf/progs/test_xdp_attach_fail.c
->
-> Filling in tech gaps would also help DPP, IDK how much DPP is based
-> or using P4, neither should I have to care, frankly :S
-
-DDP is an Intel specific approach, pre-P4. P4: at least two vendors(on
-Cc) AMD have NICs with P4 specification and there FPGA variants out
-there as well.
-From my discussions with folks at Intel it is easy to transform DDP to
-P4. My understanding is it is the same compiler folks. The beauty
-being you dont have to use the intel version of the loaded program to
-offload if you wanted to change what the hardware does custom to you
-(within constraints of what hardware can do).
-
-cheers,
-jamal
+So you're suggesting to bundle (and extend)
+tools/testing/selftests/bpf/progs/bpf_flow.c? We were thinking along
+similar lines here. We load this program manually right now, shipping
+and autoloading with the kernel will be easer.
