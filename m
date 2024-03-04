@@ -1,56 +1,56 @@
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B05E7CF0B
-	for <bpf@vger.kernel.org>; Mon,  4 Mar 2024 22:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C31A37C088
+	for <bpf@vger.kernel.org>; Mon,  4 Mar 2024 22:52:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709592747; cv=none; b=B/bEeZjxXmk++rfIUWGgbscEfqiEflko4SpPNB4xEYoXYzoFF90a053rerHCg8CXha8iAihKEOMKbBX/Qg3M2vheWfGWMPFji/XjzBGtRj01zIOHdFaE6daKLXULDhS1GEQYYTbsYdN90AjnJLy8dIlXbYMcKAjPbth6RsXBM6w=
+	t=1709592748; cv=none; b=rMRqyD8j9BDiop8RJjKIMjAt5Ux3F8JlBAIyDeiDgfseDIDGiIqEwIy/jM3HxKnE7UM0GehuE0c7cFQODi7qAJ6t3eTpSUhCC+VXVX6lBLLsVuu+uIBw+8n7SfOljJQt3JYye70WcaYEZ/3TrFHIXKlKLtgIJkDqizYj82h7ozI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709592747; c=relaxed/simple;
-	bh=UOyotS1BYRsSd5KZlhgQA45wkirr1R6UKLzxX09/m5U=;
+	s=arc-20240116; t=1709592748; c=relaxed/simple;
+	bh=3ucbTocqqvyELdO97R7ddrmWT7k2ekLNsTzOQggLbK0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jRSb1pYTyPU/j2413XgXHEpcDvtChQRMcWjLUzZbJ4l827hN8JPmJoL7dUM3X7+XiyArJZrta/C8iZay5zeWqPGyUtL95VP0oYo+I/RagK880vP8t5u1fpSWnH3GitLFcqb/dtypbb1IdWabgD4FYTyaxPVBpPvgF4n7CJpWG7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MjDox2rE; arc=none smtp.client-ip=209.85.167.48
+	 MIME-Version; b=lss1XUnLpzV+PT8cyWSgwY9jBC2dtjhh09cTRWN+BOxvKYurPZVmgsIjbXdsHMr66b4lhTjwnhTZ50HAWT4HRjP9zrIlIuTneH75bqDWoVbsVhtIwmRjrCCiA6sbavf88DhlfaKbtDP8rlNVEHV8HjnW1b40jbenjqLKZ6vZtkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GuMyu28x; arc=none smtp.client-ip=209.85.167.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MjDox2rE"
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-51344bebe2fso1624524e87.2
-        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 14:52:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GuMyu28x"
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-512bde3d197so4974540e87.0
+        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 14:52:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709592743; x=1710197543; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709592745; x=1710197545; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3J5Oq4avgTnUiue5ull73zk/v5Sx9caqkhc4270Z+44=;
-        b=MjDox2rEXD49CdaLePv7bDNGkltAZx7d72cks46blbGmeQgfEgaUEGZ2BEZuuwWb3Y
-         mtal0Vr60tkvqOXeQANmkc34WzC0x3/zteGY2Jja/DSFLQF+SfQ7BtslWiPXEnkEMzqO
-         20KJEEiGGEA7+dxGzq4XIRhlgPpkkPNnQL8GBg3hVF1txmpENw2iCcSte4AxjYXahvlq
-         gRkMSys9A5ZDw/fSCOCcQqTX7SkIggbI/rEiH0IkN9V2sO+DucWFY4bRPWcjXudPVm+e
-         fX/hXYHpKMufyz9lz7vWEho6q/Qdpjt3lg2v5IKXejlrT+UXV1WNPu5kBqDl40T/xKDA
-         aMvQ==
+        bh=kW5p4yXSsN4YghlPBvvq93ye5IVZXwFo8TqXZjsdlc0=;
+        b=GuMyu28xxsRts/ThRoKn4VNYn5uB5n94HiAUvpFyexQG8g3uaVwR1G79Oy+v6ahK9T
+         axMIvGQX8KSLUuJ0sljN+Ahu+sH1HW+LuSuUMlseTBW1vFCUm920Uf2Tj8/2KbbP1yYm
+         NU7o5HFxDh5mWgwqO6fH6oBBIMjW3YGPTxldZzTvOorh0xhKuSWvW4wWndioy5sz4PYw
+         t1Hg+s2QCDekwK79i/UWK0xMmILeU4YlUuj5cLAzeekf7xu58bPsVoFpBfYY15XrlZq5
+         qJPpb7F1jbgM6XMrc6X59mwIVMCC7JbZhurP94jFkpwBZXpM2Ixae/ZR5GX8ABqrtvT7
+         3aVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709592743; x=1710197543;
+        d=1e100.net; s=20230601; t=1709592745; x=1710197545;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3J5Oq4avgTnUiue5ull73zk/v5Sx9caqkhc4270Z+44=;
-        b=M0St60me3qXqog3C2tHGKcIPtJAnbnVsTUIUlcwK/tneyxgSH/z+wgQ8Hw0bhT37fi
-         VtXOpKq11+vuDcLu51NQJuFfBYWKJOUxiY/HLhHeqHEmKx+ZMBpHJk8zy03oMSFOppnq
-         LTElWhhMG7GLNXWIzezhQjVE1qiXkwUDR4Lz9Vc2OwPpAa/WL2NxfCpY5SeIAhHzdHSC
-         6RP96jQnYFp38hM28AsdNNOOSYH7gaZHc4vm6IhNAu3ThFJd7YFS0tbaUwXWre7+txfR
-         j4MRD86tOYZYlS4OdeKEaWECYVUcI+b7tmppPqkJqdZdEf9Bhwz4Cd8fXrDjwUu1CLcu
-         AaWA==
-X-Gm-Message-State: AOJu0YxBuyQwAbIVPqlYKKn+lqJN9S77GH86E074tZj12YV1EGjepfAn
-	BKN3rsjydZw2ldl/TT7t3FwiUS2KT/Ak5rtoGxHLENYisLXyGrR+kGJB+IVn
-X-Google-Smtp-Source: AGHT+IEtEokyrTwum1XfI45OCvMG7I3qQMV8p3hfeqIqeZy0s3TnBIZ2R8YuP3pZDEysXnXiJCfjFg==
-X-Received: by 2002:a05:6512:546:b0:513:1ff9:2bb4 with SMTP id h6-20020a056512054600b005131ff92bb4mr106072lfl.30.1709592743129;
-        Mon, 04 Mar 2024 14:52:23 -0800 (PST)
+        bh=kW5p4yXSsN4YghlPBvvq93ye5IVZXwFo8TqXZjsdlc0=;
+        b=qmln1GXiKVlFjDBXx8HhDoI/Wq/KinoQahAXIwIws54SAB6HEZ8gYvp2oS6dQkGXJK
+         71Xkj4DdJSLX+Bj9eHntXxgzgWfyqpqbLURLVAzchMxVDrfGZFuecWV4eocXpTADHpYQ
+         GnNJRjM7XculfQfnQTmm71T1sGBBpiV/k3iX29h/R8iiL5DHGoOMt+D86oBcXY90YZG3
+         t90Ls/neIiFL3sfQEOkapgAdv7HRadRpjFdsJ+VEYKE6rTOuu9hVmN/DdEsuJKKczahN
+         sWhxCyO4W3jzapKBGHorQ96hx/7oIpJb6KlRwYvBMokhnpNDgwL18JgLiNvo5jlkzdec
+         Cdqw==
+X-Gm-Message-State: AOJu0YzsyLMv5cUOTFvSBRuQWnV/DYNPtZnQpc/BotRMrXf4fu9owWuL
+	7ECFeZ4zl81sx923EEFx/fPcfvsNWfeleA7kYNz4KMQHu9zupTleYrjMccxS
+X-Google-Smtp-Source: AGHT+IGj9QCGPeTHAPONF0pgEY66EVZK/ahZUU3Jf7oPjr7Je6OdBDZaU6PW0icMdQgQlsyu2PLitw==
+X-Received: by 2002:ac2:54a8:0:b0:513:3dcf:35ca with SMTP id w8-20020ac254a8000000b005133dcf35camr100423lfk.38.1709592744509;
+        Mon, 04 Mar 2024 14:52:24 -0800 (PST)
 Received: from localhost.localdomain (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id qx22-20020a170906fcd600b00a4302eb448dsm5315499ejb.134.2024.03.04.14.52.21
+        by smtp.gmail.com with ESMTPSA id qx22-20020a170906fcd600b00a4302eb448dsm5315499ejb.134.2024.03.04.14.52.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Mar 2024 14:52:22 -0800 (PST)
+        Mon, 04 Mar 2024 14:52:24 -0800 (PST)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -62,9 +62,9 @@ Cc: andrii@kernel.org,
 	void@manifault.com,
 	sinquersw@gmail.com,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v3 12/15] libbpf: rewrite btf datasec names starting from '?'
-Date: Tue,  5 Mar 2024 00:51:53 +0200
-Message-ID: <20240304225156.24765-13-eddyz87@gmail.com>
+Subject: [PATCH bpf-next v3 13/15] selftests/bpf: test case for SEC("?.struct_ops")
+Date: Tue,  5 Mar 2024 00:51:54 +0200
+Message-ID: <20240304225156.24765-14-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240304225156.24765-1-eddyz87@gmail.com>
 References: <20240304225156.24765-1-eddyz87@gmail.com>
@@ -76,150 +76,121 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Optional struct_ops maps are defined using question mark at the start
-of the section name, e.g.:
-
-    SEC("?.struct_ops")
-    struct test_ops optional_map = { ... };
-
-This commit teaches libbpf to detect if kernel allows '?' prefix
-in datasec names, and if it doesn't then to rewrite such names
-by removing '?' prefix and adding ".optional" suffix.
-For example:
-
-    DATASEC ?.struct_ops -> DATASEC .struct_ops.optional
+Check that "?.struct_ops" and "?.struct_ops.link" section names define
+struct_ops maps with autocreate == false after open.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/lib/bpf/features.c        | 22 ++++++++++++++++++++++
- tools/lib/bpf/libbpf.c          | 30 +++++++++++++++++++++++++++++-
- tools/lib/bpf/libbpf_internal.h |  2 ++
- 3 files changed, 53 insertions(+), 1 deletion(-)
+ .../bpf/prog_tests/struct_ops_autocreate.c    | 58 +++++++++++++++++--
+ .../bpf/progs/struct_ops_autocreate.c         | 10 ++++
+ 2 files changed, 62 insertions(+), 6 deletions(-)
 
-diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
-index 6b0738ad7063..4e783cc7fc4b 100644
---- a/tools/lib/bpf/features.c
-+++ b/tools/lib/bpf/features.c
-@@ -147,6 +147,25 @@ static int probe_kern_btf_datasec(int token_fd)
- 					     strs, sizeof(strs), token_fd));
+diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_autocreate.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_autocreate.c
+index 35910cbb9ca4..a89ba036e2e2 100644
+--- a/tools/testing/selftests/bpf/prog_tests/struct_ops_autocreate.c
++++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_autocreate.c
+@@ -34,10 +34,24 @@ static void cant_load_full_object(void)
+ 	struct_ops_autocreate__destroy(skel);
  }
  
-+static int probe_kern_btf_qmark_datasec(int token_fd)
++static int check_test_1_link(struct struct_ops_autocreate *skel, struct bpf_map *map)
 +{
-+	static const char strs[] = "\0x\0?.data";
-+	/* static int a; */
-+	__u32 types[] = {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),  /* [1] */
-+		/* VAR x */                                     /* [2] */
-+		BTF_TYPE_ENC(1, BTF_INFO_ENC(BTF_KIND_VAR, 0, 0), 1),
-+		BTF_VAR_STATIC,
-+		/* DATASEC ?.data */                            /* [3] */
-+		BTF_TYPE_ENC(3, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
-+		BTF_VAR_SECINFO_ENC(2, 0, 4),
-+	};
++	struct bpf_link *link;
++	int err;
 +
-+	return probe_fd(libbpf__load_raw_btf((char *)types, sizeof(types),
-+					     strs, sizeof(strs), token_fd));
++	link = bpf_map__attach_struct_ops(skel->maps.testmod_1);
++	if (!ASSERT_OK_PTR(link, "bpf_map__attach_struct_ops"))
++		return -1;
++
++	/* test_1() would be called from bpf_dummy_reg2() in bpf_testmod.c */
++	err = ASSERT_EQ(skel->bss->test_1_result, 42, "test_1_result");
++	bpf_link__destroy(link);
++	return err;
 +}
 +
- static int probe_kern_btf_float(int token_fd)
+ static void can_load_partial_object(void)
  {
- 	static const char strs[] = "\0float";
-@@ -534,6 +553,9 @@ static struct kern_feature_desc {
- 	[FEAT_ARG_CTX_TAG] = {
- 		"kernel-side __arg_ctx tag", probe_kern_arg_ctx_tag,
- 	},
-+	[FEAT_BTF_QMARK_DATASEC] = {
-+		"BTF DATASEC names starting from '?'", probe_kern_btf_qmark_datasec,
-+	},
- };
+ 	struct struct_ops_autocreate *skel;
+-	struct bpf_link *link = NULL;
+ 	int err;
  
- bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_id feat_id)
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index c0212244bdf7..cf60291db8fd 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -2874,6 +2874,11 @@ static bool section_have_execinstr(struct bpf_object *obj, int idx)
- 	return sh->sh_flags & SHF_EXECINSTR;
- }
+ 	skel = struct_ops_autocreate__open();
+@@ -52,15 +66,45 @@ static void can_load_partial_object(void)
+ 	if (ASSERT_OK(err, "struct_ops_autocreate__load"))
+ 		goto cleanup;
  
-+static bool starts_with_qmark(const char *s)
-+{
-+	return s && s[0] == '?';
+-	link = bpf_map__attach_struct_ops(skel->maps.testmod_1);
+-	if (!ASSERT_OK_PTR(link, "bpf_map__attach_struct_ops"))
++	check_test_1_link(skel, skel->maps.testmod_1);
++
++cleanup:
++	struct_ops_autocreate__destroy(skel);
 +}
 +
- static bool btf_needs_sanitization(struct bpf_object *obj)
- {
- 	bool has_func_global = kernel_supports(obj, FEAT_BTF_GLOBAL_FUNC);
-@@ -2883,9 +2888,10 @@ static bool btf_needs_sanitization(struct bpf_object *obj)
- 	bool has_decl_tag = kernel_supports(obj, FEAT_BTF_DECL_TAG);
- 	bool has_type_tag = kernel_supports(obj, FEAT_BTF_TYPE_TAG);
- 	bool has_enum64 = kernel_supports(obj, FEAT_BTF_ENUM64);
-+	bool has_qmark_datasec = kernel_supports(obj, FEAT_BTF_QMARK_DATASEC);
++static void optional_maps(void)
++{
++	struct struct_ops_autocreate *skel;
++	int err;
++
++	skel = struct_ops_autocreate__open();
++	if (!ASSERT_OK_PTR(skel, "struct_ops_autocreate__open"))
++		return;
++
++	err  = !ASSERT_TRUE(bpf_map__autocreate(skel->maps.testmod_1),
++			    "default autocreate for testmod_1");
++	err |= !ASSERT_TRUE(bpf_map__autocreate(skel->maps.testmod_2),
++			    "default autocreate for testmod_2");
++	err |= !ASSERT_FALSE(bpf_map__autocreate(skel->maps.optional_map),
++			     "default autocreate for optional_map");
++	err |= !ASSERT_FALSE(bpf_map__autocreate(skel->maps.optional_map2),
++			    "default autocreate for optional_map2");
++	if (err)
+ 		goto cleanup;
  
- 	return !has_func || !has_datasec || !has_func_global || !has_float ||
--	       !has_decl_tag || !has_type_tag || !has_enum64;
-+	       !has_decl_tag || !has_type_tag || !has_enum64 || !has_qmark_datasec;
+-	/* test_1() would be called from bpf_dummy_reg2() in bpf_testmod.c */
+-	ASSERT_EQ(skel->bss->test_1_result, 42, "test_1_result");
++	err  = bpf_map__set_autocreate(skel->maps.testmod_1, false);
++	err |= bpf_map__set_autocreate(skel->maps.testmod_2, false);
++	err |= bpf_map__set_autocreate(skel->maps.optional_map2, true);
++	if (!ASSERT_OK(err, "bpf_map__set_autocreate"))
++		goto cleanup;
++
++	err = struct_ops_autocreate__load(skel);
++	if (ASSERT_OK(err, "struct_ops_autocreate__load"))
++		goto cleanup;
++
++	check_test_1_link(skel, skel->maps.optional_map2);
+ 
+ cleanup:
+-	bpf_link__destroy(link);
+ 	struct_ops_autocreate__destroy(skel);
  }
  
- static int bpf_object__sanitize_btf(struct bpf_object *obj, struct btf *btf)
-@@ -2897,6 +2903,7 @@ static int bpf_object__sanitize_btf(struct bpf_object *obj, struct btf *btf)
- 	bool has_decl_tag = kernel_supports(obj, FEAT_BTF_DECL_TAG);
- 	bool has_type_tag = kernel_supports(obj, FEAT_BTF_TYPE_TAG);
- 	bool has_enum64 = kernel_supports(obj, FEAT_BTF_ENUM64);
-+	bool has_qmark_datasec = kernel_supports(obj, FEAT_BTF_QMARK_DATASEC);
- 	int enum64_placeholder_id = 0;
- 	struct btf_type *t;
- 	int i, j, vlen;
-@@ -2922,6 +2929,8 @@ static int bpf_object__sanitize_btf(struct bpf_object *obj, struct btf *btf)
- 			char *name;
- 
- 			name = (char *)btf__name_by_offset(btf, t->name_off);
-+			if (*name == '?')
-+				*name++ = '_';
- 			while (*name) {
- 				if (*name == '.')
- 					*name = '_';
-@@ -2938,6 +2947,25 @@ static int bpf_object__sanitize_btf(struct bpf_object *obj, struct btf *btf)
- 				vt = (void *)btf__type_by_id(btf, v->type);
- 				m->name_off = vt->name_off;
- 			}
-+		} else if (!has_qmark_datasec && btf_is_datasec(t) &&
-+			   starts_with_qmark(btf__name_by_offset(btf, t->name_off))) {
-+			/* remove '?' prefix and add '.optional' suffix for
-+			 * DATASEC names staring from '?':
-+			 *
-+			 *   DATASEC ?.foo -> DATASEC .foo.optional
-+			 */
-+			const char *name;
-+			char buf[256];
-+			int str;
-+
-+			name = btf__name_by_offset(btf, t->name_off);
-+			snprintf(buf, sizeof(buf), "%s.optional", &name[1] /* skip '?' */);
-+			str = btf__add_str(btf, buf);
-+			if (str < 0)
-+				return str;
-+
-+			t = (struct btf_type *)btf__type_by_id(btf, i);
-+			t->name_off = str;
- 		} else if (!has_func && btf_is_func_proto(t)) {
- 			/* replace FUNC_PROTO with ENUM */
- 			vlen = btf_vlen(t);
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index ad936ac5e639..864b36177424 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -374,6 +374,8 @@ enum kern_feature_id {
- 	FEAT_UPROBE_MULTI_LINK,
- 	/* Kernel supports arg:ctx tag (__arg_ctx) for global subprogs natively */
- 	FEAT_ARG_CTX_TAG,
-+	/* Kernel supports '?' at the front of datasec names */
-+	FEAT_BTF_QMARK_DATASEC,
- 	__FEAT_CNT,
+@@ -108,4 +152,6 @@ void test_struct_ops_autocreate(void)
+ 		can_load_partial_object();
+ 	if (test__start_subtest("autoload_and_shadow_vars"))
+ 		autoload_and_shadow_vars();
++	if (test__start_subtest("optional_maps"))
++		optional_maps();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_autocreate.c b/tools/testing/selftests/bpf/progs/struct_ops_autocreate.c
+index 9a951ee6f55c..ba10c3896213 100644
+--- a/tools/testing/selftests/bpf/progs/struct_ops_autocreate.c
++++ b/tools/testing/selftests/bpf/progs/struct_ops_autocreate.c
+@@ -40,3 +40,13 @@ struct bpf_testmod_ops___v2 testmod_2 = {
+ 	.test_1 = (void *)test_1,
+ 	.does_not_exist = (void *)test_2
  };
- 
++
++SEC("?.struct_ops")
++struct bpf_testmod_ops___v1 optional_map = {
++	.test_1 = (void *)test_1,
++};
++
++SEC("?.struct_ops.link")
++struct bpf_testmod_ops___v1 optional_map2 = {
++	.test_1 = (void *)test_1,
++};
 -- 
 2.43.0
 
