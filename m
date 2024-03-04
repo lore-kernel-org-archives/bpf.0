@@ -1,200 +1,135 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5294462143;
-	Mon,  4 Mar 2024 20:28:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73C6017C8
+	for <bpf@vger.kernel.org>; Mon,  4 Mar 2024 20:34:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709584109; cv=none; b=sWn/BQ2qKrxbup96XzeGjiwe/UAc0FarQThDEtxOI1uGz4lvRQ50LDP7t3gIXOsI+UQ7Typ9a/OWiVleSIUBgo4uRL72ZGVftmcpg/ZlKPyK8QlXyuJ7Q+9/YO5cfIXB5+UsJ4cSY+/WrfSGM01kvzOrs5gDhBFHRRA9PnG0Gio=
+	t=1709584457; cv=none; b=PNwduaadhIWtCKkINE9jCuFSKsZbq9czKyeOwc/nf5I/cS0CzXJamkwgxb1kPAE/43MqZ3iiiQ8Gj1ngX41pXIkqdarAuQdMFgJ1eaz5dCk6EuT6tWxr/fw2/S31yUup/VQyNXfnQjlkS4UdI2X/GLIK998Xkaxwc/LAnbUVQ/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709584109; c=relaxed/simple;
-	bh=kK56UPJtrMgrhC+eWkyoWONsRRS13BbXbI9WLikncpM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uQ7PKM8DrG96fmCKUtfLp4w5i+6Or4nJQuKn68KzwcaN+hw1o0oi4SsHX9z8IfrB9/82QX0ejImG9UL6odRBOHwTT4WpuTp36y9ecV2KM3RPokdVuBOACqFY9QKKHxlM7AXuwwmv9qioKh0+Sdw4TQMvnOuBP4rkK0+pjhRZ2n8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=STOXi1xk; arc=none smtp.client-ip=209.85.128.52
+	s=arc-20240116; t=1709584457; c=relaxed/simple;
+	bh=2RYU6ZAtdqf8ycLsR8an+JYzuxi9iLteNXT+phtyBBc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dFXGU0ivLsG2sjLLH98cGyRj5DCZnYfzWwFCv4IJMP99bibdV2owC+i1WoaWDdoFHTZ74vP3yR9IzOcUBRmy/Pvf5ZlBOS6LHDXU/sHq73E72jKcJBMzBubbOYagMB0UqeanWrZjgO4kBAQKoXLmMqPOn/Hhb2O7kGKmKscX8ok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iLgnQrI7; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="STOXi1xk"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-412e8c63f23so5526345e9.0;
-        Mon, 04 Mar 2024 12:28:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iLgnQrI7"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1dbd32cff0bso41515185ad.0
+        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 12:34:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709584105; x=1710188905; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=C8374zjIQzoAP6NawexwSb/Q1q4lgTdoXyDk5N8EOwc=;
-        b=STOXi1xk0r6wDpy/h2h3fUddJHNio+JfY733HmrvlR/nTAj+3ZIgEWknZwAXYLe6dP
-         H2mW5cGaSiycDzQzk8KfmvqskHhdbr5Ol+l4u63uz5EMahXT6hB4+br2vSgGnpPgeDTP
-         VXu+X7JE57a4de9C7EZEYb+bJXgF/2QOE66wnsC1w9PHMzqvKyMYp74pPgoUfCkrBA4h
-         NicNvufdsIXHOk27vJH00QyGi2vPPVu0jS3rsqMCAE02dCGnMxNAI+xM0ElLMvfItfUj
-         HPMMW8pHm+T8YS6JzabGpcV7YW8Ygv9tQ3igwGGeRWgDe6NPxBHWedquGcduvJh3j9ye
-         FhBA==
+        d=gmail.com; s=20230601; t=1709584456; x=1710189256; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wXMDJ5R0LLXTMJzDa2rCEnF7h40MpmHoo+5cXd4xsoE=;
+        b=iLgnQrI73vjjqTq82paWuEOdLL1V50la0UF7MuNu4iY9uyOqH1T5irvw6DeYkIUhnX
+         kHkYXRrKHBszuaz36C59Zb/LpjFbYEx9ASZMIeLaoHGE4Os5HxtqJcPg9xJq5mPyXVhs
+         5VAH7C1f6A3/r7LqPvVZHQAPKHmKuSb5goRqQPI0VxzMIc8uyEl3/aTlw/9PTfv6VM72
+         1YXBEeQ/EdWlQupYEmvXHg+BjxhGvOoFN0j+UWx85eCiCqnywSv4tovLIcEcWSg55uby
+         sQt/XUG4E+iI29w1PTNWZGFvMJKNrI/rR/6byc64mnEFknxFbfEt6e1K83vAQLF7bQo9
+         zrfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709584105; x=1710188905;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C8374zjIQzoAP6NawexwSb/Q1q4lgTdoXyDk5N8EOwc=;
-        b=AiteLH3DswiFAdu5OcYSzQoPLgen2PK5N8BLQbjMX4Ph2GcTB23bKX3hqHL7BNUsQU
-         VOnQTzvGkFrHA31kGyj6pQ2IN1BDjkPHHBkbUZgp59gmaXZH+i/s+lBnLVZdbAHgU4jW
-         Rf/v1C0GDa0QGcY5udLFHsUIfnxILlyjB7+tvX6cfXRUBswcprBzpXGbJwSO2d7KFdgn
-         sNHitVocluLAUU9kICD6NnijHhUxLabx+oe28S49RGqIzfRXA87US+1rUCloqHFWRR19
-         gAnB3ZvAxP8sHIq/kEAnAXoxUGV+E6MIGjNpCu8JO3BcDnpSyFfPZO3ruRWzPIIn51Vx
-         g6DQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWxxBZ+zeW/XCaMwHNaVmk0Bi63PIjhK9fHR3sWq5rmiI3521k8dDvsx2A76yw33H8+itEuzi1QueTy/ixYexMnCZNgQ1sdz0vsO7z0KDEC1bfDJ8d7nvHSAJ0z3bJ/mtYv
-X-Gm-Message-State: AOJu0YzaU9wYRvoELhx93rs1Jt7S5oc+F3cYZp/yc2yLYW1UqxW8hrul
-	KSz04z2TnepClBdUkcYajBdVuD/h+7P35fdAJKVp42DHvr2R86TJ
-X-Google-Smtp-Source: AGHT+IHbTbMtHaq9bspX/vZCCO1+aoX9vsybER44sO+00buq4wgGQxNpZxIz6qKi6v4tq9zIdZpxYQ==
-X-Received: by 2002:a05:600c:5191:b0:412:e902:87a7 with SMTP id fa17-20020a05600c519100b00412e90287a7mr1117353wmb.20.1709584105222;
-        Mon, 04 Mar 2024 12:28:25 -0800 (PST)
-Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id o39-20020a05600c512700b00412d60cb914sm8808428wms.5.2024.03.04.12.28.24
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 04 Mar 2024 12:28:24 -0800 (PST)
-From: Puranjay Mohan <puranjay12@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	catalin.marinas@arm.com,
-	mark.rutland@arm.com,
-	bpf@vger.kernel.org,
-	kpsingh@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	xukuohai@huaweicloud.com
-Cc: puranjay12@gmail.com
-Subject: [PATCH bpf-next] arm64, bpf: Use bpf_prog_pack for arm64 bpf trampoline
-Date: Mon,  4 Mar 2024 20:28:03 +0000
-Message-Id: <20240304202803.31400-1-puranjay12@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        d=1e100.net; s=20230601; t=1709584456; x=1710189256;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wXMDJ5R0LLXTMJzDa2rCEnF7h40MpmHoo+5cXd4xsoE=;
+        b=abrNiJPZn5xVvRYAjvZZO4Ig8FqhuQneRe5naYX7QcXE2dzgKKyN5jAkJqxBpfNJyE
+         mkhDkpqvpEsUBziee1nFe+1HqvoOrvvs63VmeWn4ytR1dvMj4w+dXM/lE9iMn+sZ6qot
+         7xQl5cfQiwHZ5rQSrmwgthnQlgmwA/ahv9uRs4F3San6fhT16Qn/IAWOqBOUlvd+aXTP
+         N4nGAo50Q9qCvpYyLxDYmPARxV69nvh+Ae4IjzarOPc1HlIQwA20ToPt6v2RqkaHPbUF
+         Y+YTMgnmsyRT7ugTBQ6PhKRMoSsk4rQ0fuwYKTCLSXwVHl4uJaR4CRTzih9hBEgS4LK4
+         hsuw==
+X-Forwarded-Encrypted: i=1; AJvYcCXqGfmfSyUgn5Hn9itNLfBxVKNsfgI93QDUlAlFW4DNITfo63QqAbL1sDl73pAppR4LF+qX9r2hf9oHlWCOSl9IqJok
+X-Gm-Message-State: AOJu0YxI+vcER5zbtCALbg3WH6wJ59PiigDumlTHHB9Q7M9DqDZjSrDh
+	Quv8rDSYvcWXt8ZuV29UJTc04U8gWkOhKwaKacnWu/NAqhvjWmlY
+X-Google-Smtp-Source: AGHT+IFtOUS+Xy7ZKUBBYMzRxqh4VOaSj2M4cTgGYkb2tl+Iae471lLCbxIfZcar06H9dW0vgRKlog==
+X-Received: by 2002:a17:902:aa84:b0:1db:509a:5a31 with SMTP id d4-20020a170902aa8400b001db509a5a31mr9334977plr.26.1709584455652;
+        Mon, 04 Mar 2024 12:34:15 -0800 (PST)
+Received: from valdaarhun.localnet ([223.233.81.114])
+        by smtp.gmail.com with ESMTPSA id jv11-20020a170903058b00b001dc96c5fa13sm8931414plb.295.2024.03.04.12.34.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Mar 2024 12:34:15 -0800 (PST)
+From: Sahil <icegambit91@gmail.com>
+To: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ Quentin Monnet <quentin@isovalent.com>
+Cc: martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org
+Subject:
+ Re: [PATCH bpf-next] bpftool: Mount bpffs on provided dir instead of parent
+ dir
+Date: Tue, 05 Mar 2024 02:04:08 +0530
+Message-ID: <2347452.ElGaqSPkdT@valdaarhun>
+In-Reply-To: <2aeecee4-3499-4036-8c26-59ccffc2c6ab@isovalent.com>
+References:
+ <20240229130543.17491-1-icegambit91@gmail.com>
+ <3290360.44csPzL39Z@valdaarhun>
+ <2aeecee4-3499-4036-8c26-59ccffc2c6ab@isovalent.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-We used bpf_prog_pack to aggregate bpf programs into huge page to
-relieve the iTLB pressure on the system. This was merged for ARM64[1]
-We can apply it to bpf trampoline as well. This would increase the
-preformance of fentry and struct_ops programs.
+Hi,
 
-[1] https://lore.kernel.org/bpf/20240228141824.119877-1-puranjay12@gmail.com/
+Thank you for the reply.
 
-Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
----
- arch/arm64/net/bpf_jit_comp.c | 55 +++++++++++++++++++++++++++++------
- 1 file changed, 46 insertions(+), 9 deletions(-)
+On Monday, March 4, 2024 7:20:40 PM IST Quentin Monnet wrote:
+> [...]
+> Splitting the function was a suggestion, but you don't *have to* do it.
+> What matters is the clarity of the resulting code, we want the function
+> to be easy to follow and to not mix the file vs. directory paths too
+> much (or then it's very easy to introduce bugs such as the existing one,
+> or the missing --nomount check in your v1). Don't focus too much on
+> malloc()/dirname() here, just make the logics easy to understand.
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 5afc7a525eca..c5b461dda438 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -2076,7 +2076,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
- 		/* store return value */
- 		emit(A64_STR64I(A64_R(0), A64_SP, retval_off), ctx);
- 		/* reserve a nop for bpf_tramp_image_put */
--		im->ip_after_call = ctx->image + ctx->idx;
-+		im->ip_after_call = ctx->ro_image + ctx->idx;
- 		emit(A64_NOP, ctx);
- 	}
- 
-@@ -2091,7 +2091,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
- 				run_ctx_off, false);
- 
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
--		im->ip_epilogue = ctx->image + ctx->idx;
-+		im->ip_epilogue = ctx->ro_image + ctx->idx;
- 		emit_addr_mov_i64(A64_R(0), (const u64)im, ctx);
- 		emit_call((const u64)__bpf_tramp_exit, ctx);
- 	}
-@@ -2124,9 +2124,6 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
- 		emit(A64_RET(A64_R(10)), ctx);
- 	}
- 
--	if (ctx->image)
--		bpf_flush_icache(ctx->image, ctx->image + ctx->idx);
--
- 	kfree(branches);
- 
- 	return ctx->idx;
-@@ -2169,14 +2166,43 @@ int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
- 	return ret < 0 ? ret : ret * AARCH64_INSN_SIZE;
- }
- 
--int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
--				void *image_end, const struct btf_func_model *m,
-+void *arch_alloc_bpf_trampoline(unsigned int size)
-+{
-+	return bpf_prog_pack_alloc(size, jit_fill_hole);
-+}
-+
-+void arch_free_bpf_trampoline(void *image, unsigned int size)
-+{
-+	bpf_prog_pack_free(image, size);
-+}
-+
-+void arch_protect_bpf_trampoline(void *image, unsigned int size)
-+{
-+}
-+
-+void arch_unprotect_bpf_trampoline(void *image, unsigned int size)
-+{
-+}
-+
-+int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *ro_image,
-+				void *ro_image_end, const struct btf_func_model *m,
- 				u32 flags, struct bpf_tramp_links *tlinks,
- 				void *func_addr)
- {
- 	int ret, nregs;
-+	void *image, *tmp;
-+	u32 size = ro_image_end - ro_image;
-+
-+	/* image doesn't need to be in module memory range, so we can
-+	 * use kvmalloc.
-+	 */
-+	image = kvmalloc(size, GFP_KERNEL);
-+	if (!image)
-+		return -ENOMEM;
-+
- 	struct jit_ctx ctx = {
- 		.image = image,
-+		.ro_image = ro_image,
- 		.idx = 0,
- 	};
- 
-@@ -2185,15 +2211,26 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
- 	if (nregs > 8)
- 		return -ENOTSUPP;
- 
--	jit_fill_hole(image, (unsigned int)(image_end - image));
-+	jit_fill_hole(image, (unsigned int)(ro_image_end - ro_image));
- 	ret = prepare_trampoline(&ctx, im, tlinks, func_addr, nregs, flags);
- 
--	if (ret > 0 && validate_code(&ctx) < 0)
-+	if (ret > 0 && validate_code(&ctx) < 0) {
- 		ret = -EINVAL;
-+		goto out;
-+	}
- 
- 	if (ret > 0)
- 		ret *= AARCH64_INSN_SIZE;
- 
-+	tmp = bpf_arch_text_copy(ro_image, image, size);
-+	if (IS_ERR(tmp)) {
-+		ret = PTR_ERR(tmp);
-+		goto out;
-+	}
-+
-+	bpf_flush_icache(ro_image, ro_image + size);
-+out:
-+	kvfree(image);
- 	return ret;
- }
- 
--- 
-2.40.1
+Understood, I'll refactor it accordingly.
+
+> [...]
+> If I understand correctly what you're asking, for files, "is_dir" would
+> always evaluate to false so this check would be useless, wouldn't it? So
+> yes we'd remove it.
+
+This is the first part of my query.
+
+> > If "is_bpffs(name)" returns false, then that could imply that the file
+> > exists and its parent dir is not bpffs, or that the file does not exist
+> > and no comment can be made on the parent dir. In either case the malloc
+> > and dirname will have to be done.
+> > 
+> > On the other hand if the file exists
+> 
+> Note: We handle the case where a directory exists, not when the file
+> itself already exists. If the file exists we get an error when trying to
+> pin the program.
+
+Right. And this is related to the second part of my query. If the file already
+exists, an error should be thrown. But if it does not exist and the dir is not
+bpffs, we'll end up doing:
+
+    is_bpffs(name) // in the condition mentioned above
+    [...]
+    dir_name = dirname(name); // get parent dir name
+    is_bpffs(dir_name) // call is_bpffs again
+    [...]
+
+So, in the "if" statement below:
+
+    if (is_dir && is_bpffs(name))
+
+will it be better to remove the second condition as well, and in lieu of that
+we could simply run dirname() and is_bpffs(dir_name) if the function gets
+a file as an argument?
+
+Thanks,
+Sahil
+
+
 
