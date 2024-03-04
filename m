@@ -1,56 +1,56 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A5F97C089
-	for <bpf@vger.kernel.org>; Mon,  4 Mar 2024 22:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B797B3FA
+	for <bpf@vger.kernel.org>; Mon,  4 Mar 2024 22:52:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709592732; cv=none; b=TQs3wulks757C7C4ppPqsfJ7QwhcI2SBm8kN4HBF1LoOA6ospiLT936AlEO3B/sZTvVJ3E210U5v3Xsa0azApi8dr8Vq2Uew+wxaB6QuERwerCYSIUYbI6ONueKx624Z3N4uZ4n0hCkqJ2R/w5JYDfOS529N3hDPJbxvDxW/uk8=
+	t=1709592734; cv=none; b=tJxZz/jLuoHuqDnmFMQ/Iq9wpThcV3ZC30gU7RCayDRHlFkVpCTydQFn2ca2oT7/hz3Deh7VEdgEk/pLLvzRCcLoMsdANthWA6coKunweeoEXz2SS6zSWICBBDAcucORvH6+1Xj3R3cfElb97Q3yhZJOmDuNqZxZpQsFrNopKSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709592732; c=relaxed/simple;
-	bh=7n3VOltWg2CvMWA84SRE1wH3LRcYRxUITz9dnx52KQ0=;
+	s=arc-20240116; t=1709592734; c=relaxed/simple;
+	bh=MxAP1Mj+92zhg+N4eBULQMbyQMO4cUeudjXhJFMAEm8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dQTh/xHWkH7xohYMyXjwFatPeN8k6x/aM0U6zzP0OOc/NAZEDKR4HlUymMgT9DoJdCqk+1QP7QWxUM6O3Id5rlLNch6LLJuRASj+kRlq/YTW8V4aOSlRYCZmF8woK3qz2Djs7pjDzKGiMtuIIflGFZX29OXJbQ2v8eR5hELeqQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FqtOv5PT; arc=none smtp.client-ip=209.85.218.52
+	 MIME-Version; b=F7Cpb+GJs7tPones4yDa4jLtZ3K1KyZZia2qDc241ERbdqWRm0KKI/PgACEqKakeObpJH7lqw1RX99jSt8QDBh/bO2gX+ST8fj9yceu6xEskhvri4pBabiaIlWgtb7dQd/tGWyy6wLlGmc5NCcFgZHsqSIVKyGp2CUxqCv3Jmz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g8Ad3FCk; arc=none smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FqtOv5PT"
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a449c5411e1so453822966b.1
-        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 14:52:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g8Ad3FCk"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a26ed1e05c7so852613066b.2
+        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 14:52:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709592729; x=1710197529; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709592730; x=1710197530; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=v11JrOpQ0vOwRfRtr1r+yvwVR9OS5PTJrump/SfFJRM=;
-        b=FqtOv5PTru2tCO224rSDU0hNu3YsjuF5T5iFUZLOtVIaXaivbdnHACZeSY1WFo3stI
-         KbOXuBCJqRlLZ4kFgsYIwHZc6ENfxJXN7hleukHy360UUkihTlJSCRT+ECcV87KYga7t
-         CGlQjicoSsYE0JvgP+hyaczIKwW6oQ46GbrUTbxhApbdsDkK7cvMPiGBF+eeUlxQXeoQ
-         Omf+CSr/vPvyFB69S8aLGtULiGeGIoJIx7h3nIKJS9KoWcYPcwfxcapPueR80ey0b3bG
-         uqUEezCnno4e+cw6FPC5aJY7Gwor0/b1rmcDbYTnWFlrTQghQ74uTlpklQrVXvLQXH31
-         qPGw==
+        bh=ac39i9sTIpkqIzsBXHyyh1hd2HLA5BkCt5GBSAjk6Yo=;
+        b=g8Ad3FCkR7kShM0zUuG3qavleX8wj3n9ynEK/aTqs2adj5csn1qRNAMJbLCCcvthAb
+         PKZuQqyrU1DilEd0ApXZW9iFO+1KcawvoD6LOvni4+UkwbVCnI+6yRUM1GwU7YqIFkci
+         fD2WzlyupC3z9KCf/Mjn+LB7Uwnf6LLzv3a0B5nqPwp+MA3RmkbrhHBxM1O1FPI3zmLd
+         Qo8sCRvueH+pbPU6UZRnOJtqGakwLMsMhFsOvCSzLdFJRD3PA822GG1pz0lIHq9pj7eu
+         wRfDOgPaJ91FYR3BL9/PVlZLKSQ5qDJVZaK9HcXPKtOSYzkPUJ7XzQPpxoIbYa76Gj+9
+         +YPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709592729; x=1710197529;
+        d=1e100.net; s=20230601; t=1709592730; x=1710197530;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=v11JrOpQ0vOwRfRtr1r+yvwVR9OS5PTJrump/SfFJRM=;
-        b=ljri8ZZegJ87M1UwoqigLmNd/AVvcF53uePerIRD8yeBQJ9OW8sAnwfTf9PZEOfo+9
-         0o5jGUSS/wR1PodgMqsQIrdOf6gHHbTa6+xyYmrOnly5OyxuZX/tRsCMK7PtPkv39Uxi
-         IiJ60XaE832y+GTd3JrGdbI4NRZhKxa37jrnv+PhdqlYrcAvvJ8JUeRWVdt48I5my6FZ
-         ZA6pa02vjmnwMXDO/DPWkhHtJ8neElpvwyN/2qccBtWUCvwZqkyieHl0fagAAzvgVWEN
-         b/oZyW3ZzLsTKqHtM6ORCyGPCJNCfP/YzoML3lZfwzd1NAbLpaydIVjy459ArA0vQKDS
-         KleQ==
-X-Gm-Message-State: AOJu0Yxscg5Z/2jK1+TemzBQkNDp4I/rj1gJiJjHrOQ/CN1/aASi3Qn/
-	5+6Ab6fCb2L6TfNDZinbw/WI0sNSR0imajQruOaZRKXkXTDU/xzOr86lmxtN
-X-Google-Smtp-Source: AGHT+IHsuQtxvXmASDXywZrAG1WDaOMVVkRcxbdOFBNOdfRGUpVFzComBJihgNvo3S6lFag/z10kwQ==
-X-Received: by 2002:a17:906:e08d:b0:a44:731c:bace with SMTP id gh13-20020a170906e08d00b00a44731cbacemr7592179ejb.35.1709592729121;
-        Mon, 04 Mar 2024 14:52:09 -0800 (PST)
+        bh=ac39i9sTIpkqIzsBXHyyh1hd2HLA5BkCt5GBSAjk6Yo=;
+        b=GY6Bf7mPblkE/UKSA/NQ4XaX+qI+6uJ7fWoxtFVlL0IJEYu2ucIyaK5Sg0kgUkghp2
+         z/o08m412onnAl07sDIlIO+2LeSPrlaIL9lSKtSZ1T70InpqdMLKvxkMu2CeHhyP5g+A
+         oURDxL6Yot6QoAXq2XxsSDVqXIk9YFx7vD20Zzigs9F6L/AOo18yYB8N6KAEiBgigiCJ
+         IK+2VOOSu36GXtRVHMGZEbBxnps3Kwgn3houPsyrx3YRRSNjUOaMMaqXd91Ny60XvC3N
+         Fd0GxA0nefBQ/Pp5D4v2zD/40/mR4gU2RCq78E8xRwKtbeoWEp28+4EubBLFQzG6p46i
+         9PlA==
+X-Gm-Message-State: AOJu0Yxtt1p2zcURmtmcsYt14g3MU1G0/+vkBMKwLeZ6UouXMMLIpuBl
+	ZrO7XgAgCFzGZ+vPz+KvuXEdX9KB/32x9rEbNwCQt7F2vuJ/czbfAAxAMpuc
+X-Google-Smtp-Source: AGHT+IHixalHglIlXXQ2Lavebv7pP2ccRXU+8qIRYmVQYEcPC21hXjTIIyscOmgnpHW1dEoXtcZn9g==
+X-Received: by 2002:a17:906:ff53:b0:a43:5bc6:17f3 with SMTP id zo19-20020a170906ff5300b00a435bc617f3mr7589876ejb.6.1709592730507;
+        Mon, 04 Mar 2024 14:52:10 -0800 (PST)
 Received: from localhost.localdomain (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id qx22-20020a170906fcd600b00a4302eb448dsm5315499ejb.134.2024.03.04.14.52.07
+        by smtp.gmail.com with ESMTPSA id qx22-20020a170906fcd600b00a4302eb448dsm5315499ejb.134.2024.03.04.14.52.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Mar 2024 14:52:08 -0800 (PST)
+        Mon, 04 Mar 2024 14:52:10 -0800 (PST)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -62,9 +62,9 @@ Cc: andrii@kernel.org,
 	void@manifault.com,
 	sinquersw@gmail.com,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v3 02/15] libbpf: tie struct_ops programs to kernel BTF ids, not to local ids
-Date: Tue,  5 Mar 2024 00:51:43 +0200
-Message-ID: <20240304225156.24765-3-eddyz87@gmail.com>
+Subject: [PATCH bpf-next v3 03/15] libbpf: honor autocreate flag for struct_ops maps
+Date: Tue,  5 Mar 2024 00:51:44 +0200
+Message-ID: <20240304225156.24765-4-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240304225156.24765-1-eddyz87@gmail.com>
 References: <20240304225156.24765-1-eddyz87@gmail.com>
@@ -76,97 +76,67 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Enforce the following existing limitation on struct_ops programs based
-on kernel BTF id instead of program-local BTF id:
+Skip load steps for struct_ops maps not marked for automatic creation.
+This should allow to load bpf object in situations like below:
 
-    struct_ops BPF prog can be re-used between multiple .struct_ops &
-    .struct_ops.link as long as it's the same struct_ops struct
-    definition and the same function pointer field
+    SEC("struct_ops/foo") int BPF_PROG(foo) { ... }
+    SEC("struct_ops/bar") int BPF_PROG(bar) { ... }
 
-This allows reusing same BPF program for versioned struct_ops map
-definitions, e.g.:
+    struct test_ops___v1 {
+    	int (*foo)(void);
+    };
 
-    SEC("struct_ops/test")
-    int BPF_PROG(foo) { ... }
+    struct test_ops___v2 {
+    	int (*foo)(void);
+    	int (*does_not_exist)(void);
+    };
 
-    struct some_ops___v1 { int (*test)(void); };
-    struct some_ops___v2 { int (*test)(void); };
+    SEC(".struct_ops.link")
+    struct test_ops___v1 map_for_old = {
+    	.test_1 = (void *)foo
+    };
 
-    SEC(".struct_ops.link") struct some_ops___v1 a = { .test = foo }
-    SEC(".struct_ops.link") struct some_ops___v2 b = { .test = foo }
+    SEC(".struct_ops.link")
+    struct test_ops___v2 map_for_new = {
+    	.test_1 = (void *)foo,
+    	.does_not_exist = (void *)bar
+    };
 
+Suppose program is loaded on old kernel that does not have definition
+for 'does_not_exist' struct_ops member. After this commit it would be
+possible to load such object file after the following tweaks:
+
+    bpf_program__set_autoload(skel->progs.bar, false);
+    bpf_map__set_autocreate(skel->maps.map_for_new, false);
+
+Acked-by: David Vernet <void@manifault.com>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/lib/bpf/libbpf.c | 49 ++++++++++++++++++++++--------------------
- 1 file changed, 26 insertions(+), 23 deletions(-)
+ tools/lib/bpf/libbpf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index e2a4c409980b..2c0cb72bc7a4 100644
+index 2c0cb72bc7a4..25c452c20d7d 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -1146,8 +1146,32 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
+@@ -1209,7 +1209,7 @@ static int bpf_object__init_kern_struct_ops_maps(struct bpf_object *obj)
+ 	for (i = 0; i < obj->nr_maps; i++) {
+ 		map = &obj->maps[i];
  
- 			if (mod_btf)
- 				prog->attach_btf_obj_fd = mod_btf->fd;
--			prog->attach_btf_id = kern_type_id;
--			prog->expected_attach_type = kern_member_idx;
-+
-+			/* if we haven't yet processed this BPF program, record proper
-+			 * attach_btf_id and member_idx
-+			 */
-+			if (!prog->attach_btf_id) {
-+				prog->attach_btf_id = kern_type_id;
-+				prog->expected_attach_type = kern_member_idx;
-+			}
-+
-+			/* struct_ops BPF prog can be re-used between multiple
-+			 * .struct_ops & .struct_ops.link as long as it's the
-+			 * same struct_ops struct definition and the same
-+			 * function pointer field
-+			 */
-+			if (prog->attach_btf_id != kern_type_id) {
-+				pr_warn("struct_ops init_kern %s func ptr %s: invalid reuse of prog %s in sec %s with type %u: attach_btf_id %u != kern_type_id %u\n",
-+					map->name, mname, prog->name, prog->sec_name, prog->type,
-+					prog->attach_btf_id, kern_type_id);
-+				return -EINVAL;
-+			}
-+			if (prog->expected_attach_type != kern_member_idx) {
-+				pr_warn("struct_ops init_kern %s func ptr %s: invalid reuse of prog %s in sec %s with type %u: expected_attach_type %u != kern_member_idx %u\n",
-+					map->name, mname, prog->name, prog->sec_name, prog->type,
-+					prog->expected_attach_type, kern_member_idx);
-+				return -EINVAL;
-+			}
+-		if (!bpf_map__is_struct_ops(map))
++		if (!bpf_map__is_struct_ops(map) || !map->autocreate)
+ 			continue;
  
- 			st_ops->kern_func_off[i] = kern_data_off + kern_moff;
+ 		err = bpf_map__init_kern_struct_ops(map);
+@@ -8136,7 +8136,7 @@ static int bpf_object_prepare_struct_ops(struct bpf_object *obj)
+ 	int i;
  
-@@ -9428,27 +9452,6 @@ static int bpf_object__collect_st_ops_relos(struct bpf_object *obj,
- 			return -EINVAL;
- 		}
+ 	for (i = 0; i < obj->nr_maps; i++)
+-		if (bpf_map__is_struct_ops(&obj->maps[i]))
++		if (bpf_map__is_struct_ops(&obj->maps[i]) && obj->maps[i].autocreate)
+ 			bpf_map_prepare_vdata(&obj->maps[i]);
  
--		/* if we haven't yet processed this BPF program, record proper
--		 * attach_btf_id and member_idx
--		 */
--		if (!prog->attach_btf_id) {
--			prog->attach_btf_id = st_ops->type_id;
--			prog->expected_attach_type = member_idx;
--		}
--
--		/* struct_ops BPF prog can be re-used between multiple
--		 * .struct_ops & .struct_ops.link as long as it's the
--		 * same struct_ops struct definition and the same
--		 * function pointer field
--		 */
--		if (prog->attach_btf_id != st_ops->type_id ||
--		    prog->expected_attach_type != member_idx) {
--			pr_warn("struct_ops reloc %s: cannot use prog %s in sec %s with type %u attach_btf_id %u expected_attach_type %u for func ptr %s\n",
--				map->name, prog->name, prog->sec_name, prog->type,
--				prog->attach_btf_id, prog->expected_attach_type, name);
--			return -EINVAL;
--		}
--
- 		st_ops->progs[member_idx] = prog;
- 
- 		/* st_ops->data will be exposed to users, being returned by
+ 	return 0;
 -- 
 2.43.0
 
