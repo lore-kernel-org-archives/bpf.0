@@ -1,111 +1,176 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C86A27441
-	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 03:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1CC6FB5;
+	Tue,  5 Mar 2024 04:21:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709610307; cv=none; b=XuVVbgpqbuZ+Ai9o5Na8UYKPKWZZ1w/2LiYf0vE9m8azJnjWYLh0TLjpMZOg6evCEIWbXw+zJi1wL4G7TWQKnuYq5K69ngcWMm1lmXxROJtnoW/WE9mBCsRFVZlm8+xQcuPl80Eac8PBvbTD506UW+muTHIIxQZfm/5kcyujJvA=
+	t=1709612466; cv=none; b=pbTlOgCU/hV+GvkBjDnAY8ssQdRQIeNpzBr7zHT1TCU0fFfLm3sh1MQ+bOE5Z1mbrpuoM5Hui9iOQHZLdjNB4gj7ZHISfnnDJkNBHcgWAmI0lFARFnsOuojjOn9ZfnLiObolb8Bz7DWhAOTr4/Vnd8qstfKYuzM6sd3EgtG1cPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709610307; c=relaxed/simple;
-	bh=sdrQno3o1kVg1Faen4nvZ12ryVrdPFXuThqxDYmb8Io=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ib+XsDL9B0wB4bjTxjx5Eh4QqBFyQfrFCTh0AX2tDQXidv5m99gmYoCDsx5glT7op2/z95GF7knlUSoTJ+/rb1mGelzA4BEZ1R1I9KE4fkQNu3uurmut8RSaR2MUpnW2Ys6PIRCuuezTx9ElcfJjiAHW5sC1+lziKI5pk3askL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V+20CX3D; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709612466; c=relaxed/simple;
+	bh=1WHkQK/Ja5W+APKzZ4IYM8Vsp3euVtIzyGWw7tf7y6A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JqQROgEGxcRVgaiNv4F7+9Sb+szqrp2/qJtgloNWaNcNgSuITLlWWBKnyhZXQBKBmPJfqhGNXwHQZ8NboNOFgK0UttgNTWwR7ZqHjBTQt/HSFzGtZi87oHisXs4IXY8pVeTI/wTB7JSLIZt39jV5k+MfpM54eXjiIeCTp5uZ9bY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FElsCGGa; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V+20CX3D"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-33e383546c1so839152f8f.2
-        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 19:45:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709610303; x=1710215103; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x65LKIvzu5VeHJKqViZoIBW1f0SAuGvBnghYX/iuxXg=;
-        b=V+20CX3DbOpfmGtB0GMgiHGke8DMGAh85Afu7F6y0QfMzHAREvnZN/MWo6doTeb3TD
-         f6r2io4dBLxK8WXHeu4ScjzgaH9GdYC6QuIzDYXKZdKDq065fOc2L0c9JSLq3/iL2nvV
-         tI0+a5qGsZ5wb7EycyDKyHCZrq+hx5SigAZiDR5rIz6n3eb9euTLOUut2fozt+n2OxnD
-         TuBIdYC/Nnhn2x3GtI4+b/YHymAivxW8eiqjfwUTVuLXm35Z71JTr4QCKSBkzNp8VWcs
-         b3I91ZRmHv4EbJ/rCbo3EFTNkLFq8N7Ck7mWQr4dkZkdY4ewgdfYCrfGzNYIv4jn47uu
-         /R6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709610303; x=1710215103;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x65LKIvzu5VeHJKqViZoIBW1f0SAuGvBnghYX/iuxXg=;
-        b=rggaMOhJGZvzuwBoGTYCILUq02v2Ex+IJEuE4tBr0Wlam8CoESBFoSHTteBK+RpOZy
-         rFaokWzucovGp/zZlpAHURVIVOLtNVayBu7tmnKVX0iIQAuvP3KsjZIWHDOUSBLVuyTU
-         Q6MqouL6o48SEACR7OpxQu1c5krrKovKuxftykEZHK+NIngDZqA3fegnyShpu5FYJywe
-         Lw1JKK4X0ha+3HUQaUpSjaqV79PZ6elMpts7+JNAoQ6JflaAkpgPud6phUC64MfAlYaw
-         RXfmAbIYjW9auRsNvRsgy7FHzuhX5RS4c0IdIZlY7kKaV4eYekblPCtdabdibXumwCLJ
-         Sgtg==
-X-Gm-Message-State: AOJu0YzQ5j7c0zs6bryy1gUjluZtiqwHAf0qwhB7kUUvZY49mMZkrrYx
-	5DbyCMQQGc4KZk1CVvu34R033OfzjZkYtFCmkKgjcO3OFF3zPac3LXdh4DgKD6oB7nsY3aWi7UM
-	gZZXlCsv70mYJe0kNxTcZgOot478=
-X-Google-Smtp-Source: AGHT+IEA99/gXoVfwvbBBodE46xa86URrOMK5VmRI0Dd9CvTS1j/IU3wVD1ZgP+Eq04S5P9OAy3giSQM7TlHFqw/hRU=
-X-Received: by 2002:a5d:5084:0:b0:33b:187c:4ca0 with SMTP id
- a4-20020a5d5084000000b0033b187c4ca0mr8505824wrt.62.1709610303287; Mon, 04 Mar
- 2024 19:45:03 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FElsCGGa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709612463; x=1741148463;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1WHkQK/Ja5W+APKzZ4IYM8Vsp3euVtIzyGWw7tf7y6A=;
+  b=FElsCGGa4+8opnGv+3B2XTWr1ARr9LwLFhe8t6sp1K2RQelQNjrnkI+C
+   nwpbbNYgFFNXSQWwTfH9eSyH1vOvKSjiUEmat4swCBeDcSSs8SvxcRezw
+   XNR4DRbptPV97nfN2l/EJzC2Cyfs9ZCMGE+xWTU4AzfpwznE/9iLCqxfl
+   ktT6dKGaKgj61JZYz2do65CqZ2Xk2wDXk1HWaPZN4bhBVxKzekjjqwOxt
+   tpgmkNyQM7A/GPUzGwB7pErEEk6RdKHYUeTpB3wHKK7T7li+u11Bt8Hz8
+   rwxixG/v6bzOk5WHYezhaFUPmH19qNU56yoT4wy+3m5dCySXO5GmoH8K0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11003"; a="4300750"
+X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
+   d="scan'208";a="4300750"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 20:21:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
+   d="scan'208";a="40216302"
+Received: from choongyo-mobl.gar.corp.intel.com (HELO [10.247.102.58]) ([10.247.102.58])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 20:20:55 -0800
+Message-ID: <6fbbd36a-20f5-43db-97fc-c8755a82a159@linux.intel.com>
+Date: Tue, 5 Mar 2024 12:20:39 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240302020010.95393-1-alexei.starovoitov@gmail.com>
- <20240302020010.95393-3-alexei.starovoitov@gmail.com> <136a8fbc350dacbb8b8a4a4c0236c11f1c49d4cb.camel@gmail.com>
- <CAADnVQ+AeSkSovp_4wDztNhGKMF0X4+k+36_9r0DUZD5horZOA@mail.gmail.com>
-In-Reply-To: <CAADnVQ+AeSkSovp_4wDztNhGKMF0X4+k+36_9r0DUZD5horZOA@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 4 Mar 2024 19:44:51 -0800
-Message-ID: <CAADnVQJQYyHv_2vwi+A=FGqiqGAj5FLh6kNsGTHR2hy_H3viFQ@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 2/4] bpf: Recognize that two registers are
- safe when their ranges match
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, John Fastabend <john.fastabend@gmail.com>, 
-	Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v5 1/9] net: phylink: provide
+ mac_get_pcs_neg_mode() function
+To: "Voon, Weifeng" <weifeng.voon@intel.com>,
+ Russell King <linux@armlinux.org.uk>
+Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+ David E Box <david.e.box@linux.intel.com>,
+ Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Jose Abreu <Jose.Abreu@synopsys.com>, "David S . Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Richard Cochran <richardcochran@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+ Heiner Kallweit <hkallweit1@gmail.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Andrew Halaney
+ <ahalaney@redhat.com>, Serge Semin <fancer.lancer@gmail.com>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-stm32@st-md-mailman.stormreply.com"
+ <linux-stm32@st-md-mailman.stormreply.com>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ "Sit, Michael Wei Hong" <michael.wei.hong.sit@intel.com>,
+ "Lai, Peter Jun Ann" <peter.jun.ann.lai@intel.com>,
+ "Abdul Rahim, Faizal" <faizal.abdul.rahim@intel.com>
+References: <20240215030500.3067426-1-yong.liang.choong@linux.intel.com>
+ <20240215030500.3067426-2-yong.liang.choong@linux.intel.com>
+ <Zc47T/qv8Xg2SA21@shell.armlinux.org.uk>
+ <PH7PR11MB65210C62342088CF5C484A2888552@PH7PR11MB6521.namprd11.prod.outlook.com>
+Content-Language: en-US
+From: Choong Yong Liang <yong.liang.choong@linux.intel.com>
+In-Reply-To: <PH7PR11MB65210C62342088CF5C484A2888552@PH7PR11MB6521.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sun, Mar 3, 2024 at 9:21=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
-> > >               loop_entry =3D get_loop_entry(&sl->state);
-> > >               force_exact =3D loop_entry && loop_entry->branches > 0;
-> > > -             if (states_equal(env, &sl->state, cur, force_exact)) {
-> > > +             if (states_equal(env, &sl->state, cur, force_exact ? EX=
-ACT : NOT_EXACT)) {
-> >
-> > Logically this checks same condition as checks for calls_callback() or
-> > is_iter_next_insn() above: whether current state is equivalent to some
-> > old state, where old state had not been tracked to 'exit' for each
-> > possible path yet.
-> > Thus, 'exact' flags used in these checks should be the same:
-> > "force_exact ? RANGE_WITHIN : NOT_EXACT".
->
-> Good point. Will change. It should help as well.
 
-While working on that suggestion realized that this patch
-has a bug that I'm fixing with extra hunk:
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 410ac8423cf8..1e823c40a6d2 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -16471,11 +16471,9 @@ static bool regsafe(struct bpf_verifier_env
-*env, struct bpf_reg_state *rold,
-        if (!(rold->live & REG_LIVE_READ) && exact !=3D RANGE_WITHIN)
-                /* explored state didn't use this */
-                return true;
--       if (rold->type =3D=3D NOT_INIT)
-+       if (rold->type =3D=3D NOT_INIT && exact !=3D RANGE_WITHIN)
-                /* explored state can't have used this */
-                return true;
--       if (rcur->type =3D=3D NOT_INIT)
--               return false;
+On 23/2/2024 2:58 pm, Voon, Weifeng wrote:
+>>> For instance, if the interface switches from 2500baseX to SGMII mode,
+>>> and the current link mode is MLO_AN_PHY, calling
+>> 'phylink_pcs_neg_mode'
+>>> would yield PHYLINK_PCS_NEG_OUTBAND. Since the MAC and PCS driver
+>>> require PHYLINK_PCS_NEG_INBAND_ENABLED, the
+>> 'mac_get_pcs_neg_mode'
+>>> function will calculate the mode based on the interface, current link
+>>> negotiation mode, and advertising link mode, returning
+>>> PHYLINK_PCS_NEG_OUTBAND to enable the PCS to configure the correct
+>> settings.
+>>
+>> This paragraph doesn't make sense - at least to me. It first talks about
+>> requiring PHYLINK_PCS_NEG_INBAND_ENABLED when in SGMII mode. On
+>> this:
+> 
+> The example given here is a very specific condition and that probably why there are some confusions here. Basically, this patch provides an optional function for MAC driver to change the phy interface on-the-fly without the need of reinitialize the Ethernet driver. As we know that the 2500base-x is messy, in our case the 2500base-x does not support inband. To complete the picture, we are using SGMII c37 to handle speed 10/100/1000. Hence, to enable user to switch link speed from 2500 to 1000/100/10 and vice versa on-the-fly, the phy interface need to be configured to inband SGMII for speed 10/100/1000, and outband 2500base-x for speed 2500. Lastly, the newly introduced "mac_get_pcs_neg_mode"callback function enables MAC driver to reconfigure pcs negotiation mode to inband or outband based on the interface mode, current link negotiation mode, and advertising link mode.
+> 
+>>
+>> 1) are you sure that the hardware can't be programmed for the SGMII
+>> symbol repititions?
+>>
+> 
+> No, the HW can be program for SGMII symbol repetitions.
+> 
+>> 2) what happens if you're paired with a PHY (e.g. on a SFP module) which
+>> uses SGMII but has no capability of providing the inband data?
+>> (They do exist.) If your hardware truly does require inband data, it is going to
+>> be fundamentally inoperative with these modules.
+>>
+> 
+> Above explanation should have already cleared your doubts. Inband or outband capability is configured based on the phy interface.
+> 
+>> Next, you then talk about returning PHYLINK_PCS_NEG_OUTBAND for the
+>> "correct settings". How does this relate to the first part where you basically
+>> describe the problem as SGMII requring inband? Basically the two don't
+>> follow.
+> 
+> It should be a typo mistake. SGMII should return PHYLINK_PCS_NEG_INBAND_ENABLED.
+> 
+>>
+>> How, from a design point of view, because this fundamentally allows drivers
+>> to change how the system behaves, it will allow radically different behaviours
+>> for the same parameters between different drivers.
+>> I am opposed to that - I want to see a situation where we have uniform
+>> behaviour for the same configuration, and where hardware doesn't support
+>> something, we have some way to indicate that via some form of capabilities.
+>>
+> 
+> Hi Russell,
+> If I understand you correctly, MAC driver should not interfere with pcs negotiation mode and it should be standardized in the generic function, e.g., phylink_pcs_neg_mode()?
+> 
+>> The issue of whether 2500base-X has inband or not is a long standing issue,
+>> and there are arguments (and hardware) that take totally opposing views on
+>> this. There is hardware where 2500base-X inband _must_ be used or the link
+>> doesn't come up. There is also hardware where 2500base-X inband is not
+>> "supported" in documentation but works in practice. There is also hardware
+>> where 2500base-X inband doesn't work. The whole thing is a total mess
+>> (thanks IEEE 802.3 for not getting on top of this early enough... and what's
+>> now stated in 802.3 for 2500base-X is now irrelevant because they were too
+>> late to the
+>> party.)
+>>
+> 
+> Agreed. And I have also seen some of your comments regarding the 2500SGMII and 2500BASEX.
+> 
+Hi Russell,
 
-Kinda obvious in retrospect.
+Did the previous reply clear your doubt?
+
+If we understand you correctly that MAC driver should not interfere with 
+pcs negotiation mode and it should be standardized in the generic function.
+If implement what you suggested earlier that during interface mode change 
+then update the `cur_link_an_mode` but not cfg_link_an_mode: 
+https://patchwork.kernel.org/project/netdevbpf/patch/20230921121946.3025771-4-yong.liang.choong@linux.intel.com/?
+
+Would that be a better solution?
+So that 'phylink_pcs_neg_mode' function still can serve as the generic for 
+all the drivers.
+
+Do you have anything in mind that we can handle better for this patch series?
+or the solution can be aligned with what you are going to implement in the 
+future?
