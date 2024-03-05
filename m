@@ -1,316 +1,101 @@
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78635C61F;
-	Tue,  5 Mar 2024 12:55:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF7D43AB0;
+	Tue,  5 Mar 2024 13:28:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709643315; cv=none; b=TxqkuYNCzJsPgeSCyd9jfu25GYwOaUIonu9/DKiyBNrVb7LjVkYf0K6EEmEYcpnsSFenu2MqgSBbcooo2dUOgp4OLONw++hRlpUog8HLd1e9s0CIE5apB2OFgjQCw1K0xiWfCe/+UVGv824ODdZzcz6DkbWRuCKELQtIUHm6Pbo=
+	t=1709645321; cv=none; b=iQG/ovB2lVZk0N5rIwWF0IudaiuqE8rt/oxdm8XcwTyT5kVcK8Ly12E6rgC8smZYs1wlCxVqUNoaudxjJHrne/RhCmf+6QnKpognuTc1DgUVXQ0AY7QzPCVflrjJmIc32Ww0dVDMnMgkZDu48pGueTGTtvG5HHGAjBwmX8HoLvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709643315; c=relaxed/simple;
-	bh=oiVodYfXO6uYQW4w1Uil613ULlWtjgHVgcKoJPtT3uo=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=UO2QEz/0nM28inXLi66/Az7u58uwev6kfcmMoAARhnoecbztcqpWJnoe8hUDaf8NQJ6pgQleaPfbasddtVGKxDlLc15ODlHm/K1J1TT3aDq6h3Wza/md/HF1fErtbt2Bkl6IGzPN0SA6Kf6fiIdD+kQ+1J9yUhFdL3NUPo8wt6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4TpwTG1JyWz1Q9lF;
-	Tue,  5 Mar 2024 20:52:50 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id CFEDC1402CE;
-	Tue,  5 Mar 2024 20:55:10 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Tue, 5 Mar
- 2024 20:55:10 +0800
-Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf to
- netdevice
-To: Mina Almasry <almasrymina@google.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-alpha@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-	<linux-parisc@vger.kernel.org>, <sparclinux@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
-CC: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Richard Henderson
-	<richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer
-	<tsbogend@alpha.franken.de>, "James E.J. Bottomley"
-	<James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
-	<hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
-	<arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
-	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
-	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
-	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
-	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	David Ahern <dsahern@kernel.org>, Willem de Bruijn
-	<willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, Sumit
- Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=c3=b6nig?=
-	<christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
- Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Shailend Chand
-	<shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel
- Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, Praveen
- Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>,
-	Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-6-almasrymina@google.com>
-From: Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <da42cea9-c169-599e-f087-d38c419e3dab@huawei.com>
-Date: Tue, 5 Mar 2024 20:55:09 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+	s=arc-20240116; t=1709645321; c=relaxed/simple;
+	bh=9nHBU801rt03QXGVs4K6yWHFgU//kmL7q1mSOjCjtSc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kWqqNaeOQly6QjYj9M5M/lkkTZN2WDpbVpCeMy5to7yjHww8nVlsYl5s6eznTonBNl60vr0wTtYaDwCyetmhgcLPy6QeUkyb3/FphHvs2TyYrE9C6pEqC5VoAb3c1itQhYy/dKq8ykbg9zlqaoCzRZX70hcvUQkZmtPzMeZqRMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=fcCvJcgA; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="fcCvJcgA"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=2o5mFGZCvQCk7WKP/xRNSu+/KpBgcWlkfRQoWTuInbY=; b=fcCvJcgAkcMcQFOc4nYDR/Yzhv
+	Y8IiVBCtwKjUMpOh02072azemJ8Sb6tC/SVw+f74ahwPgdczkKF8WJ9UMCYkcOVxYnaoVgZ6Z3Jwt
+	iiS6/PoKPPutlUHIT5TpgkIpdugZ8H0BsYpd3BejSVa4AjBYvnRK+kDjUeDZosHHJi3Q=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1rhUqi-009Qae-FR; Tue, 05 Mar 2024 14:28:52 +0100
+Date: Tue, 5 Mar 2024 14:28:52 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Julien Panis <jpanis@baylibre.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v2 2/2] net: ethernet: ti: am65-cpsw: Add minimal XDP
+ support
+Message-ID: <be16d069-062e-489d-b8e9-19ef3ef90029@lunn.ch>
+References: <20240223-am65-cpsw-xdp-basic-v2-0-01c6caacabb6@baylibre.com>
+ <20240223-am65-cpsw-xdp-basic-v2-2-01c6caacabb6@baylibre.com>
+ <356f4dd4-eb0e-49fa-a9eb-4dffbe5c7e7c@lunn.ch>
+ <3a5f3950-e47f-409a-b881-0c8545778b91@baylibre.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240305020153.2787423-6-almasrymina@google.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500005.china.huawei.com (7.185.36.74)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3a5f3950-e47f-409a-b881-0c8545778b91@baylibre.com>
 
-On 2024/3/5 10:01, Mina Almasry wrote:
-
-...
-
+On Tue, Mar 05, 2024 at 11:46:00AM +0100, Julien Panis wrote:
+> On 3/1/24 17:38, Andrew Lunn wrote:
+> > On Fri, Mar 01, 2024 at 04:02:53PM +0100, Julien Panis wrote:
+> > > This patch adds XDP (eXpress Data Path) support to TI AM65 CPSW
+> > > Ethernet driver. The following features are implemented:
+> > > - NETDEV_XDP_ACT_BASIC (XDP_PASS, XDP_TX, XDP_DROP, XDP_ABORTED)
+> > > - NETDEV_XDP_ACT_REDIRECT (XDP_REDIRECT)
+> > > - NETDEV_XDP_ACT_NDO_XMIT (ndo_xdp_xmit callback)
+> > > 
+> > > The page pool memory model is used to get better performance.
+> > Do you have any benchmark numbers? It should help with none XDP
+> > traffic as well. So maybe iperf numbers before and after?
+> > 
+> > 	Andrew
 > 
-> The netdev_dmabuf_binding struct is refcounted, and releases its
-> resources only when all the refs are released.
+> Argh...Houston, we have a problem. I checked my v3, which is ready for
+> submission, with iperf3:
+> 1) Before = without page pool -> 500 MBits/sec
+> 2) After = with page pool -> 442 MBits/sec
+> -> ~ 10% worse with page pool here.
 > 
-> Signed-off-by: Willem de Bruijn <willemb@google.com>
-> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> 
-> ---
-> 
-> RFC v6:
-> - Validate rx queue index
-> - Refactor new functions into devmem.c (Pavel)
+> Unless the difference is not due to page pool. Maybe there's something else
+> which is not good in my patch. I'm going to send the v3 which uses page pool,
+> hopefully someone will find out something suspicious. Meanwhile, I'll carry on
+> investigating: I'll check the results with my patch, by removing only the using of
+> page pool.
 
-It seems odd that the functions or stucts in a file called devmem.c
-are named after 'dmabuf' instead of 'devmem'.
+You can also go the other way. First add page pool support. For the
+FEC, that improved its performance. Then add XDP, which i think
+decreased the performance a little. It is extra processing in the hot
+path, so a little loss is not unsurprising.
 
-> 
+What tends to be expensive with ARM is cache invalidation and
+flush. So make sure you have the lengths correct. You don't want to
+operate on more memory than necessary. No point flushing the full MTU
+for a 64 byte TCP ACK, etc.
 
-...
-
-> diff --git a/include/net/netmem.h b/include/net/netmem.h
-> index d8b810245c1d..72e932a1a948 100644
-> --- a/include/net/netmem.h
-> +++ b/include/net/netmem.h
-> @@ -8,6 +8,16 @@
->  #ifndef _NET_NETMEM_H
->  #define _NET_NETMEM_H
->  
-> +#include <net/devmem.h>
-> +
-> +/* net_iov */
-> +
-> +struct net_iov {
-> +	struct dmabuf_genpool_chunk_owner *owner;
-> +};
-> +
-> +/* netmem */
-> +
->  /**
->   * typedef netmem_ref - a nonexistent type marking a reference to generic
->   * network memory.
-> diff --git a/net/core/Makefile b/net/core/Makefile
-> index 821aec06abf1..592f955c1241 100644
-> --- a/net/core/Makefile
-> +++ b/net/core/Makefile
-> @@ -13,7 +13,7 @@ obj-y		     += dev.o dev_addr_lists.o dst.o netevent.o \
->  			neighbour.o rtnetlink.o utils.o link_watch.o filter.o \
->  			sock_diag.o dev_ioctl.o tso.o sock_reuseport.o \
->  			fib_notifier.o xdp.o flow_offload.o gro.o \
-> -			netdev-genl.o netdev-genl-gen.o gso.o
-> +			netdev-genl.o netdev-genl-gen.o gso.o devmem.o
->  
->  obj-$(CONFIG_NETDEV_ADDR_LIST_TEST) += dev_addr_lists_test.o
->  
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index fe054cbd41e9..bbea1b252529 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -155,6 +155,9 @@
->  #include <net/netdev_rx_queue.h>
->  #include <net/page_pool/types.h>
->  #include <net/page_pool/helpers.h>
-> +#include <linux/genalloc.h>
-> +#include <linux/dma-buf.h>
-> +#include <net/devmem.h>
->  
->  #include "dev.h"
->  #include "net-sysfs.h"
-> diff --git a/net/core/devmem.c b/net/core/devmem.c
-> new file mode 100644
-> index 000000000000..779ad990971e
-> --- /dev/null
-> +++ b/net/core/devmem.c
-> @@ -0,0 +1,293 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + *      Devmem TCP
-> + *
-> + *      Authors:	Mina Almasry <almasrymina@google.com>
-> + *			Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-> + *			Kaiyuan Zhang <kaiyuanz@google.com
-> + */
-> +
-> +#include <linux/types.h>
-> +#include <linux/mm.h>
-> +#include <linux/netdevice.h>
-> +#include <trace/events/page_pool.h>
-> +#include <net/netdev_rx_queue.h>
-> +#include <net/page_pool/types.h>
-> +#include <net/page_pool/helpers.h>
-> +#include <linux/genalloc.h>
-> +#include <linux/dma-buf.h>
-> +#include <net/devmem.h>
-> +
-> +/* Device memory support */
-> +
-> +#ifdef CONFIG_DMA_SHARED_BUFFER
-
-I still think it is worth adding its own config for devmem or dma-buf
-for networking, thinking about the embeded system.
-
-> +static void netdev_dmabuf_free_chunk_owner(struct gen_pool *genpool,
-> +					   struct gen_pool_chunk *chunk,
-> +					   void *not_used)
-
-It seems odd to still keep the netdev_ prefix as it is not really related
-to netdev, perhaps use 'net_' or something better.
-
-> +{
-> +	struct dmabuf_genpool_chunk_owner *owner = chunk->owner;
-> +
-> +	kvfree(owner->niovs);
-> +	kfree(owner);
-> +}
-> +
-> +void __netdev_dmabuf_binding_free(struct netdev_dmabuf_binding *binding)
-> +{
-> +	size_t size, avail;
-> +
-> +	gen_pool_for_each_chunk(binding->chunk_pool,
-> +				netdev_dmabuf_free_chunk_owner, NULL);
-> +
-> +	size = gen_pool_size(binding->chunk_pool);
-> +	avail = gen_pool_avail(binding->chunk_pool);
-> +
-> +	if (!WARN(size != avail, "can't destroy genpool. size=%lu, avail=%lu",
-> +		  size, avail))
-> +		gen_pool_destroy(binding->chunk_pool);
-> +
-> +	dma_buf_unmap_attachment(binding->attachment, binding->sgt,
-> +				 DMA_BIDIRECTIONAL);
-
-For now DMA_FROM_DEVICE seems enough as tx is not supported yet.
-
-> +	dma_buf_detach(binding->dmabuf, binding->attachment);
-> +	dma_buf_put(binding->dmabuf);
-> +	xa_destroy(&binding->bound_rxq_list);
-> +	kfree(binding);
-> +}
-> +
-> +static int netdev_restart_rx_queue(struct net_device *dev, int rxq_idx)
-> +{
-> +	void *new_mem;
-> +	void *old_mem;
-> +	int err;
-> +
-> +	if (!dev || !dev->netdev_ops)
-> +		return -EINVAL;
-> +
-> +	if (!dev->netdev_ops->ndo_queue_stop ||
-> +	    !dev->netdev_ops->ndo_queue_mem_free ||
-> +	    !dev->netdev_ops->ndo_queue_mem_alloc ||
-> +	    !dev->netdev_ops->ndo_queue_start)
-> +		return -EOPNOTSUPP;
-> +
-> +	new_mem = dev->netdev_ops->ndo_queue_mem_alloc(dev, rxq_idx);
-> +	if (!new_mem)
-> +		return -ENOMEM;
-> +
-> +	err = dev->netdev_ops->ndo_queue_stop(dev, rxq_idx, &old_mem);
-> +	if (err)
-> +		goto err_free_new_mem;
-> +
-> +	err = dev->netdev_ops->ndo_queue_start(dev, rxq_idx, new_mem);
-> +	if (err)
-> +		goto err_start_queue;
-> +
-> +	dev->netdev_ops->ndo_queue_mem_free(dev, old_mem);
-> +
-> +	return 0;
-> +
-> +err_start_queue:
-> +	dev->netdev_ops->ndo_queue_start(dev, rxq_idx, old_mem);
-
-It might worth mentioning why queue start with old_mem will always
-success here as the return value seems to be ignored here.
-
-> +
-> +err_free_new_mem:
-> +	dev->netdev_ops->ndo_queue_mem_free(dev, new_mem);
-> +
-> +	return err;
-> +}
-> +
-> +/* Protected by rtnl_lock() */
-> +static DEFINE_XARRAY_FLAGS(netdev_dmabuf_bindings, XA_FLAGS_ALLOC1);
-> +
-> +void netdev_unbind_dmabuf(struct netdev_dmabuf_binding *binding)
-> +{
-> +	struct netdev_rx_queue *rxq;
-> +	unsigned long xa_idx;
-> +	unsigned int rxq_idx;
-> +
-> +	if (!binding)
-> +		return;
-> +
-> +	if (binding->list.next)
-> +		list_del(&binding->list);
-
-The above does not seems to be a good pattern to delete a entry, is
-there any reason having a checking before the list_del()? seems like
-defensive programming?
-
-> +
-> +	xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
-> +		if (rxq->binding == binding) {
-
-It seems like defensive programming here too?
-
-> +			/* We hold the rtnl_lock while binding/unbinding
-> +			 * dma-buf, so we can't race with another thread that
-> +			 * is also modifying this value. However, the driver
-> +			 * may read this config while it's creating its
-> +			 * rx-queues. WRITE_ONCE() here to match the
-> +			 * READ_ONCE() in the driver.
-> +			 */
-> +			WRITE_ONCE(rxq->binding, NULL);
-> +
-> +			rxq_idx = get_netdev_rx_queue_index(rxq);
-> +
-> +			netdev_restart_rx_queue(binding->dev, rxq_idx);
-> +		}
-> +	}
-> +
-> +	xa_erase(&netdev_dmabuf_bindings, binding->id);
-> +
-> +	netdev_dmabuf_binding_put(binding);
-> +}
-> +
-
+      Andrew
