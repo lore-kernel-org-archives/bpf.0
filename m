@@ -1,159 +1,245 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F96E7F
-	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 00:38:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB4028BFB
+	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 00:55:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709599140; cv=none; b=r38cidAo4e0/pSOaUZBAPVQuz6TtsI+GfdFv/LdicD/cfUhLAooAQH/JxwVTWwAcJLwuByraWyZBkOpbcQ0qXRDlxowzhdCcroxa+9Xx+yDYd31Jw6WC8zU4MLHQIwaVf/Ux/dApre93IOPNpJl9DyXCp96gxrM6ArlyXzYnJZs=
+	t=1709600148; cv=none; b=q2UmTsI0NYJe809higT7/hu/GpdKSKIhP5CUhvYnbbl9c1o3+b+VOWLBz9k8srmntuFcT7SxAlKTx4jubIYYufyeXfu3vwxNaSTmmRRa+x7EkYekQSoKdTsDe0nmq0XwozxN/TxVyE9viD+GhHtZvLG102+aENHSetO1Hg9wFtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709599140; c=relaxed/simple;
-	bh=pE/HJJHxoI8oSX8QIfvjz3rKFl/qWzRuw0gGjdoZRC0=;
+	s=arc-20240116; t=1709600148; c=relaxed/simple;
+	bh=kaJRHz+miQdFJRCW81j9OztIQ7vbDSTwsL2yiqJU9nM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fhEpr2MQw+qGlWN4LrFQVvRDBom+UgBCyVcW/mVSkOtqjOX5Xol8bKu6tN6OVfNiMyFUJUO+7cUZKDQ7DN+DTZwTThbc+SnGq3dLHzp7kaOe+IwKREjZLX1YpjXU6Q1H6KPZjjT1KCGmlDPR9wYMx/Kk6ev11NaXZvQ5TQmNL1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nqx1Xscf; arc=none smtp.client-ip=209.85.128.51
+	 To:Cc:Content-Type; b=GiVRazqo8Yt0oW/gcLxywMQPQxz+ZwPisaHvJ7pW9Dd2umQDNLpd3Vhkx3mSmcxRWyFPIZWqIAg453AufOfNuHDdYTufgDj/asIICtGDlBlhmu8wHPRLl6qj1ZCYgmHPNbQajX62M9SzcBcyVfu+Ws/xCwGwK36JgV9pf6GKqtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K+oKXKNK; arc=none smtp.client-ip=209.85.215.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nqx1Xscf"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-412e8c63f23so6744525e9.0
-        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 16:38:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K+oKXKNK"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5d81b08d6f2so4701656a12.0
+        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 16:55:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709599137; x=1710203937; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709600146; x=1710204946; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Bj5zoTI69PLp3cR+V6/5ODnZceaydtC6xTdxHYis12E=;
-        b=nqx1XscfmH09BinLqkR8HLyHWckzE1hJnYvnN/HO+dv9J+1aXYeoeUnuuVJrgrxUOi
-         a4klzaY4cR0vtWNkzSjaelS09j8jIAB0HpQPO+VS2bcwriuB9v8+0V69AEHt0NRP5t3B
-         mbggUA7Twyyz+6f0o2SdxxVyEXLliQSAUU8hIi54hkVbTeBWuKKIRbAXnsYECxTTawTC
-         f+D0Z37vTlCbaJtrXBTtBDEOR72AM4jdO+sG57XW1zgQG3UAoaqIPRTZYGnviqwPDmxA
-         C8vPJDFrptGQSjAnS9mrwleFip3jOPkZEAozT1fQI5HbeRVJoTJ/vP9mjH7kGBoKdnqJ
-         cDdQ==
+        bh=g011V8PiEAASXZHVO0VZ+fzWEJMv1CB3Z4GHYEGhcBQ=;
+        b=K+oKXKNKEHNoSGBUEHPI1KmlhiBmnz56oGAf9T6yHrc3NuNKPLI5Yloe0Rbr8X0YWA
+         yySr9GTrzuQXAApVlr8YBQkJwXHwROaJ4R6UqFKmcQePb9HdO6KsD+aoRx0Wtmh2jQ+A
+         0l5EGeok8fL+anF7nTeKXCm5zdCGqJMQ+UplIDy0xfS+oR+5WOZso4nk1YUoZlTWHij4
+         p7uGZLHgA0sun30wSYQj7ti4iL/1NvTt4BPxB+Q30typ+5YTZc7XDnKSkIEMoHbIdnUy
+         qVWoTH8RrEK09yDvzmeB6Pvy+4ADbD41PrSL8uHvk3cAxBpdpcpwAVxk4fZoFUEyyEz0
+         9dyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709599137; x=1710203937;
+        d=1e100.net; s=20230601; t=1709600146; x=1710204946;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Bj5zoTI69PLp3cR+V6/5ODnZceaydtC6xTdxHYis12E=;
-        b=Z9nV1S2qO07M5Pxc4RJVvQAcbCGHLSn4q4XqzYuw5OpCCm+XO0oR/e6+PMWXPbOztk
-         Q/23LsuxIhde74ARMBGQ9HrvCjokiuCRDEzHfaU/K87ureOJsktdbfQuH7Lf0Ei1uuni
-         MXWRZAu6tRrQ1atdVa+1FS8q7ZeT19I6PhC2tIVQ82MijufnS7JJQHukU76jHwuVqSD/
-         VX+RcBLGYMXQy8SSaIJh7p7KwBS8IJHpdpbvA3Hl2bsrEQ4WfKpw2NP0eNYrVkEyRojp
-         c0v2Cc0oIVFgzK3r9A4hFnPWLid1qd/nUxaodb+CfNCNe/LRYef4mFy2L8NFvinV7wZJ
-         tpFQ==
-X-Gm-Message-State: AOJu0Yy/WHEnPcQsiFrifx+PMJua8c5Q4G1fjeal8HmCIlaJRAShNOuv
-	zOEP0oKba3JGd32+LlZkqfgYLzLyF7jXHVyODNkbOSIZw4puMvBmzCVw7S42H1SD+R1zVuJA4lj
-	TNGL/aMlMKlajifKmpdKFPBLkey4=
-X-Google-Smtp-Source: AGHT+IHPuUlqp1ldZ1+USNRqTG8hjmjknNCOaSaQz6ztGJruA1SPY5lwFtYqj/d3Q7KwH/p72Add+tEiks5hC80Uxqg=
-X-Received: by 2002:a05:600c:444e:b0:412:ecc4:3c3a with SMTP id
- v14-20020a05600c444e00b00412ecc43c3amr154280wmn.40.1709599136434; Mon, 04 Mar
- 2024 16:38:56 -0800 (PST)
+        bh=g011V8PiEAASXZHVO0VZ+fzWEJMv1CB3Z4GHYEGhcBQ=;
+        b=mBduCr0tHH3sRDXYiC5ug2PO1AZJEaBXxFEoM/nSOvXM0lvwzx2HpzniFvYMbae3wj
+         JnEjiSnajwz5jHKrBCaSH6Ag6qXVpYJnmrcYnHRdICcaDyWbT9CyJ1fJoHOzSXwGqn7b
+         OYhFylo6AK4iONodpznBYMgzIHpCs2O+bCrXNy4o1xXsnv0b3u4tkV/9cLua3HycvFOt
+         g+/u2Sz9ew4l6QggDxUUxOQd76S+7I3cjClboqYe7ovhjKVGqlU0QyFD63MeG4uNsNbl
+         XwQHKMFmKdEuTJQdN57v1koAoNMTUbhTe9tUhBZYVn9UbhxmlUsnvV3xbPyb/Wg75E6a
+         FH8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXVUuuNN2+C1fIRPZJdNxcIpQvag/RNVVd4X3Mzjnrrl9XA1wRNdP/OKBFfto0xQyD6+kNV5jY1qA4D9HF5IAmliCTJ
+X-Gm-Message-State: AOJu0YzBECvVDXnl4AThhEz6LvbcTYE30FFpoPrOKr/67uZTCMP/j6f3
+	xL6rkl3dtb9cNZJX5K9XRSp0I/I99jH/s27lqlEURpDyzI0h1IZUaFlJj0zxVLfe9qU2rQtf4Qe
+	/gvvFjiVRu0DZJQz1H4Ib5s961CCUrCzlQHs=
+X-Google-Smtp-Source: AGHT+IGeFprd5EhpmMb7eRHyhLFE6Nytti0bqmMN59enLOhoknmz6w+VXF9alZG7CSPt/LQdSnLwA+BlXfZYXf19ne0=
+X-Received: by 2002:a05:6a21:9988:b0:1a1:5059:b221 with SMTP id
+ ve8-20020a056a21998800b001a15059b221mr455635pzb.1.1709600146103; Mon, 04 Mar
+ 2024 16:55:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240223235728.13981-1-alexei.starovoitov@gmail.com>
- <20240223235728.13981-3-alexei.starovoitov@gmail.com> <ZeV-IE-65yiIwFSY@kernel.org>
-In-Reply-To: <ZeV-IE-65yiIwFSY@kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 4 Mar 2024 16:38:45 -0800
-Message-ID: <CAADnVQL4iEhc4nAoeE57Q3=X0_uh37ZDW_SOw1CicD1L7eTU6w@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 2/3] mm, xen: Separate xen use cases from ioremap.
-To: Mike Rapoport <rppt@kernel.org>
-Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Barret Rhoden <brho@google.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Lorenzo Stoakes <lstoakes@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Uladzislau Rezki <urezki@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>, sstabellini@kernel.org, 
-	Juergen Gross <jgross@suse.com>, linux-mm <linux-mm@kvack.org>, xen-devel@lists.xenproject.org, 
-	Kernel Team <kernel-team@fb.com>
+References: <ZeCXHKJ--iYYbmLj@krava> <CAEf4Bzbs4toMxw62kVTWNHA7sW-CncamyKHCWynCT0GnG+fOfQ@mail.gmail.com>
+ <ZeGPU8FRqwNuUJwd@krava> <CAADnVQKW4Qk55NjaApx1caPDF_pA8f5JZFE12DKA2R8cKWmtcw@mail.gmail.com>
+ <CAEf4Bzbv5_yG8S4c22QUXp1FhLZGSSRZS6FFjXfvo=4RdAThZA@mail.gmail.com> <ZeRO9_IiLSy9D7jQ@krava>
+In-Reply-To: <ZeRO9_IiLSy9D7jQ@krava>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 4 Mar 2024 16:55:33 -0800
+Message-ID: <CAEf4BzZQnqjoCc6Y_N3Wu4eMpioqgZC04QrTujgyiYMMRpG3Nw@mail.gmail.com>
+Subject: Re: [LSF/MM/BPF TOPIC] faster uprobes
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, yunwei356@gmail.com, 
+	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	lsf-pc <lsf-pc@lists.linux-foundation.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Oleg Nesterov <oleg@redhat.com>, Daniel Borkmann <daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 3, 2024 at 11:55=E2=80=AFPM Mike Rapoport <rppt@kernel.org> wro=
-te:
+On Sun, Mar 3, 2024 at 2:20=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrote=
+:
 >
-> On Fri, Feb 23, 2024 at 03:57:27PM -0800, Alexei Starovoitov wrote:
-> > From: Alexei Starovoitov <ast@kernel.org>
+> On Fri, Mar 01, 2024 at 09:26:57AM -0800, Andrii Nakryiko wrote:
+> > On Fri, Mar 1, 2024 at 9:01=E2=80=AFAM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Fri, Mar 1, 2024 at 12:18=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com=
+> wrote:
+> > > >
+> > > > On Thu, Feb 29, 2024 at 04:25:17PM -0800, Andrii Nakryiko wrote:
+> > > > > On Thu, Feb 29, 2024 at 6:39=E2=80=AFAM Jiri Olsa <olsajiri@gmail=
+.com> wrote:
+> > > > > >
+> > > > > > One of uprobe pain points is having slow execution that involve=
+s
+> > > > > > two traps in worst case scenario or single trap if the original
+> > > > > > instruction can be emulated. For return uprobes there's one ext=
+ra
+> > > > > > trap on top of that.
+> > > > > >
+> > > > > > My current idea on how to make this faster is to follow the opt=
+imized
+> > > > > > kprobes and replace the normal uprobe trap instruction with jum=
+p to
+> > > > > > user space trampoline that:
+> > > > > >
+> > > > > >   - executes syscall to call uprobe consumers callbacks
+> > > > >
+> > > > > Did you get a chance to measure relative performance of syscall v=
+s
+> > > > > int3 interrupt handling? If not, do you think you'll be able to g=
+et
+> > > > > some numbers by the time the conference starts? This should infor=
+m the
+> > > > > decision whether it even makes sense to go through all the troubl=
+e.
+> > > >
+> > > > right, will do that
+> > >
+> > > I believe Yusheng measured syscall vs uprobe performance
+> > > difference during LPC. iirc it was something like 3x.
 > >
-> > xen grant table and xenbus ring are not ioremap the way arch specific c=
-ode is using it,
-> > so let's add VM_XEN flag to separate them from VM_IOREMAP users.
-> > xen will not and should not be calling ioremap_page_range() on that ran=
-ge.
-> > /proc/vmallocinfo will print such region as "xen" instead of "ioremap" =
-as well.
+> > Do you have a link to slides? Was it actual uprobe vs just some fast
+> > syscall (not doing BPF program execution) comparison? Or comparing the
+> > performance of int3 handling vs equivalent syscall handling.
 > >
-> > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> > ---
-> >  arch/x86/xen/grant-table.c         | 2 +-
-> >  drivers/xen/xenbus/xenbus_client.c | 2 +-
-> >  include/linux/vmalloc.h            | 1 +
-> >  mm/vmalloc.c                       | 7 +++++--
-> >  4 files changed, 8 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/arch/x86/xen/grant-table.c b/arch/x86/xen/grant-table.c
-> > index 1e681bf62561..b816db0349c4 100644
-> > --- a/arch/x86/xen/grant-table.c
-> > +++ b/arch/x86/xen/grant-table.c
-> > @@ -104,7 +104,7 @@ static int arch_gnttab_valloc(struct gnttab_vm_area=
- *area, unsigned nr_frames)
-> >       area->ptes =3D kmalloc_array(nr_frames, sizeof(*area->ptes), GFP_=
-KERNEL);
-> >       if (area->ptes =3D=3D NULL)
-> >               return -ENOMEM;
-> > -     area->area =3D get_vm_area(PAGE_SIZE * nr_frames, VM_IOREMAP);
-> > +     area->area =3D get_vm_area(PAGE_SIZE * nr_frames, VM_XEN);
-> >       if (!area->area)
-> >               goto out_free_ptes;
-> >       if (apply_to_page_range(&init_mm, (unsigned long)area->area->addr=
-,
-> > diff --git a/drivers/xen/xenbus/xenbus_client.c b/drivers/xen/xenbus/xe=
-nbus_client.c
-> > index 32835b4b9bc5..b9c81a2d578b 100644
-> > --- a/drivers/xen/xenbus/xenbus_client.c
-> > +++ b/drivers/xen/xenbus/xenbus_client.c
-> > @@ -758,7 +758,7 @@ static int xenbus_map_ring_pv(struct xenbus_device =
-*dev,
-> >       bool leaked =3D false;
-> >       int err =3D -ENOMEM;
-> >
-> > -     area =3D get_vm_area(XEN_PAGE_SIZE * nr_grefs, VM_IOREMAP);
-> > +     area =3D get_vm_area(XEN_PAGE_SIZE * nr_grefs, VM_XEN);
-> >       if (!area)
-> >               return -ENOMEM;
-> >       if (apply_to_page_range(&init_mm, (unsigned long)area->addr,
-> > diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-> > index c720be70c8dd..223e51c243bc 100644
-> > --- a/include/linux/vmalloc.h
-> > +++ b/include/linux/vmalloc.h
-> > @@ -28,6 +28,7 @@ struct iov_iter;            /* in uio.h */
-> >  #define VM_FLUSH_RESET_PERMS 0x00000100      /* reset direct map and f=
-lush TLB on unmap, can't be freed in atomic context */
-> >  #define VM_MAP_PUT_PAGES     0x00000200      /* put pages and free arr=
-ay in vfree */
-> >  #define VM_ALLOW_HUGE_VMAP   0x00000400      /* Allow for huge pages o=
-n archs with HAVE_ARCH_HUGE_VMALLOC */
-> > +#define VM_XEN                       0x00000800      /* xen use cases =
-*/
-> >
-> >  #if (defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)) &=
-& \
-> >       !defined(CONFIG_KASAN_VMALLOC)
+> > I suspect it's the former, and so probably not that representative.
+> > I'm curious about the performance of going
+> > userspace->kernel->userspace through int3 vs syscall (all other things
+> > being equal).
 >
-> There's also VM_DEFER_KMEMLEAK a line below:
+> I have a simple test [1] comparing:
+>   - uprobe with 2 traps
+>   - uprobe with 1 trap
+>   - syscall executing uprobe
+>
+> the syscall takes uprobe address as argument, finds the uprobe and execut=
+es
+> its consumers, which should be comparable to what the trampoline will do
+>
+> test does same amount of loops triggering each uprobe type and measures
+> the time it took
+>
+>   # ./test_progs -t uprobe_syscall_bench -v
+>   bpf_testmod.ko is already unloaded.
+>   Loading bpf_testmod.ko...
+>   Successfully loaded bpf_testmod.ko.
+>   test_bench_1:PASS:uprobe_bench__open_and_load 0 nsec
+>   test_bench_1:PASS:uprobe_bench__attach 0 nsec
+>   test_bench_1:PASS:uprobe1_cnt 0 nsec
+>   test_bench_1:PASS:syscalls_uprobe1_cnt 0 nsec
+>   test_bench_1:PASS:uprobe2_cnt 0 nsec
+>   test_bench_1: uprobes (1 trap) in  36.439s
+>   test_bench_1: uprobes (2 trap) in  91.960s
+>   test_bench_1: syscalls         in  17.872s
+>   #395/1   uprobe_syscall_bench/bench_1:OK
+>   #395     uprobe_syscall_bench:OK
+>   Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
+>
+> syscall uprobe execution seems to be ~2x faster than 1 trap uprobe
+> and ~5x faster than 2 traps uprobe
+>
 
-Ohh. Good catch. Will fix.
+Thanks for running benchmarks! I quickly looked at the selftest and
+noticed this:
 
-> I think it makes sense to use an enumeration for vm_flags, just like as
-> Suren did for GFP
-> (https://lore.kernel.org/linux-mm/20240224015800.2569851-1-surenb@google.=
-com/)
++/*
++ * Assuming following prolog:
++ *
++ * 6984ac:       55                      push   %rbp
++ * 6984ad:       48 89 e5                mov    %rsp,%rbp
++ */
++noinline void uprobe2_bench_trigger(void)
++{
++        asm volatile ("");
++}
 
-Hmm. I'm pretty sure Christoph hates BIT macro obfuscation.
-I'm not a fan of it either, though we use it in bpf in a few places.
-If mm folks prefer that style they can do such conversion later.
+This actually will be optimized out to just ret in -O2 mode (make
+RELEASE=3D1 for selftests):
+
+00000000005a0ce0 <uprobe2_bench_trigger>:
+  5a0ce0: c3                            retq
+  5a0ce1: 66 66 2e 0f 1f 84 00 00 00 00 00      nopw    %cs:(%rax,%rax)
+  5a0cec: 0f 1f 40 00                   nopl    (%rax)
+
+So be careful with that.
+
+Also, I just updated our existing set of uprobe benchmarks (see [0]),
+do you mind adding your syscall-based one as another one there and
+running all of them and sharing the numbers with us? Very curious to
+see both absolute and relative numbers from that benchmark. (and
+please do build with RELEASE=3D1)
+
+You should be able to just run benchs/run_bench_uprobes.sh (also don't
+forget to add your syscall-based benchmark to the list of benchmarks
+in that shell script).
+
+Thank you!
+
+
+BTW, while I think patching multiple instructions for syscall-based
+uprobe is going to be extremely tricky, I think at least u*ret*probe's
+int3 can be pretty easily optimized away with syscall, given that the
+kernel controls code generation there. If anything, it will get the
+uretprobe case a bit closer to the performance of uprobe. Give it some
+thought.
+
+
+  [0] https://patchwork.kernel.org/project/netdevbpf/patch/20240301214551.1=
+686095-1-andrii@kernel.org/
+
+> jirka
+>
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/log/?h=
+=3Duprobe_syscall_bench
+>
+> >
+> > > Certainly necessary to have a benchmark.
+> > > selftests/bpf/bench has one for uprobe.
+> > > Probably should extend with sys_bpf.
+> > >
+> > > Regarding:
+> > > > replace the normal uprobe trap instruction with jump to
+> > > user space trampoline
+> > >
+> > > it should probably be a call to trampoline instead of a jump.
+> > > Unless you plan to generate a different trampoline for every location=
+ ?
+> > >
+> > > Also how would you pick a space for a trampoline in the target proces=
+s ?
+> > > Analyze /proc/pid/maps and look for gaps in executable sections?
+> >
+> > kernel already does that for uretprobes, it adds a new "[uprobes]"
+> > memory mapping, so this part is already implemented
+> >
+> > >
+> > > We can start simple with a USDT that uses nop5 instead of nop1
+> > > and explicit single trampoline for all USDT locations
+> > > that saves all (callee and caller saved) registers and
+> > > then does sys_bpf with a new cmd.
+> > >
+> > > To replace nop5 with a call to trampoline we can use text_poke_bp
+> > > approach: replace 1st byte with int3, replace 2-5 with target addr,
+> > > replace 1st byte to make an actual call insn.
+> > >
+> > > Once patched there will be no simulation of insns or kernel traps.
+> > > Just normal user code that calls into trampoline, that calls sys_bpf,
+> > > and returns back.
