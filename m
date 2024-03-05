@@ -1,54 +1,56 @@
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A89C28E23
-	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 03:05:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 689BE28E23
+	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 03:05:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709607922; cv=none; b=TCFpoob7YRiJJevvId5RvOsPIbisZjRD0g1hAYMtIblIMCfo0cp/hkiPwSR3rjfeXAQfT/BckC+yOc/97HcEki/BszeDT5yq/IOHb2hCN1GoC8EZkhTmDACE08lJgw8H067+1ZAL7n2ixSVsw42cq4VbLOW8GUNNO9DSEdmMveg=
+	t=1709607926; cv=none; b=bt0gCZ+dYAiRyyiLQQoZqasB5VHy5WiwujhpXv4vBfjDaChwEA6GGwaiKpSWs97fdIqKgZ6sZM5RyKIzxI3YIOrxWx9GhIVR4zsIpXnDo8bxhdF9hkY1vqOhl8qITzwGVyqvSWO/nyeZS3RkpDTuKF53dQ7L/73HXW6MoPi+iJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709607922; c=relaxed/simple;
-	bh=5ZVjSwAfJsPd+QkXMr9nZIk7lyTzPslSdY9PUohFIoU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gdEX69+vjjEbCPN2LbIF+wUMDdVtNBc26K4To/nP6hkw51dK5htSEDW9zqHN8maed2yLl/HHlgxqeL6Ilyj5tBUD6XLUFeTMybbb4pxfBYcNgP0J2lAKWpIDUvTHSurr/6ysyc2CMx5sJFsmLIo4xo9oVDYgxP8P2n64dadCZzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vy5Si5xR; arc=none smtp.client-ip=209.85.210.42
+	s=arc-20240116; t=1709607926; c=relaxed/simple;
+	bh=lgfINaiLdOBQ4e4ik4QRTuWaoLgUUvuFaltC5V5ewrI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=l2PZLouM3HJZHoug9uGiJBbX/s/HM+JrsLFdFD0kg92PDc1fBPs9XM/2L/pqnln/iPgkIRqBt8IdXcnq93OYvDQn1HcCiifTkK7GTja4UQlmxLqe/wqjtuCrf+uLcVSl1DaVuvDxlBUy+NSlq0UF5aQKWu/lvC6HK+uoooHpY28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NT5APoc9; arc=none smtp.client-ip=209.85.167.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vy5Si5xR"
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-6e4b34f2455so2856399a34.2
-        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 19:05:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NT5APoc9"
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3c19e18470aso3417827b6e.1
+        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 19:05:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709607920; x=1710212720; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GO37OSQRQXlN2VGFyW6LzwjH/NpS/PSzwjkGcO70oKE=;
-        b=Vy5Si5xRsbpFzCRuiXEp+ZJv2EceCxMmgm268nuwJpgFlaukFeKkwTr6/H9QMJ6mdV
-         aaD1YgQ3SqgXaIRMLnc1ao0yjb0gORz0ufl1gtVKV0oqur+cSijtKBU3yCJYRGX+aBKz
-         L9u74BhtHhe2fZxJDLYOYrQsNS07ryUY5ei8RBjDkRTK5vhNdujl0xiP0uRd03wK5UuF
-         ne2QIC19/wkrwpDTapVu+whRm8EzmZs/sMzwq7fAjs4MePM0CFAmyEbVxE3xUjnjYMyW
-         XDpaeIxiKiJppTDOUftNVUmFEwNYDOzSb7nnVKHFHR1GDTKPutuaqfFkV9jhsOw8u/PW
-         sV5g==
+        d=gmail.com; s=20230601; t=1709607924; x=1710212724; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Lvs1TetY/ywxZOqb7cu6/qS8FYbgNwju0ZDKmLnC7pk=;
+        b=NT5APoc96Dviubg/QNLXZi9InEUbwVkFqfi7kwpXoGAEHO7GIJnkJCS8yq0hrNoRMW
+         Z5dPMjU36IWXZYvnsBct5fJiAogDEVNAsdY+sZxMmTZ/NYF6HhuszGsyA4b4LiBNLA6Y
+         DctfF6056mOmtIX8XV17OXr5aFHWPBb8MQnJTDAsFAe6Fb7B2GtYc4bEf6cBy4bPsf/4
+         ZiGtgaRDlFUK2pAHccUc5c0aLLgpEqfV7KPxf6mHyN523g4bAd4teqppLoyoXlFT9YOQ
+         kKJbwOKU6bMRqC4D2XYwbF/B6k95JwLUTCNplr2z6lS12nsaqHJAayisf5gXl0XZC37A
+         l+DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709607920; x=1710212720;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GO37OSQRQXlN2VGFyW6LzwjH/NpS/PSzwjkGcO70oKE=;
-        b=u6L6NAyk2sHdhL763KdtFGZFSraNsqYsWRF+ravJWS87vTDkXBwB1RPMLMpXboEKUq
-         +b9blWTcdcAy63FsbZt4F+VWlapI1cAQsD5Mvd1D5XEP2qig5TSbqNqH9ACfVlkNAY/Y
-         NfbEaRzKHc6cAqFqfe5CD+twJat7EGlSiiOddDoWppM7uCWL/jQrE6F9utZoD2+MFuCp
-         iyuBsudugMCP/impK+AQzW7WbWKBm20IvuN/MU2PulK1sL82AwqVzMyeh9e44jFfpgHi
-         Rgy+q/vRBfp+PoVKpgiajcgcy/4jiT6t/UgnutrIdGOaU+mdvVDR+BKOd9Gdn8yRrNng
-         GZwQ==
-X-Gm-Message-State: AOJu0YxGB+awaFC/LNj2gZjQhhXGjFsSqFBeWy9npjMB9huEETQ73D5E
-	4O+ppWYsQA313N/fRW6y71uHhnA/8m3N+SP+OFoKDAf+neiF7iqG4r3NImjv
-X-Google-Smtp-Source: AGHT+IF4DC0r95WIbRC/5og05/9WKTnTnsPpk3e37OmDlc5CQCogzBPB5agJQ7Ifv5VhRu3af2p6Pw==
-X-Received: by 2002:a05:6870:898f:b0:220:99bf:c26d with SMTP id f15-20020a056870898f00b0022099bfc26dmr589777oaq.9.1709607919882;
-        Mon, 04 Mar 2024 19:05:19 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709607924; x=1710212724;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Lvs1TetY/ywxZOqb7cu6/qS8FYbgNwju0ZDKmLnC7pk=;
+        b=S3uRr7+Wc7cNBg4YCkuh+RpUg94bUoc7KFJxNtJ/nC/py+NZnJQwkHKOB9HYPRHv3G
+         1eSCW8nHIK38Jekb7cneWrDcnd9yF/szSb6CPyXeIQ4ZNajSoNDKu0OBqVaQn0TBa8v9
+         eBuyLmtKufiiT2qqjbRx23J3EC2i8J8wCjvminvlPaSOtg0AsJELXXcqAtuj2qR7aeGf
+         pZkwVp/CSS6OQRHo0dDC022WwKNfXByZZGxRyJPft1b4G+xpRmU8QD2n8ilVtOt8SFuA
+         Bm1vK0mW0Hk6vrsezVhhm2p+75fB6ouJ6z2VcbsNPD0UScup4D/WlUDGOqg3zZBG+XVV
+         rYbQ==
+X-Gm-Message-State: AOJu0YxP8Xb6uG9cJBXzDA61WwoO9fS0MicOWC83+Zzvy8qr+j11JmE3
+	6E3buM9Tdb5HRVl3fMbE3Pltm3pCj7kri7nQF0mMTQaD3wv8AdHVMeMXcoio
+X-Google-Smtp-Source: AGHT+IFYfdb0wzVKskM65cSKwSSitCWQ5HIwpxCM5POpmVMYG5/Wx6Ndr8UyOlbODBpKZ1uFvI0VUw==
+X-Received: by 2002:a05:6808:4c3:b0:3c2:c13:978c with SMTP id a3-20020a05680804c300b003c20c13978cmr597466oie.5.1709607923728;
+        Mon, 04 Mar 2024 19:05:23 -0800 (PST)
 Received: from localhost.localdomain ([2620:10d:c090:400::5:9426])
-        by smtp.gmail.com with ESMTPSA id y15-20020aa7854f000000b006e5a99942c6sm6822695pfn.88.2024.03.04.19.05.18
+        by smtp.gmail.com with ESMTPSA id i37-20020a635865000000b005dc5289c4edsm7941060pgm.64.2024.03.04.19.05.22
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 04 Mar 2024 19:05:19 -0800 (PST)
+        Mon, 04 Mar 2024 19:05:23 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -67,10 +69,12 @@ Cc: daniel@iogearbox.net,
 	linux-mm@kvack.org,
 	xen-devel@lists.xenproject.org,
 	kernel-team@fb.com
-Subject: [PATCH v4 bpf-next 0/2] mm: Enforce ioremap address space and introduce sparse vm_area
-Date: Mon,  4 Mar 2024 19:05:14 -0800
-Message-Id: <20240305030516.41519-1-alexei.starovoitov@gmail.com>
+Subject: [PATCH v4 bpf-next 1/2] mm: Enforce VM_IOREMAP flag and range in ioremap_page_range.
+Date: Mon,  4 Mar 2024 19:05:15 -0800
+Message-Id: <20240305030516.41519-2-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.39.3 (Apple Git-145)
+In-Reply-To: <20240305030516.41519-1-alexei.starovoitov@gmail.com>
+References: <20240305030516.41519-1-alexei.starovoitov@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,56 +85,43 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-v3 -> v4
-- dropped VM_XEN patch for now. It will be in the follow up.
-- fixed constant as pointed out by Mike
+There are various users of get_vm_area() + ioremap_page_range() APIs.
+Enforce that get_vm_area() was requested as VM_IOREMAP type and range
+passed to ioremap_page_range() matches created vm_area to avoid
+accidentally ioremap-ing into wrong address range.
 
-v2 -> v3
-- added Christoph's reviewed-by to patch 1
-- cap commit log lines to 75 chars
-- factored out common checks in patch 3 into helper
-- made vm_area_unmap_pages() return void
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ mm/vmalloc.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-There are various users of kernel virtual address space:
-vmalloc, vmap, ioremap, xen.
-
-- vmalloc use case dominates the usage. Such vm areas have VM_ALLOC flag
-and these areas are treated differently by KASAN.
-
-- the areas created by vmap() function should be tagged with VM_MAP
-(as majority of the users do).
-
-- ioremap areas are tagged with VM_IOREMAP and vm area start is aligned
-to size of the area unlike vmalloc/vmap.
-
-- there is also xen usage that is marked as VM_IOREMAP, but it doesn't
-call ioremap_page_range() unlike all other VM_IOREMAP users.
-
-To clean this up a bit, enforce that ioremap_page_range() checks the range
-and VM_IOREMAP flag.
-
-In addition BPF would like to reserve regions of kernel virtual address
-space and populate it lazily, similar to xen use cases.
-For that reason, introduce VM_SPARSE flag and vm_area_[un]map_pages()
-helpers to populate this sparse area.
-
-In the end the /proc/vmallocinfo will show
-"vmalloc"
-"vmap"
-"ioremap"
-"sparse"
-categories for different kinds of address regions.
-
-ioremap, sparse will return zero when dumped through /proc/kcore
-
-Alexei Starovoitov (2):
-  mm: Enforce VM_IOREMAP flag and range in ioremap_page_range.
-  mm: Introduce VM_SPARSE kind and vm_area_[un]map_pages().
-
- include/linux/vmalloc.h |  5 +++
- mm/vmalloc.c            | 72 +++++++++++++++++++++++++++++++++++++++--
- 2 files changed, 75 insertions(+), 2 deletions(-)
-
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index d12a17fc0c17..f42f98a127d5 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -307,8 +307,21 @@ static int vmap_range_noflush(unsigned long addr, unsigned long end,
+ int ioremap_page_range(unsigned long addr, unsigned long end,
+ 		phys_addr_t phys_addr, pgprot_t prot)
+ {
++	struct vm_struct *area;
+ 	int err;
+ 
++	area = find_vm_area((void *)addr);
++	if (!area || !(area->flags & VM_IOREMAP)) {
++		WARN_ONCE(1, "vm_area at addr %lx is not marked as VM_IOREMAP\n", addr);
++		return -EINVAL;
++	}
++	if (addr != (unsigned long)area->addr ||
++	    (void *)end != area->addr + get_vm_area_size(area)) {
++		WARN_ONCE(1, "ioremap request [%lx,%lx) doesn't match vm_area [%lx, %lx)\n",
++			  addr, end, (long)area->addr,
++			  (long)area->addr + get_vm_area_size(area));
++		return -ERANGE;
++	}
+ 	err = vmap_range_noflush(addr, end, phys_addr, pgprot_nx(prot),
+ 				 ioremap_max_page_shift);
+ 	flush_cache_vmap(addr, end);
 -- 
 2.43.0
 
