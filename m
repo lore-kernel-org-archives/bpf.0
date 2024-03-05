@@ -1,123 +1,119 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590B51EA74
-	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 23:50:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C213FB9B
+	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 23:53:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709682650; cv=none; b=QZ8SLKUh2BX/yH135F7y0PoywOHpruFrSJJsA11ujfpa243AnBL5AtPGg1p1hDn4DbjKBvUyC+bTVmN5h/GyzEF60FxPkxYMeaHjjf2zPBr6M3SeleF/qJhDzk7z+LiznEHqswgSfd5ntUS1ULdRhN+5B4SXJCf8Gdl/YPvfMQc=
+	t=1709682830; cv=none; b=t0mrmPWraXLTRnPJiDk0C8dgVqGedRl4N9rJ79Se7wQO1trX9Vsa37J7t9y/OFlnCyMwdKiuvk+gNVTNbySZiXdBigONDPpTwCwRLcbhCkSSTLTZz0vP2vma+sI0ZWljio/KQownBCTsgjrFIqsIpELGaugCIdLY3ef4MMpj894=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709682650; c=relaxed/simple;
-	bh=gBMnmNu0Mo9cdUnhnenxQc4pN1E0HMlhsLIHEm3vra8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=t61yAKasAfQUnANeDXhfTLCguddITvI/uN24ico3383J9ne8rj0JllhVgUwsgQ6y8+a8PXOQzZfgRWmmy+YcUuDPG2rxXlPv61f2BZJa3O6GsC74iN/rRQmh0hHgtHPUaoRpCfQ3552tyG3NHQUy+W0ijr81b8JfENNRuNyPims=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OLjEccri; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709682830; c=relaxed/simple;
+	bh=ydf4Yx2Jd82KucagGqCfWZtB5+14VqxsLS0+ojqyNdQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tiRhbO1zIfP1zzB1SNSaeS/KbZ0XL+TN/ZVnew4+1Iw0ecDxI/Mv8zh5ytD5PwyF9rOzxOr1JSyvFtpcr+YcF1XNbz5TG6DiLQCiH1xCvZztJ2+iSaoZODyNLZ9RBSHpZmah9m/GV49Zi9g9rDzV+EmAWATzlVHTp+Vm265VgFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LzpO+ah9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OLjEccri"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5672afabb86so3079301a12.3
-        for <bpf@vger.kernel.org>; Tue, 05 Mar 2024 15:50:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709682646; x=1710287446; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PBaFLGkHbaV8kw/WktE6zv0vzwujrUB5nVS7Og8h5Aw=;
-        b=OLjEccrimtSFtDz4ELG8LTRP34qglWa1p+ZzcALdw+2E4+QECSrrU3zR+7uqYGMqBX
-         ZiZnV/5idv3pZSnwjWpXgk1vKpBb8WAMRQxFKsc/1pZw9bD9vpQ6cAVZcRxzYP2mQ0/t
-         jUJKNsQQQsk1LVB9sBxX500Rcx+WzqIhp0F7PSNv7uXR54hju3GdRCfjn+l0q41TuHnc
-         c1Ds9CQnEU7y6bPgZK3/h2INupR1cKP0edzqDt4biEU1YjWYGjsZPZWXqkRzyh9alf3G
-         4ZNiC8IB4wfrGfClN4sUwjDSK46sMjh9zB0BbNY3LBj8aS95lYvYFjzZVn7OsMhIqK6P
-         loVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709682646; x=1710287446;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PBaFLGkHbaV8kw/WktE6zv0vzwujrUB5nVS7Og8h5Aw=;
-        b=VzgBYM8Oc1NGwGEYRXgCIjHVgnujtDayh5Xsqx00WIyd9KNqv+RtTQ1hy2uYQB34BQ
-         x6EQQGr4xTUxjh6HxhccdJFe8ONDPfEVYPvyp6+yoD/+IixbuJnzXVPZ8YTke4UsuGmo
-         560MKvXsZcx31oJI1IUMpQuaiLAHNfDF5i7Fx+uOXkf3nUsyOeCPBSkAW7d7+qRTkgh6
-         qM3h8pgUy2ljh8nC5Rt93zZVdH271SWhfWLPV0tOGszAtFeo4wGZ6PNBqcS16WxL0Kno
-         DlsD8CCxjrLHsNuQew1VHTvPeAbArFHfewhS81nK2QGcifvCRRxtfj9kACh+i90t8Gmo
-         jVng==
-X-Gm-Message-State: AOJu0YwJneDRJbTYNS/xnqC7GfCaqe1itAJhO2dvO/m/uq+At3O6hbd8
-	C9uj3WNTfNOLTQrMVvcfxq8b7yvUmWfFrPQ/VEdY2nYM9xBg/hCr
-X-Google-Smtp-Source: AGHT+IEPh/wX8fo1NbMdjAQJIxRUTxD9DvF+MLOhstbuC+oOL/UGUOo5oMGMiEGRfQk8lXE24BmkAA==
-X-Received: by 2002:aa7:d44b:0:b0:567:4694:159 with SMTP id q11-20020aa7d44b000000b0056746940159mr4900085edr.26.1709682646231;
-        Tue, 05 Mar 2024 15:50:46 -0800 (PST)
-Received: from [192.168.1.94] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id m18-20020aa7c492000000b005662d3418dfsm6276981edq.74.2024.03.05.15.50.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Mar 2024 15:50:45 -0800 (PST)
-Message-ID: <422d596d7b29e96a1d95424e425706a6525b8446.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 03/15] libbpf: honor autocreate flag for
- struct_ops maps
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net,  martin.lau@linux.dev, kernel-team@fb.com,
- yonghong.song@linux.dev,  void@manifault.com, sinquersw@gmail.com
-Date: Wed, 06 Mar 2024 01:50:44 +0200
-In-Reply-To: <CAEf4BzZp0PHxkJtLBnVeiwBK6Uqr8RZ2=5Q0iy7eRgCuK5ecLg@mail.gmail.com>
-References: <20240304225156.24765-1-eddyz87@gmail.com>
-	 <20240304225156.24765-4-eddyz87@gmail.com>
-	 <CAEf4BzZp0PHxkJtLBnVeiwBK6Uqr8RZ2=5Q0iy7eRgCuK5ecLg@mail.gmail.com>
-Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LzpO+ah9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6198C43394
+	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 23:53:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709682829;
+	bh=ydf4Yx2Jd82KucagGqCfWZtB5+14VqxsLS0+ojqyNdQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=LzpO+ah9drHuZetTc6PXeBhsLKV8VTcekY2BZGsGs42AKmkmPTUoyyf/ViL6yDepO
+	 1sMymmCNWoJofJE6nUdrb1ZzAPKVbUnD6O9sVHOT3NCky5YbVFWLf1KLx0+KwozbtE
+	 HbZjo/zdukihEwTbJngIVX0vjuA+uDyZDTyqCFzR5fmwisK+JeP0ZSZ5p1wLaghb0H
+	 Vz95XJMg5hUzmJCLyX1oEpudABE6/HOjO70C0h0ESX0j5RBrn6SdQfvuJrLcC+870d
+	 QegErBu3C7JuTuDbpPcC2HOxmEa1V+Qun7N2fyO6dTprAVxZd1GbOYfq8uMgHN25z2
+	 zTWqrvGeaDewg==
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2d2505352e6so83398511fa.3
+        for <bpf@vger.kernel.org>; Tue, 05 Mar 2024 15:53:49 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVoCRe/mmNWAGoyYyDphv7w7syOkReGLxeiqFOSkgEd75qsfntsmIcXTnShURRZy42XOHXOUd2bJuqoxxUf8x7vtBb2
+X-Gm-Message-State: AOJu0YxyurhAfQ0dBiWBd90nI10ESNnt8LeaC9gImLV/uwv9rp6k7NTB
+	1OZrNaSKewbO6/Pfm/fHQbZMYYW9DiWOXG5bWWC08hAvZgmASevw1VhPdZCF8Q9iPJy0GW/cDZg
+	YzAmTqPYWEOsZIVBmDxx85+JE5hg=
+X-Google-Smtp-Source: AGHT+IGQGWhkwtEfACGp79cxMl4K5dwnAX80/nJD8oibv9TVbbG/RYYqiNSCGroJ+UjUcPKsJBonIlK7qedhM30/c9A=
+X-Received: by 2002:a05:6512:e98:b0:513:59fb:1a50 with SMTP id
+ bi24-20020a0565120e9800b0051359fb1a50mr1185879lfb.54.1709682827910; Tue, 05
+ Mar 2024 15:53:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <ZeCXHKJ--iYYbmLj@krava> <23f9790d-4ab1-4edb-9262-6f982413b3e9@gmail.com>
+ <ZedT8S-GjNOry5LZ@krava>
+In-Reply-To: <ZedT8S-GjNOry5LZ@krava>
+From: Song Liu <song@kernel.org>
+Date: Tue, 5 Mar 2024 15:53:35 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5_6vkL58Efm3qL9G9W+7i=XVicoLXT6_G+T7TLx=zQJg@mail.gmail.com>
+Message-ID: <CAPhsuW5_6vkL58Efm3qL9G9W+7i=XVicoLXT6_G+T7TLx=zQJg@mail.gmail.com>
+Subject: Re: [LSF/MM/BPF TOPIC] faster uprobes
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Kui-Feng Lee <sinquersw@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, lsf-pc@lists.linux-foundation.org, 
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	Oleg Nesterov <oleg@redhat.com>, Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2024-03-05 at 11:19 -0800, Andrii Nakryiko wrote:
-[...]
+On Tue, Mar 5, 2024 at 9:18=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrote=
+:
+>
+> On Fri, Mar 01, 2024 at 11:39:03AM -0800, Kui-Feng Lee wrote:
+> >
+> >
+> >
+> > On 2/29/24 06:39, Jiri Olsa wrote:
+> > > One of uprobe pain points is having slow execution that involves
+> > > two traps in worst case scenario or single trap if the original
+> > > instruction can be emulated. For return uprobes there's one extra
+> > > trap on top of that.
+> > >
+> > > My current idea on how to make this faster is to follow the optimized
+> > > kprobes and replace the normal uprobe trap instruction with jump to
+> > > user space trampoline that:
+> > >
+> > >    - executes syscall to call uprobe consumers callbacks
+> > >    - executes original instructions
+> > >    - jumps back to continue with the original code
+> > >
+> > > There are of course corner cases where above will have trouble or
+> > > won't work completely, like:
+> > >
+> > >    - executing original instructions in the trampoline is tricky wrt
+> > >      rip relative addressing
+> > >
+> > >    - some instructions we can't move to trampoline at all
+> > >
+> > >    - the uprobe address is on page boundary so the jump instruction t=
+o
+> > >      trampoline would span across 2 pages, hence the page replace won=
+'t
+> > >      be atomic, which might cause issues
+> > >
+> > >    - ... ? many others I'm sure
+> > >
+> > > Still with all the limitations I think we could be able to speed up
+> > > some amount of the uprobes, which seems worth doing.
+> >
+> > Just a random idea related to this.
+> > Could we also run jit code of bpf programs in the user space to collect
+> > information instead of going back to the kernel every time?
 
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index 2c0cb72bc7a4..25c452c20d7d 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> > @@ -1209,7 +1209,7 @@ static int bpf_object__init_kern_struct_ops_maps(=
-struct bpf_object *obj)
-> >         for (i =3D 0; i < obj->nr_maps; i++) {
-> >                 map =3D &obj->maps[i];
-> >=20
-> > -               if (!bpf_map__is_struct_ops(map))
-> > +               if (!bpf_map__is_struct_ops(map) || !map->autocreate)
->=20
-> tbh, I'd keep them as separate checks (they check very different
-> aspects, so feels appropriate to not combine them in one check)
->=20
-> >                         continue;
-> >=20
-> >                 err =3D bpf_map__init_kern_struct_ops(map);
-> > @@ -8136,7 +8136,7 @@ static int bpf_object_prepare_struct_ops(struct b=
-pf_object *obj)
-> >         int i;
-> >=20
-> >         for (i =3D 0; i < obj->nr_maps; i++)
-> > -               if (bpf_map__is_struct_ops(&obj->maps[i]))
-> > +               if (bpf_map__is_struct_ops(&obj->maps[i]) && obj->maps[=
-i].autocreate)
->=20
-> especially here, this becomes a bit convoluted
->=20
-> how about we make it a bit more verbose, but also straightforward
->=20
-> map =3D &obj->maps[i];
-> if (!bpf_map__is_struct_ops(map))
->     continue;
-> if (!map->autocreate)
->     continue;
-> bpf_map_prepare_vdata(...)
+I was thinking about a similar idea. I guess these user space BPF
+programs will have limited features that we can probably use them
+update bpf maps. For this limited scope, we still need bpf_arena.
+Otherwise, the user space bpf program will need to update the bpf
+maps with sys_bpf(), which adds the same overhead as triggering
+the program with a syscall.
 
-Ok, will do
+>
+> sorry for late reply, do you mean like ubpf? the scope of this change
+> is to speed up the generic uprobe, ebpf is just one of the consumers
 
-[...]
+I guess this means we need a new syscall?
+
+Thanks,
+Song
