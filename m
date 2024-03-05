@@ -1,274 +1,105 @@
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C773E5F54D
-	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 12:30:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B640B58AB6;
+	Tue,  5 Mar 2024 12:54:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709641851; cv=none; b=a0F5CYWGO5kr8m8wqndRYxot2zQRD44LEwkPwEDh3UEcql0wEadHs522WBFMVyFScR6e0Zhq/+tpZfnNJClaKK+nQZ9ko2CyeRaOFgwIyLwimyQ6DUxOgLQpBAHgAXf4cR4BEAZ+jNgq0kYeAmWk2G0izEhpX4iJvmMMaWTL0xw=
+	t=1709643292; cv=none; b=WNjjBZ0cH6it0nAGwU79vaNbgOi9IgmfHVlh6af3v3aCHN4v992VQYqgf3lvK7bpTDst+vTNF3hoBAmX4ELjdcfM4XftLv6apQ7aWlvEq6JJ8TOc43yrfWiT428Yt9KDGC0NQvF66FyUu5kpp9ZX+1DGAltRANgh1kBTUkJT9w8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709641851; c=relaxed/simple;
-	bh=SZLK8P2ADiENGbW04b9z23zC/UqppzTLuGKz8QEUmJk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TWByeP1TWtYa/5osyBHi2jV6A2RZjfuzReED25rkgv8SrhZkdtkXaqWVWD9hsQtSkz+tmkWrJQxQMjsGZ4Y80RYzm/W8et+zoD7DAZA6Y05x69P8BGchJ4dKYMOtUOSs9cVy2/2gQzPeUa6Q7AswxBhO+I7ZwPtM1EA5mgWP3Pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=ZESlcrHk; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="ZESlcrHk"
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dcbcea9c261so5904097276.3
-        for <bpf@vger.kernel.org>; Tue, 05 Mar 2024 04:30:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1709641848; x=1710246648; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UTEvrdVpxvNz6j/baH9InbN4N4UJFFvSmq9qNcU5dkY=;
-        b=ZESlcrHkCePIs9tyuoszzVGUvNHk6a+7L+B+2njeoPkHInOTRlbhmRXosvNJxNplvx
-         6Nrk0AZSQFkIswY/qPdueokzSfqj7wCZl8V4eDVNKCHc5P4TwYZAlgsVBdgUlYzIBp1N
-         LNNswJg/US35Wfoy/A02RPH4EaT9Keno/08Hksb1eeug5+EydsMMmF4JNW1xdb7BkZTS
-         2cVCuZUNtX5rlgEE8Xt/7gAuOreNe47eEOV7B7jLqdku7xKiDS88c3zILqruCiFz0HAg
-         HC4iwKNrOXRUpY/VEhKDs/CSfBgs6nHuIUYE4kZdNovq/hv5RtriRPD71LTaTDFqPiq/
-         L1ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709641848; x=1710246648;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UTEvrdVpxvNz6j/baH9InbN4N4UJFFvSmq9qNcU5dkY=;
-        b=TIFyK6h9RN27U5iv20O4aSlBoCaLZaAElOZPWSSw/Ygeny2P67gHNW4Cs9ZTOGae7u
-         Nev+4mnbsqQGjD2bUUWil1B5vyvUq6LVLStWPkMkjsE5iZLNdDAfNLCy2uLcyOPp55Ik
-         NI3K/FvNd6YRnpFzkbYH4lVzJmHv1Hf4sX8Yo3qEvk+oq+jptMHdu/aFS8iBjvu4Jnem
-         Ur3zi1bNcZZYAPdFtSZ7wicE2+To2IF1/Vx8jWLX4l7yWZR0l0XB0XbVPFUqYk1vWNdT
-         TB/me7SjJoLQgjNtZXlP3eC8piQc40KxJU/P98SANDMQmmuERF5MGjCar3Z012+xJR3i
-         5qew==
-X-Forwarded-Encrypted: i=1; AJvYcCVfTzp/HtAjv59ZLBIdjggWuPFLHO+XPuRPT18S3crSe7A2XWZL6hHIHDKdXNZiv0gLxI6Tfv9JN39v6IBcqBcbFFXB
-X-Gm-Message-State: AOJu0YzrRtBu7SRXXOyPm6XPMbRKYBPjN3P/97vX2rFRPm4SbA/Uk6yR
-	kp0lJuXzZnpULHg2/GPj+K0KD5t6gGFGV+ZV58uctxKffj5/76YVBsbRMjtkD6UoagUlCI7YwhQ
-	f7nZUMDVL7k0WKoYnbLvM0W6xtMK6bx2iVnRN
-X-Google-Smtp-Source: AGHT+IEiK4FnyRl5wMGbnd3eCLkbDlfnfgw31wOOQ1r6LU9gMsHDcT84GXZ2c4GKp0DwHfG51kgxez2P4bw8wfZi98w=
-X-Received: by 2002:a25:d50b:0:b0:dc6:bcd5:9503 with SMTP id
- r11-20020a25d50b000000b00dc6bcd59503mr7911133ybe.48.1709641848686; Tue, 05
- Mar 2024 04:30:48 -0800 (PST)
+	s=arc-20240116; t=1709643292; c=relaxed/simple;
+	bh=dBll0MMe1cd+COq57v39zRTivh0aNAY6WcRafFYM2J8=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=RvhzBhkAw8qz3BVDSHI+CLCGlmP1Keqk6FfQCNlG+VaX2YwffXxybJfgJ/yfzPC6eOz461gcPnvGDIjnvAXuHZqnFWZVf+GVHFUZ6DTchEhJkBQrxzDrM4f/kY3k9oFJ+B+toY0dxPizz5C2AWU1r/+uDSr8I/ND2nFNOl5PtPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4TpwVc6CY4zbcjb;
+	Tue,  5 Mar 2024 20:54:00 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
+	by mail.maildlp.com (Postfix) with ESMTPS id D491214037C;
+	Tue,  5 Mar 2024 20:54:42 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Tue, 5 Mar
+ 2024 20:54:42 +0800
+Subject: Re: [RFC PATCH net-next v6 00/15] Device Memory TCP
+To: Mina Almasry <almasrymina@google.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-alpha@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+	<linux-parisc@vger.kernel.org>, <sparclinux@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
+CC: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Richard Henderson
+	<richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer
+	<tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+	<James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+	<hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+	<arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
+	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	David Ahern <dsahern@kernel.org>, Willem de Bruijn
+	<willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, Sumit
+ Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=c3=b6nig?=
+	<christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
+ Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Shailend Chand
+	<shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel
+ Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, Praveen
+ Kaligineedi <pkaligineedi@google.com>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+From: Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <6208950d-6453-e797-7fc3-1dcf15b49dbe@huawei.com>
+Date: Tue, 5 Mar 2024 20:54:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240225165447.156954-1-jhs@mojatatu.com> <20240225165447.156954-15-jhs@mojatatu.com>
- <9eff9a51-a945-48f6-9d14-a484b7c0d04c@linux.dev> <CAM0EoMniOaKn4W_WN9rmQZ1JY3qCugn34mmqCy9UdCTAj_tuTQ@mail.gmail.com>
- <f88b5f65-957e-4b5d-8959-d16e79372658@linux.dev> <CAM0EoMk=igKT5ZEwcfdQqP6O3u8tO7VOpkNsWE1b92ia2eZVpw@mail.gmail.com>
- <496c78b7-4e16-42eb-a2f4-99472cd764fd@linux.dev>
-In-Reply-To: <496c78b7-4e16-42eb-a2f4-99472cd764fd@linux.dev>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Tue, 5 Mar 2024 07:30:37 -0500
-Message-ID: <CAM0EoMmB0s5WzZ-CgGWBF9YdaWi7O0tHEj+C8zuryGhKz7+FpA@mail.gmail.com>
-Subject: Re: [PATCH net-next v12 14/15] p4tc: add set of P4TC table kfuncs
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: deb.chatterjee@intel.com, anjali.singhai@intel.com, 
-	namrata.limaye@intel.com, tom@sipanda.io, mleitner@redhat.com, 
-	Mahesh.Shirshyad@amd.com, Vipin.Jain@amd.com, tomasz.osinski@intel.com, 
-	jiri@resnulli.us, xiyou.wangcong@gmail.com, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, vladbu@nvidia.com, 
-	horms@kernel.org, khalidm@nvidia.com, toke@redhat.com, daniel@iogearbox.net, 
-	victor@mojatatu.com, pctammela@mojatatu.com, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240305020153.2787423-1-almasrymina@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
 
-On Tue, Mar 5, 2024 at 2:40=E2=80=AFAM Martin KaFai Lau <martin.lau@linux.d=
-ev> wrote:
->
-> On 3/3/24 9:20 AM, Jamal Hadi Salim wrote:
->
-> >>>>> +#define P4TC_MAX_PARAM_DATA_SIZE 124
-> >>>>> +
-> >>>>> +struct p4tc_table_entry_act_bpf {
-> >>>>> +     u32 act_id;
-> >>>>> +     u32 hit:1,
-> >>>>> +         is_default_miss_act:1,
-> >>>>> +         is_default_hit_act:1;
-> >>>>> +     u8 params[P4TC_MAX_PARAM_DATA_SIZE];
-> >>>>> +} __packed;
-> >>>>> +
-> >>>>> +struct p4tc_table_entry_act_bpf_kern {
-> >>>>> +     struct rcu_head rcu;
-> >>>>> +     struct p4tc_table_entry_act_bpf act_bpf;
-> >>>>> +};
-> >>>>> +
-> >>>>>     struct tcf_p4act {
-> >>>>>         struct tc_action common;
-> >>>>>         /* Params IDR reference passed during runtime */
-> >>>>>         struct tcf_p4act_params __rcu *params;
-> >>>>> +     struct p4tc_table_entry_act_bpf_kern __rcu *act_bpf;
-> >>>>>         u32 p_id;
-> >>>>>         u32 act_id;
-> >>>>>         struct list_head node;
-> >>>>> @@ -24,4 +40,39 @@ struct tcf_p4act {
-> >>>>>
-> >>>>>     #define to_p4act(a) ((struct tcf_p4act *)a)
-> >>>>>
-> >>>>> +static inline struct p4tc_table_entry_act_bpf *
-> >>>>> +p4tc_table_entry_act_bpf(struct tc_action *action)
-> >>>>> +{
-> >>>>> +     struct p4tc_table_entry_act_bpf_kern *act_bpf;
-> >>>>> +     struct tcf_p4act *p4act =3D to_p4act(action);
-> >>>>> +
-> >>>>> +     act_bpf =3D rcu_dereference(p4act->act_bpf);
-> >>>>> +
-> >>>>> +     return &act_bpf->act_bpf;
-> >>>>> +}
-> >>>>> +
-> >>>>> +static inline int
-> >>>>> +p4tc_table_entry_act_bpf_change_flags(struct tc_action *action, u3=
-2 hit,
-> >>>>> +                                   u32 dflt_miss, u32 dflt_hit)
-> >>>>> +{
-> >>>>> +     struct p4tc_table_entry_act_bpf_kern *act_bpf, *act_bpf_old;
-> >>>>> +     struct tcf_p4act *p4act =3D to_p4act(action);
-> >>>>> +
-> >>>>> +     act_bpf =3D kzalloc(sizeof(*act_bpf), GFP_KERNEL);
-> >>>>
-> >>>>
-> >>>> [ ... ]
->
->
-> >>>>> +static int
-> >>>>> +__bpf_p4tc_entry_create(struct net *net,
-> >>>>> +                     struct p4tc_table_entry_create_bpf_params *pa=
-rams,
-> >>>>> +                     void *key, const u32 key__sz,
-> >>>>> +                     struct p4tc_table_entry_act_bpf *act_bpf)
-> >>>>> +{
-> >>>>> +     struct p4tc_table_entry_key *entry_key =3D key;
-> >>>>> +     struct p4tc_pipeline *pipeline;
-> >>>>> +     struct p4tc_table *table;
-> >>>>> +
-> >>>>> +     if (!params || !key)
-> >>>>> +             return -EINVAL;
-> >>>>> +     if (key__sz !=3D P4TC_ENTRY_KEY_SZ_BYTES(entry_key->keysz))
-> >>>>> +             return -EINVAL;
-> >>>>> +
-> >>>>> +     pipeline =3D p4tc_pipeline_find_byid(net, params->pipeid);
-> >>>>> +     if (!pipeline)
-> >>>>> +             return -ENOENT;
-> >>>>> +
-> >>>>> +     table =3D p4tc_tbl_cache_lookup(net, params->pipeid, params->=
-tblid);
-> >>>>> +     if (!table)
-> >>>>> +             return -ENOENT;
-> >>>>> +
-> >>>>> +     if (entry_key->keysz !=3D table->tbl_keysz)
-> >>>>> +             return -EINVAL;
-> >>>>> +
-> >>>>> +     return p4tc_table_entry_create_bpf(pipeline, table, entry_key=
-, act_bpf,
-> >>>>> +                                        params->profile_id);
-> >>>>
-> >>>> My understanding is this kfunc will allocate a "struct
-> >>>> p4tc_table_entry_act_bpf_kern" object. If the bpf_p4tc_entry_delete(=
-) kfunc is
-> >>>> never called and the bpf prog is unloaded, how the act_bpf object wi=
-ll be
-> >>>> cleaned up?
-> >>>>
-> >>>
-> >>> The TC code takes care of this. Unloading the bpf prog does not affec=
-t
-> >>> the deletion, it is the TC control side that will take care of it. If
-> >>> we delete the pipeline otoh then not just this entry but all entries
-> >>> will be flushed.
-> >>
-> >> It looks like the "struct p4tc_table_entry_act_bpf_kern" object is all=
-ocated by
-> >> the bpf prog through kfunc and will only be useful for the bpf prog bu=
-t not
-> >> other parts of the kernel. However, if the bpf prog is unloaded, these=
- bpf
-> >> specific objects will be left over in the kernel until the tc pipeline=
- (where
-> >> the act_bpf_kern object resided) is gone.
-> >>
-> >> It is the expectation on bpf prog (not only tc/xdp bpf prog) about res=
-ources
-> >> clean up that these bpf objects will be gone after unloading the bpf p=
-rog and
-> >> unpinning its bpf map.
-> >>
-> >
-> > The table (residing on the TC side) could be shared by multiple bpf
-> > programs. Entries are allocated on the TC side of the fence.
->
->
-> > IOW, the memory is not owned by the bpf prog but rather by pipeline.
->
-> The struct p4tc_table_entry_act_(bpf_kern) object is allocated by
-> bpf_p4tc_entry_create() kfunc and only bpf prog can use it, no?
-> afaict, this is bpf objects.
->
+On 2024/3/5 10:01, Mina Almasry wrote:
 
-Bear with me because i am not sure i am following.
-When we looked at conntrack as guidance we noticed they do things
-slightly differently. They have an allocate kfunc and an insert
-function. If you have alloc then you need a complimentary release. The
-existence of the release in conntrack, correct me if i am wrong, seems
-to be based on the need to free the object if an insert fails. In our
-case the insert does first allocate then inserts all in one operation.
-If either fails it's not the concern of the bpf side to worry about
-it. IOW, i see the ownership as belonging to the P4TC side  (it is
-both allocated, updated and freed by that side). Likely i am missing
-something..
+...
 
-> > We do have a "whodunnit" field, i.e we keep track of which entity
-> > added an entry and we are capable of deleting all entries when we
-> > detect a bpf program being deleted (this would be via deleting the tc
-> > filter). But my thinking is we should make that a policy decision as
-> > opposed to something which is default.
->
-> afaik, this policy decision or cleanup upon tc filter delete has not been=
- done
-> yet. I will leave it to you to figure out how to track what was allocated=
- by a
-> particular bpf prog on the TC side. It is not immediately clear to me and=
- I
-> probably won't have a good idea either.
->
+> 
+> Perf - page-pool benchmark:
+> ---------------------------
+> 
+> bench_page_pool_simple.ko tests with and without these changes:
+> https://pastebin.com/raw/ncHDwAbn
+> 
+> AFAIK the number that really matters in the perf tests is the
+> 'tasklet_page_pool01_fast_path Per elem'. This one measures at about 8
+> cycles without the changes but there is some 1 cycle noise in some
+> results.
+> 
+> With the patches this regresses to 9 cycles with the changes but there
+> is 1 cycle noise occasionally running this test repeatedly.
+> 
+> Lastly I tried disable the static_branch_unlikely() in
+> netmem_is_net_iov() check. To my surprise disabling the
+> static_branch_unlikely() check reduces the fast path back to 8 cycles,
+> but the 1 cycle noise remains.
+> 
 
-I am looking at the conntrack code and i dont see how they release
-entries from the cotrack table when the bpf prog goes away.
-
-> Just to be clear that it is almost certain to be unacceptable to extend a=
-nd make
-> changes on the bpf side in the future to handle specific resource
-> cleanup/tracking/sharing of the bpf objects allocated by these kfuncs. Th=
-is
-> problem has already been solved and works for different bpf program types=
-,
-> tc/cgroup/tracing...etc. Adding a refcnted bpf prog pointer alongside the
-> act_bpf_kern object will be a non-starter.
->
-> I think multiple people have already commented that these kfuncs
-> (create/update/delete...) resemble the existing bpf map. If these kfuncs =
-are
-> replaced with the bpf map ops, this bpf resource management has already b=
-een
-> handled and will be consistent with other bpf program types.
->
-> I expect the act_bpf_kern object probably will grow in size over time als=
-o.
-> Considering this new p4 pipeline and table is residing on the TC side, I =
-will
-> leave it up to others to decide if it is acceptable to have some unused b=
-pf
-> objects left attached there.
-
-There should be no dangling things at all.
-Probably not a very good example, but this would be analogous to
-pinning a map which is shared by many bpf progs. Deleting one or all
-the bpf progs doesnt delete the contents of the bpf map, you have to
-explicitly remove it. Deleting the pipeline will be equivalent to
-deleting the map. IOW, resource cleanup is tied to the pipeline...
-
-cheers,
-jamal
+The last sentence seems to be suggesting the above 1 ns regresses is caused
+by the static_branch_unlikely() checking?
