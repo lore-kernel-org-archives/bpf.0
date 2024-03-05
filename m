@@ -1,201 +1,263 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2107E59C
-	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 07:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBCCF7B3E7
+	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 08:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709624450; cv=none; b=aiJ161XlasQ2kot0mbuNVABfCEGusJ78umLMGftIwE+dLT2s921fdzPYDk1bN58yXm+TrNmW/t9OZ6NspI8UoMmzn1AaDUN1zH81oNzqh/kIqyhVhut0CVH1c4AtEcmYg02JEl6vwc6qi9oIfNZQjsM2hBr4L37xP4eH3OOQ1zw=
+	t=1709627059; cv=none; b=DTTQbDinwbkdsizRZPNF7esF+/baUZyZ4CIlOvkIw5n7K3Qy/q5xQ2InJ7NmWJOxdTluRzPHLlO0g87eAvkO12WTrFMMX8WXtSfcT6sElWhDjFzn8aa/G7ue+M4HmJrpTiTSt/+aD3wm9T9Y3cBwkB2e21adZb4GL4K72dCjTzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709624450; c=relaxed/simple;
-	bh=DNIEX4gwHPS+t9otwZT0rXbKmVHXDqZRCb/chYD7uww=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L422rLW0y7sKBbIVKawvdPHWGHvYPWALxATd5eIpg3nkomfVsGvW3AlB4Du815NR97gYf/4PViwyTpOcdZMUqosrX1ALgV9+xm4UK95lYKRkNhJb6TbAFTwUy7f+RZN5N/fAET4VgecBeLIX1BSkRFdadzhKsaOFspBQb636BMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o9mMjdjf; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1709627059; c=relaxed/simple;
+	bh=Uh9o34sIm/aJj5QwMne7eOtJ3A7gQBIg8vj4WitGRHQ=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tM5HBYkFbiUydJ5rGepSKynlXA1YtQAdlervXLfalavCbty3aRTxib7vhgzkCjy/vu8/BIikmsobI1Kgb4ZjLlfArPIXMu0VJCZAEM3d15Mdzezo1hzdwHUZ53PSS/zKb9/664ABaX+2LXnpDhM79gHOHYWD36+MXy8iNPFmPcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VAoBU4aW; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o9mMjdjf"
-Message-ID: <496c78b7-4e16-42eb-a2f4-99472cd764fd@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1709624446;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sMOvK/9p/X/KCj3g12ZTFtVD7hChAjvPBa5aFBCrAck=;
-	b=o9mMjdjfCA5tvzCQsNrXGYRq1nEirUkuBxxzoGoA4GYVhMV56ya9Q7lHYIRKvi4vFNcjjX
-	Z9CKdBFQxDDfNQtRR8rlhJN4ijYXd9G96zda0QNiW00BgAjbLTPBeuz9CiLxwKA7+toWhQ
-	pgQHGA2rYKXFy1Xm6fJ6UAx+CFKVtB4=
-Date: Mon, 4 Mar 2024 23:40:34 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VAoBU4aW"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-566e869f631so4273978a12.0
+        for <bpf@vger.kernel.org>; Tue, 05 Mar 2024 00:24:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709627056; x=1710231856; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=T0HW0FAd4wXxARZCkThpH5NoJjK1DnfT6VYy0Msr/dk=;
+        b=VAoBU4aW6t+1ylAHkztzIxF7FXvfiD2caxESwzMAfb8Lo4J657cZMm/VI192HVOmjz
+         E6lSfolVOpJrC01j/sFVPhbht8waKdURnZCSIv02L6v8SSrqsR3DgHgX1WtTWUsZE48Y
+         KINFqye4RX7CeCf72z4SqdraJpsFw7z77qh+rpKxF4d80Jmeh7jfgaHCOm7TFUl3CUgI
+         AS+AUxsModqof/CxMWY5M54obq0BMR6j6w5RKQckkGHbobMNcuUb0t6JYge0qzFSG7Ti
+         E0TYKdRtWarnNTmXM6Pd7VqBBv8dOBw5z30jw7VIAUfGgDrXNLP2+FbKQxEsYqvYr5Zm
+         dn6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709627056; x=1710231856;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T0HW0FAd4wXxARZCkThpH5NoJjK1DnfT6VYy0Msr/dk=;
+        b=pBuKicPLdQ5hUBWlDoWZ4sHU27onoi7Ow2sUwr+1JJe0UlJGb1+6A7GWb6spOcu8JC
+         jYbwc3Ud6XloDzGNmBrbLUMF7bjwxGRcTrjvw6qnudcO8Wy/we3AR25o+3X08j63jK0Z
+         Aw3jWMcdGxgpqgCYvbCtga3TyvO8baWD+oj9gw9BAXfxwcGdktT8LgjhQMYrukDXmNCL
+         818a7/WF/oTErsBfDcOPwfaOFcqNq0jNr0ySkLL7shWOshlUSLICgbyrF+XTs4/Bmd/i
+         W4M2Bz452+pGYRu8uBDCBe9gbbzvF5luV5EPy8fz0wqrFgwLMZmUFHJrjO/TfBNIUgEc
+         kWmg==
+X-Forwarded-Encrypted: i=1; AJvYcCVtA0vE1ZuTFy12tFoazoKCxj2U+jLKlw5+DVVE+KuWP46Nk5R1CAFjvjiNS+xn5v6hSVjj+7eM2T9/2ZradNqvyxN9
+X-Gm-Message-State: AOJu0Yx4a6nFHFeLy9q3yio0PJ1WOJAScoCsqJK3nxSg5HKO+K/MNUHw
+	kwecYt5Z8vj5MPNoJmmzeIhAVPCMHLBjZHc3Y3YpjR1AmJIJK8Henp6sZoUi
+X-Google-Smtp-Source: AGHT+IH8FF419VrLIXHfMkAF0HxLUWC2ddSEi3dQraDGOg6ObMrLGEivA/vIOmzlPN1PZCvhB3twYQ==
+X-Received: by 2002:a17:906:e211:b0:a43:fd9e:2d44 with SMTP id gf17-20020a170906e21100b00a43fd9e2d44mr7967250ejb.42.1709627055735;
+        Tue, 05 Mar 2024 00:24:15 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id os26-20020a170906af7a00b00a450b817705sm2893060ejb.154.2024.03.05.00.24.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Mar 2024 00:24:15 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 5 Mar 2024 09:24:08 +0100
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	yunwei356@gmail.com, bpf <bpf@vger.kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	lsf-pc <lsf-pc@lists.linux-foundation.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: [LSF/MM/BPF TOPIC] faster uprobes
+Message-ID: <ZebWqIgABbk8dQXT@krava>
+References: <ZeCXHKJ--iYYbmLj@krava>
+ <CAEf4Bzbs4toMxw62kVTWNHA7sW-CncamyKHCWynCT0GnG+fOfQ@mail.gmail.com>
+ <ZeGPU8FRqwNuUJwd@krava>
+ <CAADnVQKW4Qk55NjaApx1caPDF_pA8f5JZFE12DKA2R8cKWmtcw@mail.gmail.com>
+ <CAEf4Bzbv5_yG8S4c22QUXp1FhLZGSSRZS6FFjXfvo=4RdAThZA@mail.gmail.com>
+ <ZeRO9_IiLSy9D7jQ@krava>
+ <CAEf4BzZQnqjoCc6Y_N3Wu4eMpioqgZC04QrTujgyiYMMRpG3Nw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net-next v12 14/15] p4tc: add set of P4TC table kfuncs
-Content-Language: en-US
-To: Jamal Hadi Salim <jhs@mojatatu.com>
-Cc: deb.chatterjee@intel.com, anjali.singhai@intel.com,
- namrata.limaye@intel.com, tom@sipanda.io, mleitner@redhat.com,
- Mahesh.Shirshyad@amd.com, Vipin.Jain@amd.com, tomasz.osinski@intel.com,
- jiri@resnulli.us, xiyou.wangcong@gmail.com, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, vladbu@nvidia.com,
- horms@kernel.org, khalidm@nvidia.com, toke@redhat.com, daniel@iogearbox.net,
- victor@mojatatu.com, pctammela@mojatatu.com, bpf@vger.kernel.org,
- netdev@vger.kernel.org
-References: <20240225165447.156954-1-jhs@mojatatu.com>
- <20240225165447.156954-15-jhs@mojatatu.com>
- <9eff9a51-a945-48f6-9d14-a484b7c0d04c@linux.dev>
- <CAM0EoMniOaKn4W_WN9rmQZ1JY3qCugn34mmqCy9UdCTAj_tuTQ@mail.gmail.com>
- <f88b5f65-957e-4b5d-8959-d16e79372658@linux.dev>
- <CAM0EoMk=igKT5ZEwcfdQqP6O3u8tO7VOpkNsWE1b92ia2eZVpw@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <CAM0EoMk=igKT5ZEwcfdQqP6O3u8tO7VOpkNsWE1b92ia2eZVpw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzZQnqjoCc6Y_N3Wu4eMpioqgZC04QrTujgyiYMMRpG3Nw@mail.gmail.com>
 
-On 3/3/24 9:20 AM, Jamal Hadi Salim wrote:
-
->>>>> +#define P4TC_MAX_PARAM_DATA_SIZE 124
->>>>> +
->>>>> +struct p4tc_table_entry_act_bpf {
->>>>> +     u32 act_id;
->>>>> +     u32 hit:1,
->>>>> +         is_default_miss_act:1,
->>>>> +         is_default_hit_act:1;
->>>>> +     u8 params[P4TC_MAX_PARAM_DATA_SIZE];
->>>>> +} __packed;
->>>>> +
->>>>> +struct p4tc_table_entry_act_bpf_kern {
->>>>> +     struct rcu_head rcu;
->>>>> +     struct p4tc_table_entry_act_bpf act_bpf;
->>>>> +};
->>>>> +
->>>>>     struct tcf_p4act {
->>>>>         struct tc_action common;
->>>>>         /* Params IDR reference passed during runtime */
->>>>>         struct tcf_p4act_params __rcu *params;
->>>>> +     struct p4tc_table_entry_act_bpf_kern __rcu *act_bpf;
->>>>>         u32 p_id;
->>>>>         u32 act_id;
->>>>>         struct list_head node;
->>>>> @@ -24,4 +40,39 @@ struct tcf_p4act {
->>>>>
->>>>>     #define to_p4act(a) ((struct tcf_p4act *)a)
->>>>>
->>>>> +static inline struct p4tc_table_entry_act_bpf *
->>>>> +p4tc_table_entry_act_bpf(struct tc_action *action)
->>>>> +{
->>>>> +     struct p4tc_table_entry_act_bpf_kern *act_bpf;
->>>>> +     struct tcf_p4act *p4act = to_p4act(action);
->>>>> +
->>>>> +     act_bpf = rcu_dereference(p4act->act_bpf);
->>>>> +
->>>>> +     return &act_bpf->act_bpf;
->>>>> +}
->>>>> +
->>>>> +static inline int
->>>>> +p4tc_table_entry_act_bpf_change_flags(struct tc_action *action, u32 hit,
->>>>> +                                   u32 dflt_miss, u32 dflt_hit)
->>>>> +{
->>>>> +     struct p4tc_table_entry_act_bpf_kern *act_bpf, *act_bpf_old;
->>>>> +     struct tcf_p4act *p4act = to_p4act(action);
->>>>> +
->>>>> +     act_bpf = kzalloc(sizeof(*act_bpf), GFP_KERNEL);
->>>>
->>>>
->>>> [ ... ]
-
-
->>>>> +static int
->>>>> +__bpf_p4tc_entry_create(struct net *net,
->>>>> +                     struct p4tc_table_entry_create_bpf_params *params,
->>>>> +                     void *key, const u32 key__sz,
->>>>> +                     struct p4tc_table_entry_act_bpf *act_bpf)
->>>>> +{
->>>>> +     struct p4tc_table_entry_key *entry_key = key;
->>>>> +     struct p4tc_pipeline *pipeline;
->>>>> +     struct p4tc_table *table;
->>>>> +
->>>>> +     if (!params || !key)
->>>>> +             return -EINVAL;
->>>>> +     if (key__sz != P4TC_ENTRY_KEY_SZ_BYTES(entry_key->keysz))
->>>>> +             return -EINVAL;
->>>>> +
->>>>> +     pipeline = p4tc_pipeline_find_byid(net, params->pipeid);
->>>>> +     if (!pipeline)
->>>>> +             return -ENOENT;
->>>>> +
->>>>> +     table = p4tc_tbl_cache_lookup(net, params->pipeid, params->tblid);
->>>>> +     if (!table)
->>>>> +             return -ENOENT;
->>>>> +
->>>>> +     if (entry_key->keysz != table->tbl_keysz)
->>>>> +             return -EINVAL;
->>>>> +
->>>>> +     return p4tc_table_entry_create_bpf(pipeline, table, entry_key, act_bpf,
->>>>> +                                        params->profile_id);
->>>>
->>>> My understanding is this kfunc will allocate a "struct
->>>> p4tc_table_entry_act_bpf_kern" object. If the bpf_p4tc_entry_delete() kfunc is
->>>> never called and the bpf prog is unloaded, how the act_bpf object will be
->>>> cleaned up?
->>>>
->>>
->>> The TC code takes care of this. Unloading the bpf prog does not affect
->>> the deletion, it is the TC control side that will take care of it. If
->>> we delete the pipeline otoh then not just this entry but all entries
->>> will be flushed.
->>
->> It looks like the "struct p4tc_table_entry_act_bpf_kern" object is allocated by
->> the bpf prog through kfunc and will only be useful for the bpf prog but not
->> other parts of the kernel. However, if the bpf prog is unloaded, these bpf
->> specific objects will be left over in the kernel until the tc pipeline (where
->> the act_bpf_kern object resided) is gone.
->>
->> It is the expectation on bpf prog (not only tc/xdp bpf prog) about resources
->> clean up that these bpf objects will be gone after unloading the bpf prog and
->> unpinning its bpf map.
->>
+On Mon, Mar 04, 2024 at 04:55:33PM -0800, Andrii Nakryiko wrote:
+> On Sun, Mar 3, 2024 at 2:20 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Fri, Mar 01, 2024 at 09:26:57AM -0800, Andrii Nakryiko wrote:
+> > > On Fri, Mar 1, 2024 at 9:01 AM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > On Fri, Mar 1, 2024 at 12:18 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > > > >
+> > > > > On Thu, Feb 29, 2024 at 04:25:17PM -0800, Andrii Nakryiko wrote:
+> > > > > > On Thu, Feb 29, 2024 at 6:39 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > > > > > >
+> > > > > > > One of uprobe pain points is having slow execution that involves
+> > > > > > > two traps in worst case scenario or single trap if the original
+> > > > > > > instruction can be emulated. For return uprobes there's one extra
+> > > > > > > trap on top of that.
+> > > > > > >
+> > > > > > > My current idea on how to make this faster is to follow the optimized
+> > > > > > > kprobes and replace the normal uprobe trap instruction with jump to
+> > > > > > > user space trampoline that:
+> > > > > > >
+> > > > > > >   - executes syscall to call uprobe consumers callbacks
+> > > > > >
+> > > > > > Did you get a chance to measure relative performance of syscall vs
+> > > > > > int3 interrupt handling? If not, do you think you'll be able to get
+> > > > > > some numbers by the time the conference starts? This should inform the
+> > > > > > decision whether it even makes sense to go through all the trouble.
+> > > > >
+> > > > > right, will do that
+> > > >
+> > > > I believe Yusheng measured syscall vs uprobe performance
+> > > > difference during LPC. iirc it was something like 3x.
+> > >
+> > > Do you have a link to slides? Was it actual uprobe vs just some fast
+> > > syscall (not doing BPF program execution) comparison? Or comparing the
+> > > performance of int3 handling vs equivalent syscall handling.
+> > >
+> > > I suspect it's the former, and so probably not that representative.
+> > > I'm curious about the performance of going
+> > > userspace->kernel->userspace through int3 vs syscall (all other things
+> > > being equal).
+> >
+> > I have a simple test [1] comparing:
+> >   - uprobe with 2 traps
+> >   - uprobe with 1 trap
+> >   - syscall executing uprobe
+> >
+> > the syscall takes uprobe address as argument, finds the uprobe and executes
+> > its consumers, which should be comparable to what the trampoline will do
+> >
+> > test does same amount of loops triggering each uprobe type and measures
+> > the time it took
+> >
+> >   # ./test_progs -t uprobe_syscall_bench -v
+> >   bpf_testmod.ko is already unloaded.
+> >   Loading bpf_testmod.ko...
+> >   Successfully loaded bpf_testmod.ko.
+> >   test_bench_1:PASS:uprobe_bench__open_and_load 0 nsec
+> >   test_bench_1:PASS:uprobe_bench__attach 0 nsec
+> >   test_bench_1:PASS:uprobe1_cnt 0 nsec
+> >   test_bench_1:PASS:syscalls_uprobe1_cnt 0 nsec
+> >   test_bench_1:PASS:uprobe2_cnt 0 nsec
+> >   test_bench_1: uprobes (1 trap) in  36.439s
+> >   test_bench_1: uprobes (2 trap) in  91.960s
+> >   test_bench_1: syscalls         in  17.872s
+> >   #395/1   uprobe_syscall_bench/bench_1:OK
+> >   #395     uprobe_syscall_bench:OK
+> >   Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
+> >
+> > syscall uprobe execution seems to be ~2x faster than 1 trap uprobe
+> > and ~5x faster than 2 traps uprobe
+> >
 > 
-> The table (residing on the TC side) could be shared by multiple bpf
-> programs. Entries are allocated on the TC side of the fence.
+> Thanks for running benchmarks! I quickly looked at the selftest and
+> noticed this:
+> 
+> +/*
+> + * Assuming following prolog:
+> + *
+> + * 6984ac:       55                      push   %rbp
+> + * 6984ad:       48 89 e5                mov    %rsp,%rbp
+> + */
+> +noinline void uprobe2_bench_trigger(void)
+> +{
+> +        asm volatile ("");
+> +}
+> 
+> This actually will be optimized out to just ret in -O2 mode (make
+> RELEASE=1 for selftests):
+> 
+> 00000000005a0ce0 <uprobe2_bench_trigger>:
+>   5a0ce0: c3                            retq
+>   5a0ce1: 66 66 2e 0f 1f 84 00 00 00 00 00      nopw    %cs:(%rax,%rax)
+>   5a0cec: 0f 1f 40 00                   nopl    (%rax)
+> 
+> So be careful with that.
 
+right, I did not mean for this to be checked in, just wanted to get the
+numbers quickly
 
-> IOW, the memory is not owned by the bpf prog but rather by pipeline.
+> 
+> Also, I just updated our existing set of uprobe benchmarks (see [0]),
+> do you mind adding your syscall-based one as another one there and
+> running all of them and sharing the numbers with us? Very curious to
+> see both absolute and relative numbers from that benchmark. (and
+> please do build with RELEASE=1)
+> 
+> You should be able to just run benchs/run_bench_uprobes.sh (also don't
+> forget to add your syscall-based benchmark to the list of benchmarks
+> in that shell script).
 
-The struct p4tc_table_entry_act_(bpf_kern) object is allocated by 
-bpf_p4tc_entry_create() kfunc and only bpf prog can use it, no?
-afaict, this is bpf objects.
+yes, saw it and was going to run/compare it.. it's good idea to add
+the syscall one and get all numbers together, will do that
 
-> We do have a "whodunnit" field, i.e we keep track of which entity
-> added an entry and we are capable of deleting all entries when we
-> detect a bpf program being deleted (this would be via deleting the tc
-> filter). But my thinking is we should make that a policy decision as
-> opposed to something which is default.
+> 
+> Thank you!
+> 
+> 
+> BTW, while I think patching multiple instructions for syscall-based
+> uprobe is going to be extremely tricky, I think at least u*ret*probe's
+> int3 can be pretty easily optimized away with syscall, given that the
+> kernel controls code generation there. If anything, it will get the
+> uretprobe case a bit closer to the performance of uprobe. Give it some
+> thought.
 
-afaik, this policy decision or cleanup upon tc filter delete has not been done 
-yet. I will leave it to you to figure out how to track what was allocated by a 
-particular bpf prog on the TC side. It is not immediately clear to me and I 
-probably won't have a good idea either.
+hm, right.. the trampoline is there already, but at the moment is global
+and used by all uretprobes.. and int3 code moves userspace (changes rip)
+to the original return address.. maybe we can do that through syscall
+as well
 
-Just to be clear that it is almost certain to be unacceptable to extend and make 
-changes on the bpf side in the future to handle specific resource 
-cleanup/tracking/sharing of the bpf objects allocated by these kfuncs. This 
-problem has already been solved and works for different bpf program types, 
-tc/cgroup/tracing...etc. Adding a refcnted bpf prog pointer alongside the 
-act_bpf_kern object will be a non-starter.
+or we could add jump back to uretprobe's original return addrress to the
+trampoline, but then we need special trampoline for each uretprobe,
+I'll check
 
-I think multiple people have already commented that these kfuncs 
-(create/update/delete...) resemble the existing bpf map. If these kfuncs are 
-replaced with the bpf map ops, this bpf resource management has already been 
-handled and will be consistent with other bpf program types.
+thanks,
+jirka
 
-I expect the act_bpf_kern object probably will grow in size over time also.
-Considering this new p4 pipeline and table is residing on the TC side, I will 
-leave it up to others to decide if it is acceptable to have some unused bpf 
-objects left attached there.
+> 
+> 
+>   [0] https://patchwork.kernel.org/project/netdevbpf/patch/20240301214551.1686095-1-andrii@kernel.org/
+> 
+> > jirka
+> >
+> >
+> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/log/?h=uprobe_syscall_bench
+> >
+> > >
+> > > > Certainly necessary to have a benchmark.
+> > > > selftests/bpf/bench has one for uprobe.
+> > > > Probably should extend with sys_bpf.
+> > > >
+> > > > Regarding:
+> > > > > replace the normal uprobe trap instruction with jump to
+> > > > user space trampoline
+> > > >
+> > > > it should probably be a call to trampoline instead of a jump.
+> > > > Unless you plan to generate a different trampoline for every location ?
+> > > >
+> > > > Also how would you pick a space for a trampoline in the target process ?
+> > > > Analyze /proc/pid/maps and look for gaps in executable sections?
+> > >
+> > > kernel already does that for uretprobes, it adds a new "[uprobes]"
+> > > memory mapping, so this part is already implemented
+> > >
+> > > >
+> > > > We can start simple with a USDT that uses nop5 instead of nop1
+> > > > and explicit single trampoline for all USDT locations
+> > > > that saves all (callee and caller saved) registers and
+> > > > then does sys_bpf with a new cmd.
+> > > >
+> > > > To replace nop5 with a call to trampoline we can use text_poke_bp
+> > > > approach: replace 1st byte with int3, replace 2-5 with target addr,
+> > > > replace 1st byte to make an actual call insn.
+> > > >
+> > > > Once patched there will be no simulation of insns or kernel traps.
+> > > > Just normal user code that calls into trampoline, that calls sys_bpf,
+> > > > and returns back.
