@@ -1,291 +1,129 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA0381C2BD
-	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 19:03:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24F517997
+	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 19:12:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709665432; cv=none; b=V0rekhT26Btxss4X9pZb2tchv4PqnUXxznR9xr497MZQ6Qz8gZ5u5myMvdERWGSsEo6pXJM9KddBCmaRYrIDjgJMc9RAD6oa0AGn0ut8nV3XvtUoiThoY9xAiL6vJqiKV2d0fvvZk8yHY/4QV142uXyCyBju0rvglzngse21SXI=
+	t=1709665974; cv=none; b=KgVaU9OxnEH0ederhX7w2Ji8MrG45cvMjA2S7U+7234Dcc5GcfEXFns0yaOKVsmgGmcTmACM4pJX3LFRvIAG+Py+L0L7nYa2u+JTMdclDh81gNX8H48vEz6nAHIv/WncUfrBE/aLvc2Pnxubvjx/1yVlsSV/8y3EUzwhsHBVQlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709665432; c=relaxed/simple;
-	bh=rmmGRYx43MjM4TUG5qgJFl3i47m2hCGmdpg0+e0kgq0=;
+	s=arc-20240116; t=1709665974; c=relaxed/simple;
+	bh=jx6Rge/HL2/8Fkw+Fg5JjHkQfizW4JwlxG2CLvB1yBU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UkcmsaerkQC4Bt2xtFVdFIZsasgiyk0tZk3Z93iOiv/kSIF/vLfGGNNfClUlYCTLChsIYmAFSCDUlrRkj/mc85qqQqPXb90FX9VVr5lTyC4M5Io/ohrnJWt5vCX8msE6iCrhhjc21+ugDUUQjXrPPszjpQoO6i+x2vmmG4t8AVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Me34NFkd; arc=none smtp.client-ip=209.85.216.49
+	 To:Cc:Content-Type; b=bakkpjvde6O64vbGKj2Is85wr+IwgGMITqYr3a8QCKig+gznzKOmQP6gW0fbsZwQ9fm4pyrxXSs2Vzahnr3dNNjBK8J6VfxT9CM0k6bUC+nYbZdmZSci0D8nUGc2nSflf60j9hWnB0SfKN0yunm0udYbcrzdSoR36sPVarNL2As=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YDViyf1C; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Me34NFkd"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-299d3b09342so71938a91.2
-        for <bpf@vger.kernel.org>; Tue, 05 Mar 2024 11:03:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YDViyf1C"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6e58d259601so61406b3a.3
+        for <bpf@vger.kernel.org>; Tue, 05 Mar 2024 11:12:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709665430; x=1710270230; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709665972; x=1710270772; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9nFKQAgntPsabUMKhijS9tOO6R2NrFtq12FfMHfx09M=;
-        b=Me34NFkd25hZyVPbBealhJKNt+1zU4fV4yff3mADp+pdbIV8uT44pFyP5jwswMR9kp
-         JX7tcSWhLakUF9Ct//MR8g77kTedpBoislGMBzxOJ1+VqvYUDlT5mEqMKv3EuztwOclx
-         16qgMrImKkbxF/g3lMj6avjs4KPsMaY79sW6iM/9B0pI5/zyPj6nqWcixAoog1OPWCQM
-         qUGf+UQaDgiJWNWdztjDrCNZBACch3qokSfnLgSAFD57vPwkb8WiDO5yKq+f/pFbgtWa
-         9Jf99w4CLEfzxSZEnqoQFKZpQAn9BG4tgHH+Ewk/nk08B/JxNU8O9dDavjO77Vq1tHFY
-         cSyA==
+        bh=Du+03rgZyIAaZxo8Mft1n9yPxFZja3KPt3aoH+gMxLo=;
+        b=YDViyf1C9sz2OTYWG2n5qqW+ayqOkKaHd5hhIGoqOBqYuyTr7XCb6qR0TPmMc/ng8U
+         M3/WSR6yYweFqChQ2lroW5//BtUHULt+OvjXHb1OVF55Mkc0YDJ8Uo8lhYTmgxw55ztM
+         w4QoDe2ysOk6rEoSU5OC2KbLUrR6Y5TuaQcFjW4Nmq5+hrkyWjf2Wu7kyFYMNch9308w
+         fN7MQjhb/7fZlCRs9gu5kzk8p29B3kRx3E8+IMWx6wpdhPjz9o/wNRb6ADdjvJ2q4w1y
+         CmQjtn7+6JDggRy6wKvexmTKjoNDyQ3gHOwu+U8h9vV3xRjS1jYZyFePrMdKnThjvw3C
+         pPKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709665430; x=1710270230;
+        d=1e100.net; s=20230601; t=1709665972; x=1710270772;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9nFKQAgntPsabUMKhijS9tOO6R2NrFtq12FfMHfx09M=;
-        b=WTw7F7crx/SuPaBBMBnNRjdUK3QJR7mP9CKyyVfGhTt+veAR6Jn2aKKuwzH3C550gD
-         109mN8N7A2860rVwkvKwFAzZomUJhFOriyCCbBLlSK4YrPOucuqCnASGB+srxpvPrHae
-         miKpLsKnhF57c4HNhewuDyVhsuoeSGeUTmE9IjCN0U1XTWIr72UkST7u5wqOOe25Y4XX
-         gtfTrGdtgf4F8tVbhDQ7sKf6B1I0HLKlv9D4BGuRU3ppV21s+5fk0L8nexd/taJxRzYI
-         o0sECIOcZrOKQOdZVZPFl1PJS6Ok0j90NDN+ECrpov5OL9SY4Y/1f5Vyv0HKWzGEfXWt
-         2vHg==
-X-Gm-Message-State: AOJu0YzcL1YDYvz3cA1DOe2nRniSoEflhEJ3934RF6RhvVXSUh433Hm5
-	y+SRW9ZowaGTeOwOpRV48AL0VgRqVr01oJD2NokZrBGhsk9e305abhW8EwiK0y2mpsXm0V2FSV/
-	6ZAI/TGYxgR6CkrlDSAS7GchKvRg=
-X-Google-Smtp-Source: AGHT+IFoYvFzZakCTe/91gOHkM+zAW0/uyin321So4LwLwhZCtQDu4h+UmN7/glQOLvrrh0vUTOA6g1h9H2YcUbTtlQ=
-X-Received: by 2002:a17:90b:124a:b0:29b:4755:23fc with SMTP id
- gx10-20020a17090b124a00b0029b475523fcmr6363172pjb.33.1709665429773; Tue, 05
- Mar 2024 11:03:49 -0800 (PST)
+        bh=Du+03rgZyIAaZxo8Mft1n9yPxFZja3KPt3aoH+gMxLo=;
+        b=OxAjElbZCZ/oa8OTfrGPzrQbCFUiWwBGxdtKox86i4b0zUAjT5Z1PqxWtfpVcAavVm
+         s4RbKr4I8OwXhryWsG2hCAE9n/IchwEBI2Vv82SwNe0PqBj5FCCb6Bi5Urd5POXl4YRD
+         Lk/4ZpGvj97tNeFVIYHDfp18IW0P9dzRJc3+VuQItTZGcVqaEEiA0D18SWa8UhO4WYBX
+         ZUN/cOTsmHR5/6POgADnad9jtDj0d7IS1tzG9cLS7SFKqaRTkb0FQCznKb+Moqk0TxCM
+         1J8vPXZ6kXb0c05PTmRPL0I9dwpDj7/qwUrnLD4dj01vtpwSEARi9dcoQPaDJpSPDbGV
+         cL8Q==
+X-Gm-Message-State: AOJu0Yyi/3sgbckOjPHQ4NMceOFn6Q4K7V3fjRZh+EerWPhKL0d+eMQm
+	L/T0JSwLUX1mYT0v6vKFH9qoXP8vKWyUoyX1GNJ75ZcBsRpUL7IjBvnR321upl68njOjICGt08+
+	DVCvf+8yHLGl8ZH0vLscupugs/ck=
+X-Google-Smtp-Source: AGHT+IFhXMsbiuV/Dwzywk6O0NkhsZmL5kCl9jhi0zhiu3l5EMkgRmU6Q/PVSvNABfOTuU5XlkGpWea+czOCz1WEg+g=
+X-Received: by 2002:a05:6a00:1a8b:b0:6e3:fe0b:527 with SMTP id
+ e11-20020a056a001a8b00b006e3fe0b0527mr15990465pfv.30.1709665971959; Tue, 05
+ Mar 2024 11:12:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240305045219.66142-1-alexei.starovoitov@gmail.com> <20240305045219.66142-3-alexei.starovoitov@gmail.com>
-In-Reply-To: <20240305045219.66142-3-alexei.starovoitov@gmail.com>
+References: <20240304225156.24765-1-eddyz87@gmail.com> <20240304225156.24765-2-eddyz87@gmail.com>
+In-Reply-To: <20240304225156.24765-2-eddyz87@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 5 Mar 2024 11:03:37 -0800
-Message-ID: <CAEf4BzbvBwcCU2dHwDKdY1HC2z8yo_Tv_=23KOT7UaP1867fGQ@mail.gmail.com>
-Subject: Re: [PATCH v5 bpf-next 2/4] bpf: Recognize that two registers are
- safe when their ranges match
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@kernel.org, memxor@gmail.com, eddyz87@gmail.com, 
-	john.fastabend@gmail.com, kernel-team@fb.com
+Date: Tue, 5 Mar 2024 11:12:40 -0800
+Message-ID: <CAEf4BzYrb9Dj6DpaZwb4ss7D8933ti_djXaAQ-LMV6z9SAE52g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 01/15] libbpf: allow version suffixes
+ (___smth) for struct_ops types
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
+	yonghong.song@linux.dev, void@manifault.com, sinquersw@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 4, 2024 at 8:52=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Mon, Mar 4, 2024 at 2:52=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com>=
+ wrote:
 >
-> From: Alexei Starovoitov <ast@kernel.org>
+> E.g. allow the following struct_ops definitions:
 >
-> When open code iterators, bpf_loop or may_goto is used the following two =
-states
-> are equivalent and safe to prune the search:
+>     struct bpf_testmod_ops___v1 { int (*test)(void); };
+>     struct bpf_testmod_ops___v2 { int (*test)(void); };
 >
-> cur state: fp-8_w=3Dscalar(id=3D3,smin=3Dumin=3Dsmin32=3Dumin32=3D2,smax=
-=3Dumax=3Dsmax32=3Dumax32=3D11,var_off=3D(0x0; 0xf))
-> old state: fp-8_rw=3Dscalar(id=3D2,smin=3Dumin=3Dsmin32=3Dumin32=3D1,smax=
-=3Dumax=3Dsmax32=3Dumax32=3D11,var_off=3D(0x0; 0xf))
+>     SEC(".struct_ops.link")
+>     struct bpf_testmod_ops___v1 a =3D { .test =3D ... }
+>     SEC(".struct_ops.link")
+>     struct bpf_testmod_ops___v2 b =3D { .test =3D ... }
 >
-> In other words "exact" state match should ignore liveness and precision m=
-arks,
-> since open coded iterator logic didn't complete their propagation,
-> but range_within logic that applies to scalars, ptr_to_mem, map_value, pk=
-t_ptr
-> is safe to rely on.
+> Where both bpf_testmod_ops__v1 and bpf_testmod_ops__v2 would be
+> resolved as 'struct bpf_testmod_ops' from kernel BTF.
 >
-> Avoid doing such comparison when regular infinite loop detection logic is=
- used,
-> otherwise bounded loop logic will declare such "infinite loop" as false
-> positive. Such example is in progs/verifier_loops1.c not_an_inifinite_loo=
-p().
->
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> Acked-by: David Vernet <void@manifault.com>
+> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 > ---
 
-You haven't updated stacksafe() to work with enums (the code still
-assumes bool), please adjust.
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-pw-bot: cr
-
-Also, I wonder if we actually need three cases. We need EXACT only for
-infinite loop detection, right? I wonder if that infinite loop
-detection is actually that useful in practice, I rarely encounter it
-(if at all), and it constantly causes issues.
-
-What if we just dropped infinite loop detection logic altogether and
-have NOT_EXACT vs RANGE_WITHIN logic only?
-
->  kernel/bpf/verifier.c | 39 ++++++++++++++++++++++-----------------
->  1 file changed, 22 insertions(+), 17 deletions(-)
+>  tools/lib/bpf/libbpf.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 >
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 226bb65f9c2c..74b55d5571c7 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -16254,8 +16254,8 @@ static int check_btf_info(struct bpf_verifier_env=
- *env,
->  }
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 6c2979f1b471..e2a4c409980b 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -948,7 +948,7 @@ static int find_btf_by_prefix_kind(const struct btf *=
+btf, const char *prefix,
+>                                    const char *name, __u32 kind);
 >
->  /* check %cur's range satisfies %old's */
-> -static bool range_within(struct bpf_reg_state *old,
-> -                        struct bpf_reg_state *cur)
-> +static bool range_within(const struct bpf_reg_state *old,
-> +                        const struct bpf_reg_state *cur)
->  {
->         return old->umin_value <=3D cur->umin_value &&
->                old->umax_value >=3D cur->umax_value &&
-> @@ -16419,21 +16419,26 @@ static bool regs_exact(const struct bpf_reg_sta=
-te *rold,
->                check_ids(rold->ref_obj_id, rcur->ref_obj_id, idmap);
->  }
+>  static int
+> -find_struct_ops_kern_types(struct bpf_object *obj, const char *tname,
+> +find_struct_ops_kern_types(struct bpf_object *obj, const char *tname_raw=
+,
+>                            struct module_btf **mod_btf,
+>                            const struct btf_type **type, __u32 *type_id,
+>                            const struct btf_type **vtype, __u32 *vtype_id=
+,
+> @@ -958,8 +958,12 @@ find_struct_ops_kern_types(struct bpf_object *obj, c=
+onst char *tname,
+>         const struct btf_member *kern_data_member;
+>         struct btf *btf;
+>         __s32 kern_vtype_id, kern_type_id;
+> +       char tname[256];
+>         __u32 i;
 >
-> +enum exact_level {
-> +       NOT_EXACT,
-> +       EXACT,
-> +       RANGE_WITHIN
-> +};
+> +       snprintf(tname, sizeof(tname), "%.*s",
+> +                (int)bpf_core_essential_name_len(tname_raw), tname_raw);
 > +
->  /* Returns true if (rold safe implies rcur safe) */
->  static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *=
-rold,
-> -                   struct bpf_reg_state *rcur, struct bpf_idmap *idmap, =
-bool exact)
-> +                   struct bpf_reg_state *rcur, struct bpf_idmap *idmap,
-> +                   enum exact_level exact)
->  {
-> -       if (exact)
-> +       if (exact =3D=3D EXACT)
->                 return regs_exact(rold, rcur, idmap);
->
-> -       if (!(rold->live & REG_LIVE_READ))
-> +       if (!(rold->live & REG_LIVE_READ) && exact !=3D RANGE_WITHIN)
-
-imo, `exact =3D=3D NOT_EXACT` is easier to follow (we excluded EXACT above)
-
->                 /* explored state didn't use this */
->                 return true;
-> -       if (rold->type =3D=3D NOT_INIT)
-> +       if (rold->type =3D=3D NOT_INIT && exact !=3D RANGE_WITHIN)
-
-ditto
-
->                 /* explored state can't have used this */
->                 return true;
-> -       if (rcur->type =3D=3D NOT_INIT)
-> -               return false;
-
-do we need to remove this? in which case will it do the wrong thing?
-
->
->         /* Enforce that register types have to match exactly, including t=
-heir
->          * modifiers (like PTR_MAYBE_NULL, MEM_RDONLY, etc), as a general
-> @@ -16468,7 +16473,7 @@ static bool regsafe(struct bpf_verifier_env *env,=
- struct bpf_reg_state *rold,
->                         return memcmp(rold, rcur, offsetof(struct bpf_reg=
-_state, id)) =3D=3D 0 &&
->                                check_scalar_ids(rold->id, rcur->id, idmap=
-);
->                 }
-> -               if (!rold->precise)
-> +               if (!rold->precise && exact !=3D RANGE_WITHIN)
-
-same, I think explicit `exact =3D=3D NOT_EXACT` is easier to follow
-
->                         return true;
->                 /* Why check_ids() for scalar registers?
->                  *
-> @@ -16579,7 +16584,7 @@ static struct bpf_reg_state *scalar_reg_for_stack=
-(struct bpf_verifier_env *env,
->  }
->
->  static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_stat=
-e *old,
-> -                     struct bpf_func_state *cur, struct bpf_idmap *idmap=
-, bool exact)
-> +                     struct bpf_func_state *cur, struct bpf_idmap *idmap=
-, enum exact_level exact)
->  {
->         int i, spi;
->
-> @@ -16743,7 +16748,7 @@ static bool refsafe(struct bpf_func_state *old, s=
-truct bpf_func_state *cur,
->   * the current state will reach 'bpf_exit' instruction safely
->   */
->  static bool func_states_equal(struct bpf_verifier_env *env, struct bpf_f=
-unc_state *old,
-> -                             struct bpf_func_state *cur, bool exact)
-> +                             struct bpf_func_state *cur, enum exact_leve=
-l exact)
->  {
->         int i;
->
-> @@ -16770,7 +16775,7 @@ static void reset_idmap_scratch(struct bpf_verifi=
-er_env *env)
->  static bool states_equal(struct bpf_verifier_env *env,
->                          struct bpf_verifier_state *old,
->                          struct bpf_verifier_state *cur,
-> -                        bool exact)
-> +                        enum exact_level exact)
->  {
->         int i;
->
-> @@ -17144,7 +17149,7 @@ static int is_state_visited(struct bpf_verifier_e=
-nv *env, int insn_idx)
->                          * =3D> unsafe memory access at 11 would not be c=
-aught.
->                          */
->                         if (is_iter_next_insn(env, insn_idx)) {
-> -                               if (states_equal(env, &sl->state, cur, tr=
-ue)) {
-> +                               if (states_equal(env, &sl->state, cur, RA=
-NGE_WITHIN)) {
->                                         struct bpf_func_state *cur_frame;
->                                         struct bpf_reg_state *iter_state,=
- *iter_reg;
->                                         int spi;
-> @@ -17168,20 +17173,20 @@ static int is_state_visited(struct bpf_verifier=
-_env *env, int insn_idx)
->                                 goto skip_inf_loop_check;
->                         }
->                         if (is_may_goto_insn(env, insn_idx)) {
-> -                               if (states_equal(env, &sl->state, cur, tr=
-ue)) {
-> +                               if (states_equal(env, &sl->state, cur, RA=
-NGE_WITHIN)) {
->                                         update_loop_entry(cur, &sl->state=
-);
->                                         goto hit;
->                                 }
->                                 goto skip_inf_loop_check;
->                         }
->                         if (calls_callback(env, insn_idx)) {
-> -                               if (states_equal(env, &sl->state, cur, tr=
-ue))
-> +                               if (states_equal(env, &sl->state, cur, RA=
-NGE_WITHIN))
->                                         goto hit;
->                                 goto skip_inf_loop_check;
->                         }
->                         /* attempt to detect infinite loop to avoid unnec=
-essary doomed work */
->                         if (states_maybe_looping(&sl->state, cur) &&
-> -                           states_equal(env, &sl->state, cur, true) &&
-> +                           states_equal(env, &sl->state, cur, EXACT) &&
->                             !iter_active_depths_differ(&sl->state, cur) &=
-&
->                             sl->state.may_goto_cnt =3D=3D cur->may_goto_c=
-nt &&
->                             sl->state.callback_unroll_depth =3D=3D cur->c=
-allback_unroll_depth) {
-> @@ -17239,7 +17244,7 @@ static int is_state_visited(struct bpf_verifier_e=
-nv *env, int insn_idx)
->                  */
->                 loop_entry =3D get_loop_entry(&sl->state);
->                 force_exact =3D loop_entry && loop_entry->branches > 0;
-> -               if (states_equal(env, &sl->state, cur, force_exact)) {
-> +               if (states_equal(env, &sl->state, cur, force_exact ? RANG=
-E_WITHIN : NOT_EXACT)) {
->                         if (force_exact)
->                                 update_loop_entry(cur, loop_entry);
->  hit:
+>         kern_type_id =3D find_ksym_btf_id(obj, tname, BTF_KIND_STRUCT,
+>                                         &btf, mod_btf);
+>         if (kern_type_id < 0) {
 > --
 > 2.43.0
 >
