@@ -1,56 +1,56 @@
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B547945035
-	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 04:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65DC34C637
+	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 04:52:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709614357; cv=none; b=HYxH5IkxxZT8KEkPJWeoL7cMO9vSJv8rbyJ9TawfXpsWCas4wKTYWG0ncva3pJ6m/EZNi91f3qPbicCj/RNJ5ecYG1OMkvoKIMn4IY0imzgcpY7h/XqHrhOgWeJaviRF9zMbV58wQbzXeBBzRbBYMkR570qeGUc2xKicqnfGfmM=
+	t=1709614358; cv=none; b=eC2uy/3XDTqHropgcrACmn+pyNJ6zpIJmOAoDqhK5WG1+UjXbJPhN8cOtDujQwfH3QGf0412ujre6pDOfil5cGZJIWxNL7iLg+Afj7drch2rJBsAe9bxTOST2Q9fwM6DzvYiudK4jk/ljABWYbbrpAw+zaaasyJlN4rgWeZo62M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709614357; c=relaxed/simple;
-	bh=mCa42/Q98qGiGrElS19uEf5wTtmbxd6P3lHNZbxLTmk=;
+	s=arc-20240116; t=1709614358; c=relaxed/simple;
+	bh=Zsn3UciRmz1y4y4OcE4XSj+bnHZZ1ViSPWAHbOk1uSY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=aLAMQMkG7MQ3RU6Gk/Dr+y/kzHf9R+bh4QleHRHuqGBGvK41EM9BAZPs5wPZQwAixcW4niUYQph3mSqRXBnyCpCFVVM6BhXDrEl4zhIIpZ/VLfESsA6LI7YDpzwDfOEOzz+eNt575lIRRSRXDkLl7J3V8DW0XdPmhW1tDWBGBlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d/EriwE2; arc=none smtp.client-ip=209.85.167.173
+	 MIME-Version; b=qNIAicjydZ7FkFw4uv1yOB1QFeQwJWZnUFfcvHJ/lnHMENy4d8RnN9nQz60JcWD387Ai22HdZzm1b8D2BvziFQWnrkB1mLaCTjbGRzTe0hsNcXM71IO400KpqVBNBUuR1pFSNsaYfWEAxofXv5QKApVnMw1tOO1gfs13pdfRr6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xd6IwlJA; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d/EriwE2"
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3c1ea59cf81so1098183b6e.1
-        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 20:52:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xd6IwlJA"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6e4d48a5823so4185144b3a.1
+        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 20:52:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709614354; x=1710219154; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709614356; x=1710219156; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=G1XGjkNPdvKETGMdqvp5/vYhVvH/XT13ZLHghy/4+Jo=;
-        b=d/EriwE2+R0WbhqccBKuTnIErXADMr49FsrtC4C/Wr10s/AZWE556qRFjt7pBD+GfT
-         lIFP2mjQN/ZXQWlxkq3CRtUjJTBXogyQ83y+BYOazyeaUJXvIzmT4ByElSnJmmIs+AXt
-         7jjI6jViVxrMXiIN/B7SnBWcEdxI1wphok9vXHHCf3afxoHdseiPGyoqFHMNB8GzsCv+
-         toi4ARMloiJic7HdW7S+sT5yBCmzOpz4HJcjl4016zHJFCJYVzfLlERJBQ5QAgxswvjG
-         IFfLas7TAymRUO4c4ZN6lPMhf6xEHPcbOKRGEY4TK6nlN6Yihn7i4EVj/Xd10mCgZngX
-         1XmA==
+        bh=DSQ/agq3nwxiLrfdgKH47D6257r+0l8kkJgdS53pJhI=;
+        b=Xd6IwlJA1cpCGdebeBWhqlHE96BJ4XHBT38O0urKjApDEEIAgQLblORZu6/kSuHDCT
+         PvxH9xP5EeUREN6IyR6eJbasc15nqGWu1aoUc6jKAy4ucWJYtILaPKxO6B/Bf5sPYqEn
+         uK5KVqKB9PaLAmtOCZkS5Qw3fUSP7BxOV1/gJ+W8ibSPH3tWkifw7rF5Hrg5PyCVPCxH
+         MVBIhWMOQIexWWHqSp6rAc3PxJK9fSdiRwnwrhyT13FErO8OsnBYh9In+acm4dUfRWzy
+         stFsuum5GOOgQbhURsrpIgZVqxfVx8Fftq7jRwp/4d9yPahR6HK3aC43JHJu+544xbo7
+         5Jwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709614354; x=1710219154;
+        d=1e100.net; s=20230601; t=1709614356; x=1710219156;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=G1XGjkNPdvKETGMdqvp5/vYhVvH/XT13ZLHghy/4+Jo=;
-        b=GVVtVZcP/VMkoFkVI1aLXfcNj8FAZlV8FOgyZSc6cgDDdOpaNIAhDjrH/q11dgibYq
-         qavG1lVR5tnRmOOoU6nfcWGM+Arms8gxJRKgJr6AfFV/rXv6jt35OdK48EV/c4fC9btA
-         a+Tfe+Et8YhwlyRaSwYbmrnUV9bi1C3WMIdqX/iqQcaSBtaka5s0AYUI8grc5qJJ3na6
-         BgQ7BlgdAlnDEBQhDBSGzIXyXlBpLXxqvEqivGb0KvGneSNI9kAnPbz8JfONWxuwdYun
-         nZtxhHzbPxevuFzyP28Pu5sMxSldJYyuKkGfCP5yTg/h08JGZfG8LiEdTIqS00N/X877
-         5CcQ==
-X-Gm-Message-State: AOJu0YwyE4mwcl21DH6B3V0c/k9h73GsauqmeJ7hN3rd6mCFe+72uMKk
-	/Vz5CBE1JOggYUuWWCoGsERZSSHWnfuVKTnXRfuYYw+2XCExz5raDu5dklnu
-X-Google-Smtp-Source: AGHT+IEJbiQolKj0lStTRN6Wb0dFzQOJm1vzDvBRYwfF25e4GXp70PnYNvLyMO0xI3WEuBGGnEvKnw==
-X-Received: by 2002:a05:6808:8c4:b0:3c1:eac5:3b5e with SMTP id k4-20020a05680808c400b003c1eac53b5emr775251oij.7.1709614352497;
-        Mon, 04 Mar 2024 20:52:32 -0800 (PST)
+        bh=DSQ/agq3nwxiLrfdgKH47D6257r+0l8kkJgdS53pJhI=;
+        b=vo279U7B7sn7PBSES72m2Lqkz/taKTe9OgoH0hqCbmd4M5dEL5DlAeBKN2DOJ9sNpb
+         61OoX1e3BcMUZ3gBiYYqBn1kAalLHhINP3LBAXV3FqBLlYwBDl0BFDv8x20Ic6idCnZH
+         WIsApnIZqW9uXxRFnorhv1gjhbBLIcI9wKI/xyBW+96iYLCWC51bpxqltgLzEOdjBSLh
+         4Yfn5UnpBo/0psIPix1xQEViZMgS51HOAPjr4AZ7nXb4aAcbOhwV+mwwc0JgRCSJupMY
+         NzJRpBRiOndWT2uMjBWPgLv2Lr4Cu541rcdnQC/L5dqL2A+kX/MtVgSa8ojulEd3rA+3
+         ZpWw==
+X-Gm-Message-State: AOJu0YySkhDlDCtUhpmrLIznOmi83q6Y9E4jSqiS/VfhayQoSSvQf3CT
+	L6ygreBZgQi29mGKGR9pnuvqF6NGs4lEU1Tfngh8+Ec8LRfXvdVB8oOn32eR
+X-Google-Smtp-Source: AGHT+IEn22Wlnq2fYGJMxP6zW6kxVI+CfKoKfLmaInCkciuUnyOgxph/MANId2gAnStQ67YEgHvwHg==
+X-Received: by 2002:a05:6a20:54a4:b0:1a0:ea67:ecb2 with SMTP id i36-20020a056a2054a400b001a0ea67ecb2mr998113pzk.12.1709614355985;
+        Mon, 04 Mar 2024 20:52:35 -0800 (PST)
 Received: from localhost.localdomain ([2620:10d:c090:400::5:9426])
-        by smtp.gmail.com with ESMTPSA id y11-20020aa79e0b000000b006e537e90f91sm7986117pfq.131.2024.03.04.20.52.31
+        by smtp.gmail.com with ESMTPSA id b10-20020a170903228a00b001dcc138d4afsm9434175plh.34.2024.03.04.20.52.34
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 04 Mar 2024 20:52:32 -0800 (PST)
+        Mon, 04 Mar 2024 20:52:35 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -60,9 +60,9 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	john.fastabend@gmail.com,
 	kernel-team@fb.com
-Subject: [PATCH v5 bpf-next 3/4] bpf: Add cond_break macro
-Date: Mon,  4 Mar 2024 20:52:18 -0800
-Message-Id: <20240305045219.66142-4-alexei.starovoitov@gmail.com>
+Subject: [PATCH v5 bpf-next 4/4] selftests/bpf: Test may_goto
+Date: Mon,  4 Mar 2024 20:52:19 -0800
+Message-Id: <20240305045219.66142-5-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.39.3 (Apple Git-145)
 In-Reply-To: <20240305045219.66142-1-alexei.starovoitov@gmail.com>
 References: <20240305045219.66142-1-alexei.starovoitov@gmail.com>
@@ -76,48 +76,141 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Use may_goto instruction to implement cond_break macro.
-Ideally the macro should be written as:
-  asm volatile goto(".byte 0xe5;
-                     .byte 0;
-                     .short %l[l_break] ...
-                     .long 0;
-but LLVM doesn't recognize fixup of 2 byte PC relative yet.
-Hence use
-  asm volatile goto(".byte 0xe5;
-                     .byte 0;
-                     .long %l[l_break] ...
-                     .short 0;
-that produces correct asm on little endian.
+Add tests for may_goto instruction via cond_break macro.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/testing/selftests/bpf/bpf_experimental.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
+ .../bpf/progs/verifier_iterating_callbacks.c  | 103 +++++++++++++++++-
+ 2 files changed, 101 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index 0d749006d107..bc9a0832ae72 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -326,6 +326,18 @@ l_true:												\
-        })
- #endif
+diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
+index 1a63996c0304..cb810a98e78f 100644
+--- a/tools/testing/selftests/bpf/DENYLIST.s390x
++++ b/tools/testing/selftests/bpf/DENYLIST.s390x
+@@ -3,3 +3,4 @@
+ exceptions				 # JIT does not support calling kfunc bpf_throw				       (exceptions)
+ get_stack_raw_tp                         # user_stack corrupted user stack                                             (no backchain userspace)
+ stacktrace_build_id                      # compare_map_keys stackid_hmap vs. stackmap err -2 errno 2                   (?)
++verifier_iterating_callbacks
+diff --git a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+index 5905e036e0ea..04cdbce4652f 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
++++ b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+@@ -1,8 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+-
+-#include <linux/bpf.h>
+-#include <bpf/bpf_helpers.h>
+ #include "bpf_misc.h"
++#include "bpf_experimental.h"
  
-+#define cond_break					\
-+	({ __label__ l_break, l_continue;		\
-+	 asm volatile goto("1:.byte 0xe5;			\
-+		      .byte 0;				\
-+		      .long ((%l[l_break] - 1b - 8) / 8) & 0xffff;	\
-+		      .short 0"				\
-+		      :::: l_break);			\
-+	goto l_continue;				\
-+	l_break: break;					\
-+	l_continue:;					\
-+	})
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_ARRAY);
+@@ -239,4 +237,103 @@ int bpf_loop_iter_limit_nested(void *unused)
+ 	return 1000 * a + b + c;
+ }
+ 
++#define ARR_SZ 1000000
++int zero;
++char arr[ARR_SZ];
 +
- #ifndef bpf_nop_mov
- #define bpf_nop_mov(var) \
- 	asm volatile("%[reg]=%[reg]"::[reg]"r"((short)var))
++SEC("socket")
++__success __retval(0xd495cdc0)
++int cond_break1(const void *ctx)
++{
++	unsigned long i;
++	unsigned int sum = 0;
++
++	for (i = zero; i < ARR_SZ; cond_break, i++)
++		sum += i;
++	for (i = zero; i < ARR_SZ; i++) {
++		barrier_var(i);
++		sum += i + arr[i];
++		cond_break;
++	}
++
++	return sum;
++}
++
++SEC("socket")
++__success __retval(999000000)
++int cond_break2(const void *ctx)
++{
++	int i, j;
++	int sum = 0;
++
++	for (i = zero; i < 1000; cond_break, i++)
++		for (j = zero; j < 1000; j++) {
++			sum += i + j;
++			cond_break;
++		}
++
++	return sum;
++}
++
++static __noinline int loop(void)
++{
++	int i, sum = 0;
++
++	for (i = zero; i <= 1000000; i++, cond_break)
++		sum += i;
++
++	return sum;
++}
++
++SEC("socket")
++__success __retval(0x6a5a2920)
++int cond_break3(const void *ctx)
++{
++	return loop();
++}
++
++SEC("socket")
++__success __retval(1)
++int cond_break4(const void *ctx)
++{
++	int cnt = zero;
++
++	for (;;) {
++		/* should eventually break out of the loop */
++		cond_break;
++		cnt++;
++	}
++	/* if we looped a bit, it's a success */
++	return cnt > 1 ? 1 : 0;
++}
++
++static __noinline int static_subprog(void)
++{
++	int cnt = zero;
++
++	for (;;) {
++		cond_break;
++		cnt++;
++	}
++
++	return cnt;
++}
++
++SEC("socket")
++__success __retval(1)
++int cond_break5(const void *ctx)
++{
++	int cnt1 = zero, cnt2;
++
++	for (;;) {
++		cond_break;
++		cnt1++;
++	}
++
++	cnt2 = static_subprog();
++
++	/* main and subprog have to loop a bit */
++	return cnt1 > 1 && cnt2 > 1 ? 1 : 0;
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
