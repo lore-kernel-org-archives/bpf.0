@@ -1,55 +1,55 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B00DE1803A
-	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 02:02:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE834182D4
+	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 02:02:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709604122; cv=none; b=EKQXrIagq4q/jDpRV64zL5OcEhvMtgmp1pkITa6vu0wvmDWC84RGP9osJS+wnUhnuaxYo0Jy2CrYfZy7IvKXp4YbH4sYrxEmX/hW7ZumkXXZe8E8MERduzDra8h0fg5+91R2YP3LY/7OH/V4J9hsPiI6VD+El64G6uA2CnD1GoM=
+	t=1709604126; cv=none; b=WgmnRTNFmyUIh5eQAqiwQYKLq4hXiple5+z7lLLlYXv7/DwB79M+8CT+spVg3NtL5jTF1mE1B0Grn4rLaCSKOlLUeprfrnV9PHrW7s+NKOsJUPGBAO7yNM9sUOa9ANT4G4dOvPrpu6q3O9KG/EiHWxjkiLJ07nMeSUGSQy7xXjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709604122; c=relaxed/simple;
-	bh=VcAq+8sPLS5iB4yXv3NBRB5uIgbi5Zb5VcGf/lhRiGs=;
+	s=arc-20240116; t=1709604126; c=relaxed/simple;
+	bh=kPcvF1yAIkU4SC9auITlzhMeVIQD4E0gxQqihz8N8Fk=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=PGTQS9SLhTbZyGACzlbOLhyFo+0nAfvPRIi0de2rKK2ycRGLyfRU9vqbj70SSYkbNXW6pacQFOcapl8RaGX2kNgUvfP23w3PZJKL3N4Kq6kvkXc9WRnVpwY3WahAuw3P32izHQW7u7wMvXh3LPBvW0pbjtzr/L9OBHfKbMtTjTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SOAGPinq; arc=none smtp.client-ip=209.85.219.202
+	 To:Cc:Content-Type; b=SlDL7wqo9dsAUseYiu5IazhWOIb8QMYPL7QQOoTRYyjeIUHBEhGhXkRMyO8k1RiYN9MlrYyDrEUKxO+nVVd93ZWegpQJTcHMbVJePuqrjpr45tyzGxebq0xupEhD47mk2vxsgiwYi5USA81AqCsTpUqPj5vloj07dImlG7ouOig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gmeKkjC/; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SOAGPinq"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dce775fa8adso9118383276.1
-        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 18:02:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gmeKkjC/"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-60802b0afd2so47273727b3.1
+        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 18:02:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709604120; x=1710208920; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1709604122; x=1710208922; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Na1UZEy/GVYcP9OgTRpAH79YV4s5dC/8SJ0CqP6QkUQ=;
-        b=SOAGPinqVL6jLI6F/9qU7rdsc1wI4Kab05iu4Eal0k5PFI7K5rXmfGdPKieAk0pBAA
-         oGx/qepbdzcpLpo+3o6p11H/kYhpD1r/wtceTPnNFJ7EfQ4i0td+DmJvYjZwonOndeMg
-         JuXtYENZii5Ep4SzuyccbI3Np3AGwqVT8INYZv2Ed6Cdd2xcD1b43oai0RjNgds989pq
-         pRwp6svHhLUGhbNt5eV5LvVJ0N02c+7YyHtznAjVCv7rHn4+1xN2wVvaxtYDNE7wL4Y8
-         ST9FQMNb89vEVzH3pV/zJUX2+SR+MOOFfOzlJ1auEkVAtBIKVL148AJaj422gzQW5viE
-         yQPQ==
+        bh=QOWmAeQMGWMC5aJa64Dg0AHzjb+8gPpNDHS7ziT/3ac=;
+        b=gmeKkjC/zxBnWVkZCwsSw7pqWMZgdwGOi3VEVTPYLgq7YA5GF0ar4Qx5H7PKSMJC/6
+         7HzA+z1BVI9oNpIB0wFEYO+D5jMVHBMUinGnOdtcfm+unNf65u01qPIY7LRi7+YMTb60
+         m6K62SlyfuOdYF69cdEqwaJKVnbqgivhEFe1ErC5tcy99gy8jE+/Hg+EWw0JI7DrQdA9
+         PGbgK9+YSaiX9ooaBRYf0y3aqrIMo4cv2b8XUMPcCwXfgmQmLskoPekvP1o9I7JvldCY
+         bl/H5AG2Ol4gk6joZU5Up2XRc3N+nNBaO2igwxyqPjmIztLt0RrFWAiAl0BmUR6P13ia
+         ONKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709604120; x=1710208920;
+        d=1e100.net; s=20230601; t=1709604122; x=1710208922;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Na1UZEy/GVYcP9OgTRpAH79YV4s5dC/8SJ0CqP6QkUQ=;
-        b=ELQWOEuWTjYCw4gmH80VXK5btkIrhqjy9LzFxo1p1Qu7oWvo9frn4fEejiRr+U1CVG
-         e/9QcB7dWutBVS3lElHkVc4XhL2Ckw37s3T1B4e9m/Dd4kx3rw5yGxscM0HgVQdNxk5E
-         JLVVPzTxnMXKuFUbZ4NyfzrmGeEdE2ipLqWAzJzgrUXvQT9AQQHK+mn1yCpBgNokJnVH
-         s3DDIDRdHAN+80Peh0ELNhYt+l8bxD0BUd3Oa933UZ1fRrVJlPhgm9THlNMskKKKSMTt
-         QRFJvz9qXjYcZhTbDIMsVv6q9yGJTtGuKdverw2tc02dG8GZAhWcKHN7pC6KUU2xs1VW
-         WbTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWg5rX8loW4aGhKt/VuFgQdDVcIjIASweMWS+83kfFmTEP2TGqyGAfssuFQpI9fUDrrRBvOpeaPlNKHRKAGrozUkaIy
-X-Gm-Message-State: AOJu0Ywx2tjWqJd7UU1HUQ6HWgexW5Dy1K6/SWsHtnFUIwB0jQ4PKYKX
-	uZQa5RbBhai7aMLYsPQpgk14hPTFcxMI7T2AqqQtVKjqD+Ptm31JtQdpe+tgci1kAtk2ivsiz6T
-	iYA+ZS/WcTQmm/uL4Rh1mpw==
-X-Google-Smtp-Source: AGHT+IGpPTZKtcPN8U9sdm9ezESJ/sJ5oiNSY59vHDkx0uXjzdGQiK9QV6X9ugUC+YOriupaZX7copF8kyJbbuA8Ug==
+        bh=QOWmAeQMGWMC5aJa64Dg0AHzjb+8gPpNDHS7ziT/3ac=;
+        b=K2t/bZdnNxyvOLu8I9Pv0Grq2byB6Lq4AkUlLVHo121ipkacRsTUDB8kfIuzYzAyff
+         bVkU0EjYdbXzkAe6WaEuJ5e5ITYa01JEZ5D62x7XaYxEBK1KDAMt6Vd7XLkbFyOJVbjT
+         gH++f+/sRmwAuZLRdYO1iMEe++F3iveqIlEafOPO62VgaJFYyyiGsryaCiEBN8x3iBNM
+         E3JTcEISG3tXH5jYX0fhy3VoEX+kFtU0USH6IkaRELUHH+ZXCdCjdZrBITbScuLi/qu9
+         gbSlUNLZm/mCH6RW/tmdu0AgE9F19HgEP200iCkKv5YpAypNg3K8rkXZ2Dlm0xEdpJe3
+         XNBA==
+X-Forwarded-Encrypted: i=1; AJvYcCXECV9XOpUQM6A1OetjIHday7y6bnVheOHIyQBFGCbjBX0O6ZwraydHTA36ywv0WW6A/9laWyziykWZK/0XyG6oldch
+X-Gm-Message-State: AOJu0YwmjepEz97hD0keXP9C42Gqq9QCWxukhQarxRbLQzsKrAPnMaS6
+	GOOWJY6s28l3Z9PlSx/1jwDDbG5V0TUwbjXSE7CsXwquCwTWsNKOwKhI1jgTTWx8zYiP6ZMT/mw
+	19PG3vZLrSKLBoZFiq6IbBg==
+X-Google-Smtp-Source: AGHT+IG6KeWQw0XbqPbYmQM0P/6OwcAsrFu5mozN13W1clztdP6zot9Fisjb9bkCfEQNwnMXpfHNCZGrzpwJASvg9w==
 X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2c4:200:b614:914c:63cd:3830])
- (user=almasrymina job=sendgmr) by 2002:a05:6902:1004:b0:dc2:3441:897f with
- SMTP id w4-20020a056902100400b00dc23441897fmr2713866ybt.6.1709604119594; Mon,
- 04 Mar 2024 18:01:59 -0800 (PST)
-Date: Mon,  4 Mar 2024 18:01:36 -0800
+ (user=almasrymina job=sendgmr) by 2002:a81:4c93:0:b0:609:3a33:bacc with SMTP
+ id z141-20020a814c93000000b006093a33baccmr264479ywa.5.1709604121833; Mon, 04
+ Mar 2024 18:02:01 -0800 (PST)
+Date: Mon,  4 Mar 2024 18:01:37 -0800
 In-Reply-To: <20240305020153.2787423-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -59,8 +59,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240305020153.2787423-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.44.0.rc1.240.g4c46232300-goog
-Message-ID: <20240305020153.2787423-2-almasrymina@google.com>
-Subject: [RFC PATCH net-next v6 01/15] queue_api: define queue api
+Message-ID: <20240305020153.2787423-3-almasrymina@google.com>
+Subject: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for custom
+ page providers
 From: Mina Almasry <almasrymina@google.com>
 To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
@@ -93,56 +94,183 @@ Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.ne
 	Praveen Kaligineedi <pkaligineedi@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-This API enables the net stack to reset the queues used for devmem.
+From: Jakub Kicinski <kuba@kernel.org>
 
+The page providers which try to reuse the same pages will
+need to hold onto the ref, even if page gets released from
+the pool - as in releasing the page from the pp just transfers
+the "ownership" reference from pp to the provider, and provider
+will wait for other references to be gone before feeding this
+page back into the pool.
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Mina Almasry <almasrymina@google.com>
 
 ---
- include/linux/netdevice.h | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index c41019f34179..3105c586355d 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -1435,6 +1435,20 @@ struct netdev_net_notifier {
-  *			   struct kernel_hwtstamp_config *kernel_config,
-  *			   struct netlink_ext_ack *extack);
-  *	Change the hardware timestamping parameters for NIC device.
-+ *
-+ * void *(*ndo_queue_mem_alloc)(struct net_device *dev, int idx);
-+ *	Allocate memory for an RX queue. The memory returned in the form of
-+ *	a void * can be passed to ndo_queue_mem_free() for freeing or to
-+ *	ndo_queue_start to create an RX queue with this memory.
-+ *
-+ * void	(*ndo_queue_mem_free)(struct net_device *dev, void *);
-+ *	Free memory from an RX queue.
-+ *
-+ * int (*ndo_queue_start)(struct net_device *dev, int idx, void *);
-+ *	Start an RX queue at the specified index.
-+ *
-+ * int (*ndo_queue_stop)(struct net_device *dev, int idx, void **);
-+ *	Stop the RX queue at the specified index.
-  */
- struct net_device_ops {
- 	int			(*ndo_init)(struct net_device *dev);
-@@ -1679,6 +1693,16 @@ struct net_device_ops {
- 	int			(*ndo_hwtstamp_set)(struct net_device *dev,
- 						    struct kernel_hwtstamp_config *kernel_config,
- 						    struct netlink_ext_ack *extack);
-+	void *			(*ndo_queue_mem_alloc)(struct net_device *dev,
-+						       int idx);
-+	void			(*ndo_queue_mem_free)(struct net_device *dev,
-+						      void *queue_mem);
-+	int			(*ndo_queue_start)(struct net_device *dev,
-+						   int idx,
-+						   void *queue_mem);
-+	int			(*ndo_queue_stop)(struct net_device *dev,
-+						  int idx,
-+						  void **out_queue_mem);
+This is implemented by Jakub in his RFC:
+https://lore.kernel.org/netdev/f8270765-a27b-6ccf-33ea-cda097168d79@redhat.com/T/
+
+I take no credit for the idea or implementation; I only added minor
+edits to make this workable with device memory TCP, and removed some
+hacky test code. This is a critical dependency of device memory TCP
+and thus I'm pulling it into this series to make it revewable and
+mergeable.
+
+RFC v3 -> v1
+- Removed unusued mem_provider. (Yunsheng).
+- Replaced memory_provider & mp_priv with netdev_rx_queue (Jakub).
+
+---
+ include/net/page_pool/types.h | 12 ++++++++++
+ net/core/page_pool.c          | 43 +++++++++++++++++++++++++++++++----
+ 2 files changed, 50 insertions(+), 5 deletions(-)
+
+diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.h
+index 5e43a08d3231..ffe5f31fb0da 100644
+--- a/include/net/page_pool/types.h
++++ b/include/net/page_pool/types.h
+@@ -52,6 +52,7 @@ struct pp_alloc_cache {
+  * @dev:	device, for DMA pre-mapping purposes
+  * @netdev:	netdev this pool will serve (leave as NULL if none or multiple)
+  * @napi:	NAPI which is the sole consumer of pages, otherwise NULL
++ * @queue:	struct netdev_rx_queue this page_pool is being created for.
+  * @dma_dir:	DMA mapping direction
+  * @max_len:	max DMA sync memory size for PP_FLAG_DMA_SYNC_DEV
+  * @offset:	DMA sync address offset for PP_FLAG_DMA_SYNC_DEV
+@@ -64,6 +65,7 @@ struct page_pool_params {
+ 		int		nid;
+ 		struct device	*dev;
+ 		struct napi_struct *napi;
++		struct netdev_rx_queue *queue;
+ 		enum dma_data_direction dma_dir;
+ 		unsigned int	max_len;
+ 		unsigned int	offset;
+@@ -126,6 +128,13 @@ struct page_pool_stats {
  };
+ #endif
  
- /**
++struct memory_provider_ops {
++	int (*init)(struct page_pool *pool);
++	void (*destroy)(struct page_pool *pool);
++	struct page *(*alloc_pages)(struct page_pool *pool, gfp_t gfp);
++	bool (*release_page)(struct page_pool *pool, struct page *page);
++};
++
+ struct page_pool {
+ 	struct page_pool_params_fast p;
+ 
+@@ -176,6 +185,9 @@ struct page_pool {
+ 	 */
+ 	struct ptr_ring ring;
+ 
++	void *mp_priv;
++	const struct memory_provider_ops *mp_ops;
++
+ #ifdef CONFIG_PAGE_POOL_STATS
+ 	/* recycle stats are per-cpu to avoid locking */
+ 	struct page_pool_recycle_stats __percpu *recycle_stats;
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index d706fe5548df..8776fcad064a 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -25,6 +25,8 @@
+ 
+ #include "page_pool_priv.h"
+ 
++static DEFINE_STATIC_KEY_FALSE(page_pool_mem_providers);
++
+ #define DEFER_TIME (msecs_to_jiffies(1000))
+ #define DEFER_WARN_INTERVAL (60 * HZ)
+ 
+@@ -177,6 +179,7 @@ static int page_pool_init(struct page_pool *pool,
+ 			  int cpuid)
+ {
+ 	unsigned int ring_qsize = 1024; /* Default */
++	int err;
+ 
+ 	memcpy(&pool->p, &params->fast, sizeof(pool->p));
+ 	memcpy(&pool->slow, &params->slow, sizeof(pool->slow));
+@@ -248,10 +251,25 @@ static int page_pool_init(struct page_pool *pool,
+ 	/* Driver calling page_pool_create() also call page_pool_destroy() */
+ 	refcount_set(&pool->user_cnt, 1);
+ 
++	if (pool->mp_ops) {
++		err = pool->mp_ops->init(pool);
++		if (err) {
++			pr_warn("%s() mem-provider init failed %d\n",
++				__func__, err);
++			goto free_ptr_ring;
++		}
++
++		static_branch_inc(&page_pool_mem_providers);
++	}
++
+ 	if (pool->p.flags & PP_FLAG_DMA_MAP)
+ 		get_device(pool->p.dev);
+ 
+ 	return 0;
++
++free_ptr_ring:
++	ptr_ring_cleanup(&pool->ring, NULL);
++	return err;
+ }
+ 
+ static void page_pool_uninit(struct page_pool *pool)
+@@ -546,7 +564,10 @@ struct page *page_pool_alloc_pages(struct page_pool *pool, gfp_t gfp)
+ 		return page;
+ 
+ 	/* Slow-path: cache empty, do real allocation */
+-	page = __page_pool_alloc_pages_slow(pool, gfp);
++	if (static_branch_unlikely(&page_pool_mem_providers) && pool->mp_ops)
++		page = pool->mp_ops->alloc_pages(pool, gfp);
++	else
++		page = __page_pool_alloc_pages_slow(pool, gfp);
+ 	return page;
+ }
+ EXPORT_SYMBOL(page_pool_alloc_pages);
+@@ -603,10 +624,13 @@ void __page_pool_release_page_dma(struct page_pool *pool, struct page *page)
+ void page_pool_return_page(struct page_pool *pool, struct page *page)
+ {
+ 	int count;
++	bool put;
+ 
+-	__page_pool_release_page_dma(pool, page);
+-
+-	page_pool_clear_pp_info(page);
++	put = true;
++	if (static_branch_unlikely(&page_pool_mem_providers) && pool->mp_ops)
++		put = pool->mp_ops->release_page(pool, page);
++	else
++		__page_pool_release_page_dma(pool, page);
+ 
+ 	/* This may be the last page returned, releasing the pool, so
+ 	 * it is not safe to reference pool afterwards.
+@@ -614,7 +638,10 @@ void page_pool_return_page(struct page_pool *pool, struct page *page)
+ 	count = atomic_inc_return_relaxed(&pool->pages_state_release_cnt);
+ 	trace_page_pool_state_release(pool, page, count);
+ 
+-	put_page(page);
++	if (put) {
++		page_pool_clear_pp_info(page);
++		put_page(page);
++	}
+ 	/* An optimization would be to call __free_pages(page, pool->p.order)
+ 	 * knowing page is not part of page-cache (thus avoiding a
+ 	 * __page_cache_release() call).
+@@ -884,6 +911,12 @@ static void __page_pool_destroy(struct page_pool *pool)
+ 
+ 	page_pool_unlist(pool);
+ 	page_pool_uninit(pool);
++
++	if (pool->mp_ops) {
++		pool->mp_ops->destroy(pool);
++		static_branch_dec(&page_pool_mem_providers);
++	}
++
+ 	kfree(pool);
+ }
+ 
 -- 
 2.44.0.rc1.240.g4c46232300-goog
 
