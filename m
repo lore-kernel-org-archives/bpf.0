@@ -1,213 +1,153 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wflow4-smtp.messagingengine.com (wflow4-smtp.messagingengine.com [64.147.123.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F575128817
-	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 21:40:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D4512D1F3;
+	Tue,  5 Mar 2024 21:42:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709674835; cv=none; b=TaFi/GJXw/Fgc/7oNxBi6eWRMYX81SefVfpNvXPSpHMM/LnqX3UzmvOcA+pq7hgCrPqCTtIKx2J6pKybfQql1phT5H+fsku6CEufuEeOxelaJPXYvczmCRO1ftgZjOZtZexKWG0ypjuR+HqWFINfyJPMHa5VNZgAOKr6b9i79H0=
+	t=1709674956; cv=none; b=ByzcLOlPUmfwycSFdl/Bow7WLkoak3LoC5nKMz2CvSPMz5c/LdsTorCeL6ab+klgUStUolh/eXHoe6DbiCZa+kwjD72VwwZIrPMj3rSBwNlkdn+8+SqwzBi6U+9sKdOfytdRqgQyl9pzhxLNcm+OBpy3ejm0U2PGOvsBke4LeyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709674835; c=relaxed/simple;
-	bh=bqdBo9QBrGaIMrkDZ/U6rQQonTE1Wr4AjCV+ob/aIRg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=H1PC/hXn/56X7K+FuL5xPrT8TDq5U+sGQX0LXn07Eb9Bb33JCP/0O8jxidznmX23nWEv2pM4A51a0epo+TF+hmcG4BWWNc+c/lTXgd+SXtUZJ/W54bw9Q520vPwUR+IzgOg3KsKmVNEsUBMb4SeVi/PyQiYjZOql5G3JekRRS5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qh8fDKCu; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709674956; c=relaxed/simple;
+	bh=wZkSkX9694x6IaB7S0oYpjmKV7DkKNY9dxbFCcaTTio=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=rfhY05yYiKV1G6z8A9BYi2h0u1iVmdQbRAuBQNEZbvcsTPFlz5YjRnqY/xCbPQvmmSpGNyHxrP0IQvjpLnygDn8fcegMb8kmtzANtQejrWDhqtBg02XPq0KOo8hCbquEe90ql1RVi8dXYdcq0PdWADflSQrGi7QyU2PQwMMVs40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=XZ2oMdA0; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mYV1xzR9; arc=none smtp.client-ip=64.147.123.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qh8fDKCu"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6e56787e691so170663b3a.0
-        for <bpf@vger.kernel.org>; Tue, 05 Mar 2024 13:40:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709674833; x=1710279633; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w5VaGwcXsUiOjqdehXLk4iOjdbpWD4QCTNfxxKLumZ4=;
-        b=Qh8fDKCux/5bt9cGIIauD1hXKLf7zwWLbn1YXFJwB1zXFFDM58qNHbSwJ1WuExMuhX
-         MwA3vQnYE7I6Pl1eeVsDdeb4K1i1pldwl9QxYfAvUD4WUZfruIuAp7POjeQ6sTqYhtPN
-         X6u6yuqAQAv0Akg+/QoHQy9C1bchOfGvdUyG98m0Xuluna9ZxBuPHAx0dLUiXe6eLzim
-         GN7Rq9S2zS+amtpmgBfub6DEh1r3UGDC5hvlFocSBVThVtc9FYBwcNZWMhXig96WN6a+
-         WNcDYv0OtlNa8HQoVTYG4xjP9oIg3nQzyJ5P7WhVpi50apcEl5oHm6krNeZpi6VaIYKw
-         ORjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709674833; x=1710279633;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w5VaGwcXsUiOjqdehXLk4iOjdbpWD4QCTNfxxKLumZ4=;
-        b=C+WunGzn8GjROhDUH8oZzqgxDwFbBjzqvZOqL2MQ9Azzt82o1kSMvgFZQSTnNIaU79
-         f7vxHBBsOb9ZJBXkoWQ5E4a7QDBL7BgeNJKJnyahBdWPGBRphpVQ7YoU8vPpznc36lnx
-         ZNQSJlXlANwPH6GkUj0rk0rlz8VYU5k8BNMlk8E3nfLerxUtcgf1hTCTXJkUL3id1/mo
-         2Y895/yn7YUrhql7KB0Z9m7aNzORSM7SDb0zgJSF2sUoyePqePoJDrFkchGDIuYUZQ3t
-         WyLCZAyPX5sCEKTahJ7HUQSxU/fcpnO4NBIfhhkXtwjXp25lhlM0+sl6vr9qssMH+ZX7
-         9mPQ==
-X-Gm-Message-State: AOJu0YxGBzoJ9VWCiBhsdWiB3udFjosIWRiLT7sit7bmiblFHZbmPPb7
-	wNVbNHZga2B8w7/f1LfCXUOCl55BiS7OyHLdAST+03hHMPId175p5prtODN9dTYJa79B0YnXUID
-	USl1xrUtbqiQ/6LJJgc8zDj7F1ps=
-X-Google-Smtp-Source: AGHT+IFY0YyVy1bOOSx+mdfbcegwBIuN6e+GbewWkSdzQi706Em91DBAUrhVlU5sfdil/TLqIPkmSBSNmsVz9yVtRYY=
-X-Received: by 2002:a05:6a20:9150:b0:1a1:4aea:c665 with SMTP id
- x16-20020a056a20915000b001a14aeac665mr4023588pzc.19.1709674832744; Tue, 05
- Mar 2024 13:40:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="XZ2oMdA0";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mYV1xzR9"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailflow.west.internal (Postfix) with ESMTP id 115652CC01D1;
+	Tue,  5 Mar 2024 16:42:29 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Tue, 05 Mar 2024 16:42:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1709674949;
+	 x=1709682149; bh=Hz9n4ApIEoOa8ewx4aHPiFWUsa7oc5PoCFR5tHWnstc=; b=
+	XZ2oMdA07S+7hmypj5QmtD0nNybpY6WbMrxw6JgYsyydLHTkYM1bxw1KTdED4WUn
+	fwIaV2zXznYPrYc5LYEAV+VuJz2KX1qm0gcumhFs23mh4qpWQtLA2lc691Q/Uk4/
+	FUemAMA/9zkuLIZz/DK7HVQVeQgtHF2lFoHxNfTrbNvUxe6gVD1VlAXYtAPCqvEZ
+	noa71qckqnyqHn/nRxMFCx2+2jCqXOSLw5Sv+scjTsM/yGQpSaLHuKHv/1VsdaLs
+	3mwDUdsdZEwijrbkaZGXhGpow2MlMaqZb1ZEbWNttk7KrY9eqfkOJIEXR5yoM82P
+	NrKLnSQBBHwHnc78L800pA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1709674949; x=
+	1709682149; bh=Hz9n4ApIEoOa8ewx4aHPiFWUsa7oc5PoCFR5tHWnstc=; b=m
+	YV1xzR9VwNyMdvd2XxXxlJbHbTZ0OvC3pZn34wUhHPTlEO7UfqSvQyCb1RILFRLI
+	B+81/OXji3z8G1HZDalct/dCiJFD316qld+uwRlKBjxSQjuwt/3wEWl4jU3oCEGo
+	o6uafFR9no+xodPAC1rtnQh4dfnqoYjcRBP217iRnGy4A267tYOMotFHfey2l7Gj
+	zqzW5nBLMcmOHOP+XgZdptdsRY1SAtQkz9TH7YfGn4r1VEbS9bWUV2ahYQJ9gKnm
+	tCHegqOl0Fwrmj5Yqi4r9STaoj7Ldcy2mSqkCKVGL/CT3LtVFe/fvF8Fb0/9xZbA
+	oQxpwmFtV2ONVC+oUAN+g==
+X-ME-Sender: <xms:xJHnZXh6_Ll67eXxQ5IzrwKb7JXNcfHOjxWeF-PNY5GTihlf4JwMaQ>
+    <xme:xJHnZUARHkU-tew3b4nqSUUOqwaqwVt-03sRKHJCbOgFt-tuJeQdDnZ0UngQ39xqw
+    E5u2wmzDqpwqX8ZFuk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrheelgddugeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:xJHnZXEwrc_6UC-oU7zTOsd4x7vgSjvx6z-qUsrI4jZi8oxPsNNvxA>
+    <xmx:xJHnZUSSUvHtOP8idKYag43S_3FuAJ09uenNeen5kNu3HgR6tX0xMQ>
+    <xmx:xJHnZUwjhfoRh0qlfaZkMhUZF7kFZoBb1bs4TCFhBbV5ih_eY6EXrA>
+    <xmx:xZHnZYUomTIt-IeObDeUChktO6Gx2l2mAGwspc1JBF7-3JHixliqgJ-IsxrdhuDf>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 02874B6008D; Tue,  5 Mar 2024 16:42:28 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-208-g3f1d79aedb-fm-20240301.002-g3f1d79ae
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240304225156.24765-1-eddyz87@gmail.com> <20240304225156.24765-14-eddyz87@gmail.com>
-In-Reply-To: <20240304225156.24765-14-eddyz87@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 5 Mar 2024 13:40:20 -0800
-Message-ID: <CAEf4BzYkAKW6dq6r+ircdES6x4hpooA-U3Mgm5mLGW1rhp8Ybw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 13/15] selftests/bpf: test case for SEC("?.struct_ops")
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
-	yonghong.song@linux.dev, void@manifault.com, sinquersw@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <037496c9-f06a-4946-b903-95d87d577b89@app.fastmail.com>
+In-Reply-To: 
+ <CAHS8izPhvRDPVHr8mY2FffPCLYjKqaazjy5NFcnJSnLK+CdyCA@mail.gmail.com>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-6-almasrymina@google.com>
+ <5e2f9342-4ee9-4b30-9dcf-393e57e0f7c6@app.fastmail.com>
+ <CAHS8izPhvRDPVHr8mY2FffPCLYjKqaazjy5NFcnJSnLK+CdyCA@mail.gmail.com>
+Date: Tue, 05 Mar 2024 22:42:07 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Mina Almasry" <almasrymina@google.com>
+Cc: Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org,
+ "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Jonathan Corbet" <corbet@lwn.net>,
+ "Richard Henderson" <richard.henderson@linaro.org>,
+ "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
+ "Matt Turner" <mattst88@gmail.com>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Helge Deller" <deller@gmx.de>, "Andreas Larsson" <andreas@gaisler.com>,
+ "Jesper Dangaard Brouer" <hawk@kernel.org>,
+ "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+ "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>,
+ "John Fastabend" <john.fastabend@gmail.com>,
+ "KP Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@google.com>,
+ "Hao Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>,
+ "David Ahern" <dsahern@kernel.org>,
+ "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,
+ shuah <shuah@kernel.org>, "Sumit Semwal" <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ "Pavel Begunkov" <asml.silence@gmail.com>, "David Wei" <dw@davidwei.uk>,
+ "Jason Gunthorpe" <jgg@ziepe.ca>,
+ "Yunsheng Lin" <linyunsheng@huawei.com>,
+ "Shailend Chand" <shailend@google.com>,
+ "Harshitha Ramamurthy" <hramamurthy@google.com>,
+ "Shakeel Butt" <shakeelb@google.com>,
+ "Jeroen de Borst" <jeroendb@google.com>,
+ "Praveen Kaligineedi" <pkaligineedi@google.com>,
+ "Willem de Bruijn" <willemb@google.com>,
+ "Kaiyuan Zhang" <kaiyuanz@google.com>
+Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf to netdevice
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 4, 2024 at 2:52=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com>=
- wrote:
+On Tue, Mar 5, 2024, at 21:00, Mina Almasry wrote:
+> On Tue, Mar 5, 2024 at 1:05=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> w=
+rote:
+>> On Tue, Mar 5, 2024, at 03:01, Mina Almasry wrote:
 >
-> Check that "?.struct_ops" and "?.struct_ops.link" section names define
-> struct_ops maps with autocreate =3D=3D false after open.
+> A key goal of this patch series is that the kernel does not try to
+> parse the skb frags that reside in the dma-buf for that precise
+> reason. This is achieved using patch "net: add support for skbs with
+> unreadable frags" which disables the kernel touching the payload in
+> these skbs, and "tcp: RX path for devmem TCP" which implements a uapi
+> where the kernel hands the data in the dmabuf to the userspace via a
+> cmsg that gives the user a pointer to the data in the dmabuf (offset +
+> size).
 >
-> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-> ---
->  .../bpf/prog_tests/struct_ops_autocreate.c    | 58 +++++++++++++++++--
->  .../bpf/progs/struct_ops_autocreate.c         | 10 ++++
->  2 files changed, 62 insertions(+), 6 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_autocreate=
-.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_autocreate.c
-> index 35910cbb9ca4..a89ba036e2e2 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/struct_ops_autocreate.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_autocreate.c
-> @@ -34,10 +34,24 @@ static void cant_load_full_object(void)
->         struct_ops_autocreate__destroy(skel);
->  }
->
-> +static int check_test_1_link(struct struct_ops_autocreate *skel, struct =
-bpf_map *map)
-> +{
-> +       struct bpf_link *link;
-> +       int err;
-> +
-> +       link =3D bpf_map__attach_struct_ops(skel->maps.testmod_1);
-> +       if (!ASSERT_OK_PTR(link, "bpf_map__attach_struct_ops"))
-> +               return -1;
-> +
-> +       /* test_1() would be called from bpf_dummy_reg2() in bpf_testmod.=
-c */
-> +       err =3D ASSERT_EQ(skel->bss->test_1_result, 42, "test_1_result");
-> +       bpf_link__destroy(link);
-> +       return err;
-> +}
-> +
->  static void can_load_partial_object(void)
->  {
->         struct struct_ops_autocreate *skel;
-> -       struct bpf_link *link =3D NULL;
->         int err;
->
->         skel =3D struct_ops_autocreate__open();
-> @@ -52,15 +66,45 @@ static void can_load_partial_object(void)
->         if (ASSERT_OK(err, "struct_ops_autocreate__load"))
->                 goto cleanup;
->
-> -       link =3D bpf_map__attach_struct_ops(skel->maps.testmod_1);
-> -       if (!ASSERT_OK_PTR(link, "bpf_map__attach_struct_ops"))
-> +       check_test_1_link(skel, skel->maps.testmod_1);
-> +
-> +cleanup:
-> +       struct_ops_autocreate__destroy(skel);
-> +}
-> +
-> +static void optional_maps(void)
-> +{
-> +       struct struct_ops_autocreate *skel;
-> +       int err;
-> +
-> +       skel =3D struct_ops_autocreate__open();
-> +       if (!ASSERT_OK_PTR(skel, "struct_ops_autocreate__open"))
-> +               return;
-> +
-> +       err  =3D !ASSERT_TRUE(bpf_map__autocreate(skel->maps.testmod_1),
-> +                           "default autocreate for testmod_1");
-> +       err |=3D !ASSERT_TRUE(bpf_map__autocreate(skel->maps.testmod_2),
-> +                           "default autocreate for testmod_2");
-> +       err |=3D !ASSERT_FALSE(bpf_map__autocreate(skel->maps.optional_ma=
-p),
-> +                            "default autocreate for optional_map");
-> +       err |=3D !ASSERT_FALSE(bpf_map__autocreate(skel->maps.optional_ma=
-p2),
-> +                           "default autocreate for optional_map2");
-> +       if (err)
->                 goto cleanup;
+> So really AFACT the only restriction here is that the NIC should be
+> able to DMA into the dmabuf that we're attaching, and dma_buf_attach()
+> fails in this scenario so we're covered there.
 
-The above is a bit ugly. I think we can keep it simple just by not
-exiting early, just do
+Ok, makes sense. Thanks for the clarification.
 
-ASSERT_TRUE(...);
-ASSERT_TRUE(...);
-ASSERT_FALSE(...);
-ASSERT_FALSE(...);
-
-.. then continue to bpf_map__set_autocreate() tests, even if previous
-assertions already failed.
-
-Nothing will crash, you'll just get more errors, potentially (because
-some preconditions weren't set correctly or something).
-
->
-> -       /* test_1() would be called from bpf_dummy_reg2() in bpf_testmod.=
-c */
-> -       ASSERT_EQ(skel->bss->test_1_result, 42, "test_1_result");
-> +       err  =3D bpf_map__set_autocreate(skel->maps.testmod_1, false);
-> +       err |=3D bpf_map__set_autocreate(skel->maps.testmod_2, false);
-> +       err |=3D bpf_map__set_autocreate(skel->maps.optional_map2, true);
-> +       if (!ASSERT_OK(err, "bpf_map__set_autocreate"))
-> +               goto cleanup;
-> +
-> +       err =3D struct_ops_autocreate__load(skel);
-> +       if (ASSERT_OK(err, "struct_ops_autocreate__load"))
-> +               goto cleanup;
-> +
-> +       check_test_1_link(skel, skel->maps.optional_map2);
->
->  cleanup:
-> -       bpf_link__destroy(link);
->         struct_ops_autocreate__destroy(skel);
->  }
->
-> @@ -108,4 +152,6 @@ void test_struct_ops_autocreate(void)
->                 can_load_partial_object();
->         if (test__start_subtest("autoload_and_shadow_vars"))
->                 autoload_and_shadow_vars();
-> +       if (test__start_subtest("optional_maps"))
-> +               optional_maps();
->  }
-> diff --git a/tools/testing/selftests/bpf/progs/struct_ops_autocreate.c b/=
-tools/testing/selftests/bpf/progs/struct_ops_autocreate.c
-> index 9a951ee6f55c..ba10c3896213 100644
-> --- a/tools/testing/selftests/bpf/progs/struct_ops_autocreate.c
-> +++ b/tools/testing/selftests/bpf/progs/struct_ops_autocreate.c
-> @@ -40,3 +40,13 @@ struct bpf_testmod_ops___v2 testmod_2 =3D {
->         .test_1 =3D (void *)test_1,
->         .does_not_exist =3D (void *)test_2
->  };
-> +
-> +SEC("?.struct_ops")
-> +struct bpf_testmod_ops___v1 optional_map =3D {
-> +       .test_1 =3D (void *)test_1,
-> +};
-> +
-> +SEC("?.struct_ops.link")
-> +struct bpf_testmod_ops___v1 optional_map2 =3D {
-> +       .test_1 =3D (void *)test_1,
-> +};
-> --
-> 2.43.0
->
+     Arnd
