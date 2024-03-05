@@ -1,183 +1,190 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 388D724B29
-	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 19:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5CFF1AADC
+	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 19:25:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709666553; cv=none; b=snDmqBW9IHTzVE1vhe4mVSPlA+M60iFL6LCQGgsVXKUKNie1v3gT45MNVhLJA+WldEg78wf/P2QdRKKbsTGCMP8QWdPVQOIATxjqnguJhUH6lkA887GTONaHGR5XFcHrffukS75AHMxAMj72PiTbmy2gLWbndq3fYVrzAYqgXrM=
+	t=1709666714; cv=none; b=bYNnR/Nu+7e6Oi8XexZz0Q0PhsnLNZ3c5Ue0aNEgpMZu55aWhGhuXYyPGFSmVG7zelxVO3AmuBXeS8XL/oWDHHkKXyo4j+4QhZ2ElMDmW2ipaWnf/MpP5/LyhkNa3BEcJKFE24bEBddChGMh2EGKWPygNhHeYn5TrAsRoXIueUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709666553; c=relaxed/simple;
-	bh=kV74Yj1MzqVyf6NNGDQ2CeGxlzKebgu7sxAA/z9x7pk=;
+	s=arc-20240116; t=1709666714; c=relaxed/simple;
+	bh=93eItdb45/SxvA0bB5zypz5ygnRFiRusWrdKOWBCq7s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jFQY44VZ0d85VTxHASkC8YpInUol9EKRvppLzT+Nj6jAxgFF6J4InbNNuXOxnD78az57eVn/wD/m86P77Pgr6aDfz1wVlWrYCyB3H644lonx7IwJ4WMbg/c2VDEkM5fJRnsYkfsV+45NdgrsryajfmFMj4J/spH1c+aBJxpqLxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HB+2fcJF; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=jmoenYLFlCtzZ5Rcv2SUhmQTn5n3cNCOuBPALyQnZjd8n76tRRzx5HNVTo5hLauehN6UHbUL7ajv+J8X2GFQjeEzMkZfNBzEbDsa7m7JP78hjbjrfd8Ostzfkfg2qY21BzV0xYDEqy7eUXz+9cMJgsyK0ks94i2DrfNJ11Jg7Zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nZSy52Ba; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HB+2fcJF"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a4515f8e13cso348136966b.3
-        for <bpf@vger.kernel.org>; Tue, 05 Mar 2024 11:22:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nZSy52Ba"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1dc1ff58fe4so1626915ad.1
+        for <bpf@vger.kernel.org>; Tue, 05 Mar 2024 11:25:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709666549; x=1710271349; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709666712; x=1710271512; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Zz04MsiLPf1EieQ9O8SZKHnfGRYziipBu1MQvsGASi0=;
-        b=HB+2fcJF8i4aysA250J5V59Sykrt6RAA7OXvzat/EnHx2gkocUpUFfYcL8Laz1ldgo
-         uiq13FWYw/j0TY+/6iyX/O6AUybIRCjMfzwKCPIgKaUfkCNCLj3y0UY2V8JiX33j0wen
-         OwgHQb+0rmI4v39A53bSy1Om0beyGkFDa3QQvfHNJTTfum6Inur6L+BWAqkAGRFlS9YP
-         3xSpuMB/U6nEoVyuBlUgOtuPjXyCtuh77HZyW+u7qIRHC47PKwtOqESealfxelh235M8
-         Z7o8aAj05QR3jtuf8U2ilcjw+0l2nsg02feqIqxDTH5A3GXCM5ehYD5yLdpoqIGWrNBh
-         rl2g==
+        bh=cG9dgg6ASQ9HeaPGGfu0PtF/VXtVrjasMN6Rp7DpYc4=;
+        b=nZSy52BaSL7lGQWBtTDrG0aegI+w92ZcTXCv4U0SzadcYHjFHXXW9tzKdpWXNcOmyL
+         rH9I7jRIXYRoJMKeN6xK5RyU0sZqPJJzmj4nKYxCpXhPQBX+s9zOYpzNBiWGpc2QgIwA
+         ZIPo/s+jI67XsqpYIUUlYv3jnEKokD/BoTI+NNGQMFatXI8+D1K0kN6NXjqQiptuxIDY
+         F97b6oRHG31AWx3nz7BweMDPriXKrm/5PpP+lU45a7YvoBpTyX4WHbnBYOCX3PskhxhJ
+         hHbh4woN0Uva6FNQio9UcPwd9u3KknSq2Z2/IvgRMOBHrujcwtlsk7LgVJ00yMj8bD6M
+         kF1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709666549; x=1710271349;
+        d=1e100.net; s=20230601; t=1709666712; x=1710271512;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Zz04MsiLPf1EieQ9O8SZKHnfGRYziipBu1MQvsGASi0=;
-        b=W3WOD7XiQmNEaw0jMqHC8WJF7JxBKmAtyxJNxakaFPoOZ1G6PADVDZJYPwGX0KO/N9
-         I+qLOoBMbEsvIZohKhtDKgR7V5YVvVa0KLbg0qpsQ0OQOTqjWd5seSwfw3E7r7UpoET+
-         hxdSE3P5OBfU+cz5KnKjRFPC6cL1dguqLffMjmj244NKbsMpbXRAd04EdVSGtCTlC8Ie
-         sldihfgvNyXdcjmWzto0+eI/x1AMXSC3gP07BzPM//HJCcBgjabohadZGwiGiiO5M/0P
-         D5mQDC/Xa3Tz0t38gYJ8XFduSnDh6f6pcBiAbw3SD58NwBlC8ieAcZkzggBPIA7ZLhgL
-         mgTg==
-X-Forwarded-Encrypted: i=1; AJvYcCXKTgDwPhENgzSW912tnLBg3P7wfwUkJJLq3VO/IyzzC9Y7u08gG/6Bur4+lS87oG7ExVcf3uG2oRxTHsf6voZot+pI
-X-Gm-Message-State: AOJu0Yzsk32BEapdyrJAjX2kr8rJLqfKLU3CEYgioWhe+qVLFlAXNma9
-	EeAJm+2oDjloUcOkCMTFEZLsLQrD6ozPmJ0jlT2vGMMR7/y7tBg3F/LPq1bK1f3NaMCleYW/1JT
-	CXsTqizCRUabrjIm3WpCFfia6h0U9Lw9u3u7n
-X-Google-Smtp-Source: AGHT+IGfm5Q9d1QQtEV+FHngrLRB7RaEIdB98iS7LcjxrbCUYiUnZIxAhZ7sX2WiKXZhI6ep9u27+39/LAWZPVIzVjw=
-X-Received: by 2002:a17:906:1cd5:b0:a44:15c3:c8e9 with SMTP id
- i21-20020a1709061cd500b00a4415c3c8e9mr10269704ejh.28.1709666549065; Tue, 05
- Mar 2024 11:22:29 -0800 (PST)
+        bh=cG9dgg6ASQ9HeaPGGfu0PtF/VXtVrjasMN6Rp7DpYc4=;
+        b=pCIemWOpDGCltetiOy7DQSx3UUoUYJieYMHxDLJ+UxSPv5LRmPWdtvFWu7O1JZJhoB
+         JqW4uZaMI0YPIsN1r7oOanT20uJ8Y3lrSsBnSScgtpR2+xq2S7r0ZVvhoqxf5rOaQ9UP
+         DneS49B56fGA9YXgZaCbWF5KCKM2GYjbc9vxx5b9TXjigAfcbKb2II8B1mwzRiTBUcDF
+         Jo6VITCIHprMYk39RxBrvzPuHHRVBV1pWXlBEdlIK9BU9ESG5sSYSDQIOxI9/MeVgT+j
+         0laSsFohz4BzEEUfSiDhJvxVunTsmozEnu+XCel+I3pZXc1bRFYNuk1FzjwAzwKLRQQb
+         GAPA==
+X-Gm-Message-State: AOJu0YxqD4HM1AW2DFGWG0ahIX4v/LnnhtsGkJ+zAtmDOZItsLGkbYDg
+	YLCIgAjDDZFKZ3Se09LE8axM2ew3eoObqaE0mg5OVYFmSWMhtNk97JYo8aiECGQb1fN3GNAaTmv
+	0DY6eEOjH4V5x00u/m4gUbLLxEmU=
+X-Google-Smtp-Source: AGHT+IEKY7X9ZnTHY3pGZ6Tr6tr3YEoyYv3ZKlKQtS3aHMZs3vA281KGaPBK5JbIaezDIE8Vkv+xQXTfixeR+tX/SLQ=
+X-Received: by 2002:a17:902:c951:b0:1dc:673:1932 with SMTP id
+ i17-20020a170902c95100b001dc06731932mr3756419pla.38.1709666712007; Tue, 05
+ Mar 2024 11:25:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-13-almasrymina@google.com> <a2d926be-695a-484b-b2b5-098da47e372e@app.fastmail.com>
-In-Reply-To: <a2d926be-695a-484b-b2b5-098da47e372e@app.fastmail.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 5 Mar 2024 11:22:15 -0800
-Message-ID: <CAHS8izPbBHz=rr65ZtCy-+OGPbXXaY66_5EFSXw2bbhfGweRWg@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v6 12/15] tcp: RX path for devmem TCP
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	Linux-Arch <linux-arch@vger.kernel.org>, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, shuah <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
-	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240304225156.24765-1-eddyz87@gmail.com> <20240304225156.24765-6-eddyz87@gmail.com>
+In-Reply-To: <20240304225156.24765-6-eddyz87@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 5 Mar 2024 11:24:59 -0800
+Message-ID: <CAEf4BzaxJ3w0-rpShqd5qAMMyHmfhYCOCqAUNKEO15sd0QCStw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 05/15] selftests/bpf: utility functions to
+ capture libbpf log in test_progs
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
+	yonghong.song@linux.dev, void@manifault.com, sinquersw@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 5, 2024 at 12:42=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote=
-:
+On Mon, Mar 4, 2024 at 2:52=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com>=
+ wrote:
 >
-> On Tue, Mar 5, 2024, at 03:01, Mina Almasry wrote:
-> > --- a/arch/alpha/include/uapi/asm/socket.h
-> > +++ b/arch/alpha/include/uapi/asm/socket.h
-> >  #define SO_PEERPIDFD         77
-> > +#define SO_DEVMEM_LINEAR     79
-> > +#define SO_DEVMEM_DMABUF     80
-> > --- a/arch/mips/include/uapi/asm/socket.h
-> > +++ b/arch/mips/include/uapi/asm/socket.h
-> >  #define SO_PEERPIDFD         77
-> > +#define SO_DEVMEM_LINEAR     79
-> > +#define SO_DEVMEM_DMABUF     80
-> > --- a/arch/parisc/include/uapi/asm/socket.h
-> > +++ b/arch/parisc/include/uapi/asm/socket.h
-> >  #define SO_PEERPIDFD         0x404B
-> > +#define SO_DEVMEM_LINEAR     98
-> > +#define SO_DEVMEM_DMABUF     99
-> > --- a/arch/sparc/include/uapi/asm/socket.h
-> > +++ b/arch/sparc/include/uapi/asm/socket.h
-> >  #define SO_PEERPIDFD             0x0056
-> > +#define SO_DEVMEM_LINEAR         0x0058
-> > +#define SO_DEVMEM_DMABUF         0x0059
-> > --- a/include/uapi/asm-generic/socket.h
-> > +++ b/include/uapi/asm-generic/socket.h
-> > @@ -135,6 +135,11 @@
-> >  #define SO_PEERPIDFD         77
-> > +#define SO_DEVMEM_LINEAR     98
-> > +#define SO_DEVMEM_DMABUF     99
+> Several test_progs tests already capture libbpf log in order to check
+> for some expected output, e.g bpf_tcp_ca.c, kfunc_dynptr_param.c,
+> log_buf.c and a few others.
 >
-> These look inconsistent. I can see how you picked the
-> alpha and mips numbers, but how did you come up with
-> the generic and parisc ones? Can you follow the existing
-> scheme instead?
+> This commit provides a, hopefully, simple API to capture libbpf log
+> w/o necessity to define new print callback in each test:
 >
-
-Sorry, yes, this is a bit weird. I'll change this to use the next
-available entry rather than leave a gap.
-
-> > diff --git a/include/uapi/linux/uio.h b/include/uapi/linux/uio.h
-> > index 059b1a9147f4..ad92e37699da 100644
-> > --- a/include/uapi/linux/uio.h
-> > +++ b/include/uapi/linux/uio.h
-> > @@ -20,6 +20,16 @@ struct iovec
-> >       __kernel_size_t iov_len; /* Must be size_t (1003.1g) */
-> >  };
-> >
-> > +struct dmabuf_cmsg {
-> > +     __u64 frag_offset;      /* offset into the dmabuf where the frag =
-starts.
-> > +                              */
-> > +     __u32 frag_size;        /* size of the frag. */
-> > +     __u32 frag_token;       /* token representing this frag for
-> > +                              * DEVMEM_DONTNEED.
-> > +                              */
-> > +     __u32  dmabuf_id;       /* dmabuf id this frag belongs to. */
-> > +};
+>     /* Creates a global memstream capturing all output passed to
+>      * libbpf_print_fn.
+>      * Returns 0 on success, negative value on failure.
+>      * On failure the description is printed using PRINT_FAIL and
+>      * current test case is marked as fail.
+>      */
+>     int start_libbpf_log_capture(void)
 >
-> This structure requires a special compat handler to run
-> x86-32 binaries on x86-64 because of the different alignment
-> requirements. Any uapi-visible structures should be defined
-> to avoid this and just have no holes in them. Maybe extend
-> one of the __u32 members to __u64 or add another 32-bit padding field?
+>     /* Destroys global memstream created by start_libbpf_log_capture().
+>      * Returns a pointer to captured data which has to be freed.
+>      * Returned buffer is null terminated.
+>      */
+>     char *stop_libbpf_log_capture(void)
+>
+> The intended usage is as follows:
+>
+>     if (start_libbpf_log_capture())
+>             return;
+>     use_libbpf();
+>     char *log =3D stop_libbpf_log_capture();
+>     ASSERT_HAS_SUBSTR(log, "... expected ...", "expected some message");
+>     free(log);
+>
+> As a safety measure, free(start_libbpf_log_capture()) is invoked in the
+> epilogue of the test_progs.c:run_one_test().
+>
+> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/test_progs.c | 57 ++++++++++++++++++++++++
+>  tools/testing/selftests/bpf/test_progs.h |  3 ++
+>  2 files changed, 60 insertions(+)
 >
 
-Honestly the 32-bit fields as-is are somewhat comically large. I don't
-think extending the __u32 -> __u64 is preferred because I don't see us
-needing that much, so maybe I can add another 32-bit padding field.
-Does this look good to you?
+[...]
 
-struct dmabuf_cmsg {
-  __u64 frag_offset;
-  __u32 frag_size;
-  __u32 frag_token;
-  __u32 dmabuf_id;
-  __u32 ext; /* reserved for future flags */
-};
+> +/* Destroys global memstream created by start_libbpf_log_capture().
+> + * Returns a pointer to captured data which has to be freed.
+> + * Returned buffer is null terminated.
+> + */
+> +char *stop_libbpf_log_capture(void)
+> +{
+> +       char *buf;
+> +
+> +       if (!libbpf_capture_stream)
+> +               return NULL;
+> +
+> +       fputc(0, libbpf_capture_stream);
+> +       fclose(libbpf_capture_stream);
+> +       libbpf_capture_stream =3D NULL;
+> +       /* get 'buf' after fclose(), see open_memstream() documentation *=
+/
+> +       buf =3D libbpf_output_capture.buf;
+> +       bzero(&libbpf_output_capture, sizeof(libbpf_output_capture));
 
-Another option is to actually compress frag_token & dmabuf_id to be
-32-bit combined size if that addresses your concern. I prefer that
-less in case they end up being too small for future use cases.
+please use memset():
 
---=20
-Thanks,
-Mina
+$ rg -w memset | wc -l
+355
+$ rg -w bzero | wc -l
+12
+
+
+> +       return buf;
+> +}
+> +
+>  static int libbpf_print_fn(enum libbpf_print_level level,
+>                            const char *format, va_list args)
+>  {
+> +       if (libbpf_capture_stream) {
+> +               va_list args2;
+> +
+> +               va_copy(args2, args);
+> +               vfprintf(libbpf_capture_stream, format, args2);
+> +       }
+
+should we take into account verbosity settings? capturing LIBBPF_DEBUG
+logs probably isn't very useful (but will make debugging harder,
+probably)
+
+> +
+>         if (env.verbosity < VERBOSE_VERY && level =3D=3D LIBBPF_DEBUG)
+>                 return 0;
+>         vfprintf(stdout, format, args);
+> @@ -1081,6 +1137,7 @@ static void run_one_test(int test_num)
+>                 cleanup_cgroup_environment();
+>
+>         stdio_restore();
+> +       free(stop_libbpf_log_capture());
+>
+>         dump_test_log(test, state, false, false, NULL);
+>  }
+> diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/sel=
+ftests/bpf/test_progs.h
+> index 80df51244886..0ba5a20b19ba 100644
+> --- a/tools/testing/selftests/bpf/test_progs.h
+> +++ b/tools/testing/selftests/bpf/test_progs.h
+> @@ -397,6 +397,9 @@ int test__join_cgroup(const char *path);
+>                 system(cmd);                                            \
+>         })
+>
+> +int start_libbpf_log_capture(void);
+> +char *stop_libbpf_log_capture(void);
+> +
+>  static inline __u64 ptr_to_u64(const void *ptr)
+>  {
+>         return (__u64) (unsigned long) ptr;
+> --
+> 2.43.0
+>
