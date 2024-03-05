@@ -1,216 +1,119 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65DC34C637
-	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 04:52:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 499E0AD5E
+	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 05:37:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709614358; cv=none; b=eC2uy/3XDTqHropgcrACmn+pyNJ6zpIJmOAoDqhK5WG1+UjXbJPhN8cOtDujQwfH3QGf0412ujre6pDOfil5cGZJIWxNL7iLg+Afj7drch2rJBsAe9bxTOST2Q9fwM6DzvYiudK4jk/ljABWYbbrpAw+zaaasyJlN4rgWeZo62M=
+	t=1709617074; cv=none; b=eL3Sa7CzWigxx3bqEHqWsaqcI0kCLPapKhEup8V05yKXZHHXoYbofNVsmzg4qCtHrY502XEjA1o8O9KzM94Ez+iVdpIk1xT7kLugXbksYylDL/5bURSLCHjPnGiTQCgUN6o1gBDhtjC6NWko3gL08fBdcuJBCZKseR4qx1vqd+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709614358; c=relaxed/simple;
-	bh=Zsn3UciRmz1y4y4OcE4XSj+bnHZZ1ViSPWAHbOk1uSY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qNIAicjydZ7FkFw4uv1yOB1QFeQwJWZnUFfcvHJ/lnHMENy4d8RnN9nQz60JcWD387Ai22HdZzm1b8D2BvziFQWnrkB1mLaCTjbGRzTe0hsNcXM71IO400KpqVBNBUuR1pFSNsaYfWEAxofXv5QKApVnMw1tOO1gfs13pdfRr6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xd6IwlJA; arc=none smtp.client-ip=209.85.210.172
+	s=arc-20240116; t=1709617074; c=relaxed/simple;
+	bh=XVge9CmhE9dq0MwMLZ7ssKBg8VWY0EMKoxlvu8eBDUs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=m8NjUuQGzxuK7ZaTiM7RzuWm49g7Hg1M8moLQfrDCqZG2JmoWVJJOPdGz7ItuB8Pf5NXJ332oqzRTNMwFQrNEDSueWdxMMRg0qWu6piO7pSQOxm1il3t1eG6dX+AbdM6bmMiFnLEnQYSCbu/R7pxNgd/dyisTIJLGatuBI6iJ6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CHABeMaS; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xd6IwlJA"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6e4d48a5823so4185144b3a.1
-        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 20:52:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CHABeMaS"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-33e1d327595so2175565f8f.2
+        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 21:37:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709614356; x=1710219156; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1709617070; x=1710221870; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DSQ/agq3nwxiLrfdgKH47D6257r+0l8kkJgdS53pJhI=;
-        b=Xd6IwlJA1cpCGdebeBWhqlHE96BJ4XHBT38O0urKjApDEEIAgQLblORZu6/kSuHDCT
-         PvxH9xP5EeUREN6IyR6eJbasc15nqGWu1aoUc6jKAy4ucWJYtILaPKxO6B/Bf5sPYqEn
-         uK5KVqKB9PaLAmtOCZkS5Qw3fUSP7BxOV1/gJ+W8ibSPH3tWkifw7rF5Hrg5PyCVPCxH
-         MVBIhWMOQIexWWHqSp6rAc3PxJK9fSdiRwnwrhyT13FErO8OsnBYh9In+acm4dUfRWzy
-         stFsuum5GOOgQbhURsrpIgZVqxfVx8Fftq7jRwp/4d9yPahR6HK3aC43JHJu+544xbo7
-         5Jwg==
+        bh=lxVBp1zhZ4QIDfbscqJrsSoDtJf81TiRKKS7HYvzdu8=;
+        b=CHABeMaSMubi43dxm41pUkU//ft944lEu/ECPag9y29Ib9U2ms5FnIxglJAr4g2jHx
+         3fOaiV8Vkfg9hsabXy4m2vLpj4jTG110jr0ljp1cSNPTdlUoMKHSETSJHch6Elt8GyHN
+         KtwZc0WhEI6WEeylk7KBBBoQjUlyhsdePhRL9NtmXSukDSHm3bC4Kb3Zmpb6IEPY5FEd
+         e+nlUaTT97Dugpk7qjmJsDjiGaA7n8sj7htEmxJ94Ly2Z7HgnHfVEWGF6+p0XZ9vPllD
+         UVfQgQqGAA97PHcPTZ/0zZqO4T9DTJCiQdYDz5g3bWKVYXbzUrcVklUxs3PZVWt0XeYA
+         NVuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709614356; x=1710219156;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1709617070; x=1710221870;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DSQ/agq3nwxiLrfdgKH47D6257r+0l8kkJgdS53pJhI=;
-        b=vo279U7B7sn7PBSES72m2Lqkz/taKTe9OgoH0hqCbmd4M5dEL5DlAeBKN2DOJ9sNpb
-         61OoX1e3BcMUZ3gBiYYqBn1kAalLHhINP3LBAXV3FqBLlYwBDl0BFDv8x20Ic6idCnZH
-         WIsApnIZqW9uXxRFnorhv1gjhbBLIcI9wKI/xyBW+96iYLCWC51bpxqltgLzEOdjBSLh
-         4Yfn5UnpBo/0psIPix1xQEViZMgS51HOAPjr4AZ7nXb4aAcbOhwV+mwwc0JgRCSJupMY
-         NzJRpBRiOndWT2uMjBWPgLv2Lr4Cu541rcdnQC/L5dqL2A+kX/MtVgSa8ojulEd3rA+3
-         ZpWw==
-X-Gm-Message-State: AOJu0YySkhDlDCtUhpmrLIznOmi83q6Y9E4jSqiS/VfhayQoSSvQf3CT
-	L6ygreBZgQi29mGKGR9pnuvqF6NGs4lEU1Tfngh8+Ec8LRfXvdVB8oOn32eR
-X-Google-Smtp-Source: AGHT+IEn22Wlnq2fYGJMxP6zW6kxVI+CfKoKfLmaInCkciuUnyOgxph/MANId2gAnStQ67YEgHvwHg==
-X-Received: by 2002:a05:6a20:54a4:b0:1a0:ea67:ecb2 with SMTP id i36-20020a056a2054a400b001a0ea67ecb2mr998113pzk.12.1709614355985;
-        Mon, 04 Mar 2024 20:52:35 -0800 (PST)
-Received: from localhost.localdomain ([2620:10d:c090:400::5:9426])
-        by smtp.gmail.com with ESMTPSA id b10-20020a170903228a00b001dcc138d4afsm9434175plh.34.2024.03.04.20.52.34
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 04 Mar 2024 20:52:35 -0800 (PST)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@kernel.org,
-	memxor@gmail.com,
-	eddyz87@gmail.com,
-	john.fastabend@gmail.com,
-	kernel-team@fb.com
-Subject: [PATCH v5 bpf-next 4/4] selftests/bpf: Test may_goto
-Date: Mon,  4 Mar 2024 20:52:19 -0800
-Message-Id: <20240305045219.66142-5-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.39.3 (Apple Git-145)
-In-Reply-To: <20240305045219.66142-1-alexei.starovoitov@gmail.com>
-References: <20240305045219.66142-1-alexei.starovoitov@gmail.com>
+        bh=lxVBp1zhZ4QIDfbscqJrsSoDtJf81TiRKKS7HYvzdu8=;
+        b=NY5kDP+RkJ1ktG0JdSG8kBpjOom/j5OTFdlIc326pjQkd3Kr3lx1OX5LmBcdSxmhYv
+         ++D0LXjl/yhWbCHJ+ESol71HCPRWKxx+P7mz1XkPG8IU1LvQrwLLbtY3P9dd5OgdWR64
+         9muUbPJQzQIIzEQmJo0Y98cIlsXSB2ipoMp+PJ0fPtK/MnnysxvT5SsMkqcU9DJm4kAL
+         rk9KXzvGOu5Q5Nl5BKzZnEs5bqfaHTDADo92cj6LrS0cq39xiq2QQM/hiv5Xb+9rO6Im
+         vq5bVKrs/PvH4efAaCqlYy3w+MQEia65IAo/IzfwNAuKL2aZXe+/E19ez9GEKh3kKPFY
+         r10w==
+X-Gm-Message-State: AOJu0YwOpczC2bdlAP63ZuMps83dJIpT9IsxuiH6N9YSgJn/uzu+dhp8
+	c1DPkhrrDnYLhDoGCiL8YUr48DFU6BJdJL/Jae9Mdr4/NGcndUK1wTTpTojTKRt2/i+CK66ipkD
+	1tzocICxFY9d3dOKgeaXMjdMoJAQ=
+X-Google-Smtp-Source: AGHT+IHBuNaHCUFGAwMGxNEt+OdAua8W/DgbAOBtk0jYWHM51CssFhog4684CK/89dzckl9mt+enkKSUfsOyzRiS444=
+X-Received: by 2002:adf:e6cf:0:b0:33e:151a:39e1 with SMTP id
+ y15-20020adfe6cf000000b0033e151a39e1mr7774861wrm.33.1709617070380; Mon, 04
+ Mar 2024 21:37:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240302165017.1627295-1-yonghong.song@linux.dev> <20240302165033.1628421-1-yonghong.song@linux.dev>
+In-Reply-To: <20240302165033.1628421-1-yonghong.song@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 4 Mar 2024 21:37:38 -0800
+Message-ID: <CAADnVQK1RTkyT-87=43WuJk+69mO8eK58AXojRvCYFHKD8V3ow@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/4] selftests/bpf: Fix possible ksyms test
+ failure with LTO kernel
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Kernel Team <kernel-team@fb.com>, Martin KaFai Lau <martin.lau@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Alexei Starovoitov <ast@kernel.org>
+On Sat, Mar 2, 2024 at 8:50=E2=80=AFAM Yonghong Song <yonghong.song@linux.d=
+ev> wrote:
+>
+> In my locally build clang LTO kernel (enabling CONFIG_LTO and
+> CONFIG_LTO_CLANG_THIN), ksyms test failed like:
+>   test_ksyms:PASS:kallsyms_fopen 0 nsec
+>   test_ksyms:FAIL:ksym_find symbol 'bpf_link_fops' not found
+>   #118     ksyms:FAIL
+>
+> The reason is that 'bpf_link_fops' is renamed to
+>   bpf_link_fops.llvm.8325593422554671469
+> Due to cross-file inlining, the static variable 'bpf_link_fops'
+> in syscall.c is used by a function in another file. To avoid
+> potential duplicated names, the llvm added suffix '.llvm.<hash>'.
+>
+> To fix the failure, we can skip this test with LTO kernel
+> if the symbol 'bpf_link_fops' is not found in kallsyms.
+>
+> After this patch, with the same LTO kernel:
+>   #118     ksyms:SKIP
+>
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/ksyms.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms.c b/tools/testi=
+ng/selftests/bpf/prog_tests/ksyms.c
+> index e081f8bf3f17..cd81f190c5d7 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/ksyms.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/ksyms.c
+> @@ -21,7 +21,11 @@ void test_ksyms(void)
+>                 return;
+>         }
+>         if (err =3D=3D -ENOENT) {
+> -               ASSERT_TRUE(false, "ksym_find for bpf_link_fops");
+> +               /* bpf_link_fops might be renamed to bpf_link_fops.llvm.<=
+hash> in LTO kernel. */
+> +               if (check_lto_kernel() =3D=3D 1)
+> +                       test__skip();
+> +               else
+> +                       ASSERT_TRUE(false, "ksym_find for bpf_link_fops")=
+;
 
-Add tests for may_goto instruction via cond_break macro.
-
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
- .../bpf/progs/verifier_iterating_callbacks.c  | 103 +++++++++++++++++-
- 2 files changed, 101 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
-index 1a63996c0304..cb810a98e78f 100644
---- a/tools/testing/selftests/bpf/DENYLIST.s390x
-+++ b/tools/testing/selftests/bpf/DENYLIST.s390x
-@@ -3,3 +3,4 @@
- exceptions				 # JIT does not support calling kfunc bpf_throw				       (exceptions)
- get_stack_raw_tp                         # user_stack corrupted user stack                                             (no backchain userspace)
- stacktrace_build_id                      # compare_map_keys stackid_hmap vs. stackmap err -2 errno 2                   (?)
-+verifier_iterating_callbacks
-diff --git a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-index 5905e036e0ea..04cdbce4652f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-@@ -1,8 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
--
--#include <linux/bpf.h>
--#include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
-+#include "bpf_experimental.h"
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
-@@ -239,4 +237,103 @@ int bpf_loop_iter_limit_nested(void *unused)
- 	return 1000 * a + b + c;
- }
- 
-+#define ARR_SZ 1000000
-+int zero;
-+char arr[ARR_SZ];
-+
-+SEC("socket")
-+__success __retval(0xd495cdc0)
-+int cond_break1(const void *ctx)
-+{
-+	unsigned long i;
-+	unsigned int sum = 0;
-+
-+	for (i = zero; i < ARR_SZ; cond_break, i++)
-+		sum += i;
-+	for (i = zero; i < ARR_SZ; i++) {
-+		barrier_var(i);
-+		sum += i + arr[i];
-+		cond_break;
-+	}
-+
-+	return sum;
-+}
-+
-+SEC("socket")
-+__success __retval(999000000)
-+int cond_break2(const void *ctx)
-+{
-+	int i, j;
-+	int sum = 0;
-+
-+	for (i = zero; i < 1000; cond_break, i++)
-+		for (j = zero; j < 1000; j++) {
-+			sum += i + j;
-+			cond_break;
-+		}
-+
-+	return sum;
-+}
-+
-+static __noinline int loop(void)
-+{
-+	int i, sum = 0;
-+
-+	for (i = zero; i <= 1000000; i++, cond_break)
-+		sum += i;
-+
-+	return sum;
-+}
-+
-+SEC("socket")
-+__success __retval(0x6a5a2920)
-+int cond_break3(const void *ctx)
-+{
-+	return loop();
-+}
-+
-+SEC("socket")
-+__success __retval(1)
-+int cond_break4(const void *ctx)
-+{
-+	int cnt = zero;
-+
-+	for (;;) {
-+		/* should eventually break out of the loop */
-+		cond_break;
-+		cnt++;
-+	}
-+	/* if we looped a bit, it's a success */
-+	return cnt > 1 ? 1 : 0;
-+}
-+
-+static __noinline int static_subprog(void)
-+{
-+	int cnt = zero;
-+
-+	for (;;) {
-+		cond_break;
-+		cnt++;
-+	}
-+
-+	return cnt;
-+}
-+
-+SEC("socket")
-+__success __retval(1)
-+int cond_break5(const void *ctx)
-+{
-+	int cnt1 = zero, cnt2;
-+
-+	for (;;) {
-+		cond_break;
-+		cnt1++;
-+	}
-+
-+	cnt2 = static_subprog();
-+
-+	/* main and subprog have to loop a bit */
-+	return cnt1 > 1 && cnt2 > 1 ? 1 : 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.43.0
-
+I'm afraid LTO breakage is bigger than this.
+pid_iter program as part of bpftool is using bpf_link_fops too.
+I suspect that part of bpftool feature is broken on LTO kernel.
+We need to find a solution instead of 'skip' a selftest.
