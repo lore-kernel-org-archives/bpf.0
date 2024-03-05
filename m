@@ -1,166 +1,169 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866C324B59
-	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 19:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98DED5915D
+	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 20:00:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709668539; cv=none; b=QiIusVkmQtv0vQWBScY11/3teLc18dOvAENi386IdjmDuhp4xeRxA9IA0BWacpjrLMVWakH3cMiL2NZZkv6nOETgOd1mFumt5hM63EIA+2ItgvhDKmdbhAFFw4hVHi94uyUp0Ld3z2Ya8kgVlThUM6fFWbdks4EZC6e11j5vGCs=
+	t=1709668825; cv=none; b=VmnJwMCpMziNviyvt3uzQ5K8v1Xj0LYYd1GoSTkttzyc8MYv5jjTmdkXvER4GIv+SAsB/8rzLqY4glLyliFvAzdxSFCIHRLFSz9dB5gEGlxWDij/IWEllAhAhfMUZtvFs40e9ds6AMuqjf5EJr02sLXcCbtLJH/6utsc/EG5YLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709668539; c=relaxed/simple;
-	bh=n7SIcpig6qpwpcoBYZ1vsgHqIIEQy5hvo+khHLV0t6Q=;
+	s=arc-20240116; t=1709668825; c=relaxed/simple;
+	bh=zvCIxr8VBjsKzdRKj72ITiWaaPuXwUFhasVmFGiaDtk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=chDAZD5fTtuZmQWrjC7vTSS8rf9MCBxM6Dcv3IywJUwoU9zyhFiytsWai6pQPDNC/RuQKw+nJ7+DmNlXKd59BJMvxrlUHMXoRoG2XHXF54ZDQUGVmPJZsb94gxBkjPBCAe+hwHJYCsBVbNP5E9cgJDPlxeZrGT+fsbvJ5Pd4wyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KECIXYeO; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=Tu+ID3pLgZdmNCqOuv1E4v6wPWYBvyabeHLIPLlArmd54EDWsKSDS+qufwGH/+BEDAodOAqYfq1CHKUENPkU8aZn2GHf8qL79ToHVf4UXHjoAuTtuQH8QboFy2Yf3zk01s1MWT2fLH6mj3X4KeDJdGbOVWhAOnn8axG4ow/ch3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GQCcdh2M; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KECIXYeO"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6da202aa138so4526458b3a.2
-        for <bpf@vger.kernel.org>; Tue, 05 Mar 2024 11:55:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GQCcdh2M"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a26ed1e05c7so1022131666b.2
+        for <bpf@vger.kernel.org>; Tue, 05 Mar 2024 12:00:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709668538; x=1710273338; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1709668821; x=1710273621; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TtGzNgmCvvGesCHHpgQDbeKZD8d7OaQs9o4mSpa8qwc=;
-        b=KECIXYeOUgv0HIxRbEo7CaK3ZnwcFA/2MNl4pWNo4qG7LZufuItDe3jlQzFt4PrOEQ
-         zCVed6t9sqoDpD4o2LGAIwdyuSqpwMRpIUGaP3cP8BJfAhaCtUiHPcqrSM6g2DUdQsxq
-         mMGjscEeXOiUm2SqYwIH6Lmu43tNLu2KKn14/xSOqzipBRaAAy2XlzP51HEtz/M+8rHc
-         pisGrpNCLdkKvFB5hVrKQCzcGfXk4GSuIxBiSxem9w/sPz8jSE8iqLmTLBk+WxMNBd4H
-         NqL+Nq6e/KEsGejDsdRljY7zgIW4YvP30nxOcey5LjS6AXhCSWsHdlcDRNO9HH0fsNbI
-         ORqw==
+        bh=Um7HQJN8N4J1bd3DjjlCtIBtcKYJjLGAY5O7WX29jhs=;
+        b=GQCcdh2MldH/YcpNngEOhJ93Lez+BG92jbvj3xTQKZfXfuaZNCzmOOZbV2gDMd4//R
+         RUDIXcB0aVfS9WSwFs7IJJQ/y1Qy/nicYVfdFQluHtxSMfgcamUEChzZrV6bE5RVAg+d
+         8x7sUhgoYrXyQAD3Q6LRJGRQxNsdjrhT6qN4tKbeqfoxWmkzMvDIL7erP/n5qj18xKHf
+         R8fBtNcxgwib9+mtc8yx+839STKOJlbtiDxY5Rzdvlj2/s7kRdLuo4E2+Lxyc/t5v71o
+         hE27KoRkiuOaRQejDkoDPRhF+QXyaz5wGJRSvG72AT2vKBH6JSBdgt/ZHxE3VsBBvnf8
+         rw+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709668538; x=1710273338;
+        d=1e100.net; s=20230601; t=1709668821; x=1710273621;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TtGzNgmCvvGesCHHpgQDbeKZD8d7OaQs9o4mSpa8qwc=;
-        b=TD0EQcx6MpnX1vAuhqtV4w6ZD7aTZOnhcfXpaDSP8fSLwhzUcvZa4zmZo9eO6O0IG9
-         fvTXYVsUGV+vfd0mey5QWYAKpJQF92XIlZtieNt55DHSZP07Y6gnTOibusbg2vLVL4dS
-         Crn8U7FJFCyvpFruQvH1HFzxUqUIywdMLuusRQJy34bsym8g2agINgh03UOT50iFWiDC
-         ygImBfIJIeOFoyFOGRwdM9+7B+X9GtfoOw3G1UrRafNSGDnh7fxh3ZQcv7PLaEdlBb3C
-         fc0DWjuQUd4oFHMrLAbEEok0gOMHFdHO2oMnn7uDcXxtIWcJJjf2WDyTXr0ApUtveEET
-         YpBA==
-X-Gm-Message-State: AOJu0YzvzTketVVBC05G/BfyKTiy4F1OKFqlPg3uDX+O5TA9yPTyLl8l
-	vhtQl5vm+LWhPXgKmcNu/Yd7Ym1TVFHjzNHrNeWaTORqV+ieHPvqL1Gwz7+R+gH0jLwzo0Nzk/c
-	1X6YcMUGsjc3Dw1MOBzfRv9AyqUc=
-X-Google-Smtp-Source: AGHT+IHXu6tXC20oKcgck8RaJhOHCYZLbpHeE+EEzH3Yr4yt4dftISUcSrWAAi9VhTYKsCITg+5RBtoeztOz6wSEbhI=
-X-Received: by 2002:a05:6a00:2352:b0:6e5:adb9:b955 with SMTP id
- j18-20020a056a00235200b006e5adb9b955mr17097610pfj.23.1709668537342; Tue, 05
- Mar 2024 11:55:37 -0800 (PST)
+        bh=Um7HQJN8N4J1bd3DjjlCtIBtcKYJjLGAY5O7WX29jhs=;
+        b=R6eRbcDuZ5GcEeumvGc8hQ4hRN7SB/n43DPTtXYIjUsM0Vcop8IXKaYAXoZPQNGsld
+         QSvc0Mo0DAdRLjj3jRV3LbVVJjTYVgExW8wLaFJUm5y3YNy5vQWjZrWsYzLciI9biFvy
+         fYKJD2O4+l3+Tmqw10zn5ASBLphCC1cHV81auutLkd7ijowACPqYvf7w9TUl51SsMCmx
+         Cux9gwOxnIAID/WOUuKD/skP3QRUkVl7Wx5sdntzaL7hewkK6342xLNpeL43ta5Djnvn
+         +vmAJfCfZ3U/ab+3kejX1lH3tPqWMp2+2iqkSAHgKzu8bbfXk503MhMscU4lXEDrmfXh
+         q6hg==
+X-Forwarded-Encrypted: i=1; AJvYcCW8ULF1m2Bo/ntmPnDY6W5fhW3+l516fhNOwk9etajbvp26GmvmNVw0ozBefmGwv4EJPQAboKy9eVZSK3gL0rAPkcEA
+X-Gm-Message-State: AOJu0YyD2yyKvIcZATk5yRw4IczHCRpQGECu57xeO9PsSaS1xL7iC9SL
+	m004mVY6V6XUkQBHu+lS3xCGJhRyZ3Zx11Qu/QGtm7i+/Et3ySj5I8vxkkk4LHfrY/b60tNnmog
+	B+RV1eI4bmY2hiDc83BddPe7Xk02Je9dT2EMr
+X-Google-Smtp-Source: AGHT+IHytdC7v7Vx7sLFDUTdLyz9HH4/B980RlTrZABliOPKZSD4E6pDWhlNI6pqEZujcxK31LaEVTdzhieo1tJYP+0=
+X-Received: by 2002:a17:906:394b:b0:a43:6146:a4df with SMTP id
+ g11-20020a170906394b00b00a436146a4dfmr7667230eje.21.1709668820535; Tue, 05
+ Mar 2024 12:00:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240304225156.24765-1-eddyz87@gmail.com> <20240304225156.24765-12-eddyz87@gmail.com>
-In-Reply-To: <20240304225156.24765-12-eddyz87@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 5 Mar 2024 11:55:24 -0800
-Message-ID: <CAEf4BzY6FokZYmNgGh=q5+icLxJ2p5Z9S6UxTC2AdJ4qz6==mA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 11/15] libbpf: struct_ops in
- SEC("?.struct_ops") and SEC("?.struct_ops.link")
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
-	yonghong.song@linux.dev, void@manifault.com, sinquersw@gmail.com
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-6-almasrymina@google.com> <5e2f9342-4ee9-4b30-9dcf-393e57e0f7c6@app.fastmail.com>
+In-Reply-To: <5e2f9342-4ee9-4b30-9dcf-393e57e0f7c6@app.fastmail.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 5 Mar 2024 12:00:08 -0800
+Message-ID: <CAHS8izPhvRDPVHr8mY2FffPCLYjKqaazjy5NFcnJSnLK+CdyCA@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf to netdevice
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	Linux-Arch <linux-arch@vger.kernel.org>, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, shuah <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 4, 2024 at 2:52=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com>=
- wrote:
+On Tue, Mar 5, 2024 at 1:05=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> Allow using two new section names for struct_ops maps:
-> - SEC("?.struct_ops")
-> - SEC("?.struct_ops.link")
+> On Tue, Mar 5, 2024, at 03:01, Mina Almasry wrote:
 >
-> To specify maps that have bpf_map->autocreate =3D=3D false after open.
+> > +int netdev_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+> > +                    struct netdev_dmabuf_binding **out)
+> > +{
+> > +     struct netdev_dmabuf_binding *binding;
+> > +     static u32 id_alloc_next;
+> > +     struct scatterlist *sg;
+> > +     struct dma_buf *dmabuf;
+> > +     unsigned int sg_idx, i;
+> > +     unsigned long virtual;
+> > +     int err;
+> > +
+> > +     if (!capable(CAP_NET_ADMIN))
+> > +             return -EPERM;
+> > +
+> > +     dmabuf =3D dma_buf_get(dmabuf_fd);
+> > +     if (IS_ERR_OR_NULL(dmabuf))
+> > +             return -EBADFD;
 >
-> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-> ---
->  tools/lib/bpf/libbpf.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
->
-
-Please check that patch subject is <80, and perhaps shorten it a bit?
-
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 4ef3902e65db..c0212244bdf7 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -497,6 +497,8 @@ struct bpf_struct_ops {
->  #define KSYMS_SEC ".ksyms"
->  #define STRUCT_OPS_SEC ".struct_ops"
->  #define STRUCT_OPS_LINK_SEC ".struct_ops.link"
-> +#define OPT_STRUCT_OPS_SEC "?.struct_ops"
-> +#define OPT_STRUCT_OPS_LINK_SEC "?.struct_ops.link"
+> You should never need to use IS_ERR_OR_NULL() for a properly
+> defined kernel interface. This one should always return an
+> error or a valid pointer, so don't check for NULL.
 >
 
-I wouldn't do this, see below
+Thanks for clarifying. I will convert to IS_ERR().
 
-
->  enum libbpf_map_type {
->         LIBBPF_MAP_UNSPEC,
-> @@ -1324,6 +1326,15 @@ static int init_struct_ops_maps(struct bpf_object =
-*obj, const char *sec_name,
->                         return -ENOMEM;
->                 map->btf_value_type_id =3D type_id;
+> > +     binding->attachment =3D dma_buf_attach(binding->dmabuf, dev->dev.=
+parent);
+> > +     if (IS_ERR(binding->attachment)) {
+> > +             err =3D PTR_ERR(binding->attachment);
+> > +             goto err_free_id;
+> > +     }
+> > +
+> > +     binding->sgt =3D
+> > +             dma_buf_map_attachment(binding->attachment, DMA_BIDIRECTI=
+ONAL);
+> > +     if (IS_ERR(binding->sgt)) {
+> > +             err =3D PTR_ERR(binding->sgt);
+> > +             goto err_detach;
+> > +     }
 >
-> +               /* Follow same convention as for programs autoload:
-> +                * SEC("?.struct_ops") means map is not created by defaul=
-t.
-> +                */
-> +               if (sec_name[0] =3D=3D '?') {
-> +                       map->autocreate =3D false;
-> +                       /* from now on forget there was ? in section name=
- */
-> +                       sec_name++;
-> +               }
-> +
->                 map->def.type =3D BPF_MAP_TYPE_STRUCT_OPS;
->                 map->def.key_size =3D sizeof(int);
->                 map->def.value_size =3D type->size;
-> @@ -3688,7 +3699,9 @@ static int bpf_object__elf_collect(struct bpf_objec=
-t *obj)
->                                 sec_desc->shdr =3D sh;
->                                 sec_desc->data =3D data;
->                         } else if (strcmp(name, STRUCT_OPS_SEC) =3D=3D 0 =
-||
-> -                                  strcmp(name, STRUCT_OPS_LINK_SEC) =3D=
-=3D 0) {
-> +                                  strcmp(name, STRUCT_OPS_LINK_SEC) =3D=
-=3D 0 ||
-> +                                  strcmp(name, OPT_STRUCT_OPS_SEC) =3D=
-=3D 0 ||
-> +                                  strcmp(name, OPT_STRUCT_OPS_LINK_SEC) =
-=3D=3D 0) {
-
-I'd do just
-
-strcmp(name, "?" STRUCT_OPS_SEC) =3D=3D 0 ||
-strcmp(name, "?" STRUCT_OPS_LINK_SEC) =3D=3D 0 ||
-
-
->                                 sec_desc->sec_type =3D SEC_ST_OPS;
->                                 sec_desc->shdr =3D sh;
->                                 sec_desc->data =3D data;
-> @@ -3708,6 +3721,8 @@ static int bpf_object__elf_collect(struct bpf_objec=
-t *obj)
->                         if (!section_have_execinstr(obj, targ_sec_idx) &&
->                             strcmp(name, ".rel" STRUCT_OPS_SEC) &&
->                             strcmp(name, ".rel" STRUCT_OPS_LINK_SEC) &&
-> +                           strcmp(name, ".rel" OPT_STRUCT_OPS_SEC) &&
-> +                           strcmp(name, ".rel" OPT_STRUCT_OPS_LINK_SEC) =
-&&
-
-and similarly here, just use ".rel?" ?
-
->                             strcmp(name, ".rel" MAPS_ELF_SEC)) {
->                                 pr_info("elf: skipping relo section(%d) %=
-s for section(%d) %s\n",
->                                         idx, name, targ_sec_idx,
-> --
-> 2.43.0
+> Should there be a check to verify that this buffer
+> is suitable for network data?
 >
+> In general, dmabuf allows buffers that are uncached or reside
+> in MMIO space of another device, but I think this would break
+> when you get an skb with those buffers and try to parse the
+> data inside of the kernel on architectures where MMIO space
+> is not a normal pointer or unaligned access is disallowed on
+> uncached data.
+>
+>         Arnd
+
+A key goal of this patch series is that the kernel does not try to
+parse the skb frags that reside in the dma-buf for that precise
+reason. This is achieved using patch "net: add support for skbs with
+unreadable frags" which disables the kernel touching the payload in
+these skbs, and "tcp: RX path for devmem TCP" which implements a uapi
+where the kernel hands the data in the dmabuf to the userspace via a
+cmsg that gives the user a pointer to the data in the dmabuf (offset +
+size).
+
+So really AFACT the only restriction here is that the NIC should be
+able to DMA into the dmabuf that we're attaching, and dma_buf_attach()
+fails in this scenario so we're covered there.
+
+--=20
+Thanks,
+Mina
