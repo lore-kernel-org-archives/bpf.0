@@ -1,91 +1,82 @@
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A97A8662F
-	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 15:51:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C34F38F5B;
+	Tue,  5 Mar 2024 16:43:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709653897; cv=none; b=R3TWRMzUQ4iD5x6qckqp/TFQN5sy+O5Qyx9smWEjIlvygdBV3O71upuwmFgE5/npzHVZy+7kQPLqxVvzjo7hkzqHDyBn2IUz5g5zNsJIgYeZpg1Wjc2bw+HBnpAS4cZGF4ALdQqMR14WH8YyWbWv9r1IUOQOV/twPbZYO/RyYHo=
+	t=1709657012; cv=none; b=X68p7wibkvE/hUveQ5awlHkDZLs2P/u+qKI9ncDNYr0kB+/YSKczUX/EokaDIfo7BMr4APiel/ror0uOdtgOA1cSOoGpuJw/5ucDMcu4hhM4B9xJn75cioJKllftoMmX+Ks0t+679eHWDlbfPjf0N7nukGjzQvxlVjKTFjvpdds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709653897; c=relaxed/simple;
-	bh=EMd8D9x6LCJyMVuR6HjE7h11goOGadOV9XpnSjsIMz4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TDpKSTic27nVrm0N/4PQTdBQsQEXLwjrO0vXiFQhBe9iHL4imfp95yG6keBmydu7uG9avSIJNHX195E2B9YZAlqsKqF0BFTq21tmqS+sRxc3wLDbS8RfeUnExo+A9Q+LLNBHJb2BKl8NiFVyN6mDc8n9r6ehaqNMyNtvMs/MClI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Tq0RG6Yktz4f3lfp
-	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 23:51:22 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 691E61A016E
-	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 23:51:30 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP4 (Coremail) with SMTP id gCh0CgAHW22BP+dlaK+BGA--.23259S2;
-	Tue, 05 Mar 2024 23:51:30 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: linux-riscv@lists.infradead.org,
-	bpf@vger.kernel.org
-Cc: Atish Patra <atishp@atishpatra.org>,
-	Anup Patel <anup@brainfault.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Pu Lehui <pulehui@huawei.com>,
-	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH] drivers/perf: riscv: Disable PERF_SAMPLE_BRANCH_* while not supported
-Date: Tue,  5 Mar 2024 15:52:23 +0000
-Message-Id: <20240305155223.1823287-1-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1709657012; c=relaxed/simple;
+	bh=P6nN8nYe2p11CQet9y+FM78XpoJb0cF9rQOnA6XJi5w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d71LcvihVRxahcH+qQUvxdnJcbD7MzTcJ8RhRtrA/ppSEUtkGnZgFiPIur/zNKqhSKqb71U4DvXOwAF78k4aYkOPn156L7Y3lkvGUNPWw6zUbjznN7KFmGCLeDOq0HpQcuG46gs/6S3K2S56BaHSgMZkQoK9wWSLQZIhNE7x6Fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=mhUL2ny0; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="mhUL2ny0"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+	In-Reply-To:References; bh=PVFgwp/QdjijP88eb7vICgQD/i/Cph89zRHBxuPxLkQ=; b=mh
+	UL2ny02+IbdPCp6v1dKZFbBjeeeQDV3sgFlQePTH9Xj1Qf5l727zlZQk/V3XqUZ9h3vfqXUS37Aq2
+	kADHFM6R/J8U4GCObrUHbjmWU8PnlkVpr2vG9qt4EJbrkoFskDQSB9PQblK4sHK+FqBJ8+7mKNzmg
+	ZHYTg3rHDi3vRR0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1rhXtH-009RlL-BZ; Tue, 05 Mar 2024 17:43:43 +0100
+Date: Tue, 5 Mar 2024 17:43:43 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Julien Panis <jpanis@baylibre.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v2 2/2] net: ethernet: ti: am65-cpsw: Add minimal XDP
+ support
+Message-ID: <ff4ba8c9-8a34-41c3-92ed-910e46e1ca99@lunn.ch>
+References: <20240223-am65-cpsw-xdp-basic-v2-0-01c6caacabb6@baylibre.com>
+ <20240223-am65-cpsw-xdp-basic-v2-2-01c6caacabb6@baylibre.com>
+ <356f4dd4-eb0e-49fa-a9eb-4dffbe5c7e7c@lunn.ch>
+ <3a5f3950-e47f-409a-b881-0c8545778b91@baylibre.com>
+ <be16d069-062e-489d-b8e9-19ef3ef90029@lunn.ch>
+ <f0a9524a-08cd-4ec2-89f8-4dff9dd3e09e@baylibre.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgAHW22BP+dlaK+BGA--.23259S2
-X-Coremail-Antispam: 1UD129KBjvdXoWruF4UJr47Xr1UWFWDCr18Grg_yoWfGwb_Ca
-	47WFZrKr98Jas0q3yUAwn5urW5t3sYvas5ZFn2g347Ars7Jwn5u3y2vrW7t34UXF47ZF93
-	tFs5WryxXrZxKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbwkFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-	Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
-	1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
-	cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
-	ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vIr41l
-	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
-	AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
-	cVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI
-	8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
-	wI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+In-Reply-To: <f0a9524a-08cd-4ec2-89f8-4dff9dd3e09e@baylibre.com>
 
-From: Pu Lehui <pulehui@huawei.com>
+> 3) From 2), am65_cpsw_alloc_skb() function removed and replaced by
+> netdev_alloc_skb_ip_align(), as used by the driver before -> res = 506
+> Conclusion: Here is where the loss comes from.
+> IOW, My am65_cpsw_alloc_skb() function is not good.
+> 
+> Initially, I mainly created this 'custom' am65_cpsw_alloc_skb() function
+> because I thought that none of XDP memory models could be used along
+> with netdev_alloc_skb_ip_align() function. Was I wrong ?
+> By creating this custom am65_cpsw_alloc_skb(), I also wanted to handle
+> the way headroom is reserved differently.
 
-RISC-V perf does not yet support branch sampling. Two riscv bpf
-testcases get_branch_snapshot and perf_branches/perf_branches_hw failed
-due to not disabling such sampling.
+What is special about your device? Why would
+netdev_alloc_skb_ip_align() not work?
 
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- drivers/perf/riscv_pmu.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/perf/riscv_pmu.c b/drivers/perf/riscv_pmu.c
-index c78a6fd6c57f..bc42cb95a97c 100644
---- a/drivers/perf/riscv_pmu.c
-+++ b/drivers/perf/riscv_pmu.c
-@@ -313,6 +313,10 @@ static int riscv_pmu_event_init(struct perf_event *event)
- 	u64 event_config = 0;
- 	uint64_t cmask;
- 
-+	/* does not support taken branch sampling */
-+	if (has_branch_stack(event))
-+		return -EOPNOTSUPP;
-+
- 	hwc->flags = 0;
- 	mapped_event = rvpmu->event_map(event, &event_config);
- 	if (mapped_event < 0) {
--- 
-2.34.1
-
+	Andrew
