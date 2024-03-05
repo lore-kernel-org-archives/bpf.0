@@ -1,101 +1,178 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF7D43AB0;
-	Tue,  5 Mar 2024 13:28:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E44127B4A
+	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 15:23:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709645321; cv=none; b=iQG/ovB2lVZk0N5rIwWF0IudaiuqE8rt/oxdm8XcwTyT5kVcK8Ly12E6rgC8smZYs1wlCxVqUNoaudxjJHrne/RhCmf+6QnKpognuTc1DgUVXQ0AY7QzPCVflrjJmIc32Ww0dVDMnMgkZDu48pGueTGTtvG5HHGAjBwmX8HoLvU=
+	t=1709652193; cv=none; b=e8F7fn1uDxgd6eMHGetMyx02qL577In9F0dUXkFW4M59eB1Kd1iguG4sHEX3Va5WkpkW5b9ZQ9xVFmo4xuaoHOfEwyqN4f8GG6RudOG9jGDY3EMqrDd9KZhn8vChDxPkkKloCM0/PRjVY9ABHt+4mDYvZ6sU9NNibFX/WORfycg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709645321; c=relaxed/simple;
-	bh=9nHBU801rt03QXGVs4K6yWHFgU//kmL7q1mSOjCjtSc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kWqqNaeOQly6QjYj9M5M/lkkTZN2WDpbVpCeMy5to7yjHww8nVlsYl5s6eznTonBNl60vr0wTtYaDwCyetmhgcLPy6QeUkyb3/FphHvs2TyYrE9C6pEqC5VoAb3c1itQhYy/dKq8ykbg9zlqaoCzRZX70hcvUQkZmtPzMeZqRMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=fcCvJcgA; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	s=arc-20240116; t=1709652193; c=relaxed/simple;
+	bh=p3hGpTjqSBNSUbgAYqrLgi23lxEARPBl57o/KtA6x3U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Kyj3nX6LDbpqM6KHZhHkOviyiLbcv0y7ZfQSofWWqzIIphJ1DEkYvHkC/RRyvUCq7qo6IxitY3HbcmATxgcoqqunyQEg7t5TRSjELEKW4YjTL35vXblqndKOaukWtlarTkob/i0sAa/oPC2Ph1Ypwn5JOCBTu6Eu0vU1POoPKt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vahedi.org; spf=pass smtp.mailfrom=vahedi.org; dkim=pass (2048-bit key) header.d=vahedi.org header.i=@vahedi.org header.b=DY3irVRl; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vahedi.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vahedi.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="fcCvJcgA"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=2o5mFGZCvQCk7WKP/xRNSu+/KpBgcWlkfRQoWTuInbY=; b=fcCvJcgAkcMcQFOc4nYDR/Yzhv
-	Y8IiVBCtwKjUMpOh02072azemJ8Sb6tC/SVw+f74ahwPgdczkKF8WJ9UMCYkcOVxYnaoVgZ6Z3Jwt
-	iiS6/PoKPPutlUHIT5TpgkIpdugZ8H0BsYpd3BejSVa4AjBYvnRK+kDjUeDZosHHJi3Q=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1rhUqi-009Qae-FR; Tue, 05 Mar 2024 14:28:52 +0100
-Date: Tue, 5 Mar 2024 14:28:52 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Julien Panis <jpanis@baylibre.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v2 2/2] net: ethernet: ti: am65-cpsw: Add minimal XDP
- support
-Message-ID: <be16d069-062e-489d-b8e9-19ef3ef90029@lunn.ch>
-References: <20240223-am65-cpsw-xdp-basic-v2-0-01c6caacabb6@baylibre.com>
- <20240223-am65-cpsw-xdp-basic-v2-2-01c6caacabb6@baylibre.com>
- <356f4dd4-eb0e-49fa-a9eb-4dffbe5c7e7c@lunn.ch>
- <3a5f3950-e47f-409a-b881-0c8545778b91@baylibre.com>
+	dkim=pass (2048-bit key) header.d=vahedi.org header.i=@vahedi.org header.b="DY3irVRl"
+Message-ID: <6e4cf7cc-6a2e-4396-b0d5-01ff10d6923a@vahedi.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vahedi.org; s=key1;
+	t=1709652184;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IhJfKoroaIk49x7q064rqPyouK8pXJKorErLZG4KbU0=;
+	b=DY3irVRliVu4roXRXLoyLsNXxsyZkRYgFHF4555aErIqR2hX6YkvCUo1XCkWixFM747KtS
+	4X2ugxNRC7xw/uyglx4iy/dJ5/vavemapaMdhd4ftYzgoxzCJwCS1k4X19f8dznvD5xjJJ
+	fZ/GCDdjshIF+D4CSKL6SURKxG459IN3cIZQZ51zvaZ2w7rR1Oq7UVY0R1AlQwAS7NFFbz
+	zlq7/OEJnHuYxYxvh6AHrWaqzRazhmCHwg3u6m5uVl7bxI+C+OJ++IX5WqLmqLxTQXY76k
+	J9L0EaYX476cxEMWzXzQJGJJl0AHb0YB3MHhDP+vxMt7LH3Wl2QZ2FBVGFUJSg==
+Date: Tue, 5 Mar 2024 16:22:58 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3a5f3950-e47f-409a-b881-0c8545778b91@baylibre.com>
+Subject: Re: [PATCH bpf-next v1] ARC: Add eBPF JIT support
+To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc: bpf@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ Shahab Vahedi <list+bpf@vahedi.org>, Vineet Gupta <vgupta@kernel.org>
+References: <20240213131946.32068-1-list+bpf@vahedi.org>
+ <87ttlnqlmv.fsf@all.your.base.are.belong.to.us>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Shahab Vahedi <list+bpf@vahedi.org>
+In-Reply-To: <87ttlnqlmv.fsf@all.your.base.are.belong.to.us>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Mar 05, 2024 at 11:46:00AM +0100, Julien Panis wrote:
-> On 3/1/24 17:38, Andrew Lunn wrote:
-> > On Fri, Mar 01, 2024 at 04:02:53PM +0100, Julien Panis wrote:
-> > > This patch adds XDP (eXpress Data Path) support to TI AM65 CPSW
-> > > Ethernet driver. The following features are implemented:
-> > > - NETDEV_XDP_ACT_BASIC (XDP_PASS, XDP_TX, XDP_DROP, XDP_ABORTED)
-> > > - NETDEV_XDP_ACT_REDIRECT (XDP_REDIRECT)
-> > > - NETDEV_XDP_ACT_NDO_XMIT (ndo_xdp_xmit callback)
-> > > 
-> > > The page pool memory model is used to get better performance.
-> > Do you have any benchmark numbers? It should help with none XDP
-> > traffic as well. So maybe iperf numbers before and after?
-> > 
-> > 	Andrew
+Hi Björn,
+
+Thank you very much for your inputs. Please find my remarks below.
+
+Björn Töpel <bjorn@kernel.org> writes:
+
+> Shahab Vahedi <list+bpf@vahedi.org> writes:
 > 
-> Argh...Houston, we have a problem. I checked my v3, which is ready for
-> submission, with iperf3:
-> 1) Before = without page pool -> 500 MBits/sec
-> 2) After = with page pool -> 442 MBits/sec
-> -> ~ 10% worse with page pool here.
+> What's the easiest way to test test this w/o ARC HW? Is there a qemu
+> port avaiable?
+
+Yes, there is a (downstream) port available on GitHub [1]. If one is
+interested, there are also guides about building QEMU for ARC targets [2]
+and how to run eBPF tests for ARC Linux [3].
+
+[1] ARC QEMU port
+https://github.com/foss-for-synopsys-dwc-arc-processors/qemu
+
+[2] Building ARC QEMU
+https://foss-for-synopsys-dwc-arc-processors.github.io/experimental-documentation/2023.09/simulators/qemu/
+
+[3] Runing eBPF tests for ARC Linux
+https://foss-for-synopsys-dwc-arc-processors.github.io/experimental-documentation/2023.09/linux/ebpf/build/
+
+> I don't know much about ARC -- Is v2 compatible with v3?
+
+No, they're not. For what it's worth, ARCv3 comes in {32,64}-bit
+flavours which are not compatible with each other either.
+
+> I'm curious about the missing support; tailcall/atomic/division/extable
+> support. Would it require a lot of work to add that support in the
+> initial change set?
+
+If you're asking whether it is possible that I add those features now,
+my answer unfortunately would be "no". However, the way that things
+are implemented, it will be a straightforward addition.
+
+> There are a lot of checkpatch/kernel style issues. Run, e.g.,
+> "checkpatch --strict -g HEAD" and you'll get a bunch of issues. Most of
+> them are just basic style issues. Please try to fix most of them for the
+> next rev.
+
+I did run the "checkpatch" before submitting. I've fixed all the "errors"
+and most of the "warnings". But now that you brought it up, I will try to
+fix as many "warnings"/"checks" as make sense.
+
+> You should add yourself to the MAINTAINERS file.
+
+I will. Thanks!
+
+> Please try to avoid static inline in the C-files. The compiler usually
+> knows better.
+
+I will replace them with "static" then.
+
+> > +/* Sane initial values for the globals */
+> > +bool emit = true;
+> > +bool zext_thyself = true;
 > 
-> Unless the difference is not due to page pool. Maybe there's something else
-> which is not good in my patch. I'm going to send the v3 which uses page pool,
-> hopefully someone will find out something suspicious. Meanwhile, I'll carry on
-> investigating: I'll check the results with my patch, by removing only the using of
-> page pool.
+> Hmm, this is racy. Can we move this into the jit context? Also, is
+> zext_thyself even used?
 
-You can also go the other way. First add page pool support. For the
-FEC, that improved its performance. Then add XDP, which i think
-decreased the performance a little. It is extra processing in the hot
-path, so a little loss is not unsurprising.
+I will get rid of those. For the record, "zext_thyself" is used by
+calling "zext()" after handling "BPF_ALU" operations.
 
-What tends to be expensive with ARM is cache invalidation and
-flush. So make sure you have the lengths correct. You don't want to
-operate on more memory than necessary. No point flushing the full MTU
-for a 64 byte TCP ACK, etc.
+> > +#define CHECK_RET(cmd)			\
+> > +	do {				\
+> > +		ret = (cmd);		\
+> > +		if (ret < 0)		\
+> > +			return ret;	\
+> > +	} while (0)
+> > +
+> 
+> Nit/personal taste, but I prefer not having these kind of macros. I
+> think it makes it harder to read the code.
 
-      Andrew
+At some point, I found myself distracted from seeing the bigger picture
+while the code was interspersed by the menial "return checking"s. If
+you don't mind, I'd rather keep it as is, unless you feel strong about
+it or Vineet also agrees with you.
+
+> Care to elaborate a bit more on ARC_BPF_JIT_DEBUG. This smells of
+> duplicated funtionality with bpf_jit_dump(), and the BUG()s are scary.
+
+ARC_BPF_JIT_DEBUG is supposed to be enabled for development purposes.
+It enables:
+
+1. A set of assert-like condition checking which makes the code
+slow and can lead to ungraceful terminations.
+
+2. Use of a custom version of hex dumps. The most important difference
+with bpf_jit_dump() is that bpf_jit_dump() cannot be used for dumping
+the input BPF byte stream. Rest, I can live with. An example follows:
+
+Using only "bpf_jit_dump" (ARC_BPF_JIT_DEBUG is not defined)
+
+  flen=2 proglen=20 pass=1 image=2e8c6fb9 from=hello pid=127
+  JIT code: 00000000: 8a 20 00 10 8a 21 00 10 0a 20 00 02 0a 21 40 02
+  JIT code: 00000010: e0 20 c0 07
+
+vs.
+
+Using the custom version (ARC_BPF_JIT_DEBUG is defined)
+  -----------------[  VM   ]-----------------
+  0xb7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+  0x95, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+  -----------------[ JIT:1 ]-----------------
+  0x8a, 0x20, 0x00, 0x10, 0x8a, 0x21, 0x00, 0x10
+  0x0a, 0x20, 0x00, 0x02, 0x0a, 0x21, 0x40, 0x02
+  0xe0, 0x20, 0xc0, 0x07
+
+> > +static int jit_ctx_init(struct jit_context *ctx, struct bpf_prog *prog)
+> > +{
+> > +   ...
+> 
+> I'd just make sure that ctx is zeroed, and init the non-zero members here.
+
+Very good point! I will implement it that way.
+
+If you have read this far, I'd like to thank you again for spending time
+on reviewing this patch. It is much appreciated.
+
+
+Cheers,
+Shahab
+
