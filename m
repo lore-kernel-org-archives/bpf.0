@@ -1,245 +1,516 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB4028BFB
-	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 00:55:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A542179A8
+	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 02:01:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709600148; cv=none; b=q2UmTsI0NYJe809higT7/hu/GpdKSKIhP5CUhvYnbbl9c1o3+b+VOWLBz9k8srmntuFcT7SxAlKTx4jubIYYufyeXfu3vwxNaSTmmRRa+x7EkYekQSoKdTsDe0nmq0XwozxN/TxVyE9viD+GhHtZvLG102+aENHSetO1Hg9wFtg=
+	t=1709604122; cv=none; b=JD4rvzGXWkMz848PphOpDQtx6+70f227oUbjiVWhDRpjJfm3W1z0uutWmqTi6jZfbNWBgYhCyPOziUsSxnnIizq5qF5bbu7Ym+EnOzX4mUFMGaNV98AcWK8OxkkNBFCSS+o7i6MfZd+mJw27cvRAuc9HZBfgs6qPkymTExeCjyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709600148; c=relaxed/simple;
-	bh=kaJRHz+miQdFJRCW81j9OztIQ7vbDSTwsL2yiqJU9nM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GiVRazqo8Yt0oW/gcLxywMQPQxz+ZwPisaHvJ7pW9Dd2umQDNLpd3Vhkx3mSmcxRWyFPIZWqIAg453AufOfNuHDdYTufgDj/asIICtGDlBlhmu8wHPRLl6qj1ZCYgmHPNbQajX62M9SzcBcyVfu+Ws/xCwGwK36JgV9pf6GKqtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K+oKXKNK; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709604122; c=relaxed/simple;
+	bh=5SJCpvoT4gZvZaTMx89Ghuq+/9NUs5gsmK3PbeWX42Y=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Imm9o4JbNHj/yWRusESUBjnWbSgvxcy1liRB8LHh92wtLZx389pzkRtoKBCp2+MbuoFBfYGvtCyUI0Hyb7VDW7a5m5cOwbz9/slXZBtwQ+TN9ZcmbIgOySBuyI5aWone9cwxNEI4hRBwsxM4vDecJEiI24jT8avsYEA4FLIJaR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=34ZrN8xf; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K+oKXKNK"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5d81b08d6f2so4701656a12.0
-        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 16:55:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="34ZrN8xf"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-608e4171382so67824527b3.3
+        for <bpf@vger.kernel.org>; Mon, 04 Mar 2024 18:01:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709600146; x=1710204946; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g011V8PiEAASXZHVO0VZ+fzWEJMv1CB3Z4GHYEGhcBQ=;
-        b=K+oKXKNKEHNoSGBUEHPI1KmlhiBmnz56oGAf9T6yHrc3NuNKPLI5Yloe0Rbr8X0YWA
-         yySr9GTrzuQXAApVlr8YBQkJwXHwROaJ4R6UqFKmcQePb9HdO6KsD+aoRx0Wtmh2jQ+A
-         0l5EGeok8fL+anF7nTeKXCm5zdCGqJMQ+UplIDy0xfS+oR+5WOZso4nk1YUoZlTWHij4
-         p7uGZLHgA0sun30wSYQj7ti4iL/1NvTt4BPxB+Q30typ+5YTZc7XDnKSkIEMoHbIdnUy
-         qVWoTH8RrEK09yDvzmeB6Pvy+4ADbD41PrSL8uHvk3cAxBpdpcpwAVxk4fZoFUEyyEz0
-         9dyg==
+        d=google.com; s=20230601; t=1709604117; x=1710208917; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=55SlYXskgAbUC07Ocxvb4GPfka9yxb5WpBWQrml1mno=;
+        b=34ZrN8xfC1aNn9ebckh9Lj67fgvG6ae773KeainKXvBMwapu14aA9leQgVh5fsDy8Z
+         3KBLQFhaoin+n26WL9z5+4wIqcwug6D3+tVWEqlUWz9Nr7qeiNV4JSqEyG2BgO1MRZ5S
+         DVTK1oePmCQkEZHZDTZIWM1UdWkapyFzu0nzABJOhhThkMMQev48f1KQwpER7wesukTU
+         O/VSuU7s+RvbMyadbpQlfbsr15XmqUS1C0ivwmGU/LRlHELyYuNyJoYDxH/1gzWerToK
+         MtamZdOsHCi/4wk3c6IlL8gbVG2HwT6ky8LE2RhzGp/7HCpLVcV4d4E8sKorWbXTo1z8
+         iWmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709600146; x=1710204946;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g011V8PiEAASXZHVO0VZ+fzWEJMv1CB3Z4GHYEGhcBQ=;
-        b=mBduCr0tHH3sRDXYiC5ug2PO1AZJEaBXxFEoM/nSOvXM0lvwzx2HpzniFvYMbae3wj
-         JnEjiSnajwz5jHKrBCaSH6Ag6qXVpYJnmrcYnHRdICcaDyWbT9CyJ1fJoHOzSXwGqn7b
-         OYhFylo6AK4iONodpznBYMgzIHpCs2O+bCrXNy4o1xXsnv0b3u4tkV/9cLua3HycvFOt
-         g+/u2Sz9ew4l6QggDxUUxOQd76S+7I3cjClboqYe7ovhjKVGqlU0QyFD63MeG4uNsNbl
-         XwQHKMFmKdEuTJQdN57v1koAoNMTUbhTe9tUhBZYVn9UbhxmlUsnvV3xbPyb/Wg75E6a
-         FH8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXVUuuNN2+C1fIRPZJdNxcIpQvag/RNVVd4X3Mzjnrrl9XA1wRNdP/OKBFfto0xQyD6+kNV5jY1qA4D9HF5IAmliCTJ
-X-Gm-Message-State: AOJu0YzBECvVDXnl4AThhEz6LvbcTYE30FFpoPrOKr/67uZTCMP/j6f3
-	xL6rkl3dtb9cNZJX5K9XRSp0I/I99jH/s27lqlEURpDyzI0h1IZUaFlJj0zxVLfe9qU2rQtf4Qe
-	/gvvFjiVRu0DZJQz1H4Ib5s961CCUrCzlQHs=
-X-Google-Smtp-Source: AGHT+IGeFprd5EhpmMb7eRHyhLFE6Nytti0bqmMN59enLOhoknmz6w+VXF9alZG7CSPt/LQdSnLwA+BlXfZYXf19ne0=
-X-Received: by 2002:a05:6a21:9988:b0:1a1:5059:b221 with SMTP id
- ve8-20020a056a21998800b001a15059b221mr455635pzb.1.1709600146103; Mon, 04 Mar
- 2024 16:55:46 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709604117; x=1710208917;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=55SlYXskgAbUC07Ocxvb4GPfka9yxb5WpBWQrml1mno=;
+        b=ZJdcX5iQNPA42sGt7JFUQS0DzDRqqAAA4pQIwQUro7OQsqPLdb0rvJY7U/0xCu9E9Z
+         Guc2A3hFrPM/WamnaaT2fPFTOjEL2VO5iIykpMM0xX0G41knyk0ZqZDsa1M8FebgAYqm
+         tnm4yJRWB1JlTd3UNsSDqoE++jrCd0VWviV9+g5VAdITUlGndJI7/NQHjSqZEWayAPDq
+         iaTu44qpW/QOsSbTdziUhR+w85Xb+8GGqsykp3CjIq9qJ61VbAnB9vUW2lD9K4LizID1
+         HM+jJUtPXbWgg4iCG6lyovBky5haCzcJodwpwqpz4BrPgeNJKUKfk1O5KNY0xvGvVib0
+         tHpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVam27iyAquRDPS9DICWeKVQyvSGpDwv9Iabu9PDRAaMDgc+nUh8C8M1Jd8v1Q6BYaRgQwyz8OlpVgjmNJZi26LOpXj
+X-Gm-Message-State: AOJu0YxSJEXd5wASlLOTCoSCEhmpKlHJFklDqWKm8XfVCDLvzovvlN+t
+	Q74SdsWG+yHxBUqIsXqRC4rO8f/GxRNpFTwJ0mmkli6UJziXONuQNS/CFlaDHrhE0ANUtDf/6KA
+	voN5lN6H/DDojoTk3rA0BTQ==
+X-Google-Smtp-Source: AGHT+IGgP9lxCpbwb0hThtM10r7DBqXWOVEk2Uw392R6Iks3K5NMb+79+YKWvZAz/yW3nimazxZaTBRJtMLl6xuDug==
+X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2c4:200:b614:914c:63cd:3830])
+ (user=almasrymina job=sendgmr) by 2002:a25:c794:0:b0:dcb:c2c0:b319 with SMTP
+ id w142-20020a25c794000000b00dcbc2c0b319mr462976ybe.9.1709604117458; Mon, 04
+ Mar 2024 18:01:57 -0800 (PST)
+Date: Mon,  4 Mar 2024 18:01:35 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <ZeCXHKJ--iYYbmLj@krava> <CAEf4Bzbs4toMxw62kVTWNHA7sW-CncamyKHCWynCT0GnG+fOfQ@mail.gmail.com>
- <ZeGPU8FRqwNuUJwd@krava> <CAADnVQKW4Qk55NjaApx1caPDF_pA8f5JZFE12DKA2R8cKWmtcw@mail.gmail.com>
- <CAEf4Bzbv5_yG8S4c22QUXp1FhLZGSSRZS6FFjXfvo=4RdAThZA@mail.gmail.com> <ZeRO9_IiLSy9D7jQ@krava>
-In-Reply-To: <ZeRO9_IiLSy9D7jQ@krava>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 4 Mar 2024 16:55:33 -0800
-Message-ID: <CAEf4BzZQnqjoCc6Y_N3Wu4eMpioqgZC04QrTujgyiYMMRpG3Nw@mail.gmail.com>
-Subject: Re: [LSF/MM/BPF TOPIC] faster uprobes
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, yunwei356@gmail.com, 
-	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	lsf-pc <lsf-pc@lists.linux-foundation.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Oleg Nesterov <oleg@redhat.com>, Daniel Borkmann <daniel@iogearbox.net>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.rc1.240.g4c46232300-goog
+Message-ID: <20240305020153.2787423-1-almasrymina@google.com>
+Subject: [RFC PATCH net-next v6 00/15] Device Memory TCP
+From: Mina Almasry <almasrymina@google.com>
+To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org
+Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, 
+	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, 
+	David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 3, 2024 at 2:20=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrote=
-:
->
-> On Fri, Mar 01, 2024 at 09:26:57AM -0800, Andrii Nakryiko wrote:
-> > On Fri, Mar 1, 2024 at 9:01=E2=80=AFAM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Fri, Mar 1, 2024 at 12:18=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com=
-> wrote:
-> > > >
-> > > > On Thu, Feb 29, 2024 at 04:25:17PM -0800, Andrii Nakryiko wrote:
-> > > > > On Thu, Feb 29, 2024 at 6:39=E2=80=AFAM Jiri Olsa <olsajiri@gmail=
-.com> wrote:
-> > > > > >
-> > > > > > One of uprobe pain points is having slow execution that involve=
-s
-> > > > > > two traps in worst case scenario or single trap if the original
-> > > > > > instruction can be emulated. For return uprobes there's one ext=
-ra
-> > > > > > trap on top of that.
-> > > > > >
-> > > > > > My current idea on how to make this faster is to follow the opt=
-imized
-> > > > > > kprobes and replace the normal uprobe trap instruction with jum=
-p to
-> > > > > > user space trampoline that:
-> > > > > >
-> > > > > >   - executes syscall to call uprobe consumers callbacks
-> > > > >
-> > > > > Did you get a chance to measure relative performance of syscall v=
-s
-> > > > > int3 interrupt handling? If not, do you think you'll be able to g=
-et
-> > > > > some numbers by the time the conference starts? This should infor=
-m the
-> > > > > decision whether it even makes sense to go through all the troubl=
-e.
-> > > >
-> > > > right, will do that
-> > >
-> > > I believe Yusheng measured syscall vs uprobe performance
-> > > difference during LPC. iirc it was something like 3x.
-> >
-> > Do you have a link to slides? Was it actual uprobe vs just some fast
-> > syscall (not doing BPF program execution) comparison? Or comparing the
-> > performance of int3 handling vs equivalent syscall handling.
-> >
-> > I suspect it's the former, and so probably not that representative.
-> > I'm curious about the performance of going
-> > userspace->kernel->userspace through int3 vs syscall (all other things
-> > being equal).
->
-> I have a simple test [1] comparing:
->   - uprobe with 2 traps
->   - uprobe with 1 trap
->   - syscall executing uprobe
->
-> the syscall takes uprobe address as argument, finds the uprobe and execut=
-es
-> its consumers, which should be comparable to what the trampoline will do
->
-> test does same amount of loops triggering each uprobe type and measures
-> the time it took
->
->   # ./test_progs -t uprobe_syscall_bench -v
->   bpf_testmod.ko is already unloaded.
->   Loading bpf_testmod.ko...
->   Successfully loaded bpf_testmod.ko.
->   test_bench_1:PASS:uprobe_bench__open_and_load 0 nsec
->   test_bench_1:PASS:uprobe_bench__attach 0 nsec
->   test_bench_1:PASS:uprobe1_cnt 0 nsec
->   test_bench_1:PASS:syscalls_uprobe1_cnt 0 nsec
->   test_bench_1:PASS:uprobe2_cnt 0 nsec
->   test_bench_1: uprobes (1 trap) in  36.439s
->   test_bench_1: uprobes (2 trap) in  91.960s
->   test_bench_1: syscalls         in  17.872s
->   #395/1   uprobe_syscall_bench/bench_1:OK
->   #395     uprobe_syscall_bench:OK
->   Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
->
-> syscall uprobe execution seems to be ~2x faster than 1 trap uprobe
-> and ~5x faster than 2 traps uprobe
->
+RFC v6:
+=3D=3D=3D=3D=3D=3D=3D
 
-Thanks for running benchmarks! I quickly looked at the selftest and
-noticed this:
+Major Changes:
+--------------
 
-+/*
-+ * Assuming following prolog:
-+ *
-+ * 6984ac:       55                      push   %rbp
-+ * 6984ad:       48 89 e5                mov    %rsp,%rbp
-+ */
-+noinline void uprobe2_bench_trigger(void)
-+{
-+        asm volatile ("");
-+}
+This revision largely rebases on top of net-next and addresses the little
+feedback RFCv5 received.
 
-This actually will be optimized out to just ret in -O2 mode (make
-RELEASE=3D1 for selftests):
+The series remains in RFC because the queue-API ndos defined in this
+series are not yet implemented. I have a GVE implementation I carry out
+of tree for my testing. A upstreamable GVE implementation is in the
+works. Aside from that, in my estimation all the patches are ready for
+review/merge. Please do take a look.
 
-00000000005a0ce0 <uprobe2_bench_trigger>:
-  5a0ce0: c3                            retq
-  5a0ce1: 66 66 2e 0f 1f 84 00 00 00 00 00      nopw    %cs:(%rax,%rax)
-  5a0cec: 0f 1f 40 00                   nopl    (%rax)
+As usual the full devmem TCP changes including the full GVE driver
+implementation is here:
 
-So be careful with that.
+https://github.com/mina/linux/commits/tcpdevmem-v6/
 
-Also, I just updated our existing set of uprobe benchmarks (see [0]),
-do you mind adding your syscall-based one as another one there and
-running all of them and sharing the numbers with us? Very curious to
-see both absolute and relative numbers from that benchmark. (and
-please do build with RELEASE=3D1)
+This version also comes with some performance data recorded in the cover
+letter (see below changelog).
 
-You should be able to just run benchs/run_bench_uprobes.sh (also don't
-forget to add your syscall-based benchmark to the list of benchmarks
-in that shell script).
+Detailed changelog:
 
-Thank you!
+- Rebased on top of the merged netmem_ref changes.
+
+- Converted skb->dmabuf to skb->readable (Pavel). Pavel's original
+  suggestion was to remove the skb->dmabuf flag entirely, but when I
+  looked into it closely, I found the issue that if we remove the flag
+  we have to dereference the shinfo(skb) pointer to obtain the first
+  frag to tell whether an skb is readable or not. This can cause a
+  performance regression if it dirties the cache line when the
+  shinfo(skb) was not really needed. Instead, I converted the skb->dmabuf
+  flag into a generic skb->readable flag which can be re-used by io_uring
+  0-copy RX.
+
+- Squashed a few locking optimizations from Eric Dumazet in the RX path
+  and the DEVMEM_DONTNEED setsockopt.
+
+- Expanded the tests a bit. Added validation for invalid scenarios and
+  added some more coverage.
+
+Perf - page-pool benchmark:
+---------------------------
+
+bench_page_pool_simple.ko tests with and without these changes:
+https://pastebin.com/raw/ncHDwAbn
+
+AFAIK the number that really matters in the perf tests is the
+'tasklet_page_pool01_fast_path Per elem'. This one measures at about 8
+cycles without the changes but there is some 1 cycle noise in some
+results.
+
+With the patches this regresses to 9 cycles with the changes but there
+is 1 cycle noise occasionally running this test repeatedly.
+
+Lastly I tried disable the static_branch_unlikely() in
+netmem_is_net_iov() check. To my surprise disabling the
+static_branch_unlikely() check reduces the fast path back to 8 cycles,
+but the 1 cycle noise remains.
+
+Perf - Devmem TCP benchmark:
+---------------------
+
+189/200gbps bi-directional throughput with RX devmem TCP and regular TCP
+TX i.e. ~95% line rate.
+
+Major changes in RFC v5:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+1. Rebased on top of 'Abstract page from net stack' series and used the
+   new netmem type to refer to LSB set pointers instead of re-using
+   struct page.
+
+2. Downgraded this series back to RFC and called it RFC v5. This is
+   because this series is now dependent on 'Abstract page from net
+   stack'[1] and the queue API. Both are removed from the series to
+   reduce the patch # and those bits are fairly independent or
+   pre-requisite work.
+
+3. Reworked the page_pool devmem support to use netmem and for some
+   more unified handling.
+
+4. Reworked the reference counting of net_iov (renamed from
+   page_pool_iov) to use pp_ref_count for refcounting.
+
+The full changes including the dependent series and GVE page pool
+support is here:
+
+https://github.com/mina/linux/commits/tcpdevmem-rfcv5/
+
+[1] https://patchwork.kernel.org/project/netdevbpf/list/?series=3D810774
+
+Major changes in v1:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+1. Implemented MVP queue API ndos to remove the userspace-visible
+   driver reset.
+
+2. Fixed issues in the napi_pp_put_page() devmem frag unref path.
+
+3. Removed RFC tag.
+
+Many smaller addressed comments across all the patches (patches have
+individual change log).
+
+Full tree including the rest of the GVE driver changes:
+https://github.com/mina/linux/commits/tcpdevmem-v1
+
+Changes in RFC v3:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+1. Pulled in the memory-provider dependency from Jakub's RFC[1] to make the
+   series reviewable and mergeable.
+
+2. Implemented multi-rx-queue binding which was a todo in v2.
+
+3. Fix to cmsg handling.
+
+The sticking point in RFC v2[2] was the device reset required to refill
+the device rx-queues after the dmabuf bind/unbind. The solution
+suggested as I understand is a subset of the per-queue management ops
+Jakub suggested or similar:
+
+https://lore.kernel.org/netdev/20230815171638.4c057dcd@kernel.org/
+
+This is not addressed in this revision, because:
+
+1. This point was discussed at netconf & netdev and there is openness to
+   using the current approach of requiring a device reset.
+
+2. Implementing individual queue resetting seems to be difficult for my
+   test bed with GVE. My prototype to test this ran into issues with the
+   rx-queues not coming back up properly if reset individually. At the
+   moment I'm unsure if it's a mistake in the POC or a genuine issue in
+   the virtualization stack behind GVE, which currently doesn't test
+   individual rx-queue restart.
+
+3. Our usecases are not bothered by requiring a device reset to refill
+   the buffer queues, and we'd like to support NICs that run into this
+   limitation with resetting individual queues.
+
+My thought is that drivers that have trouble with per-queue configs can
+use the support in this series, while drivers that support new netdev
+ops to reset individual queues can automatically reset the queue as
+part of the dma-buf bind/unbind.
+
+The same approach with device resets is presented again for consideration
+with other sticking points addressed.
+
+This proposal includes the rx devmem path only proposed for merge. For a
+snapshot of my entire tree which includes the GVE POC page pool support &
+device memory support:
+
+https://github.com/torvalds/linux/compare/master...mina:linux:tcpdevmem-v3
+
+[1] https://lore.kernel.org/netdev/f8270765-a27b-6ccf-33ea-cda097168d79@red=
+hat.com/T/
+[2] https://lore.kernel.org/netdev/CAHS8izOVJGJH5WF68OsRWFKJid1_huzzUK+hpKb=
+LcL4pSOD1Jw@mail.gmail.com/T/
+
+Changes in RFC v2:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+The sticking point in RFC v1[1] was the dma-buf pages approach we used to
+deliver the device memory to the TCP stack. RFC v2 is a proof-of-concept
+that attempts to resolve this by implementing scatterlist support in the
+networking stack, such that we can import the dma-buf scatterlist
+directly. This is the approach proposed at a high level here[2].
+
+Detailed changes:
+1. Replaced dma-buf pages approach with importing scatterlist into the
+   page pool.
+2. Replace the dma-buf pages centric API with a netlink API.
+3. Removed the TX path implementation - there is no issue with
+   implementing the TX path with scatterlist approach, but leaving
+   out the TX path makes it easier to review.
+4. Functionality is tested with this proposal, but I have not conducted
+   perf testing yet. I'm not sure there are regressions, but I removed
+   perf claims from the cover letter until they can be re-confirmed.
+5. Added Signed-off-by: contributors to the implementation.
+6. Fixed some bugs with the RX path since RFC v1.
+
+Any feedback welcome, but specifically the biggest pending questions
+needing feedback IMO are:
+
+1. Feedback on the scatterlist-based approach in general.
+2. Netlink API (Patch 1 & 2).
+3. Approach to handle all the drivers that expect to receive pages from
+   the page pool (Patch 6).
+
+[1] https://lore.kernel.org/netdev/dfe4bae7-13a0-3c5d-d671-f61b375cb0b4@gma=
+il.com/T/
+[2] https://lore.kernel.org/netdev/CAHS8izPm6XRS54LdCDZVd0C75tA1zHSu6jLVO8n=
+zTLXCc=3DH7Nw@mail.gmail.com/
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+* TL;DR:
+
+Device memory TCP (devmem TCP) is a proposal for transferring data to and/o=
+r
+from device memory efficiently, without bouncing the data to a host memory
+buffer.
+
+* Problem:
+
+A large amount of data transfers have device memory as the source and/or
+destination. Accelerators drastically increased the volume of such transfer=
+s.
+Some examples include:
+- ML accelerators transferring large amounts of training data from storage =
+into
+  GPU/TPU memory. In some cases ML training setup time can be as long as 50=
+% of
+  TPU compute time, improving data transfer throughput & efficiency can hel=
+p
+  improving GPU/TPU utilization.
+
+- Distributed training, where ML accelerators, such as GPUs on different ho=
+sts,
+  exchange data among them.
+
+- Distributed raw block storage applications transfer large amounts of data=
+ with
+  remote SSDs, much of this data does not require host processing.
+
+Today, the majority of the Device-to-Device data transfers the network are
+implemented as the following low level operations: Device-to-Host copy,
+Host-to-Host network transfer, and Host-to-Device copy.
+
+The implementation is suboptimal, especially for bulk data transfers, and c=
+an
+put significant strains on system resources, such as host memory bandwidth,
+PCIe bandwidth, etc. One important reason behind the current state is the
+kernel=E2=80=99s lack of semantics to express device to network transfers.
+
+* Proposal:
+
+In this patch series we attempt to optimize this use case by implementing
+socket APIs that enable the user to:
+
+1. send device memory across the network directly, and
+2. receive incoming network packets directly into device memory.
+
+Packet _payloads_ go directly from the NIC to device memory for receive and=
+ from
+device memory to NIC for transmit.
+Packet _headers_ go to/from host memory and are processed by the TCP/IP sta=
+ck
+normally. The NIC _must_ support header split to achieve this.
+
+Advantages:
+
+- Alleviate host memory bandwidth pressure, compared to existing
+ network-transfer + device-copy semantics.
+
+- Alleviate PCIe BW pressure, by limiting data transfer to the lowest level
+  of the PCIe tree, compared to traditional path which sends data through t=
+he
+  root complex.
+
+* Patch overview:
+
+** Part 1: netlink API
+
+Gives user ability to bind dma-buf to an RX queue.
+
+** Part 2: scatterlist support
+
+Currently the standard for device memory sharing is DMABUF, which doesn't
+generate struct pages. On the other hand, networking stack (skbs, drivers, =
+and
+page pool) operate on pages. We have 2 options:
+
+1. Generate struct pages for dmabuf device memory, or,
+2. Modify the networking stack to process scatterlist.
+
+Approach #1 was attempted in RFC v1. RFC v2 implements approach #2.
+
+** part 3: page pool support
+
+We piggy back on page pool memory providers proposal:
+https://github.com/kuba-moo/linux/tree/pp-providers
+
+It allows the page pool to define a memory provider that provides the
+page allocation and freeing. It helps abstract most of the device memory
+TCP changes from the driver.
+
+** part 4: support for unreadable skb frags
+
+Page pool iovs are not accessible by the host; we implement changes
+throughput the networking stack to correctly handle skbs with unreadable
+frags.
+
+** Part 5: recvmsg() APIs
+
+We define user APIs for the user to send and receive device memory.
+
+Not included with this series is the GVE devmem TCP support, just to
+simplify the review. Code available here if desired:
+https://github.com/mina/linux/tree/tcpdevmem
+
+This series is built on top of net-next with Jakub's pp-providers changes
+cherry-picked.
+
+* NIC dependencies:
+
+1. (strict) Devmem TCP require the NIC to support header split, i.e. the
+   capability to split incoming packets into a header + payload and to put
+   each into a separate buffer. Devmem TCP works by using device memory
+   for the packet payload, and host memory for the packet headers.
+
+2. (optional) Devmem TCP works better with flow steering support & RSS supp=
+ort,
+   i.e. the NIC's ability to steer flows into certain rx queues. This allow=
+s the
+   sysadmin to enable devmem TCP on a subset of the rx queues, and steer
+   devmem TCP traffic onto these queues and non devmem TCP elsewhere.
+
+The NIC I have access to with these properties is the GVE with DQO support
+running in Google Cloud, but any NIC that supports these features would suf=
+fice.
+I may be able to help reviewers bring up devmem TCP on their NICs.
+
+* Testing:
+
+The series includes a udmabuf kselftest that show a simple use case of
+devmem TCP and validates the entire data path end to end without
+a dependency on a specific dmabuf provider.
+
+** Test Setup
+
+Kernel: net-next with this series and memory provider API cherry-picked
+locally.
+
+Hardware: Google Cloud A3 VMs.
+
+NIC: GVE with header split & RSS & flow steering support.
+
+Cc: Pavel Begunkov <asml.silence@gmail.com>
+Cc: David Wei <dw@davidwei.uk>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Yunsheng Lin <linyunsheng@huawei.com>
+Cc: Shailend Chand <shailend@google.com>
+Cc: Harshitha Ramamurthy <hramamurthy@google.com>
+Cc: Shakeel Butt <shakeelb@google.com>
+Cc: Jeroen de Borst <jeroendb@google.com>
+Cc: Praveen Kaligineedi <pkaligineedi@google.com>
 
 
-BTW, while I think patching multiple instructions for syscall-based
-uprobe is going to be extremely tricky, I think at least u*ret*probe's
-int3 can be pretty easily optimized away with syscall, given that the
-kernel controls code generation there. If anything, it will get the
-uretprobe case a bit closer to the performance of uprobe. Give it some
-thought.
+Jakub Kicinski (1):
+  net: page_pool: create hooks for custom page providers
 
+Mina Almasry (14):
+  queue_api: define queue api
+  net: page_pool: factor out page_pool recycle check
+  net: netdev netlink api to bind dma-buf to a net device
+  netdev: support binding dma-buf to netdevice
+  netdev: netdevice devmem allocator
+  page_pool: convert to use netmem
+  page_pool: devmem support
+  memory-provider: dmabuf devmem memory provider
+  net: support non paged skb frags
+  net: add support for skbs with unreadable frags
+  tcp: RX path for devmem TCP
+  net: add SO_DEVMEM_DONTNEED setsockopt to release RX frags
+  net: add devmem TCP documentation
+  selftests: add ncdevmem, netcat for devmem TCP
 
-  [0] https://patchwork.kernel.org/project/netdevbpf/patch/20240301214551.1=
-686095-1-andrii@kernel.org/
+ Documentation/netlink/specs/netdev.yaml |  52 +++
+ Documentation/networking/devmem.rst     | 271 ++++++++++++
+ Documentation/networking/index.rst      |   1 +
+ arch/alpha/include/uapi/asm/socket.h    |   6 +
+ arch/mips/include/uapi/asm/socket.h     |   6 +
+ arch/parisc/include/uapi/asm/socket.h   |   6 +
+ arch/sparc/include/uapi/asm/socket.h    |   6 +
+ include/linux/netdevice.h               |  24 ++
+ include/linux/skbuff.h                  |  67 ++-
+ include/linux/socket.h                  |   1 +
+ include/net/devmem.h                    | 127 ++++++
+ include/net/netdev_rx_queue.h           |   1 +
+ include/net/netmem.h                    | 234 +++++++++-
+ include/net/page_pool/helpers.h         | 154 +++++--
+ include/net/page_pool/types.h           |  28 +-
+ include/net/sock.h                      |   2 +
+ include/net/tcp.h                       |   5 +-
+ include/trace/events/page_pool.h        |  29 +-
+ include/uapi/asm-generic/socket.h       |   6 +
+ include/uapi/linux/netdev.h             |  19 +
+ include/uapi/linux/uio.h                |  14 +
+ net/bpf/test_run.c                      |   5 +-
+ net/core/Makefile                       |   2 +-
+ net/core/datagram.c                     |   6 +
+ net/core/dev.c                          |   6 +-
+ net/core/devmem.c                       | 413 ++++++++++++++++++
+ net/core/gro.c                          |   7 +-
+ net/core/netdev-genl-gen.c              |  19 +
+ net/core/netdev-genl-gen.h              |   2 +
+ net/core/netdev-genl.c                  | 123 ++++++
+ net/core/page_pool.c                    | 362 +++++++++-------
+ net/core/skbuff.c                       | 110 ++++-
+ net/core/sock.c                         |  61 +++
+ net/ipv4/tcp.c                          | 257 ++++++++++-
+ net/ipv4/tcp_input.c                    |  13 +-
+ net/ipv4/tcp_ipv4.c                     |   9 +
+ net/ipv4/tcp_output.c                   |   5 +-
+ net/packet/af_packet.c                  |   4 +-
+ tools/include/uapi/linux/netdev.h       |  19 +
+ tools/testing/selftests/net/.gitignore  |   1 +
+ tools/testing/selftests/net/Makefile    |   5 +
+ tools/testing/selftests/net/ncdevmem.c  | 546 ++++++++++++++++++++++++
+ 42 files changed, 2764 insertions(+), 270 deletions(-)
+ create mode 100644 Documentation/networking/devmem.rst
+ create mode 100644 include/net/devmem.h
+ create mode 100644 net/core/devmem.c
+ create mode 100644 tools/testing/selftests/net/ncdevmem.c
 
-> jirka
->
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/log/?h=
-=3Duprobe_syscall_bench
->
-> >
-> > > Certainly necessary to have a benchmark.
-> > > selftests/bpf/bench has one for uprobe.
-> > > Probably should extend with sys_bpf.
-> > >
-> > > Regarding:
-> > > > replace the normal uprobe trap instruction with jump to
-> > > user space trampoline
-> > >
-> > > it should probably be a call to trampoline instead of a jump.
-> > > Unless you plan to generate a different trampoline for every location=
- ?
-> > >
-> > > Also how would you pick a space for a trampoline in the target proces=
-s ?
-> > > Analyze /proc/pid/maps and look for gaps in executable sections?
-> >
-> > kernel already does that for uretprobes, it adds a new "[uprobes]"
-> > memory mapping, so this part is already implemented
-> >
-> > >
-> > > We can start simple with a USDT that uses nop5 instead of nop1
-> > > and explicit single trampoline for all USDT locations
-> > > that saves all (callee and caller saved) registers and
-> > > then does sys_bpf with a new cmd.
-> > >
-> > > To replace nop5 with a call to trampoline we can use text_poke_bp
-> > > approach: replace 1st byte with int3, replace 2-5 with target addr,
-> > > replace 1st byte to make an actual call insn.
-> > >
-> > > Once patched there will be no simulation of insns or kernel traps.
-> > > Just normal user code that calls into trampoline, that calls sys_bpf,
-> > > and returns back.
+--=20
+2.44.0.rc1.240.g4c46232300-goog
+
