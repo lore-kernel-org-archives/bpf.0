@@ -1,184 +1,201 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D8724C637;
-	Tue,  5 Mar 2024 07:28:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2107E59C
+	for <bpf@vger.kernel.org>; Tue,  5 Mar 2024 07:40:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709623724; cv=none; b=px9uVeSPDHWnGslzQm0Z60CVuJVJAWus07E7ZUw4jKBrY5lBU+VkWTyvEzZeBC6YDtV+9G8wEjmwXpZ4k40nT6Fg/bRDpQxRuTU+B8b51RGoh72VCv1BTk1fbwVfdLlPRybkqlYbwoFfazG2t92FyL861AeeEyDtqIzpriluGQY=
+	t=1709624450; cv=none; b=aiJ161XlasQ2kot0mbuNVABfCEGusJ78umLMGftIwE+dLT2s921fdzPYDk1bN58yXm+TrNmW/t9OZ6NspI8UoMmzn1AaDUN1zH81oNzqh/kIqyhVhut0CVH1c4AtEcmYg02JEl6vwc6qi9oIfNZQjsM2hBr4L37xP4eH3OOQ1zw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709623724; c=relaxed/simple;
-	bh=0CSkO4V5DXVEFBREqHoKNNDYXRtYsWIaR34aGSPoS2E=;
+	s=arc-20240116; t=1709624450; c=relaxed/simple;
+	bh=DNIEX4gwHPS+t9otwZT0rXbKmVHXDqZRCb/chYD7uww=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NumHkZvafMGAJe5u0FdmfMreBzLC34wKBgIoe9z1j969leRbwX6YtpWSY+IuWf2wQKlPwWluVhKygoTUW3q8+RuTiZpytj9J/Fug06vuj+6rlwalXdyFMV+ztizQg6sNNSDcoBv4UQ9+qGkyW1ny13emQ5vzuVcizoutY2CulIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MMG+DDAL; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 In-Reply-To:Content-Type; b=L422rLW0y7sKBbIVKawvdPHWGHvYPWALxATd5eIpg3nkomfVsGvW3AlB4Du815NR97gYf/4PViwyTpOcdZMUqosrX1ALgV9+xm4UK95lYKRkNhJb6TbAFTwUy7f+RZN5N/fAET4VgecBeLIX1BSkRFdadzhKsaOFspBQb636BMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o9mMjdjf; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MMG+DDAL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709623723; x=1741159723;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0CSkO4V5DXVEFBREqHoKNNDYXRtYsWIaR34aGSPoS2E=;
-  b=MMG+DDAL4fU9Tt78ThCfvcslTxakcTS97uFkQ/pN9HR7oueeLdAB+2ig
-   8ROLH6aoF3qKF7CICnUhwGTlw5b11TUkF/EIMo2KGdxTSBHvhyklKaCr+
-   u2ORCHyJfPVlyB7waLYj7l32PBp0g321T04HEMEF8OisT1ui52wUZt1dt
-   RrqfbeehIBk7v1XhuLwZ4cDbSCsiNGQS+BMC4qo+BjPHgH6fofmWu+8MR
-   ajgpr48yx5ySJbNyvbS9tQePe3H92XaFdmxjdlAhToJXHyAY+J8aNu2/K
-   eXixJ+/fzYQR/WZYZl62Ly7VYp3pRZq67BA0hXs0U6ShRsR3Yoy3tgXob
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11003"; a="15585538"
-X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
-   d="scan'208";a="15585538"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 23:28:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
-   d="scan'208";a="9354222"
-Received: from agoll-mobl.ger.corp.intel.com (HELO [10.245.176.64]) ([10.245.176.64])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 23:28:37 -0800
-Message-ID: <76621a84-d5c5-40c2-ac51-db0ec57be472@linux.intel.com>
-Date: Tue, 5 Mar 2024 09:28:34 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o9mMjdjf"
+Message-ID: <496c78b7-4e16-42eb-a2f4-99472cd764fd@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1709624446;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sMOvK/9p/X/KCj3g12ZTFtVD7hChAjvPBa5aFBCrAck=;
+	b=o9mMjdjfCA5tvzCQsNrXGYRq1nEirUkuBxxzoGoA4GYVhMV56ya9Q7lHYIRKvi4vFNcjjX
+	Z9CKdBFQxDDfNQtRR8rlhJN4ijYXd9G96zda0QNiW00BgAjbLTPBeuz9CiLxwKA7+toWhQ
+	pgQHGA2rYKXFy1Xm6fJ6UAx+CFKVtB4=
+Date: Mon, 4 Mar 2024 23:40:34 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Intel-wired-lan] [PATCH net 1/1] igc: avoid returning frame
- twice in XDP_REDIRECT
-To: Florian Kauer <florian.kauer@linutronix.de>,
- Jesse Brandeburg <jesse.brandeburg@intel.com>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Jithu Joseph <jithu.joseph@intel.com>, Andre Guedes
- <andre.guedes@intel.com>, Vedang Patel <vedang.patel@intel.com>
-Cc: netdev@vger.kernel.org, kurt@linutronix.de, linux-kernel@vger.kernel.org,
- intel-wired-lan@lists.osuosl.org, bpf@vger.kernel.org
-References: <20240219090843.9307-1-florian.kauer@linutronix.de>
+Subject: Re: [PATCH net-next v12 14/15] p4tc: add set of P4TC table kfuncs
 Content-Language: en-US
-From: "naamax.meir" <naamax.meir@linux.intel.com>
-In-Reply-To: <20240219090843.9307-1-florian.kauer@linutronix.de>
+To: Jamal Hadi Salim <jhs@mojatatu.com>
+Cc: deb.chatterjee@intel.com, anjali.singhai@intel.com,
+ namrata.limaye@intel.com, tom@sipanda.io, mleitner@redhat.com,
+ Mahesh.Shirshyad@amd.com, Vipin.Jain@amd.com, tomasz.osinski@intel.com,
+ jiri@resnulli.us, xiyou.wangcong@gmail.com, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, vladbu@nvidia.com,
+ horms@kernel.org, khalidm@nvidia.com, toke@redhat.com, daniel@iogearbox.net,
+ victor@mojatatu.com, pctammela@mojatatu.com, bpf@vger.kernel.org,
+ netdev@vger.kernel.org
+References: <20240225165447.156954-1-jhs@mojatatu.com>
+ <20240225165447.156954-15-jhs@mojatatu.com>
+ <9eff9a51-a945-48f6-9d14-a484b7c0d04c@linux.dev>
+ <CAM0EoMniOaKn4W_WN9rmQZ1JY3qCugn34mmqCy9UdCTAj_tuTQ@mail.gmail.com>
+ <f88b5f65-957e-4b5d-8959-d16e79372658@linux.dev>
+ <CAM0EoMk=igKT5ZEwcfdQqP6O3u8tO7VOpkNsWE1b92ia2eZVpw@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <CAM0EoMk=igKT5ZEwcfdQqP6O3u8tO7VOpkNsWE1b92ia2eZVpw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On 2/19/2024 11:08, Florian Kauer wrote:
-> When a frame can not be transmitted in XDP_REDIRECT
-> (e.g. due to a full queue), it is necessary to free
-> it by calling xdp_return_frame_rx_napi.
-> 
-> However, this is the reponsibility of the caller of
-> the ndo_xdp_xmit (see for example bq_xmit_all in
-> kernel/bpf/devmap.c) and thus calling it inside
-> igc_xdp_xmit (which is the ndo_xdp_xmit of the igc
-> driver) as well will lead to memory corruption.
-> 
-> In fact, bq_xmit_all expects that it can return all
-> frames after the last successfully transmitted one.
-> Therefore, break for the first not transmitted frame,
-> but do not call xdp_return_frame_rx_napi in igc_xdp_xmit.
-> This is equally implemented in other Intel drivers
-> such as the igb.
-> 
-> There are two alternatives to this that were rejected:
-> 1. Return num_frames as all the frames would have been
->     transmitted and release them inside igc_xdp_xmit.
->     While it might work technically, it is not what
->     the return value is meant to repesent (i.e. the
->     number of SUCCESSFULLY transmitted packets).
-> 2. Rework kernel/bpf/devmap.c and all drivers to
->     support non-consecutively dropped packets.
->     Besides being complex, it likely has a negative
->     performance impact without a significant gain
->     since it is anyway unlikely that the next frame
->     can be transmitted if the previous one was dropped.
-> 
-> The memory corruption can be reproduced with
-> the following script which leads to a kernel panic
-> after a few seconds.  It basically generates more
-> traffic than a i225 NIC can transmit and pushes it
-> via XDP_REDIRECT from a virtual interface to the
-> physical interface where frames get dropped.
-> 
->     #!/bin/bash
->     INTERFACE=enp4s0
->     INTERFACE_IDX=`cat /sys/class/net/$INTERFACE/ifindex`
-> 
->     sudo ip link add dev veth1 type veth peer name veth2
->     sudo ip link set up $INTERFACE
->     sudo ip link set up veth1
->     sudo ip link set up veth2
-> 
->     cat << EOF > redirect.bpf.c
-> 
->     SEC("prog")
->     int redirect(struct xdp_md *ctx)
->     {
->         return bpf_redirect($INTERFACE_IDX, 0);
->     }
-> 
->     char _license[] SEC("license") = "GPL";
->     EOF
->     clang -O2 -g -Wall -target bpf -c redirect.bpf.c -o redirect.bpf.o
->     sudo ip link set veth2 xdp obj redirect.bpf.o
-> 
->     cat << EOF > pass.bpf.c
-> 
->     SEC("prog")
->     int pass(struct xdp_md *ctx)
->     {
->         return XDP_PASS;
->     }
-> 
->     char _license[] SEC("license") = "GPL";
->     EOF
->     clang -O2 -g -Wall -target bpf -c pass.bpf.c -o pass.bpf.o
->     sudo ip link set $INTERFACE xdp obj pass.bpf.o
-> 
->     cat << EOF > trafgen.cfg
-> 
->     {
->       /* Ethernet Header */
->       0xe8, 0x6a, 0x64, 0x41, 0xbf, 0x46,
->       0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
->       const16(ETH_P_IP),
-> 
->       /* IPv4 Header */
->       0b01000101, 0,   # IPv4 version, IHL, TOS
->       const16(1028),   # IPv4 total length (UDP length + 20 bytes (IP header))
->       const16(2),      # IPv4 ident
->       0b01000000, 0,   # IPv4 flags, fragmentation off
->       64,              # IPv4 TTL
->       17,              # Protocol UDP
->       csumip(14, 33),  # IPv4 checksum
-> 
->       /* UDP Header */
->       10,  0, 1, 1,    # IP Src - adapt as needed
->       10,  0, 1, 2,    # IP Dest - adapt as needed
->       const16(6666),   # UDP Src Port
->       const16(6666),   # UDP Dest Port
->       const16(1008),   # UDP length (UDP header 8 bytes + payload length)
->       csumudp(14, 34), # UDP checksum
-> 
->       /* Payload */
->       fill('W', 1000),
->     }
->     EOF
-> 
->     sudo trafgen -i trafgen.cfg -b3000MB -o veth1 --cpp
-> 
-> Fixes: 4ff320361092 ("igc: Add support for XDP_REDIRECT action")
-> Signed-off-by: Florian Kauer <florian.kauer@linutronix.de>
-> ---
->   drivers/net/ethernet/intel/igc/igc_main.c | 13 ++++++-------
->   1 file changed, 6 insertions(+), 7 deletions(-)
+On 3/3/24 9:20 AM, Jamal Hadi Salim wrote:
 
-Tested-by: Naama Meir <naamax.meir@linux.intel.com>
+>>>>> +#define P4TC_MAX_PARAM_DATA_SIZE 124
+>>>>> +
+>>>>> +struct p4tc_table_entry_act_bpf {
+>>>>> +     u32 act_id;
+>>>>> +     u32 hit:1,
+>>>>> +         is_default_miss_act:1,
+>>>>> +         is_default_hit_act:1;
+>>>>> +     u8 params[P4TC_MAX_PARAM_DATA_SIZE];
+>>>>> +} __packed;
+>>>>> +
+>>>>> +struct p4tc_table_entry_act_bpf_kern {
+>>>>> +     struct rcu_head rcu;
+>>>>> +     struct p4tc_table_entry_act_bpf act_bpf;
+>>>>> +};
+>>>>> +
+>>>>>     struct tcf_p4act {
+>>>>>         struct tc_action common;
+>>>>>         /* Params IDR reference passed during runtime */
+>>>>>         struct tcf_p4act_params __rcu *params;
+>>>>> +     struct p4tc_table_entry_act_bpf_kern __rcu *act_bpf;
+>>>>>         u32 p_id;
+>>>>>         u32 act_id;
+>>>>>         struct list_head node;
+>>>>> @@ -24,4 +40,39 @@ struct tcf_p4act {
+>>>>>
+>>>>>     #define to_p4act(a) ((struct tcf_p4act *)a)
+>>>>>
+>>>>> +static inline struct p4tc_table_entry_act_bpf *
+>>>>> +p4tc_table_entry_act_bpf(struct tc_action *action)
+>>>>> +{
+>>>>> +     struct p4tc_table_entry_act_bpf_kern *act_bpf;
+>>>>> +     struct tcf_p4act *p4act = to_p4act(action);
+>>>>> +
+>>>>> +     act_bpf = rcu_dereference(p4act->act_bpf);
+>>>>> +
+>>>>> +     return &act_bpf->act_bpf;
+>>>>> +}
+>>>>> +
+>>>>> +static inline int
+>>>>> +p4tc_table_entry_act_bpf_change_flags(struct tc_action *action, u32 hit,
+>>>>> +                                   u32 dflt_miss, u32 dflt_hit)
+>>>>> +{
+>>>>> +     struct p4tc_table_entry_act_bpf_kern *act_bpf, *act_bpf_old;
+>>>>> +     struct tcf_p4act *p4act = to_p4act(action);
+>>>>> +
+>>>>> +     act_bpf = kzalloc(sizeof(*act_bpf), GFP_KERNEL);
+>>>>
+>>>>
+>>>> [ ... ]
+
+
+>>>>> +static int
+>>>>> +__bpf_p4tc_entry_create(struct net *net,
+>>>>> +                     struct p4tc_table_entry_create_bpf_params *params,
+>>>>> +                     void *key, const u32 key__sz,
+>>>>> +                     struct p4tc_table_entry_act_bpf *act_bpf)
+>>>>> +{
+>>>>> +     struct p4tc_table_entry_key *entry_key = key;
+>>>>> +     struct p4tc_pipeline *pipeline;
+>>>>> +     struct p4tc_table *table;
+>>>>> +
+>>>>> +     if (!params || !key)
+>>>>> +             return -EINVAL;
+>>>>> +     if (key__sz != P4TC_ENTRY_KEY_SZ_BYTES(entry_key->keysz))
+>>>>> +             return -EINVAL;
+>>>>> +
+>>>>> +     pipeline = p4tc_pipeline_find_byid(net, params->pipeid);
+>>>>> +     if (!pipeline)
+>>>>> +             return -ENOENT;
+>>>>> +
+>>>>> +     table = p4tc_tbl_cache_lookup(net, params->pipeid, params->tblid);
+>>>>> +     if (!table)
+>>>>> +             return -ENOENT;
+>>>>> +
+>>>>> +     if (entry_key->keysz != table->tbl_keysz)
+>>>>> +             return -EINVAL;
+>>>>> +
+>>>>> +     return p4tc_table_entry_create_bpf(pipeline, table, entry_key, act_bpf,
+>>>>> +                                        params->profile_id);
+>>>>
+>>>> My understanding is this kfunc will allocate a "struct
+>>>> p4tc_table_entry_act_bpf_kern" object. If the bpf_p4tc_entry_delete() kfunc is
+>>>> never called and the bpf prog is unloaded, how the act_bpf object will be
+>>>> cleaned up?
+>>>>
+>>>
+>>> The TC code takes care of this. Unloading the bpf prog does not affect
+>>> the deletion, it is the TC control side that will take care of it. If
+>>> we delete the pipeline otoh then not just this entry but all entries
+>>> will be flushed.
+>>
+>> It looks like the "struct p4tc_table_entry_act_bpf_kern" object is allocated by
+>> the bpf prog through kfunc and will only be useful for the bpf prog but not
+>> other parts of the kernel. However, if the bpf prog is unloaded, these bpf
+>> specific objects will be left over in the kernel until the tc pipeline (where
+>> the act_bpf_kern object resided) is gone.
+>>
+>> It is the expectation on bpf prog (not only tc/xdp bpf prog) about resources
+>> clean up that these bpf objects will be gone after unloading the bpf prog and
+>> unpinning its bpf map.
+>>
+> 
+> The table (residing on the TC side) could be shared by multiple bpf
+> programs. Entries are allocated on the TC side of the fence.
+
+
+> IOW, the memory is not owned by the bpf prog but rather by pipeline.
+
+The struct p4tc_table_entry_act_(bpf_kern) object is allocated by 
+bpf_p4tc_entry_create() kfunc and only bpf prog can use it, no?
+afaict, this is bpf objects.
+
+> We do have a "whodunnit" field, i.e we keep track of which entity
+> added an entry and we are capable of deleting all entries when we
+> detect a bpf program being deleted (this would be via deleting the tc
+> filter). But my thinking is we should make that a policy decision as
+> opposed to something which is default.
+
+afaik, this policy decision or cleanup upon tc filter delete has not been done 
+yet. I will leave it to you to figure out how to track what was allocated by a 
+particular bpf prog on the TC side. It is not immediately clear to me and I 
+probably won't have a good idea either.
+
+Just to be clear that it is almost certain to be unacceptable to extend and make 
+changes on the bpf side in the future to handle specific resource 
+cleanup/tracking/sharing of the bpf objects allocated by these kfuncs. This 
+problem has already been solved and works for different bpf program types, 
+tc/cgroup/tracing...etc. Adding a refcnted bpf prog pointer alongside the 
+act_bpf_kern object will be a non-starter.
+
+I think multiple people have already commented that these kfuncs 
+(create/update/delete...) resemble the existing bpf map. If these kfuncs are 
+replaced with the bpf map ops, this bpf resource management has already been 
+handled and will be consistent with other bpf program types.
+
+I expect the act_bpf_kern object probably will grow in size over time also.
+Considering this new p4 pipeline and table is residing on the TC side, I will 
+leave it up to others to decide if it is acceptable to have some unused bpf 
+objects left attached there.
