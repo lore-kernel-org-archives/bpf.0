@@ -1,133 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 730D21426B;
-	Wed,  6 Mar 2024 12:13:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E72878668;
+	Wed,  6 Mar 2024 12:37:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709727232; cv=none; b=lKYu6fFhS1DftmmGN8PXlPG0xPQHNv8bUsShwN208ubnYJFnHx+HBkpewWCBooHxY0WGv8qgBzZHbXHhpDnsMXMWlKZxcC8eoKXeGKY81kw82DVB02EaGonQxtcrFcRZH/ZpPh8Lg8ybkOWM5Cz4LotSt1ECSkklE0BjukrBfk8=
+	t=1709728667; cv=none; b=QpWkcgKPLc5Q1K5Vk5PO1NrQpp6hpoRlKWCD07ag9VSukTF2BFdyOhkI8znjGh5k8D50wHluq2C7xIQkuZgpMZAaMMdGnP3SLInIC0HzZ8cjE/afjJUh2jRfcay7J2Y8dAeq38TlSbkoomEQiTlUs1rPH9p7CDY+YtTJuU7lpKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709727232; c=relaxed/simple;
-	bh=ojEffb4COaOPiBzIgQj1CiYFBW+nj8u1CS/gHL+DJT0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G9evhu8JuOoq+hhZSBB6a0+ID4b5UTO0FvYCbvGRFkvGl8HOGf25jKNroQBvWLJlisJKd0415ruCC1UaXj8XsLxTn/EyJTthl2dVnvyUI0YSjJAcJR9g6+P/VSZECvNOCtwQAYzz33d3Hd8WVbbu6H5+NrgajNTrroECsnpD+Gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tfcAte4d; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tfcAte4d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3666C433C7;
-	Wed,  6 Mar 2024 12:13:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709727232;
-	bh=ojEffb4COaOPiBzIgQj1CiYFBW+nj8u1CS/gHL+DJT0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tfcAte4dn72KWdp2vtAuJ+7w8w1YEfRjbOHEnfv78OShc8jeqYfZBlPbSJ+c0CDRW
-	 nuVPUbyq7ooGFt14B//PqZjTSwXo8GBNOfojetZF8/i9S3g2l1/tqeXGItK0VTd/1o
-	 yONoPED4zz9FlbSCedDhk1bF/j7MMDalGXJeP/9GlioZYaI0lXy+1h3129EIL/cVMY
-	 rEbrOqf38PC2hLV6GAaDZs0p1/PE7RhwJ+N5/9g16TIqRrvX7LyRZTZI/E0z6i2NDR
-	 vuv4nP7FC2/Fi6ErWLp8lTbPhmfcoUqyP+Jx/9KjQutV0fk0JkR971KoL1Is8UkmTj
-	 rB3otNY+DhqYw==
-Date: Wed, 6 Mar 2024 13:13:46 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Matt Bobrowski <mattbobrowski@google.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	kpsingh@google.com, jannh@google.com, jolsa@kernel.org, daniel@iogearbox.net, 
-	torvalds@linux-foundation.org, linux-fsdevel@vger.kernel.org, 
-	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 bpf-next 0/9] add new acquire/release BPF kfuncs
-Message-ID: <20240306-sandgrube-flora-a61409c2f10c@brauner>
-References: <cover.1709675979.git.mattbobrowski@google.com>
- <20240306-flach-tragbar-b2b3c531bf0d@brauner>
+	s=arc-20240116; t=1709728667; c=relaxed/simple;
+	bh=H4l2DgnqyQlVDiFExqxtFkBp3iqUS/pZqNwziWPDq4U=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=qvMqvTdAUXSIB5KZiE4NvSAoivIkCipYaC+PQnluYCyaSQFfZj7mHmv0ogADWIdAx9G7DoQ+Sf5SgOwTdfhJ2SUXriTHo1/EmwhOPFmmTlCTieztvSc0OrSVo19EYP0PiHliIuFL7FINh7PP/aWg/0RQrsT1fBmRydN9T0Ml+fI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4TqX3L3NVrzNlbl;
+	Wed,  6 Mar 2024 20:35:58 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
+	by mail.maildlp.com (Postfix) with ESMTPS id ABDAC14011F;
+	Wed,  6 Mar 2024 20:37:36 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Wed, 6 Mar
+ 2024 20:37:36 +0800
+Subject: Re: [RFC PATCH net-next v6 00/15] Device Memory TCP
+To: Mina Almasry <almasrymina@google.com>
+CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-alpha@vger.kernel.org>,
+	<linux-mips@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
+	<sparclinux@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-media@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Richard
+ Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
+	<ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+	<James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+	<hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+	<arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
+	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	David Ahern <dsahern@kernel.org>, Willem de Bruijn
+	<willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, Sumit
+ Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=c3=b6nig?=
+	<christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
+ Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Shailend Chand
+	<shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel
+ Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, Praveen
+ Kaligineedi <pkaligineedi@google.com>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <6208950d-6453-e797-7fc3-1dcf15b49dbe@huawei.com>
+ <CAHS8izMwTRyqUS0iRtErfAqDVsXRia5Ajx9PRK3vcfo8utJoUA@mail.gmail.com>
+From: Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <de633244-6d6e-f568-dc09-49b56abd0423@huawei.com>
+Date: Wed, 6 Mar 2024 20:37:35 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240306-flach-tragbar-b2b3c531bf0d@brauner>
+In-Reply-To: <CAHS8izMwTRyqUS0iRtErfAqDVsXRia5Ajx9PRK3vcfo8utJoUA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
 
-On Wed, Mar 06, 2024 at 12:21:28PM +0100, Christian Brauner wrote:
-> On Wed, Mar 06, 2024 at 07:39:14AM +0000, Matt Bobrowski wrote:
-> > G'day All,
-> > 
-> > The original cover letter providing background context and motivating
-> > factors around the needs for the BPF kfuncs introduced within this
-> > patch series can be found here [0], so please do reference that if
-> > need be.
-> > 
-> > Notably, one of the main contention points within v1 of this patch
-> > series was that we were effectively leaning on some preexisting
-> > in-kernel APIs such as get_task_exe_file() and get_mm_exe_file()
-> > within some of the newly introduced BPF kfuncs. As noted in my
-> > response here [1] though, I struggle to understand the technical
-> > reasoning behind why exposing such in-kernel helpers, specifically
-> > only to BPF LSM program types in the form of BPF kfuncs, is inherently
-> > a terrible idea. So, until someone provides me with a sound technical
-> > explanation as to why this cannot or should not be done, I'll continue
-> > to lean on them. The alternative is to reimplement the necessary
-> > in-kernel APIs within the BPF kfuncs, but that's just nonsensical IMO.
+On 2024/3/6 3:38, Mina Almasry wrote:
+> On Tue, Mar 5, 2024 at 4:54 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
+>>
+>> On 2024/3/5 10:01, Mina Almasry wrote:
+>>
+>> ...
+>>
+>>>
+>>> Perf - page-pool benchmark:
+>>> ---------------------------
+>>>
+>>> bench_page_pool_simple.ko tests with and without these changes:
+>>> https://pastebin.com/raw/ncHDwAbn
+>>>
+>>> AFAIK the number that really matters in the perf tests is the
+>>> 'tasklet_page_pool01_fast_path Per elem'. This one measures at about 8
+>>> cycles without the changes but there is some 1 cycle noise in some
+>>> results.
+>>>
+>>> With the patches this regresses to 9 cycles with the changes but there
+>>> is 1 cycle noise occasionally running this test repeatedly.
+>>>
+>>> Lastly I tried disable the static_branch_unlikely() in
+>>> netmem_is_net_iov() check. To my surprise disabling the
+>>> static_branch_unlikely() check reduces the fast path back to 8 cycles,
+>>> but the 1 cycle noise remains.
+>>>
+>>
+>> The last sentence seems to be suggesting the above 1 ns regresses is caused
+>> by the static_branch_unlikely() checking?
 > 
-> You may lean as much as you like. What I've reacted to is that you've
-> (not you specifically, I'm sure) messed up. You've exposed d_path() to
-> users  without understanding that it wasn't safe apparently.
+> Note it's not a 1ns regression, it's looks like maybe a 1 cycle
+> regression (slightly less than 1ns if I'm reading the output of the
+> test correctly):
 > 
-> And now we get patches that use the self-inflicted brokeness as an
-> argument to expose a bunch of other low-level helpers to fix that.
+> # clean net-next
+> time_bench: Type:tasklet_page_pool01_fast_path Per elem: 8 cycles(tsc)
+> 2.993 ns (step:0)
 > 
-> The fact that it's "just bpf LSM" programs doesn't alleviate any
-> concerns whatsoever. Not just because that is just an entry vector but
-> also because we have LSMs induced API abuse that we only ever get to see
-> the fallout from when we refactor apis and then it causes pain for the vfs.
+> # with patches
+> time_bench: Type:tasklet_page_pool01_fast_path Per elem: 9 cycles(tsc)
+> 3.679 ns (step:0)
 > 
-> I'll take another look at the proposed helpers you need as bpf kfuncs
-> and I'll give my best not to be overly annoyed by all of this. I have no
-> intention of not helping you quite the opposite but I'm annoyed that
-> we're here in the first place.
+> # with patches and with diff that disables static branching:
+
+> time_bench: Type:tasklet_page_pool01_fast_path Per elem: 8 cycles(tsc)
+> 3.248 ns (step:0)
 > 
-> What I want is to stop this madness of exposing stuff to users without
-> fully understanding it's semantics and required guarantees.
+> I do see noise in the test results between run and run, and any
+> regression (if any) is slightly obfuscated by the noise, so it's a bit
+> hard to make confident statements. So far it looks like a ~0.25ns
+> regression without static branch and about ~0.65ns with static branch.
+> 
+> Honestly when I saw all 3 results were within some noise I did not
+> investigate more, but if this looks concerning to you I can dig
+> further. I likely need to gather a few test runs to filter out the
+> noise and maybe investigate the assembly my compiler is generating to
+> maybe narrow down what changes there.
 
-So, looking at this series you're now asking us to expose:
+Yes, that is confusing enough that need more investigation.
 
-(1) mmgrab()
-(2) mmput()
-(3) fput()
-(5) get_mm_exe_file()
-(4) get_task_exe_file()
-(7) get_task_fs_pwd()
-(6) get_task_fs_root()
-(8) path_get()
-(9) path_put()
-
-in one go and the justification in all patches amounts to "This is
-common in some BPF LSM programs".
-
-So, broken stuff got exposed to users or at least a broken BPF LSM
-program was written somewhere out there that is susceptible to UAFs
-becauase you didn't restrict bpf_d_path() to trusted pointer arguments.
-So you're now scrambling to fix this by asking for a bunch of low-level
-exports.
-
-What is the guarantee that you don't end up writing another BPF LSM that
-abuses these exports in a way that causes even more issues and then
-someone else comes back asking for the next round of bpf funcs to be
-exposed to fix it.
-
-The difference between a regular LSM asking about this and a BPF LSM
-program is that we can see in the hook implementation what the LSM
-intends to do with this and we can judge whether that's safe or not.
-
-Here you're asking us to do this blindfolded. So I feel we can't really
-ACK a series such as this without actually seeing what is intended to be
-done with all these helpers that you want as kfuncs. Not after the
-previous brokenness.
-
-In any case, you need separate ACKs from mm for the mmgrab()/mmput()
-kfuncs as well.
-
-Because really, all I see immediately supportable is the addition of a
-safe variant of bpf making use of the trusted pointer argument
-constraint:
-
-[PATCH v2 bpf-next 8/9] bpf: add trusted d_path() based BPF kfunc bpf_path_d_path()
+> 
