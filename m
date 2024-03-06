@@ -1,159 +1,264 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69FE3137930
-	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 16:51:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789BE1350CC
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 16:54:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709743894; cv=none; b=kPkEBZpSTghwj5L43TlsG/QD4SPGILvtH2yZoXv64lrCGFtEa5P7mP1SflUFIC8Yby2N1l3/rVVkdwyh2aKps0hDDqQ6HYr7ottbJOPi8W2SdznTZf7Oa8/Uvk4bABm1rvXJtbnwBL3N7ntw+8GaiBUi40mmsDkM+fLRAB3IPfo=
+	t=1709744047; cv=none; b=R/iHGCDxoMZYIqBPdxWLFY+uF2hunWRDmCyg5l6eY4QshkWbL/oXwyN3LZkvXELAUOTE4YjUExveuAP0KHUHedMHH4dC9XfODJNcPa7biatbFwJumpTqIqyQt1a5fZcwBNNU+jmbTgCJ/hrrojBAjixaVs0eVy8N75ujASl4ZBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709743894; c=relaxed/simple;
-	bh=2ZhRIiVOue9t1Wad+eKIOFn2M0PF3k+uzBlQG79ns5E=;
+	s=arc-20240116; t=1709744047; c=relaxed/simple;
+	bh=McwZU4c2Sl+z0GuvkLcYT+tvKQHp48oJn4Z8E/M9d6M=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LjnVzv/TW3nWOr7n7NrZWq5ZriTE4i9cwPpLbkHyWw6ElTdvwoNWbhkDpPc1DiZw09sdKk/Fesijb1Q0DGgVHzHSE2gNAJeyAI/vpcTXW8CMoj0byA8eAtHo9GhHdA7PA9g/XBILQEh5hAxtaMcBykck+6y/5V09VQn41/y2/0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MgZ0KcAS; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=Z7Vj6uBxXGMeYX36q0AMzG4uXu8bLSkzdOTHloGMVF7mEQofAFM6R+6UhRzo1PU/9nXF3sq3rmaAUC1NaQGjtle59Ptafb+S88hziqHRtuW0f8v1QLJe3GnSGx2nQqOxIFdDqzkc2jG7kmLJN8Up7YkH3Yd7wH3/8HrAhDTZduQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DkVpVxqp; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MgZ0KcAS"
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-565b434f90aso10333665a12.3
-        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 08:51:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DkVpVxqp"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-33e4f15710aso1052474f8f.2
+        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 08:54:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709743891; x=1710348691; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709744044; x=1710348844; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fAuNxTfS6x4OQHwyTAR2JW08hPHhuONnAVW1sMtWxI0=;
-        b=MgZ0KcAS7HSS77yVu7xyCeHAcaC/1SdsNfuOebsPKTi47ADSikIPFHFpMVlwAuM3Lq
-         ADh3B8tOCDjS8SO22bC5JH7v38MMF7sGik0mAt/5hJkVIW5AEQmXcFeW9oqhkFytK0rb
-         /Ww9ONL83z+QuBnnhMONLXuuoA7qgm3K0ZfBZvgkcOLzqswyIaukdbQhLb3YNczFfmmx
-         jgRR8h2ZQOpnYgWc7g+WCCi0m0f37F6bezegEtZlxh4cxVcQxJZp/udwbPuqUyp3aK1a
-         0D9N4f04odZmGIVAHEJ6AuB6otT/H7GV6nWXPid/olVyvuohW5SN+xe5wVd+/4rfcXAt
-         PowQ==
+        bh=Se4GiN1HXTq1m+cMhZb5UFy+KTnynNTSn98tlX/0SLw=;
+        b=DkVpVxqpi81z8gvT2RU2qgdzX01RAf4S5IkJ70KcTh/VnbWVoeUWTF4enZQ4WMkdOp
+         7guJlIopbTLUiGjrRc9+Qz+kpcZuBNmDqqoVZmyV+PgmOzSkfm9wJIZJGJejm8Ea/Ca8
+         0EdEpp1IMZDGgtqLVRa2aUgdxjZnQ/SwdkKqtwyAjN962sH3nOmVo7ZNCtw1FSkevVpF
+         Ns//p7E385qJ7BhlhTbS53ymHgB8gXz6sktMhf2mwxb6uOqbFK/XhstTJsYr/BFZmxNj
+         fZTpzxGLdtRcP5ll5KANz8ZcIj9Mdnnrh7d1CqbVIWfwoyl13IGrIdUWbe94Ye/b6KHy
+         h31Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709743891; x=1710348691;
+        d=1e100.net; s=20230601; t=1709744044; x=1710348844;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fAuNxTfS6x4OQHwyTAR2JW08hPHhuONnAVW1sMtWxI0=;
-        b=pM6yqsLipt3Co/kGbJXz6HD9C1zXydGemXkIY0nCgUDEGLZa5W3+RYKB+oTFOh20yq
-         Gh9dOZ728wq1gUd2g51+t0Rvu4JR28rGh5D9lMTFRILuHGwLBWmZ0JEfwkS4kUdFVoPr
-         WKjP4k/yQRtahQU6Z02GTcDxiPhn5w+mW3zMyOtaoDwgY9eBegaHNZk4rrvbnoy4Sxav
-         J3fp2526kifmtB38lwC+jqMLf48w5gBn16LinJqUos+YD21ulpQHry6LYT0lAQ6HoxxS
-         qZbkLyHMV4oOSxoaNnIS9TXfEYhAG08HMIPuzbWGvhDsY8z7dAp2z78AY9YkEPbdVZV/
-         Luhg==
-X-Forwarded-Encrypted: i=1; AJvYcCWtB9LHc2VRHhNAgIkLo1fG07mWJRqQF9FPUrbPoSmL31XqShaV3V7/HYTOwbtABPrS9VCNAwARs/mc/HSOGT7M+cjF
-X-Gm-Message-State: AOJu0YxJ4u08tMCVpYTJkB8VARdX331qgODoFj0scvGjHDn/gLLd9RWe
-	goo9UPk2ZSB0kqtoO2OVRBovZQf/Z9Wps17cdKGYE9/QwREkI0E++TT5oY+TypqWraMuqPOshVT
-	9QSd8kYo3vXXKzfyDqLaRYcTqLZiLGUXGo1MX
-X-Google-Smtp-Source: AGHT+IHrH3y3Ev3rFR65oa9/ga3T2bFvGKoWYUoW9uQPlR8wceBykqCSE0zANfpwXtxsNCt9XtLxrBXjLnroDNOKeBc=
-X-Received: by 2002:a17:906:fc01:b0:a43:f267:789f with SMTP id
- ov1-20020a170906fc0100b00a43f267789fmr10647282ejb.41.1709743890406; Wed, 06
- Mar 2024 08:51:30 -0800 (PST)
+        bh=Se4GiN1HXTq1m+cMhZb5UFy+KTnynNTSn98tlX/0SLw=;
+        b=woQl61cxHcIwOQJWeEKqkNW41RHXt2gf+Pmls7SYGc1M2cQkr1SSc1CH0C3ylUQniE
+         0Cd9iZcbPDdJRu6uGOCLW/ujuCWxLrRNgo/PRQwgqpy08+fZc+eJQhR4vBAEhAPK7Irq
+         aCcVLMGzwIsYKuDdM3cGhvL9i2gMcrV3saCZjU4tqZ1Xt283sHTNy8qF/RaWOtNbtsGO
+         CVd5iyAxQLzeS+A6UhxGBnPEjKalCHicWJRQ+rh+qZ+i1iEGM0bMFsUgLWw1SX4g56L8
+         YkJzOIH+pA3yOgC4tnY9u/nnLSB5To+9cBUEimuxlnhHk60/3mwpnENWJHWpOwlOWh00
+         6zXg==
+X-Forwarded-Encrypted: i=1; AJvYcCXsnJlrRfur9q/BFLLybMSql3ziLs5C5D9U7/izptL72rrettKS47SMXGMlwj8+498gG8tZKazxw1vQ2nRiJWizUsWP
+X-Gm-Message-State: AOJu0YwELCdd6UdW1ATy0PYFwRRLygN3G5cA7Y1AwwfSKyv45J7sZpd1
+	xaot9oPAE0m++tKck3E3DVeFkvZT/IFEemqx4Jj9TNw7lDF+F4h8uSjMdoFnTyYGkfILXkgq53j
+	6KgUJNhs03LUl2i0TruzQ1pAPQPE=
+X-Google-Smtp-Source: AGHT+IHwANhvvTzlrsEeRIrICdvn3DIp1tfbzcIe6nMqHiaMCwE5+5daJP2bz48fSVJe/zno4jPY3LfN9Ph2OyIooeU=
+X-Received: by 2002:adf:e045:0:b0:33e:cc6:8485 with SMTP id
+ w5-20020adfe045000000b0033e0cc68485mr10677706wrh.47.1709744043595; Wed, 06
+ Mar 2024 08:54:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-10-almasrymina@google.com> <383c4870-167f-4123-bbf3-928db1463e01@davidwei.uk>
- <CAHS8izP_PzDJVxycwZe_d_x10-SX4=Q-CWpKTjoOQ5dc2NSn3w@mail.gmail.com> <b85b36bd-7082-47a5-bf46-50cff8eb60be@gmail.com>
-In-Reply-To: <b85b36bd-7082-47a5-bf46-50cff8eb60be@gmail.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 6 Mar 2024 08:51:18 -0800
-Message-ID: <CAHS8izMEJHWAHVjaKu9ZpeWRj1TwoLkmY5tCtDYxdDReBV8=Dw@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v6 09/15] memory-provider: dmabuf devmem
- memory provider
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: David Wei <dw@davidwei.uk>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
-	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240229112250.13723-1-toke@redhat.com> <20240229112250.13723-3-toke@redhat.com>
+ <CAADnVQJTEo8c1=vs8avDakMKYjBopVXKNQ5f=bgrBSqELZhBow@mail.gmail.com>
+ <65e10367cb393_33719208c2@john.notmuch> <878r32b04u.fsf@toke.dk>
+ <CAADnVQLzVJRut0v2dQPbBUDW971Fd-EjkOf0pyLh5-W7wYwiYA@mail.gmail.com>
+ <87plwa6tgv.fsf@toke.dk> <CAADnVQJ=NGbdQXOo=Eu4AG2m=AMJLYF+Gyqh99_YHGy8=EL_Nw@mail.gmail.com>
+ <87ttljtzuo.fsf@toke.dk>
+In-Reply-To: <87ttljtzuo.fsf@toke.dk>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 6 Mar 2024 08:53:52 -0800
+Message-ID: <CAADnVQJgk7oHnwH5qmbKFchpTQSTAc8ByMyx_iA_XYmkL-YNmw@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 2/2] bpf: Fix hashtab overflow check on 32-bit arches
+To: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 6, 2024 at 6:59=E2=80=AFAM Pavel Begunkov <asml.silence@gmail.c=
-om> wrote:
+On Wed, Mar 6, 2024 at 2:32=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen <to=
+ke@redhat.com> wrote:
 >
-> On 3/6/24 02:42, Mina Almasry wrote:
-> > On Tue, Mar 5, 2024 at 6:28=E2=80=AFPM David Wei <dw@davidwei.uk> wrote=
-:
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+>
+> > On Mon, Mar 4, 2024 at 5:02=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen=
+ <toke@redhat.com> wrote:
 > >>
-> >> On 2024-03-04 18:01, Mina Almasry wrote:
-> >>> +     if (pool->p.queue)
-> >>> +             binding =3D READ_ONCE(pool->p.queue->binding);
-> >>> +
-> >>> +     if (binding) {
-> >>> +             pool->mp_ops =3D &dmabuf_devmem_ops;
-> >>> +             pool->mp_priv =3D binding;
-> >>> +     }
+> >> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 > >>
-> >> This is specific to TCP devmem. For ZC Rx we will need something more
-> >> generic to let us pass our own memory provider backend down to the pag=
-e
-> >> pool.
+> >> > On Fri, Mar 1, 2024 at 4:35=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgen=
+sen <toke@redhat.com> wrote:
+> >> >>
+> >> >> John Fastabend <john.fastabend@gmail.com> writes:
+> >> >>
+> >> >> > Alexei Starovoitov wrote:
+> >> >> >> On Thu, Feb 29, 2024 at 3:23=E2=80=AFAM Toke H=C3=B8iland-J=C3=
+=B8rgensen <toke@redhat.com> wrote:
+> >> >> >> >
+> >> >> >> > The hashtab code relies on roundup_pow_of_two() to compute the=
+ number of
+> >> >> >> > hash buckets, and contains an overflow check by checking if th=
+e resulting
+> >> >> >> > value is 0. However, on 32-bit arches, the roundup code itself=
+ can overflow
+> >> >> >> > by doing a 32-bit left-shift of an unsigned long value, which =
+is undefined
+> >> >> >> > behaviour, so it is not guaranteed to truncate neatly. This wa=
+s triggered
+> >> >> >> > by syzbot on the DEVMAP_HASH type, which contains the same che=
+ck, copied
+> >> >> >> > from the hashtab code. So apply the same fix to hashtab, by mo=
+ving the
+> >> >> >> > overflow check to before the roundup.
+> >> >> >> >
+> >> >> >> > The hashtab code also contained a check that prevents the tota=
+l allocation
+> >> >> >> > size for the buckets from overflowing a 32-bit value, but sinc=
+e all the
+> >> >> >> > allocation code uses u64s, this does not really seem to be nec=
+essary, so
+> >> >> >> > drop it and keep only the strict overflow check of the n_bucke=
+ts variable.
+> >> >> >> >
+> >> >> >> > Fixes: daaf427c6ab3 ("bpf: fix arraymap NULL deref and missing=
+ overflow and zero size checks")
+> >> >> >> > Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.c=
+om>
+> >> >> >> > ---
+> >> >> >> >  kernel/bpf/hashtab.c | 10 +++++-----
+> >> >> >> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> >> >> >> >
+> >> >> >> > diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> >> >> >> > index 03a6a2500b6a..4caf8dab18b0 100644
+> >> >> >> > --- a/kernel/bpf/hashtab.c
+> >> >> >> > +++ b/kernel/bpf/hashtab.c
+> >> >> >> > @@ -499,8 +499,6 @@ static struct bpf_map *htab_map_alloc(unio=
+n bpf_attr *attr)
+> >> >> >> >                                                           num_=
+possible_cpus());
+> >> >> >> >         }
+> >> >> >> >
+> >> >> >> > -       /* hash table size must be power of 2 */
+> >> >> >> > -       htab->n_buckets =3D roundup_pow_of_two(htab->map.max_e=
+ntries);
+> >> >> >> >
+> >> >> >> >         htab->elem_size =3D sizeof(struct htab_elem) +
+> >> >> >> >                           round_up(htab->map.key_size, 8);
+> >> >> >> > @@ -510,11 +508,13 @@ static struct bpf_map *htab_map_alloc(un=
+ion bpf_attr *attr)
+> >> >> >> >                 htab->elem_size +=3D round_up(htab->map.value_=
+size, 8);
+> >> >> >> >
+> >> >> >> >         err =3D -E2BIG;
+> >> >> >> > -       /* prevent zero size kmalloc and check for u32 overflo=
+w */
+> >> >> >> > -       if (htab->n_buckets =3D=3D 0 ||
+> >> >> >> > -           htab->n_buckets > U32_MAX / sizeof(struct bucket))
+> >> >> >> > +       /* prevent overflow in roundup below */
+> >> >> >> > +       if (htab->map.max_entries > U32_MAX / 2 + 1)
+> >> >> >> >                 goto free_htab;
+> >> >> >>
+> >> >> >> No. We cannot artificially reduce max_entries that will break re=
+al users.
+> >> >> >> Hash table with 4B elements is not that uncommon.
+> >> >>
+> >> >> Erm, huh? The existing code has the n_buckets > U32_MAX / sizeof(st=
+ruct
+> >> >> bucket) check, which limits max_entries to 134M (0x8000000). This p=
+atch
+> >> >> is *increasing* the maximum allowable size by a factor of 16 (to 2.=
+1B or
+> >> >> 0x80000000).
+> >> >>
+> >> >> > Agree how about return E2BIG in these cases (32bit arch and overf=
+low) and
+> >> >> > let user figure it out. That makes more sense to me.
+> >> >>
+> >> >> Isn't that exactly what this patch does? What am I missing here?
+> >> >
+> >> > I see. Then what are you fixing?
+> >> > roundup_pow_of_two() will return 0 and existing code is fine as-is.
 > >>
-> >> What about storing ops and priv void ptr in struct netdev_rx_queue
-> >> instead? Then we can both use it.
+> >> On 64-bit arches it will, yes. On 32-bit arches it ends up doing a
+> >> 32-bit left-shift (1UL << 32) of a 32-bit type (unsigned long), which =
+is
+> >> UB, so there's no guarantee that it truncates down to 0. And it seems =
+at
+> >> least on arm32 it does not: syzbot managed to trigger a crash in the
+> >> DEVMAP_HASH code by creating a map with more than 0x80000000 entries:
+> >>
+> >> https://lore.kernel.org/r/000000000000ed666a0611af6818@google.com
+> >>
+> >> This patch just preemptively applies the same fix to the hashtab code,
+> >> since I could not find any reason why it shouldn't be possible to hit
+> >> the same issue there. I haven't actually managed to trigger a crash
+> >> there, though (I don't have any arm32 hardware to test this on), so in
+> >> that sense it's a bit theoretical for hashtab. So up to you if you wan=
+t
+> >> to take this, but even if you don't, could you please apply the first
+> >> patch? That does fix the issue reported by syzbot (cf the
+> >> reported-and-tested-by tag).
 > >
-> > Yes, this is dmabuf specific, I was thinking you'd define your own
-> > member of netdev_rx_queue, and then add something like this to
-> > page_pool_init:
+> > I see.
+> > Since roundup_pow_of_two() is non deterministic on 32-bit archs,
+> > let's fix them all.
+> >
+> > We have at least 5 to fix:
+> > bloom_filter.c:                 nr_bits =3D roundup_pow_of_two(nr_bits)=
+;
+> > devmap.c:               dtab->n_buckets =3D
+> > roundup_pow_of_two(dtab->map.max_entries);
+> > hashtab.c:      htab->n_buckets =3D roundup_pow_of_two(htab->map.max_en=
+tries);
+> > stackmap.c:     n_buckets =3D roundup_pow_of_two(attr->max_entries);
+> >
+> > hashtab.c:           htab->map.max_entries =3D roundup(attr->max_entrie=
+s,
+> >                                                 num_possible_cpus());
+> >
+> > bloom_filter looks ok as-is,
+> > but stack_map has the same issue as devmap and hashtab.
+> >
+> > Let's check for
+> > if (max_entries > (1u << 31))
+> > in 3 maps and that should be enough to cover all 5 cases?
+> >
+> > imo 1u << 31 is much easier to visualize than U32_MAX/2+1
+> >
+> > and don't touch other checks.
+> > This patch is removing U32_MAX / sizeof(struct bucket) check
+> > and with that introduces overflow just few lines below in bpf_map_area_=
+alloc.
 >
-> That would be quite annoying, there are 3 expected users together
-> with huge pages, each would need a field and check all others are
-> disabled as you mentioned and so on. It should be cleaner to pass
-> a generic {pp_ops,pp_private} pair instead.
+> Are you sure there's an overflow there? I did look at that and concluded
+> that since bpf_map_area_alloc() uses a u64 for the size that it would
+> not actually overflow even with n_buckets =3D=3D 1<<31. There's a check i=
+n
+> __bpf_map_area_alloc() for the size:
 >
-> If header dependencies is a problem, you it can probably be
+>         if (size >=3D SIZE_MAX)
+>                 return NULL;
 >
-> struct pp_provider_param {
->         struct pp_ops ops;
->         void *private;
-> };
+> with
 >
-> # netdev_rx_queue.h
+> #define SIZE_MAX        (~(size_t)0)
 >
-> // definition is not included here
-> struct pp_provider_params;
->
-> struct netdev_rx_queue {
->         ...
->         struct pp_provider_params *pp_params;
-> };
->
+> in limits.h. So if sizeof(size_t) =3D=3D 4, that check against SIZE_MAX
+> should trip and the allocation will just fail; but there's no overflow
+> anywhere AFAICT?
 
-Seems very reasonable, will do! Thanks!
+There is an overflow _before_ it calls into bpf_map_area_alloc().
+Here is the line:
+        htab->buckets =3D bpf_map_area_alloc(htab->n_buckets *
+                                           sizeof(struct bucket),
+                                           htab->map.numa_node);
+that's why we have:
+if (htab->n_buckets > U32_MAX / sizeof(struct bucket))
+before that.
 
-> --
-> Pavel Begunkov
 
+> Anyway, I'm OK with keeping the check; I'll respin with the changed
+> constant and add the check to stackmap.c as well.
 
-
---=20
-Thanks,
-Mina
+Thanks!
