@@ -1,264 +1,241 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789BE1350CC
-	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 16:54:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E64F137934
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 17:05:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709744047; cv=none; b=R/iHGCDxoMZYIqBPdxWLFY+uF2hunWRDmCyg5l6eY4QshkWbL/oXwyN3LZkvXELAUOTE4YjUExveuAP0KHUHedMHH4dC9XfODJNcPa7biatbFwJumpTqIqyQt1a5fZcwBNNU+jmbTgCJ/hrrojBAjixaVs0eVy8N75ujASl4ZBU=
+	t=1709744711; cv=none; b=ZnehvUX3vhMEdg4Qh5sdNTEE16dwgYbdGsGnTPpklfkPHraJUh/4Qdzj0tjoKSVC6qCfQ5e5j2rAgDt+RMfKcOgQnM1Wsm5MwCL/HnZjNLpfTJxPbPFI/DEHFgz7f1X04RDtZ3MjNZJMyL2+ZPdOudF5vc0TCtjAMcN/oaIoKBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709744047; c=relaxed/simple;
-	bh=McwZU4c2Sl+z0GuvkLcYT+tvKQHp48oJn4Z8E/M9d6M=;
+	s=arc-20240116; t=1709744711; c=relaxed/simple;
+	bh=f1WmBqp+S6Tcw7A8Oq9HJf0VJDtBrJ0ATA6lz8ebmoc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z7Vj6uBxXGMeYX36q0AMzG4uXu8bLSkzdOTHloGMVF7mEQofAFM6R+6UhRzo1PU/9nXF3sq3rmaAUC1NaQGjtle59Ptafb+S88hziqHRtuW0f8v1QLJe3GnSGx2nQqOxIFdDqzkc2jG7kmLJN8Up7YkH3Yd7wH3/8HrAhDTZduQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DkVpVxqp; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=VsF4Iyjb+MQfUTBVWsEB9X78dU/tUSC7ehSwQ81fMFAVhsoFDMEDTRHINkOliybf/gy6o6VxOAuCcT89Ohdahjx0Jf/QGrTStyoQDJrEcE9xLmXBMX1IzLAy0Hxuu/Oycwzm+7x0/9h9JOv8t2t21FRHIIFIVZ7xrEzMag7Iauo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YGPSFtgj; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DkVpVxqp"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-33e4f15710aso1052474f8f.2
-        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 08:54:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YGPSFtgj"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a452877ddcaso3470466b.3
+        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 09:05:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709744044; x=1710348844; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1709744707; x=1710349507; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Se4GiN1HXTq1m+cMhZb5UFy+KTnynNTSn98tlX/0SLw=;
-        b=DkVpVxqpi81z8gvT2RU2qgdzX01RAf4S5IkJ70KcTh/VnbWVoeUWTF4enZQ4WMkdOp
-         7guJlIopbTLUiGjrRc9+Qz+kpcZuBNmDqqoVZmyV+PgmOzSkfm9wJIZJGJejm8Ea/Ca8
-         0EdEpp1IMZDGgtqLVRa2aUgdxjZnQ/SwdkKqtwyAjN962sH3nOmVo7ZNCtw1FSkevVpF
-         Ns//p7E385qJ7BhlhTbS53ymHgB8gXz6sktMhf2mwxb6uOqbFK/XhstTJsYr/BFZmxNj
-         fZTpzxGLdtRcP5ll5KANz8ZcIj9Mdnnrh7d1CqbVIWfwoyl13IGrIdUWbe94Ye/b6KHy
-         h31Q==
+        bh=A1xSBjsofT/9pZS7Yx9G3XGpR9XoFLam+fQU7TnybVs=;
+        b=YGPSFtgjiZCZ2/fuo+t9hwJeE6OWJF42MA00e/1bbwxL4sNb2/4OygmNqZk6G1kDV3
+         SmmGm7Z2FiRELYmj/mWtsxnVBpHGTCMFWS1a0BaKZalgzAxl0ni/yS8mqyV38GnbNBRr
+         yb5Mb8zHgmrFvODzq1rVBfG+fJ0WfZROjkaIjECLEAnstyK2x++QDjrxpzz75DILwvqm
+         D5Cn45O4ZK52+wqd/abE/c7vgFqhD1Zn4HWJNk7RFSxd2bjYfoz+Yz3CXo5qaYUpaxL9
+         2HSwptCAvjycaff/WigX2F0Ns/pl/6wmEn3v/qS4GPz1tpIuvc7rj5x9lhqJqzb8U0GW
+         nGMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709744044; x=1710348844;
+        d=1e100.net; s=20230601; t=1709744707; x=1710349507;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Se4GiN1HXTq1m+cMhZb5UFy+KTnynNTSn98tlX/0SLw=;
-        b=woQl61cxHcIwOQJWeEKqkNW41RHXt2gf+Pmls7SYGc1M2cQkr1SSc1CH0C3ylUQniE
-         0Cd9iZcbPDdJRu6uGOCLW/ujuCWxLrRNgo/PRQwgqpy08+fZc+eJQhR4vBAEhAPK7Irq
-         aCcVLMGzwIsYKuDdM3cGhvL9i2gMcrV3saCZjU4tqZ1Xt283sHTNy8qF/RaWOtNbtsGO
-         CVd5iyAxQLzeS+A6UhxGBnPEjKalCHicWJRQ+rh+qZ+i1iEGM0bMFsUgLWw1SX4g56L8
-         YkJzOIH+pA3yOgC4tnY9u/nnLSB5To+9cBUEimuxlnhHk60/3mwpnENWJHWpOwlOWh00
-         6zXg==
-X-Forwarded-Encrypted: i=1; AJvYcCXsnJlrRfur9q/BFLLybMSql3ziLs5C5D9U7/izptL72rrettKS47SMXGMlwj8+498gG8tZKazxw1vQ2nRiJWizUsWP
-X-Gm-Message-State: AOJu0YwELCdd6UdW1ATy0PYFwRRLygN3G5cA7Y1AwwfSKyv45J7sZpd1
-	xaot9oPAE0m++tKck3E3DVeFkvZT/IFEemqx4Jj9TNw7lDF+F4h8uSjMdoFnTyYGkfILXkgq53j
-	6KgUJNhs03LUl2i0TruzQ1pAPQPE=
-X-Google-Smtp-Source: AGHT+IHwANhvvTzlrsEeRIrICdvn3DIp1tfbzcIe6nMqHiaMCwE5+5daJP2bz48fSVJe/zno4jPY3LfN9Ph2OyIooeU=
-X-Received: by 2002:adf:e045:0:b0:33e:cc6:8485 with SMTP id
- w5-20020adfe045000000b0033e0cc68485mr10677706wrh.47.1709744043595; Wed, 06
- Mar 2024 08:54:03 -0800 (PST)
+        bh=A1xSBjsofT/9pZS7Yx9G3XGpR9XoFLam+fQU7TnybVs=;
+        b=r+RUtrYHEzDlxmUATW3YX2L+mDgrmzA9vZB4jv2wf1sv3Xq6eQyJjgQkun30rCYkXs
+         Jan5DsgjXFnTOSRlC/upG8cBJPBxGljX9mu2hRfbFKDhpbqDGFHk13Y2MTGi3ULZOUWl
+         3h1Jv+5NKnl9hsFHEEW7ONk6hzGc1ilmD7T6JKzqnG7XGsmIZuxZBf0Yp6PuEoP9m1Eg
+         JCN6POCBMUT3EskeQUqSBUz6EfBgeVM5ws+0N8x5k3HFYeQJnFXKAY2IQFqFxKq0t9nW
+         bhlWuFE8ZGqFSGOiP7oKPYwueqyC/AxABeHpnXab2ibYDGwlVagLwlzQCGsQKJcDxugI
+         Y5kQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV6XmeVsohM3MpzS8Th4g7AfTz3Ee16qvYYGRQFMHSn6NQI7ud09WEdF7UakFh7sT2ndTREc65UmM76uGPrxizaQtw+
+X-Gm-Message-State: AOJu0YxXlc7wpU3Kx+Lx71BtYtBa/UWKEdQg0q8OZpPTCci/DR35DUzA
+	INqWsfCB6V36un6dNffayr6G3Up7gqQBJsLSNEat0NW0j9LhXf27GtGLnm3ayR4ScK3gpN/v8pa
+	E6ZfSqfFqkXYLm8otPB4H5ay/MBlGYvi1dBEk
+X-Google-Smtp-Source: AGHT+IEFAot1sqpMocgXEq0iHPu0SbjnF94L+Z+kSlPfTE1HrQ8kPH2Z8oVY6d8041os4lHMCzDMgHeBjBfnC6a+Now=
+X-Received: by 2002:a17:906:b00b:b0:a44:c583:dfc8 with SMTP id
+ v11-20020a170906b00b00b00a44c583dfc8mr9370474ejy.48.1709744706904; Wed, 06
+ Mar 2024 09:05:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240229112250.13723-1-toke@redhat.com> <20240229112250.13723-3-toke@redhat.com>
- <CAADnVQJTEo8c1=vs8avDakMKYjBopVXKNQ5f=bgrBSqELZhBow@mail.gmail.com>
- <65e10367cb393_33719208c2@john.notmuch> <878r32b04u.fsf@toke.dk>
- <CAADnVQLzVJRut0v2dQPbBUDW971Fd-EjkOf0pyLh5-W7wYwiYA@mail.gmail.com>
- <87plwa6tgv.fsf@toke.dk> <CAADnVQJ=NGbdQXOo=Eu4AG2m=AMJLYF+Gyqh99_YHGy8=EL_Nw@mail.gmail.com>
- <87ttljtzuo.fsf@toke.dk>
-In-Reply-To: <87ttljtzuo.fsf@toke.dk>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 6 Mar 2024 08:53:52 -0800
-Message-ID: <CAADnVQJgk7oHnwH5qmbKFchpTQSTAc8ByMyx_iA_XYmkL-YNmw@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 2/2] bpf: Fix hashtab overflow check on 32-bit arches
-To: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, bpf <bpf@vger.kernel.org>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-3-almasrymina@google.com> <1b57dac2-4b04-4bec-b2d7-d0edb4fcabbc@davidwei.uk>
+ <CAHS8izM5O39mnTQ8mhcQE75amDT4G-3vcgozzjcYsAdd_-he1g@mail.gmail.com> <417f293a-848e-4eb2-b690-c8696079b452@gmail.com>
+In-Reply-To: <417f293a-848e-4eb2-b690-c8696079b452@gmail.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Wed, 6 Mar 2024 09:04:54 -0800
+Message-ID: <CAHS8izNPtHb2GnEMviiJTFT_dPxsxgYsNw5V9s-gSC2YnJRPRg@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
+ custom page providers
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: David Wei <dw@davidwei.uk>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, shakeel.butt@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 6, 2024 at 2:32=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen <to=
-ke@redhat.com> wrote:
+On Wed, Mar 6, 2024 at 6:30=E2=80=AFAM Pavel Begunkov <asml.silence@gmail.c=
+om> wrote:
 >
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
->
-> > On Mon, Mar 4, 2024 at 5:02=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen=
- <toke@redhat.com> wrote:
+> On 3/5/24 22:36, Mina Almasry wrote:
+> > On Tue, Mar 5, 2024 at 1:55=E2=80=AFPM David Wei <dw@davidwei.uk> wrote=
+:
 > >>
-> >> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
-> >>
-> >> > On Fri, Mar 1, 2024 at 4:35=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgen=
-sen <toke@redhat.com> wrote:
-> >> >>
-> >> >> John Fastabend <john.fastabend@gmail.com> writes:
-> >> >>
-> >> >> > Alexei Starovoitov wrote:
-> >> >> >> On Thu, Feb 29, 2024 at 3:23=E2=80=AFAM Toke H=C3=B8iland-J=C3=
-=B8rgensen <toke@redhat.com> wrote:
-> >> >> >> >
-> >> >> >> > The hashtab code relies on roundup_pow_of_two() to compute the=
- number of
-> >> >> >> > hash buckets, and contains an overflow check by checking if th=
-e resulting
-> >> >> >> > value is 0. However, on 32-bit arches, the roundup code itself=
- can overflow
-> >> >> >> > by doing a 32-bit left-shift of an unsigned long value, which =
-is undefined
-> >> >> >> > behaviour, so it is not guaranteed to truncate neatly. This wa=
-s triggered
-> >> >> >> > by syzbot on the DEVMAP_HASH type, which contains the same che=
-ck, copied
-> >> >> >> > from the hashtab code. So apply the same fix to hashtab, by mo=
-ving the
-> >> >> >> > overflow check to before the roundup.
-> >> >> >> >
-> >> >> >> > The hashtab code also contained a check that prevents the tota=
-l allocation
-> >> >> >> > size for the buckets from overflowing a 32-bit value, but sinc=
-e all the
-> >> >> >> > allocation code uses u64s, this does not really seem to be nec=
-essary, so
-> >> >> >> > drop it and keep only the strict overflow check of the n_bucke=
-ts variable.
-> >> >> >> >
-> >> >> >> > Fixes: daaf427c6ab3 ("bpf: fix arraymap NULL deref and missing=
- overflow and zero size checks")
-> >> >> >> > Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.c=
-om>
-> >> >> >> > ---
-> >> >> >> >  kernel/bpf/hashtab.c | 10 +++++-----
-> >> >> >> >  1 file changed, 5 insertions(+), 5 deletions(-)
-> >> >> >> >
-> >> >> >> > diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> >> >> >> > index 03a6a2500b6a..4caf8dab18b0 100644
-> >> >> >> > --- a/kernel/bpf/hashtab.c
-> >> >> >> > +++ b/kernel/bpf/hashtab.c
-> >> >> >> > @@ -499,8 +499,6 @@ static struct bpf_map *htab_map_alloc(unio=
-n bpf_attr *attr)
-> >> >> >> >                                                           num_=
-possible_cpus());
-> >> >> >> >         }
-> >> >> >> >
-> >> >> >> > -       /* hash table size must be power of 2 */
-> >> >> >> > -       htab->n_buckets =3D roundup_pow_of_two(htab->map.max_e=
-ntries);
-> >> >> >> >
-> >> >> >> >         htab->elem_size =3D sizeof(struct htab_elem) +
-> >> >> >> >                           round_up(htab->map.key_size, 8);
-> >> >> >> > @@ -510,11 +508,13 @@ static struct bpf_map *htab_map_alloc(un=
-ion bpf_attr *attr)
-> >> >> >> >                 htab->elem_size +=3D round_up(htab->map.value_=
-size, 8);
-> >> >> >> >
-> >> >> >> >         err =3D -E2BIG;
-> >> >> >> > -       /* prevent zero size kmalloc and check for u32 overflo=
-w */
-> >> >> >> > -       if (htab->n_buckets =3D=3D 0 ||
-> >> >> >> > -           htab->n_buckets > U32_MAX / sizeof(struct bucket))
-> >> >> >> > +       /* prevent overflow in roundup below */
-> >> >> >> > +       if (htab->map.max_entries > U32_MAX / 2 + 1)
-> >> >> >> >                 goto free_htab;
-> >> >> >>
-> >> >> >> No. We cannot artificially reduce max_entries that will break re=
-al users.
-> >> >> >> Hash table with 4B elements is not that uncommon.
-> >> >>
-> >> >> Erm, huh? The existing code has the n_buckets > U32_MAX / sizeof(st=
-ruct
-> >> >> bucket) check, which limits max_entries to 134M (0x8000000). This p=
-atch
-> >> >> is *increasing* the maximum allowable size by a factor of 16 (to 2.=
-1B or
-> >> >> 0x80000000).
-> >> >>
-> >> >> > Agree how about return E2BIG in these cases (32bit arch and overf=
-low) and
-> >> >> > let user figure it out. That makes more sense to me.
-> >> >>
-> >> >> Isn't that exactly what this patch does? What am I missing here?
-> >> >
-> >> > I see. Then what are you fixing?
-> >> > roundup_pow_of_two() will return 0 and existing code is fine as-is.
-> >>
-> >> On 64-bit arches it will, yes. On 32-bit arches it ends up doing a
-> >> 32-bit left-shift (1UL << 32) of a 32-bit type (unsigned long), which =
-is
-> >> UB, so there's no guarantee that it truncates down to 0. And it seems =
-at
-> >> least on arm32 it does not: syzbot managed to trigger a crash in the
-> >> DEVMAP_HASH code by creating a map with more than 0x80000000 entries:
-> >>
-> >> https://lore.kernel.org/r/000000000000ed666a0611af6818@google.com
-> >>
-> >> This patch just preemptively applies the same fix to the hashtab code,
-> >> since I could not find any reason why it shouldn't be possible to hit
-> >> the same issue there. I haven't actually managed to trigger a crash
-> >> there, though (I don't have any arm32 hardware to test this on), so in
-> >> that sense it's a bit theoretical for hashtab. So up to you if you wan=
-t
-> >> to take this, but even if you don't, could you please apply the first
-> >> patch? That does fix the issue reported by syzbot (cf the
-> >> reported-and-tested-by tag).
-> >
-> > I see.
-> > Since roundup_pow_of_two() is non deterministic on 32-bit archs,
-> > let's fix them all.
-> >
-> > We have at least 5 to fix:
-> > bloom_filter.c:                 nr_bits =3D roundup_pow_of_two(nr_bits)=
+> >> On 2024-03-04 18:01, Mina Almasry wrote:
+> >>> +struct memory_provider_ops {
+> >>> +     int (*init)(struct page_pool *pool);
+> >>> +     void (*destroy)(struct page_pool *pool);
+> >>> +     struct page *(*alloc_pages)(struct page_pool *pool, gfp_t gfp);
+> >>> +     bool (*release_page)(struct page_pool *pool, struct page *page)=
 ;
-> > devmap.c:               dtab->n_buckets =3D
-> > roundup_pow_of_two(dtab->map.max_entries);
-> > hashtab.c:      htab->n_buckets =3D roundup_pow_of_two(htab->map.max_en=
-tries);
-> > stackmap.c:     n_buckets =3D roundup_pow_of_two(attr->max_entries);
+> >>
+> >> For ZC Rx we added a scrub() function to memory_provider_ops that is
+> >> called from page_pool_scrub(). Does TCP devmem not custom behaviour
+> >> waiting for all netmem_refs to return before destroying the page pool?
+> >> What happens if e.g. application crashes?
 > >
-> > hashtab.c:           htab->map.max_entries =3D roundup(attr->max_entrie=
-s,
-> >                                                 num_possible_cpus());
+> > (sorry for the long reply, but he refcounting is pretty complicated to
+> > explain and I feel like we need to agree on how things currently work)
 > >
-> > bloom_filter looks ok as-is,
-> > but stack_map has the same issue as devmap and hashtab.
+> > Yeah, the addition of the page_pool_scrub() function is a bit of a
+> > head scratcher for me. Here is how the (complicated) refcounting works
+> > for devmem TCP (assuming the driver is not doing its own recycling
+> > logic which complicates things further):
 > >
-> > Let's check for
-> > if (max_entries > (1u << 31))
-> > in 3 maps and that should be enough to cover all 5 cases?
+> > 1. When a netmem_ref is allocated by the page_pool (from dmabuf or
+> > page), the netmem_get_pp_ref_count_ref()=3D=3D1 and belongs to the page
+> > pool as long as the netmem is waiting in the pool for driver
+> > allocation.
 > >
-> > imo 1u << 31 is much easier to visualize than U32_MAX/2+1
+> > 2. When a netmem is allocated by the driver, no refcounting is
+> > changed, but the ownership of the netmem_get_pp_ref_count_ref() is
+> > implicitly transferred from the page pool to the driver. i.e. the ref
+> > now belongs to the driver until an skb is formed.
 > >
-> > and don't touch other checks.
-> > This patch is removing U32_MAX / sizeof(struct bucket) check
-> > and with that introduces overflow just few lines below in bpf_map_area_=
-alloc.
+> > 3. When the driver forms an skb using skb_rx_add_frag_netmem(), no
+> > refcounting is changed, but the ownership of the
+> > netmem_get_pp_ref_count_ref() is transferred from the driver to the
+> > TCP stack.
+> >
+> > 4. When the TCP stack hands the skb to the application, the TCP stack
+> > obtains an additional refcount, so netmem_get_pp_ref_count_ref()=3D=3D2=
+,
+> > and frees the skb using skb_frag_unref(), which drops the
+> > netmem_get_pp_ref_count_ref()=3D=3D1.
+> >
+> > 5. When the user is done with the skb, the user calls the
+> > DEVMEM_DONTNEED setsockopt which calls napi_pp_put_netmem() which
+> > recycles the netmem back to the page pool. This doesn't modify any
+> > refcounting, but the refcount ownership transfers from the userspace
+> > back to the page pool, and we're back at step 1.
+> >
+> > So all in all netmem can belong either to (a) the page pool, or (b)
+> > the driver, or (c) the TCP stack, or (d) the application depending on
+> > where exactly it is in the RX path.
+> >
+> > When an application running devmem TCP crashes, the netmem that belong
+> > to the page pool or driver are not touched, because the page pool is
+> > not tied to the application in our case really. However, the TCP stack
+> > notices the devmem socket of the application close, and when it does,
+> > the TCP stack will:
+> >
+> > 1. Free all the skbs in the sockets receive queue. This is not custom
+> > behavior for devmem TCP, it's just standard for TCP to free all skbs
+> > waiting to be received by the application.
+> > 2. The TCP stack will free references that belong to the application.
+> > Since the application crashed, it will not call the DEVMEM_DONTNEED
+> > setsockopt, so we need to free those on behalf of the application.
+> > This is done in this diff:
+> >
+> > @@ -2498,6 +2498,15 @@ static void tcp_md5sig_info_free_rcu(struct
+> > rcu_head *head)
+> >   void tcp_v4_destroy_sock(struct sock *sk)
+> >   {
+> >    struct tcp_sock *tp =3D tcp_sk(sk);
+> > + __maybe_unused unsigned long index;
+> > + __maybe_unused void *netmem;
+> > +
+> > +#ifdef CONFIG_PAGE_POOL
+> > + xa_for_each(&sk->sk_user_frags, index, netmem)
+> > + WARN_ON_ONCE(!napi_pp_put_page((__force netmem_ref)netmem, false));
+> > +#endif
+> > +
+> > + xa_destroy(&sk->sk_user_frags);
+> >
+> >    trace_tcp_destroy_sock(sk);
+> >
+> > To be honest, I think it makes sense for the TCP stack to be
+> > responsible for putting the references that belong to it and the
+> > application. To me, it does not make much sense for the page pool to
+> > be responsible for putting the reference that belongs to the TCP stack
+> > or driver via a page_pool_scrub() function, as those references do not
+> > belong to the page pool really. I'm not sure why there is a diff
+> > between our use cases here because I'm not an io_uring expert. Why do
+> > you need to scrub all the references on page pool destruction? Don't
+> > these belong to non-page pool components like io_uring stack or TCP
+> > stack ol otherwise?
 >
-> Are you sure there's an overflow there? I did look at that and concluded
-> that since bpf_map_area_alloc() uses a u64 for the size that it would
-> not actually overflow even with n_buckets =3D=3D 1<<31. There's a check i=
-n
-> __bpf_map_area_alloc() for the size:
+> That one is about cleaning buffers that are in b/w 4 and 5, i.e.
+> owned by the user, which devmem does at sock destruction. io_uring
+> could get by without scrub, dropping user refs while unregistering
+> ifq, but then it'd need to wait for all requests to finish so there
+> is no step 4 in the meantime. Might change, can be useful, but it
+> was much easier to hook into the pp release loop.
 >
->         if (size >=3D SIZE_MAX)
->                 return NULL;
+> Another concern is who and when can reset ifq / kill pp outside
+> of io_uring/devmem. I assume it can happen on a whim, which is
+> hard to handle gracefully.
 >
-> with
->
-> #define SIZE_MAX        (~(size_t)0)
->
-> in limits.h. So if sizeof(size_t) =3D=3D 4, that check against SIZE_MAX
-> should trip and the allocation will just fail; but there's no overflow
-> anywhere AFAICT?
 
-There is an overflow _before_ it calls into bpf_map_area_alloc().
-Here is the line:
-        htab->buckets =3D bpf_map_area_alloc(htab->n_buckets *
-                                           sizeof(struct bucket),
-                                           htab->map.numa_node);
-that's why we have:
-if (htab->n_buckets > U32_MAX / sizeof(struct bucket))
-before that.
+If this is about dropping application refs in step 4 & step 5, then
+from devmem TCP perspective it must be done on socket close & skb
+freeing AFAIU, and not delayed until page_pool destruction. Think
+about a stupid or malicious user that does something like:
 
+1. Set up dmabuf binding using netlink api.
+2. While (100000):
+3.   create devmem TCP socket.
+4.   receive some devmem data on TCP socket.
+5.   close TCP socket without calling DEVMEM_DONTNEED.
+6. clean up dmabuf binding using netlink api.
 
-> Anyway, I'm OK with keeping the check; I'll respin with the changed
-> constant and add the check to stackmap.c as well.
+In this case, we need to drop the references in step 5 when the socket
+is destroyed, so the memory is freed to the page pool and available
+for the next socket in step 3. We cannot delay the freeing until step
+6 when the rx queue is recreated and the page pool is destroyed,
+otherwise the net_iovs would leak in the loop and eventually the NIC
+would fail to find available memory. The same bug would be
+reproducible with io_uring unless you're creating a new page pool for
+each new io_uring socket equivalent.
 
-Thanks!
+But even outside of this, I think it's a bit semantically off to ask
+the page_pool to drop references that belong to the application IMO,
+because those references are not the page_pool's.
+
+> --
+> Pavel Begunkov
+
+--=20
+Thanks,
+Mina
