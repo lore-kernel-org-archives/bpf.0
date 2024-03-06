@@ -1,56 +1,56 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8772560893
-	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 10:45:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD306089F
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 10:45:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709721959; cv=none; b=jBjK3wxrhbTzF2+pmbmZ3VDMG4ynIApYpyfYoX9B/OgAODz5DI1U71O6LzkUKsAfEXVOlX+JEV16Msy/Jdf7yfZyFTJj8iJlXIa1e2/mpCH4gr6luZMbx/OMfnXBU4dT2p4y0lJScerIkl0d+XY9lh9U7JoBXsab48+9Ru+MoFw=
+	t=1709721960; cv=none; b=SbdbcEV96yi4kvhEn7b4RXJAqneODZbJXD5bNiI5SFA0G9o8vD0SH6tkTyI7yOKLcaOcnLnX9V0wZPmMCCTP0U2dI5cVfsXc7Rr7225VaUP7SrGTgtWSA2p4PwQBtN2ub4+xuEVCpv8+AQkTO6XDT6D01XYtz0nHOp1YjEKZWJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709721959; c=relaxed/simple;
-	bh=c626uGZGz6bvkWSfIGAs2RDjqVJ0je76+hAvK5HHS2Y=;
+	s=arc-20240116; t=1709721960; c=relaxed/simple;
+	bh=qq8YY5adS+/Dj50g3xdUaXj0dVPqjGcPBsacABXu0nA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=D+DLhznQowsIVzl0dTS9ux6aOwZdqZFnwiywRSS9I1FYVzzce/cGWqoloTzjaTJmJJosD3RMxEEJU11pT3Y0ouywoDSzMAsa7QM/Ssl6tPXZW2uqbWqD7m0wbBsIuQu8/eRK1i+QnvFt5ZulMr3twdQDtJUoe1etyDu03nOUfzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=couvARLh; arc=none smtp.client-ip=209.85.208.44
+	 MIME-Version; b=oV+b2BxOnQvGbcceLiMO6sAOeVJeK7MTY75QNuP7S81WFsAV5/g+1vLvkIbNlsi+fcUJI0gnxmAykcsChgqjYgvA7z/4iutEb4EAQW95IzSgv0Akt7n+R0bZb6elmGwIM6Jfd02APHHKfDYYOdkhy4hTioaqJCwzSo/Njw/RJKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X9/5xrti; arc=none smtp.client-ip=209.85.208.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="couvARLh"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-565c6cf4819so1254578a12.1
-        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 02:45:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X9/5xrti"
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2d3b93e992aso43270041fa.1
+        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 02:45:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709721956; x=1710326756; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709721957; x=1710326757; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wzOUaWEMM76cWVANb2OxVF5f/AqcuB1wbqQNTxjWF78=;
-        b=couvARLhQgH4jfg5nrb7ho6pCvqaU7/c6p3ikE8hnkgK13EzPV6k1REYvlBK129il6
-         A+zwWOWTLgZhcYtGADNjRsTwg1P+ChZUta0WPn1cLnBF7c7ROI/fxIK+uy8kUpiqnSwi
-         UHoKhGccTQgMW5J4BVGZT9hH38XSPBJCdeOfpD0L3R7nCNWMSzICspgAGixT0Iz9/BTN
-         xvvfQLLpkucyuouDwiTbjXB/KkSrNOq1kmujCW+taENOx3r8adwO3uTqpLyRepCX7FjW
-         2xizIyTjzHg24Sl4DLiYoeHRrVjAxYszcYGJGiSFYqYhSL5RMzk5T08CbJlH9wd2MlRz
-         aljA==
+        bh=zV5iorLT4bPhioadrT3z62waasJmp7yXKBZpS5NIkKQ=;
+        b=X9/5xrtiybAt3g+9wqQSJ79XgBQhj33yhfYqXSZMF6RZ9/GxaYtYcaGAF0kEW8sz5w
+         YlBYeVxJV69XYOEV5Uzd9Kq5x2Hh5BT2WMaQU/sw3pcrYp6nNJw74hgCjws+dU4vo+h6
+         cKjHwhsDllc5PLUEAPkWQKSxZjAfhFm5d2LW7Z5dWnosCArAEyZKR9+IxRXx7UWUh8Ik
+         CMIY+4YKx1Zg0s6HSYkOXVa9pbl2AUWeUDphUJZd6JpkYFIoGfNsGV9s449hsJqkcWEH
+         V2AKZ1gfCD8sep0w4AXGPlmpJJPJG+ccp5G1uBfUV+e4olD4HjawgMO0Y8/j+W+rrf7u
+         PhoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709721956; x=1710326756;
+        d=1e100.net; s=20230601; t=1709721957; x=1710326757;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wzOUaWEMM76cWVANb2OxVF5f/AqcuB1wbqQNTxjWF78=;
-        b=g6ED5n06l68ldcPLUs9Aum/K89Ww0Ch6i2y6VU2uRh8mJOPwfOKYRtRqY46K+3PQG6
-         IxSuoY9Bro3QmvzuIKxilRn3IyX8kdj4Otw2MyHYlqnwHTr9h3HFVnabA8C6kb69J8h3
-         xbb55tT81dI4++e24zdNZxVf97y0Fknb5LaPY+XjwmojtfVEqc39nY+1YJFok/FhQbsM
-         c9bICPrJ4X4xG2CMtdqaIZGEz3yTXVJn5DWI3iNyT8ZxwW5lVBj8B+V5Z63jVe9Ji7Jp
-         9wHevl3iQkF5bVSnVU+IsqZPJBFOyhYtqAi43+NK2N2+26FYC3dSEXB+3HZKDXV/eGM1
-         IisQ==
-X-Gm-Message-State: AOJu0Yxypi2sC4XJw5od5Vfg6gwawvGAEsxHMiKD04pvcUmpVUW+s5jn
-	WXIHXpSIcN7KXVJ1VmmdoMr/C7VhC4iHY87wUU/XAxtBlQWWllj8zdU2hKQy
-X-Google-Smtp-Source: AGHT+IF8mFF9vKid5Auy4JklvLlGMlW7SPTJbEzRGbCJoKOMNX4oLz/caOOMXIvLkhFjG+QqmW3TOQ==
-X-Received: by 2002:a17:906:793:b0:a43:75ad:6d56 with SMTP id l19-20020a170906079300b00a4375ad6d56mr5995575ejc.18.1709721955869;
-        Wed, 06 Mar 2024 02:45:55 -0800 (PST)
+        bh=zV5iorLT4bPhioadrT3z62waasJmp7yXKBZpS5NIkKQ=;
+        b=ay9Ukvgh7abJj5aeojy1C+c5VmMQ4LMt8/Yr29ZmkLBrC/zvkPRIc8PAdcoL3thudG
+         jgmm8mXZB2Lr2jzKz7CaRaS/BuSTR3xgKbOv3THqJVnlArcEhsTm+Qyy19WaZgPPNK4a
+         rPxixsedtRjscIzZ+/bOEO2UU+4DCwW/fL73fKzuoWuC6151v8YOH8KR32VY5cMOtOkm
+         DkLI+jsmMKx9FafdWuVOAIopm7J9umtIBv6PqPJt414px5cILiTtYxFx19o/MtiGENGh
+         ddrt+WIptO9JjtjFW0PiZhR2JHCKAnOFun9+eigLpuBgsPhBmhDavQWM9b4uaI5Ve25L
+         BpIQ==
+X-Gm-Message-State: AOJu0YxcNquH8SPlt7SfkV3sz2jwm9zeXJHwPWFs9u0ME8d4IXIT4LOg
+	gwmVqY+FWtUzHPDQOJ5Syk7DT5s0DREN4NewLJoujpciCJrfAmBCHz5A8dQp
+X-Google-Smtp-Source: AGHT+IE4M9KzztvTNKt/DJlHSfxkT37cNtdjM/4inIWBHQV/hkXDC9Q8dlNyRiW8jVvqe3ynfIyX4w==
+X-Received: by 2002:a05:6512:3593:b0:513:5541:e5d9 with SMTP id m19-20020a056512359300b005135541e5d9mr2103567lfr.18.1709721956841;
+        Wed, 06 Mar 2024 02:45:56 -0800 (PST)
 Received: from localhost.localdomain (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id h20-20020a170906591400b00a3d5efc65e0sm7002450ejq.91.2024.03.06.02.45.54
+        by smtp.gmail.com with ESMTPSA id h20-20020a170906591400b00a3d5efc65e0sm7002450ejq.91.2024.03.06.02.45.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Mar 2024 02:45:55 -0800 (PST)
+        Wed, 06 Mar 2024 02:45:56 -0800 (PST)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -62,9 +62,9 @@ Cc: andrii@kernel.org,
 	void@manifault.com,
 	sinquersw@gmail.com,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v4 14/15] bpf: allow all printable characters in BTF DATASEC names
-Date: Wed,  6 Mar 2024 12:45:28 +0200
-Message-ID: <20240306104529.6453-15-eddyz87@gmail.com>
+Subject: [PATCH bpf-next v4 15/15] selftests/bpf: test cases for '?' in BTF names
+Date: Wed,  6 Mar 2024 12:45:29 +0200
+Message-ID: <20240306104529.6453-16-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240306104529.6453-1-eddyz87@gmail.com>
 References: <20240306104529.6453-1-eddyz87@gmail.com>
@@ -76,55 +76,63 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The intent is to allow libbpf to use SEC("?.struct_ops") to identify
-struct_ops maps that are optional, e.g. like in the following BPF code:
-
-    SEC("?.struct_ops")
-    struct test_ops optional_map = { ... };
-
-Which yields the following BTF:
-
-    ...
-    [13] DATASEC '?.struct_ops' size=0 vlen=...
-    ...
-
-To load such BTF libbpf rewrites DATASEC name before load.
-After this patch the rewrite won't be necessary.
+Two test cases to verify that '?' and other printable characters are
+allowed in BTF DATASEC names:
+- DATASEC with name "?.foo bar:buz" should be accepted;
+- type with name "?foo" should be rejected.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/btf.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/prog_tests/btf.c | 29 ++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 6ff0bd1a91d5..170d017e8e4a 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -809,9 +809,23 @@ static bool btf_name_valid_identifier(const struct btf *btf, u32 offset)
- 	return __btf_name_valid(btf, offset);
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
+index 816145bcb647..00965a6e83bb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -3535,6 +3535,32 @@ static struct btf_raw_test raw_tests[] = {
+ 	.value_type_id = 1,
+ 	.max_entries = 1,
+ },
++{
++	.descr = "datasec: name '?.foo bar:buz' is ok",
++	.raw_types = {
++		/* int */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),  /* [1] */
++		/* VAR x */                                     /* [2] */
++		BTF_TYPE_ENC(1, BTF_INFO_ENC(BTF_KIND_VAR, 0, 0), 1),
++		BTF_VAR_STATIC,
++		/* DATASEC ?.data */                            /* [3] */
++		BTF_TYPE_ENC(3, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1), 4),
++		BTF_VAR_SECINFO_ENC(2, 0, 4),
++		BTF_END_RAW,
++	},
++	BTF_STR_SEC("\0x\0?.foo bar:buz"),
++},
++{
++	.descr = "type name '?foo' is not ok",
++	.raw_types = {
++		/* union ?foo; */
++		BTF_TYPE_ENC(1, BTF_INFO_ENC(BTF_KIND_FWD, 1, 0), 0), /* [1] */
++		BTF_END_RAW,
++	},
++	BTF_STR_SEC("\0?foo"),
++	.err_str = "Invalid name",
++	.btf_load_err = true,
++},
  
-+/* Allow any printable character in DATASEC names */
- static bool btf_name_valid_section(const struct btf *btf, u32 offset)
  {
--	return __btf_name_valid(btf, offset);
-+	/* offset must be valid */
-+	const char *src = btf_str_by_offset(btf, offset);
-+	const char *src_limit;
-+
-+	/* set a limit on identifier length */
-+	src_limit = src + KSYM_NAME_LEN;
-+	src++;
-+	while (*src && src < src_limit) {
-+		if (!isprint(*src))
-+			return false;
-+		src++;
-+	}
-+
-+	return !*src;
- }
+ 	.descr = "float test #1, well-formed",
+@@ -4363,6 +4389,9 @@ static void do_test_raw(unsigned int test_num)
+ 	if (err || btf_fd < 0)
+ 		goto done;
  
- static const char *__btf_name_by_offset(const struct btf *btf, u32 offset)
++	if (!test->map_type)
++		goto done;
++
+ 	opts.btf_fd = btf_fd;
+ 	opts.btf_key_type_id = test->key_type_id;
+ 	opts.btf_value_type_id = test->value_type_id;
 -- 
 2.43.0
 
