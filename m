@@ -1,111 +1,154 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50021BC3E
-	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 05:32:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940385C8F9
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 07:39:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709703153; cv=none; b=MHcSfL/+1YVsoxGk3p66DcYgPIt7FCs3y06XRA3vcCyMnhLtWHyus8tAvzOW4vie4gXd/2J/ArU1Be1iSl8CHjd+YoUIGFfq98XK23z+U+ss93QYjqeQJCrS8viYVg3KhMvstkLCqg/EQu0YrXRYSsaJdEZ1BZL5y4lKEseHzWc=
+	t=1709710765; cv=none; b=GKhBfhsU42zlO8CqLoT8TD0w6K/13uZaSXcu28CnHSo5+OnMe1Y/Qbk23InsZMSsJNyq4Gp7Qaj9KXBKXjArXRL77sPQv40cfSX0spLezcxZwd2B3cnXU79hU+6k8qjebbMkWEYta90QOjwWdig73aOYrGUVN/ZNY4W7+nuDyFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709703153; c=relaxed/simple;
-	bh=TU6enkAGhxLVo9zYShsbcBwAQaBFKNnqNn+vF6qWndE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OvlvZvaCO45dIKHOdt0WmEmckDbHmdm5SX7GjUMnT5Ogv8eK2x0auhjE5Hk1fPh4Q2uzqZjvMNpPVVonrKalsM3klqTEkWE87vOziQ/VYrY3PlSfryM5A8PSrlSeFPmnrl1LXhszFbrgU9sHRqziWOs0jtrSAbiHdN45eARqd38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PdnN1E3+; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1709710765; c=relaxed/simple;
+	bh=3zLyHQYTk50JqHGT0H8b7TxvnP4JF7JAmJRGihoWBck=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=WTxS5HguW4UgoklSRYVXubW5k4bAWhld6PTU3ZTd3Z6VvdVCnyYYfAT1MY55g9dZm0yvW3ewKzCBfIfX7NLw0yxSUbCFNSrT1FYDLKW8y32pw0NvRF+DNaRJP/uu5NRt0DcNv5ok4NIB2Kxne/WQmWnsn1RYmKT4KND/jbh5XKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lbN1VIbx; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PdnN1E3+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1709703150;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TU6enkAGhxLVo9zYShsbcBwAQaBFKNnqNn+vF6qWndE=;
-	b=PdnN1E3+KecPnHIRxnxwLmahV4XhMPOqtLFZIiSgKT3snZURcCEuxrePFvONz4u6LGBE1Z
-	Dxh5thasLVyPKdtQN/euWHHlInP7Q39L2slpTMLaN67/d2rHqQl43Ed0QL3sJQz0T+od49
-	Xgvmx1aDWiaBLWzRStKbEbIHRewwh3g=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-634-KmwHsCMIPQuP2UeBKuGmdQ-1; Wed, 06 Mar 2024 00:32:27 -0500
-X-MC-Unique: KmwHsCMIPQuP2UeBKuGmdQ-1
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-1dccd2efdbfso64222345ad.2
-        for <bpf@vger.kernel.org>; Tue, 05 Mar 2024 21:32:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lbN1VIbx"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a26ed1e05c7so1083126166b.2
+        for <bpf@vger.kernel.org>; Tue, 05 Mar 2024 23:39:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1709710761; x=1710315561; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iK81biHTtD/Y+vOFBIjWOtHY+5xsEtWIIh90hV3rhZA=;
+        b=lbN1VIbxl5krAWpiIEzlRMVEfDx35YP9OXarEQSQVu3s6YPf6iusYXn5zEeItDhnU7
+         VY0C0zYWVS77MxqULXv5rKAE9f+sCes56QabDmub79AYl/ACzgdA0RKWbf/W/4Mw95QC
+         qBuKOGBuSc1DLKgZVqvmawHRMrW5ogBwbMoHqa/EYYDSVDCgxMSiEmijzz34hjnqS3uh
+         XyNVS+igJH2F80kX8FBY/i/6SGfhA77H1xOKxAm0c5yH/F8znrJZSFIpqGhr0Q3bfy/7
+         to/SWXD775ZVnDTpwUu/UNCMVm8dvPq6KFof8ZO0G1YqCtJV1mWj7oOBvRNafOEpBFS3
+         WEWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709703146; x=1710307946;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TU6enkAGhxLVo9zYShsbcBwAQaBFKNnqNn+vF6qWndE=;
-        b=arshWLgbmDvgW9o9W07xmB3r6A8MEz/SQ3tw1i+8eSI1Jh7AdL1KlN1P4U+91LRXJJ
-         czC5HHYWzwgSoPqcSV6L8NofOQ0pYCQu2eidEvyXnm0VF3H/GtbG/SxignvTz8NBu+Kp
-         uSxzdw+RCWwIHOpfIiTtp7I7TcyoGnyGlGGsCK23ny1Ts5yvo9NQ1ajUwTKqFmC6yRzo
-         H6K8NMcYGu93s/jNksgx04OdtwrZifhR4bmVQejSI/2svAQGDb2zkkh9JpviYLuzPX7n
-         uiqINrxNQ8vnqET/gpLsWKtj02vtLZds7hT1PLDM1yareMjXpYZID+a32rqgKs9Olmbd
-         QzFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXUUncoPJOSc2aIJWdCQIRTNHnv2GptCBsfHMHuiLjPbr539EMhEc+UmLT6PTxLV3AnIgazmU5lSovRoea62hTgQpm3
-X-Gm-Message-State: AOJu0YyiXOb129RvbDQCiyMqKzh9K4L5IpOX9cmVVN7oIqNfahcFeZP+
-	zPxSsynjTQ30u/VBCOAUtEaaYIEj1CEWPDG6IWL6ZJCmokQDr6d6p8ds5qTLjfzLHKJi8lm0TjW
-	EaQhw5lCVJKg407kzI43hKTQNvYLNGeAOhCsdiG3+2L+M2rOP4QWnr2iFiQ04JfytLC1+axGQVk
-	DGRSy6ugShFyS6pPz0fWV0k2BV
-X-Received: by 2002:a17:90a:d24f:b0:29a:e097:50be with SMTP id o15-20020a17090ad24f00b0029ae09750bemr11686566pjw.31.1709703146440;
-        Tue, 05 Mar 2024 21:32:26 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFevY310UVbmpQFlUk/kqBWvaY92fb2a59CmZ2Hx22y1HnOSHWpHQhrAOQOaJV/YvhnP8j2q2riF5z5dzcbMWs=
-X-Received: by 2002:a17:90a:d24f:b0:29a:e097:50be with SMTP id
- o15-20020a17090ad24f00b0029ae09750bemr11686548pjw.31.1709703146152; Tue, 05
- Mar 2024 21:32:26 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709710761; x=1710315561;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iK81biHTtD/Y+vOFBIjWOtHY+5xsEtWIIh90hV3rhZA=;
+        b=XWmlq7/46MyY4nI+SuqwVX1fReFfvYzgliekACNBaVWYUWNU4PZXu6/GjaAgatK2IB
+         evRokmoWc6/7ANlQrD1tnAWwpG7xUoWIJRH6ZyGoNBFjwK1tRA2mYV4djtQXrWCtVezc
+         Jf5ul0UpuX9U599BAhuP4izRnk9ibTtTyj0a79hEAvHMy0we5sXRf+wD8ANTFNdnWQif
+         AsfDqiByx9fgSeVrVZvg3SFziBjBdD8FkvLYTWB5CRH168iz2UXW37mthAGA0wg/106p
+         0z0JkQ8h62bh7EEfYSFnzM5wS/o7f4VqGjVwuz9dOTGX6Y1Vcd6uVTKlIJeb/k+oq/64
+         PkAQ==
+X-Gm-Message-State: AOJu0YzJA/ySd9F8SdGEq8flN5M+GKsFZ7U7Oc24O+D9nXfWgmdUndlz
+	vamLyFAcRzwTKXyoOsP89Dvpgxl3mMFXVXUuyXzY9LFuWVwWtnfQRBtkTo/2iv7pZ3OyZ73U/A8
+	uzw==
+X-Google-Smtp-Source: AGHT+IEAo/YHXhUCVcmg42ky0a9z+nrVmwu+zvZWzJ+uai0a1ygawoh3yDL8xN6bZ+CGtHjLKyyvTg==
+X-Received: by 2002:a17:907:11d9:b0:a44:1893:437d with SMTP id va25-20020a17090711d900b00a441893437dmr10155440ejb.7.1709710760964;
+        Tue, 05 Mar 2024 23:39:20 -0800 (PST)
+Received: from google.com (12.196.204.35.bc.googleusercontent.com. [35.204.196.12])
+        by smtp.gmail.com with ESMTPSA id wk15-20020a170907054f00b00a4519304f8bsm3833592ejb.14.2024.03.05.23.39.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Mar 2024 23:39:20 -0800 (PST)
+Date: Wed, 6 Mar 2024 07:39:14 +0000
+From: Matt Bobrowski <mattbobrowski@google.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, kpsingh@google.com, jannh@google.com,
+	jolsa@kernel.org, daniel@iogearbox.net, brauner@kernel.org,
+	torvalds@linux-foundation.org, linux-fsdevel@vger.kernel.org
+Subject: [PATCH v2 bpf-next 0/9] add new acquire/release BPF kfuncs
+Message-ID: <cover.1709675979.git.mattbobrowski@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1709118356-133960-1-git-send-email-wangyunjian@huawei.com>
- <ZeHiBm/frFvioIIt@boxer> <65e2212e66769_158220294f@willemb.c.googlers.com.notmuch>
-In-Reply-To: <65e2212e66769_158220294f@willemb.c.googlers.com.notmuch>
-From: Jason Wang <jasowang@redhat.com>
-Date: Wed, 6 Mar 2024 13:32:14 +0800
-Message-ID: <CACGkMEsd4icR3EDHS-4DjmKMeez41r2SnNP4j70gAdzq8O=w=w@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 3/3] tun: AF_XDP Tx zero-copy support
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Yunjian Wang <wangyunjian@huawei.com>, mst@redhat.com, 
-	kuba@kernel.org, bjorn@kernel.org, magnus.karlsson@intel.com, 
-	jonathan.lemon@gmail.com, davem@davemloft.net, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	virtualization@lists.linux.dev, xudingke@huawei.com, liwei395@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, Mar 2, 2024 at 2:40=E2=80=AFAM Willem de Bruijn
-<willemdebruijn.kernel@gmail.com> wrote:
->
-> Maciej Fijalkowski wrote:
-> > On Wed, Feb 28, 2024 at 07:05:56PM +0800, Yunjian Wang wrote:
-> > > This patch set allows TUN to support the AF_XDP Tx zero-copy feature,
-> > > which can significantly reduce CPU utilization for XDP programs.
-> >
-> > Why no Rx ZC support though? What will happen if I try rxdrop xdpsock
-> > against tun with this patch? You clearly allow for that.
->
-> This is AF_XDP receive zerocopy, right?
->
-> The naming is always confusing with tun, but even though from a tun
-> PoV this happens on ndo_start_xmit, it is the AF_XDP equivalent to
-> tun_put_user.
->
-> So the implementation is more like other device's Rx ZC.
->
-> I would have preferred that name, but I think Jason asked for this
-> and given tun's weird status, there is something bo said for either.
->
+G'day All,
 
-From the the view of the AF_XDP userspace program, it's the TX path,
-and as you said it happens on the TUN xmit path as well. When using
-with a VM, it's the RX path.
+The original cover letter providing background context and motivating
+factors around the needs for the BPF kfuncs introduced within this
+patch series can be found here [0], so please do reference that if
+need be.
 
-So TX seems better.
+Notably, one of the main contention points within v1 of this patch
+series was that we were effectively leaning on some preexisting
+in-kernel APIs such as get_task_exe_file() and get_mm_exe_file()
+within some of the newly introduced BPF kfuncs. As noted in my
+response here [1] though, I struggle to understand the technical
+reasoning behind why exposing such in-kernel helpers, specifically
+only to BPF LSM program types in the form of BPF kfuncs, is inherently
+a terrible idea. So, until someone provides me with a sound technical
+explanation as to why this cannot or should not be done, I'll continue
+to lean on them. The alternative is to reimplement the necessary
+in-kernel APIs within the BPF kfuncs, but that's just nonsensical IMO.
 
-Thanks
+Changes since v1:
+   * Dropped the probe-read related patches [2, 3], which focused on
+     retroactively fixing bpf_d_path() such that it's susceptability
+     to memory corruption issues is drastically reduced. Rightfully so
+     though, it was deemed that reimplementing a semi-functional
+     variant of d_path() that was effectively backed by
+     copy_from_kernel_nofault() is suboptimal.
 
+[0] https://lore.kernel.org/bpf/cover.1708377880.git.mattbobrowski@google.com/
+[1] https://lore.kernel.org/bpf/ZdX83H7rTEwMYvs2@google.com/
+[2] https://lore.kernel.org/bpf/5643840bd57d0c2345635552ae228dfb2ed3428c.1708377880.git.mattbobrowski@google.com/
+[3] https://lore.kernel.org/bpf/18c7b587d43bbc7e80593bf51ea9d3eb99e47bc1.1708377880.git.mattbobrowski@google.com/
+
+Matt Bobrowski (9):
+  bpf: rename fs_kfunc_set_ids to lsm_kfunc_set_ids
+  bpf: add new acquire/release BPF kfuncs for mm_struct
+  bpf/selftests: add selftests for mm_struct acquire/release BPF kfuncs
+  bpf: add new acquire/release based BPF kfuncs for exe_file
+  bpf/selftests: add selftests for exe_file acquire/release BPF kfuncs
+  bpf: add acquire/release based BPF kfuncs for fs_struct's paths
+  bpf/selftests: add selftests for root/pwd path based BPF kfuncs
+  bpf: add trusted d_path() based BPF kfunc bpf_path_d_path()
+  bpf/selftests: adapt selftests test_d_path for BPF kfunc
+    bpf_path_d_path()
+
+ kernel/trace/bpf_trace.c                      | 248 +++++++++++++++++-
+ .../testing/selftests/bpf/prog_tests/d_path.c |  80 ++++++
+ .../selftests/bpf/prog_tests/exe_file_kfunc.c |  49 ++++
+ .../selftests/bpf/prog_tests/mm_kfunc.c       |  48 ++++
+ .../selftests/bpf/prog_tests/path_kfunc.c     |  48 ++++
+ .../selftests/bpf/progs/d_path_common.h       |  35 +++
+ .../bpf/progs/d_path_kfunc_failure.c          |  66 +++++
+ .../bpf/progs/d_path_kfunc_success.c          |  25 ++
+ .../bpf/progs/exe_file_kfunc_common.h         |  23 ++
+ .../bpf/progs/exe_file_kfunc_failure.c        | 181 +++++++++++++
+ .../bpf/progs/exe_file_kfunc_success.c        |  52 ++++
+ .../selftests/bpf/progs/mm_kfunc_common.h     |  19 ++
+ .../selftests/bpf/progs/mm_kfunc_failure.c    | 103 ++++++++
+ .../selftests/bpf/progs/mm_kfunc_success.c    |  30 +++
+ .../selftests/bpf/progs/path_kfunc_common.h   |  20 ++
+ .../selftests/bpf/progs/path_kfunc_failure.c  | 114 ++++++++
+ .../selftests/bpf/progs/path_kfunc_success.c  |  30 +++
+ .../testing/selftests/bpf/progs/test_d_path.c |  20 +-
+ .../bpf/progs/test_d_path_check_rdonly_mem.c  |   8 +-
+ .../bpf/progs/test_d_path_check_types.c       |   8 +-
+ 20 files changed, 1160 insertions(+), 47 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/exe_file_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/mm_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/path_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/progs/d_path_common.h
+ create mode 100644 tools/testing/selftests/bpf/progs/d_path_kfunc_failure.c
+ create mode 100644 tools/testing/selftests/bpf/progs/d_path_kfunc_success.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exe_file_kfunc_common.h
+ create mode 100644 tools/testing/selftests/bpf/progs/exe_file_kfunc_failure.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exe_file_kfunc_success.c
+ create mode 100644 tools/testing/selftests/bpf/progs/mm_kfunc_common.h
+ create mode 100644 tools/testing/selftests/bpf/progs/mm_kfunc_failure.c
+ create mode 100644 tools/testing/selftests/bpf/progs/mm_kfunc_success.c
+ create mode 100644 tools/testing/selftests/bpf/progs/path_kfunc_common.h
+ create mode 100644 tools/testing/selftests/bpf/progs/path_kfunc_failure.c
+ create mode 100644 tools/testing/selftests/bpf/progs/path_kfunc_success.c
+
+-- 
+2.44.0.278.ge034bb2e1d-goog
+
+/M
