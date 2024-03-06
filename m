@@ -1,56 +1,56 @@
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A8D79DE
-	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 03:19:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F2BC79DE
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 03:19:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709695183; cv=none; b=Ks7rxkfG1RWBJ0ChKZlN2DrT7ovhXA/nEnT2uA5DhQq9U3HZ7E37Zk04RpnGwgO6+eJkMVOMqjYOJWVNTWf0LWebvQ1d3RtVnrAwLTvBy3FiaeE3qwXghhL8uTRsCW1mzU4lJ03cerXmkd1JEIt22RFhlhMgO6e99wiAhiOhSKQ=
+	t=1709695186; cv=none; b=V1vcAjEEwYEqjqU7fT8F9y6auGRdSnPaap6/8urOrgcJ7byZyXj2Rm1fEqJMp/nqxmQC/zdQLfTvJIwXcM99eNn5Wp+Jg/mZYsCLjI7aBTzXyjLJddXYHUfzf77eL4hAsm+VMLSkFWM2QYUDGzyKDjU1hdo2o1FOjKXkxe/yLxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709695183; c=relaxed/simple;
-	bh=LmbIqjBvMiQoOk+bRCqbuhi1lqOUp9YREgd1Xtf/+RM=;
+	s=arc-20240116; t=1709695186; c=relaxed/simple;
+	bh=6WGvSe7Fem9w3KxKjd4+06v+OFSiQr/JuzcRXnyMfzc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=FjRfrboNtt7M/5gEeh0QX3WYB9boncyWGN0oftpM17edEkDWruL3C72oQ1N1dsBt2/rys0fWLu6cC9vHuY63XE3oL1bfEZHRmsHbXvm/CF8I3nzqaxAMpm3JsQXytRQo1c2zGhXiJYdW9Rpo1dHiBmtdjUU8U48d38OXRUwaaT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Phgv4wFT; arc=none smtp.client-ip=209.85.160.54
+	 MIME-Version; b=qOaLdKij16yvgr9c9wenw55YwVB1YcaD0rL9eEO0EULEcvW5rCHcTnYdU66KToY7hb5rK6KI1YlZZ0KviN4Zhnhf2A3XqFgk6jcKMVojf4wtCtMVWuy1WAsUVU6RYceEPR1MZxg0sCrgLM2grdT45DjwrX1Fu9yZCoTGpY5q83k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CcD/SqAB; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Phgv4wFT"
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-214def5da12so3857511fac.2
-        for <bpf@vger.kernel.org>; Tue, 05 Mar 2024 19:19:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CcD/SqAB"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-5ca29c131ebso5375692a12.0
+        for <bpf@vger.kernel.org>; Tue, 05 Mar 2024 19:19:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709695180; x=1710299980; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709695184; x=1710299984; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=E3g4pDfrGTsD340XQYwR0v4nnzNgvfyzWie+F6zzJmo=;
-        b=Phgv4wFTVu+f2uL/TmzlTezGseofkFNjyoYe1tJPTdvUjpvN+VDjX6ipWMCNlKPVN7
-         W812hyGavgDytBzMzwI0J0w3CQYMw9JoWZ1DnUusL/hmVggPJPx3AC1fUluyLCf6eT0X
-         lTBo0qxBvz8z7NivrFUJ0tRdh8blLlnrIBGQ/U4qDhimKtJVDtF+0tmPdmE9TBPa1C+h
-         weRtEIWfGO164cmFWzDx0SsXcqgS/aTEK8vLBOiGFxp8q5Y7RobCAVy8gkLdHQEx5MTs
-         yFKfttdlEfyQuUVEIny7srpXGf6E0mwbspFIbk5nxwd37PaKewAXII5u5MRl4zqmTHm7
-         aIwA==
+        bh=PYgGy7hKxvqJRIlsT84Qutdq9lW39geXxenSPQnQeJY=;
+        b=CcD/SqABvsZyJLUvfN3MTRiwwSe/YJKMcyhz8S1nRBp71EE34DTwgJQAn8OptjZJAp
+         muk58krbGf4FkeM000qdK/DfaG7Mv/WH9FAGDanrZBMxLMWExvsUBaMZ037OqXodgA7I
+         hR38Dv4YrMVqNv0pccnSzWNVzrbcYJfTuGCezY3fdC4v2YzxUrrk3o8k+IYCFLFx+Lxn
+         Os38erRXZN/0rc+fZiEEo3dFaKA0UJrNryGIX/9cNvCRLC0LBBIAEEEjszuE5euQcjiN
+         PVCVKKUhDUaKjjCNqI8MgWoPWRP3zgNv2eSIjVDPVkP1LkHrt9URKnIiR0JWJbfkZf4Y
+         GCmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709695180; x=1710299980;
+        d=1e100.net; s=20230601; t=1709695184; x=1710299984;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=E3g4pDfrGTsD340XQYwR0v4nnzNgvfyzWie+F6zzJmo=;
-        b=gC58jeDtlQm5f96MjxpC3tH+wM3Qgj0sKPn6ZC+s/jWO2KB+HDUfaFD0h4JD2uE2Bm
-         jB3pBTIXE9jfypbf/0qGg/iNtI+7ClaqqCDhHpGyNdWThBpjX3xj2SrvCQBQxj444Lrt
-         TervWx50qgs+NSXC8gPzVZAo5ptf0tCYKz6qbr969QM7n+C8GjaUApNRbFEvEZk10Civ
-         5qRYChD68PxkSgQwXTO2EFait10kd0Q4YlTCOitV0ihDpfbddbP39iyTQFFaoxo2DuD3
-         VpXnXb+Hr2VvHjfUZ9QXIwrYY6d/gm7FdxFONbFnxuOXuQfhRwxf1AFV/QcleRwHwlkU
-         2hqQ==
-X-Gm-Message-State: AOJu0YzbSqiDDG/nEdDqL+AzORFHCm+E3t2b+VXAPURuKWUnXU3tLEv6
-	aLv/d8ePrbtDWE4P52pUnrlScdY/ZlvWoPJtg10IqjbXpL95jEdyqiB9D7KX
-X-Google-Smtp-Source: AGHT+IGOYbSjctTzc9N9iMq1j0abbNRGjRqj+iszp4Gz4rrlqJLHTlo6UxQbDpx6hpU2RGgOcaG9Sg==
-X-Received: by 2002:a05:6870:2113:b0:220:87bb:cadd with SMTP id f19-20020a056870211300b0022087bbcaddmr4051544oae.16.1709695179515;
-        Tue, 05 Mar 2024 19:19:39 -0800 (PST)
+        bh=PYgGy7hKxvqJRIlsT84Qutdq9lW39geXxenSPQnQeJY=;
+        b=uvw73vkKyajgd3gzZN5lPVU7EcokV/xfKS1DNVb1wdduxdmftall4Ky1h1VVVJ1//u
+         tPMZqFvIGrkta6sQVOWdzZxHgH7V4ZgK6UNwzcyMCAVAteqxyN38az2Nl/cPQsCfw9ax
+         X5whtS+oo0zpKOO+Iyim+qDMQxA/eL6E5+ldt+SxBYsJNrRO6m22FPhYSTVg8kc4rwTY
+         J9wtGw8GI6IQB5P2asNHhmVBNd+J+z+vptOHwBmyYFR2iEPtu5r9Acf7hGbeL1fnmGtL
+         nyQXVSQRfIdEhUyPsVB0P3dnirKs+FolN5lCZmFS1+KSvB2Qmuh3aamogsDXu7dq8Pzt
+         jPhA==
+X-Gm-Message-State: AOJu0YxXPnCsUX+rOqz+EUOLtD1O4Z8TDzZwIYdF/O0XhvFw1TYWyjo0
+	pPdC3dopd4VGutUPZwEiJYMfHBZxSSghSMm4F7GTHahk4PtRk+DWwBh8K+Gp
+X-Google-Smtp-Source: AGHT+IHMfoGIQD1sV1DqZ7msofAEsA2ohlW2F71gWTPlx+btCqKC+sguZI45/Gtu09g2MCKpPrX5xQ==
+X-Received: by 2002:a05:6a20:7351:b0:1a0:e707:8c2 with SMTP id v17-20020a056a20735100b001a0e70708c2mr4158793pzc.29.1709695183701;
+        Tue, 05 Mar 2024 19:19:43 -0800 (PST)
 Received: from localhost.localdomain ([2620:10d:c090:400::5:52ad])
-        by smtp.gmail.com with ESMTPSA id x14-20020a056a00188e00b006e55f6cd7fesm9639998pfh.137.2024.03.05.19.19.37
+        by smtp.gmail.com with ESMTPSA id v27-20020aa799db000000b006e5a0abb167sm9046119pfi.1.2024.03.05.19.19.42
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 05 Mar 2024 19:19:39 -0800 (PST)
+        Tue, 05 Mar 2024 19:19:43 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -60,9 +60,9 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	john.fastabend@gmail.com,
 	kernel-team@fb.com
-Subject: [PATCH v6 bpf-next 1/4] bpf: Introduce may_goto instruction
-Date: Tue,  5 Mar 2024 19:19:26 -0800
-Message-Id: <20240306031929.42666-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH v6 bpf-next 2/4] bpf: Recognize that two registers are safe when their ranges match
+Date: Tue,  5 Mar 2024 19:19:27 -0800
+Message-Id: <20240306031929.42666-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.39.3 (Apple Git-145)
 In-Reply-To: <20240306031929.42666-1-alexei.starovoitov@gmail.com>
 References: <20240306031929.42666-1-alexei.starovoitov@gmail.com>
@@ -76,525 +76,175 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Introduce may_goto instruction that from the verifier pov is similar to
-open coded iterators bpf_for()/bpf_repeat() and bpf_loop() helper, but it
-doesn't iterate any objects.
-In assembly 'may_goto' is a nop most of the time until bpf runtime has to
-terminate the program for whatever reason. In the current implementation
-may_goto has a hidden counter, but other mechanisms can be used.
-For programs written in C the later patch introduces 'cond_break' macro
-that combines 'may_goto' with 'break' statement and has similar semantics:
-cond_break is a nop until bpf runtime has to break out of this loop.
-It can be used in any normal "for" or "while" loop, like
+When open code iterators, bpf_loop or may_goto are used the following two
+states are equivalent and safe to prune the search:
 
-  for (i = zero; i < cnt; cond_break, i++) {
+cur state: fp-8_w=scalar(id=3,smin=umin=smin32=umin32=2,smax=umax=smax32=umax32=11,var_off=(0x0; 0xf))
+old state: fp-8_rw=scalar(id=2,smin=umin=smin32=umin32=1,smax=umax=smax32=umax32=11,var_off=(0x0; 0xf))
 
-The verifier recognizes that may_goto is used in the program, reserves
-additional 8 bytes of stack, initializes them in subprog prologue, and
-replaces may_goto instruction with:
-aux_reg = *(u64 *)(fp - 40)
-if aux_reg == 0 goto pc+off
-aux_reg -= 1
-*(u64 *)(fp - 40) = aux_reg
+In other words "exact" state match should ignore liveness and precision
+marks, since open coded iterator logic didn't complete their propagation,
+reg_old->type == NOT_INIT && reg_cur->type != NOT_INIT is also not safe to
+prune while looping, but range_within logic that applies to scalars,
+ptr_to_mem, map_value, pkt_ptr is safe to rely on.
 
-may_goto instruction can be used by LLVM to implement __builtin_memcpy,
-__builtin_strcmp.
+Avoid doing such comparison when regular infinite loop detection logic is
+used, otherwise bounded loop logic will declare such "infinite loop" as
+false positive. Such example is in progs/verifier_loops1.c
+not_an_inifinite_loop().
 
-may_goto is not a full substitute for bpf_for() macro.
-bpf_for() doesn't have induction variable that verifiers sees,
-so 'i' in bpf_for(i, 0, 100) is seen as imprecise and bounded.
-
-But when the code is written as:
-for (i = 0; i < 100; cond_break, i++)
-the verifier see 'i' as precise constant zero,
-hence cond_break (aka may_goto) doesn't help to converge the loop.
-A static or global variable can be used as a workaround:
-static int zero = 0;
-for (i = zero; i < 100; cond_break, i++) // works!
-
-may_goto works well with arena pointers that don't need to be bounds
-checked on access. Load/store from arena returns imprecise unbounded
-scalar and loops with may_goto pass the verifier.
-
-Reserve new opcode BPF_JMP | BPF_JCOND for may_goto insn.
-JCOND stands for conditional pseudo jump.
-Since goto_or_nop insn was proposed, it may use the same opcode.
-may_goto vs goto_or_nop can be distinguished by src_reg:
-code = BPF_JMP | BPF_JCOND
-src_reg = 0 - may_goto
-src_reg = 1 - goto_or_nop
-
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h   |   2 +
- include/uapi/linux/bpf.h       |   5 +
- kernel/bpf/core.c              |   1 +
- kernel/bpf/disasm.c            |   4 +
- kernel/bpf/verifier.c          | 163 +++++++++++++++++++++++++++------
- tools/include/uapi/linux/bpf.h |   5 +
- 6 files changed, 150 insertions(+), 30 deletions(-)
+ kernel/bpf/verifier.c | 51 +++++++++++++++++++++++++------------------
+ 1 file changed, 30 insertions(+), 21 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 84365e6dd85d..4b0f6600e499 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -449,6 +449,7 @@ struct bpf_verifier_state {
- 	u32 jmp_history_cnt;
- 	u32 dfs_depth;
- 	u32 callback_unroll_depth;
-+	u32 may_goto_depth;
- };
- 
- #define bpf_get_spilled_reg(slot, frame, mask)				\
-@@ -619,6 +620,7 @@ struct bpf_subprog_info {
- 	u32 start; /* insn idx of function entry point */
- 	u32 linfo_idx; /* The idx to the main_prog->aux->linfo */
- 	u16 stack_depth; /* max. stack depth used by this function */
-+	u16 stack_extra;
- 	bool has_tail_call: 1;
- 	bool tail_call_reachable: 1;
- 	bool has_ld_abs: 1;
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index a241f407c234..85ec7fc799d7 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -42,6 +42,7 @@
- #define BPF_JSGE	0x70	/* SGE is signed '>=', GE in x86 */
- #define BPF_JSLT	0xc0	/* SLT is signed, '<' */
- #define BPF_JSLE	0xd0	/* SLE is signed, '<=' */
-+#define BPF_JCOND	0xe0	/* conditional pseudo jumps: may_goto, goto_or_nop */
- #define BPF_CALL	0x80	/* function call */
- #define BPF_EXIT	0x90	/* function return */
- 
-@@ -50,6 +51,10 @@
- #define BPF_XCHG	(0xe0 | BPF_FETCH)	/* atomic exchange */
- #define BPF_CMPXCHG	(0xf0 | BPF_FETCH)	/* atomic compare-and-write */
- 
-+enum bpf_cond_pseudo_jmp {
-+	BPF_MAY_GOTO = 0,
-+};
-+
- /* Register numbers */
- enum {
- 	BPF_REG_0 = 0,
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 71c459a51d9e..9ee4536d0a09 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1675,6 +1675,7 @@ bool bpf_opcode_in_insntable(u8 code)
- 		[BPF_LD | BPF_IND | BPF_B] = true,
- 		[BPF_LD | BPF_IND | BPF_H] = true,
- 		[BPF_LD | BPF_IND | BPF_W] = true,
-+		[BPF_JMP | BPF_JCOND] = true,
- 	};
- #undef BPF_INSN_3_TBL
- #undef BPF_INSN_2_TBL
-diff --git a/kernel/bpf/disasm.c b/kernel/bpf/disasm.c
-index 49940c26a227..82b2dbdd048f 100644
---- a/kernel/bpf/disasm.c
-+++ b/kernel/bpf/disasm.c
-@@ -322,6 +322,10 @@ void print_bpf_insn(const struct bpf_insn_cbs *cbs,
- 		} else if (insn->code == (BPF_JMP | BPF_JA)) {
- 			verbose(cbs->private_data, "(%02x) goto pc%+d\n",
- 				insn->code, insn->off);
-+		} else if (insn->code == (BPF_JMP | BPF_JCOND) &&
-+			   insn->src_reg == BPF_MAY_GOTO) {
-+			verbose(cbs->private_data, "(%02x) may_goto pc%+d\n",
-+				insn->code, insn->off);
- 		} else if (insn->code == (BPF_JMP32 | BPF_JA)) {
- 			verbose(cbs->private_data, "(%02x) gotol pc%+d\n",
- 				insn->code, insn->imm);
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 4dd84e13bbfe..8030b50d3b45 100644
+index 8030b50d3b45..ee86e4d7d5fc 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -533,6 +533,16 @@ static bool is_async_callback_calling_insn(struct bpf_insn *insn)
- 	return bpf_helper_call(insn) && is_async_callback_calling_function(insn->imm);
+@@ -16260,8 +16260,8 @@ static int check_btf_info(struct bpf_verifier_env *env,
  }
  
-+static bool is_may_goto_insn(struct bpf_insn *insn)
-+{
-+	return insn->code == (BPF_JMP | BPF_JCOND) && insn->src_reg == BPF_MAY_GOTO;
-+}
-+
-+static bool is_may_goto_insn_at(struct bpf_verifier_env *env, int insn_idx)
-+{
-+	return is_may_goto_insn(&env->prog->insnsi[insn_idx]);
-+}
-+
- static bool is_storage_get_function(enum bpf_func_id func_id)
+ /* check %cur's range satisfies %old's */
+-static bool range_within(struct bpf_reg_state *old,
+-			 struct bpf_reg_state *cur)
++static bool range_within(const struct bpf_reg_state *old,
++			 const struct bpf_reg_state *cur)
  {
- 	return func_id == BPF_FUNC_sk_storage_get ||
-@@ -1429,6 +1439,7 @@ static int copy_verifier_state(struct bpf_verifier_state *dst_state,
- 	dst_state->dfs_depth = src->dfs_depth;
- 	dst_state->callback_unroll_depth = src->callback_unroll_depth;
- 	dst_state->used_as_loop_entry = src->used_as_loop_entry;
-+	dst_state->may_goto_depth = src->may_goto_depth;
- 	for (i = 0; i <= src->curframe; i++) {
- 		dst = dst_state->frame[i];
- 		if (!dst) {
-@@ -14871,11 +14882,36 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 	int err;
+ 	return old->umin_value <= cur->umin_value &&
+ 	       old->umax_value >= cur->umax_value &&
+@@ -16425,21 +16425,28 @@ static bool regs_exact(const struct bpf_reg_state *rold,
+ 	       check_ids(rold->ref_obj_id, rcur->ref_obj_id, idmap);
+ }
  
- 	/* Only conditional jumps are expected to reach here. */
--	if (opcode == BPF_JA || opcode > BPF_JSLE) {
-+	if (opcode == BPF_JA || opcode > BPF_JCOND) {
- 		verbose(env, "invalid BPF_JMP/JMP32 opcode %x\n", opcode);
- 		return -EINVAL;
- 	}
++enum exact_level {
++	NOT_EXACT,
++	EXACT,
++	RANGE_WITHIN
++};
++
+ /* Returns true if (rold safe implies rcur safe) */
+ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+-		    struct bpf_reg_state *rcur, struct bpf_idmap *idmap, bool exact)
++		    struct bpf_reg_state *rcur, struct bpf_idmap *idmap,
++		    enum exact_level exact)
+ {
+-	if (exact)
++	if (exact == EXACT)
+ 		return regs_exact(rold, rcur, idmap);
  
-+	if (opcode == BPF_JCOND) {
-+		struct bpf_verifier_state *cur_st = env->cur_state, *queued_st, *prev_st;
-+		int idx = *insn_idx;
-+
-+		if (insn->code != (BPF_JMP | BPF_JCOND) ||
-+		    insn->src_reg != BPF_MAY_GOTO ||
-+		    insn->dst_reg || insn->imm || insn->off == 0) {
-+			verbose(env, "invalid may_goto off %d imm %d\n",
-+				insn->off, insn->imm);
-+			return -EINVAL;
-+		}
-+		prev_st = find_prev_entry(env, cur_st->parent, idx);
-+
-+		/* branch out 'fallthrough' insn as a new state to explore */
-+		queued_st = push_stack(env, idx + 1, idx, false);
-+		if (!queued_st)
-+			return -ENOMEM;
-+
-+		queued_st->may_goto_depth++;
-+		if (prev_st)
-+			widen_imprecise_scalars(env, prev_st, queued_st);
-+		*insn_idx += insn->off;
-+		return 0;
+-	if (!(rold->live & REG_LIVE_READ))
++	if (!(rold->live & REG_LIVE_READ) && exact == NOT_EXACT)
+ 		/* explored state didn't use this */
+ 		return true;
+-	if (rold->type == NOT_INIT)
+-		/* explored state can't have used this */
+-		return true;
+-	if (rcur->type == NOT_INIT)
+-		return false;
++	if (rold->type == NOT_INIT) {
++		if (exact == NOT_EXACT || rcur->type == NOT_INIT)
++			/* explored state can't have used this */
++			return true;
 +	}
-+
- 	/* check src2 operand */
- 	err = check_reg_arg(env, insn->dst_reg, SRC_OP);
- 	if (err)
-@@ -15659,6 +15695,8 @@ static int visit_insn(int t, struct bpf_verifier_env *env)
- 	default:
- 		/* conditional jump with two edges */
- 		mark_prune_point(env, t);
-+		if (is_may_goto_insn(insn))
-+			mark_force_checkpoint(env, t);
  
- 		ret = push_insn(t, t + 1, FALLTHROUGH, env);
- 		if (ret)
-@@ -17135,6 +17173,13 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 	/* Enforce that register types have to match exactly, including their
+ 	 * modifiers (like PTR_MAYBE_NULL, MEM_RDONLY, etc), as a general
+@@ -16474,7 +16481,7 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 			return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
+ 			       check_scalar_ids(rold->id, rcur->id, idmap);
+ 		}
+-		if (!rold->precise)
++		if (!rold->precise && exact == NOT_EXACT)
+ 			return true;
+ 		/* Why check_ids() for scalar registers?
+ 		 *
+@@ -16585,7 +16592,8 @@ static struct bpf_reg_state *scalar_reg_for_stack(struct bpf_verifier_env *env,
+ }
+ 
+ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+-		      struct bpf_func_state *cur, struct bpf_idmap *idmap, bool exact)
++		      struct bpf_func_state *cur, struct bpf_idmap *idmap,
++		      enum exact_level exact)
+ {
+ 	int i, spi;
+ 
+@@ -16598,12 +16606,13 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 
+ 		spi = i / BPF_REG_SIZE;
+ 
+-		if (exact &&
++		if (exact != NOT_EXACT &&
+ 		    old->stack[spi].slot_type[i % BPF_REG_SIZE] !=
+ 		    cur->stack[spi].slot_type[i % BPF_REG_SIZE])
+ 			return false;
+ 
+-		if (!(old->stack[spi].spilled_ptr.live & REG_LIVE_READ) && !exact) {
++		if (!(old->stack[spi].spilled_ptr.live & REG_LIVE_READ)
++		    && exact == NOT_EXACT) {
+ 			i += BPF_REG_SIZE - 1;
+ 			/* explored state didn't use this */
+ 			continue;
+@@ -16749,7 +16758,7 @@ static bool refsafe(struct bpf_func_state *old, struct bpf_func_state *cur,
+  * the current state will reach 'bpf_exit' instruction safely
+  */
+ static bool func_states_equal(struct bpf_verifier_env *env, struct bpf_func_state *old,
+-			      struct bpf_func_state *cur, bool exact)
++			      struct bpf_func_state *cur, enum exact_level exact)
+ {
+ 	int i;
+ 
+@@ -16776,7 +16785,7 @@ static void reset_idmap_scratch(struct bpf_verifier_env *env)
+ static bool states_equal(struct bpf_verifier_env *env,
+ 			 struct bpf_verifier_state *old,
+ 			 struct bpf_verifier_state *cur,
+-			 bool exact)
++			 enum exact_level exact)
+ {
+ 	int i;
+ 
+@@ -17150,7 +17159,7 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 			 * => unsafe memory access at 11 would not be caught.
+ 			 */
+ 			if (is_iter_next_insn(env, insn_idx)) {
+-				if (states_equal(env, &sl->state, cur, true)) {
++				if (states_equal(env, &sl->state, cur, RANGE_WITHIN)) {
+ 					struct bpf_func_state *cur_frame;
+ 					struct bpf_reg_state *iter_state, *iter_reg;
+ 					int spi;
+@@ -17174,20 +17183,20 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 				goto skip_inf_loop_check;
+ 			}
+ 			if (is_may_goto_insn_at(env, insn_idx)) {
+-				if (states_equal(env, &sl->state, cur, true)) {
++				if (states_equal(env, &sl->state, cur, RANGE_WITHIN)) {
+ 					update_loop_entry(cur, &sl->state);
+ 					goto hit;
  				}
  				goto skip_inf_loop_check;
  			}
-+			if (is_may_goto_insn_at(env, insn_idx)) {
-+				if (states_equal(env, &sl->state, cur, true)) {
-+					update_loop_entry(cur, &sl->state);
-+					goto hit;
-+				}
-+				goto skip_inf_loop_check;
-+			}
  			if (calls_callback(env, insn_idx)) {
- 				if (states_equal(env, &sl->state, cur, true))
+-				if (states_equal(env, &sl->state, cur, true))
++				if (states_equal(env, &sl->state, cur, RANGE_WITHIN))
  					goto hit;
-@@ -17144,6 +17189,7 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 				goto skip_inf_loop_check;
+ 			}
+ 			/* attempt to detect infinite loop to avoid unnecessary doomed work */
  			if (states_maybe_looping(&sl->state, cur) &&
- 			    states_equal(env, &sl->state, cur, true) &&
+-			    states_equal(env, &sl->state, cur, true) &&
++			    states_equal(env, &sl->state, cur, EXACT) &&
  			    !iter_active_depths_differ(&sl->state, cur) &&
-+			    sl->state.may_goto_depth == cur->may_goto_depth &&
+ 			    sl->state.may_goto_depth == cur->may_goto_depth &&
  			    sl->state.callback_unroll_depth == cur->callback_unroll_depth) {
- 				verbose_linfo(env, insn_idx, "; ");
- 				verbose(env, "infinite loop detected at insn %d\n", insn_idx);
-@@ -19408,7 +19454,10 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 	struct bpf_insn insn_buf[16];
- 	struct bpf_prog *new_prog;
- 	struct bpf_map *map_ptr;
--	int i, ret, cnt, delta = 0;
-+	int i, ret, cnt, delta = 0, cur_subprog = 0;
-+	struct bpf_subprog_info *subprogs = env->subprog_info;
-+	u16 stack_depth = subprogs[cur_subprog].stack_depth;
-+	u16 stack_depth_extra = 0;
- 
- 	if (env->seen_exception && !env->exception_callback_subprog) {
- 		struct bpf_insn patch[] = {
-@@ -19428,7 +19477,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 		mark_subprog_exc_cb(env, env->exception_callback_subprog);
- 	}
- 
--	for (i = 0; i < insn_cnt; i++, insn++) {
-+	for (i = 0; i < insn_cnt;) {
- 		/* Make divide-by-zero exceptions impossible. */
- 		if (insn->code == (BPF_ALU64 | BPF_MOD | BPF_X) ||
- 		    insn->code == (BPF_ALU64 | BPF_DIV | BPF_X) ||
-@@ -19467,7 +19516,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			delta    += cnt - 1;
- 			env->prog = prog = new_prog;
- 			insn      = new_prog->insnsi + i + delta;
--			continue;
-+			goto next_insn;
- 		}
- 
- 		/* Implement LD_ABS and LD_IND with a rewrite, if supported by the program type. */
-@@ -19487,7 +19536,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			delta    += cnt - 1;
- 			env->prog = prog = new_prog;
- 			insn      = new_prog->insnsi + i + delta;
--			continue;
-+			goto next_insn;
- 		}
- 
- 		/* Rewrite pointer arithmetic to mitigate speculation attacks. */
-@@ -19502,7 +19551,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			aux = &env->insn_aux_data[i + delta];
- 			if (!aux->alu_state ||
- 			    aux->alu_state == BPF_ALU_NON_POINTER)
--				continue;
-+				goto next_insn;
- 
- 			isneg = aux->alu_state & BPF_ALU_NEG_VALUE;
- 			issrc = (aux->alu_state & BPF_ALU_SANITIZE) ==
-@@ -19540,19 +19589,39 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			delta    += cnt - 1;
- 			env->prog = prog = new_prog;
- 			insn      = new_prog->insnsi + i + delta;
--			continue;
-+			goto next_insn;
-+		}
-+
-+		if (is_may_goto_insn(insn)) {
-+			int stack_off = -stack_depth - 8;
-+
-+			stack_depth_extra = 8;
-+			insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_AX, BPF_REG_10, stack_off);
-+			insn_buf[1] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, insn->off + 2);
-+			insn_buf[2] = BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1);
-+			insn_buf[3] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, stack_off);
-+			cnt = 4;
-+
-+			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
-+			if (!new_prog)
-+				return -ENOMEM;
-+
-+			delta += cnt - 1;
-+			env->prog = prog = new_prog;
-+			insn = new_prog->insnsi + i + delta;
-+			goto next_insn;
- 		}
- 
- 		if (insn->code != (BPF_JMP | BPF_CALL))
--			continue;
-+			goto next_insn;
- 		if (insn->src_reg == BPF_PSEUDO_CALL)
--			continue;
-+			goto next_insn;
- 		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
- 			ret = fixup_kfunc_call(env, insn, insn_buf, i + delta, &cnt);
- 			if (ret)
- 				return ret;
- 			if (cnt == 0)
--				continue;
-+				goto next_insn;
- 
- 			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 			if (!new_prog)
-@@ -19561,7 +19630,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			delta	 += cnt - 1;
- 			env->prog = prog = new_prog;
- 			insn	  = new_prog->insnsi + i + delta;
--			continue;
-+			goto next_insn;
- 		}
- 
- 		if (insn->imm == BPF_FUNC_get_route_realm)
-@@ -19609,11 +19678,11 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 				}
- 
- 				insn->imm = ret + 1;
--				continue;
-+				goto next_insn;
- 			}
- 
- 			if (!bpf_map_ptr_unpriv(aux))
--				continue;
-+				goto next_insn;
- 
- 			/* instead of changing every JIT dealing with tail_call
- 			 * emit two extra insns:
-@@ -19642,7 +19711,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			delta    += cnt - 1;
- 			env->prog = prog = new_prog;
- 			insn      = new_prog->insnsi + i + delta;
--			continue;
-+			goto next_insn;
- 		}
- 
- 		if (insn->imm == BPF_FUNC_timer_set_callback) {
-@@ -19754,7 +19823,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 				delta    += cnt - 1;
- 				env->prog = prog = new_prog;
- 				insn      = new_prog->insnsi + i + delta;
--				continue;
-+				goto next_insn;
- 			}
- 
- 			BUILD_BUG_ON(!__same_type(ops->map_lookup_elem,
-@@ -19785,31 +19854,31 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			switch (insn->imm) {
- 			case BPF_FUNC_map_lookup_elem:
- 				insn->imm = BPF_CALL_IMM(ops->map_lookup_elem);
--				continue;
-+				goto next_insn;
- 			case BPF_FUNC_map_update_elem:
- 				insn->imm = BPF_CALL_IMM(ops->map_update_elem);
--				continue;
-+				goto next_insn;
- 			case BPF_FUNC_map_delete_elem:
- 				insn->imm = BPF_CALL_IMM(ops->map_delete_elem);
--				continue;
-+				goto next_insn;
- 			case BPF_FUNC_map_push_elem:
- 				insn->imm = BPF_CALL_IMM(ops->map_push_elem);
--				continue;
-+				goto next_insn;
- 			case BPF_FUNC_map_pop_elem:
- 				insn->imm = BPF_CALL_IMM(ops->map_pop_elem);
--				continue;
-+				goto next_insn;
- 			case BPF_FUNC_map_peek_elem:
- 				insn->imm = BPF_CALL_IMM(ops->map_peek_elem);
--				continue;
-+				goto next_insn;
- 			case BPF_FUNC_redirect_map:
- 				insn->imm = BPF_CALL_IMM(ops->map_redirect);
--				continue;
-+				goto next_insn;
- 			case BPF_FUNC_for_each_map_elem:
- 				insn->imm = BPF_CALL_IMM(ops->map_for_each_callback);
--				continue;
-+				goto next_insn;
- 			case BPF_FUNC_map_lookup_percpu_elem:
- 				insn->imm = BPF_CALL_IMM(ops->map_lookup_percpu_elem);
--				continue;
-+				goto next_insn;
- 			}
- 
- 			goto patch_call_imm;
-@@ -19837,7 +19906,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			delta    += cnt - 1;
- 			env->prog = prog = new_prog;
- 			insn      = new_prog->insnsi + i + delta;
--			continue;
-+			goto next_insn;
- 		}
- 
- 		/* Implement bpf_get_func_arg inline. */
-@@ -19862,7 +19931,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			delta    += cnt - 1;
- 			env->prog = prog = new_prog;
- 			insn      = new_prog->insnsi + i + delta;
--			continue;
-+			goto next_insn;
- 		}
- 
- 		/* Implement bpf_get_func_ret inline. */
-@@ -19890,7 +19959,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			delta    += cnt - 1;
- 			env->prog = prog = new_prog;
- 			insn      = new_prog->insnsi + i + delta;
--			continue;
-+			goto next_insn;
- 		}
- 
- 		/* Implement get_func_arg_cnt inline. */
-@@ -19905,7 +19974,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 
- 			env->prog = prog = new_prog;
- 			insn      = new_prog->insnsi + i + delta;
--			continue;
-+			goto next_insn;
- 		}
- 
- 		/* Implement bpf_get_func_ip inline. */
-@@ -19920,7 +19989,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 
- 			env->prog = prog = new_prog;
- 			insn      = new_prog->insnsi + i + delta;
--			continue;
-+			goto next_insn;
- 		}
- 
- 		/* Implement bpf_kptr_xchg inline */
-@@ -19938,7 +20007,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			delta    += cnt - 1;
- 			env->prog = prog = new_prog;
- 			insn      = new_prog->insnsi + i + delta;
--			continue;
-+			goto next_insn;
- 		}
- patch_call_imm:
- 		fn = env->ops->get_func_proto(insn->imm, env->prog);
-@@ -19952,6 +20021,40 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			return -EFAULT;
- 		}
- 		insn->imm = fn->func - __bpf_call_base;
-+next_insn:
-+		if (subprogs[cur_subprog + 1].start == i + delta + 1) {
-+			subprogs[cur_subprog].stack_depth += stack_depth_extra;
-+			subprogs[cur_subprog].stack_extra = stack_depth_extra;
-+			cur_subprog++;
-+			stack_depth = subprogs[cur_subprog].stack_depth;
-+			stack_depth_extra = 0;
-+		}
-+		i++;
-+		insn++;
-+	}
-+
-+	env->prog->aux->stack_depth = subprogs[0].stack_depth;
-+	for (i = 0; i < env->subprog_cnt; i++) {
-+		int subprog_start = subprogs[i].start;
-+		int stack_slots = subprogs[i].stack_extra / 8;
-+
-+		if (!stack_slots)
-+			continue;
-+		if (stack_slots > 1) {
-+			verbose(env, "verifier bug: stack_slots supports may_goto only\n");
-+			return -EFAULT;
-+		}
-+
-+		/* Add ST insn to subprog prologue to init extra stack */
-+		insn_buf[0] = BPF_ST_MEM(BPF_DW, BPF_REG_FP,
-+					 -subprogs[i].stack_depth, BPF_MAX_LOOPS);
-+		/* Copy first actual insn to preserve it */
-+		insn_buf[1] = env->prog->insnsi[subprog_start];
-+
-+		new_prog = bpf_patch_insn_data(env, subprog_start, insn_buf, 2);
-+		if (!new_prog)
-+			return -ENOMEM;
-+		env->prog = prog = new_prog;
- 	}
- 
- 	/* Since poke tab is now finalized, publish aux to tracker. */
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index a241f407c234..85ec7fc799d7 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -42,6 +42,7 @@
- #define BPF_JSGE	0x70	/* SGE is signed '>=', GE in x86 */
- #define BPF_JSLT	0xc0	/* SLT is signed, '<' */
- #define BPF_JSLE	0xd0	/* SLE is signed, '<=' */
-+#define BPF_JCOND	0xe0	/* conditional pseudo jumps: may_goto, goto_or_nop */
- #define BPF_CALL	0x80	/* function call */
- #define BPF_EXIT	0x90	/* function return */
- 
-@@ -50,6 +51,10 @@
- #define BPF_XCHG	(0xe0 | BPF_FETCH)	/* atomic exchange */
- #define BPF_CMPXCHG	(0xf0 | BPF_FETCH)	/* atomic compare-and-write */
- 
-+enum bpf_cond_pseudo_jmp {
-+	BPF_MAY_GOTO = 0,
-+};
-+
- /* Register numbers */
- enum {
- 	BPF_REG_0 = 0,
+@@ -17245,7 +17254,7 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 		 */
+ 		loop_entry = get_loop_entry(&sl->state);
+ 		force_exact = loop_entry && loop_entry->branches > 0;
+-		if (states_equal(env, &sl->state, cur, force_exact)) {
++		if (states_equal(env, &sl->state, cur, force_exact ? RANGE_WITHIN : NOT_EXACT)) {
+ 			if (force_exact)
+ 				update_loop_entry(cur, loop_entry);
+ hit:
 -- 
 2.43.0
 
