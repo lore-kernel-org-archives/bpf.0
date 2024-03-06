@@ -1,124 +1,252 @@
-Received: from wfout5-smtp.messagingengine.com (wfout5-smtp.messagingengine.com [64.147.123.148])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD47C5CDD8
-	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 07:57:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E6CD5CDC5
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 07:59:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709711864; cv=none; b=LEDDo3ApUhlUgT9mzOdOWY8zuK+tdPcLUNB9o0mPE4nD1SErnH3KmAfB6SqBlX27vsnflk9rzSYVU1y4vR5rjuiBydAem2LhlRf1x0mU8FrLtcpmUoKw1UCLtWNfz07SWMNNwhFNc45S9ncU1YCTdkJIltlkduZuVdL/gCZdEZk=
+	t=1709711942; cv=none; b=RX/PPYvDOUbN/hqIBYGPGWbSrwGREbT9kVkkiNbETR2Z+zRlmWbV2FhLZU8GZmIBJvFBrJlFCJYFQj/zSOM5H+AOai2+GUUt6bvL+T+d0ui1f2kqzZZUj5N1u0+RkZFYDgGEJv7tgS3j7UOyTDybLUoZNW3I8+ekTNYs8Cu0dV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709711864; c=relaxed/simple;
-	bh=6mEzWRPAPZpFHIGgZvLiqo/nfEnV9sE0CRc9KSAlcXc=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=stl/u9iTp7RWm1LgR0z70epCrL73QqeMQXLz5lUjziAbbszdndLnWiy57mBI5CNTTiMoELGHJLyCco5yDAhViF7pSWXGtZtYKIf92U8GxeaPxgIuXB42XscSz7GTsKUYjcfXYnLvmBBjfC4E5IJ+RVQZsmSPtZkTXAnSnTjIS7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isaackhor.com; spf=pass smtp.mailfrom=isaackhor.com; dkim=pass (2048-bit key) header.d=isaackhor.com header.i=@isaackhor.com header.b=cQlIpg5S; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=GeQbSa1Y; arc=none smtp.client-ip=64.147.123.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isaackhor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isaackhor.com
+	s=arc-20240116; t=1709711942; c=relaxed/simple;
+	bh=4nTzqRh2Da9+8jGOqLVDfEZtt/wUSEj0nyjdCZP2Ywo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KTHKkqLx5S9S815bzWLbGI/psMv6KZjRHynjjZeVZ0RpQtBw0Wrr52TpdTxObH1abROKgm5wNc+DCoFBfwD0iBmWdD5iV6GG6qVRr8cFClO6aLwgCqGG4TceaH4ln+JsdJgu3+3yJf16iOSzSmrdC3CqJ/sN9uAKiQJjx94gwrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nAXrGGdB; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isaackhor.com header.i=@isaackhor.com header.b="cQlIpg5S";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="GeQbSa1Y"
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailfout.west.internal (Postfix) with ESMTP id 9868B1C000A9;
-	Wed,  6 Mar 2024 02:57:41 -0500 (EST)
-Received: from imap45 ([10.202.2.95])
-  by compute6.internal (MEProxy); Wed, 06 Mar 2024 02:57:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=isaackhor.com;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1709711861; x=
-	1709798261; bh=3cZ8wVDgtLMJtJp1u+3LLyQkoR0tmTOysQzSb4YxXUg=; b=c
-	QlIpg5SzIqNLszQpTvedZFv8wVtALFBIqTCR0CCNGw5Wg/s9sDclTfpcvaG5JdUM
-	oze2pz1m4OG7pbAUuOgE1icuo4ciEscKw8YIt09f3DD7lerG1df8Oc/VTqdKOdZf
-	fFIZYzbUgyaPX+ezqAfXN9oRpAXkqUDDd5FLn5LFi4NVr9bYY9kNWwVsFVg00P5d
-	kdLEBR3olNMpE2wX4GreKToEUlflsTj5BSVo+KDWIj7mioN2rKQOIS/ZtaMHr3IR
-	PZ+EpRLm2f/O3Dj7ehws8EuiDfmUkOGIpIEUBrXG6p+hvzV111hbuYVbQMjOKR/w
-	ScEgkNXcKMBNV8Q9gUhvA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1709711861; x=1709798261; bh=3cZ8wVDgtLMJtJp1u+3LLyQkoR0t
-	mTOysQzSb4YxXUg=; b=GeQbSa1YNmtD6DF/xAE30/vgv9UOhLjsEP4z+Gjk5JQD
-	OBeYh/0r6v0Hcfh8J5yBdFYazIlXX6Y8QVWOdh9v4YKcuz2SDSQEr+Bph9/hJ5gw
-	fjtPSl3OdXnCOoGB/IDTaeXfAtcH8nyBSVD7IErkVg/sJejbSuWoP8x1riVm6htW
-	T/kD6jRZnEjx3MoHAPBY0PS1bBijDgY2SigJVr6fklQGKB8+C5qMWM4x/TNJDne8
-	WgWIlmPlblfEGcEW77rjW+OdZJlMSqvdeN9StBFMqA7equPcMNLfiAd1NS+6w4D5
-	cluyfKv2Fy84zM2WfoNn/WZh7By9DrZfyvFv8VIs5Q==
-X-ME-Sender: <xms:9CHoZSKnshyrA9tgKmZaYfN0mFGJKhi6v2PD3ZQOTPqqE4BsikHznQ>
-    <xme:9CHoZaLRh5HvXjATQiOhc8XFphyurx5hFvlPV9KPEE6EzeSb-q16kbFTXVNTZlZr-
-    a9gBSgbMkfkQwIr0Zg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledriedtgdduuddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfkfhs
-    rggrtgcumfhhohhrfdcuoegtohhnthgrtghtsehishgrrggtkhhhohhrrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpefhfeeuhfegffehgeduhffgvdejvdfgffeffefhtefhtefgieeg
-    vdehtdetudeitdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegtohhnthgrtghtsehishgrrggtkhhhohhrrdgtohhm
-X-ME-Proxy: <xmx:9SHoZSsm5LGLvrKNeU6rxRSObRPJiJLIeUeO-ZIUeOiknN2pSq0WvQ>
-    <xmx:9SHoZXZO9naZFUoWkoxha2ORuGj6sV7JnXxBIdSCO95bhaSbqv150Q>
-    <xmx:9SHoZZYwadbxe9vkU0IPPQSm5H5mD_WafqNv4wnLSExPde953fsDJQ>
-    <xmx:9SHoZYxy4AwjWhsiZDFZWivhoc7c-knrNR9cT4-NcXsS-udtUxEAVAVvkIw>
-Feedback-ID: ia46944cc:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id DE571272007C; Wed,  6 Mar 2024 02:57:40 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-208-g3f1d79aedb-fm-20240301.002-g3f1d79ae
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nAXrGGdB"
+Message-ID: <7aaeee73-4197-4ea8-834a-2265ef078bab@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1709711938;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rMdKN/veBvBZl77DmaY151Schj3OAuh7OxlNW/BLu6g=;
+	b=nAXrGGdBbQdUdnkNDA0RBfdaM0nkRv2H/UfctRgaGjhMARmkjoODK6z6T5Ek4R6mb31PiN
+	nMhroCz5VA9f7LYxd6Tai65xSjh6m3soj7X7caiPOtItHpArT3l/ERx4PIrLWrqVqBCp4u
+	QV2T2p7Uwhiio13pBruGdoN4eu9koBU=
+Date: Tue, 5 Mar 2024 23:58:47 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d55baee2-29bc-4057-b0b8-c789df8dcebc@app.fastmail.com>
-In-Reply-To: 
- <CAADnVQKY0d2ww4hwbuu3TA3DFyrSeBnRqSp0qdEY2Scgf4kP5g@mail.gmail.com>
-References: <8F75EC74-53D6-4841-8D41-4CF56BE69730@isaackhor.com>
- <CAADnVQKY0d2ww4hwbuu3TA3DFyrSeBnRqSp0qdEY2Scgf4kP5g@mail.gmail.com>
-Date: Wed, 06 Mar 2024 02:57:20 -0500
-From: "Isaac Khor" <contact@isaackhor.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>
-Subject: Re: struct_ops usage - verifier interactions
-Content-Type: text/plain
+Subject: Re: [PATCH net-next v12 14/15] p4tc: add set of P4TC table kfuncs
+Content-Language: en-US
+To: Jamal Hadi Salim <jhs@mojatatu.com>
+Cc: deb.chatterjee@intel.com, anjali.singhai@intel.com,
+ namrata.limaye@intel.com, tom@sipanda.io, mleitner@redhat.com,
+ Mahesh.Shirshyad@amd.com, Vipin.Jain@amd.com, tomasz.osinski@intel.com,
+ jiri@resnulli.us, xiyou.wangcong@gmail.com, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, vladbu@nvidia.com,
+ horms@kernel.org, khalidm@nvidia.com, toke@redhat.com, daniel@iogearbox.net,
+ victor@mojatatu.com, pctammela@mojatatu.com, bpf@vger.kernel.org,
+ netdev@vger.kernel.org
+References: <20240225165447.156954-1-jhs@mojatatu.com>
+ <20240225165447.156954-15-jhs@mojatatu.com>
+ <9eff9a51-a945-48f6-9d14-a484b7c0d04c@linux.dev>
+ <CAM0EoMniOaKn4W_WN9rmQZ1JY3qCugn34mmqCy9UdCTAj_tuTQ@mail.gmail.com>
+ <f88b5f65-957e-4b5d-8959-d16e79372658@linux.dev>
+ <CAM0EoMk=igKT5ZEwcfdQqP6O3u8tO7VOpkNsWE1b92ia2eZVpw@mail.gmail.com>
+ <496c78b7-4e16-42eb-a2f4-99472cd764fd@linux.dev>
+ <CAM0EoMmB0s5WzZ-CgGWBF9YdaWi7O0tHEj+C8zuryGhKz7+FpA@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <CAM0EoMmB0s5WzZ-CgGWBF9YdaWi7O0tHEj+C8zuryGhKz7+FpA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-> Was it compiled with -O0 ?
-> clang didn't even inline what was marked as __always_inline which is strange.
-> Make sure to use the latest clang with -O2 -target bpf -g -mcpu=v3
+On 3/5/24 4:30 AM, Jamal Hadi Salim wrote:
+> On Tue, Mar 5, 2024 at 2:40 AM Martin KaFai Lau <martin.lau@linux.dev> wrote:
+>>
+>> On 3/3/24 9:20 AM, Jamal Hadi Salim wrote:
+>>
+>>>>>>> +#define P4TC_MAX_PARAM_DATA_SIZE 124
+>>>>>>> +
+>>>>>>> +struct p4tc_table_entry_act_bpf {
+>>>>>>> +     u32 act_id;
+>>>>>>> +     u32 hit:1,
+>>>>>>> +         is_default_miss_act:1,
+>>>>>>> +         is_default_hit_act:1;
+>>>>>>> +     u8 params[P4TC_MAX_PARAM_DATA_SIZE];
+>>>>>>> +} __packed;
+>>>>>>> +
+>>>>>>> +struct p4tc_table_entry_act_bpf_kern {
+>>>>>>> +     struct rcu_head rcu;
+>>>>>>> +     struct p4tc_table_entry_act_bpf act_bpf;
+>>>>>>> +};
+>>>>>>> +
+>>>>>>>      struct tcf_p4act {
+>>>>>>>          struct tc_action common;
+>>>>>>>          /* Params IDR reference passed during runtime */
+>>>>>>>          struct tcf_p4act_params __rcu *params;
+>>>>>>> +     struct p4tc_table_entry_act_bpf_kern __rcu *act_bpf;
+>>>>>>>          u32 p_id;
+>>>>>>>          u32 act_id;
+>>>>>>>          struct list_head node;
+>>>>>>> @@ -24,4 +40,39 @@ struct tcf_p4act {
+>>>>>>>
+>>>>>>>      #define to_p4act(a) ((struct tcf_p4act *)a)
+>>>>>>>
+>>>>>>> +static inline struct p4tc_table_entry_act_bpf *
+>>>>>>> +p4tc_table_entry_act_bpf(struct tc_action *action)
+>>>>>>> +{
+>>>>>>> +     struct p4tc_table_entry_act_bpf_kern *act_bpf;
+>>>>>>> +     struct tcf_p4act *p4act = to_p4act(action);
+>>>>>>> +
+>>>>>>> +     act_bpf = rcu_dereference(p4act->act_bpf);
+>>>>>>> +
+>>>>>>> +     return &act_bpf->act_bpf;
+>>>>>>> +}
+>>>>>>> +
+>>>>>>> +static inline int
+>>>>>>> +p4tc_table_entry_act_bpf_change_flags(struct tc_action *action, u32 hit,
+>>>>>>> +                                   u32 dflt_miss, u32 dflt_hit)
+>>>>>>> +{
+>>>>>>> +     struct p4tc_table_entry_act_bpf_kern *act_bpf, *act_bpf_old;
+>>>>>>> +     struct tcf_p4act *p4act = to_p4act(action);
+>>>>>>> +
+>>>>>>> +     act_bpf = kzalloc(sizeof(*act_bpf), GFP_KERNEL);
+>>>>>>
+>>>>>>
+>>>>>> [ ... ]
+>>
+>>
+>>>>>>> +static int
+>>>>>>> +__bpf_p4tc_entry_create(struct net *net,
+>>>>>>> +                     struct p4tc_table_entry_create_bpf_params *params,
+>>>>>>> +                     void *key, const u32 key__sz,
+>>>>>>> +                     struct p4tc_table_entry_act_bpf *act_bpf)
+>>>>>>> +{
+>>>>>>> +     struct p4tc_table_entry_key *entry_key = key;
+>>>>>>> +     struct p4tc_pipeline *pipeline;
+>>>>>>> +     struct p4tc_table *table;
+>>>>>>> +
+>>>>>>> +     if (!params || !key)
+>>>>>>> +             return -EINVAL;
+>>>>>>> +     if (key__sz != P4TC_ENTRY_KEY_SZ_BYTES(entry_key->keysz))
+>>>>>>> +             return -EINVAL;
+>>>>>>> +
+>>>>>>> +     pipeline = p4tc_pipeline_find_byid(net, params->pipeid);
+>>>>>>> +     if (!pipeline)
+>>>>>>> +             return -ENOENT;
+>>>>>>> +
+>>>>>>> +     table = p4tc_tbl_cache_lookup(net, params->pipeid, params->tblid);
+>>>>>>> +     if (!table)
+>>>>>>> +             return -ENOENT;
+>>>>>>> +
+>>>>>>> +     if (entry_key->keysz != table->tbl_keysz)
+>>>>>>> +             return -EINVAL;
+>>>>>>> +
+>>>>>>> +     return p4tc_table_entry_create_bpf(pipeline, table, entry_key, act_bpf,
+>>>>>>> +                                        params->profile_id);
+>>>>>>
+>>>>>> My understanding is this kfunc will allocate a "struct
+>>>>>> p4tc_table_entry_act_bpf_kern" object. If the bpf_p4tc_entry_delete() kfunc is
+>>>>>> never called and the bpf prog is unloaded, how the act_bpf object will be
+>>>>>> cleaned up?
+>>>>>>
+>>>>>
+>>>>> The TC code takes care of this. Unloading the bpf prog does not affect
+>>>>> the deletion, it is the TC control side that will take care of it. If
+>>>>> we delete the pipeline otoh then not just this entry but all entries
+>>>>> will be flushed.
+>>>>
+>>>> It looks like the "struct p4tc_table_entry_act_bpf_kern" object is allocated by
+>>>> the bpf prog through kfunc and will only be useful for the bpf prog but not
+>>>> other parts of the kernel. However, if the bpf prog is unloaded, these bpf
+>>>> specific objects will be left over in the kernel until the tc pipeline (where
+>>>> the act_bpf_kern object resided) is gone.
+>>>>
+>>>> It is the expectation on bpf prog (not only tc/xdp bpf prog) about resources
+>>>> clean up that these bpf objects will be gone after unloading the bpf prog and
+>>>> unpinning its bpf map.
+>>>>
+>>>
+>>> The table (residing on the TC side) could be shared by multiple bpf
+>>> programs. Entries are allocated on the TC side of the fence.
+>>
+>>
+>>> IOW, the memory is not owned by the bpf prog but rather by pipeline.
+>>
+>> The struct p4tc_table_entry_act_(bpf_kern) object is allocated by
+>> bpf_p4tc_entry_create() kfunc and only bpf prog can use it, no?
+>> afaict, this is bpf objects.
+>>
+> 
+> Bear with me because i am not sure i am following.
+> When we looked at conntrack as guidance we noticed they do things
+> slightly differently. They have an allocate kfunc and an insert
+> function. If you have alloc then you need a complimentary release. The
+> existence of the release in conntrack, correct me if i am wrong, seems
+> to be based on the need to free the object if an insert fails. In our
+> case the insert does first allocate then inserts all in one operation.
+> If either fails it's not the concern of the bpf side to worry about
+> it. IOW, i see the ownership as belonging to the P4TC side  (it is
+> both allocated, updated and freed by that side). Likely i am missing
+> something..
 
-You're right, the optimisations got disabled somewhere along the road when
-I was debugging the problem. Re-tested with the compiler args you listed:
+It is not the concern about the kfuncs may leak object.
 
-libbpf: prog 'bpf_iden_max_ra': BPF program load failed: Permission denied
-libbpf: prog 'bpf_iden_max_ra': -- BEGIN PROG LOAD LOG --
-0: R1=ctx() R10=fp0
-; int BPF_PROG(bpf_iden_max_ra, struct bpf_fs_readahead_state *s) @ readahead_noop.c:7
-0: (79) r1 = *(u64 *)(r1 +0)          ; R1_w=scalar()
-; return s->ra_pages; @ readahead_noop.c:9
-1: (61) r0 = *(u32 *)(r1 +12)
-R1 invalid mem access 'scalar'
-processed 2 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
--- END PROG LOAD LOG --
-libbpf: prog 'bpf_iden_max_ra': failed to load: -13
-libbpf: failed to load object '/root/readahead_noop.o'
+I think my question was, who can use the act_bpf_kern object when all tc bpf 
+prog is unloaded? If no one can use it, it should as well be cleaned up when the 
+bpf prog is unloaded.
 
-Stepping through the verifier in a debugger still shows the same problem,
-somehow the verifier thinks that the register is a `SCALAR_VALUE` instead of 
-valid pointer.
+or the kernel p4 pipeline can use the act_bpf_kern object even when there is no 
+bpf prog loaded?
 
-> You should see something like:
->
-> llvm-objdump -S -r bpf_cubic.bpf.o|head -50
->
-> bpf_cubic.bpf.o:    file format elf64-bpf
->
-> Disassembly of section struct_ops/bpf_cubic_init:
->
-> <... snip ...>
 
-Yep, the output matches. I'm building with `vmlinux.h` instead of linux/bpf.h
-but otherwise nothing has changed.
+> 
+>>> We do have a "whodunnit" field, i.e we keep track of which entity
+>>> added an entry and we are capable of deleting all entries when we
+>>> detect a bpf program being deleted (this would be via deleting the tc
+>>> filter). But my thinking is we should make that a policy decision as
+>>> opposed to something which is default.
+>>
+>> afaik, this policy decision or cleanup upon tc filter delete has not been done
+>> yet. I will leave it to you to figure out how to track what was allocated by a
+>> particular bpf prog on the TC side. It is not immediately clear to me and I
+>> probably won't have a good idea either.
+>>
+> 
+> I am looking at the conntrack code and i dont see how they release
+> entries from the cotrack table when the bpf prog goes away.
+> 
+>> Just to be clear that it is almost certain to be unacceptable to extend and make
+>> changes on the bpf side in the future to handle specific resource
+>> cleanup/tracking/sharing of the bpf objects allocated by these kfuncs. This
+>> problem has already been solved and works for different bpf program types,
+>> tc/cgroup/tracing...etc. Adding a refcnted bpf prog pointer alongside the
+>> act_bpf_kern object will be a non-starter.
+>>
+>> I think multiple people have already commented that these kfuncs
+>> (create/update/delete...) resemble the existing bpf map. If these kfuncs are
+>> replaced with the bpf map ops, this bpf resource management has already been
+>> handled and will be consistent with other bpf program types.
+>>
+>> I expect the act_bpf_kern object probably will grow in size over time also.
+>> Considering this new p4 pipeline and table is residing on the TC side, I will
+>> leave it up to others to decide if it is acceptable to have some unused bpf
+>> objects left attached there.
+> 
+> There should be no dangling things at all.
+> Probably not a very good example, but this would be analogous to
+> pinning a map which is shared by many bpf progs. Deleting one or all
+> the bpf progs doesnt delete the contents of the bpf map, you have to
+> explicitly remove it. Deleting the pipeline will be equivalent to
+> deleting the map. IOW, resource cleanup is tied to the pipeline..
 
-Thanks,
-Isaac Khor
+bpf is also used by many subsystems (e.g. tracing/cgroup/...). The bpf users 
+have a common expectation on how bpf resources will be cleaned up when writing 
+bpf for different subsystems, i.e. map/link/pinned-file. Thus, p4 pipeline is 
+not the same as a pinned bpf map here. The p4-tc bpf user cannot depend on the 
+common bpf ecosystem to cleanup all resources.
+
+It is going back to how link/fd and the map ops discussion by others in the 
+earlier revisions which we probably don't want to redo here. I think I have been 
+making enough noise such that we don't have to discuss potential future changes 
+about how to release this resources when the bpf prog is unloaded.
