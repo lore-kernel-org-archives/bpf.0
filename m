@@ -1,68 +1,67 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB86E3E48E
-	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 13:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC08131720
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 13:12:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709730451; cv=none; b=arq0Ri7gs1kEjwnzdK8iDVoy5Fbz6oQBsakURg88Bg3lxinPVx5u5AstO5DxvoQIA97AgqGX8VhFitUJW5TrujLYJYygGBgbT+n0UIQ3rlJlHJ0zNY00TE6TxNqpIUNiZiI/zN/peqW6ZjAgk+0mVl6UkNCnvhxTRH+jtw4Tq7w=
+	t=1709730730; cv=none; b=V8PqbA6+5Kx7ZKuofDZTd809PPcYmjJBeAdke9XrG7iYRqGPQR8j4h8pEuromgH7VuR6CvmbT78pXALeSEZYU/hjUBOkUq8hr6OxvfDoR+HxENoaHPSmFlhL/iaafx8SS9QHUAABvTAt4i0LuJn7uGMEfz4cASEIaG9b99mZuCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709730451; c=relaxed/simple;
-	bh=3jug2md0K7m6mkUo0SQ+JduBXmxHYamY2ypjqkjgEbs=;
+	s=arc-20240116; t=1709730730; c=relaxed/simple;
+	bh=oVKUqanUGAcq2NWxlbbq/+er60MgHhBcCtUj4CoQsV8=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ck1hAtXj1DBlyHlTTSeXCYWPl6yqAW94bg8gu4JETGVyX7800DfiYl6gkhQU8qCzRJaUyhuKBWNMok3xGFsyA1+nNuIdU9IUT/lPN37iftl7wJeWZikp74nD7YEbKii90LgQ/wy/Gsj0M8oyetvorpCEqohb53Eri01eGUV5mfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UNd4nVZJ; arc=none smtp.client-ip=209.85.218.49
+	 Content-Type:MIME-Version; b=s+KTtMn+sgSP8IQeSB++2dVEOBLEQLGV7P54t/ijk9Q3ldZwLfPmFjLEfSgb5hPftWKAfPCN5iP1wGolHeiYnKkG6z6L/I+Ha1pEENyjLXNkagt+50ZW6osyEjzvuoeolk646MYcKr1Y0WvBoMgjV4DVdYrenE09rdasmprk8Ts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I7fZ1o/w; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UNd4nVZJ"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a293f2280c7so138327466b.1
-        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 05:07:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I7fZ1o/w"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-565ef8af2f5so8635552a12.3
+        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 05:12:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709730448; x=1710335248; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709730727; x=1710335527; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:autocrypt
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=3jug2md0K7m6mkUo0SQ+JduBXmxHYamY2ypjqkjgEbs=;
-        b=UNd4nVZJSYGBfFRW0U0xxL9MNB6fy/tizcBp2l7YqiNDHnUcncwERL8qslV/S4wsEL
-         z5rZMeUxLIcKfe/n0SWCSS7pQTbJJdkL4YguVN/4sEJ0ecekqb69gTMOLfa4j/AU+9Iq
-         u52kBI1ku6HnuQth4uthtQGlzqPdYVs7b+qFmEOu2LH3oXolWfUsEvj9hrEymvOGCMU9
-         1wn5z6xNb9pHEIgWCZL3FRkg8t9T+U3miDB3FMBuygyFXUi4y8IDK5A6qENjQr13akCI
-         LGvoT9drGALLvETz5IeMcKeWERNyeUkflI/h5t4OHdM3A6OMtkvgfdmYWjHFxpz1oKbn
-         A72w==
+        bh=1ZIy1xwiIRwXJ/TPCtZPshhjhmF1b2jcglnJlzmWcHs=;
+        b=I7fZ1o/w1wynqAMtdrSEGbTNc/2I8j1sEDjifu/fPQ5Tzvg2nQbeP4gXmnL3yoVeBD
+         naCiguxb23spoiA4uB60dPfWiGj46n6lJhlCsE6xrs9jjN4Q91AOfP0EC0A3yAnGFnlF
+         3Qugg9BC2jzkai8hy1t2D22O//heTlP3A6QE3yNif/+jXo4iD4ZpoLBSpTXgPOh5y6lh
+         r2rEEeIHF38OdCLSF7s3RtwiHmSLf4VvzTuC47Q7kts5ZSFi6mMS8rvBZL3ut9N7FBrN
+         T9I8hC3O5ADBTkuV1l+ckFzjCvohADwgDnMMz02ZYNoHt5hi9ezxwXJdYfaesld4HU91
+         M/bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709730448; x=1710335248;
+        d=1e100.net; s=20230601; t=1709730727; x=1710335527;
         h=mime-version:user-agent:content-transfer-encoding:autocrypt
          :references:in-reply-to:date:cc:to:from:subject:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3jug2md0K7m6mkUo0SQ+JduBXmxHYamY2ypjqkjgEbs=;
-        b=puN48OS3xRyzvi9+tw9E7xhbhAbjMITAvW94mCGPbGP+GjCfo/k1krEnyAcpcJZ6MS
-         Gr79F8FbsAZ13X5uWG8ma477xyCWJ6lXIpbZICEl1/LABzldFIypyooRopy94lTC40Eo
-         6VKs0n8XfItJabtOXzwzdp6q5DYZGQjzvrQkBE0UYTkG6svhNbOPdeZSgqltu6V7L7u0
-         OgGEy4wTEXvplMnkEEtt+KbUCT9+/xuD691j+7keOQfjUVHXI/ltlVbYuNJ181BQesYO
-         rTzCp7TvevLP++8BKoTQ6n4aPDvphEoH/+k9XOC0KvrLVqBVOMzUTYo79zn6mLwklDS1
-         ze7g==
-X-Forwarded-Encrypted: i=1; AJvYcCV8MqhqgBDPbvdnSiBpu4PtuXC+3HUui+RNqtnLy4eJhl/K8rpug64+hyiAcDlDPrbXHq4weQ/wDnSJ/KK/5Hy8mYb9
-X-Gm-Message-State: AOJu0Yw3KDdZeMlhRnsDNh3UfdFwk1aLwiRNhuzlqw5U20c2Q5fd3ykX
-	m2i7JIW7ZmYLJ4ZvkfnKKiBSF6PBhSu2jWZi0irF8rHwYPpN3EWPn/ClOg0e
-X-Google-Smtp-Source: AGHT+IE5wElHEyLKsG/BaRPgVVOD5EPHshndgDXJKaf/QqQvOdfGLWzYV25jQoE6EVDn4DQ90c8Wrw==
-X-Received: by 2002:a17:906:37d6:b0:a45:b1fc:52d with SMTP id o22-20020a17090637d600b00a45b1fc052dmr2109576ejc.76.1709730447797;
-        Wed, 06 Mar 2024 05:07:27 -0800 (PST)
+        bh=1ZIy1xwiIRwXJ/TPCtZPshhjhmF1b2jcglnJlzmWcHs=;
+        b=ok6xrpdcCY5X04t0MmNkNN2CKhn6T5kJrgOUtLHIESy/t68f6vlp/2XwkB98zKhr5q
+         EPOPtw6APj9Xp0xSPOv+eVOjJcbjt5js7Tdm+fgVkEtmVK2OSS8CONSlpeoU9FtRUYd5
+         uxm+KE8cbdnpFx+cmP0aWICv0KnmYzBNzQSEB95WDoMKDhXDs77P2cCZ41Lf/oIT/pAd
+         SjS2sQfpGzGMwEuJ6oWWsL979nNE7CmGrFn01DMrFCraK9zksDltDSoqpi3UM8C7g1aS
+         GkNn8WutWv96sdkaEWbv48hxT0eIxRwv49GnTtGXk44J6pm1CmVsHhf98c3l/e+BH6yq
+         PlJA==
+X-Forwarded-Encrypted: i=1; AJvYcCVKrhGucQoVcLz4z6PdqxGkOvWAWRDBwM4M1gMzkjHYLUKL69L2OQv1GwFMV0vwFqQCrAlS8mw0+hnLJ5GamCsAEC+e
+X-Gm-Message-State: AOJu0YwbVU+EAQyhiZVaRXnR0tmds68B0b4cSoZMB94Nlwk0USCnvXuI
+	pc0gCQQ5zR7tm256siIpPuZ9sScgxRQ1n0Wa+9NM96rzqADubJ/S
+X-Google-Smtp-Source: AGHT+IEA8orCjqWvz4seHKDEwZ7QLgf9MfE+1Ut4/SQ2uflmhcVmBCO3CJGBOm6qPaEFPDPT9poDGA==
+X-Received: by 2002:a17:907:7677:b0:a44:7bbe:d770 with SMTP id kk23-20020a170907767700b00a447bbed770mr12276912ejc.7.1709730727255;
+        Wed, 06 Mar 2024 05:12:07 -0800 (PST)
 Received: from [192.168.1.94] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id k14-20020a170906128e00b00a44b91ae6d4sm5460896ejb.33.2024.03.06.05.07.26
+        by smtp.gmail.com with ESMTPSA id w24-20020a1709067c9800b00a4528658771sm3841399ejo.31.2024.03.06.05.12.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Mar 2024 05:07:27 -0800 (PST)
-Message-ID: <ac4aa0863b5dc80d20ce91584bcd351b4d6b3bdc.camel@gmail.com>
-Subject: Re: [PATCH v6 bpf-next 2/4] bpf: Recognize that two registers are
- safe when their ranges match
+        Wed, 06 Mar 2024 05:12:06 -0800 (PST)
+Message-ID: <d7b7dd3eab10ff5b57799e16b95ef1a45c90285a.camel@gmail.com>
+Subject: Re: [PATCH v6 bpf-next 1/4] bpf: Introduce may_goto instruction
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
 Cc: daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org, 
 	memxor@gmail.com, john.fastabend@gmail.com, kernel-team@fb.com
-Date: Wed, 06 Mar 2024 15:07:25 +0200
-In-Reply-To: <20240306031929.42666-3-alexei.starovoitov@gmail.com>
+Date: Wed, 06 Mar 2024 15:12:05 +0200
+In-Reply-To: <20240306031929.42666-2-alexei.starovoitov@gmail.com>
 References: <20240306031929.42666-1-alexei.starovoitov@gmail.com>
-	 <20240306031929.42666-3-alexei.starovoitov@gmail.com>
+	 <20240306031929.42666-2-alexei.starovoitov@gmail.com>
 Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
@@ -78,27 +77,83 @@ MIME-Version: 1.0
 
 On Tue, 2024-03-05 at 19:19 -0800, Alexei Starovoitov wrote:
 > From: Alexei Starovoitov <ast@kernel.org>
+
+[...]
+
+> JCOND stands for conditional pseudo jump.
+> Since goto_or_nop insn was proposed, it may use the same opcode.
+> may_goto vs goto_or_nop can be distinguished by src_reg:
+> code =3D BPF_JMP | BPF_JCOND
+> src_reg =3D 0 - may_goto
+> src_reg =3D 1 - goto_or_nop
 >=20
-> When open code iterators, bpf_loop or may_goto are used the following two
-> states are equivalent and safe to prune the search:
->=20
-> cur state: fp-8_w=3Dscalar(id=3D3,smin=3Dumin=3Dsmin32=3Dumin32=3D2,smax=
-=3Dumax=3Dsmax32=3Dumax32=3D11,var_off=3D(0x0; 0xf))
-> old state: fp-8_rw=3Dscalar(id=3D2,smin=3Dumin=3Dsmin32=3Dumin32=3D1,smax=
-=3Dumax=3Dsmax32=3Dumax32=3D11,var_off=3D(0x0; 0xf))
->=20
-> In other words "exact" state match should ignore liveness and precision
-> marks, since open coded iterator logic didn't complete their propagation,
-> reg_old->type =3D=3D NOT_INIT && reg_cur->type !=3D NOT_INIT is also not =
-safe to
-> prune while looping, but range_within logic that applies to scalars,
-> ptr_to_mem, map_value, pkt_ptr is safe to rely on.
->=20
-> Avoid doing such comparison when regular infinite loop detection logic is
-> used, otherwise bounded loop logic will declare such "infinite loop" as
-> false positive. Such example is in progs/verifier_loops1.c
-> not_an_inifinite_loop().
->=20
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
 > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+
+[...]
+
+> @@ -14871,11 +14882,36 @@ static int check_cond_jmp_op(struct bpf_verifie=
+r_env *env,
+>  	int err;
+> =20
+>  	/* Only conditional jumps are expected to reach here. */
+> -	if (opcode =3D=3D BPF_JA || opcode > BPF_JSLE) {
+> +	if (opcode =3D=3D BPF_JA || opcode > BPF_JCOND) {
+>  		verbose(env, "invalid BPF_JMP/JMP32 opcode %x\n", opcode);
+>  		return -EINVAL;
+>  	}
+> =20
+> +	if (opcode =3D=3D BPF_JCOND) {
+> +		struct bpf_verifier_state *cur_st =3D env->cur_state, *queued_st, *pre=
+v_st;
+> +		int idx =3D *insn_idx;
+> +
+> +		if (insn->code !=3D (BPF_JMP | BPF_JCOND) ||
+> +		    insn->src_reg !=3D BPF_MAY_GOTO ||
+> +		    insn->dst_reg || insn->imm || insn->off =3D=3D 0) {
+> +			verbose(env, "invalid may_goto off %d imm %d\n",
+> +				insn->off, insn->imm);
+> +			return -EINVAL;
+> +		}
+> +		prev_st =3D find_prev_entry(env, cur_st->parent, idx);
+> +
+> +		/* branch out 'fallthrough' insn as a new state to explore */
+> +		queued_st =3D push_stack(env, idx + 1, idx, false);
+> +		if (!queued_st)
+> +			return -ENOMEM;
+> +
+> +		queued_st->may_goto_depth++;
+> +		if (prev_st)
+> +			widen_imprecise_scalars(env, prev_st, queued_st);
+> +		*insn_idx +=3D insn->off;
+> +		return 0;
+> +	}
+
+Nit: for other conditional jumps the fallthrough branch is explored first,
+     I tried the following and the tests keep passing:
+    =20
+@@ -14901,14 +14901,13 @@ static int check_cond_jmp_op(struct bpf_verifier_=
+env *env,
+ 		prev_st =3D find_prev_entry(env, cur_st->parent, idx);
+=20
+ 		/* branch out 'fallthrough' insn as a new state to explore */
+-		queued_st =3D push_stack(env, idx + 1, idx, false);
++		queued_st =3D push_stack(env, idx + insn->off + 1, idx, false);
+ 		if (!queued_st)
+ 			return -ENOMEM;
+=20
+-		queued_st->may_goto_depth++;
++		cur_st->may_goto_depth++;
+ 		if (prev_st)
+-			widen_imprecise_scalars(env, prev_st, queued_st);
+-		*insn_idx +=3D insn->off;
++			widen_imprecise_scalars(env, prev_st, cur_st);
+ 		return 0;
+ 	}
+=20
+Maybe this is a property worth preserving, wdyt?
+
+[...]
