@@ -1,145 +1,159 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA0BD534
-	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 16:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69FE3137930
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 16:51:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709743884; cv=none; b=NX2Lf/bL/iDsK00Y1LPQOZEaZNDExB7cau7W3EC/hcN/l2xjR6vb9j7zzNk0JP50FoyGXBk8lC7tNpX8YrgK58vlcm42FyrKRDA910T6m+nOjvMWun+sSnSdkShQokjWhFmV5t28QpH6XGMfppCOqiedt5Y+NNqgQEWBEKXV/2U=
+	t=1709743894; cv=none; b=kPkEBZpSTghwj5L43TlsG/QD4SPGILvtH2yZoXv64lrCGFtEa5P7mP1SflUFIC8Yby2N1l3/rVVkdwyh2aKps0hDDqQ6HYr7ottbJOPi8W2SdznTZf7Oa8/Uvk4bABm1rvXJtbnwBL3N7ntw+8GaiBUi40mmsDkM+fLRAB3IPfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709743884; c=relaxed/simple;
-	bh=AuuhBwLZ0UDCQuIj72sUdbGMEd5gcb381MhHE5Ur1mQ=;
+	s=arc-20240116; t=1709743894; c=relaxed/simple;
+	bh=2ZhRIiVOue9t1Wad+eKIOFn2M0PF3k+uzBlQG79ns5E=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l5IzpVth3v4ovD7ijdKz2rVgihSiSf9hvQ3gVFydVsaCsdtEXa6q0ovwh8IqReIZhmGauFlRvIGIfRxcvtXVQmDyXW1i4165BAM+IByxgAcY0yUADOjpY3v3/GtuYY+u28ORZxaDwP9gmBBZzS5R55oN2t9Trhpo84ziEeo2Z04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AhAFAkZZ; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=LjnVzv/TW3nWOr7n7NrZWq5ZriTE4i9cwPpLbkHyWw6ElTdvwoNWbhkDpPc1DiZw09sdKk/Fesijb1Q0DGgVHzHSE2gNAJeyAI/vpcTXW8CMoj0byA8eAtHo9GhHdA7PA9g/XBILQEh5hAxtaMcBykck+6y/5V09VQn41/y2/0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MgZ0KcAS; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AhAFAkZZ"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-33e122c8598so13126f8f.1
-        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 08:51:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MgZ0KcAS"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-565b434f90aso10333665a12.3
+        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 08:51:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709743881; x=1710348681; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1709743891; x=1710348691; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4oZYzWHIx6qDvlz03KR2uwW6nKu66yvZ/HggnMiSEPc=;
-        b=AhAFAkZZgn4rT6VpsepxgN9cLjn7o7/3NiONM9b4A3kyMzKxg+bltMjjFj+XaDmqed
-         wsniNMh/26aPGwg6ZOxlxuyL03mi4/5xSmyj3ReUIDQUccWEYUWrkf1Hk5MYmldwC7Y4
-         FIez717YqZDDcMv2WZ3KiAuvyjH1ph53Cl3IpAKvfJqob6zNH5dwth/pUbgtVMW+jdtC
-         tbnhsSUPFqiIwnFJ7aTT4NNc70d5/UgK2zImZyEaKVq85gOX2IZ0vj4cjBdlhyaqRpLr
-         PU1NVl7vqID2J4IOjAyqhVcYtbHKxvAro4i4aM8WtA7YlsU+uiCwgwaF8Q9Dq+XcXuCp
-         llTA==
+        bh=fAuNxTfS6x4OQHwyTAR2JW08hPHhuONnAVW1sMtWxI0=;
+        b=MgZ0KcAS7HSS77yVu7xyCeHAcaC/1SdsNfuOebsPKTi47ADSikIPFHFpMVlwAuM3Lq
+         ADh3B8tOCDjS8SO22bC5JH7v38MMF7sGik0mAt/5hJkVIW5AEQmXcFeW9oqhkFytK0rb
+         /Ww9ONL83z+QuBnnhMONLXuuoA7qgm3K0ZfBZvgkcOLzqswyIaukdbQhLb3YNczFfmmx
+         jgRR8h2ZQOpnYgWc7g+WCCi0m0f37F6bezegEtZlxh4cxVcQxJZp/udwbPuqUyp3aK1a
+         0D9N4f04odZmGIVAHEJ6AuB6otT/H7GV6nWXPid/olVyvuohW5SN+xe5wVd+/4rfcXAt
+         PowQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709743881; x=1710348681;
+        d=1e100.net; s=20230601; t=1709743891; x=1710348691;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4oZYzWHIx6qDvlz03KR2uwW6nKu66yvZ/HggnMiSEPc=;
-        b=djNoK0GVI8cnu3fsAQKkKD1/HX6n0LxszxTp4AdLqh/NUN4pKyFw1qxMbnEm6u/OnN
-         nfZ2sHED9oGwDHZ82CzIHN6tuQgFU8qcSdBaKQYpcnnSD3VDj/tu053J+WnJI+uxa/nk
-         6JIdpYpxj+CAy3Wd9KkQrLJYN/VHriZXG9ijKwYPL2/Bd6HmiDi8pJkBjvOlEORo8g2D
-         WdbLRO4pW8qYRiopSLcX3/iGMul7zqccO1XMYlaLOpYbsFpmjh1kvHTIf7ttgBC+nOcm
-         gD3JlCdt8gKh5ZuGCSVrbb6B/0gA7mtZkrd17nWbDXCa12FNZgM30XC1DLnSL5th/1QD
-         infA==
-X-Gm-Message-State: AOJu0YzRzoMUJk0KXbkzG7HnDT7FwARnBEx1Ei6Xrck7O+TX1CyCqlED
-	3FxLRhTMo9g/7X/u6e/qynGGkzch4HL/XzWke+/1g/ysAEDlo53g5THVoyHI3DJW9Ww00MjZLHW
-	YkShwaehsvP2WI5PdFu2EZCLa7hw=
-X-Google-Smtp-Source: AGHT+IFFOGrlzmfdBVVui7KjHMsLs8H794U4gl8tZwxN46LAgjI2iqHnrmjdKDBURInFtLCE35zNpZuXu8/KdTEkqKw=
-X-Received: by 2002:a05:6000:1963:b0:33e:1560:71a8 with SMTP id
- da3-20020a056000196300b0033e156071a8mr10422841wrb.7.1709743880943; Wed, 06
- Mar 2024 08:51:20 -0800 (PST)
+        bh=fAuNxTfS6x4OQHwyTAR2JW08hPHhuONnAVW1sMtWxI0=;
+        b=pM6yqsLipt3Co/kGbJXz6HD9C1zXydGemXkIY0nCgUDEGLZa5W3+RYKB+oTFOh20yq
+         Gh9dOZ728wq1gUd2g51+t0Rvu4JR28rGh5D9lMTFRILuHGwLBWmZ0JEfwkS4kUdFVoPr
+         WKjP4k/yQRtahQU6Z02GTcDxiPhn5w+mW3zMyOtaoDwgY9eBegaHNZk4rrvbnoy4Sxav
+         J3fp2526kifmtB38lwC+jqMLf48w5gBn16LinJqUos+YD21ulpQHry6LYT0lAQ6HoxxS
+         qZbkLyHMV4oOSxoaNnIS9TXfEYhAG08HMIPuzbWGvhDsY8z7dAp2z78AY9YkEPbdVZV/
+         Luhg==
+X-Forwarded-Encrypted: i=1; AJvYcCWtB9LHc2VRHhNAgIkLo1fG07mWJRqQF9FPUrbPoSmL31XqShaV3V7/HYTOwbtABPrS9VCNAwARs/mc/HSOGT7M+cjF
+X-Gm-Message-State: AOJu0YxJ4u08tMCVpYTJkB8VARdX331qgODoFj0scvGjHDn/gLLd9RWe
+	goo9UPk2ZSB0kqtoO2OVRBovZQf/Z9Wps17cdKGYE9/QwREkI0E++TT5oY+TypqWraMuqPOshVT
+	9QSd8kYo3vXXKzfyDqLaRYcTqLZiLGUXGo1MX
+X-Google-Smtp-Source: AGHT+IHrH3y3Ev3rFR65oa9/ga3T2bFvGKoWYUoW9uQPlR8wceBykqCSE0zANfpwXtxsNCt9XtLxrBXjLnroDNOKeBc=
+X-Received: by 2002:a17:906:fc01:b0:a43:f267:789f with SMTP id
+ ov1-20020a170906fc0100b00a43f267789fmr10647282ejb.41.1709743890406; Wed, 06
+ Mar 2024 08:51:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240306031929.42666-1-alexei.starovoitov@gmail.com>
- <20240306031929.42666-4-alexei.starovoitov@gmail.com> <e4fcd2c9f88e7ce31d356cb31e686bab22382bab.camel@gmail.com>
-In-Reply-To: <e4fcd2c9f88e7ce31d356cb31e686bab22382bab.camel@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 6 Mar 2024 08:51:09 -0800
-Message-ID: <CAADnVQ+pUa02_8u01KhTfsmgc0=sRVdX8TCp5gYkKBp5Sfhf7g@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 3/4] bpf: Add cond_break macro
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, John Fastabend <john.fastabend@gmail.com>, 
-	Kernel Team <kernel-team@fb.com>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-10-almasrymina@google.com> <383c4870-167f-4123-bbf3-928db1463e01@davidwei.uk>
+ <CAHS8izP_PzDJVxycwZe_d_x10-SX4=Q-CWpKTjoOQ5dc2NSn3w@mail.gmail.com> <b85b36bd-7082-47a5-bf46-50cff8eb60be@gmail.com>
+In-Reply-To: <b85b36bd-7082-47a5-bf46-50cff8eb60be@gmail.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Wed, 6 Mar 2024 08:51:18 -0800
+Message-ID: <CAHS8izMEJHWAHVjaKu9ZpeWRj1TwoLkmY5tCtDYxdDReBV8=Dw@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 09/15] memory-provider: dmabuf devmem
+ memory provider
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: David Wei <dw@davidwei.uk>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 6, 2024 at 5:26=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com>=
- wrote:
+On Wed, Mar 6, 2024 at 6:59=E2=80=AFAM Pavel Begunkov <asml.silence@gmail.c=
+om> wrote:
 >
-> On Tue, 2024-03-05 at 19:19 -0800, Alexei Starovoitov wrote:
-> > From: Alexei Starovoitov <ast@kernel.org>
+> On 3/6/24 02:42, Mina Almasry wrote:
+> > On Tue, Mar 5, 2024 at 6:28=E2=80=AFPM David Wei <dw@davidwei.uk> wrote=
+:
+> >>
+> >> On 2024-03-04 18:01, Mina Almasry wrote:
+> >>> +     if (pool->p.queue)
+> >>> +             binding =3D READ_ONCE(pool->p.queue->binding);
+> >>> +
+> >>> +     if (binding) {
+> >>> +             pool->mp_ops =3D &dmabuf_devmem_ops;
+> >>> +             pool->mp_priv =3D binding;
+> >>> +     }
+> >>
+> >> This is specific to TCP devmem. For ZC Rx we will need something more
+> >> generic to let us pass our own memory provider backend down to the pag=
+e
+> >> pool.
+> >>
+> >> What about storing ops and priv void ptr in struct netdev_rx_queue
+> >> instead? Then we can both use it.
 > >
-> > Use may_goto instruction to implement cond_break macro.
-> > Ideally the macro should be written as:
-> >   asm volatile goto(".byte 0xe5;
-> >                      .byte 0;
-> >                      .short %l[l_break] ...
-> >                      .long 0;
-> > but LLVM doesn't recognize fixup of 2 byte PC relative yet.
-> > Hence use
-> >   asm volatile goto(".byte 0xe5;
-> >                      .byte 0;
-> >                      .long %l[l_break] ...
-> >                      .short 0;
-> > that produces correct asm on little endian.
-> >
-> > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> > Yes, this is dmabuf specific, I was thinking you'd define your own
+> > member of netdev_rx_queue, and then add something like this to
+> > page_pool_init:
 >
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> That would be quite annoying, there are 3 expected users together
+> with huge pages, each would need a field and check all others are
+> disabled as you mentioned and so on. It should be cleaner to pass
+> a generic {pp_ops,pp_private} pair instead.
 >
-> I tried rewriting with offset +1 and an additional goto:
+> If header dependencies is a problem, you it can probably be
 >
->         ({ __label__ l_break, l_continue;               \
->          asm volatile goto("%[jcond]; goto %l[l_break];"\
->                            :: __imm_insn(jcond, BPF_RAW_INSN(BPF_JMP | BP=
-F_JCOND, 0, 0, 1, 0)) \
->                            :: l_break);                 \
->         goto l_continue;                                \
->         l_break: break;                                 \
->         l_continue:;                                    \
->         })
+> struct pp_provider_param {
+>         struct pp_ops ops;
+>         void *private;
+> };
+>
+> # netdev_rx_queue.h
+>
+> // definition is not included here
+> struct pp_provider_params;
+>
+> struct netdev_rx_queue {
+>         ...
+>         struct pp_provider_params *pp_params;
+> };
+>
 
-It probably works, but the generated code is not pretty.
-That's the reason why this macro has two labels l_break and l_continue.
-It could have been written with a single label, like:
+Seems very reasonable, will do! Thanks!
 
-/* bad asm */
-#define cond_break \
-({ __label__ l_continue; \
-asm volatile goto("may_goto %l[l_continue]" :::: l_continue); \
-break; \
-l_continue: ; \
-})
+> --
+> Pavel Begunkov
 
-but generated code isn't great.
-It's similar to bpf_cmp_likely vs bpf_cmp_unlikely.
-The C statement that llvm sees right after 'asm volatile goto'
-is important for codegen.
 
-The macro in this patch is effectively this
-/* good asm */
-#define cond_break \
-({ __label__ l_break, l_continue; \
-asm volatile goto("may_goto %l[l_break]" :::: l_break); \
-goto l_continue; \
-l_break: break; \
-l_continue: ; \
-})
 
-To visualize see:
-https://godbolt.org/z/98bcbrxaE
-
-The next step is to do several fixes in llvm:
-- allow pcrel fixup of 2 bytes
-- introduce builtin_may_goto()
-- recognize may_goto in inline asm and llvm-objdump disasm
-
-With that the macro will be cleaned up and the big-endian issue
-will be addressed.
+--=20
+Thanks,
+Mina
