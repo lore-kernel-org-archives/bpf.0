@@ -1,125 +1,133 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 438FC13F00C
-	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 19:15:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87C2960250
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 19:18:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709752542; cv=none; b=jbYRFDCj0UA8eHhZ448Q9FGAWDjTpR2MbOMAWz18gypz1pEKuC3LZfcXdsHGoPTP/o4zCnKpHJeqYE+/TcM4QjlnBJKYWjQvI3oi0qDXvuE2PZhC0rpkeQPx/JhXp2S0J/Ki8FZ01hDS24EEHtg8YMpMHFf4jPRjFGX1RrTmQD8=
+	t=1709752688; cv=none; b=sNIHdyMroH5uibrkffGV/JAlPDMKHbakZr6ra1Q8qkvZPaegYDvSx8UYBr2ECXNsYkIOv1/pMiow2KR0koPu+8la5Qhl8goM5pGN2xPf/zwHn6SQKiLGuy6AAKYT7hTqq7uwfjL/CRJgoNY0Hif7nj886gLyburIBdA09DKlYBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709752542; c=relaxed/simple;
-	bh=NFXyJbYacHBoD0F5xTOouV6fnC4b31g+akIOuMV65Qc=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=XDGN2sCsPolxGZFHImvAgD3KId9GKS5RlhUqKo+2On2mRaLvpefDgjw87RnfgHbuEg9u8BkBUjNmo34DP0sHdgaYAlPBfMphog4p9OSBE2xDHqMQ+UmBjrSzB2peo+S5S4lNCNUGHhMpKIuoVgoyRVSr+M/lAaCrqfGlCke4wXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YDiNE7+0; arc=none smtp.client-ip=209.85.210.169
+	s=arc-20240116; t=1709752688; c=relaxed/simple;
+	bh=3CqH+Yn0QojVHv4eboB2iy8YNlCQwH0cOk+2Z5LXZ0k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TW5bQC/KtKBqLHOqpp/3s1l5dR/E3CkHdMsgmngVysWc5SAYQI0PBUFzAO+18AsmcxERrZGj4tlvpO88JIwD8BV0OhGFtxvdXjgsFY8/ImJmK5GBSXYOq+RfFZQE4gYlTdXEPIg6/FGjub0iDDAZUmk4SJtIIS2Afu8W6cXmfaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kEeT4xcH; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YDiNE7+0"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6e617b39877so43447b3a.3
-        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 11:15:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kEeT4xcH"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-29abd02d0d9so4822982a91.0
+        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 11:18:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709752540; x=1710357340; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1709752687; x=1710357487; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=t5Jzb+Wmd3SvsCQisoBy52wpRKNxdYiCJNj6t9ERjys=;
-        b=YDiNE7+0KAz8tVISD5QQuHqMqXpN1FERK8uheq82/gSux+knapeWNhoRhKSIUIjuVu
-         8xq/x+OYsFyuiwHqh7nvRW4pyO8/ffel6IMNSeY1G+viDkFENk7t0MQbo8GBKyDboXe/
-         R/NT+Z5HP7pcHHVZvU3KCY5OScpYK7AREsRcHIXYybUdr8WU9pPrpcsMDp3y09Uyybkm
-         Rrr4bDrybjcMkjtIuWZmZmjId/6uz1DwKzYbHIYb2RfCMegzuLW9GqWmKI0yxnXmwdsK
-         GM0h6YsHmozba/sfqLoQlUaMoHENWUAH9sUfQAwYuctVf7UnS0ASzAW5DXx/wzlYFGap
-         b1fw==
+        bh=XHiNBZvCn3wB5Ii9Wc2aJdBOKiyj3i+KV/1Fx6InuOs=;
+        b=kEeT4xcHlmbXWKSCyxRU29zVefEFZ+tsC6CQCzpEA5njGpNoDEVqMcFeMHgrNsQZci
+         +2b+yn3dQYm4bK1ns/N701tzdjSr4CSZqmbqMl8eZI43dEKSpuW7ZuZtPK20reLXJ5n0
+         ESGcgjVSuWg8ejEPmeuamxOktcMWz/3XraO4G2Zj8PccBkXwnSEOa2q9qTkrL/rfXZby
+         t8ec2uhDD8bI3MrLBzVChxi2m3m/McR7I8YQOpV+Lf6+hUROK+79YQr5nXTnJxaxL2Kc
+         XnefcAwKUk7SA4et8b0PDylr/1Rppuyxy1VIU4nnheaHzjPGzf/IQt1XlHfyAx+LyD41
+         ZsHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709752540; x=1710357340;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=t5Jzb+Wmd3SvsCQisoBy52wpRKNxdYiCJNj6t9ERjys=;
-        b=Tm51uAyIom9DdrAlY0pIjiOwB+o7+jPLBQhso/UtRsFL3dE3FJI1PClPCY1iOZJQFT
-         XSeNd8LroDyke+uJdiQJlW6dXVwK5GtTkL5W7JWraOs4aLfzrR2sCmEdg+SUkKHLrZR+
-         Egz8pCf+TQNxkWP8bdWof9web4esyczNDoqZxoyOJNSQFrb2pPCYThspUzi3q0H95Jl9
-         NTKOfaJjHxfHb9yDXbThk960K2evze8a2rfGEv09nChMmGroXQYiGUj0zdtzs7GB2uv4
-         k6YLrCmj3st1n2cAcpsF/6SfQX11H5aY2Iv1f1VWFXZZfG5e1uvP37+9JCt1q6Ia3eD0
-         v9ew==
-X-Gm-Message-State: AOJu0YxbdTyN4SkQcsdafOIXVgjOPquMjDJP7vrCg6DMAquk5eUtHL+2
-	A80yI7oKsXSfwMrYHdu6fzgM/W1s79n9d5DQMdx/KK7lfVcj1i+T
-X-Google-Smtp-Source: AGHT+IGtzfac148E0Zp6HX8t1uaubrccdGVjIzwohjETkCYdKTXMXB4DDkmolGrKZo+xj5pprudJMQ==
-X-Received: by 2002:a05:6a20:2d0a:b0:1a1:1e94:dd40 with SMTP id g10-20020a056a202d0a00b001a11e94dd40mr7244574pzl.54.1709752540284;
-        Wed, 06 Mar 2024 11:15:40 -0800 (PST)
-Received: from localhost ([98.97.36.54])
-        by smtp.gmail.com with ESMTPSA id n17-20020a170902969100b001dc214f7353sm12917047plp.249.2024.03.06.11.15.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Mar 2024 11:15:39 -0800 (PST)
-Date: Wed, 06 Mar 2024 11:15:38 -0800
-From: John Fastabend <john.fastabend@gmail.com>
-To: patchwork-bot+netdevbpf@kernel.org, 
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, 
- daniel@iogearbox.net, 
- andrii@kernel.org, 
- martin.lau@kernel.org, 
- memxor@gmail.com, 
- eddyz87@gmail.com, 
- john.fastabend@gmail.com, 
- kernel-team@fb.com
-Message-ID: <65e8c0da91115_34fc720827@john.notmuch>
-In-Reply-To: <170975102930.9518.8336084287032577662.git-patchwork-notify@kernel.org>
-References: <20240306031929.42666-1-alexei.starovoitov@gmail.com>
- <170975102930.9518.8336084287032577662.git-patchwork-notify@kernel.org>
-Subject: Re: [PATCH v6 bpf-next 0/4] bpf: Introduce may_goto and cond_break
+        d=1e100.net; s=20230601; t=1709752687; x=1710357487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XHiNBZvCn3wB5Ii9Wc2aJdBOKiyj3i+KV/1Fx6InuOs=;
+        b=CY45cOXJgsE+dwNgKBOfq4N9YTavmwKTIB+m8ewSE3fNJENtd1NhNQSakFC6NrNgdc
+         0UmxHfvlIiqJpuMNSKnaNOiqiH1CqLvdrw6wT3rob3o2WdhrtGRWD03UM3Nrpdqr1/r7
+         7Y3j5FD7LlhpOw/R153VqSHHtGI/Gb93FUfBvlgkjKA2fWrfzikVF43TuKAjoxEnJYWU
+         4huVrlKO85Z+98U2vxTLf/YEKHmTFuStHEc0ewvmH6A1VEYIhu4uoqW0OmNhTiK6G6fv
+         mHHlDFM74hcGoFyi5mWeOvba6g38uhgrv6yrteEPpKRHozSjc8JInIDHrYuql6067Sj3
+         /L7g==
+X-Gm-Message-State: AOJu0YyOtrx3u7v5f4Fa9EIdg4zfnxU7ZOlo3Yxb0eeDnzZCKWGV3aYd
+	9rweSpUPF0o0i9mwMrQ3k2m2U89xeckpPV8by8Ns1BcM0tWTiZs/CaO7g2INJDF/gQEefklG/l5
+	MR4dh+9lY/WYOa8uXzMIhGB7wimM=
+X-Google-Smtp-Source: AGHT+IEDy+820iJLjy61Puk87tWheeRTDnQ52f+tOAW/xX+QDh2XB/rUsAnxWfEUqNyukyiqFvDHtOLdXnTUE40DwLA=
+X-Received: by 2002:a17:90a:9f0c:b0:29a:5996:416 with SMTP id
+ n12-20020a17090a9f0c00b0029a59960416mr13491738pjp.36.1709752686817; Wed, 06
+ Mar 2024 11:18:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20240306104529.6453-1-eddyz87@gmail.com> <20240306104529.6453-15-eddyz87@gmail.com>
+In-Reply-To: <20240306104529.6453-15-eddyz87@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 6 Mar 2024 11:17:54 -0800
+Message-ID: <CAEf4Bzaunjf+0Fu59k6Ga3CmoURn65U-k9M06nY0_FaMRMsM1A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 14/15] bpf: allow all printable characters in
+ BTF DATASEC names
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
+	yonghong.song@linux.dev, void@manifault.com, sinquersw@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-patchwork-bot+netdevbpf@ wrote:
-> Hello:
-> 
-> This series was applied to bpf/bpf-next.git (master)
-> by Andrii Nakryiko <andrii@kernel.org>:
-> 
-> On Tue,  5 Mar 2024 19:19:25 -0800 you wrote:
-> > From: Alexei Starovoitov <ast@kernel.org>
-> > 
-> > v5 -> v6:
-> > - Rename BPF_JMA to BPF_JCOND
-> > - Addressed Andrii's review comments
-> > 
-> > v4 -> v5:
-> > - rewrote patch 1 to avoid fake may_goto_reg and use 'u32 may_goto_cnt' instead.
-> >   This way may_goto handling is similar to bpf_loop() processing.
-> > - fixed bug in patch 2 that RANGE_WITHIN should not use
-> >   rold->type == NOT_INIT as a safe signal.
-> > - patch 3 fixed negative offset computation in cond_break macro
-> > - using bpf_arena and cond_break recompiled lib/glob.c as bpf prog
-> >   and it works! It will be added as a selftest to arena series.
-> > 
-> > [...]
-> 
-> Here is the summary with links:
->   - [v6,bpf-next,1/4] bpf: Introduce may_goto instruction
->     https://git.kernel.org/bpf/bpf-next/c/9c4cab4e6756
->   - [v6,bpf-next,2/4] bpf: Recognize that two registers are safe when their ranges match
->     https://git.kernel.org/bpf/bpf-next/c/cc570d85e66e
->   - [v6,bpf-next,3/4] bpf: Add cond_break macro
->     https://git.kernel.org/bpf/bpf-next/c/7825948e135b
->   - [v6,bpf-next,4/4] selftests/bpf: Test may_goto
->     https://git.kernel.org/bpf/bpf-next/c/8089b99d4649
-> 
-> You are awesome, thank you!
-> -- 
-> Deet-doot-dot, I am a bot.
-> https://korg.docs.kernel.org/patchwork/pwbot.html
-> 
-> 
+On Wed, Mar 6, 2024 at 2:45=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com>=
+ wrote:
+>
+> The intent is to allow libbpf to use SEC("?.struct_ops") to identify
+> struct_ops maps that are optional, e.g. like in the following BPF code:
+>
+>     SEC("?.struct_ops")
+>     struct test_ops optional_map =3D { ... };
+>
+> Which yields the following BTF:
+>
+>     ...
+>     [13] DATASEC '?.struct_ops' size=3D0 vlen=3D...
+>     ...
+>
+> To load such BTF libbpf rewrites DATASEC name before load.
+> After this patch the rewrite won't be necessary.
+>
+> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+> ---
+>  kernel/bpf/btf.c | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 6ff0bd1a91d5..170d017e8e4a 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -809,9 +809,23 @@ static bool btf_name_valid_identifier(const struct b=
+tf *btf, u32 offset)
+>         return __btf_name_valid(btf, offset);
 
-Fwiw, I've been running this for a few days converting things to it.
+We should just rename __btf_name_valid() into
+btf_name_valid_indentifier() and use that everywhere. Please consider
+a clean up patch as a follow up, thanks!
 
-Tested-by: John Fastabend <john.fastabend@gmail.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+>  }
+>
+> +/* Allow any printable character in DATASEC names */
+>  static bool btf_name_valid_section(const struct btf *btf, u32 offset)
+>  {
+> -       return __btf_name_valid(btf, offset);
+> +       /* offset must be valid */
+> +       const char *src =3D btf_str_by_offset(btf, offset);
+> +       const char *src_limit;
+> +
+> +       /* set a limit on identifier length */
+> +       src_limit =3D src + KSYM_NAME_LEN;
+> +       src++;
+> +       while (*src && src < src_limit) {
+> +               if (!isprint(*src))
+> +                       return false;
+> +               src++;
+> +       }
+> +
+> +       return !*src;
+>  }
+>
+>  static const char *__btf_name_by_offset(const struct btf *btf, u32 offse=
+t)
+> --
+> 2.43.0
+>
