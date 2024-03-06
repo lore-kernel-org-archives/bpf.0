@@ -1,93 +1,110 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1151660250
-	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 19:19:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F81913F00F
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 19:30:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709752749; cv=none; b=LvmHwzolZxhzF3g69ctoJqBXGs7tg95/zM66lMA6QzaHPasvJd/3k/IWqy6fXIVjLUe4Drxv/ZSl0D3zfvKFYIDptmG+gpoj24NTMCgG8rVBvMjeFygTlIdzmKC14Auz4hjJtBePN586l+AFEkG9OpDoXBMw6x83GYH9WGOPV9Q=
+	t=1709753432; cv=none; b=I5bTO4P454FH8b6Fc+gvKQmrFZClOzJD+XaFVzTsbLK7WNJu4JTxqwxLD0+eBOQrwCmsLQ7zPdv/pAy1Kk6Z7cReF6yUBVImlN/E5fmiy4OCNNgcaRFEpSqiJ0ZXlGg568h/7YAtKJgqOZ/DPBOf6yNUxRlsrICzx6q6nnfeozw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709752749; c=relaxed/simple;
-	bh=VQEZhoWVge7jGgqzV6oherw8yCzTwobCnufm/KmE+LE=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=G/DNN574eVfLHSXUO0e5IAlsRtXDh+smFl2pzxxeY7dekzhnh8oPc5iBnQsTqiyEEI1yo8kUPexqjM0DWkMu48ECHrSgQmXUtz3wEW3QIWC8e0zACTGHbG6T4XfHFcYCyjucpgwiRsYyrvOBTuTc3UAYXOuAHJWtlX+4ODtel8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RT6AhwAK; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709753432; c=relaxed/simple;
+	bh=stufQQ8kD/M3tNiS1gVx0bYC984OYXvmu6Y1b/3GPuk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Y52P2NzeHWyUJMLtg7rMfTRrY5Enr/HJwYVQfRnD4kGwkfloCXf9MvjH5HIK+cnNqccLBPdMePeKuptl6akde71kayjQ21RbWO6iCCf7UKG5O2cmavMiJxczhnMm6qY+M2C3LlUm6W2ncRCl0/EmxoqpvRSeSx7t/rXE1gIeUH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VLkj40KW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RT6AhwAK"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1dcce5e84bcso650735ad.1
-        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 11:19:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709752747; x=1710357547; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ygDNJdX+wIbMlpomf5qZ0mCLiQc5gFgcrV/3pEM30DM=;
-        b=RT6AhwAKkeU7UmLAr5C/B2bNh+QXjNDNP4BuvKFVnt7oGjuJigSLs45STuIqsDqWQH
-         A4l2LFlkyO3mcc115afkl/LX8xrzCaq7u5pJN9g+bQB7+trwo6Po1drxjFrN7sIBceiR
-         Tx+SleSVJLmrc2uyJy/P0GiA4RtGarkVwqZIqpVMSjTgeEm5k81Gz/ewSrLJf3Sq1wnw
-         HI7q2Rw32Sbpn6VilZtvqqv/GHSexpqpO59RsUtiu8+JvFzjgtPh8j2Y1vRM0Ft1bjHS
-         eelD8BurMOaar1LdXk63rQUPa7iiDjmuLOZ/jn5eOa6ABKLhX5gatYKCsJPgRKL4RGSl
-         T4nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709752747; x=1710357547;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ygDNJdX+wIbMlpomf5qZ0mCLiQc5gFgcrV/3pEM30DM=;
-        b=IvJyQRj2RUhb5Y5djZgqQ//mc70/l6EtjHPS+RR9epnGdH7LsZ07eK+XKbvxD44qY5
-         Z3Jh1oobEkexsu95gIWfRdzZqCJacDyocci6VXdoA9InIxB4vZP3SA4f5i0ICF9ClRPN
-         FXC00KRm4EEHoRfyfMzi0ozKyGcn3r+MgvvRmcnmaLhYtT7GfwZIWWSw8NlstSclv8py
-         C4Za0z3qqiw4qjvNxMtjwB6IjFestKSpj/9sJEKl0YAE4J+NsrC6JyMy/WbYU8pjyCMA
-         5dKWMbUOn4BXAJSX22BC85fqbno7qjWQ2mI9wK6pRRmY+ESnN9nSnxON9qytePA368KP
-         Ty7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU7ybUYmY08G0LwJ70xM0SMtYL0u1d4W2xPxXbjzQKGNpxdQ+Umt4AJcGOQjS48i7p03xZQAl7YHP6VRA+x+stdROtS
-X-Gm-Message-State: AOJu0YyamFRMAygTisjK0B9u77UI/k6seIFHeEtkInclJpvqrZoMmZ9p
-	G//jlEXUJbs7CyypavDI1xoayZPzpeHxeUNYiKpVw4kpbZ8Y4Zkq
-X-Google-Smtp-Source: AGHT+IEeZuKYwN88bkIUwv7c9FuX/kvPSMVbzq32C++OBp5oTT0fPkiuiArImskCd+saCWndqaNGlQ==
-X-Received: by 2002:a17:902:e544:b0:1dc:e26f:d8f8 with SMTP id n4-20020a170902e54400b001dce26fd8f8mr6935104plf.14.1709752747238;
-        Wed, 06 Mar 2024 11:19:07 -0800 (PST)
-Received: from localhost ([98.97.36.54])
-        by smtp.gmail.com with ESMTPSA id t2-20020a170902e84200b001db45855528sm12954181plg.198.2024.03.06.11.19.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Mar 2024 11:19:06 -0800 (PST)
-Date: Wed, 06 Mar 2024 11:19:05 -0800
-From: John Fastabend <john.fastabend@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, 
- bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- kernel-team@fb.com, 
- Martin KaFai Lau <martin.lau@kernel.org>
-Message-ID: <65e8c1a95f4a8_34fc7208ec@john.notmuch>
-In-Reply-To: <20240305202155.3890667-1-yonghong.song@linux.dev>
-References: <20240305202155.3890667-1-yonghong.song@linux.dev>
-Subject: RE: [RFC PATCH bpf-next 0/5] Add bpf_link support for sk_msg prog
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VLkj40KW"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C9D4AC43390;
+	Wed,  6 Mar 2024 19:30:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709753431;
+	bh=stufQQ8kD/M3tNiS1gVx0bYC984OYXvmu6Y1b/3GPuk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=VLkj40KWWSFYhPPNuH9AwSr8iVUNDnyExuVZPZDmM3FT17JPJvwWHc8qfxUahPk3Q
+	 SiAo9WkuushwJbMTT0ziZb43/g97OnbhDJ8szf4jhn2xoB1d0X5iDVRVaBv/cf8Xzh
+	 4ooaL68NuEFJdPLVMvnXeW2mIwgjzB4WA41NStWAXnt2YJGgHCr6kqdKaymozotfCP
+	 aLH2Rd8BWoDasUMmYsBlNR5UV1lkL4S3zzFiYdNKoEz6eRC+HaphafnjcNXsfKlSnL
+	 yuAmBmxYAWfY6Q3peCPWxp6et0ZmU1OuuDkaHsLUP5nLRsrq4Yc3n3O73u8ikJ+8jk
+	 dXK6tVhrzlUQw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ACAE1D9A4B5;
+	Wed,  6 Mar 2024 19:30:31 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v4 00/15] libbpf: type suffixes and autocreate flag
+ for struct_ops maps
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170975343169.31409.14202616471159827755.git-patchwork-notify@kernel.org>
+Date: Wed, 06 Mar 2024 19:30:31 +0000
+References: <20240306104529.6453-1-eddyz87@gmail.com>
+In-Reply-To: <20240306104529.6453-1-eddyz87@gmail.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev, void@manifault.com, sinquersw@gmail.com
 
-Yonghong Song wrote:
-> One of our internal services started to use sk_msg program and currently
-> it used existing prog attach/detach2 as demonstrated in selftests.
-> But attach/detach of all other bpf programs are based on bpf_link.
-> Consistent attach/detach APIs for all programs will make things easy to
-> undersand and less error prone. So this patch added bpf_link
-> support for BPF_PROG_TYPE_SK_MSG.
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
+
+On Wed,  6 Mar 2024 12:45:14 +0200 you wrote:
+> Tweak struct_ops related APIs to allow the following features:
+> - specify version suffixes for stuct_ops map types;
+> - share same BPF program between several map definitions with
+>   different local BTF types, assuming only maps with same
+>   kernel BTF type would be selected for load;
+> - toggle autocreate flag for struct_ops maps;
+> - automatically toggle autoload for struct_ops programs referenced
+>   from struct_ops maps, depending on autocreate status of the
+>   corresponding map;
+> - use SEC("?.struct_ops") and SEC("?.struct_ops.link")
+>   to define struct_ops maps with autocreate == false after object open.
 > 
-> I marked the patch as RFC as not all functionality are covered
-> by tests yet, e.g. update_prog(). Maybe somebody can suggest
-> an existing test which I can look into.
-> Or maybe some other tests need to be added as well.
+> [...]
 
-Agree this was missing it will be nice to get this merged. The links
-are much nicer to deal with.
+Here is the summary with links:
+  - [bpf-next,v4,01/15] libbpf: allow version suffixes (___smth) for struct_ops types
+    https://git.kernel.org/bpf/bpf-next/c/88972acee1f9
+  - [bpf-next,v4,02/15] libbpf: tie struct_ops programs to kernel BTF ids, not to local ids
+    https://git.kernel.org/bpf/bpf-next/c/1fcdcca90bf2
+  - [bpf-next,v4,03/15] libbpf: honor autocreate flag for struct_ops maps
+    https://git.kernel.org/bpf/bpf-next/c/08c5dde48dd0
+  - [bpf-next,v4,04/15] selftests/bpf: test struct_ops map definition with type suffix
+    https://git.kernel.org/bpf/bpf-next/c/901a9c536f26
+  - [bpf-next,v4,05/15] selftests/bpf: utility functions to capture libbpf log in test_progs
+    https://git.kernel.org/bpf/bpf-next/c/4597f853d5bc
+  - [bpf-next,v4,06/15] selftests/bpf: bad_struct_ops test
+    https://git.kernel.org/bpf/bpf-next/c/9c82929ce1bc
+  - [bpf-next,v4,07/15] selftests/bpf: test autocreate behavior for struct_ops maps
+    https://git.kernel.org/bpf/bpf-next/c/08dfc1369554
+  - [bpf-next,v4,08/15] libbpf: sync progs autoload with maps autocreate for struct_ops maps
+    https://git.kernel.org/bpf/bpf-next/c/607a50ff2802
+  - [bpf-next,v4,09/15] selftests/bpf: verify struct_ops autoload/autocreate sync
+    https://git.kernel.org/bpf/bpf-next/c/404855a8c3be
+  - [bpf-next,v4,10/15] libbpf: replace elf_state->st_ops_* fields with SEC_ST_OPS sec_type
+    https://git.kernel.org/bpf/bpf-next/c/24d9fe302af5
+  - [bpf-next,v4,11/15] libbpf: struct_ops in SEC("?.struct_ops") / SEC("?.struct_ops.link")
+    https://git.kernel.org/bpf/bpf-next/c/cea716b7850b
+  - [bpf-next,v4,12/15] libbpf: rewrite btf datasec names starting from '?'
+    https://git.kernel.org/bpf/bpf-next/c/43525abbdb0d
+  - [bpf-next,v4,13/15] selftests/bpf: test case for SEC("?.struct_ops")
+    https://git.kernel.org/bpf/bpf-next/c/df32d591bf63
+  - [bpf-next,v4,14/15] bpf: allow all printable characters in BTF DATASEC names
+    https://git.kernel.org/bpf/bpf-next/c/503012aad7f3
+  - [bpf-next,v4,15/15] selftests/bpf: test cases for '?' in BTF names
+    https://git.kernel.org/bpf/bpf-next/c/bc22f9a13840
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
