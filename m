@@ -1,94 +1,178 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B1C1B59C;
-	Wed,  6 Mar 2024 21:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59841B813
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 21:44:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709760888; cv=none; b=hRKQu+/dRObGg5JhSUh5jQfQ17wyd5Zw0ckxFYYrZl8kng9PtuwG8ivw0ZHTA1Mn1FEoTnkiQcA1mB/SvnptbOuAgbAClRPOszlRv9c9DaEDSEs7BJyBWm07gnVJXwmtxrhB/VVDoeZALc/OZVjxgX/WprNouawjIROfp+kZtTo=
+	t=1709761479; cv=none; b=ul7Tw2WsSeVvHpDoARdYjgvTuxUvIkX4t5jH8Qp8jGY3vvqyYSe3f2pTTUL4TZL+53lDzVdy09yPglFidhBOvdS54fxe5tkG1oAWIe6BtWMDus3SUPT9EiyWtA+RL3n1jjTOpGq9fgIGwGDgQPja0EVETk1tTTdvZITxiuO++zM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709760888; c=relaxed/simple;
-	bh=EENCLqG5V3ac8guut1rXuephqedDKNfSA+GEUUm2Ldc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JvGu2waQrdDdT1k39KKMJWdGVOtf8bEw6f2tXLI+r3hu8X9ARbY50pSMhGyCqsFReMaprWQ7uzTJMuZWKHBtCdsr2OfEDSuP+UEHRney6mKyeesfIyLVJ7r5CLgnew8FjUBdx8U01DxlBsctNRqs0zlNyNusSoDHdvXhQzb2UQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=WnGdPuGj; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1709761479; c=relaxed/simple;
+	bh=yNaF3aOi4krieU8CScidoOzuFos1k7RPbwb2c+R3EAY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hyCPNE2jeHNuB9kYmhPK1SmHw57MyBeeypyKXSXEDUgQCY92zjtqdjFydVSUrYlDnkMF+Pn7SVsSHxUX3k69Hm7udS6LkUZgvJYZD6/mUuWRpThKqZPRT5CHt+rmxJWSWTORcBKbwxMYS5OCYRyaL5n4Xg5ylI9I6b15/eu1HOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=GMWRJpPP; arc=none smtp.client-ip=209.85.219.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="WnGdPuGj"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Pnrclyp8qd04tGL+paauReWhMqljiQ5BhKgBB0WcrGc=; b=WnGdPuGjK0DJWslO+RClJS5y4I
-	5B8C5YAmXsTC55hIAo8YMFhw2q8p4bch0h7B8wC2w9wScUcSlicDw2Ngd+HVnDWZ6M2t62VKOQr3g
-	xa19j5fyo9dOSgZvD1Tt3Ne44oT/0bK1MLvxnP257sEIFzNoQntAvUhfGNCF6rV7A0jhQNMkdPwew
-	tUYo716dQGB0rZx09USyxW2Kdi0cFIyWXhsw3MTC4w9MJnsAXxPFCd64pW7Yt4RekRpDZwzegFOyr
-	2fOR7osn7I78XruxsHsT6Hd7MBR3Uhc6sFCu0yxbe1ZAbILzWusyPeZ/Ainmpv63ADEiA/z79WTyH
-	IjW4rvbQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rhyuO-00000001xdj-0ljc;
-	Wed, 06 Mar 2024 21:34:40 +0000
-Date: Wed, 6 Mar 2024 13:34:40 -0800
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Calvin Owens <jcalvinowens@gmail.com>, Song Liu <song@kernel.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Naveen N Rao <naveen.n.rao@linux.ibm.com>,
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-	David S Miller <davem@davemloft.net>,
-	Thomas Gleixner <tglx@linutronix.de>, bpf@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC][PATCH 0/4] Make bpf_jit and kprobes work with
- CONFIG_MODULES=n
-Message-ID: <ZejhcP_r5QJZcS6j@bombadil.infradead.org>
-References: <cover.1709676663.git.jcalvinowens@gmail.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="GMWRJpPP"
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dccb1421bdeso159827276.1
+        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 13:44:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1709761477; x=1710366277; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TzexKeqTYViWR529/99I1fk8au39z5xjVC/HT3MU//k=;
+        b=GMWRJpPPMthfHkO/3mq37QeOIq2uoWFcOxQyZo0N7MzgVddAZm0Xsmxw+HKiozNpn2
+         kZY5LQ/xQ2QASR+m3Q6zFokh5pS9eI6EZpUXHjHkEQeP/CQSIm9UF0Ue7Bv29J0MjPd5
+         aphzYpGdu/pwM4vaaUnZaE+fpAqbWmO/XENeEfv+fGgZFlcS7J1XVRDOfvHehgOMhC4E
+         Kt+rTdUmIGCCMiRtm42JzXDwrZp+LqMY+cq2/nHQTb9bR8+5IBZOpBOlMBnT3go9AvTV
+         HzpWy8OMSu9DG/R/FJtZ2Npq7DNNMlZigIv+ESvunOP3wY57XBp25Ychcj/BpUXJtAco
+         8ALA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709761477; x=1710366277;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TzexKeqTYViWR529/99I1fk8au39z5xjVC/HT3MU//k=;
+        b=LaqnR+znisnZIgnyQbi1IkiowmL+qz7bh4uwf3n8bFkvtU90ZYdsdT6xzrcnSQYu/l
+         CfZ/c4a5p+jKaGFZEcZAFSYAVfDKKRUZXeWBVk3VmKlzSKIhO2WrETK7K1ODviUV1uxM
+         6PVSQi0D1t46P17tg0T8m9s3vtb+eNGNsXCUbminMkKR8+N1hen+C2X1UYtkwrf1uvrM
+         14Ie/VNzgwfOcpAnjK21MJZW+NAiTBS9oU92GtSPKsg5TDUnb9HJzjA+5rc/v6RT3cE3
+         lfuvT2cpwlYwCIuWgF6fFrbG2pZxo8KI/VeORkMs8Biwm1nZ0f4xQlMW+ltshMuQZ8nu
+         TsXg==
+X-Gm-Message-State: AOJu0YythwdJDFgJPNQISxRzbn7TkXyb760roM7N//5bsCv7fwxNkBIK
+	g5eOr3slLAGGanb2oXbYNVoVbkzOzPdEuVgglD9Ihza1yIV0oUh7Qi/laeOZtK74kXTkaSJ5baA
+	I/qVu07Iwxe4ZMdpjZUtYBoeZuETk/ZKtvUhd
+X-Google-Smtp-Source: AGHT+IHiRNoOuP50M05G+2934mcfs5/bOqVRy3BWxHsLB6KirZP8Ll5YoDYeUaTCCUruZFAXGTfcnQL/dVPSyIP0Lgw=
+X-Received: by 2002:a25:5102:0:b0:dc6:d738:1fa6 with SMTP id
+ f2-20020a255102000000b00dc6d7381fa6mr12722660ybb.6.1709761476718; Wed, 06 Mar
+ 2024 13:44:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1709676663.git.jcalvinowens@gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <cover.1709675979.git.mattbobrowski@google.com>
+ <20240306-flach-tragbar-b2b3c531bf0d@brauner> <20240306-sandgrube-flora-a61409c2f10c@brauner>
+In-Reply-To: <20240306-sandgrube-flora-a61409c2f10c@brauner>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 6 Mar 2024 16:44:25 -0500
+Message-ID: <CAHC9VhRSydKRpNQOEeyG1SYZi5r36dSa=auXcbh6srA02eaRdw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 0/9] add new acquire/release BPF kfuncs
+To: Christian Brauner <brauner@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, kpsingh@google.com, 
+	jannh@google.com, jolsa@kernel.org, daniel@iogearbox.net, 
+	torvalds@linux-foundation.org, linux-fsdevel@vger.kernel.org, 
+	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
+	linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 06, 2024 at 12:05:07PM -0800, Calvin Owens wrote:
-> Hello all,
-> 
-> This patchset makes it possible to use bpftrace with kprobes on kernels
-> built without loadable module support.
+On Wed, Mar 6, 2024 at 7:14=E2=80=AFAM Christian Brauner <brauner@kernel.or=
+g> wrote:
+> On Wed, Mar 06, 2024 at 12:21:28PM +0100, Christian Brauner wrote:
+> > On Wed, Mar 06, 2024 at 07:39:14AM +0000, Matt Bobrowski wrote:
+> > > G'day All,
+> > >
+> > > The original cover letter providing background context and motivating
+> > > factors around the needs for the BPF kfuncs introduced within this
+> > > patch series can be found here [0], so please do reference that if
+> > > need be.
+> > >
+> > > Notably, one of the main contention points within v1 of this patch
+> > > series was that we were effectively leaning on some preexisting
+> > > in-kernel APIs such as get_task_exe_file() and get_mm_exe_file()
+> > > within some of the newly introduced BPF kfuncs. As noted in my
+> > > response here [1] though, I struggle to understand the technical
+> > > reasoning behind why exposing such in-kernel helpers, specifically
+> > > only to BPF LSM program types in the form of BPF kfuncs, is inherentl=
+y
+> > > a terrible idea. So, until someone provides me with a sound technical
+> > > explanation as to why this cannot or should not be done, I'll continu=
+e
+> > > to lean on them. The alternative is to reimplement the necessary
+> > > in-kernel APIs within the BPF kfuncs, but that's just nonsensical IMO=
+.
+> >
+> > You may lean as much as you like. What I've reacted to is that you've
+> > (not you specifically, I'm sure) messed up. You've exposed d_path() to
+> > users  without understanding that it wasn't safe apparently.
+> >
+> > And now we get patches that use the self-inflicted brokeness as an
+> > argument to expose a bunch of other low-level helpers to fix that.
+> >
+> > The fact that it's "just bpf LSM" programs doesn't alleviate any
+> > concerns whatsoever. Not just because that is just an entry vector but
+> > also because we have LSMs induced API abuse that we only ever get to se=
+e
+> > the fallout from when we refactor apis and then it causes pain for the =
+vfs.
 
-This is a step in the right direction for another reason: clearly the
-module_alloc() is not about modules, and we have special reasons for it
-now beyond modules. The effort to share a generalize a huge page for
-these things is also another reason for some of this but that is more
-long term.
+Let's not start throwing stones at the in-tree, native LSM folks;
+instead let's just all admit that it's often a challenge working
+across subsystem lines, but we usually find a way because we all want
+the kernel to move forward.  We've all got our grudges and scars,
+let's not start poking each other with sticks.
 
-I'm all for minor changes here so to avoid regressions but it seems a
-rename is in order -- if we're going to all this might as well do it
-now. And for that I'd just like to ask you paint the bikeshed with
-Song Liu as he's been the one slowly making way to help us get there
-with the "module: replace module_layout with module_memory",
-and Mike Rapoport as he's had some follow up attempts [0]. As I see it,
-the EXECMEM stuff would be what we use instead then. Mike kept the
-module_alloc() and the execmem was just a wrapper but your move of the
-arch stuff makes sense as well and I think would complement his series
-nicely.
+> > I'll take another look at the proposed helpers you need as bpf kfuncs
+> > and I'll give my best not to be overly annoyed by all of this. I have n=
+o
+> > intention of not helping you quite the opposite but I'm annoyed that
+> > we're here in the first place.
+> >
+> > What I want is to stop this madness of exposing stuff to users without
+> > fully understanding it's semantics and required guarantees.
+>
+> So, looking at this series you're now asking us to expose:
+>
+> (1) mmgrab()
+> (2) mmput()
+> (3) fput()
+> (5) get_mm_exe_file()
+> (4) get_task_exe_file()
+> (7) get_task_fs_pwd()
+> (6) get_task_fs_root()
+> (8) path_get()
+> (9) path_put()
+>
+> in one go and the justification in all patches amounts to "This is
+> common in some BPF LSM programs".
+>
+> So, broken stuff got exposed to users or at least a broken BPF LSM
+> program was written somewhere out there that is susceptible to UAFs
+> becauase you didn't restrict bpf_d_path() to trusted pointer arguments.
+> So you're now scrambling to fix this by asking for a bunch of low-level
+> exports.
+>
+> What is the guarantee that you don't end up writing another BPF LSM that
+> abuses these exports in a way that causes even more issues and then
+> someone else comes back asking for the next round of bpf funcs to be
+> exposed to fix it.
+>
+> The difference between a regular LSM asking about this and a BPF LSM
+> program is that we can see in the hook implementation what the LSM
+> intends to do with this and we can judge whether that's safe or not.
 
-If you're gonna split code up to move to another place, it'd be nice
-if you can add copyright headers as was done with the kernel/module.c
-split into kernel/module/*.c
+I wish things were different, but the current reality is that from a
+practical perspective BPF LSMs are not much different than
+out-of-tree, native LSMs.  There is no requirement, or even
+convention, for BPF LSMs to post their designs, docs, or
+implementations on the LSM list for review like we do with other LSMs;
+maybe it has happened once or twice, but I can't remember the last
+time I saw a serious BPF LSM posted to the LSM list.  Even if someone
+did do The Right Thing with their BPF LSM and proposed it for review
+just like a native LSM, there is no guarantee someone else couldn't
+fork that LSM and do something wrong (intentional or not).
 
-Can we start with some small basic stuff we can all agree on?
+Unless something changes, I'm left to treat BPF LSMs the same as any
+other out-of-tree kernel code: I'm not going to make life difficult
+for a /out-of-tree/BPF/ LSM simply because it is /out-of-tree/BPF/,
+but I'm not going to do anything to negatively impact the current, or
+future, state of the in-tree LSMs simply to appease the
+/out-of-tree/BPF/ LSMs.
 
-[0] https://lwn.net/Articles/944857/
-
-  Luis
+--=20
+paul-moore.com
