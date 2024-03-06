@@ -1,433 +1,133 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6548F1B95B
-	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 22:11:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EDDA1B7EB
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 22:13:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709763072; cv=none; b=J5EiPovPjVEfa/EpvlGaQArdLFNkG3fh4ggz4rRjVU9kafKxOEZD3Lirq8dCrrokwXDQsutlHd8csenWML/shEK0xJvm7T7PrZimAsvVkIdPNUQh5YGIe3dIYCPsSloBCe/Z1l+zb1mcEsn2DlxyyU3pVdjEdtvLQy0TsfLqf00=
+	t=1709763189; cv=none; b=gEWnMJnRfJucPmHFSucxazV6124ip6A4Da4sZm6n2Ln3JNAXkuaaHCaiZecpc9dk5R4Pf0Gd45ioh4dpqNO+Te5KNU5FblbaPWt+bYJOfe7oDSzXhYGPKppf5GVbOzRduswTL/glogdrFPAf3DmaYo0um6F2q50d7c0DmOM+pZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709763072; c=relaxed/simple;
-	bh=e+h5g7ggIAcqtCEsjbwW8QZ4XMZUN74BvuwxvFy1dqE=;
+	s=arc-20240116; t=1709763189; c=relaxed/simple;
+	bh=0co437MWlwiDr7sdvNxT0czQBG4oFsy/9/ksjHplhkY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YTjdUFg4UypKYFHGu17UkkH2yNGGfb3XuzXMk3NRBTg6eRTESnbTMQ81tFDGhb7xICgb3cRdi51TGaD9eGgyZMoWbZRliN7vO6URu6uVnGgzPVgQ5ojMy5BRk3gIXQixB3jVrUZBY5lIAtffk4SmWtAseKWkJSSJOThhl0U3RJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=imSnvB/g; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=EJsBrfuMdMnE6PdNSCDQrYE6XZD7bN74GOIiLblS+CgN08CT9TFjMgjrr+lWBYAJEW3Dt8nffzjdEaZbuOci105U+xigpfLyDPtSt6fanUQxQCNt9UklPYnDArmaSRCDMAXH62iZa3oIYmBMdPgwAGsdwUM9b6ljwjtsgBRBAmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DMtz6wpC; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="imSnvB/g"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a45c006ab82so33438466b.3
-        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 14:11:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DMtz6wpC"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-412eddd165eso2295085e9.1
+        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 14:13:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709763068; x=1710367868; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709763186; x=1710367986; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GMaQ3cDJaF53fme3ObxORiWTrmjgHw0Qfaex1Nu2I/k=;
-        b=imSnvB/glsrcOoPIl62eeq6tzX1mTcMOBOEqK11tyD8Q0h0/m3eXHCKa62zKxIl1k+
-         YqDAFu8QP4A/jo0OqqO3VFfTgffsuHGIPg60Dz2Y/rpwW/z69zYX6P14tfKr3BJFm0LV
-         rpolC4pkfuCAG7xI6MU71ZLwVokmsKyyEvQx9Fva5V6SFM/yuZnVjwezpSC75JLue0FE
-         VqBQp4fGnzQub8hM2Mst6i0IksmKfepM49kQxm+bK49O6M2u0qiSNE5TYZKaxqhaTXVl
-         pptv/cGgeHIqMbTyvqkUl4s18Xy1ph3NeNPUHutsXLXyE5u8Lh4Fy4W0+DQ39RUs8czE
-         25Bw==
+        bh=0co437MWlwiDr7sdvNxT0czQBG4oFsy/9/ksjHplhkY=;
+        b=DMtz6wpC+pAUDD2rTImsJL/IQWuSaBetw3YZ7Rh+gP1h2h/+26DGosj3jV7YDeX7Yu
+         gWPEmMwLWVMD6+yBjeWE75tSjX+zmAKm2SCbkXeYFkoRxzDz3F7v+pxcJbQ0Qt6vj9y5
+         6u5oBbEADiV/9tWjd/PEp2WnjfPY6G19rWFrKa0TQsP8kcub9p3HZ4VGV4IgAR64HKyf
+         XWNK/sgYDB83qnIkHeRgTPUqq+uNBVNBJ1uFK3CBM7HUpNMw4STXnxHzwao5kKKnHzye
+         kJyLEpvrwJ4j7wLi82l7srKOEFzg8CtHR2mmLAktz11DKo+wWggwRZpIRYCNL3gGRFee
+         Aauw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709763068; x=1710367868;
+        d=1e100.net; s=20230601; t=1709763186; x=1710367986;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GMaQ3cDJaF53fme3ObxORiWTrmjgHw0Qfaex1Nu2I/k=;
-        b=H/e1ZGzsfMFwZTc7zIQMLSnxoHU7E8al3CJePeqVYzEJewYNY55CIa+t59jyGzcxUn
-         a0+woFJg6F3mmpkHCHJHtW78aAUcLjpGvWNRcRFr/2giw5lBWYaHR81NRRPFFhgEBBRw
-         ZiVdjI+R17F6yhXgRRJ5K8RvBD4rnBVTQibZCHlhjJD/OpaXe6v814Pf+9GysF0lSfKN
-         HXrTgemhiQRLfhMEA89EgjRKO5rwEDTJzU6QQykYKJwZq8pfmO7MY600uMQIk3KVFKeu
-         v69KJ+W9IyF+2+FJsBZ0H5179FKwIumbnDf3vT8SkVmzjKSHgOPf7sTZ3ubwydF4Bkfx
-         p3Lw==
-X-Forwarded-Encrypted: i=1; AJvYcCXUN3oOkJ71Q5oQbgZCVdB2fwz9fyqvwdjy9+M7D3+yHt9Vzau1nzQP4U/VgVE/jkREUuRTnF0ZFoC5WiAWhCungPPa
-X-Gm-Message-State: AOJu0Ywy1bpkhYW+CXMmaG/36EgK2asGiDXw8bGTer81unTn+Bk2Zqe9
-	G1P5McgMraXRsXq7K3WgG8iHHYGshZRq1wLS1pGu5hvyqGmkOD2XyLyGakIVz6lpE1YGu1iUCMV
-	tgh+hV6UrrcCxws7GeNgALWhk8Hn2hj8YiYz0
-X-Google-Smtp-Source: AGHT+IENXwD+VWczLj/dTM2/A1MFyK7LqUp0f5yPqTDI4m7+LrQO5mzGQIb3CxwkX+uMg5NpdLqf746V4nTchzug2EI=
-X-Received: by 2002:a17:906:3442:b0:a44:3ec9:1fd3 with SMTP id
- d2-20020a170906344200b00a443ec91fd3mr9663971ejb.30.1709763067483; Wed, 06 Mar
- 2024 14:11:07 -0800 (PST)
+        bh=0co437MWlwiDr7sdvNxT0czQBG4oFsy/9/ksjHplhkY=;
+        b=fJczv0VX//ZKh7Anjd+IAT+KtAJwpQjbXCQ+9tDMNQLBKMK4/ugKwddt34btC7WyfO
+         hqz3k1rWbZDqaxVP9HU1mfaXkJuVzKGR8gQLluYX1apVFlpYuJfU/2yAWoYdwa00oFvr
+         4wCNm2TkQN48bPjaqqbZbWNMTNTcepu1Ip9PtY9xhXA0PeMsgkoGU3tvoh8M2O2eC/Sq
+         AlaPbWm+XdCm0pj2lWiXKc/P57TbzJ0Y9uMAfzz+opZcnObQEiFXcjKe+zS4mCPY5bRb
+         H211Yn8VWIQ6X4FyRMLoD34ZcEtC0xjv1BacddJ/SgOWHg8sZ/nOWzr9mxBMHR6PSWC3
+         4THg==
+X-Gm-Message-State: AOJu0YzPrClPJ/qHQQfaIJspJyusRIZLyM7F+IRib5v1tKNkoyVlRBVp
+	OBkCThTqhFOtRf1kFKMLvcHBTx9MN5mIyIeUgnNZaUhx/RDWdl0rgp7KXIRHfLWIkUQK2qvz2sB
+	/Ie0ZtXuxBW8OasevdpSlTX5oiOc=
+X-Google-Smtp-Source: AGHT+IHM5WAdyGr/B7hLl36s77xYo/gy7yzLMW3COR6pSamXxzxHTbpB4M1O/zLuG0Dc6UyW1yEJEoYoydHCAh4AHuk=
+X-Received: by 2002:a05:6000:1cd2:b0:33d:82c1:f9d3 with SMTP id
+ bf18-20020a0560001cd200b0033d82c1f9d3mr11649861wrb.4.1709763185840; Wed, 06
+ Mar 2024 14:13:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-6-almasrymina@google.com> <da42cea9-c169-599e-f087-d38c419e3dab@huawei.com>
- <CAHS8izM7GbvWHrH=h9q0oG0DMU649EjT1udNEW_8F-hGeC15EQ@mail.gmail.com> <aa892723-7396-998d-db06-166c28fba1e0@huawei.com>
-In-Reply-To: <aa892723-7396-998d-db06-166c28fba1e0@huawei.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 6 Mar 2024 14:10:55 -0800
-Message-ID: <CAHS8izNJFnKGn9nrJ3kRxGwhvjiDey_bfrxQNfsfj=S9hZR_UA@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf to netdevice
-To: Yunsheng Lin <linyunsheng@huawei.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240305030516.41519-1-alexei.starovoitov@gmail.com>
+ <20240305030516.41519-3-alexei.starovoitov@gmail.com> <CA+CK2bDCgpYR2-gHv-H3vDXDqcoA16vMNr55BZ6nouZNdwGufQ@mail.gmail.com>
+ <CAADnVQ+pxrRRvyLXG+opUuPuYZc+XTBLksK0rERrS1BY9ayQpQ@mail.gmail.com> <CA+CK2bAhWgSSotKjiGA4oTbH0XaCAtiWe+5p5u9OAf0ykBekwg@mail.gmail.com>
+In-Reply-To: <CA+CK2bAhWgSSotKjiGA4oTbH0XaCAtiWe+5p5u9OAf0ykBekwg@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 6 Mar 2024 14:12:54 -0800
+Message-ID: <CAADnVQL9h7R0zYyr=P4jm9AFvK27Vx+rrUuPjTuw4QpubNngpw@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 2/2] mm: Introduce VM_SPARSE kind and vm_area_[un]map_pages().
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Barret Rhoden <brho@google.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Lorenzo Stoakes <lstoakes@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Uladzislau Rezki <urezki@gmail.com>, Christoph Hellwig <hch@infradead.org>, Mike Rapoport <rppt@kernel.org>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, sstabellini@kernel.org, 
+	Juergen Gross <jgross@suse.com>, linux-mm <linux-mm@kvack.org>, xen-devel@lists.xenproject.org, 
+	Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 6, 2024 at 4:38=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei.com=
-> wrote:
+On Wed, Mar 6, 2024 at 1:46=E2=80=AFPM Pasha Tatashin <pasha.tatashin@solee=
+n.com> wrote:
 >
-> On 2024/3/6 5:17, Mina Almasry wrote:
-> > On Tue, Mar 5, 2024 at 4:55=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei=
-.com> wrote:
-> >>
-> >> On 2024/3/5 10:01, Mina Almasry wrote:
-> >>
-> >> ...
-> >>
-> >>>
-> >>> The netdev_dmabuf_binding struct is refcounted, and releases its
-> >>> resources only when all the refs are released.
-> >>>
-> >>> Signed-off-by: Willem de Bruijn <willemb@google.com>
-> >>> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
-> >>> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> >>>
-> >>> ---
-> >>>
-> >>> RFC v6:
-> >>> - Validate rx queue index
-> >>> - Refactor new functions into devmem.c (Pavel)
-> >>
-> >> It seems odd that the functions or stucts in a file called devmem.c
-> >> are named after 'dmabuf' instead of 'devmem'.
-> >>
+> > > This interface and in general VM_SPARSE would be useful for
+> > > dynamically grown kernel stacks [1]. However, the might_sleep() here
+> > > would be a problem. We would need to be able to handle
+> > > vm_area_map_pages() from interrupt disabled context therefore no
+> > > sleeping. The caller would need to guarantee that the page tables are
+> > > pre-allocated before the mapping.
 > >
-> > So my intention with this naming that devmem.c contains all the
-> > functions for all devmem tcp specific support. Currently the only
-> > devmem we support is dmabuf. In the future, other devmem may be
-> > supported and it can fit nicely in devmem.c. For example, if we want
-> > to extend devmem TCP to support NVMe devices, we need to add support
-> > for p2pdma, maybe, and we can add that support under the devmem.c
-> > umbrella rather than add new files.
+> > Sounds like we'd need to differentiate two kinds of sparse regions.
+> > One that is really sparse where page tables are not populated (bpf use =
+case)
+> > and another where only the pte level might be empty.
+> > Only the latter one will be usable for such auto-grow stacks.
 > >
-> > But I can rename to dmabuf.c if there is strong objection to the curren=
-t name.
+> > Months back I played with this idea:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git/commit/?&id=
+=3Dce63949a879f2f26c1c1834303e6dfbfb79d1fbd
+> > that
+> > "Make vmap_pages_range() allocate page tables down to the last (PTE) le=
+vel."
+> > Essentially pass NULL instead of 'pages' into vmap_pages_range()
+> > and it will populate all levels except the last.
 >
-> Grepping 'dmabuf' seems to show that it may be common rename it to
-> something as *_dmabuf.c.
->
-> >
-> >>>
-> >>
-> >> ...
-> >>
-> >>> diff --git a/include/net/netmem.h b/include/net/netmem.h
-> >>> index d8b810245c1d..72e932a1a948 100644
-> >>> --- a/include/net/netmem.h
-> >>> +++ b/include/net/netmem.h
-> >>> @@ -8,6 +8,16 @@
-> >>>  #ifndef _NET_NETMEM_H
-> >>>  #define _NET_NETMEM_H
-> >>>
-> >>> +#include <net/devmem.h>
-> >>> +
-> >>> +/* net_iov */
-> >>> +
-> >>> +struct net_iov {
-> >>> +     struct dmabuf_genpool_chunk_owner *owner;
-> >>> +};
-> >>> +
-> >>> +/* netmem */
-> >>> +
-> >>>  /**
-> >>>   * typedef netmem_ref - a nonexistent type marking a reference to ge=
-neric
-> >>>   * network memory.
-> >>> diff --git a/net/core/Makefile b/net/core/Makefile
-> >>> index 821aec06abf1..592f955c1241 100644
-> >>> --- a/net/core/Makefile
-> >>> +++ b/net/core/Makefile
-> >>> @@ -13,7 +13,7 @@ obj-y                    +=3D dev.o dev_addr_lists.=
-o dst.o netevent.o \
-> >>>                       neighbour.o rtnetlink.o utils.o link_watch.o fi=
-lter.o \
-> >>>                       sock_diag.o dev_ioctl.o tso.o sock_reuseport.o =
-\
-> >>>                       fib_notifier.o xdp.o flow_offload.o gro.o \
-> >>> -                     netdev-genl.o netdev-genl-gen.o gso.o
-> >>> +                     netdev-genl.o netdev-genl-gen.o gso.o devmem.o
-> >>>
-> >>>  obj-$(CONFIG_NETDEV_ADDR_LIST_TEST) +=3D dev_addr_lists_test.o
-> >>>
-> >>> diff --git a/net/core/dev.c b/net/core/dev.c
-> >>> index fe054cbd41e9..bbea1b252529 100644
-> >>> --- a/net/core/dev.c
-> >>> +++ b/net/core/dev.c
-> >>> @@ -155,6 +155,9 @@
-> >>>  #include <net/netdev_rx_queue.h>
-> >>>  #include <net/page_pool/types.h>
-> >>>  #include <net/page_pool/helpers.h>
-> >>> +#include <linux/genalloc.h>
-> >>> +#include <linux/dma-buf.h>
-> >>> +#include <net/devmem.h>
-> >>>
-> >>>  #include "dev.h"
-> >>>  #include "net-sysfs.h"
-> >>> diff --git a/net/core/devmem.c b/net/core/devmem.c
-> >>> new file mode 100644
-> >>> index 000000000000..779ad990971e
-> >>> --- /dev/null
-> >>> +++ b/net/core/devmem.c
-> >>> @@ -0,0 +1,293 @@
-> >>> +// SPDX-License-Identifier: GPL-2.0-or-later
-> >>> +/*
-> >>> + *      Devmem TCP
-> >>> + *
-> >>> + *      Authors:     Mina Almasry <almasrymina@google.com>
-> >>> + *                   Willem de Bruijn <willemdebruijn.kernel@gmail.c=
-om>
-> >>> + *                   Kaiyuan Zhang <kaiyuanz@google.com
-> >>> + */
-> >>> +
-> >>> +#include <linux/types.h>
-> >>> +#include <linux/mm.h>
-> >>> +#include <linux/netdevice.h>
-> >>> +#include <trace/events/page_pool.h>
-> >>> +#include <net/netdev_rx_queue.h>
-> >>> +#include <net/page_pool/types.h>
-> >>> +#include <net/page_pool/helpers.h>
-> >>> +#include <linux/genalloc.h>
-> >>> +#include <linux/dma-buf.h>
-> >>> +#include <net/devmem.h>
-> >>> +
-> >>> +/* Device memory support */
-> >>> +
-> >>> +#ifdef CONFIG_DMA_SHARED_BUFFER
-> >>
-> >> I still think it is worth adding its own config for devmem or dma-buf
-> >> for networking, thinking about the embeded system.
-> >>
-> >
-> > FWIW Willem did weigh on this previously and said he prefers to have
-> > it unguarded by a CONFIG, but I will submit to whatever the consensus
-> > here. It shouldn't be a huge deal to add a CONFIG technically
-> > speaking.
->
-> Grepping 'CONFIG_DMA_SHARED_BUFFER' show that the API user of dmabuf
-> API does not seems to reuse the CONFIG_DMA_SHARED_BUFFER, instead they
-> seem to define its own config, and select CONFIG_DMA_SHARED_BUFFER
-> if necessary, it that any reason it is different here?
->
-> >
-> >>> +static void netdev_dmabuf_free_chunk_owner(struct gen_pool *genpool,
-> >>> +                                        struct gen_pool_chunk *chunk=
-,
-> >>> +                                        void *not_used)
-> >>
-> >> It seems odd to still keep the netdev_ prefix as it is not really rela=
-ted
-> >> to netdev, perhaps use 'net_' or something better.
-> >>
-> >
-> > Yes, thanks for catching. I can change to net_devmem_ maybe or net_dmab=
-uf_*.
->
-> FWIW, net_dmabuf_* seems like a better name technically.
->
-> >
-> >>> +{
-> >>> +     struct dmabuf_genpool_chunk_owner *owner =3D chunk->owner;
-> >>> +
-> >>> +     kvfree(owner->niovs);
-> >>> +     kfree(owner);
-> >>> +}
-> >>> +
-> >>> +void __netdev_dmabuf_binding_free(struct netdev_dmabuf_binding *bind=
-ing)
-> >>> +{
-> >>> +     size_t size, avail;
-> >>> +
-> >>> +     gen_pool_for_each_chunk(binding->chunk_pool,
-> >>> +                             netdev_dmabuf_free_chunk_owner, NULL);
-> >>> +
-> >>> +     size =3D gen_pool_size(binding->chunk_pool);
-> >>> +     avail =3D gen_pool_avail(binding->chunk_pool);
-> >>> +
-> >>> +     if (!WARN(size !=3D avail, "can't destroy genpool. size=3D%lu, =
-avail=3D%lu",
-> >>> +               size, avail))
-> >>> +             gen_pool_destroy(binding->chunk_pool);
-> >>> +
-> >>> +     dma_buf_unmap_attachment(binding->attachment, binding->sgt,
-> >>> +                              DMA_BIDIRECTIONAL);
-> >>
-> >> For now DMA_FROM_DEVICE seems enough as tx is not supported yet.
-> >>
-> >
-> > Yes, good catch. I suspect we want to reuse this code for TX path. But
-> > for now, I'll test with DMA_FROM_DEVICE and if I see no issues I'll
-> > apply this change.
-> >
-> >>> +     dma_buf_detach(binding->dmabuf, binding->attachment);
-> >>> +     dma_buf_put(binding->dmabuf);
-> >>> +     xa_destroy(&binding->bound_rxq_list);
-> >>> +     kfree(binding);
-> >>> +}
-> >>> +
-> >>> +static int netdev_restart_rx_queue(struct net_device *dev, int rxq_i=
-dx)
-> >>> +{
-> >>> +     void *new_mem;
-> >>> +     void *old_mem;
-> >>> +     int err;
-> >>> +
-> >>> +     if (!dev || !dev->netdev_ops)
-> >>> +             return -EINVAL;
-> >>> +
-> >>> +     if (!dev->netdev_ops->ndo_queue_stop ||
-> >>> +         !dev->netdev_ops->ndo_queue_mem_free ||
-> >>> +         !dev->netdev_ops->ndo_queue_mem_alloc ||
-> >>> +         !dev->netdev_ops->ndo_queue_start)
-> >>> +             return -EOPNOTSUPP;
-> >>> +
-> >>> +     new_mem =3D dev->netdev_ops->ndo_queue_mem_alloc(dev, rxq_idx);
-> >>> +     if (!new_mem)
-> >>> +             return -ENOMEM;
-> >>> +
-> >>> +     err =3D dev->netdev_ops->ndo_queue_stop(dev, rxq_idx, &old_mem)=
-;
-> >>> +     if (err)
-> >>> +             goto err_free_new_mem;
-> >>> +
-> >>> +     err =3D dev->netdev_ops->ndo_queue_start(dev, rxq_idx, new_mem)=
-;
-> >>> +     if (err)
-> >>> +             goto err_start_queue;
-> >>> +
-> >>> +     dev->netdev_ops->ndo_queue_mem_free(dev, old_mem);
-> >>> +
-> >>> +     return 0;
-> >>> +
-> >>> +err_start_queue:
-> >>> +     dev->netdev_ops->ndo_queue_start(dev, rxq_idx, old_mem);
-> >>
-> >> It might worth mentioning why queue start with old_mem will always
-> >> success here as the return value seems to be ignored here.
-> >>
-> >
-> > So the old queue, we stopped it, and if we fail to bring up the new
-> > queue, then we want to start the old queue back up to get the queue
-> > back to a workable state.
-> >
-> > I don't see what we can do to recover if restarting the old queue
-> > fails. Seems like it should be a requirement that the driver tries as
-> > much as possible to keep the old queue restartable.
->
-> Is it possible that we may have the 'old_mem' leaking if the driver
-> fails to restart the old queue? how does the driver handle the
-> firmware cmd failure for ndo_queue_start()? it seems a little
-> tricky to implement it.
->
+> Yes, this is what is needed, however, it can be a little simpler with
+> kernel stacks:
+> given that the first page in the vm_area is mapped when stack is first
+> allocated, and that the VA range is aligned to 16K, we actually are
+> guaranteed to have all page table levels down to pte pre-allocated
+> during that initial mapping. Therefore, we do not need to worry about
+> allocating them later during PFs.
 
-I'm not sure what we can do to meaningfully recover from failure to
-restarting the old queue, except log it so the error is visible. In
-theory because we have not modifying any queue configurations
-restarting it would be straight forward, but since it's dealing with
-hardware then any failures are possible.
+Ahh. Found:
+stack =3D __vmalloc_node_range(THREAD_SIZE, THREAD_ALIGN, ...
 
-> >
-> > I can improve this by at least logging or warning if restarting the
-> > old queue fails.
+> > Then the page fault handler can service a fault in auto-growing stack
+> > area if it has a page stashed in some per-cpu free list.
+> > I suspect this is something you might need for
+> > "16k stack that is populated on fault",
+> > plus a free list of 3 pages per-cpu,
+> > and set_pte_at() in pf handler.
 >
-> Also the semantics of the above function seems odd that it is not
-> only restarting rx queue, but also freeing and allocating memory
-> despite the name only suggests 'restart', I am a litte afraid that
-> it may conflict with future usecae when user only need the
-> 'restart' part, perhaps rename it to a more appropriate name.
->
+> Yes, what you described is exactly what I am working on: using 3-pages
+> per-cpu to handle kstack page faults. The only thing that is missing
+> is that I would like to have the ability to call a non-sleeping
+> version of vm_area_map_pages().
 
-Oh, what we want here is just the 'restart' part. However, Jakub
-mandates that if you restart a queue (or a driver), you do it like
-this, hence the slightly more complicated implementation.
+vm_area_map_pages() cannot be non-sleepable, since the [start, end)
+range will dictate whether mid level allocs and locks are needed.
 
-https://patchwork.kernel.org/project/netdevbpf/patch/20231106024413.2801438=
--13-almasrymina@google.com/#25590262
-https://lore.kernel.org/netdev/20230815171638.4c057dcd@kernel.org/
-
-> >
-> >>> +
-> >>> +err_free_new_mem:
-> >>> +     dev->netdev_ops->ndo_queue_mem_free(dev, new_mem);
-> >>> +
-> >>> +     return err;
-> >>> +}
-> >>> +
-> >>> +/* Protected by rtnl_lock() */
-> >>> +static DEFINE_XARRAY_FLAGS(netdev_dmabuf_bindings, XA_FLAGS_ALLOC1);
-> >>> +
-> >>> +void netdev_unbind_dmabuf(struct netdev_dmabuf_binding *binding)
-> >>> +{
-> >>> +     struct netdev_rx_queue *rxq;
-> >>> +     unsigned long xa_idx;
-> >>> +     unsigned int rxq_idx;
-> >>> +
-> >>> +     if (!binding)
-> >>> +             return;
-> >>> +
-> >>> +     if (binding->list.next)
-> >>> +             list_del(&binding->list);
-> >>
-> >> The above does not seems to be a good pattern to delete a entry, is
-> >> there any reason having a checking before the list_del()? seems like
-> >> defensive programming?
-> >>
-> >
-> > I think I needed to apply this condition to handle the case where
-> > netdev_unbind_dmabuf() is called when binding->list is not initialized
-> > or is empty.
-> >
-> > netdev_nl_bind_rx_doit() will call unbind to free a partially
-> > allocated binding in error paths, so, netdev_unbind_dmabuf() may be
-> > called with a partially initialized binding. This is why we check for
-> > binding->list is initialized here and check that rxq->binding =3D=3D
-> > binding below. The main point is that netdev_unbind_dmabuf() may be
-> > asked to unbind a partially bound dmabuf due to error paths.
-> >
-> > Maybe a comment here will test this better. I will double confirm the
-> > check is needed for the error paths in netdev_nl_bind_rx_doit().
-> >
-> >>> +
-> >>> +     xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
-> >>> +             if (rxq->binding =3D=3D binding) {
-> >>
-> >> It seems like defensive programming here too?
-> >>
->
-
-
---=20
-Thanks,
-Mina
+Instead in alloc_thread_stack_node() you'd need a flavor
+of get_vm_area() that can align the range to THREAD_ALIGN.
+Then immediately call _sleepable_ vm_area_map_pages() to populate
+the first page and later set_pte_at() the other pages on demand
+from the fault handler.
