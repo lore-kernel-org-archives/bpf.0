@@ -1,651 +1,339 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF37E143C59;
-	Wed,  6 Mar 2024 20:05:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34CE7140E22
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 20:22:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709755554; cv=none; b=S0I6i7lS1I0widx9IAxHnIqsz0f9zedp6MKSjPxPOw0fJN6MBG//JzZy3BLY8ZyyX+JmWspmyLzWk/cQEpY0ZsF4ZRfnrZGM1o4unfdmuPABJhrMA79uPKyYcZqzICxK4R2Q8x0DkkzEu4NX3HDFnAVSKthbmWQA2twqP+qKJbE=
+	t=1709756547; cv=none; b=ALnh6TSRYnHxWWhA/axbmGrA+u7p8p3A2BoP62JUPz6EmS+IoArpwCdBjJKu8Pv0DqO1Iaj3qIT/cTVE/EoF9fxVRKspW8X5JiFg4s4TaQ1mv6ivq9ghUz1NtdHYZrqNwAkqxycKotd2kZtZemXtWajag39btmf7fr6NlzLYBZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709755554; c=relaxed/simple;
-	bh=o8Z06UqQHpQij/QFSA0wOi1qE/jLPCTw6JsXGHcNP4w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nLagmbpfw0QHQjpA5td25dbytbAM12mCCboqh9DxdnZ19WsIyaMUEskHAJLSTWCMOB/G9s8n484eYKu0vJ0YELFJi4jVoz46TtBh7hseXnwNCSqy96cjd+ciOoyzZhdF0dMJU/gf4Eo6/BRBWXofyXdNu1ny/QU7p6M6RDeD4Fk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HhXiVV2s; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709756547; c=relaxed/simple;
+	bh=hCKskeWjcP7GWg7M756l+RD7uiiLsJPgNH2f+iFWmzY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WnFAlHtG2HoHKV9eAVjh5VG77tqRC+SAHJ1kGYuE+xSAsCGm4Da0nrwpBcg0UnLUzMpcri6KdrEp7B+0wspXZ3QvQQZCXlgPDMG8up9GsnvgakfDtenpvB3l+YfmaYEWYLq8KhV7OvzuhLASpcQOdJtQ4eHGmk8tj9sat2vt6Uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=Sh54lByy; arc=none smtp.client-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HhXiVV2s"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1dc0d11d1b7so1153755ad.2;
-        Wed, 06 Mar 2024 12:05:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="Sh54lByy"
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-60983233a0dso1740557b3.3
+        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 12:22:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709755551; x=1710360351; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1709756544; x=1710361344; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FX8YkIaogeZn2Ru8WOvguzpBluPt3gWrmRThD9l197w=;
-        b=HhXiVV2sp77qhEnPj/wJBy0i29PpXH+F/uUFfAOGgr5zi6S4ded093Ev/4g+VN1NZl
-         W3wiEQKjsR2sciYKr15P77h2QEd9LXkwAGiVlLTNwhp7dnZRVYJ7zH7tP4f9mdxgpjGY
-         9n/Ck+ULjhZzepe2v+GO06wH74trJCgXCyKQIq41Ad9lAP+LbS/2yiwDHKmaU5rVeloZ
-         ZkcVaSeY1/2suzhW3BvthmZL7p4gQGwMDNPv9MuHPDDmF428lF0WpMm9jhirKxLkUqoq
-         /hqJZs1hHHPYvkaBn91n4myA6Ql/dVftLAyNpwnMHqtj5CZnvfSuo9PGn8xnsOQes5DL
-         Wj/Q==
+        bh=ub2+wSpjjuXiMSyu0LAxMbix1pDCmSnWkN5wg/KKB1Q=;
+        b=Sh54lByy+oRIfx3LWp4yy+P/yrf259vP0PAWIUtTQ777kaaGfq7MKHa0/dyfxjpbyQ
+         Z84WQXoxIxQXQawgyriiPdgmW75RcY/LIQVKO3cyOEHpu3j2kNI4WxGtUitsPMi+AonZ
+         mnOeOHi5jcXMDrSuA4f/b8mAb7PDRMmcwH8ooaBUgcjRFtC6SWAKlL65Q4aDZXFV4xp9
+         X6O/II3zKv5RMpe5kjbwDttwLAzapdOsBhyojqCT/0O2MNxi6x77Y5M900ljGRRrsbQT
+         fFVwZRiY52Px/U8ZSPpFO6tRkY1f+BXoiQ0eQ1tgHjlTDmHpYWkpdwRjDMXKDMSnkSSa
+         PM4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709755551; x=1710360351;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1709756544; x=1710361344;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FX8YkIaogeZn2Ru8WOvguzpBluPt3gWrmRThD9l197w=;
-        b=EW4XIYuKuNYW7gpgBi8dh/1bxWKuBVrab53DBrIe+X54baQHQS4rAdhKrrN4GqAfVE
-         WvdFEIYDWNSJ+snUJY5AsfTDvQcc9sR6+FupJLc+oE7kzFQ7LYkjZ9IbJmyLPDc/H77u
-         /SRDJcoAvipvMcJp6GxKu5kasZ4tn2Y1ZDUbQH2oTM0Kjk0LRv2ETYfPKdsoUW/cSK4T
-         DusxJCgGay7yETQufFK6P19EDvHhdypNGlix1sJfHY8u6Lp/KjBDRqr+TvQAMeFzks7s
-         r7N8L/lkkmldp7zv6ViEy/HpRmjq5jrC01Gp0xqY6GwOzocdGhi+c3SHqDAcTKhs6+A6
-         Rd2A==
-X-Forwarded-Encrypted: i=1; AJvYcCXXqqNX8NlV1eFd/NWsvOj02pywkr91Rj9xpIKmi5lcxMa2/+JJHdGc8RkDZ3O/0a5BpN4Ds46mjJdBfiMo66cvw8t+xd7uZhUPKn+24STFU5/bYqqlS9Ni46AX+uZU5gs8FaBAv7iyWVlKad1B/3PjhksjT2X57sdDG7ijjrbrXQ==
-X-Gm-Message-State: AOJu0YyolmykII+63L4FxjMoKVc1/f/vSr30EU3+FcVZvZFRyZkWDv/p
-	zgEB7IaHHFFw50YsObvJua53jVDBleHzDlL//O+H6uhpYmiv3D++
-X-Google-Smtp-Source: AGHT+IFcyEHFqWXhZBDtPi0MIYs8Ofqj90k6hm7PQVd4a7TPst+AD3T0SxCfQSfslpMC8GlPYNmpPg==
-X-Received: by 2002:a17:902:e74b:b0:1da:22d9:e7fd with SMTP id p11-20020a170902e74b00b001da22d9e7fdmr7091836plf.20.1709755551114;
-        Wed, 06 Mar 2024 12:05:51 -0800 (PST)
-Received: from mozart.vkv.me ([192.184.166.229])
-        by smtp.gmail.com with ESMTPSA id n15-20020a170902e54f00b001dcfc88ccf6sm8869341plf.263.2024.03.06.12.05.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Mar 2024 12:05:50 -0800 (PST)
-From: Calvin Owens <jcalvinowens@gmail.com>
-To: Luis Chamberlain <mcgrof@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Naveen N Rao <naveen.n.rao@linux.ibm.com>,
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-	David S Miller <davem@davemloft.net>,
-	Thomas Gleixner <tglx@linutronix.de>
-Cc: Calvin Owens <jcalvinowens@gmail.com>,
-	bpf@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [RFC][PATCH 4/4] selftests/bpf: Support testing the !MODULES case
-Date: Wed,  6 Mar 2024 12:05:11 -0800
-Message-ID: <0efc2579470afafc8c6ea14ee6f4530dc27a6d65.1709676663.git.jcalvinowens@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1709676663.git.jcalvinowens@gmail.com>
-References: <cover.1709676663.git.jcalvinowens@gmail.com>
+        bh=ub2+wSpjjuXiMSyu0LAxMbix1pDCmSnWkN5wg/KKB1Q=;
+        b=qsso4225CkleL/hkZI87RFkGYfWh9kQkld4D5kgs4ekGsl6TBqjg+bx4bqmmdJZCnO
+         4r57M43b6RwbWGugKnazRNYS3wiHnxCDxUdrfPTxl/Gl21WvwJk7klyV7Vv4tL95tZ1p
+         679OgjnHDbra/kOe+I/cUvZjBsm3SvJpnB3jrUScvsv6A/LQiOimQVSLxOsbVzlSAmpU
+         idn6Ustch3zOTJrI8uXUGN2FdMJSDq/3YhjBUp/aNU8yjd9nslLIKb+o0DBKDPV9Szwh
+         uXvLgAvF9LD6sKGU9ci1svkIcSWnjHroBaiuqp8G1+E+yhap/QTO2OsJnpbbJyxx2/Iq
+         5nzg==
+X-Forwarded-Encrypted: i=1; AJvYcCWKvkJR5jRV1Sh/5kru70glVn2N3eO1YTSu2Tz760nh3mAIglJuypCVM8Q7iqhAEK9Bt0Z39h0ltvsbp6CoUGEnpD9y
+X-Gm-Message-State: AOJu0YyD/zcHPd/dmx2uwG20WJu0HQPuAHg6TzP/tuG1x7L6f5E15/nR
+	hfokTibLB3gxbT5E99LhCbZEwUXJlBiDQtHuhXAfPSbo2hIh1JjK/QkVAlGUr3bnClguoxQg4wA
+	9+mmen8OAZGtVPCLvBWFLXnV7MM/W88pUCdzh
+X-Google-Smtp-Source: AGHT+IHD7bpKDD6ms90iGDtFELqAGYMH/XlJhvbVS3nXmz0Y0jGhI4sVinBekUBW9scC2cf1dFKe8ea4QhmCa43d5nk=
+X-Received: by 2002:a81:a012:0:b0:609:e844:97bf with SMTP id
+ x18-20020a81a012000000b00609e84497bfmr826356ywg.12.1709756544051; Wed, 06 Mar
+ 2024 12:22:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240225165447.156954-1-jhs@mojatatu.com> <20240225165447.156954-15-jhs@mojatatu.com>
+ <9eff9a51-a945-48f6-9d14-a484b7c0d04c@linux.dev> <CAM0EoMniOaKn4W_WN9rmQZ1JY3qCugn34mmqCy9UdCTAj_tuTQ@mail.gmail.com>
+ <f88b5f65-957e-4b5d-8959-d16e79372658@linux.dev> <CAM0EoMk=igKT5ZEwcfdQqP6O3u8tO7VOpkNsWE1b92ia2eZVpw@mail.gmail.com>
+ <496c78b7-4e16-42eb-a2f4-99472cd764fd@linux.dev> <CAM0EoMmB0s5WzZ-CgGWBF9YdaWi7O0tHEj+C8zuryGhKz7+FpA@mail.gmail.com>
+ <7aaeee73-4197-4ea8-834a-2265ef078bab@linux.dev>
+In-Reply-To: <7aaeee73-4197-4ea8-834a-2265ef078bab@linux.dev>
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+Date: Wed, 6 Mar 2024 15:22:12 -0500
+Message-ID: <CAM0EoMnkJpBnD5G3CfWnGkzE1cQKDp_mz02BW+aHK4rbTnOQCQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v12 14/15] p4tc: add set of P4TC table kfuncs
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: deb.chatterjee@intel.com, anjali.singhai@intel.com, 
+	namrata.limaye@intel.com, tom@sipanda.io, mleitner@redhat.com, 
+	Mahesh.Shirshyad@amd.com, Vipin.Jain@amd.com, tomasz.osinski@intel.com, 
+	jiri@resnulli.us, xiyou.wangcong@gmail.com, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, vladbu@nvidia.com, 
+	horms@kernel.org, khalidm@nvidia.com, toke@redhat.com, daniel@iogearbox.net, 
+	victor@mojatatu.com, pctammela@mojatatu.com, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This symlinks bpf_testmod into the main source, so it can be built-in
-for running selftests in the new !MODULES case.
+On Wed, Mar 6, 2024 at 2:58=E2=80=AFAM Martin KaFai Lau <martin.lau@linux.d=
+ev> wrote:
+>
+> On 3/5/24 4:30 AM, Jamal Hadi Salim wrote:
+> > On Tue, Mar 5, 2024 at 2:40=E2=80=AFAM Martin KaFai Lau <martin.lau@lin=
+ux.dev> wrote:
+> >>
+> >> On 3/3/24 9:20 AM, Jamal Hadi Salim wrote:
+> >>
+> >>>>>>> +#define P4TC_MAX_PARAM_DATA_SIZE 124
+> >>>>>>> +
+> >>>>>>> +struct p4tc_table_entry_act_bpf {
+> >>>>>>> +     u32 act_id;
+> >>>>>>> +     u32 hit:1,
+> >>>>>>> +         is_default_miss_act:1,
+> >>>>>>> +         is_default_hit_act:1;
+> >>>>>>> +     u8 params[P4TC_MAX_PARAM_DATA_SIZE];
+> >>>>>>> +} __packed;
+> >>>>>>> +
+> >>>>>>> +struct p4tc_table_entry_act_bpf_kern {
+> >>>>>>> +     struct rcu_head rcu;
+> >>>>>>> +     struct p4tc_table_entry_act_bpf act_bpf;
+> >>>>>>> +};
+> >>>>>>> +
+> >>>>>>>      struct tcf_p4act {
+> >>>>>>>          struct tc_action common;
+> >>>>>>>          /* Params IDR reference passed during runtime */
+> >>>>>>>          struct tcf_p4act_params __rcu *params;
+> >>>>>>> +     struct p4tc_table_entry_act_bpf_kern __rcu *act_bpf;
+> >>>>>>>          u32 p_id;
+> >>>>>>>          u32 act_id;
+> >>>>>>>          struct list_head node;
+> >>>>>>> @@ -24,4 +40,39 @@ struct tcf_p4act {
+> >>>>>>>
+> >>>>>>>      #define to_p4act(a) ((struct tcf_p4act *)a)
+> >>>>>>>
+> >>>>>>> +static inline struct p4tc_table_entry_act_bpf *
+> >>>>>>> +p4tc_table_entry_act_bpf(struct tc_action *action)
+> >>>>>>> +{
+> >>>>>>> +     struct p4tc_table_entry_act_bpf_kern *act_bpf;
+> >>>>>>> +     struct tcf_p4act *p4act =3D to_p4act(action);
+> >>>>>>> +
+> >>>>>>> +     act_bpf =3D rcu_dereference(p4act->act_bpf);
+> >>>>>>> +
+> >>>>>>> +     return &act_bpf->act_bpf;
+> >>>>>>> +}
+> >>>>>>> +
+> >>>>>>> +static inline int
+> >>>>>>> +p4tc_table_entry_act_bpf_change_flags(struct tc_action *action, =
+u32 hit,
+> >>>>>>> +                                   u32 dflt_miss, u32 dflt_hit)
+> >>>>>>> +{
+> >>>>>>> +     struct p4tc_table_entry_act_bpf_kern *act_bpf, *act_bpf_old=
+;
+> >>>>>>> +     struct tcf_p4act *p4act =3D to_p4act(action);
+> >>>>>>> +
+> >>>>>>> +     act_bpf =3D kzalloc(sizeof(*act_bpf), GFP_KERNEL);
+> >>>>>>
+> >>>>>>
+> >>>>>> [ ... ]
+> >>
+> >>
+> >>>>>>> +static int
+> >>>>>>> +__bpf_p4tc_entry_create(struct net *net,
+> >>>>>>> +                     struct p4tc_table_entry_create_bpf_params *=
+params,
+> >>>>>>> +                     void *key, const u32 key__sz,
+> >>>>>>> +                     struct p4tc_table_entry_act_bpf *act_bpf)
+> >>>>>>> +{
+> >>>>>>> +     struct p4tc_table_entry_key *entry_key =3D key;
+> >>>>>>> +     struct p4tc_pipeline *pipeline;
+> >>>>>>> +     struct p4tc_table *table;
+> >>>>>>> +
+> >>>>>>> +     if (!params || !key)
+> >>>>>>> +             return -EINVAL;
+> >>>>>>> +     if (key__sz !=3D P4TC_ENTRY_KEY_SZ_BYTES(entry_key->keysz))
+> >>>>>>> +             return -EINVAL;
+> >>>>>>> +
+> >>>>>>> +     pipeline =3D p4tc_pipeline_find_byid(net, params->pipeid);
+> >>>>>>> +     if (!pipeline)
+> >>>>>>> +             return -ENOENT;
+> >>>>>>> +
+> >>>>>>> +     table =3D p4tc_tbl_cache_lookup(net, params->pipeid, params=
+->tblid);
+> >>>>>>> +     if (!table)
+> >>>>>>> +             return -ENOENT;
+> >>>>>>> +
+> >>>>>>> +     if (entry_key->keysz !=3D table->tbl_keysz)
+> >>>>>>> +             return -EINVAL;
+> >>>>>>> +
+> >>>>>>> +     return p4tc_table_entry_create_bpf(pipeline, table, entry_k=
+ey, act_bpf,
+> >>>>>>> +                                        params->profile_id);
+> >>>>>>
+> >>>>>> My understanding is this kfunc will allocate a "struct
+> >>>>>> p4tc_table_entry_act_bpf_kern" object. If the bpf_p4tc_entry_delet=
+e() kfunc is
+> >>>>>> never called and the bpf prog is unloaded, how the act_bpf object =
+will be
+> >>>>>> cleaned up?
+> >>>>>>
+> >>>>>
+> >>>>> The TC code takes care of this. Unloading the bpf prog does not aff=
+ect
+> >>>>> the deletion, it is the TC control side that will take care of it. =
+If
+> >>>>> we delete the pipeline otoh then not just this entry but all entrie=
+s
+> >>>>> will be flushed.
+> >>>>
+> >>>> It looks like the "struct p4tc_table_entry_act_bpf_kern" object is a=
+llocated by
+> >>>> the bpf prog through kfunc and will only be useful for the bpf prog =
+but not
+> >>>> other parts of the kernel. However, if the bpf prog is unloaded, the=
+se bpf
+> >>>> specific objects will be left over in the kernel until the tc pipeli=
+ne (where
+> >>>> the act_bpf_kern object resided) is gone.
+> >>>>
+> >>>> It is the expectation on bpf prog (not only tc/xdp bpf prog) about r=
+esources
+> >>>> clean up that these bpf objects will be gone after unloading the bpf=
+ prog and
+> >>>> unpinning its bpf map.
+> >>>>
+> >>>
+> >>> The table (residing on the TC side) could be shared by multiple bpf
+> >>> programs. Entries are allocated on the TC side of the fence.
+> >>
+> >>
+> >>> IOW, the memory is not owned by the bpf prog but rather by pipeline.
+> >>
+> >> The struct p4tc_table_entry_act_(bpf_kern) object is allocated by
+> >> bpf_p4tc_entry_create() kfunc and only bpf prog can use it, no?
+> >> afaict, this is bpf objects.
+> >>
+> >
+> > Bear with me because i am not sure i am following.
+> > When we looked at conntrack as guidance we noticed they do things
+> > slightly differently. They have an allocate kfunc and an insert
+> > function. If you have alloc then you need a complimentary release. The
+> > existence of the release in conntrack, correct me if i am wrong, seems
+> > to be based on the need to free the object if an insert fails. In our
+> > case the insert does first allocate then inserts all in one operation.
+> > If either fails it's not the concern of the bpf side to worry about
+> > it. IOW, i see the ownership as belonging to the P4TC side  (it is
+> > both allocated, updated and freed by that side). Likely i am missing
+> > something..
+>
+> It is not the concern about the kfuncs may leak object.
+>
+> I think my question was, who can use the act_bpf_kern object when all tc =
+bpf
+> prog is unloaded? If no one can use it, it should as well be cleaned up w=
+hen the
+> bpf prog is unloaded.
+>
+> or the kernel p4 pipeline can use the act_bpf_kern object even when there=
+ is no
+> bpf prog loaded?
+>
+>
+> >
+> >>> We do have a "whodunnit" field, i.e we keep track of which entity
+> >>> added an entry and we are capable of deleting all entries when we
+> >>> detect a bpf program being deleted (this would be via deleting the tc
+> >>> filter). But my thinking is we should make that a policy decision as
+> >>> opposed to something which is default.
+> >>
+> >> afaik, this policy decision or cleanup upon tc filter delete has not b=
+een done
+> >> yet. I will leave it to you to figure out how to track what was alloca=
+ted by a
+> >> particular bpf prog on the TC side. It is not immediately clear to me =
+and I
+> >> probably won't have a good idea either.
+> >>
+> >
+> > I am looking at the conntrack code and i dont see how they release
+> > entries from the cotrack table when the bpf prog goes away.
+> >
+> >> Just to be clear that it is almost certain to be unacceptable to exten=
+d and make
+> >> changes on the bpf side in the future to handle specific resource
+> >> cleanup/tracking/sharing of the bpf objects allocated by these kfuncs.=
+ This
+> >> problem has already been solved and works for different bpf program ty=
+pes,
+> >> tc/cgroup/tracing...etc. Adding a refcnted bpf prog pointer alongside =
+the
+> >> act_bpf_kern object will be a non-starter.
+> >>
+> >> I think multiple people have already commented that these kfuncs
+> >> (create/update/delete...) resemble the existing bpf map. If these kfun=
+cs are
+> >> replaced with the bpf map ops, this bpf resource management has alread=
+y been
+> >> handled and will be consistent with other bpf program types.
+> >>
+> >> I expect the act_bpf_kern object probably will grow in size over time =
+also.
+> >> Considering this new p4 pipeline and table is residing on the TC side,=
+ I will
+> >> leave it up to others to decide if it is acceptable to have some unuse=
+d bpf
+> >> objects left attached there.
+> >
+> > There should be no dangling things at all.
+> > Probably not a very good example, but this would be analogous to
+> > pinning a map which is shared by many bpf progs. Deleting one or all
+> > the bpf progs doesnt delete the contents of the bpf map, you have to
+> > explicitly remove it. Deleting the pipeline will be equivalent to
+> > deleting the map. IOW, resource cleanup is tied to the pipeline..
+>
+> bpf is also used by many subsystems (e.g. tracing/cgroup/...). The bpf us=
+ers
+> have a common expectation on how bpf resources will be cleaned up when wr=
+iting
+> bpf for different subsystems, i.e. map/link/pinned-file. Thus, p4 pipelin=
+e is
+> not the same as a pinned bpf map here. The p4-tc bpf user cannot depend o=
+n the
+> common bpf ecosystem to cleanup all resources.
+>
 
-To be clear, no changes to the existing selftests are required: this
-only exists to enable testing the new case which was not previously
-possible. I'm sure somebody will be able to suggest a less ugly way I
-can do this...
+I am not trying to be difficult. Sincerely trying to understand and
+very puzzled - and it is not that we cant do what you are suggesting
+just trying to understand the reasoning to make sure it fits our
+requirements.
 
-Signed-off-by: Calvin Owens <jcalvinowens@gmail.com>
----
- include/trace/events/bpf_testmod.h            |  1 +
- kernel/bpf/Kconfig                            |  9 ++++++
- kernel/bpf/Makefile                           |  2 ++
- kernel/bpf/bpf_testmod/Makefile               |  1 +
- kernel/bpf/bpf_testmod/bpf_testmod.c          |  1 +
- kernel/bpf/bpf_testmod/bpf_testmod.h          |  1 +
- kernel/bpf/bpf_testmod/bpf_testmod_kfunc.h    |  1 +
- net/bpf/test_run.c                            |  2 ++
- tools/testing/selftests/bpf/Makefile          | 28 +++++++++++++------
- .../selftests/bpf/bpf_testmod/Makefile        |  2 +-
- .../bpf/bpf_testmod/bpf_testmod-events.h      |  6 ++++
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   |  4 +++
- .../bpf/bpf_testmod/bpf_testmod_kfunc.h       |  2 ++
- tools/testing/selftests/bpf/config            |  5 ----
- tools/testing/selftests/bpf/config.mods       |  5 ++++
- tools/testing/selftests/bpf/config.nomods     |  1 +
- .../selftests/bpf/progs/btf_type_tag_percpu.c |  2 ++
- .../selftests/bpf/progs/btf_type_tag_user.c   |  2 ++
- tools/testing/selftests/bpf/progs/core_kern.c |  2 ++
- .../selftests/bpf/progs/iters_testmod_seq.c   |  2 ++
- .../bpf/progs/test_core_reloc_module.c        |  2 ++
- .../selftests/bpf/progs/test_ldsx_insn.c      |  2 ++
- .../selftests/bpf/progs/test_module_attach.c  |  3 ++
- .../selftests/bpf/progs/tracing_struct.c      |  2 ++
- tools/testing/selftests/bpf/testing_helpers.c | 14 ++++++++++
- tools/testing/selftests/bpf/vmtest.sh         | 24 ++++++++++++++--
- 26 files changed, 110 insertions(+), 16 deletions(-)
- create mode 120000 include/trace/events/bpf_testmod.h
- create mode 100644 kernel/bpf/bpf_testmod/Makefile
- create mode 120000 kernel/bpf/bpf_testmod/bpf_testmod.c
- create mode 120000 kernel/bpf/bpf_testmod/bpf_testmod.h
- create mode 120000 kernel/bpf/bpf_testmod/bpf_testmod_kfunc.h
- create mode 100644 tools/testing/selftests/bpf/config.mods
- create mode 100644 tools/testing/selftests/bpf/config.nomods
+I asked earlier about conntrack (where we took the inspiration from):
+How is what we are doing different from contrack? If you can help me
+understand that i am more than willing to make the change.
+Conntrack entries can be added via the kfunc(same for us). Contrack
+entries can also be added from the control plane and can be found by
+ebpf lookups(same for us). They can be deleted by the control plane,
+timers, entry evictions to make space for new entries, etc (same for
+us). Not sure if they can be deleted by ebpf side (we can). Perusing
+the conntrack code, I could not find anything  that indicated that
+entries created from ebpf are deleted when the ebpf program goes away.
 
-diff --git a/include/trace/events/bpf_testmod.h b/include/trace/events/bpf_testmod.h
-new file mode 120000
-index 000000000000..ae237a90d381
---- /dev/null
-+++ b/include/trace/events/bpf_testmod.h
-@@ -0,0 +1 @@
-+../../../tools/testing/selftests/bpf/bpf_testmod/bpf_testmod-events.h
-\ No newline at end of file
-diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-index 77df483a8925..d5ba795182e5 100644
---- a/kernel/bpf/Kconfig
-+++ b/kernel/bpf/Kconfig
-@@ -100,4 +100,13 @@ config BPF_LSM
- 
- 	  If you are unsure how to answer this question, answer N.
- 
-+config BPF_TEST_MODULE
-+	bool "Build the module for BPF selftests as a built-in"
-+	depends on BPF_SYSCALL
-+	depends on BPF_JIT
-+	depends on !MODULES
-+	default n
-+	help
-+	  This allows most of the bpf selftests to run without modules.
-+
- endmenu # "BPF subsystem"
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index f526b7573e97..04b3e50ff940 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -46,3 +46,5 @@ obj-$(CONFIG_BPF_PRELOAD) += preload/
- obj-$(CONFIG_BPF_SYSCALL) += relo_core.o
- $(obj)/relo_core.o: $(srctree)/tools/lib/bpf/relo_core.c FORCE
- 	$(call if_changed_rule,cc_o_c)
-+
-+obj-$(CONFIG_BPF_TEST_MODULE) += bpf_testmod/
-diff --git a/kernel/bpf/bpf_testmod/Makefile b/kernel/bpf/bpf_testmod/Makefile
-new file mode 100644
-index 000000000000..55a73fd8443e
---- /dev/null
-+++ b/kernel/bpf/bpf_testmod/Makefile
-@@ -0,0 +1 @@
-+obj-y += bpf_testmod.o
-diff --git a/kernel/bpf/bpf_testmod/bpf_testmod.c b/kernel/bpf/bpf_testmod/bpf_testmod.c
-new file mode 120000
-index 000000000000..ca3baca5d9c4
---- /dev/null
-+++ b/kernel/bpf/bpf_testmod/bpf_testmod.c
-@@ -0,0 +1 @@
-+../../../tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-\ No newline at end of file
-diff --git a/kernel/bpf/bpf_testmod/bpf_testmod.h b/kernel/bpf/bpf_testmod/bpf_testmod.h
-new file mode 120000
-index 000000000000..f8d3df98b6a5
---- /dev/null
-+++ b/kernel/bpf/bpf_testmod/bpf_testmod.h
-@@ -0,0 +1 @@
-+../../../tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
-\ No newline at end of file
-diff --git a/kernel/bpf/bpf_testmod/bpf_testmod_kfunc.h b/kernel/bpf/bpf_testmod/bpf_testmod_kfunc.h
-new file mode 120000
-index 000000000000..fdf42f5eaeb0
---- /dev/null
-+++ b/kernel/bpf/bpf_testmod/bpf_testmod_kfunc.h
-@@ -0,0 +1 @@
-+../../../tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
-\ No newline at end of file
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index dfd919374017..33029c91bf92 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -573,10 +573,12 @@ __bpf_kfunc int bpf_modify_return_test2(int a, int *b, short c, int d,
- 	return a + *b + c + d + (long)e + f + g;
- }
- 
-+#if !IS_ENABLED(CONFIG_BPF_TEST_MODULE)
- int noinline bpf_fentry_shadow_test(int a)
- {
- 	return a + 1;
- }
-+#endif
- 
- struct prog_test_member1 {
- 	int a;
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index fd15017ed3b1..12da018c9fc3 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -108,9 +108,16 @@ TEST_PROGS_EXTENDED := with_addr.sh \
- # Compile but not part of 'make run_tests'
- TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
- 	flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
--	test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko \
--	xskxceiver xdp_redirect_multi xdp_synproxy veristat xdp_hw_metadata \
--	xdp_features
-+	test_lirc_mode2_user xdping test_cpp runqslower bench xskxceiver \
-+	xdp_redirect_multi xdp_synproxy veristat xdp_hw_metadata xdp_features
-+
-+RUN_TESTS_WITHOUT_MODULES ?= 0
-+TRUNNER_EXTRA_CFLAGS ?=
-+
-+ifeq ($(RUN_TESTS_WITHOUT_MODULES),0)
-+TEST_GEN_PROGS_EXTENDED += bpf_testmod.ko
-+TRUNNER_EXTRA_CFLAGS += -DBPF_TESTMOD_EXTERNAL
-+endif
- 
- TEST_GEN_FILES += liburandom_read.so urandom_read sign-file uprobe_multi
- 
-@@ -400,22 +407,22 @@ $(OUTPUT)/cgroup_getset_retval_hooks.o: cgroup_getset_retval_hooks.h
- # $3 - CFLAGS
- define CLANG_BPF_BUILD_RULE
- 	$(call msg,CLNG-BPF,$(TRUNNER_BINARY),$2)
--	$(Q)$(CLANG) $3 -O2 --target=bpf -c $1 -mcpu=v3 -o $2
-+	$(Q)$(CLANG) $3 $(TRUNNER_EXTRA_CFLAGS) -O2 --target=bpf -c $1 -mcpu=v3 -o $2
- endef
- # Similar to CLANG_BPF_BUILD_RULE, but with disabled alu32
- define CLANG_NOALU32_BPF_BUILD_RULE
- 	$(call msg,CLNG-BPF,$(TRUNNER_BINARY),$2)
--	$(Q)$(CLANG) $3 -O2 --target=bpf -c $1 -mcpu=v2 -o $2
-+	$(Q)$(CLANG) $3 $(TRUNNER_EXTRA_CFLAGS) -O2 --target=bpf -c $1 -mcpu=v2 -o $2
- endef
- # Similar to CLANG_BPF_BUILD_RULE, but with cpu-v4
- define CLANG_CPUV4_BPF_BUILD_RULE
- 	$(call msg,CLNG-BPF,$(TRUNNER_BINARY),$2)
--	$(Q)$(CLANG) $3 -O2 --target=bpf -c $1 -mcpu=v4 -o $2
-+	$(Q)$(CLANG) $3 $(TRUNNER_EXTRA_CFLAGS) -O2 --target=bpf -c $1 -mcpu=v4 -o $2
- endef
- # Build BPF object using GCC
- define GCC_BPF_BUILD_RULE
- 	$(call msg,GCC-BPF,$(TRUNNER_BINARY),$2)
--	$(Q)$(BPF_GCC) $3 -O2 -c $1 -o $2
-+	$(Q)$(BPF_GCC) $3 $(TRUNNER_EXTRA_CFLAGS) -O2 -c $1 -o $2
- endef
- 
- SKEL_BLACKLIST := btf__% test_pinning_invalid.c test_sk_assign.c
-@@ -605,7 +612,7 @@ TRUNNER_EXTRA_SOURCES := test_progs.c		\
- 			 json_writer.c 		\
- 			 flow_dissector_load.h	\
- 			 ip_check_defrag_frags.h
--TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko	\
-+TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read				\
- 		       $(OUTPUT)/liburandom_read.so			\
- 		       $(OUTPUT)/xdp_synproxy				\
- 		       $(OUTPUT)/sign-file				\
-@@ -614,6 +621,11 @@ TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko	\
- 		       verify_sig_setup.sh				\
- 		       $(wildcard progs/btf_dump_test_case_*.c)		\
- 		       $(wildcard progs/*.bpf.o)
-+
-+ifeq ($(RUN_TESTS_WITHOUT_MODULES),0)
-+TRUNNER_EXTRA_FILES += $(OUTPUT)/bpf_testmod.ko
-+endif
-+
- TRUNNER_BPF_BUILD_RULE := CLANG_BPF_BUILD_RULE
- TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(CLANG_CFLAGS) -DENABLE_ATOMICS_TESTS
- $(eval $(call DEFINE_TEST_RUNNER,test_progs))
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/Makefile b/tools/testing/selftests/bpf/bpf_testmod/Makefile
-index 15cb36c4483a..123f161339e4 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/Makefile
-+++ b/tools/testing/selftests/bpf/bpf_testmod/Makefile
-@@ -10,7 +10,7 @@ endif
- MODULES = bpf_testmod.ko
- 
- obj-m += bpf_testmod.o
--CFLAGS_bpf_testmod.o = -I$(src)
-+CFLAGS_bpf_testmod.o = -I$(src) -DBPF_TESTMOD_EXTERNAL
- 
- all:
- 	+$(Q)make -C $(KDIR) M=$(BPF_TESTMOD_DIR) modules
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod-events.h b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod-events.h
-index 11ee801e75e7..57a9795d814a 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod-events.h
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod-events.h
-@@ -1,5 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /* Copyright (c) 2020 Facebook */
-+
- #undef TRACE_SYSTEM
- #define TRACE_SYSTEM bpf_testmod
- 
-@@ -7,7 +8,10 @@
- #define _BPF_TESTMOD_EVENTS_H
- 
- #include <linux/tracepoint.h>
-+
-+#ifdef BPF_TESTMOD_EXTERNAL
- #include "bpf_testmod.h"
-+#endif
- 
- TRACE_EVENT(bpf_testmod_test_read,
- 	TP_PROTO(struct task_struct *task, struct bpf_testmod_test_read_ctx *ctx),
-@@ -51,7 +55,9 @@ BPF_TESTMOD_DECLARE_TRACE(bpf_testmod_test_writable_bare,
- 
- #endif /* _BPF_TESTMOD_EVENTS_H */
- 
-+#ifdef BPF_TESTMOD_EXTERNAL
- #undef TRACE_INCLUDE_PATH
- #define TRACE_INCLUDE_PATH .
- #define TRACE_INCLUDE_FILE bpf_testmod-events
-+#endif
- #include <trace/define_trace.h>
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-index 91907b321f91..78769fe1c66b 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-@@ -12,7 +12,11 @@
- #include "bpf_testmod_kfunc.h"
- 
- #define CREATE_TRACE_POINTS
-+#ifdef BPF_TESTMOD_EXTERNAL
- #include "bpf_testmod-events.h"
-+#else
-+#include "trace/events/bpf_testmod.h"
-+#endif
- 
- typedef int (*func_proto_typedef)(long);
- typedef int (*func_proto_typedef_nested1)(func_proto_typedef);
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
-index 7c664dd61059..fe4a67cf04cb 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
-@@ -26,6 +26,7 @@ struct prog_test_ref_kfunc {
- };
- #endif
- 
-+#if defined(BPF_TESTMOD_EXTERNAL) || defined(__KERNEL__)
- struct prog_test_pass1 {
- 	int x0;
- 	struct {
-@@ -63,6 +64,7 @@ struct prog_test_fail3 {
- 	char arr1[2];
- 	char arr2[];
- };
-+#endif
- 
- struct prog_test_ref_kfunc *
- bpf_kfunc_call_test_acquire(unsigned long *scalar_ptr) __ksym;
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index c125c441abc7..b26e79e42fb7 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -44,11 +44,6 @@ CONFIG_IPV6_TUNNEL=y
- CONFIG_KEYS=y
- CONFIG_LIRC=y
- CONFIG_LWTUNNEL=y
--CONFIG_MODULE_SIG=y
--CONFIG_MODULE_SRCVERSION_ALL=y
--CONFIG_MODULE_UNLOAD=y
--CONFIG_MODULES=y
--CONFIG_MODVERSIONS=y
- CONFIG_MPLS=y
- CONFIG_MPLS_IPTUNNEL=y
- CONFIG_MPLS_ROUTING=y
-diff --git a/tools/testing/selftests/bpf/config.mods b/tools/testing/selftests/bpf/config.mods
-new file mode 100644
-index 000000000000..7fc4edb66b35
---- /dev/null
-+++ b/tools/testing/selftests/bpf/config.mods
-@@ -0,0 +1,5 @@
-+CONFIG_MODULE_SIG=y
-+CONFIG_MODULE_SRCVERSION_ALL=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_MODULES=y
-+CONFIG_MODVERSIONS=y
-diff --git a/tools/testing/selftests/bpf/config.nomods b/tools/testing/selftests/bpf/config.nomods
-new file mode 100644
-index 000000000000..aea6afdc0a0b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/config.nomods
-@@ -0,0 +1 @@
-+CONFIG_BPF_TEST_MODULE=y
-diff --git a/tools/testing/selftests/bpf/progs/btf_type_tag_percpu.c b/tools/testing/selftests/bpf/progs/btf_type_tag_percpu.c
-index 38f78d9345de..b3b52934dd37 100644
---- a/tools/testing/selftests/bpf/progs/btf_type_tag_percpu.c
-+++ b/tools/testing/selftests/bpf/progs/btf_type_tag_percpu.c
-@@ -4,6 +4,7 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- 
-+#ifdef BPF_TESTMOD_EXTERNAL
- struct bpf_testmod_btf_type_tag_1 {
- 	int a;
- };
-@@ -11,6 +12,7 @@ struct bpf_testmod_btf_type_tag_1 {
- struct bpf_testmod_btf_type_tag_2 {
- 	struct bpf_testmod_btf_type_tag_1 *p;
- };
-+#endif
- 
- __u64 g;
- 
-diff --git a/tools/testing/selftests/bpf/progs/btf_type_tag_user.c b/tools/testing/selftests/bpf/progs/btf_type_tag_user.c
-index 5523f77c5a44..a41cf28ef437 100644
---- a/tools/testing/selftests/bpf/progs/btf_type_tag_user.c
-+++ b/tools/testing/selftests/bpf/progs/btf_type_tag_user.c
-@@ -4,6 +4,7 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- 
-+#ifdef BPF_TESTMOD_EXTERNAL
- struct bpf_testmod_btf_type_tag_1 {
- 	int a;
- };
-@@ -11,6 +12,7 @@ struct bpf_testmod_btf_type_tag_1 {
- struct bpf_testmod_btf_type_tag_2 {
- 	struct bpf_testmod_btf_type_tag_1 *p;
- };
-+#endif
- 
- int g;
- 
-diff --git a/tools/testing/selftests/bpf/progs/core_kern.c b/tools/testing/selftests/bpf/progs/core_kern.c
-index 004f2acef2eb..82deb60ef672 100644
---- a/tools/testing/selftests/bpf/progs/core_kern.c
-+++ b/tools/testing/selftests/bpf/progs/core_kern.c
-@@ -67,9 +67,11 @@ struct __sk_bUfF /* it will not exist in vmlinux */ {
- 	int len;
- } __attribute__((preserve_access_index));
- 
-+#ifdef BPF_TESTMOD_EXTERNAL
- struct bpf_testmod_test_read_ctx /* it exists in bpf_testmod */ {
- 	size_t len;
- } __attribute__((preserve_access_index));
-+#endif
- 
- SEC("tc")
- int balancer_ingress(struct __sk_buff *ctx)
-diff --git a/tools/testing/selftests/bpf/progs/iters_testmod_seq.c b/tools/testing/selftests/bpf/progs/iters_testmod_seq.c
-index 3873fb6c292a..39658b05ac1e 100644
---- a/tools/testing/selftests/bpf/progs/iters_testmod_seq.c
-+++ b/tools/testing/selftests/bpf/progs/iters_testmod_seq.c
-@@ -5,10 +5,12 @@
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
- 
-+#ifdef BPF_TESTMOD_EXTERNAL
- struct bpf_iter_testmod_seq {
- 	u64 :64;
- 	u64 :64;
- };
-+#endif
- 
- extern int bpf_iter_testmod_seq_new(struct bpf_iter_testmod_seq *it, s64 value, int cnt) __ksym;
- extern s64 *bpf_iter_testmod_seq_next(struct bpf_iter_testmod_seq *it) __ksym;
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_module.c b/tools/testing/selftests/bpf/progs/test_core_reloc_module.c
-index bcb31ff92dcc..77b2dae54dd5 100644
---- a/tools/testing/selftests/bpf/progs/test_core_reloc_module.c
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_module.c
-@@ -8,12 +8,14 @@
- 
- char _license[] SEC("license") = "GPL";
- 
-+#ifdef BPF_TESTMOD_EXTERNAL
- struct bpf_testmod_test_read_ctx {
- 	/* field order is mixed up */
- 	size_t len;
- 	char *buf;
- 	loff_t off;
- } __attribute__((preserve_access_index));
-+#endif
- 
- struct {
- 	char in[256];
-diff --git a/tools/testing/selftests/bpf/progs/test_ldsx_insn.c b/tools/testing/selftests/bpf/progs/test_ldsx_insn.c
-index 2a2a942737d7..f1d7276c6629 100644
---- a/tools/testing/selftests/bpf/progs/test_ldsx_insn.c
-+++ b/tools/testing/selftests/bpf/progs/test_ldsx_insn.c
-@@ -48,9 +48,11 @@ int map_val_prog(const void *ctx)
- 
- }
- 
-+#ifdef BPF_TESTMOD_EXTERNAL
- struct bpf_testmod_struct_arg_1 {
- 	int a;
- };
-+#endif
- 
- long long int_member;
- 
-diff --git a/tools/testing/selftests/bpf/progs/test_module_attach.c b/tools/testing/selftests/bpf/progs/test_module_attach.c
-index 8a1b50f3a002..772cff1190b1 100644
---- a/tools/testing/selftests/bpf/progs/test_module_attach.c
-+++ b/tools/testing/selftests/bpf/progs/test_module_attach.c
-@@ -5,7 +5,10 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- #include <bpf/bpf_core_read.h>
-+
-+#ifdef BPF_TESTMOD_EXTERNAL
- #include "../bpf_testmod/bpf_testmod.h"
-+#endif
- 
- __u32 raw_tp_read_sz = 0;
- 
-diff --git a/tools/testing/selftests/bpf/progs/tracing_struct.c b/tools/testing/selftests/bpf/progs/tracing_struct.c
-index 515daef3c84b..3b5c69858feb 100644
---- a/tools/testing/selftests/bpf/progs/tracing_struct.c
-+++ b/tools/testing/selftests/bpf/progs/tracing_struct.c
-@@ -5,6 +5,7 @@
- #include <bpf/bpf_tracing.h>
- #include <bpf/bpf_helpers.h>
- 
-+#ifdef BPF_TESTMOD_EXTERNAL
- struct bpf_testmod_struct_arg_1 {
- 	int a;
- };
-@@ -22,6 +23,7 @@ struct bpf_testmod_struct_arg_4 {
- 	u64 a;
- 	int b;
- };
-+#endif
- 
- long t1_a_a, t1_a_b, t1_b, t1_c, t1_ret, t1_nregs;
- __u64 t1_reg0, t1_reg1, t1_reg2, t1_reg3;
-diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
-index d2458c1b1671..331be87d74d5 100644
---- a/tools/testing/selftests/bpf/testing_helpers.c
-+++ b/tools/testing/selftests/bpf/testing_helpers.c
-@@ -342,6 +342,12 @@ int unload_bpf_testmod(bool verbose)
- {
- 	if (kern_sync_rcu())
- 		fprintf(stdout, "Failed to trigger kernel-side RCU sync!\n");
-+
-+	if (access("/proc/modules", F_OK)) {
-+		fprintf(stdout, "Modules are disabled, fake unload success\n");
-+		return 0;
-+	}
-+
- 	if (delete_module("bpf_testmod", 0)) {
- 		if (errno == ENOENT) {
- 			if (verbose)
-@@ -363,6 +369,14 @@ int load_bpf_testmod(bool verbose)
- 	if (verbose)
- 		fprintf(stdout, "Loading bpf_testmod.ko...\n");
- 
-+	if (access("/proc/modules", F_OK)) {
-+		if (!access("/sys/kernel/debug/tracing/events/bpf_testmod", F_OK))
-+			return 0;
-+
-+		fprintf(stdout, "Modules are disabled, testmod not built-in\n");
-+		return -ENOENT;
-+	}
-+
- 	fd = open("bpf_testmod.ko", O_RDONLY);
- 	if (fd < 0) {
- 		fprintf(stdout, "Can't find bpf_testmod.ko kernel module: %d\n", -errno);
-diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
-index 65d14f3bbe30..27e0b1241b16 100755
---- a/tools/testing/selftests/bpf/vmtest.sh
-+++ b/tools/testing/selftests/bpf/vmtest.sh
-@@ -44,11 +44,12 @@ NUM_COMPILE_JOBS="$(nproc)"
- LOG_FILE_BASE="$(date +"bpf_selftests.%Y-%m-%d_%H-%M-%S")"
- LOG_FILE="${LOG_FILE_BASE}.log"
- EXIT_STATUS_FILE="${LOG_FILE_BASE}.exit_status"
-+MODULES="yes"
- 
- usage()
- {
- 	cat <<EOF
--Usage: $0 [-i] [-s] [-d <output_dir>] -- [<command>]
-+Usage: $0 [-i] [-s] [-n] [-d <output_dir>] -- [<command>]
- 
- <command> is the command you would normally run when you are in
- tools/testing/selftests/bpf. e.g:
-@@ -76,6 +77,7 @@ Options:
- 	-s)		Instead of powering off the VM, start an interactive
- 			shell. If <command> is specified, the shell runs after
- 			the command finishes executing
-+	-n)		Run tests with CONFIG_MODULES=n
- EOF
- }
- 
-@@ -341,7 +343,7 @@ main()
- 	local exit_command="poweroff -f"
- 	local debug_shell="no"
- 
--	while getopts ':hskid:j:' opt; do
-+	while getopts ':hskid:j:n' opt; do
- 		case ${opt} in
- 		i)
- 			update_image="yes"
-@@ -357,6 +359,9 @@ main()
- 			debug_shell="yes"
- 			exit_command="bash"
- 			;;
-+		n)
-+			MODULES="no"
-+			;;
- 		h)
- 			usage
- 			exit 0
-@@ -409,12 +414,27 @@ main()
- 
- 	echo "Output directory: ${OUTPUT_DIR}"
- 
-+	if [[ "${MODULES}" == "yes" ]]; then
-+		KCONFIG_REL_PATHS+=("tools/testing/selftests/bpf/config.mods")
-+	else
-+		make_command="${make_command} RUN_TESTS_WITHOUT_MODULES=1"
-+		KCONFIG_REL_PATHS+=("tools/testing/selftests/bpf/config.nomods")
-+	fi
-+
- 	mkdir -p "${OUTPUT_DIR}"
- 	mkdir -p "${mount_dir}"
- 	update_kconfig "${kernel_checkout}" "${kconfig_file}"
- 
- 	recompile_kernel "${kernel_checkout}" "${make_command}"
- 
-+	# Touch the opposite mods/nomods config we used to ensure the
-+	# kernel is rebuilt when the user adds or drops the -n flag.
-+	if [[ "${MODULES}" == "yes" ]]; then
-+		touch -m "tools/testing/selftests/bpf/config.nomods"
-+	else
-+		touch -m "tools/testing/selftests/bpf/config.mods"
-+	fi
-+
- 	if [[ "${update_image}" == "no" && ! -f "${rootfs_img}" ]]; then
- 		echo "rootfs image not found in ${rootfs_img}"
- 		update_image="yes"
--- 
-2.43.0
+To re-emphasize: Maybe there's something subtle i am missing that we
+are not doing that conntrack is doing?
+Conntrack does one small thing we dont: It allocs and returns to ebpf
+the memory for insertion. I dont see that as particularly useful for
+our case (and more importantly how that results in the entries being
+deleted when the ebpf prog goes away)
 
+cheers,
+jamal
+
+> It is going back to how link/fd and the map ops discussion by others in t=
+he
+> earlier revisions which we probably don't want to redo here. I think I ha=
+ve been
+> making enough noise such that we don't have to discuss potential future c=
+hanges
+> about how to release this resources when the bpf prog is unloaded.
