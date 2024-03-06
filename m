@@ -1,178 +1,115 @@
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59841B813
-	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 21:44:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB1361B7F6
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 21:46:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709761479; cv=none; b=ul7Tw2WsSeVvHpDoARdYjgvTuxUvIkX4t5jH8Qp8jGY3vvqyYSe3f2pTTUL4TZL+53lDzVdy09yPglFidhBOvdS54fxe5tkG1oAWIe6BtWMDus3SUPT9EiyWtA+RL3n1jjTOpGq9fgIGwGDgQPja0EVETk1tTTdvZITxiuO++zM=
+	t=1709761605; cv=none; b=THXnS5U1fpAUMK2y4r5TqcUKPBtnzfQsq+rX8PDpk3mT/iplrzqZHN9SQrZ+B7itYOYiZ9tZyksFODzMbE2OGIs7aPyWSqeXqg+Zo9d44lacPWidywGeCX12vzH9SX384l4cxXm6BrrIgd4lqfHqMzro7sa/JXH/KzyCHDAr6EE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709761479; c=relaxed/simple;
-	bh=yNaF3aOi4krieU8CScidoOzuFos1k7RPbwb2c+R3EAY=;
+	s=arc-20240116; t=1709761605; c=relaxed/simple;
+	bh=sqaAoKPOgm/rSWCI7eBbS/kktgGPF2ytcO0T40EpJ3Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hyCPNE2jeHNuB9kYmhPK1SmHw57MyBeeypyKXSXEDUgQCY92zjtqdjFydVSUrYlDnkMF+Pn7SVsSHxUX3k69Hm7udS6LkUZgvJYZD6/mUuWRpThKqZPRT5CHt+rmxJWSWTORcBKbwxMYS5OCYRyaL5n4Xg5ylI9I6b15/eu1HOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=GMWRJpPP; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	 To:Cc:Content-Type; b=aa6wdCwK6P6U+BVBLNiMSY+7O+aAKpoBCYDfZPmlaaOPpkWMAGe6aJ7UfgM9wGa4pRD6psPB4HnqQekdcgCpA3n2UpDanDrknumP9/oFQKYbjGiySKKinNBMfDXkI2QMa2Pw8E9m+y7GtewQzYJgLxj+gdnlsCOmb+FWzGDIysk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b=fOB38IQ8; arc=none smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="GMWRJpPP"
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dccb1421bdeso159827276.1
-        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 13:44:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b="fOB38IQ8"
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-42a029c8e62so1224651cf.1
+        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 13:46:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1709761477; x=1710366277; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TzexKeqTYViWR529/99I1fk8au39z5xjVC/HT3MU//k=;
-        b=GMWRJpPPMthfHkO/3mq37QeOIq2uoWFcOxQyZo0N7MzgVddAZm0Xsmxw+HKiozNpn2
-         kZY5LQ/xQ2QASR+m3Q6zFokh5pS9eI6EZpUXHjHkEQeP/CQSIm9UF0Ue7Bv29J0MjPd5
-         aphzYpGdu/pwM4vaaUnZaE+fpAqbWmO/XENeEfv+fGgZFlcS7J1XVRDOfvHehgOMhC4E
-         Kt+rTdUmIGCCMiRtm42JzXDwrZp+LqMY+cq2/nHQTb9bR8+5IBZOpBOlMBnT3go9AvTV
-         HzpWy8OMSu9DG/R/FJtZ2Npq7DNNMlZigIv+ESvunOP3wY57XBp25Ychcj/BpUXJtAco
-         8ALA==
+        d=soleen-com.20230601.gappssmtp.com; s=20230601; t=1709761602; x=1710366402; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sqaAoKPOgm/rSWCI7eBbS/kktgGPF2ytcO0T40EpJ3Q=;
+        b=fOB38IQ83RHWSeI0wdxqrBCGw1VcPGNdi7ukW+2i2o68cEabTuJiWdW+caWLKi5gFA
+         UhzYDhImPuqHaJGL9/9uuL1p5qYmkXdRTJlybTSfeXWr9ag1GrV2iUyNbGO21ugRK/NU
+         CGt+JAAVZzM5S+91TrCFb7JBVtEy2ku6yRXXowQxnUG13FTCLLkSfRA5DTtVfDuIUEJj
+         chZDRdJmWajP5Drp5s0g+A1LkjvOpK+i/Yc7o/AqFgPugSkkuqag92p2GhApBBRzxZZE
+         jQsquq2OzohFuyJV8yy8iWYyYAf6hWeIM0Atw9OsdASR08obq0PqCoDu0MdDvFs8W2E+
+         bnaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709761477; x=1710366277;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TzexKeqTYViWR529/99I1fk8au39z5xjVC/HT3MU//k=;
-        b=LaqnR+znisnZIgnyQbi1IkiowmL+qz7bh4uwf3n8bFkvtU90ZYdsdT6xzrcnSQYu/l
-         CfZ/c4a5p+jKaGFZEcZAFSYAVfDKKRUZXeWBVk3VmKlzSKIhO2WrETK7K1ODviUV1uxM
-         6PVSQi0D1t46P17tg0T8m9s3vtb+eNGNsXCUbminMkKR8+N1hen+C2X1UYtkwrf1uvrM
-         14Ie/VNzgwfOcpAnjK21MJZW+NAiTBS9oU92GtSPKsg5TDUnb9HJzjA+5rc/v6RT3cE3
-         lfuvT2cpwlYwCIuWgF6fFrbG2pZxo8KI/VeORkMs8Biwm1nZ0f4xQlMW+ltshMuQZ8nu
-         TsXg==
-X-Gm-Message-State: AOJu0YythwdJDFgJPNQISxRzbn7TkXyb760roM7N//5bsCv7fwxNkBIK
-	g5eOr3slLAGGanb2oXbYNVoVbkzOzPdEuVgglD9Ihza1yIV0oUh7Qi/laeOZtK74kXTkaSJ5baA
-	I/qVu07Iwxe4ZMdpjZUtYBoeZuETk/ZKtvUhd
-X-Google-Smtp-Source: AGHT+IHiRNoOuP50M05G+2934mcfs5/bOqVRy3BWxHsLB6KirZP8Ll5YoDYeUaTCCUruZFAXGTfcnQL/dVPSyIP0Lgw=
-X-Received: by 2002:a25:5102:0:b0:dc6:d738:1fa6 with SMTP id
- f2-20020a255102000000b00dc6d7381fa6mr12722660ybb.6.1709761476718; Wed, 06 Mar
- 2024 13:44:36 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709761602; x=1710366402;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sqaAoKPOgm/rSWCI7eBbS/kktgGPF2ytcO0T40EpJ3Q=;
+        b=r8pjQjqfuck4BrEEqaT8oPFhQ1BH3JAOG463ezqruYpAuXzkspfJhNGcYHnjGXfWyc
+         mB2TpsIOU9AeJGdcyQH/Ht6G3Bm0sP99HneZVw1P2D8vunEhYXGLosi1nLVLOMbS/bN9
+         SsRXrTQ86hV5TsI62DwD4U8KDqV07diaGWVc0lH5wOWQMjy5E9+XJrKtHoHN47Xm4cEO
+         OkFf3vHdIqMBpZfk+9qb9xmsol5FxvblJtcGJpLT5Qmx+NBEp5R39v6vtAsjJSnmSJsS
+         LaEPN13ir7UvpBL2mEY8Ze6bRnUDuP1kD3opdzZj7aoes38QqrFZknIKQFBE8H3P9Nbl
+         kkyA==
+X-Gm-Message-State: AOJu0YzEE4ggVdvUBePRlxQqW1feOZliJmj89xHdvxAcKyicY1xfBHy3
+	RmxY75UccqDmR2clp1orvX7pjkeZm9eaVdJ8oExKAFguENHe97VmXEJ+gAJrsASpM32tBBU5jd8
+	ssolOBY4pHBa5vmlE3XHjRzQ1gCFftR1RqJI2tA==
+X-Google-Smtp-Source: AGHT+IFM2e6KeyuiMDLqxycUojt02VdH+rm+iHu3K+tnBqw9pzAEUVRf5SsdUcF0xgYDCB5n+exrwO1T+sS2NaqjfMM=
+X-Received: by 2002:ac8:7e86:0:b0:42e:f7cf:ff98 with SMTP id
+ w6-20020ac87e86000000b0042ef7cfff98mr7140911qtj.16.1709761602628; Wed, 06 Mar
+ 2024 13:46:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1709675979.git.mattbobrowski@google.com>
- <20240306-flach-tragbar-b2b3c531bf0d@brauner> <20240306-sandgrube-flora-a61409c2f10c@brauner>
-In-Reply-To: <20240306-sandgrube-flora-a61409c2f10c@brauner>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 6 Mar 2024 16:44:25 -0500
-Message-ID: <CAHC9VhRSydKRpNQOEeyG1SYZi5r36dSa=auXcbh6srA02eaRdw@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 0/9] add new acquire/release BPF kfuncs
-To: Christian Brauner <brauner@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, kpsingh@google.com, 
-	jannh@google.com, jolsa@kernel.org, daniel@iogearbox.net, 
-	torvalds@linux-foundation.org, linux-fsdevel@vger.kernel.org, 
-	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
-	linux-security-module@vger.kernel.org
+References: <20240305030516.41519-1-alexei.starovoitov@gmail.com>
+ <20240305030516.41519-3-alexei.starovoitov@gmail.com> <CA+CK2bDCgpYR2-gHv-H3vDXDqcoA16vMNr55BZ6nouZNdwGufQ@mail.gmail.com>
+ <CAADnVQ+pxrRRvyLXG+opUuPuYZc+XTBLksK0rERrS1BY9ayQpQ@mail.gmail.com>
+In-Reply-To: <CAADnVQ+pxrRRvyLXG+opUuPuYZc+XTBLksK0rERrS1BY9ayQpQ@mail.gmail.com>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Wed, 6 Mar 2024 16:46:05 -0500
+Message-ID: <CA+CK2bAhWgSSotKjiGA4oTbH0XaCAtiWe+5p5u9OAf0ykBekwg@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 2/2] mm: Introduce VM_SPARSE kind and vm_area_[un]map_pages().
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Barret Rhoden <brho@google.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Lorenzo Stoakes <lstoakes@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Uladzislau Rezki <urezki@gmail.com>, Christoph Hellwig <hch@infradead.org>, Mike Rapoport <rppt@kernel.org>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, sstabellini@kernel.org, 
+	Juergen Gross <jgross@suse.com>, linux-mm <linux-mm@kvack.org>, xen-devel@lists.xenproject.org, 
+	Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 6, 2024 at 7:14=E2=80=AFAM Christian Brauner <brauner@kernel.or=
-g> wrote:
-> On Wed, Mar 06, 2024 at 12:21:28PM +0100, Christian Brauner wrote:
-> > On Wed, Mar 06, 2024 at 07:39:14AM +0000, Matt Bobrowski wrote:
-> > > G'day All,
-> > >
-> > > The original cover letter providing background context and motivating
-> > > factors around the needs for the BPF kfuncs introduced within this
-> > > patch series can be found here [0], so please do reference that if
-> > > need be.
-> > >
-> > > Notably, one of the main contention points within v1 of this patch
-> > > series was that we were effectively leaning on some preexisting
-> > > in-kernel APIs such as get_task_exe_file() and get_mm_exe_file()
-> > > within some of the newly introduced BPF kfuncs. As noted in my
-> > > response here [1] though, I struggle to understand the technical
-> > > reasoning behind why exposing such in-kernel helpers, specifically
-> > > only to BPF LSM program types in the form of BPF kfuncs, is inherentl=
-y
-> > > a terrible idea. So, until someone provides me with a sound technical
-> > > explanation as to why this cannot or should not be done, I'll continu=
-e
-> > > to lean on them. The alternative is to reimplement the necessary
-> > > in-kernel APIs within the BPF kfuncs, but that's just nonsensical IMO=
-.
-> >
-> > You may lean as much as you like. What I've reacted to is that you've
-> > (not you specifically, I'm sure) messed up. You've exposed d_path() to
-> > users  without understanding that it wasn't safe apparently.
-> >
-> > And now we get patches that use the self-inflicted brokeness as an
-> > argument to expose a bunch of other low-level helpers to fix that.
-> >
-> > The fact that it's "just bpf LSM" programs doesn't alleviate any
-> > concerns whatsoever. Not just because that is just an entry vector but
-> > also because we have LSMs induced API abuse that we only ever get to se=
-e
-> > the fallout from when we refactor apis and then it causes pain for the =
-vfs.
+> > This interface and in general VM_SPARSE would be useful for
+> > dynamically grown kernel stacks [1]. However, the might_sleep() here
+> > would be a problem. We would need to be able to handle
+> > vm_area_map_pages() from interrupt disabled context therefore no
+> > sleeping. The caller would need to guarantee that the page tables are
+> > pre-allocated before the mapping.
+>
+> Sounds like we'd need to differentiate two kinds of sparse regions.
+> One that is really sparse where page tables are not populated (bpf use case)
+> and another where only the pte level might be empty.
+> Only the latter one will be usable for such auto-grow stacks.
+>
+> Months back I played with this idea:
+> https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git/commit/?&id=ce63949a879f2f26c1c1834303e6dfbfb79d1fbd
+> that
+> "Make vmap_pages_range() allocate page tables down to the last (PTE) level."
+> Essentially pass NULL instead of 'pages' into vmap_pages_range()
+> and it will populate all levels except the last.
 
-Let's not start throwing stones at the in-tree, native LSM folks;
-instead let's just all admit that it's often a challenge working
-across subsystem lines, but we usually find a way because we all want
-the kernel to move forward.  We've all got our grudges and scars,
-let's not start poking each other with sticks.
+Yes, this is what is needed, however, it can be a little simpler with
+kernel stacks:
+given that the first page in the vm_area is mapped when stack is first
+allocated, and that the VA range is aligned to 16K, we actually are
+guaranteed to have all page table levels down to pte pre-allocated
+during that initial mapping. Therefore, we do not need to worry about
+allocating them later during PFs.
 
-> > I'll take another look at the proposed helpers you need as bpf kfuncs
-> > and I'll give my best not to be overly annoyed by all of this. I have n=
-o
-> > intention of not helping you quite the opposite but I'm annoyed that
-> > we're here in the first place.
-> >
-> > What I want is to stop this madness of exposing stuff to users without
-> > fully understanding it's semantics and required guarantees.
->
-> So, looking at this series you're now asking us to expose:
->
-> (1) mmgrab()
-> (2) mmput()
-> (3) fput()
-> (5) get_mm_exe_file()
-> (4) get_task_exe_file()
-> (7) get_task_fs_pwd()
-> (6) get_task_fs_root()
-> (8) path_get()
-> (9) path_put()
->
-> in one go and the justification in all patches amounts to "This is
-> common in some BPF LSM programs".
->
-> So, broken stuff got exposed to users or at least a broken BPF LSM
-> program was written somewhere out there that is susceptible to UAFs
-> becauase you didn't restrict bpf_d_path() to trusted pointer arguments.
-> So you're now scrambling to fix this by asking for a bunch of low-level
-> exports.
->
-> What is the guarantee that you don't end up writing another BPF LSM that
-> abuses these exports in a way that causes even more issues and then
-> someone else comes back asking for the next round of bpf funcs to be
-> exposed to fix it.
->
-> The difference between a regular LSM asking about this and a BPF LSM
-> program is that we can see in the hook implementation what the LSM
-> intends to do with this and we can judge whether that's safe or not.
+> Then the page fault handler can service a fault in auto-growing stack
+> area if it has a page stashed in some per-cpu free list.
+> I suspect this is something you might need for
+> "16k stack that is populated on fault",
+> plus a free list of 3 pages per-cpu,
+> and set_pte_at() in pf handler.
 
-I wish things were different, but the current reality is that from a
-practical perspective BPF LSMs are not much different than
-out-of-tree, native LSMs.  There is no requirement, or even
-convention, for BPF LSMs to post their designs, docs, or
-implementations on the LSM list for review like we do with other LSMs;
-maybe it has happened once or twice, but I can't remember the last
-time I saw a serious BPF LSM posted to the LSM list.  Even if someone
-did do The Right Thing with their BPF LSM and proposed it for review
-just like a native LSM, there is no guarantee someone else couldn't
-fork that LSM and do something wrong (intentional or not).
+Yes, what you described is exactly what I am working on: using 3-pages
+per-cpu to handle kstack page faults. The only thing that is missing
+is that I would like to have the ability to call a non-sleeping
+version of vm_area_map_pages().
 
-Unless something changes, I'm left to treat BPF LSMs the same as any
-other out-of-tree kernel code: I'm not going to make life difficult
-for a /out-of-tree/BPF/ LSM simply because it is /out-of-tree/BPF/,
-but I'm not going to do anything to negatively impact the current, or
-future, state of the in-tree LSMs simply to appease the
-/out-of-tree/BPF/ LSMs.
-
---=20
-paul-moore.com
+Pasha
