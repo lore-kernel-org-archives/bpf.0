@@ -1,150 +1,124 @@
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wfout5-smtp.messagingengine.com (wfout5-smtp.messagingengine.com [64.147.123.148])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0855CDED
-	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 07:40:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD47C5CDD8
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 07:57:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709710837; cv=none; b=F2WVjCjnyfTC643QpzvgfJ/oBV48X+W6KstxuMVIi01VZ9uisVVvSs9AkGz+fpS+RQiZur3TxqwI9xzCSEqUHNUS8L9jIYyEgJpkJQFSU7WCm45OEuLrXfSiDe5ynYJhyn/H0DWJg3HUSDL6ve7VcvhgRvqd0TktIono5OvVUjA=
+	t=1709711864; cv=none; b=LEDDo3ApUhlUgT9mzOdOWY8zuK+tdPcLUNB9o0mPE4nD1SErnH3KmAfB6SqBlX27vsnflk9rzSYVU1y4vR5rjuiBydAem2LhlRf1x0mU8FrLtcpmUoKw1UCLtWNfz07SWMNNwhFNc45S9ncU1YCTdkJIltlkduZuVdL/gCZdEZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709710837; c=relaxed/simple;
-	bh=ddtC+uKArv7UdiqQfjewNtYRkzLuCLfgVvW+TGa7IBM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pcMSe+u418kOT2Tdroyni9cV9503L2YqdfkTXav1vjXQAK3vtaxn2oMWYhljR/N0yyQPsVtz7VeWaWC9OaWneqgHbSo7LY/RopNn2loplwiaGHVUK/lVLIx+zX+NYJtp8+OKPv3XIU5dHOFWUhfxItLu7rJ1XcObGoh3JRNIfa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xyeBSyxq; arc=none smtp.client-ip=209.85.210.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1709711864; c=relaxed/simple;
+	bh=6mEzWRPAPZpFHIGgZvLiqo/nfEnV9sE0CRc9KSAlcXc=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=stl/u9iTp7RWm1LgR0z70epCrL73QqeMQXLz5lUjziAbbszdndLnWiy57mBI5CNTTiMoELGHJLyCco5yDAhViF7pSWXGtZtYKIf92U8GxeaPxgIuXB42XscSz7GTsKUYjcfXYnLvmBBjfC4E5IJ+RVQZsmSPtZkTXAnSnTjIS7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isaackhor.com; spf=pass smtp.mailfrom=isaackhor.com; dkim=pass (2048-bit key) header.d=isaackhor.com header.i=@isaackhor.com header.b=cQlIpg5S; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=GeQbSa1Y; arc=none smtp.client-ip=64.147.123.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isaackhor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isaackhor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xyeBSyxq"
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6ddca59e336so267485a34.0
-        for <bpf@vger.kernel.org>; Tue, 05 Mar 2024 23:40:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709710835; x=1710315635; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dNwfyies9fK4BVkN1qpRBwPdhTsOnQT/qyn6MGfjNFo=;
-        b=xyeBSyxqnFnYSu96xjr+jh7LR1kANzKZclTL/89+Mq9eiLWbe+6VR1ub4GupusB+eW
-         Oa1IT7A1R5nckYfRqq6XFdNfdDAS8lPjXCGzbHgkqPz0ZvBbbgSM1Opwr3JF/aJ9Xf3z
-         PIcLZnbiXQvVdqhSo3ScBWhwH0udkKt0gcnFpu/ihs5Iuyi6EWJOsmKNrqZ/Y5z1sYGr
-         MUcOs6lJUsSz0rTwTK95G43LJHtvkW2nmiwCMVNpevCmL81fC684BNnHcpqe4vreRjgJ
-         YpEnruTud1zsYtskWYceqXelRcUBmxhiJHtlX7Zcc5ULsQecp059JiPxDz2ywUpPSEDv
-         IyVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709710835; x=1710315635;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dNwfyies9fK4BVkN1qpRBwPdhTsOnQT/qyn6MGfjNFo=;
-        b=dzrN3mQQ/FI+rX9EZ5ZzTN9anhfSe5OweGUXuVfwLJJN3M2IGZo0pk5EH7a+JcTqa5
-         pyjXEInxiop8JZ0rTzCyQlSUqmvHGTPfM/L/if0pCi96Ozh35bYSZc65mFGPuC2CdQBI
-         yChYugqsqwCvrS8RBw4TBjhAflf/yzRFskuyGx3UCKJO50PbfNzWoSkyq9ZnjUUwMMd2
-         amVQJvg5GE5Ayd+kvTPJLDgNYUz2Y1qb25U85ZwpAomebLCai7pYbjoMNghjFzqxEUZ2
-         ShlvDX6dcwSJS27Br//zqU71tMgaKj5i1534TidpqHBbnYVR96Oed8V2sUqp1rGj19Hz
-         b7fw==
-X-Gm-Message-State: AOJu0YxnDgc6sXJMZuaNLPYufYHOqAjy5nomj+z89v0LbZggQlcTUJph
-	mKkfFtSqzCEwphCcZLWxH0lNfuA1J7ay9E2vLTu4wqpPgwbiYgkonjYcSePhbRWIFSd6fZWn7ew
-	OpA==
-X-Google-Smtp-Source: AGHT+IHSF6r7pWyah8Vo6aI+WZxk3Tmzs3eaCRP+IhPTHK+o4locRRAwnyg28TbdpJHarx1oGzZZ5Q==
-X-Received: by 2002:a9d:6d94:0:b0:6e4:ae29:d77f with SMTP id x20-20020a9d6d94000000b006e4ae29d77fmr1908819otp.6.1709710834670;
-        Tue, 05 Mar 2024 23:40:34 -0800 (PST)
-Received: from google.com (12.196.204.35.bc.googleusercontent.com. [35.204.196.12])
-        by smtp.gmail.com with ESMTPSA id z9-20020a9d7a49000000b006e4b6013ab2sm2183069otm.15.2024.03.05.23.40.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Mar 2024 23:40:34 -0800 (PST)
-Date: Wed, 6 Mar 2024 07:40:27 +0000
-From: Matt Bobrowski <mattbobrowski@google.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, kpsingh@google.com, jannh@google.com,
-	jolsa@kernel.org, daniel@iogearbox.net, brauner@kernel.org,
-	torvalds@linux-foundation.org, linux-fsdevel@vger.kernel.org
-Subject: [PATCH v2 bpf-next 8/9] bpf: add trusted d_path() based BPF kfunc
- bpf_path_d_path()
-Message-ID: <af87ec2e92b48a96ca556ec4e62eabde54d509e1.1709675979.git.mattbobrowski@google.com>
-References: <cover.1709675979.git.mattbobrowski@google.com>
+	dkim=pass (2048-bit key) header.d=isaackhor.com header.i=@isaackhor.com header.b="cQlIpg5S";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="GeQbSa1Y"
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailfout.west.internal (Postfix) with ESMTP id 9868B1C000A9;
+	Wed,  6 Mar 2024 02:57:41 -0500 (EST)
+Received: from imap45 ([10.202.2.95])
+  by compute6.internal (MEProxy); Wed, 06 Mar 2024 02:57:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=isaackhor.com;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm3; t=1709711861; x=
+	1709798261; bh=3cZ8wVDgtLMJtJp1u+3LLyQkoR0tmTOysQzSb4YxXUg=; b=c
+	QlIpg5SzIqNLszQpTvedZFv8wVtALFBIqTCR0CCNGw5Wg/s9sDclTfpcvaG5JdUM
+	oze2pz1m4OG7pbAUuOgE1icuo4ciEscKw8YIt09f3DD7lerG1df8Oc/VTqdKOdZf
+	fFIZYzbUgyaPX+ezqAfXN9oRpAXkqUDDd5FLn5LFi4NVr9bYY9kNWwVsFVg00P5d
+	kdLEBR3olNMpE2wX4GreKToEUlflsTj5BSVo+KDWIj7mioN2rKQOIS/ZtaMHr3IR
+	PZ+EpRLm2f/O3Dj7ehws8EuiDfmUkOGIpIEUBrXG6p+hvzV111hbuYVbQMjOKR/w
+	ScEgkNXcKMBNV8Q9gUhvA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1709711861; x=1709798261; bh=3cZ8wVDgtLMJtJp1u+3LLyQkoR0t
+	mTOysQzSb4YxXUg=; b=GeQbSa1YNmtD6DF/xAE30/vgv9UOhLjsEP4z+Gjk5JQD
+	OBeYh/0r6v0Hcfh8J5yBdFYazIlXX6Y8QVWOdh9v4YKcuz2SDSQEr+Bph9/hJ5gw
+	fjtPSl3OdXnCOoGB/IDTaeXfAtcH8nyBSVD7IErkVg/sJejbSuWoP8x1riVm6htW
+	T/kD6jRZnEjx3MoHAPBY0PS1bBijDgY2SigJVr6fklQGKB8+C5qMWM4x/TNJDne8
+	WgWIlmPlblfEGcEW77rjW+OdZJlMSqvdeN9StBFMqA7equPcMNLfiAd1NS+6w4D5
+	cluyfKv2Fy84zM2WfoNn/WZh7By9DrZfyvFv8VIs5Q==
+X-ME-Sender: <xms:9CHoZSKnshyrA9tgKmZaYfN0mFGJKhi6v2PD3ZQOTPqqE4BsikHznQ>
+    <xme:9CHoZaLRh5HvXjATQiOhc8XFphyurx5hFvlPV9KPEE6EzeSb-q16kbFTXVNTZlZr-
+    a9gBSgbMkfkQwIr0Zg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledriedtgdduuddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfkfhs
+    rggrtgcumfhhohhrfdcuoegtohhnthgrtghtsehishgrrggtkhhhohhrrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpefhfeeuhfegffehgeduhffgvdejvdfgffeffefhtefhtefgieeg
+    vdehtdetudeitdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegtohhnthgrtghtsehishgrrggtkhhhohhrrdgtohhm
+X-ME-Proxy: <xmx:9SHoZSsm5LGLvrKNeU6rxRSObRPJiJLIeUeO-ZIUeOiknN2pSq0WvQ>
+    <xmx:9SHoZXZO9naZFUoWkoxha2ORuGj6sV7JnXxBIdSCO95bhaSbqv150Q>
+    <xmx:9SHoZZYwadbxe9vkU0IPPQSm5H5mD_WafqNv4wnLSExPde953fsDJQ>
+    <xmx:9SHoZYxy4AwjWhsiZDFZWivhoc7c-knrNR9cT4-NcXsS-udtUxEAVAVvkIw>
+Feedback-ID: ia46944cc:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id DE571272007C; Wed,  6 Mar 2024 02:57:40 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-208-g3f1d79aedb-fm-20240301.002-g3f1d79ae
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1709675979.git.mattbobrowski@google.com>
+Message-Id: <d55baee2-29bc-4057-b0b8-c789df8dcebc@app.fastmail.com>
+In-Reply-To: 
+ <CAADnVQKY0d2ww4hwbuu3TA3DFyrSeBnRqSp0qdEY2Scgf4kP5g@mail.gmail.com>
+References: <8F75EC74-53D6-4841-8D41-4CF56BE69730@isaackhor.com>
+ <CAADnVQKY0d2ww4hwbuu3TA3DFyrSeBnRqSp0qdEY2Scgf4kP5g@mail.gmail.com>
+Date: Wed, 06 Mar 2024 02:57:20 -0500
+From: "Isaac Khor" <contact@isaackhor.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>
+Subject: Re: struct_ops usage - verifier interactions
+Content-Type: text/plain
 
-The legacy bpf_d_path() helper did not operate on trusted pointer
-arguments, therefore under certain circumstances was susceptible to
-memory corruption issues [0]. This new d_path() based BPF kfunc
-bpf_path_d_path() makes use of the trusted pointer argument constraint
-KF_TRUSTED_ARGS. Making use of the KF_TRUSTED_ARGS constraint will
-ensure that d_path() may only be called when and underlying BPF
-program holds a stable handle for a given path.
+> Was it compiled with -O0 ?
+> clang didn't even inline what was marked as __always_inline which is strange.
+> Make sure to use the latest clang with -O2 -target bpf -g -mcpu=v3
 
-For now, we restrict bpf_path_d_path() to BPF LSM program types, but
-this may be relaxed in the future.
+You're right, the optimisations got disabled somewhere along the road when
+I was debugging the problem. Re-tested with the compiler args you listed:
 
-Notably, we are consciously not retroactively enforcing the
-KF_TRUSTED_ARGS constraint onto the legacy bpf_d_path() helper, as
-that would lead to wide-scale BPF program breakage.
+libbpf: prog 'bpf_iden_max_ra': BPF program load failed: Permission denied
+libbpf: prog 'bpf_iden_max_ra': -- BEGIN PROG LOAD LOG --
+0: R1=ctx() R10=fp0
+; int BPF_PROG(bpf_iden_max_ra, struct bpf_fs_readahead_state *s) @ readahead_noop.c:7
+0: (79) r1 = *(u64 *)(r1 +0)          ; R1_w=scalar()
+; return s->ra_pages; @ readahead_noop.c:9
+1: (61) r0 = *(u32 *)(r1 +12)
+R1 invalid mem access 'scalar'
+processed 2 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
+-- END PROG LOAD LOG --
+libbpf: prog 'bpf_iden_max_ra': failed to load: -13
+libbpf: failed to load object '/root/readahead_noop.o'
 
-[0]
-https://lore.kernel.org/bpf/CAG48ez0ppjcT=QxU-jtCUfb5xQb3mLr=5FcwddF_VKfEBPs_Dg@mail.gmail.com/
+Stepping through the verifier in a debugger still shows the same problem,
+somehow the verifier thinks that the register is a `SCALAR_VALUE` instead of 
+valid pointer.
 
-Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
----
- kernel/trace/bpf_trace.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+> You should see something like:
+>
+> llvm-objdump -S -r bpf_cubic.bpf.o|head -50
+>
+> bpf_cubic.bpf.o:    file format elf64-bpf
+>
+> Disassembly of section struct_ops/bpf_cubic_init:
+>
+> <... snip ...>
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 84fd87ead20c..4989639153cd 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1647,6 +1647,37 @@ __bpf_kfunc void bpf_put_path(struct path *path)
- 	path_put(path);
- }
- 
-+/**
-+ * bpf_path_d_path - resolve the pathname for a given path
-+ * @path: path to resolve the pathname for
-+ * @buf: buffer to return the resolved path value in
-+ * @buflen: length of the supplied buffer
-+ *
-+ * Resolve the pathname for the supplied trusted *path* in *buf*. This kfunc is
-+ * the trusted/safer variant of the legacy bpf_d_path() helper and should be
-+ * used in place of bpf_d_path() whenever possible.
-+ *
-+ * Return: A strictly positive integer corresponding to the length of the string
-+ * representing the resolved pathname, including the NUL termination
-+ * character. On error, a negative integer is returned.
-+ */
-+__bpf_kfunc int bpf_path_d_path(struct path *path, char *buf, int buflen)
-+{
-+	int len;
-+	char *ret;
-+
-+	if (buflen <= 0)
-+		return -EINVAL;
-+
-+	ret = d_path(path, buf, buflen);
-+	if (IS_ERR(ret))
-+		return PTR_ERR(ret);
-+
-+	len = buf + buflen - ret;
-+	memmove(buf, ret, len);
-+	return len;
-+}
-+
- __bpf_kfunc_end_defs();
- 
- BTF_KFUNCS_START(lsm_kfunc_set_ids)
-@@ -1663,6 +1694,7 @@ BTF_ID_FLAGS(func, bpf_get_task_fs_root,
- BTF_ID_FLAGS(func, bpf_get_task_fs_pwd,
- 	     KF_ACQUIRE | KF_TRUSTED_ARGS | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_put_path, KF_RELEASE | KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, bpf_path_d_path, KF_TRUSTED_ARGS | KF_SLEEPABLE)
- BTF_KFUNCS_END(lsm_kfunc_set_ids)
- 
- static int bpf_lsm_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
--- 
-2.44.0.278.ge034bb2e1d-goog
+Yep, the output matches. I'm building with `vmlinux.h` instead of linux/bpf.h
+but otherwise nothing has changed.
 
-/M
+Thanks,
+Isaac Khor
