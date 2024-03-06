@@ -1,56 +1,56 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3285360887
-	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 10:45:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA15604A7
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 10:45:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709721953; cv=none; b=I3tu8mHWsx4AqrorAJro3w4yoTee3PJNYN2buesya2RnlMW0F2Irf7qFm2xT4+Q7U+WLq2AsoLIyTjvmuGmQfiuKkWEk50LktnxHkrj5ZbPPYIPhardngEzQRtGafO2bcFOcZDze6S3MmLTs2BcQfSLLUvlwQbmINMF7Rjb9lO4=
+	t=1709721955; cv=none; b=kqUMsYETfUn4NfKrFAHi4afaD7OM94j1EPdH2xuxwdje8iZxIOyY2nuEy+h3zSHzDqsXUQ2ssIE0UcrzA86/My9W/bfAvxj0haIk93HrpbrggtHo7ucg/PrMYM/cLKWjvLdC5FQfVhYXPAgxZ0vHvKBnc8vUGvqcl6dcq/IGeSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709721953; c=relaxed/simple;
-	bh=G4ecxg7LSoDP8MJVLH4UV2xdOkweAMnKQ77b3nVDSQ4=;
+	s=arc-20240116; t=1709721955; c=relaxed/simple;
+	bh=liT2Bf2pYMcGiLNQzN3/ZVAPOpSd4cYypNOz1rx5Ruo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BFTfmxj7WtGXBpvd418/hSRu+argCuNX5+NnDLLVV9v8cC+T5PvpfvgRbOGezLppkTkS42beaht4NQVnSGD9w/i9WnQJbhabM/buO/rRBCJavt2Xb9hwPa9heHZIAre3EE7ilF1cNGHfKKuc6qJWye+wqg5zg+ijnmYzy4imwS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YjS8o/rL; arc=none smtp.client-ip=209.85.218.50
+	 MIME-Version; b=urFoMPJew8kscG06SZSpgav9ub170ntAyavzDjMCeUWZmLQ13TdbMLfT07e+z6qalJSTS6seGqFp0l58HmANjY/MT/2mXfPaOP25l4ogDXpMDKrMrwgxa0gvV8WNYred+k6yVTtSknhjuL4UN2MD15j2bwxn4aXQ9QS+KOsLGjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DJO40U//; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YjS8o/rL"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a3f893ad5f4so971477866b.2
-        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 02:45:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DJO40U//"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-567fbbd723cso222547a12.3
+        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 02:45:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709721950; x=1710326750; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709721951; x=1710326751; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=l7Tp1+0QPXm9bAZ+co/csJxjcRsh7mBUoZj4MMBt58o=;
-        b=YjS8o/rLl1BdP1LoXpfh0MWYwLilYJtZPaBbPeCOwHfV2stVOennz/UE2uNj2E4meY
-         nfFpbkomiaqx2yygQv1/B1Zf/jUD2IJ+b/C8u4KkzM+J+EaT2A7PX2Q3xksQQDyG5M5i
-         5jPlqNeLN8InHNhOHQm6fqhMm9I62cPT2PgE9tLLi0JK5tYBEql8iNRbNzAbxCmSaqUs
-         rJ1FgTjpHqE1yA4en79iHvJ7PH8njXeJsAdwnUC8nP1hhqJcnLQroqT7wjWGxSDHX/Yp
-         9pDleh2+/ODkwj/X5nZgUI1dDEd2ddu++gr7vdFiiv/9d71Im1LhJilo3R+49L0cIAPZ
-         +/ag==
+        bh=JD4CwcZkWrmekfCA2TcuuBFUVuij7VezMqcO0//4liQ=;
+        b=DJO40U//y3FobJHDqfHXEd034p0jFramAnbftN1VVeLmnf1V2t6OlTMd+UQl2qiBwt
+         sDZ9KTFzlvhyA1QEhucUbjPS6z8hTRZzt9N8uOZCVi05S8X5+y82T/MBkvhaLxlI5iql
+         tkH8Hy4fny8I/lTxceDfAuzJVBAm9fP3znmV5AjqKJRpSRolKssnNNYe3vS9OVKaiGvc
+         ArNuhcrkfV4RBHaYHeMoa7+959CbTJJPUr9Cl9SzIbt5gyzCHa39CM3wVn2oZ1hvoTB8
+         s142MegH3YVM1DX791RTz3wvn+TNPGXBgi1fXovYXFRJvoWxv5ewFcrS9t08076Z+Uap
+         DnUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709721950; x=1710326750;
+        d=1e100.net; s=20230601; t=1709721951; x=1710326751;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=l7Tp1+0QPXm9bAZ+co/csJxjcRsh7mBUoZj4MMBt58o=;
-        b=eDfcWmWimPEAcuMPQcFoZfDUfRlWSvFnnGZgahpTgxfS90kSrx8PKfQui33GaRkv46
-         NUXF54rPDvtNMep2GArlxpUpAYU7xXxbB3RBjRDQ1j+M4FMCIj9DFHzP5xnev/GuuWqT
-         C7D+K79rnnppRl5Fy6yaIstYbSRCubAkrvzHf3px0X6+4C9m8nPI9dc//LAfHDbd5EWi
-         Ijje/ElCBuPHudSDynbQZHIXKtoNBm0tfFMfucI24dTzy6uBqzVLaZak7jv6UFSYy9Fq
-         o38nO1LYj9D86x/Pv3m8P9csKDU+x6ZkGF48+/D4lR+wjm/NEttDx/SqKBTBo46ZhXNu
-         z8CQ==
-X-Gm-Message-State: AOJu0Yw2PnCv6DkkvjpOJkl/S989HFg1cqXoc6Ja+LWVqWlTfdvsc24l
-	Q+PoGgzT4nrLLSCHL+3qZ9nv9Cx4BFmal712Cry9XxYrL81MwNq12t5RAei6
-X-Google-Smtp-Source: AGHT+IEENWkkyQZSUlrGBITDlHZpJub1P5JJAfzyw/XOK2EYw1OZzJgCg9gQf8/RDxr3PBKcNHcV1Q==
-X-Received: by 2002:a17:906:248b:b0:a45:ad00:eade with SMTP id e11-20020a170906248b00b00a45ad00eademr2711628ejb.57.1709721950389;
-        Wed, 06 Mar 2024 02:45:50 -0800 (PST)
+        bh=JD4CwcZkWrmekfCA2TcuuBFUVuij7VezMqcO0//4liQ=;
+        b=U4XfHOLoMDkLcCDkldCuG3oxqM4Us9d+QB5h4qBwiu/7tSwJ6omvIvjT+x+haZmIs4
+         M0OtOpUSlFJy5qP6s/BXMq/tO/JnbtM+KevBryP+kxP1X4aHwh4ToG/DctnXWuEfaNQ/
+         6p597W/IzZ8A87dRpOTB7z3joaaUwSNo3OdD/yN8X9NA4vzLlerCJWVlHokpu8F+nCf+
+         Ee5h/mQ8ONaHvMWsw139ipog2Cq6I7vQjDPzxoKJsuJ1//NbWvKcaD/iqEwO2TM0i4DH
+         ZU6MalLzaoC1EiXVueTHcwxxjzlCMmoeLmzIp8AM4R1fNkA2K1nPjJzVVPro3mOXTHKY
+         8WFQ==
+X-Gm-Message-State: AOJu0YzFC6ifbqR2bXhsxhFWlYoexIW0+0b0opdqUL68iDe9Voa/lRSm
+	qpaU8OnlkCNvRFD+DqoKm6KdT76iVSB+f5goLAdln61QuDbaN7VXvuK5ZFW4
+X-Google-Smtp-Source: AGHT+IHzD6NUj8aLdE/2DC0NbrDALtmfkuI4JxElnyjTmKC+OP3dFWyontdry8wyWT5t/+4Fhqiwjw==
+X-Received: by 2002:a17:906:714f:b0:a3f:4596:c3c8 with SMTP id z15-20020a170906714f00b00a3f4596c3c8mr9509729ejj.53.1709721951408;
+        Wed, 06 Mar 2024 02:45:51 -0800 (PST)
 Received: from localhost.localdomain (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id h20-20020a170906591400b00a3d5efc65e0sm7002450ejq.91.2024.03.06.02.45.49
+        by smtp.gmail.com with ESMTPSA id h20-20020a170906591400b00a3d5efc65e0sm7002450ejq.91.2024.03.06.02.45.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Mar 2024 02:45:49 -0800 (PST)
+        Wed, 06 Mar 2024 02:45:51 -0800 (PST)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -62,9 +62,9 @@ Cc: andrii@kernel.org,
 	void@manifault.com,
 	sinquersw@gmail.com,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v4 09/15] selftests/bpf: verify struct_ops autoload/autocreate sync
-Date: Wed,  6 Mar 2024 12:45:23 +0200
-Message-ID: <20240306104529.6453-10-eddyz87@gmail.com>
+Subject: [PATCH bpf-next v4 10/15] libbpf: replace elf_state->st_ops_* fields with SEC_ST_OPS sec_type
+Date: Wed,  6 Mar 2024 12:45:24 +0200
+Message-ID: <20240306104529.6453-11-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240306104529.6453-1-eddyz87@gmail.com>
 References: <20240306104529.6453-1-eddyz87@gmail.com>
@@ -76,224 +76,173 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Check that autocreate flags of struct_ops map cause autoload of
-struct_ops corresponding programs:
-- when struct_ops program is referenced only from a map for which
-  autocreate is set to false, that program should not be loaded;
-- when struct_ops program with autoload == false is set to be used
-  from a map with autocreate == true using shadow var,
-  that program should be loaded;
-- when struct_ops program is not referenced from any map object load
-  should fail.
+The next patch would add two new section names for struct_ops maps.
+To make working with multiple struct_ops sections more convenient:
+- remove fields like elf_state->st_ops_{shndx,link_shndx};
+- mark section descriptions hosting struct_ops as
+  elf_sec_desc->sec_type == SEC_ST_OPS;
 
+After these changes struct_ops sections could be processed uniformly
+by iterating bpf_object->efile.secs entries.
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- .../selftests/bpf/prog_tests/bad_struct_ops.c | 32 ++++++++++++
- .../bpf/prog_tests/struct_ops_autocreate.c    | 51 +++++++++++++++++--
- .../selftests/bpf/progs/bad_struct_ops2.c     | 14 +++++
- .../bpf/progs/struct_ops_autocreate2.c        | 32 ++++++++++++
- 4 files changed, 125 insertions(+), 4 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/bad_struct_ops2.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_autocreate2.c
+ tools/lib/bpf/libbpf.c | 61 ++++++++++++++++++++++--------------------
+ 1 file changed, 32 insertions(+), 29 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bad_struct_ops.c b/tools/testing/selftests/bpf/prog_tests/bad_struct_ops.c
-index 9f5dbefa0dd9..6a707213e46b 100644
---- a/tools/testing/selftests/bpf/prog_tests/bad_struct_ops.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bad_struct_ops.c
-@@ -2,6 +2,7 @@
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 595c287d84ef..cff72de42bf4 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -612,6 +612,7 @@ enum sec_type {
+ 	SEC_BSS,
+ 	SEC_DATA,
+ 	SEC_RODATA,
++	SEC_ST_OPS,
+ };
  
- #include <test_progs.h>
- #include "bad_struct_ops.skel.h"
-+#include "bad_struct_ops2.skel.h"
+ struct elf_sec_desc {
+@@ -627,8 +628,6 @@ struct elf_state {
+ 	Elf *elf;
+ 	Elf64_Ehdr *ehdr;
+ 	Elf_Data *symbols;
+-	Elf_Data *st_ops_data;
+-	Elf_Data *st_ops_link_data;
+ 	size_t shstrndx; /* section index for section name strings */
+ 	size_t strtabidx;
+ 	struct elf_sec_desc *secs;
+@@ -637,8 +636,7 @@ struct elf_state {
+ 	__u32 btf_maps_sec_btf_id;
+ 	int text_shndx;
+ 	int symbols_shndx;
+-	int st_ops_shndx;
+-	int st_ops_link_shndx;
++	bool has_st_ops;
+ };
  
- static void invalid_prog_reuse(void)
- {
-@@ -28,8 +29,39 @@ static void invalid_prog_reuse(void)
- 	bad_struct_ops__destroy(skel);
+ struct usdt_manager;
+@@ -1266,7 +1264,7 @@ static int bpf_object__init_kern_struct_ops_maps(struct bpf_object *obj)
  }
  
-+static void unused_program(void)
-+{
-+	struct bad_struct_ops2 *skel;
-+	char *log = NULL;
-+	int err;
-+
-+	skel = bad_struct_ops2__open();
-+	if (!ASSERT_OK_PTR(skel, "bad_struct_ops2__open"))
-+		return;
-+
-+	/* struct_ops programs not referenced from any maps are open
-+	 * with autoload set to true.
-+	 */
-+	ASSERT_TRUE(bpf_program__autoload(skel->progs.foo), "foo autoload == true");
-+
-+	if (start_libbpf_log_capture())
-+		goto cleanup;
-+
-+	err = bad_struct_ops2__load(skel);
-+	ASSERT_ERR(err, "bad_struct_ops2__load should fail");
-+	log = stop_libbpf_log_capture();
-+	ASSERT_HAS_SUBSTR(log, "prog 'foo': failed to load",
-+			  "message about 'foo' failing to load");
-+
-+cleanup:
-+	free(log);
-+	bad_struct_ops2__destroy(skel);
-+}
-+
- void test_bad_struct_ops(void)
+ static int init_struct_ops_maps(struct bpf_object *obj, const char *sec_name,
+-				int shndx, Elf_Data *data, __u32 map_flags)
++				int shndx, Elf_Data *data)
  {
- 	if (test__start_subtest("invalid_prog_reuse"))
- 		invalid_prog_reuse();
-+	if (test__start_subtest("unused_program"))
-+		unused_program();
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_autocreate.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_autocreate.c
-index a5c8bb9fcb2c..78948dc6445c 100644
---- a/tools/testing/selftests/bpf/prog_tests/struct_ops_autocreate.c
-+++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_autocreate.c
-@@ -2,6 +2,7 @@
+ 	const struct btf_type *type, *datasec;
+ 	const struct btf_var_secinfo *vsi;
+@@ -1328,7 +1326,7 @@ static int init_struct_ops_maps(struct bpf_object *obj, const char *sec_name,
+ 		map->def.key_size = sizeof(int);
+ 		map->def.value_size = type->size;
+ 		map->def.max_entries = 1;
+-		map->def.map_flags = map_flags;
++		map->def.map_flags = strcmp(sec_name, STRUCT_OPS_LINK_SEC) == 0 ? BPF_F_LINK : 0;
  
- #include <test_progs.h>
- #include "struct_ops_autocreate.skel.h"
-+#include "struct_ops_autocreate2.skel.h"
+ 		map->st_ops = calloc(1, sizeof(*map->st_ops));
+ 		if (!map->st_ops)
+@@ -1363,15 +1361,25 @@ static int init_struct_ops_maps(struct bpf_object *obj, const char *sec_name,
  
- static void cant_load_full_object(void)
+ static int bpf_object_init_struct_ops(struct bpf_object *obj)
  {
-@@ -43,18 +44,20 @@ static void can_load_partial_object(void)
- 	if (!ASSERT_OK_PTR(skel, "struct_ops_autocreate__open_opts"))
- 		return;
+-	int err;
++	const char *sec_name;
++	int sec_idx, err;
  
--	err = bpf_program__set_autoload(skel->progs.test_2, false);
--	if (!ASSERT_OK(err, "bpf_program__set_autoload"))
--		goto cleanup;
--
- 	err = bpf_map__set_autocreate(skel->maps.testmod_2, false);
- 	if (!ASSERT_OK(err, "bpf_map__set_autocreate"))
- 		goto cleanup;
- 
-+	ASSERT_TRUE(bpf_program__autoload(skel->progs.test_1), "test_1 default autoload");
-+	ASSERT_TRUE(bpf_program__autoload(skel->progs.test_2), "test_2 default autoload");
+-	err = init_struct_ops_maps(obj, STRUCT_OPS_SEC, obj->efile.st_ops_shndx,
+-				   obj->efile.st_ops_data, 0);
+-	err = err ?: init_struct_ops_maps(obj, STRUCT_OPS_LINK_SEC,
+-					  obj->efile.st_ops_link_shndx,
+-					  obj->efile.st_ops_link_data,
+-					  BPF_F_LINK);
+-	return err;
++	for (sec_idx = 0; sec_idx < obj->efile.sec_cnt; ++sec_idx) {
++		struct elf_sec_desc *desc = &obj->efile.secs[sec_idx];
 +
- 	err = struct_ops_autocreate__load(skel);
- 	if (ASSERT_OK(err, "struct_ops_autocreate__load"))
- 		goto cleanup;
- 
-+	ASSERT_TRUE(bpf_program__autoload(skel->progs.test_1), "test_1 actual autoload");
-+	ASSERT_FALSE(bpf_program__autoload(skel->progs.test_2), "test_2 actual autoload");
++		if (desc->sec_type != SEC_ST_OPS)
++			continue;
 +
- 	link = bpf_map__attach_struct_ops(skel->maps.testmod_1);
- 	if (!ASSERT_OK_PTR(link, "bpf_map__attach_struct_ops"))
- 		goto cleanup;
-@@ -67,10 +70,50 @@ static void can_load_partial_object(void)
- 	struct_ops_autocreate__destroy(skel);
- }
- 
-+/* Swap test_mod1->test_1 program from 'bar' to 'foo' using shadow vars.
-+ * test_mod1 load should enable autoload for 'foo'.
-+ */
-+static void autoload_and_shadow_vars(void)
-+{
-+	struct struct_ops_autocreate2 *skel = NULL;
-+	struct bpf_link *link = NULL;
-+	int err;
++		sec_name = elf_sec_name(obj, elf_sec_by_idx(obj, sec_idx));
++		if (!sec_name)
++			return -LIBBPF_ERRNO__FORMAT;
 +
-+	skel = struct_ops_autocreate2__open();
-+	if (!ASSERT_OK_PTR(skel, "struct_ops_autocreate__open_opts"))
-+		return;
++		err = init_struct_ops_maps(obj, sec_name, sec_idx, desc->data);
++		if (err)
++			return err;
++	}
 +
-+	ASSERT_FALSE(bpf_program__autoload(skel->progs.foo), "foo default autoload");
-+	ASSERT_FALSE(bpf_program__autoload(skel->progs.bar), "bar default autoload");
-+
-+	/* loading map testmod_1 would switch foo's autoload to true */
-+	skel->struct_ops.testmod_1->test_1 = skel->progs.foo;
-+
-+	err = struct_ops_autocreate2__load(skel);
-+	if (ASSERT_OK(err, "struct_ops_autocreate__load"))
-+		goto cleanup;
-+
-+	ASSERT_TRUE(bpf_program__autoload(skel->progs.foo), "foo actual autoload");
-+	ASSERT_FALSE(bpf_program__autoload(skel->progs.bar), "bar actual autoload");
-+
-+	link = bpf_map__attach_struct_ops(skel->maps.testmod_1);
-+	if (!ASSERT_OK_PTR(link, "bpf_map__attach_struct_ops"))
-+		goto cleanup;
-+
-+	/* test_1() would be called from bpf_dummy_reg2() in bpf_testmod.c */
-+	err = ASSERT_EQ(skel->bss->test_1_result, 42, "test_1_result");
-+
-+cleanup:
-+	bpf_link__destroy(link);
-+	struct_ops_autocreate2__destroy(skel);
-+}
-+
- void test_struct_ops_autocreate(void)
- {
- 	if (test__start_subtest("cant_load_full_object"))
- 		cant_load_full_object();
- 	if (test__start_subtest("can_load_partial_object"))
- 		can_load_partial_object();
-+	if (test__start_subtest("autoload_and_shadow_vars"))
-+		autoload_and_shadow_vars();
- }
-diff --git a/tools/testing/selftests/bpf/progs/bad_struct_ops2.c b/tools/testing/selftests/bpf/progs/bad_struct_ops2.c
-new file mode 100644
-index 000000000000..64a95f6be86d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bad_struct_ops2.c
-@@ -0,0 +1,14 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+/* This is an unused struct_ops program, it lacks corresponding
-+ * struct_ops map, which provides attachment information.
-+ * W/o additional configuration attempt to load such
-+ * BPF object file would fail.
-+ */
-+SEC("struct_ops/foo")
-+void foo(void) {}
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_autocreate2.c b/tools/testing/selftests/bpf/progs/struct_ops_autocreate2.c
-new file mode 100644
-index 000000000000..6049d9c902d3
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_autocreate2.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int test_1_result = 0;
-+
-+SEC("?struct_ops/test_1")
-+int BPF_PROG(foo)
-+{
-+	test_1_result = 42;
 +	return 0;
-+}
-+
-+SEC("?struct_ops/test_1")
-+int BPF_PROG(bar)
-+{
-+	test_1_result = 24;
-+	return 0;
-+}
-+
-+struct bpf_testmod_ops {
-+	int (*test_1)(void);
-+};
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops testmod_1 = {
-+	.test_1 = (void *)bar
-+};
+ }
+ 
+ static struct bpf_object *bpf_object__new(const char *path,
+@@ -1409,8 +1417,6 @@ static struct bpf_object *bpf_object__new(const char *path,
+ 	obj->efile.obj_buf = obj_buf;
+ 	obj->efile.obj_buf_sz = obj_buf_sz;
+ 	obj->efile.btf_maps_shndx = -1;
+-	obj->efile.st_ops_shndx = -1;
+-	obj->efile.st_ops_link_shndx = -1;
+ 	obj->kconfig_map_idx = -1;
+ 
+ 	obj->kern_version = get_kernel_version();
+@@ -1427,8 +1433,6 @@ static void bpf_object__elf_finish(struct bpf_object *obj)
+ 	elf_end(obj->efile.elf);
+ 	obj->efile.elf = NULL;
+ 	obj->efile.symbols = NULL;
+-	obj->efile.st_ops_data = NULL;
+-	obj->efile.st_ops_link_data = NULL;
+ 
+ 	zfree(&obj->efile.secs);
+ 	obj->efile.sec_cnt = 0;
+@@ -2973,14 +2977,13 @@ static int bpf_object__sanitize_btf(struct bpf_object *obj, struct btf *btf)
+ static bool libbpf_needs_btf(const struct bpf_object *obj)
+ {
+ 	return obj->efile.btf_maps_shndx >= 0 ||
+-	       obj->efile.st_ops_shndx >= 0 ||
+-	       obj->efile.st_ops_link_shndx >= 0 ||
++	       obj->efile.has_st_ops ||
+ 	       obj->nr_extern > 0;
+ }
+ 
+ static bool kernel_needs_btf(const struct bpf_object *obj)
+ {
+-	return obj->efile.st_ops_shndx >= 0 || obj->efile.st_ops_link_shndx >= 0;
++	return obj->efile.has_st_ops;
+ }
+ 
+ static int bpf_object__init_btf(struct bpf_object *obj,
+@@ -3681,12 +3684,12 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 				sec_desc->sec_type = SEC_RODATA;
+ 				sec_desc->shdr = sh;
+ 				sec_desc->data = data;
+-			} else if (strcmp(name, STRUCT_OPS_SEC) == 0) {
+-				obj->efile.st_ops_data = data;
+-				obj->efile.st_ops_shndx = idx;
+-			} else if (strcmp(name, STRUCT_OPS_LINK_SEC) == 0) {
+-				obj->efile.st_ops_link_data = data;
+-				obj->efile.st_ops_link_shndx = idx;
++			} else if (strcmp(name, STRUCT_OPS_SEC) == 0 ||
++				   strcmp(name, STRUCT_OPS_LINK_SEC) == 0) {
++				sec_desc->sec_type = SEC_ST_OPS;
++				sec_desc->shdr = sh;
++				sec_desc->data = data;
++				obj->efile.has_st_ops = true;
+ 			} else {
+ 				pr_info("elf: skipping unrecognized data section(%d) %s\n",
+ 					idx, name);
+@@ -6999,12 +7002,12 @@ static int bpf_object__collect_relos(struct bpf_object *obj)
+ 		data = sec_desc->data;
+ 		idx = shdr->sh_info;
+ 
+-		if (shdr->sh_type != SHT_REL) {
++		if (shdr->sh_type != SHT_REL || idx < 0 || idx >= obj->efile.sec_cnt) {
+ 			pr_warn("internal error at %d\n", __LINE__);
+ 			return -LIBBPF_ERRNO__INTERNAL;
+ 		}
+ 
+-		if (idx == obj->efile.st_ops_shndx || idx == obj->efile.st_ops_link_shndx)
++		if (obj->efile.secs[idx].sec_type == SEC_ST_OPS)
+ 			err = bpf_object__collect_st_ops_relos(obj, shdr, data);
+ 		else if (idx == obj->efile.btf_maps_shndx)
+ 			err = bpf_object__collect_map_relos(obj, shdr, data);
 -- 
 2.43.0
 
