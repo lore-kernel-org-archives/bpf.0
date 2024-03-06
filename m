@@ -1,55 +1,57 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E564514039D;
-	Wed,  6 Mar 2024 20:05:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F0FE14372D;
+	Wed,  6 Mar 2024 20:05:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709755548; cv=none; b=sBkMM/POXTVDWXlJ5mNYWKVyzYvLa2rAl2HgzlIh99de4drni743Zcnrv6h5ciVWcmIhg8uE/WvLVbjya9asd894xPN2DFHW7EKF2QZOISJZkZ6Q1IDAgQLhKz6cjyOyP+8JVYZrzgqlP8attdtfFmqkEEwXTBNP8OcCxGsudIA=
+	t=1709755550; cv=none; b=JVIFquYcNvdzvesgE8k5RF1Osy4YBk1LhPX9jBkHtMuxKevp51Y/dm6HHRreX3kZLGUBhO4IopBBZqFNoPfXLNU6Qf/EO21IhsiPEXd2XdIUDAec7R2jDDPOtDtr3B9HKI69nxI7WWMhBFuKI/7cqxA0pkMkss0xnjwnp0rTZnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709755548; c=relaxed/simple;
-	bh=S124P+mm3Kl3zFpQxSCsgU9NgXjbbAI2YP6sizbVbXo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QAClAbdp1i5CHpL5g6X5fJYnRqpnOy8U76Vn+B2XJ+GEj+KvralEFk2p97r8N2AVpKBhjdUM7pUHUPWc8+hf8A7xhsKtAaPSdPm4BkqMbe4wamKCX+c1PAzddy6TIP2K4UlB9db8o63OuoqPbk1jjYeSYwP4fP+On2xr5AsqVJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PWSqOQfG; arc=none smtp.client-ip=209.85.214.178
+	s=arc-20240116; t=1709755550; c=relaxed/simple;
+	bh=joPS7aRxwYa4hZZkszZGFWj2FC8Fr3qNLAdjdoRuogw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=B2hlIhUpxrl2Er1l/Jk405YCNAhWBDRLErV1pGrk6FUx1MioLCe7la2v0hbLN7FuMiqYguNdFtuA+Q4KxKXzklzF3qo2R+ic/SSp57LkWGJMGa+K5tVY1kIlznivdpJmOppuJ2jzERw3r/LdZjxijuqKv6O5+VOLpbJLhb1bSkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kzbTbw7N; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PWSqOQfG"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1dc3b4b9b62so1261555ad.1;
-        Wed, 06 Mar 2024 12:05:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kzbTbw7N"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1dc1ff3ba1aso827655ad.3;
+        Wed, 06 Mar 2024 12:05:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709755546; x=1710360346; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ESj7oVujXgrkYivCI2YmJM9UXLkhtSWs5CWgAIwkimU=;
-        b=PWSqOQfGrV6YrNVkCHsI4YvRKQa4GSDg2vlk5MgjFpZrX1oTUJmbWZGAIhUq0gtPuj
-         LTkxpjzUtAYC6Dr4UR45glXnNgQ4WxUwtOBgGwXuya26T+8EcEiu+vD4HiaxqGqQetku
-         1vqX9zOiX9pUxQOjz8EP81HUU5Bs4pBg44kx74y6/72HH076vRz/yem/grrm4ZRVIP9e
-         P2iiftS1AkACu7TiQOjdg8A7Z4t5HBYXaXviq2ybh5hEFHrLryOX9Mn1pIE5xla5FQw8
-         HCoVsDrZSTHAkiScvPdOlkE8JCXZyfiCThkFln/JEHQrQOHJtDQWy63wg70fGtVfqm5G
-         w6Vg==
+        d=gmail.com; s=20230601; t=1709755548; x=1710360348; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I57kyg6eTucwv8eo/E5FOHR5MopFsB/omhETuWjxqlw=;
+        b=kzbTbw7N5F1WNBI3IUy+6lXpkbSV6Scc0Ag6udfuKbKVLEQOkzKh7yWylDtB29TG4k
+         Rb/TT+CkWEOFVkW2MYuvBlx+Xm1vRbBH1LUxXCWQIdsICt4RAxKvuRQyy+Fq2HC9U9VJ
+         fTWN8uXpD9FJCCLfj3lxn7IeqmBMl1gTcQf93Xr1Pmr3WlZbolzO5o+oliAdjBxr4ZmM
+         xXU0eLDQUGWyOHvhFZHrM/bo2DJUTpUqel0+zNqYEAzZtE659mEh+7+abU2mmSRKPGy4
+         75MNwnN8CfaN7rtCtjndRSwSvMCvRkPQqaU8ZOiFAxFHuOd7iSgXHbe/NkssPgIEAto/
+         q4mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709755546; x=1710360346;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ESj7oVujXgrkYivCI2YmJM9UXLkhtSWs5CWgAIwkimU=;
-        b=PZIEWXa7yxwDDth02YB69Mx7+Y5kuMw4GR4qW4/7tGhU4vNn5jnQfJKcecqsAMlqyY
-         VWSePK3UpJ39VmS8yLcCXgsVJv3KVu5Z1PhoSrSKR2ugD9LRIsVsDwjbJ6RNZiANV+c6
-         RRZGKIRjZPFTntmqYZBwUKERyVIvGcmcW7b+KD3hWAy2m0NsUjA1hQZNCgbJLcW0KNzZ
-         /bUT6r3gOo0ligGC4JG2DydA6d2eqmQrxLmTrb2CUSrbWKMnsNcak+IPzHFBOyOTJiXu
-         yXGxEMLA1Jnp6jEwlUn8KlfvszdZm6b48EIcULS6pM5lbF58x4G1jczdfrqQOqs7jvlR
-         6/jg==
-X-Forwarded-Encrypted: i=1; AJvYcCVTE3TXNw+C3Y2+ZEFBVS7T7JQ4Qhb05pKcXeOhaoMozucXzjrdANZgc0Y7NRVJNItxBkaKivr9lXqrYdGHqsZBhjoaYJYKkQcnpHFhFm76t5fllGKiwRzno57zDafToJOTdQedqIXuUr1ER+Vh0OLZ4ogevd0LE6d4EqJPGa3I4Q==
-X-Gm-Message-State: AOJu0YxMdrF1k57Y9aSBlJU0073AEkDiL0YawkuVoWLbihVPlNh9JAg8
-	rv8gCyOf0L020xAdr5QaiAK1TOU6W196d3y3cOwyOVojmr2Va0EJ
-X-Google-Smtp-Source: AGHT+IH6M31mE34Me8SM21tMS8XfhsE3dhmJ1lHuJdEN16FIegxlJS+I/Wfc5klC7Ry9QFJHthE2CA==
-X-Received: by 2002:a17:902:e887:b0:1dc:cc0c:a29f with SMTP id w7-20020a170902e88700b001dccc0ca29fmr1736695plg.4.1709755545642;
-        Wed, 06 Mar 2024 12:05:45 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709755548; x=1710360348;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I57kyg6eTucwv8eo/E5FOHR5MopFsB/omhETuWjxqlw=;
+        b=V9Z4rdVKoedOh+6VI4ooeivZQ02iBXzN2LowWK5LkUyZ7ZNzxlOJTA2jM4koLT7AW7
+         8RQiveKyGZHRBPLktl+DklYrWFgq//ehiHZIk1TCIXQAcvGnEWJ2fdrkoSTNg+KsXIKs
+         kGkoebbJNWjwvZ9/j47gLjE4NSQNIZBFC4C9c/W0ysLUuSRiLjWPVgyQ1ZoqZD1xS59I
+         I0mbUfQIt1Jg5xkClzZ1ZJUH/a6bpUleVnFfNowiFqaO46BLw2H2Y9NeYlQ0R0xiK7kA
+         xG95tupyW17gxSyuILhsA72ZNQFGVjeBWO3DgLY62L1AofwKF4oFg37xhAB3SFw5III8
+         G9tQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVAtccP+lpUTJ+tLwV4R74HdSRxoud0GfuKMt4S7LFg50K2jyAOVq0MfreuyDWtryjHwVmIMzayVcDca39l7tIM3VDLSTNkXqckCvNfCq6FxOPUS0KYd8Eo2VUmHi/0xAr4akii06faODywmHAJz9YyAKizBpMnzKC+Z0BXKVdhsA==
+X-Gm-Message-State: AOJu0Yz0a0ZWPGK/ZMKk5OihMz7aNFtGue8ZSFNhlB9U/0pnT4t/UnmZ
+	EuBkPoEGWEpdFxEEWjV3azcwrKVLGYn/Bn7ZSaiUVTeJNTcY8z3g
+X-Google-Smtp-Source: AGHT+IH8zfganj5XWPVSBbSsHDUFg52F70PkgfZSuw9plNsQY5H+gIvjYq7zI0Mzm73ysjj5eI88rQ==
+X-Received: by 2002:a17:902:650b:b0:1dc:c93e:f5f5 with SMTP id b11-20020a170902650b00b001dcc93ef5f5mr5840853plk.12.1709755548504;
+        Wed, 06 Mar 2024 12:05:48 -0800 (PST)
 Received: from mozart.vkv.me ([192.184.166.229])
-        by smtp.gmail.com with ESMTPSA id n15-20020a170902e54f00b001dcfc88ccf6sm8869341plf.263.2024.03.06.12.05.44
+        by smtp.gmail.com with ESMTPSA id n15-20020a170902e54f00b001dcfc88ccf6sm8869341plf.263.2024.03.06.12.05.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Mar 2024 12:05:45 -0800 (PST)
+        Wed, 06 Mar 2024 12:05:48 -0800 (PST)
 From: Calvin Owens <jcalvinowens@gmail.com>
 To: Luis Chamberlain <mcgrof@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
@@ -66,10 +68,12 @@ Cc: Calvin Owens <jcalvinowens@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC][PATCH 0/4] Make bpf_jit and kprobes work with CONFIG_MODULES=n
-Date: Wed,  6 Mar 2024 12:05:07 -0800
-Message-ID: <cover.1709676663.git.jcalvinowens@gmail.com>
+Subject: [RFC][PATCH 2/4] bpf: Allow BPF_JIT with CONFIG_MODULES=n
+Date: Wed,  6 Mar 2024 12:05:09 -0800
+Message-ID: <afebd15dd032f908e46871bec5be438063ae7458.1709676663.git.jcalvinowens@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1709676663.git.jcalvinowens@gmail.com>
+References: <cover.1709676663.git.jcalvinowens@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,166 +82,101 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hello all,
+No BPF code has to change, except in struct_ops (for module refs).
 
-This patchset makes it possible to use bpftrace with kprobes on kernels
-built without loadable module support.
+This conflicts with bpf-next because of this (relevant) series:
 
-On a Raspberry Pi 4b, this saves about 700KB of memory where BPF is
-needed but loadable module support is not. These two kernels had
-identical configurations, except CONFIG_MODULE was off in the second:
+    https://lore.kernel.org/all/20240119225005.668602-1-thinker.li@gmail.com/
 
-   - Linux version 6.8.0-rc7
-   - Memory: 3330672K/4050944K available (16576K kernel code, 2390K rwdata,
-   - 12364K rodata, 5632K init, 675K bss, 195984K reserved, 524288K cma-reserved)
-   + Linux version 6.8.0-rc7-00003-g2af01251ca21
-   + Memory: 3331400K/4050944K available (16512K kernel code, 2384K rwdata,
-   + 11728K rodata, 5632K init, 673K bss, 195256K reserved, 524288K cma-reserved)
+If something like this is merged down the road, it can go through
+bpf-next at leisure once the module_alloc change is in: it's a one-way
+dependency.
 
-I don't intend to present an exhaustive list of !MODULES usecases, since
-I'm sure there are many I'm not aware of. Performance is a common one,
-the primary justification being that static text is mapped on hugepages
-and module text is not. Security is another, since rootkits are much
-harder to implement without modules.
+Signed-off-by: Calvin Owens <jcalvinowens@gmail.com>
+---
+ kernel/bpf/Kconfig          |  2 +-
+ kernel/bpf/bpf_struct_ops.c | 28 ++++++++++++++++++++++++----
+ 2 files changed, 25 insertions(+), 5 deletions(-)
 
-The first patch is the interesting one: it moves module_alloc() into its
-own file with its own Kconfig option, so it can be utilized even when
-loadable module support is disabled. I got the idea from an unmerged
-patch from a few years ago I found on lkml (see [1/4] for details). I
-think this also has value in its own right, since I suspect there are
-potential users beyond bpf, hopefully we will hear from some.
-
-Patches 2-3 are proofs of concept to demonstrate the first patch is
-sufficient to achieve my goal (full ebpf functionality without modules).
-
-Patch 4 adds a new "-n" argument to vmtest.sh to run the BPF selftests
-without modules, so the prior three patches can be rigorously tested.
-
-If something like the first patch were to eventually be merged, the rest
-could go through the normal bpf-next process as I clean them up: I've
-only based them on Linus' tree and combined them into a series here to
-introduce the idea.
-
-If you prefer to fetch the patches via git:
-
-  [1/4] https://github.com/jcalvinowens/linux.git work/module-alloc
- +[2/4]+[3/4] https://github.com/jcalvinowens/linux.git work/nomodule-bpf
- +[4/4] https://github.com/jcalvinowens/linux.git testing/nomodule-bpf-ci
-
-In addition to the automated BPF selftests, I've lightly tested this on
-my laptop (x86_64), a Raspberry Pi 4b (arm64), and a Raspberry Pi Zero W
-(arm). The other architectures have only been compile tested.
-
-I didn't want to spam all the arch maintainers with what I expect will
-be a discussion mostly about modules and bpf, so I've left them off this
-first submission. I will be sure to add them on future submissions of
-the first patch. Of course, feedback on the arch bits is welcome here.
-
-In addition to feedback on the patches themselves, I'm interested in
-hearing from anybody else who might find this functionality useful.
-
-Thanks,
-Calvin
-
-
-Calvin Owens (4):
-  module: mm: Make module_alloc() generally available
-  bpf: Allow BPF_JIT with CONFIG_MODULES=n
-  kprobes: Allow kprobes with CONFIG_MODULES=n
-  selftests/bpf: Support testing the !MODULES case
-
- arch/Kconfig                                  |   4 +-
- arch/arm/kernel/module.c                      |  35 -----
- arch/arm/mm/Makefile                          |   2 +
- arch/arm/mm/module_alloc.c                    |  40 ++++++
- arch/arm64/kernel/module.c                    | 127 -----------------
- arch/arm64/mm/Makefile                        |   1 +
- arch/arm64/mm/module_alloc.c                  | 130 ++++++++++++++++++
- arch/loongarch/kernel/module.c                |   6 -
- arch/loongarch/mm/Makefile                    |   2 +
- arch/loongarch/mm/module_alloc.c              |  10 ++
- arch/mips/kernel/module.c                     |  10 --
- arch/mips/mm/Makefile                         |   2 +
- arch/mips/mm/module_alloc.c                   |  13 ++
- arch/nios2/kernel/module.c                    |  20 ---
- arch/nios2/mm/Makefile                        |   2 +
- arch/nios2/mm/module_alloc.c                  |  22 +++
- arch/parisc/kernel/module.c                   |  12 --
- arch/parisc/mm/Makefile                       |   1 +
- arch/parisc/mm/module_alloc.c                 |  15 ++
- arch/powerpc/kernel/module.c                  |  36 -----
- arch/powerpc/mm/Makefile                      |   1 +
- arch/powerpc/mm/module_alloc.c                |  41 ++++++
- arch/riscv/kernel/module.c                    |  11 --
- arch/riscv/mm/Makefile                        |   1 +
- arch/riscv/mm/module_alloc.c                  |  17 +++
- arch/s390/kernel/module.c                     |  37 -----
- arch/s390/mm/Makefile                         |   1 +
- arch/s390/mm/module_alloc.c                   |  42 ++++++
- arch/sparc/kernel/module.c                    |  31 -----
- arch/sparc/mm/Makefile                        |   2 +
- arch/sparc/mm/module_alloc.c                  |  31 +++++
- arch/x86/kernel/ftrace.c                      |   2 +-
- arch/x86/kernel/module.c                      |  56 --------
- arch/x86/mm/Makefile                          |   2 +
- arch/x86/mm/module_alloc.c                    |  59 ++++++++
- fs/proc/kcore.c                               |   2 +-
- include/trace/events/bpf_testmod.h            |   1 +
- kernel/bpf/Kconfig                            |  11 +-
- kernel/bpf/Makefile                           |   2 +
- kernel/bpf/bpf_struct_ops.c                   |  28 +++-
- kernel/bpf/bpf_testmod/Makefile               |   1 +
- kernel/bpf/bpf_testmod/bpf_testmod.c          |   1 +
- kernel/bpf/bpf_testmod/bpf_testmod.h          |   1 +
- kernel/bpf/bpf_testmod/bpf_testmod_kfunc.h    |   1 +
- kernel/kprobes.c                              |  22 +++
- kernel/module/Kconfig                         |   1 +
- kernel/module/main.c                          |  17 ---
- kernel/trace/trace_kprobe.c                   |  11 ++
- mm/Kconfig                                    |   3 +
- mm/Makefile                                   |   1 +
- mm/module_alloc.c                             |  21 +++
- mm/vmalloc.c                                  |   2 +-
- net/bpf/test_run.c                            |   2 +
- tools/testing/selftests/bpf/Makefile          |  28 ++--
- .../selftests/bpf/bpf_testmod/Makefile        |   2 +-
- .../bpf/bpf_testmod/bpf_testmod-events.h      |   6 +
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   |   4 +
- .../bpf/bpf_testmod/bpf_testmod_kfunc.h       |   2 +
- tools/testing/selftests/bpf/config            |   5 -
- tools/testing/selftests/bpf/config.mods       |   5 +
- tools/testing/selftests/bpf/config.nomods     |   1 +
- .../selftests/bpf/progs/btf_type_tag_percpu.c |   2 +
- .../selftests/bpf/progs/btf_type_tag_user.c   |   2 +
- tools/testing/selftests/bpf/progs/core_kern.c |   2 +
- .../selftests/bpf/progs/iters_testmod_seq.c   |   2 +
- .../bpf/progs/test_core_reloc_module.c        |   2 +
- .../selftests/bpf/progs/test_ldsx_insn.c      |   2 +
- .../selftests/bpf/progs/test_module_attach.c  |   3 +
- .../selftests/bpf/progs/tracing_struct.c      |   2 +
- tools/testing/selftests/bpf/testing_helpers.c |  14 ++
- tools/testing/selftests/bpf/vmtest.sh         |  24 +++-
- 71 files changed, 636 insertions(+), 424 deletions(-)
- create mode 100644 arch/arm/mm/module_alloc.c
- create mode 100644 arch/arm64/mm/module_alloc.c
- create mode 100644 arch/loongarch/mm/module_alloc.c
- create mode 100644 arch/mips/mm/module_alloc.c
- create mode 100644 arch/nios2/mm/module_alloc.c
- create mode 100644 arch/parisc/mm/module_alloc.c
- create mode 100644 arch/powerpc/mm/module_alloc.c
- create mode 100644 arch/riscv/mm/module_alloc.c
- create mode 100644 arch/s390/mm/module_alloc.c
- create mode 100644 arch/sparc/mm/module_alloc.c
- create mode 100644 arch/x86/mm/module_alloc.c
- create mode 120000 include/trace/events/bpf_testmod.h
- create mode 100644 kernel/bpf/bpf_testmod/Makefile
- create mode 120000 kernel/bpf/bpf_testmod/bpf_testmod.c
- create mode 120000 kernel/bpf/bpf_testmod/bpf_testmod.h
- create mode 120000 kernel/bpf/bpf_testmod/bpf_testmod_kfunc.h
- create mode 100644 mm/module_alloc.c
- create mode 100644 tools/testing/selftests/bpf/config.mods
- create mode 100644 tools/testing/selftests/bpf/config.nomods
-
+diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
+index 6a906ff93006..77df483a8925 100644
+--- a/kernel/bpf/Kconfig
++++ b/kernel/bpf/Kconfig
+@@ -42,7 +42,7 @@ config BPF_JIT
+ 	bool "Enable BPF Just In Time compiler"
+ 	depends on BPF
+ 	depends on HAVE_CBPF_JIT || HAVE_EBPF_JIT
+-	depends on MODULES
++	select MODULE_ALLOC
+ 	help
+ 	  BPF programs are normally handled by a BPF interpreter. This option
+ 	  allows the kernel to generate native code when a program is loaded
+diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+index 02068bd0e4d9..fbf08a1bb00c 100644
+--- a/kernel/bpf/bpf_struct_ops.c
++++ b/kernel/bpf/bpf_struct_ops.c
+@@ -108,11 +108,30 @@ const struct bpf_prog_ops bpf_struct_ops_prog_ops = {
+ #endif
+ };
+ 
++#if IS_ENABLED(CONFIG_MODULES)
+ static const struct btf_type *module_type;
+ 
++static int bpf_struct_module_type_init(struct btf *btf)
++{
++	s32 module_id;
++
++	module_id = btf_find_by_name_kind(btf, "module", BTF_KIND_STRUCT);
++	if (module_id < 0)
++		return 1;
++
++	module_type = btf_type_by_id(btf, module_id);
++	return 0;
++}
++#else
++static int bpf_struct_module_type_init(struct btf *btf)
++{
++	return 0;
++}
++#endif
++
+ void bpf_struct_ops_init(struct btf *btf, struct bpf_verifier_log *log)
+ {
+-	s32 type_id, value_id, module_id;
++	s32 type_id, value_id;
+ 	const struct btf_member *member;
+ 	struct bpf_struct_ops *st_ops;
+ 	const struct btf_type *t;
+@@ -125,12 +144,10 @@ void bpf_struct_ops_init(struct btf *btf, struct bpf_verifier_log *log)
+ #include "bpf_struct_ops_types.h"
+ #undef BPF_STRUCT_OPS_TYPE
+ 
+-	module_id = btf_find_by_name_kind(btf, "module", BTF_KIND_STRUCT);
+-	if (module_id < 0) {
++	if (bpf_struct_module_type_init(btf)) {
+ 		pr_warn("Cannot find struct module in btf_vmlinux\n");
+ 		return;
+ 	}
+-	module_type = btf_type_by_id(btf, module_id);
+ 
+ 	for (i = 0; i < ARRAY_SIZE(bpf_struct_ops); i++) {
+ 		st_ops = bpf_struct_ops[i];
+@@ -433,12 +450,15 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
+ 
+ 		moff = __btf_member_bit_offset(t, member) / 8;
+ 		ptype = btf_type_resolve_ptr(btf_vmlinux, member->type, NULL);
++
++#if IS_ENABLED(CONFIG_MODULES)
+ 		if (ptype == module_type) {
+ 			if (*(void **)(udata + moff))
+ 				goto reset_unlock;
+ 			*(void **)(kdata + moff) = BPF_MODULE_OWNER;
+ 			continue;
+ 		}
++#endif
+ 
+ 		err = st_ops->init_member(t, member, kdata, udata);
+ 		if (err < 0)
 -- 
 2.43.0
 
