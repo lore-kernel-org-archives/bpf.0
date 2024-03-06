@@ -1,56 +1,56 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7658605B3
-	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 10:45:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8772560893
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 10:45:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709721958; cv=none; b=NPErN81H9vLKNUp+cJqnaFli0t/ZaOg94LLN6hHONEL/2zOf4Sc5wWthEf1TTzmto7gNcr05khzflYpBMMir8fmc3E+7l9/2uFAOQyQryOuf3lqDFR0OKLGq+O79yAoZFxCFDB+O9T+NC1vpxEnp11m8ZYaGZ6rTRq5lrm5D55I=
+	t=1709721959; cv=none; b=jBjK3wxrhbTzF2+pmbmZ3VDMG4ynIApYpyfYoX9B/OgAODz5DI1U71O6LzkUKsAfEXVOlX+JEV16Msy/Jdf7yfZyFTJj8iJlXIa1e2/mpCH4gr6luZMbx/OMfnXBU4dT2p4y0lJScerIkl0d+XY9lh9U7JoBXsab48+9Ru+MoFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709721958; c=relaxed/simple;
-	bh=rqgFbIeNuDVsN10Y3Wc/XO8EnZl5RUPoZprVYF/DQc8=;
+	s=arc-20240116; t=1709721959; c=relaxed/simple;
+	bh=c626uGZGz6bvkWSfIGAs2RDjqVJ0je76+hAvK5HHS2Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ARv8iwEBDEX+qeDGMMITq9SqL1r+cH240Dbn8C7NKYT0x2BuX07y3spw1n9J4CzVU/3vmqTVv76w2m3tYpV0XjqIDvS4q5PehrVz/ie7jXxk2Djc3z9q9NMqCW3z9MQk+YjK1R6otuOEmdFZWGo7h29mWb2Raq6kvH8GWl6Swn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ix2Xd/SZ; arc=none smtp.client-ip=209.85.218.51
+	 MIME-Version; b=D+DLhznQowsIVzl0dTS9ux6aOwZdqZFnwiywRSS9I1FYVzzce/cGWqoloTzjaTJmJJosD3RMxEEJU11pT3Y0ouywoDSzMAsa7QM/Ssl6tPXZW2uqbWqD7m0wbBsIuQu8/eRK1i+QnvFt5ZulMr3twdQDtJUoe1etyDu03nOUfzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=couvARLh; arc=none smtp.client-ip=209.85.208.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ix2Xd/SZ"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a3ddc13bbb3so127266966b.0
-        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 02:45:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="couvARLh"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-565c6cf4819so1254578a12.1
+        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 02:45:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709721955; x=1710326755; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709721956; x=1710326756; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sT8tEW8RnySdDbuoriCWllNRutWRJvAqN1r7dcUmjdE=;
-        b=ix2Xd/SZfnh9bO+Xwx8RcfbdLRtTqlb4ZVVyxTIp4OZqfXMUd5Zqe7WdQkwE0JsSQy
-         /H+MK4Z4yAwSq3bGZha7bl2ADTexsp6OPZmFN6+x/zObq2RgTnE2TGr6G7TSTuxV5YKN
-         +Gbl8/rANEoFiWzOhC2SdSaKAuRd3BWKpnahsEN2xcv0c8cvNqZSvq95YV3al78++BKP
-         KKtfFT7nu/ymOcd8arbHrQSJ1bOzWqCahw1RcUjLTy/dng5GPv6UJ66EHisYh0E/7FvV
-         z6umUYJSFMUgIzt5W0JJ5XjsOvopEner+r/Ob1ite2xgarN8Njdt7gNGyKyLh/r1J+DS
-         n3Gg==
+        bh=wzOUaWEMM76cWVANb2OxVF5f/AqcuB1wbqQNTxjWF78=;
+        b=couvARLhQgH4jfg5nrb7ho6pCvqaU7/c6p3ikE8hnkgK13EzPV6k1REYvlBK129il6
+         A+zwWOWTLgZhcYtGADNjRsTwg1P+ChZUta0WPn1cLnBF7c7ROI/fxIK+uy8kUpiqnSwi
+         UHoKhGccTQgMW5J4BVGZT9hH38XSPBJCdeOfpD0L3R7nCNWMSzICspgAGixT0Iz9/BTN
+         xvvfQLLpkucyuouDwiTbjXB/KkSrNOq1kmujCW+taENOx3r8adwO3uTqpLyRepCX7FjW
+         2xizIyTjzHg24Sl4DLiYoeHRrVjAxYszcYGJGiSFYqYhSL5RMzk5T08CbJlH9wd2MlRz
+         aljA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709721955; x=1710326755;
+        d=1e100.net; s=20230601; t=1709721956; x=1710326756;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sT8tEW8RnySdDbuoriCWllNRutWRJvAqN1r7dcUmjdE=;
-        b=eMw7NINH3IhhnZoBH2dOKeMXfnPM7zvn7c1Qh+zlh07McNdOHidG+IfA1qrsT+TiAw
-         zYxaRNJn32vWRA7VPVCVuSfABgBQHewXabyj1UYT+1FeS03RYcyzAcVJP8QaC+LD0db4
-         Wro7dVw9TO0n0eU7cbSxqpoC8aT6MURI6npYx8A7Guxe5H1MPLMjuSpa7KXBlQvUa+Oa
-         i/u3ycxa5URyTFYI8nLvhMNKYWa4s77C7OO22KgKmGXzPILucfveFYbIBlNpXnrRBSNY
-         ZtFhcbDCI5+c4T7HC6NYh+0oUz8eMjjqN57COwK7Lp38+a+W7U6k8TF+gvPnw+jJWnn0
-         BsIg==
-X-Gm-Message-State: AOJu0YxSf+gNCqczv4nRMlS3mafdQFKShWY7cBXjS0IH1n7NDFdTpkd3
-	yqXmLgwfxK0SogNi5ny3Uk/nQMGpwEPrLNKcNn2UKLdnLrR/gkOYdZcafMM4
-X-Google-Smtp-Source: AGHT+IFInlQzz0qIUa2Ds5TTKIIkya00rik6bD0nLjKdoDxfJHA9R4Y93T2P2TYQ1mW7nbpxNX6Erg==
-X-Received: by 2002:a17:906:ca5b:b0:a45:163a:c08e with SMTP id jx27-20020a170906ca5b00b00a45163ac08emr5775241ejb.0.1709721954899;
-        Wed, 06 Mar 2024 02:45:54 -0800 (PST)
+        bh=wzOUaWEMM76cWVANb2OxVF5f/AqcuB1wbqQNTxjWF78=;
+        b=g6ED5n06l68ldcPLUs9Aum/K89Ww0Ch6i2y6VU2uRh8mJOPwfOKYRtRqY46K+3PQG6
+         IxSuoY9Bro3QmvzuIKxilRn3IyX8kdj4Otw2MyHYlqnwHTr9h3HFVnabA8C6kb69J8h3
+         xbb55tT81dI4++e24zdNZxVf97y0Fknb5LaPY+XjwmojtfVEqc39nY+1YJFok/FhQbsM
+         c9bICPrJ4X4xG2CMtdqaIZGEz3yTXVJn5DWI3iNyT8ZxwW5lVBj8B+V5Z63jVe9Ji7Jp
+         9wHevl3iQkF5bVSnVU+IsqZPJBFOyhYtqAi43+NK2N2+26FYC3dSEXB+3HZKDXV/eGM1
+         IisQ==
+X-Gm-Message-State: AOJu0Yxypi2sC4XJw5od5Vfg6gwawvGAEsxHMiKD04pvcUmpVUW+s5jn
+	WXIHXpSIcN7KXVJ1VmmdoMr/C7VhC4iHY87wUU/XAxtBlQWWllj8zdU2hKQy
+X-Google-Smtp-Source: AGHT+IF8mFF9vKid5Auy4JklvLlGMlW7SPTJbEzRGbCJoKOMNX4oLz/caOOMXIvLkhFjG+QqmW3TOQ==
+X-Received: by 2002:a17:906:793:b0:a43:75ad:6d56 with SMTP id l19-20020a170906079300b00a4375ad6d56mr5995575ejc.18.1709721955869;
+        Wed, 06 Mar 2024 02:45:55 -0800 (PST)
 Received: from localhost.localdomain (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id h20-20020a170906591400b00a3d5efc65e0sm7002450ejq.91.2024.03.06.02.45.53
+        by smtp.gmail.com with ESMTPSA id h20-20020a170906591400b00a3d5efc65e0sm7002450ejq.91.2024.03.06.02.45.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Mar 2024 02:45:54 -0800 (PST)
+        Wed, 06 Mar 2024 02:45:55 -0800 (PST)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -62,9 +62,9 @@ Cc: andrii@kernel.org,
 	void@manifault.com,
 	sinquersw@gmail.com,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v4 13/15] selftests/bpf: test case for SEC("?.struct_ops")
-Date: Wed,  6 Mar 2024 12:45:27 +0200
-Message-ID: <20240306104529.6453-14-eddyz87@gmail.com>
+Subject: [PATCH bpf-next v4 14/15] bpf: allow all printable characters in BTF DATASEC names
+Date: Wed,  6 Mar 2024 12:45:28 +0200
+Message-ID: <20240306104529.6453-15-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240306104529.6453-1-eddyz87@gmail.com>
 References: <20240306104529.6453-1-eddyz87@gmail.com>
@@ -76,115 +76,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Check that "?.struct_ops" and "?.struct_ops.link" section names define
-struct_ops maps with autocreate == false after open.
+The intent is to allow libbpf to use SEC("?.struct_ops") to identify
+struct_ops maps that are optional, e.g. like in the following BPF code:
+
+    SEC("?.struct_ops")
+    struct test_ops optional_map = { ... };
+
+Which yields the following BTF:
+
+    ...
+    [13] DATASEC '?.struct_ops' size=0 vlen=...
+    ...
+
+To load such BTF libbpf rewrites DATASEC name before load.
+After this patch the rewrite won't be necessary.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- .../bpf/prog_tests/struct_ops_autocreate.c    | 52 ++++++++++++++++---
- .../bpf/progs/struct_ops_autocreate.c         | 10 ++++
- 2 files changed, 56 insertions(+), 6 deletions(-)
+ kernel/bpf/btf.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_autocreate.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_autocreate.c
-index 78948dc6445c..a5cc593c1e1d 100644
---- a/tools/testing/selftests/bpf/prog_tests/struct_ops_autocreate.c
-+++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_autocreate.c
-@@ -34,10 +34,24 @@ static void cant_load_full_object(void)
- 	struct_ops_autocreate__destroy(skel);
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 6ff0bd1a91d5..170d017e8e4a 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -809,9 +809,23 @@ static bool btf_name_valid_identifier(const struct btf *btf, u32 offset)
+ 	return __btf_name_valid(btf, offset);
  }
  
-+static int check_test_1_link(struct struct_ops_autocreate *skel, struct bpf_map *map)
-+{
-+	struct bpf_link *link;
-+	int err;
-+
-+	link = bpf_map__attach_struct_ops(skel->maps.testmod_1);
-+	if (!ASSERT_OK_PTR(link, "bpf_map__attach_struct_ops"))
-+		return -1;
-+
-+	/* test_1() would be called from bpf_dummy_reg2() in bpf_testmod.c */
-+	err = ASSERT_EQ(skel->bss->test_1_result, 42, "test_1_result");
-+	bpf_link__destroy(link);
-+	return err;
-+}
-+
- static void can_load_partial_object(void)
++/* Allow any printable character in DATASEC names */
+ static bool btf_name_valid_section(const struct btf *btf, u32 offset)
  {
- 	struct struct_ops_autocreate *skel;
--	struct bpf_link *link = NULL;
- 	int err;
- 
- 	skel = struct_ops_autocreate__open();
-@@ -58,15 +72,39 @@ static void can_load_partial_object(void)
- 	ASSERT_TRUE(bpf_program__autoload(skel->progs.test_1), "test_1 actual autoload");
- 	ASSERT_FALSE(bpf_program__autoload(skel->progs.test_2), "test_2 actual autoload");
- 
--	link = bpf_map__attach_struct_ops(skel->maps.testmod_1);
--	if (!ASSERT_OK_PTR(link, "bpf_map__attach_struct_ops"))
-+	check_test_1_link(skel, skel->maps.testmod_1);
+-	return __btf_name_valid(btf, offset);
++	/* offset must be valid */
++	const char *src = btf_str_by_offset(btf, offset);
++	const char *src_limit;
 +
-+cleanup:
-+	struct_ops_autocreate__destroy(skel);
-+}
++	/* set a limit on identifier length */
++	src_limit = src + KSYM_NAME_LEN;
++	src++;
++	while (*src && src < src_limit) {
++		if (!isprint(*src))
++			return false;
++		src++;
++	}
 +
-+static void optional_maps(void)
-+{
-+	struct struct_ops_autocreate *skel;
-+	int err;
-+
-+	skel = struct_ops_autocreate__open();
-+	if (!ASSERT_OK_PTR(skel, "struct_ops_autocreate__open"))
-+		return;
-+
-+	ASSERT_TRUE(bpf_map__autocreate(skel->maps.testmod_1), "testmod_1 autocreate");
-+	ASSERT_TRUE(bpf_map__autocreate(skel->maps.testmod_2), "testmod_2 autocreate");
-+	ASSERT_FALSE(bpf_map__autocreate(skel->maps.optional_map), "optional_map autocreate");
-+	ASSERT_FALSE(bpf_map__autocreate(skel->maps.optional_map2), "optional_map2 autocreate");
-+
-+	err  = bpf_map__set_autocreate(skel->maps.testmod_1, false);
-+	err |= bpf_map__set_autocreate(skel->maps.testmod_2, false);
-+	err |= bpf_map__set_autocreate(skel->maps.optional_map2, true);
-+	if (!ASSERT_OK(err, "bpf_map__set_autocreate"))
- 		goto cleanup;
- 
--	/* test_1() would be called from bpf_dummy_reg2() in bpf_testmod.c */
--	ASSERT_EQ(skel->bss->test_1_result, 42, "test_1_result");
-+	err = struct_ops_autocreate__load(skel);
-+	if (ASSERT_OK(err, "struct_ops_autocreate__load"))
-+		goto cleanup;
-+
-+	check_test_1_link(skel, skel->maps.optional_map2);
- 
- cleanup:
--	bpf_link__destroy(link);
- 	struct_ops_autocreate__destroy(skel);
++	return !*src;
  }
  
-@@ -116,4 +154,6 @@ void test_struct_ops_autocreate(void)
- 		can_load_partial_object();
- 	if (test__start_subtest("autoload_and_shadow_vars"))
- 		autoload_and_shadow_vars();
-+	if (test__start_subtest("optional_maps"))
-+		optional_maps();
- }
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_autocreate.c b/tools/testing/selftests/bpf/progs/struct_ops_autocreate.c
-index 9a951ee6f55c..ba10c3896213 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_autocreate.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_autocreate.c
-@@ -40,3 +40,13 @@ struct bpf_testmod_ops___v2 testmod_2 = {
- 	.test_1 = (void *)test_1,
- 	.does_not_exist = (void *)test_2
- };
-+
-+SEC("?.struct_ops")
-+struct bpf_testmod_ops___v1 optional_map = {
-+	.test_1 = (void *)test_1,
-+};
-+
-+SEC("?.struct_ops.link")
-+struct bpf_testmod_ops___v1 optional_map2 = {
-+	.test_1 = (void *)test_1,
-+};
+ static const char *__btf_name_by_offset(const struct btf *btf, u32 offset)
 -- 
 2.43.0
 
