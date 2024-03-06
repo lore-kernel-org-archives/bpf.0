@@ -1,81 +1,91 @@
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8D51B94D
-	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 22:38:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8861B59D;
+	Wed,  6 Mar 2024 22:40:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709764685; cv=none; b=BhqamMOz/RYo4w8D70DOVmAnI/cel9iP5zOPaQEcA5TsE6L9s8IVhSHqDVCOiRPp7MHYZbeFvgilBOvNSWy2rD1MOZIuKHwj2qsMT7Fmw0hz/J5OGX9g2eS3j3SYLfrwpQnSGbCo2tbDj1Z4dEkl5B+uA5t0BFr3zvmNxu9axZA=
+	t=1709764832; cv=none; b=RnTB9Idih4b5sDwETG5zksl1yAJPSdKstUaDJaAAtOiBF4BQWSC9XYDoO/qcAEsovbzEzCK3hda56WzeE9VcORTgYsi6x6S+cKLc7MFLXjcBSHlfbNGvXrAhqYR9IMy6v7rYJmXNpCT0C5V+A6/oaU+NpIqcSYK+W4ZkLjq4szA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709764685; c=relaxed/simple;
-	bh=aONfvMBLi+nGa8z5RQpjQsVQe9F1v8fIwL3IxZQZEyI=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=FZniR6yFuXjR9Bjy4qlsiO3WQ9+Ie1t5aGgoe7ooE4pt8tM4B6hGOe0agJzXjMRwUmC0Chs/4nDQs8P0OsLzhhOgx85D7QQ0FI3XC+r6PY3Ovwd9McYVsXm5o24F4atkz6q0LeZUfSeiJ2Blf/Y2wA7yKr6hRF7XRLbywFyhdPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7c83c53216bso32467639f.1
-        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 14:38:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709764682; x=1710369482;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oQx8oyVkoBQfTgwpCDc5Joc1fA/0UhEcaF4wgBQJJZ8=;
-        b=Lzep1/mvLPo3YNoVefHM35zgS//eIC3j0qwGo4VgFPXQ7t7uGW7WJwXurhsob4Lntc
-         GCxKHRqKuIngKR6j0tZfZ/MjeAGDE1jfmhPYVyWh5z3C76Dipa73mMOZxo0l1b4OdH5X
-         mbEh9FuI6nMcBX+JzqCx3VZChpXdHzBxe2RsFXPRRtJRAnHgh6Z8VINef5VTibc6jIJK
-         cm5DGWgcBbszcldaTDlgelSKeMP27s/BCVyLMJAcw1Z3iPi7wkSnrIRbLNRN5/T4w+zm
-         TKpwTFbTuilyYDhLh/PM2Pt++qCLuO8v3A3DxZXdbBApLMuxk0pqspVJ/sxffE/Xf4GO
-         t7Uw==
-X-Gm-Message-State: AOJu0YwU8eRoUaT9QbXEZtAv5aM57DPLtxtt1zt5faSeD4E1Kt/Nr/nV
-	1i6oMfDsZe+9atEgW9b71naqcQST4hZ9U1NtSu/mKuZjf5AsMCuLrPdZvblMl5vbTOku6E5EmYi
-	feOcITYsVxcLqpKLJGUT8PZJmpJA+9JS7F4fBSPPUB+TEV99KosCT+VmeOQ==
-X-Google-Smtp-Source: AGHT+IGUeFlmZ563e7wj+Rf7wOdbVjqxtWnT0cqDf2LCScDa5TAdV8QLnpmJdPdM1DX82HvmD30tfAYPKrbIiXL+LIblSWlVilKs
+	s=arc-20240116; t=1709764832; c=relaxed/simple;
+	bh=AEovCiiEXVApMoLVDcg5c4GHI5Cl3cHsFPUm+rDkwAU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=VpCLcUzu4bwBnMOChOa1+WNy1JaGFYbFFhnTkUlmse8WEpzJZiUsmLeQ/sqUi/mLgsrSdYoHgsMWp8NYW2dEI3sKoE/4N/Bsk/80AXowETR+D9eyt5M0w1kPBSwvR5Q/W2D7cwh8AeWekvbxVGHUQdiJVR6xUwPyLAgoAQfrUuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s5KWhNTA; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s5KWhNTA"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id ACA27C433F1;
+	Wed,  6 Mar 2024 22:40:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709764830;
+	bh=AEovCiiEXVApMoLVDcg5c4GHI5Cl3cHsFPUm+rDkwAU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=s5KWhNTA0B37vZARTbe3FnPyfrscIhrgVJeAE7ArWE+INoia81W5brE+KrUqhfASi
+	 mcT/1a/2j8PHwHO5oOMxxXNONqdJiMJiwKthFZOdz4gdDaL7RrHSb72rH+hHGurXmR
+	 n87I6DnaLfLfQSMTcGATB0f6Kw1sdUb4w6oZDTNNmBC9P5Rexn0fAIbzeUkOLDxsFc
+	 cocO4Vg2I0aiUqs3TplON8l7JhYBi0OhoJU2tvZ7FTGJ9SxsC9zUboQerCkuzrGAsJ
+	 qPKmKlb+Vo3YXPamsW16rISA2XYDn0OXSq/ULW24pWNAi5GNufr9SerZotEkmHtOXZ
+	 Trlkw8tOPjDew==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 86753C3274B;
+	Wed,  6 Mar 2024 22:40:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2181:b0:474:c5e2:384c with SMTP id
- s1-20020a056638218100b00474c5e2384cmr727865jaj.4.1709764682541; Wed, 06 Mar
- 2024 14:38:02 -0800 (PST)
-Date: Wed, 06 Mar 2024 14:38:02 -0800
-In-Reply-To: <0000000000000c439a05daa527cb@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008d7cfe0613059c97@google.com>
-Subject: Re: [syzbot] [netfilter?] INFO: rcu detected stall in gc_worker (3)
-From: syzbot <syzbot+eec403943a2a2455adaa@syzkaller.appspotmail.com>
-To: bpf@vger.kernel.org, coreteam@netfilter.org, davem@davemloft.net, 
-	dvyukov@google.com, edumazet@google.com, fw@strlen.de, gautamramk@gmail.com, 
-	hdanton@sina.com, jhs@mojatatu.com, jiri@resnulli.us, kadlec@netfilter.org, 
-	kuba@kernel.org, lesliemonis@gmail.com, linux-kernel@vger.kernel.org, 
-	michal.kubiak@intel.com, mohitbhasi1998@gmail.com, netdev@vger.kernel.org, 
-	netfilter-devel@vger.kernel.org, pabeni@redhat.com, pablo@netfilter.org, 
-	paulmck@kernel.org, sdp.sachin@gmail.com, syzkaller-bugs@googlegroups.com, 
-	tahiliani@nitk.edu.in, tglx@linutronix.de, vsaicharan1998@gmail.com, 
-	xiyou.wangcong@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next 0/1] Support kCFI + BPF on riscv64
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170976483053.9451.12256048383404087701.git-patchwork-notify@kernel.org>
+Date: Wed, 06 Mar 2024 22:40:30 +0000
+References: <20240303170207.82201-1-puranjay12@gmail.com>
+In-Reply-To: <20240303170207.82201-1-puranjay12@gmail.com>
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, luke.r.nels@gmail.com,
+ xi.wang@gmail.com, bjorn@kernel.org, samitolvanen@google.com,
+ peterz@infradead.org, keescook@chromium.org, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+Hello:
 
-commit 8c21ab1bae945686c602c5bfa4e3f3352c2452c5
-Author: Eric Dumazet <edumazet@google.com>
-Date:   Tue Aug 29 12:35:41 2023 +0000
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-    net/sched: fq_pie: avoid stalls in fq_pie_timer()
+On Sun,  3 Mar 2024 17:02:06 +0000 you wrote:
+> With CONFIG_CFI_CLANG, the compiler injects a type preamble immediately
+> before each function and a check to validate the target function type
+> before indirect calls:
+> 
+>   ; type preamble
+>     .word <id>
+>   function:
+>     ...
+>   ; indirect call check
+>     lw      t1, -4(a0)
+>     lui     t2, <hi20>
+>     addiw   t2, t2, <lo12>
+>     beq     t1, t2, .Ltmp0
+>     ebreak
+>   .Ltmp0:
+>     jarl    a0
+> 
+> [...]
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1338df0e180000
-start commit:   d4a7ce642100 igc: Fix Kernel Panic during ndo_tx_timeout c..
-git tree:       net
-kernel config:  https://syzkaller.appspot.com/x/.config?x=77b9a3cf8f44c6da
-dashboard link: https://syzkaller.appspot.com/bug?extid=eec403943a2a2455adaa
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1504b511a80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=137bf931a80000
+Here is the summary with links:
+  - [bpf-next,1/1] riscv64/cfi,bpf: Support kCFI + BPF on riscv64
+    https://git.kernel.org/bpf/bpf-next/c/dfd646d117b7
 
-If the result looks correct, please mark the issue as fixed by replying with:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-#syz fix: net/sched: fq_pie: avoid stalls in fq_pie_timer()
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
