@@ -1,158 +1,190 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464715B03B;
-	Wed,  6 Mar 2024 14:59:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C4A7FBAE
+	for <bpf@vger.kernel.org>; Wed,  6 Mar 2024 16:21:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709737181; cv=none; b=exHvIKQEjOU/Anx+92tAruNGmEoXaQ9p05EYkUo1GnLmeCKugaeW+XEOuxJRgsuKErsFzI921N/vCrkGp9VOEWQaHg0QvphaIdJx48q94FG+H09FK2QuCF74R/xUvy51n4T+3uTVyj7/8llkXxXXcOYdRdyTJn2tWFs+JuT7Wz4=
+	t=1709742078; cv=none; b=RHfWbfwvgv6AvaYRqYeyG1j3v7RELAJD/4k+/QB++Jpy97iJy9uZWm98VxBE6tQEQZgTE7aYPdqQQuv4dt88J2CyijbYA0RnCKArtRQSGaqbB5oHQlOBRUhr5e4M+sEgnaZdapjAl0ttt2oQAN8sHantoK2lJuHL8jF5osQfX9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709737181; c=relaxed/simple;
-	bh=wWfmjk4jJc0azJs5MAtNsWXdDU8hGOFf9AsXbM5PzFE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O9HIK7KwUWCIBBvk2oQ4/bu4dLJ8eSjckAyDvqFfTJSlAnZAQj3WCCCEoapzCoGF1GTXEgZx7xVpLuYOEfbU5xoasLPctpm5RaDM6PeUfLGNSaNbM6Cu/SgkmVhr4feGrX+JXm0lPC0Dg9eMtKkqIglWhe53AzO6Li+1Jc1AaYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XjNVNX0r; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709742078; c=relaxed/simple;
+	bh=6ckO67eGISRujj/lGOm0lzpeisjfBFslDG+kvZLS6W4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ovRwBVXPkk21jlsCyP/K1tR0cULc2dqkRI0PoHpwoyC0uENPzAfpy6Tabm7xqXXiwwTCAWW3rSrEmwZCRd/ODaswCUHheu4QjMn/yU6Oj34C5f7U8hnw0Su46HL02gJj0Jz/YY530n+M/3sGnmTPlJFbZ9+4IIqeguXG66XlhNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JNu6kheq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XjNVNX0r"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-33d153254b7so4708756f8f.0;
-        Wed, 06 Mar 2024 06:59:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709737178; x=1710341978; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k3KTBSf8CRlcIZfoKRwDp/o4UHKfshbIbaLHqnkKL/Q=;
-        b=XjNVNX0rLvgSbah451dBNV75h6uXG0ZSzZudNMr8hTabBjVjKCAM93NEiCStHOoiO2
-         VKDvgZ7Mh4tODw4Ei1m3tfOw+Eq4fnvrzWch5lACXDJt/wY34D+TNLirBgL6eLQ8EF66
-         neuWhiqg8HoepNaILTpG+sNNFeZCpI4620BGmxec6/srCDCbYnQgQsRMy5RJQueBWJal
-         9CHAa8TUf/+CijO7NF3taJwT/tUeMMi67czTFE1p3g3x8w1pAKQ9LvBu8jrKrydymE7k
-         24l8K5WFHlKSt1r6C7OcxDfHYRqflw5twj4VyE9NoZyS2KCVDZEN8VzDgo/SC2io5F96
-         JpDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709737178; x=1710341978;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k3KTBSf8CRlcIZfoKRwDp/o4UHKfshbIbaLHqnkKL/Q=;
-        b=QO/Bixoif5RCybFujEyiyjtfJLT12vAPp3c6aOhwdweXF9sMvA5fM8+XaMyWm1jHpB
-         xuna0K/5KRKUOBOokt9SmFLTU2CcPKY7V01J+VNANBUuV3DtvXjjsKmMEClz1ZcIq/T8
-         ucGBO6rZkKDgyul3NPVOYxyM24OZ5xUKN0tF45dS36+BkUN2T+Y33U1N//pKHEeDwcnl
-         fr9+dYVQX5BpPcYvuayWCU3ZEr2cqMXy7d+SHDcuJIJCVkXCpFrNgYjDoeYk0HSgu14Q
-         z70+GX/ifYbNQNzzwVKd+VMZoT4p+5e0EsJCCLrINScHRnBh6AzR6jiY6veloFmiCUnD
-         fRbw==
-X-Forwarded-Encrypted: i=1; AJvYcCW77HW/Q910jJXLnbJPA3p4ZUT/zTGFq5L7KuSvYaBeDODRUmtsnYHqhYGrI7fLBvCCd3W9jROaApfCr7Ic8LWNuLRb0V6VHU7FqCpSDwJyr+dZPZu9+hyCgFKuRcE3XFJLJRijwnXAxCpKHojQnFWUxiQzcnP0keGkOR61wj4tEkPyO1TE0aGQAKTNUbUrzhE5mprTob1BAhT5V/exiCE59j7ovgbD/ch7Wbk6gRAFOrdZlic/oGk4NGphyNOmPyPEkP7KLfp6LO8sMSllHF+1k447VV5SIPNJqbtUod7/9DuINK6BL2rX8u+DmiBixAlxghGXO09rwv8d0qmQlQdc59O4mL0/AMN1+YXlKoeUL6Ek8p8dcN+9AhbHl+9XjVOMUGjjEr2tybz7lu9nDoDSNhUP4XBVNBL6fsnEw2wwcvHKtOEK56KjfNpJS8//cFbsnOZfjkbWgiVmYVDlwaqXLcBiuD4R8YA4gyJU9w==
-X-Gm-Message-State: AOJu0YzgCutdh7CIapmyelX2J0pTMqFyhM17kcSRg7DwhE6oPEqesA3U
-	n0wE25iyRPdNhI2Oi0qkjTj4XuXY4TLSmaQItIDnvT6SKrkLuN7Z
-X-Google-Smtp-Source: AGHT+IFqyav+emKmFSd0bSOzFBUFGtQwTCEQWXrbswWn1syNw+koJNQ7CeSt912Wgj47JjnPQnfG0g==
-X-Received: by 2002:a5d:6b4a:0:b0:33e:1b80:ae95 with SMTP id x10-20020a5d6b4a000000b0033e1b80ae95mr10870719wrw.11.1709737178481;
-        Wed, 06 Mar 2024 06:59:38 -0800 (PST)
-Received: from [192.168.8.100] ([85.255.233.174])
-        by smtp.gmail.com with ESMTPSA id f10-20020a5d58ea000000b0033d4cf751b2sm17698519wrd.33.2024.03.06.06.59.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Mar 2024 06:59:38 -0800 (PST)
-Message-ID: <b85b36bd-7082-47a5-bf46-50cff8eb60be@gmail.com>
-Date: Wed, 6 Mar 2024 14:58:38 +0000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JNu6kheq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85007C433C7;
+	Wed,  6 Mar 2024 16:21:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709742077;
+	bh=6ckO67eGISRujj/lGOm0lzpeisjfBFslDG+kvZLS6W4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=JNu6kheqe1GT6U9cQubnthfBNBS9kqhQuerryJN4Ll7JM3ITydjl8ew/b8/2ERDbd
+	 0ZbNvKZpVc00AppoflyDkaPdGarS2AoJvJio5vKxKgFL1wQDPaBdfr3dSHCbbrAgSN
+	 FB1Y1ifbY43+CIo3L+FKKbO+saZNRc/Fw4pEM2BA4+lpmmXmZ+d/chbbJ8Dn714yBa
+	 tbAhx9qsrsApTUB1cf/+7bM6GvU962rmvnbV9HSTcsH+FsJj7oPaIxfL2QEBkIeeM8
+	 NivOHO2gniC1zv+pfAzJxGgZ4EzMltKMmle36vQ7V1f1NvzVOhwkolOwbduS6K9sn+
+	 42BaZuu9+N7Vw==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Shahab Vahedi <list+bpf@vahedi.org>
+Cc: bpf@vger.kernel.org, linux-snps-arc@lists.infradead.org, Shahab Vahedi
+ <list+bpf@vahedi.org>, Vineet Gupta <vgupta@kernel.org>
+Subject: Re: [PATCH bpf-next v1] ARC: Add eBPF JIT support
+In-Reply-To: <6e4cf7cc-6a2e-4396-b0d5-01ff10d6923a@vahedi.org>
+References: <20240213131946.32068-1-list+bpf@vahedi.org>
+ <87ttlnqlmv.fsf@all.your.base.are.belong.to.us>
+ <6e4cf7cc-6a2e-4396-b0d5-01ff10d6923a@vahedi.org>
+Date: Wed, 06 Mar 2024 17:21:14 +0100
+Message-ID: <87sf13babp.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH net-next v6 09/15] memory-provider: dmabuf devmem
- memory provider
-Content-Language: en-US
-To: Mina Almasry <almasrymina@google.com>, David Wei <dw@davidwei.uk>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
- Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Jeroen de Borst <jeroendb@google.com>,
- Praveen Kaligineedi <pkaligineedi@google.com>,
- Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-10-almasrymina@google.com>
- <383c4870-167f-4123-bbf3-928db1463e01@davidwei.uk>
- <CAHS8izP_PzDJVxycwZe_d_x10-SX4=Q-CWpKTjoOQ5dc2NSn3w@mail.gmail.com>
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <CAHS8izP_PzDJVxycwZe_d_x10-SX4=Q-CWpKTjoOQ5dc2NSn3w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 3/6/24 02:42, Mina Almasry wrote:
-> On Tue, Mar 5, 2024 at 6:28 PM David Wei <dw@davidwei.uk> wrote:
->>
->> On 2024-03-04 18:01, Mina Almasry wrote:
->>> +     if (pool->p.queue)
->>> +             binding = READ_ONCE(pool->p.queue->binding);
->>> +
->>> +     if (binding) {
->>> +             pool->mp_ops = &dmabuf_devmem_ops;
->>> +             pool->mp_priv = binding;
->>> +     }
->>
->> This is specific to TCP devmem. For ZC Rx we will need something more
->> generic to let us pass our own memory provider backend down to the page
->> pool.
->>
->> What about storing ops and priv void ptr in struct netdev_rx_queue
->> instead? Then we can both use it.
-> 
-> Yes, this is dmabuf specific, I was thinking you'd define your own
-> member of netdev_rx_queue, and then add something like this to
-> page_pool_init:
+Shahab Vahedi <list+bpf@vahedi.org> writes:
 
-That would be quite annoying, there are 3 expected users together
-with huge pages, each would need a field and check all others are
-disabled as you mentioned and so on. It should be cleaner to pass
-a generic {pp_ops,pp_private} pair instead.
+> Hi Bj=C3=B6rn,
+>
+> Thank you very much for your inputs. Please find my remarks below.
+>
+> Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> writes:
+>
+>> Shahab Vahedi <list+bpf@vahedi.org> writes:
+>>=20
+>> What's the easiest way to test test this w/o ARC HW? Is there a qemu
+>> port avaiable?
+>
+> Yes, there is a (downstream) port available on GitHub [1]. If one is
+> interested, there are also guides about building QEMU for ARC targets [2]
+> and how to run eBPF tests for ARC Linux [3].
+>
+> [1] ARC QEMU port
+> https://github.com/foss-for-synopsys-dwc-arc-processors/qemu
+>
+> [2] Building ARC QEMU
+> https://foss-for-synopsys-dwc-arc-processors.github.io/experimental-docum=
+entation/2023.09/simulators/qemu/
+>
+> [3] Runing eBPF tests for ARC Linux
+> https://foss-for-synopsys-dwc-arc-processors.github.io/experimental-docum=
+entation/2023.09/linux/ebpf/build/
 
-If header dependencies is a problem, you it can probably be
+Cool, TY.
 
-struct pp_provider_param {
-	struct pp_ops ops;
-	void *private;
-};
+>> I don't know much about ARC -- Is v2 compatible with v3?
+>
+> No, they're not. For what it's worth, ARCv3 comes in {32,64}-bit
+> flavours which are not compatible with each other either.
+>
+>> I'm curious about the missing support; tailcall/atomic/division/extable
+>> support. Would it require a lot of work to add that support in the
+>> initial change set?
+>
+> If you're asking whether it is possible that I add those features now,
+> my answer unfortunately would be "no". However, the way that things
+> are implemented, it will be a straightforward addition.
 
-# netdev_rx_queue.h
+Ok! Did you try building the kselftest/bpf suite? Would be interesting
+to see the pass/fail rate of test_progs.
 
-// definition is not included here
-struct pp_provider_params;
+>> There are a lot of checkpatch/kernel style issues. Run, e.g.,
+>> "checkpatch --strict -g HEAD" and you'll get a bunch of issues. Most of
+>> them are just basic style issues. Please try to fix most of them for the
+>> next rev.
+>
+> I did run the "checkpatch" before submitting. I've fixed all the "errors"
+> and most of the "warnings". But now that you brought it up, I will try to
+> fix as many "warnings"/"checks" as make sense.
 
-struct netdev_rx_queue {
-	...
-	struct pp_provider_params *pp_params;
-};
+Ok. I noticed a lot non-kernel style in your patch (checking against
+NULL e.g.)
 
--- 
-Pavel Begunkov
+>> You should add yourself to the MAINTAINERS file.
+>
+> I will. Thanks!
+>
+>> Please try to avoid static inline in the C-files. The compiler usually
+>> knows better.
+>
+> I will replace them with "static" then.
+>
+>> > +/* Sane initial values for the globals */
+>> > +bool emit =3D true;
+>> > +bool zext_thyself =3D true;
+>>=20
+>> Hmm, this is racy. Can we move this into the jit context? Also, is
+>> zext_thyself even used?
+>
+> I will get rid of those. For the record, "zext_thyself" is used by
+> calling "zext()" after handling "BPF_ALU" operations.
+
+Ah, indeed!
+
+>> > +#define CHECK_RET(cmd)			\
+>> > +	do {				\
+>> > +		ret =3D (cmd);		\
+>> > +		if (ret < 0)		\
+>> > +			return ret;	\
+>> > +	} while (0)
+>> > +
+>>=20
+>> Nit/personal taste, but I prefer not having these kind of macros. I
+>> think it makes it harder to read the code.
+>
+> At some point, I found myself distracted from seeing the bigger picture
+> while the code was interspersed by the menial "return checking"s. If
+> you don't mind, I'd rather keep it as is, unless you feel strong about
+> it or Vineet also agrees with you.
+>
+>> Care to elaborate a bit more on ARC_BPF_JIT_DEBUG. This smells of
+>> duplicated funtionality with bpf_jit_dump(), and the BUG()s are scary.
+>
+> ARC_BPF_JIT_DEBUG is supposed to be enabled for development purposes.
+> It enables:
+>
+> 1. A set of assert-like condition checking which makes the code
+> slow and can lead to ungraceful terminations.
+>
+> 2. Use of a custom version of hex dumps. The most important difference
+> with bpf_jit_dump() is that bpf_jit_dump() cannot be used for dumping
+> the input BPF byte stream. Rest, I can live with. An example follows:
+>
+> Using only "bpf_jit_dump" (ARC_BPF_JIT_DEBUG is not defined)
+>
+>   flen=3D2 proglen=3D20 pass=3D1 image=3D2e8c6fb9 from=3Dhello pid=3D127
+>   JIT code: 00000000: 8a 20 00 10 8a 21 00 10 0a 20 00 02 0a 21 40 02
+>   JIT code: 00000010: e0 20 c0 07
+>
+> vs.
+>
+> Using the custom version (ARC_BPF_JIT_DEBUG is defined)
+>   -----------------[  VM   ]-----------------
+>   0xb7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+>   0x95, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+>   -----------------[ JIT:1 ]-----------------
+>   0x8a, 0x20, 0x00, 0x10, 0x8a, 0x21, 0x00, 0x10
+>   0x0a, 0x20, 0x00, 0x02, 0x0a, 0x21, 0x40, 0x02
+>   0xe0, 0x20, 0xc0, 0x07
+>
+>> > +static int jit_ctx_init(struct jit_context *ctx, struct bpf_prog *pro=
+g)
+>> > +{
+>> > +   ...
+>>=20
+>> I'd just make sure that ctx is zeroed, and init the non-zero members her=
+e.
+>
+> Very good point! I will implement it that way.
+>
+> If you have read this far, I'd like to thank you again for spending time
+> on reviewing this patch. It is much appreciated.
+
+Looking forward for the next revision!
+
+
+Bj=C3=B6rn
