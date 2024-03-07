@@ -1,91 +1,69 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12422E648
-	for <bpf@vger.kernel.org>; Thu,  7 Mar 2024 23:10:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11A93309C
+	for <bpf@vger.kernel.org>; Thu,  7 Mar 2024 23:27:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709853031; cv=none; b=LqyXxNFDkKGnO30btjpG2jZ2DoEmWfvbhfA9M9cV1J2PRxVZu+5HLdlPcnHoUnik78Z97MnQdm53H0J9DffVhBwnedlM77bQ4xgssPZuVjLuGGkgRvrXFj5VgyAOTUWoPCfQBMtTxkzhoKdnRgpJk5fOmWfPLGD6UTS5HQkYbOU=
+	t=1709854036; cv=none; b=Tyvrfu4gHKzMo9S3wK5igL9pjDo2/aCOxsmL7o/qy1vh+OuorLqpP8oIIvWMT8tx2WsI/SOqmmyaRiurq/WS1eYEoyy12Af2eYIg1SbbE36ziz1wfH/o0qWlX0eLSIZRhPeEPgTC18GrNYVI3dVq+xLc2RlaM0xtZzcub7WjQXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709853031; c=relaxed/simple;
-	bh=atIzMDOsMMh5QIHpPOQEuyLVnXrsW5RFV0Nw19VWmz4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=BLwjQ6HLAU//E+ZmSaCeMocvHQgXYyL//NcTd0LuuqZnwKjaZb3W5pNUNsj9xDTup1652cXPd15SWYMQvYQXleTecrxCfObpH/4m4gOy0JTCwKl+mw3woaQBmZy4GykuLGHvpLkAOkjT0Lba8cgrVEod5MwmWYqUxJod79U6Sgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DmagqIe9; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DmagqIe9"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1B80DC43394;
-	Thu,  7 Mar 2024 23:10:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709853031;
-	bh=atIzMDOsMMh5QIHpPOQEuyLVnXrsW5RFV0Nw19VWmz4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=DmagqIe9B4YY/iyu8i0eYgcRB5JoUB3qYrd7XLUAw3mQ923oKGMV5jHmhw78/2tQp
-	 JFTobJHJCyS1aJ8uwarj53Eb7MbY0MxLfRP7yTSQCo7RMBbdH+/t770nkRuR44eS4U
-	 bGnVdI/J9Y0JKXKs1sdLayWYzinE0g1taqP06e9fM6yR8zr4KH0PUxv0nJPnphps4+
-	 rK+70HxpmR5+3GhNJNTUAhWHY5Rbhl0Vmb9UN9A9RrxR1sdLkisbgtjmO41c0YgThB
-	 l7O4a+y3lMzTnK8jwWwhNlZAkYp70q7ohs7pfq8cuK5URvZrCgnAwMtj05/sTnjps6
-	 ZkxQdV2ucwq5Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EC2DBC04D3F;
-	Thu,  7 Mar 2024 23:10:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1709854036; c=relaxed/simple;
+	bh=TFexT1JF1Faw/hJCvZHF+lnZJinRZ50jyIcy+IsB6Ek=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P5Xje8l4cCwwSW4XqV7i785+Yff7AL4KM6bK+hyaIOpSCmwcK9ZQs+7zFoCs7KVDjfmqK6fRiszhojyaQsrErUBbFWjKf/HH8qC2yQ4/KVhFmvmJRV7/Z0/ZFSy8ofjXU+3cP8ZmRaZ/f8bGOgwD7bSPLhnKxgRZ0UPAWcVyWAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+	id B939B164A15E; Thu,  7 Mar 2024 15:26:59 -0800 (PST)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Yury Namgung <ynamgung@meta.com>
+Subject: [PATCH bpf-next 0/5] bpf: Allow helper bpf_get_ns_current_pid_tgid() in cgroup/sk_msg programs
+Date: Thu,  7 Mar 2024 15:26:58 -0800
+Message-ID: <20240307232659.1115872-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 bpf-next 0/6] bpf: arena prerequisites
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170985303095.28922.11104490293682114783.git-patchwork-notify@kernel.org>
-Date: Thu, 07 Mar 2024 23:10:30 +0000
-References: <20240307031228.42896-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20240307031228.42896-1-alexei.starovoitov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@kernel.org, memxor@gmail.com, eddyz87@gmail.com,
- kernel-team@fb.com
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+Currently bpf_get_current_pid_tgid() is allowed in tracing, cgroup
+and sk_msg progs while bpf_get_ns_current_pid_tgid() is only allowed
+in tracing progs.
 
-This series was applied to bpf/bpf-next.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
+We have an internal use case where for an application running
+in a container (with pid namespace), user wants to get
+the pid associated with the pid namespace in a cgroup bpf
+program. Besides cgroup, the only prog type, supporting
+bpf_get_current_pid_tgid() but not bpf_get_ns_current_pid_tgid(),
+is sk_msg and this patch set added it as well.
 
-On Wed,  6 Mar 2024 19:12:22 -0800 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> These are bpf_arena prerequisite patches.
-> Useful on its own.
-> 
-> Alexei Starovoitov (5):
->   bpf: Allow kfuncs return 'void *'
->   bpf: Recognize '__map' suffix in kfunc arguments
->   bpf: Plumb get_unmapped_area() callback into bpf_map_ops
->   libbpf: Allow specifying 64-bit integers in map BTF.
->   bpf: Tell bpf programs kernel's PAGE_SIZE
-> 
-> [...]
+Patch 1 added the kernel support and patches 2-5 added
+the test for cgroup and sk_msg.
 
-Here is the summary with links:
-  - [v4,bpf-next,1/6] bpf: Allow kfuncs return 'void *'
-    https://git.kernel.org/bpf/bpf-next/c/88d1d4a7eebe
-  - [v4,bpf-next,2/6] bpf: Recognize '__map' suffix in kfunc arguments
-    https://git.kernel.org/bpf/bpf-next/c/8d94f1357c00
-  - [v4,bpf-next,3/6] bpf: Plumb get_unmapped_area() callback into bpf_map_ops
-    https://git.kernel.org/bpf/bpf-next/c/cf2c2e4a3d91
-  - [v4,bpf-next,4/6] libbpf: Allow specifying 64-bit integers in map BTF.
-    https://git.kernel.org/bpf/bpf-next/c/d147357e2e59
-  - [v4,bpf-next,5/6] bpftool: rename is_internal_mmapable_map into is_mmapable_map
-    https://git.kernel.org/bpf/bpf-next/c/1576b0796197
-  - [v4,bpf-next,6/6] bpf: Tell bpf programs kernel's PAGE_SIZE
-    https://git.kernel.org/bpf/bpf-next/c/fe5064158c56
+Yonghong Song (5):
+  bpf: Allow helper bpf_get_ns_current_pid_tgid() in cgroup and sk_msg
+    programs
+  selftests/bpf: Replace CHECK with ASSERT_* in ns_current_pid_tgid test
+  selftests/bpf: Refactor out some functions in ns_current_pid_tgid test
+  selftests/bpf: Add a cgroup prog bpf_get_ns_current_pid_tgid() test
+  selftests/bpf: Add a sk_msg prog bpf_get_ns_current_pid_tgid() test
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+ kernel/bpf/cgroup.c                           |   2 +
+ net/core/filter.c                             |   2 +
+ .../bpf/prog_tests/ns_current_pid_tgid.c      | 195 +++++++++++++++---
+ .../bpf/progs/test_ns_current_pid_tgid.c      |  31 ++-
+ 4 files changed, 196 insertions(+), 34 deletions(-)
 
+--=20
+2.43.0
 
