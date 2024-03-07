@@ -1,84 +1,112 @@
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A26015F86B;
-	Thu,  7 Mar 2024 13:56:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E040512DDB3;
+	Thu,  7 Mar 2024 14:24:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709819804; cv=none; b=uRNb0MTXqRB0+PZqQhs53L8BA8u9026xwqECMHddWPoDvPY6DaBvaR2+j4Cgf30KXPTuJdp05hSnickPaAp0U8/EnuYbCZjZIX7TeD8KBvYjtwENnm8BODubRBRA1/X8XAX/5UH8T6a65l9f5xpkr2tVVUeM/tbG2EErKmWIhwI=
+	t=1709821473; cv=none; b=dc+9Sa6a18dSuVJRaQLwOwmrbRbuVcrqzy+vVXKzxTGVodwbQji0gwapTykruhx03N1yNCJ79ee7iwDcuj8pdL5T/wRZK3kCNODkD1xWizpaCdMBaFqYMEv6vbOyanqCPR+wLOfW7o2HUMWkSSLWJhfenB0KcdoFRgRzxZnHAHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709819804; c=relaxed/simple;
-	bh=eZunBR5IonjfmCLeU/OwM5mH/pBJdEWF78x9j91cTus=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=UwTSJbYenCYLZNOkOQffzCElPFYWn9j3O7im852Yl3iC9GSqaQgMKdVC2UMbfzsgbit9zork4a0lnZYzXXlAy+JwZtlpWkNtOmWtWouN8c1+sjsP1wjY8Df8xTr6dlABjFLr9OcIVX3h4/QQJaWYQqAYpYf6CK//CY89cninKYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Tr9lD5RKGz1h1ZX;
-	Thu,  7 Mar 2024 21:54:16 +0800 (CST)
-Received: from kwepemd100009.china.huawei.com (unknown [7.221.188.135])
-	by mail.maildlp.com (Postfix) with ESMTPS id ABF311A016E;
-	Thu,  7 Mar 2024 21:56:38 +0800 (CST)
-Received: from [10.67.109.184] (10.67.109.184) by
- kwepemd100009.china.huawei.com (7.221.188.135) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Thu, 7 Mar 2024 21:56:38 +0800
-Message-ID: <b4516819-8cc7-46eb-b4ea-9ffd1a0c51e6@huawei.com>
-Date: Thu, 7 Mar 2024 21:56:37 +0800
+	s=arc-20240116; t=1709821473; c=relaxed/simple;
+	bh=xg1eOt0wglIkaWOSwgLrDSJpQ58XHwZw41RAzy80U4A=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=j9+YqdHhgn+Snn5C/AW4/CLRUWJmp7TcrH4u9xsO5bAortyPO09zFgnkBhItDklI1e8Fg7ZRRix0bJenr16u0ijYNEgkI90yyxdb2REHehNNL7KJs4IDSUHc6y459CjGzyXZvySMa+W5VtLoi145GMuvr2hUVcuQtic1bsJCd/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aKTV4t7B; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aKTV4t7B"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5682360e095so269047a12.1;
+        Thu, 07 Mar 2024 06:24:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709821470; x=1710426270; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yMrD5Wxs5PDkGXlVNDeOqSMgdbBP8Z7tpc4n9PJoZbA=;
+        b=aKTV4t7BIknIZvmH+S4QztIn1wAyhKXVolMSsYEYClnI/NaWO5gtO3k873ShQ0zxbZ
+         7bosmtFl6vIMyDJb7gLzIASKV6nGxlf9N9LWRjTgO0Bmha2ZrCnqxkLBKr1ZzH9+T3j8
+         fwxPre/BtAE01MzYN4d89tLG1Thfx99UXzaqY56jPrTgQoRK5zIXBqKEX3LXPcdOycsG
+         K95liKQkO3pz3h5iSDmt1kUj2j2g9gxN190vwHh4cH2OwXBgN1j4U91TDPA2LDRFcQtA
+         rgPDsPXTBs9DR8jjd8TxxGn9kKmQelNGgY4/D9NawJ8YZNSI7pVpbOL9ReGGm51Aofh5
+         3wfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709821470; x=1710426270;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yMrD5Wxs5PDkGXlVNDeOqSMgdbBP8Z7tpc4n9PJoZbA=;
+        b=LSZJ+zg9dyb1QKME6o9TwMF6ai6zOYTRf2ANmqdtVQSXyWb1/IRujUlcyyBcD7Zfax
+         I+nG/N+4p+/LJ7EJeQVzC8w8B5AVSUiYHepGi6GTH39sbeV6s/NQRpzLOxIWh4zCP6TQ
+         IqEv22dA3ZOG1h3IO56nBVusAFEAgfv5ETYkIB58bnqJIAw+hjOG/o/uQWNIpqKHmM/t
+         elVsNpIsUZ4MjoSNshW9GUPOnJyY1Qt9tYDgX0PXgdpDxfFl739MM41f5D7EanErEZTI
+         VoBtU8Snjy+mx6Hz7TGZTS5nFtRY22pyApC5oml3ki/RUdRRj3nJWY82N6+fuibRm18A
+         sixA==
+X-Forwarded-Encrypted: i=1; AJvYcCWfDi66S8nHPqo22NUh4OwlIjFfHTPARO3SpmZAr3QWUT7PgVu9k1T8u2DtmpYSh7vqP6Qz5MicR+Wrqm6Vhyb4bTieTeVP4aa+yOhYsyp0WuLs6u2hfHVw6AdGMarxPsJ04emW0grHiY+hLqiIe6+FxTTfbSjT2/hm
+X-Gm-Message-State: AOJu0YzxEsob8wgqsqbu/aNopwRLRmPtas6YzkC8ydUzT7GLdjn+QJok
+	eFuD/KBqCKiJiFust7pSWC0kZllMtvghhnBjvRyxpKQDcSttKrE2
+X-Google-Smtp-Source: AGHT+IF79HyHdzTafjL8+9TtPINyr42uAy7otPI6ux6UmL68GF21GqJYuOJCvMPYHkWDwpo0mgCzMw==
+X-Received: by 2002:a17:906:4818:b0:a45:2fc4:f25d with SMTP id w24-20020a170906481800b00a452fc4f25dmr8617282ejq.12.1709821469653;
+        Thu, 07 Mar 2024 06:24:29 -0800 (PST)
+Received: from pc-de-david.. ([2a04:cec0:102e:977f:c5e6:aa78:de82:531])
+        by smtp.gmail.com with ESMTPSA id me12-20020a170906aecc00b00a45af5df0f3sm2371653ejb.112.2024.03.07.06.24.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Mar 2024 06:24:29 -0800 (PST)
+From: David Gouarin <dgouarin@gmail.com>
+To: 
+Cc: david.gouarin@thalesgroup.com,
+	David Gouarin <dgouarin@gmail.com>,
+	Madalin Bucur <madalin.bucur@nxp.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Camelia Groza <camelia.groza@nxp.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH net v2] dpaa_eth: fix XDP queue index
+Date: Thu,  7 Mar 2024 15:24:02 +0100
+Message-Id: <20240307142402.906681-1-dgouarin@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <ZeiNxaq3jzloO9l6@boxer>
+References: <ZeiNxaq3jzloO9l6@boxer>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 1/2] xdp, bonding: Fix feature flags when there are no
- slave devs anymore
-Content-Language: en-US
-To: Daniel Borkmann <daniel@iogearbox.net>
-CC: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-	<magnus.karlsson@intel.com>, <prbatra.mail@gmail.com>, <toke@redhat.com>,
-	<kuba@kernel.org>
-References: <20240305090829.17131-1-daniel@iogearbox.net>
- <170968502778.5704.4519517843918140180.git-patchwork-notify@kernel.org>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <170968502778.5704.4519517843918140180.git-patchwork-notify@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemd100009.china.huawei.com (7.221.188.135)
+Content-Transfer-Encoding: 8bit
 
+Make it possible to bind a XDP socket to a queue id.
+The DPAA FQ Id was passed to the XDP program in the XDP packet metadata
+which made it unusable with bpf_map_redirect.
+Instead of the DPAA FQ Id, initialise the XDP rx queue with the channel id.
 
-On 2024/3/6 8:30, patchwork-bot+netdevbpf@kernel.org wrote:
-> Hello:
-> 
-> This series was applied to bpf/bpf.git (master)
-> by Alexei Starovoitov <ast@kernel.org>:
-> 
-> On Tue,  5 Mar 2024 10:08:28 +0100 you wrote:
->> Commit 9b0ed890ac2a ("bonding: do not report NETDEV_XDP_ACT_XSK_ZEROCOPY")
->> changed the driver from reporting everything as supported before a device
->> was bonded into having the driver report that no XDP feature is supported
->> until a real device is bonded as it seems to be more truthful given
->> eventually real underlying devices decide what XDP features are supported.
->>
->> The change however did not take into account when all slave devices get
->> removed from the bond device. In this case after 9b0ed890ac2a, the driver
->> keeps reporting a feature mask of 0x77, that is, NETDEV_XDP_ACT_MASK &
->> ~NETDEV_XDP_ACT_XSK_ZEROCOPY whereas it should have reported a feature
->> mask of 0.
->>
->> [...]
-> 
-> Here is the summary with links:
->    - [bpf,1/2] xdp, bonding: Fix feature flags when there are no slave devs anymore
->      https://git.kernel.org/bpf/bpf/c/f267f2628150
->    - [bpf,2/2] selftests/bpf: Fix up xdp bonding test wrt feature flags
->      https://git.kernel.org/bpf/bpf/c/0bfc0336e134
+Fixes: d57e57d0cd04 ("dpaa_eth: add XDP_TX support")
 
-I had encountered the same issue during riscv bpf selftest regression. 
-Happy to see this fixes.
+Signed-off-by: David Gouarin <dgouarin@gmail.com>
+---
+v2: add Fixes: in description
+---
+ drivers/net/ethernet/freescale/dpaa/dpaa_eth.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> You are awesome, thank you!
+diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+index dcbc598b11c6..988dc9237368 100644
+--- a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
++++ b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+@@ -1154,7 +1154,7 @@ static int dpaa_fq_init(struct dpaa_fq *dpaa_fq, bool td_enable)
+ 	if (dpaa_fq->fq_type == FQ_TYPE_RX_DEFAULT ||
+ 	    dpaa_fq->fq_type == FQ_TYPE_RX_PCD) {
+ 		err = xdp_rxq_info_reg(&dpaa_fq->xdp_rxq, dpaa_fq->net_dev,
+-				       dpaa_fq->fqid, 0);
++				       dpaa_fq->channel, 0);
+ 		if (err) {
+ 			dev_err(dev, "xdp_rxq_info_reg() = %d\n", err);
+ 			return err;
+-- 
+2.34.1
+
