@@ -1,36 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 663931CD2B;
-	Thu,  7 Mar 2024 07:14:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE573D6B;
+	Thu,  7 Mar 2024 07:23:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709795678; cv=none; b=K9bsAhpNCM4tLd7R62/7sDR5ZQ/8hmPBLhRE+hJijAxU7+iJBrm425CZgr+d0j7+zBY9Z/pdQCMGR94BL1RN81GFC83VQHptsA0ifNJGq9HLRMKjlvpQZwNH3LuhYBdBayF936+DBkuMlAIPrssCyAfKFVPsupxT414LxZBkSzo=
+	t=1709796184; cv=none; b=SXHEWzmJC9T5f+uOYTAZfs1fmIk3emuFy2POLb27dFJU+fgM0mCXMLEwg0pSyIHHGKkLafbZ7lKQFtPZd5c2Al79UCGjnV4ju9hnuv3VdeUPYRlHCyiV0EF2qCQXCWuNqE6BeONMCvtVzOdll7M8OPIjsbe1FutTV7WpuHG3jj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709795678; c=relaxed/simple;
-	bh=XrqHaXGwAuBpilTxp8gnF0TssLrIh3Pzrsw4cPIBHKo=;
+	s=arc-20240116; t=1709796184; c=relaxed/simple;
+	bh=zDK4jwPUVS3K65SBI2uDrKWUgERbKeIXVQOlOCTCKjU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=muRn+6GqwL+sCpiDjOZfM4G4bO9zcTZIu8alUtFwoNdo7yZnc69xFIcqS354OQLEB4wQCc3BU385F1brVrDqOsGx7qMOLUWHIsf5Jp2h6god620Y9UDxoqhf51dmF2mWMxgZvrJWm+qrbr0MaUpBa0gdOzduvD7PV0JK87mf3xE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XA23YDnO; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=taw+RBDkfKV9pmV1qb5L8FVERylU2rLwD2E3H5eR6/1zKwGMll2Reu3Ef5iLZIIR1rg1BTnRXwIAOyUasLIXZkJ0rvOzLus0NL2P+iptuv3ht+nUIldOESeLZrnsSLlcMcG8vYZrfKjjFTXg1XSNfwTjKNRJokrlzGTfVi4HuVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nLlingeY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XA23YDnO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92A3AC433C7;
-	Thu,  7 Mar 2024 07:14:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nLlingeY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D43E0C433F1;
+	Thu,  7 Mar 2024 07:22:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709795677;
-	bh=XrqHaXGwAuBpilTxp8gnF0TssLrIh3Pzrsw4cPIBHKo=;
+	s=k20201202; t=1709796183;
+	bh=zDK4jwPUVS3K65SBI2uDrKWUgERbKeIXVQOlOCTCKjU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XA23YDnORCr6xDhDoeiBEwyhLiTwSpRzvg+c5WYhzs2+2pT6W/GJuGCa1xphBKrH9
-	 RBscEG6PkG8jCCJYSTfYhiyCWqaDVLeUzrV/cfruVHsunC9KqYJoFDZRvCGIH5dD3u
-	 +5I9znWoPTRi1Xzol74q49RBos1teuk6efvsPE3ingU4xbOdNd9FILtA5MRfna79bi
-	 27mz2D5mRd0p+qcLCemAiUSyY0xZo7Fdzo9Uln2wq1INkTCvfh+QBRfczijXG9LVo5
-	 b2rnJYbCdH5HYIDF0XFB9K68Yj5T6xY/AFLTr0QLAgA+dCLF0T11qS9coi06ZzTlxE
-	 R6/G0QNnlkBGw==
-Date: Thu, 7 Mar 2024 09:13:41 +0200
+	b=nLlingeY5dSoTNCuzLFH4Pi+5vHniY8+2eVCyy/3AXVHLinu0QNWXfJS5FNb8vNKn
+	 5/P4NtytF4nBIIKX7G3JJHKiZZFzmz+s1J+sYGsXaeJz6c2sxKG+YchPOd3b7/knxs
+	 5qZdGm5zOiWC8+UxQ6uAUmBKSGJHivUSylJ/HhVerxvZuQqVqaqTWECsLE7UFaQ4YQ
+	 3Bow3DPCmAmGcRiSJP8WY7Y4zGgpqdMXGR/piKgXvLCQNJiaPV1rnnwJf25scWOEIW
+	 4tRIjgUAB1zi09L7A/UAwNYxKUoEnHugdhWrxakDk8BUZCo/cuy5MbJxj0cxXK/+U1
+	 FCB3QMm0vmmpQ==
+Date: Thu, 7 Mar 2024 09:22:07 +0200
 From: Mike Rapoport <rppt@kernel.org>
 To: Calvin Owens <jcalvinowens@gmail.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Song Liu <song@kernel.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Steven Rostedt <rostedt@goodmis.org>,
@@ -42,12 +41,10 @@ Cc: Luis Chamberlain <mcgrof@kernel.org>, Song Liu <song@kernel.org>,
 	David S Miller <davem@davemloft.net>,
 	Thomas Gleixner <tglx@linutronix.de>, bpf@vger.kernel.org,
 	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC][PATCH 0/4] Make bpf_jit and kprobes work with
- CONFIG_MODULES=n
-Message-ID: <ZelpJS4FqDTiwbfW@kernel.org>
+Subject: Re: [RFC][PATCH 3/4] kprobes: Allow kprobes with CONFIG_MODULES=n
+Message-ID: <ZelrH2hiUmaomDv2@kernel.org>
 References: <cover.1709676663.git.jcalvinowens@gmail.com>
- <ZejhcP_r5QJZcS6j@bombadil.infradead.org>
- <Zej66vQInnDYgpNy@gmail.com>
+ <2af01251ca21d79fa29092505d192f1f1b746cff.1709676663.git.jcalvinowens@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,58 +53,71 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zej66vQInnDYgpNy@gmail.com>
+In-Reply-To: <2af01251ca21d79fa29092505d192f1f1b746cff.1709676663.git.jcalvinowens@gmail.com>
 
-Hi Calvin,
-
-On Wed, Mar 06, 2024 at 03:23:22PM -0800, Calvin Owens wrote:
-> On Wednesday 03/06 at 13:34 -0800, Luis Chamberlain wrote:
-> > On Wed, Mar 06, 2024 at 12:05:07PM -0800, Calvin Owens wrote:
-> > > Hello all,
-> > > 
-> > > This patchset makes it possible to use bpftrace with kprobes on kernels
-> > > built without loadable module support.
-> > 
-> > This is a step in the right direction for another reason: clearly the
-> > module_alloc() is not about modules, and we have special reasons for it
-> > now beyond modules. The effort to share a generalize a huge page for
-> > these things is also another reason for some of this but that is more
-> > long term.
-> > 
-> > I'm all for minor changes here so to avoid regressions but it seems a
-> > rename is in order -- if we're going to all this might as well do it
-> > now. And for that I'd just like to ask you paint the bikeshed with
-> > Song Liu as he's been the one slowly making way to help us get there
-> > with the "module: replace module_layout with module_memory",
-> > and Mike Rapoport as he's had some follow up attempts [0]. As I see it,
-> > the EXECMEM stuff would be what we use instead then. Mike kept the
-> > module_alloc() and the execmem was just a wrapper but your move of the
-> > arch stuff makes sense as well and I think would complement his series
-> > nicely.
-
-Actually I've dropped module_alloc() in favor of execmem_alloc() ;-)
- 
-> I apologize for missing that. I think these are the four most recent
-> versions of the different series referenced from that LWN link:
+On Wed, Mar 06, 2024 at 12:05:10PM -0800, Calvin Owens wrote:
+> If something like this is merged down the road, it can go in at leisure
+> once the module_alloc change is in: it's a one-way dependency.
 > 
->   a) https://lore.kernel.org/all/20230918072955.2507221-1-rppt@kernel.org/
->   b) https://lore.kernel.org/all/20230526051529.3387103-1-song@kernel.org/
->   c) https://lore.kernel.org/all/20221107223921.3451913-1-song@kernel.org/
->   d) https://lore.kernel.org/all/20201120202426.18009-1-rick.p.edgecombe@intel.com/
-> 
-> Song and Mike, please correct me if I'm wrong, but I think what I've
-> done here (see [1], sorry for not adding you initially) is compatible
-> with everything both of you have recently proposed above. How do you
-> feel about this as a first step?
+> Signed-off-by: Calvin Owens <jcalvinowens@gmail.com>
+> ---
+>  arch/Kconfig                |  2 +-
+>  kernel/kprobes.c            | 22 ++++++++++++++++++++++
+>  kernel/trace/trace_kprobe.c | 11 +++++++++++
+>  3 files changed, 34 insertions(+), 1 deletion(-)
 
-No objections from me.
+When I did this in my last execmem posting, I think I've got slightly less
+ugly ifdery, you may want to take a look at that:
 
-> For naming, execmem_alloc() seems reasonable to me? I have no strong
-> feelings at all, I'll just use that going forward unless somebody else
-> expresses an opinion.
-
-I like execmem_alloc() and CONFIG_EXECMEM.
+https://lore.kernel.org/all/20230918072955.2507221-13-rppt@kernel.org
  
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index cfc24ced16dd..e60ce984d095 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -52,8 +52,8 @@ config GENERIC_ENTRY
+>  
+>  config KPROBES
+>  	bool "Kprobes"
+> -	depends on MODULES
+>  	depends on HAVE_KPROBES
+> +	select MODULE_ALLOC
+>  	select KALLSYMS
+>  	select TASKS_RCU if PREEMPTION
+>  	help
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index 9d9095e81792..194270e17d57 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -1556,8 +1556,12 @@ static bool is_cfi_preamble_symbol(unsigned long addr)
+>  		str_has_prefix("__pfx_", symbuf);
+>  }
+>  
+> +#if IS_ENABLED(CONFIG_MODULES)
+>  static int check_kprobe_address_safe(struct kprobe *p,
+>  				     struct module **probed_mod)
+> +#else
+> +static int check_kprobe_address_safe(struct kprobe *p)
+> +#endif
+>  {
+>  	int ret;
+>  
+> @@ -1580,6 +1584,7 @@ static int check_kprobe_address_safe(struct kprobe *p,
+>  		goto out;
+>  	}
+>  
+> +#if IS_ENABLED(CONFIG_MODULES)
+
+Plain #ifdef will do here and below. IS_ENABLED is for usage withing the
+code, like
+
+	if (IS_ENABLED(CONFIG_MODULES))
+		;
+
+>  	/* Check if 'p' is probing a module. */
+>  	*probed_mod = __module_text_address((unsigned long) p->addr);
+>  	if (*probed_mod) {
+
 -- 
 Sincerely yours,
 Mike.
