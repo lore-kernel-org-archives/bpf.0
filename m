@@ -1,56 +1,56 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30DD2E546
-	for <bpf@vger.kernel.org>; Thu,  7 Mar 2024 03:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE2BE554
+	for <bpf@vger.kernel.org>; Thu,  7 Mar 2024 03:12:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709781163; cv=none; b=EfzxLdTNeD34bTjXV4/rIRaTkhqRQrGP9xa2grtiTmDEw3vnRk3QhpnZ5QH8cUwdVBm2P92hkQ941fQ2pDqwLuJrGkUPe/4OI3N2uh0qA2O92WGiab2HVew+MzmTI0qQYPjqDv/ZT3ZmuSNuc/8caifUbnzi4zPOiO7FR4Mtn7c=
+	t=1709781167; cv=none; b=OPF3MvE+Vg/dMIGcfdOcbNiCuRT1/QUIbWxoldzOz79KbSLqHji8NOrm2DkNzBIrDcP0HLvDWzKEZ1pCWd3mmqImSu2coC67BWQNP6waotK3zbUUUrKNj5HOcaLWlSuy8zMKxsIpz5oW/L7Mwbab/i9pH8EzhFsMzD4WmnY5UFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709781163; c=relaxed/simple;
-	bh=XnlsoQFXLM0Vve6a0zyaM47X1FEn0VJgXz3p8HUxRnE=;
+	s=arc-20240116; t=1709781167; c=relaxed/simple;
+	bh=8u5FwGZOQvGWs13SGw8hCJZUOeF4oULonqwyw5IBvts=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=RN1DYFuPhGgY9QxWUL3BCWjRlMCXyl13SkdStxDkmLRdSLu3ByutpOsJKTcCMdmBi5KDf88NiVWTDQVmht7Zc4iR63lyyrZP5JpqnUOiUlBS1sV0JycbcwMqbCGSAKRrzjsZD4II/0HAawhBBH9rKBS4DiI+TwmC+ISCyNoB5OE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LvuKv3Af; arc=none smtp.client-ip=209.85.210.177
+	 MIME-Version; b=evlK2KfxW3kDlRn8xkcDVxDsbKhe+Nlc4Fqr1GNBZPLjhBQHRwagLE/3GOMzuQfofqgPfMOVXJuKsTjq+NCydZbXLcoyO4KGG6UkOI2x1djes4KSCJ7t0WAe0J3/2pqR/bx6h9PZRNvMV4d/0atpOcht12oPG+VwEBaRRVbLi7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KlbDHL8P; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LvuKv3Af"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6e46dcd8feaso339296b3a.2
-        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 19:12:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KlbDHL8P"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-5d8b276979aso315274a12.2
+        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 19:12:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709781161; x=1710385961; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709781165; x=1710385965; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9QXi2fGy0WO2Juk0nELFlUaJBHD5vu1E3qVS4jPD92Q=;
-        b=LvuKv3Af6DO0uiwjBwy3QMil2kvhtcJo2oxmwl0OKM2X7w/n3zQqMi7ACvES+4eatG
-         6Mn1Ss5/SG6bbY0XWgQZjkBjjfI4av4ObxViAj0LR+Ik4B6VQBY8krEeLhrITgRbM2Tm
-         YrI95FU2cfpaznTLAlowEJws2s4N7kzvj87ihlc6bltNsQ6Pl0fwbXkUU47Lnyc+WUic
-         Be2WE90LNkXbI2xH6a3fBKuFdyLDPWA5ueWHtXn+fZi7VDvuV9CVLfpkcxURBsBs9ruW
-         Zk8n7l32knbFxAd0iqjV2Ms7E/E+hcSkxE3yRkAASufGQGjIGwKbVU4EOdZlfAmiGPYo
-         t15g==
+        bh=6f6GYPJ364QpWqK3mIvywnvJQ658PEM/p0C7UMLLVdE=;
+        b=KlbDHL8P4aq7fpZbLmGoaf93+E/wnBHp7LgdCBTu6lHt8fjVfjPjvoGbBGZhGFjnea
+         sN43n0keRtcgZr4+6EWIc9nRov5XY2qYJ1raHZgLxbG/+RTkYPEDGHSHZhekQPuy7BNP
+         Fm84TBKEcERwZFb/oBS0GV4N4wAp0e8bOsirnVfkU95M/Irq+JrXfjZ/X9I6l+Ha1YHn
+         HZHgJBt4cydHVznUO+4LcKgSorS50nRUKEBbijHnp89iFqge7bXMNT5NC5ormTmmoPOS
+         zbikMsPFhJxVEEFrkB4pXvzg+vKzvuHAxivhpd8RZjms8OEbeEtJT6hf+Xd3VmqL9EBb
+         2RzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709781161; x=1710385961;
+        d=1e100.net; s=20230601; t=1709781165; x=1710385965;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9QXi2fGy0WO2Juk0nELFlUaJBHD5vu1E3qVS4jPD92Q=;
-        b=VlT4mIaxMNV4U2pnqdsJcVxMcBGJdVuTFnbH5v9kGkduXGmiYWWeR3ZjhN4OG+uj7X
-         wysP3SsZVvaexitv4Vv9ydf53mXrR3BfBa03BuEFXFDKgNMPZOLjkDim0spmYhY/jCLZ
-         uGPgkPWNYoCGANDJQJXzxFlpVdiZze9a+pLZg6/5Ot4vgM7Pz58N9pVyTLEe7i3b2BZB
-         6i0RxOiraadHghKeK2TldR5MDb/Jm/3beLNnsYkFDb0waWsKgiOW1N8lGj32pQASe32/
-         VD/fckXlW8/Ei6zoRCjdjXJ1tNsR4HhLX0jC+vIbZeyU4QL2J0X2pKlXQSb49iYxaVTt
-         XskA==
-X-Gm-Message-State: AOJu0YyJjql1JTsfryGu+B3UYnaTI8kSiWsKSWR0sE336rlcfqS2LD6p
-	4HlBfj9blHaa3ge9wwUC5WX+770li56Cxc5dfvaDpN6cNm1NDuUFD2Ov+JT2
-X-Google-Smtp-Source: AGHT+IHMGOhk1GfbygH0Qr3N0moMlk1VqsYYl2kuzPDD4e1aETSEADSJHw+dFZ452WQMtUUScu57YA==
-X-Received: by 2002:a05:6a00:4f96:b0:6e5:3b8e:bb6b with SMTP id ld22-20020a056a004f9600b006e53b8ebb6bmr18698706pfb.7.1709781160775;
-        Wed, 06 Mar 2024 19:12:40 -0800 (PST)
+        bh=6f6GYPJ364QpWqK3mIvywnvJQ658PEM/p0C7UMLLVdE=;
+        b=APiunSeVhsl/ARffxwHJc0ViLzCyi2U1ie3qLAKPfgQgUOvkUbIcqqC82Jeqskb84s
+         drsyvroM/Q3ZOKxFJsC3byMOlsyuj7xhsL3/E5m4S5ZLsqMtLwY12UP0Lr46rZPq7//y
+         XzfqcsyRydKNJSIWK0dpY9JHCijCDp87/ojUB85fEl5RqY56ZdM+bXWupnz/05Q/BYpB
+         AnAfDcHVl3dueCgT74qMEBg3dPRswuGrY/SRKUv3nMTTerR6UA4v+Pyi8FqJSr14dy8y
+         deaXuk0VE2CMZPzY8k1YPhNDeV9hRS9M+GjJhX08OXm7+pvcsB3V0fcUdhn6a6onZLsa
+         2nsg==
+X-Gm-Message-State: AOJu0Yw6AO90H6BmK0b+eeLCkJuXXRlhf0eRFIVtXRmAu0NszI5jkyPS
+	trNPMvqfbNc7b/6w4nujy7bFHefg+MYp0oFX3fhHc1HNS3myXHfAS6stlglJ
+X-Google-Smtp-Source: AGHT+IGEdQLU7AekXaYHt/M4zx4G9I9NyuyA+kUeaRbBsIixDI2dAELIbyrcKtfsrQiv5EjR7PbEjg==
+X-Received: by 2002:a05:6a20:e10e:b0:1a1:6a75:1442 with SMTP id kr14-20020a056a20e10e00b001a16a751442mr3048769pzb.11.1709781164771;
+        Wed, 06 Mar 2024 19:12:44 -0800 (PST)
 Received: from localhost.localdomain ([2620:10d:c090:400::5:dd40])
-        by smtp.gmail.com with ESMTPSA id c9-20020aa78c09000000b006e56da42e24sm11464986pfd.158.2024.03.06.19.12.39
+        by smtp.gmail.com with ESMTPSA id q10-20020a170902daca00b001dd3ea391f4sm2001199plx.177.2024.03.06.19.12.43
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 06 Mar 2024 19:12:40 -0800 (PST)
+        Wed, 06 Mar 2024 19:12:44 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -59,9 +59,9 @@ Cc: daniel@iogearbox.net,
 	memxor@gmail.com,
 	eddyz87@gmail.com,
 	kernel-team@fb.com
-Subject: [PATCH v4 bpf-next 2/6] bpf: Recognize '__map' suffix in kfunc arguments
-Date: Wed,  6 Mar 2024 19:12:24 -0800
-Message-Id: <20240307031228.42896-3-alexei.starovoitov@gmail.com>
+Subject: [PATCH v4 bpf-next 3/6] bpf: Plumb get_unmapped_area() callback into bpf_map_ops
+Date: Wed,  6 Mar 2024 19:12:25 -0800
+Message-Id: <20240307031228.42896-4-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.39.3 (Apple Git-145)
 In-Reply-To: <20240307031228.42896-1-alexei.starovoitov@gmail.com>
 References: <20240307031228.42896-1-alexei.starovoitov@gmail.com>
@@ -75,82 +75,64 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Recognize 'void *p__map' kfunc argument as 'struct bpf_map *p__map'.
-It allows kfunc to have 'void *' argument for maps, since bpf progs
-will call them as:
-struct {
-        __uint(type, BPF_MAP_TYPE_ARENA);
-	...
-} arena SEC(".maps");
-
-bpf_kfunc_with_map(... &arena ...);
-
-Underneath libbpf will load CONST_PTR_TO_MAP into the register via ld_imm64
-insn. If kfunc was defined with 'struct bpf_map *' it would pass the
-verifier as well, but bpf prog would need to type cast the argument
-(void *)&arena, which is not clean.
+Subsequent patches introduce bpf_arena that imposes special alignment
+requirements on address selection.
 
 Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ include/linux/bpf.h  |  3 +++
+ kernel/bpf/syscall.c | 16 ++++++++++++++++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9c2a36b1373b..bf084c693507 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10752,6 +10752,11 @@ static bool is_kfunc_arg_ignore(const struct btf *btf, const struct btf_param *a
- 	return btf_param_match_suffix(btf, arg, "__ign");
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 785660810e6a..95e07673cdc1 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -139,6 +139,9 @@ struct bpf_map_ops {
+ 	int (*map_mmap)(struct bpf_map *map, struct vm_area_struct *vma);
+ 	__poll_t (*map_poll)(struct bpf_map *map, struct file *filp,
+ 			     struct poll_table_struct *pts);
++	unsigned long (*map_get_unmapped_area)(struct file *filep, unsigned long addr,
++					       unsigned long len, unsigned long pgoff,
++					       unsigned long flags);
+ 
+ 	/* Functions called by bpf_local_storage maps */
+ 	int (*map_local_storage_charge)(struct bpf_local_storage_map *smap,
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index b2750b79ac80..f63f4da4db5e 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -937,6 +937,21 @@ static __poll_t bpf_map_poll(struct file *filp, struct poll_table_struct *pts)
+ 	return EPOLLERR;
  }
  
-+static bool is_kfunc_arg_map(const struct btf *btf, const struct btf_param *arg)
++static unsigned long bpf_get_unmapped_area(struct file *filp, unsigned long addr,
++					   unsigned long len, unsigned long pgoff,
++					   unsigned long flags)
 +{
-+	return btf_param_match_suffix(btf, arg, "__map");
++	struct bpf_map *map = filp->private_data;
++
++	if (map->ops->map_get_unmapped_area)
++		return map->ops->map_get_unmapped_area(filp, addr, len, pgoff, flags);
++#ifdef CONFIG_MMU
++	return current->mm->get_unmapped_area(filp, addr, len, pgoff, flags);
++#else
++	return addr;
++#endif
 +}
 +
- static bool is_kfunc_arg_alloc_obj(const struct btf *btf, const struct btf_param *arg)
- {
- 	return btf_param_match_suffix(btf, arg, "__alloc");
-@@ -10921,6 +10926,7 @@ enum kfunc_ptr_arg_type {
- 	KF_ARG_PTR_TO_RB_NODE,
- 	KF_ARG_PTR_TO_NULL,
- 	KF_ARG_PTR_TO_CONST_STR,
-+	KF_ARG_PTR_TO_MAP,
+ const struct file_operations bpf_map_fops = {
+ #ifdef CONFIG_PROC_FS
+ 	.show_fdinfo	= bpf_map_show_fdinfo,
+@@ -946,6 +961,7 @@ const struct file_operations bpf_map_fops = {
+ 	.write		= bpf_dummy_write,
+ 	.mmap		= bpf_map_mmap,
+ 	.poll		= bpf_map_poll,
++	.get_unmapped_area = bpf_get_unmapped_area,
  };
  
- enum special_kfunc_type {
-@@ -11074,6 +11080,9 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *env,
- 	if (is_kfunc_arg_const_str(meta->btf, &args[argno]))
- 		return KF_ARG_PTR_TO_CONST_STR;
- 
-+	if (is_kfunc_arg_map(meta->btf, &args[argno]))
-+		return KF_ARG_PTR_TO_MAP;
-+
- 	if ((base_type(reg->type) == PTR_TO_BTF_ID || reg2btf_ids[base_type(reg->type)])) {
- 		if (!btf_type_is_struct(ref_t)) {
- 			verbose(env, "kernel function %s args#%d pointer type %s %s is not supported\n",
-@@ -11674,6 +11683,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 		switch (kf_arg_type) {
- 		case KF_ARG_PTR_TO_NULL:
- 			continue;
-+		case KF_ARG_PTR_TO_MAP:
- 		case KF_ARG_PTR_TO_ALLOC_BTF_ID:
- 		case KF_ARG_PTR_TO_BTF_ID:
- 			if (!is_kfunc_trusted_args(meta) && !is_kfunc_rcu(meta))
-@@ -11890,6 +11900,12 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 			if (ret < 0)
- 				return ret;
- 			break;
-+		case KF_ARG_PTR_TO_MAP:
-+			/* If argument has '__map' suffix expect 'struct bpf_map *' */
-+			ref_id = *reg2btf_ids[CONST_PTR_TO_MAP];
-+			ref_t = btf_type_by_id(btf_vmlinux, ref_id);
-+			ref_tname = btf_name_by_offset(btf, ref_t->name_off);
-+			fallthrough;
- 		case KF_ARG_PTR_TO_BTF_ID:
- 			/* Only base_type is checked, further checks are done here */
- 			if ((base_type(reg->type) != PTR_TO_BTF_ID ||
+ int bpf_map_new_fd(struct bpf_map *map, int flags)
 -- 
 2.43.0
 
