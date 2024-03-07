@@ -1,173 +1,158 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39861130AF1;
-	Thu,  7 Mar 2024 17:31:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB7612FF6B;
+	Thu,  7 Mar 2024 17:42:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709832706; cv=none; b=RRnSRX1waA97wAXiTMwUvE7ST/2XdbaQq2u7kSnEBfmhjbp/X20ZUm6oQTvTi7ml22mI5DTKHEFM0W4tWhwHeYXI6aFQLMsz5l4NyzSor1O0+8VxO9URrpjJmlAKM4e99tI30deVh84bOkzTcM35nz8OYYBrZDDdV6ZLKLQhaRY=
+	t=1709833345; cv=none; b=H0mr2ZFlBCcpJkGZtkygwiIKYxNYbWzK2FM1lZ77CfiYaSabXU6bxnD14Qc5cToxAUQHwZaZbOUn09DG6M3JBcIf7PEpG2SBy6ySXfbeb2WLTB+svDwnj9SiDl80zYwf8qZ6Ad/up0h2unSGLLRFD8qBEdniZh7/T151b3pBbAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709832706; c=relaxed/simple;
-	bh=Pw1wjnfdkstP4sMjq/SqSIfAkxHM4ROpPhW1adlHMZI=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=MDWyNvEjUmqvPxv7Uaq5B2Vz3L76Z4uIx5LL6iFzhA/P/jST/DGfDUVj2d6oVCo463fCad9k7jifgRkBum7kL7BaJaVM1MTlACkNz1cQofWGYkzaXe9vF/XOYeaJVUTKxgwyzyrH/xV1fECr/YkISD2KrQE3DQ2Jsz7ubFuZcw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=JXWx3fcS; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1709833345; c=relaxed/simple;
+	bh=Bvba2DtZz+jf7Ja4Z76FOUCxSbokk36ji0l3Y1c0nrI=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=LpxHrwJ36GVSGZWcH/rLkpkpFa/otvvnWb5pn7WbpfnlReIdjTEUIMr9ODouSYZhhMN4jHGrm9pJj9Yx7tbgMWbQGfvTC+XpFzXsmGuIqCLol1UHhoXag16itWm9PCBlTiZdVRkiPRnzhpivqZrSy684kQRQXkUYUy2fEr6K6p4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QV6YbjXG; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="JXWx3fcS"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=6GKHuULFobI/veCzO71hJuFZMvHW2DBWIwJthjIFZt0=; b=JXWx3fcSvqEd2usjf0tQN1DMCi
-	vSO6xR4WJptmR2KKeHQgwZrwN8Kcxo2SsAwQYU3GqG1uUhHegfI3SUUIcj3xuPPVcnq4qvvd9Z59E
-	QEXIJexwsh/xmTHCzcD+vFT4djVEoZUoeVEOEWDbhnGjDhNOexCanK8oqtsXqubWrWGy58R7eCA5a
-	KMkwOmTd6RBHYUW7MOdrUMkaxa0IBDN9EMKZ1xegBgTvPlxJM2R9eO51SJIrfnnNNvBIZE0Kisxb1
-	7MM1fiEoUnsAibMICY+p3wL4QPlBDDx84amzwvLXj1OsBgSDB7e/8IGpBSO57JhZs1rwQ14crw6Zx
-	jCusX5Yw==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1riHZL-000J8N-R9; Thu, 07 Mar 2024 18:30:11 +0100
-Received: from [77.58.94.13] (helo=localhost.localdomain)
-	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1riHZI-0034Od-1I;
-	Thu, 07 Mar 2024 18:30:08 +0100
-Subject: Re: [PATCH bpf-next RESEND v2 1/2] bpf: Take return from
- set_memory_ro() into account with bpf_prog_lock_ro()
-To: Christophe Leroy <christophe.leroy@csgroup.eu>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Russell King <linux@armlinux.org.uk>,
- Puranjay Mohan <puranjay12@gmail.com>, Tiezhu Yang <yangtiezhu@loongson.cn>,
- Hengqi Chen <hengqi.chen@gmail.com>, Huacai Chen <chenhuacai@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>,
- Johan Almbladh <johan.almbladh@anyfinetworks.com>,
- Paul Burton <paulburton@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Ilya Leoshkevich <iii@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, "David S. Miller"
- <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
- Wang YanQing <udknight@gmail.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>
-Cc: bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
- netdev@vger.kernel.org,
- "linux-hardening @ vger . kernel . org" <linux-hardening@vger.kernel.org>,
- Kees Cook <keescook@chromium.org>
-References: <8f3b3823cce2177e5912ff5f2f11381a16db07db.1709279661.git.christophe.leroy@csgroup.eu>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <093da237-50c1-5898-1637-7a9a84e1076c@iogearbox.net>
-Date: Thu, 7 Mar 2024 18:30:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QV6YbjXG"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-5cfd95130c6so848190a12.1;
+        Thu, 07 Mar 2024 09:42:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709833344; x=1710438144; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=GNPv2vcny770JugCU5vEv7PYXpIlGF138/B6fZ0069A=;
+        b=QV6YbjXGomqjNOhv0EMOy27ZXJ9UhtCU6r7Q41Cc55D1I0ltoQklmUJ0M9PoNOfvsK
+         PeOhXJRkITbhPqEDzwlp7FrXyuBURPuxXhxKbAkWGcc4VirSSXHnbuGrt9IfwptY7YJq
+         qmjrUa49Or8AlblnGfMnfyavYHIDJZTNYQ7yDkWr5rvHAuxuLghJOTzh/pWhAxveMi9R
+         pU1ipdUI7pX1Ygw7WVbke7+v7+ArBm0tb53jGzqBK3tmtHr+YNXpcqiWPqGgAXTdU4Yt
+         XeknqIgtgWKbiNdtVAnhcixhvKnbaH09LetMi5ceMhvyWuJF+TpL71TLl6YabcSQ9O85
+         qVqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709833344; x=1710438144;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GNPv2vcny770JugCU5vEv7PYXpIlGF138/B6fZ0069A=;
+        b=uicmOP7zmiDkCWIjs4g14WQ6diCAjO80yCxqJf8QhO0r+OHzkNSyHcpa1T06hN8B5I
+         yz289uSVXCahWb6216WXjiGelO5hmONJ1uUqbCCQR8F3FAtdUlMGGU0mZzVPCBQORW+3
+         mkx4b2cT919yZmClSeKFyyDYEUKkU2EvG4lsWW9Ltuq6RDPz0dTPHTE7gpSy2NUotGOl
+         hzgcwKMbJUNvx/NDJmMOvN84Svu7mUyEJ2dG6Y7/UnzydoR4hXLqG2MFgQFpZPLeMTS4
+         YEXb5ntd5uQQ/7UP9xHgL0bXSGo5aHLU7XbVjlJAjnOpX6dBjcVTjI9krlo8AWXSikfe
+         QEsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUACkY6lEnJsKvolcuSAITvH+0aIXfcZ0RiinIRm2DF4+6aey32xdBo+yZ171cYhjT+ued19vM7iPCOtgRg+CsgCDYA4y0lhv9sW26dU/Vy2BKLcMPrTF2aXBg5MTFS
+X-Gm-Message-State: AOJu0Yy6nOvILjmPC+RxT8D2Fvx6GxI+WwLgNoF13E5rCRkGnbN4C3Gn
+	XBN2df/7rkmipvEROx51BeRkVktoVyHlEN5V4jM3ZjRqtV3RjyWAfcU7G7GFciT7SZcW8N5zpDJ
+	Lrog0WDCeuy7pTJKgrVrHlKdLNOVle11jAPKWOCmU
+X-Google-Smtp-Source: AGHT+IHNfRuXjverMdTwkkrAgRMRadVy4zksg6l+DjOqSczT1b1ZK9UlbLpR4hkPIznRqnBltkEc6DRl9eMeHfy/6XE=
+X-Received: by 2002:a05:6a20:47d8:b0:1a1:3042:8ee4 with SMTP id
+ ey24-20020a056a2047d800b001a130428ee4mr6755151pzb.42.1709833343587; Thu, 07
+ Mar 2024 09:42:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <8f3b3823cce2177e5912ff5f2f11381a16db07db.1709279661.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27207/Thu Mar  7 10:27:12 2024)
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 7 Mar 2024 18:42:11 +0100
+Message-ID: <CANiq72ka4rir+RTN2FQoT=Vvprp_Ao-CvoYEkSNqtSY+RZj+AA@mail.gmail.com>
+Subject: vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
+To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, alexei.starovoitov@gmail.com, 
+	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 3/1/24 8:57 AM, Christophe Leroy wrote:
-> set_memory_ro() can fail, leaving memory unprotected.
-> 
-> Check its return and take it into account as an error.
-> 
-> Link: https://github.com/KSPP/linux/issues/7
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: linux-hardening@vger.kernel.org <linux-hardening@vger.kernel.org>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> ---
-> Sorry for the resend, I forgot to flag patch 2 as bpf-next
-> 
-> Note: next patch is autonomous, it is sent as a follow-up of this one to minimize risk of conflict on filter.h because the two changes are too close to each other.
-> 
-> v2: No modification (Just added link in patch message), patchwork discarded this series due to failed test of s390 but it seems unrelated, see https://lore.kernel.org/bpf/wvd5gzde5ejc2rzsbrtwqyof56uw5ea3rxntfrxtkdabzcuwt6@w7iczzhmay2i/T/#m2e61446f42d5dc3d78f2e0e8b7a783f15cfb109d
-> ---
->   include/linux/filter.h | 5 +++--
->   kernel/bpf/core.c      | 4 +++-
->   kernel/bpf/verifier.c  | 4 +++-
->   3 files changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/filter.h b/include/linux/filter.h
-> index 36cc29a2934c..7dd59bccaeec 100644
-> --- a/include/linux/filter.h
-> +++ b/include/linux/filter.h
-> @@ -884,14 +884,15 @@ bpf_ctx_narrow_access_offset(u32 off, u32 size, u32 size_default)
->   
->   #define bpf_classic_proglen(fprog) (fprog->len * sizeof(fprog->filter[0]))
->   
-> -static inline void bpf_prog_lock_ro(struct bpf_prog *fp)
-> +static inline int __must_check bpf_prog_lock_ro(struct bpf_prog *fp)
->   {
->   #ifndef CONFIG_BPF_JIT_ALWAYS_ON
->   	if (!fp->jited) {
->   		set_vm_flush_reset_perms(fp);
-> -		set_memory_ro((unsigned long)fp, fp->pages);
-> +		return set_memory_ro((unsigned long)fp, fp->pages);
->   	}
->   #endif
-> +	return 0;
->   }
->   
->   static inline void bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 71c459a51d9e..c49619ef55d0 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2392,7 +2392,9 @@ struct bpf_prog *bpf_prog_select_runtime(struct bpf_prog *fp, int *err)
->   	}
->   
->   finalize:
-> -	bpf_prog_lock_ro(fp);
-> +	*err = bpf_prog_lock_ro(fp);
-> +	if (*err)
-> +		return fp;
->   
->   	/* The tail call compatibility check can only be done at
->   	 * this late stage as we need to determine, if we deal
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 1c34b91b9583..6ec134f76a11 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -19096,7 +19096,9 @@ static int jit_subprogs(struct bpf_verifier_env *env)
->   	 * bpf_prog_load will add the kallsyms for the main program.
->   	 */
->   	for (i = 1; i < env->subprog_cnt; i++) {
-> -		bpf_prog_lock_ro(func[i]);
-> +		err = bpf_prog_lock_ro(func[i]);
-> +		if (err)
-> +			goto out_free;
+Hi arm64/bpf/pci,
 
-How does the error path take out the subprogs from kallsyms in your case? Suppose some of
-the loop iterations succeed before we hit an error. I believe the subprogs still exist in
-kallsyms here.
+In today's next-20240307 with a defconfig LLVM=1 I am seeing [1] under
+QEMU virt, i.e. from
+https://lore.kernel.org/all/20240305030516.41519-2-alexei.starovoitov@gmail.com/
+applied to the bpf-next tree.
 
->   		bpf_prog_kallsyms_add(func[i]);
->   	}
->   
-> 
+Cheers,
+Miguel
 
+[1]
+
+[    0.425177] pci-host-generic 4010000000.pcie: host bridge
+/pcie@10000000 ranges:
+[    0.425886] pci-host-generic 4010000000.pcie:       IO
+0x003eff0000..0x003effffff -> 0x0000000000
+[    0.426534] pci-host-generic 4010000000.pcie:      MEM
+0x0010000000..0x003efeffff -> 0x0010000000
+[    0.426764] pci-host-generic 4010000000.pcie:      MEM
+0x8000000000..0xffffffffff -> 0x8000000000
+[    0.427324] ------------[ cut here ]------------
+[    0.427456] vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
+[    0.427944] WARNING: CPU: 0 PID: 1 at mm/vmalloc.c:315
+ioremap_page_range+0x25c/0x2bc
+[    0.428543] Modules linked in:
+[    0.429236] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
+6.8.0-rc7-next-20240307 #1
+[    0.429513] Hardware name: linux,dummy-virt (DT)
+[    0.429751] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    0.429946] pc : ioremap_page_range+0x25c/0x2bc
+[    0.430063] lr : ioremap_page_range+0x258/0x2bc
+[    0.430178] sp : ffff80008002b670
+[    0.430271] x29: ffff80008002b690 x28: 0000000000001820 x27: 0000000000001880
+[    0.430556] x26: ffffde390bd7d000 x25: 0000000000000000 x24: ffffde390bce9000
+[    0.430729] x23: ffff69958280b0a0 x22: 0000000000000000 x21: 000000003eff0000
+[    0.430895] x20: ffff699582805090 x19: ffffffffc0800000 x18: 00000000de69481d
+[    0.431060] x17: ffff80008002b1fb x16: 0000000000000108 x15: 0000000000000004
+[    0.431245] x14: ffffde390bd19570 x13: 0000000000000fff x12: 0000000000000003
+[    0.431421] x11: 0000000000000003 x10: ffffde390bca2008 x9 : 4038d3d4a4dd4200
+[    0.431623] x8 : 4038d3d4a4dd4200 x7 : 0773076107200764 x6 : 0765076b07720761
+[    0.431774] x5 : ffff699582829f00 x4 : ffff699582829fa0 x3 : 0000000000000000
+[    0.431923] x2 : 0000000000000000 x1 : ffff80008002b400 x0 : 00000000ffffffea
+[    0.432220] Call trace:
+[    0.432462]  ioremap_page_range+0x25c/0x2bc
+[    0.432703]  pci_remap_iospace+0x78/0x84
+[    0.432854]  devm_pci_remap_iospace+0x54/0x98
+[    0.432979]  devm_of_pci_bridge_init+0x2e0/0x48c
+[    0.433114]  devm_pci_alloc_host_bridge+0xa4/0xbc
+[    0.433254]  pci_host_common_probe+0x48/0x1a4
+[    0.433363]  platform_probe+0xa8/0xd0
+[    0.433456]  really_probe+0x130/0x2e4
+[    0.433545]  __driver_probe_device+0xa0/0x128
+[    0.433647]  driver_probe_device+0x3c/0x1f8
+[    0.433742]  __driver_attach+0xdc/0x1a4
+[    0.433834]  bus_for_each_dev+0xe8/0x140
+[    0.433925]  driver_attach+0x24/0x30
+[    0.434011]  bus_add_driver+0x154/0x240
+[    0.434104]  driver_register+0x68/0x100
+[    0.434196]  __platform_driver_register+0x24/0x30
+[    0.434306]  gen_pci_driver_init+0x1c/0x28
+[    0.434407]  do_one_initcall+0xbc/0x248
+[    0.434533]  do_initcall_level+0x94/0xb4
+[    0.434632]  do_initcalls+0x54/0x94
+[    0.434721]  do_basic_setup+0x50/0x60
+[    0.434810]  kernel_init_freeable+0x10c/0x178
+[    0.434912]  kernel_init+0x20/0x1a0
+[    0.435003]  ret_from_fork+0x10/0x20
+[    0.435227] ---[ end trace 0000000000000000 ]---
+[    0.435691] pci-host-generic 4010000000.pcie: error -22: failed to
+map resource [io  0x0000-0xffff]
+[    0.436124] pci-host-generic 4010000000.pcie: Memory resource size
+exceeds max for 32 bits
+[    0.436713] pci-host-generic 4010000000.pcie: ECAM at [mem
+0x4010000000-0x401fffffff] for [bus 00-ff]
+[    0.438068] pci-host-generic 4010000000.pcie: PCI host bridge to bus 0000:00
+[    0.438414] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    0.438584] pci_bus 0000:00: root bus resource [mem 0x10000000-0x3efeffff]
+[    0.438732] pci_bus 0000:00: root bus resource [mem
+0x8000000000-0xffffffffff]
+[    0.440126] pci 0000:00:00.0: [1b36:0008] type 00 class 0x060000
+conventional PCI endpoint
+[    0.443526] pci 0000:00:01.0: [1af4:1000] type 00 class 0x020000
+conventional PCI endpoint
+[    0.443891] pci 0000:00:01.0: BAR 0 [io  0x0000-0x001f]
+[    0.444059] pci 0000:00:01.0: BAR 1 [mem 0x00000000-0x00000fff]
+[    0.444227] pci 0000:00:01.0: BAR 4 [mem 0x00000000-0x00003fff 64bit pref]
+[    0.444468] pci 0000:00:01.0: ROM [mem 0x00000000-0x0007ffff pref]
+[    0.446795] pci 0000:00:01.0: ROM [mem 0x10000000-0x1007ffff pref]: assigned
+[    0.447158] pci 0000:00:01.0: BAR 4 [mem 0x8000000000-0x8000003fff
+64bit pref]: assigned
+[    0.447465] pci 0000:00:01.0: BAR 1 [mem 0x10080000-0x10080fff]: assigned
+[    0.447632] pci 0000:00:01.0: BAR 0 [io  size 0x0020]: can't assign; no space
+[    0.447945] pci 0000:00:01.0: BAR 0 [io  size 0x0020]: failed to assign
