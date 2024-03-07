@@ -1,146 +1,173 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74BF12FB0D
-	for <bpf@vger.kernel.org>; Thu,  7 Mar 2024 16:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39861130AF1;
+	Thu,  7 Mar 2024 17:31:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709830363; cv=none; b=Xk3MFRgBEAvLZDlIFV+NTNJO8a3/5gqeX5haMffCeAvNvCVOcWbk4Q7VJ1+Q0aUY1uQkjNBd1Hc+yQZp3CqpKMsIhiD6om3j3bMqPYInNzmHk4VfNd3SXIAUzSuydnGX6ZejZE4nUyGkYMFXLPuR7zBpE84Xi/wsvzoVLMGM2n4=
+	t=1709832706; cv=none; b=RRnSRX1waA97wAXiTMwUvE7ST/2XdbaQq2u7kSnEBfmhjbp/X20ZUm6oQTvTi7ml22mI5DTKHEFM0W4tWhwHeYXI6aFQLMsz5l4NyzSor1O0+8VxO9URrpjJmlAKM4e99tI30deVh84bOkzTcM35nz8OYYBrZDDdV6ZLKLQhaRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709830363; c=relaxed/simple;
-	bh=5MaPnCgbvziQLQI6ZFwiRO9uMq2nmv6SQ8WFv2ZHA4k=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=tKuAjTTlPAzOikgO9X094gGSncxRPhLKuZBEsEhlmBe6ZQkqVMp0WETyPV7Uz2h0Olcbiy4XX/TzM/374nb/OuoF3dHWHjvPl7M3loEb8qVmZlUgfGRXRDPbJ2hef4oZVGLVF1YIuv4Ucb6FmXVraRHHjGFWPe7ldvpGDw5qgno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EgAvWh4j; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1709832706; c=relaxed/simple;
+	bh=Pw1wjnfdkstP4sMjq/SqSIfAkxHM4ROpPhW1adlHMZI=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=MDWyNvEjUmqvPxv7Uaq5B2Vz3L76Z4uIx5LL6iFzhA/P/jST/DGfDUVj2d6oVCo463fCad9k7jifgRkBum7kL7BaJaVM1MTlACkNz1cQofWGYkzaXe9vF/XOYeaJVUTKxgwyzyrH/xV1fECr/YkISD2KrQE3DQ2Jsz7ubFuZcw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=JXWx3fcS; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EgAvWh4j"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1709830360;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=whGVs82XXa9QzJHzJW0FkxvrD6T0b+AbKtmPoy5f9ys=;
-	b=EgAvWh4j55MIPjx5SyZSG3yI2mwkcDf0dCBMb0CeU3npYhknl2ORE+PLC2ni1Z8pytC9JA
-	XGxmItowxV8APfl2XS55fG15DMgg/EB5SvrLUjNMQCHn8eEcqpoc5thsfz/QTTpEHs+CDy
-	xN1RZI4Kvv3ZRrq7uQ9kK3R6Ud+Dvwk=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-226-bBoLCt4VOm-S6wYKcEWWoQ-1; Thu, 07 Mar 2024 11:52:38 -0500
-X-MC-Unique: bBoLCt4VOm-S6wYKcEWWoQ-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-5673426400fso523149a12.0
-        for <bpf@vger.kernel.org>; Thu, 07 Mar 2024 08:52:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709830357; x=1710435157;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=whGVs82XXa9QzJHzJW0FkxvrD6T0b+AbKtmPoy5f9ys=;
-        b=ZAsgVe+Ggcchvu95sz/pdAbfNAIVhD1oYmdYHVrW90DaPun0adPMapycbjFAEQp7RO
-         Bi4UL5wLqCFDfu4lbOv49zZ1kIAqEYNNELqFQBR31TiKxK+By34d7hPqxMImpRTQWtSk
-         epupQuf/uMY8oQ9cSxG+uktEH5XXgwdPVSW0EBpBrJTJN0Mlzkug6iCdQ0Y5dM2hvwwr
-         1uQ9iaVFmktdm5L4+NkdMWNKt7HfJ3JYeqZzl2u5so6Kmd0eQAkTlr3ZWi978AcJO87D
-         hYrh6pvpQzu/xSIsooGZYhxFyv8fc3Eea99eYaXTkwvtNj1whuP9GJmkCwcOaoZphPlI
-         Bb/A==
-X-Gm-Message-State: AOJu0YzGtHy1WseIO/P5SRjBw+xQhg1QMFwVsdb2LwQArOr+dX5skHJz
-	+SHh6r5AcIsvLDMuUpEXRODrm4nyCz0C6LNSEpDS/ytrDyxbRgnbfd329mpcA8Z6Y9mV3uI0YV+
-	JOfFuI0IN7yTh+Ei4qBaDG457J2r7PyCRElgupGptxhUnk2KEow==
-X-Received: by 2002:a17:906:558:b0:a45:ae87:ec09 with SMTP id k24-20020a170906055800b00a45ae87ec09mr4865035eja.60.1709830357267;
-        Thu, 07 Mar 2024 08:52:37 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFJuwDEmjitjVeEH8Q4lSg8YGu6nL4jSf2LgBNlkkHlgNCGd/EJzY9XXW3tnhx33fNmMUKFpw==
-X-Received: by 2002:a17:906:558:b0:a45:ae87:ec09 with SMTP id k24-20020a170906055800b00a45ae87ec09mr4865023eja.60.1709830356914;
-        Thu, 07 Mar 2024 08:52:36 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id lo2-20020a170906fa0200b00a45a687b52asm3145246ejb.213.2024.03.07.08.52.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Mar 2024 08:52:36 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 216B0112F3DB; Thu,  7 Mar 2024 17:52:36 +0100 (CET)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Bui Quang Minh <minhquangbui99@gmail.com>, Song Liu <song@kernel.org>,
- Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH bpf v3 3/3] bpf: Fix stackmap overflow check on 32-bit
- arches
-In-Reply-To: <549972cd-15e6-4520-a99b-c70c1ed455e5@gmail.com>
-References: <20240307120340.99577-1-toke@redhat.com>
- <20240307120340.99577-4-toke@redhat.com>
- <549972cd-15e6-4520-a99b-c70c1ed455e5@gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Thu, 07 Mar 2024 17:52:36 +0100
-Message-ID: <87edcmrnl7.fsf@toke.dk>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="JXWx3fcS"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=6GKHuULFobI/veCzO71hJuFZMvHW2DBWIwJthjIFZt0=; b=JXWx3fcSvqEd2usjf0tQN1DMCi
+	vSO6xR4WJptmR2KKeHQgwZrwN8Kcxo2SsAwQYU3GqG1uUhHegfI3SUUIcj3xuPPVcnq4qvvd9Z59E
+	QEXIJexwsh/xmTHCzcD+vFT4djVEoZUoeVEOEWDbhnGjDhNOexCanK8oqtsXqubWrWGy58R7eCA5a
+	KMkwOmTd6RBHYUW7MOdrUMkaxa0IBDN9EMKZ1xegBgTvPlxJM2R9eO51SJIrfnnNNvBIZE0Kisxb1
+	7MM1fiEoUnsAibMICY+p3wL4QPlBDDx84amzwvLXj1OsBgSDB7e/8IGpBSO57JhZs1rwQ14crw6Zx
+	jCusX5Yw==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1riHZL-000J8N-R9; Thu, 07 Mar 2024 18:30:11 +0100
+Received: from [77.58.94.13] (helo=localhost.localdomain)
+	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1riHZI-0034Od-1I;
+	Thu, 07 Mar 2024 18:30:08 +0100
+Subject: Re: [PATCH bpf-next RESEND v2 1/2] bpf: Take return from
+ set_memory_ro() into account with bpf_prog_lock_ro()
+To: Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Russell King <linux@armlinux.org.uk>,
+ Puranjay Mohan <puranjay12@gmail.com>, Tiezhu Yang <yangtiezhu@loongson.cn>,
+ Hengqi Chen <hengqi.chen@gmail.com>, Huacai Chen <chenhuacai@kernel.org>,
+ WANG Xuerui <kernel@xen0n.name>,
+ Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+ Paul Burton <paulburton@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Ilya Leoshkevich <iii@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>, "David S. Miller"
+ <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
+ Wang YanQing <udknight@gmail.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>
+Cc: bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+ netdev@vger.kernel.org,
+ "linux-hardening @ vger . kernel . org" <linux-hardening@vger.kernel.org>,
+ Kees Cook <keescook@chromium.org>
+References: <8f3b3823cce2177e5912ff5f2f11381a16db07db.1709279661.git.christophe.leroy@csgroup.eu>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <093da237-50c1-5898-1637-7a9a84e1076c@iogearbox.net>
+Date: Thu, 7 Mar 2024 18:30:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <8f3b3823cce2177e5912ff5f2f11381a16db07db.1709279661.git.christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27207/Thu Mar  7 10:27:12 2024)
 
-Bui Quang Minh <minhquangbui99@gmail.com> writes:
+On 3/1/24 8:57 AM, Christophe Leroy wrote:
+> set_memory_ro() can fail, leaving memory unprotected.
+> 
+> Check its return and take it into account as an error.
+> 
+> Link: https://github.com/KSPP/linux/issues/7
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: linux-hardening@vger.kernel.org <linux-hardening@vger.kernel.org>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> ---
+> Sorry for the resend, I forgot to flag patch 2 as bpf-next
+> 
+> Note: next patch is autonomous, it is sent as a follow-up of this one to minimize risk of conflict on filter.h because the two changes are too close to each other.
+> 
+> v2: No modification (Just added link in patch message), patchwork discarded this series due to failed test of s390 but it seems unrelated, see https://lore.kernel.org/bpf/wvd5gzde5ejc2rzsbrtwqyof56uw5ea3rxntfrxtkdabzcuwt6@w7iczzhmay2i/T/#m2e61446f42d5dc3d78f2e0e8b7a783f15cfb109d
+> ---
+>   include/linux/filter.h | 5 +++--
+>   kernel/bpf/core.c      | 4 +++-
+>   kernel/bpf/verifier.c  | 4 +++-
+>   3 files changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/filter.h b/include/linux/filter.h
+> index 36cc29a2934c..7dd59bccaeec 100644
+> --- a/include/linux/filter.h
+> +++ b/include/linux/filter.h
+> @@ -884,14 +884,15 @@ bpf_ctx_narrow_access_offset(u32 off, u32 size, u32 size_default)
+>   
+>   #define bpf_classic_proglen(fprog) (fprog->len * sizeof(fprog->filter[0]))
+>   
+> -static inline void bpf_prog_lock_ro(struct bpf_prog *fp)
+> +static inline int __must_check bpf_prog_lock_ro(struct bpf_prog *fp)
+>   {
+>   #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+>   	if (!fp->jited) {
+>   		set_vm_flush_reset_perms(fp);
+> -		set_memory_ro((unsigned long)fp, fp->pages);
+> +		return set_memory_ro((unsigned long)fp, fp->pages);
+>   	}
+>   #endif
+> +	return 0;
+>   }
+>   
+>   static inline void bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 71c459a51d9e..c49619ef55d0 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2392,7 +2392,9 @@ struct bpf_prog *bpf_prog_select_runtime(struct bpf_prog *fp, int *err)
+>   	}
+>   
+>   finalize:
+> -	bpf_prog_lock_ro(fp);
+> +	*err = bpf_prog_lock_ro(fp);
+> +	if (*err)
+> +		return fp;
+>   
+>   	/* The tail call compatibility check can only be done at
+>   	 * this late stage as we need to determine, if we deal
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 1c34b91b9583..6ec134f76a11 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -19096,7 +19096,9 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+>   	 * bpf_prog_load will add the kallsyms for the main program.
+>   	 */
+>   	for (i = 1; i < env->subprog_cnt; i++) {
+> -		bpf_prog_lock_ro(func[i]);
+> +		err = bpf_prog_lock_ro(func[i]);
+> +		if (err)
+> +			goto out_free;
 
-> On 3/7/24 19:03, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
->> The stackmap code relies on roundup_pow_of_two() to compute the number
->> of hash buckets, and contains an overflow check by checking if the
->> resulting value is 0. However, on 32-bit arches, the roundup code itself
->> can overflow by doing a 32-bit left-shift of an unsigned long value,
->> which is undefined behaviour, so it is not guaranteed to truncate
->> neatly. This was triggered by syzbot on the DEVMAP_HASH type, which
->> contains the same check, copied from the hashtab code.
->>=20
->> The commit in the fixes tag actually attempted to fix this, but the fix
->> did not account for the UB, so the fix only works on CPUs where an
->> overflow does result in a neat truncation to zero, which is not
->> guaranteed. Checking the value before rounding does not have this
->> problem.
->>=20
->> Fixes: 6183f4d3a0a2 ("bpf: Check for integer overflow when using roundup=
-_pow_of_two()")
->> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->> ---
->>   kernel/bpf/stackmap.c | 9 ++++++---
->>   1 file changed, 6 insertions(+), 3 deletions(-)
->>=20
->> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
->> index dff7ba539701..c99f8e5234ac 100644
->> --- a/kernel/bpf/stackmap.c
->> +++ b/kernel/bpf/stackmap.c
->> @@ -91,11 +91,14 @@ static struct bpf_map *stack_map_alloc(union bpf_att=
-r *attr)
->>   	} else if (value_size / 8 > sysctl_perf_event_max_stack)
->>   		return ERR_PTR(-EINVAL);
->>=20=20=20
->> -	/* hash table size must be power of 2 */
->> -	n_buckets =3D roundup_pow_of_two(attr->max_entries);
->> -	if (!n_buckets)
->> +	/* hash table size must be power of 2; roundup_pow_of_two() can overfl=
-ow
->> +	 * into UB on 32-bit arches, so check that first
->> +	 */
->> +	if (attr->max_entries > 1UL << 31)
->>   		return ERR_PTR(-E2BIG);
->>=20=20=20
->> +	n_buckets =3D roundup_pow_of_two(attr->max_entries);
->> +
->>   	cost =3D n_buckets * sizeof(struct stack_map_bucket *) + sizeof(*smap=
-);
->>   	smap =3D bpf_map_area_alloc(cost, bpf_map_attr_numa_node(attr));
->>   	if (!smap)
->
-> Reviewed-by: Bui Quang Minh <minhquangbui99@gmail.com>
->
-> Today I learned to be more careful with UB in C.
+How does the error path take out the subprogs from kallsyms in your case? Suppose some of
+the loop iterations succeed before we hit an error. I believe the subprogs still exist in
+kallsyms here.
 
-Haha, yeah, I was surprised about this one as well; UB is nasty! :)
-
--Toke
+>   		bpf_prog_kallsyms_add(func[i]);
+>   	}
+>   
+> 
 
