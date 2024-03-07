@@ -1,144 +1,237 @@
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8D5E1BDD8;
-	Wed,  6 Mar 2024 23:23:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28DCF4C6C;
+	Thu,  7 Mar 2024 01:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709767408; cv=none; b=O4SL5d+pGoJyXgotw3ULYTzniEO/VEEkuz3bBrAUvV8ggFwmBZjYHd+6MD7Tsm2qNEGOEy8iTbeLPz3zdLXt8L+nUjP5sETtbYlcRullEXvp5tS7ZzjZm+5yZlECrWg1clHjsphmTez+7jTZZ516CaJXYpRAeENMB+12SS+GZDM=
+	t=1709775388; cv=none; b=CDTcqaqTuiDih3QbFA6F2nEi8w3qRVWQ9ydNRO1GQB6xgsbVIuy9yQ8JSWm6ZuCiclg6WROfe67b4Yj7KUbh9PS8fjRUXUWqkbYVERyNrjJmem5SJGZ3vr9D9TlvwcKpUlAWM5mMsktVwq2NLzEk7Fa3TOs8EtGniyCSzQ9K2go=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709767408; c=relaxed/simple;
-	bh=1WRbX+TI/TIz5mPHKL1eqQRCErrvtvoQDz6CoaHCImM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NnW96kQhx9Ghf7PTX2Yrff/8xb4LFghxp2QVfaMnQf3YJYt8qn82/kG3J71LJMXHh84tGtI8Tid3gOfmJ3xsocmUPQlZDKzXxx95OdvZApCDrYBWnbDdgMHkcgSgcasRMTzKZvWBZdDD7bbWZZcuCLJFL2KIuTUS2FipA1lq2tM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KEiIuR6A; arc=none smtp.client-ip=209.85.210.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709775388; c=relaxed/simple;
+	bh=DGvZGr1IjTXNmLu/v0BjlBPqV6VOcPWZhaTsHSCk+tQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dA00CP7q8KDf5N8Lv+fmdulCr4nLO/iZNt7TTimaYZ9foIUnuqH20M+ge+DDweexT9vbp4gvPARmtU7qe2nErKpBpgFKXATL6Rcm24G5uYehhSJc/2u6y9E337ub9Kzu5XUb4VwAiDWzl5bfIOKwyhpcOqbwVIGkW+pZO0oDp44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=rrTElCvX; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KEiIuR6A"
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6e5027608a9so138380a34.1;
-        Wed, 06 Mar 2024 15:23:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709767406; x=1710372206; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9dMMYy1C3aupt6USp5Zxp+kTQYXfep2asyPktWS87fY=;
-        b=KEiIuR6A6TIQ7CdHI12HdWir1DYb8Z/UgwQdgys3ifQFmURliOlSjweYCDT/vQwAnC
-         ZtFl3Ohc49jmV4zYVipwISs6DP3BQ+a/iEdScRTo5EG+TdroJx4HzO6se/C2+B5h9+pd
-         2D4Ll4l86PbT4CQkpED8DVHGe/tDx/JG2vmiNvJMtriiSCCXXCU9BaJDeHbA0AFmmQ6i
-         /Otv8gbXo+OU7K7+gdyVhmPpkQRpoH+Gk3pcZELEh5i+LgGDJPncpITku3vrNrytXJF5
-         Ak9wxV4b0VDMK/CXgZDODil5NYEC6u/WL70++3lwQX2Yxgm/bhmE8SePkQ4kdk1Xbyq1
-         ebhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709767406; x=1710372206;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9dMMYy1C3aupt6USp5Zxp+kTQYXfep2asyPktWS87fY=;
-        b=badUUkGP4DOISL/cyh4jpMR5WWHNA0jHZN7VjJ8N3+he55KUqS3ehrYcAvu4B1AQrJ
-         uMTFTnms+Aq9p347Ge13DhQf0VLaFvBH/3oSAvrb/AVT/uXE+HChjkhqjH+qI5vh574m
-         BTNfPLydqu64PDbB8B2eRVrQ3ixzRusrWW0lYRaWs/jKVVg68+7dpTpNxAcLECOYEI49
-         pgjK7Cq0ZqkFr9n1N3Q4erCjJ0G263G+GBvNieBeWnBW5kEQpO482KPzAlHWhUTKuyq2
-         iNtbuO+oTZTAX1mkTCD7k15Z8mLrPdgWq6LuX4GkLNxcWg2zeAQku6u27nDCZYMmQXUN
-         Gb7A==
-X-Forwarded-Encrypted: i=1; AJvYcCU7j8CZVP5Si85rhRznoyevr1R9JSFZl0d7esfxGhlD99Z3UdQtO1+uMFK/ozQh0vX+dvHpC5CWabixaujbon78iKohNEQOuw6+BMsPPlMzCDwAObPv4RS6Z6YQhNA5w4HsEWgnpO80hy9tWVp57RTBV+cYaM6qa+08UsWTIxSHXg==
-X-Gm-Message-State: AOJu0YxAtbs3Tu8wID9I6B6aO2toalrVI5rw/gDJgTuJthBUD4IIHAyd
-	Kh+iELlNqn31bvrB11sQy5sJtvSXMfbkMhaDBLQiUTIP4qF9Xq5N
-X-Google-Smtp-Source: AGHT+IGHWliYgSSKC0WXGN0v2gdDTPrrnao+wDe6wCKEm4bKb2ryvCmXGErELzFgwPS6w+NW5PWvxA==
-X-Received: by 2002:a9d:6958:0:b0:6e4:e900:bb8e with SMTP id p24-20020a9d6958000000b006e4e900bb8emr7282981oto.3.1709767405730;
-        Wed, 06 Mar 2024 15:23:25 -0800 (PST)
-Received: from gmail.com ([192.184.166.229])
-        by smtp.gmail.com with ESMTPSA id j36-20020a63fc24000000b0059b2316be86sm11415952pgi.46.2024.03.06.15.23.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Mar 2024 15:23:25 -0800 (PST)
-Date: Wed, 6 Mar 2024 15:23:22 -0800
-From: Calvin Owens <jcalvinowens@gmail.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Song Liu <song@kernel.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Mike Rapoport <rppt@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Naveen N Rao <naveen.n.rao@linux.ibm.com>,
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-	David S Miller <davem@davemloft.net>,
-	Thomas Gleixner <tglx@linutronix.de>, bpf@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC][PATCH 0/4] Make bpf_jit and kprobes work with
- CONFIG_MODULES=n
-Message-ID: <Zej66vQInnDYgpNy@gmail.com>
-References: <cover.1709676663.git.jcalvinowens@gmail.com>
- <ZejhcP_r5QJZcS6j@bombadil.infradead.org>
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="rrTElCvX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1709775383;
+	bh=uRHTG0L933W49rR7eLKbmUyiReuzr8JXVYf13P4Er+Q=;
+	h=Date:From:To:Cc:Subject:From;
+	b=rrTElCvXas/WiNo+f1N65FbgNlU7mB11ugnVirlWtEHb3B4xgr5r/O2gPm1/2FzZl
+	 FrzXBlkf38spshsYkA+1L87m0S7rK3Ol68f7phITkwXauziCqkfJrtKdqt8NljcP7u
+	 GDGn7IVpXXQB54yHSzFvW7kh+X4JR+Su4zMl4ubdOwNJWm2Wf9GQrpzWykOIgOuHyu
+	 YqQ4HRmLsl4XyEqIZ62v5iq4E4ulJKUqBk5USreOKLwALUshSwXlK2lV9LBUIuXzyB
+	 v95RNmInFJVRPSWDqE8kdA1T1/w3YcY3mDqTy7nJHGPf6DWiRYm2SyR1o2q2Jbfz1+
+	 BmaWdSgG8d2fg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TqsMp2znkz4wc7;
+	Thu,  7 Mar 2024 12:36:22 +1100 (AEDT)
+Date: Thu, 7 Mar 2024 12:36:19 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, bpf
+ <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, "Uladzislau Rezki (Sony)"
+ <urezki@gmail.com>
+Subject: linux-next: manual merge of the bpf-next tree with the mm-stable
+ tree
+Message-ID: <20240307123619.159f1c4c@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZejhcP_r5QJZcS6j@bombadil.infradead.org>
+Content-Type: multipart/signed; boundary="Sig_/0XTsu3vubCij2IEjsa0+JF6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Wednesday 03/06 at 13:34 -0800, Luis Chamberlain wrote:
-> On Wed, Mar 06, 2024 at 12:05:07PM -0800, Calvin Owens wrote:
-> > Hello all,
-> > 
-> > This patchset makes it possible to use bpftrace with kprobes on kernels
-> > built without loadable module support.
-> 
-> This is a step in the right direction for another reason: clearly the
-> module_alloc() is not about modules, and we have special reasons for it
-> now beyond modules. The effort to share a generalize a huge page for
-> these things is also another reason for some of this but that is more
-> long term.
-> 
-> I'm all for minor changes here so to avoid regressions but it seems a
-> rename is in order -- if we're going to all this might as well do it
-> now. And for that I'd just like to ask you paint the bikeshed with
-> Song Liu as he's been the one slowly making way to help us get there
-> with the "module: replace module_layout with module_memory",
-> and Mike Rapoport as he's had some follow up attempts [0]. As I see it,
-> the EXECMEM stuff would be what we use instead then. Mike kept the
-> module_alloc() and the execmem was just a wrapper but your move of the
-> arch stuff makes sense as well and I think would complement his series
-> nicely.
+--Sig_/0XTsu3vubCij2IEjsa0+JF6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I apologize for missing that. I think these are the four most recent
-versions of the different series referenced from that LWN link:
+Hi all,
 
-  a) https://lore.kernel.org/all/20230918072955.2507221-1-rppt@kernel.org/
-  b) https://lore.kernel.org/all/20230526051529.3387103-1-song@kernel.org/
-  c) https://lore.kernel.org/all/20221107223921.3451913-1-song@kernel.org/
-  d) https://lore.kernel.org/all/20201120202426.18009-1-rick.p.edgecombe@intel.com/
+Today's linux-next merge of the bpf-next tree got a conflict in:
 
-Song and Mike, please correct me if I'm wrong, but I think what I've
-done here (see [1], sorry for not adding you initially) is compatible
-with everything both of you have recently proposed above. How do you
-feel about this as a first step?
+  mm/vmalloc.c
 
-For naming, execmem_alloc() seems reasonable to me? I have no strong
-feelings at all, I'll just use that going forward unless somebody else
-expresses an opinion.
+between commit:
 
-[1] https://lore.kernel.org/lkml/cover.1709676663.git.jcalvinowens@gmail.com/T/#m337096e158a5f771d0c7c2fb15a3b80a4443226a
+  8e1d743f2c26 ("mm: vmalloc: support multiple nodes in vmallocinfo")
 
-> If you're gonna split code up to move to another place, it'd be nice
-> if you can add copyright headers as was done with the kernel/module.c
-> split into kernel/module/*.c
+from the mm-stable tree and commit:
 
-Silly question: should it be the same copyright header as the original
-corresponding module.c, or a new one? I tried to preserve the license
-header because I wasn't sure what to do about it.
+  e6f798225a31 ("mm: Introduce VM_SPARSE kind and vm_area_[un]map_pages().")
 
-Thanks,
-Calvin
+from the bpf-next tree.
 
-> Can we start with some small basic stuff we can all agree on?
-> 
-> [0] https://lwn.net/Articles/944857/
-> 
->   Luis
+I fixed it up (I think - see below) and can carry the fix as necessary.
+This is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc mm/vmalloc.c
+index 25a8df497255,e5b8c70950bc..000000000000
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@@ -4755,81 -4423,70 +4820,84 @@@ static void show_numa_info(struct seq_f
+ =20
+  static void show_purge_info(struct seq_file *m)
+  {
+ +	struct vmap_node *vn;
+  	struct vmap_area *va;
+ +	int i;
+ =20
+ -	spin_lock(&purge_vmap_area_lock);
+ -	list_for_each_entry(va, &purge_vmap_area_list, list) {
+ -		seq_printf(m, "0x%pK-0x%pK %7ld unpurged vm_area\n",
+ -			(void *)va->va_start, (void *)va->va_end,
+ -			va->va_end - va->va_start);
+ -	}
+ -	spin_unlock(&purge_vmap_area_lock);
+ -}
+ +	for (i =3D 0; i < nr_vmap_nodes; i++) {
+ +		vn =3D &vmap_nodes[i];
+ =20
+ -static int s_show(struct seq_file *m, void *p)
+ -{
+ -	struct vmap_area *va;
+ -	struct vm_struct *v;
+ -
+ -	va =3D list_entry(p, struct vmap_area, list);
+ -
+ -	if (!va->vm) {
+ -		if (va->flags & VMAP_RAM)
+ -			seq_printf(m, "0x%pK-0x%pK %7ld vm_map_ram\n",
+ +		spin_lock(&vn->lazy.lock);
+ +		list_for_each_entry(va, &vn->lazy.head, list) {
+ +			seq_printf(m, "0x%pK-0x%pK %7ld unpurged vm_area\n",
+  				(void *)va->va_start, (void *)va->va_end,
+  				va->va_end - va->va_start);
+ -
+ -		goto final;
+ +		}
+ +		spin_unlock(&vn->lazy.lock);
+  	}
+ +}
+ =20
+ -	v =3D va->vm;
+ +static int vmalloc_info_show(struct seq_file *m, void *p)
+ +{
+ +	struct vmap_node *vn;
+ +	struct vmap_area *va;
+ +	struct vm_struct *v;
+ +	int i;
+ =20
+ -	seq_printf(m, "0x%pK-0x%pK %7ld",
+ -		v->addr, v->addr + v->size, v->size);
+ +	for (i =3D 0; i < nr_vmap_nodes; i++) {
+ +		vn =3D &vmap_nodes[i];
+ =20
+ -	if (v->caller)
+ -		seq_printf(m, " %pS", v->caller);
+ +		spin_lock(&vn->busy.lock);
+ +		list_for_each_entry(va, &vn->busy.head, list) {
+ +			if (!va->vm) {
+ +				if (va->flags & VMAP_RAM)
+ +					seq_printf(m, "0x%pK-0x%pK %7ld vm_map_ram\n",
+ +						(void *)va->va_start, (void *)va->va_end,
+ +						va->va_end - va->va_start);
+ =20
+ -	if (v->nr_pages)
+ -		seq_printf(m, " pages=3D%d", v->nr_pages);
+ +				continue;
+ +			}
+ =20
+ -	if (v->phys_addr)
+ -		seq_printf(m, " phys=3D%pa", &v->phys_addr);
+ +			v =3D va->vm;
+ =20
+ -	if (v->flags & VM_IOREMAP)
+ -		seq_puts(m, " ioremap");
+ +			seq_printf(m, "0x%pK-0x%pK %7ld",
+ +				v->addr, v->addr + v->size, v->size);
+ =20
+ -	if (v->flags & VM_SPARSE)
+ -		seq_puts(m, " sparse");
+ +			if (v->caller)
+ +				seq_printf(m, " %pS", v->caller);
+ =20
+ -	if (v->flags & VM_ALLOC)
+ -		seq_puts(m, " vmalloc");
+ +			if (v->nr_pages)
+ +				seq_printf(m, " pages=3D%d", v->nr_pages);
+ =20
+ -	if (v->flags & VM_MAP)
+ -		seq_puts(m, " vmap");
+ +			if (v->phys_addr)
+ +				seq_printf(m, " phys=3D%pa", &v->phys_addr);
+ =20
+ -	if (v->flags & VM_USERMAP)
+ -		seq_puts(m, " user");
+ +			if (v->flags & VM_IOREMAP)
+ +				seq_puts(m, " ioremap");
+ =20
+ -	if (v->flags & VM_DMA_COHERENT)
+ -		seq_puts(m, " dma-coherent");
+++			if (v->flags & VM_SPARSE)
+++				seq_puts(m, " sparse");
++=20
+ -	if (is_vmalloc_addr(v->pages))
+ -		seq_puts(m, " vpages");
+ +			if (v->flags & VM_ALLOC)
+ +				seq_puts(m, " vmalloc");
+ =20
+ -	show_numa_info(m, v);
+ -	seq_putc(m, '\n');
+ +			if (v->flags & VM_MAP)
+ +				seq_puts(m, " vmap");
+ +
+ +			if (v->flags & VM_USERMAP)
+ +				seq_puts(m, " user");
+ +
+ +			if (v->flags & VM_DMA_COHERENT)
+ +				seq_puts(m, " dma-coherent");
+ +
+ +			if (is_vmalloc_addr(v->pages))
+ +				seq_puts(m, " vpages");
+ +
+ +			show_numa_info(m, v);
+ +			seq_putc(m, '\n');
+ +		}
+ +		spin_unlock(&vn->busy.lock);
+ +	}
+ =20
+  	/*
+  	 * As a final step, dump "unpurged" areas.
+
+--Sig_/0XTsu3vubCij2IEjsa0+JF6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXpGhMACgkQAVBC80lX
+0GyulQf/cE1To1a/iTynPNiIw/MuF/ez+0lLzyXqxJCfduHst/Bz0PRYwaJm85tH
+I2KEy153199aJrR5nbgdaeY7EDYvuijcImpDE3uKT4dIVBr193DRBmul7fQX9uTm
+541NS/iDRJ6x/xOsEUvBaud/LRvOSixTdb1jiypaFL1MBbtOHPDgq9oShgqFOsAB
+o3TgqXV8SyUJiDtwD8aUWTjtbEAfi1IeDekJPvb2oZZf1hSvLu2hKYAgyTcd7f6j
+ctYZMJfzKhYugPT7mdS35q2XmybnP/B7Dk4WXu/4W1dJGk/O9BLbATra+XpwPH58
+K+k/PR7THaX+tNTyMYBYWeTqCcCfJw==
+=U7Ep
+-----END PGP SIGNATURE-----
+
+--Sig_/0XTsu3vubCij2IEjsa0+JF6--
