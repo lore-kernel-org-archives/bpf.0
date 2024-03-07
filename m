@@ -1,130 +1,118 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5DB12FB2B;
-	Thu,  7 Mar 2024 17:49:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72A3212F5B1
+	for <bpf@vger.kernel.org>; Thu,  7 Mar 2024 17:52:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709833743; cv=none; b=QlUPijXGlEAuY8A1xdq7h5pvGNMrOjxQuSRAwZBF4r3Nno8fWJAmHOzFKFzCIkkxCxPcvpPOk/+8JcesXM7TedJs+tjlko5uR7oy6j0F3cYWNj1zJjVtmIPrTQW608ZUQjizrhMOpFl5uu2TFP+bUtWPJLreZWL+NkO0gKRzzno=
+	t=1709833969; cv=none; b=AkWQDMWESyROpOnqjYzpNMbWcyCWu6ISxfDL7SdwDYouYUrfchMQKJBH39/F0YTI/E28yS42rmd+hkBb4eAvrn/Lkcmundz4rF9QDcpBB7XUaSKFK5azsxg41rIBtX9pcvgyu7L3lCEEOerOMPcxtJkr5AiOeF1rn0/Gr7plNE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709833743; c=relaxed/simple;
-	bh=SWaaB0XQCIhzAS6EmdUMQf+lLQWEmTzrwTE2/ASS73A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AbUPgOgRq8h8XoeitHtziEpt2PIMU7lJdmLHyB1OIcsCJO3T9WJuUsbBJ2hxyiCekXw6wi8yhbO+im0qDh5gBN+Gfhp9kwBgrYJKGABW0uPZbGTk8kfnjT1UEESmQ+MerDOLhC0cU2F22E0x/AFq3cLozCNeMkaY1sLmsZ9XCTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L9eY9P8G; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709833969; c=relaxed/simple;
+	bh=1ClZOi8SROF3/2EGEIpOzZLDcZRHrpi89pOQRoUF5g4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fAah0I7pxUTuyorlqniFp3x/ClBErnW9UXLrQFr6EtQePD/g3wAv7mamdvkUWA2MuHQyOu4san2r8WW/H3eXiP+M7EZBfWclR6Fio8hvlr1ZKJueXzwQ4ulkoOeSq0r5qQX7lmlVFtt0k0eYwpWKiovDwYUXpPhNzpLO75Pp+54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hzYD6xCK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L9eY9P8G"
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-42ee7fa077bso5066731cf.3;
-        Thu, 07 Mar 2024 09:49:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709833741; x=1710438541; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3azFskcK1Kr594pn4cAjp31V8LFrQG4+hgU7A9RDIXk=;
-        b=L9eY9P8GPvIGZ/1AOuhnZEwuBhpYq56SeoWY1rLiw87s+jgS3BBHoi7yJvP1jgb++y
-         s8vK3J4LizPptbc+OgZ/o0E+xHvH9rcCNXde+hMRqFjdtj4DGF+ep+iMSkxkbXXEFxrv
-         AeqYtGINbZrwyeExt2bzwDETTVUsYViEI7umLKHjQgX7HjdwSPLgVBDpT7vTFOp6s//T
-         GdlGxEwbma+TjI5bN+Lk+5kVfM+bSO//fP77Deq8RLZGaUulVp1PQX8r3amZ5r7hKNza
-         vzDYa/aRVSrgDwq5/nE7sWvgswRUcqiHnUzisfEnKRUgGN+aSoS60hafHd3GBrmkVK5O
-         Ju5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709833741; x=1710438541;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3azFskcK1Kr594pn4cAjp31V8LFrQG4+hgU7A9RDIXk=;
-        b=EhxOCExzdQjIEW+Qq6EiHvdRQgACrBDPsGyaSNEsr63ZoHkzjFWvTqK5bqvoQfF1sQ
-         L3aLA60Td+5iPW6lzWk/dGWEb89fUbv9OvHN4izFRTkXtLKfyxZjgkTVtyu7A509tTD1
-         8A9jzC8kePe/p7kmMxm0CRNl0YrD8mP+Lhf44bUyA0jacMMerpwYLUg0MmRqBZqDBlft
-         rW8/2M3pcFAKFGcf7+VbEwuxD2qlyeQT9WVM/GAqAO08aEeYphQtPOcfW/71LiSvUuo2
-         bmfGCMXwfx+e3vZ88NcPdyMO1uvq2hUHEIST94xZ+i1UrmS1OpiohIOo3Mu1EMPtrjwk
-         Y1Xw==
-X-Forwarded-Encrypted: i=1; AJvYcCVrXTwBU+83xKFF1EzF8veIrgJ/zYBqEbjN0csQXidimZay5WRidUowZ3mI/VEEEq4fv5l7+fuf7L7CAsOFnoMrCUMY/dpCwbbu8fuSGywDGHxVwNly91p4AiYjleNHThsUD370jkmqTrX/U1w3b52MHyM9mBKoPpAp
-X-Gm-Message-State: AOJu0YxMIw2eZhgdYm9nZ+2rZKeKYMmuXVr+linQ4Rit+DfOhKSMqs63
-	BIrikzMJeF2hyZ4qSXFVxxM52MVmeNAVJe2pNiOfnpGN6U16GYeb4QN7GWWI17lrWawSg+2Z9Zu
-	xOYlXzemiM/WbeoPzaYjTQ8SkPKksMU1OLV3fGw==
-X-Google-Smtp-Source: AGHT+IFtJCet5o1lyZnRcTyn4EgVIYVJsxWpjc8YqORCDIgVR49weziOGhMcQg3AfHy5K2m4sfmNZwGAEqxGK2ey/9E=
-X-Received: by 2002:a05:622a:15d6:b0:42e:da48:fbb3 with SMTP id
- d22-20020a05622a15d600b0042eda48fbb3mr8812751qty.41.1709833740937; Thu, 07
- Mar 2024 09:49:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hzYD6xCK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 541A7C433C7;
+	Thu,  7 Mar 2024 17:52:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709833969;
+	bh=1ClZOi8SROF3/2EGEIpOzZLDcZRHrpi89pOQRoUF5g4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hzYD6xCKVPE+12412+X9UQuFFd2RRnMuJGsACJBTb/7CUUUNC1c4k8iFn/CrQBm52
+	 hzy813fVf0bRI3lQPg9tARhWCNgS0gHFyuFj8zLB8xDxtNDcqawRrTAYzs0hkn6N4h
+	 pGJJ4m5L4Ye5AhBTwB2wXDQokUrTJRr23pZDnbstFv6LaKDMXSjCHwAqxKjzfA52al
+	 +0ff8cWY9zAhEgakXJ7/4RbGFG7sdQz0ySN5pK6829mMDeVQceJ/iWw01MOb64c9KF
+	 BS9zWftTXKpBG4xr+uq7Kg6TPOymsbEwq3ATZbDfJ8Z9MmLCE0/zgO/MT82hwyircs
+	 vSzMJk73Rnr4Q==
+Date: Thu, 7 Mar 2024 17:52:45 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Pu Lehui <pulehui@huaweicloud.com>
+Cc: linux-riscv@lists.infradead.org, bpf@vger.kernel.org,
+	Atish Patra <atishp@atishpatra.org>,
+	Anup Patel <anup@brainfault.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Pu Lehui <pulehui@huawei.com>
+Subject: Re: [PATCH] drivers/perf: riscv: Disable PERF_SAMPLE_BRANCH_* while
+ not supported
+Message-ID: <20240307-oat-mule-10441ef7e94a@spud>
+References: <20240305155223.1823287-1-pulehui@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZeiNxaq3jzloO9l6@boxer> <20240307142402.906681-1-dgouarin@gmail.com>
- <ZenidKFF/gQefijz@boxer>
-In-Reply-To: <ZenidKFF/gQefijz@boxer>
-From: david gouarin <dgouarin@gmail.com>
-Date: Thu, 7 Mar 2024 18:48:50 +0100
-Message-ID: <CAH3uZAwOBeuV9FQpFJ5-S-j5HDWpxR5vvXKzUoq_UTOenz6=XQ@mail.gmail.com>
-Subject: Re: [PATCH net v2] dpaa_eth: fix XDP queue index
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: david.gouarin@thalesgroup.com, Madalin Bucur <madalin.bucur@nxp.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Camelia Groza <camelia.groza@nxp.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="Y0Dtpe87eFaER5Lo"
+Content-Disposition: inline
+In-Reply-To: <20240305155223.1823287-1-pulehui@huaweicloud.com>
+
+
+--Y0Dtpe87eFaER5Lo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Le jeu. 7 mars 2024 =C3=A0 16:51, Maciej Fijalkowski
-<maciej.fijalkowski@intel.com> a =C3=A9crit :
->
-> On Thu, Mar 07, 2024 at 03:24:02PM +0100, David Gouarin wrote:
-> > Make it possible to bind a XDP socket to a queue id.
-> > The DPAA FQ Id was passed to the XDP program in the XDP packet metadata
-> > which made it unusable with bpf_map_redirect.
->
-> I think that referring to a member from xdp_rxq_info struct as 'packet
-> metadata' is confusing. I was trying to find a place where you are
-> actually storing this id at xdp_buff::data_meta. This is not happening
-> AFAICT. Thing is that xsk_rcv_check() picks xdp->rxq->queue_index which
-> holds fqid which is not related to queue number, right?
+On Tue, Mar 05, 2024 at 03:52:23PM +0000, Pu Lehui wrote:
+> From: Pu Lehui <pulehui@huawei.com>
+>=20
+> RISC-V perf does not yet support branch sampling. Two riscv bpf
+> testcases get_branch_snapshot and perf_branches/perf_branches_hw failed
+> due to not disabling such sampling.
+>=20
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
 
-Correct. I have used the term xdp metadata because that is the terminology
-used in the xdp program (struct xdp_md).
-I should have said instead :
-The DPAA FQ Id was passed to the XDP program in the xdp_rxq_info->queue_ind=
-ex
-instead of the queue number [...]
+This seems worthy of a fixes tag. For what commit I do not know, but I
+figure it is a problem currently in mainline and a fix should be
+backported?
 
-Maciej please forgive me for the double send and formatting mistakes,
-kernel mailing lists are new to me.
+> ---
+>  drivers/perf/riscv_pmu.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/drivers/perf/riscv_pmu.c b/drivers/perf/riscv_pmu.c
+> index c78a6fd6c57f..bc42cb95a97c 100644
+> --- a/drivers/perf/riscv_pmu.c
+> +++ b/drivers/perf/riscv_pmu.c
+> @@ -313,6 +313,10 @@ static int riscv_pmu_event_init(struct perf_event *e=
+vent)
+>  	u64 event_config =3D 0;
+>  	uint64_t cmask;
+> =20
+> +	/* does not support taken branch sampling */
 
->
-> > Instead of the DPAA FQ Id, initialise the XDP rx queue with the channel=
- id.
-> >
-> > Fixes: d57e57d0cd04 ("dpaa_eth: add XDP_TX support")
-> >
-> > Signed-off-by: David Gouarin <dgouarin@gmail.com>
-> > ---
-> > v2: add Fixes: in description
-> > ---
-> >  drivers/net/ethernet/freescale/dpaa/dpaa_eth.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c b/drivers/n=
-et/ethernet/freescale/dpaa/dpaa_eth.c
-> > index dcbc598b11c6..988dc9237368 100644
-> > --- a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-> > +++ b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-> > @@ -1154,7 +1154,7 @@ static int dpaa_fq_init(struct dpaa_fq *dpaa_fq, =
-bool td_enable)
-> >       if (dpaa_fq->fq_type =3D=3D FQ_TYPE_RX_DEFAULT ||
-> >           dpaa_fq->fq_type =3D=3D FQ_TYPE_RX_PCD) {
-> >               err =3D xdp_rxq_info_reg(&dpaa_fq->xdp_rxq, dpaa_fq->net_=
-dev,
-> > -                                    dpaa_fq->fqid, 0);
-> > +                                    dpaa_fq->channel, 0);
-> >               if (err) {
-> >                       dev_err(dev, "xdp_rxq_info_reg() =3D %d\n", err);
-> >                       return err;
-> > --
-> > 2.34.1
-> >
+Skimming patchwork, I found this comment confusing.
+Isolated from the commit message, which it will be once committed, it
+was not immediately clear that you were referring to the driver. I think
+it is just matter of making this a complete sentence that starts by
+mentioning /what/ does not support this feature. Is it the driver? Does
+the spec not allow it? etc
+
+Cheers,
+Conor.
+
+> +	if (has_branch_stack(event))
+> +		return -EOPNOTSUPP;
+> +
+>  	hwc->flags =3D 0;
+>  	mapped_event =3D rvpmu->event_map(event, &event_config);
+>  	if (mapped_event < 0) {
+> --=20
+> 2.34.1
+>=20
+
+--Y0Dtpe87eFaER5Lo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZen+7AAKCRB4tDGHoIJi
+0uSNAQC0ygLY7d+KZxYs9uH8DbuuQbv5GSbkf16CritRnRiMDgEA3Ev5pVFKqsJJ
+mXnvkHf+BdnNDV6obRMrSnx/ayR2fAw=
+=vaBk
+-----END PGP SIGNATURE-----
+
+--Y0Dtpe87eFaER5Lo--
