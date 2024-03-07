@@ -1,117 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648042E648;
-	Thu,  7 Mar 2024 23:00:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679AD335C7
+	for <bpf@vger.kernel.org>; Thu,  7 Mar 2024 23:02:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709852446; cv=none; b=rJ9xt2SyOALQXI14ydGXXlzs/jhn630w2ee3FXz+yBkxtaO+DUeKkr85rBLajpQlMALuKAzR3X0YSkq0y4OE/iwCCIF6sXK4dwIzIGmqvacunVp9hqeF7Whr0m1A0f9Ah0+lHBDlw0gLyolXHoIGI6uSja7vYG3bF8zZe4PNw1s=
+	t=1709852575; cv=none; b=JcI1eQS2BobCeDjYm/5T3On/+S9vt7G4KJ8BbU0r9j1SuTW2adxaglxxNXuPxxotTIiHfiAQV6xiM4520Qe881hjvhn5I9vaDdH3extpbcjfwTrFLQUbwN2EpZjFWuxSjtcf8pgpIahzv2u5u4xlshpBTXjTS7/gQQpnnvxCzTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709852446; c=relaxed/simple;
-	bh=0BNRnFKrPmqb8JaQMgFhNaR+/YfUrRcBITV+UhUg3ek=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=b8lauutBTeOTA158EAzIlfibU69e4sZS0JxxLX0dpKsyB245t584ceT/4uQTiCkAWoQdnWqR4L6HscpDgBQuL3IK1jlwZgRjkpcKWKHkToQoPb8lmU+mfXL2klv1tYxBluq5ufIbsSRvomLhwKh1rD6j7ZDIFI/e5oEiRP08XUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tXeuew1Y; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1709852575; c=relaxed/simple;
+	bh=9KKhtwnASWRMx1q4RYJmtGiLzk9MB788R4Lfv3Kb3WA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OXwoYZqG8Ua0KTGpvCXQ0BLvq8a1JVtBIvrbYvRpWS0+Sr9RAGNQmYArvKhMxG5QyloNCuH8D6lRCdh9r86US4BerYR4ppNxK4ngqwmdOJ+b0Rvecv3vB9+o7BZ2+1Twx3xH40To+Bcr7PQV43wczTScFxVHMwgBsRuDwm0pxTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HFUruNR9; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tXeuew1Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9A4CC433B1;
-	Thu,  7 Mar 2024 23:00:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709852446;
-	bh=0BNRnFKrPmqb8JaQMgFhNaR+/YfUrRcBITV+UhUg3ek=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=tXeuew1YyJIEz+oDjmSV0cwsFcBuHVY23U1kIUAqIZhkGDqLAQ0oxrLIR+iItj9SW
-	 yW78XbjssAiVqZ1/WCvzByCaa531nWXw9ZZz/dXHX1FuPvQCM636NnLT4ancOxU+9q
-	 zlJQU3JV5YUccyXPDosO1BR/S6606xjMIoiNZzG+KGaifOFoPWFPojN1UbPVn9AuXU
-	 vmJmrr/hjbutmQGTFFlUuCfpV+fzZ/LOOL3bsxA5gJSLMO71mGxb6Slr1CGm2oHkI7
-	 q8zRGDgCtu5uJwjVr+i9IAmd6CL667ZbC2yl2I6byx7E9XeAdk0D2AdoMt0o3WjMuD
-	 D2Inyft1wyrew==
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2d309a23d76so22834811fa.1;
-        Thu, 07 Mar 2024 15:00:45 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWRG4tZOOKLlrDZlXUKyalTc/RGg+q4xStCcyH5PNHCT+d8FHHK5Upww31ma9Ji2UvNmBS3Y0IxAqkz2MtwfIgUyn1g/3NamvxkWCcBYwMhUw79jnutOyNyVXQ0sQj95g==
-X-Gm-Message-State: AOJu0Yz3SjU1l5b1hdwF4tH5eCHRa4I2pF1JSMWhbsrMQ1tniksfhqJt
-	ZqyNlbldwsfPzSa8/t+DUWbKmaMVK3RIKRof9SLWxTcPsfJGg3cL8EwjWq60CI2uDqJ04xhs+zI
-	i5zvA7JN9v7GM0o9mQoifeqbPBYI=
-X-Google-Smtp-Source: AGHT+IHIvKBLMm2DYDZH0mQVeIadMl7yshOMcUdRiFEkU3IcF/jRIDNEu423eBEh/eV/YsvR3ATkeFr1xweFEoLngSE=
-X-Received: by 2002:a05:6512:616:b0:513:2508:d2f with SMTP id
- b22-20020a056512061600b0051325080d2fmr1107647lfe.12.1709852443920; Thu, 07
- Mar 2024 15:00:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HFUruNR9"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6098bf69909so13427717b3.1
+        for <bpf@vger.kernel.org>; Thu, 07 Mar 2024 15:02:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709852573; x=1710457373; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tt7DerqK6vSXKH3qsw0FdsRP/olVGmGsqI8wpkP34/c=;
+        b=HFUruNR9+PD+bAjOMLwia8iZg9Y5aTje5ND46xuUrZdNcfrSAYThTx0QcIVBK5UQRO
+         xlBu4A45qANn/2hgO44p905zBwSyRnVV4TaqA82byIW0cQErIHhahUwROcx4FTq3b0Y/
+         kAsbqooy7AJF4mL/g10bUfALwtm74Cr9x2CGVdJtTWH8rhNa4fBlme7+tyBlUEbsU5cW
+         jeqFjlPo7M1WCTEHWPRTk3mRzWVrk+bjZ/gLnTRrafDvOybvvpaZ4kjZ/9e6ZQuuv5rz
+         x6BtjbCP5rEQBKy4tnuHSBKtIbxzvcMwWRN9+MoobB6H+2fQcwi5eB7XlOiaaNw28c0w
+         BDHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709852573; x=1710457373;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tt7DerqK6vSXKH3qsw0FdsRP/olVGmGsqI8wpkP34/c=;
+        b=WR3vEHON5h6DfGVtOIrVOhs6iohmNjcKXTGWqRFOZL3RF2KAypReXFB6ikANhBoFVL
+         ZS7tsrG3rrmYapS08FkR1cj2NKvmC9faQvO080zhQUohqj3yhHRIaOG4kUOGetu6KksS
+         R4Fh/PKGyGBTErS9VQv8wSXVH2ORJmznEl5YxL1qKLTXkMKHqa05fRf1Uj2uR5oU1B1w
+         9xvqIaz1qNG+oqqNwwrUMosQxv11+N/mQuTQmFfhNmUkmG4Y8fCb9slx7R1QWnvwyZIu
+         eUgh4Rb3PrXAEUIbd7cRL8o8RJLy2gkOK0iNUXQpn3MM0/XV2poYC6nkCYpeT1t6IaeC
+         pJ/g==
+X-Gm-Message-State: AOJu0YwUvz7TiQiQMV6R4ZWKri++sRPC12K/lZRmTnzHRi3lFdM/O0Yf
+	sySNVGH8LsGQSN0fGXNCmzQP1ixFNDLoXNyBXXeIQSxTBpS1p+X1
+X-Google-Smtp-Source: AGHT+IFojAoWkaB+zxeR+2JeMuO9FbQgxYwMeJSo/oeTxvMuEHJjsizJJciPOf3SEVqbosQH2wOD6w==
+X-Received: by 2002:a81:840f:0:b0:609:3a5c:b2be with SMTP id u15-20020a81840f000000b006093a5cb2bemr1968749ywf.24.1709852573180;
+        Thu, 07 Mar 2024 15:02:53 -0800 (PST)
+Received: from ?IPV6:2600:1700:6cf8:1240:3e27:94b7:4919:8737? ([2600:1700:6cf8:1240:3e27:94b7:4919:8737])
+        by smtp.gmail.com with ESMTPSA id dg8-20020a05690c0fc800b00607f86fa184sm4332614ywb.99.2024.03.07.15.02.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Mar 2024 15:02:52 -0800 (PST)
+Message-ID: <412c987b-b1c4-4761-83e4-d46c78a255be@gmail.com>
+Date: Thu, 7 Mar 2024 15:02:51 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <65e9e748.a70a0220.606f7.53c0@mx.google.com> <7e216c88-77ee-47b8-becc-a0f780868d3c@sirena.org.uk>
- <CAPhsuW7c+OgFcZ9qWF7nes3SbaQdf5GYZZA+jyHAOzJ5omuZ8g@mail.gmail.com>
- <4ce67bde-3bd4-4a59-bce7-4a2764445783@sirena.org.uk> <CANk7y0gBRgJQqeqXZmTXygKREUWn4OQ2cbTYqh5P9gN3ZSV2sQ@mail.gmail.com>
-In-Reply-To: <CANk7y0gBRgJQqeqXZmTXygKREUWn4OQ2cbTYqh5P9gN3ZSV2sQ@mail.gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Thu, 7 Mar 2024 15:00:32 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW4XtFn2Nb0hr9R5FAcNNYjHsT1khvF8mHSvZarT6bPdCQ@mail.gmail.com>
-Message-ID: <CAPhsuW4XtFn2Nb0hr9R5FAcNNYjHsT1khvF8mHSvZarT6bPdCQ@mail.gmail.com>
-Subject: Re: next/master bisection: baseline.login on qemu_arm64-virt-gicv3-uefi
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Will Deacon <will@kernel.org>, kernelci-results@groups.io, 
-	bot@kernelci.org, linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org, 
-	bpf@vger.kernel.org, linux-next@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [LSF/MM/BPF TOPIC] faster uprobes
+To: Song Liu <song@kernel.org>, Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ lsf-pc@lists.linux-foundation.org,
+ Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+ Yonghong Song <yonghong.song@linux.dev>, Oleg Nesterov <oleg@redhat.com>,
+ Daniel Borkmann <daniel@iogearbox.net>
+References: <ZeCXHKJ--iYYbmLj@krava>
+ <23f9790d-4ab1-4edb-9262-6f982413b3e9@gmail.com> <ZedT8S-GjNOry5LZ@krava>
+ <CAPhsuW5_6vkL58Efm3qL9G9W+7i=XVicoLXT6_G+T7TLx=zQJg@mail.gmail.com>
+Content-Language: en-US
+From: Kui-Feng Lee <sinquersw@gmail.com>
+In-Reply-To: <CAPhsuW5_6vkL58Efm3qL9G9W+7i=XVicoLXT6_G+T7TLx=zQJg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 7, 2024 at 11:02=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.co=
-m> wrote:
->
-> On Thu, Mar 7, 2024 at 7:34=E2=80=AFPM Mark Brown <broonie@kernel.org> wr=
-ote:
-> >
-> > On Thu, Mar 07, 2024 at 10:16:21AM -0800, Song Liu wrote:
-> > > On Thu, Mar 7, 2024 at 8:36=E2=80=AFAM Mark Brown <broonie@kernel.org=
-> wrote:
-> >
-> > > > The KernelCI bisection bot found a boot regression n today's -next =
-on
-> > > > qemu arm64 UEFI platforms with 64K pages which was bisected to comm=
-it
-> > > > 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory management"=
-).
-> > > > We OOM quite early in boot:
-> >
-> > > IIUC, 64kB pages means 512MB PMD. I think that's indeed too big. We
-> > > will need some logic to limit such cases.
->
-> As far as I understand, we need the prog pack to be PMD sized so it is
-> allocated as a huge page
-> and if we limit this then vmalloc() will not allocate a huge page and
-> the performance benefit will be lost.
 
-bpf_prog_pack gives benefits without using PMD pages. For arm64
-with 64kB page, even bpf_prog_pack of 64kB can fit multiple bpf
-programs in it. OTOH, 512MB is really big.
 
-How about we do something like the following?
+On 3/5/24 15:53, Song Liu wrote:
+> On Tue, Mar 5, 2024 at 9:18 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+>>
+>> On Fri, Mar 01, 2024 at 11:39:03AM -0800, Kui-Feng Lee wrote:
+>>>
+>>>
+>>>
+>>> On 2/29/24 06:39, Jiri Olsa wrote:
+>>>> One of uprobe pain points is having slow execution that involves
+>>>> two traps in worst case scenario or single trap if the original
+>>>> instruction can be emulated. For return uprobes there's one extra
+>>>> trap on top of that.
+>>>>
+>>>> My current idea on how to make this faster is to follow the optimized
+>>>> kprobes and replace the normal uprobe trap instruction with jump to
+>>>> user space trampoline that:
+>>>>
+>>>>     - executes syscall to call uprobe consumers callbacks
+>>>>     - executes original instructions
+>>>>     - jumps back to continue with the original code
+>>>>
+>>>> There are of course corner cases where above will have trouble or
+>>>> won't work completely, like:
+>>>>
+>>>>     - executing original instructions in the trampoline is tricky wrt
+>>>>       rip relative addressing
+>>>>
+>>>>     - some instructions we can't move to trampoline at all
+>>>>
+>>>>     - the uprobe address is on page boundary so the jump instruction to
+>>>>       trampoline would span across 2 pages, hence the page replace won't
+>>>>       be atomic, which might cause issues
+>>>>
+>>>>     - ... ? many others I'm sure
+>>>>
+>>>> Still with all the limitations I think we could be able to speed up
+>>>> some amount of the uprobes, which seems worth doing.
+>>>
+>>> Just a random idea related to this.
+>>> Could we also run jit code of bpf programs in the user space to collect
+>>> information instead of going back to the kernel every time?
+> 
+> I was thinking about a similar idea. I guess these user space BPF
+> programs will have limited features that we can probably use them
+> update bpf maps. For this limited scope, we still need bpf_arena.
+> Otherwise, the user space bpf program will need to update the bpf
+> maps with sys_bpf(), which adds the same overhead as triggering
 
-Thanks,
-Song
+That is true. However, even without bpf_arena, it still works with
+some workarounds without going through sys_bpf().
 
-diff --git i/kernel/bpf/core.c w/kernel/bpf/core.c
-index 9ee4536d0a09..1fe05c280e31 100644
---- i/kernel/bpf/core.c
-+++ w/kernel/bpf/core.c
-@@ -888,7 +888,15 @@ static LIST_HEAD(pack_list);
-  * CONFIG_MMU=3Dn. Use PAGE_SIZE in these cases.
-  */
- #ifdef PMD_SIZE
--#define BPF_PROG_PACK_SIZE (PMD_SIZE * num_possible_nodes())
-+  /* PMD_SIZE is really big for some archs. It doesn't make sense to
-+   * reserve too much memory in one allocation. Cap BPF_PROG_PACK_SIZE to
-+   * 2MiB * num_possible_nodes().
-+   */
-+  #if PMD_SIZE <=3D (1 << 21)
-+    #define BPF_PROG_PACK_SIZE (PMD_SIZE * num_possible_nodes())
-+  #else
-+    #define BPF_PROG_PACK_SIZE ((1 << 21) * num_possible_nodes())
-+  #endif
- #else
- #define BPF_PROG_PACK_SIZE PAGE_SIZE
- #endif
+> the program with a syscall.
+> 
+>>
+>> sorry for late reply, do you mean like ubpf? the scope of this change
+>> is to speed up the generic uprobe, ebpf is just one of the consumers
+> 
+> I guess this means we need a new syscall?
+> 
+> Thanks,
+> Song
