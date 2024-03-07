@@ -1,179 +1,569 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33FCB1BDDB
-	for <bpf@vger.kernel.org>; Thu,  7 Mar 2024 18:01:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2358012C81E;
+	Thu,  7 Mar 2024 18:16:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709834509; cv=none; b=pIOkddiiyJ2dGmRExkgK3W1htLzHEXt6DSEf07ckVuwtapAich1p3bZ0vIusWgvaiUXK3qLR11PXJcNDJ1nMBCdF/odO4gUncVpVntJBBoyqG8Mqs3NzU7AQFxVHhVcgOCCfUIdyC81XMBSbdBTfsvHnIvZyCDaoDAOmjZEET+A=
+	t=1709835396; cv=none; b=dmZ3/YlY3pvxwDNnCTP1UaGnIU2NQv48zn9XMmcD2Sni5Pu0uSmmWUglRhxgrqmFAUKmDgXpJRmxTHbvdGd4EZ3j+2KBjR1z4Ji2YOLM83q0Hrk2vpygrgzPIzt2i3YB5EQn1TcE7SwL4W/itsH+y5fvQdhg7tb+8wehq6eLD7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709834509; c=relaxed/simple;
-	bh=cTKlD4B8xqRtLOIhq21xo7dHhHGY5KhiWOTymc30Mqo=;
-	h=Date:From:To:Cc:Message-ID:MIME-Version:Subject:Content-Type; b=Ltr8JxvBJpbud0UqSdDSv4EDP2Wn6u8sF9cUrwHhsF1tysvKSaUnfnltrHX9iYZG3+65m6tCytakzx+Wop1uxcdepJktvCkC2VliNlXb4GcTK8aCbGk1zB0C6lJTFuq4o6P4pe0exfFQ4a9zEXS5qH56AkfLiYUDTn321xF2Sho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=K39JFDcr; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=jFLNdV9d; arc=none smtp.client-ip=50.223.129.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	s=arc-20240116; t=1709835396; c=relaxed/simple;
+	bh=0r7bLhDQPjxmR+E62vUErznSiYClcqYwwCjCI1sE/yg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QPmUbFEZFa6F8zIzr+Iu37SoGxGQTPs+DKmOSSjZtOEE5qAURlF3RYoa97IdLsIxArJ/YDtnhs7M9nT/qhW+mu7H4fnoIdcVvCu9HzVcAuRHHBJkLcQBNsA5SB07XEb88NUs2M+QTdr3FVdaoOPvY+q52mG9c+ZH7I2+RVR+Kpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bmJxo4rB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="K39JFDcr";
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="jFLNdV9d"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 23B18C18DB95
-	for <bpf@vger.kernel.org>; Thu,  7 Mar 2024 10:01:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1709834500; bh=cTKlD4B8xqRtLOIhq21xo7dHhHGY5KhiWOTymc30Mqo=;
-	h=Date:From:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe;
-	b=K39JFDcrlvU0it+ckeL0lkhszjtU/8qjGz28ZOh4XbtSNf4qi5IDGLMJ0G5AfaoHi
-	 ejxWELVuHVzB62x6di05OgVFaYSbh61eEEj54KFvN4PMLxECsmDPhkmoM2MID+Cfzq
-	 x+WferS51ciWszKyXbJ0y1qEm48mS+h92Y2o4564=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Thu Mar  7 10:01:40 2024
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id DEEA1C151091;
-	Thu,  7 Mar 2024 10:01:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1709834499; bh=cTKlD4B8xqRtLOIhq21xo7dHhHGY5KhiWOTymc30Mqo=;
-	h=Date:From:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe;
-	b=jFLNdV9dmXlxgfzGUvbpn/daPhGWDYIHAi+smc2a2BE/umqQqRlGEL19bpBaDn6yn
-	 +gWFb+XM/MMLRqBq4L+BSxO5mAuMIz/EiOdeogHQOOTnKtHHGkRLQQghCq+BZ+pl3+
-	 X3ir5op2QivttHgo6vyNv4BZyZaKwftIRxgVJmJk=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 415DBC151091;
- Thu,  7 Mar 2024 10:01:38 -0800 (PST)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -6.407
-X-Spam-Level: 
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IqiOL_6iU5HS; Thu,  7 Mar 2024 10:01:37 -0800 (PST)
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com
- [209.85.219.48])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 6C35EC14F6F4;
- Thu,  7 Mar 2024 10:01:37 -0800 (PST)
-Received: by mail-qv1-f48.google.com with SMTP id
- 6a1803df08f44-68f51ba7043so6994736d6.3; 
- Thu, 07 Mar 2024 10:01:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1709834496; x=1710439296;
- h=user-agent:content-disposition:mime-version:message-id:subject:cc
- :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Qdh/6l+0WsIUlkS8DWg4uNUGSTHenYj301WnoWcwq7c=;
- b=W4ONcAANTmaTSnSuOjEt2a8o40xcDvWtv43aAFutK0EM7sBAIDcQ6aRaIa2dHknT6Q
- gP9XC0doVcycCx5SPguVmaFKxKGjPy47KG7WoR2uzDpP/O0Kv7Zbmuxr0TTnUACUNCnV
- DRIa6/oGgpl0GOL8NCOVHD4M/aiaSZDSe298itxRDDqj+e+smDIuZw7waNFTAwHzvSt0
- agCpvi2G5nKhwHq4YKQqio1YeNzaAGdirgXT7L3crY2B4wIXNRjJQJKomXvkeZI6p9qU
- 3NOtne3dGIAYz7qmyB551I0cPo8sGiKsoV7eQTTTlG77bNO1rRqSizYUeTm2zMcmSAqR
- xjgA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVVzAzW7jup+bmoOHH1NS2lLb2j9EXcmMe7OHGBAlhC1upDmENQNzw2Stt/V5hRuju3vBPEuvo7TmocU8Rt8V7m0Qpv
-X-Gm-Message-State: AOJu0YzzweG4sQUGoYaZSOTk+dGOm2oQs5B+O66Z6vRAO2M157NA/Czw
- ao5rvzwytSkrhXRRwsfjFAJxSMhQithFIHd+VosYcKkMn4de6MQkSmi9YRAc
-X-Google-Smtp-Source: AGHT+IEx1o8KunLYwMP8sbVQdaaiQwH01HapmcR4ow/LSnKoT9I/DedeMQAfNGd+mLloy+9NeEjE3A==
-X-Received: by 2002:a0c:bf46:0:b0:690:5dcc:31e7 with SMTP id
- b6-20020a0cbf46000000b006905dcc31e7mr9058872qvj.25.1709834495901; 
- Thu, 07 Mar 2024 10:01:35 -0800 (PST)
-Received: from maniforge (c-24-1-27-177.hsd1.il.comcast.net. [24.1.27.177])
- by smtp.gmail.com with ESMTPSA id
- lx6-20020a0562145f0600b0068f752195b5sm8935431qvb.86.2024.03.07.10.01.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Mar 2024 10:01:35 -0800 (PST)
-Date: Thu, 7 Mar 2024 12:01:33 -0600
-From: David Vernet <void@manifault.com>
-To: bpf@ietf.org
-Cc: bpf@vger.kernel.org, bpf-chairs@ietf.org, suresh.krishnan@gmail.com,
- ek.ietf@gmail.com, alexei.starovoitov@gmail.com, hch@lst.de,
- dthaler1968@gmail.com
-Message-ID: <20240307180133.GB63192@maniforge>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bmJxo4rB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70A4EC43390;
+	Thu,  7 Mar 2024 18:16:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709835395;
+	bh=0r7bLhDQPjxmR+E62vUErznSiYClcqYwwCjCI1sE/yg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=bmJxo4rBMcDZtvMb4Op7PB1QSTaoL2sKoFfwMZLMJS4jzrIMHBa7s/fPzXWlyB7cG
+	 6YNlV0KaSQFvo9XzSAkBqx8QyjndgvBgJhwMW55VZEuW8//N9TD+4hdk/Ez2KTnHLu
+	 65K+dtcCRnf6adctcLqTehZA2tyWwdOGm/NfqF4vm7RxwW7OGjMDvMvnn/4J3hXbef
+	 jVyzdb0k+zNQZwMZRI2qi25KP44Fsd8ecb/58qaDIHwZz/gnyWp+mnfZRofU4oKKwv
+	 TMkNt76dckW6HnXNwdm4SSshr84wXl8KuJl2LDz7D4ShT3iEK+kUwxFvrgcjpZafYp
+	 Y7LuZIfsEHVYg==
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2d109e82bd0so15999441fa.3;
+        Thu, 07 Mar 2024 10:16:35 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXVwUg3IeLS+LxpuECRvhDnBkH9oilJFc5z3VuQ1oQB3HWqc0svLoAZGOhdj56bxeBPVum+rryNflWMH/n3tBIZGmKbr1IJVSQgpipf3KLy6rSvPwdQxW7HMwonp6S7CA==
+X-Gm-Message-State: AOJu0YzXaKCLSlIOuSMuGVblT0cJz6eGjP14jsXpqlfi8yW0RDmxjwrk
+	HksVNHbXO7LiJaEeKVm2wR3lCdLWFgdupjlXRusInKqxmC1/j0TedaNRGaenbP4MWlm2iiffK3x
+	c+2s2GFbbb8rjG+yPlNmp5SHnaHQ=
+X-Google-Smtp-Source: AGHT+IHSYtgXzKgQ/AEZx62O/qmj4o+j2hHR2LS+fohaeKLnI0y0tkEPNyAKJi6LNuNC8vVWqlZAqcJB+JBc3TzdqAw=
+X-Received: by 2002:a2e:7c01:0:b0:2d2:c82c:b822 with SMTP id
+ x1-20020a2e7c01000000b002d2c82cb822mr1691031ljc.22.1709835393505; Thu, 07 Mar
+ 2024 10:16:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mutt/2.2.12 (2023-09-09)
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/XQdLgj-imCLDWde8NyOfsqB7q1s>
-Subject: [Bpf] BPF WG ISA Document: Last Call
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-Content-Type: multipart/mixed; boundary="===============8356444143383965135=="
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-Message-ID: <20240307180133.qzY9tztLTkgY3Ck48nYFWYtk7iOZdkeP6BHD7DcLEsE@z>
+References: <65e9e748.a70a0220.606f7.53c0@mx.google.com> <7e216c88-77ee-47b8-becc-a0f780868d3c@sirena.org.uk>
+In-Reply-To: <7e216c88-77ee-47b8-becc-a0f780868d3c@sirena.org.uk>
+From: Song Liu <song@kernel.org>
+Date: Thu, 7 Mar 2024 10:16:21 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW7c+OgFcZ9qWF7nes3SbaQdf5GYZZA+jyHAOzJ5omuZ8g@mail.gmail.com>
+Message-ID: <CAPhsuW7c+OgFcZ9qWF7nes3SbaQdf5GYZZA+jyHAOzJ5omuZ8g@mail.gmail.com>
+Subject: Re: next/master bisection: baseline.login on qemu_arm64-virt-gicv3-uefi
+To: Mark Brown <broonie@kernel.org>
+Cc: Puranjay Mohan <puranjay12@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Will Deacon <will@kernel.org>, kernelci-results@groups.io, 
+	bot@kernelci.org, linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org, 
+	bpf@vger.kernel.org, linux-next@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Mar 7, 2024 at 8:36=E2=80=AFAM Mark Brown <broonie@kernel.org> wrot=
+e:
+>
+> On Thu, Mar 07, 2024 at 08:12:00AM -0800, KernelCI bot wrote:
+>
+> The KernelCI bisection bot found a boot regression n today's -next on
+> qemu arm64 UEFI platforms with 64K pages which was bisected to commit
+> 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory management").
+> We OOM quite early in boot:
 
---===============8356444143383965135==
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="HU+4dg1vAbR+g8k1"
-Content-Disposition: inline
+IIUC, 64kB pages means 512MB PMD. I think that's indeed too big. We
+will need some logic to limit such cases.
 
+Song
 
---HU+4dg1vAbR+g8k1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hello everyone,
-
-We're very excited to meet in less than two weeks at IETF 119!
-
-We've made great progress since IETF 118, and we're thrilled to announce that
-the Instruction Set Architecture (ISA) document is now in working group last
-call. Please review the document at [0], and share any remaining feedback that
-you believe needs to be addressed before we send the document to the ADs. As a
-reminder, the official working group document is in [0], but any suggestions
-for updates should be sent as patches to the instruction-set.rst document in
-the Linux kernel tree [1].
-
-[0]: https://datatracker.ietf.org/doc/draft-ietf-bpf-isa/
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/Documentation/bpf/standardization/instruction-set.rst
-
-Because we're so close to IETF 119, the document will remain in last call for
-at least two weeks following the conclusion of the conference.
-
-Finally, as a friendly reminder, we're still soliciting agenda items for IETF
-119. As mentioned in [2], please email myself and Suresh at bpf-chairs@ietf.org
-with any items you'd like to discuss. Note that there are still plenty of
-remaining milestones in the working group charter [3]. Any topic related to the
-charter or BPF at large are within scope for discussion.
-
-[2]: https://mailarchive.ietf.org/arch/msg/bpf/6pJCj9ujMA5ffb0yKv6DrIOzXOo/
-[3]: https://datatracker.ietf.org/wg/bpf/about/
-
-Regards,
-David and Suresh
-
---HU+4dg1vAbR+g8k1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQRBxU1So5MTLwphjdFZ5LhpZcTzZAUCZeoA/QAKCRBZ5LhpZcTz
-ZKdaAQC+aJQ+d83b28Tvo23GXzE/AHxrsYAmr2E/5MeBoHT+oQEAvuMRcczBCoiH
-MlGiOlmMKf6bi17Eub9viblFAm1Ajgg=
-=C/Zl
------END PGP SIGNATURE-----
-
---HU+4dg1vAbR+g8k1--
-
-
---===============8356444143383965135==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
-
---===============8356444143383965135==--
-
+>
+> <6>[    0.174998] DMI: QEMU QEMU Virtual Machine, BIOS 0.0.0 02/06/2015
+> <4>[    0.189015] swapper/0 invoked oom-killer: gfp_mask=3D0x2cc2(GFP_KER=
+NEL|__GFP_HIGHMEM|__GFP_NOWARN), order=3D0, oom_score_adj=3D0
+> <4>[    0.189835] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.8.0-rc7-nex=
+t-20240307 #1
+> <4>[    0.190093] Hardware name: QEMU QEMU Virtual Machine, BIOS 0.0.0 02=
+/06/2015
+>
+> ...
+>
+>
+> <4>[    0.192209]  vmalloc+0x84/0x94
+> <4>[    0.192301]  bpf_jit_alloc_exec+0x10/0x1c
+> <4>[    0.192402]  bpf_prog_pack_alloc+0x120/0x26c
+> <4>[    0.192505]  bpf_jit_binary_pack_alloc+0x6c/0x128
+> <4>[    0.192611]  bpf_int_jit_compile+0x5f4/0x69c
+> <4>[    0.192718]  bpf_prog_select_runtime+0x11c/0x194
+> <4>[    0.192832]  bpf_migrate_filter+0x120/0x164
+> <4>[    0.192940]  bpf_prog_create+0x124/0x154
+> <4>[    0.193045]  ptp_classifier_init+0x40/0x70
+> <4>[    0.193152]  sock_init+0xa4/0xbc
+>
+> It just seems to be these platforms that are affected, the same
+> platforms without UEFI are fine and no other platforms seem to be
+> showing similar behaviour.  A full log from one of the failed boots can
+> be seen here:
+>
+>    https://storage.kernelci.org/next/master/next-20240307/arm64/defconfig=
++CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gic=
+v2-uefi.txt
+>
+> I've left the full report from the bot below, including links to other
+> boot logs and further information as well as a Reported-by for the bot.
+>
+> > * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+> > * This automated bisection report was sent to you on the basis  *
+> > * that you may be involved with the breaking commit it has      *
+> > * found.  No manual investigation has been done to verify it,   *
+> > * and the root cause of the problem may be somewhere else.      *
+> > *                                                               *
+> > * If you do send a fix, please include this trailer:            *
+> > *   Reported-by: "kernelci.org bot" <bot@kernelci.org>          *
+> > *                                                               *
+> > * Hope this helps!                                              *
+> > * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+> >
+> > next/master bisection: baseline.login on qemu_arm64-virt-gicv3-uefi
+> >
+> > Summary:
+> >   Start:      1843e16d2df9 Add linux-next specific files for 20240307
+> >   Plain log:  https://storage.kernelci.org/next/master/next-20240307/ar=
+m64/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-collabora/baseline-qemu=
+_arm64-virt-gicv3-uefi.txt
+> >   HTML log:   https://storage.kernelci.org/next/master/next-20240307/ar=
+m64/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-collabora/baseline-qemu=
+_arm64-virt-gicv3-uefi.html
+> >   Result:     1dad391daef1 bpf, arm64: use bpf_prog_pack for memory man=
+agement
+> >
+> > Checks:
+> >   revert:     PASS
+> >   verify:     PASS
+> >
+> > Parameters:
+> >   Tree:       next
+> >   URL:        https://git.kernel.org/pub/scm/linux/kernel/git/next/linu=
+x-next.git
+> >   Branch:     master
+> >   Target:     qemu_arm64-virt-gicv3-uefi
+> >   CPU arch:   arm64
+> >   Lab:        lab-collabora
+> >   Compiler:   gcc-10
+> >   Config:     defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+> >   Test case:  baseline.login
+> >
+> > Breaking commit found:
+> >
+> > -----------------------------------------------------------------------=
+--------
+> > commit 1dad391daef129e01e28206b8d586608ff026548
+> > Author: Puranjay Mohan <puranjay12@gmail.com>
+> > Date:   Wed Feb 28 14:18:24 2024 +0000
+> >
+> >     bpf, arm64: use bpf_prog_pack for memory management
+> >
+> >     Use bpf_jit_binary_pack_alloc for memory management of JIT binaries=
+ in
+> >     ARM64 BPF JIT. The bpf_jit_binary_pack_alloc creates a pair of RW a=
+nd RX
+> >     buffers. The JIT writes the program into the RW buffer. When the JI=
+T is
+> >     done, the program is copied to the final RX buffer
+> >     with bpf_jit_binary_pack_finalize.
+> >
+> >     Implement bpf_arch_text_copy() and bpf_arch_text_invalidate() for A=
+RM64
+> >     JIT as these functions are required by bpf_jit_binary_pack allocato=
+r.
+> >
+> >     Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+> >     Acked-by: Song Liu <song@kernel.org>
+> >     Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+> >     Link: https://lore.kernel.org/r/20240228141824.119877-3-puranjay12@=
+gmail.com
+> >     Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> >
+> > diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_com=
+p.c
+> > index 20720ec346b8..5afc7a525eca 100644
+> > --- a/arch/arm64/net/bpf_jit_comp.c
+> > +++ b/arch/arm64/net/bpf_jit_comp.c
+> > @@ -76,6 +76,7 @@ struct jit_ctx {
+> >       int *offset;
+> >       int exentry_idx;
+> >       __le32 *image;
+> > +     __le32 *ro_image;
+> >       u32 stack_size;
+> >       int fpb_offset;
+> >  };
+> > @@ -205,6 +206,14 @@ static void jit_fill_hole(void *area, unsigned int=
+ size)
+> >               *ptr++ =3D cpu_to_le32(AARCH64_BREAK_FAULT);
+> >  }
+> >
+> > +int bpf_arch_text_invalidate(void *dst, size_t len)
+> > +{
+> > +     if (!aarch64_insn_set(dst, AARCH64_BREAK_FAULT, len))
+> > +             return -EINVAL;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  static inline int epilogue_offset(const struct jit_ctx *ctx)
+> >  {
+> >       int to =3D ctx->epilogue_offset;
+> > @@ -746,7 +755,8 @@ static int add_exception_handler(const struct bpf_i=
+nsn *insn,
+> >                                struct jit_ctx *ctx,
+> >                                int dst_reg)
+> >  {
+> > -     off_t offset;
+> > +     off_t ins_offset;
+> > +     off_t fixup_offset;
+> >       unsigned long pc;
+> >       struct exception_table_entry *ex;
+> >
+> > @@ -763,12 +773,17 @@ static int add_exception_handler(const struct bpf=
+_insn *insn,
+> >               return -EINVAL;
+> >
+> >       ex =3D &ctx->prog->aux->extable[ctx->exentry_idx];
+> > -     pc =3D (unsigned long)&ctx->image[ctx->idx - 1];
+> > +     pc =3D (unsigned long)&ctx->ro_image[ctx->idx - 1];
+> >
+> > -     offset =3D pc - (long)&ex->insn;
+> > -     if (WARN_ON_ONCE(offset >=3D 0 || offset < INT_MIN))
+> > +     /*
+> > +      * This is the relative offset of the instruction that may fault =
+from
+> > +      * the exception table itself. This will be written to the except=
+ion
+> > +      * table and if this instruction faults, the destination register=
+ will
+> > +      * be set to '0' and the execution will jump to the next instruct=
+ion.
+> > +      */
+> > +     ins_offset =3D pc - (long)&ex->insn;
+> > +     if (WARN_ON_ONCE(ins_offset >=3D 0 || ins_offset < INT_MIN))
+> >               return -ERANGE;
+> > -     ex->insn =3D offset;
+> >
+> >       /*
+> >        * Since the extable follows the program, the fixup offset is alw=
+ays
+> > @@ -777,12 +792,25 @@ static int add_exception_handler(const struct bpf=
+_insn *insn,
+> >        * bits. We don't need to worry about buildtime or runtime sort
+> >        * modifying the upper bits because the table is already sorted, =
+and
+> >        * isn't part of the main exception table.
+> > +      *
+> > +      * The fixup_offset is set to the next instruction from the instr=
+uction
+> > +      * that may fault. The execution will jump to this after handling=
+ the
+> > +      * fault.
+> >        */
+> > -     offset =3D (long)&ex->fixup - (pc + AARCH64_INSN_SIZE);
+> > -     if (!FIELD_FIT(BPF_FIXUP_OFFSET_MASK, offset))
+> > +     fixup_offset =3D (long)&ex->fixup - (pc + AARCH64_INSN_SIZE);
+> > +     if (!FIELD_FIT(BPF_FIXUP_OFFSET_MASK, fixup_offset))
+> >               return -ERANGE;
+> >
+> > -     ex->fixup =3D FIELD_PREP(BPF_FIXUP_OFFSET_MASK, offset) |
+> > +     /*
+> > +      * The offsets above have been calculated using the RO buffer but=
+ we
+> > +      * need to use the R/W buffer for writes.
+> > +      * switch ex to rw buffer for writing.
+> > +      */
+> > +     ex =3D (void *)ctx->image + ((void *)ex - (void *)ctx->ro_image);
+> > +
+> > +     ex->insn =3D ins_offset;
+> > +
+> > +     ex->fixup =3D FIELD_PREP(BPF_FIXUP_OFFSET_MASK, fixup_offset) |
+> >                   FIELD_PREP(BPF_FIXUP_REG_MASK, dst_reg);
+> >
+> >       ex->type =3D EX_TYPE_BPF;
+> > @@ -1550,7 +1578,8 @@ static inline void bpf_flush_icache(void *start, =
+void *end)
+> >
+> >  struct arm64_jit_data {
+> >       struct bpf_binary_header *header;
+> > -     u8 *image;
+> > +     u8 *ro_image;
+> > +     struct bpf_binary_header *ro_header;
+> >       struct jit_ctx ctx;
+> >  };
+> >
+> > @@ -1559,12 +1588,14 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf=
+_prog *prog)
+> >       int image_size, prog_size, extable_size, extable_align, extable_o=
+ffset;
+> >       struct bpf_prog *tmp, *orig_prog =3D prog;
+> >       struct bpf_binary_header *header;
+> > +     struct bpf_binary_header *ro_header;
+> >       struct arm64_jit_data *jit_data;
+> >       bool was_classic =3D bpf_prog_was_classic(prog);
+> >       bool tmp_blinded =3D false;
+> >       bool extra_pass =3D false;
+> >       struct jit_ctx ctx;
+> >       u8 *image_ptr;
+> > +     u8 *ro_image_ptr;
+> >
+> >       if (!prog->jit_requested)
+> >               return orig_prog;
+> > @@ -1591,8 +1622,11 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_=
+prog *prog)
+> >       }
+> >       if (jit_data->ctx.offset) {
+> >               ctx =3D jit_data->ctx;
+> > -             image_ptr =3D jit_data->image;
+> > +             ro_image_ptr =3D jit_data->ro_image;
+> > +             ro_header =3D jit_data->ro_header;
+> >               header =3D jit_data->header;
+> > +             image_ptr =3D (void *)header + ((void *)ro_image_ptr
+> > +                                              - (void *)ro_header);
+> >               extra_pass =3D true;
+> >               prog_size =3D sizeof(u32) * ctx.idx;
+> >               goto skip_init_ctx;
+> > @@ -1637,18 +1671,27 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf=
+_prog *prog)
+> >       /* also allocate space for plt target */
+> >       extable_offset =3D round_up(prog_size + PLT_TARGET_SIZE, extable_=
+align);
+> >       image_size =3D extable_offset + extable_size;
+> > -     header =3D bpf_jit_binary_alloc(image_size, &image_ptr,
+> > -                                   sizeof(u32), jit_fill_hole);
+> > -     if (header =3D=3D NULL) {
+> > +     ro_header =3D bpf_jit_binary_pack_alloc(image_size, &ro_image_ptr=
+,
+> > +                                           sizeof(u32), &header, &imag=
+e_ptr,
+> > +                                           jit_fill_hole);
+> > +     if (!ro_header) {
+> >               prog =3D orig_prog;
+> >               goto out_off;
+> >       }
+> >
+> >       /* 2. Now, the actual pass. */
+> >
+> > +     /*
+> > +      * Use the image(RW) for writing the JITed instructions. But also=
+ save
+> > +      * the ro_image(RX) for calculating the offsets in the image. The=
+ RW
+> > +      * image will be later copied to the RX image from where the prog=
+ram
+> > +      * will run. The bpf_jit_binary_pack_finalize() will do this copy=
+ in the
+> > +      * final step.
+> > +      */
+> >       ctx.image =3D (__le32 *)image_ptr;
+> > +     ctx.ro_image =3D (__le32 *)ro_image_ptr;
+> >       if (extable_size)
+> > -             prog->aux->extable =3D (void *)image_ptr + extable_offset=
+;
+> > +             prog->aux->extable =3D (void *)ro_image_ptr + extable_off=
+set;
+> >  skip_init_ctx:
+> >       ctx.idx =3D 0;
+> >       ctx.exentry_idx =3D 0;
+> > @@ -1656,9 +1699,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_p=
+rog *prog)
+> >       build_prologue(&ctx, was_classic, prog->aux->exception_cb);
+> >
+> >       if (build_body(&ctx, extra_pass)) {
+> > -             bpf_jit_binary_free(header);
+> >               prog =3D orig_prog;
+> > -             goto out_off;
+> > +             goto out_free_hdr;
+> >       }
+> >
+> >       build_epilogue(&ctx, prog->aux->exception_cb);
+> > @@ -1666,34 +1708,44 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf=
+_prog *prog)
+> >
+> >       /* 3. Extra pass to validate JITed code. */
+> >       if (validate_ctx(&ctx)) {
+> > -             bpf_jit_binary_free(header);
+> >               prog =3D orig_prog;
+> > -             goto out_off;
+> > +             goto out_free_hdr;
+> >       }
+> >
+> >       /* And we're done. */
+> >       if (bpf_jit_enable > 1)
+> >               bpf_jit_dump(prog->len, prog_size, 2, ctx.image);
+> >
+> > -     bpf_flush_icache(header, ctx.image + ctx.idx);
+> > -
+> >       if (!prog->is_func || extra_pass) {
+> >               if (extra_pass && ctx.idx !=3D jit_data->ctx.idx) {
+> >                       pr_err_once("multi-func JIT bug %d !=3D %d\n",
+> >                                   ctx.idx, jit_data->ctx.idx);
+> > -                     bpf_jit_binary_free(header);
+> >                       prog->bpf_func =3D NULL;
+> >                       prog->jited =3D 0;
+> >                       prog->jited_len =3D 0;
+> > +                     goto out_free_hdr;
+> > +             }
+> > +             if (WARN_ON(bpf_jit_binary_pack_finalize(prog, ro_header,
+> > +                                                      header))) {
+> > +                     /* ro_header has been freed */
+> > +                     ro_header =3D NULL;
+> > +                     prog =3D orig_prog;
+> >                       goto out_off;
+> >               }
+> > -             bpf_jit_binary_lock_ro(header);
+> > +             /*
+> > +              * The instructions have now been copied to the ROX regio=
+n from
+> > +              * where they will execute. Now the data cache has to be =
+cleaned to
+> > +              * the PoU and the I-cache has to be invalidated for the =
+VAs.
+> > +              */
+> > +             bpf_flush_icache(ro_header, ctx.ro_image + ctx.idx);
+> >       } else {
+> >               jit_data->ctx =3D ctx;
+> > -             jit_data->image =3D image_ptr;
+> > +             jit_data->ro_image =3D ro_image_ptr;
+> >               jit_data->header =3D header;
+> > +             jit_data->ro_header =3D ro_header;
+> >       }
+> > -     prog->bpf_func =3D (void *)ctx.image;
+> > +
+> > +     prog->bpf_func =3D (void *)ctx.ro_image;
+> >       prog->jited =3D 1;
+> >       prog->jited_len =3D prog_size;
+> >
+> > @@ -1714,6 +1766,14 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_=
+prog *prog)
+> >               bpf_jit_prog_release_other(prog, prog =3D=3D orig_prog ?
+> >                                          tmp : orig_prog);
+> >       return prog;
+> > +
+> > +out_free_hdr:
+> > +     if (header) {
+> > +             bpf_arch_text_copy(&ro_header->size, &header->size,
+> > +                                sizeof(header->size));
+> > +             bpf_jit_binary_pack_free(ro_header, header);
+> > +     }
+> > +     goto out_off;
+> >  }
+> >
+> >  bool bpf_jit_supports_kfunc_call(void)
+> > @@ -1721,6 +1781,13 @@ bool bpf_jit_supports_kfunc_call(void)
+> >       return true;
+> >  }
+> >
+> > +void *bpf_arch_text_copy(void *dst, void *src, size_t len)
+> > +{
+> > +     if (!aarch64_insn_copy(dst, src, len))
+> > +             return ERR_PTR(-EINVAL);
+> > +     return dst;
+> > +}
+> > +
+> >  u64 bpf_jit_alloc_exec_limit(void)
+> >  {
+> >       return VMALLOC_END - VMALLOC_START;
+> > @@ -2359,3 +2426,27 @@ bool bpf_jit_supports_exceptions(void)
+> >        */
+> >       return true;
+> >  }
+> > +
+> > +void bpf_jit_free(struct bpf_prog *prog)
+> > +{
+> > +     if (prog->jited) {
+> > +             struct arm64_jit_data *jit_data =3D prog->aux->jit_data;
+> > +             struct bpf_binary_header *hdr;
+> > +
+> > +             /*
+> > +              * If we fail the final pass of JIT (from jit_subprogs),
+> > +              * the program may not be finalized yet. Call finalize he=
+re
+> > +              * before freeing it.
+> > +              */
+> > +             if (jit_data) {
+> > +                     bpf_arch_text_copy(&jit_data->ro_header->size, &j=
+it_data->header->size,
+> > +                                        sizeof(jit_data->header->size)=
+);
+> > +                     kfree(jit_data);
+> > +             }
+> > +             hdr =3D bpf_jit_binary_pack_hdr(prog);
+> > +             bpf_jit_binary_pack_free(hdr, NULL);
+> > +             WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(prog));
+> > +     }
+> > +
+> > +     bpf_prog_unlock_free(prog);
+> > +}
+> > -----------------------------------------------------------------------=
+--------
+> >
+> >
+> > Git bisection log:
+> >
+> > -----------------------------------------------------------------------=
+--------
+> > git bisect start
+> > # good: [67be068d31d423b857ffd8c34dbcc093f8dfff76] Merge tag 'vfs-6.8-r=
+elease.fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs
+> > git bisect good 67be068d31d423b857ffd8c34dbcc093f8dfff76
+> > # bad: [1843e16d2df9d98427ef8045589571749d627cf7] Add linux-next specif=
+ic files for 20240307
+> > git bisect bad 1843e16d2df9d98427ef8045589571749d627cf7
+> > # bad: [1a0a33e22e715a4cc7bb2709cfda8e83b8c756b2] Merge branch 'main' o=
+f git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
+> > git bisect bad 1a0a33e22e715a4cc7bb2709cfda8e83b8c756b2
+> > # good: [5a0d6b0465ab18fefa8abc9afbabce19e7de2fe5] Merge branch 'nfsd-n=
+ext' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
+> > git bisect good 5a0d6b0465ab18fefa8abc9afbabce19e7de2fe5
+> > # good: [a5fcf74d80bec9948701ff0f7529ae96a0c4a41c] inet: annotate data-=
+races around ifa->ifa_valid_lft
+> > git bisect good a5fcf74d80bec9948701ff0f7529ae96a0c4a41c
+> > # good: [7aaab3e1fcee995b70d344687fa0f33b0b9d33f7] Merge branch 'hwmon-=
+next' of git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging=
+.git
+> > git bisect good 7aaab3e1fcee995b70d344687fa0f33b0b9d33f7
+> > # good: [dfa2c103738019033bad44d8be7919ad8bc19dd6] Merge branch 'linux-=
+next' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+> > git bisect good dfa2c103738019033bad44d8be7919ad8bc19dd6
+> > # bad: [564ae6794ec5f050bb6df4446820777e7253f960] mptcp: get addr in us=
+erspace pm list
+> > git bisect bad 564ae6794ec5f050bb6df4446820777e7253f960
+> > # good: [2c21a0f67c8ce334b8a58332e8c2d71694bef0ab] Merge branch 'Suppor=
+t PTR_MAYBE_NULL for struct_ops arguments.'
+> > git bisect good 2c21a0f67c8ce334b8a58332e8c2d71694bef0ab
+> > # bad: [4ab597d2962195ca4f01a429f9b2ea87ee684be3] net: bareudp: Remove =
+generic .ndo_get_stats64
+> > git bisect bad 4ab597d2962195ca4f01a429f9b2ea87ee684be3
+> > # good: [dfe6625df48ec54c6dc9b86d361f26962d09de88] bpf: introduce in_sl=
+eepable() helper
+> > git bisect good dfe6625df48ec54c6dc9b86d361f26962d09de88
+> > # bad: [f2e81192e07e87897ff1296c96775eceea8f582a] bpftool: Add an examp=
+le for struct_ops map and shadow type.
+> > git bisect bad f2e81192e07e87897ff1296c96775eceea8f582a
+> > # bad: [1dad391daef129e01e28206b8d586608ff026548] bpf, arm64: use bpf_p=
+rog_pack for memory management
+> > git bisect bad 1dad391daef129e01e28206b8d586608ff026548
+> > # good: [22fc0e80aeb5c0c1377e6c02d7248f8fbf5df7fc] bpf, arm64: support =
+exceptions
+> > git bisect good 22fc0e80aeb5c0c1377e6c02d7248f8fbf5df7fc
+> > # good: [451c3cab9a65e656c3b3d106831fc02d56b8c34a] arm64: patching: imp=
+lement text_poke API
+> > git bisect good 451c3cab9a65e656c3b3d106831fc02d56b8c34a
+> > # first bad commit: [1dad391daef129e01e28206b8d586608ff026548] bpf, arm=
+64: use bpf_prog_pack for memory management
+> > -----------------------------------------------------------------------=
+--------
+> >
+> >
+> > -=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-
+> > Groups.io Links: You receive all messages sent to this group.
+> > View/Reply Online (#52295): https://groups.io/g/kernelci-results/messag=
+e/52295
+> > Mute This Topic: https://groups.io/mt/104790392/1131744
+> > Group Owner: kernelci-results+owner@groups.io
+> > Unsubscribe: https://groups.io/g/kernelci-results/unsub [broonie@kernel=
+.org]
+> > -=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-
+> >
+> >
