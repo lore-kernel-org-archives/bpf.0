@@ -1,125 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A5DC12C;
-	Thu,  7 Mar 2024 01:58:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DD001C27
+	for <bpf@vger.kernel.org>; Thu,  7 Mar 2024 03:12:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709776708; cv=none; b=bD/0ZTlLZBmcmqR2isGWZ2r3cKoB2kY/jeQlmoE/SL3Eo3s7Jtunxm38SldadStBGakDQQe8Dxg9KcRb9Kg2GeCVWG8oRnjZn2HKSdzrVUIf+xSH/ldPLSyozin/eXxXaQvk4XrcYx6rVEnk1yMGbt2aju0uYEQuKoQleFdthq0=
+	t=1709781155; cv=none; b=VfncmeaeQB9Ij5Hfcd7hOGffqfbL4VB5WO5l7DxpYSzc5mx5IptRwi20DLf7sDhADdbeA5+APlYkAgJHvBAUKivxRHONbJK9qRQotd6ZJDTNstdjnYUHvrdJh7RPEmioJOgSdxsl49qTPl1sD4wiVD3hrImfypLKt8iITD2KLqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709776708; c=relaxed/simple;
-	bh=L3O4A6I6q2xswAZ9waPqbgEcxCJuuOwWupiDClvIBCA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EWEiKoZH2fT2CoCE2YATTHGZAHwr3AqkuMRXZ95uD8jbBMB7W6naMFMKGfRtiypEKzrLoEeWe9LCCJi5q3Ju9aCcrEDjEbOEgTDPBwmAUAJh7lBUEvdBVDXAgu3X3PNEDKN7GYMV4jl5fSTyjX9mDHQf97ixADLhKGmL6w3TNNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4bc4mQZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1709781155; c=relaxed/simple;
+	bh=IgS2S5vb8V+VYxgYJ52kpoJu+dlAuAG5QnfZAkoC1YE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=K4TqKihZWCSi2aW22Hb+sX4bFmQSb6eBwVqU5/QKMlN+xYn+DS1E5aKbBr6sU2trfejvloy7QhrHLTSaQSG4nJFzaYQgeUXeHmEtv3WuzlXO5xO6HDqbE1J9no4sKR0x6N1iMxW/mVOWATCEAqjNqwrO7cASgsxPc5Uee2RO7eg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MOB6jSVj; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4bc4mQZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B17E9C433B2;
-	Thu,  7 Mar 2024 01:58:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709776707;
-	bh=L3O4A6I6q2xswAZ9waPqbgEcxCJuuOwWupiDClvIBCA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=X4bc4mQZ0B3YJSeSKqiud7Pf5N/PjasxBQ1sMnySsbNAqELWmQzGCHW1xq+e8l4qF
-	 z3M/dNxNVtfU1I30IY+TSKsj9VPCItZCs3R03RcrwhEKjqm6pGosP7tLrSpXYJKhag
-	 Zc0MB8QQS6smVLljR7ow2tjallSs+HTHue72Adaz1fcfkwBVUhbmgQbYmUZT0ZKMEv
-	 YKs57ytwtvBPJcshu67gsib/BYoBk+wVIJ0id6y0BgYNPrZxxaEdja4UPmzScUScm7
-	 cWRfl8Lm0CLa7Hn+WgfIfZuTaVyqbuqk5XeZHM7xq2MWRgNAMyMQaZYnMD82QBKetV
-	 3jORWmm61v4Mg==
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2d27fef509eso4019021fa.3;
-        Wed, 06 Mar 2024 17:58:27 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXstASmHxCVdk5buDowSfGS0POGtS013UP2BZAbe6bldIcMhcGVyIbLOd1hxY6FZwVOthZMofO39Lb9ya43yiS7fhTFmA7KdgQLvw49WNTGm18FwWeYOvjSqcefnnZpPsK3g96mB6xSWjZy86y/1CQirMtVyfS9J38TJc9+HiSJsQ==
-X-Gm-Message-State: AOJu0YwvRVHOJPUdv9uYIVrayZ6uag2S0eijTKVYSdBgxEz/3HsiD+7S
-	qI5Ub8qxbbtZAwCEeFGwdpjm4zYT4F4phkrYZUUwkJ74lRDHHFvMMkm0mi1X0hQTkvURs3rAHAx
-	oPdE3F8kHL88xJYz+SNibpSn2M5s=
-X-Google-Smtp-Source: AGHT+IGPIf6DMuhux4lfwdNlvY9b2iTHZNOuENjiG+dZoBpCzsrVoKx3uIZaEFLeNAPlIblsD05KjVQRj/3eo0KQ5xM=
-X-Received: by 2002:a05:651c:1987:b0:2d2:a9d6:c435 with SMTP id
- bx7-20020a05651c198700b002d2a9d6c435mr451387ljb.34.1709776705769; Wed, 06 Mar
- 2024 17:58:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MOB6jSVj"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-6e56da425b5so441919b3a.0
+        for <bpf@vger.kernel.org>; Wed, 06 Mar 2024 19:12:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709781153; x=1710385953; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MbMb/cmqqu8//3ACZai0ueXgKQ5OarLX0+UhHc3GttM=;
+        b=MOB6jSVjSwlfbHixWs9M9XszuaPI5VJQv83tkHWjBEtUfKHrs5kampgj7BhCBKfukM
+         q62/EytZAGcB4/6BbBGOxAwvv3GsyMhvPkG4U7I/O+mhlFdzHy0gNg2yfpKAhzjd71ws
+         gHBt73NjHE0n8NQqLYZGrjY52HnJ02lXgOqTmbxl8s5Fxo59pv4HjkdmULJleXE8lILe
+         bUi81NdzvnQ0f54p0iEuymNPIxcKCHWzjCuCnIguFDociMfc11RdqsXZfw2jDAW9rsxG
+         XExWHEjpPyMXrX+yzwaCxxsJnvKABWh+qLtp7PtSGlu19BWX/E/Y0TLtLtcVhq8+jz6U
+         BNmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709781153; x=1710385953;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MbMb/cmqqu8//3ACZai0ueXgKQ5OarLX0+UhHc3GttM=;
+        b=GF8iiG2qyjMew4zf6ugXdUQa4h+WCX83uhO2CMBLGbvCaXheCARxDH4sdMdHeo7MRq
+         iMYfWt2zl7MrIGDqf4nFx4A7VlqrhLJzrDp92gYtXQxTMKyEcKjN5t4ciVi7qhGWYfsS
+         U1LdzrWrY/B7W0l9opVO2jJLEImmEka0pIymRC1/X3nx+X01pw/yB2i7piespKkqd0dM
+         2JhSFhQsJ26hSy2s5EcoZe5Ym5opMF44gySQqRAtrD25scSd20zQ1JBPAd5rveZBtxLe
+         hEhueXg2eGkkKdRRdll4J1+7Jh1o/wz2o95rPjJ7bkUT29FCjLFG4/VtXoSAatKMBXei
+         21Tw==
+X-Gm-Message-State: AOJu0YwyrU4QNeXBvjjcwqRU8B3iYciBV/3UOEzUlhqn4GEeFeBd6PFt
+	e47ObPXwKAivNu8IJSnsCSXniNuNHvlqpBgmEY6liqkafx9tT6IrGS/JBiYU
+X-Google-Smtp-Source: AGHT+IG8Ca06Jp9pwaV93bmK3ciiug3BSR4hVDHX4SpPXO3rHTeIZFP1RMuGOA8XxuoUS0oOv8vdVw==
+X-Received: by 2002:a05:6a00:93aa:b0:6e6:4679:fa8b with SMTP id ka42-20020a056a0093aa00b006e64679fa8bmr6927714pfb.4.1709781152838;
+        Wed, 06 Mar 2024 19:12:32 -0800 (PST)
+Received: from localhost.localdomain ([2620:10d:c090:400::5:dd40])
+        by smtp.gmail.com with ESMTPSA id r16-20020a62e410000000b006e46047fe04sm11497444pfh.204.2024.03.06.19.12.31
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 06 Mar 2024 19:12:32 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@kernel.org,
+	memxor@gmail.com,
+	eddyz87@gmail.com,
+	kernel-team@fb.com
+Subject: [PATCH v4 bpf-next 0/6] bpf: arena prerequisites
+Date: Wed,  6 Mar 2024 19:12:22 -0800
+Message-Id: <20240307031228.42896-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.39.3 (Apple Git-145)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1709676663.git.jcalvinowens@gmail.com> <ZejhcP_r5QJZcS6j@bombadil.infradead.org>
- <Zej66vQInnDYgpNy@gmail.com>
-In-Reply-To: <Zej66vQInnDYgpNy@gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Wed, 6 Mar 2024 17:58:14 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW4UA9uCRK7EVCJGUvmroQhZZZiVdXotri4oO7+WRQr3sg@mail.gmail.com>
-Message-ID: <CAPhsuW4UA9uCRK7EVCJGUvmroQhZZZiVdXotri4oO7+WRQr3sg@mail.gmail.com>
-Subject: Re: [RFC][PATCH 0/4] Make bpf_jit and kprobes work with CONFIG_MODULES=n
-To: Calvin Owens <jcalvinowens@gmail.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Naveen N Rao <naveen.n.rao@linux.ibm.com>, 
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>, David S Miller <davem@davemloft.net>, 
-	Thomas Gleixner <tglx@linutronix.de>, bpf@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Calvin,
+From: Alexei Starovoitov <ast@kernel.org>
 
-It is great to hear from you! :)
+These are bpf_arena prerequisite patches.
+Useful on its own.
 
-On Wed, Mar 6, 2024 at 3:23=E2=80=AFPM Calvin Owens <jcalvinowens@gmail.com=
-> wrote:
->
-> On Wednesday 03/06 at 13:34 -0800, Luis Chamberlain wrote:
-> > On Wed, Mar 06, 2024 at 12:05:07PM -0800, Calvin Owens wrote:
-> > > Hello all,
-> > >
-> > > This patchset makes it possible to use bpftrace with kprobes on kerne=
-ls
-> > > built without loadable module support.
-> >
-> > This is a step in the right direction for another reason: clearly the
-> > module_alloc() is not about modules, and we have special reasons for it
-> > now beyond modules. The effort to share a generalize a huge page for
-> > these things is also another reason for some of this but that is more
-> > long term.
-> >
-> > I'm all for minor changes here so to avoid regressions but it seems a
-> > rename is in order -- if we're going to all this might as well do it
-> > now. And for that I'd just like to ask you paint the bikeshed with
-> > Song Liu as he's been the one slowly making way to help us get there
-> > with the "module: replace module_layout with module_memory",
-> > and Mike Rapoport as he's had some follow up attempts [0]. As I see it,
-> > the EXECMEM stuff would be what we use instead then. Mike kept the
-> > module_alloc() and the execmem was just a wrapper but your move of the
-> > arch stuff makes sense as well and I think would complement his series
-> > nicely.
->
-> I apologize for missing that. I think these are the four most recent
-> versions of the different series referenced from that LWN link:
->
->   a) https://lore.kernel.org/all/20230918072955.2507221-1-rppt@kernel.org=
-/
->   b) https://lore.kernel.org/all/20230526051529.3387103-1-song@kernel.org=
-/
->   c) https://lore.kernel.org/all/20221107223921.3451913-1-song@kernel.org=
-/
->   d) https://lore.kernel.org/all/20201120202426.18009-1-rick.p.edgecombe@=
-intel.com/
->
-> Song and Mike, please correct me if I'm wrong, but I think what I've
-> done here (see [1], sorry for not adding you initially) is compatible
-> with everything both of you have recently proposed above. How do you
-> feel about this as a first step?
+Alexei Starovoitov (5):
+  bpf: Allow kfuncs return 'void *'
+  bpf: Recognize '__map' suffix in kfunc arguments
+  bpf: Plumb get_unmapped_area() callback into bpf_map_ops
+  libbpf: Allow specifying 64-bit integers in map BTF.
+  bpf: Tell bpf programs kernel's PAGE_SIZE
 
-I agree that the work here is compatible with other efforts. I have no
-objection to making this the first step.
+Andrii Nakryiko (1):
+  bpftool: rename is_internal_mmapable_map into is_mmapable_map
 
->
-> For naming, execmem_alloc() seems reasonable to me? I have no strong
-> feelings at all, I'll just use that going forward unless somebody else
-> expresses an opinion.
+ include/linux/bpf.h         |  3 +++
+ kernel/bpf/core.c           |  7 +++++-
+ kernel/bpf/syscall.c        | 16 ++++++++++++++
+ kernel/bpf/verifier.c       | 19 ++++++++++++++++
+ tools/bpf/bpftool/gen.c     | 18 +++++++--------
+ tools/lib/bpf/bpf_helpers.h |  1 +
+ tools/lib/bpf/libbpf.c      | 44 +++++++++++++++++++++++++++++++++++--
+ 7 files changed, 96 insertions(+), 12 deletions(-)
 
-I am not good at naming things. No objection from me to "execmem_alloc".
+-- 
+2.43.0
 
-Thanks,
-Song
