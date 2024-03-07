@@ -1,127 +1,96 @@
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01F529411
-	for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 15:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504371E863
+	for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 18:40:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710085658; cv=none; b=HUPJPbxh7eEiR3ZVTzr1G+3Ppr3UGsMJo+gdmDeawP138YlloJAHNFPKxvD32kRtOBUtGg7sR4imQ0M9EBX53nDsms4PimptgRl4nQPVnA63pf+P1Nf12rpoEoE20QUKBThf9RjN6UfrDGO0C0tm/cjNspp0cEEtM0z0pyneckw=
+	t=1710096048; cv=none; b=Z1n6VJx+gMwO182o6IHENEJwSYtZZhxBFew/O9TD1a1Hg+eZH1IrhM83tmf5v7PevPW3v9O7Jt+0QnZ8SUmSpfnkYNIWBp25EzZ0ZHSpyeRpedfdSn4rfhxZ4fSMh5A2cC+T0CEUNFSPjmbZCr+aYjoi14awUv5YOcM6jSUqWRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710085658; c=relaxed/simple;
-	bh=Pujf88MSgeBgnVk3XoQ+u8p6dPOMYRawFtSeLnjfy6c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DvJix1ni3ipmNvsWXu8YPxUcx6nGU16s1lqwxWPwcHhWsSvklaiwQ9soTpkHdDciQP/qsu7lYF1gYkaZW/PplsWF2+G/kwNOQ7jtNsLv2RkOPQqQbuZUwNvXUty2y6hoOd9VT01HI4Kjpr6q9FpeK5DiG4JTz08HHhKd8nRIzzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=k8CBp5Lz; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1710096048; c=relaxed/simple;
+	bh=ygRR0Del03h6JLPzJzNQCY0A8xY4KgyDpwAqNnhbwsI=;
+	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
+	 MIME-Version:Content-Type; b=k1ni35QFuTkoq0AMaPr4G5UTs3b4tmqzZMBBwAms0ffmZytGoPb1zpTGtUJYKdw/it5ClBvXYSvCccmrqnfZtlcfuoy3Y3pLzegIyJJHjRJhAPM1MCHFPDbM5qCZj6MtRveOfeeHaJGWAeTDCI4PYymp+grjD4POeReyhnpec2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=djA13dGK; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="k8CBp5Lz"
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B043F48A9E
-	for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 15:47:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1710085652;
-	bh=3x1QmuNCSkhKmOkbx/k9p+MANy4otdnhu0jXgm0Ki0g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
-	b=k8CBp5LzYXhGPbcR+Y0ZUahzuctNhcOFEqscHdPUKYfadZ/tjEP5uwj2GIKvWEs2O
-	 Je1FtoyKahzh68HcKC6uSbn/AhjEBb6Cr/pQHJWd50aCSOHaGfqaxgqYUNMYz9kxC7
-	 pr7E9gctEUAbMrOykUtFUhkuI9BbavRzbvQlUCmfkxm/Ie9mh3AQnSkFDdZDYmhRwY
-	 /2aII6yAngPK9GJTwXQDoSp3NWE8DaozEDjKOl0VrVdoFuHz6D8w/q68Eso9CViOZD
-	 yBAZkOcvfxf1PyZdyBaolViPN+W54FiDT1BB3gQH+9iAiOklRPTLcWGYuuBLH+utA6
-	 1+wn9Xlmxp8kA==
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a4623436bd1so8121966b.2
-        for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 08:47:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="djA13dGK"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-56845954fffso1159502a12.3
+        for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 11:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1710096044; x=1710700844; darn=vger.kernel.org;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=BGXBZR4M5Hf2bGx2FubnlyZXvesqTiZYLbVSADloLzM=;
+        b=djA13dGK/LR0KcI02cl+qZeI14FaVrD5JwjRxvtquTGN85dQQAJuzBSjaYW1rMOuTD
+         uikVXinP21TrGfWos86q/fWeqZGMOQt27iKAybn+/E/YLZ36bUrbkxbS/FdXwUVWnoL/
+         y8A30MigbKohyrX+DiK/5SmoF8QxrD719nkHNRKCXhzRJpTN/CmQIqS0P5c0GOKidFXh
+         4Q8qUnzevsCRI07oA39KduH3KzUbnM4hxE+Kqs8XMyRmdOG2aX/GBv5J2M2Mu8cGlaWm
+         Gc6W6TkiZqpmu+Mtb60utsfsq+FJmmP7wHhVcyEM6STnzCRd+pRaAlAzWKZ8wTSmqzKZ
+         kpLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710085652; x=1710690452;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3x1QmuNCSkhKmOkbx/k9p+MANy4otdnhu0jXgm0Ki0g=;
-        b=rHJSloyK3XGbDESTHhu4nvdeD64d/s1hftLG1QBNSkjuiguXrM++qJHSoxRegwfsDl
-         Yo0GlS1DkOPS+Z8NEZcGuoEqMT/drLFeZLViLrAhwoWC/Uy1B8gBbL/znHF18h2508iP
-         Zte6nnP5rzv/yPy35jcORQEp5c1DsvhnvtMj8L5OQjszfdSviO/xVo23omRDCOLFHSBT
-         iCRQ8mq3MOagh4Qjbx9Hmcr7RebNV+SlWBfmQOj0GgXlqJZJt3vFdHrxpr10/bjhbszB
-         nodNTPngztK+l2JVhachqWRW6bc7DUNtBLTYNvd233kTWNnePIR4oqwprNUwHDWBq32C
-         0YLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXMtqzzPY56CI3RAKNDcWfpkqGTRfjnVuT92UUWrdW32hlkEDO+mDM1oVC8KeomqoNwF+clPnY/Nknu0a5ZSSvp71CU
-X-Gm-Message-State: AOJu0YwosTzsfInOGKMuYJBRF+2KEunvLcKjs5MjSg4fieliX4zDriw9
-	9yvnoVIYQpdO1QzvS59ewWcj80Eq13a3Q/mjjCM9XjoTX3AWTcrNgC+wyoixXYkES+OhuuUiOJr
-	d/Izd6PCfU8BWJrLxU7S2S50BsqeWXtG8urgCQNWOQo5/OU24e0ifpRJoe8B793gISw==
-X-Received: by 2002:a17:907:1019:b0:a45:e3ab:152f with SMTP id ox25-20020a170907101900b00a45e3ab152fmr2489394ejb.21.1710085651894;
-        Sun, 10 Mar 2024 08:47:31 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IENK7ttrDdst22S8NlzkTYOHuK9XdIpvxOY4BupgfkauqF6iuk+XsSwN9Rn7jDGuE0TrKQE/g==
-X-Received: by 2002:a17:907:1019:b0:a45:e3ab:152f with SMTP id ox25-20020a170907101900b00a45e3ab152fmr2489368ejb.21.1710085651366;
-        Sun, 10 Mar 2024 08:47:31 -0700 (PDT)
-Received: from localhost.localdomain (host-87-21-72-46.retail.telecomitalia.it. [87.21.72.46])
-        by smtp.gmail.com with ESMTPSA id l20-20020a170906a41400b00a46163be639sm1092417ejz.12.2024.03.10.08.47.29
+        d=1e100.net; s=20230601; t=1710096044; x=1710700844;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BGXBZR4M5Hf2bGx2FubnlyZXvesqTiZYLbVSADloLzM=;
+        b=diprzpPkla/aXyjbDp3xbiIsQqtQAoIWhJq4p8wXY/yzfp5JrObyWSlrYgh9J7R9vs
+         BrCQXg/aQfpGZAxV1/l6JUq+Ykmx6yNosiYNzqa6fgGnFdBd6KIM6pavLPZKVXK3+fj3
+         V+LLa12lzXbN5MPGXODifV8L9cGQyN4qGC6uqHhf8n1DoraOBHoVoyaV0h80z3f450Rq
+         SQq8aYP28IATwqRlb9+8Risg5PeOyqSDynzwk6H7X2MZ8vGzB8CcmHLYPv91rAnQeGQG
+         ZtQXcJ0J36sudA3eiLTddX0If4UpAykmCns13Ku+pSefO9EKcyj+emXme+C90MAnGU5F
+         fagQ==
+X-Gm-Message-State: AOJu0Yy8fNUGwrNsPYDJqBJjZvqNYlEEmKPMvY5FqcMMZQ36egPOqjTR
+	009vglEYR+44ukURSUr/k74YUF0DmFtGo7JP6dlft2q9pYoQQQnbG0IGCvCEgn4=
+X-Google-Smtp-Source: AGHT+IFwY0iIO0/nuK4U57r7Lme6AZd00P5h99JTaJroT5lH7Di/U1Me+g3ulv6tMYDAb1Z00Mqmnw==
+X-Received: by 2002:a50:aad2:0:b0:565:af1d:7416 with SMTP id r18-20020a50aad2000000b00565af1d7416mr3061162edc.5.1710096044473;
+        Sun, 10 Mar 2024 11:40:44 -0700 (PDT)
+Received: from cloudflare.com ([2a09:bac5:5064:2dc::49:8f])
+        by smtp.gmail.com with ESMTPSA id y89-20020a50bb62000000b005651ae4ac91sm2243006ede.41.2024.03.10.11.40.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Mar 2024 08:47:30 -0700 (PDT)
-From: Andrea Righi <andrea.righi@canonical.com>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Tejun Heo <tj@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Andrea Righi <andrea.righi@canonical.com>
-Subject: [PATCH] libbpf: ringbuf: allow to partially consume items
-Date: Sun, 10 Mar 2024 16:47:26 +0100
-Message-ID: <20240310154726.734289-1-andrea.righi@canonical.com>
-X-Mailer: git-send-email 2.43.0
+        Sun, 10 Mar 2024 11:40:43 -0700 (PDT)
+References: <20240305202155.3890667-1-yonghong.song@linux.dev>
+User-agent: mu4e 1.6.10; emacs 29.2
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Andrii
+ Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John
+ Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com, Martin KaFai Lau
+ <martin.lau@kernel.org>
+Subject: Re: [RFC PATCH bpf-next 0/5] Add bpf_link support for sk_msg prog
+Date: Thu, 07 Mar 2024 13:01:09 +0000
+In-reply-to: <20240305202155.3890667-1-yonghong.song@linux.dev>
+Message-ID: <87jzmarkut.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Instead of always consuming all items from a ring buffer in a greedy
-way, allow to stop when the callback returns a value > 0.
+On Tue, Mar 05, 2024 at 12:21 PM -08, Yonghong Song wrote:
+> One of our internal services started to use sk_msg program and currently
+> it used existing prog attach/detach2 as demonstrated in selftests.
+> But attach/detach of all other bpf programs are based on bpf_link.
+> Consistent attach/detach APIs for all programs will make things easy to
+> undersand and less error prone. So this patch added bpf_link
+> support for BPF_PROG_TYPE_SK_MSG.
+>
+> I marked the patch as RFC as not all functionality are covered
+> by tests yet, e.g. update_prog(). Maybe somebody can suggest
+> an existing test which I can look into.
+> Or maybe some other tests need to be added as well.
 
-This allows to distinguish between an error condition and an intentional
-stop condition by returning a non-negative non-zero value from the ring
-buffer callback.
+I have a general remark, not specific to this work.
 
-This can be useful, for example, to consume just a single item from the
-ring buffer.
+We can't attach with links from CLI, apart from when auto-attach is
+supported.  `bpftool prog attach` doesn't use bpf links. For instance:
 
-Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
----
- tools/lib/bpf/ringbuf.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+bpftool prog attach \
+        pinned /sys/fs/bpf/test/sk_msg_prog \
+        sk_msg_verdict \
+        pinned /sys/fs/bpf/test/sock_map
 
-diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-index aacb64278a01..dd8908eb3204 100644
---- a/tools/lib/bpf/ringbuf.c
-+++ b/tools/lib/bpf/ringbuf.c
-@@ -265,6 +265,14 @@ static int64_t ringbuf_process_ring(struct ring *r)
- 					return err;
- 				}
- 				cnt++;
-+				if (err > 0) {
-+					/* update consumer pos and return the
-+					 * total amount of items consumed.
-+					 */
-+					smp_store_release(r->consumer_pos,
-+							  cons_pos);
-+					goto done;
-+				}
- 			}
- 
- 			smp_store_release(r->consumer_pos, cons_pos);
--- 
-2.43.0
-
+Is there a plan for the CLI tooling to support it?
