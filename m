@@ -1,174 +1,117 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F08E1CF8F;
-	Fri,  8 Mar 2024 16:49:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9939E572;
+	Fri,  8 Mar 2024 16:55:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709916562; cv=none; b=JYB/YkUJu5O30oi97/DrriKtwU+VQsL55Pr+VHJMIJy0xdtu41BM1TWidoEvzZOAp0dzKdaP0yabM5SnssiUUNuYYN4H+IvPQ+r2h7buVWm81mbpfLzZ60qtaREgJWHlrgko4iPjMMdOG5CHzbn4pee5kNWMMDyiymuRU1g5018=
+	t=1709916929; cv=none; b=aIRa0zRwnGh28H2v0toS9XNSQ3X1CpB9HeigU2uWK5MypzEaIGC1i4qDVygslJRe8jDF/uRLqkDFioCLfwexmVx/dFA4tnckVR9a/ogtOi86KMoOLev/aECSU/8Fjj8eG7oUkT92yTEElnEvKVqQB6WVyJ6Vo6KubXoupYtxtk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709916562; c=relaxed/simple;
-	bh=S0Dp/WBR/EujGLQqqCGTWW5cVi0WtWTDa9DqA4ijtho=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OfAzxeQ6VTlh+Wgr7XVK/GzxiSBYQZtOSGX8PpbHUV9TFyJqqPUrYcEU6lGYrtfzSsZRjezbjdGDhJJkW5liCHw3soZS46W0Blg8Samiz53w2xfIATJdhEjJCorp0E5kRSmZdoGWSfK/6CLoBt71fhtgJaI3q1F1OeM5z9StIck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Szq9eLfL; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709916929; c=relaxed/simple;
+	bh=DbchbOqFFVKBM2t0Qy3IghyGibkgCCKQjmqp5ugPh1g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hplqJp60Aragg6JpyGAmEJotUOZYgZJIFPfAgTBE3WYy3UH4musVRrAgC3/+cDKxCl9FxS++Wmz+0MtyMna8LfsStPAGrtq/yojNcjaBnQ/ZdYNqYGVnR3tgPiZ+I84nUTZL2v+03L29QtIdhKoxFKGl1cVdeEQd0IcFy0d3kV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LLFeSBnd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Szq9eLfL"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-5d8b887bb0cso1836349a12.2;
-        Fri, 08 Mar 2024 08:49:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709916560; x=1710521360; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=c0nYRWlBOyohOq+wmgk45L39MksWf6aczzJ+KIoLdfo=;
-        b=Szq9eLfLmnuaMp/8ey66kKKLbPs9nhVuay/Cc69+GqUJbmnxQrbXXjvTp5DYrkczGW
-         BrOaoIv6i93tIqXSwl74e7eUAuTWXvRSNgc24x8Xvw2WWhx/UkDYDhuEi+kkn82T58Id
-         iMRbSUeVGGkbg7kakhvk8QISnIb3OPG544Vw8COJpOldYu1K10Em8pFVQM66TMTfPe1R
-         +FCoE3pHSlH6fLLQTknndOZuhycYqKIUTKd0+6A9n7NAOTszyZQdQUCaKa+lTqBWWvha
-         2L1fajzZTzQUhzKJOa+ZhCRCDZkpkD3Ylu3VADJNpWALmTGWVToLg6ys12JnaoJDFFsA
-         d00Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709916560; x=1710521360;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=c0nYRWlBOyohOq+wmgk45L39MksWf6aczzJ+KIoLdfo=;
-        b=gUClNTtf5B1Zb/zv00bTuBgCgSa/+1so1RcM1czoetNdQWtR9VdoqepZjvhF5gyo1l
-         wq9lZBuolXJ4/A8lvAfR7YY39n1Q280woCd53pyNO3/BpDKQrmh1wIcNRtzThId19LNO
-         YXFYEKnnt7wgU23W2HADbbBL1xI6LEdO8pdRA4JvBpTp6TCAmlt6U3aoW+FN0ypyweHT
-         0oFr87YTu/gRb3HL28005yGrhKc20Tx2uWRaEPI0/lxVaj9BBqwNkuYw0SNj1tQ/gFJf
-         5KJ2gYxv+FVJFPPTpknil9xk2xolYSL/3k6QSRWzL8q+T+n8Q4lAV01Sdj73qT2Aj4w3
-         YUow==
-X-Forwarded-Encrypted: i=1; AJvYcCUFeuW+3JKchX3HRfKt6B+0yPLI2UrUd1+RlTT1xfIkhIKd9JXj/kgUJcstuN/+t2Kdr9cZpW8huvBTKzC0mrKRDiOc+VwlZsyLw7S8ObkLBHkQmwf77BgkJU4gZMmKTJes
-X-Gm-Message-State: AOJu0YzNDDkzXvyJQUxLLaY19sz0U1OxehfApax6uuVh0Qjsg6emQ7DG
-	/EvPM/Ksp0HehWTk7IFDkyV8lHWEgdtDy03DNgJtTVVf26wdrs/Y
-X-Google-Smtp-Source: AGHT+IGoXj2uKpQqLd5DtfnhCg/6JNd8Lt1Wdw018u5BYLYSz8lFaPR7sSVCQCTVcuIq4bLALVv3LA==
-X-Received: by 2002:a17:90a:de85:b0:29b:a149:2fed with SMTP id n5-20020a17090ade8500b0029ba1492fedmr583646pjv.10.1709916560239;
-        Fri, 08 Mar 2024 08:49:20 -0800 (PST)
-Received: from localhost ([117.147.31.93])
-        by smtp.gmail.com with ESMTPSA id h22-20020a17090a051600b002992f49922csm3689154pjh.25.2024.03.08.08.49.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Mar 2024 08:49:19 -0800 (PST)
-From: Tao Chen <chen.dylane@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>
-Cc: chen.dylane@gmail.com,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] WIP: bpf: Support lookup_and_delete_elem for stackmap
-Date: Sat,  9 Mar 2024 00:49:11 +0800
-Message-Id: <20240308164911.118640-1-chen.dylane@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LLFeSBnd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92F03C433C7;
+	Fri,  8 Mar 2024 16:55:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709916928;
+	bh=DbchbOqFFVKBM2t0Qy3IghyGibkgCCKQjmqp5ugPh1g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=LLFeSBndw8GfNsV/ySmEPb5MqncBTviKxOluPa3GeNUNPE7PW/7eS7ltnD24mVaQY
+	 3SO/vhD3cKrAbGjjdXAQ2/KoRyHxBGNA51GFG1ID3SRv6B6pJCqDgetjAbzFi8nMla
+	 LDmhe5L4LC6+HUF+Olv9TL+LWkq1wbI0xJLS6GFc9thzV3uJCXlkTmDLwga7B+hwHs
+	 krAj3CRlzDm/b0C7IdxRoImFX2HikydcA13mTo6DWyMzJpeN7syTlWS6eH+4yNQOp8
+	 TIjGX87e82srNLEhoTWSVp0aC67JysMYXcjtzgpSJG8BM9Ct0jdNqI0wZk51I/lLRv
+	 4Ahwn/JiEVMSA==
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-513298d6859so2200271e87.3;
+        Fri, 08 Mar 2024 08:55:28 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWPRLJb3JIhXrVHG69VIVb6fFVhORu45bviN/FhpKm+4A5HeNORK3T8Xs5vtxGxLDz+zYcv90I37A4tRacKbKgwt7KcN3CeTNZ5K9Sle5sZmIyZrjCSpwpOzZYfzSnUEfzV
+X-Gm-Message-State: AOJu0YwxM/IH6ov44HnN08c0UzTNfB4Gw9ptDOTd2pHJgGe9/sCezNbF
+	LtiNSRRT8KEnkkDcDtiHk9AYk4/+/fq0wFTT+irG8imyLN5eBEzXA746U0Np6aigGSxyY4snxca
+	gi8dezkpXjHY84mdCsNJtmk2Ni34=
+X-Google-Smtp-Source: AGHT+IEvLk7UHtO38Nms4JK1shCpzamyjWivk7RaeHiTPVJ29LLn/xdDEywWh2pxUZUB8z7i+GezLd7z0oD+SCjNhGQ=
+X-Received: by 2002:a05:6512:711:b0:513:2900:1f5c with SMTP id
+ b17-20020a056512071100b0051329001f5cmr3428004lfs.59.1709916926779; Fri, 08
+ Mar 2024 08:55:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240308120712.88122-1-puranjay12@gmail.com>
+In-Reply-To: <20240308120712.88122-1-puranjay12@gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Fri, 8 Mar 2024 08:55:15 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW7Do8c8cA6rVykhVnFRgKA0s6nO8JyGXkEB7gm94KR7Mw@mail.gmail.com>
+Message-ID: <CAPhsuW7Do8c8cA6rVykhVnFRgKA0s6nO8JyGXkEB7gm94KR7Mw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: cap BPF_PROG_PACK_SIZE to 2MB * num_possible_nodes()
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Extend lookup_and_delete_elem for stackmap, so we can clear the
-elem in time in the userspace like the eBPF tool profile in bcc.
+On Fri, Mar 8, 2024 at 4:07=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.com=
+> wrote:
+>
+> On some architectures like ARM64, PMD_SIZE can be really large in some
+> configurations. Like with CONFIG_ARM64_64K_PAGES=3Dy the PMD_SIZE is
+> 512MB.
+>
+> Use 2MB * num_possible_nodes() as the upper limit for allocations done
+> through the prog pack allocator.
+>
+> Fixes: ea2babac63d4 ("bpf: Simplify bpf_prog_pack_[size|mask]")
+> Reported-by: "kernelci.org bot" <bot@kernelci.org>
+> Closes: https://lore.kernel.org/all/7e216c88-77ee-47b8-becc-a0f780868d3c@=
+sirena.org.uk/
+> Suggested-by: Song Liu <song@kernel.org>
+> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+> ---
+>  kernel/bpf/core.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 134b7979f537..83a3b6964e54 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -893,8 +893,17 @@ static LIST_HEAD(pack_list);
+>   * CONFIG_MMU=3Dn. Use PAGE_SIZE in these cases.
+>   */
+>  #ifdef PMD_SIZE
+> +/*
+> + * PMD_SIZE is really big for some archs. It doesn't make sense to
+> + * reserve too much memory in one allocation. Cap BPF_PROG_PACK_SIZE to
+> + * 2MiB * num_possible_nodes().
+> + */
 
-Signed-off-by: Tao Chen <chen.dylane@gmail.com>
----
- include/linux/bpf.h   |  2 +-
- kernel/bpf/stackmap.c |  8 ++++++--
- kernel/bpf/syscall.c  | 12 +++++++++---
- 3 files changed, 16 insertions(+), 6 deletions(-)
+In BPF code, we prefer a different style of multiple line comments:
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 49f8b691496c..11d21e4e861b 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2284,7 +2284,7 @@ int bpf_percpu_hash_update(struct bpf_map *map, void *key, void *value,
- int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,
- 			    u64 flags);
- 
--int bpf_stackmap_copy(struct bpf_map *map, void *key, void *value);
-+int bpf_stackmap_copy_and_delete(struct bpf_map *map, void *key, void *value, bool delete);
- 
- int bpf_fd_array_map_update_elem(struct bpf_map *map, struct file *map_file,
- 				 void *key, void *value, u64 map_flags);
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 458bb80b14d5..935f537dced0 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -563,7 +563,7 @@ static void *stack_map_lookup_elem(struct bpf_map *map, void *key)
- }
- 
- /* Called from syscall */
--int bpf_stackmap_copy(struct bpf_map *map, void *key, void *value)
-+int bpf_stackmap_copy_and_delete(struct bpf_map *map, void *key, void *value, bool delete)
- {
- 	struct bpf_stack_map *smap = container_of(map, struct bpf_stack_map, map);
- 	struct stack_map_bucket *bucket, *old_bucket;
-@@ -580,7 +580,11 @@ int bpf_stackmap_copy(struct bpf_map *map, void *key, void *value)
- 	memcpy(value, bucket->data, trace_len);
- 	memset(value + trace_len, 0, map->value_size - trace_len);
- 
--	old_bucket = xchg(&smap->buckets[id], bucket);
-+	if (!delete)
-+		old_bucket = xchg(&smap->buckets[id], bucket);
-+	else
-+		old_bucket = bucket;
-+
- 	if (old_bucket)
- 		pcpu_freelist_push(&smap->freelist, &old_bucket->fnode);
- 	return 0;
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index d77b2f8b9364..77afce8710a4 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -225,7 +225,7 @@ static int bpf_map_copy_value(struct bpf_map *map, void *key, void *value,
- 	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE) {
- 		err = bpf_percpu_cgroup_storage_copy(map, key, value);
- 	} else if (map->map_type == BPF_MAP_TYPE_STACK_TRACE) {
--		err = bpf_stackmap_copy(map, key, value);
-+		err = bpf_stackmap_copy_and_delete(map, key, value, false);
- 	} else if (IS_FD_ARRAY(map) || IS_FD_PROG_ARRAY(map)) {
- 		err = bpf_fd_array_map_lookup_elem(map, key, value);
- 	} else if (IS_FD_HASH(map)) {
-@@ -1372,7 +1372,8 @@ struct bpf_map *bpf_map_inc_not_zero(struct bpf_map *map)
- }
- EXPORT_SYMBOL_GPL(bpf_map_inc_not_zero);
- 
--int __weak bpf_stackmap_copy(struct bpf_map *map, void *key, void *value)
-+int __weak bpf_stackmap_copy_and_delete(struct bpf_map *map, void *key, void *value,
-+										bool delete)
- {
- 	return -ENOTSUPP;
- }
-@@ -1897,7 +1898,8 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
- 
- 	if (attr->flags &&
- 	    (map->map_type == BPF_MAP_TYPE_QUEUE ||
--	     map->map_type == BPF_MAP_TYPE_STACK)) {
-+	     map->map_type == BPF_MAP_TYPE_STACK ||
-+		 map->map_type == BPF_MAP_TYPE_STACK_TRACE)) {
- 		err = -EINVAL;
- 		goto err_put;
- 	}
-@@ -1936,6 +1938,10 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
- 			rcu_read_unlock();
- 			bpf_enable_instrumentation();
- 		}
-+	} else if (map->map_type == BPF_MAP_TYPE_STACK_TRACE) {
-+		bpf_disable_instrumentation();
-+		err = bpf_stackmap_copy_and_delete(map, key, value, true);
-+		bpf_enable_instrumentation();
- 	}
- 
- 	if (err)
--- 
-2.34.1
+/* PMD_SIZE is really big for some archs. It doesn't make sense to
+ * reserve too much memory in one allocation. Cap BPF_PROG_PACK_SIZE to
+ * 2MiB * num_possible_nodes().
+ */
 
+Other than this, this looks good to me.
+
+Acked-by: Song Liu <song@kernel.org>
+
+Thanks,
+Song
+
+> +#if PMD_SIZE <=3D (1 << 21)
+>  #define BPF_PROG_PACK_SIZE (PMD_SIZE * num_possible_nodes())
+>  #else
+> +#define BPF_PROG_PACK_SIZE ((1 << 21) * num_possible_nodes())
+> +#endif
+> +#else
+>  #define BPF_PROG_PACK_SIZE PAGE_SIZE
+>  #endif
