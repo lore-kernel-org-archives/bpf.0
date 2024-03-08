@@ -1,237 +1,183 @@
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2C23217
-	for <bpf@vger.kernel.org>; Fri,  8 Mar 2024 17:14:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91E194F213;
+	Fri,  8 Mar 2024 17:20:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709918069; cv=none; b=iXGP/pYz3UIQouxWk4zyPN02YYSBJGs2Oq3CDgbsRDiQ4NKjVX+lXI/iA1NgBcCFda8I9naw7qTFJ04d2L/uKZTN+PPVfilu73nLKDZCyl7DBdIgZpqMiNDXtNx0uvM9X5NCsAtCS0oAaVGVHEPyRZt3q/UNTgPJCi9IgKdeUK0=
+	t=1709918440; cv=none; b=BvVOYjVhAlqW/nMZVMpVHdjbCLZdW45GjzpRoSKdl9RM3RW4GDQkC3q0qkNrLqnf849xrdt0JPtvEziPeS8KPPXHsfhVGGZUAEIl+dpr0V9asigH6f2PhAK3+KDs11DcvVo4miwOhwSBYWgR8sVZhlMdSeHB5c/xojIn5ezalac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709918069; c=relaxed/simple;
-	bh=pSZN3E+H9R1DtX04zdbIqeFAxdfCkyiHECLJrBmuJl8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=H7o2uSr/7TRmePc5f6tJQm79fvdXqrdOd2gCxQ8T5OFrrfMihM5CYyET2L0KpFu50m7GZCHZNVmA1TBfC6V5KRq/pR+g8tve+b40hQQR28Bl4AYPrt7iQdYG25wYXDYIEmI2BCVx3+cKaY6AkqiAIrEJEsujtZs4ZyGORMCuIzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=c9Xdc3MH; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1709918440; c=relaxed/simple;
+	bh=Rr/3morRYf08jSB6i3dJJGHoyF2YTqnFL480a51rHQQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=a/YnCVVxMgAhmyWzCwxncuilTkXtxjUqzR2NU9QLBsOG6iwKPWRmSkQhFw8qtM4gja9zflhgEj+aXV1P4VBdrV2xzhlB5kc052myV+xDzYGHT+Iznz24Mw+k1qhqylbiRulqlpFCxsg1fGk4goLM3cJnnJvlDD56PeE/KBCdhDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZEPlvztV; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="c9Xdc3MH"
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20240308171423euoutp022cb18227752477eeaef37acd927a58bb~62Wtl2t_N2750127501euoutp02o
-	for <bpf@vger.kernel.org>; Fri,  8 Mar 2024 17:14:23 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20240308171423euoutp022cb18227752477eeaef37acd927a58bb~62Wtl2t_N2750127501euoutp02o
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1709918063;
-	bh=DSDacrVBnLQUXSKvLn3/E67RoDPwbljmlkbfkQl9jbw=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=c9Xdc3MH/xVf6+dULK54d9bPJDYmO7KLujMYxCNxfOcZcvVDqr8/dd7163R7/ZzL1
-	 Ap5hL6uI8DFKeOqH8jhDEbyJLQ955dLiCyVsA5dfOENtXhUu3TrDktjjb33dXu6Ja2
-	 RSYL6IamUWzMUdlJ3NuP5ynIy1s0n41r1uV2fplQ=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-	20240308171423eucas1p2371311a5b08d9706eaf93179362c94a4~62WtQk0AA1558315583eucas1p2a;
-	Fri,  8 Mar 2024 17:14:23 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges3new.samsung.com (EUCPMTA) with SMTP id D8.9D.09552.F674BE56; Fri,  8
-	Mar 2024 17:14:23 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240308171422eucas1p293895be469655aa618535cf199b0c43a~62WsXkhLx1558115581eucas1p2O;
-	Fri,  8 Mar 2024 17:14:22 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240308171422eusmtrp24638ab6298336da4c1c0e8a41a4a64fc~62WsW41FF2621526215eusmtrp2E;
-	Fri,  8 Mar 2024 17:14:22 +0000 (GMT)
-X-AuditID: cbfec7f5-853ff70000002550-40-65eb476faf57
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id 02.2F.09146.E674BE56; Fri,  8
-	Mar 2024 17:14:22 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240308171421eusmtip21f5afb8678a08bd51cca727cfeea567f~62WrRSVaA2266422664eusmtip2R;
-	Fri,  8 Mar 2024 17:14:21 +0000 (GMT)
-Message-ID: <1f49d568-24f9-4003-b222-515f33a99cf2@samsung.com>
-Date: Fri, 8 Mar 2024 18:14:21 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZEPlvztV"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-33e7ae72312so267380f8f.1;
+        Fri, 08 Mar 2024 09:20:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709918437; x=1710523237; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pbCp7DmgJjmAKIHEigoBc3KX7fetXPW58mtVegm0DfI=;
+        b=ZEPlvztVZsWrTVGIP2yhI64IZOYio+J8JC82BtDrEJRKVvOxT4DXkCqmrnJYz8ccRR
+         r9J+lKOqf/UnTAoua66FutFtIxPn3Jq+ziDdttuQCexwlQ39sVea5MuGqhmdeLiE6J9F
+         n7NnmGeASfI3und1g9Oa5KSFY/+Z5JnXo+n5J3LM8+D7dJMqsF//LvwufRzm3EvBK49J
+         RUFClfIeJ3ccR2XhyzuBe22izR+Gf1UPiWiFq6vV+Aml/yGvb/lwZZOV4QFOAFiob3Fd
+         o8l/aJvZJxu880txy6AfbvvQ7KbBnz5hnmk5IFtIy9i/kHBnMrsnij/ojoRwXcQQ+tp0
+         27gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709918437; x=1710523237;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pbCp7DmgJjmAKIHEigoBc3KX7fetXPW58mtVegm0DfI=;
+        b=OTwhwIaqqokM9cbv++sZ0D/YFHm8shqA5sUXwil6JHRI/PA1wZ7UEXT/puMFDbrbuW
+         0J6V6+ym690FgM/Ta/2YRHYAnqaiQ5+3c5XmG1CZGnaooil0zgxGLKeFGjdmIU+2ycw8
+         xQ/SnPumiKITcUJ0H8Wf/drWWAd3D1rZeHK+wUWhifM/qU/zm9X7kscHR6uwdAX/taxi
+         LILntB68p+JbnOzctLx7o/3RuWEyeNFU8yRv44t07fdfxSujw/ohRHjsrKF78LSvTRfA
+         QsMYU2oJ2S/Gb+8Q3jhOOyhCEAGH8yaHJzRqitJptSMyhJv2bv0kQ74Sn2dj70quUywI
+         VAIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXpaXfM0bqz0MsmAI77yfBGqRYfAQvAy8UrTadzaxRqgkbZL4aD2WKKP9nMbOQST7cLZBNENhdm/b8jpMaFF79X3KNkJANs2F7thhdbtvzf0+nNQZVMPOfj/zR8MuLS
+X-Gm-Message-State: AOJu0YxboQBTYB1J6oXJBTLANdmTVjeVEuoZaTCIHm6mzCd2V6x9rhnv
+	GWTWTHpKkLGgqX8ppbjq5QYFKeaPC8m659d8OJxe2hwer+CT1z419DWaumhIpinnO8lekId8L5O
+	rzGV3BTwsCK53y39CAMwwhj73wVA=
+X-Google-Smtp-Source: AGHT+IHEyAocoC9+N+chISdLsopzPHdFAe0K730evBmORwJM6yWIHQsZb/nmwlfe88bL3sQ0x/XNwYhYdeZBswTeILk=
+X-Received: by 2002:adf:e906:0:b0:33e:73f6:c620 with SMTP id
+ f6-20020adfe906000000b0033e73f6c620mr2578060wrm.40.1709918436580; Fri, 08 Mar
+ 2024 09:20:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 bpf-next 1/2] mm: Enforce VM_IOREMAP flag and range
- in ioremap_page_range.
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, torvalds@linux-foundation.org,
-	brho@google.com, hannes@cmpxchg.org, lstoakes@gmail.com,
-	akpm@linux-foundation.org, urezki@gmail.com, hch@infradead.org,
-	rppt@kernel.org, boris.ostrovsky@oracle.com, sstabellini@kernel.org,
-	jgross@suse.com, linux-mm@kvack.org, xen-devel@lists.xenproject.org,
-	kernel-team@fb.com
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20240305030516.41519-2-alexei.starovoitov@gmail.com>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrOKsWRmVeSWpSXmKPExsWy7djP87r57q9TDVadFLGYs34Nm0XD4w5W
-	i++/ZzNbXJzeymLx+chxNourPZ9ZLBYv/MZssXqTr8XpCYuYLObcNLI41vee1eLemv+sFne+
-	zWO3OLJ+O5PF6nXxFo/63rJbrL7IYvF9y2QmByGPw2/eM3tMbH7H7rFz1l12jwWbSj02r9Dy
-	6Lpxidlj06pONo9Nnyaxe5yY8ZvF4/CHKyweH5/eYvFYv+Uqi8fnTXIBvFFcNimpOZllqUX6
-	dglcGScWzWMsOKdc8WzdWfYGxslyXYwcHBICJhLrbiZ2MXJxCAmsYJRY2DOFGcL5wijRM+kd
-	I4TzmVHi768zQA4nWMfaqU1MEInljBL37/+GqvrIKPFm01VmkCpeATuJbQ8XM4HYLAIqEn/a
-	H7NDxAUlTs58wgJiiwrIS9y/NQMsLiyQLHH57wUwm1lAXOLWk/lgvSICXhJ3t7axQMRfM0ns
-	vloBYrMJGEp0ve1iA7E5BZwk9j56zApRIy/RvHU22A8SAvc4Je5u+80GcbaLxP7tk6BeEJZ4
-	dXwLO4QtI/F/53wmiIZ2RokFv+9DORMYJRqe34LqsJa4c+4XGyjImAU0Jdbv0ocIO0pM6XjH
-	BAlJPokbbwUhjuCTmLRtOjNEmFeio00IolpNYtbxdXBrD164xDyBUWkWUrDMQvL+LCTvzELY
-	u4CRZRWjeGppcW56arFxXmq5XnFibnFpXrpecn7uJkZg2jz97/jXHYwrXn3UO8TIxMF4iFGC
-	g1lJhJfF4mWqEG9KYmVValF+fFFpTmrxIUZpDhYlcV7VFPlUIYH0xJLU7NTUgtQimCwTB6dU
-	A5M4z6VXBs4R515kOB54fal0Y0Pt2Vcr1E8F7tRgiGmPWXjm1I50i/5bTc1Ho4O5e1I4A393
-	xxQun3b1I3d7eN6uHlezg2L/vm8yZolO04iZo75cYbf46Sw17fTkztWT+1Z9tn20/cS2D6+s
-	1+s62rydEf6t8fQ7xRvvL2/ylnr590JUoWJN2Y/b/EwLayesOprhzNd16/ESry9Xipcv+lw6
-	g4HJOsFBYuebx7btx0Krzz+RuZellpA86a7z9I27vDQePjNITNQ/foyv7c6Mp+tj8oKWf9q6
-	aSbH1nfVEj/a1f+d1BZ7PWVh8T2m3fvPyac3PJQ/cOCm6mnHskXTNfS1YupdGhQkDylV+aXr
-	M2crsRRnJBpqMRcVJwIA1gwiTQoEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupileLIzCtJLcpLzFFi42I5/e/4Pd0899epBq3bpSzmrF/DZtHwuIPV
-	4vvv2cwWF6e3slh8PnKczeJqz2cWi8ULvzFbrN7ka3F6wiImizk3jSyO9b1ntbi35j+rxZ1v
-	89gtjqzfzmSxel28xaO+t+wWqy+yWHzfMpnJQcjj8Jv3zB4Tm9+xe+ycdZfdY8GmUo/NK7Q8
-	um5cYvbYtKqTzWPTp0nsHidm/GbxOPzhCovHx6e3WDzWb7nK4vF5k1wAb5SeTVF+aUmqQkZ+
-	cYmtUrShhZGeoaWFnpGJpZ6hsXmslZGpkr6dTUpqTmZZapG+XYJexolF8xgLzilXPFt3lr2B
-	cbJcFyMnh4SAicTaqU1MXYxcHEICSxklXsx/wwqRkJE4Oa0ByhaW+HOtiw2i6D2jxN5zrewg
-	CV4BO4ltDxczgdgsAioSf9ofQ8UFJU7OfMICYosKyEvcvzUDLC4skCzx8uUjsKHMAuISt57M
-	B+sVEfCSuLu1jQVkAbPAayaJ+0tbGEESQgKVEu/Xd4M1sAkYSnS9BbmCk4NTwEli76PHUIPM
-	JLq2djFC2PISzVtnM09gFJqF5I5ZSPbNQtIyC0nLAkaWVYwiqaXFuem5xYZ6xYm5xaV56XrJ
-	+bmbGIGJYtuxn5t3MM579VHvECMTB+MhRgkOZiURXhaLl6lCvCmJlVWpRfnxRaU5qcWHGE2B
-	gTGRWUo0OR+YqvJK4g3NDEwNTcwsDUwtzYyVxHk9CzoShQTSE0tSs1NTC1KLYPqYODilGpic
-	Js67+29/Ar8Dd3hCoWv05FdBc6SCp88z5RXlWbfmaZLzIUmn6K4wgZaFff9d/LeaLOZ71FQ+
-	fYHrg46rc44eutZkl3zj9VEbmYmv5zembVjNVnvVs8LT/tOBW09ZV9vY37OZxxzP/qNUcMIW
-	UbeCaVN/eT14l8ms73Ks2aZKdEYAX/3Ry5sNE0ymGcT6faybv4XjX29B80bLr32RFssm+Nfy
-	7+5zqWirdOY6q7xsQdVjL+b2CxKeuXPT5P5KP9Lgklq/7vo6qalaLTYzvRTmSnreXS5+4Lzg
-	kUTv73YCfQFn351dEH6l0sCXK0BVRok7QTvU3u3iuvnaFTyM899oXvptySbxcubJKuGl4kos
-	xRmJhlrMRcWJAJJePS+dAwAA
-X-CMS-MailID: 20240308171422eucas1p293895be469655aa618535cf199b0c43a
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20240308171422eucas1p293895be469655aa618535cf199b0c43a
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240308171422eucas1p293895be469655aa618535cf199b0c43a
-References: <20240305030516.41519-1-alexei.starovoitov@gmail.com>
-	<20240305030516.41519-2-alexei.starovoitov@gmail.com>
-	<CGME20240308171422eucas1p293895be469655aa618535cf199b0c43a@eucas1p2.samsung.com>
+References: <CANiq72ka4rir+RTN2FQoT=Vvprp_Ao-CvoYEkSNqtSY+RZj+AA@mail.gmail.com>
+ <CAADnVQL1Zt5dwFv9HPDKDuPEKa6V7gb5j-D-LPWv47hC6mtwgw@mail.gmail.com>
+ <CAADnVQLP=dxBb+RiMGXoaCEuRrbK387J6B+pfzWKF_F=aRgCPQ@mail.gmail.com>
+ <Zeso7eNj1sBhH5zY@infradead.org> <CAADnVQKQumV-0AxGLKX0jQEfa8Z2Bxx2yW8k_1OqGBnD-RqrbA@mail.gmail.com>
+ <ZetEkyW1QgIKwfFz@infradead.org>
+In-Reply-To: <ZetEkyW1QgIKwfFz@infradead.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 8 Mar 2024 09:20:24 -0800
+Message-ID: <CAADnVQL4JAUz-p-X9aEggeKNpYUqJZrzQKO7N0dnohE0r7mdpg@mail.gmail.com>
+Subject: Re: vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, linux-mm <linux-mm@kvack.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
+Content-Type: multipart/mixed; boundary="000000000000021009061329699e"
 
-On 05.03.2024 04:05, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
+--000000000000021009061329699e
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Mar 8, 2024 at 9:02=E2=80=AFAM Christoph Hellwig <hch@infradead.org=
+> wrote:
 >
-> There are various users of get_vm_area() + ioremap_page_range() APIs.
-> Enforce that get_vm_area() was requested as VM_IOREMAP type and range
-> passed to ioremap_page_range() matches created vm_area to avoid
-> accidentally ioremap-ing into wrong address range.
+> On Fri, Mar 08, 2024 at 08:33:18AM -0800, Alexei Starovoitov wrote:
+> > vmap_range_noflush() is static in mm/vmalloc.c
+> > There is vmap_pages_range_noflush() that is in mm/internal.h,
+> > but it needs pages instead of phys_addr_t.
+> > Newly introduced vm_area_map_pages() needs struct vm_struct *area
+> > and struct page **pages.
+> > In this PCI case there is no vm_struct and no pages.
+> > ioremap_page_range() is the only api that fits. afaict.
 >
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
-
-This patch landed in today's linux-next as commit 3e49a866c9dc ("mm: 
-Enforce VM_IOREMAP flag and range in ioremap_page_range."). 
-Unfortunately it triggers the following warning on all my test machines 
-with PCI bridges. Here is an example reproduced with QEMU and ARM64 
-'virt' machine:
-
-pci-host-generic 4010000000.pcie: host bridge /pcie@10000000 ranges:
-pci-host-generic 4010000000.pcie:       IO 0x003eff0000..0x003effffff -> 
-0x0000000000
-pci-host-generic 4010000000.pcie:      MEM 0x0010000000..0x003efeffff -> 
-0x0010000000
-pci-host-generic 4010000000.pcie:      MEM 0x8000000000..0xffffffffff -> 
-0x8000000000
-------------[ cut here ]------------
-vm_area at addr fffffbfffe800000 is not marked as VM_IOREMAP
-WARNING: CPU: 0 PID: 1 at mm/vmalloc.c:315 ioremap_page_range+0x8c/0x174
-Modules linked in:
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.8.0-rc6+ #14694
-Hardware name: linux,dummy-virt (DT)
-pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : ioremap_page_range+0x8c/0x174
-lr : ioremap_page_range+0x8c/0x174
-sp : ffff800083faba10
-...
-Call trace:
-  ioremap_page_range+0x8c/0x174
-  pci_remap_iospace+0x74/0x88
-  devm_pci_remap_iospace+0x54/0xac
-  devm_of_pci_bridge_init+0x160/0x1fc
-  devm_pci_alloc_host_bridge+0xb4/0xd0
-  pci_host_common_probe+0x44/0x1a0
-  platform_probe+0x68/0xd8
-  really_probe+0x148/0x2b4
-  __driver_probe_device+0x78/0x12c
-  driver_probe_device+0xdc/0x164
-  __driver_attach+0x9c/0x1ac
-  bus_for_each_dev+0x74/0xd4
-  driver_attach+0x24/0x30
-  bus_add_driver+0xe4/0x1e8
-  driver_register+0x60/0x128
-  __platform_driver_register+0x28/0x34
-  gen_pci_driver_init+0x1c/0x28
-  do_one_initcall+0x74/0x2f4
-  kernel_init_freeable+0x28c/0x4dc
-  kernel_init+0x24/0x1dc
-  ret_from_fork+0x10/0x20
-irq event stamp: 74360
-hardirqs last  enabled at (74359): [<ffff80008012cb9c>] 
-console_unlock+0x120/0x12c
-hardirqs last disabled at (74360): [<ffff80008122daa0>] el1_dbg+0x24/0x8c
-softirqs last  enabled at (71258): [<ffff800080010a60>] 
-__do_softirq+0x4a0/0x4e8
-softirqs last disabled at (71245): [<ffff8000800169b0>] 
-____do_softirq+0x10/0x1c
----[ end trace 0000000000000000 ]---
-pci-host-generic 4010000000.pcie: error -22: failed to map resource [io  
-0x0000-0xffff]
-pci-host-generic 4010000000.pcie: Memory resource size exceeds max for 
-32 bits
-pci-host-generic 4010000000.pcie: ECAM at [mem 
-0x4010000000-0x401fffffff] for [bus 00-ff]
-pci-host-generic 4010000000.pcie: PCI host bridge to bus 0000:00
-pci_bus 0000:00: root bus resource [bus 00-ff]
-pci_bus 0000:00: root bus resource [mem 0x10000000-0x3efeffff]
-pci_bus 0000:00: root bus resource [mem 0x8000000000-0xffffffffff]
-pci 0000:00:00.0: [1b36:0008] type 00 class 0x060000 conventional PCI 
-endpoint
-
-It looks that PCI related code must be somehow adjusted for this change.
-
->   mm/vmalloc.c | 13 +++++++++++++
->   1 file changed, 13 insertions(+)
+> Except that we want to enforce a vm_area with the ioremap flag for
+> ioremap_page_range, and just adding a NULL check defeats that.
 >
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index d12a17fc0c17..f42f98a127d5 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -307,8 +307,21 @@ static int vmap_range_noflush(unsigned long addr, unsigned long end,
->   int ioremap_page_range(unsigned long addr, unsigned long end,
->   		phys_addr_t phys_addr, pgprot_t prot)
->   {
-> +	struct vm_struct *area;
->   	int err;
->   
-> +	area = find_vm_area((void *)addr);
-> +	if (!area || !(area->flags & VM_IOREMAP)) {
-> +		WARN_ONCE(1, "vm_area at addr %lx is not marked as VM_IOREMAP\n", addr);
-> +		return -EINVAL;
-> +	}
-> +	if (addr != (unsigned long)area->addr ||
-> +	    (void *)end != area->addr + get_vm_area_size(area)) {
-> +		WARN_ONCE(1, "ioremap request [%lx,%lx) doesn't match vm_area [%lx, %lx)\n",
-> +			  addr, end, (long)area->addr,
-> +			  (long)area->addr + get_vm_area_size(area));
-> +		return -ERANGE;
-> +	}
->   	err = vmap_range_noflush(addr, end, phys_addr, pgprot_nx(prot),
->   				 ioremap_max_page_shift);
->   	flush_cache_vmap(addr, end);
+> The right long term thing would be to actually create a vm_area
+> for the PCI_IOBASE region, but until then we just need a lower level
+> API.  That's why I suggest to add a vmap_range() that is basically
+> the ioremap_page_range before you added the checks, and make
+> ioremap_page_range a wrapper around that that checks the area.
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+ok. Like the attached patch?
 
+> If/when we get PCI_IOBASE handling converted to the proper
+> vmalloc/ioremap areas we can remove that again as well as
+> vunmap_range which is just used for PCI_IOBASE and other equivalent
+> ISA_IO_BASE in powerpc and somewhat unusual case in arm64 that I
+> need to look into a bit more.
+
+The plan makes sense to me.
+
+--000000000000021009061329699e
+Content-Type: application/octet-stream; 
+	name="0001-mm-Introduce-vmap_page_range-to-be-used-by-PCI.patch"
+Content-Disposition: attachment; 
+	filename="0001-mm-Introduce-vmap_page_range-to-be-used-by-PCI.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ltix9gg70>
+X-Attachment-Id: f_ltix9gg70
+
+RnJvbSBhM2EyNmM4NjE5ZjZlZDZkOGNjYTU4YWMxYjFkNTQ4OTQ4YmZlZTA1IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBBbGV4ZWkgU3Rhcm92b2l0b3YgPGFzdEBrZXJuZWwub3JnPgpE
+YXRlOiBGcmksIDggTWFyIDIwMjQgMDk6MTI6NTQgLTA4MDAKU3ViamVjdDogW1BBVENIIGJwZi1u
+ZXh0XSBtbTogSW50cm9kdWNlIHZtYXBfcGFnZV9yYW5nZSgpIHRvIGJlIHVzZWQgYnkgUENJCgpp
+b3JlbWFwX3BhZ2VfcmFuZ2UoKSBzaG91bGQgYmUgdXNlZCBmb3IgcmFuZ2VzIHdpdGhpbiB2bWFs
+bG9jIHJhbmdlIG9ubHkuClRoZSB2bWFsbG9jIHJhbmdlcyBhcmUgYWxsb2NhdGVkIGJ5IGdldF92
+bV9hcmVhKCkuIFBDSSBoYXMgInJlc291cmNlIgphbGxvY2F0b3IgdGhhdCBtYW5hZ2VzIFBDSV9J
+T0JBU0UsIElPX1NQQUNFX0xJTUlUIGFkZHJlc3MgcmFuZ2UsIGhlbmNlCmludHJvZHVjZSB2bWFw
+X3BhZ2VfcmFuZ2UoKSB0byBiZSB1c2VkIGV4Y2x1c2l2ZWx5IGJ5IFBDSS4KClNpZ25lZC1vZmYt
+Ynk6IEFsZXhlaSBTdGFyb3ZvaXRvdiA8YXN0QGtlcm5lbC5vcmc+Ci0tLQogZHJpdmVycy9wY2kv
+cGNpLmMgIHwgIDQgKystLQogaW5jbHVkZS9saW51eC9pby5oIHwgIDcgKysrKysrKwogbW0vdm1h
+bGxvYy5jICAgICAgIHwgMjMgKysrKysrKysrKysrKysrLS0tLS0tLS0KIDMgZmlsZXMgY2hhbmdl
+ZCwgMjQgaW5zZXJ0aW9ucygrKSwgMTAgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVy
+cy9wY2kvcGNpLmMgYi9kcml2ZXJzL3BjaS9wY2kuYwppbmRleCBjMzU4NTIyOWMxMmEuLmNjZWU1
+NjYxNWY3OCAxMDA2NDQKLS0tIGEvZHJpdmVycy9wY2kvcGNpLmMKKysrIGIvZHJpdmVycy9wY2kv
+cGNpLmMKQEAgLTQzNTMsOCArNDM1Myw4IEBAIGludCBwY2lfcmVtYXBfaW9zcGFjZShjb25zdCBz
+dHJ1Y3QgcmVzb3VyY2UgKnJlcywgcGh5c19hZGRyX3QgcGh5c19hZGRyKQogCWlmIChyZXMtPmVu
+ZCA+IElPX1NQQUNFX0xJTUlUKQogCQlyZXR1cm4gLUVJTlZBTDsKIAotCXJldHVybiBpb3JlbWFw
+X3BhZ2VfcmFuZ2UodmFkZHIsIHZhZGRyICsgcmVzb3VyY2Vfc2l6ZShyZXMpLCBwaHlzX2FkZHIs
+Ci0JCQkJICBwZ3Byb3RfZGV2aWNlKFBBR0VfS0VSTkVMKSk7CisJcmV0dXJuIHZtYXBfcGFnZV9y
+YW5nZSh2YWRkciwgdmFkZHIgKyByZXNvdXJjZV9zaXplKHJlcyksIHBoeXNfYWRkciwKKwkJCSAg
+ICAgICBwZ3Byb3RfZGV2aWNlKFBBR0VfS0VSTkVMKSk7CiAjZWxzZQogCS8qCiAJICogVGhpcyBh
+cmNoaXRlY3R1cmUgZG9lcyBub3QgaGF2ZSBtZW1vcnkgbWFwcGVkIEkvTyBzcGFjZSwKZGlmZiAt
+LWdpdCBhL2luY2x1ZGUvbGludXgvaW8uaCBiL2luY2x1ZGUvbGludXgvaW8uaAppbmRleCA3MzA0
+ZjJhNjk5NjAuLjIzNWJhN2Q4MGE4ZiAxMDA2NDQKLS0tIGEvaW5jbHVkZS9saW51eC9pby5oCisr
+KyBiL2luY2x1ZGUvbGludXgvaW8uaApAQCAtMjMsMTIgKzIzLDE5IEBAIHZvaWQgX19pb3dyaXRl
+NjRfY29weSh2b2lkIF9faW9tZW0gKnRvLCBjb25zdCB2b2lkICpmcm9tLCBzaXplX3QgY291bnQp
+OwogI2lmZGVmIENPTkZJR19NTVUKIGludCBpb3JlbWFwX3BhZ2VfcmFuZ2UodW5zaWduZWQgbG9u
+ZyBhZGRyLCB1bnNpZ25lZCBsb25nIGVuZCwKIAkJICAgICAgIHBoeXNfYWRkcl90IHBoeXNfYWRk
+ciwgcGdwcm90X3QgcHJvdCk7CitpbnQgdm1hcF9wYWdlX3JhbmdlKHVuc2lnbmVkIGxvbmcgYWRk
+ciwgdW5zaWduZWQgbG9uZyBlbmQsCisJCSAgICBwaHlzX2FkZHJfdCBwaHlzX2FkZHIsIHBncHJv
+dF90IHByb3QpOwogI2Vsc2UKIHN0YXRpYyBpbmxpbmUgaW50IGlvcmVtYXBfcGFnZV9yYW5nZSh1
+bnNpZ25lZCBsb25nIGFkZHIsIHVuc2lnbmVkIGxvbmcgZW5kLAogCQkJCSAgICAgcGh5c19hZGRy
+X3QgcGh5c19hZGRyLCBwZ3Byb3RfdCBwcm90KQogewogCXJldHVybiAwOwogfQorc3RhdGljIGlu
+bGluZSBpbnQgdm1hcF9wYWdlX3JhbmdlKHVuc2lnbmVkIGxvbmcgYWRkciwgdW5zaWduZWQgbG9u
+ZyBlbmQsCisJCQkJICBwaHlzX2FkZHJfdCBwaHlzX2FkZHIsIHBncHJvdF90IHByb3QpCit7CisJ
+cmV0dXJuIDA7Cit9CiAjZW5kaWYKIAogLyoKZGlmZiAtLWdpdCBhL21tL3ZtYWxsb2MuYyBiL21t
+L3ZtYWxsb2MuYwppbmRleCBlNWI4YzcwOTUwYmMuLjFlMzYzMjJkODNkOCAxMDA2NDQKLS0tIGEv
+bW0vdm1hbGxvYy5jCisrKyBiL21tL3ZtYWxsb2MuYwpAQCAtMzA0LDExICszMDQsMjQgQEAgc3Rh
+dGljIGludCB2bWFwX3JhbmdlX25vZmx1c2godW5zaWduZWQgbG9uZyBhZGRyLCB1bnNpZ25lZCBs
+b25nIGVuZCwKIAlyZXR1cm4gZXJyOwogfQogCitpbnQgdm1hcF9wYWdlX3JhbmdlKHVuc2lnbmVk
+IGxvbmcgYWRkciwgdW5zaWduZWQgbG9uZyBlbmQsCisJCSAgICBwaHlzX2FkZHJfdCBwaHlzX2Fk
+ZHIsIHBncHJvdF90IHByb3QpCit7CisJaW50IGVycjsKKworCWVyciA9IHZtYXBfcmFuZ2Vfbm9m
+bHVzaChhZGRyLCBlbmQsIHBoeXNfYWRkciwgcGdwcm90X254KHByb3QpLAorCQkJCSBpb3JlbWFw
+X21heF9wYWdlX3NoaWZ0KTsKKwlmbHVzaF9jYWNoZV92bWFwKGFkZHIsIGVuZCk7CisJaWYgKCFl
+cnIpCisJCWVyciA9IGttc2FuX2lvcmVtYXBfcGFnZV9yYW5nZShhZGRyLCBlbmQsIHBoeXNfYWRk
+ciwgcHJvdCwKKwkJCQkJICAgICAgIGlvcmVtYXBfbWF4X3BhZ2Vfc2hpZnQpOworCXJldHVybiBl
+cnI7Cit9CisKIGludCBpb3JlbWFwX3BhZ2VfcmFuZ2UodW5zaWduZWQgbG9uZyBhZGRyLCB1bnNp
+Z25lZCBsb25nIGVuZCwKIAkJcGh5c19hZGRyX3QgcGh5c19hZGRyLCBwZ3Byb3RfdCBwcm90KQog
+ewogCXN0cnVjdCB2bV9zdHJ1Y3QgKmFyZWE7Ci0JaW50IGVycjsKIAogCWFyZWEgPSBmaW5kX3Zt
+X2FyZWEoKHZvaWQgKilhZGRyKTsKIAlpZiAoIWFyZWEgfHwgIShhcmVhLT5mbGFncyAmIFZNX0lP
+UkVNQVApKSB7CkBAIC0zMjIsMTMgKzMzNSw3IEBAIGludCBpb3JlbWFwX3BhZ2VfcmFuZ2UodW5z
+aWduZWQgbG9uZyBhZGRyLCB1bnNpZ25lZCBsb25nIGVuZCwKIAkJCSAgKGxvbmcpYXJlYS0+YWRk
+ciArIGdldF92bV9hcmVhX3NpemUoYXJlYSkpOwogCQlyZXR1cm4gLUVSQU5HRTsKIAl9Ci0JZXJy
+ID0gdm1hcF9yYW5nZV9ub2ZsdXNoKGFkZHIsIGVuZCwgcGh5c19hZGRyLCBwZ3Byb3RfbngocHJv
+dCksCi0JCQkJIGlvcmVtYXBfbWF4X3BhZ2Vfc2hpZnQpOwotCWZsdXNoX2NhY2hlX3ZtYXAoYWRk
+ciwgZW5kKTsKLQlpZiAoIWVycikKLQkJZXJyID0ga21zYW5faW9yZW1hcF9wYWdlX3JhbmdlKGFk
+ZHIsIGVuZCwgcGh5c19hZGRyLCBwcm90LAotCQkJCQkgICAgICAgaW9yZW1hcF9tYXhfcGFnZV9z
+aGlmdCk7Ci0JcmV0dXJuIGVycjsKKwlyZXR1cm4gdm1hcF9wYWdlX3JhbmdlKGFkZHIsIGVuZCwg
+cGh5c19hZGRyLCBwcm90KTsKIH0KIAogc3RhdGljIHZvaWQgdnVubWFwX3B0ZV9yYW5nZShwbWRf
+dCAqcG1kLCB1bnNpZ25lZCBsb25nIGFkZHIsIHVuc2lnbmVkIGxvbmcgZW5kLAotLSAKMi40My4w
+Cgo=
+--000000000000021009061329699e--
