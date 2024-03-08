@@ -1,96 +1,174 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E60B0291E;
-	Fri,  8 Mar 2024 16:37:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F08E1CF8F;
+	Fri,  8 Mar 2024 16:49:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709915875; cv=none; b=M+1wE/a5xNnyoRxrUem/6s/orq0aEtoZdEtGlqGVaYHeJDnzSinZQTwpSZeMcNsHyO/2AJ2UFFIv0nqn2fPS0YDziQhoC0APR17ws3qq+7U3+bBzK610Cd5E0JF7NWaHhMVNNBfLd+HEGszopcfLJ4jjyLWlC6R+2QSnWqc5Xf0=
+	t=1709916562; cv=none; b=JYB/YkUJu5O30oi97/DrriKtwU+VQsL55Pr+VHJMIJy0xdtu41BM1TWidoEvzZOAp0dzKdaP0yabM5SnssiUUNuYYN4H+IvPQ+r2h7buVWm81mbpfLzZ60qtaREgJWHlrgko4iPjMMdOG5CHzbn4pee5kNWMMDyiymuRU1g5018=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709915875; c=relaxed/simple;
-	bh=KL8RCkcWqSd8XgfOapZoaXrPGEaLE1ze7TfYfS7DQPQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GAGputNROJ0yoO8M5MN/ieV1su8XoIlzfQOfzXMXQp76LNWvZA6QUsGKgouypu1IUmXuyACwViePShib0C/OdDoXptCjv1m+AYnO9hEyFHConAmw+fziC5cGtPTgzKPL3zA1P+LJS2NORknvnixk7sYgfquQq1IAhjgX9hg2+YQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YuLX91ne; arc=none smtp.client-ip=209.85.221.44
+	s=arc-20240116; t=1709916562; c=relaxed/simple;
+	bh=S0Dp/WBR/EujGLQqqCGTWW5cVi0WtWTDa9DqA4ijtho=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OfAzxeQ6VTlh+Wgr7XVK/GzxiSBYQZtOSGX8PpbHUV9TFyJqqPUrYcEU6lGYrtfzSsZRjezbjdGDhJJkW5liCHw3soZS46W0Blg8Samiz53w2xfIATJdhEjJCorp0E5kRSmZdoGWSfK/6CLoBt71fhtgJaI3q1F1OeM5z9StIck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Szq9eLfL; arc=none smtp.client-ip=209.85.215.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YuLX91ne"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-33d90dfe73cso1376338f8f.0;
-        Fri, 08 Mar 2024 08:37:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Szq9eLfL"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-5d8b887bb0cso1836349a12.2;
+        Fri, 08 Mar 2024 08:49:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709915872; x=1710520672; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5JesRgTUuNt1xE/krs+/X0XneE8maUM05vwUraJuO3Y=;
-        b=YuLX91neOv/LFF/E+F8sH6i4hWRQfivyCnyPY6g/k8CS2hf4Q8FLsdfyoK3nxIIPp7
-         2rF1J9GJoQXU/KEZyVyobgN4l/UkADCUgHgkiuQKSBsn45HmEF60Jk4QpJdnkP0gPrP/
-         7i/Mqi0NvfYDhGvtP3rBqK7s41EKrmovnz9HE3x+42aO+IcBqHAPJLDSG0fK52UaPfJw
-         BU3Wfpmrrvzj0FXa9ZlVlXyOAc0NDgv76JRoshZn4Uu9Aj0qAPsB/LIV+gaSdzBl0a/X
-         pJEjEbQHEa40C3rbbtCcWMlaph7tiFi8ot1QHHukJl1JwVRls2lu5gbwA4EVCMwu1FlF
-         m82A==
+        d=gmail.com; s=20230601; t=1709916560; x=1710521360; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=c0nYRWlBOyohOq+wmgk45L39MksWf6aczzJ+KIoLdfo=;
+        b=Szq9eLfLmnuaMp/8ey66kKKLbPs9nhVuay/Cc69+GqUJbmnxQrbXXjvTp5DYrkczGW
+         BrOaoIv6i93tIqXSwl74e7eUAuTWXvRSNgc24x8Xvw2WWhx/UkDYDhuEi+kkn82T58Id
+         iMRbSUeVGGkbg7kakhvk8QISnIb3OPG544Vw8COJpOldYu1K10Em8pFVQM66TMTfPe1R
+         +FCoE3pHSlH6fLLQTknndOZuhycYqKIUTKd0+6A9n7NAOTszyZQdQUCaKa+lTqBWWvha
+         2L1fajzZTzQUhzKJOa+ZhCRCDZkpkD3Ylu3VADJNpWALmTGWVToLg6ys12JnaoJDFFsA
+         d00Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709915872; x=1710520672;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5JesRgTUuNt1xE/krs+/X0XneE8maUM05vwUraJuO3Y=;
-        b=EZMSlcQSMs51kAKwmp1AJDw0+h1TNkOQ316znHgLcdwlYV48I4TMDkBsbdJ8BiTUHI
-         AebVYqKILfwhYlp7h9tLw/ShVDmjTnR7kLq90cunKIGVxoNtcXSpiBD/M1p5qaj6uUXf
-         hR0QlNvtZOS9Eb2dfxstPpQ2BXGLaXdncqF+OMT1Qn8ZAokEcbc8WcmkqpyxetpL5UPS
-         92tpykd4y1UvmDdkOvX/u60lY8zk67C11h87S4XNt9pEqXz9C7JxiZF4XVEOHYVVIvfG
-         Dk69n1wWaNG3aPWBmlwCCR1rf3Ak+xKGsGKmGbAj08XDb0fd2ZRiw0QjRFS9zjtRNjgg
-         rXxA==
-X-Forwarded-Encrypted: i=1; AJvYcCVonKd/OtkJa1rE7+XIUj1en7quH6U31eInoT1pxXkAnD/8yD1puAtK8cQDUNvkQU1TGxAEkKKHjRFDuvQb9A+K9n/zgLomkTYsqVgiKNx8CqsshbAfuIM/1ImVdHdL
-X-Gm-Message-State: AOJu0Yz10/F/+1JdTgF9O9du1DwpxYxwVEHpF3oqJN4rGBTeEBhDjp3d
-	+yqqmk1c0CQHbuiosDDgkQeWKCbCUAKeFS9sTZss5wVYry7j40SD4giKV9KAgfSt4Ts//6DrRYg
-	61YQlTf9sX+qrkVFipt2ibnw37BI=
-X-Google-Smtp-Source: AGHT+IFXA8k9e8qbckQo0rY/uY6uy5njvrqYYq3CiI0AMi4h+wRSUVu4NMbB2uyXdDPqPcwFmb2tq340tNJ8GMAHSog=
-X-Received: by 2002:adf:b1d8:0:b0:33e:12a4:8619 with SMTP id
- r24-20020adfb1d8000000b0033e12a48619mr760550wra.24.1709915871988; Fri, 08 Mar
- 2024 08:37:51 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709916560; x=1710521360;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c0nYRWlBOyohOq+wmgk45L39MksWf6aczzJ+KIoLdfo=;
+        b=gUClNTtf5B1Zb/zv00bTuBgCgSa/+1so1RcM1czoetNdQWtR9VdoqepZjvhF5gyo1l
+         wq9lZBuolXJ4/A8lvAfR7YY39n1Q280woCd53pyNO3/BpDKQrmh1wIcNRtzThId19LNO
+         YXFYEKnnt7wgU23W2HADbbBL1xI6LEdO8pdRA4JvBpTp6TCAmlt6U3aoW+FN0ypyweHT
+         0oFr87YTu/gRb3HL28005yGrhKc20Tx2uWRaEPI0/lxVaj9BBqwNkuYw0SNj1tQ/gFJf
+         5KJ2gYxv+FVJFPPTpknil9xk2xolYSL/3k6QSRWzL8q+T+n8Q4lAV01Sdj73qT2Aj4w3
+         YUow==
+X-Forwarded-Encrypted: i=1; AJvYcCUFeuW+3JKchX3HRfKt6B+0yPLI2UrUd1+RlTT1xfIkhIKd9JXj/kgUJcstuN/+t2Kdr9cZpW8huvBTKzC0mrKRDiOc+VwlZsyLw7S8ObkLBHkQmwf77BgkJU4gZMmKTJes
+X-Gm-Message-State: AOJu0YzNDDkzXvyJQUxLLaY19sz0U1OxehfApax6uuVh0Qjsg6emQ7DG
+	/EvPM/Ksp0HehWTk7IFDkyV8lHWEgdtDy03DNgJtTVVf26wdrs/Y
+X-Google-Smtp-Source: AGHT+IGoXj2uKpQqLd5DtfnhCg/6JNd8Lt1Wdw018u5BYLYSz8lFaPR7sSVCQCTVcuIq4bLALVv3LA==
+X-Received: by 2002:a17:90a:de85:b0:29b:a149:2fed with SMTP id n5-20020a17090ade8500b0029ba1492fedmr583646pjv.10.1709916560239;
+        Fri, 08 Mar 2024 08:49:20 -0800 (PST)
+Received: from localhost ([117.147.31.93])
+        by smtp.gmail.com with ESMTPSA id h22-20020a17090a051600b002992f49922csm3689154pjh.25.2024.03.08.08.49.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Mar 2024 08:49:19 -0800 (PST)
+From: Tao Chen <chen.dylane@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>
+Cc: chen.dylane@gmail.com,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] WIP: bpf: Support lookup_and_delete_elem for stackmap
+Date: Sat,  9 Mar 2024 00:49:11 +0800
+Message-Id: <20240308164911.118640-1-chen.dylane@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAADnVQLP=dxBb+RiMGXoaCEuRrbK387J6B+pfzWKF_F=aRgCPQ@mail.gmail.com>
- <20240308161331.GA682898@bhelgaas>
-In-Reply-To: <20240308161331.GA682898@bhelgaas>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 8 Mar 2024 08:37:40 -0800
-Message-ID: <CAADnVQJ=_HwPo=Cnemwd095dcsLXKtp=VVBB4bG9_ovfwG8bWw@mail.gmail.com>
-Subject: Re: vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, linux-mm <linux-mm@kvack.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 8, 2024 at 8:13=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.org> w=
-rote:
->
-> On Thu, Mar 07, 2024 at 07:49:16PM -0800, Alexei Starovoitov wrote:
-> > Ok. I think I figured it out.
-> > Please try the attached patch.
->
-> > PCI address range is managed independently from vmalloc range.
->
-> This suggests that the PCI maintainers should be aware of something,
-> but I don't know what this means.  Can you elaborate on what PCI
-> address range management this is, e.g., what functions allocate from
-> it?  Or how PCI should have been able to avoid this issue?
+Extend lookup_and_delete_elem for stackmap, so we can clear the
+elem in time in the userspace like the eBPF tool profile in bcc.
 
-I believe Chritoph's long term plan for ioremap_page_range()
-is to be used for ranges _within_ vmalloc range only.
-The vmalloc ranges are allocated by get_vm_area().
-In PCI you don't use vmalloc address range.
-PCI manages its own PCI_IOBASE, IO_SPACE_LIMIT address range
-independently from vmalloc range and they do not overlap.
-Hence this proposed patch.
+Signed-off-by: Tao Chen <chen.dylane@gmail.com>
+---
+ include/linux/bpf.h   |  2 +-
+ kernel/bpf/stackmap.c |  8 ++++++--
+ kernel/bpf/syscall.c  | 12 +++++++++---
+ 3 files changed, 16 insertions(+), 6 deletions(-)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 49f8b691496c..11d21e4e861b 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2284,7 +2284,7 @@ int bpf_percpu_hash_update(struct bpf_map *map, void *key, void *value,
+ int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,
+ 			    u64 flags);
+ 
+-int bpf_stackmap_copy(struct bpf_map *map, void *key, void *value);
++int bpf_stackmap_copy_and_delete(struct bpf_map *map, void *key, void *value, bool delete);
+ 
+ int bpf_fd_array_map_update_elem(struct bpf_map *map, struct file *map_file,
+ 				 void *key, void *value, u64 map_flags);
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index 458bb80b14d5..935f537dced0 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -563,7 +563,7 @@ static void *stack_map_lookup_elem(struct bpf_map *map, void *key)
+ }
+ 
+ /* Called from syscall */
+-int bpf_stackmap_copy(struct bpf_map *map, void *key, void *value)
++int bpf_stackmap_copy_and_delete(struct bpf_map *map, void *key, void *value, bool delete)
+ {
+ 	struct bpf_stack_map *smap = container_of(map, struct bpf_stack_map, map);
+ 	struct stack_map_bucket *bucket, *old_bucket;
+@@ -580,7 +580,11 @@ int bpf_stackmap_copy(struct bpf_map *map, void *key, void *value)
+ 	memcpy(value, bucket->data, trace_len);
+ 	memset(value + trace_len, 0, map->value_size - trace_len);
+ 
+-	old_bucket = xchg(&smap->buckets[id], bucket);
++	if (!delete)
++		old_bucket = xchg(&smap->buckets[id], bucket);
++	else
++		old_bucket = bucket;
++
+ 	if (old_bucket)
+ 		pcpu_freelist_push(&smap->freelist, &old_bucket->fnode);
+ 	return 0;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index d77b2f8b9364..77afce8710a4 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -225,7 +225,7 @@ static int bpf_map_copy_value(struct bpf_map *map, void *key, void *value,
+ 	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE) {
+ 		err = bpf_percpu_cgroup_storage_copy(map, key, value);
+ 	} else if (map->map_type == BPF_MAP_TYPE_STACK_TRACE) {
+-		err = bpf_stackmap_copy(map, key, value);
++		err = bpf_stackmap_copy_and_delete(map, key, value, false);
+ 	} else if (IS_FD_ARRAY(map) || IS_FD_PROG_ARRAY(map)) {
+ 		err = bpf_fd_array_map_lookup_elem(map, key, value);
+ 	} else if (IS_FD_HASH(map)) {
+@@ -1372,7 +1372,8 @@ struct bpf_map *bpf_map_inc_not_zero(struct bpf_map *map)
+ }
+ EXPORT_SYMBOL_GPL(bpf_map_inc_not_zero);
+ 
+-int __weak bpf_stackmap_copy(struct bpf_map *map, void *key, void *value)
++int __weak bpf_stackmap_copy_and_delete(struct bpf_map *map, void *key, void *value,
++										bool delete)
+ {
+ 	return -ENOTSUPP;
+ }
+@@ -1897,7 +1898,8 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
+ 
+ 	if (attr->flags &&
+ 	    (map->map_type == BPF_MAP_TYPE_QUEUE ||
+-	     map->map_type == BPF_MAP_TYPE_STACK)) {
++	     map->map_type == BPF_MAP_TYPE_STACK ||
++		 map->map_type == BPF_MAP_TYPE_STACK_TRACE)) {
+ 		err = -EINVAL;
+ 		goto err_put;
+ 	}
+@@ -1936,6 +1938,10 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
+ 			rcu_read_unlock();
+ 			bpf_enable_instrumentation();
+ 		}
++	} else if (map->map_type == BPF_MAP_TYPE_STACK_TRACE) {
++		bpf_disable_instrumentation();
++		err = bpf_stackmap_copy_and_delete(map, key, value, true);
++		bpf_enable_instrumentation();
+ 	}
+ 
+ 	if (err)
+-- 
+2.34.1
+
