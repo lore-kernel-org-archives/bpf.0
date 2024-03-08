@@ -1,48 +1,75 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E133A53391;
-	Fri,  8 Mar 2024 10:36:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A6054FB0
+	for <bpf@vger.kernel.org>; Fri,  8 Mar 2024 10:48:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709894166; cv=none; b=i73Y2jeko0AJYgjzLTdtGR+5tXHKdVGdjEPOm2mhoTS/s3R9F+e6hh0SsloY1hV1IqaNEPLKrexN0Dw1CA16cBCXuNpHOwhaBMZWEjPU8217r7O/Ka/U6SnFBWGlnYDgihEEgWFEKY0Sf50rp7HKa0vEJ6skYAxgqNBWOi+dhTw=
+	t=1709894903; cv=none; b=r4eRSgNysXhC1Y0/e7hBVxmZ6+sZ6xE9Iz2KfEZg7sk2ZQfaF2FD/c0iF4OI06aUdaf1KPNYkXui1WOaTikF4E1qA+aDdoseta/NoLhNtS4ZHtBI1xz7bjNBwV6AcjoegSgQE+4bQTD/AlgxO684wuu+UKRXC+YfvtHs79tIrRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709894166; c=relaxed/simple;
-	bh=QkVpUYeV3CtNb7O8+udH/aZB4OwfinzkvvEEuTNnMFg=;
+	s=arc-20240116; t=1709894903; c=relaxed/simple;
+	bh=Q2p1nqdXkF20Wgelw53WVgSL+Uq1JR8kxpIUSAn3Gpk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J+rM313RBX7my92R0pBLnMS/h3tgA77tAJpkjtg5WAMX9vHi95G9HyrQ8I9bcDGzK8Ek5haxVGE+lW0cRTmgYNDHg8H14hPOvc8IDB1hHRTs4LygPhlS0dkfqh8qoJlKdbDnOBZ5WMrMNKPHRGunAupBq8gQ7Sr/rmgIrH6EqZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LWV6sPna; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nt0aNrPkVDYwu6C7na8MDdDkckFHEB15HyzSEWYAwtY3sJxppKbSp4TYGBgrFqSD4WIwCD1+1cRk7GjN93RvA2E/spu+cmHReSVy/8mzxCnjcZGYi3xKh9VZcWAlm54fa8Mmk8IIN71NaHnMdYHQB91JpSup1zOC0cHm9Es9mvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JFxjUbAn; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LWV6sPna"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18E63C433F1;
-	Fri,  8 Mar 2024 10:36:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709894165;
-	bh=QkVpUYeV3CtNb7O8+udH/aZB4OwfinzkvvEEuTNnMFg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LWV6sPnaWP9YplC1t/94tZ0sy+b7KIBGbPH7SZg7w22R3lrl43cvJu+W0zOigCh/P
-	 I92ydODnQMf1mYrgkxTwXgQenW748JseAHzrawivMp4Vjm51Da8xToKCz3CWZA3lcc
-	 7C6FhA6xiosVjYQIjGghK3t8ZafGyl4Zo+0wPyzavJr/bZQAW16L62A2I2YFGLyB10
-	 k6XsMFxdvsG2NGZSMHqG38TjUxDw1NKxHpsBaJJViirMn6+z+CKhzDhUY7B03lfl+9
-	 1bFiRYxoOOI3fLPcIrNHQuGmV6J6n52Yu7ECxmB8CNj7AyKhc7LnIoA2wDvxUk0KtU
-	 0fyy0HRt/jeGw==
-Date: Fri, 8 Mar 2024 11:35:59 +0100
-From: Christian Brauner <brauner@kernel.org>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JFxjUbAn"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1dd4bc7a87aso3219965ad.2
+        for <bpf@vger.kernel.org>; Fri, 08 Mar 2024 02:48:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1709894901; x=1710499701; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=26hAEq53OJfxkgYSi/GiWOaFJ9O8E1BfJnbrW6c9mKE=;
+        b=JFxjUbAnVrElm7ywcn9wyjWG4718Np5cjMARdL1Eel4X6Qqz/zhUgp1l4sooS6eddj
+         qs2olmYz2Dohl983LUvOPd9Bog2aKCWd5RP54nQdnk9jO7/JbdG44gI6L5+SXZpY6dBC
+         bKDNIY2n+sq32ikkS5ucTMcQX55kdw4UWfW8kicdSZjHRN2CWvykzZsv/2ct/BYPhrFN
+         U9Nl/rbn3nU54/ffsG88+v3jns+A5nNGVEWzrVcmy1AC/BHwycIbl7eIH5QPlm/ckJRJ
+         CtOb4JofPP0OIXTQb256tWVq+YN/B+CnvCSRU8ZKv3Hawmp5qXgXf2Mm3L5o1OCR/IH8
+         FidQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709894901; x=1710499701;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=26hAEq53OJfxkgYSi/GiWOaFJ9O8E1BfJnbrW6c9mKE=;
+        b=csX4EHcgaB2UjH8hLw3zBcWULcxLfXywIfPAoxjzE0YaD7MCTCCmPVpPnRnoo3QGR0
+         zEc0b4uaSHwh9lMQr0yjKIkHCrlBrGUJ1gB/AQwk/zEt7miTkNiNRyXVFHq37DvVBI03
+         D3xPc8wkYR8evWZDHCVXf4Lr8KoGcB6OUF7+2aoCnQgC6gNYf2+pBX78nEq+dkQpl1NI
+         +tjWX+y9oQtiJzOGw2pPhM+lA2I6ynOJrdC8ges3Efh/focDPtspFyoMns8WSf8T5IF4
+         FBeqGAdTus7KdWYbrGhoEMhvOI//ybB3njumMlw1P4Eo6zAFCtQeetS0gwjyxUqoUEnO
+         WpyA==
+X-Forwarded-Encrypted: i=1; AJvYcCUczqMHGAeYrEkR+/dtQQ1dMEiXR2qbdGwOixtK29pODVoHoviCgNFtiBBGwQimn4CE0OaYyW1jwa8wfRpHrP7uQQU0
+X-Gm-Message-State: AOJu0YzeB/4k/wOlK/W4PHsc556dgF3pSwp5oVE5wlMVotATdPct/vJG
+	+PTc7ecwPKSa/72lvx69sLrr2rDhy/XlXit77x6P4aajuXCYx2BiRsXZEwxHQQ==
+X-Google-Smtp-Source: AGHT+IGTZSiRBTMWUdaBO1vqD4dWLINeszuACZPHN9xahf3y7wMBHlVvLuZk7dXkbF83IM4NNHUGtA==
+X-Received: by 2002:a17:903:2443:b0:1dc:ca1b:279b with SMTP id l3-20020a170903244300b001dcca1b279bmr13328124pls.1.1709894900832;
+        Fri, 08 Mar 2024 02:48:20 -0800 (PST)
+Received: from thinkpad ([117.217.183.232])
+        by smtp.gmail.com with ESMTPSA id cp12-20020a170902e78c00b001dd3bee3cd6sm4853039plb.219.2024.03.08.02.48.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Mar 2024 02:48:20 -0800 (PST)
+Date: Fri, 8 Mar 2024 16:18:11 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Matt Bobrowski <mattbobrowski@google.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	KP Singh <kpsingh@google.com>, Jann Horn <jannh@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	linux-mm <linux-mm@kvack.org>, LSM List <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v2 bpf-next 0/9] add new acquire/release BPF kfuncs
-Message-ID: <20240308-kleben-eindecken-73c993fb3ebd@brauner>
-References: <cover.1709675979.git.mattbobrowski@google.com>
- <20240306-flach-tragbar-b2b3c531bf0d@brauner>
- <20240306-sandgrube-flora-a61409c2f10c@brauner>
- <CAADnVQ+RBV_rJx5LCtCiW-TWZ5DCOPz1V3ga_fc__RmL_6xgOg@mail.gmail.com>
- <20240307-phosphor-entnahmen-8ef28b782abf@brauner>
- <CAADnVQLMHdL1GfScnG8=0wL6PEC=ACZT3xuuRFrzNJqHKrYvsw@mail.gmail.com>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-mm <linux-mm@kvack.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
+Subject: Re: vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
+Message-ID: <20240308104811.GA53064@thinkpad>
+References: <CANiq72ka4rir+RTN2FQoT=Vvprp_Ao-CvoYEkSNqtSY+RZj+AA@mail.gmail.com>
+ <CAADnVQL1Zt5dwFv9HPDKDuPEKa6V7gb5j-D-LPWv47hC6mtwgw@mail.gmail.com>
+ <CAADnVQLP=dxBb+RiMGXoaCEuRrbK387J6B+pfzWKF_F=aRgCPQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,171 +79,66 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQLMHdL1GfScnG8=0wL6PEC=ACZT3xuuRFrzNJqHKrYvsw@mail.gmail.com>
+In-Reply-To: <CAADnVQLP=dxBb+RiMGXoaCEuRrbK387J6B+pfzWKF_F=aRgCPQ@mail.gmail.com>
 
-On Thu, Mar 07, 2024 at 07:11:22PM -0800, Alexei Starovoitov wrote:
-> On Thu, Mar 7, 2024 at 1:55 AM Christian Brauner <brauner@kernel.org> wrote:
+On Thu, Mar 07, 2024 at 07:49:16PM -0800, Alexei Starovoitov wrote:
+> On Thu, Mar 7, 2024 at 9:54 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
 > >
-> > > >
-> > > > So, looking at this series you're now asking us to expose:
-> > > >
-> > > > (1) mmgrab()
-> > > > (2) mmput()
-> > > > (3) fput()
-> > > > (5) get_mm_exe_file()
-> > > > (4) get_task_exe_file()
-> > > > (7) get_task_fs_pwd()
-> > > > (6) get_task_fs_root()
-> > > > (8) path_get()
-> > > > (9) path_put()
-> > > >
-> > > > in one go and the justification in all patches amounts to "This is
-> > > > common in some BPF LSM programs".
-> > > >
-> > > > So, broken stuff got exposed to users or at least a broken BPF LSM
-> > > > program was written somewhere out there that is susceptible to UAFs
-> > > > becauase you didn't restrict bpf_d_path() to trusted pointer arguments.
-> > > > So you're now scrambling to fix this by asking for a bunch of low-level
-> > > > exports.
-> > > >
-> > > > What is the guarantee that you don't end up writing another BPF LSM that
-> > > > abuses these exports in a way that causes even more issues and then
-> > > > someone else comes back asking for the next round of bpf funcs to be
-> > > > exposed to fix it.
+> > On Thu, Mar 7, 2024 at 9:42 AM Miguel Ojeda
+> > <miguel.ojeda.sandonis@gmail.com> wrote:
 > > >
-> > > There is no guarantee.
-> > > We made a safety mistake with bpf_d_path() though
-> > > we restricted it very tight. And that UAF is tricky.
-> > > I'm still amazed how Jann managed to find it.
-> > > We all make mistakes.
-> > > It's not the first one and not going to be the last.
+> > > Hi arm64/bpf/pci,
 > > >
-> > > What Matt is doing is an honest effort to fix it
-> > > in the upstream kernel for all bpf users to benefit.
-> > > He could have done it with a kernel module.
-> > > The above "low level" helpers are all either static inline
-> > > in .h or they call EXPORT_SYMBOL[_GPL] or simply inc/dec refcnt.
+> > > In today's next-20240307 with a defconfig LLVM=1 I am seeing [1] under
+> > > QEMU virt, i.e. from
+> > > https://lore.kernel.org/all/20240305030516.41519-2-alexei.starovoitov@gmail.com/
+> > > applied to the bpf-next tree.
 > > >
-> > > One can implement such kfuncs in an out of tree kernel module
-> > > and be done with it, but in the bpf community we encourage
-> > > everyone to upstream their work.
+> > > Cheers,
+> > > Miguel
 > > >
-> > > So kudos to Matt for working on these patches.
+> > > [1]
 > > >
-> > > His bpf-lsm use case is not special.
-> > > It just needs a safe way to call d_path.
-> > >
-> > > +SEC("lsm.s/file_open")
-> > > +__failure __msg("R1 must be referenced or trusted")
-> > > +int BPF_PROG(path_d_path_kfunc_untrusted_from_current)
-> > > +{
-> > > +       struct path *pwd;
-> > > +       struct task_struct *current;
-> > > +
-> > > +       current = bpf_get_current_task_btf();
-> > > +       /* Walking a trusted pointer returned from bpf_get_current_task_btf()
-> > > +        * yields and untrusted pointer. */
-> > > +       pwd = &current->fs->pwd;
-> > > +       bpf_path_d_path(pwd, buf, sizeof(buf));
-> > > +       return 0;
-> > > +}
-> > >
-> > > This test checks that such an access pattern is unsafe and
-> > > the verifier will catch it.
-> > >
-> > > To make it safe one needs to do:
-> > >
-> > >   current = bpf_get_current_task_btf();
-> > >   pwd = bpf_get_task_fs_pwd(current);
-> > >   if (!pwd) // error path
-> > >   bpf_path_d_path(pwd, ...);
-> > >   bpf_put_path(pwd);
-> > >
-> > > these are the kfuncs from patch 6.
-> > >
-> > > And notice that they have KF_ACQUIRE and KF_RELEASE flags.
-> > >
-> > > They tell the verifier to recognize that bpf_get_task_fs_pwd()
-> > > kfunc acquires 'struct path *'.
-> > > Meaning that bpf prog cannot just return without releasing it.
-> > >
-> > > The bpf prog cannot use-after-free that 'pwd' either
-> > > after it was released by bpf_put_path(pwd).
-> > >
-> > > The verifier static analysis catches such UAF-s.
-> > > It didn't catch Jann's UAF earlier, because we didn't have
-> > > these kfuncs! Hence the fix is to add such kfuncs with
-> > > acquire/release semantics.
-> > >
-> > > > The difference between a regular LSM asking about this and a BPF LSM
-> > > > program is that we can see in the hook implementation what the LSM
-> > > > intends to do with this and we can judge whether that's safe or not.
-> > >
-> > > See above example.
-> > > The verifier is doing a much better job than humans when it comes
-> > > to safety.
-> > >
-> > > > Here you're asking us to do this blindfolded.
-> > >
-> > > If you don't trust the verifier to enforce safety,
-> > > you shouldn't trust Rust compiler to generate safe code either.
-> > >
-> > > In another reply you've compared kfuncs to EXPORT_SYMBOL_GPL.
-> > > Such analogy is correct to some extent,
-> > > but unlike exported symbols kfuncs are restricted to particular
-> > > program types. They don't accept arbitrary pointers,
-> > > and reference count is enforced as well.
-> > > That's a pretty big difference vs EXPORT_SYMBOL.
+> > > [    0.425177] pci-host-generic 4010000000.pcie: host bridge
+> > > /pcie@10000000 ranges:
+> > > [    0.425886] pci-host-generic 4010000000.pcie:       IO
+> > > 0x003eff0000..0x003effffff -> 0x0000000000
+> > > [    0.426534] pci-host-generic 4010000000.pcie:      MEM
+> > > 0x0010000000..0x003efeffff -> 0x0010000000
+> > > [    0.426764] pci-host-generic 4010000000.pcie:      MEM
+> > > 0x8000000000..0xffffffffff -> 0x8000000000
+> > > [    0.427324] ------------[ cut here ]------------
+> > > [    0.427456] vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
+> > > [    0.427944] WARNING: CPU: 0 PID: 1 at mm/vmalloc.c:315
+> > > ioremap_page_range+0x25c/0x2bc
 > >
-> > There's one fundamental question here that we'll need an official answer to:
+> > Great. Thanks for flagging.
+> > Looks like this check found some misuse of ioremap_page_range.
 > >
-> > Is it ok for an out-of-tree BPF LSM program, that nobody has ever seen
-> > to request access to various helpers in the kernel?
+> > Note that without marking the address range as VM_IOREMAP
+> > the vread_iter() will be bulk reading over IO and might
+> > cause hard hangs and what not.
+> > pci drivers need to mark their range as VM_IOREMAP.
+> > That was the reason for the warning.
+> >
+> > I'll try to figure out which piece of code missed passing
+> > VM_IOREMAP into vm_area.
+> > I'm not familiar with pci, so help is greatly appreciated.
 > 
-> obviously not.
-> 
-> > Because fundamentally this is what this patchset is asking to be done.
-> 
-> Pardon ?
-> 
-> > If the ZFS out-of-tree kernel module were to send us a similar patch
-> > series asking us for a list of 9 functions that they'd like us to export
-> > what would the answer to that be?
-> 
-> This patch set doesn't request any new EXPORT_SYMBOL.
+> Ok. I think I figured it out.
+> Please try the attached patch.
 
-In order for that out-of-tree BPF LSM program to get similar guarantees
-than an equivalent kernel module we need to export all nine functions
-for BPF. Included in that set are functions that aren't currently even
-exported to modules.
+I tested the attached patch on Qcom SDM845 based dev board and it fixes the
+issue. So,
 
-These exports are specifically for an out-of-tree BPF LSM program that
-is not accessible to the public. The question in the other mail stands.
+Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-> First of all, there is no such thing as get_task_fs_pwd/root
-> in the kernel.
+On a side note, PCI is the only driver making use of this API. If I'm making
+such an API change, I would've made sure that the callers are unaffected by the
+change.
 
-Yeah, we'd need specific helpers for a never seen before out-of-tree BPF
-LSM. I don't see how that's different from an out-of-tree kernel module.
+- Mani
 
-> One can argue that get_mm_exe_file() is not exported,
-> but it's nothing but rcu_lock-wrap plus get_file_rcu()
-> which is EXPORT_SYMBOL.
-
-Oh, good spot. That's an accident. get_file_rcu() definitely shouldn't
-be exported. So that'll be removed asap.
-
-> Christian,
-> 
-> I understand your irritation with anything bpf related
-> due to our mistake with fd=0, but as I said earlier it was
-> an honest mistake. There was no malicious intent.
-> Time to move on.
-
-I understand your concern but I'm neither irritated by bpf nor do I hold
-grudges. As I'm writing this bpf's bpffs and token changes are on their
-way into mainline for v6.9 which I reviewed and acked immediately after
-that discussion.
-
-Rest assures that you can move on from that concern. There's no need to
-keep bringing it up in unrelated discussions.
+-- 
+மணிவண்ணன் சதாசிவம்
