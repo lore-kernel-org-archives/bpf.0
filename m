@@ -1,125 +1,113 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD3B3D3BB;
-	Thu,  7 Mar 2024 23:47:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581BA4C9D
+	for <bpf@vger.kernel.org>; Fri,  8 Mar 2024 01:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709855234; cv=none; b=lfiASgz6KUnuDKrlC5vy117d7dIUjhNmh7M4pKRmbpNKbk85ZcUfZcYkDaar8ogiaCSP2NP4iapvu/X7aRIUQ5tnxTFhjRRBuXcKnbTy5uJUSS25lhMmPMEsfdjjTL57PsUK12v0iDTN12Io3sMWw89ONODr2P06ow3px5hTIN0=
+	t=1709859837; cv=none; b=eKyxCsPiENZ0Up6wx48CdUAJwB1QIwUoTvO2I7gUoqd4LJXYrf7MnM2uOq6l9ex5EyubfoAWryvLjNOFX4X6TjJ9UZj1dbc6sdopmQQyOK0X4C2dngPHxxH7I3mQeP2VUeA9l76VC5u8eMcj6XoYIrI2xSiIuPSA6hRRyMfNTOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709855234; c=relaxed/simple;
-	bh=hiSn8SSIe9tegeKwF4wqEjbTESubvyzdJG8DyIQ2F5c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eeYUKyWAssq/PH17TdZoh610PnCZest8s0i99wfSuBm3p0IF6PglRQsPT4CTI8jzxO3Hw8b7Bl4OTQ5FjS8TSGME7hC7c890ZrGrKgepz2BsfxOY7oMHS6j2IX3HTPpFm+ojg0I1WPaxVl3QPPjbBFPyJNO9/tbaefNh2gqcu2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6da202aa138so1038511b3a.2;
-        Thu, 07 Mar 2024 15:47:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709855232; x=1710460032;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VRglE+lg+GiCjlWhoic2nCJGJlQoZ9wZneASUD21CRs=;
-        b=TgFBz6bhZ/32RivFypCTKygjGuZ3oo+p25WazFc9QsblTtfbxKUjzIIPoFRgQDikhi
-         /yvPFHCbI1ux8+ClRWPazLDAIZ+HYKghgx+Tomev8Lr2i+XM7rNbHC+i/FrdDL4gAokM
-         XF42pZSvOM3cu4DhahKFJMWzceckE9m0dSvdKqQ5Wf11i7s7UVS5CgHwHG/NnA+PSPiU
-         GN8C60vLg36Wmalz1iI5Mup8/i8Kpwuagf3xRMxfA2YAsF0kjMxxKVEg4ASQVrrGklhM
-         RMpmNoOsuX0iP5LTyT27kweljyNc1a+PTlomOBGHxiMcCgtdUg6ttuLD+LAVtxjLxJnF
-         ++Sw==
-X-Forwarded-Encrypted: i=1; AJvYcCWQzlVVNnr2G02vgUU/+wX8NFr8sp6S5eov9mq95qpWjysgdmpVWEYcZieOhtllCahMMMM+tYwNKW87vJwuEv4hbns2hyDEOi3cnDCuV15Ob1xfyeo94k2tlbKnZXKYkWK11EuVDskzSK+/DcnQGcws8kFoU2RnSsXsTAvDqB7YYszP3A==
-X-Gm-Message-State: AOJu0YwXAWCRmyJyYyaWA3cqooshjpUvhHNSBNsX3R0KOri3NqPhpDn9
-	AAOLJDfk4GsEP3QX3Yu1xLaUwF7JOA42b4sbJC+8a2t/auBT+czGpPyld383ieP9c3mbUcA9Ml/
-	mUxIEl8cVFyukok36zxlJQck4njo=
-X-Google-Smtp-Source: AGHT+IGjnH5Y4f8Xc68LPqBs4yQPZ4Urn7qyiy5Tf+SuqPL2hThvfF428reoLcncH5TvvcXLda4DiyJCHhDBIBQxWys=
-X-Received: by 2002:a05:6a20:a99a:b0:1a0:e187:87c4 with SMTP id
- cc26-20020a056a20a99a00b001a0e18787c4mr8978541pzb.38.1709855232461; Thu, 07
- Mar 2024 15:47:12 -0800 (PST)
+	s=arc-20240116; t=1709859837; c=relaxed/simple;
+	bh=dL3JJMCUiw12MUhjl8AX46HNwJj4h0AxngXLsUvjSkc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pOzx9iSb7ls+DUKCdC2426ruaIuPeTYO6gRxCf7L49PT7umo8NUH1pq6MFIULwfUkSVRWs0ZxJ7y3dJWH2pxNAx5daf+/YXdFHdI0wUak8CD/8TaHlZjILD3R1ME70vtFbZtxhU7/bOIfP7FtTiS/VqpGc9NzTNs+HzBRYzM/fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QM/6Wbyp; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QM/6Wbyp"
+Message-ID: <fe323c90-bda3-4837-8daa-372073014446@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1709859832;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gC74MGn3Y3tSFbRYc+uvNsgQvmrsRYHxqYo53nKvO0Y=;
+	b=QM/6Wbyp7018YakXgblFggvzTz1idd5bTi7zwCH+0X9UX+PlZp2nhO1xNHUS+PdLRMGiZ1
+	DZC1sX0g1+CHxpYgOkUJmXNEQ/4b6vpHOs0eAIN4lIipmYhDHWQidJ1bnDY2mGuPeubccm
+	mUDwqnYtH/TxAYUvscmUp0auaCwclA4=
+Date: Thu, 7 Mar 2024 17:03:43 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240202234057.2085863-1-irogers@google.com> <CAP-5=fVjAHqAHHLqE=3v2bP6S6k98psiuZds7TUTFCT7RgMFdQ@mail.gmail.com>
- <CAM9d7ciPYMd4zckrcgnPtradZ_bvaNOHji1tkkYQu_TTF5=eYw@mail.gmail.com>
-In-Reply-To: <CAM9d7ciPYMd4zckrcgnPtradZ_bvaNOHji1tkkYQu_TTF5=eYw@mail.gmail.com>
-From: Namhyung Kim <namhyung@kernel.org>
-Date: Thu, 7 Mar 2024 15:47:00 -0800
-Message-ID: <CAM9d7cgbxHZoaq4ZLCda-6TW5A+b+-8dSrRApk+AjcTVNC5hNA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/8] Clean up libperf cpumap's empty function
-To: Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@arm.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Mike Leach <mike.leach@linaro.org>, 
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Kajol Jain <kjain@linux.ibm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Alexandre Ghiti <alexghiti@rivosinc.com>, 
-	Atish Patra <atishp@rivosinc.com>, "Steinar H. Gunderson" <sesse@google.com>, 
-	Yang Jihong <yangjihong1@huawei.com>, Yang Li <yang.lee@linux.alibaba.com>, 
-	Changbin Du <changbin.du@huawei.com>, Sandipan Das <sandipan.das@amd.com>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, Paran Lee <p4ranlee@gmail.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Huacai Chen <chenhuacai@kernel.org>, 
-	Yanteng Si <siyanteng@loongson.cn>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, coresight@lists.linaro.org, 
-	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
-	Leo Yan <leo.yan@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] tools/testing/selftests/bpf/test_tc_tunnel.sh: Prevent
+ client connect before server bind
+Content-Language: en-US
+To: "Alessandro Carminati (Red Hat)" <alessandro.carminati@gmail.com>
+Cc: Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>
+References: <20240229140000.175274-1-alessandro.carminati@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20240229140000.175274-1-alessandro.carminati@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Ian,
+On 2/29/24 6:00 AM, Alessandro Carminati (Red Hat) wrote:
+> In some systems, the netcat server can incur in delay to start listening.
+> When this happens, the test can randomly fail in various points.
+> This is an example error message:
+>     # ip gre none gso
+>     # encap 192.168.1.1 to 192.168.1.2, type gre, mac none len 2000
+>     # test basic connectivity
+>     # Ncat: Connection refused.
 
-Sorry for the late reply.
+This explained what is the issue. Please also explain how the patch solves it.
 
-On Fri, Feb 16, 2024 at 5:04=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
-wrote:
->
-> On Wed, Feb 14, 2024 at 2:03=E2=80=AFPM Ian Rogers <irogers@google.com> w=
-rote:
-> >
-> > On Fri, Feb 2, 2024 at 3:41=E2=80=AFPM Ian Rogers <irogers@google.com> =
-wrote:
-> > >
-> > > Rename and clean up the use of libperf CPU map functions particularly
-> > > focussing on perf_cpu_map__empty that may return true for maps
-> > > containing CPUs but also with an "any CPU"/dummy value.
-> > >
-> > > perf_cpu_map__nr is also troubling in that iterating an empty CPU map
-> > > will yield the "any CPU"/dummy value. Reduce the appearance of some
-> > > calls to this by using the perf_cpu_map__for_each_cpu macro.
-> > >
-> > > v3: Address handling of "any" is arm-spe/cs-etm patch.
-> > > v2: 6 patches were merged by Arnaldo. New patch added ensure empty
-> > >     maps are allocated as NULL (suggested by James Clark). Hopefully =
-a
-> > >     fix to "perf arm-spe/cs-etm: Directly iterate CPU maps".
-> > >
-> > > Ian Rogers (8):
-> > >   libperf cpumap: Add any, empty and min helpers
-> > >   libperf cpumap: Ensure empty cpumap is NULL from alloc
-> > >   perf arm-spe/cs-etm: Directly iterate CPU maps
-> > >   perf intel-pt/intel-bts: Switch perf_cpu_map__has_any_cpu_or_is_emp=
-ty
-> > >     use
-> > >   perf cpumap: Clean up use of perf_cpu_map__has_any_cpu_or_is_empty
-> > >   perf arm64 header: Remove unnecessary CPU map get and put
-> > >   perf stat: Remove duplicate cpus_map_matched function
-> > >   perf cpumap: Use perf_cpu_map__for_each_cpu when possible
-> >
-> > Ping. Thanks,
-> > Ian
->
-> Adrian and James, are you ok with this now?
+> 
+> Signed-off-by: Alessandro Carminati (Red Hat) <alessandro.carminati@gmail.com>
+> ---
+>   tools/testing/selftests/bpf/test_tc_tunnel.sh | 19 ++++++++++++++++++-
+>   1 file changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/test_tc_tunnel.sh b/tools/testing/selftests/bpf/test_tc_tunnel.sh
+> index 910044f08908..01c0f4b1a8c2 100755
+> --- a/tools/testing/selftests/bpf/test_tc_tunnel.sh
+> +++ b/tools/testing/selftests/bpf/test_tc_tunnel.sh
+> @@ -72,7 +72,6 @@ cleanup() {
+>   server_listen() {
+>   	ip netns exec "${ns2}" nc "${netcat_opt}" -l "${port}" > "${outfile}" &
+>   	server_pid=$!
+> -	sleep 0.2
+>   }
+>   
+>   client_connect() {
+> @@ -93,6 +92,22 @@ verify_data() {
+>   	fi
+>   }
+>   
+> +wait_for_port() {
+> +	local digits=8
+> +	local port2check=$(printf ":%04X" $1)
+> +	local prot=$([ "$2" == "-6" ] && echo 6 && digits=32)
+> +
+> +	for i in $(seq 20); do
+> +		if ip netns exec "${ns2}" cat /proc/net/tcp${prot} | \
+> +			sed -r 's/^[ \t]+[0-9]+: ([0-9A-F]{'${digits}'}:[0-9A-F]{4}) .*$/\1/' | \
+> +			grep -q "${port2check}"; then
 
-I think James is fine now and the Intel-pt part seems straight-forward
-so I'd like to merge this change.  Please tell me if you have any concerns.
+The idea is to check if there is socket listening on port 8888?
 
-Thanks,
-Namhyung
+May be something simpler like "ss -OHtl src :$1" instead?
+
+--
+pw-bot: cr
+
+The check-and-wait fix in this patch is fine to get your test environment going.
+
+Eventually, it will be good to see the test_tc_tunnel.sh test moved to 
+test_progs. The test_tc_tunnel.sh is not run by bpf CI and issue like this got 
+unnoticed. Some other "*.sh" tests have already been moved to test_progs.
+
+
