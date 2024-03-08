@@ -1,85 +1,237 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2085B1D698;
-	Fri,  8 Mar 2024 17:02:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2C23217
+	for <bpf@vger.kernel.org>; Fri,  8 Mar 2024 17:14:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709917338; cv=none; b=cdDmrmtAryO7mj/CB7Y5U7ef1QTETHnw5PLK1WlIjs5CjKKLFjQN8TMSpRjnTys5tmQWi31ClVkj8UUhmvzAdFTZ9Fr8UQfbTHS0vrENyLzaQxyJ/dPBAtOUAA9mHbzUsxfqHskqISXxZHl1AxWrxuks+KfUQ/YtFBlX+bCun5k=
+	t=1709918069; cv=none; b=iXGP/pYz3UIQouxWk4zyPN02YYSBJGs2Oq3CDgbsRDiQ4NKjVX+lXI/iA1NgBcCFda8I9naw7qTFJ04d2L/uKZTN+PPVfilu73nLKDZCyl7DBdIgZpqMiNDXtNx0uvM9X5NCsAtCS0oAaVGVHEPyRZt3q/UNTgPJCi9IgKdeUK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709917338; c=relaxed/simple;
-	bh=EJfinzrUbLD4sEKSlrZWMhsgaO5WiyaoMvgJl2gYYYY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s/L5WCdAmUpn/ej8EIIbnGQs75mjy2lsumk5+tuRrWnxW/YWQpIJsFJFHlVjUETxmV+xOyjKYjQNKYt+p/dyr9R7tP0DDPdGNLvcp6lQYeWsBX1YFE2swhctKbW0X2EplfWisruGQXvItAGJynEfaaXT0Kl2QdKYnnj8No1ranI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=SjKkr9M7; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	s=arc-20240116; t=1709918069; c=relaxed/simple;
+	bh=pSZN3E+H9R1DtX04zdbIqeFAxdfCkyiHECLJrBmuJl8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=H7o2uSr/7TRmePc5f6tJQm79fvdXqrdOd2gCxQ8T5OFrrfMihM5CYyET2L0KpFu50m7GZCHZNVmA1TBfC6V5KRq/pR+g8tve+b40hQQR28Bl4AYPrt7iQdYG25wYXDYIEmI2BCVx3+cKaY6AkqiAIrEJEsujtZs4ZyGORMCuIzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=c9Xdc3MH; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SjKkr9M7"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=4qt6B2DEelMk3i3au76miwVYGuqD69MMNvsQhf9L6eU=; b=SjKkr9M7HMCTOJeUS7mscRYx5K
-	lu8Smc7Bhj+S8mDp4VsgDShum2AAGcEXflC1jcpUhkEKrYpF7Bbp4xI42lx8mhtr+euAwApC5Z2z8
-	3ffgWeSG/txUpX5DOj1uG/xkuo05nYQLUhkPFHxvw0tRJoronxRdMYz6DJ92mTWRVW4HkkMFhA3RH
-	QhOXe42tfkLsAn5aZr8HjFlGiilvCmARmuR1YxooOxh8Nt64TfxiAb9obIMj1KEYClj//0VG669Ps
-	eZLe3sQOoNSqU+vWomQSz11n0w3kQAOd38T37PSYk2o7kMWG0sbtdtNNYnZInnflW4kpZfEPTMu8N
-	qwnrrJ+g==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1ridbo-0000000AMNk-086d;
-	Fri, 08 Mar 2024 17:02:12 +0000
-Date: Fri, 8 Mar 2024 09:02:11 -0800
-From: Christoph Hellwig <hch@infradead.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Christoph Hellwig <hch@infradead.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-mm <linux-mm@kvack.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: Re: vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
-Message-ID: <ZetEkyW1QgIKwfFz@infradead.org>
-References: <CANiq72ka4rir+RTN2FQoT=Vvprp_Ao-CvoYEkSNqtSY+RZj+AA@mail.gmail.com>
- <CAADnVQL1Zt5dwFv9HPDKDuPEKa6V7gb5j-D-LPWv47hC6mtwgw@mail.gmail.com>
- <CAADnVQLP=dxBb+RiMGXoaCEuRrbK387J6B+pfzWKF_F=aRgCPQ@mail.gmail.com>
- <Zeso7eNj1sBhH5zY@infradead.org>
- <CAADnVQKQumV-0AxGLKX0jQEfa8Z2Bxx2yW8k_1OqGBnD-RqrbA@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="c9Xdc3MH"
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20240308171423euoutp022cb18227752477eeaef37acd927a58bb~62Wtl2t_N2750127501euoutp02o
+	for <bpf@vger.kernel.org>; Fri,  8 Mar 2024 17:14:23 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20240308171423euoutp022cb18227752477eeaef37acd927a58bb~62Wtl2t_N2750127501euoutp02o
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1709918063;
+	bh=DSDacrVBnLQUXSKvLn3/E67RoDPwbljmlkbfkQl9jbw=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=c9Xdc3MH/xVf6+dULK54d9bPJDYmO7KLujMYxCNxfOcZcvVDqr8/dd7163R7/ZzL1
+	 Ap5hL6uI8DFKeOqH8jhDEbyJLQ955dLiCyVsA5dfOENtXhUu3TrDktjjb33dXu6Ja2
+	 RSYL6IamUWzMUdlJ3NuP5ynIy1s0n41r1uV2fplQ=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+	20240308171423eucas1p2371311a5b08d9706eaf93179362c94a4~62WtQk0AA1558315583eucas1p2a;
+	Fri,  8 Mar 2024 17:14:23 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+	eusmges3new.samsung.com (EUCPMTA) with SMTP id D8.9D.09552.F674BE56; Fri,  8
+	Mar 2024 17:14:23 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20240308171422eucas1p293895be469655aa618535cf199b0c43a~62WsXkhLx1558115581eucas1p2O;
+	Fri,  8 Mar 2024 17:14:22 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240308171422eusmtrp24638ab6298336da4c1c0e8a41a4a64fc~62WsW41FF2621526215eusmtrp2E;
+	Fri,  8 Mar 2024 17:14:22 +0000 (GMT)
+X-AuditID: cbfec7f5-853ff70000002550-40-65eb476faf57
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+	eusmgms1.samsung.com (EUCPMTA) with SMTP id 02.2F.09146.E674BE56; Fri,  8
+	Mar 2024 17:14:22 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20240308171421eusmtip21f5afb8678a08bd51cca727cfeea567f~62WrRSVaA2266422664eusmtip2R;
+	Fri,  8 Mar 2024 17:14:21 +0000 (GMT)
+Message-ID: <1f49d568-24f9-4003-b222-515f33a99cf2@samsung.com>
+Date: Fri, 8 Mar 2024 18:14:21 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQKQumV-0AxGLKX0jQEfa8Z2Bxx2yW8k_1OqGBnD-RqrbA@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 bpf-next 1/2] mm: Enforce VM_IOREMAP flag and range
+ in ioremap_page_range.
+Content-Language: en-US
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, torvalds@linux-foundation.org,
+	brho@google.com, hannes@cmpxchg.org, lstoakes@gmail.com,
+	akpm@linux-foundation.org, urezki@gmail.com, hch@infradead.org,
+	rppt@kernel.org, boris.ostrovsky@oracle.com, sstabellini@kernel.org,
+	jgross@suse.com, linux-mm@kvack.org, xen-devel@lists.xenproject.org,
+	kernel-team@fb.com
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20240305030516.41519-2-alexei.starovoitov@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrOKsWRmVeSWpSXmKPExsWy7djP87r57q9TDVadFLGYs34Nm0XD4w5W
+	i++/ZzNbXJzeymLx+chxNourPZ9ZLBYv/MZssXqTr8XpCYuYLObcNLI41vee1eLemv+sFne+
+	zWO3OLJ+O5PF6nXxFo/63rJbrL7IYvF9y2QmByGPw2/eM3tMbH7H7rFz1l12jwWbSj02r9Dy
+	6Lpxidlj06pONo9Nnyaxe5yY8ZvF4/CHKyweH5/eYvFYv+Uqi8fnTXIBvFFcNimpOZllqUX6
+	dglcGScWzWMsOKdc8WzdWfYGxslyXYwcHBICJhLrbiZ2MXJxCAmsYJRY2DOFGcL5wijRM+kd
+	I4TzmVHi768zQA4nWMfaqU1MEInljBL37/+GqvrIKPFm01VmkCpeATuJbQ8XM4HYLAIqEn/a
+	H7NDxAUlTs58wgJiiwrIS9y/NQMsLiyQLHH57wUwm1lAXOLWk/lgvSICXhJ3t7axQMRfM0ns
+	vloBYrMJGEp0ve1iA7E5BZwk9j56zApRIy/RvHU22A8SAvc4Je5u+80GcbaLxP7tk6BeEJZ4
+	dXwLO4QtI/F/53wmiIZ2RokFv+9DORMYJRqe34LqsJa4c+4XGyjImAU0Jdbv0ocIO0pM6XjH
+	BAlJPokbbwUhjuCTmLRtOjNEmFeio00IolpNYtbxdXBrD164xDyBUWkWUrDMQvL+LCTvzELY
+	u4CRZRWjeGppcW56arFxXmq5XnFibnFpXrpecn7uJkZg2jz97/jXHYwrXn3UO8TIxMF4iFGC
+	g1lJhJfF4mWqEG9KYmVValF+fFFpTmrxIUZpDhYlcV7VFPlUIYH0xJLU7NTUgtQimCwTB6dU
+	A5M4z6VXBs4R515kOB54fal0Y0Pt2Vcr1E8F7tRgiGmPWXjm1I50i/5bTc1Ho4O5e1I4A393
+	xxQun3b1I3d7eN6uHlezg2L/vm8yZolO04iZo75cYbf46Sw17fTkztWT+1Z9tn20/cS2D6+s
+	1+s62rydEf6t8fQ7xRvvL2/ylnr590JUoWJN2Y/b/EwLayesOprhzNd16/ESry9Xipcv+lw6
+	g4HJOsFBYuebx7btx0Krzz+RuZellpA86a7z9I27vDQePjNITNQ/foyv7c6Mp+tj8oKWf9q6
+	aSbH1nfVEj/a1f+d1BZ7PWVh8T2m3fvPyac3PJQ/cOCm6mnHskXTNfS1YupdGhQkDylV+aXr
+	M2crsRRnJBpqMRcVJwIA1gwiTQoEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupileLIzCtJLcpLzFFi42I5/e/4Pd0899epBq3bpSzmrF/DZtHwuIPV
+	4vvv2cwWF6e3slh8PnKczeJqz2cWi8ULvzFbrN7ka3F6wiImizk3jSyO9b1ntbi35j+rxZ1v
+	89gtjqzfzmSxel28xaO+t+wWqy+yWHzfMpnJQcjj8Jv3zB4Tm9+xe+ycdZfdY8GmUo/NK7Q8
+	um5cYvbYtKqTzWPTp0nsHidm/GbxOPzhCovHx6e3WDzWb7nK4vF5k1wAb5SeTVF+aUmqQkZ+
+	cYmtUrShhZGeoaWFnpGJpZ6hsXmslZGpkr6dTUpqTmZZapG+XYJexolF8xgLzilXPFt3lr2B
+	cbJcFyMnh4SAicTaqU1MXYxcHEICSxklXsx/wwqRkJE4Oa0ByhaW+HOtiw2i6D2jxN5zrewg
+	CV4BO4ltDxczgdgsAioSf9ofQ8UFJU7OfMICYosKyEvcvzUDLC4skCzx8uUjsKHMAuISt57M
+	B+sVEfCSuLu1jQVkAbPAayaJ+0tbGEESQgKVEu/Xd4M1sAkYSnS9BbmCk4NTwEli76PHUIPM
+	JLq2djFC2PISzVtnM09gFJqF5I5ZSPbNQtIyC0nLAkaWVYwiqaXFuem5xYZ6xYm5xaV56XrJ
+	+bmbGIGJYtuxn5t3MM579VHvECMTB+MhRgkOZiURXhaLl6lCvCmJlVWpRfnxRaU5qcWHGE2B
+	gTGRWUo0OR+YqvJK4g3NDEwNTcwsDUwtzYyVxHk9CzoShQTSE0tSs1NTC1KLYPqYODilGpic
+	Js67+29/Ar8Dd3hCoWv05FdBc6SCp88z5RXlWbfmaZLzIUmn6K4wgZaFff9d/LeaLOZ71FQ+
+	fYHrg46rc44eutZkl3zj9VEbmYmv5zembVjNVnvVs8LT/tOBW09ZV9vY37OZxxzP/qNUcMIW
+	UbeCaVN/eT14l8ms73Ks2aZKdEYAX/3Ry5sNE0ymGcT6faybv4XjX29B80bLr32RFssm+Nfy
+	7+5zqWirdOY6q7xsQdVjL+b2CxKeuXPT5P5KP9Lgklq/7vo6qalaLTYzvRTmSnreXS5+4Lzg
+	kUTv73YCfQFn351dEH6l0sCXK0BVRok7QTvU3u3iuvnaFTyM899oXvptySbxcubJKuGl4kos
+	xRmJhlrMRcWJAJJePS+dAwAA
+X-CMS-MailID: 20240308171422eucas1p293895be469655aa618535cf199b0c43a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20240308171422eucas1p293895be469655aa618535cf199b0c43a
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20240308171422eucas1p293895be469655aa618535cf199b0c43a
+References: <20240305030516.41519-1-alexei.starovoitov@gmail.com>
+	<20240305030516.41519-2-alexei.starovoitov@gmail.com>
+	<CGME20240308171422eucas1p293895be469655aa618535cf199b0c43a@eucas1p2.samsung.com>
 
-On Fri, Mar 08, 2024 at 08:33:18AM -0800, Alexei Starovoitov wrote:
-> vmap_range_noflush() is static in mm/vmalloc.c
-> There is vmap_pages_range_noflush() that is in mm/internal.h,
-> but it needs pages instead of phys_addr_t.
-> Newly introduced vm_area_map_pages() needs struct vm_struct *area
-> and struct page **pages.
-> In this PCI case there is no vm_struct and no pages.
-> ioremap_page_range() is the only api that fits. afaict.
+On 05.03.2024 04:05, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+>
+> There are various users of get_vm_area() + ioremap_page_range() APIs.
+> Enforce that get_vm_area() was requested as VM_IOREMAP type and range
+> passed to ioremap_page_range() matches created vm_area to avoid
+> accidentally ioremap-ing into wrong address range.
+>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
 
-Except that we want to enforce a vm_area with the ioremap flag for
-ioremap_page_range, and just adding a NULL check defeats that.
+This patch landed in today's linux-next as commit 3e49a866c9dc ("mm: 
+Enforce VM_IOREMAP flag and range in ioremap_page_range."). 
+Unfortunately it triggers the following warning on all my test machines 
+with PCI bridges. Here is an example reproduced with QEMU and ARM64 
+'virt' machine:
 
-The right long term thing would be to actually create a vm_area
-for the PCI_IOBASE region, but until then we just need a lower level
-API.  That's why I suggest to add a vmap_range() that is basically
-the ioremap_page_range before you added the checks, and make
-ioremap_page_range a wrapper around that that checks the area.
+pci-host-generic 4010000000.pcie: host bridge /pcie@10000000 ranges:
+pci-host-generic 4010000000.pcie:       IO 0x003eff0000..0x003effffff -> 
+0x0000000000
+pci-host-generic 4010000000.pcie:      MEM 0x0010000000..0x003efeffff -> 
+0x0010000000
+pci-host-generic 4010000000.pcie:      MEM 0x8000000000..0xffffffffff -> 
+0x8000000000
+------------[ cut here ]------------
+vm_area at addr fffffbfffe800000 is not marked as VM_IOREMAP
+WARNING: CPU: 0 PID: 1 at mm/vmalloc.c:315 ioremap_page_range+0x8c/0x174
+Modules linked in:
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.8.0-rc6+ #14694
+Hardware name: linux,dummy-virt (DT)
+pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : ioremap_page_range+0x8c/0x174
+lr : ioremap_page_range+0x8c/0x174
+sp : ffff800083faba10
+...
+Call trace:
+  ioremap_page_range+0x8c/0x174
+  pci_remap_iospace+0x74/0x88
+  devm_pci_remap_iospace+0x54/0xac
+  devm_of_pci_bridge_init+0x160/0x1fc
+  devm_pci_alloc_host_bridge+0xb4/0xd0
+  pci_host_common_probe+0x44/0x1a0
+  platform_probe+0x68/0xd8
+  really_probe+0x148/0x2b4
+  __driver_probe_device+0x78/0x12c
+  driver_probe_device+0xdc/0x164
+  __driver_attach+0x9c/0x1ac
+  bus_for_each_dev+0x74/0xd4
+  driver_attach+0x24/0x30
+  bus_add_driver+0xe4/0x1e8
+  driver_register+0x60/0x128
+  __platform_driver_register+0x28/0x34
+  gen_pci_driver_init+0x1c/0x28
+  do_one_initcall+0x74/0x2f4
+  kernel_init_freeable+0x28c/0x4dc
+  kernel_init+0x24/0x1dc
+  ret_from_fork+0x10/0x20
+irq event stamp: 74360
+hardirqs last  enabled at (74359): [<ffff80008012cb9c>] 
+console_unlock+0x120/0x12c
+hardirqs last disabled at (74360): [<ffff80008122daa0>] el1_dbg+0x24/0x8c
+softirqs last  enabled at (71258): [<ffff800080010a60>] 
+__do_softirq+0x4a0/0x4e8
+softirqs last disabled at (71245): [<ffff8000800169b0>] 
+____do_softirq+0x10/0x1c
+---[ end trace 0000000000000000 ]---
+pci-host-generic 4010000000.pcie: error -22: failed to map resource [io  
+0x0000-0xffff]
+pci-host-generic 4010000000.pcie: Memory resource size exceeds max for 
+32 bits
+pci-host-generic 4010000000.pcie: ECAM at [mem 
+0x4010000000-0x401fffffff] for [bus 00-ff]
+pci-host-generic 4010000000.pcie: PCI host bridge to bus 0000:00
+pci_bus 0000:00: root bus resource [bus 00-ff]
+pci_bus 0000:00: root bus resource [mem 0x10000000-0x3efeffff]
+pci_bus 0000:00: root bus resource [mem 0x8000000000-0xffffffffff]
+pci 0000:00:00.0: [1b36:0008] type 00 class 0x060000 conventional PCI 
+endpoint
 
-If/when we get PCI_IOBASE handling converted to the proper
-vmalloc/ioremap areas we can remove that again as well as
-vunmap_range which is just used for PCI_IOBASE and other equivalent
-ISA_IO_BASE in powerpc and somewhat unusual case in arm64 that I
-need to look into a bit more.
+It looks that PCI related code must be somehow adjusted for this change.
+
+>   mm/vmalloc.c | 13 +++++++++++++
+>   1 file changed, 13 insertions(+)
+>
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index d12a17fc0c17..f42f98a127d5 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -307,8 +307,21 @@ static int vmap_range_noflush(unsigned long addr, unsigned long end,
+>   int ioremap_page_range(unsigned long addr, unsigned long end,
+>   		phys_addr_t phys_addr, pgprot_t prot)
+>   {
+> +	struct vm_struct *area;
+>   	int err;
+>   
+> +	area = find_vm_area((void *)addr);
+> +	if (!area || !(area->flags & VM_IOREMAP)) {
+> +		WARN_ONCE(1, "vm_area at addr %lx is not marked as VM_IOREMAP\n", addr);
+> +		return -EINVAL;
+> +	}
+> +	if (addr != (unsigned long)area->addr ||
+> +	    (void *)end != area->addr + get_vm_area_size(area)) {
+> +		WARN_ONCE(1, "ioremap request [%lx,%lx) doesn't match vm_area [%lx, %lx)\n",
+> +			  addr, end, (long)area->addr,
+> +			  (long)area->addr + get_vm_area_size(area));
+> +		return -ERANGE;
+> +	}
+>   	err = vmap_range_noflush(addr, end, phys_addr, pgprot_nx(prot),
+>   				 ioremap_max_page_shift);
+>   	flush_cache_vmap(addr, end);
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
