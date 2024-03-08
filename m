@@ -1,56 +1,57 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504371E863
-	for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 18:40:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94DE31E863
+	for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 18:41:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710096048; cv=none; b=Z1n6VJx+gMwO182o6IHENEJwSYtZZhxBFew/O9TD1a1Hg+eZH1IrhM83tmf5v7PevPW3v9O7Jt+0QnZ8SUmSpfnkYNIWBp25EzZ0ZHSpyeRpedfdSn4rfhxZ4fSMh5A2cC+T0CEUNFSPjmbZCr+aYjoi14awUv5YOcM6jSUqWRk=
+	t=1710096069; cv=none; b=UI3PHwNPg5aqxu9P+3a8huZEblqR9zfHUxKAVQt9Rj3kP6TfgFwBmVKJhjQoTO2/q0FiuCQ1ubqqGMx+csRbXa8xTAVZMF4aelmjDY7B1n1Xwfv1I6G4JX5XkjVS8W74lrErrIc7cdgt0dtjEtQ9SMRN0eTg/yuPGMdKsepKXmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710096048; c=relaxed/simple;
-	bh=ygRR0Del03h6JLPzJzNQCY0A8xY4KgyDpwAqNnhbwsI=;
+	s=arc-20240116; t=1710096069; c=relaxed/simple;
+	bh=AvFQPp4kyLh+TFglZjeC3Lb5VBfSdzOtKtFyl1V2cFo=;
 	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
-	 MIME-Version:Content-Type; b=k1ni35QFuTkoq0AMaPr4G5UTs3b4tmqzZMBBwAms0ffmZytGoPb1zpTGtUJYKdw/it5ClBvXYSvCccmrqnfZtlcfuoy3Y3pLzegIyJJHjRJhAPM1MCHFPDbM5qCZj6MtRveOfeeHaJGWAeTDCI4PYymp+grjD4POeReyhnpec2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=djA13dGK; arc=none smtp.client-ip=209.85.208.53
+	 MIME-Version:Content-Type; b=caqbNhZbZWBVEioAGMrlVtHaL/1t01uTt4yiRs4MGqg8XaIAK51oQX1su5oeyGXxCxb29oKK9ZEjaUGmzKtCwlOcEOH23hnATaemdjlnKibhnfVpwjoVp+tl/E30JYsBgqcqyXhDU4A5N0+AKR+0Nhk2ZOICR2J/JP8CJsBTHPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=GS3FxPxX; arc=none smtp.client-ip=209.85.218.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="djA13dGK"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-56845954fffso1159502a12.3
-        for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 11:40:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="GS3FxPxX"
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a461e09ddddso52499266b.2
+        for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 11:41:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1710096044; x=1710700844; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1710096066; x=1710700866; darn=vger.kernel.org;
         h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
          :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=BGXBZR4M5Hf2bGx2FubnlyZXvesqTiZYLbVSADloLzM=;
-        b=djA13dGK/LR0KcI02cl+qZeI14FaVrD5JwjRxvtquTGN85dQQAJuzBSjaYW1rMOuTD
-         uikVXinP21TrGfWos86q/fWeqZGMOQt27iKAybn+/E/YLZ36bUrbkxbS/FdXwUVWnoL/
-         y8A30MigbKohyrX+DiK/5SmoF8QxrD719nkHNRKCXhzRJpTN/CmQIqS0P5c0GOKidFXh
-         4Q8qUnzevsCRI07oA39KduH3KzUbnM4hxE+Kqs8XMyRmdOG2aX/GBv5J2M2Mu8cGlaWm
-         Gc6W6TkiZqpmu+Mtb60utsfsq+FJmmP7wHhVcyEM6STnzCRd+pRaAlAzWKZ8wTSmqzKZ
-         kpLw==
+        bh=tL0MzOZMsAFV4TRaP2fV8WC40d9wfVEKBIBOf/OGnHA=;
+        b=GS3FxPxXRc2YsizCg9zFziyMUzGCdKKSYYZFGbcW3iTbR/cqxheBj08fQ5xKyw2cVj
+         iz/JPv2ckcgbFJejQiwYWrMTCEMo22D1oTUI59d8/DM6RVTI/wH8g/YyLWlqM8U9d7lF
+         zlJYfcwTVu4EN0IXOIALQjS8ZmZ/JBARdDsNPkCfu5+RN3xhjDpTnlO8iCrQnoFB1dYG
+         Pc2pEPIUZGyR3jRhvTFsY0uKMD/KSueRgyZ4OSLnfVU2+C6NATB6otdGmX/MSuXufSEo
+         mJwikh3oamxxwmxwDTmDmu0k2KnsffjPkCYXwaynr8eTMYoe+x2gAxlwhl4TxMG0ncqN
+         mKYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710096044; x=1710700844;
+        d=1e100.net; s=20230601; t=1710096066; x=1710700866;
         h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
          :user-agent:references:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BGXBZR4M5Hf2bGx2FubnlyZXvesqTiZYLbVSADloLzM=;
-        b=diprzpPkla/aXyjbDp3xbiIsQqtQAoIWhJq4p8wXY/yzfp5JrObyWSlrYgh9J7R9vs
-         BrCQXg/aQfpGZAxV1/l6JUq+Ykmx6yNosiYNzqa6fgGnFdBd6KIM6pavLPZKVXK3+fj3
-         V+LLa12lzXbN5MPGXODifV8L9cGQyN4qGC6uqHhf8n1DoraOBHoVoyaV0h80z3f450Rq
-         SQq8aYP28IATwqRlb9+8Risg5PeOyqSDynzwk6H7X2MZ8vGzB8CcmHLYPv91rAnQeGQG
-         ZtQXcJ0J36sudA3eiLTddX0If4UpAykmCns13Ku+pSefO9EKcyj+emXme+C90MAnGU5F
-         fagQ==
-X-Gm-Message-State: AOJu0Yy8fNUGwrNsPYDJqBJjZvqNYlEEmKPMvY5FqcMMZQ36egPOqjTR
-	009vglEYR+44ukURSUr/k74YUF0DmFtGo7JP6dlft2q9pYoQQQnbG0IGCvCEgn4=
-X-Google-Smtp-Source: AGHT+IFwY0iIO0/nuK4U57r7Lme6AZd00P5h99JTaJroT5lH7Di/U1Me+g3ulv6tMYDAb1Z00Mqmnw==
-X-Received: by 2002:a50:aad2:0:b0:565:af1d:7416 with SMTP id r18-20020a50aad2000000b00565af1d7416mr3061162edc.5.1710096044473;
-        Sun, 10 Mar 2024 11:40:44 -0700 (PDT)
+        bh=tL0MzOZMsAFV4TRaP2fV8WC40d9wfVEKBIBOf/OGnHA=;
+        b=nuGG/RtMN5Crvfo+4qxpIDoBhGS+P2gJGMDsMsiEeXBowwJysKAN+fsy2iDcxgz6xi
+         qExgKxsXpQgllJTcaljpFJYgy/ZzI2hZN3gYveEoP8jpbrQx6yAeiavhvb5+jgJLI6X7
+         LaiUfMH0nxu8K5C6BQdLLAminTdIFU708W1Xame9dJ+1YPNd3u2hU4opvKD/KpOlJnDw
+         kzTmaqiLiasGw6wBoBA63Nhgf/2Cx2TJeyyZT1mdh8Ww1oZlirdgoJylP5kaDJYF9iOH
+         AZkCCb5pEDfYvRkhjQlGXgWAX5hr/y9qxZgxxlResGdps730iWwfQSVfzAgAonJYUz/A
+         IHmA==
+X-Gm-Message-State: AOJu0Yx5Vwu5S49FHtwkSS9NiJ1fuIGgPVuprBhfLpArEXguJhYZ7AXt
+	mZhXQjdFlGShDfMAKYTcbEbfTfvzaAAVCIjBRxDrrSjbP/VYdRTbBgwGD4q+pks=
+X-Google-Smtp-Source: AGHT+IFIjgRQ9mjpImT9qf2vtWWU2jZ/hV1jIr40gk6/mKtG1jBTEtkaBQmSxRu4E3z/u/Wqd6zKKQ==
+X-Received: by 2002:a17:907:c310:b0:a46:1f6d:3052 with SMTP id tl16-20020a170907c31000b00a461f6d3052mr1735697ejc.14.1710096065817;
+        Sun, 10 Mar 2024 11:41:05 -0700 (PDT)
 Received: from cloudflare.com ([2a09:bac5:5064:2dc::49:8f])
-        by smtp.gmail.com with ESMTPSA id y89-20020a50bb62000000b005651ae4ac91sm2243006ede.41.2024.03.10.11.40.43
+        by smtp.gmail.com with ESMTPSA id v2-20020a170906564200b00a4619ab82c8sm982105ejr.197.2024.03.10.11.41.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Mar 2024 11:40:43 -0700 (PDT)
+        Sun, 10 Mar 2024 11:41:05 -0700 (PDT)
 References: <20240305202155.3890667-1-yonghong.song@linux.dev>
+ <20240305202216.3891808-1-yonghong.song@linux.dev>
 User-agent: mu4e 1.6.10; emacs 29.2
 From: Jakub Sitnicki <jakub@cloudflare.com>
 To: Yonghong Song <yonghong.song@linux.dev>
@@ -58,10 +59,11 @@ Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Andrii
  Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John
  Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com, Martin KaFai Lau
  <martin.lau@kernel.org>
-Subject: Re: [RFC PATCH bpf-next 0/5] Add bpf_link support for sk_msg prog
-Date: Thu, 07 Mar 2024 13:01:09 +0000
-In-reply-to: <20240305202155.3890667-1-yonghong.song@linux.dev>
-Message-ID: <87jzmarkut.fsf@cloudflare.com>
+Subject: Re: [RFC PATCH bpf-next 4/5] bpftool: Add link dump support for
+ BPF_LINK_TYPE_SK_MSG
+Date: Fri, 08 Mar 2024 16:07:22 +0000
+In-reply-to: <20240305202216.3891808-1-yonghong.song@linux.dev>
+Message-ID: <87frwyrku7.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,27 +72,43 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-On Tue, Mar 05, 2024 at 12:21 PM -08, Yonghong Song wrote:
-> One of our internal services started to use sk_msg program and currently
-> it used existing prog attach/detach2 as demonstrated in selftests.
-> But attach/detach of all other bpf programs are based on bpf_link.
-> Consistent attach/detach APIs for all programs will make things easy to
-> undersand and less error prone. So this patch added bpf_link
-> support for BPF_PROG_TYPE_SK_MSG.
+On Tue, Mar 05, 2024 at 12:22 PM -08, Yonghong Song wrote:
+> An example output looks like:
+>   9: sk_msg  prog 108
+>           map_id 84  attach_type sk_msg_verdict
 >
-> I marked the patch as RFC as not all functionality are covered
-> by tests yet, e.g. update_prog(). Maybe somebody can suggest
-> an existing test which I can look into.
-> Or maybe some other tests need to be added as well.
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> ---
+>  tools/bpf/bpftool/link.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
+> index afde9d0c2ea1..5eb140197d3f 100644
+> --- a/tools/bpf/bpftool/link.c
+> +++ b/tools/bpf/bpftool/link.c
+> @@ -526,6 +526,9 @@ static int show_link_close_json(int fd, struct bpf_link_info *info)
+>  		show_link_ifindex_json(info->netkit.ifindex, json_wtr);
+>  		show_link_attach_type_json(info->netkit.attach_type, json_wtr);
+>  		break;
+> +	case BPF_LINK_TYPE_SK_MSG:
+> +		jsonw_uint_field(json_wtr, "map_id", info->skmsg.map_id);
+> +		show_link_attach_type_json(info->skmsg.attach_type, json_wtr);
 
-I have a general remark, not specific to this work.
+Compiler says - missing break.
 
-We can't attach with links from CLI, apart from when auto-attach is
-supported.  `bpftool prog attach` doesn't use bpf links. For instance:
+>  	case BPF_LINK_TYPE_XDP:
+>  		show_link_ifindex_json(info->xdp.ifindex, json_wtr);
+>  		break;
+> @@ -915,6 +918,11 @@ static int show_link_close_plain(int fd, struct bpf_link_info *info)
+>  		show_link_ifindex_plain(info->netkit.ifindex);
+>  		show_link_attach_type_plain(info->netkit.attach_type);
+>  		break;
+> +	case BPF_LINK_TYPE_SK_MSG:
+> +		printf("\n\t");
+> +		printf("map_id %u  ", info->skmsg.map_id);
+> +		show_link_attach_type_plain(info->skmsg.attach_type);
+> +		break;
+>  	case BPF_LINK_TYPE_XDP:
+>  		printf("\n\t");
+>  		show_link_ifindex_plain(info->xdp.ifindex);
 
-bpftool prog attach \
-        pinned /sys/fs/bpf/test/sk_msg_prog \
-        sk_msg_verdict \
-        pinned /sys/fs/bpf/test/sock_map
-
-Is there a plan for the CLI tooling to support it?
