@@ -1,322 +1,222 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8423611F
-	for <bpf@vger.kernel.org>; Fri,  8 Mar 2024 06:03:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E133A53391;
+	Fri,  8 Mar 2024 10:36:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709877842; cv=none; b=TVOsJSpTOObwgBskhWs2L3AGupMt1+W2NPlf1D8tdJL0pENwGzNHa97DElTjAOaGoX4H4baFTqQw/sJg0UNITo8rDohv73zhkHuWFq5ejAPGUXGQg7mSW2VRR3+uaf4YX4jNQjV7L52igZ8UEP10GwJc+HWqF3GiEPjyhqEfAcQ=
+	t=1709894166; cv=none; b=i73Y2jeko0AJYgjzLTdtGR+5tXHKdVGdjEPOm2mhoTS/s3R9F+e6hh0SsloY1hV1IqaNEPLKrexN0Dw1CA16cBCXuNpHOwhaBMZWEjPU8217r7O/Ka/U6SnFBWGlnYDgihEEgWFEKY0Sf50rp7HKa0vEJ6skYAxgqNBWOi+dhTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709877842; c=relaxed/simple;
-	bh=jgt2FmcV3Yk28s1hw88s4sNZ9AfG+QarsYVdwOdt8LQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Mnknn6BSrFz9RjRUTC4vaWrHctiDWOX7x32UBCp4t/SxfpZ/lKVkxKqk4/uO5kvvABy567VquD1LS9hgezI7BoKQJnC02argpgZicakE3G2rEUV+fcUiAzBwdsylr3Iu9oRN9+w5Q7/4ucu/r77JFxHI8q6RdCl66xQpbDnHS0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SHyDNdvc; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1709894166; c=relaxed/simple;
+	bh=QkVpUYeV3CtNb7O8+udH/aZB4OwfinzkvvEEuTNnMFg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J+rM313RBX7my92R0pBLnMS/h3tgA77tAJpkjtg5WAMX9vHi95G9HyrQ8I9bcDGzK8Ek5haxVGE+lW0cRTmgYNDHg8H14hPOvc8IDB1hHRTs4LygPhlS0dkfqh8qoJlKdbDnOBZ5WMrMNKPHRGunAupBq8gQ7Sr/rmgIrH6EqZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LWV6sPna; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SHyDNdvc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1709877835;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yaMKbz1uGEbeDlqPaWY/PoRYwRKKFpuiuv79VQFM3t8=;
-	b=SHyDNdvcBdi1IeJTzTG7WgTFlZsjiJzS5kgOrgtko5vwewLQyDep7T0pvNhP0H0xSvKwI+
-	WxPCFB3iIvNasACtNohOJJN+egWp3bCNdVQzpCK4BwV18xPWQY1tTpEZLrsZTqW6xYorl/
-	xXWAdD4cuTzayZWhLhIY7kucBgkxc5w=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-158-yZupKESiM0O4P0NTQpk6eg-1; Fri, 08 Mar 2024 01:03:54 -0500
-X-MC-Unique: yZupKESiM0O4P0NTQpk6eg-1
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-5c17cff57f9so1318709a12.0
-        for <bpf@vger.kernel.org>; Thu, 07 Mar 2024 22:03:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709877832; x=1710482632;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yaMKbz1uGEbeDlqPaWY/PoRYwRKKFpuiuv79VQFM3t8=;
-        b=cUflHXADQkcKtoNrTvNBXW4YjCuOxL25DAyHyqzYV5swgQFkT+m9fPUBx6LpEx5RU3
-         NNCGVkOQOg6eIfYFZXs7RD4OryMxA4efrYf2KPxrkNbwjMlNNBey/FN7xaPmXTSDGGqO
-         XSyL0RDcBGnbCuzfEUXdpGGPR+IHV/vsGDDQoK7d8WT2wD9af7uYxquM4g31BdpNAyeC
-         2/k1EkXuk9wfszBowSaC37JW1yr3Ehd5BPdHL3s60UncaSGUkcHsY3fhOwtezyg4cbP5
-         l7bMI4ApGf7DwK0C5YOefb45jrDxx5OtJAaO50dEdnT/ypMZxZAdMswCpCRV0EbQb12p
-         uxtA==
-X-Forwarded-Encrypted: i=1; AJvYcCUg+ybMqnQhoD9IUhwrn/ycSBpmU4Ms1+G4DdxGIzVN/2gVid53UIC6rMppji4RBXxU1IEQ5j6TadGQryZsdq+ZRes1
-X-Gm-Message-State: AOJu0YzxxhKLnIXWCIgBSGic+Zfkq1urVBlfV49nm3bXVYM/Eh4ZcN+z
-	jeQ951EBc4Rph1OQ1CBwEEw4OtT9ANrrEaxJfrU1abTLdW2f2TVbYhAWrlDKZfliKzOLpHEil8V
-	9Ttf1E8q/Oex7hMR3R+GoLxvUk4haD5INx9wdxOP/C5xl3KDhG53SwQzljUI03Hm6HY/fymT/7O
-	SP3VB457+mN8Y6h6bZ+0qAAzan
-X-Received: by 2002:a05:6a20:1586:b0:1a0:ebbd:9ae7 with SMTP id h6-20020a056a20158600b001a0ebbd9ae7mr11552879pzj.4.1709877832477;
-        Thu, 07 Mar 2024 22:03:52 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFwSy+KRC/GSn2zLsN0UNnw00pTdXTREweDEIwdkwzwwVJ8XmarEUl1eSz0tZAv2yTcVHqnwoNrrIMVt2DhM18=
-X-Received: by 2002:a05:6a20:1586:b0:1a0:ebbd:9ae7 with SMTP id
- h6-20020a056a20158600b001a0ebbd9ae7mr11552863pzj.4.1709877832102; Thu, 07 Mar
- 2024 22:03:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LWV6sPna"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18E63C433F1;
+	Fri,  8 Mar 2024 10:36:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709894165;
+	bh=QkVpUYeV3CtNb7O8+udH/aZB4OwfinzkvvEEuTNnMFg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LWV6sPnaWP9YplC1t/94tZ0sy+b7KIBGbPH7SZg7w22R3lrl43cvJu+W0zOigCh/P
+	 I92ydODnQMf1mYrgkxTwXgQenW748JseAHzrawivMp4Vjm51Da8xToKCz3CWZA3lcc
+	 7C6FhA6xiosVjYQIjGghK3t8ZafGyl4Zo+0wPyzavJr/bZQAW16L62A2I2YFGLyB10
+	 k6XsMFxdvsG2NGZSMHqG38TjUxDw1NKxHpsBaJJViirMn6+z+CKhzDhUY7B03lfl+9
+	 1bFiRYxoOOI3fLPcIrNHQuGmV6J6n52Yu7ECxmB8CNj7AyKhc7LnIoA2wDvxUk0KtU
+	 0fyy0HRt/jeGw==
+Date: Fri, 8 Mar 2024 11:35:59 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Matt Bobrowski <mattbobrowski@google.com>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	KP Singh <kpsingh@google.com>, Jann Horn <jannh@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-mm <linux-mm@kvack.org>, LSM List <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v2 bpf-next 0/9] add new acquire/release BPF kfuncs
+Message-ID: <20240308-kleben-eindecken-73c993fb3ebd@brauner>
+References: <cover.1709675979.git.mattbobrowski@google.com>
+ <20240306-flach-tragbar-b2b3c531bf0d@brauner>
+ <20240306-sandgrube-flora-a61409c2f10c@brauner>
+ <CAADnVQ+RBV_rJx5LCtCiW-TWZ5DCOPz1V3ga_fc__RmL_6xgOg@mail.gmail.com>
+ <20240307-phosphor-entnahmen-8ef28b782abf@brauner>
+ <CAADnVQLMHdL1GfScnG8=0wL6PEC=ACZT3xuuRFrzNJqHKrYvsw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240229072044.77388-1-xuanzhuo@linux.alibaba.com>
- <20240229031755-mutt-send-email-mst@kernel.org> <1709197357.626784-1-xuanzhuo@linux.alibaba.com>
- <20240229043238-mutt-send-email-mst@kernel.org> <1709718889.4420547-1-xuanzhuo@linux.alibaba.com>
- <CACGkMEu5=DKJfXsvOoXDDH7KJ-DWt83jj=vf8GoRnq-9zUeOOg@mail.gmail.com> <1709798771.2564156-2-xuanzhuo@linux.alibaba.com>
-In-Reply-To: <1709798771.2564156-2-xuanzhuo@linux.alibaba.com>
-From: Jason Wang <jasowang@redhat.com>
-Date: Fri, 8 Mar 2024 14:03:41 +0800
-Message-ID: <CACGkMEsHTwA=9W+3QfQGxzHcgzZZ=Bi9bb4PijUJHUQmLfEQpw@mail.gmail.com>
-Subject: Re: [PATCH vhost v3 00/19] virtio: drivers maintain dma info for
- premapped vq
-To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc: "Michael S. Tsirkin" <mst@redhat.com>, virtualization@lists.linux.dev, 
-	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Hans de Goede <hdegoede@redhat.com>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Vadim Pasternak <vadimp@nvidia.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Mathieu Poirier <mathieu.poirier@linaro.org>, Cornelia Huck <cohuck@redhat.com>, 
-	Halil Pasic <pasic@linux.ibm.com>, Eric Farman <farman@linux.ibm.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, linux-um@lists.infradead.org, 
-	netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
-	linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org, 
-	kvm@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQLMHdL1GfScnG8=0wL6PEC=ACZT3xuuRFrzNJqHKrYvsw@mail.gmail.com>
 
-On Thu, Mar 7, 2024 at 4:15=E2=80=AFPM Xuan Zhuo <xuanzhuo@linux.alibaba.co=
-m> wrote:
->
-> On Thu, 7 Mar 2024 13:28:27 +0800, Jason Wang <jasowang@redhat.com> wrote=
-:
-> > On Wed, Mar 6, 2024 at 6:01=E2=80=AFPM Xuan Zhuo <xuanzhuo@linux.alibab=
-a.com> wrote:
-> > >
-> > > On Thu, 29 Feb 2024 04:34:20 -0500, "Michael S. Tsirkin" <mst@redhat.=
-com> wrote:
-> > > > On Thu, Feb 29, 2024 at 05:02:37PM +0800, Xuan Zhuo wrote:
-> > > > > On Thu, 29 Feb 2024 03:21:14 -0500, "Michael S. Tsirkin" <mst@red=
-hat.com> wrote:
-> > > > > > On Thu, Feb 29, 2024 at 03:20:25PM +0800, Xuan Zhuo wrote:
-> > > > > > > As discussed:
-> > > > > > > http://lore.kernel.org/all/CACGkMEvq0No8QGC46U4mGsMtuD44fD_cf=
-LcPaVmJ3rHYqRZxYg@mail.gmail.com
-> > > > > > >
-> > > > > > > If the virtio is premapped mode, the driver should manage the=
- dma info by self.
-> > > > > > > So the virtio core should not store the dma info.
-> > > > > > > So we can release the memory used to store the dma info.
-> > > > > > >
-> > > > > > > But if the desc_extra has not dma info, we face a new questio=
-n,
-> > > > > > > it is hard to get the dma info of the desc with indirect flag=
-.
-> > > > > > > For split mode, that is easy from desc, but for the packed mo=
-de,
-> > > > > > > it is hard to get the dma info from the desc. And for hardeni=
-ng
-> > > > > > > the dma unmap is saft, we should store the dma info of indire=
-ct
-> > > > > > > descs.
-> > > > > > >
-> > > > > > > So I introduce the "structure the indirect desc table" to
-> > > > > > > allocate space to store dma info with the desc table.
-> > > > > > >
-> > > > > > > On the other side, we mix the descs with indirect flag
-> > > > > > > with other descs together to share the unmap api. That
-> > > > > > > is complex. I found if we we distinguish the descs with
-> > > > > > > VRING_DESC_F_INDIRECT before unmap, thing will be clearer.
-> > > > > > >
-> > > > > > > Because of the dma array is allocated in the find_vqs(),
-> > > > > > > so I introduce a new parameter to find_vqs().
-> > > > > > >
-> > > > > > > Note:
-> > > > > > >     this is on the top of
-> > > > > > >         [PATCH vhost v1] virtio: packed: fix unmap leak for i=
-ndirect desc table
-> > > > > > >         http://lore.kernel.org/all/20240223071833.26095-1-xua=
-nzhuo@linux.alibaba.com
-> > > > > > >
-> > > > > > > Please review.
-> > > > > > >
-> > > > > > > Thanks
-> > > > > > >
-> > > > > > > v3:
-> > > > > > >     1. fix the conflict with the vp_modern_create_avq().
-> > > > > >
-> > > > > > Okay but are you going to address huge memory waste all this is=
- causing for
-> > > > > > - people who never do zero copy
-> > > > > > - systems where dma unmap is a nop
-> > > > > >
-> > > > > > ?
-> > > > > >
-> > > > > > You should address all comments when you post a new version, no=
-t just
-> > > > > > what was expedient, or alternatively tag patch as RFC and expla=
-in
-> > > > > > in commit log that you plan to do it later.
-> > > > >
-> > > > >
-> > > > > Do you miss this one?
-> > > > > http://lore.kernel.org/all/1708997579.5613105-1-xuanzhuo@linux.al=
-ibaba.com
+On Thu, Mar 07, 2024 at 07:11:22PM -0800, Alexei Starovoitov wrote:
+> On Thu, Mar 7, 2024 at 1:55 AM Christian Brauner <brauner@kernel.org> wrote:
+> >
 > > > >
+> > > > So, looking at this series you're now asking us to expose:
 > > > >
-> > > > I did. The answer is that no, you don't get to regress memory usage
-> > > > for lots of people then fix it up.
-> > > > So the patchset is big, I guess it will take a couple of cycles to
-> > > > merge gradually.
-> > >
-> > > Hi @Michael
-> > >
-> > > So, how about this patch set?
-> > >
-> > > I do not think they (dma maintainers) will agree the API dma_can_skip=
-_unmap().
-> > >
-> > > If you think sq wastes too much memory using pre-mapped dma mode, how=
- about
-> > > we only enable it when xsk is bond?
-> > >
-> > > Could you give me some advice?
-> >
-> > I think we have some discussion, one possible solution is:
-> >
-> > when pre mapping is enabled, virtio core won't store dma metadatas.
-> >
-> > Then it makes virtio-net align with other NIC.
->
->
-> YES.
->
-> This patch set works as this.
->
-> But the virtio-net must allocate too much memory to store dma and len.
->
-> num =3D queue size * 19
->
-> Michael thinks that waste too much memory.
->         http://lore.kernel.org/all/20240225032330-mutt-send-email-mst@ker=
-nel.org
->
-> So we try this:
->         http://lore.kernel.org/all/20240301071918.64631-1-xuanzhuo@linux.=
-alibaba.com
->
-> But I think that is difficult to be accepted by the  DMA maintainers.
->
-> So I have two advices:
->
-> 1. virtio-net sq works without indirect.
->         - that more like other NIC
->         - the num of the memory to store the dma info is queue_size
-
-This requires benchmarks.
-
->
-> 2. The default mode of virtio-net sq is no-premapped
->         - we just switch the mode when binding xsk
-
-This could be one step.
-
-We can hear from Michael.
-
-Thanks
-
->
-> Thanks.
->
->
-> >
-> > Thanks
-> >
-> > >
-> > > Thanks.
-> > >
-> > >
+> > > > (1) mmgrab()
+> > > > (2) mmput()
+> > > > (3) fput()
+> > > > (5) get_mm_exe_file()
+> > > > (4) get_task_exe_file()
+> > > > (7) get_task_fs_pwd()
+> > > > (6) get_task_fs_root()
+> > > > (8) path_get()
+> > > > (9) path_put()
 > > > >
-> > > > > I asked you. But I didnot recv your answer.
-> > > > >
-> > > > > Thanks.
-> > > > >
-> > > > >
-> > > > > >
-> > > > > > > v2:
-> > > > > > >     1. change the dma item of virtio-net, every item have MAX=
-_SKB_FRAGS + 2
-> > > > > > >         addr + len pairs.
-> > > > > > >     2. introduce virtnet_sq_free_stats for __free_old_xmit
-> > > > > > >
-> > > > > > > v1:
-> > > > > > >     1. rename transport_vq_config to vq_transport_config
-> > > > > > >     2. virtio-net set dma meta number to (ring-size + 1)(MAX_=
-SKB_FRGAS +2)
-> > > > > > >     3. introduce virtqueue_dma_map_sg_attrs
-> > > > > > >     4. separate vring_create_virtqueue to an independent comm=
-it
-> > > > > > >
-> > > > > > >
-> > > > > > >
-> > > > > > > Xuan Zhuo (19):
-> > > > > > >   virtio_ring: introduce vring_need_unmap_buffer
-> > > > > > >   virtio_ring: packed: remove double check of the unmap ops
-> > > > > > >   virtio_ring: packed: structure the indirect desc table
-> > > > > > >   virtio_ring: split: remove double check of the unmap ops
-> > > > > > >   virtio_ring: split: structure the indirect desc table
-> > > > > > >   virtio_ring: no store dma info when unmap is not needed
-> > > > > > >   virtio: find_vqs: pass struct instead of multi parameters
-> > > > > > >   virtio: vring_create_virtqueue: pass struct instead of mult=
-i
-> > > > > > >     parameters
-> > > > > > >   virtio: vring_new_virtqueue(): pass struct instead of multi=
- parameters
-> > > > > > >   virtio_ring: simplify the parameters of the funcs related t=
-o
-> > > > > > >     vring_create/new_virtqueue()
-> > > > > > >   virtio: find_vqs: add new parameter premapped
-> > > > > > >   virtio_ring: export premapped to driver by struct virtqueue
-> > > > > > >   virtio_net: set premapped mode by find_vqs()
-> > > > > > >   virtio_ring: remove api of setting vq premapped
-> > > > > > >   virtio_ring: introduce dma map api for page
-> > > > > > >   virtio_ring: introduce virtqueue_dma_map_sg_attrs
-> > > > > > >   virtio_net: unify the code for recycling the xmit ptr
-> > > > > > >   virtio_net: rename free_old_xmit_skbs to free_old_xmit
-> > > > > > >   virtio_net: sq support premapped mode
-> > > > > > >
-> > > > > > >  arch/um/drivers/virtio_uml.c             |  31 +-
-> > > > > > >  drivers/net/virtio_net.c                 | 283 ++++++---
-> > > > > > >  drivers/platform/mellanox/mlxbf-tmfifo.c |  24 +-
-> > > > > > >  drivers/remoteproc/remoteproc_virtio.c   |  31 +-
-> > > > > > >  drivers/s390/virtio/virtio_ccw.c         |  33 +-
-> > > > > > >  drivers/virtio/virtio_mmio.c             |  30 +-
-> > > > > > >  drivers/virtio/virtio_pci_common.c       |  59 +-
-> > > > > > >  drivers/virtio/virtio_pci_common.h       |   9 +-
-> > > > > > >  drivers/virtio/virtio_pci_legacy.c       |  16 +-
-> > > > > > >  drivers/virtio/virtio_pci_modern.c       |  38 +-
-> > > > > > >  drivers/virtio/virtio_ring.c             | 698 ++++++++++++-=
-----------
-> > > > > > >  drivers/virtio/virtio_vdpa.c             |  45 +-
-> > > > > > >  include/linux/virtio.h                   |  13 +-
-> > > > > > >  include/linux/virtio_config.h            |  48 +-
-> > > > > > >  include/linux/virtio_ring.h              |  82 +--
-> > > > > > >  tools/virtio/virtio_test.c               |   4 +-
-> > > > > > >  tools/virtio/vringh_test.c               |  28 +-
-> > > > > > >  17 files changed, 847 insertions(+), 625 deletions(-)
-> > > > > > >
-> > > > > > > --
-> > > > > > > 2.32.0.3.g01195cf9f
-> > > > > >
+> > > > in one go and the justification in all patches amounts to "This is
+> > > > common in some BPF LSM programs".
 > > > >
+> > > > So, broken stuff got exposed to users or at least a broken BPF LSM
+> > > > program was written somewhere out there that is susceptible to UAFs
+> > > > becauase you didn't restrict bpf_d_path() to trusted pointer arguments.
+> > > > So you're now scrambling to fix this by asking for a bunch of low-level
+> > > > exports.
+> > > >
+> > > > What is the guarantee that you don't end up writing another BPF LSM that
+> > > > abuses these exports in a way that causes even more issues and then
+> > > > someone else comes back asking for the next round of bpf funcs to be
+> > > > exposed to fix it.
 > > >
+> > > There is no guarantee.
+> > > We made a safety mistake with bpf_d_path() though
+> > > we restricted it very tight. And that UAF is tricky.
+> > > I'm still amazed how Jann managed to find it.
+> > > We all make mistakes.
+> > > It's not the first one and not going to be the last.
+> > >
+> > > What Matt is doing is an honest effort to fix it
+> > > in the upstream kernel for all bpf users to benefit.
+> > > He could have done it with a kernel module.
+> > > The above "low level" helpers are all either static inline
+> > > in .h or they call EXPORT_SYMBOL[_GPL] or simply inc/dec refcnt.
+> > >
+> > > One can implement such kfuncs in an out of tree kernel module
+> > > and be done with it, but in the bpf community we encourage
+> > > everyone to upstream their work.
+> > >
+> > > So kudos to Matt for working on these patches.
+> > >
+> > > His bpf-lsm use case is not special.
+> > > It just needs a safe way to call d_path.
+> > >
+> > > +SEC("lsm.s/file_open")
+> > > +__failure __msg("R1 must be referenced or trusted")
+> > > +int BPF_PROG(path_d_path_kfunc_untrusted_from_current)
+> > > +{
+> > > +       struct path *pwd;
+> > > +       struct task_struct *current;
+> > > +
+> > > +       current = bpf_get_current_task_btf();
+> > > +       /* Walking a trusted pointer returned from bpf_get_current_task_btf()
+> > > +        * yields and untrusted pointer. */
+> > > +       pwd = &current->fs->pwd;
+> > > +       bpf_path_d_path(pwd, buf, sizeof(buf));
+> > > +       return 0;
+> > > +}
+> > >
+> > > This test checks that such an access pattern is unsafe and
+> > > the verifier will catch it.
+> > >
+> > > To make it safe one needs to do:
+> > >
+> > >   current = bpf_get_current_task_btf();
+> > >   pwd = bpf_get_task_fs_pwd(current);
+> > >   if (!pwd) // error path
+> > >   bpf_path_d_path(pwd, ...);
+> > >   bpf_put_path(pwd);
+> > >
+> > > these are the kfuncs from patch 6.
+> > >
+> > > And notice that they have KF_ACQUIRE and KF_RELEASE flags.
+> > >
+> > > They tell the verifier to recognize that bpf_get_task_fs_pwd()
+> > > kfunc acquires 'struct path *'.
+> > > Meaning that bpf prog cannot just return without releasing it.
+> > >
+> > > The bpf prog cannot use-after-free that 'pwd' either
+> > > after it was released by bpf_put_path(pwd).
+> > >
+> > > The verifier static analysis catches such UAF-s.
+> > > It didn't catch Jann's UAF earlier, because we didn't have
+> > > these kfuncs! Hence the fix is to add such kfuncs with
+> > > acquire/release semantics.
+> > >
+> > > > The difference between a regular LSM asking about this and a BPF LSM
+> > > > program is that we can see in the hook implementation what the LSM
+> > > > intends to do with this and we can judge whether that's safe or not.
+> > >
+> > > See above example.
+> > > The verifier is doing a much better job than humans when it comes
+> > > to safety.
+> > >
+> > > > Here you're asking us to do this blindfolded.
+> > >
+> > > If you don't trust the verifier to enforce safety,
+> > > you shouldn't trust Rust compiler to generate safe code either.
+> > >
+> > > In another reply you've compared kfuncs to EXPORT_SYMBOL_GPL.
+> > > Such analogy is correct to some extent,
+> > > but unlike exported symbols kfuncs are restricted to particular
+> > > program types. They don't accept arbitrary pointers,
+> > > and reference count is enforced as well.
+> > > That's a pretty big difference vs EXPORT_SYMBOL.
 > >
->
+> > There's one fundamental question here that we'll need an official answer to:
+> >
+> > Is it ok for an out-of-tree BPF LSM program, that nobody has ever seen
+> > to request access to various helpers in the kernel?
+> 
+> obviously not.
+> 
+> > Because fundamentally this is what this patchset is asking to be done.
+> 
+> Pardon ?
+> 
+> > If the ZFS out-of-tree kernel module were to send us a similar patch
+> > series asking us for a list of 9 functions that they'd like us to export
+> > what would the answer to that be?
+> 
+> This patch set doesn't request any new EXPORT_SYMBOL.
 
+In order for that out-of-tree BPF LSM program to get similar guarantees
+than an equivalent kernel module we need to export all nine functions
+for BPF. Included in that set are functions that aren't currently even
+exported to modules.
+
+These exports are specifically for an out-of-tree BPF LSM program that
+is not accessible to the public. The question in the other mail stands.
+
+> First of all, there is no such thing as get_task_fs_pwd/root
+> in the kernel.
+
+Yeah, we'd need specific helpers for a never seen before out-of-tree BPF
+LSM. I don't see how that's different from an out-of-tree kernel module.
+
+> One can argue that get_mm_exe_file() is not exported,
+> but it's nothing but rcu_lock-wrap plus get_file_rcu()
+> which is EXPORT_SYMBOL.
+
+Oh, good spot. That's an accident. get_file_rcu() definitely shouldn't
+be exported. So that'll be removed asap.
+
+> Christian,
+> 
+> I understand your irritation with anything bpf related
+> due to our mistake with fd=0, but as I said earlier it was
+> an honest mistake. There was no malicious intent.
+> Time to move on.
+
+I understand your concern but I'm neither irritated by bpf nor do I hold
+grudges. As I'm writing this bpf's bpffs and token changes are on their
+way into mainline for v6.9 which I reviewed and acked immediately after
+that discussion.
+
+Rest assures that you can move on from that concern. There's no need to
+keep bringing it up in unrelated discussions.
