@@ -1,75 +1,50 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A6054FB0
-	for <bpf@vger.kernel.org>; Fri,  8 Mar 2024 10:48:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68BAC54BF1;
+	Fri,  8 Mar 2024 10:58:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709894903; cv=none; b=r4eRSgNysXhC1Y0/e7hBVxmZ6+sZ6xE9Iz2KfEZg7sk2ZQfaF2FD/c0iF4OI06aUdaf1KPNYkXui1WOaTikF4E1qA+aDdoseta/NoLhNtS4ZHtBI1xz7bjNBwV6AcjoegSgQE+4bQTD/AlgxO684wuu+UKRXC+YfvtHs79tIrRE=
+	t=1709895504; cv=none; b=mWnHKM68XH8PRBMgw6eAibixyqRTv3PJzFiHlMrEZFnJQaxGH42LuFJT/cO98xrzN88Ng4+o7F5GasTjr816J0nCvsXuafcwa+55hNg2EBuptDzCBNBRADOOE4inIquShwMlw24LdyHIE7WC1GN0qQq4Td2t9F5MZYq9pvCQzyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709894903; c=relaxed/simple;
-	bh=Q2p1nqdXkF20Wgelw53WVgSL+Uq1JR8kxpIUSAn3Gpk=;
+	s=arc-20240116; t=1709895504; c=relaxed/simple;
+	bh=t+CUSuGz1oswbfA1pD8nv4aLnvXGsLe3pXT7Zvxm/o4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nt0aNrPkVDYwu6C7na8MDdDkckFHEB15HyzSEWYAwtY3sJxppKbSp4TYGBgrFqSD4WIwCD1+1cRk7GjN93RvA2E/spu+cmHReSVy/8mzxCnjcZGYi3xKh9VZcWAlm54fa8Mmk8IIN71NaHnMdYHQB91JpSup1zOC0cHm9Es9mvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JFxjUbAn; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=dZ5EMU4ye5cTT6+6j2suwaeVLtgAPVjGYZHzY7gGL+boORyClNWJp+LwWYGaSGQ1TZw9YcnmEvZRvQC1Sv1UrDL3PP3QfTdF0auFXPcBIU6HjIjjyQq9+/E8tb+WrSDcIyyg4eYhUFPpbNnnDynf/ff7jPESfVVGXbqR8AzsPj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nt/pTjjQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JFxjUbAn"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1dd4bc7a87aso3219965ad.2
-        for <bpf@vger.kernel.org>; Fri, 08 Mar 2024 02:48:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709894901; x=1710499701; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=26hAEq53OJfxkgYSi/GiWOaFJ9O8E1BfJnbrW6c9mKE=;
-        b=JFxjUbAnVrElm7ywcn9wyjWG4718Np5cjMARdL1Eel4X6Qqz/zhUgp1l4sooS6eddj
-         qs2olmYz2Dohl983LUvOPd9Bog2aKCWd5RP54nQdnk9jO7/JbdG44gI6L5+SXZpY6dBC
-         bKDNIY2n+sq32ikkS5ucTMcQX55kdw4UWfW8kicdSZjHRN2CWvykzZsv/2ct/BYPhrFN
-         U9Nl/rbn3nU54/ffsG88+v3jns+A5nNGVEWzrVcmy1AC/BHwycIbl7eIH5QPlm/ckJRJ
-         CtOb4JofPP0OIXTQb256tWVq+YN/B+CnvCSRU8ZKv3Hawmp5qXgXf2Mm3L5o1OCR/IH8
-         FidQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709894901; x=1710499701;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=26hAEq53OJfxkgYSi/GiWOaFJ9O8E1BfJnbrW6c9mKE=;
-        b=csX4EHcgaB2UjH8hLw3zBcWULcxLfXywIfPAoxjzE0YaD7MCTCCmPVpPnRnoo3QGR0
-         zEc0b4uaSHwh9lMQr0yjKIkHCrlBrGUJ1gB/AQwk/zEt7miTkNiNRyXVFHq37DvVBI03
-         D3xPc8wkYR8evWZDHCVXf4Lr8KoGcB6OUF7+2aoCnQgC6gNYf2+pBX78nEq+dkQpl1NI
-         +tjWX+y9oQtiJzOGw2pPhM+lA2I6ynOJrdC8ges3Efh/focDPtspFyoMns8WSf8T5IF4
-         FBeqGAdTus7KdWYbrGhoEMhvOI//ybB3njumMlw1P4Eo6zAFCtQeetS0gwjyxUqoUEnO
-         WpyA==
-X-Forwarded-Encrypted: i=1; AJvYcCUczqMHGAeYrEkR+/dtQQ1dMEiXR2qbdGwOixtK29pODVoHoviCgNFtiBBGwQimn4CE0OaYyW1jwa8wfRpHrP7uQQU0
-X-Gm-Message-State: AOJu0YzeB/4k/wOlK/W4PHsc556dgF3pSwp5oVE5wlMVotATdPct/vJG
-	+PTc7ecwPKSa/72lvx69sLrr2rDhy/XlXit77x6P4aajuXCYx2BiRsXZEwxHQQ==
-X-Google-Smtp-Source: AGHT+IGTZSiRBTMWUdaBO1vqD4dWLINeszuACZPHN9xahf3y7wMBHlVvLuZk7dXkbF83IM4NNHUGtA==
-X-Received: by 2002:a17:903:2443:b0:1dc:ca1b:279b with SMTP id l3-20020a170903244300b001dcca1b279bmr13328124pls.1.1709894900832;
-        Fri, 08 Mar 2024 02:48:20 -0800 (PST)
-Received: from thinkpad ([117.217.183.232])
-        by smtp.gmail.com with ESMTPSA id cp12-20020a170902e78c00b001dd3bee3cd6sm4853039plb.219.2024.03.08.02.48.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Mar 2024 02:48:20 -0800 (PST)
-Date: Fri, 8 Mar 2024 16:18:11 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nt/pTjjQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13062C433F1;
+	Fri,  8 Mar 2024 10:58:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709895503;
+	bh=t+CUSuGz1oswbfA1pD8nv4aLnvXGsLe3pXT7Zvxm/o4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Nt/pTjjQU4/t3Ui9AfP/dhesu6bAiD8W7/miIsLlhrZSjAlXV7WqES8euFVx1uQD4
+	 +FUUlqnKwoS70h1rnQLHKUE5PWZ+QNxd8mwh+EVmb51Nxl5mdwTs3ZvCTDRHw8jOMl
+	 iaRd79094+RZjPKhlT466/S49+7RXqxpvctoSDlLNMYYtrrXsl6uz5FMtdYa9Bp3BX
+	 UcNjbhTiTDzuoqDuEjGKXGg1DPuGZytR/4O1Lb0+lT1rmW+WU2sKy0tAwUREzm4+L/
+	 Ad52rwEl00CILgMst32JlQY5LS83uve/k+lHCaFiM0Iq8f5oVITi1qkEYvt4MumUcr
+	 ItKmzldvPudgw==
+Date: Fri, 8 Mar 2024 11:58:17 +0100
+From: Christian Brauner <brauner@kernel.org>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-mm <linux-mm@kvack.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: Re: vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
-Message-ID: <20240308104811.GA53064@thinkpad>
-References: <CANiq72ka4rir+RTN2FQoT=Vvprp_Ao-CvoYEkSNqtSY+RZj+AA@mail.gmail.com>
- <CAADnVQL1Zt5dwFv9HPDKDuPEKa6V7gb5j-D-LPWv47hC6mtwgw@mail.gmail.com>
- <CAADnVQLP=dxBb+RiMGXoaCEuRrbK387J6B+pfzWKF_F=aRgCPQ@mail.gmail.com>
+Cc: Paul Moore <paul@paul-moore.com>, 
+	Matt Bobrowski <mattbobrowski@google.com>, bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@google.com>, Jann Horn <jannh@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, linux-mm <linux-mm@kvack.org>, 
+	LSM List <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v2 bpf-next 0/9] add new acquire/release BPF kfuncs
+Message-ID: <20240308-diese-kartbahn-7f87d054964b@brauner>
+References: <cover.1709675979.git.mattbobrowski@google.com>
+ <20240306-flach-tragbar-b2b3c531bf0d@brauner>
+ <20240306-sandgrube-flora-a61409c2f10c@brauner>
+ <CAADnVQ+RBV_rJx5LCtCiW-TWZ5DCOPz1V3ga_fc__RmL_6xgOg@mail.gmail.com>
+ <20240307-phosphor-entnahmen-8ef28b782abf@brauner>
+ <CAHC9VhTbjzS88uU=7Pau7tzsYD+UW5=3TGw2qkqrA5a-GVunrQ@mail.gmail.com>
+ <CAADnVQLQ8uVaSKx-zth1HTT44T3ZC8C1cyNxxuhPMqywGVV9Pw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,66 +54,60 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQLP=dxBb+RiMGXoaCEuRrbK387J6B+pfzWKF_F=aRgCPQ@mail.gmail.com>
+In-Reply-To: <CAADnVQLQ8uVaSKx-zth1HTT44T3ZC8C1cyNxxuhPMqywGVV9Pw@mail.gmail.com>
 
-On Thu, Mar 07, 2024 at 07:49:16PM -0800, Alexei Starovoitov wrote:
-> On Thu, Mar 7, 2024 at 9:54 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
+On Thu, Mar 07, 2024 at 07:25:05PM -0800, Alexei Starovoitov wrote:
+> On Thu, Mar 7, 2024 at 12:51 PM Paul Moore <paul@paul-moore.com> wrote:
 > >
-> > On Thu, Mar 7, 2024 at 9:42 AM Miguel Ojeda
-> > <miguel.ojeda.sandonis@gmail.com> wrote:
+> > On Thu, Mar 7, 2024 at 4:55 AM Christian Brauner <brauner@kernel.org> wrote:
 > > >
-> > > Hi arm64/bpf/pci,
+> > > There's one fundamental question here that we'll need an official answer to:
 > > >
-> > > In today's next-20240307 with a defconfig LLVM=1 I am seeing [1] under
-> > > QEMU virt, i.e. from
-> > > https://lore.kernel.org/all/20240305030516.41519-2-alexei.starovoitov@gmail.com/
-> > > applied to the bpf-next tree.
-> > >
-> > > Cheers,
-> > > Miguel
-> > >
-> > > [1]
-> > >
-> > > [    0.425177] pci-host-generic 4010000000.pcie: host bridge
-> > > /pcie@10000000 ranges:
-> > > [    0.425886] pci-host-generic 4010000000.pcie:       IO
-> > > 0x003eff0000..0x003effffff -> 0x0000000000
-> > > [    0.426534] pci-host-generic 4010000000.pcie:      MEM
-> > > 0x0010000000..0x003efeffff -> 0x0010000000
-> > > [    0.426764] pci-host-generic 4010000000.pcie:      MEM
-> > > 0x8000000000..0xffffffffff -> 0x8000000000
-> > > [    0.427324] ------------[ cut here ]------------
-> > > [    0.427456] vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
-> > > [    0.427944] WARNING: CPU: 0 PID: 1 at mm/vmalloc.c:315
-> > > ioremap_page_range+0x25c/0x2bc
+> > > Is it ok for an out-of-tree BPF LSM program, that nobody has ever seen
+> > > to request access to various helpers in the kernel?
 > >
-> > Great. Thanks for flagging.
-> > Looks like this check found some misuse of ioremap_page_range.
-> >
-> > Note that without marking the address range as VM_IOREMAP
-> > the vread_iter() will be bulk reading over IO and might
-> > cause hard hangs and what not.
-> > pci drivers need to mark their range as VM_IOREMAP.
-> > That was the reason for the warning.
-> >
-> > I'll try to figure out which piece of code missed passing
-> > VM_IOREMAP into vm_area.
-> > I'm not familiar with pci, so help is greatly appreciated.
+> > Phrased in a slightly different way, and a bit more generalized: do we
+> > treat out-of-tree BPF programs the same as we do with out-of-tree
+> > kernel modules?  I believe that's the real question, and if we answer
+> > that, we should also have our answer for the internal helper function
+> > question.
 > 
-> Ok. I think I figured it out.
-> Please try the attached patch.
+> From 10k ft view bpf programs may look like kernel modules,
+> but looking closely they are very different.
+> 
+> Modules can read/write any data structure and can call any exported function.
+> All modules fall into two categories GPL or not.
+> While bpf progs are divided by program type.
+> Tracing progs can read any kernel memory safely via probe_read_kernel.
+> Networking prog can read/write packets, but cannot read kernel memory.
+> bpf_lsm programs can be called from lsm hooks and
+> call only kfuncs that were explicitly allowlisted to bpf_lsm prog type.
+> Furthermore kfuncs have acquire/release semantics enforced by
+> the verifier.
+> For example, bpf progs can do bpf_rcu_read_lock() which is
+> a wrapper around rcu_read_lock() and the verifier will make sure
+> that bpf_rcu_read_unlock() is called.
+> Under bpf_rcu_read_lock() bpf programs can dereference __rcu tagged
+> fields and the verifier will track them as rcu protected objects
+> until bpf_rcu_read_unlock().
+> In other words the verifier is doing sparse-on-steroids analysis
+> and enforcing it.
+> Kernel modules are not subject to such enforcement.
+> 
+> One more distinction: 99.9% of bpf features require a GPL-ed bpf program.
+> All kfuncs are GPL only.
 
-I tested the attached patch on Qcom SDM845 based dev board and it fixes the
-issue. So,
+While these are certainly all very nice properties it doesn't change the
+core question.
 
-Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+An out of-tree BPF LSM program is requesting us to add nine vfs helpers
+to the BPF kfunc api. That out-of-tree BPF LSM program is not even
+accessible to the public. There is no meaningful difference to an
+out-of-tree kernel module asking us to add nine functions to the export
+api. The safety properties don't matter for this. Clearly, they didn't
+prevent the previous bpf_d_path() stuff from happening.
 
-On a side note, PCI is the only driver making use of this API. If I'm making
-such an API change, I would've made sure that the callers are unaffected by the
-change.
-
-- Mani
-
--- 
-மணிவண்ணன் சதாசிவம்
+We need rules for how this is supposed to be handled. Unless those rules
+are clearly specified and make sense we shouldn't be adding BPF kfuncs
+based on requests from out-of-tree BPF LSMs that amount to "we need
+this".
