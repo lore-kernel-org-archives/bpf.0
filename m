@@ -1,115 +1,296 @@
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D7253818;
-	Fri,  8 Mar 2024 12:12:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7ACE1D52B
+	for <bpf@vger.kernel.org>; Fri,  8 Mar 2024 13:07:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709899957; cv=none; b=AuJWmFzYq22K+4lJjQxEui3ztWopYuqJmPVM6FAMd7RryqpYZ0qsHn4XWPx+41nTPzxKEX89112x3/pdM5CCIFRH5ogaQKKsj5iRMa+AKsMY71nyw9cLZ8JxFtCqyCldJm6dt6RqTVWuiLIRbhI/MszXguAwlB1UrjMs9rcXyF8=
+	t=1709903238; cv=none; b=ndi8PWvjtq4s2FNeCkFHOxOxoAVNz6fbVIestuz4KGr9nGhMM5XqgTPAAqk0QmOtWNOUA3ixRNqQgiN76ZTtc7gWszJdZEgpeNzRN7j4gYQu6NgWmAEHaKfQY6xDS9Ewmmk6tRBL8cw7vPdOisGpgb32sweQTWdrH9XdWmZDEhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709899957; c=relaxed/simple;
-	bh=544OZUrJA9dUBIh274nDnLFkCaRopvsFSDGO0SwIxvE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CMKmBFb06qb737UXC59xvd2C6YzrloBXhoDQF0FZ55E81jXY0SBumtwkZzfC95ysd8gdsm4o1iAe+fZd3cgmGhV1BY3h5oT4poCHtHAqFI8wzlm1xxivfX3Fff+7zk8dYOnP9jYMAZLgsLx3uIO18A5pzWwYzRaf8pcD9WeCIsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SYuwNAVg; arc=none smtp.client-ip=209.85.208.182
+	s=arc-20240116; t=1709903238; c=relaxed/simple;
+	bh=ul/92kVbq3hoXw6DV/+iIjp9XFF9KXLUaejhczl8Auc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=InxcuM8eaA76nH6YVJcZHpHJXEedIrzwSQPd0oFAnG1XauBtK6GeFZuJMONj088SfNRa9EBlU3uHxJSVrJbGfhCECfTihRUxb5clmp3ujwV0aDev3ingT8jRREXzNkM/xmn6rzNnRUoTj84y2PDvq5vKV/hVV2tB1hPI3Bk6PDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BrlXcuLo; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SYuwNAVg"
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2d094bc2244so28145961fa.1;
-        Fri, 08 Mar 2024 04:12:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BrlXcuLo"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6e55731af5cso599336b3a.0
+        for <bpf@vger.kernel.org>; Fri, 08 Mar 2024 05:07:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709899954; x=1710504754; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=meFIHVCgIsrANISbGy64o1HL0u5OXJpL/X7mLIVqRgg=;
-        b=SYuwNAVgjCIF74z0Aoop/YPO+ZE7DQiqYj7RxvKGodBxn+hXa9qKOiPYMn5bd88JfG
-         YCct1sEPz8TsdmFM2cJE4j8Ry218GdbwGZ60FFebqgeJMF4w3Daj/vwedc4n1HxlvJ/k
-         JT3D+NeDWex+a0/mpy+BYtlhjLGumoVImHzEuj7kE+Ud61N6HP6IGGSUwyOb6nbgwefz
-         rCwfjmhwn5llN2HVYnjWr/MdzJBvq8802PJIwyLweFPYkc6mf2jz++5PATsO6Oscln8e
-         hSMf7asOJmtcHATABTbB/efxqJpbdDuOPVl3oScOTu2/zwGM8qHuLbX4r6ueEypQjtdv
-         dWxw==
+        d=gmail.com; s=20230601; t=1709903236; x=1710508036; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6JBIiA7snPXQC91EmSjQtdStb4kybeMyqJyIjHTQc5Q=;
+        b=BrlXcuLoIgYnSPlCJeKrxV+kG0L/Wepve0wfP3f9O8COLzf07mC1luhg3A+DMnjQfB
+         FytZQzOsQRo04Yb8BIwOhY2vTW/ANolJsykJ0VI1T0cp5rTJmVlas9f3vqo7rV8XXEEL
+         NsUaX61SQut++ov5RUaeyKz5gQAYOxeZpShB+E/7o8h5ZZ5c+In0W5GMsA5L/QAwY3wv
+         HrMec1DkA39tYEMwhIF5ji/krODRdtdw9/8LcDxR1nUsnYLFOT7czrePDTzYcf/OpqMI
+         expL1Wgg097qLT6E1kEqXIJaMRvgaWyPJR0p4sNGJ5fe5lpWE4kVrY8yJAxipe9FVXYK
+         9saw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709899954; x=1710504754;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1709903236; x=1710508036;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=meFIHVCgIsrANISbGy64o1HL0u5OXJpL/X7mLIVqRgg=;
-        b=sGLUwbLn8cZ7HCeM7mSCRfOdlW9omQeC2zpjTU4IoBmTcTKtCa5EabZXixgFdqiT9Q
-         NpMgNRguB/TzImcxFfSB7rtoqbcHohUaKHOcXPzoDeqNq9hAVu8DJsjlzH9DBy2K2Vds
-         iuVh0eXmLsWwVxJGJEvyEJXCsBM03RfmiHsirC0XiMMxVok0xmZGHTpbPdazH24PsiXR
-         8crkgRUmMqsVa1s+OyQDchZdR8wPPDVanFx2a6HRvKZ6ozvSJ9CwARVhnxBRV0g6Ge7M
-         fCcokYTnYz6iV3cYgaew16uQJyI4Cu0LM5IC5i+i3AWZy78zY5oMlff7S3na5Z96BekO
-         MfCA==
-X-Forwarded-Encrypted: i=1; AJvYcCXXP0YkkqWKZ4MRgNd0XUi7Sz8NeJ+XbnZH87hlX7l/6h0VxrDqs9fZYchH6w/YM7XDp0oeH+zqfd5rumM8glEyRME/xhUhyUuf0lTzGaOWLNyk4EtiUPCUQkYbMUbIAA==
-X-Gm-Message-State: AOJu0YxvpHxylbhXc0r4XwNrVIP9CFVsOb9Z3eWfvUsTsCs2mzT6O3jk
-	njqbhWufhHEr0GVFdx7EwF6HBkUikyHQWeUmZgG9YopKIomv25tQY69oglzp76E8Qb4oufUD7Zh
-	zUr+oy2z/HnRDbl5w4rkub9iDb3A=
-X-Google-Smtp-Source: AGHT+IFBNRy60ek/1OppKoH0Osl6U9Q6E57NlHmBVlZusNg5vkvK1iwyu2ZenlGHJCD16vxR3AP9LARVulWYCFzyYog=
-X-Received: by 2002:a05:651c:b2b:b0:2d4:22d1:d96c with SMTP id
- b43-20020a05651c0b2b00b002d422d1d96cmr377155ljr.25.1709899953822; Fri, 08 Mar
- 2024 04:12:33 -0800 (PST)
+        bh=6JBIiA7snPXQC91EmSjQtdStb4kybeMyqJyIjHTQc5Q=;
+        b=hf31Ru/hdmaSvwKk4BbJ3Sj8q7cBD6Gfa/wLpqGWbBdIjIzVgAWLtJQGngAxh1hZhh
+         +x6HebbTXEmX41fCA8rnp2rViBmUgO79Mh7WCRUw06CX78kIitxj7WJunbbY0dISbGU4
+         7i+YnT+0LYoRW306OCR5bco+AyGniWDmgimnUOZHfcaVH7n9VnJlj7LHgTVxDqUaOPBt
+         2NFFBWtcDFXEwIWnyee/IWA5hEJ5apg2WWqs7x5yV0UWv1fvtnKe6T5Kcan3FNPzDvHn
+         IVIegWe3CFw9SSxZDQ9QPUAwXRh5YEFJfalfMjHOKGV7osQUIQjvycW9J3qy3t+1MFNH
+         A1zg==
+X-Forwarded-Encrypted: i=1; AJvYcCUQpwEKwokkkfomtDBiFaR7JIuiJXl8tl3Et0GZPyY3Nro/UzjkD+2m9k9eoJijHtksScfGxZ+ANTMgWhJATdh4ixF7
+X-Gm-Message-State: AOJu0YxTTnNFLCBad9eYyVM8Vgcl4rr4NBZI4zK767fsoll2X9WlYdLR
+	Tk+SfgSEVzerFVsoEOb1c2jdruqrm57jH32i9boircsTI/shoHHy
+X-Google-Smtp-Source: AGHT+IHa7gqsRi91JtMKNVnW/oIPSlnybcyQgmSx9QEPuEePHwy1MCiUbT6PlSLMrBJZTIin9JNQWw==
+X-Received: by 2002:a05:6a21:32a9:b0:1a1:72aa:11b0 with SMTP id yt41-20020a056a2132a900b001a172aa11b0mr5689883pzb.32.1709903236120;
+        Fri, 08 Mar 2024 05:07:16 -0800 (PST)
+Received: from valdaarhun.. ([2409:4081:2c0a:51c8:7b2d:2fd4:2d14:6e3b])
+        by smtp.gmail.com with ESMTPSA id x15-20020a17090abc8f00b0029bc0a9e366sm132480pjr.30.2024.03.08.05.07.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Mar 2024 05:07:15 -0800 (PST)
+From: Sahil Siddiq <icegambit91@gmail.com>
+To: quentin@isovalent.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org
+Cc: martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@google.com,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	bpf@vger.kernel.org,
+	Sahil Siddiq <icegambit91@gmail.com>
+Subject: [PATCH bpf-next v2] bpftool: Mount bpffs on provided dir instead of parent dir
+Date: Fri,  8 Mar 2024 18:36:19 +0530
+Message-ID: <20240308130619.28123-1-icegambit91@gmail.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <65e9e748.a70a0220.606f7.53c0@mx.google.com> <7e216c88-77ee-47b8-becc-a0f780868d3c@sirena.org.uk>
- <CAPhsuW7c+OgFcZ9qWF7nes3SbaQdf5GYZZA+jyHAOzJ5omuZ8g@mail.gmail.com>
- <4ce67bde-3bd4-4a59-bce7-4a2764445783@sirena.org.uk> <CANk7y0gBRgJQqeqXZmTXygKREUWn4OQ2cbTYqh5P9gN3ZSV2sQ@mail.gmail.com>
- <CAPhsuW4XtFn2Nb0hr9R5FAcNNYjHsT1khvF8mHSvZarT6bPdCQ@mail.gmail.com>
-In-Reply-To: <CAPhsuW4XtFn2Nb0hr9R5FAcNNYjHsT1khvF8mHSvZarT6bPdCQ@mail.gmail.com>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Fri, 8 Mar 2024 13:12:22 +0100
-Message-ID: <CANk7y0gwpy2oNBf4zoRYTHrY1TqMNDwOY61RvC9V3xKaG0=o5Q@mail.gmail.com>
-Subject: Re: next/master bisection: baseline.login on qemu_arm64-virt-gicv3-uefi
-To: Song Liu <song@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Will Deacon <will@kernel.org>, kernelci-results@groups.io, 
-	bot@kernelci.org, linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org, 
-	bpf@vger.kernel.org, linux-next@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Song,
+When pinning programs/objects under PATH (eg: during "bpftool prog
+loadall") the bpffs is mounted on the parent dir of PATH in the
+following situations:
+- the given dir exists but it is not bpffs.
+- the given dir doesn't exist and the parent dir is not bpffs.
 
->
-> bpf_prog_pack gives benefits without using PMD pages. For arm64
-> with 64kB page, even bpf_prog_pack of 64kB can fit multiple bpf
-> programs in it. OTOH, 512MB is really big.
->
-> How about we do something like the following?
->
-> Thanks,
-> Song
->
-> diff --git i/kernel/bpf/core.c w/kernel/bpf/core.c
-> index 9ee4536d0a09..1fe05c280e31 100644
-> --- i/kernel/bpf/core.c
-> +++ w/kernel/bpf/core.c
-> @@ -888,7 +888,15 @@ static LIST_HEAD(pack_list);
->   * CONFIG_MMU=n. Use PAGE_SIZE in these cases.
->   */
->  #ifdef PMD_SIZE
-> -#define BPF_PROG_PACK_SIZE (PMD_SIZE * num_possible_nodes())
-> +  /* PMD_SIZE is really big for some archs. It doesn't make sense to
-> +   * reserve too much memory in one allocation. Cap BPF_PROG_PACK_SIZE to
-> +   * 2MiB * num_possible_nodes().
-> +   */
-> +  #if PMD_SIZE <= (1 << 21)
-> +    #define BPF_PROG_PACK_SIZE (PMD_SIZE * num_possible_nodes())
-> +  #else
-> +    #define BPF_PROG_PACK_SIZE ((1 << 21) * num_possible_nodes())
-> +  #endif
->  #else
->  #define BPF_PROG_PACK_SIZE PAGE_SIZE
->  #endif
+Mounting on the parent dir can also have the unintentional side-
+effect of hiding other files located under the parent dir.
 
-I have sent a patch with the above:
-https://lore.kernel.org/all/20240308120712.88122-1-puranjay12@gmail.com/
-Thanks for helping with this.
+If the given dir exists but is not bpffs, then the bpffs should
+be mounted on the given dir and not its parent dir.
 
-I have tested that this patch fixes this issue.
+Similarly, if the given dir doesn't exist and its parent dir is not
+bpffs, then the given dir should be created and the bpffs should be
+mounted on this new dir.
 
-Thanks,
-Puranjay
+Link: https://lore.kernel.org/bpf/2da44d24-74ae-a564-1764-afccf395eeec@isovalent.com/T/#t
+
+Closes: https://github.com/libbpf/bpftool/issues/100
+
+Fixes: 2a36c26fe3b8 ("bpftool: Support bpffs mountpoint as pin path for prog loadall")
+
+Signed-off-by: Sahil Siddiq <icegambit91@gmail.com>
+---
+Changes since v1:
+ - Split "mount_bpffs_for_pin" into two functions:
+   - mount_bpffs_on_dir
+   - mount_bpffs_given_file
+   This is done to improve maintainability and readability.
+ - Improve error messages
+ - (mount_bpffs_given_file): If the file already exists, throw an
+   error instead of waiting for bpf_obj_pin() to throw an error
+ - Code style changes
+
+ tools/bpf/bpftool/common.c     | 78 +++++++++++++++++++++++++++++-----
+ tools/bpf/bpftool/iter.c       |  2 +-
+ tools/bpf/bpftool/main.h       |  3 +-
+ tools/bpf/bpftool/prog.c       |  5 ++-
+ tools/bpf/bpftool/struct_ops.c |  2 +-
+ 5 files changed, 75 insertions(+), 15 deletions(-)
+
+diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
+index cc6e6aae2447..d2746681200e 100644
+--- a/tools/bpf/bpftool/common.c
++++ b/tools/bpf/bpftool/common.c
+@@ -244,24 +244,80 @@ int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type)
+ 	return fd;
+ }
+ 
+-int mount_bpffs_for_pin(const char *name, bool is_dir)
++int mount_bpffs_on_dir(const char *dir_name)
+ {
+ 	char err_str[ERR_MAX_LEN];
+-	char *file;
+-	char *dir;
+ 	int err = 0;
+ 
+-	if (is_dir && is_bpffs(name))
++	if (is_bpffs(dir_name))
+ 		return err;
+ 
+-	file = malloc(strlen(name) + 1);
+-	if (!file) {
++	if (access(dir_name, F_OK) == -1) {
++		char *temp_name;
++		char *parent_name;
++
++		temp_name = malloc(strlen(dir_name) + 1);
++		if (!temp_name) {
++			p_err("mem alloc failed");
++			return -1;
++		}
++
++		strcpy(temp_name, dir_name);
++		parent_name = dirname(temp_name);
++
++		if (is_bpffs(parent_name)) {
++			/* nothing to do if already mounted */
++			free(temp_name);
++			return err;
++		}
++
++		free(temp_name);
++
++		if (block_mount) {
++			p_err("no BPF file system found, not mounting it due to --nomount option");
++			return -1;
++		}
++
++		err = mkdir(dir_name, 0700);
++		if (err) {
++			p_err("failed to create dir (%s): %s", dir_name, strerror(errno));
++			return err;
++		}
++	} else if (block_mount) {
++		p_err("no BPF file system found, not mounting it due to --nomount option");
++		return -1;
++	}
++
++	err = mnt_fs(dir_name, "bpf", err_str, ERR_MAX_LEN);
++	if (err) {
++		err_str[ERR_MAX_LEN - 1] = '\0';
++		p_err("can't mount BPF file system on given dir (%s): %s",
++		      dir_name, err_str);
++	}
++
++	return err;
++}
++
++int mount_bpffs_given_file(const char *file_name)
++{
++	char err_str[ERR_MAX_LEN];
++	char *temp_name;
++	char *dir;
++	int err = 0;
++
++	if (access(file_name, F_OK) != -1) {
++		p_err("bpf object can't be pinned since file (%s) already exists", file_name);
++		return -1;
++	}
++
++	temp_name = malloc(strlen(file_name) + 1);
++	if (!temp_name) {
+ 		p_err("mem alloc failed");
+ 		return -1;
+ 	}
+ 
+-	strcpy(file, name);
+-	dir = dirname(file);
++	strcpy(temp_name, file_name);
++	dir = dirname(temp_name);
+ 
+ 	if (is_bpffs(dir))
+ 		/* nothing to do if already mounted */
+@@ -277,11 +333,11 @@ int mount_bpffs_for_pin(const char *name, bool is_dir)
+ 	if (err) {
+ 		err_str[ERR_MAX_LEN - 1] = '\0';
+ 		p_err("can't mount BPF file system to pin the object (%s): %s",
+-		      name, err_str);
++		      file_name, err_str);
+ 	}
+ 
+ out_free:
+-	free(file);
++	free(temp_name);
+ 	return err;
+ }
+ 
+@@ -289,7 +345,7 @@ int do_pin_fd(int fd, const char *name)
+ {
+ 	int err;
+ 
+-	err = mount_bpffs_for_pin(name, false);
++	err = mount_bpffs_given_file(name);
+ 	if (err)
+ 		return err;
+ 
+diff --git a/tools/bpf/bpftool/iter.c b/tools/bpf/bpftool/iter.c
+index 6b0e5202ca7a..3911563dcc60 100644
+--- a/tools/bpf/bpftool/iter.c
++++ b/tools/bpf/bpftool/iter.c
+@@ -76,7 +76,7 @@ static int do_pin(int argc, char **argv)
+ 		goto close_obj;
+ 	}
+ 
+-	err = mount_bpffs_for_pin(path, false);
++	err = mount_bpffs_given_file(path);
+ 	if (err)
+ 		goto close_link;
+ 
+diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+index b8bb08d10dec..20e06ad183ec 100644
+--- a/tools/bpf/bpftool/main.h
++++ b/tools/bpf/bpftool/main.h
+@@ -142,7 +142,8 @@ const char *get_fd_type_name(enum bpf_obj_type type);
+ char *get_fdinfo(int fd, const char *key);
+ int open_obj_pinned(const char *path, bool quiet);
+ int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type);
+-int mount_bpffs_for_pin(const char *name, bool is_dir);
++int mount_bpffs_given_file(const char *file_name);
++int mount_bpffs_on_dir(const char *dir_name);
+ int do_pin_any(int argc, char **argv, int (*get_fd_by_id)(int *, char ***));
+ int do_pin_fd(int fd, const char *name);
+ 
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index 9cb42a3366c0..09b5f0415a5e 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -1778,7 +1778,10 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 		goto err_close_obj;
+ 	}
+ 
+-	err = mount_bpffs_for_pin(pinfile, !first_prog_only);
++	if (first_prog_only)
++		err = mount_bpffs_given_file(pinfile);
++	else
++		err = mount_bpffs_on_dir(pinfile);
+ 	if (err)
+ 		goto err_close_obj;
+ 
+diff --git a/tools/bpf/bpftool/struct_ops.c b/tools/bpf/bpftool/struct_ops.c
+index d573f2640d8e..bf50a99b2501 100644
+--- a/tools/bpf/bpftool/struct_ops.c
++++ b/tools/bpf/bpftool/struct_ops.c
+@@ -515,7 +515,7 @@ static int do_register(int argc, char **argv)
+ 	if (argc == 1)
+ 		linkdir = GET_ARG();
+ 
+-	if (linkdir && mount_bpffs_for_pin(linkdir, true)) {
++	if (linkdir && mount_bpffs_on_dir(linkdir)) {
+ 		p_err("can't mount bpffs for pinning");
+ 		return -1;
+ 	}
+-- 
+2.44.0
+
