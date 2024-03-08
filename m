@@ -1,89 +1,83 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6637323775
-	for <bpf@vger.kernel.org>; Fri,  8 Mar 2024 04:09:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 219AB23775;
+	Fri,  8 Mar 2024 04:10:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709870989; cv=none; b=Oy/PrHU2Jzre4KJbvCpCMjgsxBmBm3UFt0U1RFEOM3kbKdQY/9E545TK85F1cGTRBoejo1w53cJXARWtODQgrTO2OosTlTFpI48SkIyvCF9X9tLxLw7WzXIQudoMtLnBWOHmfS9rDvDnu0MacEGnMJGXApNvvmUTH3CEoqT//p0=
+	t=1709871030; cv=none; b=ot94Rl1ebOREeidcNS6YfXItt9Ahm8QMIahrEerCOfHQKdKtmcZpFI+lwdZIbDL3yi1PG9ulZWBWr+pEKah/c2KBBbg97C4jdYhsBCMIXup0wIAir6szKUz47CxtKG/Zy0lXbxUL80kcb8iyzhhvqUivaWSNbAAY6pTCqqiIfIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709870989; c=relaxed/simple;
-	bh=Z+0lSwPRGBipz+vkKEgeoawErffPs6C8E9v5Br9GYrM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mCyzIgrVa0yLjCsydMRFOifRe5HZstDlv5/ZBaKgRnTLfPrUBOCCguJqbcpvWc9F0JOGRMBKjvWXSoPpjylcg+rLy2w5iYtkIenXSCutfncwdBHdiK50/LaKNFmpY0zjaaKVTJRf1mSsK/VlazSZqHQVcZOSZGQv6Hd2UTHbpqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f3YpLMZ7; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709871030; c=relaxed/simple;
+	bh=zBKCtVKHUVP0YPHPLhCu2OSFItgCHklS1adP/X+nCyo=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=d0olne1kqnn2nXHXp+2jEtPYymlLaVnFkGDSC+/NGZ9BdWmws3mfXwqp/aSvqymI+rqb4G7JD3AWa8BMRW6QBsHwV5TdxZZJKALyGVJ1ZFAS7htfjPMyMtlu7HUSeOauCTySnTSWwcliNx2NpFcKzlAIgqHL6HO3ubslqugNM6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mi8Q1PwZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f3YpLMZ7"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a44cdb2d3a6so243519366b.2
-        for <bpf@vger.kernel.org>; Thu, 07 Mar 2024 20:09:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709870985; x=1710475785; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eVLdNjTDqhCCPdze1cx12641/sj9S9XJNJqA6uSB1mA=;
-        b=f3YpLMZ7CLuPXt3VRCyt7P8Gi6rH8olWeONaB6xC5WmEwwYLFbP6EW7HhJxVqgG7Qn
-         nKZQ1wCQWme6rR9GMPJ+TG8JXJqg0PZ333DkwvrB+7hsgqZt2xv4Zujfz+TQOzFCJPN5
-         AFuB3bzPgqyINWTsgtfDWlMuI1tcvgY9oTaTng0cNnQueXvatTnUP0nnW139FT3nxgR8
-         2o6mJfJXh5KNTKxAun6H0LuF2R+I8m0fAlrmpB5HNNfspUe2C/FzJ9u4xejF20YxQm1x
-         Hc83QQp3G96fhvDT0H8DEBqYQgh+gturiKAmZ5h4C8gmLv4xpjYxyN3RiHsEX5pkKtEB
-         lcDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709870985; x=1710475785;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eVLdNjTDqhCCPdze1cx12641/sj9S9XJNJqA6uSB1mA=;
-        b=SqCpvyyK9mQE8gJy/QXybvImmd57GMh9HsqNfT80PVVp1LvD+mvIWvg1Hu+Wh451CW
-         U8kXfT7xwvOm0kfwiWbBmBcnEfUOkBDz8A+tBGbNN6c+CkO6zK0h9FrakHNJVBfj0BPK
-         FnJSOd4TATpbnaA6E2ql7RXUPlzKVtnuC8YgTpMYA18/6Wgx9zsRXOArD9s33RpUxmyG
-         XpK2PWSLpe3NRLN6n9Bi4rcyTW+0k9F5HIUb5ZjJ2OS1DcC+VszSJuownZ3f6acrl7qF
-         tyErkqFk9lfRH7U1KOXKJcicLATebAgXttcZBcPZ+hfx3/LS/ylrOJXlZwMn79wxZvSt
-         6nYg==
-X-Forwarded-Encrypted: i=1; AJvYcCUgVlmR1EaMjwpzBZhDSFYY/4t9yPVUeT5rRzITedqCxWxo7+oRZ37VwD2mVrgNlsSBauJP7sQdlxXGgbW3ZryXIH8/
-X-Gm-Message-State: AOJu0YwBcB/m2e5e1bHgkNrjrADc34xBDubH8dULOwq/X5/jvZ+a8AOE
-	yMffTkTPlsOLCvGIA11tnyoruQCQvtD15Bla69BCbrHZJExN0nqBgDWZ6fcO/8lgbvBJSmo6nlv
-	b+1nR+Brb4HEFaL67BiDiPui52ik=
-X-Google-Smtp-Source: AGHT+IEu0Wc1Uwc3zLYdAvP4i68WBEAUP5dWhz50K+BC42HNPn8QMZn4/R+FqATOHjE2cuYJDGrnxMMEs47Bl2fzx2U=
-X-Received: by 2002:a17:906:5953:b0:a44:b90b:3262 with SMTP id
- g19-20020a170906595300b00a44b90b3262mr13536084ejr.5.1709870985422; Thu, 07
- Mar 2024 20:09:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mi8Q1PwZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8549AC43390;
+	Fri,  8 Mar 2024 04:10:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709871029;
+	bh=zBKCtVKHUVP0YPHPLhCu2OSFItgCHklS1adP/X+nCyo=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Mi8Q1PwZh+/ViFjbFDHrjaow7cgbnq1CavDzpSptbnR3uWrPg12ohjmYkjtZ01+YK
+	 C/efJboLRjatLHpDbuSmzmSR3iT/PD7K6N+ordBAfQzZCHkIUWnyqmIX17NXQ3ZQ6k
+	 pHTsG0aEm0txsvRbkbetVA9qcnFPvrfNerJpblJRcpcXn+tnxO61gdj0jPnRoHWZVs
+	 CG7x1Iso5YE1lEHG3OzB2iqERzantKBbtkl9E0fVA/tQLfdkYrr3H3+OmbKfRTSm8c
+	 WzJdFEjOM7eji7t/CH2MdzuWU91FDIw2FX+RmzUr8+nL9tTdt9+qo5fmbHNSXty9oH
+	 BvWx/b4lOVikw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6AB29D84BBC;
+	Fri,  8 Mar 2024 04:10:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240307120340.99577-1-toke@redhat.com> <20240307120340.99577-3-toke@redhat.com>
-In-Reply-To: <20240307120340.99577-3-toke@redhat.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 7 Mar 2024 20:09:34 -0800
-Message-ID: <CAADnVQLjEeDTmyn2+EsgSy_vkUcOGyUeSPpsLg0ytNnDW+YczQ@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 2/3] bpf: Fix hashtab overflow check on 32-bit arches
-To: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v3 0/3] Fix hash bucket overflow checks for 32-bit arches
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170987102943.21432.2167255417824159739.git-patchwork-notify@kernel.org>
+Date: Fri, 08 Mar 2024 04:10:29 +0000
+References: <20240307120340.99577-1-toke@redhat.com>
+In-Reply-To: <20240307120340.99577-1-toke@redhat.com>
+To: =?utf-8?b?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2VuIDx0b2tlQHJlZGhhdC5jb20+?=@ci.codeaurora.org
+Cc: ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+ kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, jolsa@kernel.org, minhquangbui99@gmail.com,
+ brouer@redhat.com, netdev@vger.kernel.org, bpf@vger.kernel.org
 
-On Thu, Mar 7, 2024 at 4:03=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen <to=
-ke@redhat.com> wrote:
->
-> -       err =3D -E2BIG;
-> -       /* prevent zero size kmalloc and check for u32 overflow */
-> -       if (htab->n_buckets =3D=3D 0 ||
-> -           htab->n_buckets > U32_MAX / sizeof(struct bucket))
-> +       /* prevent zero size kmalloc */
-> +       if (htab->n_buckets > U32_MAX / sizeof(struct bucket))
+Hello:
 
-The comment carried over the wrong half of the comment.
-I fixed it up while applying... to bpf-next.
-There probably will be no bpf pr,
-since the merge window is about to start.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Thanks!
+On Thu,  7 Mar 2024 13:03:34 +0100 you wrote:
+> Syzbot managed to trigger a crash by creating a DEVMAP_HASH map with a
+> large number of buckets because the overflow check relies on
+> well-defined behaviour that is only correct on 64-bit arches.
+> 
+> Fix the overflow checks to happen before values are rounded up in all
+> the affected map types.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf,v3,1/3] bpf: Fix DEVMAP_HASH overflow check on 32-bit arches
+    https://git.kernel.org/bpf/bpf-next/c/281d464a34f5
+  - [bpf,v3,2/3] bpf: Fix hashtab overflow check on 32-bit arches
+    (no matching commit)
+  - [bpf,v3,3/3] bpf: Fix stackmap overflow check on 32-bit arches
+    https://git.kernel.org/bpf/bpf-next/c/7a4b21250bf7
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
