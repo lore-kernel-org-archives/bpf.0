@@ -1,56 +1,56 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE94219FC
-	for <bpf@vger.kernel.org>; Fri,  8 Mar 2024 01:09:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D09C21A1C
+	for <bpf@vger.kernel.org>; Fri,  8 Mar 2024 01:09:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709860145; cv=none; b=R4o+k7NKQ49FyQrErqZCmuY5D89SwKSxtiQKZI6DG45J9cccmtFZ4JYNKZX9/34RQZ30mmnM5YzOqScNStlK/t3ZZDprtNiOqNIEALSgb+/8tfvgWWA6YFeJn/pMNCEKbAhgz7v+hv43Pxkcpc01blWt66JUYIPMVXJMsMFThAU=
+	t=1709860148; cv=none; b=ksDsdrLfFLzDxjjDw2D6aX/XKvT6oAU+RDhHZFLUJM/Z8xuuFPMqlzFgZM/BUYg2PPhHLdsoE+SUt9OFHzE0u0+U+A+zjpsgSid5jl4hf1dAY6jkaPYwvlqpX+4/G1xokzKM/NbcPBEAnBcZVJGNcnR4XRvGEZaKC/J4r/mBWpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709860145; c=relaxed/simple;
-	bh=Lh1cWZyoua8dhlov1pKHlaDLREY/hRCp6dARSvcUotU=;
+	s=arc-20240116; t=1709860148; c=relaxed/simple;
+	bh=fzazxGlA40/MdKpenHo/R5zuHc74e+DUZVH8FGgpiOQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dgPqALvEnNFFpysqUEpto55wIZbbaCZQ+cYgDYmXjqKOk3QZV5CFvaPG+/7554QSLmVW2qRo+M7yKdm5AigyjD6jQS5tyqsqXhM7dKIZb1dUICmF2mZx2swuQWdBuG64zpDxRCjveHUmmCefX8qYyral562yryMq21QhJ/CvEdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YqC+rZ2Y; arc=none smtp.client-ip=209.85.214.177
+	 MIME-Version; b=as+UfN+r8feebtYihaARHl28PAQXePA5QvlWSY/lRVAkGDxYy2OCdxt2sPbjQp+K/BgdCWEtwV4iMCx1YH59br23JtIs6ayXH+hV2gDBkMOLgyTHH3yAyc37AcjpGSza+3U9IdmOJhgMAilWtYkfpwsOd30qNZkdY9enuVQ+d3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j47hm7KG; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YqC+rZ2Y"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1dc13fb0133so2212465ad.3
-        for <bpf@vger.kernel.org>; Thu, 07 Mar 2024 17:09:03 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j47hm7KG"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1dc1ff58fe4so11622865ad.1
+        for <bpf@vger.kernel.org>; Thu, 07 Mar 2024 17:09:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709860142; x=1710464942; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709860146; x=1710464946; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8D6++xUxvD64ipEi92YPdyv+HOEeUH/sHJwtJKhwLCY=;
-        b=YqC+rZ2Y0omZL488e/14I9Kh80qkun56pA0a5jCAwiMvf20h/ENKGy0Lp2mf/LrEUu
-         gBVyMTblzIs6LMKUaCdE7f9eydN8LqXHa5FUyFHWlAK2T7AGKFNYE1M8T73U6TvzcW8Q
-         RfhtCO4gxVwtj3lqfwqxLcUkIsiib2WKC4POpqoOR8saeDsjoYgUVavKUosD9cOWa5+U
-         pXqD16vTKWzKvCao0UcNHM+SDLZpn+JVOEGlCLhHHkYXDhNLSnYzTg7/Y38oB1Ze/hbT
-         S1COuFay5ty1VN9qNarkKCuDG3Q1ypa1YX6OXW1gPGpjKzMXbbuHcDET2RIyBRn/mxEj
-         uUbA==
+        bh=vpi4QqlrH6Gb27ghrZwkx18ctzPDyLw0H9dN/ovouKs=;
+        b=j47hm7KGCvGh0026Wt0ocjQQdxujFBDvaFb9whtXrxCvNzf+WIFt00htRvC0BelefT
+         4jTFP+VKa744t7cUW0RFYPvAsVmBIx0XimzSodFGsEGLwbthYBr/GSmVh7+jPVBQItW5
+         7T9cXYK8O4ZreQyDW/jrCbdlQJpdPMcej196wh3hPP0iGmQnRBY+9Ip5KznDCfcAd+/k
+         v+VNhZfsDAabh6hBxkfMJr5cvj/vmRO80D1Yp89q4rTexfZzUUEOmRN+BB60spS/AL/B
+         S9U3jMtKmkoZ7vL9n6/r85UFt8QTGT9t30kdgqMPygD7Pk00nZ/XtJQo5vBNMUJ1pYV+
+         M68A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709860142; x=1710464942;
+        d=1e100.net; s=20230601; t=1709860146; x=1710464946;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8D6++xUxvD64ipEi92YPdyv+HOEeUH/sHJwtJKhwLCY=;
-        b=K/7wgNHPNU+1QVvSL2JzCT1CfQhBeMvfZN39JlsWJQkU4XFHw0AngwqzAo1rifihvo
-         jbhT2Ruqvk5bO1dKPnFzrEVaRnYBMt3Z1hVJQZXhjy8rU5EqIA45j5w1JYGMR/Nvfy8S
-         /tV4VCy/K6qkO99tn0MLs2JUVi9CB4ejWADwhKIRjT/6ZZlMlyRdA8vD8B+gEm+HoAM6
-         CacamSrVX3gmKIvDtATpLWn0N5/Qf3XO+hJ5KQZ4fvEULcF3pd0FqM2jKjxwp9UZB+pK
-         LqkixPpr7EpD3TVMG0UKaR24CCIho9MYpsWcZK3zyVhSeqZRx/ubREFASS2VHdzA5o27
-         GGYg==
-X-Gm-Message-State: AOJu0YzwJByD890ltUIrWhfIKKoVTYH9rLnrEjbTi9v+2LOc9GBgoAOl
-	fNGZqHZ2yZBQcmDYAPxG3wIdAf2CGZE3q2aqNMVX+0U6bEZmFgNrY5XYFo3i
-X-Google-Smtp-Source: AGHT+IEb5Ff0MnhqlTusueikYxMdd/Bze2OZWDejIaWF+sfCU+yKkQtF/zprJoiN+xBfdiuoHHXzMA==
-X-Received: by 2002:a17:902:f786:b0:1dc:ad86:8f41 with SMTP id q6-20020a170902f78600b001dcad868f41mr12030785pln.28.1709860142341;
-        Thu, 07 Mar 2024 17:09:02 -0800 (PST)
+        bh=vpi4QqlrH6Gb27ghrZwkx18ctzPDyLw0H9dN/ovouKs=;
+        b=ImIqPw3DGk/Rh7XF44qjxHFKvfIgaakPPLSjjuWcQsGYdS6oRtYEK+oosqDmHr+BUB
+         EExASP2UgwNHF5vIkh96/f0O+uNIfc/zSuSPACVcfIJYRJOPf7y11yDdn1cmHjWZZw6W
+         4jWAOl2qastBDtPh1a9CXvV5uvI1zRvfW2VfQxm6TPMwJkt0griEbG1xSb/KJxXe5kuh
+         xS6t3sgpAkHdZfJlgnDfq2n6Fmo7zdbdRLweKCt6VUT/+oNmvovHLMZfTNRZmqCZJWpf
+         k7DpJYZNRlVz4CDB/dIAxfAiw/d5NGz/Hr2p51KJe2VoZHCwy+oIeNClJa2cDzrW8+3C
+         /rOg==
+X-Gm-Message-State: AOJu0Yxl29Q48e2Dl9xuSeZv8rFUxn9rXJnQBwIJj3aSQTitUxciekae
+	NJJmEb6CFP2uua+jwWnwv5eYBjSr1kdvaz1z+oKW/1bN2b5n/YtqIBL3jPBR
+X-Google-Smtp-Source: AGHT+IGdZhV5bxBeeUmmwgSlzXQMYoimx5PGXPGrr8Ve7jtmllA3H42p0lrX2YJCWZIhgzqDqaeLuw==
+X-Received: by 2002:a17:903:11c3:b0:1dc:d8de:5664 with SMTP id q3-20020a17090311c300b001dcd8de5664mr11335910plh.33.1709860145857;
+        Thu, 07 Mar 2024 17:09:05 -0800 (PST)
 Received: from localhost.localdomain ([2620:10d:c090:400::5:428c])
-        by smtp.gmail.com with ESMTPSA id f6-20020a170902ce8600b001db45bae92dsm15276659plg.74.2024.03.07.17.09.01
+        by smtp.gmail.com with ESMTPSA id n14-20020a170902e54e00b001d9641003cfsm14286578plf.142.2024.03.07.17.09.04
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 07 Mar 2024 17:09:02 -0800 (PST)
+        Thu, 07 Mar 2024 17:09:05 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -63,9 +63,9 @@ Cc: daniel@iogearbox.net,
 	hch@infradead.org,
 	linux-mm@kvack.org,
 	kernel-team@fb.com
-Subject: [PATCH v3 bpf-next 13/14] selftests/bpf: Add bpf_arena_list test.
-Date: Thu,  7 Mar 2024 17:08:11 -0800
-Message-Id: <20240308010812.89848-14-alexei.starovoitov@gmail.com>
+Subject: [PATCH v3 bpf-next 14/14] selftests/bpf: Add bpf_arena_htab test.
+Date: Thu,  7 Mar 2024 17:08:12 -0800
+Message-Id: <20240308010812.89848-15-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.39.3 (Apple Git-145)
 In-Reply-To: <20240308010812.89848-1-alexei.starovoitov@gmail.com>
 References: <20240308010812.89848-1-alexei.starovoitov@gmail.com>
@@ -79,274 +79,246 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-bpf_arena_alloc.h - implements page_frag allocator as a bpf program.
-bpf_arena_list.h - doubly linked link list as a bpf program.
-
-Compiled as a bpf program and as native C code.
+bpf_arena_htab.h - hash table implemented as bpf program
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/testing/selftests/bpf/bpf_arena_alloc.h | 67 ++++++++++++++
- tools/testing/selftests/bpf/bpf_arena_list.h  | 92 +++++++++++++++++++
- .../selftests/bpf/prog_tests/arena_list.c     | 68 ++++++++++++++
- .../testing/selftests/bpf/progs/arena_list.c  | 87 ++++++++++++++++++
- 4 files changed, 314 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/bpf_arena_alloc.h
- create mode 100644 tools/testing/selftests/bpf/bpf_arena_list.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_list.c
- create mode 100644 tools/testing/selftests/bpf/progs/arena_list.c
+ tools/testing/selftests/bpf/DENYLIST.aarch64  |   1 +
+ tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
+ tools/testing/selftests/bpf/bpf_arena_htab.h  | 100 ++++++++++++++++++
+ .../selftests/bpf/prog_tests/arena_htab.c     |  88 +++++++++++++++
+ .../testing/selftests/bpf/progs/arena_htab.c  |  48 +++++++++
+ .../selftests/bpf/progs/arena_htab_asm.c      |   5 +
+ 6 files changed, 243 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/bpf_arena_htab.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_htab.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_htab.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_htab_asm.c
 
-diff --git a/tools/testing/selftests/bpf/bpf_arena_alloc.h b/tools/testing/selftests/bpf/bpf_arena_alloc.h
+diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 b/tools/testing/selftests/bpf/DENYLIST.aarch64
+index f9101651747b..d8ade15e2789 100644
+--- a/tools/testing/selftests/bpf/DENYLIST.aarch64
++++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
+@@ -11,3 +11,4 @@ fill_link_info/kretprobe_multi_link_info         # bpf_program__attach_kprobe_mu
+ fill_link_info/kprobe_multi_invalid_ubuff        # bpf_program__attach_kprobe_multi_opts unexpected error: -95
+ missed/kprobe_recursion                          # missed_kprobe_recursion__attach unexpected error: -95 (errno 95)
+ verifier_arena                                   # JIT does not support arena
++arena_htab                                       # JIT does not support arena
+diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
+index aa8a620f3318..f4a2f66a683d 100644
+--- a/tools/testing/selftests/bpf/DENYLIST.s390x
++++ b/tools/testing/selftests/bpf/DENYLIST.s390x
+@@ -5,3 +5,4 @@ get_stack_raw_tp                         # user_stack corrupted user stack
+ stacktrace_build_id                      # compare_map_keys stackid_hmap vs. stackmap err -2 errno 2                   (?)
+ verifier_iterating_callbacks
+ verifier_arena                           # JIT does not support arena
++arena_htab                               # JIT does not support arena
+diff --git a/tools/testing/selftests/bpf/bpf_arena_htab.h b/tools/testing/selftests/bpf/bpf_arena_htab.h
 new file mode 100644
-index 000000000000..c27678299e0c
+index 000000000000..acc01a876668
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/bpf_arena_alloc.h
-@@ -0,0 +1,67 @@
++++ b/tools/testing/selftests/bpf/bpf_arena_htab.h
+@@ -0,0 +1,100 @@
 +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
 +/* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
 +#pragma once
-+#include "bpf_arena_common.h"
++#include <errno.h>
++#include "bpf_arena_alloc.h"
++#include "bpf_arena_list.h"
 +
-+#ifndef __round_mask
-+#define __round_mask(x, y) ((__typeof__(x))((y)-1))
-+#endif
-+#ifndef round_up
-+#define round_up(x, y) ((((x)-1) | __round_mask(x, y))+1)
-+#endif
-+
-+#ifdef __BPF__
-+#define NR_CPUS (sizeof(struct cpumask) * 8)
-+
-+static void __arena * __arena page_frag_cur_page[NR_CPUS];
-+static int __arena page_frag_cur_offset[NR_CPUS];
-+
-+/* Simple page_frag allocator */
-+static inline void __arena* bpf_alloc(unsigned int size)
-+{
-+	__u64 __arena *obj_cnt;
-+	__u32 cpu = bpf_get_smp_processor_id();
-+	void __arena *page = page_frag_cur_page[cpu];
-+	int __arena *cur_offset = &page_frag_cur_offset[cpu];
-+	int offset;
-+
-+	size = round_up(size, 8);
-+	if (size >= PAGE_SIZE - 8)
-+		return NULL;
-+	if (!page) {
-+refill:
-+		page = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-+		if (!page)
-+			return NULL;
-+		cast_kern(page);
-+		page_frag_cur_page[cpu] = page;
-+		*cur_offset = PAGE_SIZE - 8;
-+		obj_cnt = page + PAGE_SIZE - 8;
-+		*obj_cnt = 0;
-+	} else {
-+		cast_kern(page);
-+		obj_cnt = page + PAGE_SIZE - 8;
-+	}
-+
-+	offset = *cur_offset - size;
-+	if (offset < 0)
-+		goto refill;
-+
-+	(*obj_cnt)++;
-+	*cur_offset = offset;
-+	return page + offset;
-+}
-+
-+static inline void bpf_free(void __arena *addr)
-+{
-+	__u64 __arena *obj_cnt;
-+
-+	addr = (void __arena *)(((long)addr) & ~(PAGE_SIZE - 1));
-+	obj_cnt = addr + PAGE_SIZE - 8;
-+	if (--(*obj_cnt) == 0)
-+		bpf_arena_free_pages(&arena, addr, 1);
-+}
-+#else
-+static inline void __arena* bpf_alloc(unsigned int size) { return NULL; }
-+static inline void bpf_free(void __arena *addr) {}
-+#endif
-diff --git a/tools/testing/selftests/bpf/bpf_arena_list.h b/tools/testing/selftests/bpf/bpf_arena_list.h
-new file mode 100644
-index 000000000000..b99b9f408eff
---- /dev/null
-+++ b/tools/testing/selftests/bpf/bpf_arena_list.h
-@@ -0,0 +1,92 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-+/* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
-+#pragma once
-+#include "bpf_arena_common.h"
-+
-+struct arena_list_node;
-+
-+typedef struct arena_list_node __arena arena_list_node_t;
-+
-+struct arena_list_node {
-+	arena_list_node_t *next;
-+	arena_list_node_t * __arena *pprev;
++struct htab_bucket {
++	struct arena_list_head head;
 +};
++typedef struct htab_bucket __arena htab_bucket_t;
 +
-+struct arena_list_head {
-+	struct arena_list_node __arena *first;
++struct htab {
++	htab_bucket_t *buckets;
++	int n_buckets;
 +};
-+typedef struct arena_list_head __arena arena_list_head_t;
++typedef struct htab __arena htab_t;
 +
-+#define list_entry(ptr, type, member) arena_container_of(ptr, type, member)
-+
-+#define list_entry_safe(ptr, type, member) \
-+	({ typeof(*ptr) * ___ptr = (ptr); \
-+	 ___ptr ? ({ cast_kern(___ptr); list_entry(___ptr, type, member); }) : NULL; \
-+	 })
-+
-+#ifndef __BPF__
-+static inline void *bpf_iter_num_new(struct bpf_iter_num *it, int i, int j) { return NULL; }
-+static inline void bpf_iter_num_destroy(struct bpf_iter_num *it) {}
-+static inline bool bpf_iter_num_next(struct bpf_iter_num *it) { return true; }
-+#define cond_break ({})
-+#endif
-+
-+/* Safely walk link list elements. Deletion of elements is allowed. */
-+#define list_for_each_entry(pos, head, member)					\
-+	for (void * ___tmp = (pos = list_entry_safe((head)->first,		\
-+						    typeof(*(pos)), member),	\
-+			      (void *)0);					\
-+	     pos && ({ ___tmp = (void *)pos->member.next; 1; });		\
-+	     cond_break,							\
-+	     pos = list_entry_safe((void __arena *)___tmp, typeof(*(pos)), member))
-+
-+static inline void list_add_head(arena_list_node_t *n, arena_list_head_t *h)
++static inline htab_bucket_t *__select_bucket(htab_t *htab, __u32 hash)
 +{
-+	arena_list_node_t *first = h->first, * __arena *tmp;
++	htab_bucket_t *b = htab->buckets;
 +
-+	cast_user(first);
-+	cast_kern(n);
-+	WRITE_ONCE(n->next, first);
-+	cast_kern(first);
-+	if (first) {
-+		tmp = &n->next;
-+		cast_user(tmp);
-+		WRITE_ONCE(first->pprev, tmp);
++	cast_kern(b);
++	return &b[hash & (htab->n_buckets - 1)];
++}
++
++static inline arena_list_head_t *select_bucket(htab_t *htab, __u32 hash)
++{
++	return &__select_bucket(htab, hash)->head;
++}
++
++struct hashtab_elem {
++	int hash;
++	int key;
++	int value;
++	struct arena_list_node hash_node;
++};
++typedef struct hashtab_elem __arena hashtab_elem_t;
++
++static hashtab_elem_t *lookup_elem_raw(arena_list_head_t *head, __u32 hash, int key)
++{
++	hashtab_elem_t *l;
++
++	list_for_each_entry(l, head, hash_node)
++		if (l->hash == hash && l->key == key)
++			return l;
++
++	return NULL;
++}
++
++static int htab_hash(int key)
++{
++	return key;
++}
++
++__weak int htab_lookup_elem(htab_t *htab __arg_arena, int key)
++{
++	hashtab_elem_t *l_old;
++	arena_list_head_t *head;
++
++	cast_kern(htab);
++	head = select_bucket(htab, key);
++	l_old = lookup_elem_raw(head, htab_hash(key), key);
++	if (l_old)
++		return l_old->value;
++	return 0;
++}
++
++__weak int htab_update_elem(htab_t *htab __arg_arena, int key, int value)
++{
++	hashtab_elem_t *l_new = NULL, *l_old;
++	arena_list_head_t *head;
++
++	cast_kern(htab);
++	head = select_bucket(htab, key);
++	l_old = lookup_elem_raw(head, htab_hash(key), key);
++
++	l_new = bpf_alloc(sizeof(*l_new));
++	if (!l_new)
++		return -ENOMEM;
++	l_new->key = key;
++	l_new->hash = htab_hash(key);
++	l_new->value = value;
++
++	list_add_head(&l_new->hash_node, head);
++	if (l_old) {
++		list_del(&l_old->hash_node);
++		bpf_free(l_old);
 +	}
-+	cast_user(n);
-+	WRITE_ONCE(h->first, n);
-+
-+	tmp = &h->first;
-+	cast_user(tmp);
-+	cast_kern(n);
-+	WRITE_ONCE(n->pprev, tmp);
++	return 0;
 +}
 +
-+static inline void __list_del(arena_list_node_t *n)
++void htab_init(htab_t *htab)
 +{
-+	arena_list_node_t *next = n->next, *tmp;
-+	arena_list_node_t * __arena *pprev = n->pprev;
++	void __arena *buckets = bpf_arena_alloc_pages(&arena, NULL, 2, NUMA_NO_NODE, 0);
 +
-+	cast_user(next);
-+	cast_kern(pprev);
-+	tmp = *pprev;
-+	cast_kern(tmp);
-+	WRITE_ONCE(tmp, next);
-+	if (next) {
-+		cast_user(pprev);
-+		cast_kern(next);
-+		WRITE_ONCE(next->pprev, pprev);
-+	}
++	cast_user(buckets);
++	htab->buckets = buckets;
++	htab->n_buckets = 2 * PAGE_SIZE / sizeof(struct htab_bucket);
 +}
-+
-+#define POISON_POINTER_DELTA 0
-+
-+#define LIST_POISON1  ((void __arena *) 0x100 + POISON_POINTER_DELTA)
-+#define LIST_POISON2  ((void __arena *) 0x122 + POISON_POINTER_DELTA)
-+
-+static inline void list_del(arena_list_node_t *n)
-+{
-+	__list_del(n);
-+	n->next = LIST_POISON1;
-+	n->pprev = LIST_POISON2;
-+}
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_list.c b/tools/testing/selftests/bpf/prog_tests/arena_list.c
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_htab.c b/tools/testing/selftests/bpf/prog_tests/arena_htab.c
 new file mode 100644
-index 000000000000..e61886debab1
+index 000000000000..0766702de846
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_list.c
-@@ -0,0 +1,68 @@
++++ b/tools/testing/selftests/bpf/prog_tests/arena_htab.c
+@@ -0,0 +1,88 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
 +#include <test_progs.h>
 +#include <sys/mman.h>
 +#include <network_helpers.h>
 +
++#include "arena_htab_asm.skel.h"
++#include "arena_htab.skel.h"
++
 +#define PAGE_SIZE 4096
 +
-+#include "bpf_arena_list.h"
-+#include "arena_list.skel.h"
++#include "bpf_arena_htab.h"
 +
-+struct elem {
-+	struct arena_list_node node;
-+	__u64 value;
-+};
-+
-+static int list_sum(struct arena_list_head *head)
++static void test_arena_htab_common(struct htab *htab)
 +{
-+	struct elem __arena *n;
-+	int sum = 0;
++	int i;
 +
-+	list_for_each_entry(n, head, node)
-+		sum += n->value;
-+	return sum;
++	printf("htab %p buckets %p n_buckets %d\n", htab, htab->buckets, htab->n_buckets);
++	ASSERT_OK_PTR(htab->buckets, "htab->buckets shouldn't be NULL");
++	for (i = 0; htab->buckets && i < 16; i += 4) {
++		/*
++		 * Walk htab buckets and link lists since all pointers are correct,
++		 * though they were written by bpf program.
++		 */
++		int val = htab_lookup_elem(htab, i);
++
++		ASSERT_EQ(i, val, "key == value");
++	}
 +}
 +
-+static void test_arena_list_add_del(int cnt)
++static void test_arena_htab_llvm(void)
 +{
 +	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	struct arena_list *skel;
-+	int expected_sum = (u64)cnt * (cnt - 1) / 2;
-+	int ret, sum;
++	struct arena_htab *skel;
++	struct htab *htab;
++	size_t arena_sz;
++	void *area;
++	int ret;
 +
-+	skel = arena_list__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "arena_list__open_and_load"))
++	skel = arena_htab__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "arena_htab__open_and_load"))
 +		return;
 +
-+	skel->bss->cnt = cnt;
-+	ret = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.arena_list_add), &opts);
-+	ASSERT_OK(ret, "ret_add");
++	area = bpf_map__initial_value(skel->maps.arena, &arena_sz);
++	/* fault-in a page with pgoff == 0 as sanity check */
++	*(volatile int *)area = 0x55aa;
++
++	/* bpf prog will allocate more pages */
++	ret = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.arena_htab_llvm), &opts);
++	ASSERT_OK(ret, "ret");
 +	ASSERT_OK(opts.retval, "retval");
 +	if (skel->bss->skip) {
 +		printf("%s:SKIP:compiler doesn't support arena_cast\n", __func__);
 +		test__skip();
 +		goto out;
 +	}
-+	sum = list_sum(skel->bss->list_head);
-+	ASSERT_EQ(sum, expected_sum, "sum of elems");
-+	ASSERT_EQ(skel->arena->arena_sum, expected_sum, "__arena sum of elems");
-+	ASSERT_EQ(skel->arena->test_val, cnt + 1, "num of elems");
-+
-+	ret = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.arena_list_del), &opts);
-+	ASSERT_OK(ret, "ret_del");
-+	sum = list_sum(skel->bss->list_head);
-+	ASSERT_EQ(sum, 0, "sum of list elems after del");
-+	ASSERT_EQ(skel->bss->list_sum, expected_sum, "sum of list elems computed by prog");
-+	ASSERT_EQ(skel->arena->arena_sum, expected_sum, "__arena sum of elems");
++	htab = skel->bss->htab_for_user;
++	test_arena_htab_common(htab);
 +out:
-+	arena_list__destroy(skel);
++	arena_htab__destroy(skel);
 +}
 +
-+void test_arena_list(void)
++static void test_arena_htab_asm(void)
 +{
-+	if (test__start_subtest("arena_list_1"))
-+		test_arena_list_add_del(1);
-+	if (test__start_subtest("arena_list_1000"))
-+		test_arena_list_add_del(1000);
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	struct arena_htab_asm *skel;
++	struct htab *htab;
++	int ret;
++
++	skel = arena_htab_asm__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "arena_htab_asm__open_and_load"))
++		return;
++
++	ret = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.arena_htab_asm), &opts);
++	ASSERT_OK(ret, "ret");
++	ASSERT_OK(opts.retval, "retval");
++	htab = skel->bss->htab_for_user;
++	test_arena_htab_common(htab);
++	arena_htab_asm__destroy(skel);
 +}
-diff --git a/tools/testing/selftests/bpf/progs/arena_list.c b/tools/testing/selftests/bpf/progs/arena_list.c
++
++void test_arena_htab(void)
++{
++	if (test__start_subtest("arena_htab_llvm"))
++		test_arena_htab_llvm();
++	if (test__start_subtest("arena_htab_asm"))
++		test_arena_htab_asm();
++}
+diff --git a/tools/testing/selftests/bpf/progs/arena_htab.c b/tools/testing/selftests/bpf/progs/arena_htab.c
 new file mode 100644
-index 000000000000..cd35b8448435
+index 000000000000..b7bb712cacfd
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/arena_list.c
-@@ -0,0 +1,87 @@
++++ b/tools/testing/selftests/bpf/progs/arena_htab.c
+@@ -0,0 +1,48 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
 +#include <vmlinux.h>
@@ -359,74 +331,35 @@ index 000000000000..cd35b8448435
 +	__uint(type, BPF_MAP_TYPE_ARENA);
 +	__uint(map_flags, BPF_F_MMAPABLE);
 +	__uint(max_entries, 100); /* number of pages */
-+#ifdef __TARGET_ARCH_arm64
-+	__ulong(map_extra, 0x1ull << 32); /* start of mmap() region */
-+#else
-+	__ulong(map_extra, 0x1ull << 44); /* start of mmap() region */
-+#endif
 +} arena SEC(".maps");
 +
-+#include "bpf_arena_alloc.h"
-+#include "bpf_arena_list.h"
++#include "bpf_arena_htab.h"
 +
-+struct elem {
-+	struct arena_list_node node;
-+	__u64 value;
-+};
-+
-+struct arena_list_head __arena *list_head;
-+int list_sum;
-+int cnt;
++void __arena *htab_for_user;
 +bool skip = false;
 +
-+#ifdef __BPF_FEATURE_ARENA_CAST
-+long __arena arena_sum;
-+int __arena test_val = 1;
-+struct arena_list_head __arena global_head;
-+#else
-+long arena_sum SEC(".arena.1");
-+int test_val SEC(".arena.1");
-+#endif
-+
-+int zero;
++int zero = 0;
 +
 +SEC("syscall")
-+int arena_list_add(void *ctx)
++int arena_htab_llvm(void *ctx)
 +{
-+#ifdef __BPF_FEATURE_ARENA_CAST
++#if defined(__BPF_FEATURE_ARENA_CAST) || defined(BPF_ARENA_FORCE_ASM)
++	struct htab __arena *htab;
 +	__u64 i;
 +
-+	list_head = &global_head;
++	htab = bpf_alloc(sizeof(*htab));
++	cast_kern(htab);
++	htab_init(htab);
 +
-+	for (i = zero; i < cnt; cond_break, i++) {
-+		struct elem __arena *n = bpf_alloc(sizeof(*n));
++	/* first run. No old elems in the table */
++	for (i = zero; i < 1000; i++)
++		htab_update_elem(htab, i, i);
 +
-+		test_val++;
-+		n->value = i;
-+		arena_sum += i;
-+		list_add_head(&n->node, list_head);
-+	}
-+#else
-+	skip = true;
-+#endif
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int arena_list_del(void *ctx)
-+{
-+#ifdef __BPF_FEATURE_ARENA_CAST
-+	struct elem __arena *n;
-+	int sum = 0;
-+
-+	arena_sum = 0;
-+	list_for_each_entry(n, list_head, node) {
-+		sum += n->value;
-+		arena_sum += n->value;
-+		list_del(&n->node);
-+		bpf_free(n);
-+	}
-+	list_sum = sum;
++	/* should replace all elems with new ones */
++	for (i = zero; i < 1000; i++)
++		htab_update_elem(htab, i, i);
++	cast_user(htab);
++	htab_for_user = htab;
 +#else
 +	skip = true;
 +#endif
@@ -434,6 +367,17 @@ index 000000000000..cd35b8448435
 +}
 +
 +char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/arena_htab_asm.c b/tools/testing/selftests/bpf/progs/arena_htab_asm.c
+new file mode 100644
+index 000000000000..6cd70ea12f0d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/arena_htab_asm.c
+@@ -0,0 +1,5 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
++#define BPF_ARENA_FORCE_ASM
++#define arena_htab_llvm arena_htab_asm
++#include "arena_htab.c"
 -- 
 2.43.0
 
