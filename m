@@ -1,117 +1,85 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9939E572;
-	Fri,  8 Mar 2024 16:55:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2085B1D698;
+	Fri,  8 Mar 2024 17:02:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709916929; cv=none; b=aIRa0zRwnGh28H2v0toS9XNSQ3X1CpB9HeigU2uWK5MypzEaIGC1i4qDVygslJRe8jDF/uRLqkDFioCLfwexmVx/dFA4tnckVR9a/ogtOi86KMoOLev/aECSU/8Fjj8eG7oUkT92yTEElnEvKVqQB6WVyJ6Vo6KubXoupYtxtk4=
+	t=1709917338; cv=none; b=cdDmrmtAryO7mj/CB7Y5U7ef1QTETHnw5PLK1WlIjs5CjKKLFjQN8TMSpRjnTys5tmQWi31ClVkj8UUhmvzAdFTZ9Fr8UQfbTHS0vrENyLzaQxyJ/dPBAtOUAA9mHbzUsxfqHskqISXxZHl1AxWrxuks+KfUQ/YtFBlX+bCun5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709916929; c=relaxed/simple;
-	bh=DbchbOqFFVKBM2t0Qy3IghyGibkgCCKQjmqp5ugPh1g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hplqJp60Aragg6JpyGAmEJotUOZYgZJIFPfAgTBE3WYy3UH4musVRrAgC3/+cDKxCl9FxS++Wmz+0MtyMna8LfsStPAGrtq/yojNcjaBnQ/ZdYNqYGVnR3tgPiZ+I84nUTZL2v+03L29QtIdhKoxFKGl1cVdeEQd0IcFy0d3kV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LLFeSBnd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1709917338; c=relaxed/simple;
+	bh=EJfinzrUbLD4sEKSlrZWMhsgaO5WiyaoMvgJl2gYYYY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s/L5WCdAmUpn/ej8EIIbnGQs75mjy2lsumk5+tuRrWnxW/YWQpIJsFJFHlVjUETxmV+xOyjKYjQNKYt+p/dyr9R7tP0DDPdGNLvcp6lQYeWsBX1YFE2swhctKbW0X2EplfWisruGQXvItAGJynEfaaXT0Kl2QdKYnnj8No1ranI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=SjKkr9M7; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LLFeSBnd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92F03C433C7;
-	Fri,  8 Mar 2024 16:55:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709916928;
-	bh=DbchbOqFFVKBM2t0Qy3IghyGibkgCCKQjmqp5ugPh1g=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=LLFeSBndw8GfNsV/ySmEPb5MqncBTviKxOluPa3GeNUNPE7PW/7eS7ltnD24mVaQY
-	 3SO/vhD3cKrAbGjjdXAQ2/KoRyHxBGNA51GFG1ID3SRv6B6pJCqDgetjAbzFi8nMla
-	 LDmhe5L4LC6+HUF+Olv9TL+LWkq1wbI0xJLS6GFc9thzV3uJCXlkTmDLwga7B+hwHs
-	 krAj3CRlzDm/b0C7IdxRoImFX2HikydcA13mTo6DWyMzJpeN7syTlWS6eH+4yNQOp8
-	 TIjGX87e82srNLEhoTWSVp0aC67JysMYXcjtzgpSJG8BM9Ct0jdNqI0wZk51I/lLRv
-	 4Ahwn/JiEVMSA==
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-513298d6859so2200271e87.3;
-        Fri, 08 Mar 2024 08:55:28 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWPRLJb3JIhXrVHG69VIVb6fFVhORu45bviN/FhpKm+4A5HeNORK3T8Xs5vtxGxLDz+zYcv90I37A4tRacKbKgwt7KcN3CeTNZ5K9Sle5sZmIyZrjCSpwpOzZYfzSnUEfzV
-X-Gm-Message-State: AOJu0YwxM/IH6ov44HnN08c0UzTNfB4Gw9ptDOTd2pHJgGe9/sCezNbF
-	LtiNSRRT8KEnkkDcDtiHk9AYk4/+/fq0wFTT+irG8imyLN5eBEzXA746U0Np6aigGSxyY4snxca
-	gi8dezkpXjHY84mdCsNJtmk2Ni34=
-X-Google-Smtp-Source: AGHT+IEvLk7UHtO38Nms4JK1shCpzamyjWivk7RaeHiTPVJ29LLn/xdDEywWh2pxUZUB8z7i+GezLd7z0oD+SCjNhGQ=
-X-Received: by 2002:a05:6512:711:b0:513:2900:1f5c with SMTP id
- b17-20020a056512071100b0051329001f5cmr3428004lfs.59.1709916926779; Fri, 08
- Mar 2024 08:55:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SjKkr9M7"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=4qt6B2DEelMk3i3au76miwVYGuqD69MMNvsQhf9L6eU=; b=SjKkr9M7HMCTOJeUS7mscRYx5K
+	lu8Smc7Bhj+S8mDp4VsgDShum2AAGcEXflC1jcpUhkEKrYpF7Bbp4xI42lx8mhtr+euAwApC5Z2z8
+	3ffgWeSG/txUpX5DOj1uG/xkuo05nYQLUhkPFHxvw0tRJoronxRdMYz6DJ92mTWRVW4HkkMFhA3RH
+	QhOXe42tfkLsAn5aZr8HjFlGiilvCmARmuR1YxooOxh8Nt64TfxiAb9obIMj1KEYClj//0VG669Ps
+	eZLe3sQOoNSqU+vWomQSz11n0w3kQAOd38T37PSYk2o7kMWG0sbtdtNNYnZInnflW4kpZfEPTMu8N
+	qwnrrJ+g==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1ridbo-0000000AMNk-086d;
+	Fri, 08 Mar 2024 17:02:12 +0000
+Date: Fri, 8 Mar 2024 09:02:11 -0800
+From: Christoph Hellwig <hch@infradead.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Christoph Hellwig <hch@infradead.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-mm <linux-mm@kvack.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
+Subject: Re: vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
+Message-ID: <ZetEkyW1QgIKwfFz@infradead.org>
+References: <CANiq72ka4rir+RTN2FQoT=Vvprp_Ao-CvoYEkSNqtSY+RZj+AA@mail.gmail.com>
+ <CAADnVQL1Zt5dwFv9HPDKDuPEKa6V7gb5j-D-LPWv47hC6mtwgw@mail.gmail.com>
+ <CAADnVQLP=dxBb+RiMGXoaCEuRrbK387J6B+pfzWKF_F=aRgCPQ@mail.gmail.com>
+ <Zeso7eNj1sBhH5zY@infradead.org>
+ <CAADnVQKQumV-0AxGLKX0jQEfa8Z2Bxx2yW8k_1OqGBnD-RqrbA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240308120712.88122-1-puranjay12@gmail.com>
-In-Reply-To: <20240308120712.88122-1-puranjay12@gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Fri, 8 Mar 2024 08:55:15 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW7Do8c8cA6rVykhVnFRgKA0s6nO8JyGXkEB7gm94KR7Mw@mail.gmail.com>
-Message-ID: <CAPhsuW7Do8c8cA6rVykhVnFRgKA0s6nO8JyGXkEB7gm94KR7Mw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: cap BPF_PROG_PACK_SIZE to 2MB * num_possible_nodes()
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQKQumV-0AxGLKX0jQEfa8Z2Bxx2yW8k_1OqGBnD-RqrbA@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Fri, Mar 8, 2024 at 4:07=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.com=
-> wrote:
->
-> On some architectures like ARM64, PMD_SIZE can be really large in some
-> configurations. Like with CONFIG_ARM64_64K_PAGES=3Dy the PMD_SIZE is
-> 512MB.
->
-> Use 2MB * num_possible_nodes() as the upper limit for allocations done
-> through the prog pack allocator.
->
-> Fixes: ea2babac63d4 ("bpf: Simplify bpf_prog_pack_[size|mask]")
-> Reported-by: "kernelci.org bot" <bot@kernelci.org>
-> Closes: https://lore.kernel.org/all/7e216c88-77ee-47b8-becc-a0f780868d3c@=
-sirena.org.uk/
-> Suggested-by: Song Liu <song@kernel.org>
-> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
-> ---
->  kernel/bpf/core.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 134b7979f537..83a3b6964e54 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -893,8 +893,17 @@ static LIST_HEAD(pack_list);
->   * CONFIG_MMU=3Dn. Use PAGE_SIZE in these cases.
->   */
->  #ifdef PMD_SIZE
-> +/*
-> + * PMD_SIZE is really big for some archs. It doesn't make sense to
-> + * reserve too much memory in one allocation. Cap BPF_PROG_PACK_SIZE to
-> + * 2MiB * num_possible_nodes().
-> + */
+On Fri, Mar 08, 2024 at 08:33:18AM -0800, Alexei Starovoitov wrote:
+> vmap_range_noflush() is static in mm/vmalloc.c
+> There is vmap_pages_range_noflush() that is in mm/internal.h,
+> but it needs pages instead of phys_addr_t.
+> Newly introduced vm_area_map_pages() needs struct vm_struct *area
+> and struct page **pages.
+> In this PCI case there is no vm_struct and no pages.
+> ioremap_page_range() is the only api that fits. afaict.
 
-In BPF code, we prefer a different style of multiple line comments:
+Except that we want to enforce a vm_area with the ioremap flag for
+ioremap_page_range, and just adding a NULL check defeats that.
 
-/* PMD_SIZE is really big for some archs. It doesn't make sense to
- * reserve too much memory in one allocation. Cap BPF_PROG_PACK_SIZE to
- * 2MiB * num_possible_nodes().
- */
+The right long term thing would be to actually create a vm_area
+for the PCI_IOBASE region, but until then we just need a lower level
+API.  That's why I suggest to add a vmap_range() that is basically
+the ioremap_page_range before you added the checks, and make
+ioremap_page_range a wrapper around that that checks the area.
 
-Other than this, this looks good to me.
-
-Acked-by: Song Liu <song@kernel.org>
-
-Thanks,
-Song
-
-> +#if PMD_SIZE <=3D (1 << 21)
->  #define BPF_PROG_PACK_SIZE (PMD_SIZE * num_possible_nodes())
->  #else
-> +#define BPF_PROG_PACK_SIZE ((1 << 21) * num_possible_nodes())
-> +#endif
-> +#else
->  #define BPF_PROG_PACK_SIZE PAGE_SIZE
->  #endif
+If/when we get PCI_IOBASE handling converted to the proper
+vmalloc/ioremap areas we can remove that again as well as
+vunmap_range which is just used for PCI_IOBASE and other equivalent
+ISA_IO_BASE in powerpc and somewhat unusual case in arm64 that I
+need to look into a bit more.
