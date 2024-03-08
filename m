@@ -1,114 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C6971DFDE;
-	Fri,  8 Mar 2024 16:13:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741551CF95;
+	Fri,  8 Mar 2024 16:33:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709914413; cv=none; b=DbBadcz+c0PvCSTm5zrZlRs/C/MAShjiXmHuaq+1qq+GgleFZkxuL/Gz9fT0TU/dL4yfTXDdIwB3vXDpr6RemG3jmcN53FsCaQ2gJ3ebLBEOUh6oxE4bSpZWFhLIHpXkUHefjO5xQLVr3ZkYvwkPryBk7ECldVSZ7JayajG2rnU=
+	t=1709915614; cv=none; b=SRXVrETlUje/VFXT3lAKKZXgOVpQnwdzuciSD2pcGKlP2ZrdxWkAn7PKPbCOXtOEz9/LtMTk4Urwbe90++1zaebIsBAutUWhbLQafnA8PNHc5UnN8T9kPCw2zNrtowu6wL6FJgGvpSW6cAOPoTUt+q89AIKUSlwTxU8mV9qfewY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709914413; c=relaxed/simple;
-	bh=HSmK8y4wZfMaF9zPGuPkWTfpEvKg9sCf44pQ9TfKLKI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=a7h0O1MNu1dk0fMNOBDB1kMnMAvsEUGW8CX9ZTd9sIxenxpmM+I/vt7xzKCV8mPVugYMf8tMWXqVvAzIKlOYkTWZeVXPMw55Rt1sG0sNV0sP+JDrKATGfiJB9dKHQJRoXVDz2MyE0E1jiwbJhcmZ4Hu3B911QxidnAUDuFzkfkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DQW+3eVH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1709915614; c=relaxed/simple;
+	bh=9/FAYiHlr20Cyrm1j5FOoJn0knjxzaGX6qLlMAq6UVk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=F9xIm0k0lpIVRb2Wg0GQCtk2kGKCVWJaJE8n57HFEM+ZTq3Oj/PWDzeof63SnvEJ6/RYcI5gjt7hM5HHVqZroO77tIknP7pHYsz5DpHLITE1TFEkmzEJPze4DRUXmvXsYQnRFIaxpMTYysd16C6i8V638qxvB9WVcGJH1/vhHhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lFgv0VMy; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DQW+3eVH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE693C433F1;
-	Fri,  8 Mar 2024 16:13:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709914413;
-	bh=HSmK8y4wZfMaF9zPGuPkWTfpEvKg9sCf44pQ9TfKLKI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=DQW+3eVHqqURvbqP0/pUlvw8/g5/RvwEORqnou2Y7p0rH5IW97csuPRMsZKHuO8wv
-	 JbYEgqXWP5gzgqGWLXQJsPVRu03W4kOTpFVHf/a+NrDqQ6kTt874PTcZM7MaMCX+Wr
-	 uwqk01eEt3KoUN/1g87iTSANfDlg7aknbs6mxCbl3CmXp5H2Zju1+EmAJPH+YHyGkV
-	 MF1oW8QdquOCla/Ntek6cp7x9wqjh3Pse9h8rT8YwxZ9UK1XleHhpluiUFiHintIx4
-	 EyV28on5q+ldFpjpbqOPwYQJVTbkv3HuKdSRFJ6MUfmv1ou5GxPiC69kjgawJlxE5E
-	 EGp/9c1Tx8cfA==
-Date: Fri, 8 Mar 2024 10:13:31 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-mm <linux-mm@kvack.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: Re: vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
-Message-ID: <20240308161331.GA682898@bhelgaas>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lFgv0VMy"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-33e162b1b71so2048760f8f.1;
+        Fri, 08 Mar 2024 08:33:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709915611; x=1710520411; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DbgwgkAex3VYDxIBDZPuxNUeU8585DvkCZMxr6fhjg0=;
+        b=lFgv0VMys3U0EURrhKWqOkqx+f/Hurk8bWKKuNjhF5usxkvWQbQaTW6M8VuLo8u+MB
+         t1vVC7eyzb1GQrEVXVge9ON+Kq/8G5BYW/hTsc+1YjRAd0snoAFB40RUdLgV7ZrpfQW6
+         1JDedgJvTWkduDV8GUW8+iDIV6QJf/srCi/0g+fOtc9VWU7NHt87r5hy8VSwYeDSr2TC
+         yo3wW8RM1ejUAWcPyIVT55C/nkOM91Xv+A6rU4hxMbs0evbK6RcpZRT9YSELWMICGgjE
+         K583cU/j+JXqET02niCCY1P5tv3mR9GbgxpgkrBSe8YROMYm2xT3FVZdq92aSwWyOkMj
+         aL9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709915611; x=1710520411;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DbgwgkAex3VYDxIBDZPuxNUeU8585DvkCZMxr6fhjg0=;
+        b=c3nB3Db8FdDidBBH8K8FnpKXcgz3YiaVG2U8MtjSxvP0wbbaRdrsNfM4HwfpHxnUIY
+         rLMOGHWzC0zjrDIg0VqxAOqkD+ENaaOhmmNSy2+y3TAeqpsJ/bpyFq0hd3FcCi90qOj5
+         IeQ+MtWQRMuuX6P1XBj4/hkkeZWBv3DiJ28CC9FpChS7F2KlCjwLJcXVYFxDhohLonOP
+         CHC6IHwYx/ISXeWHHNMvD/4qk1YgIH9i3TyIfkJLpiViX5ZkgaC54uYb1bfMV+z6hEQv
+         r7gOPoV2bwVWoC462hcTm8uW80eTWZlFf3XmqApYG0N8FX6LkCMqgsY+1DNcXezin/MD
+         bIZg==
+X-Forwarded-Encrypted: i=1; AJvYcCXiP2NdJu9euTt7LDJvzLZ0GIWJyMf++fpZjGcXsftN3ktr9wluzwHB9f6uRAZUpbZ5GBwLc5l0muQZUnysE70tnQ47CBUOvAaXTAxDjI5VjvHWc/7618nggMjlNkbQ
+X-Gm-Message-State: AOJu0Yx8njMwDf5lRMsZqa1V6paxN/P9hWQIKKvEq+Ez7Hl51e5zcux6
+	Y3vVTNV1BVRp8WUx8Jv4uRPG6JuiFarIK48mzma6tJU6mGE92urzY2shDbm6T3Z+UHagZtbquz5
+	4r4qFAVxtMiuwdkrKNRzoynqwcLA=
+X-Google-Smtp-Source: AGHT+IHdxJaJ3BjN39OtK+VvOYPJJdb1YiSUT5r+TVfvi6+mlBgKf8nx4LtzsQUnK/CBhNNSbcZV6F417SAgTs8tOK0=
+X-Received: by 2002:adf:ca8a:0:b0:33d:9f58:8803 with SMTP id
+ r10-20020adfca8a000000b0033d9f588803mr13484808wrh.18.1709915610478; Fri, 08
+ Mar 2024 08:33:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQLP=dxBb+RiMGXoaCEuRrbK387J6B+pfzWKF_F=aRgCPQ@mail.gmail.com>
+References: <CANiq72ka4rir+RTN2FQoT=Vvprp_Ao-CvoYEkSNqtSY+RZj+AA@mail.gmail.com>
+ <CAADnVQL1Zt5dwFv9HPDKDuPEKa6V7gb5j-D-LPWv47hC6mtwgw@mail.gmail.com>
+ <CAADnVQLP=dxBb+RiMGXoaCEuRrbK387J6B+pfzWKF_F=aRgCPQ@mail.gmail.com> <Zeso7eNj1sBhH5zY@infradead.org>
+In-Reply-To: <Zeso7eNj1sBhH5zY@infradead.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 8 Mar 2024 08:33:18 -0800
+Message-ID: <CAADnVQKQumV-0AxGLKX0jQEfa8Z2Bxx2yW8k_1OqGBnD-RqrbA@mail.gmail.com>
+Subject: Re: vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, linux-mm <linux-mm@kvack.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 07, 2024 at 07:49:16PM -0800, Alexei Starovoitov wrote:
-> Ok. I think I figured it out.
-> Please try the attached patch.
+On Fri, Mar 8, 2024 at 7:04=E2=80=AFAM Christoph Hellwig <hch@infradead.org=
+> wrote:
+>
+> On Thu, Mar 07, 2024 at 07:49:16PM -0800, Alexei Starovoitov wrote:
+> > Ok. I think I figured it out.
+> > Please try the attached patch.
+>
+> I don't think this is the right thing.  The probem is that
+> the PCI code shouldn't really be using ioremap_page_range if it is
+> not an ioremap area, but instead directly call into
+> vmap_range_noflush (or an added back vmap_range to avoid all the
+> duplication) similar to the vunmap case in vunmap_range.
 
-> PCI address range is managed independently from vmalloc range.
-
-This suggests that the PCI maintainers should be aware of something,
-but I don't know what this means.  Can you elaborate on what PCI
-address range management this is, e.g., what functions allocate from
-it?  Or how PCI should have been able to avoid this issue?
-
-The patch is in a generic area with no obvious connection to PCI and
-no obvious sign of independent management, which doesn't feel quite
-right.  Maybe this is what Christoph is getting at.
-
-> Enforce flags and range in ioremap_page_range() only when
-> the start address is within vmalloc range allocated by get_vm_area().
-
-> Fixes: 3e49a866c9dc ("mm: Enforce VM_IOREMAP flag and range in ioremap_page_range.")
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
->  mm/vmalloc.c | 23 +++++++++++++----------
->  1 file changed, 13 insertions(+), 10 deletions(-)
-> 
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index e5b8c70950bc..17eb0f974e0f 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -311,16 +311,19 @@ int ioremap_page_range(unsigned long addr, unsigned long end,
->  	int err;
->  
->  	area = find_vm_area((void *)addr);
-> -	if (!area || !(area->flags & VM_IOREMAP)) {
-> -		WARN_ONCE(1, "vm_area at addr %lx is not marked as VM_IOREMAP\n", addr);
-> -		return -EINVAL;
-> -	}
-> -	if (addr != (unsigned long)area->addr ||
-> -	    (void *)end != area->addr + get_vm_area_size(area)) {
-> -		WARN_ONCE(1, "ioremap request [%lx,%lx) doesn't match vm_area [%lx, %lx)\n",
-> -			  addr, end, (long)area->addr,
-> -			  (long)area->addr + get_vm_area_size(area));
-> -		return -ERANGE;
-> +	if (area) {
-> +		if (!(area->flags & VM_IOREMAP)) {
-> +			WARN_ONCE(1, "vm_area at addr %lx is not marked as VM_IOREMAP\n",
-> +				  addr);
-> +			return -EINVAL;
-> +		}
-> +		if (addr != (unsigned long)area->addr ||
-> +		    (void *)end != area->addr + get_vm_area_size(area)) {
-> +			WARN_ONCE(1, "ioremap request [%lx,%lx) doesn't match vm_area [%lx, %lx)\n",
-> +				  addr, end, (long)area->addr,
-> +				  (long)area->addr + get_vm_area_size(area));
-> +			return -ERANGE;
-> +		}
->  	}
->  	err = vmap_range_noflush(addr, end, phys_addr, pgprot_nx(prot),
->  				 ioremap_max_page_shift);
-> -- 
-> 2.43.0
-> 
+vmap_range_noflush() is static in mm/vmalloc.c
+There is vmap_pages_range_noflush() that is in mm/internal.h,
+but it needs pages instead of phys_addr_t.
+Newly introduced vm_area_map_pages() needs struct vm_struct *area
+and struct page **pages.
+In this PCI case there is no vm_struct and no pages.
+ioremap_page_range() is the only api that fits. afaict.
