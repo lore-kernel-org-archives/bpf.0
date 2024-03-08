@@ -1,80 +1,75 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 029A55E077;
-	Fri,  8 Mar 2024 20:53:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D20F35B20C;
+	Fri,  8 Mar 2024 20:57:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709931226; cv=none; b=nXQCBTPtF0nhg04F3ClM9s1tsZRbWH41uVwb4tl+7gEs1Y5tvYAi8pJT4PAVdoO5srDQR+enVj4xtb7F7E3f9LgGTUdwMzLlXZt30vJoakkxysemqFyej5Zjuyp1BqpkeIUgUzbWB7+OmeFqb6qo9oEFrcrJx9JK8oy+ri8/cXs=
+	t=1709931427; cv=none; b=Tub1KxeGjGqhXVogPkP+eWUELDOUp+vD0gcucr3bOGi8I0xp7/y5vozOL0bA+/ygiKBkSgF498hkgOKGxY3ZKTRaur2TLzCM2Q29AuUyMvzgMlHK/uXXNNx0vXLfyod3O7VSCTbHPu+eGNuek2+ihAKXZv/MK89rF5XLsDSaRHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709931226; c=relaxed/simple;
-	bh=mZHwASnNiA+0JOdqGd28VuUM0QHLH5hUItAzYpemHCU=;
+	s=arc-20240116; t=1709931427; c=relaxed/simple;
+	bh=VOH0uGjlamTkGKWBUFzaUSvLcg+ZgjEUF3K2hEsJEkc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j/zWzKbDN6NYRH3lPZe85DXjRhxlsAOtPeB3sGrP24lV5MBz7204WNMWExj+jQg4zTXZYEbSheJayJbp+Y8/C5q6h5QImFMnRR+ruyLUfCzbM0BWw6bl3zOQ5AFnFs8oRKKUo4G6RbZPh7taKTmvI2Z2aVV5e+OQuM+A9XybJyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nhh3jga4; arc=none smtp.client-ip=209.85.214.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=r24RwYSkrs8Vm9Hn+12PizvTv9VJ1GZWAWeF0TG3P6R50uefqVqlIQ7m5xoE+/djqtCm6/074ZWww6cAy/m760Z+ltX6yq+iNLRP/L6MWO4dsaucSMNCDCAKNFtPfConB/+ssFJ/nEGWVhQnDLglmeIcyRq7u1a8QNU2EewSBQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LOJKqfeT; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nhh3jga4"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1dd6198c4e2so14357785ad.2;
-        Fri, 08 Mar 2024 12:53:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LOJKqfeT"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1dd5df90170so15540665ad.0;
+        Fri, 08 Mar 2024 12:57:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709931224; x=1710536024; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=k3FyJJXkStTdlH41VSk6TL63Vo5zy8Q5BFHWuyAluFE=;
-        b=nhh3jga4KeoJy1eXXTHVeyA+1IvpRSwrr/CojtFG9UnPsYabh6q6pwHqtlH129ZK5S
-         4zKL+GfgtMch8SJb/XT+oXQ0xxFH41aNZm1zWpivqrMuXiZ+LFwd/dVzMHqmxnhJbOTK
-         7vPOgSwZI3GI075dlXGXIK9N17CG2KoqV4LwJQyuk8DpcsO8rBF1UNB6cG5APy/bBxwm
-         nPH0sg1P8S/+dRs+KsDElBCAjFBA+czkKCyzaZ+r2AJnWT/s3AsCvsrubd28qMaxqk0+
-         5eaI+43nZd5pOd8f4GUl8hCOmpXhnfqpU6cjju7FUkgMciOQVo3jW+O7NNkF8gmDRGNO
-         iW2g==
+        d=gmail.com; s=20230601; t=1709931425; x=1710536225; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LZ1lttaPT6oImPNItYzV/eS/q/nsl7IAM97Yp19qF10=;
+        b=LOJKqfeTGeojhVOlPSrT4kQFHIVD7BIN3Q4C7V9cEc/EiGWdHA6/+HsMWC0PNwnEza
+         StJhf1tK2ygdgHd12X2Q//O0uIzzzJL1q+qhQ+p1QrA/CX33ugZmxlkBRkWqGMS0QBe4
+         YAywsu4epasZTkCkDwNjKC8F8+rpUqyBjzMVyYcUrkrluC3CXBcWOPd/isVscCNcSNtv
+         V5CL/ElbU0UXTfACCVvE8eTm/M+AqW1HMHBCZ+Xu/drnIRCv8T7Sjn8R0hxnjrYyh/3F
+         D1LgO5XbKh4UdNUWSdnsk9KL1u0ly7rEkAM/C4nbeDl02cAINL1+Zi1CgEB3ISdDhqxe
+         CdJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709931224; x=1710536024;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k3FyJJXkStTdlH41VSk6TL63Vo5zy8Q5BFHWuyAluFE=;
-        b=cenyBycBcZ//nh4YamNGhcQjVa744Uf7DZeq3kwRyz9r3wN5yQaRva1Gss33HPgVeS
-         svPOycCynsKZskE4P0qEhE+o7yKfKI+UIsm3y/04/W+cmwKRVlwPcB5uMRBkeIB1oDlX
-         RWgfZtjgft/6nAmFWhBemFyRWDNEFVeeJ4xu0Ue9Pgv6HM+Z2O7vSeZ8x/0sK5df5/fB
-         CvOI3I19bX/TYOxW1+0A+JZE73HVyUsvzG8yN7K8m488KkH8jF2/fy/cqo/6RsuvZSfm
-         WsRnGs4nQluI+EoySHJ41ckGQ4ZFlPNswufNqRsQWc7VjDj/v2oOx0FcVo6zttVWdnxR
-         ek0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWMnZ0CW1Rv1mpZfLdvvuhtnCePCYMWzFoJEmxlEyJBTYsleN8X/psnOQI8J9Mrye2gkDvrtSTTCWniyHLNUL8cRDOEL071qcKd2NTdxzG4MYfAMryVI1FUpeTf4hbZfmmEvRXi4NxCslrnO8CiSYiOWSJ9mEikux+gX0wqvW9JSA==
-X-Gm-Message-State: AOJu0Ywi4lY5OIDBcKd9xz8OeHHkR1q16zQcLXTzccQxrG7xGxnQaUoU
-	wstBvcW5lz8U5zEyg+krNVJfA8FdPaVoT/FB6St1OwxSz7b+89rk
-X-Google-Smtp-Source: AGHT+IEZ4C7lx2v17kFxsEX8KT9D5zuIweUrqZ5jV/dRO0aBQtjZ/MWRfKM9TJEsG4RM1AcT5MH8nw==
-X-Received: by 2002:a17:903:41c3:b0:1dc:bb8e:d28f with SMTP id u3-20020a17090341c300b001dcbb8ed28fmr249406ple.66.1709931224231;
-        Fri, 08 Mar 2024 12:53:44 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709931425; x=1710536225;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LZ1lttaPT6oImPNItYzV/eS/q/nsl7IAM97Yp19qF10=;
+        b=SiNYMrefjycYTm9dtX0WQKHeenKMTDGXiNTb9HtpHi2/BjTDsYYCCWcogtFEU/WNGn
+         +V3gfCfiCEu41/r3PgC3OSCKcVkrhzH/nJjFH0/HudwjiCePdasvCEjHJBXkHQmbriEA
+         U8l6Z+xeMW4Q31B8if8XkSqcsuC/Tv9OYgwpLe3YXpbKFZld534HSbmF6pob28sAlTUL
+         Cxa9ElUtn3qeLQflh5lGkJoJtIxW1wJPvJiNj4TiksSs2PQpGrYklpdUMUOUsziHK+6Y
+         1PZV2A0c2TDwEkJG2dIQEuIlrkkaNpHMIpfhK42YhIiSKHKZCGSAq/qXRQABS64zVsSj
+         qDkA==
+X-Forwarded-Encrypted: i=1; AJvYcCXR7fC6NGIFYxOzDbzeheSo8dBudt/Ifsxit0TxLsGBnByzdAF/YIn3BA/jXy5r/zm0DIkUfSH6DXOtgqL/WAbCnjlqth0KnH5sQ2LNPBO4vJ07eb966+vcuUyPpi001d+C0uOXKXjfhJF87W4jZnJn47aRuE2Lw7ZzuZuMrLHrTg==
+X-Gm-Message-State: AOJu0YxpdV2+mdY9/zPiDw7VrwWjcQDgS8eo+EOdSgAfUr1YOhSAb87m
+	mMJ1GXMvm9sw21ksWekVToRsErMISM7968yGLc+Cv5cCGw68Mlqw
+X-Google-Smtp-Source: AGHT+IEvgUBojpUpbkDB25bGHd4TvdI+WTXfgYQ8kdQhv6hkv/khHthg5hmriSusZDYwDOf7ZsikBg==
+X-Received: by 2002:a17:902:c942:b0:1dd:91c:249f with SMTP id i2-20020a170902c94200b001dd091c249fmr496165pla.24.1709931424783;
+        Fri, 08 Mar 2024 12:57:04 -0800 (PST)
 Received: from gmail.com ([192.184.166.229])
-        by smtp.gmail.com with ESMTPSA id u6-20020a170902e80600b001da001aed18sm73346plg.54.2024.03.08.12.53.43
+        by smtp.gmail.com with ESMTPSA id o11-20020a17090323cb00b001dcc0d06959sm69529plh.245.2024.03.08.12.57.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Mar 2024 12:53:43 -0800 (PST)
-Date: Fri, 8 Mar 2024 12:53:41 -0800
+        Fri, 08 Mar 2024 12:57:04 -0800 (PST)
+Date: Fri, 8 Mar 2024 12:57:02 -0800
 From: Calvin Owens <jcalvinowens@gmail.com>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Masami Hiramatsu <mhiramat@kernel.org>
 Cc: Luis Chamberlain <mcgrof@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
 	Naveen N Rao <naveen.n.rao@linux.ibm.com>,
 	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
 	David S Miller <davem@davemloft.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC][PATCH 1/4] module: mm: Make module_alloc() generally
- available
-Message-ID: <Zet61a2jTaSV1eF0@gmail.com>
+	Thomas Gleixner <tglx@linutronix.de>, bpf@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC][PATCH 3/4] kprobes: Allow kprobes with CONFIG_MODULES=n
+Message-ID: <Zet7nsiStlbNx0km@gmail.com>
 References: <cover.1709676663.git.jcalvinowens@gmail.com>
- <a6b162aed1e6fea7f565ef9dd0204d6f2284bcce.1709676663.git.jcalvinowens@gmail.com>
- <267d9173-2a0e-4006-a858-4e94aeff94df@csgroup.eu>
+ <2af01251ca21d79fa29092505d192f1f1b746cff.1709676663.git.jcalvinowens@gmail.com>
+ <20240308114603.289720cf17ed75ba7bce8779@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,123 +78,232 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <267d9173-2a0e-4006-a858-4e94aeff94df@csgroup.eu>
+In-Reply-To: <20240308114603.289720cf17ed75ba7bce8779@kernel.org>
 
-On Thursday 03/07 at 14:43 +0000, Christophe Leroy wrote:
-> Hi Calvin,
+On Friday 03/08 at 11:46 +0900, Masami Hiramatsu wrote:
+> On Wed,  6 Mar 2024 12:05:10 -0800
+> Calvin Owens <jcalvinowens@gmail.com> wrote:
 > 
-> Le 06/03/2024 à 21:05, Calvin Owens a écrit :
-> > [Vous ne recevez pas souvent de courriers de jcalvinowens@gmail.com. Découvrez pourquoi ceci est important à https://aka.ms/LearnAboutSenderIdentification ]
-> > 
-> > Both BPF_JIT and KPROBES depend on CONFIG_MODULES, but only require
-> > module_alloc() itself, which can be easily separated into a standalone
-> > allocator for executable kernel memory.
-> 
-> Easily maybe, but not as easily as you think, see below.
-> 
-> > 
-> > Thomas Gleixner sent a patch to do that for x86 as part of a larger
-> > series a couple years ago:
-> > 
-> >      https://lore.kernel.org/all/20220716230953.442937066@linutronix.de/
-> > 
-> > I've simply extended that approach to the whole kernel.
+> > If something like this is merged down the road, it can go in at leisure
+> > once the module_alloc change is in: it's a one-way dependency.
 > > 
 > > Signed-off-by: Calvin Owens <jcalvinowens@gmail.com>
 > > ---
-> >   arch/Kconfig                     |   2 +-
-> >   arch/arm/kernel/module.c         |  35 ---------
-> >   arch/arm/mm/Makefile             |   2 +
-> >   arch/arm/mm/module_alloc.c       |  40 ++++++++++
-> >   arch/arm64/kernel/module.c       | 127 ------------------------------
-> >   arch/arm64/mm/Makefile           |   1 +
-> >   arch/arm64/mm/module_alloc.c     | 130 +++++++++++++++++++++++++++++++
-> >   arch/loongarch/kernel/module.c   |   6 --
-> >   arch/loongarch/mm/Makefile       |   2 +
-> >   arch/loongarch/mm/module_alloc.c |  10 +++
-> >   arch/mips/kernel/module.c        |  10 ---
-> >   arch/mips/mm/Makefile            |   2 +
-> >   arch/mips/mm/module_alloc.c      |  13 ++++
-> >   arch/nios2/kernel/module.c       |  20 -----
-> >   arch/nios2/mm/Makefile           |   2 +
-> >   arch/nios2/mm/module_alloc.c     |  22 ++++++
-> >   arch/parisc/kernel/module.c      |  12 ---
-> >   arch/parisc/mm/Makefile          |   1 +
-> >   arch/parisc/mm/module_alloc.c    |  15 ++++
-> >   arch/powerpc/kernel/module.c     |  36 ---------
-> >   arch/powerpc/mm/Makefile         |   1 +
-> >   arch/powerpc/mm/module_alloc.c   |  41 ++++++++++
+> >  arch/Kconfig                |  2 +-
+> >  kernel/kprobes.c            | 22 ++++++++++++++++++++++
+> >  kernel/trace/trace_kprobe.c | 11 +++++++++++
+> >  3 files changed, 34 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/Kconfig b/arch/Kconfig
+> > index cfc24ced16dd..e60ce984d095 100644
+> > --- a/arch/Kconfig
+> > +++ b/arch/Kconfig
+> > @@ -52,8 +52,8 @@ config GENERIC_ENTRY
+> >  
+> >  config KPROBES
+> >  	bool "Kprobes"
+> > -	depends on MODULES
+> >  	depends on HAVE_KPROBES
+> > +	select MODULE_ALLOC
 > 
-> Missing several powerpc changes to make it work. You must audit every 
-> use of CONFIG_MODULES inside powerpc. Here are a few exemples:
+> OK, if we use EXEC_ALLOC,
 > 
-> Function get_patch_pfn() to enable text code patching.
+> config EXEC_ALLOC
+> 	depends on HAVE_EXEC_ALLOC
 > 
-> arch/powerpc/Kconfig : 	select KASAN_VMALLOC			if KASAN && MODULES
+> And 
 > 
-> arch/powerpc/include/asm/kasan.h:
+>   config KPROBES
+>   	bool "Kprobes"
+> 	depends on MODULES || EXEC_ALLOC
+> 	select EXEC_ALLOC if HAVE_EXEC_ALLOC
 > 
-> #if defined(CONFIG_MODULES) && defined(CONFIG_PPC32)
-> #define KASAN_KERN_START	ALIGN_DOWN(PAGE_OFFSET - SZ_256M, SZ_256M)
-> #else
-> #define KASAN_KERN_START	PAGE_OFFSET
+> then kprobes can be enabled either modules supported or exec_alloc is supported.
+> (new arch does not need to implement exec_alloc)
+> 
+> Maybe we also need something like
+> 
+> #ifdef CONFIG_EXEC_ALLOC
+> #define module_alloc(size) exec_alloc(size)
 > #endif
 > 
-> arch/powerpc/kernel/head_8xx.S and arch/powerpc/kernel/head_book3s_32.S: 
-> InstructionTLBMiss interrupt handler must know that there is executable 
-> kernel text outside kernel core.
+> in kprobes.h, or just add `replacing module_alloc with exec_alloc` patch.
 > 
-> Function is_module_segment() to identified segments used for module text 
-> and set NX (NoExec) MMU flag on non-module segments.
+> Thank you,
 
-Thanks Christophe, I'll fix that up.
+The example was helpful, thanks. I see what you mean with
+HAVE_EXEC_ALLOC, I'll implement it like that in the next verison.
 
-I'm sure there are many other issues like this in the arch stuff here,
-I'm going to run them all through QEMU to catch everything I can before
-the next respin.
-
-> >   arch/riscv/kernel/module.c       |  11 ---
-> >   arch/riscv/mm/Makefile           |   1 +
-> >   arch/riscv/mm/module_alloc.c     |  17 ++++
-> >   arch/s390/kernel/module.c        |  37 ---------
-> >   arch/s390/mm/Makefile            |   1 +
-> >   arch/s390/mm/module_alloc.c      |  42 ++++++++++
-> >   arch/sparc/kernel/module.c       |  31 --------
-> >   arch/sparc/mm/Makefile           |   2 +
-> >   arch/sparc/mm/module_alloc.c     |  31 ++++++++
-> >   arch/x86/kernel/ftrace.c         |   2 +-
-> >   arch/x86/kernel/module.c         |  56 -------------
-> >   arch/x86/mm/Makefile             |   2 +
-> >   arch/x86/mm/module_alloc.c       |  59 ++++++++++++++
-> >   fs/proc/kcore.c                  |   2 +-
-> >   kernel/module/Kconfig            |   1 +
-> >   kernel/module/main.c             |  17 ----
-> >   mm/Kconfig                       |   3 +
-> >   mm/Makefile                      |   1 +
-> >   mm/module_alloc.c                |  21 +++++
-> >   mm/vmalloc.c                     |   2 +-
-> >   42 files changed, 467 insertions(+), 402 deletions(-)
-> 
-> ...
-> 
-> > diff --git a/mm/Kconfig b/mm/Kconfig
-> > index ffc3a2ba3a8c..92bfb5ae2e95 100644
-> > --- a/mm/Kconfig
-> > +++ b/mm/Kconfig
-> > @@ -1261,6 +1261,9 @@ config LOCK_MM_AND_FIND_VMA
-> >   config IOMMU_MM_DATA
-> >          bool
-> > 
-> > +config MODULE_ALLOC
-> > +       def_bool n
+> >  	select KALLSYMS
+> >  	select TASKS_RCU if PREEMPTION
+> >  	help
+> > diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> > index 9d9095e81792..194270e17d57 100644
+> > --- a/kernel/kprobes.c
+> > +++ b/kernel/kprobes.c
+> > @@ -1556,8 +1556,12 @@ static bool is_cfi_preamble_symbol(unsigned long addr)
+> >  		str_has_prefix("__pfx_", symbuf);
+> >  }
+> >  
+> > +#if IS_ENABLED(CONFIG_MODULES)
+> >  static int check_kprobe_address_safe(struct kprobe *p,
+> >  				     struct module **probed_mod)
+> > +#else
+> > +static int check_kprobe_address_safe(struct kprobe *p)
+> > +#endif
+> >  {
+> >  	int ret;
+> >  
+> > @@ -1580,6 +1584,7 @@ static int check_kprobe_address_safe(struct kprobe *p,
+> >  		goto out;
+> >  	}
+> >  
+> > +#if IS_ENABLED(CONFIG_MODULES)
+> >  	/* Check if 'p' is probing a module. */
+> >  	*probed_mod = __module_text_address((unsigned long) p->addr);
+> >  	if (*probed_mod) {
+> > @@ -1603,6 +1608,8 @@ static int check_kprobe_address_safe(struct kprobe *p,
+> >  			ret = -ENOENT;
+> >  		}
+> >  	}
+> > +#endif
 > > +
+> >  out:
+> >  	preempt_enable();
+> >  	jump_label_unlock();
+> > @@ -1614,7 +1621,9 @@ int register_kprobe(struct kprobe *p)
+> >  {
+> >  	int ret;
+> >  	struct kprobe *old_p;
+> > +#if IS_ENABLED(CONFIG_MODULES)
+> >  	struct module *probed_mod;
+> > +#endif
+> >  	kprobe_opcode_t *addr;
+> >  	bool on_func_entry;
+> >  
+> > @@ -1633,7 +1642,11 @@ int register_kprobe(struct kprobe *p)
+> >  	p->nmissed = 0;
+> >  	INIT_LIST_HEAD(&p->list);
+> >  
+> > +#if IS_ENABLED(CONFIG_MODULES)
+> >  	ret = check_kprobe_address_safe(p, &probed_mod);
+> > +#else
+> > +	ret = check_kprobe_address_safe(p);
+> > +#endif
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > @@ -1676,8 +1689,10 @@ int register_kprobe(struct kprobe *p)
+> >  out:
+> >  	mutex_unlock(&kprobe_mutex);
+> >  
+> > +#if IS_ENABLED(CONFIG_MODULES)
+> >  	if (probed_mod)
+> >  		module_put(probed_mod);
+> > +#endif
+> >  
+> >  	return ret;
+> >  }
+> > @@ -2482,6 +2497,7 @@ int kprobe_add_area_blacklist(unsigned long start, unsigned long end)
+> >  	return 0;
+> >  }
+> >  
+> > +#if IS_ENABLED(CONFIG_MODULES)
+> >  /* Remove all symbols in given area from kprobe blacklist */
+> >  static void kprobe_remove_area_blacklist(unsigned long start, unsigned long end)
+> >  {
+> > @@ -2499,6 +2515,7 @@ static void kprobe_remove_ksym_blacklist(unsigned long entry)
+> >  {
+> >  	kprobe_remove_area_blacklist(entry, entry + 1);
+> >  }
+> > +#endif
+> >  
+> >  int __weak arch_kprobe_get_kallsym(unsigned int *symnum, unsigned long *value,
+> >  				   char *type, char *sym)
+> > @@ -2564,6 +2581,7 @@ static int __init populate_kprobe_blacklist(unsigned long *start,
+> >  	return ret ? : arch_populate_kprobe_blacklist();
+> >  }
+> >  
+> > +#if IS_ENABLED(CONFIG_MODULES)
+> >  static void add_module_kprobe_blacklist(struct module *mod)
+> >  {
+> >  	unsigned long start, end;
+> > @@ -2665,6 +2683,7 @@ static struct notifier_block kprobe_module_nb = {
+> >  	.notifier_call = kprobes_module_callback,
+> >  	.priority = 0
+> >  };
+> > +#endif /* IS_ENABLED(CONFIG_MODULES) */
+> >  
+> >  void kprobe_free_init_mem(void)
+> >  {
+> > @@ -2724,8 +2743,11 @@ static int __init init_kprobes(void)
+> >  	err = arch_init_kprobes();
+> >  	if (!err)
+> >  		err = register_die_notifier(&kprobe_exceptions_nb);
+> > +
+> > +#if IS_ENABLED(CONFIG_MODULES)
+> >  	if (!err)
+> >  		err = register_module_notifier(&kprobe_module_nb);
+> > +#endif
+> >  
+> >  	kprobes_initialized = (err == 0);
+> >  	kprobe_sysctls_init();
+> > diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> > index c4c6e0e0068b..dd4598f775b9 100644
+> > --- a/kernel/trace/trace_kprobe.c
+> > +++ b/kernel/trace/trace_kprobe.c
+> > @@ -102,6 +102,7 @@ static nokprobe_inline bool trace_kprobe_has_gone(struct trace_kprobe *tk)
+> >  	return kprobe_gone(&tk->rp.kp);
+> >  }
+> >  
+> > +#if IS_ENABLED(CONFIG_MODULES)
+> >  static nokprobe_inline bool trace_kprobe_within_module(struct trace_kprobe *tk,
+> >  						 struct module *mod)
+> >  {
+> > @@ -129,6 +130,12 @@ static nokprobe_inline bool trace_kprobe_module_exist(struct trace_kprobe *tk)
+> >  
+> >  	return ret;
+> >  }
+> > +#else
+> > +static nokprobe_inline bool trace_kprobe_module_exist(struct trace_kprobe *tk)
+> > +{
+> > +	return true;
+> > +}
+> > +#endif
+> >  
+> >  static bool trace_kprobe_is_busy(struct dyn_event *ev)
+> >  {
+> > @@ -670,6 +677,7 @@ static int register_trace_kprobe(struct trace_kprobe *tk)
+> >  	return ret;
+> >  }
+> >  
+> > +#if IS_ENABLED(CONFIG_MODULES)
+> >  /* Module notifier call back, checking event on the module */
+> >  static int trace_kprobe_module_callback(struct notifier_block *nb,
+> >  				       unsigned long val, void *data)
+> > @@ -704,6 +712,7 @@ static struct notifier_block trace_kprobe_module_nb = {
+> >  	.notifier_call = trace_kprobe_module_callback,
+> >  	.priority = 1	/* Invoked after kprobe module callback */
+> >  };
+> > +#endif /* IS_ENABLED(CONFIG_MODULES) */
+> >  
+> >  static int count_symbols(void *data, unsigned long unused)
+> >  {
+> > @@ -1897,8 +1906,10 @@ static __init int init_kprobe_trace_early(void)
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > +#if IS_ENABLED(CONFIG_MODULES)
+> >  	if (register_module_notifier(&trace_kprobe_module_nb))
+> >  		return -EINVAL;
+> > +#endif
+> >  
+> >  	return 0;
+> >  }
+> > -- 
+> > 2.43.0
+> > 
 > 
-> I'd call it something else than CONFIG_MODULE_ALLOC as you want to use 
-> it when CONFIG_MODULE is not selected.
 > 
-> Something like CONFIG_EXECMEM_ALLOC or CONFIG_DYNAMIC_EXECMEM ?
-> 
-> 
-> 
-> Christophe
+> -- 
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
