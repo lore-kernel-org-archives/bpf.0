@@ -1,171 +1,116 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755F323741;
-	Fri,  8 Mar 2024 03:49:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D15EA2C699
+	for <bpf@vger.kernel.org>; Fri,  8 Mar 2024 03:53:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709869771; cv=none; b=ExrMtbIAJ/wWdupRIq2pgyAPP5dpJd41263L0XBvdoK9yHZ+wuYR/I93EDxoXHfJWWARbz5Hpsrh0IyyOqgTS5lMV2E6sn+U+foGgFaOyF6VwT8PxGdo2wMlKEcLI1uQzhwMBmT+KK7DXp65eiB5ngJbXvvap0eWAQDU1drQbXQ=
+	t=1709869986; cv=none; b=RxvlOAyNvH223pnRyvQ/ZyI3rg7bYKuphHhUanCsLaiDwwAnkqMeOD0GtsOZPzsr03wYAHNkW4Z40js7ZjGFEMMKVzFFljHlR101Wku9aa2X8/Cn3mScLuJwKNQE8tQreQVcNeIFkyAEZ8/G0ni4jVSyO4c6TN/jsdwXv/Mfh2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709869771; c=relaxed/simple;
-	bh=F4zU7D6HPe9hWwYeKpLKioI6WEJUIZuDx2NIFay9Cdo=;
+	s=arc-20240116; t=1709869986; c=relaxed/simple;
+	bh=nQBQRrvHoysHynF+mTt73tPJEIZFv4JnnmX+dawqxUI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=muxmCZaiOe8AxcIv6l7d/TIXgUME2VOdB/YHxqkeEOerGOVOT63quOJxXaZzgsDFPGhgLQZCh5Fzhu/z6eKLt8VotP4fhmkK1MKxY2T/95ECfR9VxWZ4ILgNSpedMpi7TtAD8pEbkk/SxRU3QsiIA8OvJ1yVAyWOM+AquOXRb9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KR9FmOTt; arc=none smtp.client-ip=209.85.218.54
+	 To:Cc:Content-Type; b=UGX+nNL4FnNIlPcBILiGHjRHwEeQV3GtbJGXcWodsxH5MtMT483Q7mVOitrq9/FdWrYd0+FrCDfIB2d0IHS1hzHIgKeq35pZ03OqyVDl0ra7zXHqrrCvs4M3Z8Aun2PWz2O4sY0XiIX62uGDZxxAW4TdwMa9HU8U6C9vCyP+CNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CZRJNNsU; arc=none smtp.client-ip=209.85.222.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KR9FmOTt"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a45ba1f8e89so217116366b.1;
-        Thu, 07 Mar 2024 19:49:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CZRJNNsU"
+Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-7d995bd557eso927556241.0
+        for <bpf@vger.kernel.org>; Thu, 07 Mar 2024 19:53:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709869768; x=1710474568; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e8ZzEOeqwXaF+/K/gLza7Lv335pwHs3+S/P5LcnAwfs=;
-        b=KR9FmOTt74tYxPazPx+RixafzIaHgqpZ8BCwN9h9LjnlAOYnxHbh7AYiCdXlGOmZHy
-         /JX0Lz3gV4cj/J9/mHv4aYzSPDkkngf8wuRgQ72YGYCXxr95WbvR+V3AQUWsgzRXB4PN
-         BvOSwBuX7H5jhM8ISQgYEQd3BRD3qD4nDW2pPw1md3a8mmNF8OSKgi8uzUTeiqB//WDw
-         /VOR2ozteHD/yY1EPKgghEdQxk97hkuFWDmecepyPySCo52R4sx1dL5SLvkenb3VfJtl
-         lbcsHeu6Pk+QtkKU6aRWrGXRUgo3Ko9AWOfYtD+OxqEC/57P1T60tkbLvTOlLD5IVog7
-         KagA==
+        d=gmail.com; s=20230601; t=1709869983; x=1710474783; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nQBQRrvHoysHynF+mTt73tPJEIZFv4JnnmX+dawqxUI=;
+        b=CZRJNNsUOtD5tdjkkoBZyoKWBSMAu4OtuVhw5+vtKdXtrKvzpC2GUNkDbqppsdBwFZ
+         LguluaQbh+s3rLRF+Xu9Lje9zEeux9mvnpdsL5U4+h4mTY1KDlZ+7fdC0KOkoCKq+atN
+         2hqK16N4IQg8MCCj2anbRgJiSCNDxfzQK2bdqfBCncfttpyVi17B0vhDejLJzS6PDvni
+         zDbgJ6Qp9dnkKc7NwjmP+ev04iEUYpdU4vWEJSu5EZ/KFPGV/Sgu8hC0fyb5o+bjVQ6m
+         9OQaOdbIG5ilhuau2Dj59ZDAxJDylwJTR5Ljnj7objUUDX43k7jYtBXSg8vJ11T/mzz1
+         N2Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709869768; x=1710474568;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e8ZzEOeqwXaF+/K/gLza7Lv335pwHs3+S/P5LcnAwfs=;
-        b=mI8lea6eeWXdCR2zhno4/Q7QaCtIx2tsg1zqefznoBZU1I3J1REzspOY5UVDy+Dp69
-         bzoDJnMzLwzEIVHUE0khcZuA4/4Q0eAPsaHAgmq1Iu2heww+Owq5z51lXH5UrqsMnwbI
-         M/snjRC59lRvH7yyX1ZWpe1nEKA3B/BV+JxZdI7gFU8S7oIZer+l3tuwDmgWvfA8A7ff
-         OV2FuedgKDl9XG9p5xwt8rkCU5Rs5gN+psEJI6IPLSGN1t/BMQVZ3yDkWWhNhqUA1uGz
-         ONExRT7oKIAe/64WNUI+g85azmd+4Xzpk2DtGV2c2QZb/Tw8BEA0whtP2XNO44q+G9qR
-         YHyA==
-X-Forwarded-Encrypted: i=1; AJvYcCWmH2tWhVWP2GTl2mya0M/hgTqqRe0hYnVQ7HENlLse+axkUjPwfXol6QYUUPkI6xKTLmTeplqwSC8Ue242C5aLPDMCGqF4co3kUElPHioEY32qJBNgQDS/iYt6Fk7K
-X-Gm-Message-State: AOJu0YwkvWa/46Pt9aQAIxVEDL3x3t4Fw200GPFtZmH5EsQGZHUIhNYY
-	JUuF3ACBNJKKJO600z/JT2TRIeq9tqheJlyfuslfGgM0i0WUkRpB66cuoL1w3IHapmTAqg50CZ1
-	KIEQceqHbBjmZKFN21GHJJh9K62Y=
-X-Google-Smtp-Source: AGHT+IEz3ttpI0orlvLB4AJ+nczG2zehj++7TffijNDU0t/tCUA5dTFH+dzs38O3DWeWHMtb93KUEZ6RhDCAs5+at2o=
-X-Received: by 2002:a17:906:364d:b0:a3e:a712:ba9d with SMTP id
- r13-20020a170906364d00b00a3ea712ba9dmr13521012ejb.4.1709869767603; Thu, 07
- Mar 2024 19:49:27 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709869983; x=1710474783;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nQBQRrvHoysHynF+mTt73tPJEIZFv4JnnmX+dawqxUI=;
+        b=VcNoyImTLftGWidazxr3hMbs98v8xF4U4UbB8colP4y6hymqdhG+dRTWa/ycBRrxZs
+         VpboJ3dv0+8BLJdVSUtDxbc0futHoLBC5IluVLwxn/eW3JN3FAFh0NKeRShM54yVSP3Y
+         uuBub1u2UlA5O+uWtR90MPrL3SYr3F7k4r3dmeXW+WkANKTRpvEHcEOJ/YARYGf2KFYM
+         r3dnkDxYR1zk7T+zy3JIcvHEQ+WwbzdN1EFwPJCsct1vL6kqZcDUpK43T82dolmFRGHn
+         ef2fnF5bTFS8Uef8j3s+LNT8qZSfFdbVzvMvKKEFkcppJR9EztHyq3/Tvgu6i5ITDs8b
+         OJQg==
+X-Forwarded-Encrypted: i=1; AJvYcCXV3pp4BELGASvpmcZ9oWRxCIS+b3iJXY6esc9crU05msUU2Bomi4wb3ftCV5lYJkUFavAV+3dFDI69QT/13B9EKrSg
+X-Gm-Message-State: AOJu0YweMUF0bjhDmjzuZTv6hX4iA+J4mbSV4bBemRdyvncTGNj/t+Se
+	EeSs72G5XMKKpmgFq49lY1T5wofUXIDc1Mh/ha68pbmj4nWdXkMDdlHv8J12fuYH09Ahoz22fEa
+	UeLY9kf8RU+bGay3CTD4T2sqqNyE=
+X-Google-Smtp-Source: AGHT+IG61gQBE4BTtN2uiusA9UVGstZeoSjwYUq4mM9Bpg7oK/SKNSofZ+XGxf44Saj6D6f5GdM7yM3YllcS45kykLE=
+X-Received: by 2002:a05:6102:32d1:b0:473:c24:7b3a with SMTP id
+ o17-20020a05610232d100b004730c247b3amr1936628vss.10.1709869983686; Thu, 07
+ Mar 2024 19:53:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CANiq72ka4rir+RTN2FQoT=Vvprp_Ao-CvoYEkSNqtSY+RZj+AA@mail.gmail.com>
- <CAADnVQL1Zt5dwFv9HPDKDuPEKa6V7gb5j-D-LPWv47hC6mtwgw@mail.gmail.com>
-In-Reply-To: <CAADnVQL1Zt5dwFv9HPDKDuPEKa6V7gb5j-D-LPWv47hC6mtwgw@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 7 Mar 2024 19:49:16 -0800
-Message-ID: <CAADnVQLP=dxBb+RiMGXoaCEuRrbK387J6B+pfzWKF_F=aRgCPQ@mail.gmail.com>
-Subject: Re: vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, linux-mm <linux-mm@kvack.org>, 
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Content-Type: multipart/mixed; boundary="0000000000001c584e06131e1443"
-
---0000000000001c584e06131e1443
+References: <CAM_iQpXzAYFES62Cbj8PoGqr_OW=R+Y-ac=6s3kmp5373R7RzQ@mail.gmail.com>
+ <20240304095947.GB123222@linux.alibaba.com>
+In-Reply-To: <20240304095947.GB123222@linux.alibaba.com>
+From: Cong Wang <xiyou.wangcong@gmail.com>
+Date: Thu, 7 Mar 2024 19:52:52 -0800
+Message-ID: <CAM_iQpXKi3tYb+5O=NRi_C-eGCRYiZgk96=egFaKAPa3KX8joA@mail.gmail.com>
+Subject: Re: [LSF/MM/BPF TOPIC] Inter-VM Shared Memory Communications with eBPF
+To: dust.li@linux.alibaba.com
+Cc: lsf-pc@lists.linux-foundation.org, bpf <bpf@vger.kernel.org>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	"a.mehrab@bytedance.com" <a.mehrab@bytedance.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 7, 2024 at 9:54=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Mon, Mar 4, 2024 at 1:59=E2=80=AFAM Dust Li <dust.li@linux.alibaba.com> =
+wrote:
 >
-> On Thu, Mar 7, 2024 at 9:42=E2=80=AFAM Miguel Ojeda
-> <miguel.ojeda.sandonis@gmail.com> wrote:
-> >
-> > Hi arm64/bpf/pci,
-> >
-> > In today's next-20240307 with a defconfig LLVM=3D1 I am seeing [1] unde=
-r
-> > QEMU virt, i.e. from
-> > https://lore.kernel.org/all/20240305030516.41519-2-alexei.starovoitov@g=
-mail.com/
-> > applied to the bpf-next tree.
-> >
-> > Cheers,
-> > Miguel
-> >
-> > [1]
-> >
-> > [    0.425177] pci-host-generic 4010000000.pcie: host bridge
-> > /pcie@10000000 ranges:
-> > [    0.425886] pci-host-generic 4010000000.pcie:       IO
-> > 0x003eff0000..0x003effffff -> 0x0000000000
-> > [    0.426534] pci-host-generic 4010000000.pcie:      MEM
-> > 0x0010000000..0x003efeffff -> 0x0010000000
-> > [    0.426764] pci-host-generic 4010000000.pcie:      MEM
-> > 0x8000000000..0xffffffffff -> 0x8000000000
-> > [    0.427324] ------------[ cut here ]------------
-> > [    0.427456] vm_area at addr ffffffffc0800000 is not marked as VM_IOR=
-EMAP
-> > [    0.427944] WARNING: CPU: 0 PID: 1 at mm/vmalloc.c:315
-> > ioremap_page_range+0x25c/0x2bc
+> On Fri, Feb 23, 2024 at 03:05:59PM -0800, Cong Wang wrote:
 >
-> Great. Thanks for flagging.
-> Looks like this check found some misuse of ioremap_page_range.
+> Hi Cong,
 >
-> Note that without marking the address range as VM_IOREMAP
-> the vread_iter() will be bulk reading over IO and might
-> cause hard hangs and what not.
-> pci drivers need to mark their range as VM_IOREMAP.
-> That was the reason for the warning.
+> This is a good topic !
+> We have proposed another solution to accelerate Inter-VM tcp/ip communica=
+tion
+> transparently within the same host based on SMC-D + virtio-ism
+> https://lists.oasis-open.org/archives/virtio-comment/202212/msg00030.html
 >
-> I'll try to figure out which piece of code missed passing
-> VM_IOREMAP into vm_area.
-> I'm not familiar with pci, so help is greatly appreciated.
+> I don't know, can we do better with your proposal ?
 
-Ok. I think I figured it out.
-Please try the attached patch.
+We knew SMC and it _is_ actually why I have this eBPF based proposal.
+Sorry for not providing more details here, since I just want to keep
+this proposal
+brief and will certain have all the details in our presentation if our
+proposal gets
+accepted.
 
---0000000000001c584e06131e1443
-Content-Type: application/octet-stream; 
-	name="0001-mm-Enforce-range-of-ioremap_page_range-when-it-s-ins.patch"
-Content-Disposition: attachment; 
-	filename="0001-mm-Enforce-range-of-ioremap_page_range-when-it-s-ins.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_lti4ahb30>
-X-Attachment-Id: f_lti4ahb30
+The main problem of SMC is it is not fully transparent, LD_PRELOAD could
+work for most cases but not all. Therefore, I don't think introducing any n=
+ew
+socket family is in the right direction at all.
 
-RnJvbSBiNDQ2NTM0ZjJkYzVjNDhkOGFiMDdjNjhlNzk2NDhmNDIyMzhmZWY4IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBBbGV4ZWkgU3Rhcm92b2l0b3YgPGFzdEBrZXJuZWwub3JnPgpE
-YXRlOiBUaHUsIDcgTWFyIDIwMjQgMTk6NDE6NDUgLTA4MDAKU3ViamVjdDogW1BBVENIIGJwZi1u
-ZXh0XSBtbTogRW5mb3JjZSByYW5nZSBvZiBpb3JlbWFwX3BhZ2VfcmFuZ2Ugd2hlbiBpdCdzCiBp
-bnNpZGUgdm1hbGxvYyByYW5nZQoKUENJIGFkZHJlc3MgcmFuZ2UgaXMgbWFuYWdlZCBpbmRlcGVu
-ZGVudGx5IGZyb20gdm1hbGxvYyByYW5nZS4KRW5mb3JjZSBmbGFncyBhbmQgcmFuZ2UgaW4gaW9y
-ZW1hcF9wYWdlX3JhbmdlKCkgb25seSB3aGVuCnRoZSBzdGFydCBhZGRyZXNzIGlzIHdpdGhpbiB2
-bWFsbG9jIHJhbmdlIGFsbG9jYXRlZCBieSBnZXRfdm1fYXJlYSgpLgoKRml4ZXM6IDNlNDlhODY2
-YzlkYyAoIm1tOiBFbmZvcmNlIFZNX0lPUkVNQVAgZmxhZyBhbmQgcmFuZ2UgaW4gaW9yZW1hcF9w
-YWdlX3JhbmdlLiIpClNpZ25lZC1vZmYtYnk6IEFsZXhlaSBTdGFyb3ZvaXRvdiA8YXN0QGtlcm5l
-bC5vcmc+Ci0tLQogbW0vdm1hbGxvYy5jIHwgMjMgKysrKysrKysrKysrKy0tLS0tLS0tLS0KIDEg
-ZmlsZSBjaGFuZ2VkLCAxMyBpbnNlcnRpb25zKCspLCAxMCBkZWxldGlvbnMoLSkKCmRpZmYgLS1n
-aXQgYS9tbS92bWFsbG9jLmMgYi9tbS92bWFsbG9jLmMKaW5kZXggZTViOGM3MDk1MGJjLi4xN2Vi
-MGY5NzRlMGYgMTAwNjQ0Ci0tLSBhL21tL3ZtYWxsb2MuYworKysgYi9tbS92bWFsbG9jLmMKQEAg
-LTMxMSwxNiArMzExLDE5IEBAIGludCBpb3JlbWFwX3BhZ2VfcmFuZ2UodW5zaWduZWQgbG9uZyBh
-ZGRyLCB1bnNpZ25lZCBsb25nIGVuZCwKIAlpbnQgZXJyOwogCiAJYXJlYSA9IGZpbmRfdm1fYXJl
-YSgodm9pZCAqKWFkZHIpOwotCWlmICghYXJlYSB8fCAhKGFyZWEtPmZsYWdzICYgVk1fSU9SRU1B
-UCkpIHsKLQkJV0FSTl9PTkNFKDEsICJ2bV9hcmVhIGF0IGFkZHIgJWx4IGlzIG5vdCBtYXJrZWQg
-YXMgVk1fSU9SRU1BUFxuIiwgYWRkcik7Ci0JCXJldHVybiAtRUlOVkFMOwotCX0KLQlpZiAoYWRk
-ciAhPSAodW5zaWduZWQgbG9uZylhcmVhLT5hZGRyIHx8Ci0JICAgICh2b2lkICopZW5kICE9IGFy
-ZWEtPmFkZHIgKyBnZXRfdm1fYXJlYV9zaXplKGFyZWEpKSB7Ci0JCVdBUk5fT05DRSgxLCAiaW9y
-ZW1hcCByZXF1ZXN0IFslbHgsJWx4KSBkb2Vzbid0IG1hdGNoIHZtX2FyZWEgWyVseCwgJWx4KVxu
-IiwKLQkJCSAgYWRkciwgZW5kLCAobG9uZylhcmVhLT5hZGRyLAotCQkJICAobG9uZylhcmVhLT5h
-ZGRyICsgZ2V0X3ZtX2FyZWFfc2l6ZShhcmVhKSk7Ci0JCXJldHVybiAtRVJBTkdFOworCWlmIChh
-cmVhKSB7CisJCWlmICghKGFyZWEtPmZsYWdzICYgVk1fSU9SRU1BUCkpIHsKKwkJCVdBUk5fT05D
-RSgxLCAidm1fYXJlYSBhdCBhZGRyICVseCBpcyBub3QgbWFya2VkIGFzIFZNX0lPUkVNQVBcbiIs
-CisJCQkJICBhZGRyKTsKKwkJCXJldHVybiAtRUlOVkFMOworCQl9CisJCWlmIChhZGRyICE9ICh1
-bnNpZ25lZCBsb25nKWFyZWEtPmFkZHIgfHwKKwkJICAgICh2b2lkICopZW5kICE9IGFyZWEtPmFk
-ZHIgKyBnZXRfdm1fYXJlYV9zaXplKGFyZWEpKSB7CisJCQlXQVJOX09OQ0UoMSwgImlvcmVtYXAg
-cmVxdWVzdCBbJWx4LCVseCkgZG9lc24ndCBtYXRjaCB2bV9hcmVhIFslbHgsICVseClcbiIsCisJ
-CQkJICBhZGRyLCBlbmQsIChsb25nKWFyZWEtPmFkZHIsCisJCQkJICAobG9uZylhcmVhLT5hZGRy
-ICsgZ2V0X3ZtX2FyZWFfc2l6ZShhcmVhKSk7CisJCQlyZXR1cm4gLUVSQU5HRTsKKwkJfQogCX0K
-IAllcnIgPSB2bWFwX3JhbmdlX25vZmx1c2goYWRkciwgZW5kLCBwaHlzX2FkZHIsIHBncHJvdF9u
-eChwcm90KSwKIAkJCQkgaW9yZW1hcF9tYXhfcGFnZV9zaGlmdCk7Ci0tIAoyLjQzLjAKCg==
---0000000000001c584e06131e1443--
+(There are some other problems with SMC too, for instance, it requires more
+than a 3-way handshake.)
+
+And I don't think there is any conflict or overlap here at all. Our eBPF-ba=
+sed
+solution relies on the existing inter-VM shared memory, no matter it is ivs=
+hmem
+or virtio-ism. We don't propose any new way of sharing memory, what we
+propose is merely using an existing one and building our solution on top.
+
+In fact, we believe our solution can be on top of your virtio-ism,
+since it is just
+another flat memory region from our point of view.
+
+Hope this helps.
+
+Thanks.
