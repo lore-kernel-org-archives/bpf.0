@@ -1,82 +1,76 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D9EF5E065;
-	Fri,  8 Mar 2024 20:27:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE511D52D;
+	Fri,  8 Mar 2024 20:36:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709929676; cv=none; b=qN3qp+Dv7sHxuXikiPyoQ8EEz2Ttx5Btccj9MZEXdfLgiHUzsQkWN/lAlp43J236Ct24YgHGxvezqAXXTRaT6UT2T81eujia/h5r+F/g92rRPWwuVlmtlI8FyN1I8rDy+Fh+A1zAhpSPEcvBGFLUHQXv8Br0blNmIGad+EcUMXk=
+	t=1709930167; cv=none; b=V6GCLxr9yhPvfMhW/B3n6qtCrdIsOTKHgcrTmcGdkzaLfUzKFdq2P8cCbS4RfazcsuuzpeadjcdgMu0nA2Pn+hufkf6iS79fnt5vDPQS+aGdhXrBWUs5NWhIyU9m5J7dbMyev0c9hezO5kJRUuXSs8433mnKC9zlmRP4OfN0ki8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709929676; c=relaxed/simple;
-	bh=mQcD5ykMCdd/SZ7+M4Y9X6BbATMyJuVX8fjLs9rMW6Q=;
+	s=arc-20240116; t=1709930167; c=relaxed/simple;
+	bh=2DJgVA5hEWcv6uQ9ADvTEvGHCBiB/9lOyZUdjddNE1w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lt+IutL5EJ6mdl2iWRtDAs5jP+7i8ZCv3zoqOlY6EsQwqi/N91QVxqER6DuEYoK6J0AovTHYaXZEQNT6vdES5d/Xoji5RoCNGKgtU4DtXbwwwWXREdlo36kltTsRErMBvc516xsSru0XB4xf8IMkGAsihc2dXHC8H2uJ/ANeVP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C+Wb+pKE; arc=none smtp.client-ip=209.85.210.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=TWMTEkJVKtfk/LBQQPIh3ZVJ++W+uNAbYvXfxDyw5S9mNAd+H30wuuyZeXBGAEPCrf1s1RUN9pvrFjPS9hVnx4LXVqFRUjtQf/dy+shXi53hdWq1CLmnvGxwjLuoXWzPQzWj9AiEF7lO4RvfTvf3QjyyXUVEXypyu4AbR2fyl/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PeYY5oGy; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C+Wb+pKE"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6e56787e691so2491469b3a.0;
-        Fri, 08 Mar 2024 12:27:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PeYY5oGy"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6e62c65865cso2127241b3a.2;
+        Fri, 08 Mar 2024 12:36:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709929674; x=1710534474; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wXUjGZ9jnAwCdwAfXjSSya1Xbt4jMaLFoszBP4rfXz4=;
-        b=C+Wb+pKELrY3+HDDncr9v4kbytGC47A9na5afTsWgqNuKP+43EG4Mq+qONCF4Z0lUJ
-         McRchkk/LDOP08C0gqTwpH3ilG/EsptNiNFTX2gdVQvrOMobEbyAFA/W2Z5oAij0RIZI
-         VsDRL9s9Cgc8mLHf2zJGs8UnqZH9VzXTtvXwVOijsYrlaGrDXVcVhTNbae90ICP0pxUT
-         DYtX6ioxRlaVwhNbIh8DB2n03cuXrXsclHBlbYHBGkOTPqLfQ3xva12i2Nw0X061Lx+z
-         f7HwZGxK9VqscxLjszuH56QqFGLGK0F6v0GYDkDyLvq9Vs0sBz2VbpJIw5Qgk5Y3qnDf
-         kTrQ==
+        d=gmail.com; s=20230601; t=1709930165; x=1710534965; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5KLgrDjMCRpuO7WBfnDia6NDpj8Onfdt2Teu/Yvj1Oo=;
+        b=PeYY5oGyBC1yeeK/Tw/CVQkPLIYXaPkDh0IaWmXvsHxqAINOyKDSrKW7EfQ0pvmjPP
+         EX+0NXcOeE2X04OGbOH0Und6s7ONheBF4O49gCRo6qvJm3YZTeQ99SN52/Cnhw0z0uoZ
+         /XLtXaA7YlaKQ3D6h43IB/MpoWDRVptYF/WJqQ8myzmwQTIicQ+rXyB7xoOeMhmbOzcj
+         M/RnqipAMQbZNnp5ytijQjK9J0mrwwvFUSQN1X/s83JL15fMVO11Eam4MCwYFli1u/62
+         7sgUe5kgu26LhjOWM9cdm9bN0lKrVLTAAor9Ro8NOVHMcq/qGsKyXGCSs3oOQbZIseM6
+         rbHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709929674; x=1710534474;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wXUjGZ9jnAwCdwAfXjSSya1Xbt4jMaLFoszBP4rfXz4=;
-        b=tLM85lXynCzUmkZGo1TXPmjacNxnaXgbA7ZTRUA+4Bp+bN8O1WtXSzDeZTE/uhkbG8
-         MgQqMGOIATVNRnxUBtGPSmzhRfLEG+UvHieVmOaJmLFr53u7B2n2SWZxGxrg9KwymaPv
-         aoVkIVkaOM/6o/nFafL9YuZ8VSErO1LQslSoh1dJBfwGPh3PSn2IAzUesaSILLSFjRdg
-         Ui7H750qAbea9FKculAaGqzh4Z1JBpEKCU5Kz1gCElmeSAVKRBvDNizbImcQ9wE83GEQ
-         GIOM4aXqe2Ryhr1w/QvqQ2DxHSTaS4agfGF6oVu7vuQqz+cfXZs1CcQ/L0R/0T7H5QSZ
-         8ITQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUZuqBAWNoTO0vQYRx0v8bLj6RabK56m5PYSm+qML8sDhZWArMxIqstCtD9hjaTxTEHsmWk+IRi6RvgiGjDKwySvaY4P0JkrqKU35pXcGslcC5A5ewSuO6g6r/sa/Vc6i4Skd8WQAEnfw5uutmD/ySbu4k1Dd4CDJaGTpxDdyNcWw==
-X-Gm-Message-State: AOJu0Yy7aDiuoRfCpiErXiVlWmxoKuhcGL/qLfDfzTUseQ84/TldGe4D
-	vyt0KWi/6Rd4GzvjwcMZYj3kCCce4unRn70z3MJoW8hXNXlDl3J8
-X-Google-Smtp-Source: AGHT+IEmOBhZjqMgFca4qw/6mMXRhzelSikcLVjZYKzNw0aKx+OmvlvhRngoIFIQUR84hPVcrzzQlQ==
-X-Received: by 2002:a05:6a21:3284:b0:1a1:82e0:3ad4 with SMTP id yt4-20020a056a21328400b001a182e03ad4mr349882pzb.7.1709929673633;
-        Fri, 08 Mar 2024 12:27:53 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709930165; x=1710534965;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5KLgrDjMCRpuO7WBfnDia6NDpj8Onfdt2Teu/Yvj1Oo=;
+        b=bt7hB+TKQ9+Xge1k7d+LjbrFq7eLLip0YgyB6DknaNi6PT24BqUegQuCB/gXl4ebcF
+         cYDBNcQLrKtiMNHJV9CA+kohNwrNwENfYVFP4kprOlp0l1xFxLpON/lhr6eJ6sWkIe8t
+         SXy/y/xB6Gpy3brEtL0Cug+i6T3rAkucdkexrp7Vi27Cj7kuUyK401pCQRfmneEHqPLF
+         /1fg8WhOy0eduBM7WqC0KTJWbiQbaJ1hfUFo8Vu2vAx/hl1fRXg6nbZVHbS7EfLwQ8On
+         auzN5BEfhFV6NbcBzqgTp1QzqEQtwMsreMHTnfqdqu081izQ8i/nWqm8N2NIiSJ6uTvL
+         b2Gg==
+X-Forwarded-Encrypted: i=1; AJvYcCXDoKTRN8LvBAAVNpnuwV542No8sWU3mf8Y3512KPbLHmAUhP1ZKBpLvbcA8f+uQVnZHN8pBFO9Y91afDXM7qhd31B7fHQiG/azWd9c0RlR3zPQtakYYjuukY9IYoGrbGAy4uQvnMKyg8wMNYoNoXQogHRxVcAS9HR3GNY0yz/y9Q==
+X-Gm-Message-State: AOJu0YzWwdP4GW/BbouVN9rks3tKUWMMjCm/p4OhEKn8pIRTyIjUBTPH
+	8lHdWiGY2WfnIdNSy6IOqF2RhVct3riEcAXwXIqsemMeI4dWYi4B
+X-Google-Smtp-Source: AGHT+IGPH4hm9U5ivGtNFAgXMPMjIph/C46hT5a647tMtgPEKrAlzMz9Ca/0FZJBDPhbjbwTce6o9Q==
+X-Received: by 2002:a05:6a21:3985:b0:1a1:4c8f:fdc0 with SMTP id ad5-20020a056a21398500b001a14c8ffdc0mr101628pzc.43.1709930165026;
+        Fri, 08 Mar 2024 12:36:05 -0800 (PST)
 Received: from gmail.com ([192.184.166.229])
-        by smtp.gmail.com with ESMTPSA id bm24-20020a656e98000000b005cfbdf71baasm84122pgb.47.2024.03.08.12.27.52
+        by smtp.gmail.com with ESMTPSA id r2-20020aa79ec2000000b006e31f615af6sm114076pfq.17.2024.03.08.12.36.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Mar 2024 12:27:53 -0800 (PST)
-Date: Fri, 8 Mar 2024 12:27:50 -0800
+        Fri, 08 Mar 2024 12:36:04 -0800 (PST)
+Date: Fri, 8 Mar 2024 12:36:02 -0800
 From: Calvin Owens <jcalvinowens@gmail.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Song Liu <song@kernel.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Mike Rapoport <rppt@kernel.org>,
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
 	Naveen N Rao <naveen.n.rao@linux.ibm.com>,
 	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
 	David S Miller <davem@davemloft.net>,
 	Thomas Gleixner <tglx@linutronix.de>, bpf@vger.kernel.org,
 	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC][PATCH 0/4] Make bpf_jit and kprobes work with
- CONFIG_MODULES=n
-Message-ID: <Zet0xm0Nf2k9O7U9@gmail.com>
+Subject: Re: [RFC][PATCH 3/4] kprobes: Allow kprobes with CONFIG_MODULES=n
+Message-ID: <Zet2ssRGrOLVqZq-@gmail.com>
 References: <cover.1709676663.git.jcalvinowens@gmail.com>
- <ZejhcP_r5QJZcS6j@bombadil.infradead.org>
- <Zej66vQInnDYgpNy@gmail.com>
- <CAPhsuW4UA9uCRK7EVCJGUvmroQhZZZiVdXotri4oO7+WRQr3sg@mail.gmail.com>
- <20240308115004.22fe5bb7ecea4080aa2ef383@kernel.org>
- <CAB=NE6V+HroMv4vNBJkCu_6Sbu08mPh0ZBadDEQxOKWoKoBk1w@mail.gmail.com>
+ <2af01251ca21d79fa29092505d192f1f1b746cff.1709676663.git.jcalvinowens@gmail.com>
+ <ZelrH2hiUmaomDv2@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -85,72 +79,76 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAB=NE6V+HroMv4vNBJkCu_6Sbu08mPh0ZBadDEQxOKWoKoBk1w@mail.gmail.com>
+In-Reply-To: <ZelrH2hiUmaomDv2@kernel.org>
 
-On Thursday 03/07 at 18:55 -0800, Luis Chamberlain wrote:
-> On Thu, Mar 7, 2024 at 6:50 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > On Wed, 6 Mar 2024 17:58:14 -0800
-> > Song Liu <song@kernel.org> wrote:
-> >
-> > > Hi Calvin,
-> > >
-> > > It is great to hear from you! :)
-> > >
-> > > On Wed, Mar 6, 2024 at 3:23 PM Calvin Owens <jcalvinowens@gmail.com> wrote:
-> > > >
-> > > > On Wednesday 03/06 at 13:34 -0800, Luis Chamberlain wrote:
-> > > > > On Wed, Mar 06, 2024 at 12:05:07PM -0800, Calvin Owens wrote:
-> > > > > > Hello all,
-> > > > > >
-> > > > > > This patchset makes it possible to use bpftrace with kprobes on kernels
-> > > > > > built without loadable module support.
-> > > > >
-> > > > > This is a step in the right direction for another reason: clearly the
-> > > > > module_alloc() is not about modules, and we have special reasons for it
-> > > > > now beyond modules. The effort to share a generalize a huge page for
-> > > > > these things is also another reason for some of this but that is more
-> > > > > long term.
-> > > > >
-> > > > > I'm all for minor changes here so to avoid regressions but it seems a
-> > > > > rename is in order -- if we're going to all this might as well do it
-> > > > > now. And for that I'd just like to ask you paint the bikeshed with
-> > > > > Song Liu as he's been the one slowly making way to help us get there
-> > > > > with the "module: replace module_layout with module_memory",
-> > > > > and Mike Rapoport as he's had some follow up attempts [0]. As I see it,
-> > > > > the EXECMEM stuff would be what we use instead then. Mike kept the
-> > > > > module_alloc() and the execmem was just a wrapper but your move of the
-> > > > > arch stuff makes sense as well and I think would complement his series
-> > > > > nicely.
-> > > >
-> > > > I apologize for missing that. I think these are the four most recent
-> > > > versions of the different series referenced from that LWN link:
-> > > >
-> > > >   a) https://lore.kernel.org/all/20230918072955.2507221-1-rppt@kernel.org/
-> > > >   b) https://lore.kernel.org/all/20230526051529.3387103-1-song@kernel.org/
-> > > >   c) https://lore.kernel.org/all/20221107223921.3451913-1-song@kernel.org/
-> > > >   d) https://lore.kernel.org/all/20201120202426.18009-1-rick.p.edgecombe@intel.com/
-> > > >
-> > > > Song and Mike, please correct me if I'm wrong, but I think what I've
-> > > > done here (see [1], sorry for not adding you initially) is compatible
-> > > > with everything both of you have recently proposed above. How do you
-> > > > feel about this as a first step?
-> > >
-> > > I agree that the work here is compatible with other efforts. I have no
-> > > objection to making this the first step.
-> > >
-> > > >
-> > > > For naming, execmem_alloc() seems reasonable to me? I have no strong
-> > > > feelings at all, I'll just use that going forward unless somebody else
-> > > > expresses an opinion.
-> > >
-> > > I am not good at naming things. No objection from me to "execmem_alloc".
-> >
-> > Hm, it sounds good to me too. I think we should add a patch which just
-> > rename the module_alloc/module_memfree with execmem_alloc/free first.
+On Thursday 03/07 at 09:22 +0200, Mike Rapoport wrote:
+> On Wed, Mar 06, 2024 at 12:05:10PM -0800, Calvin Owens wrote:
+> > If something like this is merged down the road, it can go in at leisure
+> > once the module_alloc change is in: it's a one-way dependency.
+> > 
+> > Signed-off-by: Calvin Owens <jcalvinowens@gmail.com>
+> > ---
+> >  arch/Kconfig                |  2 +-
+> >  kernel/kprobes.c            | 22 ++++++++++++++++++++++
+> >  kernel/trace/trace_kprobe.c | 11 +++++++++++
+> >  3 files changed, 34 insertions(+), 1 deletion(-)
 > 
-> I think that would be cleaner, yes. Leaving the possible move to a
-> secondary patch and placing the testing more on the later part.
+> When I did this in my last execmem posting, I think I've got slightly less
+> ugly ifdery, you may want to take a look at that:
+> 
+> https://lore.kernel.org/all/20230918072955.2507221-13-rppt@kernel.org
 
-Makes sense to me.
+Thanks Mike, I definitely agree. I'm annoyed at myself for not finding
+your patches, I spent some time looking for prior work and I really
+don't know how I missed it...
+
+> > diff --git a/arch/Kconfig b/arch/Kconfig
+> > index cfc24ced16dd..e60ce984d095 100644
+> > --- a/arch/Kconfig
+> > +++ b/arch/Kconfig
+> > @@ -52,8 +52,8 @@ config GENERIC_ENTRY
+> >  
+> >  config KPROBES
+> >  	bool "Kprobes"
+> > -	depends on MODULES
+> >  	depends on HAVE_KPROBES
+> > +	select MODULE_ALLOC
+> >  	select KALLSYMS
+> >  	select TASKS_RCU if PREEMPTION
+> >  	help
+> > diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> > index 9d9095e81792..194270e17d57 100644
+> > --- a/kernel/kprobes.c
+> > +++ b/kernel/kprobes.c
+> > @@ -1556,8 +1556,12 @@ static bool is_cfi_preamble_symbol(unsigned long addr)
+> >  		str_has_prefix("__pfx_", symbuf);
+> >  }
+> >  
+> > +#if IS_ENABLED(CONFIG_MODULES)
+> >  static int check_kprobe_address_safe(struct kprobe *p,
+> >  				     struct module **probed_mod)
+> > +#else
+> > +static int check_kprobe_address_safe(struct kprobe *p)
+> > +#endif
+> >  {
+> >  	int ret;
+> >  
+> > @@ -1580,6 +1584,7 @@ static int check_kprobe_address_safe(struct kprobe *p,
+> >  		goto out;
+> >  	}
+> >  
+> > +#if IS_ENABLED(CONFIG_MODULES)
+> 
+> Plain #ifdef will do here and below. IS_ENABLED is for usage withing the
+> code, like
+> 
+> 	if (IS_ENABLED(CONFIG_MODULES))
+> 		;
+> 
+> >  	/* Check if 'p' is probing a module. */
+> >  	*probed_mod = __module_text_address((unsigned long) p->addr);
+> >  	if (*probed_mod) {
+> 
+> -- 
+> Sincerely yours,
+> Mike.
