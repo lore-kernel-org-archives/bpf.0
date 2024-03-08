@@ -1,116 +1,170 @@
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D15EA2C699
-	for <bpf@vger.kernel.org>; Fri,  8 Mar 2024 03:53:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820532C190;
+	Fri,  8 Mar 2024 03:58:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709869986; cv=none; b=RxvlOAyNvH223pnRyvQ/ZyI3rg7bYKuphHhUanCsLaiDwwAnkqMeOD0GtsOZPzsr03wYAHNkW4Z40js7ZjGFEMMKVzFFljHlR101Wku9aa2X8/Cn3mScLuJwKNQE8tQreQVcNeIFkyAEZ8/G0ni4jVSyO4c6TN/jsdwXv/Mfh2o=
+	t=1709870312; cv=none; b=jE+T3TVAaPGExfSWnw0azJsuKJv6Bjo+gI36j3pWmCSKe4ARCHTLXDsgj4JP3sjbwK8SLd38XPcNSv/m2BuQducyNYDZyGxZIqXLlpcTcQHV0eD51T5mRDnSWpe85OIp17ysvLqxuQ7eE3KVPts7BGaS2Qw+ohIVEqxv59smoKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709869986; c=relaxed/simple;
-	bh=nQBQRrvHoysHynF+mTt73tPJEIZFv4JnnmX+dawqxUI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UGX+nNL4FnNIlPcBILiGHjRHwEeQV3GtbJGXcWodsxH5MtMT483Q7mVOitrq9/FdWrYd0+FrCDfIB2d0IHS1hzHIgKeq35pZ03OqyVDl0ra7zXHqrrCvs4M3Z8Aun2PWz2O4sY0XiIX62uGDZxxAW4TdwMa9HU8U6C9vCyP+CNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CZRJNNsU; arc=none smtp.client-ip=209.85.222.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709870312; c=relaxed/simple;
+	bh=mF6Wbp6MtxfNFDHq0iHrXjjYNWZxisqag9vARhbWvOU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=aKAPJFYD9DEFLLVE4606nXAd8E8OxP0B5e30PgkuP9WQk26yef/Lj4H8OIVd/PflCyZlyWEZjTE1w90LkK9HjdMXqCFyHZtOszITWqhhg0AhoR6QlXF0+tG/p8xz3o1k1FdFKCfWoCk1Y7RuhFuz2gwJu3tQ2IO6cXm9FwMgva4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZADXQRtg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CZRJNNsU"
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-7d995bd557eso927556241.0
-        for <bpf@vger.kernel.org>; Thu, 07 Mar 2024 19:53:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709869983; x=1710474783; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nQBQRrvHoysHynF+mTt73tPJEIZFv4JnnmX+dawqxUI=;
-        b=CZRJNNsUOtD5tdjkkoBZyoKWBSMAu4OtuVhw5+vtKdXtrKvzpC2GUNkDbqppsdBwFZ
-         LguluaQbh+s3rLRF+Xu9Lje9zEeux9mvnpdsL5U4+h4mTY1KDlZ+7fdC0KOkoCKq+atN
-         2hqK16N4IQg8MCCj2anbRgJiSCNDxfzQK2bdqfBCncfttpyVi17B0vhDejLJzS6PDvni
-         zDbgJ6Qp9dnkKc7NwjmP+ev04iEUYpdU4vWEJSu5EZ/KFPGV/Sgu8hC0fyb5o+bjVQ6m
-         9OQaOdbIG5ilhuau2Dj59ZDAxJDylwJTR5Ljnj7objUUDX43k7jYtBXSg8vJ11T/mzz1
-         N2Kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709869983; x=1710474783;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nQBQRrvHoysHynF+mTt73tPJEIZFv4JnnmX+dawqxUI=;
-        b=VcNoyImTLftGWidazxr3hMbs98v8xF4U4UbB8colP4y6hymqdhG+dRTWa/ycBRrxZs
-         VpboJ3dv0+8BLJdVSUtDxbc0futHoLBC5IluVLwxn/eW3JN3FAFh0NKeRShM54yVSP3Y
-         uuBub1u2UlA5O+uWtR90MPrL3SYr3F7k4r3dmeXW+WkANKTRpvEHcEOJ/YARYGf2KFYM
-         r3dnkDxYR1zk7T+zy3JIcvHEQ+WwbzdN1EFwPJCsct1vL6kqZcDUpK43T82dolmFRGHn
-         ef2fnF5bTFS8Uef8j3s+LNT8qZSfFdbVzvMvKKEFkcppJR9EztHyq3/Tvgu6i5ITDs8b
-         OJQg==
-X-Forwarded-Encrypted: i=1; AJvYcCXV3pp4BELGASvpmcZ9oWRxCIS+b3iJXY6esc9crU05msUU2Bomi4wb3ftCV5lYJkUFavAV+3dFDI69QT/13B9EKrSg
-X-Gm-Message-State: AOJu0YweMUF0bjhDmjzuZTv6hX4iA+J4mbSV4bBemRdyvncTGNj/t+Se
-	EeSs72G5XMKKpmgFq49lY1T5wofUXIDc1Mh/ha68pbmj4nWdXkMDdlHv8J12fuYH09Ahoz22fEa
-	UeLY9kf8RU+bGay3CTD4T2sqqNyE=
-X-Google-Smtp-Source: AGHT+IG61gQBE4BTtN2uiusA9UVGstZeoSjwYUq4mM9Bpg7oK/SKNSofZ+XGxf44Saj6D6f5GdM7yM3YllcS45kykLE=
-X-Received: by 2002:a05:6102:32d1:b0:473:c24:7b3a with SMTP id
- o17-20020a05610232d100b004730c247b3amr1936628vss.10.1709869983686; Thu, 07
- Mar 2024 19:53:03 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZADXQRtg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCA81C433F1;
+	Fri,  8 Mar 2024 03:58:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709870312;
+	bh=mF6Wbp6MtxfNFDHq0iHrXjjYNWZxisqag9vARhbWvOU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ZADXQRtggZVF7jCXRnr/Nx++UqGw2O1E+U/KttSTtzSSlM9bBjttGEo/A8hRic7ge
+	 O+gDFK9MJBHmJ2YDam/9YZE3gp0xxBazL1mTi5MDwug/eJk53dwV/etCOw6KZlAWuN
+	 2i1Oe8pKYSCdgSopwQohIoatN4yPvCX5Cuzbnr/d5jvVAjw1Ie2U1uJLT8OtOKVyTs
+	 N5lwkQbIk4pRTkVTCTO3QA4II1m8BzPZ9ti7U330EoXvcxzor4u0v+kBt/tUSkRAKp
+	 tt8z4/H4M6CWk2MTdlJfmcAQM/5mZHnYRX7fG89CTjTzKp4ec7OLIdHAisaNLAPPMH
+	 kRchFPzFcbV0A==
+Date: Thu, 7 Mar 2024 19:58:28 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>, Richard Henderson
+ <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+ Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, Willem de Bruijn
+ <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, Sumit
+ Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
+ <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
+ Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
+ <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, Kaiyuan
+ Zhang <kaiyuanz@google.com>
+Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf
+ to netdevice
+Message-ID: <20240307195828.183a76c2@kernel.org>
+In-Reply-To: <20240305020153.2787423-6-almasrymina@google.com>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+	<20240305020153.2787423-6-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAM_iQpXzAYFES62Cbj8PoGqr_OW=R+Y-ac=6s3kmp5373R7RzQ@mail.gmail.com>
- <20240304095947.GB123222@linux.alibaba.com>
-In-Reply-To: <20240304095947.GB123222@linux.alibaba.com>
-From: Cong Wang <xiyou.wangcong@gmail.com>
-Date: Thu, 7 Mar 2024 19:52:52 -0800
-Message-ID: <CAM_iQpXKi3tYb+5O=NRi_C-eGCRYiZgk96=egFaKAPa3KX8joA@mail.gmail.com>
-Subject: Re: [LSF/MM/BPF TOPIC] Inter-VM Shared Memory Communications with eBPF
-To: dust.li@linux.alibaba.com
-Cc: lsf-pc@lists.linux-foundation.org, bpf <bpf@vger.kernel.org>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	"a.mehrab@bytedance.com" <a.mehrab@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 4, 2024 at 1:59=E2=80=AFAM Dust Li <dust.li@linux.alibaba.com> =
-wrote:
->
-> On Fri, Feb 23, 2024 at 03:05:59PM -0800, Cong Wang wrote:
->
-> Hi Cong,
->
-> This is a good topic !
-> We have proposed another solution to accelerate Inter-VM tcp/ip communica=
-tion
-> transparently within the same host based on SMC-D + virtio-ism
-> https://lists.oasis-open.org/archives/virtio-comment/202212/msg00030.html
->
-> I don't know, can we do better with your proposal ?
+On Mon,  4 Mar 2024 18:01:40 -0800 Mina Almasry wrote:
+> +	if (!dev || !dev->netdev_ops)
+> +		return -EINVAL;
 
-We knew SMC and it _is_ actually why I have this eBPF based proposal.
-Sorry for not providing more details here, since I just want to keep
-this proposal
-brief and will certain have all the details in our presentation if our
-proposal gets
-accepted.
+too defensive
 
-The main problem of SMC is it is not fully transparent, LD_PRELOAD could
-work for most cases but not all. Therefore, I don't think introducing any n=
-ew
-socket family is in the right direction at all.
+> +	if (!dev->netdev_ops->ndo_queue_stop ||
+> +	    !dev->netdev_ops->ndo_queue_mem_free ||
+> +	    !dev->netdev_ops->ndo_queue_mem_alloc ||
+> +	    !dev->netdev_ops->ndo_queue_start)
+> +		return -EOPNOTSUPP;
+> +
+> +	new_mem = dev->netdev_ops->ndo_queue_mem_alloc(dev, rxq_idx);
+> +	if (!new_mem)
+> +		return -ENOMEM;
+> +
+> +	err = dev->netdev_ops->ndo_queue_stop(dev, rxq_idx, &old_mem);
+> +	if (err)
+> +		goto err_free_new_mem;
+> +
+> +	err = dev->netdev_ops->ndo_queue_start(dev, rxq_idx, new_mem);
+> +	if (err)
+> +		goto err_start_queue;
+> +
+> +	dev->netdev_ops->ndo_queue_mem_free(dev, old_mem);
 
-(There are some other problems with SMC too, for instance, it requires more
-than a 3-way handshake.)
+nice :)
 
-And I don't think there is any conflict or overlap here at all. Our eBPF-ba=
-sed
-solution relies on the existing inter-VM shared memory, no matter it is ivs=
-hmem
-or virtio-ism. We don't propose any new way of sharing memory, what we
-propose is merely using an existing one and building our solution on top.
+> +	rxq = __netif_get_rx_queue(dev, rxq_idx);
+> +
+> +	if (rxq->binding)
 
-In fact, we believe our solution can be on top of your virtio-ism,
-since it is just
-another flat memory region from our point of view.
+nit: a few places have an empty line between call and error check
 
-Hope this helps.
+> +		return -EEXIST;
 
-Thanks.
+> +	if (!capable(CAP_NET_ADMIN))
+> +		return -EPERM;
+
+this can be a flag on the netlink policy, no?
+
+	flags: [ admin-perm ]
+
+on the op
+
+> +	dmabuf = dma_buf_get(dmabuf_fd);
+> +	if (IS_ERR_OR_NULL(dmabuf))
+> +		return -EBADFD;
+
+
+> +	hdr = genlmsg_put(rsp, info->snd_portid, info->snd_seq,
+
+genlmsg_iput()
+
+> +static int netdev_netlink_notify(struct notifier_block *nb, unsigned long state,
+> +				 void *_notify)
+> +{
+> +	struct netlink_notify *notify = _notify;
+> +	struct netdev_dmabuf_binding *rbinding;
+> +
+> +	if (state != NETLINK_URELEASE || notify->protocol != NETLINK_GENERIC)
+> +		return NOTIFY_DONE;
+> +
+> +	rtnl_lock();
+> +
+> +	list_for_each_entry(rbinding, &netdev_rbinding_list, list) {
+> +		if (rbinding->owner_nlportid == notify->portid) {
+> +			netdev_unbind_dmabuf(rbinding);
+> +			break;
+> +		}
+> +	}
+> +
+> +	rtnl_unlock();
+> +
+> +	return NOTIFY_OK;
+> +}
+
+While you were not looking we added three new members to the netlink
+family:
+
+ * @sock_priv_size: the size of per-socket private memory
+ * @sock_priv_init: the per-socket private memory initializer
+ * @sock_priv_destroy: the per-socket private memory destructor
+
+You should be able to associate state with a netlink socket
+and have it auto-destroyed if the socket closes.
+LMK if that doesn't work for you, I was hoping it would fit nicely.
+
+I just realized now that the code gen doesn't know how to spit
+those members out, but I'll send a patch tomorrow, you can hack
+it manually until that gets in.
