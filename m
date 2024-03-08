@@ -1,89 +1,121 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C892855C27;
-	Fri,  8 Mar 2024 11:23:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91CA656444;
+	Fri,  8 Mar 2024 12:07:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709897026; cv=none; b=GGxNyHTL4nDotMi5VUXn2NHOzcygSaIXuoc67CZaFBERYIxTMPp7pKqm1RWN2IWvXaTqIIDCvtQDKLJJPgsK+y/Hc6+xf9ol+Y+CCTEbzX48CETb05hi08hhIx4PIVf5tkDlv6aJMDFIE3UW8BiVECSosDO4fEQd1qY9+vCVnVA=
+	t=1709899651; cv=none; b=Dl/ijSDxityaQrwJYc644h/gr5YVHhNE0PTuJEL6l345ASzB53KpJPkhCuxd8e0JRl3E2DyGhAaO9+YuB4OZCwIWz4Z+PGaMw8tUX4DKHQ0L+F7QZUi18mkPzNiK4+4UnPZrU2XUSsLb7Zmd0ezYPO/a90fSGQVhmOoeXz1c4BQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709897026; c=relaxed/simple;
-	bh=4ppzpC6QfKVkA0N3umVzKTv2UWQkb0gMKFhOE3q2BRw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WLrbTK3EHCQFoBMCfckKcJVklAN1O3gcPTtOEywYTiDxigI0T3IhGKWmwiqi2J+lSpx56avKsbQydOvL1Qx54BwmF1taBuLBDbWSibbuUo091Are31GNTS+MzseGqFxodCksJ2WMm2z70Ub4qnZCjU3bGSASII+uFyC73Qp28bQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LG/P5tQB; arc=none smtp.client-ip=209.85.216.49
+	s=arc-20240116; t=1709899651; c=relaxed/simple;
+	bh=xpgMoZKks9BX+yecW9htcqCKyTMNBB0o2ne0EdbkE/s=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=O13bVdE+tmkpR+cQDYOrlJxmVkC+4EN4SrysTzggrAN1ptFF4e6Pfb99tJuCHEmLvrQz3VrnDbDNCKmV4TPkNl4czrnOzaDIXx/MdJ4ENGAmW4ikkBroQ8Cpf6J7o28sg0IoW83sSyTWoHBYyyQDK0zSEmlW5Kv7i0nMA0lamlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cgv0mAg3; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LG/P5tQB"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-29a74c88f74so568012a91.3;
-        Fri, 08 Mar 2024 03:23:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cgv0mAg3"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-33e2248948bso1285658f8f.0;
+        Fri, 08 Mar 2024 04:07:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709897024; x=1710501824; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4ppzpC6QfKVkA0N3umVzKTv2UWQkb0gMKFhOE3q2BRw=;
-        b=LG/P5tQBzzP0jI4JaUaja7pRksBrQyXfqjLhuku0PvepJ08iTVhvwWaOuOzeUNK62I
-         m79lieub9Wm3mxZr0FSiQXgLkSVUHDdTf+CUBrKrjl3teQ7m3KVEMfHwfz16W0GZbnDY
-         oXSymh/BONAVvvt49TxUcncHqyF652Hv7FwJmYWIDoki1ltrhOyCQk3YKhS1MNwvHdyE
-         vNGq1/Qu1c33cx6ZyooGl2QQ3J1A/A1ItsfQWF1DHwxy4klMyqzG35Nd855kBrGe3pJG
-         g6nETWQCYdbp5jI1Pye1c4ZEm2T8bldy1DcM2wYzYqG2gXLe127Gz11yMiedacrZp+11
-         YhXw==
+        d=gmail.com; s=20230601; t=1709899648; x=1710504448; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bJ1KNA3ECIGK6xtavH6nbPGIymjpc0HF4am1jvZwZlA=;
+        b=Cgv0mAg3MJeTFRGnDVaJewgI//5c0j44A9JS9B5taTmEC1Uu0iNFQgx25UO+FS7qfe
+         UKRrzfVXOoKHmT/erWzrR5GVceaPV1BJwr4L86TInU43ZwtKswaK05naC4WB1jOvmLPW
+         tDoB29ArlNmYJopAvS2W7Q0RsEiPFLWvFMqPhFSXAf+cihw12m7Jfnqs7pSuA9Nyd2NH
+         zspERffsMTgY2VHRBzjWZ7EqPPdYAVlsAnqF/auRBce3v7RLPj3UcpqBNLm26MqI/cRb
+         on9Hbn3KoXCX4joLIQAtE2CCE16Gaie/2OsMdtNQApcep6qBxFotrMu1ba8gDMeqEIYr
+         k+fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709897024; x=1710501824;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4ppzpC6QfKVkA0N3umVzKTv2UWQkb0gMKFhOE3q2BRw=;
-        b=j8wmE9QAzU1Ht7dgQ0nT7szfJA8tbUBJwmUqT17MR8AZY9JeRyt15DtbOZnSRh4y7u
-         qsIo+epWT/dQlEzrtVGcF+0oA6OyHl008IODnlmq4K6ZpmmCpku/71UREcUkxbfL9MlB
-         CHkfvMalgbc3w7C1eewr88gzYQii1Q/ox0MVkmQO99pDTAVP530E0bplNC5our83oJww
-         Y3/+om4XHt3YavFzPM79QlxoPT2sq4BeNp3kPh5Lo7S8w3nD0M1widVQqbujLoJPHicr
-         6WkrkESIOjE25kLaQS1WNDu8jwDsBkErGHjkc2vZsIdJ8ShH1XCFzo3nfPkw+k+Rvu1B
-         B7/g==
-X-Forwarded-Encrypted: i=1; AJvYcCWc7887XbWMc7xOLuUR1mobdj41gTfXCdzP4KwqKhHm3GfMfvaTxztytXDbF4QM1X0IS+QPIobdtsribwjFhBlGI3+IZN9o4mI5+felAwyNinjgGgksM3ZnbLE/EDni
-X-Gm-Message-State: AOJu0YyYeTzC0l3u2UjwYJ06wikiiJnoPinRmdCdx+QP4Lm5mxSJWOS3
-	FTg88TXuiUdgbePJjjLIxmej2iIdnSpUdO/+JI6uw6KWrkqvJoln4kyRBJOarJb+5hx8CyOdmff
-	Kg41aXiJ+PL3mxb0ZEpCHLrdv5Ng=
-X-Google-Smtp-Source: AGHT+IHWByPgN5/INLRj9h9f1n2iuWq+SGjq1T9BwyrfIASWGOtYz+mpsjMb+IvHdHZ0B4n4v7Dr1TD6SKe9a9sL9b0=
-X-Received: by 2002:a17:90a:f40f:b0:29b:b05e:3a5b with SMTP id
- ch15-20020a17090af40f00b0029bb05e3a5bmr1221987pjb.47.1709897024038; Fri, 08
- Mar 2024 03:23:44 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709899648; x=1710504448;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bJ1KNA3ECIGK6xtavH6nbPGIymjpc0HF4am1jvZwZlA=;
+        b=Z6CU8GM331ry6i31reldYjRfoDAbHh3ul3ccNxpmlO8LRsRkeBQ+SgqrX8bxgsY7E/
+         PkU7gmkpv+a59rNJ/qkrnQeQbMICsJFcYsXJlU4l1SUlC5FTV2L2B+sqjssIE1R6jOA5
+         XyIcKKrN7ydDiFTZJZbMVYETlvY2xuG1E3gZuDTo+HS4Pb7c/PfG5fZ2awLgREwv9dGM
+         YWitCMolUw7VOBvghf5+jyF/YIKFai6YJrtDHqKckvYVWmt0T26UvFlIuYum7LE+XSgY
+         L9pGvrUJ2hQ23C4Ff06gZVBj/RkWNf7XhA/9q7kv2oUW7dUxONe8nbde8j58vyxV5nPt
+         zcHA==
+X-Forwarded-Encrypted: i=1; AJvYcCVDu8WZSNlxhkVzg5uJN6O9UwSdML7XXRaTTniApbvX86XJpw5B+faaX+0oN0BVXFibPbCI1XdghtL+wehZ4x2GOjJau0f6Kqzctf2nmiJjYunRIL31KFPeLmiqRM5VnxU3
+X-Gm-Message-State: AOJu0YyArWxppgDnKw4ubL9Yi1Yeqw7P/qanu0pDNe2pWbDCDccFYGSW
+	r+eBJ5D+6zOe7Xux/nKcQssijLpexpblZYId1skM7CB65mF50kk7
+X-Google-Smtp-Source: AGHT+IEYmiZPNYb4tb5aFQEwdgg7/WvYPJsIJNgKu5Iem/TEUBVrAivU1wZ85SOt2jPziDMQcIyaxg==
+X-Received: by 2002:adf:da48:0:b0:33e:1f94:7aa5 with SMTP id r8-20020adfda48000000b0033e1f947aa5mr15921901wrl.54.1709899647638;
+        Fri, 08 Mar 2024 04:07:27 -0800 (PST)
+Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
+        by smtp.gmail.com with ESMTPSA id bs3-20020a056000070300b0033d4c3b0beesm23297364wrb.19.2024.03.08.04.07.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 08 Mar 2024 04:07:26 -0800 (PST)
+From: Puranjay Mohan <puranjay12@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: puranjay12@gmail.com
+Subject: [PATCH bpf-next] bpf: cap BPF_PROG_PACK_SIZE to 2MB * num_possible_nodes()
+Date: Fri,  8 Mar 2024 12:07:12 +0000
+Message-Id: <20240308120712.88122-1-puranjay12@gmail.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CANiq72ka4rir+RTN2FQoT=Vvprp_Ao-CvoYEkSNqtSY+RZj+AA@mail.gmail.com>
- <CAADnVQL1Zt5dwFv9HPDKDuPEKa6V7gb5j-D-LPWv47hC6mtwgw@mail.gmail.com> <CAADnVQLP=dxBb+RiMGXoaCEuRrbK387J6B+pfzWKF_F=aRgCPQ@mail.gmail.com>
-In-Reply-To: <CAADnVQLP=dxBb+RiMGXoaCEuRrbK387J6B+pfzWKF_F=aRgCPQ@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 8 Mar 2024 12:23:31 +0100
-Message-ID: <CANiq72kh-OcUsoCXD-mPYarTyHVv7pd83zgHxMKZWT8Qbb6CKg@mail.gmail.com>
-Subject: Re: vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Christoph Hellwig <hch@infradead.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	linux-mm <linux-mm@kvack.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 8, 2024 at 4:49=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> Ok. I think I figured it out.
-> Please try the attached patch.
+On some architectures like ARM64, PMD_SIZE can be really large in some
+configurations. Like with CONFIG_ARM64_64K_PAGES=y the PMD_SIZE is
+512MB.
 
-On top of today's next-20240308 for both arm64 and x86_64 under QEMU:
+Use 2MB * num_possible_nodes() as the upper limit for allocations done
+through the prog pack allocator.
 
-Tested-by: Miguel Ojeda <ojeda@kernel.org>
+Fixes: ea2babac63d4 ("bpf: Simplify bpf_prog_pack_[size|mask]")
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Closes: https://lore.kernel.org/all/7e216c88-77ee-47b8-becc-a0f780868d3c@sirena.org.uk/
+Suggested-by: Song Liu <song@kernel.org>
+Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+---
+ kernel/bpf/core.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Thanks!
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 134b7979f537..83a3b6964e54 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -893,8 +893,17 @@ static LIST_HEAD(pack_list);
+  * CONFIG_MMU=n. Use PAGE_SIZE in these cases.
+  */
+ #ifdef PMD_SIZE
++/*
++ * PMD_SIZE is really big for some archs. It doesn't make sense to
++ * reserve too much memory in one allocation. Cap BPF_PROG_PACK_SIZE to
++ * 2MiB * num_possible_nodes().
++ */
++#if PMD_SIZE <= (1 << 21)
+ #define BPF_PROG_PACK_SIZE (PMD_SIZE * num_possible_nodes())
+ #else
++#define BPF_PROG_PACK_SIZE ((1 << 21) * num_possible_nodes())
++#endif
++#else
+ #define BPF_PROG_PACK_SIZE PAGE_SIZE
+ #endif
+ 
+-- 
+2.40.1
 
-Cheers,
-Miguel
