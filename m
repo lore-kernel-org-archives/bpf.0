@@ -1,107 +1,79 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D47F15AF;
-	Fri,  8 Mar 2024 22:44:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FF281DA52;
+	Fri,  8 Mar 2024 23:00:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709937856; cv=none; b=BQG/41e3u7aGdvmGO49g4GAA8EkcT5VJ76tl6uVEaiA7WVtYm/w4dH+gzs2R/Tfa18ZFXDZhjQXq6G4soaNGR9fMS7h9NGllaqpBrfmzclDo7ICyWqyUAG/c/ostWsKQTr/caSDyTTJsNKOLdW6yXtUCIrfcEzcEh70a3rXMXoc=
+	t=1709938832; cv=none; b=deBS3RscFdQyp+nloHBA0McMx+6fgBAlBbS2EaRpSE0/SPK/AZQ8btxNroG7N1KyL+KuFh/YjFLipB+c5fGPN4SfvFviIEbDPMNgJ+nfxxSy0hqxpk8Bkeztcx5ENxa7gxGqL77+CqCKHB2Ubf6qoLrGdzlUER6H93z2L9kJVps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709937856; c=relaxed/simple;
-	bh=D3aJXRvY9D9HCzFxB6bg6tdOOq0PzsTOhGjNlR0CgaI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OHoGGBdDh3E+VO3IURuKrNDJ1HljDg3yJqGQy/N8Nn0j6YkPn/0nHLj3XlO7cjqO2CkhJZhrpHvnx0D5Fg8l8//2lExc28gg7V7547fweNBEW0+98szVnaikca8AHVhNFRB9oVnIWZiTHdhgFQylbMvvWxUD3N1Qi7iAyaxUZDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EtcCMkSr; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709938832; c=relaxed/simple;
+	bh=hgauyfs0CuOwwpnTgH32w9+9nxlVw5ECI9wjU6LA1Bc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=R3G+6xJThoUQLiNsYQiXp1k8I6J4Vkahd1ffMwZGPHL8dZNHlub1uRPRCUOCs3ctXiyuydy5QHOvdVx6roCB4lHLCIbD56nU6NJ/bX/WJpCdcBPBdErRLMYgpz789Rxzr7UI6OzoRrGvE3dNBK89UwPyJUsWm1AgjpOT4MA3ajg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=clS7HO8Q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EtcCMkSr"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-412fc5f5152so18985525e9.0;
-        Fri, 08 Mar 2024 14:44:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709937854; x=1710542654; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D3aJXRvY9D9HCzFxB6bg6tdOOq0PzsTOhGjNlR0CgaI=;
-        b=EtcCMkSrJOOeadMo41KtdLmZdRP2kCk7Z//IYYGFXTlbCZrNTR8SCTGvUvsZloDsFQ
-         Gr8T8jBsKvFew5Zpqp/hSvg7rW0Pr0kM/sbtBN1g7h83AZEUm2AjxExDu/jGeyI7en2u
-         MYDkTZ8qR5WuANMm3VHSlHS5jDtCxlKQ3qKP8JuGwJOx12NYDgBlqOSvDHx+noAKiZmr
-         R+Eu7r0h17DGurqnLnS2tDLLf9ss0JQ8ijh7Xzi0kFv1x5JTOTe4SDVP2GZXKNj6YSvj
-         cJcuDitmHwLGm5iW9FwU5dflP02KA+JfJpuQ/2c89603QkxecXShKG35moyX52+Xaktp
-         l2lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709937854; x=1710542654;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D3aJXRvY9D9HCzFxB6bg6tdOOq0PzsTOhGjNlR0CgaI=;
-        b=c/08NC1ZH4hTm4oBFuoKmiL6aZpK4QXyqhqAc1SIMNCYGL3gnAkNlxXZglu3BCcSE+
-         bhxtjsTFCbPL0cjizWuwmYe014Tj2qxGZlsUbZqk/dy87iJL+qzclKJ6T7aeN9UHhbn8
-         P26Lo60jk2PsrOtTak1LNhtYqkfB7Fy6bMWcAD6VwPc8YXjFiPYAa2q0sX9ErKqqehxr
-         glqVm0o9R2qk6tau4OHV9NpzM0rytdOxRBXXyoy12UAhlt4TZ5G+BvVdE/9OAuP9ZkFb
-         AnagcpFoKRZYFaOsdP2nwr27lNdux2MGPIoPQt6cPUI2nkj0J4omMRzIbrqf+H7VyPM8
-         k9qQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWFNpQtxU4CFMjVsvJdDYHilkIinpRRXXatMqPkeqztVC/U3DZj+Zc9R8yzCD03OzQpOrRQA1pp3pco7XqEO9FXZGFlSbgS9jgCQYRekeemOLiAaI8vM4+li1QSOPEs
-X-Gm-Message-State: AOJu0Yw/gbQ6oPnMpc9mDXP/5KPeo5140SZkdQc1cfvQidYcqF7mr7Yd
-	S+BgocgPYzChaRyttzaOkg/huJ5cLw56e7uneEc41oZIvaXBdtyvrtK+PevOJsCJPyV7rhFu6Nr
-	+UPMaOMZ9m7h/Q0Ruh5FzfRhisYE=
-X-Google-Smtp-Source: AGHT+IF29hP1nUphTx29aJJzjLnvSZ7w2MXv31LF0HDDrSpcFvBtG4aiKykokpKDa4jenS3QWggi3HNaLt+3GSV1b8w=
-X-Received: by 2002:a05:600c:b96:b0:412:ef25:aa91 with SMTP id
- fl22-20020a05600c0b9600b00412ef25aa91mr418338wmb.18.1709937853551; Fri, 08
- Mar 2024 14:44:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="clS7HO8Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 089B9C43390;
+	Fri,  8 Mar 2024 23:00:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709938832;
+	bh=hgauyfs0CuOwwpnTgH32w9+9nxlVw5ECI9wjU6LA1Bc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=clS7HO8QJuegGS/mU0gJ222MnoXamq8PSidpDEPLycBMlYYNyGOhAoniT96KB4z0k
+	 +bTdaFQ4KV4h0K2dnX2XhgcDBf+gkXlUspbZOgS4oW/Ta3UukAVfQI198R+whvcC+k
+	 a2mINw/UwFEOdekVv/bUpDO2RpgmF4FvFY0q6+0q8+rcr4dH2KN3xgxJSfcxZ8tKH7
+	 XVDXlJNyxnOQteDhzESy1Il4J7SZrcJNBwT3UKxYsi8IBZrB/0Q6kMrsad7w094tHy
+	 EP8C5PGkpRx8M+Obl/iHctjex7ARTN80oBsWffdG3ToIlLmuFd9GdY6VoRopspVMt5
+	 VGJDW+YdoNX/A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DB028C59A4C;
+	Fri,  8 Mar 2024 23:00:31 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CANiq72ka4rir+RTN2FQoT=Vvprp_Ao-CvoYEkSNqtSY+RZj+AA@mail.gmail.com>
- <CAADnVQL1Zt5dwFv9HPDKDuPEKa6V7gb5j-D-LPWv47hC6mtwgw@mail.gmail.com>
- <CAADnVQLP=dxBb+RiMGXoaCEuRrbK387J6B+pfzWKF_F=aRgCPQ@mail.gmail.com>
- <Zeso7eNj1sBhH5zY@infradead.org> <CAADnVQKQumV-0AxGLKX0jQEfa8Z2Bxx2yW8k_1OqGBnD-RqrbA@mail.gmail.com>
- <ZetEkyW1QgIKwfFz@infradead.org> <CAADnVQL4JAUz-p-X9aEggeKNpYUqJZrzQKO7N0dnohE0r7mdpg@mail.gmail.com>
- <ZetJ4xfopatYstPs@infradead.org> <CAADnVQJKPa+JUUKpW7gZehbFBYj3GPrbpd0NCj4xwkU2puObEw@mail.gmail.com>
-In-Reply-To: <CAADnVQJKPa+JUUKpW7gZehbFBYj3GPrbpd0NCj4xwkU2puObEw@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 8 Mar 2024 14:44:02 -0800
-Message-ID: <CAADnVQJeOc9Muki+-PUYc20-=1vRgkprbNL0zTc=Cz-T_iYkNQ@mail.gmail.com>
-Subject: Re: vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, linux-mm <linux-mm@kvack.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] arm64,
+ bpf: Use bpf_prog_pack for arm64 bpf trampoline
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170993883189.21366.2723021380774066449.git-patchwork-notify@kernel.org>
+Date: Fri, 08 Mar 2024 23:00:31 +0000
+References: <20240304202803.31400-1-puranjay12@gmail.com>
+In-Reply-To: <20240304202803.31400-1-puranjay12@gmail.com>
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, song@kernel.org, catalin.marinas@arm.com,
+ mark.rutland@arm.com, bpf@vger.kernel.org, kpsingh@kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ xukuohai@huaweicloud.com
 
-On Fri, Mar 8, 2024 at 9:53=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Mar 8, 2024 at 9:24=E2=80=AFAM Christoph Hellwig <hch@infradead.o=
-rg> wrote:
-> >
-> > On Fri, Mar 08, 2024 at 09:20:24AM -0800, Alexei Starovoitov wrote:
-> > > ok. Like the attached patch?
-> >
-> > Looks sensibe, but I think the powerpc callers of ioremap_page_range
-> > will need the same treatment.
->
-> Good point. Only one of the callers in arch/powerpc needs adjusting.
-> Found few other similar arch users.
-> See attached patch.
->
-> ioremap_page() in arch/arm/mm/ioremap.c is an interesting case.
-> It is EXPORT_SYMBOL, but there are no in-tree users.
-> I think we shouldn't apply checks to it,
-> since some out-of-tree module may fail.
-> I have no arm boards to test, I suggest we play safe than sorry.
+Hello:
 
-I double checked on my newly setup arm64 VM that the fix works.
-I believe the regression needs to be fixed today, but
-looks like Chritoph is out for today.
-So I can either revert the offending commit or
-apply the proposed fix to bpf-next.
-I'm going to do the latter soon if no one objects.
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Mon,  4 Mar 2024 20:28:03 +0000 you wrote:
+> We used bpf_prog_pack to aggregate bpf programs into huge page to
+> relieve the iTLB pressure on the system. This was merged for ARM64[1]
+> We can apply it to bpf trampoline as well. This would increase the
+> preformance of fentry and struct_ops programs.
+> 
+> [1] https://lore.kernel.org/bpf/20240228141824.119877-1-puranjay12@gmail.com/
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next] arm64, bpf: Use bpf_prog_pack for arm64 bpf trampoline
+    https://git.kernel.org/bpf/bpf-next/c/d6f98243392f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
