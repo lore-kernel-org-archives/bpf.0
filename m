@@ -1,201 +1,156 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA7F5B5A8
-	for <bpf@vger.kernel.org>; Fri,  8 Mar 2024 19:53:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D9EF5E065;
+	Fri,  8 Mar 2024 20:27:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709927618; cv=none; b=bPn23wi8Io3tumalA0D0zZjskSGbG8vDZyU+5640FOHtUrTw1PkFTwcaWZUHJWmS4zuVyKewsPNeWn8sUt5IV+G4B7BlMSm12pEn1eSizjwIhPKmHNni1hzpIJ1sDzAxHWwPQUn90Z1gFiN8DhFRNif8YNgEi6fvspxxvPAh1Z4=
+	t=1709929676; cv=none; b=qN3qp+Dv7sHxuXikiPyoQ8EEz2Ttx5Btccj9MZEXdfLgiHUzsQkWN/lAlp43J236Ct24YgHGxvezqAXXTRaT6UT2T81eujia/h5r+F/g92rRPWwuVlmtlI8FyN1I8rDy+Fh+A1zAhpSPEcvBGFLUHQXv8Br0blNmIGad+EcUMXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709927618; c=relaxed/simple;
-	bh=+JPchmRbdEWp2hPvsQ8mwR8SsWihb9svN/keL3PqCmM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uNELoVriSqaXuxv7hJMESi54NuTYqmennM0Vn6KPWj8iI2xt/GZwzh+JExcZzQflZ1gU1AGiMa+vYfYc/7ck5LFn/S8a5/SfQTaf/FfZBVvmPtMKarWE2L+2sIlW39JteRJpjhuwyAYe4WZSFPyCI5Y9W5hYrCEa7ETSkaSe3KI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FQIcIjit; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1709929676; c=relaxed/simple;
+	bh=mQcD5ykMCdd/SZ7+M4Y9X6BbATMyJuVX8fjLs9rMW6Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lt+IutL5EJ6mdl2iWRtDAs5jP+7i8ZCv3zoqOlY6EsQwqi/N91QVxqER6DuEYoK6J0AovTHYaXZEQNT6vdES5d/Xoji5RoCNGKgtU4DtXbwwwWXREdlo36kltTsRErMBvc516xsSru0XB4xf8IMkGAsihc2dXHC8H2uJ/ANeVP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C+Wb+pKE; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FQIcIjit"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a45bdf6e9c2so301398266b.0
-        for <bpf@vger.kernel.org>; Fri, 08 Mar 2024 11:53:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C+Wb+pKE"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6e56787e691so2491469b3a.0;
+        Fri, 08 Mar 2024 12:27:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709927613; x=1710532413; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pd2ZoV00c/hvjjV6TuUocydSDT4SN2a80zpBvuI43a4=;
-        b=FQIcIjitCXslDz2GbbUrP/Dl2A1fHjodIwfcVwX7edPGJjzUe6ft0Dzx4S5sFwe1Vh
-         g88zviT2eLf5PmHmjVJB2aNpgv9n3ocJvS72MSrLxPfMODNwXkIqGml7VkVhyDJXPZ65
-         MjMUs4Lqmk59C5q9pviF7lrr5HVfpNnp9VtqWc7ZvnuMI0EGx3Q5NM/4uZGay3xcEJFy
-         qYcxb+eRfAcYnwP/UVfmW9ErY4qC/DPOwckI+rRsS39kszwhkv8lEpCyJ9PUorpE+Wmk
-         8YbTN6+zdx0SrM+L7muhYuk5uJr4h+Hit4pCKYkJfFmlBE74LLcVw8ZHHf4d82NY4qR1
-         jV5w==
+        d=gmail.com; s=20230601; t=1709929674; x=1710534474; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wXUjGZ9jnAwCdwAfXjSSya1Xbt4jMaLFoszBP4rfXz4=;
+        b=C+Wb+pKELrY3+HDDncr9v4kbytGC47A9na5afTsWgqNuKP+43EG4Mq+qONCF4Z0lUJ
+         McRchkk/LDOP08C0gqTwpH3ilG/EsptNiNFTX2gdVQvrOMobEbyAFA/W2Z5oAij0RIZI
+         VsDRL9s9Cgc8mLHf2zJGs8UnqZH9VzXTtvXwVOijsYrlaGrDXVcVhTNbae90ICP0pxUT
+         DYtX6ioxRlaVwhNbIh8DB2n03cuXrXsclHBlbYHBGkOTPqLfQ3xva12i2Nw0X061Lx+z
+         f7HwZGxK9VqscxLjszuH56QqFGLGK0F6v0GYDkDyLvq9Vs0sBz2VbpJIw5Qgk5Y3qnDf
+         kTrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709927613; x=1710532413;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Pd2ZoV00c/hvjjV6TuUocydSDT4SN2a80zpBvuI43a4=;
-        b=rkFWIhpNM9ddcBenZSrpelhdOkddGZB3lN9OUhMgWu8awsRU8bsU1441bsdP+TBC3T
-         FY3Wg75QLgYStxrM27yVHspxOlQ3zC/dskjfE6iudQd5c9i2Hi1Ujp5806ICLQch4bta
-         4asajR33sXowSUnPVAUbAoDFSIViJxoNXEs06Mg9Kpg4YEKU3/OP2UpDmuptPw3vcaJS
-         cvgXZpl6g1cvRMeQNeMCVEYKOpHMI5F0KNjiwMLFnQa72UQNru4vQsUn0qb1Z5gY8Wjl
-         WRs78VnnD65inJmKkLkrkYTPAS2py8LMEFDxwrHXvzal/Y53RcLWLDe5mS3Lpuy61Ufd
-         v5vQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWjTbjYqcD9IjKejf2FbzmQnZR8O24OySl1uD0pxSGsYBg75PNd+oTaJ2W5IMezUOjb40kAbCHOQzolZ+xBkxNiX8Qe
-X-Gm-Message-State: AOJu0Yw4i8RBLh7e0lIn4eoqgAveoGIm56LAgc9b9Lg9baVqRIauwNSX
-	B6hIrLEryT0UVVzK2yTF/9T/FY2oRNlc3CoXeoZLmOt1byL81zgN1G7TNQaxWBok2zIZaj9oUSd
-	HJSXOzDbwd1KHS+8EzTuT+duemy/XkoCrLOUY
-X-Google-Smtp-Source: AGHT+IGdfTizwHQnCpRk5GeSjOHjssHLcb+cVFlrr45NHBDRApEdAye6AN9i0+rO/lWinEjVvgcrkAuNBm/bbSNX5ic=
-X-Received: by 2002:a17:907:76d7:b0:a3e:9aa3:7024 with SMTP id
- kf23-20020a17090776d700b00a3e9aa37024mr57660ejc.34.1709927612751; Fri, 08 Mar
- 2024 11:53:32 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709929674; x=1710534474;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wXUjGZ9jnAwCdwAfXjSSya1Xbt4jMaLFoszBP4rfXz4=;
+        b=tLM85lXynCzUmkZGo1TXPmjacNxnaXgbA7ZTRUA+4Bp+bN8O1WtXSzDeZTE/uhkbG8
+         MgQqMGOIATVNRnxUBtGPSmzhRfLEG+UvHieVmOaJmLFr53u7B2n2SWZxGxrg9KwymaPv
+         aoVkIVkaOM/6o/nFafL9YuZ8VSErO1LQslSoh1dJBfwGPh3PSn2IAzUesaSILLSFjRdg
+         Ui7H750qAbea9FKculAaGqzh4Z1JBpEKCU5Kz1gCElmeSAVKRBvDNizbImcQ9wE83GEQ
+         GIOM4aXqe2Ryhr1w/QvqQ2DxHSTaS4agfGF6oVu7vuQqz+cfXZs1CcQ/L0R/0T7H5QSZ
+         8ITQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUZuqBAWNoTO0vQYRx0v8bLj6RabK56m5PYSm+qML8sDhZWArMxIqstCtD9hjaTxTEHsmWk+IRi6RvgiGjDKwySvaY4P0JkrqKU35pXcGslcC5A5ewSuO6g6r/sa/Vc6i4Skd8WQAEnfw5uutmD/ySbu4k1Dd4CDJaGTpxDdyNcWw==
+X-Gm-Message-State: AOJu0Yy7aDiuoRfCpiErXiVlWmxoKuhcGL/qLfDfzTUseQ84/TldGe4D
+	vyt0KWi/6Rd4GzvjwcMZYj3kCCce4unRn70z3MJoW8hXNXlDl3J8
+X-Google-Smtp-Source: AGHT+IEmOBhZjqMgFca4qw/6mMXRhzelSikcLVjZYKzNw0aKx+OmvlvhRngoIFIQUR84hPVcrzzQlQ==
+X-Received: by 2002:a05:6a21:3284:b0:1a1:82e0:3ad4 with SMTP id yt4-20020a056a21328400b001a182e03ad4mr349882pzb.7.1709929673633;
+        Fri, 08 Mar 2024 12:27:53 -0800 (PST)
+Received: from gmail.com ([192.184.166.229])
+        by smtp.gmail.com with ESMTPSA id bm24-20020a656e98000000b005cfbdf71baasm84122pgb.47.2024.03.08.12.27.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Mar 2024 12:27:53 -0800 (PST)
+Date: Fri, 8 Mar 2024 12:27:50 -0800
+From: Calvin Owens <jcalvinowens@gmail.com>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Song Liu <song@kernel.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Mike Rapoport <rppt@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Naveen N Rao <naveen.n.rao@linux.ibm.com>,
+	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+	David S Miller <davem@davemloft.net>,
+	Thomas Gleixner <tglx@linutronix.de>, bpf@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC][PATCH 0/4] Make bpf_jit and kprobes work with
+ CONFIG_MODULES=n
+Message-ID: <Zet0xm0Nf2k9O7U9@gmail.com>
+References: <cover.1709676663.git.jcalvinowens@gmail.com>
+ <ZejhcP_r5QJZcS6j@bombadil.infradead.org>
+ <Zej66vQInnDYgpNy@gmail.com>
+ <CAPhsuW4UA9uCRK7EVCJGUvmroQhZZZiVdXotri4oO7+WRQr3sg@mail.gmail.com>
+ <20240308115004.22fe5bb7ecea4080aa2ef383@kernel.org>
+ <CAB=NE6V+HroMv4vNBJkCu_6Sbu08mPh0ZBadDEQxOKWoKoBk1w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-3-almasrymina@google.com> <15625bac-dfec-4c4e-a828-d11424f7aced@davidwei.uk>
-In-Reply-To: <15625bac-dfec-4c4e-a828-d11424f7aced@davidwei.uk>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 8 Mar 2024 11:53:18 -0800
-Message-ID: <CAHS8izMC=q_DuR94i-NCKFVsW0JadX7NEbDfyT8PfG3tBwPv-Q@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
- custom page providers
-To: David Wei <dw@davidwei.uk>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAB=NE6V+HroMv4vNBJkCu_6Sbu08mPh0ZBadDEQxOKWoKoBk1w@mail.gmail.com>
 
-On Thu, Mar 7, 2024 at 8:57=E2=80=AFPM David Wei <dw@davidwei.uk> wrote:
->
-> On 2024-03-04 18:01, Mina Almasry wrote:
-> > From: Jakub Kicinski <kuba@kernel.org>
+On Thursday 03/07 at 18:55 -0800, Luis Chamberlain wrote:
+> On Thu, Mar 7, 2024 at 6:50 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
 > >
-> > The page providers which try to reuse the same pages will
-> > need to hold onto the ref, even if page gets released from
-> > the pool - as in releasing the page from the pp just transfers
-> > the "ownership" reference from pp to the provider, and provider
-> > will wait for other references to be gone before feeding this
-> > page back into the pool.
+> > On Wed, 6 Mar 2024 17:58:14 -0800
+> > Song Liu <song@kernel.org> wrote:
 > >
-> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> > Signed-off-by: Mina Almasry <almasrymina@google.com>
+> > > Hi Calvin,
+> > >
+> > > It is great to hear from you! :)
+> > >
+> > > On Wed, Mar 6, 2024 at 3:23 PM Calvin Owens <jcalvinowens@gmail.com> wrote:
+> > > >
+> > > > On Wednesday 03/06 at 13:34 -0800, Luis Chamberlain wrote:
+> > > > > On Wed, Mar 06, 2024 at 12:05:07PM -0800, Calvin Owens wrote:
+> > > > > > Hello all,
+> > > > > >
+> > > > > > This patchset makes it possible to use bpftrace with kprobes on kernels
+> > > > > > built without loadable module support.
+> > > > >
+> > > > > This is a step in the right direction for another reason: clearly the
+> > > > > module_alloc() is not about modules, and we have special reasons for it
+> > > > > now beyond modules. The effort to share a generalize a huge page for
+> > > > > these things is also another reason for some of this but that is more
+> > > > > long term.
+> > > > >
+> > > > > I'm all for minor changes here so to avoid regressions but it seems a
+> > > > > rename is in order -- if we're going to all this might as well do it
+> > > > > now. And for that I'd just like to ask you paint the bikeshed with
+> > > > > Song Liu as he's been the one slowly making way to help us get there
+> > > > > with the "module: replace module_layout with module_memory",
+> > > > > and Mike Rapoport as he's had some follow up attempts [0]. As I see it,
+> > > > > the EXECMEM stuff would be what we use instead then. Mike kept the
+> > > > > module_alloc() and the execmem was just a wrapper but your move of the
+> > > > > arch stuff makes sense as well and I think would complement his series
+> > > > > nicely.
+> > > >
+> > > > I apologize for missing that. I think these are the four most recent
+> > > > versions of the different series referenced from that LWN link:
+> > > >
+> > > >   a) https://lore.kernel.org/all/20230918072955.2507221-1-rppt@kernel.org/
+> > > >   b) https://lore.kernel.org/all/20230526051529.3387103-1-song@kernel.org/
+> > > >   c) https://lore.kernel.org/all/20221107223921.3451913-1-song@kernel.org/
+> > > >   d) https://lore.kernel.org/all/20201120202426.18009-1-rick.p.edgecombe@intel.com/
+> > > >
+> > > > Song and Mike, please correct me if I'm wrong, but I think what I've
+> > > > done here (see [1], sorry for not adding you initially) is compatible
+> > > > with everything both of you have recently proposed above. How do you
+> > > > feel about this as a first step?
+> > >
+> > > I agree that the work here is compatible with other efforts. I have no
+> > > objection to making this the first step.
+> > >
+> > > >
+> > > > For naming, execmem_alloc() seems reasonable to me? I have no strong
+> > > > feelings at all, I'll just use that going forward unless somebody else
+> > > > expresses an opinion.
+> > >
+> > > I am not good at naming things. No objection from me to "execmem_alloc".
 > >
-> > ---
-> >
-> > This is implemented by Jakub in his RFC:
-> > https://lore.kernel.org/netdev/f8270765-a27b-6ccf-33ea-cda097168d79@red=
-hat.com/T/
-> >
-> > I take no credit for the idea or implementation; I only added minor
-> > edits to make this workable with device memory TCP, and removed some
-> > hacky test code. This is a critical dependency of device memory TCP
-> > and thus I'm pulling it into this series to make it revewable and
-> > mergeable.
-> >
-> > RFC v3 -> v1
-> > - Removed unusued mem_provider. (Yunsheng).
-> > - Replaced memory_provider & mp_priv with netdev_rx_queue (Jakub).
-> >
-> > ---
-> >  include/net/page_pool/types.h | 12 ++++++++++
-> >  net/core/page_pool.c          | 43 +++++++++++++++++++++++++++++++----
-> >  2 files changed, 50 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/include/net/page_pool/types.h b/include/net/page_pool/type=
-s.h
-> > index 5e43a08d3231..ffe5f31fb0da 100644
-> > --- a/include/net/page_pool/types.h
-> > +++ b/include/net/page_pool/types.h
-> > @@ -52,6 +52,7 @@ struct pp_alloc_cache {
-> >   * @dev:     device, for DMA pre-mapping purposes
-> >   * @netdev:  netdev this pool will serve (leave as NULL if none or mul=
-tiple)
-> >   * @napi:    NAPI which is the sole consumer of pages, otherwise NULL
-> > + * @queue:   struct netdev_rx_queue this page_pool is being created fo=
-r.
-> >   * @dma_dir: DMA mapping direction
-> >   * @max_len: max DMA sync memory size for PP_FLAG_DMA_SYNC_DEV
-> >   * @offset:  DMA sync address offset for PP_FLAG_DMA_SYNC_DEV
-> > @@ -64,6 +65,7 @@ struct page_pool_params {
-> >               int             nid;
-> >               struct device   *dev;
-> >               struct napi_struct *napi;
-> > +             struct netdev_rx_queue *queue;
-> >               enum dma_data_direction dma_dir;
-> >               unsigned int    max_len;
-> >               unsigned int    offset;
-> > @@ -126,6 +128,13 @@ struct page_pool_stats {
-> >  };
-> >  #endif
-> >
-> > +struct memory_provider_ops {
-> > +     int (*init)(struct page_pool *pool);
-> > +     void (*destroy)(struct page_pool *pool);
-> > +     struct page *(*alloc_pages)(struct page_pool *pool, gfp_t gfp);
-> > +     bool (*release_page)(struct page_pool *pool, struct page *page);
-> > +};
->
-> Separate question as I try to adapt bnxt to this and your queue
-> configuration API.
->
-> How does GVE handle the need to allocate kernel pages for headers and
-> dmabuf for payloads?
->
-> Reading the code, struct gve_rx_ring is the main per-ring object with a
-> page pool. gve_queue_page_lists are filled with page pool netmem
-> allocations from the page pool in gve_alloc_queue_page_list(). Are these
-> strictly used for payloads only?
->
+> > Hm, it sounds good to me too. I think we should add a patch which just
+> > rename the module_alloc/module_memfree with execmem_alloc/free first.
+> 
+> I think that would be cleaner, yes. Leaving the possible move to a
+> secondary patch and placing the testing more on the later part.
 
-You're almost correct. We actually don't use the gve queue page lists
-for devmem TCP, that's an unrelated GVE feature/code path for low
-memory VMs. The code in effect is the !qpl code. In that code, for
-incoming RX packets we allocate a new or recycled netmem from the page
-pool in gve_alloc_page_dqo(). These buffers are used for payload only
-in the case where header split is enabled. In the case header split is
-disabled, these buffers are used for the entire incoming packet.
-
-> I found a struct gve_header_buf in both gve_rx_ring and struct
-> gve_per_rx_queue_mem_dpo. This is allocated in gve_rx_queue_mem_alloc()
-> using dma_alloc_coherent(). Is this where GVE stores headers?
->
-
-Yes, this is where GVE stores headers.
-
-> IOW, GVE only uses page pool to allocate memory for QPLs, and QPLs are
-> used by the device for split payloads. Is my understanding correct?
->
-
---=20
-Thanks,
-Mina
+Makes sense to me.
