@@ -1,182 +1,172 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2964836E
-	for <bpf@vger.kernel.org>; Sat,  9 Mar 2024 00:04:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E700736E
+	for <bpf@vger.kernel.org>; Sat,  9 Mar 2024 00:27:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709942691; cv=none; b=NnpX8wDomBT7U78TVdDYAmH84WzO3/KwHXIOTSPGrHAe9T4/askSMZQBjAVWllb0WdnJEJyNlEANfvZxZ/ZpoqatsskrbzGKeaShXYthgN5tDHNTV977n8/7Xe9bHGngrxKvLD5GrZCghxMoQC8kX3JFUKWmmidgfA/R23OsNRs=
+	t=1709944075; cv=none; b=GNOy1ORNyLcZNKfQuqIyZHBXgo6P9G2BmykfC/xgRiNhf6wp6ZgB2aLZI6cEFuPX+GxaiuEVNtiqU10tYYeLbkldoU/6ASG3iTYD4WHxQUuzsBMigKTrT966N1Gwa8jd5xeQFjtEWK4f76yGb7wLRLKm7rkgnvDP3jdunjyTCb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709942691; c=relaxed/simple;
-	bh=ODy2J85YKLzDB8bH97wmW29wek0RPwFHEjk1waRoUf4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C0hK+noPLzNtp9aMl1aTAcJ5PUNa8M+2nLuPu9rxFa9ewyc9bynSXXzhWoBULbeK72fNIHN2wOnmmjL/HMrut7UojqVueacGI8moOYLjO99Sh1D00hFt8czdo7P4aDeLlxgNf9ACSGoGVYxhcOLWy2iAYIwvNPuSh2g/ePYTAfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AYKYbXlZ; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1709944075; c=relaxed/simple;
+	bh=UAHNOoQOfnXGU4ynjW3Di4sMLSMOx0hwkdhyKrO246c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lqDwmq3HBl2U1Qq3QzEIZs6nAUt9PyQk56XZxIW1NRgr54+jTArFOdqTS98ulJK47W+Gpo88qD3PB+5cP93EQhBtnFeYQGLHVghAdsUaXx8+FIovfs6f2wYvvnq68kzjv23VlqYfNYtLoqRhc1KSYsCZX64I1he9DMH+26ILxyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cKLX+2Aa; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AYKYbXlZ"
-Message-ID: <ff89127f-2c2c-42db-948f-74d524243fc4@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1709942686;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KO7R+RQhqQop540c9zRooIFQapEF86a1tlckoU4bej8=;
-	b=AYKYbXlZJLANFCspUX45wQHaN2r+3/bQ9ML/6mFzRrxGb6eCuJ/miAUmeaqPcS+nRAbLOQ
-	ewlQ8ijKWKPrxtZuqSJJOjXfrD+qQek+7Dgt1ZRflCGTDx5FlEwJek8nA6lJl6VeXlCmnW
-	kOKK2RNNiekMqJHJxG+9FgMk+uAjg5I=
-Date: Fri, 8 Mar 2024 16:04:40 -0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cKLX+2Aa"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a4429c556efso182909966b.0
+        for <bpf@vger.kernel.org>; Fri, 08 Mar 2024 16:27:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1709944071; x=1710548871; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EWYfh9XoJurOTi8J7CJKHaNZmYFNooi7e3RylW8C//Y=;
+        b=cKLX+2AaXAKsbJm0yJSoV5EfK47mkTHgBxnjzLm3Qi+mbVTJ0/35N0WYiav0SapGJM
+         cDyGrmHJrruoMoMLbe1jOUloQx5t4MAi4aNwOQY0tF21GKFBaIbyB/l1TEL/VySh/Mik
+         uhP1cbY/yn+43G6SGbVcuyZnEEPvvCMiXnZzryMRsh8Odw3H7pu5pO3+Xv/68hE6he8H
+         ZAR9cxuAP0O2ixXqz107LMaGDHHGH3a2etOdS48euG1nmkimVqQO91HOAsFYAgNUbZv7
+         gdlKD2Ge6lIpNV+E+cB7LDUcbiPqA15QcEwaIAxb+3xOnQn/QxOZXkzs8kwfH8dshzUL
+         sTKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709944071; x=1710548871;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EWYfh9XoJurOTi8J7CJKHaNZmYFNooi7e3RylW8C//Y=;
+        b=c+Ze0UNx1DPdL68IY694hJcuvnXH+i1z61OeOtRaHMkm3dmyzSPfo/ObxkS+iHl6Dq
+         16lD2F9/NPLL2jdFahvdOcn/SkJnzhFHazPa09CTEm5Z7dKAFtkUhvh/Z/806d7FrteI
+         NBEoUxYnljdOvPuKVJSBYLihkPyUmVyZNo4Dh/1UUA1qCaGdsNINNygzi2gIsRRfVgHi
+         ZCf7sPK7YRb9nYgT7CmVyy7XjiQvsM8KUWHNtYR++dTKm9Lxg+f2aMAmO4Sz6rNG+TFJ
+         kUaYtVCpWHm3/h6FBubzcgjhWsTWgTjrF2gJyc7gTdGs7TzeAd10N0vpPXCJaXJX9hIW
+         3oKA==
+X-Forwarded-Encrypted: i=1; AJvYcCWKQL4aNU+2V+FNoxw3jdpyVwKKOcsX0/5Be2btV65bxfQrA3Z6gEoFKguCtWNOfwuovkA1H9GY491MhPpd39p1/Wdz
+X-Gm-Message-State: AOJu0YzrkLclmF5R9Fmw+AA8RmW3gL8hfjq+aWFQhe079JE7SmNY2wiq
+	7VXR9N0ub0WV2IWbKZ1IoKYBGbE4aKJ5wrkfsZoqwq/dW43ue/kyorLYTi+m3mpdEibGU+VLysT
+	bBuTz+pcDTBadJqdeKWhPZJnvtZN3UYvQa2rV
+X-Google-Smtp-Source: AGHT+IESd1pHYOts43futyrxfMXx/f2edur2d17Kl0AlPQ1Jsil6uEMQ/KupG2jdYDiEzWeJ95HiQuXNh787lBIftRY=
+X-Received: by 2002:a17:906:3c56:b0:a45:b631:1045 with SMTP id
+ i22-20020a1709063c5600b00a45b6311045mr133451ejg.21.1709944071018; Fri, 08 Mar
+ 2024 16:27:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 4/5] selftests/bpf: Add a cgroup prog
- bpf_get_ns_current_pid_tgid() test
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com,
- Martin KaFai Lau <martin.lau@kernel.org>, Yury Namgung <ynamgung@meta.com>,
- bpf@vger.kernel.org
-References: <20240307232659.1115872-1-yonghong.song@linux.dev>
- <20240307232721.1117597-1-yonghong.song@linux.dev>
- <83a6001f-8ed4-4e31-92bd-282c34e6782f@linux.dev>
-Content-Language: en-GB
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <83a6001f-8ed4-4e31-92bd-282c34e6782f@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-2-almasrymina@google.com> <54891f27-555a-4ed1-b92f-668813c18c37@davidwei.uk>
+In-Reply-To: <54891f27-555a-4ed1-b92f-668813c18c37@davidwei.uk>
+From: Mina Almasry <almasrymina@google.com>
+Date: Fri, 8 Mar 2024 16:27:39 -0800
+Message-ID: <CAHS8izPJbLSgvXn7pA6OQ89=dOCoXYYtTvM=7-0_MB2NxucazA@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 01/15] queue_api: define queue api
+To: David Wei <dw@davidwei.uk>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Mar 8, 2024 at 3:48=E2=80=AFPM David Wei <dw@davidwei.uk> wrote:
+>
+> On 2024-03-04 18:01, Mina Almasry wrote:
+> > This API enables the net stack to reset the queues used for devmem.
+> >
+> > Signed-off-by: Mina Almasry <almasrymina@google.com>
+> >
+> > ---
+> >  include/linux/netdevice.h | 24 ++++++++++++++++++++++++
+> >  1 file changed, 24 insertions(+)
+> >
+> > diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> > index c41019f34179..3105c586355d 100644
+> > --- a/include/linux/netdevice.h
+> > +++ b/include/linux/netdevice.h
+> > @@ -1435,6 +1435,20 @@ struct netdev_net_notifier {
+> >   *                      struct kernel_hwtstamp_config *kernel_config,
+> >   *                      struct netlink_ext_ack *extack);
+> >   *   Change the hardware timestamping parameters for NIC device.
+> > + *
+> > + * void *(*ndo_queue_mem_alloc)(struct net_device *dev, int idx);
+> > + *   Allocate memory for an RX queue. The memory returned in the form =
+of
+> > + *   a void * can be passed to ndo_queue_mem_free() for freeing or to
+> > + *   ndo_queue_start to create an RX queue with this memory.
+> > + *
+> > + * void      (*ndo_queue_mem_free)(struct net_device *dev, void *);
+> > + *   Free memory from an RX queue.
+> > + *
+> > + * int (*ndo_queue_start)(struct net_device *dev, int idx, void *);
+> > + *   Start an RX queue at the specified index.
+> > + *
+> > + * int (*ndo_queue_stop)(struct net_device *dev, int idx, void **);
+> > + *   Stop the RX queue at the specified index.
+> >   */
+> >  struct net_device_ops {
+> >       int                     (*ndo_init)(struct net_device *dev);
+> > @@ -1679,6 +1693,16 @@ struct net_device_ops {
+> >       int                     (*ndo_hwtstamp_set)(struct net_device *de=
+v,
+> >                                                   struct kernel_hwtstam=
+p_config *kernel_config,
+> >                                                   struct netlink_ext_ac=
+k *extack);
+> > +     void *                  (*ndo_queue_mem_alloc)(struct net_device =
+*dev,
+> > +                                                    int idx);
+> > +     void                    (*ndo_queue_mem_free)(struct net_device *=
+dev,
+> > +                                                   void *queue_mem);
+> > +     int                     (*ndo_queue_start)(struct net_device *dev=
+,
+> > +                                                int idx,
+> > +                                                void *queue_mem);
+> > +     int                     (*ndo_queue_stop)(struct net_device *dev,
+> > +                                               int idx,
+> > +                                               void **out_queue_mem);
+> >  };
+>
+> I'm working to port bnxt over to using this API. What are your thoughts
+> on maybe pulling this out and use bnxt to drive it?
+>
 
-On 3/8/24 11:08 AM, Martin KaFai Lau wrote:
-> On 3/7/24 3:27 PM, Yonghong Song wrote:
->> Add a cgroup bpf program test where the bpf program is running
->> in a pid namespace. The test is successfully:
->>    #165/3   ns_current_pid_tgid/new_ns_cgrp:OK
->>
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->> ---
->>   .../bpf/prog_tests/ns_current_pid_tgid.c      | 54 +++++++++++++++++++
->>   .../bpf/progs/test_ns_current_pid_tgid.c      |  7 +++
->>   2 files changed, 61 insertions(+)
->>
->> diff --git 
->> a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c 
->> b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
->> index 847d7b70e290..a307303e01ee 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
->> @@ -12,6 +12,7 @@
->>   #include <sys/wait.h>
->>   #include <sys/mount.h>
->>   #include <sys/fcntl.h>
->> +#include "network_helpers.h"
->>     #define STACK_SIZE (1024 * 1024)
->>   static char child_stack[STACK_SIZE];
->> @@ -74,6 +75,50 @@ static int test_current_pid_tgid_tp(void *args)
->>       return ret;
->>   }
->>   +static int test_current_pid_tgid_cgrp(void *args)
->> +{
->> +    struct test_ns_current_pid_tgid__bss *bss;
->> +    struct test_ns_current_pid_tgid *skel;
->> +    int server_fd = -1, ret = -1, err;
->> +    int cgroup_fd = *(int *)args;
->> +    pid_t tgid, pid;
->> +
->> +    skel = test_ns_current_pid_tgid__open();
->> +    if (!ASSERT_OK_PTR(skel, "test_ns_current_pid_tgid__open"))
->> +        return ret;
->> +
->> +    bpf_program__set_autoload(skel->progs.cgroup_bind4, true);
->> +
->> +    err = test_ns_current_pid_tgid__load(skel);
->> +    if (!ASSERT_OK(err, "test_ns_current_pid_tgid__load"))
->> +        goto cleanup;
->> +
->> +    bss = skel->bss;
->> +    if (get_pid_tgid(&pid, &tgid, bss))
->> +        goto cleanup;
->> +
->> +    skel->links.cgroup_bind4 = bpf_program__attach_cgroup(
->> +        skel->progs.cgroup_bind4, cgroup_fd);
->> +    if (!ASSERT_OK_PTR(skel->links.cgroup_bind4, 
->> "bpf_program__attach_cgroup"))
->> +        goto cleanup;
->> +
->> +    server_fd = start_server(AF_INET, SOCK_STREAM, NULL, 0, 0);
->
-> nit. This binds to ADDR_ANY. Regardless, it is a good idea to create a 
-> netns for this subtest. It will be one less thing to worry about when 
-> removing "serial_" from this test eventually. The same for the subtest 
-> in patch 5 also.
+Sure thing, go for it! Thanks!
 
-Good point. Will do.
+I think we've going to have someone from GVE working on this in
+parallel. I see no issue with us aligning on what the core-net ndos
+would look like and implementing those in parallel for both drivers.
+We're not currently planning to make any changes to the ndos besides
+applying Jakub's feedback from this thread. If you find a need to
+deviate from this, let us know and we'll work on staying in line with
+that. Thanks!
 
-
->
->> +    if (!ASSERT_GE(server_fd, 0, "start_server"))
->> +        goto cleanup;
->> +
->> +    if (!ASSERT_EQ(bss->user_pid, pid, "pid"))
->> +        goto cleanup;
->> +    if (!ASSERT_EQ(bss->user_tgid, tgid, "tgid"))
->> +        goto cleanup;
->> +    ret = 0;
->> +
->> +cleanup:
->> +    if (server_fd >= 0)
->> +        close(server_fd);
->> +    test_ns_current_pid_tgid__destroy(skel);
->> +    return ret;
->> +}
->> +
->>   static void test_ns_current_pid_tgid_new_ns(int (*fn)(void *), void 
->> *arg)
->>   {
->>       int wstatus;
->> @@ -102,4 +147,13 @@ void serial_test_ns_current_pid_tgid(void)
->>           test_current_pid_tgid_tp(NULL);
->>       if (test__start_subtest("new_ns_tp"))
->> test_ns_current_pid_tgid_new_ns(test_current_pid_tgid_tp, NULL);
->> +    if (test__start_subtest("new_ns_cgrp")) {
->> +        int cgroup_fd = -1;
->
-> nit. no need to "= -1;"
-Ack. My mistake. Will change.
->
-> Other patches lgtm.
->
->> +
->> +        cgroup_fd = test__join_cgroup("/sock_addr");
->> +        if (ASSERT_GE(cgroup_fd, 0, "join_cgroup")) {
->> + test_ns_current_pid_tgid_new_ns(test_current_pid_tgid_cgrp, 
->> &cgroup_fd);
->> +            close(cgroup_fd);
->> +        }
->> +    }
->>   }
->> diff --git 
->> a/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c 
->> b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
->> index aa3ec7ca16d9..d0010e698f66 100644
->> --- a/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
->> +++ b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
->> @@ -28,4 +28,11 @@ int tp_handler(const void *ctx)
->>       return 0;
->>   }
->>   +SEC("?cgroup/bind4")
->> +int cgroup_bind4(struct bpf_sock_addr *ctx)
->> +{
->> +    get_pid_tgid();
->> +    return 1;
->> +}
->> +
->>   char _license[] SEC("license") = "GPL";
->
+--=20
+Thanks,
+Mina
