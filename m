@@ -1,66 +1,66 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FFD0EA4
-	for <bpf@vger.kernel.org>; Sat,  9 Mar 2024 01:01:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603787FA
+	for <bpf@vger.kernel.org>; Sat,  9 Mar 2024 01:03:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709946081; cv=none; b=kXLAsI2ouFTlafYjsnHqrsurhCRvpVb0GlOCcCyWosBCTAs1XSaO90oPstWawLKKpA6+Yb/AHweIOgX0sH/EJPR2eWWju3/+DWI/Z29IN3SjmPc5gAf3FAZpRuxtbV+wsgi+IS49qrKU6qr6hWnEsHlxxCDeF579dFZl70RuqBU=
+	t=1709946185; cv=none; b=Z3bM5oXLfHNm/q+nfRKOofMpA6A0hK3DV+l5kl0gEIG6BrTXFYYJQyhzQ4yPKNGi7YAgvskBlX9w4MbVQi3i2rKpT/nhPMC+0esJvmESxiZbfeK7i+q4aIZ9iuL5UBuJkRCj0I4ypsvnXoUheWdm1LRk7G52Rtka7v/MUqx5LTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709946081; c=relaxed/simple;
-	bh=02JDVDiubz78KYRygPqWa0M2HgO+RcW+Fn36gm9ITCo=;
+	s=arc-20240116; t=1709946185; c=relaxed/simple;
+	bh=Gs3A25pAEeZrLMU5zeomp2hdm1slwwHpDsfYFHjREos=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Sn+7+MA65PAT/CSpb4HjMHeF5aClxdcrENNPl21F+HOsA4rSdqpUlyg/huPvOG0TgmdGwfYz2Wx+ZR97oFcC7yzpX0R3j+MXqxkIYwgkDsrciXcrYKTe9m3rWSYAYU9CXHIDlKVrZKQdDPbLwmqcFJMJZTOpgNC99viBsk/AuYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cxKrDauw; arc=none smtp.client-ip=209.85.218.42
+	 To:Cc:Content-Type; b=gplZpPWkbfOrmYYu/HJHLbWxSAAAtG3FgOspVYNfZ06LyVIomaYQU3R08PY1KLeDNO+d88iVY7u5DnwxAZGogw4LmL1AhOEjuIN3fT8UsVQs79eErhIILE0lLr00jW8sUs3KOzLHEo9l9ifE1eUc6GlUCz9fY5t3q3/JpH5lNUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JBDlDyfd; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cxKrDauw"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a45cdb790dfso306371966b.3
-        for <bpf@vger.kernel.org>; Fri, 08 Mar 2024 17:01:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JBDlDyfd"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a3ed9cae56fso674130566b.1
+        for <bpf@vger.kernel.org>; Fri, 08 Mar 2024 17:03:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709946077; x=1710550877; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709946181; x=1710550981; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FZAm0Tgx98b87jNznQKbIh24x5ADZ/9jsinWkEdrtEU=;
-        b=cxKrDauwXkpRkErOTS60RnDxptNLeahFQNoO+vWEIiyqr7hTTgUi/52p4TTjN5egbR
-         NgCknBvK+Cyo7qMDujOnrHL372BdtTL6BTdMmTJ01lMW3tw8wlKbNAAKd4KV5O1xaiFh
-         5DCZbN+1p+RQUSKupVsKp5+Qir5rf8QpHIPa6PJ8+01WII2j5YIZRQeXk8IUfJtgkWPm
-         V6R7XUsBmZFobv2vd8GFFs5m2GXFBsP1l/nzLxkUAfacR8oZpSvW0mPkuVoNwfueibWA
-         wFR0XuvGtuR+u0WRbzFGh0MZpc3fnZXs9l1aCjVc9WYLwYwwwAr8xXoU0BS7i/hl6WWZ
-         WrfA==
+        bh=I/2rPjPRCZqz5sOPw1HRuma6gCoF1e+0nsF6ljaER7g=;
+        b=JBDlDyfd1c9Mv8gTwrgBXA7QKxDKQysC0/WqkU+vuKSrb+g/peb4sho6cY57s8gWzf
+         o3m8Mg3EN39nEcmyuLaDNNf61BulaTR9f6jBmkw/o4qLoqjngwcBIj9XrnadVeVH13OJ
+         XVKNNZSk8T+5f17orKGFU0yvwMpuvJkc8crL9O+B7dbpzOKta9r2sZnL11xRkN7U+zew
+         uYTUaUwS5L+yYMKTQBjzpk3C5JwVcR4dQwM5WVSLicMB+p19J531oEqdF//JUXvWEGMh
+         kSPHYQQDhnnzhTiY7wtJLnKG6b983/NCnCrfoncJt7uMycb0eEaGJ7fIYwn6S7chicyI
+         n1sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709946077; x=1710550877;
+        d=1e100.net; s=20230601; t=1709946181; x=1710550981;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FZAm0Tgx98b87jNznQKbIh24x5ADZ/9jsinWkEdrtEU=;
-        b=TEuHjgdLfX6f13KYwOgcDGmtNWfA2pZnHRa8B/goMybxuCkz2iJutflOnDpP2QJqDm
-         0A80+/jsRSw4PAfHNHkN3e0e/HQsIHCOm38YaSc1Y8KLCEZV6Ab7oYWfTzuMk4Tfuoo9
-         /o4DKffnckpRxZzYTGj0/1WoLEXfu6KlGc59oc8iz7yLdjFoJeVnZplz0H08NoZ7YjWW
-         uA4DPeXe6PkuNJo39sjIbtTkwmZJ9xPzMZBwcMtfKmzUuohuLdLyGNchTL5wbrJz6ODN
-         pCIFipM3CBNexfheSIWGygLOyqRQ3f0P9h/t6d01cVQMZfghaB0uC0Jt4i4290+Qtayc
-         qbYA==
-X-Gm-Message-State: AOJu0YxZoULC+Qa3+uQRLCmCrrtZ0qaETJlPvOdojP/6aMe9+ric3u2y
-	e6f+9nZ+pjvXhKNz2fFIJn0zunlj7yv9r6tBKWhHjKaAGWy/QyCFPcsKoJ1D7XbtSYwS2bfj5rr
-	rXEb4pWYwFoLyjF9fRW50NwMDZQ6d1Xd2
-X-Google-Smtp-Source: AGHT+IEEhHT+dCC9sqCgMkSB4gi9NF7aFWkgHWAxEcmwZVyWeuaKq9NKvqLO/p/K6kUD6sCvhH7esgXf/zV2yvp9Ybs=
-X-Received: by 2002:a17:906:81ca:b0:a45:ad2c:6f57 with SMTP id
- e10-20020a17090681ca00b00a45ad2c6f57mr168972ejx.56.1709946077240; Fri, 08 Mar
- 2024 17:01:17 -0800 (PST)
+        bh=I/2rPjPRCZqz5sOPw1HRuma6gCoF1e+0nsF6ljaER7g=;
+        b=b+NZ7V7Pxx9AOrZNeSfo2C0uxQXR1AcVmjOvhfG0xydqAESol45BfpWh9JBCW07beM
+         afnwtX1XlwcZthO6Tui9b0tutsF3InwEh3lGqN+4e+lEO8Yl+QCZZ7athSBEqA8CNXeP
+         UIC6Eq3NeRbEyNXuTEnYQL1+jHOeRwuqiSm0WWioSypTcaGUSBB3N65wYeB4l20Iz4as
+         5TyljRfK04l4x4KrWxOloizTdrJtl46K2ZHd4WJTZ6BLh5xDeiBoTGijnAGk9JjKC15o
+         s92apONKYWmY+CI6zqsH0du7VfNPV9p2LgDX3Ld7JQZyKFViyHJgIpO07X/oNVRc8lQz
+         QRxQ==
+X-Gm-Message-State: AOJu0YwRDlsS2/PQbhDeon4n2UTrzipK3bb9rXU334HPVY1SbVxYZruC
+	l7d3+KhjzIk1hXOcaSBUj4uPpwAY5GPW9K2emEde6C3pRwqAUtKrO0CWXQYzAabJ1EFUtuo9fa9
+	nSuOvdE8uJH7MnfqjVSy5GvFMI1w=
+X-Google-Smtp-Source: AGHT+IF3z8WEYPiS88Rd9qEsmoOD3++gy7rQ8pUqNod613mNWmKEdlasnulxVo7bJmjrHYOwvu5AANivoBPnQ8SeBgk=
+X-Received: by 2002:a17:906:f209:b0:a45:ffbe:f6f7 with SMTP id
+ gt9-20020a170906f20900b00a45ffbef6f7mr281588ejb.30.1709946181468; Fri, 08 Mar
+ 2024 17:03:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240305202155.3890667-1-yonghong.song@linux.dev> <20240305202211.3891663-1-yonghong.song@linux.dev>
-In-Reply-To: <20240305202211.3891663-1-yonghong.song@linux.dev>
+References: <20240305202155.3890667-1-yonghong.song@linux.dev> <20240305202206.3891411-1-yonghong.song@linux.dev>
+In-Reply-To: <20240305202206.3891411-1-yonghong.song@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 8 Mar 2024 17:01:02 -0800
-Message-ID: <CAEf4Bzb1TpvMU8V9PrO9j35H=z4j4bqvdVGE2JfF4gGzVnGGPA@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 3/5] libbpf: Add link support for BPF_PROG_TYPE_SK_MSG
+Date: Fri, 8 Mar 2024 17:02:47 -0800
+Message-ID: <CAEf4Bza0sbBXRmFQDN82cE0=v7xiRqx5tcHG-tu+MwaLNqzn+w@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 2/5] libbpf: Refactor bpf_program_attach_fd()
 To: Yonghong Song <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
 	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -72,81 +72,74 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Mar 5, 2024 at 12:22=E2=80=AFPM Yonghong Song <yonghong.song@linux.=
 dev> wrote:
 >
-> Introduce a libbpf API bpf_program__attach_sk_msg() which allows
-> user to get a bpf_link. The API makes auto-deletion easier and
-> also allows user space application easier as link based APIs
-> are used for all programs.
+> Refactor function bpf_program_attach_fd() to provide a helper function
+> which has attach_type as one of input parameters. This will make later
+> libbpf change easier to understand.
 >
 > Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 > ---
->  tools/lib/bpf/libbpf.c   | 8 ++++++++
->  tools/lib/bpf/libbpf.h   | 3 +++
->  tools/lib/bpf/libbpf.map | 1 +
->  3 files changed, 12 insertions(+)
+>  tools/lib/bpf/libbpf.c | 18 +++++++++++++-----
+>  1 file changed, 13 insertions(+), 5 deletions(-)
 >
 > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 97b573516675..b3982bb3f979 100644
+> index 6c2979f1b471..97b573516675 100644
 > --- a/tools/lib/bpf/libbpf.c
 > +++ b/tools/lib/bpf/libbpf.c
-> @@ -149,6 +149,7 @@ static const char * const link_type_name[] =3D {
->         [BPF_LINK_TYPE_TCX]                     =3D "tcx",
->         [BPF_LINK_TYPE_UPROBE_MULTI]            =3D "uprobe_multi",
->         [BPF_LINK_TYPE_NETKIT]                  =3D "netkit",
-> +       [BPF_LINK_TYPE_SK_MSG]                  =3D "sk_msg",
->  };
->
->  static const char * const map_type_name[] =3D {
-> @@ -12280,6 +12281,13 @@ bpf_program__attach_netkit(const struct bpf_prog=
-ram *prog, int ifindex,
->         return bpf_program_attach_fd(prog, ifindex, "netkit", &link_creat=
-e_opts);
+> @@ -12151,11 +12151,10 @@ static int attach_lsm(const struct bpf_program =
+*prog, long cookie, struct bpf_li
 >  }
 >
-> +struct bpf_link *
-> +bpf_program__attach_sk_msg(const struct bpf_program *prog, int map_fd,
-> +                          enum bpf_attach_type attach_type)
+>  static struct bpf_link *
+> -bpf_program_attach_fd(const struct bpf_program *prog,
+> -                     int target_fd, const char *target_name,
+> -                     const struct bpf_link_create_opts *opts)
+> +__bpf_program_attach_fd(const struct bpf_program *prog, int target_fd,
 
-Why do we need to allow users to override attach_type? Why can't it
-come from bpf_program's expected attach type?
+I hope we won't need this patch at all (see my comment on later
+patch), but if we do need to do this refactoring then a) let's not
+used underscore-prefixed names, this is not a common practice in
+libbpf code base and b) I think we can just update all callers of
+bpf_program_attach_fd() to pass attach_type directly, there are just 6
+of them.
 
+> +                       enum bpf_attach_type attach_type, const char *tar=
+get_name,
+> +                       const struct bpf_link_create_opts *opts)
+>  {
+> -       enum bpf_attach_type attach_type;
+>         char errmsg[STRERR_BUFSIZE];
+>         struct bpf_link *link;
+>         int prog_fd, link_fd;
+> @@ -12171,7 +12170,6 @@ bpf_program_attach_fd(const struct bpf_program *p=
+rog,
+>                 return libbpf_err_ptr(-ENOMEM);
+>         link->detach =3D &bpf_link__detach_fd;
+>
+> -       attach_type =3D bpf_program__expected_attach_type(prog);
+>         link_fd =3D bpf_link_create(prog_fd, target_fd, attach_type, opts=
+);
+>         if (link_fd < 0) {
+>                 link_fd =3D -errno;
+> @@ -12185,6 +12183,16 @@ bpf_program_attach_fd(const struct bpf_program *=
+prog,
+>         return link;
+>  }
+>
+> +static struct bpf_link *
+> +bpf_program_attach_fd(const struct bpf_program *prog,
+> +                     int target_fd, const char *target_name,
+> +                     const struct bpf_link_create_opts *opts)
 > +{
-> +       return __bpf_program_attach_fd(prog, map_fd, attach_type, "sk_msg=
-", NULL);
+> +       return __bpf_program_attach_fd(prog, target_fd,
+> +                                      bpf_program__expected_attach_type(=
+prog),
+> +                                      target_name, opts);
 > +}
 > +
->  struct bpf_link *bpf_program__attach_freplace(const struct bpf_program *=
-prog,
->                                               int target_fd,
->                                               const char *attach_func_nam=
-e)
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index 5723cbbfcc41..c8448f05e8d6 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -786,6 +786,9 @@ bpf_program__attach_netns(const struct bpf_program *p=
-rog, int netns_fd);
->  LIBBPF_API struct bpf_link *
->  bpf_program__attach_xdp(const struct bpf_program *prog, int ifindex);
->  LIBBPF_API struct bpf_link *
-> +bpf_program__attach_sk_msg(const struct bpf_program *prog, int map_fd,
-> +                          enum bpf_attach_type attach_type);
-> +LIBBPF_API struct bpf_link *
->  bpf_program__attach_freplace(const struct bpf_program *prog,
->                              int target_fd, const char *attach_func_name)=
-;
->
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index 86804fd90dd1..c59986c6dbc5 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -410,6 +410,7 @@ LIBBPF_1.3.0 {
->
->  LIBBPF_1.4.0 {
->         global:
-> +               bpf_program__attach_sk_msg;
->                 bpf_token_create;
->                 btf__new_split;
->                 btf_ext__raw_data;
+>  struct bpf_link *
+>  bpf_program__attach_cgroup(const struct bpf_program *prog, int cgroup_fd=
+)
+>  {
 > --
 > 2.43.0
 >
