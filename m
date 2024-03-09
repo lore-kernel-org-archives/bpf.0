@@ -1,94 +1,82 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64A6EEBF;
-	Sat,  9 Mar 2024 16:33:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F0415BA;
+	Sat,  9 Mar 2024 16:36:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710002032; cv=none; b=iAgbYD9GwX1ovVRUfOXGxafbKXapBQmfVq/H7kPMoc+KS/PPEBtrRT5VM9eJK4TTMhBQnUVw2nmVci+sB+nxcE5JOzsSrqzjILfzIltJ4al3vx4SAH+vbo6Dq+7CQbjW2ukB7dtW/kqW07+yCfcHmVNUbScHPfE9ME24/Zl/5Kw=
+	t=1710002207; cv=none; b=tp0HvH1/aPcYG7a3oYEDXCq39xTptOhkX8afJEr1qtUTi0XZTHMpWL7Xkx5BapTofhYJFd/YFkv3ETY/K/1TpjJplQL3ktknDqehCox8lQCSkHipl5h+24Q4K5qU7Ryri1v1YAtvlso2IcYdgwvRg21Ch5Esvd2NtT2bSsTRd3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710002032; c=relaxed/simple;
-	bh=VYW3LXEdZn4/ijTYL/iheFaI/HsZ+NDFhk8D1UbfQ00=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uEHV8h03TEbkxz+GrDyJ3KWSoyZIFNj6U19j4L1MibwMxukuCCcELAqr1+ON/x+KuHoMA8mtMnVevwKSkRuA9L8K/bt12jdfbfE+jcZVPwi6BACSUQoEEmfLpqucWK+GTUV8esb2kd5gyBMo8SSP/EZr0Vxn9TEeRfCuQH87TbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TEaMAnbl; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710002207; c=relaxed/simple;
+	bh=pxIOe2hfqRhb0QCUXddAl6+zpU3sFWxZy0utO2WLXh4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=icCDFb0bbdsA4qxqK80BQn4nVQypeRk1/cgaGoBabydxAFizDF/7h5L5ols9KE3Rn/TgLKAJU0UkEKswNlWIb8L6QkUYq2JyrqoFBvikQbAvHJQ3FbnXBvRkNRu/Z/ovj7VStjLWkcAcLfWxPuGjl0Mwycxrbhl2232VoxMSBGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=13soT37s; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TEaMAnbl"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-33e686d60eeso1396466f8f.0;
-        Sat, 09 Mar 2024 08:33:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710002029; x=1710606829; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/e4Fet7IjzqwV+1YTy6/YgOk5MLX9oVPoESQlOIoCNw=;
-        b=TEaMAnbl+zMuTVVc+rrsK0fJsartz255VlXrZP0vMRugLhzngOLLBz7mfR+4CGndG2
-         7bc+ZvT/Y3+AYRaGiHt92Wpt6srcPnErcCMAcIuW4esSK8gEDezxnop3amDcaYVNJZCD
-         bS8ezZPl9mdNJ/TxVXtb5h1ZopPaAXMHJBaQHLKzwuKVKXiYEaBu1nVcTGH0k5v6FO++
-         QdKgYSLApcdgurXaNsPM0PAXbcDanI6CdgWJtCZfENGH619wPGa/57DDeKzkm63xVSWV
-         idiEf14ysXKJa1/3oChsgLry/Ei0L7z7tmpJtHgChdhUH6TZQcgzOrrydnkl7hfrVPft
-         A+Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710002029; x=1710606829;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/e4Fet7IjzqwV+1YTy6/YgOk5MLX9oVPoESQlOIoCNw=;
-        b=rqPJBwbbn7R+OYwClI9gNsOnxR7dlxsyh1gPu76JvIHp6NRxaYwFmmpq+q9AwwDnr5
-         NoEmUvQnAO7IsIx/XdR94QAuNycshOXu9RkLMCpT/AgbvAPCNzGMEAB6Vmi2FxCGXGYa
-         mvIsFj1f8YveqjD1p6QeooHNLtkHw6zh5Y1VVMh+VmjZYPE4CbCMPl6Q/JGaGAyT5h7l
-         2oSjrK1LutlX0K5HQZzmU033poRzMvFfKLd9+XfYghyAHyMONWKIX7eV1wYIMiSLckSC
-         sZRFqBikHuYt7HRaQMVyYmqDhMTZ2uvrqZE2PWqzrP+iutbJlKO/A4MFKkjozuHNuFBg
-         T8Gg==
-X-Forwarded-Encrypted: i=1; AJvYcCXnrA4UZvXxOW8QNOkjHlgUnD6cjeeWQoGI2NrFxCjVUfbZc65FDXlfk73BfboVFh2kgftwxDGve3fOGOUpsQ8bHr2xATHZhylg0Ml66CD+WUtyjZLYsv4qY6ByY7hC
-X-Gm-Message-State: AOJu0YwkgLbJIuXL63aZqb6ODXpS2IwHKoL2dx+YZKYyCuwBWkq491cc
-	twVhNF5C53JyyhXtQwFgMqmdmt2LOPxuz6QTUy44/BzthBcT7OunNGa2GHco7Yi/ZkUKkFbkreM
-	SsOxqJJJ65yTwH0rsIVGUBRS6cfQ=
-X-Google-Smtp-Source: AGHT+IFTrt6A9iDoKKnK4T9RJ/3EaY5Ma5+9a+V8qIiLzGQ/3w4UmFislyGktP2vNMhEG57TMpHr9M9lFAT1JRU8Oic=
-X-Received: by 2002:a5d:4c4d:0:b0:33e:66d8:56df with SMTP id
- n13-20020a5d4c4d000000b0033e66d856dfmr1290242wrt.13.1710002028536; Sat, 09
- Mar 2024 08:33:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="13soT37s"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
+	:Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=ddEtC0OaYXNinFjX1O8qBWg4PwT/XS5HbgLCjTbGBtw=; b=13soT37sghi46wwoosaRp/B7Ww
+	tJ0AS28EAKUxB/jCvMxgv79Iaj8CcXIr0ADG2WFzMWPXu6hzVzE7FF+EPhJD5ejoPgshy3x28rB7U
+	yVSbrCxTn5BrdXaULJTEIFBjpc4Qz78/+9bHGdS/2mKA43YDgbNTyu2RqiFNLQCe/cjh5qcz5tZmJ
+	noTb5iIiPHpM34G+6Uu2CzvXyVi9nO7HVvq4ftvDru+Bl1S98AV1J5xzUKLqqJtWSgC2Pw/2PeMZd
+	RMjwMY6iye345H/oN3yLd3U5KgjaBejDhWue9mcGg/5kV72cz5FHVq2yH198r5OZuMT22r3DtVXXc
+	EgIcOYiw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rizgf-0000000Dldv-0CdF;
+	Sat, 09 Mar 2024 16:36:41 +0000
+Date: Sat, 9 Mar 2024 08:36:41 -0800
+From: Christoph Hellwig <hch@infradead.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Christoph Hellwig <hch@infradead.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-mm <linux-mm@kvack.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
+Subject: Re: vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
+Message-ID: <ZeyQGU3ziQbLBu_E@infradead.org>
+References: <Zeso7eNj1sBhH5zY@infradead.org>
+ <CAADnVQKQumV-0AxGLKX0jQEfa8Z2Bxx2yW8k_1OqGBnD-RqrbA@mail.gmail.com>
+ <ZetEkyW1QgIKwfFz@infradead.org>
+ <CAADnVQL4JAUz-p-X9aEggeKNpYUqJZrzQKO7N0dnohE0r7mdpg@mail.gmail.com>
+ <ZetJ4xfopatYstPs@infradead.org>
+ <CAADnVQJKPa+JUUKpW7gZehbFBYj3GPrbpd0NCj4xwkU2puObEw@mail.gmail.com>
+ <CAADnVQJeOc9Muki+-PUYc20-=1vRgkprbNL0zTc=Cz-T_iYkNQ@mail.gmail.com>
+ <CAADnVQ+zbZ1M_uvWmyWUdomAedP+LWMhQX-5bGajzJ0GYzme9g@mail.gmail.com>
+ <ZeyATzYas84F3IKQ@infradead.org>
+ <CAADnVQLVr4ppEkDOVScR2FZ0dRwMLADtgh7L4jqt1yOYrxoWZg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAADnVQL1Zt5dwFv9HPDKDuPEKa6V7gb5j-D-LPWv47hC6mtwgw@mail.gmail.com>
- <CAADnVQLP=dxBb+RiMGXoaCEuRrbK387J6B+pfzWKF_F=aRgCPQ@mail.gmail.com>
- <Zeso7eNj1sBhH5zY@infradead.org> <CAADnVQKQumV-0AxGLKX0jQEfa8Z2Bxx2yW8k_1OqGBnD-RqrbA@mail.gmail.com>
- <ZetEkyW1QgIKwfFz@infradead.org> <CAADnVQL4JAUz-p-X9aEggeKNpYUqJZrzQKO7N0dnohE0r7mdpg@mail.gmail.com>
- <ZetJ4xfopatYstPs@infradead.org> <CAADnVQJKPa+JUUKpW7gZehbFBYj3GPrbpd0NCj4xwkU2puObEw@mail.gmail.com>
- <CAADnVQJeOc9Muki+-PUYc20-=1vRgkprbNL0zTc=Cz-T_iYkNQ@mail.gmail.com>
- <CAADnVQ+zbZ1M_uvWmyWUdomAedP+LWMhQX-5bGajzJ0GYzme9g@mail.gmail.com> <ZeyATzYas84F3IKQ@infradead.org>
-In-Reply-To: <ZeyATzYas84F3IKQ@infradead.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sat, 9 Mar 2024 08:33:37 -0800
-Message-ID: <CAADnVQLVr4ppEkDOVScR2FZ0dRwMLADtgh7L4jqt1yOYrxoWZg@mail.gmail.com>
-Subject: Re: vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, linux-mm <linux-mm@kvack.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQLVr4ppEkDOVScR2FZ0dRwMLADtgh7L4jqt1yOYrxoWZg@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Sat, Mar 9, 2024 at 7:29=E2=80=AFAM Christoph Hellwig <hch@infradead.org=
-> wrote:
->
-> Hi Alexei,
->
-> yes, the patch looks good,
+On Sat, Mar 09, 2024 at 08:33:37AM -0800, Alexei Starovoitov wrote:
+> On Sat, Mar 9, 2024 at 7:29 AM Christoph Hellwig <hch@infradead.org> wrote:
+> >
+> > Hi Alexei,
+> >
+> > yes, the patch looks good,
+> 
+> Thanks for the review.
+> Can I add your ack or reviewed-by ?
 
-Thanks for the review.
-Can I add your ack or reviewed-by ?
+I thought you had already applied it, but in case you can still
+ammend it:
 
-> and yes, arm32 ioremap_page should just be
-> removed.  I can send  patch unless you plan to.
-
-Pls go ahead.
+Reviewed-by: Christoph Hellwig <hch@lst.de>
