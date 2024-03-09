@@ -1,178 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A48F9F8
-	for <bpf@vger.kernel.org>; Sat,  9 Mar 2024 00:51:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D8E415AF
+	for <bpf@vger.kernel.org>; Sat,  9 Mar 2024 01:00:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709945486; cv=none; b=pPQQTffX1E7B4JbZxZdBgudCVXZd1cRdJf+pO+ydIq1MkwVhmAHC78mGR0V4GMvspxQ7KrR3x6lNgdaeowWVv7OUpKQZrxHPhykso6IG9ddEIDsIbuAfkswIkIc/f5il8/CZGcO96GzrcKf5MJZXNZhFcef1CrW/GbAqkJfXAbU=
+	t=1709946010; cv=none; b=B0sNuV3YWX61Sx/yifmRwh/1jCrCY9ijZBrI4c0rZZHJUpGoaU3UqVI/4U7fpCded/yk6OCyGSgZjmzj7mrHUsCeZZ/T/d0PskgFAtIboyzlf2ub9szO5tRO9dTAfP6PNZBkQ4z97fCTeWewMx2VmtoCZU+PrANLDVMQVWWYtWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709945486; c=relaxed/simple;
-	bh=WB2XXF6DF4QNTlz/uhYPYRQYkfEybOkNy/jHBqbALWE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IVk/wJEzI5G++V3AbJLDLJep2Y4B34xEIpDiKFMivTYKa3N05UYX+fz0a70OAHYTd46LB729XbPohn2PXiyWaLXu5qfva8wKT/TjYu9rzZCEDZV8hNevJTi7SUpCYniUh9bhIDbqiSaq3RWhuo7KMQzwoYE7YbaVpye5n9TIKns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oVTFzE19; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1709946010; c=relaxed/simple;
+	bh=9j3QuuDm3nVltLN8KwysnK1OYgHpJiIhXrkPBs6xQ2I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=e21L/ZI19ouOzyd2uenkulGXUpA5NjHe4N9jwrnDRs5uM/PDKmy/LPXxKCyprRxtcVuz72Uwg1AK0gtALOsW2tEgukQDkpKsnKMQNDrvGWPzuy4l71vluvjPeAwBVvJEZ/tEtUqBL9uPSWKdmEFddVJWVYdpGwxo//yuVWvRgy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TIymAKM+; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oVTFzE19"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F61EC433C7;
-	Sat,  9 Mar 2024 00:51:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709945486;
-	bh=WB2XXF6DF4QNTlz/uhYPYRQYkfEybOkNy/jHBqbALWE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=oVTFzE19T8iRmwSWJ3+33v+/BWxyEFGrm0ScIyUtW+bQt+3A7TNaTxH1BIqcLgNGG
-	 DGqOLdVxYeGK1fABpbg3Ni2+Q8A7TU2DnXPaGAWJUiwEOeGv0R8lznJ0n6IvGiqLd9
-	 IFJrcNM0i2zO2XBW8yJC9vTs4cQKLjVYNMN5j9Y+C8DLlPjOM1EP3o33qr1Ru3+Pgh
-	 muUHBp3fQ/IElS37sgsqGglTQioQv10d7Q2tyV2zgENMIA7SUQj/5ngC9/yQiKKY6C
-	 oorVn1PpvmkX7mSCmZTCdT7NrfFog1kgrsm/ZSmt1+n/4WvDF8IS2IGzvWraZ9QEa8
-	 kbq4kUEfdPUGA==
-From: Andrii Nakryiko <andrii@kernel.org>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@kernel.org
-Cc: andrii@kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next] selftests/bpf: add fexit and kretprobe triggering benchmarks
-Date: Fri,  8 Mar 2024 16:51:24 -0800
-Message-ID: <20240309005124.3004446-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TIymAKM+"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a456ab934eeso379747266b.0
+        for <bpf@vger.kernel.org>; Fri, 08 Mar 2024 17:00:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709946004; x=1710550804; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+39JzJdPMOse6Ap73XwBX2okQdFUO73zLTPO3/9pYzs=;
+        b=TIymAKM+y12c8cvEWqFAQy949BpjSAiJMEgCmalTtN00VKqqw5KUI2utw73Fjk9PWR
+         aLvlQKu8AhhF0ZRwgCVA+FqKDBTgyhTFsJybwbICQRQN+7pDxkOXbnXfIIvvCZLU8/Pg
+         75OkwIY/9z/PIChsPPC5dGbsuANUDvd+tjTUvt+p2BGoUpZdEx6e5bdaeo7PuowF0pdB
+         z6URLyiXBy1v+E53sr0eoPE3QX4jQ6mFKVHTftcltunSND8ZCjO4udR5X3bMqggiHxGI
+         pEqEf7Q906Q6Gugpx+7VDwpd+0meifirb3WmB+x2Wr7oHjfmatPoWcdJw0RjEcF4oM5c
+         E0PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709946004; x=1710550804;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+39JzJdPMOse6Ap73XwBX2okQdFUO73zLTPO3/9pYzs=;
+        b=Ib7BKZcvZ1RlYVudTbSS20wA2wuGnoJ2pmS03WtmNDP5BTB9Gdz654mV6KscRDskyN
+         kVaw3XsWYGg/fCYk+OF0v9lKqPTuYIUvCITkCX6udqF++kmdk/rvU3qy1SW8GuokZsTN
+         jLa0PqPuMh6dlrWe9tVaVEvJNT09N8J4Hnwv8JAlrFGgUH9qFCKiKNja1swPVK6MKlMs
+         riPvyEN6vE90qzWkV+45zZuGmXnnW6ndQfS9StA3GuIaEY+2nH+vxW8A1UVJpPltmr7p
+         rIZ5pEywrU8BXKCoYf7HFTNcLAqm63cR2VhEWE41doVK4Lm6VTVELGav1ZNTMzaTQpqF
+         PE0Q==
+X-Gm-Message-State: AOJu0Yy1trrZ0jHcNcwwKgoj99zJLDYeK5C3xnjNe9DAd4daA8Gr+b2N
+	W3JZVH6ewyK16OCyZaMAYVES5elYie0isJYuQ4z23e/ZVyfFRMT2jREBs1Kq4Ej8KoI5all4Ha7
+	kDfvxYlv5I3F+RQkiV8AhESmOeOo=
+X-Google-Smtp-Source: AGHT+IEItwexlP6QgVZEXbYmmAaforfyMTD254BSLAXrMXfkclr5zF92EQGyQsEgBIDzAJ8b+naVD5jJZ9LILIUJsB8=
+X-Received: by 2002:a17:906:360d:b0:a45:f4d9:d911 with SMTP id
+ q13-20020a170906360d00b00a45f4d9d911mr163573ejb.34.1709946003596; Fri, 08 Mar
+ 2024 17:00:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240305202155.3890667-1-yonghong.song@linux.dev> <20240305202201.3891042-1-yonghong.song@linux.dev>
+In-Reply-To: <20240305202201.3891042-1-yonghong.song@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 8 Mar 2024 16:59:49 -0800
+Message-ID: <CAEf4BzYXwKsmbj2D38DNsoi_gb-VLN1+2xXR9SqyPB6wN=S81A@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 1/5] bpf: Add link support for sk_msg prog
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com, 
+	Martin KaFai Lau <martin.lau@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-We already have kprobe and fentry benchmarks. Let's add kretprobe and
-fexit ones for completeness.
+On Tue, Mar 5, 2024 at 12:22=E2=80=AFPM Yonghong Song <yonghong.song@linux.=
+dev> wrote:
+>
+> Add link support for sk_msg program. This will make user space
+> easy to manage as most common used programs have alrady have
+> link support.
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/testing/selftests/bpf/bench.c           |  4 +++
- .../selftests/bpf/benchs/bench_trigger.c      | 32 +++++++++++++++++++
- .../selftests/bpf/progs/trigger_bench.c       | 14 ++++++++
- 3 files changed, 50 insertions(+)
+So we have:
 
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index 60df99b6ac72..8e02645afe31 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -495,7 +495,9 @@ extern const struct bench bench_trig_base;
- extern const struct bench bench_trig_tp;
- extern const struct bench bench_trig_rawtp;
- extern const struct bench bench_trig_kprobe;
-+extern const struct bench bench_trig_kretprobe;
- extern const struct bench bench_trig_fentry;
-+extern const struct bench bench_trig_fexit;
- extern const struct bench bench_trig_fentry_sleep;
- extern const struct bench bench_trig_fmodret;
- extern const struct bench bench_trig_uprobe_base;
-@@ -539,7 +541,9 @@ static const struct bench *benchs[] = {
- 	&bench_trig_tp,
- 	&bench_trig_rawtp,
- 	&bench_trig_kprobe,
-+	&bench_trig_kretprobe,
- 	&bench_trig_fentry,
-+	&bench_trig_fexit,
- 	&bench_trig_fentry_sleep,
- 	&bench_trig_fmodret,
- 	&bench_trig_uprobe_base,
-diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-index 064a1ef7a6fb..3f24be9cfcb9 100644
---- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-@@ -85,12 +85,24 @@ static void trigger_kprobe_setup(void)
- 	attach_bpf(ctx.skel->progs.bench_trigger_kprobe);
- }
- 
-+static void trigger_kretprobe_setup(void)
-+{
-+	setup_ctx();
-+	attach_bpf(ctx.skel->progs.bench_trigger_kretprobe);
-+}
-+
- static void trigger_fentry_setup(void)
- {
- 	setup_ctx();
- 	attach_bpf(ctx.skel->progs.bench_trigger_fentry);
- }
- 
-+static void trigger_fexit_setup(void)
-+{
-+	setup_ctx();
-+	attach_bpf(ctx.skel->progs.bench_trigger_fexit);
-+}
-+
- static void trigger_fentry_sleep_setup(void)
- {
- 	setup_ctx();
-@@ -261,6 +273,16 @@ const struct bench bench_trig_kprobe = {
- 	.report_final = hits_drops_report_final,
- };
- 
-+const struct bench bench_trig_kretprobe = {
-+	.name = "trig-kretprobe",
-+	.validate = trigger_validate,
-+	.setup = trigger_kretprobe_setup,
-+	.producer_thread = trigger_producer,
-+	.measure = trigger_measure,
-+	.report_progress = hits_drops_report_progress,
-+	.report_final = hits_drops_report_final,
-+};
-+
- const struct bench bench_trig_fentry = {
- 	.name = "trig-fentry",
- 	.validate = trigger_validate,
-@@ -271,6 +293,16 @@ const struct bench bench_trig_fentry = {
- 	.report_final = hits_drops_report_final,
- };
- 
-+const struct bench bench_trig_fexit = {
-+	.name = "trig-fexit",
-+	.validate = trigger_validate,
-+	.setup = trigger_fexit_setup,
-+	.producer_thread = trigger_producer,
-+	.measure = trigger_measure,
-+	.report_progress = hits_drops_report_progress,
-+	.report_final = hits_drops_report_final,
-+};
-+
- const struct bench bench_trig_fentry_sleep = {
- 	.name = "trig-fentry-sleep",
- 	.validate = trigger_validate,
-diff --git a/tools/testing/selftests/bpf/progs/trigger_bench.c b/tools/testing/selftests/bpf/progs/trigger_bench.c
-index 694e7cec1823..eb94f9c0186f 100644
---- a/tools/testing/selftests/bpf/progs/trigger_bench.c
-+++ b/tools/testing/selftests/bpf/progs/trigger_bench.c
-@@ -33,6 +33,13 @@ int bench_trigger_kprobe(void *ctx)
- 	return 0;
- }
- 
-+SEC("kretprobe/" SYS_PREFIX "sys_getpgid")
-+int bench_trigger_kretprobe(void *ctx)
-+{
-+	__sync_add_and_fetch(&hits, 1);
-+	return 0;
-+}
-+
- SEC("fentry/" SYS_PREFIX "sys_getpgid")
- int bench_trigger_fentry(void *ctx)
- {
-@@ -40,6 +47,13 @@ int bench_trigger_fentry(void *ctx)
- 	return 0;
- }
- 
-+SEC("fexit/" SYS_PREFIX "sys_getpgid")
-+int bench_trigger_fexit(void *ctx)
-+{
-+	__sync_add_and_fetch(&hits, 1);
-+	return 0;
-+}
-+
- SEC("fentry.s/" SYS_PREFIX "sys_getpgid")
- int bench_trigger_fentry_sleep(void *ctx)
- {
--- 
-2.43.0
+SEC("sk_skb/stream_parser") mapping to SK_SKB/BPF_SK_SKB_STREAM_PARSER.
+SEC("sk_skb/stream_verdict") mapping to SK_SKB/BPF_SK_SKB_STREAM_VERDICT.
+SEC("sk_msg") mapping to SK_MSG/BPF_SK_MSG_VERDICT.
 
+Are those all kind of in the same category and should we support link
+for both SK_MSG and SK_SKB? I'm not too familiar, maybe John or
+someone else can clarify.
+
+>
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> ---
+>  include/linux/bpf.h            |  13 +++
+>  include/uapi/linux/bpf.h       |   5 ++
+>  kernel/bpf/syscall.c           |   3 +
+>  net/core/skmsg.c               | 153 +++++++++++++++++++++++++++++++++
+>  net/core/sock_map.c            |   6 +-
+>  tools/include/uapi/linux/bpf.h |   5 ++
+>  6 files changed, 181 insertions(+), 4 deletions(-)
+>
+
+[...]
