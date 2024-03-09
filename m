@@ -1,121 +1,129 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEA52125CA;
-	Sat,  9 Mar 2024 01:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3992F1D558
+	for <bpf@vger.kernel.org>; Sat,  9 Mar 2024 06:48:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709948247; cv=none; b=ujlFeka1KiEHRYFEq9H3olC09ilC2LUYvWlFsICLo46ocicofrvEYBnSvLglUjfqilhpy6TMwgq1Mr3dXrl3AlpoJLp8iP2DUvajyO5uprGabUmObfOPB5dRcPAKIMXFI+WrARaeWlEYE13LN9y8G4dWD5FeFb/VWjEQu/SY+C0=
+	t=1709966934; cv=none; b=S50SlpQ49YIgngSFisbDkdbzVa3u3J8teHNhFZFTjTp/xMFto6ktiIP7hLhLqotPOr7RX4r7Jd5l2qmTrWnEnNsvrklbPTddFAMt8O2/TuySjkrgcaVAgbYUhUrNlYKHpQMGBt9+boDqTtyzi8rU8ULS4sb2ZFtPr7G3S87LBh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709948247; c=relaxed/simple;
-	bh=t9sJfx/dPoC4PHFHcz79QVELMCRzIgS/uV7VsG1ZiEU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jYTE+aOSpcjVPtD02Po2t7ULxZhzRHX9uuFhSa+t4S3WBdkDaUGpZBsn/Go3Fh+0Kbj3uVzBYHZgTugWTFh8KFf3+36eBYXPF/lA+ngr8rL+RuuT7/+w20uVoqKC1WE1Elt4bTnW+Ylawjw9Izcb1ECrAyeaPF1PObZb679E9zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jlaz2cdP; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jlaz2cdP"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4131f5f7d47so1211525e9.1;
-        Fri, 08 Mar 2024 17:37:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709948244; x=1710553044; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t9sJfx/dPoC4PHFHcz79QVELMCRzIgS/uV7VsG1ZiEU=;
-        b=Jlaz2cdPWBHXHJdRbFrzP87C91/uWdN70AY6SqmzjUuDbfUpbofq6eU/vUTSKwTh46
-         DCHjW9lVVNhZT5iRXJ6zHL2wIJcix9bP1Y2A/qPf+09n/iEDGt79/Tx9iCO5AGKScvgk
-         AxHZ4FK8iRLYhU+vTG0Zm3Kqoim4PiBsLolc5d3KG+Y6KLYEJ46sXxy7PHAtqThovTj9
-         wQ93gXeYr5ZYmbYikfMxPS6ibZvB1E1SCAjaOmt2XhNf9PuYlyf53BZvu1G4l9XplhNV
-         A+UJ764HVjJgrnFKfX52+zcqF0pdy+PY8IXcH7a6MJuKigfQjBQfonswTvMJBzQSfdQ9
-         q3MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709948244; x=1710553044;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t9sJfx/dPoC4PHFHcz79QVELMCRzIgS/uV7VsG1ZiEU=;
-        b=e49JxgNKaysK9hfCEbb5cOPQNhFKBDWuHYtD98GY95FdJKqZSZMtvh/1/XzE9TAyue
-         ZK995Tbtsp9oEgJ5zDPJmKRwCyugBELdFb754AmTIFwH1HWsFsubg466e8Uxn9IpU49C
-         XB96R0jEBVyDEw6JiE/q/UJ09hTyg7Q4Rzo4uoGycZfP4sa6SPW+pz4whhmVs6z8XRer
-         zrqXRRT9G8D/80M+4/GwKJ/Uq9kWsDbx4R4VhjoBdBckTaX6O2rGVDcdXtslQbjBBanh
-         8di7g2V+/0ajP2BEbWoQ/L//WWXxHlHA8R+IaNLdMGQUTWq5ltM1P+JJgZXa2D3QK7oC
-         GCnw==
-X-Forwarded-Encrypted: i=1; AJvYcCWbJ0MCiOGDq2HoUytz2iFUZoRcI+wdancULNyT+/XGhS3CwFtpOXQphU4K8RD9utHdqZfyZZ9oIta3We5dbVnzn3tF9srbi9iqhjI3Z92nDKfIsOlzcLDWzZ46SzrD
-X-Gm-Message-State: AOJu0Yy+ET69MRvwEsl4ruKWATZ6svAVAOFJWNuMa4qnJl+hPXdudzfS
-	oGNXR+nu5qyGD7srAFN7NGP6co8B9C5pp34++bQUh3ZZs0MCs7JdOynFSTZT4MeYgg/9axVMHRX
-	F8+JLutJGy/IiTSRiWlj82L2xxtM=
-X-Google-Smtp-Source: AGHT+IG8nKUYYOjFdMCUDQrm7i9rcMegPic9EYSlh0DvVf0EaRVfqjGxM834FUWChCcqgKR7fVJIScN+mCzQErdyEKM=
-X-Received: by 2002:a05:600c:190c:b0:413:1139:3bec with SMTP id
- j12-20020a05600c190c00b0041311393becmr525736wmq.35.1709948244238; Fri, 08 Mar
- 2024 17:37:24 -0800 (PST)
+	s=arc-20240116; t=1709966934; c=relaxed/simple;
+	bh=WP5oobjhhkhpYflRy+irgdGS9peCv3p2hdSVGzKUdfA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eGO3fGqKghifmuWTTNi1OdBbfuGTxa1zrwXIV7GIPrkXHXzQQ4vxpNlkipFYJoXLKMML+lKy7FgjOsHMZnBVil4fMjpjMUk5vm4FSuhdIx8itmv31IIX53jzdf7N72ZVTuBvmqLTYXeNdcPYFOTvWBuYjE3NH17fNkFfPkLC+3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4TsDCC5yPqz4f3lgN
+	for <bpf@vger.kernel.org>; Sat,  9 Mar 2024 14:48:39 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 6F93F1A016E
+	for <bpf@vger.kernel.org>; Sat,  9 Mar 2024 14:48:47 +0800 (CST)
+Received: from [10.67.109.184] (unknown [10.67.109.184])
+	by APP1 (Coremail) with SMTP id cCh0CgAXNQ5OBuxl25GXGQ--.25189S2;
+	Sat, 09 Mar 2024 14:48:47 +0800 (CST)
+Message-ID: <f399749b-85bf-4aaf-8af6-ea735c5ab517@huaweicloud.com>
+Date: Sat, 9 Mar 2024 14:48:45 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CANiq72ka4rir+RTN2FQoT=Vvprp_Ao-CvoYEkSNqtSY+RZj+AA@mail.gmail.com>
- <CAADnVQL1Zt5dwFv9HPDKDuPEKa6V7gb5j-D-LPWv47hC6mtwgw@mail.gmail.com>
- <CAADnVQLP=dxBb+RiMGXoaCEuRrbK387J6B+pfzWKF_F=aRgCPQ@mail.gmail.com>
- <Zeso7eNj1sBhH5zY@infradead.org> <CAADnVQKQumV-0AxGLKX0jQEfa8Z2Bxx2yW8k_1OqGBnD-RqrbA@mail.gmail.com>
- <ZetEkyW1QgIKwfFz@infradead.org> <CAADnVQL4JAUz-p-X9aEggeKNpYUqJZrzQKO7N0dnohE0r7mdpg@mail.gmail.com>
- <ZetJ4xfopatYstPs@infradead.org> <CAADnVQJKPa+JUUKpW7gZehbFBYj3GPrbpd0NCj4xwkU2puObEw@mail.gmail.com>
- <CAADnVQJeOc9Muki+-PUYc20-=1vRgkprbNL0zTc=Cz-T_iYkNQ@mail.gmail.com>
-In-Reply-To: <CAADnVQJeOc9Muki+-PUYc20-=1vRgkprbNL0zTc=Cz-T_iYkNQ@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 8 Mar 2024 17:37:13 -0800
-Message-ID: <CAADnVQ+zbZ1M_uvWmyWUdomAedP+LWMhQX-5bGajzJ0GYzme9g@mail.gmail.com>
-Subject: Re: vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, linux-mm <linux-mm@kvack.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drivers/perf: riscv: Disable PERF_SAMPLE_BRANCH_* while
+ not supported
+Content-Language: en-US
+To: Conor Dooley <conor@kernel.org>
+Cc: linux-riscv@lists.infradead.org, bpf@vger.kernel.org,
+ Atish Patra <atishp@atishpatra.org>, Anup Patel <anup@brainfault.org>,
+ Palmer Dabbelt <palmer@dabbelt.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Pu Lehui <pulehui@huawei.com>
+References: <20240305155223.1823287-1-pulehui@huaweicloud.com>
+ <20240307-oat-mule-10441ef7e94a@spud>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <20240307-oat-mule-10441ef7e94a@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:cCh0CgAXNQ5OBuxl25GXGQ--.25189S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF4fWw4xCrWfJrWxXr4UXFb_yoW8uw4UpF
+	WIkFySka1rJF1Ivw13XF1vq3W5X3ykKF9xKr95K3s8urs0kFnrKFyvyayrC3W8Zr1fAryI
+	vr17KrW3Ca45ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+	AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
+	IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
+	KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-On Fri, Mar 8, 2024 at 2:44=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Mar 8, 2024 at 9:53=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Fri, Mar 8, 2024 at 9:24=E2=80=AFAM Christoph Hellwig <hch@infradead=
-.org> wrote:
-> > >
-> > > On Fri, Mar 08, 2024 at 09:20:24AM -0800, Alexei Starovoitov wrote:
-> > > > ok. Like the attached patch?
-> > >
-> > > Looks sensibe, but I think the powerpc callers of ioremap_page_range
-> > > will need the same treatment.
-> >
-> > Good point. Only one of the callers in arch/powerpc needs adjusting.
-> > Found few other similar arch users.
-> > See attached patch.
-> >
-> > ioremap_page() in arch/arm/mm/ioremap.c is an interesting case.
-> > It is EXPORT_SYMBOL, but there are no in-tree users.
-> > I think we shouldn't apply checks to it,
-> > since some out-of-tree module may fail.
-> > I have no arm boards to test, I suggest we play safe than sorry.
->
-> I double checked on my newly setup arm64 VM that the fix works.
-> I believe the regression needs to be fixed today, but
-> looks like Chritoph is out for today.
-> So I can either revert the offending commit or
-> apply the proposed fix to bpf-next.
-> I'm going to do the latter soon if no one objects.
 
-And now applied the fix to bpf-next
-https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=
-=3Dd0d131e3b655fd267d14bb1bed49e3f990a1465e
 
-I've looked through all remaining users of ioremap_page_range()
-in alpha, arm, loongarch, mips, powerpc, sh, x86 and
-all of them do the right thing:
-*get_vm_area*(.. VM_IOREMAP, ...)
-followed by ioremap_page_range().
+On 2024/3/8 1:52, Conor Dooley wrote:
+> On Tue, Mar 05, 2024 at 03:52:23PM +0000, Pu Lehui wrote:
+>> From: Pu Lehui <pulehui@huawei.com>
+>>
+>> RISC-V perf does not yet support branch sampling. Two riscv bpf
+>> testcases get_branch_snapshot and perf_branches/perf_branches_hw failed
+>> due to not disabling such sampling.
+>>
+>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> 
+> This seems worthy of a fixes tag. For what commit I do not know, but I
+> figure it is a problem currently in mainline and a fix should be
+> backported?
+
+Thanks for review. We need to ban this type of event, otherwise we will 
+get unpredictable results. It should be with a fixes tag.
+
+> 
+>> ---
+>>   drivers/perf/riscv_pmu.c | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/drivers/perf/riscv_pmu.c b/drivers/perf/riscv_pmu.c
+>> index c78a6fd6c57f..bc42cb95a97c 100644
+>> --- a/drivers/perf/riscv_pmu.c
+>> +++ b/drivers/perf/riscv_pmu.c
+>> @@ -313,6 +313,10 @@ static int riscv_pmu_event_init(struct perf_event *event)
+>>   	u64 event_config = 0;
+>>   	uint64_t cmask;
+>>   
+>> +	/* does not support taken branch sampling */
+> 
+> Skimming patchwork, I found this comment confusing.
+> Isolated from the commit message, which it will be once committed, it
+> was not immediately clear that you were referring to the driver. I think
+> it is just matter of making this a complete sentence that starts by
+> mentioning /what/ does not support this feature. Is it the driver? Does
+> the spec not allow it? etc
+
+I actually just found out that the current implementation of riscv perf 
+driver doesn't support it. After reading the relevant spec, I did not 
+find any description related to branch record. Maybe I may have missed 
+something or it may be supported in the future, but the current driver 
+does not support it, so I think it is more appropriate to limit this 
+comment to the driver implementation. How about "riscv perf driver does 
+not support branch stack sampling"?
+
+> 
+> Cheers,
+> Conor.
+> 
+>> +	if (has_branch_stack(event))
+>> +		return -EOPNOTSUPP;
+>> +
+>>   	hwc->flags = 0;
+>>   	mapped_event = rvpmu->event_map(event, &event_config);
+>>   	if (mapped_event < 0) {
+>> -- 
+>> 2.34.1
+>>
+
