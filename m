@@ -1,114 +1,109 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94DE31E863
-	for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 18:41:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920463A8CC
+	for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 19:43:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710096069; cv=none; b=UI3PHwNPg5aqxu9P+3a8huZEblqR9zfHUxKAVQt9Rj3kP6TfgFwBmVKJhjQoTO2/q0FiuCQ1ubqqGMx+csRbXa8xTAVZMF4aelmjDY7B1n1Xwfv1I6G4JX5XkjVS8W74lrErrIc7cdgt0dtjEtQ9SMRN0eTg/yuPGMdKsepKXmI=
+	t=1710099825; cv=none; b=HFajEKIl0HnRlatr37+9mGDoBGOsXdEeazdrnxf9E2SHRbKhWrexvzvSu8IemkZsBTKBYgMVz8K09TwD0chLVRLcR3zjYSjLCvYeAALEXaU5RVLKuyp1bYkQi7rfkP7VwBTHOxxGcrSIhxw3out2KL5Bm+klk6JSQ9Jr8nfrOUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710096069; c=relaxed/simple;
-	bh=AvFQPp4kyLh+TFglZjeC3Lb5VBfSdzOtKtFyl1V2cFo=;
+	s=arc-20240116; t=1710099825; c=relaxed/simple;
+	bh=Po+LUBeVn1OO/Jp/EJAb5LbLfXvJwOhspjQU7oYwS14=;
 	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
-	 MIME-Version:Content-Type; b=caqbNhZbZWBVEioAGMrlVtHaL/1t01uTt4yiRs4MGqg8XaIAK51oQX1su5oeyGXxCxb29oKK9ZEjaUGmzKtCwlOcEOH23hnATaemdjlnKibhnfVpwjoVp+tl/E30JYsBgqcqyXhDU4A5N0+AKR+0Nhk2ZOICR2J/JP8CJsBTHPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=GS3FxPxX; arc=none smtp.client-ip=209.85.218.43
+	 MIME-Version:Content-Type; b=Fz+C8TTSjvov5Av/5JCDhClCPrfHWWf7urq761MJV5LcogSWrxHLXexs8Fe7UPXl9bYaS42FHEptMn5DlXbukAlrTaeu7aXpqmcuxga0Xd2AkduqXmLGLpgdGDWljbngWd+qsfsLYYG/LvzJDqeQGKxTFEpcEJ6unxk0uisQhL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=C7s4WDVT; arc=none smtp.client-ip=209.85.208.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="GS3FxPxX"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a461e09ddddso52499266b.2
-        for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 11:41:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="C7s4WDVT"
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2d382a78c38so43500991fa.1
+        for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 12:43:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1710096066; x=1710700866; darn=vger.kernel.org;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=tL0MzOZMsAFV4TRaP2fV8WC40d9wfVEKBIBOf/OGnHA=;
-        b=GS3FxPxXRc2YsizCg9zFziyMUzGCdKKSYYZFGbcW3iTbR/cqxheBj08fQ5xKyw2cVj
-         iz/JPv2ckcgbFJejQiwYWrMTCEMo22D1oTUI59d8/DM6RVTI/wH8g/YyLWlqM8U9d7lF
-         zlJYfcwTVu4EN0IXOIALQjS8ZmZ/JBARdDsNPkCfu5+RN3xhjDpTnlO8iCrQnoFB1dYG
-         Pc2pEPIUZGyR3jRhvTFsY0uKMD/KSueRgyZ4OSLnfVU2+C6NATB6otdGmX/MSuXufSEo
-         mJwikh3oamxxwmxwDTmDmu0k2KnsffjPkCYXwaynr8eTMYoe+x2gAxlwhl4TxMG0ncqN
-         mKYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710096066; x=1710700866;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+        d=cloudflare.com; s=google09082023; t=1710099821; x=1710704621; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tL0MzOZMsAFV4TRaP2fV8WC40d9wfVEKBIBOf/OGnHA=;
-        b=nuGG/RtMN5Crvfo+4qxpIDoBhGS+P2gJGMDsMsiEeXBowwJysKAN+fsy2iDcxgz6xi
-         qExgKxsXpQgllJTcaljpFJYgy/ZzI2hZN3gYveEoP8jpbrQx6yAeiavhvb5+jgJLI6X7
-         LaiUfMH0nxu8K5C6BQdLLAminTdIFU708W1Xame9dJ+1YPNd3u2hU4opvKD/KpOlJnDw
-         kzTmaqiLiasGw6wBoBA63Nhgf/2Cx2TJeyyZT1mdh8Ww1oZlirdgoJylP5kaDJYF9iOH
-         AZkCCb5pEDfYvRkhjQlGXgWAX5hr/y9qxZgxxlResGdps730iWwfQSVfzAgAonJYUz/A
-         IHmA==
-X-Gm-Message-State: AOJu0Yx5Vwu5S49FHtwkSS9NiJ1fuIGgPVuprBhfLpArEXguJhYZ7AXt
-	mZhXQjdFlGShDfMAKYTcbEbfTfvzaAAVCIjBRxDrrSjbP/VYdRTbBgwGD4q+pks=
-X-Google-Smtp-Source: AGHT+IFIjgRQ9mjpImT9qf2vtWWU2jZ/hV1jIr40gk6/mKtG1jBTEtkaBQmSxRu4E3z/u/Wqd6zKKQ==
-X-Received: by 2002:a17:907:c310:b0:a46:1f6d:3052 with SMTP id tl16-20020a170907c31000b00a461f6d3052mr1735697ejc.14.1710096065817;
-        Sun, 10 Mar 2024 11:41:05 -0700 (PDT)
+        bh=Po+LUBeVn1OO/Jp/EJAb5LbLfXvJwOhspjQU7oYwS14=;
+        b=C7s4WDVT8pqC0RmXyiUSpFhGlVJ9YBqHmPBFp1AuItISY0Cx2xkSl7T5KGALiCe6An
+         YxphfR1cTxgBQ0WGQlwuI36NatzzOvQZHKW6WFuj1XHKa12JAqAPoJWTEsBF/isD4dKN
+         dP8ft5aH1M6BHphK3E9hB/2fcgggadltV3spJB6Mfdr1np2mexBZMN6UVx4Sgwx5XVSk
+         XdeZzqVZsEJ5g747DtSseVEVqxUuCEdQT/5PN1AzYTtcD+6pKbe3JroQYNc0ZkRde8RQ
+         f6+lSAUK1kRQUPNHevZw8T6EzATTlAtqIs+AY1fVo9SAUCGOppc3ygH2/uV9gzbmirw0
+         kv9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710099821; x=1710704621;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Po+LUBeVn1OO/Jp/EJAb5LbLfXvJwOhspjQU7oYwS14=;
+        b=lhVeYQxA4q7/9urWOoCel2+TeyvnWz3B9YTl4g1H9FAmz0dcQxGnEcB+gcK3m6uHK8
+         qfAZiItmaXUzcCO73Gp4d8CE/cd3tsIZSKAzMNTbfbGbuLMjQMdTaZl1b62zzLOZubWX
+         xmoH5z2UsWIm7Q7ffob8q0cvFTPRhZ9e9TJmlOxpCPjKB8ZYAAdk6T7hPE4dEJ8RGMWy
+         pG9cAvF3z7Z+ZTxCtaybh70LL23J1fgkPcy/QLt81FVOWubp/OPhEYHSFOQChh/OvS3L
+         y/MqxoKFSX5KgeQwip2q674uVi6TP++aaDdL6s8iD0xsLWBDVznzCoYSNPbkoeO0QPq5
+         wGtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX59BBK7nMqEjJaXCmX+ZvBp4bOcvXJctHZFxtH+XIpG6rX9lGA06BlmUc3GUWceS2dbZK/XNVk2vihdswdwdtPPvjm
+X-Gm-Message-State: AOJu0YyWIjgXMX2Ad5sSMu9/c9jxQLvOj6aCevdD0myMi9+4O6NWjIlc
+	d5k3aEVDyqCwE1gaHK5n54CjeVPyQr6IYwXw2dhza03h8WzfrDMpOb5nKrYpaTv1rUd3Ci0Ge4K
+	U
+X-Google-Smtp-Source: AGHT+IGFyVvdAFE0NAFVZngCgJ7i6p78aGW7lh2Aqqniv1VQZs5PG5HRneBcFRQvS0ThP1rmraJmnA==
+X-Received: by 2002:a2e:3212:0:b0:2d3:3b37:db78 with SMTP id y18-20020a2e3212000000b002d33b37db78mr2552879ljy.16.1710099820655;
+        Sun, 10 Mar 2024 12:43:40 -0700 (PDT)
 Received: from cloudflare.com ([2a09:bac5:5064:2dc::49:8f])
-        by smtp.gmail.com with ESMTPSA id v2-20020a170906564200b00a4619ab82c8sm982105ejr.197.2024.03.10.11.41.04
+        by smtp.gmail.com with ESMTPSA id b2-20020aa7c902000000b00564e489ce9asm2222322edt.12.2024.03.10.12.43.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Mar 2024 11:41:05 -0700 (PDT)
+        Sun, 10 Mar 2024 12:43:38 -0700 (PDT)
 References: <20240305202155.3890667-1-yonghong.song@linux.dev>
- <20240305202216.3891808-1-yonghong.song@linux.dev>
+ <20240305202201.3891042-1-yonghong.song@linux.dev>
+ <CAEf4BzYXwKsmbj2D38DNsoi_gb-VLN1+2xXR9SqyPB6wN=S81A@mail.gmail.com>
 User-agent: mu4e 1.6.10; emacs 29.2
 From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Andrii
- Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John
- Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com, Martin KaFai Lau
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org, Alexei
+ Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, John Fastabend
+ <john.fastabend@gmail.com>, kernel-team@fb.com, Martin KaFai Lau
  <martin.lau@kernel.org>
-Subject: Re: [RFC PATCH bpf-next 4/5] bpftool: Add link dump support for
- BPF_LINK_TYPE_SK_MSG
-Date: Fri, 08 Mar 2024 16:07:22 +0000
-In-reply-to: <20240305202216.3891808-1-yonghong.song@linux.dev>
-Message-ID: <87frwyrku7.fsf@cloudflare.com>
+Subject: Re: [RFC PATCH bpf-next 1/5] bpf: Add link support for sk_msg prog
+Date: Sun, 10 Mar 2024 20:23:49 +0100
+In-reply-to: <CAEf4BzYXwKsmbj2D38DNsoi_gb-VLN1+2xXR9SqyPB6wN=S81A@mail.gmail.com>
+Message-ID: <878r2pswie.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 05, 2024 at 12:22 PM -08, Yonghong Song wrote:
-> An example output looks like:
->   9: sk_msg  prog 108
->           map_id 84  attach_type sk_msg_verdict
+On Fri, Mar 08, 2024 at 04:59 PM -08, Andrii Nakryiko wrote:
+> On Tue, Mar 5, 2024 at 12:22=E2=80=AFPM Yonghong Song <yonghong.song@linu=
+x.dev> wrote:
+>>
+>> Add link support for sk_msg program. This will make user space
+>> easy to manage as most common used programs have alrady have
+>> link support.
 >
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->  tools/bpf/bpftool/link.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> So we have:
 >
-> diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-> index afde9d0c2ea1..5eb140197d3f 100644
-> --- a/tools/bpf/bpftool/link.c
-> +++ b/tools/bpf/bpftool/link.c
-> @@ -526,6 +526,9 @@ static int show_link_close_json(int fd, struct bpf_link_info *info)
->  		show_link_ifindex_json(info->netkit.ifindex, json_wtr);
->  		show_link_attach_type_json(info->netkit.attach_type, json_wtr);
->  		break;
-> +	case BPF_LINK_TYPE_SK_MSG:
-> +		jsonw_uint_field(json_wtr, "map_id", info->skmsg.map_id);
-> +		show_link_attach_type_json(info->skmsg.attach_type, json_wtr);
+> SEC("sk_skb/stream_parser") mapping to SK_SKB/BPF_SK_SKB_STREAM_PARSER.
+> SEC("sk_skb/stream_verdict") mapping to SK_SKB/BPF_SK_SKB_STREAM_VERDICT.
+> SEC("sk_msg") mapping to SK_MSG/BPF_SK_MSG_VERDICT.
+>
+> Are those all kind of in the same category and should we support link
+> for both SK_MSG and SK_SKB? I'm not too familiar, maybe John or
+> someone else can clarify.
 
-Compiler says - missing break.
+We also have the most recent SK_SKB/BPF_SK_SKB_VERDICT [1], which is
+what one would use instead of SK_SKB/BPF_SK_SKB_STREAM_* prog pair when
+chopping the stream of bytes into frames is not needed. For instance,
+because we're redirecting from a UDP socket.
 
->  	case BPF_LINK_TYPE_XDP:
->  		show_link_ifindex_json(info->xdp.ifindex, json_wtr);
->  		break;
-> @@ -915,6 +918,11 @@ static int show_link_close_plain(int fd, struct bpf_link_info *info)
->  		show_link_ifindex_plain(info->netkit.ifindex);
->  		show_link_attach_type_plain(info->netkit.attach_type);
->  		break;
-> +	case BPF_LINK_TYPE_SK_MSG:
-> +		printf("\n\t");
-> +		printf("map_id %u  ", info->skmsg.map_id);
-> +		show_link_attach_type_plain(info->skmsg.attach_type);
-> +		break;
->  	case BPF_LINK_TYPE_XDP:
->  		printf("\n\t");
->  		show_link_ifindex_plain(info->xdp.ifindex);
+I have a cheatsheet that clarifies in which redirect-with-sockmap
+configuration what program type + attach type is used [2].
 
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
+it/?id=3Da7ba4558e69a3c2ae4ca521f015832ef44799538
+[2] https://github.com/jsitnicki/srecon-2023-sockmap/blob/main/sockmap-chea=
+tsheet.png
