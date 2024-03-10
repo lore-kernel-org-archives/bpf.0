@@ -1,57 +1,57 @@
 Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 415AF5662
-	for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 02:05:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF19C12A
+	for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 02:05:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710036338; cv=none; b=dE+HgQhyKmV98Kvi1skqN+4wwKS0Q9kYuoJnXpo/rCzsTdJgMlWVjeRLzFmN4qA4sYZvYH58h1lfkeXTpZq4I3/p0t0s5Cf7ZGdMqly6Q/rNc8BYtX/YsJo+2qbzkl4qwWg9tpcmPoHRqheB6DqETqTYiQev9+qeQ6tdD3BRrSY=
+	t=1710036342; cv=none; b=sVllwa2460X4e2zuydNS2V21+QYpY0Wa40XeZBlXokZ+Adakns1B9W4ZsToXxXpUeGC9jp/zIzXHcIvLVdan2UrSegpPQ7GOJPicFFKTN+44t8G/IWKbWOnqAGC+PAE24S0aQh/8OoWZJ+8djImX79i/6Tc4NoXyF+NjSycjkbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710036338; c=relaxed/simple;
-	bh=D2uX+Mnk+6vztSUZd5hP00XWtGAz0CoTxvXAkzGNj1I=;
+	s=arc-20240116; t=1710036342; c=relaxed/simple;
+	bh=RGHR+QiLceocR0H7Go2J+IFsQikYIqGpUdA5u3bRq6I=;
 	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Content-Type; b=bKV/w1lpBDNFglfiDTghsn7N2v155z7NMkFsnyDdHlV8aur+pGLosgoYYDL6mBb/cWvuAyRVsWV0Sbzd1nyYCRcBI63P7Bxj4fUuWt7EwNl5kPpJcya6fleVYiAMcod4318LdbNmscCGbizjy2wRg1i2deYsHygxTh+cmqb64Ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kMIRydFx; arc=none smtp.client-ip=209.85.128.202
+	 To:Content-Type; b=ewEwTIGjWawV8bpfINtTvhJpi6JS3Lf7aMl/xTbsWBmQJGa774zYY+c3Gxy5WYeIEWOk8nzoL+K+bOO9vWpeVoOhZ4u1cLBBiSpPv5XrecSCmQ0ueyv/9pzseYcU6L95U2F5nxF8SFWxZ46PW5Y/pfJCAe+7H+Lgi2UGSRn8dic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VRsNZPe0; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kMIRydFx"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-609ea26233dso55970847b3.0
-        for <bpf@vger.kernel.org>; Sat, 09 Mar 2024 18:05:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VRsNZPe0"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-609f2920b53so48009387b3.0
+        for <bpf@vger.kernel.org>; Sat, 09 Mar 2024 18:05:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710036336; x=1710641136; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1710036339; x=1710641139; darn=vger.kernel.org;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=T7XIYLAkcLSrj5FLrGjKI8q+UW4mZzYyudvGuQ4/TZo=;
-        b=kMIRydFxidKzY7BpYx9EUp/eSGgFea4GwwQrTWrZFWAG+5gWnMJU0Gbf6KDWEXRVbB
-         yt7yTV4W7LoKxr4bwuLNicNelGV0VJdo8+Xxc3tr9qWqEormXicnooeGM+XBHP/F8Lpv
-         MkZPbXBbSyvDxovJoSlKKkCQ8NeOEsoPsWWeQ/wCQOw3jDd+VazdaPjgJjjglqJ2YrqQ
-         DzXZQwEmve8ZRYv9vrjP3ObWuuQVtRPblfKrVNINjUlnr0Z/lkXrGfycXXpfWJCveve2
-         LkbG7/7/jskn+XiPH/2MRqGAtT1mcFiev5F2k5tRA7Uy3qUjHzrB0948Z1PAUaO33IXn
-         CXSQ==
+        bh=lEogdjVExxayJMRv1u0mjZw+1C1F2zoHt9ebGCOCyUE=;
+        b=VRsNZPe08ukQkLbC8cLeYP0BRexi0H/ytB079Ek1//YKN6get16huQfO+BpiG1tXOD
+         /DfXJJsAhbpa41MJSgaY2NShFvyfGKd41kr50rONuG+9vGjXxf92ch8Hl6eGAPWS0hw7
+         V3PejFFmfmrU5vPpGLAigL7iSv4mZImqptxoFxJQ4OjxVvG0ERXdGOpP+Lgn2PtK9AWA
+         0g0yb0s9m2oHNGuLPm57TNOEk03to2Zrwt1BJs6TA32/yB8FdcS9VHIy8Wq9TRzx0jSD
+         Bgqc+g/01i/CxnEOjKXp+j/RC3Las1cviN75DkghO3v1bmFnfAoqbBTNS/IAQpDlv+tN
+         PkEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710036336; x=1710641136;
+        d=1e100.net; s=20230601; t=1710036339; x=1710641139;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T7XIYLAkcLSrj5FLrGjKI8q+UW4mZzYyudvGuQ4/TZo=;
-        b=M5d80vZYYE1h7jp5uDf7NWSqm2IE4KV2sWdHgFh6EQLaMhyT9DQE5+NWqn8AgVb4yq
-         K5gSCOAWYOZ/ryymvo/1Abua9SLg+xTMmfY+XZD7hHANaK2Ee77W+BQM/N2GmrjwiVWB
-         ddlcQerrsX7KirSOEJYv0cC3A5Q9rPFgl/GEXj9xIrCpRHGKT95WHp3ymrlCTvK5GkeE
-         tkOiDhKrkOWsTeT3eNn2OT3lX6dklMFHKLkw6N6EkIpK2WE5sRCN/LxSjxpkfkGNOfM6
-         Dpr+wUoe2ugaCzv6//l3kzF9MmiUQcxKDZ8wTwMMD65M2dHEz/Rw4/vQMUGMT6NJSIyI
-         NexQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUwSj7kSF6WCSi26wzV84uzzEkUhc7rL6pFLDxautOH5z8Liu7sQ3SUf6uB/f8gvghu57MU3om//2KeQc66aFFggcQ1
-X-Gm-Message-State: AOJu0Yz6GWOuS1ZM/964D1pk4ZTL7POOtG0DMYgAAk+Y1IC4v6cb71yI
-	TgA8KbF/t6YPwl8Akgy56jPo03L8Bg4wtEcck5DSxCR1NNLP0E926GG+yzrPi+VIe/dLepTK68F
-	uhIsftg==
-X-Google-Smtp-Source: AGHT+IHgDNWM+Z4QXgFMm7GizvEhHToqcLHuZHJtXyYeO1MzHp7huAG4ihDQbMUHqCDQpOBGjLQSGQDO0YZe
+        bh=lEogdjVExxayJMRv1u0mjZw+1C1F2zoHt9ebGCOCyUE=;
+        b=VK7OZRmtF6+6tudlEAAuVaUpXHWWAfM257l0vPrOXVImL0LT19IuNdyL29vEgABzI0
+         teXlrDMjyJe7YKdTt36Myp0FIQDxN5t88pgVXIjNnq+QsIYrxoqqaU7OJiQ6kfPTUB6o
+         2vSaBQJ2q8HQvvllqmGW8noYFsJuF+V7h2JYJ85hxDcCpWHBUb0wkN92mW+dNqqD1L1o
+         ZfsvL3IXFlcnqOh58HEqXJGoVpTc8dHUK0xDGpVY5/GfRhX/idd1VNfJeINkaedDRdot
+         RnSQCbZYs9Kgy0lJ/ety0ZhOOrmsmUyTuhoQNKZOfvjRyDXOux+VIOzA3x3cjDrBY1Be
+         RKEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWRihHRtRo/QamuppLc/hvGov5EH5fUoLAQ8Yr666D0LAjDmxqngHeUceu9A472MoEHDN2g+LIy0c4HqvPDif4AOfxN
+X-Gm-Message-State: AOJu0YxLCjybIS/GxAoEjdvRO8R5SR5FSOzIfLDS7Gq9exSXjvVQHpQG
+	xAC2mlIEvzOkYI6FL/1/C+IjEvqywAv4GhxCdRosRrDS7wSmwrIWNdXX9uO5JDtCDEaFqgdckxk
+	U2tDhRQ==
+X-Google-Smtp-Source: AGHT+IEyM3cHgr9ZVgnZoKCZ0SYCN/4S3200GAqNBDyFBPz9iTsTIsAdJdgR5M7Dk98A1ko/gir8jVGY1z12
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a63d:1b65:e810:3ad3])
- (user=irogers job=sendgmr) by 2002:a0d:d7cd:0:b0:608:72fe:b8a1 with SMTP id
- z196-20020a0dd7cd000000b0060872feb8a1mr953360ywd.4.1710036336387; Sat, 09 Mar
- 2024 18:05:36 -0800 (PST)
-Date: Sat,  9 Mar 2024 18:04:57 -0800
+ (user=irogers job=sendgmr) by 2002:a0d:e84c:0:b0:609:d325:5826 with SMTP id
+ r73-20020a0de84c000000b00609d3255826mr678752ywe.7.1710036339213; Sat, 09 Mar
+ 2024 18:05:39 -0800 (PST)
+Date: Sat,  9 Mar 2024 18:04:58 -0800
 In-Reply-To: <20240310020509.647319-1-irogers@google.com>
-Message-Id: <20240310020509.647319-3-irogers@google.com>
+Message-Id: <20240310020509.647319-4-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240310020509.647319-1-irogers@google.com>
 X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
-Subject: [PATCH v1 02/13] libbpf: Make __printf define conditional
+Subject: [PATCH v1 03/13] libperf xyarray: Use correct stddef.h include
 From: Ian Rogers <irogers@google.com>
 To: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -93,34 +93,27 @@ To: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>,
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-libbpf depends upon linux/err.h which has a linux/compiler.h
-dependency. In the kernel includes, as opposed to the tools version,
-linux/compiler.h includes linux/compiler_attributes.h which defines
-__printf. As the libbpf.c __printf definition isn't guarded by an
-ifndef, this leads to a duplicate definition compilation error when
-trying to update the tools/include/linux/compiler.h. Fix this by
-adding the missing ifndef.
+sys/types.h may not define both NULL and size_t used in this
+file. Change the dependency to the correct stddef.h one.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/bpf/libbpf.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/lib/perf/include/internal/xyarray.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index afd09571c482..2152360b4b18 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -66,7 +66,9 @@
-  */
- #pragma GCC diagnostic ignored "-Wformat-nonliteral"
+diff --git a/tools/lib/perf/include/internal/xyarray.h b/tools/lib/perf/include/internal/xyarray.h
+index f10af3da7b21..947804fb8c85 100644
+--- a/tools/lib/perf/include/internal/xyarray.h
++++ b/tools/lib/perf/include/internal/xyarray.h
+@@ -3,7 +3,7 @@
+ #define __LIBPERF_INTERNAL_XYARRAY_H
  
--#define __printf(a, b)	__attribute__((format(printf, a, b)))
-+#ifndef __printf
-+# define __printf(a, b)	__attribute__((format(printf, a, b)))
-+#endif
+ #include <linux/compiler.h>
+-#include <sys/types.h>
++#include <stddef.h>
  
- static struct bpf_map *bpf_object__add_map(struct bpf_object *obj);
- static bool prog_is_subprog(const struct bpf_object *obj, const struct bpf_program *prog);
+ struct xyarray {
+ 	size_t row_size;
 -- 
 2.44.0.278.ge034bb2e1d-goog
 
