@@ -1,111 +1,127 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E381D1F958;
-	Sun, 10 Mar 2024 11:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01F529411
+	for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 15:47:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710071157; cv=none; b=LBarGsUsphPM11NtcZN4mwB4IWmh/baSHx5n/rtLAJhgXkLm540SjMTL5+GzhfC2O/YyGTOw2ODqfBeu+4vwzhFt+FlNry7PNYcTFHJmqwYLvBYQ4afk1YzxRomqr5ujWKLCJHKLTFNdbRmUNil6eqWRdcvudWvIDg6Wh0nzPyg=
+	t=1710085658; cv=none; b=HUPJPbxh7eEiR3ZVTzr1G+3Ppr3UGsMJo+gdmDeawP138YlloJAHNFPKxvD32kRtOBUtGg7sR4imQ0M9EBX53nDsms4PimptgRl4nQPVnA63pf+P1Nf12rpoEoE20QUKBThf9RjN6UfrDGO0C0tm/cjNspp0cEEtM0z0pyneckw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710071157; c=relaxed/simple;
-	bh=x4szjyNUt9dEAUQ7bswBMhPwjeuMoSBrMur9XPZXXjY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AwH1Na2FSPF5yGBrGuU1N75D+EP537dPweb8v+7UvwkbZ5B2TIwY3e817MQSzv4PVdSo6/xIKS1/595vI17w/GW4whRHHzZgUmpGE8Deb2qyR6PiXHJY7SxSeLgf2+o3pP2uO8GNxqOOi+LpP1AOuk1qp2PwRLTF9OidZW/+Vmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iRGVgfe3; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710085658; c=relaxed/simple;
+	bh=Pujf88MSgeBgnVk3XoQ+u8p6dPOMYRawFtSeLnjfy6c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DvJix1ni3ipmNvsWXu8YPxUcx6nGU16s1lqwxWPwcHhWsSvklaiwQ9soTpkHdDciQP/qsu7lYF1gYkaZW/PplsWF2+G/kwNOQ7jtNsLv2RkOPQqQbuZUwNvXUty2y6hoOd9VT01HI4Kjpr6q9FpeK5DiG4JTz08HHhKd8nRIzzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=k8CBp5Lz; arc=none smtp.client-ip=185.125.188.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iRGVgfe3"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-29bfc3ca816so2652a91.0;
-        Sun, 10 Mar 2024 04:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710071155; x=1710675955; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=APdbC4WVW8bbq3Ji/1h5l4Whb2mua5InxmZI64nd8Ms=;
-        b=iRGVgfe3PUY3WM7M9Kmd42qfBq7UphZl9qeOmNZYCwlmsG3Hb2Ew0MxoOjs/omvieC
-         V8Bj4yAYeku3ibpWlNpreJPuNFdUkwE5K7sX3LAFpNAEB3h7yG2CbS/34uKcfur1d5fB
-         EbvCHU9TX7XO2xSTx7ywCQG2q7her5P5QLhm8z88prW9fKJTXNb8UZfKYnHv7dX7xNFO
-         q/Yv93biu7tEdRE9q/VvcQxCZFW+hi5DT1Swzj2ZMCLMnTWSigckGQR23vA9DOqnA0/P
-         1fztKSwLsGGkL6MBxPKJ2OQS4CIApADjkb5eQGtiqBi1ZYSs/YtwQwdB3NHSAIe82zvN
-         cyUg==
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="k8CBp5Lz"
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B043F48A9E
+	for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 15:47:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1710085652;
+	bh=3x1QmuNCSkhKmOkbx/k9p+MANy4otdnhu0jXgm0Ki0g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
+	b=k8CBp5LzYXhGPbcR+Y0ZUahzuctNhcOFEqscHdPUKYfadZ/tjEP5uwj2GIKvWEs2O
+	 Je1FtoyKahzh68HcKC6uSbn/AhjEBb6Cr/pQHJWd50aCSOHaGfqaxgqYUNMYz9kxC7
+	 pr7E9gctEUAbMrOykUtFUhkuI9BbavRzbvQlUCmfkxm/Ie9mh3AQnSkFDdZDYmhRwY
+	 /2aII6yAngPK9GJTwXQDoSp3NWE8DaozEDjKOl0VrVdoFuHz6D8w/q68Eso9CViOZD
+	 yBAZkOcvfxf1PyZdyBaolViPN+W54FiDT1BB3gQH+9iAiOklRPTLcWGYuuBLH+utA6
+	 1+wn9Xlmxp8kA==
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a4623436bd1so8121966b.2
+        for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 08:47:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710071155; x=1710675955;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=APdbC4WVW8bbq3Ji/1h5l4Whb2mua5InxmZI64nd8Ms=;
-        b=hZSVx5RyGqbtctFFGHlycoZfZP01IDWjUS65CNusWaGYwJR9lLmRInxG8lx6j1HQfl
-         BUE+RX6NZy08dG8HUiCx6r2pHWldk07ztSM9I+XN33EeA/zzLsMaWoUTLiD4PH/1S5q8
-         cuOxpsWfZG7UpywOfctZT02Pbr3myEPT2nhVxACh6fQHVtqz6EBs0RkWwy8cYen2d7/d
-         Dx9hQeCNLvU5j9qtthiDwj4E989JNN6+VvKg7TiTrHOsjV53gYZum3l5HG+AwJDRz7o8
-         grjNnveiBxS138cvrmSgdF23JujLuYT1ijh24USdq6H5EOTjjprp7j/wQAxk+VwenV7v
-         Hmbw==
-X-Forwarded-Encrypted: i=1; AJvYcCUPHDxOhvQDKT9Nu+H8jiOKi3WhMF7FyhvMhL6/h41yhQNcQM2zg3iP2NkxPBfm4/ylmhNHtxvq4KkTFbjGpPxR6KV9wqZjxUemxCG7q3nn3+LibRSluu/c40/sKVSmVTUX+6g/rHNPmAj8RU68T2WMinL1qJ+GRvm2vujPNC6e9H+rVcG+niZ7zkVB2PDIii5LBGYKtbqwCKcRTIxc3MoQztlm7RtfDaZIGU/s18d4TF/KlwxZ/X4i+F8o2cG/WqkJjRPRUn+3FwtU54iwj0qCQBMAcfVv3s0M0Os2hK22tJNbrKHYJ/72I1ycZlPvx5sDDNLkPGw=
-X-Gm-Message-State: AOJu0YxjZEEiM4bhznA2nN7GGD0ithWvosiPDts4aHEwif7QxyQd6wt2
-	j0rUUDh8j9e4bi4eLtxuXgnCisVXsvfs/ZKBUdGzEFhd2EW9A/vw3m1uRFbgZobLhcAJOrIbUMP
-	cEheeYWSYun/XSTYpKBakZ5Ete9I=
-X-Google-Smtp-Source: AGHT+IFg5QyD7zzPSiIxq5ayVbCopyYxmimvVxbYpEQvBBTN/IY5s/u1gydEhZLQBPQOnhaZIkoB9B3RWeU16yrH+hI=
-X-Received: by 2002:a17:90a:43a2:b0:29b:90d7:36dc with SMTP id
- r31-20020a17090a43a200b0029b90d736dcmr2619352pjg.19.1710071154965; Sun, 10
- Mar 2024 04:45:54 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710085652; x=1710690452;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3x1QmuNCSkhKmOkbx/k9p+MANy4otdnhu0jXgm0Ki0g=;
+        b=rHJSloyK3XGbDESTHhu4nvdeD64d/s1hftLG1QBNSkjuiguXrM++qJHSoxRegwfsDl
+         Yo0GlS1DkOPS+Z8NEZcGuoEqMT/drLFeZLViLrAhwoWC/Uy1B8gBbL/znHF18h2508iP
+         Zte6nnP5rzv/yPy35jcORQEp5c1DsvhnvtMj8L5OQjszfdSviO/xVo23omRDCOLFHSBT
+         iCRQ8mq3MOagh4Qjbx9Hmcr7RebNV+SlWBfmQOj0GgXlqJZJt3vFdHrxpr10/bjhbszB
+         nodNTPngztK+l2JVhachqWRW6bc7DUNtBLTYNvd233kTWNnePIR4oqwprNUwHDWBq32C
+         0YLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXMtqzzPY56CI3RAKNDcWfpkqGTRfjnVuT92UUWrdW32hlkEDO+mDM1oVC8KeomqoNwF+clPnY/Nknu0a5ZSSvp71CU
+X-Gm-Message-State: AOJu0YwosTzsfInOGKMuYJBRF+2KEunvLcKjs5MjSg4fieliX4zDriw9
+	9yvnoVIYQpdO1QzvS59ewWcj80Eq13a3Q/mjjCM9XjoTX3AWTcrNgC+wyoixXYkES+OhuuUiOJr
+	d/Izd6PCfU8BWJrLxU7S2S50BsqeWXtG8urgCQNWOQo5/OU24e0ifpRJoe8B793gISw==
+X-Received: by 2002:a17:907:1019:b0:a45:e3ab:152f with SMTP id ox25-20020a170907101900b00a45e3ab152fmr2489394ejb.21.1710085651894;
+        Sun, 10 Mar 2024 08:47:31 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IENK7ttrDdst22S8NlzkTYOHuK9XdIpvxOY4BupgfkauqF6iuk+XsSwN9Rn7jDGuE0TrKQE/g==
+X-Received: by 2002:a17:907:1019:b0:a45:e3ab:152f with SMTP id ox25-20020a170907101900b00a45e3ab152fmr2489368ejb.21.1710085651366;
+        Sun, 10 Mar 2024 08:47:31 -0700 (PDT)
+Received: from localhost.localdomain (host-87-21-72-46.retail.telecomitalia.it. [87.21.72.46])
+        by smtp.gmail.com with ESMTPSA id l20-20020a170906a41400b00a46163be639sm1092417ejz.12.2024.03.10.08.47.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Mar 2024 08:47:30 -0700 (PDT)
+From: Andrea Righi <andrea.righi@canonical.com>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Tejun Heo <tj@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Andrea Righi <andrea.righi@canonical.com>
+Subject: [PATCH] libbpf: ringbuf: allow to partially consume items
+Date: Sun, 10 Mar 2024 16:47:26 +0100
+Message-ID: <20240310154726.734289-1-andrea.righi@canonical.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240310020509.647319-1-irogers@google.com> <20240310020509.647319-13-irogers@google.com>
-In-Reply-To: <20240310020509.647319-13-irogers@google.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 10 Mar 2024 12:45:42 +0100
-Message-ID: <CANiq72=YJEpyk_uGo1skK-K7AUBdtUkuVqoBD0WCyifE-xbHQA@mail.gmail.com>
-Subject: Re: [PATCH v1 12/13] tools headers: Sync compiler.h headers
-To: Ian Rogers <irogers@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Liam Howlett <liam.howlett@oracle.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	David Laight <David.Laight@aculab.com>, "Michael S. Tsirkin" <mst@redhat.com>, Shunsuke Mie <mie@igel.co.jp>, 
-	Yafang Shao <laoar.shao@gmail.com>, Kui-Feng Lee <kuifeng@meta.com>, 
-	James Clark <james.clark@arm.com>, Nick Forrington <nick.forrington@arm.com>, 
-	Leo Yan <leo.yan@linux.dev>, German Gomez <german.gomez@arm.com>, Rob Herring <robh@kernel.org>, 
-	John Garry <john.g.garry@oracle.com>, Sean Christopherson <seanjc@google.com>, 
-	Anup Patel <anup@brainfault.org>, Fuad Tabba <tabba@google.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
-	Haibo Xu <haibo1.xu@intel.com>, Peter Xu <peterx@redhat.com>, 
-	Vishal Annapurve <vannapurve@google.com>, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, Mar 10, 2024 at 3:06=E2=80=AFAM Ian Rogers <irogers@google.com> wro=
-te:
->
-> compiler_attributes.h - added from
->  include/linux/compiler_attributes.h,
->  guards were added to definitions to avoid redefinition of macros
->  in libc.
+Instead of always consuming all items from a ring buffer in a greedy
+way, allow to stop when the callback returns a value > 0.
 
-Do you have an example for context?
+This allows to distinguish between an error condition and an intentional
+stop condition by returning a non-negative non-zero value from the ring
+buffer callback.
 
-Thanks!
+This can be useful, for example, to consume just a single item from the
+ring buffer.
 
-Cheers,
-Miguel
+Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+---
+ tools/lib/bpf/ringbuf.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
+index aacb64278a01..dd8908eb3204 100644
+--- a/tools/lib/bpf/ringbuf.c
++++ b/tools/lib/bpf/ringbuf.c
+@@ -265,6 +265,14 @@ static int64_t ringbuf_process_ring(struct ring *r)
+ 					return err;
+ 				}
+ 				cnt++;
++				if (err > 0) {
++					/* update consumer pos and return the
++					 * total amount of items consumed.
++					 */
++					smp_store_release(r->consumer_pos,
++							  cons_pos);
++					goto done;
++				}
+ 			}
+ 
+ 			smp_store_release(r->consumer_pos, cons_pos);
+-- 
+2.43.0
+
