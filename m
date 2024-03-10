@@ -1,172 +1,151 @@
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21841F513
-	for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 09:16:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA82B1DFE3;
+	Sun, 10 Mar 2024 09:46:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710062185; cv=none; b=McR6lqqjwRS3mgTG/CziVZib+LWCNr4k2S+xKr6tfbBezQFdPAzKQ5IcIAkCsYyS9M7xaVm52bbOAHSv4jv2vdSMfhOlzOL1ywEXqOqV8Sw0mA6m8Rg7OcXCIokEnr+4NFGyXMMnQWcQfp+83tka5w0AHmwCPBrNQ7yeuUMbn2c=
+	t=1710063978; cv=none; b=X0jvqMmwvVYBNSMLwVd1gJ9IhSaNO7NBYAIFvnNB8T3ZHiylzldKeFbsjAVYwlJ7rU3giyYL/pVhZRO+0GeyDMIliTqY6y6qwdiQoZGtcS5QjkJ+pSdkU67I7dktLitEkeQnkA0tQSYqiPcxD3nZc59TduffG+O69FyYPbcv4mI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710062185; c=relaxed/simple;
-	bh=MlagqZPBrdWvUGmaWGdhxE6Ng+8nES7zjq8PZhu+dW0=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=acC9EXE7l+blkbDKGS4KA/V0dBNtq6OkvYkXgfwEnlUjFzBKpzZ9ayZNDhuVULTOiuqzBmX/2Ov54fC8uprGqefU/IkXIwt8oFF4+NUAY4qae406fiHlfjXxb3TRsk1b2mDwIh4xUcLMP01fsFRLQ/xPM1XZydzszOV5I5MsIkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7c8a960bd9eso56606739f.0
-        for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 01:16:23 -0800 (PST)
+	s=arc-20240116; t=1710063978; c=relaxed/simple;
+	bh=/GhFON8Do320G8z8VQvYlu3fYyOfCpj9BoRB30wb9pY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VRxFGN5Lf7G8sd1VOjqhlAIcn1l543lKSGOOVlbjdciHuK6cG7P86pghLrVUzkYupURMhmQtdULPyThMWQ+JvUbIsv0ZJRVSBDlWpMAgO033RXpfhs32a4RZchh2ZRVnEC8v6rP8VIGFYapmAWUDZw6LRwYqDSs0uwG5+1nHtBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gbq6Iqvv; arc=none smtp.client-ip=209.85.160.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gbq6Iqvv"
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-21f70f72fb5so2008383fac.1;
+        Sun, 10 Mar 2024 01:46:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710063976; x=1710668776; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rbg4nHfKFdyabGyYSoVhh0nolAtG4N9mQBhWKhXVkcg=;
+        b=gbq6IqvvNeaYZt6yXc1uxx0IeCC7k0MrCjicD6ard83YLcskgiSDYkRlCiSzUkNgz2
+         KDemMJcM55c7p+xP3IXdTMFD5jKFo0YpZTiKVxt0Tb+Z7+/V5e8B5IISWD45EF8/nukt
+         XClHyAwylswzyug0b7b3ZFJH80RANRH2scGXsgamZibBuju7vm0w4ykeFoDXjxpqKumX
+         8ijaHZxg7+ul/J4ggotgM0M4hdNz+Q3MSWTHkqjbVjvDr3UaTv02vp9i+juUE86X04lQ
+         Ctpuzk3rC+hcyzAH1XKSwShP6IGecwjwbvhdC1hWKe/dN+5q2VMa0o3jdtf8oYZlEG8L
+         9xnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710062183; x=1710666983;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5zDRQjgkhxRVicgj40VR0YIXpagwtpa9TQqkcBjGwTE=;
-        b=J+FAbloLbpZHLIj+yWBz+Fq1UVVxWjfHUbdkQ62hg9uwrT2Z6BDAhkF7hEfpzyRGOg
-         SCU8FnoK5E/sImJmrNodJS3UwS8qkWrxvvY+Oh46NPYDJe33VlVzmCI6BAKqzJK0lzBe
-         cdtjxgJYEvnGr4U7bsIyVZx/Flc/uFj00iPKfxVQ4b73YEGJzCovu2Hb4w8m5r0lkR/g
-         20nogLUiMnRdxTwN9h9Nw/OApiqRcyfxbh0EPV0+Lvze1Nhr6coufkGXK8vsv/6tgrq0
-         KDHlyble98ASUTE6idHJnsY9/miDEX5TI8LcTrG/KiHF3/+dZwcP09S4WPlShHfY+U0G
-         BHNw==
-X-Forwarded-Encrypted: i=1; AJvYcCWdI/mlIBcNmDUI85zkeu4HPBcO9hGIZNsncaqQ2O6AJABIBIV9vQBVy1fDesJSDw2uiFBejN8xzTb5ZnDEIkoNfTpg
-X-Gm-Message-State: AOJu0YxgVwJBYjd0IOODCsWdPX1LspdU6upg7xVlyNV3GqMbw1ubHyDy
-	fAO3qRbIrhG1E4zcbv3zCDZigWyPGJmh1MfwH3pC7gGQYGJS3sXVG1RSrg/0GDvQMMrOXDzyVbC
-	bkuwPLt/EPbXTMYY+PJ+QxMOY2VoNEaOPf1w6pj+ZtLZMSZd7OYEREow=
-X-Google-Smtp-Source: AGHT+IHHKgN8BmBXtWcmcpRxGbXFfnt/P3gNEMVRNNGsEyS+NN4qwWDDqY3mLY75SrShvLCcc1t4pjRetlQ/ZgalTKy0i1RsYaYD
+        d=1e100.net; s=20230601; t=1710063976; x=1710668776;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rbg4nHfKFdyabGyYSoVhh0nolAtG4N9mQBhWKhXVkcg=;
+        b=pzQHtqibO7G7jui87oUrk5qopAWqegRFS7WuODSypmlTkSDX9boP4a4qa5ueq6Ru26
+         pApQWST1hf8rN4SExIvcMgHR5XzFn1hLpT3RNqW2fw421N3lsAzkmksZsvOJ47+o/Tvp
+         BYqj44t/eazPGCSWeJMePgOLk0K3YDBa08jo72nSUjbTtCw2gY7PTkPmEUJ4rHSB2sRF
+         PM9emwVpvi8VVtg00zYEq1XGxS1wCmu3YkjzcOvggtHLu+yPQpvewBQ39ORC/0rAoVzw
+         GcvRP3vQVtxNpE+oVIlVLOdcis3D4rXjcDz2RKvR8Zc+qrphrkTcQKCCV7GcrdJI3z6M
+         sT6g==
+X-Forwarded-Encrypted: i=1; AJvYcCVqSvx63aJJXHIBKJNmHm815YOn8d08TM2qpmxNUT2yUhHivPGcuX5mj+M6i6TxJtq2vEjHmBjC8LJYdT9tYxYXpkAFyAK+Z1o1IZDPb+JMJ47Ceq45eZC9OHhTeKbpczpho9UqbBDH1ZoBckLEZe/5NUiUB0qNKyhYrDbwoKa2nEqJ
+X-Gm-Message-State: AOJu0Yx31v59ENBBtBR9VNsdo0L+65b4Oy8kdozlXkn+FLTIvGvUs+OT
+	qu9Bh7zV0K1bvc4aFpU5rd3P0GpjsU2CWJmBr3+k+JKtN0OULhIE7+Tb1A8QF7M8hsmcRKOdU1g
+	85SDstx9nFVK8EKtHdpJmmA0eLP8=
+X-Google-Smtp-Source: AGHT+IGND3SUtjJ+29g6S46shTc540N7XnQU/eZabXpLTqPPQL7vApYdErbNBguCJDkCUdw23+W8H2a7tqQUNcn87gE=
+X-Received: by 2002:a05:6870:d38c:b0:220:c899:5be1 with SMTP id
+ k12-20020a056870d38c00b00220c8995be1mr4801215oag.12.1710063975795; Sun, 10
+ Mar 2024 01:46:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:218b:b0:476:e4c4:c80e with SMTP id
- s11-20020a056638218b00b00476e4c4c80emr25604jaj.6.1710062183319; Sun, 10 Mar
- 2024 01:16:23 -0800 (PST)
-Date: Sun, 10 Mar 2024 01:16:23 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fb15d306134ae036@google.com>
-Subject: [syzbot] [bpf?] [net?] KMSAN: uninit-value in bpf_prog_test_run_xdp
-From: syzbot <syzbot+6856926fbb5e9b794e5c@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com, 
-	haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org, 
-	kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org, 
-	martin.lau@linux.dev, netdev@vger.kernel.org, pabeni@redhat.com, 
-	sdf@google.com, song@kernel.org, syzkaller-bugs@googlegroups.com, 
-	yonghong.song@linux.dev
+References: <20240229140000.175274-1-alessandro.carminati@gmail.com> <fe323c90-bda3-4837-8daa-372073014446@linux.dev>
+In-Reply-To: <fe323c90-bda3-4837-8daa-372073014446@linux.dev>
+From: Alessandro Carminati <alessandro.carminati@gmail.com>
+Date: Sun, 10 Mar 2024 10:45:39 +0100
+Message-ID: <CAPp5cGR2gFtMh3jWHuFHXdHvLdq85j5qcMPh4EoiOv+JA_HYTw@mail.gmail.com>
+Subject: Re: [PATCH] tools/testing/selftests/bpf/test_tc_tunnel.sh: Prevent
+ client connect before server bind
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Hello,
+Hi Martin,
+Thanks for the review.
 
-syzbot found the following issue on:
-
-HEAD commit:    3aaa8ce7a335 Merge tag 'mm-hotfixes-stable-2024-03-07-16-1..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=13e5861e180000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f8d2f8f66e9a667a
-dashboard link: https://syzkaller.appspot.com/bug?extid=6856926fbb5e9b794e5c
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10ed8171180000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13b728ae180000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/2a093f1b5a72/disk-3aaa8ce7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/efa5cb929ca6/vmlinux-3aaa8ce7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/2b0c044e721b/bzImage-3aaa8ce7.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6856926fbb5e9b794e5c@syzkaller.appspotmail.com
-
-=====================================================
-BUG: KMSAN: uninit-value in bpf_prog_test_run_xdp+0x1758/0x1a30 net/bpf/test_run.c:1277
- bpf_prog_test_run_xdp+0x1758/0x1a30 net/bpf/test_run.c:1277
- bpf_prog_test_run+0x6af/0xac0 kernel/bpf/syscall.c:4107
- __sys_bpf+0x649/0xd60 kernel/bpf/syscall.c:5475
- __do_sys_bpf kernel/bpf/syscall.c:5561 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5559 [inline]
- __x64_sys_bpf+0xa0/0xe0 kernel/bpf/syscall.c:5559
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x63/0x6b
-
-Uninit was stored to memory at:
- bpf_test_run+0x515/0xaf0
- bpf_prog_test_run_xdp+0xea5/0x1a30 net/bpf/test_run.c:1267
- bpf_prog_test_run+0x6af/0xac0 kernel/bpf/syscall.c:4107
- __sys_bpf+0x649/0xd60 kernel/bpf/syscall.c:5475
- __do_sys_bpf kernel/bpf/syscall.c:5561 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5559 [inline]
- __x64_sys_bpf+0xa0/0xe0 kernel/bpf/syscall.c:5559
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x63/0x6b
-
-Uninit was stored to memory at:
- ___bpf_prog_run+0x76dd/0xdb80
- __bpf_prog_run512+0xb5/0xe0 kernel/bpf/core.c:2227
- bpf_dispatcher_nop_func include/linux/bpf.h:1231 [inline]
- __bpf_prog_run include/linux/filter.h:651 [inline]
- bpf_prog_run_xdp include/net/xdp.h:514 [inline]
- bpf_test_run+0x42d/0xaf0 net/bpf/test_run.c:421
- bpf_prog_test_run_xdp+0xea5/0x1a30 net/bpf/test_run.c:1267
- bpf_prog_test_run+0x6af/0xac0 kernel/bpf/syscall.c:4107
- __sys_bpf+0x649/0xd60 kernel/bpf/syscall.c:5475
- __do_sys_bpf kernel/bpf/syscall.c:5561 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5559 [inline]
- __x64_sys_bpf+0xa0/0xe0 kernel/bpf/syscall.c:5559
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x63/0x6b
-
-Uninit was stored to memory at:
- ___bpf_prog_run+0x8567/0xdb80
- __bpf_prog_run512+0xb5/0xe0 kernel/bpf/core.c:2227
- bpf_dispatcher_nop_func include/linux/bpf.h:1231 [inline]
- __bpf_prog_run include/linux/filter.h:651 [inline]
- bpf_prog_run_xdp include/net/xdp.h:514 [inline]
- bpf_test_run+0x42d/0xaf0 net/bpf/test_run.c:421
- bpf_prog_test_run_xdp+0xea5/0x1a30 net/bpf/test_run.c:1267
- bpf_prog_test_run+0x6af/0xac0 kernel/bpf/syscall.c:4107
- __sys_bpf+0x649/0xd60 kernel/bpf/syscall.c:5475
- __do_sys_bpf kernel/bpf/syscall.c:5561 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5559 [inline]
- __x64_sys_bpf+0xa0/0xe0 kernel/bpf/syscall.c:5559
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x63/0x6b
-
-Local variable stack created at:
- __bpf_prog_run512+0x45/0xe0 kernel/bpf/core.c:2227
- bpf_dispatcher_nop_func include/linux/bpf.h:1231 [inline]
- __bpf_prog_run include/linux/filter.h:651 [inline]
- bpf_prog_run_xdp include/net/xdp.h:514 [inline]
- bpf_test_run+0x42d/0xaf0 net/bpf/test_run.c:421
-
-CPU: 0 PID: 5009 Comm: syz-executor369 Not tainted 6.8.0-rc7-syzkaller-00142-g3aaa8ce7a335 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/25/2024
-=====================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Il giorno ven 8 mar 2024 alle ore 02:03 Martin KaFai Lau
+<martin.lau@linux.dev> ha scritto:
+>
+> On 2/29/24 6:00 AM, Alessandro Carminati (Red Hat) wrote:
+> > In some systems, the netcat server can incur in delay to start listening.
+> > When this happens, the test can randomly fail in various points.
+> > This is an example error message:
+> >     # ip gre none gso
+> >     # encap 192.168.1.1 to 192.168.1.2, type gre, mac none len 2000
+> >     # test basic connectivity
+> >     # Ncat: Connection refused.
+>
+> This explained what is the issue. Please also explain how the patch solves it.
+>
+The issue, as stated, depends on a race condition between the netcat client
+and server. The test author addressed this problem using a sleep, which I
+removed in this patch. To easily solve the issue, one could simply increase
+the sleep duration. However, this patch opts to tackle the problem by
+querying the /proc directory and verifying TCP binds at the specified port
+before letting the client connect.
+> >
+> > Signed-off-by: Alessandro Carminati (Red Hat) <alessandro.carminati@gmail.com>
+> > ---
+> >   tools/testing/selftests/bpf/test_tc_tunnel.sh | 19 ++++++++++++++++++-
+> >   1 file changed, 18 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/test_tc_tunnel.sh b/tools/testing/selftests/bpf/test_tc_tunnel.sh
+> > index 910044f08908..01c0f4b1a8c2 100755
+> > --- a/tools/testing/selftests/bpf/test_tc_tunnel.sh
+> > +++ b/tools/testing/selftests/bpf/test_tc_tunnel.sh
+> > @@ -72,7 +72,6 @@ cleanup() {
+> >   server_listen() {
+> >       ip netns exec "${ns2}" nc "${netcat_opt}" -l "${port}" > "${outfile}" &
+> >       server_pid=$!
+> > -     sleep 0.2
+> >   }
+> >
+> >   client_connect() {
+> > @@ -93,6 +92,22 @@ verify_data() {
+> >       fi
+> >   }
+> >
+> > +wait_for_port() {
+> > +     local digits=8
+> > +     local port2check=$(printf ":%04X" $1)
+> > +     local prot=$([ "$2" == "-6" ] && echo 6 && digits=32)
+> > +
+> > +     for i in $(seq 20); do
+> > +             if ip netns exec "${ns2}" cat /proc/net/tcp${prot} | \
+> > +                     sed -r 's/^[ \t]+[0-9]+: ([0-9A-F]{'${digits}'}:[0-9A-F]{4}) .*$/\1/' | \
+> > +                     grep -q "${port2check}"; then
+>
+> The idea is to check if there is socket listening on port 8888?
+>
+> May be something simpler like "ss -OHtl src :$1" instead?
+Indeed, the aim is to ensure that the server is bound before the
+client attempts to
+connect by checking if socket is listening, and yes using 'ss' would be shorter.
+However, I chose not to use 'ss' or 'netstat' to avoid adding new dependencies,
+considering they are already many.
+Nonetheless, 'ss' is preferred, I have no objections.
+>
+> --
+> pw-bot: cr
+>
+> The check-and-wait fix in this patch is fine to get your test environment going.
+>
+> Eventually, it will be good to see the test_tc_tunnel.sh test moved to
+> test_progs. The test_tc_tunnel.sh is not run by bpf CI and issue like this got
+> unnoticed. Some other "*.sh" tests have already been moved to test_progs.
+>
+>
+Regards
+Alessandro
