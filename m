@@ -1,319 +1,172 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB9A3A8F6
-	for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 02:06:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21841F513
+	for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 09:16:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710036369; cv=none; b=dqNFRPt63tHL/+fqXnn8ameldbKPMZljN3VF/OG8jja0IldSHpjFkSHOyGzd218foOOpPq9VVnWGQq7I9X9FfvyRJTbgBD5UXJbkM8S/E96oB+EflK/n2uCygdUOE4dQ8Wt0cItM+WsCpgxpHwN69iAPpU+FoLHGHdqhHfqp0mY=
+	t=1710062185; cv=none; b=McR6lqqjwRS3mgTG/CziVZib+LWCNr4k2S+xKr6tfbBezQFdPAzKQ5IcIAkCsYyS9M7xaVm52bbOAHSv4jv2vdSMfhOlzOL1ywEXqOqV8Sw0mA6m8Rg7OcXCIokEnr+4NFGyXMMnQWcQfp+83tka5w0AHmwCPBrNQ7yeuUMbn2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710036369; c=relaxed/simple;
-	bh=qvu80I2tuIwczv3ewDN5Kf8bkfHfC9IP72lON4Zzmek=;
-	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Cc:Content-Type; b=GuxDwtFN9NgHkoWsxAYJ45ltx9xA4KfmRcWlrtQPGljpt8qVBez6KRWrXBXh5OMBEsu3AY5D7vRsysXclpLwRkZ9+D796PF3I+ntkW5jYRKA+AinNYoJBxeNHtE00XziOrqOCaAKvAZvvzrv17Avf0pZiUDl4+q/4dpUAuAYLK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hV39oof8; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hV39oof8"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc6b2682870so5542689276.0
-        for <bpf@vger.kernel.org>; Sat, 09 Mar 2024 18:06:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710036365; x=1710641165; darn=vger.kernel.org;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z2TI3BR52BOETJMkXQVYiCvqxjFYb61EnnuV6r2EGgU=;
-        b=hV39oof8n6gQYhpoRdQBNKXrF9luve4Gjjy1Iibfj18oWaFulJIcW/K0a+36t6prcz
-         c2TirRz8836CT+nuHJYaKfcP8O3elPqWrHmJdhPhrYbIebqJVgH2tC4zE2I3VeLdlg23
-         ihbhVIuMkt4Fo+motqOpBgLeIqMlgh6bVwkPGzIwr78rsxBOM839rKLVNIweb/bB37oC
-         bee/hJw0Psd6q4+giekuPYhNzCCyOGVouxE66vuCTKa3h+WcMmDafItdyLDBzhIC+mvw
-         yus2gBGtfrawoxBl/bS0bvetjFoluac4zdUvlbymAVId8gCuS3ZZ+LOeQ0GGcBYxc1wG
-         mt4w==
+	s=arc-20240116; t=1710062185; c=relaxed/simple;
+	bh=MlagqZPBrdWvUGmaWGdhxE6Ng+8nES7zjq8PZhu+dW0=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=acC9EXE7l+blkbDKGS4KA/V0dBNtq6OkvYkXgfwEnlUjFzBKpzZ9ayZNDhuVULTOiuqzBmX/2Ov54fC8uprGqefU/IkXIwt8oFF4+NUAY4qae406fiHlfjXxb3TRsk1b2mDwIh4xUcLMP01fsFRLQ/xPM1XZydzszOV5I5MsIkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7c8a960bd9eso56606739f.0
+        for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 01:16:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710036365; x=1710641165;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z2TI3BR52BOETJMkXQVYiCvqxjFYb61EnnuV6r2EGgU=;
-        b=TESG5scargdp3NKk8O3ai5oaDr6MCyxFNZSWEZ2g9qRw7d70FTSg2Gt3L8jgPmab+e
-         KVZwaKlM4UNbY2cjoQ/hk/7wTXEf+vS5GJE6Vb7U/5Mf1NvI5D4hADwGPRC4ueles8DX
-         AoSnniXsc6XAUdUueNFPDe22Og6g4Y0FyEsNEZPH1LKym+17uWLc1lGbrSZUOY6QduuF
-         HtGpm5aJGmE2JHoAjX+jhfXUpA0GUhpy84bjGX2wqHXxw6yc9Cl5l8vedv8AxWXNqCbD
-         WycgahVSW85I5YcbPNKdeL08FDR7VLJVQxKdSlyFjPYyXphxgHfsJjUp1HIrXy7e/qPK
-         NCmA==
-X-Forwarded-Encrypted: i=1; AJvYcCXDgV1zpJG+NWnU8GAsKP/L91dncy1s4IxaxUo7QUSr/nwaMHfDozY7yvR/ajhk2aEnkm7tR4eHt2QpwzYQgT2caoZ8
-X-Gm-Message-State: AOJu0YwJ1+rwALqAgdHKGntJzazCo1/Ao8yONEQBpMus1eoIZ8Rtu3ty
-	/vMn+3mfvIfNHyQHM/IpzJ24MHdv4h2DeNI6yq4HFhzbZzxzbWBt7ePqD+4bjHGNcdiIj1ozjiY
-	qleoS+w==
-X-Google-Smtp-Source: AGHT+IHg84e8jFIAgnoZrRiN8Pu+L19uE2B6rig+tSx4eREFwobOlwuHge4FvzAmOSQKYE9pLZGbcXyYmOgE
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a63d:1b65:e810:3ad3])
- (user=irogers job=sendgmr) by 2002:a05:6902:18c9:b0:dc6:fec4:1c26 with SMTP
- id ck9-20020a05690218c900b00dc6fec41c26mr897542ybb.1.1710036365375; Sat, 09
- Mar 2024 18:06:05 -0800 (PST)
-Date: Sat,  9 Mar 2024 18:05:08 -0800
-In-Reply-To: <20240310020509.647319-1-irogers@google.com>
-Message-Id: <20240310020509.647319-14-irogers@google.com>
+        d=1e100.net; s=20230601; t=1710062183; x=1710666983;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5zDRQjgkhxRVicgj40VR0YIXpagwtpa9TQqkcBjGwTE=;
+        b=J+FAbloLbpZHLIj+yWBz+Fq1UVVxWjfHUbdkQ62hg9uwrT2Z6BDAhkF7hEfpzyRGOg
+         SCU8FnoK5E/sImJmrNodJS3UwS8qkWrxvvY+Oh46NPYDJe33VlVzmCI6BAKqzJK0lzBe
+         cdtjxgJYEvnGr4U7bsIyVZx/Flc/uFj00iPKfxVQ4b73YEGJzCovu2Hb4w8m5r0lkR/g
+         20nogLUiMnRdxTwN9h9Nw/OApiqRcyfxbh0EPV0+Lvze1Nhr6coufkGXK8vsv/6tgrq0
+         KDHlyble98ASUTE6idHJnsY9/miDEX5TI8LcTrG/KiHF3/+dZwcP09S4WPlShHfY+U0G
+         BHNw==
+X-Forwarded-Encrypted: i=1; AJvYcCWdI/mlIBcNmDUI85zkeu4HPBcO9hGIZNsncaqQ2O6AJABIBIV9vQBVy1fDesJSDw2uiFBejN8xzTb5ZnDEIkoNfTpg
+X-Gm-Message-State: AOJu0YxgVwJBYjd0IOODCsWdPX1LspdU6upg7xVlyNV3GqMbw1ubHyDy
+	fAO3qRbIrhG1E4zcbv3zCDZigWyPGJmh1MfwH3pC7gGQYGJS3sXVG1RSrg/0GDvQMMrOXDzyVbC
+	bkuwPLt/EPbXTMYY+PJ+QxMOY2VoNEaOPf1w6pj+ZtLZMSZd7OYEREow=
+X-Google-Smtp-Source: AGHT+IHHKgN8BmBXtWcmcpRxGbXFfnt/P3gNEMVRNNGsEyS+NN4qwWDDqY3mLY75SrShvLCcc1t4pjRetlQ/ZgalTKy0i1RsYaYD
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240310020509.647319-1-irogers@google.com>
-X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
-Subject: [PATCH v1 13/13] tools headers: Rename noinline to __noinline
-From: Ian Rogers <irogers@google.com>
-To: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Liam Howlett <liam.howlett@oracle.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	David Laight <David.Laight@ACULAB.COM>, "Michael S. Tsirkin" <mst@redhat.com>, Shunsuke Mie <mie@igel.co.jp>, 
-	Yafang Shao <laoar.shao@gmail.com>, Kui-Feng Lee <kuifeng@meta.com>, 
-	James Clark <james.clark@arm.com>, Nick Forrington <nick.forrington@arm.com>, 
-	Leo Yan <leo.yan@linux.dev>, German Gomez <german.gomez@arm.com>, Rob Herring <robh@kernel.org>, 
-	John Garry <john.g.garry@oracle.com>, Sean Christopherson <seanjc@google.com>, 
-	Anup Patel <anup@brainfault.org>, Fuad Tabba <tabba@google.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
-	Haibo Xu <haibo1.xu@intel.com>, Peter Xu <peterx@redhat.com>, 
-	Vishal Annapurve <vannapurve@google.com>, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	llvm@lists.linux.dev
-Cc: Christopher Di Bella <cjdb@google.com>
+MIME-Version: 1.0
+X-Received: by 2002:a05:6638:218b:b0:476:e4c4:c80e with SMTP id
+ s11-20020a056638218b00b00476e4c4c80emr25604jaj.6.1710062183319; Sun, 10 Mar
+ 2024 01:16:23 -0800 (PST)
+Date: Sun, 10 Mar 2024 01:16:23 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fb15d306134ae036@google.com>
+Subject: [syzbot] [bpf?] [net?] KMSAN: uninit-value in bpf_prog_test_run_xdp
+From: syzbot <syzbot+6856926fbb5e9b794e5c@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com, 
+	haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org, 
+	kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org, 
+	martin.lau@linux.dev, netdev@vger.kernel.org, pabeni@redhat.com, 
+	sdf@google.com, song@kernel.org, syzkaller-bugs@googlegroups.com, 
+	yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-An issue was reported with clang and llvm libc where the noinline
-attribute [1] was being expanded due to the #define in
-linux/compiler.h (now in compiler_attributes.h). The expansion caused
-the __attribute__ to appear twice and break the build. To avoid this
-conflict, rename noinline to __noinline which is more consistent with
-other compiler attributes.
+Hello,
 
-[1] https://clang.llvm.org/docs/AttributeReference.html#noinline
-Reported-by: Christopher Di Bella <cjdb@google.com>
+syzbot found the following issue on:
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+HEAD commit:    3aaa8ce7a335 Merge tag 'mm-hotfixes-stable-2024-03-07-16-1..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=13e5861e180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f8d2f8f66e9a667a
+dashboard link: https://syzkaller.appspot.com/bug?extid=6856926fbb5e9b794e5c
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10ed8171180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13b728ae180000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/2a093f1b5a72/disk-3aaa8ce7.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/efa5cb929ca6/vmlinux-3aaa8ce7.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/2b0c044e721b/bzImage-3aaa8ce7.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6856926fbb5e9b794e5c@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in bpf_prog_test_run_xdp+0x1758/0x1a30 net/bpf/test_run.c:1277
+ bpf_prog_test_run_xdp+0x1758/0x1a30 net/bpf/test_run.c:1277
+ bpf_prog_test_run+0x6af/0xac0 kernel/bpf/syscall.c:4107
+ __sys_bpf+0x649/0xd60 kernel/bpf/syscall.c:5475
+ __do_sys_bpf kernel/bpf/syscall.c:5561 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5559 [inline]
+ __x64_sys_bpf+0xa0/0xe0 kernel/bpf/syscall.c:5559
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+
+Uninit was stored to memory at:
+ bpf_test_run+0x515/0xaf0
+ bpf_prog_test_run_xdp+0xea5/0x1a30 net/bpf/test_run.c:1267
+ bpf_prog_test_run+0x6af/0xac0 kernel/bpf/syscall.c:4107
+ __sys_bpf+0x649/0xd60 kernel/bpf/syscall.c:5475
+ __do_sys_bpf kernel/bpf/syscall.c:5561 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5559 [inline]
+ __x64_sys_bpf+0xa0/0xe0 kernel/bpf/syscall.c:5559
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+
+Uninit was stored to memory at:
+ ___bpf_prog_run+0x76dd/0xdb80
+ __bpf_prog_run512+0xb5/0xe0 kernel/bpf/core.c:2227
+ bpf_dispatcher_nop_func include/linux/bpf.h:1231 [inline]
+ __bpf_prog_run include/linux/filter.h:651 [inline]
+ bpf_prog_run_xdp include/net/xdp.h:514 [inline]
+ bpf_test_run+0x42d/0xaf0 net/bpf/test_run.c:421
+ bpf_prog_test_run_xdp+0xea5/0x1a30 net/bpf/test_run.c:1267
+ bpf_prog_test_run+0x6af/0xac0 kernel/bpf/syscall.c:4107
+ __sys_bpf+0x649/0xd60 kernel/bpf/syscall.c:5475
+ __do_sys_bpf kernel/bpf/syscall.c:5561 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5559 [inline]
+ __x64_sys_bpf+0xa0/0xe0 kernel/bpf/syscall.c:5559
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+
+Uninit was stored to memory at:
+ ___bpf_prog_run+0x8567/0xdb80
+ __bpf_prog_run512+0xb5/0xe0 kernel/bpf/core.c:2227
+ bpf_dispatcher_nop_func include/linux/bpf.h:1231 [inline]
+ __bpf_prog_run include/linux/filter.h:651 [inline]
+ bpf_prog_run_xdp include/net/xdp.h:514 [inline]
+ bpf_test_run+0x42d/0xaf0 net/bpf/test_run.c:421
+ bpf_prog_test_run_xdp+0xea5/0x1a30 net/bpf/test_run.c:1267
+ bpf_prog_test_run+0x6af/0xac0 kernel/bpf/syscall.c:4107
+ __sys_bpf+0x649/0xd60 kernel/bpf/syscall.c:5475
+ __do_sys_bpf kernel/bpf/syscall.c:5561 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5559 [inline]
+ __x64_sys_bpf+0xa0/0xe0 kernel/bpf/syscall.c:5559
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+
+Local variable stack created at:
+ __bpf_prog_run512+0x45/0xe0 kernel/bpf/core.c:2227
+ bpf_dispatcher_nop_func include/linux/bpf.h:1231 [inline]
+ __bpf_prog_run include/linux/filter.h:651 [inline]
+ bpf_prog_run_xdp include/net/xdp.h:514 [inline]
+ bpf_test_run+0x42d/0xaf0 net/bpf/test_run.c:421
+
+CPU: 0 PID: 5009 Comm: syz-executor369 Not tainted 6.8.0-rc7-syzkaller-00142-g3aaa8ce7a335 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/25/2024
+=====================================================
+
+
 ---
- tools/include/linux/compiler_attributes.h |  4 ++--
- tools/perf/arch/x86/tests/bp-modify.c     |  4 ++--
- tools/perf/bench/find-bit-bench.c         |  2 +-
- tools/perf/tests/bp_account.c             |  2 +-
- tools/perf/tests/bp_signal.c              |  2 +-
- tools/perf/tests/bp_signal_overflow.c     |  2 +-
- tools/perf/tests/dwarf-unwind.c           | 12 ++++++------
- tools/perf/tests/workloads/leafloop.c     |  8 ++++----
- tools/perf/tests/workloads/thloop.c       |  4 ++--
- 9 files changed, 20 insertions(+), 20 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/tools/include/linux/compiler_attributes.h b/tools/include/linux/compiler_attributes.h
-index 9bfaec783e48..1ff3d85f5af3 100644
---- a/tools/include/linux/compiler_attributes.h
-+++ b/tools/include/linux/compiler_attributes.h
-@@ -267,12 +267,12 @@
- # define __flatten			__attribute__((flatten))
- 
- /*
-- * Note the missing underscores.
-+ * Note, the kernel version is missing the underscores.
-  *
-  *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-noinline-function-attribute
-  * clang: mentioned
-  */
--#define   noinline                      __attribute__((__noinline__))
-+#define   __noinline                      __attribute__((__noinline__))
- 
- /*
-  * Optional: only supported since gcc >= 8
-diff --git a/tools/perf/arch/x86/tests/bp-modify.c b/tools/perf/arch/x86/tests/bp-modify.c
-index 0924ccd9e36d..65493ff7a76f 100644
---- a/tools/perf/arch/x86/tests/bp-modify.c
-+++ b/tools/perf/arch/x86/tests/bp-modify.c
-@@ -15,13 +15,13 @@
- #include "tests/tests.h"
- #include "arch-tests.h"
- 
--static noinline int bp_1(void)
-+static __noinline int bp_1(void)
- {
- 	pr_debug("in %s\n", __func__);
- 	return 0;
- }
- 
--static noinline int bp_2(void)
-+static __noinline int bp_2(void)
- {
- 	pr_debug("in %s\n", __func__);
- 	return 0;
-diff --git a/tools/perf/bench/find-bit-bench.c b/tools/perf/bench/find-bit-bench.c
-index 7e25b0e413f6..dd97a51649bc 100644
---- a/tools/perf/bench/find-bit-bench.c
-+++ b/tools/perf/bench/find-bit-bench.c
-@@ -31,7 +31,7 @@ static const char *const bench_usage[] = {
- static unsigned int accumulator;
- static unsigned int use_of_val;
- 
--static noinline void workload(int val)
-+static __noinline void workload(int val)
- {
- 	use_of_val += val;
- 	accumulator++;
-diff --git a/tools/perf/tests/bp_account.c b/tools/perf/tests/bp_account.c
-index 6f921db33cf9..459f61752a71 100644
---- a/tools/perf/tests/bp_account.c
-+++ b/tools/perf/tests/bp_account.c
-@@ -34,7 +34,7 @@
- 
- static volatile long the_var;
- 
--static noinline int test_function(void)
-+static __noinline int test_function(void)
- {
- 	return 0;
- }
-diff --git a/tools/perf/tests/bp_signal.c b/tools/perf/tests/bp_signal.c
-index 1f2908f02389..484a7e7f96ee 100644
---- a/tools/perf/tests/bp_signal.c
-+++ b/tools/perf/tests/bp_signal.c
-@@ -59,7 +59,7 @@ static void __test_function(volatile long *ptr)
- }
- #endif
- 
--static noinline int test_function(void)
-+static __noinline int test_function(void)
- {
- 	__test_function(&the_var);
- 	the_var++;
-diff --git a/tools/perf/tests/bp_signal_overflow.c b/tools/perf/tests/bp_signal_overflow.c
-index 4e897c2cf26b..9436bf2973f8 100644
---- a/tools/perf/tests/bp_signal_overflow.c
-+++ b/tools/perf/tests/bp_signal_overflow.c
-@@ -30,7 +30,7 @@
- 
- static int overflows;
- 
--static noinline int test_function(void)
-+static __noinline int test_function(void)
- {
- 	return time(NULL);
- }
-diff --git a/tools/perf/tests/dwarf-unwind.c b/tools/perf/tests/dwarf-unwind.c
-index d01aa931fe81..a669c69a9242 100644
---- a/tools/perf/tests/dwarf-unwind.c
-+++ b/tools/perf/tests/dwarf-unwind.c
-@@ -109,7 +109,7 @@ static int unwind_entry(struct unwind_entry *entry, void *arg)
- 	return strcmp((const char *) symbol, funcs[idx]);
- }
- 
--NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__thread(struct thread *thread)
-+NO_TAIL_CALL_ATTRIBUTE __noinline int test_dwarf_unwind__thread(struct thread *thread)
- {
- 	struct perf_sample sample;
- 	unsigned long cnt = 0;
-@@ -140,7 +140,7 @@ NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__thread(struct thread *thr
- 
- static int global_unwind_retval = -INT_MAX;
- 
--NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__compare(void *p1, void *p2)
-+NO_TAIL_CALL_ATTRIBUTE __noinline int test_dwarf_unwind__compare(void *p1, void *p2)
- {
- 	/* Any possible value should be 'thread' */
- 	struct thread *thread = *(struct thread **)p1;
-@@ -159,7 +159,7 @@ NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__compare(void *p1, void *p
- 	return p1 - p2;
- }
- 
--NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__krava_3(struct thread *thread)
-+NO_TAIL_CALL_ATTRIBUTE __noinline int test_dwarf_unwind__krava_3(struct thread *thread)
- {
- 	struct thread *array[2] = {thread, thread};
- 	void *fp = &bsearch;
-@@ -178,7 +178,7 @@ NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__krava_3(struct thread *th
- 	return global_unwind_retval;
- }
- 
--NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__krava_2(struct thread *thread)
-+NO_TAIL_CALL_ATTRIBUTE __noinline int test_dwarf_unwind__krava_2(struct thread *thread)
- {
- 	int ret;
- 
-@@ -187,7 +187,7 @@ NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__krava_2(struct thread *th
- 	return ret;
- }
- 
--NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__krava_1(struct thread *thread)
-+NO_TAIL_CALL_ATTRIBUTE __noinline int test_dwarf_unwind__krava_1(struct thread *thread)
- {
- 	int ret;
- 
-@@ -196,7 +196,7 @@ NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__krava_1(struct thread *th
- 	return ret;
- }
- 
--noinline int test__dwarf_unwind(struct test_suite *test __maybe_unused,
-+__noinline int test__dwarf_unwind(struct test_suite *test __maybe_unused,
- 				int subtest __maybe_unused)
- {
- 	struct machine *machine;
-diff --git a/tools/perf/tests/workloads/leafloop.c b/tools/perf/tests/workloads/leafloop.c
-index 1bf5cc97649b..89d2cec2f461 100644
---- a/tools/perf/tests/workloads/leafloop.c
-+++ b/tools/perf/tests/workloads/leafloop.c
-@@ -4,18 +4,18 @@
- #include "../tests.h"
- 
- /* We want to check these symbols in perf script */
--noinline void leaf(volatile int b);
--noinline void parent(volatile int b);
-+__noinline void leaf(volatile int b);
-+__noinline void parent(volatile int b);
- 
- static volatile int a;
- 
--noinline void leaf(volatile int b)
-+__noinline void leaf(volatile int b)
- {
- 	for (;;)
- 		a += b;
- }
- 
--noinline void parent(volatile int b)
-+__noinline void parent(volatile int b)
- {
- 	leaf(b);
- }
-diff --git a/tools/perf/tests/workloads/thloop.c b/tools/perf/tests/workloads/thloop.c
-index 457b29f91c3e..e252efb76203 100644
---- a/tools/perf/tests/workloads/thloop.c
-+++ b/tools/perf/tests/workloads/thloop.c
-@@ -9,14 +9,14 @@
- static volatile sig_atomic_t done;
- 
- /* We want to check this symbol in perf report */
--noinline void test_loop(void);
-+__noinline void test_loop(void);
- 
- static void sighandler(int sig __maybe_unused)
- {
- 	done = 1;
- }
- 
--noinline void test_loop(void)
-+__noinline void test_loop(void)
- {
- 	while (!done);
- }
--- 
-2.44.0.278.ge034bb2e1d-goog
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
