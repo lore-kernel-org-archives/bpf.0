@@ -1,92 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4AFA10E3;
-	Mon, 11 Mar 2024 01:12:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5713453AC
+	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 02:43:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710119559; cv=none; b=PBgRMeTH3eE3HtmcUB//hIJjJubSogc2ZVWGYicHaFdRfr4JpCr8oSIma+yrrc4k3iTqcWvCbOZfKiQAz4XTLWsRLULu/8IF89KufRfoRMuQnAJVeVZ/HigZ7dMO30F4pkO7+HAyZkVXb6srHVEdthmIlHfdTW19hkuwWcCjR/s=
+	t=1710124990; cv=none; b=HCvkSh71MsiMugDe4JYsyuoqmR6WDOmrKcLhTreaFyIlHSYk0fyfPO6uY5S6C2mWUCNQNdtCBIx6mrkJFB6WAWC4NQyPByiLXeH4x36mUw1yi0OLb00yyDQw1L1nVKcGyTdf/O1YrSq+C/i2QkdTd9C55XaOg5W+cKamLh5BwVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710119559; c=relaxed/simple;
-	bh=2z5jInwHvNUuGQ13fZ+9l+YxupANHQadDhz4Wpt4Yg4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TMaDHusuOG6qDO06CyVMw2Hohhh/ZhKvidGRBjK3tWhgbcrhVRNu+h6J1lyQKyY1Gtv3xjpCon9/qlyF3xj/BUe//bCqFTY3JBwEiB9/EsWSH/JPx0dyKhThdqGski8izbGoDMYdmvHCjJzeBpohVhWQkDWUxzeQhemEAii7L64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cPm6Sx4E; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710124990; c=relaxed/simple;
+	bh=OKTSETOaIf+cDllksWoXnbkZa2TuIPIonIMCuioza3Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EKH1T7ZgsqqsGoeX0GtJ4Foq+u4ss2psDoc6FmTejwxhxUzplDY1S5z1Moq377TEGM5CuP0hJZzR8PJdVttla9u2VX/HDEX0TKDJJfS1y79S4eOyySYGmt2VHMsEOZiWBT047GdQkp0twp9jm/+sALr90SWLVW5c37lT1/sI7CA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gy/hDVU6; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cPm6Sx4E"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76CBFC433C7;
-	Mon, 11 Mar 2024 01:12:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710119558;
-	bh=2z5jInwHvNUuGQ13fZ+9l+YxupANHQadDhz4Wpt4Yg4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=cPm6Sx4E1EG59Iov80OXl2MFAXOcYsH6sW5GBiEeM0WcaeXdKWeKnjLgnzkJAJNUQ
-	 ZGzu+uinfXZiBrCQs/BnKum3xWBjuxiG2Jnz71jbsD0IMC436SUkVVtHUBc/15b5J5
-	 FlPk3Ywx0H9l5f6XBzTHnrtsVcxrCsUls2TXOjJDboqFM5zle++N9DatBuzt45gQv9
-	 A18j7hc9e2S5CULTkLup888zf+AZXZNNkNXEhSYF1+RpxOAoMtWrJsod25hXkO9GSU
-	 RHXZrgsBmlzTI8CgfJbqud+ntqAvcBQ37IkpFwFwxWMNfwcwgLu6iaf5Hgq8eaTHuq
-	 I4nNxU2JaTS7Q==
-Message-ID: <9bd5ff0c-2f56-4fa5-9a78-f3b8981c970f@kernel.org>
-Date: Sun, 10 Mar 2024 19:12:34 -0600
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gy/hDVU6"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-33e94c12cfaso591947f8f.3
+        for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 19:43:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710124988; x=1710729788; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kszp2/sHdBYHQM3bCGYoHt7aaVrOE/U3KZlolmgyyrM=;
+        b=Gy/hDVU6WLZRSLWV6w+1WHKKIdt/bHHsBja6dacH5sVls+okZ6CgzBq3VhbHCnrOjb
+         jX/tCqre6DtevBMxTFK3ekb64iQ4YnlwXdKxu60Xa9WxUFvdk8jct41RkMcLBNY0yUq8
+         kI2jXxydG5WfCAA12i9K862RCD3dnj0iU/sJ5jXhOR/krQoD7zhH6/AgSOBcMyR7JOQO
+         gDc9QqifYMuuZFFjMJH34swNIe+wjHG1Y0u57fKjPfLUer5ke8MT5hGm52xMH+GnzJKw
+         Jrpauhude9DsmFiJLFfoOXGAkYoWmmpAqipR0m0NDEOwsz/+p8TBK7Twd5rN/C3LbPkJ
+         nzUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710124988; x=1710729788;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kszp2/sHdBYHQM3bCGYoHt7aaVrOE/U3KZlolmgyyrM=;
+        b=k6KJAEyvKU4bQ1BFRY/HYW/3EgBAgPN+QKQIH6J1tn/Jd06YsYTa1LP9igY7kSJI8Z
+         fBeL5yKbnhnemZEYWWtzAGNaK8ZzJO4r+r6h0E4gLWs7nv7BX13aNwu21FD4h2DGA8q5
+         4z6450vZLNUqqPJ+qEaKSCk/2Sc4rZuf9XceJRsuyZCdDxLpt3iLbSat7QLMalBWQOgm
+         vzEylIQIUZVdiY6ru+9jKQW6DzVIgTuzdUjHkIhf+XsuFGDWCoRsACuPEUyv3xnSEvf0
+         8imXQKokXC656XkQ1lWMAxY3Vf7rB9HSwemml7WnurnkSFn7oZCZMsuXCdVavTYFmj3+
+         jMZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWvq+HjpXsexVnu8/Zf05YV0AtfxU/vXI/iTTKmRZ5QdPo6bAcDKvJWzNdUEsvwKSs7KdP7J9y7fgnUWJ2OCph0veOy
+X-Gm-Message-State: AOJu0YyvB6SsLNDFZs2OOfVpLyaOLMqnbU22ZSSkheNTQjcTEjrUYKxn
+	WbkWPlWvYAbreAP6vUdClcvA5OAp2nHUc3Eb+8vKOU57oWLdeySPII7FotN5q2OTzB9bVq8FQyo
+	vn/rtsmrAHCAKXoOUthdl8442gfI=
+X-Google-Smtp-Source: AGHT+IHB1HlCfT26qC9N0aUQ9OmjLBXn3TJesDmw3rjbXRDqU54RdYkSuC4D1f4Y0dJ2cnaEulbkjOI2HJX3V+Jo2e0=
+X-Received: by 2002:adf:e40b:0:b0:33e:733b:cd11 with SMTP id
+ g11-20020adfe40b000000b0033e733bcd11mr3432241wrm.53.1710124987487; Sun, 10
+ Mar 2024 19:43:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH net-next v6 01/15] queue_api: define queue api
-Content-Language: en-US
-To: David Wei <dw@davidwei.uk>, Mina Almasry <almasrymina@google.com>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Jeroen de Borst <jeroendb@google.com>,
- Praveen Kaligineedi <pkaligineedi@google.com>
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-2-almasrymina@google.com>
- <54891f27-555a-4ed1-b92f-668813c18c37@davidwei.uk>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <54891f27-555a-4ed1-b92f-668813c18c37@davidwei.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <202403092219.dhgcuz2G-lkp@intel.com> <CAADnVQJ+6mFs56fu+KEvumQ5uqM-oLpYx0hGxLJfE9XUCtEWEA@mail.gmail.com>
+ <CANk7y0gT8bvKuhJvxG1yLTxdRycMKNEBtgEv_PsCA56Nv74cDg@mail.gmail.com>
+In-Reply-To: <CANk7y0gT8bvKuhJvxG1yLTxdRycMKNEBtgEv_PsCA56Nv74cDg@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sun, 10 Mar 2024 19:42:56 -0700
+Message-ID: <CAADnVQLXFWDDV8xGLVRNd9JXaqOMfCO3ZGtuQUg8CZjrwLjxrA@mail.gmail.com>
+Subject: Re: [bpf-next:master 5/7] kernel/bpf/core.c:900:5: warning:
+ '__pte_index_size' is not defined, evaluates to 0
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>, Song Liu <song@kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, oe-kbuild-all@lists.linux.dev, 
+	Alexei Starovoitov <ast@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/8/24 4:47 PM, David Wei wrote:
-> 
-> I'm working to port bnxt over to using this API. What are your thoughts
-> on maybe pulling this out and use bnxt to drive it?
-> 
+On Sun, Mar 10, 2024 at 3:05=E2=80=AFPM Puranjay Mohan <puranjay12@gmail.co=
+m> wrote:
+>
+> Hi Alexei,
+>
+> On Sat, Mar 9, 2024 at 5:38=E2=80=AFPM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > Puranjay,
+> >
+> > Looks like I have to drop this patch for now,
+> > since PMD_SIZE is not a constant on all archs
+> > that can be evaluated by a preprocessor.
+> >
+> > We need to find a different way.
+> >
+>
+> How about we define it like:
+> -#define BPF_PROG_PACK_SIZE (PMD_SIZE * num_possible_nodes())
+> +/*
+> + * PMD_SIZE is really big for some archs. It doesn't make sense to
+> + * reserve too much memory in one allocation. Cap BPF_PROG_PACK_SIZE to
+> + * 2MiB * num_possible_nodes().
+> + */
+> +#define BPF_PROG_PACK_SIZE ((PMD_SIZE <=3D (1 << 21)) ? (PMD_SIZE *
+> num_possible_nodes())  \
+> +
+>                              : ((1 << 21) * num_possible_nodes()))
+>
+> So, it will be computed at runtime. This adds more performance
+> overhead but this is called very infrequently
+> so shouldn't matter.
+>
+> Or we can hardcode it as `2MB * num_possible_nodes()` because
+> PMD size in most architectures will be 2MB or larger but never smaller.
 
-I would love to see a second nic implementation; this patch set and
-overall design is driven by GVE limitations.
-
+I think hard coding is cleaner and less surprising.
+I'd like to hear what Song thinks about it.
