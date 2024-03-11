@@ -1,88 +1,110 @@
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E076A2375F
-	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 10:18:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D18F36B1B
+	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 10:58:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710152308; cv=none; b=hk7sbuTf9WgyQr2KT1ccntpcKjdVY9IAgz9hjE2i/I0p6IV83gXR30Ywtpt6wQqd/U2FKMqvDujtCgaNT5TbZUuqpaRS8XZ8jpDYuY65vI2cRUhTOO7VWj94Q9LLw+WuNVwB5iYmAvHcwNChz09VeKMEGkeE1qkECgiX588aD5Y=
+	t=1710154699; cv=none; b=ElKu4BiXA8h//re6uengloXlxQoBgdJtJyA32O/UbI5mIG2f1/7oOv3DD7F6KrBaRmu201yzBrVWtfxgxWJgcINrRbKYZnIw0uA9aXnMB5Xd6YLQEWeN/qOPgpj4fXDNYve/1TjmmaMG6TmxWriTUPoIi90P72xW86L6um0Wi2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710152308; c=relaxed/simple;
-	bh=49p/z+I9ibGX9tkXzASFtaJyfmLbdA1BOuZStIYVDhg=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=G/GCh9fQ+Pp0q9LT38PBKWtueepCSBnKkplqaXfncH9XTisAmjo/1dnHotZ/LpTjFuoQWUkZc8ixQKNn9FAc3p0CjJhmazr4XAUoYnkwNv2V8FrYisl6dEugHp2ByIBRMHSjyBjoWz6BzKbWpvGzpKBPwRAA4nAkTFwZ4f6Gleg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3662feb9789so23592375ab.0
-        for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 03:18:26 -0700 (PDT)
+	s=arc-20240116; t=1710154699; c=relaxed/simple;
+	bh=ueYvYRRt8uZiMakPsZEiFU9N73WoMsnYXzeDfT3cV9o=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=cp1DaKAKiR4zffu2HylqvpvgHbimJxJl1uWNX4My035n8w0EB7I90R9r88fRLPD39JKJ1ejc1Km+VmGEZt+X6Js+cyVdGsmgtEkYUW0aTnni4bT+y7FGmZjvuSZ6olsg4q/h1SA/HPKGsRssQ3d566BgggjyGNrFy3I6FXBDAP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JCDYowv2; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JCDYowv2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1710154697;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LujXe2chMJShFPP0kGmuZtZqiL6qoec92g+O9DJTPjA=;
+	b=JCDYowv2i6c95eExdD2ihYhaz5MudCUocaAHAybLeMFppPOfUwuVLxyjDTr4+6cbNbQo/k
+	xsax2+1zPwAUewTmE7DNPlrSbgnH6N4dIfoe0hZQSsHoqpskizKlDkM4+1T6jpWh1rYEj4
+	dPPqdP4Pgu8yCAbGxWNnk/C3PvmrMhc=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-185-ac7vpp4JNseCxJH6mB2n5A-1; Mon, 11 Mar 2024 06:58:15 -0400
+X-MC-Unique: ac7vpp4JNseCxJH6mB2n5A-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a46376dcdcbso17561566b.1
+        for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 03:58:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710152306; x=1710757106;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PeeeQW0zVOCeEC+ecefxOMdD9qh/oMQiVsJYRGRAiHM=;
-        b=CbuNThDiyxcZit5WzKLzSxLDe2QzWnrX65ri2btFQmU2CBF0UkFV1k+nHFFfPC0JeL
-         kC7OxD+wKLgdjBN8nHP4iSJSe/g/JVCgt/eg0cb6i15w/WiwbPl+M+zaLWNu16BTFnOZ
-         YYad++bBoQpz60Wj7wcq/BLqHRb3aHKemoVsBIDJghZ6gDT8ifqMPHmmW4Zf7pgZDWwM
-         sjVQyg3ZIgpFGjcfYSl6hYhTeQyHjr93J8H1S/OhaxgkPzXCECPV17eRstmrIyvegSFr
-         PZWwD/YfqHh3faklWWm13TqF7ydke4Wan8G/GcI82gJMxEX0mXwmlZb9weYj8qRWqRGv
-         cQ4w==
-X-Forwarded-Encrypted: i=1; AJvYcCVvKNBQpisFzJNYhl93+tdrsE9Lo/yWaCSvqVmcNRwtHGfEWkb6o/AHrEnb4PwI/rWaigbQgJpC2rKt+hfU5K6boBi8
-X-Gm-Message-State: AOJu0YxXM372SPm/Vz6tIjY6QiX98yTqtIXPD/9Fjp579prDoLiZDzHO
-	u7cjcYmcZq50vAxkeFMuK/6LRhTejvFAphdkWpLaeoIuo419W5vrbbffO8jzvAwHyoREKzcijnR
-	nJV0Suvqt33R6TuH/entWkv2lIDHZr23zMniRn5/DdTgg4x/JKoUSxDg=
-X-Google-Smtp-Source: AGHT+IGyDFOwFe3vpd5h1XcY9fH/ePmTHy+TjyNNTo4z5/jgrAj391EgLeE6V7W+6kx8BJ7MA89VMnoKdMd5kpqMn7d9cx/tcO9h
+        d=1e100.net; s=20230601; t=1710154694; x=1710759494;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LujXe2chMJShFPP0kGmuZtZqiL6qoec92g+O9DJTPjA=;
+        b=b6pRxl5niumlCFBZ4/t1zxWLAMzu0kVnyErTsurBzIUVr6/u/C2h+XGY884e0/KcWW
+         Ejosv4mGJVg+zEdJx757a/zHASLRZmxUd32cPZSvz9OgdggTNk0DxCR0/a8XRcis4eyA
+         7Koh1HlGVmNjjfKBB+rPfSu5ZNXOz+JHlkhjExlrSwsAR0wCCP0BGkdMULu+mxFd2yhc
+         TKj0r9Y3Z3NyLakzWMU5HMC9mIKhpXv3zQxph6dGzG+mddx+ck5Aw6fYE4qF28OHrTvd
+         T2H6WxbmPZkltP0JuHmap7LIh52VSI3m391TItjZNtLBxcdOKgLl14qpRojME6RsjsLV
+         RVEg==
+X-Forwarded-Encrypted: i=1; AJvYcCWm7dwgReC5AW/tq5658LZ+8HKmrzqWJL9T3GVeAbbrFOs3KYkhC8/amHRgT7TgthPDAzoE3dwR7dPMSq2zOZ727V6I
+X-Gm-Message-State: AOJu0YxzcJLlGg9QmBc8Y2bq+FgNx+iP1NKfb7G0pb27sCO46pTHHHet
+	7GojqhbzI7btGOpdX3sa4k279lhlYukXTDMxiIDbaRlbAH4dUjJdGucVhiA0RXkvtoKthB/ebDY
+	ihqMmaxJvCQ81eVYjgDmpeHYK18PqpesvFIcY/YNeaHYrU3X2wg==
+X-Received: by 2002:a50:955e:0:b0:565:4b37:4578 with SMTP id v30-20020a50955e000000b005654b374578mr6169951eda.14.1710154693980;
+        Mon, 11 Mar 2024 03:58:13 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGG7tMk4I8lmmNgh1KxCP0Ul+ru81bqi16+u2IL0KL6cxR/4BiIDmWqGLNRolkKjO4jg1dNDA==
+X-Received: by 2002:a50:955e:0:b0:565:4b37:4578 with SMTP id v30-20020a50955e000000b005654b374578mr6169931eda.14.1710154693662;
+        Mon, 11 Mar 2024 03:58:13 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id r24-20020aa7d158000000b00568525ab2e8sm1428927edo.55.2024.03.11.03.58.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Mar 2024 03:58:13 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id BF761112F9DB; Mon, 11 Mar 2024 11:58:12 +0100 (CET)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf v3 2/3] bpf: Fix hashtab overflow check on 32-bit
+ arches
+In-Reply-To: <CAADnVQLjEeDTmyn2+EsgSy_vkUcOGyUeSPpsLg0ytNnDW+YczQ@mail.gmail.com>
+References: <20240307120340.99577-1-toke@redhat.com>
+ <20240307120340.99577-3-toke@redhat.com>
+ <CAADnVQLjEeDTmyn2+EsgSy_vkUcOGyUeSPpsLg0ytNnDW+YczQ@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Mon, 11 Mar 2024 11:58:12 +0100
+Message-ID: <87msr5qbln.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:218d:b0:365:26e3:6e47 with SMTP id
- j13-20020a056e02218d00b0036526e36e47mr348291ila.0.1710152306129; Mon, 11 Mar
- 2024 03:18:26 -0700 (PDT)
-Date: Mon, 11 Mar 2024 03:18:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b80a0d06135fdc97@google.com>
-Subject: [syzbot] Monthly bpf report (Mar 2024)
-From: syzbot <syzbot+listf53548453a719ea625e4@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, linux-kernel@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hello bpf maintainers/developers,
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
-This is a 31-day syzbot report for the bpf subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/bpf
+> On Thu, Mar 7, 2024 at 4:03=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen <=
+toke@redhat.com> wrote:
+>>
+>> -       err =3D -E2BIG;
+>> -       /* prevent zero size kmalloc and check for u32 overflow */
+>> -       if (htab->n_buckets =3D=3D 0 ||
+>> -           htab->n_buckets > U32_MAX / sizeof(struct bucket))
+>> +       /* prevent zero size kmalloc */
+>> +       if (htab->n_buckets > U32_MAX / sizeof(struct bucket))
+>
+> The comment carried over the wrong half of the comment.
+> I fixed it up while applying... to bpf-next.
+> There probably will be no bpf pr,
+> since the merge window is about to start.
 
-During the period, 3 new issues were detected and 2 were fixed.
-In total, 12 issues are still open and 207 have been fixed so far.
+Oops, yeah, completely misread that comment; thanks for fixing! :)
 
-Some of the still happening issues:
+-Toke
 
-Ref Crashes Repro Title
-<1> 175     No    KMSAN: uninit-value in bpf_prog_run_generic_xdp
-                  https://syzkaller.appspot.com/bug?extid=0e6ddb1ef80986bdfe64
-<2> 94      Yes   KMSAN: uninit-value in ___bpf_prog_run (4)
-                  https://syzkaller.appspot.com/bug?extid=853242d9c9917165d791
-<3> 43      Yes   BUG: unable to handle kernel NULL pointer dereference in sk_msg_recvmsg
-                  https://syzkaller.appspot.com/bug?extid=84f695756ed0c4bb3aba
-<4> 4       Yes   KMSAN: uninit-value in strnchr
-                  https://syzkaller.appspot.com/bug?extid=9b8be5e35747291236c8
-<5> 3       Yes   INFO: rcu detected stall in sys_unshare (9)
-                  https://syzkaller.appspot.com/bug?extid=872bccd9a68c6ba47718
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
