@@ -1,97 +1,85 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F6358126
-	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 21:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DE856B8F
+	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 21:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710194107; cv=none; b=Nl+rZiU4dzxDAoyG1GmvjX+WT73Rpea1R903jP/Jp9HTBW+7M1pVmgVn2sOapNxd1kagNHqdAIRkPDNj+2Q/F+IrPNv2IJXEta0EjEsJ0zpfWe2Hk3tr2OnMqiZr6j34awfaksv2OcwTP29EglI+hMesDkfktwxX9GfHXGmFDZ0=
+	t=1710194303; cv=none; b=Ky0WDY994R4rPyLqAQqJUZbKVE5oJqwR3owU/KqY64BhYHCt2W0O52f2Hg9fkXUMvIzpLkLPraMb/WhE3RmTc23qwgOr0+urQ7M4P4aIIlwy12Fx0b4imnSNDg3FI/I3uaYrz1mcS+NScl5Dvc92POenIvVygdZSnrc+AH5rAJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710194107; c=relaxed/simple;
-	bh=Udi8+U/vtX2/LPgj4sUV0JI0Ggc7mamIf55Kp3zKe6U=;
+	s=arc-20240116; t=1710194303; c=relaxed/simple;
+	bh=DwBxF/sQa7my6LaXNH28mv7/9qc6hMl3yBd5VyN90Co=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kvLskLLWqSHb2ZjXLUNA7xSjuwGX3s+tvTee4GQ8YAeE/UyTXk8xPBEGdadZIJHi1xb6QzbZ28BH2urfNrd3S7VYfSZP3g3UiXogwn73QRbzu4z+VMxgwUJYVAplVzyAQWBDIVDtwpsYnvJG7hWHIEQvZhtPe3/zOxOlCWIWQa0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HSV3jFMY; arc=none smtp.client-ip=91.218.175.180
+	 In-Reply-To:Content-Type; b=LlXsqD9K/lTtpajzHFmTVhT+DAw0oNa8nsVmggVtGg1HQI/fRvKyZAv8oH5yYoJtPneW9p/vHXwyxm9CLEoT+EJ7XFnVOOdtgmvHIhP1pSmLXgMyIlfIkyZlG6VdT0yZAGYvDvW0k51QWc/8cCFAinNWM91Z9aCT52sflDU1xg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p8PBIffc; arc=none smtp.client-ip=91.218.175.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HSV3jFMY"
-Message-ID: <f12bb629-868b-4357-a097-cdbb6c0df163@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p8PBIffc"
+Message-ID: <3ea1a77e-75d4-41ef-b745-ff101b1918a2@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1710194104;
+	t=1710194298;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=uhtGK/COtiytU70gjYaRGYYvLbxnBHUfL2rl+0P/3jo=;
-	b=HSV3jFMYBQVicuy5a816uP1R5g6Hj7SjHf2h3hehEvvyDgQs8HChQxg8bCZ/JbfO+Ssyyk
-	mQU93t1LhIX/XQd/ozqDjas7gdAYCAVwzdLHETrNlqZtNPoY/vpQTcprT86kO31J+Oyrrt
-	tJNWIejoInzy6m9tEW96QZIrjIq5iW8=
-Date: Mon, 11 Mar 2024 14:54:58 -0700
+	bh=DwBxF/sQa7my6LaXNH28mv7/9qc6hMl3yBd5VyN90Co=;
+	b=p8PBIffcklhPN0eKX7UTB14GsT7ejvYXrZlFeL8BKrWpa51nXhoAo/ppdcXf+ZX+Sm+Rtc
+	sl+8y7+OziQ5yB4Ve8sy8BHq4GgmnFgirBX3t8b3bZvERZDH2Ggch8edU4du3KrF0OpTQu
+	2hpo0OJq7GPjTJdX255oMpnlzGRcd0A=
+Date: Mon, 11 Mar 2024 14:58:13 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH bpf-next 4/5] bpftool: Add link dump support for
- BPF_LINK_TYPE_SK_MSG
+Subject: Re: [RFC PATCH bpf-next 1/5] bpf: Add link support for sk_msg prog
 Content-Language: en-GB
-To: Jakub Sitnicki <jakub@cloudflare.com>
+To: Jakub Sitnicki <jakub@cloudflare.com>,
+ Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
  John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com,
  Martin KaFai Lau <martin.lau@kernel.org>
 References: <20240305202155.3890667-1-yonghong.song@linux.dev>
- <20240305202216.3891808-1-yonghong.song@linux.dev>
- <87frwyrku7.fsf@cloudflare.com>
+ <20240305202201.3891042-1-yonghong.song@linux.dev>
+ <CAEf4BzYXwKsmbj2D38DNsoi_gb-VLN1+2xXR9SqyPB6wN=S81A@mail.gmail.com>
+ <878r2pswie.fsf@cloudflare.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <87frwyrku7.fsf@cloudflare.com>
+In-Reply-To: <878r2pswie.fsf@cloudflare.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 
-On 3/8/24 8:07 AM, Jakub Sitnicki wrote:
-> On Tue, Mar 05, 2024 at 12:22 PM -08, Yonghong Song wrote:
->> An example output looks like:
->>    9: sk_msg  prog 108
->>            map_id 84  attach_type sk_msg_verdict
+On 3/10/24 12:23 PM, Jakub Sitnicki wrote:
+> On Fri, Mar 08, 2024 at 04:59 PM -08, Andrii Nakryiko wrote:
+>> On Tue, Mar 5, 2024 at 12:22 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+>>> Add link support for sk_msg program. This will make user space
+>>> easy to manage as most common used programs have alrady have
+>>> link support.
+>> So we have:
 >>
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->> ---
->>   tools/bpf/bpftool/link.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
+>> SEC("sk_skb/stream_parser") mapping to SK_SKB/BPF_SK_SKB_STREAM_PARSER.
+>> SEC("sk_skb/stream_verdict") mapping to SK_SKB/BPF_SK_SKB_STREAM_VERDICT.
+>> SEC("sk_msg") mapping to SK_MSG/BPF_SK_MSG_VERDICT.
 >>
->> diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
->> index afde9d0c2ea1..5eb140197d3f 100644
->> --- a/tools/bpf/bpftool/link.c
->> +++ b/tools/bpf/bpftool/link.c
->> @@ -526,6 +526,9 @@ static int show_link_close_json(int fd, struct bpf_link_info *info)
->>   		show_link_ifindex_json(info->netkit.ifindex, json_wtr);
->>   		show_link_attach_type_json(info->netkit.attach_type, json_wtr);
->>   		break;
->> +	case BPF_LINK_TYPE_SK_MSG:
->> +		jsonw_uint_field(json_wtr, "map_id", info->skmsg.map_id);
->> +		show_link_attach_type_json(info->skmsg.attach_type, json_wtr);
-> Compiler says - missing break.
-
-Ack, will fix.
-
+>> Are those all kind of in the same category and should we support link
+>> for both SK_MSG and SK_SKB? I'm not too familiar, maybe John or
+>> someone else can clarify.
+> We also have the most recent SK_SKB/BPF_SK_SKB_VERDICT [1], which is
+> what one would use instead of SK_SKB/BPF_SK_SKB_STREAM_* prog pair when
+> chopping the stream of bytes into frames is not needed. For instance,
+> because we're redirecting from a UDP socket.
 >
->>   	case BPF_LINK_TYPE_XDP:
->>   		show_link_ifindex_json(info->xdp.ifindex, json_wtr);
->>   		break;
->> @@ -915,6 +918,11 @@ static int show_link_close_plain(int fd, struct bpf_link_info *info)
->>   		show_link_ifindex_plain(info->netkit.ifindex);
->>   		show_link_attach_type_plain(info->netkit.attach_type);
->>   		break;
->> +	case BPF_LINK_TYPE_SK_MSG:
->> +		printf("\n\t");
->> +		printf("map_id %u  ", info->skmsg.map_id);
->> +		show_link_attach_type_plain(info->skmsg.attach_type);
->> +		break;
->>   	case BPF_LINK_TYPE_XDP:
->>   		printf("\n\t");
->>   		show_link_ifindex_plain(info->xdp.ifindex);
+> I have a cheatsheet that clarifies in which redirect-with-sockmap
+> configuration what program type + attach type is used [2].
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a7ba4558e69a3c2ae4ca521f015832ef44799538
+> [2] https://github.com/jsitnicki/srecon-2023-sockmap/blob/main/sockmap-cheatsheet.png
+
+Thanks. I will take a look. Yes, agree, we only need to implement
+the recommended one, which is SK_SKB/BPF_SK_SKB_VERDICT if I understand correctly.
+
