@@ -1,105 +1,143 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5317F138E;
-	Mon, 11 Mar 2024 16:34:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A4AA405F9
+	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 16:46:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710174868; cv=none; b=I+3uuGsgLSOAOouTbufhyX+3njPNomwdBAO+bbZtlH3vtfxmIXDFLF6UlFQXdIi6H1T9XT9FPw4ebvV8xIywzRtEsrZ2FB6Tejr4iP7k/vn7F+gHYn6mUKb2DQVOHJZ2lMrZN//t4evkKn1d8u4eCt0oi1otJlwrXCNqeio0RQw=
+	t=1710175593; cv=none; b=uRxkS/h5LrVzaR6f3OwvlyU7W+eP0mQLl3Pag9hBaMSsiUGg5UWabyrzAFXnzBm52RGZT43zRP5aIhY/EY9jIwVop3Uo7BGcv9BSC5AKFrMmmtgXscwJWmMj1sBIMFuwezAKSMZf7JaM2jTIkWJNOPAls46cF+PMpEgD3ZN4usg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710174868; c=relaxed/simple;
-	bh=WixOqrZR+rJh/Fbz+wWrf8dVTfQslX0GeSZNmY4xbK4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=sgNdPA3bpwooKtZGLXUbTSNmXqj4NYWytNwjZUQIDTva+meTuCLnUzYVjFXodSXztS8aGozb4Svzws0v8wD6dL/4xi0A8goC6joZMPAl0oCS+EX+RbAjtZQ+SBGuR4Vd2G0MmRBSNWppn6rjs9aVJF+K2z5V6ENDfoIxYYUhL7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A7831007;
-	Mon, 11 Mar 2024 09:35:02 -0700 (PDT)
-Received: from [192.168.1.100] (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D3233F762;
-	Mon, 11 Mar 2024 09:34:12 -0700 (PDT)
-Message-ID: <1ab20914-b6d2-fe39-7b14-c1ccebaa34f6@arm.com>
-Date: Mon, 11 Mar 2024 16:34:10 +0000
+	s=arc-20240116; t=1710175593; c=relaxed/simple;
+	bh=tWqWR50thwDEOKvvP22rRnDxKRT/0CYyjp1qfx/iGmI=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FuCf5pthT8ryUlz1wOD5skvC4v/pDK2Ae9sq1RIssvU0FKqeyKAKj1epSFBLBUl4n/9PzDBzWGVz7WifI3h8i/yBcXPKO+Nnrn9arduM6+R92oeO2AbhFhq764kvJuIxkEuh604QpC6pvNy1myKb9vPATbKJjEbatdLJzSQSbu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l7TG80XN; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l7TG80XN"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5684f95cc9bso2558168a12.1
+        for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 09:46:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710175590; x=1710780390; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zHReTrME8uoKqyR8ATAaezTDb2HTSwyf8OT5Kp+HoMo=;
+        b=l7TG80XNVm5lllLeqLAPxFQPF8m5Dzd/sYIuqeOjkFXNz9HCDSBPXkUPfDAlc1jyv+
+         542/5U4w7XyOwBi5j3x79XeVj6BsjP4/9wLbeTbS3vuswldg1H2QZO3L+5Kk/4OjAMR3
+         OTW1vx/3qMCL8jiOkap6MJijlFzQyDv7IQt2jEtoIXxCPfQUnXdap6acJHSPeWp9yTyj
+         qRe3K/G+7obSwA3YwsCWhUNRJoXCict7hLCHWr/MXarRjPPHpMP5wt2iqlDyyzInSm00
+         wEMG79zKjIBnKQDfdGzFIHvMcGLzUNdb5qpQcvfJgyOSEEgrCCTfcOM8AYgf4lJkIRuk
+         x7yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710175590; x=1710780390;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zHReTrME8uoKqyR8ATAaezTDb2HTSwyf8OT5Kp+HoMo=;
+        b=EEHSX1LB8drCAik/J6iG9z263xvjyAku5ecIUkYCQSc0awQQPn/TmNPSmVrsQotO+e
+         dGS1WoZ7HKOtgX7+FYv15d9yHZPtqNDtgMw6fHZ/5nEn87Ol0Q+VzIclAzRSU4gPykgO
+         iXmBVEVikfJbOOOaDTE3vX+MNuu2zkCadzjh3K9w1q8AQqwXYJ/MGEtVUp0gn0yuOCd7
+         vfmygbaHo2hiZutsSuXPhW2kR/Ylj0kpMwi85tu/jy6GKqkznC/kR9Y/UU6YUNoJRCjz
+         waR9AH2k3+TWLDUzr++6o0BbLtjootImSFNVF2Ar70DYrBFOSdhtbtNnQtIlshTx/uOw
+         xMIA==
+X-Forwarded-Encrypted: i=1; AJvYcCVTZiDA4RCNy3iqR+xxl9P36dIjLH+3HRfA//i/h9Gsx8jMNrhu+gz5rGfcRHgLbd/0LmZs33XkAgByFfYdLeLbQ3iC
+X-Gm-Message-State: AOJu0Yz2IYfw6a635zY2CBI8SH+EMsmNtZukPa+kSFjlBiqHjlRRMgXj
+	5rlzyGb+RXc/jJGSGvP+TP5tgdEkR+R6vhioFJIY4YguYEKHZnrr
+X-Google-Smtp-Source: AGHT+IEOVbreSKP+rDUNLmhRkeIjGq3cGrQ4MJ7PnFJQPEc1zOgox2wpq6z+nC43Rm/i2DSZUNZl2Q==
+X-Received: by 2002:a50:9550:0:b0:567:a2c7:27b4 with SMTP id v16-20020a509550000000b00567a2c727b4mr8000823eda.5.1710175590343;
+        Mon, 11 Mar 2024 09:46:30 -0700 (PDT)
+Received: from krava ([83.240.63.214])
+        by smtp.gmail.com with ESMTPSA id r26-20020a056402019a00b005686184eb77sm932852edv.78.2024.03.11.09.46.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Mar 2024 09:46:30 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 11 Mar 2024 17:46:27 +0100
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>,
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	yunwei356@gmail.com, bpf <bpf@vger.kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	lsf-pc <lsf-pc@lists.linux-foundation.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: [LSF/MM/BPF TOPIC] faster uprobes
+Message-ID: <Ze81Y2oal2Lg03HA@krava>
+References: <ZeCXHKJ--iYYbmLj@krava>
+ <CAEf4Bzbs4toMxw62kVTWNHA7sW-CncamyKHCWynCT0GnG+fOfQ@mail.gmail.com>
+ <ZeGPU8FRqwNuUJwd@krava>
+ <CAADnVQKW4Qk55NjaApx1caPDF_pA8f5JZFE12DKA2R8cKWmtcw@mail.gmail.com>
+ <CAEf4Bzbv5_yG8S4c22QUXp1FhLZGSSRZS6FFjXfvo=4RdAThZA@mail.gmail.com>
+ <ZeRO9_IiLSy9D7jQ@krava>
+ <CAEf4BzZQnqjoCc6Y_N3Wu4eMpioqgZC04QrTujgyiYMMRpG3Nw@mail.gmail.com>
+ <ZebWqIgABbk8dQXT@krava>
+ <Ze7kGP5aAYGseRuM@krava>
+ <20240311150658.GA28588@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v1 12/13] tools headers: Sync compiler.h headers
-Content-Language: en-US
-To: Ian Rogers <irogers@google.com>
-References: <20240310020509.647319-1-irogers@google.com>
- <20240310020509.647319-13-irogers@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Paolo Bonzini
- <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Kees Cook <keescook@chromium.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Liam Howlett <liam.howlett@oracle.com>, Miguel Ojeda <ojeda@kernel.org>,
- Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
- David Laight <David.Laight@ACULAB.COM>, "Michael S. Tsirkin"
- <mst@redhat.com>, Shunsuke Mie <mie@igel.co.jp>,
- Yafang Shao <laoar.shao@gmail.com>, Kui-Feng Lee <kuifeng@meta.com>,
- Nick Forrington <nick.forrington@arm.com>, Leo Yan <leo.yan@linux.dev>,
- German Gomez <german.gomez@arm.com>, Rob Herring <robh@kernel.org>,
- John Garry <john.g.garry@oracle.com>, Sean Christopherson
- <seanjc@google.com>, Anup Patel <anup@brainfault.org>,
- Fuad Tabba <tabba@google.com>, Andrew Jones <ajones@ventanamicro.com>,
- Chao Peng <chao.p.peng@linux.intel.com>, Haibo Xu <haibo1.xu@intel.com>,
- Peter Xu <peterx@redhat.com>, Vishal Annapurve <vannapurve@google.com>,
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org,
- llvm@lists.linux.dev
-From: James Clark <james.clark@arm.com>
-In-Reply-To: <20240310020509.647319-13-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240311150658.GA28588@redhat.com>
 
-
-
-On 10/03/2024 02:05, Ian Rogers wrote:
-> compiler.h - synced from include/linux/compiler.h, guards were
->  added to definitions to avoid redefinition of macros
->  in libc. ftrace, CONFIG_OBJTOOL and kentry logic was removed as
->  redundant.
+On Mon, Mar 11, 2024 at 04:06:59PM +0100, Oleg Nesterov wrote:
+> I forgot everything about the low-level x86_64 code, but...
 > 
+> On 03/11, Jiri Olsa wrote:
+> >
+> >  #ifdef CONFIG_X86_64
+> > +
+> > +asm (
+> > +       ".pushsection .rodata\n"
+> > +       ".global uretprobe_syscall_entry\n"
+> > +       "uretprobe_syscall_entry:\n"
+> > +       "push %rax\n"
+> > +       "mov $462, %rax\n"
+> > +       "syscall\n"
+> 
+> Hmm... I think you need to save/restore more registers clobbered by
+> syscall/entry_SYSCALL_64 ?
 
-Hi Ian,
+hum, so the call happens on the function call return, so I thought
+we should just preserve callee saved registers which seems to be
+taken care of by the entry_SYSCALL_64 path.. I will double check
 
-This commit breaks the Arm build (and cross compilation for Arm on x86):
+> 
+> > +SYSCALL_DEFINE1(uprobe, unsigned long, cmd)
+> > +{
+> > +	struct pt_regs *regs = task_pt_regs(current);
+> > +	unsigned long ax, err;
+> > +
+> > +	/*
+> > +	 * We get invoked from the trampoline that pushed rax
+> > +	 * value on stack, read and restore the value.
+> > +	 */
+> > +	err = copy_from_user((void*) &ax, (void *) regs->sp, sizeof(ax));
+> > +	WARN_ON_ONCE(err);
+> > +
+> > +	regs->ax = ax;
+> 
+> probably not strictly needed, we are going to return ax...
 
-  $ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
+it needs to be there for the bpf program to read proper return
+value from regs
 
-Something like this, but I won't paste the whole output because it's huge:
+> 
+> > +	regs->orig_ax = ax;
+> 
+> This doesn't look right. I think you need
+> 
+> 	regs->orig_ax = -1;
+> 
+> Say, to avoid the "Did we come from a system call" checks in
+> arch_do_signal_or_restart() or handle_signal().
 
-tools/include/linux/ring_buffer.h: In function ‘ring_buffer_read_head’:
+ugh right that's probably wrong, I need check on that
 
-tools/include/asm/../../arch/arm64/include/asm/barrier.h:72:35: error:
-‘__u8_alias_t’ undeclared (first use in this function)
-   72 |                         : "=r" (*(__u8_alias_t *)__u.__c)
-       \
-      |                                   ^~~~~~~~~~~~
-tools/include/linux/ring_buffer.h:59:16: note: in expansion of macro
-‘smp_load_acquire’
-   59 |         return smp_load_acquire(&base->data_head);
-      |                ^~~~~~~~~~~~~~~~
-
-Thanks
-James
+thanks,
+jirka
