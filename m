@@ -1,142 +1,81 @@
-Received: from out-184.mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52C8358234
-	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 23:30:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84DF257890;
+	Mon, 11 Mar 2024 23:40:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710199841; cv=none; b=IU4e55lktZFpnJnzVnSz96JPU6eDD3NV7G13zKN6cOvf3UZRRw8X14E7Cr7W4IObr5kPNipNQyTS8l87ftLnrW2c0++Kxq5MsGQ2Klxa+VeC/R7TaHRsR4M8U1oi5tJMVrML9VvtQTUwuoUx7cV4yvsLsvL/RICfy8O0V2x7FtA=
+	t=1710200430; cv=none; b=OxQ8/L2XkN0Pa9RLp7109T3emMplDQBoqI3a23HWc8KzIfhpsLLdS9zrD/voT7duRDmbRRHETaj3MJHpmXqfuklPsRB9+nUta1B1ynmzaH+oxeU9pTWIqSfNINyq0PLPM5haUDxFsK7Df9EPdAyk8Exh1Lc+0jC3xj8/7nLu9BU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710199841; c=relaxed/simple;
-	bh=GXge6vdMGNwk84kOx8nDeoZizR+y0wwQi9kA+vNioaQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=posiE7vizJpGY1GmglNzCg/gwqt+tR5+DRMY0k8GKSZGkZlNS2UDYCDOrpgyCCJ0og/XlzjZ/H3zHcl/qlNx0iijClLBuhOyOGXZ2jdt5zBF/UkQ5ShG3R+UQXw6LxyUcJQ4T1WB8RkN+JRuHIXAVCBksm7SB1+sylo4kY48R7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CDwZrxx4; arc=none smtp.client-ip=95.215.58.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1710200430; c=relaxed/simple;
+	bh=GhHM2Z484ZX1jCAPVE0yiIxkDV/AUIBM6eUbYoi5D2I=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Vsa535k8U7yR6W2R20wz+adFBfeBbnowoet6stZz1/Lpnez51FhmC5Txcrzwv7GeBv1ghFSP4P6LxUzVf9sLdvDjxk3XM8GCqLgLzh/9wtsNOYLiug4ELmvyFVXBHd+QI4alOx+QXkKXnt7oyC+a6xYd2SCE2o/Zc2mQSuO+pTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dn3gJoJ9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CDwZrxx4"
-Message-ID: <e4196303-0631-4a08-a544-ade179d41ef8@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1710199836;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wJbTACPNN7dp7eOjevBRzcdn8jxMId+sJfGAu/VKb3o=;
-	b=CDwZrxx4G55tdnLYxiqd2lLNgllenc7lIC/QdoajBQJ7YUTC3UtRZbLPN8QJwCK7VWSyIb
-	61yHl3WkZrEyaISoGTN7o56OoP2JxYvFX1SrsS7o+U3CFs0obAaDJuxG26D9lxfPc7yt/A
-	8sbSzNitG6J/CCGHJX0TUuBwvHLOhgc=
-Date: Mon, 11 Mar 2024 16:30:25 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dn3gJoJ9"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EF179C433F1;
+	Mon, 11 Mar 2024 23:40:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710200430;
+	bh=GhHM2Z484ZX1jCAPVE0yiIxkDV/AUIBM6eUbYoi5D2I=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Dn3gJoJ9izC7sFePlYlBGByDDJr1qQwgXW0zH5QvE5WdziQmNzZtxOPUkb1Fil20G
+	 dpL9UFCFSjqpGmOTJVMfUvJvdXXHMHloLiIq6MLQgmh4YiPjK/ZOMcL5HyNgqH87Z2
+	 H2S/K9Hc3d5PTdx148Duso34v5MHgrITSUoLDrZVdTxOF3xUB71IdTdZQPj/dKajcL
+	 z13JXjJqnPAdF7kM5vuzAff7nwJGaULoWYh3Y3UghK87nTCjqHzHl2KUR/2HUVy5lk
+	 cVoXZea3E960W6bSpZHphb9R0kVdHa8KoPOTuXQEYfqMfvffkfpBwoLgXsTUaB8o1D
+	 Sm1f4gao8VXHA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D00DFD95056;
+	Mon, 11 Mar 2024 23:40:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next] bpftool: Fix missing pids during link show
-Content-Language: en-GB
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- kernel-team@fb.com, Martin KaFai Lau <martin.lau@kernel.org>,
- Quentin Monnet <quentin@isovalent.com>
-References: <20240311214116.2123875-1-yonghong.song@linux.dev>
- <CAEf4BzYU0R=HxFk0h_4rHdfCD=9hX-8NRSr=eGiND_3p=8Syvg@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <CAEf4BzYU0R=HxFk0h_4rHdfCD=9hX-8NRSr=eGiND_3p=8Syvg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Subject: Re: [PATCH bpf-next v2] bpf: hardcode BPF_PROG_PACK_SIZE to 2MB *
+ num_possible_nodes()
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171020042984.6750.3210035771015171823.git-patchwork-notify@kernel.org>
+Date: Mon, 11 Mar 2024 23:40:29 +0000
+References: <20240311122722.86232-1-puranjay12@gmail.com>
+In-Reply-To: <20240311122722.86232-1-puranjay12@gmail.com>
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Mon, 11 Mar 2024 12:27:22 +0000 you wrote:
+> On some architectures like ARM64, PMD_SIZE can be really large in some
+> configurations. Like with CONFIG_ARM64_64K_PAGES=y the PMD_SIZE is
+> 512MB.
+> 
+> Use 2MB * num_possible_nodes() as the size for allocations done through
+> the prog pack allocator. On most architectures, PMD_SIZE will be equal
+> to 2MB in case of 4KB pages and will be greater than 2MB for bigger page
+> sizes.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v2] bpf: hardcode BPF_PROG_PACK_SIZE to 2MB * num_possible_nodes()
+    https://git.kernel.org/bpf/bpf-next/c/d6170e4aaf86
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-On 3/11/24 4:13 PM, Andrii Nakryiko wrote:
-> On Mon, Mar 11, 2024 at 2:41 PM Yonghong Song <yonghong.song@linux.dev> wrote:
->> Current 'bpftool link' command does not show pids, e.g.,
->>    $ tools/build/bpftool/bpftool link
->>    ...
->>    4: tracing  prog 23
->>          prog_type lsm  attach_type lsm_mac
->>          target_obj_id 1  target_btf_id 31320
->>
->> Hack the following change to enable normal libbpf debug output,
->>    --- a/tools/bpf/bpftool/pids.c
->>    +++ b/tools/bpf/bpftool/pids.c
->>    @@ -121,9 +121,9 @@ int build_obj_refs_table(struct hashmap **map, enum bpf_obj_type type)
->>            /* we don't want output polluted with libbpf errors if bpf_iter is not
->>             * supported
->>             */
->>    -       default_print = libbpf_set_print(libbpf_print_none);
->>    +       /* default_print = libbpf_set_print(libbpf_print_none); */
->>            err = pid_iter_bpf__load(skel);
->>    -       libbpf_set_print(default_print);
->>    +       /* libbpf_set_print(default_print); */
->>
->> Rerun the above bpftool command:
->>    $ tools/build/bpftool/bpftool link
->>    libbpf: prog 'iter': BPF program load failed: Permission denied
->>    libbpf: prog 'iter': -- BEGIN PROG LOAD LOG --
->>    0: R1=ctx() R10=fp0
->>    ; struct task_struct *task = ctx->task; @ pid_iter.bpf.c:69
->>    0: (79) r6 = *(u64 *)(r1 +8)          ; R1=ctx() R6_w=ptr_or_null_task_struct(id=1)
->>    ; struct file *file = ctx->file; @ pid_iter.bpf.c:68
->>    ...
->>    ; struct bpf_link *link = (struct bpf_link *) file->private_data; @ pid_iter.bpf.c:103
->>    80: (79) r3 = *(u64 *)(r8 +432)       ; R3_w=scalar() R8=ptr_file()
->>    ; if (link->type == bpf_core_enum_value(enum bpf_link_type___local, @ pid_iter.bpf.c:105
->>    81: (61) r1 = *(u32 *)(r3 +12)
->>    R3 invalid mem access 'scalar'
->>    processed 39 insns (limit 1000000) max_states_per_insn 0 total_states 3 peak_states 3 mark_read 2
->>    -- END PROG LOAD LOG --
->>    libbpf: prog 'iter': failed to load: -13
->>    ...
->>
->> The 'file->private_data' returns a 'void' type and this caused subsequent 'link->type'
->> (insn #81) failed in verification.
->>
->> To fix the issue, do a type cast from 'void *' to 'struct bpf_link *' for file->private_data
->> as in this patch, and the 'bpftool link' runs successfully with 'pids'.
->>    $ tools/build/bpftool/bpftool link
->>    ...
->>    4: tracing  prog 23
->>          prog_type lsm  attach_type lsm_mac
->>          target_obj_id 1  target_btf_id 31320
->>          pids systemd(1)
->>
->> Fixes: 44ba7b30e84f ("bpftool: Use a local copy of BPF_LINK_TYPE_PERF_EVENT in pid_iter.bpf.c")
->> Cc: Quentin Monnet <quentin@isovalent.com>
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->> ---
->>   tools/bpf/bpftool/skeleton/pid_iter.bpf.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/bpf/bpftool/skeleton/pid_iter.bpf.c b/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
->> index 26004f0c5a6a..96ffcc4f0e67 100644
->> --- a/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
->> +++ b/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
->> @@ -100,7 +100,7 @@ int iter(struct bpf_iter__task_file *ctx)
->>          if (obj_type == BPF_OBJ_LINK &&
->>              bpf_core_enum_value_exists(enum bpf_link_type___local,
->>                                         BPF_LINK_TYPE_PERF_EVENT___local)) {
->> -               struct bpf_link *link = (struct bpf_link *) file->private_data;
->> +               struct bpf_link *link = bpf_core_cast(file->private_data, struct bpf_link);
-> bpf_core_cast() (i.e., bpf_rdonly_cast()) is newer feature, so relying
-> on it in bpftool will make PID printing not work on older kernels that
-> generally do support iter/task_file iterators.
->
->>                  if (link->type == bpf_core_enum_value(enum bpf_link_type___local,
-> the problem is that we dropped BPF_CORE_READ() here and went with
-> `link->type`. Should we restore BPF_CORE_READ(link, type) here and
-> solve the problem, while also supporting this feature on wider set of
-> kernels? Quentin?
-
-Good point. Using the latest fancy feature might not be the best way as old
-kernels won't work and this is a strong argument. I will change
-to use BPF_CORE_READ in v2.
-
->
->>                                                        BPF_LINK_TYPE_PERF_EVENT___local)) {
->> --
->> 2.43.0
->>
