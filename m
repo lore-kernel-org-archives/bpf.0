@@ -1,233 +1,168 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FF795466E;
-	Mon, 11 Mar 2024 19:00:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5315C52F82
+	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 19:24:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710183605; cv=none; b=kJwPbiatyor3PCgNkwJofsXgeKWcL5u2gxRghfYkqnrTO4zNJcfJuJP/Wj4clRu7dzjDs0fUmtnuYdAVV1dzxWleRZGRkB0DbGfRGRAoH8qH7hBCJzn/zw0Yn1uaaKTi53ExJb2HboDIOvJ4v8K5fkCqZ8ugRwFqGH4e65Zg9Jk=
+	t=1710185078; cv=none; b=rA2B+VWHFsTFZ9PPpE+73hJaxD1VNODM68XfDpRAnciGWTlrzh7VpShNkzajywt2tarMZ5cc3OUCIqbvmyi37VcCduT50kDRVnQMzofzo+Dwg7ZqUTYp/9kn9CGfxoNozu/JuvY8ue0f+1ubUUzITQFuipSqD9+QYPolGydX8rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710183605; c=relaxed/simple;
-	bh=/aOIFgTHUMEqp9O5NKY1ZNFdcxP6TJE6ObPyADvDy+g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s+LBiikmFnDD/tr8ASg62N1QIn7clzUsDMw9B+Qn4kpZ5tuncHg6aqS+1gO7vcfw+gjFshfARET9q/vCWg0l52wrHhfN2iP3V30qNFxhG8tkk3+z2rQeSQR0CLNq1nKXbpRhEnsrTPFoiXch4tCUzIf2QuJMxvseP9L9E9YV8sU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cmU9q5yf; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1710185078; c=relaxed/simple;
+	bh=DgLWHcwduAxqjCigbUNUqTye02EDECmbNSNBeiAjWj8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PoMh343jWjCFNF7jJfLdGkNS+ipgI2fN0lDe/FfDxwIVCopFhE2QRffBxxI1BqXbMVny49nCTdwZ+ZBc76Dje9RxhcPRwBxooTmRHW3n/x/Qrm5VJRreikTOl1ZvRmuN2ilW03IfKQ2BQ5F30I3foNufDBGsVJtM28zKQ1MouNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pxbuNjla; arc=none smtp.client-ip=209.85.166.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cmU9q5yf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710183603; x=1741719603;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/aOIFgTHUMEqp9O5NKY1ZNFdcxP6TJE6ObPyADvDy+g=;
-  b=cmU9q5yfF31GfmCaq/SqN8pjjLfqrt8YFruHaISQ/ae0pFxsN6Vl4edq
-   TP0SGltPUDVvcixm0l0MY3PKILlA9s9cpV8aVzgkexQnucOhFF7wWNtg+
-   t4hyXNqsufTyMmVDkV8sIdgjt9EuI2jxfH5eZKstndJ9BSqUgAT1Ha4WP
-   v1MC107OFLa/J8IZZ0e2ScwDEdOLvRBT+63nXitwX3aVHiDNeR7oi5azn
-   OwNQJQJKe0AAvfu00n4vuU/UOFrlR7bstU8dAunQ4fZmt7Ir9zNUAnLr8
-   otIR6Qb3h9S0Hk5vHJLlZ3JaU7lWlu/9jN0SS4i/yLc8svrVSnW3Xt/KT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11010"; a="4982345"
-X-IronPort-AV: E=Sophos;i="6.07,117,1708416000"; 
-   d="scan'208";a="4982345"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 12:00:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,117,1708416000"; 
-   d="scan'208";a="34425075"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 11 Mar 2024 11:59:54 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rjksK-0009NZ-1k;
-	Mon, 11 Mar 2024 18:59:52 +0000
-Date: Tue, 12 Mar 2024 02:59:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Menglong Dong <dongmenglong.8@bytedance.com>, andrii@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ast@kernel.org,
-	daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-	jolsa@kernel.org, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-	svens@linux.ibm.com, davem@davemloft.net, dsahern@kernel.org,
-	dave.hansen@linux.intel.com, x86@kernel.org, rostedt@goodmis.org,
-	mathieu.desnoyers@efficios.com, quentin@isovalent.com,
-	bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 6/9] bpf: tracing: add multi-link support
-Message-ID: <202403120218.Me518kSk-lkp@intel.com>
-References: <20240311093526.1010158-7-dongmenglong.8@bytedance.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pxbuNjla"
+Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-366248b78d9so17655ab.1
+        for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 12:24:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1710185075; x=1710789875; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PPemlJM4Xz0k98wRrCIdoRJ/9LZG6WhrdONiHPBnMmw=;
+        b=pxbuNjlaOnceYNWJHoUQQzhYjMPi130X9DGE9v72HGo8G2ovCj3Eyq640WR1ZIe1+A
+         sYD4B9u6vxyLeIErXplk896HlLVI0sUgi/QVDCoq6VME612+J5pLJnEEIcXhokFK+P2U
+         Nma8U98Prf+9nxVDUbGe8P0FGuAlfqC1HoT/LAUrRZD/rkskb07d49yHbfE9G0v4inZz
+         IIC7Ija2Cak7EeP3EL+xMrpHrpdG+J9Q+QkUCsAlt14OGsMVngNp4UrGF+ogSRWbUTcR
+         G17E/qzGa3/MDWceOIjZSJH04GccTuicpN3sMVxBhhiDsxWbf8Hw5tEdngiZ/qRCubZP
+         iW1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710185075; x=1710789875;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PPemlJM4Xz0k98wRrCIdoRJ/9LZG6WhrdONiHPBnMmw=;
+        b=aDTe2zwL1Z1y/fa3xPdPqUpan9MVOzgImWx9zQBHbXSg1PhiTxei4+bSxRcI5b71S/
+         uzV6F0UdHkateUrfZcrL/Lh1wwDV4pwNbIDIVlEBygRoVp5y2S6PEMtXb3LXDka25bWX
+         /kQEGZUmpwSn9gckZBJaNJm+vqrKYB0rEo5KVdTuHmHQSg2A4j3O5+zCC3RKt+QcuBAu
+         oIAOmLlzcdhAFKPZ2K7FOiZGrAgw57vN4gyvgXPjpTcWzGAn7pleaQV6vBkHQiCXawhg
+         yuSwhSZMenbf3q36TL4Hix0HrHd2JiKLUp+dXQmm+wra0ebY4Y2KDV46TH0mqGuWm/6p
+         31tQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX0+FOsnkJYjD8Or7Fv1VVXdTnYru8iJI7wLBG8EqojWE6TFkjwGjFL6mWZ6ByXsJ7I/sJn5C06AjMOQBGSE9T0bZA1
+X-Gm-Message-State: AOJu0YzRXlMmCN5UksKPEsWW0YKxGiEEXAVR/JuTWk+OgPJKMm1WFFMR
+	vAPqJG/VQPL62SZMyEbMYG53gu4LneO6no3qrxR42TLL8fgzLZfZkLEDb0iPwyT48SbieM61rcq
+	s1EY5JeW+1MLaREkT0IVOShtEx8sNs5WV4JNL
+X-Google-Smtp-Source: AGHT+IHK6kjYuN+av2sRfyJ8pA7jWQvyzS6EkNDyOpNIDK07iRRVV0vswER0vA5L4Tl9BTd3XE1V8lLoEXKubRDEp18=
+X-Received: by 2002:a05:6e02:1a43:b0:366:27e0:3425 with SMTP id
+ u3-20020a056e021a4300b0036627e03425mr10947ilv.19.1710185075344; Mon, 11 Mar
+ 2024 12:24:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240311093526.1010158-7-dongmenglong.8@bytedance.com>
+References: <20240310020509.647319-1-irogers@google.com> <20240310020509.647319-13-irogers@google.com>
+ <1ab20914-b6d2-fe39-7b14-c1ccebaa34f6@arm.com>
+In-Reply-To: <1ab20914-b6d2-fe39-7b14-c1ccebaa34f6@arm.com>
+From: Ian Rogers <irogers@google.com>
+Date: Mon, 11 Mar 2024 12:24:24 -0700
+Message-ID: <CAP-5=fWZVrpRufO4w-S4EcSi9STXcTAN2ERLwTSN7yrSSA-otQ@mail.gmail.com>
+Subject: Re: [PATCH v1 12/13] tools headers: Sync compiler.h headers
+To: James Clark <james.clark@arm.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Liam Howlett <liam.howlett@oracle.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	David Laight <David.Laight@aculab.com>, "Michael S. Tsirkin" <mst@redhat.com>, Shunsuke Mie <mie@igel.co.jp>, 
+	Yafang Shao <laoar.shao@gmail.com>, Kui-Feng Lee <kuifeng@meta.com>, 
+	Nick Forrington <nick.forrington@arm.com>, Leo Yan <leo.yan@linux.dev>, 
+	German Gomez <german.gomez@arm.com>, Rob Herring <robh@kernel.org>, 
+	John Garry <john.g.garry@oracle.com>, Sean Christopherson <seanjc@google.com>, 
+	Anup Patel <anup@brainfault.org>, Fuad Tabba <tabba@google.com>, 
+	Andrew Jones <ajones@ventanamicro.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
+	Haibo Xu <haibo1.xu@intel.com>, Peter Xu <peterx@redhat.com>, 
+	Vishal Annapurve <vannapurve@google.com>, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Menglong,
+On Mon, Mar 11, 2024 at 9:34=E2=80=AFAM James Clark <james.clark@arm.com> w=
+rote:
+>
+>
+>
+> On 10/03/2024 02:05, Ian Rogers wrote:
+> > compiler.h - synced from include/linux/compiler.h, guards were
+> >  added to definitions to avoid redefinition of macros
+> >  in libc. ftrace, CONFIG_OBJTOOL and kentry logic was removed as
+> >  redundant.
+> >
+>
+> Hi Ian,
+>
+> This commit breaks the Arm build (and cross compilation for Arm on x86):
+>
+>   $ make ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu-
+>
+> Something like this, but I won't paste the whole output because it's huge=
+:
+>
+> tools/include/linux/ring_buffer.h: In function =E2=80=98ring_buffer_read_=
+head=E2=80=99:
+>
+> tools/include/asm/../../arch/arm64/include/asm/barrier.h:72:35: error:
+> =E2=80=98__u8_alias_t=E2=80=99 undeclared (first use in this function)
+>    72 |                         : "=3Dr" (*(__u8_alias_t *)__u.__c)
+>        \
+>       |                                   ^~~~~~~~~~~~
+> tools/include/linux/ring_buffer.h:59:16: note: in expansion of macro
+> =E2=80=98smp_load_acquire=E2=80=99
+>    59 |         return smp_load_acquire(&base->data_head);
+>       |                ^~~~~~~~~~~~~~~~
 
-kernel test robot noticed the following build errors:
+Sorry for this James, I was rushing. I'll address the issues in v2 but
+the one you highlight above doesn't look like a fun/simple issue to
+resolve :-( Tbh, I'm not sure how much value tools/include has in its
+current set up. It is weird the include order in perf prefers
+tools/include/linux over tools/include/uapi. Current tools/include
+seems to be trying to do a few different things:
 
-[auto build test ERROR on bpf-next/master]
+1) provide headers like list.h so programs in tools can have linux
+style lists, etc.
+2) stuff that (1) drags in .. do we really want the asm barrier code
+from arm? A sane user space program would be better using stdatomic.h,
+plus that'd give the user space program an ability to get compiled on
+to weirder targets like wasm. Plus we end up with weird type conflicts
+like bool coming from linux/types.h rather than stdbool.h.
+3) copies of kernel uapi headers that may be more up-to-date that
+those in your system, thereby exposing constants that things like
+libbpf depend upon.
+4) headers with the same name as and that resemble kernel headers but
+are really a reimplementation, like tools/include/linux/string.h
+5) headers we have just so we can use shell scripts to scrape
+constants for beautifying things in perf trace
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Menglong-Dong/bpf-tracing-add-support-to-record-and-check-the-accessed-args/20240311-173954
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20240311093526.1010158-7-dongmenglong.8%40bytedance.com
-patch subject: [PATCH bpf-next v2 6/9] bpf: tracing: add multi-link support
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240312/202403120218.Me518kSk-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 503c55e17037436dcd45ac69dea8967e67e3f5e8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240312/202403120218.Me518kSk-lkp@intel.com/reproduce)
+For (1) and (2) it seems a separate library would be cleaner than
+having the code in tools/include.
+(3) feels like a legit use-case, so we should hold onto
+tools/include/uapi, but do we want the asm directories?
+(4) sounds like it should be in a library, perhaps with (1) and (2).
+(5) feels like the headers should be alongside the shell scripts to
+avoid polluting tools/include.
+Not that I propose fixing any of this here.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403120218.Me518kSk-lkp@intel.com/
+Thanks,
+Ian
 
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/bpf/syscall.c:4:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from kernel/bpf/syscall.c:4:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from kernel/bpf/syscall.c:4:
-   include/linux/bpf.h:751:48: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     751 |         ARG_PTR_TO_MAP_VALUE_OR_NULL    = PTR_MAYBE_NULL | ARG_PTR_TO_MAP_VALUE,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:752:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     752 |         ARG_PTR_TO_MEM_OR_NULL          = PTR_MAYBE_NULL | ARG_PTR_TO_MEM,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   include/linux/bpf.h:753:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     753 |         ARG_PTR_TO_CTX_OR_NULL          = PTR_MAYBE_NULL | ARG_PTR_TO_CTX,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   include/linux/bpf.h:754:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     754 |         ARG_PTR_TO_SOCKET_OR_NULL       = PTR_MAYBE_NULL | ARG_PTR_TO_SOCKET,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:755:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     755 |         ARG_PTR_TO_STACK_OR_NULL        = PTR_MAYBE_NULL | ARG_PTR_TO_STACK,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:756:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     756 |         ARG_PTR_TO_BTF_ID_OR_NULL       = PTR_MAYBE_NULL | ARG_PTR_TO_BTF_ID,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:760:38: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     760 |         ARG_PTR_TO_UNINIT_MEM           = MEM_UNINIT | ARG_PTR_TO_MEM,
-         |                                           ~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   include/linux/bpf.h:762:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     762 |         ARG_PTR_TO_FIXED_SIZE_MEM       = MEM_FIXED_SIZE | ARG_PTR_TO_MEM,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   include/linux/bpf.h:785:48: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     785 |         RET_PTR_TO_MAP_VALUE_OR_NULL    = PTR_MAYBE_NULL | RET_PTR_TO_MAP_VALUE,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:786:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     786 |         RET_PTR_TO_SOCKET_OR_NULL       = PTR_MAYBE_NULL | RET_PTR_TO_SOCKET,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:787:47: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     787 |         RET_PTR_TO_TCP_SOCK_OR_NULL     = PTR_MAYBE_NULL | RET_PTR_TO_TCP_SOCK,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:788:50: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     788 |         RET_PTR_TO_SOCK_COMMON_OR_NULL  = PTR_MAYBE_NULL | RET_PTR_TO_SOCK_COMMON,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:790:49: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     790 |         RET_PTR_TO_DYNPTR_MEM_OR_NULL   = PTR_MAYBE_NULL | RET_PTR_TO_MEM,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   include/linux/bpf.h:791:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     791 |         RET_PTR_TO_BTF_ID_OR_NULL       = PTR_MAYBE_NULL | RET_PTR_TO_BTF_ID,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:792:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     792 |         RET_PTR_TO_BTF_ID_TRUSTED       = PTR_TRUSTED    | RET_PTR_TO_BTF_ID,
-         |                                           ~~~~~~~~~~~    ^ ~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:903:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
-     903 |         PTR_TO_MAP_VALUE_OR_NULL        = PTR_MAYBE_NULL | PTR_TO_MAP_VALUE,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:904:42: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
-     904 |         PTR_TO_SOCKET_OR_NULL           = PTR_MAYBE_NULL | PTR_TO_SOCKET,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
-   include/linux/bpf.h:905:46: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
-     905 |         PTR_TO_SOCK_COMMON_OR_NULL      = PTR_MAYBE_NULL | PTR_TO_SOCK_COMMON,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:906:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
-     906 |         PTR_TO_TCP_SOCK_OR_NULL         = PTR_MAYBE_NULL | PTR_TO_TCP_SOCK,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~
-   include/linux/bpf.h:907:42: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
-     907 |         PTR_TO_BTF_ID_OR_NULL           = PTR_MAYBE_NULL | PTR_TO_BTF_ID,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
->> kernel/bpf/syscall.c:3538:2: error: call to undeclared function 'bpf_trampoline_multi_unlink_prog'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    3538 |         bpf_trampoline_multi_unlink_prog(&multi_link->link);
-         |         ^
-   kernel/bpf/syscall.c:3538:2: note: did you mean 'bpf_trampoline_unlink_prog'?
-   include/linux/bpf.h:1368:19: note: 'bpf_trampoline_unlink_prog' declared here
-    1368 | static inline int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link,
-         |                   ^
->> kernel/bpf/syscall.c:3815:8: error: call to undeclared function 'bpf_trampoline_multi_link_prog'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    3815 |         err = bpf_trampoline_multi_link_prog(&link->link);
-         |               ^
-   kernel/bpf/syscall.c:3815:8: note: did you mean 'bpf_trampoline_unlink_prog'?
-   include/linux/bpf.h:1368:19: note: 'bpf_trampoline_unlink_prog' declared here
-    1368 | static inline int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link,
-         |                   ^
-   kernel/bpf/syscall.c:3821:3: error: call to undeclared function 'bpf_trampoline_multi_unlink_prog'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    3821 |                 bpf_trampoline_multi_unlink_prog(&link->link);
-         |                 ^
-   kernel/bpf/syscall.c:6204:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    6204 |         .arg2_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
-         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   28 warnings and 3 errors generated.
-
-
-vim +/bpf_trampoline_multi_unlink_prog +3538 kernel/bpf/syscall.c
-
-  3532	
-  3533	static void bpf_tracing_multi_link_release(struct bpf_link *link)
-  3534	{
-  3535		struct bpf_tracing_multi_link *multi_link =
-  3536			container_of(link, struct bpf_tracing_multi_link, link.link);
-  3537	
-> 3538		bpf_trampoline_multi_unlink_prog(&multi_link->link);
-  3539		__bpf_tracing_multi_link_release(multi_link);
-  3540	}
-  3541	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Thanks
+> James
