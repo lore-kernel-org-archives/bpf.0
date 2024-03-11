@@ -1,57 +1,57 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7457738F97
-	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 09:34:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709E238F94
+	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 09:35:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710149701; cv=none; b=bYVfO2FUgLFJ512YTdNOdojc2lSTUjoqMQMcoz+b0xKxS1V8E+F1dSnGJchA5+vGHAFmY6Z+pct77Ip9ZiveVLewFJ7unN5WYPnXvFAgWnfjQ75ih5Kvz6j7FWCoDDwGJtAoMILLvH2/JOOTUVDzrFxbpoYpxvXG3v2QocHwoyg=
+	t=1710149708; cv=none; b=SH0U8EN5JwBWvc4w0aEhu1xeDzUHMHwtw35ErBQR06wG8RjNtlS/Njz68FRNhjRdQNhh0CmaCzGzj64fyGZRAHgAfK8J3xxXKdAfpYYqJCuBDE+D88Efo+O4en9VfoNISgk/gAMcvQELpGIHi3rrPuBc+B2f3YyKR849pfp/MlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710149701; c=relaxed/simple;
-	bh=TE0qpmdPB+wes4LW3PVEl7Os9qDezEyQM77BodsjCrg=;
+	s=arc-20240116; t=1710149708; c=relaxed/simple;
+	bh=rlgHAktRXh8Arz+mICUGBGJaAN9yHmzX0MUr6JUJO9s=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=iJhm3pn71q/pN1eRj+T9zNWyaQ1Y3F0CxXGKeAhnXiHKhGaD+JNvfWlgRW/4R4/8FF8oNJix+7Xnx7oUtz1T1XBOmbhXF9n6K0w6LAjasSy76wkOOM+alW15zBr9kx9JQ+Q2YSQ3gAFfaoWvosdwdnGjQs9Rm78bV4w5aVCyTW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=adpl9kIe; arc=none smtp.client-ip=209.85.210.179
+	 MIME-Version; b=QJCbjWDcSbiq2XrCCUysjYH48swAL0VIwHhSqfgNUL4EjhnpimJDX/xV/ZE+jd5jsAPuV4r8Pdxsa7HFOoLvbSQLehD1wZLU+4+rXCHoRvfCjcCr2vxx6+boP0za1Vi3pr/j5iy2nU+LEm8JKIgNQZoQ6LIKRvpW6v4y8vrcd00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=ZE9HCwZy; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="adpl9kIe"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6e5b1c6daa3so2487336b3a.1
-        for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 02:34:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="ZE9HCwZy"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1dcab44747bso26692365ad.1
+        for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 02:35:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1710149699; x=1710754499; darn=vger.kernel.org;
+        d=bytedance.com; s=google; t=1710149706; x=1710754506; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mQHWXqakG53bwp/DHGcig31BilBtYFxqqjfUWdtPR6g=;
-        b=adpl9kIeZoKs45VwHW8g6CUq/VGzVREUPqjUfsVt7/FJN2vEnM8n/ShhzcJnC4rNrz
-         0IehkKKhiHwR+f1CEoQkIMfD8bFCQ9Mc8Qz3YyHqcyt4+jwsBUONCAL4dcRcix4xK9ei
-         7XqXA1FRABEGSyWGJGB5ZdPu8yvuUNq7kNsEVhFlSKrQjCEMSvzcXg9JOP+XitxZva/Z
-         DXUjXG9ekOBe71+TZng1vW4kVf0wTRluMLo+Yc6D12jY5nXVqXEFAjuC5xo4OT3JSDHN
-         1Kw8IiwUHDogxYKBFj/1gxH4phK2gyfH4Ho9yALQK88PnPSqT7YVJ1h3/JrAaXL/BY6q
-         incg==
+        bh=nrO/qg8uwgz9YPMWghckYtP0xPd/PM4sF9e4mk1PfXk=;
+        b=ZE9HCwZy187GBNAo7g/OJQlPcb4GhJhGQc0rFJPUD2DvjDdE+ImM5bbI6PUvrYGBSr
+         74xxLoDX+jpOIBahy6mpRFevTRPdp0bRgxv+E7sUMIo3zkCfLKQ0dhzjlrMj0BDFO69E
+         /LSzq+NljuvIdKTfXvuIBZQLq0StFInFpadfnHWDPuDs+pa2//gW0+zf0Jmz3GMbWZpy
+         3dBTvokDItedaJNKlzeVt7rpk/gvUs3RKcPvNVD4p0vEswbahWT/JaW83Z61D/4mSwQq
+         1ePC74X4Zyn+KzpYPrgLz+sQbsXDvg5sc/4o9AkDCOwIVMNS3S/buhrhRmB9lURF82Bp
+         bZaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710149699; x=1710754499;
+        d=1e100.net; s=20230601; t=1710149706; x=1710754506;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mQHWXqakG53bwp/DHGcig31BilBtYFxqqjfUWdtPR6g=;
-        b=YGxET30VGbPOHWHkQmxVsLwwCc+XcUS63218kTtiTrxOoJC5/ZyYpnzNGDnwC8zrKX
-         FPrXvDDO1B3DBh7xN+F0F13pVkS3VgTh8IOzdhEjGq5OQbY87ieB7UEMY8ZwlzxrquuZ
-         KIc6N5kPI6aVCAiWGq3jo5ZSI0dA/llW467dg/vYqyBbWBB2Es6rAYw4nqMicei7R28F
-         IHjAwH3ew6eEPOv9Jzveh37opaG4s64ZLsgtWk0k9WRLEgVcnCcIOYbv33a+rwE60rrG
-         bTT3YOUPPMPRTBqLIIc93OCrA+6N0cst5o4hd5sJNp9p2gUFXWJGyiARjlDFeVw4t6vz
-         DEzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWjf8Fah3cbve4emzCUVBYp17ujMZh36ytaM/Ff22b0DIfCXu4yj1StJSe+n1Hbk3jCuI549wULLJfbuQhwF/1gVfZd
-X-Gm-Message-State: AOJu0YzWLXVuFpZZbKJqyTJcHHfYWPlC2N8XxRwCLfmxuMxFYrD0+6Em
-	gk1d+7gq1lj/UZIw7uKF7YV+3w+dvChzQZs1DMYmOMraYz8xvoJCFs5j/1frqcw=
-X-Google-Smtp-Source: AGHT+IHwrlcPzEPWwJhB9wbDVFgwEUaTXK8PIDDimv1XZruHWD6zTTqAqef2QwBY7Qc+7bmyEVvx+w==
-X-Received: by 2002:a05:6a20:6f8f:b0:1a3:1d7e:342b with SMTP id gv15-20020a056a206f8f00b001a31d7e342bmr631985pzb.48.1710149698990;
-        Mon, 11 Mar 2024 02:34:58 -0700 (PDT)
+        bh=nrO/qg8uwgz9YPMWghckYtP0xPd/PM4sF9e4mk1PfXk=;
+        b=TL+5oZ3J3Z0Ebqv+0vrxFufFCNGoB7OGi8B8YK7b9l6qyKnadcrIGwv+9eOPxpkb0S
+         o1JIw7Hx9J16SC5aPwINrG4EkeEs0U7qy63enCqoLm8nQz4t7PLra6ggCYW6xO/zjONr
+         iyImbU3B8b4LawdoL4K+qzcVCaHP/RzIN+rhogGbK7GPF0TZW8dRKN2R4M4i9hQByLzg
+         SIMfY8WFtO+L344MipFAGFbej58p8iETPzgs4XEsfkazQx/IrBn5yEDNhZomPIYKYexz
+         DVfBoiOfXRrHfMP4S3ZdoaYr+TxRUhxyp7ZPvP2+uiX2JUSR0eM6OaNJ8/TvKn6u5M0A
+         cJQA==
+X-Forwarded-Encrypted: i=1; AJvYcCVRmDOTSWeWAJ7ymsxcUKxVnOcbIh2qqTjtIn935m9rInUGgt76LHtVqXz1wXmB7rOzDkAVpzsyE5kl5XPI0Sybxn3w
+X-Gm-Message-State: AOJu0YzctsL4JIoOGqjxxe789F53zAaSaUrTEgUTkoSQ5YKHNBZNLBJT
+	jbH8zXn7QZGClbIJASSxHzr+4ckZ8qYPOWAcVpRpisZDO2aBMMuuqaI6D3jwr+w=
+X-Google-Smtp-Source: AGHT+IGdSAmTRkYfDKtyWphJJzXlBtH2IoijdRXhZZCIJP7eVn99sHsdiqYvOsYl4WPd5euBmexj4g==
+X-Received: by 2002:a17:902:bcc6:b0:1dc:f803:85b3 with SMTP id o6-20020a170902bcc600b001dcf80385b3mr4689221pls.43.1710149706575;
+        Mon, 11 Mar 2024 02:35:06 -0700 (PDT)
 Received: from localhost.localdomain ([43.129.25.208])
-        by smtp.gmail.com with ESMTPSA id h9-20020a170902f7c900b001dcad9cbf8bsm4253365plw.239.2024.03.11.02.34.51
+        by smtp.gmail.com with ESMTPSA id h9-20020a170902f7c900b001dcad9cbf8bsm4253365plw.239.2024.03.11.02.34.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Mar 2024 02:34:58 -0700 (PDT)
+        Mon, 11 Mar 2024 02:35:06 -0700 (PDT)
 From: Menglong Dong <dongmenglong.8@bytedance.com>
 To: andrii@kernel.org
 Cc: ast@kernel.org,
@@ -85,9 +85,9 @@ Cc: ast@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-stm32@st-md-mailman.stormreply.com,
 	Menglong Dong <dongmenglong.8@bytedance.com>
-Subject: [PATCH bpf-next v2 4/9] bpf: trampoline: introduce bpf_tramp_multi_link
-Date: Mon, 11 Mar 2024 17:35:21 +0800
-Message-Id: <20240311093526.1010158-5-dongmenglong.8@bytedance.com>
+Subject: [PATCH bpf-next v2 5/9] bpf: verifier: add btf to the function args of bpf_check_attach_target
+Date: Mon, 11 Mar 2024 17:35:22 +0800
+Message-Id: <20240311093526.1010158-6-dongmenglong.8@bytedance.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
 References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
@@ -99,113 +99,106 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Introduce the struct bpf_tramp_multi_link, which is used to attach
-a bpf_link to multi trampoline. Meanwhile, introduce corresponding
-function bpf_trampoline_multi_{link,unlink}_prog.
+Add target btf to the function args of bpf_check_attach_target(), then
+the caller can specify the btf to check.
 
 Signed-off-by: Menglong Dong <dongmenglong.8@bytedance.com>
 ---
- include/linux/bpf.h     | 14 ++++++++++++
- kernel/bpf/trampoline.c | 47 +++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 61 insertions(+)
+ include/linux/bpf_verifier.h | 1 +
+ kernel/bpf/syscall.c         | 6 ++++--
+ kernel/bpf/trampoline.c      | 1 +
+ kernel/bpf/verifier.c        | 8 +++++---
+ 4 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 2b5cd6100fc4..4e8f17d9f022 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -57,6 +57,7 @@ struct user_namespace;
- struct super_block;
- struct inode;
- struct bpf_tramp_link;
-+struct bpf_tramp_multi_link;
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 4b0f6600e499..6cb20efcfac3 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -811,6 +811,7 @@ static inline void bpf_trampoline_unpack_key(u64 key, u32 *obj_id, u32 *btf_id)
+ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 			    const struct bpf_prog *prog,
+ 			    const struct bpf_prog *tgt_prog,
++			    struct btf *btf,
+ 			    u32 btf_id,
+ 			    struct bpf_attach_target_info *tgt_info);
+ void bpf_free_kfunc_btf_tab(struct bpf_kfunc_btf_tab *tab);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index d1cd645ef9ac..6128c3131141 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3401,9 +3401,11 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+ 		 * need a new trampoline and a check for compatibility
+ 		 */
+ 		struct bpf_attach_target_info tgt_info = {};
++		struct btf *btf;
  
- extern struct idr btf_idr;
- extern spinlock_t btf_idr_lock;
-@@ -1282,6 +1283,8 @@ struct bpf_trampoline *bpf_trampoline_get(u64 key,
- 					  struct bpf_attach_target_info *tgt_info);
- void bpf_trampoline_put(struct bpf_trampoline *tr);
- int arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int num_funcs);
-+int bpf_trampoline_multi_link_prog(struct bpf_tramp_multi_link *link);
-+int bpf_trampoline_multi_unlink_prog(struct bpf_tramp_multi_link *link);
+-		err = bpf_check_attach_target(NULL, prog, tgt_prog, btf_id,
+-					      &tgt_info);
++		btf = tgt_prog ? tgt_prog->aux->btf : prog->aux->attach_btf;
++		err = bpf_check_attach_target(NULL, prog, tgt_prog, btf,
++					      btf_id, &tgt_info);
+ 		if (err)
+ 			goto out_unlock;
  
- /*
-  * When the architecture supports STATIC_CALL replace the bpf_dispatcher_fn
-@@ -1614,6 +1617,17 @@ struct bpf_shim_tramp_link {
- 	struct bpf_trampoline *trampoline;
- };
- 
-+struct bpf_tramp_multi_link_entry {
-+	struct bpf_trampoline *trampoline;
-+	struct bpf_tramp_link_conn conn;
-+};
-+
-+struct bpf_tramp_multi_link {
-+	struct bpf_link link;
-+	u32 cnt;
-+	struct bpf_tramp_multi_link_entry *entries;
-+};
-+
- struct bpf_tracing_link {
- 	struct bpf_tramp_link link;
- 	enum bpf_attach_type attach_type;
 diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index cf9b84f785f3..2167aa3fe583 100644
+index 2167aa3fe583..b00d53af8fcb 100644
 --- a/kernel/bpf/trampoline.c
 +++ b/kernel/bpf/trampoline.c
-@@ -607,6 +607,53 @@ int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_trampolin
- 	return err;
- }
+@@ -747,6 +747,7 @@ int bpf_trampoline_link_cgroup_shim(struct bpf_prog *prog,
+ 	int err;
  
-+static int __bpf_trampoline_multi_unlink_prog(struct bpf_tramp_multi_link *link,
-+					      u32 cnt)
-+{
-+	struct bpf_tramp_multi_link_entry *entry;
-+	struct bpf_trampoline *tr;
-+	int err = 0, i;
-+
-+	for (i = 0; i < cnt; i++) {
-+		entry = &link->entries[i];
-+		tr = entry->trampoline;
-+		mutex_lock(&tr->mutex);
-+		err = __bpf_trampoline_unlink_prog(&entry->conn,
-+						   entry->trampoline);
-+		mutex_unlock(&tr->mutex);
-+		if (err)
-+			break;
-+	}
-+	return err;
-+}
-+
-+int bpf_trampoline_multi_unlink_prog(struct bpf_tramp_multi_link *link)
-+{
-+	return __bpf_trampoline_multi_unlink_prog(link, link->cnt);
-+}
-+
-+int bpf_trampoline_multi_link_prog(struct bpf_tramp_multi_link *link)
-+{
-+	struct bpf_tramp_multi_link_entry *entry;
-+	struct bpf_trampoline *tr;
-+	int err = 0, i;
-+
-+	for (i = 0; i < link->cnt; i++) {
-+		entry = &link->entries[i];
-+		tr = entry->trampoline;
-+		mutex_lock(&tr->mutex);
-+		err = __bpf_trampoline_link_prog(&entry->conn, tr);
-+		mutex_unlock(&tr->mutex);
-+		if (err)
-+			goto unlink;
-+	}
-+
-+	return 0;
-+unlink:
-+	__bpf_trampoline_multi_unlink_prog(link, i);
-+	return err;
-+}
-+
- #if defined(CONFIG_CGROUP_BPF) && defined(CONFIG_BPF_LSM)
- static void bpf_shim_tramp_link_release(struct bpf_link *link)
+ 	err = bpf_check_attach_target(NULL, prog, NULL,
++				      prog->aux->attach_btf,
+ 				      prog->aux->attach_btf_id,
+ 				      &tgt_info);
+ 	if (err)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index bf084c693507..4493ecc23597 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -20613,6 +20613,7 @@ static int check_non_sleepable_error_inject(u32 btf_id)
+ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 			    const struct bpf_prog *prog,
+ 			    const struct bpf_prog *tgt_prog,
++			    struct btf *btf,
+ 			    u32 btf_id,
+ 			    struct bpf_attach_target_info *tgt_info)
  {
+@@ -20623,7 +20624,6 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 	const struct btf_type *t;
+ 	bool conservative = true;
+ 	const char *tname;
+-	struct btf *btf;
+ 	long addr = 0;
+ 	struct module *mod = NULL;
+ 
+@@ -20631,7 +20631,6 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 		bpf_log(log, "Tracing programs must provide btf_id\n");
+ 		return -EINVAL;
+ 	}
+-	btf = tgt_prog ? tgt_prog->aux->btf : prog->aux->attach_btf;
+ 	if (!btf) {
+ 		bpf_log(log,
+ 			"FENTRY/FEXIT program can only be attached to another program annotated with BTF\n");
+@@ -20940,6 +20939,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 	struct bpf_attach_target_info tgt_info = {};
+ 	u32 btf_id = prog->aux->attach_btf_id;
+ 	struct bpf_trampoline *tr;
++	struct btf *btf;
+ 	int ret;
+ 	u64 key;
+ 
+@@ -20964,7 +20964,9 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 	    prog->type != BPF_PROG_TYPE_EXT)
+ 		return 0;
+ 
+-	ret = bpf_check_attach_target(&env->log, prog, tgt_prog, btf_id, &tgt_info);
++	btf = tgt_prog ? tgt_prog->aux->btf : prog->aux->attach_btf;
++	ret = bpf_check_attach_target(&env->log, prog, tgt_prog, btf,
++				      btf_id, &tgt_info);
+ 	if (ret)
+ 		return ret;
+ 
 -- 
 2.39.2
 
