@@ -1,120 +1,129 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A2E4174A
-	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 15:08:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22EAE4AEDB
+	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 15:29:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710169710; cv=none; b=d8q8OLEw64zIk+/zPHEKZTfg5XDhtToGyRrKAO3vafQuCBdPFtasUdyE2l7VrRSOjZ1mAT+7b1DhdsE3xkmgY8tTieg5EUZK6IXiF07ns3tGfvCSdG1TYvBzIr79pC8lWaB8nzgEHgsTTO5zpUJg7KFUqmDuYS3J6rK6hXyFx44=
+	t=1710170955; cv=none; b=EOOF2Parj2iUDJrFdJ0cIFj/cJZLSkLONtvP4KqZkpzvuugDcBRLDZEiu2/uNR0R/rsg4PkYY95pFDiiXtw+j0nAi2ai8QTdTM10n6FDJw4LVSb9EOu3UBk/s9igpdV2FcbUUhKIO4i+NHuYkHj2mLqio8eoHeDjLS0ORUHyfug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710169710; c=relaxed/simple;
-	bh=098fWzoYwSmqpWJ12+QC7qOPaM5eBGf6cTIamjA8KaM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pMkkIhOaBaqwjjNlLl6zjmtka7w5XMyGgcSJC5MTMzGg2+CSL4BAScIwBSu/suYMFaKqurCXmxND9c6cw+bCpOtwWZzzt6O097QGObUfD7z5PpkLvDbf7UGg0SOIPsOnWFHHUw+kczoGIUawcZk/pg17q4o89OEweFZg6jNkXos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=S+n7Pj+8; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1710170955; c=relaxed/simple;
+	bh=e6TFE/1KfvvW7dIxLWV8I/Uiw2fbSncmPD9VPYm2nJU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=O3SXcgdVRqdfbsgkzRx19at4FSgR1o29dWp8F2k9sRMDrrz3L1s9W9IctCXe6zmhjjTqbI1OfrSeHi6wg47bqWCyqi0ruIub5DyGVxX3r3yWIa4JtRc7cyTfkjl4MzXFXcuwlwT/L/42EJOdUFuRCntG+ZV9yQRBKWoieLe0530=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=GG9w/Ley; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S+n7Pj+8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1710169707;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Kcvm7TGmZ4F/Q+GGtGoWGuc0b/iyK4sfHKLwBgDx/8A=;
-	b=S+n7Pj+8KwD3I/FvLTzmhckL2ySFGZ352XVzWEUv6beSBTPAVmqjEdBB6wpx8CqtEGZgsK
-	K8s597zBCKYEnQQw79ddeQtJWH67Lk1Uy9BIid/Ns9sh9Txa4ar/YG8sjaOBCCO80IHhAb
-	g7KSpfDfaCz1ry6leLA3kEmPTET/ukU=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-164-p58QcrU6Nfia94QT33p1-g-1; Mon,
- 11 Mar 2024 11:08:24 -0400
-X-MC-Unique: p58QcrU6Nfia94QT33p1-g-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A10FD383E122;
-	Mon, 11 Mar 2024 15:08:23 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.242])
-	by smtp.corp.redhat.com (Postfix) with SMTP id 499961C060A4;
-	Mon, 11 Mar 2024 15:08:21 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Mon, 11 Mar 2024 16:07:02 +0100 (CET)
-Date: Mon, 11 Mar 2024 16:06:59 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	yunwei356@gmail.com, bpf <bpf@vger.kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	lsf-pc <lsf-pc@lists.linux-foundation.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [LSF/MM/BPF TOPIC] faster uprobes
-Message-ID: <20240311150658.GA28588@redhat.com>
-References: <ZeCXHKJ--iYYbmLj@krava>
- <CAEf4Bzbs4toMxw62kVTWNHA7sW-CncamyKHCWynCT0GnG+fOfQ@mail.gmail.com>
- <ZeGPU8FRqwNuUJwd@krava>
- <CAADnVQKW4Qk55NjaApx1caPDF_pA8f5JZFE12DKA2R8cKWmtcw@mail.gmail.com>
- <CAEf4Bzbv5_yG8S4c22QUXp1FhLZGSSRZS6FFjXfvo=4RdAThZA@mail.gmail.com>
- <ZeRO9_IiLSy9D7jQ@krava>
- <CAEf4BzZQnqjoCc6Y_N3Wu4eMpioqgZC04QrTujgyiYMMRpG3Nw@mail.gmail.com>
- <ZebWqIgABbk8dQXT@krava>
- <Ze7kGP5aAYGseRuM@krava>
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="GG9w/Ley"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4132a89a351so5616215e9.1
+        for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 08:29:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1710170951; x=1710775751; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oBRdUgazJ1HnLsYGkRF0jKMpPcVcTcXQbKGRIqRZPjY=;
+        b=GG9w/LeyV9WgyjVUjY3zdgyZj3jaaKNt9/reFo/vkrZtW/AhbnLCB64bpzoy6bMHG4
+         4m1Y8XgP65NeAZ4/5TkSJ0CdG2ZIjC5y3uq9z9Wk72x2CjQsqKmvIiPo9S3PkjdAtMlZ
+         kJeFLaA7luKLc7Fnm1iyKkmLmVtcxgnDAQrB/pknRWhwWdH0ZhgIOfoVma5l7thlR3QJ
+         fCZHT/aBtHiv26GWyKx1vJ0+7M9QGArXTTsdWbQepwdsfEfYTHTfQA0EaIIEnCIM9sTH
+         i3GrHl6sAt8zPQRGY78IWezjMd6GzJzUDUkULKKh11InxGbdS3pjrvCnvqJjpKp5ohfF
+         wXkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710170951; x=1710775751;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oBRdUgazJ1HnLsYGkRF0jKMpPcVcTcXQbKGRIqRZPjY=;
+        b=JNYVH5NfBGFQ8DVL66Qx4blZLaxroOFeCmREHAcsoHlDT0LPWnAtB5yGGXn0G/EMm5
+         1rHLxvBjQ09TOGqm7oNN+9c0axYFb+w3/gG6I0ekiqWo22ZLffmAOQDaBylzNdcTwWMh
+         EmwJPNAnHFhqBTARL5qEMAzCKLh5ahHnusaLfdl0nd944M7iLdHxslky79jICzutfDi6
+         faeRIXOaDyN9Qd4Hd9yHU0b05AJ49S1/tacQma8LxXkEgFUXoGbYUFFoZsDNRl+bgmi7
+         Ybg3l2bO63cVXQ2Y8pKH6TCe5v1KiOq3WuxbwQOfTulDT/2KgajceVIsi5L9yKjFwRrK
+         OJnw==
+X-Forwarded-Encrypted: i=1; AJvYcCW/KmulzBm+UVtxxDEBwlxtzabR2UL55aV14H0O2G+5L/GWKwoe8rLt5hEFGSh2qQWVZoMC6qhkDWW5lX12/1zFN0EP
+X-Gm-Message-State: AOJu0YxBeiWipMT9vcAhJuzcNUKlrZj5hLRpYK9eEfuXH8tCv4dQ1mEq
+	zcJgxyyfziked58zQLMpUjbdg5Uz5bAShqdF930GQgJ7a1TamokzIFCo5NcxfGw=
+X-Google-Smtp-Source: AGHT+IEwgdh7H+9crLcV9S5SLA+JZoumOzg/VaQuwX7biWBYjQ6DqPv+BHttGcsj9IyOJw9JoIyg7w==
+X-Received: by 2002:a05:600c:4449:b0:413:1f5c:baa6 with SMTP id v9-20020a05600c444900b004131f5cbaa6mr5344265wmn.30.1710170951441;
+        Mon, 11 Mar 2024 08:29:11 -0700 (PDT)
+Received: from ?IPV6:2a02:8011:e80c:0:5231:db44:25b0:339e? ([2a02:8011:e80c:0:5231:db44:25b0:339e])
+        by smtp.gmail.com with ESMTPSA id n4-20020a05600c4f8400b00412ff941abasm15941091wmq.21.2024.03.11.08.29.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Mar 2024 08:29:11 -0700 (PDT)
+Message-ID: <e8f37842-1ddf-4241-97f3-b83ffcb32ddc@isovalent.com>
+Date: Mon, 11 Mar 2024 15:29:09 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ze7kGP5aAYGseRuM@krava>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 8/9] libbpf: add support for the multi-link of
+ tracing
+Content-Language: en-GB
+To: Menglong Dong <dongmenglong.8@bytedance.com>, andrii@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, jolsa@kernel.org, agordeev@linux.ibm.com,
+ borntraeger@linux.ibm.com, svens@linux.ibm.com, davem@davemloft.net,
+ dsahern@kernel.org, dave.hansen@linux.intel.com, x86@kernel.org,
+ rostedt@goodmis.org, mathieu.desnoyers@efficios.com, bpf@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ netdev@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
+References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
+ <20240311093526.1010158-9-dongmenglong.8@bytedance.com>
+From: Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20240311093526.1010158-9-dongmenglong.8@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-I forgot everything about the low-level x86_64 code, but...
+2024-03-11 09:35 UTC+0000 ~ Menglong Dong <dongmenglong.8@bytedance.com>
+> Add support for the attach types of:
+> 
+> BPF_TRACE_FENTRY_MULTI
+> BPF_TRACE_FEXIT_MULTI
+> BPF_MODIFY_RETURN_MULTI
+> 
+> Signed-off-by: Menglong Dong <dongmenglong.8@bytedance.com>
+> ---
+>  tools/bpf/bpftool/common.c |   3 +
+>  tools/lib/bpf/bpf.c        |  10 +++
+>  tools/lib/bpf/bpf.h        |   6 ++
+>  tools/lib/bpf/libbpf.c     | 168 ++++++++++++++++++++++++++++++++++++-
+>  tools/lib/bpf/libbpf.h     |  14 ++++
+>  tools/lib/bpf/libbpf.map   |   1 +
+>  6 files changed, 199 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
+> index cc6e6aae2447..ffc85256671d 100644
+> --- a/tools/bpf/bpftool/common.c
+> +++ b/tools/bpf/bpftool/common.c
+> @@ -1089,6 +1089,9 @@ const char *bpf_attach_type_input_str(enum bpf_attach_type t)
+>  	case BPF_TRACE_FENTRY:			return "fentry";
+>  	case BPF_TRACE_FEXIT:			return "fexit";
+>  	case BPF_MODIFY_RETURN:			return "mod_ret";
+> +	case BPF_TRACE_FENTRY_MULTI:		return "fentry_multi";
+> +	case BPF_TRACE_FEXIT_MULTI:		return "fexit_multi";
+> +	case BPF_MODIFY_RETURN_MULTI:		return "mod_ret_multi";
+>  	case BPF_SK_REUSEPORT_SELECT:		return "sk_skb_reuseport_select";
+>  	case BPF_SK_REUSEPORT_SELECT_OR_MIGRATE:	return "sk_skb_reuseport_select_or_migrate";
+>  	default:	return libbpf_bpf_attach_type_str(t);
 
-On 03/11, Jiri Olsa wrote:
->
->  #ifdef CONFIG_X86_64
-> +
-> +asm (
-> +       ".pushsection .rodata\n"
-> +       ".global uretprobe_syscall_entry\n"
-> +       "uretprobe_syscall_entry:\n"
-> +       "push %rax\n"
-> +       "mov $462, %rax\n"
-> +       "syscall\n"
+Hi, please drop this part in bpftool.
 
-Hmm... I think you need to save/restore more registers clobbered by
-syscall/entry_SYSCALL_64 ?
+bpf_attach_type_input_str() is used for legacy attach type names that
+were used before bpftool switched to libbpf_bpf_attach_type_str(), and
+that are still supported today. The names for new attach types should
+just be retrieved with libbpf_bpf_attach_type_str(). And function
+bpf_attach_type_input_str() is also only used for attaching
+cgroup-related programs with "bpftool cgroup (at|de)tach".
 
-> +SYSCALL_DEFINE1(uprobe, unsigned long, cmd)
-> +{
-> +	struct pt_regs *regs = task_pt_regs(current);
-> +	unsigned long ax, err;
-> +
-> +	/*
-> +	 * We get invoked from the trampoline that pushed rax
-> +	 * value on stack, read and restore the value.
-> +	 */
-> +	err = copy_from_user((void*) &ax, (void *) regs->sp, sizeof(ax));
-> +	WARN_ON_ONCE(err);
-> +
-> +	regs->ax = ax;
-
-probably not strictly needed, we are going to return ax...
-
-> +	regs->orig_ax = ax;
-
-This doesn't look right. I think you need
-
-	regs->orig_ax = -1;
-
-Say, to avoid the "Did we come from a system call" checks in
-arch_do_signal_or_restart() or handle_signal().
-
-Oleg.
+Thanks,
+Quentin
 
