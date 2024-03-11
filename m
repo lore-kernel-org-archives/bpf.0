@@ -1,94 +1,163 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28583B78E;
-	Mon, 11 Mar 2024 11:46:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96ED03CF79;
+	Mon, 11 Mar 2024 12:01:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710157614; cv=none; b=Y2o89PkRmcWISAk9oidAbbjHE9v2NJ2GsUkVFj/nmftmuegKxx2EuXuDaFin+obj3de/NpUYSUlmz8Qw7WJLJvuIk8YWayjVsLJoqb5M+CiBJzqgflAxMuYQr2NrGVGpbD+ca+7mtAtKk6giKxXjoLJjPTXVIuZJ5gvHcXMzUNM=
+	t=1710158463; cv=none; b=pd6O0ORoY8ti1Ea80OM82+m027NGtm7x8pmul7vRWJE/tUC9ooJZ7flBxQcXGc6mfH6gbcoArlRSccIBgOhvDBW3EM9/bQZ0/RQD6GMfBq/9R/lUC/CrwYqkQn9jrmhZKQRK3J6rMpTRm43jWmwYIwrsvWnW6c0Tnt/74mK5fzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710157614; c=relaxed/simple;
-	bh=ADA7WsWOqpTgckZhMzIai2MEKGe5CSeq88JNezN9c2M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZBTeSqEcoGRVdK0gI8yiP5q7IAYT3waNTq7nTvu5ub8ws2M6gyVfXJEO0bF7D6s3y1v5TrerPeh1w1D1PvHU9L4tWqv4WNmfJfkAU27WSgBHsFBpJAWCAP+AxI7rg6TXvLNUlCpEydt0z7HDQVYGc0blAugg5yZfC0CJXyQyDZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MEEFanXf; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710158463; c=relaxed/simple;
+	bh=fT5zINPY9j/8xLkIBxSYOgCQjvdqeRAhMKCybJ05TQQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iARCfzMdl84Ed6bmmhdngXaXK8XN7C+vtuFqzqai7BhX/aIRcRkAVz1AnkMyQ6wLr342+JQfz5AVqsJaK68dLluXS1NGmXmmrNyrDcLzpFCYKSefs3M/XDriWhNZiZq/sZporTZVlexzow31L5xBVjoeugINQZgVeKFRlYV7IbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=erF5UkB7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MEEFanXf"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1dc3b4b9b62so25414985ad.1;
-        Mon, 11 Mar 2024 04:46:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710157612; x=1710762412; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ADA7WsWOqpTgckZhMzIai2MEKGe5CSeq88JNezN9c2M=;
-        b=MEEFanXfhCGqgIrfQ+0SgaZG0Ad8T/QTzAZ0GRLJebRw0E4rJ+flwEuxdrUa8SoXT8
-         QZO6begJwOauRZlD0fakKOOoxl8EFW3EgIBe932vwtA96eVX0C4RQtsT+X00hb5eOE4f
-         5MBXVDOXljrQjspWnqjxZYTdy9A2P+RhSJH8uFGW//IL/dA02x/mXpiqAy7HwsD9rsHq
-         1v/Erkxu0cGu+l4Pg/TQaMSUjtYVUl3vPMY2uTYSSr1CCMhOnm59GSBRmYJyx1/NosI4
-         I/Bb0v2kdk6SmXFX7leqMtbiPamirsao0M2anpGYENBmrGtI/cj+jU44pkh+BHBSFtHl
-         Qbog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710157612; x=1710762412;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ADA7WsWOqpTgckZhMzIai2MEKGe5CSeq88JNezN9c2M=;
-        b=pXUIBdWECrHZOCjPfH05T6EFlHlXYkcEI/+In7ryKwRqqg4zEZIGb5OaFS7ohXtH5q
-         VD+suhXNEz9uKB0utAgOP1L9DcXmIQ5Ymfp3kMmDt8aMvUdLK/0VaJummgKpfMocXBFu
-         ml2/MPktLJoqSLHzHpniuaMNpVAlCh8dMR2qR1srK0kphQjII6AFx/XJ+6UdaXJKGHsj
-         ZGwaLd+dLp1CZYpGlkD863llvEkwLx82HSwrH26b26hwT+dFFGtDxcHyttPxCuupp1lF
-         o47ZFN5lO6y5l1ClUtJPO+sN3nvSWenk59N5mxVo8vviBWoM2VtStuKNamnFOzKvthQv
-         ojcg==
-X-Forwarded-Encrypted: i=1; AJvYcCXoDfHzqSqEzQDFkC5YpnRhzyv9e9SS5Mt4Wk1dgR7sF6Z/1a3uZRtFPjbhl/JNcOEXf+PXAInUqWTzcaN9Lufiq/2ajESBXHVI8fMalq+uHdiJsLQxUNZAw6AexS5V
-X-Gm-Message-State: AOJu0YyNgKM2GGyn1TCKz11mcMwmpwrCFDXGEgQz08rAZe/nooj5K7KE
-	sRD8k7bOb4IDXEBMPludd3f8I+rR9TXvgo9bghReLlB9votcdp3s51nSniWgdRMBg5OKpcrfxh3
-	ei/Ld8TjVadFZbXG+oJmcQiHEm7k=
-X-Google-Smtp-Source: AGHT+IG3/lofTePc3tTrdH/j62d9xz8R6o/uCfYlMdLpBER9bDLT2xGfHEMxm7Bc39GvJ1RhKfxmwbOCvDt8dtP+RJw=
-X-Received: by 2002:a17:903:2305:b0:1dc:b64:13cd with SMTP id
- d5-20020a170903230500b001dc0b6413cdmr9596984plh.27.1710157611864; Mon, 11 Mar
- 2024 04:46:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="erF5UkB7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DF54C43390;
+	Mon, 11 Mar 2024 12:00:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710158463;
+	bh=fT5zINPY9j/8xLkIBxSYOgCQjvdqeRAhMKCybJ05TQQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=erF5UkB7mbXC3562nUyPVTqJMF6nrNRiMFVstjWEDCm8BoLWdWRnY15085Kr4AWXs
+	 RMRE2RcTXhaF4b3PKCFbThEJuUphxCndNv4Jt7r1SXhXgNXafDw5EUeOb5dDCoBxFS
+	 2BoWl2yKaeWu3ITC/CROdG20SP339bnnMIg/rNR6neR2l5Bj5ZX+70hc4VfHAGGHi3
+	 4C+rHM7m6du+r5xCVRn2v7d+XYtqs9WQi4QsgBb3xhkxxSOkIFD/prTzbybt1uwW+R
+	 AOapPaKus5E12gzrRl7LuL8ZAtHLtzlZlJ43/U1AF2K8aS/Nn+eM6sKizMGaAUz9Cm
+	 v9CfC2TdBzOQg==
+Date: Mon, 11 Mar 2024 13:00:56 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Matt Bobrowski <mattbobrowski@google.com>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	KP Singh <kpsingh@google.com>, Jann Horn <jannh@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-mm <linux-mm@kvack.org>, LSM List <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v2 bpf-next 0/9] add new acquire/release BPF kfuncs
+Message-ID: <20240311-geglaubt-kursverfall-500a27578cca@brauner>
+References: <cover.1709675979.git.mattbobrowski@google.com>
+ <20240306-flach-tragbar-b2b3c531bf0d@brauner>
+ <20240306-sandgrube-flora-a61409c2f10c@brauner>
+ <CAADnVQ+RBV_rJx5LCtCiW-TWZ5DCOPz1V3ga_fc__RmL_6xgOg@mail.gmail.com>
+ <20240307-phosphor-entnahmen-8ef28b782abf@brauner>
+ <CAADnVQLMHdL1GfScnG8=0wL6PEC=ACZT3xuuRFrzNJqHKrYvsw@mail.gmail.com>
+ <20240308-kleben-eindecken-73c993fb3ebd@brauner>
+ <CAADnVQJVNntnH=DLHwUioe9mEw0FzzdUvmtj3yx8SjL38daeXQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <Zeso7eNj1sBhH5zY@infradead.org> <CAADnVQKQumV-0AxGLKX0jQEfa8Z2Bxx2yW8k_1OqGBnD-RqrbA@mail.gmail.com>
- <ZetEkyW1QgIKwfFz@infradead.org> <CAADnVQL4JAUz-p-X9aEggeKNpYUqJZrzQKO7N0dnohE0r7mdpg@mail.gmail.com>
- <ZetJ4xfopatYstPs@infradead.org> <CAADnVQJKPa+JUUKpW7gZehbFBYj3GPrbpd0NCj4xwkU2puObEw@mail.gmail.com>
- <CAADnVQJeOc9Muki+-PUYc20-=1vRgkprbNL0zTc=Cz-T_iYkNQ@mail.gmail.com>
- <CAADnVQ+zbZ1M_uvWmyWUdomAedP+LWMhQX-5bGajzJ0GYzme9g@mail.gmail.com>
- <ZeyATzYas84F3IKQ@infradead.org> <CAADnVQLVr4ppEkDOVScR2FZ0dRwMLADtgh7L4jqt1yOYrxoWZg@mail.gmail.com>
- <ZeyQGU3ziQbLBu_E@infradead.org> <CAADnVQJVkxKXyQXHuBOrsCR3-9Jb7MV6H0D89Hzd2+ZNOvjv1Q@mail.gmail.com>
-In-Reply-To: <CAADnVQJVkxKXyQXHuBOrsCR3-9Jb7MV6H0D89Hzd2+ZNOvjv1Q@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 11 Mar 2024 12:46:45 +0100
-Message-ID: <CANiq72nYFiL4YRpwjty6BQFbuF1E2Vp1nAxakMOh2fi8vevDfA@mail.gmail.com>
-Subject: Re: vm_area at addr ffffffffc0800000 is not marked as VM_IOREMAP
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Christoph Hellwig <hch@infradead.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	linux-mm <linux-mm@kvack.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJVNntnH=DLHwUioe9mEw0FzzdUvmtj3yx8SjL38daeXQ@mail.gmail.com>
 
-On Sat, Mar 9, 2024 at 5:39=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> Thanks. It's on the top, so it's easy.
+On Fri, Mar 08, 2024 at 05:23:30PM -0800, Alexei Starovoitov wrote:
+> On Fri, Mar 8, 2024 at 2:36 AM Christian Brauner <brauner@kernel.org> wrote:
+> >
+> >
+> > These exports are specifically for an out-of-tree BPF LSM program that
+> > is not accessible to the public. The question in the other mail stands.
+> 
+> The question was already answered. You just don't like the answer.
+> bpf progs are not equivalent to kernel modules.
+> They have completely different safety and visibility properties.
+> The safety part I already talked about.
+> Sounds like the visibility has to be explained.
+> Kernel modules are opaque binary blobs.
+> bpf programs are fully transparent. The intent is known
+> to the verifier and to anyone with understanding
+> of bpf assembly.
+> Those that cannot read bpf asm can read C source code that is
+> embedded in the bpf program in kernel memory.
+> It's not the same as "llvm-dwarfdump module.ko" on disk.
+> The bpf prog source code is loaded into the kernel
+> at program verification time for debugging and visibility reasons.
+> If there is a verifier bug and bpf manages to crash the kernel
+> vmcore will have relevant lines of program C source code right there.
+> 
+> Hence out-of-tree or in-tree bpf makes no practical difference.
+> The program cannot hide its meaning and doesn't hamper debugging.
+> 
+> Hence adding EXPORT_SYMBOL == Brace for impact!
+> Expect crashes, api misuse and what not.
+> 
+> While adding bpf_kfunc is a nop for kernel development.
+> If kfunc is in the way of code refactoring it can be removed
+> (as we demonstrated several times).
+> A kfunc won't cause headaches for the kernel code it is
+> calling (assuming no verifier bugs).
+> If there is a bug it's on us to fix it as we demonstrated in the past.
+> For example: bpf_probe_read_kernel().
+> It's a wrapper of copy_from_kernel_nofault() and over the years
+> bpf users hit various bugs in copy_from_kernel_nofault(),
+> reported them, and _bpf developers_ fixed them.
+> Though copy_from_kernel_nofault() is as generic as it can get
+> and the same bugs could have been reproduced without bpf
+> we took care of fixing these parts of the kernel.
+> 
+> Look at path_put().
+> It's EXPORT_SYMBOL and any kernel module can easily screw up
+> reference counting, so that sooner or later distro folks
+> will experience debug pains due to out-of-tree drivers.
+> 
+> kfunc that calls path_put() won't have such consequences.
+> The verifier will prevent path_put() on a pointer that wasn't
+> acquired by the same bpf program. No support pains.
+> It's a nop for vfs folks.
+> 
+> > > First of all, there is no such thing as get_task_fs_pwd/root
+> > > in the kernel.
+> >
+> > Yeah, we'd need specific helpers for a never seen before out-of-tree BPF
+> > LSM. I don't see how that's different from an out-of-tree kernel module.
+> 
+> Sorry, but you don't seem to understand what bpf can and cannot do,
+> hence they look similar.
 
-A Link/Closes to the discussion/report(s) (I think Naresh also
-reported it) would be nice. In any case:
+Maybe. On the other hand you seem to ignore what I'm saying. You
+currently don't have a clear set of rules for when it's ok for someone
+to send patches and request access to bpf kfuncs to implement a new BPF
+program. This patchset very much illustrates this point. The safety
+properties of bpf don't matter for this. And again, your safety
+properties very much didn't protect you from your bpf_d_path() mess.
 
-Tested-by: Miguel Ojeda <ojeda@kernel.org>
+We're not even clearly told where and how these helper are supposed to be
+used. That's not ok and will never be ok. As long as there are no clear
+criteria to operate under this is highly problematic. This may be fine
+from a bpf perspective and one can even understand why because that's
+apparently your model or promise to your users. But there's no reason to
+expect the same level of laxness from any of the subsystems you're
+requesting kfuncs from.
 
-Thanks!
+> > > One can argue that get_mm_exe_file() is not exported,
+> > > but it's nothing but rcu_lock-wrap plus get_file_rcu()
+> > > which is EXPORT_SYMBOL.
+> >
+> > Oh, good spot. That's an accident. get_file_rcu() definitely shouldn't
+> > be exported. So that'll be removed asap.
+> 
+> So, just to make a point that
+> "Included in that set are functions that aren't currently even
+> exported to modules"
+> you want to un-export get_file_rcu() ?
 
-Cheers,
-Miguel
+No. The reason it was exported was because of the drm subsystem and we
+already quite disliked that. But it turned out that's not needed so in
+commit 61d4fb0b349e ("file, i915: fix file reference for
+mmap_singleton()") they were moved away from this helper.
+
+And then we simply forgot to unexport it.
+
+A helper such as get_file_rcu() is called on a file object that is
+subject to SLAB_TYPESAFE_BY_RCU semantics where the caller doesn't hold
+a reference. The semantics of that are maybe understood by a couple of
+people in the kernel. There is absolutely no way that any userspace will
+get access to such low-level helpers. They have zero business to be
+involved in the lifetimes of objects on this level just as no module has.
+
+So really, this is an orthogonal cleanup.
