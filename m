@@ -1,103 +1,134 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F3658234
-	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 23:49:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DADBA58AAC;
+	Mon, 11 Mar 2024 23:55:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710200970; cv=none; b=gRco/66+K1ccMRHJuK1aA4/6Q0g+ua12db4VibeIcdcs5tEhH4tEehFKJFYSPZ0IAbKaucEV/Kf45pkDaqUXG8Fg2jUxVwUkqgI+07Dz55s/yVt9jWhpTf5zYFRy2OFOAgslq+ipbylkov6FzEdjnDycT2VvyDUogibX9GgyBG4=
+	t=1710201339; cv=none; b=u7w10IYzYefBFNJXeK+Y93aLlUyztrY4nSU8jNvepm0MyoKY5t67q2vKI3NfK/+RPfTo99P/ESBkMtCyIGoOX3oZS+VjZxdqzcTUZskCZHqxzds+pDtygvneuOJub1Ip7fZl/FN0oB0e5V27FE+J4AZ+Qx2nDfMN8hIrTLiW0GM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710200970; c=relaxed/simple;
-	bh=qXyedWwtoBnrE9l6BzFjAypj61IV50APm3+iBvgpmxE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AzXThnT6YPk+BXiee/V0GEnMEMXkoCQI5kgdr8OE+6Krv3Ki7fktFXn6lTmbNHhVb9q5aj/z452kcQdIqoOSh52wqHprEmfdu2DIrJ31XMSE8Y/7zunsXXPi4UWkw5NVTUGBco+POKJBY2i0XadGLPs0xVeAFB4PrluWh53UxQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DbqfO/76; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710201339; c=relaxed/simple;
+	bh=BuwxzEM/Bxcww15ApUyz1+fwftuGUlKv1u90MSb2jyc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ro3PQcBDB4r/Q15JMucJo/1L+dzMLnX/ExTBf+DF8g41brGlK8zNyVQqxBEfK9j3ae1kPNP7uAF6Ztih4o994XfQOK8nSTqUhzpUKHIPlUD/wxhwkHpe6fZiIqUdVFTkTCakm0AQTbiPRG44CFh3Eu9C3xycqXPVXER4r8awfG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RCpIijKg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DbqfO/76"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-33e99b639e0so766285f8f.0
-        for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 16:49:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710200967; x=1710805767; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4vfzoxjMPZ9tlEU3oYSsGsaYtcdsPpUgvMYU6t0AE00=;
-        b=DbqfO/76dodsSUqZaUvMoFdgOg+cWUfAcTEYOPzQOVvGI/FzdQBCjb1YQYADhyl2d3
-         WoSB25luJpXpem4PaTNMqHfssdjlo2JaLufFJMFdE03UO3L5FTo57DKKzNUeSnS1+2OD
-         AbYUhBpeN/sDupkq83MUAaEXniDFqhqDluB7YPZIiMTtqKtWAgpnyE8VsQh41WmepKZ/
-         VlCa8PPf1vPJUzXq3qd4+eI3UEplJ0b1CpkDOPIblrE6PIqkvMxJ2pSFnFfPCRBgom2t
-         cJcYaBzghNXOPJI2XXV2y75nusXXUb2k5yiF21YP3GSt6RnBud+n3Lssf9wfWJAMjFrq
-         wr5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710200967; x=1710805767;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4vfzoxjMPZ9tlEU3oYSsGsaYtcdsPpUgvMYU6t0AE00=;
-        b=E7DLzLV2aYzcyiZ9o7RMaf0WxlibnBKB0Gf5jpNrs+igCtFBRZgztpGa0U7RjSDMTg
-         Db/mHWj/s1rQQXBn/1Xr0+olKlE2/OHbqJV7oqPi0DH20O+wbB9XKWLcsqm7BIi5DWlA
-         qZ81YbeLUwMgrtByOxRgXpbcDUhZs+xcYRG3iEBQuo3Umv8eON3H2BjN0iypwYX99to4
-         cuC2BMrOwHdJybrNsFhc4zX6k6VnxgkhbsgnhT3yZu+/uzBKOH0rCQEKcRNop/XR4syg
-         vKd6kt0E00fEgJ3GscntyTUWmHEAUO0yeCIFlQvv4crqYhRWpCdEHvMD5QuZMbax+m0G
-         gwXA==
-X-Gm-Message-State: AOJu0YxDucXjcKUIJoMT/fi7mKgxttKTz/5QMSxXNcGU2RMxk/meVD++
-	G/b23ehspBseIu3Y71f01H3OTZS3MgLnTE35CkSE4qdMHCAGWIWbmb2QMKNBtCZb5aI2dqr9/Ix
-	g8LpqGc0m0UPhXjUqL76BLzUPtwQ=
-X-Google-Smtp-Source: AGHT+IG8xdn5sLCDztwvDDZo4l2prvhXh3oTeAIynJFIlDG+dAYdzk27/B0IQbvnZK2uVb5xEQYsQCOWrvJwMUT7dWg=
-X-Received: by 2002:adf:f68c:0:b0:33e:800d:e87a with SMTP id
- v12-20020adff68c000000b0033e800de87amr4904176wrp.34.1710200967338; Mon, 11
- Mar 2024 16:49:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RCpIijKg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D1F9C433F1;
+	Mon, 11 Mar 2024 23:55:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710201338;
+	bh=BuwxzEM/Bxcww15ApUyz1+fwftuGUlKv1u90MSb2jyc=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=RCpIijKgQgoTSA/YgO5HGnRv3Hf9/Bg6Rr/EDvLtzPQgyI+KITZQdfzApLBYH/2PR
+	 s+tHpIkNnd8px5/X+EeLzzDUEUxl4H6mHKD7AvraOplbNr9dli6MZME3EdEtvGdXmW
+	 pYgwXcM/XGtMTZLpBDr1vnz9eKE2woypzmXew2bH20+gC0+Ppn9o7pbtmBsRmcFH9m
+	 loWPfwQV4KR5r0ugMkELBAZyXvtHC01/1dYPOrTKg+8ho4iv3F+9jgD25U1TOI/DHW
+	 /G2XFIzJ6EOA4Z8DOgLJP87E7bD9F/NFCdNPVlq5ocwS+QZGfqhDQkih2/FSDmDMwq
+	 k0zzq9tzTDy1A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 0244FCE1A25; Mon, 11 Mar 2024 16:55:37 -0700 (PDT)
+Date: Mon, 11 Mar 2024 16:55:37 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Yan Zhai <yan@cloudflare.com>
+Cc: Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Coco Li <lixiaoyan@google.com>, Wei Wang <weiwan@google.com>,
+	Alexander Duyck <alexanderduyck@fb.com>,
+	Hannes Frederic Sowa <hannes@stressinduktion.org>,
+	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+	bpf@vger.kernel.org, kernel-team@cloudflare.com,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>, mark.rutland@arm.com,
+	Jesper Brouer <jesper@cloudflare.com>
+Subject: Re: [PATCH v2] net: raise RCU qs after each threaded NAPI poll
+Message-ID: <aa4909dd-98f2-4185-833d-666c640786c6@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <ZeFPz4D121TgvCje@debian.debian>
+ <CAO3-PboqKqjqrAScqzu6aB8d+fOq97_Wuz8b7d5uoMKT-+-WvQ@mail.gmail.com>
+ <CANn89iLCv0f3vBYt8W+_ZDuNeOY1jDLDBfMbOj7Hzi8s0xQCZA@mail.gmail.com>
+ <CAO3-PboZwTiSmVxVFFfAm94o+LgK=rnm1vbJvMhzSGep+RYzaQ@mail.gmail.com>
+ <ed57b5fa-8b44-48de-904e-fe8da1939292@paulmck-laptop>
+ <CAO3-Pbp0Pxbbgmjf03wKo6MDrQYE7uiL+mUnheT9UA9Pjj5bUQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240309004739.2961431-1-andrii@kernel.org>
-In-Reply-To: <20240309004739.2961431-1-andrii@kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 11 Mar 2024 16:49:16 -0700
-Message-ID: <CAADnVQKpCO+kF3Bi6gzpVWr_RUq20gmr+XgmytF2Ngv+gSYnCw@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next] bpf: move sleepable flag from bpf_prog_aux to bpf_prog
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAO3-Pbp0Pxbbgmjf03wKo6MDrQYE7uiL+mUnheT9UA9Pjj5bUQ@mail.gmail.com>
 
-On Fri, Mar 8, 2024 at 4:47=E2=80=AFPM Andrii Nakryiko <andrii@kernel.org> =
-wrote:
->
-> prog->aux->sleepable is checked very frequently as part of (some) BPF
-> program run hot paths. So this extra aux indirection seems wasteful and
-> on busy systems might cause unnecessary memory cache misses.
->
-> Let's move sleepable flag into prog itself to eliminate unnecessary
-> pointer dereference.
->
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
->  include/linux/bpf.h            |  8 ++++----
->  kernel/bpf/bpf_iter.c          |  4 ++--
->  kernel/bpf/core.c              |  2 +-
->  kernel/bpf/syscall.c           |  6 +++---
->  kernel/bpf/trampoline.c        |  4 ++--
->  kernel/bpf/verifier.c          | 12 ++++++------
->  kernel/events/core.c           |  2 +-
->  kernel/trace/bpf_trace.c       |  2 +-
->  net/bpf/bpf_dummy_struct_ops.c |  2 +-
->  9 files changed, 21 insertions(+), 21 deletions(-)
+On Mon, Mar 11, 2024 at 05:58:16PM -0500, Yan Zhai wrote:
+> On Fri, Mar 1, 2024 at 4:29 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Fri, Mar 01, 2024 at 11:30:29AM -0600, Yan Zhai wrote:
+> > > Hi Eric,
+> > >
+> > > On Fri, Mar 1, 2024 at 2:30 AM Eric Dumazet <edumazet@google.com> wrote:
+> > > >
+> > > > I could not see the reason for 1sec (HZ) delays.
+> > > >
+> > > > Would calling rcu_softirq_qs() every ~10ms instead be a serious issue ?
+> > > >
+> > > The trouble scenarios are often when we need to detach an ad-hoc BPF
+> > > tracing program, or restart a monitoring service. It is fine as long
+> > > as they do not block for 10+ seconds or even completely stall under
+> > > heavy traffic. Raising a QS every few ms or HZ both work in such
+> > > cases.
+> > >
+> > > > In anycase, if this all about rcu_tasks, I would prefer using a macro
+> > > > defined in kernel/rcu/tasks.h
+> > > > instead of having a hidden constant in a networking core function.
+> > >
+> > > Paul E. McKenney was suggesting either current form or
+> > >
+> > >          local_bh_enable();
+> > >          if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+> > >                  rcu_softirq_qs_enable(local_bh_enable());
+> > >          else
+> > >                  local_bh_enable();
+> > >
+> > > With an interval it might have to be
+> > > "rcu_softirq_qs_enable(local_bh_enable(), &next_qs);" to avoid an
+> > > unnecessary extern/static var. Will it make more sense to you?
+> >
+> > I was thinking in terms of something like this (untested):
+> >
+> >         #define rcu_softirq_qs_enable(enable_stmt, oldj) \
+> >         do { \
+> >                 if (!IS_ENABLED(CONFIG_PREEMPT_RT) && \
+> >                     time_after(oldj + HZ / 10, jiffies) { \
+> >                         rcu_softirq_qs(); \
+> >                         (oldj) = jiffies; \
+> >                 } \
+> >                 do  { enable_stmt; } while (0) \
+> >         } while (0)
+> >
+> > Then the call could be "rcu_softirq_qs_enable(local_bh_enable(), last_qs)",
+> > where last_qs is initialized by the caller to jiffies.
+> >
+> > The reason for putting "enable_stmt;" into anothor do-while loop is
+> > in case someone typos an "else" as the first part of the "enable_stmt"
+> > argument.
+> >
+> > Would that work?
+> >
+> Thanks Paul, just got time to continue this thread as I was
+> travelling. I think it is probably better to move
+> preempt_disable/enable into the macro to avoid the friction. And also
+> since this can affect NAPI thread, NAPI busy loop and XDP cpu map
+> thread (+Jesper who reminded me about this), let me send a v3 later to
+> cover all of those places.
 
-Looks good.
-It might help Benjamin too to add sleepable callbacks.
+OK, looking forward to seeing what you come up with.
 
-Separately, noticed that jit_subprogs() doesn't copy
-sleepable flag into subprogs's aux.
-This patch doesn't change that.
-
-Though subprogs are never called directly
-probably worth a follow up to copy the flag into subprogs?
-Just for completeness.
+							Thanx, Paul
