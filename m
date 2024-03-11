@@ -1,36 +1,70 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3B054F95;
-	Mon, 11 Mar 2024 19:58:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B09FF56B6C
+	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 20:25:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710187116; cv=none; b=fLSpYwdj/WQusaKWQB/JT0czjoqa80F6iJy7iheGBPXtOTHsp8PHLa+XpUnOJH7M6/HGyTRhx6E+J/o6PJ5ZFZrWYfAmquNlfDB9pkvyNYWurNe+vD3EJzpX/wmgqPUfBQLO82aem3vbqPr5GIvTdv3b4X5Hwxbr0O3WqyD0Fz8=
+	t=1710188745; cv=none; b=JzmW17iJUEFxijvEv2tlNiccIuzmecGKo++ti6o9X9/MpN20rkvVdyMnDFTyJpEMA5UchfqN972z/LuKfM0B8TDBDYXSMINKtMbg6T0erqdapzgmQPu/hQsz+Xsxp4AfPzEyDkwc3MvAMean2xg5CQ8t/1CvyOIcFtaYVjT/rSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710187116; c=relaxed/simple;
-	bh=ssNflA7VlumiRNbQACID7MitO221/D8PNzUcKbsa064=;
+	s=arc-20240116; t=1710188745; c=relaxed/simple;
+	bh=UxnbAUSo+88lJQ+P6Sfv/W5dV/HCtXbh5r5tC2bZbd0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YYg0LoFrXRxkF7Vuq/T270Z52crJxSNj8Ik0gRidkSQPCWt+WGF31U8Mdg7sIFjKqqNof2lt1zY4TNCFm8/rNtIAPrIhj2tYJsvA6c0ngH/H5tZI8kXcWvRb+9VBqVSoriLOs1HG8X05mNChHx5Ju72jdeeMLLGvk/06hoyekRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ga4H7MB+; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=fGiRSSv4GDUCN2K74AFQ+2idre+t6viQoCuFh+JxKfOGLrQiXEr0DY+Z2p3PmdlfSk+/pP9Rhy4H9Jo3kgPpVEQIv6r0/D4Vd+6aMEHtFbwJtmQ4budrI9cTBVKZNRpoAKlkxM4Pqc1FYL5h7vGcXfqC2VDNvUWxnZi68Xu+OBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=LkgBhHkv; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ga4H7MB+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4714C433C7;
-	Mon, 11 Mar 2024 19:58:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710187116;
-	bh=ssNflA7VlumiRNbQACID7MitO221/D8PNzUcKbsa064=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ga4H7MB+n/UszT8fQQAyc+ZafKIC/IoT6PXlcO0UCBq+eoH1GEx/oe+cfs1WzM6E9
-	 7K1BfFeslSgIgq+An2+bRA5NGTjQKD6ZQ/35nUX7WLO6/RPlWpltiwgpApdKgojNzN
-	 uuhd/WghRDZC6KRkaajxhi08GN82/2o+tXriQTHiASR22+uFQB6FF6pn6odXas/cli
-	 AIMcBBvCG8omT6PVIcLfdRKpmjjIRCtQ9vxnBaFxs/QmBNTQjYCq+Ny5NOopW57PhH
-	 165aUX0uYO/MZqnp8tvTXi5BZurCChOZXOknCyHEWc6QxvvUwycAdIIEKxlPWZSIU7
-	 yws3clDWr5pMQ==
-Date: Mon, 11 Mar 2024 16:58:33 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Ian Rogers <irogers@google.com>
-Cc: James Clark <james.clark@arm.com>, Arnd Bergmann <arnd@arndb.de>,
-	Andrii Nakryiko <andrii@kernel.org>,
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="LkgBhHkv"
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6DA6341141
+	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 20:25:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1710188735;
+	bh=o9YLDdfCdflFyCMs5+/nFPe6338k23U+/2LO3IYQYLE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:In-Reply-To;
+	b=LkgBhHkvWvV52s3wOJqvfPlEdLQtKt6w0YIqS0/AIHS0+t/QBUKGi3cT+UVWY9NJY
+	 z8jxEsFZ7zhBrrrSlWIBzdLWDI8xQi7Bce4yyi5eIpdBKbHe4xUVRJisNs9HXXGVXm
+	 jeo4UHI/HQIn6SyvXAz7AdHnawAKUuwJ3CZ84xCFrHAd5xw4WM8NNXLwTDDFZgWlos
+	 lJzRrHgu2hTULTCU/phC6+rifsIieXof6sgLCr6T7e0WfsBcyP9/jaYDVBeZgWbjiK
+	 l0FGMRZv2Mrh956dB6e4nzg28TYjDNecxf5iIBLdcq1F4YLx9F0q5t+8RTq9dAj+YC
+	 yzTQJc2xRraPA==
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-5684b85e0c9so2193935a12.1
+        for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 13:25:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710188734; x=1710793534;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o9YLDdfCdflFyCMs5+/nFPe6338k23U+/2LO3IYQYLE=;
+        b=Vyn3CS3KadMR/Xdj3pOrwONQhl+0whA3bP6JyQJWkWxTo/UGRqGXHvRvbYt22XyHFD
+         0T40CzG1F2KJ1fip9hU9P4XUOHBxFxYquEYXFShMBiwCRzhfr1xszHWDxk7FEkuWeWTd
+         LsBJlltbPPO1AUvCQTfWnJAnsIOPPlCZ0YsylIEIOo2ko2zfvu1nBk6UJjfje0TS2WDj
+         FaUJq1+TgZGgZPhZGFrvxOOo371l8xBfyzyevquM66YQ6g2l5JNtMHVY7jvupRfTayee
+         IYGgLVMMTP4jxwnCoPOniNgnOshiGzbo1kfbuEoRAwVHaagVKwGrYDkaUEzZL3y6/QHm
+         /Rwg==
+X-Forwarded-Encrypted: i=1; AJvYcCXeTRUk3QWk0ghztlqAJzN2J4w3MlrAwfeRcaxS9emEsS7HjRLenX7j+OcBa8niX5sUbyYwiAw9sMExjw5/zwcFyYzr
+X-Gm-Message-State: AOJu0YyvkosGq89BjuQhv3uSQvQuvnofmb4ecHO75y1QJJqOPQcHXN8C
+	9N0YYeT//EncVxpOP9lj3np8d2kWWVRArtD/I0OcVh+VwX2YxA5TnexZEzD2bL2uejEaO1cpueA
+	GMD0j/GQYujpAXHplyVFJDp+xMRytlmzvx0g02+Isxe18gyq3dZLJV/wFCxY4sa48RQ==
+X-Received: by 2002:a50:875e:0:b0:566:6a9d:6147 with SMTP id 30-20020a50875e000000b005666a9d6147mr8824844edv.0.1710188733937;
+        Mon, 11 Mar 2024 13:25:33 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFuRSBKB/l5WrY2+SCwqGjztOQYnHF/v6oCAuorX/wc86bW0V0ykSX2IazmuHEnnDeQZHtJVA==
+X-Received: by 2002:a50:875e:0:b0:566:6a9d:6147 with SMTP id 30-20020a50875e000000b005666a9d6147mr8824824edv.0.1710188733443;
+        Mon, 11 Mar 2024 13:25:33 -0700 (PDT)
+Received: from localhost (host-87-21-72-46.retail.telecomitalia.it. [87.21.72.46])
+        by smtp.gmail.com with ESMTPSA id b20-20020aa7dc14000000b005684fa1c4dbsm2138489edu.52.2024.03.11.13.25.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Mar 2024 13:25:33 -0700 (PDT)
+Date: Mon, 11 Mar 2024 21:25:31 +0100
+From: Andrea Righi <andrea.righi@canonical.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
@@ -38,45 +72,12 @@ Cc: James Clark <james.clark@arm.com>, Arnd Bergmann <arnd@arndb.de>,
 	John Fastabend <john.fastabend@gmail.com>,
 	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
 	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Liam Howlett <liam.howlett@oracle.com>,
-	Miguel Ojeda <ojeda@kernel.org>, Will Deacon <will@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	David Laight <David.Laight@aculab.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Shunsuke Mie <mie@igel.co.jp>, Yafang Shao <laoar.shao@gmail.com>,
-	Kui-Feng Lee <kuifeng@meta.com>,
-	Nick Forrington <nick.forrington@arm.com>,
-	Leo Yan <leo.yan@linux.dev>, German Gomez <german.gomez@arm.com>,
-	Rob Herring <robh@kernel.org>, John Garry <john.g.garry@oracle.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Anup Patel <anup@brainfault.org>, Fuad Tabba <tabba@google.com>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Chao Peng <chao.p.peng@linux.intel.com>,
-	Haibo Xu <haibo1.xu@intel.com>, Peter Xu <peterx@redhat.com>,
-	Vishal Annapurve <vannapurve@google.com>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v1 12/13] tools headers: Sync compiler.h headers
-Message-ID: <Ze9iaape_1Du4oAa@x1>
-References: <20240310020509.647319-1-irogers@google.com>
- <20240310020509.647319-13-irogers@google.com>
- <1ab20914-b6d2-fe39-7b14-c1ccebaa34f6@arm.com>
- <CAP-5=fWZVrpRufO4w-S4EcSi9STXcTAN2ERLwTSN7yrSSA-otQ@mail.gmail.com>
+	David Vernet <void@manifault.com>, Tejun Heo <tj@kernel.org>,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] libbpf: ringbuf: allow to partially consume items
+Message-ID: <Ze9ou-OrYO8NZsDb@gpd>
+References: <20240310154726.734289-1-andrea.righi@canonical.com>
+ <CAEf4BzYrwRQu1eNMACfXtsac+=psnNGr+=WQz3zUPP+2DPA2Rg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -86,33 +87,84 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fWZVrpRufO4w-S4EcSi9STXcTAN2ERLwTSN7yrSSA-otQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzYrwRQu1eNMACfXtsac+=psnNGr+=WQz3zUPP+2DPA2Rg@mail.gmail.com>
 
-On Mon, Mar 11, 2024 at 12:24:24PM -0700, Ian Rogers wrote:
-> 5) headers we have just so we can use shell scripts to scrape
-> constants for beautifying things in perf trace
+On Mon, Mar 11, 2024 at 10:55:57AM -0700, Andrii Nakryiko wrote:
+> On Sun, Mar 10, 2024 at 8:47 AM Andrea Righi <andrea.righi@canonical.com> wrote:
+> >
+> > Instead of always consuming all items from a ring buffer in a greedy
+> > way, allow to stop when the callback returns a value > 0.
+> >
+> > This allows to distinguish between an error condition and an intentional
+> > stop condition by returning a non-negative non-zero value from the ring
+> > buffer callback.
+> >
+> > This can be useful, for example, to consume just a single item from the
+> > ring buffer.
+> >
+> > Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+> > ---
+> >  tools/lib/bpf/ringbuf.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
+> > index aacb64278a01..dd8908eb3204 100644
+> > --- a/tools/lib/bpf/ringbuf.c
+> > +++ b/tools/lib/bpf/ringbuf.c
+> > @@ -265,6 +265,14 @@ static int64_t ringbuf_process_ring(struct ring *r)
+> >                                         return err;
+> >                                 }
+> >                                 cnt++;
+> > +                               if (err > 0) {
+> 
+> So libbpf already stops at any err < 0 (and sets correct consumer
+> pos). So you could already get desired behavior by just returning your
+> own error code. If you need count, you'd have to count it yourself
+> through custom context, that's a bit of inconvenience.
 
-> (5) feels like the headers should be alongside the shell scripts to
-> avoid polluting tools/include.
-> Not that I propose fixing any of this here.
+Yep, that's exactly what I'm doing right now.
 
-Yeah, 5 is why we have things used just for scrapping in
-tools/perf/trace/beauty/include/, that now has just socket.h, used by
+To give more context, here's the code:
+https://github.com/sched-ext/scx/blob/b7c06b9ed9f72cad83c31e39e9c4e2cfd8683a55/rust/scx_rustland_core/src/bpf.rs#L217
 
-⬢[acme@toolbox perf-tools-next]$ tools/perf/trace/beauty/socket.sh | head
-static const char *socket_ipproto[] = {
-	[0] = "IP",
-	[1] = "ICMP",
-	[2] = "IGMP",
-	[4] = "IPIP",
-	[6] = "TCP",
-	[8] = "EGP",
-	[12] = "PUP",
-	[17] = "UDP",
-	[22] = "IDP",
-⬢[acme@toolbox perf-tools-next]$
+> 
+> But on the other hand, currently if user callback returns anything > 0
+> they keep going and that return value is ignored. Your change will
+> break any such user pretty badly. So I'm a bit hesitant to do this.
 
-I'll see if I get a series moving things that are just for scrapping to
-that directory, then test on the container build images I have.
+So, returning a value > 0 should have the same behavior as returning 0?
+Why any user callback would return > 0 then?
 
-- Arnaldo
+> 
+> Is there any reason you can't just return error code (libbpf doesn't
+> do anything with it, just passes it back, so it might as well be
+> `-cnt`, if you need that).
+
+Sure, I can keep using my special error code to stop. It won't be a
+problem for my particular use case.
+
+Actually, one thing that it would be nice to have is a way to consume up
+to a certain amount of items, let's say I need to copy multiple items
+from the ring buffer to a limited user buffer. But that would require a
+new API I guess, in order to pass the max counter... right?
+
+Thanks,
+-Andrea
+
+> 
+> pw-bot: cr
+> 
+> > +                                       /* update consumer pos and return the
+> > +                                        * total amount of items consumed.
+> > +                                        */
+> > +                                       smp_store_release(r->consumer_pos,
+> > +                                                         cons_pos);
+> > +                                       goto done;
+> > +                               }
+> >                         }
+> >
+> >                         smp_store_release(r->consumer_pos, cons_pos);
+> > --
+> > 2.43.0
+> >
+> >
