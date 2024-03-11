@@ -1,77 +1,118 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE6554F9D
-	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 19:39:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3B054F95;
+	Mon, 11 Mar 2024 19:58:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710185958; cv=none; b=DVe95PR+F0W6epmkB4zo9VNndHp54JKMQ87sw5QSlg1AVBZkwpmAibscVMw9LBuPaJgGWq9w5WmJAf40POMTwwEVxhS4TwVmWa2ad9vxlg07+xgkKR1unh6oDaNgRNFwD1XP6ZF0/aun24IIB4JxXHt9G275mmu8ZjE2wdpG9AU=
+	t=1710187116; cv=none; b=fLSpYwdj/WQusaKWQB/JT0czjoqa80F6iJy7iheGBPXtOTHsp8PHLa+XpUnOJH7M6/HGyTRhx6E+J/o6PJ5ZFZrWYfAmquNlfDB9pkvyNYWurNe+vD3EJzpX/wmgqPUfBQLO82aem3vbqPr5GIvTdv3b4X5Hwxbr0O3WqyD0Fz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710185958; c=relaxed/simple;
-	bh=838nlSPSd8VtxeF/9bY/8eWtOq4VGPOsPKx3e506zS8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=VBPwiTAuC4Bq9w7IJcaWPd3qU+mRDH4ggR8lAcsHVFdb7+U5edfCxTNYVBFUQQ2DWxOajFwWxbKih6k2JwpaBOWfHMoWUuySLvwHItxW4EnwT3q/6V7ej9Sd98uYbjjmS5BR+gmgRUKZq7P5tq9ygKdNfPNo8aGOuxiBsh9EG8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IKaIDQdY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710187116; c=relaxed/simple;
+	bh=ssNflA7VlumiRNbQACID7MitO221/D8PNzUcKbsa064=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YYg0LoFrXRxkF7Vuq/T270Z52crJxSNj8Ik0gRidkSQPCWt+WGF31U8Mdg7sIFjKqqNof2lt1zY4TNCFm8/rNtIAPrIhj2tYJsvA6c0ngH/H5tZI8kXcWvRb+9VBqVSoriLOs1HG8X05mNChHx5Ju72jdeeMLLGvk/06hoyekRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ga4H7MB+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IKaIDQdY"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AA224C43390;
-	Mon, 11 Mar 2024 19:39:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ga4H7MB+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4714C433C7;
+	Mon, 11 Mar 2024 19:58:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710185957;
-	bh=838nlSPSd8VtxeF/9bY/8eWtOq4VGPOsPKx3e506zS8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=IKaIDQdYOgdsVH7DAN5wjlrR+lg1mGQy52PRApSrrr3PCRiA0zWCEFjs5W7oAVAre
-	 /oEHeP8QrCVbtffnHV8Kpt1zsK7z8iaVmUjMdcmDRH4obc2aQNmtsCzM9frfGl2W/w
-	 DOFb3NgcWDgpByIybatGmdR7KN2AK/UHA4ulxR2b3WjyBgLy/gK3sITCiO0Ogu30kc
-	 bVwnKqLT4TfdETSyYmHdxHgPdMd71mwIMvcE4vH7D9Cci0DJ+aE36nsppspeAee+Kw
-	 sbLy6S6gRK2SfZPC/lbdRBbbICdT7LvNoQYsUXG/Aiw1HXUm7rKBUc5Tss4TdA39OT
-	 wbQLFKrY1+SDQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8B925D95055;
-	Mon, 11 Mar 2024 19:39:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1710187116;
+	bh=ssNflA7VlumiRNbQACID7MitO221/D8PNzUcKbsa064=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ga4H7MB+n/UszT8fQQAyc+ZafKIC/IoT6PXlcO0UCBq+eoH1GEx/oe+cfs1WzM6E9
+	 7K1BfFeslSgIgq+An2+bRA5NGTjQKD6ZQ/35nUX7WLO6/RPlWpltiwgpApdKgojNzN
+	 uuhd/WghRDZC6KRkaajxhi08GN82/2o+tXriQTHiASR22+uFQB6FF6pn6odXas/cli
+	 AIMcBBvCG8omT6PVIcLfdRKpmjjIRCtQ9vxnBaFxs/QmBNTQjYCq+Ny5NOopW57PhH
+	 165aUX0uYO/MZqnp8tvTXi5BZurCChOZXOknCyHEWc6QxvvUwycAdIIEKxlPWZSIU7
+	 yws3clDWr5pMQ==
+Date: Mon, 11 Mar 2024 16:58:33 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: James Clark <james.clark@arm.com>, Arnd Bergmann <arnd@arndb.de>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Liam Howlett <liam.howlett@oracle.com>,
+	Miguel Ojeda <ojeda@kernel.org>, Will Deacon <will@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	David Laight <David.Laight@aculab.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Shunsuke Mie <mie@igel.co.jp>, Yafang Shao <laoar.shao@gmail.com>,
+	Kui-Feng Lee <kuifeng@meta.com>,
+	Nick Forrington <nick.forrington@arm.com>,
+	Leo Yan <leo.yan@linux.dev>, German Gomez <german.gomez@arm.com>,
+	Rob Herring <robh@kernel.org>, John Garry <john.g.garry@oracle.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Anup Patel <anup@brainfault.org>, Fuad Tabba <tabba@google.com>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Chao Peng <chao.p.peng@linux.intel.com>,
+	Haibo Xu <haibo1.xu@intel.com>, Peter Xu <peterx@redhat.com>,
+	Vishal Annapurve <vannapurve@google.com>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v1 12/13] tools headers: Sync compiler.h headers
+Message-ID: <Ze9iaape_1Du4oAa@x1>
+References: <20240310020509.647319-1-irogers@google.com>
+ <20240310020509.647319-13-irogers@google.com>
+ <1ab20914-b6d2-fe39-7b14-c1ccebaa34f6@arm.com>
+ <CAP-5=fWZVrpRufO4w-S4EcSi9STXcTAN2ERLwTSN7yrSSA-otQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: add fexit and kretprobe triggering
- benchmarks
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171018595756.1144.13320459973031684069.git-patchwork-notify@kernel.org>
-Date: Mon, 11 Mar 2024 19:39:17 +0000
-References: <20240309005124.3004446-1-andrii@kernel.org>
-In-Reply-To: <20240309005124.3004446-1-andrii@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@kernel.org, kernel-team@meta.com
+In-Reply-To: <CAP-5=fWZVrpRufO4w-S4EcSi9STXcTAN2ERLwTSN7yrSSA-otQ@mail.gmail.com>
 
-Hello:
+On Mon, Mar 11, 2024 at 12:24:24PM -0700, Ian Rogers wrote:
+> 5) headers we have just so we can use shell scripts to scrape
+> constants for beautifying things in perf trace
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+> (5) feels like the headers should be alongside the shell scripts to
+> avoid polluting tools/include.
+> Not that I propose fixing any of this here.
 
-On Fri,  8 Mar 2024 16:51:24 -0800 you wrote:
-> We already have kprobe and fentry benchmarks. Let's add kretprobe and
-> fexit ones for completeness.
-> 
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
->  tools/testing/selftests/bpf/bench.c           |  4 +++
->  .../selftests/bpf/benchs/bench_trigger.c      | 32 +++++++++++++++++++
->  .../selftests/bpf/progs/trigger_bench.c       | 14 ++++++++
->  3 files changed, 50 insertions(+)
+Yeah, 5 is why we have things used just for scrapping in
+tools/perf/trace/beauty/include/, that now has just socket.h, used by
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: add fexit and kretprobe triggering benchmarks
-    https://git.kernel.org/bpf/bpf-next/c/365c2b32792e
+⬢[acme@toolbox perf-tools-next]$ tools/perf/trace/beauty/socket.sh | head
+static const char *socket_ipproto[] = {
+	[0] = "IP",
+	[1] = "ICMP",
+	[2] = "IGMP",
+	[4] = "IPIP",
+	[6] = "TCP",
+	[8] = "EGP",
+	[12] = "PUP",
+	[17] = "UDP",
+	[22] = "IDP",
+⬢[acme@toolbox perf-tools-next]$
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I'll see if I get a series moving things that are just for scrapping to
+that directory, then test on the container build images I have.
 
-
+- Arnaldo
