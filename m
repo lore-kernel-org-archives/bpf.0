@@ -1,239 +1,107 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FCEA1876
-	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 04:01:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65BD0D516
+	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 06:42:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710129668; cv=none; b=GqVcVX23eRitRj6E0yzoZPXsFhYY2MF74afIYEE/0yOsB/J9HeWX54U7EuxZRSLuAOQ4+mXUkGXaUZoY+0SAjjLb4UiVobeg3R3OtiIwYayGNx+0EM6il0SgUKy1MEsw0FlxV610uLRnA/ux6CLsWOHxwqeBNQFtXFWYuiDmEng=
+	t=1710139373; cv=none; b=uSX2XwIE+9EtRbbW9WFtmRZO8tu61cxwLhK6SyPcXz/ZdjCIG3Nnf7pTGZyvUzSx66gbf+wvziLGsMKXrMuSoERoLFG/mzkVshCxsMdng2hbK98axX+sIKkFHbnFscmy5aOCIfBQxHs8V6qtKbJheMTOiisF+KYnfI8ZX2vXurY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710129668; c=relaxed/simple;
-	bh=rZi0TGzdyLW1WeqbJYHxPHjlp/Ci1sJz1HPaw88Nqks=;
+	s=arc-20240116; t=1710139373; c=relaxed/simple;
+	bh=X5qz9Wi4uBq7D4n7eDIWIgGHVZWH2iYo30BLX+iEMuQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=etJM4GczbbrLLdKaAWkA8u4QfqAwfSc/zs3RNePIRk4tojR1JN2i2ad3PnzEu3TI2dKorw2vfpEtmzr2vFsNxuoL2aeozuS5TzC9UlWcQE+b0kpI6YEzXMKzpR4HP5i6CDoUlMogOnYAIx3nPI40nSDVXfX7bJS1y30rkUf2ts4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DZpd1r9/; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 To:Cc:Content-Type; b=MORGhZgVGeaZm4Jkpao5CUTF2yg0F4jUEsmgjpCrZZVg1Z8WxkJ7rHl8yM9NnA4nFgfgK+NgnH8qwqvZ3M1iL/W3/+Lz1T0qLXTxPjs3LJ9FDObtgMvWAbsiRhjJAcpPfumC4+yhaSAdQafS9ElLmeuiUqc5nOZuYE+yClamFss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qeTDraVT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DZpd1r9/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1710129665;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=M2U/8cLx3dve7P4IJjHpYHx0RULwN13Wx0LsSxS6gyA=;
-	b=DZpd1r9/6v9Pngtvs9tcjgH+oIZ3t3wxg9UZyLwYhelGvBT+e1UAtTYZWYKVhVljbjpcQW
-	mxMj9+IOXoxdwCDMxMbgsWXHxu31FBVQ2MKdLIR5wbXHctFuGF8jfZYQfu359ZUwindpVn
-	W/2XKNGYuq7oqoyGPrzkBzHezWbrUMs=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-130-BjSXdF40Olmk90aE9oVIuA-1; Mon, 11 Mar 2024 00:01:00 -0400
-X-MC-Unique: BjSXdF40Olmk90aE9oVIuA-1
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1dd7a10b789so19935025ad.1
-        for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 21:01:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710129660; x=1710734460;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M2U/8cLx3dve7P4IJjHpYHx0RULwN13Wx0LsSxS6gyA=;
-        b=bFvDty887k8+hMMYbbdPvinhnj7QX2+OgEYBkPA7C0vk8/d0qLsxuxL2J7rEfsK56t
-         iyaD52ooKaMr9JNIkn8hVQ2t98VxEvUp5P34s7OkWUStqTZPGi0TdW77b7s5JTzRKV3L
-         VAU386Uk5hNx+5vZGyIv8VfYwmMV9kTodiqKO8bb0yfshOZy95cMKPo4d+5RAnBhB3tw
-         eJg1+sSjYi89XJP2rZiAsTIHSAnixUbfB36gBpobx+yR9/EO2Sc2/6QJ3/8pUX+GpoUX
-         4oxqG8eiSFHVDed64Ujp9zuh0Huolr5vzZexPO2XrqcrFTr/Cn7RYLlb6wym6Rm5ehKB
-         mrAA==
-X-Forwarded-Encrypted: i=1; AJvYcCVh3hK8mA0AMlqrfxFcKtf/b8kdO9e4V2BXABoK3PWZ2jkvUtMo27v96WsVcSrD2DdDjQGhYftToL4EF0abA/sg6c38
-X-Gm-Message-State: AOJu0YzWzsQsEJkX4zvtaxpqzmjDET95Oe88hlKo1YtY4xJ2r4/yTYcZ
-	5QLiD7vKkIILX74WzhCNsUhHmCUdeRdjyxGIaIz0gaenle6/P0JKX6xCRrV0HZZUy1NlcxYzY3c
-	rt8rH8xaEepMiyMQWYQcXSQM0WfAza1Y/rmSMGrrs2Q1f1qXwdFUQuyekdK/X3JbAGip5xFYw5h
-	CuRl1PQa8pGgLcLZPihVJussYF
-X-Received: by 2002:a17:90a:fd92:b0:29b:bd2c:7238 with SMTP id cx18-20020a17090afd9200b0029bbd2c7238mr3908734pjb.7.1710129659791;
-        Sun, 10 Mar 2024 21:00:59 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFlzVpYifmiq3kPP1nBEaLaTDBKlwZXFbqzpZKku1ileIZWpeswDU4nOMch5iZXL/GpxbvnXQOshFnSjHN0OS4=
-X-Received: by 2002:a17:90a:fd92:b0:29b:bd2c:7238 with SMTP id
- cx18-20020a17090afd9200b0029bbd2c7238mr3908714pjb.7.1710129659509; Sun, 10
- Mar 2024 21:00:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qeTDraVT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B00C43399
+	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 06:42:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710139373;
+	bh=X5qz9Wi4uBq7D4n7eDIWIgGHVZWH2iYo30BLX+iEMuQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=qeTDraVTTf+ACqxXrDDimzU8Nh4CnUfoK1WZtlJ18mfUvkUo+uqgqSNOssx4EzQM7
+	 aJ4BAYMvZCZwVs5xe4bozsdcmZpU9wl+C0Uc8JDHaZpT4Nju8nprGzuz7amcOOfNBc
+	 /1Nf5vgxgBx8J90D494O08kzbcx/AfrukIxD6e9lah7bBY4n83RjgQsK1g5/N5mX4i
+	 iuQbGBbWpS02De89jKpMR+nWrql9OCpYlVno9PEaljteUeWyEPMXwkitLVdH4U/Wja
+	 jieVZofB2Kfo8kvWxwh2b5AjxqqS0J9jhd/QRRrybwVDgShnx0/w2qAWzBi1hDG/4c
+	 I7L09zckSfldA==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5101cd91017so6581945e87.2
+        for <bpf@vger.kernel.org>; Sun, 10 Mar 2024 23:42:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUVDoRSOsOEGAPtVnYk5eyywqiqVUexAdrzmyH7JctU7A6GGK9zyEGqOeloWx6qGNpXd1fAs1juLTWorye7s4n/Y40H
+X-Gm-Message-State: AOJu0YwnDO+VZdFm1/Q8CX+16r373+MHezN765UBBnL7pvRQlutI37DQ
+	9pROchoD12mrrJpgEzCyTWi7+0MRRW6Gnsth2SqBt9H0iCEXlP8z70qzYC1uUCSF2UT3s9PO2FA
+	45AByG6GRkOqAUxbv9EZaELk2ZRs=
+X-Google-Smtp-Source: AGHT+IFRvN4GnmkKCHuiRRRDivtgUw11BSzhv9eBjtFFiLCjPwtxoIH9/kVamdN69E8+WDuN3wpWoUEIthHheticPz8=
+X-Received: by 2002:a05:6512:1091:b0:513:aef9:a7d8 with SMTP id
+ j17-20020a056512109100b00513aef9a7d8mr546945lfg.47.1710139371237; Sun, 10 Mar
+ 2024 23:42:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1709118356-133960-1-git-send-email-wangyunjian@huawei.com>
- <7d478cb842e28094f4d6102e593e3de25ab27dfe.camel@redhat.com>
- <223aeca6435342ec8a4d57c959c23303@huawei.com> <20240301065141-mutt-send-email-mst@kernel.org>
- <ffbe60c2732842a3b81e6ae0f58d2556@huawei.com>
-In-Reply-To: <ffbe60c2732842a3b81e6ae0f58d2556@huawei.com>
-From: Jason Wang <jasowang@redhat.com>
-Date: Mon, 11 Mar 2024 12:00:47 +0800
-Message-ID: <CACGkMEsFtJTMFVHt8pJ39Ge8nTJcsX=R_dYghz_93+_Yn--ZDQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 3/3] tun: AF_XDP Tx zero-copy support
-To: wangyunjian <wangyunjian@huawei.com>
-Cc: "Michael S. Tsirkin" <mst@redhat.com>, Paolo Abeni <pabeni@redhat.com>, 
-	"willemdebruijn.kernel@gmail.com" <willemdebruijn.kernel@gmail.com>, "kuba@kernel.org" <kuba@kernel.org>, 
-	"bjorn@kernel.org" <bjorn@kernel.org>, "magnus.karlsson@intel.com" <magnus.karlsson@intel.com>, 
-	"maciej.fijalkowski@intel.com" <maciej.fijalkowski@intel.com>, 
-	"jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>, "davem@davemloft.net" <davem@davemloft.net>, 
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
-	"virtualization@lists.linux.dev" <virtualization@lists.linux.dev>, xudingke <xudingke@huawei.com>, 
-	"liwei (DT)" <liwei395@huawei.com>
+References: <202403092219.dhgcuz2G-lkp@intel.com> <CAADnVQJ+6mFs56fu+KEvumQ5uqM-oLpYx0hGxLJfE9XUCtEWEA@mail.gmail.com>
+ <CANk7y0gT8bvKuhJvxG1yLTxdRycMKNEBtgEv_PsCA56Nv74cDg@mail.gmail.com> <CAADnVQLXFWDDV8xGLVRNd9JXaqOMfCO3ZGtuQUg8CZjrwLjxrA@mail.gmail.com>
+In-Reply-To: <CAADnVQLXFWDDV8xGLVRNd9JXaqOMfCO3ZGtuQUg8CZjrwLjxrA@mail.gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Sun, 10 Mar 2024 23:42:39 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4=OPS+MgbsnsJM=pJCj64vg2xEG4MUq3hufWBkNDr-1w@mail.gmail.com>
+Message-ID: <CAPhsuW4=OPS+MgbsnsJM=pJCj64vg2xEG4MUq3hufWBkNDr-1w@mail.gmail.com>
+Subject: Re: [bpf-next:master 5/7] kernel/bpf/core.c:900:5: warning:
+ '__pte_index_size' is not defined, evaluates to 0
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Puranjay Mohan <puranjay12@gmail.com>, kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, oe-kbuild-all@lists.linux.dev, 
+	Alexei Starovoitov <ast@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 4, 2024 at 9:45=E2=80=AFPM wangyunjian <wangyunjian@huawei.com>=
- wrote:
+On Sun, Mar 10, 2024 at 7:43=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
->
->
-> > -----Original Message-----
-> > From: Michael S. Tsirkin [mailto:mst@redhat.com]
-> > Sent: Friday, March 1, 2024 7:53 PM
-> > To: wangyunjian <wangyunjian@huawei.com>
-> > Cc: Paolo Abeni <pabeni@redhat.com>; willemdebruijn.kernel@gmail.com;
-> > jasowang@redhat.com; kuba@kernel.org; bjorn@kernel.org;
-> > magnus.karlsson@intel.com; maciej.fijalkowski@intel.com;
-> > jonathan.lemon@gmail.com; davem@davemloft.net; bpf@vger.kernel.org;
-> > netdev@vger.kernel.org; linux-kernel@vger.kernel.org; kvm@vger.kernel.o=
-rg;
-> > virtualization@lists.linux.dev; xudingke <xudingke@huawei.com>; liwei (=
-DT)
-> > <liwei395@huawei.com>
-> > Subject: Re: [PATCH net-next v2 3/3] tun: AF_XDP Tx zero-copy support
+> On Sun, Mar 10, 2024 at 3:05=E2=80=AFPM Puranjay Mohan <puranjay12@gmail.=
+com> wrote:
 > >
-> > On Fri, Mar 01, 2024 at 11:45:52AM +0000, wangyunjian wrote:
-> > > > -----Original Message-----
-> > > > From: Paolo Abeni [mailto:pabeni@redhat.com]
-> > > > Sent: Thursday, February 29, 2024 7:13 PM
-> > > > To: wangyunjian <wangyunjian@huawei.com>; mst@redhat.com;
-> > > > willemdebruijn.kernel@gmail.com; jasowang@redhat.com;
-> > > > kuba@kernel.org; bjorn@kernel.org; magnus.karlsson@intel.com;
-> > > > maciej.fijalkowski@intel.com; jonathan.lemon@gmail.com;
-> > > > davem@davemloft.net
-> > > > Cc: bpf@vger.kernel.org; netdev@vger.kernel.org;
-> > > > linux-kernel@vger.kernel.org; kvm@vger.kernel.org;
-> > > > virtualization@lists.linux.dev; xudingke <xudingke@huawei.com>;
-> > > > liwei (DT) <liwei395@huawei.com>
-> > > > Subject: Re: [PATCH net-next v2 3/3] tun: AF_XDP Tx zero-copy
-> > > > support
-> > > >
-> > > > On Wed, 2024-02-28 at 19:05 +0800, Yunjian Wang wrote:
-> > > > > @@ -2661,6 +2776,54 @@ static int tun_ptr_peek_len(void *ptr)
-> > > > >         }
-> > > > >  }
-> > > > >
-> > > > > +static void tun_peek_xsk(struct tun_file *tfile) {
-> > > > > +       struct xsk_buff_pool *pool;
-> > > > > +       u32 i, batch, budget;
-> > > > > +       void *frame;
-> > > > > +
-> > > > > +       if (!ptr_ring_empty(&tfile->tx_ring))
-> > > > > +               return;
-> > > > > +
-> > > > > +       spin_lock(&tfile->pool_lock);
-> > > > > +       pool =3D tfile->xsk_pool;
-> > > > > +       if (!pool) {
-> > > > > +               spin_unlock(&tfile->pool_lock);
-> > > > > +               return;
-> > > > > +       }
-> > > > > +
-> > > > > +       if (tfile->nb_descs) {
-> > > > > +               xsk_tx_completed(pool, tfile->nb_descs);
-> > > > > +               if (xsk_uses_need_wakeup(pool))
-> > > > > +                       xsk_set_tx_need_wakeup(pool);
-> > > > > +       }
-> > > > > +
-> > > > > +       spin_lock(&tfile->tx_ring.producer_lock);
-> > > > > +       budget =3D min_t(u32, tfile->tx_ring.size, TUN_XDP_BATCH)=
-;
-> > > > > +
-> > > > > +       batch =3D xsk_tx_peek_release_desc_batch(pool, budget);
-> > > > > +       if (!batch) {
-> > > >
-> > > > This branch looks like an unneeded "optimization". The generic loop
-> > > > below should have the same effect with no measurable perf delta - a=
-nd
-> > smaller code.
-> > > > Just remove this.
-> > > >
-> > > > > +               tfile->nb_descs =3D 0;
-> > > > > +               spin_unlock(&tfile->tx_ring.producer_lock);
-> > > > > +               spin_unlock(&tfile->pool_lock);
-> > > > > +               return;
-> > > > > +       }
-> > > > > +
-> > > > > +       tfile->nb_descs =3D batch;
-> > > > > +       for (i =3D 0; i < batch; i++) {
-> > > > > +               /* Encode the XDP DESC flag into lowest bit for c=
-onsumer to
-> > differ
-> > > > > +                * XDP desc from XDP buffer and sk_buff.
-> > > > > +                */
-> > > > > +               frame =3D tun_xdp_desc_to_ptr(&pool->tx_descs[i])=
-;
-> > > > > +               /* The budget must be less than or equal to tx_ri=
-ng.size,
-> > > > > +                * so enqueuing will not fail.
-> > > > > +                */
-> > > > > +               __ptr_ring_produce(&tfile->tx_ring, frame);
-> > > > > +       }
-> > > > > +       spin_unlock(&tfile->tx_ring.producer_lock);
-> > > > > +       spin_unlock(&tfile->pool_lock);
-> > > >
-> > > > More related to the general design: it looks wrong. What if
-> > > > get_rx_bufs() will fail (ENOBUF) after successful peeking? With no
-> > > > more incoming packets, later peek will return 0 and it looks like
-> > > > that the half-processed packets will stay in the ring forever???
-> > > >
-> > > > I think the 'ring produce' part should be moved into tun_do_read().
-> > >
-> > > Currently, the vhost-net obtains a batch descriptors/sk_buffs from th=
-e
-> > > ptr_ring and enqueue the batch descriptors/sk_buffs to the
-> > > virtqueue'queue, and then consumes the descriptors/sk_buffs from the
-> > > virtqueue'queue in sequence. As a result, TUN does not know whether
-> > > the batch descriptors have been used up, and thus does not know when =
-to
-> > return the batch descriptors.
-> > >
-> > > So, I think it's reasonable that when vhost-net checks ptr_ring is
-> > > empty, it calls peek_len to get new xsk's descs and return the descri=
-ptors.
-> > >
-> > > Thanks
+> > Hi Alexei,
 > >
-> > What you need to think about is that if you peek, another call in paral=
-lel can get
-> > the same value at the same time.
->
-> Thank you. I have identified a problem. The tx_descs array was created wi=
-thin xsk's pool.
-> When xsk is freed, the pool and tx_descs are also freed. Howerver, some d=
-escs may
-> remain in the virtqueue'queue, which could lead to a use-after-free scena=
-rio.
-
-This can probably solving by when xsk pool is disabled, signal the
-vhost_net to drop those descriptors.
-
-Thanks
-
-> Currently,
-> I do not have an idea to solve this concurrency problem and believe this =
-scenario may
-> not be appropriate for reusing the ptr_ring.
->
-> Thanks
->
-> >
-> >
-> > > >
-> > > > Cheers,
-> > > >
-> > > > Paolo
+> > On Sat, Mar 9, 2024 at 5:38=E2=80=AFPM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
 > > >
+> > > Puranjay,
+> > >
+> > > Looks like I have to drop this patch for now,
+> > > since PMD_SIZE is not a constant on all archs
+> > > that can be evaluated by a preprocessor.
+> > >
+> > > We need to find a different way.
+> > >
+> >
+> > How about we define it like:
+> > -#define BPF_PROG_PACK_SIZE (PMD_SIZE * num_possible_nodes())
+> > +/*
+> > + * PMD_SIZE is really big for some archs. It doesn't make sense to
+> > + * reserve too much memory in one allocation. Cap BPF_PROG_PACK_SIZE t=
+o
+> > + * 2MiB * num_possible_nodes().
+> > + */
+> > +#define BPF_PROG_PACK_SIZE ((PMD_SIZE <=3D (1 << 21)) ? (PMD_SIZE *
+> > num_possible_nodes())  \
+> > +
+> >                              : ((1 << 21) * num_possible_nodes()))
+> >
+> > So, it will be computed at runtime. This adds more performance
+> > overhead but this is called very infrequently
+> > so shouldn't matter.
+> >
+> > Or we can hardcode it as `2MB * num_possible_nodes()` because
+> > PMD size in most architectures will be 2MB or larger but never smaller.
 >
+> I think hard coding is cleaner and less surprising.
+> I'd like to hear what Song thinks about it.
 
+Agreed. Let's just hard code it to 2MiB * num_possible_nodes().
+
+Thanks,
+Song
