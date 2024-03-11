@@ -1,120 +1,86 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69322AE91
-	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 17:04:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A244AEC5
+	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 17:08:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710176663; cv=none; b=Hb1A0fQwSdgzrFbZHZmfySttzaXDujPTiwLSwS8UfMc3tCY4z6kMNqzaUEVeKf3yMrV+HNwyvKUyklaajIJNsyGaSqMoPpH8wqLLnNuXWf+XxQDWziFoFtwhy9ZCj3jVRjSiE2ilpnkJRauoeq5QqywfKWqB0BfuUAbd/1yrfME=
+	t=1710176932; cv=none; b=O4Fa9cY2uUyQmzr9xgyWQaUi5W3A+NSN+gdKAJDx4cE2iVrV/yg1LpR/zeJPDmlbE1/CDuiHgMlEZYSo8vcxDALnLtcB8nN7hUANv/fT4HjKeSmpfbaUpBpykdPnw+3+z5JVQFEkVR1Mqq/9kDkFXNDeXFJeoxyeSxb4E+3VPTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710176663; c=relaxed/simple;
-	bh=HUvpJoiDG5/K9hvakIssPN4vqoR6JTY/QKH1maDBQIo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gjGzbgegjf0R2vMgYY90a18n4NIk+GkvR+CgAytz2BkyrDTvO6LRfZKiy1Ytsx3NTOB25xBwusSL6juGCgtO6Pe/PbajzAYpyxlNEj/bW9eVKwq7RCvyxSeFO9vlT7hqimVRIDDIUfyGR7SPUNoqOYP8+A08O48/VM5gipRS+mo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EZOo83Ed; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1710176932; c=relaxed/simple;
+	bh=MFB1NXASOT7/Q36B+MS26c3a/OjHk5U8gre+lgzgXE0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kHfQFWkDnrzPQ42giNwT5Zg6lRYPloQul4zkwqXuH/3i5vYfL3k/RP73KkacZoVl/b/U1Bmhxz2n0ppE9MHEJodAPYlza/P9+lpSKZedYEYSWpwlhvjlVkvUPcothRWIid+Vq9kH3JBNre7eQF00hJGoshGUVaqJ86o0VA4LEn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=C3g62IND; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EZOo83Ed"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1710176660;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1EVOXCT9OZ5yBK1wj9as2c6O9AhGxdaIZd7ePnK+NV0=;
-	b=EZOo83EdLGM/HE2naKOC4RQjFX+UmbHAyG1ASpM/1bVFGvi3Lgll0lfATJwzrJhEwAhEEq
-	X1qN9VuLOlXw60c7c0qhN5FiYTLXi3gO/lR6HhVX0YoagcR/9fNVKvmCLpjEjLFdiG1kPI
-	sdcQcBwZXW0QV5wn/GVaSDX1B4jAEpA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-151-nHD9ld5HOl-trUWYqMk0rQ-1; Mon, 11 Mar 2024 13:03:56 -0400
-X-MC-Unique: nHD9ld5HOl-trUWYqMk0rQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E95E989C8E0;
-	Mon, 11 Mar 2024 17:03:55 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.242])
-	by smtp.corp.redhat.com (Postfix) with SMTP id D9C69112132A;
-	Mon, 11 Mar 2024 17:03:53 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Mon, 11 Mar 2024 18:02:34 +0100 (CET)
-Date: Mon, 11 Mar 2024 18:02:31 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	yunwei356@gmail.com, bpf <bpf@vger.kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	lsf-pc <lsf-pc@lists.linux-foundation.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [LSF/MM/BPF TOPIC] faster uprobes
-Message-ID: <20240311170231.GB28588@redhat.com>
-References: <CAEf4Bzbs4toMxw62kVTWNHA7sW-CncamyKHCWynCT0GnG+fOfQ@mail.gmail.com>
- <ZeGPU8FRqwNuUJwd@krava>
- <CAADnVQKW4Qk55NjaApx1caPDF_pA8f5JZFE12DKA2R8cKWmtcw@mail.gmail.com>
- <CAEf4Bzbv5_yG8S4c22QUXp1FhLZGSSRZS6FFjXfvo=4RdAThZA@mail.gmail.com>
- <ZeRO9_IiLSy9D7jQ@krava>
- <CAEf4BzZQnqjoCc6Y_N3Wu4eMpioqgZC04QrTujgyiYMMRpG3Nw@mail.gmail.com>
- <ZebWqIgABbk8dQXT@krava>
- <Ze7kGP5aAYGseRuM@krava>
- <20240311150658.GA28588@redhat.com>
- <Ze81Y2oal2Lg03HA@krava>
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="C3g62IND"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4132e548343so4548565e9.1
+        for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 10:08:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1710176929; x=1710781729; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4Fjyy0RSim8Nqg/20R7z2/C0DzCQisJdbBrQhqnQx3s=;
+        b=C3g62IND6F3/bAaRmwrqKH6ElGI6ChqvQWaPORLebZfEAC3hGXJKmW4PYsrahad9Br
+         LlpgSAauq/pU+l8sowI/fM6dwzIlHTNbGst4KyATcz8sW4jP6Spba9Rzsp0hsWmlTIlj
+         42Q9YpyYxfg0swv7/xYZ3rVyqK7hR2bM4/zQlh+RVttRpkJ1DTWFhKo/oJbnffwc/I3Z
+         BpiTPOhINlcALtE4kofk+rYRiWlMc/+XwDt+EpfxZ4PzxLxb+6j+AYihF9gbaB1DEm3w
+         nMqnGMC0/FEox1JO9wV6Qe3e/3ya+sf8GafNVETXLu1emN/sHQ0OBaCVLZPZGu53dmJy
+         K4BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710176929; x=1710781729;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Fjyy0RSim8Nqg/20R7z2/C0DzCQisJdbBrQhqnQx3s=;
+        b=rCZD+n2ciWIx60ydfc+T7Nh0kkgm+Oe3ILnyesOTHBRAQ0k1Otg6fPN05lcDSC549n
+         B9UYJzLT8zeejsP0qIqXXN+sX5GbbyyLuqnPRYSZoag9l9haFs4IptRxoq1bc8ctfKaT
+         hyD+5mJoq1x3U8G3BFP53gNYi2Uz45tA0dWfCPkeWzOXNccad1vq76AMgMGmHuCO0rdL
+         kbAYd0FNu5FosWIvPoxx4yrTWX4Fl0gAEfQaCxtMRpJAlEd7+z3aNrjmAATJO4G977OH
+         w1PTh1qEx0JWTa5gUDGty/+dRebqr6cGrroioZIduqE2BKSijcxpD2WwElCGXenjMifd
+         OsiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVuHKZ+zQod6EaNc7k5XDtDp4ZsDHDqNMetD7/Fwl3nPjKz7triurb49bSVF3JAS+sjaogojF7Oe7n0DJ7x5Dlqx6nV
+X-Gm-Message-State: AOJu0Yw9caLxwgXSgrHEkLxpu02F2YGaoX/fqBZuJdny2qanvYH1giGg
+	EER0h3lkWyoTJjdjRFTmmBMRrymEfppko4FVFrOm2evdiokp0PbyB89wz6MtWOY=
+X-Google-Smtp-Source: AGHT+IH7RGKZkMSy2pdJ5Zl0JMvYJ86KseiEILVI33QDTXGxglRNDbihbglD4B3KNIGKu7T5LMHujQ==
+X-Received: by 2002:a05:600c:3554:b0:413:271a:1e5e with SMTP id i20-20020a05600c355400b00413271a1e5emr3320696wmq.38.1710176929093;
+        Mon, 11 Mar 2024 10:08:49 -0700 (PDT)
+Received: from ?IPV6:2a02:8011:e80c:0:5231:db44:25b0:339e? ([2a02:8011:e80c:0:5231:db44:25b0:339e])
+        by smtp.gmail.com with ESMTPSA id o2-20020a05600c4fc200b004132f9cf053sm1310682wmq.33.2024.03.11.10.08.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Mar 2024 10:08:48 -0700 (PDT)
+Message-ID: <b3b5690e-c8d4-4f47-8175-bc1567139391@isovalent.com>
+Date: Mon, 11 Mar 2024 17:08:47 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ze81Y2oal2Lg03HA@krava>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 bpf-next 09/14] bpftool: Recognize arena map type
+Content-Language: en-GB
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, torvalds@linux-foundation.org,
+ brho@google.com, hannes@cmpxchg.org, akpm@linux-foundation.org,
+ urezki@gmail.com, hch@infradead.org, linux-mm@kvack.org, kernel-team@fb.com
+References: <20240308010812.89848-1-alexei.starovoitov@gmail.com>
+ <20240308010812.89848-10-alexei.starovoitov@gmail.com>
+From: Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20240308010812.89848-10-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 03/11, Jiri Olsa wrote:
->
-> On Mon, Mar 11, 2024 at 04:06:59PM +0100, Oleg Nesterov wrote:
-> > I forgot everything about the low-level x86_64 code, but...
-> >
-> > On 03/11, Jiri Olsa wrote:
-> > >
-> > >  #ifdef CONFIG_X86_64
-> > > +
-> > > +asm (
-> > > +       ".pushsection .rodata\n"
-> > > +       ".global uretprobe_syscall_entry\n"
-> > > +       "uretprobe_syscall_entry:\n"
-> > > +       "push %rax\n"
-> > > +       "mov $462, %rax\n"
-> > > +       "syscall\n"
-> >
-> > Hmm... I think you need to save/restore more registers clobbered by
-> > syscall/entry_SYSCALL_64 ?
->
-> hum, so the call happens on the function call return, so I thought
-> we should just preserve callee saved registers which seems to be
-> taken care of by the entry_SYSCALL_64 path..
+2024-03-08 01:08 UTC+0000 ~ Alexei Starovoitov
+<alexei.starovoitov@gmail.com>
+> From: Alexei Starovoitov <ast@kernel.org>
+> 
+> Teach bpftool to recognize arena map type.
+> 
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-Yes, but we do not know if the (ret)probed function obeys the C-calling
-convention, perhaps it is low level asm code or not a C function.
-
-> I will double check
-
-but I won't insist if you think we do not care.
-
-> > > +
-> > > +	regs->ax = ax;
-> >
-> > probably not strictly needed, we are going to return ax...
->
-> it needs to be there for the bpf program to read proper return
-> value from regs
-
-OK, I see, thanks.
-
-Oleg.
+Acked-by: Quentin Monnet <quentin@isovalent.com>
 
