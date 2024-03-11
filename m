@@ -1,135 +1,146 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F4334C631;
-	Mon, 11 Mar 2024 17:56:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E738854F8D;
+	Mon, 11 Mar 2024 18:02:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710179771; cv=none; b=bv0KeSgCCJn+FiuRRv4NsBK5uf2SMI2IX/flaXGw4l/HO8ZqPUEkAJKjGGTwTWVBUDGLo5hGDOjobXvVUQIQlUKOco6ER2v9+oWQuAoMTFgqkPyTSfXOVkEH0h8Pe04XYSFhgfWomZX4HaxAILGY7RIbOafb+5o8o89em95txL8=
+	t=1710180127; cv=none; b=l0aw9Fl9hEPq0OFf7y0/1Gd17iNB8+aJj6mKDiJ33V3OtlvXjZhp4h0iGQoCWYD2q5Y3itq9z4xs8VnlU7S3d0TIZZsF/sLU93/wP/j4YGOR+CaX2uMofm7A128qCJxWzd0DoUUxwMkZc6vDANBd0doEPdtA5xjntu5kD7gF/Hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710179771; c=relaxed/simple;
-	bh=2sHTM97y6Ae9lduC17X4CVIj9RmYErbw28IMnyPzK8c=;
+	s=arc-20240116; t=1710180127; c=relaxed/simple;
+	bh=rkJoFU+8RUcVvUJAcqdZvMWhYKXiwBRaY37lui0QE2U=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YYDf2Xz2FaQnBtqXXDNONAr3odqzh/gs5TVud+BEGKaAXK1oyw6mjBxHzfSZO56GywcaXMSceGhqW5rAYsVuugA18DVfIQQ67b5g9wyYCWHK0r+EYKW7tY3fD2WNpmZhRyn2uKGZ0LhflbcoNdZdzjszChEJ1HB9xVe2RHufNuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N1JQeV7b; arc=none smtp.client-ip=209.85.215.180
+	 To:Cc:Content-Type; b=oNIKJyP3L1Dpeyt67uP16J39ezyB30Sjltxea1KIh4qwCyXP7XwvGDLC554fu9YUmrGAK9lAkxvWWXfWyh/hMIFSbqZBtGZH1pXjQNnnRwe++tzzbfyb6MuelzyKie5oFAvvssAEhbKzQ8bZry3SlWYxoKOLnBA6VNOfuUUhJiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K6hOpfN1; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N1JQeV7b"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-5e4613f2b56so3042826a12.1;
-        Mon, 11 Mar 2024 10:56:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K6hOpfN1"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6e66601f082so2857602b3a.0;
+        Mon, 11 Mar 2024 11:02:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710179770; x=1710784570; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710180125; x=1710784925; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yA5M5kpASFinQzBucQIe6R0OuQDkEP28n5sfVDn4lPc=;
-        b=N1JQeV7buFwUk5r48st+Ef1KwXH8aIbNNv0Un9zEV4zCtewyMMMEYWMdFQXl7b5rNU
-         TymjHNpn5nAeIWhH51Qj62Px1dr/h22Ozy8kJXRtMszXe9s4w6L1k2O+wsIhQm4STNkT
-         qCeS17FQW0f8HhqVyfm00zKHnvKCgLGXYdrHviO1sY2IV33iQYTqiwYRTO5nK1pliX8I
-         A/hJF8N53Aq9y4u5+1E7YIe0r8Q9+QXcDhjsk8KC8ujVsPZaG3LD6dvCVq6J8wAARMOT
-         Ox5WW0MDb9SzuljqJESN50FSHcXnfIWn8kVhpU4jLev43THqHw2Unr6MWiUTLeFIYnqk
-         EfUw==
+        bh=o4R9ADmuK2FzMV+uyNo5OY4V3RZjV78H/xpdInlrSUI=;
+        b=K6hOpfN16tdkcx1IoNQhnhY85iNzGR6aBAR77VXORPZyRXkSjgeUiJw/Wt/VnQXavL
+         6EoDYwzoVee6ARQ58yU71mNQ6Osisd7JA42vq390MOT9iAZSYfuekVOTgGJn53vHrG6v
+         sGAiAqir0/n6fKerRnsy5k1Eo66Bb8hFY5PEWqVDcV+V90vMTaF5qG06+IqOwanlbtga
+         1Ec/UAgcKQqYVqzs/xoEXLztaGK0k2gOtHwSP+lpivqLaaCCrtLzQVurRU7Va5Kamc5J
+         1LLSvWBDRumG1PLQ0GSfbcdM1Z5G5uZyDvpb5a95Ac2YwBH6oUa4U6eJOmms5a29mGs0
+         kadA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710179770; x=1710784570;
+        d=1e100.net; s=20230601; t=1710180125; x=1710784925;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yA5M5kpASFinQzBucQIe6R0OuQDkEP28n5sfVDn4lPc=;
-        b=YrFxn6nIc/G59mH3ch/eAfG4nYMzrCQ5GXqDh9tM/mphGTAVqdNTORl68hRPFvfQeJ
-         jVkCaIeaZSlU+FT5O6o7yZZDL/jsUkdWgF8yJbBCtELfshvb3SKGGTzTuDO1UF0BBPmZ
-         b93uLNnPUukqaY3iAM7gvkoCDdoeHW7whYYcfSFdSyFaR7v1gZlPKxfY6sLy7cOWmu1U
-         XA+uVtszxGNb2+zvdcuc6nTu/fNr0teQ49QS+Vow+D2CnNg+d2AjV62DinWCP2vGFiXM
-         yOlKA0FOiji/BqeEL4p5lQs4lQAGqo+AJ1O7GyezpvUecLrM2G7jJnFfM4HagBxvETyT
-         Wl+w==
-X-Forwarded-Encrypted: i=1; AJvYcCXCBYC9KZHqZdFvmORL9D1cuTxlrIELBPkDH1xY0WxQXICTfijI2Bbiy+hFQeF2HuN6X2/LE74pRlswtqT5kCTRzvhugUwAiwTApHhtEFmavIPpWq7PzhCpKcS6PhVpvID+
-X-Gm-Message-State: AOJu0Yxk25N+y6SmuO7BIDf5SF26JiaOMI9M48Fa6g80QKDfEt2gl/Ut
-	bnkSmo76WJKBIKoY6rtEiqMfNZo6cgYLRRCmPHhwec4Nho6yeHZQeHN1nzxOE7x7bN3OF+uUafH
-	9HHUGji721/Cl5qEGqC6mzyRJk6Q=
-X-Google-Smtp-Source: AGHT+IGmceLJx9agIv6BGQlFZEwEv807foK6FXOon+/fe1VfiZLBlWJjK50x0/uje3HacOpp0lRoQlNZsZCEy7Zs7UA=
-X-Received: by 2002:a17:90b:4007:b0:29c:e1b:f9e2 with SMTP id
- ie7-20020a17090b400700b0029c0e1bf9e2mr2261232pjb.25.1710179769736; Mon, 11
- Mar 2024 10:56:09 -0700 (PDT)
+        bh=o4R9ADmuK2FzMV+uyNo5OY4V3RZjV78H/xpdInlrSUI=;
+        b=fu/6UUVssjiCREhcmXJ5mluJiLdSsC7LBbeTECfP1qgclsd23O9eTb59MpTeQLg6WE
+         xt4qK5ia5JxVSGCI6B/AgCFuYpKbBHwqiA5kUt6JFexCB6TiCry7s/5A5+sQFsTvz+29
+         yTlideJFQpgzqwzez9YsUUL55BlPuIXYrGoxKlu282gidktWGLVdNHKx5tX0PC7/CyjS
+         tbJuJqifTyox+a2Rlf3dMgIMs3s23d7qBqdnEOWskVoSlyp2fywd+7ICXxQUaEI1BSmy
+         WSUbn/lXIxw/JEUbjVAjEIBLsWBBCcolsgxB7kVDTHQJE2WPS1si4+7GYjFkqbOLc49X
+         /o3A==
+X-Forwarded-Encrypted: i=1; AJvYcCUoIBZGD2sr/eKeZ2T3+q0lJrpTWwR0koBh5OGPwkTLWgtIecNFmkPGi/jfSzqp8glGm45nqDV+XKWxj8nMiXacE+nVyME7x4DmgdVFem9f7SRKlsaJcC7/6QVkQM5BNpPn+SUEUVZLZfutdSsYZCtZE+fM1Kih14iu
+X-Gm-Message-State: AOJu0YxtsDyt+VGpixIjM6fjuRzHQuLBqco8CL2Hm7tNZWb9c6+zytTd
+	uB431YzMsXjD7fJfr1935GO1SCb7OoHcU/N1KOdi3+ZSZtvn6YerX38bQB6+ovC/kb+IxVNgHUv
+	ye74QMY9h1HfT5/Onc33IL04fgt0=
+X-Google-Smtp-Source: AGHT+IE0HXRVILcbLRkdcMQ91Ff+mSiLMeMoLaa8RV2aeF2XJTB8yy92gHL1YS2H9RjfeX/2ibS2+rn6n0/Ttk+24y4=
+X-Received: by 2002:a05:6a20:3d87:b0:1a1:4848:98af with SMTP id
+ s7-20020a056a203d8700b001a1484898afmr5735907pzi.1.1710180124799; Mon, 11 Mar
+ 2024 11:02:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240310154726.734289-1-andrea.righi@canonical.com>
-In-Reply-To: <20240310154726.734289-1-andrea.righi@canonical.com>
+References: <00000000000081fb0d06135eb3ca@google.com> <tencent_E4EB1B6A2584BA2BBBB733409EAE1B524B08@qq.com>
+ <5f1446d409322de91946a569edc0b836daa52aae.camel@gmail.com>
+In-Reply-To: <5f1446d409322de91946a569edc0b836daa52aae.camel@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 11 Mar 2024 10:55:57 -0700
-Message-ID: <CAEf4BzYrwRQu1eNMACfXtsac+=psnNGr+=WQz3zUPP+2DPA2Rg@mail.gmail.com>
-Subject: Re: [PATCH] libbpf: ringbuf: allow to partially consume items
-To: Andrea Righi <andrea.righi@canonical.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, David Vernet <void@manifault.com>, Tejun Heo <tj@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Mon, 11 Mar 2024 11:01:52 -0700
+Message-ID: <CAEf4BzbbvBEwy6_S1MRjiGWWfS_nxy6qNsEc0_Jdro1c10b8Vw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: fix oob in btf_name_valid_section
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Edward Adam Davis <eadavis@qq.com>, syzbot+cc32304f6487ebff9b70@syzkaller.appspotmail.com, 
+	andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net, 
+	haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org, 
+	kpsingh@kernel.org, linux-kernel@vger.kernel.org, martin.lau@linux.dev, 
+	netdev@vger.kernel.org, sdf@google.com, song@kernel.org, 
+	syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 10, 2024 at 8:47=E2=80=AFAM Andrea Righi <andrea.righi@canonica=
-l.com> wrote:
+On Mon, Mar 11, 2024 at 7:48=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
 >
-> Instead of always consuming all items from a ring buffer in a greedy
-> way, allow to stop when the callback returns a value > 0.
+> On Mon, 2024-03-11 at 21:16 +0800, Edward Adam Davis wrote:
+> > Check the first char of the BTF DATASEC names.
+> >
+> > Fixes: bd70a8fb7ca4 ("bpf: Allow all printable characters in BTF DATASE=
+C names")
+> > Reported-and-tested-by: syzbot+cc32304f6487ebff9b70@syzkaller.appspotma=
+il.com
+> > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+> > ---
+> >  kernel/bpf/btf.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> > index 170d017e8e4a..dda0aa0d7175 100644
+> > --- a/kernel/bpf/btf.c
+> > +++ b/kernel/bpf/btf.c
+> > @@ -816,6 +816,8 @@ static bool btf_name_valid_section(const struct btf=
+ *btf, u32 offset)
+> >       const char *src =3D btf_str_by_offset(btf, offset);
+> >       const char *src_limit;
+> >
+> > +     if (!isprint(*src))
+> > +             return false;
+> >       /* set a limit on identifier length */
+> >       src_limit =3D src + KSYM_NAME_LEN;
+> >       src++;
 >
-> This allows to distinguish between an error condition and an intentional
-> stop condition by returning a non-negative non-zero value from the ring
-> buffer callback.
+> Hi Edward,
 >
-> This can be useful, for example, to consume just a single item from the
-> ring buffer.
+> Thank you for fixing this.
+> I wonder, maybe something like below would be simpler?
 >
-> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+> Thanks,
+> Eduard
+>
 > ---
->  tools/lib/bpf/ringbuf.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
 >
-> diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-> index aacb64278a01..dd8908eb3204 100644
-> --- a/tools/lib/bpf/ringbuf.c
-> +++ b/tools/lib/bpf/ringbuf.c
-> @@ -265,6 +265,14 @@ static int64_t ringbuf_process_ring(struct ring *r)
->                                         return err;
->                                 }
->                                 cnt++;
-> +                               if (err > 0) {
-
-So libbpf already stops at any err < 0 (and sets correct consumer
-pos). So you could already get desired behavior by just returning your
-own error code. If you need count, you'd have to count it yourself
-through custom context, that's a bit of inconvenience.
-
-But on the other hand, currently if user callback returns anything > 0
-they keep going and that return value is ignored. Your change will
-break any such user pretty badly. So I'm a bit hesitant to do this.
-
-Is there any reason you can't just return error code (libbpf doesn't
-do anything with it, just passes it back, so it might as well be
-`-cnt`, if you need that).
-
-pw-bot: cr
-
-> +                                       /* update consumer pos and return=
- the
-> +                                        * total amount of items consumed=
-.
-> +                                        */
-> +                                       smp_store_release(r->consumer_pos=
-,
-> +                                                         cons_pos);
-> +                                       goto done;
-> +                               }
->                         }
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 170d017e8e4a..3d95d5398c8a 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -818,7 +818,6 @@ static bool btf_name_valid_section(const struct btf *=
+btf, u32 offset)
 >
->                         smp_store_release(r->consumer_pos, cons_pos);
-> --
-> 2.43.0
->
+>         /* set a limit on identifier length */
+>         src_limit =3D src + KSYM_NAME_LEN;
+> -       src++;
+
+ah, __btf_name_valid() has a separate __btf_name_char_ok(*src, true)
+check and then skips first character :(
+
+What Eduard proposes makes sense, we shouldn't advance src before the loop.
+
+Eduard, I'd also say we should make __btf_name_valid() a bit more
+uniform by dropping that first if and then doing
+
+if (!__btf_name_char_ok(*src, src =3D=3D src_orig))
+    return false;
+
+where we just remember original string pointer in src_orig.
+
+WDYT?
+
+
+>         while (*src && src < src_limit) {
+>                 if (!isprint(*src))
+>                         return false;
 >
