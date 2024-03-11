@@ -1,111 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97FF458AA3
-	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 22:50:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008C459151
+	for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 22:58:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710197436; cv=none; b=Yq5m0qSgDl3tpRO2yMICdluqyGtKg6+ZWw89c87175n3h5p3dklbAiLgWATYrBjRFq67REY7EanINajLd+3I33uqm+YVGPjGJyZIYJL7ZTCBtBI+CjqPEDlObZif053GvI7rPkxCG1qt3yknH49uIEH+F9qVw0U40jCg3UOR9Wo=
+	t=1710197910; cv=none; b=OT8n9HJZWvQP4xjkP8602MgfTh8wpiqmMiRpn1fXU5S6eWNOmFrGrtNYWYc/1XHeCBuPdly9wGTG+t5q0Lx4emYr8UIhFF8WBZ/iFXWuPL6YKbPv6k2E2ry7Yrs0A6aoKUJB6iJYXOSQ7AZ3bj+GMnMnaj32QWAX5rCKm/2R9Ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710197436; c=relaxed/simple;
-	bh=zKXYKLJLTFvG2zlhuFiYXj4eOLZu93Dmhz0acT5x4oo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Ev5MW1tECUbR9YWHvjUzF1+erIyEl/qX9RexESh6Mb8bi6dAEt/vh+TCJiAPz5Ix5sV+MQMpZ9QJxmJPk++ToR6GKrGG9eBV5w17ffK4QrTsHyGNxICJi8LQUGqR2LKIfLyVQdV2er1XMOEY19WKt0jIEIMzUqeru3abRjBYMP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AmH6EJWI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710197910; c=relaxed/simple;
+	bh=Sy2ja+oWY4kLIoimKcOlUaKukJLyATY5SDDnWhA91Ac=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kC1aErXHhNTGEYAW2DL4PA7gac3cAgmtypmmxesrI41a2o+Vv+FlzwCSagxo2v3UIRtcK3c8a1r015mpcNI8MWtKl5y1rS9pm58GtHJ1t2IB+zhZwdvuuXLQxG+Pp2ttezFUwQUK7Hiepglnsz0CS/v8psIBmsAZccBYgbyfJlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=SP5Rpl6c; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AmH6EJWI"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1B053C433C7;
-	Mon, 11 Mar 2024 22:50:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710197436;
-	bh=zKXYKLJLTFvG2zlhuFiYXj4eOLZu93Dmhz0acT5x4oo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=AmH6EJWIBcbhoAKjZbEbas0kw+Ppmjy1M7y+c11uowu/2Ze0WqlpjvFnyuMpOJliy
-	 ry6jirNUOhGiFpXnYk5jrjWgBSGKCBtryYQeQrSENuBQ4SOIFtWOno7z69lrFkgVoI
-	 msj/GWkp0g6tOrpYnw8dundCI3A0zoaAR6+t+dI1sGIhH9mG5uYnume7ddxFWuT1uK
-	 nIihhClmNsBUEMNRPrWzOQihgPC/elRJaL9729WU+eBqRgjxftMFR4SfmHg9WkZx73
-	 bnxHEYiAad1K/XcrUGLPFu+14i0y7rkiOdtT93CTMoN2nr1uTmHvUmdIi0XjqutIa0
-	 a/IBpmN4fApXw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EDC60D95056;
-	Mon, 11 Mar 2024 22:50:35 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="SP5Rpl6c"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-563c403719cso5967041a12.2
+        for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 15:58:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1710197907; x=1710802707; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nZU1Phb/CtBsFoY7di9Z4tKqixjDqwCWx89567ciR4U=;
+        b=SP5Rpl6czg4AU2txJ9pwoUIX+jKaWyTESCU8zziCpmLg+9os4JbkywPsfiptOmsE41
+         029+WB3JRQYltxioUHSXUIPGpDqv6LS2+PG1soznW2JfpV96EjfGnnzZzhcX32+gHYTo
+         M3HX78zmlGi2YrAZhv9a318L7vrIRrkom9wKuw0MK1EWC/yl9rjFYIvNrBA3RvgUN7m4
+         UX6bs5d8pA+o3VT2hffvfjZYRGBG/ScKy1aI2B9aEAE8UH1BZRx8S/zTp9nZohsb+gGQ
+         wPZBsijOHwmHJWmVSgeKpWvs+gw9dgEtQ3qzYK6EZ1piU5acpGjVdZt5dGaENkWC/1QT
+         0ksw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710197907; x=1710802707;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nZU1Phb/CtBsFoY7di9Z4tKqixjDqwCWx89567ciR4U=;
+        b=UdJFb0MCj5EiARwHIHktRzHXZnmn+Ww6FF8UFuAqnMAPa/0xyQZsCIWMbjsD06QQkQ
+         yVd8e6DzyeGDXqqoEJ6Eo6i8yhBPOOtmwrSqOZuB08QaR+Z7yEhQVO68D0BmLSBzaUTq
+         FwuQCRUUXOg1iuaAWaPs0RoUfAM6loQ7NhsHxldIwOerlcIYXvohnztzRM06VOvjFrWh
+         m8pNTIMxIPEfwNShDzx6+k9xRmFERSwk6BGvDVV+JzVNjfm33gymKxRqJSzHzTGoDLVy
+         CQcEa4OQNs9rKDM6U/Rq7X+VQ+VwqIRiYBMmiTGFePSkwWjeuE6eVQcjRpMWh1xTy5c+
+         ddDw==
+X-Forwarded-Encrypted: i=1; AJvYcCXBlCX1P2VU8lxy990fikmwlP9crduBtzXkUAMVwuD3dVeLBq2oAsdF8vWlvgX1dydDV3/rPJaUmxi0oeSy6swVCf5w
+X-Gm-Message-State: AOJu0YxyMQHXOmmuxSsct/8077B+5M+wQN93c4gmPDQHzjo18VTaMhZx
+	UZLxso3QZpDC3BPjzL3kIOim2KrT8+cCs2qT7rzywEouN+LQsXlA/grYNeO5vJj2w95eNcnqSat
+	IlKyJziMdfQy/rM01cUHCb/1jJFaKU7HkmGWXDQ==
+X-Google-Smtp-Source: AGHT+IGITjDbeDqDL56Vs6ZKVYZbv/7Re4zuMWjQ1QwBopqmSC3CV4Fh/8ykwO7zXo4qD39wARjuqm67gf/TwkPnlqE=
+X-Received: by 2002:a50:cccb:0:b0:566:a235:9355 with SMTP id
+ b11-20020a50cccb000000b00566a2359355mr1211898edj.33.1710197907206; Mon, 11
+ Mar 2024 15:58:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 bpf-next 00/14] bpf: Introduce BPF arena.
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171019743596.8733.12295118460292244286.git-patchwork-notify@kernel.org>
-Date: Mon, 11 Mar 2024 22:50:35 +0000
-References: <20240308010812.89848-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20240308010812.89848-1-alexei.starovoitov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- torvalds@linux-foundation.org, brho@google.com, hannes@cmpxchg.org,
- akpm@linux-foundation.org, urezki@gmail.com, hch@infradead.org,
- linux-mm@kvack.org, kernel-team@fb.com
+References: <ZeFPz4D121TgvCje@debian.debian> <CAO3-PboqKqjqrAScqzu6aB8d+fOq97_Wuz8b7d5uoMKT-+-WvQ@mail.gmail.com>
+ <CANn89iLCv0f3vBYt8W+_ZDuNeOY1jDLDBfMbOj7Hzi8s0xQCZA@mail.gmail.com>
+ <CAO3-PboZwTiSmVxVFFfAm94o+LgK=rnm1vbJvMhzSGep+RYzaQ@mail.gmail.com> <ed57b5fa-8b44-48de-904e-fe8da1939292@paulmck-laptop>
+In-Reply-To: <ed57b5fa-8b44-48de-904e-fe8da1939292@paulmck-laptop>
+From: Yan Zhai <yan@cloudflare.com>
+Date: Mon, 11 Mar 2024 17:58:16 -0500
+Message-ID: <CAO3-Pbp0Pxbbgmjf03wKo6MDrQYE7uiL+mUnheT9UA9Pjj5bUQ@mail.gmail.com>
+Subject: Re: [PATCH v2] net: raise RCU qs after each threaded NAPI poll
+To: paulmck@kernel.org
+Cc: Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Lorenzo Bianconi <lorenzo@kernel.org>, 
+	Coco Li <lixiaoyan@google.com>, Wei Wang <weiwan@google.com>, 
+	Alexander Duyck <alexanderduyck@fb.com>, Hannes Frederic Sowa <hannes@stressinduktion.org>, 
+	linux-kernel@vger.kernel.org, rcu@vger.kernel.org, bpf@vger.kernel.org, 
+	kernel-team@cloudflare.com, Joel Fernandes <joel@joelfernandes.org>, 
+	=?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, mark.rutland@arm.com, 
+	Jesper Brouer <jesper@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Fri, Mar 1, 2024 at 4:29=E2=80=AFPM Paul E. McKenney <paulmck@kernel.org=
+> wrote:
+>
+> On Fri, Mar 01, 2024 at 11:30:29AM -0600, Yan Zhai wrote:
+> > Hi Eric,
+> >
+> > On Fri, Mar 1, 2024 at 2:30=E2=80=AFAM Eric Dumazet <edumazet@google.co=
+m> wrote:
+> > >
+> > > I could not see the reason for 1sec (HZ) delays.
+> > >
+> > > Would calling rcu_softirq_qs() every ~10ms instead be a serious issue=
+ ?
+> > >
+> > The trouble scenarios are often when we need to detach an ad-hoc BPF
+> > tracing program, or restart a monitoring service. It is fine as long
+> > as they do not block for 10+ seconds or even completely stall under
+> > heavy traffic. Raising a QS every few ms or HZ both work in such
+> > cases.
+> >
+> > > In anycase, if this all about rcu_tasks, I would prefer using a macro
+> > > defined in kernel/rcu/tasks.h
+> > > instead of having a hidden constant in a networking core function.
+> >
+> > Paul E. McKenney was suggesting either current form or
+> >
+> >          local_bh_enable();
+> >          if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+> >                  rcu_softirq_qs_enable(local_bh_enable());
+> >          else
+> >                  local_bh_enable();
+> >
+> > With an interval it might have to be
+> > "rcu_softirq_qs_enable(local_bh_enable(), &next_qs);" to avoid an
+> > unnecessary extern/static var. Will it make more sense to you?
+>
+> I was thinking in terms of something like this (untested):
+>
+>         #define rcu_softirq_qs_enable(enable_stmt, oldj) \
+>         do { \
+>                 if (!IS_ENABLED(CONFIG_PREEMPT_RT) && \
+>                     time_after(oldj + HZ / 10, jiffies) { \
+>                         rcu_softirq_qs(); \
+>                         (oldj) =3D jiffies; \
+>                 } \
+>                 do  { enable_stmt; } while (0) \
+>         } while (0)
+>
+> Then the call could be "rcu_softirq_qs_enable(local_bh_enable(), last_qs)=
+",
+> where last_qs is initialized by the caller to jiffies.
+>
+> The reason for putting "enable_stmt;" into anothor do-while loop is
+> in case someone typos an "else" as the first part of the "enable_stmt"
+> argument.
+>
+> Would that work?
+>
+Thanks Paul, just got time to continue this thread as I was
+travelling. I think it is probably better to move
+preempt_disable/enable into the macro to avoid the friction. And also
+since this can affect NAPI thread, NAPI busy loop and XDP cpu map
+thread (+Jesper who reminded me about this), let me send a v3 later to
+cover all of those places.
 
-This series was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Thu,  7 Mar 2024 17:07:58 -0800 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> v2->v3:
-> - contains bpf bits only, but cc-ing past audience for continuity
-> - since prerequisite patches landed, this series focus on the main
->   functionality of bpf_arena.
-> - adopted Andrii's approach to support arena in libbpf.
-> - simplified LLVM support. Instead of two instructions it's now only one.
-> - switched to cond_break (instead of open coded iters) in selftests
-> - implemented several follow-ups that will be sent after this set
->   . remember first IP and bpf insn that faulted in arena.
->     report to user space via bpftool
->   . copy paste and tweak glob_match() aka mini-regex as a selftests/bpf
-> - see patch 1 for detailed description of bpf_arena
-> 
-> [...]
-
-Here is the summary with links:
-  - [v3,bpf-next,01/14] bpf: Introduce bpf_arena.
-    https://git.kernel.org/bpf/bpf-next/c/317460317a02
-  - [v3,bpf-next,02/14] bpf: Disasm support for addr_space_cast instruction.
-    https://git.kernel.org/bpf/bpf-next/c/667a86ad9b71
-  - [v3,bpf-next,03/14] bpf: Add x86-64 JIT support for PROBE_MEM32 pseudo instructions.
-    https://git.kernel.org/bpf/bpf-next/c/2fe99eb0ccf2
-  - [v3,bpf-next,04/14] bpf: Add x86-64 JIT support for bpf_addr_space_cast instruction.
-    https://git.kernel.org/bpf/bpf-next/c/142fd4d2dcf5
-  - [v3,bpf-next,05/14] bpf: Recognize addr_space_cast instruction in the verifier.
-    https://git.kernel.org/bpf/bpf-next/c/6082b6c328b5
-  - [v3,bpf-next,06/14] bpf: Recognize btf_decl_tag("arg:arena") as PTR_TO_ARENA.
-    https://git.kernel.org/bpf/bpf-next/c/2edc3de6fb65
-  - [v3,bpf-next,07/14] libbpf: Add __arg_arena to bpf_helpers.h
-    https://git.kernel.org/bpf/bpf-next/c/4d2b56081c32
-  - [v3,bpf-next,08/14] libbpf: Add support for bpf_arena.
-    https://git.kernel.org/bpf/bpf-next/c/79ff13e99169
-  - [v3,bpf-next,09/14] bpftool: Recognize arena map type
-    https://git.kernel.org/bpf/bpf-next/c/eed512e8ac64
-  - [v3,bpf-next,10/14] libbpf: Recognize __arena global varaibles.
-    https://git.kernel.org/bpf/bpf-next/c/2e7ba4f8fd1f
-  - [v3,bpf-next,11/14] bpf: Add helper macro bpf_addr_space_cast()
-    https://git.kernel.org/bpf/bpf-next/c/204c628730c6
-  - [v3,bpf-next,12/14] selftests/bpf: Add unit tests for bpf_arena_alloc/free_pages
-    https://git.kernel.org/bpf/bpf-next/c/80a4129fcf20
-  - [v3,bpf-next,13/14] selftests/bpf: Add bpf_arena_list test.
-    https://git.kernel.org/bpf/bpf-next/c/9f2c156f90a4
-  - [v3,bpf-next,14/14] selftests/bpf: Add bpf_arena_htab test.
-    https://git.kernel.org/bpf/bpf-next/c/8df839ae23b8
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Yan
 
 
+>                                                         Thanx, Paul
