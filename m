@@ -1,64 +1,77 @@
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275793E49B;
-	Mon, 11 Mar 2024 13:27:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A0F41740;
+	Mon, 11 Mar 2024 14:48:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710163682; cv=none; b=KANS21VG7ORgof5kIm4JxOx6IdwQ1lCPu3FmX8dkaeS8FNxTFM7Hr/0dB6i06oGl4Kx26H/utFCdjoXJcg0GReWT53xyI1vAptrlZTlGGiCKb0U8xsL2WtpKEzKUrkHZLVtVl4PPR2/2fDp/Vx7sZZzT0w5OUDC536yXz1dNpPQ=
+	t=1710168516; cv=none; b=izyqGzWxJ7L90OHhkkR6jNxVEFfruHMIzVoR/bvH0L+W+3BlrO0fNs+0KVFgqH5I1amGPL1xHsZyVa+HaQSFN9JzMV6ZygZ1+cr5zN6zQds5NOy5fL3f+mTZ2xZfKzcNZwxsFwAR4RqTM1XNh7HXblI0ZaBUbi5uLXk8ygqEUkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710163682; c=relaxed/simple;
-	bh=d6ew6C9tzrw7Ygtx7qhqa0xyH1KjyUgtnnWoozJXgh4=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=XYfr858Nx/Gj8qQvCzTbDWLxMjcwKXXWTG+Utlxa4xVb3CT9ifD+0P4oZwsehH5yTMJJ4NUl7Yns6QH8HF+sviXNDQ7o/5SQ/mgIpTb9G0O6NAZ2BoMtODNBY2hdThJh/I+kvybYJ7eW7+99BF/OeV2QQJxBtckbeKKOliYOD+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Ttcw952dtz2BfmF;
-	Mon, 11 Mar 2024 21:25:29 +0800 (CST)
-Received: from kwepemm000003.china.huawei.com (unknown [7.193.23.66])
-	by mail.maildlp.com (Postfix) with ESMTPS id 4DA141A016C;
-	Mon, 11 Mar 2024 21:27:55 +0800 (CST)
-Received: from dggpemm500008.china.huawei.com (7.185.36.136) by
- kwepemm000003.china.huawei.com (7.193.23.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Mon, 11 Mar 2024 21:27:54 +0800
-Received: from dggpemm500008.china.huawei.com ([7.185.36.136]) by
- dggpemm500008.china.huawei.com ([7.185.36.136]) with mapi id 15.01.2507.035;
- Mon, 11 Mar 2024 21:27:54 +0800
-From: wangyunjian <wangyunjian@huawei.com>
-To: Jason Wang <jasowang@redhat.com>
-CC: "Michael S. Tsirkin" <mst@redhat.com>, Paolo Abeni <pabeni@redhat.com>,
-	"willemdebruijn.kernel@gmail.com" <willemdebruijn.kernel@gmail.com>,
-	"kuba@kernel.org" <kuba@kernel.org>, "bjorn@kernel.org" <bjorn@kernel.org>,
-	"magnus.karlsson@intel.com" <magnus.karlsson@intel.com>,
-	"maciej.fijalkowski@intel.com" <maciej.fijalkowski@intel.com>,
-	"jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>, "davem@davemloft.net"
-	<davem@davemloft.net>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "virtualization@lists.linux.dev"
-	<virtualization@lists.linux.dev>, xudingke <xudingke@huawei.com>, "liwei
- (DT)" <liwei395@huawei.com>
-Subject: RE: [PATCH net-next v2 3/3] tun: AF_XDP Tx zero-copy support
-Thread-Topic: [PATCH net-next v2 3/3] tun: AF_XDP Tx zero-copy support
-Thread-Index: AQHaajYcNkJKJoTBfEqyMPzDlwSi+bEgpeYAgAIJPRD//5RegIAFWUkggAnaEoCAASPy4A==
-Date: Mon, 11 Mar 2024 13:27:54 +0000
-Message-ID: <d44e32c757014b38bb64d92af683b128@huawei.com>
-References: <1709118356-133960-1-git-send-email-wangyunjian@huawei.com>
- <7d478cb842e28094f4d6102e593e3de25ab27dfe.camel@redhat.com>
- <223aeca6435342ec8a4d57c959c23303@huawei.com>
- <20240301065141-mutt-send-email-mst@kernel.org>
- <ffbe60c2732842a3b81e6ae0f58d2556@huawei.com>
- <CACGkMEsFtJTMFVHt8pJ39Ge8nTJcsX=R_dYghz_93+_Yn--ZDQ@mail.gmail.com>
-In-Reply-To: <CACGkMEsFtJTMFVHt8pJ39Ge8nTJcsX=R_dYghz_93+_Yn--ZDQ@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1710168516; c=relaxed/simple;
+	bh=IR8Rw7R6tlXgp1dNF24paSxTLyfrch6BTzvZhpaULa0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=iAw94YkZssGpUP4eNCZqkmu+iNoTCJ8tfnRob1M8Gw5XXw+9XaS8Sq5raKaxnZgSBse38FfP2HD0KH8KTplAGaoToI8ck4eIiYtMyB2j1eKsMU42QqUaLrWVLHp5tZbYPh9hNR9cUEptwzXObkAqrwmw6iy4wybzmkk4lukW6Ds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OQ6RPbAo; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OQ6RPbAo"
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-512e4f4e463so6055106e87.1;
+        Mon, 11 Mar 2024 07:48:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710168512; x=1710773312; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ddB4TyhSFcJPopfOJaqWR0bgzqo9ldABM++8wxjWoXg=;
+        b=OQ6RPbAo4hBeuHAktYxCJYZN9id35Nd+tt8l64SecXAPRRQdpI5UtzhMkRa+mi8uwB
+         XPpMbDxzlEFQq1xEmjpoT0hZ6mu6VJ5hFrUpw7d3sNho6cqHTkbqFKHBd3yRV4PD51cl
+         ne/rvI+XgK2tt4V7NBEJOeW6v0KQP9q+q55mBCEoTt671Ag2ZltkbkR1RD2QJremOjEW
+         +OFAwqlYBRKd4M04rJzl/fAFSHYFj9CkLTTHXbtF9nftN2061ZJ7e/FdjaQXbLWE0mSS
+         MDgcKTICK+RjoI9sGamrBOUiJ1dJb48UiqFhcHd/l8C2/xy/nUjRLdhwAfRS6kPET+Sz
+         ZLAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710168512; x=1710773312;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ddB4TyhSFcJPopfOJaqWR0bgzqo9ldABM++8wxjWoXg=;
+        b=Uk7TGfJ8VgFVxqVGChhLfaTWdwX1BihOB4FfFyAZ8g1za/RAzuV/1UcGiuuLoQTwKG
+         iTzsbCWitnyPJ5NepjlHbGVbm4c8Zy4mOFtjzxKtaFq5Nc3m6xJJxATSXFehOTwUSvZ9
+         vIKbQPgGoc78/YGsRyEC15pbsqPKoA4DMVu4kVjTL2K3UIrADJ9AiMKMo4oBzbPa8eFU
+         kU/ZqlxbEZaTLh2jdt8W5PK6KHYv8y6ruWx3kZavbtwffNs69hzEaPsfzHS5AwjWuduc
+         aCvWuGmr6PGEOpf/+1m1gBmyxjbLaj6lLhTcZcGyji9aEXa/wwykyyV6PVaQbdylXdDJ
+         yauA==
+X-Forwarded-Encrypted: i=1; AJvYcCWJqW0lQiiLd7VMNvqSBi9DxVgBAoJAUNiI6ZotTfLnXWJ6nDA5hWnLhqRtJpCOyWtLXMogWG4wt4QrzcbFmPtGcxGZg8I4EvjkXz8Ks12Ch+g6VCm676rjfCYObzDoRn9ES5Jk5rt62h3byNdrqwewHnWAJ3/hS1vP
+X-Gm-Message-State: AOJu0YwKWHYppJ58yotKsfG0oaCxj6AoVQTAnfhcPwjOAuRd30CjggTH
+	JHnvOUiW62J5UB2+0Oh3OEo32oUYicZcVfhwA1xcyBe1Db5J4vP0
+X-Google-Smtp-Source: AGHT+IHVwZWNAEFkEevqKJoH5+48Z7sExLdiH9I+11qeXRtg6lcSHLpliy123iTToDf3Eszv0VArZA==
+X-Received: by 2002:a05:6512:3b12:b0:513:2329:4308 with SMTP id f18-20020a0565123b1200b0051323294308mr553457lfv.14.1710168512173;
+        Mon, 11 Mar 2024 07:48:32 -0700 (PDT)
+Received: from [192.168.1.94] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id f15-20020a05600c4e8f00b00412ea52b102sm16206787wmq.34.2024.03.11.07.48.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Mar 2024 07:48:30 -0700 (PDT)
+Message-ID: <5f1446d409322de91946a569edc0b836daa52aae.camel@gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: fix oob in btf_name_valid_section
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Edward Adam Davis <eadavis@qq.com>, 
+	syzbot+cc32304f6487ebff9b70@syzkaller.appspotmail.com
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+ daniel@iogearbox.net,  haoluo@google.com, john.fastabend@gmail.com,
+ jolsa@kernel.org, kpsingh@kernel.org,  linux-kernel@vger.kernel.org,
+ martin.lau@linux.dev, netdev@vger.kernel.org,  sdf@google.com,
+ song@kernel.org, syzkaller-bugs@googlegroups.com,  yonghong.song@linux.dev
+Date: Mon, 11 Mar 2024 16:48:29 +0200
+In-Reply-To: <tencent_E4EB1B6A2584BA2BBBB733409EAE1B524B08@qq.com>
+References: <00000000000081fb0d06135eb3ca@google.com>
+	 <tencent_E4EB1B6A2584BA2BBBB733409EAE1B524B08@qq.com>
+Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,129 +79,54 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSmFzb24gV2FuZyBbbWFp
-bHRvOmphc293YW5nQHJlZGhhdC5jb21dDQo+IFNlbnQ6IE1vbmRheSwgTWFyY2ggMTEsIDIwMjQg
-MTI6MDEgUE0NCj4gVG86IHdhbmd5dW5qaWFuIDx3YW5neXVuamlhbkBodWF3ZWkuY29tPg0KPiBD
-YzogTWljaGFlbCBTLiBUc2lya2luIDxtc3RAcmVkaGF0LmNvbT47IFBhb2xvIEFiZW5pIDxwYWJl
-bmlAcmVkaGF0LmNvbT47DQo+IHdpbGxlbWRlYnJ1aWpuLmtlcm5lbEBnbWFpbC5jb207IGt1YmFA
-a2VybmVsLm9yZzsgYmpvcm5Aa2VybmVsLm9yZzsNCj4gbWFnbnVzLmthcmxzc29uQGludGVsLmNv
-bTsgbWFjaWVqLmZpamFsa293c2tpQGludGVsLmNvbTsNCj4gam9uYXRoYW4ubGVtb25AZ21haWwu
-Y29tOyBkYXZlbUBkYXZlbWxvZnQubmV0OyBicGZAdmdlci5rZXJuZWwub3JnOw0KPiBuZXRkZXZA
-dmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBrdm1Admdlci5r
-ZXJuZWwub3JnOw0KPiB2aXJ0dWFsaXphdGlvbkBsaXN0cy5saW51eC5kZXY7IHh1ZGluZ2tlIDx4
-dWRpbmdrZUBodWF3ZWkuY29tPjsgbGl3ZWkgKERUKQ0KPiA8bGl3ZWkzOTVAaHVhd2VpLmNvbT4N
-Cj4gU3ViamVjdDogUmU6IFtQQVRDSCBuZXQtbmV4dCB2MiAzLzNdIHR1bjogQUZfWERQIFR4IHpl
-cm8tY29weSBzdXBwb3J0DQo+IA0KPiBPbiBNb24sIE1hciA0LCAyMDI0IGF0IDk6NDXigK9QTSB3
-YW5neXVuamlhbiA8d2FuZ3l1bmppYW5AaHVhd2VpLmNvbT4NCj4gd3JvdGU6DQo+ID4NCj4gPg0K
-PiA+DQo+ID4gPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+ID4gRnJvbTogTWljaGFl
-bCBTLiBUc2lya2luIFttYWlsdG86bXN0QHJlZGhhdC5jb21dDQo+ID4gPiBTZW50OiBGcmlkYXks
-IE1hcmNoIDEsIDIwMjQgNzo1MyBQTQ0KPiA+ID4gVG86IHdhbmd5dW5qaWFuIDx3YW5neXVuamlh
-bkBodWF3ZWkuY29tPg0KPiA+ID4gQ2M6IFBhb2xvIEFiZW5pIDxwYWJlbmlAcmVkaGF0LmNvbT47
-DQo+ID4gPiB3aWxsZW1kZWJydWlqbi5rZXJuZWxAZ21haWwuY29tOyBqYXNvd2FuZ0ByZWRoYXQu
-Y29tOw0KPiA+ID4ga3ViYUBrZXJuZWwub3JnOyBiam9ybkBrZXJuZWwub3JnOyBtYWdudXMua2Fy
-bHNzb25AaW50ZWwuY29tOw0KPiA+ID4gbWFjaWVqLmZpamFsa293c2tpQGludGVsLmNvbTsgam9u
-YXRoYW4ubGVtb25AZ21haWwuY29tOw0KPiA+ID4gZGF2ZW1AZGF2ZW1sb2Z0Lm5ldDsgYnBmQHZn
-ZXIua2VybmVsLm9yZzsgbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsNCj4gPiA+IGxpbnV4LWtlcm5l
-bEB2Z2VyLmtlcm5lbC5vcmc7IGt2bUB2Z2VyLmtlcm5lbC5vcmc7DQo+ID4gPiB2aXJ0dWFsaXph
-dGlvbkBsaXN0cy5saW51eC5kZXY7IHh1ZGluZ2tlIDx4dWRpbmdrZUBodWF3ZWkuY29tPjsNCj4g
-PiA+IGxpd2VpIChEVCkgPGxpd2VpMzk1QGh1YXdlaS5jb20+DQo+ID4gPiBTdWJqZWN0OiBSZTog
-W1BBVENIIG5ldC1uZXh0IHYyIDMvM10gdHVuOiBBRl9YRFAgVHggemVyby1jb3B5DQo+ID4gPiBz
-dXBwb3J0DQo+ID4gPg0KPiA+ID4gT24gRnJpLCBNYXIgMDEsIDIwMjQgYXQgMTE6NDU6NTJBTSAr
-MDAwMCwgd2FuZ3l1bmppYW4gd3JvdGU6DQo+ID4gPiA+ID4gLS0tLS1PcmlnaW5hbCBNZXNzYWdl
-LS0tLS0NCj4gPiA+ID4gPiBGcm9tOiBQYW9sbyBBYmVuaSBbbWFpbHRvOnBhYmVuaUByZWRoYXQu
-Y29tXQ0KPiA+ID4gPiA+IFNlbnQ6IFRodXJzZGF5LCBGZWJydWFyeSAyOSwgMjAyNCA3OjEzIFBN
-DQo+ID4gPiA+ID4gVG86IHdhbmd5dW5qaWFuIDx3YW5neXVuamlhbkBodWF3ZWkuY29tPjsgbXN0
-QHJlZGhhdC5jb207DQo+ID4gPiA+ID4gd2lsbGVtZGVicnVpam4ua2VybmVsQGdtYWlsLmNvbTsg
-amFzb3dhbmdAcmVkaGF0LmNvbTsNCj4gPiA+ID4gPiBrdWJhQGtlcm5lbC5vcmc7IGJqb3JuQGtl
-cm5lbC5vcmc7IG1hZ251cy5rYXJsc3NvbkBpbnRlbC5jb207DQo+ID4gPiA+ID4gbWFjaWVqLmZp
-amFsa293c2tpQGludGVsLmNvbTsgam9uYXRoYW4ubGVtb25AZ21haWwuY29tOw0KPiA+ID4gPiA+
-IGRhdmVtQGRhdmVtbG9mdC5uZXQNCj4gPiA+ID4gPiBDYzogYnBmQHZnZXIua2VybmVsLm9yZzsg
-bmV0ZGV2QHZnZXIua2VybmVsLm9yZzsNCj4gPiA+ID4gPiBsaW51eC1rZXJuZWxAdmdlci5rZXJu
-ZWwub3JnOyBrdm1Admdlci5rZXJuZWwub3JnOw0KPiA+ID4gPiA+IHZpcnR1YWxpemF0aW9uQGxp
-c3RzLmxpbnV4LmRldjsgeHVkaW5na2UgPHh1ZGluZ2tlQGh1YXdlaS5jb20+Ow0KPiA+ID4gPiA+
-IGxpd2VpIChEVCkgPGxpd2VpMzk1QGh1YXdlaS5jb20+DQo+ID4gPiA+ID4gU3ViamVjdDogUmU6
-IFtQQVRDSCBuZXQtbmV4dCB2MiAzLzNdIHR1bjogQUZfWERQIFR4IHplcm8tY29weQ0KPiA+ID4g
-PiA+IHN1cHBvcnQNCj4gPiA+ID4gPg0KPiA+ID4gPiA+IE9uIFdlZCwgMjAyNC0wMi0yOCBhdCAx
-OTowNSArMDgwMCwgWXVuamlhbiBXYW5nIHdyb3RlOg0KPiA+ID4gPiA+ID4gQEAgLTI2NjEsNiAr
-Mjc3Niw1NCBAQCBzdGF0aWMgaW50IHR1bl9wdHJfcGVla19sZW4odm9pZCAqcHRyKQ0KPiA+ID4g
-PiA+ID4gICAgICAgICB9DQo+ID4gPiA+ID4gPiAgfQ0KPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+
-ICtzdGF0aWMgdm9pZCB0dW5fcGVla194c2soc3RydWN0IHR1bl9maWxlICp0ZmlsZSkgew0KPiA+
-ID4gPiA+ID4gKyAgICAgICBzdHJ1Y3QgeHNrX2J1ZmZfcG9vbCAqcG9vbDsNCj4gPiA+ID4gPiA+
-ICsgICAgICAgdTMyIGksIGJhdGNoLCBidWRnZXQ7DQo+ID4gPiA+ID4gPiArICAgICAgIHZvaWQg
-KmZyYW1lOw0KPiA+ID4gPiA+ID4gKw0KPiA+ID4gPiA+ID4gKyAgICAgICBpZiAoIXB0cl9yaW5n
-X2VtcHR5KCZ0ZmlsZS0+dHhfcmluZykpDQo+ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgcmV0
-dXJuOw0KPiA+ID4gPiA+ID4gKw0KPiA+ID4gPiA+ID4gKyAgICAgICBzcGluX2xvY2soJnRmaWxl
-LT5wb29sX2xvY2spOw0KPiA+ID4gPiA+ID4gKyAgICAgICBwb29sID0gdGZpbGUtPnhza19wb29s
-Ow0KPiA+ID4gPiA+ID4gKyAgICAgICBpZiAoIXBvb2wpIHsNCj4gPiA+ID4gPiA+ICsgICAgICAg
-ICAgICAgICBzcGluX3VubG9jaygmdGZpbGUtPnBvb2xfbG9jayk7DQo+ID4gPiA+ID4gPiArICAg
-ICAgICAgICAgICAgcmV0dXJuOw0KPiA+ID4gPiA+ID4gKyAgICAgICB9DQo+ID4gPiA+ID4gPiAr
-DQo+ID4gPiA+ID4gPiArICAgICAgIGlmICh0ZmlsZS0+bmJfZGVzY3MpIHsNCj4gPiA+ID4gPiA+
-ICsgICAgICAgICAgICAgICB4c2tfdHhfY29tcGxldGVkKHBvb2wsIHRmaWxlLT5uYl9kZXNjcyk7
-DQo+ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgaWYgKHhza191c2VzX25lZWRfd2FrZXVwKHBv
-b2wpKQ0KPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgeHNrX3NldF90eF9uZWVk
-X3dha2V1cChwb29sKTsNCj4gPiA+ID4gPiA+ICsgICAgICAgfQ0KPiA+ID4gPiA+ID4gKw0KPiA+
-ID4gPiA+ID4gKyAgICAgICBzcGluX2xvY2soJnRmaWxlLT50eF9yaW5nLnByb2R1Y2VyX2xvY2sp
-Ow0KPiA+ID4gPiA+ID4gKyAgICAgICBidWRnZXQgPSBtaW5fdCh1MzIsIHRmaWxlLT50eF9yaW5n
-LnNpemUsDQo+ID4gPiA+ID4gPiArIFRVTl9YRFBfQkFUQ0gpOw0KPiA+ID4gPiA+ID4gKw0KPiA+
-ID4gPiA+ID4gKyAgICAgICBiYXRjaCA9IHhza190eF9wZWVrX3JlbGVhc2VfZGVzY19iYXRjaChw
-b29sLCBidWRnZXQpOw0KPiA+ID4gPiA+ID4gKyAgICAgICBpZiAoIWJhdGNoKSB7DQo+ID4gPiA+
-ID4NCj4gPiA+ID4gPiBUaGlzIGJyYW5jaCBsb29rcyBsaWtlIGFuIHVubmVlZGVkICJvcHRpbWl6
-YXRpb24iLiBUaGUgZ2VuZXJpYw0KPiA+ID4gPiA+IGxvb3AgYmVsb3cgc2hvdWxkIGhhdmUgdGhl
-IHNhbWUgZWZmZWN0IHdpdGggbm8gbWVhc3VyYWJsZSBwZXJmDQo+ID4gPiA+ID4gZGVsdGEgLSBh
-bmQNCj4gPiA+IHNtYWxsZXIgY29kZS4NCj4gPiA+ID4gPiBKdXN0IHJlbW92ZSB0aGlzLg0KPiA+
-ID4gPiA+DQo+ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgdGZpbGUtPm5iX2Rlc2NzID0gMDsN
-Cj4gPiA+ID4gPiA+ICsgICAgICAgICAgICAgICBzcGluX3VubG9jaygmdGZpbGUtPnR4X3Jpbmcu
-cHJvZHVjZXJfbG9jayk7DQo+ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgc3Bpbl91bmxvY2so
-JnRmaWxlLT5wb29sX2xvY2spOw0KPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgIHJldHVybjsN
-Cj4gPiA+ID4gPiA+ICsgICAgICAgfQ0KPiA+ID4gPiA+ID4gKw0KPiA+ID4gPiA+ID4gKyAgICAg
-ICB0ZmlsZS0+bmJfZGVzY3MgPSBiYXRjaDsNCj4gPiA+ID4gPiA+ICsgICAgICAgZm9yIChpID0g
-MDsgaSA8IGJhdGNoOyBpKyspIHsNCj4gPiA+ID4gPiA+ICsgICAgICAgICAgICAgICAvKiBFbmNv
-ZGUgdGhlIFhEUCBERVNDIGZsYWcgaW50byBsb3dlc3QgYml0DQo+ID4gPiA+ID4gPiArIGZvciBj
-b25zdW1lciB0bw0KPiA+ID4gZGlmZmVyDQo+ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgICog
-WERQIGRlc2MgZnJvbSBYRFAgYnVmZmVyIGFuZCBza19idWZmLg0KPiA+ID4gPiA+ID4gKyAgICAg
-ICAgICAgICAgICAqLw0KPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgIGZyYW1lID0gdHVuX3hk
-cF9kZXNjX3RvX3B0cigmcG9vbC0+dHhfZGVzY3NbaV0pOw0KPiA+ID4gPiA+ID4gKyAgICAgICAg
-ICAgICAgIC8qIFRoZSBidWRnZXQgbXVzdCBiZSBsZXNzIHRoYW4gb3IgZXF1YWwgdG8NCj4gdHhf
-cmluZy5zaXplLA0KPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgICAqIHNvIGVucXVldWluZyB3
-aWxsIG5vdCBmYWlsLg0KPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgICAqLw0KPiA+ID4gPiA+
-ID4gKyAgICAgICAgICAgICAgIF9fcHRyX3JpbmdfcHJvZHVjZSgmdGZpbGUtPnR4X3JpbmcsIGZy
-YW1lKTsNCj4gPiA+ID4gPiA+ICsgICAgICAgfQ0KPiA+ID4gPiA+ID4gKyAgICAgICBzcGluX3Vu
-bG9jaygmdGZpbGUtPnR4X3JpbmcucHJvZHVjZXJfbG9jayk7DQo+ID4gPiA+ID4gPiArICAgICAg
-IHNwaW5fdW5sb2NrKCZ0ZmlsZS0+cG9vbF9sb2NrKTsNCj4gPiA+ID4gPg0KPiA+ID4gPiA+IE1v
-cmUgcmVsYXRlZCB0byB0aGUgZ2VuZXJhbCBkZXNpZ246IGl0IGxvb2tzIHdyb25nLiBXaGF0IGlm
-DQo+ID4gPiA+ID4gZ2V0X3J4X2J1ZnMoKSB3aWxsIGZhaWwgKEVOT0JVRikgYWZ0ZXIgc3VjY2Vz
-c2Z1bCBwZWVraW5nPyBXaXRoDQo+ID4gPiA+ID4gbm8gbW9yZSBpbmNvbWluZyBwYWNrZXRzLCBs
-YXRlciBwZWVrIHdpbGwgcmV0dXJuIDAgYW5kIGl0IGxvb2tzDQo+ID4gPiA+ID4gbGlrZSB0aGF0
-IHRoZSBoYWxmLXByb2Nlc3NlZCBwYWNrZXRzIHdpbGwgc3RheSBpbiB0aGUgcmluZyBmb3JldmVy
-Pz8/DQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBJIHRoaW5rIHRoZSAncmluZyBwcm9kdWNlJyBwYXJ0
-IHNob3VsZCBiZSBtb3ZlZCBpbnRvIHR1bl9kb19yZWFkKCkuDQo+ID4gPiA+DQo+ID4gPiA+IEN1
-cnJlbnRseSwgdGhlIHZob3N0LW5ldCBvYnRhaW5zIGEgYmF0Y2ggZGVzY3JpcHRvcnMvc2tfYnVm
-ZnMgZnJvbQ0KPiA+ID4gPiB0aGUgcHRyX3JpbmcgYW5kIGVucXVldWUgdGhlIGJhdGNoIGRlc2Ny
-aXB0b3JzL3NrX2J1ZmZzIHRvIHRoZQ0KPiA+ID4gPiB2aXJ0cXVldWUncXVldWUsIGFuZCB0aGVu
-IGNvbnN1bWVzIHRoZSBkZXNjcmlwdG9ycy9za19idWZmcyBmcm9tDQo+ID4gPiA+IHRoZSB2aXJ0
-cXVldWUncXVldWUgaW4gc2VxdWVuY2UuIEFzIGEgcmVzdWx0LCBUVU4gZG9lcyBub3Qga25vdw0K
-PiA+ID4gPiB3aGV0aGVyIHRoZSBiYXRjaCBkZXNjcmlwdG9ycyBoYXZlIGJlZW4gdXNlZCB1cCwg
-YW5kIHRodXMgZG9lcyBub3QNCj4gPiA+ID4ga25vdyB3aGVuIHRvDQo+ID4gPiByZXR1cm4gdGhl
-IGJhdGNoIGRlc2NyaXB0b3JzLg0KPiA+ID4gPg0KPiA+ID4gPiBTbywgSSB0aGluayBpdCdzIHJl
-YXNvbmFibGUgdGhhdCB3aGVuIHZob3N0LW5ldCBjaGVja3MgcHRyX3JpbmcgaXMNCj4gPiA+ID4g
-ZW1wdHksIGl0IGNhbGxzIHBlZWtfbGVuIHRvIGdldCBuZXcgeHNrJ3MgZGVzY3MgYW5kIHJldHVy
-biB0aGUgZGVzY3JpcHRvcnMuDQo+ID4gPiA+DQo+ID4gPiA+IFRoYW5rcw0KPiA+ID4NCj4gPiA+
-IFdoYXQgeW91IG5lZWQgdG8gdGhpbmsgYWJvdXQgaXMgdGhhdCBpZiB5b3UgcGVlaywgYW5vdGhl
-ciBjYWxsIGluDQo+ID4gPiBwYXJhbGxlbCBjYW4gZ2V0IHRoZSBzYW1lIHZhbHVlIGF0IHRoZSBz
-YW1lIHRpbWUuDQo+ID4NCj4gPiBUaGFuayB5b3UuIEkgaGF2ZSBpZGVudGlmaWVkIGEgcHJvYmxl
-bS4gVGhlIHR4X2Rlc2NzIGFycmF5IHdhcyBjcmVhdGVkIHdpdGhpbg0KPiB4c2sncyBwb29sLg0K
-PiA+IFdoZW4geHNrIGlzIGZyZWVkLCB0aGUgcG9vbCBhbmQgdHhfZGVzY3MgYXJlIGFsc28gZnJl
-ZWQuIEhvd2VydmVyLA0KPiA+IHNvbWUgZGVzY3MgbWF5IHJlbWFpbiBpbiB0aGUgdmlydHF1ZXVl
-J3F1ZXVlLCB3aGljaCBjb3VsZCBsZWFkIHRvIGENCj4gdXNlLWFmdGVyLWZyZWUgc2NlbmFyaW8u
-DQo+IA0KPiBUaGlzIGNhbiBwcm9iYWJseSBzb2x2aW5nIGJ5IHdoZW4geHNrIHBvb2wgaXMgZGlz
-YWJsZWQsIHNpZ25hbCB0aGUgdmhvc3RfbmV0IHRvDQo+IGRyb3AgdGhvc2UgZGVzY3JpcHRvcnMu
-DQoNCkkgdGhpbmsgVFVOIGNhbiBub3RpZnkgdmhvc3RfbmV0IHRvIGRyb3AgdGhlc2UgZGVzY3Jp
-cHRvcnMgdGhyb3VnaCBuZXRkZXYgZXZlbnRzLg0KSG93ZXZlciwgdGhlcmUgaXMgYSBwb3RlbnRp
-YWwgY29uY3VycmVuY3kgcHJvYmxlbS4gV2hlbiBoYW5kbGluZyBuZXRkZXYgZXZlbnRzDQphbmQg
-cGFja2V0cywgdmhvc3RfbmV0IHByZWVtcHRzIHRoZSAndnEtPm11dGV4X2xvY2snLCBsZWFkaW5n
-IHRvIHVuc3RhYmxlIHBlcmZvcm1hbmNlLg0KDQpUaGFua3MNCj4gDQo+IFRoYW5rcw0KPiANCj4g
-PiBDdXJyZW50bHksDQo+ID4gSSBkbyBub3QgaGF2ZSBhbiBpZGVhIHRvIHNvbHZlIHRoaXMgY29u
-Y3VycmVuY3kgcHJvYmxlbSBhbmQgYmVsaWV2ZQ0KPiA+IHRoaXMgc2NlbmFyaW8gbWF5IG5vdCBi
-ZSBhcHByb3ByaWF0ZSBmb3IgcmV1c2luZyB0aGUgcHRyX3JpbmcuDQo+ID4NCj4gPiBUaGFua3MN
-Cj4gPg0KPiA+ID4NCj4gPiA+DQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBDaGVlcnMsDQo+ID4gPiA+
-ID4NCj4gPiA+ID4gPiBQYW9sbw0KPiA+ID4gPg0KPiA+DQoNCg==
+On Mon, 2024-03-11 at 21:16 +0800, Edward Adam Davis wrote:
+> Check the first char of the BTF DATASEC names.
+>=20
+> Fixes: bd70a8fb7ca4 ("bpf: Allow all printable characters in BTF DATASEC =
+names")
+> Reported-and-tested-by: syzbot+cc32304f6487ebff9b70@syzkaller.appspotmail=
+.com
+> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+> ---
+>  kernel/bpf/btf.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 170d017e8e4a..dda0aa0d7175 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -816,6 +816,8 @@ static bool btf_name_valid_section(const struct btf *=
+btf, u32 offset)
+>  	const char *src =3D btf_str_by_offset(btf, offset);
+>  	const char *src_limit;
+> =20
+> +	if (!isprint(*src))
+> +		return false;
+>  	/* set a limit on identifier length */
+>  	src_limit =3D src + KSYM_NAME_LEN;
+>  	src++;
+
+Hi Edward,
+
+Thank you for fixing this.
+I wonder, maybe something like below would be simpler?
+
+Thanks,
+Eduard
+
+---
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 170d017e8e4a..3d95d5398c8a 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -818,7 +818,6 @@ static bool btf_name_valid_section(const struct btf *bt=
+f, u32 offset)
+=20
+        /* set a limit on identifier length */
+        src_limit =3D src + KSYM_NAME_LEN;
+-       src++;
+        while (*src && src < src_limit) {
+                if (!isprint(*src))
+                        return false;
+
