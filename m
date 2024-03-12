@@ -1,55 +1,55 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44161B66F
-	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 02:56:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35952883D
+	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 03:14:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710212195; cv=none; b=snkpe7i04HxordQ1Ndfo0dW3asgqNFJscDMOYD0yYTqDMnls+GvU4yACqW2jYXndi6dhWCwD3o9qCHJXZqadr/Y7LwOlcPSebsJfNDCPYTpWyC9TjVOCS9Vprvc15MmpUm23BPG5Qedxgg23VETgABjVvl481UpmDZCcVRM7hQ0=
+	t=1710213244; cv=none; b=mTF8Q2kw0XDQ/3jthDxAmfPIx9v8JgUoYKmvvvys9ydCUzOFE0fzB1Et+IvuLK0jFnAkghPcXIEgxAdmfUubIbO40UnBbt8rRQPA+xWnEeZfTM52aa0JB+9yIkm0c4kuTHo6S/4DBDPvFCkmMandU7kPcjir/DnLnSjldj+1rs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710212195; c=relaxed/simple;
-	bh=8duYlw7yiLaMQiEjvPs64/nXpWh4xT1l7do/uy0Ifvk=;
+	s=arc-20240116; t=1710213244; c=relaxed/simple;
+	bh=rT7M/hhiO9hEYBPUu40z7VC7HSNxO+QXlUEwZKhhsYA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HagPZUrwZOCzDoPRxuK8qtlqBDVdU2yyfqIjL7URJVjz2lHrQ8jP57j+79S6rWJhGo4rfjq1qAf5VUwgSeO61W7pqESy+MT9PGjUbpkKX9hZ4DXQf0NCtk4guahbU8q4KTl9E2/cdnU0c8XEeVFa3sLS33LK+r2UIZLpEEdES94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=d2Ova4t3; arc=none smtp.client-ip=209.85.216.44
+	 To:Cc:Content-Type; b=BkHbD8rbm746duGTQu5Wyl2ZvgEOMuIfgqucfcPDuDtG5N81qQPR6NmSRSVgR92x0fcvncpxswkEA++diEYqiQVqEfqLPlGh2jnnTwqe8mZe9GQTQB1jL8RY4FcF6rUMAcoyI46pjPwXztbhLjEpvwZ4A4H5jwy9k50ArFGITL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=lMRi1qrI; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="d2Ova4t3"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-29bbff1505dso1739059a91.0
-        for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 19:56:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="lMRi1qrI"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-29bf998872fso1088703a91.3
+        for <bpf@vger.kernel.org>; Mon, 11 Mar 2024 20:14:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1710212192; x=1710816992; darn=vger.kernel.org;
+        d=bytedance.com; s=google; t=1710213241; x=1710818041; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8duYlw7yiLaMQiEjvPs64/nXpWh4xT1l7do/uy0Ifvk=;
-        b=d2Ova4t3LH8K/YV1te1DCzhVl3PLbvJaG/iY2pzTDJkcosWx6A/MdUZ/mM4MW9sfUR
-         GQ5sY5+buMi0xl8pZAl6oybDues4UiLqfZLkGdHy7hPxqm0DSdeog5UKj7At1YM1DJbF
-         l6UuGZe+F+ck+GPIQFyxK9ZWsB8KHcJnj8TP5e3nSaFDsrIcxIZjimixhc84Rouc2Ru1
-         jU20/9p6MyfoCzVO+QitGrjhtK31dySWPAfyxG2PMVfo2ka/f/+TxRDVMZ2SEVhhX4tC
-         +C70CU73YnvAnGtEokTXbWYERGIAFzRa+RhVapWsKkGeZhM3DUaa0u5ykhQUncKB7WlF
-         EL8g==
+        bh=OXlf8eE/kb9hUjEHRg6KiaZYrPX7zppIuDOk01qdNjA=;
+        b=lMRi1qrIRCns0bPtlKM0A/k5itTFpHl1DuVkHVNCT46WSmj7nS4EwljQKQXCbnJEFw
+         gTbZxAf6O3KNGvO+R0soX1XV6i71rwXQ2Hvv+yZ9vCbWXfp4voNJjqCUviAF0NW2hjKK
+         V4SjhNPWs58kLY/j7A80yZNSbLEUTDT+ZdG7BvvPa+qk746DYrrtup4eybnQy/RMTfdw
+         3FdGAcMsJRLSAABGojCYnl09fdXYyzVVoatY9TcNgSikiUNd3ivtCs/SmPTmUOZN3QYj
+         OynyxIF+ERdZXYtThelNKm/YnAzPCOFgpVDzcnfZJVAsjRV0rwbDc44PLeGqI0uhQ06e
+         1Iqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710212192; x=1710816992;
+        d=1e100.net; s=20230601; t=1710213241; x=1710818041;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8duYlw7yiLaMQiEjvPs64/nXpWh4xT1l7do/uy0Ifvk=;
-        b=vD7FhFCehNWfXDSwqCd2w4eoFxgy5qC4ZJ4eP996b6nE7VEgN3Dbehkk3b9RDoyi18
-         YTiX8qSVBjJDOIzjzR/HCGEbeshwI3LN3WhAJeOerqBxLD2ANBqOlrI9UUxuyxizvId4
-         g+6yrwaTFNs2XowDizpl0ijgGXVa7VU2T7rKLqkdxAl7mpMhuwu0oIKJPr143ElwXlCl
-         L2aKDGiZzswN/CgrbpEgIxFxSZsBo7pbIFKF5xs1OMayapgnxP5Pyfi20kxm5IybGiH3
-         yFUYs26Pryl+pBlPx/RV7zdCOAiUu3ZoMdza06gmG0khw/6iWY86kVBLy/5HgGc9I9Yy
-         zHMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVmfxG9sDF8Jbqeomip0MVAGARwtOtflBMu9xVx/LPxZatwhdbEu8WvIUtOLi8dAR7LDHgzdPlT/Mx+PabezwcmjB0N
-X-Gm-Message-State: AOJu0Yyt4u+kfZEzx0Ya/FeZV7vkGau2FMSfJNpq+y8r/lOUh83K8nmC
-	9bYUtVscJUsdAyPhh4RCbwR9yev85g9hHWrHz3W8cJNsnDFfRIUSFO7RO7ExIhHHpaqMf0PtYBy
-	Osr/cO1ERClmFvO7f+KSFe7Jy0viJmRysJL+Cdw==
-X-Google-Smtp-Source: AGHT+IEEbNdZpfvWrZfgFQVH2ecv7uQ4oHjBsb6d+e9PBZQkR1FkO3HlcgN1IPWibJVLKEs+f74flvYnRRAAWujNw0M=
-X-Received: by 2002:a17:90a:f305:b0:299:63fe:3a27 with SMTP id
- ca5-20020a17090af30500b0029963fe3a27mr5454778pjb.19.1710212192599; Mon, 11
- Mar 2024 19:56:32 -0700 (PDT)
+        bh=OXlf8eE/kb9hUjEHRg6KiaZYrPX7zppIuDOk01qdNjA=;
+        b=mp8QXJZVot+gDEs2+alTx9oW8TCs+tReIQMUE7Eea35R+AmMB8kmMzsdrtmGlYbyhK
+         Vk+a36mAsv4xCeMrBO7raElG4vnWsBf6RiLwbwX2RToG8OvowyCaub68CFZ2CKdTkEax
+         ewhYr/bnkTzCR8f0vCHvIeu/Vcmf1Ngs235jcyNPNcCu5uMRypCtLsAEWUD7uEnDJ8pp
+         1jk8E9mLw5zIQCpmmtJoUEPjrK5aFN9Cpqf0oxqey5tgNkzI/EE+MTFc+ZaPJRG5tEu2
+         xGHvmnGcLXciQ/try0xpz9XMAwamhwywN8kjlXVY5cvQJHpDqpDi9OD850vY5rUWjtg6
+         XdpA==
+X-Forwarded-Encrypted: i=1; AJvYcCXH/AHONRHyUViqruZ1k/Npo5uvDLwvTfauKvVFgTzppQjgpZr6tfvCav8w/qKUzhZ19uHFklHkC2sTf95ChEehhJpb
+X-Gm-Message-State: AOJu0YzJ2Np/qUMDgLW5IwsEJeEp7bW04nK28f1I0VbN5OjmGPxxtT2b
+	irNQHgGzjxXJk42k1loP1dEjmvhUm6TfuV3EYIjAGjP4iZ0tH7MNtrp399aCP2LVne+kS68UIzT
+	TQ0lYcCdff4idyT1ljDgpK2D9nzGlHfrR/sZkgA==
+X-Google-Smtp-Source: AGHT+IFrJd1b6cRe3N1bdjRPMDm6UQYIWuBJWFP813OtCjwvKtB/NBwZvIOHJ5+UKRNsfrlwra9CEE8kwZK9x+jxh4c=
+X-Received: by 2002:a17:90a:c684:b0:299:5b95:cd7d with SMTP id
+ n4-20020a17090ac68400b002995b95cd7dmr5190887pjt.45.1710213241618; Mon, 11 Mar
+ 2024 20:14:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,14 +57,13 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
- <20240311093526.1010158-8-dongmenglong.8@bytedance.com> <CAADnVQK4tdefa3s=sim69Sc+ztd-hHohPEDXaUNVTU-mLNYUiw@mail.gmail.com>
- <CALz3k9iabeOwHSrPb9mkfCuOebanh3+bAfi7xh3kBBN0DzHC3A@mail.gmail.com> <CAADnVQKsrLB-2bD53R4ZdzUVdx1aqkgom1rzGCGKK0M3Uc+csQ@mail.gmail.com>
-In-Reply-To: <CAADnVQKsrLB-2bD53R4ZdzUVdx1aqkgom1rzGCGKK0M3Uc+csQ@mail.gmail.com>
+ <20240311093526.1010158-6-dongmenglong.8@bytedance.com> <CAADnVQKw4HUbwvivysVBQPpA2MC2e56MwrvJy89qs8rx_ixOnw@mail.gmail.com>
+In-Reply-To: <CAADnVQKw4HUbwvivysVBQPpA2MC2e56MwrvJy89qs8rx_ixOnw@mail.gmail.com>
 From: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>
-Date: Tue, 12 Mar 2024 10:56:21 +0800
-Message-ID: <CALz3k9jJtxVRmgGM4F-33m1wp=aCShnqdaX+7pZ9UmHwntFgXw@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH bpf-next v2 7/9] libbpf: don't free btf if
- program of multi-link tracing existing
+Date: Tue, 12 Mar 2024 11:13:50 +0800
+Message-ID: <CALz3k9iiP5msNtL5c0ZhwRoYyEZtxZoWGbFiPrVcL3To6hj4wQ@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH bpf-next v2 5/9] bpf: verifier: add btf to
+ the function args of bpf_check_attach_target
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
@@ -84,38 +83,78 @@ Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 12, 2024 at 10:13=E2=80=AFAM Alexei Starovoitov
+On Tue, Mar 12, 2024 at 9:51=E2=80=AFAM Alexei Starovoitov
 <alexei.starovoitov@gmail.com> wrote:
 >
-> On Mon, Mar 11, 2024 at 7:05=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3 <dong=
-menglong.8@bytedance.com> wrote:
+> On Mon, Mar 11, 2024 at 2:35=E2=80=AFAM Menglong Dong
+> <dongmenglong.8@bytedance.com> wrote:
 > >
-> > > >
-> > > > +LIBBPF_API void bpf_object__free_btfs(struct bpf_object *obj);
-> > > > +
-> > >
-> > > It shouldn't be exported.
-> > > libbpf should clean it up when bpf_object is freed.
+> > Add target btf to the function args of bpf_check_attach_target(), then
+> > the caller can specify the btf to check.
 > >
-> > Yes, libbpf will clean up the btfs when bpf_object is freed in
-> > this commit. And I'm trying to offer a way to early free the btfs
-> > by the users manual to reduce the memory usage. Or, the
-> > btfs that we opened will keep existing until we close the
-> > bpf_object.
+> > Signed-off-by: Menglong Dong <dongmenglong.8@bytedance.com>
+> > ---
+> >  include/linux/bpf_verifier.h | 1 +
+> >  kernel/bpf/syscall.c         | 6 ++++--
+> >  kernel/bpf/trampoline.c      | 1 +
+> >  kernel/bpf/verifier.c        | 8 +++++---
+> >  4 files changed, 11 insertions(+), 5 deletions(-)
 > >
-> > This is optional, I can remove it if you prefer.
+> > diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.=
+h
+> > index 4b0f6600e499..6cb20efcfac3 100644
+> > --- a/include/linux/bpf_verifier.h
+> > +++ b/include/linux/bpf_verifier.h
+> > @@ -811,6 +811,7 @@ static inline void bpf_trampoline_unpack_key(u64 ke=
+y, u32 *obj_id, u32 *btf_id)
+> >  int bpf_check_attach_target(struct bpf_verifier_log *log,
+> >                             const struct bpf_prog *prog,
+> >                             const struct bpf_prog *tgt_prog,
+> > +                           struct btf *btf,
+> >                             u32 btf_id,
+> >                             struct bpf_attach_target_info *tgt_info);
+> >  void bpf_free_kfunc_btf_tab(struct bpf_kfunc_btf_tab *tab);
+> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > index d1cd645ef9ac..6128c3131141 100644
+> > --- a/kernel/bpf/syscall.c
+> > +++ b/kernel/bpf/syscall.c
+> > @@ -3401,9 +3401,11 @@ static int bpf_tracing_prog_attach(struct bpf_pr=
+og *prog,
+> >                  * need a new trampoline and a check for compatibility
+> >                  */
+> >                 struct bpf_attach_target_info tgt_info =3D {};
+> > +               struct btf *btf;
+> >
+> > -               err =3D bpf_check_attach_target(NULL, prog, tgt_prog, b=
+tf_id,
+> > -                                             &tgt_info);
+> > +               btf =3D tgt_prog ? tgt_prog->aux->btf : prog->aux->atta=
+ch_btf;
 >
-> Let's not extend libbpf api unless we really need to.
-> bpf_program__attach_trace_multi_opts() and
-> *skel*__attach() can probably free them.
+> I think it's better to keep this bit inside bpf_check_attach_target(),
+> since a lot of other code in there is working with if (tgt_prog) ...
+> so if the caller messes up passing tgt_prog->aux->btf with tgt_prog
+> the bug will be difficult to debug.
 
-That's a good idea! Should we add a "bool free_btf" field
-to struct bpf_trace_multi_opts? bpf_program__attach_trace_multi_opts()
-can be called multi times for a bpf_object, which has multi bpf
-program of type tracing multi-link. Or, can we free the btfs
-automatically if we found all tracing multi-link programs are attached?
+In the previous version, I pass the attach_btf with the following
+way:
+
++            origin_btf =3D prog->aux->attach_btf;
++             /* use the new attach_btf to check the target */
++             prog->aux->attach_btf =3D attach_btf;
+              err =3D bpf_check_attach_target(NULL, prog, tgt_prog, btf_id,
+                                            &tgt_info);
++             prog->aux->attach_btf =3D origin_btf;
+
+And Jiri suggested to add the attach_btf to the function args
+of bpf_check_attach_target().
+
+Ennn....Should I convert to the old way?
 
 Thanks!
 Menglong Dong
 
-> I don't see a use case where you'd want to keep them afterwards.
+>
+> > +               err =3D bpf_check_attach_target(NULL, prog, tgt_prog, b=
+tf,
+> > +                                             btf_id, &tgt_info);
