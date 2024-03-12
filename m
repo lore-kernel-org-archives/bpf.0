@@ -1,67 +1,67 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7887514293
-	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 23:01:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9642A14293
+	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 23:10:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710284498; cv=none; b=ZbT92uFHlcFINnK9QSqh9cQ7JZYbOV6UGGI+g5aBQ+MVn57fUyOYvdMbyovP4p4Hm0t9NCJE3cVC4asymqC7DAf1g7D5lXGc562E0Hh2UEyCEaslfvnDlF+VGGdecc92DG3PzrS7xw5TZtHx0abj3x3i3yVVnLQhP/0v586WMsE=
+	t=1710285018; cv=none; b=Mq19OU9ZKFuUIRUmbqkq5oVPaUH3IIWX94vfbqo0R+KXcUmTOXT4KaoHPknSqvfF9/XTzy+bsMA6/6Z04SKG5G2ErCDSaXSA/CkKcYvwxWhJkqs0OOGlGBKT9Yyy+v2dqt5PtCF9PymUXc8nb4Gm/ExmqysxSaygEEMkD1yga9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710284498; c=relaxed/simple;
-	bh=93juWgUBC6a5CiJHDzOXom8ubeU6fMkrKzA5KcnXN9Y=;
+	s=arc-20240116; t=1710285018; c=relaxed/simple;
+	bh=+B1cV+lpbjm6ipjHa7LKHLmqIgHBrI926nYuHapb/DE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NynW9EMNXynf1my5yWg9tPyYiWZiD+fFe4ANoM2liYHYnCNc2rd4iKbj4sadfOZY5P21PgJeTpMJzm8yITdwwo/TJs/49gd15Aa2it/Feh1UU5OARaVxCvQx3Sabgil/Aa018bkwPBVyuotYf+r3SP/wAmwuPCR1VizXUwNNAks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dg+lvlAM; arc=none smtp.client-ip=209.85.215.173
+	 To:Cc:Content-Type; b=Ld+gePZIHj0FByYId70yGNi5ybyezaqFVw6v3w7H+ZbgQftbt5m+tOul4Pb2mhoCje/0YDN9hKmnr58hlYMLuOSJu5iUuH3wXSq6eGeFyLlDECJDlAVQE0udZrJGzrt3gAYXoUPdPOo6DjNlclbn/yn3nNu3BZSHKIBOUH67gME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z6fqRp8w; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dg+lvlAM"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5dbcfa0eb5dso416321a12.3
-        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 16:01:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z6fqRp8w"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-29b7164eef6so3707297a91.2
+        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 16:10:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710284497; x=1710889297; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710285016; x=1710889816; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Besnb0UsOcy1a1WgnUfrHvLMr5+pBKawdLdz3SKU/r8=;
-        b=dg+lvlAMIAxEU0WqkUUb9ccMchP8JQvWJjl/xeI++6Wuz7ID3a4sadzOBYSW2eBfAC
-         5j0yMpsaSWplc94MJyuJ0+MzbJ9yMj1BuI+BqOse5Wd0fITkH50nRlTbmGGD4v5+EZTD
-         /GMlSjQ0mtwrBdFVS36JK8x3zc1EfVkz8/YK5M2cqUFookHzyjovNIyEfs6/6iR/77qu
-         DMt76itYuet224cW/roQ18ZEcYabT19mtBjmQ5Wzhf9Ju8S06wyzV6Wj3MP3JDwR8JZW
-         SnsVI7x/XtWrmjkyKlIL9mrwStRLRt9R0pccOMY8kDF6vCcYfDx4xjQ+mcDB1VFtvYt4
-         DV7g==
+        bh=S72nq305V8xfd8N1TRc42oftYMs4+cS89O23ww5LRYY=;
+        b=Z6fqRp8wZb/o3QU/MocKdN/n45AwHX4cHETjkUAYKS1AaOjmsvNv72mAqcCp4lqCdU
+         pceBIEF0loG0v759NPbFsu7YLtvjbg13nVklgKhgeerVRxJkxfMy8U9/BQn+thROcIH8
+         HTpiaJ3NFdfZ5DZiGRCnXkAXz5RG8cTqU9qjRJgmQ8xwQp+Hp0d7yOhJRdGUf6ARFWFK
+         56g1zkPWKclLyUr9c3hKZ56rckUNLp9WRb36mVTR2QHnfNKVPciNkYqHiLA6M7rI25eG
+         mEDan4MmQpE4KBH5CM5RpcLoE/48n0P43ezVOa5BGHWqTRNnHUrh6yR+wi2KGo5ee6bM
+         J7rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710284497; x=1710889297;
+        d=1e100.net; s=20230601; t=1710285016; x=1710889816;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Besnb0UsOcy1a1WgnUfrHvLMr5+pBKawdLdz3SKU/r8=;
-        b=r+JL47oLNIHTrgTKw9r7bVX9xm3zAAAqKIClXySS/7WwEIkxx78oFKaqHsEOdwF2Fc
-         YCocTWD3MVkhZd/jX/T7yX5Lfr6VwZfvUjnv2m3mBQxaq2byO3tjV7gpY8hdQriQVLGk
-         E3dJNqOr8drmIQZySi6vb5N+lW9BRZhW5h/AxkayWLokgYGEHzXP47PpO62CBME7UoIa
-         Du1gawoimQ28eKIde0iNzPfTyaYsdFnMj+WKnnAeHMsfEz+SWt0t2aXrSxEPAHpIrl29
-         Byqf4cH7ch/5p5AHzG38mwQzVE5oaNa+Ons9/0HduyobmPoFIS3abJBu5V/VY0JgjbOD
-         wSSA==
-X-Gm-Message-State: AOJu0YzqW0rpUnvue+fJ0z2B0bGZlfhdcs1x1Lk6he7SUhZTOZxe3jlQ
-	y+Rx6jIY6W4WLPYBQY4fmtfitankdrOgPeVP9j/Ny22oIAyplN092JfpzCtPhV5ov1TU8zeEKb1
-	an3Z1VNs/0YmzHEtMkE2EYuhYGLo=
-X-Google-Smtp-Source: AGHT+IEbN8eRrcsULl0Ty/oD8+9VL4ip1oVeQunMQDjhx8+LocB1eDfcXjgWvD40PFc5cVDDBy58IDe8+CPfUZ5gmj4=
-X-Received: by 2002:a17:90b:3c0c:b0:29b:b1b5:13f2 with SMTP id
- pb12-20020a17090b3c0c00b0029bb1b513f2mr4473897pjb.4.1710284496632; Tue, 12
- Mar 2024 16:01:36 -0700 (PDT)
+        bh=S72nq305V8xfd8N1TRc42oftYMs4+cS89O23ww5LRYY=;
+        b=iRZVLJHrqtqwjZsa9LXz7lgAxzTkQ7PWoTeFwqGG7aY0zoZY/ZKDm3ZpmmtDbOgrz9
+         YiPY6wroBVWiMJ4z89suu8jA4RgjgqTK1kUsS3GQX5jxhWdoLkVK/mVB5r6LAu0Vbp0P
+         4hWgNAF1gVwwjH2t5OSf9M0Kb+8X79w89v12gSMfeuUdyELBDbauELrJ8XZCRNC//QqE
+         xX4I/qIcXR/t2r43qm1RzJjERI2Y6xWdOebn22uHhvktSV3Ww4jBpAbQ8y5MchIy/Bs6
+         FQBjVHCojYZ3zTqHPEEHyyDtLMRmo2Uefn3Vvk4ByP6NwvPnuqcn23RyNIWhjsGjlwfo
+         aOsg==
+X-Gm-Message-State: AOJu0YzAF3RbidFOHdSr1P2yqV4A1BZCGqYuLYi/8SRvR2cqpMrUVhTi
+	kc1zXME+MPTosAmfYyE99aQIAeggh5qTnLYose2LG0NVpLHfzCI623qDQMXpKjLri5/arDA3z/F
+	Uz+UBxDWVlYpImgmEqxh3UXIDFfypi+dhErA=
+X-Google-Smtp-Source: AGHT+IHlg/l3yku8PGHj1sVn8jY8P/qSNZQWwrL56mZZllA8WifEJEo1Kl7HrnoXvMJU5RbIsx6l7v5eEdKFpwERBEQ=
+X-Received: by 2002:a17:90b:48d2:b0:299:3ebf:d180 with SMTP id
+ li18-20020a17090b48d200b002993ebfd180mr1941730pjb.6.1710285015835; Tue, 12
+ Mar 2024 16:10:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240312183245.341141-1-thinker.li@gmail.com> <20240312183245.341141-2-thinker.li@gmail.com>
-In-Reply-To: <20240312183245.341141-2-thinker.li@gmail.com>
+References: <20240312183245.341141-1-thinker.li@gmail.com> <20240312183245.341141-3-thinker.li@gmail.com>
+In-Reply-To: <20240312183245.341141-3-thinker.li@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 12 Mar 2024 16:01:24 -0700
-Message-ID: <CAEf4BzZMt+7AhY9aC7aTC=Fd_=10kFxNmRXuQMn_Lp2VNFRhBw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] libbpf: Skip zeroed or null fields if not
- found in the kernel type.
+Date: Tue, 12 Mar 2024 16:10:04 -0700
+Message-ID: <CAEf4BzYyDV5MAjB+0Jj64Fr6AqPg+JS_mHc2rGNovFPAHjxM2Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Ensure libbpf skip all-zeros
+ fields of struct_ops maps.
 To: Kui-Feng Lee <thinker.li@gmail.com>
 Cc: bpf@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev, song@kernel.org, 
 	kernel-team@meta.com, andrii@kernel.org, sinquersw@gmail.com, 
@@ -72,122 +72,107 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Mar 12, 2024 at 11:32=E2=80=AFAM Kui-Feng Lee <thinker.li@gmail.com=
 > wrote:
 >
-> Accept additional fields of a struct_ops type with all zero values even i=
-f
-> these fields are not in the corresponding type in the kernel. This provid=
-es
-> a way to be backward compatible. User space programs can use the same map
-> on a machine running an old kernel by clearing fields that do not exist i=
-n
-> the kernel.
+> A new version of a type may have additional fields that do not exist in
+> older versions. Previously, libbpf would reject struct_ops maps with a ne=
+w
+> version containing extra fields when running on a machine with an old
+> kernel. However, we have updated libbpf to ignore these fields if their
+> values are all zeros or null in order to provide backward compatibility.
 >
 > Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
 > ---
->  tools/lib/bpf/libbpf.c | 30 +++++++++++++++++++++++-------
->  1 file changed, 23 insertions(+), 7 deletions(-)
+>  .../bpf/prog_tests/test_struct_ops_module.c   | 35 +++++++++++++++++++
+>  .../selftests/bpf/progs/struct_ops_module.c   | 13 +++++++
+>  2 files changed, 48 insertions(+)
 >
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index efab29b8935b..715879796046 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -1131,11 +1131,33 @@ static int bpf_map__init_kern_struct_ops(struct b=
-pf_map *map)
->                 __u32 kern_member_idx;
->                 const char *mname;
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_modul=
+e.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+> index ee5372c7f2c7..e0d9ff75121b 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+> @@ -93,9 +93,44 @@ static void test_struct_ops_load(void)
+>         struct_ops_module__destroy(skel);
+>  }
 >
-> +               mtype =3D skip_mods_and_typedefs(btf, member->type, &mtyp=
-e_id);
-
-you don't need to move this up here, btf__resolve_size() can skip
-modifiers and typedefs just fine, so let's keep this one below and
-just pass member->type to btf__resolve_size()
-
->                 mname =3D btf__name_by_offset(btf, member->name_off);
-> +               moff =3D member->offset / 8;
-> +               mdata =3D data + moff;
-> +               msize =3D btf__resolve_size(btf, mtype_id);
-> +               if (msize < 0) {
-> +                       pr_warn("struct_ops init_kern %s: fails to resolv=
-e the size of member %s\n",
-
-s/fails/failed/
-
-> +                               map->name, mname);
-> +                       return msize;
-> +               }
+> +static void test_struct_ops_not_zeroed(void)
+> +{
+> +       struct struct_ops_module *skel;
+> +       int err;
 > +
->                 kern_member =3D find_member_by_name(kern_btf, kern_type, =
-mname);
->                 if (!kern_member) {
->                         pr_warn("struct_ops init_kern %s: Cannot find mem=
-ber %s in kernel BTF\n",
->                                 map->name, mname);
+> +       skel =3D struct_ops_module__open();
+> +       if (!ASSERT_OK_PTR(skel, "struct_ops_module_open"))
+> +               return;
 > +
-> +                       /* Skip all zeros or null fields if they are not
-> +                        * presented in the kernel BTF.
-> +                        */
-> +                       if (btf_is_ptr(mtype)) {
-> +                               if (!st_ops->progs[i])
-> +                                       continue;
+> +       bpf_program__set_autoload(skel->progs.test_3, false);
 
-so, this is both unnecessary to check for NULL (libbpf_is_mem_zeroed
-will do it just fine for pointers as well), but it's also wrong
-because user could have set this program pointer through skeleton's
-shadow type, while here you won't yet see. So let's drop this
-btf_is_ptr() special case, and just do generic libbpf_is_mem_zeroed()
-check
+maybe mark test_3 program in progs/struct_ops_module.c as default
+not-autoload (SEC("?struct_ops/test_3")), so you don't have to set
+this to false everywhere?
 
-> +                       } else {
-> +                               if (libbpf_is_mem_zeroed(mdata, msize))
-> +                                       continue;
-
-I think it's worth emitting informational message here, something like
-
-pr_info("struct_ops %s: member %s not found in kernel, skipping it as
-it's set to zero\n", ...")
-
-?
-
-and move that pr_warn("Cannot find member %s in kernel BTF") after
-this check, so we don't have scary-looking error-level message
-
-> +                       }
 > +
->                         return -ENOTSUP;
->                 }
+> +       err =3D struct_ops_module__load(skel);
+> +       struct_ops_module__destroy(skel);
+> +
+> +       if (!ASSERT_OK(err, "struct_ops_module_load"))
+> +               return;
+> +
+> +       skel =3D struct_ops_module__open();
+> +       if (!ASSERT_OK_PTR(skel, "struct_ops_module_open_not_zeroed"))
+> +               return;
+> +
+> +       bpf_program__set_autoload(skel->progs.test_3, false);
+> +
+> +       /* libbpf should reject the testmod_zeroed since the value of its
+> +        * "zeroed" is non-zero.
+> +        */
+> +       skel->struct_ops.testmod_zeroed->zeroed =3D 0xdeadbeef;
+> +       err =3D struct_ops_module__load(skel);
+> +       ASSERT_ERR(err, "struct_ops_module_load_not_zeroed");
+> +
+> +       struct_ops_module__destroy(skel);
+> +}
+> +
+>  void serial_test_struct_ops_module(void)
+>  {
+>         if (test__start_subtest("test_struct_ops_load"))
+>                 test_struct_ops_load();
+> +       if (test__start_subtest("test_struct_ops_not_zeroed"))
+> +               test_struct_ops_not_zeroed();
+>  }
 >
-> @@ -1147,13 +1169,8 @@ static int bpf_map__init_kern_struct_ops(struct bp=
-f_map *map)
->                         return -ENOTSUP;
->                 }
->
-> -               moff =3D member->offset / 8;
->                 kern_moff =3D kern_member->offset / 8;
-> -
-> -               mdata =3D data + moff;
->                 kern_mdata =3D kern_data + kern_moff;
-> -
-> -               mtype =3D skip_mods_and_typedefs(btf, member->type, &mtyp=
-e_id);
->                 kern_mtype =3D skip_mods_and_typedefs(kern_btf, kern_memb=
-er->type,
->                                                     &kern_mtype_id);
->                 if (BTF_INFO_KIND(mtype->info) !=3D
-> @@ -1230,9 +1247,8 @@ static int bpf_map__init_kern_struct_ops(struct bpf=
-_map *map)
->                         continue;
->                 }
->
-> -               msize =3D btf__resolve_size(btf, mtype_id);
->                 kern_msize =3D btf__resolve_size(kern_btf, kern_mtype_id)=
-;
-> -               if (msize < 0 || kern_msize < 0 || msize !=3D kern_msize)=
- {
-> +               if (kern_msize < 0 || msize !=3D kern_msize) {
->                         pr_warn("struct_ops init_kern %s: Error in size o=
-f member %s: %zd !=3D %zd(kernel)\n",
->                                 map->name, mname, (ssize_t)msize,
->                                 (ssize_t)kern_msize);
+> diff --git a/tools/testing/selftests/bpf/progs/struct_ops_module.c b/tool=
+s/testing/selftests/bpf/progs/struct_ops_module.c
+> index 026cabfa7f1f..d7d7606f639c 100644
+> --- a/tools/testing/selftests/bpf/progs/struct_ops_module.c
+> +++ b/tools/testing/selftests/bpf/progs/struct_ops_module.c
+> @@ -54,3 +54,16 @@ struct bpf_testmod_ops___v2 testmod_2 =3D {
+>         .test_1 =3D (void *)test_1,
+>         .test_2 =3D (void *)test_2_v2,
+>  };
+> +
+> +struct bpf_testmod_ops___zeroed {
+> +       int (*test_1)(void);
+> +       void (*test_2)(int a, int b);
+> +       int (*test_maybe_null)(int dummy, struct task_struct *task);
+> +       int zeroed;
+> +};
+> +
+> +SEC(".struct_ops.link")
+> +struct bpf_testmod_ops___zeroed testmod_zeroed =3D {
+> +       .test_1 =3D (void *)test_1,
+> +       .test_2 =3D (void *)test_2_v2,
+> +};
+
+We should also test the case where we have local ops definition with
+incompatible callback function signature (e.g., extra argument or
+something). Test then would update the program pointer (through
+skeleton's shadow type) to a compatible implementation.
+
+Can you please add a test like that? Because the goal is to have a
+single struct_ops definition, if possible, and adjust it at runtime to
+make it compatible with the old kernel, let's have a small demo of
+this working.
+
 > --
 > 2.34.1
 >
