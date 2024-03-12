@@ -1,139 +1,198 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AF637A733;
-	Tue, 12 Mar 2024 16:11:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F9367E117
+	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 16:41:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710259916; cv=none; b=eInpm4tDVgOHP66sP3aTVBJg6RwNiKwwiq73lRLThnUFKZuhw5tAkasGPcLpNYHzyu+8fteOI54uGvtfs7V3Fr6/L18bFXLCOeVqm5ujSdNNML6iqcDA2u/yYgNQwpxXFXhafwAoAlOE2kR0zfB+yFrZW675i9i6UjWwOWtzPNg=
+	t=1710261688; cv=none; b=b/cw/i5Q0TefMsljUA1PRbxPOJyNYHkq7d52Tk/kxfqVhXisXwk/Q/tAUTXe2hX+Ie6qpi/ySeqcI08MMZBiSoaMQjcwh5I9xfPiqIqYFV1MEf5t5LlICvj3B8eVFdgEm2YK2tKGFzPyTmLEpyPMQti2xeUAqgSbo84r58+9OUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710259916; c=relaxed/simple;
-	bh=pK5/KZXV6dGLZcSbEQLvyxdyemAdcpgwpgjSR+FzciQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=T9cJOC/ut3JGPGi0vjF6lJd2GPsmbv9vKQog2VFLsJJDxnjT7lrjkjyADjSGMIpXgwE4QkOecMYrT0h4YuA2YiuUupycb/RSoKvoth3H40wTECYEwxO9jPSPPZRKQ7KL/44EbrJN0JNweqWUnq43kJ3fd3Hyf2mgHw3VdLE3Y5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aQZF+FKV; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aQZF+FKV"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-33e99b639e0so1410165f8f.0;
-        Tue, 12 Mar 2024 09:11:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710259913; x=1710864713; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mlMGohocih4/vv8NN3ExYyD4aDTNUoH7ERTwZOWg+9o=;
-        b=aQZF+FKVulDD0cD6twny7vFQuct4bMGN7AEwkOwIR3HS+hs4inJmjoZg5bzKqLbGHp
-         0kuOsotVuQtutGuq4sR7//h5NP2HJw+Zam6DgZpluUiOH9d+KUgrQImpOMfo9TStuCF9
-         PFUP70DjifLJStO30F0BeNoJxjHfbd4/6Hq32nfz+8RRj5ix1+1zjuFrqio9hh11ApV+
-         tc2iHR2fiicsH8ls8POlBJb9PiVDPiF4lcVtqF/II6kFahdp3Qd8n7K36FZU38lU4LFY
-         4DxapN8kj9fn9Krh8JvFXoaHQak4wVIxd3hf+gaa6cc/zfzHSuXZoGx/EA/dltX0DpK2
-         mLfA==
+	s=arc-20240116; t=1710261688; c=relaxed/simple;
+	bh=Ia/g7gpINNg1xSYQR5fZ/mdVyEIzl5Oml3hHMK0dNQ0=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=NtpvX24HuNow8zsOgx5f5QKsx52SmqzwGTQoHh3PrbJnAuGG9mEBYH+OoruO1Lnlhkh+lbeVFYyUaRSl8Qda30PTlghi3GibwwTwbfuJSJ321wdGrYd2jooJisItqEg1/pp8G7vFN4FJlkec1HI3gVcf1muU8qo+Yw067Agj+Ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7c8af56060aso240911839f.3
+        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 09:41:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710259913; x=1710864713;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mlMGohocih4/vv8NN3ExYyD4aDTNUoH7ERTwZOWg+9o=;
-        b=EJnhgzG+e2kx5raLIy1y7mWK5x855plVwFeTwqE8q/Qj7ueLFHBk5XPQriZSiFbylA
-         jX1sFx0ww94nWrVJj5VLyyWTjNt39sHTNnKRRQ1QYvzacOmAvLoOUniVEUe8U0iXXH38
-         Ol1tnt9XpJSAdeJpfcS3cR3+t163bwJHOV+yDLjcVFdlsxEJ4gw4hgeLYUke5PMEPPXO
-         1TcgZRf3e3tFx+YWodFJsW2oNOR3Ge3m+XzvNZMSgLk6dv7ONiSswWdXWYNS7YZXTPnq
-         ncwW8h1Z+pIQFtouenLiqVh17DLlVnMMErk+QjKzPEQ7dK0nqP7r+ghLbtI+ky9Y+spE
-         M86Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUPKXvDBXb3yAv7Tj4DYSdnjYksswD+BXRS7tNZb198Ky5/cbuSaNSfrS+3BP+YHc8bHzHjQaMRMvKVxCpWYgFVLnUvTyQ9NQbhpvZJla/H1Qo0x0Jy/x8pa1C9izyiTGDJYvcW2FC40puqPPauHlRshTtQsYpqImrEJxXUeA2bgIpoOk1WmfwM501N+oJVReIEuxamNLGy2nrY5aJPKSGLMlu6RK8ziJcay5WX3M29F7spwRiGS4IS6UTr0yqs9qgL17uoOufB6HnZ1bXJf6j5jxWlkRCQKPsE3A==
-X-Gm-Message-State: AOJu0YwR0ICy4wGJrRYu9dNdob3cmLuuh+oIGyQm4I001mDVoINHS45Y
-	54cMSmOfG9eje96VI/1IVz66AmhkCKXOjRATUcXuFh+sxKTeaefaffAE4FvsAn2v7Mh4z+4dnQs
-	7BdIMpK19V4A9MCsYg+DBQ4CHmnM=
-X-Google-Smtp-Source: AGHT+IEluJaPH2ZbEhOuqEk+ZR7WjEJU3XS86GzKec4PZE8B7+fsWbUJbxd+Mrhd/TndoYPK/al8v9EOlZQdZgQXq3Y=
-X-Received: by 2002:adf:f60a:0:b0:33c:e396:b035 with SMTP id
- t10-20020adff60a000000b0033ce396b035mr458814wrp.69.1710259912730; Tue, 12 Mar
- 2024 09:11:52 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710261686; x=1710866486;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BguXlgsVtvypY7Tu4G0mFoycCRJNmFBusc/imnjbyPM=;
+        b=aMICxLutlyNk2NU4OBuuzC76yw3GHqDggYWeBPGY2neazA2AcONPQ5hEC89VvyA81J
+         RJgSaVLlMx8kRWPI3A6CKVsTBPBUD/sY4zSHfUiFyb/+gFCqHQec4F5Vc7JxIrMz1WYW
+         x4yF0cjFUf1VW63F2suJqgnKc+MSiueK0gWZvEzxAuzmha0slZSbjJqd/yGNHStIJNLD
+         1zZL5CEl246+9tixPPv0Ca41ELMvHUOMLKu+g+HwUEJBITd2GKJXTjT/Dc7s60nilu/d
+         7ktEFL0XiHcabHc/qo2he43FTTNu/3fIr9BlXZ60GEAPHYkrIcdttgi7xLi4qLL0IfIf
+         xFEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUq8BU2cEAtT69FwcF9awtQjOWc/SR0ve5C51ES3zUtcKUHTO+Ug3HxZPKLwlEOERyIwxR0Pf5T7D6KQr0Ba5sOHesS
+X-Gm-Message-State: AOJu0YzWG0Q/Wsjnf7yHEpWYuezFBTODNRVwBTJ4gLj2Wg+benfJ161y
+	M3LbwPMgWtQ1rE8jFgVEdy0IFtdqTs/1+fPL+OoVj1Oq0mWor61TwjvpgeyfYD23n+K1SRc+fRH
+	BkvpZ1oZ5g8gGQKPSVoKAgrPOgaH276wB0A144Ug1M9VdL8CQ53ZfHeY=
+X-Google-Smtp-Source: AGHT+IFAYgwq6zkOJm8YlnnDQkKflTW5gxeK0NaExGE0yzvzCuGBdS8akXQB2L3FYqdbNdeQl2/HK8nbPxnZgv7/bD9cQwOlJGsd
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
- <20240311093526.1010158-9-dongmenglong.8@bytedance.com> <CAADnVQK+s3XgSYhpSdh7_9Qhq4DimmSO-D9d5+EsSZQMX4TxxA@mail.gmail.com>
- <CALz3k9hZxsbUGoe5JoWpMEV0URykRwiKWLKZNj4nhvnXg3V=Zg@mail.gmail.com>
-In-Reply-To: <CALz3k9hZxsbUGoe5JoWpMEV0URykRwiKWLKZNj4nhvnXg3V=Zg@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 12 Mar 2024 09:11:41 -0700
-Message-ID: <CAADnVQJ87Ov6ny2hj-0_WymGB3TeuEZu373EmqmRJqZv-8Ze_Q@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH bpf-next v2 8/9] libbpf: add support for
- the multi-link of tracing
-To: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	X86 ML <x86@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Quentin Monnet <quentin@isovalent.com>, 
-	bpf <bpf@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
+X-Received: by 2002:a05:6602:3419:b0:7c8:c7ec:2b71 with SMTP id
+ n25-20020a056602341900b007c8c7ec2b71mr81804ioz.3.1710261686407; Tue, 12 Mar
+ 2024 09:41:26 -0700 (PDT)
+Date: Tue, 12 Mar 2024 09:41:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004aa700061379547e@google.com>
+Subject: [syzbot] [bpf?] possible deadlock in __bpf_ringbuf_reserve
+From: syzbot <syzbot+850aaf14624dc0c6d366@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com, 
+	jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org, 
+	martin.lau@linux.dev, netdev@vger.kernel.org, sdf@google.com, song@kernel.org, 
+	syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 11, 2024 at 7:44=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3 <dongme=
-nglong.8@bytedance.com> wrote:
->
-> On Tue, Mar 12, 2024 at 9:56=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Mon, Mar 11, 2024 at 2:35=E2=80=AFAM Menglong Dong
-> > <dongmenglong.8@bytedance.com> wrote:
-> > >
-> > >
-> > > -               err =3D libbpf_find_attach_btf_id(prog, attach_name, =
-&btf_obj_fd, &btf_type_id);
-> > > +               name_end =3D strchr(attach_name, ',');
-> > > +               /* for multi-link tracing, use the first target symbo=
-l during
-> > > +                * loading.
-> > > +                */
-> > > +               if ((def & SEC_ATTACH_BTF_MULTI) && name_end) {
-> > > +                       int len =3D name_end - attach_name + 1;
-> > > +                       char *first_tgt;
-> > > +
-> > > +                       first_tgt =3D malloc(len);
-> > > +                       if (!first_tgt)
-> > > +                               return -ENOMEM;
-> > > +                       strncpy(first_tgt, attach_name, len);
-> > > +                       first_tgt[len - 1] =3D '\0';
-> > > +                       err =3D libbpf_find_attach_btf_id(prog, first=
-_tgt, &btf_obj_fd,
-> > > +                                                       &btf_type_id)=
-;
-> > > +                       free(first_tgt);
-> > > +               } else {
-> > > +                       err =3D libbpf_find_attach_btf_id(prog, attac=
-h_name, &btf_obj_fd,
-> > > +                                                       &btf_type_id)=
-;
-> > > +               }
-> >
-> > Pls use glob_match the way [ku]probe multi are doing
-> > instead of exact match.
->
-> Hello,
->
-> I'm a little suspecting the effect of glob_match. I seldom found
-> the use case that the kernel functions which we want to trace
-> have the same naming pattern. And the exact match seems more
-> useful.
->
-> Can we use both exact and glob match here?
+Hello,
 
-exact is a subset of glob_match.
-Pls follow the pattern that[ku]probe multi established
-in terms of user interface expectations.
+syzbot found the following issue on:
+
+HEAD commit:    df4793505abd Merge tag 'net-6.8-rc8' of git://git.kernel.o..
+git tree:       bpf
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=11fd0092180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c11c5c676adb61f0
+dashboard link: https://syzkaller.appspot.com/bug?extid=850aaf14624dc0c6d366
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1509c4ae180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10babc01180000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d2e80ee1112b/disk-df479350.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b35ea54cd190/vmlinux-df479350.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/59f69d999ad2/bzImage-df479350.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+850aaf14624dc0c6d366@syzkaller.appspotmail.com
+
+============================================
+WARNING: possible recursive locking detected
+6.8.0-rc7-syzkaller-gdf4793505abd #0 Not tainted
+--------------------------------------------
+strace-static-x/5063 is trying to acquire lock:
+ffffc900096f10d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
+
+but task is already holding lock:
+ffffc900098410d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&rb->spinlock);
+  lock(&rb->spinlock);
+
+ *** DEADLOCK ***
+
+ May be due to missing lock nesting notation
+
+4 locks held by strace-static-x/5063:
+ #0: ffff88807857e068 (&pipe->mutex/1){+.+.}-{3:3}, at: __pipe_lock fs/pipe.c:103 [inline]
+ #0: ffff88807857e068 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_write+0x1cc/0x1a40 fs/pipe.c:465
+ #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:298 [inline]
+ #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:750 [inline]
+ #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: __bpf_trace_run kernel/trace/bpf_trace.c:2380 [inline]
+ #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run2+0x114/0x420 kernel/trace/bpf_trace.c:2420
+ #2: ffffc900098410d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
+ #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:298 [inline]
+ #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:750 [inline]
+ #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: __bpf_trace_run kernel/trace/bpf_trace.c:2380 [inline]
+ #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run2+0x114/0x420 kernel/trace/bpf_trace.c:2420
+
+stack backtrace:
+CPU: 0 PID: 5063 Comm: strace-static-x Not tainted 6.8.0-rc7-syzkaller-gdf4793505abd #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/25/2024
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2e0 lib/dump_stack.c:106
+ check_deadlock kernel/locking/lockdep.c:3062 [inline]
+ validate_chain+0x15c0/0x58e0 kernel/locking/lockdep.c:3856
+ __lock_acquire+0x1345/0x1fd0 kernel/locking/lockdep.c:5137
+ lock_acquire+0x1e3/0x530 kernel/locking/lockdep.c:5754
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
+ __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
+ ____bpf_ringbuf_reserve kernel/bpf/ringbuf.c:459 [inline]
+ bpf_ringbuf_reserve+0x5c/0x70 kernel/bpf/ringbuf.c:451
+ bpf_prog_9efe54833449f08e+0x2d/0x47
+ bpf_dispatcher_nop_func include/linux/bpf.h:1231 [inline]
+ __bpf_prog_run include/linux/filter.h:651 [inline]
+ bpf_prog_run include/linux/filter.h:658 [inline]
+ __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+ bpf_trace_run2+0x204/0x420 kernel/trace/bpf_trace.c:2420
+ __traceiter_contention_end+0x7b/0xb0 include/trace/events/lock.h:122
+ trace_contention_end+0xf6/0x120 include/trace/events/lock.h:122
+ __pv_queued_spin_lock_slowpath+0x939/0xc60 kernel/locking/qspinlock.c:560
+ pv_queued_spin_lock_slowpath arch/x86/include/asm/paravirt.h:584 [inline]
+ queued_spin_lock_slowpath+0x42/0x50 arch/x86/include/asm/qspinlock.h:51
+ queued_spin_lock include/asm-generic/qspinlock.h:114 [inline]
+ do_raw_spin_lock+0x271/0x370 kernel/locking/spinlock_debug.c:116
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:111 [inline]
+ _raw_spin_lock_irqsave+0xe1/0x120 kernel/locking/spinlock.c:162
+ __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
+ ____bpf_ringbuf_reserve kernel/bpf/ringbuf.c:459 [inline]
+ bpf_ringbuf_reserve+0x5c/0x70 kernel/bpf/ringbuf.c:451
+ bpf_prog_9efe54833449f08e+0x2d/0x47
+ bpf_dispatcher_nop_func include/linux/bpf.h:1231 [inline]
+ __bpf_prog_run include/linux/filter.h:651 [inline]
+ bpf_prog_run include/linux/filter.h:658 [inline]
+ __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+ bpf_trace_run2+0x204/0x420 kernel/trace/bpf_trace.c:2420
+ __traceiter_contention_end+0x7b/0xb0 include/trace/events/lock.h:122
+ trace_contention_end+0xd7/0x100 include/trace/events/lock.h:122
+ __mutex_lock_common kernel/locking/mutex.c:617 [inline]
+ __mutex_lock+0x2e4/0xd70 kernel/locking/mutex.c:752
+ __pipe_lock fs/pipe.c:103 [inline]
+ pipe_write+0x1cc/0x1a40 fs/pipe.c:465
+ call_write_iter include/linux/fs.h:2087 [inline]
+ new_sync_write fs/read_write.c:497 [inline]
+ vfs_write+0xa81/0xcb0 fs/read_write.c:590
+ ksys_write+0x1a0/0x2c0 fs/read_write.c:643
+ do_syscall_64+0xf9/0x240
+ entry_SYSCALL_64_after_hwframe+0x6f/0x77
+RIP: 0033:0x4e8593
+Code: c7 c2 a8 ff ff ff f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 55 c3 0f 1f 40 00 48 83 ec 28 48 89 54 24 18
+RSP: 002b:00007ffeda768928 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000012 RCX: 00000000004e8593
+RDX: 0000000000000012 RSI: 0000000000817140 RDI: 0000000000000002
+RBP: 0000000000817140 R08: 0000000000000010 R09: 0000000000000090
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000012
+R13: 000000000063f460 R14: 0000000000000012 R15: 0000000000000001
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
