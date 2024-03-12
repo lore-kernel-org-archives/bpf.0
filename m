@@ -1,59 +1,59 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2777829A
-	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 09:53:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D8B78667
+	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 10:29:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710237234; cv=none; b=sHuz2ei4rOVcdpO8aiJATgcrZawme9q1RIaQP2BSBdduV7pKycvH6N7wCgEs48Nhi/30CA36tiiC5OLZ1H4Gj1rUdQ9phOfGJActuRfVvO8SIIAQYM3NDq+Cd2mKkZJrVw9delDNcqgzw4AhDRmq3xIbIj/RNqtE5vAJC9rkZUM=
+	t=1710239346; cv=none; b=hLGOeqWL8GT+WqYQnGXKhUJWecwbH7kbwHkQW7SXisCPYoIQFyIcA7cEr4r1ugUSqrs37lraOa77ENe6Z/VFFnLtbx2xaKF9IK2NTAZIvOTjKWRKFWNtjLnxk2UXn/natbWuHzwmwD5XKZlSX2duCYMBSuSfTeQ2fV4rCKPFM9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710237234; c=relaxed/simple;
-	bh=3s6A+HRj29Z54PXRwWvf+DZkSagSB5YIezKOb3jp9co=;
+	s=arc-20240116; t=1710239346; c=relaxed/simple;
+	bh=JLDcBgW+3vtGMYoTcRPuT4brcDBaHRWE2L0AAL86eQA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PesUBKpxcweJ/mDBPUtBfZu2y0zJpgX/QFaL0qTuWBgvoqM0Q7yk/i5trFufiuUue8nyfUXgXx2U5SwJYGz2FUHvX/NM2aXwW/OYLq/BXi4YT+ilWIqvPW9ZykmBDEdOl0fQ339+O+kS60oklaGkyI00zK0610rJw0a3wO9ESxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=NA7ZyrSl; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
+	 In-Reply-To:Content-Type; b=SxTOqvBkAhF8fRO76Zol1K7PX7LthB821aWhA+IkCIEii7ng8sTlhj+WlpfBt4QErabgY69HRVi6hRTtDlW6tqEPFpklbpCAUfQ2Eby2T6ONoTR9+6jarbDnvKFbypRlFjk2Vd6bzq/m4qP8O4tA0m85DXjZDqT3x8LErJxsZZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=C8t6XGs3; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="NA7ZyrSl"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4132a4b0971so9947635e9.3
-        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 02:53:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="C8t6XGs3"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4132f37e0acso8093695e9.2
+        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 03:29:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1710237231; x=1710842031; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1710239342; x=1710844142; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=FLz84WFc+uvm0OgDvpP2YimwJ20b1tGE+HgG1/01c6g=;
-        b=NA7ZyrSlWyRFJVDO9//caoszOgMxUTj2dncdqwekyovh2QL4remIiEC8l5Anuw4VkN
-         Xpqo5si7qfM7c9HFBZ694ovABnUDEIeyfWLPXLGlizYpQ5n6golasqZs4zoPSek5pxrB
-         vniGR16OQNXBnFM8RNisQCnWycdRoXD9bZ62b8cKq4uMkj26xNYRzwqcBrpxJvwQW4yR
-         0JJf59tml9tMfzcFVYc1FAy7oD3aLZEu496OW6VL+02mFvlHoiKYLmVmuzIMpTIaKNYy
-         JjfVbgpoR23RuPNdgNUftIP4g9lNFZCf99aqqjTU2L98aMwG+dAUoRwdmRS5t7LHMw+L
-         lLXQ==
+        bh=5d4B/pAoZQB5tS1BWWn28qe/xI29Jo7qr/wZ2JnyTFg=;
+        b=C8t6XGs3CoziosSQAiUwj0PiG6auvS5pl2sHBvguqIx7BvfhSiXEkr5iGwblD1+IHd
+         sueCvPQFHklTGp7t+V6MbMQrv/XMaBhmXa0+lpZrr8Yri/yyrhgWN+B2lIuc5PxYoKnI
+         QktorKAQXEAclLo4ITnG0tIvbwzsQeisSF02kPnKGbLphmWTtbhDQZh/EeWbfRzs7Wlv
+         eJaS3pyXWeOIb++WEp9JS0MECQfIYSQggHZ50kgG9KtA5PTMQ9Xuiybam2jZ6QLyvH4n
+         9us7luNsZ58t0s057CHyIM+dOHbR7kov5mjNT9j7zSasF8SvtUAEsa/FVw0mgOiKezKC
+         Ut8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710237231; x=1710842031;
+        d=1e100.net; s=20230601; t=1710239342; x=1710844142;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FLz84WFc+uvm0OgDvpP2YimwJ20b1tGE+HgG1/01c6g=;
-        b=Syoir1GBbxxTUGmOVQ1jdojz49cslSkPuagRqXk3VuGsgMdF1eE5X6ectjS8spDgGx
-         Erukku5TN57JJj8vIhiSDXvAaZ8PDzyMHaZvVhUSegBloyiFlaDST91/TJNvv5s3h+TP
-         nRnmOI/ArgCNqDYPEifTjaC9fUh+jgHE2MWIhBL9iKn72LWm/SzqQQ547vZM7Q1Z6ZPl
-         OMvbx7Gl+vjPBek8RVabz5IfhLa1k9wPBNG6VPHnyTK5/Unp+fQ/fYg3o0sU7GcIz+PM
-         /RvKWcpAs9d9TGXxqur0G986VIJbzhhLpQwM+j3eo7tkLLX1uWo7OOwkCnRAYc3foxSO
-         1KjA==
-X-Forwarded-Encrypted: i=1; AJvYcCU6U9oG7J/JGciVsHKVzrPCkts5f98qTQnv5gexY1quu8mAXeXlfMcLYV9naQSWtoj5IgRQadcCpLEkyOIT0qyWxIjl
-X-Gm-Message-State: AOJu0YwRD1bAC9le+AJhZNhO2kiP/0gNNCxFStrXwNLUjXRzM5lko+g5
-	Au2kVAw/V++fKSRDjCEi/0lrtnR2wV+xpyoTlrH6La26bqj6N++8jV2olaMh8Aw=
-X-Google-Smtp-Source: AGHT+IGn/957XmhvahBozxGlAJF8nfkrgOWiy9pv/WcdIvERnCw17P14BmfUmykTAkSNuLCJzYJXIA==
-X-Received: by 2002:a05:600c:5101:b0:413:2958:d145 with SMTP id o1-20020a05600c510100b004132958d145mr4157306wms.4.1710237231536;
-        Tue, 12 Mar 2024 02:53:51 -0700 (PDT)
-Received: from ?IPV6:2a02:8011:e80c:0:5231:db44:25b0:339e? ([2a02:8011:e80c:0:5231:db44:25b0:339e])
-        by smtp.gmail.com with ESMTPSA id fc19-20020a05600c525300b0041312855081sm11996411wmb.5.2024.03.12.02.53.50
+        bh=5d4B/pAoZQB5tS1BWWn28qe/xI29Jo7qr/wZ2JnyTFg=;
+        b=IIWVKYfIEid8y10T64TeWSV0B5eRt8t8Sh03Ta0unD3P2QMto32Tc+otIP5XeCzIKA
+         IeQIfyDV8yRAV3CjKaAfyX0iqiZroThtMd3PCmUCaFGlgEfEhRkcjElENa4RaZH4m7Gl
+         zemKA44x5HeDfQdawnU5TQ2q6FKr8S2Y8PuLiiuBjwgGfeqE8lKf+0Oq/2ZhwLR6T/Jv
+         /riwKjQ9Rb1FZPQHsWUoSa36Lsc4RoqP+vCUB+VphcxoQm4MiNRPNbLBKMhkoEBxfZcr
+         lyzqDEPdiKRU+4/5hu4bKua+Z1VH+YGb5PjBrJV9goPRymuGp0xZBV+u5O5xi78CQRJa
+         3m8A==
+X-Forwarded-Encrypted: i=1; AJvYcCWBrr4XrUxUpHeqRxnPoAE8UKdt1VXa1wEV2WyGdwqGktNALkjwHTnocmQ6UnOz3N7yO02lFemfkHfMzwaBYm1Y8spE
+X-Gm-Message-State: AOJu0YwLaPIclkJR1P+GoMykzQoU0rQFDGWdg/t7CkPewt75672eaqfA
+	VyVQRzAOI47ny+UkDCRxxtkI/fLilO1CxksS8BZFv3f5unYLVIZICOt5r8NOcVs=
+X-Google-Smtp-Source: AGHT+IEtUTnilAGbJcn+GRXMX4RNIS078U7C8s6e6rzHKdm5WSpVA53oIuu5hDIUApB8xtk4QdMhSg==
+X-Received: by 2002:a05:600c:5101:b0:413:2966:4bfb with SMTP id o1-20020a05600c510100b0041329664bfbmr4277240wms.1.1710239341697;
+        Tue, 12 Mar 2024 03:29:01 -0700 (PDT)
+Received: from [10.3.5.130] (laubervilliers-657-1-248-155.w90-24.abo.wanadoo.fr. [90.24.137.155])
+        by smtp.gmail.com with ESMTPSA id z11-20020a05600c0a0b00b00412f428aedasm18656971wmp.46.2024.03.12.03.29.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Mar 2024 02:53:51 -0700 (PDT)
-Message-ID: <6e44c9da-ea3b-45bb-a62e-3094889408fe@isovalent.com>
-Date: Tue, 12 Mar 2024 09:53:50 +0000
+        Tue, 12 Mar 2024 03:29:01 -0700 (PDT)
+Message-ID: <88856abb-f5f8-4dbf-9b26-30915bfaee7a@baylibre.com>
+Date: Tue, 12 Mar 2024 11:28:59 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -61,40 +61,64 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] bpftool: cast pointers for shadow types
- explicitly.
-Content-Language: en-GB
-To: Yonghong Song <yonghong.song@linux.dev>,
- Kui-Feng Lee <thinker.li@gmail.com>, bpf@vger.kernel.org, ast@kernel.org,
- martin.lau@linux.dev, song@kernel.org, kernel-team@meta.com,
- andrii@kernel.org
-Cc: sinquersw@gmail.com, kuifeng@meta.com, yhs@meta.com
-References: <20240312013726.1780720-1-thinker.li@gmail.com>
- <2c0512f4-6bbc-459c-b6e6-7319d59595a7@linux.dev>
-From: Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <2c0512f4-6bbc-459c-b6e6-7319d59595a7@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v2 2/2] net: ethernet: ti: am65-cpsw: Add minimal XDP
+ support
+Content-Language: en-US
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Russell King <linux@armlinux.org.uk>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linaro-mm-sig@lists.linaro.org
+References: <20240223-am65-cpsw-xdp-basic-v2-0-01c6caacabb6@baylibre.com>
+ <20240223-am65-cpsw-xdp-basic-v2-2-01c6caacabb6@baylibre.com>
+ <356f4dd4-eb0e-49fa-a9eb-4dffbe5c7e7c@lunn.ch>
+ <3a5f3950-e47f-409a-b881-0c8545778b91@baylibre.com>
+ <be16d069-062e-489d-b8e9-19ef3ef90029@lunn.ch>
+ <f0a9524a-08cd-4ec2-89f8-4dff9dd3e09e@baylibre.com>
+ <ff4ba8c9-8a34-41c3-92ed-910e46e1ca99@lunn.ch>
+From: Julien Panis <jpanis@baylibre.com>
+In-Reply-To: <ff4ba8c9-8a34-41c3-92ed-910e46e1ca99@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-2024-03-12 05:22 UTC+0000 ~ Yonghong Song <yonghong.song@linux.dev>
-> 
-> On 3/11/24 6:37 PM, Kui-Feng Lee wrote:
->> According to a report, skeletons fail to assign shadow pointers when
->> being
->> compiled with C++ programs. Unlike C doing implicit casting for void
->> pointers, C++ requires an explicit casting.
+On 3/5/24 17:43, Andrew Lunn wrote:
+>> 3) From 2), am65_cpsw_alloc_skb() function removed and replaced by
+>> netdev_alloc_skb_ip_align(), as used by the driver before -> res = 506
+>> Conclusion: Here is where the loss comes from.
+>> IOW, My am65_cpsw_alloc_skb() function is not good.
 >>
->> To support C++, we do explicit casting for each shadow pointer.
->>
->> Cc: yhs@meta.com
->> Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
-> 
-> LGTM.
-> 
-> Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> 
+>> Initially, I mainly created this 'custom' am65_cpsw_alloc_skb() function
+>> because I thought that none of XDP memory models could be used along
+>> with netdev_alloc_skb_ip_align() function. Was I wrong ?
+>> By creating this custom am65_cpsw_alloc_skb(), I also wanted to handle
+>> the way headroom is reserved differently.
+> What is special about your device? Why would
+> netdev_alloc_skb_ip_align() not work?
+>
+> 	Andrew
 
-Acked-by: Quentin Monnet <quentin@isovalent.com>
+Nothing special about my device, I just misunderstood.
 
-Thanks!
+Regarding page pool, I now have better performance.
+Two things were missing:
+- I did not call skb_mark_for_recycle(), so pages were freed instead of
+being recycled !
+- In page_pool_params, that's better when I specify the "napi" parameter.
+
+Performance improvement is not that impressive, but it's better:
+505 Mbits/sec (with page pool) instead of 495 Mbits/sec (without).
+There is a ~ 5 Mbits/sec loss due to additional processing in the path, for XDP stuffs.
+So, the difference in favor of page pool using is ~ 15 Mbits/sec.
+
+I'll send a v4 soon.
+
+Julien
 
