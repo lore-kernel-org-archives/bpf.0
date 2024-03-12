@@ -1,313 +1,182 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9DE213B2BD
-	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 17:06:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D67F137C3A
+	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 17:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710263210; cv=none; b=DIDUdvkZvGhwcj7F/k1l8NwiEOjukcaF0B85vs8DqID1rXISyQUOiBoLk5IWi7J32S/AR+diEL4RX2xrkJBHlCyorBIFR8Jfk60czlO24tgDeWLR6EpLtWZOkVQvJ1ayyv6Gv0/goaj4A8DWH9ENfZz2sqA84DCPprTfnW6qui8=
+	t=1710263764; cv=none; b=a3UoqtlVWrKePyVjwtcC5QQQM3+Vvp3IxFWPkJeCQuDtlnr5LWcMgqKWhyOJB9WmJGOj0Mw4Qlx4nZgyakNboZaMDC95BAaAPWZE7w930Yif0ERGfMdnQW1ADLaXRrCYC5xX7tNwz8jB3eLax3UoLpkiVEpFIiBXmGOD/FHSLR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710263210; c=relaxed/simple;
-	bh=tp5GJDJhFlsY2bgmgdHUuBDT+vKAUmP0b5/gPSMSm8M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vEJgljSMXUWMg4slIFGuHd6Mh8jv+6SimSiIbiZVlRSy42ltp1Crf4drQ1imeA9HAlCocUKn339kVDKmCmNbRZBM0xjs3mzuaJC8B5+AFDO3FpjcBXd/7DTuSTqYyaSyZLTFK5RoZFJMrW03xUMjHrx1wuCkjnjq0zV8c6JUYo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eXrvPo4C; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1710263764; c=relaxed/simple;
+	bh=RUe5m4EEhKMkFZ8gaaQP+ne5G+pt7oLAs7FRN/D/DsY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=V7XPeWcPHvaVy9/wjKcxcsoiZpaCQjVxhw9M6Tour0LAMr0zqVvj0lrLuDkqtxcKADOzhfutC5O6hvTp50+lAsirdbhZI4L+2HlYjbn0vzMyzSpNaVpGUYA+YgixV9jgkeRFkQykjDwUjRZ4sbI/LIVlVm0/RX4dGIb25eJcYWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Atzm4z9y; arc=none smtp.client-ip=209.85.161.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eXrvPo4C"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-56840d872aeso4387110a12.0
-        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 10:06:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Atzm4z9y"
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5a1bf69a3a5so1973751eaf.2
+        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 10:16:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710263207; x=1710868007; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zB5OcsqYgooW+2YsYbicutHPTgoP7Ts7AFCJig6ZoKo=;
-        b=eXrvPo4C9sB00275h6/4v4IGJ4TlUUp5o8rlY3gWLjPB1/uG1AZLFA5li7a5cZaGTP
-         dbMKOUWgSAnD39CWIn+9zAKrHjcsbXN7DUSLsc+NDNVj7iBpewn/cQOc43fWLW+JiH1w
-         /5KqKZwF3NyjYirx8TvFsNR4nphHu1cBbMYS/t9fldPzmYnt4nlEgq4xsCRqWp44MWZg
-         1grsME6p56vBhKltx8W7/yjG43tsu61l0ELh6ePL2eBGGVekXqpvSyJZv4HDIkxiHGCr
-         1xKPxH/4AnSDAa42MzNYuPkNpBL3BeRTbU9YuBhe3KsaELWLOl/7jlt8A45Wo2rTjxBg
-         mfNw==
+        d=gmail.com; s=20230601; t=1710263762; x=1710868562; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/gSfhfXmzN7W5ozoJ9i9I4/FllRNGXl+jkzJKizkbu0=;
+        b=Atzm4z9yuK2eM+vz0TFFZIiUq7PZtXF9X3TKIl1YLR4AunJW2aTE1LPLByhxDqRPC9
+         gUpO4fuqm72H986rT9x5I7o69DGyop7VHwa0wJqwKN0aY0m8gHz4PdeBeM/CGTX6kXMO
+         VhPErWbreHG1fWi1PxCvtAiTRIq78elRwCdwtbAiic+piBUt866CSp0MHJ5R9matDaD7
+         ZeB6Rvd7aHoYEfYSuN4tHd7xNeHZPfqgMfPx3kjIY+hrWiV4xcQydED8FdO8qrWXyODm
+         QtXTRl1piBToRwn1PPvoRz1WG8Z+pUGLXrsPbZwLhu5s49jOF37SjtYJO0cCeol8lWjS
+         xdRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710263207; x=1710868007;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1710263762; x=1710868562;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zB5OcsqYgooW+2YsYbicutHPTgoP7Ts7AFCJig6ZoKo=;
-        b=REE8x/0W3mA0/CNnIorl72vovmqDctirvcErJLyrNYKAOLf9KqUgNHkki3C3+MQa4R
-         QWk4VesrcWWSFLrJhk5E8R6R/tP6mMno5CA6LYfUJP7u7H85E5O/mBgPaWTylx+GVYqm
-         tKNp2xSeaWgYjDPgyG4KtpZhyREclfwUhsKgOflPgcjcNXsl5OUhtfKd9peEs8L4Dskg
-         aNmALYOtImx9r2BlIse+bHA4asrqPfz8d1ThvvisWbbhHfEsA2SMtTCIWRupHzYmEvxs
-         FSkd6a0tSNRi89X0RJVih3uMV6rztKRNxN1Dy2SglI2XaKfue+9Hq5ZAoxE3l9RiXrOW
-         cWVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWgD2xgReKxzhb9AUvTiLqZ44D6xZaTQsQLTSOCItkBLMveF1cJS3zXrv7shthpdifJtQNu2YejVHbx9kPLDZ/qPvxq
-X-Gm-Message-State: AOJu0Yx1EdX4EaDpYsRZw7rVkEmrE+qa6g3+ggDgkjhBkGnarc22v5jG
-	teT12+X+Yj4nu9IBV1+6fgAA4tjmsrP6u+daSGGUPkAq0DNP3updt/O799aAAA==
-X-Google-Smtp-Source: AGHT+IEI+5ZeRxyTNwgNp4mYtKX2fYjiH77MdAHaIh6CM5o8Vto9KrIbDxf7Shq7e5wuKr+g45z/+A==
-X-Received: by 2002:a50:c01b:0:b0:566:43ab:8b78 with SMTP id r27-20020a50c01b000000b0056643ab8b78mr6675907edb.30.1710263206888;
-        Tue, 12 Mar 2024 10:06:46 -0700 (PDT)
-Received: from google.com (12.196.204.35.bc.googleusercontent.com. [35.204.196.12])
-        by smtp.gmail.com with ESMTPSA id d23-20020a056402001700b0056857701bf5sm2379670edu.81.2024.03.12.10.06.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Mar 2024 10:06:46 -0700 (PDT)
-Date: Tue, 12 Mar 2024 17:06:36 +0000
-From: Matt Bobrowski <mattbobrowski@google.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@google.com>,
-	Jann Horn <jannh@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-mm <linux-mm@kvack.org>,
-	LSM List <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v2 bpf-next 0/9] add new acquire/release BPF kfuncs
-Message-ID: <ZfCLnOBDnBp2wcJy@google.com>
-References: <cover.1709675979.git.mattbobrowski@google.com>
- <20240306-flach-tragbar-b2b3c531bf0d@brauner>
- <20240306-sandgrube-flora-a61409c2f10c@brauner>
- <CAADnVQ+RBV_rJx5LCtCiW-TWZ5DCOPz1V3ga_fc__RmL_6xgOg@mail.gmail.com>
- <20240307-phosphor-entnahmen-8ef28b782abf@brauner>
- <CAADnVQLMHdL1GfScnG8=0wL6PEC=ACZT3xuuRFrzNJqHKrYvsw@mail.gmail.com>
- <20240308-kleben-eindecken-73c993fb3ebd@brauner>
- <CAADnVQJVNntnH=DLHwUioe9mEw0FzzdUvmtj3yx8SjL38daeXQ@mail.gmail.com>
- <20240311-geglaubt-kursverfall-500a27578cca@brauner>
+        bh=/gSfhfXmzN7W5ozoJ9i9I4/FllRNGXl+jkzJKizkbu0=;
+        b=KWxPmfN97al5zq6mtuIlX331PfF2Jf/3hjIlRA7n0t9wSTYHkZzuiXqmYLGcoH+tdZ
+         1SgDEUWyy9vop4cPQAXvz+vuDm5SNHsDHpo211Gx5bnWLyoqr5t21PnQvV0RgYIv9am5
+         3NwZJtBs3Ip4J5EXCmoUratyAacKPXNLt6MDwa3RxPRmPZZAw4hPUUGiEuMNScrj5pus
+         Pu39ZsNr3HTiirk6gCE7gUgSTzUM29eiC3PkX/8HTWXFAWZNtA+IwQ7zuhJsehvMd2O9
+         jZR17+Y5jb+zqWJ90EJjBxIDrDzmOQta1b8TKSMxZDlHYh9SRKmpXnsJe1A/07SisFOq
+         Ek5w==
+X-Forwarded-Encrypted: i=1; AJvYcCW4ArYS+i/YIDxBB1idYzi+aLFBn8cHa0erRMzRa3CCAdr10uoC/FUefPX71yGoM26N6MYoblSgCF3LFL7YPeq9aMsB
+X-Gm-Message-State: AOJu0YwN0mZo8NCIZz29lDdliQ2Pvb6qjZy6BwF08MXtlMKMbS9XcvXI
+	00WL4aA1/vwsb+syf91WzpY0dLZMOyEZomYj70YhT/iNHez+qEJO
+X-Google-Smtp-Source: AGHT+IEq96bZ2kPTUQ2uP4z/wMCDPG8XLpKm/7E1VAl19HPCQvCYH2rorluEQPqZzzFXQKWiMlmnBg==
+X-Received: by 2002:a05:6358:1209:b0:17b:f464:e14b with SMTP id h9-20020a056358120900b0017bf464e14bmr2707445rwi.13.1710263762321;
+        Tue, 12 Mar 2024 10:16:02 -0700 (PDT)
+Received: from ?IPV6:2600:1700:6cf8:1240:b4ae:c2f4:b38f:1540? ([2600:1700:6cf8:1240:b4ae:c2f4:b38f:1540])
+        by smtp.gmail.com with ESMTPSA id b8-20020a0dd908000000b00608a5d25dc1sm2021881ywe.77.2024.03.12.10.16.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Mar 2024 10:16:01 -0700 (PDT)
+Message-ID: <097cc830-7a73-4fb8-9c97-b3b337a25f99@gmail.com>
+Date: Tue, 12 Mar 2024 10:16:00 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [LSF/MM/BPF TOPIC] faster uprobes
+To: Andrei Matei <andreimatei1@gmail.com>
+Cc: Song Liu <song@kernel.org>, Jiri Olsa <olsajiri@gmail.com>,
+ bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ lsf-pc@lists.linux-foundation.org,
+ Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+ Yonghong Song <yonghong.song@linux.dev>, Oleg Nesterov <oleg@redhat.com>,
+ Daniel Borkmann <daniel@iogearbox.net>
+References: <ZeCXHKJ--iYYbmLj@krava>
+ <23f9790d-4ab1-4edb-9262-6f982413b3e9@gmail.com> <ZedT8S-GjNOry5LZ@krava>
+ <CAPhsuW5_6vkL58Efm3qL9G9W+7i=XVicoLXT6_G+T7TLx=zQJg@mail.gmail.com>
+ <412c987b-b1c4-4761-83e4-d46c78a255be@gmail.com>
+ <CABWLsevYANVb8TmOF69qtXeEjk6=NVQmsObrFG8r+oqSRMBxpw@mail.gmail.com>
+Content-Language: en-US
+From: Kui-Feng Lee <sinquersw@gmail.com>
+In-Reply-To: <CABWLsevYANVb8TmOF69qtXeEjk6=NVQmsObrFG8r+oqSRMBxpw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240311-geglaubt-kursverfall-500a27578cca@brauner>
 
-Hey Christian,
 
-On Mon, Mar 11, 2024 at 01:00:56PM +0100, Christian Brauner wrote:
-> On Fri, Mar 08, 2024 at 05:23:30PM -0800, Alexei Starovoitov wrote:
-> > On Fri, Mar 8, 2024 at 2:36 AM Christian Brauner <brauner@kernel.org> wrote:
-> > >
-> > >
-> > > These exports are specifically for an out-of-tree BPF LSM program that
-> > > is not accessible to the public. The question in the other mail stands.
-> > 
-> > The question was already answered. You just don't like the answer.
-> > bpf progs are not equivalent to kernel modules.
-> > They have completely different safety and visibility properties.
-> > The safety part I already talked about.
-> > Sounds like the visibility has to be explained.
-> > Kernel modules are opaque binary blobs.
-> > bpf programs are fully transparent. The intent is known
-> > to the verifier and to anyone with understanding
-> > of bpf assembly.
-> > Those that cannot read bpf asm can read C source code that is
-> > embedded in the bpf program in kernel memory.
-> > It's not the same as "llvm-dwarfdump module.ko" on disk.
-> > The bpf prog source code is loaded into the kernel
-> > at program verification time for debugging and visibility reasons.
-> > If there is a verifier bug and bpf manages to crash the kernel
-> > vmcore will have relevant lines of program C source code right there.
-> > 
-> > Hence out-of-tree or in-tree bpf makes no practical difference.
-> > The program cannot hide its meaning and doesn't hamper debugging.
-> > 
-> > Hence adding EXPORT_SYMBOL == Brace for impact!
-> > Expect crashes, api misuse and what not.
-> > 
-> > While adding bpf_kfunc is a nop for kernel development.
-> > If kfunc is in the way of code refactoring it can be removed
-> > (as we demonstrated several times).
-> > A kfunc won't cause headaches for the kernel code it is
-> > calling (assuming no verifier bugs).
-> > If there is a bug it's on us to fix it as we demonstrated in the past.
-> > For example: bpf_probe_read_kernel().
-> > It's a wrapper of copy_from_kernel_nofault() and over the years
-> > bpf users hit various bugs in copy_from_kernel_nofault(),
-> > reported them, and _bpf developers_ fixed them.
-> > Though copy_from_kernel_nofault() is as generic as it can get
-> > and the same bugs could have been reproduced without bpf
-> > we took care of fixing these parts of the kernel.
-> > 
-> > Look at path_put().
-> > It's EXPORT_SYMBOL and any kernel module can easily screw up
-> > reference counting, so that sooner or later distro folks
-> > will experience debug pains due to out-of-tree drivers.
-> > 
-> > kfunc that calls path_put() won't have such consequences.
-> > The verifier will prevent path_put() on a pointer that wasn't
-> > acquired by the same bpf program. No support pains.
-> > It's a nop for vfs folks.
-> > 
-> > > > First of all, there is no such thing as get_task_fs_pwd/root
-> > > > in the kernel.
-> > >
-> > > Yeah, we'd need specific helpers for a never seen before out-of-tree BPF
-> > > LSM. I don't see how that's different from an out-of-tree kernel module.
-> > 
-> > Sorry, but you don't seem to understand what bpf can and cannot do,
-> > hence they look similar.
+
+On 3/8/24 07:43, Andrei Matei wrote:
+> On Thu, Mar 7, 2024 at 6:02 PM Kui-Feng Lee <sinquersw@gmail.com> wrote:
+>>
+>>
+>>
+>> On 3/5/24 15:53, Song Liu wrote:
+>>> On Tue, Mar 5, 2024 at 9:18 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+>>>>
+>>>> On Fri, Mar 01, 2024 at 11:39:03AM -0800, Kui-Feng Lee wrote:
+>>>>>
+>>>>>
+>>>>>
+>>>>> On 2/29/24 06:39, Jiri Olsa wrote:
+>>>>>> One of uprobe pain points is having slow execution that involves
+>>>>>> two traps in worst case scenario or single trap if the original
+>>>>>> instruction can be emulated. For return uprobes there's one extra
+>>>>>> trap on top of that.
+>>>>>>
+>>>>>> My current idea on how to make this faster is to follow the optimized
+>>>>>> kprobes and replace the normal uprobe trap instruction with jump to
+>>>>>> user space trampoline that:
+>>>>>>
+>>>>>>      - executes syscall to call uprobe consumers callbacks
+>>>>>>      - executes original instructions
+>>>>>>      - jumps back to continue with the original code
+>>>>>>
+>>>>>> There are of course corner cases where above will have trouble or
+>>>>>> won't work completely, like:
+>>>>>>
+>>>>>>      - executing original instructions in the trampoline is tricky wrt
+>>>>>>        rip relative addressing
+>>>>>>
+>>>>>>      - some instructions we can't move to trampoline at all
+>>>>>>
+>>>>>>      - the uprobe address is on page boundary so the jump instruction to
+>>>>>>        trampoline would span across 2 pages, hence the page replace won't
+>>>>>>        be atomic, which might cause issues
+>>>>>>
+>>>>>>      - ... ? many others I'm sure
+>>>>>>
+>>>>>> Still with all the limitations I think we could be able to speed up
+>>>>>> some amount of the uprobes, which seems worth doing.
+>>>>>
+>>>>> Just a random idea related to this.
+>>>>> Could we also run jit code of bpf programs in the user space to collect
+>>>>> information instead of going back to the kernel every time?
+>>>
+>>> I was thinking about a similar idea. I guess these user space BPF
+>>> programs will have limited features that we can probably use them
+>>> update bpf maps. For this limited scope, we still need bpf_arena.
+>>> Otherwise, the user space bpf program will need to update the bpf
+>>> maps with sys_bpf(), which adds the same overhead as triggering
+>>
+>> That is true. However, even without bpf_arena, it still works with
+>> some workarounds without going through sys_bpf().
 > 
-> Maybe. On the other hand you seem to ignore what I'm saying. You
-> currently don't have a clear set of rules for when it's ok for someone
-> to send patches and request access to bpf kfuncs to implement a new BPF
-> program. This patchset very much illustrates this point. The safety
-> properties of bpf don't matter for this. And again, your safety
-> properties very much didn't protect you from your bpf_d_path() mess.
+> Anything making uprobes faster would be very welcomed for my project.  The
+> biggest performance problem for us is the cost of bpf_probe_read_user()
+> relative to raw memory access. Every call to this helper walks the process'
+
+"raw memory access"? Do you mean not going through any helper function,
+reading from a pointer directly?
+
+> page table to check that the access would not cause a fault (I think); this is
+> very slow. I wonder if there's some other option that would keep the safety
+> requirement for the memory access -- I'm imagining an optimistic mode where the
+> raw access is performed (in the target process' memory space) and, in the rare
+> case when a fault happens, the kernel would somehow recover from the fault and
+
+I am not very familiar with this part. I read the implementation of
+bpf_probe_read_user() a little bit. It does what you mentioned here. It
+would cause page faults, however, the handler will skip the instruction
+leaving the counter non-zero. By checking the counter, it knows the
+instruction is not completed, and returns an error.
+
+I am curious about what your access pattern looks like. Does it access a
+large number of small chunks of data? Or, does it access a small number
+of big chunks of data?
+
+> fail the bpf_probe_read_user() helper. Would something like that be technically
+> feasible / has there been any prior interest in faster access to user memory
 > 
-> We're not even clearly told where and how these helper are supposed to be
-> used. That's not ok and will never be ok. As long as there are no clear
-> criteria to operate under this is highly problematic. This may be fine
-> from a bpf perspective and one can even understand why because that's
-> apparently your model or promise to your users. But there's no reason to
-> expect the same level of laxness from any of the subsystems you're
-> requesting kfuncs from.
-
-You raise a completely fair point, and I truly do apologies for the
-lack of context and in depth explanations around the specific
-situations that the proposed BPF kfuncs are intended to be used
-from. Admittedly, that's a failure on my part, and I can completely
-understand why from a maintainers point of view there would be
-reservations around acknowledging requests for adding such invisible
-dependencies.
-
-Now, I'm in a little bit of a tough situation as I'm unable to point
-you to an open-source BPF LSM implementation that intends to make use
-of such newly proposed BPF kfuncs. That's just an unfortunate
-constraint and circumstance that I'm having to deal with, so I'm just
-going to have to provide heavily redacted and incomplete example to
-illustrate how these BPF kfuncs intend to be used from BPF LSM
-programs that I personally work on here at Google. Notably though, the
-contexts that I do share here may obviously be a nonholistic view on
-how these newly introduced BPF kfuncs end up getting used in practice
-by some other completely arbitrary open-source BPF LSM programs.
-
-Anyway, as Alexei had pointed out in one of the prior responses, the
-core motivating factor behind introducing these newly proposed BPF
-kfuncs purely stems from the requirement of needing to call
-bpf_d_path() safely on a struct path from the context of a BPF LSM
-program, specifically within the security_file_open() and
-security_mmap_file() LSM hooks. Now, as noted within the original bug
-report [0], it's currently not considered safe to pluck a struct path
-out from an arbitrary in-kernel data structure, which in our case was
-current->mm->exe_file->f_path, and have it passed to bpf_d_path() from
-the aforementioned LSM hook points, or any other LSM hook point for
-that matter.
-
-So, without using these newly introduced BPF kfuncs, our BPF LSM
-program hanging off security_file_open() looks as follows:
-
-```
-int BPF_PROG(file_open, struct file *file)
-{
-  // Perform a whole bunch of operations on the supplied file argument. This
-  // includes some form of policy evaluation, and if there's a violation against
-  // policy and auditing is enabled, then we eventually call bpf_d_path() on
-  // file->f_path. Calling bpf_d_path() on the file argument isn't problematic
-  // as we have a stable path here as the file argument is reference counted.
-  struct path *target = &file->f_path;
-
-  // ...
-
-  struct task_struct *current = bpf_get_current_task_btf();
-
-  // ...
-  
-  bpf_rcu_read_lock();
-  // Reserve a slot on the BPF ring buffer such that the actor's path can be
-  // passed back to userspace.
-  void *buf = bpf_ringbuf_reserve(&ringbuf, PATH_MAX, 0);
-  if (!buf) {
-    goto unlock;
-  }
-
-  // For contextual purposes when performing an audit we also call bpf_d_path()
-  // on the actor, being current->mm->exe_file->f_path.
-  struct path *actor = &current->mm->exe_file->f_path;
-
-  // Now perform the path resolution on the actor via bpf_d_path().
-  u64 ret = bpf_d_path(actor, buf, PATH_MAX);
-  if (ret > 0) {
-    bpf_ringbuf_submit(buf, BPF_RB_NO_WAKEUP);
-  } else {
-    bpf_ringbuf_discard(buf, 0);
-  }
-
-unlock:
-  bpf_rcu_read_unlock();
-  return 0;
-}
-```
-
-Post landing these BPF kfuncs, the BPF LSM program hanging off
-security_file_open() would be updated to make use of the
-acquire/release BPF kfuncs as below. Here I'm only making use of
-bpf_get_task_exe_file(), but similar usage also extends to
-bpf_get_task_fs_root() and bpf_get_task_fs_pwd().
-
-```
-int BPF_PROG(file_open, struct file *file)
-{
-  // Perform a whole bunch of operations on the supplied file argument. This
-  // includes some form of policy evaluation, and if there's a violation against
-  // policy and auditing is enabled, then we eventually call bpf_path_d_path()
-  // on file->f_path. Calling bpf_path_d_path() on the file argument isn't
-  // problematic as we have a stable path here as the file argument is trusted
-  // and reference counted.
-  struct path *target = &file->f_path;
-
-  // ...
-
-  struct task_struct *current = bpf_get_current_task_btf();
-
-  // ...
-  
-  // Reserve a slot on the BPF ring buffer such that the actor's path can be
-  // passed back to userspace.
-  void *buf = bpf_ringbuf_reserve(&ringbuf, PATH_MAX, 0);
-  if (!buf) {
-    return 0;
-  }
-
-  // For contextual purposes when performing an audit we also call
-  // bpf_path_d_path() on the actor, being current->mm->exe_file->f_path.
-  // Here we're operating on a stable trused and reference counted file,
-  // thanks to bpf_get_task_exe_file().
-  struct file *exe_file = bpf_get_task_exe_file(current);
-  if (!exe_file) {
-    bpf_ringbuf_discard(buf, 0);
-    return 0;
-  }
-
-  // Now perform the path resolution on the actor via bpf_path_d_path(), which
-  // only accepts a trusted struct path.
-  u64 ret = bpf_path_d_path(&exe_file->f_path, buf, PATH_MAX);
-  if (ret > 0) {
-    bpf_ringbuf_submit(buf, BPF_RB_NO_WAKEUP);
-  } else {
-    bpf_ringbuf_discard(buf, 0);
-  }
-
-  // Drop the reference on exe_file.
-  bpf_put_file(exe_file);
-  return 0;
-}
-```
-
-This is rather incredibly straightforward, but the fundamental
-difference between the two implementations is that one allows us to
-work on stable file, whereas the other does not. That's really
-it. Similarly, we do more or less the same for our BPF LSM program
-that hangs off security_mmap_file().
-
-Do you need anything else which illustrates the proposed BPF kfunc
-usage?
-
-[0] https://lore.kernel.org/bpf/CAG48ez0ppjcT=QxU-jtCUfb5xQb3mLr=5FcwddF_VKfEBPs_Dg@mail.gmail.com/
-
-/M
+> A more limited option that might be helpful would be a vectorized version of
+> bpf_probe_read_user() that verifies many pointers at once.
+> 
+> 
+>>
+>>> the program with a syscall.
+>>>
+>>>>
+>>>> sorry for late reply, do you mean like ubpf? the scope of this change
+>>>> is to speed up the generic uprobe, ebpf is just one of the consumers
+>>>
+>>> I guess this means we need a new syscall?
+>>>
+>>> Thanks,
+>>> Song
+>>
