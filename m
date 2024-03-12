@@ -1,162 +1,113 @@
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D27113C9DD
-	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 18:32:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D1C139572
+	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 19:13:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710268374; cv=none; b=WufuHQ+DfvdXFNq/Z8J2q9RihOS/tINh2nWIaaZCXWGdMafyMUfeKSoepKyeQN33fjK92w6tcXqLhRYMuJ//UIJlMhgl1O+gbhmvn7obtl9z3sv/QBXrzYbWP9a1E1O7fEYEDjzkopI1PGG9PtLhXGJgbKKkLWeW4JUbXjXIvUI=
+	t=1710270786; cv=none; b=EQN0Rh2qQOosWiKDZHqh6Ro+lRW38iSe/3lvRZ/Ycle3cZtekSEYjXoJGc8aJrdDzpznXS/rxF2t8UWqr5bZ70XwVJYMCrfLhdJjPj5Osq292VKAMzEMdYU6NzAJJ5oPrIu4PRkLzqvByDJRx4aeZ7OdbBC6Xc3zHVdSboYa06M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710268374; c=relaxed/simple;
-	bh=cBcNAwMtfRE0MWEVLd0YFM6VqthOJ1zv+n0nTlfSrO8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Sd1qsphRgnHtINzJAxSCOy9Po/MF+2oHl6wiFNl77buSy7jc5mDFDojegr+wmgFc/fzJuzbEFyoTkfPv57P8BZbJUVUbZciN1h8M6jjqVu5YPM66hPYOT6Pex2fhY9PU5LWpj2JlB/vGz4/6gRILvMZDSmZa2wWy+cs6gyFejOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JcBx95wj; arc=none smtp.client-ip=209.85.219.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710270786; c=relaxed/simple;
+	bh=Amfo1zyY/XMgZfkM64p7BMIVhxMGSBZtC+3yuV7dH0w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WWNQaNa8ws/fQAc/OHjxwvJG4ZvpNqR2pG/Ao8Ig75P62I2WDmtLzmhVKvTAVVDjUQdw95ZHZbP9z7OWDL/AvIJWR61hxDayJXwC56n5I9V7ZKuQa8BtKK2jUyb8Xdc9DX23ObR1tMrTnenBi4A0j2fCgsATHtr1StmXcOg65pM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atishpatra.org; spf=pass smtp.mailfrom=atishpatra.org; dkim=pass (1024-bit key) header.d=atishpatra.org header.i=@atishpatra.org header.b=FKnLkNPQ; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atishpatra.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atishpatra.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JcBx95wj"
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-dc74e33fe1bso5384523276.0
-        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 11:32:52 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=atishpatra.org header.i=@atishpatra.org header.b="FKnLkNPQ"
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5131316693cso306394e87.0
+        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 12:13:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710268371; x=1710873171; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=atishpatra.org; s=google; t=1710270782; x=1710875582; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=85hgbrddKGD0xyBfuycyl0J/43uufOK34r5gdSmrGzE=;
-        b=JcBx95wjYfatZoV7caKzbw8gOSMAt4c3Z6D+iO0e+f/q+2AfYAiyWpi6G3pVhUSbxl
-         bwuc0IwVbEYG6WLJnRDn+wUvOf7S1L2c6KvbRjhGTaZNWZzFxwf9LA6tOJykqlq2r3kr
-         638Ojz/vFAfWnhWwAp03pBbIurMCXpLW/VbesvZ6qFJHOPVPFtkz+pmI4Wy285YTorfJ
-         TXV2Fw+oBndIbckk62KBgGcEikYr2mothUM1r7xg0ap8dYGdShajIO4rHhuFwuGcgOGD
-         RxBGsnks8gEMm0KaOTOoVDQFbnbGdIAyxPRM7BNfV20fZOn+QzzXEiBrnvWUqJMT3HlH
-         JL9A==
+        bh=6jG8wbZD5AfK31iZyN31p0fO15RUS8zjleaircOhECw=;
+        b=FKnLkNPQGPH0aBpXuknz9S5g/N4I6NCuu3xogMutRMb08FhHuHHuFFPr8UssL+VWU9
+         /2MLGlwe0CKvdQPMe9QGsh3xe6GVRV0q5aV9TNmrEUkQOkUpkuXV+2Ss1FGy3e0/DoKe
+         MZgynV0Xx7i3oW5QNYsJLkONFqKWnpwHqUU3o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710268371; x=1710873171;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1710270782; x=1710875582;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=85hgbrddKGD0xyBfuycyl0J/43uufOK34r5gdSmrGzE=;
-        b=JUE4liWgay01EA+zLyJxiCSJ7YZXvyKlfewaSlZbj4JpaEiDAuIMqs/CHox75YlYvS
-         c8xUq9tDKpdFPGjXpE3xGEqYGcWQDYkSaiitYnvRoSCpCoJNbmRGlIi8jrGup/33yOYL
-         ljON2BIVM9W6uBB2GqYuIJQIiZZ/iUBRyKsLv//kHeu0QV3MlCmX9zxJ7Jj5Q4qzvXCX
-         eYeWkyKZ+ZPjPJHhH9GzWPbLjadau2Q5//cQpkarjKq6CoT3Pg4pRY9DXMA2NaJUaKVP
-         1B9H2ffV7s0KGHK8KhvaGqUwQLOsa3haWc94kNclRwEIzfaRjsESpjHTAjNkFqJZ6jFl
-         AxRA==
-X-Gm-Message-State: AOJu0Yz9p0qi77nS3tfApXGBV1WepIBLckEMYLEzsRHdU/QEYuSRxj9C
-	Z3VIKC9hnHdUUu+B4mvnvyZ/3ZrVfW/4Dk44VTQl7Cn7q4dJqxky5ZmLPceP
-X-Google-Smtp-Source: AGHT+IE+k5tyx/1Y1CAcxs7XbMdOyz/DoN+Hzw9EVRhBsGcqKwFgtfkYsqQkT5J1iT8d7x24VUz5lA==
-X-Received: by 2002:a25:9390:0:b0:dcd:97ad:74b3 with SMTP id a16-20020a259390000000b00dcd97ad74b3mr255163ybm.63.1710268370857;
-        Tue, 12 Mar 2024 11:32:50 -0700 (PDT)
-Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:b4ae:c2f4:b38f:1540])
-        by smtp.gmail.com with ESMTPSA id v185-20020a252fc2000000b00dc9c5991ecdsm1868444ybv.50.2024.03.12.11.32.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Mar 2024 11:32:50 -0700 (PDT)
-From: Kui-Feng Lee <thinker.li@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	kernel-team@meta.com,
-	andrii@kernel.org
-Cc: sinquersw@gmail.com,
-	kuifeng@meta.com,
-	Kui-Feng Lee <thinker.li@gmail.com>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Ensure libbpf skip all-zeros fields of struct_ops maps.
-Date: Tue, 12 Mar 2024 11:32:45 -0700
-Message-Id: <20240312183245.341141-3-thinker.li@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240312183245.341141-1-thinker.li@gmail.com>
-References: <20240312183245.341141-1-thinker.li@gmail.com>
+        bh=6jG8wbZD5AfK31iZyN31p0fO15RUS8zjleaircOhECw=;
+        b=UmbExSof4E1qdobG2DaJFtzZThXkqIe5wYIoNZKc4+rWY2kV08ZCCalTA+vB5575WD
+         4CsF3fjecFlkTZpq0eIEldMwqTmqtAIddkyMMq/UfTk5eafOjz+9IyUv1nqyTNXh2VNR
+         pkKqsAD0+ZA2jgfu5d1Xw5DUAgOBbROlcS2bqFshsbkXI0BmP3lzIfb+xn5mEgFHNFH+
+         QwyO1cO65OJAka2DE6/7MidrQ0DjoKJjJQLSRjjx0uklLm2QEiTN6Cjjld8lWFRH1W21
+         SPO6QTQpJYhjgUxfFMMXCAfZd+Fad1WWzlmeCRbAHFHiyCkSTKpIbCpII1IZn8//iXgc
+         ZwGw==
+X-Forwarded-Encrypted: i=1; AJvYcCVdcCj8uP4iFLXxFeZeyIFSeavmB72mogFTJu4qL9QVoQ5BbQmtYj8l5hQ9xCRC1puyzkZaHzeh1K7GAyVrMEmKGzHm
+X-Gm-Message-State: AOJu0YwOimcpIVQPnFRkuC/WD8UgGBu0NtutP6JJwJzpExlEuzNyAA/Z
+	CT4UpGrYutbkv2aXXQPc8uk8PgRDm1UqQZ6GwYKLN9ilHK1E8sItnGyK+Oho5FeZr/xn8MvARbP
+	22/azScSgkQEqLV04l9NIK4l9fahe5xJqgsFi
+X-Google-Smtp-Source: AGHT+IGPN7MP8pGrBw+bqrQS1y4hzsPicRpPqb0kh9lC4781+mVZ8XqAvBGV25wdDyJyi7TeYTLFfsuHZmR1lT5iWJ8=
+X-Received: by 2002:a05:6512:5c8:b0:513:c7eb:edf1 with SMTP id
+ o8-20020a05651205c800b00513c7ebedf1mr32508lfo.59.1710270782277; Tue, 12 Mar
+ 2024 12:13:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240312012053.1178140-1-pulehui@huaweicloud.com>
+In-Reply-To: <20240312012053.1178140-1-pulehui@huaweicloud.com>
+From: Atish Patra <atishp@atishpatra.org>
+Date: Tue, 12 Mar 2024 12:12:50 -0700
+Message-ID: <CAOnJCUKF4BWfX+Z6cQLjfFKc5+REsSXWiVvcHadrs-=z1b6+5g@mail.gmail.com>
+Subject: Re: [PATCH v2] drivers/perf: riscv: Disable PERF_SAMPLE_BRANCH_*
+ while not supported
+To: Pu Lehui <pulehui@huaweicloud.com>
+Cc: linux-riscv@lists.infradead.org, bpf@vger.kernel.org, 
+	Conor Dooley <conor@kernel.org>, Anup Patel <anup@brainfault.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	Pu Lehui <pulehui@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-A new version of a type may have additional fields that do not exist in
-older versions. Previously, libbpf would reject struct_ops maps with a new
-version containing extra fields when running on a machine with an old
-kernel. However, we have updated libbpf to ignore these fields if their
-values are all zeros or null in order to provide backward compatibility.
+On Mon, Mar 11, 2024 at 6:19=E2=80=AFPM Pu Lehui <pulehui@huaweicloud.com> =
+wrote:
+>
+> From: Pu Lehui <pulehui@huawei.com>
+>
+> RISC-V perf driver does not yet support branch sampling. Although the
+> specification is in the works [0], it is best to disable such events
+> until support is available, otherwise we will get unexpected results.
+> Due to this reason, two riscv bpf testcases get_branch_snapshot and
+> perf_branches/perf_branches_hw fail.
+>
+> Link: https://github.com/riscv/riscv-control-transfer-records [0]
+> Fixes: f5bfa23f576f ("RISC-V: Add a perf core library for pmu drivers")
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> ---
+>  drivers/perf/riscv_pmu.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/drivers/perf/riscv_pmu.c b/drivers/perf/riscv_pmu.c
+> index c78a6fd6c57f..b4efdddb2ad9 100644
+> --- a/drivers/perf/riscv_pmu.c
+> +++ b/drivers/perf/riscv_pmu.c
+> @@ -313,6 +313,10 @@ static int riscv_pmu_event_init(struct perf_event *e=
+vent)
+>         u64 event_config =3D 0;
+>         uint64_t cmask;
+>
+> +       /* driver does not support branch stack sampling */
+> +       if (has_branch_stack(event))
+> +               return -EOPNOTSUPP;
+> +
+>         hwc->flags =3D 0;
+>         mapped_event =3D rvpmu->event_map(event, &event_config);
+>         if (mapped_event < 0) {
+> --
+> 2.34.1
+>
 
-Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
----
- .../bpf/prog_tests/test_struct_ops_module.c   | 35 +++++++++++++++++++
- .../selftests/bpf/progs/struct_ops_module.c   | 13 +++++++
- 2 files changed, 48 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-index ee5372c7f2c7..e0d9ff75121b 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-@@ -93,9 +93,44 @@ static void test_struct_ops_load(void)
- 	struct_ops_module__destroy(skel);
- }
- 
-+static void test_struct_ops_not_zeroed(void)
-+{
-+	struct struct_ops_module *skel;
-+	int err;
-+
-+	skel = struct_ops_module__open();
-+	if (!ASSERT_OK_PTR(skel, "struct_ops_module_open"))
-+		return;
-+
-+	bpf_program__set_autoload(skel->progs.test_3, false);
-+
-+	err = struct_ops_module__load(skel);
-+	struct_ops_module__destroy(skel);
-+
-+	if (!ASSERT_OK(err, "struct_ops_module_load"))
-+		return;
-+
-+	skel = struct_ops_module__open();
-+	if (!ASSERT_OK_PTR(skel, "struct_ops_module_open_not_zeroed"))
-+		return;
-+
-+	bpf_program__set_autoload(skel->progs.test_3, false);
-+
-+	/* libbpf should reject the testmod_zeroed since the value of its
-+	 * "zeroed" is non-zero.
-+	 */
-+	skel->struct_ops.testmod_zeroed->zeroed = 0xdeadbeef;
-+	err = struct_ops_module__load(skel);
-+	ASSERT_ERR(err, "struct_ops_module_load_not_zeroed");
-+
-+	struct_ops_module__destroy(skel);
-+}
-+
- void serial_test_struct_ops_module(void)
- {
- 	if (test__start_subtest("test_struct_ops_load"))
- 		test_struct_ops_load();
-+	if (test__start_subtest("test_struct_ops_not_zeroed"))
-+		test_struct_ops_not_zeroed();
- }
- 
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_module.c b/tools/testing/selftests/bpf/progs/struct_ops_module.c
-index 026cabfa7f1f..d7d7606f639c 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_module.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_module.c
-@@ -54,3 +54,16 @@ struct bpf_testmod_ops___v2 testmod_2 = {
- 	.test_1 = (void *)test_1,
- 	.test_2 = (void *)test_2_v2,
- };
-+
-+struct bpf_testmod_ops___zeroed {
-+	int (*test_1)(void);
-+	void (*test_2)(int a, int b);
-+	int (*test_maybe_null)(int dummy, struct task_struct *task);
-+	int zeroed;
-+};
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops___zeroed testmod_zeroed = {
-+	.test_1 = (void *)test_1,
-+	.test_2 = (void *)test_2_v2,
-+};
--- 
-2.34.1
-
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
+--=20
+Regards,
+Atish
