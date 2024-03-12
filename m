@@ -1,180 +1,248 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61558467
-	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 23:11:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB66E47A52;
+	Tue, 12 Mar 2024 23:51:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710285116; cv=none; b=OFw640CQDI/5CxWB3NT2HvNg/QW8HY78qog/V1jiT2nteDpXBU0j4lKJOT9STpeQ9eU673aAFCVg2X/6w2usiclG4sxIhyVXvQDGV9atqu1kx4dPpMm96S68S4GAnLXEPFZM9sMiR6Pmo1tAjNLsNohEjLwi/xxzJKeBnsyRocw=
+	t=1710287483; cv=none; b=s8/BqeLUKrLdPugBBX9urQ+wChjV7gMNJujsEPUFO5LcNoX0nQdNX/zNEQChM5dXhbr5bBPhZDR3z5oI6uetGkZm7aCakX/aT25anCPxLdtOuLmCNQIYsE4B2xdX8NpcEAH+8PdlB3YAhHEszvzs2CHu1ec7qt9PB4EcIpQ5eiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710285116; c=relaxed/simple;
-	bh=YSzkwGOtnro7HXMJEZtJcPqoH8oZs2Qkypoqg63lRU8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LRZlVvKNol0Ot6VXy6D8OaNugz2SzDQu6ydu7d41O9qpXKDABMm7d4TWL306z6GV0jBtylmFKvx4Zpi2dzRD5sbLNQ8iVr2J6KuM6K8PMCZzZd1EVS6NTY7zbao5LxeVXtemGGrLX6Mshtol8UUsfZLkkgAfv3/hCL894AqQc+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q23qwikD; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710287483; c=relaxed/simple;
+	bh=X7Pm5RoAdj55evPiJMvqxK1W5YPJTErKGzSKaroow58=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pF+QJyyU9/DSCgfXZNOCnVNh1vZz7GJGtihZfEA4mrPM1FYY6j0P93xD7iU8h32Vo6Q0oTzk0w6y+HBDkBs3jZ15h5v74eiPEqgSnfxiywYZSLguFlJs07bcbf/jHHiR2Mbq6VYZ4pYYZd64lAMOR9Vwq1O83A33Nuv6/eYdP1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=bYEbldRC; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q23qwikD"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6da202aa138so3986962b3a.2
-        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 16:11:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710285114; x=1710889914; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2qLzbSj6iXlswglqhRIGQvEz8KlxmflH62tsbcMWx+0=;
-        b=Q23qwikDPXFNzMu9eyNLTn9k0jRleWgrEqDqQn25bY556rOs1jAlnWfhw5zD59OX40
-         pIrIGbqmPvR43HADAeoDL7WxhGkvTQ1h57BUXlH/rTlFvama+KOA6lEMoDrefqdqV+kr
-         x168Ew+jCzqZwCZV2rLMo/rSsWqJgr7YJiNB7Fotr8YhCyqs90jdVrCyYMRIeG2D+7Cm
-         n99v+b03h180kMiMyYNGo1mdp1GlpInAlsDR/ANkHMnESgoiLEKq7vUbxE7m/4MB/W+F
-         tyM/vLRmPgXjr0wQGneayapsYhb/XCb2mp+ym2CjZ8SPYmp5eToskvvrUj0oJvWiuJUV
-         TF3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710285114; x=1710889914;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2qLzbSj6iXlswglqhRIGQvEz8KlxmflH62tsbcMWx+0=;
-        b=lD7DQ6iDpAqVqjkynwqCMvww0lX3gHo0+9mpwj+ovOPXnIS7ziogDTyWBrfscrbP8s
-         HFwQCZbezlGCo59HyYFVE2OuIEuckblnJ+xW0HlcUQNIUcGkto5jwO7V0xDJ5u7/WVrJ
-         +n1iU0CndFHr+qEkpnJMBS7L5W6kjto2qsxS/X5YYBxcRJIcvMT7Cs3xYaCsOKjQAchH
-         gwd8DzyugCqs0F3Hm0GKzzcLmH79FIB994C5hhMOx7q3budP1WwBApWkqlxA/CevTFX1
-         3K/M7+K4UMqtRRzS6FYrYtOnPo9bxbPa0SRwxIeyEYE6Rt0WCz3lA9ErX7VEXUeHy6tk
-         gCtg==
-X-Forwarded-Encrypted: i=1; AJvYcCWdTx4IA2GZbsbhFNACgY/XpVlQz8Nyqr7HlbXQ8CfKiPKGUTPKSPZysE3fPTFnPN3P5TJt3YBoCaCaUOHJMvXjCaGi
-X-Gm-Message-State: AOJu0YwxXRF2lBH3h2EzjKe5TuKluiOrqHdHBeYLWzrUbyqj0DzSmRyl
-	eUD0s2gkvJ5TvI7Nt0pvqxoHrY7Acj/BTLFH/zS/6USKcjC4AT9oA8R8VdyOOdM9QlWXxoSTwkj
-	mv52ECb2cbloTpPzkLy50hXt1i/w=
-X-Google-Smtp-Source: AGHT+IG6DtZ33vqm1DWdoto2JdWJmYP9LpEEbXUzmhq/Cb7hpFiXULgR1xqgcf6Qk6g4E06dV72MjWBkAkyZdry2imE=
-X-Received: by 2002:a05:6a20:d808:b0:1a3:1d56:ba6c with SMTP id
- iv8-20020a056a20d80800b001a31d56ba6cmr7716895pzb.59.1710285114147; Tue, 12
- Mar 2024 16:11:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="bYEbldRC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1710287479;
+	bh=UodvkJ5UEPNHTE1gtYxLGz+q1xnZJ07gSgPcwxaWF9c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=bYEbldRCdLIt6oYNRPPF8TYvU+vJr/g49398b/QE5R+asPhOYeT/wQ377CZwVhjVZ
+	 4o3EwmKCXZd87SILQ6mNGSNVEd4icyqmTFFq8KWzVt1FxbMUhycBwvzXd7RFIuP6yy
+	 BzJn8yRcIb5T8Ym1OGTKlrATz0yO++vgiSGjFvjFEDBYxoGlrYYEAYzsrHACwLednn
+	 ggaSp7qgM2FdavlBYipLsURqyRq7lFDpoCGCeuNPMp+pEpUaa42uhBvBWwW3L8N0Uc
+	 0r3pAu56QedBToNWym5rohNm3w5pHv031FN7a7AxBjwQmltWF0r3n4RfTd+GNzloTW
+	 FWkdJ7U36T3ZA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TvVlp0bKyz4wcJ;
+	Wed, 13 Mar 2024 10:51:17 +1100 (AEDT)
+Date: Wed, 13 Mar 2024 10:51:17 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Networking <netdev@vger.kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, David Miller <davem@davemloft.net>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, bpf
+ <bpf@vger.kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Subject: Re: linux-next: manual merge of the bpf-next tree with the
+ mm-stable tree
+Message-ID: <20240313105117.699dc720@canb.auug.org.au>
+In-Reply-To: <20240307123619.159f1c4c@canb.auug.org.au>
+References: <20240307123619.159f1c4c@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240312023249.3776718-1-yonghong.song@linux.dev>
- <c73285ba-57db-4f08-8e77-01c66c98379c@isovalent.com> <53e1eddb-b003-4ae7-be13-55727d03b27f@linux.dev>
-In-Reply-To: <53e1eddb-b003-4ae7-be13-55727d03b27f@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 12 Mar 2024 16:11:41 -0700
-Message-ID: <CAEf4BzZ-itSprx8AOWAyPbZ6FBLBhz_HKWSyyLWszg40Pi3MRw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpftool: Fix missing pids during link show
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Quentin Monnet <quentin@isovalent.com>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com, 
-	Martin KaFai Lau <martin.lau@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/yT0EdgRsoNW8+yPN=MLDvoO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/yT0EdgRsoNW8+yPN=MLDvoO
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 12, 2024 at 8:24=E2=80=AFAM Yonghong Song <yonghong.song@linux.=
-dev> wrote:
->
->
-> On 3/12/24 7:01 AM, Quentin Monnet wrote:
-> > 2024-03-12 02:32 UTC+0000 ~ Yonghong Song <yonghong.song@linux.dev>
-> >> Current 'bpftool link' command does not show pids, e.g.,
-> >>    $ tools/build/bpftool/bpftool link
-> >>    ...
-> >>    4: tracing  prog 23
-> >>          prog_type lsm  attach_type lsm_mac
-> >>          target_obj_id 1  target_btf_id 31320
-> >>
-> >> Hack the following change to enable normal libbpf debug output,
-> >>    --- a/tools/bpf/bpftool/pids.c
-> >>    +++ b/tools/bpf/bpftool/pids.c
-> >>    @@ -121,9 +121,9 @@ int build_obj_refs_table(struct hashmap **map, =
-enum bpf_obj_type type)
-> >>            /* we don't want output polluted with libbpf errors if bpf_=
-iter is not
-> >>             * supported
-> >>             */
-> >>    -       default_print =3D libbpf_set_print(libbpf_print_none);
-> >>    +       /* default_print =3D libbpf_set_print(libbpf_print_none); *=
-/
-> >>            err =3D pid_iter_bpf__load(skel);
-> >>    -       libbpf_set_print(default_print);
-> >>    +       /* libbpf_set_print(default_print); */
-> >>
-> >> Rerun the above bpftool command:
-> >>    $ tools/build/bpftool/bpftool link
-> >>    libbpf: prog 'iter': BPF program load failed: Permission denied
-> >>    libbpf: prog 'iter': -- BEGIN PROG LOAD LOG --
-> >>    0: R1=3Dctx() R10=3Dfp0
-> >>    ; struct task_struct *task =3D ctx->task; @ pid_iter.bpf.c:69
-> >>    0: (79) r6 =3D *(u64 *)(r1 +8)          ; R1=3Dctx() R6_w=3Dptr_or_=
-null_task_struct(id=3D1)
-> >>    ; struct file *file =3D ctx->file; @ pid_iter.bpf.c:68
-> >>    ...
-> >>    ; struct bpf_link *link =3D (struct bpf_link *) file->private_data;=
- @ pid_iter.bpf.c:103
-> >>    80: (79) r3 =3D *(u64 *)(r8 +432)       ; R3_w=3Dscalar() R8=3Dptr_=
-file()
-> >>    ; if (link->type =3D=3D bpf_core_enum_value(enum bpf_link_type___lo=
-cal, @ pid_iter.bpf.c:105
-> >>    81: (61) r1 =3D *(u32 *)(r3 +12)
-> >>    R3 invalid mem access 'scalar'
-> >>    processed 39 insns (limit 1000000) max_states_per_insn 0 total_stat=
-es 3 peak_states 3 mark_read 2
-> >>    -- END PROG LOAD LOG --
-> >>    libbpf: prog 'iter': failed to load: -13
-> >>    ...
-> >>
-> >> The 'file->private_data' returns a 'void' type and this caused subsequ=
-ent 'link->type'
-> >> (insn #81) failed in verification.
-> >>
-> >> To fix the issue, restore the previous BPF_CORE_READ so old kernels ca=
-n also work.
-> >> With this patch, the 'bpftool link' runs successfully with 'pids'.
-> >>    $ tools/build/bpftool/bpftool link
-> >>    ...
-> >>    4: tracing  prog 23
-> >>          prog_type lsm  attach_type lsm_mac
-> >>          target_obj_id 1  target_btf_id 31320
-> >>          pids systemd(1)
-> >>
-> >> Fixes: 44ba7b30e84f ("bpftool: Use a local copy of BPF_LINK_TYPE_PERF_=
-EVENT in pid_iter.bpf.c")
-> >> Cc: Quentin Monnet <quentin@isovalent.com>
-> >> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> >> ---
-> >>   tools/bpf/bpftool/skeleton/pid_iter.bpf.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/tools/bpf/bpftool/skeleton/pid_iter.bpf.c b/tools/bpf/bpf=
-tool/skeleton/pid_iter.bpf.c
-> >> index 26004f0c5a6a..1eb756f8d02e 100644
-> >> --- a/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
-> >> +++ b/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
-> >> @@ -102,7 +102,7 @@ int iter(struct bpf_iter__task_file *ctx)
-> >>                                     BPF_LINK_TYPE_PERF_EVENT___local))=
- {
-> >>              struct bpf_link *link =3D (struct bpf_link *) file->priva=
-te_data;
-> >>
-> >> -            if (link->type =3D=3D bpf_core_enum_value(enum bpf_link_t=
-ype___local,
-> >> +            if (BPF_CORE_READ(link, type) =3D=3D bpf_core_enum_value(=
-enum bpf_link_type___local,
-> >>                                                    BPF_LINK_TYPE_PERF_=
-EVENT___local)) {
-> > Looks good, thank you! Could you please just realign the
-> > BPF_LINK_TYPE_PERF_EVENT___local argument on the next line properly?
->
-> Will do. thanks.
->
+Hi all,
 
-We can fix it up while applying, so don't send another revision. We
-are waiting for trees to converge, so applying patches will be delayed
-a bit.
+On Thu, 7 Mar 2024 12:36:19 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>=20
+> Today's linux-next merge of the bpf-next tree got a conflict in:
+>=20
+>   mm/vmalloc.c
+>=20
+> between commit:
+>=20
+>   8e1d743f2c26 ("mm: vmalloc: support multiple nodes in vmallocinfo")
+>=20
+> from the mm-stable tree and commit:
+>=20
+>   e6f798225a31 ("mm: Introduce VM_SPARSE kind and vm_area_[un]map_pages()=
+.")
+>=20
+> from the bpf-next tree.
+>=20
+> I fixed it up (I think - see below) and can carry the fix as necessary.
+> This is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+>=20
+> diff --cc mm/vmalloc.c
+> index 25a8df497255,e5b8c70950bc..000000000000
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@@ -4755,81 -4423,70 +4820,84 @@@ static void show_numa_info(struct seq_f
+>  =20
+>   static void show_purge_info(struct seq_file *m)
+>   {
+>  +	struct vmap_node *vn;
+>   	struct vmap_area *va;
+>  +	int i;
+>  =20
+>  -	spin_lock(&purge_vmap_area_lock);
+>  -	list_for_each_entry(va, &purge_vmap_area_list, list) {
+>  -		seq_printf(m, "0x%pK-0x%pK %7ld unpurged vm_area\n",
+>  -			(void *)va->va_start, (void *)va->va_end,
+>  -			va->va_end - va->va_start);
+>  -	}
+>  -	spin_unlock(&purge_vmap_area_lock);
+>  -}
+>  +	for (i =3D 0; i < nr_vmap_nodes; i++) {
+>  +		vn =3D &vmap_nodes[i];
+>  =20
+>  -static int s_show(struct seq_file *m, void *p)
+>  -{
+>  -	struct vmap_area *va;
+>  -	struct vm_struct *v;
+>  -
+>  -	va =3D list_entry(p, struct vmap_area, list);
+>  -
+>  -	if (!va->vm) {
+>  -		if (va->flags & VMAP_RAM)
+>  -			seq_printf(m, "0x%pK-0x%pK %7ld vm_map_ram\n",
+>  +		spin_lock(&vn->lazy.lock);
+>  +		list_for_each_entry(va, &vn->lazy.head, list) {
+>  +			seq_printf(m, "0x%pK-0x%pK %7ld unpurged vm_area\n",
+>   				(void *)va->va_start, (void *)va->va_end,
+>   				va->va_end - va->va_start);
+>  -
+>  -		goto final;
+>  +		}
+>  +		spin_unlock(&vn->lazy.lock);
+>   	}
+>  +}
+>  =20
+>  -	v =3D va->vm;
+>  +static int vmalloc_info_show(struct seq_file *m, void *p)
+>  +{
+>  +	struct vmap_node *vn;
+>  +	struct vmap_area *va;
+>  +	struct vm_struct *v;
+>  +	int i;
+>  =20
+>  -	seq_printf(m, "0x%pK-0x%pK %7ld",
+>  -		v->addr, v->addr + v->size, v->size);
+>  +	for (i =3D 0; i < nr_vmap_nodes; i++) {
+>  +		vn =3D &vmap_nodes[i];
+>  =20
+>  -	if (v->caller)
+>  -		seq_printf(m, " %pS", v->caller);
+>  +		spin_lock(&vn->busy.lock);
+>  +		list_for_each_entry(va, &vn->busy.head, list) {
+>  +			if (!va->vm) {
+>  +				if (va->flags & VMAP_RAM)
+>  +					seq_printf(m, "0x%pK-0x%pK %7ld vm_map_ram\n",
+>  +						(void *)va->va_start, (void *)va->va_end,
+>  +						va->va_end - va->va_start);
+>  =20
+>  -	if (v->nr_pages)
+>  -		seq_printf(m, " pages=3D%d", v->nr_pages);
+>  +				continue;
+>  +			}
+>  =20
+>  -	if (v->phys_addr)
+>  -		seq_printf(m, " phys=3D%pa", &v->phys_addr);
+>  +			v =3D va->vm;
+>  =20
+>  -	if (v->flags & VM_IOREMAP)
+>  -		seq_puts(m, " ioremap");
+>  +			seq_printf(m, "0x%pK-0x%pK %7ld",
+>  +				v->addr, v->addr + v->size, v->size);
+>  =20
+>  -	if (v->flags & VM_SPARSE)
+>  -		seq_puts(m, " sparse");
+>  +			if (v->caller)
+>  +				seq_printf(m, " %pS", v->caller);
+>  =20
+>  -	if (v->flags & VM_ALLOC)
+>  -		seq_puts(m, " vmalloc");
+>  +			if (v->nr_pages)
+>  +				seq_printf(m, " pages=3D%d", v->nr_pages);
+>  =20
+>  -	if (v->flags & VM_MAP)
+>  -		seq_puts(m, " vmap");
+>  +			if (v->phys_addr)
+>  +				seq_printf(m, " phys=3D%pa", &v->phys_addr);
+>  =20
+>  -	if (v->flags & VM_USERMAP)
+>  -		seq_puts(m, " user");
+>  +			if (v->flags & VM_IOREMAP)
+>  +				seq_puts(m, " ioremap");
+>  =20
+>  -	if (v->flags & VM_DMA_COHERENT)
+>  -		seq_puts(m, " dma-coherent");
+> ++			if (v->flags & VM_SPARSE)
+> ++				seq_puts(m, " sparse");
+> +=20
+>  -	if (is_vmalloc_addr(v->pages))
+>  -		seq_puts(m, " vpages");
+>  +			if (v->flags & VM_ALLOC)
+>  +				seq_puts(m, " vmalloc");
+>  =20
+>  -	show_numa_info(m, v);
+>  -	seq_putc(m, '\n');
+>  +			if (v->flags & VM_MAP)
+>  +				seq_puts(m, " vmap");
+>  +
+>  +			if (v->flags & VM_USERMAP)
+>  +				seq_puts(m, " user");
+>  +
+>  +			if (v->flags & VM_DMA_COHERENT)
+>  +				seq_puts(m, " dma-coherent");
+>  +
+>  +			if (is_vmalloc_addr(v->pages))
+>  +				seq_puts(m, " vpages");
+>  +
+>  +			show_numa_info(m, v);
+>  +			seq_putc(m, '\n');
+>  +		}
+>  +		spin_unlock(&vn->busy.lock);
+>  +	}
+>  =20
+>   	/*
+>   	 * As a final step, dump "unpurged" areas.
 
-> >
-> > With that:
-> >
-> > Tested-by: Quentin Monnet <quentin@isovalent.com>
-> > Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+This is now a conflict between the net-next tree and the mm-stable tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/yT0EdgRsoNW8+yPN=MLDvoO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXw6nUACgkQAVBC80lX
+0Gya7Af/eanjo0KqtUdKrpWYcPSmSO1QHXGP9/SE4P3qCeVYHvN19R2jZLzaou9a
+fGAjvSvop62RTF22Fz4qHDee9W7Lv/fIWb8ZP6Qf+z9heyPqLHl848oRFK7iIOzb
+f9Z3AnUz7iwg8aBxn42HNA1i+wHXH/r/QdNtKLLDnIhQTGeH17Cv1TJRx32hWlOj
+4yPWa8QtzZLIq1fwaWY487mXIjALPrFC6lIZ4gbtZpQ/AxT3+lfZbi515nIm6kMk
+F68Qb61VEuwWHW120bsVzogE0ZSKxGrNHQchW6CEOfC8QEYh+8eaKD8RT/Kuduro
+ufS2iZdqvtdej+4JXPBQhj+QTH4eNw==
+=4mUn
+-----END PGP SIGNATURE-----
+
+--Sig_/yT0EdgRsoNW8+yPN=MLDvoO--
