@@ -1,256 +1,99 @@
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15031428EC
-	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 20:11:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12441139580
+	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 20:17:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710274277; cv=none; b=JBtIJZqNZkd6ABl2XBVYK5t/VO6WK9tncGEQy5QeMjMnFrk10TowOLnWe69w5woGd0qLMrI/3gcoTlCNRdoMOm/vn7FZn2QYdP7uuOms7Kc/rBWt8hJG8EM0/er+3hnxszJ44cD16GU69lFslgLzrp6CK6he6Sh4XohrFbcxb2c=
+	t=1710274647; cv=none; b=l0rrFXW9iRCH7Hb1oL1Ut4O7xj8uMePkeOZcAA0gJezBpEdfhth0RJOvrQtIzDThqwgdG6EzoCBJqDCG0S9FB8QFzv4OA4uiS+ie+soduJ8Tcc4GmfcM/Tz4stI3+HFtqv/RHOAVWkXM8vqtN5o5QyXrnFNIG2lRZ7PWLqk1EQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710274277; c=relaxed/simple;
-	bh=ZTzOhV15T2M/IQSF7GpXLwUn0RlUF6gGc0Px4d4WFLA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=flNiL769O+rpiX6JtjmrCVuyR7V413LT1HDVjXMLAakrzbqT4Wr6lQLwyUMJzDiHZ+opwLbLMngvIizYNTtrdEbfnu7b5vXH4fC2nwhPXcywlZuztxmgSs4TkyvCbFOjxilQsJGq1Q2rlWbAmJ8jy83yjHHs7Jt1buv+rjeChpg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4KIjMWH9; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1710274647; c=relaxed/simple;
+	bh=QfiI841UMd+b4M6uGOAl6Tti6206LQPlspjZ1aGj+vE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IVf5EbSj3C4BogBW6SINPjF5Tw9rTLK6OlJOvAILHVmvTH88o+osHIhdAMOI6YXqFeq7qcjNNFbAOPc3N6VetQaQ4+4bLmGYZzavt+Dhbjix2siMrM/650K2GZTUBwPhHELhzJxeuv5vxXIjhmG2yp+xRStHvMfjyTw8X7avjjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=U7QWMctl; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4KIjMWH9"
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5135486cfccso5820548e87.0
-        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 13:11:15 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="U7QWMctl"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a3ddc13bbb3so41213666b.0
+        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 13:17:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710274274; x=1710879074; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=aTW9UBNB4skRIIaA0uCJ32yGuAcFB87u0woHqEplkTs=;
-        b=4KIjMWH9jxSDdQHvU3oAQtVx7A+VJn5FDhQzKDvo+7XO/6WEbaWEneEUPZJqeHeSjt
-         cYAbSuE3iYU7b0fVFW+0HLRBs9tESJGxUJFcg5KN/NUYd316o+hv1fQncGvRlSR4YKGB
-         S+gAFWtLN9k1UTunyBjloJfxS9yQGkqZbGB0YUtDitHvOPkSCf1yX5isJ4OErl9dybmF
-         6pLBaHOYPIhKfBjxhdDHalEEQFACoAgabSHsBB5YasrZOsOrIX+xGKZrj/aXahwbqFYE
-         YUp+aTke/Oy7ygr6Fm3ud8RCEwWfN3+wSh+qqpR4Vrv+yLi2eYTdhXrLz6ZGK6nJYoAm
-         4RdA==
+        d=linux-foundation.org; s=google; t=1710274643; x=1710879443; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vIGv442Bb3GoyJ4GTJ4MmhCFvAXMUZvcBMa8Hexcis0=;
+        b=U7QWMctl/G45JotggaKN/dnbq4z7uMEANnSMQSWr8GgMCMq8NX4Vu+jhYssskbwA1V
+         wc7293ZskkTB/97luDvU/tXjNdI2uVhGlvN13HVt8VpmCpV+uNewwkhM30iP2C2xn9Qp
+         IPJwg3n8bk/FIVjJEeP1IuPK2eI8R122Ann5Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710274274; x=1710879074;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aTW9UBNB4skRIIaA0uCJ32yGuAcFB87u0woHqEplkTs=;
-        b=YlaKJsES7VG4NczCABVvHxiJY3K3IwR88hLa/blzJHiZPz/alxH29uzh2yx7X1kwKj
-         CEc28CiGxdZf3w8ge9i0k3WxjtPcmJgmH5t64eyNAEgjRad08EajldnPUF8Q/BajGIY9
-         UtSClm4R+ud4TCfh8hkiXPjXU7kCmU177oQ8tIWxTfsqX/+23asU5i351LGwNYMqz71t
-         Pm3iHnx/wMp68BCNkdhU6no7vguuexQwgvEOMKxmca3K6Fywbik0jpJCAmv+4RXRpY9F
-         bOR8sQJ0uJeXm0jWZ3ebkwGOoa/bchOC9bZRsq9Z2IZgMwtlWsd3N02DlPX8s6y0AVSk
-         UXZg==
-X-Forwarded-Encrypted: i=1; AJvYcCVzkzmg9yVpWU0DWQkX0DF+AXkvA6afnv6KqGFKN59S4nCkd1QkbD7zOpXahtg8qwoz/hsdqtLabe/1CzWePK/HVYjb
-X-Gm-Message-State: AOJu0Yz0rqG8tSjh5Y5j/Rwl1+Y7xjUI4EHRhlXuY4IVpJ12Mvv16mXN
-	zzrLJMNLyPX4wppG0wJRpm/RgAvvlBxSIdm0kPRkJiG/WmxfSxb4W77I8eVVLQ==
-X-Google-Smtp-Source: AGHT+IF+AhYKVculquTNUnhCVljsflyqLdu6h/Yij3aC1xYaUjGLnZQatobo+tgbJCrmukCn6bUzVw==
-X-Received: by 2002:ac2:5f7b:0:b0:512:e58c:7bf1 with SMTP id c27-20020ac25f7b000000b00512e58c7bf1mr6443085lfc.40.1710274273885;
-        Tue, 12 Mar 2024 13:11:13 -0700 (PDT)
-Received: from google.com (12.196.204.35.bc.googleusercontent.com. [35.204.196.12])
-        by smtp.gmail.com with ESMTPSA id h8-20020a0564020e0800b005653c441a20sm3775534edh.34.2024.03.12.13.11.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Mar 2024 13:11:13 -0700 (PDT)
-Date: Tue, 12 Mar 2024 20:11:09 +0000
-From: Matt Bobrowski <mattbobrowski@google.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@google.com>,
-	Jann Horn <jannh@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-mm <linux-mm@kvack.org>,
-	LSM List <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v2 bpf-next 0/9] add new acquire/release BPF kfuncs
-Message-ID: <ZfC23WIxnBc9CU6c@google.com>
-References: <cover.1709675979.git.mattbobrowski@google.com>
- <20240306-flach-tragbar-b2b3c531bf0d@brauner>
- <20240306-sandgrube-flora-a61409c2f10c@brauner>
- <CAADnVQ+RBV_rJx5LCtCiW-TWZ5DCOPz1V3ga_fc__RmL_6xgOg@mail.gmail.com>
- <20240307-phosphor-entnahmen-8ef28b782abf@brauner>
- <CAADnVQLMHdL1GfScnG8=0wL6PEC=ACZT3xuuRFrzNJqHKrYvsw@mail.gmail.com>
- <20240308-kleben-eindecken-73c993fb3ebd@brauner>
- <CAADnVQJVNntnH=DLHwUioe9mEw0FzzdUvmtj3yx8SjL38daeXQ@mail.gmail.com>
- <20240311-geglaubt-kursverfall-500a27578cca@brauner>
- <ZfCLnOBDnBp2wcJy@google.com>
+        d=1e100.net; s=20230601; t=1710274643; x=1710879443;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vIGv442Bb3GoyJ4GTJ4MmhCFvAXMUZvcBMa8Hexcis0=;
+        b=JPlpElhVwLtCu0Ch98Y1aGEhVDhjsfVel26zH3IN6zJ+Pp53zpDqzCVsh/0ebSQ5qR
+         e9tnrOh/KPYrB+wEfwOKvXGa5Jt1RognbtE0BYLAOGFJ5uBh+PTyElSt4fKLDIDgFVen
+         pBx0/779JF1uScsfQ3mIeS+zWO0u6b3/xgcL5hm/L3Cyds3hjgGBE4hz/bnHLbwmjQx8
+         7eCr+hEzm2KDNrGUhBeRCzqyKZryG7Wl1YXGSMq2VHURWSMAdbOrWqjcrMv5xvazmzu9
+         7KKXjYoC/nomL/7p6VdBpymV2VAiRwHUbDpRZkCvArcpNR5fZdLCCL9BBh7ioyOu0wWg
+         IHAA==
+X-Forwarded-Encrypted: i=1; AJvYcCXzMwrxVYkzeQaKC4KYeRfgaJgj4bB8zrVwPUtg9eeAvW9vuS0U5IJWtkNUn+lngxMTBl3XhZjBU3L2UYmKJm8zHLeo
+X-Gm-Message-State: AOJu0YycwzJdJz6laqYFXFyyVXYR4D7Gx8b/0h4gE3Tn00GEVdgbntvb
+	cWw9n1pyxcrYIz6jyBqkSbCCMZudKr/rwD3JefI2xsp4Illx3oIt42kGHf+tllWJiG2Zy8kD5X0
+	ERoZG2A==
+X-Google-Smtp-Source: AGHT+IEAooDJu2kAdb1q4t/pBSVB16otJgBrA1Jqzbw+88moRIHRolN80yW/bNdLV14yXUKFUznZQQ==
+X-Received: by 2002:a17:907:d383:b0:a46:1cbd:c2c4 with SMTP id vh3-20020a170907d38300b00a461cbdc2c4mr650699ejc.26.1710274643217;
+        Tue, 12 Mar 2024 13:17:23 -0700 (PDT)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
+        by smtp.gmail.com with ESMTPSA id le13-20020a170906ae0d00b00a461d26713fsm2859645ejb.103.2024.03.12.13.17.22
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Mar 2024 13:17:22 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a3ddc13bbb3so41210666b.0
+        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 13:17:22 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVrs3RKCLHZ/aAKLSQy1wDkdr6NRBTG4vncM8TLUyI7EEUl4eTkTedfV8yPTlMzuxkFglVq6oAi5P6sj8ZTpfTshYkQ
+X-Received: by 2002:a17:906:6c8e:b0:a46:479c:1c1 with SMTP id
+ s14-20020a1709066c8e00b00a46479c01c1mr521289ejr.19.1710274642338; Tue, 12 Mar
+ 2024 13:17:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZfCLnOBDnBp2wcJy@google.com>
+References: <20240312042504.1835743-1-kuba@kernel.org>
+In-Reply-To: <20240312042504.1835743-1-kuba@kernel.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 12 Mar 2024 13:17:05 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgknyB6yR+X50rBYDyTnpcU4MukJ2iQ5mQQf+Xzm9N9Dw@mail.gmail.com>
+Message-ID: <CAHk-=wgknyB6yR+X50rBYDyTnpcU4MukJ2iQ5mQQf+Xzm9N9Dw@mail.gmail.com>
+Subject: Re: [GIT PULL] Networking for v6.9
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	pabeni@redhat.com, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Mar 12, 2024 at 05:06:36PM +0000, Matt Bobrowski wrote:
-> Hey Christian,
-> 
-> On Mon, Mar 11, 2024 at 01:00:56PM +0100, Christian Brauner wrote:
-> > On Fri, Mar 08, 2024 at 05:23:30PM -0800, Alexei Starovoitov wrote:
-> > > On Fri, Mar 8, 2024 at 2:36 AM Christian Brauner <brauner@kernel.org> wrote:
-> > > >
-> > > >
-> > > > These exports are specifically for an out-of-tree BPF LSM program that
-> > > > is not accessible to the public. The question in the other mail stands.
-> > > 
-> > > The question was already answered. You just don't like the answer.
-> > > bpf progs are not equivalent to kernel modules.
-> > > They have completely different safety and visibility properties.
-> > > The safety part I already talked about.
-> > > Sounds like the visibility has to be explained.
-> > > Kernel modules are opaque binary blobs.
-> > > bpf programs are fully transparent. The intent is known
-> > > to the verifier and to anyone with understanding
-> > > of bpf assembly.
-> > > Those that cannot read bpf asm can read C source code that is
-> > > embedded in the bpf program in kernel memory.
-> > > It's not the same as "llvm-dwarfdump module.ko" on disk.
-> > > The bpf prog source code is loaded into the kernel
-> > > at program verification time for debugging and visibility reasons.
-> > > If there is a verifier bug and bpf manages to crash the kernel
-> > > vmcore will have relevant lines of program C source code right there.
-> > > 
-> > > Hence out-of-tree or in-tree bpf makes no practical difference.
-> > > The program cannot hide its meaning and doesn't hamper debugging.
-> > > 
-> > > Hence adding EXPORT_SYMBOL == Brace for impact!
-> > > Expect crashes, api misuse and what not.
-> > > 
-> > > While adding bpf_kfunc is a nop for kernel development.
-> > > If kfunc is in the way of code refactoring it can be removed
-> > > (as we demonstrated several times).
-> > > A kfunc won't cause headaches for the kernel code it is
-> > > calling (assuming no verifier bugs).
-> > > If there is a bug it's on us to fix it as we demonstrated in the past.
-> > > For example: bpf_probe_read_kernel().
-> > > It's a wrapper of copy_from_kernel_nofault() and over the years
-> > > bpf users hit various bugs in copy_from_kernel_nofault(),
-> > > reported them, and _bpf developers_ fixed them.
-> > > Though copy_from_kernel_nofault() is as generic as it can get
-> > > and the same bugs could have been reproduced without bpf
-> > > we took care of fixing these parts of the kernel.
-> > > 
-> > > Look at path_put().
-> > > It's EXPORT_SYMBOL and any kernel module can easily screw up
-> > > reference counting, so that sooner or later distro folks
-> > > will experience debug pains due to out-of-tree drivers.
-> > > 
-> > > kfunc that calls path_put() won't have such consequences.
-> > > The verifier will prevent path_put() on a pointer that wasn't
-> > > acquired by the same bpf program. No support pains.
-> > > It's a nop for vfs folks.
-> > > 
-> > > > > First of all, there is no such thing as get_task_fs_pwd/root
-> > > > > in the kernel.
-> > > >
-> > > > Yeah, we'd need specific helpers for a never seen before out-of-tree BPF
-> > > > LSM. I don't see how that's different from an out-of-tree kernel module.
-> > > 
-> > > Sorry, but you don't seem to understand what bpf can and cannot do,
-> > > hence they look similar.
-> > 
-> > Maybe. On the other hand you seem to ignore what I'm saying. You
-> > currently don't have a clear set of rules for when it's ok for someone
-> > to send patches and request access to bpf kfuncs to implement a new BPF
-> > program. This patchset very much illustrates this point. The safety
-> > properties of bpf don't matter for this. And again, your safety
-> > properties very much didn't protect you from your bpf_d_path() mess.
-> > 
-> > We're not even clearly told where and how these helper are supposed to be
-> > used. That's not ok and will never be ok. As long as there are no clear
-> > criteria to operate under this is highly problematic. This may be fine
-> > from a bpf perspective and one can even understand why because that's
-> > apparently your model or promise to your users. But there's no reason to
-> > expect the same level of laxness from any of the subsystems you're
-> > requesting kfuncs from.
-> 
-> You raise a completely fair point, and I truly do apologies for the
-> lack of context and in depth explanations around the specific
-> situations that the proposed BPF kfuncs are intended to be used
-> from. Admittedly, that's a failure on my part, and I can completely
-> understand why from a maintainers point of view there would be
-> reservations around acknowledging requests for adding such invisible
-> dependencies.
-> 
-> Now, I'm in a little bit of a tough situation as I'm unable to point
-> you to an open-source BPF LSM implementation that intends to make use
-> of such newly proposed BPF kfuncs. That's just an unfortunate
-> constraint and circumstance that I'm having to deal with, so I'm just
-> going to have to provide heavily redacted and incomplete example to
-> illustrate how these BPF kfuncs intend to be used from BPF LSM
-> programs that I personally work on here at Google. Notably though, the
-> contexts that I do share here may obviously be a nonholistic view on
-> how these newly introduced BPF kfuncs end up getting used in practice
-> by some other completely arbitrary open-source BPF LSM programs.
-> 
-> Anyway, as Alexei had pointed out in one of the prior responses, the
-> core motivating factor behind introducing these newly proposed BPF
-> kfuncs purely stems from the requirement of needing to call
-> bpf_d_path() safely on a struct path from the context of a BPF LSM
-> program, specifically within the security_file_open() and
-> security_mmap_file() LSM hooks. Now, as noted within the original bug
-> report [0], it's currently not considered safe to pluck a struct path
-> out from an arbitrary in-kernel data structure, which in our case was
-> current->mm->exe_file->f_path, and have it passed to bpf_d_path() from
-> the aforementioned LSM hook points, or any other LSM hook point for
-> that matter.
-> 
-> So, without using these newly introduced BPF kfuncs, our BPF LSM
-> program hanging off security_file_open() looks as follows:
-> 
-> ```
-> int BPF_PROG(file_open, struct file *file)
-> {
->   // Perform a whole bunch of operations on the supplied file argument. This
->   // includes some form of policy evaluation, and if there's a violation against
->   // policy and auditing is enabled, then we eventually call bpf_d_path() on
->   // file->f_path. Calling bpf_d_path() on the file argument isn't problematic
->   // as we have a stable path here as the file argument is reference counted.
->   struct path *target = &file->f_path;
-> 
->   // ...
-> 
->   struct task_struct *current = bpf_get_current_task_btf();
-> 
->   // ...
->   
->   bpf_rcu_read_lock();
->   // Reserve a slot on the BPF ring buffer such that the actor's path can be
->   // passed back to userspace.
->   void *buf = bpf_ringbuf_reserve(&ringbuf, PATH_MAX, 0);
->   if (!buf) {
->     goto unlock;
->   }
-> 
->   // For contextual purposes when performing an audit we also call bpf_d_path()
->   // on the actor, being current->mm->exe_file->f_path.
->   struct path *actor = &current->mm->exe_file->f_path;
-> 
->   // Now perform the path resolution on the actor via bpf_d_path().
->   u64 ret = bpf_d_path(actor, buf, PATH_MAX);
->   if (ret > 0) {
->     bpf_ringbuf_submit(buf, BPF_RB_NO_WAKEUP);
->   } else {
->     bpf_ringbuf_discard(buf, 0);
->   }
-> 
-> unlock:
->   bpf_rcu_read_unlock();
->   return 0;
-> }
-> ```
+On Mon, 11 Mar 2024 at 21:25, Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> I get what looks like blk-iocost deadlock when I try to run
+> your current tree on real Meta servers :(
 
-Note that we're also aware of the fact that calling bpf_d_path()
-within an RCU read-side critical shouldn't be permitted. I have a
-patch teed up which addresses this. bpf_path_d_path() OTOH isn't
-susceptible to this problem as the BPF verifier ensure that BPF kfuncs
-annotated KF_SLEEPABLE can't be called whilst in an RCU read-side
-critical section.
+Hmm. This "it breaks on real hardware, but works in virtual boxes"
+sounds like it might be the DM queue limit issue.
 
-/M
+Did the tree you tested with perhaps have commit 8e0ef4128694 (which
+came in yesterday through the block merge (merge commit 1ddeeb2a058d
+just after 11am Monday), but not the revert (commit bff4b74625fe, six
+hours later).
+
+IOW, just how current was that "current"? Your email was sent multiple
+hours after the revert happened and was pushed out, but I would not be
+surprised if your testing was done with something that was in that
+broken window.
+
+So if you merged some *other* tree than one from that six-hour window,
+please holler - because there's something else going on and we need to
+get the block people on it.
+
+               Linus
