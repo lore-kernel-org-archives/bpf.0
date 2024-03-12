@@ -1,108 +1,123 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F9B71EB5C;
-	Tue, 12 Mar 2024 02:13:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C3A815BF
+	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 02:33:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710209599; cv=none; b=Mb1Rlkdu4BnLyZF85yRbVZ8/SwmD92mZQ7kvVXyxrXP69/+DnT702rZRlp1UVw7ARwZr34yaST0ITJ77QapGXWfCGWcfxwIXvlKwFRYvmRHTr2MDdAyzTPX511lHOdb5r0qiR1P64KeT1NpJ4mnoCLhlSt+lcKroWT10Ob/8FL0=
+	t=1710210787; cv=none; b=tOboNiK8M+QKS9VchFJjRbYEvd1xb0KvuFT0v4j7/b+2PIssk4pAhxV37gkJypfyVgVnavIvk7ADRDM++hpyplDW4CVGgTb4aa1S1ADBWXqWrNLAzgUpChrP7LxGbp/wop0zmOnva3V6v4dvxzFMl9HauaX6Dwiatb39bs6XW+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710209599; c=relaxed/simple;
-	bh=xxgkr5eNkvW5q1zkcYlUGp+GjUJ5hPdmOjnvJkUucnk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Dn/iiSEex6TiwnyGjOdH5lhsGnQRNz1Hmx1HTyquVyxTzFYSgeC1dcK1F1AzvleOzVGUdQSOobgkZvTrXbWQ2eoyds/zPB6ZcsJi1aLXd8cRwHhxJfHfXUX9AWgc1kbMrHgxmg9kI0dyjVlpitPdPklSy91FRKIMlD8vO737y6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EI8/DEW4; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EI8/DEW4"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-33e899ce9e3so1805288f8f.1;
-        Mon, 11 Mar 2024 19:13:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710209596; x=1710814396; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xxgkr5eNkvW5q1zkcYlUGp+GjUJ5hPdmOjnvJkUucnk=;
-        b=EI8/DEW4FPp43ofgqsH2qBfW49i50NoDCrizUb6IYCuupG45uqgzh0Exxt7Isq63pw
-         fbg5COrtcmXD63Qu2BfHZL2/skr4dnSx8BufGb+fH3xb93d1jOmCMWMdQfcSOUqk5UNh
-         WGrgQ3qV0zStRiyHj655rMmMDIUNftrzZvoHv3npiGzAN57p1pLmHQIlQ0go8EOXhkcG
-         En1ujhLOX29nn6LpGrjX44RbCS4WOVFnOcH1SOc33lAF4xhMq1RtE6DYnEnFaZL2Db39
-         fw5O35I8YtGn2lik5fJPZ+X/zyyM7oLK3W3HtCMZM15vHuw2Dn1SEpxbEVNGlV3qx8+z
-         216g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710209596; x=1710814396;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xxgkr5eNkvW5q1zkcYlUGp+GjUJ5hPdmOjnvJkUucnk=;
-        b=dgSs3a2MIyxDxomMuoq0dNeZsgmiKXA7gcUbcULgc/W8xoB6fcK6IPkNFqIXF2ix8C
-         zOB2T8KCL1BzVVO0EHy8WGsGrFWVTKtQ+xPl+ZPNUzQ1b8WGGSsD0Xd9xRzFc7zBnNXi
-         kfjAIkHMPBsSz3fE+RFUz2uRyU0TiWwlNveYirzLfH1WJclFivqEgfYDWR1c+6W0nGQw
-         qX93w3vQdEyJ/p8ivuIdEnLtkLIPE04MYnJY03+CqVRpNgMI21QJIOcYoGxtLfeWXQE5
-         RQIiR4lr2W8rEDPTvPzVvDoAq9Nicad6LXXyUzBuOf2FwMZqWaVLrHZiBPlgD549KdRf
-         GzfA==
-X-Forwarded-Encrypted: i=1; AJvYcCVCvbMxEXCNkSmEeKEMjaD4seLhhkiEkzWipJXMFGHN95lPfC6WXvjkqL6pyCK0noLLpBFPK7KXWhUjMvVwZYQxCaz2DwlJtHhn+czXAt7TV58+7mrgl8FnjlNyBFE1fxlqMIWPsn0YWt8PaA1jAH6oa9rolni47ezC2njkdNshk2oNbyBbz1dNsk/hjK+2DExpVfiwKqLyna/f90bj34y64PAfgIXl1jHQNb7MPCUjuqM0nJoA8NLA5HnHLNmx6WeDdamWU7yz2Drxcjxb1LOl0gDxAziRUeGkSA==
-X-Gm-Message-State: AOJu0YxsgvTpIp43h+AalndypjPsQB29bSwBY+JRm1vAbxqOQVPlLRDa
-	lpcvfydqZZ4YZ7cekcpDpalRrG70mcu6SnoeqjYEP+NvijXs8F++KZcK9E3gkNt63TCqkggmh+G
-	BcM8SKxYoKSLBlv+CC1Vhd44tPsE=
-X-Google-Smtp-Source: AGHT+IGaeIqJnZOJ/SuZRPtu+8MtD/3nozajQZ94fUgHlD7gwqeVkMLfFrTcgwoFQp9lHB+TsWg3BU+ivdAF6tyjFJM=
-X-Received: by 2002:a5d:4112:0:b0:33e:74c6:bcb2 with SMTP id
- l18-20020a5d4112000000b0033e74c6bcb2mr5165378wrp.16.1710209596408; Mon, 11
- Mar 2024 19:13:16 -0700 (PDT)
+	s=arc-20240116; t=1710210787; c=relaxed/simple;
+	bh=9S860esa0PAf3noGWiQlxz6VQZZOQg59041k0pC6Jok=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gVOCuq0FNO4xI53bpDR8jvipgHmKWkUK9wflWzOIQNKFcKoBMMnesP97WkgX/xFYu+N8RaXX+bW4YNGDHardp7I5NEtLfmnS/jiPvewolDcJPpkmaLgNmnn2lxWLA7AaM5uFo6z6HHubi5d02zLEoQdQ7KdfNoMEXNmCKs5y6Es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+	id B2F1B19D38C1; Mon, 11 Mar 2024 19:32:49 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Quentin Monnet <quentin@isovalent.com>
+Subject: [PATCH bpf-next v2] bpftool: Fix missing pids during link show
+Date: Mon, 11 Mar 2024 19:32:49 -0700
+Message-ID: <20240312023249.3776718-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
- <20240311093526.1010158-8-dongmenglong.8@bytedance.com> <CAADnVQK4tdefa3s=sim69Sc+ztd-hHohPEDXaUNVTU-mLNYUiw@mail.gmail.com>
- <CALz3k9iabeOwHSrPb9mkfCuOebanh3+bAfi7xh3kBBN0DzHC3A@mail.gmail.com>
-In-Reply-To: <CALz3k9iabeOwHSrPb9mkfCuOebanh3+bAfi7xh3kBBN0DzHC3A@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 11 Mar 2024 19:13:05 -0700
-Message-ID: <CAADnVQKsrLB-2bD53R4ZdzUVdx1aqkgom1rzGCGKK0M3Uc+csQ@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH bpf-next v2 7/9] libbpf: don't free btf if
- program of multi-link tracing existing
-To: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	X86 ML <x86@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Quentin Monnet <quentin@isovalent.com>, 
-	bpf <bpf@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 11, 2024 at 7:05=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3 <dongme=
-nglong.8@bytedance.com> wrote:
->
-> > >
-> > > +LIBBPF_API void bpf_object__free_btfs(struct bpf_object *obj);
-> > > +
-> >
-> > It shouldn't be exported.
-> > libbpf should clean it up when bpf_object is freed.
->
-> Yes, libbpf will clean up the btfs when bpf_object is freed in
-> this commit. And I'm trying to offer a way to early free the btfs
-> by the users manual to reduce the memory usage. Or, the
-> btfs that we opened will keep existing until we close the
-> bpf_object.
->
-> This is optional, I can remove it if you prefer.
+Current 'bpftool link' command does not show pids, e.g.,
+  $ tools/build/bpftool/bpftool link
+  ...
+  4: tracing  prog 23
+        prog_type lsm  attach_type lsm_mac
+        target_obj_id 1  target_btf_id 31320
 
-Let's not extend libbpf api unless we really need to.
-bpf_program__attach_trace_multi_opts() and
-*skel*__attach() can probably free them.
-I don't see a use case where you'd want to keep them afterwards.
+Hack the following change to enable normal libbpf debug output,
+  --- a/tools/bpf/bpftool/pids.c
+  +++ b/tools/bpf/bpftool/pids.c
+  @@ -121,9 +121,9 @@ int build_obj_refs_table(struct hashmap **map, enum=
+ bpf_obj_type type)
+          /* we don't want output polluted with libbpf errors if bpf_iter=
+ is not
+           * supported
+           */
+  -       default_print =3D libbpf_set_print(libbpf_print_none);
+  +       /* default_print =3D libbpf_set_print(libbpf_print_none); */
+          err =3D pid_iter_bpf__load(skel);
+  -       libbpf_set_print(default_print);
+  +       /* libbpf_set_print(default_print); */
+
+Rerun the above bpftool command:
+  $ tools/build/bpftool/bpftool link
+  libbpf: prog 'iter': BPF program load failed: Permission denied
+  libbpf: prog 'iter': -- BEGIN PROG LOAD LOG --
+  0: R1=3Dctx() R10=3Dfp0
+  ; struct task_struct *task =3D ctx->task; @ pid_iter.bpf.c:69
+  0: (79) r6 =3D *(u64 *)(r1 +8)          ; R1=3Dctx() R6_w=3Dptr_or_null=
+_task_struct(id=3D1)
+  ; struct file *file =3D ctx->file; @ pid_iter.bpf.c:68
+  ...
+  ; struct bpf_link *link =3D (struct bpf_link *) file->private_data; @ p=
+id_iter.bpf.c:103
+  80: (79) r3 =3D *(u64 *)(r8 +432)       ; R3_w=3Dscalar() R8=3Dptr_file=
+()
+  ; if (link->type =3D=3D bpf_core_enum_value(enum bpf_link_type___local,=
+ @ pid_iter.bpf.c:105
+  81: (61) r1 =3D *(u32 *)(r3 +12)
+  R3 invalid mem access 'scalar'
+  processed 39 insns (limit 1000000) max_states_per_insn 0 total_states 3=
+ peak_states 3 mark_read 2
+  -- END PROG LOAD LOG --
+  libbpf: prog 'iter': failed to load: -13
+  ...
+
+The 'file->private_data' returns a 'void' type and this caused subsequent=
+ 'link->type'
+(insn #81) failed in verification.
+
+To fix the issue, restore the previous BPF_CORE_READ so old kernels can a=
+lso work.
+With this patch, the 'bpftool link' runs successfully with 'pids'.
+  $ tools/build/bpftool/bpftool link
+  ...
+  4: tracing  prog 23
+        prog_type lsm  attach_type lsm_mac
+        target_obj_id 1  target_btf_id 31320
+        pids systemd(1)
+
+Fixes: 44ba7b30e84f ("bpftool: Use a local copy of BPF_LINK_TYPE_PERF_EVE=
+NT in pid_iter.bpf.c")
+Cc: Quentin Monnet <quentin@isovalent.com>
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ tools/bpf/bpftool/skeleton/pid_iter.bpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/bpf/bpftool/skeleton/pid_iter.bpf.c b/tools/bpf/bpftoo=
+l/skeleton/pid_iter.bpf.c
+index 26004f0c5a6a..1eb756f8d02e 100644
+--- a/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
++++ b/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
+@@ -102,7 +102,7 @@ int iter(struct bpf_iter__task_file *ctx)
+ 				       BPF_LINK_TYPE_PERF_EVENT___local)) {
+ 		struct bpf_link *link =3D (struct bpf_link *) file->private_data;
+=20
+-		if (link->type =3D=3D bpf_core_enum_value(enum bpf_link_type___local,
++		if (BPF_CORE_READ(link, type) =3D=3D bpf_core_enum_value(enum bpf_link=
+_type___local,
+ 						      BPF_LINK_TYPE_PERF_EVENT___local)) {
+ 			e.has_bpf_cookie =3D true;
+ 			e.bpf_cookie =3D get_bpf_cookie(link);
+--=20
+2.43.0
+
