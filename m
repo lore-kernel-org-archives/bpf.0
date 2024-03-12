@@ -1,298 +1,187 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989F8138E;
-	Tue, 12 Mar 2024 22:37:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6475B14293;
+	Tue, 12 Mar 2024 22:42:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710283052; cv=none; b=n8Dr/NVC4KcMB9ERg2GJHOmn3oJsh+2NjewfohcRLQXn+TcHusPJh6pU9yp1wKE2wKlQ9hjft3siZRWJaxgB4JWN+NTB5oEWPkf4XyTwW/y0VS/w5ItGEeX+LU6yENudsczYaXR80yZhnPpspUkz5AgDVrzSqlfjjsF/Uu2LR0E=
+	t=1710283375; cv=none; b=U3OwTx5tK3FhJ7FX55og/DhytODestP7hdIo+o9CI08l41BKfQUqj/wvcMxm+lzV2j7gLbJJQQQlWlSQcGByvfJ5r0L3GgzVjdyE4Mdq3rhnhiTHbbuccMM1ChGy/XlR0q2YMldlGkD2ouFImQFXdzjy3REr3MJG23OoKa0gC6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710283052; c=relaxed/simple;
-	bh=p9o2nc/lVXuQu7hk0G9hxXEmZN1WSRIM3iulUuK50Kk=;
+	s=arc-20240116; t=1710283375; c=relaxed/simple;
+	bh=itk3+aa121hQohCaZWXLyFbk44xpebuGh6lznsJnwBI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QpzY2mZdMPcM0eTaukDMfkTRfvIrhEQ+Rg8QIx0N11QWcSdyj+D13WOAvy2soKLs9zlsPkqaYuY2a5CzmKrwYic8e1CCjtxxokLB7KzyoaqMLBuVoIeNdKILPvPjeATYIpXT1j6qgkvd3aMv0HV2ozYkXfn2oSe+jdz6M2eh+88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eVvx4dLV; arc=none smtp.client-ip=209.85.210.174
+	 To:Cc:Content-Type; b=A9XYgKaknHZp7ZvtC5i8IWfUvneyQ4nAXbD8In/SBGVXGAp79so+4cvgq9bZpoX0Qsfz2EqLvjP7BmYcP6eFhFyUYrgSTyTTH4mLYwwLFH9yXmJQiXBQ7Lo/Q1DC3ovrfuXapaNoAzht05YCWjk3P1kR3v2VyAcgGaL2+46qa1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TIVWnHwx; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eVvx4dLV"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6e55b33ad14so3307252b3a.1;
-        Tue, 12 Mar 2024 15:37:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TIVWnHwx"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-29c23f53eabso1549045a91.0;
+        Tue, 12 Mar 2024 15:42:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710283050; x=1710887850; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710283373; x=1710888173; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OqDdfqse8a/9SgDc7ZWNGTWOFS8enGOS+wsK61ONQGU=;
-        b=eVvx4dLVdeCorZEQc48f11tZkJykM6j5ur5IObnjVKpjnDnkssBb+EDGdFUzLxVTT6
-         1s9FQq4QRaJon3KHzvlfwOzvlTfk1lnlMrhM2WHTt+DMMgq5qKLBc1bsLEoFAZB7XyLr
-         k/5VgF4GRx15v5igqKAR3/FHt0I7czeUZ61aIiFbdw016L+x6iesHklkAf9HopuVzZiL
-         CrJDnuZ8S7c6TxyTsOsHQv1Rdeco+9z5AISbCP6meQuGimFwpgMs4qEbBFK8xp+wt0wp
-         fXh4TtiCs5svkaEZZeNzymvsoB6g1BP5l0TGntbLimgO9wLcOcqHKgjAVUAAscKEX4uV
-         McGQ==
+        bh=GW5vj3ww6Q8f0lmgbHjuCxUYGiTO32XJbsJws7w3Yo4=;
+        b=TIVWnHwx2/uuaE5pqmD2H4Zq4GtrGGAv9o1jEyq+jWiz695Tdfqjb3hNuw+6L5VESc
+         h6q5O0Ws3FdBatlX/jJZrYnUUs6g0s5swQbVyEfTmhNV0r7oPyDf76PYJNZMtlpG1jbp
+         LszeYIwvCHrdvmgwTeDTG4Tml2/RcV9EH29XoPt1ZM9sk3oCZaBIe47JvW1YbEOLfFOl
+         5qx+JDPk7OvptZh/ilhvSHCZXxFxzNvg12bPx0+pgi/8xdFl3AmuNPxpaa8YPFXq6lN0
+         D+DraiunRv+7IQFpZRiwf8VtYJYSYhYSgs25BiiUtjb6DzKRANmgv/1jNlPnr1k4h9TM
+         Q/gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710283050; x=1710887850;
+        d=1e100.net; s=20230601; t=1710283373; x=1710888173;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OqDdfqse8a/9SgDc7ZWNGTWOFS8enGOS+wsK61ONQGU=;
-        b=u6w+UXde+aNXLMw23y2ByKNIe1Ec0GjBSjnwyZwjbP8ox+ZvQSRVljv1bjNDiRjbKH
-         vXzUPs0a/HpRUTeKxJ4LBpudOHuqjC9qMJw5FMRhDfcOc6GB/wSVjNLoyi6SwRMnTaQi
-         Cy2MN/uBGHwyykEXCAh9SjM3P7ZMshuR2aVoSPd1C+uYfmDATND1+G3URIoRAJYNi6Pt
-         mdSp6oo2KJ7WMc3zWY6dkhpJ6mqHpVuhwu+JF13DCcNAWQjvWZnmsQubLoWxPKdstZZi
-         jtEA/NUJQiafmYO73J70yN6tjGVpLbpWhg9vf8+rUWT5PuQCIkmO3pEeXfQlJ3u6xjAV
-         YWjw==
-X-Forwarded-Encrypted: i=1; AJvYcCXEV2GTWl8zZpvn7WocX/MQ4EIxavnBkp2DYOro9uAdnJtZP2paERMuESf0sf0sjgrXtr8u8pEMU12AYOZY8Yb3xmqEmznYfbeQw+WR2BlaLhFFchQTesUcvk78baq4ulKU0pyfb2d6tKDb4AjNyf9r2tUYTaM93aTy
-X-Gm-Message-State: AOJu0YzQxvKsNyueb7yBz1DentkT1gIAsvtBB0NJsn2Mb91a/m1yEWSD
-	HMHBsAw70aljxcZqbuXzosEfAM2xUPz0vMhQ1/KnFKTOkHgz9+Et0bx0dpa6WG3Z9hUKsfpb4Hq
-	XFBYZjP0Qwpv3t3Ih38UB9OqcpdxMsf9jvkc=
-X-Google-Smtp-Source: AGHT+IG8F51CmKEtJ55rR0EIP5bMQeNK1c5ASHxyndnP4FqOJ8wmtc1BUW+AC18do6kTV496PmiyuoodAD7Gk3H9MDk=
-X-Received: by 2002:a05:6a20:9591:b0:1a0:cd54:6d9f with SMTP id
- iu17-20020a056a20959100b001a0cd546d9fmr10436041pzb.23.1710283049586; Tue, 12
- Mar 2024 15:37:29 -0700 (PDT)
+        bh=GW5vj3ww6Q8f0lmgbHjuCxUYGiTO32XJbsJws7w3Yo4=;
+        b=nv/uLKVqUryeMsdpKK/qxNzQ/caZFbHOaZ127BlHHA1Km5WIJS5ANmiwJbKTfL76Qz
+         o4ekB8wDEGf5MRX6ouPpzhKUZ8rsQvRGmhrLjlOEd7P51hhVFiH+Y44QtdnDrc+g5Cd8
+         TU/Na6NCedPs2M/66xbUiCU5z46/8Iq7bmnP03pyjDWkj0dPk2AVHgvilj/sFI/cyQQo
+         mKVOcnSkrHxjwKLh0jqlyuJgRsNCXdf5PlfnpsZIz9NtE+uvcs2Tp9pUSBZwdkEW2O9G
+         WjQhleJ9XxCqjmIqjLJ1duxioPr/XK+OqK+Va5yrrvppekvQxBfJJwZu04GNzZ1gTnQ8
+         t3Vw==
+X-Forwarded-Encrypted: i=1; AJvYcCV4wvqi1iXkoJxZPlfcCjf29srXTWVoWgDjvZyVRCUUuk48s5q+iAn9710d0gQ6kq6fYuOIv7Fyo4aiHHpi87ALLBN4dm7wXVMxYDqB26NlADT47nLZzf/+a1eqfVbvtcPj
+X-Gm-Message-State: AOJu0Yw9zujFMc+g9lbeSQLCWICORsGFXZmOHrWZpGhGvWyoxKV3fAhF
+	Ycl+enBoE8UMgf9afSblOMBwFiKmQ840trmzHjkb+PtyhASOylsDC+WusrbmpmghzXtuSnlA2SM
+	z2CdMHXNus7UwXBgrfNxAJnzWriI=
+X-Google-Smtp-Source: AGHT+IG05AQ8p9LY6kKsQm6GaiTqTBxg+G+H6czkTltA1tGWZzBAoHsJAVkP01GQzO3Mbk3NNcALJkAVyzlg4Vsn3w0=
+X-Received: by 2002:a17:90a:bb8a:b0:29b:a793:e3cb with SMTP id
+ v10-20020a17090abb8a00b0029ba793e3cbmr8207504pjr.22.1710283373514; Tue, 12
+ Mar 2024 15:42:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <0000000000004aa700061379547e@google.com> <ZfDC45Kc1VEvBMuW@krava> <ZfDGmoOcUqrHPSkq@krava>
-In-Reply-To: <ZfDGmoOcUqrHPSkq@krava>
+References: <20240310154726.734289-1-andrea.righi@canonical.com>
+ <CAEf4BzYrwRQu1eNMACfXtsac+=psnNGr+=WQz3zUPP+2DPA2Rg@mail.gmail.com> <Ze9ou-OrYO8NZsDb@gpd>
+In-Reply-To: <Ze9ou-OrYO8NZsDb@gpd>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 12 Mar 2024 15:37:16 -0700
-Message-ID: <CAEf4Bza8iH4_JY_sN-6GYeSfn6iuUsLMzxd=xRkCC7q-3_StNQ@mail.gmail.com>
-Subject: Re: [syzbot] [bpf?] possible deadlock in __bpf_ringbuf_reserve
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: syzbot <syzbot+850aaf14624dc0c6d366@syzkaller.appspotmail.com>, 
-	andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net, 
-	haoluo@google.com, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	linux-kernel@vger.kernel.org, martin.lau@linux.dev, netdev@vger.kernel.org, 
-	sdf@google.com, song@kernel.org, syzkaller-bugs@googlegroups.com, 
-	yonghong.song@linux.dev
+Date: Tue, 12 Mar 2024 15:42:41 -0700
+Message-ID: <CAEf4Bzb6eA5Sz3hKCVKPZjGzCE1v5aGhieR4rOD_appnNDmBqw@mail.gmail.com>
+Subject: Re: [PATCH] libbpf: ringbuf: allow to partially consume items
+To: Andrea Righi <andrea.righi@canonical.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Vernet <void@manifault.com>, Tejun Heo <tj@kernel.org>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 12, 2024 at 2:18=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wrot=
-e:
+On Mon, Mar 11, 2024 at 1:25=E2=80=AFPM Andrea Righi <andrea.righi@canonica=
+l.com> wrote:
 >
-> On Tue, Mar 12, 2024 at 10:02:27PM +0100, Jiri Olsa wrote:
-> > On Tue, Mar 12, 2024 at 09:41:26AM -0700, syzbot wrote:
-> > > Hello,
+> On Mon, Mar 11, 2024 at 10:55:57AM -0700, Andrii Nakryiko wrote:
+> > On Sun, Mar 10, 2024 at 8:47=E2=80=AFAM Andrea Righi <andrea.righi@cano=
+nical.com> wrote:
 > > >
-> > > syzbot found the following issue on:
+> > > Instead of always consuming all items from a ring buffer in a greedy
+> > > way, allow to stop when the callback returns a value > 0.
 > > >
-> > > HEAD commit:    df4793505abd Merge tag 'net-6.8-rc8' of git://git.ker=
-nel.o..
-> > > git tree:       bpf
-> > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D11fd00921=
-80000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dc11c5c676=
-adb61f0
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=3D850aaf14624=
-dc0c6d366
-> > > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for=
- Debian) 2.40
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1509c4a=
-e180000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D10babc011=
-80000
+> > > This allows to distinguish between an error condition and an intentio=
+nal
+> > > stop condition by returning a non-negative non-zero value from the ri=
+ng
+> > > buffer callback.
 > > >
-> > > Downloadable assets:
-> > > disk image: https://storage.googleapis.com/syzbot-assets/d2e80ee1112b=
-/disk-df479350.raw.xz
-> > > vmlinux: https://storage.googleapis.com/syzbot-assets/b35ea54cd190/vm=
-linux-df479350.xz
-> > > kernel image: https://storage.googleapis.com/syzbot-assets/59f69d999a=
-d2/bzImage-df479350.xz
+> > > This can be useful, for example, to consume just a single item from t=
+he
+> > > ring buffer.
 > > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the =
-commit:
-> > > Reported-by: syzbot+850aaf14624dc0c6d366@syzkaller.appspotmail.com
-> > >
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > WARNING: possible recursive locking detected
-> > > 6.8.0-rc7-syzkaller-gdf4793505abd #0 Not tainted
-> > > --------------------------------------------
-> > > strace-static-x/5063 is trying to acquire lock:
-> > > ffffc900096f10d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_reser=
-ve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
-> > >
-> > > but task is already holding lock:
-> > > ffffc900098410d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_reser=
-ve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
-> > >
-> > > other info that might help us debug this:
-> > >  Possible unsafe locking scenario:
-> > >
-> > >        CPU0
-> > >        ----
-> > >   lock(&rb->spinlock);
-> > >   lock(&rb->spinlock);
-> > >
-> > >  *** DEADLOCK ***
-> > >
-> > >  May be due to missing lock nesting notation
-> > >
-> > > 4 locks held by strace-static-x/5063:
-> > >  #0: ffff88807857e068 (&pipe->mutex/1){+.+.}-{3:3}, at: __pipe_lock f=
-s/pipe.c:103 [inline]
-> > >  #0: ffff88807857e068 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_write+0x=
-1cc/0x1a40 fs/pipe.c:465
-> > >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acqui=
-re include/linux/rcupdate.h:298 [inline]
-> > >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock =
-include/linux/rcupdate.h:750 [inline]
-> > >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: __bpf_trace_ru=
-n kernel/trace/bpf_trace.c:2380 [inline]
-> > >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run2=
-+0x114/0x420 kernel/trace/bpf_trace.c:2420
-> > >  #2: ffffc900098410d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_=
-reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
-> > >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acqui=
-re include/linux/rcupdate.h:298 [inline]
-> > >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock =
-include/linux/rcupdate.h:750 [inline]
-> > >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: __bpf_trace_ru=
-n kernel/trace/bpf_trace.c:2380 [inline]
-> > >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run2=
-+0x114/0x420 kernel/trace/bpf_trace.c:2420
-> > >
-> > > stack backtrace:
-> > > CPU: 0 PID: 5063 Comm: strace-static-x Not tainted 6.8.0-rc7-syzkalle=
-r-gdf4793505abd #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BI=
-OS Google 01/25/2024
-> > > Call Trace:
-> > >  <TASK>
-> > >  __dump_stack lib/dump_stack.c:88 [inline]
-> > >  dump_stack_lvl+0x1e7/0x2e0 lib/dump_stack.c:106
-> > >  check_deadlock kernel/locking/lockdep.c:3062 [inline]
-> > >  validate_chain+0x15c0/0x58e0 kernel/locking/lockdep.c:3856
-> > >  __lock_acquire+0x1345/0x1fd0 kernel/locking/lockdep.c:5137
-> > >  lock_acquire+0x1e3/0x530 kernel/locking/lockdep.c:5754
-> > >  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline=
-]
-> > >  _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
-> > >  __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
-> > >  ____bpf_ringbuf_reserve kernel/bpf/ringbuf.c:459 [inline]
-> > >  bpf_ringbuf_reserve+0x5c/0x70 kernel/bpf/ringbuf.c:451
-> > >  bpf_prog_9efe54833449f08e+0x2d/0x47
-> > >  bpf_dispatcher_nop_func include/linux/bpf.h:1231 [inline]
-> > >  __bpf_prog_run include/linux/filter.h:651 [inline]
-> > >  bpf_prog_run include/linux/filter.h:658 [inline]
-> > >  __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
-> >
-> > hum, scratching my head how this could passed through the prog->active =
-check,
->
-> nah could be 2 instances of the same program, got confused by the tag
->
-> trace_contention_end
->   __bpf_trace_run(prog1)
->     bpf_prog_9efe54833449f08e
->       bpf_ringbuf_reserve
->         trace_contention_end
->           __bpf_trace_run(prog1)  prog1->active check fails
->           __bpf_trace_run(prog2)
->             bpf_prog_9efe54833449f08e
->               bpf_ringbuf_reserve
->                 lockup
->
-> we had similar issue in [1] and we replaced the lock with extra buffers,
-> not sure that's possible in bpf_ringbuf_reserve
->
-
-Having trace_contention_begin and trace_contention_end in such
-low-level parts of ringbuf (and I'm sure anything in BPF that's using
-spinlock) is unfortunate. I'm not sure what's the best solution, but
-it would be great if we had ability to disable these tracepoints when
-taking lock in low-level BPF infrastructure. Given BPF programs can
-attach to these tracepoints, it's best to avoid this arbitrary nesting
-of BPF ringbuf calls. Also note, no per-program protection will help,
-because it can be independent BPF programs using the same map.
-
-
-> jirka
->
->
-> [1] e2bb9e01d589 bpf: Remove trace_printk_lock
->
-> > will try to reproduce
-> >
-> > jirka
-> >
-> > >  bpf_trace_run2+0x204/0x420 kernel/trace/bpf_trace.c:2420
-> > >  __traceiter_contention_end+0x7b/0xb0 include/trace/events/lock.h:122
-> > >  trace_contention_end+0xf6/0x120 include/trace/events/lock.h:122
-> > >  __pv_queued_spin_lock_slowpath+0x939/0xc60 kernel/locking/qspinlock.=
-c:560
-> > >  pv_queued_spin_lock_slowpath arch/x86/include/asm/paravirt.h:584 [in=
-line]
-> > >  queued_spin_lock_slowpath+0x42/0x50 arch/x86/include/asm/qspinlock.h=
-:51
-> > >  queued_spin_lock include/asm-generic/qspinlock.h:114 [inline]
-> > >  do_raw_spin_lock+0x271/0x370 kernel/locking/spinlock_debug.c:116
-> > >  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:111 [inline=
-]
-> > >  _raw_spin_lock_irqsave+0xe1/0x120 kernel/locking/spinlock.c:162
-> > >  __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
-> > >  ____bpf_ringbuf_reserve kernel/bpf/ringbuf.c:459 [inline]
-> > >  bpf_ringbuf_reserve+0x5c/0x70 kernel/bpf/ringbuf.c:451
-> > >  bpf_prog_9efe54833449f08e+0x2d/0x47
-> > >  bpf_dispatcher_nop_func include/linux/bpf.h:1231 [inline]
-> > >  __bpf_prog_run include/linux/filter.h:651 [inline]
-> > >  bpf_prog_run include/linux/filter.h:658 [inline]
-> > >  __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
-> > >  bpf_trace_run2+0x204/0x420 kernel/trace/bpf_trace.c:2420
-> > >  __traceiter_contention_end+0x7b/0xb0 include/trace/events/lock.h:122
-> > >  trace_contention_end+0xd7/0x100 include/trace/events/lock.h:122
-> > >  __mutex_lock_common kernel/locking/mutex.c:617 [inline]
-> > >  __mutex_lock+0x2e4/0xd70 kernel/locking/mutex.c:752
-> > >  __pipe_lock fs/pipe.c:103 [inline]
-> > >  pipe_write+0x1cc/0x1a40 fs/pipe.c:465
-> > >  call_write_iter include/linux/fs.h:2087 [inline]
-> > >  new_sync_write fs/read_write.c:497 [inline]
-> > >  vfs_write+0xa81/0xcb0 fs/read_write.c:590
-> > >  ksys_write+0x1a0/0x2c0 fs/read_write.c:643
-> > >  do_syscall_64+0xf9/0x240
-> > >  entry_SYSCALL_64_after_hwframe+0x6f/0x77
-> > > RIP: 0033:0x4e8593
-> > > Code: c7 c2 a8 ff ff ff f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f =
-1f 00 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 01 00 00 00 0f 05 <48> 3d 00 f=
-0 ff ff 77 55 c3 0f 1f 40 00 48 83 ec 28 48 89 54 24 18
-> > > RSP: 002b:00007ffeda768928 EFLAGS: 00000246 ORIG_RAX: 000000000000000=
-1
-> > > RAX: ffffffffffffffda RBX: 0000000000000012 RCX: 00000000004e8593
-> > > RDX: 0000000000000012 RSI: 0000000000817140 RDI: 0000000000000002
-> > > RBP: 0000000000817140 R08: 0000000000000010 R09: 0000000000000090
-> > > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000012
-> > > R13: 000000000063f460 R14: 0000000000000012 R15: 0000000000000001
-> > >  </TASK>
-> > >
-> > >
+> > > Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
 > > > ---
-> > > This report is generated by a bot. It may contain errors.
-> > > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> > >  tools/lib/bpf/ringbuf.c | 8 ++++++++
+> > >  1 file changed, 8 insertions(+)
 > > >
-> > > syzbot will keep track of this issue. See:
-> > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> > > diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
+> > > index aacb64278a01..dd8908eb3204 100644
+> > > --- a/tools/lib/bpf/ringbuf.c
+> > > +++ b/tools/lib/bpf/ringbuf.c
+> > > @@ -265,6 +265,14 @@ static int64_t ringbuf_process_ring(struct ring =
+*r)
+> > >                                         return err;
+> > >                                 }
+> > >                                 cnt++;
+> > > +                               if (err > 0) {
+> >
+> > So libbpf already stops at any err < 0 (and sets correct consumer
+> > pos). So you could already get desired behavior by just returning your
+> > own error code. If you need count, you'd have to count it yourself
+> > through custom context, that's a bit of inconvenience.
+>
+> Yep, that's exactly what I'm doing right now.
+>
+> To give more context, here's the code:
+> https://github.com/sched-ext/scx/blob/b7c06b9ed9f72cad83c31e39e9c4e2cfd86=
+83a55/rust/scx_rustland_core/src/bpf.rs#L217
+>
+
+cool, great that you at least have a work-around
+
+
+> >
+> > But on the other hand, currently if user callback returns anything > 0
+> > they keep going and that return value is ignored. Your change will
+> > break any such user pretty badly. So I'm a bit hesitant to do this.
+>
+> So, returning a value > 0 should have the same behavior as returning 0?
+
+yes, that's what the contract is right now
+
+> Why any user callback would return > 0 then?
+
+this is not the code I can control and ringbuf API was like that for a
+long time, which is why I'm saying I'm hesitant to make these changes
+
+>
+> >
+> > Is there any reason you can't just return error code (libbpf doesn't
+> > do anything with it, just passes it back, so it might as well be
+> > `-cnt`, if you need that).
+>
+> Sure, I can keep using my special error code to stop. It won't be a
+> problem for my particular use case.
+>
+> Actually, one thing that it would be nice to have is a way to consume up
+> to a certain amount of items, let's say I need to copy multiple items
+> from the ring buffer to a limited user buffer. But that would require a
+> new API I guess, in order to pass the max counter... right?
+
+Yes, definitely a new API, but that's not a big problem. Though I'm
+wondering if ring_buffer__consume_one() would be a more flexible API,
+where user would have more flexible control. Either way libbpf is
+doing smp_store_release() after each consumed element, so I don't
+think it will have any downsides in terms of performance.
+
+So please consider contributing a patch for this new API.
+
+>
+> Thanks,
+> -Andrea
+>
+> >
+> > pw-bot: cr
+> >
+> > > +                                       /* update consumer pos and re=
+turn the
+> > > +                                        * total amount of items cons=
+umed.
+> > > +                                        */
+> > > +                                       smp_store_release(r->consumer=
+_pos,
+> > > +                                                         cons_pos);
+> > > +                                       goto done;
+> > > +                               }
+> > >                         }
 > > >
-> > > If the report is already addressed, let syzbot know by replying with:
-> > > #syz fix: exact-commit-title
+> > >                         smp_store_release(r->consumer_pos, cons_pos);
+> > > --
+> > > 2.43.0
 > > >
-> > > If you want syzbot to run the reproducer, reply with:
-> > > #syz test: git://repo/address.git branch-or-commit-hash
-> > > If you attach or paste a git patch, syzbot will apply it before testi=
-ng.
 > > >
-> > > If you want to overwrite report's subsystems, reply with:
-> > > #syz set subsystems: new-subsystem
-> > > (See the list of subsystem names on the web dashboard)
-> > >
-> > > If the report is a duplicate of another one, reply with:
-> > > #syz dup: exact-subject-of-another-report
-> > >
-> > > If you want to undo deduplication, reply with:
-> > > #syz undup
