@@ -1,113 +1,256 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D1C139572
-	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 19:13:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15031428EC
+	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 20:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710270786; cv=none; b=EQN0Rh2qQOosWiKDZHqh6Ro+lRW38iSe/3lvRZ/Ycle3cZtekSEYjXoJGc8aJrdDzpznXS/rxF2t8UWqr5bZ70XwVJYMCrfLhdJjPj5Osq292VKAMzEMdYU6NzAJJ5oPrIu4PRkLzqvByDJRx4aeZ7OdbBC6Xc3zHVdSboYa06M=
+	t=1710274277; cv=none; b=JBtIJZqNZkd6ABl2XBVYK5t/VO6WK9tncGEQy5QeMjMnFrk10TowOLnWe69w5woGd0qLMrI/3gcoTlCNRdoMOm/vn7FZn2QYdP7uuOms7Kc/rBWt8hJG8EM0/er+3hnxszJ44cD16GU69lFslgLzrp6CK6he6Sh4XohrFbcxb2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710270786; c=relaxed/simple;
-	bh=Amfo1zyY/XMgZfkM64p7BMIVhxMGSBZtC+3yuV7dH0w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WWNQaNa8ws/fQAc/OHjxwvJG4ZvpNqR2pG/Ao8Ig75P62I2WDmtLzmhVKvTAVVDjUQdw95ZHZbP9z7OWDL/AvIJWR61hxDayJXwC56n5I9V7ZKuQa8BtKK2jUyb8Xdc9DX23ObR1tMrTnenBi4A0j2fCgsATHtr1StmXcOg65pM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atishpatra.org; spf=pass smtp.mailfrom=atishpatra.org; dkim=pass (1024-bit key) header.d=atishpatra.org header.i=@atishpatra.org header.b=FKnLkNPQ; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atishpatra.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atishpatra.org
+	s=arc-20240116; t=1710274277; c=relaxed/simple;
+	bh=ZTzOhV15T2M/IQSF7GpXLwUn0RlUF6gGc0Px4d4WFLA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=flNiL769O+rpiX6JtjmrCVuyR7V413LT1HDVjXMLAakrzbqT4Wr6lQLwyUMJzDiHZ+opwLbLMngvIizYNTtrdEbfnu7b5vXH4fC2nwhPXcywlZuztxmgSs4TkyvCbFOjxilQsJGq1Q2rlWbAmJ8jy83yjHHs7Jt1buv+rjeChpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4KIjMWH9; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=atishpatra.org header.i=@atishpatra.org header.b="FKnLkNPQ"
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5131316693cso306394e87.0
-        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 12:13:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4KIjMWH9"
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5135486cfccso5820548e87.0
+        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 13:11:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google; t=1710270782; x=1710875582; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6jG8wbZD5AfK31iZyN31p0fO15RUS8zjleaircOhECw=;
-        b=FKnLkNPQGPH0aBpXuknz9S5g/N4I6NCuu3xogMutRMb08FhHuHHuFFPr8UssL+VWU9
-         /2MLGlwe0CKvdQPMe9QGsh3xe6GVRV0q5aV9TNmrEUkQOkUpkuXV+2Ss1FGy3e0/DoKe
-         MZgynV0Xx7i3oW5QNYsJLkONFqKWnpwHqUU3o=
+        d=google.com; s=20230601; t=1710274274; x=1710879074; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=aTW9UBNB4skRIIaA0uCJ32yGuAcFB87u0woHqEplkTs=;
+        b=4KIjMWH9jxSDdQHvU3oAQtVx7A+VJn5FDhQzKDvo+7XO/6WEbaWEneEUPZJqeHeSjt
+         cYAbSuE3iYU7b0fVFW+0HLRBs9tESJGxUJFcg5KN/NUYd316o+hv1fQncGvRlSR4YKGB
+         S+gAFWtLN9k1UTunyBjloJfxS9yQGkqZbGB0YUtDitHvOPkSCf1yX5isJ4OErl9dybmF
+         6pLBaHOYPIhKfBjxhdDHalEEQFACoAgabSHsBB5YasrZOsOrIX+xGKZrj/aXahwbqFYE
+         YUp+aTke/Oy7ygr6Fm3ud8RCEwWfN3+wSh+qqpR4Vrv+yLi2eYTdhXrLz6ZGK6nJYoAm
+         4RdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710270782; x=1710875582;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6jG8wbZD5AfK31iZyN31p0fO15RUS8zjleaircOhECw=;
-        b=UmbExSof4E1qdobG2DaJFtzZThXkqIe5wYIoNZKc4+rWY2kV08ZCCalTA+vB5575WD
-         4CsF3fjecFlkTZpq0eIEldMwqTmqtAIddkyMMq/UfTk5eafOjz+9IyUv1nqyTNXh2VNR
-         pkKqsAD0+ZA2jgfu5d1Xw5DUAgOBbROlcS2bqFshsbkXI0BmP3lzIfb+xn5mEgFHNFH+
-         QwyO1cO65OJAka2DE6/7MidrQ0DjoKJjJQLSRjjx0uklLm2QEiTN6Cjjld8lWFRH1W21
-         SPO6QTQpJYhjgUxfFMMXCAfZd+Fad1WWzlmeCRbAHFHiyCkSTKpIbCpII1IZn8//iXgc
-         ZwGw==
-X-Forwarded-Encrypted: i=1; AJvYcCVdcCj8uP4iFLXxFeZeyIFSeavmB72mogFTJu4qL9QVoQ5BbQmtYj8l5hQ9xCRC1puyzkZaHzeh1K7GAyVrMEmKGzHm
-X-Gm-Message-State: AOJu0YwOimcpIVQPnFRkuC/WD8UgGBu0NtutP6JJwJzpExlEuzNyAA/Z
-	CT4UpGrYutbkv2aXXQPc8uk8PgRDm1UqQZ6GwYKLN9ilHK1E8sItnGyK+Oho5FeZr/xn8MvARbP
-	22/azScSgkQEqLV04l9NIK4l9fahe5xJqgsFi
-X-Google-Smtp-Source: AGHT+IGPN7MP8pGrBw+bqrQS1y4hzsPicRpPqb0kh9lC4781+mVZ8XqAvBGV25wdDyJyi7TeYTLFfsuHZmR1lT5iWJ8=
-X-Received: by 2002:a05:6512:5c8:b0:513:c7eb:edf1 with SMTP id
- o8-20020a05651205c800b00513c7ebedf1mr32508lfo.59.1710270782277; Tue, 12 Mar
- 2024 12:13:02 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710274274; x=1710879074;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aTW9UBNB4skRIIaA0uCJ32yGuAcFB87u0woHqEplkTs=;
+        b=YlaKJsES7VG4NczCABVvHxiJY3K3IwR88hLa/blzJHiZPz/alxH29uzh2yx7X1kwKj
+         CEc28CiGxdZf3w8ge9i0k3WxjtPcmJgmH5t64eyNAEgjRad08EajldnPUF8Q/BajGIY9
+         UtSClm4R+ud4TCfh8hkiXPjXU7kCmU177oQ8tIWxTfsqX/+23asU5i351LGwNYMqz71t
+         Pm3iHnx/wMp68BCNkdhU6no7vguuexQwgvEOMKxmca3K6Fywbik0jpJCAmv+4RXRpY9F
+         bOR8sQJ0uJeXm0jWZ3ebkwGOoa/bchOC9bZRsq9Z2IZgMwtlWsd3N02DlPX8s6y0AVSk
+         UXZg==
+X-Forwarded-Encrypted: i=1; AJvYcCVzkzmg9yVpWU0DWQkX0DF+AXkvA6afnv6KqGFKN59S4nCkd1QkbD7zOpXahtg8qwoz/hsdqtLabe/1CzWePK/HVYjb
+X-Gm-Message-State: AOJu0Yz0rqG8tSjh5Y5j/Rwl1+Y7xjUI4EHRhlXuY4IVpJ12Mvv16mXN
+	zzrLJMNLyPX4wppG0wJRpm/RgAvvlBxSIdm0kPRkJiG/WmxfSxb4W77I8eVVLQ==
+X-Google-Smtp-Source: AGHT+IF+AhYKVculquTNUnhCVljsflyqLdu6h/Yij3aC1xYaUjGLnZQatobo+tgbJCrmukCn6bUzVw==
+X-Received: by 2002:ac2:5f7b:0:b0:512:e58c:7bf1 with SMTP id c27-20020ac25f7b000000b00512e58c7bf1mr6443085lfc.40.1710274273885;
+        Tue, 12 Mar 2024 13:11:13 -0700 (PDT)
+Received: from google.com (12.196.204.35.bc.googleusercontent.com. [35.204.196.12])
+        by smtp.gmail.com with ESMTPSA id h8-20020a0564020e0800b005653c441a20sm3775534edh.34.2024.03.12.13.11.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Mar 2024 13:11:13 -0700 (PDT)
+Date: Tue, 12 Mar 2024 20:11:09 +0000
+From: Matt Bobrowski <mattbobrowski@google.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@google.com>,
+	Jann Horn <jannh@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-mm <linux-mm@kvack.org>,
+	LSM List <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v2 bpf-next 0/9] add new acquire/release BPF kfuncs
+Message-ID: <ZfC23WIxnBc9CU6c@google.com>
+References: <cover.1709675979.git.mattbobrowski@google.com>
+ <20240306-flach-tragbar-b2b3c531bf0d@brauner>
+ <20240306-sandgrube-flora-a61409c2f10c@brauner>
+ <CAADnVQ+RBV_rJx5LCtCiW-TWZ5DCOPz1V3ga_fc__RmL_6xgOg@mail.gmail.com>
+ <20240307-phosphor-entnahmen-8ef28b782abf@brauner>
+ <CAADnVQLMHdL1GfScnG8=0wL6PEC=ACZT3xuuRFrzNJqHKrYvsw@mail.gmail.com>
+ <20240308-kleben-eindecken-73c993fb3ebd@brauner>
+ <CAADnVQJVNntnH=DLHwUioe9mEw0FzzdUvmtj3yx8SjL38daeXQ@mail.gmail.com>
+ <20240311-geglaubt-kursverfall-500a27578cca@brauner>
+ <ZfCLnOBDnBp2wcJy@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240312012053.1178140-1-pulehui@huaweicloud.com>
-In-Reply-To: <20240312012053.1178140-1-pulehui@huaweicloud.com>
-From: Atish Patra <atishp@atishpatra.org>
-Date: Tue, 12 Mar 2024 12:12:50 -0700
-Message-ID: <CAOnJCUKF4BWfX+Z6cQLjfFKc5+REsSXWiVvcHadrs-=z1b6+5g@mail.gmail.com>
-Subject: Re: [PATCH v2] drivers/perf: riscv: Disable PERF_SAMPLE_BRANCH_*
- while not supported
-To: Pu Lehui <pulehui@huaweicloud.com>
-Cc: linux-riscv@lists.infradead.org, bpf@vger.kernel.org, 
-	Conor Dooley <conor@kernel.org>, Anup Patel <anup@brainfault.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	Pu Lehui <pulehui@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZfCLnOBDnBp2wcJy@google.com>
 
-On Mon, Mar 11, 2024 at 6:19=E2=80=AFPM Pu Lehui <pulehui@huaweicloud.com> =
-wrote:
->
-> From: Pu Lehui <pulehui@huawei.com>
->
-> RISC-V perf driver does not yet support branch sampling. Although the
-> specification is in the works [0], it is best to disable such events
-> until support is available, otherwise we will get unexpected results.
-> Due to this reason, two riscv bpf testcases get_branch_snapshot and
-> perf_branches/perf_branches_hw fail.
->
-> Link: https://github.com/riscv/riscv-control-transfer-records [0]
-> Fixes: f5bfa23f576f ("RISC-V: Add a perf core library for pmu drivers")
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> ---
->  drivers/perf/riscv_pmu.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/perf/riscv_pmu.c b/drivers/perf/riscv_pmu.c
-> index c78a6fd6c57f..b4efdddb2ad9 100644
-> --- a/drivers/perf/riscv_pmu.c
-> +++ b/drivers/perf/riscv_pmu.c
-> @@ -313,6 +313,10 @@ static int riscv_pmu_event_init(struct perf_event *e=
-vent)
->         u64 event_config =3D 0;
->         uint64_t cmask;
->
-> +       /* driver does not support branch stack sampling */
-> +       if (has_branch_stack(event))
-> +               return -EOPNOTSUPP;
-> +
->         hwc->flags =3D 0;
->         mapped_event =3D rvpmu->event_map(event, &event_config);
->         if (mapped_event < 0) {
-> --
-> 2.34.1
->
+On Tue, Mar 12, 2024 at 05:06:36PM +0000, Matt Bobrowski wrote:
+> Hey Christian,
+> 
+> On Mon, Mar 11, 2024 at 01:00:56PM +0100, Christian Brauner wrote:
+> > On Fri, Mar 08, 2024 at 05:23:30PM -0800, Alexei Starovoitov wrote:
+> > > On Fri, Mar 8, 2024 at 2:36 AM Christian Brauner <brauner@kernel.org> wrote:
+> > > >
+> > > >
+> > > > These exports are specifically for an out-of-tree BPF LSM program that
+> > > > is not accessible to the public. The question in the other mail stands.
+> > > 
+> > > The question was already answered. You just don't like the answer.
+> > > bpf progs are not equivalent to kernel modules.
+> > > They have completely different safety and visibility properties.
+> > > The safety part I already talked about.
+> > > Sounds like the visibility has to be explained.
+> > > Kernel modules are opaque binary blobs.
+> > > bpf programs are fully transparent. The intent is known
+> > > to the verifier and to anyone with understanding
+> > > of bpf assembly.
+> > > Those that cannot read bpf asm can read C source code that is
+> > > embedded in the bpf program in kernel memory.
+> > > It's not the same as "llvm-dwarfdump module.ko" on disk.
+> > > The bpf prog source code is loaded into the kernel
+> > > at program verification time for debugging and visibility reasons.
+> > > If there is a verifier bug and bpf manages to crash the kernel
+> > > vmcore will have relevant lines of program C source code right there.
+> > > 
+> > > Hence out-of-tree or in-tree bpf makes no practical difference.
+> > > The program cannot hide its meaning and doesn't hamper debugging.
+> > > 
+> > > Hence adding EXPORT_SYMBOL == Brace for impact!
+> > > Expect crashes, api misuse and what not.
+> > > 
+> > > While adding bpf_kfunc is a nop for kernel development.
+> > > If kfunc is in the way of code refactoring it can be removed
+> > > (as we demonstrated several times).
+> > > A kfunc won't cause headaches for the kernel code it is
+> > > calling (assuming no verifier bugs).
+> > > If there is a bug it's on us to fix it as we demonstrated in the past.
+> > > For example: bpf_probe_read_kernel().
+> > > It's a wrapper of copy_from_kernel_nofault() and over the years
+> > > bpf users hit various bugs in copy_from_kernel_nofault(),
+> > > reported them, and _bpf developers_ fixed them.
+> > > Though copy_from_kernel_nofault() is as generic as it can get
+> > > and the same bugs could have been reproduced without bpf
+> > > we took care of fixing these parts of the kernel.
+> > > 
+> > > Look at path_put().
+> > > It's EXPORT_SYMBOL and any kernel module can easily screw up
+> > > reference counting, so that sooner or later distro folks
+> > > will experience debug pains due to out-of-tree drivers.
+> > > 
+> > > kfunc that calls path_put() won't have such consequences.
+> > > The verifier will prevent path_put() on a pointer that wasn't
+> > > acquired by the same bpf program. No support pains.
+> > > It's a nop for vfs folks.
+> > > 
+> > > > > First of all, there is no such thing as get_task_fs_pwd/root
+> > > > > in the kernel.
+> > > >
+> > > > Yeah, we'd need specific helpers for a never seen before out-of-tree BPF
+> > > > LSM. I don't see how that's different from an out-of-tree kernel module.
+> > > 
+> > > Sorry, but you don't seem to understand what bpf can and cannot do,
+> > > hence they look similar.
+> > 
+> > Maybe. On the other hand you seem to ignore what I'm saying. You
+> > currently don't have a clear set of rules for when it's ok for someone
+> > to send patches and request access to bpf kfuncs to implement a new BPF
+> > program. This patchset very much illustrates this point. The safety
+> > properties of bpf don't matter for this. And again, your safety
+> > properties very much didn't protect you from your bpf_d_path() mess.
+> > 
+> > We're not even clearly told where and how these helper are supposed to be
+> > used. That's not ok and will never be ok. As long as there are no clear
+> > criteria to operate under this is highly problematic. This may be fine
+> > from a bpf perspective and one can even understand why because that's
+> > apparently your model or promise to your users. But there's no reason to
+> > expect the same level of laxness from any of the subsystems you're
+> > requesting kfuncs from.
+> 
+> You raise a completely fair point, and I truly do apologies for the
+> lack of context and in depth explanations around the specific
+> situations that the proposed BPF kfuncs are intended to be used
+> from. Admittedly, that's a failure on my part, and I can completely
+> understand why from a maintainers point of view there would be
+> reservations around acknowledging requests for adding such invisible
+> dependencies.
+> 
+> Now, I'm in a little bit of a tough situation as I'm unable to point
+> you to an open-source BPF LSM implementation that intends to make use
+> of such newly proposed BPF kfuncs. That's just an unfortunate
+> constraint and circumstance that I'm having to deal with, so I'm just
+> going to have to provide heavily redacted and incomplete example to
+> illustrate how these BPF kfuncs intend to be used from BPF LSM
+> programs that I personally work on here at Google. Notably though, the
+> contexts that I do share here may obviously be a nonholistic view on
+> how these newly introduced BPF kfuncs end up getting used in practice
+> by some other completely arbitrary open-source BPF LSM programs.
+> 
+> Anyway, as Alexei had pointed out in one of the prior responses, the
+> core motivating factor behind introducing these newly proposed BPF
+> kfuncs purely stems from the requirement of needing to call
+> bpf_d_path() safely on a struct path from the context of a BPF LSM
+> program, specifically within the security_file_open() and
+> security_mmap_file() LSM hooks. Now, as noted within the original bug
+> report [0], it's currently not considered safe to pluck a struct path
+> out from an arbitrary in-kernel data structure, which in our case was
+> current->mm->exe_file->f_path, and have it passed to bpf_d_path() from
+> the aforementioned LSM hook points, or any other LSM hook point for
+> that matter.
+> 
+> So, without using these newly introduced BPF kfuncs, our BPF LSM
+> program hanging off security_file_open() looks as follows:
+> 
+> ```
+> int BPF_PROG(file_open, struct file *file)
+> {
+>   // Perform a whole bunch of operations on the supplied file argument. This
+>   // includes some form of policy evaluation, and if there's a violation against
+>   // policy and auditing is enabled, then we eventually call bpf_d_path() on
+>   // file->f_path. Calling bpf_d_path() on the file argument isn't problematic
+>   // as we have a stable path here as the file argument is reference counted.
+>   struct path *target = &file->f_path;
+> 
+>   // ...
+> 
+>   struct task_struct *current = bpf_get_current_task_btf();
+> 
+>   // ...
+>   
+>   bpf_rcu_read_lock();
+>   // Reserve a slot on the BPF ring buffer such that the actor's path can be
+>   // passed back to userspace.
+>   void *buf = bpf_ringbuf_reserve(&ringbuf, PATH_MAX, 0);
+>   if (!buf) {
+>     goto unlock;
+>   }
+> 
+>   // For contextual purposes when performing an audit we also call bpf_d_path()
+>   // on the actor, being current->mm->exe_file->f_path.
+>   struct path *actor = &current->mm->exe_file->f_path;
+> 
+>   // Now perform the path resolution on the actor via bpf_d_path().
+>   u64 ret = bpf_d_path(actor, buf, PATH_MAX);
+>   if (ret > 0) {
+>     bpf_ringbuf_submit(buf, BPF_RB_NO_WAKEUP);
+>   } else {
+>     bpf_ringbuf_discard(buf, 0);
+>   }
+> 
+> unlock:
+>   bpf_rcu_read_unlock();
+>   return 0;
+> }
+> ```
 
+Note that we're also aware of the fact that calling bpf_d_path()
+within an RCU read-side critical shouldn't be permitted. I have a
+patch teed up which addresses this. bpf_path_d_path() OTOH isn't
+susceptible to this problem as the BPF verifier ensure that BPF kfuncs
+annotated KF_SLEEPABLE can't be called whilst in an RCU read-side
+critical section.
 
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
---=20
-Regards,
-Atish
+/M
