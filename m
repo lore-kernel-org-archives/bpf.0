@@ -1,288 +1,313 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41A015BF;
-	Tue, 12 Mar 2024 16:42:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9DE213B2BD
+	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 17:06:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710261754; cv=none; b=JSgeGS0tVWvZHHOYhnYS9B7j2omVCZT+7DmyCEVa/DB1HpUYhmkZea/Nvgg1VDJNaYaoWhhSdaVDQWHHSMHdpDDExtmo/0R3JLs//VSF+nq2Sas0zx6qoyqXWk3IDtXxZcO0TMR0p+Qp9Y9LBpy4qhXmjn1rpKrIPYXrEWANa4E=
+	t=1710263210; cv=none; b=DIDUdvkZvGhwcj7F/k1l8NwiEOjukcaF0B85vs8DqID1rXISyQUOiBoLk5IWi7J32S/AR+diEL4RX2xrkJBHlCyorBIFR8Jfk60czlO24tgDeWLR6EpLtWZOkVQvJ1ayyv6Gv0/goaj4A8DWH9ENfZz2sqA84DCPprTfnW6qui8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710261754; c=relaxed/simple;
-	bh=IOgqkFC+7YdtEWrDEG6VjFtw1asWxY5nI0CrswHAChw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AirsjUnB326vLJHYVfcOpl8EJhyJUYObcTbvo92ujtEPioQlfOIV1YHkxAwMRNqurXlcY0gcNr9ODJhSktIAXX4diTthGWBU8Up27IK09A5mKeZsj2dLaE0Z9i0isftffBUq4Og4kSbGryrdROgIYUKY8et3ch2v52cLXhch7Xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d/iSciIw; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710263210; c=relaxed/simple;
+	bh=tp5GJDJhFlsY2bgmgdHUuBDT+vKAUmP0b5/gPSMSm8M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=vEJgljSMXUWMg4slIFGuHd6Mh8jv+6SimSiIbiZVlRSy42ltp1Crf4drQ1imeA9HAlCocUKn339kVDKmCmNbRZBM0xjs3mzuaJC8B5+AFDO3FpjcBXd/7DTuSTqYyaSyZLTFK5RoZFJMrW03xUMjHrx1wuCkjnjq0zV8c6JUYo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eXrvPo4C; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d/iSciIw"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-33e9df3416bso1255106f8f.3;
-        Tue, 12 Mar 2024 09:42:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eXrvPo4C"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-56840d872aeso4387110a12.0
+        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 10:06:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710261751; x=1710866551; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OLfmcQWu5XXgWrSqV2rZUXevRLdZ2i834nrQ0vcBR5U=;
-        b=d/iSciIwroGieURQlgA8fpaiaFKGNwcyk4A5FC2l9dhiKW6spTNPbw824j8YQbxmJn
-         VaB1YYFXAw6zMZpjeJ8ybd6gVqTIcQ8SECsb9Gnq5t8WpFswyAocjSaErpZXlq/BJmcH
-         KwTPcDoxYZakRsMKF4gbErmSAYHTPFQDtHIdKUTZ1M6tqsIzYjHudZNrU3MqBHWTtnnc
-         mLG1OMez6Qc9U//258c1SDybIw5CFRqg4DJemZMoTV4VJSu3zWZNIjRM2ol4PeDbUUwf
-         nptpMqqrc7XZfW6H2Hz0bKYvgzb5R/RJM9xGf1FL0KwBGe7NHyNWMCH79dbAwYso6FYZ
-         bSDQ==
+        d=google.com; s=20230601; t=1710263207; x=1710868007; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zB5OcsqYgooW+2YsYbicutHPTgoP7Ts7AFCJig6ZoKo=;
+        b=eXrvPo4C9sB00275h6/4v4IGJ4TlUUp5o8rlY3gWLjPB1/uG1AZLFA5li7a5cZaGTP
+         dbMKOUWgSAnD39CWIn+9zAKrHjcsbXN7DUSLsc+NDNVj7iBpewn/cQOc43fWLW+JiH1w
+         /5KqKZwF3NyjYirx8TvFsNR4nphHu1cBbMYS/t9fldPzmYnt4nlEgq4xsCRqWp44MWZg
+         1grsME6p56vBhKltx8W7/yjG43tsu61l0ELh6ePL2eBGGVekXqpvSyJZv4HDIkxiHGCr
+         1xKPxH/4AnSDAa42MzNYuPkNpBL3BeRTbU9YuBhe3KsaELWLOl/7jlt8A45Wo2rTjxBg
+         mfNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710261751; x=1710866551;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OLfmcQWu5XXgWrSqV2rZUXevRLdZ2i834nrQ0vcBR5U=;
-        b=KQ29HysbZoOwqUlT5JGrEL05JJ0+wffQIvkiU7SxZ1Adjzyf1VLJh+hAy2V4BLY2PX
-         jjNMRr5hG89XcjAHXnXBP4WJT8lDWqYtD3tVKPJKrIS/gd5rLJHUnorigb0DEn9mV7uy
-         rtAuBYb0VUtJr6kiW3NIKZ0YFym6ic/0hIt/rcmXxeln5s30mUkZ5ZX7DBq60oj6TkdV
-         ntwRbzkeeuTEbmYHpVUl5CVTWpP20y95y97V72HZ79PYMgwJsOayXXepxfyBOWcrhZUT
-         VkFCzTkyORul1m1CLZzO9ebmpfD+HQTMCMmW89jP1FNB25xOYKX//FIv2bezUfg9YRXE
-         yHTw==
-X-Forwarded-Encrypted: i=1; AJvYcCVNssiKARFpffZ8LoFSbrjGVSAKhQXuefJJFx41gcDFjND5KLa3vPRqxsTM4wa0CCYlkJDjb5BW78pkswMq8V/BMe+Q891K3xaq6iOJgUVVkZistZI7i2ZBJEHJBBs0XAkH2pm+x8ASHdHFPA/f4Qkhk8594XPW+YTG8PWdR6pUB70qTtOiOOekI8y1OABLrihS9A+JPTyQOWhnH3/qdRuAcG6psA0ixnNyyDERJ4EbbTkj8IXs7pK0dCpq7L7WRBMeTxdisQ1i4o26e1b6Mhqh8hSRr5Bn3LhxSQ==
-X-Gm-Message-State: AOJu0Yx4f6A3li4NgbiVm58JtzoXKBefug+tQwcyttaSpOxX5RWiDfuU
-	QKXIk84fwa6J3YFyeIuU2cI9Lfw7kuNqaIJ6yPj5DTuTH7cQnLFq3VxpLIcNXFji9x68OAeB90l
-	7ghPlqBXrzQiHMVduxhgbAKbv/ok=
-X-Google-Smtp-Source: AGHT+IEa+4UMJem4Fp/QIrh+BONIvwnIkZaOvOjaYS7rj5IxmTt11nQG4gevX9xIkt30Kg19GjMMdC27opnimO5UKuk=
-X-Received: by 2002:adf:fa91:0:b0:33e:11c3:7ebf with SMTP id
- h17-20020adffa91000000b0033e11c37ebfmr6854846wrr.62.1710261750841; Tue, 12
- Mar 2024 09:42:30 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710263207; x=1710868007;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zB5OcsqYgooW+2YsYbicutHPTgoP7Ts7AFCJig6ZoKo=;
+        b=REE8x/0W3mA0/CNnIorl72vovmqDctirvcErJLyrNYKAOLf9KqUgNHkki3C3+MQa4R
+         QWk4VesrcWWSFLrJhk5E8R6R/tP6mMno5CA6LYfUJP7u7H85E5O/mBgPaWTylx+GVYqm
+         tKNp2xSeaWgYjDPgyG4KtpZhyREclfwUhsKgOflPgcjcNXsl5OUhtfKd9peEs8L4Dskg
+         aNmALYOtImx9r2BlIse+bHA4asrqPfz8d1ThvvisWbbhHfEsA2SMtTCIWRupHzYmEvxs
+         FSkd6a0tSNRi89X0RJVih3uMV6rztKRNxN1Dy2SglI2XaKfue+9Hq5ZAoxE3l9RiXrOW
+         cWVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWgD2xgReKxzhb9AUvTiLqZ44D6xZaTQsQLTSOCItkBLMveF1cJS3zXrv7shthpdifJtQNu2YejVHbx9kPLDZ/qPvxq
+X-Gm-Message-State: AOJu0Yx1EdX4EaDpYsRZw7rVkEmrE+qa6g3+ggDgkjhBkGnarc22v5jG
+	teT12+X+Yj4nu9IBV1+6fgAA4tjmsrP6u+daSGGUPkAq0DNP3updt/O799aAAA==
+X-Google-Smtp-Source: AGHT+IEI+5ZeRxyTNwgNp4mYtKX2fYjiH77MdAHaIh6CM5o8Vto9KrIbDxf7Shq7e5wuKr+g45z/+A==
+X-Received: by 2002:a50:c01b:0:b0:566:43ab:8b78 with SMTP id r27-20020a50c01b000000b0056643ab8b78mr6675907edb.30.1710263206888;
+        Tue, 12 Mar 2024 10:06:46 -0700 (PDT)
+Received: from google.com (12.196.204.35.bc.googleusercontent.com. [35.204.196.12])
+        by smtp.gmail.com with ESMTPSA id d23-20020a056402001700b0056857701bf5sm2379670edu.81.2024.03.12.10.06.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Mar 2024 10:06:46 -0700 (PDT)
+Date: Tue, 12 Mar 2024 17:06:36 +0000
+From: Matt Bobrowski <mattbobrowski@google.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@google.com>,
+	Jann Horn <jannh@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-mm <linux-mm@kvack.org>,
+	LSM List <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v2 bpf-next 0/9] add new acquire/release BPF kfuncs
+Message-ID: <ZfCLnOBDnBp2wcJy@google.com>
+References: <cover.1709675979.git.mattbobrowski@google.com>
+ <20240306-flach-tragbar-b2b3c531bf0d@brauner>
+ <20240306-sandgrube-flora-a61409c2f10c@brauner>
+ <CAADnVQ+RBV_rJx5LCtCiW-TWZ5DCOPz1V3ga_fc__RmL_6xgOg@mail.gmail.com>
+ <20240307-phosphor-entnahmen-8ef28b782abf@brauner>
+ <CAADnVQLMHdL1GfScnG8=0wL6PEC=ACZT3xuuRFrzNJqHKrYvsw@mail.gmail.com>
+ <20240308-kleben-eindecken-73c993fb3ebd@brauner>
+ <CAADnVQJVNntnH=DLHwUioe9mEw0FzzdUvmtj3yx8SjL38daeXQ@mail.gmail.com>
+ <20240311-geglaubt-kursverfall-500a27578cca@brauner>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
- <20240311093526.1010158-2-dongmenglong.8@bytedance.com> <CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
- <CALz3k9i5G5wWi+rtvHPwVLOUAXVMCiU_8QUZs87TEYgR_0wpPA@mail.gmail.com>
- <CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail.com> <CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
-In-Reply-To: <CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 12 Mar 2024 09:42:17 -0700
-Message-ID: <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add support
- to record and check the accessed args
-To: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	X86 ML <x86@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Quentin Monnet <quentin@isovalent.com>, 
-	bpf <bpf@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240311-geglaubt-kursverfall-500a27578cca@brauner>
 
-On Mon, Mar 11, 2024 at 7:42=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3 <dongme=
-nglong.8@bytedance.com> wrote:
->
-> On Tue, Mar 12, 2024 at 10:09=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Mon, Mar 11, 2024 at 7:01=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3 <do=
-ngmenglong.8@bytedance.com> wrote:
+Hey Christian,
+
+On Mon, Mar 11, 2024 at 01:00:56PM +0100, Christian Brauner wrote:
+> On Fri, Mar 08, 2024 at 05:23:30PM -0800, Alexei Starovoitov wrote:
+> > On Fri, Mar 8, 2024 at 2:36 AM Christian Brauner <brauner@kernel.org> wrote:
 > > >
-> > > On Tue, Mar 12, 2024 at 9:46=E2=80=AFAM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Mon, Mar 11, 2024 at 2:34=E2=80=AFAM Menglong Dong
-> > > > <dongmenglong.8@bytedance.com> wrote:
-> > > > >
-> > > > > In this commit, we add the 'accessed_args' field to struct bpf_pr=
-og_aux,
-> > > > > which is used to record the accessed index of the function args i=
-n
-> > > > > btf_ctx_access().
-> > > > >
-> > > > > Meanwhile, we add the function btf_check_func_part_match() to com=
-pare the
-> > > > > accessed function args of two function prototype. This function w=
-ill be
-> > > > > used in the following commit.
-> > > > >
-> > > > > Signed-off-by: Menglong Dong <dongmenglong.8@bytedance.com>
-> > > > > ---
-> > > > >  include/linux/bpf.h |   4 ++
-> > > > >  kernel/bpf/btf.c    | 108 ++++++++++++++++++++++++++++++++++++++=
-+++++-
-> > > > >  2 files changed, 110 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > > > > index 95e07673cdc1..0f677fdcfcc7 100644
-> > > > > --- a/include/linux/bpf.h
-> > > > > +++ b/include/linux/bpf.h
-> > > > > @@ -1461,6 +1461,7 @@ struct bpf_prog_aux {
-> > > > >         const struct btf_type *attach_func_proto;
-> > > > >         /* function name for valid attach_btf_id */
-> > > > >         const char *attach_func_name;
-> > > > > +       u64 accessed_args;
-> > > > >         struct bpf_prog **func;
-> > > > >         void *jit_data; /* JIT specific data. arch dependent */
-> > > > >         struct bpf_jit_poke_descriptor *poke_tab;
-> > > > > @@ -2565,6 +2566,9 @@ struct bpf_reg_state;
-> > > > >  int btf_prepare_func_args(struct bpf_verifier_env *env, int subp=
-rog);
-> > > > >  int btf_check_type_match(struct bpf_verifier_log *log, const str=
-uct bpf_prog *prog,
-> > > > >                          struct btf *btf, const struct btf_type *=
-t);
-> > > > > +int btf_check_func_part_match(struct btf *btf1, const struct btf=
-_type *t1,
-> > > > > +                             struct btf *btf2, const struct btf_=
-type *t2,
-> > > > > +                             u64 func_args);
-> > > > >  const char *btf_find_decl_tag_value(const struct btf *btf, const=
- struct btf_type *pt,
-> > > > >                                     int comp_idx, const char *tag=
-_key);
-> > > > >  int btf_find_next_decl_tag(const struct btf *btf, const struct b=
-tf_type *pt,
-> > > > > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > > > > index 170d017e8e4a..c2a0299d4358 100644
-> > > > > --- a/kernel/bpf/btf.c
-> > > > > +++ b/kernel/bpf/btf.c
-> > > > > @@ -6125,19 +6125,24 @@ static bool is_int_ptr(struct btf *btf, c=
-onst struct btf_type *t)
-> > > > >  }
-> > > > >
-> > > > >  static u32 get_ctx_arg_idx(struct btf *btf, const struct btf_typ=
-e *func_proto,
-> > > > > -                          int off)
-> > > > > +                          int off, int *aligned_idx)
-> > > > >  {
-> > > > >         const struct btf_param *args;
-> > > > >         const struct btf_type *t;
-> > > > >         u32 offset =3D 0, nr_args;
-> > > > >         int i;
-> > > > >
-> > > > > +       if (aligned_idx)
-> > > > > +               *aligned_idx =3D -ENOENT;
-> > > > > +
-> > > > >         if (!func_proto)
-> > > > >                 return off / 8;
-> > > > >
-> > > > >         nr_args =3D btf_type_vlen(func_proto);
-> > > > >         args =3D (const struct btf_param *)(func_proto + 1);
-> > > > >         for (i =3D 0; i < nr_args; i++) {
-> > > > > +               if (aligned_idx && offset =3D=3D off)
-> > > > > +                       *aligned_idx =3D i;
-> > > > >                 t =3D btf_type_skip_modifiers(btf, args[i].type, =
-NULL);
-> > > > >                 offset +=3D btf_type_is_ptr(t) ? 8 : roundup(t->s=
-ize, 8);
-> > > > >                 if (off < offset)
-> > > > > @@ -6207,7 +6212,7 @@ bool btf_ctx_access(int off, int size, enum=
- bpf_access_type type,
-> > > > >                         tname, off);
-> > > > >                 return false;
-> > > > >         }
-> > > > > -       arg =3D get_ctx_arg_idx(btf, t, off);
-> > > > > +       arg =3D get_ctx_arg_idx(btf, t, off, NULL);
-> > > > >         args =3D (const struct btf_param *)(t + 1);
-> > > > >         /* if (t =3D=3D NULL) Fall back to default BPF prog with
-> > > > >          * MAX_BPF_FUNC_REG_ARGS u64 arguments.
-> > > > > @@ -6217,6 +6222,9 @@ bool btf_ctx_access(int off, int size, enum=
- bpf_access_type type,
-> > > > >                 /* skip first 'void *__data' argument in btf_trac=
-e_##name typedef */
-> > > > >                 args++;
-> > > > >                 nr_args--;
-> > > > > +               prog->aux->accessed_args |=3D (1 << (arg + 1));
-> > > > > +       } else {
-> > > > > +               prog->aux->accessed_args |=3D (1 << arg);
-> > > >
-> > > > What do you need this aligned_idx for ?
-> > > > I'd expect that above "accessed_args |=3D (1 << arg);" is enough.
-> > > >
 > > >
-> > > Which aligned_idx? No aligned_idx in the btf_ctx_access(), and
-> > > aligned_idx is only used in the btf_check_func_part_match().
+> > > These exports are specifically for an out-of-tree BPF LSM program that
+> > > is not accessible to the public. The question in the other mail stands.
+> > 
+> > The question was already answered. You just don't like the answer.
+> > bpf progs are not equivalent to kernel modules.
+> > They have completely different safety and visibility properties.
+> > The safety part I already talked about.
+> > Sounds like the visibility has to be explained.
+> > Kernel modules are opaque binary blobs.
+> > bpf programs are fully transparent. The intent is known
+> > to the verifier and to anyone with understanding
+> > of bpf assembly.
+> > Those that cannot read bpf asm can read C source code that is
+> > embedded in the bpf program in kernel memory.
+> > It's not the same as "llvm-dwarfdump module.ko" on disk.
+> > The bpf prog source code is loaded into the kernel
+> > at program verification time for debugging and visibility reasons.
+> > If there is a verifier bug and bpf manages to crash the kernel
+> > vmcore will have relevant lines of program C source code right there.
+> > 
+> > Hence out-of-tree or in-tree bpf makes no practical difference.
+> > The program cannot hide its meaning and doesn't hamper debugging.
+> > 
+> > Hence adding EXPORT_SYMBOL == Brace for impact!
+> > Expect crashes, api misuse and what not.
+> > 
+> > While adding bpf_kfunc is a nop for kernel development.
+> > If kfunc is in the way of code refactoring it can be removed
+> > (as we demonstrated several times).
+> > A kfunc won't cause headaches for the kernel code it is
+> > calling (assuming no verifier bugs).
+> > If there is a bug it's on us to fix it as we demonstrated in the past.
+> > For example: bpf_probe_read_kernel().
+> > It's a wrapper of copy_from_kernel_nofault() and over the years
+> > bpf users hit various bugs in copy_from_kernel_nofault(),
+> > reported them, and _bpf developers_ fixed them.
+> > Though copy_from_kernel_nofault() is as generic as it can get
+> > and the same bugs could have been reproduced without bpf
+> > we took care of fixing these parts of the kernel.
+> > 
+> > Look at path_put().
+> > It's EXPORT_SYMBOL and any kernel module can easily screw up
+> > reference counting, so that sooner or later distro folks
+> > will experience debug pains due to out-of-tree drivers.
+> > 
+> > kfunc that calls path_put() won't have such consequences.
+> > The verifier will prevent path_put() on a pointer that wasn't
+> > acquired by the same bpf program. No support pains.
+> > It's a nop for vfs folks.
+> > 
+> > > > First of all, there is no such thing as get_task_fs_pwd/root
+> > > > in the kernel.
 > > >
-> > > In the btf_check_func_part_match(), I need to compare the
-> > > t1->args[i] and t2->args[j], which have the same offset. And
-> > > the aligned_idx is to find the "j" according to the offset of
-> > > t1->args[i].
-> >
-> > And that's my question.
-> > Why you don't do the max of accessed_args across all attach
-> > points and do btf_check_func_type_match() to that argno
-> > instead of nargs1.
-> > This 'offset +=3D btf_type_is_ptr(t1) ? 8 : roundup...
-> > is odd.
->
-> Hi, I'm trying to make the bpf flexible enough. Let's take an example,
-> now we have the bpf program:
->
-> int test1_result =3D 0;
-> int BPF_PROG(test1, int a, long b, char c)
-> {
->     test1_result =3D a + c;
->     return 0;
-> }
->
-> In this program, only the 1st and 3rd arg is accessed. So all kernel
-> functions whose 1st arg is int and 3rd arg is char can be attached
-> by this bpf program, even if their 2nd arg is different.
->
-> And let's take another example for struct. This is our bpf program:
->
-> int test1_result =3D 0;
-> int BPF_PROG(test1, long a, long b, char c)
-> {
->     test1_result =3D c;
->     return 0;
-> }
->
-> Only the 3rd arg is accessed. And we have following kernel function:
->
-> int kernel_function1(long a, long b, char c)
-> {
-> xxx
-> }
->
-> struct test1 {
->     long a;
->     long b;
-> };
-> int kernel_function2(struct test1 a, char b)
-> {
-> xxx
-> }
->
-> The kernel_function1 and kernel_function2 should be compatible,
-> as the bpf program only accessed the ctx[2], whose offset is 16.
-> And the arg in kernel_function1() with offset 16 is "char c", the
-> arg in kernel_function2() with offset 16 is "char b", which is
-> compatible.
+> > > Yeah, we'd need specific helpers for a never seen before out-of-tree BPF
+> > > LSM. I don't see how that's different from an out-of-tree kernel module.
+> > 
+> > Sorry, but you don't seem to understand what bpf can and cannot do,
+> > hence they look similar.
+> 
+> Maybe. On the other hand you seem to ignore what I'm saying. You
+> currently don't have a clear set of rules for when it's ok for someone
+> to send patches and request access to bpf kfuncs to implement a new BPF
+> program. This patchset very much illustrates this point. The safety
+> properties of bpf don't matter for this. And again, your safety
+> properties very much didn't protect you from your bpf_d_path() mess.
+> 
+> We're not even clearly told where and how these helper are supposed to be
+> used. That's not ok and will never be ok. As long as there are no clear
+> criteria to operate under this is highly problematic. This may be fine
+> from a bpf perspective and one can even understand why because that's
+> apparently your model or promise to your users. But there's no reason to
+> expect the same level of laxness from any of the subsystems you're
+> requesting kfuncs from.
 
-I see.
-I thought you're sharing the trampoline across attachments.
-(since bpf prog is the same).
-But above approach cannot possibly work with a shared trampoline.
-You need to create individual trampoline for all attachment
-and point them to single bpf prog.
+You raise a completely fair point, and I truly do apologies for the
+lack of context and in depth explanations around the specific
+situations that the proposed BPF kfuncs are intended to be used
+from. Admittedly, that's a failure on my part, and I can completely
+understand why from a maintainers point of view there would be
+reservations around acknowledging requests for adding such invisible
+dependencies.
 
-tbh I'm less excited about this feature now, since sharing
-the prog across different attachments is nice, but it won't scale
-to thousands of attachments.
-I assumed that there will be a single trampoline with max(argno)
-across attachments and attach/detach will scale to thousands.
+Now, I'm in a little bit of a tough situation as I'm unable to point
+you to an open-source BPF LSM implementation that intends to make use
+of such newly proposed BPF kfuncs. That's just an unfortunate
+constraint and circumstance that I'm having to deal with, so I'm just
+going to have to provide heavily redacted and incomplete example to
+illustrate how these BPF kfuncs intend to be used from BPF LSM
+programs that I personally work on here at Google. Notably though, the
+contexts that I do share here may obviously be a nonholistic view on
+how these newly introduced BPF kfuncs end up getting used in practice
+by some other completely arbitrary open-source BPF LSM programs.
 
-With individual trampoline this will work for up to a hundred
-attachments max.
+Anyway, as Alexei had pointed out in one of the prior responses, the
+core motivating factor behind introducing these newly proposed BPF
+kfuncs purely stems from the requirement of needing to call
+bpf_d_path() safely on a struct path from the context of a BPF LSM
+program, specifically within the security_file_open() and
+security_mmap_file() LSM hooks. Now, as noted within the original bug
+report [0], it's currently not considered safe to pluck a struct path
+out from an arbitrary in-kernel data structure, which in our case was
+current->mm->exe_file->f_path, and have it passed to bpf_d_path() from
+the aforementioned LSM hook points, or any other LSM hook point for
+that matter.
 
-Let's step back.
-What is the exact use case you're trying to solve?
-Not an artificial one as selftest in patch 9, but the real use case?
+So, without using these newly introduced BPF kfuncs, our BPF LSM
+program hanging off security_file_open() looks as follows:
+
+```
+int BPF_PROG(file_open, struct file *file)
+{
+  // Perform a whole bunch of operations on the supplied file argument. This
+  // includes some form of policy evaluation, and if there's a violation against
+  // policy and auditing is enabled, then we eventually call bpf_d_path() on
+  // file->f_path. Calling bpf_d_path() on the file argument isn't problematic
+  // as we have a stable path here as the file argument is reference counted.
+  struct path *target = &file->f_path;
+
+  // ...
+
+  struct task_struct *current = bpf_get_current_task_btf();
+
+  // ...
+  
+  bpf_rcu_read_lock();
+  // Reserve a slot on the BPF ring buffer such that the actor's path can be
+  // passed back to userspace.
+  void *buf = bpf_ringbuf_reserve(&ringbuf, PATH_MAX, 0);
+  if (!buf) {
+    goto unlock;
+  }
+
+  // For contextual purposes when performing an audit we also call bpf_d_path()
+  // on the actor, being current->mm->exe_file->f_path.
+  struct path *actor = &current->mm->exe_file->f_path;
+
+  // Now perform the path resolution on the actor via bpf_d_path().
+  u64 ret = bpf_d_path(actor, buf, PATH_MAX);
+  if (ret > 0) {
+    bpf_ringbuf_submit(buf, BPF_RB_NO_WAKEUP);
+  } else {
+    bpf_ringbuf_discard(buf, 0);
+  }
+
+unlock:
+  bpf_rcu_read_unlock();
+  return 0;
+}
+```
+
+Post landing these BPF kfuncs, the BPF LSM program hanging off
+security_file_open() would be updated to make use of the
+acquire/release BPF kfuncs as below. Here I'm only making use of
+bpf_get_task_exe_file(), but similar usage also extends to
+bpf_get_task_fs_root() and bpf_get_task_fs_pwd().
+
+```
+int BPF_PROG(file_open, struct file *file)
+{
+  // Perform a whole bunch of operations on the supplied file argument. This
+  // includes some form of policy evaluation, and if there's a violation against
+  // policy and auditing is enabled, then we eventually call bpf_path_d_path()
+  // on file->f_path. Calling bpf_path_d_path() on the file argument isn't
+  // problematic as we have a stable path here as the file argument is trusted
+  // and reference counted.
+  struct path *target = &file->f_path;
+
+  // ...
+
+  struct task_struct *current = bpf_get_current_task_btf();
+
+  // ...
+  
+  // Reserve a slot on the BPF ring buffer such that the actor's path can be
+  // passed back to userspace.
+  void *buf = bpf_ringbuf_reserve(&ringbuf, PATH_MAX, 0);
+  if (!buf) {
+    return 0;
+  }
+
+  // For contextual purposes when performing an audit we also call
+  // bpf_path_d_path() on the actor, being current->mm->exe_file->f_path.
+  // Here we're operating on a stable trused and reference counted file,
+  // thanks to bpf_get_task_exe_file().
+  struct file *exe_file = bpf_get_task_exe_file(current);
+  if (!exe_file) {
+    bpf_ringbuf_discard(buf, 0);
+    return 0;
+  }
+
+  // Now perform the path resolution on the actor via bpf_path_d_path(), which
+  // only accepts a trusted struct path.
+  u64 ret = bpf_path_d_path(&exe_file->f_path, buf, PATH_MAX);
+  if (ret > 0) {
+    bpf_ringbuf_submit(buf, BPF_RB_NO_WAKEUP);
+  } else {
+    bpf_ringbuf_discard(buf, 0);
+  }
+
+  // Drop the reference on exe_file.
+  bpf_put_file(exe_file);
+  return 0;
+}
+```
+
+This is rather incredibly straightforward, but the fundamental
+difference between the two implementations is that one allows us to
+work on stable file, whereas the other does not. That's really
+it. Similarly, we do more or less the same for our BPF LSM program
+that hangs off security_mmap_file().
+
+Do you need anything else which illustrates the proposed BPF kfunc
+usage?
+
+[0] https://lore.kernel.org/bpf/CAG48ez0ppjcT=QxU-jtCUfb5xQb3mLr=5FcwddF_VKfEBPs_Dg@mail.gmail.com/
+
+/M
