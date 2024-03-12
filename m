@@ -1,153 +1,138 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0EDD7826B
-	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 14:01:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A6AB7C0AF;
+	Tue, 12 Mar 2024 15:17:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710252064; cv=none; b=rn8Gdy4fFtfrQol2RpMsSwStcdlAzZxTtBkTBobfQJ3tpWuknrLeWN1JbQ7Xr38qtAEiJvodNKm1KKQ4UjOHGyMpKO8fhD9bdsZgIF2Tp460mw1iqwnwUbxEEKeRStMVURPYDH8+kgQodAdlIGbfmeXNaLDVLx7bADKCtQX0Btw=
+	t=1710256624; cv=none; b=YyPcgpVGv5UKp8pZxB/AdVsyKhAJMCaS9WGXz+ndOrGDtYaphIWTDIZi02cvcPzAqlAeolsTev91EMbtwP3Ds3W+byww0GA3KddwR1gWTZBnQggC2cwLbRrj1FOnUToxGS7vy7swhOyI6YoaYbvLegJI41coNm8qKMBG9pUicdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710252064; c=relaxed/simple;
-	bh=r3bvWHkqn0LxwXuGyjtEt70o5bxGaHmRUKS7LtvIF2Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sSZ27AXO9B/A7LvOQj9VaXOxmts2blmZAbKFgIFVO/z2wjsK2fd4s1qbHK0GybOw+z1YBh9NTObg/fhXL7XgNEckwc+bYh2bc8NRytHifhv+SS8Nj9u3lbxx3lWFAUZ030T0L37kANLdrGrWJgQvLuYLLORmBIxDkjKPTzhE1dk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=IWoq2MWl; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
+	s=arc-20240116; t=1710256624; c=relaxed/simple;
+	bh=bSthC5syu0b9DNJKbHK9XMaq4/xDZjjE/HnWodCOT0M=;
+	h=Subject:From:To:Cc:Date:Message-ID:MIME-Version:Content-Type; b=fc1UdfgqWlN4wBpAPz/2AGCIpkNr/P49zuzWff9NI3mfTdTqiUilp6fv8cIwDfD2kBkN3RNPLgt8W8q8ZJOy3iU3Wf3rpoqZbJE3mHVoXaXB9I+U+Y6XNn5NAXP5vcWUS76eZcYH9GHrZ11LIk0QoUxlMa/qRzcLv3Zg29RrOBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D7R5J0ZO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="IWoq2MWl"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-33e672e10cfso2774306f8f.0
-        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 07:01:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1710252061; x=1710856861; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OPS6ueWvDDPvd1bK4Vc3bpf3LfO9QQYNRpSn8aRrVjM=;
-        b=IWoq2MWlF/1bKFPI+SoJXcf+yc0zgPpgdGokH7LyEYVwkRosOIbKX7ryU22+evpspb
-         gl+2lb76/3Zc2H84AZefDVyBOxPoRQdMHtgYX5Ez20ejN7oVUf7QN0c8bAzz/KjZRHgs
-         ZuqtbQ6VFOPe1i2YLEjiXvWLjOvTd8q32UW4aaKtKA2Wy65PrfDw8ZE1mTmISNGMzrxb
-         UUaWFEPmzLdR6Lm4nASKufwEMF50nPuma+CqYv9TIdjQwMg+p9KZaIGKXQreUsWaWnEZ
-         x+yEnKa95ydjLZntlubXDjNeu8HeFZMr5a3SIB/67kmnH75GFbd5xwL+Ig/oMzEGJtyt
-         beZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710252061; x=1710856861;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OPS6ueWvDDPvd1bK4Vc3bpf3LfO9QQYNRpSn8aRrVjM=;
-        b=DGc+Whw3L+35zwMPRdXKNSZYeRkMdTesdxLpQGVO2y/GIMG59oBr7OvsEVTNmUSdoM
-         nqD4LMyE2DvjZahDx7cpai/JmkPEEpBSa2gvYPtC26J58MUam9BGrOrw4EyBI2/g1KdE
-         qQcF23LPWjsFV1PReIo0PklM/XN9Gmr97BhD2tZHVzZ9CLOcoMGG4bPxgni32uQt7xi7
-         ur7JA7MswtnKpWqkbrvXWD1cu/8mZ1uVWPBpvRTLWXwdcwIcuE+C0OVrgdZUUuP9m1ql
-         O2MmqVkpoBwNDFF232GXq7tdEmx5uOOIMOsmgMNnMedMZAN6ZIr/BIfC/o4WRcdRCz+3
-         7Jiw==
-X-Forwarded-Encrypted: i=1; AJvYcCWqgPGifO7vu/BnWP9JMEy7g3R67X1OVCDNwuInj+atWtzgTApEOrBTIfIPtI9opzjbz+bCRpInZDacgieuRftteVUv
-X-Gm-Message-State: AOJu0YwFqaGRbYxFIXFBPNfqwQYKnnC+5jRISZdXo8KBqy13Gx71r0zJ
-	ROBSqs7rVVRoPMHOcPlLJXKsAlhVeKhYxhbbgYdv/Z7Vg+Mh8RsCe8ytLj8CZ6A=
-X-Google-Smtp-Source: AGHT+IH0zLPp/2ltJpbir0yydX/z9G69yX9JtpbNrGTanVBoabeUscKBa1FYLLpnuvwZWpq6Pi4m4Q==
-X-Received: by 2002:a05:6000:381:b0:33d:bb65:806d with SMTP id u1-20020a056000038100b0033dbb65806dmr8859457wrf.50.1710252061381;
-        Tue, 12 Mar 2024 07:01:01 -0700 (PDT)
-Received: from ?IPV6:2a02:8011:e80c:0:6eff:72b5:841b:4654? ([2a02:8011:e80c:0:6eff:72b5:841b:4654])
-        by smtp.gmail.com with ESMTPSA id s12-20020a5d424c000000b0033e48db23bdsm9098417wrr.100.2024.03.12.07.01.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Mar 2024 07:01:01 -0700 (PDT)
-Message-ID: <c73285ba-57db-4f08-8e77-01c66c98379c@isovalent.com>
-Date: Tue, 12 Mar 2024 14:01:00 +0000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D7R5J0ZO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01613C433C7;
+	Tue, 12 Mar 2024 15:17:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710256624;
+	bh=bSthC5syu0b9DNJKbHK9XMaq4/xDZjjE/HnWodCOT0M=;
+	h=Subject:From:To:Cc:Date:From;
+	b=D7R5J0ZOluy2ENp7xwzCobRUEGVFN/U3YBtuScjB0Lmstqr9ZfHjdR2l8l2BP1ixs
+	 GB6X7mGMggMvoewtaGm7zwhYV+Rn8O1Lcxv3uDB7ZMDPOf/GJJ6qD+h2q+AXCrX7vM
+	 3LNngxj2AFoShllOWczsXlNk5T470CEPnSuJEQCx56r7hRvk7WdT52z5VVAAwe7Q/r
+	 7E0HKIVoOXxfMM8kywm8dJJy1kp0c+go2AozNgCb9OKTd3gqhy6U2ibk0vwVaeJ2xG
+	 vHbZZ5fqpyuHpT/djxEs37zyJmTO9XnWG5CQa+ZDwqK5CYIL1ZK4vB9ipAhfOpCfZG
+	 XpYXQc0Xb4GWQ==
+Subject: [PATCH bpf-next] bpf/lpm_trie: inline longest_prefix_match for
+ fastpath
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+To: bpf@vger.kernel.org
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <borkmann@iogearbox.net>, martin.lau@kernel.org,
+ netdev@vger.kernel.org, kernel-team@cloudflare.com
+Date: Tue, 12 Mar 2024 16:17:00 +0100
+Message-ID: <171025648415.2098287.4441181253947701605.stgit@firesoul>
+User-Agent: StGit/1.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2] bpftool: Fix missing pids during link show
-Content-Language: en-GB
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
- Martin KaFai Lau <martin.lau@kernel.org>
-References: <20240312023249.3776718-1-yonghong.song@linux.dev>
-From: Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <20240312023249.3776718-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-2024-03-12 02:32 UTC+0000 ~ Yonghong Song <yonghong.song@linux.dev>
-> Current 'bpftool link' command does not show pids, e.g.,
->   $ tools/build/bpftool/bpftool link
->   ...
->   4: tracing  prog 23
->         prog_type lsm  attach_type lsm_mac
->         target_obj_id 1  target_btf_id 31320
-> 
-> Hack the following change to enable normal libbpf debug output,
->   --- a/tools/bpf/bpftool/pids.c
->   +++ b/tools/bpf/bpftool/pids.c
->   @@ -121,9 +121,9 @@ int build_obj_refs_table(struct hashmap **map, enum bpf_obj_type type)
->           /* we don't want output polluted with libbpf errors if bpf_iter is not
->            * supported
->            */
->   -       default_print = libbpf_set_print(libbpf_print_none);
->   +       /* default_print = libbpf_set_print(libbpf_print_none); */
->           err = pid_iter_bpf__load(skel);
->   -       libbpf_set_print(default_print);
->   +       /* libbpf_set_print(default_print); */
-> 
-> Rerun the above bpftool command:
->   $ tools/build/bpftool/bpftool link
->   libbpf: prog 'iter': BPF program load failed: Permission denied
->   libbpf: prog 'iter': -- BEGIN PROG LOAD LOG --
->   0: R1=ctx() R10=fp0
->   ; struct task_struct *task = ctx->task; @ pid_iter.bpf.c:69
->   0: (79) r6 = *(u64 *)(r1 +8)          ; R1=ctx() R6_w=ptr_or_null_task_struct(id=1)
->   ; struct file *file = ctx->file; @ pid_iter.bpf.c:68
->   ...
->   ; struct bpf_link *link = (struct bpf_link *) file->private_data; @ pid_iter.bpf.c:103
->   80: (79) r3 = *(u64 *)(r8 +432)       ; R3_w=scalar() R8=ptr_file()
->   ; if (link->type == bpf_core_enum_value(enum bpf_link_type___local, @ pid_iter.bpf.c:105
->   81: (61) r1 = *(u32 *)(r3 +12)
->   R3 invalid mem access 'scalar'
->   processed 39 insns (limit 1000000) max_states_per_insn 0 total_states 3 peak_states 3 mark_read 2
->   -- END PROG LOAD LOG --
->   libbpf: prog 'iter': failed to load: -13
->   ...
-> 
-> The 'file->private_data' returns a 'void' type and this caused subsequent 'link->type'
-> (insn #81) failed in verification.
-> 
-> To fix the issue, restore the previous BPF_CORE_READ so old kernels can also work.
-> With this patch, the 'bpftool link' runs successfully with 'pids'.
->   $ tools/build/bpftool/bpftool link
->   ...
->   4: tracing  prog 23
->         prog_type lsm  attach_type lsm_mac
->         target_obj_id 1  target_btf_id 31320
->         pids systemd(1)
-> 
-> Fixes: 44ba7b30e84f ("bpftool: Use a local copy of BPF_LINK_TYPE_PERF_EVENT in pid_iter.bpf.c")
-> Cc: Quentin Monnet <quentin@isovalent.com>
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->  tools/bpf/bpftool/skeleton/pid_iter.bpf.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/bpf/bpftool/skeleton/pid_iter.bpf.c b/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
-> index 26004f0c5a6a..1eb756f8d02e 100644
-> --- a/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
-> +++ b/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
-> @@ -102,7 +102,7 @@ int iter(struct bpf_iter__task_file *ctx)
->  				       BPF_LINK_TYPE_PERF_EVENT___local)) {
->  		struct bpf_link *link = (struct bpf_link *) file->private_data;
->  
-> -		if (link->type == bpf_core_enum_value(enum bpf_link_type___local,
-> +		if (BPF_CORE_READ(link, type) == bpf_core_enum_value(enum bpf_link_type___local,
->  						      BPF_LINK_TYPE_PERF_EVENT___local)) {
+The BPF map type LPM (Longest Prefix Match) is used heavily
+in production by multiple products that have BPF components.
+Perf data shows trie_lookup_elem() and longest_prefix_match()
+being part of kernels perf top.
 
-Looks good, thank you! Could you please just realign the
-BPF_LINK_TYPE_PERF_EVENT___local argument on the next line properly?
+For every level in the LPM tree trie_lookup_elem() calls out
+to longest_prefix_match().  The compiler is free to inline this
+call, but chooses not to inline, because other slowpath callers
+(that can be invoked via syscall) exists like trie_update_elem(),
+trie_delete_elem() or trie_get_next_key().
 
-With that:
+ bcc/tools/funccount -Ti 1 'trie_lookup_elem|longest_prefix_match.isra.0'
+ FUNC                                    COUNT
+ trie_lookup_elem                       664945
+ longest_prefix_match.isra.0           8101507
 
-Tested-by: Quentin Monnet <quentin@isovalent.com>
-Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+Observation on a single random metal shows a factor 12 between
+the two functions. Given an average of 12 levels in the trie being
+searched.
+
+This patch force inlining longest_prefix_match(), but only for
+the lookup fastpath to balance object instruction size.
+
+ $ bloat-o-meter kernel/bpf/lpm_trie.o.orig-noinline kernel/bpf/lpm_trie.o
+ add/remove: 1/1 grow/shrink: 1/0 up/down: 335/-4 (331)
+ Function                                     old     new   delta
+ trie_lookup_elem                             179     510    +331
+ __BTF_ID__struct__lpm_trie__706741             -       4      +4
+ __BTF_ID__struct__lpm_trie__706733             4       -      -4
+ Total: Before=3056, After=3387, chg +10.83%
+
+Details: Due to AMD mitigation for SRSO (Speculative Return Stack Overflow)
+these function calls have additional overhead. On newer kernels this shows
+up under srso_safe_ret() + srso_return_thunk(), and on older kernels (6.1)
+under __x86_return_thunk(). Thus, for production workloads the biggest gain
+comes from avoiding this mitigation overhead.
+
+Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+---
+I do know net-next is closed
+ https://netdev.bots.linux.dev/net-next.html
+
+Hoping BPF maintainers can queue this patch anyhow.
+If not feel free to drop and I will try to remember to resubmit.
+
+ kernel/bpf/lpm_trie.c |   16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+index 050fe1ebf0f7..7a6f39425e14 100644
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -162,9 +162,10 @@ static inline int extract_bit(const u8 *data, size_t index)
+  *
+  * Determine the longest prefix of @node that matches the bits in @key.
+  */
+-static size_t longest_prefix_match(const struct lpm_trie *trie,
+-				   const struct lpm_trie_node *node,
+-				   const struct bpf_lpm_trie_key_u8 *key)
++static __always_inline
++size_t __longest_prefix_match(const struct lpm_trie *trie,
++			      const struct lpm_trie_node *node,
++			      const struct bpf_lpm_trie_key_u8 *key)
+ {
+ 	u32 limit = min(node->prefixlen, key->prefixlen);
+ 	u32 prefixlen = 0, i = 0;
+@@ -224,6 +225,13 @@ static size_t longest_prefix_match(const struct lpm_trie *trie,
+ 	return prefixlen;
+ }
+ 
++static size_t longest_prefix_match(const struct lpm_trie *trie,
++				   const struct lpm_trie_node *node,
++				   const struct bpf_lpm_trie_key_u8 *key)
++{
++	return __longest_prefix_match(trie, node, key);
++}
++
+ /* Called from syscall or from eBPF program */
+ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
+ {
+@@ -245,7 +253,7 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
+ 		 * If it's the maximum possible prefix for this trie, we have
+ 		 * an exact match and can return it directly.
+ 		 */
+-		matchlen = longest_prefix_match(trie, node, key);
++		matchlen = __longest_prefix_match(trie, node, key);
+ 		if (matchlen == trie->max_prefixlen) {
+ 			found = node;
+ 			break;
+
+
