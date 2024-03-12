@@ -1,54 +1,56 @@
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F087213F44E
-	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 18:32:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC84140E30
+	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 18:32:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710268371; cv=none; b=O6XsZGShsmn5r3OLwV67aHP+nrEYaFbqKGTuypK1VRlmPBk80KifmEg/PwLlVmK9ZbespfRLH7D6JmLUhGQ6vaLV0X4P0BQSA5qBBaEddd2YqJ2dB7slBU7wHeFw2fpxHH7e+DuqD5dvi6UQRIY+w+do9q7BgI/lcvu1LXn5N9k=
+	t=1710268372; cv=none; b=R8Hc9pvqtY1YbN7GEOkoyQG0TvwqG6qiWTaGNSsmHil+GgURwWEAhm/I4xbNSd4tkSErrAdg9Q5ebOvfsEGwSBkYwjfUB4v0vbBo4fbjMfd8DmtZaFnIOIUeKJ1odiiTgZuPKyUkS8C2KvInnKepytp+4khfavy8Cjdl6HenCaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710268371; c=relaxed/simple;
-	bh=d7kfWksCUZGKLmK/LZaIO17+ZMMLqh6F0WlhUO3pu9E=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QWz4aa3wW1znMS+Wzm/EFi8wywesTBwhXPo9WfmPEo7HtEjyJzNBfat6zt/vcRK6Cw6hdIIiFaiVXzTgVj+sNo29XhR74dAE/IIir346eXUJNroNcDcIEX2rOAhA3wQPVqaY2ZN1rR23RcHp+IRirvfldKPrUT6jlDgnGYWm9ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HaONcn5/; arc=none smtp.client-ip=209.85.219.179
+	s=arc-20240116; t=1710268372; c=relaxed/simple;
+	bh=Kn/FAiS0u2/qbKrNgQfdLin5EQuxq4os8Dsa6bIylvc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=J+JWR5BFAIIS1cWStd11HMJIB5j7HxfXw6R9POgYZV168/Su0osZBJOqYuuaw2u46WmtxxYZnYFmA8sC59J6mOdyKfFhpONGUIoyl6KRYYPLQ0StiMDNlSBUL6P+4ORNk2nGtXWRkbz01+L24bZBVxmc8SDJ0tMsQxZSJ4oV7ow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LtxjZYcu; arc=none smtp.client-ip=209.85.219.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HaONcn5/"
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dc742543119so4184393276.0
-        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 11:32:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LtxjZYcu"
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-dd14d8e7026so166862276.2
+        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 11:32:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710268368; x=1710873168; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=o9A2WCdTDFOmY8+ZwuqSNoB39/g8W72UZ7dcrVE5diU=;
-        b=HaONcn5/xp/txRaUdbPMkr/90/s88RbEKNkE4j7ojgylsZnKkYCL9HviUCn3InFyQK
-         8nUzxflNqLRQ+sAHL3lmkwo67kov+iHoEFLkw1u5X2v1kanM5k0qEB7iHNb41sCdOx+4
-         ZzZJKMW0w6GE3pm5ZI6Q4U+PvRXlDqh6U1s8dzL4iaj6mWcnT1HTFSY9JJE5nnOo5fe6
-         hx7mbwBPfAvjUEbvnGv95eQMFeFXs7hy+7ZuCx0zmY40+bXiDC3oJVo7EEnR1TK1A7LW
-         M8vWc3EwGwj2mT4FeUp+q21qh+ZuC8YIuAt9vNr1yvII9lGsusedORQB9eFrUobbzXy8
-         bW/A==
+        d=gmail.com; s=20230601; t=1710268370; x=1710873170; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1yl7lpHmoNgTrnH9+ChQKLUy/ErIjqrjXS0hb8PyJWk=;
+        b=LtxjZYcu7MAB2kpT/NLkOcJm9acOiicK/2kWx1VP/MZ9d0qSATXGEziL6QXiEpK8Fc
+         RQMyubWuqs31g1BhCB+nVhR9aT+VTd+gWcVSDPhGVptgAUfwRuvqZAW6bLPVvnsHf1ay
+         h8QUdjBQFbSbFmM+3QF32mISMkLsLnlrai62MYwTuKjzUAcxjBWBx2boGN8Ju54AW/d+
+         NNtVn5nuyRkGGs/qYcSClqjsGgO+QYw/OlJqMeXjzIqcZQOuB1v9b9W7OW5BxLi48BpK
+         Atz4tr/9PXIRbM489tiBVamvuA0jz1DyBQHbRXli5JN0HgonUPm+2hUhMAPMq8uGLekK
+         Dk2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710268368; x=1710873168;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o9A2WCdTDFOmY8+ZwuqSNoB39/g8W72UZ7dcrVE5diU=;
-        b=rSwp9zKatlYMiRgW/ZD5rUdTs14lSzjFReoUXLdkzEpHyrgpzMUPfYjks3iTJbDdsS
-         AiRjaPhBnq9uTrauS6LbuexEqoeydl5LR07CXTdTxY37aaShOhLkDSlbotLSRaOJOHUo
-         326Bu9SUOct6rXrFNWeaCQW1yXI1NOQwhvhcqS4aBac5CQJek7X0MlcJK3owZoy9n/VH
-         v87yXt/kLS8UBFxjfPw2Jw5qo/rD8hAU9S8bi2wmyjdRuyPuSio01iDJAFyRw950ohDj
-         lHC3C2KRRwI3zFIaZWChKoZn43VYH/1q3qMYT+y3mBRiGOiniUiimIATj4A/6ttaCa6S
-         G6ag==
-X-Gm-Message-State: AOJu0YzrtqBvuqY48zdCCDoRO4rJw4akuDHnVwMl8LLkm/LCEHV33HjO
-	RdC7rZ6Q3HD9SeuftmjRKdju8zIV6mquDREEhCFsbvtNoqHj1UnGoAkMi8Id
-X-Google-Smtp-Source: AGHT+IGjh6AIHBSrKkeJWfmEDg2SUMQHyCPFyZAl33KZD318QSyih3utY9lizCGJJenorFYfeZj/7Q==
-X-Received: by 2002:a25:ce83:0:b0:dcd:aa73:e349 with SMTP id x125-20020a25ce83000000b00dcdaa73e349mr304363ybe.12.1710268368580;
-        Tue, 12 Mar 2024 11:32:48 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710268370; x=1710873170;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1yl7lpHmoNgTrnH9+ChQKLUy/ErIjqrjXS0hb8PyJWk=;
+        b=E+40iS8aul6baVzeWm3P/udK4Dw+xkz9fPEZPHbhsV1j1BhleAtoCPKayL5tAU46pk
+         TV0yZ+jyFdpOLQvg4TiQdsKL673viU7Wtv0lfInwznAPuzfFidNHBGZOfwDu+qRaljpn
+         pEvS+jFGSwOgtTbnkZJelCU4xGpbcGvZ8g0XgjxRVPIvdsWfNJwlw/PXXbWTJwc3dLpB
+         hpDjL7t892gExyFkgF155RGu+i7XH+JGfdkm2Ce1UVJGTN2zsDT2DxcFCO4sTvO9Cw4y
+         bKunhct6EOqImpUnQ/FTVloLhyxvVgf1VJxyLSt5LRKPjTts1eFSvce3tPOs4S7rv8wm
+         ML0Q==
+X-Gm-Message-State: AOJu0YzEjJfS61yxazaNJf7F30h9Wkm4d+zjCS0xNG83/LV9Ji2c9Sz7
+	khXgRXvrdXTD81Fle+jl4anrV5g2qbIzxxChLz9C19eML5aA/z+AkAjmK7E/
+X-Google-Smtp-Source: AGHT+IGDD2gYWhdgu70Bwo6lS9D+xTKTLT8pgk3hlU1aR3WPg4DKbNtsCAZgVa/TYwe2wdharJOdTg==
+X-Received: by 2002:a5b:202:0:b0:dc7:497e:cddf with SMTP id z2-20020a5b0202000000b00dc7497ecddfmr254950ybl.33.1710268369754;
+        Tue, 12 Mar 2024 11:32:49 -0700 (PDT)
 Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:b4ae:c2f4:b38f:1540])
-        by smtp.gmail.com with ESMTPSA id v185-20020a252fc2000000b00dc9c5991ecdsm1868444ybv.50.2024.03.12.11.32.47
+        by smtp.gmail.com with ESMTPSA id v185-20020a252fc2000000b00dc9c5991ecdsm1868444ybv.50.2024.03.12.11.32.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Mar 2024 11:32:48 -0700 (PDT)
+        Tue, 12 Mar 2024 11:32:49 -0700 (PDT)
 From: Kui-Feng Lee <thinker.li@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -59,10 +61,12 @@ To: bpf@vger.kernel.org,
 Cc: sinquersw@gmail.com,
 	kuifeng@meta.com,
 	Kui-Feng Lee <thinker.li@gmail.com>
-Subject: [PATCH bpf-next 0/2] Ignore additional fields in the struct_ops maps in an updated version.
-Date: Tue, 12 Mar 2024 11:32:43 -0700
-Message-Id: <20240312183245.341141-1-thinker.li@gmail.com>
+Subject: [PATCH bpf-next 1/2] libbpf: Skip zeroed or null fields if not found in the kernel type.
+Date: Tue, 12 Mar 2024 11:32:44 -0700
+Message-Id: <20240312183245.341141-2-thinker.li@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240312183245.341141-1-thinker.li@gmail.com>
+References: <20240312183245.341141-1-thinker.li@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -71,47 +75,80 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-According to an offline discussion, it would be beneficial to
-implement a backward-compatible method for struct_ops types with
-additional fields that are not present in older kernels.
+Accept additional fields of a struct_ops type with all zero values even if
+these fields are not in the corresponding type in the kernel. This provides
+a way to be backward compatible. User space programs can use the same map
+on a machine running an old kernel by clearing fields that do not exist in
+the kernel.
 
-This patchset accepts additional fields of a struct_ops map with all
-zero values even if these fields are not in the corresponding type in
-the kernel. This provides a way to be backward compatible. User space
-programs can use the same map on a machine running an old kernel by
-clearing fields that do not exist in the kernel.
+Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
+---
+ tools/lib/bpf/libbpf.c | 30 +++++++++++++++++++++++-------
+ 1 file changed, 23 insertions(+), 7 deletions(-)
 
-For example, in a test case, it adds an additional field "zeroed" that
-doesn't exist in struct bpf_testmod_ops of the kernel.
-
-    struct bpf_testmod_ops___zeroed {
-    	int (*test_1)(void);
-    	void (*test_2)(int a, int b);
-    	int (*test_maybe_null)(int dummy, struct task_struct *task);
-    	int zeroed;
-    };
-    
-    SEC(".struct_ops.link")
-    struct bpf_testmod_ops___zeroed testmod_zeroed = {
-    	.test_1 = (void *)test_1,
-    	.test_2 = (void *)test_2_v2,
-    };
-
-Here, it doesn't assign a value to "zeroed" of testmod_zeroed, and by
-default the value of this field will be zero. So, the map will be
-accepted by libbpf, but libbpf will skip the "zeroed" field. However,
-if the "zeroed" field is assigned to any value other than "0", libbpf
-will reject to load this map.
-
-Kui-Feng Lee (2):
-  libbpf: Skip zeroed or null fields if not found in the kernel type.
-  selftests/bpf: Ensure libbpf skip all-zeros fields of struct_ops maps.
-
- tools/lib/bpf/libbpf.c                        | 30 ++++++++++++----
- .../bpf/prog_tests/test_struct_ops_module.c   | 35 +++++++++++++++++++
- .../selftests/bpf/progs/struct_ops_module.c   | 13 +++++++
- 3 files changed, 71 insertions(+), 7 deletions(-)
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index efab29b8935b..715879796046 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -1131,11 +1131,33 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
+ 		__u32 kern_member_idx;
+ 		const char *mname;
+ 
++		mtype = skip_mods_and_typedefs(btf, member->type, &mtype_id);
+ 		mname = btf__name_by_offset(btf, member->name_off);
++		moff = member->offset / 8;
++		mdata = data + moff;
++		msize = btf__resolve_size(btf, mtype_id);
++		if (msize < 0) {
++			pr_warn("struct_ops init_kern %s: fails to resolve the size of member %s\n",
++				map->name, mname);
++			return msize;
++		}
++
+ 		kern_member = find_member_by_name(kern_btf, kern_type, mname);
+ 		if (!kern_member) {
+ 			pr_warn("struct_ops init_kern %s: Cannot find member %s in kernel BTF\n",
+ 				map->name, mname);
++
++			/* Skip all zeros or null fields if they are not
++			 * presented in the kernel BTF.
++			 */
++			if (btf_is_ptr(mtype)) {
++				if (!st_ops->progs[i])
++					continue;
++			} else {
++				if (libbpf_is_mem_zeroed(mdata, msize))
++					continue;
++			}
++
+ 			return -ENOTSUP;
+ 		}
+ 
+@@ -1147,13 +1169,8 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
+ 			return -ENOTSUP;
+ 		}
+ 
+-		moff = member->offset / 8;
+ 		kern_moff = kern_member->offset / 8;
+-
+-		mdata = data + moff;
+ 		kern_mdata = kern_data + kern_moff;
+-
+-		mtype = skip_mods_and_typedefs(btf, member->type, &mtype_id);
+ 		kern_mtype = skip_mods_and_typedefs(kern_btf, kern_member->type,
+ 						    &kern_mtype_id);
+ 		if (BTF_INFO_KIND(mtype->info) !=
+@@ -1230,9 +1247,8 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
+ 			continue;
+ 		}
+ 
+-		msize = btf__resolve_size(btf, mtype_id);
+ 		kern_msize = btf__resolve_size(kern_btf, kern_mtype_id);
+-		if (msize < 0 || kern_msize < 0 || msize != kern_msize) {
++		if (kern_msize < 0 || msize != kern_msize) {
+ 			pr_warn("struct_ops init_kern %s: Error in size of member %s: %zd != %zd(kernel)\n",
+ 				map->name, mname, (ssize_t)msize,
+ 				(ssize_t)kern_msize);
 -- 
 2.34.1
 
