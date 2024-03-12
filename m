@@ -1,178 +1,180 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9642A14293
-	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 23:10:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61558467
+	for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 23:11:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710285018; cv=none; b=Mq19OU9ZKFuUIRUmbqkq5oVPaUH3IIWX94vfbqo0R+KXcUmTOXT4KaoHPknSqvfF9/XTzy+bsMA6/6Z04SKG5G2ErCDSaXSA/CkKcYvwxWhJkqs0OOGlGBKT9Yyy+v2dqt5PtCF9PymUXc8nb4Gm/ExmqysxSaygEEMkD1yga9o=
+	t=1710285116; cv=none; b=OFw640CQDI/5CxWB3NT2HvNg/QW8HY78qog/V1jiT2nteDpXBU0j4lKJOT9STpeQ9eU673aAFCVg2X/6w2usiclG4sxIhyVXvQDGV9atqu1kx4dPpMm96S68S4GAnLXEPFZM9sMiR6Pmo1tAjNLsNohEjLwi/xxzJKeBnsyRocw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710285018; c=relaxed/simple;
-	bh=+B1cV+lpbjm6ipjHa7LKHLmqIgHBrI926nYuHapb/DE=;
+	s=arc-20240116; t=1710285116; c=relaxed/simple;
+	bh=YSzkwGOtnro7HXMJEZtJcPqoH8oZs2Qkypoqg63lRU8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ld+gePZIHj0FByYId70yGNi5ybyezaqFVw6v3w7H+ZbgQftbt5m+tOul4Pb2mhoCje/0YDN9hKmnr58hlYMLuOSJu5iUuH3wXSq6eGeFyLlDECJDlAVQE0udZrJGzrt3gAYXoUPdPOo6DjNlclbn/yn3nNu3BZSHKIBOUH67gME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z6fqRp8w; arc=none smtp.client-ip=209.85.216.46
+	 To:Cc:Content-Type; b=LRZlVvKNol0Ot6VXy6D8OaNugz2SzDQu6ydu7d41O9qpXKDABMm7d4TWL306z6GV0jBtylmFKvx4Zpi2dzRD5sbLNQ8iVr2J6KuM6K8PMCZzZd1EVS6NTY7zbao5LxeVXtemGGrLX6Mshtol8UUsfZLkkgAfv3/hCL894AqQc+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q23qwikD; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z6fqRp8w"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-29b7164eef6so3707297a91.2
-        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 16:10:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q23qwikD"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6da202aa138so3986962b3a.2
+        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 16:11:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710285016; x=1710889816; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710285114; x=1710889914; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=S72nq305V8xfd8N1TRc42oftYMs4+cS89O23ww5LRYY=;
-        b=Z6fqRp8wZb/o3QU/MocKdN/n45AwHX4cHETjkUAYKS1AaOjmsvNv72mAqcCp4lqCdU
-         pceBIEF0loG0v759NPbFsu7YLtvjbg13nVklgKhgeerVRxJkxfMy8U9/BQn+thROcIH8
-         HTpiaJ3NFdfZ5DZiGRCnXkAXz5RG8cTqU9qjRJgmQ8xwQp+Hp0d7yOhJRdGUf6ARFWFK
-         56g1zkPWKclLyUr9c3hKZ56rckUNLp9WRb36mVTR2QHnfNKVPciNkYqHiLA6M7rI25eG
-         mEDan4MmQpE4KBH5CM5RpcLoE/48n0P43ezVOa5BGHWqTRNnHUrh6yR+wi2KGo5ee6bM
-         J7rA==
+        bh=2qLzbSj6iXlswglqhRIGQvEz8KlxmflH62tsbcMWx+0=;
+        b=Q23qwikDPXFNzMu9eyNLTn9k0jRleWgrEqDqQn25bY556rOs1jAlnWfhw5zD59OX40
+         pIrIGbqmPvR43HADAeoDL7WxhGkvTQ1h57BUXlH/rTlFvama+KOA6lEMoDrefqdqV+kr
+         x168Ew+jCzqZwCZV2rLMo/rSsWqJgr7YJiNB7Fotr8YhCyqs90jdVrCyYMRIeG2D+7Cm
+         n99v+b03h180kMiMyYNGo1mdp1GlpInAlsDR/ANkHMnESgoiLEKq7vUbxE7m/4MB/W+F
+         tyM/vLRmPgXjr0wQGneayapsYhb/XCb2mp+ym2CjZ8SPYmp5eToskvvrUj0oJvWiuJUV
+         TF3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710285016; x=1710889816;
+        d=1e100.net; s=20230601; t=1710285114; x=1710889914;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=S72nq305V8xfd8N1TRc42oftYMs4+cS89O23ww5LRYY=;
-        b=iRZVLJHrqtqwjZsa9LXz7lgAxzTkQ7PWoTeFwqGG7aY0zoZY/ZKDm3ZpmmtDbOgrz9
-         YiPY6wroBVWiMJ4z89suu8jA4RgjgqTK1kUsS3GQX5jxhWdoLkVK/mVB5r6LAu0Vbp0P
-         4hWgNAF1gVwwjH2t5OSf9M0Kb+8X79w89v12gSMfeuUdyELBDbauELrJ8XZCRNC//QqE
-         xX4I/qIcXR/t2r43qm1RzJjERI2Y6xWdOebn22uHhvktSV3Ww4jBpAbQ8y5MchIy/Bs6
-         FQBjVHCojYZ3zTqHPEEHyyDtLMRmo2Uefn3Vvk4ByP6NwvPnuqcn23RyNIWhjsGjlwfo
-         aOsg==
-X-Gm-Message-State: AOJu0YzAF3RbidFOHdSr1P2yqV4A1BZCGqYuLYi/8SRvR2cqpMrUVhTi
-	kc1zXME+MPTosAmfYyE99aQIAeggh5qTnLYose2LG0NVpLHfzCI623qDQMXpKjLri5/arDA3z/F
-	Uz+UBxDWVlYpImgmEqxh3UXIDFfypi+dhErA=
-X-Google-Smtp-Source: AGHT+IHlg/l3yku8PGHj1sVn8jY8P/qSNZQWwrL56mZZllA8WifEJEo1Kl7HrnoXvMJU5RbIsx6l7v5eEdKFpwERBEQ=
-X-Received: by 2002:a17:90b:48d2:b0:299:3ebf:d180 with SMTP id
- li18-20020a17090b48d200b002993ebfd180mr1941730pjb.6.1710285015835; Tue, 12
- Mar 2024 16:10:15 -0700 (PDT)
+        bh=2qLzbSj6iXlswglqhRIGQvEz8KlxmflH62tsbcMWx+0=;
+        b=lD7DQ6iDpAqVqjkynwqCMvww0lX3gHo0+9mpwj+ovOPXnIS7ziogDTyWBrfscrbP8s
+         HFwQCZbezlGCo59HyYFVE2OuIEuckblnJ+xW0HlcUQNIUcGkto5jwO7V0xDJ5u7/WVrJ
+         +n1iU0CndFHr+qEkpnJMBS7L5W6kjto2qsxS/X5YYBxcRJIcvMT7Cs3xYaCsOKjQAchH
+         gwd8DzyugCqs0F3Hm0GKzzcLmH79FIB994C5hhMOx7q3budP1WwBApWkqlxA/CevTFX1
+         3K/M7+K4UMqtRRzS6FYrYtOnPo9bxbPa0SRwxIeyEYE6Rt0WCz3lA9ErX7VEXUeHy6tk
+         gCtg==
+X-Forwarded-Encrypted: i=1; AJvYcCWdTx4IA2GZbsbhFNACgY/XpVlQz8Nyqr7HlbXQ8CfKiPKGUTPKSPZysE3fPTFnPN3P5TJt3YBoCaCaUOHJMvXjCaGi
+X-Gm-Message-State: AOJu0YwxXRF2lBH3h2EzjKe5TuKluiOrqHdHBeYLWzrUbyqj0DzSmRyl
+	eUD0s2gkvJ5TvI7Nt0pvqxoHrY7Acj/BTLFH/zS/6USKcjC4AT9oA8R8VdyOOdM9QlWXxoSTwkj
+	mv52ECb2cbloTpPzkLy50hXt1i/w=
+X-Google-Smtp-Source: AGHT+IG6DtZ33vqm1DWdoto2JdWJmYP9LpEEbXUzmhq/Cb7hpFiXULgR1xqgcf6Qk6g4E06dV72MjWBkAkyZdry2imE=
+X-Received: by 2002:a05:6a20:d808:b0:1a3:1d56:ba6c with SMTP id
+ iv8-20020a056a20d80800b001a31d56ba6cmr7716895pzb.59.1710285114147; Tue, 12
+ Mar 2024 16:11:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240312183245.341141-1-thinker.li@gmail.com> <20240312183245.341141-3-thinker.li@gmail.com>
-In-Reply-To: <20240312183245.341141-3-thinker.li@gmail.com>
+References: <20240312023249.3776718-1-yonghong.song@linux.dev>
+ <c73285ba-57db-4f08-8e77-01c66c98379c@isovalent.com> <53e1eddb-b003-4ae7-be13-55727d03b27f@linux.dev>
+In-Reply-To: <53e1eddb-b003-4ae7-be13-55727d03b27f@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 12 Mar 2024 16:10:04 -0700
-Message-ID: <CAEf4BzYyDV5MAjB+0Jj64Fr6AqPg+JS_mHc2rGNovFPAHjxM2Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Ensure libbpf skip all-zeros
- fields of struct_ops maps.
-To: Kui-Feng Lee <thinker.li@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev, song@kernel.org, 
-	kernel-team@meta.com, andrii@kernel.org, sinquersw@gmail.com, 
-	kuifeng@meta.com
+Date: Tue, 12 Mar 2024 16:11:41 -0700
+Message-ID: <CAEf4BzZ-itSprx8AOWAyPbZ6FBLBhz_HKWSyyLWszg40Pi3MRw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpftool: Fix missing pids during link show
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: Quentin Monnet <quentin@isovalent.com>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com, 
+	Martin KaFai Lau <martin.lau@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 12, 2024 at 11:32=E2=80=AFAM Kui-Feng Lee <thinker.li@gmail.com=
-> wrote:
+On Tue, Mar 12, 2024 at 8:24=E2=80=AFAM Yonghong Song <yonghong.song@linux.=
+dev> wrote:
 >
-> A new version of a type may have additional fields that do not exist in
-> older versions. Previously, libbpf would reject struct_ops maps with a ne=
-w
-> version containing extra fields when running on a machine with an old
-> kernel. However, we have updated libbpf to ignore these fields if their
-> values are all zeros or null in order to provide backward compatibility.
 >
-> Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
-> ---
->  .../bpf/prog_tests/test_struct_ops_module.c   | 35 +++++++++++++++++++
->  .../selftests/bpf/progs/struct_ops_module.c   | 13 +++++++
->  2 files changed, 48 insertions(+)
+> On 3/12/24 7:01 AM, Quentin Monnet wrote:
+> > 2024-03-12 02:32 UTC+0000 ~ Yonghong Song <yonghong.song@linux.dev>
+> >> Current 'bpftool link' command does not show pids, e.g.,
+> >>    $ tools/build/bpftool/bpftool link
+> >>    ...
+> >>    4: tracing  prog 23
+> >>          prog_type lsm  attach_type lsm_mac
+> >>          target_obj_id 1  target_btf_id 31320
+> >>
+> >> Hack the following change to enable normal libbpf debug output,
+> >>    --- a/tools/bpf/bpftool/pids.c
+> >>    +++ b/tools/bpf/bpftool/pids.c
+> >>    @@ -121,9 +121,9 @@ int build_obj_refs_table(struct hashmap **map, =
+enum bpf_obj_type type)
+> >>            /* we don't want output polluted with libbpf errors if bpf_=
+iter is not
+> >>             * supported
+> >>             */
+> >>    -       default_print =3D libbpf_set_print(libbpf_print_none);
+> >>    +       /* default_print =3D libbpf_set_print(libbpf_print_none); *=
+/
+> >>            err =3D pid_iter_bpf__load(skel);
+> >>    -       libbpf_set_print(default_print);
+> >>    +       /* libbpf_set_print(default_print); */
+> >>
+> >> Rerun the above bpftool command:
+> >>    $ tools/build/bpftool/bpftool link
+> >>    libbpf: prog 'iter': BPF program load failed: Permission denied
+> >>    libbpf: prog 'iter': -- BEGIN PROG LOAD LOG --
+> >>    0: R1=3Dctx() R10=3Dfp0
+> >>    ; struct task_struct *task =3D ctx->task; @ pid_iter.bpf.c:69
+> >>    0: (79) r6 =3D *(u64 *)(r1 +8)          ; R1=3Dctx() R6_w=3Dptr_or_=
+null_task_struct(id=3D1)
+> >>    ; struct file *file =3D ctx->file; @ pid_iter.bpf.c:68
+> >>    ...
+> >>    ; struct bpf_link *link =3D (struct bpf_link *) file->private_data;=
+ @ pid_iter.bpf.c:103
+> >>    80: (79) r3 =3D *(u64 *)(r8 +432)       ; R3_w=3Dscalar() R8=3Dptr_=
+file()
+> >>    ; if (link->type =3D=3D bpf_core_enum_value(enum bpf_link_type___lo=
+cal, @ pid_iter.bpf.c:105
+> >>    81: (61) r1 =3D *(u32 *)(r3 +12)
+> >>    R3 invalid mem access 'scalar'
+> >>    processed 39 insns (limit 1000000) max_states_per_insn 0 total_stat=
+es 3 peak_states 3 mark_read 2
+> >>    -- END PROG LOAD LOG --
+> >>    libbpf: prog 'iter': failed to load: -13
+> >>    ...
+> >>
+> >> The 'file->private_data' returns a 'void' type and this caused subsequ=
+ent 'link->type'
+> >> (insn #81) failed in verification.
+> >>
+> >> To fix the issue, restore the previous BPF_CORE_READ so old kernels ca=
+n also work.
+> >> With this patch, the 'bpftool link' runs successfully with 'pids'.
+> >>    $ tools/build/bpftool/bpftool link
+> >>    ...
+> >>    4: tracing  prog 23
+> >>          prog_type lsm  attach_type lsm_mac
+> >>          target_obj_id 1  target_btf_id 31320
+> >>          pids systemd(1)
+> >>
+> >> Fixes: 44ba7b30e84f ("bpftool: Use a local copy of BPF_LINK_TYPE_PERF_=
+EVENT in pid_iter.bpf.c")
+> >> Cc: Quentin Monnet <quentin@isovalent.com>
+> >> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> >> ---
+> >>   tools/bpf/bpftool/skeleton/pid_iter.bpf.c | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/tools/bpf/bpftool/skeleton/pid_iter.bpf.c b/tools/bpf/bpf=
+tool/skeleton/pid_iter.bpf.c
+> >> index 26004f0c5a6a..1eb756f8d02e 100644
+> >> --- a/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
+> >> +++ b/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
+> >> @@ -102,7 +102,7 @@ int iter(struct bpf_iter__task_file *ctx)
+> >>                                     BPF_LINK_TYPE_PERF_EVENT___local))=
+ {
+> >>              struct bpf_link *link =3D (struct bpf_link *) file->priva=
+te_data;
+> >>
+> >> -            if (link->type =3D=3D bpf_core_enum_value(enum bpf_link_t=
+ype___local,
+> >> +            if (BPF_CORE_READ(link, type) =3D=3D bpf_core_enum_value(=
+enum bpf_link_type___local,
+> >>                                                    BPF_LINK_TYPE_PERF_=
+EVENT___local)) {
+> > Looks good, thank you! Could you please just realign the
+> > BPF_LINK_TYPE_PERF_EVENT___local argument on the next line properly?
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_modul=
-e.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-> index ee5372c7f2c7..e0d9ff75121b 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-> @@ -93,9 +93,44 @@ static void test_struct_ops_load(void)
->         struct_ops_module__destroy(skel);
->  }
+> Will do. thanks.
 >
-> +static void test_struct_ops_not_zeroed(void)
-> +{
-> +       struct struct_ops_module *skel;
-> +       int err;
-> +
-> +       skel =3D struct_ops_module__open();
-> +       if (!ASSERT_OK_PTR(skel, "struct_ops_module_open"))
-> +               return;
-> +
-> +       bpf_program__set_autoload(skel->progs.test_3, false);
 
-maybe mark test_3 program in progs/struct_ops_module.c as default
-not-autoload (SEC("?struct_ops/test_3")), so you don't have to set
-this to false everywhere?
+We can fix it up while applying, so don't send another revision. We
+are waiting for trees to converge, so applying patches will be delayed
+a bit.
 
-> +
-> +       err =3D struct_ops_module__load(skel);
-> +       struct_ops_module__destroy(skel);
-> +
-> +       if (!ASSERT_OK(err, "struct_ops_module_load"))
-> +               return;
-> +
-> +       skel =3D struct_ops_module__open();
-> +       if (!ASSERT_OK_PTR(skel, "struct_ops_module_open_not_zeroed"))
-> +               return;
-> +
-> +       bpf_program__set_autoload(skel->progs.test_3, false);
-> +
-> +       /* libbpf should reject the testmod_zeroed since the value of its
-> +        * "zeroed" is non-zero.
-> +        */
-> +       skel->struct_ops.testmod_zeroed->zeroed =3D 0xdeadbeef;
-> +       err =3D struct_ops_module__load(skel);
-> +       ASSERT_ERR(err, "struct_ops_module_load_not_zeroed");
-> +
-> +       struct_ops_module__destroy(skel);
-> +}
-> +
->  void serial_test_struct_ops_module(void)
->  {
->         if (test__start_subtest("test_struct_ops_load"))
->                 test_struct_ops_load();
-> +       if (test__start_subtest("test_struct_ops_not_zeroed"))
-> +               test_struct_ops_not_zeroed();
->  }
->
-> diff --git a/tools/testing/selftests/bpf/progs/struct_ops_module.c b/tool=
-s/testing/selftests/bpf/progs/struct_ops_module.c
-> index 026cabfa7f1f..d7d7606f639c 100644
-> --- a/tools/testing/selftests/bpf/progs/struct_ops_module.c
-> +++ b/tools/testing/selftests/bpf/progs/struct_ops_module.c
-> @@ -54,3 +54,16 @@ struct bpf_testmod_ops___v2 testmod_2 =3D {
->         .test_1 =3D (void *)test_1,
->         .test_2 =3D (void *)test_2_v2,
->  };
-> +
-> +struct bpf_testmod_ops___zeroed {
-> +       int (*test_1)(void);
-> +       void (*test_2)(int a, int b);
-> +       int (*test_maybe_null)(int dummy, struct task_struct *task);
-> +       int zeroed;
-> +};
-> +
-> +SEC(".struct_ops.link")
-> +struct bpf_testmod_ops___zeroed testmod_zeroed =3D {
-> +       .test_1 =3D (void *)test_1,
-> +       .test_2 =3D (void *)test_2_v2,
-> +};
-
-We should also test the case where we have local ops definition with
-incompatible callback function signature (e.g., extra argument or
-something). Test then would update the program pointer (through
-skeleton's shadow type) to a compatible implementation.
-
-Can you please add a test like that? Because the goal is to have a
-single struct_ops definition, if possible, and adjust it at runtime to
-make it compatible with the old kernel, let's have a small demo of
-this working.
-
-> --
-> 2.34.1
->
+> >
+> > With that:
+> >
+> > Tested-by: Quentin Monnet <quentin@isovalent.com>
+> > Reviewed-by: Quentin Monnet <quentin@isovalent.com>
