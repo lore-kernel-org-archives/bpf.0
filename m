@@ -1,69 +1,68 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E674A5F541;
-	Wed, 13 Mar 2024 16:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353F96A034;
+	Wed, 13 Mar 2024 16:57:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710348792; cv=none; b=P/FnVOQTz6D03c5s37f7HxqX0hyhh3+Qfbwmm88IhqCnLNpzO6ge3rRgwRjLmPqh4wSh2JDNje1IvoeWZzh/ESLrKHRpsY8GSfJThdCbN7xZepJlt7sfJRJIISSy60WFHX5IWWOtrOjOwVTh52FttHxaPrQypWv676wK7/B9Kl8=
+	t=1710349042; cv=none; b=JCu1Vuahf5rq/tmh531lxD9PGmsLpBVcguZ7Ax2Z90Y5T7sjFf2KZ6gSZAn5ZJCJeSrKVj7eyd/x+nFb77O80Xon8oX3vs1Ha6d0w50mtj3e00DEpXz23yVkHGFWjCM6vud7wlKyqHtddnoXz6R0+W5eZJKbu8dBS6IC/md+sgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710348792; c=relaxed/simple;
-	bh=xCzpgaA+HTbALS3/kwZcZ+auovGGgbqRsKa38fzJmHI=;
+	s=arc-20240116; t=1710349042; c=relaxed/simple;
+	bh=zWkvPDSr4nWceYKN+DiHB+DpnKp//0SZn+eJKoVGCIo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FYyziY+f4Czq2eDiX+rBM9o8IoVIVui4SwjsPDIY5tCf5B2dy6K+8KDHJuaGTX9su0PZ4387xaKKpyCr9AnRzSJcvdXEhNYj7tl5GxxKROubYTUJO+QBcCyqu+OVTyBpPKH11QYGSd7J24vM5uzZ0Z/FfxjYP78D533BeeULh5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f2SmWq1g; arc=none smtp.client-ip=209.85.216.46
+	 To:Cc:Content-Type; b=n7qeSHNdlnYJdVRJZkx3L7TkOpB5tq+hCi9n9pamysb2gdD/ujq36B1iO6Hni20ItndkP9+F7tx49MWW9M+IaQV7gP2YQyWlFq5O+tAY8+de9mg7TbsGZG1BVgIhJPZyPwFFCbqilh7RnwxBozKdvvrE0gbY2Hli2mnVFQvWAb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cVCVpYxB; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f2SmWq1g"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-29bbff1505dso103129a91.0;
-        Wed, 13 Mar 2024 09:53:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cVCVpYxB"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-5e42b4bbfa4so14188a12.1;
+        Wed, 13 Mar 2024 09:57:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710348789; x=1710953589; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710349040; x=1710953840; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/u8ZrY8sdFo2g+CmoHjb0TtVHcvA+5O3rJ7eccy6sco=;
-        b=f2SmWq1gAhW3BbvQQgboyimm+ZMdmYja/LyNaR85Ff/koVW57VgPhehnbLBk6CBHjT
-         6TacvkWrj8w6g719vbnzvvN0UIae3JqigehFM+ZBgyH6hEq0+o0eqUXcjH8Nf31cP/vz
-         XipVLr/AuKcm/dB31jQMlverAw+AUIRTN5frs37Hro/EurIuAlY/KAQfMz+ospO6s8Ug
-         Yqoz0sEqX457qL5C7NafgvnxQ0LYT6RZY4qczJyR1Kevp77BtLZt/56dOy30wwCKX881
-         nZgFSjjO7kPg6vS4rtTpUIrQLzdSNm1bZxQT3hzi7kXeTRPRLCJ2j1C6kOGetfwcYFam
-         xf4Q==
+        bh=FcUZAbVkq0HpTHMJX+97jvTzRlAnbhGCRg9qoOkVutc=;
+        b=cVCVpYxBENyq1mPEAXl3RfaBtgUugIw2cj+o0WB8a5ZjAOrEanKUNthSGWh4w7u/EL
+         SDSJmNCfPQAL68yVu3mtDWGCNCwPYb1FUUtBX4VeSHdcGomUCwWQvr2M0VFiPNNIWx2e
+         pt4k28XB11xXD8qZhc0Qh3D8/2t3CmFp33DeAYucMVPvzIYPE+GTh2pXIRwwD/3SRNuL
+         wo80mDW6+wwF8iQ1ssT2vqCmpPKLftNUvSV2KUv3B0yh+OEU2GmI0t/vD6wIBoJ1wYYk
+         s/21OlHs9+w7qa+kn0TxntRqb86i4ywmbr2/mKAAIvh66/B0vAdmhgJG7HeWpl2tG9Ip
+         F6tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710348789; x=1710953589;
+        d=1e100.net; s=20230601; t=1710349040; x=1710953840;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/u8ZrY8sdFo2g+CmoHjb0TtVHcvA+5O3rJ7eccy6sco=;
-        b=JfI5K+M/4xj+IOs+JhEtxgEpgRBRd4vOsVrvUWvMmVg/WDE9MjDi/1UR8y0lSfC7dR
-         Q+zS6lZ0A0uvyMnLKyxvBVtVbLzRWxFWuyroDM0+zKi8ARFqLxictjBPfGumlO1mO0Vx
-         HdspDIEneXwbVLd2GsR8Qj3raDbeQp3kCgz4JvbdrHEG/VGZBXUw7mSp5Adzv27rBNd9
-         XWfL8rAkzEYS+d3YPvtEHnaQKMcanwcVj9f/Fmb5gRQR7MClB+iCg97v8R0dAUm7aHRH
-         Ad1cP43W9UPt6yyL1MQEoIT3zuMnWZgwQP+E7e8v4Bmr8tZVXQX29fLWHnOuw41jpsYj
-         F5ag==
-X-Forwarded-Encrypted: i=1; AJvYcCX7b59aSF4ADjWzvgz2/m1Y/zDYQ7XAPGL2xWK1xGImjuP4Ytp1Ac1LZsRYEfYkLC42mMERYxW9tv28lYYQJLfoLDVQmbtSNl0u2TICJ3FQQHA7Xy+xtb1M9LyPMsVKRtNwTiGOgOv50nalMdWhZ4Bt5aai/epT9Hce4y9uN0gMwR+aZKzg
-X-Gm-Message-State: AOJu0YxPmISrHVHEgv9yPEH1y02NgXqHIS/5BMwhVMhxkOSUf9eUCE86
-	I53lC7vzdsXi2hXU2nPe+iULtK3JugJs7PDKn3vUut+u1wIkCcRfQ4JieVztB3Ftp0a2H8HYl4+
-	ecxTkYWinKq2uY9FopbXWV7djQIhtr6Ss
-X-Google-Smtp-Source: AGHT+IEKjZFpcEzhNIwyrlO8/dl5vFNshA/6fBoRE3yJXIKiK1GOk90qYsxtCTPxpE386HMmh5WhBrtUik7VqjarrqE=
-X-Received: by 2002:a17:90a:a407:b0:29b:ab0e:4f03 with SMTP id
- y7-20020a17090aa40700b0029bab0e4f03mr10231243pjp.37.1710348789075; Wed, 13
- Mar 2024 09:53:09 -0700 (PDT)
+        bh=FcUZAbVkq0HpTHMJX+97jvTzRlAnbhGCRg9qoOkVutc=;
+        b=sz2kdw2BsKkDP2iYnQPsdlYlzwcwaN69My/yhX+AMmmCSUCKteefjrkubFWNkADmBz
+         tWx87sK1ZJgev8pDXGs8EVo+hfZ2tqiPCCTeejklnBoZAR3rv8Fj4XFx2KnXZhBntJJ/
+         uWTnPF7Oj6cAr/aZeUgAlcTDfqPp/+BzzvDv9qDQHzNJ0OzOJM+HZowTbEB2nfNAO9Y9
+         q7CYf/E0kRKzzKne0qLrcdyIbVzE7KcvTBXyI/UNDUE1xXwwDp0qxEZt9t2mFERNRPCJ
+         KkquEqkspO3f0L/0/Es2lNzxx5izR7ZVTEFTunTzuypxYAXN+qYIrXJCANlJzDRO7xU2
+         tLzg==
+X-Forwarded-Encrypted: i=1; AJvYcCXVfaLKIxznNeIjr4dVXNEoyHVHg01sd1RhjgOD5lfaZ4BfRAx5thuZryXnHFRf+pIBpfVrSULAFm02oal2+D8K5UZJtm/i0YUXClAm0wLhk1MxxHtrs5aSVOXkvT4UXk4a8njkaRCR0t8f+h7MyNUrh/vSxi/G48YgrUhXmdgDNzB2J4T1
+X-Gm-Message-State: AOJu0Yzm4YevQmUhk9Iu46iUBw6/K65/GGx9YqpDkz98cm6yaUKbYmOz
+	RfxFfl6usAY4Qy8BbiA5no8dK1e/oxbWo3UggDbVg31dL+H4yW5KA35ZEbS0QLp7DXz6QxtrYjm
+	cqS21KRAt4AssiGyW5uJGGu/cdeQ=
+X-Google-Smtp-Source: AGHT+IGyGPJjOFnPQxps+GSyJhPCPCChdeziQP5s6fat3MumqhQnMduQK8qzg1G2YZ0Al3EVqKKwOuOKv4spRx6o/3g=
+X-Received: by 2002:a05:6a21:6da7:b0:1a3:1255:6062 with SMTP id
+ wl39-20020a056a216da700b001a312556062mr4824539pzb.1.1710349040424; Wed, 13
+ Mar 2024 09:57:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240312210233.1941599-1-andrii@kernel.org> <20240312210233.1941599-2-andrii@kernel.org>
- <20240313151507.GA25452@redhat.com>
-In-Reply-To: <20240313151507.GA25452@redhat.com>
+References: <20240312210233.1941599-1-andrii@kernel.org> <20240312210233.1941599-3-andrii@kernel.org>
+ <20240313154716.GB25452@redhat.com>
+In-Reply-To: <20240313154716.GB25452@redhat.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 13 Mar 2024 09:52:56 -0700
-Message-ID: <CAEf4BzbXew_qC4NaA7vtqS5fFwkh6Hw-uKLq3UDD7GjGAP6UeQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/3] uprobes: encapsulate preparation of uprobe
- args buffer
+Date: Wed, 13 Mar 2024 09:57:08 -0700
+Message-ID: <CAEf4BzYFzLuGB93digNwCnHZ=LEjxvyfPb4GcF3Mwqi-JP3skw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/3] uprobes: prepare uprobe args buffer lazily
 To: Oleg Nesterov <oleg@redhat.com>
 Cc: Andrii Nakryiko <andrii@kernel.org>, linux-trace-kernel@vger.kernel.org, 
 	rostedt@goodmis.org, mhiramat@kernel.org, bpf@vger.kernel.org, 
@@ -71,41 +70,56 @@ Cc: Andrii Nakryiko <andrii@kernel.org>, linux-trace-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 13, 2024 at 8:16=E2=80=AFAM Oleg Nesterov <oleg@redhat.com> wro=
+On Wed, Mar 13, 2024 at 8:48=E2=80=AFAM Oleg Nesterov <oleg@redhat.com> wro=
 te:
 >
-> LGTM, one nit below.
+> Again, looks good to me, but I have a minor nit. Feel free to ignore.
 >
 > On 03/12, Andrii Nakryiko wrote:
 > >
-> > +static struct uprobe_cpu_buffer *prepare_uprobe_buffer(struct trace_up=
-robe *tu,
-> > +                                                    struct pt_regs *re=
-gs)
-> > +{
+> >  static void __uprobe_trace_func(struct trace_uprobe *tu,
+> >                               unsigned long func, struct pt_regs *regs,
+> > -                             struct uprobe_cpu_buffer *ucb,
+> > +                             struct uprobe_cpu_buffer **ucbp,
+> >                               struct trace_event_file *trace_file)
+> >  {
+> >       struct uprobe_trace_entry_head *entry;
+> >       struct trace_event_buffer fbuffer;
 > > +     struct uprobe_cpu_buffer *ucb;
-> > +     int dsize, esize;
-> > +
-> > +     esize =3D SIZEOF_TRACE_ENTRY(is_ret_probe(tu));
-> > +     dsize =3D __get_data_size(&tu->tp, regs);
-> > +
-> > +     ucb =3D uprobe_buffer_get();
-> > +     ucb->dsize =3D dsize;
-> > +
-> > +     store_trace_args(ucb->buf, &tu->tp, regs, esize, dsize);
-> > +
-> > +     return ucb;
-> > +}
+> >       void *data;
+> >       int size, esize;
+> >       struct trace_event_call *call =3D trace_probe_event_call(&tu->tp)=
+;
+> >
+> > +     ucb =3D *ucbp;
+> > +     if (!ucb) {
+> > +             ucb =3D prepare_uprobe_buffer(tu, regs);
+> > +             *ucbp =3D ucb;
+> > +     }
 >
-> OK, but note that every user of ->dsize adds tp.size. So I think you can
-> simplify this code a bit more if you change prepare_uprobe_buffer() to do
+> perhaps it would be more clean to pass ucbp to prepare_uprobe_buffer()
+> and change it to do
 >
->         ucb->dsize =3D tu->tp.size + dsize;
+>         if (*ucbp)
+>                 return *ucbp;
 >
-> and update the users.
+> at the start. Then __uprobe_trace_func() and __uprobe_perf_func() can
+> simply do
 >
+>         ucb =3D prepare_uprobe_buffer(tu, regs, ucbp);
 
-makes sense, done
+ok, will do
 
+>
+> > -     uprobe_buffer_put(ucb);
+> > +     if (ucb)
+> > +             uprobe_buffer_put(ucb);
+>
+> Similarly, I think the "ucb !=3D NULL" check should be shifted into
+> uprobe_buffer_put().
+
+sure, will hide it inside uprobe_buffer_put()
+
+>
 > Oleg.
 >
