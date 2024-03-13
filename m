@@ -1,89 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5E53D0DD;
-	Wed, 13 Mar 2024 15:10:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8218E4596D
+	for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 15:16:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710342655; cv=none; b=BIiIPhMokPBnB2X06b/d245xTxq4J3nKxipS9gsxLwdWaCnL7waHFXrTqlpujV8NcP/j6GwaxJED0uyU8PQQN8D/B4s679zHnY8kqx+0fcM/R1I/5wL5lAcwOfmpr5Npb3imKRwcJY6HiCgZd8CVzAbX2SKok/I11kqQtcCTfro=
+	t=1710342997; cv=none; b=dLthmWkPb1NVStT1+389+KBQfa6vJpQSpta/DhD2/vOkIMTnma0qPlhD+QfQFvCsNzC5cnbpjmRzLWQLB0jVYeLCnK4tmva5aru3LfYB690P6gxhmdsfRSdRGBGrwdbAHC/J4iFKUPxxZBCbvA/vrw9ggEDSU6IBXKy83jtuayU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710342655; c=relaxed/simple;
-	bh=Ocy8geFE9kPb4bFGq3+89/S58bGkARoG+qV87/35muY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IVq4akUdvLdaR1rx/IgxUS2eDR0ZNElcnFEEKK1h2Nq3okYYZKybUQJ3UxoLqYUXJsm4kvwTTN6paUnys7OkNxFlOqKvOHeRuuOp35FwUO4FSTZ7zh9E8isnBSXlscb1r9Iow7R5OYPHUPlS6Kz+cp6KF0MrnUwms0JIgwL2P5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BQTqO5RK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710342997; c=relaxed/simple;
+	bh=nTWNjiLUgBLi4JWtq8dT/dKeum211ni/Q5IbjhlmfqY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lf7vkIywYF2z7T3zV6ftxSCgJBs2zz4jSJP9jbvHOX8E5sBWoq/DUhfhzzAvg9O1uNxRcv4jxMYlFGjbEIvGnWePSiiPK1V6Hy5X9tRTM/5TzzZcMqa2vthP9rrxk0wEdQNVKKkhkfT3PkMDFqZB6Ia047txwNJdIqGj20sz5lQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ig4dInhw; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BQTqO5RK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5857CC43390;
-	Wed, 13 Mar 2024 15:10:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710342654;
-	bh=Ocy8geFE9kPb4bFGq3+89/S58bGkARoG+qV87/35muY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BQTqO5RKQ54EJbv1S8P4pENDD44OtCvTkL9lM0F/BjZDviqG3B0fDJJK/mP93C5AD
-	 e9TBae3uLVN8p+c9QD+Cgcg5BhM0SQ+cbTJVjY48VqldBqjhoxy/kKJ5GZr+iYgyDD
-	 fMap9HtRVG7CVD0kHcCT7P/XpbW1oiZ5e3mTERWJg34aNJRfbiC6lAgjQ3bdjLyQUc
-	 5F2CmhbUXwmkDQLp5Dbww4+yg9bG3nIQNdrd3luSRaFR4fmxe1IG1k6USgNsRoMmQU
-	 m7Z7qjL5d+9JQOr9qOo3eGbT3GtBTePzlKT0Am8DiS2uvcVVYuktEKspVo05H7FTg5
-	 8XlUR3jJv1Mkg==
-Message-ID: <bb1cbf09-53dd-42d9-bce5-9ac1ba94be2c@kernel.org>
-Date: Wed, 13 Mar 2024 16:10:49 +0100
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ig4dInhw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1710342994;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vSsee+SCFbFI/+NyWT4z4JA4fgasuDRXPdyzWyF43gA=;
+	b=Ig4dInhw3R4n8hlp/F8JNu/fHuU0XkIJo9N0B8SbiQKdqbM/USfB5F13XuzUpZSMCw1BN/
+	PNV16UNuwtwo81cq/zzB6T8Z9PXemYHNFBFUUJ46ioKp5TPHSSbed94zHwe5pQyFTxM4tU
+	HBC2FUfryj3fKOaopIDOkFjnEi9sDuA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-145-uxZ5Pz_eMwe3UMj2xWkKuw-1; Wed, 13 Mar 2024 11:16:32 -0400
+X-MC-Unique: uxZ5Pz_eMwe3UMj2xWkKuw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 50171101A523;
+	Wed, 13 Mar 2024 15:16:32 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.233])
+	by smtp.corp.redhat.com (Postfix) with SMTP id 74F5C1C060D1;
+	Wed, 13 Mar 2024 15:16:30 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Wed, 13 Mar 2024 16:15:10 +0100 (CET)
+Date: Wed, 13 Mar 2024 16:15:08 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: linux-trace-kernel@vger.kernel.org, rostedt@goodmis.org,
+	mhiramat@kernel.org, bpf@vger.kernel.org,
+	mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 1/3] uprobes: encapsulate preparation of uprobe
+ args buffer
+Message-ID: <20240313151507.GA25452@redhat.com>
+References: <20240312210233.1941599-1-andrii@kernel.org>
+ <20240312210233.1941599-2-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [EXTERNAL] Re: [PATCH v4 0/3] Add minimal XDP support to TI AM65
- CPSW Ethernet driver
-To: Ratheesh Kannoth <rkannoth@marvell.com>,
- Julien Panis <jpanis@baylibre.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Russell King <linux@armlinux.org.uk>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Simon Horman <horms@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>
-References: <20240223-am65-cpsw-xdp-basic-v4-0-38361a63a48b@baylibre.com>
- <20240313134441.GA1263398@maili.marvell.com>
- <9016930f-d90b-4a7a-b6fb-80cf56a94bd8@baylibre.com>
- <MWHPR1801MB19184E6AFDEAF4062FB1C4B3D32A2@MWHPR1801MB1918.namprd18.prod.outlook.com>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <MWHPR1801MB19184E6AFDEAF4062FB1C4B3D32A2@MWHPR1801MB1918.namprd18.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240312210233.1941599-2-andrii@kernel.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
 
+LGTM, one nit below.
 
+On 03/12, Andrii Nakryiko wrote:
+>
+> +static struct uprobe_cpu_buffer *prepare_uprobe_buffer(struct trace_uprobe *tu,
+> +						       struct pt_regs *regs)
+> +{
+> +	struct uprobe_cpu_buffer *ucb;
+> +	int dsize, esize;
+> +
+> +	esize = SIZEOF_TRACE_ENTRY(is_ret_probe(tu));
+> +	dsize = __get_data_size(&tu->tp, regs);
+> +
+> +	ucb = uprobe_buffer_get();
+> +	ucb->dsize = dsize;
+> +
+> +	store_trace_args(ucb->buf, &tu->tp, regs, esize, dsize);
+> +
+> +	return ucb;
+> +}
 
-On 13/03/2024 15.31, Ratheesh Kannoth wrote:
->> From: Julien Panis <jpanis@baylibre.com>
->> Sent: Wednesday, March 13, 2024 7:34 PM
->> On 3/13/24 14:44, Ratheesh Kannoth wrote:
->>> On 2024-03-12 at 18:52:39, Julien Panis (jpanis@baylibre.com) wrote:
->>>> This patch adds XDP support to TI AM65 CPSW Ethernet driver.
->>> is this a net-next item ?
->>
->> Initially I worked on top of mainline kernel v6.8-rc1. Then, I also ensured that
->> the series could be applied on top of net-next/main.
->>
-> Please post to net-next ; once it is open
->  > https://patchwork.hopto.org/net-next.html
+OK, but note that every user of ->dsize adds tp.size. So I think you can
+simplify this code a bit more if you change prepare_uprobe_buffer() to do
 
-Funny link, as I usually use:
-  https://netdev.bots.linux.dev/net-next.html
+	ucb->dsize = tu->tp.size + dsize;
 
-As documented in:
-  https://kernel.org/doc/html/latest/process/maintainer-netdev.html
+and update the users.
 
---Jesper
+Oleg.
 
