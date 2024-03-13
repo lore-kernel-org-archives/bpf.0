@@ -1,210 +1,125 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50084B67D
-	for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 01:53:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46326C147
+	for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 03:17:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.111.4.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710294836; cv=none; b=QUEe72n7QYXvSj8PZXwjjKqKRtQPcJqwYKXlltCCpAKefm+RteerLw4tDMZDFBtdZ33ZLSSXW51+2CNfoYM7L7XFg/DSpmIyaWwY5CbTyXIK+HQgwN+dYuXh9D3GMOxDdFo7r9E3Qzu1aWepkCQm81DtZXmF+V/lm/UOHmzBu24=
+	t=1710299847; cv=none; b=r5cyMU/jb2inHTZrI3Ia2nR4EwsToI8/Xe8uupDTMawyxvLHv5oLaMX72dKMUe2319aN6HHOofvax5AZbhrglo4Enws1/c8w/HlTD66iTLPb+4uJTbZ7PNCloCp0Ub62BY4bkAN2c8JSoo16kE0PMIypYV8CiN50XTiYhEd5G0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710294836; c=relaxed/simple;
-	bh=VJyuvh6XroWcN//l0X/a6mKR6esThbwoEFp9wLz0ITQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KUUpYUBxrWnY4Wx4u/ZytF655u9eCUMkofh1be1LTaOyTvSDm5wIccsqk2/70HJ5b7WWhanMQ8b1pSZkGNfUk08BNHf66Xlztubpt0ScCPHGB9Z7YGDVrTynJOB/14huoDnE5K1w9nYl4Tc4O8HUyI9kECOqUHKdK+8928QF1kQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=gt7CwXCw; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	s=arc-20240116; t=1710299847; c=relaxed/simple;
+	bh=VeytVHTZaDvfTg7tzEZ4AYfH7KWnF7KE/RJr7oZW/f0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CXEpqa8Jl36p8iMKavu6gdKe3vqFfPaph9rVg5ByNyQmaiCuRlVgSDnAZoJvFO+wB/EdzNtSegcTvWAxodF3YzqhYy0XcK6hgP3GovbgJ1SuA1hLqsL5tJWol69cU+FTl4Y3QanHvBwd5NKISi8vCaP/SqQitEnzjTA1fr1RnyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=Mu0t7U3E; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jgaJWiap; arc=none smtp.client-ip=66.111.4.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="gt7CwXCw"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-29c16b324ecso1891914a91.3
-        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 18:53:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1710294833; x=1710899633; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7l5GW7Xueu7fYsf7BEOcM5d+RaLSvHptG6HFvYvp5v8=;
-        b=gt7CwXCwKszw+Rpmvl/FJkFc2RIYjA9MXMNVpLpoLDVTL7M1paBlGE7/vHrSqYwR/1
-         08Fh5L+IpOyjdflRw0bX4nd/c7CRQsztH3KTOMGTzHzo+WPHiZfTj04+/xKzDYb7gbMP
-         iI3d3iZnRrzR6tNibiycSDz8htVfmb2eRDP1vC3KsXvGMJY2njLsXxIXt02LQuJ0Bzzs
-         NiSLGG7Us+wH7VgETLbztfzvRnMGpUdBsB6w/Aj49RkHbzFkZk7HDE7WiFrvDLxaRYsS
-         p/8NHL3XplA/Sgmlopu10PVHmj+1iT6HJTcbEiap1nqMLSt8Op/+NI0SVy6uGln4E3jX
-         Y2ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710294833; x=1710899633;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7l5GW7Xueu7fYsf7BEOcM5d+RaLSvHptG6HFvYvp5v8=;
-        b=bZT9FXIrlqbiY4TQWEnd+Cr5O6/edYacnpgWjn+goNYnHqcYPTWs8o6voNchYeX/0l
-         eivDDs42IBR+/U2odMHUUWW+d/m8vM7j+YfXe0LFs+kadZU14h4kLLsMJTu5IrOr9i4G
-         jllwtmhQSmMhnvzBCaz7KxmLzKiKRHwb5ChdOhpwydR09NwUPhkyj+XP+pi5zA95M3fG
-         PwgS5Opo9HcphQQ9jLe7b2Qj1cJQyhcNJ8oPUYg78So+uMf+UmAq6FligZH5fkuwp12p
-         ZiCF7fFvljnwPJS3gQ/kx5Flm+9D3AiQwCpjZ23HSSE9aXQWbtrKeiB/hUCVvAwUgUCv
-         8Fjg==
-X-Forwarded-Encrypted: i=1; AJvYcCVu3ugLn58JnqKvU+xG+ieteNmMlSOCZ2OTFXiZeJZgT6wXteGEvdjaWRp/sHzYeIsqShQ2UNf4zIrdfbY8ncZlwUm+
-X-Gm-Message-State: AOJu0Yxb4WLF2i18baLcr6XWBc3qXq9IgC95yHX3ZpUjFPNHnM7af/PF
-	A5Qwhi3GPArTu3VV0//oTscwZHuV/JqmTXLfEsL11ysiGs/jbYbYFlvDdBH4GfUELGGEjiS50ri
-	XlOW7odtsRh0qlBNgpsL/Hr8/9bKjCHnGwGWNlA==
-X-Google-Smtp-Source: AGHT+IHgGbwSxuf8Mmcf4YK9IOWtZvoBJarSb5lD1Bv4wCl1IDU6oxYJMO4FXlVIEhW8DTCD21/mcpij4jSoKbejNKI=
-X-Received: by 2002:a17:90a:e612:b0:29c:1271:219e with SMTP id
- j18-20020a17090ae61200b0029c1271219emr6694584pjy.18.1710294833648; Tue, 12
- Mar 2024 18:53:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="Mu0t7U3E";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jgaJWiap"
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
+	by mailout.nyi.internal (Postfix) with ESMTP id 5CC7F5C0065;
+	Tue, 12 Mar 2024 23:17:25 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute7.internal (MEProxy); Tue, 12 Mar 2024 23:17:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1710299845; x=1710386245; bh=JLxuvz4dXY
+	vC57RZ5WOpbCIOv1xzOWomyd1ZNq5z0fA=; b=Mu0t7U3EIKbYc9sIMxGHol+Aer
+	ekOHdfcwsGcakVGk803hdvVeDskkwvnXWTEpVqPflYPUsgBdKm3Q6Nw3DI4IzA1c
+	Wa7UmDU2L2VOdYBDokafxrYgkV5wE27pGX/sEi4fE3maUAvJ4Peq9yRZFGL0tR06
+	7BvFh26FCyIR91hJ8l0uTDQPvJN/w+xKARVfaG+2qsBo6PF/oJ6geThf3mkQIVnx
+	0cM4ma2g7xHH86RBnuAfHTrEWwfDmZAQAh/7eyBlYby8CiJXHtvM3V1OYsBgKny6
+	xw5zUXAy7A6x4YfCXRhPbZ8TBQg2qwwtR0ZTFAzRjRKnapk8HNexFSbucT5Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1710299845; x=1710386245; bh=JLxuvz4dXYvC57RZ5WOpbCIOv1xz
+	OWomyd1ZNq5z0fA=; b=jgaJWiapVMrnenYrvJwHaaa3nKGzAHE8dSejSmkJlnEg
+	lsSFFABDkMAnXUQmZRZV0sZp9ff0tGTuZD6MSVdJMgc+Zm/wSioECX8LN8K+nAMq
+	+5RckMlyH7+ku1i4gjJLYip4SJuudBzzGXEVNH1+dQLJH6WOgLdpo/1alPlhnXaC
+	/UwgroBgQt1aJ76RKjts7QWbP/UXMtV8yJFT+Jy8924akEUPyGQ/Rm+meAeO5qNS
+	QHz3iW74ZQVwk4Euam6TzaNMBgiw+59f5WswGtyLcfU/RJD/F/zK/TQe+wwkjtcb
+	rRex82PKYWYsQ48wm69HlcbEAlgBpJchpL3QqA9l5A==
+X-ME-Sender: <xms:xRrxZbD5KW6Fy4PlXGqeC5pkjg6z8lDb-B3gO4-O74DRYP6Ll4Sl_g>
+    <xme:xRrxZRiMabQuKl1D4i65WEyVakAh8H39XdulKm1daasEPfzDOlELeWBEg_a0LWbd1
+    NCebnf8PsmP_7Hg7w>
+X-ME-Received: <xmr:xRrxZWmOTpKX1D43VB6_RtZIgccTD10ov3sl2blC0SWKVYTDH9UEnGJwUv4t1TKAWuxuDtuiJVGbRFGIlP1T9kJzlIVOtsolGYMcptw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrjeeggdehkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
+    hrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtsfdttddt
+    vdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqeenuc
+    ggtffrrghtthgvrhhnpeeujeetkeehvddvkeelhfehgeevveehveejleffudehteduudef
+    heefkeekleevjeenucffohhmrghinhepugiguhhuuhdrgiihiienucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:xRrxZdxkFHsi_qAoUo55TZ7x4_MoWjLeU9VqIsgniAMFpK8f3PJ2mA>
+    <xmx:xRrxZQReYLlWlvfDoQAkHLS_Vj8kg2m7qIH95reTQLrqTHyq_PPVWQ>
+    <xmx:xRrxZQY8Fif-CnheZ66e1lq-FzxjtJGADaCXVzjp5P25Lq_Q_aJy1w>
+    <xmx:xRrxZRSEiponSV3Qa9QGzn3KXAi2FRLWaCHwLlCoAj4nmSxOUQMQpA>
+    <xmx:xRrxZVRMLg9FjpMKXD7NZNg9ogSgsAK87CubVbiZ1bkjcfD4CMvPyg>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 12 Mar 2024 23:17:24 -0400 (EDT)
+Date: Tue, 12 Mar 2024 21:17:22 -0600
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: acme@kernel.org, jolsa@kernel.org, quentin@isovalent.com, 
+	andrii.nakryiko@gmail.com, ast@kernel.org, daniel@iogearbox.net, bpf@vger.kernel.org
+Subject: Re: [PATCH dwarves v4 2/2] pahole: Inject kfunc decl tags into BTF
+Message-ID: <tqkiee5rc3szutsobuuttgpv4ejjhnjbcfhkdozkrvxcjrp6zf@2mvkkhhbn7vj>
+References: <cover.1707071969.git.dxu@dxuuu.xyz>
+ <28e81ccf28d6dd33f6db50af6526dc1770502b8d.1707071969.git.dxu@dxuuu.xyz>
+ <8e0580c6-bc72-4644-a010-c73d779f385c@oracle.com>
+ <s3fcrvcbxjn47nw3nhcus4hmyx3zkxz26vz4ddm2fxoskacf4s@tfd2rx7n33vc>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
- <20240311093526.1010158-2-dongmenglong.8@bytedance.com> <CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
- <CALz3k9i5G5wWi+rtvHPwVLOUAXVMCiU_8QUZs87TEYgR_0wpPA@mail.gmail.com>
- <CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail.com>
- <CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com> <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
-In-Reply-To: <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
-From: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>
-Date: Wed, 13 Mar 2024 09:53:42 +0800
-Message-ID: <CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add support
- to record and check the accessed args
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	X86 ML <x86@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Quentin Monnet <quentin@isovalent.com>, 
-	bpf <bpf@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <s3fcrvcbxjn47nw3nhcus4hmyx3zkxz26vz4ddm2fxoskacf4s@tfd2rx7n33vc>
 
-On Wed, Mar 13, 2024 at 12:42=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon, Mar 11, 2024 at 7:42=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3 <dong=
-menglong.8@bytedance.com> wrote:
-> >
-[......]
->
-> I see.
-> I thought you're sharing the trampoline across attachments.
-> (since bpf prog is the same).
+Hi Alan,
 
-That seems to be a good idea, which I hadn't thought before.
+On Wed, Feb 28, 2024 at 05:57:01PM -0700, Daniel Xu wrote:
+> Hi Alan,
+> 
+> On Thu, Feb 08, 2024 at 10:00:15AM +0000, Alan Maguire wrote:
+> > On 04/02/2024 18:40, Daniel Xu wrote:
 
-> But above approach cannot possibly work with a shared trampoline.
-> You need to create individual trampoline for all attachment
-> and point them to single bpf prog.
->
-> tbh I'm less excited about this feature now, since sharing
-> the prog across different attachments is nice, but it won't scale
-> to thousands of attachments.
-> I assumed that there will be a single trampoline with max(argno)
-> across attachments and attach/detach will scale to thousands.
->
-> With individual trampoline this will work for up to a hundred
-> attachments max.
+[...]
 
-What does "a hundred attachments max" means? Can't I
-trace thousands of kernel functions with a bpf program of
-tracing multi-link?
+> > 
+> > Then all you'd need to do is iterate over BTF functions, using
+> > btf_encoder__find_function() to get a function and associated ELF info
+> > by name.
+> 
+> Didn't know about this, thanks. I'll take a look at if the patch can use
+> the existing function metadata. That should get rid of
+> btf_encoder__collect_btf_funcs() if it works.
 
->
-> Let's step back.
-> What is the exact use case you're trying to solve?
-> Not an artificial one as selftest in patch 9, but the real use case?
+I experimented with this a bit and I'm not sure if it's a good approach.
 
-I have a tool, which is used to diagnose network problems,
-and its name is "nettrace". It will trace many kernel functions, whose
-function args contain "skb", like this:
+Here are the two commits:
 
-./nettrace -p icmp
-begin trace...
-***************** ffff889be8fbd500,ffff889be8fbcd00 ***************
-[1272349.614564] [dev_gro_receive     ] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614579] [__netif_receive_skb_core] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614585] [ip_rcv              ] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614592] [ip_rcv_core         ] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614599] [skb_clone           ] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614616] [nf_hook_slow        ] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614629] [nft_do_chain        ] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614635] [ip_rcv_finish       ] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614643] [ip_route_input_slow ] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614647] [fib_validate_source ] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614652] [ip_local_deliver    ] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614658] [nf_hook_slow        ] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614663] [ip_local_deliver_finish] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614666] [icmp_rcv            ] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614671] [icmp_echo           ] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614675] [icmp_reply          ] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614715] [consume_skb         ] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614722] [packet_rcv          ] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
-[1272349.614725] [consume_skb         ] ICMP: 169.254.128.15 ->
-172.27.0.6 ping request, seq: 48220
+        https://pastes.dxuuu.xyz/xo9jwk
+        https://pastes.dxuuu.xyz/xmzew5
 
-For now, I have to create a bpf program for every kernel
-function that I want to trace, which is up to 200.
+Basically my approach was to fan-in all the function info collected by
+the different threads. I don't think it'll work cuz some of the data
+(the name in particular) in struct elf_function belongs to the thread's
+struct btf_encoder instance. Which is all freed by btf_encoder__delete()
+before btf_encoder__encode().
 
-With this multi-link, I only need to create 5 bpf program,
-like this:
+It could probably be fixed, but doesn't seem very clean to me. So I
+think it'll be better to keep the code as-is. Unless you were thinking
+something different.
 
-int BPF_PROG(trace_skb_1, struct *skb);
-int BPF_PROG(trace_skb_2, u64 arg0, struct *skb);
-int BPF_PROG(trace_skb_3, u64 arg0, u64 arg1, struct *skb);
-int BPF_PROG(trace_skb_4, u64 arg0, u64 arg1, u64 arg2, struct *skb);
-int BPF_PROG(trace_skb_5, u64 arg0, u64 arg1, u64 arg2, u64 arg3, struct *s=
-kb);
-
-Then, I can attach trace_skb_1 to all the kernel functions that
-I want to trace and whose first arg is skb; attach trace_skb_2 to kernel
-functions whose 2nd arg is skb, etc.
-
-Or, I can create only one bpf program and store the index
-of skb to the attachment cookie, and attach this program to all
-the kernel functions that I want to trace.
-
-This is my use case. With the multi-link, now I only have
-1 bpf program, 1 bpf link, 200 trampolines, instead of 200
-bpf programs, 200 bpf link and 200 trampolines.
-
-The shared trampoline you mentioned seems to be a
-wonderful idea, which can make the 200 trampolines
-to one. Let me have a look, we create a trampoline and
-record the max args count of all the target functions, let's
-mark it as arg_count.
-
-During generating the trampoline, we assume that the
-function args count is arg_count. During attaching, we
-check the consistency of all the target functions, just like
-what we do now.
-
-Am I right?
-
-Thanks!
-Menglong Dong
+Thanks,
+Daniel
