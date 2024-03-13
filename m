@@ -1,227 +1,98 @@
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E31353E2E
-	for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 21:41:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D58482D3;
+	Wed, 13 Mar 2024 21:42:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710366110; cv=none; b=klVU5lNrodUAMuqTF3Lsm6gqB92mL0B/mmnccDIOhohbFlBF+6wGhfEoUqL7HsunsxH7GxuPSzfb+sPimQ3gCSxutHop3azQStbRszA5JmtZLcN0Hsnx5+8XCTzca0Y4VrFz+DpVJLDiQiM/IAfFtFbYFl2rqBct3YvzW2FeiDE=
+	t=1710366134; cv=none; b=er8oVcucqiTfZLiB7Px65CDmr2xAlV0lXLEG2mR9sOTNpUYWmzNDSouqeLOaaFVzHvJEUw1ajEBBKCy+aaeFoUqd0bk5H0lzxKsVqltFxeVtg+E13TvQ+7GO36hToVhHff+OIqhylhmDivF4r+XbHgmvpj88x8U86bvxXbwQAds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710366110; c=relaxed/simple;
-	bh=u1+sbSM+7+UEe04xGAhqrujZrrYmcrCFuvWQmciz25Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lauBkz0WWfHa3WmQdx/Lo/QLBN/g60mnxaJPbToQTGsYmXp9nlYoWq7fxOaulu3Qwy5lS+HDWhXT5q2kgiDvDcn82Lelu314eUsu66SvCEag8xHD39jsE6dgdoAG1x30+OnNQrKZ5m7hcItcYhNI6IxGtsAfL0QC/vZPA0yeLco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gBqHvYeX; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710366134; c=relaxed/simple;
+	bh=UDD6nJy5LKVxEcx74mHkfaNIhdaXsDmXdSdoWYD3tQk=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=QDrf3FBkMJLi0RdWyuYSUQlllBNTdJBngtW9kbeHvjXgEM0Heuo5otaZ27EbT8pz/QS29igcjXmfRIlhJko8zCRcGetStpsl64A6BZD86UNeLlJWT+vYJB7GrZEbLR0eEwIpb01WNy+wAJbioLRcEEbkty+rX23lFSDGdTH/cfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=lBtZkWGT; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gBqHvYeX"
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-609fc742044so3639067b3.1
-        for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 14:41:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710366107; x=1710970907; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7hMREXqXE361hvOJ3Zdr6NNwVC2A8l7mk09b9lG9NMU=;
-        b=gBqHvYeXsVITnE4wiTdPW3jO3xlcN6t3+pNI8cK7sjLUJHnXKqvGz1BFXLawEYxnVU
-         nQjayGxPhCyYqDLnErvk9YhB5UsShg/7HBP4QY7YA3HEnY3/dMIb7jyOx8aoTLyy8DII
-         pClVySFzHoAEHNsEtK1WAv/XgZidSS6XZY8xnn1MNW/rohX4WU/CLTG/jGVupB93o2yd
-         XT0e2axUpUgAoEj+zpnIH5UPQkuk3R2U90IFE+zi1yC1RWwHn6kAbMp3hPVaouyELqBu
-         38SHdv66wrW6UWOCiVVp0+s1XMhYTMjqG5mR9vDQMK2Tu3L3DeCuRe5OJN1BZarUzKDO
-         9/dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710366107; x=1710970907;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7hMREXqXE361hvOJ3Zdr6NNwVC2A8l7mk09b9lG9NMU=;
-        b=p5deXTEycdMTm38cPpMxAjyc0tvBTTZesasOhsmAHdeh2pI8oF+mBXcTNJyanm9s+D
-         WZqkyich7/DQqxsGByPBO9LXr8n3gTNxrwJjeN0FIMgGGY+6YdqFNvb8L0pU3JJPc1WH
-         JPB4RzAOe07lbO+btQvTo5tMpE1UZLzkZu9XpX7uAmWwzJcwUfk7aAxLYyBLhClOvMQx
-         ESXLrnVf0eswnxoR8fGxlXzYxXmeSpKGTsceuYbJxecBcc1b2h/6q0Nvp0mPvpcWV9ft
-         eOQiSRknHDlfZZF7XuLp1Z/q6HYbM61ccdePtsUNgTyfwo3V6M8aUbo7vZnr8ioy+pBO
-         MguA==
-X-Gm-Message-State: AOJu0YwfhaogEHlqI3XSpELXcJzNVNnezke1BB4/vDko8zdILdK06m+t
-	4viWuJRdGg3FKwoK/CydmtWMNLTEOonreGvJujQWCvnMLu/6lSTQwRUi+KME
-X-Google-Smtp-Source: AGHT+IFgR3d6HgqWlyHbiQ2UiAgP/2mZEtx2IQmFTaorMP+UbeD/ttRWEU03WJbfYJuv2lgPDANk5Q==
-X-Received: by 2002:a0d:c945:0:b0:60a:3ad:6872 with SMTP id l66-20020a0dc945000000b0060a03ad6872mr3763204ywd.34.1710366106836;
-        Wed, 13 Mar 2024 14:41:46 -0700 (PDT)
-Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:30fd:440:22c1:8047])
-        by smtp.gmail.com with ESMTPSA id y74-20020a0dd64d000000b00607b3038a7dsm2678950ywd.9.2024.03.13.14.41.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Mar 2024 14:41:46 -0700 (PDT)
-From: Kui-Feng Lee <thinker.li@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	kernel-team@meta.com,
-	andrii@kernel.org
-Cc: sinquersw@gmail.com,
-	kuifeng@meta.com,
-	Kui-Feng Lee <thinker.li@gmail.com>
-Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Accept extra arguments if they are not used.
-Date: Wed, 13 Mar 2024 14:41:39 -0700
-Message-Id: <20240313214139.685112-4-thinker.li@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240313214139.685112-1-thinker.li@gmail.com>
-References: <20240313214139.685112-1-thinker.li@gmail.com>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="lBtZkWGT"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=7GE8YcmRLknEbeV60EceEz8pJp5RGK6eT1a+sdWBOZA=; b=lBtZkWGTjFJERjPGsFBpoaPh+F
+	BezITbLRclMtDthJovP31Wd3yn2B4ehPO+oUBCp0Ok6HVlvi72fSsTBgAEzu/l0kcc/qKj10PvR8h
+	KN/7XpKUJzKGBLSQAuJ0XVcl93XTwRuwIJQUEkFoZefN6sp29TQIjU6CYUOFQtsmc+AWYKt1b+Blx
+	DVySp3cHDnCUyDP7LvhQqNxAEreimMhEPuBJZhzmd5E9yFYF3UlhPRIs2hjnJV9uolbPHl1/L04Bx
+	miB6gDD5jDbDblBwArZ/2KIEM9g/0+ilng/1ooqyf7mWhul1U+5wbS8wDBzjneuVjFdLRM1qeq289
+	g0cArwwg==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1rkWM6-0006Pa-4U; Wed, 13 Mar 2024 22:41:46 +0100
+Received: from [178.197.249.11] (helo=linux.home)
+	by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1rkWM5-000FqN-3u; Wed, 13 Mar 2024 22:41:45 +0100
+Subject: Re: [PATCH net-next v4] net: Re-use and set mono_delivery_time bit
+ for userspace tstamp packets
+To: Martin KaFai Lau <martin.lau@linux.dev>,
+ "Abhishek Chauhan (ABC)" <quic_abchauha@quicinc.com>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: kernel@quicinc.com, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
+ Martin KaFai Lau <martin.lau@kernel.org>, bpf <bpf@vger.kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>
+References: <20240301201348.2815102-1-quic_abchauha@quicinc.com>
+ <2a4cb416-5d95-459d-8c1c-3fb225240363@linux.dev>
+ <65f16946cd33e_344ff1294fc@willemb.c.googlers.com.notmuch>
+ <28282905-065a-4233-a0a2-53aa9b85f381@linux.dev>
+ <65f2004e65802_3d1e792943e@willemb.c.googlers.com.notmuch>
+ <02363fef-0b5e-4b6c-bad9-db924db230b9@quicinc.com>
+ <0a0f948a-ca0e-4241-8a21-e7c7fc2ea471@linux.dev>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <1e419a00-41cf-c760-7912-68b34b74f8d1@iogearbox.net>
+Date: Wed, 13 Mar 2024 22:41:44 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <0a0f948a-ca0e-4241-8a21-e7c7fc2ea471@linux.dev>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27213/Wed Mar 13 09:26:34 2024)
 
-A struct_ops program can have more arguments than what the corresponding
-function pointer in the kernel has if the program doesn't access the
-arguments. For example, a struct_ops operator may have 2 arguments, but
-your program may defined with 3 or more arguments. It is acceptable as long
-as the program doesn't use these arguments.
+On 3/13/24 10:19 PM, Martin KaFai Lau wrote:
+> On 3/13/24 1:59 PM, Abhishek Chauhan (ABC) wrote:
+>>>> I think all this is crying for another bit in skb to mean user_delivery_time
+>>>> (skb->tstamp depends on skb->sk->sk_clockid) while mono_delivery_time is the
+>>>> mono time either set by kernel-tcp or bpf.
+>>>
+>>> It does sound like the approach with least side effects.
+>>>
+>> Martin and Willem , while we are discussing to use seperate bit per skb to check if its
+>> SO_TXTIME from userspace or (rcv) timestamp . I came across two flags used in skbuff
+>> called in filter framework
+>> @tc_at_ingress: used within tc_classify to distinguish in/egress
+>> @from_ingress: packet was redirected from the ingress path
+>>
+>> Since i believe the above testcase is based on redirecting from ingress to egress part
+>> why cant we use these already existing flags ? Please advice
+>>
+>> I am not completely sure if we can use these flags to solve the bpf problem or not.
+> 
+> I don't see how they are related. It can tell where a skb is at. It cannot tell what is in skb->tstamp.
 
-Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
----
- .../bpf/prog_tests/test_struct_ops_module.c   | 56 +++++++++++++++++++
- .../bpf/progs/struct_ops_extra_arg.c          | 49 ++++++++++++++++
- 2 files changed, 105 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_extra_arg.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-index 098776d00ab4..a146bf079a60 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-@@ -4,6 +4,7 @@
- #include <time.h>
- 
- #include "struct_ops_module.skel.h"
-+#include "struct_ops_extra_arg.skel.h"
- 
- static void check_map_info(struct bpf_map_info *info)
- {
-@@ -138,11 +139,66 @@ static void test_struct_ops_not_zeroed(void)
- 	struct_ops_module__destroy(skel);
- }
- 
-+/* Handle BPF programs with additional arguments that don't appear in the
-+ * function pointer prototype in the kernel.
-+ */
-+static void test_struct_ops_extra_arg(void)
-+{
-+	struct struct_ops_extra_arg *skel;
-+	int err;
-+
-+	/* test_extra_arg() has an extra argument, so testmod_1 should fail
-+	 * to load.
-+	 *
-+	 * Since extra_arg is used in test_extra_arg(), it should be
-+	 * rejected by the verifier.
-+	 */
-+	skel = struct_ops_extra_arg__open();
-+	if (!ASSERT_OK_PTR(skel, "struct_ops_extra_arg_open_extra_arg"))
-+		return;
-+
-+	err = struct_ops_extra_arg__load(skel);
-+	ASSERT_ERR(err, "struct_ops_extra_arg_load_extra_arg");
-+
-+	struct_ops_extra_arg__destroy(skel);
-+
-+	/* Switch to test_2() */
-+	skel = struct_ops_extra_arg__open();
-+	if (!ASSERT_OK_PTR(skel, "struct_ops_extra_arg_open"))
-+		return;
-+
-+	skel->struct_ops.testmod_1->test_2 = skel->progs.test_2;
-+
-+	err = struct_ops_extra_arg__load(skel);
-+	ASSERT_OK(err, "struct_ops_extra_arg_load");
-+
-+	struct_ops_extra_arg__destroy(skel);
-+
-+	/* Switch to test_extra_arg_unused()
-+	 *
-+	 * Since extra_arg is never used, it should be accepted by the
-+	 * verifier. The verifier would accept a program with extra
-+	 * arguments as long as they are not used.
-+	 */
-+	skel = struct_ops_extra_arg__open();
-+	if (!ASSERT_OK_PTR(skel, "struct_ops_extra_arg_open_unused"))
-+		return;
-+
-+	skel->struct_ops.testmod_1->test_2 = skel->progs.test_extra_arg_unused;
-+
-+	err = struct_ops_extra_arg__load(skel);
-+	ASSERT_OK(err, "struct_ops_extra_arg_load_unused");
-+
-+	struct_ops_extra_arg__destroy(skel);
-+}
-+
- void serial_test_struct_ops_module(void)
- {
- 	if (test__start_subtest("test_struct_ops_load"))
- 		test_struct_ops_load();
- 	if (test__start_subtest("test_struct_ops_not_zeroed"))
- 		test_struct_ops_not_zeroed();
-+	if (test__start_subtest("test_struct_ops_extra_arg"))
-+		test_struct_ops_extra_arg();
- }
- 
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_extra_arg.c b/tools/testing/selftests/bpf/progs/struct_ops_extra_arg.c
-new file mode 100644
-index 000000000000..4b73b279ad22
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_extra_arg.c
-@@ -0,0 +1,49 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "../bpf_testmod/bpf_testmod.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int test_1_result = 0;
-+int test_2_result = 0;
-+
-+SEC("struct_ops/test_1")
-+int BPF_PROG(test_1)
-+{
-+	test_1_result = 0xdeadbeef;
-+	return 0;
-+}
-+
-+SEC("?struct_ops/test_2")
-+void BPF_PROG(test_2, int a, int b)
-+{
-+	test_2_result = a + b;
-+}
-+
-+SEC("?struct_ops/test_extra_arg")
-+void BPF_PROG(test_extra_arg, int a, int b, int extra_arg)
-+{
-+	/* Accessing extra_arg will cause a verifier error since it
-+	 * accesses the context data beyond the size of the context.
-+	 */
-+	test_2_result = a + b + extra_arg + 3;
-+}
-+
-+SEC("?struct_ops/test_extra_arg_unused")
-+void BPF_PROG(test_extra_arg_unused, int a, int b, int extra_arg)
-+{
-+	/* The extra_arg is not used, so it should not cause a verifier
-+	 * error.
-+	 */
-+	test_2_result = a + b + 3;
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops testmod_1 = {
-+	.test_1 = (void *)test_1,
-+	.test_2 = (void *)test_extra_arg,
-+	.data = 0x1,
-+};
--- 
-2.34.1
-
++1, if we go that route as per discussion, I'd also prefer clearly encoding delivery
+time clock base in skb to avoid ambiguity.
