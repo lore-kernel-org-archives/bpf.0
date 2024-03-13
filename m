@@ -1,152 +1,254 @@
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9061F93F;
-	Wed, 13 Mar 2024 08:52:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216941B59B;
+	Wed, 13 Mar 2024 09:04:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710319947; cv=none; b=qd8l+eFjvnEydkbuHKTYBedLNJDFH37xVQHpaVfc/funS3KZWnemBWbRpiwDTMnyT354HoWOG/V5hPJir0H9dil+4pOZXwmVF6Amp43LQAj3qjN7mYFcwvk3GgaMJvCoHxrSmyJHM9+I7yLb+GQKQ2+2CU1YugpmY9AnoDjKHsM=
+	t=1710320659; cv=none; b=mJdIxn7j2owmeo1AI61OvYGfuHgitzLO1X+9ovXt8/2u0eWl2saAGuXoefCFBJ0MDrvuvxxdy4U+kFAcPtJs/3IkSbr/ZV+p5amK3Mz0th5LLtrpt8NJW9D3qs1jMPcS1g4K50pHtUZbwJwBQuuQKWTbAPeH/qriCmwcqBIkyFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710319947; c=relaxed/simple;
-	bh=MBGoPePJfGD927BQzBl+0QOCTgtJGQa5eqdTJMY7LcM=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=UtJgmrPPcqrdctG71G8qIFf6w3QBX0fj2oElYA9JhnA8IK9uK9mOPbu9kX5hSnv7fsH/WBPY6qgng6b/mu3sown17Y9P9Wxtf5vQf4kJFYKM4wI0FRx6MUd1tsMvLsC0+I9xrx+o5f69to7LlnuAffUqDcHNSTIUs17NjE8SBTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=brZqD1Xh; arc=none smtp.client-ip=209.85.222.173
+	s=arc-20240116; t=1710320659; c=relaxed/simple;
+	bh=OY7dmVLts/l8qSevFTkHGMcjHfepEVJnm07/K15atac=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PuxMv9zRTWkbYWQM8XZT3LEnt2GcN9Brt3zXkTrJ/ZoaDOcmUXcSTfoYXj0kEpspPx00qoPA5FhCUNcU+Uh1NIFMZlmkvhdV3qkOs8QqcgHlWkb4n/mToQ0+uLi2F4secidtWQzF+dPXtkkrCANSGom0ndniA9UaFRk217LIXww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S8gPwY9q; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="brZqD1Xh"
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-78810ba2ff1so233169485a.3;
-        Wed, 13 Mar 2024 01:52:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S8gPwY9q"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4132f37e170so15165835e9.2;
+        Wed, 13 Mar 2024 02:04:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710319943; x=1710924743; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NiyXUYdI9F2JA3CsusbHXE/Pdh1jVbsVBwhd+PEGfCY=;
-        b=brZqD1Xh35m0etdW7y9eHKDAVI92YU6Gx/ZIIgyLvtP7k9nTkinahOu6WE2zx3UzPV
-         Y9dMBKQ72PRQIxmqVb8G9AYaiAWLgMbyxVsvoXssdrn14AG6umc/hOqd6A0kf6qpwsoQ
-         UTEgYT0AA7wTTQTTSCvChmGZlhS80TAsARxYDDULolzA8mxbqBZBU+oNic+tdPcWlI4H
-         fow2nJmtxpzq4VX+7Ah8oq6F4c1Ioqn+KNxuwBNDzZg1hoowVaS4pQpd0V63/r6Ab3zq
-         8R+qI8QekRDvkI1xe2yIUeiVBOWoeHefYdlfpkkpvCYxIYnhxrO929UUUNwL2efMsV11
-         Y7Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710319943; x=1710924743;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+        d=gmail.com; s=20230601; t=1710320655; x=1710925455; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=NiyXUYdI9F2JA3CsusbHXE/Pdh1jVbsVBwhd+PEGfCY=;
-        b=WA98mBItfk7aYRCSpEWQmFPLgyqWE9fb9Fcv5r5fU+Y96wZ637Tm6c8jV/srqVi9M/
-         renkJ4lkqvul6JR9sikgIQ3nlKt+rbROH/dUaITIpVXcZ7MkbD58dIwiQsIHIL5L9rOu
-         YOC0sNXSwY/dSTuxMuI333xdEr7c85oXKhyBhFK12RfbJsIzAyClkOvD19/4hIzhpGIs
-         8kG6Y4GddkFvNp7wGICH+smwgXa+hBWBdGuo6Vq73rO+BUkEPrn17cdZ/cA33Bdqtt0t
-         qXDORqBU82VNSz7LnSa1mEaqwqo8AURcL0QIfRoy8j/SOyw/7SpYsJit5+osZfbHDOiN
-         sKkw==
-X-Forwarded-Encrypted: i=1; AJvYcCWhS+UUMqnMtEo6eaGWOihlAiOeqOwJlZlpnm8BD/jMWVNry/Y1KXQ0cRl7nXP9RMBk96+lAldxeApGXUGUuXZpDlqNe5cWAsE4Lf0hLxy1xRei4HnsNvWtMAEizt05F184TWzgHWhWW7peppZUeVDPcoRMVteja4HF
-X-Gm-Message-State: AOJu0YykB6Et1lGdkw7uhF2SzewKhkC3pjj1K4BXQMmdiLWDY0ECbJxO
-	hYdTaELXxC1413MAkLB5hT/3AMzHX1GsbAcIxkloNhvwXw/CkCmb
-X-Google-Smtp-Source: AGHT+IENqpNPUVCBD2bYLTHTCzOlVlxtqfauB/mV5DQpC8fHVxO4vHszbRwC1Xogc4MtuxBvNUDr+g==
-X-Received: by 2002:a05:620a:1a0f:b0:788:5866:788a with SMTP id bk15-20020a05620a1a0f00b007885866788amr15818667qkb.9.1710319943582;
-        Wed, 13 Mar 2024 01:52:23 -0700 (PDT)
-Received: from localhost (55.87.194.35.bc.googleusercontent.com. [35.194.87.55])
-        by smtp.gmail.com with ESMTPSA id 26-20020a05620a04da00b0078838695dfasm4466818qks.59.2024.03.13.01.52.23
+        bh=QjqI0UtI7NlkaSgyzcRJ5GhIlnZWE1jspTguoc6XJII=;
+        b=S8gPwY9qhaZVR6Bb09+d5LLt9+hBoDdNWpgKUAGzap7aZPiQNNOOD/AAFwP7esWLPV
+         IQa2U/BbnVOcANfyAPU490C85yL8mMSCBFPln4QggI7Mc4tJiEsLqITWt/UaRfDF5va9
+         KWkhMDsZhVpfzfVrCR9lTlbkB+Hwkitiv0Lb/wbf5pZdtFNi5qO58GdjpwagXyr+SlaR
+         wiSfBzpROgA4Mp7xGynIqDjy/3A6HP2rYIpSBCheH+22aISUP/yyhI1oGTNN7qNNE5qx
+         185XxU07u8s6z3ofN1w67HMRJDUamdm/8q4QkD+RY3dxyQ3na1Htzfv0j+NWow6dgJlc
+         AZUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710320655; x=1710925455;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QjqI0UtI7NlkaSgyzcRJ5GhIlnZWE1jspTguoc6XJII=;
+        b=Z2piCzEA74RQw+qmY5lQ7sEzSSAqAL0qYXJoyIXTc637TYp/nIyNga9xvhk+R1SxG3
+         wTQQdXAfjkIpa1ecN23g1X/q6rqv7/fMsC40ThhAXmHNcmH8eWTRoz/evGXftR2zGzwx
+         nqJtjQdd/43swGBQEmTbD1nKuSZL6792ojZZEqMNC5JJeQo4CkGCKCzPSmgLfgLSCqL3
+         Bgtgd5Ht399Hb3gA0vDUprRjEGMywfKRDS0MY2kwzxHXsEjawV3bLepqhydg8uxpi0AR
+         VviXMd8PFFOMZ1NbH2UsU5mf8YI2DHuersIZm77ZTkGnTCeZJBef0RTdoMd7QcDqqzFH
+         O0MA==
+X-Forwarded-Encrypted: i=1; AJvYcCUU9vP/dCQWlNvkivUgva7ZI8bBljfW/cASVIbjhA4he5jtbuLJBZtWNMC/HAivNHKK1tfAoeJvqWTB6FZfFUHUCGy/XMizhUS7NWtLO53c60L5tMIgN8q4L+bhBtrIQhGohYMK37if67bsW/ai5tKMfUyS6MzdIWgB
+X-Gm-Message-State: AOJu0YwlvGbmgLq/KwMqQCVG69fq/ERxoaTL9vaWO+vhiBchSf3EaSAB
+	w+HYAeLMmKluCy4CKtXjVTpTojozT0XooCm8j/bxBn0kZK3f6lfG
+X-Google-Smtp-Source: AGHT+IH3UHABTxaiQniABaOfSvf4/sZ4Ay97aD9Qzeat6erm1yzjN60nJJ7df8qTsrC+qywcrJ+eMQ==
+X-Received: by 2002:a05:600c:524c:b0:412:eb6e:1fdb with SMTP id fc12-20020a05600c524c00b00412eb6e1fdbmr1520565wmb.40.1710320654430;
+        Wed, 13 Mar 2024 02:04:14 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id n2-20020adfe782000000b0033e7715bafasm11155874wrm.59.2024.03.13.02.04.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Mar 2024 01:52:23 -0700 (PDT)
-Date: Wed, 13 Mar 2024 04:52:22 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>, 
- Abhishek Chauhan <quic_abchauha@quicinc.com>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: kernel@quicinc.com, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- Andrew Halaney <ahalaney@redhat.com>, 
- Martin KaFai Lau <martin.lau@kernel.org>, 
- bpf <bpf@vger.kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Alexei Starovoitov <ast@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>
-Message-ID: <65f16946cd33e_344ff1294fc@willemb.c.googlers.com.notmuch>
-In-Reply-To: <2a4cb416-5d95-459d-8c1c-3fb225240363@linux.dev>
-References: <20240301201348.2815102-1-quic_abchauha@quicinc.com>
- <2a4cb416-5d95-459d-8c1c-3fb225240363@linux.dev>
-Subject: Re: [PATCH net-next v4] net: Re-use and set mono_delivery_time bit
- for userspace tstamp packets
+        Wed, 13 Mar 2024 02:04:13 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 13 Mar 2024 10:04:11 +0100
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>,
+	syzbot <syzbot+850aaf14624dc0c6d366@syzkaller.appspotmail.com>,
+	andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+	daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+	kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+	martin.lau@linux.dev, netdev@vger.kernel.org, sdf@google.com,
+	song@kernel.org, syzkaller-bugs@googlegroups.com,
+	yonghong.song@linux.dev
+Subject: Re: [syzbot] [bpf?] possible deadlock in __bpf_ringbuf_reserve
+Message-ID: <ZfFsC6zyrUCtTxK-@krava>
+References: <0000000000004aa700061379547e@google.com>
+ <ZfDC45Kc1VEvBMuW@krava>
+ <ZfDGmoOcUqrHPSkq@krava>
+ <CAEf4Bza8iH4_JY_sN-6GYeSfn6iuUsLMzxd=xRkCC7q-3_StNQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4Bza8iH4_JY_sN-6GYeSfn6iuUsLMzxd=xRkCC7q-3_StNQ@mail.gmail.com>
 
-Martin KaFai Lau wrote:
-> On 3/1/24 12:13 PM, Abhishek Chauhan wrote:
-> > Bridge driver today has no support to forward the userspace timestamp
-> > packets and ends up resetting the timestamp. ETF qdisc checks the
-> > packet coming from userspace and encounters to be 0 thereby dropping
-> > time sensitive packets. These changes will allow userspace timestamps
-> > packets to be forwarded from the bridge to NIC drivers.
-> > 
-> > Setting the same bit (mono_delivery_time) to avoid dropping of
-> > userspace tstamp packets in the forwarding path.
-> > 
-> > Existing functionality of mono_delivery_time remains unaltered here,
-> > instead just extended with userspace tstamp support for bridge
-> > forwarding path.
+On Tue, Mar 12, 2024 at 03:37:16PM -0700, Andrii Nakryiko wrote:
+> On Tue, Mar 12, 2024 at 2:18 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Tue, Mar 12, 2024 at 10:02:27PM +0100, Jiri Olsa wrote:
+> > > On Tue, Mar 12, 2024 at 09:41:26AM -0700, syzbot wrote:
+> > > > Hello,
+> > > >
+> > > > syzbot found the following issue on:
+> > > >
+> > > > HEAD commit:    df4793505abd Merge tag 'net-6.8-rc8' of git://git.kernel.o..
+> > > > git tree:       bpf
+> > > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=11fd0092180000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=c11c5c676adb61f0
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=850aaf14624dc0c6d366
+> > > > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1509c4ae180000
+> > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10babc01180000
+> > > >
+> > > > Downloadable assets:
+> > > > disk image: https://storage.googleapis.com/syzbot-assets/d2e80ee1112b/disk-df479350.raw.xz
+> > > > vmlinux: https://storage.googleapis.com/syzbot-assets/b35ea54cd190/vmlinux-df479350.xz
+> > > > kernel image: https://storage.googleapis.com/syzbot-assets/59f69d999ad2/bzImage-df479350.xz
+> > > >
+> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > > Reported-by: syzbot+850aaf14624dc0c6d366@syzkaller.appspotmail.com
+> > > >
+> > > > ============================================
+> > > > WARNING: possible recursive locking detected
+> > > > 6.8.0-rc7-syzkaller-gdf4793505abd #0 Not tainted
+> > > > --------------------------------------------
+> > > > strace-static-x/5063 is trying to acquire lock:
+> > > > ffffc900096f10d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
+> > > >
+> > > > but task is already holding lock:
+> > > > ffffc900098410d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
+> > > >
+> > > > other info that might help us debug this:
+> > > >  Possible unsafe locking scenario:
+> > > >
+> > > >        CPU0
+> > > >        ----
+> > > >   lock(&rb->spinlock);
+> > > >   lock(&rb->spinlock);
+> > > >
+> > > >  *** DEADLOCK ***
+> > > >
+> > > >  May be due to missing lock nesting notation
+> > > >
+> > > > 4 locks held by strace-static-x/5063:
+> > > >  #0: ffff88807857e068 (&pipe->mutex/1){+.+.}-{3:3}, at: __pipe_lock fs/pipe.c:103 [inline]
+> > > >  #0: ffff88807857e068 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_write+0x1cc/0x1a40 fs/pipe.c:465
+> > > >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:298 [inline]
+> > > >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:750 [inline]
+> > > >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: __bpf_trace_run kernel/trace/bpf_trace.c:2380 [inline]
+> > > >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run2+0x114/0x420 kernel/trace/bpf_trace.c:2420
+> > > >  #2: ffffc900098410d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
+> > > >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:298 [inline]
+> > > >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:750 [inline]
+> > > >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: __bpf_trace_run kernel/trace/bpf_trace.c:2380 [inline]
+> > > >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run2+0x114/0x420 kernel/trace/bpf_trace.c:2420
+> > > >
+> > > > stack backtrace:
+> > > > CPU: 0 PID: 5063 Comm: strace-static-x Not tainted 6.8.0-rc7-syzkaller-gdf4793505abd #0
+> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/25/2024
+> > > > Call Trace:
+> > > >  <TASK>
+> > > >  __dump_stack lib/dump_stack.c:88 [inline]
+> > > >  dump_stack_lvl+0x1e7/0x2e0 lib/dump_stack.c:106
+> > > >  check_deadlock kernel/locking/lockdep.c:3062 [inline]
+> > > >  validate_chain+0x15c0/0x58e0 kernel/locking/lockdep.c:3856
+> > > >  __lock_acquire+0x1345/0x1fd0 kernel/locking/lockdep.c:5137
+> > > >  lock_acquire+0x1e3/0x530 kernel/locking/lockdep.c:5754
+> > > >  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+> > > >  _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
+> > > >  __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
+> > > >  ____bpf_ringbuf_reserve kernel/bpf/ringbuf.c:459 [inline]
+> > > >  bpf_ringbuf_reserve+0x5c/0x70 kernel/bpf/ringbuf.c:451
+> > > >  bpf_prog_9efe54833449f08e+0x2d/0x47
+> > > >  bpf_dispatcher_nop_func include/linux/bpf.h:1231 [inline]
+> > > >  __bpf_prog_run include/linux/filter.h:651 [inline]
+> > > >  bpf_prog_run include/linux/filter.h:658 [inline]
+> > > >  __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+> > >
+> > > hum, scratching my head how this could passed through the prog->active check,
+> >
+> > nah could be 2 instances of the same program, got confused by the tag
+> >
+> > trace_contention_end
+> >   __bpf_trace_run(prog1)
+> >     bpf_prog_9efe54833449f08e
+> >       bpf_ringbuf_reserve
+> >         trace_contention_end
+> >           __bpf_trace_run(prog1)  prog1->active check fails
+> >           __bpf_trace_run(prog2)
+> >             bpf_prog_9efe54833449f08e
+> >               bpf_ringbuf_reserve
+> >                 lockup
+> >
+> > we had similar issue in [1] and we replaced the lock with extra buffers,
+> > not sure that's possible in bpf_ringbuf_reserve
+> >
 > 
-> The patch currently broke the bpf selftest test_tc_dtime: 
-> https://github.com/kernel-patches/bpf/actions/runs/8242487344/job/22541746675
-> 
-> In particular, there is a uapi field __sk_buff->tstamp_type which currently has 
-> BPF_SKB_TSTAMP_DELIVERY_MONO to mean skb->tstamp has the MONO "delivery" time. 
-> BPF_SKB_TSTAMP_UNSPEC means everything else (this could be a rx timestamp at 
-> ingress or a delivery time set by user space).
-> 
-> __sk_buff->tstamp_type depends on skb->mono_delivery_time which does not 
-> necessarily mean mono after this patch. I thought about fixing it on the bpf 
-> side such that reading __sk_buff->tstamp_type only returns 
-> BPF_SKB_TSTAMP_DELIVERY_MONO when the skb->mono_delivery_time is set and skb->sk 
-> is IPPROTO_TCP. However, it won't work because of bpf_skb_set_tstamp().
-> 
-> There is a bpf helper, bpf_skb_set_tstamp(skb, tstamp, 
-> BPF_SKB_TSTAMP_DELIVERY_MONO). This helper changes both the skb->tstamp and the 
-> skb->mono_delivery_time. The expectation is this could change skb->tstamp in the 
-> ingress skb and redirect to egress sch_fq. It could also set a mono time to 
-> skb->tstamp where the udp sk->sk_clockid may not be necessary in mono and then 
-> bpf_redirect to egress sch_fq. When bpf_skb_set_tstamp(skb, tstamp, 
-> BPF_SKB_TSTAMP_DELIVERY_MONO) succeeds, reading __sk_buff->tstamp_type expects 
-> BPF_SKB_TSTAMP_DELIVERY_MONO also.
-> 
-> I ran out of idea to solve this uapi breakage.
-> 
-> I am afraid it may need to go back to v1 idea and use another bit 
-> (user_delivery_time) in the skb.
+> Having trace_contention_begin and trace_contention_end in such
+> low-level parts of ringbuf (and I'm sure anything in BPF that's using
+> spinlock) is unfortunate. I'm not sure what's the best solution, but
+> it would be great if we had ability to disable these tracepoints when
+> taking lock in low-level BPF infrastructure. Given BPF programs can
+> attach to these tracepoints, it's best to avoid this arbitrary nesting
+> of BPF ringbuf calls. Also note, no per-program protection will help,
+> because it can be independent BPF programs using the same map.
 
-Is the only conflict when bpf_skb_set_tstamp is called for an skb from
-a socket with sk_clockid set (and thus SO_TXTIME called)?
+one of the initial attempts for the previous problem was to deny
+the attach of programs calling printk to printk tracepoint:
+  https://lore.kernel.org/bpf/20221121213123.1373229-1-jolsa@kernel.org/
 
-Interpreting skb->tstamp as mono if skb->mono_delivery_time is set and
-skb->sk is NULL is fine. This is the ingress to egress redirect case.
+how about we overload the bpf contention tracepoints callbacks and
+make it conditional like outlined below.. but not sure it'd be
+feasible on the lock/unlock calling sides to use this
 
-I don't see an immediate use for this BPF function on egress where it
-would overwrite an SO_TXTIME timestamp and now skb->tstamp is mono,
-but skb->sk != NULL and skb->sk->sk_clockid != CLOCK_MONOTONIC.
-
-Perhaps bpf_skb_set_tstamp() can just fail if another delivery time is
-already explicitly programmed?
-
-    skb->sk &&
-    sock_flag(sk, SOCK_TXTIME) &&
-    skb->sk->sk_clockid != CLOCK_MONOTONIC
-
-Either that, or unset SOCK_TXTIME to make sk_clockid undefined and
-fall back on interpreting as monotonic.
+jirka
 
 
+---
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 0a5c4efc73c3..c17b7eaab440 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -2347,13 +2347,42 @@ int perf_event_query_prog_array(struct perf_event *event, void __user *info)
+ extern struct bpf_raw_event_map __start__bpf_raw_tp[];
+ extern struct bpf_raw_event_map __stop__bpf_raw_tp[];
+ 
++extern struct tracepoint __tracepoint_contention_begin;
++
++#define __CAST_TO_U64(x) ({ \
++	typeof(x) __src = (x); \
++	UINTTYPE(sizeof(x)) __dst; \
++	memcpy(&__dst, &__src, sizeof(__dst)); \
++	(u64)__dst; })
++
++int contention_tps_disable;
++
++static notrace void
++__bpf_trace_contention_begin_overload(void *__data, void *lock, unsigned int flags)
++{
++	struct bpf_prog *prog = __data;
++
++	if (contention_tps_disable)
++		return;
++
++	bpf_trace_run2(prog, __CAST_TO_U64(lock), __CAST_TO_U64(flags));
++}
++
++static struct bpf_raw_event_map* fixup(struct bpf_raw_event_map *btp)
++{
++	if (btp->tp == &__tracepoint_contention_begin)
++		btp->bpf_func = __bpf_trace_contention_begin_overload;
++
++	return btp;
++}
++
+ struct bpf_raw_event_map *bpf_get_raw_tracepoint(const char *name)
+ {
+ 	struct bpf_raw_event_map *btp = __start__bpf_raw_tp;
+ 
+ 	for (; btp < __stop__bpf_raw_tp; btp++) {
+ 		if (!strcmp(btp->tp->name, name))
+-			return btp;
++			return fixup(btp);
+ 	}
+ 
+ 	return bpf_get_raw_tracepoint_module(name);
