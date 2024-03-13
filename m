@@ -1,108 +1,119 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DBF5627E5
-	for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 17:24:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 783B551021;
+	Wed, 13 Mar 2024 17:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710350663; cv=none; b=Q29wSMa2gq642WugA23/9dvBtG1qvPLc1YCKw97H1yi1r7zF8eG7PCI++RMt8X/yb+l2rIxlAg9vCAtsAXwOuzRZ1tDvSmAHU18uxITzt9nbx1/c7DM/cpH4srqtuNKwXxuNo7UNZ+a2CnxfXhVfMCsaN1rsXx+wW43H8XFnsrk=
+	t=1710351223; cv=none; b=pAAW42x6CH2exDGDNHsmKZa5At3sGX9P2UyVsRpE7vR268eL9kXQIps3BDVwkzREyW/RiHgzjz59sMBPn63LULDdMYcQLITlej3oFaIIqNUspexNgjr36HjMKMXGWBi1/AClY9nEDob/S5iXK0+YSVQzQJCma1qiYqaV0OgauZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710350663; c=relaxed/simple;
-	bh=COX/dutxMFtgdD2qShiWUCYf8rrcG91VNCH65Dn+Iyo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NnnqiOTBgbVVcR6MPXp01ubosCnlxZ9d1syeld9rU3xnhaVqObE/54zs/qIU9rY/W1p/NgpTQurWVdVFdWMyqXjmamu3vsXogilS6ZribC4Q1FkX+HmDH+Q8xrgJnyuuogTcM5o+m5lKyXf6p2RKd5suKF5bguNP6VSAfqX9FV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=WP0Pze/5; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
+	s=arc-20240116; t=1710351223; c=relaxed/simple;
+	bh=t/meYn2//gmVYkp7P0vow+AvSYr+P2IoQgUqP9xrrMM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=s82G+ZAYWd9hQUW/50RX+wJzPBTJdO3d7Hn0ia4We3/zU9nLnJuO0F1r0sJfZ84KGTbspD2aLu0VYqOxhkjfCjDIgpbjtPlfsiwXhodBt2kiFycW9dtu7gq01YRwg/ZZOVbL5BKoUs6L6bAGyVpyTKfCKwMiNSdfyUNNGZYddo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hj7zaRI5; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="WP0Pze/5"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-33e94c12cfaso8210f8f.3
-        for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 10:24:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hj7zaRI5"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-5ce2aada130so49237a12.1;
+        Wed, 13 Mar 2024 10:33:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1710350660; x=1710955460; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RssB/TaUSBP145878SWmPyDLBDn7gY7D0hNqObZ/9Ns=;
-        b=WP0Pze/5LjQTB1dEmSNlIL82PRKoKfTQm7mSza2V65Oe6+k7B9t7Eln9WWnr/KzOmz
-         0X+HWMHeZQ1ul5Bf5UQh4ShQtq3G4DqQj7ugREQIExhz86u/vCcMGxfKmSCp6L12pp0d
-         Io/3LT/NPy3/SIFXmjBxtZoC0hIPctyejTadptkz24VcgI6i9iALoeCEvLcqrwmEkPdD
-         O327/DnxfytB4g4zukiTJycLKa5zOhrachG/RtAkVEX1FG4OcgsOXMJGil46jZiFmvft
-         PvwEAHro+AVWGmqZ8tFpi/FB7QC/i3JdDWFxQHKFiLGKe/iZJrcCQ4/+Hwd165KdXbXo
-         oARA==
+        d=gmail.com; s=20230601; t=1710351221; x=1710956021; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=44Vskwsk5gQiVM0kOdLBvtJVlmH+VOeRs73HeGYck7g=;
+        b=Hj7zaRI5dR9tsiv1bpGz4x4iHDhnAkMKkTirfN9RVw6fYvY45WQnWXNmkv0LiXwvjk
+         8Pyz/t8lUYXx6WxaKWbgTG1045QTCN8eeZ7tpok/NJ2LxLGxE2fQZxEn54roSw8/f3JK
+         VDq4vahLksp/USDzxMP5ASZorZlgSQ0Vk2xz6A/k4BIL54QIP5bBuWn3Nvx6uc0KgWLg
+         3+hqB1e1XvIdE6K9B1n8QB41Myu4Fo0uvGFQ9E/ur4eoqd9gnDYdpOf+bxe5J7HQ7dRB
+         +63Xzc6SGtlLhKEap8P0aO94uLDH3WITijB2nS5VSnVIxRjA4Lrv7iEFhuqiY/PalRUV
+         Xzxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710350660; x=1710955460;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RssB/TaUSBP145878SWmPyDLBDn7gY7D0hNqObZ/9Ns=;
-        b=CnNnGkxiKLK/w/UgNt/jnQd/WCInt3HlIiGxFMlGz2D13HG7sqI3tOx2+mYLgBvlbm
-         oQ+Y3p3fOc0KUNt7e6sdRO+3p8wcwznhlAOJ3YzuHdK3d+53zIU3xGNOZBhpBCnYr/+T
-         cmYinGau2RPs7vQ7k2MhMdIfrrYD3Y111IZcUbHYbk6CkOnW5Fin9nZsNcJ++7stwixv
-         0+K67ksQrVoonvY/6jtE8rdD70LWUPQMRJyH7hfMKMF8CnrBrgYwGD12p+ssFGK+pHD7
-         j5Ue+6Rqo0ewSXH626ZQGefXNZExuUdZCOedfu9+AEpX5KKGYJmj+oFVc1qdy2k/gvMe
-         ieAg==
-X-Forwarded-Encrypted: i=1; AJvYcCW/yqdy1FwiXDI8deHDgXDLdCjWVMN1yJBZo4VXFBOc8+2ud6Lmt6JER6dZbImpkOtDsq6r8H3Mi6H6inkS6D0UwOIL
-X-Gm-Message-State: AOJu0Yw6TDRBJv+0MdEw/7OTpp+DlO2vd3/TVHOPB0ouaclWczHFIBbX
-	TxVnlCV3HY2+JlpD1VG9y7+9JdmnhfttQ4gHy7crgl/a2w4kcG3wigU3SFVUFmY=
-X-Google-Smtp-Source: AGHT+IF0tWEJIwLhmFW78mMPAgi/vCrtOr8tt0tCfvZluY/jcLCxwBXPd44Cb4tggUzr+tdt+qjmdQ==
-X-Received: by 2002:a5d:4489:0:b0:33e:7fbc:caea with SMTP id j9-20020a5d4489000000b0033e7fbccaeamr1973121wrq.34.1710350659720;
-        Wed, 13 Mar 2024 10:24:19 -0700 (PDT)
-Received: from harfang.fritz.box ([2a02:8011:e80c:0:4ac2:8d7d:13ad:ef01])
-        by smtp.gmail.com with ESMTPSA id b17-20020a05600010d100b0033e03a6b1ecsm12129498wrx.18.2024.03.13.10.24.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Mar 2024 10:24:19 -0700 (PDT)
-From: Quentin Monnet <quentin@isovalent.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	bpf@vger.kernel.org,
-	Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next] Revert "libbpf: make uniform use of btf__fd() accessor inside libbpf"
-Date: Wed, 13 Mar 2024 17:23:45 +0000
-Message-Id: <20240313172345.75270-1-quentin@isovalent.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1710351221; x=1710956021;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=44Vskwsk5gQiVM0kOdLBvtJVlmH+VOeRs73HeGYck7g=;
+        b=NemlnW7fxuZVoBp+993q2Umbxrq0WTpbRMcgVVx6ObIr+sq5KfqS/EyllZkfDvpA4C
+         XTuBlmUD1wg5CHFscSqTkNNAxKk++d1lWCtecNAg+WanaFrR1+ovFXzRsvnCkxFxAyVA
+         Rp3AYVYxjrO1LfKGk+/LFmX7v0MD8f/mwHCYCS49QrWFnGa2GcyIYTUmv0hzvAidDIuR
+         lC7J2pGDt4lMVcN8OjTsrA1NaPScvbuE3EffFlggoccLZiDHuHHUsJsoBJnD35CD96nY
+         5RZctM4Nzd7MPwSkADgOrbIvGyD/OhBB+rWrfDgChOoMVBK7P2sMmMDbz6K/yjBD6P07
+         v3/w==
+X-Forwarded-Encrypted: i=1; AJvYcCVqev5uUNlE2tlGaATKMiRBZRr6nMeY6Uyb679iukqa/QW1nPNXD+lQ6H2AHZ3c3dVKVPVSd4NX+ABoL9+a3nMhIB2vn20cqYEO+sD4gbQqzQFdPav35qiJ1Z62E1g0nKSCLMMS3AmeWz3k/e1Pbt6F3n0ozh7z9+9vd0A7xf4fy5lux+nB
+X-Gm-Message-State: AOJu0Yy3w9mDBbCrPWCOC2vSv0RC2FJ5slfWqYaFFKdNQbFjeNNALwA2
+	JWEhOqkyQYP8oRdQnULGkwxuu5q+69SG9SNrpT+2hdsLizT27o0eXRljdCwdjYRGDFjdyAQB7LC
+	1Xl+aF8jbQNEtLxzRxumBHRv/iRQ=
+X-Google-Smtp-Source: AGHT+IEbz15QjLVfbB/SxHmwa0IZioDlMthks84TvTvC9JdJERJmGOLeEMSPc1KUYOHSA48kWjfeKPg91JLDCX1+DNo=
+X-Received: by 2002:a17:90a:c386:b0:29c:7170:fa33 with SMTP id
+ h6-20020a17090ac38600b0029c7170fa33mr925284pjt.29.1710351220723; Wed, 13 Mar
+ 2024 10:33:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240312210233.1941599-1-andrii@kernel.org> <ZfF02HCzYLcuwmw9@krava>
+In-Reply-To: <ZfF02HCzYLcuwmw9@krava>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 13 Mar 2024 10:33:28 -0700
+Message-ID: <CAEf4BzaSy8wcuqmi6UqeH-UV8Kf4J_67TfP49Z334LmXrxoFpQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/3] uprobes: two common case speed ups
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, linux-trace-kernel@vger.kernel.org, 
+	rostedt@goodmis.org, mhiramat@kernel.org, bpf@vger.kernel.org, 
+	mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org, oleg@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This reverts commit df7c3f7d3a3ddab31ca8cfa9b86a8729ec43fd2e.
+On Wed, Mar 13, 2024 at 2:41=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
+>
+> On Tue, Mar 12, 2024 at 02:02:30PM -0700, Andrii Nakryiko wrote:
+> > This patch set implements two speed ups for uprobe/uretprobe runtime ex=
+ecution
+> > path for some common scenarios: BPF-only uprobes (patches #1 and #2) an=
+d
+> > system-wide (non-PID-specific) uprobes (patch #3). Please see individua=
+l
+> > patches for details.
+> >
+> > Given I haven't worked with uprobe code before, I'm unfamiliar with
+> > conventions in this subsystem, including which kernel tree patches shou=
+ld be
+> > sent to. For now I based all the changes on top of bpf-next/master, whi=
+ch is
+> > where I tested and benchmarked everything anyways. Please advise what s=
+hould
+> > I use as a base for subsequent revision. Thanks.
 
-There's no guarantee that obj->btf is non-NULL when passing it to
-btf__fd(), and this function doesn't perform any check before
-dereferencing its argument. As a consequence, this commit caused
-segmentation faults in bpftool (for example) when trying to load
-programs that come without BTF info.
+Steven, Masami,
 
-Signed-off-by: Quentin Monnet <quentin@isovalent.com>
----
- tools/lib/bpf/libbpf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Is this the kind of patches that should go through your tree(s)? Or
+you'd be fine with this going through bpf-next? I'd appreciate the
+link to the specific GIT repo I should use as a base in the former
+case, thank you!
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index efab29b8935b..0f9a4d232468 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -7343,7 +7343,7 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
- 	load_attr.prog_ifindex = prog->prog_ifindex;
- 
- 	/* specify func_info/line_info only if kernel supports them */
--	btf_fd = btf__fd(obj->btf);
-+	btf_fd = bpf_object__btf_fd(obj);
- 	if (btf_fd >= 0 && kernel_supports(obj, FEAT_BTF_FUNC)) {
- 		load_attr.prog_btf_fd = btf_fd;
- 		load_attr.func_info = prog->func_info;
--- 
-2.34.1
-
+> >
+> > Andrii Nakryiko (3):
+> >   uprobes: encapsulate preparation of uprobe args buffer
+> >   uprobes: prepare uprobe args buffer lazily
+> >   uprobes: add speculative lockless system-wide uprobe filter check
+>
+> nice cleanup and speed up, lgtm
+>
+> Reviewed-by: Jiri Olsa <jolsa@kernel.org>
+>
+> jirka
+>
+> >
+> >  kernel/trace/trace_uprobe.c | 103 ++++++++++++++++++++++--------------
+> >  1 file changed, 63 insertions(+), 40 deletions(-)
+> >
+> > --
+> > 2.43.0
+> >
+> >
