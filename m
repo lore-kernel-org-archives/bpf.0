@@ -1,140 +1,128 @@
-Received: from mail115-63.sinamail.sina.com.cn (mail115-63.sinamail.sina.com.cn [218.30.115.63])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EF903FB15
-	for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 12:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=218.30.115.63
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C8A143AC3
+	for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 13:20:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710332053; cv=none; b=ndVYt6HG/hlsB3/J3+5tWQ+s1WvjUjxVEemUksYx+oO5UpIeTckBuaxKSDMAmMaiHHwWXeL66+JMEr7wtm/rEgt9PLhcD08GQaf+bhU76Bm4Reu/mxNHpP7zQIJJLHXk0AHDMVqS/akTufCQQjuX6Ien68WaLq3zXnlhYZppiqw=
+	t=1710336059; cv=none; b=T47VFaVj52ceZoOnBAyDUbYoXH9E1lKIPLKmnM5gGarNbcG55sqRQwY4oq5kfUY6TkGv93jgnQxE1vQMnkuH1/BR1kcOHE/CzjyPHnjyHDUS2NyaWkDJEa5qydVV3BJVa28Ynb3AVbn3I1LJy9pZEGnyuOAiOOlZQ9iUKkC5CBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710332053; c=relaxed/simple;
-	bh=sOkhZ/jvuJIvVKMVXakf+8B+RRwVxQbb5lRb+kXv7gY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=TWNo93YdHPW4dmE5C00aFcWwzKKQN8l2Bp22nAFQO0c8f9CEpbcwKLZ+mR4z1jJU9zpkaWludDePPXDJF2kvBX0x6mQGz/gyWmm0jfI2e10t2PhBLjrOMxOyn3PhwG8h51O4+QwJ34KRuUvC8/tkf8DP/IPybnZWLi9zK6ShYJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sina.com; spf=pass smtp.mailfrom=sina.com; arc=none smtp.client-ip=218.30.115.63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sina.com
-X-SMAIL-HELO: localhost.localdomain
-Received: from unknown (HELO localhost.localdomain)([116.24.9.180])
-	by sina.com (10.75.12.45) with ESMTP
-	id 65F19882000062E7; Wed, 13 Mar 2024 20:13:58 +0800 (CST)
-X-Sender: hdanton@sina.com
-X-Auth-ID: hdanton@sina.com
-Authentication-Results: sina.com;
-	 spf=none smtp.mailfrom=hdanton@sina.com;
-	 dkim=none header.i=none;
-	 dmarc=none action=none header.from=hdanton@sina.com
-X-SMAIL-MID: 63174631457839
-X-SMAIL-UIID: DBAC9056B457471298C7A75B155E6EF3-20240313-201358-1
-From: Hillf Danton <hdanton@sina.com>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: syzbot <syzbot+850aaf14624dc0c6d366@syzkaller.appspotmail.com>,
-	andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com,
-	yonghong.song@linux.dev
-Subject: Re: [syzbot] [bpf?] possible deadlock in __bpf_ringbuf_reserve
-Date: Wed, 13 Mar 2024 20:13:45 +0800
-Message-Id: <20240313121345.2292-1-hdanton@sina.com>
-In-Reply-To: <ZfDC45Kc1VEvBMuW@krava>
-References: <0000000000004aa700061379547e@google.com>
+	s=arc-20240116; t=1710336059; c=relaxed/simple;
+	bh=FaT4XGiP/1deYiwr6gMlT38Yu4UeP83mybH7QKeqj60=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gzGgVp62pS0WCg8crrnSE0rbHekr/TLo+u7q0DstXy+cce3U0darBbtZVYzcGtUTjE1O5krEGxu5tSiAheth0g7sq9WgCOmZdw9w0F5DWPLnHLQtHIpRzHemKzgcht6Boc6RQ5Xl/U+r/MfCp+sfB4zZk5hz1p7T5PawdCodE+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VdsspccV; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VdsspccV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1710336056;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=k9AU0bydAYPASchpnpF2gWjzciQAPMb4OtYaMryl0jc=;
+	b=VdsspccVxD2ypzNaL059/rohJVieeQw6OhOK0MvI97E5ZvzSpBSjFSVOvDvNAdbc9z0R3j
+	LWLVruO0F8pgmKEnnWz1SQE84RISFJLELJY9mFkWjWhXvbA0cj5A4kyKLf0sanc/ZzVIfi
+	bvQFN3FfsyzFZzhOVimK0QLAB26RXD8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-645-gV73DBrjPaWDGE1FfRfGdw-1; Wed, 13 Mar 2024 09:20:51 -0400
+X-MC-Unique: gV73DBrjPaWDGE1FfRfGdw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 96A17101CC63;
+	Wed, 13 Mar 2024 13:20:50 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.233])
+	by smtp.corp.redhat.com (Postfix) with SMTP id D189B2166B4F;
+	Wed, 13 Mar 2024 13:20:48 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Wed, 13 Mar 2024 14:19:29 +0100 (CET)
+Date: Wed, 13 Mar 2024 14:19:26 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: linux-trace-kernel@vger.kernel.org, rostedt@goodmis.org,
+	mhiramat@kernel.org, bpf@vger.kernel.org,
+	mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 3/3] uprobes: add speculative lockless
+ system-wide uprobe filter check
+Message-ID: <20240313131926.GA19986@redhat.com>
+References: <20240312210233.1941599-1-andrii@kernel.org>
+ <20240312210233.1941599-4-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240312210233.1941599-4-andrii@kernel.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
 
-On Tue, 12 Mar 2024 22:02:27 +0100 Jiri Olsa <olsajiri@gmail.com>
-> On Tue, Mar 12, 2024 at 09:41:26AM -0700, syzbot wrote:
-> > Hello,
-> > 
-> > syzbot found the following issue on:
-> > 
-> > HEAD commit:    df4793505abd Merge tag 'net-6.8-rc8' of git://git.kernel.o..
-> > git tree:       bpf
-> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=11fd0092180000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=c11c5c676adb61f0
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=850aaf14624dc0c6d366
-> > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1509c4ae180000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10babc01180000
-> > 
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/d2e80ee1112b/disk-df479350.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/b35ea54cd190/vmlinux-df479350.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/59f69d999ad2/bzImage-df479350.xz
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+850aaf14624dc0c6d366@syzkaller.appspotmail.com
-> > 
-> > ============================================
-> > WARNING: possible recursive locking detected
-> > 6.8.0-rc7-syzkaller-gdf4793505abd #0 Not tainted
-> > --------------------------------------------
-> > strace-static-x/5063 is trying to acquire lock:
-> > ffffc900096f10d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
-> > 
-> > but task is already holding lock:
-> > ffffc900098410d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
-> > 
-> > other info that might help us debug this:
-> >  Possible unsafe locking scenario:
-> > 
-> >        CPU0
-> >        ----
-> >   lock(&rb->spinlock);
-> >   lock(&rb->spinlock);
-> > 
-> >  *** DEADLOCK ***
-> > 
-> >  May be due to missing lock nesting notation
-> > 
-> > 4 locks held by strace-static-x/5063:
-> >  #0: ffff88807857e068 (&pipe->mutex/1){+.+.}-{3:3}, at: __pipe_lock fs/pipe.c:103 [inline]
-> >  #0: ffff88807857e068 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_write+0x1cc/0x1a40 fs/pipe.c:465
-> >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:298 [inline]
-> >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:750 [inline]
-> >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: __bpf_trace_run kernel/trace/bpf_trace.c:2380 [inline]
-> >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run2+0x114/0x420 kernel/trace/bpf_trace.c:2420
-> >  #2: ffffc900098410d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
-> >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:298 [inline]
-> >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:750 [inline]
-> >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: __bpf_trace_run kernel/trace/bpf_trace.c:2380 [inline]
-> >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run2+0x114/0x420 kernel/trace/bpf_trace.c:2420
-> > 
-> > stack backtrace:
-> > CPU: 0 PID: 5063 Comm: strace-static-x Not tainted 6.8.0-rc7-syzkaller-gdf4793505abd #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/25/2024
-> > Call Trace:
-> >  <TASK>
-> >  __dump_stack lib/dump_stack.c:88 [inline]
-> >  dump_stack_lvl+0x1e7/0x2e0 lib/dump_stack.c:106
-> >  check_deadlock kernel/locking/lockdep.c:3062 [inline]
-> >  validate_chain+0x15c0/0x58e0 kernel/locking/lockdep.c:3856
-> >  __lock_acquire+0x1345/0x1fd0 kernel/locking/lockdep.c:5137
-> >  lock_acquire+0x1e3/0x530 kernel/locking/lockdep.c:5754
-> >  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-> >  _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
-> >  __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
-> >  ____bpf_ringbuf_reserve kernel/bpf/ringbuf.c:459 [inline]
-> >  bpf_ringbuf_reserve+0x5c/0x70 kernel/bpf/ringbuf.c:451
-> >  bpf_prog_9efe54833449f08e+0x2d/0x47
-> >  bpf_dispatcher_nop_func include/linux/bpf.h:1231 [inline]
-> >  __bpf_prog_run include/linux/filter.h:651 [inline]
-> >  bpf_prog_run include/linux/filter.h:658 [inline]
-> >  __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
-> 
-> hum, scratching my head how this could passed through the prog->active check,
-> will try to reproduce
+I forgot everything about this code, plus it has changed a lot since
+I looked at it many years ago, but ...
 
-Feel free to take a look at another syzbot report [1,2]
+I think this change is fine but the changelog looks a bit confusing
+(overcomplicated) to me.
 
-[1] Subject: Re: [syzbot] [ntfs3?] possible deadlock in ntfs_set_state (2)
-https://lore.kernel.org/lkml/ZdwSXCaTrzq7mm7Z@boqun-archlinux/
+On 03/12, Andrii Nakryiko wrote:
+>
+> This patch adds a speculative check before grabbing that rwlock. If
+> nr_systemwide is non-zero, lock is skipped and event is passed through.
+> From examining existing logic it looks correct and safe to do. If
+> nr_systemwide is being modified under rwlock in parallel, we have to
+> consider basically just one important race condition: the case when
+> nr_systemwide is dropped from one to zero (from
+> trace_uprobe_filter_remove()) under filter->rwlock, but
+> uprobe_perf_filter() raced and saw it as >0.
 
-[2] Subject: Re: [syzbot] [bpf?] possible deadlock in __bpf_ringbuf_reserve
-https://lore.kernel.org/lkml/00000000000082883f061388d49e@google.com/
+Unless I am totally confused, there is nothing new. Even without
+this change trace_uprobe_filter_remove() can clear nr_systemwide
+right after uprobe_perf_filter() drops filter->rwlock.
+
+And of course, trace_uprobe_filter_add() can change nr_systemwide
+from 0 to 1. In this case uprobe_perf_func() can "wrongly" return
+UPROBE_HANDLER_REMOVE but we can't avoid this and afaics this is
+fine even if handler_chain() does unapply_uprobe(), uprobe_perf_open()
+will do uprobe_apply() after that, we can rely on ->register_rwsem.
+
+> In case we speculatively read nr_systemwide as zero, while it was
+> incremented in parallel, we'll proceed to grabbing filter->rwlock and
+> re-doing the check, this time in lock-protected and non-racy way.
+
+See above...
+
+
+So I think uprobe_perf_filter() needs filter->rwlock only to iterate
+the list, it can check nr_systemwide lockless and this means that you
+can also remove the same check in __uprobe_perf_filter(), other callers
+trace_uprobe_filter_add/remove check it themselves.
+
+
+> --- a/kernel/trace/trace_uprobe.c
+> +++ b/kernel/trace/trace_uprobe.c
+> @@ -1351,6 +1351,10 @@ static bool uprobe_perf_filter(struct uprobe_consumer *uc,
+>  	tu = container_of(uc, struct trace_uprobe, consumer);
+>  	filter = tu->tp.event->filter;
+>
+> +	/* speculative check */
+> +	if (READ_ONCE(filter->nr_systemwide))
+> +		return true;
+> +
+>  	read_lock(&filter->rwlock);
+>  	ret = __uprobe_perf_filter(filter, mm);
+>  	read_unlock(&filter->rwlock);
+
+ACK,
+
+but see above. I think the changelog should be simplified and the
+filter->nr_systemwide check in __uprobe_perf_filter() should be
+removed. But I won't insist and perhaps I missed something...
+
+Oleg.
+
