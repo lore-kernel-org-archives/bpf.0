@@ -1,105 +1,140 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail115-63.sinamail.sina.com.cn (mail115-63.sinamail.sina.com.cn [218.30.115.63])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F75A20DDC;
-	Wed, 13 Mar 2024 09:41:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EF903FB15
+	for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 12:14:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=218.30.115.63
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710322911; cv=none; b=qK+mS02K0U9RBrWh9XuNb+FzB+aWDKj5bsscKf0eWfdj8JOJ5DPK0yKKuwtl1RS5eFkMvQaU3euUdJLUoK09T1LHgSzZ7PForQWm4p8gWBNT3Eu2zz6L8g7vNQTi+1WgV60AZE+WbkPZYRAvzQur5sk/p5w1LHzjEScMsyfx/xA=
+	t=1710332053; cv=none; b=ndVYt6HG/hlsB3/J3+5tWQ+s1WvjUjxVEemUksYx+oO5UpIeTckBuaxKSDMAmMaiHHwWXeL66+JMEr7wtm/rEgt9PLhcD08GQaf+bhU76Bm4Reu/mxNHpP7zQIJJLHXk0AHDMVqS/akTufCQQjuX6Ien68WaLq3zXnlhYZppiqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710322911; c=relaxed/simple;
-	bh=Iy33NOA8FEicl4HdVCTiTZ1Jnm6pT2oK0Zfr+wPVLGU=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LXT10y5Mt5L/0DwVVeehkapqOuV/ztzL9UJPLqZiZsd30MPDfge1Oe3vtkVcVX71UEcWfuXtK3aI8w0smjbkx4djt18fOhN4jvkOYSzlCnQ8a5HxsXUzmeoYIR+sAjkGNY9zKx4nYeIemd74qne3dWXQU/MJcSZT1s+abh/9GaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QMB0PnMI; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QMB0PnMI"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4132600824bso5610685e9.2;
-        Wed, 13 Mar 2024 02:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710322908; x=1710927708; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nqT6MbYIUXhVn1ev/HIV8qz1Uih12KTCzkmhMV6SWPg=;
-        b=QMB0PnMI9GjqYeRiGwma3mODigfSyzjeYEs2N1DLTd2lo81g+HajqZKBxyjTfFC0PB
-         BeofCcvF4XAIxlR8gzjcjx9H1nUwd6OJgaO/mDLDcmwwGMBajv0x3ekgR3ITOjGxBNXN
-         Q56Cm8WMMw/198y+xCOerip2ANEjRTJLqT6LLj1guTaIrobgTo1HIbVZVeM9TRMby3RZ
-         gm18IrPKGqRcgnI9TyNN9CQZ16b/hiTLE9j7w8N5j6xkhcVBaRLrKo9uXXzaVtpybTu5
-         ia2jHrB9CoSeScfW0XkGL/Jl5Bw0c0/DbBdArZv7z2DJxUTrq5TLXgAE2/TyFDhQBjnJ
-         XnvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710322908; x=1710927708;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nqT6MbYIUXhVn1ev/HIV8qz1Uih12KTCzkmhMV6SWPg=;
-        b=WYc2hRoguqpYuoQiZIIjpRlzYRVka4CiZJFmyaXyYI2E2gAiuZs+d416f/l6iUFIxl
-         T9eOi33jpLPkUS8HUqBFzVgp8ahw9fiE30Oxxl70cp0aX+iQPl9OxhIWbk5VsMvwbq51
-         2UUCx2JlMTRY+kG/UYGOxjOyqJa3c+EtArrdUSBrt0FjG2Zo+qrlGNFBCKED4oT5m/0C
-         uF++kkWFcieuHXW/ru6EJWQjXoa7MxN+awBf0JqIx4EI1tQpjtBVlfdxwBFWFc98oNTr
-         Qj23EKlbLEUyFKBihNQqki4/GvRURFvZ6muTQsgMV9BrR1dcvjaOt0WHuyVFS4YsnY5m
-         AobQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX88x706dcV3KqpkxhGttEXnJS+F82tlBGs/FzEeoUZqb+7qIGAb+WBX7khamnSWnmlw5GFoZYXO0WnwzLIG0PE8KtunfGYEwwCCqQz3BToXO1Xcj5os8DXaClgHIsyq1XB
-X-Gm-Message-State: AOJu0YyxYfe7tKa5sZCpQld6B2NT9TDMHy3P5B1b0jghBDwCrT3qwQCm
-	BjHQ1WAvZ/swgLML+5zlx2kyL6jdoFiC3krXzol9bO9Z1+5OpNUz
-X-Google-Smtp-Source: AGHT+IG6Xo+xOpnJ7nktDyubCJL/FGt5e8kZ78wAlCMWt+JfD8mn5qZsmzaKSG5u1Tv3FzElNjGzqQ==
-X-Received: by 2002:a05:600c:538c:b0:413:e994:16dd with SMTP id hg12-20020a05600c538c00b00413e99416ddmr974339wmb.28.1710322907592;
-        Wed, 13 Mar 2024 02:41:47 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id h4-20020a05600c350400b00413177c3f1dsm1728584wmq.18.2024.03.13.02.41.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Mar 2024 02:41:46 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 13 Mar 2024 10:41:44 +0100
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: linux-trace-kernel@vger.kernel.org, rostedt@goodmis.org,
-	mhiramat@kernel.org, bpf@vger.kernel.org,
-	mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org,
-	oleg@redhat.com
-Subject: Re: [PATCH bpf-next 0/3] uprobes: two common case speed ups
-Message-ID: <ZfF02HCzYLcuwmw9@krava>
-References: <20240312210233.1941599-1-andrii@kernel.org>
+	s=arc-20240116; t=1710332053; c=relaxed/simple;
+	bh=sOkhZ/jvuJIvVKMVXakf+8B+RRwVxQbb5lRb+kXv7gY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=TWNo93YdHPW4dmE5C00aFcWwzKKQN8l2Bp22nAFQO0c8f9CEpbcwKLZ+mR4z1jJU9zpkaWludDePPXDJF2kvBX0x6mQGz/gyWmm0jfI2e10t2PhBLjrOMxOyn3PhwG8h51O4+QwJ34KRuUvC8/tkf8DP/IPybnZWLi9zK6ShYJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sina.com; spf=pass smtp.mailfrom=sina.com; arc=none smtp.client-ip=218.30.115.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sina.com
+X-SMAIL-HELO: localhost.localdomain
+Received: from unknown (HELO localhost.localdomain)([116.24.9.180])
+	by sina.com (10.75.12.45) with ESMTP
+	id 65F19882000062E7; Wed, 13 Mar 2024 20:13:58 +0800 (CST)
+X-Sender: hdanton@sina.com
+X-Auth-ID: hdanton@sina.com
+Authentication-Results: sina.com;
+	 spf=none smtp.mailfrom=hdanton@sina.com;
+	 dkim=none header.i=none;
+	 dmarc=none action=none header.from=hdanton@sina.com
+X-SMAIL-MID: 63174631457839
+X-SMAIL-UIID: DBAC9056B457471298C7A75B155E6EF3-20240313-201358-1
+From: Hillf Danton <hdanton@sina.com>
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: syzbot <syzbot+850aaf14624dc0c6d366@syzkaller.appspotmail.com>,
+	andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com,
+	yonghong.song@linux.dev
+Subject: Re: [syzbot] [bpf?] possible deadlock in __bpf_ringbuf_reserve
+Date: Wed, 13 Mar 2024 20:13:45 +0800
+Message-Id: <20240313121345.2292-1-hdanton@sina.com>
+In-Reply-To: <ZfDC45Kc1VEvBMuW@krava>
+References: <0000000000004aa700061379547e@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240312210233.1941599-1-andrii@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 12, 2024 at 02:02:30PM -0700, Andrii Nakryiko wrote:
-> This patch set implements two speed ups for uprobe/uretprobe runtime execution
-> path for some common scenarios: BPF-only uprobes (patches #1 and #2) and
-> system-wide (non-PID-specific) uprobes (patch #3). Please see individual
-> patches for details.
+On Tue, 12 Mar 2024 22:02:27 +0100 Jiri Olsa <olsajiri@gmail.com>
+> On Tue, Mar 12, 2024 at 09:41:26AM -0700, syzbot wrote:
+> > Hello,
+> > 
+> > syzbot found the following issue on:
+> > 
+> > HEAD commit:    df4793505abd Merge tag 'net-6.8-rc8' of git://git.kernel.o..
+> > git tree:       bpf
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=11fd0092180000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=c11c5c676adb61f0
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=850aaf14624dc0c6d366
+> > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1509c4ae180000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10babc01180000
+> > 
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/d2e80ee1112b/disk-df479350.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/b35ea54cd190/vmlinux-df479350.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/59f69d999ad2/bzImage-df479350.xz
+> > 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+850aaf14624dc0c6d366@syzkaller.appspotmail.com
+> > 
+> > ============================================
+> > WARNING: possible recursive locking detected
+> > 6.8.0-rc7-syzkaller-gdf4793505abd #0 Not tainted
+> > --------------------------------------------
+> > strace-static-x/5063 is trying to acquire lock:
+> > ffffc900096f10d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
+> > 
+> > but task is already holding lock:
+> > ffffc900098410d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
+> > 
+> > other info that might help us debug this:
+> >  Possible unsafe locking scenario:
+> > 
+> >        CPU0
+> >        ----
+> >   lock(&rb->spinlock);
+> >   lock(&rb->spinlock);
+> > 
+> >  *** DEADLOCK ***
+> > 
+> >  May be due to missing lock nesting notation
+> > 
+> > 4 locks held by strace-static-x/5063:
+> >  #0: ffff88807857e068 (&pipe->mutex/1){+.+.}-{3:3}, at: __pipe_lock fs/pipe.c:103 [inline]
+> >  #0: ffff88807857e068 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_write+0x1cc/0x1a40 fs/pipe.c:465
+> >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:298 [inline]
+> >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:750 [inline]
+> >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: __bpf_trace_run kernel/trace/bpf_trace.c:2380 [inline]
+> >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run2+0x114/0x420 kernel/trace/bpf_trace.c:2420
+> >  #2: ffffc900098410d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
+> >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:298 [inline]
+> >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:750 [inline]
+> >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: __bpf_trace_run kernel/trace/bpf_trace.c:2380 [inline]
+> >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run2+0x114/0x420 kernel/trace/bpf_trace.c:2420
+> > 
+> > stack backtrace:
+> > CPU: 0 PID: 5063 Comm: strace-static-x Not tainted 6.8.0-rc7-syzkaller-gdf4793505abd #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/25/2024
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0x1e7/0x2e0 lib/dump_stack.c:106
+> >  check_deadlock kernel/locking/lockdep.c:3062 [inline]
+> >  validate_chain+0x15c0/0x58e0 kernel/locking/lockdep.c:3856
+> >  __lock_acquire+0x1345/0x1fd0 kernel/locking/lockdep.c:5137
+> >  lock_acquire+0x1e3/0x530 kernel/locking/lockdep.c:5754
+> >  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+> >  _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
+> >  __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
+> >  ____bpf_ringbuf_reserve kernel/bpf/ringbuf.c:459 [inline]
+> >  bpf_ringbuf_reserve+0x5c/0x70 kernel/bpf/ringbuf.c:451
+> >  bpf_prog_9efe54833449f08e+0x2d/0x47
+> >  bpf_dispatcher_nop_func include/linux/bpf.h:1231 [inline]
+> >  __bpf_prog_run include/linux/filter.h:651 [inline]
+> >  bpf_prog_run include/linux/filter.h:658 [inline]
+> >  __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
 > 
-> Given I haven't worked with uprobe code before, I'm unfamiliar with
-> conventions in this subsystem, including which kernel tree patches should be
-> sent to. For now I based all the changes on top of bpf-next/master, which is
-> where I tested and benchmarked everything anyways. Please advise what should
-> I use as a base for subsequent revision. Thanks.
-> 
-> Andrii Nakryiko (3):
->   uprobes: encapsulate preparation of uprobe args buffer
->   uprobes: prepare uprobe args buffer lazily
->   uprobes: add speculative lockless system-wide uprobe filter check
+> hum, scratching my head how this could passed through the prog->active check,
+> will try to reproduce
 
-nice cleanup and speed up, lgtm
+Feel free to take a look at another syzbot report [1,2]
 
-Reviewed-by: Jiri Olsa <jolsa@kernel.org>
+[1] Subject: Re: [syzbot] [ntfs3?] possible deadlock in ntfs_set_state (2)
+https://lore.kernel.org/lkml/ZdwSXCaTrzq7mm7Z@boqun-archlinux/
 
-jirka
-
-> 
->  kernel/trace/trace_uprobe.c | 103 ++++++++++++++++++++++--------------
->  1 file changed, 63 insertions(+), 40 deletions(-)
-> 
-> -- 
-> 2.43.0
-> 
-> 
+[2] Subject: Re: [syzbot] [bpf?] possible deadlock in __bpf_ringbuf_reserve
+https://lore.kernel.org/lkml/00000000000082883f061388d49e@google.com/
