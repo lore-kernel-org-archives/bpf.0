@@ -1,128 +1,111 @@
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E00B50A75
-	for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 16:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E674A5F541;
+	Wed, 13 Mar 2024 16:53:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710347160; cv=none; b=GS1MfsDB8y6RykNiJY9fMgtK12ZG47pAmG5M+otCv0LHSyrh6a+Cmfml5mB2yoTi09qA6K136nSpeHrEM8lRQfzLFLr266jD2i+LeJGzoLtTm4bm0ANziY+NQboxCgv7I5Va8+kkGTm9SiW7h2QCSk4X9vsdOZHc6jLfovXROUs=
+	t=1710348792; cv=none; b=P/FnVOQTz6D03c5s37f7HxqX0hyhh3+Qfbwmm88IhqCnLNpzO6ge3rRgwRjLmPqh4wSh2JDNje1IvoeWZzh/ESLrKHRpsY8GSfJThdCbN7xZepJlt7sfJRJIISSy60WFHX5IWWOtrOjOwVTh52FttHxaPrQypWv676wK7/B9Kl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710347160; c=relaxed/simple;
-	bh=WZXQ3n6OAHQk56baal6CzZ+snXfrxRm2xjx8a0VoWYc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FdONIzOlBhj48gE5tORHrAJ9Jou6+NswSuPnZ7dXH+Ug7lL/GWL7I9u83kGUj/ge2N6nxXyvpADYJlvbJDaqMn+Es/7gY3Kfsk16I4tGZoDS//yaOtWrNxepOBFR4RASi5jg7FUn/4FcxLGI8kNZ4LU8IuO5Q/9D5AQ2U3JJ560=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=YveUiEzC; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1710348792; c=relaxed/simple;
+	bh=xCzpgaA+HTbALS3/kwZcZ+auovGGgbqRsKa38fzJmHI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FYyziY+f4Czq2eDiX+rBM9o8IoVIVui4SwjsPDIY5tCf5B2dy6K+8KDHJuaGTX9su0PZ4387xaKKpyCr9AnRzSJcvdXEhNYj7tl5GxxKROubYTUJO+QBcCyqu+OVTyBpPKH11QYGSd7J24vM5uzZ0Z/FfxjYP78D533BeeULh5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f2SmWq1g; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="YveUiEzC"
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-78822e21a9dso250133185a.2
-        for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 09:25:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f2SmWq1g"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-29bbff1505dso103129a91.0;
+        Wed, 13 Mar 2024 09:53:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1710347158; x=1710951958; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JuTpc8vOHdn72vm+nW+iFZ+lBgZnpQ42Xv3ej2YV4rQ=;
-        b=YveUiEzC/32H1ytCovwTz9zaPUHN1E0CPx783n6uHVYrg7GjxAUME3P0UhV1DTd6Ah
-         3zMTCZED8Fjuvqmq57tZma7oeF+mofWikhPkKytUA+a4s5Og6RErjr2LieFYUovauFWf
-         AKoyQ3gh7xQ13w7nKgU/BOnF9UNTvzgh58A45IPS7AIKCE6zCtSq5askW1IljZw/xnKK
-         8yRqkdSl5Noc9xw8a4zyK1+jySvQuVsJV6jJuJUALn1aalzUIfP4aBeat0wXg4y2PVWh
-         CevkxTP3UDfbhulwPsQTwX7a/cSOZnQvBmpF1A+5qIQE+C+MtNxsFh8zJnvYeszxXIQB
-         KplA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710347158; x=1710951958;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1710348789; x=1710953589; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JuTpc8vOHdn72vm+nW+iFZ+lBgZnpQ42Xv3ej2YV4rQ=;
-        b=SqushbH6JCb8/xFjidkO3RaRArhqlHX39wMcrSfnG6Rz70hKs6UIk2CHYKXxdrDq6q
-         OgVt6LaW1CBi+AvsKBv8r24cqcz3SKgEhYTF8nErDsw0ie9yFLo6xL523iwAC7bysrYf
-         qvyGctdjuvdYyR2LrT8128W+bnzTV3PA5HK5OdSAGS+kiljFmTkmUtgLYWUB2dAQitWy
-         Teg6lN3ArTvrGDncPGKjhjGjXUskrQSAkJxOGt+7/r0PhSJqL1Yi7hjWklOXhijEspEg
-         3x6CEZzmkqGe2IYqw1TuLWKjVIk5RI38LJ3+el0AaC9atFpI/xkM3TyPewmp5LJFs9tP
-         GMoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVpDUkTLovwixn8fJBG/Ee2fTvxm1oyu8V/4vRGLt3LlTCMmBUEBXZA9Q5lWTlr4PTJ6EzqaVTTE8N1lSlETGeQW5A7
-X-Gm-Message-State: AOJu0YxEMyK6lkIZuXRnKOCTrBw3ls4ag6y60E1tQjJWk7zK+5s3MdFV
-	KJVrQKzdri0IO3dU4ZoO94rWkhwnrULA74u6t4elVjfV5RM4j+uotcGyifwsGvI=
-X-Google-Smtp-Source: AGHT+IEI5lC3i4ZzAG9M2/sNgNAyGuzNjHl2dssxPjvKQlI6GB/Cg43iYqdnjnkGtZ41amsgTrXgsg==
-X-Received: by 2002:a05:622a:11d5:b0:430:9773:b083 with SMTP id n21-20020a05622a11d500b004309773b083mr823078qtk.19.1710347158423;
-        Wed, 13 Mar 2024 09:25:58 -0700 (PDT)
-Received: from debian.debian ([2a09:bac5:7a49:f91::18d:37])
-        by smtp.gmail.com with ESMTPSA id c25-20020ac853d9000000b0042f2130cd0csm4975824qtq.34.2024.03.13.09.25.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Mar 2024 09:25:57 -0700 (PDT)
-Date: Wed, 13 Mar 2024 09:25:55 -0700
-From: Yan Zhai <yan@cloudflare.com>
-To: netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Coco Li <lixiaoyan@google.com>, Wei Wang <weiwan@google.com>,
-	Alexander Duyck <alexanderduyck@fb.com>,
-	Hannes Frederic Sowa <hannes@stressinduktion.org>,
-	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-	bpf@vger.kernel.org, kernel-team@cloudflare.com,
-	Joel Fernandes <joel@joelfernandes.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>, mark.rutland@arm.com,
-	Jesper Dangaard Brouer <hawk@kernel.org>
-Subject: [PATCH v3 net 3/3] bpf: report RCU QS in cpumap kthread
-Message-ID: <3112a13efb21893b6cf285b3757877dc466c5f58.1710346410.git.yan@cloudflare.com>
-References: <cover.1710346410.git.yan@cloudflare.com>
+        bh=/u8ZrY8sdFo2g+CmoHjb0TtVHcvA+5O3rJ7eccy6sco=;
+        b=f2SmWq1gAhW3BbvQQgboyimm+ZMdmYja/LyNaR85Ff/koVW57VgPhehnbLBk6CBHjT
+         6TacvkWrj8w6g719vbnzvvN0UIae3JqigehFM+ZBgyH6hEq0+o0eqUXcjH8Nf31cP/vz
+         XipVLr/AuKcm/dB31jQMlverAw+AUIRTN5frs37Hro/EurIuAlY/KAQfMz+ospO6s8Ug
+         Yqoz0sEqX457qL5C7NafgvnxQ0LYT6RZY4qczJyR1Kevp77BtLZt/56dOy30wwCKX881
+         nZgFSjjO7kPg6vS4rtTpUIrQLzdSNm1bZxQT3hzi7kXeTRPRLCJ2j1C6kOGetfwcYFam
+         xf4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710348789; x=1710953589;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/u8ZrY8sdFo2g+CmoHjb0TtVHcvA+5O3rJ7eccy6sco=;
+        b=JfI5K+M/4xj+IOs+JhEtxgEpgRBRd4vOsVrvUWvMmVg/WDE9MjDi/1UR8y0lSfC7dR
+         Q+zS6lZ0A0uvyMnLKyxvBVtVbLzRWxFWuyroDM0+zKi8ARFqLxictjBPfGumlO1mO0Vx
+         HdspDIEneXwbVLd2GsR8Qj3raDbeQp3kCgz4JvbdrHEG/VGZBXUw7mSp5Adzv27rBNd9
+         XWfL8rAkzEYS+d3YPvtEHnaQKMcanwcVj9f/Fmb5gRQR7MClB+iCg97v8R0dAUm7aHRH
+         Ad1cP43W9UPt6yyL1MQEoIT3zuMnWZgwQP+E7e8v4Bmr8tZVXQX29fLWHnOuw41jpsYj
+         F5ag==
+X-Forwarded-Encrypted: i=1; AJvYcCX7b59aSF4ADjWzvgz2/m1Y/zDYQ7XAPGL2xWK1xGImjuP4Ytp1Ac1LZsRYEfYkLC42mMERYxW9tv28lYYQJLfoLDVQmbtSNl0u2TICJ3FQQHA7Xy+xtb1M9LyPMsVKRtNwTiGOgOv50nalMdWhZ4Bt5aai/epT9Hce4y9uN0gMwR+aZKzg
+X-Gm-Message-State: AOJu0YxPmISrHVHEgv9yPEH1y02NgXqHIS/5BMwhVMhxkOSUf9eUCE86
+	I53lC7vzdsXi2hXU2nPe+iULtK3JugJs7PDKn3vUut+u1wIkCcRfQ4JieVztB3Ftp0a2H8HYl4+
+	ecxTkYWinKq2uY9FopbXWV7djQIhtr6Ss
+X-Google-Smtp-Source: AGHT+IEKjZFpcEzhNIwyrlO8/dl5vFNshA/6fBoRE3yJXIKiK1GOk90qYsxtCTPxpE386HMmh5WhBrtUik7VqjarrqE=
+X-Received: by 2002:a17:90a:a407:b0:29b:ab0e:4f03 with SMTP id
+ y7-20020a17090aa40700b0029bab0e4f03mr10231243pjp.37.1710348789075; Wed, 13
+ Mar 2024 09:53:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1710346410.git.yan@cloudflare.com>
+References: <20240312210233.1941599-1-andrii@kernel.org> <20240312210233.1941599-2-andrii@kernel.org>
+ <20240313151507.GA25452@redhat.com>
+In-Reply-To: <20240313151507.GA25452@redhat.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 13 Mar 2024 09:52:56 -0700
+Message-ID: <CAEf4BzbXew_qC4NaA7vtqS5fFwkh6Hw-uKLq3UDD7GjGAP6UeQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/3] uprobes: encapsulate preparation of uprobe
+ args buffer
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, linux-trace-kernel@vger.kernel.org, 
+	rostedt@goodmis.org, mhiramat@kernel.org, bpf@vger.kernel.org, 
+	mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When there are heavy load, cpumap kernel threads can be busy polling
-packets from redirect queues and block out RCU tasks from reaching
-quiescent states. It is insufficient to just call cond_resched() in such
-context. Periodically raise a consolidated RCU QS before cond_resched
-fixes the problem.
+On Wed, Mar 13, 2024 at 8:16=E2=80=AFAM Oleg Nesterov <oleg@redhat.com> wro=
+te:
+>
+> LGTM, one nit below.
+>
+> On 03/12, Andrii Nakryiko wrote:
+> >
+> > +static struct uprobe_cpu_buffer *prepare_uprobe_buffer(struct trace_up=
+robe *tu,
+> > +                                                    struct pt_regs *re=
+gs)
+> > +{
+> > +     struct uprobe_cpu_buffer *ucb;
+> > +     int dsize, esize;
+> > +
+> > +     esize =3D SIZEOF_TRACE_ENTRY(is_ret_probe(tu));
+> > +     dsize =3D __get_data_size(&tu->tp, regs);
+> > +
+> > +     ucb =3D uprobe_buffer_get();
+> > +     ucb->dsize =3D dsize;
+> > +
+> > +     store_trace_args(ucb->buf, &tu->tp, regs, esize, dsize);
+> > +
+> > +     return ucb;
+> > +}
+>
+> OK, but note that every user of ->dsize adds tp.size. So I think you can
+> simplify this code a bit more if you change prepare_uprobe_buffer() to do
+>
+>         ucb->dsize =3D tu->tp.size + dsize;
+>
+> and update the users.
+>
 
-Fixes: 6710e1126934 ("bpf: introduce new bpf cpu map type BPF_MAP_TYPE_CPUMAP")
-Reviewed-by: Jesper Dangaard Brouer <hawk@kernel.org>
-Signed-off-by: Yan Zhai <yan@cloudflare.com>
----
- kernel/bpf/cpumap.c | 3 +++
- 1 file changed, 3 insertions(+)
+makes sense, done
 
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index ef82ffc90cbe..8f1d390bcbde 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -262,6 +262,7 @@ static int cpu_map_bpf_prog_run(struct bpf_cpu_map_entry *rcpu, void **frames,
- static int cpu_map_kthread_run(void *data)
- {
- 	struct bpf_cpu_map_entry *rcpu = data;
-+	unsigned long last_qs = jiffies;
- 
- 	complete(&rcpu->kthread_running);
- 	set_current_state(TASK_INTERRUPTIBLE);
-@@ -287,10 +288,12 @@ static int cpu_map_kthread_run(void *data)
- 			if (__ptr_ring_empty(rcpu->queue)) {
- 				schedule();
- 				sched = 1;
-+				last_qs = jiffies;
- 			} else {
- 				__set_current_state(TASK_RUNNING);
- 			}
- 		} else {
-+			rcu_softirq_qs_periodic(last_qs);
- 			sched = cond_resched();
- 		}
- 
--- 
-2.30.2
-
-
+> Oleg.
+>
