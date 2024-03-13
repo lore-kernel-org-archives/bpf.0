@@ -1,254 +1,210 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216941B59B;
-	Wed, 13 Mar 2024 09:04:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710320659; cv=none; b=mJdIxn7j2owmeo1AI61OvYGfuHgitzLO1X+9ovXt8/2u0eWl2saAGuXoefCFBJ0MDrvuvxxdy4U+kFAcPtJs/3IkSbr/ZV+p5amK3Mz0th5LLtrpt8NJW9D3qs1jMPcS1g4K50pHtUZbwJwBQuuQKWTbAPeH/qriCmwcqBIkyFk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710320659; c=relaxed/simple;
-	bh=OY7dmVLts/l8qSevFTkHGMcjHfepEVJnm07/K15atac=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PuxMv9zRTWkbYWQM8XZT3LEnt2GcN9Brt3zXkTrJ/ZoaDOcmUXcSTfoYXj0kEpspPx00qoPA5FhCUNcU+Uh1NIFMZlmkvhdV3qkOs8QqcgHlWkb4n/mToQ0+uLi2F4secidtWQzF+dPXtkkrCANSGom0ndniA9UaFRk217LIXww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S8gPwY9q; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6224224E0
+	for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 09:37:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710322627; cv=fail; b=bxps3/56mAAFRaI/F5Y9myD6hQkNuMqxRAXkrCegxg8qmdoK6XtHq7725g9K+RPWqfo6RxiAs7a9oagFRZDZiOe9T3gX7qq2lYY+uxhcqO8HXar+sEKMVhNObqoev3huzUPsFozXnlcbflY17fuDt+X/4rCdEk7HwXi5MhJJ5hc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710322627; c=relaxed/simple;
+	bh=G1SSOBgCBwk1DMbpZaDeYAbX5ucwKbQfUxbsQ1lz1LE=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=duIt4ci8uG1Xt9gsP+WtPe9z6VoilVdccvjqwFE1IdYrVR4IkDwcI7nSUC+43jUq2VsRJwBhs1e/PPhIw0EqXSU3uhhx2YXoBxFne38y1FggfhpA2xmRyx8pB5CrH82slyYJYGXLJHOL+QUIyqEL2PcwQ70NNQA5pDRjnoUD138=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=FkVv1Pw3; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=UVgOMPmd; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S8gPwY9q"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4132f37e170so15165835e9.2;
-        Wed, 13 Mar 2024 02:04:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="FkVv1Pw3";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="UVgOMPmd"
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42D8iFSg011272;
+	Wed, 13 Mar 2024 09:36:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-11-20;
+ bh=zI/a6LH8v8sRyuvxcJDfOZtxv0GoEeUWnqIQAP/BAI0=;
+ b=FkVv1Pw3ATYt+NDlDFfyL8TN3hGM+G+aNQpJDq02VNoMfpsWNkxPxdbM5NKb8QfScGNk
+ zwPDL6hx8LsV5wPRf4HHqQ3e6JWP9txBIin0rLSU9UH1cb4i24VADDy08rH/UO8Doqt+
+ nXmudlq1LLgHqBAUrsVnNZUjLJqvqhiUmaMM7N2J6X/Ba3CPWlrpSR6pYVQfuZ+E47CY
+ 1upWuYTpojjsLa3N6PhD9FPkxkDm5c8tqLEAKtFkJzJZeEgiR1a9PfuANVbtFcHH1LOq
+ 3SnAhriCBfdbOQpNPjLxAaLfrU48carSDICRTmHaV3bsgGlc9rJw0f/Jv5ntSnkpX2NG rw== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3wrec2gd53-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 13 Mar 2024 09:36:47 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 42D9FFHu028739;
+	Wed, 13 Mar 2024 09:36:46 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2100.outbound.protection.outlook.com [104.47.55.100])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3wre78hqrk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 13 Mar 2024 09:36:46 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ij7j8OA3eDdk6Le5Jw9Rc80qSRQcAPq4zuXQr0KT3dYvQ2m9/hc5GUaW6I2wepkEdQgyEXeKKsC7L9mCX8XKdLxki3hSBX7H03eJpkpnarWswA15qjQ2hnQNaZwMjByQ2eBd79sMdQ+96MPVuzNlj/0euKywteEewdpZdF/euxLWcUSaSlA5HhfYR3dzGKWC2QFkba0NTB6JdPZRCbUzEWYS5cm1rE891PZGPw4j9cxtnEf3pkj11uVo0uWvmyYxzsiAnmO3OktzQHBsAd8kDwiTG6fSp0gtyHtKcOzMF+6y1XsuCLTlq2iRk/Cmeq5NwcoNKwT8ImwNwHybbJIhew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zI/a6LH8v8sRyuvxcJDfOZtxv0GoEeUWnqIQAP/BAI0=;
+ b=XJTENucAEm2opllqKkpSO++ZtNd5O4zUca4HP2SioEvjsrVVWJCdZrE56r+Jc27qSUBWu+t/bnybwv10UN7ESrHQPST/gTBOgb3Jfk+4dIlWIzOF2lzjJ/ivurfM3H0+g34qiOiEtVImwq6sdttUvo2rL2FtrDSzQjOAGKscqqZJu6TjpRaJXBPtPR4zuA8gEFjGpAfteKSKIuvm/sYIcbjaMKFjxSvXdg6U1jmh77nZuvVK55Sdw05NDCvojFivhK0HNSxmPTJuJgIdOmgUpvyoNi9U4uqIxun08u1hbnXxFvHOa8bfUtGmqkYqmvERowYRaAWnFVJhKU5Daq3jxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710320655; x=1710925455; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QjqI0UtI7NlkaSgyzcRJ5GhIlnZWE1jspTguoc6XJII=;
-        b=S8gPwY9qhaZVR6Bb09+d5LLt9+hBoDdNWpgKUAGzap7aZPiQNNOOD/AAFwP7esWLPV
-         IQa2U/BbnVOcANfyAPU490C85yL8mMSCBFPln4QggI7Mc4tJiEsLqITWt/UaRfDF5va9
-         KWkhMDsZhVpfzfVrCR9lTlbkB+Hwkitiv0Lb/wbf5pZdtFNi5qO58GdjpwagXyr+SlaR
-         wiSfBzpROgA4Mp7xGynIqDjy/3A6HP2rYIpSBCheH+22aISUP/yyhI1oGTNN7qNNE5qx
-         185XxU07u8s6z3ofN1w67HMRJDUamdm/8q4QkD+RY3dxyQ3na1Htzfv0j+NWow6dgJlc
-         AZUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710320655; x=1710925455;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QjqI0UtI7NlkaSgyzcRJ5GhIlnZWE1jspTguoc6XJII=;
-        b=Z2piCzEA74RQw+qmY5lQ7sEzSSAqAL0qYXJoyIXTc637TYp/nIyNga9xvhk+R1SxG3
-         wTQQdXAfjkIpa1ecN23g1X/q6rqv7/fMsC40ThhAXmHNcmH8eWTRoz/evGXftR2zGzwx
-         nqJtjQdd/43swGBQEmTbD1nKuSZL6792ojZZEqMNC5JJeQo4CkGCKCzPSmgLfgLSCqL3
-         Bgtgd5Ht399Hb3gA0vDUprRjEGMywfKRDS0MY2kwzxHXsEjawV3bLepqhydg8uxpi0AR
-         VviXMd8PFFOMZ1NbH2UsU5mf8YI2DHuersIZm77ZTkGnTCeZJBef0RTdoMd7QcDqqzFH
-         O0MA==
-X-Forwarded-Encrypted: i=1; AJvYcCUU9vP/dCQWlNvkivUgva7ZI8bBljfW/cASVIbjhA4he5jtbuLJBZtWNMC/HAivNHKK1tfAoeJvqWTB6FZfFUHUCGy/XMizhUS7NWtLO53c60L5tMIgN8q4L+bhBtrIQhGohYMK37if67bsW/ai5tKMfUyS6MzdIWgB
-X-Gm-Message-State: AOJu0YwlvGbmgLq/KwMqQCVG69fq/ERxoaTL9vaWO+vhiBchSf3EaSAB
-	w+HYAeLMmKluCy4CKtXjVTpTojozT0XooCm8j/bxBn0kZK3f6lfG
-X-Google-Smtp-Source: AGHT+IH3UHABTxaiQniABaOfSvf4/sZ4Ay97aD9Qzeat6erm1yzjN60nJJ7df8qTsrC+qywcrJ+eMQ==
-X-Received: by 2002:a05:600c:524c:b0:412:eb6e:1fdb with SMTP id fc12-20020a05600c524c00b00412eb6e1fdbmr1520565wmb.40.1710320654430;
-        Wed, 13 Mar 2024 02:04:14 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id n2-20020adfe782000000b0033e7715bafasm11155874wrm.59.2024.03.13.02.04.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Mar 2024 02:04:13 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 13 Mar 2024 10:04:11 +0100
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>,
-	syzbot <syzbot+850aaf14624dc0c6d366@syzkaller.appspotmail.com>,
-	andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-	daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-	kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-	martin.lau@linux.dev, netdev@vger.kernel.org, sdf@google.com,
-	song@kernel.org, syzkaller-bugs@googlegroups.com,
-	yonghong.song@linux.dev
-Subject: Re: [syzbot] [bpf?] possible deadlock in __bpf_ringbuf_reserve
-Message-ID: <ZfFsC6zyrUCtTxK-@krava>
-References: <0000000000004aa700061379547e@google.com>
- <ZfDC45Kc1VEvBMuW@krava>
- <ZfDGmoOcUqrHPSkq@krava>
- <CAEf4Bza8iH4_JY_sN-6GYeSfn6iuUsLMzxd=xRkCC7q-3_StNQ@mail.gmail.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zI/a6LH8v8sRyuvxcJDfOZtxv0GoEeUWnqIQAP/BAI0=;
+ b=UVgOMPmdK4NKI7rAUCqx64Jo4Y1P4KM9thqNTVSXdVsbP9vN5M+8QcoLf6wuS5ZZRUY4yQqfp7+kJpugenF9RgIlLFIJqD3qvtFLIwF6knKfsyZGFYSXjOJoiWLKqUfIGm/mkcaCAT/s83weF898iW8V7DSxtckTqbqXyYJAtg8=
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
+ by SA2PR10MB4412.namprd10.prod.outlook.com (2603:10b6:806:117::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7362.39; Wed, 13 Mar
+ 2024 09:36:44 +0000
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::372c:5fce:57c3:6a03]) by BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::372c:5fce:57c3:6a03%4]) with mapi id 15.20.7386.017; Wed, 13 Mar 2024
+ 09:36:44 +0000
+Message-ID: <f9ab9ab3-c3cb-4a63-bc4e-102b9f6925a9@oracle.com>
+Date: Wed, 13 Mar 2024 09:36:40 +0000
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH dwarves v4 2/2] pahole: Inject kfunc decl tags into BTF
+Content-Language: en-GB
+To: Daniel Xu <dxu@dxuuu.xyz>
+Cc: acme@kernel.org, jolsa@kernel.org, quentin@isovalent.com,
+        andrii.nakryiko@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+        bpf@vger.kernel.org
+References: <cover.1707071969.git.dxu@dxuuu.xyz>
+ <28e81ccf28d6dd33f6db50af6526dc1770502b8d.1707071969.git.dxu@dxuuu.xyz>
+ <8e0580c6-bc72-4644-a010-c73d779f385c@oracle.com>
+ <s3fcrvcbxjn47nw3nhcus4hmyx3zkxz26vz4ddm2fxoskacf4s@tfd2rx7n33vc>
+ <tqkiee5rc3szutsobuuttgpv4ejjhnjbcfhkdozkrvxcjrp6zf@2mvkkhhbn7vj>
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <tqkiee5rc3szutsobuuttgpv4ejjhnjbcfhkdozkrvxcjrp6zf@2mvkkhhbn7vj>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0281.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:195::16) To BLAPR10MB5267.namprd10.prod.outlook.com
+ (2603:10b6:208:30e::22)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4Bza8iH4_JY_sN-6GYeSfn6iuUsLMzxd=xRkCC7q-3_StNQ@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|SA2PR10MB4412:EE_
+X-MS-Office365-Filtering-Correlation-Id: f39963fb-6852-499f-e32e-08dc4341182c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	L1TltqQpg9vL7+8p7Rz+UXHDQv9ulvzez1EQU991aUQYsu7CROw0+vVO8qtxQoQ/IQmpAubj8ff908DWW0Q0B2To2qi+OkKFw/NngRLh3nGHDWgsb+rHb/I0+D++uuADNdDJ8ttw0+Ua6xvsL8xjc33FOcFnJPi16OkTYIGOKdYC+wRIMZLHGBsuhTXj+ImIQOjGERn/3SYoNxatiakJfkgB2zHOp/rGoJEyQ31rm/949bLY25cDAIrcswModXwvlloKAn/a0ySMc2kAHqGSSOcUx2iFZvPO1VK+eMAjf6SifUQDh3xAbejTBxpX1qwup1v68elBpCe6ke8yNyJeSiw3lv4fvOKeItLr3pdpSE00tekxw46EwI+aKd+FQ7/qpuPW56aUM/4YR5GV3d87zSVTW31knOOF8syyaeadOKoQ/Cc1c/YpTusLVJ8CISpvimLmnvRJxx+Q/jP6grXoFmhUmbgQJFJXtXStEwm0NkmVtlcyb2N6hyd8M3wSavvmm7LzyUiCEoT0SXzQCcg9y9AE15QBGnJY0S7MR6wS5LH4jn8/gnuUcQbaHTFAOm9DFu4J3BmiWwasSLR9b6t/AhQ6/KvAe9Gz2IFJX/H9uqI=
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?utf-8?B?ZDBrd09XajFUWFRCMUQrM0VYUzY0SzBTL3dIUm1CeE4yZFkzSVo5WVVGV0FY?=
+ =?utf-8?B?UnhnTllMODFHc2IwamFrUjgvWkx3NVF5QXEzRUhPSmJmYWJqbE92RTc4NGFv?=
+ =?utf-8?B?ampmMFNaMmxyd3l0MDExSHdiLzZzNFhRK1pwUk5DWld6ZVdJdjRFbENpUUV3?=
+ =?utf-8?B?RjVnOHJhRDVKTnRuY0lBRUJJN3J5RFdqelZNTE9HeGluTVAwS01SMkE5bXVZ?=
+ =?utf-8?B?emErTVpnalpaZm1sUmVYcDNOcHhjR0twQkhQTjFqcWh2UElMdUVGemNoOWtj?=
+ =?utf-8?B?SU9ZaVh1YkY2L2lzMjliZHRLZFhxdGQzRGtDYU8wZ0VwczIzdStYQmNvUGp4?=
+ =?utf-8?B?TkxubkdIK1hXcmx3SWptUUl4TGZSMWtLRVhwQ0ZhSUJMZWkzeWVySW9OOXFI?=
+ =?utf-8?B?eVpqOHV3R2JEYjNKWXh1R0F5ZlVVRWxackVyY3NiOVhNY2FiWEY1RFdrN293?=
+ =?utf-8?B?b1NEYk9VNzZMWlVMdG1iNTJIdGlIenFIYmVVRlZEaUZhMmRML3ZoUDdIdEFo?=
+ =?utf-8?B?cUpDRldrNk5ISWsrQXo5anBJQkVWTFVsM2h2ZXBxc2pKV0xoV0taZG5sVmtK?=
+ =?utf-8?B?Uk93VUpSUTlaazU5bnUxODNOam1PTlRjTEJnR1JGTm1GZXRzRytmWHVPeHNt?=
+ =?utf-8?B?SEFtZmVsbVlKbzM2RnlMWUVuWnY2dStJcU1YSUVZVXAzNENsaDBiQlpacUtF?=
+ =?utf-8?B?SWpwWklJdWtFcVdLKzNwbTJyd2V3RzU3OUdFeFczYWpPZW9DWUQvTXFaL2FD?=
+ =?utf-8?B?Z2ZCNHBacTNOVjA3bjdEYXAreDJQSGlhVnFIazNiQUtjY0llOWRJL0pMWDVO?=
+ =?utf-8?B?Qk8yNXlxdVlNVmJCUU9NODh3eGwxdnN3bHRlbnNVZ2VETDFwYk9OZHo5S2tK?=
+ =?utf-8?B?T0IvWXVzREl0TW1lWTh5dmdxUlRVNklYbmw3WUJNUk9tTzVqV2xGem4zdnRt?=
+ =?utf-8?B?ajdzKzZubit0MDhyRkpJcmFVdTRjV1RpQ0ZBNllOSlpXUDVTSUMwUyt3UUsw?=
+ =?utf-8?B?QzlKSkVTTnFwOCticnVOY0kxNzQ1QWwwNDdlZ1FZaDJqRnB6Z2w2RU1XSlNI?=
+ =?utf-8?B?b0hoUS83YXlkUG1ubXhESFRhOE9XZmhSclI4OTFiRWpRN3UzQURZMCtZdFVW?=
+ =?utf-8?B?d2M3ZHRXSEZxMlpqZ1NWU2sxY0tOSXEvZlBVbnN0K1Uydkhsb0hJc1A0a01v?=
+ =?utf-8?B?emhxaU9ObGVuY3NlY0Q1Tk9yNTF5MUlwUzRLa1MvcGlXQ0l1WElKOHdJcDBn?=
+ =?utf-8?B?YUNwUUNZQ2F1VVJwVy9FL0UwVUNyOWhUYThSOWxHbnlxSERLWSthcmZ4OTFE?=
+ =?utf-8?B?UWttSmt3b2Jna0xhZXlDSXVHbS9vZG4yRDVVczdRRW9Oc3BkdWwvVEx4M0ZB?=
+ =?utf-8?B?SU9MWG03UThZdUM1cmNpN2Z5eXdhOHYyUy9tZ3dmbU5mL3MvNVE3Q1dCTW13?=
+ =?utf-8?B?QjZSUTRHckRSM3U0Y3plN1RoSkJ6ZFRLbVdUMzhXUmtibUxEb21lNjlaM1Bu?=
+ =?utf-8?B?TGQ2cXFnbEZCYnRBWVRsQk5SV1hLN1c0SzZMaFpxb2FZVllWSUlBTFdydTJY?=
+ =?utf-8?B?T1ZINS85eGR0YjcvS0NhY2hsTWtxVlIrWjJmYmRtTUpNU2x6Y3BWMTd6REJX?=
+ =?utf-8?B?QzlrVlFjYkNrdzhJbzNscldkSUZxWE5QT29YTkE1RzZXajVuc3EyOTZjSGRH?=
+ =?utf-8?B?ZHdVYUdOVHIvOFpzR3M5S2VmMnY5V0lBRE1pZHpQVUVEV3NFU202TVhyWWh0?=
+ =?utf-8?B?L05qZytQajNWd2Q3SnIzR091L1lsQnVUcGhwN3dNTzA1OW1uVHltTU12SGNH?=
+ =?utf-8?B?ZndKdW0xZzFRbGFETUFyNlVGVUhvdURJQ1VTT0FPZzdxOHd1S3JPd0h0Q29N?=
+ =?utf-8?B?RFBwcStKd0x1aTlLSUNydlR2aWZ5dWFXcTJUNEZscUt6ODBnMVoyRHFGN1F5?=
+ =?utf-8?B?azJBYUkyajhUTnMwSTFlUm1uVmlyZUdKRjlJN01sUGswV1h3WkZDZ0R3aXZ4?=
+ =?utf-8?B?NkhZWEVmdTlyUDlDYXNURzYyVGNFWVh5UjFYcVQxTXZ1anhKTzlFcXpTSC9r?=
+ =?utf-8?B?dGloNzVvdS9wZGNrK01MRjJsMlZPTVNKdzhSQTFLWHBScDBOT0dRUEd6ZlhR?=
+ =?utf-8?B?VWF6NEFYYVFIRzQ3ZXF3MVRVREZOQXA1WFpwdEQ3ME9wdWdTUGVZTHE3SW0x?=
+ =?utf-8?Q?M//YZAzcsDalZF6RryRYmmE=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	yRSh8axrg0a/vtrvuC9M/D35iqv5iFRm9wYO7AgkPMqes87BWU9WxH6UHz+vFeafGPcrlhgtsaB4hbRURmSkc0eLNnWfOPCRfYcL29/P0m5Yc8Ig0t6CHAHz0OaMEhHWlL01R/IfeCSfyXpyV+4QBPUWa8WQnviJLJ5bsi+Chqa/3NfRTun4w4PawMzj50FvvUoA+qrKIOJfFe44ei3xw2LM3iVDkv3Osux/l4MHdY9zLAmBEltoLOlR3TpSGn0eHhi+fYhuVZsS85KGc8Y/Sg6M0NeaDd0JBkzk37W9DcuBoNeG0+R3ti1cl3ADscDV/xCMJWb86cTd4TlJlcXplu1vtWte1JC0Kva+AgwmmxpTDkTBhhMV4DA5jY6vlPyHZWGy0oU9Az+3EjQcCkuO41Uo39L+xxq+lCXfexNqP/Op715hDP3nBmopkPdpUoWOVvypz0lO4gP/1U1FA3di9ENNcav6c9leW7270J20D6OAG4I6fbGzmSETmw8UxM/bGt1l+QzbS7p9kGm37OGRVpwJ8VGMO015OfGAASobMz4WUU7yPsGL8D5+L8hTMnHopnHgp6Ka/EyBzMxJsVodfYast8JlpXRSfwtkAbG+YNI=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f39963fb-6852-499f-e32e-08dc4341182c
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2024 09:36:43.9954
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: w72s5+mZrpQdYmTucUTawKezWPuCnmg6BzlTgBTHCWtrPO7rUKk+aVWe7oaQ3+TLZu48BnDnD4r6BRH2OZlvMw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4412
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-13_07,2024-03-12_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 adultscore=0
+ mlxscore=0 phishscore=0 spamscore=0 suspectscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2403130070
+X-Proofpoint-ORIG-GUID: ptrvatiHBMRa2wmzxSP_kK26ZWVATDZO
+X-Proofpoint-GUID: ptrvatiHBMRa2wmzxSP_kK26ZWVATDZO
 
-On Tue, Mar 12, 2024 at 03:37:16PM -0700, Andrii Nakryiko wrote:
-> On Tue, Mar 12, 2024 at 2:18 PM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Tue, Mar 12, 2024 at 10:02:27PM +0100, Jiri Olsa wrote:
-> > > On Tue, Mar 12, 2024 at 09:41:26AM -0700, syzbot wrote:
-> > > > Hello,
-> > > >
-> > > > syzbot found the following issue on:
-> > > >
-> > > > HEAD commit:    df4793505abd Merge tag 'net-6.8-rc8' of git://git.kernel.o..
-> > > > git tree:       bpf
-> > > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=11fd0092180000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=c11c5c676adb61f0
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=850aaf14624dc0c6d366
-> > > > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1509c4ae180000
-> > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10babc01180000
-> > > >
-> > > > Downloadable assets:
-> > > > disk image: https://storage.googleapis.com/syzbot-assets/d2e80ee1112b/disk-df479350.raw.xz
-> > > > vmlinux: https://storage.googleapis.com/syzbot-assets/b35ea54cd190/vmlinux-df479350.xz
-> > > > kernel image: https://storage.googleapis.com/syzbot-assets/59f69d999ad2/bzImage-df479350.xz
-> > > >
-> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > > Reported-by: syzbot+850aaf14624dc0c6d366@syzkaller.appspotmail.com
-> > > >
-> > > > ============================================
-> > > > WARNING: possible recursive locking detected
-> > > > 6.8.0-rc7-syzkaller-gdf4793505abd #0 Not tainted
-> > > > --------------------------------------------
-> > > > strace-static-x/5063 is trying to acquire lock:
-> > > > ffffc900096f10d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
-> > > >
-> > > > but task is already holding lock:
-> > > > ffffc900098410d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
-> > > >
-> > > > other info that might help us debug this:
-> > > >  Possible unsafe locking scenario:
-> > > >
-> > > >        CPU0
-> > > >        ----
-> > > >   lock(&rb->spinlock);
-> > > >   lock(&rb->spinlock);
-> > > >
-> > > >  *** DEADLOCK ***
-> > > >
-> > > >  May be due to missing lock nesting notation
-> > > >
-> > > > 4 locks held by strace-static-x/5063:
-> > > >  #0: ffff88807857e068 (&pipe->mutex/1){+.+.}-{3:3}, at: __pipe_lock fs/pipe.c:103 [inline]
-> > > >  #0: ffff88807857e068 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_write+0x1cc/0x1a40 fs/pipe.c:465
-> > > >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:298 [inline]
-> > > >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:750 [inline]
-> > > >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: __bpf_trace_run kernel/trace/bpf_trace.c:2380 [inline]
-> > > >  #1: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run2+0x114/0x420 kernel/trace/bpf_trace.c:2420
-> > > >  #2: ffffc900098410d8 (&rb->spinlock){-.-.}-{2:2}, at: __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
-> > > >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:298 [inline]
-> > > >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:750 [inline]
-> > > >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: __bpf_trace_run kernel/trace/bpf_trace.c:2380 [inline]
-> > > >  #3: ffffffff8e130be0 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run2+0x114/0x420 kernel/trace/bpf_trace.c:2420
-> > > >
-> > > > stack backtrace:
-> > > > CPU: 0 PID: 5063 Comm: strace-static-x Not tainted 6.8.0-rc7-syzkaller-gdf4793505abd #0
-> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/25/2024
-> > > > Call Trace:
-> > > >  <TASK>
-> > > >  __dump_stack lib/dump_stack.c:88 [inline]
-> > > >  dump_stack_lvl+0x1e7/0x2e0 lib/dump_stack.c:106
-> > > >  check_deadlock kernel/locking/lockdep.c:3062 [inline]
-> > > >  validate_chain+0x15c0/0x58e0 kernel/locking/lockdep.c:3856
-> > > >  __lock_acquire+0x1345/0x1fd0 kernel/locking/lockdep.c:5137
-> > > >  lock_acquire+0x1e3/0x530 kernel/locking/lockdep.c:5754
-> > > >  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-> > > >  _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
-> > > >  __bpf_ringbuf_reserve+0x211/0x4f0 kernel/bpf/ringbuf.c:424
-> > > >  ____bpf_ringbuf_reserve kernel/bpf/ringbuf.c:459 [inline]
-> > > >  bpf_ringbuf_reserve+0x5c/0x70 kernel/bpf/ringbuf.c:451
-> > > >  bpf_prog_9efe54833449f08e+0x2d/0x47
-> > > >  bpf_dispatcher_nop_func include/linux/bpf.h:1231 [inline]
-> > > >  __bpf_prog_run include/linux/filter.h:651 [inline]
-> > > >  bpf_prog_run include/linux/filter.h:658 [inline]
-> > > >  __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
-> > >
-> > > hum, scratching my head how this could passed through the prog->active check,
-> >
-> > nah could be 2 instances of the same program, got confused by the tag
-> >
-> > trace_contention_end
-> >   __bpf_trace_run(prog1)
-> >     bpf_prog_9efe54833449f08e
-> >       bpf_ringbuf_reserve
-> >         trace_contention_end
-> >           __bpf_trace_run(prog1)  prog1->active check fails
-> >           __bpf_trace_run(prog2)
-> >             bpf_prog_9efe54833449f08e
-> >               bpf_ringbuf_reserve
-> >                 lockup
-> >
-> > we had similar issue in [1] and we replaced the lock with extra buffers,
-> > not sure that's possible in bpf_ringbuf_reserve
-> >
+On 13/03/2024 03:17, Daniel Xu wrote:
+> Hi Alan,
 > 
-> Having trace_contention_begin and trace_contention_end in such
-> low-level parts of ringbuf (and I'm sure anything in BPF that's using
-> spinlock) is unfortunate. I'm not sure what's the best solution, but
-> it would be great if we had ability to disable these tracepoints when
-> taking lock in low-level BPF infrastructure. Given BPF programs can
-> attach to these tracepoints, it's best to avoid this arbitrary nesting
-> of BPF ringbuf calls. Also note, no per-program protection will help,
-> because it can be independent BPF programs using the same map.
+> On Wed, Feb 28, 2024 at 05:57:01PM -0700, Daniel Xu wrote:
+>> Hi Alan,
+>>
+>> On Thu, Feb 08, 2024 at 10:00:15AM +0000, Alan Maguire wrote:
+>>> On 04/02/2024 18:40, Daniel Xu wrote:
+> 
+> [...]
+> 
+>>>
+>>> Then all you'd need to do is iterate over BTF functions, using
+>>> btf_encoder__find_function() to get a function and associated ELF info
+>>> by name.
+>>
+>> Didn't know about this, thanks. I'll take a look at if the patch can use
+>> the existing function metadata. That should get rid of
+>> btf_encoder__collect_btf_funcs() if it works.
+> 
+> I experimented with this a bit and I'm not sure if it's a good approach.
+> 
+> Here are the two commits:
+> 
+>         https://pastes.dxuuu.xyz/xo9jwk
+>         https://pastes.dxuuu.xyz/xmzew5
+> 
+> Basically my approach was to fan-in all the function info collected by
+> the different threads. I don't think it'll work cuz some of the data
+> (the name in particular) in struct elf_function belongs to the thread's
+> struct btf_encoder instance. Which is all freed by btf_encoder__delete()
+> before btf_encoder__encode().
+> 
+> It could probably be fixed, but doesn't seem very clean to me. So I
+> think it'll be better to keep the code as-is. Unless you were thinking
+> something different.
+> 
 
-one of the initial attempts for the previous problem was to deny
-the attach of programs calling printk to printk tracepoint:
-  https://lore.kernel.org/bpf/20221121213123.1373229-1-jolsa@kernel.org/
+Thanks for trying! We may end up revisiting the freeing of ELF
+function/variable info in the future if we add address information from
+symbols into BTF, but since that's not there yet, it makes sense to do
+your collection separately.
 
-how about we overload the bpf contention tracepoints callbacks and
-make it conditional like outlined below.. but not sure it'd be
-feasible on the lock/unlock calling sides to use this
-
-jirka
-
-
----
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 0a5c4efc73c3..c17b7eaab440 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2347,13 +2347,42 @@ int perf_event_query_prog_array(struct perf_event *event, void __user *info)
- extern struct bpf_raw_event_map __start__bpf_raw_tp[];
- extern struct bpf_raw_event_map __stop__bpf_raw_tp[];
- 
-+extern struct tracepoint __tracepoint_contention_begin;
-+
-+#define __CAST_TO_U64(x) ({ \
-+	typeof(x) __src = (x); \
-+	UINTTYPE(sizeof(x)) __dst; \
-+	memcpy(&__dst, &__src, sizeof(__dst)); \
-+	(u64)__dst; })
-+
-+int contention_tps_disable;
-+
-+static notrace void
-+__bpf_trace_contention_begin_overload(void *__data, void *lock, unsigned int flags)
-+{
-+	struct bpf_prog *prog = __data;
-+
-+	if (contention_tps_disable)
-+		return;
-+
-+	bpf_trace_run2(prog, __CAST_TO_U64(lock), __CAST_TO_U64(flags));
-+}
-+
-+static struct bpf_raw_event_map* fixup(struct bpf_raw_event_map *btp)
-+{
-+	if (btp->tp == &__tracepoint_contention_begin)
-+		btp->bpf_func = __bpf_trace_contention_begin_overload;
-+
-+	return btp;
-+}
-+
- struct bpf_raw_event_map *bpf_get_raw_tracepoint(const char *name)
- {
- 	struct bpf_raw_event_map *btp = __start__bpf_raw_tp;
- 
- 	for (; btp < __stop__bpf_raw_tp; btp++) {
- 		if (!strcmp(btp->tp->name, name))
--			return btp;
-+			return fixup(btp);
- 	}
- 
- 	return bpf_get_raw_tracepoint_module(name);
+Alan
