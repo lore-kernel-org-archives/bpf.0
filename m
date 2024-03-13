@@ -1,212 +1,124 @@
-Received: from out-184.mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7CC610F1;
-	Wed, 13 Mar 2024 21:01:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37C512E6C
+	for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 21:02:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710363684; cv=none; b=hqz3YVCZXsgrKiB5K7qVgi1+140nlNoJIeVvUMr3ra3pC6lDCzCiL7O4VbDA5Mt6BO/kxv13sKep/bzXBgobWNCwtY/eBCbW/QlSgB159sXqD1nGxotSeHeBRvXlmYthuLgZCniNLUzQkHsA57/aA7KlUKePbu5BS2r6w1F982Y=
+	t=1710363728; cv=none; b=dosaooa2wPLI3GdVjmRbC1uN+jbyNPyCTJGUJ7YNGJSjrfFZt7leMpSZ/Z2RE4fmJevtjkl8NxoDG5a8Zauujb5E2kv2FkYukX/3tHTq/HwSifSboRKFPtdWnCvm9Gu1/z7OC+3NgospxNjohJ4vQ4ww3Rgy2ob/MojJ96Dwjf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710363684; c=relaxed/simple;
-	bh=FtMFaGCWX/IIgqeePVzOqhXZdKAonuX6N+DPgyPNtJY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QQ0RcSMzoTCreQyMmyYVnCscDM+gJk+5izTg1Abe28tXJWJBqluNeyhE3zEo66X9DbmX10ZKMLI61/Kqz0PepzkUpNXQLk/VzfaaAgmoqTh3QGBJOSRZ7aH16o5sAPkwqfguK02HdrGe5poF7qvkPidPoXLy1HbFfoky17Vz3dM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=E3vG0i3s; arc=none smtp.client-ip=95.215.58.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1710363728; c=relaxed/simple;
+	bh=yqD0xySjwcxJYaNSfEggYXwyl+UN4Yk6HdWAV4mFeRA=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=lE/543TafREn2+Srch2A48jI7D5PVJ2gRNGaXt6ZpBphIQX0lJ4lNHxxMVJNu2TQeTorVjdOXvN3F5pupM6onpDDCPP0nJi2R+S6TCtg9/cWVLHrT4/rOB4GRnrxvuPRq0tGcJUXBi4HI1GWUw6uMvU8rPH1fs9D1XCNzQFe7X8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=L4xo+53Q; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="E3vG0i3s"
-Message-ID: <0dff8f05-e18d-47c8-9f19-351c44ea8624@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1710363678;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PDvEFHw9onLk72OR89fNPceBtz3o0jeeuGwgKPgczZ8=;
-	b=E3vG0i3stzEWxa9uOf7XvRBB3P0uncJpQ9qahetr/fMLx44Vr2Zudu5x03VByuTlRDo3ca
-	YI70JqCZ+VI0TbTF9p8RwUyMzbKYnIDHgnQkzGeJnB8Ke2zi3M2XoO++cymFtX22QaETcx
-	hHDByj4IGVCZJ0FIDx5l4zRnBC56QFw=
-Date: Wed, 13 Mar 2024 14:01:12 -0700
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="L4xo+53Q"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-413f0ce50b6so713515e9.3
+        for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 14:02:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1710363725; x=1710968525; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MxXXNEXYedOe949/5ExPM39bkL7aMtWRMXTPf6N1ikc=;
+        b=L4xo+53QNqsFdxnwv+A66UTjOwmqNNN8jjKP/lTSALP3H3B53/zKtv0IqBLamfS2hn
+         uFuacx282tchaazfj5yfpsF/+SFuyjoK+H1BN4nfh8nK+yr4y1Tgm8SRsUM3C+vsXaeD
+         tE2dkL0V9DTQCE3ejOdQATKDlGEMksNviCg01U8STrbGhnUWaVSiBZ6+fVlwU6C3xDaI
+         5g2pmBUroDjCiPL6kMtKJFJOVJkpxRqKX8xIAvGHVl+EP5lwtBVhkF2wZfU4awiwmm/9
+         dIXUTX9P90xoky7GNipJM+olu+MIrMU0Wt+bmS0CSlKQepE6TwImtXvooIAEkb6MZ2tS
+         dWdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710363725; x=1710968525;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MxXXNEXYedOe949/5ExPM39bkL7aMtWRMXTPf6N1ikc=;
+        b=T51cOhvQY+jJnO92yOHkvMjlW+JSO61Vvi58Jxu25RO5FnrmscUO4FqlkZajrpL6fI
+         iMsHhpMsfHkHD7EwvphS4tT7j0cMSiCQt2LEkd0+H6+id8SAaFv5Tcx1HNZCmr+xRHjv
+         5vvNm2IQwebzXvWjI+V6F5w82mHakrTXgE7WlGY1zmWh9IFhfJ0nFi1ZvWOD1dOx4Oui
+         r7lcHbYnQSOU6fCaUPRj2XY6kvb0ucXP3uYwUzNErfWATBOfCwcYFMtp9PxGq3LvTlaj
+         Asv0niuMS8iJmAKcSck3jRoSiBDC0Zr+NEpnpPDz0oO9Ai/5HC4KOL9VRqfwj5kLigEY
+         nYvg==
+X-Forwarded-Encrypted: i=1; AJvYcCUfzyzlZcBOSBfpRCUMUC+zCBn5N8co5juuJmtSLDJ7VgwvoMQK7CFdJOWfdVl9PtKsY/fkIJmF45dwR2sZ+vzh8z2s
+X-Gm-Message-State: AOJu0YxUt4GqNNbfe2dPGL8nIxoXHQRRG+spxglf0/w9ybEatmm+H+v7
+	ri//Bsg0Fcx4UoFLSDwKULoCnOav7nRD5N6oUULFInYRB6oWbXZzXStMnz0ARiw=
+X-Google-Smtp-Source: AGHT+IFkWoS25Iojqboki9WfDQuQu+oKN8VsOYyK+ua+T+XPO5TedBimaND3DmoMaonM84pezQ1oeA==
+X-Received: by 2002:a05:600c:1c09:b0:413:ef04:d347 with SMTP id j9-20020a05600c1c0900b00413ef04d347mr628060wms.10.1710363725084;
+        Wed, 13 Mar 2024 14:02:05 -0700 (PDT)
+Received: from ?IPv6:::1? ([2a02:8011:e80c:0:54f5:a101:e96b:a659])
+        by smtp.gmail.com with ESMTPSA id bi18-20020a05600c3d9200b004133825e649sm208061wmb.33.2024.03.13.14.02.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Mar 2024 14:02:04 -0700 (PDT)
+Date: Wed, 13 Mar 2024 21:02:03 +0000
+From: Quentin Monnet <quentin@isovalent.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_bpf-next=5D_Revert_=22libbpf=3A_make_uni?= =?US-ASCII?Q?form_use_of_btf=5F=5Ffd=28=29_accessor_inside_libbpf=22?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAEf4BzbC4_x6qNT-9Tzq0D85NrxU5vDz_rpT83mg0PHypDRnQA@mail.gmail.com>
+References: <20240313172345.75270-1-quentin@isovalent.com> <CAEf4BzbC4_x6qNT-9Tzq0D85NrxU5vDz_rpT83mg0PHypDRnQA@mail.gmail.com>
+Message-ID: <F6FC7374-3431-4BC8-9CDC-21C0A1F79246@isovalent.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net-next v4] net: Re-use and set mono_delivery_time bit
- for userspace tstamp packets
-Content-Language: en-US
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Abhishek Chauhan <quic_abchauha@quicinc.com>
-Cc: kernel@quicinc.com, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
- Martin KaFai Lau <martin.lau@kernel.org>, bpf <bpf@vger.kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>
-References: <20240301201348.2815102-1-quic_abchauha@quicinc.com>
- <2a4cb416-5d95-459d-8c1c-3fb225240363@linux.dev>
- <65f16946cd33e_344ff1294fc@willemb.c.googlers.com.notmuch>
- <28282905-065a-4233-a0a2-53aa9b85f381@linux.dev>
- <65f2004e65802_3d1e792943e@willemb.c.googlers.com.notmuch>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <65f2004e65802_3d1e792943e@willemb.c.googlers.com.notmuch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 3/13/24 12:36 PM, Willem de Bruijn wrote:
-> Martin KaFai Lau wrote:
->> On 3/13/24 1:52 AM, Willem de Bruijn wrote:
->>> Martin KaFai Lau wrote:
->>>> On 3/1/24 12:13 PM, Abhishek Chauhan wrote:
->>>>> Bridge driver today has no support to forward the userspace timestamp
->>>>> packets and ends up resetting the timestamp. ETF qdisc checks the
->>>>> packet coming from userspace and encounters to be 0 thereby dropping
->>>>> time sensitive packets. These changes will allow userspace timestamps
->>>>> packets to be forwarded from the bridge to NIC drivers.
->>>>>
->>>>> Setting the same bit (mono_delivery_time) to avoid dropping of
->>>>> userspace tstamp packets in the forwarding path.
->>>>>
->>>>> Existing functionality of mono_delivery_time remains unaltered here,
->>>>> instead just extended with userspace tstamp support for bridge
->>>>> forwarding path.
->>>>
->>>> The patch currently broke the bpf selftest test_tc_dtime:
->>>> https://github.com/kernel-patches/bpf/actions/runs/8242487344/job/22541746675
->>>>
->>>> In particular, there is a uapi field __sk_buff->tstamp_type which currently has
->>>> BPF_SKB_TSTAMP_DELIVERY_MONO to mean skb->tstamp has the MONO "delivery" time.
->>>> BPF_SKB_TSTAMP_UNSPEC means everything else (this could be a rx timestamp at
->>>> ingress or a delivery time set by user space).
->>>>
->>>> __sk_buff->tstamp_type depends on skb->mono_delivery_time which does not
->>>> necessarily mean mono after this patch. I thought about fixing it on the bpf
->>>> side such that reading __sk_buff->tstamp_type only returns
->>>> BPF_SKB_TSTAMP_DELIVERY_MONO when the skb->mono_delivery_time is set and skb->sk
->>>> is IPPROTO_TCP. However, it won't work because of bpf_skb_set_tstamp().
->>>>
->>>> There is a bpf helper, bpf_skb_set_tstamp(skb, tstamp,
->>>> BPF_SKB_TSTAMP_DELIVERY_MONO). This helper changes both the skb->tstamp and the
->>>> skb->mono_delivery_time. The expectation is this could change skb->tstamp in the
->>>> ingress skb and redirect to egress sch_fq. It could also set a mono time to
->>>> skb->tstamp where the udp sk->sk_clockid may not be necessary in mono and then
->>>> bpf_redirect to egress sch_fq. When bpf_skb_set_tstamp(skb, tstamp,
->>>> BPF_SKB_TSTAMP_DELIVERY_MONO) succeeds, reading __sk_buff->tstamp_type expects
->>>> BPF_SKB_TSTAMP_DELIVERY_MONO also.
->>>>
->>>> I ran out of idea to solve this uapi breakage.
->>>>
->>>> I am afraid it may need to go back to v1 idea and use another bit
->>>> (user_delivery_time) in the skb.
->>>
->>> Is the only conflict when bpf_skb_set_tstamp is called for an skb from
->>> a socket with sk_clockid set (and thus SO_TXTIME called)?
->>
->> Right, because skb->mono_delivery_time does not mean skb->tstamp is mono now and
->> its interpretation depends on skb->sk->sk_clockid.
->>
->>> Interpreting skb->tstamp as mono if skb->mono_delivery_time is set and
->>> skb->sk is NULL is fine. This is the ingress to egress redirect case.
->>
->> skb->sk == NULL is fine. I tried something like this in
->> bpf_convert_tstamp_type_read() for reading __sk_buff->tstamp_type:
->>
->> __sk_buff->tstamp_type is BPF_SKB_TSTAMP_DELIVERY_MONO when:
->>
->> 	skb->mono_delivery_time == 1 &&
->> 	(!skb->sk ||
->> 	 !sk_fullsock(skb->sk) /* tcp tw or req sk */ ||
->> 	 skb->sk->sk_protocol == IPPROTO_TCP)
->>
->> Not a small bpf instruction addition to bpf_convert_tstamp_type_read() but doable.
->>
->>>
->>> I don't see an immediate use for this BPF function on egress where it
->>> would overwrite an SO_TXTIME timestamp and now skb->tstamp is mono,
->>> but skb->sk != NULL and skb->sk->sk_clockid != CLOCK_MONOTONIC.
->>
->> The bpf prog may act as a traffic shaper that limits the bandwidth usage of all
->> outgoing packets (tcp/udp/...) by setting the mono EDT in skb->tstamp before
->> sending to the sch_fq.
->>
->> I currently also don't have a use case for skb->sk->sk_clockid !=
->> CLOCK_MONOTONIC. However, it is something that bpf_skb_set_tstamp() can do now
->> before queuing to sch_fq.
->>
->> The container (in netns + veth) may use other sk_clockid/qdisc (e.g. sch_etf)
->> setup and the non mono skb->tstamp is not cleared now during dev_forward_skb()
->> between the veth pair.
->>
->>>
->>> Perhaps bpf_skb_set_tstamp() can just fail if another delivery time is
->>> already explicitly programmed?
->>
->> This will change the existing bpf_skb_set_tstamp() behavior, so probably not
->> acceptable.
->>
->>>
->>>       skb->sk &&
->>>       sock_flag(sk, SOCK_TXTIME) &&
->>>       skb->sk->sk_clockid != CLOCK_MONOTONIC
->>
->>> Either that, or unset SOCK_TXTIME to make sk_clockid undefined and
->>> fall back on interpreting as monotonic.
->>
->> Change sk->sk_flags in tc bpf prog? hmm... I am not sure this will work well also.
->>
->> sock_valbool_flag(SOCK_TXTIME) should require a lock_sock() to make changes. The
->> tc bpf prog cannot take the lock_sock, so bpf_skb_set_tstamp() currently only
->> changes skb and does not change skb->sk.
->>
->> I think changing sock_valbool_flag(SOCK_TXTIME) will also have a new user space
->> visible side effect. The sendmsg for cmsg with SCM_TXTIME will start failing
->> from looking at __sock_cmsg_send().
->>
->> There may be a short period of disconnect between what is in sk->sk_flags and
->> what is set in skb->tstamp. e.g. what if user space does setsockopt(SO_TXTIME)
->> again after skb->tstamp is set by bpf. This could be considered a small glitch
->> for some amount of skb(s) until the user space settled on setsockopt(SO_TXTIME).
->>
->> I think all this is crying for another bit in skb to mean user_delivery_time
->> (skb->tstamp depends on skb->sk->sk_clockid) while mono_delivery_time is the
->> mono time either set by kernel-tcp or bpf.
-> 
-> It does sound like the approach with least side effects.
-> 
-> If we're going to increase to two bits per skb, it's perhaps
-> better to just encode the (selected supported) CLOCK_ type, rather
-> than only supporting clockid through skb->sk->sk_clockid.
 
-Good idea. May be starting with mono and tai (Abishek's use case?), only forward 
-these two clocks and reset the skb->tstamp for others.
 
-> 
-> This BPF function is the analogue to SO_TXTIME. It is clearly
-> extensible to additional BPF_SKB_TSTAMP_DELIVERY_.. types. To
-> work with sch_etf, say.
+On 13 March 2024 17:39:14 GMT, Andrii Nakryiko <andrii=2Enakryiko@gmail=2E=
+com> wrote:
+>On Wed, Mar 13, 2024 at 10:24=E2=80=AFAM Quentin Monnet <quentin@isovalen=
+t=2Ecom> wrote:
+>>
+>> This reverts commit df7c3f7d3a3ddab31ca8cfa9b86a8729ec43fd2e=2E
+>>
+>> There's no guarantee that obj->btf is non-NULL when passing it to
+>> btf__fd(), and this function doesn't perform any check before
+>> dereferencing its argument=2E As a consequence, this commit caused
+>> segmentation faults in bpftool (for example) when trying to load
+>> programs that come without BTF info=2E
+>>
+>> Signed-off-by: Quentin Monnet <quentin@isovalent=2Ecom>
+>> ---
+>>  tools/lib/bpf/libbpf=2Ec | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/lib/bpf/libbpf=2Ec b/tools/lib/bpf/libbpf=2Ec
+>> index efab29b8935b=2E=2E0f9a4d232468 100644
+>> --- a/tools/lib/bpf/libbpf=2Ec
+>> +++ b/tools/lib/bpf/libbpf=2Ec
+>> @@ -7343,7 +7343,7 @@ static int bpf_object_load_prog(struct bpf_object=
+ *obj, struct bpf_program *prog
+>>         load_attr=2Eprog_ifindex =3D prog->prog_ifindex;
+>>
+>>         /* specify func_info/line_info only if kernel supports them */
+>> -       btf_fd =3D btf__fd(obj->btf);
+>> +       btf_fd =3D bpf_object__btf_fd(obj);
+>
+>oh, my bad, sorry about that=2E But I'd still like to stick to using
+>btf__fd(), so maybe let's fix forward by dropping btf_fd variable here
+>and doing what bpf_object__create_map() does:
+>
+>if (obj->btf && btf__fd(obj->btf) >=3D 0 && kernel_supports(=2E=2E=2E)) {
+>    load_attr=2Eprog_btf_fd =3D btf__fd(obj->btf);
+>    =2E=2E=2E
+>}
+>
+>?
 
-Yes, if there are bits in skb to describe the clock in the skb->tstamp, 
-BPF_SKB_TSTAMP_DELIVERY_ can be extended to match it. It will be easier if the 
-values in the skb bits is the same as the BPF_SKB_TSTAMP_DELIVERY_*.
-
-The bpf_convert_tstamp_*() and the bpf_skb_set_tstamp helper will need changes 
-to include the consideration of these two bits. I think we have mostly settled 
-with the approach (thanks for the discussion!). Abhishek, not sure how much can 
-be reused from this patch for the two bits apporach, do you want to revert the 
-current patch first and then start from clean?
-
-> 
->> If we need to revert the
->> mono_delivery_time reuse patch later, we will need to revert the netdev patch
->> and the (to-be-made) bpf patch.
-> 
-> 
->   
-> 
-> 
-
+I half-expected that :)=2E I don't mind at all, I'll send an updated versi=
+on tomorrow=2E Thanks!
