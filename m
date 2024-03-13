@@ -1,232 +1,152 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7690010A1D
-	for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 05:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9061F93F;
+	Wed, 13 Mar 2024 08:52:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710308534; cv=none; b=XvxALkgrGfgvMULOWtjnXYP0sPkwFOe38y2KDTn426zKrMC8ScDB3I/7I64sPXv29zl9+Dq8gBU7MBaPbV7a7HlxtwKZUGApcnBZTab14f/iZV6+z9ddC36KA1UMpv+lrr+2CNGiOAumScv+I7ILVUdvx1EAYBxiy/p9meBO5HM=
+	t=1710319947; cv=none; b=qd8l+eFjvnEydkbuHKTYBedLNJDFH37xVQHpaVfc/funS3KZWnemBWbRpiwDTMnyT354HoWOG/V5hPJir0H9dil+4pOZXwmVF6Amp43LQAj3qjN7mYFcwvk3GgaMJvCoHxrSmyJHM9+I7yLb+GQKQ2+2CU1YugpmY9AnoDjKHsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710308534; c=relaxed/simple;
-	bh=LK3JPLHHcWQqUTtJ9SsnmfPpRWEf1gEHCUvOkVswq9c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=px+dc9MJAX7UutoCRnVF4Vq7gjUKOCi4L4O0rHfaKTuAFxVptbVuyR5BZGl5lAeK2cppxDirn2eFGW400o4qZZmOlS/FfSZd8zNzNpzuXA0/DdkBg6R350lKNHyugWUwSX5K5ooNAOYRzAjCylaGgch7KRnfZ0CouymDN33RfXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nmh1FHjd; arc=none smtp.client-ip=209.85.128.179
+	s=arc-20240116; t=1710319947; c=relaxed/simple;
+	bh=MBGoPePJfGD927BQzBl+0QOCTgtJGQa5eqdTJMY7LcM=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=UtJgmrPPcqrdctG71G8qIFf6w3QBX0fj2oElYA9JhnA8IK9uK9mOPbu9kX5hSnv7fsH/WBPY6qgng6b/mu3sown17Y9P9Wxtf5vQf4kJFYKM4wI0FRx6MUd1tsMvLsC0+I9xrx+o5f69to7LlnuAffUqDcHNSTIUs17NjE8SBTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=brZqD1Xh; arc=none smtp.client-ip=209.85.222.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nmh1FHjd"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-609f359b7b1so67811797b3.1
-        for <bpf@vger.kernel.org>; Tue, 12 Mar 2024 22:42:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="brZqD1Xh"
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-78810ba2ff1so233169485a.3;
+        Wed, 13 Mar 2024 01:52:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710308531; x=1710913331; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1jYo5CzrMczP00LzjQRtbtlKxInAIZNKzChAtT90XBE=;
-        b=nmh1FHjdtdOXZ/O8HQuJqmExwoCmuWkcb8HwBTpyuU7EJkjqSUO2QuKsbzu2mgFMeW
-         bOCPcOLUYCPJJBppK2yH7ZgmFkwyfGLCIs6GZrdZ1LMjPbwkyD9aKYmw7gkpLd21FTP5
-         ybxJ7GFDHFJDnjWAW+ao0XJH7wwZcGb4QavpSqxjo3gqw1Orj94XNCxc9bjs8iUMqdH2
-         7HpAT8jmnT8a2TmVRi60/DnjTztGu7y/EVv4cn+mdVezZnJhSV5vMBguEDQiYu/q5t4C
-         t/d/bnL+aog0L4wOTLutxfN6hddszobLR+zbWhliZv9n0j6yFqYIj3lhjvD8v4Vb4MNE
-         KjWw==
+        d=gmail.com; s=20230601; t=1710319943; x=1710924743; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NiyXUYdI9F2JA3CsusbHXE/Pdh1jVbsVBwhd+PEGfCY=;
+        b=brZqD1Xh35m0etdW7y9eHKDAVI92YU6Gx/ZIIgyLvtP7k9nTkinahOu6WE2zx3UzPV
+         Y9dMBKQ72PRQIxmqVb8G9AYaiAWLgMbyxVsvoXssdrn14AG6umc/hOqd6A0kf6qpwsoQ
+         UTEgYT0AA7wTTQTTSCvChmGZlhS80TAsARxYDDULolzA8mxbqBZBU+oNic+tdPcWlI4H
+         fow2nJmtxpzq4VX+7Ah8oq6F4c1Ioqn+KNxuwBNDzZg1hoowVaS4pQpd0V63/r6Ab3zq
+         8R+qI8QekRDvkI1xe2yIUeiVBOWoeHefYdlfpkkpvCYxIYnhxrO929UUUNwL2efMsV11
+         Y7Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710308531; x=1710913331;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1jYo5CzrMczP00LzjQRtbtlKxInAIZNKzChAtT90XBE=;
-        b=dDCfaBVml+m44RrZvMZhDl0g4DyeTs9Wv1QusSvI0UJ4Y+fzT3qdFOhYcWCJv2uww5
-         8ZogTQIkqh56zC8k00+aPrFKPkJOdaCsADQvmXo/tm8LibFG8rXa9qSIOia01QJouA0Y
-         rPlkHvqUChR8mex+lfNon9K7/vFXIa74fBlIrEaruSJA4XrDo/XFdi8Fa6eeCL2si0CW
-         BqHC7v9InykOfKaS9iDP7yxgni0HEM8ocZkFXh5Aw6M/9w//CbczuxE6mPblY+MLKEKP
-         ha3Rl2QookGkLyAF/jHuSDXwEcsx1a2BNf86dl8jKZXI70amAIlYthDHcnm/2DIVTdUO
-         waeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWmeVUgo5WNlptwp3rtlDKnaaUSRgCXCeEDcmuNcIaDl7Giei0ObRajNRbofKWTGEaxQb2UCxNirxxUFqGraec/cZFc
-X-Gm-Message-State: AOJu0Yyzd6HZOujwqj77gftRnptgSzMRM5z0orf+AEDtknAvZ+4tYmAH
-	yPElDzlXDm8CBP/Y2LtNl0cW3n8hTPWoMIrSYAyDdqUetutbbBtb
-X-Google-Smtp-Source: AGHT+IE0qlIZ5CFmSI6g7hD+kT55roxlB/6IgKmVS4LGqGIbIKuiPChLGOjhMLm9EUt5sEpFLcZXSQ==
-X-Received: by 2002:a81:ad03:0:b0:60a:10c7:3932 with SMTP id l3-20020a81ad03000000b0060a10c73932mr1519625ywh.35.1710308531240;
-        Tue, 12 Mar 2024 22:42:11 -0700 (PDT)
-Received: from ?IPV6:2600:1700:6cf8:1240:a9ce:8a39:867c:8f30? ([2600:1700:6cf8:1240:a9ce:8a39:867c:8f30])
-        by smtp.gmail.com with ESMTPSA id g15-20020a81ae4f000000b0060989fa64dfsm2301873ywk.12.2024.03.12.22.42.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Mar 2024 22:42:10 -0700 (PDT)
-Message-ID: <c999d7ce-4c49-4b4e-9e4e-07ed4efc7b79@gmail.com>
-Date: Tue, 12 Mar 2024 22:42:09 -0700
+        d=1e100.net; s=20230601; t=1710319943; x=1710924743;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=NiyXUYdI9F2JA3CsusbHXE/Pdh1jVbsVBwhd+PEGfCY=;
+        b=WA98mBItfk7aYRCSpEWQmFPLgyqWE9fb9Fcv5r5fU+Y96wZ637Tm6c8jV/srqVi9M/
+         renkJ4lkqvul6JR9sikgIQ3nlKt+rbROH/dUaITIpVXcZ7MkbD58dIwiQsIHIL5L9rOu
+         YOC0sNXSwY/dSTuxMuI333xdEr7c85oXKhyBhFK12RfbJsIzAyClkOvD19/4hIzhpGIs
+         8kG6Y4GddkFvNp7wGICH+smwgXa+hBWBdGuo6Vq73rO+BUkEPrn17cdZ/cA33Bdqtt0t
+         qXDORqBU82VNSz7LnSa1mEaqwqo8AURcL0QIfRoy8j/SOyw/7SpYsJit5+osZfbHDOiN
+         sKkw==
+X-Forwarded-Encrypted: i=1; AJvYcCWhS+UUMqnMtEo6eaGWOihlAiOeqOwJlZlpnm8BD/jMWVNry/Y1KXQ0cRl7nXP9RMBk96+lAldxeApGXUGUuXZpDlqNe5cWAsE4Lf0hLxy1xRei4HnsNvWtMAEizt05F184TWzgHWhWW7peppZUeVDPcoRMVteja4HF
+X-Gm-Message-State: AOJu0YykB6Et1lGdkw7uhF2SzewKhkC3pjj1K4BXQMmdiLWDY0ECbJxO
+	hYdTaELXxC1413MAkLB5hT/3AMzHX1GsbAcIxkloNhvwXw/CkCmb
+X-Google-Smtp-Source: AGHT+IENqpNPUVCBD2bYLTHTCzOlVlxtqfauB/mV5DQpC8fHVxO4vHszbRwC1Xogc4MtuxBvNUDr+g==
+X-Received: by 2002:a05:620a:1a0f:b0:788:5866:788a with SMTP id bk15-20020a05620a1a0f00b007885866788amr15818667qkb.9.1710319943582;
+        Wed, 13 Mar 2024 01:52:23 -0700 (PDT)
+Received: from localhost (55.87.194.35.bc.googleusercontent.com. [35.194.87.55])
+        by smtp.gmail.com with ESMTPSA id 26-20020a05620a04da00b0078838695dfasm4466818qks.59.2024.03.13.01.52.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Mar 2024 01:52:23 -0700 (PDT)
+Date: Wed, 13 Mar 2024 04:52:22 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>, 
+ Abhishek Chauhan <quic_abchauha@quicinc.com>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: kernel@quicinc.com, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Andrew Halaney <ahalaney@redhat.com>, 
+ Martin KaFai Lau <martin.lau@kernel.org>, 
+ bpf <bpf@vger.kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Alexei Starovoitov <ast@kernel.org>, 
+ Andrii Nakryiko <andrii@kernel.org>
+Message-ID: <65f16946cd33e_344ff1294fc@willemb.c.googlers.com.notmuch>
+In-Reply-To: <2a4cb416-5d95-459d-8c1c-3fb225240363@linux.dev>
+References: <20240301201348.2815102-1-quic_abchauha@quicinc.com>
+ <2a4cb416-5d95-459d-8c1c-3fb225240363@linux.dev>
+Subject: Re: [PATCH net-next v4] net: Re-use and set mono_delivery_time bit
+ for userspace tstamp packets
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [LSF/MM/BPF TOPIC] faster uprobes
-Content-Language: en-US
-To: Andrei Matei <andreimatei1@gmail.com>
-Cc: Song Liu <song@kernel.org>, Jiri Olsa <olsajiri@gmail.com>,
- bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- lsf-pc@lists.linux-foundation.org,
- Andrii Nakryiko <andrii.nakryiko@gmail.com>,
- Yonghong Song <yonghong.song@linux.dev>, Oleg Nesterov <oleg@redhat.com>,
- Daniel Borkmann <daniel@iogearbox.net>
-References: <ZeCXHKJ--iYYbmLj@krava>
- <23f9790d-4ab1-4edb-9262-6f982413b3e9@gmail.com> <ZedT8S-GjNOry5LZ@krava>
- <CAPhsuW5_6vkL58Efm3qL9G9W+7i=XVicoLXT6_G+T7TLx=zQJg@mail.gmail.com>
- <412c987b-b1c4-4761-83e4-d46c78a255be@gmail.com>
- <CABWLsevYANVb8TmOF69qtXeEjk6=NVQmsObrFG8r+oqSRMBxpw@mail.gmail.com>
- <097cc830-7a73-4fb8-9c97-b3b337a25f99@gmail.com>
- <CABWLses3HSLcYYHp64nb4CLxq9t7tifh9VzpSAnjnDDAGvr1UQ@mail.gmail.com>
-From: Kui-Feng Lee <sinquersw@gmail.com>
-In-Reply-To: <CABWLses3HSLcYYHp64nb4CLxq9t7tifh9VzpSAnjnDDAGvr1UQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-
-
-On 3/12/24 18:32, Andrei Matei wrote:
-> On Tue, Mar 12, 2024 at 1:16 PM Kui-Feng Lee <sinquersw@gmail.com> wrote:
->>
->>
->>
->> On 3/8/24 07:43, Andrei Matei wrote:
->>> On Thu, Mar 7, 2024 at 6:02 PM Kui-Feng Lee <sinquersw@gmail.com> wrote:
->>>>
->>>>
->>>>
->>>> On 3/5/24 15:53, Song Liu wrote:
->>>>> On Tue, Mar 5, 2024 at 9:18 AM Jiri Olsa <olsajiri@gmail.com> wrote:
->>>>>>
->>>>>> On Fri, Mar 01, 2024 at 11:39:03AM -0800, Kui-Feng Lee wrote:
->>>>>>>
->>>>>>>
->>>>>>>
->>>>>>> On 2/29/24 06:39, Jiri Olsa wrote:
->>>>>>>> One of uprobe pain points is having slow execution that involves
->>>>>>>> two traps in worst case scenario or single trap if the original
->>>>>>>> instruction can be emulated. For return uprobes there's one extra
->>>>>>>> trap on top of that.
->>>>>>>>
->>>>>>>> My current idea on how to make this faster is to follow the optimized
->>>>>>>> kprobes and replace the normal uprobe trap instruction with jump to
->>>>>>>> user space trampoline that:
->>>>>>>>
->>>>>>>>       - executes syscall to call uprobe consumers callbacks
->>>>>>>>       - executes original instructions
->>>>>>>>       - jumps back to continue with the original code
->>>>>>>>
->>>>>>>> There are of course corner cases where above will have trouble or
->>>>>>>> won't work completely, like:
->>>>>>>>
->>>>>>>>       - executing original instructions in the trampoline is tricky wrt
->>>>>>>>         rip relative addressing
->>>>>>>>
->>>>>>>>       - some instructions we can't move to trampoline at all
->>>>>>>>
->>>>>>>>       - the uprobe address is on page boundary so the jump instruction to
->>>>>>>>         trampoline would span across 2 pages, hence the page replace won't
->>>>>>>>         be atomic, which might cause issues
->>>>>>>>
->>>>>>>>       - ... ? many others I'm sure
->>>>>>>>
->>>>>>>> Still with all the limitations I think we could be able to speed up
->>>>>>>> some amount of the uprobes, which seems worth doing.
->>>>>>>
->>>>>>> Just a random idea related to this.
->>>>>>> Could we also run jit code of bpf programs in the user space to collect
->>>>>>> information instead of going back to the kernel every time?
->>>>>
->>>>> I was thinking about a similar idea. I guess these user space BPF
->>>>> programs will have limited features that we can probably use them
->>>>> update bpf maps. For this limited scope, we still need bpf_arena.
->>>>> Otherwise, the user space bpf program will need to update the bpf
->>>>> maps with sys_bpf(), which adds the same overhead as triggering
->>>>
->>>> That is true. However, even without bpf_arena, it still works with
->>>> some workarounds without going through sys_bpf().
->>>
->>> Anything making uprobes faster would be very welcomed for my project.  The
->>> biggest performance problem for us is the cost of bpf_probe_read_user()
->>> relative to raw memory access. Every call to this helper walks the process'
->>
->> "raw memory access"? Do you mean not going through any helper function,
->> reading from a pointer directly?
+Martin KaFai Lau wrote:
+> On 3/1/24 12:13 PM, Abhishek Chauhan wrote:
+> > Bridge driver today has no support to forward the userspace timestamp
+> > packets and ends up resetting the timestamp. ETF qdisc checks the
+> > packet coming from userspace and encounters to be 0 thereby dropping
+> > time sensitive packets. These changes will allow userspace timestamps
+> > packets to be forwarded from the bridge to NIC drivers.
+> > 
+> > Setting the same bit (mono_delivery_time) to avoid dropping of
+> > userspace tstamp packets in the forwarding path.
+> > 
+> > Existing functionality of mono_delivery_time remains unaltered here,
+> > instead just extended with userspace tstamp support for bridge
+> > forwarding path.
 > 
-> Right.
-> I recognize that, as long as bpf runs "in the kernel", one cannot simply
-> dereference a user-space pointer since the kernel is a different virtual memory
-> space (*). Still, I wish there bpf_probe_read_user() were faster.
+> The patch currently broke the bpf selftest test_tc_dtime: 
+> https://github.com/kernel-patches/bpf/actions/runs/8242487344/job/22541746675
 > 
-> (*) Or, is it indeed a different memory space or is the kernel's virtual
-> address space mapped into every process? Did this change through KPTI? I would
-> be curious to read a good resource on what exactly it means to switch from
-> user-space to the kernel and back, if such a thing exists.
-
-FYI! This is architecture dependent. AFAIK, with x86 platforms, kernel
-can access the memory of the user space directly if it is in a
-process/task context. But, you should not relies on it.
-
-If you look into bpf_probe_read_user(), it eventually do something like
-"rep movsb" on x86 platforms. Access user space memory directly with
-some extra checks. So, the bottleneck here can be the extra checks and
-memory copying. If you access small chunks like what you said bellow,
-the overhead of checks could be expensive.
-
+> In particular, there is a uapi field __sk_buff->tstamp_type which currently has 
+> BPF_SKB_TSTAMP_DELIVERY_MONO to mean skb->tstamp has the MONO "delivery" time. 
+> BPF_SKB_TSTAMP_UNSPEC means everything else (this could be a rx timestamp at 
+> ingress or a delivery time set by user space).
 > 
->>
->>> page table to check that the access would not cause a fault (I think); this is
->>> very slow. I wonder if there's some other option that would keep the safety
->>> requirement for the memory access -- I'm imagining an optimistic mode where the
->>> raw access is performed (in the target process' memory space) and, in the rare
->>> case when a fault happens, the kernel would somehow recover from the fault and
->>
->> I am not very familiar with this part. I read the implementation of
->> bpf_probe_read_user() a little bit. It does what you mentioned here. It
->> would cause page faults, however, the handler will skip the instruction
->> leaving the counter non-zero. By checking the counter, it knows the
->> instruction is not completed, and returns an error.
->>
->> I am curious about what your access pattern looks like. Does it access a
->> large number of small chunks of data? Or, does it access a small number
->> of big chunks of data?
+> __sk_buff->tstamp_type depends on skb->mono_delivery_time which does not 
+> necessarily mean mono after this patch. I thought about fixing it on the bpf 
+> side such that reading __sk_buff->tstamp_type only returns 
+> BPF_SKB_TSTAMP_DELIVERY_MONO when the skb->mono_delivery_time is set and skb->sk 
+> is IPPROTO_TCP. However, it won't work because of bpf_skb_set_tstamp().
 > 
-> My access pattern looks like a lot of small reads. Some of these reads could be
-> done at the same time if we had a vectorized API (i.e. some of the pointers are
-> known in advance); for others there are data dependencies (i.e. we need to
-> dereference a pointer to know what we'll want to read next). Specifically, the
-> use case is a debugger of sorts which uses BPF uprobes for poking around in the
-> target process' memory, rather than the more traditional ptrace-based
-> techniques (ptrace being very slow). This debugger needs to walk a lot of
-> thread stacks by following stack pointers or by using DWARF unwind information,
-> and then it further reads data structures from the target process' stacks and
-> heaps, chasing pointers recursively.
-
-
-A related information. You may already know that bpf_probe_read_user()
-can fail if a page fault happens.  A vectorized API probably doesn't
-change it. It is a limitation of non-sleepable BPF programs. Sleepable 
-BPF programs should be able to overcome it.
-
-
+> There is a bpf helper, bpf_skb_set_tstamp(skb, tstamp, 
+> BPF_SKB_TSTAMP_DELIVERY_MONO). This helper changes both the skb->tstamp and the 
+> skb->mono_delivery_time. The expectation is this could change skb->tstamp in the 
+> ingress skb and redirect to egress sch_fq. It could also set a mono time to 
+> skb->tstamp where the udp sk->sk_clockid may not be necessary in mono and then 
+> bpf_redirect to egress sch_fq. When bpf_skb_set_tstamp(skb, tstamp, 
+> BPF_SKB_TSTAMP_DELIVERY_MONO) succeeds, reading __sk_buff->tstamp_type expects 
+> BPF_SKB_TSTAMP_DELIVERY_MONO also.
 > 
+> I ran out of idea to solve this uapi breakage.
 > 
->>
->>> fail the bpf_probe_read_user() helper. Would something like that be technically
->>> feasible / has there been any prior interest in faster access to user memory
->>>
->>> A more limited option that might be helpful would be a vectorized version of
->>> bpf_probe_read_user() that verifies many pointers at once.
->>>
->>>
->>>>
->>>>> the program with a syscall.
->>>>>
->>>>>>
->>>>>> sorry for late reply, do you mean like ubpf? the scope of this change
->>>>>> is to speed up the generic uprobe, ebpf is just one of the consumers
->>>>>
->>>>> I guess this means we need a new syscall?
->>>>>
->>>>> Thanks,
->>>>> Song
->>>>
+> I am afraid it may need to go back to v1 idea and use another bit 
+> (user_delivery_time) in the skb.
+
+Is the only conflict when bpf_skb_set_tstamp is called for an skb from
+a socket with sk_clockid set (and thus SO_TXTIME called)?
+
+Interpreting skb->tstamp as mono if skb->mono_delivery_time is set and
+skb->sk is NULL is fine. This is the ingress to egress redirect case.
+
+I don't see an immediate use for this BPF function on egress where it
+would overwrite an SO_TXTIME timestamp and now skb->tstamp is mono,
+but skb->sk != NULL and skb->sk->sk_clockid != CLOCK_MONOTONIC.
+
+Perhaps bpf_skb_set_tstamp() can just fail if another delivery time is
+already explicitly programmed?
+
+    skb->sk &&
+    sock_flag(sk, SOCK_TXTIME) &&
+    skb->sk->sk_clockid != CLOCK_MONOTONIC
+
+Either that, or unset SOCK_TXTIME to make sk_clockid undefined and
+fall back on interpreting as monotonic.
+
+
