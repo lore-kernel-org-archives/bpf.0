@@ -1,189 +1,179 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AEAB4E1CE;
-	Wed, 13 Mar 2024 21:05:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB92E55C0A
+	for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 21:13:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710363929; cv=none; b=TpUMb+yN41rBy+UYyvVk95KfwaKQR2NcJsLV1zzkgBSB2havicQ+LDpBbV8OcEjldoBOTrgg4YVnd3e6n5ffoDLWzckSLcOubWRdExcMAwhpwyb3mIPpC63GEzYazueZNGEOYDx10TxVL02f+vvIWbczTsJwlkoJUGrHnxNTa5w=
+	t=1710364394; cv=none; b=qNL71Hr1W6qcih/dOd1vgU80yzNDdHebqB8QMigGztsN7RwmTH6b8OpHvJTyvdo2B9LrARI/PntXhhPt9b0Y0cknO+vsS06mjF3lOUUAPO9m4g8pMgbF1y1D9G7dMVtNzehgTDOd8C9OKdaiAgLkhHfGk9zf8f/IiNL7BeTd/FI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710363929; c=relaxed/simple;
-	bh=CH2rZ4PLi2IfM/uHiuMK9LdURXsrNx68tG+esLsv5Bw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kTQpwkcv41Mqlc3oEUFkQOzmC6vt0UoBs0ux66xDsbpvK2urSAb9YUCLq0sluV8V4RAGJStZa09i2+hEKbr92pRrb6xTofPp8r+DudlIVuiFSPkH0r/xdkHINfnQglmJWwL43/cLTp1RUQkP4rdNiuIGrc/sDL4bA7YsXHjhasA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jc+8nY0g; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710364394; c=relaxed/simple;
+	bh=piG2rXxZoNWNLHVe2jt8nXi/uTj0WnUwIhx6oIXRqiE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=UnHwG8JnBE5k9Kt5vAaqSDkkxXkaMJ7mUeGNaw9lP+bGK8BJf9MKib7hmYOO5wNu0qn+m4fjl9XQEanrYO2wQGsw1Qf+fgO1bmwY8s+/lgDnAWXJmR2l6XLh/jsfMIEt9Nrgac7Z9Et3NnVQxf3rKZr/RJohGkS3it6ah+lLubU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gy0uLXjs; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jc+8nY0g"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-33e7ae72312so203013f8f.1;
-        Wed, 13 Mar 2024 14:05:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gy0uLXjs"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-6e6bab4b84dso367752b3a.0
+        for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 14:13:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710363926; x=1710968726; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yZzVp1B0o1fPUeYOWrqe1Q57q16dmLKhwAmLef5VA14=;
-        b=Jc+8nY0g+HgXorpBon5IbPHDFTq4f4avVkggDJJwl5h13KOUZQu6oMVfm9h/5ve63X
-         inQEginxALP4HZwdofFK4tJr6OEZR3v+VnAxqqIE6tpoLhz/LZmoff4LLldd7ZalLUtj
-         R5/jVBHKpzXKoTwHYHZ6PwcieUykDU8h+f4g1x0zegzklIXVKymBX7I1WkF4MhR3074U
-         0tfjXnXNlkRCH7/10OtZbUVT9kRxJDlUe/sFGEAOvuG2VeRYAvX5F7LxZ8HizC7/fPxB
-         WHtVS3vxLiHsY7Xsq+gRIFwLIVwP4VwZhyXMqM9L66Bzew5cEZeVt3kY2lDXmq4fQSi5
-         uqnw==
+        d=google.com; s=20230601; t=1710364392; x=1710969192; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=U7ymW/w6FN24g8YRZdKxVTQojlAvJL0x5K9BRhatGis=;
+        b=gy0uLXjsCVaWqKT1FEzmF34Idu1DsL7GrwRnv5bWkYvWvQkoHFHUEyui2FdCem0Lkw
+         aJk1j+88CQW3injxyKmV9l7rYNfIA/geAP4cU4glR+yb9QwYmT5eDIIZFL0teszjizLm
+         OAtmKqTwZd8cRp3D7Vj4WWavqmx2mrxa/AILGij/PRHal0Pk+F7LeCjqamcBAlPAs+1c
+         WbJb1hOtwe5tKH3mUDlRgKPskROETlkt8A1iaf7PsrM8FA8vBsi8ELLq0TGiw4KboYHb
+         aVyQW01srMHpoQWU1wTHlOgDKhgzFFfZjNrIwst8OG47U5pUO6ICT1CVG5Xsc1i7wtIA
+         jpJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710363926; x=1710968726;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yZzVp1B0o1fPUeYOWrqe1Q57q16dmLKhwAmLef5VA14=;
-        b=cNtSTjnbTtMQ5wkSpGnHMQWL2RRaBR+QpMVJwW9BjXuxwJq3oL1HUi1JDren+Lbx5f
-         BlvL5jt6Y2ss34638on6VqpdThkH/NngmV68QENcQyUoVJOgPz9Yw0Vl3GtwsKePmYWE
-         mMR3SfgDXVc5eVDhlS2OVoVNx9x6UlN/wXO2egibIimdEdB+3CjUjzvv9NEp0XuqPzq/
-         NZR0IW6mYepd5EFdvB8Ca72i4mFXBADbE5+HQ8ORLw9iEv4zBsntfTkyI/J0Cvx/USLO
-         1T+a8SdxBkQq0IAU5iG+zrF3CDpXKbN6gB4/tIF0HhJu6yScJjbqnwdaha6IN5g+4nPK
-         KJdg==
-X-Forwarded-Encrypted: i=1; AJvYcCUlyBEQ7s6KWa65C2N4jf68C3wnwB+MaTTy9NJjEtlzXKhV+yeDD075IMphfIVRWp3TNZC4+VLpMNXmQ1ZE/6Fcq824DSOFStIPC4m+Ftf9RMDLC0I8zbDdOOOnX1THzfWYYGluiwzMe/3zRuVDeteNZD9fu+/mqRDu3TWBABv0/Wky1sUh+5fLSw==
-X-Gm-Message-State: AOJu0YyrWTfM8Ady+fVQamnMBRfm7SEdGq/MDnXS+TOj3llSnnF4uHsr
-	xzLuZlaIDPoBkAWaG5oCvH+C3Xz3WIj85S3gNUrF1QrWOCLvYaNDaoDVFz3oZ3Qq0dlTZYvNHwa
-	UPHSH7fj38qunx6AEQJc4Zh4FhBU=
-X-Google-Smtp-Source: AGHT+IFDFscIvQkKhWL6uTHrhCEwdvqJ5pjqZbod6Uv4pkjnS2CrY1wfRH/QplSvK4c2Ab2/TnZ4YDaEDqej2LD7zf8=
-X-Received: by 2002:adf:ffcc:0:b0:33d:2775:1e63 with SMTP id
- x12-20020adfffcc000000b0033d27751e63mr2732491wrs.41.1710363925428; Wed, 13
- Mar 2024 14:05:25 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710364392; x=1710969192;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U7ymW/w6FN24g8YRZdKxVTQojlAvJL0x5K9BRhatGis=;
+        b=haqyeuk4Ta2ydezyR8iuAL0XMDB4ZzRzF4Ui3qPVfqmYx+eDBjPUXb35btJ6DG9iDC
+         7bGO+xF9G3BEhlUuXbCDZ1cxxMT/kd8Vv9N1/OJgmbrBkHBE3oVohgqnvo8CmeXS63g0
+         rA6bGMtSzzgTsLhZjZ+cFHubNpetvEi2mZKFdLw5kTp7MTYQEkdNgqXYXB7nEqGF0TxO
+         8zFHSp26Z5d4y1jmY8GDarqTSndUaolAulEkNb3LdseuOGxWzgd+44qq5LSA3bnT+lQ4
+         u6PImksm4I1xLt/7vqTuqsqCt9yH+FWH/hXiehqHan6jrB4eUBaYWeitfDDZ50JbzeZB
+         GLRw==
+X-Gm-Message-State: AOJu0Yz8J/+K0f5EOBNauEnl3AVga3SM0o7g+QJD+x7K5GISPQpwlFhC
+	oO+4rCY04smHz/RGqPgT2SN/0xyP8gmdYO+LH2iHQdFBM44pg4NIcRkrPL2DRnKAD8jqrGe8vQB
+	icTgNq+gwZmzQoJbVQKWdSHT/PlX065ClRlqfTAEIfhEMYzOF1vn+nx7F4oYVRCKtaxjAYTZxYG
+	bYf7k+EQXilaGr
+X-Google-Smtp-Source: AGHT+IElkCQ8oXEWAyf1Mjd+P6pBGxvu9W8jGip/cU2tnBq7HxdCXu0HnP9HaR0PKh5rC/x5BreznoU=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a05:6a00:1884:b0:6e5:e596:55ae with SMTP id
+ x4-20020a056a00188400b006e5e59655aemr226258pfh.1.1710364391669; Wed, 13 Mar
+ 2024 14:13:11 -0700 (PDT)
+Date: Wed, 13 Mar 2024 14:13:10 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <cover.1709675979.git.mattbobrowski@google.com>
- <20240306-flach-tragbar-b2b3c531bf0d@brauner> <20240306-sandgrube-flora-a61409c2f10c@brauner>
- <CAADnVQ+RBV_rJx5LCtCiW-TWZ5DCOPz1V3ga_fc__RmL_6xgOg@mail.gmail.com>
- <20240307-phosphor-entnahmen-8ef28b782abf@brauner> <CAADnVQLMHdL1GfScnG8=0wL6PEC=ACZT3xuuRFrzNJqHKrYvsw@mail.gmail.com>
- <20240308-kleben-eindecken-73c993fb3ebd@brauner> <CAADnVQJVNntnH=DLHwUioe9mEw0FzzdUvmtj3yx8SjL38daeXQ@mail.gmail.com>
- <20240311-geglaubt-kursverfall-500a27578cca@brauner>
-In-Reply-To: <20240311-geglaubt-kursverfall-500a27578cca@brauner>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 13 Mar 2024 14:05:13 -0700
-Message-ID: <CAADnVQLnzrxyUM-EiorEP_qvfmdiSK5Kj1WtGjFoAogygHSvmA@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 0/9] add new acquire/release BPF kfuncs
-To: Christian Brauner <brauner@kernel.org>
-Cc: Matt Bobrowski <mattbobrowski@google.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@google.com>, 
-	Jann Horn <jannh@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	linux-mm <linux-mm@kvack.org>, LSM List <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Message-ID: <ZfIW5n6qBzPITavK@google.com>
+Subject: [ANN] bpf development stats for 6.9
+From: Stanislav Fomichev <sdf@google.com>
+To: bpf@vger.kernel.org
+Cc: kuba@kernel.org
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 11, 2024 at 5:01=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
->
-> > > > One can argue that get_mm_exe_file() is not exported,
-> > > > but it's nothing but rcu_lock-wrap plus get_file_rcu()
-> > > > which is EXPORT_SYMBOL.
-> > >
-> > > Oh, good spot. That's an accident. get_file_rcu() definitely shouldn'=
-t
-> > > be exported. So that'll be removed asap.
-> >
-> > So, just to make a point that
-> > "Included in that set are functions that aren't currently even
-> > exported to modules"
-> > you want to un-export get_file_rcu() ?
->
-> No. The reason it was exported was because of the drm subsystem and we
-> already quite disliked that. But it turned out that's not needed so in
-> commit 61d4fb0b349e ("file, i915: fix file reference for
-> mmap_singleton()") they were moved away from this helper.
+As usual, following up with BPF stats after the netdev posted theirs.
+See https://lore.kernel.org/netdev/20240312124346.5aa3b14a@kernel.org/
+for more info.
 
-Arguably that commit 61d4fb0b349e should have had
-Fixes: 0ede61d8589c ("file: convert to SLAB_TYPESAFE_BY_RCU")
-i915 was buggy before you touched it
-and safe_by_rcu exposed the bug.
-I can see why you guys looked at it, saw issues,
-and decided to look away.
-Though your guess in commit 61d4fb0b349e
-"
-    Now, there might be delays until
-    file->f_op->release::singleton_release() is called and
-    i915->gem.mmap_singleton is set to NULL.
-"
-feels unlikely.
-I suspect release() delay cannot be that long to cause rcu stall.
-In the log prior to the splat there are just two mmap related calls
-from selftests in i915_gem_mman_live_selftests():
-i915: Running i915_gem_mman_live_selftests/igt_mmap_offset_exhaustion
-i915: Running i915_gem_mman_live_selftests/igt_mmap
-1st mmap test passed, but 2nd failed.
-So it looks like it's not a race, but an issue with cleanup in that driver.
-And instead of getting to the bottom of the issue
-you've decided to paper over with get_file_active().
-I agree with that trade-off.
-But the bug in i915 is still there and it's probably an UAF.
-get_file_active() is probably operating on a broken 'struct file'
-that got to zero, but somehow it still around
-or it's just a garbage memory and file->f_count
-just happened to be zero.
+6.8 stats: https://lore.kernel.org/bpf/ZaA6-k5pU5nZJZtI@google.com/
 
-My point is that it's not ok to have such double standards.
-On one side you're arguing that we shouldn't introduce kfunc:
-+__bpf_kfunc struct file *bpf_get_task_exe_file(struct task_struct *task)
-+{
-+ return get_task_exe_file(task);
-+}
-that cleanly takes ref cnt on task->mm->exe_file and _not_ using lower
-level get_file/get_file_rcu/get_file_active api-s directly which
-are certainly problematic to expose anywhere, since safe_by_rcu
-protocol is delicate.
+Previous cycle:
+27 Oct to 10 Jan: 5795 mailing list messages, 75 days, 77 messages per day
+624 repo commits (8 commits/day)
 
-But on the other side there is buggy i915 that does
-questionable dance with get_file_active().
-It's EXPORT_SYMBOL_GPL as well and out of tree driver can
-ruin safe_by_rcu file properties with hard to debug consequences.
+Current cycle:
+9 Jan to 11 Mar: 4536 mailing list messages, 62 days, 73 messages per day
+602 repo commits (10 commits/day)
 
-> There is absolutely no way that any userspace will
-> get access to such low-level helpers. They have zero business to be
-> involved in the lifetimes of objects on this level just as no module has.
+Top reviewers (cs):                  Top reviewers (msg):               =20
+   1 ( +2) [5] Yonghong Song            1 ( +1) [18] Andrii Nakryiko    =20
+   2 (   ) [5] Andrii Nakryiko          2 ( +2) [14] Yonghong Song      =20
+   3 ( -2) [5] Alexei Starovoitov       3 ( -2) [12] Alexei Starovoitov =20
+   4 ( +1) [3] Jiri Olsa                4 ( -1) [10] Eduard Zingerman   =20
+   5 ( +2) [3] Martin KaFai Lau         5 ( +1) [ 8] Martin KaFai Lau   =20
+   6 (***) [2] David Vernet             6 (***) [ 8] David Vernet       =20
+   7 ( -1) [2] Daniel Borkmann          7 ( -2) [ 5] Jiri Olsa          =20
+   8 ( -4) [2] Eduard Zingerman         8 ( +1) [ 4] Daniel Borkmann    =20
+   9 (   ) [1] Jakub Kicinski           9 (+25) [ 4] Toke H=C3=B8iland-J=C3=
+=B8rgensen
+  10 ( -2) [1] John Fastabend          10 (+36) [ 4] Jason Wang         =20
+  11 (   ) [1] Song Liu                11 ( +2) [ 3] Jakub Kicinski     =20
+  12 (+16) [1] Toke H=C3=B8iland-J=C3=B8rgensen   12 ( -4) [ 3] John Fastab=
+end     =20
+  13 (+27) [1] Paolo Abeni             13 (+30) [ 3] Kumar Kartikeya Dwived=
+i
+  14 (+10) [1] Quentin Monnet          14 (+13) [ 3] Christoph Hellwig  =20
+  15 ( -5) [1] Stanislav Fomichev      15 ( -5) [ 3] Song Liu           =20
 
-correct, and kfuncs do not give bpf prog to do direct get_file*() access
-because we saw how tricky safe_by_rcu is.
-Hence kfuncs acquire file via get_task_exe_file or get_mm_exe_file
-and release via fput.
-That's the same pattern that security/tomoyo/util.c is doing:
-   exe_file =3D get_mm_exe_file(mm);
-   if (!exe_file)
-        return NULL;
+Top authors (cs):                    Top authors (msg):                 =20
+   1 (   ) [2] Andrii Nakryiko          1 ( +2) [14] Kui-Feng Lee       =20
+   2 (+34) [2] Dave Thaler              2 (+10) [14] Xuan Zhuo          =20
+   3 (   ) [1] Yonghong Song            3 ( -1) [12] Masami Hiramatsu (Goog=
+le)
+   4 (***) [1] "Jose E. Marchesi"       4 ( -3) [11] Andrii Nakryiko    =20
+   5 (***) [1] Kui-Feng Lee             5 (+22) [11] Alexei Starovoitov =20
+   6 ( +7) [1] Alexei Starovoitov       6 ( +3) [ 9] Eduard Zingerman   =20
+   7 (***) [1] Puranjay Mohan           7 (+22) [ 8] Ian Rogers         =20
+   8 ( -4) [1] Jiri Olsa                8 (***) [ 5] Benjamin Tissoires =20
+   9 (***) [1] Toke H=C3=B8iland-J=C3=B8rgensen    9 (+13) [ 4] Jamal Hadi =
+Salim   =20
+  10 (+24) [1] Ian Rogers              10 ( -2) [ 4] Yafang Shao        =20
 
-   cp =3D tomoyo_realpath_from_path(&exe_file->f_path);
-   fput(exe_file);
+Top scores (positive):               Top scores (negative):             =20
+   1 ( +3) [78] Yonghong Song           1 ( +5) [54] Xuan Zhuo          =20
+   2 (***) [57] Andrii Nakryiko         2 ( -1) [44] Masami Hiramatsu (Goog=
+le)
+   3 (   ) [48] Martin KaFai Lau        3 ( -1) [44] Kui-Feng Lee       =20
+   4 (***) [38] David Vernet            4 (+17) [30] Ian Rogers         =20
+   5 ( -4) [35] Alexei Starovoitov      5 (***) [19] Benjamin Tissoires =20
+   6 ( -1) [32] Jiri Olsa               6 (***) [13] Matt Bobrowski     =20
+   7 ( +2) [30] Daniel Borkmann         7 ( +1) [11] Yafang Shao        =20
+   8 ( -1) [21] Jakub Kicinski          8 ( +7) [10] Jamal Hadi Salim   =20
+   9 (***) [19] Song Liu                9 (***) [10] Choong Yong Liang  =20
+  10 (+24) [17] Christoph Hellwig      10 (***) [10] Alexander Lobakin  =20
 
-in bpf_lsm case it will be:
+Company rankings
+----------------
 
-   exe_file =3D bpf_get_mm_exe_file(mm);
-   if (!exe_file)
-   // the verifier will enforce that bpf prog has this NULL check here
-   // because we annotate kfunc as:
-BTF_ID_FLAGS(func, bpf_get_mm_exe_file, KF_ACQUIRE | KF_TRUSTED_ARGS |
-KF_RET_NULL)
+Top reviewers (cs):                  Top reviewers (msg):               =20
+   1 (   ) [12] Meta                    1 (   ) [52] Meta               =20
+   2 (   ) [ 7] Isovalent               2 ( +5) [15] RedHat             =20
+   3 ( +2) [ 4] RedHat                  3 ( -1) [14] Isovalent          =20
+   4 (   ) [ 3] Google                  4 (   ) [ 9] Google             =20
+   5 ( -2) [ 2] Intel                   5 ( -2) [ 5] Intel              =20
+   6 ( +1) [ 1] Huawei                  6 ( +7) [ 4] Oracle             =20
+   7 ( +1) [ 1] Oracle                  7 ( -1) [ 4] Huawei             =20
 
- bpf_path_d_path(&exe_file->f_path, ...);
- bpf_put_file(exe_file);
-// and the verifier will enforce that bpf_put_file() is called too.
-// and there is no path out of this bpf program that can take file refcnt
-// without releasing.
+Top authors (cs):                    Top authors (msg):                 =20
+   1 (   ) [8] Meta                     1 (   ) [52] Meta               =20
+   2 ( +1) [3] Google                   2 (   ) [28] Google             =20
+   3 (+27) [2] Microsoft                3 ( +3) [14] Alibaba            =20
+   4 (+22) [2] Oracle                   4 ( +1) [12] Intel              =20
+   5 ( -3) [2] Intel                    5 (+10) [11] RedHat             =20
+   6 ( +1) [2] RedHat                   6 ( -2) [ 9] Isovalent          =20
+   7 ( -2) [2] Huawei                   7 ( -4) [ 8] Huawei             =20
 
-So really these kfuncs are a nop from vfs pov.
-If there is a bug in the verifier we will debug it and we will fix it.
+Top scores (positive):               Top scores (negative):             =20
+   1 (   ) [79] Isovalent               1 ( +1) [57] Google             =20
+   2 (***) [66] Meta                    2 ( +1) [55] Alibaba            =20
+   3 (   ) [29] RedHat                  3 (***) [12] Intel              =20
+   4 (***) [17] Unknown                 4 ( +3) [11] Juniper Networks   =20
+   5 (   ) [13] Linux Foundation        5 ( +1) [11] Amazon             =20
+   6 ( +3) [12] ARM                     6 ( +4) [ 9] Mojatatu           =20
+   7 (+48) [11] Oracle                  7 (+15) [ 9] Loongson           =20
 
-You keep saying that bpf_d_path() is a mess.
-Right. It is a mess now and we're fixing it.
-When it was introduced 4 years ago it was safe at that time.
-The unrelated verifier "smartness" made it possible to use it in UAF.
-We found the issue now and we're fixing it.
-Over these years we didn't ask vfs folks to help fix such bugs,
-and not asking for help now.
-You're being cc-ed on the patches to be aware on how we plan to fix
-this bpf_d_path() mess. If you have a viable alternative please suggest.
-As it stands the new kfuncs are clean and safe way to solve this mess.
+More raw stats
+--------------
+
+Prev: start: Fri, 27 Oct 2023 13:33:09 -0700
+	end: Wed, 10 Jan 2024 14:29:01 -0500
+Prev: messages: 5795 days: 75 (77 msg/day)
+Prev: direct commits: 624 (8 commits/day)
+Prev: people/aliases: 246  {'author': 87, 'commenter': 105, 'both': 54}
+Prev: review pct: 33.49%  x-corp pct: 29.97%
+
+Curr: start: Tue, 09 Jan 2024 14:38:27 -0800
+	end: Mon, 11 Mar 2024 13:51:49 -0700
+Curr: messages: 4536 days: 62 (73 msg/day)
+Curr: direct commits: 602 (10 commits/day)
+Curr: people/aliases: 249  {'author': 79, 'commenter': 117, 'both': 53}
+Curr: review pct: 37.04%  x-corp pct: 31.89%
+
+Diff: -5.3% msg/day
+Diff: +16.7% commits/day
+Diff: +22.4% people/day
+Diff: review pct: +3.5%
+      x-corp pct: +1.9%
