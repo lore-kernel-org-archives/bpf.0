@@ -1,74 +1,87 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AAD47581A
-	for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 19:49:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40893745C2
+	for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 19:58:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710445776; cv=none; b=C03SHN2+rYaR+E7/vv45/BMAkyM8aLTzABIPDn52PAzCiW1EXN9ukqrVyZkMFCciL0jW1Yt0xWf+XT+erI/MMZhFlEx6FHuTaum+6elYkGnnZ+NFLtkLo1WbS20Q5NYVdqddjlGwi5KdnQazM/dzHqJXQOC/b/5XxRc2vV7XIzc=
+	t=1710446295; cv=none; b=Jl9bIBhScZ6UHwTEtFq7RwQAndM0If5czL/dAyaZD/FQcpPezPuqQxsKdnkmmHFs9ohF1lB7csbhKyZw+FBTvXvHzL9MIDiLTTdk/W9YqYA91r3fElFmBjckBSDJpGOqomRPD6YPHp0ivJo1VJFlNqNxkHOBMpjqOAuC1GCSgwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710445776; c=relaxed/simple;
-	bh=eTb1llV14lFOY7Mfvc2Fh172nxYzr/K5JJ8fOBamn5E=;
+	s=arc-20240116; t=1710446295; c=relaxed/simple;
+	bh=k5L70YjQtcebyW7j7pebpGqB7rUmeGtwijsYoD0/3L0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=YxNp6iDNq9rWIW6ioM9b4wbfaWr6QZvqxBmRJISrldx3PGJnBDLurHY9k50RfIe1qkeN2CRH5YeXtd68r9I3WBq+W+2XV3graSa89wjrEVDhtODm4ilRfbc/Q42JbaplTPQSQxSL6xIasLF6YGI9LTeAbtXhWJBUCmtOPe7yROY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4ADRTT4Z; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=c14NtVrvn+qrI5Je/9Wr74EQStHnFTkBL8p3kgWxBMKKyhacRBH2PO7A8sr8QnZP+UkYam7yB8W0AdVAK69+Bb/cSkqxmnh7Tz9d0qQ3fHRuNmAIlOHwnYQHaZax0Y/oilMfZsPcWuJ4sjbkcZIn+U3n88SmoCZ41bYbXofXX4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0ym0MBlP; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4ADRTT4Z"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-5dc1548ac56so1031547a12.3
-        for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 12:49:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0ym0MBlP"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-6e6b285aaa4so1353473b3a.2
+        for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 12:58:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710445774; x=1711050574; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1710446293; x=1711051093; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2WHGxSU9IPjQW9dUVAK+wHIU1TrHuG0KptgMPY8Ca3g=;
-        b=4ADRTT4ZEkfarIrO429gLquSV6Ce/lL+2Qi/TyuwP6LLxp4/p9mieRTC6OWWDv/DEU
-         0grjQkaelamlgD1zRTmXuSDkjuhmLvhBNYOiQjw0P2y/EmfeVZLsnQ7ZvW1YX9ljo8T2
-         hK3RMYWdX4Fed+q5ykMKDkNASjk/EXLzBHJWzGlhGpmqRKUlmU851rMic2H3yIsURP5i
-         DAMQupKLKrAw/xTd+bQxX7wHh2BY5iuO0Yc5AiiTbkZ05HQ3JEjEZ8vPJi5oZ3K9NiHD
-         w8vC+DpsliRgE9RF4QyvQTESM1MZW/mFscWC8G9rK9pgfNNQZvqvH/dqfsV6VJU7ievh
-         HzJQ==
+        bh=2e1f2XK1eQ3NPEdZ+dCuxwXuK529rbVT2WWTiYufja0=;
+        b=0ym0MBlPOHflb2zj5oShlDfhuU17s1U2na5R9qnkFrDib2ieH7T2fhQ81fpX5o1uj7
+         bJdhNL1aIR8+LMWaTEhbe08PeKAtskXPGQYXSmkbmn8uijk/fHupJdRlCpC1jVJLkUQU
+         Ond7vb13q9IQAdxb4S0QbsZzUoQ/7pyPiFOm2Qo6bYL/HjKlJkyzZZWU/xxgj2rhTQvW
+         t8RoSn8cekvm5svCmd8cGVHzWlp51a03J2D5gGeuYs3d03hu6gDUHfGCXKbvzxVSkJC8
+         NDmgHvJNHONZ0pw4S1uAIzI/N7uHstv8gm07IHbqz4Om+NsEUhf2OPT7A2kWAeaje7T6
+         MlhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710445774; x=1711050574;
+        d=1e100.net; s=20230601; t=1710446293; x=1711051093;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2WHGxSU9IPjQW9dUVAK+wHIU1TrHuG0KptgMPY8Ca3g=;
-        b=J4wTpBJALBt06A7ihKvb92pXjI2/zGrQH3I2bTbdAHwCMABOkumIRIFBZYkDC5KAX8
-         CcacO7OyXeR0aGFz+qFGwlrz2RzHt7FsO2oktBKnVA7aaSXWPBOL5mjyQANNetEcIosY
-         Tp6DMzLE5LLcc3u2oaGBqTWbkJO6UwXhWp0SIkZJy6ici5bZt9Be/ODidWLHAgpJ9+0D
-         V9IdFmvLsJZbqI4MA2Pkb93FoYbLWaI/YLPCTFHVyORJV/7hK1cPf2SX3Ul0lhlfETMV
-         9KmX2K3XkrEJsnjzqDLoxLs+fCSr5Uvys4z78lc0vfg1L7IPph9DET8TERZVgyyRpZ7C
-         lIxg==
-X-Gm-Message-State: AOJu0Yy7Gt1Ks3/JYXIcbdGjDVlAXRQfuzoY+mA+51L8hkWAQpEaXutQ
-	fB3PpxRDYls/zePB40hlEyCjpnNN2yCFbU/iEzq6n+UiNWkaGK64e2a8WmGwElzZWw==
-X-Google-Smtp-Source: AGHT+IH4dzX6VMa/pVED5Bm7/4BtgzD0/zs/ugUl5V9GqxVxxyruiSD54Q0WW/hDLdHl3MW1q/P/ck8=
+        bh=2e1f2XK1eQ3NPEdZ+dCuxwXuK529rbVT2WWTiYufja0=;
+        b=UwAsIfosbbi3HJAtvtMngairS6KodzpmuBs3RX3J4E/5D9IFl71WyUitFPOmmfeoeL
+         ZJN/YW802V2jOR8vk0KUEHzA9q53WrfI3V3SGF+hwQ/m/auI1UYDowU/J4oI8yAlQvCF
+         EZQbbyVJXTUW53UouL5sWaNmm5cav5pouey8EMAdCgaPiRoXM6MY9kXnVLqdZ/N4K+2g
+         +HuNdAXRASXqO3n9V6jLQe5t/eIRIkAcMMdlP7AxmXi+ngqk0AC9D2svuR8yz5LBTHRb
+         29YZt4S8UiMMNxFVn5VedOfNBWivlINdWObiEi1sCCmztnbVK/XvMEklI8/xQZidb0Mm
+         4PvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXgQqRcvBx7jWJWzzP0+APmKtZ11n5rkqj9n54qVsQjJAVni5ak8G/5O9LjasqxggPvxbTaSGCUAPIM8MeCF2LQgLJJ
+X-Gm-Message-State: AOJu0Yx0zUgAjRpJ+TEImtV4Bsxt6YeOY+TNLr34vY2gS4ZxETmqmmX8
+	YTatqBh6tGGPn0oiiJ3QLaQbcj2/49aCkEL3FV8fK7P+q6nvYmAon4ymoeQ5BLtZIQ==
+X-Google-Smtp-Source: AGHT+IHL+1mRyxkztlcgl4k+NAL+OM/Frr4qWCn9roU7Mv8Py49mJym9LFBgZymIb9Pc/5Z/SlNcADA=
 X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:902:d4ca:b0:1dd:a324:30b5 with SMTP id
- o10-20020a170902d4ca00b001dda32430b5mr7985plg.9.1710445774438; Thu, 14 Mar
- 2024 12:49:34 -0700 (PDT)
-Date: Thu, 14 Mar 2024 12:49:32 -0700
-In-Reply-To: <20240314000127.3881569-1-andrii@kernel.org>
+ (user=sdf job=sendgmr) by 2002:a05:6a00:17a9:b0:6e6:9a3c:3748 with SMTP id
+ s41-20020a056a0017a900b006e69a3c3748mr102635pfg.0.1710446293477; Thu, 14 Mar
+ 2024 12:58:13 -0700 (PDT)
+Date: Thu, 14 Mar 2024 12:58:12 -0700
+In-Reply-To: <20240314103153.2489252-1-ben.dooks@codethink.co.uk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20240314000127.3881569-1-andrii@kernel.org>
-Message-ID: <ZfNUzGekvbipa7im@google.com>
-Subject: Re: [PATCH bpf-next] bpf: preserve sleepable bit in subprog info
+References: <20240314103153.2489252-1-ben.dooks@codethink.co.uk>
+Message-ID: <ZfNW1GDMlRW2K__p@google.com>
+Subject: Re: [PATCH] bpf: remove trunctaiton warning in BPF_LD_IMM64_RAW
 From: Stanislav Fomichev <sdf@google.com>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	martin.lau@kernel.org, kernel-team@meta.com
+To: Ben Dooks <ben.dooks@codethink.co.uk>
+Cc: ast@kernel.org, daniel@iogearbox.net, bpf@vger.kernel.org
 Content-Type: text/plain; charset="utf-8"
 
-On 03/13, Andrii Nakryiko wrote:
-> Copy over main program's sleepable bit into subprog's info. This might
-> be important for, e.g., freplace cases.
+On 03/14, Ben Dooks wrote:
+> When building W=1, the following warningds get generated by lib/test_bpf.c
+> due to the BPF_LD_IMM64_RAW() truncating a 64bit to 32bit value without
+> a specific mask to do so.
 > 
-> Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> lib/test_bpf.c:6441:25: warning: cast truncates bits from constant value (ffffffff0000 becomes ffff0000)
+> lib/test_bpf.c:6442:25: warning: cast truncates bits from constant value (ffffffff0000 becomes ffff0000)
+> lib/test_bpf.c:6473:25: warning: cast truncates bits from constant value (123456789abcdef becomes 89abcdef)
+> lib/test_bpf.c:6489:25: warning: cast truncates bits from constant value (123456789abcdef becomes 89abcdef)
+> lib/test_bpf.c:6490:25: warning: cast truncates bits from constant value (123456780a0c0e0 becomes 80a0c0e0)
+> lib/test_bpf.c:6599:25: warning: cast truncates bits from constant value (123456789abcdef becomes 89abcdef)
+> lib/test_bpf.c:6637:25: warning: cast truncates bits from constant value (ffffffff0000 becomes ffff0000)
+> 
+> (more warnings truncated)
+> 
+> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+
+I wonder how many other places (in the kernel) we have where we silently
+cast u64 to u32.. Surprised that's the only warning you get :-)
 
 Acked-by: Stanislav Fomichev <sdf@google.com>
