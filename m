@@ -1,147 +1,123 @@
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1645D8F8
-	for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 14:25:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED13071749;
+	Thu, 14 Mar 2024 15:00:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710426336; cv=none; b=QSm7uEt8SWR50ukUmnO63SR+NwnVhupFXpngyAcBve//KBRsp2oJ0egZIdYzNL+/7YPFkcT0Lml1B/1IjdnAmFZy+vq0giqxZI12Bk8cuZapeEEZ2RuuqXy6xD1w8ecbVv0jQvHxLgFCMVpsa2f4YvpsKgbRUE1gZ+Te3EEFnYA=
+	t=1710428410; cv=none; b=Y3PBN5eZB5TO/iy4vdrhzvPayM7lqMeFXrFgFxhOLOPP6UfJ2wmycN++pxxBDE9MxxWzMttFB5t19dmhVLSkspcGc/WBX3z3sYJQVRAzvvOu7Vfw2xqxTc7kKo3yPTP4iyhrDKEULEsgl0oLGtT+M0yNluFI1uwKE37o5vfyHCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710426336; c=relaxed/simple;
-	bh=59IRwYZvCIRh+RtQJoWY2krHeK/9wif811uQ2Y7soPs=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=EqOzn8+n0QWdYec2Fcsrtvl/Ey5gIHCOVpEtak5JaJ6sbHQZx4oa1CWI3aT32rTsAOwnDw1F6qUMgS+cwVwT0xvlEKGv+qZ1CYwiWgLkrK8KAGOGDHuyfYW/5deAqCefgRuS9RZpFn2Xa7aAJQOvCK7LFR1RC1BFUrxxIMsIWrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7c7c9831579so90727739f.0
-        for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 07:25:34 -0700 (PDT)
+	s=arc-20240116; t=1710428410; c=relaxed/simple;
+	bh=7/DqWr5rdEq+cBVg8oAa8F/rADskEBUnpUvPYUvBp3E=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nnprWpuvfKekcJ0sJtOf/yC53wbl+jhs5PaJ6clm9xRv+Qq5cZtuK32jS6xqJj4X7e94TS45EP9Pa/gqwe28G5AtveZSQC05iAQQvJLArhKFQ0kHmwfdw/D+uk0RZIx1Cd94RvW4VsAo1UCZHCXv5xP+DYn0Ic1x4RfY9iJHmCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cib871GY; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cib871GY"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-33e966f56c7so1059627f8f.0;
+        Thu, 14 Mar 2024 08:00:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710428407; x=1711033207; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZqjW4NMzKRTfBHsJStcBs6+VmS9X4P0PAx/9ptrYQAE=;
+        b=Cib871GY2KZaD2fWkfeTy87+eAzU6NGqUcY11u3x9fX8SaEjYDEp5JE7cr7N9l4jRX
+         qnB3ENHykVUtPkiSWOYLGMrsN3xcUTQsVYaNAP5GtAma27f/oUp6BNiYn6uRK62KfYPY
+         xXfwOK9OAjriJIN9hvFXJ5G1tL48sQmGP2coJssIW4o1KRv6p6+jC7aJBnhNImn5AbY8
+         9lm0I7F1izLhvshHs5qQMHXLKaMcYw/B6cqTrtR5j/htmMY2g5ZxyIPNbRFAoesSptRf
+         9mQp72rJa0hHvfW7Tf/2yDCnAl/tOsWv8XAkyEEXt6M3VcbY7AeF3icoXf9Yuvfy+F7s
+         Hrkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710426334; x=1711031134;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=18uoimT1bopfIcNqOqvsGh+pCmb6LlcLxHjVzIhvia8=;
-        b=vR8ev7KCEDSXAwyDj+ucHj+D3I5GGuY5Xk5UnD4yEupB8kfcBOYgCT4NNiyxQa752e
-         +0jnEwm7dvMfvuOhzn3YaZHL3MLhhGfBjwtzZ6KH09imN3jfLYlPExDd6oFDuH4O+WA9
-         Qpx3h/M09FtaIknx9OXrCtaVdk9ezleKtrEWkmrUEkOLpI1tOGh1M3YDnMJk1gwLNryZ
-         9htJOJCxwU2lw4xTcYQ3mhzZ9rGB4MCOGN1o2mERhRZrAN6mayU5zqgYxd6P1zc2L4GM
-         F3AibKKBAs2z29RVhFH8cFB/d3gVQ3zs3QUxDm0Ui2i8gEEafQVrfVC8ciQ+dQXPswnt
-         kEmw==
-X-Forwarded-Encrypted: i=1; AJvYcCWgNn/qhw86XE77f8sRxPVh76C/HrFoIaj57ECbSGPTrWin6pmyUhnBRox0kL35tjilwtJniu94bgZIanwOOpK/TVDs
-X-Gm-Message-State: AOJu0YwfKjU6jJa57Z1AQvZKPbp1fxoxz8xV5HTUDjQDDvNUrhIkzhzM
-	vsoeRMWmwyLiZtUVWsYOVrH+Jp+T0jKyfWXKBN6tdPiYUw1CZ6+rGRk9KJd5VOrq2JXcnbkXTEX
-	QvvAAFWZR9TcSGaCby5D2cCmahAcwVStAVOPWJt8XRo6tTjtrN04CmHs=
-X-Google-Smtp-Source: AGHT+IEyD058LrvaoW91Em2xsLn3kN7oQVgSdB6kgLaibdaFnU05ghC1YrJnMrPMr7l+2lAoLy/tJRfiA6KQ9IsntxFwbQBCQ2jP
+        d=1e100.net; s=20230601; t=1710428407; x=1711033207;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZqjW4NMzKRTfBHsJStcBs6+VmS9X4P0PAx/9ptrYQAE=;
+        b=DHu8aq5caITS+W/3CdCSWzJkQ1AO97981pB0k9lQr2n+8Jovjrvr1dgHBzrX24iGzL
+         ZXh4/EVWSLQRz4mp1ameluHEtX6qq8Mmmlt4NMA0VnHU3TZvmHK7UOFmAn82IwPQyvnv
+         43nHRChFhd/vO3jQoyaw4tyRVaDRJ1iMKg3SPonFRv/NeGGyMsXEmmPpefpwMBA8I0bz
+         akYGv0Mh4m/uPfI7rFgBbQOW/J8WUFGEyJ/hfcLKgeNo51E2JdRT1bA3m7jKi6YHpxZn
+         s3RClaWasq6/rCPfpej4fM9qmD9EjAKtZ22Ujj+2HSdVRAFXL4SE5j18r+hvCA8/le1s
+         kOFg==
+X-Forwarded-Encrypted: i=1; AJvYcCVP6oSFpz2F8ORxVsK2nFUgJkdQmN9UzcLjXw1ZUT4GRmDBo1u6VXhe+3mbemW00RcI1SVAIEJd0uVwq2PACmu5+eGeCROdLp2Aw4Z8+h14rxL1JEGTVTPhWyybJPM2dDjL
+X-Gm-Message-State: AOJu0Yygg+6xuyQVnJmG7+tpUxZQG30ea+hJJ2rxsjj4C3ZCMfKUfnQb
+	FsRfjDZHSUy8n9EBEgEnP1LDbfD9si5x0Vc85pqjErDh/21sRiVbZSr1Oy+Ej064PMC0
+X-Google-Smtp-Source: AGHT+IEnazuqirTvzs0EMIlFEqAtC7PFDh2Ncwe0kftb1iGbJn2BbML904PHQ4HOeecoWlXdg1rA1w==
+X-Received: by 2002:a5d:6408:0:b0:33e:8b95:b350 with SMTP id z8-20020a5d6408000000b0033e8b95b350mr284485wru.7.1710428407030;
+        Thu, 14 Mar 2024 08:00:07 -0700 (PDT)
+Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
+        by smtp.gmail.com with ESMTPSA id g14-20020a5d540e000000b0033e95bf4796sm961143wrv.27.2024.03.14.08.00.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 14 Mar 2024 08:00:06 -0700 (PDT)
+From: Puranjay Mohan <puranjay12@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Zi Shen Lim <zlim.lnx@gmail.com>,
+	Xu Kuohai <xukuohai@huawei.com>
+Cc: puranjay12@gmail.com
+Subject: [PATCH bpf-next 0/2] bpf,arm64: Add support for BPF Arena
+Date: Thu, 14 Mar 2024 15:00:01 +0000
+Message-Id: <20240314150003.123020-1-puranjay12@gmail.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:6287:b0:476:fa88:fdea with SMTP id
- fh7-20020a056638628700b00476fa88fdeamr106481jab.5.1710426334129; Thu, 14 Mar
- 2024 07:25:34 -0700 (PDT)
-Date: Thu, 14 Mar 2024 07:25:34 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000f823606139faa5d@google.com>
-Subject: [syzbot] [bpf?] UBSAN: array-index-out-of-bounds in bpf_prog_select_runtime
-From: syzbot <syzbot+d2a2c639d03ac200a4f1@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
-	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
-	linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@google.com, 
-	song@kernel.org, syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hello,
+This series adds the support for PROBE_MEM32 and bpf_addr_space_cast
+instructions to the ARM64 BPF JIT. These two instructions allow the
+enablement of BPF Arena.
 
-syzbot found the following issue on:
+All arena related selftests are passing.
 
-HEAD commit:    9187210eee7d Merge tag 'net-next-6.9' of git://git.kernel...
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1736a3da180000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=222448ff79dba2ea
-dashboard link: https://syzkaller.appspot.com/bug?extid=d2a2c639d03ac200a4f1
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16b3fdc1180000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11201969180000
+  [root@ip-172-31-6-62 bpf]# ./test_progs -a "*arena*"
+  #3/1     arena_htab/arena_htab_llvm:OK
+  #3/2     arena_htab/arena_htab_asm:OK
+  #3       arena_htab:OK
+  #4/1     arena_list/arena_list_1:OK
+  #4/2     arena_list/arena_list_1000:OK
+  #4       arena_list:OK
+  #434/1   verifier_arena/basic_alloc1:OK
+  #434/2   verifier_arena/basic_alloc2:OK
+  #434/3   verifier_arena/basic_alloc3:OK
+  #434/4   verifier_arena/iter_maps1:OK
+  #434/5   verifier_arena/iter_maps2:OK
+  #434/6   verifier_arena/iter_maps3:OK
+  #434     verifier_arena:OK
+  Summary: 3/10 PASSED, 0 SKIPPED, 0 FAILED
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/98c1ea7ddb95/disk-9187210e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/343c5524f68f/vmlinux-9187210e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6c0c68b0ee90/bzImage-9187210e.xz
+The implementation of bpf_addr_space_cast can be optimised by using ROR
+(immediate) and CSEL instructions. Currently, lib/insn.c doesn't have APIs
+to generate these intructions. I will send subsequent patches to implement
+the APIs and then use these instructions in the JIT.
 
-The issue was bisected to:
+Puranjay Mohan (2):
+  bpf: Add arm64 JIT support for PROBE_MEM32 pseudo instructions.
+  bpf: Add arm64 JIT support for bpf_addr_space_cast instruction.
 
-commit 011832b97b311bb9e3c27945bc0d1089a14209c9
-Author: Alexei Starovoitov <ast@kernel.org>
-Date:   Wed Mar 6 03:19:26 2024 +0000
+ arch/arm64/net/bpf_jit.h                     |   1 +
+ arch/arm64/net/bpf_jit_comp.c                | 105 +++++++++++++++++--
+ tools/testing/selftests/bpf/DENYLIST.aarch64 |   2 -
+ 3 files changed, 96 insertions(+), 12 deletions(-)
 
-    bpf: Introduce may_goto instruction
+-- 
+2.40.1
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=115e578e180000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=135e578e180000
-console output: https://syzkaller.appspot.com/x/log.txt?x=155e578e180000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d2a2c639d03ac200a4f1@syzkaller.appspotmail.com
-Fixes: 011832b97b31 ("bpf: Introduce may_goto instruction")
-
-------------[ cut here ]------------
-UBSAN: array-index-out-of-bounds in kernel/bpf/core.c:2349:29
-index 16 is out of range for type '<unknown> *[16]'
-CPU: 1 PID: 5060 Comm: syz-executor255 Not tainted 6.8.0-syzkaller-05202-g9187210eee7d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x125/0x1b0 lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:217 [inline]
- __ubsan_handle_out_of_bounds+0x110/0x150 lib/ubsan.c:415
- bpf_prog_select_func kernel/bpf/core.c:2349 [inline]
- bpf_prog_select_runtime+0x5aa/0x640 kernel/bpf/core.c:2380
- bpf_prog_load+0xf0f/0x2660 kernel/bpf/syscall.c:2899
- __sys_bpf+0x9b4/0x4b40 kernel/bpf/syscall.c:5631
- __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
- __x64_sys_bpf+0x78/0xc0 kernel/bpf/syscall.c:5736
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xd2/0x260 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x6d/0x75
-RIP: 0033:0x7fa2a0fe73e9
-Code: 48 83 c4 28 c3 e8 37 17 00 00 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffdd829a698 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 00007ffdd829a878 RCX: 00007fa2a0fe73e9
-RDX: 0000000000000048 RSI: 00000000200017c0 RDI: 0000000000000005
-RBP: 00007fa2a105a610 R08: 0000000000000000 R09: 0000000000000000
-R10: 00000000ffffffff R11: 0000000000000246 R12: 0000000000000001
-R13: 00007ffdd829a868 R14: 0000000000000001 R15: 0000000000000001
- </TASK>
----[ end trace ]---
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
