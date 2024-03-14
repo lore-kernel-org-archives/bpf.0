@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACC55763E4
-	for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 20:40:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E9372A1C7
+	for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 20:50:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710448829; cv=none; b=V4LGFXLq4joCHgd95Ia+8LUqfNMvGsdBgu03eFmBA2P9HGmTTfO66kKG7B9sYS2ErLQgVKgz2SnXQTIyMlTJKLojose48Xo7O80bU30l8h3quftBzA5DMJty8lUWRrRVhdBFld+QYLqmc7sPNC1mDVYukts7LMrqn4sTf7a0imA=
+	t=1710449431; cv=none; b=NSDtjIvDaqs66+bwSsfQYrHpCKISw/GsaRCjhGl9wvDloz0YkjFLuVaOQO6tRGeboA16BCyywvzpYpBhlKbYjo9bOC0QOPNb2kKMM6yM0fCVJBy3u95Q8pUT+1+cL71bTwfKZsCNnELaR7pMK05Sirj20x0LKXUEKqggrp57ez4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710448829; c=relaxed/simple;
-	bh=c3m9MDMaIC5KqWMMqprFeD5Fsa+hmlljbI13FGafO68=;
+	s=arc-20240116; t=1710449431; c=relaxed/simple;
+	bh=HdJS2xZEWQC8puRW7w4LzzA18+kfSSX+Y1DBmWDhZm0=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=fbaHZ8cRlZo7oxBYEUGv3cfNX7wSmmLtchdNMoOAQMvjjscUeFuQ9mRXAHHRAFWeRUorNBU+bOaHJ4OQ8d9cvvzuK2uLuJFSS8KC+OFgvVuxOGNIeoa4GvcqOfijnaCSf8e7cCzidnKFFS1zYVOBnRw7/tQl0UuOXmbVTCCtdmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZlRCc+Hq; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=pjBd54zdGDCp9RI0EekmOFKVTwSkPgZNqutW1eBO3+lWtqQYU0Sk9UNFdKATjW/FHX1AEN4iGPapUMEEsOEckq9YrHF5c4TyXwp8dZl16+bHT4Gvv77I1F9zvg5FeXRf65Md2C2DTDtqOfgqL6uV2kA8UfdqGlWdjRoXmg3tSIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K7ANcnV9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZlRCc+Hq"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 42927C43390;
-	Thu, 14 Mar 2024 20:40:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K7ANcnV9"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 85A10C43390;
+	Thu, 14 Mar 2024 20:50:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710448829;
-	bh=c3m9MDMaIC5KqWMMqprFeD5Fsa+hmlljbI13FGafO68=;
+	s=k20201202; t=1710449430;
+	bh=HdJS2xZEWQC8puRW7w4LzzA18+kfSSX+Y1DBmWDhZm0=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=ZlRCc+Hq05Q15YkAZrFkzSSxclruzgwQnahjVe9MtTVsCkAR9qifQohv03Sn85Xem
-	 893IqPT5/AwEDuky5n03G1IA+WvATO6bL1QaU6D9DGJEDm/S1DiIcEog+RqtdHVu7k
-	 J/XU+GNjPN9yu/ghqeDnRy6CT5yffAcV8LlkioEsn9G3AQfDek5l8kHJRuyoH9+Dpo
-	 WF4d5poe0u6vR+1FEz69Wpul1Fii9PbgDoSmAncy8ywdeHXfLe7EAXEY22h7+gfoO9
-	 SNGJ9qpyRKk4PS5uNedlUSbHrHhKQaBkUmlWFAEZhiyAPIT+87wfP16Owq36+GzRSz
-	 aWiu/vm0oVDNQ==
+	b=K7ANcnV9S2R/q9rU5TB4eTav+FxXdXxsBYaQtdPwm0sC4NqZh0jrzXNAohHpItLH0
+	 ceg4TsJDH/b4JVVcvIMdXbWV7XnEywhj4W39M+J6EonEYoI3Ay0CJpTt1ukMebrtwn
+	 PQ9/IdoxemWi0mEla4MaOmy/faGqsLlzczNc8bCthuB/mPolRvePF7vt+xoWjk79JI
+	 vKzDuBzgXfAu1oUptgfPCISUCDPvOienNhdyYTvVoiK6VKuatBOuhub/IFxcArnWAR
+	 lEITXwx0O14wOVfi3Yk2VkbpYY98roCaIFaebANHUbMXgIWHrovkj1xJ/BekPGNUHf
+	 ktL7F04sv40rw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2E532D84BB4;
-	Thu, 14 Mar 2024 20:40:29 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 72505D84BB4;
+	Thu, 14 Mar 2024 20:50:30 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,36 +37,39 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] bpftool: Fix missing pids during link show
+Subject: Re: [PATCH bpf-next v2] libbpf: Prevent null-pointer dereference when
+ prog to load has no BTF
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171044882917.16494.10963082346560946802.git-patchwork-notify@kernel.org>
-Date: Thu, 14 Mar 2024 20:40:29 +0000
-References: <20240312023249.3776718-1-yonghong.song@linux.dev>
-In-Reply-To: <20240312023249.3776718-1-yonghong.song@linux.dev>
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, kernel-team@fb.com, martin.lau@kernel.org,
- quentin@isovalent.com
+ <171044943046.22144.10648250930242367803.git-patchwork-notify@kernel.org>
+Date: Thu, 14 Mar 2024 20:50:30 +0000
+References: <20240314150438.232462-1-qmo@kernel.org>
+In-Reply-To: <20240314150438.232462-1-qmo@kernel.org>
+To: None <qmo@kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Mon, 11 Mar 2024 19:32:49 -0700 you wrote:
-> Current 'bpftool link' command does not show pids, e.g.,
->   $ tools/build/bpftool/bpftool link
->   ...
->   4: tracing  prog 23
->         prog_type lsm  attach_type lsm_mac
->         target_obj_id 1  target_btf_id 31320
+On Thu, 14 Mar 2024 15:04:38 +0000 you wrote:
+> From: Quentin Monnet <qmo@kernel.org>
+> 
+> In bpf_objec_load_prog(), there's no guarantee that obj->btf is non-NULL
+> when passing it to btf__fd(), and this function does not perform any
+> check before dereferencing its argument (as bpf_object__btf_fd() used to
+> do). As a consequence, we get segmentation fault errors in bpftool (for
+> example) when trying to load programs that come without BTF information.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v2] bpftool: Fix missing pids during link show
-    https://git.kernel.org/bpf/bpf-next/c/fe879bb42f8a
+  - [bpf-next,v2] libbpf: Prevent null-pointer dereference when prog to load has no BTF
+    https://git.kernel.org/bpf/bpf-next/c/9bf48fa19a4b
 
 You are awesome, thank you!
 -- 
