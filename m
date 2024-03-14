@@ -1,248 +1,286 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF96C7F;
-	Thu, 14 Mar 2024 00:25:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8729B4683
+	for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 01:56:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710375951; cv=none; b=PQOLe92SVYXfkAaiLnguOWR3vHcs1cEv/vmNO0gwkFUR4E3ng7W9Qh7DLBZjicGsZhhCiLJ2FGqiLHu7T79YG9gkS+DGCE6+shhMqx+/ryr7ED1Z11pl1Rt8xfcKG81yGVVt1oqvWzdKwQfcDig4HAg9VjIjQZLg4bl3mCeY6VA=
+	t=1710381410; cv=none; b=s7Rx/Zu2SulYqYUSmU+pLSTeiWE3kAo0vyQo94qQCayK29A6tlUZBPL+IB13YrFKKWXO9HDQbtbzaFYgxF/BqMMuSSoCK2DNwsAfZS7uNGgpXxWBst+UJxtxs0bP/ts8ltpULJnsNkoeNTWBfjnyPjJSRCdcitWPoeroQD/lejA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710375951; c=relaxed/simple;
-	bh=9EoMAftd9vY6BGdahDlojvcesrBvYUJgWbCGJaD+H+c=;
+	s=arc-20240116; t=1710381410; c=relaxed/simple;
+	bh=wMDJJO6UDRVvyJRRMecXVVKmsFMCjyK0MSqdZIf1IvM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l1R0a3XYor+KmeTKYIJ4asID37ZsKdtnDnU+j2X5o8Zj6g92KVFmqgyIPthKrxDhJVdIx3xdEPN8XbG+GvLoDC1L0Hfoj2H6i8KHVXSp5FqhllVGo5WVEgHxuH6kXzdp/PnlHgq7fcWC0R898Z/Nsau+5IBOKvsicSn1UgH24mI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OdqMrdyl; arc=none smtp.client-ip=209.85.221.54
+	 To:Cc:Content-Type; b=TkEhmxZiwZXC5iz/Y7Oc2q3YScFLFId3XtdlleNTa/rdS064ozrhj05eZg3U2MaRkmTUYAzrL2kBTL8z6CFnR+o6ySjmC/xjP0PWuO/kseTS4i0+B+/Ze6V8YwGcMQMA0vpmtV5VqriF7UOndVSCx85GejUkoyEh6uTLvEyQuHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OMOBUch2; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OdqMrdyl"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-33e8e9a4edaso405846f8f.2;
-        Wed, 13 Mar 2024 17:25:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OMOBUch2"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-413f3b1e6d8so44845e9.0
+        for <bpf@vger.kernel.org>; Wed, 13 Mar 2024 18:56:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710375948; x=1710980748; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710381407; x=1710986207; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b1pXXVSLcJWs+QWrQ+i4P/taCr8L+0F6xiRmk8ycZXY=;
-        b=OdqMrdylzqEmk8VEhLX1MaecvtTmKmwYObl/HWkrJz2vxQmpRjFG9i7g8QGYsrvjIS
-         3B4axAft8v/tYcF4Gf34OYyjD5HXLwCu/fQk6dDB5SSUTT54DYmdhidhXRF5oA2YXlAt
-         bMrhze1VDqGgWJn6bURCARSVFag3rtodXL3MFiBzhrQOnbz2Ct8WRc/U76bVoBpsXL0b
-         fUWX1a4am4L1t4shFGn52EjdIYbWHjDksvo3e9tIZtqeVAbxDzo7kbJTYxqazVtuq7VX
-         5uJ1R0NgYUNHglDFpt5lMfQs9/yZ+8b6vvpBFAuqLbwiYr7H5NbhKdhb3DkoKBqdlrRo
-         H7NA==
+        bh=FK1v3ougoMsLqeARLs7UnUknHB0CwesXohQJ/8Mm0Rw=;
+        b=OMOBUch2U4/XpSzxPArN150mPcbRoyVTJV1uLEvmX7x1oPpuO0nuC3icbndZl/yn+F
+         HjUQry7qdw9qCG2E8kYj3eql9S0Dt7txF8dIZksZWEABpXFZeP+V4Zk/4lvDr+gWchxT
+         OQCCtHj8cQvCvvLmGgMHCqzcJO1icP3HwERDWYVra7E8XejIdS5uTIWOfMdtiWfo6dat
+         24YD66pae07EGICCtKrwaXoWhImdEINskKRHaw3crRyz4r1wb9JPEuQXzlFhmrxctm1J
+         RBSo4/A3tE3T/7YCE2kQEVXNbc6FQ/KMkSlh9Ko1+OEtlv9pjVu5ArRoffDU0E9u9nqU
+         RprQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710375948; x=1710980748;
+        d=1e100.net; s=20230601; t=1710381407; x=1710986207;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=b1pXXVSLcJWs+QWrQ+i4P/taCr8L+0F6xiRmk8ycZXY=;
-        b=Gp3B4kqA1uQ7w4ERAzo0xDM1z2drDlO7/W3S6ugQ0teE3UfTsYmFufGLKN0RRBAgXq
-         HoJZBYgAy2aVkhXr9IskiPVpkVUmywVqUVAwR3A1FgNe1w3tdLHsFrAheyHAo2dYocSk
-         iclK+A4Pfzp/Kcm2q7IL1YvhBSYAoOFnTFoohQ9EKLmXOiIaH0lqzyL3g73lA2DxEFme
-         me/8jt86a13+mcB1E1hkOn7lGGRAhAKIozoBvDxriQGDSokksaEBUsxVHkBcdSkfPywR
-         rEJyeACyT7zYvfDTHyWuoQievp651My0kbqZDv45WXImnVtb03Hp/gX89DVgxJND75a5
-         O1tg==
-X-Forwarded-Encrypted: i=1; AJvYcCV+MoOvZgsUoUpQUJPyphFpdDWfJkSqlZfC4RY38bCxBm/0apLstsk9sY/xpTTBkIxVsiNqFrELE7a5mnqpky8QeqEhDrebejlrHmL6VKmoUCUqJT4i0ZJc/SQQ32YQwcVYP/5FE2I298QfePSlXH3NMc+oCSSZBv20cwIPrUG/dwNx4AojkkHcaBpyoHyIR+wpeiDPqqsD3dTH0tBxs/+76XJ0Y44TOwQgPwKbNOXTtHt250J65oGCbLyBj/M/8ghGUS7Scfr6cMx4iUNsJBLOZBQpj2HiJtwoFQ==
-X-Gm-Message-State: AOJu0YyPgXjJNakyVxQExxzx0wjcqTVdVdoGKvzlX6EkDqv5JtZqAkzh
-	vwywPgHZ1JzJQDp84w3Jci1F+ONBlX8zTWXgVAb6YrfiynGjevvSfUC3BPmhO3apr1Jn+VrwNAf
-	QjL+FiG2UxEKVveH8LSBgXj1Fyxs=
-X-Google-Smtp-Source: AGHT+IEluUxpksFRvEO4amy8bxc8cXhNS84YSmujwUrBqdFTzudYkIWBqt3bc5Ekgo5hTd/k08iQyCGhQiEqmdJKoSg=
-X-Received: by 2002:a5d:438e:0:b0:33e:44da:827 with SMTP id
- i14-20020a5d438e000000b0033e44da0827mr112820wrq.57.1710375947716; Wed, 13 Mar
- 2024 17:25:47 -0700 (PDT)
+        bh=FK1v3ougoMsLqeARLs7UnUknHB0CwesXohQJ/8Mm0Rw=;
+        b=HyE3tdEX0ynkIPyxL347CxU3EU8olqn9bCY+FTP8Y790l9lKeK+pReB6DuxGtx0DBK
+         ugzRrJtxghPzAHYIM0SQPuJFnoFjW/nvXEkSfvntV4hjbGaGpXkPjWl1BCDHJK176ArC
+         a2RLyu7bDw2KC0TLbDt77lgI0n/FSaZKyRmd1G9T4B+SvkmjaWCWPUGK1SYSQr0OZj2e
+         REMudM4nn3uBejsU/duCjsP8Eecr3FtoZrMbmou6l8CmXKsj+9USZYs0OmSJ2MnaJUIU
+         x7CiuBlFIOIG4WtizMjqBYREzFUCZHmwZgKntwNTKRTNQkRaxsry/crSsZHcMRSVZrWr
+         4hiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVyv2MQP6SALO3Cx1WD4om8NC6CcEWJBdLeq0A9k+q0BbxKv96ulDP0NWlEIxSOLUdWV7O5+iLkWISkghKHBVcQq2V0
+X-Gm-Message-State: AOJu0YzZrOXr7JgbRbEyplGtYQtConcRudtTPrIzFC+POLWRg0CO/nUM
+	m2DR6YD9/IMBagiAQ8kBEBGSshsUnpz7YR5LVAFYaPMIGE9zE6szYPVyVuxb7jXed/AijEZlKsn
+	JiLfkXQKsm/fuTndWzAwHFNfFyF8=
+X-Google-Smtp-Source: AGHT+IEdkVus+IxnLEexywJHNvrQcH/LxvXAX9SUeEt/aZHetYP2k4qNxPcMvBdA7Fxfuh82wzEx8BSsolxBzlNhMwI=
+X-Received: by 2002:adf:a395:0:b0:33e:1f2a:d88a with SMTP id
+ l21-20020adfa395000000b0033e1f2ad88amr169500wrb.69.1710381406502; Wed, 13 Mar
+ 2024 18:56:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
- <20240311093526.1010158-2-dongmenglong.8@bytedance.com> <CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
- <CALz3k9i5G5wWi+rtvHPwVLOUAXVMCiU_8QUZs87TEYgR_0wpPA@mail.gmail.com>
- <CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail.com>
- <CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
- <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com> <CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
-In-Reply-To: <CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
+References: <20240202162813.4184616-1-aspsk@isovalent.com> <20240202162813.4184616-4-aspsk@isovalent.com>
+ <CAADnVQLnk=UyKBkRAC1tNkiaF7C4+FG7V-b2xrR3oa_E4+QX7Q@mail.gmail.com>
+ <ZcIDqnXFjsWYyu1G@zh-lab-node-5> <CAADnVQLfidjTWa4+kyRH-qC29gbGvFsRJHu6smcaL0Yk0HqgmA@mail.gmail.com>
+ <ZcS1ZruKKZ1euzlb@zh-lab-node-5> <CAADnVQKH1aitaADzCo__PfMJJA2SxAvYjTS8Z7A6Y01G2OWJgw@mail.gmail.com>
+ <Zc9p4e1EccPkMnmY@zh-lab-node-5> <CAADnVQJ+_+ok_io1_W7e5z_dZhxSqhEFZQkumRgmY4AJRYwW7g@mail.gmail.com>
+ <ZehJFP11vi5sv/eW@zh-lab-node-5>
+In-Reply-To: <ZehJFP11vi5sv/eW@zh-lab-node-5>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 13 Mar 2024 17:25:35 -0700
-Message-ID: <CAADnVQLHpi3J6cBJ0QBgCQ2aY6fWGnVvNGdfi3W-jmoa9d1eVQ@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add support
- to record and check the accessed args
-To: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	X86 ML <x86@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Quentin Monnet <quentin@isovalent.com>, 
-	bpf <bpf@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
+Date: Wed, 13 Mar 2024 18:56:34 -0700
+Message-ID: <CAADnVQJnh+j9etPYkst7hhnepvsoBuJY-ds-AF0fn3VqqJNXNg@mail.gmail.com>
+Subject: Re: [PATCH v1 bpf-next 3/9] bpf: expose how xlated insns map to
+ jitted insns
+To: Anton Protopopov <aspsk@isovalent.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jiri Olsa <jolsa@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Stanislav Fomichev <sdf@google.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 12, 2024 at 6:53=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3 <dongme=
-nglong.8@bytedance.com> wrote:
+On Wed, Mar 6, 2024 at 2:51=E2=80=AFAM Anton Protopopov <aspsk@isovalent.co=
+m> wrote:
 >
-> On Wed, Mar 13, 2024 at 12:42=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Mon, Mar 11, 2024 at 7:42=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3 <do=
-ngmenglong.8@bytedance.com> wrote:
+> On Tue, Feb 20, 2024 at 05:09:36PM -0800, Alexei Starovoitov wrote:
+> > On Fri, Feb 16, 2024 at 6:04=E2=80=AFAM Anton Protopopov <aspsk@isovale=
+nt.com> wrote:
 > > >
-> [......]
+> > > On Wed, Feb 14, 2024 at 10:48:26PM -0800, Alexei Starovoitov wrote:
+> > > > On Thu, Feb 8, 2024 at 3:11=E2=80=AFAM Anton Protopopov <aspsk@isov=
+alent.com> wrote:
+> > > > >
+> > > > > On Tue, Feb 06, 2024 at 06:26:12PM -0800, Alexei Starovoitov wrot=
+e:
+> > > > > > On Tue, Feb 6, 2024 at 2:08=E2=80=AFAM Anton Protopopov <aspsk@=
+isovalent.com> wrote:
+> > > > > > >
+> > > > > > > On Mon, Feb 05, 2024 at 05:09:51PM -0800, Alexei Starovoitov =
+wrote:
+> > > > > > > > On Fri, Feb 2, 2024 at 8:34=E2=80=AFAM Anton Protopopov <as=
+psk@isovalent.com> wrote:
+> > > > > > > > >
+> > > > > > > > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > > > > > > > > index 4def3dde35f6..bdd6be718e82 100644
+> > > > > > > > > --- a/include/linux/bpf.h
+> > > > > > > > > +++ b/include/linux/bpf.h
+> > > > > > > > > @@ -1524,6 +1524,13 @@ struct bpf_prog_aux {
+> > > > > > > > >         };
+> > > > > > > > >         /* an array of original indexes for all xlated in=
+structions */
+> > > > > > > > >         u32 *orig_idx;
+> > > > > > > > > +       /* for every xlated instruction point to all gene=
+rated jited
+> > > > > > > > > +        * instructions, if allocated
+> > > > > > > > > +        */
+> > > > > > > > > +       struct {
+> > > > > > > > > +               u32 off;        /* local offset in the ji=
+tted code */
+> > > > > > > > > +               u32 len;        /* the total len of gener=
+ated jit code */
+> > > > > > > > > +       } *xlated_to_jit;
+> > > > > > > >
+> > > > > > > > Simply put Nack to this approach.
+> > > > > > > >
+> > > > > > > > Patches 2 and 3 add an extreme amount of memory overhead.
+> > > > > > > >
+> > > > > > > > As we discussed during office hours we need a "pointer to i=
+nsn" concept
+> > > > > > > > aka "index on insn".
+> > > > > > > > The verifier would need to track that such things exist and=
+ adjust
+> > > > > > > > indices of insns when patching affects those indices.
+> > > > > > > >
+> > > > > > > > For every static branch there will be one such "pointer to =
+insn".
+> > > > > > > > Different algorithms can be used to keep them correct.
+> > > > > > > > The simplest 'lets iterate over all such pointers and updat=
+e them'
+> > > > > > > > during patch_insn() may even be ok to start.
+> > > > > > > >
+> > > > > > > > Such "pointer to insn" won't add any memory overhead.
+> > > > > > > > When patch+jit is done all such "pointer to insn" are fixed=
+ value.
+> > > > > > >
+> > > > > > > Ok, thanks for looking, this makes sense.
+> > > > > >
+> > > > > > Before jumping into coding I think it would be good to discuss
+> > > > > > the design first.
+> > > > > > I'm thinking such "address of insn" will be similar to
+> > > > > > existing "address of subprog",
+> > > > > > which is encoded in ld_imm64 as BPF_PSEUDO_FUNC.
+> > > > > > "address of insn" would be a bit more involved to track
+> > > > > > during JIT and likely trivial during insn patching,
+> > > > > > since we're already doing imm adjustment for pseudo_func.
+> > > > > > So that part of design is straightforward.
+> > > > > > Implementation in the kernel and libbpf can copy paste from pse=
+udo_func too.
+> > > > >
+> > > > > To implement the "primitive version" of static branches, where th=
+e
+> > > > > only API is `static_branch_update(xlated off, on/off)` the only
+> > > > > requirement is to build `xlated -> jitted` mapping (which is done
+> > > > > in JIT, after the verification). This can be done in a simplified
+> > > > > version of this patch, without xlated->orig mapping and with
+> > > > > xlated->jit mapping only done to gotol_or_nop instructions.
+> > > >
+> > > > yes. The array of insn->jit_addr sized with as many goto_or_nop-s
+> > > > the prog will work for user space to flip them, but...
+> > > >
+> > > > > The "address of insn" appears when we want to provide a more
+> > > > > higher-level API when some object (in user-space or in kernel) ke=
+eps
+> > > > > track of one or more gotol_or_nop instructions so that after the
+> > > > > program load this controlling object has a list of xlated offsets=
+.
+> > > > > But this would be a follow-up to the initial static branches patc=
+h.
+> > > >
+> > > > this won't work as a follow up,
+> > > > since such an array won't work for bpf prog that wants to flip bran=
+ches.
+> > > > There is nothing that associates static_branch name/id with
+> > > > particular goto_or_nop.
+> > > > There could be a kfunc that bpf prog calls, but it can only
+> > > > flip all of such insns in the prog.
+> > > > Unless we start encoding a special id inside goto_or_nop or other h=
+acks.
+> > > >
+> > > > > > The question is whether such "address of insn" should be allowe=
+d
+> > > > > > in the data section. If so, we need to brainstorm how to
+> > > > > > do it cleanly.
+> > > > > > We had various hacks for similar things in the past. Like prog_=
+array.
+> > > > > > Let's not repeat such mistakes.
+> > > > >
+> > > > > So, data section is required for implementing jump tables? Like,
+> > > > > to add a new PTR_TO_LABEL or PTR_TO_INSN data type, and a
+> > > > > corresponding "ptr to insn" object for every occurence of &&label=
+,
+> > > > > which will be adjusted during verification.
+> > > > > Looks to me like this one doesn't require any more API than speci=
+fying
+> > > > > a list of &&label occurencies on program load.
+> > > > >
+> > > > > For "static keys" though (a feature on top of this patch series) =
+we
+> > > > > need to have access to the corresponding set of adjusted pointers=
+.
+> > > > >
+> > > > > Isn't this enough to add something like an array of
+> > > > >
+> > > > >   struct insn_ptr {
+> > > > >       u32 type; /* LABEL, STATIC_BRANCH,... */
+> > > > >       u32 insn_off; /* original offset on load */
+> > > > >       union {
+> > > > >           struct label {...};
+> > > > >           struct st_branch { u32 key_id, ..};
+> > > > >       };
+> > > > >   };
+> > > >
+> > > > which I don't like because it hard codes static_branch needs into
+> > > > insn->jit_addr association.
+> > > > "address of insn" should be an individual building block without
+> > > > bolted on parts.
+> > > >
+> > > > A data section with a set of such "address of insn"
+> > > > can be a description of one static_branch.
+> > > > There will be different ways to combine such building blocks.
+> > > > For example:
+> > > > static_branch(foo) can emit goto_or_nop into bpf code
+> > > > and add "address of insn" into a section '.insn_addrs.foo".
+> > > > This section is what libbpf and bpf prog will recognize as a set
+> > > > of "address of insn" that can be passed into static_branch_update k=
+func
+> > > > or static_branch_update sys_bpf command.
+> > > > The question is whether we need a new map type (array derivative)
+> > > > to hold a set of "address of insn" or it can be a part of an existi=
+ng
+> > > > global data array.
+> > > > A new map type is easier to reason about.
+> > > > Notice how such a new map type is not a map type of static branches=
+.
+> > > > It's not a map type of goto_or_nop instructions either.
+> > > >
+> > > > At load time libbpf can populate this array with indices of insns
+> > > > that the verifier and JIT need to track. Once JITed the array is re=
+adonly
+> > > > for bpf prog and for user space.
+> > >
+> > > So this will be a map per .insn_addrs.X section (where X is key or
+> > > a pre-defined suffix for jump tables or indirect calls). And to tell
+> > > the verifier about these maps we will need to pass an array of
+> > >
+> > >     struct {
+> > >             u32 map_fd;
+> > >             u32 type; /* static key, jump table, etc. */
+> > >     }
+> > >
+> > > on program load. Is this correct?
 > >
-> > I see.
-> > I thought you're sharing the trampoline across attachments.
-> > (since bpf prog is the same).
->
-> That seems to be a good idea, which I hadn't thought before.
->
-> > But above approach cannot possibly work with a shared trampoline.
-> > You need to create individual trampoline for all attachment
-> > and point them to single bpf prog.
 > >
-> > tbh I'm less excited about this feature now, since sharing
-> > the prog across different attachments is nice, but it won't scale
-> > to thousands of attachments.
-> > I assumed that there will be a single trampoline with max(argno)
-> > across attachments and attach/detach will scale to thousands.
-> >
-> > With individual trampoline this will work for up to a hundred
-> > attachments max.
+> > Probably not.
+> > Since we're going with a new map type (at least for the sake of this
+> > discussion) it shouldn't need a new way to tell the verifier about it.
+> > If .insn_addrs.jmp_table_A was a section generated for switch() stateme=
+nt
+> > by llvm it will be created as a map by libbpf,
+> > and there will be an ld_imm64 insn generated by llvm that points
+> > to that map.
+> > libbpf will populate ld_imm64 insn with map_fd, just like it does
+> > for global data.
 >
-> What does "a hundred attachments max" means? Can't I
-> trace thousands of kernel functions with a bpf program of
-> tracing multi-link?
-
-I mean what time does it take to attach one program
-to 100 fentry-s ?
-What is the time for 1k and for 10k ?
-
-The kprobe multi test attaches to pretty much all funcs in
-/sys/kernel/tracing/available_filter_functions
-and it's fast enough to run in test_progs on every commit in bpf CI.
-See get_syms() in prog_tests/kprobe_multi_test.c
-
-Can this new multi fentry do that?
-and at what speed?
-The answer will decide how applicable this api is going to be.
-Generating different trampolines for every attach point
-is an approach as well. Pls benchmark it too.
-
-> >
-> > Let's step back.
-> > What is the exact use case you're trying to solve?
-> > Not an artificial one as selftest in patch 9, but the real use case?
+> I understand how this works for indirect jumps (and for the
+> bpf_static_branch_update(&foo) kfunc) where we have a ld_imm64 with a
+> map, however, I am still not sure how this will work for static
+> branches where we just have a 8 byte JA insn + an index in the
+> corresponding ".insn_addrs.foo" section. How kernel will know that the
+> program is using a corresponding map which we create from
+> ".insn_addrs.foo" without specifying this on program load?
 >
-> I have a tool, which is used to diagnose network problems,
-> and its name is "nettrace". It will trace many kernel functions, whose
-> function args contain "skb", like this:
->
-> ./nettrace -p icmp
-> begin trace...
-> ***************** ffff889be8fbd500,ffff889be8fbcd00 ***************
-> [1272349.614564] [dev_gro_receive     ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614579] [__netif_receive_skb_core] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614585] [ip_rcv              ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614592] [ip_rcv_core         ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614599] [skb_clone           ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614616] [nf_hook_slow        ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614629] [nft_do_chain        ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614635] [ip_rcv_finish       ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614643] [ip_route_input_slow ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614647] [fib_validate_source ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614652] [ip_local_deliver    ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614658] [nf_hook_slow        ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614663] [ip_local_deliver_finish] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614666] [icmp_rcv            ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614671] [icmp_echo           ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614675] [icmp_reply          ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614715] [consume_skb         ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614722] [packet_rcv          ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
-> [1272349.614725] [consume_skb         ] ICMP: 169.254.128.15 ->
-> 172.27.0.6 ping request, seq: 48220
->
-> For now, I have to create a bpf program for every kernel
-> function that I want to trace, which is up to 200.
->
-> With this multi-link, I only need to create 5 bpf program,
-> like this:
->
-> int BPF_PROG(trace_skb_1, struct *skb);
-> int BPF_PROG(trace_skb_2, u64 arg0, struct *skb);
-> int BPF_PROG(trace_skb_3, u64 arg0, u64 arg1, struct *skb);
-> int BPF_PROG(trace_skb_4, u64 arg0, u64 arg1, u64 arg2, struct *skb);
-> int BPF_PROG(trace_skb_5, u64 arg0, u64 arg1, u64 arg2, u64 arg3, struct =
-*skb);
->
-> Then, I can attach trace_skb_1 to all the kernel functions that
-> I want to trace and whose first arg is skb; attach trace_skb_2 to kernel
-> functions whose 2nd arg is skb, etc.
->
-> Or, I can create only one bpf program and store the index
-> of skb to the attachment cookie, and attach this program to all
-> the kernel functions that I want to trace.
->
-> This is my use case. With the multi-link, now I only have
-> 1 bpf program, 1 bpf link, 200 trampolines, instead of 200
-> bpf programs, 200 bpf link and 200 trampolines.
+> (Sorry for replying late, catching up after [simultaneous] pto &
+> covid.)
 
-I see. The use case makes sense to me.
-Andrii's retsnoop is used to do similar thing before kprobe multi was
-introduced.
-
-> The shared trampoline you mentioned seems to be a
-> wonderful idea, which can make the 200 trampolines
-> to one. Let me have a look, we create a trampoline and
-> record the max args count of all the target functions, let's
-> mark it as arg_count.
->
-> During generating the trampoline, we assume that the
-> function args count is arg_count. During attaching, we
-> check the consistency of all the target functions, just like
-> what we do now.
-
-For one trampoline to handle all attach points we might
-need some arch support, but we can start simple.
-Make btf_func_model with MAX_BPF_FUNC_REG_ARGS
-by calling btf_distill_func_proto() with func=3D=3DNULL.
-And use that to build a trampoline.
-
-The challenge is how to use minimal number of trampolines
-when bpf_progA is attached for func1, func2, func3
-and bpf_progB is attached to func3, func4, func5.
-We'd still need 3 trampolines:
-for func[12] to call bpf_progA,
-for func3 to call bpf_progA and bpf_progB,
-for func[45] to call bpf_progB.
-
-Jiri was trying to solve it in the past. His slides from LPC:
-https://lpc.events/event/16/contributions/1350/attachments/1033/1983/plumbe=
-rs.pdf
-
-Pls study them and his prior patchsets to avoid stepping on the same rakes.
+sorry. ctx switch takes time.
+libbpf can just bpf_prog_bind_map to associate this new map type
+of ptr_to_insn with a program.
+Or I misunderstood the question?
