@@ -1,93 +1,110 @@
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA6A3209
-	for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 08:05:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFEF543ADD;
+	Thu, 14 Mar 2024 08:55:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710403511; cv=none; b=BNPx85DryPCDIp/tE1A+k/o0o/uwEeRedXVOG83vKI12Y8Inh6SrV20AdYEf1Ddjl/R7vDn3RbLbH4ahBJmLcc2qNTR1PS7k+1kFaDkbBqVTMH/WHlOV/sRtApI9FbAAU/qQK3dQkq+KGm53U2i25Ddgmc9LwkeRY6orlGGW1yE=
+	t=1710406506; cv=none; b=Z3BnLa6+ao97G4ryxdOZaJmG1KXK91/JSb7C0qgAWVTrDVx8NqVnZ7008YeBi+mZsnB4XFjgwHe/PzqbY2pi8VxN7a5wtSZPBk9+f5lZYr5EheppurLcB4VhhjGKcabEh615zXfG3RfBxM6lcLGc3Ov7SiprvNoBhbTzgVzZDG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710403511; c=relaxed/simple;
-	bh=FMG/OIL1uiKxpN0qBE+WVeHUwKbnkC3Esjyme7VVJh4=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=siCGb1z44FHJT43TiNiZOALNSkDnUM7VfDf0I3c2UcIMH9PDnLYY5isgzrswn9ZD4sRMygi6PXFgJ6Sdu8bRUGsN7ZW3QgyMQzJomUxL1DcLbIsDGvOfzOya2aA2dmJkU4170glx3xX6eDk71tfkWSUdsjDGI+xsLP44TQZEINk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AyN4ntvi; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710406506; c=relaxed/simple;
+	bh=g7MDnwJa4sMN0bQaStBd6SvmxSktKfjJRuOwAzBq5eQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Q5tJanDDsLop+VxTENBAzusKu27G83pBVTHz7uFJxzktVmD+0v8+U6gZN2a2GipesxDugw73C1FGJ8EMll7hkq+10GFSekDKmgpKqU+nyzEnrg7QVnhH3c0OY+3zYf+In7WEBAnk2yjnD/hx3R0RaKko+qJ0HeWClnTbWs/jPQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=R7ST0AUg; arc=none smtp.client-ip=115.124.30.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AyN4ntvi"
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2d094bc2244so8179881fa.1
-        for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 01:05:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710403507; x=1711008307; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ker6+N1S2POGgBxd68sMORPhi/L50UTBajKPd4vtR0Q=;
-        b=AyN4ntvi3uImugMy45kGf9NluQ7vFbIMdjG/7y01dbeWRQmjj8VOsNWIXFr4Onz4Qi
-         PM0wvgLskeA2rJld05V49FjayCVnS++vHm1rBYlbnhKE+kd3EU6XRuiMs88Q1TrNvQ0w
-         gBXXrQwggEL1VBj7aFu7iudQ586C5bGlATapsbffOc3cDLQbKporVPPwKoARBHD+/Mnm
-         raMJrRDddoBHJ8m53Ht4RlUd8qxvUT8gXXswUoUUU3smqkI4KKTM+KL03SZLd09NYUfW
-         s/9TDzXBzPalE5zoED1D4DjJBXhjCGgXEfPdJ4W6Irr2AdufGEfnnChcj51l6MXWFcSC
-         zUfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710403507; x=1711008307;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Ker6+N1S2POGgBxd68sMORPhi/L50UTBajKPd4vtR0Q=;
-        b=UBjzDbONnzdQZXuRnibjM5/qKIyGtW1c1bEiRqEwfT/L82kwR1sbUsjyWkspTvCJ+P
-         /FZXNoqVnb/3iomptouIpDC1bHX9T8tmWl97U+t6XQQ3Za7mmsv+FcVDabxXcA8zQ2gY
-         Ne3vFMQUZt53xRFc9/6F2hlG2Y7pQijIBVgaP9tjgqd/FC+0qOuGcCsiGMfU2LqoNnLZ
-         +UTeBOPO3a06icrcqNf4+13DMByfRq9KB2UcTsNm9GnRdHTTW0q4GuNO/mus8PRAIp6r
-         2kgjUsKLnfUXIcqmGOz+t4qQhIVHsEYyFdS4/iUQ8c+gp1YxMsYiM8gMUN9nuRsKXyT7
-         Ypfw==
-X-Gm-Message-State: AOJu0Yx6yH/GlB036lgaC2JHGeIChTgoXnLsKwM5Ui3tem9TTrahRnNx
-	qMTrWM2/zDiAnWrBduIXJuYmMQb0KWAJQw77hvMtG/WbqA6b+OUDPMqRzsmU
-X-Google-Smtp-Source: AGHT+IFqQt6v9mYDNhj9gXgchJMMPOi6E9txFx4qSod1IK+VV/BCpczWi72RhHi8Us1OXyhiZLBg8g==
-X-Received: by 2002:a2e:7015:0:b0:2d4:71e8:5312 with SMTP id l21-20020a2e7015000000b002d471e85312mr570344ljc.23.1710403507492;
-        Thu, 14 Mar 2024 01:05:07 -0700 (PDT)
-Received: from [192.168.1.61] ([82.66.150.212])
-        by smtp.gmail.com with ESMTPSA id n28-20020adf8b1c000000b0033e745176f5sm115152wra.110.2024.03.14.01.05.07
-        for <bpf@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Mar 2024 01:05:07 -0700 (PDT)
-Message-ID: <12a4fa23-fd37-4cc9-9744-09ae056fc872@gmail.com>
-Date: Thu, 14 Mar 2024 09:05:06 +0100
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="R7ST0AUg"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1710406501; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=v5R56GJm1wCv4DzgzfQDshrevtSBDuWhu6Ql2bvSzys=;
+	b=R7ST0AUg5whcHAUkVhz1RcSmTaFtG1D/r4Yh97Xzja9LrWaq6AyIyRHyPwk1iw6ubdmcdpq0L0POlm/PGfnOXim/r1a3zS8kly9+n8AM1TqnvJAPTZih9eF+G6fZG9BBKFImtPGEyMWKki/+xaajOlXj9Fj6xp6vzTpprtRt/Ao=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0W2S1OCB_1710406499;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W2S1OCB_1710406499)
+          by smtp.aliyun-inc.com;
+          Thu, 14 Mar 2024 16:55:00 +0800
+From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To: netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@google.com>,
+	Amritha Nambiar <amritha.nambiar@intel.com>,
+	Larysa Zaremba <larysa.zaremba@intel.com>,
+	Sridhar Samudrala <sridhar.samudrala@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	virtualization@lists.linux.dev,
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v4 0/8] virtio-net: support device stats
+Date: Thu, 14 Mar 2024 16:54:51 +0800
+Message-Id: <20240314085459.115933-1-xuanzhuo@linux.alibaba.com>
+X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-GB
-To: bpf@vger.kernel.org
-From: Alexandre Cassen <acassen@gmail.com>
-Subject: PF_PACKET RPS like using bpf
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Git-Hash: 76259b0090f3
+Content-Transfer-Encoding: 8bit
 
-Hello,
+As the spec:
 
-While implementing a large scale L2 processing soft, there is a need for 
-high perf ingress handling.
+https://github.com/oasis-tcs/virtio-spec/commit/42f389989823039724f95bbbd243291ab0064f82
 
-In short: using BPF socket_filter prog with a hash func over ethernet 
-address to distribute load across multiple PF_PACKET sockets: mainly 
-filtering out non related hkey packets. It simplify userland app by 
-using multiple PF_PACKET sockets in dedicated pthread.
+The virtio net supports to get device stats.
 
-Longer discussion + quick source code illustration here:
+Please review.
 
-https://github.com/acassen/bpf-pfpacket-rps
+Thanks.
 
 
-My question would be related to sockmap. I tried to figure out how to 
-perform the same policing design using sockmap. And cant find my way 
-around it :/ If bpf verdict prog can get socket fd from __sk_buff then 
-it could drives the same hash/policing decision.
+v4:
+    1. Support per-queue statistics API
+    2. Fix some small problems in last version
 
-Is it possible to get socket fd from __sk_buff from sockmap verdict prog ?
+v3:
+    1. rebase net-next
 
-regs,
-Alexandre
+v2:
+    1. fix the usage of the leXX_to_cpu()
+    2. add comment to the structure virtnet_stats_map
+
+v1:
+    1. fix some definitions of the marco and the struct
+
+
+
+
+
+Xuan Zhuo (8):
+  virtio_net: introduce device stats feature and structures
+  virtio_net: virtnet_send_command supports command-specific-result
+  virtio_net: support device stats
+  virtio_net: stats map include driver stats
+  virtio_net: add the total stats field
+  virtio_net: rename stat tx_timeout to timeout
+  netdev: add queue stats
+  virtio-net: support queue stat
+
+ Documentation/netlink/specs/netdev.yaml | 105 ++++
+ drivers/net/virtio_net.c                | 708 +++++++++++++++++++++---
+ include/net/netdev_queues.h             |  27 +
+ include/uapi/linux/netdev.h             |  20 +
+ include/uapi/linux/virtio_net.h         | 137 +++++
+ net/core/netdev-genl.c                  |  23 +-
+ tools/include/uapi/linux/netdev.h       |  19 +
+ 7 files changed, 962 insertions(+), 77 deletions(-)
+
+--
+2.32.0.3.g01195cf9f
+
