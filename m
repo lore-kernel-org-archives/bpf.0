@@ -1,83 +1,49 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE2A71746;
-	Thu, 14 Mar 2024 15:00:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F705D75D
+	for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 15:05:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710428418; cv=none; b=cI7BrjjPUZGFDlvio9/y3CAyY1NcTDOmFibxJMxOhA/Dk1VzUCUn20U/slHe7GTHJVzAyeMm8QAc9dTwvJVP3pIquQ4LV0XNi9f+a2NyRVk7jKA8O8hzJOk1deQyvS0j5PNM6bbpTCMTnocpYr/jyY3e57tatoQ7rOVdIwptWGU=
+	t=1710428721; cv=none; b=ZWuIuBiKp2mi7vhsjAjt4L82yGiUQQW+mV1qzDmXmDqUuOSEhq/JycYAVUGBrAKfgnHwgkI1gCgzERmD2nG3JJ+lD2fcRUIYIk7O6QVT24T3J0w1sqxQioR3rUQzVaqY98Icdj60jB173FUgv1WYJgT+BZHxeMJ6SvgZ8bA6NiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710428418; c=relaxed/simple;
-	bh=iz+TloJkrWvl3/uamHD3XhGQyNmVGCiJUcAdHfkXKhM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=d/DDy8MbPSotCaS9Vil7xvJzBJyF+agdMrtwhDza9PXTghXSCHVBghL7VT5cT2QmrxohxdjcLaJN478JfV72kqQKWr1D2P7H4CW2vSv5nIagaDofeY0b9AO7osH8Mno4H7dnzZvYQZ1WRR5Cs8i9OTEBzslsYTRnwiJfT7vcKBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GCsnFWvA; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710428721; c=relaxed/simple;
+	bh=/ZOE4ZNDwWzj9JvUeVN9qTKbPV+a/h5Po7XlsY+K8i4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TTkfY1DFtgR/HT+NUb4un2wR++tPViqci4LyNNEMsLo/Xt6JPMkSyImHeiglXbnehWB2jOhKDKd+ZOnJ+mPjWkJNXd9ivdc9g0mnj8tBtffehYRZT3x+zn6zrIjoq8ySO7f/uywS5rzPCAzimKJZRdo91BmMNa74q4e2udmShD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mmsjcjyY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GCsnFWvA"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-33e8f906f3dso943795f8f.3;
-        Thu, 14 Mar 2024 08:00:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710428414; x=1711033214; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bI3xTRdT9yHEzesZP0OmYuDOzf2tVAyENBLL8gdkx4Y=;
-        b=GCsnFWvAebfQFZYl5pPzJZyQvhJHhO5yE6+r/DdYkLMcB6rH6wC5BIj2it9nSXsSSe
-         FWJMxKaZQHrl24rshJ7eG6kmMFDjy6Jjk3bFzi7imIzYjZgWOt5glIeGUzfh2gDFxU7K
-         yyzZtAId2x+X3NUiIsho71e8MFyh68dcjoZgHx7byERaCJRbZmcsULmlmJcFgJQILlLf
-         cZH2wFqkutBAFobzzcocB/9O2t0UYmdze+aGVyjjdRFAAwHmEn1RBG9Q/TuLk8oMzI/h
-         RqgMZMCte79UTi8tetNcMAIz48KbBeTO+qYpdBCdUuTkgGFsfprruKEqz2DYqv4PLuwI
-         ai7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710428414; x=1711033214;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bI3xTRdT9yHEzesZP0OmYuDOzf2tVAyENBLL8gdkx4Y=;
-        b=M1iPmC8F0+fucXASknhgVJvZxxc4dKeiQ89hhagRF7ZGfk1zTr/cHxmZw343SLyId6
-         a63dCemZS5Td+CRMnzi4STqsW+KEWUhCLx8e2eSXk5p1LBGQeTmH0t8WlSqjAaTCkTuU
-         /1k1w3Sm8ktJToqxqb258PNR1v1kdQ0L6NC9fo7XvuY0vBcSpoltHrmwkM/FtL6YK7VK
-         uSzdSjRqQuGmer13RlgL4PDgKM9iidZhtDkZFgoIdAoFqa2960VpclSyh+aLaIIuIgJL
-         deJ5CRNm1puukEZzVP1riCO9/aojLGI6Gw1msL9Lz2esuSohgmH5BQX7uxJeHWjO08yY
-         SiWw==
-X-Forwarded-Encrypted: i=1; AJvYcCXw3r1KJn04Ar/UWuNRy05yJSlOf/X4q0Ieht1ece5OqppoyDaa6AZtU+OwVwoIgeYIVrHWfvZuZ1WsAVqZwdrAsKU3vnClVxgazSL7GPGG99fFrd7r1tY+Axt+EB/entEL
-X-Gm-Message-State: AOJu0YwaFWMrtADVZ9CKHjPRm3NO18MxgMmIG4fqb7BB3WpLN7KbA5bb
-	Bmhs+nSxXxS+yr9RxgntoRQ50dygdVEchS6kuDafXt3I6weufALC
-X-Google-Smtp-Source: AGHT+IFBznIkyc3oqCe9wYPXFb4WuEfceV3WoHPrD4t9ibKVdpBrHvgQ5oWN9hNQqmplqq9GOc5tNA==
-X-Received: by 2002:a5d:69cd:0:b0:33e:c4c3:6f with SMTP id s13-20020a5d69cd000000b0033ec4c3006fmr267664wrw.64.1710428414293;
-        Thu, 14 Mar 2024 08:00:14 -0700 (PDT)
-Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id bv17-20020a0560001f1100b0033e49aebafasm959125wrb.3.2024.03.14.08.00.13
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 14 Mar 2024 08:00:13 -0700 (PDT)
-From: Puranjay Mohan <puranjay12@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mmsjcjyY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72E65C433C7;
+	Thu, 14 Mar 2024 15:05:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710428721;
+	bh=/ZOE4ZNDwWzj9JvUeVN9qTKbPV+a/h5Po7XlsY+K8i4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=mmsjcjyY98o9NMyyeF/usxbxxfpU1/Pn7sRk1gWYsgnTwthGzmQlVzsyvHBgucJpG
+	 l4ZU3KZ60KBn46bofbWq1FcrlLVK+YF41uHHQghV7EvUQJR6vrsTcX1KV/rM0+/fQT
+	 f+sSODe5KLw3hGco7Xdtf2n4aQHQVXRscbIARNZrmhHyAd0/JoVqo7jXFGHOl4NZan
+	 0efn4rBCPZfOCd1eK2RR8C10ncJ2SeWSbwksfYQ09QBXvU+jyn7kqbHTfdZeWYDJaf
+	 SH2pbmAlC3mdmAg16Z9YS6pvHGbyb7q0TBQnmXTNd2bHDjE9uMNy0vMeWLLHE1YMh5
+	 PcimoH9VxBLig==
+From: qmo@kernel.org
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
 	KP Singh <kpsingh@kernel.org>,
 	Stanislav Fomichev <sdf@google.com>,
 	Hao Luo <haoluo@google.com>,
 	Jiri Olsa <jolsa@kernel.org>,
 	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Zi Shen Lim <zlim.lnx@gmail.com>,
-	Xu Kuohai <xukuohai@huawei.com>
-Cc: puranjay12@gmail.com
-Subject: [PATCH bpf-next 2/2] bpf: Add arm64 JIT support for bpf_addr_space_cast instruction.
-Date: Thu, 14 Mar 2024 15:00:03 +0000
-Message-Id: <20240314150003.123020-3-puranjay12@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240314150003.123020-1-puranjay12@gmail.com>
-References: <20240314150003.123020-1-puranjay12@gmail.com>
+	Quentin Monnet <qmo@kernel.org>
+Subject: [PATCH bpf-next v2] libbpf: Prevent null-pointer dereference when prog to load has no BTF
+Date: Thu, 14 Mar 2024 15:04:38 +0000
+Message-Id: <20240314150438.232462-1-qmo@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -86,121 +52,52 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-LLVM generates bpf_addr_space_cast instruction while translating
-pointers between native (zero) address space and
-__attribute__((address_space(N))). The addr_space=1 is reserved as
-bpf_arena address space.
+From: Quentin Monnet <qmo@kernel.org>
 
-rY = addr_space_cast(rX, 0, 1) is processed by the verifier and
-converted to normal 32-bit move: wX = wY
+In bpf_objec_load_prog(), there's no guarantee that obj->btf is non-NULL
+when passing it to btf__fd(), and this function does not perform any
+check before dereferencing its argument (as bpf_object__btf_fd() used to
+do). As a consequence, we get segmentation fault errors in bpftool (for
+example) when trying to load programs that come without BTF information.
 
-rY = addr_space_cast(rX, 1, 0) has to be converted by JIT:
+v2: Keep btf__fd() in the fix instead of reverting to bpf_object__btf_fd().
 
-Here I explain using symbolic language what the JIT is supposed to do:
-We have:
-	src = [src_upper32][src_lower32] // 64 bit src kernel pointer
-	uvm = [uvm_upper32][uvm_lower32] // 64 bit user_vm_start
-
-The JIT has to make the dst reg like following
-	dst = [uvm_upper32][src_lower32] // if src_lower32 != 0
-	dst = [00000000000][00000000000] // if src_lower32 == 0
-
-Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+Fixes: df7c3f7d3a3d ("libbpf: make uniform use of btf__fd() accessor inside libbpf")
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Quentin Monnet <qmo@kernel.org>
 ---
- arch/arm64/net/bpf_jit.h                     |  1 +
- arch/arm64/net/bpf_jit_comp.c                | 35 ++++++++++++++++++++
- tools/testing/selftests/bpf/DENYLIST.aarch64 |  2 --
- 3 files changed, 36 insertions(+), 2 deletions(-)
+v1 was: 'Revert "libbpf: make uniform use of btf__fd() accessor inside libbpf"'
+---
+ tools/lib/bpf/libbpf.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
-index 23b1b34db088..813c3c428fde 100644
---- a/arch/arm64/net/bpf_jit.h
-+++ b/arch/arm64/net/bpf_jit.h
-@@ -238,6 +238,7 @@
- #define A64_LSLV(sf, Rd, Rn, Rm) A64_DATA2(sf, Rd, Rn, Rm, LSLV)
- #define A64_LSRV(sf, Rd, Rn, Rm) A64_DATA2(sf, Rd, Rn, Rm, LSRV)
- #define A64_ASRV(sf, Rd, Rn, Rm) A64_DATA2(sf, Rd, Rn, Rm, ASRV)
-+#define A64_RORV(sf, Rd, Rn, Rm) A64_DATA2(sf, Rd, Rn, Rm, RORV)
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index efab29b8935b..124883eaa0cf 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -7317,9 +7317,9 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
+ 	char *cp, errmsg[STRERR_BUFSIZE];
+ 	size_t log_buf_size = 0;
+ 	char *log_buf = NULL, *tmp;
+-	int btf_fd, ret, err;
+ 	bool own_log_buf = true;
+ 	__u32 log_level = prog->log_level;
++	int ret, err;
  
- /* Data-processing (3 source) */
- /* Rd = Ra + Rn * Rm */
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index ce66c17b73a0..e12e0df3ad1a 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -82,6 +82,7 @@ struct jit_ctx {
- 	__le32 *ro_image;
- 	u32 stack_size;
- 	int fpb_offset;
-+	u64 user_vm_start;
- };
+ 	if (prog->type == BPF_PROG_TYPE_UNSPEC) {
+ 		/*
+@@ -7343,9 +7343,8 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
+ 	load_attr.prog_ifindex = prog->prog_ifindex;
  
- struct bpf_plt {
-@@ -868,6 +869,34 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	/* dst = src */
- 	case BPF_ALU | BPF_MOV | BPF_X:
- 	case BPF_ALU64 | BPF_MOV | BPF_X:
-+		if (insn->off == BPF_ADDR_SPACE_CAST &&
-+		    insn->imm == 1U << 16) {
-+			/* Zero out tmp2 */
-+			emit(A64_EOR(1, tmp2, tmp2, tmp2), ctx);
-+
-+			/* Move lo_32_bits(src) to dst */
-+			if (dst != src)
-+				emit(A64_MOV(0, dst, src), ctx);
-+
-+			/* Logical shift left by 32 bits */
-+			emit(A64_LSL(1, dst, dst, 32), ctx);
-+
-+			/* Get upper 32 bits of user_vm_start in tmp */
-+			emit_a64_mov_i(0, tmp, ctx->user_vm_start >> 32, ctx);
-+
-+			/* dst |= up_32_bits(user_vm_start) */
-+			emit(A64_ORR(1, dst, dst, tmp), ctx);
-+
-+			/* Rotate by 32 bits to get final result */
-+			emit_a64_mov_i(0, tmp, 32, ctx);
-+			emit(A64_RORV(1, dst, dst, tmp), ctx);
-+
-+			/* If lo_32_bits(dst) == 0, set dst = tmp2(0) */
-+			emit(A64_CBZ(0, dst, 2), ctx);
-+			emit(A64_MOV(1, tmp2, dst), ctx);
-+			emit(A64_MOV(1, dst, tmp2), ctx);
-+		break;
-+		}
- 		switch (insn->off) {
- 		case 0:
- 			emit(A64_MOV(is64, dst, src), ctx);
-@@ -1690,6 +1719,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	}
- 
- 	ctx.fpb_offset = find_fpb_offset(prog);
-+	ctx.user_vm_start = bpf_arena_get_user_vm_start(prog->aux->arena);
- 
- 	/*
- 	 * 1. Initial fake pass to compute ctx->idx and ctx->offset.
-@@ -2514,6 +2544,11 @@ bool bpf_jit_supports_exceptions(void)
- 	return true;
- }
- 
-+bool bpf_jit_supports_arena(void)
-+{
-+	return true;
-+}
-+
- void bpf_jit_free(struct bpf_prog *prog)
- {
- 	if (prog->jited) {
-diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 b/tools/testing/selftests/bpf/DENYLIST.aarch64
-index d8ade15e2789..0445ac38bc07 100644
---- a/tools/testing/selftests/bpf/DENYLIST.aarch64
-+++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
-@@ -10,5 +10,3 @@ fill_link_info/kprobe_multi_link_info            # bpf_program__attach_kprobe_mu
- fill_link_info/kretprobe_multi_link_info         # bpf_program__attach_kprobe_multi_opts unexpected error: -95
- fill_link_info/kprobe_multi_invalid_ubuff        # bpf_program__attach_kprobe_multi_opts unexpected error: -95
- missed/kprobe_recursion                          # missed_kprobe_recursion__attach unexpected error: -95 (errno 95)
--verifier_arena                                   # JIT does not support arena
--arena_htab                                       # JIT does not support arena
+ 	/* specify func_info/line_info only if kernel supports them */
+-	btf_fd = btf__fd(obj->btf);
+-	if (btf_fd >= 0 && kernel_supports(obj, FEAT_BTF_FUNC)) {
+-		load_attr.prog_btf_fd = btf_fd;
++	if (obj->btf && btf__fd(obj->btf) >= 0 && kernel_supports(obj, FEAT_BTF_FUNC)) {
++		load_attr.prog_btf_fd = btf__fd(obj->btf);
+ 		load_attr.func_info = prog->func_info;
+ 		load_attr.func_info_rec_size = prog->func_info_rec_size;
+ 		load_attr.func_info_cnt = prog->func_info_cnt;
 -- 
-2.40.1
+2.34.1
 
