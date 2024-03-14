@@ -1,202 +1,191 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F58C73196;
-	Thu, 14 Mar 2024 20:53:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D659763EA
+	for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 20:59:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710449638; cv=none; b=EBpObwfNiDMuFJ8Vc2ofrIsOV1pLQVrNh7z5IrWPnFkJkXz/JCIC5AjE95p65ecJ09Sp3+XamIv0IBI/CxQFhk+HlV5ObUBahcaGtMte2Vrfqd76o26bHr/yWSKnvMu5/gn2NmwfuzdlZ05h8Zek8qXHWnezM3Uei5DXh99vsQw=
+	t=1710449964; cv=none; b=LhQ8nt5Ifz/+yDFoes0KnDAPgAfmfHc+oji/7gYLfQoXA4FOl1qjxvxDfkfz63yp9vgerbEXrPukbfV9JDq686OlxahlulssX8SNgjZofg6iGRl2c7cqg1cmwsdcElw3fvR/3m+tJnchvc2cbUFZqxfdvhE48SgwyGCeLh81V3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710449638; c=relaxed/simple;
-	bh=TEv+H1bswr+8vY7p2gyL5HKVtFfDNA9XfV+rdVizc8M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=t2vYT2K+iLpRW/aejUjacyTVSJPR0K7KbWvpnielqrFIXWHVz3OsaZMrqy85qlmIOX0TwlLBZKI2qdpvaRLlaUMNPRA87z8UjMAUbYeihhDUzlCshpQP8SjCsdhzOl2Q5UMtAoXxFz48nrAPU7N50u6/pJUyUvwm4sS0PDqijyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ltQ1PJEu; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1710449964; c=relaxed/simple;
+	bh=O8WIHTGHVyJ0G5L+wHJ0KkAEBikFULZvUAiheIJbUIU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QEtbJOk2r2sYkTQDbutKqqSViN6SQkGaaJBOUHH4N060ePF7sUG9Ff7z4gpkpwB50yDOeh7+AFjFR761ynDhJmv/sMTu3AkyMhnQwodxCvoJbMkSEN4/bIUE/XkUretRJ3nEaPt2zYIKcgm1gFzB5zwo7dF11MfvJhTW5mDvrWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QNjVoWPt; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ltQ1PJEu"
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42EKAKCk005987;
-	Thu, 14 Mar 2024 20:53:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=cLtKCF62FF0vkKniVeV99Hv10VrsPYHKdhsl6X8KqBg=; b=lt
-	Q1PJEu+qHouKYePSaPfiw5tRUy5pispF+t8CH8o+a175JkiCO/9vU7FMofOFNHHb
-	Atw11HQ6R7haugmyRUXLS8Haa1Ikbah2QPHhGZqPGGsRzb+cSxHWHaAD7UYAtmlE
-	sU9URTtboIQ8bAJ+9pD7vl3g+H/19yFUhoprRzQt5svfz7kq29RFmtFByaH9UX0l
-	VlMwtKF0lnnb1rjOBNoKXj3+ys2pNyjBDvbWTH3N9Dv/cKcWI2h2e+ZwSmSA9dAd
-	ipHeweQOI79pC4mlICBfPs/4ZIFV651JGWyvgicdsrFHGXCBP1ig2Yh+1f751tyS
-	WVNwBal8JcVdEC8c3gXA==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wv81bg2ft-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 14 Mar 2024 20:53:34 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42EKrXPk026027
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 14 Mar 2024 20:53:33 GMT
-Received: from [10.46.19.239] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Thu, 14 Mar
- 2024 13:53:29 -0700
-Message-ID: <e270b646-dae0-41cf-9ef8-e991738b9c57@quicinc.com>
-Date: Thu, 14 Mar 2024 13:53:29 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QNjVoWPt"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-5e4f79007ffso973362a12.2
+        for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 13:59:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710449963; x=1711054763; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8UnDk7Lj+LRDoh9gP3rGxpytkvD8lKen1v5LMpKEHyw=;
+        b=QNjVoWPtjN7jUERT54a4Wu2yiKfE0IDSN3XCvDXYm6Td4qU57dkNT653Sh0qk6ltNp
+         VZscOBpLW8ck8LAz0sBDh6ndGHylyOFj3/wM29natfGfAEwMSi6RXWzuKxjNCUAnlcN/
+         CdEAZXLr39Jsx7V9pmMBKoOa/vyXu0UN1rDuob/7w7SM3hYkUWZIDeuW7RBx3jCTWReP
+         l9hfFYvSZBc7+6pan/gDvUdYjchbvl2R/p00k2NCiCeV2xSWLAFfXqpC943gmekWWuTz
+         PMgENuZJLcvXKYoDRl27HJiJF6DxYD9Ui3CBdlNQ1m2QQsEFBoVR3llT3fb5z3VefkNZ
+         ZFJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710449963; x=1711054763;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8UnDk7Lj+LRDoh9gP3rGxpytkvD8lKen1v5LMpKEHyw=;
+        b=DID9Vz0UMsN3FZDUFJgnnJGPYCXUrpTgQkhzVmAyjB0a8VAT2dWUXZ2WFHS2W+0Dtv
+         Bq97OnM580OU4Ow+sFj9K0uU7ZDifxywvL2HFP8JFlFl80D5ACen5+bdItC9ROIh8jRD
+         u/Wg3Q0SvAprCPxfX0xhVMtaM9knkMc0JyR43MhS21xGfa40RLFVx42dxzI7NneVllBZ
+         F7yp0peKRm/NQV0w0Sll1LmFt2l9NYQ/xGfoBKj2J/vYfmhlnKTkFejYx9DoAfKwDUYE
+         zwUB3YbQrWRQqh2VMWTtdPBPIzwObBloXVGNB1iPeMthcN+qyA58x7lbH97kdbbjnH2U
+         GfHg==
+X-Gm-Message-State: AOJu0YwuAwsE18vQZbuxgr6s+UZaOsb5r0hcYgl+/8gJFo5BMQ7dYc9Z
+	gdOtcc/L8Mu+9fpmhljhA6sSvM39nIb0ZN0nHrON4wNkzx59+22mxrl4tPBq7+zwBJYX91Jvy0V
+	oLlwIx7rCHXjgUX6LDhtiN0KoXQJX+kyk6Ic=
+X-Google-Smtp-Source: AGHT+IGRA+cFsHepiW7KWsGzugZzXZSGEhcJASIB4xQeuhmp3oGAxevos8mAjQ/79gVhhhB4h7qUuPk6Fw+qOa0yRrs=
+X-Received: by 2002:a17:90a:6bc5:b0:29c:762a:3fde with SMTP id
+ w63-20020a17090a6bc500b0029c762a3fdemr3007626pjj.14.1710449962672; Thu, 14
+ Mar 2024 13:59:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v4] net: Re-use and set mono_delivery_time bit
- for userspace tstamp packets
-Content-Language: en-US
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Martin KaFai Lau
-	<martin.lau@linux.dev>
-CC: <kernel@quicinc.com>, "David S. Miller" <davem@davemloft.net>,
-        "Eric
- Dumazet" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        "Martin
- KaFai Lau" <martin.lau@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Daniel
- Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii
- Nakryiko <andrii@kernel.org>
-References: <20240301201348.2815102-1-quic_abchauha@quicinc.com>
- <2a4cb416-5d95-459d-8c1c-3fb225240363@linux.dev>
- <65f16946cd33e_344ff1294fc@willemb.c.googlers.com.notmuch>
- <28282905-065a-4233-a0a2-53aa9b85f381@linux.dev>
- <65f2004e65802_3d1e792943e@willemb.c.googlers.com.notmuch>
- <0dff8f05-e18d-47c8-9f19-351c44ea8624@linux.dev>
- <e5da91bc-5827-4347-ab38-36c92ae2dfa2@quicinc.com>
- <65f21d65820fc_3d934129463@willemb.c.googlers.com.notmuch>
- <bc037db4-58bb-4861-ac31-a361a93841d3@linux.dev>
- <65f2c81fc7988_3ee61729465@willemb.c.googlers.com.notmuch>
- <5692ddb3-9558-4440-a7bf-47fcc47401ed@linux.dev>
- <65f35e00a83c0_2132294f5@willemb.c.googlers.com.notmuch>
-From: "Abhishek Chauhan (ABC)" <quic_abchauha@quicinc.com>
-In-Reply-To: <65f35e00a83c0_2132294f5@willemb.c.googlers.com.notmuch>
+References: <20240313214139.685112-1-thinker.li@gmail.com>
+In-Reply-To: <20240313214139.685112-1-thinker.li@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 14 Mar 2024 13:59:10 -0700
+Message-ID: <CAEf4BzYXe8xbB5BH97ggYzokdFjqAv5Zuz_MRV9fyzCt+yJJvQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/3] Ignore additional fields in the
+ struct_ops maps in an updated version.
+To: Kui-Feng Lee <thinker.li@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev, song@kernel.org, 
+	kernel-team@meta.com, andrii@kernel.org, sinquersw@gmail.com, 
+	kuifeng@meta.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: k2qdVf5ZFH5s58IQjYO03QyOVUycO3zR
-X-Proofpoint-ORIG-GUID: k2qdVf5ZFH5s58IQjYO03QyOVUycO3zR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-14_13,2024-03-13_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 spamscore=0 bulkscore=0 adultscore=0 mlxlogscore=978
- mlxscore=0 clxscore=1015 malwarescore=0 priorityscore=1501
- lowpriorityscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2402120000 definitions=main-2403140161
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Mar 13, 2024 at 2:41=E2=80=AFPM Kui-Feng Lee <thinker.li@gmail.com>=
+ wrote:
+>
+> According to an offline discussion, it would be beneficial to
+> implement a backward-compatible method for struct_ops types with
+> additional fields that are not present in older kernels.
+>
+> This patchset accepts additional fields of a struct_ops map with all
+> zero values even if these fields are not in the corresponding type in
+> the kernel. This provides a way to be backward compatible. User space
+> programs can use the same map on a machine running an old kernel by
+> clearing fields that do not exist in the kernel.
+>
+> For example, in a test case, it adds an additional field "zeroed" that
+> doesn't exist in struct bpf_testmod_ops of the kernel.
+>
+>     struct bpf_testmod_ops___zeroed {
+>         int (*test_1)(void);
+>         void (*test_2)(int a, int b);
+>         int (*test_maybe_null)(int dummy, struct task_struct *task);
+>         int zeroed;
+>     };
+>
+>     SEC(".struct_ops.link")
+>     struct bpf_testmod_ops___zeroed testmod_zeroed =3D {
+>         .test_1 =3D (void *)test_1,
+>         .test_2 =3D (void *)test_2_v2,
+>     };
+>
+> Here, it doesn't assign a value to "zeroed" of testmod_zeroed, and by
+> default the value of this field will be zero. So, the map will be
+> accepted by libbpf, but libbpf will skip the "zeroed" field. However,
+> if the "zeroed" field is assigned to any value other than "0", libbpf
+> will reject to load this map.
+>
+> ---
+> Changes from v1:
+>
+>  - Fix the issue about function pointer fields.
+>
+>  - Change a warning message, and add an info message for skipping
+>    fields.
+>
+>  - Add a small demo of additional arguments that are not in the
+>    function pointer prototype in the kernel.
+>
+> v1: https://lore.kernel.org/all/20240312183245.341141-1-thinker.li@gmail.=
+com/
+>
+> Kui-Feng Lee (3):
+>   libbpf: Skip zeroed or null fields if not found in the kernel type.
+>   selftests/bpf: Ensure libbpf skip all-zeros fields of struct_ops maps.
+>   selftests/bpf: Accept extra arguments if they are not used.
+
+I applied the first two patches and dropped the third one, as I don't
+think it's actually testing any new condition. What I actually had in
+mind is more along the following lines:
+
+$ git diff
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.=
+c
+b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+index 098776d00ab4..9585504ce6b5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+@@ -103,6 +103,8 @@ static void test_struct_ops_not_zeroed(void)
+        if (!ASSERT_OK_PTR(skel, "struct_ops_module_open"))
+                return;
+
++       skel->struct_ops.testmod_fn_proto->test_2 =3D skel->progs.test_2;
++
+        err =3D struct_ops_module__load(skel);
+        ASSERT_OK(err, "struct_ops_module_load");
+
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_module.c
+b/tools/testing/selftests/bpf/progs/struct_ops_module.c
+index 86e1e50c5531..d3e0f941c16c 100644
+--- a/tools/testing/selftests/bpf/progs/struct_ops_module.c
++++ b/tools/testing/selftests/bpf/progs/struct_ops_module.c
+@@ -68,3 +68,13 @@ struct bpf_testmod_ops___zeroed testmod_zeroed =3D {
+        .test_1 =3D (void *)test_1,
+        .test_2 =3D (void *)test_2_v2,
+ };
++
++struct bpf_testmod_ops___diff_fn_proto {
++       /* differs from expected void (*test_2)(int a, int b) */
++       void (*test_2)(int a);
++};
++
++SEC(".struct_ops.link")
++struct bpf_testmod_ops___zeroed testmod_fn_proto =3D {
++       .test_2 =3D (void *)test_2_v2,
++};
 
 
+see how bpf_testmod_ops___diff_fn_proto defines test_2 callback with
+an incompatible signature, but at runtime we are switching the program
+to the one that the kernel actually expects. This is the scenario
+(incompatible struct ops type definition) that I wanted to test and
+make sure it works.
 
-On 3/14/2024 1:28 PM, Willem de Bruijn wrote:
-> Martin KaFai Lau wrote:
->> On 3/14/24 2:49 AM, Willem de Bruijn wrote:
->>>> The two bits could potentially only encode the delivery time that is allowed to
->>>> be forwarded without reset. 0 could mean refering back to sk_clockid and don't
->>>> forward. The final consumer of the forwarded skb->tstamp is the qdisc which
->>>> currently only has mono and tai.
->>>
->>> So the followinng meaning of bit pair
->>> { skb->mono_delivery_time, skb->user_delivery_time } ?
->>>   
->>> - { 0, 0 } legacy skb->tstamp: realtime on rx
->>> - { 1, 0 } skb->tstamp is mono: existing behavior of mono_delivery_time bit
->>> - { 0, 1 } skb->tstamp is tai: analogous to mono case
->>> - { 1, 1 } skb->tstamp defined by skb->sk->sk_clockid
->>
->> I was thinking only forward mono and tai until it is clearer how other clocks 
->> will be useful for forwarding between e/ingress. By resetting all skb->tstamp 
->> other than mono and tai, { 0, 0 } at ingress will mean realtime on rx and { 0, 0 
->> } at egress will mean go look skb->sk->sk_clockid.
->>
->> I do like your scheme such that it is much clearer what is in skb->tstamp 
->> without depending on other bits like tc_at_ingress or not.
->>
->> "{ 0, 1 } skb->tstamp is tai: analogous to mono case" can probably be dropped 
->> for now until bpf_skb_set_tstamp(BPF_SKB_TSTAMP_DELIVERY_TAI) is needed.
->> Otherwise, it is mostly a duplicate of "{ 1, 1 } skb->tstamp defined by 
->> skb->sk->sk_clockid".
->>
->> The bpf_convert_tstamp_{read,write} and the helper bpf_skb_set_tstamp need to be 
->> changed to handle the new "user_delivery_time" bit anyway, e.g. 
->> bpf_skb_set_tstamp(BPF_SKB_TSTAMP_DELIVERY_MONO) needs to clear the 
->> "user_delivery_time" bit.
->>
->> I think the "struct inet_frag_queue" also needs a new "user_delivery_time" 
->> field. "mono_delivery_time" is already in there.
->>
->> It may as well be cleaner to combine mono_delivery_time and user_delivery_time 
->> into a 2 bits field like:
->>
->> struct sk_buff {
->> 	__u8 tstamp_type:2;
->> };
->>
->> enum {
->> 	SKB_TSTAMP_TYPE_RX_REAL = 0, /* A RX (receive) time in real */
->> 	SKB_TSTAMP_TYPE_TX_MONO = 1, /* A TX (delivery) time in mono */
->>
->> 	/* A TX (delivery) time and its clock is in skb->sk->sk_clockid.
->> 	 *
->> 	 * BPF_SKB_TSTAMP_DELIVERY_USER should be added
->> 	 * such that reading __sk_buff->tstamp_type will match the
->> 	 * SKB_TSTAMP_TYPE_TX_USER.
->> 	 *
->> 	 * The bpf program can learn the clockid by
->> 	 * reading skb->sk->sk_clockid.
->> 	 *
->> 	 * bpf_skb_set_tstamp(BPF_SKB_TSTAMP_DELIVERY_USER)
->> 	 * should be disallowed for now until the use case
->> 	 * is more clear. Potentially, we could allow it
->> 	 * in the future as long as
->> 	 * the sock_flag(sk, SOCK_TXTIME) is true at that moment.
->> 	 */
->> 	SKB_TSTAMP_TYPE_TX_USER = 2,
->>
->> 	/* UNUSED_FOR_FUTURE = 3, */
->> };
->>
->> It will have more code churns in the first patch to rename 
->> s/mono_delivery_time/tstamp_type/.
->>
->> wdyt?
-> 
-> I asked for such code churn in the original patch. We then decided to
-> leave the variable name as is, as the churn was significant.
-> 
-> Long term, it is obviously cleaner.
-> 
-> I don't have a strong opinion. If doing this, let's at least make it
-> two separate patches, one that is a NOOP rename only.
-> Martin and Willem.
-Lets do the cleaner approach. I feel its now or never. 
+I quickly checked that it does work because libbpf doesn't enforce any
+type signature (which is both good and bad, but it is what it is). It
+would still be nice to have a selftest added with an incompatible
+struct_ops type which is "fixed up" by setting thhe correct program
+instance. Consider for a follow up.
 
-1. I will raise one patch to introduce rename mono_delivery_time to 
-tstamp_type 
-2. I will introduce setting of userspace timestamp type as the second bit 
-whem transmit_time is set. 
-3. This will be a first step to make the design scalable. 
-4. Tomorrow if we have more timestamp to support, upstream community has to do is 
-update the enum and increase the bitfield from 2=>3 and so on. 
 
-I need help from Martin to test the patch which renames the mono_delivery_time 
-to tstamp_type (Which i feel should be straight forward as the value of the bit is 1)
-
-Sounds like a plan ? 
-
-> 
+>
+>  tools/lib/bpf/libbpf.c                        |  24 +++-
+>  .../bpf/prog_tests/test_struct_ops_module.c   | 103 ++++++++++++++++++
+>  .../bpf/progs/struct_ops_extra_arg.c          |  49 +++++++++
+>  .../selftests/bpf/progs/struct_ops_module.c   |  16 ++-
+>  4 files changed, 186 insertions(+), 6 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_extra_ar=
+g.c
+>
+> --
+> 2.34.1
+>
