@@ -1,69 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EF376414;
-	Thu, 14 Mar 2024 21:55:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED3F51A38EE
+	for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 22:09:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710453302; cv=none; b=fFomu/CI8kvXKFn2jMctj+wiez5nNwotuv/egdWpKnPm7mF4l9BJgM6x5xwL4j5NeXBlS5ciyWfU7PybY5YjbmN7c1cUVkKAkj5fLhP5jrPdU8jI+y/e4cu6O8rRe1rV99nrgKn8tBHRpLSGNL0utCkqLparYZc50ElQ7rM1rA0=
+	t=1710454153; cv=none; b=kk8qFoES37LswD3wMinuVgwno1aTbU1TKPfkN+VsDZsXrJPSf2JfD1ozE3111m2eggOgF6/29nGl1GwePU+PFNh8N3OtS4vgbJp1V26rmovLfyb+EiiFz/YYF/bRXOeLCHMr8laUrDpsKyTvErkD2SDRW+ZOcjwrNBkPNx2Jf3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710453302; c=relaxed/simple;
-	bh=H4RYZfy6bgqOfA1gltQv38hEIlvGCb4vgyc16aGU3gw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TYARPhiI/lrqTQLGSzkBTfCWEGKYdIVjHYht8FPg5lUW1u6/X4pKt5vxoyekTj9lfwsifvkEZSrC4SEaubMwtnIUntW3g/Sn9jpExE6IFg8/usnIScKmiG5eaf1/GuKGo69t2g5Dza77df4ZnvtoDl6kFlEq9zk0dFiEaLpThRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oSMtl9W4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710454153; c=relaxed/simple;
+	bh=eINuvr2e+9tDN58W2utJEPEgTBmBCgF68Th43zQ0umo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BQtxQR3fCeaT/o0H0vBigX5qz6XTw0m0sd1OUDwvc+6w7wqInfa36mRh+yEGwV4ukDc0OQZCiE/8syg2UpK/97vswdh/h0XjkwpwYpm62JcI1s5aNKQTxcRUlyrMLQzL04fWtttuRnGMvH3/ciL33N8NYXvWYU+0MKm4nmc5XV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nJnAKKUl; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oSMtl9W4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C389AC433F1;
-	Thu, 14 Mar 2024 21:55:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710453301;
-	bh=H4RYZfy6bgqOfA1gltQv38hEIlvGCb4vgyc16aGU3gw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=oSMtl9W401FPzb/39ox5xpKbri4fysztQtP1mdvOl3BUcUDfDp7yreKs2KiFd0fda
-	 OYovpfXCm/XlUb/f8kuJH3kPk9q/5QeiChoVqVanJ9c2BRU8vsxX8fVQBTY8h5VRMQ
-	 /aGW/XnjqkoDqmISc9ctJdbIu/Mtw9QmRmCF2Zn4i9Me3upKuGSxFqWUqdH4n0szWd
-	 pPIiYiFef+ycjDGXi9yEvf4TLWpXSBXgB2OFtp2i1m65l1qijuJR0VctgH4xC0WbdM
-	 XTMmTpTLyOEDr6P6gCnVUwbfohXmzy8mMAbH55ikc/40KT1Vv7BOtCtRCfh7iEqQ9K
-	 CP0UAz5W9wpIA==
-Date: Thu, 14 Mar 2024 14:54:59 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Yan Zhai <yan@cloudflare.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jiri Pirko
- <jiri@resnulli.us>, Simon Horman <horms@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Lorenzo Bianconi <lorenzo@kernel.org>, Coco Li
- <lixiaoyan@google.com>, Wei Wang <weiwan@google.com>, Alexander Duyck
- <alexanderduyck@fb.com>, Hannes Frederic Sowa <hannes@stressinduktion.org>,
- linux-kernel@vger.kernel.org, rcu@vger.kernel.org, bpf@vger.kernel.org,
- kernel-team@cloudflare.com, Joel Fernandes <joel@joelfernandes.org>, "Paul
- E. McKenney" <paulmck@kernel.org>, Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdl?=
- =?UTF-8?B?bnNlbg==?= <toke@redhat.com>, Alexei Starovoitov
- <alexei.starovoitov@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
- mark.rutland@arm.com, Jesper Dangaard Brouer <hawk@kernel.org>
-Subject: Re: [PATCH v3 net 1/3] rcu: add a helper to report consolidated
- flavor QS
-Message-ID: <20240314145459.7b3aedf1@kernel.org>
-In-Reply-To: <f71214e6221c5c50b32a62a33697473c756e604e.1710346410.git.yan@cloudflare.com>
-References: <cover.1710346410.git.yan@cloudflare.com>
-	<f71214e6221c5c50b32a62a33697473c756e604e.1710346410.git.yan@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nJnAKKUl"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-33e8e9a4edaso1680191f8f.2
+        for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 15:09:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710454150; x=1711058950; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=chNCzegHivJJCW2Qy6c8rLMPZLJm5uoYVlYtgYj2Zps=;
+        b=nJnAKKUlwPQvBiYtp0U13vcwTGu40Vclq4G2C7jnoSYCrVyorQ2AqInuurQVaFQqly
+         2INjlMR1VERcNZP4m2oRbU4AnmaQYDCibHc5poBQWgm3K93iRLHU1xRFQH2u0yEvdnkv
+         mzVvSZb7HrdjdpoSRshLn9pANcVGrWFEGf+d4btBhrOBaEP6o05LhOr40BhhxFWjLj4P
+         UBWkxEkzU+QWlWxi7VEy/No4qgSubmSALNss/PLGFZqknoBYaZ5wfcfEd7QLgu75TTIp
+         AFJseSWUKJ8cE2y+d1PxyKUtaN3RAv4xlaTEVtXdwLJZfQhLnwAg/Ue68VqTccvHo3Ui
+         ht6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710454150; x=1711058950;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=chNCzegHivJJCW2Qy6c8rLMPZLJm5uoYVlYtgYj2Zps=;
+        b=h6ah4QgSMxd0PD7WHUlvqmwB/O18WnFTLPN1c0J845LmMcfu21WmOjzTtFcZBtKkVN
+         ZGggFdGGE5AwLdt8Payq3TfGPuAUqbMEx2VwBKRUlKhDsU8aVTlBOhl3hI+X567kFK+k
+         P7gHc1xmvWSAGZpX3qcccKMkr7I6I5SCEtCsbvqfQH0bkGN6j7PbU63Qq1mujxCQ2WPe
+         spyvuQFOuRNqfJ7umnIPFry72NWKgrzEuw5A/lK9YogNdxEeV/2kUj1QScibzcIlZW23
+         JXDhUK0xIryXwsyGCVxR4DCHlLsc7iGnlRQ++tVWMme3hAkYEXvds0t5pyn03oN3LFC2
+         6NPA==
+X-Forwarded-Encrypted: i=1; AJvYcCWGZ9rt/7I+YtSIkU49/O1/XTiHmXkU61jtO6XoEJCZ4gQMbW218fN3cKvo+R43vtoDqelTY57jPHkjxxpDoXMDWgbI
+X-Gm-Message-State: AOJu0YyChJCExByBMF5KO+S6bCjbJg2GgBLUcpsYbChqVSomA8aMTwnt
+	qqBvF+rVfrdwmsY3OJG2GeB46abWRxBETqezM0pHeyMIEfACji8iF45QmAuTfd9SYgbYynZcYml
+	XYHto8VmGpVdGuvT7BY83PBJNvRo=
+X-Google-Smtp-Source: AGHT+IE08PpRTYxoE3/f62enLrVOCz7b2M1uRqq3cZjNhMpzfcZ5zNp64La0QJg9nKgZZcdIxfHqTtm/ZTFtglZJAvI=
+X-Received: by 2002:adf:fed2:0:b0:33e:cc27:a9b8 with SMTP id
+ q18-20020adffed2000000b0033ecc27a9b8mr1601664wrs.32.1710454149869; Thu, 14
+ Mar 2024 15:09:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20240314103153.2489252-1-ben.dooks@codethink.co.uk>
+In-Reply-To: <20240314103153.2489252-1-ben.dooks@codethink.co.uk>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 14 Mar 2024 15:08:58 -0700
+Message-ID: <CAADnVQL=6md0Nfrg37n_nLKgUJScr9XTZG+GFpL3nnFG+HnFjA@mail.gmail.com>
+Subject: Re: [PATCH] bpf: remove trunctaiton warning in BPF_LD_IMM64_RAW
+To: Ben Dooks <ben.dooks@codethink.co.uk>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 13 Mar 2024 09:25:49 -0700 Yan Zhai wrote:
-> +/**
-> + * rcu_softirq_qs_periodic - Periodically report consolidated quiescent states
+On Thu, Mar 14, 2024 at 3:32=E2=80=AFAM Ben Dooks <ben.dooks@codethink.co.u=
+k> wrote:
+>
+> When building W=3D1, the following warningds get generated by lib/test_bp=
+f.c
+> due to the BPF_LD_IMM64_RAW() truncating a 64bit to 32bit value without
+> a specific mask to do so.
+>
+> lib/test_bpf.c:6441:25: warning: cast truncates bits from constant value =
+(ffffffff0000 becomes ffff0000)
+> lib/test_bpf.c:6442:25: warning: cast truncates bits from constant value =
+(ffffffff0000 becomes ffff0000)
+> lib/test_bpf.c:6473:25: warning: cast truncates bits from constant value =
+(123456789abcdef becomes 89abcdef)
+> lib/test_bpf.c:6489:25: warning: cast truncates bits from constant value =
+(123456789abcdef becomes 89abcdef)
+> lib/test_bpf.c:6490:25: warning: cast truncates bits from constant value =
+(123456780a0c0e0 becomes 80a0c0e0)
+> lib/test_bpf.c:6599:25: warning: cast truncates bits from constant value =
+(123456789abcdef becomes 89abcdef)
+> lib/test_bpf.c:6637:25: warning: cast truncates bits from constant value =
+(ffffffff0000 becomes ffff0000)
+>
+> (more warnings truncated)
+>
+> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+> ---
+>  include/linux/filter.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/linux/filter.h b/include/linux/filter.h
+> index c99bc3df2d28..c1ff6511f365 100644
+> --- a/include/linux/filter.h
+> +++ b/include/linux/filter.h
+> @@ -238,7 +238,7 @@ static inline bool insn_is_zext(const struct bpf_insn=
+ *insn)
+>                 .dst_reg =3D DST,                                 \
+>                 .src_reg =3D SRC,                                 \
+>                 .off   =3D 0,                                     \
+> -               .imm   =3D (__u32) (IMM) }),                      \
+> +               .imm   =3D (__u32) ((IMM) & (__u64)0xffffffff) }), \
 
-> +#define rcu_softirq_qs_periodic(old_ts) \
+What compiler is this?
+I don't think it's a good idea to uglify this macro just
+to shut up a compiler.
+As Stan said there are plenty of other places where
+such _explicit_ u32 cast is used.
+We're not going to mess with all of them.
 
-scripts/kernel-doc says:
-
-include/linux/rcupdate.h:271: warning: Function parameter or struct member 'old_ts' not described in 'rcu_softirq_qs_periodic'
--- 
 pw-bot: cr
