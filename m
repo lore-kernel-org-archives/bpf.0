@@ -1,457 +1,279 @@
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9EA26BB54;
-	Thu, 14 Mar 2024 08:55:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C58A9433A0
+	for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 09:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710406517; cv=none; b=NMyN6GNx2AidZxlWhMYhJTNwtzfFKaJU5Qypm6yBrWyE3tCN4sdfAU2jCeXTceR4LoUqf0t+3NjI3z3osQ7e//FZgn8Wy06EUhShSluRu1ug1HPUI+kkXS2sbX98XY8LDmfT5ixGGimPMdwTCHPsM5POIlt6fj1nBMGpEGhxk7o=
+	t=1710407477; cv=none; b=YIa3vmocLejMuzRrYFbQyo1jlVGH45taBOaKPpBBau7zhCM5JPwuzm+z2sPdNm+vv59Q+H7TxLhTlgQqSCFcjzX0DNLwyv2EPa4BO/BQyOIMR5CbwJpiJgojHJUQ5r2NV4MKntlMf/S19KgbJjg9UpYHHb9F7e9TdKSB6YKZW2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710406517; c=relaxed/simple;
-	bh=l3rlX4bNovDyGtniopFmjW3WOruHsBpGldfFm+IGyFA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=F+VxK0DxMsaW+wNeHcbyjrhlGidCns6uBkNjoGgVK9Asfhbdt4j/b+GqQKBjovRD/O4wff6V0wuCUPEG220M9AquPSJwYzvD9BvtugrFdMO40iAvtwbt57R188ZVX3AnPO3fsZPT0DLfaQ50jtCUv1+42i+PrcHE8sun2FnDWvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=LTeVw3kM; arc=none smtp.client-ip=115.124.30.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1710407477; c=relaxed/simple;
+	bh=tRuigTVhySto9HP06SDlUVpmAwg6czpe1ufC8XRlZVk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g2d7gwvPoqtO47jl19lTxZlYN2xarSb//KyIwyNxosroVOuW8VT5g5eabFi0vIsjiPKkSMH8yAA3SVoLebD/5HqNwi+9qd63li6WePjKtNfeQ/JDqu1urik3Jyxbme8sKVkOd38QXtV5GcV5ttcuK/Dqq0XdiIMf5Sp/5wC3O44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=ePjpxKrK; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="LTeVw3kM"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1710406507; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=QiFeYd6wUaKsOKMScaG1ih0veDz06hfJGSMp8ER6qzk=;
-	b=LTeVw3kMh/aNpdkGTgkW15HpApqMuJdFQa/Cl+LlWLF6+cE8yUZZj8tlLQ+MpYWJUaG99EUUKjXGuLM+OCFEah5eaCCO74a20yrOgb+d7GF9bHL8+FVfwWgOJ3lNT/c9aJkn5mCFRE9SlNQOjKtPrwjcbVpd4lFNWtc+mmiSdeA=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0W2S2VIN_1710406505;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W2S2VIN_1710406505)
-          by smtp.aliyun-inc.com;
-          Thu, 14 Mar 2024 16:55:05 +0800
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To: netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="ePjpxKrK"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a2f22bfb4e6so92559166b.0
+        for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 02:11:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1710407474; x=1711012274; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6uqOjoGuvM0n04+MU8F/uSrS7uGl645BO8r/kCRYiZk=;
+        b=ePjpxKrKeSSn661myDTaziQlI5wa1SQJDTqnm7GSvPYB9m4gn5v0TA4+6WsQsQ03XX
+         LXTq6BzT2wTkQwzGaXu7bRbEPyZqVKlPmRuBR8Kk7JOEb/XtWSYM5mqp2a+4alN7vZkO
+         1DAvwq17keYanTZnQt1qidwMeAKb4Rw1IibZy0HiXsFZeuynrJzaRq1C0cEd2QijSx21
+         0f15aw4Cf7E29ROWeHM7muz5s84l1uwal9V2fufEZR6LZHBqFIKxXkKAGD6viLj66gpe
+         PihN9u5iTte3P6PAKuJuES7wfbKhH+h6RuMqzPNOOEF0ysFsrzE6XcM2EvvmuPAS2utA
+         ktOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710407474; x=1711012274;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6uqOjoGuvM0n04+MU8F/uSrS7uGl645BO8r/kCRYiZk=;
+        b=T3k7MJXAwpFyt8axkNxUT/wpTRo4+Yc7jXZMqbrzC3tKdbVQG05G1KKCw7Riu0lJBp
+         gSICRWX9pLDz+eSlySm3Z9ZDvSj4B86FZVxmI2tmGW1OsLxwUHbeGseNUvxIHzWeX9F8
+         U2xEV3VR07XGmatrophfFr4uyv1qRgamPK5FjeGlMz5hTM8GdhxuvZ1SW5RH8o33VhrW
+         9ELiAyz+hGi6N8QeIOYO5zjZKt68KiiE46Qy+VwDCXno2MoQnC1QC+ypGrSY0czrfP0I
+         YcYTepV8YJPMRsL9e+4TugDq6iEV6S5YlwQcDeUDqz2HjqyB/pJA9tRYvD6QaSXbtG5t
+         4jEw==
+X-Forwarded-Encrypted: i=1; AJvYcCUR2IlfZZzJFmKy5U6O+MsWVxqUDR81wUaVe+h4CWP1dROMIXWsucwC+/PHqcpk5r2cTQFZz9TtxG0lJIWYf8KKF8A0
+X-Gm-Message-State: AOJu0YzBq2Mev4hY9O01RWqGwWJQqqwd2OJP+CFzpnNw1r8Dfxq2SYQG
+	8gjkkcxsyv6QYfAlrG8pDiGMS7Z9HzAJCIOTDV2EpASIxNFDuIeQUXcdukEFT5hoxRq/aPlEdGW
+	U
+X-Google-Smtp-Source: AGHT+IEXJ+jat5SE2PBBJfYanYu7cyUEZ6k6RTu48Eqf5ehKZxl0r8E3sJTSWnKi+LfmCyycPYZcsQ==
+X-Received: by 2002:a17:906:c2cb:b0:a46:2ba9:da10 with SMTP id ch11-20020a170906c2cb00b00a462ba9da10mr596760ejb.25.1710407473999;
+        Thu, 14 Mar 2024 02:11:13 -0700 (PDT)
+Received: from zh-lab-node-5 ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id v27-20020a1709063bdb00b00a4665f829a9sm503830ejf.90.2024.03.14.02.11.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Mar 2024 02:11:13 -0700 (PDT)
+Date: Thu, 14 Mar 2024 09:03:31 +0000
+From: Anton Protopopov <aspsk@isovalent.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
 	Stanislav Fomichev <sdf@google.com>,
-	Amritha Nambiar <amritha.nambiar@intel.com>,
-	Larysa Zaremba <larysa.zaremba@intel.com>,
-	Sridhar Samudrala <sridhar.samudrala@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	virtualization@lists.linux.dev,
-	bpf@vger.kernel.org
-Subject: [PATCH net-next v4 4/8] virtio_net: stats map include driver stats
-Date: Thu, 14 Mar 2024 16:54:55 +0800
-Message-Id: <20240314085459.115933-5-xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0.3.g01195cf9f
-In-Reply-To: <20240314085459.115933-1-xuanzhuo@linux.alibaba.com>
-References: <20240314085459.115933-1-xuanzhuo@linux.alibaba.com>
+	Yonghong Song <yonghong.song@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH v1 bpf-next 3/9] bpf: expose how xlated insns map to
+ jitted insns
+Message-ID: <ZfK9Y5c7RuOu0YiN@zh-lab-node-5>
+References: <20240202162813.4184616-4-aspsk@isovalent.com>
+ <CAADnVQLnk=UyKBkRAC1tNkiaF7C4+FG7V-b2xrR3oa_E4+QX7Q@mail.gmail.com>
+ <ZcIDqnXFjsWYyu1G@zh-lab-node-5>
+ <CAADnVQLfidjTWa4+kyRH-qC29gbGvFsRJHu6smcaL0Yk0HqgmA@mail.gmail.com>
+ <ZcS1ZruKKZ1euzlb@zh-lab-node-5>
+ <CAADnVQKH1aitaADzCo__PfMJJA2SxAvYjTS8Z7A6Y01G2OWJgw@mail.gmail.com>
+ <Zc9p4e1EccPkMnmY@zh-lab-node-5>
+ <CAADnVQJ+_+ok_io1_W7e5z_dZhxSqhEFZQkumRgmY4AJRYwW7g@mail.gmail.com>
+ <ZehJFP11vi5sv/eW@zh-lab-node-5>
+ <CAADnVQJnh+j9etPYkst7hhnepvsoBuJY-ds-AF0fn3VqqJNXNg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Git-Hash: 76259b0090f3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJnh+j9etPYkst7hhnepvsoBuJY-ds-AF0fn3VqqJNXNg@mail.gmail.com>
 
-In the last commit, we use the stats map to manage the device stats.
+On Wed, Mar 13, 2024 at 06:56:34PM -0700, Alexei Starovoitov wrote:
+> On Wed, Mar 6, 2024 at 2:51 AM Anton Protopopov <aspsk@isovalent.com> wrote:
+> >
+> > On Tue, Feb 20, 2024 at 05:09:36PM -0800, Alexei Starovoitov wrote:
+> > > On Fri, Feb 16, 2024 at 6:04 AM Anton Protopopov <aspsk@isovalent.com> wrote:
+> > > >
+> > > > On Wed, Feb 14, 2024 at 10:48:26PM -0800, Alexei Starovoitov wrote:
+> > > > > On Thu, Feb 8, 2024 at 3:11 AM Anton Protopopov <aspsk@isovalent.com> wrote:
+> > > > > >
+> > > > > > On Tue, Feb 06, 2024 at 06:26:12PM -0800, Alexei Starovoitov wrote:
+> > > > > > > On Tue, Feb 6, 2024 at 2:08 AM Anton Protopopov <aspsk@isovalent.com> wrote:
+> > > > > > > >
+> > > > > > > > On Mon, Feb 05, 2024 at 05:09:51PM -0800, Alexei Starovoitov wrote:
+> > > > > > > > > On Fri, Feb 2, 2024 at 8:34 AM Anton Protopopov <aspsk@isovalent.com> wrote:
+> > > > > > > > > >
+> > > > > > > > > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > > > > > > > > > index 4def3dde35f6..bdd6be718e82 100644
+> > > > > > > > > > --- a/include/linux/bpf.h
+> > > > > > > > > > +++ b/include/linux/bpf.h
+> > > > > > > > > > @@ -1524,6 +1524,13 @@ struct bpf_prog_aux {
+> > > > > > > > > >         };
+> > > > > > > > > >         /* an array of original indexes for all xlated instructions */
+> > > > > > > > > >         u32 *orig_idx;
+> > > > > > > > > > +       /* for every xlated instruction point to all generated jited
+> > > > > > > > > > +        * instructions, if allocated
+> > > > > > > > > > +        */
+> > > > > > > > > > +       struct {
+> > > > > > > > > > +               u32 off;        /* local offset in the jitted code */
+> > > > > > > > > > +               u32 len;        /* the total len of generated jit code */
+> > > > > > > > > > +       } *xlated_to_jit;
+> > > > > > > > >
+> > > > > > > > > Simply put Nack to this approach.
+> > > > > > > > >
+> > > > > > > > > Patches 2 and 3 add an extreme amount of memory overhead.
+> > > > > > > > >
+> > > > > > > > > As we discussed during office hours we need a "pointer to insn" concept
+> > > > > > > > > aka "index on insn".
+> > > > > > > > > The verifier would need to track that such things exist and adjust
+> > > > > > > > > indices of insns when patching affects those indices.
+> > > > > > > > >
+> > > > > > > > > For every static branch there will be one such "pointer to insn".
+> > > > > > > > > Different algorithms can be used to keep them correct.
+> > > > > > > > > The simplest 'lets iterate over all such pointers and update them'
+> > > > > > > > > during patch_insn() may even be ok to start.
+> > > > > > > > >
+> > > > > > > > > Such "pointer to insn" won't add any memory overhead.
+> > > > > > > > > When patch+jit is done all such "pointer to insn" are fixed value.
+> > > > > > > >
+> > > > > > > > Ok, thanks for looking, this makes sense.
+> > > > > > >
+> > > > > > > Before jumping into coding I think it would be good to discuss
+> > > > > > > the design first.
+> > > > > > > I'm thinking such "address of insn" will be similar to
+> > > > > > > existing "address of subprog",
+> > > > > > > which is encoded in ld_imm64 as BPF_PSEUDO_FUNC.
+> > > > > > > "address of insn" would be a bit more involved to track
+> > > > > > > during JIT and likely trivial during insn patching,
+> > > > > > > since we're already doing imm adjustment for pseudo_func.
+> > > > > > > So that part of design is straightforward.
+> > > > > > > Implementation in the kernel and libbpf can copy paste from pseudo_func too.
+> > > > > >
+> > > > > > To implement the "primitive version" of static branches, where the
+> > > > > > only API is `static_branch_update(xlated off, on/off)` the only
+> > > > > > requirement is to build `xlated -> jitted` mapping (which is done
+> > > > > > in JIT, after the verification). This can be done in a simplified
+> > > > > > version of this patch, without xlated->orig mapping and with
+> > > > > > xlated->jit mapping only done to gotol_or_nop instructions.
+> > > > >
+> > > > > yes. The array of insn->jit_addr sized with as many goto_or_nop-s
+> > > > > the prog will work for user space to flip them, but...
+> > > > >
+> > > > > > The "address of insn" appears when we want to provide a more
+> > > > > > higher-level API when some object (in user-space or in kernel) keeps
+> > > > > > track of one or more gotol_or_nop instructions so that after the
+> > > > > > program load this controlling object has a list of xlated offsets.
+> > > > > > But this would be a follow-up to the initial static branches patch.
+> > > > >
+> > > > > this won't work as a follow up,
+> > > > > since such an array won't work for bpf prog that wants to flip branches.
+> > > > > There is nothing that associates static_branch name/id with
+> > > > > particular goto_or_nop.
+> > > > > There could be a kfunc that bpf prog calls, but it can only
+> > > > > flip all of such insns in the prog.
+> > > > > Unless we start encoding a special id inside goto_or_nop or other hacks.
+> > > > >
+> > > > > > > The question is whether such "address of insn" should be allowed
+> > > > > > > in the data section. If so, we need to brainstorm how to
+> > > > > > > do it cleanly.
+> > > > > > > We had various hacks for similar things in the past. Like prog_array.
+> > > > > > > Let's not repeat such mistakes.
+> > > > > >
+> > > > > > So, data section is required for implementing jump tables? Like,
+> > > > > > to add a new PTR_TO_LABEL or PTR_TO_INSN data type, and a
+> > > > > > corresponding "ptr to insn" object for every occurence of &&label,
+> > > > > > which will be adjusted during verification.
+> > > > > > Looks to me like this one doesn't require any more API than specifying
+> > > > > > a list of &&label occurencies on program load.
+> > > > > >
+> > > > > > For "static keys" though (a feature on top of this patch series) we
+> > > > > > need to have access to the corresponding set of adjusted pointers.
+> > > > > >
+> > > > > > Isn't this enough to add something like an array of
+> > > > > >
+> > > > > >   struct insn_ptr {
+> > > > > >       u32 type; /* LABEL, STATIC_BRANCH,... */
+> > > > > >       u32 insn_off; /* original offset on load */
+> > > > > >       union {
+> > > > > >           struct label {...};
+> > > > > >           struct st_branch { u32 key_id, ..};
+> > > > > >       };
+> > > > > >   };
+> > > > >
+> > > > > which I don't like because it hard codes static_branch needs into
+> > > > > insn->jit_addr association.
+> > > > > "address of insn" should be an individual building block without
+> > > > > bolted on parts.
+> > > > >
+> > > > > A data section with a set of such "address of insn"
+> > > > > can be a description of one static_branch.
+> > > > > There will be different ways to combine such building blocks.
+> > > > > For example:
+> > > > > static_branch(foo) can emit goto_or_nop into bpf code
+> > > > > and add "address of insn" into a section '.insn_addrs.foo".
+> > > > > This section is what libbpf and bpf prog will recognize as a set
+> > > > > of "address of insn" that can be passed into static_branch_update kfunc
+> > > > > or static_branch_update sys_bpf command.
+> > > > > The question is whether we need a new map type (array derivative)
+> > > > > to hold a set of "address of insn" or it can be a part of an existing
+> > > > > global data array.
+> > > > > A new map type is easier to reason about.
+> > > > > Notice how such a new map type is not a map type of static branches.
+> > > > > It's not a map type of goto_or_nop instructions either.
+> > > > >
+> > > > > At load time libbpf can populate this array with indices of insns
+> > > > > that the verifier and JIT need to track. Once JITed the array is readonly
+> > > > > for bpf prog and for user space.
+> > > >
+> > > > So this will be a map per .insn_addrs.X section (where X is key or
+> > > > a pre-defined suffix for jump tables or indirect calls). And to tell
+> > > > the verifier about these maps we will need to pass an array of
+> > > >
+> > > >     struct {
+> > > >             u32 map_fd;
+> > > >             u32 type; /* static key, jump table, etc. */
+> > > >     }
+> > > >
+> > > > on program load. Is this correct?
+> > >
+> > >
+> > > Probably not.
+> > > Since we're going with a new map type (at least for the sake of this
+> > > discussion) it shouldn't need a new way to tell the verifier about it.
+> > > If .insn_addrs.jmp_table_A was a section generated for switch() statement
+> > > by llvm it will be created as a map by libbpf,
+> > > and there will be an ld_imm64 insn generated by llvm that points
+> > > to that map.
+> > > libbpf will populate ld_imm64 insn with map_fd, just like it does
+> > > for global data.
+> >
+> > I understand how this works for indirect jumps (and for the
+> > bpf_static_branch_update(&foo) kfunc) where we have a ld_imm64 with a
+> > map, however, I am still not sure how this will work for static
+> > branches where we just have a 8 byte JA insn + an index in the
+> > corresponding ".insn_addrs.foo" section. How kernel will know that the
+> > program is using a corresponding map which we create from
+> > ".insn_addrs.foo" without specifying this on program load?
+> >
+> > (Sorry for replying late, catching up after [simultaneous] pto &
+> > covid.)
+> 
+> sorry. ctx switch takes time.
+> libbpf can just bpf_prog_bind_map to associate this new map type
+> of ptr_to_insn with a program.
+> Or I misunderstood the question?
 
-Managing driver statistics separately can be inconvenient. To streamline
-the process, I propose integrating driver stats into the existing stats
-map. This integration will allow us to uniformly handle all statistics
-through a single method, simplifying management and reducing complexity
-in our codebase.
+All ptr_to_insn maps are required during the verification. So
+bpf_prog_bind_map can't be used as it requires an existing program.
 
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
----
- drivers/net/virtio_net.c | 200 +++++++++++++++++++--------------------
- 1 file changed, 99 insertions(+), 101 deletions(-)
+What could work and what I am proposing is to pass a list of bound
+maps in prog_load attributes. Then such maps can be used during the
+verification. For normal maps
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index d1f389316e71..e127915a20bd 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -102,32 +102,29 @@ struct virtnet_rq_stats {
- 	u64_stats_t kicks;
- };
- 
--#define VIRTNET_SQ_STAT(m)	offsetof(struct virtnet_sq_stats, m)
--#define VIRTNET_RQ_STAT(m)	offsetof(struct virtnet_rq_stats, m)
-+#define VIRTNET_SQ_STAT(name, m) {name, offsetof(struct virtnet_sq_stats, m)}
-+#define VIRTNET_RQ_STAT(name, m) {name, offsetof(struct virtnet_rq_stats, m)}
- 
- static const struct virtnet_stat_desc virtnet_sq_stats_desc[] = {
--	{ "packets",		VIRTNET_SQ_STAT(packets) },
--	{ "bytes",		VIRTNET_SQ_STAT(bytes) },
--	{ "xdp_tx",		VIRTNET_SQ_STAT(xdp_tx) },
--	{ "xdp_tx_drops",	VIRTNET_SQ_STAT(xdp_tx_drops) },
--	{ "kicks",		VIRTNET_SQ_STAT(kicks) },
--	{ "tx_timeouts",	VIRTNET_SQ_STAT(tx_timeouts) },
-+	VIRTNET_SQ_STAT("packets",      packets),
-+	VIRTNET_SQ_STAT("bytes",        bytes),
-+	VIRTNET_SQ_STAT("xdp_tx",       xdp_tx),
-+	VIRTNET_SQ_STAT("xdp_tx_drops", xdp_tx_drops),
-+	VIRTNET_SQ_STAT("kicks",        kicks),
-+	VIRTNET_SQ_STAT("tx_timeouts",  tx_timeouts),
- };
- 
- static const struct virtnet_stat_desc virtnet_rq_stats_desc[] = {
--	{ "packets",		VIRTNET_RQ_STAT(packets) },
--	{ "bytes",		VIRTNET_RQ_STAT(bytes) },
--	{ "drops",		VIRTNET_RQ_STAT(drops) },
--	{ "xdp_packets",	VIRTNET_RQ_STAT(xdp_packets) },
--	{ "xdp_tx",		VIRTNET_RQ_STAT(xdp_tx) },
--	{ "xdp_redirects",	VIRTNET_RQ_STAT(xdp_redirects) },
--	{ "xdp_drops",		VIRTNET_RQ_STAT(xdp_drops) },
--	{ "kicks",		VIRTNET_RQ_STAT(kicks) },
-+	VIRTNET_RQ_STAT("packets",       packets),
-+	VIRTNET_RQ_STAT("bytes",         bytes),
-+	VIRTNET_RQ_STAT("drops",         drops),
-+	VIRTNET_RQ_STAT("xdp_packets",   xdp_packets),
-+	VIRTNET_RQ_STAT("xdp_tx",        xdp_tx),
-+	VIRTNET_RQ_STAT("xdp_redirects", xdp_redirects),
-+	VIRTNET_RQ_STAT("xdp_drops",     xdp_drops),
-+	VIRTNET_RQ_STAT("kicks",         kicks),
- };
- 
--#define VIRTNET_SQ_STATS_LEN	ARRAY_SIZE(virtnet_sq_stats_desc)
--#define VIRTNET_RQ_STATS_LEN	ARRAY_SIZE(virtnet_rq_stats_desc)
--
- #define VIRTNET_STATS_DESC_CQ(name) \
- 	{#name, offsetof(struct virtio_net_stats_cvq, name)}
- 
-@@ -208,10 +205,10 @@ static const struct virtnet_stat_desc virtnet_stats_tx_speed_desc[] = {
- #define VIRTNET_Q_TYPE_CQ 2
- 
- struct virtnet_stats_map {
--	/* The stat type in bitmap. */
-+	/* The stat type in bitmap. Just for device stats. */
- 	u64 stat_type;
- 
--	/* The bytes of the response for the stat. */
-+	/* The bytes of the response for the stat. Just for device stats. */
- 	u32 len;
- 
- 	/* The num of the response fields for the stat. */
-@@ -220,9 +217,12 @@ struct virtnet_stats_map {
- 	/* The type of queue corresponding to the statistics. (cq, rq, sq) */
- 	u32 queue_type;
- 
--	/* The reply type of the stat. */
-+	/* The reply type of the stat. Just for device stats. */
- 	u8 reply_type;
- 
-+	/* The stats are counted by the driver. */
-+	bool from_driver;
-+
- 	/* Describe the name and the offset in the response. */
- 	const struct virtnet_stat_desc *desc;
- };
-@@ -234,10 +234,24 @@ struct virtnet_stats_map {
- 		ARRAY_SIZE(virtnet_stats_ ## type ##_desc),	\
- 		VIRTNET_Q_TYPE_##queue_type,			\
- 		VIRTIO_NET_STATS_TYPE_REPLY_##TYPE,		\
-+		false,						\
- 		&virtnet_stats_##type##_desc[0]			\
- 	}
- 
-+#define VIRTNET_DRIVER_STATS_MAP_ITEM(type, queue_type)		\
-+	{							\
-+		0, 0,						\
-+		ARRAY_SIZE(virtnet_ ## type ## _stats_desc),	\
-+		VIRTNET_Q_TYPE_##queue_type,			\
-+		0, true,					\
-+		&virtnet_##type##_stats_desc[0]			\
-+	}
-+
- static struct virtnet_stats_map virtio_net_stats_map[] = {
-+	/* Driver stats should on the start. */
-+	VIRTNET_DRIVER_STATS_MAP_ITEM(rq, RX),
-+	VIRTNET_DRIVER_STATS_MAP_ITEM(sq, TX),
-+
- 	VIRTNET_DEVICE_STATS_MAP_ITEM(CVQ, cvq, CQ),
- 
- 	VIRTNET_DEVICE_STATS_MAP_ITEM(RX_BASIC, rx_basic, RX),
-@@ -251,6 +265,11 @@ static struct virtnet_stats_map virtio_net_stats_map[] = {
- 	VIRTNET_DEVICE_STATS_MAP_ITEM(TX_SPEED, tx_speed, TX),
- };
- 
-+#define virtnet_stats_supported(vi, m) ({				\
-+	typeof(m) _m = (m);						\
-+	(((vi)->device_stats_cap & _m->stat_type) || _m->from_driver);	\
-+})
-+
- struct virtnet_interrupt_coalesce {
- 	u32 max_packets;
- 	u32 max_usecs;
-@@ -2266,7 +2285,7 @@ static int virtnet_receive(struct receive_queue *rq, int budget,
- 
- 	u64_stats_set(&stats.packets, packets);
- 	u64_stats_update_begin(&rq->stats.syncp);
--	for (i = 0; i < VIRTNET_RQ_STATS_LEN; i++) {
-+	for (i = 0; i < ARRAY_SIZE(virtnet_rq_stats_desc); i++) {
- 		size_t offset = virtnet_rq_stats_desc[i].offset;
- 		u64_stats_t *item, *src;
- 
-@@ -3400,38 +3419,34 @@ static int virtnet_set_channels(struct net_device *dev,
- 	return err;
- }
- 
--static void virtnet_get_hw_stats_string(struct virtnet_info *vi, int type, int qid, u8 **data)
-+static void virtnet_get_stats_string(struct virtnet_info *vi, int type, int qid, u8 **data)
- {
- 	struct virtnet_stats_map *m;
-+	const char *tp, *hw, *desc;
- 	int i, j;
- 	u8 *p = *data;
- 
--	if (!virtio_has_feature(vi->vdev, VIRTIO_NET_F_DEVICE_STATS))
--		return;
--
- 	for (i = 0; i < ARRAY_SIZE(virtio_net_stats_map); ++i) {
- 		m = &virtio_net_stats_map[i];
- 
- 		if (m->queue_type != type)
- 			continue;
- 
--		if (!(vi->device_stats_cap & m->stat_type))
-+		if (!virtnet_stats_supported(vi, m))
- 			continue;
- 
-+		hw = m->from_driver ? "" : "_hw";
-+		tp = type == VIRTNET_Q_TYPE_RX ? "rx" : "tx";
-+
- 		for (j = 0; j < m->num; ++j) {
--			switch (type) {
--			case VIRTNET_Q_TYPE_RX:
--				ethtool_sprintf(&p, "rx_queue_hw_%u_%s", qid, m->desc[j].desc);
--				break;
--
--			case VIRTNET_Q_TYPE_TX:
--				ethtool_sprintf(&p, "tx_queue_hw_%u_%s", qid, m->desc[j].desc);
--				break;
--
--			case VIRTNET_Q_TYPE_CQ:
--				ethtool_sprintf(&p, "cq_hw_%s", m->desc[j].desc);
--				break;
-+			desc = m->desc[j].desc;
-+
-+			if (type == VIRTNET_Q_TYPE_CQ) {
-+				ethtool_sprintf(&p, "cq%s_%s", hw, desc);
-+				continue;
- 			}
-+
-+			ethtool_sprintf(&p, "%s_queue%s_%u_%s", tp, hw, qid, desc);
- 		}
- 	}
- 
-@@ -3460,7 +3475,7 @@ static void virtnet_stats_ctx_init(struct virtnet_info *vi,
- 	for (i = 0; i < ARRAY_SIZE(virtio_net_stats_map); ++i) {
- 		m = &virtio_net_stats_map[i];
- 
--		if (!(vi->device_stats_cap & m->stat_type))
-+		if (!virtnet_stats_supported(vi, m))
- 			continue;
- 
- 		ctx->bitmap[m->queue_type]   |= m->stat_type;
-@@ -3470,54 +3485,67 @@ static void virtnet_stats_ctx_init(struct virtnet_info *vi,
- }
- 
- /* virtnet_fill_stats - copy the stats to ethtool -S
-- * The stats source is the device.
-+ * The stats source is the device or the driver.
-  *
-  * @vi: virtio net info
-  * @qid: the vq id
-  * @ctx: stats ctx (initiated by virtnet_stats_ctx_init())
-- * @base: pointer to the device reply.
-- * @type: the type of the device reply
-+ * @base: pointer to the device reply or the driver stats structure.
-+ * @from_driver: designate the base type (device reply, driver stats)
-+ * @type: the type of the device reply (if from_driver is true, this must be
-+ *     zero)
-  */
- static void virtnet_fill_stats(struct virtnet_info *vi, u32 qid,
- 			       struct virtnet_stats_ctx *ctx,
--			       const u8 *base, u8 type)
-+			       const u8 *base, bool from_driver, u8 type)
- {
- 	u32 queue_type, num_rx, num_tx, num_cq;
-+	const struct virtnet_stat_desc *desc;
- 	struct virtnet_stats_map *m;
--	u64 offset, bitmap;
-+	const u64_stats_t *v_stat;
- 	const __le64 *v;
-+	u64 offset;
- 	int i, j;
- 
--	num_rx = VIRTNET_RQ_STATS_LEN + ctx->desc_num[VIRTNET_Q_TYPE_RX];
--	num_tx = VIRTNET_SQ_STATS_LEN + ctx->desc_num[VIRTNET_Q_TYPE_TX];
- 	num_cq = ctx->desc_num[VIRTNET_Q_TYPE_CQ];
-+	num_rx = ctx->desc_num[VIRTNET_Q_TYPE_RX];
-+	num_tx = ctx->desc_num[VIRTNET_Q_TYPE_TX];
- 
- 	queue_type = vq_type(vi, qid);
--	bitmap = ctx->bitmap[queue_type];
- 	offset = 0;
- 
--	if (queue_type == VIRTNET_Q_TYPE_TX) {
-+	if (queue_type == VIRTNET_Q_TYPE_TX)
- 		offset = num_cq + num_rx * vi->curr_queue_pairs + num_tx * (qid / 2);
--		offset += VIRTNET_SQ_STATS_LEN;
--	} else if (queue_type == VIRTNET_Q_TYPE_RX) {
--		offset = num_cq + num_rx * (qid / 2) + VIRTNET_RQ_STATS_LEN;
--	}
-+	else if (queue_type == VIRTNET_Q_TYPE_RX)
-+		offset = num_cq + num_rx * (qid / 2);
- 
- 	for (i = 0; i < ARRAY_SIZE(virtio_net_stats_map); ++i) {
- 		m = &virtio_net_stats_map[i];
- 
--		if (m->stat_type & bitmap)
--			offset += m->num;
-+		if (m->queue_type != queue_type)
-+			continue;
-+
-+		if (from_driver != m->from_driver)
-+			goto skip;
- 
- 		if (type != m->reply_type)
--			continue;
-+			goto skip;
- 
- 		for (j = 0; j < m->num; ++j) {
--			v = (const __le64 *)(base + m->desc[j].offset);
--			ctx->data[offset + j] = le64_to_cpu(*v);
-+			desc = &m->desc[j];
-+			if (!from_driver) {
-+				v = (const __le64 *)(base + desc->offset);
-+				ctx->data[offset + j] = le64_to_cpu(*v);
-+			} else {
-+				v_stat = (const u64_stats_t *)(base + desc->offset);
-+				ctx->data[offset + j] = u64_stats_read(v_stat);
-+			}
- 		}
- 
- 		break;
-+skip:
-+		if (virtnet_stats_supported(vi, m))
-+			offset += m->num;
- 	}
- }
- 
-@@ -3548,7 +3576,7 @@ static int __virtnet_get_hw_stats(struct virtnet_info *vi,
- 	for (p = reply; p - reply < res_size; p += le16_to_cpu(hdr->size)) {
- 		hdr = p;
- 		qid = le16_to_cpu(hdr->vq_index);
--		virtnet_fill_stats(vi, qid, ctx, p, hdr->type);
-+		virtnet_fill_stats(vi, qid, ctx, p, false, hdr->type);
- 	}
- 
- 	kfree(reply);
-@@ -3620,28 +3648,18 @@ static int virtnet_get_hw_stats(struct virtnet_info *vi,
- static void virtnet_get_strings(struct net_device *dev, u32 stringset, u8 *data)
- {
- 	struct virtnet_info *vi = netdev_priv(dev);
--	unsigned int i, j;
-+	unsigned int i;
- 	u8 *p = data;
- 
- 	switch (stringset) {
- 	case ETH_SS_STATS:
--		virtnet_get_hw_stats_string(vi, VIRTNET_Q_TYPE_CQ, 0, &p);
-+		virtnet_get_stats_string(vi, VIRTNET_Q_TYPE_CQ, 0, &p);
- 
--		for (i = 0; i < vi->curr_queue_pairs; i++) {
--			for (j = 0; j < VIRTNET_RQ_STATS_LEN; j++)
--				ethtool_sprintf(&p, "rx_queue_%u_%s", i,
--						virtnet_rq_stats_desc[j].desc);
-+		for (i = 0; i < vi->curr_queue_pairs; ++i)
-+			virtnet_get_stats_string(vi, VIRTNET_Q_TYPE_RX, i, &p);
- 
--			virtnet_get_hw_stats_string(vi, VIRTNET_Q_TYPE_RX, i, &p);
--		}
--
--		for (i = 0; i < vi->curr_queue_pairs; i++) {
--			for (j = 0; j < VIRTNET_SQ_STATS_LEN; j++)
--				ethtool_sprintf(&p, "tx_queue_%u_%s", i,
--						virtnet_sq_stats_desc[j].desc);
--
--			virtnet_get_hw_stats_string(vi, VIRTNET_Q_TYPE_TX, i, &p);
--		}
-+		for (i = 0; i < vi->curr_queue_pairs; ++i)
-+			virtnet_get_stats_string(vi, VIRTNET_Q_TYPE_TX, i, &p);
- 		break;
- 	}
- }
-@@ -3674,8 +3692,7 @@ static int virtnet_get_sset_count(struct net_device *dev, int sset)
- 
- 		virtnet_stats_ctx_init(vi, &ctx, NULL);
- 
--		pair_count = VIRTNET_RQ_STATS_LEN + VIRTNET_SQ_STATS_LEN;
--		pair_count += ctx.desc_num[VIRTNET_Q_TYPE_RX] + ctx.desc_num[VIRTNET_Q_TYPE_TX];
-+		pair_count = ctx.desc_num[VIRTNET_Q_TYPE_RX] + ctx.desc_num[VIRTNET_Q_TYPE_TX];
- 
- 		return ctx.desc_num[VIRTNET_Q_TYPE_CQ] + vi->curr_queue_pairs * pair_count;
- 	default:
-@@ -3688,47 +3705,28 @@ static void virtnet_get_ethtool_stats(struct net_device *dev,
- {
- 	struct virtnet_info *vi = netdev_priv(dev);
- 	struct virtnet_stats_ctx ctx = {0};
--	unsigned int idx, start, i, j;
-+	unsigned int start, i;
- 	const u8 *stats_base;
--	const u64_stats_t *p;
--	size_t offset;
- 
- 	virtnet_stats_ctx_init(vi, &ctx, data);
- 	if (virtnet_get_hw_stats(vi, &ctx))
- 		dev_warn(&vi->dev->dev, "Failed to get hw stats.\n");
- 
--	idx = ctx.desc_num[VIRTNET_Q_TYPE_CQ];
--
- 	for (i = 0; i < vi->curr_queue_pairs; i++) {
- 		struct receive_queue *rq = &vi->rq[i];
-+		struct send_queue *sq = &vi->sq[i];
- 
- 		stats_base = (const u8 *)&rq->stats;
- 		do {
- 			start = u64_stats_fetch_begin(&rq->stats.syncp);
--			for (j = 0; j < VIRTNET_RQ_STATS_LEN; j++) {
--				offset = virtnet_rq_stats_desc[j].offset;
--				p = (const u64_stats_t *)(stats_base + offset);
--				data[idx + j] = u64_stats_read(p);
--			}
-+			virtnet_fill_stats(vi, i * 2, &ctx, stats_base, true, 0);
- 		} while (u64_stats_fetch_retry(&rq->stats.syncp, start));
--		idx += VIRTNET_RQ_STATS_LEN;
--		idx += ctx.desc_num[VIRTNET_Q_TYPE_RX];
--	}
--
--	for (i = 0; i < vi->curr_queue_pairs; i++) {
--		struct send_queue *sq = &vi->sq[i];
- 
- 		stats_base = (const u8 *)&sq->stats;
- 		do {
- 			start = u64_stats_fetch_begin(&sq->stats.syncp);
--			for (j = 0; j < VIRTNET_SQ_STATS_LEN; j++) {
--				offset = virtnet_sq_stats_desc[j].offset;
--				p = (const u64_stats_t *)(stats_base + offset);
--				data[idx + j] = u64_stats_read(p);
--			}
-+			virtnet_fill_stats(vi, i * 2 + 1, &ctx, stats_base, true, 0);
- 		} while (u64_stats_fetch_retry(&sq->stats.syncp, start));
--		idx += VIRTNET_SQ_STATS_LEN;
--		idx += ctx.desc_num[VIRTNET_Q_TYPE_TX];
- 	}
- }
- 
--- 
-2.32.0.3.g01195cf9f
+  prog = prog_load(attr={.bound_maps=maps})
 
+will be semantically the same as
+
+  prog = prog_load()
+  bpf_prog_bind_map(prog, maps)
