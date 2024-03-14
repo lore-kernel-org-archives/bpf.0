@@ -1,168 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39117350B;
-	Thu, 14 Mar 2024 18:32:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D53B2BB13;
+	Thu, 14 Mar 2024 19:10:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710441121; cv=none; b=EZoUVEHF++UUYYt9fb4/hpjdkwvysB7w0VUIEI9O2BDkfjP0eTCf6ipD2zul41ZM0Vay59ZbvyxbNemQA6K2KZ/JiceRnVHizaFGaAt7qQxyvwHP8orXEaXHYptopGpdU5Qq6kM/b2cyAyj/DouG1jAfxb0+2g+ND+dPzIeYFjc=
+	t=1710443431; cv=none; b=h/D89KrM9L0ySwnI8ODIS0Ms2dENkJjuthqWNSyTbP7/KuD5+3c1UM1aEbzff1RabWL4ehY0XMTIxpkRNy7QAJ+KssMfOqJDK7gfc4wY1DrSJ0NlgyeWC7LeBI6vmZvm9/3BCmNGGofOS9YE8M9sja7l0viVabjASyaFPvkloeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710441121; c=relaxed/simple;
-	bh=mvdnoLfy3ROkxmfR7t2H/wROfPIdheF/nBqPtCWPX4A=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=caLa/U/pxbHZR3c2cgLYTWNfRiA+6oquCYVT0Zmwd3BR/OrkH/rbhZk1lY5pP3oWRjph2JZwAmOZLHBdGaQYp7AYEQdESRFcyNEAwWBKfS3IFbfttuB+96ugNrUdTjPMYwMOfjTBCQ7G8BRIlMWMFp5hWA2G/VbK2/563kweVw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A243FC43390;
-	Thu, 14 Mar 2024 18:31:55 +0000 (UTC)
-Date: Thu, 14 Mar 2024 14:34:06 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Alison Schofield <alison.schofield@intel.com>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
- <linux-trace-kernel@vger.kernel.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
- linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
- intel-xe@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
- freedreno@lists.freedesktop.org, virtualization@lists.linux.dev,
- linux-rdma@vger.kernel.org, linux-pm@vger.kernel.org,
- iommu@lists.linux.dev, linux-tegra@vger.kernel.org, netdev@vger.kernel.org,
- linux-hyperv@vger.kernel.org, ath10k@lists.infradead.org,
- linux-wireless@vger.kernel.org, ath11k@lists.infradead.org,
- ath12k@lists.infradead.org, brcm80211@lists.linux.dev,
- brcm80211-dev-list.pdl@broadcom.com, linux-usb@vger.kernel.org,
- linux-bcachefs@vger.kernel.org, linux-nfs@vger.kernel.org,
- ocfs2-devel@lists.linux.dev, linux-cifs@vger.kernel.org,
- linux-xfs@vger.kernel.org, linux-edac@vger.kernel.org,
- selinux@vger.kernel.org, linux-btrfs@vger.kernel.org,
- linux-erofs@lists.ozlabs.org, linux-f2fs-devel@lists.sourceforge.net,
- linux-hwmon@vger.kernel.org, io-uring@vger.kernel.org,
- linux-sound@vger.kernel.org, bpf@vger.kernel.org,
- linux-wpan@vger.kernel.org, dev@openvswitch.org,
- linux-s390@vger.kernel.org, tipc-discussion@lists.sourceforge.net, Julia
- Lawall <Julia.Lawall@inria.fr>
-Subject: Re: [FYI][PATCH] tracing/treewide: Remove second parameter of
- __assign_str()
-Message-ID: <20240314143406.6289a060@gandalf.local.home>
-In-Reply-To: <ZfMslbCmCtyEaEWN@aschofie-mobl2>
-References: <20240223125634.2888c973@gandalf.local.home>
-	<ZfMslbCmCtyEaEWN@aschofie-mobl2>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1710443431; c=relaxed/simple;
+	bh=A/L/Xxt7fXbGgWNyQy6zNLHcJ/h/grArt2RG6AtChhQ=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=a5hhLtoykslpdgntv0oHiGOxgz3+mKGD4/JY82VF9DtQ3T43XZYJfeRrvfe7jrVrkkhYZD90qwOVCkOFvCG2R0HpJz3XZtLgPLrWoCCB3EnsJjdcQ3l0tBoIkP7c2r+w9UBDiD0WuACVjODKpBReQ+0fn+k7E2/XvyCRdAgHV9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CHR9glI1; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CHR9glI1"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0EDB3C43390;
+	Thu, 14 Mar 2024 19:10:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710443431;
+	bh=A/L/Xxt7fXbGgWNyQy6zNLHcJ/h/grArt2RG6AtChhQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=CHR9glI1tLyEueqMssJ6DbyET0pQVuIhLr129d91iPJEEtF7fFXERkSKTqsX9Yh3D
+	 jgbTefc6mN4tyU0YLhe/TxvymQmQ7BjfDEKJlTGnCcaSFZ+iB9UDui456G0FrsuYrY
+	 VGVrXw8rBGvSYU+Jqu/yJH2+IzeVv1MIl38kGmF7t5pAcqp87QodBJQS5G56nsnYD8
+	 0G/qJgu1nK2s1bWdaPh7BZWWn4kNCfAOcwq7Koie1nYxpnccSnoMBdB/NEYIXvKkjO
+	 nffZuBZAj+wdlxwih+0KmAtxuzNhi0np+GvYJTvc3WJSXFkdTDjXdWhtHuQ2+Ctshw
+	 agvNM0F9MLSoQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F01C6D95055;
+	Thu, 14 Mar 2024 19:10:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf] bpf: Temporarily disable atomic operations in BPF arena
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171044343097.30186.7484635385194590602.git-patchwork-notify@kernel.org>
+Date: Thu, 14 Mar 2024 19:10:30 +0000
+References: <20240314174931.98702-1-puranjay12@gmail.com>
+In-Reply-To: <20240314174931.98702-1-puranjay12@gmail.com>
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, jolsa@kernel.org, memxor@gmail.com, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-On Thu, 14 Mar 2024 09:57:57 -0700
-Alison Schofield <alison.schofield@intel.com> wrote:
+Hello:
 
-> On Fri, Feb 23, 2024 at 12:56:34PM -0500, Steven Rostedt wrote:
-> > From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> > 
-> > [
-> >    This is a treewide change. I will likely re-create this patch again in
-> >    the second week of the merge window of v6.9 and submit it then. Hoping
-> >    to keep the conflicts that it will cause to a minimum.
-> > ]
+This patch was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Note, change of plans. I plan on sending this in the next merge window, as
-this merge window I have this patch:
-
-  https://lore.kernel.org/linux-trace-kernel/20240312113002.00031668@gandalf.local.home/
-
-That will warn if the source string of __string() is different than the
-source string of __assign_str(). I want to make sure they are identical
-before just dropping one of them.
-
-
+On Thu, 14 Mar 2024 17:49:31 +0000 you wrote:
+> Currently, the x86 JIT handling PROBE_MEM32 tagged accesses is not
+> equipped to handle atomic accesses into PTR_TO_ARENA, as no PROBE_MEM32
+> tagging is performed and no handling is enabled for them.
 > 
-> > diff --git a/drivers/cxl/core/trace.h b/drivers/cxl/core/trace.h
-> > index bdf117a33744..07ba4e033347 100644
-> > --- a/drivers/cxl/core/trace.h
-> > +++ b/drivers/cxl/core/trace.h  
+> This will lead to unsafety as the offset into arena will dereferenced
+> directly without turning it into a base + offset access into the arena
+> region.
 > 
-> snip to poison
-> 
-> > @@ -668,8 +668,8 @@ TRACE_EVENT(cxl_poison,
-> >  	    ),
-> >  
-> >  	TP_fast_assign(
-> > -		__assign_str(memdev, dev_name(&cxlmd->dev));
-> > -		__assign_str(host, dev_name(cxlmd->dev.parent));
-> > +		__assign_str(memdev);
-> > +		__assign_str(host);  
-> 
-> I think I get that the above changes work because the TP_STRUCT__entry for
-> these did:
-> 	__string(memdev, dev_name(&cxlmd->dev))
-> 	__string(host, dev_name(cxlmd->dev.parent))
+> [...]
 
-That's the point. They have to be identical or you will likely bug.
+Here is the summary with links:
+  - [bpf] bpf: Temporarily disable atomic operations in BPF arena
+    https://git.kernel.org/bpf/bpf/c/44d79142ede8
 
-The __string(name, src) is used to find the string length of src which
-allocates the necessary length on the ring buffer. The __assign_str(name, src)
-will copy src into the ring buffer.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Similar to:
 
-	len = strlen(src);
-	buf = malloc(len);
-	strcpy(buf, str);
-
-Where __string() is strlen() and __assign_str() is strcpy(). It doesn't
-make sense to use two different strings, and if you did, it would likely be
-a bug.
-
-But the magic behind __string() does much more than just get the length of
-the string, and it could easily save the pointer to the string (along with
-its length) and have it copy that in the __assign_str() call, making the
-src parameter of __assign_str() useless.
-
-> 
-> >  		__entry->serial = cxlmd->cxlds->serial;
-> >  		__entry->overflow_ts = cxl_poison_overflow(flags, overflow_ts);
-> >  		__entry->dpa = cxl_poison_record_dpa(record);
-> > @@ -678,12 +678,12 @@ TRACE_EVENT(cxl_poison,
-> >  		__entry->trace_type = trace_type;
-> >  		__entry->flags = flags;
-> >  		if (region) {
-> > -			__assign_str(region, dev_name(&region->dev));
-> > +			__assign_str(region);
-> >  			memcpy(__entry->uuid, &region->params.uuid, 16);
-> >  			__entry->hpa = cxl_trace_hpa(region, cxlmd,
-> >  						     __entry->dpa);
-> >  		} else {
-> > -			__assign_str(region, "");
-> > +			__assign_str(region);
-> >  			memset(__entry->uuid, 0, 16);
-> >  			__entry->hpa = ULLONG_MAX;  
-> 
-> For the above 2, there was no helper in TP_STRUCT__entry. A recently
-> posted patch is fixing that up to be __string(region, NULL) See [1],
-> with the actual assignment still happening in TP_fast_assign.
-
-__string(region, NULL) doesn't make sense. It's like:
-
-	len = strlen(NULL);
-	buf = malloc(len);
-	strcpy(buf, NULL);
-
-??
-
-I'll reply to that email.
-
--- Steve
-
-> 
-> Does that assign logic need to move to the TP_STRUCT__entry definition
-> when you merge these changes? I'm not clear how much logic is able to be
-> included, ie like 'C' style code in the TP_STRUCT__entry.
-> 
-> [1]
-> https://lore.kernel.org/linux-cxl/20240314044301.2108650-1-alison.schofield@intel.com/
