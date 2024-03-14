@@ -1,324 +1,132 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 155587443F;
-	Thu, 14 Mar 2024 17:46:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF87841C6D;
+	Thu, 14 Mar 2024 17:49:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710438393; cv=none; b=XS+xrpvWL6WHTSsIQi4Mg3l/mH3lo41EDMVRQsQbgnSkI/t8lPnseRM18813m6AI+zITD8DtNn77FAhjfWzaNhv6zc9x+VEbDAWy9keqPZ3xt+mcCWCbtGwvSMPZ3UZjZ8SJrjppDs4sDL6dtpfSWHYal+GGCW8NWtYXS/HH8IQ=
+	t=1710438579; cv=none; b=XPslvN4Fn+SLgTBGtC++/+mXE/WfELJnYLL/KiO4f0xkWOZhDEVRCRDLxBtZwd1miyXeUEfgNSZw8or1qstpMw4y7+1q/YF5dClVOJT+gCz0rE0VGkNzUAAq+3dFAuvUvTNiLChSl4GTyv5HQ6pFtE9phOPDvi7zn1yR/1/p7nE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710438393; c=relaxed/simple;
-	bh=agKTTomEz4kA+n4rL2OUGP6ABhhFhpO2Zl2XImbNJrE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BniQ4zsP3P1SCjJbaONpvYyHGxWNvUt5NFSNLl7h/yt17qsCZsKmZ8aG2na+msgioek3xE72Lhkh/+lV7ViO1uNOxRcDsNkKcSljPuoskVqmZfN0Zf/9mvhI/xtXP6JBq0Y8VSaXZWlixp7LtaJeHr1Yja2SD5+dbmNNmcnapjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jt3Tjsy9; arc=none smtp.client-ip=209.85.221.42
+	s=arc-20240116; t=1710438579; c=relaxed/simple;
+	bh=mM+v1kmQ3/Nx0Xb+0QIWcpLvojmmSfnlNtCYXhBw2WA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Cq8ryi8Hg+22FoMmKB10RhSBAjTSXIfI+Y+Ux/Kik+ekboNDcmf83GDH/15FT79KmH/4NtDRRv6N+itgGIqoI2+XkTkIlPSM9LeM9gp/N8aLKiC+yBGNrtrFJYPy2FCNplNHsctfJruhC5IYzLJhUg+VtGy5Ptkd+kHv2XMpwPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UQ0dkRqX; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jt3Tjsy9"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-33e9990da78so1016014f8f.0;
-        Thu, 14 Mar 2024 10:46:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UQ0dkRqX"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-413feb4d7b4so859075e9.3;
+        Thu, 14 Mar 2024 10:49:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710438389; x=1711043189; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z4I/hbAEGvzlzslG7GDyeJP5iYQIKOeg2en3UKGStes=;
-        b=Jt3Tjsy9L4k5j5sfbiIhCu+nvDKYi7Avj2cnxxxtAbLuYOCuBfB932WAK4uzTsJua+
-         6QhNCf4XYLjfh7263+LtrPXzrjPZUvYWjLYAHCbtPq8a35kwJ/0CUwgwD591HP8MWAXu
-         NMBmEuRrsAA9DZQNWMJ81o0oOCSd79XVAorDHikGIAA402WbF1wXIxWunopQOb0sgPRE
-         PW9NHBlg+eA3JPS/ylG28XWOJW315NIVz/36c44WonYYUINQzCAVBKkToLOiO2qpVBdD
-         AuofhJwzIDFYALTNC9L61hz1snMNcHlCumWsSJn0AQDbtBl2wHxtuIrPrlDaHdKSCNtg
-         NAgw==
+        d=gmail.com; s=20230601; t=1710438576; x=1711043376; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6sTrFM/7u+qguknxAtmm7g0jvXeK16BxRSJMHNHbRBI=;
+        b=UQ0dkRqXxVUtrBFJ1J6W21YGErNR2Gz43drOmf9JTE73LGDfIOC2AyTogtj1kR8OkZ
+         qcgCH01Fyuxm71bt2/8p2XmM+hbP03EG4PZk+BYhk0NmXkEqSwsq7tsHPCLzZbY6Nbun
+         S7P+fJwtyizzn3U9DzZkH2M/6Yua80Jg/lTS5+uNNH4Lekb4KCK2B7ZiujfaBfmmzA0m
+         /N3VS56v4MmHDxA1NgVU4iBE/IrIu23bkgD17LSbGirhDOE/lT075m8GRjGhUhTMr2EF
+         VhtGp/+3J66N9Vej4cxx0ng6pNkTXQI6CVVulzq1/2OpJUwxpaZg2hx72191G8tehwnO
+         JdAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710438389; x=1711043189;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z4I/hbAEGvzlzslG7GDyeJP5iYQIKOeg2en3UKGStes=;
-        b=tRf140xGEPYVjzeXu/hFirk5hiJRfPVe1iMdfUrUWtp1sScUdgO/zuoDf/ynJnCmRp
-         o3U1tx/4oxl6Ada4iC9cp1hrOFe6i54zXkjXE1s/t6Txj5TU3rhbmmfdkNrxuaKOpL6F
-         2w8yOcP+2AIwtdk1wiCwh8X7riA7lgBwxancyVP/hRiZAwLOOVHFNpBFsRSNAvOaSdfK
-         Z8ZetE86Y7EVq6uwK6iH19YkXbLefDU3dRCeZAz4/gR4B8/k2SwUd0rihdwP/aBz5tTh
-         W8sYeczO33sDlJtZf8xlPxXytr96010DBPKj4v3vRI8E6v2d26qklGPRkQLGOQfOdcYV
-         1skw==
-X-Forwarded-Encrypted: i=1; AJvYcCXmgB01HA/yjt6PmgBTsgqen2v1sJ6qg0xxfGL4Rq+ELAAQ3p3DeB24Zlxx3BAotBe+HtTTotbjCNq9TUQ/xPS1PDPd4B+MJCp6/2Pa7EYwrgygGlQ53j3SzNN/NNoebkcLYBtGVyJiOsTxwOoLeB4NOmzFHq4UvFG6WIBHo78dsfhdESYhAuvd2WhMBczG4y4icmMeQQ==
-X-Gm-Message-State: AOJu0Yxeov4ssXYLHBpTFgGHXvk8qMq1xcCopiCL/Kbao/RthiN1HymK
-	gy72+tEJIki2OgAMyxzSIjIq5uOdcwxDVHyOXI3v2ebHInYd76+wVz63eJmgJWJH8z3me4wTtW+
-	/3wbGVbDbs9KNqakFDM2F/l3XsoRY+oOmlD8=
-X-Google-Smtp-Source: AGHT+IFFxixUpVKaMDQ0ST25az6uKrSdahJaFVI4ZiUZI2qk5WssR4jx9vxjvViv3ooNXrvDQ4x3Tz7pzCcwqdsjJUI=
-X-Received: by 2002:a5d:594d:0:b0:33d:5484:e451 with SMTP id
- e13-20020a5d594d000000b0033d5484e451mr1740326wri.34.1710438389228; Thu, 14
- Mar 2024 10:46:29 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710438576; x=1711043376;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6sTrFM/7u+qguknxAtmm7g0jvXeK16BxRSJMHNHbRBI=;
+        b=auCepSmUJ+CbKsOuY/qzaw0/5G5hVPaCs3w8hS1szEtL3w5ZlayK3wUMqmk0x6EV5D
+         uP9GmKJiCg7Khz10ZMfa6JwFeulyEdSKhA7GTPQUlZDzs3yXU5/+S5xPij9jMoYBV/0H
+         tH6VSChCFmRFtetqPekjEQJK0/+K7u29Yyp2LqxRRd/P4wme/a/mH4jA0pcZOYMLQGdG
+         gegF8Lq7sb24QzIhnl5IUmtRNN2M4VapF6XrjBbqLPkpODaR9ejs/k/KS5ICkuvTzgUD
+         FxM6eouEjVU5h8eZi0fMGC/wQhAhR6k4CWWQCCqhrH2Nvf1sEXLh+oeK/+0hqlxD2O+6
+         ULxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW0J8kq3uE1G4Pdb5sU32c9bBX6jzeJ3mcjI9X63yH9ctJjkOkL7FSP/DSRE6yjFckKCXPlnX6N2qD4IbbxcGJNfoBGdBiIigNXzfVJtJHCql1t7TxMfvKu1QZfCxhD9wl3
+X-Gm-Message-State: AOJu0YzasF3g/nq9DzDuhr2Y8l574RHEQgtHZiKIFaBRnIj/I8zgoqp/
+	u9FNWY+lYXLPC+zwrDBnrPmgapjm/fO4S5uriV0sS3r3xa4nRYhD
+X-Google-Smtp-Source: AGHT+IFwDo2oxGv3fi6pQfCDt86GQFWWZq1JkZ63g8IYl12nLb24vmG4t5kqzxFgYmIluoYNvJBPXw==
+X-Received: by 2002:a05:600c:358a:b0:413:1872:6ad7 with SMTP id p10-20020a05600c358a00b0041318726ad7mr576116wmq.29.1710438575901;
+        Thu, 14 Mar 2024 10:49:35 -0700 (PDT)
+Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
+        by smtp.gmail.com with ESMTPSA id i13-20020a05600c354d00b00413e6465413sm6199472wmq.27.2024.03.14.10.49.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 14 Mar 2024 10:49:35 -0700 (PDT)
+From: Puranjay Mohan <puranjay12@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: puranjay12@gmail.com
+Subject: [PATCH bpf] bpf: Temporarily disable atomic operations in BPF arena
+Date: Thu, 14 Mar 2024 17:49:31 +0000
+Message-Id: <20240314174931.98702-1-puranjay12@gmail.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240307123619.159f1c4c@canb.auug.org.au> <20240313105117.699dc720@canb.auug.org.au>
- <20240314093012.3dba692a@canb.auug.org.au> <ZfLElrAT3RMLuWdB@pc636>
-In-Reply-To: <ZfLElrAT3RMLuWdB@pc636>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 14 Mar 2024 10:46:18 -0700
-Message-ID: <CAADnVQJpoBCL6r9BM09-kcMeB4Cm0H0y+UD-i8NX5YtvcCpffw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the bpf-next tree with the mm-stable tree
-To: Uladzislau Rezki <urezki@gmail.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Andrew Morton <akpm@linux-foundation.org>, 
-	Networking <netdev@vger.kernel.org>, David Miller <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 14, 2024 at 2:34=E2=80=AFAM Uladzislau Rezki <urezki@gmail.com>=
- wrote:
->
-> > Hi all,
-> >
-> > On Wed, 13 Mar 2024 10:51:17 +1100 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote:
-> > >
-> > > On Thu, 7 Mar 2024 12:36:19 +1100 Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
-> > > >
-> > > > Today's linux-next merge of the bpf-next tree got a conflict in:
-> > > >
-> > > >   mm/vmalloc.c
-> > > >
-> > > > between commit:
-> > > >
-> > > >   8e1d743f2c26 ("mm: vmalloc: support multiple nodes in vmallocinfo=
-")
-> > > >
-> > > > from the mm-stable tree and commit:
-> > > >
-> > > >   e6f798225a31 ("mm: Introduce VM_SPARSE kind and vm_area_[un]map_p=
-ages().")
-> > > >
-> > > > from the bpf-next tree.
-> > > >
-> > > > I fixed it up (I think - see below) and can carry the fix as necess=
-ary.
-> > > > This is now fixed as far as linux-next is concerned, but any non tr=
-ivial
-> > > > conflicts should be mentioned to your upstream maintainer when your=
- tree
-> > > > is submitted for merging.  You may also want to consider cooperatin=
-g
-> > > > with the maintainer of the conflicting tree to minimise any particu=
-larly
-> > > > complex conflicts.
-> > > >
-> > > >
-> > > > diff --cc mm/vmalloc.c
-> > > > index 25a8df497255,e5b8c70950bc..000000000000
-> > > > --- a/mm/vmalloc.c
-> > > > +++ b/mm/vmalloc.c
-> > > > @@@ -4755,81 -4423,70 +4820,84 @@@ static void show_numa_info(struc=
-t seq_f
-> > > >
-> > > >   static void show_purge_info(struct seq_file *m)
-> > > >   {
-> > > >  +        struct vmap_node *vn;
-> > > >           struct vmap_area *va;
-> > > >  +        int i;
-> > > >
-> > > >  -        spin_lock(&purge_vmap_area_lock);
-> > > >  -        list_for_each_entry(va, &purge_vmap_area_list, list) {
-> > > >  -                seq_printf(m, "0x%pK-0x%pK %7ld unpurged vm_area\=
-n",
-> > > >  -                        (void *)va->va_start, (void *)va->va_end,
-> > > >  -                        va->va_end - va->va_start);
-> > > >  -        }
-> > > >  -        spin_unlock(&purge_vmap_area_lock);
-> > > >  -}
-> > > >  +        for (i =3D 0; i < nr_vmap_nodes; i++) {
-> > > >  +                vn =3D &vmap_nodes[i];
-> > > >
-> > > >  -static int s_show(struct seq_file *m, void *p)
-> > > >  -{
-> > > >  -        struct vmap_area *va;
-> > > >  -        struct vm_struct *v;
-> > > >  -
-> > > >  -        va =3D list_entry(p, struct vmap_area, list);
-> > > >  -
-> > > >  -        if (!va->vm) {
-> > > >  -                if (va->flags & VMAP_RAM)
-> > > >  -                        seq_printf(m, "0x%pK-0x%pK %7ld vm_map_ra=
-m\n",
-> > > >  +                spin_lock(&vn->lazy.lock);
-> > > >  +                list_for_each_entry(va, &vn->lazy.head, list) {
-> > > >  +                        seq_printf(m, "0x%pK-0x%pK %7ld unpurged =
-vm_area\n",
-> > > >                                   (void *)va->va_start, (void *)va-=
->va_end,
-> > > >                                   va->va_end - va->va_start);
-> > > >  -
-> > > >  -                goto final;
-> > > >  +                }
-> > > >  +                spin_unlock(&vn->lazy.lock);
-> > > >           }
-> > > >  +}
-> > > >
-> > > >  -        v =3D va->vm;
-> > > >  +static int vmalloc_info_show(struct seq_file *m, void *p)
-> > > >  +{
-> > > >  +        struct vmap_node *vn;
-> > > >  +        struct vmap_area *va;
-> > > >  +        struct vm_struct *v;
-> > > >  +        int i;
-> > > >
-> > > >  -        seq_printf(m, "0x%pK-0x%pK %7ld",
-> > > >  -                v->addr, v->addr + v->size, v->size);
-> > > >  +        for (i =3D 0; i < nr_vmap_nodes; i++) {
-> > > >  +                vn =3D &vmap_nodes[i];
-> > > >
-> > > >  -        if (v->caller)
-> > > >  -                seq_printf(m, " %pS", v->caller);
-> > > >  +                spin_lock(&vn->busy.lock);
-> > > >  +                list_for_each_entry(va, &vn->busy.head, list) {
-> > > >  +                        if (!va->vm) {
-> > > >  +                                if (va->flags & VMAP_RAM)
-> > > >  +                                        seq_printf(m, "0x%pK-0x%p=
-K %7ld vm_map_ram\n",
-> > > >  +                                                (void *)va->va_st=
-art, (void *)va->va_end,
-> > > >  +                                                va->va_end - va->=
-va_start);
-> > > >
-> > > >  -        if (v->nr_pages)
-> > > >  -                seq_printf(m, " pages=3D%d", v->nr_pages);
-> > > >  +                                continue;
-> > > >  +                        }
-> > > >
-> > > >  -        if (v->phys_addr)
-> > > >  -                seq_printf(m, " phys=3D%pa", &v->phys_addr);
-> > > >  +                        v =3D va->vm;
-> > > >
-> > > >  -        if (v->flags & VM_IOREMAP)
-> > > >  -                seq_puts(m, " ioremap");
-> > > >  +                        seq_printf(m, "0x%pK-0x%pK %7ld",
-> > > >  +                                v->addr, v->addr + v->size, v->si=
-ze);
-> > > >
-> > > >  -        if (v->flags & VM_SPARSE)
-> > > >  -                seq_puts(m, " sparse");
-> > > >  +                        if (v->caller)
-> > > >  +                                seq_printf(m, " %pS", v->caller);
-> > > >
-> > > >  -        if (v->flags & VM_ALLOC)
-> > > >  -                seq_puts(m, " vmalloc");
-> > > >  +                        if (v->nr_pages)
-> > > >  +                                seq_printf(m, " pages=3D%d", v->n=
-r_pages);
-> > > >
-> > > >  -        if (v->flags & VM_MAP)
-> > > >  -                seq_puts(m, " vmap");
-> > > >  +                        if (v->phys_addr)
-> > > >  +                                seq_printf(m, " phys=3D%pa", &v->=
-phys_addr);
-> > > >
-> > > >  -        if (v->flags & VM_USERMAP)
-> > > >  -                seq_puts(m, " user");
-> > > >  +                        if (v->flags & VM_IOREMAP)
-> > > >  +                                seq_puts(m, " ioremap");
-> > > >
-> > > >  -        if (v->flags & VM_DMA_COHERENT)
-> > > >  -                seq_puts(m, " dma-coherent");
-> > > > ++                        if (v->flags & VM_SPARSE)
-> > > > ++                                seq_puts(m, " sparse");
-> > > > +
-> > > >  -        if (is_vmalloc_addr(v->pages))
-> > > >  -                seq_puts(m, " vpages");
-> > > >  +                        if (v->flags & VM_ALLOC)
-> > > >  +                                seq_puts(m, " vmalloc");
-> > > >
-> > > >  -        show_numa_info(m, v);
-> > > >  -        seq_putc(m, '\n');
-> > > >  +                        if (v->flags & VM_MAP)
-> > > >  +                                seq_puts(m, " vmap");
-> > > >  +
-> > > >  +                        if (v->flags & VM_USERMAP)
-> > > >  +                                seq_puts(m, " user");
-> > > >  +
-> > > >  +                        if (v->flags & VM_DMA_COHERENT)
-> > > >  +                                seq_puts(m, " dma-coherent");
-> > > >  +
-> > > >  +                        if (is_vmalloc_addr(v->pages))
-> > > >  +                                seq_puts(m, " vpages");
-> > > >  +
-> > > >  +                        show_numa_info(m, v);
-> > > >  +                        seq_putc(m, '\n');
-> > > >  +                }
-> > > >  +                spin_unlock(&vn->busy.lock);
-> > > >  +        }
-> > > >
-> > > >           /*
-> > > >            * As a final step, dump "unpurged" areas.
-> > >
-> > > This is now a conflict between the net-next tree and the mm-stable tr=
-ee.
-> >
-> >  ... and now a conflict between te mm-stable tree and Linus' tree.
-> >
-> If you need some help with resolving conflicts i can help. The problem
-> to me looks like:
->
-> <snip>
-> commit d7bca9199a27b8690ae1c71dc11f825154af7234
-> Author: Alexei Starovoitov <ast@kernel.org>
-> Date:   Fri Mar 8 09:12:54 2024 -0800
->
->     mm: Introduce vmap_page_range() to map pages in PCI address space
->
-> commit e6f798225a31485e47a6e4f6aa07ee9fdf80c2cb
-> Author: Alexei Starovoitov <ast@kernel.org>
-> Date:   Mon Mar 4 19:05:16 2024 -0800
->
->     mm: Introduce VM_SPARSE kind and vm_area_[un]map_pages().
->
-> commit 3e49a866c9dcbd8173e4f3e491293619a9e81fa4
-> Author: Alexei Starovoitov <ast@kernel.org>
-> Date:   Mon Mar 4 19:05:15 2024 -0800
->
->     mm: Enforce VM_IOREMAP flag and range in ioremap_page_range.
-> <snip>
->
-> those three patches were not based on linux-next and are currently
-> in the Linus tree(bypassing mm-tree?). Whereas below work:
->
-> mm: vmalloc: refactor vmalloc_dump_obj() function
-> mm: vmalloc: improve description of vmap node layer
-> mm: vmalloc: add a shrinker to drain vmap pools
-> mm: vmalloc: set nr_nodes based on CPUs in a system
-> mm: vmalloc: support multiple nodes in vmallocinfo
-> mm: vmalloc: support multiple nodes in vread_iter
-> mm: vmalloc: add a scan area of VA only once
-> mm: vmalloc: offload free_vmap_area_lock lock
-> mm: vmalloc: remove global purge_vmap_area_root rb-tree
-> mm/vmalloc: remove vmap_area_list
-> mm: vmalloc: remove global vmap_area_root rb-tree
-> mm: vmalloc: move vmap_init_free_space() down in vmalloc.c
-> mm: vmalloc: rename adjust_va_to_fit_type() function
-> mm: vmalloc: add va_alloc() helper
->
-> now should be based on Alexei Starovoitov base in order to resolve
-> a small conflict.
+Currently, the x86 JIT handling PROBE_MEM32 tagged accesses is not
+equipped to handle atomic accesses into PTR_TO_ARENA, as no PROBE_MEM32
+tagging is performed and no handling is enabled for them.
 
-Pls don't rebase anything.
+This will lead to unsafety as the offset into arena will dereferenced
+directly without turning it into a base + offset access into the arena
+region.
 
-> But you better know how to proceed. Just in case, if you need some
-> support please let me know i can help with conflict resolving.
+Since the changes to the x86 JIT will be fairly involved, for now,
+temporarily disallow use of PTR_TO_ARENA as the destination operand for
+atomics until support is added to the JIT backend.
 
-As Stephen said these two conflict:
+Fixes: 2fe99eb0ccf2 ("bpf: Add x86-64 JIT support for PROBE_MEM32 pseudo instructions.")
+Reported-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ kernel/bpf/verifier.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-> > >   8e1d743f2c26 ("mm: vmalloc: support multiple nodes in vmallocinfo")
-> > >
-> > >   e6f798225a31 ("mm: Introduce VM_SPARSE kind and vm_area_[un]map_pag=
-es().")
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 63749ad5ac6b..1dd3b99d1bb9 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5682,6 +5682,13 @@ static bool is_flow_key_reg(struct bpf_verifier_env *env, int regno)
+ 	return reg->type == PTR_TO_FLOW_KEYS;
+ }
+ 
++static bool is_arena_reg(struct bpf_verifier_env *env, int regno)
++{
++	const struct bpf_reg_state *reg = reg_state(env, regno);
++
++	return reg->type == PTR_TO_ARENA;
++}
++
+ static u32 *reg2btf_ids[__BPF_REG_TYPE_MAX] = {
+ #ifdef CONFIG_NET
+ 	[PTR_TO_SOCKET] = &btf_sock_ids[BTF_SOCK_TYPE_SOCK],
+@@ -7019,7 +7026,8 @@ static int check_atomic(struct bpf_verifier_env *env, int insn_idx, struct bpf_i
+ 	if (is_ctx_reg(env, insn->dst_reg) ||
+ 	    is_pkt_reg(env, insn->dst_reg) ||
+ 	    is_flow_key_reg(env, insn->dst_reg) ||
+-	    is_sk_reg(env, insn->dst_reg)) {
++	    is_sk_reg(env, insn->dst_reg) ||
++	    is_arena_reg(env, insn->dst_reg)) {
+ 		verbose(env, "BPF_ATOMIC stores into R%d %s is not allowed\n",
+ 			insn->dst_reg,
+ 			reg_type_str(env, reg_state(env, insn->dst_reg)->type));
+-- 
+2.40.1
 
-and conflict is trivial. It just looks big due to the indent change.
