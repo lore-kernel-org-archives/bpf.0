@@ -1,178 +1,234 @@
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CC486FE0B;
-	Thu, 14 Mar 2024 20:28:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A620E73539
+	for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 20:36:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710448132; cv=none; b=KCc0M9Z3+7ynYMrnOh10HjPbYmhD7aOiknAp9e8ePBReAO+PAF0Et8KQsqsyyoRfUtR77NmfZiWlBZj1WrTkBD/ySve4wG617yriFG20dysY/51N07hreaN6c7KTM4rSzFEyx9+NsCGm5Ob4cVLoQCwtoGvAjq8vio8Mb1lfN5M=
+	t=1710448586; cv=none; b=fiCsksIUey5NNH1LAupBgYoRvJ4n5GUEAnRXVJQJKdz4JodQsVTa9th0RBKh3LK+KsYa34fVR1crFM7nXQuV6N+OZbxawblTwttJcZea68a+uSHjl9bnMaS/xRukoYfZ2KvwRBHwkAn0m9h0bsTLEb7cNeZoGF/eaWg6Iel2Cdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710448132; c=relaxed/simple;
-	bh=CSLuRo45oS25PsjTaTFl3smBFMW61nQHF4/uB1uvbfY=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=O03mh7d2i18EqP/XufisSYDlEnYreRdYZlc3FD74gJBkRu8/EiyCZniWL5yy1aMRYkWBSUIvB5ISWdhT4A/fA6B6RgwaEjHeS66EZUL3M1fOta6TWDl5q+Z9moqo/ICQew5hKnEs57ZwEtp0F2dUOurJT1in+6nXzTKSogIl2sc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RC4TESjg; arc=none smtp.client-ip=209.85.222.174
+	s=arc-20240116; t=1710448586; c=relaxed/simple;
+	bh=SQmzlqqfIZdDnsJzbJILdD2Zalux16ytFMGddMRv30w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DQBiXocjN4yhBJT/o1a6E0IZyU5aUh+cTJouTbA6S70SmnxEr+K6LpcJDeVZU4U61rF96QR1AoGHPawYV//GuxLl1XKlnI9Vk1RgUKDwrN64gPnji4pUS7Q/CUP6IXIbhmZLF7MCkxB31xw85bZX3NBwZTwy5p7rVu+gMWDj0Mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gIXvuhJk; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RC4TESjg"
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-788455430easo120568785a.0;
-        Thu, 14 Mar 2024 13:28:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gIXvuhJk"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-5dbd519bde6so1080743a12.1
+        for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 13:36:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710448129; x=1711052929; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1710448583; x=1711053383; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CYqvlgz3fwOmk26mzvVlgzBO06xI1HS4SgqCSEg+b5c=;
-        b=RC4TESjg+RNd+U9F+L9Ct6JX7nEGooNiGgcfVhghmLLOCRgo2j4OpQEcnNtMoXUu+5
-         gZo5WM/2/TFaRZUyR9hrtkqcateGkAT7yaG6GkaCOaeBtt73OonIpQ/iXFSn7YVBhsK1
-         aqUp0znJK2g1TTcabqxuY3VK84S8nXYGV5Y487ZyC7pH66PGwp1jnHgUzwXyHJ0gYjbz
-         4ENu/n+4mAiJkrpjcBluG3UOkVo0znqadKdVBDGpKLZHF9WjihGnjeF2f+p40eXwVUP3
-         yEr3uXltB54W8dI6DiDcAIUDdLZTWjJRGTsPuj9/L0OZ0rMt/V0gx9fjHWSRJlVGsm9u
-         22qA==
+        bh=L83PgkjPwhdF9t3YVMUVm9BpVLEor+fvCDCMuLO2CeY=;
+        b=gIXvuhJkyetNXPgYxfKvjTrztrH5urfPrk0yh7xfJ1tY5G00Df6C/5gKdfn/PTgjgv
+         jcjCaR32hYCkEJkIxTxKefbCaNkBXX1ODj0ycwR+frkTGSEKqhcxOPKAbd83xvz/GYf9
+         Cmxk0ROQA5CTNrmIF9TmfF50KMXiFCT4ZdFMgGRVBl3GPTxMzv5Jc5pDAN1M6ime7hI1
+         djhTpBTE93+iekwRVeB03cSb5Ohq9mmXY0KdYTbMl+GtOsVRtg/efeZ6zqrwlrB+sQAl
+         k6FwcnE0jAGym7+5FWK9SR4OWhJyILbonCgbnMJIi+r7eZ3ECT1eaVRbkuWWpcCvANKd
+         MCxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710448129; x=1711052929;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=CYqvlgz3fwOmk26mzvVlgzBO06xI1HS4SgqCSEg+b5c=;
-        b=LhFEHZxbJL/WUAVr/mQcfw7IGElZSeioz+TD8DFYuLqYMAcXyzdLGXXmOrT/uvvINn
-         vhqyRZ66Dc/SArewK67IilmjA1BG4iCNgF6Zaz8gaY9NO67ySOJdxqtM8xeIiKMO6Wpp
-         AzSRLWC3ijEPErBouGnpBNrtmJZ9Ttjg3e28TD0+lnrlkF8UwRI6TPEX2QS0Wmtujgto
-         y89UxCB7s5EjqcCU/bcPjkd/R/cwHHVjSvpvC6nQDQGyn+aVWtHqwqKgiZ1ATkXNsxIs
-         If3EOiaPvsCMZhu4Ozla5AUEeMbBp137YmIjHhfu6VYUtMmmvaiuYO+QqVoR7a9fBqgR
-         WVZg==
-X-Forwarded-Encrypted: i=1; AJvYcCUWnfKPGwlW9vgjIuAhymb2webG3tdSoCDH+2TrD+Qm3ZI1I2E7ensqgDpfn2o6IojfI9BDezF0yLa01vI0I3lYc3kRtthtY1yJ7w6KT5lkMq2ZjPD8hl3BpLGvfqr4/0HnG4tBLMNYym1idDcWQ6f0vLPtECSrzPGO
-X-Gm-Message-State: AOJu0Yxa8esFFpgmSQmU215SnHH/gNxcsz4Clqo69DBrZEzbNypGqPYP
-	EW1K34zRWvwCsZJ3MQqLv2iGqrFmICAlhnARQfhCmN4T2CkJ9uF2
-X-Google-Smtp-Source: AGHT+IGUaNsIDJgU+eM5eb/wJkOEMlfh0za8eNyWdhZM8yhCLEQBESeVxfmkTFMxD2J+HIvCbDcDtg==
-X-Received: by 2002:a05:620a:29cb:b0:789:cfca:f59 with SMTP id s11-20020a05620a29cb00b00789cfca0f59mr7081354qkp.14.1710448129467;
-        Thu, 14 Mar 2024 13:28:49 -0700 (PDT)
-Received: from localhost (55.87.194.35.bc.googleusercontent.com. [35.194.87.55])
-        by smtp.gmail.com with ESMTPSA id d2-20020a05620a158200b00789cd996cbcsm1201344qkk.134.2024.03.14.13.28.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Mar 2024 13:28:48 -0700 (PDT)
-Date: Thu, 14 Mar 2024 16:28:48 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- "Abhishek Chauhan (ABC)" <quic_abchauha@quicinc.com>
-Cc: kernel@quicinc.com, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- Andrew Halaney <ahalaney@redhat.com>, 
- Martin KaFai Lau <martin.lau@kernel.org>, 
- bpf <bpf@vger.kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Alexei Starovoitov <ast@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>
-Message-ID: <65f35e00a83c0_2132294f5@willemb.c.googlers.com.notmuch>
-In-Reply-To: <5692ddb3-9558-4440-a7bf-47fcc47401ed@linux.dev>
-References: <20240301201348.2815102-1-quic_abchauha@quicinc.com>
- <2a4cb416-5d95-459d-8c1c-3fb225240363@linux.dev>
- <65f16946cd33e_344ff1294fc@willemb.c.googlers.com.notmuch>
- <28282905-065a-4233-a0a2-53aa9b85f381@linux.dev>
- <65f2004e65802_3d1e792943e@willemb.c.googlers.com.notmuch>
- <0dff8f05-e18d-47c8-9f19-351c44ea8624@linux.dev>
- <e5da91bc-5827-4347-ab38-36c92ae2dfa2@quicinc.com>
- <65f21d65820fc_3d934129463@willemb.c.googlers.com.notmuch>
- <bc037db4-58bb-4861-ac31-a361a93841d3@linux.dev>
- <65f2c81fc7988_3ee61729465@willemb.c.googlers.com.notmuch>
- <5692ddb3-9558-4440-a7bf-47fcc47401ed@linux.dev>
-Subject: Re: [PATCH net-next v4] net: Re-use and set mono_delivery_time bit
- for userspace tstamp packets
+        d=1e100.net; s=20230601; t=1710448583; x=1711053383;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=L83PgkjPwhdF9t3YVMUVm9BpVLEor+fvCDCMuLO2CeY=;
+        b=kojAp/t6VPx2+3rfhhK9ZMSfYjJmZIEN800UsoGPjyYlEEEs0y6JNGv5cU3IrfQJUk
+         YneUy9VLV1ycbtQwwZ/jgWFuW6L29Mw60wndFLQ30epKap+CetgcgvulIo+y63YJFTXt
+         4yApY2MeAp0xOEtop6TC7bT04DiziIsIBKjNQdIJUEmnEhITmt0lBAS9pgMGx08ZjKY1
+         24wsVsHH5j0T9NNGU8BaXjYAcVfy4bo6zUrL7JHO5icxa/e2CFWoITLWgKuAQ1QFXTWZ
+         GUH2ks+jA37etEJMXSs9biD5if/XdyI44Z+k9I5V0gWx0WIZcAsN5nafj3+eU2vLum6U
+         hTww==
+X-Forwarded-Encrypted: i=1; AJvYcCVteC3buMHXFicBP8yFZinCYoRb78lNe4J3jatMp0ws5CLyQjT7/pZShIAQicmVf5nwc5Iow1uqoffzI8FBTlaZ+Mix
+X-Gm-Message-State: AOJu0Yz+OPTzuvFklkhX5b9D0loiGJa5002GgsJ5UmMcFtcqWBuEn88S
+	9TS1LjKnYxhlISFsALWjmKLewsQQWJvswdOFsnIKJfbtjaGqn9lKFxPVsj0RmOEDh0Ez+46ychU
+	+ac5ule7PQnSxcyDugHvA6SKCaUY=
+X-Google-Smtp-Source: AGHT+IFo8jUKCdEmEadQfqhla2eweKJ032jtF+QKl+++fjWlw4yw3hBFUBSUzxQb2u+WzaXNED4CSzs251eEhNbV+fM=
+X-Received: by 2002:a17:90a:f606:b0:29c:761e:3955 with SMTP id
+ bw6-20020a17090af60600b0029c761e3955mr2543864pjb.17.1710448582975; Thu, 14
+ Mar 2024 13:36:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20240312013726.1780720-1-thinker.li@gmail.com>
+ <CAEf4BzZafCA3gQVgmL1-OnpcWPXNJZ8iXgdaH82gAvu5TEOVEw@mail.gmail.com>
+ <c1781093-69fe-4760-9df5-8ae71a3ecd05@gmail.com> <CAEf4Bzb8ft68Ue-=2pQBGySbjpE2cgPvtDJaec3F-NyE_tTB5Q@mail.gmail.com>
+ <b81c0d46-d817-4a7d-a1c4-c6de707fbe7b@gmail.com> <CAEf4BzaeBwnX7_tTy-aNQtAwwTy==nOgVyBGcaLE=4FB0BVgXw@mail.gmail.com>
+In-Reply-To: <CAEf4BzaeBwnX7_tTy-aNQtAwwTy==nOgVyBGcaLE=4FB0BVgXw@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 14 Mar 2024 13:36:10 -0700
+Message-ID: <CAEf4BzZrtwoBX=GXPg=fpyyomW5oSUhpFxpmi5Pw-o70wRSLYg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpftool: cast pointers for shadow types explicitly.
+To: Kui-Feng Lee <sinquersw@gmail.com>
+Cc: Kui-Feng Lee <thinker.li@gmail.com>, bpf@vger.kernel.org, ast@kernel.org, 
+	martin.lau@linux.dev, song@kernel.org, kernel-team@meta.com, 
+	andrii@kernel.org, kuifeng@meta.com, yhs@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Martin KaFai Lau wrote:
-> On 3/14/24 2:49 AM, Willem de Bruijn wrote:
-> >> The two bits could potentially only encode the delivery time that is allowed to
-> >> be forwarded without reset. 0 could mean refering back to sk_clockid and don't
-> >> forward. The final consumer of the forwarded skb->tstamp is the qdisc which
-> >> currently only has mono and tai.
-> > 
-> > So the followinng meaning of bit pair
-> > { skb->mono_delivery_time, skb->user_delivery_time } ?
-> >   
-> > - { 0, 0 } legacy skb->tstamp: realtime on rx
-> > - { 1, 0 } skb->tstamp is mono: existing behavior of mono_delivery_time bit
-> > - { 0, 1 } skb->tstamp is tai: analogous to mono case
-> > - { 1, 1 } skb->tstamp defined by skb->sk->sk_clockid
-> 
-> I was thinking only forward mono and tai until it is clearer how other clocks 
-> will be useful for forwarding between e/ingress. By resetting all skb->tstamp 
-> other than mono and tai, { 0, 0 } at ingress will mean realtime on rx and { 0, 0 
-> } at egress will mean go look skb->sk->sk_clockid.
-> 
-> I do like your scheme such that it is much clearer what is in skb->tstamp 
-> without depending on other bits like tc_at_ingress or not.
-> 
-> "{ 0, 1 } skb->tstamp is tai: analogous to mono case" can probably be dropped 
-> for now until bpf_skb_set_tstamp(BPF_SKB_TSTAMP_DELIVERY_TAI) is needed.
-> Otherwise, it is mostly a duplicate of "{ 1, 1 } skb->tstamp defined by 
-> skb->sk->sk_clockid".
-> 
-> The bpf_convert_tstamp_{read,write} and the helper bpf_skb_set_tstamp need to be 
-> changed to handle the new "user_delivery_time" bit anyway, e.g. 
-> bpf_skb_set_tstamp(BPF_SKB_TSTAMP_DELIVERY_MONO) needs to clear the 
-> "user_delivery_time" bit.
-> 
-> I think the "struct inet_frag_queue" also needs a new "user_delivery_time" 
-> field. "mono_delivery_time" is already in there.
-> 
-> It may as well be cleaner to combine mono_delivery_time and user_delivery_time 
-> into a 2 bits field like:
-> 
-> struct sk_buff {
-> 	__u8 tstamp_type:2;
-> };
-> 
-> enum {
-> 	SKB_TSTAMP_TYPE_RX_REAL = 0, /* A RX (receive) time in real */
-> 	SKB_TSTAMP_TYPE_TX_MONO = 1, /* A TX (delivery) time in mono */
-> 
-> 	/* A TX (delivery) time and its clock is in skb->sk->sk_clockid.
-> 	 *
-> 	 * BPF_SKB_TSTAMP_DELIVERY_USER should be added
-> 	 * such that reading __sk_buff->tstamp_type will match the
-> 	 * SKB_TSTAMP_TYPE_TX_USER.
-> 	 *
-> 	 * The bpf program can learn the clockid by
-> 	 * reading skb->sk->sk_clockid.
-> 	 *
-> 	 * bpf_skb_set_tstamp(BPF_SKB_TSTAMP_DELIVERY_USER)
-> 	 * should be disallowed for now until the use case
-> 	 * is more clear. Potentially, we could allow it
-> 	 * in the future as long as
-> 	 * the sock_flag(sk, SOCK_TXTIME) is true at that moment.
-> 	 */
-> 	SKB_TSTAMP_TYPE_TX_USER = 2,
-> 
-> 	/* UNUSED_FOR_FUTURE = 3, */
-> };
-> 
-> It will have more code churns in the first patch to rename 
-> s/mono_delivery_time/tstamp_type/.
-> 
-> wdyt?
+On Wed, Mar 13, 2024 at 8:51=E2=80=AFAM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Tue, Mar 12, 2024 at 5:37=E2=80=AFPM Kui-Feng Lee <sinquersw@gmail.com=
+> wrote:
+> >
+> >
+> >
+> > On 3/12/24 17:27, Andrii Nakryiko wrote:
+> > > On Tue, Mar 12, 2024 at 5:08=E2=80=AFPM Kui-Feng Lee <sinquersw@gmail=
+.com> wrote:
+> > >>
+> > >>
+> > >>
+> > >> On 3/12/24 15:47, Andrii Nakryiko wrote:
+> > >>> On Mon, Mar 11, 2024 at 6:38=E2=80=AFPM Kui-Feng Lee <thinker.li@gm=
+ail.com> wrote:
+> > >>>>
+> > >>>> According to a report, skeletons fail to assign shadow pointers wh=
+en being
+> > >>>> compiled with C++ programs. Unlike C doing implicit casting for vo=
+id
+> > >>>> pointers, C++ requires an explicit casting.
+> > >>>>
+> > >>>> To support C++, we do explicit casting for each shadow pointer.
+> > >>>>
+> > >>>> Cc: yhs@meta.com
+> > >>>> Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
+> > >>>> ---
+> > >>>>    tools/bpf/bpftool/gen.c | 2 +-
+> > >>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+> > >>>>
+> > >>>> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+> > >>>> index 4fa4ade1ce74..dedafea0c127 100644
+> > >>>> --- a/tools/bpf/bpftool/gen.c
+> > >>>> +++ b/tools/bpf/bpftool/gen.c
+> > >>>> @@ -1131,7 +1131,7 @@ static void gen_st_ops_shadow_init(struct bt=
+f *btf, struct bpf_object *obj)
+> > >>>>                           continue;
+> > >>>>                   codegen("\
+> > >>>>                           \n\
+> > >>>> -                               obj->struct_ops.%1$s =3D bpf_map__=
+initial_value(obj->maps.%1$s, NULL);\n\
+> > >>>> +                               obj->struct_ops.%1$s =3D (typeof(o=
+bj->struct_ops.%1$s))bpf_map__initial_value(obj->maps.%1$s, NULL);\n\
+> > >>>
+> > >>> Given we have a named struct type for this and we use explicit type
+> > >>> names in other parts of generated skeleton code, let's maybe use
+> > >>> "struct %s__%s__%s" explicitly here (passing in obj_name, ident,
+> > >>> type_name)?
+> > >>
+> > >> I have considered about this solution. But, C++ works differently. I=
+t
+> > >> has nested namespaces. That means it should be referred as
+> > >> "XXX_skeleton::OOO_st_ops_map" in C++. Then, we need #if #else #endi=
+f
+> > >> directives to provide two separated casting.
+> > >>
+> > >
+> > > we cast to (struct <skeleton> *) by name of the skeleton, so it shoul=
+d
+> > > be fine, I don't see why we'd need to do something C++ specific here
+> >
+> > The skeleton looks like
+> >
+> > struct struct_ops_module {
+> >      ......
+> >      struct {
+> >          struct
+> > struct_ops_module__testmod_zeroed__bpf_testmod_ops___zeroed {
+> >              ....
+> >          } testmod_zeroed;
+> >      } struct_ops;
+> > };
+> >
+> > struct struct_ops_module__testmod_zeroed__bpf_testmod_ops___zeroed is
+> > inside of struct struct_ops_module. In C++, it should be referred as
+> > "struct_ops_module::struct_ops_module__testmod_zeroed__bpf_testmod_ops_=
+__zeroed".
+>
+> ah, makes sense, thanks for elaborating
+>
+> >
+> > The other option is moving definitions of these types to the top scope.
+>
+> no, it's fine the way you did it in this patch, I'll land it once
+> bpf-next tree is open for new patches, thanks
+>
 
-I asked for such code churn in the original patch. We then decided to
-leave the variable name as is, as the churn was significant.
+so I made the following changes/additions as I was applying your patch:
 
-Long term, it is obviously cleaner.
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index dedafea0c127..3ce277544c24 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -1131,7 +1131,8 @@ static void gen_st_ops_shadow_init(struct btf
+*btf, struct bpf_object *obj)
+                        continue;
+                codegen("\
+                        \n\
+-                               obj->struct_ops.%1$s =3D
+(typeof(obj->struct_ops.%1$s))bpf_map__initial_value(obj->maps.%1$s,
+NULL);\n\
++                               obj->struct_ops.%1$s =3D
+(typeof(obj->struct_ops.%1$s))\n\
++
+bpf_map__initial_value(obj->maps.%1$s, NULL);\n\
+                        \n\
+                        ", ident);
+        }
+diff --git a/tools/testing/selftests/bpf/test_cpp.cpp
+b/tools/testing/selftests/bpf/test_cpp.cpp
+index f4936834f76f..dde0bb16e782 100644
+--- a/tools/testing/selftests/bpf/test_cpp.cpp
++++ b/tools/testing/selftests/bpf/test_cpp.cpp
+@@ -7,6 +7,7 @@
+ #include <bpf/bpf.h>
+ #include <bpf/btf.h>
+ #include "test_core_extern.skel.h"
++#include "struct_ops_module.skel.h"
 
-I don't have a strong opinion. If doing this, let's at least make it
-two separate patches, one that is a NOOP rename only.
+ template <typename T>
+ class Skeleton {
+@@ -98,6 +99,7 @@ int main(int argc, char *argv[])
+ {
+        struct btf_dump_opts opts =3D { };
+        struct test_core_extern *skel;
++       struct struct_ops_module *skel2;
+        struct btf *btf;
+        int fd;
+
+@@ -118,6 +120,9 @@ int main(int argc, char *argv[])
+        skel =3D test_core_extern__open_and_load();
+        test_core_extern__destroy(skel);
+
++       skel2 =3D struct_ops_module__open_and_load();
++       struct_ops_module__destroy(skel2);
++
+        fd =3D bpf_enable_stats(BPF_STATS_RUN_TIME);
+        if (fd < 0)
+                std::cout << "FAILED to enable stats: " << fd << std::endl;
 
 
+test_cpp is a good think to validate that skeletons are compiled with
+C++ compiler just fine, so I referenced struct_ops-based skeleton
+there.
+
+
+> >
+> > >
+> > >>>
+> > >>> No strong preferences, but feels like a consistent approach here wo=
+uld be nice.
+> > >>>
+> > >>>>                           \n\
+> > >>>>                           ", ident);
+> > >>>>           }
+> > >>>> --
+> > >>>> 2.34.1
+> > >>>>
