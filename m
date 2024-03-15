@@ -1,131 +1,363 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1F42E634
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 13:18:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F1EB1C686
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 13:38:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710508740; cv=none; b=CIO5PB7KtcwOSQgN1Z7UXkxG2EKAydCbpjDyYVSsn6w1i+l+ojiYy+Uc9rWeERQJHhxSy48pVj4TE3n2GoLOyGe15e60LIzaMzJKcgjX8QrwPW9ga20EyYzPGgXO8Ekt83mNOnuT6GhsVGkFS3vGZl8TnrDMv/9o8fOizdW37xk=
+	t=1710509896; cv=none; b=Gm0ZTCl/Tj3+2qnGsJ+u6KO2Yp5Uu9H8B6LMUoQHOdQbjIeo+VqXzBD0uTloltwVQmGkfkCPUqwb+LEXO72OHujSj4+V8tEV2WR8HUjLwzLTjRAiOvjVQ4yHV447HM7XwKmM+lI58I8EyEmrHRb8UuMyiZuo6LWxczR8gDTTCZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710508740; c=relaxed/simple;
-	bh=ZiY5aqBBy4wXdNf9hEy3IAUETg4rPleFD6ZuFW1SLnk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uL8S3OAj2LQyg7MjG4cIKVy3s7+LEdPf+AjCxHVdt/qYZrTcH1tT/xd5BhpIZpO/SHqM8HegzWXI+9RnCN+JcxvngWQNbyjTFpNX/AE6iFHswbvj4oAFydZrZSupd+v+Q0mauKv+eD5lKvhPiygmDLfh5eZmImSASk51lrssjcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=bc2GOJ0B; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
+	s=arc-20240116; t=1710509896; c=relaxed/simple;
+	bh=1qcMzHfiGpjmHDfWZUqRqmBar0r1sOkOTtHAbu7zvvg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ADEuuruF6oR7fJr4JTBH0jp5mYoAc4fzaSMGMWjwdsAeaP3jE0a6WGw/Gil2CF/T0cAe8E1JXDxcPXpPtOxr539QrtRANVdHFvfi/bj71kc1S13qysaLowZSABy/YYIbVviLdiLnzZID+rHiw+Y3cAaaIjfnRC+AgYgBpIAF/hE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WPdpgSLE; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="bc2GOJ0B"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-41324a16c9eso13369115e9.0
-        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 06:18:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WPdpgSLE"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-568898e47e2so14414a12.0
+        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 06:38:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1710508737; x=1711113537; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=VTJA5zABiIxu6ju+LJ2Lvn7FiaFJtGeYB6l9FUIHhMY=;
-        b=bc2GOJ0BMZSG289ZWG5/G0/IW1fFV0k4XZFL5JUvRz2QDwBLEEzXryWxKwUhprpfAV
-         RXKpPImyCvuX/PuaeRz+0gwbLmnTcCXqMI41HIDrIjPUMTfgSItt/OUi88Swv5+WLUOd
-         bgFDWN4D5RXIKSPJGWCNjRp1KO0Ne1WIV1f48n02//tNdgqnjyVgkTikeqlwihyMnr0j
-         iHi0FvKZ7iVE023zUxm+k9m5T0XaeA7PrP1NxeSOkbJeL8xSaOotSrh+VGzxSh67dXeh
-         9aQmz+Z42hye/LH3iVnyAy0Acruz8BI6Kz9Y+WtPGZiKCq9coQ4jgs0rM9HUt3tJ093l
-         RpaA==
+        d=google.com; s=20230601; t=1710509892; x=1711114692; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U3bFJ0R8PaQgJ1Og/AejVqX9GHKhfPt5iaRycZ3sn48=;
+        b=WPdpgSLEJ4qr41CT+hO9nI9tZ6SMHw4hEghtvrzoPYJ0tm+FDAYFcbLGc7cYVWk8NY
+         /C3qN0sZHXhk9G7XJBGYlwLBh25Zrbc1VD5kGqyuGlbdgkO2doEL1s5NLjLgDwb+i/5k
+         1xW7z05LnBzZt8VCvqCfE+Rzd6mH7SuXmAg7RYwmmMxHWlLCEVPgAQSf07DBpsFcCfJn
+         Rsk0VAu7hp6/TB2iyp5ZGpFqeT+xWNOz3N4dPAP2ATc5PRiSqOiFGEnP/EFU4710AsAn
+         HGVNq3pyLIu9Aa5LirEk6P3lUood313w5e8gHGUkWePo+FYyWYbVHcjZk8ibYEYGqPso
+         1UiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710508737; x=1711113537;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VTJA5zABiIxu6ju+LJ2Lvn7FiaFJtGeYB6l9FUIHhMY=;
-        b=tjylSUr66ab9Loh4iXRZgeRAizDU9/PjVAf8tnKh3r0MV0YOkwEqkylHY0Prj6Npj0
-         SA9c4WDOng0fMl288ERNmwiO+uomtrTnElqdJXU6y0MgL5KqIEnVgI8+/BrSwNh+J7bu
-         7fwBjB2QnfaT6FU8fqfBNoa0cv9/fe2dzfPyHzVYasBEXoR5z5/pLKNNkpSrYq0g0Pk8
-         c6ptwolIMP9iLF6wby7o7Mv/Nl6znzLwBr7BIDIva7AEkazD0VSVyJD3xgsBt28OUqMa
-         A1jZOtax81TGzpXfpJ9ANOYRx38N2UBv1xAolc29HP9l4kfVOTrj5p/pcX5ALY9ZN4/f
-         pRsA==
-X-Forwarded-Encrypted: i=1; AJvYcCUfloo6OLNOGepkaG/vaWGY5Y8qTV1N80CDUoO3rMh+Bmnt+5kBmHUacpu5gRqbWBE3+mRwVXIzmuaNPXb/is1uKGAq
-X-Gm-Message-State: AOJu0YzEos9JG8Cw6g5y4gg10aKAaGWCqHvqzZU1IY8zCeokXOZjKVe0
-	tAtYPujoXe36nRCnSq9p5BtoNZiq30xlcq6Rkz8wGY+lsRsb4n8Yf3NtajOuwofqCPKqvyd3v7E
-	h
-X-Google-Smtp-Source: AGHT+IEK5rmAr7FeIzQF8sG3lph0H5kS31lYf/Plo3NMZW0K96gORtuXMJbTNUAwugD+O+0IPqawxA==
-X-Received: by 2002:a05:600c:1994:b0:413:f2a1:c47b with SMTP id t20-20020a05600c199400b00413f2a1c47bmr3314789wmq.16.1710508736785;
-        Fri, 15 Mar 2024 06:18:56 -0700 (PDT)
-Received: from zh-lab-node-5 ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id fl22-20020a05600c0b9600b00414013adab2sm1912142wmb.6.2024.03.15.06.18.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Mar 2024 06:18:56 -0700 (PDT)
-Date: Fri, 15 Mar 2024 13:11:11 +0000
-From: Anton Protopopov <aspsk@isovalent.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Stanislav Fomichev <sdf@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH v1 bpf-next 3/9] bpf: expose how xlated insns map to
- jitted insns
-Message-ID: <ZfRI79We8x+n0is0@zh-lab-node-5>
-References: <ZcS1ZruKKZ1euzlb@zh-lab-node-5>
- <CAADnVQKH1aitaADzCo__PfMJJA2SxAvYjTS8Z7A6Y01G2OWJgw@mail.gmail.com>
- <Zc9p4e1EccPkMnmY@zh-lab-node-5>
- <CAADnVQJ+_+ok_io1_W7e5z_dZhxSqhEFZQkumRgmY4AJRYwW7g@mail.gmail.com>
- <ZehJFP11vi5sv/eW@zh-lab-node-5>
- <CAADnVQJnh+j9etPYkst7hhnepvsoBuJY-ds-AF0fn3VqqJNXNg@mail.gmail.com>
- <ZfK9Y5c7RuOu0YiN@zh-lab-node-5>
- <CAADnVQLXok7niyyvpUaJxq4pNFFrBP5Vsk47NNxw1V4ipBdRrg@mail.gmail.com>
- <CAEf4BzbkkrFACwWQQQkESrdRKWUvJz=NyWdrtu4v6m2aOJKztw@mail.gmail.com>
- <CAADnVQKdvKqNt0GJ5+vJFEHHjRF_YGUR_htrs+QjQ0SgUV5woA@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1710509892; x=1711114692;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U3bFJ0R8PaQgJ1Og/AejVqX9GHKhfPt5iaRycZ3sn48=;
+        b=Zs2nKtzcUKWAEe1fpg2h6wujYaSjlix4+8Wj2HYIwmCqvlNWM02vNMIvv0kFcAeM6o
+         ILLrNscw6nWiYS/otkTC8G64o0DgY1QCImKt4W1DKmESry0taDqqErAypLVJSzvABvvR
+         sIICKUCmYE/2NInwg9pWxpkqzNzSLNdFVEE1VrgFLLIrNnu71bIXSUGAeVYMFei6MX0S
+         xFW8ivqXxPHG0r9KsGHWsnuHfMRhPe7bcyX/uhFqO3w5ORNiFRVc8GW6vljFkTsNw1+I
+         0fJ/UO08Bjr00pkIy05jg4RUH6jePJS2Q72MPJ9yq1Sn2u7Jj6QKw0uHFkx54RXwU/DB
+         giNg==
+X-Forwarded-Encrypted: i=1; AJvYcCWNQ8OmYia6GmjZqfpafXwaz/dD16DaJcQ5NwfQiZc+4Y3wBurDxgRiGKwA/tNvkBOYg+Febk2MSeZCbXoInjOl6AYE
+X-Gm-Message-State: AOJu0YzLTuzfDAtJofcYs9pASt/cNuwDo6kcnGLkTiyx5JdchfdN8694
+	MrkV+m3kohmf/JRqqn+2Oey6/w3IxtAm4EsLroSoq+KpmlZHtUbye1yjmyrHW2i279bxpMAcy/w
+	9uEM31q2SIu9qwf4MqbBoeRYdmfqcc9fK7eHs
+X-Google-Smtp-Source: AGHT+IFuT/1SgoR2KAZODZY3ZftzGPV9imxBX5OOT1fgTRgtkxhx6aba00ep0bxXeNmt4Hg0znYng3Esb2elWXjm4Oc=
+X-Received: by 2002:a05:6402:1212:b0:568:551d:9e09 with SMTP id
+ c18-20020a056402121200b00568551d9e09mr143571edw.6.1710509892087; Fri, 15 Mar
+ 2024 06:38:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQKdvKqNt0GJ5+vJFEHHjRF_YGUR_htrs+QjQ0SgUV5woA@mail.gmail.com>
+References: <20240115205514.68364-1-kuniyu@amazon.com> <20240115205514.68364-5-kuniyu@amazon.com>
+In-Reply-To: <20240115205514.68364-5-kuniyu@amazon.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Fri, 15 Mar 2024 14:37:57 +0100
+Message-ID: <CANn89iKdN9c+C_2JAUbc+VY3DDQjAQukMtiBbormAmAk9CdvQA@mail.gmail.com>
+Subject: Re: [PATCH v8 bpf-next 4/6] bpf: tcp: Handle BPF SYN Cookie in cookie_v[46]_check().
+To: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Paolo Abeni <pabeni@redhat.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 14, 2024 at 02:41:36PM -0700, Alexei Starovoitov wrote:
-> On Thu, Mar 14, 2024 at 1:06 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > > What could work and what I am proposing is to pass a list of bound
-> > > > maps in prog_load attributes. Then such maps can be used during the
-> > > > verification. For normal maps
-> > > >
-> > > >   prog = prog_load(attr={.bound_maps=maps})
-> > > >
-> > > > will be semantically the same as
-> > > >
-> > > >   prog = prog_load()
-> > > >   bpf_prog_bind_map(prog, maps)
-> > >
-> > > Instead of a whole new api, let's make libbpf insert
-> > > ld_imm64 r0, map
-> > > as the first insn for this case for now.
-> >
-> > This sounds like a big hack and unnecessary complication, tbh. I'd
-> > like to avoid having to do this in libbpf.
-> >
-> > But I think we almost have this already supported. In BPF_PROG_LOAD
-> > UAPI we have fd_array property, right? I think right now we lazily
-> > refcnt referenced maps. But I think it makes total sense to just
-> > define that bpf_prog will keep references to all BPF objects passed in
-> > through fd_array, WDYT? Verifier will just iterate all provided FDs,
-> > determine kind of BPF object it is (and reject unknown ones), and then
-> > just take refcnts on each of them once. On prog free we'll just do the
-> > same in reverse and be done with it.
-> >
-> > It also can be used as a batch and single-step (in the sense it will
-> > be done as part of program load instead of a separate command)
-> > alternative for bpf_prog_bind_map(), I suppose.
-> 
-> fd_array approach also works. There can be map and btf fds in there.
-> I would only bind maps this way.
+On Mon, Jan 15, 2024 at 9:57=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazon.co=
+m> wrote:
+>
+> We will support arbitrary SYN Cookie with BPF in the following
+> patch.
+>
+> If BPF prog validates ACK and kfunc allocates a reqsk, it will
+> be carried to cookie_[46]_check() as skb->sk.  If skb->sk is not
+> NULL, we call cookie_bpf_check().
+>
+> Then, we clear skb->sk and skb->destructor, which are needed not
+> to hold refcnt for reqsk and the listener.  See the following patch
+> for details.
+>
+> After that, we finish initialisation for the remaining fields with
+> cookie_tcp_reqsk_init().
+>
+> Note that the server side WScale is set only for non-BPF SYN Cookie.
 
-Ok, thanks, this approach looks good
+So the difference between BPF and non-BPF is using a req->syncookie
+which had a prior meaning ?
+
+This is very confusing, and needs documentation/comments.
+
+
+>
+> Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> ---
+>  include/net/tcp.h     | 20 ++++++++++++++++++++
+>  net/ipv4/syncookies.c | 31 +++++++++++++++++++++++++++----
+>  net/ipv6/syncookies.c | 13 +++++++++----
+>  3 files changed, 56 insertions(+), 8 deletions(-)
+>
+> diff --git a/include/net/tcp.h b/include/net/tcp.h
+> index 114000e71a46..dfe99a084a71 100644
+> --- a/include/net/tcp.h
+> +++ b/include/net/tcp.h
+> @@ -599,6 +599,26 @@ static inline bool cookie_ecn_ok(const struct net *n=
+et, const struct dst_entry *
+>                 dst_feature(dst, RTAX_FEATURE_ECN);
+>  }
+>
+> +#if IS_ENABLED(CONFIG_BPF)
+> +static inline bool cookie_bpf_ok(struct sk_buff *skb)
+> +{
+> +       return skb->sk;
+> +}
+> +
+> +struct request_sock *cookie_bpf_check(struct sock *sk, struct sk_buff *s=
+kb);
+> +#else
+> +static inline bool cookie_bpf_ok(struct sk_buff *skb)
+> +{
+> +       return false;
+> +}
+> +
+> +static inline struct request_sock *cookie_bpf_check(struct net *net, str=
+uct sock *sk,
+> +                                                   struct sk_buff *skb)
+> +{
+> +       return NULL;
+> +}
+> +#endif
+> +
+>  /* From net/ipv6/syncookies.c */
+>  int __cookie_v6_check(const struct ipv6hdr *iph, const struct tcphdr *th=
+);
+>  struct sock *cookie_v6_check(struct sock *sk, struct sk_buff *skb);
+> diff --git a/net/ipv4/syncookies.c b/net/ipv4/syncookies.c
+> index 981944c22820..be88bf586ff9 100644
+> --- a/net/ipv4/syncookies.c
+> +++ b/net/ipv4/syncookies.c
+> @@ -295,6 +295,24 @@ static int cookie_tcp_reqsk_init(struct sock *sk, st=
+ruct sk_buff *skb,
+>         return 0;
+>  }
+>
+> +#if IS_ENABLED(CONFIG_BPF)
+> +struct request_sock *cookie_bpf_check(struct sock *sk, struct sk_buff *s=
+kb)
+> +{
+> +       struct request_sock *req =3D inet_reqsk(skb->sk);
+> +
+> +       skb->sk =3D NULL;
+> +       skb->destructor =3D NULL;
+> +
+> +       if (cookie_tcp_reqsk_init(sk, skb, req)) {
+> +               reqsk_free(req);
+> +               req =3D NULL;
+> +       }
+> +
+> +       return req;
+> +}
+> +EXPORT_SYMBOL_GPL(cookie_bpf_check);
+> +#endif
+> +
+>  struct request_sock *cookie_tcp_reqsk_alloc(const struct request_sock_op=
+s *ops,
+>                                             struct sock *sk, struct sk_bu=
+ff *skb,
+>                                             struct tcp_options_received *=
+tcp_opt,
+> @@ -395,9 +413,13 @@ struct sock *cookie_v4_check(struct sock *sk, struct=
+ sk_buff *skb)
+>             !th->ack || th->rst)
+>                 goto out;
+>
+> -       req =3D cookie_tcp_check(net, sk, skb);
+> -       if (IS_ERR(req))
+> -               goto out;
+> +       if (cookie_bpf_ok(skb)) {
+> +               req =3D cookie_bpf_check(sk, skb);
+> +       } else {
+> +               req =3D cookie_tcp_check(net, sk, skb);
+> +               if (IS_ERR(req))
+> +                       goto out;
+> +       }
+>         if (!req)
+>                 goto out_drop;
+>
+> @@ -445,7 +467,8 @@ struct sock *cookie_v4_check(struct sock *sk, struct =
+sk_buff *skb)
+>                                   ireq->wscale_ok, &rcv_wscale,
+>                                   dst_metric(&rt->dst, RTAX_INITRWND));
+>
+> -       ireq->rcv_wscale  =3D rcv_wscale;
+> +       if (!req->syncookie)
+> +               ireq->rcv_wscale =3D rcv_wscale;
+>         ireq->ecn_ok &=3D cookie_ecn_ok(net, &rt->dst);
+>
+>         ret =3D tcp_get_cookie_sock(sk, skb, req, &rt->dst);
+> diff --git a/net/ipv6/syncookies.c b/net/ipv6/syncookies.c
+> index c8d2ca27220c..6b9c69278819 100644
+> --- a/net/ipv6/syncookies.c
+> +++ b/net/ipv6/syncookies.c
+> @@ -182,9 +182,13 @@ struct sock *cookie_v6_check(struct sock *sk, struct=
+ sk_buff *skb)
+>             !th->ack || th->rst)
+>                 goto out;
+>
+> -       req =3D cookie_tcp_check(net, sk, skb);
+> -       if (IS_ERR(req))
+> -               goto out;
+> +       if (cookie_bpf_ok(skb)) {
+> +               req =3D cookie_bpf_check(sk, skb);
+> +       } else {
+> +               req =3D cookie_tcp_check(net, sk, skb);
+> +               if (IS_ERR(req))
+> +                       goto out;
+> +       }
+>         if (!req)
+>                 goto out_drop;
+>
+> @@ -247,7 +251,8 @@ struct sock *cookie_v6_check(struct sock *sk, struct =
+sk_buff *skb)
+>                                   ireq->wscale_ok, &rcv_wscale,
+>                                   dst_metric(dst, RTAX_INITRWND));
+>
+> -       ireq->rcv_wscale =3D rcv_wscale;
+> +       if (!req->syncookie)
+> +               ireq->rcv_wscale =3D rcv_wscale;
+
+I think a comment is deserved. I do not understand this.
+
+cookie_v6_check() is dealing with syncookie, unless I am mistaken.
+
+Also syzbot is not happy, req->syncookie might be uninitialized here.
+
+BUG: KMSAN: uninit-value in cookie_v4_check+0x22b7/0x29e0
+net/ipv4/syncookies.c:477
+cookie_v4_check+0x22b7/0x29e0 net/ipv4/syncookies.c:477
+tcp_v4_cookie_check net/ipv4/tcp_ipv4.c:1855 [inline]
+tcp_v4_do_rcv+0xb17/0x10b0 net/ipv4/tcp_ipv4.c:1914
+tcp_v4_rcv+0x4ce4/0x5420 net/ipv4/tcp_ipv4.c:2322
+ip_protocol_deliver_rcu+0x2a3/0x13d0 net/ipv4/ip_input.c:205
+ip_local_deliver_finish+0x332/0x500 net/ipv4/ip_input.c:233
+NF_HOOK include/linux/netfilter.h:314 [inline]
+ip_local_deliver+0x21f/0x490 net/ipv4/ip_input.c:254
+dst_input include/net/dst.h:460 [inline]
+ip_rcv_finish+0x4a2/0x520 net/ipv4/ip_input.c:449
+NF_HOOK include/linux/netfilter.h:314 [inline]
+ip_rcv+0xcd/0x380 net/ipv4/ip_input.c:569
+__netif_receive_skb_one_core net/core/dev.c:5538 [inline]
+__netif_receive_skb+0x319/0x9e0 net/core/dev.c:5652
+process_backlog+0x480/0x8b0 net/core/dev.c:5981
+__napi_poll+0xe7/0x980 net/core/dev.c:6632
+napi_poll net/core/dev.c:6701 [inline]
+net_rx_action+0x89d/0x1820 net/core/dev.c:6813
+__do_softirq+0x1c0/0x7d7 kernel/softirq.c:554
+do_softirq+0x9a/0x100 kernel/softirq.c:455
+__local_bh_enable_ip+0x9f/0xb0 kernel/softirq.c:382
+local_bh_enable include/linux/bottom_half.h:33 [inline]
+rcu_read_unlock_bh include/linux/rcupdate.h:820 [inline]
+__dev_queue_xmit+0x2776/0x52c0 net/core/dev.c:4362
+dev_queue_xmit include/linux/netdevice.h:3091 [inline]
+neigh_hh_output include/net/neighbour.h:526 [inline]
+neigh_output include/net/neighbour.h:540 [inline]
+ip_finish_output2+0x187a/0x1b70 net/ipv4/ip_output.c:235
+__ip_finish_output+0x287/0x810
+ip_finish_output+0x4b/0x550 net/ipv4/ip_output.c:323
+NF_HOOK_COND include/linux/netfilter.h:303 [inline]
+ip_output+0x15f/0x3f0 net/ipv4/ip_output.c:433
+dst_output include/net/dst.h:450 [inline]
+ip_local_out net/ipv4/ip_output.c:129 [inline]
+__ip_queue_xmit+0x1e93/0x2030 net/ipv4/ip_output.c:535
+ip_queue_xmit+0x60/0x80 net/ipv4/ip_output.c:549
+__tcp_transmit_skb+0x3c70/0x4890 net/ipv4/tcp_output.c:1462
+tcp_transmit_skb net/ipv4/tcp_output.c:1480 [inline]
+tcp_write_xmit+0x3ee1/0x8900 net/ipv4/tcp_output.c:2792
+__tcp_push_pending_frames net/ipv4/tcp_output.c:2977 [inline]
+tcp_send_fin+0xa90/0x12e0 net/ipv4/tcp_output.c:3578
+tcp_shutdown+0x198/0x1f0 net/ipv4/tcp.c:2716
+inet_shutdown+0x33f/0x5b0 net/ipv4/af_inet.c:923
+__sys_shutdown_sock net/socket.c:2425 [inline]
+__sys_shutdown net/socket.c:2437 [inline]
+__do_sys_shutdown net/socket.c:2445 [inline]
+__se_sys_shutdown+0x2a4/0x440 net/socket.c:2443
+__x64_sys_shutdown+0x6c/0xa0 net/socket.c:2443
+do_syscall_64+0xd5/0x1f0
+entry_SYSCALL_64_after_hwframe+0x6d/0x75
+
+Uninit was stored to memory at:
+reqsk_alloc include/net/request_sock.h:148 [inline]
+inet_reqsk_alloc+0x651/0x7a0 net/ipv4/tcp_input.c:6978
+cookie_tcp_reqsk_alloc+0xd4/0x900 net/ipv4/syncookies.c:328
+cookie_tcp_check net/ipv4/syncookies.c:388 [inline]
+cookie_v4_check+0x289f/0x29e0 net/ipv4/syncookies.c:420
+tcp_v4_cookie_check net/ipv4/tcp_ipv4.c:1855 [inline]
+tcp_v4_do_rcv+0xb17/0x10b0 net/ipv4/tcp_ipv4.c:1914
+tcp_v4_rcv+0x4ce4/0x5420 net/ipv4/tcp_ipv4.c:2322
+ip_protocol_deliver_rcu+0x2a3/0x13d0 net/ipv4/ip_input.c:205
+ip_local_deliver_finish+0x332/0x500 net/ipv4/ip_input.c:233
+NF_HOOK include/linux/netfilter.h:314 [inline]
+ip_local_deliver+0x21f/0x490 net/ipv4/ip_input.c:254
+dst_input include/net/dst.h:460 [inline]
+ip_rcv_finish+0x4a2/0x520 net/ipv4/ip_input.c:449
+NF_HOOK include/linux/netfilter.h:314 [inline]
+ip_rcv+0xcd/0x380 net/ipv4/ip_input.c:569
+__netif_receive_skb_one_core net/core/dev.c:5538 [inline]
+__netif_receive_skb+0x319/0x9e0 net/core/dev.c:5652
+process_backlog+0x480/0x8b0 net/core/dev.c:5981
+__napi_poll+0xe7/0x980 net/core/dev.c:6632
+napi_poll net/core/dev.c:6701 [inline]
+net_rx_action+0x89d/0x1820 net/core/dev.c:6813
+__do_softirq+0x1c0/0x7d7 kernel/softirq.c:554
+
+Uninit was created at:
+__alloc_pages+0x9a7/0xe00 mm/page_alloc.c:4592
+__alloc_pages_node include/linux/gfp.h:238 [inline]
+alloc_pages_node include/linux/gfp.h:261 [inline]
+alloc_slab_page mm/slub.c:2175 [inline]
+allocate_slab mm/slub.c:2338 [inline]
+new_slab+0x2de/0x1400 mm/slub.c:2391
+___slab_alloc+0x1184/0x33d0 mm/slub.c:3525
+__slab_alloc mm/slub.c:3610 [inline]
+__slab_alloc_node mm/slub.c:3663 [inline]
+slab_alloc_node mm/slub.c:3835 [inline]
+kmem_cache_alloc+0x6d3/0xbe0 mm/slub.c:3852
+reqsk_alloc include/net/request_sock.h:131 [inline]
+inet_reqsk_alloc+0x66/0x7a0 net/ipv4/tcp_input.c:6978
+tcp_conn_request+0x484/0x44e0 net/ipv4/tcp_input.c:7135
+tcp_v4_conn_request+0x16f/0x1d0 net/ipv4/tcp_ipv4.c:1716
+tcp_rcv_state_process+0x2e5/0x4bb0 net/ipv4/tcp_input.c:6655
+tcp_v4_do_rcv+0xbfd/0x10b0 net/ipv4/tcp_ipv4.c:1929
+tcp_v4_rcv+0x4ce4/0x5420 net/ipv4/tcp_ipv4.c:2322
+ip_protocol_deliver_rcu+0x2a3/0x13d0 net/ipv4/ip_input.c:205
+ip_local_deliver_finish+0x332/0x500 net/ipv4/ip_input.c:233
+NF_HOOK include/linux/netfilter.h:314 [inline]
+ip_local_deliver+0x21f/0x490 net/ipv4/ip_input.c:254
+dst_input include/net/dst.h:460 [inline]
+ip_sublist_rcv_finish net/ipv4/ip_input.c:580 [inline]
+ip_list_rcv_finish net/ipv4/ip_input.c:631 [inline]
+ip_sublist_rcv+0x15f3/0x17f0 net/ipv4/ip_input.c:639
+ip_list_rcv+0x9ef/0xa40 net/ipv4/ip_input.c:674
+__netif_receive_skb_list_ptype net/core/dev.c:5581 [inline]
+__netif_receive_skb_list_core+0x15c5/0x1670 net/core/dev.c:5629
+__netif_receive_skb_list net/core/dev.c:5681 [inline]
+netif_receive_skb_list_internal+0x106c/0x16f0 net/core/dev.c:5773
+gro_normal_list include/net/gro.h:438 [inline]
+napi_complete_done+0x425/0x880 net/core/dev.c:6113
+virtqueue_napi_complete drivers/net/virtio_net.c:465 [inline]
+virtnet_poll+0x149d/0x2240 drivers/net/virtio_net.c:2211
+__napi_poll+0xe7/0x980 net/core/dev.c:6632
+napi_poll net/core/dev.c:6701 [inline]
+net_rx_action+0x89d/0x1820 net/core/dev.c:6813
+__do_softirq+0x1c0/0x7d7 kernel/softirq.c:554
+
+CPU: 0 PID: 16792 Comm: syz-executor.2 Not tainted
+6.8.0-syzkaller-05562-g61387b8dcf1d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine,
+BIOS Google 02/29/2024
