@@ -1,201 +1,122 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE4B28F1
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 16:31:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 536EB45970
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 16:33:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710520298; cv=none; b=iCCcRQ4oHOjjPvIDu4tqHJuo8UGrGpIQL+Jocl0vJEZyTzo7Fkc7fNdLM6DSBLInBRp6BNCySxVYIwUVNqbo6NtxEH5xCXOXK4PYC7TiOhCqmuCLt4R7grTTw35ibxtExPmrq8d7ZSCOhc4mK4rHvY4a31c2sC7tFx1fEv/i420=
+	t=1710520387; cv=none; b=tJ2j2DjfISjl5LuKUpiHZC6ic9kJsLNP0+HnxPr7CZJd0jnZAtOPzRc4h8NXVOEwEAsLhMrBmfauLzezwYUv+/WU6Zahl1GpAJxWwu9xljdFUimp/z0SNMrE6Gcln0jo91l82+xSvqoRAKNG1ch/mLW8UusjyB4TijAdPgCni/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710520298; c=relaxed/simple;
-	bh=f8FB23SdJpoVg+IOqbIwsSdaRHo86KC7ydsQhUlC2Vo=;
+	s=arc-20240116; t=1710520387; c=relaxed/simple;
+	bh=s/BDewy2og3gZ1LCUXxuxGEeN0vfxyfHKGu3DaFPrFg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Va5hvi4lJOcm0dPvR6eCJdAxbn/Y4bX0tsLgJ3+XeQQPUS+Ux2hcaAG7IPcBcqzfx5adZnB2dpZvScyVgkmI1fcJvjpyqnfz6qhjWm8O4USl3jji3I4Rj5T0ucqc3U6SVzcxWUtQN2AV66OG0NYrX7pGk+bb03KrmCxYnLoy/EM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FBmaKs8X; arc=none smtp.client-ip=209.85.210.169
+	 To:Cc:Content-Type; b=DIMAIRSbFKklOxTI1VFz335+sgAMjej+h4R0Pwo2X/MWZs4+IRRIkuJiLl3jLCkeEyIQHg5r8CETvPAhZFcTMmbemMRhzYufMV3do1LDh1D670Bx/CUX+bfEqigb9n4RrTLtGWBAIh+FkYwcT9ukFO6rZYPVrNeQ4D6MwXsE0qE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fJLT5XSl; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FBmaKs8X"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6e6b3dc3564so2108440b3a.2
-        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 09:31:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fJLT5XSl"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-29c16b324ecso1726237a91.3
+        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 09:33:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710520296; x=1711125096; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710520385; x=1711125185; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=I6//baylfDmx6HuBtFjDiC8hoWG3ghl44iKczNM+77k=;
-        b=FBmaKs8XSZirasQsQCdSpjYI6pG9zLjnjmiT/llIUJN4M/9FiMNULU+zj7TAB5gSbg
-         I2gHQ6et1jMNp/zqmGimf52v0gXaMCVlHzyXBARplBeTbFiE1FedkxU+b16KgGUmiMtO
-         ogjRFpVTfhNWLln0ma1Ew7SF4/eCU4WtSBNLPsbhNxGJJ7C1/gUlCjzx5+erMVb3b8Sz
-         BgifnXowQixDXfraCDDjWqWKf0KzBGxkeE1AIZOqyXe8P39L0ETCrpAUv11xBVmv6R7X
-         SzU7P3g+u9KW5U0j82XOmkQ3chDEDJ3uWdhceskFFICsSuQ9sfcTlxGY6r912gTtNB28
-         t0VA==
+        bh=tVq28LuJUHVImSegoPYnyTJIQo9AajCxAmkjABn6qTo=;
+        b=fJLT5XSlB4wikujvpAaKPVtfZLnvIYXeUlA3cBm49qXI4fc8g6wdyCiUfkR65HEw2j
+         qSEGN6xX6ln5zFo2jYkOfdH+dvDNUmK80KDapMCfPVHg23jvn4sZzH0cE3+P0vnMTwRJ
+         EjW9I/9+3NzaGifvCvT535qWyofJuqxsHLXgeKZHKhXSS+UKP6n2zxQC9B5N2PVp6vpn
+         w2PybicaHjotwleNSOua69As67kc+oEgFScbiH99ev7Q/23Ln6oadk3sYkcVfJq3haVC
+         RFyo1+sodC8Q1EFa3JmLR7D5PPN+zY8NLyFHXZ4ONdGh4J+tElidxgBUp6axGmGaI5x6
+         KtoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710520296; x=1711125096;
+        d=1e100.net; s=20230601; t=1710520385; x=1711125185;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=I6//baylfDmx6HuBtFjDiC8hoWG3ghl44iKczNM+77k=;
-        b=f1tiMuUiIhWr4Psbjr6GR+SUyGS3f9mJdKugzunOTh0tC9BO4sVsPf0HtPzctdwB/s
-         rk0tUGXLW31cXkscXiAZZgCbMmxYlDLvvaVUlolIl6DRVftt+LMmXUsWSYCFw8EZOLU9
-         UkuTTws68DP0+yqapsC77CYj8tWja4jiDFMhsdNRpWiafzpZaC+L8sK1df596mPq/1AX
-         mW2a3pGnl5tm5NbbusPd6dw/jpTpk+XaLdQf64dlMl8tauZNPk/iex9Zpx2JrA8ymVwK
-         LFmYIYMk8jCiJCXda9SBXyIcLZy7uemdht5Mu9EcPS0XYSERZKaUvuj2eGIlMpIHjSuJ
-         w6TQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU8bVKgOCF4LxoSpJOAyDXcJYzigUYMMMSLeqdViD8tYxDyDFgXA5aiScMWwtzgdbDz9m94vp+ZW6L6oMYFJWf9u9pe
-X-Gm-Message-State: AOJu0YwhE21jVmzAOqt+HzqT76qa6Zc5sOGZjSteUyJCA8FUVcwKk1L9
-	r35Tv9NOglXuRH00diy/zvMn9WyPVhqskM0Arr2ScdRsJWo9QaA5/hPI1w7ZcF3mef8fnJiqysT
-	rBLgsbFzE+u3ZaSn2iOhlMvb3t/8=
-X-Google-Smtp-Source: AGHT+IHoMRdrYvUZ3Zg3D5FG3qKx0P6hQ5VJKMpg3wZ4syFsu21gi6PvrW3265IFhOWTdo+NQ203CAVHQ3oRn/rhTyk=
-X-Received: by 2002:a05:6a21:6d90:b0:1a1:667c:eeca with SMTP id
- wl16-20020a056a216d9000b001a1667ceecamr6469729pzb.3.1710520295813; Fri, 15
- Mar 2024 09:31:35 -0700 (PDT)
+        bh=tVq28LuJUHVImSegoPYnyTJIQo9AajCxAmkjABn6qTo=;
+        b=gTfhgwIOS57REJzxngRexxR9TJVsrH99MXkcNhX0jXeKiLjkYoUvZ5Air2FUo4ZM6z
+         ZKYxmxLWij3LAqszN6hlyRdrDs0bgvonYOhNyC44lKmiogpkf314NgPTGqCjhKvh8fjd
+         lOBzZq+jiWEezVATh3BzU0eC9tIOjCpecS7wAzd0LK90yRAArc15yqN5fKx9ApDD615v
+         WMlF2FjCZ+uOUNmCxSQMev/FCVk88lmRIKk8qX/DkADDd2bIs4p/qf7WgZWEI2nb3slL
+         e5XaT4ldtAfpbhqWWL5TfUJsZZiMccMFIS7FNFwaeta+/qTsK3zrECFaQiruD27zOzhT
+         nLsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUv8oDDxL2coxjy502wTq3+YMhEQg0wqQ3z43ZbRb+pxH3ZHiY0EnwnBtiqQzLq7tnMziVYIXgd5/uC302JsQLbTJ7D
+X-Gm-Message-State: AOJu0Ywn92zQxiW2kkdc4d7V8RBxOTnvjd+vBM3fddCsts8RxYP9J0vD
+	h5DJg4PoR2fRcrcTGtFhsuXpIY5anjUxQ1WP+ZJLepsw6qR5AuxcZZoJEWgWFFH5NIE6Iywt1wa
+	34zKPRhIGDqFAK5Vv+LjgtFo8l4c=
+X-Google-Smtp-Source: AGHT+IEbemYwqH5K78I6LYVMJ98kY+gpl+EsooT7C5ZlT520qPvPEq8hw8IU+A9DMJg2RGDKpv+cFYR4zi+9ZpaObTU=
+X-Received: by 2002:a17:90a:bc9:b0:29a:6b1d:4d32 with SMTP id
+ x9-20020a17090a0bc900b0029a6b1d4d32mr5334127pjd.38.1710520385470; Fri, 15 Mar
+ 2024 09:33:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240315051813.1320559-1-andrii@kernel.org> <20240315051813.1320559-2-andrii@kernel.org>
- <CAADnVQLFCVCdb4Uu+6QJMDybUc5RqLCF-5yS2eQVoQ==qq3vvQ@mail.gmail.com>
-In-Reply-To: <CAADnVQLFCVCdb4Uu+6QJMDybUc5RqLCF-5yS2eQVoQ==qq3vvQ@mail.gmail.com>
+References: <20240202162813.4184616-4-aspsk@isovalent.com> <CAADnVQLnk=UyKBkRAC1tNkiaF7C4+FG7V-b2xrR3oa_E4+QX7Q@mail.gmail.com>
+ <ZcIDqnXFjsWYyu1G@zh-lab-node-5> <CAADnVQLfidjTWa4+kyRH-qC29gbGvFsRJHu6smcaL0Yk0HqgmA@mail.gmail.com>
+ <ZcS1ZruKKZ1euzlb@zh-lab-node-5> <CAADnVQKH1aitaADzCo__PfMJJA2SxAvYjTS8Z7A6Y01G2OWJgw@mail.gmail.com>
+ <Zc9p4e1EccPkMnmY@zh-lab-node-5> <CAADnVQJ+_+ok_io1_W7e5z_dZhxSqhEFZQkumRgmY4AJRYwW7g@mail.gmail.com>
+ <ZehJFP11vi5sv/eW@zh-lab-node-5> <CAADnVQJnh+j9etPYkst7hhnepvsoBuJY-ds-AF0fn3VqqJNXNg@mail.gmail.com>
+ <ZfK9Y5c7RuOu0YiN@zh-lab-node-5> <CAADnVQLXok7niyyvpUaJxq4pNFFrBP5Vsk47NNxw1V4ipBdRrg@mail.gmail.com>
+ <CAEf4BzbkkrFACwWQQQkESrdRKWUvJz=NyWdrtu4v6m2aOJKztw@mail.gmail.com> <CAADnVQKdvKqNt0GJ5+vJFEHHjRF_YGUR_htrs+QjQ0SgUV5woA@mail.gmail.com>
+In-Reply-To: <CAADnVQKdvKqNt0GJ5+vJFEHHjRF_YGUR_htrs+QjQ0SgUV5woA@mail.gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 15 Mar 2024 09:31:24 -0700
-Message-ID: <CAEf4BzYuMJVoEhK=wHhzDN2193ZvTupG6i+Ya6YjZNWohdADxQ@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 2/2] selftests/bpf: add fast mostly in-kernel
- BPF triggering benchmarks
+Date: Fri, 15 Mar 2024 09:32:53 -0700
+Message-ID: <CAEf4BzY9wov5rS_MmzPWLErr8RKxKmFGV17Y2zsMCQCz6HKx6Q@mail.gmail.com>
+Subject: Re: [PATCH v1 bpf-next 3/9] bpf: expose how xlated insns map to
+ jitted insns
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@meta.com>, 
-	Jiri Olsa <jolsa@kernel.org>
+Cc: Anton Protopopov <aspsk@isovalent.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jiri Olsa <jolsa@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Stanislav Fomichev <sdf@google.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 15, 2024 at 9:03=E2=80=AFAM Alexei Starovoitov
+On Thu, Mar 14, 2024 at 2:41=E2=80=AFPM Alexei Starovoitov
 <alexei.starovoitov@gmail.com> wrote:
 >
-> On Thu, Mar 14, 2024 at 10:18=E2=80=AFPM Andrii Nakryiko <andrii@kernel.o=
-rg> wrote:
+> On Thu, Mar 14, 2024 at 1:06=E2=80=AFPM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > > What could work and what I am proposing is to pass a list of bound
+> > > > maps in prog_load attributes. Then such maps can be used during the
+> > > > verification. For normal maps
+> > > >
+> > > >   prog =3D prog_load(attr=3D{.bound_maps=3Dmaps})
+> > > >
+> > > > will be semantically the same as
+> > > >
+> > > >   prog =3D prog_load()
+> > > >   bpf_prog_bind_map(prog, maps)
+> > >
+> > > Instead of a whole new api, let's make libbpf insert
+> > > ld_imm64 r0, map
+> > > as the first insn for this case for now.
 > >
-> > Existing kprobe/fentry triggering benchmarks have 1-to-1 mapping betwee=
-n
-> > one syscall execution and BPF program run. While we use a fast
-> > get_pgid() syscall, syscall overhead can still be non-trivial.
+> > This sounds like a big hack and unnecessary complication, tbh. I'd
+> > like to avoid having to do this in libbpf.
 > >
-> > This patch adds kprobe/fentry set of benchmarks significantly amortizin=
-g
-> > the cost of syscall vs actual BPF triggering overhead. We do this by
-> > employing BPF_PROG_TEST_RUN command to trigger "driver" raw_tp program
-> > which does a tight parameterized loop calling cheap BPF helper
-> > (bpf_get_smp_processor_id()), to which kprobe/fentry programs are
-> > attached for benchmarking.
+> > But I think we almost have this already supported. In BPF_PROG_LOAD
+> > UAPI we have fd_array property, right? I think right now we lazily
+> > refcnt referenced maps. But I think it makes total sense to just
+> > define that bpf_prog will keep references to all BPF objects passed in
+> > through fd_array, WDYT? Verifier will just iterate all provided FDs,
+> > determine kind of BPF object it is (and reject unknown ones), and then
+> > just take refcnts on each of them once. On prog free we'll just do the
+> > same in reverse and be done with it.
 > >
-> > This way 1 bpf() syscall causes N executions of BPF program being
-> > benchmarked. N defaults to 100, but can be adjusted with
-> > --trig-batch-iters CLI argument.
-> >
-> > Results speak for themselves:
-> >
-> > $ ./run_bench_trigger.sh
-> > uprobe-base         :  138.054 =C2=B1 0.556M/s
-> > base                :   16.650 =C2=B1 0.123M/s
+> > It also can be used as a batch and single-step (in the sense it will
+> > be done as part of program load instead of a separate command)
+> > alternative for bpf_prog_bind_map(), I suppose.
 >
-> What's going on here? Why two bases are so different?
-> I thought the "base" is what all other benchmarks
-> should be compared against.
-> The "base" is the theoretical maximum for all benchs.
-> Or uprobe* benches should be compared with uprobe-base
-> while all other benchs compared with 'base' ?
-> Probably not anymore due to this new approach.
-> The 'base' is kinda lost its value then.
+> fd_array approach also works. There can be map and btf fds in there.
+> I would only bind maps this way.
 
-naming is hard. base is doing syscall(get_pgid) in a tight loop. It's
-base compared to previous trigger benchmarks where we used syscall to
-trigger kprobe/fentry programs. uprobe-base is just a user-space loop
-that does atomic_inc() in a tight loop. So uprobe-base is basically
-the measure of how fast CPU is, but it's unrealistic to expect either
-fentry/kprobe to get close, and especially it's unrealistic to expect
-uprobes to get close to it.
-
-Naming suggestions are welcome, though.
-
-I'm not sure what the "base" should be for xxx-fast benchmarks? Doing
-a counter loop in driver BPF program, perhaps? Would you like me to
-add base-fast benchmark doing just that?
-
-
->
-> > tp                  :   11.068 =C2=B1 0.100M/s
-> > rawtp               :   14.087 =C2=B1 0.511M/s
-> > kprobe              :    9.641 =C2=B1 0.027M/s
-> > kprobe-multi        :   10.263 =C2=B1 0.061M/s
-> > kretprobe           :    5.475 =C2=B1 0.028M/s
-> > kretprobe-multi     :    5.703 =C2=B1 0.036M/s
-> > fentry              :   14.544 =C2=B1 0.112M/s
-> > fexit               :   10.637 =C2=B1 0.073M/s
-> > fmodret             :   11.357 =C2=B1 0.061M/s
-> > kprobe-fast         :   14.286 =C2=B1 0.377M/s
-> > kprobe-multi-fast   :   14.999 =C2=B1 0.204M/s
-> > kretprobe-fast      :    7.646 =C2=B1 0.084M/s
-> > kretprobe-multi-fast:    4.354 =C2=B1 0.066M/s
-> > fentry-fast         :   31.475 =C2=B1 0.254M/s
-> > fexit-fast          :   17.379 =C2=B1 0.195M/s
->
-> I think the "-fast" suffix doesn't really fit here.
-> It's a different way to benchmark fexit vs kprobe overhead.
->
-> I think the old approach should be replaced with the new one.
-> There is no value in keeping the old stuff around when
-> now it's clear that it's measuring much more than it should.
-
-I'd say we should keep them. Note that fmod_ret, tp, and raw_tp can't
-be benchmarked the same way. So we don't have -fast variants for them.
-If we get rid of pre-existing fentry/kprobe benchmarks, we won't be
-able to compare raw_tp/fmod_ret/fexit.s to them.
-
-And to be clear, in practice I'm not comparing xxx-fast with xxx at
-all. I just put all the numbers in this patch summary to show that we
-indeed have a significant performance lost on syscall.
-
-In practice when comparing kprobe vs fentry, it should be kprobe-fast
-vs fentry-fast.
-
->
-> > One huge and not yet explained deviation is a slowdown of
-> > kretprobe-multi, we should look into that separately.
-> >
-> > kretprobe           :    5.475 =C2=B1 0.028M/s
-> > kretprobe-multi     :    5.703 =C2=B1 0.036M/s
-> > kretprobe-fast      :    7.646 =C2=B1 0.084M/s
-> > kretprobe-multi-fast:    4.354 =C2=B1 0.066M/s
->
-> That is weird indeed. Since it's a single cpu run
-> it cannot be due to contention.
-> My gut feel is that something odd is here:
-> #ifdef CONFIG_X86_KERNEL_IBT
-> static unsigned long get_entry_ip(unsigned long fentry_ip)
->
-> Did you have it in your config?
-
-No, this was without IBT. I do have an upcoming small patch to
-eliminate unnecessary copy_kernel_nofault() in IBT path, but I don't
-think this is it. It should be pretty clear with profiling where we
-are losing CPU, I just didn't have time/desire to look into it, as I
-have tons of small things being worked on in parallel and didn't want
-to add another one.
-
->
-> > +SEC("raw_tp")
-> > +int trigger_driver(void *ctx)
-> > +{
-> > +       int i;
-> > +
-> > +       for (i =3D 0; i < batch_iters; i++)
-> > +               (void)bpf_get_smp_processor_id(); /* attach here to ben=
-chmark */
->
-> bpf_get_numa_node_id() is probably even faster and
-> not subject to DEBUG configs.
-
-Sure, I can switch to that, np.
+Any reason why we should have non-uniform behavior between maps and
+BTFs? Seems more error-prone to have a difference here, tbh.
