@@ -1,35 +1,61 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98D42CCAD;
-	Fri, 15 Mar 2024 14:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0F3376F8;
+	Fri, 15 Mar 2024 14:23:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710511228; cv=none; b=a7GI6JioNlon1OSTqjSzMj8488dPbZmne9JPXaQNcoPN3qei6Nzm//cZ+xwh3W3L6+rQvIL6SrhCPrIuujMjlotv2voIyUnWODAzLYGvhu6u+9+rU7I+viqljS7LX29mmBnyjbEaqLdWmDtIcCkIcSMY8bEjV33uvMNirPgKNPY=
+	t=1710512607; cv=none; b=MoQUoT0D2JV7fIq6NX3eGU1uVphZQ2DoI9ebceYM1cf5mtoZ2yHUDYwIykNPpCaH8O3eI2OfOLZph45quhH7w8WV1tcZAWKAGmBdabR3asSSJJkyBEvw4MvnecH1TOvPbRA2AJK5LDxykFPcqOwzmZbXwVR0gmnEtPbqLzq5vM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710511228; c=relaxed/simple;
-	bh=AZP6LgRFwKHqKWfDp056pqDc5aEgznPPgS6hov1CARs=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=GLailLB1rNhitlD13BX0giyM8JhtUlrGgPQX5E6rbvKlz9LUEcZrJVOaNemyfeZfq0PQpUwUDgKMONzcG/xOm77f8zTvoctLDmt13D7o99tAxylEhAfJz24S2L/cqHwpf+dG6tdDKuroDKTBkX9As4cnB5nhTSJw/VQYYeM1gBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bpcZqi5h; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710512607; c=relaxed/simple;
+	bh=sUEItuKgutLTb5MQiwL0cprRpiEgiKKPW8dPQXXVeqA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iiAdQXzq6PgDGtcpGodIrPLxpya+ILfvH++gGIVWc7jYN5TILhvZ/opLJtLMgLHrV2pNCUnmklLvEBRXeHG6193YC5gqd3ncK0bh7vBqEx1o8UqK6QF4lz0nlHcZILmonIaoRgxrFtjzHYJhxcdTfNqLvvcfbmUL0pADXzo0C2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OsCKTAN5; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bpcZqi5h"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1FC6FC433C7;
-	Fri, 15 Mar 2024 14:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710511228;
-	bh=AZP6LgRFwKHqKWfDp056pqDc5aEgznPPgS6hov1CARs=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=bpcZqi5h2xKg9WGd3wHnKTicXVOHAwHlqxER/SAyh93746/4H90uMwFGkQ4r6tT6B
-	 JbosKofCC2xGaLvWs39IMg9R6Emv+Mcl659aVK1Qm2KXEeEyNbxCX7sFZwu3+eVwkU
-	 /8/yOeSWgAmg6CwCSFm2tQyloAbRZeP8Ios123DUWRDGHc7Yk0NCdGAKpR8shTJvV9
-	 fKE4vxW3+pgil8g6hApi2sdYf+WhB4C+GZVn+1Wc8qkQkDh8tNwjkVFWeqbVjVzudT
-	 gYO1wg40KIM9pWDT+cMjjG02Jq/Z+K599JbBo66jYz+W6jTDZx48DVM4wWSEGAXyXu
-	 NEJoW8vQaVLUw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0AA9FD84BA8;
-	Fri, 15 Mar 2024 14:00:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OsCKTAN5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710512606; x=1742048606;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sUEItuKgutLTb5MQiwL0cprRpiEgiKKPW8dPQXXVeqA=;
+  b=OsCKTAN5mgHaMUHCTPxQXW2r3563yNiL69w/FJzDRN2nwf+8p3cg7/jb
+   PkoYCecUrZjbw2gQ039nrVrhRFhgtRJfpyIThDNPgbDuvRudHtiTjOokz
+   phI1jgVCXj1rs3XnP6Dijto1LLpcvB4XEW8Y4d9ymB4ovLilbhpFwTNDE
+   FOsMEZ5Xv52HEqrdni2+hCb4Jk/vWyNVP3S5YbPQm3xDX/hhCrPXcRntK
+   w6Qw4qEEysuspoQka8nx6SRa/XRs+bvCTmg5s50M5gPB1CcNNv7bmw7EA
+   iP8GiX49l/lbTUrHCObXHGBrxOoc8q9WLBNXplLM3SIJoG7AV8OFf4FOF
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11013"; a="5250003"
+X-IronPort-AV: E=Sophos;i="6.07,128,1708416000"; 
+   d="scan'208";a="5250003"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2024 07:23:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,128,1708416000"; 
+   d="scan'208";a="17140735"
+Received: from intel.iind.intel.com (HELO brc5..) ([10.190.162.156])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2024 07:23:19 -0700
+From: Tushar Vyavahare <tushar.vyavahare@intel.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	bjorn@kernel.org,
+	magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	jonathan.lemon@gmail.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	tirthendu.sarkar@intel.com,
+	tushar.vyavahare@intel.com
+Subject: [PATCH bpf-next 0/6] Enhancing selftests/xsk Framework: Maximum and Minimum Ring Configurations
+Date: Fri, 15 Mar 2024 14:07:20 +0000
+Message-Id: <20240315140726.22291-1-tushar.vyavahare@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,41 +63,68 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH][next] selftests/bpf: Remove second semicolon
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171051122803.31092.15319627583349442995.git-patchwork-notify@kernel.org>
-Date: Fri, 15 Mar 2024 14:00:28 +0000
-References: <20240315092654.2431062-1-colin.i.king@gmail.com>
-In-Reply-To: <20240315092654.2431062-1-colin.i.king@gmail.com>
-To: Colin Ian King <colin.i.king@gmail.com>
-Cc: john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
- linux-kernel@vger.kernel.org
 
-Hello:
+Please find enclosed a patch set that introduces enhancements and new test
+cases to the selftests/xsk framework. These test the robustness and
+reliability of AF_XDP across both minimal and maximal ring size
+configurations.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+While running these tests, a bug [1] was identified when the batch size is
+roughly the same as the NIC ring size. This has now been addressed by
+Maciej's fix.
 
-On Fri, 15 Mar 2024 09:26:54 +0000 you wrote:
-> There are statements with two semicolons. Remove the second one, it
-> is redundant.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  tools/testing/selftests/bpf/benchs/bench_local_storage_create.c | 2 +-
->  tools/testing/selftests/bpf/progs/iters.c                       | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=913eda2b08cc49d31f382579e2be34c2709eb789
 
-Here is the summary with links:
-  - [next] selftests/bpf: Remove second semicolon
-    https://git.kernel.org/bpf/bpf-next/c/4c8644f86c85
+Patch Summary:
 
-You are awesome, thank you!
+1: Adds the definition of ethtool_ringparam to the UAPI header, a
+   necessary step for the subsequent patches to run tests with various
+   ring sizes.
+
+2: Modifies the BATCH_SIZE from a constant to a variable, batch_size, to
+   support dynamic modification at runtime for testing different hardware
+   ring sizes.
+
+3: Implements a function, get_hw_ring_size, to retrieve the current
+   maximum interface size and store this information in the hw_ring
+   structure.
+
+4: Implements a new function, set_hw_ring_size, which allows for the
+   dynamic configuration of the ring size within an interface.
+
+5: Adds a new test case that puts the AF_XDP driver under stress by
+   configuring minimal hardware and software ring sizes, verifying its
+   functionality under constrained conditions.
+
+6: Enhances the framework by adding a new test case that evaluates the
+   maximum ring sizes for AF_XDP, ensuring its reliability under maximum
+   ring utilization.
+
+Testing Strategy:
+
+Check the system in extreme scenarios, such as maximum and minimum
+configurations. This helps identify and fix any bugs that may occur.
+
+Tushar Vyavahare (6):
+  tools/include: add ethtool_ringparam definition to UAPI header
+  selftests/xsk: make batch size variable
+  selftests/xsk: implement get_hw_ring_size function to retrieve current
+    and max interface size
+  selftests/xsk: implement set_hw_ring_size function to configure
+    interface ring size
+  selftests/xsk: test AF_XDP functionality under minimal ring
+    configurations
+  selftests/xsk: enhance framework with a new test case for AF_XDP under
+    max ring sizes
+
+Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
+
+---
+ tools/include/uapi/linux/ethtool.h       |  41 ++++++
+ tools/testing/selftests/bpf/xskxceiver.c | 155 +++++++++++++++++++++--
+ tools/testing/selftests/bpf/xskxceiver.h |  14 +-
+ 3 files changed, 200 insertions(+), 10 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
