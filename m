@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B43D2F0
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 02:30:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B78D2FA;
+	Fri, 15 Mar 2024 02:30:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710469831; cv=none; b=sc80tc9Esk0+WiVqTgDRVLWkeCLV17JGAxVjuZ+zx/XNWvdzkZGln+eH++jsrvthZt09sb7a/G3lP4ksmluIn4aLCZs0yoD8u1dRhFfUFf9lhM1csPbK7F/xKM4qVJjyJDxw6rJTaycgt/zF2kCPSM9OgbFz3UQBSLs8w8SXm/U=
+	t=1710469831; cv=none; b=Mh4MEwuPWtmPFLKjX+38ME0FzIf000fe3r8745CouHRPp3nWFa9YE9SIvoEsRT/JNw3uEDvvm/4O78VaANzmmisxQ1n2RzJatRBmjOGawYRs/9gpxBByluqFzpmGp10m9BwVJ+e45ouflO6/KwxSfRMJo2HrVz8TykKtV1ngcGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1710469831; c=relaxed/simple;
-	bh=fY/NX/cQMM22dyD1v3nx5fyqpjC9sBZkxAMZqKsHZVc=;
+	bh=/DuxcoU5eU7Jg2W0UecnZo3j6aFQsVsJnqcpKoj3iDU=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=kSDE46kOpD5tSHB+5/oUnLDE61THaZQ5G/zYmzN2ise612obFCeO4DyEcMQhL8Zx4KajbjoCohFcdmRiGhQAmrNIQEWQPEKfWyMSmTB8U0R4Qm7Gkg4PfNHbwEnHVzBiClAdVLlnzYJ+Nmxckmaw/2Fr3m2Ke/T+gEFmLk3Jgd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eN2Qg/du; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=mVDBStFU77eZ/LU1HaaOnd8nnpsBYTNRxmOTUPyheO72N4g9SOv8g2fG1ChRqxLKetY/647C3EcybO+MrHeiVehzInfSOEoUHekQX6N0r/V19qKPVJ9eKsqHWcu6DuMcxPkjNFvg9MXeoiSPzNHXR/v0POweoP8jdg9eXgVZOEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KP6FE4eq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eN2Qg/du"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 17A57C43390;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KP6FE4eq"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0D109C433C7;
 	Fri, 15 Mar 2024 02:30:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1710469831;
-	bh=fY/NX/cQMM22dyD1v3nx5fyqpjC9sBZkxAMZqKsHZVc=;
+	bh=/DuxcoU5eU7Jg2W0UecnZo3j6aFQsVsJnqcpKoj3iDU=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=eN2Qg/duvaBF5GD3sAZt9nQcY9k7Xs7iiSD2hKW3JKiBWfYieEqBHJTLiqwkhQFdQ
-	 7DhDXnxxDFoHnFydInxXuPJCnjYS5zFlwX+RwGxaqvTdvZQkFa+iTI4QAlMKp89qJ5
-	 MUKR6by/vPrxoJcrzzW8kTZdXHZq0UDTtZYYF2w8PTJBjF2khRl6FuMZYD+k1y8Mvb
-	 qw8+r8Bhayv4FlliH1nO75HK+vsOnzrAdr7YZSym0eycksEK2u1ZOhF+5L/gTGlB7G
-	 Stj7gkjo7zScMQVEA2BWoS+ph7DKvL2MMRUxeIO8EryvUnQXsumnpBBh4un5ZJaSWz
-	 mL4iMnbZ8O3nQ==
+	b=KP6FE4eq9/myZv8B6rO85RyDC/5fy8vNg16+Nz/OmRAVWA0o5ldthsyQHF9xdmSQD
+	 3sGhNMgSv2xxV3C5rikVOXZzCyLxjUMljmmQHwVrrkUDmGrnQvOtpyCFOz0ZbHddh6
+	 meiyRECn3tp+MCoUkGwPalXjGO8yEUDPyJLjYi1k2TMOWcwI9VkkDp1EKWuhu8Waxg
+	 DHzRRIfjbJnniJwWQfZM9ckyC7Wq1VzEpcqorHyXiaMEQYz6Sk9RJECU67gJnNavX5
+	 CsyUGj74Bq5C3LTBLwmtQwd0mJbg1t/FxU1HdjS2cYKVqMT74jNfrEZZRl/+PZ1piE
+	 irzVcogN+JBCA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 06404C595C3;
-	Fri, 15 Mar 2024 02:30:31 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EFF08D84BAB;
+	Fri, 15 Mar 2024 02:30:30 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,35 +37,47 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: preserve sleepable bit in subprog info
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: Take return from set_memory_ro() into
+ account with bpf_prog_lock_ro()
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171046983102.25404.3149367929106857077.git-patchwork-notify@kernel.org>
-Date: Fri, 15 Mar 2024 02:30:31 +0000
-References: <20240314000127.3881569-1-andrii@kernel.org>
-In-Reply-To: <20240314000127.3881569-1-andrii@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@kernel.org, kernel-team@meta.com
+ <171046983097.25404.15651868965957197359.git-patchwork-notify@kernel.org>
+Date: Fri, 15 Mar 2024 02:30:30 +0000
+References: <286def78955e04382b227cb3e4b6ba272a7442e3.1709850515.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <286def78955e04382b227cb3e4b6ba272a7442e3.1709850515.git.christophe.leroy@csgroup.eu>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+ sparclinux@vger.kernel.org, netdev@vger.kernel.org,
+ linux-hardening@vger.kernel.org, keescook@chromium.org
 
 Hello:
 
-This patch was applied to bpf/bpf-next.git (master)
+This series was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Wed, 13 Mar 2024 17:01:27 -0700 you wrote:
-> Copy over main program's sleepable bit into subprog's info. This might
-> be important for, e.g., freplace cases.
+On Fri,  8 Mar 2024 06:38:07 +0100 you wrote:
+> set_memory_ro() can fail, leaving memory unprotected.
 > 
-> Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
->  kernel/bpf/verifier.c | 1 +
->  1 file changed, 1 insertion(+)
+> Check its return and take it into account as an error.
+> 
+> Link: https://github.com/KSPP/linux/issues/7
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: linux-hardening@vger.kernel.org <linux-hardening@vger.kernel.org>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> 
+> [...]
 
 Here is the summary with links:
-  - [bpf-next] bpf: preserve sleepable bit in subprog info
-    https://git.kernel.org/bpf/bpf-next/c/4d8926a0407c
+  - [bpf-next,v3,1/2] bpf: Take return from set_memory_ro() into account with bpf_prog_lock_ro()
+    https://git.kernel.org/bpf/bpf-next/c/7d2cc63eca0c
+  - [bpf-next,v3,2/2] bpf: Take return from set_memory_rox() into account with bpf_jit_binary_lock_ro()
+    https://git.kernel.org/bpf/bpf-next/c/e60adf513275
 
 You are awesome, thank you!
 -- 
