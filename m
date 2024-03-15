@@ -1,88 +1,151 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4CAB548E7
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 21:12:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB00C548F0;
+	Fri, 15 Mar 2024 21:17:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710537128; cv=none; b=LrMxtRU7BOSlbKMTTqIipwO0sOWSqoj2toDTFXV3MHCg6eOM8AO17rAq65ORcaFP8vXPnRLbLqqgoMm8z1yT70G7YXkaFgzhm1B3SoX+YIiPEKa9ZGyH4whkm3xh/2LQ551nNdh+/l0GtIWv175rm80KW3MjlR/lFWKxthuR3xM=
+	t=1710537432; cv=none; b=oSnymNfDzb020l9NOeeXZT/FrhOrWXtzr5hQTU9Lxy+e1dLFV7HRCHno/Kz+mPbymGXc/6Juli3ovfod5FthB69OUQlIuSPuJ7Kst0xEIRlp2MF6+g+XxoNv3lI58Eu7ZL89OY/bTa+JRkuYmojczb0GWHRlq2dX1yerRgtXi0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710537128; c=relaxed/simple;
-	bh=n/ul0ogx7iwzi5n9hjSGc4kclaFxVnfk7TjW0NiHHcU=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Emi2+l2mHezkK2UdIbhtxs7TbyuMNsIUPiWLv/nkXX+zDwMwkiOXtvrkqifT4zfLmVUKNhrfbSXyCvQAFS0noRgWUD6IufVkVzGNV13/uOvCY4O1YFP6wu6vONvGGhG+0UVKpJzPoXXu8lJMixbU3L26xT8ea1Li74Ho2pRn/yc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=t4qE5XXz; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1710537432; c=relaxed/simple;
+	bh=hwD/lGz/VzatlOJGLNO2bM+DjLMZEkNqMUkR6QXjBvk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EmKZ/0zBU5JIcy+mcbEoRyI53l+J2EZXBMeF7QvaEl212I6eO6XaXzzTzD1M7vbyJI/x3GWnp9sGfPmNeWCeifu46rHWOYi5sKqAFxV7UFXclb3xtAJFcJJ4yZ8NsZaFnPgeCDrkl0cJwadGATnk3jjJk/H0YerOqv6SExCltAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WASBOIO/; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="t4qE5XXz"
-Message-ID: <5f450439-3400-45cb-bb62-4559bd6e088e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1710537124;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xOAHpfzXDspbl58UkIknw9ZqxHAdHjN22/pRm7dUv/A=;
-	b=t4qE5XXzsRE50gGpMBjUHqk5Bu4EZG4MzUQBEyCuL5dXlhgz0ShnsZPiF6CtWiV+W1m7xj
-	M2yCNnU7rX1uVEIErJHuaNgglF/wVvku1w7OW6Ye7fMWu320FPJZjouURI7uFEu2Sbw/6T
-	qXnUkC8vJnpGnHHnnsupyN0I6GBMr1U=
-Date: Fri, 15 Mar 2024 14:11:51 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WASBOIO/"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1dd9b6098aeso19215645ad.0;
+        Fri, 15 Mar 2024 14:17:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710537429; x=1711142229; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dbw37BmJsQeVdqK1E7BHtnCUQp5XmW43FRTZzRfLqog=;
+        b=WASBOIO/mk8BOl/FGa78H6u+IUALpPqN0Qt30t5ECct3HdZ2wqtwhtbXDrna/n3cGk
+         pjkV2cgD+E4iIS7AWk0dZK4cbRBKGCew5xYlHuZBhU5TDuQGpQxJmbjjgTaRuSiWJcO8
+         1W52bLKcN7cutPxLcPNiE3iaZqCqfdncGMBjnvRPS4uGwcsGvldPD2uhiMUbwgz922cv
+         +kftX/2jr4wZVspG8EM6NeiYBnjCF36rooC3Uv9BIMjcmwYoPSlE2TpqMen9Ea4Us+2j
+         nXnAo7ZLQjBRfdDiFjEEfs/yw0wJ5hUlEipiKTa13lOSUMgpPIQ2L9F01DIfBdVEizyE
+         wQww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710537429; x=1711142229;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dbw37BmJsQeVdqK1E7BHtnCUQp5XmW43FRTZzRfLqog=;
+        b=PGDhIhJV4YAlspWfXXC/d5bmOLA7U1z5aOHgzFqMa7UPaQg12iQNGsMHTau5Fg43zY
+         tJFwVfeH8tmEO1j9uhK78PqCACITHBWAEJYY0GFxEYOumkVgH4lv/xR4oX+qvctmXxF/
+         zvBu80oL6k5QngESVgi/IX8PH4u06e5YUEsSxKjnvYjZKdPn8nlsLf32wyTyzKn5EjNS
+         5mnitQd/spRNEZugvyo//rJhG3TdYVcLAXkfMUTbhMozblLG8o9b+BIrNdRjEhGNs8m8
+         y7Bho6R5r0daRuRqL28/5ZlKXzO/AkJ633CTLtCNeGGO/A3zuGomJ+6FddmnuKelmt92
+         KnUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUt5opfCpfN8eT27H5L4ewgTcJdG9ZfmtqSKhC+W6KrBvqntatXtqmdbv0idSB7/CQZadO2Z+LtFlrCJ1tbGP+jslygs74lgwHQWxsxj/Jxs+DgJDRYldMwstjK/m/XdUszVqqE92yT1dyDstEYtE4yuXS68OX3ISHOoRjhTp290Zwt6z8nU0XGbcJxT5TgNYQjpRLbrvtDZi4vfdzVlKUDVETK1Mo=
+X-Gm-Message-State: AOJu0YxkEMw31ZKbxzXmWGOQt2SgtTNAaXZie8deiejH08uOYTdoDbmA
+	2m0JLl78RDINLPjjHNG+Ctc9vMgHgrxO8H/iwZ/s0SndIQs5csEl0IaLLnAZ/oSbvAlnRUL7A5p
+	fuCXdUF2iPoOdZSAdNL3V2SrS+FEAxM+n
+X-Google-Smtp-Source: AGHT+IGbDe8TDqWhW7fOhXA2CHqs3losvmxFx7BFSa9/+mgxC9s6/F3YiXoF2pn+xPEHeBz0lVW6B8iNIstOBbhkgns=
+X-Received: by 2002:a17:902:6e16:b0:1dc:ca1b:279b with SMTP id
+ u22-20020a1709026e1600b001dcca1b279bmr5438447plk.1.1710537428873; Fri, 15 Mar
+ 2024 14:17:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 2/2] bpf: Check return from set_memory_rox()
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Zi Shen Lim <zlim.lnx@gmail.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Kui-Feng Lee <thinker.li@gmail.com>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- Kees Cook <keescook@chromium.org>
-References: <2b9fdb119ef73cfa4516572026ba4936e86aedca.1710522112.git.christophe.leroy@csgroup.eu>
- <4d7cc25e937403ac61ae61be06f998f27e631a65.1710522112.git.christophe.leroy@csgroup.eu>
- <55151dc9-8edf-4c75-b1d0-1cc0437816c3@linux.dev>
-In-Reply-To: <55151dc9-8edf-4c75-b1d0-1cc0437816c3@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20240315113828.258005-1-cgzones@googlemail.com>
+ <20240315113828.258005-2-cgzones@googlemail.com> <CAEf4BzZF0A9qEzmRigHFLQ4vBQshGUQWZVG5L0q2_--kx4=AXA@mail.gmail.com>
+ <0f8291f7-48b1-4be1-8a57-dbad5d0ab28c@kernel.dk>
+In-Reply-To: <0f8291f7-48b1-4be1-8a57-dbad5d0ab28c@kernel.dk>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 15 Mar 2024 14:16:56 -0700
+Message-ID: <CAEf4BzbgQrYDMma=NbW6A-qikA693eSnz9-RwjkF3xPLRE8qqg@mail.gmail.com>
+Subject: Re: [PATCH 02/10] capability: add any wrappers to test for multiple
+ caps with exactly one audit message
+To: Jens Axboe <axboe@kernel.dk>
+Cc: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>, 
+	linux-security-module@vger.kernel.org, linux-block@vger.kernel.org, 
+	Serge Hallyn <serge@hallyn.com>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/15/24 1:55 PM, Martin KaFai Lau wrote:
-> On 3/15/24 10:06 AM, Christophe Leroy wrote:
->> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
->> index 43356faaa057..ca1d9b87c475 100644
->> --- a/kernel/bpf/bpf_struct_ops.c
->> +++ b/kernel/bpf/bpf_struct_ops.c
->> @@ -742,8 +742,11 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map 
->> *map, void *key,
->>           if (err)
->>               goto reset_unlock;
->>       }
->> -    for (i = 0; i < st_map->image_pages_cnt; i++)
->> -        arch_protect_bpf_trampoline(st_map->image_pages[i], PAGE_SIZE);
->> +    for (i = 0; i < st_map->image_pages_cnt && !err; i++)
->> +        err = arch_protect_bpf_trampoline(st_map->image_pages[i], PAGE_SIZE);
->> +
->> +    if (err)
->> +        goto reset_unlock;
-> 
-> This part does not look right. The "if (err)" check should be inside the for loop.
+On Fri, Mar 15, 2024 at 11:41=E2=80=AFAM Jens Axboe <axboe@kernel.dk> wrote=
+:
+>
+> On 3/15/24 10:45 AM, Andrii Nakryiko wrote:
+> >> +/**
+> >> + * ns_capable_any - Determine if the current task has one of two supe=
+rior capabilities in effect
+> >> + * @ns:  The usernamespace we want the capability in
+> >> + * @cap1: The capabilities to be tested for first
+> >> + * @cap2: The capabilities to be tested for secondly
+> >> + *
+> >> + * Return true if the current task has at least one of the two given =
+superior
+> >> + * capabilities currently available for use, false if not.
+> >> + *
+> >> + * In contrast to or'ing capable() this call will create exactly one =
+audit
+> >> + * message, either for @cap1, if it is granted or both are not permit=
+ted,
+> >> + * or @cap2, if it is granted while the other one is not.
+> >> + *
+> >> + * The capabilities should be ordered from least to most invasive, i.=
+e. CAP_SYS_ADMIN last.
+> >> + *
+> >> + * This sets PF_SUPERPRIV on the task if the capability is available =
+on the
+> >> + * assumption that it's about to be used.
+> >> + */
+> >> +bool ns_capable_any(struct user_namespace *ns, int cap1, int cap2)
+> >> +{
+> >> +       if (cap1 =3D=3D cap2)
+> >> +               return ns_capable(ns, cap1);
+> >> +
+> >> +       if (ns_capable_noauditondeny(ns, cap1))
+> >> +               return true;
+> >> +
+> >> +       if (ns_capable_noauditondeny(ns, cap2))
+> >> +               return true;
+> >> +
+> >> +       return ns_capable(ns, cap1);
+> >
+> > this will incur an extra capable() check (with all the LSMs involved,
+> > etc), and so for some cases where capability is expected to not be
+> > present, this will be a regression. Is there some way to not redo the
+> > check, but just audit the failure? At this point we do know that cap1
+> > failed before, so might as well just log that.
+>
+> Not sure why that's important - if it's a failure case, and any audit
+> failure should be, then why would we care if that's now doing a bit of
+> extra work?
 
-ah. Please ignore. missed the "!err" in the for loop.
+Lack of capability doesn't necessarily mean "failure". E.g., in FUSE
+there are at least few places where the code checks
+capable(CAP_SYS_ADMIN), and based on that decides on some limit values
+or extra checks. So if !capable(CAP_SYS_ADMIN), operation doesn't
+necessarily fail outright, it just has some more restricted resources
+or something.
+
+Luckily in FUSE's case it's singular capable() check, so capable_any()
+won't incur extra overhead. But I was just wondering if it would be
+possible to avoid this with capable_any() as well, so that no one has
+to do these trade-offs.
+
+We also had cases in production of some BPF applications tracing
+cap_capable() calls, so each extra triggering of it would be a bit of
+added overhead, as a general rule.
+
+Having said the above, I do like capable_any() changes (which is why I
+acked BPF side of things).
+
+>
+> I say this not knowing the full picture, as I unhelpfully was only CC'ed
+> on two of the patches... Please don't do that when sending patchsets.
+>
+> --
+> Jens Axboe
+>
