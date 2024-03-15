@@ -1,109 +1,221 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76E44CB37
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 18:30:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E86101C3;
+	Fri, 15 Mar 2024 18:30:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710527408; cv=none; b=Pz6FpCGUGtv/XHgZahzxXs3bpCE+85uRSFabZ+rmNHyYRDkSkufj7hH3uHPYTi+E9TrvULrxCdp4KDfe+ldHg6iEdKZlsEQsaxMZ1RdZzWDghqPj6T1JLKFSm41TmuxPkOda0BbQ1htRg/bw7ueogzxWFNnoOqGEtXBmT2MU0qM=
+	t=1710527450; cv=none; b=i4QRcgqgHEGUUylWd+BRoNpr9PF7Tzyme6XnEoLRBHLy4AZLzUHs5QcUoBq+d5ohrOU4rxa4Ykcs4bdPVDS4jWeJLIER4SGvH0oC/R2owBVkCe9KA9QGCP21iDjM0AdBEaZ7vN+0k8omsYBx57a1hFxSUBCwg17MS+TBDGXqf2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710527408; c=relaxed/simple;
-	bh=2CY3iY7WFMaadqVPoCDCxcWGOVu+MgkPKPo9nbRdhSc=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Q/SuuNhhscD0mIFaesVy9qhJ4+Rd2hIf9jFkGPSlW4yCH36XUFt2vs8JEvjJoctBzE/qUOYc93s+X+u8Mwl+X2wGUxhf4+Ya7P9NyYVXzkA5kqfstPxbS2xkaeZ4zFpdHjRSrk3GWVeH5ZGXitun61JZZ0KV/QiAB7+Da1xdJPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gLwhfWyJ; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com
+	s=arc-20240116; t=1710527450; c=relaxed/simple;
+	bh=5Xz50tDh2SV78HMFTMD1A0h2hu+XSpD2m/eQOXfHhI0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E05vYzy1SS+eWWAmLEdSHa+VG374zgpOVNEQugIgjem5DU7oJq+Tzi80+HdZpy54UhDFEtfJsWPHPEVG5/zfaS0gWNa3nzZoc02ecJfnv7ijf9MHf6ttvt2l455lsK+u3BY+4/obnrBgqKhDdyEScqLiGKDp7G0ywfVitRpKd74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aTvFAQV3; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gLwhfWyJ"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-5cfc2041cdfso1844448a12.2
-        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 11:30:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aTvFAQV3"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1dddaa02d22so14383695ad.2;
+        Fri, 15 Mar 2024 11:30:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710527406; x=1711132206; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=n5G1Y3qw0gKwLwzXpV+7qDHQyHhpinIiFbTLqmHrd/Y=;
-        b=gLwhfWyJzHKvCGp2VjR0Yoj4oPjmLCxZJNDZeRoJETD0mG5Y2+7HBHstUXvC4hEbp9
-         PFWE30QLyMsvguMfGHqIlYed7wuW3BGQfpWBd4PjliNe8JxLsJGWw0279lU5LUjM5uoE
-         QmxsVvzDehC9Q6xiz24JQFl8Q1xcJLv5/n37iFmCxISKPSgqlEa3vDH/Fo09YIkfrA+v
-         ZEPOnB2lzO4e3KoukO5PUvJwZsBKTDNRd9qfplbnW60u6s1CIkQpjg/+ynpWm/36i3Bc
-         nBsaRDKznO0CCcpoGgTcmTzOVI94AinhmiQ4vzvRKKt8K48gV1uLG3Wb2rOct/NOzb0E
-         NLoA==
+        d=gmail.com; s=20230601; t=1710527447; x=1711132247; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pbpFTqBdS3olh9wHBTkJECdWAd4sQa56r15EYsGS4Ms=;
+        b=aTvFAQV3aeCVRB8hITKHmGHY05tQgchzNu6PBMqsJ1WXC0+140Lpu9m+EC/EBqhkk9
+         7wExeyGpkfhzJKUyQqHo+VM9cqEyWit17zXuvFpwhDhUB8FNfEfBDczolycTyz+b887x
+         bKyBmfkrJgMUQRRGRA+yP3bb8EE11ac7yB2i8QefD/trcPU7NX6X5N5iQCEOGVJcCB6t
+         mO3iQT2qnsTiSRix94OByoANhq4naMwz7swPiaU3tm5187iCqQUw194fBAPB7XHuvCPG
+         Mne73n9OwWktgZ6fEXeiNzH/Map+INGtmoRJbJia+SeTXao74dkpimMhAPkcMEI1CW5j
+         XZgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710527406; x=1711132206;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n5G1Y3qw0gKwLwzXpV+7qDHQyHhpinIiFbTLqmHrd/Y=;
-        b=mOTeePkrR2vPRfNdmyD76FKTQ0eRkz+jQpllsKRIg0zREKXIo3OSqdmby0xR8Sb/ox
-         vd9EHy693YkRf35QOfsQFZPgNpPUsD5DG89TF4AFVPGkUvvG7hHl2eb9Ps+Oqmpa/nMq
-         ybvo0pcoiQKHVrCLcF5baPhofVWvbjZI241EYvfLn/lS2vUz1wGnoxd26qT0ieQCk9Pb
-         M7FNBLsIZzeKc7bprjD9OMv8UHvdzcNsIl6QESqR6dNgHNvsTDSguaWrYE1OtneSTIXk
-         9gOb6CEUt0LWd6WnXqA3vwVcsyoIviG3j1BtmXCHE32S6IKUJrQ6cP7Mr0vjUeeOiAIB
-         M3mA==
-X-Gm-Message-State: AOJu0YyqoCO2NMGws0Bf7OdWUyPjC0YmHy2qaaz3fRDmwiU86Wsd4LWq
-	0lu+fCnCBbio9AMbGT3iGfQf7M0QlmIyQB/nAkKuii7Z2mEfxZcBqiEqmz8kpVtUhw==
-X-Google-Smtp-Source: AGHT+IFcuPBryZ1ntjaFPATHblXCxMxO6pIJC/bUyAXszX/U+Vjv2d7HO0URfMljx2hOJgTA+AHCIXU=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a65:6544:0:b0:5d8:cd91:44e4 with SMTP id
- a4-20020a656544000000b005d8cd9144e4mr8052pgw.12.1710527405220; Fri, 15 Mar
- 2024 11:30:05 -0700 (PDT)
-Date: Fri, 15 Mar 2024 11:30:03 -0700
-In-Reply-To: <dc02f7f4-6996-4a1e-a45d-09784c164939@gmail.com>
+        d=1e100.net; s=20230601; t=1710527447; x=1711132247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pbpFTqBdS3olh9wHBTkJECdWAd4sQa56r15EYsGS4Ms=;
+        b=LfcMMJRD/mKLMf3+PDYaNhJiVCyVLQ8x6PLRlAYDi7ZiIeLtZwNbtSgPN855VunF3o
+         PsVIW7PraO3rjyhx6gu8HXQx4ZEwgRfawsWaEBUloHeUDOKWhTtS1BNk3RWOtxe39xMC
+         M9RGKzqgd1BtAj/m5GDqGs4E5dDvG2ULBxqt6/dbrfXESysFl/LUzx5DaARTFHEGEhsv
+         t/LYWTk96yfCyEW3Zfw0V0Y+CYAGYt9SRAgZJByk9NrJho88PZkiMg0zNanBMn+VQ1Q6
+         0xvDQhxHmI46b0rWJZsPdeRVMJ2qMXZ8dknaRZMWyT94thF7Qnyq99fgCTGGFqSzUnMB
+         7XVA==
+X-Forwarded-Encrypted: i=1; AJvYcCWX6WNI8RcHJPUQhhUUg5QC9L16vT2vYVM65SpiTC6bN82lYi3JcCilJskqI2jxB4Ak/dBZ84+6tngSlzx22zJ6rS8wu/vOqNp1wN+l59WPfG6uzPGHjGZa7Gd3d4iHsMmtFDglCUX5QWMRxfmWWZcw0BWb5zkqXGt/vVVonzw=
+X-Gm-Message-State: AOJu0YzDx4O4QafwkhocHpePi3lew4uFHe66pNFckM1sTYm5DbWYo3QI
+	kiG1AA/Raq9jKWQvnpWgaWOk34rjorFAb1YdnofovZ+jyNcq5M7qhg3OPHVcKupGCqonEW9nEbl
+	ldJUeisG7I9iOef8nj1XdGx24O8E=
+X-Google-Smtp-Source: AGHT+IGZzgq/mjcEak1ubFRlLXArgTzr7DYoX/TCFR4XWCKf5ZaHunqGl/IwrB55WvC+mXm1BtOkCc60Ds+UWhpFy6g=
+X-Received: by 2002:a17:902:ba8c:b0:1dc:42da:bad with SMTP id
+ k12-20020a170902ba8c00b001dc42da0badmr3428728pls.62.1710527446870; Fri, 15
+ Mar 2024 11:30:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <12a4fa23-fd37-4cc9-9744-09ae056fc872@gmail.com>
- <ZfSF6aNQ419Dx9yS@google.com> <dc02f7f4-6996-4a1e-a45d-09784c164939@gmail.com>
-Message-ID: <ZfSTq3tBoHoiUNMv@google.com>
-Subject: Re: PF_PACKET RPS like using bpf
-From: Stanislav Fomichev <sdf@google.com>
-To: Alexandre Cassen <acassen@gmail.com>
-Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+References: <20240315113828.258005-1-cgzones@googlemail.com>
+ <20240315113828.258005-2-cgzones@googlemail.com> <CAEf4BzZF0A9qEzmRigHFLQ4vBQshGUQWZVG5L0q2_--kx4=AXA@mail.gmail.com>
+ <CAJ2a_Dfy3DKnsZZhKUXiMbG-NZqH0APwz3tGF1Fdma+nYcHmOQ@mail.gmail.com>
+In-Reply-To: <CAJ2a_Dfy3DKnsZZhKUXiMbG-NZqH0APwz3tGF1Fdma+nYcHmOQ@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 15 Mar 2024 11:30:34 -0700
+Message-ID: <CAEf4Bzaw8jV8KxHcO71MCkqA9e2vE9f0XqkGY2CUgbRFiUzjng@mail.gmail.com>
+Subject: Re: [PATCH 02/10] capability: add any wrappers to test for multiple
+ caps with exactly one audit message
+To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc: linux-security-module@vger.kernel.org, linux-block@vger.kernel.org, 
+	Serge Hallyn <serge@hallyn.com>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 03/15, Alexandre Cassen wrote:
-> 
-> 
-> On 15/03/2024 18:31, Stanislav Fomichev wrote:
-> > On 03/14, Alexandre Cassen wrote:
-> > > Hello,
-> > > 
-> > > While implementing a large scale L2 processing soft, there is a need for
-> > > high perf ingress handling.
-> > > 
-> > > In short: using BPF socket_filter prog with a hash func over ethernet
-> > > address to distribute load across multiple PF_PACKET sockets: mainly
-> > > filtering out non related hkey packets. It simplify userland app by using
-> > > multiple PF_PACKET sockets in dedicated pthread.
-> > > 
-> > > Longer discussion + quick source code illustration here:
-> > > 
-> > > https://github.com/acassen/bpf-pfpacket-rps
-> > > 
-> > > 
-> > > My question would be related to sockmap. I tried to figure out how to
-> > > perform the same policing design using sockmap. And cant find my way around
-> > > it :/ If bpf verdict prog can get socket fd from __sk_buff then it could
-> > > drives the same hash/policing decision.
-> > > 
-> > > Is it possible to get socket fd from __sk_buff from sockmap verdict prog ?
-> > 
-> > Don't have an answer about sockmap, but I'd suggest you look at AF_XDP
-> > if you want the best perf out there with raw frames.
-> > IIRC, it just recently got a mode where you can redirect into multiple
-> > sockets (== consumer threads):
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=2863d665ea41
-> 
-> thanks for replying, __sk_buff bpf mirror doesnt export struct sock as
-> present into kernel skbuff, so no options but extending.
-> AF_XDP is an option. Will extend test code with it later on.
+On Fri, Mar 15, 2024 at 11:27=E2=80=AFAM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
+>
+> On Fri, 15 Mar 2024 at 17:46, Andrii Nakryiko <andrii.nakryiko@gmail.com>=
+ wrote:
+> >
+> > On Fri, Mar 15, 2024 at 4:39=E2=80=AFAM Christian G=C3=B6ttsche
+> > <cgzones@googlemail.com> wrote:
+> > >
+> > > Add the interfaces `capable_any()` and `ns_capable_any()` as an
+> > > alternative to multiple `capable()`/`ns_capable()` calls, like
+> > > `capable_any(CAP_SYS_NICE, CAP_SYS_ADMIN)` instead of
+> > > `capable(CAP_SYS_NICE) || capable(CAP_SYS_ADMIN)`.
+> > >
+> > > `capable_any()`/`ns_capable_any()` will in particular generate exactl=
+y
+> > > one audit message, either for the left most capability in effect or, =
+if
+> > > the task has none, the first one.
+> > >
+> > > This is especially helpful with regard to SELinux, where each audit
+> > > message about a not allowed capability request will create a denial
+> > > message.  Using this new wrapper with the least invasive capability a=
+s
+> > > left most argument (e.g. CAP_SYS_NICE before CAP_SYS_ADMIN) enables
+> > > policy writers to only grant the least invasive one for the particula=
+r
+> > > subject instead of both.
+> > >
+> > > CC: linux-block@vger.kernel.org
+> > > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> > > ---
+> > > v5:
+> > >    - add check for identical passed capabilities
+> > >    - rename internal helper according to flag rename to
+> > >      ns_capable_noauditondeny()
+> > > v4:
+> > >    Use CAP_OPT_NODENYAUDIT via added ns_capable_nodenyaudit()
+> > > v3:
+> > >    - rename to capable_any()
+> > >    - fix typo in function documentation
+> > >    - add ns_capable_any()
+> > > v2:
+> > >    avoid varargs and fix to two capabilities; capable_or3() can be ad=
+ded
+> > >    later if needed
+> > > ---
+> > >  include/linux/capability.h | 10 ++++++
+> > >  kernel/capability.c        | 73 ++++++++++++++++++++++++++++++++++++=
+++
+> > >  2 files changed, 83 insertions(+)
+> > >
+> >
+> > [...]
+> >
+> > >
+> > > +/**
+> > > + * ns_capable_any - Determine if the current task has one of two sup=
+erior capabilities in effect
+> > > + * @ns:  The usernamespace we want the capability in
+> > > + * @cap1: The capabilities to be tested for first
+> > > + * @cap2: The capabilities to be tested for secondly
+> > > + *
+> > > + * Return true if the current task has at least one of the two given=
+ superior
+> > > + * capabilities currently available for use, false if not.
+> > > + *
+> > > + * In contrast to or'ing capable() this call will create exactly one=
+ audit
+> > > + * message, either for @cap1, if it is granted or both are not permi=
+tted,
+> > > + * or @cap2, if it is granted while the other one is not.
+> > > + *
+> > > + * The capabilities should be ordered from least to most invasive, i=
+.e. CAP_SYS_ADMIN last.
+> > > + *
+> > > + * This sets PF_SUPERPRIV on the task if the capability is available=
+ on the
+> > > + * assumption that it's about to be used.
+> > > + */
+> > > +bool ns_capable_any(struct user_namespace *ns, int cap1, int cap2)
+> > > +{
+> > > +       if (cap1 =3D=3D cap2)
+> > > +               return ns_capable(ns, cap1);
+> > > +
+> > > +       if (ns_capable_noauditondeny(ns, cap1))
+> > > +               return true;
+> > > +
+> > > +       if (ns_capable_noauditondeny(ns, cap2))
+> > > +               return true;
+> > > +
+> > > +       return ns_capable(ns, cap1);
+> >
+> > this will incur an extra capable() check (with all the LSMs involved,
+> > etc), and so for some cases where capability is expected to not be
+> > present, this will be a regression. Is there some way to not redo the
+> > check, but just audit the failure? At this point we do know that cap1
+> > failed before, so might as well just log that.
+>
+> Logging the failure is quite different in AppArmor and SELinux, so
+> just log might not be so easy.
+> One option would be to change the entire LSM hook security_capable()
+> to take two capability arguments, and let the LSMs handle the any
+> logic.
 
-We do export bpf_sock in __sk_buff:
+that sounds like an even bigger overkill, probably not worth it
 
-	__bpf_md_ptr(struct bpf_sock *, sk);
-
-But it has a very minimal set of 'struct sock' fields exported.
+>
+> > > +}
+> > > +EXPORT_SYMBOL(ns_capable_any);
+> > > +
+> > > +/**
+> > > + * capable_any - Determine if the current task has one of two superi=
+or capabilities in effect
+> > > + * @cap1: The capabilities to be tested for first
+> > > + * @cap2: The capabilities to be tested for secondly
+> > > + *
+> > > + * Return true if the current task has at least one of the two given=
+ superior
+> > > + * capabilities currently available for use, false if not.
+> > > + *
+> > > + * In contrast to or'ing capable() this call will create exactly one=
+ audit
+> > > + * message, either for @cap1, if it is granted or both are not permi=
+tted,
+> > > + * or @cap2, if it is granted while the other one is not.
+> > > + *
+> > > + * The capabilities should be ordered from least to most invasive, i=
+.e. CAP_SYS_ADMIN last.
+> > > + *
+> > > + * This sets PF_SUPERPRIV on the task if the capability is available=
+ on the
+> > > + * assumption that it's about to be used.
+> > > + */
+> > > +bool capable_any(int cap1, int cap2)
+> > > +{
+> > > +       return ns_capable_any(&init_user_ns, cap1, cap2);
+> > > +}
+> > > +EXPORT_SYMBOL(capable_any);
+> > > +
+> > >  /**
+> > >   * capable - Determine if the current task has a superior capability=
+ in effect
+> > >   * @cap: The capability to be tested for
+> > > --
+> > > 2.43.0
+> > >
+> > >
