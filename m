@@ -1,252 +1,221 @@
-Received: from smtp-fw-52002.amazon.com (smtp-fw-52002.amazon.com [52.119.213.150])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 429FB5A0E7;
-	Fri, 15 Mar 2024 23:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84CC65B5A1
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 23:44:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710544323; cv=none; b=i4XKdpyqSI4wXG+dc+ir4Jl4/f/la5ieFVeo92sLJYQnAnJ1vDg7Oy15IKy2kQcDpve3tdoH51jSvaUagc/mUoM+X/+fjMtA0Ljr2wrWiwRi6tOqumQ5fiWjjQNxYCav4sVfRJ1CBVNvC5SKfyFU9RshUMEeYz0793Xb6YK1RjM=
+	t=1710546298; cv=none; b=cx0g7raGgTSS6/GqnBu8LkF5+71dkc8NiLlMmj+fuBMAot452Fk6Ok8FQuW18qBb9jH//WiPc9dCkZeD0HnnuaBvgVuJvdVJJNmLEuoVEKxp+1YW9Tjprnw/iFJfiniNKnFrxOb9M0BvCbuZtrA9S8chAFWnMgWdVD61MzJulR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710544323; c=relaxed/simple;
-	bh=VQpxIo0PRL4MlhjDwV9PLwADMylqIo1qt3PRoZ+zYW8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dmWC0T5h2wLYiN3Ot/Y6B69YooO0zaxDrTj75oDwcI5lDFItqqO1cvY2tfwvCQDWUSwMxXsSoqy1HLXa3Wiwu0+PrvzOgiutdZ+76Jhb6N85cPWEzVsHAYl2r8mhAjlYdex+cvJgWHVO4cxUvavaK97Vv4EUoM88G9+kon86mBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=CYIBjIMZ; arc=none smtp.client-ip=52.119.213.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+	s=arc-20240116; t=1710546298; c=relaxed/simple;
+	bh=qOaSDvcuk8FZ4RaOhV/4AETFA1PmBA/195+ZD7zlk3Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OwiJWjYGX9e7Ap/wIETSOcYh2QFwSY//vSEEIWrrdMv9rbOyIRFehKlD8GpMjC74axXpoDWE3xjhOVjEyxVkftVMK/xy1IgE1k1gZrkpcATtgqOsSNtTPzP/g9JbsF9Nb5gLGb85BI5mczjEDy5IGF/eB6lj0Zkgn2RJYBG9log=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b/DwxDnm; arc=none smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="CYIBjIMZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b/DwxDnm"
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-609f24f447cso29204907b3.2
+        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 16:44:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1710544321; x=1742080321;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=B4dnSYlWi+5f7Z1pVNEI53jPibTTZHENrkrv7AgPCIg=;
-  b=CYIBjIMZedxnpTM42iSQy1wPnrbdvQURaToagXnoucn4gxMaHkAOkH2P
-   FTxFYWzfP/OAfLKvzXHrOwmytlsrmgQSefqr8Q/C2uq3/ySkN+a6HvKPG
-   2vgAUznirbZYmuXbGVzjg8+J9N0e55atpFV4hUYPr5qhweTvKApJTCqyn
-   0=;
-X-IronPort-AV: E=Sophos;i="6.07,129,1708387200"; 
-   d="scan'208";a="620033953"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-52002.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2024 23:11:57 +0000
-Received: from EX19MTAUWC001.ant.amazon.com [10.0.38.20:50026]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.17.84:2525] with esmtp (Farcaster)
- id c630005c-4ede-431c-93cb-c18bfbd6267b; Fri, 15 Mar 2024 23:11:56 +0000 (UTC)
-X-Farcaster-Flow-ID: c630005c-4ede-431c-93cb-c18bfbd6267b
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Fri, 15 Mar 2024 23:11:56 +0000
-Received: from 88665a182662.ant.amazon.com (10.106.101.41) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Fri, 15 Mar 2024 23:11:51 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <cgzones@googlemail.com>
-CC: <alex.aring@gmail.com>, <alexander@mihalicyn.com>, <bpf@vger.kernel.org>,
-	<daan.j.demeyer@gmail.com>, <davem@davemloft.net>, <dhowells@redhat.com>,
-	<dsahern@kernel.org>, <edumazet@google.com>, <john.fastabend@gmail.com>,
-	<kuba@kernel.org>, <kuniyu@amazon.com>, <leitao@debian.org>,
-	<linux-kernel@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
-	<linux-wpan@vger.kernel.org>, <miquel.raynal@bootlin.com>,
-	<mkl@pengutronix.de>, <netdev@vger.kernel.org>, <pabeni@redhat.com>,
-	<stefan@datenfreihafen.org>, <wuyun.abel@bytedance.com>
-Subject: Re: [PATCH 08/10] net: use new capable_any functionality
-Date: Fri, 15 Mar 2024 16:11:42 -0700
-Message-ID: <20240315231142.56998-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20240315113828.258005-8-cgzones@googlemail.com>
-References: <20240315113828.258005-8-cgzones@googlemail.com>
+        d=gmail.com; s=20230601; t=1710546295; x=1711151095; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=InZ0SV8VdKl1DWxyMvv5E0CpX/Sg9kd6khfXrpoR4XY=;
+        b=b/DwxDnmDcZ/kYa9CvuLUZSBKqfpTVunZ0Fx5DDG0O1tohVfuwvTV3yZ74F+t0HrVp
+         yr4r5d7SC8gA6I5nP0zDuh8V37W14LBH+KUI2erXOQ9PQwfy+W0k3FN4WxrxZGjHGiv1
+         vbFHGUmNbyyvGI79BMh7GCrOe93cXVcz28bxCI2WPt64LKD3ZlrkhKAL2fwvVR+JAA6o
+         hSbBBJ9KZ6yPG7btBhlrzRmEItYjgTvJ9AJCwH26kREM+uYaIdl18hBmlay16HlqaPhl
+         gGWfCJbRVfkW3ljo20Y+YiEii7/loXNBHIFIl7iwDTUzL/iOtdDo7wD0o6Egcz6YL3/0
+         FkXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710546295; x=1711151095;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=InZ0SV8VdKl1DWxyMvv5E0CpX/Sg9kd6khfXrpoR4XY=;
+        b=rwXDqqQlpcZdag4fq2eh3pkUPHecaTiiLm8OXDn74rjiDl54HEIkXN/FxIQ0JdqadC
+         vKgTd1Bt15lBjg9D7x4zGMl6PNL/ivD/U2vovNrzGH7r0yx3aCCJWjNGdFRJCHst9Jey
+         tQgg7IrDFuAxNQxUO0WDN1GX/dnhMHSgqSTBl5yARdCjBwZvxeYTF1gcVn7cKgPjp6jC
+         69egAD8Oc1tczmdfxIyw6M7nWVof+pJ46iDtQt2QhCRtQJpdUStGlqYc4/Bo1pah9yBL
+         /6qsqJhsBWew9XWUIlCHZEQkYMg9mvH5P5lvebB12WZoeXdADf85c5ugn12mHGoUkZJj
+         zANg==
+X-Gm-Message-State: AOJu0YxXFkr1XyNmlUsmsLxtdvx7QqXGChFr5ASYU0GKrQ4hVk6l1uDg
+	93G7o0EqdD99ghiJ6L9Ym4vGjwd5ursAGj7yS1OzSdVdH6mKJH2P
+X-Google-Smtp-Source: AGHT+IFa1bibpC/qsfJ/5VMM2x4dtBqKd+LisKNrS3voBHFhddJc355bs4Qdiqp3XqFPwfNZITfQDQ==
+X-Received: by 2002:a0d:c243:0:b0:60a:37fb:7a4c with SMTP id e64-20020a0dc243000000b0060a37fb7a4cmr5032122ywd.5.1710546295359;
+        Fri, 15 Mar 2024 16:44:55 -0700 (PDT)
+Received: from ?IPV6:2600:1700:6cf8:1240:e725:878a:b2f4:624? ([2600:1700:6cf8:1240:e725:878a:b2f4:624])
+        by smtp.gmail.com with ESMTPSA id z7-20020a81ac47000000b00607b9efdf49sm940378ywj.2.2024.03.15.16.44.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Mar 2024 16:44:55 -0700 (PDT)
+Message-ID: <521a3085-c98e-404f-a30e-d981dc2cd674@gmail.com>
+Date: Fri, 15 Mar 2024 16:44:53 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 0/3] Ignore additional fields in the
+ struct_ops maps in an updated version.
+Content-Language: en-US
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+ Kui-Feng Lee <thinker.li@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev,
+ song@kernel.org, kernel-team@meta.com, andrii@kernel.org, kuifeng@meta.com
+References: <20240313214139.685112-1-thinker.li@gmail.com>
+ <CAEf4BzYXe8xbB5BH97ggYzokdFjqAv5Zuz_MRV9fyzCt+yJJvQ@mail.gmail.com>
+From: Kui-Feng Lee <sinquersw@gmail.com>
+In-Reply-To: <CAEf4BzYXe8xbB5BH97ggYzokdFjqAv5Zuz_MRV9fyzCt+yJJvQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: EX19D031UWC002.ant.amazon.com (10.13.139.212) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
-From: Christian Göttsche <cgzones@googlemail.com>
-Date: Fri, 15 Mar 2024 12:37:29 +0100
-> Use the new added capable_any function in appropriate cases, where a
-> task is required to have any of two capabilities.
+
+
+On 3/14/24 13:59, Andrii Nakryiko wrote:
+> On Wed, Mar 13, 2024 at 2:41 PM Kui-Feng Lee <thinker.li@gmail.com> wrote:
+>>
+>> According to an offline discussion, it would be beneficial to
+>> implement a backward-compatible method for struct_ops types with
+>> additional fields that are not present in older kernels.
+>>
+>> This patchset accepts additional fields of a struct_ops map with all
+>> zero values even if these fields are not in the corresponding type in
+>> the kernel. This provides a way to be backward compatible. User space
+>> programs can use the same map on a machine running an old kernel by
+>> clearing fields that do not exist in the kernel.
+>>
+>> For example, in a test case, it adds an additional field "zeroed" that
+>> doesn't exist in struct bpf_testmod_ops of the kernel.
+>>
+>>      struct bpf_testmod_ops___zeroed {
+>>          int (*test_1)(void);
+>>          void (*test_2)(int a, int b);
+>>          int (*test_maybe_null)(int dummy, struct task_struct *task);
+>>          int zeroed;
+>>      };
+>>
+>>      SEC(".struct_ops.link")
+>>      struct bpf_testmod_ops___zeroed testmod_zeroed = {
+>>          .test_1 = (void *)test_1,
+>>          .test_2 = (void *)test_2_v2,
+>>      };
+>>
+>> Here, it doesn't assign a value to "zeroed" of testmod_zeroed, and by
+>> default the value of this field will be zero. So, the map will be
+>> accepted by libbpf, but libbpf will skip the "zeroed" field. However,
+>> if the "zeroed" field is assigned to any value other than "0", libbpf
+>> will reject to load this map.
+>>
+>> ---
+>> Changes from v1:
+>>
+>>   - Fix the issue about function pointer fields.
+>>
+>>   - Change a warning message, and add an info message for skipping
+>>     fields.
+>>
+>>   - Add a small demo of additional arguments that are not in the
+>>     function pointer prototype in the kernel.
+>>
+>> v1: https://lore.kernel.org/all/20240312183245.341141-1-thinker.li@gmail.com/
+>>
+>> Kui-Feng Lee (3):
+>>    libbpf: Skip zeroed or null fields if not found in the kernel type.
+>>    selftests/bpf: Ensure libbpf skip all-zeros fields of struct_ops maps.
+>>    selftests/bpf: Accept extra arguments if they are not used.
 > 
-> Add sock_ns_capable_any() wrapper similar to existing sock_ns_capable()
-> one.
+> I applied the first two patches and dropped the third one, as I don't
+> think it's actually testing any new condition. What I actually had in
+> mind is more along the following lines:
 > 
-> Reorder CAP_SYS_ADMIN last.
+> $ git diff
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+> b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+> index 098776d00ab4..9585504ce6b5 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+> @@ -103,6 +103,8 @@ static void test_struct_ops_not_zeroed(void)
+>          if (!ASSERT_OK_PTR(skel, "struct_ops_module_open"))
+>                  return;
 > 
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-> Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com> (ieee802154 portion)
-> ---
-> v4:
->   - introduce sockopt_ns_capable_any()
-> v3:
->   - rename to capable_any()
->   - make use of ns_capable_any
-> ---
->  include/net/sock.h       |  1 +
->  net/caif/caif_socket.c   |  2 +-
->  net/core/sock.c          | 15 +++++++++------
->  net/ieee802154/socket.c  |  6 ++----
->  net/ipv4/ip_sockglue.c   |  5 +++--
->  net/ipv6/ipv6_sockglue.c |  3 +--
->  net/unix/af_unix.c       |  2 +-
->  7 files changed, 18 insertions(+), 16 deletions(-)
-> 
-> diff --git a/include/net/sock.h b/include/net/sock.h
-> index b5e00702acc1..2e64a80c8fca 100644
-> --- a/include/net/sock.h
-> +++ b/include/net/sock.h
-> @@ -1736,6 +1736,7 @@ static inline void unlock_sock_fast(struct sock *sk, bool slow)
->  void sockopt_lock_sock(struct sock *sk);
->  void sockopt_release_sock(struct sock *sk);
->  bool sockopt_ns_capable(struct user_namespace *ns, int cap);
-> +bool sockopt_ns_capable_any(struct user_namespace *ns, int cap1, int cap2);
->  bool sockopt_capable(int cap);
->  
->  /* Used by processes to "lock" a socket state, so that
-> diff --git a/net/caif/caif_socket.c b/net/caif/caif_socket.c
-> index 039dfbd367c9..2d811037e378 100644
-> --- a/net/caif/caif_socket.c
-> +++ b/net/caif/caif_socket.c
-> @@ -1026,7 +1026,7 @@ static int caif_create(struct net *net, struct socket *sock, int protocol,
->  		.usersize = sizeof_field(struct caifsock, conn_req.param)
->  	};
->  
-> -	if (!capable(CAP_SYS_ADMIN) && !capable(CAP_NET_ADMIN))
-> +	if (!capable_any(CAP_NET_ADMIN, CAP_SYS_ADMIN))
->  		return -EPERM;
->  	/*
->  	 * The sock->type specifies the socket type to use.
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index 43bf3818c19e..fa9edcc3e23d 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -1077,6 +1077,12 @@ bool sockopt_ns_capable(struct user_namespace *ns, int cap)
->  }
->  EXPORT_SYMBOL(sockopt_ns_capable);
->  
-> +bool sockopt_ns_capable_any(struct user_namespace *ns, int cap1, int cap2)
-> +{
-> +	return has_current_bpf_ctx() || ns_capable_any(ns, cap1, cap2);
-> +}
-> +EXPORT_SYMBOL(sockopt_ns_capable_any);
+> +       skel->struct_ops.testmod_fn_proto->test_2 = skel->progs.test_2;
 > +
->  bool sockopt_capable(int cap)
->  {
->  	return has_current_bpf_ctx() || capable(cap);
-> @@ -1118,8 +1124,7 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
->  	switch (optname) {
->  	case SO_PRIORITY:
->  		if ((val >= 0 && val <= 6) ||
-> -		    sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) ||
-> -		    sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN)) {
-> +		    sockopt_ns_capable_any(sock_net(sk)->user_ns, CAP_NET_RAW, CAP_NET_ADMIN)) {
->  			sock_set_priority(sk, val);
->  			return 0;
->  		}
-> @@ -1422,8 +1427,7 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
->  		break;
->  
->  	case SO_MARK:
-> -		if (!sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) &&
-> -		    !sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN)) {
-> +		if (!sockopt_ns_capable_any(sock_net(sk)->user_ns, CAP_NET_RAW, CAP_NET_ADMIN)) {
->  			ret = -EPERM;
->  			break;
->  		}
-> @@ -2813,8 +2817,7 @@ int __sock_cmsg_send(struct sock *sk, struct cmsghdr *cmsg,
->  
->  	switch (cmsg->cmsg_type) {
->  	case SO_MARK:
-> -		if (!ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) &&
-> -		    !ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
-> +		if (!ns_capable_any(sock_net(sk)->user_ns, CAP_NET_RAW, CAP_NET_ADMIN))
->  			return -EPERM;
->  		if (cmsg->cmsg_len != CMSG_LEN(sizeof(u32)))
->  			return -EINVAL;
-> diff --git a/net/ieee802154/socket.c b/net/ieee802154/socket.c
-> index 990a83455dcf..42b3b12eb493 100644
-> --- a/net/ieee802154/socket.c
-> +++ b/net/ieee802154/socket.c
-> @@ -902,8 +902,7 @@ static int dgram_setsockopt(struct sock *sk, int level, int optname,
->  		ro->want_lqi = !!val;
->  		break;
->  	case WPAN_SECURITY:
-> -		if (!ns_capable(net->user_ns, CAP_NET_ADMIN) &&
-> -		    !ns_capable(net->user_ns, CAP_NET_RAW)) {
-> +		if (!ns_capable_any(net->user_ns, CAP_NET_ADMIN, CAP_NET_RAW)) {
+>          err = struct_ops_module__load(skel);
+>          ASSERT_OK(err, "struct_ops_module_load");
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/struct_ops_module.c
+> b/tools/testing/selftests/bpf/progs/struct_ops_module.c
+> index 86e1e50c5531..d3e0f941c16c 100644
+> --- a/tools/testing/selftests/bpf/progs/struct_ops_module.c
+> +++ b/tools/testing/selftests/bpf/progs/struct_ops_module.c
+> @@ -68,3 +68,13 @@ struct bpf_testmod_ops___zeroed testmod_zeroed = {
+>          .test_1 = (void *)test_1,
+>          .test_2 = (void *)test_2_v2,
+>   };
+> +
+> +struct bpf_testmod_ops___diff_fn_proto {
+> +       /* differs from expected void (*test_2)(int a, int b) */
+> +       void (*test_2)(int a);
+> +};
+> +
+> +SEC(".struct_ops.link")
+> +struct bpf_testmod_ops___zeroed testmod_fn_proto = {
+> +       .test_2 = (void *)test_2_v2,
+> +};
 
-IIUC, should CAP_NET_RAW be tested first ?
+It is an interesting combination. The newer versions usually have more
+arguments although it is not always true. But, you used the old version
+of a type intentionally. Most people would do opposite, right?
 
-Then, perhaps you should remove the Reviewed-by tag.
+How about to use a version with more arguments than what the kernel
+expected, but assign a function pointer with fewer arguments?  For example,
 
+SEC("struct_ops/test_2_arg3v")
+void BPF_PROG(test_2_arg3v, int a, int b, int c)
+{
+     ......
+}
 
->  			err = -EPERM;
->  			break;
->  		}
-> @@ -926,8 +925,7 @@ static int dgram_setsockopt(struct sock *sk, int level, int optname,
->  		}
->  		break;
->  	case WPAN_SECURITY_LEVEL:
-> -		if (!ns_capable(net->user_ns, CAP_NET_ADMIN) &&
-> -		    !ns_capable(net->user_ns, CAP_NET_RAW)) {
-> +		if (!ns_capable_any(net->user_ns, CAP_NET_ADMIN, CAP_NET_RAW)) {
+struct bpf_test_ops___new_fn_proto {
+     void (*test_2)(int a, int b, int c);
+};
 
-Same here.
+SEC(".struct_ops.link")
+struct bpf_testmod_ops___new_fn_proto testmod_fn_proto = {
+     .test_2 = (void *)test_2_arg3v
+};
 
-Thanks!
+Basically, we don't check signatures of function pointers so far.
+We have the ability to *decrease* the number of arguments.
 
-
->  			err = -EPERM;
->  			break;
->  		}
-> diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
-> index cf377377b52d..5a1e5ee20ddd 100644
-> --- a/net/ipv4/ip_sockglue.c
-> +++ b/net/ipv4/ip_sockglue.c
-> @@ -1008,8 +1008,9 @@ int do_ip_setsockopt(struct sock *sk, int level, int optname,
->  		inet_assign_bit(MC_ALL, sk, val);
->  		return 0;
->  	case IP_TRANSPARENT:
-> -		if (!!val && !sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) &&
-> -		    !sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
-> +		if (!!val &&
-> +		    !sockopt_ns_capable_any(sock_net(sk)->user_ns,
-> +					    CAP_NET_RAW, CAP_NET_ADMIN))
->  			return -EPERM;
->  		if (optlen < 1)
->  			return -EINVAL;
-> diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
-> index d4c28ec1bc51..e46b11b5d3dd 100644
-> --- a/net/ipv6/ipv6_sockglue.c
-> +++ b/net/ipv6/ipv6_sockglue.c
-> @@ -773,8 +773,7 @@ int do_ipv6_setsockopt(struct sock *sk, int level, int optname,
->  		break;
->  
->  	case IPV6_TRANSPARENT:
-> -		if (valbool && !sockopt_ns_capable(net->user_ns, CAP_NET_RAW) &&
-> -		    !sockopt_ns_capable(net->user_ns, CAP_NET_ADMIN)) {
-> +		if (valbool && !sockopt_ns_capable_any(net->user_ns, CAP_NET_RAW, CAP_NET_ADMIN)) {
->  			retv = -EPERM;
->  			break;
->  		}
-> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-> index 5b41e2321209..acc36b2d25d7 100644
-> --- a/net/unix/af_unix.c
-> +++ b/net/unix/af_unix.c
-> @@ -1783,7 +1783,7 @@ static inline bool too_many_unix_fds(struct task_struct *p)
->  	struct user_struct *user = current_user();
->  
->  	if (unlikely(READ_ONCE(user->unix_inflight) > task_rlimit(p, RLIMIT_NOFILE)))
-> -		return !capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN);
-> +		return !capable_any(CAP_SYS_RESOURCE, CAP_SYS_ADMIN);
->  	return false;
->  }
->  
-> -- 
-> 2.43.0
+> 
+> 
+> see how bpf_testmod_ops___diff_fn_proto defines test_2 callback with
+> an incompatible signature, but at runtime we are switching the program
+> to the one that the kernel actually expects. This is the scenario
+> (incompatible struct ops type definition) that I wanted to test and
+> make sure it works.
+> 
+> I quickly checked that it does work because libbpf doesn't enforce any
+> type signature (which is both good and bad, but it is what it is). It
+> would still be nice to have a selftest added with an incompatible
+> struct_ops type which is "fixed up" by setting thhe correct program
+> instance. Consider for a follow up.
+> 
+> 
+>>
+>>   tools/lib/bpf/libbpf.c                        |  24 +++-
+>>   .../bpf/prog_tests/test_struct_ops_module.c   | 103 ++++++++++++++++++
+>>   .../bpf/progs/struct_ops_extra_arg.c          |  49 +++++++++
+>>   .../selftests/bpf/progs/struct_ops_module.c   |  16 ++-
+>>   4 files changed, 186 insertions(+), 6 deletions(-)
+>>   create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_extra_arg.c
+>>
+>> --
+>> 2.34.1
+>>
