@@ -1,212 +1,160 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 806841C2AF;
-	Fri, 15 Mar 2024 10:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271BA1B809
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 11:21:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710498719; cv=none; b=THFr87eVoGoUAbEZLGXSdlJU1alFxCjza+laYuWRgWl96TUr/1Wwnv3Qj/gldcBAVkT4tO/nwMOa4+YXw6vE++pBgIXcnFr24MZAV5gLRpaNOkJC92xSpjV8N5RvqTUqv4VsAjlkrF7ci/FOZJ4sWvTzgfSUAXchV1hX48lQsSM=
+	t=1710501713; cv=none; b=MIOApmusS5hfNJh9V/TJefl2keNjJ0yU18KXkT+z9LpZxG7ueZxOm7PV6+ddEqdu8vUiAdCSQAY9BclVBOdxXi8XKgk54LNlQLqF4dkOEKqM7J7VymeXU8h1Zsw9X/sMaYbeOHVp5TXuCRH6BAtVzPZDHyGkGWxzhlB0DgLHDeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710498719; c=relaxed/simple;
-	bh=zfiUBLeK+PtZG4A+qL9jArSHbLnJbmxDpCXiIS0qrUQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p4jPWADaJJxPCP4McoW2P3BzsQjosSfLKcod/etbC+/J3xnNgZp8/GC7rNGNlPjjYiO1/C5AykIWRsFTyDa3ydAP6KUG+kjiP9c9nmMJxLk/+ElNwG0CJiqLS6sqFK8wt7xxFfPZeK78RKjdV9M0ZyeEN+IDEbbigukuerm9AHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mAFEdedN; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710501713; c=relaxed/simple;
+	bh=ACaChIFK+KQQUmcosJqGNJiIbMApQZFHU7jRCzgGzGg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G0ZjimOZwEwfKyw5hf3JfHutc3T4pbjXOZ9TXgqMnzwoqw+TcKPgZ0FaTNuz2Cq2M72mc7iDTRt0dkw+u5lHeC101KEOq2QDuj85AjqCe/qa/X06j5Tc/Dm+VnnD3GEDtbXzA1ouUXCKEUD62aA4vLaJUevZMj2C0+tj4iyvl/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mn9EMPoK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mAFEdedN"
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2d48ba4d5ecso3671741fa.1;
-        Fri, 15 Mar 2024 03:31:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710498716; x=1711103516; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NkgvVj4VQnM0U5OLYxoLZxYfZKzb6GHR+JPP7Dvj7ys=;
-        b=mAFEdedNPm2iIYUyQmSqU+j5sg5ops36pys5XuegzilsQ3BUawDfADBSfqWtWqTGcL
-         hYnhWHXQLVyLg76n6JhetfQaNGpNrS+1SsJtVs7eLNJ8BwNpk0YoUhjtlv1wYauL/v0z
-         KujjuSXnOw8V7ZzVZo34Hu5Ll7ueTGZ0Zz/Sj2B1b5lUzm2D2KCiHukNbqHSDtq0T4UK
-         xf/wSWVjGPpI0QEsuNCR+vN4cMwMpAQmhPNtE3qPsMHHKqdIgfsbviaqwbdEKLaRMWZi
-         UhMRpyrPDpc8p0f6hNgFjYY/3bOM7qgy5FCTrbMc6NYUTzJCYBhWbuchgghcrNd7cKB5
-         b0Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710498716; x=1711103516;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NkgvVj4VQnM0U5OLYxoLZxYfZKzb6GHR+JPP7Dvj7ys=;
-        b=vIkX6eXQLkLryOrFspdLcAfjTXvDvfHapZJQFFWBdr96S8bzsgCAq5MnkrHU0Bb61m
-         0tpCicTpQobUI/WnmRbD00zrsPdogCQ2bGbCzg045uk37cAOP/jg4VsItcPfijFVjEVC
-         o2N3nrgGF8naLocRVLbAO8TOWbWzI/yBb97XklaxiABsA3l65dRxSn/Xkp0gIB9J3kPs
-         JPmUNvhXls/oI+c6J1iefI7xcmCsSdQPGeHP/dN3wbTIME9Itr4hZgncfpGwLGijcnPS
-         7fQGADGZc5Goe4Tfxh4MszIXDTqpnm7zewmBQQkY4bE04sU2CIjC3q1RhpXBdONugK/5
-         YU8g==
-X-Forwarded-Encrypted: i=1; AJvYcCU9HCDb43hhWwhOtvF/QZGLBpdZuGw4XOzXLhJvBLshgCqMryDN+mcwLsx9+JiF3aF9pAxWy/gErQKz4GFmbCsjG4dfeeiHocxPm0KZ+paGCV5hD3RJhwa9559Qlztbe0z3
-X-Gm-Message-State: AOJu0YyXsAMeuNF4nsLpYhJ7wfk4ou5hrFSDO9KEjMPDgiGAS1kjOHV1
-	zjHoxo9VhCTYHTo9G6/xoD/Vq9e3iS1BysgvybGuKE5XMoBjSJKuJo3gGlpHossGsnX7BqlLeAE
-	i+FTG5NztHtGwPsQeGSFEQOf1HuE=
-X-Google-Smtp-Source: AGHT+IFoe+KXjZBP9/D8N3JpUzEHl/Z5odV3mFyPV9Zy3sD3yWRo9tM+wc9McbZUNoKbgm7mMP8EYEvEMzIK16e3ZO4=
-X-Received: by 2002:a2e:8904:0:b0:2d4:8a62:bd4f with SMTP id
- d4-20020a2e8904000000b002d48a62bd4fmr491248lji.3.1710498715148; Fri, 15 Mar
- 2024 03:31:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mn9EMPoK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 110F5C433F1;
+	Fri, 15 Mar 2024 11:21:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710501712;
+	bh=ACaChIFK+KQQUmcosJqGNJiIbMApQZFHU7jRCzgGzGg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Mn9EMPoKFbPIe/zqthOKrpHB/fc26+Jfz322ZDq5h1BKV/iaS27sRW4RupHEyPrBd
+	 You8OIZHE2OIdfUWRiKnHnTpkqiGDniBwBIaI8T2Q/UlSmq8RncXbzzCsVNNHTyHKw
+	 7r+olItQ54l/HZUZE8zajMvZ2PB/EcvVNiLZpAIj2tVVthiQufIkWuh8BPS30fcHYD
+	 kwJSnNSv5PKhObjPhpMo165hxAPAKXvlMprgeKDzyeARTkMtQUYqlIijlhRpzSwPD3
+	 7oa0irgjVYNlJLnQy4qq40eQNPHbbYZwghqSzQKwboiT4AupoTmcYytkBabxU41aOT
+	 DMD+T6i23nwrw==
+Date: Fri, 15 Mar 2024 12:21:46 +0100
+From: Alejandro Colomar <alx@kernel.org>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Quentin Monnet <quentin@isovalent.com>,
+	Alejandro Colomar <alx.manpages@gmail.com>,
+	Michael Hofmann <mhofmann@redhat.com>
+Subject: Re: [PATCH bpf] bpf_doc: use silent mode when exec make cmd
+Message-ID: <ZfQvSmag_v7VaOAB@debian>
+References: <20240315023443.2364442-1-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240314150003.123020-1-puranjay12@gmail.com> <20240314150003.123020-2-puranjay12@gmail.com>
- <CAP01T75tG5tXqRJsMn6iU1xvmEqeuTg=ja=LUPqqXkrJiYL2XQ@mail.gmail.com>
- <mb61pfrwsohx5.fsf@gmail.com> <CAADnVQ+vAuP1UuFf6tY64AmHBqk4FjRY7DwEjKXwWUaczubDcg@mail.gmail.com>
-In-Reply-To: <CAADnVQ+vAuP1UuFf6tY64AmHBqk4FjRY7DwEjKXwWUaczubDcg@mail.gmail.com>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Fri, 15 Mar 2024 11:31:44 +0100
-Message-ID: <CANk7y0g0i=9U89kdpZARKgf5MnKy4dM1m5zDjo=3LSAwaDEcYg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Add arm64 JIT support for PROBE_MEM32
- pseudo instructions.
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Zi Shen Lim <zlim.lnx@gmail.com>, Xu Kuohai <xukuohai@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="oWO6bu1OvXyQZnH0"
+Content-Disposition: inline
+In-Reply-To: <20240315023443.2364442-1-liuhangbin@gmail.com>
+
+
+--oWO6bu1OvXyQZnH0
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Date: Fri, 15 Mar 2024 12:21:46 +0100
+From: Alejandro Colomar <alx@kernel.org>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Quentin Monnet <quentin@isovalent.com>,
+	Alejandro Colomar <alx.manpages@gmail.com>,
+	Michael Hofmann <mhofmann@redhat.com>
+Subject: Re: [PATCH bpf] bpf_doc: use silent mode when exec make cmd
 
-On Thu, Mar 14, 2024 at 6:21=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu, Mar 14, 2024 at 10:13=E2=80=AFAM Puranjay Mohan <puranjay12@gmail=
-.com> wrote:
-> >
-> > Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
-> >
-> > > On Thu, 14 Mar 2024 at 16:00, Puranjay Mohan <puranjay12@gmail.com> w=
-rote:
-> > >>
-> > >> Add support for [LDX | STX | ST], PROBE_MEM32, [B | H | W | DW]
-> > >> instructions.  They are similar to PROBE_MEM instructions with the
-> > >> following differences:
-> > >> - PROBE_MEM32 supports store.
-> > >> - PROBE_MEM32 relies on the verifier to clear upper 32-bit of the
-> > >>   src/dst register
-> > >> - PROBE_MEM32 adds 64-bit kern_vm_start address (which is stored in =
-R28
-> > >>   in the prologue). Due to bpf_arena constructions such R28 + reg +
-> > >>   off16 access is guaranteed to be within arena virtual range, so no
-> > >>   address check at run-time.
-> > >> - PROBE_MEM32 allows STX and ST. If they fault the store is a nop. W=
-hen
-> > >>   LDX faults the destination register is zeroed.
-> > >>
-> > >> To support these on arm64, we do tmp2 =3D R28 + src/dst reg and then=
- use
-> > >> tmp2 as the new src/dst register. This allows us to reuse most of th=
-e
-> > >> code for normal [LDX | STX | ST].
-> > >>
-> > >> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
-> > >> ---
-> > >
-> > > Hi Alexei,
-> > > Puranjay and I were discussing this stuff off list and noticed that
-> > > atomic instructions are not handled.
-> > > It turns out that will cause a kernel crash right now because the
-> > > 32-bit offset into arena will be dereferenced directly.
-> > >
-> > > e.g. something like this:
-> > >
-> > > @@ -55,6 +56,7 @@ int arena_list_add(void *ctx)
-> > >                 test_val++;
-> > >                 n->value =3D i;
-> > >                 arena_sum +=3D i;
-> > > +               __sync_fetch_and_add(&arena_sum, 0);
-> > >                 list_add_head(&n->node, list_head);
-> > >         }
-> > >  #else
-> > >
-> > > I will try to prepare a fix for the x86 JIT. Puranjay will do the sam=
-e
-> > > for his set.
-> >
-> > Yes, testing the change mentioned by Kumar on ARM64 causes a crashes as=
- well:
-> >
-> > bpf_testmod: loading out-of-tree module taints kernel.
-> >  bpf_testmod: module verification failed: signature and/or required key=
- missing - tainting kernel
-> >  Unable to handle kernel NULL pointer dereference at virtual address 00=
-00000000000010
-> >  Mem abort info:
-> >    ESR =3D 0x0000000096000006
-> >    EC =3D 0x25: DABT (current EL), IL =3D 32 bits
-> >    SET =3D 0, FnV =3D 0
-> >    EA =3D 0, S1PTW =3D 0
-> >    FSC =3D 0x06: level 2 translation fault
-> >  Data abort info:
-> >    ISV =3D 0, ISS =3D 0x00000006, ISS2 =3D 0x00000000
-> >    CM =3D 0, WnR =3D 0, TnD =3D 0, TagAccess =3D 0
-> >    GCS =3D 0, Overlay =3D 0, DirtyBit =3D 0, Xs =3D 0
-> >  user pgtable: 4k pages, 48-bit VAs, pgdp=3D00000004043cc000
-> >  [0000000000000010] pgd=3D0800000410d8f003, p4d=3D0800000410d8f003, pud=
-=3D0800000405972003, pmd=3D0000000000000000
-> >  Internal error: Oops: 0000000096000006 [#1] SMP
-> >  Modules linked in: bpf_testmod(OE) nls_ascii nls_cp437 sunrpc vfat fat=
- aes_ce_blk aes_ce_cipher ghash_ce sha1_ce button sch_fq_codel dm_mod dax c=
-onfigfs dmi_sysfs sha2_ce sha256_arm64 efivarfs
-> >  CPU: 8 PID: 5631 Comm: test_progs Tainted: G           OE      6.8.0+ =
-#2
-> >  Hardware name: Amazon EC2 c6g.16xlarge/, BIOS 1.0 11/1/2018
-> >  pstate: 20400005 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=3D--)
-> >  pc : bpf_prog_8771c336cb6a18eb_arena_list_add+0x204/0x2b8
-> >  lr : bpf_prog_8771c336cb6a18eb_arena_list_add+0x144/0x2b8
-> >  sp : ffff80008b84bc30
-> >  x29: ffff80008b84bca0 x28: ffff8000a5008000 x27: ffff80008b84bc38
-> >  x26: 0000000000000000 x25: ffff80008b84bc60 x24: 0000000000000000
-> >  x23: 0000000000000000 x22: 0000000000000058 x21: 0000000000000838
-> >  x20: 0000000000000000 x19: 0000000100001fe0 x18: 0000000000000000
-> >  x17: 0000000000000000 x16: 0000000000000000 x15: 0000ffffcc66d2c8
-> >  x14: 0000000000000000 x13: 0000000000000000 x12: 000000000004058c
-> >  x11: ffff8000a5008010 x10: 00000000ffffffff x9 : 00000000000002cf
-> >  x8 : ffff800082ff4ab8 x7 : 0000000100001000 x6 : 0000000000000001
-> >  x5 : 0000000010e5e3fd x4 : 000000003619b978 x3 : 0000000000000010
-> >  x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000001fe0
-> >  Call trace:
-> >   bpf_prog_8771c336cb6a18eb_arena_list_add+0x204/0x2b8
-> >   bpf_prog_test_run_syscall+0x100/0x340
-> >   __sys_bpf+0x8e8/0xa20
-> >   __arm64_sys_bpf+0x2c/0x48
-> >   invoke_syscall+0x50/0x128
-> >   el0_svc_common.constprop.0+0x48/0xf8
-> >   do_el0_svc+0x28/0x40
-> >   el0_svc+0x58/0x190
-> >   el0t_64_sync_handler+0x13c/0x158
-> >   el0t_64_sync+0x1a8/0x1b0
-> >  Code: 8b010042 8b1c006b f9000162 d2800001 (f821307f)
-> >  ---[ end trace 0000000000000000 ]---
-> >  Kernel panic - not syncing: Oops: Fatal exception
-> >  SMP: stopping secondary CPUs
-> >  Kernel Offset: disabled
-> >  CPU features: 0x0,00000120,7002014a,21407a0b
-> >  Memory Limit: none
-> >  Rebooting in 5 seconds..
-> >
-> > I will send v2 with the arm64 JIT fix, but I guess verifier has to be m=
-odified
-> > as well to add BPF_PROBE_MEM32 to atomic instructions.
->
-> The JIT and the verifier changes for atomics might be too big.
-> Let's disable atomics in arena in the verifier for now.
-> Pls send a patch.
+Hi!
 
-As atomics are disabled in the Arena now, this series will not require
-any changes.
-Looking forward to the reviews.
+On Fri, Mar 15, 2024 at 10:34:43AM +0800, Hangbin Liu wrote:
+> When getting kernel version via make, the result may be polluted by other
+> output, like directory change info. e.g.
+> $ export MAKEFLAGS=3D"-w"
+> $ make kernelversion
+> make: Entering directory '/home/net'
+> 6.8.0
+> make: Leaving directory '/home/net'
+>=20
+> This will distort the reStructuredText output and make latter rst2man
+> failed like:
+> bpf-helpers.rst:20: (WARNING/2) Field list ends without a blank line; une=
+xpected unindent.
+>=20
+> Using silent mode would help. e.g.
+> $ make -s --no-print-directory kernelversion
 
-Thanks,
-Puranjay
+Acked-by: Alejandro Colomar <alx@kernel.org>
+
+Thanks!
+Alex
+
+> 6.8.0
+>=20
+> Fixes: fd0a38f9c37d ("scripts/bpf: Set version attribute for bpf-helpers(=
+7) man page")
+> Signed-off-by: Michael Hofmann <mhofmann@redhat.com>
+> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> ---
+>  scripts/bpf_doc.py | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
+> index 4606944984ee..c55878bddfdd 100755
+> --- a/scripts/bpf_doc.py
+> +++ b/scripts/bpf_doc.py
+> @@ -414,8 +414,8 @@ class PrinterRST(Printer):
+>              version =3D version.stdout.decode().rstrip()
+>          except:
+>              try:
+> -                version =3D subprocess.run(['make', 'kernelversion'], cw=
+d=3DlinuxRoot,
+> -                                         capture_output=3DTrue, check=3D=
+True)
+> +                version =3D subprocess.run(['make', '-s', '--no-print-di=
+rectory', 'kernelversion'],
+> +                                         cwd=3DlinuxRoot, capture_output=
+=3DTrue, check=3DTrue)
+>                  version =3D version.stdout.decode().rstrip()
+>              except:
+>                  return 'Linux'
+> --=20
+> 2.43.0
+>=20
+
+--=20
+<https://www.alejandro-colomar.es/>
+
+--oWO6bu1OvXyQZnH0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmX0L0oACgkQnowa+77/
+2zKWag/9EkeVxkkYXyxeuR1iTa+PjCYvwIACldussto8WkFjXcE7hCAA4S2F48Yz
+P5JMy+2tu4yS+wJLkr/vIZmLNmnt39Wccu+/cuF5cKhO4v/fp5ktnISiMEG7A1y0
+wGA3D/aS1Ekda8rKM0Na3xRzpIpQMY6SrfHo1J63q6+tpJKiireskm85Wn1XLAdk
+CjdlF3b5BfhNUTiI4Y3TkOLiyFyxtzAibJgGQVx1CNDNCyrn1Hvsbk5t6te0k5YZ
+XoGWFiN9cqMLrJsUeKJWBnUkEeIRt5s0P3zgvHqTaYSkpiD/KWlY8d64y++1e+Fk
+2+VH8EbO0OQ2qcDwx9SkK8KFdhZDsH8sgwocu1RQQUJg5dQFVLY+3YjlMkf4KL88
+LvZzEIgfZT1zHOYLH7ZZXu3Z3Jmba9Y8L/z/y7rWJNw9KC3x6vd9s/n7uNJQ0HWY
+R8UCofF7BhMuujaw17zydxwf7jeaZyIV+Fi9mwSGK24N1hoipGh+zMmsDOVXvteW
+kSLq+bWJn4bc17qIWQAumejOxVxUsLvE/n/zDwWuXwUYF8Lra4NFIg4ee1QeG4xg
+cwkNF46Tl/QgBZ67HaTVMR9oHWJXVRC9bVoi/MgGmrgjMu5LfMbLGWArBfbeCqsJ
+Tpg3OQmiACeijeLl9ZoT+RwK3s27HejcVSaTEovXlCy4RpPWvRI=
+=xEqH
+-----END PGP SIGNATURE-----
+
+--oWO6bu1OvXyQZnH0--
