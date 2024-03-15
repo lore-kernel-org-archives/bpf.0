@@ -1,128 +1,163 @@
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4360D548FB
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 19:55:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED9F5336A;
+	Fri, 15 Mar 2024 19:59:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710532516; cv=none; b=YgNmpjLF/vEkD6Beft2N3+YJE9ow3V6E4La7WTd1sanfh0a+DzPIS1jA4HTjmT8M2mZV0z8xwJ9caEZKHsAAnfMjnH778gRorix7vRCd3nby6sPhwWundBBNEnJmuMhVTRIClqzJcbW31qAAj1nZlJDzlq7QOWIn2Mo26XFb9tA=
+	t=1710532770; cv=none; b=N+hjjk2J735f+kFwj0mIbv/NWFNEULdQt7uVGvP+uXfP7jNuJQpiJebh9x+Xnqtle6kBfUqpRXrRr4qzAaMEjYn4DGKwlHN/RjGILDWeqKG3ZJvCoG55APXzz1XcXcrjd5rGLqszQdoqy+dbD0oQ4IpHVBrg78G6KnbjHQh4FVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710532516; c=relaxed/simple;
-	bh=WZXQ3n6OAHQk56baal6CzZ+snXfrxRm2xjx8a0VoWYc=;
+	s=arc-20240116; t=1710532770; c=relaxed/simple;
+	bh=oUmhpF7xElrNNw84e7vQKqO0uKdLUyu+P4YirT7F+JU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eeMbY1dx/O7eH9D+WSjpnr/JrhOIwuvv47CWAUoEOC7+EUB2GUkJalpI+HDhyJUE1jg+LS1kHHy+pAqliuxk9J0jV8xZnE4YT0mxaEC/8qdvs5k6zlaVG2ssi19lg8hL8P3W7bDuSSyX2QI13Itx122lt/lopLV5xZdOC9pE8jY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=B8iM9QDV; arc=none smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="B8iM9QDV"
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-60a057b6601so24691807b3.2
-        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 12:55:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1710532512; x=1711137312; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JuTpc8vOHdn72vm+nW+iFZ+lBgZnpQ42Xv3ej2YV4rQ=;
-        b=B8iM9QDVZLZoUQZ8+NLabWS5GVaGI8Isyl0UZeZNi6c7bxWMDdD9oOzjKm+InlbPtd
-         nLtyh/PmJjVYabW8/ArekKixTswp0SJY9jxQLAy4uANQmBoi4FNZ1kEf5v58iLn+lflE
-         cvSy0WnZRUsVqeCOG8yHqRq/VircQ3NdY/VOZD652Ya6yioJSClcndMz7Dx9NliOLBoB
-         Uxa3CffXk6RcH7qLIVVsFtAeZ80I8beZvtT1jSBwmrg8C3oATJ0UfNWGDuf0HloYEFBq
-         7jlSpRAKasi40HOg/8QIJWkHFfbcSgJ3PWlIFSYEk+rSGMjFBxHTM8sjYzkGwID1e5oG
-         xIOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710532512; x=1711137312;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JuTpc8vOHdn72vm+nW+iFZ+lBgZnpQ42Xv3ej2YV4rQ=;
-        b=pMqAYj7PrdDbvBO9YQiGWHQSlRPvDN9R5jMK4d6CIIC9FNAsZZu+94BYo3K4P+TVDx
-         PP5ekRTILvjXSKaPOdUGFZ3skUJIPRaemeXr7Qqd30QAsDiCdshKpuPjMjU7uLX85ASd
-         9nSfEpzhZ8GkSzVkXWAPx4icebjxhO/rLwwpCL/b+x+glIEK3C54nDs8ZEhVv6RKwFMK
-         JVLRzorKOzSHuhhHz7ZxNfeyBtF2avP0fiCBSNnyd0x6i8pO1XkSjZF87+q1+LF1Ce3U
-         yM969m9sFwZVQZGHIMR1QIGD2kpH6M7qabKDI2T871S9n0dkDlThWYjJ4R4QZeYOMeDT
-         /5AA==
-X-Forwarded-Encrypted: i=1; AJvYcCVWaIrEYO+EpCb/B7BTPNXcfrJ0J1pGnQVr7QyRTlY6ymtihRjHDv1i5Gjmim0GQMSyjo2RAl/FREePvZduUwr+IHRV
-X-Gm-Message-State: AOJu0YxHPsadqzsflG1nebXbq6Gm1KjSfzuEvcZWMoVmMU5nrmOfj3t3
-	Hi9XI3sBS+fSrJHtdbEldmxdnItpm0PjyQR3y++1yxdckNO0B+s1A06xRE6dYyA=
-X-Google-Smtp-Source: AGHT+IHyogcIr/Qsc9GsN9jZgtkStJ86LGPi25CEyZtC3+KaxMDzrcvpAOvf7tMwDDJPH7QLO3rHqA==
-X-Received: by 2002:a25:ea43:0:b0:dc6:ff12:1a21 with SMTP id o3-20020a25ea43000000b00dc6ff121a21mr5517436ybe.31.1710532512300;
-        Fri, 15 Mar 2024 12:55:12 -0700 (PDT)
-Received: from debian.debian ([2a09:bac5:7a49:1046::19f:c])
-        by smtp.gmail.com with ESMTPSA id j6-20020ac86646000000b0042e2002ed12sm2251399qtp.57.2024.03.15.12.55.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Mar 2024 12:55:11 -0700 (PDT)
-Date: Fri, 15 Mar 2024 12:55:09 -0700
-From: Yan Zhai <yan@cloudflare.com>
-To: netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Coco Li <lixiaoyan@google.com>, Wei Wang <weiwan@google.com>,
-	Alexander Duyck <alexanderduyck@fb.com>,
-	Hannes Frederic Sowa <hannes@stressinduktion.org>,
-	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-	bpf@vger.kernel.org, kernel-team@cloudflare.com,
-	Joel Fernandes <joel@joelfernandes.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>, mark.rutland@arm.com,
-	Jesper Dangaard Brouer <hawk@kernel.org>
-Subject: [PATCH v4 net 3/3] bpf: report RCU QS in cpumap kthread
-Message-ID: <c8a337e11bb4843e2e1db4775f16518c18545950.1710525524.git.yan@cloudflare.com>
-References: <cover.1710525524.git.yan@cloudflare.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=malDPbQVC/DdLyHrPTOvuHXC0d3geWyc5/Tfssgw2ZMgrQgw74/83oX8HBhvCF7KoUrR/gCCuEywAV0N4Vztkr/AMx2LSVcZjjKi/u4GI8RfHryCM+M8WFXzOeeUSjk66qMdAMMpI3K1Du+8dhqu2M0LrShfMTWUXOE8LiH96PE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com; spf=pass smtp.mailfrom=hallyn.com; arc=none smtp.client-ip=178.63.66.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hallyn.com
+Received: from serge-l-PF3DENS3 (unknown [72.163.2.238])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: serge)
+	by mail.hallyn.com (Postfix) with ESMTPSA id 8AAB0888;
+	Fri, 15 Mar 2024 14:59:21 -0500 (CDT)
+Date: Fri, 15 Mar 2024 14:59:19 -0500
+From: Serge Hallyn <serge@hallyn.com>
+To: Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>
+Cc: linux-security-module@vger.kernel.org, linux-block@vger.kernel.org,
+	Paul Moore <paul@paul-moore.com>,
+	John Johansen <john.johansen@canonical.com>,
+	James Morris <jmorris@namei.org>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Khadija Kamran <kamrankhadijadj@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>, linux-kernel@vger.kernel.org,
+	apparmor@lists.ubuntu.com, selinux@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH 01/10] capability: introduce new capable flag
+ CAP_OPT_NOAUDIT_ONDENY
+Message-ID: <ZfSol9llgsKWj1p9@serge-l-PF3DENS3>
+References: <20240315113828.258005-1-cgzones@googlemail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <cover.1710525524.git.yan@cloudflare.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240315113828.258005-1-cgzones@googlemail.com>
 
-When there are heavy load, cpumap kernel threads can be busy polling
-packets from redirect queues and block out RCU tasks from reaching
-quiescent states. It is insufficient to just call cond_resched() in such
-context. Periodically raise a consolidated RCU QS before cond_resched
-fixes the problem.
+On Fri, Mar 15, 2024 at 12:37:22PM +0100, Christian Göttsche wrote:
+> Introduce a new capable flag, CAP_OPT_NOAUDIT_ONDENY, to not generate
+> an audit event if the requested capability is not granted.  This will be
+> used in a new capable_any() functionality to reduce the number of
+> necessary capable calls.
+> 
+> Handle the flag accordingly in AppArmor and SELinux.
+> 
+> CC: linux-block@vger.kernel.org
+> Suggested-by: Paul Moore <paul@paul-moore.com>
+> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 
-Fixes: 6710e1126934 ("bpf: introduce new bpf cpu map type BPF_MAP_TYPE_CPUMAP")
-Reviewed-by: Jesper Dangaard Brouer <hawk@kernel.org>
-Signed-off-by: Yan Zhai <yan@cloudflare.com>
----
- kernel/bpf/cpumap.c | 3 +++
- 1 file changed, 3 insertions(+)
+Thanks.
 
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index ef82ffc90cbe..8f1d390bcbde 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -262,6 +262,7 @@ static int cpu_map_bpf_prog_run(struct bpf_cpu_map_entry *rcpu, void **frames,
- static int cpu_map_kthread_run(void *data)
- {
- 	struct bpf_cpu_map_entry *rcpu = data;
-+	unsigned long last_qs = jiffies;
- 
- 	complete(&rcpu->kthread_running);
- 	set_current_state(TASK_INTERRUPTIBLE);
-@@ -287,10 +288,12 @@ static int cpu_map_kthread_run(void *data)
- 			if (__ptr_ring_empty(rcpu->queue)) {
- 				schedule();
- 				sched = 1;
-+				last_qs = jiffies;
- 			} else {
- 				__set_current_state(TASK_RUNNING);
- 			}
- 		} else {
-+			rcu_softirq_qs_periodic(last_qs);
- 			sched = cond_resched();
- 		}
- 
--- 
-2.30.2
+Reviewed-by: Serge Hallyn <serge@hallyn.com>
 
-
+> ---
+> v5:
+>    rename flag to CAP_OPT_NOAUDIT_ONDENY, suggested by Serge:
+>      https://lore.kernel.org/all/20230606190013.GA640488@mail.hallyn.com/
+> ---
+>  include/linux/security.h       |  2 ++
+>  security/apparmor/capability.c |  8 +++++---
+>  security/selinux/hooks.c       | 14 ++++++++------
+>  3 files changed, 15 insertions(+), 9 deletions(-)
+> 
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 41a8f667bdfa..c60cae78ff8b 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -70,6 +70,8 @@ struct lsm_ctx;
+>  #define CAP_OPT_NOAUDIT BIT(1)
+>  /* If capable is being called by a setid function */
+>  #define CAP_OPT_INSETID BIT(2)
+> +/* If capable should audit the security request for authorized requests only */
+> +#define CAP_OPT_NOAUDIT_ONDENY BIT(3)
+>  
+>  /* LSM Agnostic defines for security_sb_set_mnt_opts() flags */
+>  #define SECURITY_LSM_NATIVE_LABELS	1
+> diff --git a/security/apparmor/capability.c b/security/apparmor/capability.c
+> index 9934df16c843..08c9c9a0fc19 100644
+> --- a/security/apparmor/capability.c
+> +++ b/security/apparmor/capability.c
+> @@ -108,7 +108,8 @@ static int audit_caps(struct apparmor_audit_data *ad, struct aa_profile *profile
+>   * profile_capable - test if profile allows use of capability @cap
+>   * @profile: profile being enforced    (NOT NULL, NOT unconfined)
+>   * @cap: capability to test if allowed
+> - * @opts: CAP_OPT_NOAUDIT bit determines whether audit record is generated
+> + * @opts: CAP_OPT_NOAUDIT/CAP_OPT_NOAUDIT_ONDENY bit determines whether audit
+> + *	record is generated
+>   * @ad: audit data (MAY BE NULL indicating no auditing)
+>   *
+>   * Returns: 0 if allowed else -EPERM
+> @@ -126,7 +127,7 @@ static int profile_capable(struct aa_profile *profile, int cap,
+>  	else
+>  		error = -EPERM;
+>  
+> -	if (opts & CAP_OPT_NOAUDIT) {
+> +	if ((opts & CAP_OPT_NOAUDIT) || ((opts & CAP_OPT_NOAUDIT_ONDENY) && error)) {
+>  		if (!COMPLAIN_MODE(profile))
+>  			return error;
+>  		/* audit the cap request in complain mode but note that it
+> @@ -143,7 +144,8 @@ static int profile_capable(struct aa_profile *profile, int cap,
+>   * @subj_cred: cred we are testing capability against
+>   * @label: label being tested for capability (NOT NULL)
+>   * @cap: capability to be tested
+> - * @opts: CAP_OPT_NOAUDIT bit determines whether audit record is generated
+> + * @opts: CAP_OPT_NOAUDIT/CAP_OPT_NOAUDIT_ONDENY bit determines whether audit
+> + *	record is generated
+>   *
+>   * Look up capability in profile capability set.
+>   *
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index 3448454c82d0..1a2c7c1a89be 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -1624,7 +1624,7 @@ static int cred_has_capability(const struct cred *cred,
+>  	u16 sclass;
+>  	u32 sid = cred_sid(cred);
+>  	u32 av = CAP_TO_MASK(cap);
+> -	int rc;
+> +	int rc, rc2;
+>  
+>  	ad.type = LSM_AUDIT_DATA_CAP;
+>  	ad.u.cap = cap;
+> @@ -1643,11 +1643,13 @@ static int cred_has_capability(const struct cred *cred,
+>  	}
+>  
+>  	rc = avc_has_perm_noaudit(sid, sid, sclass, av, 0, &avd);
+> -	if (!(opts & CAP_OPT_NOAUDIT)) {
+> -		int rc2 = avc_audit(sid, sid, sclass, av, &avd, rc, &ad);
+> -		if (rc2)
+> -			return rc2;
+> -	}
+> +	if ((opts & CAP_OPT_NOAUDIT) || ((opts & CAP_OPT_NOAUDIT_ONDENY) && rc))
+> +		return rc;
+> +
+> +	rc2 = avc_audit(sid, sid, sclass, av, &avd, rc, &ad);
+> +	if (rc2)
+> +		return rc2;
+> +
+>  	return rc;
+>  }
+>  
+> -- 
+> 2.43.0
+> 
+> 
