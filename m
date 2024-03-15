@@ -1,56 +1,56 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46FA6FD1
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 02:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13FEE7499
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 02:18:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710469124; cv=none; b=Rp3NtgE3+NkEnRdo9olOHWBxE7m/156IzwlD/NfXXeCcTKs4ikxAEmc15DOdzEcAB9yjXN9WGrrAsQOjgZTuRGoL6xgywvEJa2+Qw9Rj+COCwlyJ3lif+LazVs+oCcLbzG3JFOqQj2yGKOPOvIqNTkdYLhWC6+TjGvGi3APUvr4=
+	t=1710469127; cv=none; b=PmGrOfq382EMpRKlS2V0symvrGYeSnNYafMNT8BTWN8ZbXQyibbzSIGxwYMEwb1Q2u8zNh6TdSKPkhb1tl52/3Arj9b/7jAfyo7h03LQ/ZL2mw6Xe69V89+MoigsXPs1FbgMbtICQnAY3aahbOUUVe7Zsl5UU2LY27JzLnzE50A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710469124; c=relaxed/simple;
-	bh=d88y2F04DSKnoADFHmboH2wiThUSyoR+o38AjRueuto=;
+	s=arc-20240116; t=1710469127; c=relaxed/simple;
+	bh=Q9ogDrVBReMWJF93xhEiBRaSk+I0x49qVjP+LojR4bY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=krAlFzPmNz1Wzqi0GGUUYCg7u9co/7sYx6U0SYmWnTzzT8Q1iQjX4tEtqg9tHZONkp8lbjqI3QmoSsneyRurssBOEJM/ODTUxCeTMsEU2aTfPDBVqbaN4IQRsOqqC7fmeyeGTiJfU0+lpI8vnUtXyh+Ht8WNc69owCp8AW7Zl4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lfc9TPxH; arc=none smtp.client-ip=209.85.214.177
+	 MIME-Version; b=T6OXAnJJAL4mDmByCPhXVo5AsUL/zqF83yZg9Jynl8eSDGzW7g6GaUCiOHT5V1x6OlcjCG7AEXUdboUfhHFhVb7bYm5wpydi62dgJYV1Ii8jbORJTq/+nVfBey63ot0gqLwtz12hJGwiInPiFC1sKQcmIxjb1JGbXdrJD0dmETQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zi5Y2QOJ; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lfc9TPxH"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1dddaa02d22so9918015ad.2
-        for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 19:18:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zi5Y2QOJ"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6e6eb891db9so1164599b3a.3
+        for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 19:18:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710469121; x=1711073921; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710469124; x=1711073924; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ryZnmvBx3CZ9a33TjKjCtH+JryFtuyjLqRiWRXEiNMc=;
-        b=Lfc9TPxHotfoeSWhTwhBC2DZl+szwZmzN432GPqWFJ0mKj/3hc8o11EU66rYXfVrif
-         WYgrgWItBa/mLqU294lWOgzCM96HAg3T8Rx1itKdXNXAEEMTKNfA1umCjEsG3qUPCBIO
-         imPsZFwU0JOlItP+mC8guI6i1fmsGqUYRvMNjMT24T4Qd7NjWryLBCmZX+oacoRmpgO7
-         GALyfDjcX60Z+DLjMao/35NuUwdMQYOyZWYnNXXpCMJe5fgtnPfvf+9c5Nru6Z/Y9TWW
-         MCvgjkybb49AWQpdXeGCNRKwpAR+BcOwHNdirbgtygEjWE15SmNZ5kmGsuDZIzoWY+r4
-         /1FA==
+        bh=17f+nEHPgSpLlniyWNzznar1mNYCf92rMKqwvSNOLng=;
+        b=Zi5Y2QOJ5z4DGE2lEkT/PPqEpOLXoRSw/xujDEfaV0q1gKFggU5A0OyESi4vnmHjyh
+         Hl6Tt/6jlSL33GyuofNnXWbM8IgyO4mx2eocNcwXb6EUV8vl3kuMvRVtKUWtYfui5u+w
+         qqKBpQ/aTairDSjB+47vBEEP0CjXKUCEV1C1Dv0PcQu+zl0pWFZWpCqUYMjK2PshKjxc
+         IymlAGnAj4jNOw/3wyG5Hyo2a3iYwltAaq6yoeE9xFauSos9C1V9oJUv1AO4Z2SJ2dub
+         3Fgk1rXC7IwtW2FPrM27H/e3F+6aUv8EnXe46jj/xuUTn3Soc4tGsJgVXKBkYcmJgeCr
+         /img==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710469121; x=1711073921;
+        d=1e100.net; s=20230601; t=1710469124; x=1711073924;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ryZnmvBx3CZ9a33TjKjCtH+JryFtuyjLqRiWRXEiNMc=;
-        b=HO2M1y6zaxX18PDcYb2/+eOHR00zRGwlYnejGDXksRQKTVa9i+oTqcJpMZ8GEBPAHQ
-         27ofizoaavB/rNGtH9doh/TEbZl4lXFCkNFbFB/JYI+ql5URXgNr86UdlxtGVt479lfc
-         EEXNFKkXOH+mgBEaxUbx+lKxSjZcGVM5noBt3Jj0v1+eeD1alKdft/Olnr4iK/7BCjGY
-         tbpbThj4/8y1BXM7zoY2/c6VY1oLGZzIysCk9zGLGKEHujEOu5u+g/QFkXVaDyxA+1Pk
-         Cs5CgwUQPCDx75EMVUIBdOmwsj+3pEfwpOYeH2sqovrk+W3IJsBIIGunIJ2L6KMqpwf5
-         I5Zw==
-X-Gm-Message-State: AOJu0YxOjFNEZkfFNYcrLJc0wYsDy9j+DN2QlAidgFo48AiTrB/IPn0t
-	O/oC5hHHlv9dihxPjuleXFGh8j3g3KpI+dDePEhQc2ZezvfYxwlzuJCx3nhm
-X-Google-Smtp-Source: AGHT+IE9P9isnWik3MI63pTSR49o4wHdea/Q7GE65TBti6gV4omXFppc+XfK1iGqG5Cf0WVX/fWpeQ==
-X-Received: by 2002:a17:902:f691:b0:1dc:3261:ab7 with SMTP id l17-20020a170902f69100b001dc32610ab7mr2150914plg.49.1710469121273;
-        Thu, 14 Mar 2024 19:18:41 -0700 (PDT)
+        bh=17f+nEHPgSpLlniyWNzznar1mNYCf92rMKqwvSNOLng=;
+        b=C5Gvhlq9I7cq1pspZl7+mTMPDHzuHuxj6S2Dxai54qaNu3KAK6fqXVoFTbVyQ0vqx0
+         CeUqXTNZML9lezh7UUr83NTEH0X0M29yoNCGxnE35MR4x9VytJu+bOPAwbUbdbv7Qi6S
+         ET517WI2DZYZCLShTGBZgQqBYtSJ+6+nlGGoIRzx2+DWAQpTnBEuSI2myGtfFRFz3ZFf
+         teV0+mpLFNXTAfFM0JgUJXhvQvc3fyn/YV5zYwk4sVhDAlvBqNMl46U66jtIva0NqnNQ
+         wCXhG1N1yNWYOQoljcy/VrX/lTyiab1a8+psj8lZUEXcNZ50kCDHi674qHbQAfJdNjbO
+         WGxQ==
+X-Gm-Message-State: AOJu0YxCHSdnSHAn5mASMRw5DNr945whVRhZB8RvyjM4w+GB64KLITY7
+	1mAKeOH80WoKdNqYAbAnNhuLUPElmwaS2hBjNvG9VLK7mDiBQius4hbqMzfK
+X-Google-Smtp-Source: AGHT+IGJ9nXaLzS/lLGz1jxPzJqQkolv5kHyDrH/luDRxTS0vnsYAZ23OGYyWxGcrxSSH90oW80QCQ==
+X-Received: by 2002:a05:6a00:23c6:b0:6e5:e7c5:9120 with SMTP id g6-20020a056a0023c600b006e5e7c59120mr3948190pfc.19.1710469124559;
+        Thu, 14 Mar 2024 19:18:44 -0700 (PDT)
 Received: from localhost.localdomain ([2620:10d:c090:400::5:12e])
-        by smtp.gmail.com with ESMTPSA id t10-20020a170902dcca00b001dd621111e2sm2470843pll.194.2024.03.14.19.18.39
+        by smtp.gmail.com with ESMTPSA id gx20-20020a056a001e1400b006e6bcbccda9sm2232547pfb.59.2024.03.14.19.18.43
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 14 Mar 2024 19:18:40 -0700 (PDT)
+        Thu, 14 Mar 2024 19:18:44 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -58,9 +58,9 @@ Cc: daniel@iogearbox.net,
 	martin.lau@kernel.org,
 	eddyz87@gmail.com,
 	kernel-team@fb.com
-Subject: [PATCH bpf 1/4] bpf: Clarify bpf_arena comments.
-Date: Thu, 14 Mar 2024 19:18:31 -0700
-Message-Id: <20240315021834.62988-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 2/4] libbpf, selftests/bpf: Adjust libbpf, bpftool, selftests to match LLVM
+Date: Thu, 14 Mar 2024 19:18:32 -0700
+Message-Id: <20240315021834.62988-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.39.3 (Apple Git-145)
 In-Reply-To: <20240315021834.62988-1-alexei.starovoitov@gmail.com>
 References: <20240315021834.62988-1-alexei.starovoitov@gmail.com>
@@ -74,99 +74,139 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Clarify two bpf_arena comments, use existing SZ_4G #define,
-improve page_cnt check.
+The selftests use
+to tell LLVM about special pointers. For LLVM there is nothing "arena"
+about them. They are simply pointers in a different address space.
+Hence LLVM diff https://github.com/llvm/llvm-project/pull/85161 renamed:
+. macro __BPF_FEATURE_ARENA_CAST -> __BPF_FEATURE_ADDR_SPACE_CAST
+. global variables in __attribute__((address_space(N))) are now
+  placed in section named ".address_space.N" instead of ".arena.N".
+
+Adjust libbpf, bpftool, and selftests to match LLVM.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/arena.c | 25 ++++++++++++++++++-------
- 1 file changed, 18 insertions(+), 7 deletions(-)
+ tools/bpf/bpftool/gen.c                            |  2 +-
+ tools/lib/bpf/libbpf.c                             |  2 +-
+ tools/testing/selftests/bpf/bpf_arena_common.h     |  2 +-
+ tools/testing/selftests/bpf/progs/arena_htab.c     |  2 +-
+ tools/testing/selftests/bpf/progs/arena_list.c     | 10 +++++-----
+ tools/testing/selftests/bpf/progs/verifier_arena.c |  4 ++--
+ 6 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index 86571e760dd6..343c3456c8dd 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -38,7 +38,7 @@
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index 4fa4ade1ce74..540c0f2c4fda 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -121,7 +121,7 @@ static bool get_datasec_ident(const char *sec_name, char *buf, size_t buf_sz)
+ 	int i, n;
  
- /* number of bytes addressable by LDX/STX insn with 16-bit 'off' field */
- #define GUARD_SZ (1ull << sizeof(((struct bpf_insn *)0)->off) * 8)
--#define KERN_VM_SZ ((1ull << 32) + GUARD_SZ)
-+#define KERN_VM_SZ (SZ_4G + GUARD_SZ)
+ 	/* recognize hard coded LLVM section name */
+-	if (strcmp(sec_name, ".arena.1") == 0) {
++	if (strcmp(sec_name, ".addr_space.1") == 0) {
+ 		/* this is the name to use in skeleton */
+ 		snprintf(buf, buf_sz, "arena");
+ 		return true;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index efab29b8935b..36e26f4f5997 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -498,7 +498,7 @@ struct bpf_struct_ops {
+ #define KSYMS_SEC ".ksyms"
+ #define STRUCT_OPS_SEC ".struct_ops"
+ #define STRUCT_OPS_LINK_SEC ".struct_ops.link"
+-#define ARENA_SEC ".arena.1"
++#define ARENA_SEC ".addr_space.1"
  
- struct bpf_arena {
- 	struct bpf_map map;
-@@ -110,7 +110,7 @@ static struct bpf_map *arena_map_alloc(union bpf_attr *attr)
- 		return ERR_PTR(-EINVAL);
+ enum libbpf_map_type {
+ 	LIBBPF_MAP_UNSPEC,
+diff --git a/tools/testing/selftests/bpf/bpf_arena_common.h b/tools/testing/selftests/bpf/bpf_arena_common.h
+index bcf195c64a45..567491f3e1b5 100644
+--- a/tools/testing/selftests/bpf/bpf_arena_common.h
++++ b/tools/testing/selftests/bpf/bpf_arena_common.h
+@@ -32,7 +32,7 @@
+  */
+ #endif
  
- 	vm_range = (u64)attr->max_entries * PAGE_SIZE;
--	if (vm_range > (1ull << 32))
-+	if (vm_range > SZ_4G)
- 		return ERR_PTR(-E2BIG);
+-#if defined(__BPF_FEATURE_ARENA_CAST) && !defined(BPF_ARENA_FORCE_ASM)
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) && !defined(BPF_ARENA_FORCE_ASM)
+ #define __arena __attribute__((address_space(1)))
+ #define cast_kern(ptr) /* nop for bpf prog. emitted by LLVM */
+ #define cast_user(ptr) /* nop for bpf prog. emitted by LLVM */
+diff --git a/tools/testing/selftests/bpf/progs/arena_htab.c b/tools/testing/selftests/bpf/progs/arena_htab.c
+index b7bb712cacfd..1e6ac187a6a0 100644
+--- a/tools/testing/selftests/bpf/progs/arena_htab.c
++++ b/tools/testing/selftests/bpf/progs/arena_htab.c
+@@ -22,7 +22,7 @@ int zero = 0;
+ SEC("syscall")
+ int arena_htab_llvm(void *ctx)
+ {
+-#if defined(__BPF_FEATURE_ARENA_CAST) || defined(BPF_ARENA_FORCE_ASM)
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) || defined(BPF_ARENA_FORCE_ASM)
+ 	struct htab __arena *htab;
+ 	__u64 i;
  
- 	if ((attr->map_extra >> 32) != ((attr->map_extra + vm_range - 1) >> 32))
-@@ -301,7 +301,7 @@ static unsigned long arena_get_unmapped_area(struct file *filp, unsigned long ad
+diff --git a/tools/testing/selftests/bpf/progs/arena_list.c b/tools/testing/selftests/bpf/progs/arena_list.c
+index cd35b8448435..c0422c58cee2 100644
+--- a/tools/testing/selftests/bpf/progs/arena_list.c
++++ b/tools/testing/selftests/bpf/progs/arena_list.c
+@@ -30,13 +30,13 @@ int list_sum;
+ int cnt;
+ bool skip = false;
  
- 	if (pgoff)
- 		return -EINVAL;
--	if (len > (1ull << 32))
-+	if (len > SZ_4G)
- 		return -E2BIG;
+-#ifdef __BPF_FEATURE_ARENA_CAST
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
+ long __arena arena_sum;
+ int __arena test_val = 1;
+ struct arena_list_head __arena global_head;
+ #else
+-long arena_sum SEC(".arena.1");
+-int test_val SEC(".arena.1");
++long arena_sum SEC(".addr_space.1");
++int test_val SEC(".addr_space.1");
+ #endif
  
- 	/* if user_vm_start was specified at arena creation time */
-@@ -322,7 +322,7 @@ static unsigned long arena_get_unmapped_area(struct file *filp, unsigned long ad
- 	if (WARN_ON_ONCE(arena->user_vm_start))
- 		/* checks at map creation time should prevent this */
- 		return -EFAULT;
--	return round_up(ret, 1ull << 32);
-+	return round_up(ret, SZ_4G);
- }
+ int zero;
+@@ -44,7 +44,7 @@ int zero;
+ SEC("syscall")
+ int arena_list_add(void *ctx)
+ {
+-#ifdef __BPF_FEATURE_ARENA_CAST
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
+ 	__u64 i;
  
- static int arena_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
-@@ -346,7 +346,7 @@ static int arena_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
- 		return -EBUSY;
+ 	list_head = &global_head;
+@@ -66,7 +66,7 @@ int arena_list_add(void *ctx)
+ SEC("syscall")
+ int arena_list_del(void *ctx)
+ {
+-#ifdef __BPF_FEATURE_ARENA_CAST
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
+ 	struct elem __arena *n;
+ 	int sum = 0;
  
- 	/* Earlier checks should prevent this */
--	if (WARN_ON_ONCE(vma->vm_end - vma->vm_start > (1ull << 32) || vma->vm_pgoff))
-+	if (WARN_ON_ONCE(vma->vm_end - vma->vm_start > SZ_4G || vma->vm_pgoff))
- 		return -EFAULT;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
+index 5540b05ff9ee..969bc091060b 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_arena.c
++++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
+@@ -19,7 +19,7 @@ SEC("syscall")
+ __success __retval(0)
+ int basic_alloc1(void *ctx)
+ {
+-#if defined(__BPF_FEATURE_ARENA_CAST)
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+ 	volatile int __arena *page1, *page2, *no_page, *page3;
  
- 	if (remember_vma(arena, vma))
-@@ -420,7 +420,7 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
- 		if (uaddr & ~PAGE_MASK)
- 			return 0;
- 		pgoff = compute_pgoff(arena, uaddr);
--		if (pgoff + page_cnt > page_cnt_max)
-+		if (pgoff > page_cnt_max - page_cnt)
- 			/* requested address will be outside of user VMA */
- 			return 0;
- 	}
-@@ -447,7 +447,13 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
- 		goto out;
+ 	page1 = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
+@@ -58,7 +58,7 @@ SEC("syscall")
+ __success __retval(0)
+ int basic_alloc2(void *ctx)
+ {
+-#if defined(__BPF_FEATURE_ARENA_CAST)
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+ 	volatile char __arena *page1, *page2, *page3, *page4;
  
- 	uaddr32 = (u32)(arena->user_vm_start + pgoff * PAGE_SIZE);
--	/* Earlier checks make sure that uaddr32 + page_cnt * PAGE_SIZE will not overflow 32-bit */
-+	/* Earlier checks made sure that uaddr32 + page_cnt * PAGE_SIZE - 1
-+	 * will not overflow 32-bit. Lower 32-bit need to represent
-+	 * contiguous user address range.
-+	 * Map these pages at kern_vm_start base.
-+	 * kern_vm_start + uaddr32 + page_cnt * PAGE_SIZE - 1 can overflow
-+	 * lower 32-bit and it's ok.
-+	 */
- 	ret = vm_area_map_pages(arena->kern_vm, kern_vm_start + uaddr32,
- 				kern_vm_start + uaddr32 + page_cnt * PAGE_SIZE, pages);
- 	if (ret) {
-@@ -510,6 +516,11 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt)
- 		if (!page)
- 			continue;
- 		if (page_cnt == 1 && page_mapped(page)) /* mapped by some user process */
-+			/* Optimization for the common case of page_cnt==1:
-+			 * If page wasn't mapped into some user vma there
-+			 * is no need to call zap_pages which is slow. When
-+			 * page_cnt is big it's faster to do the batched zap.
-+			 */
- 			zap_pages(arena, full_uaddr, 1);
- 		vm_area_unmap_pages(arena->kern_vm, kaddr, kaddr + PAGE_SIZE);
- 		__free_page(page);
+ 	page1 = bpf_arena_alloc_pages(&arena, NULL, 2, NUMA_NO_NODE, 0);
 -- 
 2.43.0
 
