@@ -1,96 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6046487B5;
-	Fri, 15 Mar 2024 14:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0603A1B5
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 14:54:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710513905; cv=none; b=RaHlV50ODyKx0R3v4hOO9GGCtEJlbvp1Elrpo9Jksn5vJl2p9RNDG63MLD/jbT+WvayRMJT2KJRdGSdFe08Tg2+BvqSSW/8AJNunSOD9KKZSYQ9t/jKOPBEB6lmtLE6/qxmBvWueEfCEd97jWnVM2T4k99iLPnRBSC+vhFIWfBk=
+	t=1710514463; cv=none; b=FMf4W1pPTTEXSGpOe+LOn3PR8cSiB7YJ6OraRD99qtEJCxoPZwbAxcMiKyKeYktqdS2rys7PDUCstI8wMyfYcIJYnx5Bc2lcFUIN+wFSw6GJwHe3srwAJqBNOroZTq5EnKXI/dz/tVxXbS3hJR8C0FQV8rts8ZWXm8KWaXZ9abE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710513905; c=relaxed/simple;
-	bh=pHSHMrnqR0ZCUlfOmkPFExxeq+HQHfhP88ZBOTpK7+U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YNqxOdDpu5N5/ynQcyLx5R6YIfi4MFo2WxyVtK4wEvtvtXZA4x/yEKuYt5Ss7CWVclNwm8/iyq3f9193uarRMastLCsb3GLmUJWCw0SshoXeGzaDsgrSyZ0YUtZAn1nN9YSyobvIS5C2l0WPtXtQSrbmlBpONxx80FGheIfX/AY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k5L7FB7Z; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710514463; c=relaxed/simple;
+	bh=q0sxlmWZ/FVV1zfz2VpYFEe+xwviTDIZ5JEWihPHwp8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VjRPGl3edZzxERAyj3jWAdvA6pmoAEDoIb1eqzPfkVLEXY4bBPMIgxWnR7oL7CxZIIdOKR9eDs9U5mTJ5ZHXScvm6nw7T1wO7Sj6+p6h/ZgSZ+r4OS9Rd3lj8kLXqUAyBHBQR3nkhWw6vKADaFiuE5FnXZmLWP5qdq7ApedyhWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=IgljK7aV; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k5L7FB7Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EF12C433C7;
-	Fri, 15 Mar 2024 14:45:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710513905;
-	bh=pHSHMrnqR0ZCUlfOmkPFExxeq+HQHfhP88ZBOTpK7+U=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=k5L7FB7ZPJtTBZL1lfjZb4NkQC98oCeF4hiesYmJWVwHzkLUHvfqxpwCFRRn2kLr7
-	 3Sk8riGIe8rYazkDUkbaNk3wjmXBYybetTp0iyIw9JJLxusH2eLYFaz/mgxoMPsB9x
-	 1BWcqe83XsD5fzeHuS9DJS6AT/jdyfLPXPCHCzJFylPJudi6QXWDGLIQx/atyOkaZO
-	 nknUIiRPIm2cPbsmqTVMaro3/xY32t/CTKgJFeMpjZkN7tdW8vWW3pyP0wHs5ghMmH
-	 /NulkRAvne/o8lYJak4oHcXaZHWRVjibwsJkNHxqMV4UiWftOhisHeEUNYT0KJnH/R
-	 mw2QeyKmdVDtQ==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Fri, 15 Mar 2024 15:44:44 +0100
-Subject: [PATCH v4 7/7] HID: bpf: allow to use bpf_timer_set_sleepable_cb()
- in tracing callbacks.
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="IgljK7aV"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-56890b533aaso2621735a12.3
+        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 07:54:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1710514460; x=1711119260; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q0sxlmWZ/FVV1zfz2VpYFEe+xwviTDIZ5JEWihPHwp8=;
+        b=IgljK7aVz7mWTeCcuJciOzy5qhMHo0og5Gm486qtN0CqfaqiZdxFRnuQIxm1SdsMD1
+         NqpjwVbyCCdFeV1w+/Q/BnnJM6lzny6BvB8ib+HeXGUS8fsnLTURXZtcWHb2of2fy9sT
+         mUI3Qr2TquspS7KBq1cLk6L6fW8jmCTsjXk3btZ2qFHGnW1KFwq4jq2VLq9pYeq2Kha5
+         FQ9X7wufb4zrVI0JebZNTjbZdIhkgqMw9qV5Cgfd/ey43GpHyEB1dcGeuCQOZebRqFWL
+         mDKINfC35wpiE1iK9qIRUH2W8CjUz9ySDfoEcw71A9WOWwYdg9EVSDqswajQVQKDUfEB
+         bBuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710514460; x=1711119260;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q0sxlmWZ/FVV1zfz2VpYFEe+xwviTDIZ5JEWihPHwp8=;
+        b=wEEPOUq6NRq4/6HAR7t6HrVcdTvmkazroDP8oR4zT7JTqDMuu+Cy79o7hXEmqE7Iz7
+         7U/VJE6S0p8UECiS7aCv2n4u8896gkxEiE9OsgSmP2rSdU54+OyefrE4K0/h2PjKXS32
+         Pj3QfnwNC2bVW/jIwR0uvikcaPJyROjgBEjXiys2lmHXNd6npSDQEsqVKzVqu18GPwVB
+         aWiQOfiQzQo5R78jNkjpED7rlQYAkcT7tjguG7KXtTHdVIOSFmkdJxiW9AMDuhBTXFXS
+         Em+I+XAFo4Op0Ar883IC8Bjl8+rjtIKXC3oWfw9BlNonnvqWaVZCgnWZA61nM0u6cpUW
+         fHFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWcdsZ0Wrxu03vp/yHE/ipSebwd9fbBkaSbIOaFmTz4UL9bXjzE8w8M7HxLbuj0mJn8wDugavq8OuUgB5b8mMJGi06B
+X-Gm-Message-State: AOJu0YwkX8RjN5RNI7//MWacvC1Gpg0WD7GKA67MNhgjqGH1NUL2IT8/
+	ITDL5pNdbP4HzA1pyBchbchDf7L+u3QpLUrjqaughqHNIF/J8wjqK04NvYLU3+dXil0duGG3IQ9
+	QfE8RjxVkTZri+2M1dEASXsb6uRj9YYduy7casQ==
+X-Google-Smtp-Source: AGHT+IGAXuUW49fzljDaSHnEPf/5724NscYefKAehPQ4X765R6/8qKdPAaZTE8bvj8BPPDkeMk7rsijwG2UmAT6Fg4A=
+X-Received: by 2002:a05:6402:913:b0:568:b95e:8012 with SMTP id
+ g19-20020a056402091300b00568b95e8012mr259127edz.14.1710514460320; Fri, 15 Mar
+ 2024 07:54:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240315-b4-hid-bpf-new-funcs-v4-7-079c282469d3@kernel.org>
-References: <20240315-b4-hid-bpf-new-funcs-v4-0-079c282469d3@kernel.org>
-In-Reply-To: <20240315-b4-hid-bpf-new-funcs-v4-0-079c282469d3@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>, 
- Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc: Benjamin Tissoires <bentiss@kernel.org>, linux-input@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1710513885; l=1287;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=pHSHMrnqR0ZCUlfOmkPFExxeq+HQHfhP88ZBOTpK7+U=;
- b=neXHs6HmauwDcYyxZkB2zyEGDGkjjsb/jB2ZqXOyT2E7aR7xhzlaptJaXq5rkpXzM0p9yQoUE
- 2jmWyF+kMQFBp22CSeJfCS4DRsYQJC8xJunXMCcIiD+QUwgS+VGwPxv
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+References: <cover.1710346410.git.yan@cloudflare.com> <f71214e6221c5c50b32a62a33697473c756e604e.1710346410.git.yan@cloudflare.com>
+ <20240314145459.7b3aedf1@kernel.org>
+In-Reply-To: <20240314145459.7b3aedf1@kernel.org>
+From: Yan Zhai <yan@cloudflare.com>
+Date: Fri, 15 Mar 2024 09:54:09 -0500
+Message-ID: <CAO3-PbqTzsTX9UBgdC2aV4pLdL6ddrSKHTXeYNoD_m5yK6qdrQ@mail.gmail.com>
+Subject: Re: [PATCH v3 net 1/3] rcu: add a helper to report consolidated
+ flavor QS
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>, 
+	Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Lorenzo Bianconi <lorenzo@kernel.org>, Coco Li <lixiaoyan@google.com>, Wei Wang <weiwan@google.com>, 
+	Alexander Duyck <alexanderduyck@fb.com>, Hannes Frederic Sowa <hannes@stressinduktion.org>, 
+	linux-kernel@vger.kernel.org, rcu@vger.kernel.org, bpf@vger.kernel.org, 
+	kernel-team@cloudflare.com, Joel Fernandes <joel@joelfernandes.org>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, mark.rutland@arm.com, 
+	Jesper Dangaard Brouer <hawk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Export the sleepable kfuncs we have on HID-BPF in tracing bpf programs,
-but with the condition of being used in a sleepable context.
-This allows to use the bpf_timer when used in a sleepable context
-through bpf_timer_set_sleepable_cb() and initiate work from a device event.
+On Thu, Mar 14, 2024 at 4:55=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
+>
+> On Wed, 13 Mar 2024 09:25:49 -0700 Yan Zhai wrote:
+> > +/**
+> > + * rcu_softirq_qs_periodic - Periodically report consolidated quiescen=
+t states
+>
+> > +#define rcu_softirq_qs_periodic(old_ts) \
+>
+> scripts/kernel-doc says:
+>
+TIL, thanks. Let me send v4 to amend the text.
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+Yan
 
----
-
-no changes in v4
-
-no changes in v3
-
-new in v2
----
- drivers/hid/bpf/hid_bpf_dispatch.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
-index e1a650f4a626..e27c2ffb4f60 100644
---- a/drivers/hid/bpf/hid_bpf_dispatch.c
-+++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-@@ -544,6 +544,11 @@ __bpf_kfunc_end_defs();
-  */
- BTF_KFUNCS_START(hid_bpf_kfunc_ids)
- BTF_ID_FLAGS(func, hid_bpf_get_data, KF_RET_NULL)
-+BTF_ID_FLAGS(func, hid_bpf_allocate_context, KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, hid_bpf_release_context, KF_RELEASE | KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, hid_bpf_hw_request, KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, hid_bpf_hw_output_report, KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, hid_bpf_input_report, KF_SLEEPABLE)
- BTF_KFUNCS_END(hid_bpf_kfunc_ids)
- 
- static const struct btf_kfunc_id_set hid_bpf_kfunc_set = {
-
--- 
-2.44.0
-
+> include/linux/rcupdate.h:271: warning: Function parameter or struct membe=
+r 'old_ts' not described in 'rcu_softirq_qs_periodic'
+> --
+> pw-bot: cr
