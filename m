@@ -1,21 +1,21 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E47B914A9F
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 18:49:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D3011DA26
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 18:49:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710528549; cv=none; b=aFBXiTcmxVzEW/O0O5qUWm4MPtoMwi2x68FPh9t4mVbQjWnWDLNkSZWWBvhN8yifSjZNkWL0sGQwLGuAvGVuutP0AXfmOpPW/+OUB/Qp/0JZMRg3JF2uZjzgAEIiVRvAsczCsJnzJVW+iFwrSNoL5YFGyGjpg1HIDC+oU1NhKAU=
+	t=1710528550; cv=none; b=d6HD6I3J3Ww0XKRGHouZEcopT2b14XMzbodO0h7HuA3sBH2GfUH2AgAUHfnzu2JkoKtscwNVwblCeEJOMjc4qEx8fnOxOHBIwJ34H6EBCCvFvuRnpuHN0c6Ln7Q3EObJgFE5TYESIcD6R+PpE5/rAtgkOOQoOLo2dBnhcoDyUb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710528549; c=relaxed/simple;
-	bh=BWyeWMXrm9Z4GtAbAPQmZ4KO8eRZ5bhhefii0SrRhHw=;
+	s=arc-20240116; t=1710528550; c=relaxed/simple;
+	bh=uiZF4MEQM1xZU1C3ZBsHlhA2jP/kdEyxNArmYwOquOE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Sl3ca859LUuWPZPSdMfNCRYNSrpgDoJrJwwJ89Mmh4LIsyk8nyFmAUH9xN5mDDNiW5+WIteOVtslqbW3FUhS7bTd3CwCvTNav0M4wc3N/jrYyTU1VcFO9P842WEtqzm9/KnxfJNVzxYcpQ8xscIgM60SjoIbjsRM/hbXcJk3yZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+	 MIME-Version; b=elr9ka5n7Mwmv5Tv5c1rInc5Z9+rSyu90ijGDVuEJ/fyZqJaxE9TdKlzPub4FwJXZGu8YIdjAdxrt4MHjkGJXP3wHdXWBSgxuNP25A3gUtZ46tc5ljhDGBhauUsO9ySAT0xlSxU+xRSSLW+D5enNfq6RLRsK3VgbFx4p62OGPhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id E840C1D1E615; Fri, 15 Mar 2024 11:49:04 -0700 (PDT)
+	id B5D501D1E5AD; Fri, 15 Mar 2024 11:48:54 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -25,9 +25,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>,
 	Yury Namgung <ynamgung@meta.com>
-Subject: [PATCH bpf-next v2 3/5] selftests/bpf: Refactor out some functions in ns_current_pid_tgid test
-Date: Fri, 15 Mar 2024 11:49:04 -0700
-Message-ID: <20240315184904.2976123-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 1/5] bpf: Allow helper bpf_get_[ns_]current_pid_tgid() for all prog types
+Date: Fri, 15 Mar 2024 11:48:54 -0700
+Message-ID: <20240315184854.2975190-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240315184849.2974556-1-yonghong.song@linux.dev>
 References: <20240315184849.2974556-1-yonghong.song@linux.dev>
@@ -39,151 +39,106 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Refactor some functions in both user space code and bpf program
-as these functions are used by later cgroup/sk_msg tests.
-Another change is to mark tp program optional loading as later
-patches will use optional loading as well since they have quite
-different attachment and testing logic.
+Currently bpf_get_current_pid_tgid() is allowed in tracing, cgroup
+and sk_msg progs while bpf_get_ns_current_pid_tgid() is only allowed
+in tracing progs.
 
-There is no functionality change.
+We have an internal use case where for an application running
+in a container (with pid namespace), user wants to get
+the pid associated with the pid namespace in a cgroup bpf
+program. Currently, cgroup bpf progs already allow
+bpf_get_current_pid_tgid(). Let us allow bpf_get_ns_current_pid_tgid()
+as well.
+
+With auditing the code, bpf_get_current_pid_tgid() is also used
+by sk_msg prog. But there are no side effect to expose these two
+helpers to all prog types since they do not reveal any kernel specific
+data. The detailed discussion is in [1].
+
+So with this patch, both bpf_get_current_pid_tgid() and bpf_get_ns_curren=
+t_pid_tgid()
+are put in bpf_base_func_proto(), making them available to all
+program types.
+
+  [1] https://lore.kernel.org/bpf/20240307232659.1115872-1-yonghong.song@=
+linux.dev/
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../bpf/prog_tests/ns_current_pid_tgid.c      | 53 ++++++++++++-------
- .../bpf/progs/test_ns_current_pid_tgid.c      | 10 ++--
- 2 files changed, 41 insertions(+), 22 deletions(-)
+ kernel/bpf/cgroup.c      | 2 --
+ kernel/bpf/helpers.c     | 4 ++++
+ kernel/trace/bpf_trace.c | 4 ----
+ net/core/filter.c        | 2 --
+ 4 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c=
- b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-index 3a0664a86243..847d7b70e290 100644
---- a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-@@ -16,30 +16,46 @@
- #define STACK_SIZE (1024 * 1024)
- static char child_stack[STACK_SIZE];
-=20
--static int test_current_pid_tgid(void *args)
-+static int get_pid_tgid(pid_t *pid, pid_t *tgid,
-+			struct test_ns_current_pid_tgid__bss *bss)
- {
--	struct test_ns_current_pid_tgid__bss  *bss;
--	struct test_ns_current_pid_tgid *skel;
--	int ret =3D -1, err;
--	pid_t tgid, pid;
- 	struct stat st;
-+	int err;
-=20
--	skel =3D test_ns_current_pid_tgid__open_and_load();
--	if (!ASSERT_OK_PTR(skel, "test_ns_current_pid_tgid__open_and_load"))
--		goto out;
--
--	pid =3D syscall(SYS_gettid);
--	tgid =3D getpid();
-+	*pid =3D syscall(SYS_gettid);
-+	*tgid =3D getpid();
-=20
- 	err =3D stat("/proc/self/ns/pid", &st);
- 	if (!ASSERT_OK(err, "stat /proc/self/ns/pid"))
--		goto cleanup;
-+		return err;
-=20
--	bss =3D skel->bss;
- 	bss->dev =3D st.st_dev;
- 	bss->ino =3D st.st_ino;
- 	bss->user_pid =3D 0;
- 	bss->user_tgid =3D 0;
-+	return 0;
-+}
-+
-+static int test_current_pid_tgid_tp(void *args)
-+{
-+	struct test_ns_current_pid_tgid__bss  *bss;
-+	struct test_ns_current_pid_tgid *skel;
-+	int ret =3D -1, err;
-+	pid_t tgid, pid;
-+
-+	skel =3D test_ns_current_pid_tgid__open();
-+	if (!ASSERT_OK_PTR(skel, "test_ns_current_pid_tgid__open"))
-+		return ret;
-+
-+	bpf_program__set_autoload(skel->progs.tp_handler, true);
-+
-+	err =3D test_ns_current_pid_tgid__load(skel);
-+	if (!ASSERT_OK(err, "test_ns_current_pid_tgid__load"))
-+		goto cleanup;
-+
-+	bss =3D skel->bss;
-+	if (get_pid_tgid(&pid, &tgid, bss))
-+		goto cleanup;
-=20
- 	err =3D test_ns_current_pid_tgid__attach(skel);
- 	if (!ASSERT_OK(err, "test_ns_current_pid_tgid__attach"))
-@@ -55,11 +71,10 @@ static int test_current_pid_tgid(void *args)
-=20
- cleanup:
- 	test_ns_current_pid_tgid__destroy(skel);
--out:
- 	return ret;
- }
-=20
--static void test_ns_current_pid_tgid_new_ns(void)
-+static void test_ns_current_pid_tgid_new_ns(int (*fn)(void *), void *arg=
-)
- {
- 	int wstatus;
- 	pid_t cpid;
-@@ -67,8 +82,8 @@ static void test_ns_current_pid_tgid_new_ns(void)
- 	/* Create a process in a new namespace, this process
- 	 * will be the init process of this new namespace hence will be pid 1.
- 	 */
--	cpid =3D clone(test_current_pid_tgid, child_stack + STACK_SIZE,
--		     CLONE_NEWPID | SIGCHLD, NULL);
-+	cpid =3D clone(fn, child_stack + STACK_SIZE,
-+		     CLONE_NEWPID | SIGCHLD, arg);
-=20
- 	if (!ASSERT_NEQ(cpid, -1, "clone"))
- 		return;
-@@ -84,7 +99,7 @@ static void test_ns_current_pid_tgid_new_ns(void)
- void serial_test_ns_current_pid_tgid(void)
- {
- 	if (test__start_subtest("root_ns_tp"))
--		test_current_pid_tgid(NULL);
-+		test_current_pid_tgid_tp(NULL);
- 	if (test__start_subtest("new_ns_tp"))
--		test_ns_current_pid_tgid_new_ns();
-+		test_ns_current_pid_tgid_new_ns(test_current_pid_tgid_tp, NULL);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c=
- b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
-index 0763d49f9c42..aa3ec7ca16d9 100644
---- a/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
-+++ b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
-@@ -10,17 +10,21 @@ __u64 user_tgid =3D 0;
- __u64 dev =3D 0;
- __u64 ino =3D 0;
-=20
--SEC("tracepoint/syscalls/sys_enter_nanosleep")
--int handler(const void *ctx)
-+static void get_pid_tgid(void)
- {
- 	struct bpf_pidns_info nsdata;
-=20
- 	if (bpf_get_ns_current_pid_tgid(dev, ino, &nsdata, sizeof(struct bpf_pi=
-dns_info)))
--		return 0;
-+		return;
-=20
- 	user_pid =3D nsdata.pid;
- 	user_tgid =3D nsdata.tgid;
-+}
-=20
-+SEC("?tracepoint/syscalls/sys_enter_nanosleep")
-+int tp_handler(const void *ctx)
-+{
-+	get_pid_tgid();
- 	return 0;
- }
-=20
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 82243cb6c54d..8ba73042a239 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -2575,8 +2575,6 @@ cgroup_current_func_proto(enum bpf_func_id func_id,=
+ const struct bpf_prog *prog)
+ 	switch (func_id) {
+ 	case BPF_FUNC_get_current_uid_gid:
+ 		return &bpf_get_current_uid_gid_proto;
+-	case BPF_FUNC_get_current_pid_tgid:
+-		return &bpf_get_current_pid_tgid_proto;
+ 	case BPF_FUNC_get_current_comm:
+ 		return &bpf_get_current_comm_proto;
+ #ifdef CONFIG_CGROUP_NET_CLASSID
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index a89587859571..9234174ccb21 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1730,6 +1730,10 @@ bpf_base_func_proto(enum bpf_func_id func_id, cons=
+t struct bpf_prog *prog)
+ 		return &bpf_strtol_proto;
+ 	case BPF_FUNC_strtoul:
+ 		return &bpf_strtoul_proto;
++	case BPF_FUNC_get_current_pid_tgid:
++		return &bpf_get_current_pid_tgid_proto;
++	case BPF_FUNC_get_ns_current_pid_tgid:
++		return &bpf_get_ns_current_pid_tgid_proto;
+ 	default:
+ 		break;
+ 	}
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 0a5c4efc73c3..1b041911b1d8 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1525,8 +1525,6 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, co=
+nst struct bpf_prog *prog)
+ 		return &bpf_ktime_get_boot_ns_proto;
+ 	case BPF_FUNC_tail_call:
+ 		return &bpf_tail_call_proto;
+-	case BPF_FUNC_get_current_pid_tgid:
+-		return &bpf_get_current_pid_tgid_proto;
+ 	case BPF_FUNC_get_current_task:
+ 		return &bpf_get_current_task_proto;
+ 	case BPF_FUNC_get_current_task_btf:
+@@ -1582,8 +1580,6 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, co=
+nst struct bpf_prog *prog)
+ 		return &bpf_send_signal_thread_proto;
+ 	case BPF_FUNC_perf_event_read_value:
+ 		return &bpf_perf_event_read_value_proto;
+-	case BPF_FUNC_get_ns_current_pid_tgid:
+-		return &bpf_get_ns_current_pid_tgid_proto;
+ 	case BPF_FUNC_ringbuf_output:
+ 		return &bpf_ringbuf_output_proto;
+ 	case BPF_FUNC_ringbuf_reserve:
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 8adf95765cdd..0c66e4a3fc5b 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -8342,8 +8342,6 @@ sk_msg_func_proto(enum bpf_func_id func_id, const s=
+truct bpf_prog *prog)
+ 		return &bpf_event_output_data_proto;
+ 	case BPF_FUNC_get_current_uid_gid:
+ 		return &bpf_get_current_uid_gid_proto;
+-	case BPF_FUNC_get_current_pid_tgid:
+-		return &bpf_get_current_pid_tgid_proto;
+ 	case BPF_FUNC_sk_storage_get:
+ 		return &bpf_sk_storage_get_proto;
+ 	case BPF_FUNC_sk_storage_delete:
 --=20
 2.43.0
 
