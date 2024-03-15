@@ -1,160 +1,185 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271BA1B809
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 11:21:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4332A1B7E1;
+	Fri, 15 Mar 2024 11:38:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710501713; cv=none; b=MIOApmusS5hfNJh9V/TJefl2keNjJ0yU18KXkT+z9LpZxG7ueZxOm7PV6+ddEqdu8vUiAdCSQAY9BclVBOdxXi8XKgk54LNlQLqF4dkOEKqM7J7VymeXU8h1Zsw9X/sMaYbeOHVp5TXuCRH6BAtVzPZDHyGkGWxzhlB0DgLHDeI=
+	t=1710502741; cv=none; b=pjOuI7u4gVZifmoaTNV0oK/mWk8iquHe/ySDvFcP14hOi2dbl3t2NPyVacW6sBnEyRIv1zXCCxoCip2+pWQyZuxt2yiSyfKSvyQz5yoURBX/lduNmfJ7pXPWq5MN7+9m58XNdy75Z62/L/RWfXlDQklIAi3Gh11P8/B6BnUYDSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710501713; c=relaxed/simple;
-	bh=ACaChIFK+KQQUmcosJqGNJiIbMApQZFHU7jRCzgGzGg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G0ZjimOZwEwfKyw5hf3JfHutc3T4pbjXOZ9TXgqMnzwoqw+TcKPgZ0FaTNuz2Cq2M72mc7iDTRt0dkw+u5lHeC101KEOq2QDuj85AjqCe/qa/X06j5Tc/Dm+VnnD3GEDtbXzA1ouUXCKEUD62aA4vLaJUevZMj2C0+tj4iyvl/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mn9EMPoK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710502741; c=relaxed/simple;
+	bh=YhK/jnk1sN0Eu2k73vdEasVnkAA21VPShol4SbhmQDE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AigQL+p0k9xR64d7kScCl9sY/XShtfoyniyE0HcHQNI4ap1dvUMmQG2lH6PL4MI3h3r4TP4tepeWkHdyLFKkgO0XSFGnhr5NGX1EGZ7AH63bpUrUD8J/TvHLqfQeX0Muye8zOC9/tccoaOzG4EPgPviJqUUWDUcXKdCry4ONHR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=KUfLwR3Y; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mn9EMPoK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 110F5C433F1;
-	Fri, 15 Mar 2024 11:21:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710501712;
-	bh=ACaChIFK+KQQUmcosJqGNJiIbMApQZFHU7jRCzgGzGg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Mn9EMPoKFbPIe/zqthOKrpHB/fc26+Jfz322ZDq5h1BKV/iaS27sRW4RupHEyPrBd
-	 You8OIZHE2OIdfUWRiKnHnTpkqiGDniBwBIaI8T2Q/UlSmq8RncXbzzCsVNNHTyHKw
-	 7r+olItQ54l/HZUZE8zajMvZ2PB/EcvVNiLZpAIj2tVVthiQufIkWuh8BPS30fcHYD
-	 kwJSnNSv5PKhObjPhpMo165hxAPAKXvlMprgeKDzyeARTkMtQUYqlIijlhRpzSwPD3
-	 7oa0irgjVYNlJLnQy4qq40eQNPHbbYZwghqSzQKwboiT4AupoTmcYytkBabxU41aOT
-	 DMD+T6i23nwrw==
-Date: Fri, 15 Mar 2024 12:21:46 +0100
-From: Alejandro Colomar <alx@kernel.org>
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="KUfLwR3Y"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-568a3292916so1984175a12.1;
+        Fri, 15 Mar 2024 04:38:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1710502738; x=1711107538; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ret+NQ/Tw5LK56vjyJDNxqW8M+4jtEPqZMI9umR9cCI=;
+        b=KUfLwR3YydJAheGuADHmPCFzOmeuutYh+cPx3pAcCH1JXoYknT4HVT9fGpGQHhLJDi
+         olBOT21+QWtaOksGCZZ8CHd6EMVD8QEJg4918AHNhf2I62E5flo7lL4zqJRsMDU7tSkI
+         /KjLHhFQ3LP3wzTAq9iTpNJKHaTZeFHWPLaYFzQS6+mtrg4S3DEG2suKfDmG7En7mxhc
+         Yll27I7dKJujo45T8mZwgFHw8iEAhJm92aNa3iQzb/IFiwXvwqqCsR/8Pw6SplacDztV
+         N+9d6NozKyapLVifsnOheV49lTQZGZjObh9/llKi/FIhSOFBYJdC+nf5erbPQW8rhuao
+         V40Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710502738; x=1711107538;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ret+NQ/Tw5LK56vjyJDNxqW8M+4jtEPqZMI9umR9cCI=;
+        b=er0RKIzF0IcU+kWC90ZhsiiCBSbhUkp2gA5VaqtcF2On1rKBtbSs1mQqtkmD0zvV1Y
+         cqxNAKCjrWRra/Zo1WagShjBECx7tJsGMbm8s0e+iJkhu+AJug6VbHmLMF9iyirBqIjr
+         ueeon/g/EYndS3y1pM5Efjjw0eAvybhA23DNVaaVrLDjSrT1PWVvxUZRL3pD0TA5vH5M
+         PNSjCrjt69l2mMZBqcEOVpLgFlAkoTp6YSkYnWj49PGME05TccHUqiuI8obX0/LqDfcV
+         9z/ZcA/jd03Mmq637BbxTxK0p9koyNzLR705XgJ+QbgocOaoa9/PF0hUMev6jNXvpfUg
+         y7EQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWTWCZDE67T9IvmI0YS4CbbuhFeKCMu6uUu1Zg9qo+Z8onEHrZknnbxYsBA+Pbs5O3h2UVy5ZIAdhCyc+QqDYjPvsp77hQ4qYAIU6kb91XS6xVeH9MzljrD0ODBA8UsYfRULFOKuFhVXwyX1n4+qDo8H0DqxqozFaUC1A==
+X-Gm-Message-State: AOJu0Ywzp54EqvzcF+2uV6FJxeco5CfEWjSddoxAOHAJXAk1QRjZ7rAs
+	ZQshyNSg7RA1BJS464uoBN4fZqaPA7dXXo75oGC8IzDJQUKBAWDAKKSqAO/B++3GPQ==
+X-Google-Smtp-Source: AGHT+IHxB7FB377TOoio0unYbfIwnkxt4g5n3Z4MDqCqa7L7No5w/MvY3FrF55UMKEirChoiUMRGJg==
+X-Received: by 2002:a05:6402:530a:b0:568:797a:f2d with SMTP id eo10-20020a056402530a00b00568797a0f2dmr2968341edb.27.1710502737191;
+        Fri, 15 Mar 2024 04:38:57 -0700 (PDT)
+Received: from ddev.DebianHome (dynamic-095-119-217-226.95.119.pool.telefonica.de. [95.119.217.226])
+        by smtp.gmail.com with ESMTPSA id fg3-20020a056402548300b005682f47aea7sm1610024edb.94.2024.03.15.04.38.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Mar 2024 04:38:56 -0700 (PDT)
+From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
+To: linux-security-module@vger.kernel.org
+Cc: linux-block@vger.kernel.org,
+	Paul Moore <paul@paul-moore.com>,
+	John Johansen <john.johansen@canonical.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Khadija Kamran <kamrankhadijadj@gmail.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Quentin Monnet <quentin@isovalent.com>,
-	Alejandro Colomar <alx.manpages@gmail.com>,
-	Michael Hofmann <mhofmann@redhat.com>
-Subject: Re: [PATCH bpf] bpf_doc: use silent mode when exec make cmd
-Message-ID: <ZfQvSmag_v7VaOAB@debian>
-References: <20240315023443.2364442-1-liuhangbin@gmail.com>
+	linux-kernel@vger.kernel.org,
+	apparmor@lists.ubuntu.com,
+	selinux@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH 01/10] capability: introduce new capable flag CAP_OPT_NOAUDIT_ONDENY
+Date: Fri, 15 Mar 2024 12:37:22 +0100
+Message-ID: <20240315113828.258005-1-cgzones@googlemail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="oWO6bu1OvXyQZnH0"
-Content-Disposition: inline
-In-Reply-To: <20240315023443.2364442-1-liuhangbin@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Introduce a new capable flag, CAP_OPT_NOAUDIT_ONDENY, to not generate
+an audit event if the requested capability is not granted.  This will be
+used in a new capable_any() functionality to reduce the number of
+necessary capable calls.
 
---oWO6bu1OvXyQZnH0
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 15 Mar 2024 12:21:46 +0100
-From: Alejandro Colomar <alx@kernel.org>
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Quentin Monnet <quentin@isovalent.com>,
-	Alejandro Colomar <alx.manpages@gmail.com>,
-	Michael Hofmann <mhofmann@redhat.com>
-Subject: Re: [PATCH bpf] bpf_doc: use silent mode when exec make cmd
+Handle the flag accordingly in AppArmor and SELinux.
 
-Hi!
+CC: linux-block@vger.kernel.org
+Suggested-by: Paul Moore <paul@paul-moore.com>
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+---
+v5:
+   rename flag to CAP_OPT_NOAUDIT_ONDENY, suggested by Serge:
+     https://lore.kernel.org/all/20230606190013.GA640488@mail.hallyn.com/
+---
+ include/linux/security.h       |  2 ++
+ security/apparmor/capability.c |  8 +++++---
+ security/selinux/hooks.c       | 14 ++++++++------
+ 3 files changed, 15 insertions(+), 9 deletions(-)
 
-On Fri, Mar 15, 2024 at 10:34:43AM +0800, Hangbin Liu wrote:
-> When getting kernel version via make, the result may be polluted by other
-> output, like directory change info. e.g.
-> $ export MAKEFLAGS=3D"-w"
-> $ make kernelversion
-> make: Entering directory '/home/net'
-> 6.8.0
-> make: Leaving directory '/home/net'
->=20
-> This will distort the reStructuredText output and make latter rst2man
-> failed like:
-> bpf-helpers.rst:20: (WARNING/2) Field list ends without a blank line; une=
-xpected unindent.
->=20
-> Using silent mode would help. e.g.
-> $ make -s --no-print-directory kernelversion
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 41a8f667bdfa..c60cae78ff8b 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -70,6 +70,8 @@ struct lsm_ctx;
+ #define CAP_OPT_NOAUDIT BIT(1)
+ /* If capable is being called by a setid function */
+ #define CAP_OPT_INSETID BIT(2)
++/* If capable should audit the security request for authorized requests only */
++#define CAP_OPT_NOAUDIT_ONDENY BIT(3)
+ 
+ /* LSM Agnostic defines for security_sb_set_mnt_opts() flags */
+ #define SECURITY_LSM_NATIVE_LABELS	1
+diff --git a/security/apparmor/capability.c b/security/apparmor/capability.c
+index 9934df16c843..08c9c9a0fc19 100644
+--- a/security/apparmor/capability.c
++++ b/security/apparmor/capability.c
+@@ -108,7 +108,8 @@ static int audit_caps(struct apparmor_audit_data *ad, struct aa_profile *profile
+  * profile_capable - test if profile allows use of capability @cap
+  * @profile: profile being enforced    (NOT NULL, NOT unconfined)
+  * @cap: capability to test if allowed
+- * @opts: CAP_OPT_NOAUDIT bit determines whether audit record is generated
++ * @opts: CAP_OPT_NOAUDIT/CAP_OPT_NOAUDIT_ONDENY bit determines whether audit
++ *	record is generated
+  * @ad: audit data (MAY BE NULL indicating no auditing)
+  *
+  * Returns: 0 if allowed else -EPERM
+@@ -126,7 +127,7 @@ static int profile_capable(struct aa_profile *profile, int cap,
+ 	else
+ 		error = -EPERM;
+ 
+-	if (opts & CAP_OPT_NOAUDIT) {
++	if ((opts & CAP_OPT_NOAUDIT) || ((opts & CAP_OPT_NOAUDIT_ONDENY) && error)) {
+ 		if (!COMPLAIN_MODE(profile))
+ 			return error;
+ 		/* audit the cap request in complain mode but note that it
+@@ -143,7 +144,8 @@ static int profile_capable(struct aa_profile *profile, int cap,
+  * @subj_cred: cred we are testing capability against
+  * @label: label being tested for capability (NOT NULL)
+  * @cap: capability to be tested
+- * @opts: CAP_OPT_NOAUDIT bit determines whether audit record is generated
++ * @opts: CAP_OPT_NOAUDIT/CAP_OPT_NOAUDIT_ONDENY bit determines whether audit
++ *	record is generated
+  *
+  * Look up capability in profile capability set.
+  *
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 3448454c82d0..1a2c7c1a89be 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -1624,7 +1624,7 @@ static int cred_has_capability(const struct cred *cred,
+ 	u16 sclass;
+ 	u32 sid = cred_sid(cred);
+ 	u32 av = CAP_TO_MASK(cap);
+-	int rc;
++	int rc, rc2;
+ 
+ 	ad.type = LSM_AUDIT_DATA_CAP;
+ 	ad.u.cap = cap;
+@@ -1643,11 +1643,13 @@ static int cred_has_capability(const struct cred *cred,
+ 	}
+ 
+ 	rc = avc_has_perm_noaudit(sid, sid, sclass, av, 0, &avd);
+-	if (!(opts & CAP_OPT_NOAUDIT)) {
+-		int rc2 = avc_audit(sid, sid, sclass, av, &avd, rc, &ad);
+-		if (rc2)
+-			return rc2;
+-	}
++	if ((opts & CAP_OPT_NOAUDIT) || ((opts & CAP_OPT_NOAUDIT_ONDENY) && rc))
++		return rc;
++
++	rc2 = avc_audit(sid, sid, sclass, av, &avd, rc, &ad);
++	if (rc2)
++		return rc2;
++
+ 	return rc;
+ }
+ 
+-- 
+2.43.0
 
-Acked-by: Alejandro Colomar <alx@kernel.org>
-
-Thanks!
-Alex
-
-> 6.8.0
->=20
-> Fixes: fd0a38f9c37d ("scripts/bpf: Set version attribute for bpf-helpers(=
-7) man page")
-> Signed-off-by: Michael Hofmann <mhofmann@redhat.com>
-> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-> ---
->  scripts/bpf_doc.py | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
-> index 4606944984ee..c55878bddfdd 100755
-> --- a/scripts/bpf_doc.py
-> +++ b/scripts/bpf_doc.py
-> @@ -414,8 +414,8 @@ class PrinterRST(Printer):
->              version =3D version.stdout.decode().rstrip()
->          except:
->              try:
-> -                version =3D subprocess.run(['make', 'kernelversion'], cw=
-d=3DlinuxRoot,
-> -                                         capture_output=3DTrue, check=3D=
-True)
-> +                version =3D subprocess.run(['make', '-s', '--no-print-di=
-rectory', 'kernelversion'],
-> +                                         cwd=3DlinuxRoot, capture_output=
-=3DTrue, check=3DTrue)
->                  version =3D version.stdout.decode().rstrip()
->              except:
->                  return 'Linux'
-> --=20
-> 2.43.0
->=20
-
---=20
-<https://www.alejandro-colomar.es/>
-
---oWO6bu1OvXyQZnH0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmX0L0oACgkQnowa+77/
-2zKWag/9EkeVxkkYXyxeuR1iTa+PjCYvwIACldussto8WkFjXcE7hCAA4S2F48Yz
-P5JMy+2tu4yS+wJLkr/vIZmLNmnt39Wccu+/cuF5cKhO4v/fp5ktnISiMEG7A1y0
-wGA3D/aS1Ekda8rKM0Na3xRzpIpQMY6SrfHo1J63q6+tpJKiireskm85Wn1XLAdk
-CjdlF3b5BfhNUTiI4Y3TkOLiyFyxtzAibJgGQVx1CNDNCyrn1Hvsbk5t6te0k5YZ
-XoGWFiN9cqMLrJsUeKJWBnUkEeIRt5s0P3zgvHqTaYSkpiD/KWlY8d64y++1e+Fk
-2+VH8EbO0OQ2qcDwx9SkK8KFdhZDsH8sgwocu1RQQUJg5dQFVLY+3YjlMkf4KL88
-LvZzEIgfZT1zHOYLH7ZZXu3Z3Jmba9Y8L/z/y7rWJNw9KC3x6vd9s/n7uNJQ0HWY
-R8UCofF7BhMuujaw17zydxwf7jeaZyIV+Fi9mwSGK24N1hoipGh+zMmsDOVXvteW
-kSLq+bWJn4bc17qIWQAumejOxVxUsLvE/n/zDwWuXwUYF8Lra4NFIg4ee1QeG4xg
-cwkNF46Tl/QgBZ67HaTVMR9oHWJXVRC9bVoi/MgGmrgjMu5LfMbLGWArBfbeCqsJ
-Tpg3OQmiACeijeLl9ZoT+RwK3s27HejcVSaTEovXlCy4RpPWvRI=
-=xEqH
------END PGP SIGNATURE-----
-
---oWO6bu1OvXyQZnH0--
