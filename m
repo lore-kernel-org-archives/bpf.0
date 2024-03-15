@@ -1,226 +1,88 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369DF17F5
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 21:07:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4CAB548E7
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 21:12:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710536837; cv=none; b=aWs0Wo7nJCchDl/u67QcIsYoMm7uLUdehH3IEeCg6FK5w3BSpUF3Hw0lG15VUP2eftCC42jPs36f1rDwMHj3oAWZZwhGB/PH4UADVrVMj9gEnVDqrBhXfDM6JXsWAkgWEO/4sJ4m/SuWDTGw+S0sVfIyHMM1uC2132TLicfXj7g=
+	t=1710537128; cv=none; b=LrMxtRU7BOSlbKMTTqIipwO0sOWSqoj2toDTFXV3MHCg6eOM8AO17rAq65ORcaFP8vXPnRLbLqqgoMm8z1yT70G7YXkaFgzhm1B3SoX+YIiPEKa9ZGyH4whkm3xh/2LQ551nNdh+/l0GtIWv175rm80KW3MjlR/lFWKxthuR3xM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710536837; c=relaxed/simple;
-	bh=0p31RczpRrtBHqWlTPWUSAr5T1lZttwvxM4YLGqBBG0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZxfX/YDjMgx23WPf5xamzzJuIPDyW/riTrw7646D/HwIzEajMeGHIzLWn6Ha0NwgAOMBk6z2J1zhwoY3VZ2pIL+Mab0eSJdvVBjdhau3dDrc2QFrclo+0g34TRBqtu1nPbnzl6ZDviIONh0oCwmHeKDCSb2DnmaXDVC27HkEaI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IwWWxDzo; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710537128; c=relaxed/simple;
+	bh=n/ul0ogx7iwzi5n9hjSGc4kclaFxVnfk7TjW0NiHHcU=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Emi2+l2mHezkK2UdIbhtxs7TbyuMNsIUPiWLv/nkXX+zDwMwkiOXtvrkqifT4zfLmVUKNhrfbSXyCvQAFS0noRgWUD6IufVkVzGNV13/uOvCY4O1YFP6wu6vONvGGhG+0UVKpJzPoXXu8lJMixbU3L26xT8ea1Li74Ho2pRn/yc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=t4qE5XXz; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IwWWxDzo"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1def2a1aafaso7299735ad.3
-        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 14:07:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710536833; x=1711141633; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hEvsej7Ta2qkdjzsg5dv2TQze2XzeQtDar7fl8SfNHA=;
-        b=IwWWxDzoCdVBXMGbov7+2Wte6hqajpQjqwGXLxcbq2kPQbGYAwarmJsmCehr2IUHvw
-         e4UY+9Ytx1tONfoSU6r2xA98gtiVvlxlJVu/tgm5UgkATUkTjmvVpIfosIBEb48LDesa
-         ifMzO5QNO4/8QnlCsKWknzPwQgRy0uwaRd/ypP1iJwDHCm35UYQiTtICYlQEptTZkREg
-         iLCJl+ezL4VkThDipjNaMg5N2RXzqbp2WeBTa/fEnp9j2LBwd8vINIknVy7g1C5TlyXH
-         zOlVMLV1N+7Gz7FDoVrXqryed7oY4MfmNPQG0DqlvBjo4wreOajjQ/wG6iwSPHXOE+e6
-         O5bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710536833; x=1711141633;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hEvsej7Ta2qkdjzsg5dv2TQze2XzeQtDar7fl8SfNHA=;
-        b=jcx5jP/wyBDudMK4BBLdaQ5F/txsNWhuUOtnoDPNFc4ZNUK8MC3PNSO5E4toeHLcWX
-         0e9DguAKecQPkrpr+VojuklhdH5KL2//IT5I0k5lr22p3kALtgd7yzkhRv/m/HEko4bF
-         Y89WSL2QfDYRXqasBY68TBO4kBBxh6ZqJWSFs/31bI9Hz7sM82twqwXiAKWL8Gor3hHv
-         VGAsSpqEIv95dQ5P922UqRIVWtmWpwJYRc+tJQrVk3bn3TymVB5iykqglR8Nl97I4MwV
-         ro2B3l+ulbocu4VgDlbI/zEtXF/2HqSfFpb1yKn9JTE+C1arp4ukExO7aLsjoeORyECk
-         KtrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUcoKneu5VZzeAsbujF+0qBXN15riMjqZGOl9vsoMi9FdotKaM8y0XC7CMKDjgtx/GHQ9u41EC2z0NndSfg+ZDGC3kQ
-X-Gm-Message-State: AOJu0Yw1ypfGgMJjzQDGxCSgTN+azwpETELz3ws8/aCdXx6KkDBaBJSf
-	8czgCvMjVN6UeEL/r3/bFUsdXamBv5mYIZM+XU74uzbsZlNIKH78yVwofogQKcFLKAFuuRXZmi/
-	8ZCOnTjbLN4mVVrQxGCuv6dEwBynmWS4c
-X-Google-Smtp-Source: AGHT+IGVeHjPEwaNm7To+Ndlz1PkLEXKRYromCSMGPuMN6d3+poPAVkdgsv0tJZPl8D78rdU8rHYpW/DjOgI2G7EvhI=
-X-Received: by 2002:a17:902:f64d:b0:1dd:a16e:dea4 with SMTP id
- m13-20020a170902f64d00b001dda16edea4mr5622876plg.67.1710536833480; Fri, 15
- Mar 2024 14:07:13 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="t4qE5XXz"
+Message-ID: <5f450439-3400-45cb-bb62-4559bd6e088e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1710537124;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xOAHpfzXDspbl58UkIknw9ZqxHAdHjN22/pRm7dUv/A=;
+	b=t4qE5XXzsRE50gGpMBjUHqk5Bu4EZG4MzUQBEyCuL5dXlhgz0ShnsZPiF6CtWiV+W1m7xj
+	M2yCNnU7rX1uVEIErJHuaNgglF/wVvku1w7OW6Ye7fMWu320FPJZjouURI7uFEu2Sbw/6T
+	qXnUkC8vJnpGnHHnnsupyN0I6GBMr1U=
+Date: Fri, 15 Mar 2024 14:11:51 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240315051813.1320559-1-andrii@kernel.org> <20240315051813.1320559-2-andrii@kernel.org>
- <CAADnVQLFCVCdb4Uu+6QJMDybUc5RqLCF-5yS2eQVoQ==qq3vvQ@mail.gmail.com>
- <CAEf4BzYuMJVoEhK=wHhzDN2193ZvTupG6i+Ya6YjZNWohdADxQ@mail.gmail.com>
- <CAEf4BzY433C4NJog_mQLQC0oK_7k5zs2xSgxx9qQ7f+QsST5cA@mail.gmail.com> <CAADnVQKYDLEkcfWCfs6xzBc_gfn-dSX39WynoKV629Q-Kw1aQA@mail.gmail.com>
-In-Reply-To: <CAADnVQKYDLEkcfWCfs6xzBc_gfn-dSX39WynoKV629Q-Kw1aQA@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 15 Mar 2024 14:07:01 -0700
-Message-ID: <CAEf4BzYsWuYHQnUW9qLQtRzWL3tphXABuM-dyvQscugN0adNtA@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 2/2] selftests/bpf: add fast mostly in-kernel
- BPF triggering benchmarks
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@meta.com>, 
-	Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next v3 2/2] bpf: Check return from set_memory_rox()
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Zi Shen Lim <zlim.lnx@gmail.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Kui-Feng Lee <thinker.li@gmail.com>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ Kees Cook <keescook@chromium.org>
+References: <2b9fdb119ef73cfa4516572026ba4936e86aedca.1710522112.git.christophe.leroy@csgroup.eu>
+ <4d7cc25e937403ac61ae61be06f998f27e631a65.1710522112.git.christophe.leroy@csgroup.eu>
+ <55151dc9-8edf-4c75-b1d0-1cc0437816c3@linux.dev>
+In-Reply-To: <55151dc9-8edf-4c75-b1d0-1cc0437816c3@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Mar 15, 2024 at 11:48=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Mar 15, 2024 at 9:59=E2=80=AFAM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Fri, Mar 15, 2024 at 9:31=E2=80=AFAM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Fri, Mar 15, 2024 at 9:03=E2=80=AFAM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Thu, Mar 14, 2024 at 10:18=E2=80=AFPM Andrii Nakryiko <andrii@ke=
-rnel.org> wrote:
-> > > > >
-> > > > > Existing kprobe/fentry triggering benchmarks have 1-to-1 mapping =
-between
-> > > > > one syscall execution and BPF program run. While we use a fast
-> > > > > get_pgid() syscall, syscall overhead can still be non-trivial.
-> > > > >
-> > > > > This patch adds kprobe/fentry set of benchmarks significantly amo=
-rtizing
-> > > > > the cost of syscall vs actual BPF triggering overhead. We do this=
- by
-> > > > > employing BPF_PROG_TEST_RUN command to trigger "driver" raw_tp pr=
-ogram
-> > > > > which does a tight parameterized loop calling cheap BPF helper
-> > > > > (bpf_get_smp_processor_id()), to which kprobe/fentry programs are
-> > > > > attached for benchmarking.
-> > > > >
-> > > > > This way 1 bpf() syscall causes N executions of BPF program being
-> > > > > benchmarked. N defaults to 100, but can be adjusted with
-> > > > > --trig-batch-iters CLI argument.
-> > > > >
-> > > > > Results speak for themselves:
-> > > > >
-> > > > > $ ./run_bench_trigger.sh
-> > > > > uprobe-base         :  138.054 =C2=B1 0.556M/s
-> > > > > base                :   16.650 =C2=B1 0.123M/s
-> > > >
-> > > > What's going on here? Why two bases are so different?
-> > > > I thought the "base" is what all other benchmarks
-> > > > should be compared against.
-> > > > The "base" is the theoretical maximum for all benchs.
-> > > > Or uprobe* benches should be compared with uprobe-base
-> > > > while all other benchs compared with 'base' ?
-> > > > Probably not anymore due to this new approach.
-> > > > The 'base' is kinda lost its value then.
-> > >
-> > > naming is hard. base is doing syscall(get_pgid) in a tight loop. It's
-> > > base compared to previous trigger benchmarks where we used syscall to
-> > > trigger kprobe/fentry programs. uprobe-base is just a user-space loop
-> > > that does atomic_inc() in a tight loop. So uprobe-base is basically
-> > > the measure of how fast CPU is, but it's unrealistic to expect either
-> > > fentry/kprobe to get close, and especially it's unrealistic to expect
-> > > uprobes to get close to it.
-> > >
-> > > Naming suggestions are welcome, though.
-> > >
-> > > I'm not sure what the "base" should be for xxx-fast benchmarks? Doing
-> > > a counter loop in driver BPF program, perhaps? Would you like me to
-> > > add base-fast benchmark doing just that?
-> > >
-> >
-> > How about this.
-> >
-> > base -> base-syscall (i.e., "syscall-calling baseline")
-> > uprobe-base -> base-user-loop (i.e., "user space-only baseline")
-> > and then for "fast" baseline we add "base-kernel-loop" for
-> > "kernel-side looping baseline"
->
-> I think "base" part in both doesn't fit.
-> Maybe
-> base -> syscall_loop
-> uprobe-base - user_space_loop
+On 3/15/24 1:55 PM, Martin KaFai Lau wrote:
+> On 3/15/24 10:06 AM, Christophe Leroy wrote:
+>> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+>> index 43356faaa057..ca1d9b87c475 100644
+>> --- a/kernel/bpf/bpf_struct_ops.c
+>> +++ b/kernel/bpf/bpf_struct_ops.c
+>> @@ -742,8 +742,11 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map 
+>> *map, void *key,
+>>           if (err)
+>>               goto reset_unlock;
+>>       }
+>> -    for (i = 0; i < st_map->image_pages_cnt; i++)
+>> -        arch_protect_bpf_trampoline(st_map->image_pages[i], PAGE_SIZE);
+>> +    for (i = 0; i < st_map->image_pages_cnt && !err; i++)
+>> +        err = arch_protect_bpf_trampoline(st_map->image_pages[i], PAGE_SIZE);
+>> +
+>> +    if (err)
+>> +        goto reset_unlock;
+> 
+> This part does not look right. The "if (err)" check should be inside the for loop.
 
-ok
-
->
-> since the first is only doing syscall in a loop
-> and the 2nd doesn't even go to the kernel.
->
-> >
-> > Or we can use some naming based on "counting": base-syscall-count,
-> > base-user-count, base-kernel-count?
->
-> Instead of fenty-fast -> fentry-batch
-> sounds more accurate.
->
-
-ok, -batch it is
-
-> But in general it doesn't feel right to keep the existing
-> benchs, since we've discovered that syscall overhead
-> affects the measurement so much.
-> I think we should bite the bullet and use bpf_testmod in bench tool.
-
-This will worsen the logistics of using it for any benchmark so much
-that it will be pretty much a useless tool.
-
-I can try to find some other way to trigger tracepoint and fmod_ret
-without relying on custom modules, but I'd rather just remove those
-benchmarks altogether than add dependency on bpf_testmod.
-
-> Then we can add a tracepoint there and call it in proper kernel loop,
-> then add fmodret-able empty function and call it in another loop.
->
-> Then bench tool can trigger them via bpf->kfunc->that_looping_helper
-> and capture as accurate as possibly overhead of
-> tp, raw_tp, kprobe, fentry, fmodret.
-> And all of them will be comparable to each other.
-> Right now fmodret vs fentry are comparable, but both have
-> syscall time addon which makes the comparison questionable.
-> Especially consider the kernels with mitigations.
-> Overhead of syscall is even higher and the delta is smaller,
-> to the point that fentry vs fexit might measure equal.
-
-It's still useful to be able to do this, even if syscall overhead is
-very measurable. Because when profiling it's easy to filter out
-syscall overhead and compare purely fentry vs fexit overheads.
-
-Even with mitigations on the differences between fentry and fexit are
-measurable. And bench is a nice tool to generate non-stop work to be
-able to capture profiling data conveniently. While a custom test
-module will make it much harder.
-
-
-> A benchmarking tool should be a gold standard and accurate tool
-> for performance measurement.
->
-
-This was neither a goal, nor do I sign up for that aspiration :) It's
-first and foremost a small and useful tool for doing local performance
-optimization work when it comes to BPF-related functionality in the
-kernel. And its portability is a huge part of this.
-
-> The trick:
-> +       for (i =3D 0; i < batch_iters; i++)
-> +               (void)bpf_get_smp_processor_id(); /* attach here to bench=
-mark */
->
-> is neat, but since it works for fentry/kprobe only
-> we need testmod to generalize it for fmodret and tracepoints.
-
-see above, I agree it would be nice to have (and I'll look for some
-other ways to achieve this), but is not really a required property to
-make benchmark useful
-
-For now, I'll drop this patch and re-submit the first one with
-__always_inline removed just to get those prerequisites landed.
+ah. Please ignore. missed the "!err" in the for loop.
