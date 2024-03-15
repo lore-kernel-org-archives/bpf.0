@@ -1,292 +1,209 @@
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2688D52F67;
-	Fri, 15 Mar 2024 18:11:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D9E4E1CB;
+	Fri, 15 Mar 2024 18:27:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710526272; cv=none; b=IxhJPbzC4E26CMfZapolTUk3xy4xg6OdSlGk661qJpOSwJC0Bw9vSt1NWJC+FuR/1myzDWb9wMzyikK3reBaYL6t/Fm1luj/sbN3EcLjIgqpewVoajrrSVgS1jA/xvk0pDh7q/hyFEA6fEU+wRnkSn34cJmyFZp6hyHuXgDj5HE=
+	t=1710527257; cv=none; b=NnuFKW8v8yHNJugOKCmYkU3d5bqa/UcZImihYEExwAP4PxfPnNL48hceBntKKbImmYDFPMISj/B4PnAMFBz/wpCWhSMjtY+6IQbj0kGdikk7tbiXNIGFyqkvNL9ODAke506mmEbDfOAP8K7hIJaUrITw/jeutH7jh44Rx8SgnUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710526272; c=relaxed/simple;
-	bh=j9QIo+jCdhoiNtOSD/8EpbL+Ms0m/c15WxP70y159+k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pFmCCzJGN00rkbJ9cxh2AcLpPh2E6/XqkwInhalNuK1P2GqM8m6lL+AbzJOS+HoFgkzy3CbPkNKtGx3YsAlfrhXTb7qUpL+07WD/vT5+nXQ46/jhcglo3AQAZdHQ/zziSczJSYDQ26urmycUT6bQHM6+D/IYk/Y0pUVZeL6IjK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jBpNPuvQ; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710527257; c=relaxed/simple;
+	bh=o+Uvyz4YzYO4LBu6eCmoOI+ch0BavL/du69hBKagie8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=I4XjxLsJNpNJZfTTp6gf6UneTL4/txUy2e/oVRdKOmLKzPuX/j+GvyqhK0li850g3MyAJODTmNiG8jUEXF8sLI0tt0vfvaxU75Qd8ibN0Ws+2g1X6aQpic7OZoNFzqkluD4NQo6jZveN2NYr14uU8IWTQkSqDXt9btWSnIMdxDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=cozzzGfK; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jBpNPuvQ"
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-dcc6fc978ddso2111583276.0;
-        Fri, 15 Mar 2024 11:11:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="cozzzGfK"
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-dcbcea9c261so2489884276.3;
+        Fri, 15 Mar 2024 11:27:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710526268; x=1711131068; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wns2fwvyNkdEZZpKRyhgpab3kcINnCYinHWwLelxHhU=;
-        b=jBpNPuvQZT9S5VXRP3CFm8YBGsJnh8Nj0b/X/UTIFhTMe2VmrtLE5RVia/2+rS+46s
-         Xxwow0tkI3VzYhbFKs1USbqK1jKF7ejAZyCCbwMWG+2cvUhH8MW3hYw6vQjiaH/+eig7
-         uBk7E8+YZtC5ysHHFyv7toHJgtMjLxSAuIfW4ICEn7QEaZ6fbQQ1JIeZiPlRVrJ0tS/q
-         SDk0Fmnjk8k6DcFaxQWlLdl1MvcEskpKK4H6aMcPengVRF3RlzsRve+7dwHw0f9N1M5e
-         gUBOBQ8NXelHYPCzfS6UjxhPYT+pofQvUgm9NaIuhCl58MVKosCiUydUaoEwuK5GpYL9
-         9wFg==
+        d=googlemail.com; s=20230601; t=1710527253; x=1711132053; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D0l8ekWw0JTpeXusMsWqfGloumBIBWf5eNxMM1W0z7I=;
+        b=cozzzGfKpT66ssrNAfg7iJ8n0V/H88qsF4qgHUwGlym0eZ2sapdJnpZu2+tv4jOr9F
+         Rqq6Yl8p7NmVHdJLtkJAeZT1DDfUeb/cpFiU6/51lTWEMwGPdFR/MszrwuN5qH5OG2ud
+         ADJ1MNMDu1cb8ayUAzcILcH90G+TgrBKrBa0R9ZdZtuYWY0gym0nsjDy92kM6c50w+LB
+         fMBuqaYl9FDCxxONryz3SPM7reaq2AqFbJcvzQkc76SUcYKk8TllKZeT/CKWFrDCYuOn
+         hx5AcuHAEkYa2do0IVC56FiY2phEcaH/3rgvwVMIa8CEPG/WLu9fRCNXWBYECm7BbnPz
+         u1TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710526268; x=1711131068;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wns2fwvyNkdEZZpKRyhgpab3kcINnCYinHWwLelxHhU=;
-        b=ZUlSvA1xmv6lMUsi3S5Dl/FaWWaCeWYLAIobD226YQARy5cb+07cHzsfQlefMjzTf1
-         0k+Kz45WSsvWiQvRHz4hnaUIF1arptm/e3Zz4LT2QELkbo8g5aavYEYmpJiFotUT1uve
-         2Oxb6PkQ/5OAnU26nDmoGYdVy75Q6wggCMn2cy1E14vrqvoDpNrsVJ8icKJ4N+TSV7PF
-         tkZAMj+cMPHF6p7ptL5Y8/d6qkWh8lrJlrPvSqvV+gYtHHZBkbIFdENSCD6WN5CRJO/t
-         lffjPb8NFXdcSiFsxXEV5qIHisGAJGZsHNA3KOl24+u6M79FVYTtQdn89JEhBeKmq2dn
-         XRBw==
-X-Forwarded-Encrypted: i=1; AJvYcCV64ect8wW/Om1jk2b3pbydxdV5zGaaSdGpg3e7nRNC/uHF+6oVib9bu7xnJS0ge9pdEoHZgq4vUWhdKRLRQwD3RnJm2f7nu/Ux9GFqMikXHjGwRmmQuVVLiTYe5ifc92CcExH4
-X-Gm-Message-State: AOJu0Yw4+brweKmC8ZR6Quiget/FR9MuEFxWBegXMeJBCuRDGMAqoPMq
-	Q0//C46UcyparZkzXD2eI0Yb+1tWfsICdDypz29o7YBQCE0S7UG2
-X-Google-Smtp-Source: AGHT+IFtmPNyk9mDjkdenKEr/0G1s9O0oEqpdjREeK39S3zOuolNugAqBE58cIP4upNCEGPS1v7kKA==
-X-Received: by 2002:a25:ab34:0:b0:dc2:a46:3d29 with SMTP id u49-20020a25ab34000000b00dc20a463d29mr4429807ybi.9.1710526267974;
-        Fri, 15 Mar 2024 11:11:07 -0700 (PDT)
-Received: from ?IPV6:2600:1700:6cf8:1240:6c5d:5b71:895e:beb6? ([2600:1700:6cf8:1240:6c5d:5b71:895e:beb6])
-        by smtp.gmail.com with ESMTPSA id c11-20020a25f30b000000b00dc74d5e3ff7sm773061ybs.31.2024.03.15.11.11.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Mar 2024 11:11:07 -0700 (PDT)
-Message-ID: <81492d37-47b2-4fca-ba2f-9528c2d41029@gmail.com>
-Date: Fri, 15 Mar 2024 11:11:04 -0700
+        d=1e100.net; s=20230601; t=1710527253; x=1711132053;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D0l8ekWw0JTpeXusMsWqfGloumBIBWf5eNxMM1W0z7I=;
+        b=jqVY9xksV3Fts1OKbr5CQFDXgCYR+Wr9AxBihi+ue+cA1lPwtrQpZUbrK5/s3plaSa
+         cj2MdMiIq6qQUb3lrDMz/0v6qYDbEiiMpEtlUXW2VS3IwkHeigOC3gmxjuxir7D+kckx
+         YiO7AMRV6UffK/pmapN0QtEJ0jd9QDDUdvgsQL41e9aZiq4I9V62W3THwHd94corK1Wo
+         Kq/gLTeLrRGrvRz2bH2Y5zUc3ZYvi8VboM+VgGs5qkvs+utknfmvvOneJStd7IKMCV59
+         Won3gllL0nsXiOD01F9p3Q0rEkX4b9RG1daY0sElgUyQvFQnGYi98vmsMvx9CTpeR7pM
+         Qmrw==
+X-Forwarded-Encrypted: i=1; AJvYcCXEbR337+prm7xImgbqFl7s/ZyVAM04f8Q4wJyCUriTHN4xt4nElMaXI3RC+4hkyefIoygXMnFpXaX/t5PFpcRlrdJc7sFHezmgnLUvrbOiPJEqxYyYWVxRz6aG+8uVM7CK7HTPniHiTvh5hl41rjHjusl9IRakS8U0Dd6sVlw=
+X-Gm-Message-State: AOJu0YyqzdZ/q6bvyJ3JUA1B/M2XWNJ9ns2QnnftYRQaC2y5ueaM+63k
+	OgtiDTNk160tQ0/VADlX/nzdIiyAEpsqRvZrz3a/dz7SoxsutMIsEyXkN8r2mKAqzdA9NnmwGB1
+	u4tLxfu1lyZcDE6P5sTqHBJomClIpIRlNAMAvsg==
+X-Google-Smtp-Source: AGHT+IFMhRRjG1ESUWFYiuNmqAYpvAzNTCRsgxJSy0t7rB+pBcx68HYz73ujPmf7VrBo4DOXQP/Zl+MVoPGaKfXcYu0=
+X-Received: by 2002:a25:bcc6:0:b0:dc6:ff32:aae2 with SMTP id
+ l6-20020a25bcc6000000b00dc6ff32aae2mr5004033ybm.63.1710527253128; Fri, 15 Mar
+ 2024 11:27:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 2/2] bpf: Check return from set_memory_rox()
-Content-Language: en-US
-To: Christophe Leroy <christophe.leroy@csgroup.eu>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Zi Shen Lim <zlim.lnx@gmail.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Kui-Feng Lee <thinker.li@gmail.com>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- Kees Cook <keescook@chromium.org>
-References: <2b9fdb119ef73cfa4516572026ba4936e86aedca.1710522112.git.christophe.leroy@csgroup.eu>
- <4d7cc25e937403ac61ae61be06f998f27e631a65.1710522112.git.christophe.leroy@csgroup.eu>
-From: Kui-Feng Lee <sinquersw@gmail.com>
-In-Reply-To: <4d7cc25e937403ac61ae61be06f998f27e631a65.1710522112.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240315113828.258005-1-cgzones@googlemail.com>
+ <20240315113828.258005-2-cgzones@googlemail.com> <CAEf4BzZF0A9qEzmRigHFLQ4vBQshGUQWZVG5L0q2_--kx4=AXA@mail.gmail.com>
+In-Reply-To: <CAEf4BzZF0A9qEzmRigHFLQ4vBQshGUQWZVG5L0q2_--kx4=AXA@mail.gmail.com>
+From: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Date: Fri, 15 Mar 2024 19:27:22 +0100
+Message-ID: <CAJ2a_Dfy3DKnsZZhKUXiMbG-NZqH0APwz3tGF1Fdma+nYcHmOQ@mail.gmail.com>
+Subject: Re: [PATCH 02/10] capability: add any wrappers to test for multiple
+ caps with exactly one audit message
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: linux-security-module@vger.kernel.org, linux-block@vger.kernel.org, 
+	Serge Hallyn <serge@hallyn.com>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, 15 Mar 2024 at 17:46, Andrii Nakryiko <andrii.nakryiko@gmail.com> w=
+rote:
+>
+> On Fri, Mar 15, 2024 at 4:39=E2=80=AFAM Christian G=C3=B6ttsche
+> <cgzones@googlemail.com> wrote:
+> >
+> > Add the interfaces `capable_any()` and `ns_capable_any()` as an
+> > alternative to multiple `capable()`/`ns_capable()` calls, like
+> > `capable_any(CAP_SYS_NICE, CAP_SYS_ADMIN)` instead of
+> > `capable(CAP_SYS_NICE) || capable(CAP_SYS_ADMIN)`.
+> >
+> > `capable_any()`/`ns_capable_any()` will in particular generate exactly
+> > one audit message, either for the left most capability in effect or, if
+> > the task has none, the first one.
+> >
+> > This is especially helpful with regard to SELinux, where each audit
+> > message about a not allowed capability request will create a denial
+> > message.  Using this new wrapper with the least invasive capability as
+> > left most argument (e.g. CAP_SYS_NICE before CAP_SYS_ADMIN) enables
+> > policy writers to only grant the least invasive one for the particular
+> > subject instead of both.
+> >
+> > CC: linux-block@vger.kernel.org
+> > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> > ---
+> > v5:
+> >    - add check for identical passed capabilities
+> >    - rename internal helper according to flag rename to
+> >      ns_capable_noauditondeny()
+> > v4:
+> >    Use CAP_OPT_NODENYAUDIT via added ns_capable_nodenyaudit()
+> > v3:
+> >    - rename to capable_any()
+> >    - fix typo in function documentation
+> >    - add ns_capable_any()
+> > v2:
+> >    avoid varargs and fix to two capabilities; capable_or3() can be adde=
+d
+> >    later if needed
+> > ---
+> >  include/linux/capability.h | 10 ++++++
+> >  kernel/capability.c        | 73 ++++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 83 insertions(+)
+> >
+>
+> [...]
+>
+> >
+> > +/**
+> > + * ns_capable_any - Determine if the current task has one of two super=
+ior capabilities in effect
+> > + * @ns:  The usernamespace we want the capability in
+> > + * @cap1: The capabilities to be tested for first
+> > + * @cap2: The capabilities to be tested for secondly
+> > + *
+> > + * Return true if the current task has at least one of the two given s=
+uperior
+> > + * capabilities currently available for use, false if not.
+> > + *
+> > + * In contrast to or'ing capable() this call will create exactly one a=
+udit
+> > + * message, either for @cap1, if it is granted or both are not permitt=
+ed,
+> > + * or @cap2, if it is granted while the other one is not.
+> > + *
+> > + * The capabilities should be ordered from least to most invasive, i.e=
+. CAP_SYS_ADMIN last.
+> > + *
+> > + * This sets PF_SUPERPRIV on the task if the capability is available o=
+n the
+> > + * assumption that it's about to be used.
+> > + */
+> > +bool ns_capable_any(struct user_namespace *ns, int cap1, int cap2)
+> > +{
+> > +       if (cap1 =3D=3D cap2)
+> > +               return ns_capable(ns, cap1);
+> > +
+> > +       if (ns_capable_noauditondeny(ns, cap1))
+> > +               return true;
+> > +
+> > +       if (ns_capable_noauditondeny(ns, cap2))
+> > +               return true;
+> > +
+> > +       return ns_capable(ns, cap1);
+>
+> this will incur an extra capable() check (with all the LSMs involved,
+> etc), and so for some cases where capability is expected to not be
+> present, this will be a regression. Is there some way to not redo the
+> check, but just audit the failure? At this point we do know that cap1
+> failed before, so might as well just log that.
 
+Logging the failure is quite different in AppArmor and SELinux, so
+just log might not be so easy.
+One option would be to change the entire LSM hook security_capable()
+to take two capability arguments, and let the LSMs handle the any
+logic.
 
-On 3/15/24 10:06, Christophe Leroy wrote:
-> arch_protect_bpf_trampoline() and alloc_new_pack() call
-> set_memory_rox() which can fail, leading to unprotected memory.
-> 
-> Take into account return from set_memory_rox() function and add
-> __must_check flag to arch_protect_bpf_trampoline().
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> ---
-> v3:
-> - Rebased and handled conflict in kernel/bpf/bpf_struct_ops.c
-> 
-> v2:
-> - Move list_add_tail(&pack->list, &pack_list) at the end of alloc_new_pack()
-> - Split 2 lines that are reported longer than 80 chars by BPF patchwork's checkpatch report.
-> ---
->   arch/arm64/net/bpf_jit_comp.c  |  3 ++-
->   arch/x86/net/bpf_jit_comp.c    |  3 ++-
->   include/linux/bpf.h            |  2 +-
->   kernel/bpf/bpf_struct_ops.c    |  7 +++++--
->   kernel/bpf/core.c              | 29 ++++++++++++++++++++++-------
->   kernel/bpf/trampoline.c        |  8 +++++---
->   net/bpf/bpf_dummy_struct_ops.c |  4 +++-
->   7 files changed, 40 insertions(+), 16 deletions(-)
-> 
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index 132c8ffba109..bc16eb694657 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -2176,8 +2176,9 @@ void arch_free_bpf_trampoline(void *image, unsigned int size)
->   	bpf_prog_pack_free(image, size);
->   }
->   
-> -void arch_protect_bpf_trampoline(void *image, unsigned int size)
-> +int arch_protect_bpf_trampoline(void *image, unsigned int size)
->   {
-> +	return 0;
->   }
->   
->   int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *ro_image,
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index 7a56d2d84512..4900b1ee019f 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -3004,8 +3004,9 @@ void arch_free_bpf_trampoline(void *image, unsigned int size)
->   	bpf_prog_pack_free(image, size);
->   }
->   
-> -void arch_protect_bpf_trampoline(void *image, unsigned int size)
-> +int arch_protect_bpf_trampoline(void *image, unsigned int size)
->   {
-> +	return 0;
->   }
->   
->   int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *image_end,
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index d89bdefb42e2..17843e66a1d3 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1116,7 +1116,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
->   				void *func_addr);
->   void *arch_alloc_bpf_trampoline(unsigned int size);
->   void arch_free_bpf_trampoline(void *image, unsigned int size);
-> -void arch_protect_bpf_trampoline(void *image, unsigned int size);
-> +int __must_check arch_protect_bpf_trampoline(void *image, unsigned int size);
->   int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
->   			     struct bpf_tramp_links *tlinks, void *func_addr);
->   
-> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-> index 43356faaa057..ca1d9b87c475 100644
-> --- a/kernel/bpf/bpf_struct_ops.c
-> +++ b/kernel/bpf/bpf_struct_ops.c
-> @@ -742,8 +742,11 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
->   		if (err)
->   			goto reset_unlock;
->   	}
-> -	for (i = 0; i < st_map->image_pages_cnt; i++)
-> -		arch_protect_bpf_trampoline(st_map->image_pages[i], PAGE_SIZE);
-> +	for (i = 0; i < st_map->image_pages_cnt && !err; i++)
-> +		err = arch_protect_bpf_trampoline(st_map->image_pages[i], PAGE_SIZE);
-> +
-> +	if (err)
-
-nit: Can it be more specific? I mean to check err < 0, so we can reason
-that this function never returns a positive value other than 0.
-
-> +		goto reset_unlock;
->   
->   	if (st_map->map.map_flags & BPF_F_LINK) {
->   		err = 0;
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 63f100def31b..1e761c3c66db 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -908,23 +908,31 @@ static LIST_HEAD(pack_list);
->   static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fill_hole_t bpf_fill_ill_insns)
->   {
->   	struct bpf_prog_pack *pack;
-> +	int err;
->   
->   	pack = kzalloc(struct_size(pack, bitmap, BITS_TO_LONGS(BPF_PROG_CHUNK_COUNT)),
->   		       GFP_KERNEL);
->   	if (!pack)
->   		return NULL;
->   	pack->ptr = bpf_jit_alloc_exec(BPF_PROG_PACK_SIZE);
-> -	if (!pack->ptr) {
-> -		kfree(pack);
-> -		return NULL;
-> -	}
-> +	if (!pack->ptr)
-> +		goto out;
->   	bpf_fill_ill_insns(pack->ptr, BPF_PROG_PACK_SIZE);
->   	bitmap_zero(pack->bitmap, BPF_PROG_PACK_SIZE / BPF_PROG_CHUNK_SIZE);
-> -	list_add_tail(&pack->list, &pack_list);
->   
->   	set_vm_flush_reset_perms(pack->ptr);
-> -	set_memory_rox((unsigned long)pack->ptr, BPF_PROG_PACK_SIZE / PAGE_SIZE);
-> +	err = set_memory_rox((unsigned long)pack->ptr,
-> +			     BPF_PROG_PACK_SIZE / PAGE_SIZE);
-> +	if (err)
-> +		goto out_free;
-> +	list_add_tail(&pack->list, &pack_list);
->   	return pack;
-> +
-> +out_free:
-> +	bpf_jit_free_exec(pack->ptr);
-> +out:
-> +	kfree(pack);
-> +	return NULL;
->   }
->   
->   void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns)
-> @@ -939,9 +947,16 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns)
->   		size = round_up(size, PAGE_SIZE);
->   		ptr = bpf_jit_alloc_exec(size);
->   		if (ptr) {
-> +			int err;
-> +
->   			bpf_fill_ill_insns(ptr, size);
->   			set_vm_flush_reset_perms(ptr);
-> -			set_memory_rox((unsigned long)ptr, size / PAGE_SIZE);
-> +			err = set_memory_rox((unsigned long)ptr,
-> +					     size / PAGE_SIZE);
-> +			if (err) {
-> +				bpf_jit_free_exec(ptr);
-> +				ptr = NULL;
-> +			}
->   		}
->   		goto out;
->   	}
-> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> index 04fd1abd3661..cc50607f8d8c 100644
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
-> @@ -456,7 +456,9 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
->   	if (err < 0)
->   		goto out_free;
-
-Same here
-
->   
-> -	arch_protect_bpf_trampoline(im->image, im->size);
-> +	err = arch_protect_bpf_trampoline(im->image, im->size);
-> +	if (err)
-> +		goto out_free;
->   
->   	WARN_ON(tr->cur_image && total == 0);
->   	if (tr->cur_image)
-> @@ -1072,10 +1074,10 @@ void __weak arch_free_bpf_trampoline(void *image, unsigned int size)
->   	bpf_jit_free_exec(image);
->   }
->   
-> -void __weak arch_protect_bpf_trampoline(void *image, unsigned int size)
-> +int __weak arch_protect_bpf_trampoline(void *image, unsigned int size)
->   {
->   	WARN_ON_ONCE(size > PAGE_SIZE);
-> -	set_memory_rox((long)image, 1);
-> +	return set_memory_rox((long)image, 1);
->   }
->   
->   int __weak arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
-> diff --git a/net/bpf/bpf_dummy_struct_ops.c b/net/bpf/bpf_dummy_struct_ops.c
-> index de33dc1b0daa..25b75844891a 100644
-> --- a/net/bpf/bpf_dummy_struct_ops.c
-> +++ b/net/bpf/bpf_dummy_struct_ops.c
-> @@ -133,7 +133,9 @@ int bpf_struct_ops_test_run(struct bpf_prog *prog, const union bpf_attr *kattr,
->   	if (err < 0)
->   		goto out;
->   
-> -	arch_protect_bpf_trampoline(image, PAGE_SIZE);
-> +	err = arch_protect_bpf_trampoline(image, PAGE_SIZE);
-> +	if (err)
-
-Same here.
-
-> +		goto out;
->   	prog_ret = dummy_ops_call_op(image, args);
->   
->   	err = dummy_ops_copy_args(args);
+> > +}
+> > +EXPORT_SYMBOL(ns_capable_any);
+> > +
+> > +/**
+> > + * capable_any - Determine if the current task has one of two superior=
+ capabilities in effect
+> > + * @cap1: The capabilities to be tested for first
+> > + * @cap2: The capabilities to be tested for secondly
+> > + *
+> > + * Return true if the current task has at least one of the two given s=
+uperior
+> > + * capabilities currently available for use, false if not.
+> > + *
+> > + * In contrast to or'ing capable() this call will create exactly one a=
+udit
+> > + * message, either for @cap1, if it is granted or both are not permitt=
+ed,
+> > + * or @cap2, if it is granted while the other one is not.
+> > + *
+> > + * The capabilities should be ordered from least to most invasive, i.e=
+. CAP_SYS_ADMIN last.
+> > + *
+> > + * This sets PF_SUPERPRIV on the task if the capability is available o=
+n the
+> > + * assumption that it's about to be used.
+> > + */
+> > +bool capable_any(int cap1, int cap2)
+> > +{
+> > +       return ns_capable_any(&init_user_ns, cap1, cap2);
+> > +}
+> > +EXPORT_SYMBOL(capable_any);
+> > +
+> >  /**
+> >   * capable - Determine if the current task has a superior capability i=
+n effect
+> >   * @cap: The capability to be tested for
+> > --
+> > 2.43.0
+> >
+> >
