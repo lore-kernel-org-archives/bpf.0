@@ -1,165 +1,132 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82FC11DA5E
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 18:49:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0868455C2C
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 18:50:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710528569; cv=none; b=U7iavi0axX7gWzy5Fk9Z329BVOaN72gnobbZ/7w5ALLzbkjE1Hu0Grw6nqnU5iwXWc/RK2iPJBl0wSW1YHZgufG3b2otQiiTLDvTiezugxKKbGcerXBSR/2xbb8r+7U8Bi0TKl5v0U8GiuILvnXQmPpI1XkZ+/CsIl3ad7rRaxw=
+	t=1710528656; cv=none; b=MjcxHycppANPoSQoLVUaSZW753lmq7+SgKtv7t9BH1+uC0aeyyioKr3BA+98AfXZE1DZ0HsZ8MZEjsrH1yiZ81VmoJfAun0HK36NFmUk5iXG1rhHoUMBA6oNryML4SBxje1mW3wdKdYT7k7ECLuOTOWtGEHYXUNeT7cUulkvEp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710528569; c=relaxed/simple;
-	bh=LnjhNUOucdg4COeefYoicIPoLA1piNa5SrKNTAQVBNY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=l3H4h6GxuSABG6H0ZhnHuJAIL/FDPkBRGXBGJHU0tgl3yX3jFSSweQTYdJ0c8IRBIFW7wNqctq/rytUda6bvMcC7LeeDhBJF9sXuWIgwGLkvLsm0j2oqq7NaKQHrQwRqADX3LxAnL+Jm87rp5Yjgk26WFQY9VKhy/BxT+qfdTZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 3DAD51D1E671; Fri, 15 Mar 2024 11:49:15 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Yury Namgung <ynamgung@meta.com>
-Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Add a sk_msg prog bpf_get_ns_current_pid_tgid() test
-Date: Fri, 15 Mar 2024 11:49:15 -0700
-Message-ID: <20240315184915.2976718-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240315184849.2974556-1-yonghong.song@linux.dev>
-References: <20240315184849.2974556-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1710528656; c=relaxed/simple;
+	bh=lmLbRKyghwboNWtEfGotXrpbpxUAQ3nWSRJz7Qjgis4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=pCFWikKz0ds4BkC8RKE7L3CFGWIQp6zmKyugymk5YtJPasbIDeWwrz9OBuUjDGMjUoRt6OtVotcG4tdJbz8Gn+3RNivoMp2JLa1ls2g20Xacl4qNPBXYKzqDxguvD9ztYpqYPWG6GOXObLn5IkdjvL7VcXyAFz2nwZz3sEKh+UE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Me6YpGFg; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Me6YpGFg"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-5d8bcf739e5so1846505a12.1
+        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 11:50:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1710528651; x=1711133451; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DtYC38JTkqYWVAKyPrGYPSxbyTCY8qOTTr3Tw0hY0wc=;
+        b=Me6YpGFgLPzRDHruPgCnsdhJ68KCQZHfI2goX8dddUqMBoEla5jRvOdvp0wwKedQ4c
+         jCHjgxtcdXX580dtlrqnIEUQIe/E0axvVD5uR8iDREoLJ25c19SMgyeQHM/XmnNqgWMB
+         tWOGGL+IpxpdRvACN4b5G1h41TaBWMvP5ckTuhOZ7hfS8mpqdUk2HAeVeyw8aFWVFOwc
+         gt85LrJKG0527y1qwG5ifEsPyP4mA/HCFYHBGvHUi2NdLVQppvhYhBlg1QFEDxkG06g4
+         bGzJYZ5dPYmEdCXOfgd00WYcduQpU+adLCz4pzLyF+UgxvlHpdR8olqJbaE+/rYvHi4q
+         6ogg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710528651; x=1711133451;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DtYC38JTkqYWVAKyPrGYPSxbyTCY8qOTTr3Tw0hY0wc=;
+        b=FF2ZPCJD+gEUNp/dn2ukMD8TAKyjEXfNgs70e3cPurHJgMVHhda+i/9nyw80BL929y
+         zOreSrGHz21t575HoZ8T/fEn43FtLQRQjPA5yR/FAeKvSUGWrZna5cdhb5uv2tTJrUoU
+         vsUfA927XGcTFHdCj7cXXzeNOj5TmvAYOm5os5RRJJ0jfi6RothiI0jsCo1dMXE5+HUa
+         3CgY8eFdmZ8JboBCt3mN2TGAqefFoamU03kpppv6LaMeWIA0AqyK1LqQ0Iqswa84sTSV
+         THiI8E+q20hPm6xVPxLFh8Te615QYeznuWmnjXT7ChHoQeWd9Sk3TlxyIENXvcPYYaVL
+         Ikew==
+X-Forwarded-Encrypted: i=1; AJvYcCVusZCb0qkjziskhhfOCoUqvcuPfEfrh062t4Z4tNtSa87zqN4wPc+s87zRMD682MBKcMap33vHKNE/NxQ7sYKKqWOm
+X-Gm-Message-State: AOJu0YwDke/CrQy6xkCtt6iR2oDZ7H04L4huR4Z6jsHx6/ROCAadBfyU
+	hu0NC31R4qhqktheFqqFZNMHp/tEw8TRbGDGv104imHEeTlPwstJGcc6bd1a6jx3xw==
+X-Google-Smtp-Source: AGHT+IEKRxCSilQm25fucau7ePyZf3G/pVMezpgUmF3LnBUAc1qSPoAA3mqkZJs+iIba2I9iYXMZ02Y=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a63:534f:0:b0:5dc:832e:d805 with SMTP id
+ t15-20020a63534f000000b005dc832ed805mr13318pgl.11.1710528651355; Fri, 15 Mar
+ 2024 11:50:51 -0700 (PDT)
+Date: Fri, 15 Mar 2024 11:50:49 -0700
+In-Reply-To: <20240315182804.216081-1-josef@netflix.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20240315182804.216081-1-josef@netflix.com>
+Message-ID: <ZfSYiWcE0_au_ZPt@google.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: add btf_task_get_cgroup_id kfunc
+From: Stanislav Fomichev <sdf@google.com>
+To: Jose Fernandez <josef@netflix.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Tycho Andersen <tycho@tycho.pizza>
+Content-Type: text/plain; charset="utf-8"
 
-Add a sk_msg bpf program test where the program is running in a pid
-namespace. The test is successful:
-  #165/4   ns_current_pid_tgid/new_ns_sk_msg:OK
+On 03/15, Jose Fernandez wrote:
+> This patch enhances the BPF helpers by adding a kfunc to retrieve the
+> cgroup v2 ID of a specific task, addressing a previous limitation where
+> only bpf_task_get_cgroup1 was available for cgroup v1. The new kfunc is
+> particularly useful for scenarios where obtaining the cgroup ID of a
+> task other than the "current" one is necessary, which the existing
+> bpf_get_current_cgroup_id helper cannot accommodate. A specific use case
+> at Netflix involved the sched_switch tracepoint, where we had to get
+> the cgroup IDs of both the previous and next tasks.
+> 
+> The bpf_task_get_cgroup_id kfunc returns a task's cgroup ID, correctly
+> implementing RCU read locking and unlocking for safe data access, and
+> leverages existing cgroup.h helpers to fetch the cgroup and its ID.
+> 
+> Signed-off-by: Jose Fernandez <josef@netflix.com>
+> Reviewed-by: Tycho Andersen <tycho@tycho.pizza>
+> ---
+>  kernel/bpf/helpers.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index a89587859571..8038b2bd3488 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2266,6 +2266,27 @@ bpf_task_get_cgroup1(struct task_struct *task, int hierarchy_id)
+>  		return NULL;
+>  	return cgrp;
+>  }
+> +
+> +/**
+> + * bpf_task_get_cgroup_id - Get the cgroup ID of a task.
+> + * @task: The target task
+> + *
+> + * This function returns the ID of the task's default cgroup, primarily
+> + * designed for use with cgroup v2. In cgroup v1, the concept of default
+> + * cgroup varies by subsystem, and while this function will work with
+> + * cgroup v1, it's recommended to use bpf_task_get_cgroup1 instead.
+> + */
+> +__bpf_kfunc u64 bpf_task_get_cgroup_id(struct task_struct *task)
+> +{
+> +	struct cgroup *cgrp;
+> +	u64 cgrp_id;
+> +
+> +	rcu_read_lock();
+> +	cgrp = task_dfl_cgroup(task);
+> +	cgrp_id = cgroup_id(cgrp);
+> +	rcu_read_unlock();
+> +	return cgrp_id;
+> +}
+>  #endif /* CONFIG_CGROUPS */
+>  
+>  /**
+> @@ -2573,6 +2594,7 @@ BTF_ID_FLAGS(func, bpf_cgroup_ancestor, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_cgroup_from_id, KF_ACQUIRE | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_task_under_cgroup, KF_RCU)
+>  BTF_ID_FLAGS(func, bpf_task_get_cgroup1, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+> +BTF_ID_FLAGS(func, bpf_task_get_cgroup_id, KF_RCU)
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../bpf/prog_tests/ns_current_pid_tgid.c      | 62 +++++++++++++++++++
- .../bpf/progs/test_ns_current_pid_tgid.c      | 14 +++++
- 2 files changed, 76 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c=
- b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-index fded38d24aae..e72d75d6baa7 100644
---- a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-@@ -119,6 +119,66 @@ static int test_current_pid_tgid_cgrp(void *args)
- 	return ret;
- }
-=20
-+static int test_current_pid_tgid_sk_msg(void *args)
-+{
-+	int verdict, map, server_fd =3D -1, client_fd =3D -1;
-+	struct test_ns_current_pid_tgid__bss *bss;
-+	static const char send_msg[] =3D "message";
-+	struct test_ns_current_pid_tgid *skel;
-+	int ret =3D -1, err, key =3D 0;
-+	pid_t tgid, pid;
-+
-+	skel =3D test_ns_current_pid_tgid__open();
-+	if (!ASSERT_OK_PTR(skel, "test_ns_current_pid_tgid__open"))
-+		return ret;
-+
-+	bpf_program__set_autoload(skel->progs.sk_msg, true);
-+
-+	err =3D test_ns_current_pid_tgid__load(skel);
-+	if (!ASSERT_OK(err, "test_ns_current_pid_tgid__load"))
-+		goto cleanup;
-+
-+	bss =3D skel->bss;
-+	if (get_pid_tgid(&pid, &tgid, skel->bss))
-+		goto cleanup;
-+
-+	verdict =3D bpf_program__fd(skel->progs.sk_msg);
-+	map =3D bpf_map__fd(skel->maps.sock_map);
-+	err =3D bpf_prog_attach(verdict, map, BPF_SK_MSG_VERDICT, 0);
-+	if (!ASSERT_OK(err, "prog_attach"))
-+		goto cleanup;
-+
-+	server_fd =3D start_server(AF_INET6, SOCK_STREAM, "::1", 0, 0);
-+	if (!ASSERT_GE(server_fd, 0, "start_server"))
-+		goto cleanup;
-+
-+	client_fd =3D connect_to_fd(server_fd, 0);
-+	if (!ASSERT_GE(client_fd, 0, "connect_to_fd"))
-+		goto cleanup;
-+
-+	err =3D bpf_map_update_elem(map, &key, &client_fd, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+		goto cleanup;
-+
-+	err =3D send(client_fd, send_msg, sizeof(send_msg), 0);
-+	if (!ASSERT_EQ(err, sizeof(send_msg), "send(msg)"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(bss->user_pid, pid, "pid"))
-+		goto cleanup;
-+	if (!ASSERT_EQ(bss->user_tgid, tgid, "tgid"))
-+		goto cleanup;
-+	ret =3D 0;
-+
-+cleanup:
-+	if (server_fd >=3D 0)
-+		close(server_fd);
-+	if (client_fd >=3D 0)
-+		close(client_fd);
-+	test_ns_current_pid_tgid__destroy(skel);
-+	return ret;
-+}
-+
- static void test_ns_current_pid_tgid_new_ns(int (*fn)(void *), void *arg=
-)
- {
- 	int wstatus;
-@@ -175,4 +235,6 @@ void serial_test_ns_current_pid_tgid(void)
- 			close(cgroup_fd);
- 		}
- 	}
-+	if (test__start_subtest("new_ns_sk_msg"))
-+		test_in_netns(test_current_pid_tgid_sk_msg, NULL);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c=
- b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
-index d0010e698f66..386315afad65 100644
---- a/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
-+++ b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
-@@ -5,6 +5,13 @@
- #include <stdint.h>
- #include <bpf/bpf_helpers.h>
-=20
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 2);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} sock_map SEC(".maps");
-+
- __u64 user_pid =3D 0;
- __u64 user_tgid =3D 0;
- __u64 dev =3D 0;
-@@ -35,4 +42,11 @@ int cgroup_bind4(struct bpf_sock_addr *ctx)
- 	return 1;
- }
-=20
-+SEC("?sk_msg")
-+int sk_msg(struct sk_msg_md *msg)
-+{
-+	get_pid_tgid();
-+	return SK_PASS;
-+}
-+
- char _license[] SEC("license") =3D "GPL";
---=20
-2.43.0
-
+Any reason we are not returning 'struct cgroup' pointer? That should
+allow using other kfuncs that are all 'struct cgrop' based as well.
