@@ -1,294 +1,315 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E4C17591
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 08:17:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24E317BA3;
+	Fri, 15 Mar 2024 08:20:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710490647; cv=none; b=Gz0Gk2YI/xC+e0C02iEHAfFlzrrv6Yta54DPQNWBr3Mb9f/51PBNrMkpykaXYbhygQt/vZSeVwk7DgqswTSDIvkmtESxEPe2Tl2K4PCEWtHnBdnsqcjKQi+c57mWZveyVaH6lL0QOvKFRrkSY2/u1Sh3Dr97AKWnACDcl8t//cY=
+	t=1710490832; cv=none; b=bslSon3F81CUniWxih1E19T5KeGfb+Gt0n01wjpHJTO6dADQIzs2A02vUHl6J9zPff13f3BhmYsGwVs5pfwRX8qiqmAOtHISs62BqJ7MGrwdqnYTEQGseAhu2NQaO26Gytx/ba5sNyl2wP2IJEi8SURgsLPYX5McaCs0ZpM6Coo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710490647; c=relaxed/simple;
-	bh=3Veip/OxCnGKCQ+Abe6TiS3hdoh9knWDIAqJQrDZQBc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Nt+jo6LcpTfnNlbQNfA7RD+RwB8UXDGub2XxoxxM2paXyXzywwsHuRtNe5PqSaJtQffJx0gPKNOI4wpWIk0xNnT1jmkc+TXqRThoVKKKYyOFBeiGpKfTNZY+bXZBQPxjXhBYOCIIvnGSPMRaS39CzVu/nmeZnKFr4fEhrEnIrUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=BnLnF6jp; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	s=arc-20240116; t=1710490832; c=relaxed/simple;
+	bh=xUuE1iZyi4Wob8UCQdc96ObbDd1HQ8vDLq2+WEYq5Ok=;
+	h=Message-ID:Subject:Date:From:To:Cc:References:In-Reply-To; b=GrktJzUE/I5djrH5OdW55xtniPkcjxO/vZac9jJ8xuHZDhl+vTVHZRT/y1ti7YwQN40sRdUL2hQPmPmESYlNBG6Wjs8c9R/aBRiYUJo4BSXNbgfy6kYsAz3aVyPWMswZcbG3M3VCVjeeTNu6JB8q6LUcGRiFws/sL1+F1LxkODQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=ZY8EHCkA; arc=none smtp.client-ip=115.124.30.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="BnLnF6jp"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-5dcc4076c13so1234956a12.0
-        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 01:17:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1710490644; x=1711095444; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ux+mgvQeyHLipAJjQDCARUR07kgvWhujuDpfd9PKvNE=;
-        b=BnLnF6jpTf0M3GTFjcSWetvSvIQOQ369PIgwF3aG0VASfibFMiCxnhy8vtyqhOsjyx
-         4iCua5b7xLUAUwDsGjXK/pp/XgXWUnBG6c/CKGhyio9pC/GzFGLP2/VFJWSe+yw6/QC2
-         SLs4tMFzW1MrA6ts1TTFeTkDa7eHXNIoux2jcNUZcTWqGHBe6mTwr32HfYOFkkZcXOe2
-         z2RVX0Hq5om3SYzgJ9iR3RM98+/Fv0UMU7l6EP5buU4YPD8LDhyAIISras9vEeQp4wfc
-         3SPkE0rovMXGjiRmz7PzUbWxW1Z1HmnSlwKnklK6x/rX5v3TAVv47PoG9ldtlB1sAHTd
-         tnGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710490644; x=1711095444;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ux+mgvQeyHLipAJjQDCARUR07kgvWhujuDpfd9PKvNE=;
-        b=dSBk0IdHSY0QGDt1pU7gcxgP/k6HX3Fu+xZ8tJeik/FzzPYc559n1CdHkg+BadIPA0
-         ftMoCslA/IJ81bF12u309mvFz2HASkIR+kqreu8zDYPaEaYhcVfxmEY4bwxJASWHL1+d
-         YtHJ+IcqtK/uTvJWMHff01xlel0QRzIZQMVq88zE9E3kOraDzqSvIRFd6z3qbe07LGtT
-         HimKIxkt9ehu7Z33T75YZTvfbqU3BJue4r/bnILXPAoFqhIq+S/iEwgVT6k+ft0buh8P
-         tlrk/S6bg8KRrPGGI4xXcvRhS0rD3YWqFfPkHN+/eMaG42NhdjE1CTk/JIoptl6Utw9k
-         hEFg==
-X-Forwarded-Encrypted: i=1; AJvYcCVEuZ2R3Nw9ahqGArIgEFy/GRro390kx/KQiI/RwVMymCvU5ZJhl9PytP595G7X78TR5AyTGNGwU8zVs9XIWptf+r+B
-X-Gm-Message-State: AOJu0Yz7DNnLt2bc14iUddojIhq7G13OCVcXdswadNpiH69oQkdcm9ju
-	Txx9jMbvdA/n6WgnBQ2dLWVdwZ3nDNnb3PCZ+TI8EdIxPm/nZ6TYEIHwNOmB/zN/uj4zB82wCTV
-	mt3+uy6yiSp7B01+fzM9Y/Ktltb9kp7GAdRz3EQ==
-X-Google-Smtp-Source: AGHT+IH6WVj2QW6HVMnPZetJyxE6GBO3ARfmDCsMA75RFQoJ7vWKBd9vtLcWlAX1Fz+oArSrbQ03zFV2IWXrG37YkmE=
-X-Received: by 2002:a17:90a:fa18:b0:29c:735:a758 with SMTP id
- cm24-20020a17090afa1800b0029c0735a758mr6401475pjb.19.1710490643623; Fri, 15
- Mar 2024 01:17:23 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="ZY8EHCkA"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1710490826; h=Message-ID:Subject:Date:From:To;
+	bh=edjWm6pjFHdaKcblPtA1wtYlkDRoGpaq6U1nkRYhcmg=;
+	b=ZY8EHCkAwJw5OydHeKAr9r0BTaaRcG+g8Oac9tcI5szQo6dTADEniHl9Vdg9+cLMx1CdlPqVLLSX/LYNW+ffTR3+AQN5UOU9WW9kob+a95+F/k6ruujRnCpTEm+oXllysxFW8/cvbEmDl/ZejqTxt3I1DYUMxWZCo9G4hekq2Lo=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0W2Vjw7v_1710490825;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W2Vjw7v_1710490825)
+          by smtp.aliyun-inc.com;
+          Fri, 15 Mar 2024 16:20:26 +0800
+Message-ID: <1710490269.2113092-3-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH net-next v4 7/8] netdev: add queue stats
+Date: Fri, 15 Mar 2024 16:11:09 +0800
+From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org,
+ "David S. Miller" <davem@davemloft.net>,
+ Eric  Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>,
+ "Michael S.  Tsirkin" <mst@redhat.com>,
+ Jason Wang <jasowang@redhat.com>,
+ Alexei  Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@google.com>,
+ Amritha  Nambiar <amritha.nambiar@intel.com>,
+ Larysa Zaremba <larysa.zaremba@intel.com>,
+ Sridhar Samudrala <sridhar.samudrala@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ virtualization@lists.linux.dev,
+ bpf@vger.kernel.org
+References: <20240314085459.115933-1-xuanzhuo@linux.alibaba.com>
+ <20240314085459.115933-8-xuanzhuo@linux.alibaba.com>
+ <20240314162142.36b8ff02@kernel.org>
+In-Reply-To: <20240314162142.36b8ff02@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
- <20240311093526.1010158-2-dongmenglong.8@bytedance.com> <CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
- <CALz3k9i5G5wWi+rtvHPwVLOUAXVMCiU_8QUZs87TEYgR_0wpPA@mail.gmail.com>
- <CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail.com>
- <CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
- <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
- <CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
- <CAADnVQLHpi3J6cBJ0QBgCQ2aY6fWGnVvNGdfi3W-jmoa9d1eVQ@mail.gmail.com> <ZfKY6E8xhSgzYL1I@krava>
-In-Reply-To: <ZfKY6E8xhSgzYL1I@krava>
-From: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>
-Date: Fri, 15 Mar 2024 16:17:12 +0800
-Message-ID: <CALz3k9jM0eqgw1=RKQPFpn8nk4MZRadEC3ge0kRutfvN2WVbwg@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add support
- to record and check the accessed args
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	X86 ML <x86@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Quentin Monnet <quentin@isovalent.com>, 
-	bpf <bpf@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 14, 2024 at 2:29=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wrot=
-e:
+On Thu, 14 Mar 2024 16:21:42 -0700, Jakub Kicinski <kuba@kernel.org> wrote:
+> On Thu, 14 Mar 2024 16:54:58 +0800 Xuan Zhuo wrote:
+> > +      -
+> > +        name: rx-hw-drops
+> > +        doc: |
+> > +          Number of packets that arrived at the device but never left it,
+> > +          encompassing packets dropped for reasons such as insufficient buffer
 >
-> On Wed, Mar 13, 2024 at 05:25:35PM -0700, Alexei Starovoitov wrote:
-> > On Tue, Mar 12, 2024 at 6:53=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3 <do=
-ngmenglong.8@bytedance.com> wrote:
-> > >
-> > > On Wed, Mar 13, 2024 at 12:42=E2=80=AFAM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Mon, Mar 11, 2024 at 7:42=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3=
- <dongmenglong.8@bytedance.com> wrote:
-> > > > >
-> > > [......]
-> > > >
-> > > > I see.
-> > > > I thought you're sharing the trampoline across attachments.
-> > > > (since bpf prog is the same).
-> > >
-> > > That seems to be a good idea, which I hadn't thought before.
-> > >
-> > > > But above approach cannot possibly work with a shared trampoline.
-> > > > You need to create individual trampoline for all attachment
-> > > > and point them to single bpf prog.
-> > > >
-> > > > tbh I'm less excited about this feature now, since sharing
-> > > > the prog across different attachments is nice, but it won't scale
-> > > > to thousands of attachments.
-> > > > I assumed that there will be a single trampoline with max(argno)
-> > > > across attachments and attach/detach will scale to thousands.
-> > > >
-> > > > With individual trampoline this will work for up to a hundred
-> > > > attachments max.
-> > >
-> > > What does "a hundred attachments max" means? Can't I
-> > > trace thousands of kernel functions with a bpf program of
-> > > tracing multi-link?
-> >
-> > I mean what time does it take to attach one program
-> > to 100 fentry-s ?
-> > What is the time for 1k and for 10k ?
-> >
-> > The kprobe multi test attaches to pretty much all funcs in
-> > /sys/kernel/tracing/available_filter_functions
-> > and it's fast enough to run in test_progs on every commit in bpf CI.
-> > See get_syms() in prog_tests/kprobe_multi_test.c
-> >
-> > Can this new multi fentry do that?
-> > and at what speed?
-> > The answer will decide how applicable this api is going to be.
-> > Generating different trampolines for every attach point
-> > is an approach as well. Pls benchmark it too.
-> >
-> > > >
-> > > > Let's step back.
-> > > > What is the exact use case you're trying to solve?
-> > > > Not an artificial one as selftest in patch 9, but the real use case=
-?
-> > >
-> > > I have a tool, which is used to diagnose network problems,
-> > > and its name is "nettrace". It will trace many kernel functions, whos=
-e
-> > > function args contain "skb", like this:
-> > >
-> > > ./nettrace -p icmp
-> > > begin trace...
-> > > ***************** ffff889be8fbd500,ffff889be8fbcd00 ***************
-> > > [1272349.614564] [dev_gro_receive     ] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614579] [__netif_receive_skb_core] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614585] [ip_rcv              ] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614592] [ip_rcv_core         ] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614599] [skb_clone           ] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614616] [nf_hook_slow        ] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614629] [nft_do_chain        ] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614635] [ip_rcv_finish       ] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614643] [ip_route_input_slow ] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614647] [fib_validate_source ] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614652] [ip_local_deliver    ] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614658] [nf_hook_slow        ] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614663] [ip_local_deliver_finish] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614666] [icmp_rcv            ] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614671] [icmp_echo           ] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614675] [icmp_reply          ] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614715] [consume_skb         ] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614722] [packet_rcv          ] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > > [1272349.614725] [consume_skb         ] ICMP: 169.254.128.15 ->
-> > > 172.27.0.6 ping request, seq: 48220
-> > >
-> > > For now, I have to create a bpf program for every kernel
-> > > function that I want to trace, which is up to 200.
-> > >
-> > > With this multi-link, I only need to create 5 bpf program,
-> > > like this:
-> > >
-> > > int BPF_PROG(trace_skb_1, struct *skb);
-> > > int BPF_PROG(trace_skb_2, u64 arg0, struct *skb);
-> > > int BPF_PROG(trace_skb_3, u64 arg0, u64 arg1, struct *skb);
-> > > int BPF_PROG(trace_skb_4, u64 arg0, u64 arg1, u64 arg2, struct *skb);
-> > > int BPF_PROG(trace_skb_5, u64 arg0, u64 arg1, u64 arg2, u64 arg3, str=
-uct *skb);
-> > >
-> > > Then, I can attach trace_skb_1 to all the kernel functions that
-> > > I want to trace and whose first arg is skb; attach trace_skb_2 to ker=
-nel
-> > > functions whose 2nd arg is skb, etc.
-> > >
-> > > Or, I can create only one bpf program and store the index
-> > > of skb to the attachment cookie, and attach this program to all
-> > > the kernel functions that I want to trace.
-> > >
-> > > This is my use case. With the multi-link, now I only have
-> > > 1 bpf program, 1 bpf link, 200 trampolines, instead of 200
-> > > bpf programs, 200 bpf link and 200 trampolines.
-> >
-> > I see. The use case makes sense to me.
-> > Andrii's retsnoop is used to do similar thing before kprobe multi was
-> > introduced.
-> >
-> > > The shared trampoline you mentioned seems to be a
-> > > wonderful idea, which can make the 200 trampolines
-> > > to one. Let me have a look, we create a trampoline and
-> > > record the max args count of all the target functions, let's
-> > > mark it as arg_count.
-> > >
-> > > During generating the trampoline, we assume that the
-> > > function args count is arg_count. During attaching, we
-> > > check the consistency of all the target functions, just like
-> > > what we do now.
-> >
-> > For one trampoline to handle all attach points we might
-> > need some arch support, but we can start simple.
-> > Make btf_func_model with MAX_BPF_FUNC_REG_ARGS
-> > by calling btf_distill_func_proto() with func=3D=3DNULL.
-> > And use that to build a trampoline.
-> >
-> > The challenge is how to use minimal number of trampolines
-> > when bpf_progA is attached for func1, func2, func3
-> > and bpf_progB is attached to func3, func4, func5.
-> > We'd still need 3 trampolines:
-> > for func[12] to call bpf_progA,
-> > for func3 to call bpf_progA and bpf_progB,
-> > for func[45] to call bpf_progB.
-> >
-> > Jiri was trying to solve it in the past. His slides from LPC:
-> > https://lpc.events/event/16/contributions/1350/attachments/1033/1983/pl=
-umbers.pdf
-> >
-> > Pls study them and his prior patchsets to avoid stepping on the same ra=
-kes.
+> s/encompassing/including/
 >
-> yep, I refrained from commenting not to take you down the same path
-> I did, but if you insist.. ;-)
+> > +          space, processing errors, as well as those affected by explicitly
+> > +          defined policies and packet filtering criteria.
 >
-> I managed to forgot almost all of it, but the IIRC the main pain point
-> was that at some point I had to split existing trampoline which caused
-> the whole trampolines management and error paths to become a mess
->
-> I tried to explain things in [1] changelog and the latest patchset is in =
-[0]
->
-> feel free to use/take anything, but I advice strongly against it ;-)
-> please let me know if I can help
+> I'm afraid the attempt to "correct my English" ended up decreasing the
+> clarity.
 
-I have to say that I have not gone far enough to encounter
-this problem, and I didn't dig enough to be aware of the
-complexity.
+I apologize for the misunderstanding; that was not my intention. Your original
+phrasing is indeed clear and comprehensive. Let's use your suggested
+description.
 
-I suspect that I can't overcome this challenge. The only thing that
-I thought when I hear about the "shared trampoline" is to fallback
-and not use the shared trampoline for the kernel functions who
-already have a trampoline.
+> Maybe use what I suggested more directly?
+>
+>   Number of all packets which entered the device, but never left it,
+>   including but not limited to: packets dropped due to lack of buffer
+>   space, processing errors, explicit or implicit policies and packet filters.
+>
+> > +        type: uint
+> > +      -
+> > +        name: rx-hw-drop-overruns
+> > +        doc: |
+> > +          Number of packets that arrived at the device but never left it due to
+> > +          no descriptors.
+>
+> I put a paragraph in my previous email explaining how tricky this is to
+> state for HW devices and you just went with the virtio spec :|
 
-Anyway, let's have a try on it, based on your research.
+Sorry, not native speaker, I misunderstood.
 
-Thanks!
-Menglong Dong
+Other is ok. I will fix in next version.
+
+Thanks.
 
 >
-> jirka
+>   Number of packets dropped due to transient lack of resources, such as
+>   buffer space, host descriptors etc.
 >
+> > +      -
+> > +        name: rx-csum-bad
+> > +        doc: |
+> > +          Number of packets that are dropped by device due to invalid checksum.
 >
-> [0] https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/log/?h=
-=3Dbpf/batch
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit=
-/?h=3Dbpf/batch&id=3D52a1d4acdf55df41e99ca2cea51865e6821036ce
+> Quoting myself:
+>
+> >> Maybe add a note in "bad" that packets with bad csum are not
+> >> discarded, but still delivered to the stack.
+>
+> Devices should not drop packets due to invalid L4 checksums.
+>
+> > +        type: uint
+> > +      -
+> > +        name: rx-hw-gro-packets
+> > +        doc: |
+> > +          Number of packets that area coalesced from smaller packets by the device,
+> > +          that do not cover LRO packets.
+>
+> s/area/were/ ?
+> s/that do not cover LRO packets/Counts only packets coalesced with the
+> HW-GRO netdevice feature, LRO-coalesced packets are not counted./
+>
+> > +        type: uint
+> > +      -
+> > +        name: rx-hw-gro-bytes
+> > +        doc: see `rx-hw-gro-packets`.
+> > +        type: uint
+> > +      -
+> > +        name: rx-hw-gro-wire-packets
+> > +        doc: |
+> > +          Number of packets that area coalesced to bigger packets(no LRO packets)
+> > +          by the device.
+>
+> s/area/were/
+> s/packets(no LRO packets)/packets by the HW-GRO feature of the device/
+>
+> > +        type: uint
+> > +      -
+> > +        name: rx-hw-gro-wire-bytes
+> > +        doc: see `rx-hw-gro-wire-packets`.
+>
+> Please make sure the "See `xyz`." references are capitalized (See)
+> and end with a full stop.
+>
+> > +        type: uint
+> > +      -
+> > +        name: rx-hw-drop-ratelimits
+> > +        doc: |
+> > +          Number of the packets dropped by the device due to the received
+> > +          packets bitrate exceeding the device speed limit.
+>
+> Maybe s/speed/rate/
+>
+> > +        type: uint
+> > +      -
+> > +        name: tx-hw-drops
+> > +        doc: |
+> > +          Number of packets that arrived at the device but never left it,
+> > +          encompassing packets dropped for reasons such as processing errors, as
+> > +          well as those affected by explicitly defined policies and packet
+> > +          filtering criteria.
+> > +        type: uint
+> > +      -
+> > +        name: tx-hw-drop-errors
+> > +        doc: Number of packets dropped because they were invalid or malformed.
+> > +        type: uint
+> > +      -
+> > +        name: tx-csum-none
+> > +        doc: |
+> > +          Number of packets that do not require the device to calculate the
+> > +          checksum.
+>
+> I think we should use past tense everywhere.
+>
+> > +        type: uint
+> > +      -
+> > +        name: tx-needs-csum
+> > +        doc: |
+> > +          Number of packets that require the device to calculate the
+> > +          checksum.
+> > +        type: uint
+> > +      -
+> > +        name: tx-hw-gso-packets
+> > +        doc: |
+> > +          Number of packets that necessitated segmentation into smaller packets
+> > +          by the device.
+> > +        type: uint
+> > +      -
+> > +        name: tx-hw-gso-bytes
+> > +        doc: |
+> > +          Successfully segmented into smaller packets by the device, see
+> > +          `tx-hw-gso-packets`.
+>
+> Maybe stick to "see `tx-hw-gso-packets`", none of the other counters
+> mention the send being "successful".
+>
+> > +        type: uint
+> > +      -
+> > +        name: tx-hw-gso-wire-packets
+> > +        doc: |
+> > +          Number of the small packets that segmented from bigger packets by the
+> > +          device.
+>
+> Maybe
+>
+>   Number of wire-sized packets generated by processing
+>   `tx-hw-gso-packets`
+>
+> ?
+>
+> > +        type: uint
+> > +      -
+> > +        name: tx-hw-gso-wire-bytes
+> > +        doc: See `tx-hw-gso-wire-packets`.
+> > +
+> > +        type: uint
+> > +      -
+> > +        name: tx-hw-drop-ratelimits
+> > +        doc: |
+> > +          Number of the packets dropped by the device due to the transmit
+> > +          packets bitrate exceeding the device speed limit.
+>
+> s/speed/rate/
+>
+> > +        type: uint
+> >
+> >  operations:
+> >    list:
+> > diff --git a/include/net/netdev_queues.h b/include/net/netdev_queues.h
+> > index 1ec408585373..c7ac4539eafc 100644
+> > --- a/include/net/netdev_queues.h
+> > +++ b/include/net/netdev_queues.h
+> > @@ -9,11 +9,38 @@ struct netdev_queue_stats_rx {
+> >  	u64 bytes;
+> >  	u64 packets;
+> >  	u64 alloc_fail;
+> > +
+> > +	u64 hw_drops;
+> > +	u64 hw_drop_overruns;
+> > +
+> > +	u64 csum_unnecessary;
+> > +	u64 csum_none;
+> > +	u64 csum_bad;
+> > +
+> > +	u64 hw_gro_packets;
+> > +	u64 hw_gro_bytes;
+> > +	u64 hw_gro_wire_packets;
+> > +	u64 hw_gro_wire_bytes;
+> > +
+> > +	u64 hw_drop_ratelimits;
+> >  };
+> >
+> >  struct netdev_queue_stats_tx {
+> >  	u64 bytes;
+> >  	u64 packets;
+> > +
+> > +	u64 hw_drops;
+> > +	u64 hw_drop_errors;
+> > +
+> > +	u64 csum_none;
+> > +	u64 needs_csum;
+> > +
+> > +	u64 hw_gso_packets;
+> > +	u64 hw_gso_bytes;
+> > +	u64 hw_gso_wire_packets;
+> > +	u64 hw_gso_wire_bytes;
+> > +
+> > +	u64 hw_drop_ratelimits;
+> >  };
+> >
+> >  /**
+> > diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
+> > index bb65ee840cda..702d69b09f14 100644
+> > --- a/include/uapi/linux/netdev.h
+> > +++ b/include/uapi/linux/netdev.h
+> > @@ -147,6 +147,26 @@ enum {
+> >  	NETDEV_A_QSTATS_TX_BYTES,
+> >  	NETDEV_A_QSTATS_RX_ALLOC_FAIL,
+> >
+>
+> Looks hand written. Once you update the yaml file, you should run:
+>
+> ./tools/net/ynl/ynl-regen.sh
+>
+> This will generate the uAPI changes for you.
+>
+> > +	NETDEV_A_QSTATS_RX_HW_DROPS,
+> > +	NETDEV_A_QSTATS_RX_HW_DROP_OVERRUNS,
+> > +	NETDEV_A_QSTATS_RX_CSUM_UNNECESSARY,
+> > +	NETDEV_A_QSTATS_RX_CSUM_NONE,
+> > +	NETDEV_A_QSTATS_RX_CSUM_BAD,
+> > +	NETDEV_A_QSTATS_RX_HW_GRO_PACKETS,
+> > +	NETDEV_A_QSTATS_RX_HW_GRO_BYTES,
+> > +	NETDEV_A_QSTATS_RX_HW_GRO_WIRE_PACKETS,
+> > +	NETDEV_A_QSTATS_RX_HW_GRO_WIRE_BYTES,
+> > +	NETDEV_A_QSTATS_RX_HW_DROP_RATELIMITS,
+> > +	NETDEV_A_QSTATS_TX_HW_DROPS,
+> > +	NETDEV_A_QSTATS_TX_HW_DROP_ERRORS,
+> > +	NETDEV_A_QSTATS_TX_CSUM_NONE,
+> > +	NETDEV_A_QSTATS_TX_NEEDS_CSUM,
+> > +	NETDEV_A_QSTATS_TX_HW_GSO_PACKETS,
+> > +	NETDEV_A_QSTATS_TX_HW_GSO_BYTES,
+> > +	NETDEV_A_QSTATS_TX_HW_GSO_WIRE_PACKETS,
+> > +	NETDEV_A_QSTATS_TX_HW_GSO_WIRE_BYTES,
+> > +	NETDEV_A_QSTATS_TX_HW_DROP_RATELIMITS,
+> > +
+> >  	__NETDEV_A_QSTATS_MAX,
+> >  	NETDEV_A_QSTATS_MAX = (__NETDEV_A_QSTATS_MAX - 1)
+> >  };
+>
