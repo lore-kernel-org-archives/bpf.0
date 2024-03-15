@@ -1,56 +1,57 @@
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9620C52F92
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 19:55:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484BF535AB
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 19:55:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710532506; cv=none; b=k0lUKmLuriKFrVkv2C/CayvHWSv7O2lNAlcoUQSJYBQb4ztmf/UA+K5B8dRkhyv5tuY1EcQ08i9m3cJTyq+G5f/G9sFkubaoJcV3xMq/HQVmYNX9OGW3egQivz1sZWxmgiJKDa5wMim32FQZZw4JIFt49PdfEPEK4tSIWhIji+k=
+	t=1710532511; cv=none; b=BJKf+bcXjdlk1yPgoXSH7LB3D4CsWubRXkwDqkqmTqv2guEquGeXVU+c9r/64JUwbqUOOsIP6w9s0P/mHYpLeCFDOzyCXTzgHdP324FBL94mGYFaESAKShIxGfhekMAXA+bq+y9lcglvY6z4t3ZxVem5A4gkBuzIi4UBOy0a/QE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710532506; c=relaxed/simple;
-	bh=CZwUyc/DMM0Uny3U5TTGXkC9yXTk8fyaov4ApURGlJU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=DiFxOD7COUbZF50wqIBOi02QLnC3sGOyC/7PaKMRqJf2qVaFCsnuYA2Ha+10sygqEDNJEIsFazFRa7cHKZuP+xYP2GfQF1Khx+e7Juak1vC1AXo3dsKn84bLZNW7mWQM+vY2V0PrpcRSzgx3++p35SAB+CyYWAtortROicS4FHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=ZRc8at8i; arc=none smtp.client-ip=209.85.222.178
+	s=arc-20240116; t=1710532511; c=relaxed/simple;
+	bh=h0zEXR9iEwGcrR1alN0rw2NJr4Lf0gOSf4DLUKJT8MY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FLFfCWGqyrYiJ1nKwz1OneuWrvimulSWyliRrtH3rYfSCEBVnAtw0U1ZYs4HN0snNPHvl1vhHvwmQEXa8JKlUPcTwMkpOHBc2maxf3gPo7jipa/mNNvOstqBwt0x1wzK06adke5ipPchWiS18FfOj7YBCdIo/2SvGk7NQ9u2Cbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=T7F54xHe; arc=none smtp.client-ip=209.85.222.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="ZRc8at8i"
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-789e6ceaff1so78147485a.0
-        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 12:55:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="T7F54xHe"
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-789e6ceaff1so78152185a.0
+        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 12:55:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1710532503; x=1711137303; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hFCxDEQwJlvWrjzvbkqgNENtA83xO4o1dn3KyfRTRKA=;
-        b=ZRc8at8iONxvknmBCFFyHlu9gFSFLwBb453B9kYYGuRULPGhJLb37TucWku2c10dKs
-         hYOcYEnMKNGmKutNCt3x2hGlVlLo+cF/Ub+77ZN61SK1EsVO8qySOu5uFv1RwrqMAmi6
-         Di+lcr7tZdfpwR9qxa+bznu3bm4sRwLEJoVj1ARHfsZXbpHw9qDp8vopNJy7iAQeXn2t
-         OZq5n9oNy05qJz5prXOz+5b4gxmrwnLatar7jkcJ8l3KsgwurtQ8vWhDT2B8AWbbCbdw
-         sgS0M5tXyGkpxcTk4y2KUfEK2duQNKKaZpah0wD/nOFtU9acliHcH+SmbszcNxtbf/Gl
-         AB0Q==
+        d=cloudflare.com; s=google09082023; t=1710532506; x=1711137306; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EbbNmWl+lfF606jlI7tSahkKxu0DvLBvSy6/KumUR7w=;
+        b=T7F54xHezWeUQNF5aqawytxJFmXZ7+aOPuXm9nRL2MKfWcJaIVNzOn1AdFQcc8GbYR
+         EyEk2XPpV5hHAkP1/TuB6BQJwRZ1yCLZgn6WDWAqmhqcZWZlnDD9BvwZK4dIbEIsO8GG
+         sj5G76cggqxJNvyN1WX857CVruQJ1Hj6qDrsWADsLjgLnCcDv+0A90iJkgYwmwnj9x28
+         RnDSx7v0Kt1af285HTRFSDM+Ya8wPgF8EVPX0dcMRjUmzW94N3mRG4Mt/HAFifCeyKvc
+         DedU16B7L7ZaxdYfsZEhZpPfoYVJrRsQlz5L9LaOUSfn7KnOYP0CpcokHySokXGxVmCj
+         5oxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710532503; x=1711137303;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hFCxDEQwJlvWrjzvbkqgNENtA83xO4o1dn3KyfRTRKA=;
-        b=URKkkM17uy38lzQ1l/G7sRkYerFZ1y7U5ygoYSTfxHd2pA7L/uYzjL0YKZS4KIgqX0
-         f0pYt1onnuxohUhaS3u/MVBW1TkjJubufI9fFDEu6n/lfm/AbZOq5ONF1k3LczM6CrJ8
-         x0RcL3IHEBh+7Tvf1Jt0mlGIn4Y344wFOvr7kJSJG2Yn0+Vku9pZAYYuxUTSB/lZ3279
-         aQ/oJaaydwr7Ges1O17iPnbU1y+viGfdLyk7T6dFMf5BAt3WUggt0p03zO8s1oyPaegX
-         Hqm0Fztgde7e7kD7pFpNg0mDaWHj10NdND+nMXb3rjZUqUtF+VBV4kXygQ02uvXUPDe2
-         QUuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVXPoH9Zdqg0Sohs0H10gEYZtghbMRjdkf1eTC8nUqC0ghSvy+GXPiWCecU+cJXnoL5QrULl9zMTKUpSC75d5gBjIMy
-X-Gm-Message-State: AOJu0YxxtZu8I/8pFmdOo/Y9aDbqdfYAjOJsrgiYaQHl1E3C7avcUt+z
-	DkDUrzEzY85+1mppSuiyXSauWpiBRmnsCw4Rn73KkI2usztGKAVgpbC/M1EU+J8=
-X-Google-Smtp-Source: AGHT+IFjd6KHONFC5gxvbd85NmSgiMqQ0lkwBquMR6XDCX/5Tlz40CkSaVE6adtcrZ4M3JLDNtVK/g==
-X-Received: by 2002:a05:620a:158f:b0:788:49fd:a3de with SMTP id d15-20020a05620a158f00b0078849fda3demr8820691qkk.16.1710532503509;
-        Fri, 15 Mar 2024 12:55:03 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710532506; x=1711137306;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EbbNmWl+lfF606jlI7tSahkKxu0DvLBvSy6/KumUR7w=;
+        b=lN5N1FdDnPb/+nBaCtBCHzzmMocgYdpWpaHge8s5t0LF/wrx2TDdhrU6G48QXBXq1o
+         ZFx6QqkqGeHylVGYn8NLWSZhQsInY/t992HRhUVH21D5C8F0lujHuHU97t2vglYMXWZm
+         N6WLuwPnovVFs2MfL9Sk3e8CfzMuLFT20bX0J56xF3/qavOVrn6zCC8f82dxyM8gJTNJ
+         vdgtbx19QeMTM9JS9pYFOEkVZRe40o2SUR3XABun3Ilc+ajAJlRNKfbxs/M0U7uiW5bV
+         b1/NQQtJCTw3LUqHNCnUcN+3L4q+i8zgxCDtMNDds8HH4ki1DlG7vNLN0hdF/2kQRSr5
+         f3TA==
+X-Forwarded-Encrypted: i=1; AJvYcCXAb15b04RQ7CYksDgygJLc1lM0+ZM5UbHS2rplE/d73zaVxjQwPaCCrosODqyZdR46i2xc63BZLjQAMF+5OxyRnDxB
+X-Gm-Message-State: AOJu0YzIIPIdmzciELdG3e7J/eN5t4dyst6ldprQ1U9dIfBD1AUC9g4i
+	Sc3HhDG1m2pfwJ7A8VfoaTYmS/erdqstSuu1y4wtdVAvwlKLFhLYVYqhlm/xFcA=
+X-Google-Smtp-Source: AGHT+IEZQd7hDHzs8WEgt9d/S5CteOD7EJxWIfDQQlT75NalMwM1VREuk3EwSMns3glFGvmJhcYR/g==
+X-Received: by 2002:a05:6214:1187:b0:691:4d1f:6a65 with SMTP id t7-20020a056214118700b006914d1f6a65mr9684907qvv.27.1710532506319;
+        Fri, 15 Mar 2024 12:55:06 -0700 (PDT)
 Received: from debian.debian ([2a09:bac5:7a49:1046::19f:c])
-        by smtp.gmail.com with ESMTPSA id d7-20020a05620a136700b0078863e0f829sm1405472qkl.12.2024.03.15.12.55.01
+        by smtp.gmail.com with ESMTPSA id i14-20020a0c9c8e000000b0069160557ec1sm2139110qvf.136.2024.03.15.12.55.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Mar 2024 12:55:03 -0700 (PDT)
-Date: Fri, 15 Mar 2024 12:55:00 -0700
+        Fri, 15 Mar 2024 12:55:05 -0700 (PDT)
+Date: Fri, 15 Mar 2024 12:55:03 -0700
 From: Yan Zhai <yan@cloudflare.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -70,8 +71,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
 	Steven Rostedt <rostedt@goodmis.org>, mark.rutland@arm.com,
 	Jesper Dangaard Brouer <hawk@kernel.org>
-Subject: [PATCH v4 net 0/3] Report RCU QS for busy network kthreads
-Message-ID: <cover.1710525524.git.yan@cloudflare.com>
+Subject: [PATCH v4 net 1/3] rcu: add a helper to report consolidated flavor QS
+Message-ID: <491d3af6c7d66dfb3b60b2f210f38e843dfe6ed2.1710525524.git.yan@cloudflare.com>
+References: <cover.1710525524.git.yan@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -80,55 +82,63 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1710525524.git.yan@cloudflare.com>
 
-This changeset fixes a common problem for busy networking kthreads.
-These threads, e.g. NAPI threads, typically will do:
+There are several scenario in network processing that can run
+extensively under heavy traffic. In such situation, RCU synchronization
+might not observe desired quiescent states for indefinitely long period.
+Create a helper to safely raise the desired RCU quiescent states for
+such scenario.
 
-* polling a batch of packets
-* if there are more work, call cond_resched to allow scheduling
-* continue to poll more packets when rx queue is not empty
+Currently the frequency is locked at HZ/10, i.e. 100ms, which is
+sufficient to address existing problems around RCU tasks. It's unclear
+yet if there is any future scenario for it to be further tuned down.
 
-We observed this being a problem in production, since it can block RCU
-tasks from making progress under heavy load. Investigation indicates
-that just calling cond_resched is insufficient for RCU tasks to reach
-quiescent states. This at least affects NAPI threads, napi_busy_loop, and
-also cpumap kthread for now.
+Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+Reviewed-by: Jesper Dangaard Brouer <hawk@kernel.org>
+Signed-off-by: Yan Zhai <yan@cloudflare.com>
+---
+v3->v4: comment fixup
 
-By reporting RCU QSes in these kthreads periodically before
-cond_resched, the blocked RCU waiters can correctly progress. Instead of
-just reporting QS for RCU tasks, these code share the same concern as
-noted in the commit d28139c4e967 ("rcu: Apply RCU-bh QSes to RCU-sched
-and RCU-preempt when safe"). So report a consolidated QS for safety.
-
-It is worth noting that, although this problem is reproducible in
-napi_busy_loop, it only shows up when setting the polling interval to as
-high as 2ms, which is far larger than recommended 50us-100us in the
-documentation. So napi_busy_loop is left untouched.
-
-V3: https://lore.kernel.org/lkml/20240314145459.7b3aedf1@kernel.org/t/
-V2: https://lore.kernel.org/bpf/ZeFPz4D121TgvCje@debian.debian/
-V1: https://lore.kernel.org/lkml/Zd4DXTyCf17lcTfq@debian.debian/#t
-
-changes since v3:
- * fixed kernel-doc errors
-
-changes since v2:
- * created a helper in rcu header to abstract the behavior
- * fixed cpumap kthread in addition
-
-changes since v1:
- * disable preemption first as Paul McKenney suggested
-
-Yan Zhai (3):
-  rcu: add a helper to report consolidated flavor QS
-  net: report RCU QS on threaded NAPI repolling
-  bpf: report RCU QS in cpumap kthread
-
+---
  include/linux/rcupdate.h | 24 ++++++++++++++++++++++++
- kernel/bpf/cpumap.c      |  3 +++
- net/core/dev.c           |  3 +++
- 3 files changed, 30 insertions(+)
+ 1 file changed, 24 insertions(+)
 
+diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+index 0746b1b0b663..da224706323e 100644
+--- a/include/linux/rcupdate.h
++++ b/include/linux/rcupdate.h
+@@ -247,6 +247,30 @@ do { \
+ 	cond_resched(); \
+ } while (0)
+ 
++/**
++ * rcu_softirq_qs_periodic - Periodically report consolidated quiescent states
++ * @old_ts: last jiffies when QS was reported. Might be modified in the macro.
++ *
++ * This helper is for network processing in non-RT kernels, where there could
++ * be busy polling threads that block RCU synchronization indefinitely.  In
++ * such context, simply calling cond_resched is insufficient, so give it a
++ * stronger push to eliminate all potential blockage of all RCU types.
++ *
++ * NOTE: unless absolutely sure, this helper should in general be called
++ * outside of bh lock section to avoid reporting a surprising QS to updaters,
++ * who could be expecting RCU read critical section to end at local_bh_enable().
++ */
++#define rcu_softirq_qs_periodic(old_ts) \
++do { \
++	if (!IS_ENABLED(CONFIG_PREEMPT_RT) && \
++	    time_after(jiffies, (old_ts) + HZ / 10)) { \
++		preempt_disable(); \
++		rcu_softirq_qs(); \
++		preempt_enable(); \
++		(old_ts) = jiffies; \
++	} \
++} while (0)
++
+ /*
+  * Infrastructure to implement the synchronize_() primitives in
+  * TREE_RCU and rcu_barrier_() primitives in TINY_RCU.
 -- 
 2.30.2
 
