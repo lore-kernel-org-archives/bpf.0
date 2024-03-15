@@ -1,128 +1,134 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A403D982;
-	Fri, 15 Mar 2024 15:48:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37EA3D963;
+	Fri, 15 Mar 2024 15:55:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710517690; cv=none; b=eaXYjCPfPTim7wQ9StvVUXIWpNHcHi/BlpVmxZPLPUJXQAKv2TGVC0D/QHn5cP9thtvLsNhmHaPLr+ESZGmBKFKd/Vt5KeTuPVIJXsfJixqfzsMYcUOxRqBGlEZLnKs5/ldF5NJffwYtqb2OuBQYiKlZBN1zHhZILx7jPkL/Wok=
+	t=1710518146; cv=none; b=SEwWztWrNx/P2Y04srixVm4wa051GaLiaVWAhJmYSNmAiWFKDD51penysgBFXh+Y9aYmtnzKxM33BKZQY7FXxqHY/JhVmtjPdih5aM0M5O8n9oEHTJ736Ho9BBwjf3i8oeC5kZHse6974+4OwOY9ZZsBggSxv9BXX2IpncK7PgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710517690; c=relaxed/simple;
-	bh=rNyGkaVYT9PJLTHVjpoPEHietdSutSFWVRIazh3dZZ0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ubnT6gVWIw+42vootM37EaFgZjcTP8L97w/Yg8t1vPp2VyZcICgC/Y0GH+tG/mYm80c/BZcOKXE/4LZAYTspK/RfzICtb+wuNQJvmBw9vlHzYu7wrMqH4c9pqwdZkB5AQN9sTWPMas1V1XhXw6Qe8VlXqe29UMNZAqV/NqKnvDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iz/LIGFL; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710518146; c=relaxed/simple;
+	bh=6ip9Uj32dWRB+V8eh6SOYguo6Df3SxdRX95ROSWdS4M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TQg9/lTC/yykVZLerShDi/WtzznzjwflosZkBHaDNRhgKchV494XkpikBL2fBekhHyWigRURgEe2dQPomYgi9eTBaPNGsXrL+VE5Evhv/lLyvzU6EmlHVcifLaqZ92PxlCsyJcmWmU6XPuhoHaOhQbOHoPtpAhdHDP39F7TLG1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=qDHTsKZe; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iz/LIGFL"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-413f76ff0daso11302835e9.0;
-        Fri, 15 Mar 2024 08:48:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710517687; x=1711122487; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PMDqFaIZpiFWWifm4sf0q2Ickmg+XUFkiKzZeBsRPww=;
-        b=iz/LIGFLUwYCtON47fc4+CmILRYHjhQUINdrpSBsIKD+01JbVh8EvWNiz8qL06618I
-         IuNgpF1u3IUD9rOjb4R1BqvVaNyS9/nRodWa4Esr4zER7e2ad7rLT2ssC8cPASDbM8VQ
-         a+kJA8ITtbS3AIl03k1PJWNIMRUU5pkv/y4yDj7F51GOYgjjuiqQeGwubl1q6Aai3zU6
-         SEER3nr9vcztzv6lvShIE2GrhdtVDYh7Fo9T+tAGyZ2F9YwKO0ZZAXEB0/Ru/Uw97Yn8
-         w1qT73U4RzygTrrE47ukZFyLTNnEs2TYa48pxE9JB3CfM7FPMV4ZJY0h1uqbpylMjAFS
-         NzGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710517687; x=1711122487;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PMDqFaIZpiFWWifm4sf0q2Ickmg+XUFkiKzZeBsRPww=;
-        b=n8aDkq4pGybY3VUcRoT5kh6SHoTlvUDS98pYZ8pLADcZ3ZBQJn6Elmm4e/A1QbAXIJ
-         e0BH25oEDghQ3S6FZRZmzjKPKj4S8CdGRXM5bGWkkVQwwLK8uTkFNgd9tNCkjQccIzSu
-         cu5qoWCqycXSjjO95gn2F8nPtczdxecBmPfT5B4EouiSGjWPskYJhlfvVF68ANNMITf3
-         NcFHeZs+cxD9vWXZe/mjcvLeFm1pzKyA9H7mRsfAMMXrGnz16cDldv5eyrEOI5tUFi7d
-         7H3ScxIeXL4HiH1M2X79b+8LJSIhdkolWQ9BQ3KUItNCYqUtG/Pht0mcsN8RWGZkRaBI
-         WEgA==
-X-Forwarded-Encrypted: i=1; AJvYcCUIfdirbnF1bQzuST9t4iyfFXhV0sVt1rXAsBbUjUdRRYohKD2aBjovTPCmrT+HyWzbc0P0qH676ERHJwqbavxhQB+cEiVz
-X-Gm-Message-State: AOJu0YwAiBKcEDON7Q2hSL+kk/JrL/S0TWlY6xz2joHNLIGhpMahUzyc
-	+wXKPiQOVexb24ij0zPpA5v/fTNbPArLcwnPG2ITE8OmqH7FR7J6OKl5ZFHdUoR672Xz8FYwb/m
-	I/jBt8MqrjQIsTI1KiYhEEF1oU73kFLJY
-X-Google-Smtp-Source: AGHT+IH1ENPc8GkmfMFAN9ZKZ7R/t6P/M2UcSGlgJ85sT/2ns1o4O5aj/2l/Fhh5HUSF4DxQw7neSzDAshTmtubYkfU=
-X-Received: by 2002:adf:f5cb:0:b0:33e:bfb8:7320 with SMTP id
- k11-20020adff5cb000000b0033ebfb87320mr4235066wrp.7.1710517686640; Fri, 15 Mar
- 2024 08:48:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="qDHTsKZe"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=ZVnxJ9g62UEeeePtv4TFZg6ReNxfPFWR59o9aOsZ7X0=; b=qDHTsKZeQqNiiNS+RC206jLqGQ
+	HQEHYVnr9xz2S/5szXSF9n1CpAWNN8q/iN1TeevdT47fI633bcvyd2RDNNSaOHa7SkCaHCcJKNKmk
+	ReyPdTEVYrGCB+Od93cmM+548OAAHUt+RMy3nvVVS9iMcvdNQedk9YU0mXjtqf5YEK2yfz3kRicU7
+	YoxjoCpJbt0g8gunrCWomp7y5NcSiitgRJBIxSN5FC6H9ItmgQIGHUUq2AjA+qiZzJZAIzwPAYcJB
+	zRwVVgnQQD+XL05J8FHEfx27exG5HburFXdFHh19kyKvGurVQKvfokHrw6rWVSj7Fo0bfesd49uF5
+	1jEYkcKQ==;
+Received: from [50.53.2.121] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rl9uI-00000000jiF-2tEl;
+	Fri, 15 Mar 2024 15:55:42 +0000
+Message-ID: <b49e2350-610a-4841-921d-3bdbf6defea4@infradead.org>
+Date: Fri, 15 Mar 2024 08:55:41 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240315140726.22291-1-tushar.vyavahare@intel.com> <20240315140726.22291-5-tushar.vyavahare@intel.com>
-In-Reply-To: <20240315140726.22291-5-tushar.vyavahare@intel.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 15 Mar 2024 08:47:55 -0700
-Message-ID: <CAADnVQ+BxiKDC2HyztsoFdOLh8ECgnmG2UMH_+741CdBjDx0ZQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 4/6] selftests/xsk: implement set_hw_ring_size
- function to configure interface ring size
-To: Tushar Vyavahare <tushar.vyavahare@intel.com>
-Cc: bpf <bpf@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	"Karlsson, Magnus" <magnus.karlsson@intel.com>, 
-	"Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	"Sarkar, Tirthendu" <tirthendu.sarkar@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 5/7] HID: bpf: allow to inject HID event from BPF
+Content-Language: en-US
+To: Benjamin Tissoires <bentiss@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+ Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20240315-b4-hid-bpf-new-funcs-v4-0-079c282469d3@kernel.org>
+ <20240315-b4-hid-bpf-new-funcs-v4-5-079c282469d3@kernel.org>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20240315-b4-hid-bpf-new-funcs-v4-5-079c282469d3@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Mar 15, 2024 at 7:23=E2=80=AFAM Tushar Vyavahare
-<tushar.vyavahare@intel.com> wrote:
->
-> Introduce a new function called set_hw_ring_size that allows for the
-> dynamic configuration of the ring size within the interface.
->
-> Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
+
+
+On 3/15/24 07:44, Benjamin Tissoires wrote:
+> It can be interesting to inject events from BPF as if the event were
+> to come from the device.
+> For example, some multitouch devices do not all the time send a proximity
+> out event, and we might want to send it for the physical device.
+> 
+> Compared to uhid, we can now inject events on any physical device, not
+> just uhid virtual ones.
+> 
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+> 
 > ---
->  tools/testing/selftests/bpf/xskxceiver.c | 35 ++++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/sel=
-ftests/bpf/xskxceiver.c
-> index 32005bfb9c9f..aafa78307586 100644
-> --- a/tools/testing/selftests/bpf/xskxceiver.c
-> +++ b/tools/testing/selftests/bpf/xskxceiver.c
-> @@ -441,6 +441,41 @@ static int get_hw_ring_size(struct ifobject *ifobj)
->         return 0;
+> 
+> no changes in v4
+> 
+> no changes in v3
+> 
+> no changes in v2
+> ---
+>  Documentation/hid/hid-bpf.rst      |  2 +-
+>  drivers/hid/bpf/hid_bpf_dispatch.c | 29 +++++++++++++++++++++++++++++
+>  drivers/hid/hid-core.c             |  1 +
+>  include/linux/hid_bpf.h            |  2 ++
+>  4 files changed, 33 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/hid/hid-bpf.rst b/Documentation/hid/hid-bpf.rst
+> index a575004d9025..0765b3298ecf 100644
+> --- a/Documentation/hid/hid-bpf.rst
+> +++ b/Documentation/hid/hid-bpf.rst
+> @@ -179,7 +179,7 @@ Available API that can be used in syscall HID-BPF programs:
+>  -----------------------------------------------------------
+>  
+>  .. kernel-doc:: drivers/hid/bpf/hid_bpf_dispatch.c
+> -   :functions: hid_bpf_attach_prog hid_bpf_hw_request hid_bpf_hw_output_report hid_bpf_allocate_context hid_bpf_release_context
+> +   :functions: hid_bpf_attach_prog hid_bpf_hw_request hid_bpf_hw_output_report hid_bpf_input_report hid_bpf_allocate_context hid_bpf_release_context
+>  
+>  General overview of a HID-BPF program
+>  =====================================
+> diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
+> index a5b88b491b80..e1a650f4a626 100644
+> --- a/drivers/hid/bpf/hid_bpf_dispatch.c
+> +++ b/drivers/hid/bpf/hid_bpf_dispatch.c
+> @@ -508,6 +508,34 @@ hid_bpf_hw_output_report(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz)
+>  	kfree(dma_data);
+>  	return ret;
 >  }
->
-> +static int set_hw_ring_size(struct ifobject *ifobj, u32 tx, u32 rx)
-> +{
-> +       struct ethtool_ringparam ring_param =3D {0};
-> +       struct ifreq ifr =3D {0};
-> +       int sockfd, ret;
-> +       u32 ctr =3D 0;
 > +
-> +       sockfd =3D socket(AF_INET, SOCK_DGRAM, 0);
-> +       if (sockfd < 0)
-> +               return errno;
-> +
-> +       memcpy(ifr.ifr_name, ifobj->ifname, sizeof(ifr.ifr_name));
-> +
-> +       ring_param.tx_pending =3D tx;
-> +       ring_param.rx_pending =3D rx;
-> +
-> +       ring_param.cmd =3D ETHTOOL_SRINGPARAM;
-> +       ifr.ifr_data =3D (char *)&ring_param;
-> +
-> +       while (ctr++ < SOCK_RECONF_CTR) {
-> +               ret =3D ioctl(sockfd, SIOCETHTOOL, &ifr);
-> +               if (!ret)
-> +                       break;
-> +               /* Retry if it fails */
-> +               if (ctr >=3D SOCK_RECONF_CTR) {
-> +                       close(sockfd);
-> +                       return errno;
-> +               }
-> +               usleep(USLEEP_MAX);
+> +/**
+> + * hid_bpf_input_report - Inject a HID report in the kernel from a HID device
+> + *
+> + * @ctx: the HID-BPF context previously allocated in hid_bpf_allocate_context()
+> + * @type: the type of the report (%HID_INPUT_REPORT, %HID_FEATURE_REPORT, %HID_OUTPUT_REPORT)
+> + * @buf: a %PTR_TO_MEM buffer
+> + * @buf__sz: the size of the data to transfer
+> + *
+> + * @returns %0 on success, a negative error code otherwise.
 
-Does it really have to sleep or copy paste from other places?
-This ioctl() is supposed to do synchronous config, no?
+Minimum change:
+
+      @returns:
+
+Preferred change:
+
+      Returns:
+
+"@returns" is not documented.
+
+> + */
+> +__bpf_kfunc int
+> +hid_bpf_input_report(struct hid_bpf_ctx *ctx, enum hid_report_type type, u8 *buf,
+> +		     const size_t buf__sz)
+> +{
+
+
+-- 
+#Randy
