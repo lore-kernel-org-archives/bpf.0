@@ -1,137 +1,89 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248E2487AE
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 17:44:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE3050263
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 17:59:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710524661; cv=none; b=pptu7R7HITgY9Bq7SYWJGKD+Y3dDV8v/n6ggrPE+N4cz3NFvSCPCMVOMINgVj3+XiRk7N5C+E0Su/4rgyGBrDF5yqGDch88WZ1nIC9Z78oMIsVhSANLG9KOgIXNLggv84VrBXeI6iEjWvm18AgYGACazBpQuc9DOnRaZ8Jfy4i8=
+	t=1710525570; cv=none; b=twMB2rjH0RsNYmkebur5qmJkqgiGNb5KISWXky8SNwr/m2WU345YV7v0KOJeYIdoJydT67eogQWaPqQAayP7t2GrEgsP6GncrVzg/Up0/s/15e/OCvmnpIV1L0jchb1Kbq07P4HVlORi0dr7JaHINcWm3Mi2MB5esCvQI+tdY0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710524661; c=relaxed/simple;
-	bh=IGvnvPx+HAm+FarKSIxGtvtHS82uZz8HhhBrIx5+4Ss=;
+	s=arc-20240116; t=1710525570; c=relaxed/simple;
+	bh=T/8xfkv/Dh0VPAJHUakaljNkwpJLHBIuYF8spzI5GWY=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=nt0kgJeGcrvVzUCCj1Ya/g04P48NT22to31N5UIAMzaNHRz8OgqXdnLuT4xmAsL5azIVSzBGJ/rw8JTyLEiIpiOaos5KN2yPcRZWkhpXGgcPOhkGZ0Dml/Mu+dadW2VCrDUpHDGTqHq5LrcUFkDUVrio93A+vgj7OCTP1auH36E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uhmbOdGo; arc=none smtp.client-ip=209.85.219.202
+	 To:Cc:Content-Type; b=ZOsPo3ncn1IDjc/gUfJlYHEu1hTrOqIOWPUUjHGmawx5o1ppUtIJ/HXCryUt8j1ojwcyb7x3lAHjTIx4DejplT+3fG9jReIDyMLZIY85QSlAPh9s+W1tSRBGOY8mkQEL79VOvvOerSJYlOLvsspnfYrHcQdtT0E4o57UYBiDeyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lS64Ax0O; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uhmbOdGo"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dbf216080f5so3604050276.1
-        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 10:44:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lS64Ax0O"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-6e6fce696dfso728542b3a.0
+        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 10:59:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710524659; x=1711129459; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1710525568; x=1711130368; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=syBj8zoIL67+v7E092FZU0Ar7T56G0QEhxcd8/OzuIw=;
-        b=uhmbOdGo4IHfQvprnTGEGzrDYMcy5b8eaFcXFdF4o5Z4h1/OH9e1BBQ4JDmaTUVyT+
-         n0UZltWBDx6bx6CnWCKiA5o/dIm4jb4wYBtCbQGDMo3r+i5avPViQBCoXZekfI2QKcIe
-         K6ZTWtDMl7tgBx1rPq2+OfhyQMHAV+yYSBUlznF96CfSfWpiaorzMjn2onKfoRFei3kp
-         uv/XrA+VxeHN9/K9PRNu1DMHX4XSmPccQFSsoZ8pR0w0R2ELrDL09cYuAW12oYRR1e9Z
-         c4ynC16EQu2/8sODegKRuMLugOkhynwshUmG6f22IqvNFBd4R5Yr8j661tD/W+RZjnLN
-         0FnQ==
+        bh=FqhShgYSHEfh1hALj4K3Q176sTTihLvAH/49Q9OSGWY=;
+        b=lS64Ax0OA19bf4ou1on9/QrEH/8docwKqA5yXdj7dD/Q983CqgNBSDXdxbBCxpo7Uh
+         me0plaxRiqvrcz4njivQXvw/uadhpWsxetS//Oc2Q/6lIo7cglkci4q9cDY7K8xDhv1A
+         4B2V0RyYgjxgOG5DT3QHqRqGQuLnzVaOlVXWGebriyfxkwnxDiftxbNr4WbVdIIMV4qo
+         Zuj6wa8VGSbCNwCrcGeILVjgQnFDGyeV2IC35dI9VA4PpRQnHzkBsUWCaBuzMBKpGm3a
+         8kDNd8NWfWdM5+iYDJ2000V2NnrTxg70JAdy4fFuevv3eaKWnRzeTgEwgDsoIapKdLhL
+         T9YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710524659; x=1711129459;
+        d=1e100.net; s=20230601; t=1710525568; x=1711130368;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=syBj8zoIL67+v7E092FZU0Ar7T56G0QEhxcd8/OzuIw=;
-        b=C8X9ZbgvqQRFoqsEVMrU8JQAxTrl7rUdRw6bJhHc69m2rldItk9aaoVQpngN/PNS6f
-         ntY4LHxrjvuLerZZj0X16PkZ4dXfoNC8YL/3B5d1PW0ZBj4/wfFbfi9S7g+BcTTbR52D
-         ehdhuT0FuwU+Mr4TgOaywrPRfygmK8YSWyPcif9MpCIFsoOqz0vW2QRwfG7Lvvej6nnR
-         K8laGQCpUjAvlJl3WJxwKHvuskKScYbSjqusIIJvlde0Dr13MgeNelTVr0taOQgtrcko
-         hNr6S/yw8IzdcWOYkEF36oPMF2Ns8oxPZXokgfW4W1rQS7h4psg3Bo9/qdrPT3vOhutV
-         aY4A==
-X-Gm-Message-State: AOJu0YwehwInxGbF8G49UoZjte8DOP0r9IpFCuyRWBcsa0kQfBcsQDx3
-	YY5pN69d6ZuWSa9DcC0AYQIPfTo1VznlI5ytU4j0FkgAWT9hEiEyXzo92jawSHh2yw==
-X-Google-Smtp-Source: AGHT+IHJYrHu+9A4J7kbEFnrIYxNdFbHUNxbl3Jz/1uZ22EFPWeWn/jAjRwt2/QnvOCJJAT8oeTlfCE=
+        bh=FqhShgYSHEfh1hALj4K3Q176sTTihLvAH/49Q9OSGWY=;
+        b=hgELwgO5OoSXFhLgN+vf9qZnJ2x6vbs4GVPqE2HcplfX7y59c/OB4Fpqar0M3vyLwc
+         K9e2KcY/uj47/LQxS1jR+6kIHWatQu9uSVt0R4dUxY3HdfZmXYlNDXpIbxTdsGTKdpEL
+         CbCiXOVwydn4tUgUnnLPHHjwM1NoAB9dDLThSAoJkyi7oiMto3XbM61z417ZqSVsYQBc
+         BbwgkKQFQcrba8DSlqbXkAeiLp1WaGI+VNJe0pCxdHGP03m76WLFKMfJa3iYrso8zIN3
+         /LFvGRaiZuK/bg0we93/SYxqGMpacTW6xCoVkeHg5cvGzFrSsEu7Zg031zBdImIg1rIC
+         ZuXg==
+X-Gm-Message-State: AOJu0Yye0oHVA6HOGWrDS8fGIlBsGKsPFJ5tdEuMwotXxAUez1jAbz4a
+	k4hAWUjbodAJ7np68NedRIOmZZ28jcVTHXviSwVYZTrsRT8zMy4ocobbRG9/YGyyEQ==
+X-Google-Smtp-Source: AGHT+IHHMs/eVxLHESpd24o244nq6Y4EmxbbhAy3iGzv0V4u8To/CmlESw40rAsu3tQ50BhJZmQnyTA=
 X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a05:6902:248e:b0:dcc:54d0:85e0 with SMTP id
- ds14-20020a056902248e00b00dcc54d085e0mr820369ybb.11.1710524659252; Fri, 15
- Mar 2024 10:44:19 -0700 (PDT)
-Date: Fri, 15 Mar 2024 10:44:17 -0700
-In-Reply-To: <20240315140726.22291-5-tushar.vyavahare@intel.com>
+ (user=sdf job=sendgmr) by 2002:a05:6a00:22c8:b0:6e6:450c:c9e5 with SMTP id
+ f8-20020a056a0022c800b006e6450cc9e5mr241207pfj.1.1710525568379; Fri, 15 Mar
+ 2024 10:59:28 -0700 (PDT)
+Date: Fri, 15 Mar 2024 10:59:26 -0700
+In-Reply-To: <20240315021834.62988-2-alexei.starovoitov@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20240315140726.22291-1-tushar.vyavahare@intel.com> <20240315140726.22291-5-tushar.vyavahare@intel.com>
-Message-ID: <ZfSI8UftKDGWTgUC@google.com>
-Subject: Re: [PATCH bpf-next 4/6] selftests/xsk: implement set_hw_ring_size
- function to configure interface ring size
+References: <20240315021834.62988-1-alexei.starovoitov@gmail.com> <20240315021834.62988-2-alexei.starovoitov@gmail.com>
+Message-ID: <ZfSMft5k3NMrTqlK@google.com>
+Subject: Re: [PATCH bpf 1/4] bpf: Clarify bpf_arena comments.
 From: Stanislav Fomichev <sdf@google.com>
-To: Tushar Vyavahare <tushar.vyavahare@intel.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn@kernel.org, 
-	magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, 
-	jonathan.lemon@gmail.com, davem@davemloft.net, kuba@kernel.org, 
-	pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net, 
-	tirthendu.sarkar@intel.com
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@kernel.org, eddyz87@gmail.com, kernel-team@fb.com
 Content-Type: text/plain; charset="utf-8"
 
-On 03/15, Tushar Vyavahare wrote:
-> Introduce a new function called set_hw_ring_size that allows for the
-> dynamic configuration of the ring size within the interface.
+On 03/14, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
 > 
-> Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
+> Clarify two bpf_arena comments, use existing SZ_4G #define,
+> improve page_cnt check.
+> 
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 > ---
->  tools/testing/selftests/bpf/xskxceiver.c | 35 ++++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
+>  kernel/bpf/arena.c | 25 ++++++++++++++++++-------
+>  1 file changed, 18 insertions(+), 7 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-> index 32005bfb9c9f..aafa78307586 100644
-> --- a/tools/testing/selftests/bpf/xskxceiver.c
-> +++ b/tools/testing/selftests/bpf/xskxceiver.c
-> @@ -441,6 +441,41 @@ static int get_hw_ring_size(struct ifobject *ifobj)
->  	return 0;
->  }
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index 86571e760dd6..343c3456c8dd 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+> @@ -38,7 +38,7 @@
 >  
-> +static int set_hw_ring_size(struct ifobject *ifobj, u32 tx, u32 rx)
+>  /* number of bytes addressable by LDX/STX insn with 16-bit 'off' field */
+>  #define GUARD_SZ (1ull << sizeof(((struct bpf_insn *)0)->off) * 8)
 
-Hmm, now that we have set/get, should we put them into
-network_helpers.c? These seem pretty generic if you accept
-iface_name + ethtool_ringparam in the api.
+Unrelated nit, maybe worth doing the following as well:
 
-> +{
-> +	struct ethtool_ringparam ring_param = {0};
-> +	struct ifreq ifr = {0};
-> +	int sockfd, ret;
-> +	u32 ctr = 0;
-> +
-> +	sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-> +	if (sockfd < 0)
-> +		return errno;
-> +
-> +	memcpy(ifr.ifr_name, ifobj->ifname, sizeof(ifr.ifr_name));
-> +
-> +	ring_param.tx_pending = tx;
-> +	ring_param.rx_pending = rx;
-> +
-> +	ring_param.cmd = ETHTOOL_SRINGPARAM;
-> +	ifr.ifr_data = (char *)&ring_param;
-> +
-
-[..]
-
-> +	while (ctr++ < SOCK_RECONF_CTR) {
-
-Is it to retry EINTR? Retrying something else doesn't make sense
-probably? So maybe do only errno==EINTR cases? Will make it more
-generic and not dependent on SOCK_RECONF_CTR.
-
-
-> +		ret = ioctl(sockfd, SIOCETHTOOL, &ifr);
-> +		if (!ret)
-> +			break;
-> +		/* Retry if it fails */
-> +		if (ctr >= SOCK_RECONF_CTR) {
-> +			close(sockfd);
-> +			return errno;
-> +		}
-
-[..]
-
-> +		usleep(USLEEP_MAX);
-
-Same here. Not sure what's the purpose of sleep? Alternatively, maybe
-clarify in the commit description what particular error case we want
-to retry.
+#define GUARD_SZ (1ull << sizeof_field(struct bpf_insn, off) * 8)
