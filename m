@@ -1,172 +1,77 @@
-Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932EE4CB58;
-	Fri, 15 Mar 2024 19:16:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.89.224.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C7F5102F
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 19:21:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710530179; cv=none; b=TYp9MndSzTiJpQj5WaMCqx1m15zS1JO+4O4BKImQnq+33JzxfZwgB7wRpysazHokSptsbSDBJfyL8MJKP4KkUGDa6ibQ7pL8KukLLy/Oyz0SzpybRBYHujH16rOQVEG2+Hszqs8R9j+YC1itnoV0rUcl8oI3iV7Pzq5/3hcLE1E=
+	t=1710530493; cv=none; b=q3wXHE9vsKb3rhJBjT7BE0Cdn5n2DLh5PjCh+LrwVO7hmqwZSjw/NQT6rjuIAl+Z2K5o0bkPokl7O6g7grKpWdt7kfMhlQtcJQfPq/1LOYRqLwftA/m9LHUPajt4paysuM//Jq8bRSYntRTv97mDADxIELRzQVhGxFcZ7N7EH9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710530179; c=relaxed/simple;
-	bh=2ADcnC12HSTO+U/xqectyx3NKUypGWioD/mh5sJ+rdU=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZOdXoTfwm8K/0YqeVW2vhy89MbTvydAv5OAiIkmz0OJvBKGIDMGbEFbTTZpoaleyzJlukaqxKgqv7yr32MOogklL4ND9Uo99iimP5txOxcIzy6xe++Ns14gVdscfiDrC3uaRAo9FNzkASGGzb7E55q9kOr1wM/zWquyMQ6AboU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=RDOgDofT; arc=none smtp.client-ip=45.89.224.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
+	s=arc-20240116; t=1710530493; c=relaxed/simple;
+	bh=mWf0gQpDHkYLJdzeMwFIP4FeKl/2JIS4hyIpR6zYX+Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EAjbw5RofZmOCPlxGNcOlssn3DhKrme0tp3ot+LX2wl7CccLn3BSL7nAYHLnpNkzbowoZCfSkCe0Ymf2WpJG20Soy56uo+t3XtxlzKc9EUhdYcaermFiUlXL7Te91CqPLLqpRH8Dr6ChPUvYzjOHAYg2aJHqzzDzD8I57QEN/sY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iQMVw4nG; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="RDOgDofT"
-Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
-	by mx1.sberdevices.ru (Postfix) with ESMTP id D23C5120004;
-	Fri, 15 Mar 2024 22:16:04 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru D23C5120004
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
-	s=mail; t=1710530164;
-	bh=aQc6jQvAwlY+uokpPcsnqZDUHef6LtDzBUv3F9bQff4=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
-	b=RDOgDofTh2vWrf+BZLHdtSrfXMRQEE31GwFwbtX7En6u9/ECYtjeemz51JA5YhM5u
-	 tFh4LgoxD+B370MiNwxRtFyf0RJXSpQeE9LH+Y8ZdYYsu3kQ78KbgiaZGGKGYYWtCp
-	 9+9c4FUzTbx+Wu6lWOOqubTbjMf75os3e635xIAdJ9pPk86el1WINKLQOIS96RTvqG
-	 jX17+LM99uAphI9yefMmlMV6PyAysXroSocEdeWgdg7RDGve7wEvF8Gz2rASYTV/Az
-	 ncKS/fjBaED1VDJVHoWvoKnGhy2fgFUqEYuDqSA4YWKVWm6Tk7s9oupLSawNnK599i
-	 9Ci8wUI99BNrA==
-Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mx1.sberdevices.ru (Postfix) with ESMTPS;
-	Fri, 15 Mar 2024 22:16:04 +0300 (MSK)
-Received: from localhost (100.64.160.123) by p-i-exch-sc-m02.sberdevices.ru
- (172.16.192.103) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 15 Mar
- 2024 22:16:04 +0300
-Date: Fri, 15 Mar 2024 22:16:04 +0300
-From: Dmitry Rokosov <ddrokosov@salutedevices.com>
-To: Cong Liu <liucong2@kylinos.cn>
-CC: <sdf@google.com>, <akpm@linux-foundation.org>, <bpf@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] tools/Makefile: Remove cgroup target
-Message-ID: <20240315191604.4sk3ifxrv5ca6w2n@CAB-WSD-L081021>
-References: <ZfNXjd1ML2WJwOKX@google.com>
- <20240315012249.439639-1-liucong2@kylinos.cn>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iQMVw4nG"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1710530488;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=oVxhjczIkyv+nS7khJgSyfcCSIlEdqE3wfLuLm6ctVc=;
+	b=iQMVw4nGI+YA2egxC4/BZrb6i1095J93+0MxQeMSjh2LsICrJakkKlFyds/Ce/Bxl8xZrs
+	+AqDeyWEunjDWUSZfBY5+yfXCHWvZqmuPIRsXcOr/bgBCzXHuOna4T+7bUQlM3NiUcd2/5
+	ucvbbjvtfSSCtn98DPPNfPslnN2aLFI=
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	kernel-team@meta.com,
+	Kui-Feng Lee <thinker.li@gmail.com>
+Subject: [PATCH bpf-next] bpf: Remove unnecessary err < 0 check in bpf_struct_ops_map_update_elem
+Date: Fri, 15 Mar 2024 12:21:12 -0700
+Message-ID: <20240315192112.2825039-1-martin.lau@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240315012249.439639-1-liucong2@kylinos.cn>
-User-Agent: NeoMutt/20220415
-X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
- p-i-exch-sc-m02.sberdevices.ru (172.16.192.103)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 183875 [Feb 29 2024]
-X-KSMG-AntiSpam-Version: 6.1.0.3
-X-KSMG-AntiSpam-Envelope-From: ddrokosov@salutedevices.com
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 7 0.3.7 6d6bf5bd8eea7373134f756a2fd73e9456bb7d1a, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, FromAlignment: s, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/02/29 19:21:00 #23899999
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Mar 15, 2024 at 09:22:48AM +0800, Cong Liu wrote:
-> The tools/cgroup directory no longer contains a Makefile.  This patch
-> updates the top-level tools/Makefile to remove references to building
-> and installing cgroup components. This change reflects the current
-> structure of the tools directory and fixes the build failure when
-> building tools in the top-level directory.
-> 
-> linux/tools$ make cgroup
->   DESCEND cgroup
-> make[1]: *** No targets specified and no makefile found.  Stop.
-> make: *** [Makefile:73: cgroup] Error 2
-> 
-> Signed-off-by: Cong Liu <liucong2@kylinos.cn>
+From: Martin KaFai Lau <martin.lau@kernel.org>
 
-Reviewed-by: Dmitry Rokosov <ddrokosov@salutedevices.com>
+There is a "if (err)" check earlier, so the "if (err < 0)"
+check that this patch removing is unnecessary. It was my overlook
+when making adjustments to the bpf_struct_ops_prepare_trampoline()
+such that the caller does not have to worry about the new page when
+the function returns error.
 
-> ---
->  tools/Makefile | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/Makefile b/tools/Makefile
-> index 37e9f6804832..276f5d0d53a4 100644
-> --- a/tools/Makefile
-> +++ b/tools/Makefile
-> @@ -11,7 +11,6 @@ help:
->  	@echo ''
->  	@echo '  acpi                   - ACPI tools'
->  	@echo '  bpf                    - misc BPF tools'
-> -	@echo '  cgroup                 - cgroup tools'
->  	@echo '  counter                - counter tools'
->  	@echo '  cpupower               - a tool for all things x86 CPU power'
->  	@echo '  debugging              - tools for debugging'
-> @@ -69,7 +68,7 @@ acpi: FORCE
->  cpupower: FORCE
->  	$(call descend,power/$@)
->  
-> -cgroup counter firewire hv guest bootconfig spi usb virtio mm bpf iio gpio objtool leds wmi pci firmware debugging tracing: FORCE
-> +counter firewire hv guest bootconfig spi usb virtio mm bpf iio gpio objtool leds wmi pci firmware debugging tracing: FORCE
->  	$(call descend,$@)
->  
->  bpf/%: FORCE
-> @@ -116,7 +115,7 @@ freefall: FORCE
->  kvm_stat: FORCE
->  	$(call descend,kvm/$@)
->  
-> -all: acpi cgroup counter cpupower gpio hv firewire \
-> +all: acpi counter cpupower gpio hv firewire \
->  		perf selftests bootconfig spi turbostat usb \
->  		virtio mm bpf x86_energy_perf_policy \
->  		tmon freefall iio objtool kvm_stat wmi \
-> @@ -128,7 +127,7 @@ acpi_install:
->  cpupower_install:
->  	$(call descend,power/$(@:_install=),install)
->  
-> -cgroup_install counter_install firewire_install gpio_install hv_install iio_install perf_install bootconfig_install spi_install usb_install virtio_install mm_install bpf_install objtool_install wmi_install pci_install debugging_install tracing_install:
-> +counter_install firewire_install gpio_install hv_install iio_install perf_install bootconfig_install spi_install usb_install virtio_install mm_install bpf_install objtool_install wmi_install pci_install debugging_install tracing_install:
->  	$(call descend,$(@:_install=),install)
->  
->  selftests_install:
-> @@ -155,7 +154,7 @@ freefall_install:
->  kvm_stat_install:
->  	$(call descend,kvm/$(@:_install=),install)
->  
-> -install: acpi_install cgroup_install counter_install cpupower_install gpio_install \
-> +install: acpi_install counter_install cpupower_install gpio_install \
->  		hv_install firewire_install iio_install \
->  		perf_install selftests_install turbostat_install usb_install \
->  		virtio_install mm_install bpf_install x86_energy_perf_policy_install \
-> @@ -169,7 +168,7 @@ acpi_clean:
->  cpupower_clean:
->  	$(call descend,power/cpupower,clean)
->  
-> -cgroup_clean counter_clean hv_clean firewire_clean bootconfig_clean spi_clean usb_clean virtio_clean mm_clean wmi_clean bpf_clean iio_clean gpio_clean objtool_clean leds_clean pci_clean firmware_clean debugging_clean tracing_clean:
-> +counter_clean hv_clean firewire_clean bootconfig_clean spi_clean usb_clean virtio_clean mm_clean wmi_clean bpf_clean iio_clean gpio_clean objtool_clean leds_clean pci_clean firmware_clean debugging_clean tracing_clean:
->  	$(call descend,$(@:_clean=),clean)
->  
->  libapi_clean:
-> @@ -209,7 +208,7 @@ freefall_clean:
->  build_clean:
->  	$(call descend,build,clean)
->  
-> -clean: acpi_clean cgroup_clean counter_clean cpupower_clean hv_clean firewire_clean \
-> +clean: acpi_clean counter_clean cpupower_clean hv_clean firewire_clean \
->  		perf_clean selftests_clean turbostat_clean bootconfig_clean spi_clean usb_clean virtio_clean \
->  		mm_clean bpf_clean iio_clean x86_energy_perf_policy_clean tmon_clean \
->  		freefall_clean build_clean libbpf_clean libsubcmd_clean \
-> -- 
-> 2.34.1
-> 
+Cc: Kui-Feng Lee <thinker.li@gmail.com>
+Fixes: 187e2af05abe ("bpf: struct_ops supports more than one page for trampolines.")
+Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+---
+ kernel/bpf/bpf_struct_ops.c | 2 --
+ 1 file changed, 2 deletions(-)
 
+diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+index 43356faaa057..3fcd35314ce5 100644
+--- a/kernel/bpf/bpf_struct_ops.c
++++ b/kernel/bpf/bpf_struct_ops.c
+@@ -728,8 +728,6 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
+ 			cur_image = image;
+ 			trampoline_start = 0;
+ 		}
+-		if (err < 0)
+-			goto reset_unlock;
+ 
+ 		*(void **)(kdata + moff) = image + trampoline_start + cfi_get_offset();
+ 
 -- 
-Thank you,
-Dmitry
+2.43.0
+
