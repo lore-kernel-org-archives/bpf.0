@@ -1,92 +1,108 @@
 Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C134D11737
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 04:45:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BAFCD2FA
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 04:47:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710477905; cv=none; b=Igv2nFjwtZpXLpAyFSH14WT8hH2/nAFCQXr5PAb1hpeNveasNsVNTSriptbHIble9qyEEjY5QhoZhpfkk2twbqo85gvOvDE8S0akrOxuXqeCme2O1YV8E/8s6h4W5XNHxbntSUcbYhwWztzcg0RhdYkNBelolG2ik8Lxyow7zog=
+	t=1710478071; cv=none; b=ReQ9D5itZ3gmke/ZY+Mhq8LCz8XB/eOpVkKyLZTjfR/IZo6kFojLbVUxy6hfE0Jm61shywg9FOMJff2maxqiE1H7eAf7pQ1DfamxSOTQne0CDLcT3KJoAUskw7TTdbIVeeC/gWSAJkpe+crX3Krb18Lhz5fDxfwUxJqBevqo2eQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710477905; c=relaxed/simple;
-	bh=/PyWIUXxaLMz2KVi/YjIJxN39czF3ar+mdnZSKDgAno=;
+	s=arc-20240116; t=1710478071; c=relaxed/simple;
+	bh=b6wU4RrvfqK8UCe1cRHFmg1WnI1R+g6RCtD7QE3x78Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JE9xkaMq1xkXPdtR+k38U6U6LJ5ShSextVUkUfhL3g7ESUPmtu1S3VoZyqIt+fiFifYzdecdGwwoZnrbm0CdVfAlQ2BPcGR9r2mPLTGvxeYuT8QFw9wnvOhrejVgk+9ij3j8nvJTxk8STufZOgQyFWO2APxLjFl8PHR8pwe20wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H/bdnBxJ; arc=none smtp.client-ip=209.85.221.54
+	 To:Cc:Content-Type; b=pzyPYWWacxcFSo65p1nTnbZV1bIqVviN9ZC3GnPQLYHfUJWImXQXXPtEZlC1fLQpiDnoGV40h95qhfbGccBeHXrlvFjYGEZbmzUNj53JUqEx4l2c25SogUgYFMMkAtIsnEeC8ijnoLSmj9uG01eEJGm6cXwhkQ5wI+rY5oeZrJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RzoDsTwa; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H/bdnBxJ"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-33ed4d8e9edso19617f8f.2
-        for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 21:45:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RzoDsTwa"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-33d90dfe73cso1025491f8f.0
+        for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 21:47:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710477902; x=1711082702; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710478068; x=1711082868; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ERezzMYOxc5344VP4JPhA41YPiFtNMpa8Qmjc91Q9Gs=;
-        b=H/bdnBxJ2Zh3DRakh7uJc6+eWLQTtkCSNNfDP6UYh97KkiJN8REEA6Zc0vLYAtSnIE
-         M+lFGNb6OLLWQUrLSRpiGxc28clTq42TgEoKsS9tP/Sgk1agDLFPv9Br2nRg/LY5A35y
-         VYa4OOTakY9gdxCoXTK+QPAnZx3I3NHNnM/JzPPYFm2/h73NEaoopscwlwBk/eqqaQ5U
-         UQGWHXntPqbVdk2k4ikHsncKemsiW6Q4PlclpGUUfp3PN9wKzOx51ISfnrQ96oJntMM3
-         hvMVh7ykYo7hH9m4YDoh9W2xX9g3WJCEfkEW86T93zYnYuj5BOob5Kih/CqnoYoO+wMG
-         kdBQ==
+        bh=drAWQCIEo7HnhwH/20r3m7PK4SqH9lkXzwna5fph/xE=;
+        b=RzoDsTwaaariagpBUNlKKcrN9AgFPUNmFdBAoAjtN2Lkl4wvvt6nZ4+HnjnP2t8mmp
+         ESvsLip0lKw8cx6SCDtN87BlRmYOzriOrd3q+KSeOzc/kv6w18Z6ZWdj55Y/qXw1wIn0
+         MRwEVxw/ZGwQIt+O8yLqAasd8jOr2wMBPn26+2Xm6rD9H2dfIvPf8MX5v3eNkgegOpQz
+         tC8ZHw4EM7kNIpLKktJEvmTECWbrFNUHnuWBJo7EY7Ahoztn2EVIakFy1oLH3t/eE6b5
+         5hea6VmTlNsntsBFjO5oybRuY7zIrOCOcS0/MFE2pRxnbSbLsAhBNWT/cV9mjp0oDzPu
+         AVnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710477902; x=1711082702;
+        d=1e100.net; s=20230601; t=1710478068; x=1711082868;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ERezzMYOxc5344VP4JPhA41YPiFtNMpa8Qmjc91Q9Gs=;
-        b=fbK8nKSJLz7jOuFXiMoLTBFQNt08kqTOSHJQSHSsAJpI5z2pzKFmUGRi3+5MwAUDEM
-         sIooyjfvsxVlmn0cQP1Q+t8f5+eW/unNEGxLtgjiA5dvTQiXuf98P7nMyDgkKu9L8Qyq
-         G48EWzsjZEiSLn1vQYG1SDi2N8rzibz4kGqToSvuFRGlZpfJi92iLnA302XGc1ljjju2
-         ffg3vg++Ee8gk0i96CraTO+wrb60ooWVw/L9/1/Zj9yP0vZVy4zu1WBIOrXdOGqeXhMl
-         750J2i2uruu9HAInq0ZH64/MYyTN7m8xJOdVa6us8pdofrHe8KoYLSUzVl0gGsZ+hNyk
-         ekTQ==
-X-Gm-Message-State: AOJu0YyJjcN7jx243zph1u6TYW1MnAk3M7kZ+gZav9ii4ejh2cibmP2X
-	+uQ8aBAuFuOo8H9j3a/VU0NYMNT/eD97PghJcjibFYCIQK055kXu6ZN1W35IU4q2Wvi5GzWvF01
-	JAZuqxi6KYDT95VXsJoGliy7yxFQ=
-X-Google-Smtp-Source: AGHT+IGzJCXoUX32FqiuLyaaSHpOfMNz35Qkrj+7hzobaKLFMfUYrD9w4F+KOJoC9lrqYM62PSRvvtPaZAMRAAowWOI=
-X-Received: by 2002:adf:eb11:0:b0:33e:bb74:ac0c with SMTP id
- s17-20020adfeb11000000b0033ebb74ac0cmr2899896wrn.6.1710477901921; Thu, 14 Mar
- 2024 21:45:01 -0700 (PDT)
+        bh=drAWQCIEo7HnhwH/20r3m7PK4SqH9lkXzwna5fph/xE=;
+        b=JlGpSSBJR19OBRLATocIDKY66F+OtXJ0PQ9aXdlqIt725TdUq3FOptL5xc6ZowGfdb
+         rEoPO1D7YEu/EtVEeC8o1uwp5N7n05BC8m3+tLcup8JlPbVy+GnKwWH68GYE9jdq9iJx
+         m2V6iu/jQ2VbzryAWBcmdp4fURCXJnAgq3wZzuZ3z3svtqQWq9CNt+0bHTprtId3HRzW
+         0D077Qz8Ee+ik5zwfsR+Ke4UIDCj7PPCWWiVLFGUCG25UaXto8YyXjrnOu9MPqE5zIDp
+         dzP40bS/ivpyC36YZijZnW1xs4p/IcGxRHPxJsgVv9+tE8lMuNPLUWAxphGE6nAj5qhY
+         snnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXRBXm/OMkRMVxxIK7NiVVyp38ongCxvf5YlzZydmenldHgpvboPRytpv0yC1ryO0CHWO2/QyjGM5COxkH8sOIrXmxj
+X-Gm-Message-State: AOJu0Yy2gIB2h3Vf1YxjSc8kIfuLpH00/i0/LAf6VO73SYpXcEqROTtE
+	mUGoymL+e/QrqgIFbcupHlMNKBtsoDkIUvdnxfno13+pOft1MvU5GuAeP8/eU2awPDUreEpIptn
+	21gw9D2IOyXPOhe6pDzxXCaoy93E=
+X-Google-Smtp-Source: AGHT+IHBympoQ2Mbogu/i4u7YvSlzy2eLaRYg0+1fpI2KngLwdRvxBy7a1jwK1b1F+qHFIXeP3Y4VsJ207uHjyp1xj4=
+X-Received: by 2002:a5d:5051:0:b0:33e:c69f:6769 with SMTP id
+ h17-20020a5d5051000000b0033ec69f6769mr4171182wrt.26.1710478067679; Thu, 14
+ Mar 2024 21:47:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240315021834.62988-1-alexei.starovoitov@gmail.com>
- <20240315021834.62988-3-alexei.starovoitov@gmail.com> <CAEf4BzYpEz=XGwYaG8_YBRU6WbDp_23ybVLC1aEy1bYMJ77hVg@mail.gmail.com>
-In-Reply-To: <CAEf4BzYpEz=XGwYaG8_YBRU6WbDp_23ybVLC1aEy1bYMJ77hVg@mail.gmail.com>
+References: <20240312222303.2305873-1-andrii@kernel.org> <CAADnVQLBciwQ22GE1z6Sf-r+V8JRDfMjMVQWburR_pPgLj9XZA@mail.gmail.com>
+ <CAEf4BzYwpFh9LTHW2s9G=mgyKcPZO9Knu_EYrgwPb1h=SByuXg@mail.gmail.com>
+In-Reply-To: <CAEf4BzYwpFh9LTHW2s9G=mgyKcPZO9Knu_EYrgwPb1h=SByuXg@mail.gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 14 Mar 2024 21:44:50 -0700
-Message-ID: <CAADnVQLX0=aKArQoxZt8sc_TgnNNz9+4Ycxvhnpo+AixwRK=Fg@mail.gmail.com>
-Subject: Re: [PATCH bpf 2/4] libbpf, selftests/bpf: Adjust libbpf, bpftool,
- selftests to match LLVM
+Date: Thu, 14 Mar 2024 21:47:36 -0700
+Message-ID: <CAADnVQLaAP-aw9KAe1cvsYOTxf7=_SB0qNdbZv-cGb83pxUyuQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: scale benchmark counting by using
+ per-CPU counters
 To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, Eddy Z <eddyz87@gmail.com>, 
-	Kernel Team <kernel-team@fb.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 14, 2024 at 8:57=E2=80=AFPM Andrii Nakryiko
+On Thu, Mar 14, 2024 at 8:56=E2=80=AFPM Andrii Nakryiko
 <andrii.nakryiko@gmail.com> wrote:
 >
-> On Thu, Mar 14, 2024 at 7:18=E2=80=AFPM Alexei Starovoitov
+> On Thu, Mar 14, 2024 at 7:33=E2=80=AFPM Alexei Starovoitov
 > <alexei.starovoitov@gmail.com> wrote:
 > >
-> > From: Alexei Starovoitov <ast@kernel.org>
+> > On Tue, Mar 12, 2024 at 3:23=E2=80=AFPM Andrii Nakryiko <andrii@kernel.=
+org> wrote:
+> > >
+> > >
+> > >  static void trigger_base_measure(struct bench_res *res)
+> > >  {
+> > > -       res->hits =3D atomic_swap(&base_hits.value, 0);
+> > > +       res->hits =3D sum_counters(base_hits);
+> > >  }
+> > >
+> > >  static void *trigger_producer(void *input)
+> > > @@ -42,7 +72,7 @@ static void *trigger_producer(void *input)
+> > >
+> > >  static void trigger_measure(struct bench_res *res)
+> > >  {
+> > > -       res->hits =3D atomic_swap(&ctx.skel->bss->hits, 0);
+> > > +       res->hits =3D sum_counters(ctx.skel->bss->hits);
+> > >  }
 > >
-> > The selftests use
-> > to tell LLVM about special pointers. For LLVM there is nothing "arena"
-> > about them. They are simply pointers in a different address space.
-> > Hence LLVM diff https://github.com/llvm/llvm-project/pull/85161 renamed=
-:
-> > . macro __BPF_FEATURE_ARENA_CAST -> __BPF_FEATURE_ADDR_SPACE_CAST
-> > . global variables in __attribute__((address_space(N))) are now
-> >   placed in section named ".address_space.N" instead of ".arena.N".
+> > It was zeroing counters before.
+> > Do you need to zero them now?
+> >
 >
-> .addr_space.N, according to code below
+> sum_counters() does zero them out, it does the same atomic_swap(0).
 
-yes. subject typo.
+I simply missed the swap in there.
+Could you rename it to sum_and_zero_counters() or
+something, so it's obvious?
+A helper that says 'sum_counters' isn't expected to have such side effects.
