@@ -1,122 +1,142 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 536EB45970
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 16:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 968CE36102;
+	Fri, 15 Mar 2024 16:44:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710520387; cv=none; b=tJ2j2DjfISjl5LuKUpiHZC6ic9kJsLNP0+HnxPr7CZJd0jnZAtOPzRc4h8NXVOEwEAsLhMrBmfauLzezwYUv+/WU6Zahl1GpAJxWwu9xljdFUimp/z0SNMrE6Gcln0jo91l82+xSvqoRAKNG1ch/mLW8UusjyB4TijAdPgCni/Y=
+	t=1710521053; cv=none; b=Fd2mEiyOZY1eAdZ4J1VCRP7+C1j2yfEfGI9TmJM3it1razaOg2aOCCAnG4bDI25Kz6moBL7RW+mvNUczI9aykBucRBmcjmjtFQkRjEbkcVqEcqT86W5P6YINbl+flzRdBEy0CjKgLbh0uNJI8z/19R1KjZ4+PrSurMPhfG4JhP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710520387; c=relaxed/simple;
-	bh=s/BDewy2og3gZ1LCUXxuxGEeN0vfxyfHKGu3DaFPrFg=;
+	s=arc-20240116; t=1710521053; c=relaxed/simple;
+	bh=uzYJp0p7W/KnhEZCybrOQ21iTY+W18Is4IY0juHOSkE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DIMAIRSbFKklOxTI1VFz335+sgAMjej+h4R0Pwo2X/MWZs4+IRRIkuJiLl3jLCkeEyIQHg5r8CETvPAhZFcTMmbemMRhzYufMV3do1LDh1D670Bx/CUX+bfEqigb9n4RrTLtGWBAIh+FkYwcT9ukFO6rZYPVrNeQ4D6MwXsE0qE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fJLT5XSl; arc=none smtp.client-ip=209.85.216.49
+	 To:Cc:Content-Type; b=g1prlxNeOl1SaEMVfKy3QsajdKiGX/laZ5FZpGKDgybhIvV2QNRpB8ywI1b0XF/pqC9zj6eTCihFDqaXAd4iJojOmelaG1rxVbYcnQlLCXicCI9wrmT1quqbP3fNxmB/ku96GzJB0vTpwEQtCLvvig9MmE8TqMoXqFQYhmt6bUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eNTHxGrQ; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fJLT5XSl"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-29c16b324ecso1726237a91.3
-        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 09:33:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eNTHxGrQ"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6e6cb0f782bso1903500b3a.1;
+        Fri, 15 Mar 2024 09:44:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710520385; x=1711125185; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710521051; x=1711125851; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tVq28LuJUHVImSegoPYnyTJIQo9AajCxAmkjABn6qTo=;
-        b=fJLT5XSlB4wikujvpAaKPVtfZLnvIYXeUlA3cBm49qXI4fc8g6wdyCiUfkR65HEw2j
-         qSEGN6xX6ln5zFo2jYkOfdH+dvDNUmK80KDapMCfPVHg23jvn4sZzH0cE3+P0vnMTwRJ
-         EjW9I/9+3NzaGifvCvT535qWyofJuqxsHLXgeKZHKhXSS+UKP6n2zxQC9B5N2PVp6vpn
-         w2PybicaHjotwleNSOua69As67kc+oEgFScbiH99ev7Q/23Ln6oadk3sYkcVfJq3haVC
-         RFyo1+sodC8Q1EFa3JmLR7D5PPN+zY8NLyFHXZ4ONdGh4J+tElidxgBUp6axGmGaI5x6
-         KtoA==
+        bh=EwJBRDQaCHTutZqaHKnSum7/I1i3qkduDrBcDoliYfc=;
+        b=eNTHxGrQmEp1tIgOhZUA3ovkSZ/+aFbKld9qwqhtdSw8cEg053Q09WBiDc11LgyFLq
+         /ufXfmLHFgGzPzpTNgXSSp/J98AAg1C3oBm9Nr5vmN/8ECURb0ngp2zvrBHrC49h/YBY
+         sSeFkdFVDwIcpBqjCjVUKz1s3gjfOiPK6QXMCO9NQhvG0oR1P72f4kmoR2zSFdG2jILX
+         sLXVtLIvTrnvq/0I1jQe0vVcWxKhjE6Xwexj70Ahu/G7SijarZLhMu6fnfdHVfeW8/oq
+         dz1WjFLv5gge14gh/820B8UlkaWar2p6ILTtno7CmxQaS/wrShkpRlej5LoEez8x1ywk
+         ayqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710520385; x=1711125185;
+        d=1e100.net; s=20230601; t=1710521051; x=1711125851;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tVq28LuJUHVImSegoPYnyTJIQo9AajCxAmkjABn6qTo=;
-        b=gTfhgwIOS57REJzxngRexxR9TJVsrH99MXkcNhX0jXeKiLjkYoUvZ5Air2FUo4ZM6z
-         ZKYxmxLWij3LAqszN6hlyRdrDs0bgvonYOhNyC44lKmiogpkf314NgPTGqCjhKvh8fjd
-         lOBzZq+jiWEezVATh3BzU0eC9tIOjCpecS7wAzd0LK90yRAArc15yqN5fKx9ApDD615v
-         WMlF2FjCZ+uOUNmCxSQMev/FCVk88lmRIKk8qX/DkADDd2bIs4p/qf7WgZWEI2nb3slL
-         e5XaT4ldtAfpbhqWWL5TfUJsZZiMccMFIS7FNFwaeta+/qTsK3zrECFaQiruD27zOzhT
-         nLsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUv8oDDxL2coxjy502wTq3+YMhEQg0wqQ3z43ZbRb+pxH3ZHiY0EnwnBtiqQzLq7tnMziVYIXgd5/uC302JsQLbTJ7D
-X-Gm-Message-State: AOJu0Ywn92zQxiW2kkdc4d7V8RBxOTnvjd+vBM3fddCsts8RxYP9J0vD
-	h5DJg4PoR2fRcrcTGtFhsuXpIY5anjUxQ1WP+ZJLepsw6qR5AuxcZZoJEWgWFFH5NIE6Iywt1wa
-	34zKPRhIGDqFAK5Vv+LjgtFo8l4c=
-X-Google-Smtp-Source: AGHT+IEbemYwqH5K78I6LYVMJ98kY+gpl+EsooT7C5ZlT520qPvPEq8hw8IU+A9DMJg2RGDKpv+cFYR4zi+9ZpaObTU=
-X-Received: by 2002:a17:90a:bc9:b0:29a:6b1d:4d32 with SMTP id
- x9-20020a17090a0bc900b0029a6b1d4d32mr5334127pjd.38.1710520385470; Fri, 15 Mar
- 2024 09:33:05 -0700 (PDT)
+        bh=EwJBRDQaCHTutZqaHKnSum7/I1i3qkduDrBcDoliYfc=;
+        b=WCo0GM/NETc9yWcGtLsDnjtEpi1TUAnbYSSs9kZ0+5yuYeoArp0VLmSFpBI5b6Uoie
+         wtSGTkg67LMC1OjRd0hTOxCeT2oVAOajZVw6QBONumGLROEt7SKOaSJ18qbqrfhlO2TU
+         hDx8jHSl60tyYFSDlETy1LS/J8FQZaNH76otoI/R6KO2CS5LISRY5ws7MQIwsvI+fZ3k
+         BX4hl2yQTbahZKPe/IjIJ29EJoMlYpSKsy06Dy2lxqragFNt/0d+QtZVuUYstuFGWxiF
+         27FfmHbLJ9RvKKOnDY3XChKSd1l2ck+hPDELyQkB9nzHu0qeQ7n9n1WMrCdnnkMuB9R0
+         mI+A==
+X-Forwarded-Encrypted: i=1; AJvYcCVsaD1ug+5xn49EDRhU3/byBne6dvabhZ9cfonqANTN27Z4wwqvFcZrKoq1a8kORo+PEIe4sWMdXps497LPh87SkWFGhdS58ZbvY1OnZh+v70mDgyq+IhGf73khIVtHmtyH
+X-Gm-Message-State: AOJu0Yy/5d1KheylwLEHXkIbvrxIuRykkqbeeBF4dskZTjcl68d7kM98
+	S4pl3479rHDbzQuPw813/giZm7Q94VXa1NLXFYMQb+AA3AXLiUw/8ROuO9RapjUlKcfCZ0OpwOr
+	O4Ue5dxhw2Ug0mnXdcZPGss65c24=
+X-Google-Smtp-Source: AGHT+IHedFw6/rnqxLl3EQNKEdSQVA1QinZCgy8Dszf5K4o1eAXbYCO4NwhZkS4xmW+SFL4MJ0voUf5oFtTMwlTffm4=
+X-Received: by 2002:a05:6a00:a0c:b0:6e6:6a80:aced with SMTP id
+ p12-20020a056a000a0c00b006e66a80acedmr6809034pfh.32.1710521050796; Fri, 15
+ Mar 2024 09:44:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240202162813.4184616-4-aspsk@isovalent.com> <CAADnVQLnk=UyKBkRAC1tNkiaF7C4+FG7V-b2xrR3oa_E4+QX7Q@mail.gmail.com>
- <ZcIDqnXFjsWYyu1G@zh-lab-node-5> <CAADnVQLfidjTWa4+kyRH-qC29gbGvFsRJHu6smcaL0Yk0HqgmA@mail.gmail.com>
- <ZcS1ZruKKZ1euzlb@zh-lab-node-5> <CAADnVQKH1aitaADzCo__PfMJJA2SxAvYjTS8Z7A6Y01G2OWJgw@mail.gmail.com>
- <Zc9p4e1EccPkMnmY@zh-lab-node-5> <CAADnVQJ+_+ok_io1_W7e5z_dZhxSqhEFZQkumRgmY4AJRYwW7g@mail.gmail.com>
- <ZehJFP11vi5sv/eW@zh-lab-node-5> <CAADnVQJnh+j9etPYkst7hhnepvsoBuJY-ds-AF0fn3VqqJNXNg@mail.gmail.com>
- <ZfK9Y5c7RuOu0YiN@zh-lab-node-5> <CAADnVQLXok7niyyvpUaJxq4pNFFrBP5Vsk47NNxw1V4ipBdRrg@mail.gmail.com>
- <CAEf4BzbkkrFACwWQQQkESrdRKWUvJz=NyWdrtu4v6m2aOJKztw@mail.gmail.com> <CAADnVQKdvKqNt0GJ5+vJFEHHjRF_YGUR_htrs+QjQ0SgUV5woA@mail.gmail.com>
-In-Reply-To: <CAADnVQKdvKqNt0GJ5+vJFEHHjRF_YGUR_htrs+QjQ0SgUV5woA@mail.gmail.com>
+References: <20240315113828.258005-1-cgzones@googlemail.com> <20240315113828.258005-9-cgzones@googlemail.com>
+In-Reply-To: <20240315113828.258005-9-cgzones@googlemail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 15 Mar 2024 09:32:53 -0700
-Message-ID: <CAEf4BzY9wov5rS_MmzPWLErr8RKxKmFGV17Y2zsMCQCz6HKx6Q@mail.gmail.com>
-Subject: Re: [PATCH v1 bpf-next 3/9] bpf: expose how xlated insns map to
- jitted insns
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Anton Protopopov <aspsk@isovalent.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jiri Olsa <jolsa@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Stanislav Fomichev <sdf@google.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>
+Date: Fri, 15 Mar 2024 09:43:58 -0700
+Message-ID: <CAEf4Bza0cpQM4Vz-JVDanr6b+LmJPxehcvmxX1++WQwBji9-Pg@mail.gmail.com>
+Subject: Re: [PATCH 09/10] bpf: use new capable_any functionality
+To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc: linux-security-module@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 14, 2024 at 2:41=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Fri, Mar 15, 2024 at 4:39=E2=80=AFAM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
 >
-> On Thu, Mar 14, 2024 at 1:06=E2=80=AFPM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > > What could work and what I am proposing is to pass a list of bound
-> > > > maps in prog_load attributes. Then such maps can be used during the
-> > > > verification. For normal maps
-> > > >
-> > > >   prog =3D prog_load(attr=3D{.bound_maps=3Dmaps})
-> > > >
-> > > > will be semantically the same as
-> > > >
-> > > >   prog =3D prog_load()
-> > > >   bpf_prog_bind_map(prog, maps)
-> > >
-> > > Instead of a whole new api, let's make libbpf insert
-> > > ld_imm64 r0, map
-> > > as the first insn for this case for now.
-> >
-> > This sounds like a big hack and unnecessary complication, tbh. I'd
-> > like to avoid having to do this in libbpf.
-> >
-> > But I think we almost have this already supported. In BPF_PROG_LOAD
-> > UAPI we have fd_array property, right? I think right now we lazily
-> > refcnt referenced maps. But I think it makes total sense to just
-> > define that bpf_prog will keep references to all BPF objects passed in
-> > through fd_array, WDYT? Verifier will just iterate all provided FDs,
-> > determine kind of BPF object it is (and reject unknown ones), and then
-> > just take refcnts on each of them once. On prog free we'll just do the
-> > same in reverse and be done with it.
-> >
-> > It also can be used as a batch and single-step (in the sense it will
-> > be done as part of program load instead of a separate command)
-> > alternative for bpf_prog_bind_map(), I suppose.
+> Use the new added capable_any function in bpf_token_capable() and
+> bpf_net_capable() implementations.
 >
-> fd_array approach also works. There can be map and btf fds in there.
-> I would only bind maps this way.
+> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> ---
+> v5:
+>    add patch
+> ---
+>  include/linux/bpf.h  | 2 +-
+>  kernel/bpf/syscall.c | 2 +-
+>  kernel/bpf/token.c   | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+>
 
-Any reason why we should have non-uniform behavior between maps and
-BTFs? Seems more error-prone to have a difference here, tbh.
+It's actually a nice readability improvement, thanks!
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 4f20f62f9d63..bdadf3291bec 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -2701,7 +2701,7 @@ static inline int bpf_obj_get_user(const char __use=
+r *pathname, int flags)
+>
+>  static inline bool bpf_token_capable(const struct bpf_token *token, int =
+cap)
+>  {
+> -       return capable(cap) || (cap !=3D CAP_SYS_ADMIN && capable(CAP_SYS=
+_ADMIN));
+> +       return capable_any(cap, CAP_SYS_ADMIN);
+>  }
+>
+>  static inline void bpf_token_inc(struct bpf_token *token)
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index ae2ff73bde7e..a10e6f77002c 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -1175,7 +1175,7 @@ static int map_check_btf(struct bpf_map *map, struc=
+t bpf_token *token,
+>
+>  static bool bpf_net_capable(void)
+>  {
+> -       return capable(CAP_NET_ADMIN) || capable(CAP_SYS_ADMIN);
+> +       return capable_any(CAP_NET_ADMIN, CAP_SYS_ADMIN);
+>  }
+>
+>  #define BPF_MAP_CREATE_LAST_FIELD map_token_fd
+> diff --git a/kernel/bpf/token.c b/kernel/bpf/token.c
+> index d6ccf8d00eab..53f491046a8d 100644
+> --- a/kernel/bpf/token.c
+> +++ b/kernel/bpf/token.c
+> @@ -11,7 +11,7 @@
+>
+>  static bool bpf_ns_capable(struct user_namespace *ns, int cap)
+>  {
+> -       return ns_capable(ns, cap) || (cap !=3D CAP_SYS_ADMIN && ns_capab=
+le(ns, CAP_SYS_ADMIN));
+> +       return ns_capable_any(ns, cap, CAP_SYS_ADMIN);
+>  }
+>
+>  bool bpf_token_capable(const struct bpf_token *token, int cap)
+> --
+> 2.43.0
+>
