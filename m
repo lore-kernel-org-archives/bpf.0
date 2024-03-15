@@ -1,56 +1,56 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D3A612E
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 02:18:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E097475
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 02:18:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710469130; cv=none; b=RM1COx9K/wF+ZJIxjYbzr3CV/FPdXPfsVf1PuG7DNdogA49OqLlm0xXWA0mxAFqaWGNMUXAxjAjMP6uEzEDAKJRYQKyU5iGPD73+LTIoRJdNxhut5buAzfFNgjnTiR5CELzYP1S8i+5CnF8f96HZ0AURgeMD4KVHoGyGHphjXbU=
+	t=1710469135; cv=none; b=KQYVmDQBzRLiWqJaSlOJWGj6BHvHBRKKWEKH0ZaMZSdSdJ3+7Aq61IlfeIS2tY1UUR+7NIpmEFzPnz74oqlSBP092GAiG6ldW8Q/hKmLQNX0NrWhjk6G8Z/0HboTGTngG8hjv2ajGheSd3GQ9KBaYAQ7mdpq/fX1lXZ9W/oA/JI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710469130; c=relaxed/simple;
-	bh=Ma3gWJpDDdEY2PHAX9uxB0hodqqLz6SSTDTiqh0msx0=;
+	s=arc-20240116; t=1710469135; c=relaxed/simple;
+	bh=fRGxwgZJgIun9WG2Q0eGtrpe2RH7X+Ujdo3jnRHJpIY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XCRY3Nnossb7djPNo2GZ/qThSofVnm+jQu4F0K468XyjyADiY7MYViCWve6eIkaR8t9VFeG3i5Hbxl9ckpoT2PK9u9IxvFsAbz82Isssp4aj003f8MGJyQjNq8FckCal5mCOHqxRYMxLVVq9qdacC5f9whUY8fOLWKEWJ7WYtao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AxQnZ4FY; arc=none smtp.client-ip=209.85.214.182
+	 MIME-Version; b=k0BOl8IIqaVXSj3Hm3WSMMh9EeQO+HQiYShSVgTiqNAbjvM9stA0Tj9Cd7tUVj4JmmDh830arVzxZRI7iKa65xX6dcCeUp10URm2YPEPkQ3M7grDeoF5wV/RrFCu5/VlgfDc50HS725JKVZlD0kNWGrLzmN/3XzkUz3Bgxf6fwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QRl36ZQu; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AxQnZ4FY"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1dd955753edso14126465ad.1
-        for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 19:18:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QRl36ZQu"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6e6ca3fc613so1495853b3a.3
+        for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 19:18:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710469128; x=1711073928; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710469131; x=1711073931; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/Zx7uP+08rqU4RWjEF5NIqdDD1npSQ+tlO45Imu6axw=;
-        b=AxQnZ4FYrv6QDxy0FwUy/DXiFR8elykny/BgLNc2+qjL87MyeTX0jVcLgYevnvEV2w
-         v4TC0bQ/EhaXdJEOY0SVpYOUzu7E5ZcQm7isG9+XpiYpOXSKs1cfiugdtASlKP56QD2T
-         tcvMqsKwccXhbvlv+SUo3okuY5kFhygpg0cMvwc2jvLVFbyIduXJ08vl22sUCZwfdZrm
-         au0B+w1ZkTJFQThVYqBytFhGkgp0vQo159w0/KhPS5oAz+nDrXgG0C9IqE5sDzfK+bMt
-         AeeKLoKLFanZT5/526yJAlstFescuK+QcHb6WHNBWXNmXNqvjsij3eocFjTvBV8um8dH
-         EnxQ==
+        bh=aw9HNpkPu3M15nlqCUXDEG9a1OTpQP39gAEymrsi8BA=;
+        b=QRl36ZQuyQ7NNRLSZ+hvTeD+MFk/elkKcaWmaXVIqCByxNzyDoheBEwcHbOWobNut6
+         APwGGT/tED/HOTVLmmE+X3OHOl7bz/gn/BbtoXRw1O/WKYd+A7RwoVqXcaZ3n0rlzf85
+         UYRT8aqTlSWN5akpTUTXsY0igHqeUFSzTJVCUKc8Lfs/TlqOwKHAWvp2Nycel57wLT3q
+         /JPXIDjUiPtNMCPn7LHIeJH1Z32FI3PVnuYihOHmFThKRg4LWWLCgXwy3R1C2LhHiaF0
+         Nol4S44cCpucBoa/fCcMISeprx3FxY3gEzRib7dsKHvc1KwMdeorBPXUW4dfJb1+UY3v
+         RAVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710469128; x=1711073928;
+        d=1e100.net; s=20230601; t=1710469131; x=1711073931;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/Zx7uP+08rqU4RWjEF5NIqdDD1npSQ+tlO45Imu6axw=;
-        b=pfV1eXBwNjvfHgF4dJdj17o4082dW+iWmy2umiseFMCEA9jmI0P+gT8XIe5DmqCGwl
-         1SXq5rerlMqyvvvN0bFzLLPapq3wM4cUXzMFsVEIxTWD+VlCQkqdLJe3xR99z2BexUut
-         71eyWyL83uOYkIyKczqFCaIMJU6UbBffXAsCyhpOJV7za03037PLZSxFWfSO/fXtVRSn
-         okjm/n+SgCxLvxxyYnWg/6l+gMPCTcJC1bTiIrLmDLKZnVzWOMdOZVZXVx8jD/3uFZTQ
-         pt2cnVRGu9CQMyxSxzY4cA0ZZ7p6bcUcpwX4EsPT7u77/nQiG+6eGd9M4ErcyEwVKJNI
-         opHg==
-X-Gm-Message-State: AOJu0Yx6qo8+SoBBfMby1fXCKOdI7I0XSLCCClJCeMfnmPXHaUBhW8Hi
-	O2PpV3X/oTBmJ9IhxX+hMi5XJ3liwiW0T+cOoZKGwmHcyJxlxSSYVsDl059x
-X-Google-Smtp-Source: AGHT+IGI+zFrOc/Rqmpv9XDOzSo1uZFmdk/W/vFxrG4YH/f6UafrgD2mx8n6tPB5wv1YL/7MErn6gg==
-X-Received: by 2002:a17:90b:2348:b0:29c:718b:7b8f with SMTP id ms8-20020a17090b234800b0029c718b7b8fmr1702476pjb.28.1710469127773;
-        Thu, 14 Mar 2024 19:18:47 -0700 (PDT)
+        bh=aw9HNpkPu3M15nlqCUXDEG9a1OTpQP39gAEymrsi8BA=;
+        b=bB6ZHO3PJCO61LEcOQUE5Bp8jLZDzW87nqnPMLGcdttmCLC7ucu76zZ19ZFxp264GG
+         QhD+BOI8HkOezVTL0wkDWKyzVcaHFUB/hPnAT4A2g1Jq6WGMQCZhrSv+vf79qp/KHIGz
+         sGHY2oY4DWe9nlzdIpxIgkSIZfXsD6fpTFrvsdSbdI9sy2VoOOJCrTGMRFCjwbtS9pr6
+         iJR+/z7J49PFE7ZccylKBmbjsANtOovXO8/eLEp/4z+q/nr3o+B9yGOCEiHXiKZAwJZP
+         zDCuKJcnzJ4hpgDLkYNY+LVuObBDwiE+XmmX0a01Xm8L2aS6t4waVQHbOBRtzPnKA4Rt
+         2H3A==
+X-Gm-Message-State: AOJu0Yx7Qyk0MEhQ8rAsEusEHFlgbIHCt3HPBjaHQLXd2thMlE3CBJIt
+	3721WpYKVzSPMuRCeQGswzoDRsiWPnRe9Yf4VfobvUHs+tt3DmTjSNfOgqn2
+X-Google-Smtp-Source: AGHT+IHVv7qMAuZXk6yisA4UZYvIHHSKJGRUPaOWUd9/fJij/X++y8wP21hB1Q8juuFBninv0yPwtA==
+X-Received: by 2002:a05:6a21:1a4:b0:1a3:4859:1ac5 with SMTP id le36-20020a056a2101a400b001a348591ac5mr2126755pzb.3.1710469131018;
+        Thu, 14 Mar 2024 19:18:51 -0700 (PDT)
 Received: from localhost.localdomain ([2620:10d:c090:400::5:12e])
-        by smtp.gmail.com with ESMTPSA id u10-20020a17090282ca00b001ddddc8c41fsm2478072plz.157.2024.03.14.19.18.46
+        by smtp.gmail.com with ESMTPSA id qn8-20020a17090b3d4800b0029a4efc0231sm1695675pjb.56.2024.03.14.19.18.50
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 14 Mar 2024 19:18:47 -0700 (PDT)
+        Thu, 14 Mar 2024 19:18:50 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -58,9 +58,9 @@ Cc: daniel@iogearbox.net,
 	martin.lau@kernel.org,
 	eddyz87@gmail.com,
 	kernel-team@fb.com
-Subject: [PATCH bpf 3/4] selftests/bpf: Remove hard coded PAGE_SIZE macro.
-Date: Thu, 14 Mar 2024 19:18:33 -0700
-Message-Id: <20240315021834.62988-4-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 4/4] selftests/bpf: Add arena test case for 4Gbyte corner case
+Date: Thu, 14 Mar 2024 19:18:34 -0700
+Message-Id: <20240315021834.62988-5-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.39.3 (Apple Git-145)
 In-Reply-To: <20240315021834.62988-1-alexei.starovoitov@gmail.com>
 References: <20240315021834.62988-1-alexei.starovoitov@gmail.com>
@@ -74,56 +74,110 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Remove hard coded PAGE_SIZE.
-Add #include <sys/user.h> instead (that works on x86-64 and s390)
-and fallback to slow getpagesize() for aarch64.
+Check that 4Gbyte arena can be allocated and overflow/underflow access in
+the first and the last page behaves as expected.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/arena_htab.c | 8 +++++---
- tools/testing/selftests/bpf/prog_tests/arena_list.c | 7 +++++--
- 2 files changed, 10 insertions(+), 5 deletions(-)
+ .../selftests/bpf/prog_tests/verifier.c       |  2 +
+ .../bpf/progs/verifier_arena_large.c          | 68 +++++++++++++++++++
+ 2 files changed, 70 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_arena_large.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_htab.c b/tools/testing/selftests/bpf/prog_tests/arena_htab.c
-index 0766702de846..d69fd2465f53 100644
---- a/tools/testing/selftests/bpf/prog_tests/arena_htab.c
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_htab.c
-@@ -3,12 +3,14 @@
- #include <test_progs.h>
- #include <sys/mman.h>
- #include <network_helpers.h>
--
-+#include <sys/user.h>
-+#ifndef PAGE_SIZE /* on some archs it comes in sys/user.h */
-+#include <unistd.h>
-+#define PAGE_SIZE getpagesize()
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 985273832f89..c4f9f306646e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -5,6 +5,7 @@
+ #include "cap_helpers.h"
+ #include "verifier_and.skel.h"
+ #include "verifier_arena.skel.h"
++#include "verifier_arena_large.skel.h"
+ #include "verifier_array_access.skel.h"
+ #include "verifier_basic_stack.skel.h"
+ #include "verifier_bitfield_write.skel.h"
+@@ -120,6 +121,7 @@ static void run_tests_aux(const char *skel_name,
+ 
+ void test_verifier_and(void)                  { RUN(verifier_and); }
+ void test_verifier_arena(void)                { RUN(verifier_arena); }
++void test_verifier_arena_large(void)          { RUN(verifier_arena_large); }
+ void test_verifier_basic_stack(void)          { RUN(verifier_basic_stack); }
+ void test_verifier_bitfield_write(void)       { RUN(verifier_bitfield_write); }
+ void test_verifier_bounds(void)               { RUN(verifier_bounds); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_large.c b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
+new file mode 100644
+index 000000000000..ef66ea460264
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
+@@ -0,0 +1,68 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "bpf_misc.h"
++#include "bpf_experimental.h"
++#include "bpf_arena_common.h"
++
++#define ARENA_SIZE (1ull << 32)
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
++	__uint(max_entries, ARENA_SIZE / PAGE_SIZE);
++} arena SEC(".maps");
++
++SEC("syscall")
++__success __retval(0)
++int big_alloc1(void *ctx)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
++	volatile char __arena *page1, *page2, *no_page, *page3;
++	void __arena *base;
++
++	page1 = base = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
++	if (!page1)
++		return 1;
++	*page1 = 1;
++	page2 = bpf_arena_alloc_pages(&arena, base + ARENA_SIZE - PAGE_SIZE,
++				      1, NUMA_NO_NODE, 0);
++	if (!page2)
++		return 2;
++	*page2 = 2;
++	no_page = bpf_arena_alloc_pages(&arena, base + ARENA_SIZE,
++					1, NUMA_NO_NODE, 0);
++	if (no_page)
++		return 3;
++	if (*page1 != 1)
++		return 4;
++	if (*page2 != 2)
++		return 5;
++	bpf_arena_free_pages(&arena, (void __arena *)page1, 1);
++	if (*page2 != 2)
++		return 6;
++	if (*page1 != 0) /* use-after-free should return 0 */
++		return 7;
++	page3 = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
++	if (!page3)
++		return 8;
++	*page3 = 3;
++	if (page1 != page3)
++		return 9;
++	if (*page2 != 2)
++		return 10;
++	if (*(page1 + PAGE_SIZE) != 0)
++		return 11;
++	if (*(page1 - PAGE_SIZE) != 0)
++		return 12;
++	if (*(page2 + PAGE_SIZE) != 0)
++		return 13;
++	if (*(page2 - PAGE_SIZE) != 0)
++		return 14;
 +#endif
- #include "arena_htab_asm.skel.h"
- #include "arena_htab.skel.h"
- 
--#define PAGE_SIZE 4096
--
- #include "bpf_arena_htab.h"
- 
- static void test_arena_htab_common(struct htab *htab)
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_list.c b/tools/testing/selftests/bpf/prog_tests/arena_list.c
-index e61886debab1..d15867cddde0 100644
---- a/tools/testing/selftests/bpf/prog_tests/arena_list.c
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_list.c
-@@ -3,8 +3,11 @@
- #include <test_progs.h>
- #include <sys/mman.h>
- #include <network_helpers.h>
--
--#define PAGE_SIZE 4096
-+#include <sys/user.h>
-+#ifndef PAGE_SIZE /* on some archs it comes in sys/user.h */
-+#include <unistd.h>
-+#define PAGE_SIZE getpagesize()
-+#endif
- 
- #include "bpf_arena_list.h"
- #include "arena_list.skel.h"
++	return 0;
++}
++char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
