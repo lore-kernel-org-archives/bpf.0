@@ -1,151 +1,143 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4189012E63;
-	Fri, 15 Mar 2024 07:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABFA814A83
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 08:01:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710487796; cv=none; b=g6QqKqardfPufTLnQyDbKDCsj2CDzSpMtn7wwmoIm0dbXFgNa5VDyBJ8Q5CkmlBv876LCKzWkCyGtuuAvmx4S+imGkoqxeEc/VkWbpSHh8OTOhsdp4imW1d5a1Evqa/IEnqpbpBb0hLO42t8wnhjd567AaCfa9qIZ83lGNwMZKs=
+	t=1710489669; cv=none; b=o8Mb/L4+5Q/Ez3Mr8QhaAcCjU70eAJe0a5nRzZ+t1zNY8QV6udFlDcTwpPvfTAJIgzUARPZt4GD7b8AXe4qFiKtpn88LT0xe0QIU3G7lyY/EhFB/EJwMGHrNhElT+FjjRx6e/X+uCxhbx3+I9fDnivQQ0iYFqx5zg1Yc33lI3VQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710487796; c=relaxed/simple;
-	bh=IRm5n95xEFQDT7vgK1VdLnXSKwBq0y2erx84Ft6GYXM=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G9FdPgdw8CwBVUaPCdQExXLnVitdB+7keVocR2SGAqHNZm1lqRt/2O7t3D6lmmUO4Ach3ob5uqq1dE33KbMdmu17mxZ5UoXEQbZV6tlxDrpTVYtmLmDnxm8SLoG4MJvJILYtTD/XzEb4tFMLSVPt2h8e4jD7k9A8P+L6PgR6/6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HZycXqO4; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710489669; c=relaxed/simple;
+	bh=p0en/GCOfhc21UxAgSvgpjSxEaCkV+SmFKeaU1UDvXQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p8W0fnjXDa4OC2lKa9BybSq+FiWzqnjdgSLuCfPHMUi45IrO6QeTs5LGN8LKuwMVYaegLUpzNAUlukEOtamZCWhtbHiJb2GH/VKiSFln4ydjW9W4Y31nkNRE3z3IsiOWhJYnnCWYMj5Jf1FXU0My7QqmaZ6BLJIGYrWIVesIDLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=E7E+Z+Ct; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HZycXqO4"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5687feeb1feso2043727a12.2;
-        Fri, 15 Mar 2024 00:29:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="E7E+Z+Ct"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-5d81b08d6f2so1505967a12.0
+        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 01:01:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710487793; x=1711092593; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ILoelfoifI7jxVJmz5B8PtvwaNYpiquvncdr9oWkqc0=;
-        b=HZycXqO4DgS7mPFbuN8CvjZIZ4/GsdgQ6z6VwEenucb/lm5yqNg4mgSwQO8FU0B6fx
-         5+MgC4qKcSWZL3DgJ3IjMk1cB+8BG7d75Idg3LIiQ5/ujFzOE9A2ALZY0Iml/DdT7ybk
-         1Wuo1DwJP/V/XSC1UisO73ZZq7qCpddrZExWMIWMbRspt4fsxjDXFw/Esh5wUkzkrxQl
-         Op5JXIvC90hYMg50+B9RIHMJfitXiPdDHg8rbBuNwUXr575Sq6KUaZSUT6EBeIIvqlVa
-         80pzSoNI1LpoqrT2xeygJv2BBKaY/dA7lcRnzsL/9HVjTS6sVwbEnK/IqRSH+GPCsKI7
-         sY/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710487793; x=1711092593;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+        d=bytedance.com; s=google; t=1710489667; x=1711094467; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ILoelfoifI7jxVJmz5B8PtvwaNYpiquvncdr9oWkqc0=;
-        b=bNsysmimFdb3icQXDCWXfTe5/BHIbrJpFGC9+6APgMD62kNOUxHwto5q5twLhli/HQ
-         aBghHJBwTj/5YHQxd6/KNRqU2qbw3rCY24P5mARHHtE2MnLdOEKEi6eod1YdXKofQQ2z
-         72aqY/5YZriZonqxqy7x5cVBKpI/MmdN4Ow+akeo2u0A8vW2vWzQzAFzWaOioXFilivq
-         EheSGPP9jAYAB3f47xpPb8MjVe9j2C2V5T3jiTHFfCOvnGkDK/cT7UWkmIQJ2pCvXUUq
-         zrNLuS0ZXs8jkL4lGBj8WK2u9aIgYtB06U3StKmXDTvrCflZPNGLJ/SLy9nr5rpv9j8G
-         5v6g==
-X-Forwarded-Encrypted: i=1; AJvYcCWkOt7Pt7r0ql/G7GK+WzK6wweYxkxw+ZfitvYKgGZbXkvaI38acJn+lPbWUb8m6kXRwN/P0dbdFMBCrU3+uPNLhYBDmLX2g9kXOsYIFFgpbcdWg/vB9YArLvpNlr4RWNXFhLutGfmyKzkQm5ISXcpOTd5rmnMcGQQjN6jiIihH16LDkW/CzOqLFMxnT3dUmirAGgfNow==
-X-Gm-Message-State: AOJu0YyZDNWuysath4BwQA+bI/lFemKycbENWlbJFrcHrUrqkDEzjLSt
-	KX/DlwRWmVVKgHqPP5qOrxcghpqnaSiNXC0k1/lr34LDFSrx4YdP
-X-Google-Smtp-Source: AGHT+IGJ86mFXDqoUu/TpHBtqwtLd+iQ7QPcqhWQfhyfq03s+kI5hJeXzUZlFLQBjFXYzYWC2VWzrA==
-X-Received: by 2002:a05:6402:28c9:b0:568:9e92:2847 with SMTP id ef9-20020a05640228c900b005689e922847mr2106432edb.40.1710487793271;
-        Fri, 15 Mar 2024 00:29:53 -0700 (PDT)
-Received: from pc636 (host-87-9-234-71.retail.telecomitalia.it. [87.9.234.71])
-        by smtp.gmail.com with ESMTPSA id i19-20020a1709061cd300b00a466b2aab55sm1440416ejh.79.2024.03.15.00.29.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Mar 2024 00:29:52 -0700 (PDT)
-From: Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date: Fri, 15 Mar 2024 08:29:49 +0100
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Uladzislau Rezki <urezki@gmail.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Networking <netdev@vger.kernel.org>,
-	David Miller <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the bpf-next tree with the mm-stable
- tree
-Message-ID: <ZfP47QjBzHwuJOMe@pc636>
-References: <20240307123619.159f1c4c@canb.auug.org.au>
- <20240313105117.699dc720@canb.auug.org.au>
- <20240314093012.3dba692a@canb.auug.org.au>
- <ZfLElrAT3RMLuWdB@pc636>
- <CAADnVQJpoBCL6r9BM09-kcMeB4Cm0H0y+UD-i8NX5YtvcCpffw@mail.gmail.com>
+        bh=p0en/GCOfhc21UxAgSvgpjSxEaCkV+SmFKeaU1UDvXQ=;
+        b=E7E+Z+CtWt8kqiIjYWVQjEQ5fj1jos1mIKKRspBALWmE5bpg83ESZX6Bn5hJBz/CmZ
+         BeKAAir5/rFWNesxtwFWK3Tnr4Z6qZlWzPhhZ+rIubFMtMI34lAx+ZgY0GQ3VNMgN/Cz
+         uUQnfNLDzXZfCF0vDa991O2bU8qGj7BgLVY2O33qRMVT4T6b4AM8SJwLVqqfXb8Y135U
+         4J//tHDM2+xPpMs3PW0OVcpu6s7/9R1Z7RKt6G+SdFeJcklUqICdg9FgGcgKCFZAEXEI
+         Tq25GM5Oyuk4eiAn2mh0YG9+mIj52I4qrzB+oPAKwBmu3R4t9GEa2Y9aKBvlNL2Idzkz
+         jvQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710489667; x=1711094467;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p0en/GCOfhc21UxAgSvgpjSxEaCkV+SmFKeaU1UDvXQ=;
+        b=ZjruIG89+1sdS3rPrgSOaRS+opcGva1jaBElnwI40iXQQSR0ayVNym5CLlUWMtgdUf
+         u9RDdVFPzSzqoc1zxbXtmSxIicnq6AyDhm//t0yWGLsE91YGLgCnmNhtTH+uuewGzUJw
+         LdNzpt+zo1103bOBrHycF7ILQOBizuiw/pLInpzm9euNGDLnayrrRJQjkQMZO9UB1K2H
+         OIG8D6hKzZu1GJgdeTNa2RPxlHeojO2PTAAMBvaQPuig0T3Y9vjyy0yI+qyg+MDxjtKv
+         5yD+W/6CeF+nqbc+DvSEDaM8sKCQ1ikawUx0zhrkw0UL45fm48zwvmxHQpFDzfGpSU3S
+         pf5w==
+X-Forwarded-Encrypted: i=1; AJvYcCVDvp3hwHWU7rjqYQEFea+62JlWzkfVqE/ZWr8y0E+X9l1aO7mVnOpUcisRWnethNVwnfMo08v1MT6KXouhXfAXaHBN
+X-Gm-Message-State: AOJu0YyWJjwtmpKXOhToX8qMtP+pWlqoQ8u9s+G9aNm73fIA7VYEX/KG
+	0ebobMktQCtYI+PIA8LVcWzIPSbkE0KD9MJ0LiVcHRjIU/6R4GfQWv+6LC8Gk1JtNnLLkQMJ8ZK
+	cGCOjIy+mHcK1LIYz5SJ8QU1SRX3VYMjl9Zq2Ew==
+X-Google-Smtp-Source: AGHT+IEpM9Mqa5iEhQbTXQByuieojUsSQiVC/HtuI16NWpRWnCf8v9wukRY0tmuiax6xN5WzRfxP5Mr9rKAT0G28iSY=
+X-Received: by 2002:a17:90a:dc0b:b0:29d:fe1c:79e7 with SMTP id
+ i11-20020a17090adc0b00b0029dfe1c79e7mr271232pjv.45.1710489666842; Fri, 15 Mar
+ 2024 01:01:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQJpoBCL6r9BM09-kcMeB4Cm0H0y+UD-i8NX5YtvcCpffw@mail.gmail.com>
+References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
+ <20240311093526.1010158-2-dongmenglong.8@bytedance.com> <CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
+ <CALz3k9i5G5wWi+rtvHPwVLOUAXVMCiU_8QUZs87TEYgR_0wpPA@mail.gmail.com>
+ <CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail.com>
+ <CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
+ <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
+ <CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com> <CAADnVQLHpi3J6cBJ0QBgCQ2aY6fWGnVvNGdfi3W-jmoa9d1eVQ@mail.gmail.com>
+In-Reply-To: <CAADnVQLHpi3J6cBJ0QBgCQ2aY6fWGnVvNGdfi3W-jmoa9d1eVQ@mail.gmail.com>
+From: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>
+Date: Fri, 15 Mar 2024 16:00:55 +0800
+Message-ID: <CALz3k9g-U8ih=ycJPRbyU9x_9cp00fNkU3PGQ6jP0WJ+=uKmqQ@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add support
+ to record and check the accessed args
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	X86 ML <x86@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Quentin Monnet <quentin@isovalent.com>, 
+	bpf <bpf@vger.kernel.org>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
+	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> > > > This is now a conflict between the net-next tree and the mm-stable tree.
-> > >
-> > >  ... and now a conflict between te mm-stable tree and Linus' tree.
-> > >
-> > If you need some help with resolving conflicts i can help. The problem
-> > to me looks like:
-> >
-> > <snip>
-> > commit d7bca9199a27b8690ae1c71dc11f825154af7234
-> > Author: Alexei Starovoitov <ast@kernel.org>
-> > Date:   Fri Mar 8 09:12:54 2024 -0800
-> >
-> >     mm: Introduce vmap_page_range() to map pages in PCI address space
-> >
-> > commit e6f798225a31485e47a6e4f6aa07ee9fdf80c2cb
-> > Author: Alexei Starovoitov <ast@kernel.org>
-> > Date:   Mon Mar 4 19:05:16 2024 -0800
-> >
-> >     mm: Introduce VM_SPARSE kind and vm_area_[un]map_pages().
-> >
-> > commit 3e49a866c9dcbd8173e4f3e491293619a9e81fa4
-> > Author: Alexei Starovoitov <ast@kernel.org>
-> > Date:   Mon Mar 4 19:05:15 2024 -0800
-> >
-> >     mm: Enforce VM_IOREMAP flag and range in ioremap_page_range.
-> > <snip>
-> >
-> > those three patches were not based on linux-next and are currently
-> > in the Linus tree(bypassing mm-tree?). Whereas below work:
-> >
-> > mm: vmalloc: refactor vmalloc_dump_obj() function
-> > mm: vmalloc: improve description of vmap node layer
-> > mm: vmalloc: add a shrinker to drain vmap pools
-> > mm: vmalloc: set nr_nodes based on CPUs in a system
-> > mm: vmalloc: support multiple nodes in vmallocinfo
-> > mm: vmalloc: support multiple nodes in vread_iter
-> > mm: vmalloc: add a scan area of VA only once
-> > mm: vmalloc: offload free_vmap_area_lock lock
-> > mm: vmalloc: remove global purge_vmap_area_root rb-tree
-> > mm/vmalloc: remove vmap_area_list
-> > mm: vmalloc: remove global vmap_area_root rb-tree
-> > mm: vmalloc: move vmap_init_free_space() down in vmalloc.c
-> > mm: vmalloc: rename adjust_va_to_fit_type() function
-> > mm: vmalloc: add va_alloc() helper
-> >
-> > now should be based on Alexei Starovoitov base in order to resolve
-> > a small conflict.
-> 
-> Pls don't rebase anything.
-> 
-> > But you better know how to proceed. Just in case, if you need some
-> > support please let me know i can help with conflict resolving.
-> 
-> As Stephen said these two conflict:
-> 
-> > > >   8e1d743f2c26 ("mm: vmalloc: support multiple nodes in vmallocinfo")
-> > > >
-> > > >   e6f798225a31 ("mm: Introduce VM_SPARSE kind and vm_area_[un]map_pages().")
-> 
-> and conflict is trivial. It just looks big due to the indent change.
+On Thu, Mar 14, 2024 at 8:27=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-It is solved in the Linus's tree what is good. 
+> On Tue, Mar 12, 2024 at 6:53=E2=80=AFPM =E6=A2=A6=E9=BE=99=E8=91=A3 <dong=
+menglong.8@bytedance.com> wrote:
+[......]
+> > What does "a hundred attachments max" means? Can't I
+> > trace thousands of kernel functions with a bpf program of
+> > tracing multi-link?
+>
+> I mean what time does it take to attach one program
+> to 100 fentry-s ?
+> What is the time for 1k and for 10k ?
+>
+> The kprobe multi test attaches to pretty much all funcs in
+> /sys/kernel/tracing/available_filter_functions
+> and it's fast enough to run in test_progs on every commit in bpf CI.
+> See get_syms() in prog_tests/kprobe_multi_test.c
+>
+> Can this new multi fentry do that?
+> and at what speed?
+> The answer will decide how applicable this api is going to be.
+> Generating different trampolines for every attach point
+> is an approach as well. Pls benchmark it too.
 
---
-Uladzislau Rezki
+I see. Creating plenty of trampolines does take a lot of time,
+and I'll do testing on it.
+
+>
+> > >
+> > > Let's step back.
+[......]
+>
+> For one trampoline to handle all attach points we might
+> need some arch support, but we can start simple.
+> Make btf_func_model with MAX_BPF_FUNC_REG_ARGS
+> by calling btf_distill_func_proto() with func=3D=3DNULL.
+> And use that to build a trampoline.
+>
+> The challenge is how to use minimal number of trampolines
+> when bpf_progA is attached for func1, func2, func3
+> and bpf_progB is attached to func3, func4, func5.
+> We'd still need 3 trampolines:
+> for func[12] to call bpf_progA,
+> for func3 to call bpf_progA and bpf_progB,
+> for func[45] to call bpf_progB.
+>
+> Jiri was trying to solve it in the past. His slides from LPC:
+> https://lpc.events/event/16/contributions/1350/attachments/1033/1983/plum=
+bers.pdf
+>
+> Pls study them and his prior patchsets to avoid stepping on the same rake=
+s.
