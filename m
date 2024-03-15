@@ -1,122 +1,104 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE7B86FA9
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 02:35:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02ACD529
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 03:55:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710470103; cv=none; b=XLs5/ttwmlV9VkeW2pJYkX31SYw0kZYNeUS50zziHjTt8Y85DAScnnFjD0uqkq52TtTxgxmYERJ4o/u43t5RamJ+E20Y4KwYeHbty7AzzGeRk68kyx+5osV+qEXZt1l/LBvxf8q3rDpsWmYAmgBVGHhdDnsxldDM+K1Gyi1Te1c=
+	t=1710474960; cv=none; b=dgkwj/lRoHOCDTv2SLKQBL75CFQ/+HZOmQncZcOdG1SNKa2ahIdmhbC/EhgKtx8NS8foVaDCeHbHYQa/lxKeT0EsZZHCB7xU+FC9djYZ0hFBaqF2QaMu8f8iNrVe984ds9HyNSrUKy6qzWCKdR5El+/KV9i48IRnVCmR2wxUe+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710470103; c=relaxed/simple;
-	bh=/aerGIWM+Mj1QhBCegdJRQ+Pe0yd0Ml+erYG5bXVf7I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YerxBx9hSfYX6GOPUWdaG9cTFwp9vi/ja55JkF29MHdW70IrlMED1N12dkS9dbuOmsxocHv0JBo45eyNmtmBhObmwZoCVhSve74Awjtl9nuWJ8Lwan/txL/G+PV8z3+6Otejt+PhLkwYx48FSdGG7ZIjx1/kKNIZlFSPGuKQ7oI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S3dRCXl3; arc=none smtp.client-ip=209.85.210.182
+	s=arc-20240116; t=1710474960; c=relaxed/simple;
+	bh=PHAxwb3ZBfrzaHjHDpl+aWoG68qeMxqn36eMYyPPn4o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qBe4F5NOMuwFQhWrOcTMGKRDhXxuxCFddyASw++vy8lxFy4iT6fHg3zDPNHaAaxkwhHOE+Z6VJsHDRwJZcnffHp2aP4sj2dsaXjdywa95Y1WuW8BVcp6gFOLkPKepMO18DAySXwTIuDrKDxC6dKYbw1lPGfl0VhCnRzU5HT/AQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hjW7bLDK; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S3dRCXl3"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6e6eb891db9so1172666b3a.3
-        for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 19:35:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hjW7bLDK"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-29a5f100c1aso1077157a91.0
+        for <bpf@vger.kernel.org>; Thu, 14 Mar 2024 20:55:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710470100; x=1711074900; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Nv0QILCEp/r4+hg6ISvuLea8mkviMD+/0Hdv133Qq0=;
-        b=S3dRCXl3LRdIPYdojbgcZpWKqWqFK6RHpVSAjl6EZNuzmtCq/uNSIcaScI6SW6xylx
-         Uz+IJgnQtJn/zEjW7dMRgFyFz51WVKaJIkuNrG9bMGcmejGJJzPdcxdAvAfc43O6hW0O
-         dhNywk82B25J6jHLyYR0H2mlZOvauYaUmC9SFgKPJL96k4Cv95xDEheS9LpM+yiOaXVx
-         UqZ6DkVzKa/JtSNK3jR513ykde9KC3/fJjulK676u79U4PlV0MmY5jO3y5wX6u6/7p6x
-         O9QFr0LnCpVIu+fOrip4BIYvwfWIycD3pvJU/hF80DMLYoNQRlKcbfcHryTQRxyC+lF9
-         Lmgw==
+        d=gmail.com; s=20230601; t=1710474958; x=1711079758; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oS9Y0JjGKaauA2RLkTASnFEMLhHjNoM/YcVX0YtE/Ko=;
+        b=hjW7bLDKwzPZdjIz0mDoRjzaMXweGsaQET9uEgv2EHQjZfH4zU6s1lNf0yeq9SSM9T
+         XcDjWrC5qlyoLYoehFAfKxg/7mCVicG82+ZQ2NRgeqSoX8oQ8TsdR7Ujg8IP/MVMEWnm
+         Smq52SZLvxFRtqw6QOP7a5dLrBGxSK/vFXvRmFAHNtZCg3RKNSxKmtsZsTDy4zOHdKqp
+         hHcdI7Mash+5DjnMqE+afJwgCkYKo8uT3HJIln/F9/hASzza9fWJ7lGgSf6Z01okbYlb
+         x0deOYEmMYEXIE/bZ5n8IJKHhF8KXQKR+daH3uYYpPMc4OZeH6PiJVGzAUsxGAT7Y68j
+         bERw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710470100; x=1711074900;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6Nv0QILCEp/r4+hg6ISvuLea8mkviMD+/0Hdv133Qq0=;
-        b=S6SiY3kevwZZ9yQAnhE5fEv2wXsir1hPGxOfGfCCz+IfUFvCZSYNwRQN1wdaTMaO8m
-         7LiiDbCj1JymhFEbWLlIbY7ntp7HUmzRBe1SaE2VBT6w/h0xvm9sAdPNZcQrTHmPzNZ/
-         kCrTx+wFCraGmrz2X2GPRUQnlAaWQ/VqQkevxfzwunr4NTJlEXQ5kWlsRSI60yFnZo6w
-         cA/Yfcd3x7pxlobc2WbMoKo5kmTDkKDjJ5qJ9vq6Sez+v3i84BOvbdBfcbIC5nanutDM
-         TFKSEI68NrmT8i0ueuUGMknOHfVOVmanmk9FWf+9jcswCNwbDFO5FdwVlDv2LdqkY4jr
-         L+PA==
-X-Gm-Message-State: AOJu0Yxinj2ohDw/1lsuQniRJnhHQ/jdt4BR70kfJFYTeYlkrSaRgMjp
-	o0bGhGB4NIqsllbuzkOYAt4jfwzLNwM6EycZ4w4N4JzB2ImQ+YB6cN0kvraMNQi8okx0
-X-Google-Smtp-Source: AGHT+IHwOHG+XwMTbfJBOyzPAEY4yHOFLupjzwjG880fZVKp8LZSlxjakxb8PmxFD+IZcwnDO0aiDw==
-X-Received: by 2002:a05:6a00:3a12:b0:6e6:bfb6:371 with SMTP id fj18-20020a056a003a1200b006e6bfb60371mr3835263pfb.34.1710470100252;
-        Thu, 14 Mar 2024 19:35:00 -0700 (PDT)
-Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id i9-20020a056a00004900b006e6cc93381esm2143395pfk.125.2024.03.14.19.34.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Mar 2024 19:34:59 -0700 (PDT)
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Quentin Monnet <quentin@isovalent.com>,
-	Alejandro Colomar <alx.manpages@gmail.com>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	Michael Hofmann <mhofmann@redhat.com>
-Subject: [PATCH bpf] bpf_doc: use silent mode when exec make cmd
-Date: Fri, 15 Mar 2024 10:34:43 +0800
-Message-ID: <20240315023443.2364442-1-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1710474958; x=1711079758;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oS9Y0JjGKaauA2RLkTASnFEMLhHjNoM/YcVX0YtE/Ko=;
+        b=mODFT9CE2GH0kmUPXmLMXFzoaG2n6nX3VlM2xTiS2P5RMCxh1RzOKzTBxqGuAcCLpk
+         XU8hxuJMiJy6i4YY6/KICnfEgq10ua+wK0cOnPEFKa238ccKmKX5WN2HdI7f+YeG3NHX
+         s9pxqfJLKgnF0hXtuOOYnx6QSQ+0ir16Q5MiZHfukKQdtEmFtEHosy4Jm9D82vr4nWan
+         /eTOGIgOBpt0eDHBaBJ+ANiasb7/kF4ZA0JqZSLfSjSxgW3qiTWGoHn1C+nRN8bmy773
+         VBngXaLkJV7p1Z9NpLZRU2p3sIOK4w1dLfu9rs0uSaDRh+pTUitnrWX9j9ehlK4H0GGz
+         4+KQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXhuofrb1ep/iX++mJvGQx5bKlMGWcJkQsLp/PDjMBSQezvcgja2rxhHYbBEcgHtDDEsUUPRG+tvps4Ec8SJnBdlj6y
+X-Gm-Message-State: AOJu0YyE0R3L4E/bOGtXj9PTQvy+b0gnfcBr6BWlNSbg2lIls+nxv94X
+	52LbAZoubLYuLxJxx2zjyyqw27OEkrqZVlEesM73gHCrmXT958xK22juDqC0raBBAxfy3JkPLAq
+	rwJLqSq4/uXUNIc9AFpBiW4Zx1JXJAsCr
+X-Google-Smtp-Source: AGHT+IFDOHFlyZ3ZdWK8tw95va9xVETSDhCPWh/Mog3nKcFQCP9T7ydRAgoUHeIRzgDk6pXLInaEupAYupzU7QDRXYk=
+X-Received: by 2002:a17:90b:a18:b0:29b:a59:a12d with SMTP id
+ gg24-20020a17090b0a1800b0029b0a59a12dmr3565982pjb.25.1710474958175; Thu, 14
+ Mar 2024 20:55:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240312222303.2305873-1-andrii@kernel.org> <CAADnVQLBciwQ22GE1z6Sf-r+V8JRDfMjMVQWburR_pPgLj9XZA@mail.gmail.com>
+In-Reply-To: <CAADnVQLBciwQ22GE1z6Sf-r+V8JRDfMjMVQWburR_pPgLj9XZA@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 14 Mar 2024 20:55:45 -0700
+Message-ID: <CAEf4BzYwpFh9LTHW2s9G=mgyKcPZO9Knu_EYrgwPb1h=SByuXg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: scale benchmark counting by using
+ per-CPU counters
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When getting kernel version via make, the result may be polluted by other
-output, like directory change info. e.g.
-$ export MAKEFLAGS="-w"
-$ make kernelversion
-make: Entering directory '/home/net'
-6.8.0
-make: Leaving directory '/home/net'
+On Thu, Mar 14, 2024 at 7:33=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Tue, Mar 12, 2024 at 3:23=E2=80=AFPM Andrii Nakryiko <andrii@kernel.or=
+g> wrote:
+> >
+> >
+> >  static void trigger_base_measure(struct bench_res *res)
+> >  {
+> > -       res->hits =3D atomic_swap(&base_hits.value, 0);
+> > +       res->hits =3D sum_counters(base_hits);
+> >  }
+> >
+> >  static void *trigger_producer(void *input)
+> > @@ -42,7 +72,7 @@ static void *trigger_producer(void *input)
+> >
+> >  static void trigger_measure(struct bench_res *res)
+> >  {
+> > -       res->hits =3D atomic_swap(&ctx.skel->bss->hits, 0);
+> > +       res->hits =3D sum_counters(ctx.skel->bss->hits);
+> >  }
+>
+> It was zeroing counters before.
+> Do you need to zero them now?
+>
 
-This will distort the reStructuredText output and make latter rst2man
-failed like:
-bpf-helpers.rst:20: (WARNING/2) Field list ends without a blank line; unexpected unindent.
+sum_counters() does zero them out, it does the same atomic_swap(0).
 
-Using silent mode would help. e.g.
-$ make -s --no-print-directory kernelversion
-6.8.0
-
-Fixes: fd0a38f9c37d ("scripts/bpf: Set version attribute for bpf-helpers(7) man page")
-Signed-off-by: Michael Hofmann <mhofmann@redhat.com>
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
----
- scripts/bpf_doc.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
-index 4606944984ee..c55878bddfdd 100755
---- a/scripts/bpf_doc.py
-+++ b/scripts/bpf_doc.py
-@@ -414,8 +414,8 @@ class PrinterRST(Printer):
-             version = version.stdout.decode().rstrip()
-         except:
-             try:
--                version = subprocess.run(['make', 'kernelversion'], cwd=linuxRoot,
--                                         capture_output=True, check=True)
-+                version = subprocess.run(['make', '-s', '--no-print-directory', 'kernelversion'],
-+                                         cwd=linuxRoot, capture_output=True, check=True)
-                 version = version.stdout.decode().rstrip()
-             except:
-                 return 'Linux'
--- 
-2.43.0
-
+Or are you saying we should switch to having cumulative counters and
+never swap? Because it should work as well, but it just requires a bit
+more care in remembering old cumulative sum and reporting the
+difference to `res->hits`. Probably not worth the hassle.
