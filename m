@@ -1,142 +1,141 @@
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948D01EB2C
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 19:43:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.111.4.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0055524C3
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 19:49:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710531809; cv=none; b=MVBCULN7FhVWHvV5IeJFi1Ux8l/SbzlK+taXIf2YXZK7QcBdilWy/Vjgq/bNKaQzLX6jfs0+Of762G4V0MjArfR13P3Z52orvqAK0O2HcNF0mud8rm6T/eLwb1wCecACa2DG9Cejy3ttalilDVxSUgL3bluJtWthcN+BL28cTdE=
+	t=1710532149; cv=none; b=CnMVbuv7zhLO3FPzuNXGbZ/JGoqp/pj/UF6vtuQ3qFBJ0XXaYiXhUrmC8bjOkAccZ6f2YMBAoVOtngZ+xCFcebSjpAZ1xX00b4x8e0kZLHDR2NPtidCclBOHz1P26IM9jO2R/Zed1LQ75XsFSJcSPgkxszhg+/NkU9gvT5FBPzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710531809; c=relaxed/simple;
-	bh=buLb+owpdciph9dPh2OkZc6B2bg0sd4Sxa2gBjBRo6c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FyPKiJ4dw3KY9W62EGSNRajr1R/IEHst/cUNI/09ja/NXaYTKk6fXYXHrBlH9TXevplv3aYzFOTS129T5fOf0cqy2HgQudhWItCvvhIxV6wd6ABgXJI6l9WUcruM6rUsXSmA8OR8OA8gPn9wYAwrmXDgjOWH+s8bS5ImAUbG2SE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=ajFBB8EZ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Mn/7CN7V; arc=none smtp.client-ip=66.111.4.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+	s=arc-20240116; t=1710532149; c=relaxed/simple;
+	bh=ZfQ8x5dH4x5DWUpBJmuLHOLodi5CZsFApbL/gAswl2M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cqAPeidej6UnYMthqikL/DktBj03Y1UP+TAfb3AdHcs6K9uVmMdHJ3hQD93aAefilvbnX6JExmngrhjepJKwfkOg+cllDSg5mzYcmOER9NLdNA/CdaEyhQe3tcBVv/XOi4Zkpal1BXVmfuIrvhq1x1AVvhBIE83z0JVi61xyQ3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=CnbLJSNB; arc=none smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="ajFBB8EZ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Mn/7CN7V"
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailout.nyi.internal (Postfix) with ESMTP id 70C335C01A2;
-	Fri, 15 Mar 2024 15:43:25 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 15 Mar 2024 15:43:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1710531805; x=1710618205; bh=kiqrEF6yu4
-	KatRRIf3QuAVNOsMn9S0lqz0TQKSVpJq0=; b=ajFBB8EZax6yRYGQYzA+LKdSc6
-	G4IAd4R7d01dHaiEQ07QInYMlu0yMKH+TQ5iDU7AF+3WCIyT9y2alOHKev7VFHJY
-	oEbczlMVO0YenSDuo7m4wby1WFb/zLUvrEr8NSL4euHm1ofhlGYeLoBR5RpFQwfT
-	Mdk57q5zw21hoT+EaWSTRqxAEQThJkQmQ3m/ge+tyaepGJwAKu3H7rtFpWh7AQi3
-	DE+1XfLaI84TsTUayMJPtYtaGPU1R/k8DUgzOrUvxDgEN/U0is2O+mMQ6wy2bGBb
-	VSJyJjlKpM3bBDlD23G2XUqFwFHk5P+9Llj0L0eU/3SFfAGwnesMhRcN98zg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1710531805; x=1710618205; bh=kiqrEF6yu4KatRRIf3QuAVNOsMn9
-	S0lqz0TQKSVpJq0=; b=Mn/7CN7V9nqpuZLGKZlFEq1RZOsy8UE1Txyen978Bg2E
-	lPerHL2CeXQD0SsDbKNXTu7NTppbjVYRI6Nb5bNgpbXVjnxv9iZwXCG/Y4o5Thnb
-	YQC7ekuj1AXovSzbbePRxN1+XkyogVsM/7uWcvzXKkrMIvNo6eu7AT0Se0Dt6lBR
-	ESpap1bvuJIqxmV2HTfpEKYhooCygvPo/iwAyxkVjXpdjKwuCVamtkxVfxxfd3nq
-	Ew9+z6WrY5m3/5Ui1uA4FlXUqTF/SG5iUQx8Zd5udgUEUq5hsWLyNQgM032WzxyF
-	aldioSJz9bjg8MCloX/K57s6KX3GvKftpmqxi7cmgA==
-X-ME-Sender: <xms:3KT0ZRGEvuBe2PyH31qpVpLA5P6FpebCX4xUsaHvjtxCLDtRMkr65Q>
-    <xme:3KT0ZWWdZ6FYSxJO1FXuDTYw6LftsTv-OXWr0KTZcR68YJEidKYrY-YLrIjMpz341
-    lR1YxjxcE7HglItsA>
-X-ME-Received: <xmr:3KT0ZTIaA3enLil_ryti9VkYKNNQg2fJMY2p1XrHIVRQKAK6MfDeIgde5iNXay4KIo1OuuJdhkYtijDTrW9Tp-W5QzyFxIkSwyDLqMg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrjeelgdduvdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpeffhf
-    fvvefukfhfgggtuggjsehttdfstddttddvnecuhfhrohhmpeffrghnihgvlhcuighuuceo
-    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepueejteekhedvvdekle
-    fhheegveevheevjeelffduheetuddufeehfeekkeelveejnecuffhomhgrihhnpegugihu
-    uhhurdighiiinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:3KT0ZXF_1jxnd0Bp7crZeeqCUm3XRzwK4E2KUqZulUzX9ozduON5pA>
-    <xmx:3KT0ZXWNQ1T_3xPQMZIn3s-qC8xHe8Rv7TcRvVhOymLw3jgziS4ROw>
-    <xmx:3KT0ZSP1nPAORsmFUhzxURc8u7JQoHigpXFFyt2ZAe9yLGNqcLuVQA>
-    <xmx:3KT0ZW1j8z_q-2gphDBReuPU60qRYsxUoaYK4ijyVmWRod4rwjqYiQ>
-    <xmx:3aT0ZTrzVBR0Cf57cXWasN0B62BsipKHOTsujRkPNjuDeMUPsweLmQ>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 15 Mar 2024 15:43:24 -0400 (EDT)
-Date: Fri, 15 Mar 2024 13:43:22 -0600
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: acme@kernel.org, jolsa@kernel.org, quentin@isovalent.com, 
-	alan.maguire@oracle.com, andrii.nakryiko@gmail.com, ast@kernel.org, daniel@iogearbox.net, 
-	bpf@vger.kernel.org
-Subject: Re: [PATCH dwarves v4 2/2] pahole: Inject kfunc decl tags into BTF
-Message-ID: <itgzcn4cru32sk6sswbami2ojdynwyrfof3pnx5v4j3walx5oh@4qi3337fqnrz>
-References: <cover.1707071969.git.dxu@dxuuu.xyz>
- <28e81ccf28d6dd33f6db50af6526dc1770502b8d.1707071969.git.dxu@dxuuu.xyz>
- <1853738ac796d75c53970e21b6d61bf5140a6cc1.camel@gmail.com>
- <7bpvkfzqfawuzltt7jicekwlbxokdbprom6io3fxef3rbng4ud@hwohkmt662ar>
- <773a54ed9f0cfb91c1b7c1978070bb86e42ac568.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="CnbLJSNB"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-60cc4124a39so25346457b3.3
+        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 12:49:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1710532145; x=1711136945; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xrPHDfVM1LJbs09LU1eQrP0j2lULZw9AOoce47S0QjY=;
+        b=CnbLJSNBjdQyDHAHN0qBeXGwczhNZa200ldLwVa2zo+qgcHbkwgPQZlYQLyaHkd02e
+         S5FswNzNeWEgWTmpuziPaguxVpxzDCQHm+Pm9CS1zmZWXIJfWE79QZuVoZHn59dwaPZN
+         SHQMyE/Z/iHNBXpiRixvwABxVC9Wvyf5AL2I4nZgDfKniOq0fk6QZfdz0YoDgisP0kpv
+         vYfUVcO7ejMGHHMLrHi5Yb4CnKWY4xz8aWjV5lHs/P60iwuvP8Ti9ZkpZioLo4Gtv1pH
+         zEJOIzjo3cZHUlyKSonzVNdfKTQM/t/zXezhKXHbpUWemKHbFYi3YTrrKLOD+QnJ0aQh
+         s4Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710532145; x=1711136945;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xrPHDfVM1LJbs09LU1eQrP0j2lULZw9AOoce47S0QjY=;
+        b=ZUssZDT38ZpLyYdVVmZtSTdH2fH+rjyB4Vs1TrQA0ZJDEs4PotGnq7tVSqNVggZT34
+         h3pwqzTfiFqELbJ3/WPTHv3O60Mgn/pB9RaN79jU31QhKc+m45mBOBnDV3jf1TS5DNKt
+         fUCiLqtp0YJmJB1CH5uxGP+XSknAqGgv69uSAXFSc5cQjj3u9Ilq/5QOTNWU3VgrgruB
+         0h7XWnGUJG74ejQqs5rpgjda8qJyTtc2DngtE3WyahOMGq15fhm22lJQnGvVyr5Fc0XW
+         UFK/S6eOJG1jDLhkjv5vpiMgsu7KZrDzrosIIz0iDSuj0wnyzLhSnPIN3jc8OO19zML1
+         AR8g==
+X-Forwarded-Encrypted: i=1; AJvYcCWeEOzPryBa0n3JmemIagrCl2rl0E/Rs+gq56tBIRPiaiR2vsGrvtun09Yz3Y7IQWABJkKnTPV7tMiT0Qyf7GepKmFq
+X-Gm-Message-State: AOJu0Yy2gvvvziItTuRMDMTgXwJfxJiAoXHORnNpDbhM9j6hNDaBQlzA
+	blw8HTDQV9rmXBEL4ZI8hEj6iiZYHVj/J/5Xi64kpUySlqshSwmE/pEbv8dtpHohWdoxzGmEG5+
+	giFdPDZzn55tw1nDCanvaWF3h5onsHzRS/dSY
+X-Google-Smtp-Source: AGHT+IHwst5TyUeb5tW6MfflqpvFB5F4B4ooBz3Wi0KHfdEId2X9D9NYeBtrW+pZioCvi3AEZ5oYfZafRRbAkRSKQiE=
+X-Received: by 2002:a25:26c4:0:b0:dc6:ebca:c2e8 with SMTP id
+ m187-20020a2526c4000000b00dc6ebcac2e8mr6228967ybm.5.1710532145662; Fri, 15
+ Mar 2024 12:49:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <773a54ed9f0cfb91c1b7c1978070bb86e42ac568.camel@gmail.com>
+References: <20240315113828.258005-1-cgzones@googlemail.com>
+ <20240315113828.258005-2-cgzones@googlemail.com> <CAEf4BzZF0A9qEzmRigHFLQ4vBQshGUQWZVG5L0q2_--kx4=AXA@mail.gmail.com>
+ <0f8291f7-48b1-4be1-8a57-dbad5d0ab28c@kernel.dk>
+In-Reply-To: <0f8291f7-48b1-4be1-8a57-dbad5d0ab28c@kernel.dk>
+From: Paul Moore <paul@paul-moore.com>
+Date: Fri, 15 Mar 2024 15:48:54 -0400
+Message-ID: <CAHC9VhRUkgVUJiGKHjmJo5e4o1NGL_Gc9zpipAbQbMqyn1ZFzg@mail.gmail.com>
+Subject: Re: [PATCH 02/10] capability: add any wrappers to test for multiple
+ caps with exactly one audit message
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
+	=?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>, 
+	linux-security-module@vger.kernel.org, linux-block@vger.kernel.org, 
+	Serge Hallyn <serge@hallyn.com>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Eduard,
-
-On Wed, Feb 28, 2024 at 11:33:28PM +0200, Eduard Zingerman wrote:
-> On Wed, 2024-02-28 at 09:07 -0700, Daniel Xu wrote:
-> > Hi Eduard,
+On Fri, Mar 15, 2024 at 2:41=E2=80=AFPM Jens Axboe <axboe@kernel.dk> wrote:
+> On 3/15/24 10:45 AM, Andrii Nakryiko wrote:
+> >> +/**
+> >> + * ns_capable_any - Determine if the current task has one of two supe=
+rior capabilities in effect
+> >> + * @ns:  The usernamespace we want the capability in
+> >> + * @cap1: The capabilities to be tested for first
+> >> + * @cap2: The capabilities to be tested for secondly
+> >> + *
+> >> + * Return true if the current task has at least one of the two given =
+superior
+> >> + * capabilities currently available for use, false if not.
+> >> + *
+> >> + * In contrast to or'ing capable() this call will create exactly one =
+audit
+> >> + * message, either for @cap1, if it is granted or both are not permit=
+ted,
+> >> + * or @cap2, if it is granted while the other one is not.
+> >> + *
+> >> + * The capabilities should be ordered from least to most invasive, i.=
+e. CAP_SYS_ADMIN last.
+> >> + *
+> >> + * This sets PF_SUPERPRIV on the task if the capability is available =
+on the
+> >> + * assumption that it's about to be used.
+> >> + */
+> >> +bool ns_capable_any(struct user_namespace *ns, int cap1, int cap2)
+> >> +{
+> >> +       if (cap1 =3D=3D cap2)
+> >> +               return ns_capable(ns, cap1);
+> >> +
+> >> +       if (ns_capable_noauditondeny(ns, cap1))
+> >> +               return true;
+> >> +
+> >> +       if (ns_capable_noauditondeny(ns, cap2))
+> >> +               return true;
+> >> +
+> >> +       return ns_capable(ns, cap1);
 > >
-> > Apologies for long delay - life has been busy.
-> 
-> Hi Daniel,
-> 
-> No problem, thank you for reaching back.
-> 
-> [...]
-> 
-> > > > +static char *get_func_name(const char *sym)
-> > > > +{
-> > > > +	char *func, *end;
-> > > > +
-> > > > +	if (strncmp(sym, BTF_ID_FUNC_PFX, sizeof(BTF_ID_FUNC_PFX) - 1))
-> > > > +		return NULL;
-> > > > +
-> > > > +	/* Strip prefix */
-> > > > +	func = strdup(sym + sizeof(BTF_ID_FUNC_PFX) - 1);
-> > > > +
-> > > > +	/* Strip suffix */
-> > > > +	end = strrchr(func, '_');
-> > > > +	if (!end || *(end - 1) != '_') {
-> > > 
-> > > Nit: this would do out of bounds access on malformed input
-> > >      "__BTF_ID__func___"
-> > 
-> > I think this is actually ok. Reason is we have the strncmp() above
-> > so we know the prefix is there. Then the strdup() in the malformed cased
-> > returns empty string. And strrchr() will then return NULL, so we don't
-> > enter the branch.
-> > 
-> > I tested it with: https://pastes.dxuuu.xyz/c3j4kk
-> > 
-> >         $ gcc test.c
-> >         dxu@kashmir~/scratch $ ./a.out
-> >         name=(null)
-> > 
-> 
-> The test is for "__BTF_ID__func__", but nitpick is for "__BTF_ID__func___"
-> (three underscores in the end).
-> 
+> > this will incur an extra capable() check (with all the LSMs involved,
+> > etc), and so for some cases where capability is expected to not be
+> > present, this will be a regression. Is there some way to not redo the
+> > check, but just audit the failure? At this point we do know that cap1
+> > failed before, so might as well just log that.
+>
+> Not sure why that's important - if it's a failure case, and any audit
+> failure should be, then why would we care if that's now doing a bit of
+> extra work?
 
-Ha, got it. Didn't see the 3rd one. Fixed in v5.
+Exactly.  We discussed this in an earlier patchset in 2022 (lore link below=
+):
 
-[...]
+https://lore.kernel.org/all/CAHC9VhS8ASN+BB7adi=3DuoAj=3DLeNhiD4LEidbMc=3D_=
+bcD3UTqabg@mail.gmail.com
 
-Thanks,
-Daniel
+> I say this not knowing the full picture, as I unhelpfully was only CC'ed
+> on two of the patches... Please don't do that when sending patchsets.
+
+Agreed, if the patchset touches anything in the audit, LSM, or SELinux
+code please send the full patchset to the related lists.  If I have to
+dig the full patchset out of lore for review it makes me grumpy.
+Don't resend the patchset for just this reason, but please keep it in
+mind for future patchsets.
+
+--
+paul-moore.com
