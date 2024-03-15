@@ -1,21 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 774081EB42
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 18:49:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82FC11DA5E
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 18:49:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710528564; cv=none; b=Xjq1u+M961/km70tAUOilkrQ3rgx4+P9z6HUXs4Krq2aHJ6CQJx1zQ33FkEAhE8UXSiGI7hytplcxwjWnS4RoXNmdt116IrT4Mkbsf+3OjAw7CZm08AIYhfJ5Sbyj+0+pO9SLo2397dzpahPZt8oRj8sCGk0rgWI4K6hq+cMnJs=
+	t=1710528569; cv=none; b=U7iavi0axX7gWzy5Fk9Z329BVOaN72gnobbZ/7w5ALLzbkjE1Hu0Grw6nqnU5iwXWc/RK2iPJBl0wSW1YHZgufG3b2otQiiTLDvTiezugxKKbGcerXBSR/2xbb8r+7U8Bi0TKl5v0U8GiuILvnXQmPpI1XkZ+/CsIl3ad7rRaxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710528564; c=relaxed/simple;
-	bh=GAkzNNwSkQxLNqlkWQt1WO8EvtKPt4h9nDRDsVrP+s0=;
+	s=arc-20240116; t=1710528569; c=relaxed/simple;
+	bh=LnjhNUOucdg4COeefYoicIPoLA1piNa5SrKNTAQVBNY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X5F0j3Cv5S8JTk1mApE32f5ko+IAry2orLkHZb5h5zYSgmzylPREEgbyYf5m7hws40uOFjrQSA5NNPpewE3p+Km8SDuzxACxumajVgwVJLhFD8NJ9xBnHhCA7fOXolAUIRXbw/bmC3jskVPfh5RZChyUPTLgStYXPskV1Z18RUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	 MIME-Version; b=l3H4h6GxuSABG6H0ZhnHuJAIL/FDPkBRGXBGJHU0tgl3yX3jFSSweQTYdJ0c8IRBIFW7wNqctq/rytUda6bvMcC7LeeDhBJF9sXuWIgwGLkvLsm0j2oqq7NaKQHrQwRqADX3LxAnL+Jm87rp5Yjgk26WFQY9VKhy/BxT+qfdTZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 254F31D1E656; Fri, 15 Mar 2024 11:49:10 -0700 (PDT)
+	id 3DAD51D1E671; Fri, 15 Mar 2024 11:49:15 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -25,9 +25,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>,
 	Yury Namgung <ynamgung@meta.com>
-Subject: [PATCH bpf-next v2 4/5] selftests/bpf: Add a cgroup prog bpf_get_ns_current_pid_tgid() test
-Date: Fri, 15 Mar 2024 11:49:10 -0700
-Message-ID: <20240315184910.2976522-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Add a sk_msg prog bpf_get_ns_current_pid_tgid() test
+Date: Fri, 15 Mar 2024 11:49:15 -0700
+Message-ID: <20240315184915.2976718-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240315184849.2974556-1-yonghong.song@linux.dev>
 References: <20240315184849.2974556-1-yonghong.song@linux.dev>
@@ -39,63 +39,68 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Add a cgroup bpf program test where the bpf program is running
-in a pid namespace. The test is successfully:
-  #165/3   ns_current_pid_tgid/new_ns_cgrp:OK
+Add a sk_msg bpf program test where the program is running in a pid
+namespace. The test is successful:
+  #165/4   ns_current_pid_tgid/new_ns_sk_msg:OK
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../bpf/prog_tests/ns_current_pid_tgid.c      | 73 +++++++++++++++++++
- .../bpf/progs/test_ns_current_pid_tgid.c      |  7 ++
- 2 files changed, 80 insertions(+)
+ .../bpf/prog_tests/ns_current_pid_tgid.c      | 62 +++++++++++++++++++
+ .../bpf/progs/test_ns_current_pid_tgid.c      | 14 +++++
+ 2 files changed, 76 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c=
  b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-index 847d7b70e290..fded38d24aae 100644
+index fded38d24aae..e72d75d6baa7 100644
 --- a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
 +++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-@@ -12,6 +12,7 @@
- #include <sys/wait.h>
- #include <sys/mount.h>
- #include <sys/fcntl.h>
-+#include "network_helpers.h"
-=20
- #define STACK_SIZE (1024 * 1024)
- static char child_stack[STACK_SIZE];
-@@ -74,6 +75,50 @@ static int test_current_pid_tgid_tp(void *args)
+@@ -119,6 +119,66 @@ static int test_current_pid_tgid_cgrp(void *args)
  	return ret;
  }
 =20
-+static int test_current_pid_tgid_cgrp(void *args)
++static int test_current_pid_tgid_sk_msg(void *args)
 +{
++	int verdict, map, server_fd =3D -1, client_fd =3D -1;
 +	struct test_ns_current_pid_tgid__bss *bss;
++	static const char send_msg[] =3D "message";
 +	struct test_ns_current_pid_tgid *skel;
-+	int server_fd =3D -1, ret =3D -1, err;
-+	int cgroup_fd =3D *(int *)args;
++	int ret =3D -1, err, key =3D 0;
 +	pid_t tgid, pid;
 +
 +	skel =3D test_ns_current_pid_tgid__open();
 +	if (!ASSERT_OK_PTR(skel, "test_ns_current_pid_tgid__open"))
 +		return ret;
 +
-+	bpf_program__set_autoload(skel->progs.cgroup_bind4, true);
++	bpf_program__set_autoload(skel->progs.sk_msg, true);
 +
 +	err =3D test_ns_current_pid_tgid__load(skel);
 +	if (!ASSERT_OK(err, "test_ns_current_pid_tgid__load"))
 +		goto cleanup;
 +
 +	bss =3D skel->bss;
-+	if (get_pid_tgid(&pid, &tgid, bss))
++	if (get_pid_tgid(&pid, &tgid, skel->bss))
 +		goto cleanup;
 +
-+	skel->links.cgroup_bind4 =3D bpf_program__attach_cgroup(
-+		skel->progs.cgroup_bind4, cgroup_fd);
-+	if (!ASSERT_OK_PTR(skel->links.cgroup_bind4, "bpf_program__attach_cgrou=
-p"))
++	verdict =3D bpf_program__fd(skel->progs.sk_msg);
++	map =3D bpf_map__fd(skel->maps.sock_map);
++	err =3D bpf_prog_attach(verdict, map, BPF_SK_MSG_VERDICT, 0);
++	if (!ASSERT_OK(err, "prog_attach"))
 +		goto cleanup;
 +
-+	server_fd =3D start_server(AF_INET, SOCK_STREAM, NULL, 0, 0);
++	server_fd =3D start_server(AF_INET6, SOCK_STREAM, "::1", 0, 0);
 +	if (!ASSERT_GE(server_fd, 0, "start_server"))
++		goto cleanup;
++
++	client_fd =3D connect_to_fd(server_fd, 0);
++	if (!ASSERT_GE(client_fd, 0, "connect_to_fd"))
++		goto cleanup;
++
++	err =3D bpf_map_update_elem(map, &key, &client_fd, BPF_ANY);
++	if (!ASSERT_OK(err, "bpf_map_update_elem"))
++		goto cleanup;
++
++	err =3D send(client_fd, send_msg, sizeof(send_msg), 0);
++	if (!ASSERT_EQ(err, sizeof(send_msg), "send(msg)"))
 +		goto cleanup;
 +
 +	if (!ASSERT_EQ(bss->user_pid, pid, "pid"))
@@ -107,6 +112,8 @@ p"))
 +cleanup:
 +	if (server_fd >=3D 0)
 +		close(server_fd);
++	if (client_fd >=3D 0)
++		close(client_fd);
 +	test_ns_current_pid_tgid__destroy(skel);
 +	return ret;
 +}
@@ -115,61 +122,41 @@ p"))
 )
  {
  	int wstatus;
-@@ -95,6 +140,25 @@ static void test_ns_current_pid_tgid_new_ns(int (*fn)=
-(void *), void *arg)
- 		return;
- }
-=20
-+static void test_in_netns(int (*fn)(void *), void *arg)
-+{
-+	struct nstoken *nstoken =3D NULL;
-+
-+	SYS(cleanup, "ip netns add ns_current_pid_tgid");
-+	SYS(cleanup, "ip -net ns_current_pid_tgid link set dev lo up");
-+
-+	nstoken =3D open_netns("ns_current_pid_tgid");
-+	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
-+		goto cleanup;
-+
-+	test_ns_current_pid_tgid_new_ns(fn, arg);
-+
-+cleanup:
-+	if (nstoken)
-+		close_netns(nstoken);
-+	SYS_NOFAIL("ip netns del ns_current_pid_tgid");
-+}
-+
- /* TODO: use a different tracepoint */
- void serial_test_ns_current_pid_tgid(void)
- {
-@@ -102,4 +166,13 @@ void serial_test_ns_current_pid_tgid(void)
- 		test_current_pid_tgid_tp(NULL);
- 	if (test__start_subtest("new_ns_tp"))
- 		test_ns_current_pid_tgid_new_ns(test_current_pid_tgid_tp, NULL);
-+	if (test__start_subtest("new_ns_cgrp")) {
-+		int cgroup_fd =3D -1;
-+
-+		cgroup_fd =3D test__join_cgroup("/sock_addr");
-+		if (ASSERT_GE(cgroup_fd, 0, "join_cgroup")) {
-+			test_in_netns(test_current_pid_tgid_cgrp, &cgroup_fd);
-+			close(cgroup_fd);
-+		}
-+	}
+@@ -175,4 +235,6 @@ void serial_test_ns_current_pid_tgid(void)
+ 			close(cgroup_fd);
+ 		}
+ 	}
++	if (test__start_subtest("new_ns_sk_msg"))
++		test_in_netns(test_current_pid_tgid_sk_msg, NULL);
  }
 diff --git a/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c=
  b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
-index aa3ec7ca16d9..d0010e698f66 100644
+index d0010e698f66..386315afad65 100644
 --- a/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
 +++ b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
-@@ -28,4 +28,11 @@ int tp_handler(const void *ctx)
- 	return 0;
+@@ -5,6 +5,13 @@
+ #include <stdint.h>
+ #include <bpf/bpf_helpers.h>
+=20
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 2);
++	__type(key, __u32);
++	__type(value, __u32);
++} sock_map SEC(".maps");
++
+ __u64 user_pid =3D 0;
+ __u64 user_tgid =3D 0;
+ __u64 dev =3D 0;
+@@ -35,4 +42,11 @@ int cgroup_bind4(struct bpf_sock_addr *ctx)
+ 	return 1;
  }
 =20
-+SEC("?cgroup/bind4")
-+int cgroup_bind4(struct bpf_sock_addr *ctx)
++SEC("?sk_msg")
++int sk_msg(struct sk_msg_md *msg)
 +{
 +	get_pid_tgid();
-+	return 1;
++	return SK_PASS;
 +}
 +
  char _license[] SEC("license") =3D "GPL";
