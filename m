@@ -1,125 +1,173 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34B293FB1B;
-	Fri, 15 Mar 2024 14:23:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01B833A1B5;
+	Fri, 15 Mar 2024 14:29:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710512632; cv=none; b=q6gbBWDdcqv+hG3klKRkMFgL6AUgJD3FAYgaAcJcXShiHVmW8+Wmru9MFgZkMFfSCdPoBbA9SnLLytK6dugcsh4QIytHe4mwTWDwgpiXlwdSDOOWkAhI/AW1gVagFoYYRlFfmwbbzA+Z0Nlgzu9KZnX4N/e8WvGGFkzbs/yLAUg=
+	t=1710512978; cv=none; b=PLzeHHptjIKeiKzoYkLCxCRop2a5AruwWRwKIAgPrnYI8Vgr5ocBP0OJEhL5iNykUL3S7KjcHP6Le/q+jnlQdfqOtT+ZhLaRPP3EVK6Ub5sw8YHQ1ok7ptFHHa0AOqJhYtSapwHenjUNHeC7mFhy/wdX8jPdTpoGXvc2OjSSr+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710512632; c=relaxed/simple;
-	bh=ymtlPopoAK6IcVkhxWyn3VJniXSJJ6SOqftfCTa+nu0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=LNsQwmcgWJr0ggpodRk3Tz3ZF2T2XoIr4E1qL1qiL++HkS4eErwEPPglpmmJ32zLY7/f3FwboKx0r+GJ8wxtvMa9ni9L1v53/ixbkrNbaKBekb/hTD6i/pMBxvKhpVtWlxFKyaTOkKKGfUSV9QvymJqy5UGyG2kAavOBhWqTou4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WOO4/P6C; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1710512978; c=relaxed/simple;
+	bh=1ba924wm8H+J/VP0musS5De3pBR+nFdLLCYlvLpXQLI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=J9/d1xJtvVa41HWAm5N0eRyTEAo07ah7k+kbwlHtLPpQLkqXvrdnBTLXONZ8JrLlKtiPtScJTXx5Fxm8zdPoaWCRROs/35Q6gXS2tRhV8kYotLhB/o6Y2AE6lMGrkEWdFmDaQP/zAOIvyxUz3Nu1MfgpPp6OQGB1y4PC56U7wXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M+PdkJOP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WOO4/P6C"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710512631; x=1742048631;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ymtlPopoAK6IcVkhxWyn3VJniXSJJ6SOqftfCTa+nu0=;
-  b=WOO4/P6CIMbAWMpVXvT9ZzdV++1UIUc0TTh96jJh3KOmRMy8tyUMoHTh
-   8XVukbvGHCaqgqol6MqsEOxy7o81SoCyzEtNpzxBaaolTw+NMV+SXJ3J1
-   OjQ9pNbS+ULbTLp7QBNt6jXc2pFnTtf6hNGZC1wnyVzTCA6AnaUvZ37Ke
-   H+LnljRuUoNzWA+D7taEB81I8/sQ0Sx/QE8kVkftUgRp5CXRVojq6U+5m
-   wYrPrAJQ1dSbPHXCNQ85Xw9WoVApS7pLPdhUH7IciBicwhrEvleBDHLP1
-   ADx5oWvUpKnhJQQTGq0XZ4BDkO2rWU5gWtiAJzG/78hRDyGBm8ccqoCov
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11013"; a="5250119"
-X-IronPort-AV: E=Sophos;i="6.07,128,1708416000"; 
-   d="scan'208";a="5250119"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2024 07:23:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,128,1708416000"; 
-   d="scan'208";a="17140761"
-Received: from intel.iind.intel.com (HELO brc5..) ([10.190.162.156])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2024 07:23:47 -0700
-From: Tushar Vyavahare <tushar.vyavahare@intel.com>
-To: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,
-	bjorn@kernel.org,
-	magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com,
-	jonathan.lemon@gmail.com,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	tirthendu.sarkar@intel.com,
-	tushar.vyavahare@intel.com
-Subject: [PATCH bpf-next 6/6] selftests/xsk: enhance framework with a new test case for AF_XDP under max ring sizes
-Date: Fri, 15 Mar 2024 14:07:26 +0000
-Message-Id: <20240315140726.22291-7-tushar.vyavahare@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240315140726.22291-1-tushar.vyavahare@intel.com>
-References: <20240315140726.22291-1-tushar.vyavahare@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M+PdkJOP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAD84C43394;
+	Fri, 15 Mar 2024 14:29:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710512977;
+	bh=1ba924wm8H+J/VP0musS5De3pBR+nFdLLCYlvLpXQLI=;
+	h=From:Subject:Date:To:Cc:From;
+	b=M+PdkJOPfSmxj4+10sBOVzWow9lG4Iv598TfMtzagZf45HoQ8j694v7UKhzRD8vuw
+	 BXgqmrRsuouIyuoulDx5/KsGx3vfP30xGIhfVXMyKyDETwueUlLzRtsX/dZD9zk1LK
+	 338w1U28n0tm0en7Ero4tnCHOJompXKTDk1ww9pbDQwqvqQGdmnQmh1+FCAH3yLzQh
+	 l89v4ZSvTUg2OLXyVqUPV+eP3ypvdPKbnq1nwWiy8fb6ohoGJtZyK3uKN7kG1pv7/W
+	 CoVoMlQWK3euuNRl4+nhdiPRVMVLA+La7wsJo5PN7+CbWNutCNI3xQM5DZmUPt3x+9
+	 YJF6d6jMbJKHQ==
+From: Benjamin Tissoires <bentiss@kernel.org>
+Subject: [PATCH bpf-next v4 0/6] sleepable bpf_timer (was: allow HID-BPF to
+ do device IOs)
+Date: Fri, 15 Mar 2024 15:29:24 +0100
+Message-Id: <20240315-hid-bpf-sleepable-v4-0-5658f2540564@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAERb9GUC/23Nyw7CIBAF0F8xrMUAhT5c+R/GBY+hJTa0gaapa
+ frvInFRY5c3d+6ZFUUIDiK6nlYUYHbRDT4Ffj4h3UnfAnYmZcQI44QRgTtnsBotjj3AKFUPWBP
+ KSmJNQzVHaTcGsG7J5h19Tj0sE3qkpnNxGsIrP5tp7r9uc+DOFBPMta4boYQ0ytyeEDz0lyG0m
+ ZvZjqD8iGCJEJUoFRG8YvyfKHYEo0dEkQhqVVHVWpYFoT/Etm1vMnf260MBAAA=
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: Benjamin Tissoires <bentiss@kernel.org>, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1710512973; l=4636;
+ i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=1ba924wm8H+J/VP0musS5De3pBR+nFdLLCYlvLpXQLI=;
+ b=sav/9qNPwA9ZtLUXSrg5FXA4Oawm7aJRfq4uJaFqM3sVlqdMgezCd0eTAETobBNwbkmfs7Z9B
+ e2w7pupjnijCHXLDnAO2X9HN+MJ2kvH8cKfhz4rv7f99Nhq8uMbaRQZ
+X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-Introduce a test case to evaluate AF_XDP's robustness by pushing hardware
-and software ring sizes to their limits. This test ensures AF_XDP's
-reliability amidst potential producer/consumer throttling due to maximum
-ring utilization. The testing strategy includes:
+New version of the sleepable bpf_timer code, without the HID changes, as
+they can now go through the HID tree independantly.
 
-1. Configuring rings to their maximum allowable sizes.
-2. Executing a series of tests across diverse batch sizes to assess system
-   performance under varying load conditions.
+For reference, the use cases I have in mind:
 
-Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
 ---
- tools/testing/selftests/bpf/xskxceiver.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 5326ca5c458c..f545b529e404 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -2480,6 +2480,26 @@ static int testapp_hw_sw_min_ring_size(struct test_spec *test)
- 	return testapp_validate_traffic(test);
- }
- 
-+static int testapp_hw_sw_max_ring_size(struct test_spec *test)
-+{
-+	u32 max_descs = XSK_RING_PROD__DEFAULT_NUM_DESCS * 2;
-+	int ret;
-+
-+	test->total_steps = 2;
-+	test->ifobj_tx->ring.set_tx = test->ifobj_tx->ring.max_tx;
-+	test->ifobj_tx->ring.set_rx = test->ifobj_tx->ring.max_rx;
-+	test->ifobj_rx->umem->num_frames = max_descs;
-+	test->ifobj_rx->xsk->rxqsize = max_descs;
-+	test->ifobj_rx->xsk->batch_size = XSK_RING_PROD__DEFAULT_NUM_DESCS;
-+	ret = testapp_validate_traffic(test);
-+	if (ret)
-+		return ret;
-+
-+	/* Set batch_size to 4095 */
-+	test->ifobj_rx->xsk->batch_size = max_descs - 1;
-+	return testapp_validate_traffic(test);
-+}
-+
- static void run_pkt_test(struct test_spec *test)
- {
- 	int ret;
-@@ -2585,6 +2605,7 @@ static const struct test_spec tests[] = {
- 	{.name = "UNALIGNED_INV_DESC_MULTI_BUFF", .test_func = testapp_unaligned_inv_desc_mb},
- 	{.name = "TOO_MANY_FRAGS", .test_func = testapp_too_many_frags},
- 	{.name = "HW_SW_MIN_RING_SIZE", .test_func = testapp_hw_sw_min_ring_size},
-+	{.name = "HW_SW_MAX_RING_SIZE", .test_func = testapp_hw_sw_max_ring_size},
- };
- 
- static void print_tests(void)
+Basically, I need to be able to defer a HID-BPF program for the
+following reasons (from the aforementioned patch):
+1. defer an event:
+   Sometimes we receive an out of proximity event, but the device can not
+   be trusted enough, and we need to ensure that we won't receive another
+   one in the following n milliseconds. So we need to wait those n
+   milliseconds, and eventually re-inject that event in the stack.
+
+2. inject new events in reaction to one given event:
+   We might want to transform one given event into several. This is the
+   case for macro keys where a single key press is supposed to send
+   a sequence of key presses. But this could also be used to patch a
+   faulty behavior, if a device forgets to send a release event.
+
+3. communicate with the device in reaction to one event:
+   We might want to communicate back to the device after a given event.
+   For example a device might send us an event saying that it came back
+   from sleeping state and needs to be re-initialized.
+
+Currently we can achieve that by keeping a userspace program around,
+raise a bpf event, and let that userspace program inject the events and
+commands.
+However, we are just keeping that program alive as a daemon for just
+scheduling commands. There is no logic in it, so it doesn't really justify
+an actual userspace wakeup. So a kernel workqueue seems simpler to handle.
+
+bpf_timers are currently running in a soft IRQ context, this patch
+series implements a sleppable context for them.
+
+Cheers,
+Benjamin
+
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: John Fastabend <john.fastabend@gmail.com>
+To: KP Singh <kpsingh@kernel.org>
+To: Stanislav Fomichev <sdf@google.com>
+To: Hao Luo <haoluo@google.com>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Mykola Lysenko <mykolal@fb.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Benjamin Tissoires <bentiss@kernel.org>
+Cc:  <bpf@vger.kernel.org>
+Cc:  <linux-kernel@vger.kernel.org>
+Cc:  <linux-kselftest@vger.kernel.org>
+
+---
+Changes in v4:
+- dropped the HID changes, they can go independently from bpf-core
+- addressed Alexei's and Eduard's remarks
+- added selftests
+- Link to v3: https://lore.kernel.org/r/20240221-hid-bpf-sleepable-v3-0-1fb378ca6301@kernel.org
+
+Changes in v3:
+- fixed the crash from v2
+- changed the API to have only BPF_F_TIMER_SLEEPABLE for
+  bpf_timer_start()
+- split the new kfuncs/verifier patch into several sub-patches, for
+  easier reviews
+- Link to v2: https://lore.kernel.org/r/20240214-hid-bpf-sleepable-v2-0-5756b054724d@kernel.org
+
+Changes in v2:
+- make use of bpf_timer (and dropped the custom HID handling)
+- implemented bpf_timer_set_sleepable_cb as a kfunc
+- still not implemented global subprogs
+- no sleepable bpf_timer selftests yet
+- Link to v1: https://lore.kernel.org/r/20240209-hid-bpf-sleepable-v1-0-4cc895b5adbd@kernel.org
+
+---
+Benjamin Tissoires (6):
+      bpf/helpers: introduce sleepable bpf_timers
+      bpf/verifier: add bpf_timer as a kfunc capable type
+      bpf/helpers: introduce bpf_timer_set_sleepable_cb() kfunc
+      bpf/helpers: mark the callback of bpf_timer_set_sleepable_cb() as sleepable
+      tools: sync include/uapi/linux/bpf.h
+      selftests/bpf: add sleepable timer tests
+
+ include/linux/bpf_verifier.h                       |   1 +
+ include/uapi/linux/bpf.h                           |   4 +
+ kernel/bpf/helpers.c                               | 132 ++++++++++++++++++++-
+ kernel/bpf/verifier.c                              |  92 +++++++++++++-
+ tools/include/uapi/linux/bpf.h                     |   4 +
+ tools/testing/selftests/bpf/bpf_experimental.h     |   4 +
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c        |   5 +
+ .../selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h  |   1 +
+ tools/testing/selftests/bpf/prog_tests/timer.c     |   1 +
+ tools/testing/selftests/bpf/progs/timer.c          |  40 ++++++-
+ tools/testing/selftests/bpf/progs/timer_failure.c  | 114 +++++++++++++++++-
+ 11 files changed, 387 insertions(+), 11 deletions(-)
+---
+base-commit: 9187210eee7d87eea37b45ea93454a88681894a4
+change-id: 20240205-hid-bpf-sleepable-c01260fd91c4
+
+Best regards,
 -- 
-2.34.1
+Benjamin Tissoires <bentiss@kernel.org>
 
