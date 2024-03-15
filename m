@@ -1,141 +1,144 @@
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0055524C3
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 19:49:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053C752F85
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 19:50:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.111.4.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710532149; cv=none; b=CnMVbuv7zhLO3FPzuNXGbZ/JGoqp/pj/UF6vtuQ3qFBJ0XXaYiXhUrmC8bjOkAccZ6f2YMBAoVOtngZ+xCFcebSjpAZ1xX00b4x8e0kZLHDR2NPtidCclBOHz1P26IM9jO2R/Zed1LQ75XsFSJcSPgkxszhg+/NkU9gvT5FBPzE=
+	t=1710532227; cv=none; b=Cls1l5dh98ABSqUT2BmNMIVGhy3gAifKDbh/HIl+oqxKYPBumsU5KVejDKg1eBUlMpA5nsyP+kLy30nwjOLdYih9Pw94faEsBtNgZpdzc1THFoANGnBth7L8UPsETC/P02jSmOCGLu7vRvkRmqAyRrBN+xlsP8NTbdtaZpyd6jA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710532149; c=relaxed/simple;
-	bh=ZfQ8x5dH4x5DWUpBJmuLHOLodi5CZsFApbL/gAswl2M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cqAPeidej6UnYMthqikL/DktBj03Y1UP+TAfb3AdHcs6K9uVmMdHJ3hQD93aAefilvbnX6JExmngrhjepJKwfkOg+cllDSg5mzYcmOER9NLdNA/CdaEyhQe3tcBVv/XOi4Zkpal1BXVmfuIrvhq1x1AVvhBIE83z0JVi61xyQ3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=CnbLJSNB; arc=none smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1710532227; c=relaxed/simple;
+	bh=w+s1nFzo85vcRMzf5sOGZVHXTDJPWKsuWAofiMC4Zsc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IHvSzXWl6Xqa330qZ3Z/17O34I9Iuy7nYki7OK5ybkINdLxizBdsXvCS72Q6Q+WuMtw2CY2Clske2Dx53naqePTMCYdXuOkl883IyaFmKS0u+qmfaoerpO3D8pKf52xgHayYMVRBo+GdzX8znHeuCqQvodGGn3g6WncNkSbNoWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=BPDAmsui; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RRQY1OfS; arc=none smtp.client-ip=66.111.4.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="CnbLJSNB"
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-60cc4124a39so25346457b3.3
-        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 12:49:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1710532145; x=1711136945; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xrPHDfVM1LJbs09LU1eQrP0j2lULZw9AOoce47S0QjY=;
-        b=CnbLJSNBjdQyDHAHN0qBeXGwczhNZa200ldLwVa2zo+qgcHbkwgPQZlYQLyaHkd02e
-         S5FswNzNeWEgWTmpuziPaguxVpxzDCQHm+Pm9CS1zmZWXIJfWE79QZuVoZHn59dwaPZN
-         SHQMyE/Z/iHNBXpiRixvwABxVC9Wvyf5AL2I4nZgDfKniOq0fk6QZfdz0YoDgisP0kpv
-         vYfUVcO7ejMGHHMLrHi5Yb4CnKWY4xz8aWjV5lHs/P60iwuvP8Ti9ZkpZioLo4Gtv1pH
-         zEJOIzjo3cZHUlyKSonzVNdfKTQM/t/zXezhKXHbpUWemKHbFYi3YTrrKLOD+QnJ0aQh
-         s4Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710532145; x=1711136945;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xrPHDfVM1LJbs09LU1eQrP0j2lULZw9AOoce47S0QjY=;
-        b=ZUssZDT38ZpLyYdVVmZtSTdH2fH+rjyB4Vs1TrQA0ZJDEs4PotGnq7tVSqNVggZT34
-         h3pwqzTfiFqELbJ3/WPTHv3O60Mgn/pB9RaN79jU31QhKc+m45mBOBnDV3jf1TS5DNKt
-         fUCiLqtp0YJmJB1CH5uxGP+XSknAqGgv69uSAXFSc5cQjj3u9Ilq/5QOTNWU3VgrgruB
-         0h7XWnGUJG74ejQqs5rpgjda8qJyTtc2DngtE3WyahOMGq15fhm22lJQnGvVyr5Fc0XW
-         UFK/S6eOJG1jDLhkjv5vpiMgsu7KZrDzrosIIz0iDSuj0wnyzLhSnPIN3jc8OO19zML1
-         AR8g==
-X-Forwarded-Encrypted: i=1; AJvYcCWeEOzPryBa0n3JmemIagrCl2rl0E/Rs+gq56tBIRPiaiR2vsGrvtun09Yz3Y7IQWABJkKnTPV7tMiT0Qyf7GepKmFq
-X-Gm-Message-State: AOJu0Yy2gvvvziItTuRMDMTgXwJfxJiAoXHORnNpDbhM9j6hNDaBQlzA
-	blw8HTDQV9rmXBEL4ZI8hEj6iiZYHVj/J/5Xi64kpUySlqshSwmE/pEbv8dtpHohWdoxzGmEG5+
-	giFdPDZzn55tw1nDCanvaWF3h5onsHzRS/dSY
-X-Google-Smtp-Source: AGHT+IHwst5TyUeb5tW6MfflqpvFB5F4B4ooBz3Wi0KHfdEId2X9D9NYeBtrW+pZioCvi3AEZ5oYfZafRRbAkRSKQiE=
-X-Received: by 2002:a25:26c4:0:b0:dc6:ebca:c2e8 with SMTP id
- m187-20020a2526c4000000b00dc6ebcac2e8mr6228967ybm.5.1710532145662; Fri, 15
- Mar 2024 12:49:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="BPDAmsui";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RRQY1OfS"
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailout.nyi.internal (Postfix) with ESMTP id 0140E5C01B5;
+	Fri, 15 Mar 2024 15:50:25 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Fri, 15 Mar 2024 15:50:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=fm3; t=1710532224; x=1710618624; bh=eKtMfbAqsGoGCRC8sZ8v6
+	oRV44YJGANHbKqlkxCPfyQ=; b=BPDAmsuiEPa3AbwnT93MN27awgHPaNww3ydPu
+	Q+ugdUo9Vi4SE8/iA0Tnlmt2ygHizghCn4oVYd6T/XvzPwdlIeajUtZfPdK8nsuB
+	7AfXKqxf317OCtSBXNr2fme+urP6oGC92hBNlYvLOXGtj7jJQQXkh54YviSs5md4
+	uOgR4Nx+VW7jj+CVQaajIGD6aK3b9I4Hg105g0P225DpxEkhcWXwX5rDZipKQTwt
+	PIp42SNMVduilmktucOK1v4IKnaG6XweSLtxEmuYLnu8QqdM3Dcwm6hOQ9RN1fAM
+	34pSj53jnOZwwnaVa3GNpVBrb9JTwPx/bllzFnw+XHUlOUGng==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1710532224; x=1710618624; bh=eKtMfbAqsGoGCRC8sZ8v6oRV44YJ
+	GANHbKqlkxCPfyQ=; b=RRQY1OfSt5OXpd72xC7CoEIACiA64gVHaOOcPyWwiDuu
+	Ij5mSDX2xJ0EYUtZQszpyrkzrOmWUiRA+jKpG2j9Ztdg0sOhQhnzXvaKv48zRbS7
+	ZfucT/69cK7q8gM+54gIQC69R+llisRJcigddTR0sqwrfXEw4KU5KnzHMBtyA9mT
+	zvn0UeSYC3movnrXghL8TKJrdrZVDcwIKhyeUuC0zcWZgggQ8f+aIDIAAUj6h198
+	ZT6k3IDH372ktcq+w/emc2NhMiMJuoZWmCHfRhdu9KdFr4FgoElrdSRk6f42v7e9
+	6QduYvDITOqBKlm56zwUZMpRUjGJKeFinG+0Xm5rKQ==
+X-ME-Sender: <xms:gKb0ZXVjjtzMSlttaDPDu0nqO3ReFF-u7HpODgFAJ5GnxlvPKMbWMg>
+    <xme:gKb0ZfmSzUN3Bs07i_uZjJ6Y15Mi9_gbqUXoygrjN0M0LDKXjJTllGTLWw6oCgivM
+    jlzq9R2rdP1kuwoUA>
+X-ME-Received: <xmr:gKb0ZTaif_ODQUjM3OXs99Cjz-2-1WD76q2o669qpGw1kOjlXnWKmS1-EiC-qyPHM_zLsyDSQ6J8zCelnlepv7eZSS1SJpzXsPswGH_jZ26kKA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrjeelgdduvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
+    evufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceougig
+    uhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepvdeggfetgfelhefhueefke
+    duvdfguedvhfegleejudduffffgfetueduieeikeejnecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:gKb0ZSUBwPtqHV3fG_7aj59JJ-p-8qqWWR8CL0dB-R7-Au639r-lgQ>
+    <xmx:gKb0ZRl_JxJhvT3m7aUWsRSt1dgM56a1petoZoq9R34kLK1CcExuaA>
+    <xmx:gKb0Zfcv9JD8UoKrdgokC1NMl8puV6et3zDP1e6oSBOz6CrbTgBVfg>
+    <xmx:gKb0ZbHnYfeqZrbk7oWe_8VBVMedzILzy-Ynbf152tU4F8MQh7GXbg>
+    <xmx:gKb0ZT6E08qQZwjoJ37LHk3l4o_FI5wFRimPfB2JSBxSjYkjnNhbiA>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 15 Mar 2024 15:50:23 -0400 (EDT)
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: acme@kernel.org,
+	jolsa@kernel.org,
+	quentin@isovalent.com,
+	alan.maguire@oracle.com,
+	eddyz87@gmail.com
+Cc: andrii.nakryiko@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	bpf@vger.kernel.org
+Subject: [PATCH dwarves v5 0/2] pahole: Inject kfunc decl tags into BTF
+Date: Fri, 15 Mar 2024 13:48:50 -0600
+Message-ID: <cover.1710532093.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240315113828.258005-1-cgzones@googlemail.com>
- <20240315113828.258005-2-cgzones@googlemail.com> <CAEf4BzZF0A9qEzmRigHFLQ4vBQshGUQWZVG5L0q2_--kx4=AXA@mail.gmail.com>
- <0f8291f7-48b1-4be1-8a57-dbad5d0ab28c@kernel.dk>
-In-Reply-To: <0f8291f7-48b1-4be1-8a57-dbad5d0ab28c@kernel.dk>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 15 Mar 2024 15:48:54 -0400
-Message-ID: <CAHC9VhRUkgVUJiGKHjmJo5e4o1NGL_Gc9zpipAbQbMqyn1ZFzg@mail.gmail.com>
-Subject: Re: [PATCH 02/10] capability: add any wrappers to test for multiple
- caps with exactly one audit message
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
-	=?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>, 
-	linux-security-module@vger.kernel.org, linux-block@vger.kernel.org, 
-	Serge Hallyn <serge@hallyn.com>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 15, 2024 at 2:41=E2=80=AFPM Jens Axboe <axboe@kernel.dk> wrote:
-> On 3/15/24 10:45 AM, Andrii Nakryiko wrote:
-> >> +/**
-> >> + * ns_capable_any - Determine if the current task has one of two supe=
-rior capabilities in effect
-> >> + * @ns:  The usernamespace we want the capability in
-> >> + * @cap1: The capabilities to be tested for first
-> >> + * @cap2: The capabilities to be tested for secondly
-> >> + *
-> >> + * Return true if the current task has at least one of the two given =
-superior
-> >> + * capabilities currently available for use, false if not.
-> >> + *
-> >> + * In contrast to or'ing capable() this call will create exactly one =
-audit
-> >> + * message, either for @cap1, if it is granted or both are not permit=
-ted,
-> >> + * or @cap2, if it is granted while the other one is not.
-> >> + *
-> >> + * The capabilities should be ordered from least to most invasive, i.=
-e. CAP_SYS_ADMIN last.
-> >> + *
-> >> + * This sets PF_SUPERPRIV on the task if the capability is available =
-on the
-> >> + * assumption that it's about to be used.
-> >> + */
-> >> +bool ns_capable_any(struct user_namespace *ns, int cap1, int cap2)
-> >> +{
-> >> +       if (cap1 =3D=3D cap2)
-> >> +               return ns_capable(ns, cap1);
-> >> +
-> >> +       if (ns_capable_noauditondeny(ns, cap1))
-> >> +               return true;
-> >> +
-> >> +       if (ns_capable_noauditondeny(ns, cap2))
-> >> +               return true;
-> >> +
-> >> +       return ns_capable(ns, cap1);
-> >
-> > this will incur an extra capable() check (with all the LSMs involved,
-> > etc), and so for some cases where capability is expected to not be
-> > present, this will be a regression. Is there some way to not redo the
-> > check, but just audit the failure? At this point we do know that cap1
-> > failed before, so might as well just log that.
->
-> Not sure why that's important - if it's a failure case, and any audit
-> failure should be, then why would we care if that's now doing a bit of
-> extra work?
+This patchset teaches pahole to parse symbols in .BTF_ids section in
+vmlinux and discover exported kfuncs. Pahole then takes the list of
+kfuncs and injects a BTF_KIND_DECL_TAG for each kfunc.
 
-Exactly.  We discussed this in an earlier patchset in 2022 (lore link below=
-):
+Example of encoding:
 
-https://lore.kernel.org/all/CAHC9VhS8ASN+BB7adi=3DuoAj=3DLeNhiD4LEidbMc=3D_=
-bcD3UTqabg@mail.gmail.com
+        $ bpftool btf dump file .tmp_vmlinux.btf | rg "DECL_TAG 'bpf_kfunc'" | wc -l
+        121
 
-> I say this not knowing the full picture, as I unhelpfully was only CC'ed
-> on two of the patches... Please don't do that when sending patchsets.
+        $ bpftool btf dump file .tmp_vmlinux.btf | rg 56337
+        [56337] FUNC 'bpf_ct_change_timeout' type_id=56336 linkage=static
+        [127861] DECL_TAG 'bpf_kfunc' type_id=56337 component_idx=-1
 
-Agreed, if the patchset touches anything in the audit, LSM, or SELinux
-code please send the full patchset to the related lists.  If I have to
-dig the full patchset out of lore for review it makes me grumpy.
-Don't resend the patchset for just this reason, but please keep it in
-mind for future patchsets.
+This enables downstream users and tools to dynamically discover which
+kfuncs are available on a system by parsing vmlinux or module BTF, both
+available in /sys/kernel/btf.
 
---
-paul-moore.com
+This feature is enabled with --btf_features=decl_tag,decl_tag_kfuncs.
+
+=== Changelog ===
+
+Changes from v4:
+* Update man page with decl_tag_kfuncs feature
+* Fix release mode build warnings
+* Add elf_getshrstrndx() error checking
+* Disable tagging if decl_tag feature is off
+* Fix malformed func name handling
+
+Changes from v3:
+* Guard kfunc tagging behind feature flag
+* Use struct btf_id_set8 definition
+* Remove unnecessary member from btf_encoder
+* Fix code styling
+
+Changes from v2:
+* More reliably detect kfunc membership in set8 by tracking set addr ranges
+* Rename some variables/functions to be more clear about kfunc vs func
+
+Changes from v1:
+* Fix resource leaks
+* Fix callee -> caller typo
+* Rename btf_decl_tag from kfunc -> bpf_kfunc
+* Only grab btf_id_set funcs tagged kfunc
+* Presort btf func list
+
+Daniel Xu (2):
+  pahole: Add --btf_feature=decl_tag_kfuncs feature
+  pahole: Inject kfunc decl tags into BTF
+
+ btf_encoder.c      | 370 +++++++++++++++++++++++++++++++++++++++++++++
+ dwarves.h          |   1 +
+ man-pages/pahole.1 |   1 +
+ pahole.c           |   1 +
+ 4 files changed, 373 insertions(+)
+
+-- 
+2.44.0
+
