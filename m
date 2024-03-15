@@ -1,21 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D33B1EB42
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 18:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E47B914A9F
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 18:49:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710528549; cv=none; b=LfkQQ+mtyZStRoCGaCWI/pYWsLwKxSlR6dqHsfrWC6aJaGZXgaiwZVwxAJpsQSemitbYfYgLd05uHvunAtK0/xb9kXJJhn/84kIjH+2cc3ELE6QJ6I4pzyLdPjM5ukY7Bu8emTl1YbTkcnDDcTXQGOq1Zab2sHYS02t1zLRdtCU=
+	t=1710528549; cv=none; b=aFBXiTcmxVzEW/O0O5qUWm4MPtoMwi2x68FPh9t4mVbQjWnWDLNkSZWWBvhN8yifSjZNkWL0sGQwLGuAvGVuutP0AXfmOpPW/+OUB/Qp/0JZMRg3JF2uZjzgAEIiVRvAsczCsJnzJVW+iFwrSNoL5YFGyGjpg1HIDC+oU1NhKAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1710528549; c=relaxed/simple;
-	bh=bdn2o83kn0QIuxeT+gWYvr7bTb3uemjs7CUit+0tzr0=;
+	bh=BWyeWMXrm9Z4GtAbAPQmZ4KO8eRZ5bhhefii0SrRhHw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n+Oob5zUoTqh5wS6bziLQ+gri5SHkT8AHkiIxg4VTJwnPxfBjIXKdRao5eA2YTGbKRxyMIdM7XRjKZuDHMKZDgBFy+Fxj90YbdHET6N1j8GjIcaxmBMoC4IwNrqwAVquccF6NP7jlGKWNop1D5+KitEiMpMOFlHXfGlXXqDOLGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	 MIME-Version; b=Sl3ca859LUuWPZPSdMfNCRYNSrpgDoJrJwwJ89Mmh4LIsyk8nyFmAUH9xN5mDDNiW5+WIteOVtslqbW3FUhS7bTd3CwCvTNav0M4wc3N/jrYyTU1VcFO9P842WEtqzm9/KnxfJNVzxYcpQ8xscIgM60SjoIbjsRM/hbXcJk3yZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id CEC951D1E5D0; Fri, 15 Mar 2024 11:48:59 -0700 (PDT)
+	id E840C1D1E615; Fri, 15 Mar 2024 11:49:04 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -25,9 +25,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>,
 	Yury Namgung <ynamgung@meta.com>
-Subject: [PATCH bpf-next v2 2/5] selftests/bpf: Replace CHECK with ASSERT_* in ns_current_pid_tgid test
-Date: Fri, 15 Mar 2024 11:48:59 -0700
-Message-ID: <20240315184859.2975543-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 3/5] selftests/bpf: Refactor out some functions in ns_current_pid_tgid test
+Date: Fri, 15 Mar 2024 11:49:04 -0700
+Message-ID: <20240315184904.2976123-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240315184849.2974556-1-yonghong.song@linux.dev>
 References: <20240315184849.2974556-1-yonghong.song@linux.dev>
@@ -39,114 +39,151 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Replace CHECK in selftest ns_current_pid_tgid with recommended ASSERT_* s=
-tyle.
-I also shortened subtest name as the prefix of subtest name is covered
-by the test name already.
+Refactor some functions in both user space code and bpf program
+as these functions are used by later cgroup/sk_msg tests.
+Another change is to mark tp program optional loading as later
+patches will use optional loading as well since they have quite
+different attachment and testing logic.
 
-This patch does fix a testing issue. Currently even if bss->user_{pid,tgi=
-d}
-is not correct, the test still passed since the clone func returns 0.
-I fixed it to return a non-zero value if bss->user_{pid,tgid} is incorrec=
-t.
+There is no functionality change.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../bpf/prog_tests/ns_current_pid_tgid.c      | 36 ++++++++++---------
- 1 file changed, 19 insertions(+), 17 deletions(-)
+ .../bpf/prog_tests/ns_current_pid_tgid.c      | 53 ++++++++++++-------
+ .../bpf/progs/test_ns_current_pid_tgid.c      | 10 ++--
+ 2 files changed, 41 insertions(+), 22 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c=
  b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-index 24d493482ffc..3a0664a86243 100644
+index 3a0664a86243..847d7b70e290 100644
 --- a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
 +++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-@@ -20,19 +20,19 @@ static int test_current_pid_tgid(void *args)
+@@ -16,30 +16,46 @@
+ #define STACK_SIZE (1024 * 1024)
+ static char child_stack[STACK_SIZE];
+=20
+-static int test_current_pid_tgid(void *args)
++static int get_pid_tgid(pid_t *pid, pid_t *tgid,
++			struct test_ns_current_pid_tgid__bss *bss)
  {
- 	struct test_ns_current_pid_tgid__bss  *bss;
- 	struct test_ns_current_pid_tgid *skel;
--	int err =3D -1, duration =3D 0;
-+	int ret =3D -1, err;
- 	pid_t tgid, pid;
+-	struct test_ns_current_pid_tgid__bss  *bss;
+-	struct test_ns_current_pid_tgid *skel;
+-	int ret =3D -1, err;
+-	pid_t tgid, pid;
  	struct stat st;
++	int err;
 =20
- 	skel =3D test_ns_current_pid_tgid__open_and_load();
--	if (CHECK(!skel, "skel_open_load", "failed to load skeleton\n"))
--		goto cleanup;
-+	if (!ASSERT_OK_PTR(skel, "test_ns_current_pid_tgid__open_and_load"))
-+		goto out;
-=20
- 	pid =3D syscall(SYS_gettid);
- 	tgid =3D getpid();
+-	skel =3D test_ns_current_pid_tgid__open_and_load();
+-	if (!ASSERT_OK_PTR(skel, "test_ns_current_pid_tgid__open_and_load"))
+-		goto out;
+-
+-	pid =3D syscall(SYS_gettid);
+-	tgid =3D getpid();
++	*pid =3D syscall(SYS_gettid);
++	*tgid =3D getpid();
 =20
  	err =3D stat("/proc/self/ns/pid", &st);
--	if (CHECK(err, "stat", "failed /proc/self/ns/pid: %d\n", err))
-+	if (!ASSERT_OK(err, "stat /proc/self/ns/pid"))
- 		goto cleanup;
+ 	if (!ASSERT_OK(err, "stat /proc/self/ns/pid"))
+-		goto cleanup;
++		return err;
 =20
- 	bss =3D skel->bss;
-@@ -42,24 +42,26 @@ static int test_current_pid_tgid(void *args)
+-	bss =3D skel->bss;
+ 	bss->dev =3D st.st_dev;
+ 	bss->ino =3D st.st_ino;
+ 	bss->user_pid =3D 0;
  	bss->user_tgid =3D 0;
++	return 0;
++}
++
++static int test_current_pid_tgid_tp(void *args)
++{
++	struct test_ns_current_pid_tgid__bss  *bss;
++	struct test_ns_current_pid_tgid *skel;
++	int ret =3D -1, err;
++	pid_t tgid, pid;
++
++	skel =3D test_ns_current_pid_tgid__open();
++	if (!ASSERT_OK_PTR(skel, "test_ns_current_pid_tgid__open"))
++		return ret;
++
++	bpf_program__set_autoload(skel->progs.tp_handler, true);
++
++	err =3D test_ns_current_pid_tgid__load(skel);
++	if (!ASSERT_OK(err, "test_ns_current_pid_tgid__load"))
++		goto cleanup;
++
++	bss =3D skel->bss;
++	if (get_pid_tgid(&pid, &tgid, bss))
++		goto cleanup;
 =20
  	err =3D test_ns_current_pid_tgid__attach(skel);
--	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
-+	if (!ASSERT_OK(err, "test_ns_current_pid_tgid__attach"))
- 		goto cleanup;
-=20
- 	/* trigger tracepoint */
- 	usleep(1);
--	ASSERT_EQ(bss->user_pid, pid, "pid");
--	ASSERT_EQ(bss->user_tgid, tgid, "tgid");
--	err =3D 0;
-+	if (!ASSERT_EQ(bss->user_pid, pid, "pid"))
-+		goto cleanup;
-+	if (!ASSERT_EQ(bss->user_tgid, tgid, "tgid"))
-+		goto cleanup;
-+	ret =3D 0;
+ 	if (!ASSERT_OK(err, "test_ns_current_pid_tgid__attach"))
+@@ -55,11 +71,10 @@ static int test_current_pid_tgid(void *args)
 =20
  cleanup:
--	 test_ns_current_pid_tgid__destroy(skel);
--
--	return err;
-+	test_ns_current_pid_tgid__destroy(skel);
-+out:
-+	return ret;
+ 	test_ns_current_pid_tgid__destroy(skel);
+-out:
+ 	return ret;
  }
 =20
- static void test_ns_current_pid_tgid_new_ns(void)
+-static void test_ns_current_pid_tgid_new_ns(void)
++static void test_ns_current_pid_tgid_new_ns(int (*fn)(void *), void *arg=
+)
  {
--	int wstatus, duration =3D 0;
-+	int wstatus;
+ 	int wstatus;
  	pid_t cpid;
-=20
+@@ -67,8 +82,8 @@ static void test_ns_current_pid_tgid_new_ns(void)
  	/* Create a process in a new namespace, this process
-@@ -68,21 +70,21 @@ static void test_ns_current_pid_tgid_new_ns(void)
- 	cpid =3D clone(test_current_pid_tgid, child_stack + STACK_SIZE,
- 		     CLONE_NEWPID | SIGCHLD, NULL);
+ 	 * will be the init process of this new namespace hence will be pid 1.
+ 	 */
+-	cpid =3D clone(test_current_pid_tgid, child_stack + STACK_SIZE,
+-		     CLONE_NEWPID | SIGCHLD, NULL);
++	cpid =3D clone(fn, child_stack + STACK_SIZE,
++		     CLONE_NEWPID | SIGCHLD, arg);
 =20
--	if (CHECK(cpid =3D=3D -1, "clone", "%s\n", strerror(errno)))
-+	if (!ASSERT_NEQ(cpid, -1, "clone"))
+ 	if (!ASSERT_NEQ(cpid, -1, "clone"))
  		return;
-=20
--	if (CHECK(waitpid(cpid, &wstatus, 0) =3D=3D -1, "waitpid", "%s\n", stre=
-rror(errno)))
-+	if (!ASSERT_NEQ(waitpid(cpid, &wstatus, 0), -1, "waitpid"))
- 		return;
-=20
--	if (CHECK(WEXITSTATUS(wstatus) !=3D 0, "newns_pidtgid", "failed"))
-+	if (!ASSERT_OK(WEXITSTATUS(wstatus), "newns_pidtgid"))
- 		return;
- }
-=20
- /* TODO: use a different tracepoint */
+@@ -84,7 +99,7 @@ static void test_ns_current_pid_tgid_new_ns(void)
  void serial_test_ns_current_pid_tgid(void)
  {
--	if (test__start_subtest("ns_current_pid_tgid_root_ns"))
-+	if (test__start_subtest("root_ns_tp"))
- 		test_current_pid_tgid(NULL);
--	if (test__start_subtest("ns_current_pid_tgid_new_ns"))
-+	if (test__start_subtest("new_ns_tp"))
- 		test_ns_current_pid_tgid_new_ns();
+ 	if (test__start_subtest("root_ns_tp"))
+-		test_current_pid_tgid(NULL);
++		test_current_pid_tgid_tp(NULL);
+ 	if (test__start_subtest("new_ns_tp"))
+-		test_ns_current_pid_tgid_new_ns();
++		test_ns_current_pid_tgid_new_ns(test_current_pid_tgid_tp, NULL);
  }
+diff --git a/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c=
+ b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
+index 0763d49f9c42..aa3ec7ca16d9 100644
+--- a/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
++++ b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
+@@ -10,17 +10,21 @@ __u64 user_tgid =3D 0;
+ __u64 dev =3D 0;
+ __u64 ino =3D 0;
+=20
+-SEC("tracepoint/syscalls/sys_enter_nanosleep")
+-int handler(const void *ctx)
++static void get_pid_tgid(void)
+ {
+ 	struct bpf_pidns_info nsdata;
+=20
+ 	if (bpf_get_ns_current_pid_tgid(dev, ino, &nsdata, sizeof(struct bpf_pi=
+dns_info)))
+-		return 0;
++		return;
+=20
+ 	user_pid =3D nsdata.pid;
+ 	user_tgid =3D nsdata.tgid;
++}
+=20
++SEC("?tracepoint/syscalls/sys_enter_nanosleep")
++int tp_handler(const void *ctx)
++{
++	get_pid_tgid();
+ 	return 0;
+ }
+=20
 --=20
 2.43.0
 
