@@ -1,330 +1,254 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686355479F
-	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 21:33:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8105A5490F
+	for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 22:22:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710538416; cv=none; b=Vdidd2d9Tyqk1ttoZRwZdqOiC6sOVZe1T817qQe9VIwg2PZy4lddleDBGBYd4cYTpXuOBlxdVoPBzSN+0szzqfM2wahA8G4IQ5Xl+cmvVYT+K4oMnCLuCBQWE/HBFQrMy3//F2WwaPx+LXkyaYgkh+v8qMFDhMRC0o5n9R3rFkU=
+	t=1710541365; cv=none; b=CKIuy/UGDXZg1PhBANl33gIQIQPnREOeMcvP6rtz+5Ks48MkmII8nW2ID6W9/PpKWBT1mLjdihuShXWCkAwrGfbzhBw7oVylZ9m6WpM12CaYOddBqio/7/0xsIszu3A2vTrVAm/UZwYmCWEr55JrpUmgesRkUyhkHIc/YdvZVGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710538416; c=relaxed/simple;
-	bh=MlkQgLwqK/GAQ6yoJU8WBrOUTXdX0EWS5SwQLle0hvE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QtiGPWDPG1VWdlHbfwEePGqptoO7wJ82pbyABOaZm/8gDIyX/7Ztw5oncpKNJhSli5WgUtSbKEiY2AlWa50mr2pUE4UJ78p7nyawRFXWe7nFmYzJ+nyAKftg3limgSLFI7IW5LpYPal3H6c4fx72gHQuAuhFd/8bo3QnkSBW/4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sdU2MGOe; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710541365; c=relaxed/simple;
+	bh=pR5tQvvjoWDTuDNa8SZw5yBb4VJ9wTO5I1kljgxSXOw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O+vg6BN/AYD2dowqXVhVhfbmXF4wadlNq770UV7HQjWXjFxSvNtjRyu8Ht4BDg+VsH4ltSzFikUFjZFZxtym5B2tjbfw8zMlWSGxI9MDms2BQPBRV5sGZo93kMEgyqTV7HOQEPTYvO/eJDqBP+ECmKOb70u79lOGFPUOAiKfh6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dmjunUoq; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sdU2MGOe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD189C433C7;
-	Fri, 15 Mar 2024 21:33:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710538416;
-	bh=MlkQgLwqK/GAQ6yoJU8WBrOUTXdX0EWS5SwQLle0hvE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=sdU2MGOeea25pxZN7NCmzWq5uFIYhhjjJdkcfkgxeu/3Pw9wXQV/d/tq+4ny/4fz+
-	 7R4RQJV7/t1viQ0PvQ86Yn3O/jKpZD2gQ8VDtzcPVS9mAdeciv+LWyIFaZnxc3zMt2
-	 fwHLpeP+8RU6TAR+jKEq2igd7Fee2w7mAO5DlanraKlvjTXAlIapial/fV2llRCeCx
-	 H3ohP/iHoIJ+5XHUyTO97b01OxxaiQHhNm+Tf2kKmJUqESOjYapgez/BHzZteXXaMQ
-	 pCyzev8mgrEShgtxFzGUBxOrKmnsbjmY7bQGjtESeYcju3hkpOcXztbTni/eBRVA4v
-	 BuKF37qA5kdwg==
-From: Andrii Nakryiko <andrii@kernel.org>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@kernel.org
-Cc: andrii@kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH v3 bpf-next] selftests/bpf: scale benchmark counting by using per-CPU counters
-Date: Fri, 15 Mar 2024 14:33:29 -0700
-Message-ID: <20240315213329.1161589-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dmjunUoq"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1dddad37712so24222335ad.3
+        for <bpf@vger.kernel.org>; Fri, 15 Mar 2024 15:22:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710541362; x=1711146162; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zGbuQ8RpD0zxTJTFrBl/PGYYnhznw5T9sKuZ7wiz98Q=;
+        b=dmjunUoqILAh+0du2Htycup53hQnjmtBUSqXCi0swXefJB3iomLact/zAThluh9b/V
+         WQBWLpwrvK6EYcEDVuxicYanwpqbLj3a0cSYtuuEK8tAn31nRr0SKu9tkH+OXsSArt3g
+         oumZ+czrOte5lXK83hDgyYeTPA6kbGcyQrks4/xMxUrqBV1E7x6hxwGHeMQYZ2JXSBrG
+         t8m2qYXnXs/Cn0K60TMjjSVijSE++Iw7WKZal73q+vQp/j6HgCl3jR52KR27qFZeju4s
+         ognMVPoOkPIEeqGqQf50eNcGoc0mcaWQN1YqCOm1Afu2wYv+q7r1u8dQ0FalxNquJESm
+         7Hbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710541362; x=1711146162;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zGbuQ8RpD0zxTJTFrBl/PGYYnhznw5T9sKuZ7wiz98Q=;
+        b=DT5lHW1IBow6v+iyOtWtqEQ8AeZzevKtnZPAJ7OZqG8Ptm3J360O6a+xd02n/vbZBW
+         Yh8aUNlEfPaIdtLWDezVhzdoKGafTCMX67EvgvNH2BjZw61MJwn2MUtnFN2b7PnXTqdE
+         vn2GzUPOUkJxWoRQSmu96wyuuogweenh7Mb3STG4FvvPEel1tiF3pefnG38v5o8mRNP0
+         EB4uVuJieK0buETGKAMj+BU75TsikVhCGgFv+gPez/NKyJ/KxaZ6oZ0pe+z8HfdKfIQp
+         82Ei7CwY37awufYdPkEY1fDTSAPnJdxVR0N2bomu5M9pOjANUhiN1cXvFuao0+dji+at
+         IC+A==
+X-Forwarded-Encrypted: i=1; AJvYcCU2SSe39J1Zi+WrMaoWwvalqCWcjocXudW7yoiXoWemAZAZAZVllWjfuFHtOPYD5B30exz511aVxKlZJKPkPs9WGQ8u
+X-Gm-Message-State: AOJu0Yxa3fFba50OrNSirUZ6bXBKa+GXSJj6PYu9ahVnZZNEitonup+3
+	zwAevfRekXaSSO1N2ewPCnuVzLssTmVTqra5nt/Zn+rm4pFOWC6q/aCNVoV/ncSRJHioWtv3jq/
+	hb5i72x1dSy1qn/MVvci3JCkn6Dx1jGlR
+X-Google-Smtp-Source: AGHT+IGPXGWNfUlzYlvqtNuqBk7OETglj8ogp+msfN7plmiGU0yyIAALJNGTDRyh/kN3Xu407qOKkmPbA++SjdV7yDg=
+X-Received: by 2002:a17:903:2309:b0:1dd:8ff9:40b1 with SMTP id
+ d9-20020a170903230900b001dd8ff940b1mr7923554plh.59.1710541361752; Fri, 15 Mar
+ 2024 15:22:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20240315051813.1320559-1-andrii@kernel.org> <20240315051813.1320559-2-andrii@kernel.org>
+ <ZfQQeyPu6gi4Bx9V@krava>
+In-Reply-To: <ZfQQeyPu6gi4Bx9V@krava>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 15 Mar 2024 15:22:29 -0700
+Message-ID: <CAEf4BzayNECKkmc4=XfLW5fzsPozMnjqOEmGO+r2UmEQXt1XyA@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 2/2] selftests/bpf: add fast mostly in-kernel
+ BPF triggering benchmarks
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, martin.lau@kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When benchmarking with multiple threads (-pN, where N>1), we start
-contending on single atomic counter that both BPF trigger benchmarks are
-using, as well as "baseline" tests in user space (trig-base and
-trig-uprobe-base benchmarks). As such, we start bottlenecking on
-something completely irrelevant to benchmark at hand.
+On Fri, Mar 15, 2024 at 2:10=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
+>
+> On Thu, Mar 14, 2024 at 10:18:13PM -0700, Andrii Nakryiko wrote:
+> > Existing kprobe/fentry triggering benchmarks have 1-to-1 mapping betwee=
+n
+> > one syscall execution and BPF program run. While we use a fast
+> > get_pgid() syscall, syscall overhead can still be non-trivial.
+> >
+> > This patch adds kprobe/fentry set of benchmarks significantly amortizin=
+g
+> > the cost of syscall vs actual BPF triggering overhead. We do this by
+> > employing BPF_PROG_TEST_RUN command to trigger "driver" raw_tp program
+> > which does a tight parameterized loop calling cheap BPF helper
+> > (bpf_get_smp_processor_id()), to which kprobe/fentry programs are
+> > attached for benchmarking.
+> >
+> > This way 1 bpf() syscall causes N executions of BPF program being
+> > benchmarked. N defaults to 100, but can be adjusted with
+> > --trig-batch-iters CLI argument.
+> >
+> > Results speak for themselves:
+> >
+> > $ ./run_bench_trigger.sh
+> > uprobe-base         :  138.054 =C4=85 0.556M/s
+> > base                :   16.650 =C4=85 0.123M/s
+> > tp                  :   11.068 =C4=85 0.100M/s
+> > rawtp               :   14.087 =C4=85 0.511M/s
+> > kprobe              :    9.641 =C4=85 0.027M/s
+> > kprobe-multi        :   10.263 =C4=85 0.061M/s
+> > kretprobe           :    5.475 =C4=85 0.028M/s
+> > kretprobe-multi     :    5.703 =C4=85 0.036M/s
+> > fentry              :   14.544 =C4=85 0.112M/s
+> > fexit               :   10.637 =C4=85 0.073M/s
+> > fmodret             :   11.357 =C4=85 0.061M/s
+> > kprobe-fast         :   14.286 =C4=85 0.377M/s
+> > kprobe-multi-fast   :   14.999 =C4=85 0.204M/s
+> > kretprobe-fast      :    7.646 =C4=85 0.084M/s
+> > kretprobe-multi-fast:    4.354 =C4=85 0.066M/s
+> > fentry-fast         :   31.475 =C4=85 0.254M/s
+> > fexit-fast          :   17.379 =C4=85 0.195M/s
+> >
+> > Note how xxx-fast variants are measured with significantly higher
+> > throughput, even though it's exactly the same in-kernel overhead:
+> >
+> > fentry              :   14.544 =C4=85 0.112M/s
+> > fentry-fast         :   31.475 =C4=85 0.254M/s
+> >
+> > kprobe-multi        :   10.263 =C4=85 0.061M/s
+> > kprobe-multi-fast   :   14.999 =C4=85 0.204M/s
+> >
+> > One huge and not yet explained deviation is a slowdown of
+> > kretprobe-multi, we should look into that separately.
+> >
+> > kretprobe           :    5.475 =C4=85 0.028M/s
+> > kretprobe-multi     :    5.703 =C4=85 0.036M/s
+> > kretprobe-fast      :    7.646 =C4=85 0.084M/s
+> > kretprobe-multi-fast:    4.354 =C4=85 0.066M/s
+> >
+> > Kprobe cases don't seem to have this illogical slowdown:
+> >
+> > kprobe              :    9.641 =C4=85 0.027M/s
+> > kprobe-multi        :   10.263 =C4=85 0.061M/s
+> > kprobe-fast         :   14.286 =C4=85 0.377M/s
+> > kprobe-multi-fast   :   14.999 =C4=85 0.204M/s
+>
+> hum, I see that as well:
+>
+> uprobe-base         :  230.624 =C4=85 0.527M/s
+> base                :   16.320 =C4=85 0.087M/s
+> tp                  :   10.057 =C4=85 0.122M/s
+> rawtp               :   14.851 =C4=85 0.300M/s
+> kprobe              :   10.993 =C4=85 0.104M/s
+> kprobe-multi        :   11.053 =C4=85 0.038M/s
+> kretprobe           :    6.679 =C4=85 0.015M/s
+> kretprobe-multi     :    6.466 =C4=85 0.015M/s
+> fentry              :   14.949 =C4=85 0.064M/s
+> fexit               :   10.530 =C4=85 1.275M/s
+> fmodret             :   11.145 =C4=85 0.245M/s
+> kprobe-fast         :   20.080 =C4=85 0.468M/s
+> kprobe-multi-fast   :   17.603 =C4=85 0.102M/s
+> kretprobe-fast      :    9.943 =C4=85 0.056M/s
+> kretprobe-multi-fast:    5.185 =C4=85 0.022M/s
+> fentry-fast         :   46.697 =C4=85 0.260M/s
+> fexit-fast          :   19.250 =C4=85 0.108M/s
+>
+>
+> I even see decline in kprobe-multi-fast:
+>
+>   kprobe-fast         :   20.080 =C4=85 0.468M/s
+>   kprobe-multi-fast   :   17.603 =C4=85 0.102M/s
+>
+>   kretprobe-fast      :    9.943 =C4=85 0.056M/s
+>   kretprobe-multi-fast:    5.185 =C4=85 0.022M/s
+>
+>
+> I've got some IBT related code showing up in the perf profile
+> and when I disabled it I got better results for kprobe-multi-fast
+> but kretprobe-multi-fast is still bad
 
-Scale counting up by using per-CPU counters on BPF side. On use space
-side we do the next best thing: hash thread ID to approximate per-CPU
-behavior. It seems to work quite well in practice.
+ok, I think it's a self-inflicted false alarm. Note how this benchmark
+is using bpf_get_smp_processor_id() as an attach point? Well, guess
+what, each triggered program is then calling
+bpf_get_smp_processor_id() again to get the per-CPU counter to
+increment. So this benchmark was effectively heavily testing recursion
+protection, and I guess kretprobe hurts the most.
 
-To demonstrate the difference, I ran three benchmarks with 1, 2, 4, 8,
-16, and 32 threads:
-  - trig-uprobe-base (no syscalls, pure tight counting loop in user-space);
-  - trig-base (get_pgid() syscall, atomic counter in user-space);
-  - trig-fentry (syscall to trigger fentry program, atomic uncontended per-CPU
-    counter on BPF side).
+I realized that when I moved to bpf_get_numa_node_id() and seeing much
+higher numbers:
 
-Command used:
+BEFORE
+=3D=3D=3D=3D=3D=3D
+$ benchs/run_bench_trigger.sh kprobe-batch fentry-batch
+kprobe-batch        :   14.018 =C2=B1 0.333M/s
+fentry-batch        :   31.470 =C2=B1 0.791M/s
 
-  for b in uprobe-base base fentry; do \
-    for p in 1 2 4 8 16 32; do \
-      printf "%-11s %2d: %s\n" $b $p \
-        "$(sudo ./bench -w2 -d5 -a -p$p trig-$b | tail -n1 | cut -d'(' -f1 | cut -d' ' -f3-)"; \
-    done; \
-  done
+AFTER
+=3D=3D=3D=3D=3D
+$ benchs/run_bench_trigger.sh kprobe-batch fentry-batch
+kprobe-batch         :   19.391 =C2=B1 0.868M/s
+fentry-batch         :   48.785 =C2=B1 0.932M/s
 
-Before these changes, aggregate throughput across all threads doesn't
-scale well with number of threads, it actually even falls sharply for
-uprobe-base due to a very high contention:
+That's when I realized something is off here. Now results make a bit
+more sense (machine on which I test is different, so absolute values
+differ from before):
 
-  uprobe-base  1:  138.998 ± 0.650M/s
-  uprobe-base  2:   70.526 ± 1.147M/s
-  uprobe-base  4:   63.114 ± 0.302M/s
-  uprobe-base  8:   54.177 ± 0.138M/s
-  uprobe-base 16:   45.439 ± 0.057M/s
-  uprobe-base 32:   37.163 ± 0.242M/s
-  base         1:   16.940 ± 0.182M/s
-  base         2:   19.231 ± 0.105M/s
-  base         4:   21.479 ± 0.038M/s
-  base         8:   23.030 ± 0.037M/s
-  base        16:   22.034 ± 0.004M/s
-  base        32:   18.152 ± 0.013M/s
-  fentry       1:   14.794 ± 0.054M/s
-  fentry       2:   17.341 ± 0.055M/s
-  fentry       4:   23.792 ± 0.024M/s
-  fentry       8:   21.557 ± 0.047M/s
-  fentry      16:   21.121 ± 0.004M/s
-  fentry      32:   17.067 ± 0.023M/s
+$ benchs/run_bench_trigger.sh kprobe kprobe-multi kprobe-batch
+kprobe-multi-batch kretprobe kretprobe-multi kretprobe-batch
+kretprobe-multi-batch
+kprobe               :    8.114 =C2=B1 0.199M/s
+kprobe-multi         :    8.739 =C2=B1 0.052M/s
+kprobe-batch         :   19.379 =C2=B1 0.709M/s
+kprobe-multi-batch   :   24.969 =C2=B1 0.226M/s
+kretprobe            :    4.859 =C2=B1 0.027M/s
+kretprobe-multi      :    4.940 =C2=B1 0.083M/s
+kretprobe-batch      :    8.460 =C2=B1 0.044M/s
+kretprobe-multi-batch:    8.761 =C2=B1 0.282M/s
 
-After these changes, we see almost perfect linear scaling, as expected.
-The sub-linear scaling when going from 8 to 16 threads is interesting
-and consistent on my test machine, but I haven't investigated what is
-causing it this peculiar slowdown (across all benchmarks, could be due
-to hyperthreading effects, not sure).
 
-  uprobe-base  1:  139.980 ± 0.648M/s
-  uprobe-base  2:  270.244 ± 0.379M/s
-  uprobe-base  4:  532.044 ± 1.519M/s
-  uprobe-base  8: 1004.571 ± 3.174M/s
-  uprobe-base 16: 1720.098 ± 0.744M/s
-  uprobe-base 32: 3506.659 ± 8.549M/s
-  base         1:   16.869 ± 0.071M/s
-  base         2:   33.007 ± 0.092M/s
-  base         4:   64.670 ± 0.203M/s
-  base         8:  121.969 ± 0.210M/s
-  base        16:  207.832 ± 0.112M/s
-  base        32:  424.227 ± 1.477M/s
-  fentry       1:   14.777 ± 0.087M/s
-  fentry       2:   28.575 ± 0.146M/s
-  fentry       4:   56.234 ± 0.176M/s
-  fentry       8:  106.095 ± 0.385M/s
-  fentry      16:  181.440 ± 0.032M/s
-  fentry      32:  369.131 ± 0.693M/s
+>
+>
+> uprobe-base         :  234.024 =C4=85 0.225M/s
+> base                :   16.383 =C4=85 0.029M/s
+> tp                  :    9.973 =C4=85 0.017M/s
+> rawtp               :   14.889 =C4=85 0.047M/s
+> kprobe              :   10.970 =C4=85 0.011M/s
+> kprobe-multi        :   11.640 =C4=85 0.009M/s
+> kretprobe           :    6.667 =C4=85 0.005M/s
+> kretprobe-multi     :    6.704 =C4=85 0.005M/s
+> fentry              :   14.968 =C4=85 0.024M/s
+> fexit               :   11.860 =C4=85 0.012M/s
+> fmodret             :   12.656 =C4=85 0.036M/s
+> kprobe-fast         :   20.340 =C4=85 0.043M/s
+> kprobe-multi-fast   :   21.203 =C4=85 0.019M/s
+> kretprobe-fast      :    9.956 =C4=85 0.021M/s
+> kretprobe-multi-fast:    5.611 =C4=85 0.006M/s
+> fentry-fast         :   46.825 =C4=85 0.041M/s
+> fexit-fast          :   19.746 =C4=85 0.024M/s
+>
+> slightly better:
+>
+>   kprobe-fast         :   20.340 =C4=85 0.043M/s
+>   kprobe-multi-fast   :   21.203 =C4=85 0.019M/s
+>
+> still almost half perf:
+>   kretprobe-fast      :    9.956 =C4=85 0.021M/s
+>   kretprobe-multi-fast:    5.611 =C4=85 0.006M/s
+>
+> jirka
+>
+> >
+> > Cc: Jiri Olsa <jolsa@kernel.org>
+> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > ---
+> >  tools/testing/selftests/bpf/bench.c           |  18 +++
+> >  .../selftests/bpf/benchs/bench_trigger.c      | 123 +++++++++++++++++-
+> >  .../selftests/bpf/benchs/run_bench_trigger.sh |   8 +-
+> >  .../selftests/bpf/progs/trigger_bench.c       |  56 +++++++-
+> >  4 files changed, 201 insertions(+), 4 deletions(-)
+> >
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- .../selftests/bpf/benchs/bench_trigger.c      | 40 ++++++++++++++++---
- .../selftests/bpf/progs/trigger_bench.c       | 39 ++++++++++++------
- 2 files changed, 62 insertions(+), 17 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-index ace0d1011a8e..b7aea79495ba 100644
---- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-@@ -1,15 +1,45 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2020 Facebook */
-+#define _GNU_SOURCE
-+#include <unistd.h>
- #include "bench.h"
- #include "trigger_bench.skel.h"
- #include "trace_helpers.h"
- 
-+/* adjust slot shift in inc_hits() if changing */
-+#define MAX_BUCKETS 256
-+
- /* BPF triggering benchmarks */
- static struct trigger_ctx {
- 	struct trigger_bench *skel;
- } ctx;
- 
--static struct counter base_hits;
-+static struct counter base_hits[MAX_BUCKETS];
-+
-+static __always_inline void inc_counter(struct counter *counters)
-+{
-+	static __thread int tid = 0;
-+	unsigned slot;
-+
-+	if (unlikely(tid == 0))
-+		tid = gettid();
-+
-+	/* multiplicative hashing, it's fast */
-+	slot = 2654435769U * tid;
-+	slot >>= 24;
-+
-+	atomic_inc(&base_hits[slot].value); /* use highest byte as an index */
-+}
-+
-+static long sum_and_reset_counters(struct counter *counters)
-+{
-+	int i;
-+	long sum = 0;
-+
-+	for (i = 0; i < MAX_BUCKETS; i++)
-+		sum += atomic_swap(&counters[i].value, 0);
-+	return sum;
-+}
- 
- static void trigger_validate(void)
- {
-@@ -23,14 +53,14 @@ static void *trigger_base_producer(void *input)
- {
- 	while (true) {
- 		(void)syscall(__NR_getpgid);
--		atomic_inc(&base_hits.value);
-+		inc_counter(base_hits);
- 	}
- 	return NULL;
- }
- 
- static void trigger_base_measure(struct bench_res *res)
- {
--	res->hits = atomic_swap(&base_hits.value, 0);
-+	res->hits = sum_and_reset_counters(base_hits);
- }
- 
- static void *trigger_producer(void *input)
-@@ -42,7 +72,7 @@ static void *trigger_producer(void *input)
- 
- static void trigger_measure(struct bench_res *res)
- {
--	res->hits = atomic_swap(&ctx.skel->bss->hits, 0);
-+	res->hits = sum_and_reset_counters(ctx.skel->bss->hits);
- }
- 
- static void setup_ctx(void)
-@@ -164,7 +194,7 @@ static void *uprobe_base_producer(void *input)
- {
- 	while (true) {
- 		uprobe_target_nop();
--		atomic_inc(&base_hits.value);
-+		inc_counter(base_hits);
- 	}
- 	return NULL;
- }
-diff --git a/tools/testing/selftests/bpf/progs/trigger_bench.c b/tools/testing/selftests/bpf/progs/trigger_bench.c
-index 5fda43901033..42ec202015ed 100644
---- a/tools/testing/selftests/bpf/progs/trigger_bench.c
-+++ b/tools/testing/selftests/bpf/progs/trigger_bench.c
-@@ -9,12 +9,27 @@
- 
- char _license[] SEC("license") = "GPL";
- 
--long hits = 0;
-+#define CPU_MASK 255
-+#define MAX_CPUS (CPU_MASK + 1) /* should match MAX_BUCKETS in benchs/bench_trigger.c */
-+
-+/* matches struct counter in bench.h */
-+struct counter {
-+	long value;
-+} __attribute__((aligned(128)));
-+
-+struct counter hits[MAX_CPUS];
-+
-+static __always_inline void inc_counter(void)
-+{
-+	int cpu = bpf_get_smp_processor_id();
-+
-+	__sync_add_and_fetch(&hits[cpu & CPU_MASK].value, 1);
-+}
- 
- SEC("tp/syscalls/sys_enter_getpgid")
- int bench_trigger_tp(void *ctx)
- {
--	__sync_add_and_fetch(&hits, 1);
-+	inc_counter();
- 	return 0;
- }
- 
-@@ -22,69 +37,69 @@ SEC("raw_tp/sys_enter")
- int BPF_PROG(bench_trigger_raw_tp, struct pt_regs *regs, long id)
- {
- 	if (id == __NR_getpgid)
--		__sync_add_and_fetch(&hits, 1);
-+		inc_counter();
- 	return 0;
- }
- 
- SEC("kprobe/" SYS_PREFIX "sys_getpgid")
- int bench_trigger_kprobe(void *ctx)
- {
--	__sync_add_and_fetch(&hits, 1);
-+	inc_counter();
- 	return 0;
- }
- 
- SEC("kretprobe/" SYS_PREFIX "sys_getpgid")
- int bench_trigger_kretprobe(void *ctx)
- {
--	__sync_add_and_fetch(&hits, 1);
-+	inc_counter();
- 	return 0;
- }
- 
- SEC("kprobe.multi/" SYS_PREFIX "sys_getpgid")
- int bench_trigger_kprobe_multi(void *ctx)
- {
--	__sync_add_and_fetch(&hits, 1);
-+	inc_counter();
- 	return 0;
- }
- 
- SEC("kretprobe.multi/" SYS_PREFIX "sys_getpgid")
- int bench_trigger_kretprobe_multi(void *ctx)
- {
--	__sync_add_and_fetch(&hits, 1);
-+	inc_counter();
- 	return 0;
- }
- 
- SEC("fentry/" SYS_PREFIX "sys_getpgid")
- int bench_trigger_fentry(void *ctx)
- {
--	__sync_add_and_fetch(&hits, 1);
-+	inc_counter();
- 	return 0;
- }
- 
- SEC("fexit/" SYS_PREFIX "sys_getpgid")
- int bench_trigger_fexit(void *ctx)
- {
--	__sync_add_and_fetch(&hits, 1);
-+	inc_counter();
- 	return 0;
- }
- 
- SEC("fentry.s/" SYS_PREFIX "sys_getpgid")
- int bench_trigger_fentry_sleep(void *ctx)
- {
--	__sync_add_and_fetch(&hits, 1);
-+	inc_counter();
- 	return 0;
- }
- 
- SEC("fmod_ret/" SYS_PREFIX "sys_getpgid")
- int bench_trigger_fmodret(void *ctx)
- {
--	__sync_add_and_fetch(&hits, 1);
-+	inc_counter();
- 	return -22;
- }
- 
- SEC("uprobe")
- int bench_trigger_uprobe(void *ctx)
- {
--	__sync_add_and_fetch(&hits, 1);
-+	inc_counter();
- 	return 0;
- }
--- 
-2.43.0
-
+[...]
