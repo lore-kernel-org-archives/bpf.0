@@ -1,41 +1,31 @@
-Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A820D512;
-	Sat, 16 Mar 2024 07:35:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.236.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90295171AD;
+	Sat, 16 Mar 2024 12:20:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710574554; cv=none; b=tgmGwXucV+RUDjoZLQG8UHbOqKX/6eCSsyqodFGH7wX7jiBZRzbr8AcvsgGggWy8D3cSxCiVRPPXBBZmZp+ifXvwpu/zxl/ZZ46GnS9OF7KjYo/12D014G7QUZBkGmJl415D8zkO8zNpmnEth13XIn7YrlD3t6pYtWaMir6rS0Q=
+	t=1710591610; cv=none; b=JB+iNwNDdYKsEcy7avdo9y2W1RR3sNqpMzLu5Pm7jKDesvUA5y5AQsbdEFdJK6AQjeJ0vaZhM+zSEaHZk54zTJf6lRnD5FjNTqlorBkmywDxkLdu2S0DCHhhFshD08fpgN/GJRCeOafZI5YlwmILUlqeaiGxPKTtOEYNAOKXelc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710574554; c=relaxed/simple;
-	bh=LlnTHvbnivj9imG0loJ96IHBV/H/wsdSxRFgJXN80Jk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tQNnvfWhYqn+4GnLUgiMYEDHqk2KLrt6Nm4S9poTzy+VD9WtzOHHP+EvuLC91wtAefWpYOdmSaoNHyhoCAqqEWQdi0BLRym4yD+rdGkjKjclxlyTwwX+Udc/jSfEEukuPAZmeRZnd0IfDWBoe5uwX2gikoa1y854v7XXhtr0vso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.236.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-	by localhost (Postfix) with ESMTP id 4TxXwK4dHBz9sgR;
-	Sat, 16 Mar 2024 08:35:45 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-	by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rjeu-kkETH2k; Sat, 16 Mar 2024 08:35:45 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase1.c-s.fr (Postfix) with ESMTP id 4TxXwK3p1Fz9sfF;
-	Sat, 16 Mar 2024 08:35:45 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 790DD8B764;
-	Sat, 16 Mar 2024 08:35:45 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id KRZKZw9eqZpR; Sat, 16 Mar 2024 08:35:45 +0100 (CET)
-Received: from PO20335.idsi0.si.c-s.fr (PO18731.IDSI0.si.c-s.fr [192.168.233.183])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 1EB608B768;
-	Sat, 16 Mar 2024 08:35:44 +0100 (CET)
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: Alexei Starovoitov <ast@kernel.org>,
+	s=arc-20240116; t=1710591610; c=relaxed/simple;
+	bh=6XYTXU0hZs4EdZDZYUMqxaUi1+XBZVM7Y2TtZSDAPAc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rpCDJDXd6hswYQOgPLlLz2kxhDj2DZO4w6gjWA/YcSzG8y5s23ptd4a0CDwnouCF0gMfSvecQ8+JPKqrslSpYasWU4SksKAHiuk/2ROfWnnuSr8bcg2gyg7I4t5xXqxWULbAnzasT3WkpNBrRdMG35Ey9l+tQxwRuWfr9zry8zY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4TxgDG3RBTz4f3kpB;
+	Sat, 16 Mar 2024 20:19:58 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 4D1831A0A09;
+	Sat, 16 Mar 2024 20:20:04 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+	by APP1 (Coremail) with SMTP id cCh0CgCXsQpyjvVls7GEHA--.54843S2;
+	Sat, 16 Mar 2024 20:20:03 +0800 (CST)
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
@@ -47,237 +37,136 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	Stanislav Fomichev <sdf@google.com>,
 	Hao Luo <haoluo@google.com>,
 	Jiri Olsa <jolsa@kernel.org>,
-	Zi Shen Lim <zlim.lnx@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Kui-Feng Lee <thinker.li@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Kees Cook <keescook@chromium.org>
-Subject: [PATCH bpf-next v4 2/2] bpf: Check return from set_memory_rox()
-Date: Sat, 16 Mar 2024 08:35:41 +0100
-Message-ID: <fe1c163c83767fde5cab31d209a4a6be3ddb3a73.1710574353.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <42c635bb54d3af91db0f9b85d724c7c290069f67.1710574353.git.christophe.leroy@csgroup.eu>
-References: <42c635bb54d3af91db0f9b85d724c7c290069f67.1710574353.git.christophe.leroy@csgroup.eu>
+	Florent Revest <revest@chromium.org>,
+	Brendan Jackman <jackmanb@chromium.org>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E . Hallyn" <serge@hallyn.com>,
+	Khadija Kamran <kamrankhadijadj@gmail.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Kees Cook <keescook@chromium.org>,
+	John Johansen <john.johansen@canonical.com>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Subject: [PATCH bpf-next 0/5] Fix kernel panic caused by bpf lsm return value
+Date: Sat, 16 Mar 2024 20:23:54 +0800
+Message-Id: <20240316122359.1073787-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1710574540; l=6994; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=LlnTHvbnivj9imG0loJ96IHBV/H/wsdSxRFgJXN80Jk=; b=Vre5KJCrSLF5oxg2jfaUL6rENoe4tHDG+LhmF3UdAECmWUQhueGO434Raw6VWm6dZxWspghC7 iZxJjvU/bOtAOlTVSyACGuFThN/KYUXe47+s1bQwa/orCaXTFAeA5YA
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgCXsQpyjvVls7GEHA--.54843S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCr4kKF48tFWxCF1rAry3CFg_yoWrZF4xpr
+	43KF18Gr4IqrWUJF1IkF45Jr13JFZrA3WUXryxJr95AF15Ww1DJr18JrWjqr9xJr4UAr17
+	tFyqqa1rtry8XaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+	c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+	026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF
+	0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+	vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+	jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-arch_protect_bpf_trampoline() and alloc_new_pack() call
-set_memory_rox() which can fail, leading to unprotected memory.
+From: Xu Kuohai <xukuohai@huawei.com>
 
-Take into account return from set_memory_rox() function and add
-__must_check flag to arch_protect_bpf_trampoline().
+A bpf prog returning positive number attached to file_alloc_security hook
+will make kernel panic.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Reviewed-by: Kees Cook <keescook@chromium.org>
----
-v4:
-- In bpf_struct_ops_map_update_elem(), check return of arch_protect_bpf_trampoline() inside the loop.
-- Split the line as it was reported over 80 chars by BPF patchwork's checkpatch report.
+Here is a panic log:
 
-v3:
-- Rebased and handled conflict in kernel/bpf/bpf_struct_ops.c
+[  441.235774] BUG: kernel NULL pointer dereference, address: 00000000000009
+[  441.236748] #PF: supervisor write access in kernel mode
+[  441.237429] #PF: error_code(0x0002) - not-present page
+[  441.238119] PGD 800000000b02f067 P4D 800000000b02f067 PUD b031067 PMD 0
+[  441.238990] Oops: 0002 [#1] PREEMPT SMP PTI
+[  441.239546] CPU: 0 PID: 347 Comm: loader Not tainted 6.8.0-rc6-gafe0cbf23373 #22
+[  441.240496] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b4
+[  441.241933] RIP: 0010:alloc_file+0x4b/0x190
+[  441.242485] Code: 8b 04 25 c0 3c 1f 00 48 8b b0 30 0c 00 00 e8 9c fe ff ff 48 3d 00 f0 ff fb
+[  441.244820] RSP: 0018:ffffc90000c67c40 EFLAGS: 00010203
+[  441.245484] RAX: ffff888006a891a0 RBX: ffffffff8223bd00 RCX: 0000000035b08000
+[  441.246391] RDX: ffff88800b95f7b0 RSI: 00000000001fc110 RDI: f089cd0b8088ffff
+[  441.247294] RBP: ffffc90000c67c58 R08: 0000000000000001 R09: 0000000000000001
+[  441.248209] R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000001
+[  441.249108] R13: ffffc90000c67c78 R14: ffffffff8223bd00 R15: fffffffffffffff4
+[  441.250007] FS:  00000000005f3300(0000) GS:ffff88803ec00000(0000) knlGS:0000000000000000
+[  441.251053] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  441.251788] CR2: 00000000000001a9 CR3: 000000000bdc4003 CR4: 0000000000170ef0
+[  441.252688] Call Trace:
+[  441.253011]  <TASK>
+[  441.253296]  ? __die+0x24/0x70
+[  441.253702]  ? page_fault_oops+0x15b/0x480
+[  441.254236]  ? fixup_exception+0x26/0x330
+[  441.254750]  ? exc_page_fault+0x6d/0x1c0
+[  441.255257]  ? asm_exc_page_fault+0x26/0x30
+[  441.255792]  ? alloc_file+0x4b/0x190
+[  441.256257]  alloc_file_pseudo+0x9f/0xf0
+[  441.256760]  __anon_inode_getfile+0x87/0x190
+[  441.257311]  ? lock_release+0x14e/0x3f0
+[  441.257808]  bpf_link_prime+0xe8/0x1d0
+[  441.258315]  bpf_tracing_prog_attach+0x311/0x570
+[  441.258916]  ? __pfx_bpf_lsm_file_alloc_security+0x10/0x10
+[  441.259605]  __sys_bpf+0x1bb7/0x2dc0
+[  441.260070]  __x64_sys_bpf+0x20/0x30
+[  441.260533]  do_syscall_64+0x72/0x140
+[  441.261004]  entry_SYSCALL_64_after_hwframe+0x6e/0x76
+[  441.261643] RIP: 0033:0x4b0349
+[  441.262045] Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 88
+[  441.264355] RSP: 002b:00007fff74daee38 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+[  441.265293] RAX: ffffffffffffffda RBX: 00007fff74daef30 RCX: 00000000004b0349
+[  441.266187] RDX: 0000000000000040 RSI: 00007fff74daee50 RDI: 000000000000001c
+[  441.267114] RBP: 000000000000001b R08: 00000000005ef820 R09: 0000000000000000
+[  441.268018] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
+[  441.268907] R13: 0000000000000004 R14: 00000000005ef018 R15: 00000000004004e8
 
-v2:
-- Move list_add_tail(&pack->list, &pack_list) at the end of alloc_new_pack()
-- Split 2 lines that are reported longer than 80 chars by BPF patchwork's checkpatch report.
----
- arch/arm64/net/bpf_jit_comp.c  |  3 ++-
- arch/x86/net/bpf_jit_comp.c    |  3 ++-
- include/linux/bpf.h            |  2 +-
- kernel/bpf/bpf_struct_ops.c    |  8 ++++++--
- kernel/bpf/core.c              | 29 ++++++++++++++++++++++-------
- kernel/bpf/trampoline.c        |  8 +++++---
- net/bpf/bpf_dummy_struct_ops.c |  4 +++-
- 7 files changed, 41 insertions(+), 16 deletions(-)
+The reason is that the positive number returned by bpf prog is not a
+valid errno, and could not be filtered out with IS_ERR which is used by
+the file system to check errors. As a result, the file system uses this
+positive number as file pointer, causing panic.
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 132c8ffba109..bc16eb694657 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -2176,8 +2176,9 @@ void arch_free_bpf_trampoline(void *image, unsigned int size)
- 	bpf_prog_pack_free(image, size);
- }
- 
--void arch_protect_bpf_trampoline(void *image, unsigned int size)
-+int arch_protect_bpf_trampoline(void *image, unsigned int size)
- {
-+	return 0;
- }
- 
- int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *ro_image,
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 7a56d2d84512..4900b1ee019f 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -3004,8 +3004,9 @@ void arch_free_bpf_trampoline(void *image, unsigned int size)
- 	bpf_prog_pack_free(image, size);
- }
- 
--void arch_protect_bpf_trampoline(void *image, unsigned int size)
-+int arch_protect_bpf_trampoline(void *image, unsigned int size)
- {
-+	return 0;
- }
- 
- int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *image_end,
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index d89bdefb42e2..17843e66a1d3 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1116,7 +1116,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
- 				void *func_addr);
- void *arch_alloc_bpf_trampoline(unsigned int size);
- void arch_free_bpf_trampoline(void *image, unsigned int size);
--void arch_protect_bpf_trampoline(void *image, unsigned int size);
-+int __must_check arch_protect_bpf_trampoline(void *image, unsigned int size);
- int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
- 			     struct bpf_tramp_links *tlinks, void *func_addr);
- 
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index 43356faaa057..2d4bfe6bfb5f 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -742,8 +742,12 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 		if (err)
- 			goto reset_unlock;
- 	}
--	for (i = 0; i < st_map->image_pages_cnt; i++)
--		arch_protect_bpf_trampoline(st_map->image_pages[i], PAGE_SIZE);
-+	for (i = 0; i < st_map->image_pages_cnt; i++) {
-+		err = arch_protect_bpf_trampoline(st_map->image_pages[i],
-+						  PAGE_SIZE);
-+		if (err)
-+			goto reset_unlock;
-+	}
- 
- 	if (st_map->map.map_flags & BPF_F_LINK) {
- 		err = 0;
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 63f100def31b..1e761c3c66db 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -908,23 +908,31 @@ static LIST_HEAD(pack_list);
- static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fill_hole_t bpf_fill_ill_insns)
- {
- 	struct bpf_prog_pack *pack;
-+	int err;
- 
- 	pack = kzalloc(struct_size(pack, bitmap, BITS_TO_LONGS(BPF_PROG_CHUNK_COUNT)),
- 		       GFP_KERNEL);
- 	if (!pack)
- 		return NULL;
- 	pack->ptr = bpf_jit_alloc_exec(BPF_PROG_PACK_SIZE);
--	if (!pack->ptr) {
--		kfree(pack);
--		return NULL;
--	}
-+	if (!pack->ptr)
-+		goto out;
- 	bpf_fill_ill_insns(pack->ptr, BPF_PROG_PACK_SIZE);
- 	bitmap_zero(pack->bitmap, BPF_PROG_PACK_SIZE / BPF_PROG_CHUNK_SIZE);
--	list_add_tail(&pack->list, &pack_list);
- 
- 	set_vm_flush_reset_perms(pack->ptr);
--	set_memory_rox((unsigned long)pack->ptr, BPF_PROG_PACK_SIZE / PAGE_SIZE);
-+	err = set_memory_rox((unsigned long)pack->ptr,
-+			     BPF_PROG_PACK_SIZE / PAGE_SIZE);
-+	if (err)
-+		goto out_free;
-+	list_add_tail(&pack->list, &pack_list);
- 	return pack;
-+
-+out_free:
-+	bpf_jit_free_exec(pack->ptr);
-+out:
-+	kfree(pack);
-+	return NULL;
- }
- 
- void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns)
-@@ -939,9 +947,16 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns)
- 		size = round_up(size, PAGE_SIZE);
- 		ptr = bpf_jit_alloc_exec(size);
- 		if (ptr) {
-+			int err;
-+
- 			bpf_fill_ill_insns(ptr, size);
- 			set_vm_flush_reset_perms(ptr);
--			set_memory_rox((unsigned long)ptr, size / PAGE_SIZE);
-+			err = set_memory_rox((unsigned long)ptr,
-+					     size / PAGE_SIZE);
-+			if (err) {
-+				bpf_jit_free_exec(ptr);
-+				ptr = NULL;
-+			}
- 		}
- 		goto out;
- 	}
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 04fd1abd3661..cc50607f8d8c 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -456,7 +456,9 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
- 	if (err < 0)
- 		goto out_free;
- 
--	arch_protect_bpf_trampoline(im->image, im->size);
-+	err = arch_protect_bpf_trampoline(im->image, im->size);
-+	if (err)
-+		goto out_free;
- 
- 	WARN_ON(tr->cur_image && total == 0);
- 	if (tr->cur_image)
-@@ -1072,10 +1074,10 @@ void __weak arch_free_bpf_trampoline(void *image, unsigned int size)
- 	bpf_jit_free_exec(image);
- }
- 
--void __weak arch_protect_bpf_trampoline(void *image, unsigned int size)
-+int __weak arch_protect_bpf_trampoline(void *image, unsigned int size)
- {
- 	WARN_ON_ONCE(size > PAGE_SIZE);
--	set_memory_rox((long)image, 1);
-+	return set_memory_rox((long)image, 1);
- }
- 
- int __weak arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
-diff --git a/net/bpf/bpf_dummy_struct_ops.c b/net/bpf/bpf_dummy_struct_ops.c
-index de33dc1b0daa..25b75844891a 100644
---- a/net/bpf/bpf_dummy_struct_ops.c
-+++ b/net/bpf/bpf_dummy_struct_ops.c
-@@ -133,7 +133,9 @@ int bpf_struct_ops_test_run(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	if (err < 0)
- 		goto out;
- 
--	arch_protect_bpf_trampoline(image, PAGE_SIZE);
-+	err = arch_protect_bpf_trampoline(image, PAGE_SIZE);
-+	if (err)
-+		goto out;
- 	prog_ret = dummy_ops_call_op(image, args);
- 
- 	err = dummy_ops_copy_args(args);
+To fix this issue, there are two schemes:
+
+1. Modify the calling sites of file_alloc_security to take positive
+   return values as zero.
+
+2. Make the bpf verifier to ensure no unpredicted value is returned by
+   lsm bpf prog.
+
+Considering that hook file_alloc_security never returned positive number
+before bpf lsm was introduced, and other bpf lsm hooks may have the same
+problem, scheme 2 is more reasonable.
+
+So this patch set adds lsm return value check in verifier to fix it.
+
+Xu Kuohai (5):
+  bpf, lsm: Annotate lsm hook return integer with new macro LSM_RET_INT
+  bpf, lsm: Add return value range description for lsm hook
+  bpf, lsm: Add function to read lsm hook return value range
+  bpf, lsm: Check bpf lsm hook return values in verifier
+  bpf: Fix compare error in function retval_range_within
+
+ include/linux/bpf.h           |   1 +
+ include/linux/bpf_lsm.h       |   8 +
+ include/linux/lsm_hook_defs.h | 433 +++++++++++++++++-----------------
+ include/linux/lsm_hooks.h     |   6 -
+ kernel/bpf/bpf_lsm.c          |  66 +++++-
+ kernel/bpf/btf.c              |   5 +-
+ kernel/bpf/verifier.c         |  59 ++++-
+ security/security.c           |   1 +
+ 8 files changed, 348 insertions(+), 231 deletions(-)
+
 -- 
-2.43.0
+2.30.2
 
