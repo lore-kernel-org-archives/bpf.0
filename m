@@ -1,58 +1,57 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2CFE6AA1;
-	Sat, 16 Mar 2024 05:41:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB009D2FE
+	for <bpf@vger.kernel.org>; Sat, 16 Mar 2024 07:06:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710567661; cv=none; b=d7VkeznXW6g+GxMKiatpSUE1VzFhEW/4mwXqyIFmWi0B9+iDbgT2vRDxU4mj9it8cGQNndOqohipFD1m37YC8KydzNAFAc9ucFUH+URvOW3ETOPBRMc60N/xSELI7ifUaE+sHX0hImDs3UoITb0VJPUwpFeCfboT3zx9ufA6oDw=
+	t=1710572802; cv=none; b=o+5XHicQZZIo3YMS3ozBClgMJxO+dARlOBEsZ/IVOJxi3EhlfPsozWKxs4w9txgDjGHz+W0x+hhzx0Vgz75EnNkBODvMok7rD1khjemPPwTYTeS/Zg5ssWfn2STLVIKZMGaQpk8LAf5AEdfh05VsMBtEV5f3f60ipOI5KSTPjMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710567661; c=relaxed/simple;
-	bh=zpFhiM3PAxX/JyJRkDpY9ZV+mL+lJb4usahl35U/Ujg=;
+	s=arc-20240116; t=1710572802; c=relaxed/simple;
+	bh=fmtXuNj0Bj/2ZX5YKZDcefNt6obONJhTtFpE9R9CYgA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pIMrc6muPQz+uFFwHGfI8FC95AwtE5hjOlPQD5LMoOs1yzFuOMQsVyVt3gqiCzPzc9tk0uUEgtzXhLGFC3Z8jXFFKCj1Wvq+mnUM7oczDR2SyUIsM4yg2QSVt3uCq4B85BbVUEeA9Vdp8LKJWM8srIrHPxNsfm0jqSrRjDb5iXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HjvigbZd; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=dJX2XpQ9HqEvG6MOFPICaCtYArygvexlofeZnSV0Oi7OI4pG91tv8lm289PsQf++dfnxSGCehGH0j+E09YSQ0oF8Xlq4IL8MoPDR/VnH9XG/rEr3ydmGvKvJQoVZiTQaBEAdaVu7GhkU6O3HzwZv7/1nQgNxOs9Ls62A/KvvFK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dUxe5msK; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HjvigbZd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08A28C433F1;
-	Sat, 16 Mar 2024 05:41:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710567660;
-	bh=zpFhiM3PAxX/JyJRkDpY9ZV+mL+lJb4usahl35U/Ujg=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=HjvigbZdMD0owzOJXTmHchrakQ4u/PHtXuAreEUfas8c7Eq4XwuMIZr3bAjk+cuEl
-	 /Lx88pQFy1UQN0KcvNDkZv6Wv3lMzOuki0GRGL060d/YDdYIdURoKvImT5K3UiIfId
-	 Ccj1dJ0p3DWvY3FPO8wh1SWvd3OiCDAGlc9jJq+FfGw1Rg6xzhreIwMnNkPW4g3pMN
-	 Jp+1+0rtoFOjMg5UQnsFTUu6z6tNdPpeZMVeKtWRkOlNSwA9ziA654tikdsFQDQUrK
-	 4nfNkjxQqo+SU3cKnfpgQN0RXAaFJBzsB8pfznYJKX6b+iQSLZSRumAvywJsGAnkWq
-	 46/voqVzs0SbQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 8CBF0CE0D20; Fri, 15 Mar 2024 22:40:56 -0700 (PDT)
-Date: Fri, 15 Mar 2024 22:40:56 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Yan Zhai <yan@cloudflare.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Coco Li <lixiaoyan@google.com>, Wei Wang <weiwan@google.com>,
-	Alexander Duyck <alexanderduyck@fb.com>,
-	Hannes Frederic Sowa <hannes@stressinduktion.org>,
-	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-	bpf@vger.kernel.org, kernel-team@cloudflare.com,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>, mark.rutland@arm.com,
-	Jesper Dangaard Brouer <hawk@kernel.org>
-Subject: Re: [PATCH v4 net 1/3] rcu: add a helper to report consolidated
- flavor QS
-Message-ID: <790ce7e7-a8fd-4d28-aaf3-1b991a898be2@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <cover.1710525524.git.yan@cloudflare.com>
- <491d3af6c7d66dfb3b60b2f210f38e843dfe6ed2.1710525524.git.yan@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dUxe5msK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710572801; x=1742108801;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fmtXuNj0Bj/2ZX5YKZDcefNt6obONJhTtFpE9R9CYgA=;
+  b=dUxe5msKDTm/i8Vz56v+TdOsZkba0E22EnIWbR9rfRMYfTzY0FKqiJk4
+   9tMI7Q9gXJgRPPFX3WVl5pU4YaTrNZY+0SPgXcBHa/lUcTS2CiD+VBSmi
+   xhwOxjB6AMhITJ9NuD5AMxD4ne2rdo+8fFlGqYU6hLIH/hFJXpaw1YXJj
+   l58O7Y9aXDHt/izzu6TZ1HXEjBwvxCWKcPs6iwu6nH2Z4s+Emps8JnYpg
+   ipondNZ1Ri9ncK720SXJol9m4EoBxrI5RRHeIbZBSxD0t2eJfGP+lV8QR
+   Ny+TOhcTgVSAB2ZtsQgm08t2/PRd66mWsn6p/cLDhVehx7qbt+rJiwIiL
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11014"; a="9281711"
+X-IronPort-AV: E=Sophos;i="6.07,129,1708416000"; 
+   d="scan'208";a="9281711"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2024 00:06:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,129,1708416000"; 
+   d="scan'208";a="17507555"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 16 Mar 2024 00:06:38 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rlO7n-000F9l-2H;
+	Sat, 16 Mar 2024 07:06:35 +0000
+Date: Sat, 16 Mar 2024 15:05:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, andrii@kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH bpf-next 2/5] bpf: pass whole link instead of prog when
+ triggering raw tracepoint
+Message-ID: <202403161441.xOAmLvHS-lkp@intel.com>
+References: <20240315204524.967664-3-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -61,106 +60,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <491d3af6c7d66dfb3b60b2f210f38e843dfe6ed2.1710525524.git.yan@cloudflare.com>
+In-Reply-To: <20240315204524.967664-3-andrii@kernel.org>
 
-On Fri, Mar 15, 2024 at 12:55:03PM -0700, Yan Zhai wrote:
-> There are several scenario in network processing that can run
-> extensively under heavy traffic. In such situation, RCU synchronization
-> might not observe desired quiescent states for indefinitely long period.
-> Create a helper to safely raise the desired RCU quiescent states for
-> such scenario.
-> 
-> Currently the frequency is locked at HZ/10, i.e. 100ms, which is
-> sufficient to address existing problems around RCU tasks. It's unclear
-> yet if there is any future scenario for it to be further tuned down.
+Hi Andrii,
 
-I suggest something like the following for the commit log:
+kernel test robot noticed the following build errors:
 
-------------------------------------------------------------------------
+[auto build test ERROR on bpf-next/master]
 
-When under heavy load, network processing can run CPU-bound for many tens
-of seconds.  Even in preemptible kernels, this can block RCU Tasks grace
-periods, which can cause trace-event removal to take more than a minute,
-which is unacceptably long.
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrii-Nakryiko/bpf-flatten-bpf_probe_register-call-chain/20240316-044808
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20240315204524.967664-3-andrii%40kernel.org
+patch subject: [PATCH bpf-next 2/5] bpf: pass whole link instead of prog when triggering raw tracepoint
+config: arm64-defconfig (https://download.01.org/0day-ci/archive/20240316/202403161441.xOAmLvHS-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240316/202403161441.xOAmLvHS-lkp@intel.com/reproduce)
 
-This commit therefore creates a new helper function that passes
-through both RCU and RCU-Tasks quiescent states every 100 milliseconds.
-This hard-coded value suffices for current workloads.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403161441.xOAmLvHS-lkp@intel.com/
 
-------------------------------------------------------------------------
+All errors (new ones prefixed by >>):
 
-> Suggested-by: Paul E. McKenney <paulmck@kernel.org>
-> Reviewed-by: Jesper Dangaard Brouer <hawk@kernel.org>
-> Signed-off-by: Yan Zhai <yan@cloudflare.com>
-> ---
-> v3->v4: comment fixup
-> 
-> ---
->  include/linux/rcupdate.h | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-> index 0746b1b0b663..da224706323e 100644
-> --- a/include/linux/rcupdate.h
-> +++ b/include/linux/rcupdate.h
-> @@ -247,6 +247,30 @@ do { \
->  	cond_resched(); \
->  } while (0)
->  
-> +/**
-> + * rcu_softirq_qs_periodic - Periodically report consolidated quiescent states
-> + * @old_ts: last jiffies when QS was reported. Might be modified in the macro.
-> + *
-> + * This helper is for network processing in non-RT kernels, where there could
-> + * be busy polling threads that block RCU synchronization indefinitely.  In
-> + * such context, simply calling cond_resched is insufficient, so give it a
-> + * stronger push to eliminate all potential blockage of all RCU types.
-> + *
-> + * NOTE: unless absolutely sure, this helper should in general be called
-> + * outside of bh lock section to avoid reporting a surprising QS to updaters,
-> + * who could be expecting RCU read critical section to end at local_bh_enable().
-> + */
+   kernel/bpf/syscall.c: In function 'bpf_raw_tp_link_release':
+>> kernel/bpf/syscall.c:3477:43: error: passing argument 2 of 'bpf_probe_unregister' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    3477 |         bpf_probe_unregister(raw_tp->btp, raw_tp);
+         |                                           ^~~~~~
+         |                                           |
+         |                                           struct bpf_raw_tp_link *
+   In file included from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:93,
+                    from kernel/bpf/syscall.c:11:
+   include/linux/trace_events.h:798:88: note: expected 'struct bpf_prog *' but argument is of type 'struct bpf_raw_tp_link *'
+     798 | static inline int bpf_probe_unregister(struct bpf_raw_event_map *btp, struct bpf_prog *p)
+         |                                                                       ~~~~~~~~~~~~~~~~~^
+   kernel/bpf/syscall.c: In function 'bpf_raw_tp_link_attach':
+>> kernel/bpf/syscall.c:3831:45: error: passing argument 2 of 'bpf_probe_register' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    3831 |         err = bpf_probe_register(link->btp, link);
+         |                                             ^~~~
+         |                                             |
+         |                                             struct bpf_raw_tp_link *
+   include/linux/trace_events.h:794:86: note: expected 'struct bpf_prog *' but argument is of type 'struct bpf_raw_tp_link *'
+     794 | static inline int bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_prog *p)
+         |                                                                     ~~~~~~~~~~~~~~~~~^
+   cc1: some warnings being treated as errors
 
-How about something like this for the kernel-doc comment?
 
-/**
- * rcu_softirq_qs_periodic - Report RCU and RCU-Tasks quiescent states
- * @old_ts: jiffies at start of processing.
- *
- * This helper is for long-running softirq handlers, such as those
- * in networking.  The caller should initialize the variable passed in
- * as @old_ts at the beginning of the softirq handler.  When invoked
- * frequently, this macro will invoke rcu_softirq_qs() every 100
- * milliseconds thereafter, which will provide both RCU and RCU-Tasks
- * quiescent states.  Note that this macro modifies its old_ts argument.
- *
- * Note that although cond_resched() provides RCU quiescent states,
- * it does not provide RCU-Tasks quiescent states.
- *
- * Because regions of code that have disabled softirq act as RCU
- * read-side critical sections, this macro should be invoked with softirq
- * (and preemption) enabled.
- *
- * This macro has no effect in CONFIG_PREEMPT_RT kernels.
- */
+vim +/bpf_probe_unregister +3477 kernel/bpf/syscall.c
 
-							Thanx, Paul
+  3471	
+  3472	static void bpf_raw_tp_link_release(struct bpf_link *link)
+  3473	{
+  3474		struct bpf_raw_tp_link *raw_tp =
+  3475			container_of(link, struct bpf_raw_tp_link, link);
+  3476	
+> 3477		bpf_probe_unregister(raw_tp->btp, raw_tp);
+  3478		bpf_put_raw_tracepoint(raw_tp->btp);
+  3479	}
+  3480	
 
-> +#define rcu_softirq_qs_periodic(old_ts) \
-> +do { \
-> +	if (!IS_ENABLED(CONFIG_PREEMPT_RT) && \
-> +	    time_after(jiffies, (old_ts) + HZ / 10)) { \
-> +		preempt_disable(); \
-> +		rcu_softirq_qs(); \
-> +		preempt_enable(); \
-> +		(old_ts) = jiffies; \
-> +	} \
-> +} while (0)
-> +
->  /*
->   * Infrastructure to implement the synchronize_() primitives in
->   * TREE_RCU and rcu_barrier_() primitives in TINY_RCU.
-> -- 
-> 2.30.2
-> 
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
