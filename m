@@ -1,213 +1,171 @@
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10F81BC31
-	for <bpf@vger.kernel.org>; Sat, 16 Mar 2024 16:23:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97471C2B3
+	for <bpf@vger.kernel.org>; Sat, 16 Mar 2024 17:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710606187; cv=none; b=i7Tp7v4EzHIkFF4kx0nPLSvriXzsBLNExq3GHNpHZpD27ID0neAt7rhg4ZffbmDpGEidFfKzIyNsrrryd1236ykE93RQAmQM/f3HTEWOzFLfgadCUtjeH5ZRJROtIRAzKOBPAMn0Uc4J79dFQnNxFwqfGLyV/GsYUUBC/u4ntaw=
+	t=1710609451; cv=none; b=AgvSwspKQ5aXBrWBzdzWkEpQaR6YES3uMrSC+FRRAshvYe8rPuxRNlgzvCBpTWmgrcOIU0Ih+jN+MfkH/ciuPIqE1JHeY8MQTkxew0/2zyRCIlKy8ibwkLYSrKegbLr/QfUxaFi1kUkO6MlCspm6qswtiYBjAdqu0sr+nEbWH8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710606187; c=relaxed/simple;
-	bh=3T/N87s1TiFY5CTbl7PLYpRpVqYPbSLIXW4VbrW9Qr4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=K0S2mF5CZikAHOrRyxZhlRRlu1XZkxPsDDepybB5iYYugyByxZWGc+uOfiK8wdvVdpwCoaU5/A7wwX22tzv6J4C7/6Eo474dKfqB1rBHJoAkmPq4MfXnlhfADNJcTm2QomgDVjl3WCKM7lCC9888eGuWxKZvrlWdGd8pMa9f6IE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=netflix.com; spf=pass smtp.mailfrom=netflix.com; dkim=pass (1024-bit key) header.d=netflix.com header.i=@netflix.com header.b=IeQ/wunu; arc=none smtp.client-ip=209.85.166.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=netflix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netflix.com
+	s=arc-20240116; t=1710609451; c=relaxed/simple;
+	bh=kxTk/zWbrWQmT2PYOeEcrde+if1JXoN1MgZJTpb862Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dPwIHUuEHAF709bxo6HA/CbEG1NVZtBqNdWMCoonCixwnx7naddb/89bB5MeHDJH3RZ5v37MGY6u4mWXtqPQgmx8uJ0v28cT8FLU8S6sPy/tg7p+dKtVuIwkb590tpNpw/BOEoF3GWDDNmRcRBsq2kaA5hzL7eOsMd7SkoXgw/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=A6EeWpqG; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=netflix.com header.i=@netflix.com header.b="IeQ/wunu"
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3663080b6a4so15769195ab.0
-        for <bpf@vger.kernel.org>; Sat, 16 Mar 2024 09:23:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="A6EeWpqG"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6e6c18e9635so674897b3a.1
+        for <bpf@vger.kernel.org>; Sat, 16 Mar 2024 10:17:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netflix.com; s=google; t=1710606184; x=1711210984; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FR+HdfxLkkzGogNavG10On9pl0CTmo3qowHlz+D4lik=;
-        b=IeQ/wunulIJh644LmVGaP4TsG2ufkdFJbSA92QJ9l3FCE3lD+75fMotwzn9EGVQa72
-         caqIWJ7qwAphbbJzwB/QdCv6kDiOOeQhbt8apQ0tsPK7vG5WZLg8soqVkd2DyKYVL0bZ
-         Z1z7sAXNdbIAaD4e/x8rriB6Ht4cMRBq5nocU=
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1710609449; x=1711214249; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KwyFsUDC4cYPBKX6IfNABRcCDq2xzgMKMVjZ16s/Y7M=;
+        b=A6EeWpqG+nmbCu0wSHseUQeGvokZdhBMidrggEr0tnxAQeYjRw6WoWlm998jDJoEIx
+         Pi0O3+Rv5R+m2zLvBVYx6Lt5DkOuWuVlsAMn2RmLJ6d+boB92d9OSp0/wKbBQG7e14nu
+         P7atWzkM2tOGL3b30wVOlijUBZrusivefI+VNd/en+TtqjeEUWdgTi/NmGqbumKyPTRM
+         fDs8reh4hGRJqIbi+R4pOAZmBnfvzLoWgBnfCXK8Ss5NVyglvjV/vbS/+BT35W186jQ2
+         8BpMiXasdd3uUSiKtp5xz6POfwFiD9YxKxasaHHoPl5h3pTvLKnGhVNIDbBTBzQrm33Y
+         SP2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710606184; x=1711210984;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FR+HdfxLkkzGogNavG10On9pl0CTmo3qowHlz+D4lik=;
-        b=jibyoLtuZ44ZRl9offYH1qkmenZdejh574EYTHKtFbKcBVs5gNtgW2+Gm3BllDOuHk
-         ahmX/+h0/NnLen8Zpo0SwXOywNaPqYjCYr92d79DphmsuqLPxF5Lz/7ZVap7q+RAk8GL
-         AbWUiwZUUbz0mZtwTxyM2DU+yqS1w7sQcxbtJFw08KPtBds1mcwjBoeMNsoEwuVmdub9
-         ULn0xcEsut2lTkxzqMKs2A4l5sWBjQlHIu8q5olk8SpfYA8TZhWOF+HGogCxGUCZE+DR
-         8a5K/TNhStYU+Ex18Gkay/Dn4haEd3tJM1s/VJ6DuAQi+0UwRbIWZ30Zwq1L2Re8MkJ0
-         hgLg==
-X-Gm-Message-State: AOJu0YzNTq/Gkm2Ao4T6Vf9MHS5vuSZXe8Dd6njxuW4kQ9lp7GvnHSv5
-	OahpUCrv9qG3lWohCT487nJJ0ASNaKyF8+tv2l8ym9137mUKjrIPdisX19O6dlQ4pRSYmMce+AX
-	x/4/jiBUa
-X-Google-Smtp-Source: AGHT+IGcQ3XP+3qarC5wBmrvkYQ3EjpLmKBi8RlI1pDwXP/BaiR7qNci2pcjPRzQ5wA6UbIVH8QunQ==
-X-Received: by 2002:a6b:7315:0:b0:7cb:f297:a94b with SMTP id e21-20020a6b7315000000b007cbf297a94bmr5599660ioh.15.1710606183865;
-        Sat, 16 Mar 2024 09:23:03 -0700 (PDT)
-Received: from localhost ([2601:285:8700:8f20:db82:ef0d:e122:37fc])
-        by smtp.gmail.com with UTF8SMTPSA id o27-20020a02cc3b000000b00474f364aac9sm1362211jap.71.2024.03.16.09.23.02
+        d=1e100.net; s=20230601; t=1710609449; x=1711214249;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KwyFsUDC4cYPBKX6IfNABRcCDq2xzgMKMVjZ16s/Y7M=;
+        b=VJ/lsuoCfPfG41DEz8VcZY7RvOrqw4qGq3RvDOjOLmvx0OGx65s3shJ3+L1pVCr7+A
+         Wf7/kDxe+gQHHOOkCjjnq/kzb0xgoxvK4E8peD65q+ruGRCU4nm0Yzj+WT7gvGxY6iQ3
+         T2Qa/XCJrHRuLgWxK7MVN3PY3PoeqNTNYxL/CsW++uqHG2mSxcnhRRFA0wjlXWZ1XmpD
+         JPNszr9z84E/rFmWL0hSWh0BOLbVV5iTz2QihcQ3RoeF0/3GevPELirdUrEtBOTVM/Ip
+         Lw2ZozV2IBwicqysJP6gz/U9ndtNfT9KkTo6bpJG/yIAwqpFZFuNPQpKh6WLArlYm/JU
+         bpbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUkefQ73RMl7kAyINcz6ejzSZFEFBZVXsxPKeY8Aevb5tXpuQmgPrIghOY88OSlAgOmfc1eW1gpEICyqGL0yonoDwS+
+X-Gm-Message-State: AOJu0YyzI2H0PzZPNFIwVu5uMXbzOSU45kuReLqcWtI1ac9Ua18J/sDc
+	cZ/EjSlfNQ6oFgqxEmmHh5APoQv0Pw88fc2RvKdyWjk7OM9UzdpDld9aMjh3xQY=
+X-Google-Smtp-Source: AGHT+IG3DPOFC1jCqg0VsU6zQ3yiocZQTZSrqg+K4gBfn0DXYa5cYs2kvobaBYLoCDVrM0MSeTmAvw==
+X-Received: by 2002:a17:902:d2ce:b0:1df:fbc3:d130 with SMTP id n14-20020a170902d2ce00b001dffbc3d130mr2372826plc.1.1710609448903;
+        Sat, 16 Mar 2024 10:17:28 -0700 (PDT)
+Received: from [192.168.1.150] ([198.8.77.194])
+        by smtp.gmail.com with ESMTPSA id q12-20020a17090311cc00b001db9e12cd62sm6011304plh.10.2024.03.16.10.17.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Mar 2024 09:23:03 -0700 (PDT)
-From: Jose Fernandez <josef@netflix.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Jose Fernandez <josef@netflix.com>,
-	Tycho Andersen <tycho@tycho.pizza>
-Subject: [PATCH V2 bpf-next 2/2] selftests/bpf: add selftest for bpf_task_get_cgroup
-Date: Sat, 16 Mar 2024 10:22:41 -0600
-Message-Id: <20240316162241.628855-2-josef@netflix.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240316162241.628855-1-josef@netflix.com>
-References: <20240316162241.628855-1-josef@netflix.com>
+        Sat, 16 Mar 2024 10:17:28 -0700 (PDT)
+Message-ID: <4405edd4-f20f-4040-ad67-aca3fcd7eff3@kernel.dk>
+Date: Sat, 16 Mar 2024 11:17:26 -0600
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 02/10] capability: add any wrappers to test for multiple
+ caps with exactly one audit message
+Content-Language: en-US
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
+ linux-security-module@vger.kernel.org, linux-block@vger.kernel.org,
+ Serge Hallyn <serge@hallyn.com>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20240315113828.258005-1-cgzones@googlemail.com>
+ <20240315113828.258005-2-cgzones@googlemail.com>
+ <CAEf4BzZF0A9qEzmRigHFLQ4vBQshGUQWZVG5L0q2_--kx4=AXA@mail.gmail.com>
+ <0f8291f7-48b1-4be1-8a57-dbad5d0ab28c@kernel.dk>
+ <CAEf4BzbgQrYDMma=NbW6A-qikA693eSnz9-RwjkF3xPLRE8qqg@mail.gmail.com>
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAEf4BzbgQrYDMma=NbW6A-qikA693eSnz9-RwjkF3xPLRE8qqg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-This patch adds a selftest for the `bpf_task_get_cgroup` kfunc. The test
-focuses on the use case of obtaining the cgroup ID of the previous task
-in a `sched_switch` tracepoint.
+On 3/15/24 3:16 PM, Andrii Nakryiko wrote:
+> On Fri, Mar 15, 2024 at 11:41?AM Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> On 3/15/24 10:45 AM, Andrii Nakryiko wrote:
+>>>> +/**
+>>>> + * ns_capable_any - Determine if the current task has one of two superior capabilities in effect
+>>>> + * @ns:  The usernamespace we want the capability in
+>>>> + * @cap1: The capabilities to be tested for first
+>>>> + * @cap2: The capabilities to be tested for secondly
+>>>> + *
+>>>> + * Return true if the current task has at least one of the two given superior
+>>>> + * capabilities currently available for use, false if not.
+>>>> + *
+>>>> + * In contrast to or'ing capable() this call will create exactly one audit
+>>>> + * message, either for @cap1, if it is granted or both are not permitted,
+>>>> + * or @cap2, if it is granted while the other one is not.
+>>>> + *
+>>>> + * The capabilities should be ordered from least to most invasive, i.e. CAP_SYS_ADMIN last.
+>>>> + *
+>>>> + * This sets PF_SUPERPRIV on the task if the capability is available on the
+>>>> + * assumption that it's about to be used.
+>>>> + */
+>>>> +bool ns_capable_any(struct user_namespace *ns, int cap1, int cap2)
+>>>> +{
+>>>> +       if (cap1 == cap2)
+>>>> +               return ns_capable(ns, cap1);
+>>>> +
+>>>> +       if (ns_capable_noauditondeny(ns, cap1))
+>>>> +               return true;
+>>>> +
+>>>> +       if (ns_capable_noauditondeny(ns, cap2))
+>>>> +               return true;
+>>>> +
+>>>> +       return ns_capable(ns, cap1);
+>>>
+>>> this will incur an extra capable() check (with all the LSMs involved,
+>>> etc), and so for some cases where capability is expected to not be
+>>> present, this will be a regression. Is there some way to not redo the
+>>> check, but just audit the failure? At this point we do know that cap1
+>>> failed before, so might as well just log that.
+>>
+>> Not sure why that's important - if it's a failure case, and any audit
+>> failure should be, then why would we care if that's now doing a bit of
+>> extra work?
+> 
+> Lack of capability doesn't necessarily mean "failure". E.g., in FUSE
+> there are at least few places where the code checks
+> capable(CAP_SYS_ADMIN), and based on that decides on some limit values
+> or extra checks. So if !capable(CAP_SYS_ADMIN), operation doesn't
+> necessarily fail outright, it just has some more restricted resources
+> or something.
+> 
+> Luckily in FUSE's case it's singular capable() check, so capable_any()
+> won't incur extra overhead. But I was just wondering if it would be
+> possible to avoid this with capable_any() as well, so that no one has
+> to do these trade-offs.
 
-The selftest involves creating a test cgroup, attaching a BPF program
-that utilizes the `bpf_task_get_cgroup` during a `sched_switch`
-tracepoint, and validating that the obtained cgroup ID for the previous
-task matches the expected cgroup ID.
+That's certainly a special and odd case, as most other cases really
+would be of the:
 
-Signed-off-by: Jose Fernandez <josef@netflix.com>
-Reviewed-by: Tycho Andersen <tycho@tycho.pizza>
----
-V1 -> V2: Refactor test to work with a cgroup pointer instead of the ID
+if (capable(SOMETHING))
+	return -EFAUL;
 
- .../bpf/prog_tests/task_get_cgroup.c          | 58 +++++++++++++++++++
- .../bpf/progs/test_task_get_cgroup.c          | 37 ++++++++++++
- 2 files changed, 95 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/task_get_cgroup.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_task_get_cgroup.c
+Might make more sense to special case the FUSE thing then, or provide a
+cheap way for it to do what it needs to do. I really don't think that
+kind of:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_get_cgroup.c b/tools/testing/selftests/bpf/prog_tests/task_get_cgroup.c
-new file mode 100644
-index 000000000000..67ed65d0c461
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/task_get_cgroup.c
-@@ -0,0 +1,58 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright 2024 Netflix, Inc.
-+
-+#include <test_progs.h>
-+#include <cgroup_helpers.h>
-+#include "test_task_get_cgroup.skel.h"
-+#include <unistd.h>
-+
-+#define TEST_CGROUP "/test-task-get-cgroup/"
-+
-+void test_task_get_cgroup(void)
-+{
-+	struct test_task_get_cgroup *skel;
-+	int err, fd;
-+	pid_t pid;
-+	__u64 cgroup_id, expected_cgroup_id;
-+	const struct timespec req = {
-+		.tv_sec = 1,
-+		.tv_nsec = 0,
-+	};
-+
-+	fd = test__join_cgroup(TEST_CGROUP);
-+	if (!ASSERT_OK(fd < 0, "test_join_cgroup_TEST_CGROUP"))
-+		return;
-+
-+	skel = test_task_get_cgroup__open();
-+	if (!ASSERT_OK_PTR(skel, "test_task_get_cgroup__open"))
-+		goto cleanup;
-+
-+	err = test_task_get_cgroup__load(skel);
-+	if (!ASSERT_OK(err, "test_task_get_cgroup__load"))
-+		goto cleanup;
-+
-+	err = test_task_get_cgroup__attach(skel);
-+	if (!ASSERT_OK(err, "test_task_get_cgroup__attach"))
-+		goto cleanup;
-+
-+	pid = getpid();
-+	expected_cgroup_id = get_cgroup_id(TEST_CGROUP);
-+	if (!ASSERT_GT(expected_cgroup_id, 0, "get_cgroup_id"))
-+		goto cleanup;
-+
-+	/* Trigger nanosleep to enter the sched_switch tracepoint */
-+	/* The previous task should be this process */
-+	syscall(__NR_nanosleep, &req, NULL);
-+
-+	err = bpf_map_lookup_elem(bpf_map__fd(skel->maps.pid_to_cgid_map), &pid,
-+				  &cgroup_id);
-+
-+	if (!ASSERT_OK(err, "bpf_map_lookup_elem"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(cgroup_id, expected_cgroup_id, "cgroup_id");
-+
-+cleanup:
-+	test_task_get_cgroup__destroy(skel);
-+	close(fd);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_task_get_cgroup.c b/tools/testing/selftests/bpf/progs/test_task_get_cgroup.c
-new file mode 100644
-index 000000000000..580f8f0657d5
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_task_get_cgroup.c
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright 2024 Netflix, Inc.
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+struct cgroup *bpf_task_get_cgroup(struct task_struct *task) __ksym;
-+void bpf_cgroup_release(struct cgroup *cgrp) __ksym;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 4096);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} pid_to_cgid_map SEC(".maps");
-+
-+SEC("tp_btf/sched_switch")
-+int BPF_PROG(sched_switch, bool preempt, struct task_struct *prev,
-+	     struct task_struct *next)
-+{
-+	struct cgroup *cgrp;
-+	u64 cgroup_id;
-+	u32 pid;
-+
-+	cgrp = bpf_task_get_cgroup(prev);
-+	if (cgrp == NULL)
-+		return 0;
-+	cgroup_id = cgrp->kn->id;
-+	pid = prev->pid;
-+	bpf_map_update_elem(&pid_to_cgid_map, &pid, &cgroup_id, BPF_ANY);
-+
-+	bpf_cgroup_release(cgrp);
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+if (capable(SOMETHING))
+	do something since I can
+else
+	bummer, do something else then
+
+is a common occurrence.
+
+> We also had cases in production of some BPF applications tracing
+> cap_capable() calls, so each extra triggering of it would be a bit of
+> added overhead, as a general rule.
+> 
+> Having said the above, I do like capable_any() changes (which is why I
+> acked BPF side of things).
+
+Yes, the BPF tracking capable in production is a pain in the butt, as it
+slows down any valid fast path capable checking by a substantial amount.
+We've had to work around that on the block side, unfortunately. These
+are obviously cases where you expect success, and any failure is
+permanent as far as that operation goes.
+
 -- 
-2.40.1
+Jens Axboe
 
