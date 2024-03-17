@@ -1,171 +1,290 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97471C2B3
-	for <bpf@vger.kernel.org>; Sat, 16 Mar 2024 17:17:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7517A2A
+	for <bpf@vger.kernel.org>; Sun, 17 Mar 2024 20:39:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710609451; cv=none; b=AgvSwspKQ5aXBrWBzdzWkEpQaR6YES3uMrSC+FRRAshvYe8rPuxRNlgzvCBpTWmgrcOIU0Ih+jN+MfkH/ciuPIqE1JHeY8MQTkxew0/2zyRCIlKy8ibwkLYSrKegbLr/QfUxaFi1kUkO6MlCspm6qswtiYBjAdqu0sr+nEbWH8w=
+	t=1710707944; cv=none; b=WMEBbnIDoL4u7tPrBQKcfoywJiblPQG+ifcQXS7CnHmxjElzTio56gPqvfIUB38r2U3ye/29rwvFErc14u6T+jIIRihENDLnxGGuTVqK+v1qqYdN3GnPP7gNpuHLNcORyO8nBSfAIKAnNrTs9hXiYMkJ1wsSV9lkLLBik2vfbac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710609451; c=relaxed/simple;
-	bh=kxTk/zWbrWQmT2PYOeEcrde+if1JXoN1MgZJTpb862Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dPwIHUuEHAF709bxo6HA/CbEG1NVZtBqNdWMCoonCixwnx7naddb/89bB5MeHDJH3RZ5v37MGY6u4mWXtqPQgmx8uJ0v28cT8FLU8S6sPy/tg7p+dKtVuIwkb590tpNpw/BOEoF3GWDDNmRcRBsq2kaA5hzL7eOsMd7SkoXgw/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=A6EeWpqG; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1710707944; c=relaxed/simple;
+	bh=6ol9QjyqJ5fjzC/km4vpD5Xptu55NfKtTF53hZ/XRp8=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jb5bo2Ff4vbhOfz2/rWKgxMDXpZg1YmjawQUl1l5gwuC8Dncpa3F0oyupo3I7zgDSfhlQVZ9C0RGp3mY4XuFQtHrzo9BUxE6bExW6KJT3gBy24oPW3uDA5kMNRC61Ogx4jLIvgE2C5PBhql/mWv6vQM4fnAGUt1zh9Nn3atNv14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pm8R/zu1; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="A6EeWpqG"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6e6c18e9635so674897b3a.1
-        for <bpf@vger.kernel.org>; Sat, 16 Mar 2024 10:17:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pm8R/zu1"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-33d90dfe73cso2053445f8f.0
+        for <bpf@vger.kernel.org>; Sun, 17 Mar 2024 13:39:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1710609449; x=1711214249; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KwyFsUDC4cYPBKX6IfNABRcCDq2xzgMKMVjZ16s/Y7M=;
-        b=A6EeWpqG+nmbCu0wSHseUQeGvokZdhBMidrggEr0tnxAQeYjRw6WoWlm998jDJoEIx
-         Pi0O3+Rv5R+m2zLvBVYx6Lt5DkOuWuVlsAMn2RmLJ6d+boB92d9OSp0/wKbBQG7e14nu
-         P7atWzkM2tOGL3b30wVOlijUBZrusivefI+VNd/en+TtqjeEUWdgTi/NmGqbumKyPTRM
-         fDs8reh4hGRJqIbi+R4pOAZmBnfvzLoWgBnfCXK8Ss5NVyglvjV/vbS/+BT35W186jQ2
-         8BpMiXasdd3uUSiKtp5xz6POfwFiD9YxKxasaHHoPl5h3pTvLKnGhVNIDbBTBzQrm33Y
-         SP2g==
+        d=gmail.com; s=20230601; t=1710707941; x=1711312741; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5WTgoO0ZH3+SgvEiDrbHquvEfY3h3VInRoCaJLUaelQ=;
+        b=Pm8R/zu16NA1zVdYFlVWN6GLXFxpbW3X0r8RysJIoih1Xfw6evrqegLcYJ4tDPuMJW
+         7EBRI5x4c2FOmQ6PxIb8vVD7QcSmQ6or9a+izNlbMNXyPa1fkkoV6hOKRdMfdwdKw3A/
+         MkxIABEKvEb+rxH9cOCcr8d8sqcXs2tZIb1384xKOYxfRf83q6B3p1n5/K0I1JEmhuat
+         TIX2gDqM5aolCf3hG4O1PZ2ZOZB6eT7hwojm1fSveGa++M7JrJFUB1HStuNaCBH2BbCE
+         H6dKuG3Binm4fdp+V5tgGOwAvD3pStRq3k2EOYyqQJaOtLV3EPPOBk6BWk++HxBLvOaT
+         8zTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710609449; x=1711214249;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1710707941; x=1711312741;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KwyFsUDC4cYPBKX6IfNABRcCDq2xzgMKMVjZ16s/Y7M=;
-        b=VJ/lsuoCfPfG41DEz8VcZY7RvOrqw4qGq3RvDOjOLmvx0OGx65s3shJ3+L1pVCr7+A
-         Wf7/kDxe+gQHHOOkCjjnq/kzb0xgoxvK4E8peD65q+ruGRCU4nm0Yzj+WT7gvGxY6iQ3
-         T2Qa/XCJrHRuLgWxK7MVN3PY3PoeqNTNYxL/CsW++uqHG2mSxcnhRRFA0wjlXWZ1XmpD
-         JPNszr9z84E/rFmWL0hSWh0BOLbVV5iTz2QihcQ3RoeF0/3GevPELirdUrEtBOTVM/Ip
-         Lw2ZozV2IBwicqysJP6gz/U9ndtNfT9KkTo6bpJG/yIAwqpFZFuNPQpKh6WLArlYm/JU
-         bpbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUkefQ73RMl7kAyINcz6ejzSZFEFBZVXsxPKeY8Aevb5tXpuQmgPrIghOY88OSlAgOmfc1eW1gpEICyqGL0yonoDwS+
-X-Gm-Message-State: AOJu0YyzI2H0PzZPNFIwVu5uMXbzOSU45kuReLqcWtI1ac9Ua18J/sDc
-	cZ/EjSlfNQ6oFgqxEmmHh5APoQv0Pw88fc2RvKdyWjk7OM9UzdpDld9aMjh3xQY=
-X-Google-Smtp-Source: AGHT+IG3DPOFC1jCqg0VsU6zQ3yiocZQTZSrqg+K4gBfn0DXYa5cYs2kvobaBYLoCDVrM0MSeTmAvw==
-X-Received: by 2002:a17:902:d2ce:b0:1df:fbc3:d130 with SMTP id n14-20020a170902d2ce00b001dffbc3d130mr2372826plc.1.1710609448903;
-        Sat, 16 Mar 2024 10:17:28 -0700 (PDT)
-Received: from [192.168.1.150] ([198.8.77.194])
-        by smtp.gmail.com with ESMTPSA id q12-20020a17090311cc00b001db9e12cd62sm6011304plh.10.2024.03.16.10.17.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Mar 2024 10:17:28 -0700 (PDT)
-Message-ID: <4405edd4-f20f-4040-ad67-aca3fcd7eff3@kernel.dk>
-Date: Sat, 16 Mar 2024 11:17:26 -0600
+        bh=5WTgoO0ZH3+SgvEiDrbHquvEfY3h3VInRoCaJLUaelQ=;
+        b=a1d1Xk9rfPU76jc+FLAfwJnO6BKl97asEFcnw/pLL3V33Gm4SLQH8wHQhF5lKeUkJC
+         oEZ/M7fVxO55sQ4fJHDj1ohaC5A0D84cFcoGFPF4Ew27p0g7vt/u+wrNlXukh7lQ0jP6
+         9Hk55QPc76N12O/FzPoYKGi3EvTyaPRWXXw9wt5w4fOI+oRhsvGrzHPKCFKeqc9RIfWn
+         BIogTBSqp6fI4PrDwul4TNuhBOfHU7LSh7iKUxkEEZcHHpPwX32ivfyLogUGNnE0kKLY
+         vz7lYjZE/YSTgnX3b+zGwrB1wMgYcstIzZ5RC2/+thakro0DqjtP0JeygZOe/hv7d3k2
+         R1hw==
+X-Forwarded-Encrypted: i=1; AJvYcCXAJYu6n0dHLp44usnuxV9CZvdKbsJqbQscIRMiQC+MheAgSMiBZIe8583LxLBdQ5K3Pn4P5LLJ9tdbGH+MB7HpsoUX
+X-Gm-Message-State: AOJu0YyEv+7Ws0iMKXr9UcxRAudgQanSG5QE7N92wxRSmCNpgVbJ7mJ6
+	Br7TkuvjvitqIXP6Kn/E51uuyV+0t8EJCr9GKzxfB1KEYsRkeFoc
+X-Google-Smtp-Source: AGHT+IGzolPzzIM7u69NyCXth/xuvIzIJNw1vx8sLqOEnZHsjD0kUjkm19Of+v48KMPC63oEElrXoQ==
+X-Received: by 2002:adf:a395:0:b0:33e:83a1:227e with SMTP id l21-20020adfa395000000b0033e83a1227emr11708055wrb.7.1710707940672;
+        Sun, 17 Mar 2024 13:39:00 -0700 (PDT)
+Received: from krava ([83.240.63.214])
+        by smtp.gmail.com with ESMTPSA id a13-20020adfeecd000000b0033ec94c6277sm8202545wrp.115.2024.03.17.13.38.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Mar 2024 13:39:00 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Sun, 17 Mar 2024 21:38:58 +0100
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Andrii Nakryiko <andrii@kernel.org>,
+	bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+	martin.lau@kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v2 bpf-next 2/2] selftests/bpf: add fast mostly in-kernel
+ BPF triggering benchmarks
+Message-ID: <ZfdU4ordMYOGP0BQ@krava>
+References: <20240315051813.1320559-1-andrii@kernel.org>
+ <20240315051813.1320559-2-andrii@kernel.org>
+ <ZfQQeyPu6gi4Bx9V@krava>
+ <CAEf4BzayNECKkmc4=XfLW5fzsPozMnjqOEmGO+r2UmEQXt1XyA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/10] capability: add any wrappers to test for multiple
- caps with exactly one audit message
-Content-Language: en-US
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
- linux-security-module@vger.kernel.org, linux-block@vger.kernel.org,
- Serge Hallyn <serge@hallyn.com>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20240315113828.258005-1-cgzones@googlemail.com>
- <20240315113828.258005-2-cgzones@googlemail.com>
- <CAEf4BzZF0A9qEzmRigHFLQ4vBQshGUQWZVG5L0q2_--kx4=AXA@mail.gmail.com>
- <0f8291f7-48b1-4be1-8a57-dbad5d0ab28c@kernel.dk>
- <CAEf4BzbgQrYDMma=NbW6A-qikA693eSnz9-RwjkF3xPLRE8qqg@mail.gmail.com>
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAEf4BzbgQrYDMma=NbW6A-qikA693eSnz9-RwjkF3xPLRE8qqg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzayNECKkmc4=XfLW5fzsPozMnjqOEmGO+r2UmEQXt1XyA@mail.gmail.com>
 
-On 3/15/24 3:16 PM, Andrii Nakryiko wrote:
-> On Fri, Mar 15, 2024 at 11:41?AM Jens Axboe <axboe@kernel.dk> wrote:
->>
->> On 3/15/24 10:45 AM, Andrii Nakryiko wrote:
->>>> +/**
->>>> + * ns_capable_any - Determine if the current task has one of two superior capabilities in effect
->>>> + * @ns:  The usernamespace we want the capability in
->>>> + * @cap1: The capabilities to be tested for first
->>>> + * @cap2: The capabilities to be tested for secondly
->>>> + *
->>>> + * Return true if the current task has at least one of the two given superior
->>>> + * capabilities currently available for use, false if not.
->>>> + *
->>>> + * In contrast to or'ing capable() this call will create exactly one audit
->>>> + * message, either for @cap1, if it is granted or both are not permitted,
->>>> + * or @cap2, if it is granted while the other one is not.
->>>> + *
->>>> + * The capabilities should be ordered from least to most invasive, i.e. CAP_SYS_ADMIN last.
->>>> + *
->>>> + * This sets PF_SUPERPRIV on the task if the capability is available on the
->>>> + * assumption that it's about to be used.
->>>> + */
->>>> +bool ns_capable_any(struct user_namespace *ns, int cap1, int cap2)
->>>> +{
->>>> +       if (cap1 == cap2)
->>>> +               return ns_capable(ns, cap1);
->>>> +
->>>> +       if (ns_capable_noauditondeny(ns, cap1))
->>>> +               return true;
->>>> +
->>>> +       if (ns_capable_noauditondeny(ns, cap2))
->>>> +               return true;
->>>> +
->>>> +       return ns_capable(ns, cap1);
->>>
->>> this will incur an extra capable() check (with all the LSMs involved,
->>> etc), and so for some cases where capability is expected to not be
->>> present, this will be a regression. Is there some way to not redo the
->>> check, but just audit the failure? At this point we do know that cap1
->>> failed before, so might as well just log that.
->>
->> Not sure why that's important - if it's a failure case, and any audit
->> failure should be, then why would we care if that's now doing a bit of
->> extra work?
+On Fri, Mar 15, 2024 at 03:22:29PM -0700, Andrii Nakryiko wrote:
+> On Fri, Mar 15, 2024 at 2:10 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Thu, Mar 14, 2024 at 10:18:13PM -0700, Andrii Nakryiko wrote:
+> > > Existing kprobe/fentry triggering benchmarks have 1-to-1 mapping between
+> > > one syscall execution and BPF program run. While we use a fast
+> > > get_pgid() syscall, syscall overhead can still be non-trivial.
+> > >
+> > > This patch adds kprobe/fentry set of benchmarks significantly amortizing
+> > > the cost of syscall vs actual BPF triggering overhead. We do this by
+> > > employing BPF_PROG_TEST_RUN command to trigger "driver" raw_tp program
+> > > which does a tight parameterized loop calling cheap BPF helper
+> > > (bpf_get_smp_processor_id()), to which kprobe/fentry programs are
+> > > attached for benchmarking.
+> > >
+> > > This way 1 bpf() syscall causes N executions of BPF program being
+> > > benchmarked. N defaults to 100, but can be adjusted with
+> > > --trig-batch-iters CLI argument.
+> > >
+> > > Results speak for themselves:
+> > >
+> > > $ ./run_bench_trigger.sh
+> > > uprobe-base         :  138.054 ą 0.556M/s
+> > > base                :   16.650 ą 0.123M/s
+> > > tp                  :   11.068 ą 0.100M/s
+> > > rawtp               :   14.087 ą 0.511M/s
+> > > kprobe              :    9.641 ą 0.027M/s
+> > > kprobe-multi        :   10.263 ą 0.061M/s
+> > > kretprobe           :    5.475 ą 0.028M/s
+> > > kretprobe-multi     :    5.703 ą 0.036M/s
+> > > fentry              :   14.544 ą 0.112M/s
+> > > fexit               :   10.637 ą 0.073M/s
+> > > fmodret             :   11.357 ą 0.061M/s
+> > > kprobe-fast         :   14.286 ą 0.377M/s
+> > > kprobe-multi-fast   :   14.999 ą 0.204M/s
+> > > kretprobe-fast      :    7.646 ą 0.084M/s
+> > > kretprobe-multi-fast:    4.354 ą 0.066M/s
+> > > fentry-fast         :   31.475 ą 0.254M/s
+> > > fexit-fast          :   17.379 ą 0.195M/s
+> > >
+> > > Note how xxx-fast variants are measured with significantly higher
+> > > throughput, even though it's exactly the same in-kernel overhead:
+> > >
+> > > fentry              :   14.544 ą 0.112M/s
+> > > fentry-fast         :   31.475 ą 0.254M/s
+> > >
+> > > kprobe-multi        :   10.263 ą 0.061M/s
+> > > kprobe-multi-fast   :   14.999 ą 0.204M/s
+> > >
+> > > One huge and not yet explained deviation is a slowdown of
+> > > kretprobe-multi, we should look into that separately.
+> > >
+> > > kretprobe           :    5.475 ą 0.028M/s
+> > > kretprobe-multi     :    5.703 ą 0.036M/s
+> > > kretprobe-fast      :    7.646 ą 0.084M/s
+> > > kretprobe-multi-fast:    4.354 ą 0.066M/s
+> > >
+> > > Kprobe cases don't seem to have this illogical slowdown:
+> > >
+> > > kprobe              :    9.641 ą 0.027M/s
+> > > kprobe-multi        :   10.263 ą 0.061M/s
+> > > kprobe-fast         :   14.286 ą 0.377M/s
+> > > kprobe-multi-fast   :   14.999 ą 0.204M/s
+> >
+> > hum, I see that as well:
+> >
+> > uprobe-base         :  230.624 ą 0.527M/s
+> > base                :   16.320 ą 0.087M/s
+> > tp                  :   10.057 ą 0.122M/s
+> > rawtp               :   14.851 ą 0.300M/s
+> > kprobe              :   10.993 ą 0.104M/s
+> > kprobe-multi        :   11.053 ą 0.038M/s
+> > kretprobe           :    6.679 ą 0.015M/s
+> > kretprobe-multi     :    6.466 ą 0.015M/s
+> > fentry              :   14.949 ą 0.064M/s
+> > fexit               :   10.530 ą 1.275M/s
+> > fmodret             :   11.145 ą 0.245M/s
+> > kprobe-fast         :   20.080 ą 0.468M/s
+> > kprobe-multi-fast   :   17.603 ą 0.102M/s
+> > kretprobe-fast      :    9.943 ą 0.056M/s
+> > kretprobe-multi-fast:    5.185 ą 0.022M/s
+> > fentry-fast         :   46.697 ą 0.260M/s
+> > fexit-fast          :   19.250 ą 0.108M/s
+> >
+> >
+> > I even see decline in kprobe-multi-fast:
+> >
+> >   kprobe-fast         :   20.080 ą 0.468M/s
+> >   kprobe-multi-fast   :   17.603 ą 0.102M/s
+> >
+> >   kretprobe-fast      :    9.943 ą 0.056M/s
+> >   kretprobe-multi-fast:    5.185 ą 0.022M/s
+> >
+> >
+> > I've got some IBT related code showing up in the perf profile
+> > and when I disabled it I got better results for kprobe-multi-fast
+> > but kretprobe-multi-fast is still bad
 > 
-> Lack of capability doesn't necessarily mean "failure". E.g., in FUSE
-> there are at least few places where the code checks
-> capable(CAP_SYS_ADMIN), and based on that decides on some limit values
-> or extra checks. So if !capable(CAP_SYS_ADMIN), operation doesn't
-> necessarily fail outright, it just has some more restricted resources
-> or something.
+> ok, I think it's a self-inflicted false alarm. Note how this benchmark
+> is using bpf_get_smp_processor_id() as an attach point? Well, guess
+> what, each triggered program is then calling
+> bpf_get_smp_processor_id() again to get the per-CPU counter to
+> increment. So this benchmark was effectively heavily testing recursion
+> protection, and I guess kretprobe hurts the most.
+
+heh, nice :-) that explains the bpf_prog_inc_misses_counter hits
+I see in perf profile
+
+     1.46%  bench    [kernel.vmlinux]                                              [k] bpf_prog_inc_misses_counter
+            |
+            ---bpf_prog_inc_misses_counter
+               kprobe_multi_link_prog_run.isra.0
+               fprobe_exit_handler
+               rethook_trampoline_handler
+               arch_rethook_trampoline_callback
+               arch_rethook_trampoline
+               bpf_prog_7790468e40a289ea_bench_trigger_kretprobe_multi_fast
+               kprobe_multi_link_prog_run.isra.0
+               fprobe_exit_handler
+               rethook_trampoline_handler
+               arch_rethook_trampoline_callback
+               arch_rethook_trampoline
+               bpf_prog_db14b3b08bc9e952_trigger_driver
+               __bpf_prog_test_run_raw_tp
+               bpf_prog_test_run_raw_tp
+               __sys_bpf
+               __x64_sys_bpf
+               do_syscall_64
+               entry_SYSCALL_64
+               syscall
+               start_thread
+               clone3
+
+jirka
+
 > 
-> Luckily in FUSE's case it's singular capable() check, so capable_any()
-> won't incur extra overhead. But I was just wondering if it would be
-> possible to avoid this with capable_any() as well, so that no one has
-> to do these trade-offs.
-
-That's certainly a special and odd case, as most other cases really
-would be of the:
-
-if (capable(SOMETHING))
-	return -EFAUL;
-
-Might make more sense to special case the FUSE thing then, or provide a
-cheap way for it to do what it needs to do. I really don't think that
-kind of:
-
-if (capable(SOMETHING))
-	do something since I can
-else
-	bummer, do something else then
-
-is a common occurrence.
-
-> We also had cases in production of some BPF applications tracing
-> cap_capable() calls, so each extra triggering of it would be a bit of
-> added overhead, as a general rule.
+> I realized that when I moved to bpf_get_numa_node_id() and seeing much
+> higher numbers:
 > 
-> Having said the above, I do like capable_any() changes (which is why I
-> acked BPF side of things).
-
-Yes, the BPF tracking capable in production is a pain in the butt, as it
-slows down any valid fast path capable checking by a substantial amount.
-We've had to work around that on the block side, unfortunately. These
-are obviously cases where you expect success, and any failure is
-permanent as far as that operation goes.
-
--- 
-Jens Axboe
-
+> BEFORE
+> ======
+> $ benchs/run_bench_trigger.sh kprobe-batch fentry-batch
+> kprobe-batch        :   14.018 ± 0.333M/s
+> fentry-batch        :   31.470 ± 0.791M/s
+> 
+> AFTER
+> =====
+> $ benchs/run_bench_trigger.sh kprobe-batch fentry-batch
+> kprobe-batch         :   19.391 ± 0.868M/s
+> fentry-batch         :   48.785 ± 0.932M/s
+> 
+> That's when I realized something is off here. Now results make a bit
+> more sense (machine on which I test is different, so absolute values
+> differ from before):
+> 
+> $ benchs/run_bench_trigger.sh kprobe kprobe-multi kprobe-batch
+> kprobe-multi-batch kretprobe kretprobe-multi kretprobe-batch
+> kretprobe-multi-batch
+> kprobe               :    8.114 ± 0.199M/s
+> kprobe-multi         :    8.739 ± 0.052M/s
+> kprobe-batch         :   19.379 ± 0.709M/s
+> kprobe-multi-batch   :   24.969 ± 0.226M/s
+> kretprobe            :    4.859 ± 0.027M/s
+> kretprobe-multi      :    4.940 ± 0.083M/s
+> kretprobe-batch      :    8.460 ± 0.044M/s
+> kretprobe-multi-batch:    8.761 ± 0.282M/s
+> 
+> 
+> >
+> >
+> > uprobe-base         :  234.024 ą 0.225M/s
+> > base                :   16.383 ą 0.029M/s
+> > tp                  :    9.973 ą 0.017M/s
+> > rawtp               :   14.889 ą 0.047M/s
+> > kprobe              :   10.970 ą 0.011M/s
+> > kprobe-multi        :   11.640 ą 0.009M/s
+> > kretprobe           :    6.667 ą 0.005M/s
+> > kretprobe-multi     :    6.704 ą 0.005M/s
+> > fentry              :   14.968 ą 0.024M/s
+> > fexit               :   11.860 ą 0.012M/s
+> > fmodret             :   12.656 ą 0.036M/s
+> > kprobe-fast         :   20.340 ą 0.043M/s
+> > kprobe-multi-fast   :   21.203 ą 0.019M/s
+> > kretprobe-fast      :    9.956 ą 0.021M/s
+> > kretprobe-multi-fast:    5.611 ą 0.006M/s
+> > fentry-fast         :   46.825 ą 0.041M/s
+> > fexit-fast          :   19.746 ą 0.024M/s
+> >
+> > slightly better:
+> >
+> >   kprobe-fast         :   20.340 ą 0.043M/s
+> >   kprobe-multi-fast   :   21.203 ą 0.019M/s
+> >
+> > still almost half perf:
+> >   kretprobe-fast      :    9.956 ą 0.021M/s
+> >   kretprobe-multi-fast:    5.611 ą 0.006M/s
+> >
+> > jirka
+> >
+> > >
+> > > Cc: Jiri Olsa <jolsa@kernel.org>
+> > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > > ---
+> > >  tools/testing/selftests/bpf/bench.c           |  18 +++
+> > >  .../selftests/bpf/benchs/bench_trigger.c      | 123 +++++++++++++++++-
+> > >  .../selftests/bpf/benchs/run_bench_trigger.sh |   8 +-
+> > >  .../selftests/bpf/progs/trigger_bench.c       |  56 +++++++-
+> > >  4 files changed, 201 insertions(+), 4 deletions(-)
+> > >
+> 
+> [...]
