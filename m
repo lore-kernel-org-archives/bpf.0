@@ -1,133 +1,93 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF1647F4B;
-	Mon, 18 Mar 2024 13:25:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B9D4E1B5
+	for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 14:23:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710768331; cv=none; b=mBoAEwrTT5G2tE+437yrrj2lsOBrwyWAyODdJeJ69iJqmjIg/a/ngBzn9C8/tElCYtiloSfvuXInIM3+cu5Yr8eXQ91WbTt8WraMdIsfs8lDLa7o4E4X3n10L2zFeM/A1Iqt8jwmgT3wrpaWOPvE5PDmgWEB9fyoT6keJhEEmow=
+	t=1710771828; cv=none; b=QOlijFUXvcSEoaQOHkS5XW1PmLg28Uk4MloEtS0w+UXSAcp7uT2ixxTQN+buCzlY4/0XbUfJoerxE2Sb5dFpjL9zeQuY9dFVRuAVauit6JQ+wmUIpjHwPeT90RLd8neAi+JUn+UHgDdHNsPKySo4FpnSRPJT/eAvTE9E5IeDc/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710768331; c=relaxed/simple;
-	bh=Vf12dd/Egl8nCL4fAZyQY6z00cZn1KGW7EOXwQXKS2U=;
-	h=Subject:From:To:Cc:Date:Message-ID:MIME-Version:Content-Type; b=jYDRk23uCmrKRNVxbz6WkyQE/UzSkCWPfjW3TWC8HafOJrLRTg+rTrrJOsebflaef9SuxrNb5ki9r1RqyDdCssNCBtqvaPUjdFQTP5SFJh3hiE3pwiZuBzuK088yL+2UaEU4bTF/zaCL/fMwEgOoeXtcBIgq6SAZalj2Zht6HeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GYhEnCDy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710771828; c=relaxed/simple;
+	bh=7OdIQlUMF9qMTHSVkMXMGHTnpbr8bYRRI3A7WEC5WKk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DvmS4U/nedYGLYFJNVcDnGe9YOrq2iy/jTwbwTvBqF4uH3IYVvWHb8Rpt44+/biAh6lXKo/I/wP16CDzz5ho+wdbcRN08AuwS4QIyBJKvFOE//BMLMzwevATZ1HJ8JqkSChpCATRS1Ii8HTOzGbS0uN/hWCRf1l1H8P+LiFD49U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LYK3EEnX; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GYhEnCDy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D813C433F1;
-	Mon, 18 Mar 2024 13:25:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710768331;
-	bh=Vf12dd/Egl8nCL4fAZyQY6z00cZn1KGW7EOXwQXKS2U=;
-	h=Subject:From:To:Cc:Date:From;
-	b=GYhEnCDyMs3UBDxenTSxg/j7DlqzZZigVWDEAdzKdsoknZd1yF0TQ6zmbbp+7u9Gl
-	 /BaCU6v7ke+D/B8cEFv7C3jthtvuWjrFAhWsq9eBCwasJu5TRcv4sdvrbmST7qz95T
-	 8Tjfdb5pJcuhstJ9XMQDSv/2gDY03HKQcD141p5xrtHfqiL3ug76gAwBKg88li66nn
-	 C3mOE0qz4EawfX8nuqngaeLicL6gUoLfksRHeb4KU2vthZa/JQMpW56HuC1OMU0T6Z
-	 94Dt+n9Of2bzWd2zolh1lBpjoIJKgD4cvqPCFg9+l/ZvgFOHtAizuKaSjex6MSm66f
-	 YKBXntQY336NQ==
-Subject: [PATCH bpf-next V2] bpf/lpm_trie: inline longest_prefix_match for
- fastpath
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-To: bpf@vger.kernel.org, Daniel Borkmann <borkmann@iogearbox.net>
-Cc: Jesper Dangaard Brouer <hawk@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, martin.lau@kernel.org,
- netdev@vger.kernel.org, bp@alien8.de, kernel-team@cloudflare.com
-Date: Mon, 18 Mar 2024 14:25:26 +0100
-Message-ID: <171076828575.2141737.18370644069389889027.stgit@firesoul>
-User-Agent: StGit/1.5
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LYK3EEnX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1710771826;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=J56iKe+J8y/DvtrlrUb/iBGPy3gfmTc/L9b1YwvY3l0=;
+	b=LYK3EEnXp0xuni6lhpPPcXvwMAUVeGgp5GPRhxZemJM1G0vcr7MrQxEvFKTy2plvoKaDQi
+	DWdo/ofMInekdqRbq3wgFku9uBlyI0QCHAlLW+PoPu6oL3F170syvfebMH+srzH4b8ifua
+	h/Yr0nLEsV4mXS5p/vnHdvHSAAcf42Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-287-zWaMBKYmM5-W7TvNSUni8Q-1; Mon, 18 Mar 2024 10:23:42 -0400
+X-MC-Unique: zWaMBKYmM5-W7TvNSUni8Q-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 335AB185A781;
+	Mon, 18 Mar 2024 14:23:41 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.109])
+	by smtp.corp.redhat.com (Postfix) with SMTP id CCB8CC04121;
+	Mon, 18 Mar 2024 14:23:38 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Mon, 18 Mar 2024 15:22:19 +0100 (CET)
+Date: Mon, 18 Mar 2024 15:22:12 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
+Subject: Re: [PATCH RFC bpf-next 1/3] uprobe: Add uretprobe syscall to speed
+ up return probe
+Message-ID: <20240318142211.GA7616@redhat.com>
+References: <20240318093139.293497-1-jolsa@kernel.org>
+ <20240318093139.293497-2-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240318093139.293497-2-jolsa@kernel.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
 
-The BPF map type LPM (Longest Prefix Match) is used heavily
-in production by multiple products that have BPF components.
-Perf data shows trie_lookup_elem() and longest_prefix_match()
-being part of kernels perf top.
+On 03/18, Jiri Olsa wrote:
+>
+> +SYSCALL_DEFINE0(uretprobe)
+> +{
+> +	struct pt_regs *regs = task_pt_regs(current);
+> +	unsigned long sregs[3], err;
+> +
+> +	/*
+> +	 * We set rax and syscall itself changes rcx and r11, so the syscall
+> +	 * trampoline saves their original values on stack. We need to read
+> +	 * them and set original register values and fix the rsp pointer back.
+> +	 */
+> +	err = copy_from_user((void *) &sregs, (void *) regs->sp, sizeof(sregs));
+                                              ^^^^^^^^^^^^^^^^^
 
-For every level in the LPM tree trie_lookup_elem() calls out
-to longest_prefix_match().  The compiler is free to inline this
-call, but chooses not to inline, because other slowpath callers
-(that can be invoked via syscall) exists like trie_update_elem(),
-trie_delete_elem() or trie_get_next_key().
+IIUC, it should be (void __user *)regs->sp to shut up the sparse checks.
+The 1st "(void *)" typecast is not needed.
 
- bcc/tools/funccount -Ti 1 'trie_lookup_elem|longest_prefix_match.isra.0'
- FUNC                                    COUNT
- trie_lookup_elem                       664945
- longest_prefix_match.isra.0           8101507
+Correctness-wise looks good to me, FWIW
 
-Observation on a single random machine shows a factor 12 between
-the two functions. Given an average of 12 levels in the trie being
-searched.
-
-This patch force inlining longest_prefix_match(), but only for
-the lookup fastpath to balance object instruction size.
-
-In production with AMD CPUs, measuring the function latency of
-'trie_lookup_elem' (bcc/tools/funclatency) we are seeing an improvement
-function latency reduction 7-8% with this patch applied (to production
-kernels 6.6 and 6.1). Analyzing perf data, we can explain this rather
-large improvement due to reducing the overhead for AMD side-channel
-mitigation SRSO (Speculative Return Stack Overflow).
-
-Fixes: fb3bd914b3ec ("x86/srso: Add a Speculative RAS Overflow mitigation")
-Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
----
- kernel/bpf/lpm_trie.c |   18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 050fe1ebf0f7..939620b91c0e 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -155,16 +155,17 @@ static inline int extract_bit(const u8 *data, size_t index)
- }
- 
- /**
-- * longest_prefix_match() - determine the longest prefix
-+ * __longest_prefix_match() - determine the longest prefix
-  * @trie:	The trie to get internal sizes from
-  * @node:	The node to operate on
-  * @key:	The key to compare to @node
-  *
-  * Determine the longest prefix of @node that matches the bits in @key.
-  */
--static size_t longest_prefix_match(const struct lpm_trie *trie,
--				   const struct lpm_trie_node *node,
--				   const struct bpf_lpm_trie_key_u8 *key)
-+static __always_inline
-+size_t __longest_prefix_match(const struct lpm_trie *trie,
-+			      const struct lpm_trie_node *node,
-+			      const struct bpf_lpm_trie_key_u8 *key)
- {
- 	u32 limit = min(node->prefixlen, key->prefixlen);
- 	u32 prefixlen = 0, i = 0;
-@@ -224,6 +225,13 @@ static size_t longest_prefix_match(const struct lpm_trie *trie,
- 	return prefixlen;
- }
- 
-+static size_t longest_prefix_match(const struct lpm_trie *trie,
-+				   const struct lpm_trie_node *node,
-+				   const struct bpf_lpm_trie_key_u8 *key)
-+{
-+	return __longest_prefix_match(trie, node, key);
-+}
-+
- /* Called from syscall or from eBPF program */
- static void *trie_lookup_elem(struct bpf_map *map, void *_key)
- {
-@@ -245,7 +253,7 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
- 		 * If it's the maximum possible prefix for this trie, we have
- 		 * an exact match and can return it directly.
- 		 */
--		matchlen = longest_prefix_match(trie, node, key);
-+		matchlen = __longest_prefix_match(trie, node, key);
- 		if (matchlen == trie->max_prefixlen) {
- 			found = node;
- 			break;
-
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
 
