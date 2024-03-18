@@ -1,138 +1,216 @@
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEFCE1EB41
-	for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 02:49:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F181DFC7;
+	Mon, 18 Mar 2024 03:11:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710730189; cv=none; b=i5vb60RxW7rjxC9/qL0bvvSSQuegYLjiqGb55lpMGV5TfFXOjv8+W1f1vv40XbGQD3OghO+oFIUFsfRHPPPKiiD5YMyMEASh7ouNSIEnCwTn5c+vcVJwtS0JxMuMPEmUTlAhdMQadw9I5QagbFJVYTmR7HeVUgudrzDXuxkoSbw=
+	t=1710731465; cv=none; b=gob4I9Y9qO0yykXbRBjHYGMRjXaYl2kY8ccAEk6+ZUk8Z9Tp3CBjZhlcVnaytZ9NyuhXQTrIsMZaExUR3NxKKc9UeQGTkQhzQMPEayKlUDLsc0Bmy/I4wiCADAZuwraRf5F+ITGqqYPwSTngbmnwsqfBPtNDSHyFou8JLNiBr+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710730189; c=relaxed/simple;
-	bh=ybVBqVNCXzGJGuz6lwF+tzdhl5wD9gmQp2PXPNadGZI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NmIgxwUeVZmC6sGF9z+y9S1y2lt2hyT6+66zVwVbk4YSAVyZ11twCz5uVkq8ivGJsbjOailot140811PVO2FZqOjMDXoZ8LkRI16QyVoR4xF7LN+Oqkq4WPmhGzkQIVigodjh16xmDLj83vNYJqv4wbEqskgGdKp39H14yN7Olo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=iV4pzRO6; arc=none smtp.client-ip=209.85.161.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+	s=arc-20240116; t=1710731465; c=relaxed/simple;
+	bh=4voy2gFagHbzzgdeYO59y5/rvHXe2ueRFE/fbxvdQR4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mP/Z9YlbQgPPNeIFvcbo3KBpyq1BGeCFPg+DU2xvinPcXjkbsBytuZlpeAwdggD9ovyjaZi84xi5ccEBg6sA6RdTyiDgfRvhQn/1CNmRk7dUsC2aEnNbxGf7nAKWLgAbVYxyqfg7FVjBQtMrDFmeBPuCatV+GAPjFiycqisyqnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=d8zWc7qy; arc=none smtp.client-ip=67.231.148.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="iV4pzRO6"
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5a4a14c52fcso469355eaf.1
-        for <bpf@vger.kernel.org>; Sun, 17 Mar 2024 19:49:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1710730186; x=1711334986; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QE0CXFBu76tpBM6gpoJrOe0mC6QUf5XbAI8puJxCLjs=;
-        b=iV4pzRO6P3GXwlCKnBLXNP1M23gu1zQrspv6JPJ8fStuXR6pQ39ApKrDntPI5tx/uE
-         /MnuWm41o/lbyJAypmV8amaK7R/DY9hx5GRXs/0r9iXayTGjDZNX/3a3xzI+TRbmrgc5
-         CKaIjiPutwDoASk/sLDAWwavRiaWn0pBM9030+PUUupT3yeK7y4jPmhcyEMY7r4Hl52y
-         XWNfIYJJTMt5wTngWdOXFC2+N/RSAkoF1vsgGy7/X1ZW8EIw0zE/PfsaGzUF6O4qnNcM
-         v/ZuzSbzmtn0escS9ERzZ4uMFZQ9IggD068oFEU9q2JSyZaFtYe56f0HASQWjPvNI5se
-         3jpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710730186; x=1711334986;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QE0CXFBu76tpBM6gpoJrOe0mC6QUf5XbAI8puJxCLjs=;
-        b=s7jRBaAAzcDQYgdyZAOHGA0lkABEI+zs1PgwvOLB8uVcSCpOgBNqTdHjJ+uaxzlAUj
-         KbE+DaAg8XENq+4gFAsoC9W1XRw8ipp6svNK1qU2yj4/leRAgK6QUTdurjnDjAh9GYrD
-         YQ0+3gIkvgHsJadtuPep8nU4c90eKqKuWzRP8TbwInnqxGVfUQu1glUDYeDrwBI9kraH
-         IJoLvXbbC3g2vJBXLN4kQNeq/At+NhhbrpFA2sG7i97jdjISSvlgIbCDr3aWXBqUVe8g
-         fyc+/8Z6jsnM26U8VRugIzeblkXGZokgyipfkdf6Ozcxq2Bx4kXG0Y/KWpHIzDfwHihT
-         4/EA==
-X-Forwarded-Encrypted: i=1; AJvYcCW39y2gtNJrICK2tDnxCn+VFTEzqlddYjC1Fe7lp4xVN2HzLFjU0qa3wP+63GETeJ6fOCrDzywOtiQpYpdk+oVsWZs3
-X-Gm-Message-State: AOJu0Yx7mPga4TDeAPQjmwov4Bv1z5hF4clMUH258isXZlYJu0Ano589
-	0ieyeXHdlRiz1R7tPmyATvOawjowfo8EkliTU5yc1JLyuMt09KK1jrEtg7m1eg0=
-X-Google-Smtp-Source: AGHT+IENq8waTwhUkJrEOrb8DEHjfl4QDem6FZJYYGTlmjRRGItMoHQ4P2wTQfIoEZJr502KAVnEEA==
-X-Received: by 2002:a05:6870:8e05:b0:222:d6a:9ae8 with SMTP id lw5-20020a0568708e0500b002220d6a9ae8mr10284561oab.35.1710730185882;
-        Sun, 17 Mar 2024 19:49:45 -0700 (PDT)
-Received: from [192.168.1.24] (71-212-18-124.tukw.qwest.net. [71.212.18.124])
-        by smtp.gmail.com with ESMTPSA id i189-20020a62c1c6000000b006e66a76d877sm7120229pfg.153.2024.03.17.19.49.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Mar 2024 19:49:45 -0700 (PDT)
-Message-ID: <b938514c-61cc-41e6-b592-1003b8deccae@davidwei.uk>
-Date: Sun, 17 Mar 2024 19:49:43 -0700
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="d8zWc7qy"
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42HN1Lro032363;
+	Sun, 17 Mar 2024 20:10:32 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=pfpt0220; bh=cG6+Vc30vh6fpJMkXadFZj
+	NyMvkJ+uULiCmw0urycys=; b=d8zWc7qy/iTHBvpA8z4A7R1VOJkWIcbT604bhw
+	CfhU+aGCTqWQ+aL9TwxIHk57pdiPH9R5VbsDkD8L/GaX8deyB7aqvSyF47R2xD0c
+	ftlDVuxwetFIgjLRt0S1gNUgCKQZYPzGdgeCTFQcENtKOzH2M6wklSWfjeRplvbZ
+	KydWT6JJuY+CNuX5g/VD4+Y17P9q9/dWb+aMc8m69uwOM0P6AqCNP58Yh3xXwKMJ
+	l2ivEjvxz6fyMOvaRS/lrPoa/oSTNUVf2uMEQXMCLAJj/fDi3+U/DgghyMclQxRE
+	zHFLDIJHHAVtkd0Sj7QdiOMbB9jGfiXsSW2qm1binTDFXv3g==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3ww8skkqvp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 17 Mar 2024 20:10:32 -0700 (PDT)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.12; Sun, 17 Mar 2024 20:10:31 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1258.12 via Frontend
+ Transport; Sun, 17 Mar 2024 20:10:31 -0700
+Received: from maili.marvell.com (unknown [10.28.36.165])
+	by maili.marvell.com (Postfix) with SMTP id 51C6D3F7067;
+	Sun, 17 Mar 2024 20:10:26 -0700 (PDT)
+Date: Mon, 18 Mar 2024 08:40:25 +0530
+From: Ratheesh Kannoth <rkannoth@marvell.com>
+To: Jose Fernandez <josef@netflix.com>
+CC: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann
+	<daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau
+	<martin.lau@linux.dev>,
+        Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+	<song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend
+	<john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
+	<sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, Tycho Andersen <tycho@tycho.pizza>
+Subject: Re: [PATCH V2 bpf-next 2/2] selftests/bpf: add selftest for
+ bpf_task_get_cgroup
+Message-ID: <20240318031025.GA1312616@maili.marvell.com>
+References: <20240316162241.628855-1-josef@netflix.com>
+ <20240316162241.628855-2-josef@netflix.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
- custom page providers
-Content-Language: en-GB
-To: Christoph Hellwig <hch@infradead.org>,
- Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Jeroen de Borst <jeroendb@google.com>,
- Praveen Kaligineedi <pkaligineedi@google.com>
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-3-almasrymina@google.com>
- <ZfegzB341oNc_Ocz@infradead.org>
-From: David Wei <dw@davidwei.uk>
-In-Reply-To: <ZfegzB341oNc_Ocz@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240316162241.628855-2-josef@netflix.com>
+X-Proofpoint-ORIG-GUID: v9sscJHqEs07l4SXiZdLi2Ef7gDeQ64Q
+X-Proofpoint-GUID: v9sscJHqEs07l4SXiZdLi2Ef7gDeQ64Q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-17_12,2024-03-15_01,2023-05-22_02
 
-On 2024-03-17 19:02, Christoph Hellwig wrote:
-> On Mon, Mar 04, 2024 at 06:01:37PM -0800, Mina Almasry wrote:
->> From: Jakub Kicinski <kuba@kernel.org>
->>
->> The page providers which try to reuse the same pages will
->> need to hold onto the ref, even if page gets released from
->> the pool - as in releasing the page from the pp just transfers
->> the "ownership" reference from pp to the provider, and provider
->> will wait for other references to be gone before feeding this
->> page back into the pool.
-> 
-> The word hook always rings a giant warning bell for me, and looking into
-> this series I am concerned indeed.
-> 
-> The only provider provided here is the dma-buf one, and that basically
-> is the only sensible one for the documented design.  So instead of
-> adding hooks that random proprietary crap can hook into, why not hard
-> code the dma buf provide and just use a flag?  That'll also avoid
-> expensive indirect calls.
+On 2024-03-16 at 21:52:41, Jose Fernandez (josef@netflix.com) wrote:
+> This patch adds a selftest for the `bpf_task_get_cgroup` kfunc. The test
+> focuses on the use case of obtaining the cgroup ID of the previous task
+> in a `sched_switch` tracepoint.
+>
+> The selftest involves creating a test cgroup, attaching a BPF program
+> that utilizes the `bpf_task_get_cgroup` during a `sched_switch`
+> tracepoint, and validating that the obtained cgroup ID for the previous
+> task matches the expected cgroup ID.
+>
+> Signed-off-by: Jose Fernandez <josef@netflix.com>
+> Reviewed-by: Tycho Andersen <tycho@tycho.pizza>
+> ---
+> V1 -> V2: Refactor test to work with a cgroup pointer instead of the ID
+>
+>  .../bpf/prog_tests/task_get_cgroup.c          | 58 +++++++++++++++++++
+>  .../bpf/progs/test_task_get_cgroup.c          | 37 ++++++++++++
+>  2 files changed, 95 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/task_get_cgroup.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_task_get_cgroup.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/task_get_cgroup.c b/tools/testing/selftests/bpf/prog_tests/task_get_cgroup.c
+> new file mode 100644
+> index 000000000000..67ed65d0c461
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/task_get_cgroup.c
+> @@ -0,0 +1,58 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// Copyright 2024 Netflix, Inc.
+> +
+> +#include <test_progs.h>
+> +#include <cgroup_helpers.h>
+> +#include "test_task_get_cgroup.skel.h"
+> +#include <unistd.h>
+> +
+> +#define TEST_CGROUP "/test-task-get-cgroup/"
+> +
+> +void test_task_get_cgroup(void)
+> +{
+> +	struct test_task_get_cgroup *skel;
+> +	int err, fd;
+> +	pid_t pid;
+> +	__u64 cgroup_id, expected_cgroup_id;
+> +	const struct timespec req = {
+> +		.tv_sec = 1,
+> +		.tv_nsec = 0,
+> +	};
+Reverse Xmas tree.
 
-I'm working on a similar proposal for zero copy Rx but to host memory
-and depend on this memory provider API.
-
-Jakub also designed this API for hugepages too IIRC. Basically there's
-going to be at least three fancy ways of providing pages (one of which
-isn't actually pages, hence the merged netmem_t series) to drivers.
-
-> 
+> +
+> +	fd = test__join_cgroup(TEST_CGROUP);
+> +	if (!ASSERT_OK(fd < 0, "test_join_cgroup_TEST_CGROUP"))
+> +		return;
+> +
+> +	skel = test_task_get_cgroup__open();
+> +	if (!ASSERT_OK_PTR(skel, "test_task_get_cgroup__open"))
+> +		goto cleanup;
+> +
+> +	err = test_task_get_cgroup__load(skel);
+> +	if (!ASSERT_OK(err, "test_task_get_cgroup__load"))
+> +		goto cleanup;
+> +
+> +	err = test_task_get_cgroup__attach(skel);
+> +	if (!ASSERT_OK(err, "test_task_get_cgroup__attach"))
+> +		goto cleanup;
+> +
+> +	pid = getpid();
+> +	expected_cgroup_id = get_cgroup_id(TEST_CGROUP);
+> +	if (!ASSERT_GT(expected_cgroup_id, 0, "get_cgroup_id"))
+> +		goto cleanup;
+> +
+> +	/* Trigger nanosleep to enter the sched_switch tracepoint */
+> +	/* The previous task should be this process */
+> +	syscall(__NR_nanosleep, &req, NULL);
+> +
+> +	err = bpf_map_lookup_elem(bpf_map__fd(skel->maps.pid_to_cgid_map), &pid,
+> +				  &cgroup_id);
+> +
+> +	if (!ASSERT_OK(err, "bpf_map_lookup_elem"))
+> +		goto cleanup;
+> +
+> +	ASSERT_EQ(cgroup_id, expected_cgroup_id, "cgroup_id");
+> +
+> +cleanup:
+> +	test_task_get_cgroup__destroy(skel);
+> +	close(fd);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/test_task_get_cgroup.c b/tools/testing/selftests/bpf/progs/test_task_get_cgroup.c
+> new file mode 100644
+> index 000000000000..580f8f0657d5
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_task_get_cgroup.c
+> @@ -0,0 +1,37 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// Copyright 2024 Netflix, Inc.
+> +
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +struct cgroup *bpf_task_get_cgroup(struct task_struct *task) __ksym;
+> +void bpf_cgroup_release(struct cgroup *cgrp) __ksym;
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_HASH);
+> +	__uint(max_entries, 4096);
+> +	__type(key, __u32);
+> +	__type(value, __u64);
+> +} pid_to_cgid_map SEC(".maps");
+> +
+> +SEC("tp_btf/sched_switch")
+> +int BPF_PROG(sched_switch, bool preempt, struct task_struct *prev,
+> +	     struct task_struct *next)
+> +{
+> +	struct cgroup *cgrp;
+> +	u64 cgroup_id;
+> +	u32 pid;
+> +
+> +	cgrp = bpf_task_get_cgroup(prev);
+> +	if (cgrp == NULL)
+> +		return 0;
+> +	cgroup_id = cgrp->kn->id;
+> +	pid = prev->pid;
+> +	bpf_map_update_elem(&pid_to_cgid_map, &pid, &cgroup_id, BPF_ANY);
+> +
+> +	bpf_cgroup_release(cgrp);
+> +	return 0;
+> +}
+> +
+> +char _license[] SEC("license") = "GPL";
+> --
+> 2.40.1
+>
