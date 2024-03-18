@@ -1,170 +1,133 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7915F4CB30;
-	Mon, 18 Mar 2024 13:24:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF1647F4B;
+	Mon, 18 Mar 2024 13:25:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710768265; cv=none; b=kXG3S4hPy0pF68+DiM1Aw7cstndKmN0MO+0IWfP5VOZHDlkJrDjf2UFXrOOY2Vgf+e2VqfngxmBl19aN1jgumY+26dxf4HyCdgFs1mPh9+6u0RWheVG9LgrwVXwFUxW5Oa9Gs1cTccgz5MyUi4AWgBDe9IYmmjgYDKBYBdpBdHI=
+	t=1710768331; cv=none; b=mBoAEwrTT5G2tE+437yrrj2lsOBrwyWAyODdJeJ69iJqmjIg/a/ngBzn9C8/tElCYtiloSfvuXInIM3+cu5Yr8eXQ91WbTt8WraMdIsfs8lDLa7o4E4X3n10L2zFeM/A1Iqt8jwmgT3wrpaWOPvE5PDmgWEB9fyoT6keJhEEmow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710768265; c=relaxed/simple;
-	bh=twSoeLbz1uUYCDjFLEbD4Hw80Ek0KP0899uymbExspE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WTodeN1xhgYRETk0/EP2uIMJvKmlgEaADsa7m4KzdPeIw566hvMLc/VY1RoliRC4uqIUXgtL/K+Y2KAd18VRZ6f/6p6h8Vr5FHw1FIWDW7hyq5sBEN5yKJ4HOjYYVk920DS4whvk64fnytyLNNKkCR82J+8hYt9ZyIlLNWHy0J8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q2mHGKNt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710768331; c=relaxed/simple;
+	bh=Vf12dd/Egl8nCL4fAZyQY6z00cZn1KGW7EOXwQXKS2U=;
+	h=Subject:From:To:Cc:Date:Message-ID:MIME-Version:Content-Type; b=jYDRk23uCmrKRNVxbz6WkyQE/UzSkCWPfjW3TWC8HafOJrLRTg+rTrrJOsebflaef9SuxrNb5ki9r1RqyDdCssNCBtqvaPUjdFQTP5SFJh3hiE3pwiZuBzuK088yL+2UaEU4bTF/zaCL/fMwEgOoeXtcBIgq6SAZalj2Zht6HeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GYhEnCDy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q2mHGKNt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2675DC43394;
-	Mon, 18 Mar 2024 13:24:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GYhEnCDy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D813C433F1;
+	Mon, 18 Mar 2024 13:25:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710768265;
-	bh=twSoeLbz1uUYCDjFLEbD4Hw80Ek0KP0899uymbExspE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q2mHGKNt/EOyoZSOaA7XN5EETdDtuRfGnr/KWyUFAcK+Ws8T1gO/u4j4euwl9D+I7
-	 JUIngsuY0PD0ZD+HV0+//87a0dUxX/aeFBr5wCfP5ujk/DIjjsJoLXCpdoQuPn7fqL
-	 wzLk9wV3RwDZCiLAV2JjZIBkBlsw4zVzxEBiCkBE3E71atEAQOYIyufQt6mO6ngZ65
-	 Rs/CXwBClpJkDsVoAvX0HdyDkDvRpZ2uo7EJ4yyao1gvHq1bmHu4x8PukLzVDcjcsX
-	 TncGN/jAIH5wxQcjGni8yEDKvgOCAS5sfzokFNDpQlN8/cEQIuC3lCrG4apAKx0UQP
-	 tbk3XvjgV3C/Q==
-Date: Mon, 18 Mar 2024 14:24:18 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Matt Bobrowski <mattbobrowski@google.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@google.com>, Jann Horn <jannh@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, linux-mm <linux-mm@kvack.org>, 
-	LSM List <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v2 bpf-next 0/9] add new acquire/release BPF kfuncs
-Message-ID: <20240318-freifahrt-perfide-e99eb9c1f4ec@brauner>
-References: <cover.1709675979.git.mattbobrowski@google.com>
- <20240306-flach-tragbar-b2b3c531bf0d@brauner>
- <20240306-sandgrube-flora-a61409c2f10c@brauner>
- <CAADnVQ+RBV_rJx5LCtCiW-TWZ5DCOPz1V3ga_fc__RmL_6xgOg@mail.gmail.com>
- <20240307-phosphor-entnahmen-8ef28b782abf@brauner>
- <CAADnVQLMHdL1GfScnG8=0wL6PEC=ACZT3xuuRFrzNJqHKrYvsw@mail.gmail.com>
- <20240308-kleben-eindecken-73c993fb3ebd@brauner>
- <CAADnVQJVNntnH=DLHwUioe9mEw0FzzdUvmtj3yx8SjL38daeXQ@mail.gmail.com>
- <20240311-geglaubt-kursverfall-500a27578cca@brauner>
- <ZfCLnOBDnBp2wcJy@google.com>
+	s=k20201202; t=1710768331;
+	bh=Vf12dd/Egl8nCL4fAZyQY6z00cZn1KGW7EOXwQXKS2U=;
+	h=Subject:From:To:Cc:Date:From;
+	b=GYhEnCDyMs3UBDxenTSxg/j7DlqzZZigVWDEAdzKdsoknZd1yF0TQ6zmbbp+7u9Gl
+	 /BaCU6v7ke+D/B8cEFv7C3jthtvuWjrFAhWsq9eBCwasJu5TRcv4sdvrbmST7qz95T
+	 8Tjfdb5pJcuhstJ9XMQDSv/2gDY03HKQcD141p5xrtHfqiL3ug76gAwBKg88li66nn
+	 C3mOE0qz4EawfX8nuqngaeLicL6gUoLfksRHeb4KU2vthZa/JQMpW56HuC1OMU0T6Z
+	 94Dt+n9Of2bzWd2zolh1lBpjoIJKgD4cvqPCFg9+l/ZvgFOHtAizuKaSjex6MSm66f
+	 YKBXntQY336NQ==
+Subject: [PATCH bpf-next V2] bpf/lpm_trie: inline longest_prefix_match for
+ fastpath
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+To: bpf@vger.kernel.org, Daniel Borkmann <borkmann@iogearbox.net>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, martin.lau@kernel.org,
+ netdev@vger.kernel.org, bp@alien8.de, kernel-team@cloudflare.com
+Date: Mon, 18 Mar 2024 14:25:26 +0100
+Message-ID: <171076828575.2141737.18370644069389889027.stgit@firesoul>
+User-Agent: StGit/1.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZfCLnOBDnBp2wcJy@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 12, 2024 at 05:06:36PM +0000, Matt Bobrowski wrote:
-> Hey Christian,
-> 
-> On Mon, Mar 11, 2024 at 01:00:56PM +0100, Christian Brauner wrote:
-> > On Fri, Mar 08, 2024 at 05:23:30PM -0800, Alexei Starovoitov wrote:
-> > > On Fri, Mar 8, 2024 at 2:36 AM Christian Brauner <brauner@kernel.org> wrote:
-> > > >
-> > > >
-> > > > These exports are specifically for an out-of-tree BPF LSM program that
-> > > > is not accessible to the public. The question in the other mail stands.
-> > > 
-> > > The question was already answered. You just don't like the answer.
-> > > bpf progs are not equivalent to kernel modules.
-> > > They have completely different safety and visibility properties.
-> > > The safety part I already talked about.
-> > > Sounds like the visibility has to be explained.
-> > > Kernel modules are opaque binary blobs.
-> > > bpf programs are fully transparent. The intent is known
-> > > to the verifier and to anyone with understanding
-> > > of bpf assembly.
-> > > Those that cannot read bpf asm can read C source code that is
-> > > embedded in the bpf program in kernel memory.
-> > > It's not the same as "llvm-dwarfdump module.ko" on disk.
-> > > The bpf prog source code is loaded into the kernel
-> > > at program verification time for debugging and visibility reasons.
-> > > If there is a verifier bug and bpf manages to crash the kernel
-> > > vmcore will have relevant lines of program C source code right there.
-> > > 
-> > > Hence out-of-tree or in-tree bpf makes no practical difference.
-> > > The program cannot hide its meaning and doesn't hamper debugging.
-> > > 
-> > > Hence adding EXPORT_SYMBOL == Brace for impact!
-> > > Expect crashes, api misuse and what not.
-> > > 
-> > > While adding bpf_kfunc is a nop for kernel development.
-> > > If kfunc is in the way of code refactoring it can be removed
-> > > (as we demonstrated several times).
-> > > A kfunc won't cause headaches for the kernel code it is
-> > > calling (assuming no verifier bugs).
-> > > If there is a bug it's on us to fix it as we demonstrated in the past.
-> > > For example: bpf_probe_read_kernel().
-> > > It's a wrapper of copy_from_kernel_nofault() and over the years
-> > > bpf users hit various bugs in copy_from_kernel_nofault(),
-> > > reported them, and _bpf developers_ fixed them.
-> > > Though copy_from_kernel_nofault() is as generic as it can get
-> > > and the same bugs could have been reproduced without bpf
-> > > we took care of fixing these parts of the kernel.
-> > > 
-> > > Look at path_put().
-> > > It's EXPORT_SYMBOL and any kernel module can easily screw up
-> > > reference counting, so that sooner or later distro folks
-> > > will experience debug pains due to out-of-tree drivers.
-> > > 
-> > > kfunc that calls path_put() won't have such consequences.
-> > > The verifier will prevent path_put() on a pointer that wasn't
-> > > acquired by the same bpf program. No support pains.
-> > > It's a nop for vfs folks.
-> > > 
-> > > > > First of all, there is no such thing as get_task_fs_pwd/root
-> > > > > in the kernel.
-> > > >
-> > > > Yeah, we'd need specific helpers for a never seen before out-of-tree BPF
-> > > > LSM. I don't see how that's different from an out-of-tree kernel module.
-> > > 
-> > > Sorry, but you don't seem to understand what bpf can and cannot do,
-> > > hence they look similar.
-> > 
-> > Maybe. On the other hand you seem to ignore what I'm saying. You
-> > currently don't have a clear set of rules for when it's ok for someone
-> > to send patches and request access to bpf kfuncs to implement a new BPF
-> > program. This patchset very much illustrates this point. The safety
-> > properties of bpf don't matter for this. And again, your safety
-> > properties very much didn't protect you from your bpf_d_path() mess.
-> > 
-> > We're not even clearly told where and how these helper are supposed to be
-> > used. That's not ok and will never be ok. As long as there are no clear
-> > criteria to operate under this is highly problematic. This may be fine
-> > from a bpf perspective and one can even understand why because that's
-> > apparently your model or promise to your users. But there's no reason to
-> > expect the same level of laxness from any of the subsystems you're
-> > requesting kfuncs from.
-> 
-> You raise a completely fair point, and I truly do apologies for the
-> lack of context and in depth explanations around the specific
-> situations that the proposed BPF kfuncs are intended to be used
-> from. Admittedly, that's a failure on my part, and I can completely
-> understand why from a maintainers point of view there would be
-> reservations around acknowledging requests for adding such invisible
-> dependencies.
+The BPF map type LPM (Longest Prefix Match) is used heavily
+in production by multiple products that have BPF components.
+Perf data shows trie_lookup_elem() and longest_prefix_match()
+being part of kernels perf top.
 
-Thanks for providing more background.
+For every level in the LPM tree trie_lookup_elem() calls out
+to longest_prefix_match().  The compiler is free to inline this
+call, but chooses not to inline, because other slowpath callers
+(that can be invoked via syscall) exists like trie_update_elem(),
+trie_delete_elem() or trie_get_next_key().
 
-> Now, I'm in a little bit of a tough situation as I'm unable to point
-> you to an open-source BPF LSM implementation that intends to make use
-> of such newly proposed BPF kfuncs. That's just an unfortunate
-> constraint and circumstance that I'm having to deal with, so I'm just
-> going to have to provide heavily redacted and incomplete example to
-> illustrate how these BPF kfuncs intend to be used from BPF LSM
-> programs that I personally work on here at Google. Notably though, the
-> contexts that I do share here may obviously be a nonholistic view on
-> how these newly introduced BPF kfuncs end up getting used in practice
-> by some other completely arbitrary open-source BPF LSM programs.
+ bcc/tools/funccount -Ti 1 'trie_lookup_elem|longest_prefix_match.isra.0'
+ FUNC                                    COUNT
+ trie_lookup_elem                       664945
+ longest_prefix_match.isra.0           8101507
 
-I have to say that this to me is wild. Essentially we're supposed to
-allow access to our internal APIs based on internal use-cases that
-aren't public and likely never will be.
+Observation on a single random machine shows a factor 12 between
+the two functions. Given an average of 12 levels in the trie being
+searched.
 
-If that's acceptable then I want bpf to document this in their kernel
-Documentation and submit this for review to the wider community.
+This patch force inlining longest_prefix_match(), but only for
+the lookup fastpath to balance object instruction size.
+
+In production with AMD CPUs, measuring the function latency of
+'trie_lookup_elem' (bcc/tools/funclatency) we are seeing an improvement
+function latency reduction 7-8% with this patch applied (to production
+kernels 6.6 and 6.1). Analyzing perf data, we can explain this rather
+large improvement due to reducing the overhead for AMD side-channel
+mitigation SRSO (Speculative Return Stack Overflow).
+
+Fixes: fb3bd914b3ec ("x86/srso: Add a Speculative RAS Overflow mitigation")
+Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+---
+ kernel/bpf/lpm_trie.c |   18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
+
+diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+index 050fe1ebf0f7..939620b91c0e 100644
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -155,16 +155,17 @@ static inline int extract_bit(const u8 *data, size_t index)
+ }
+ 
+ /**
+- * longest_prefix_match() - determine the longest prefix
++ * __longest_prefix_match() - determine the longest prefix
+  * @trie:	The trie to get internal sizes from
+  * @node:	The node to operate on
+  * @key:	The key to compare to @node
+  *
+  * Determine the longest prefix of @node that matches the bits in @key.
+  */
+-static size_t longest_prefix_match(const struct lpm_trie *trie,
+-				   const struct lpm_trie_node *node,
+-				   const struct bpf_lpm_trie_key_u8 *key)
++static __always_inline
++size_t __longest_prefix_match(const struct lpm_trie *trie,
++			      const struct lpm_trie_node *node,
++			      const struct bpf_lpm_trie_key_u8 *key)
+ {
+ 	u32 limit = min(node->prefixlen, key->prefixlen);
+ 	u32 prefixlen = 0, i = 0;
+@@ -224,6 +225,13 @@ static size_t longest_prefix_match(const struct lpm_trie *trie,
+ 	return prefixlen;
+ }
+ 
++static size_t longest_prefix_match(const struct lpm_trie *trie,
++				   const struct lpm_trie_node *node,
++				   const struct bpf_lpm_trie_key_u8 *key)
++{
++	return __longest_prefix_match(trie, node, key);
++}
++
+ /* Called from syscall or from eBPF program */
+ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
+ {
+@@ -245,7 +253,7 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
+ 		 * If it's the maximum possible prefix for this trie, we have
+ 		 * an exact match and can return it directly.
+ 		 */
+-		matchlen = longest_prefix_match(trie, node, key);
++		matchlen = __longest_prefix_match(trie, node, key);
+ 		if (matchlen == trie->max_prefixlen) {
+ 			found = node;
+ 			break;
+
+
