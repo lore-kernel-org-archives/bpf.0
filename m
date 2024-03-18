@@ -1,229 +1,205 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F062E400
-	for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 18:40:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE235645C;
+	Mon, 18 Mar 2024 19:02:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710787256; cv=none; b=CBdKugdbSkAr7OPTmQCid4nw2WsJxzvx/MkmFYwP16OyO3R+pNtQkvIqS657x6GWL+CNESrYAX71N35omqx2qsUc6Jy/1MzK9lxQ+U8SjeGrEMoIFuJyUL679/7yBr9TNu/4jLza8FQTxzpXvwCv4BmWYJepeoa2VMHmDxnLrZE=
+	t=1710788565; cv=none; b=jnkuzjxuA9OYhkiTMMEhc4iMwZm4ZExWziSYbktK7g1tKvvtSuIC/CtX3smI1M5i5YuVpafhqycNFLVtVJ26jx/x3S43dfE1gsPBPO3+U3U4bCi/A+I50xNyEAZeDfCSW6xmUIuStjaOk2FK+8GZQfONPWp5M8AsDXpe5lhrM9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710787256; c=relaxed/simple;
-	bh=aFHaMUjDRF+R+p20LmifZamCqh0LdfaVSrDs7fUbIWg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sqJANAmG6YhXkRP8ugv9cSRaOsrbOsWsw51Jfy+/O/mVggR8OrHD3CGmZUog/fhGFwnymsbR1wccpN2kniDVX827Nd5WD/VTHiOrLCilkTkGTBwR2VnDNf0lyEqMpHN7t5f4nCLlUqk7gsi3LFyBNszMQS8qxy06t/U6dYypTao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KyghH9kR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710788565; c=relaxed/simple;
+	bh=z3Xld9/7/DDCMRDufaRKujC9gmU3SIBIYnbq+ZzOM3w=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=r5OzuED8IjHrAjXcvGbD/jzHFQfoNHtI+1sLQyYX291MVAcsS7V0qj/auIeHFKyPra3wP6se+HeY8PM7bp1yB+r7zeuAmSitmkF5EdXma4qKEC2woGxzgM5t1hk3/8AqMTdgs1ErLvIrQJ+6iLD4QwGNbFy/oE36mnC15V8riHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=YkZwBAUK; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KyghH9kR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D79EC433F1;
-	Mon, 18 Mar 2024 18:40:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710787255;
-	bh=aFHaMUjDRF+R+p20LmifZamCqh0LdfaVSrDs7fUbIWg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KyghH9kRlwJUb9SKnOxbBBINfQWedmEajTciDTrr1jnCQA8rYbQL7iMmFWOe/IW5X
-	 NyyN6+5ngpXFuCxHMKCqiQe5E8NqXVxckPxROre/dDexDm0GHTesdNPIQOg9GrG1Iv
-	 NXkgmHYclAQuwXZh7xI6X5qBtZB1A5WVHEhuP924/Gw+fkwTqBaXLSpVJP755Lc44y
-	 e+SeMWSGQ03WIki+WJQnnV3JscivSCW+QzGtQhsHl57xPN+dVzc3FKHfif6VfUBVvN
-	 gpB772JRrE47BXY0l9ZRGZsv+AakFGPyr84vD3xghU7PZs/0dtLHmkpgKVLTTrWKyR
-	 en0dlZ+4pfZ7w==
-From: Andrii Nakryiko <andrii@kernel.org>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@kernel.org
-Cc: andrii@kernel.org,
-	kernel-team@meta.com,
-	Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH v2 bpf-next 5/5] selftests/bpf: add raw_tp/tp_btf BPF cookie subtests
-Date: Mon, 18 Mar 2024 11:40:37 -0700
-Message-ID: <20240318184037.3209242-6-andrii@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240318184037.3209242-1-andrii@kernel.org>
-References: <20240318184037.3209242-1-andrii@kernel.org>
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YkZwBAUK"
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42IHfM2b016130;
+	Mon, 18 Mar 2024 19:02:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:from:to:cc:references
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=SqpQcUYqes3Cs8Uu9tkbzQvcgpVIF66UjNmZ42F6quQ=; b=Yk
+	ZwBAUK/pCwEVzXhwob0umqJec/R4HyXNPWDsk8RtdkdcbTqCycgnIL3vaIv+joLk
+	cjLYTpcbjbSmHcO/JEYITwL/sW/OnpOtEo1DK8nSw3u5QFpv+NfCwd2fyVEfHWrO
+	YI6PqsNOLbvQ7VJTu0GBInehjt17or4Bi/KU8xtz03g3+zJhw6UqaZBIorK0IvCu
+	W9GJskn1vMi6OP+StEMpWi4Jr0wJLmc/nPlBsHMgZ8Ha4PZ2u8HTSensdaMdCkDv
+	rwdD8EZnos8Qdm6RfBSw/IP6/SaAvhbqBd2z4TS7lF9S42jARYWS2YcHUqPIl0K5
+	hCSgJa+2lixvx0erLq/A==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wxt7d05e7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 Mar 2024 19:02:15 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42IJ2DkI017831
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 Mar 2024 19:02:13 GMT
+Received: from [10.46.19.239] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 18 Mar
+ 2024 12:02:09 -0700
+Message-ID: <66ad9e5b-0126-476e-bf0f-6a33f446c976@quicinc.com>
+Date: Mon, 18 Mar 2024 12:02:09 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v4] net: Re-use and set mono_delivery_time bit
+ for userspace tstamp packets
+From: "Abhishek Chauhan (ABC)" <quic_abchauha@quicinc.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+CC: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, <kernel@quicinc.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Andrew Halaney
+	<ahalaney@redhat.com>,
+        Martin KaFai Lau <martin.lau@kernel.org>, bpf
+	<bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "Alexei
+ Starovoitov" <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+References: <20240301201348.2815102-1-quic_abchauha@quicinc.com>
+ <2a4cb416-5d95-459d-8c1c-3fb225240363@linux.dev>
+ <65f16946cd33e_344ff1294fc@willemb.c.googlers.com.notmuch>
+ <28282905-065a-4233-a0a2-53aa9b85f381@linux.dev>
+ <65f2004e65802_3d1e792943e@willemb.c.googlers.com.notmuch>
+ <0dff8f05-e18d-47c8-9f19-351c44ea8624@linux.dev>
+ <e5da91bc-5827-4347-ab38-36c92ae2dfa2@quicinc.com>
+ <65f21d65820fc_3d934129463@willemb.c.googlers.com.notmuch>
+ <bc037db4-58bb-4861-ac31-a361a93841d3@linux.dev>
+ <65f2c81fc7988_3ee61729465@willemb.c.googlers.com.notmuch>
+ <5692ddb3-9558-4440-a7bf-47fcc47401ed@linux.dev>
+ <65f35e00a83c0_2132294f5@willemb.c.googlers.com.notmuch>
+ <e270b646-dae0-41cf-9ef8-e991738b9c57@quicinc.com>
+ <8d245f5a-0c75-4634-9513-3d420eb2c88f@linux.dev>
+ <d10254cc-a908-4d81-98d2-2eed715e521f@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <d10254cc-a908-4d81-98d2-2eed715e521f@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Fs-n4a9nCVZ0zaDyrqzbof_dsR3RM1rl
+X-Proofpoint-GUID: Fs-n4a9nCVZ0zaDyrqzbof_dsR3RM1rl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-18_12,2024-03-18_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ spamscore=0 impostorscore=0 mlxlogscore=999 bulkscore=0 phishscore=0
+ suspectscore=0 priorityscore=1501 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2403140001 definitions=main-2403180144
 
-Add test validating BPF cookie can be passed during raw_tp/tp_btf
-attachment and can be retried at runtime with bpf_get_attach_cookie()
-helper.
 
-Acked-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- .../selftests/bpf/prog_tests/bpf_cookie.c     | 114 +++++++++++++++++-
- .../selftests/bpf/progs/test_bpf_cookie.c     |  16 +++
- 2 files changed, 129 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-index 1454cebc262b..f6c507c69ad2 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-@@ -573,6 +573,115 @@ static void lsm_subtest(struct test_bpf_cookie *skel)
- 		close(lsm_fd);
- }
- 
-+static void tp_btf_subtest(struct test_bpf_cookie *skel)
-+{
-+	__u64 cookie;
-+	int prog_fd, link_fd = -1;
-+	struct bpf_link *link = NULL;
-+	LIBBPF_OPTS(bpf_link_create_opts, link_opts);
-+	LIBBPF_OPTS(bpf_raw_tp_opts, raw_tp_opts);
-+	LIBBPF_OPTS(bpf_trace_opts, trace_opts);
-+
-+	/* There are three different ways to attach tp_btf (BTF-aware raw
-+	 * tracepoint) programs. Let's test all of them.
-+	 */
-+	prog_fd = bpf_program__fd(skel->progs.handle_tp_btf);
-+
-+	/* low-level BPF_RAW_TRACEPOINT_OPEN command wrapper */
-+	skel->bss->tp_btf_res = 0;
-+
-+	raw_tp_opts.cookie = cookie = 0x11000000000000L;
-+	link_fd = bpf_raw_tp_open(prog_fd, &raw_tp_opts);
-+	if (!ASSERT_GE(link_fd, 0, "bpf_raw_tp_open"))
-+		goto cleanup;
-+
-+	usleep(1); /* trigger */
-+	close(link_fd); /* detach */
-+	link_fd = -1;
-+
-+	ASSERT_EQ(skel->bss->tp_btf_res, cookie, "raw_tp_open_res");
-+
-+	/* low-level generic bpf_link_create() API */
-+	skel->bss->tp_btf_res = 0;
-+
-+	link_opts.tracing.cookie = cookie = 0x22000000000000L;
-+	link_fd = bpf_link_create(prog_fd, 0, BPF_TRACE_RAW_TP, &link_opts);
-+	if (!ASSERT_GE(link_fd, 0, "bpf_link_create"))
-+		goto cleanup;
-+
-+	usleep(1); /* trigger */
-+	close(link_fd); /* detach */
-+	link_fd = -1;
-+
-+	ASSERT_EQ(skel->bss->tp_btf_res, cookie, "link_create_res");
-+
-+	/* high-level bpf_link-based bpf_program__attach_trace_opts() API */
-+	skel->bss->tp_btf_res = 0;
-+
-+	trace_opts.cookie = cookie = 0x33000000000000L;
-+	link = bpf_program__attach_trace_opts(skel->progs.handle_tp_btf, &trace_opts);
-+	if (!ASSERT_OK_PTR(link, "attach_trace_opts"))
-+		goto cleanup;
-+
-+	usleep(1); /* trigger */
-+	bpf_link__destroy(link); /* detach */
-+	link = NULL;
-+
-+	ASSERT_EQ(skel->bss->tp_btf_res, cookie, "attach_trace_opts_res");
-+
-+cleanup:
-+	if (link_fd >= 0)
-+		close(link_fd);
-+	bpf_link__destroy(link);
-+}
-+
-+static void raw_tp_subtest(struct test_bpf_cookie *skel)
-+{
-+	__u64 cookie;
-+	int prog_fd, link_fd = -1;
-+	struct bpf_link *link = NULL;
-+	LIBBPF_OPTS(bpf_raw_tp_opts, raw_tp_opts);
-+	LIBBPF_OPTS(bpf_raw_tracepoint_opts, opts);
-+
-+	/* There are two different ways to attach raw_tp programs */
-+	prog_fd = bpf_program__fd(skel->progs.handle_raw_tp);
-+
-+	/* low-level BPF_RAW_TRACEPOINT_OPEN command wrapper */
-+	skel->bss->raw_tp_res = 0;
-+
-+	raw_tp_opts.tp_name = "sys_enter";
-+	raw_tp_opts.cookie = cookie = 0x55000000000000L;
-+	link_fd = bpf_raw_tp_open(prog_fd, &raw_tp_opts);
-+	if (!ASSERT_GE(link_fd, 0, "bpf_raw_tp_open"))
-+		goto cleanup;
-+
-+	usleep(1); /* trigger */
-+	close(link_fd); /* detach */
-+	link_fd = -1;
-+
-+	ASSERT_EQ(skel->bss->raw_tp_res, cookie, "raw_tp_open_res");
-+
-+	/* high-level bpf_link-based bpf_program__attach_raw_tracepoint_opts() API */
-+	skel->bss->raw_tp_res = 0;
-+
-+	opts.cookie = cookie = 0x66000000000000L;
-+	link = bpf_program__attach_raw_tracepoint_opts(skel->progs.handle_raw_tp,
-+						       "sys_enter", &opts);
-+	if (!ASSERT_OK_PTR(link, "attach_raw_tp_opts"))
-+		goto cleanup;
-+
-+	usleep(1); /* trigger */
-+	bpf_link__destroy(link); /* detach */
-+	link = NULL;
-+
-+	ASSERT_EQ(skel->bss->raw_tp_res, cookie, "attach_raw_tp_opts_res");
-+
-+cleanup:
-+	if (link_fd >= 0)
-+		close(link_fd);
-+	bpf_link__destroy(link);
-+}
-+
- void test_bpf_cookie(void)
- {
- 	struct test_bpf_cookie *skel;
-@@ -601,6 +710,9 @@ void test_bpf_cookie(void)
- 		tracing_subtest(skel);
- 	if (test__start_subtest("lsm"))
- 		lsm_subtest(skel);
--
-+	if (test__start_subtest("tp_btf"))
-+		tp_btf_subtest(skel);
-+	if (test__start_subtest("raw_tp"))
-+		raw_tp_subtest(skel);
- 	test_bpf_cookie__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_cookie.c b/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
-index 5a3a80f751c4..c83142b55f47 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
-@@ -15,6 +15,8 @@ __u64 uprobe_res;
- __u64 uretprobe_res;
- __u64 tp_res;
- __u64 pe_res;
-+__u64 raw_tp_res;
-+__u64 tp_btf_res;
- __u64 fentry_res;
- __u64 fexit_res;
- __u64 fmod_ret_res;
-@@ -87,6 +89,20 @@ int handle_pe(struct pt_regs *ctx)
- 	return 0;
- }
- 
-+SEC("raw_tp/sys_enter")
-+int handle_raw_tp(void *ctx)
-+{
-+	update(ctx, &raw_tp_res);
-+	return 0;
-+}
-+
-+SEC("tp_btf/sys_enter")
-+int handle_tp_btf(void *ctx)
-+{
-+	update(ctx, &tp_btf_res);
-+	return 0;
-+}
-+
- SEC("fentry/bpf_fentry_test1")
- int BPF_PROG(fentry_test1, int a)
- {
--- 
-2.43.0
+On 3/14/2024 3:29 PM, Abhishek Chauhan (ABC) wrote:
+> 
+> 
+> On 3/14/2024 2:48 PM, Martin KaFai Lau wrote:
+>> On 3/14/24 1:53 PM, Abhishek Chauhan (ABC) wrote:
+>>>>> The bpf_convert_tstamp_{read,write} and the helper bpf_skb_set_tstamp need to be
+>>>>> changed to handle the new "user_delivery_time" bit anyway, e.g.
+>>>>> bpf_skb_set_tstamp(BPF_SKB_TSTAMP_DELIVERY_MONO) needs to clear the
+>>>>> "user_delivery_time" bit.
+>>>>>
+>>>>> I think the "struct inet_frag_queue" also needs a new "user_delivery_time"
+>>>>> field. "mono_delivery_time" is already in there.
+>>
+>> [ ... ]
+>>
 
+Martin, Do we really need to add user_delivery_time as part of inet_frag_queue struct? I was wondering why is this required since we are using tstamp_type:2 to 
+distinguish between timestamp anyway .
+
+Let me know what you think ? 
+
+>> I would think the first step is to revert this patch. I don't think much of the current patch can be reused.
+>>
+>>> 1. I will raise one patch to introduce rename mono_delivery_time to
+>>> tstamp_type
+>>
+>> Right, I expect something like this:
+>>
+>> struct sk_buff {
+>>         /* ... */
+>> -            __u8                    mono_delivery_time:1;
+>> +        __u8            tstamp_type:1;
+>>         /* ... */
+>> };
+>>
+> 
+> Okay ,This should be straight-forward. 
+> 
+>>> 2. I will introduce setting of userspace timestamp type as the second bit
+>>> whem transmit_time is set.
+>>
+>> I expect the second patch should be introducing the enum first
+>>
+>> enum skb_tstamp_type {
+>>     SKB_TSTAMP_TYPE_RX_REAL = 0, /* A RX (receive) time in real */
+>>     SKB_TSTAMP_TYPE_TX_MONO = 1, /* A TX (delivery) time in mono */
+>> };
+>>
+>> and start doing "skb->tstamp_type = SKB_TSTAMP_TYPE_TX_MONO;" instead of
+>> "skb->tstamp_type = 1;"
+>>
+>> and the same for "skb->tstamp_type = SKB_TSTAMP_TYPE_RX_REAL;" instead of
+>> "skb->tstamp_type = 0;"
+>>
+>>
+>> This one I am not sure but probably need to change the skb_set_delivery_time() function signature also:
+>>
+>> static inline void skb_set_delivery_time(struct sk_buff *skb, ktime_t kt,
+>> -                                        bool mono)
+>> +                     enum skb_tstamp_type tstamp_type)
+>>
+> This should be straight-forward as well 
+> 
+>> The third patch is to change tstamp_type from 1 bit to 2 bits and add SKB_TSTAMP_TYPE_TX_USER.
+>>
+>> struct sk_buff {
+>>         /* ... */
+>> -        __u8            tstamp_type:1;
+>> +        __u8            tstamp_type:2;
+>>         /* ... */
+>> };
+>>
+>> enum skb_tstamp_type {
+>>     SKB_TSTAMP_TYPE_RX_REAL = 0,    /* A RX (receive) time in real */
+>>     SKB_TSTAMP_TYPE_TX_MONO = 1,    /* A TX (delivery) time in mono */
+>> +    SKB_TSTAMP_TYPE_TX_USER = 2,    /* A TX (delivery) time and its clock
+>>                      * is in skb->sk->sk_clockid.
+>>                      */
+>>                
+>> };
+>>
+>> This will shift a bit out of the byte where tstamp_type lives. It should be the "inner_protocol_type" bit by my hand count. Please check if it is directly used in bpf instruction (filter.c). As far as I look, it is not, so should be fine. Some details about bpf instruction accessible skb bit field here: https://lore.kernel.org/all/20230321014115.997841-1-kuba@kernel.org/
+> This is where i would need thorough reviews from you and Willem as my area of expertise is limited to part of network stack and BPF is not one of them. 
+> But i have plan on this and i know how to do it. 
+> 
+> Expect patches to be arriving to your inboxes next week, as we have a long weekend in Qualcomm 
+> Fingers crossed :) 
+> 
+>>
+>>
+>>> 3. This will be a first step to make the design scalable.
+>>> 4. Tomorrow if we have more timestamp to support, upstream community has to do is
+>>> update the enum and increase the bitfield from 2=>3 and so on.
+>>>
+>>> I need help from Martin to test the patch which renames the mono_delivery_time
+>>> to tstamp_type (Which i feel should be straight forward as the value of the bit is 1)
+>>
+>> The bpf change is not a no-op rename of mono_delivery_time. It needs to take care of the new bit added to the tstamp_type. Please see the previous email (and I also left it in the beginning of this email).
+>>
+>> Thus, you need to compile the selftests/bpf/ and run it to verify the changes when handling the new bit. The Documentation/bpf/bpf_devel_QA.rst has the howto details. You probably only need the newer llvm (newer gcc should work also as bpf CI has been using it) and the newer pahole. I can definitely help if there is issue in running the test_progs in selftests/bpf or you have question on making the changes in filter.c. To run the test: "./test_progs -t tc_redirect/tc_redirect_dtime"
+>>
