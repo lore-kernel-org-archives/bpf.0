@@ -1,30 +1,30 @@
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5AF531A83;
-	Mon, 18 Mar 2024 11:06:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF271374C4;
+	Mon, 18 Mar 2024 11:06:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710759979; cv=none; b=HowtuJtDAQYPdvQ8MEdl8wS3zQ/7C4/xjP9LOsdczSvbvAnu7V6MTJX9s0w0V0i4l+MqQMRS4XrXooaWpbPPQjFBDvjBpnVaDi17mRIR1iTCbGFADyDBPjcpZKwxAkVV7MDD1JmUFnpZKtZDDBWVL5fOGdXcumCYH5KfTjorNA0=
+	t=1710759980; cv=none; b=omY1w4093eZc2PDUZG/gaHLX1Y+Mht7bEYvRkEHgLXopVcp4sgAd7wkddqluXE0n8/him93a+aEbY9Lrt+DbcmLG83l9V50HFYjW+P/FNk4NH34XMfDXcSrC37VpU4fRpzHrjj7hH74/LHgvAP3PKKFnH2g4/7WCn3slovuMYwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710759979; c=relaxed/simple;
-	bh=6CQx/+xAUCEFNNWbsvBxnHQzcdNfNR8IFL8HVy+7I50=;
+	s=arc-20240116; t=1710759980; c=relaxed/simple;
+	bh=7Mr/4ivr3Y/mLeJHyrMzIgpQgY7W1JKx1wFWQ8Z1leU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=hVRYfohhjVns9wQSKAVJokot7WqT3zA704o2wV0oS05VFrL5+s0qPHzaDPb34h2qKqJRdeN/IXGB/l4lvglckEfnfeXlp4iA19B4HXpclJsr8r8We+O5jv55v/m5i9NmzdvIizcNo9HdL18AdvafmS+lZldXYdbOqBfmNsgOoTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=vQfvi6DF; arc=none smtp.client-ip=115.124.30.131
+	 MIME-Version; b=aYuQMm+e/di65tIYa1qvNNTjYYsAqY114+3e9JBS3Z8CLT9DsU1NmncI42CfDqH7pcFuThU3hXDAd5TpN5s5DEqmBg+o91d1vxP1fLIp9C7FccOlL2h7t5UqeQBMQOlhkWL31cIHtE44oehkETrAy6Br/iqT9TZG+7zP/f8XJVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=lvFcDjsG; arc=none smtp.client-ip=115.124.30.101
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="vQfvi6DF"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="lvFcDjsG"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1710759968; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=g7AhWHIocOr3xD8BOnGmLvpategqK4NzZU7nuJWPaSo=;
-	b=vQfvi6DFYU8khhWx46G1mNq0eOHgRPRX/9tYa2wMzDTjJksEoPlXIWHyv0/jjOPvqz+dFRr55VLGtpfqpAS16sSFMVF7bTaHbdwdwFSRBKhEu0sHXp4t37yPXXSzdAsAL5E4yF10f/uhi75qf5Wk57pW9mLE4j3Dk7ne6eh0yx0=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R411e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0W2mza12_1710759966;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W2mza12_1710759966)
+	t=1710759975; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=G2ylAct8v28rDflvY+HwznLPnqQmZx6wEikbnF/lZBY=;
+	b=lvFcDjsGzeX1VDbM2rr3dOEXWREgEA7EbzK0r6H/fxhwgxGWcGnLr6lCpt0LlLm5a14oF7oRNmL4EIB2sVkX0Sol8cnEttRC5xGdjmC/UQIIl4euZiVad6k8q5vG5HiSCkEi3iAt2ZqBjhW603vNmhWMJABrjSN77Rl0KnHxHXM=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0W2mza3d_1710759972;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W2mza3d_1710759972)
           by smtp.aliyun-inc.com;
-          Mon, 18 Mar 2024 19:06:07 +0800
+          Mon, 18 Mar 2024 19:06:13 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -45,9 +45,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
 	virtualization@lists.linux.dev,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v5 3/9] virtio_net: remove "_queue" from ethtool -S
-Date: Mon, 18 Mar 2024 19:05:56 +0800
-Message-Id: <20240318110602.37166-4-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v5 8/9] netdev: add queue stats
+Date: Mon, 18 Mar 2024 19:06:01 +0800
+Message-Id: <20240318110602.37166-9-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20240318110602.37166-1-xuanzhuo@linux.alibaba.com>
 References: <20240318110602.37166-1-xuanzhuo@linux.alibaba.com>
@@ -60,42 +60,297 @@ MIME-Version: 1.0
 X-Git-Hash: 0059ee1bd6b4
 Content-Transfer-Encoding: 8bit
 
-The key size of ethtool -S is controlled by this macro.
+These stats are commonly. Support reporting those via netdev-genl queue
+stats.
 
-ETH_GSTRING_LEN 32
-
-That includes the \0 at the end. So the max length of the key name must
-is 31. But the length of the prefix "rx_queue_0_" is 11. If the queue
-num is larger than 10, the length of the prefix is 12. So the
-key name max is 19. That is too short. We will introduce some keys
-such as "gso_packets_coalesced". So we should change the prefix
-to "rx0_".
+name: rx-hw-drops
+name: rx-hw-drop-overruns
+name: rx-csum-unnecessary
+name: rx-csum-none
+name: rx-csum-bad
+name: rx-hw-gro-packets
+name: rx-hw-gro-bytes
+name: rx-hw-gro-wire-packets
+name: rx-hw-gro-wire-bytes
+name: rx-hw-drop-ratelimits
+name: tx-hw-drops
+name: tx-hw-drop-errors
+name: tx-csum-none
+name: tx-needs-csum
+name: tx-hw-gso-packets
+name: tx-hw-gso-bytes
+name: tx-hw-gso-wire-packets
+name: tx-hw-gso-wire-bytes
+name: tx-hw-drop-ratelimits
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio_net.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/netlink/specs/netdev.yaml | 104 ++++++++++++++++++++++++
+ include/net/netdev_queues.h             |  27 ++++++
+ include/uapi/linux/netdev.h             |  19 +++++
+ net/core/netdev-genl.c                  |  23 +++++-
+ tools/include/uapi/linux/netdev.h       |  19 +++++
+ 5 files changed, 190 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index af512d85cd5b..8cb5bdd7ad91 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -3273,13 +3273,13 @@ static void virtnet_get_strings(struct net_device *dev, u32 stringset, u8 *data)
- 	case ETH_SS_STATS:
- 		for (i = 0; i < vi->curr_queue_pairs; i++) {
- 			for (j = 0; j < VIRTNET_RQ_STATS_LEN; j++)
--				ethtool_sprintf(&p, "rx_queue_%u_%s", i,
-+				ethtool_sprintf(&p, "rx%u_%s", i,
- 						virtnet_rq_stats_desc[j].desc);
- 		}
+diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
+index 76352dbd2be4..31b51b60ef13 100644
+--- a/Documentation/netlink/specs/netdev.yaml
++++ b/Documentation/netlink/specs/netdev.yaml
+@@ -335,6 +335,110 @@ attribute-sets:
+           Allocation failure may, or may not result in a packet drop, depending
+           on driver implementation and whether system recovers quickly.
+         type: uint
++      -
++        name: rx-hw-drops
++        doc: |
++          Number of all packets which entered the device, but never left it,
++          including but not limited to: packets dropped due to lack of buffer
++          space, processing errors, explicit or implicit policies and packet
++          filters.
++        type: uint
++      -
++        name: rx-hw-drop-overruns
++        doc: |
++          Number of packets dropped due to transient lack of resources, such as
++          buffer space, host descriptors etc.
++        type: uint
++      -
++        name: rx-csum-unnecessary
++        doc: Number of packets that were marked as CHECKSUM_UNNECESSARY.
++        type: uint
++      -
++        name: rx-csum-none
++        doc: Number of packets that were not checksummed by device.
++        type: uint
++      -
++        name: rx-csum-bad
++        doc: |
++          Number of packets with bad checksum. The packets are not discarded,
++          but still delivered to the stack.
++        type: uint
++      -
++        name: rx-hw-gro-packets
++        doc: |
++          Number of packets that were coalesced from smaller packets by the device.
++          Counts only packets coalesced with the HW-GRO netdevice feature,
++          LRO-coalesced packets are not counted.
++        type: uint
++      -
++        name: rx-hw-gro-bytes
++        doc: See `rx-hw-gro-packets`.
++        type: uint
++      -
++        name: rx-hw-gro-wire-packets
++        doc: |
++          Number of packets that were coalesced to bigger packetss with the HW-GRO
++          netdevice feature. LRO-coalesced packets are not counted.
++        type: uint
++      -
++        name: rx-hw-gro-wire-bytes
++        doc: See `rx-hw-gro-wire-packets`.
++        type: uint
++      -
++        name: rx-hw-drop-ratelimits
++        doc: |
++          Number of the packets dropped by the device due to the received
++          packets bitrate exceeding the device rate limit.
++        type: uint
++      -
++        name: tx-hw-drops
++        doc: |
++          Number of packets that arrived at the device but never left it,
++          encompassing packets dropped for reasons such as processing errors, as
++          well as those affected by explicitly defined policies and packet
++          filtering criteria.
++        type: uint
++      -
++        name: tx-hw-drop-errors
++        doc: Number of packets dropped because they were invalid or malformed.
++        type: uint
++      -
++        name: tx-csum-none
++        doc: |
++          Number of packets that did not require the device to calculate the
++          checksum.
++        type: uint
++      -
++        name: tx-needs-csum
++        doc: |
++          Number of packets that required the device to calculate the checksum.
++        type: uint
++      -
++        name: tx-hw-gso-packets
++        doc: |
++          Number of packets that necessitated segmentation into smaller packets
++          by the device.
++        type: uint
++      -
++        name: tx-hw-gso-bytes
++        doc: See `tx-hw-gso-packets`.
++        type: uint
++      -
++        name: tx-hw-gso-wire-packets
++        doc: |
++          Number of wire-sized packets generated by processing
++          `tx-hw-gso-packets`
++        type: uint
++      -
++        name: tx-hw-gso-wire-bytes
++        doc: See `tx-hw-gso-wire-packets`.
++        type: uint
++      -
++        name: tx-hw-drop-ratelimits
++        doc: |
++          Number of the packets dropped by the device due to the transmit
++          packets bitrate exceeding the device rate limit.
++        type: uint
  
- 		for (i = 0; i < vi->curr_queue_pairs; i++) {
- 			for (j = 0; j < VIRTNET_SQ_STATS_LEN; j++)
--				ethtool_sprintf(&p, "tx_queue_%u_%s", i,
-+				ethtool_sprintf(&p, "tx%u_%s", i,
- 						virtnet_sq_stats_desc[j].desc);
- 		}
- 		break;
+ operations:
+   list:
+diff --git a/include/net/netdev_queues.h b/include/net/netdev_queues.h
+index 1ec408585373..c7ac4539eafc 100644
+--- a/include/net/netdev_queues.h
++++ b/include/net/netdev_queues.h
+@@ -9,11 +9,38 @@ struct netdev_queue_stats_rx {
+ 	u64 bytes;
+ 	u64 packets;
+ 	u64 alloc_fail;
++
++	u64 hw_drops;
++	u64 hw_drop_overruns;
++
++	u64 csum_unnecessary;
++	u64 csum_none;
++	u64 csum_bad;
++
++	u64 hw_gro_packets;
++	u64 hw_gro_bytes;
++	u64 hw_gro_wire_packets;
++	u64 hw_gro_wire_bytes;
++
++	u64 hw_drop_ratelimits;
+ };
+ 
+ struct netdev_queue_stats_tx {
+ 	u64 bytes;
+ 	u64 packets;
++
++	u64 hw_drops;
++	u64 hw_drop_errors;
++
++	u64 csum_none;
++	u64 needs_csum;
++
++	u64 hw_gso_packets;
++	u64 hw_gso_bytes;
++	u64 hw_gso_wire_packets;
++	u64 hw_gso_wire_bytes;
++
++	u64 hw_drop_ratelimits;
+ };
+ 
+ /**
+diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
+index bb65ee840cda..cf24f1d9adf8 100644
+--- a/include/uapi/linux/netdev.h
++++ b/include/uapi/linux/netdev.h
+@@ -146,6 +146,25 @@ enum {
+ 	NETDEV_A_QSTATS_TX_PACKETS,
+ 	NETDEV_A_QSTATS_TX_BYTES,
+ 	NETDEV_A_QSTATS_RX_ALLOC_FAIL,
++	NETDEV_A_QSTATS_RX_HW_DROPS,
++	NETDEV_A_QSTATS_RX_HW_DROP_OVERRUNS,
++	NETDEV_A_QSTATS_RX_CSUM_UNNECESSARY,
++	NETDEV_A_QSTATS_RX_CSUM_NONE,
++	NETDEV_A_QSTATS_RX_CSUM_BAD,
++	NETDEV_A_QSTATS_RX_HW_GRO_PACKETS,
++	NETDEV_A_QSTATS_RX_HW_GRO_BYTES,
++	NETDEV_A_QSTATS_RX_HW_GRO_WIRE_PACKETS,
++	NETDEV_A_QSTATS_RX_HW_GRO_WIRE_BYTES,
++	NETDEV_A_QSTATS_RX_HW_DROP_RATELIMITS,
++	NETDEV_A_QSTATS_TX_HW_DROPS,
++	NETDEV_A_QSTATS_TX_HW_DROP_ERRORS,
++	NETDEV_A_QSTATS_TX_CSUM_NONE,
++	NETDEV_A_QSTATS_TX_NEEDS_CSUM,
++	NETDEV_A_QSTATS_TX_HW_GSO_PACKETS,
++	NETDEV_A_QSTATS_TX_HW_GSO_BYTES,
++	NETDEV_A_QSTATS_TX_HW_GSO_WIRE_PACKETS,
++	NETDEV_A_QSTATS_TX_HW_GSO_WIRE_BYTES,
++	NETDEV_A_QSTATS_TX_HW_DROP_RATELIMITS,
+ 
+ 	__NETDEV_A_QSTATS_MAX,
+ 	NETDEV_A_QSTATS_MAX = (__NETDEV_A_QSTATS_MAX - 1)
+diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+index 7004b3399c2b..a2bf9af2dcf6 100644
+--- a/net/core/netdev-genl.c
++++ b/net/core/netdev-genl.c
+@@ -489,7 +489,17 @@ netdev_nl_stats_write_rx(struct sk_buff *rsp, struct netdev_queue_stats_rx *rx)
+ {
+ 	if (netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_PACKETS, rx->packets) ||
+ 	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_BYTES, rx->bytes) ||
+-	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_ALLOC_FAIL, rx->alloc_fail))
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_ALLOC_FAIL, rx->alloc_fail) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_HW_DROPS, rx->hw_drops) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_HW_DROP_OVERRUNS, rx->hw_drop_overruns) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_CSUM_UNNECESSARY, rx->csum_unnecessary) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_CSUM_NONE, rx->csum_none) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_CSUM_BAD, rx->csum_bad) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_HW_GRO_PACKETS, rx->hw_gro_packets) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_HW_GRO_BYTES, rx->hw_gro_bytes) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_HW_GRO_WIRE_PACKETS, rx->hw_gro_wire_packets) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_HW_GRO_WIRE_BYTES, rx->hw_gro_wire_bytes) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_HW_DROP_RATELIMITS, rx->hw_drop_ratelimits))
+ 		return -EMSGSIZE;
+ 	return 0;
+ }
+@@ -498,7 +508,16 @@ static int
+ netdev_nl_stats_write_tx(struct sk_buff *rsp, struct netdev_queue_stats_tx *tx)
+ {
+ 	if (netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_PACKETS, tx->packets) ||
+-	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_BYTES, tx->bytes))
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_BYTES, tx->bytes) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_HW_DROPS, tx->hw_drops) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_HW_DROP_ERRORS, tx->hw_drop_errors) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_CSUM_NONE, tx->csum_none) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_NEEDS_CSUM, tx->needs_csum) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_HW_GSO_PACKETS, tx->hw_gso_packets) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_HW_GSO_BYTES, tx->hw_gso_bytes) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_HW_GSO_WIRE_PACKETS, tx->hw_gso_wire_packets) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_HW_GSO_WIRE_BYTES, tx->hw_gso_wire_bytes) ||
++	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_HW_DROP_RATELIMITS, tx->hw_drop_ratelimits))
+ 		return -EMSGSIZE;
+ 	return 0;
+ }
+diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
+index bb65ee840cda..cf24f1d9adf8 100644
+--- a/tools/include/uapi/linux/netdev.h
++++ b/tools/include/uapi/linux/netdev.h
+@@ -146,6 +146,25 @@ enum {
+ 	NETDEV_A_QSTATS_TX_PACKETS,
+ 	NETDEV_A_QSTATS_TX_BYTES,
+ 	NETDEV_A_QSTATS_RX_ALLOC_FAIL,
++	NETDEV_A_QSTATS_RX_HW_DROPS,
++	NETDEV_A_QSTATS_RX_HW_DROP_OVERRUNS,
++	NETDEV_A_QSTATS_RX_CSUM_UNNECESSARY,
++	NETDEV_A_QSTATS_RX_CSUM_NONE,
++	NETDEV_A_QSTATS_RX_CSUM_BAD,
++	NETDEV_A_QSTATS_RX_HW_GRO_PACKETS,
++	NETDEV_A_QSTATS_RX_HW_GRO_BYTES,
++	NETDEV_A_QSTATS_RX_HW_GRO_WIRE_PACKETS,
++	NETDEV_A_QSTATS_RX_HW_GRO_WIRE_BYTES,
++	NETDEV_A_QSTATS_RX_HW_DROP_RATELIMITS,
++	NETDEV_A_QSTATS_TX_HW_DROPS,
++	NETDEV_A_QSTATS_TX_HW_DROP_ERRORS,
++	NETDEV_A_QSTATS_TX_CSUM_NONE,
++	NETDEV_A_QSTATS_TX_NEEDS_CSUM,
++	NETDEV_A_QSTATS_TX_HW_GSO_PACKETS,
++	NETDEV_A_QSTATS_TX_HW_GSO_BYTES,
++	NETDEV_A_QSTATS_TX_HW_GSO_WIRE_PACKETS,
++	NETDEV_A_QSTATS_TX_HW_GSO_WIRE_BYTES,
++	NETDEV_A_QSTATS_TX_HW_DROP_RATELIMITS,
+ 
+ 	__NETDEV_A_QSTATS_MAX,
+ 	NETDEV_A_QSTATS_MAX = (__NETDEV_A_QSTATS_MAX - 1)
 -- 
 2.32.0.3.g01195cf9f
 
