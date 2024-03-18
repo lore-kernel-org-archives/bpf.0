@@ -1,76 +1,154 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C533535C2
-	for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 15:54:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05BDF53383
+	for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 16:02:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710777288; cv=none; b=VRRPSfvnTet77gqPe0klUiCavPmT3HvhIlhcZgPjexOtbd9TPmo4B7Fi+pvxzfNi+xNQn1/cXf2V1VHdeNi8CxZLbAiYKreDpqmyJ8AoFgQllB8af+9Yugcbp9wBakBExmCX08eg7sWAemo5vwpTy7/n1/w733bj061SU0vXlH8=
+	t=1710777749; cv=none; b=sNy8vVg2+cLQHgpfc2pNbrllDTlsZKRoOz2NA/IWCSC1v74NKuN5ev3nkVKZogvKFiaG3nGil0RANlshzDQmR3GOdkKjutbPnnOf+1vYNZJsDSjChG55Wy8lGwqd3HCzMpOwh8R1iMa1lCrfO5ZoAQ0h8SOorvjjRmaWflBEG5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710777288; c=relaxed/simple;
-	bh=vcYOMEAYiLvp5GB4txzZlGS/nl9zQLTuqwsD6e0HZqo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BDbMui+t1JsECJypU6zOzKgPz1rLZueO3KNZ8E6fS91a0Avmf5PE+g78orOmDgrLET63Vk70K6tA7il0JJV0wfqqmWZly96Fh65s4Tm4cNLi4AEYNaCK1uQKAeLUTYZtLxa/hGpV2QnIWwupzVxUpMsaC9DKqtlqci1AfS5MSpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Nf56PJI7; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Nf56PJI7"
-Message-ID: <34832c57-644d-45d6-b4bc-bd801e8bc5f5@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1710777285;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vcYOMEAYiLvp5GB4txzZlGS/nl9zQLTuqwsD6e0HZqo=;
-	b=Nf56PJI7xVOJrkS0f+71pB57ZHPJZk+tAQmCboLUR++39APQGUvTjN+hGBk58eCXf257pk
-	zJNFU/kKTrR+8M4wSDsbOCGFRJCKYUQPjw6tZyk9oz1ad6MS8FiRhOwwnUnvW+SEKnEjO/
-	UQcVPeBWNq2Qe9cLrSQ33qnzMnzJ28A=
-Date: Mon, 18 Mar 2024 08:54:39 -0700
+	s=arc-20240116; t=1710777749; c=relaxed/simple;
+	bh=3DaoXaMaj6dZVZBaVgtLWrlDY9Wj5keXNGy4i6D8vRY=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=bj87M9zogJWEWxpoeLit1chLfwtqBBRD62YUe+yZKmc5KyhV/RsE+CfTEsq+ZeZxMrK46Z32SsZWDldWk6B8NI7jAfb1prsYYlUlZTFu3qcyOjCXKfXQXn7iaWaMh+KKyT6bxaCcVcJbMP/BPTmk/7sewTOM8bnQuO8pFdvDmdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7cbf4635bfaso324286939f.2
+        for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 09:02:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710777747; x=1711382547;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hvqm1uy5ijqhpEACA8hGAMduEjKIAZKeKYiLPAKPLgY=;
+        b=hisZ04LC103OxQgmR8jooXdYB/L4WN8ByDyL63slEaEk6zEz9i73E5CVlc6dExr95T
+         wJKdtnpm+4j8nWy+Pox81px035no9kRlwTD5X+Vt723NxZ0sadMuZR1okqQL2kzV3Xdw
+         dTlF9vfjYJwf1EXPatweK9DXUznPTUtNz3msUghHf8dAim8hIWBSvcUfyPlrSYK3iuig
+         DmaLjHYnMZLgg+K9pcQmvyAfPXNLOu16Jj4jsqoTpABwpJ+lEOdtdhHuewEBGuuAUTdX
+         +OonVyFbwITrn8kchXe4YPq6EM8xqJtXN1hDMTBOPcuno4celeLWRYlMObeoB4sAGZWH
+         /caA==
+X-Forwarded-Encrypted: i=1; AJvYcCXtJ1hKRAA3IbzMaHq9ZIwI7vm9/8Qp8s2eKWYXL3gCACcHxoV1nea7csUKZWSL4rEsuu8yezi7PU5knfNHq+1zix05
+X-Gm-Message-State: AOJu0YxKhVdJzep//+fPklFyHGe+pbu3QUmvoPla3L8rbPJixbVcKv25
+	T+pQFRJ9KN/2MMLRfrdBX1iJGN97rgJU/vpNMxj0Mhonwlj6oXx7HDViOA1AP6wkPQ//iLmPPfC
+	/0HwY11LyXsgN5kflaEj9U05cUWdemldtNr5BLGbvrr9Kk/7w0hySJ1Y=
+X-Google-Smtp-Source: AGHT+IEb6PzzIgjfMBqhqDVVqpTCJo7r0950mjf8Jrx52jskySKEAfuHLAS5MrTfLtZPPYiEKMnNAQjMT/OflZyPeheB2g5Gjszx
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH V2 bpf-next 1/2] bpf: add bpf_task_get_cgroup kfunc
-Content-Language: en-GB
-To: Jose Fernandez <josef@netflix.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Tycho Andersen <tycho@tycho.pizza>
-References: <20240316162241.628855-1-josef@netflix.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20240316162241.628855-1-josef@netflix.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-Received: by 2002:a05:6e02:4a4:b0:367:d6da:8dbd with SMTP id
+ e4-20020a056e0204a400b00367d6da8dbdmr85930ils.4.1710777746365; Mon, 18 Mar
+ 2024 09:02:26 -0700 (PDT)
+Date: Mon, 18 Mar 2024 09:02:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dcb0e50613f17bfc@google.com>
+Subject: [syzbot] [bpf?] [net?] WARNING in sock_map_delete_elem
+From: syzbot <syzbot+2f4f478b78801c186d39@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com, 
+	jakub@cloudflare.com, john.fastabend@gmail.com, kuba@kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    480e035fc4c7 Merge tag 'drm-next-2024-03-13' of https://gi..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1167944e180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c046bf13ef8a8472
+dashboard link: https://syzkaller.appspot.com/bug?extid=2f4f478b78801c186d39
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=130cb701180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=178e0db9180000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/82840b143668/disk-480e035f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/448db0f2aaae/vmlinux-480e035f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/84c11f014272/bzImage-480e035f.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2f4f478b78801c186d39@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 5063 at kernel/softirq.c:362 __local_bh_enable_ip+0x1be/0x200 kernel/softirq.c:362
+Modules linked in:
+CPU: 0 PID: 5063 Comm: syz-executor103 Not tainted 6.8.0-syzkaller-08073-g480e035fc4c7 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
+RIP: 0010:__local_bh_enable_ip+0x1be/0x200 kernel/softirq.c:362
+Code: 3b 44 24 60 75 52 48 8d 65 d8 5b 41 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc 90 0f 0b 90 e9 ca fe ff ff e8 55 00 00 00 eb 9c 90 <0f> 0b 90 e9 fa fe ff ff 48 c7 c1 8c 33 86 8f 80 e1 07 80 c1 03 38
+RSP: 0018:ffffc9000443f8e0 EFLAGS: 00010046
+RAX: 0000000000000000 RBX: 1ffff92000887f20 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 0000000000000201 RDI: ffffffff895b387a
+RBP: ffffc9000443f9a0 R08: ffff888020a859eb R09: 1ffff11004150b3d
+R10: dffffc0000000000 R11: ffffed1004150b3e R12: dffffc0000000000
+R13: ffff88802e29ba00 R14: ffffc9000443f920 R15: 0000000000000201
+FS:  00005555629fd380(0000) GS:ffff8880b9400000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f8ef4f2501d CR3: 000000007ef10000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ spin_unlock_bh include/linux/spinlock.h:396 [inline]
+ __sock_map_delete net/core/sock_map.c:424 [inline]
+ sock_map_delete_elem+0xca/0x140 net/core/sock_map.c:446
+ bpf_prog_2c29ac5cdc6b1842+0x42/0x46
+ bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+ __bpf_prog_run include/linux/filter.h:657 [inline]
+ bpf_prog_run include/linux/filter.h:664 [inline]
+ __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+ bpf_trace_run3+0x238/0x460 kernel/trace/bpf_trace.c:2421
+ trace_kmem_cache_free include/trace/events/kmem.h:114 [inline]
+ kmem_cache_free+0x23c/0x2b0 mm/slub.c:4343
+ __sigqueue_free kernel/signal.c:451 [inline]
+ collect_signal kernel/signal.c:594 [inline]
+ __dequeue_signal+0x4ac/0x5c0 kernel/signal.c:616
+ dequeue_signal+0x169/0x5a0 kernel/signal.c:639
+ get_signal+0x5f7/0x1850 kernel/signal.c:2787
+ arch_do_signal_or_restart+0x96/0x860 arch/x86/kernel/signal.c:310
+ exit_to_user_mode_loop kernel/entry/common.c:105 [inline]
+ exit_to_user_mode_prepare include/linux/entry-common.h:328 [inline]
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:201 [inline]
+ syscall_exit_to_user_mode+0xc9/0x360 kernel/entry/common.c:212
+ do_syscall_64+0x10a/0x240 arch/x86/entry/common.c:89
+ entry_SYSCALL_64_after_hwframe+0x6d/0x75
+RIP: 0033:0x7f8ef4f03443
+Code: 00 00 00 00 00 66 90 83 ff 03 74 7b 83 ff 02 b8 fa ff ff ff 49 89 ca 0f 44 f8 80 3d 3e 0c 05 00 00 74 14 b8 e6 00 00 00 0f 05 <f7> d8 c3 66 2e 0f 1f 84 00 00 00 00 00 48 83 ec 28 48 89 54 24 10
+RSP: 002b:00007ffdd3126958 EFLAGS: 00000202 ORIG_RAX: 00000000000000e6
+RAX: fffffffffffffdfc RBX: 00000000000013c9 RCX: 00007f8ef4f03443
+RDX: 00007ffdd3126970 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 00000000000f4240 R08: 0000000000000010 R09: 00007f8ef4e9b0b0
+R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000012e67
+R13: 00007ffdd31269ac R14: 00007ffdd31269c0 R15: 00007ffdd31269b0
+ </TASK>
 
 
-On 3/16/24 9:22 AM, Jose Fernandez wrote:
-> This patch enhances the BPF helpers by adding a kfunc to retrieve the
-> cgroup v2 of a task, addressing a previous limitation where only
-> bpf_task_get_cgroup1 was available for cgroup v1. The new kfunc is
-> particularly useful for scenarios where obtaining the cgroup ID of a
-> task other than the "current" one is necessary, which the existing
-> bpf_get_current_cgroup_id helper cannot accommodate. A specific use
-> case at Netflix involved the sched_switch tracepoint, where we had to
-> get the cgroup IDs of both the prev and next tasks.
->
-> The bpf_task_get_cgroup kfunc acquires and returns a reference to a
-> task's default cgroup, ensuring thread-safe access by correctly
-> implementing RCU read locking and unlocking. It leverages the existing
-> cgroup.h helper, and cgroup_tryget to safely acquire a reference to it.
->
-> Signed-off-by: Jose Fernandez <josef@netflix.com>
-> Reviewed-by: Tycho Andersen <tycho@tycho.pizza>
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
