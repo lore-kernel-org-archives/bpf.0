@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B752F219F6
-	for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 18:40:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F062E400
+	for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 18:40:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710787252; cv=none; b=O1VCC5GPsm6zzfRxL4gkYqgqLANcXBS5NNvw2M/SqE6wTh6MYGW/J0VRMIwT9lSnpXvVL3e5pD3wFfnqOtiO+FN0MDvb/4wZCwrZUUuE+genzIbB9ROSPQjxpT4ApJMQWVsVRp+eRRmeU/MjQgtJqW7idg2YgT5WgCYNYMBeDvc=
+	t=1710787256; cv=none; b=CBdKugdbSkAr7OPTmQCid4nw2WsJxzvx/MkmFYwP16OyO3R+pNtQkvIqS657x6GWL+CNESrYAX71N35omqx2qsUc6Jy/1MzK9lxQ+U8SjeGrEMoIFuJyUL679/7yBr9TNu/4jLza8FQTxzpXvwCv4BmWYJepeoa2VMHmDxnLrZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710787252; c=relaxed/simple;
-	bh=pUS6a7pMQcExsy+qxQf8B94rU4lII6rnu7dHy0gRRH0=;
+	s=arc-20240116; t=1710787256; c=relaxed/simple;
+	bh=aFHaMUjDRF+R+p20LmifZamCqh0LdfaVSrDs7fUbIWg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kYKDErFlhGIdzfteZVGVbJB8sw/RHd02vesLhZH3tZaDifewNRN0n9mRFwzq/5zw9eoQf+9FUbNEp21x2YnnjcswXyOm0aH6K+tV0UEUekKHPUwIsFephaVRyKwMi9iufossg8aut2bAzEnkX+ZQxj2/iVgWtab4XntOUY7iF20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TPFez5BP; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=sqJANAmG6YhXkRP8ugv9cSRaOsrbOsWsw51Jfy+/O/mVggR8OrHD3CGmZUog/fhGFwnymsbR1wccpN2kniDVX827Nd5WD/VTHiOrLCilkTkGTBwR2VnDNf0lyEqMpHN7t5f4nCLlUqk7gsi3LFyBNszMQS8qxy06t/U6dYypTao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KyghH9kR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TPFez5BP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E48CC433F1;
-	Mon, 18 Mar 2024 18:40:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KyghH9kR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D79EC433F1;
+	Mon, 18 Mar 2024 18:40:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710787252;
-	bh=pUS6a7pMQcExsy+qxQf8B94rU4lII6rnu7dHy0gRRH0=;
+	s=k20201202; t=1710787255;
+	bh=aFHaMUjDRF+R+p20LmifZamCqh0LdfaVSrDs7fUbIWg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TPFez5BPkwu6ZcW0LDPDOZnRANjHS3OvIwvROV32IYAdjNi4Lm1rNazk1ZrFKYxUS
-	 nEMn1qTKuZOXIgkT7hN/N0EczWNSY/51raitlXuHsiuF4sozyCmOMZuwlemz+/b7d+
-	 ALnT229PEjndW0oVyEOHWS3VqK4VrKBb6d9PWzLeDZAPGFLC24WWbmDCjAVb8WIn5h
-	 yvwE7YZ5kYOgQX0M+1BE40anYKwOsorkOfqpfbOA/quoLMbHoHpGS5/Djt6SFoMuep
-	 gE0vZEqzu60lttvjOp3f00jwuK5cz8ygJcOwCyU1XGzun8lXUkqMUdbzuKe4iaEU7y
-	 8QeuwJCRH0Kfg==
+	b=KyghH9kRlwJUb9SKnOxbBBINfQWedmEajTciDTrr1jnCQA8rYbQL7iMmFWOe/IW5X
+	 NyyN6+5ngpXFuCxHMKCqiQe5E8NqXVxckPxROre/dDexDm0GHTesdNPIQOg9GrG1Iv
+	 NXkgmHYclAQuwXZh7xI6X5qBtZB1A5WVHEhuP924/Gw+fkwTqBaXLSpVJP755Lc44y
+	 e+SeMWSGQ03WIki+WJQnnV3JscivSCW+QzGtQhsHl57xPN+dVzc3FKHfif6VfUBVvN
+	 gpB772JRrE47BXY0l9ZRGZsv+AakFGPyr84vD3xghU7PZs/0dtLHmkpgKVLTTrWKyR
+	 en0dlZ+4pfZ7w==
 From: Andrii Nakryiko <andrii@kernel.org>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -34,9 +34,9 @@ To: bpf@vger.kernel.org,
 Cc: andrii@kernel.org,
 	kernel-team@meta.com,
 	Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH v2 bpf-next 4/5] libbpf: add support for BPF cookie for raw_tp/tp_btf programs
-Date: Mon, 18 Mar 2024 11:40:36 -0700
-Message-ID: <20240318184037.3209242-5-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 5/5] selftests/bpf: add raw_tp/tp_btf BPF cookie subtests
+Date: Mon, 18 Mar 2024 11:40:37 -0700
+Message-ID: <20240318184037.3209242-6-andrii@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240318184037.3209242-1-andrii@kernel.org>
 References: <20240318184037.3209242-1-andrii@kernel.org>
@@ -48,173 +48,182 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Wire up BPF cookie passing or raw_tp and tp_btf programs, both in
-low-level and high-level APIs.
+Add test validating BPF cookie can be passed during raw_tp/tp_btf
+attachment and can be retried at runtime with bpf_get_attach_cookie()
+helper.
 
 Acked-by: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/bpf.c      | 16 ++++++++++++++--
- tools/lib/bpf/bpf.h      |  9 +++++++++
- tools/lib/bpf/libbpf.c   | 20 +++++++++++++++++---
- tools/lib/bpf/libbpf.h   | 11 +++++++++++
- tools/lib/bpf/libbpf.map |  2 ++
- 5 files changed, 53 insertions(+), 5 deletions(-)
+ .../selftests/bpf/prog_tests/bpf_cookie.c     | 114 +++++++++++++++++-
+ .../selftests/bpf/progs/test_bpf_cookie.c     |  16 +++
+ 2 files changed, 129 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 97ec005c3c47..65d25c3c6508 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -785,6 +785,7 @@ int bpf_link_create(int prog_fd, int target_fd,
- 		if (!OPTS_ZEROED(opts, uprobe_multi))
- 			return libbpf_err(-EINVAL);
- 		break;
-+	case BPF_TRACE_RAW_TP:
- 	case BPF_TRACE_FENTRY:
- 	case BPF_TRACE_FEXIT:
- 	case BPF_MODIFY_RETURN:
-@@ -1173,20 +1174,31 @@ int bpf_link_get_info_by_fd(int link_fd, struct bpf_link_info *info, __u32 *info
- 	return bpf_obj_get_info_by_fd(link_fd, info, info_len);
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+index 1454cebc262b..f6c507c69ad2 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+@@ -573,6 +573,115 @@ static void lsm_subtest(struct test_bpf_cookie *skel)
+ 		close(lsm_fd);
  }
  
--int bpf_raw_tracepoint_open(const char *name, int prog_fd)
-+int bpf_raw_tp_open(int prog_fd, struct bpf_raw_tp_opts *opts)
- {
- 	const size_t attr_sz = offsetofend(union bpf_attr, raw_tracepoint);
- 	union bpf_attr attr;
- 	int fd;
- 
-+	if (!OPTS_VALID(opts, bpf_raw_tp_opts))
-+		return libbpf_err(-EINVAL);
-+
- 	memset(&attr, 0, attr_sz);
--	attr.raw_tracepoint.name = ptr_to_u64(name);
- 	attr.raw_tracepoint.prog_fd = prog_fd;
-+	attr.raw_tracepoint.name = ptr_to_u64(OPTS_GET(opts, tp_name, NULL));
-+	attr.raw_tracepoint.cookie = OPTS_GET(opts, cookie, 0);
- 
- 	fd = sys_bpf_fd(BPF_RAW_TRACEPOINT_OPEN, &attr, attr_sz);
- 	return libbpf_err_errno(fd);
- }
- 
-+int bpf_raw_tracepoint_open(const char *name, int prog_fd)
++static void tp_btf_subtest(struct test_bpf_cookie *skel)
 +{
-+	LIBBPF_OPTS(bpf_raw_tp_opts, opts, .tp_name = name);
++	__u64 cookie;
++	int prog_fd, link_fd = -1;
++	struct bpf_link *link = NULL;
++	LIBBPF_OPTS(bpf_link_create_opts, link_opts);
++	LIBBPF_OPTS(bpf_raw_tp_opts, raw_tp_opts);
++	LIBBPF_OPTS(bpf_trace_opts, trace_opts);
 +
-+	return bpf_raw_tp_open(prog_fd, &opts);
++	/* There are three different ways to attach tp_btf (BTF-aware raw
++	 * tracepoint) programs. Let's test all of them.
++	 */
++	prog_fd = bpf_program__fd(skel->progs.handle_tp_btf);
++
++	/* low-level BPF_RAW_TRACEPOINT_OPEN command wrapper */
++	skel->bss->tp_btf_res = 0;
++
++	raw_tp_opts.cookie = cookie = 0x11000000000000L;
++	link_fd = bpf_raw_tp_open(prog_fd, &raw_tp_opts);
++	if (!ASSERT_GE(link_fd, 0, "bpf_raw_tp_open"))
++		goto cleanup;
++
++	usleep(1); /* trigger */
++	close(link_fd); /* detach */
++	link_fd = -1;
++
++	ASSERT_EQ(skel->bss->tp_btf_res, cookie, "raw_tp_open_res");
++
++	/* low-level generic bpf_link_create() API */
++	skel->bss->tp_btf_res = 0;
++
++	link_opts.tracing.cookie = cookie = 0x22000000000000L;
++	link_fd = bpf_link_create(prog_fd, 0, BPF_TRACE_RAW_TP, &link_opts);
++	if (!ASSERT_GE(link_fd, 0, "bpf_link_create"))
++		goto cleanup;
++
++	usleep(1); /* trigger */
++	close(link_fd); /* detach */
++	link_fd = -1;
++
++	ASSERT_EQ(skel->bss->tp_btf_res, cookie, "link_create_res");
++
++	/* high-level bpf_link-based bpf_program__attach_trace_opts() API */
++	skel->bss->tp_btf_res = 0;
++
++	trace_opts.cookie = cookie = 0x33000000000000L;
++	link = bpf_program__attach_trace_opts(skel->progs.handle_tp_btf, &trace_opts);
++	if (!ASSERT_OK_PTR(link, "attach_trace_opts"))
++		goto cleanup;
++
++	usleep(1); /* trigger */
++	bpf_link__destroy(link); /* detach */
++	link = NULL;
++
++	ASSERT_EQ(skel->bss->tp_btf_res, cookie, "attach_trace_opts_res");
++
++cleanup:
++	if (link_fd >= 0)
++		close(link_fd);
++	bpf_link__destroy(link);
 +}
 +
- int bpf_btf_load(const void *btf_data, size_t btf_size, struct bpf_btf_load_opts *opts)
- {
- 	const size_t attr_sz = offsetofend(union bpf_attr, btf_token_fd);
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index df0db2f0cdb7..bf8162fbccf9 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -617,6 +617,15 @@ LIBBPF_API int bpf_prog_query(int target_fd, enum bpf_attach_type type,
- 			      __u32 query_flags, __u32 *attach_flags,
- 			      __u32 *prog_ids, __u32 *prog_cnt);
- 
-+struct bpf_raw_tp_opts {
-+	size_t sz; /* size of this struct for forward/backward compatibility */
-+	const char *tp_name;
-+	__u64 cookie;
-+	size_t :0;
-+};
-+#define bpf_raw_tp_opts__last_field cookie
-+
-+LIBBPF_API int bpf_raw_tp_open(int prog_fd, struct bpf_raw_tp_opts *opts);
- LIBBPF_API int bpf_raw_tracepoint_open(const char *name, int prog_fd);
- LIBBPF_API int bpf_task_fd_query(int pid, int fd, __u32 flags, char *buf,
- 				 __u32 *buf_len, __u32 *prog_id, __u32 *fd_type,
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 604368cfbf02..c4981e5c0bdf 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -12280,13 +12280,19 @@ static int attach_tp(const struct bpf_program *prog, long cookie, struct bpf_lin
- 	return libbpf_get_error(*link);
- }
- 
--struct bpf_link *bpf_program__attach_raw_tracepoint(const struct bpf_program *prog,
--						    const char *tp_name)
-+struct bpf_link *
-+bpf_program__attach_raw_tracepoint_opts(const struct bpf_program *prog,
-+					const char *tp_name,
-+					struct bpf_raw_tracepoint_opts *opts)
- {
-+	LIBBPF_OPTS(bpf_raw_tp_opts, raw_opts);
- 	char errmsg[STRERR_BUFSIZE];
- 	struct bpf_link *link;
- 	int prog_fd, pfd;
- 
-+	if (!OPTS_VALID(opts, bpf_raw_tracepoint_opts))
-+		return libbpf_err_ptr(-EINVAL);
-+
- 	prog_fd = bpf_program__fd(prog);
- 	if (prog_fd < 0) {
- 		pr_warn("prog '%s': can't attach before loaded\n", prog->name);
-@@ -12298,7 +12304,9 @@ struct bpf_link *bpf_program__attach_raw_tracepoint(const struct bpf_program *pr
- 		return libbpf_err_ptr(-ENOMEM);
- 	link->detach = &bpf_link__detach_fd;
- 
--	pfd = bpf_raw_tracepoint_open(tp_name, prog_fd);
-+	raw_opts.tp_name = tp_name;
-+	raw_opts.cookie = OPTS_GET(opts, cookie, 0);
-+	pfd = bpf_raw_tp_open(prog_fd, &raw_opts);
- 	if (pfd < 0) {
- 		pfd = -errno;
- 		free(link);
-@@ -12310,6 +12318,12 @@ struct bpf_link *bpf_program__attach_raw_tracepoint(const struct bpf_program *pr
- 	return link;
- }
- 
-+struct bpf_link *bpf_program__attach_raw_tracepoint(const struct bpf_program *prog,
-+						    const char *tp_name)
++static void raw_tp_subtest(struct test_bpf_cookie *skel)
 +{
-+	return bpf_program__attach_raw_tracepoint_opts(prog, tp_name, NULL);
++	__u64 cookie;
++	int prog_fd, link_fd = -1;
++	struct bpf_link *link = NULL;
++	LIBBPF_OPTS(bpf_raw_tp_opts, raw_tp_opts);
++	LIBBPF_OPTS(bpf_raw_tracepoint_opts, opts);
++
++	/* There are two different ways to attach raw_tp programs */
++	prog_fd = bpf_program__fd(skel->progs.handle_raw_tp);
++
++	/* low-level BPF_RAW_TRACEPOINT_OPEN command wrapper */
++	skel->bss->raw_tp_res = 0;
++
++	raw_tp_opts.tp_name = "sys_enter";
++	raw_tp_opts.cookie = cookie = 0x55000000000000L;
++	link_fd = bpf_raw_tp_open(prog_fd, &raw_tp_opts);
++	if (!ASSERT_GE(link_fd, 0, "bpf_raw_tp_open"))
++		goto cleanup;
++
++	usleep(1); /* trigger */
++	close(link_fd); /* detach */
++	link_fd = -1;
++
++	ASSERT_EQ(skel->bss->raw_tp_res, cookie, "raw_tp_open_res");
++
++	/* high-level bpf_link-based bpf_program__attach_raw_tracepoint_opts() API */
++	skel->bss->raw_tp_res = 0;
++
++	opts.cookie = cookie = 0x66000000000000L;
++	link = bpf_program__attach_raw_tracepoint_opts(skel->progs.handle_raw_tp,
++						       "sys_enter", &opts);
++	if (!ASSERT_OK_PTR(link, "attach_raw_tp_opts"))
++		goto cleanup;
++
++	usleep(1); /* trigger */
++	bpf_link__destroy(link); /* detach */
++	link = NULL;
++
++	ASSERT_EQ(skel->bss->raw_tp_res, cookie, "attach_raw_tp_opts_res");
++
++cleanup:
++	if (link_fd >= 0)
++		close(link_fd);
++	bpf_link__destroy(link);
 +}
 +
- static int attach_raw_tp(const struct bpf_program *prog, long cookie, struct bpf_link **link)
+ void test_bpf_cookie(void)
  {
- 	static const char *const prefixes[] = {
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 7b510761f545..f88ab50c0229 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -760,9 +760,20 @@ bpf_program__attach_tracepoint_opts(const struct bpf_program *prog,
- 				    const char *tp_name,
- 				    const struct bpf_tracepoint_opts *opts);
+ 	struct test_bpf_cookie *skel;
+@@ -601,6 +710,9 @@ void test_bpf_cookie(void)
+ 		tracing_subtest(skel);
+ 	if (test__start_subtest("lsm"))
+ 		lsm_subtest(skel);
+-
++	if (test__start_subtest("tp_btf"))
++		tp_btf_subtest(skel);
++	if (test__start_subtest("raw_tp"))
++		raw_tp_subtest(skel);
+ 	test_bpf_cookie__destroy(skel);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_bpf_cookie.c b/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
+index 5a3a80f751c4..c83142b55f47 100644
+--- a/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
++++ b/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
+@@ -15,6 +15,8 @@ __u64 uprobe_res;
+ __u64 uretprobe_res;
+ __u64 tp_res;
+ __u64 pe_res;
++__u64 raw_tp_res;
++__u64 tp_btf_res;
+ __u64 fentry_res;
+ __u64 fexit_res;
+ __u64 fmod_ret_res;
+@@ -87,6 +89,20 @@ int handle_pe(struct pt_regs *ctx)
+ 	return 0;
+ }
  
-+struct bpf_raw_tracepoint_opts {
-+	size_t sz; /* size of this struct for forward/backward compatibility */
-+	__u64 cookie;
-+	size_t :0;
-+};
-+#define bpf_raw_tracepoint_opts__last_field cookie
++SEC("raw_tp/sys_enter")
++int handle_raw_tp(void *ctx)
++{
++	update(ctx, &raw_tp_res);
++	return 0;
++}
 +
- LIBBPF_API struct bpf_link *
- bpf_program__attach_raw_tracepoint(const struct bpf_program *prog,
- 				   const char *tp_name);
-+LIBBPF_API struct bpf_link *
-+bpf_program__attach_raw_tracepoint_opts(const struct bpf_program *prog,
-+					const char *tp_name,
-+					struct bpf_raw_tracepoint_opts *opts);
- 
- struct bpf_trace_opts {
- 	/* size of this struct, for forward/backward compatibility */
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 86804fd90dd1..53dbdaad0df1 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -410,6 +410,8 @@ LIBBPF_1.3.0 {
- 
- LIBBPF_1.4.0 {
- 	global:
-+		bpf_program__attach_raw_tracepoint_opts;
-+		bpf_raw_tp_open;
- 		bpf_token_create;
- 		btf__new_split;
- 		btf_ext__raw_data;
++SEC("tp_btf/sys_enter")
++int handle_tp_btf(void *ctx)
++{
++	update(ctx, &tp_btf_res);
++	return 0;
++}
++
+ SEC("fentry/bpf_fentry_test1")
+ int BPF_PROG(fentry_test1, int a)
+ {
 -- 
 2.43.0
 
