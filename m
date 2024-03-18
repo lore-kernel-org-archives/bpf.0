@@ -1,148 +1,89 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C62B52F86
-	for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 16:08:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9084552F95
+	for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 16:13:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710778085; cv=none; b=O8MF3UoySawz5woyzZEXQLyeujXJgCkk6svmog/x7/chC6a2FLKnYZ4GQW2xSl8aEw6mnDxRgSaTm2VWYoWAPSIGx4ut7TFSQ0IBoyVic3LMyuWVzqSz70R8vbDoq7k7LDuZ7BBsGwmCV8VjAskO7H+O2CkXBP62coye2raGgqw=
+	t=1710778398; cv=none; b=nyP3zYLrq0CzFA5Q6LHLK5X5H4J5BKoJyFZCarS1jY6LHYuhy9G9nbfs5ZVTHHUAiRrgz+ob23nxTPJVPy8m1RSEYBAa7v/kzpMRAopiBXt5ps06j641bpUGwHXAlKfhtGUboOyFGcfCWg/CcY69BIVDNRo7ih6XcgA9TCfJmco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710778085; c=relaxed/simple;
-	bh=XftcC/cufe2hINAjtjXcT+EDnMGkcOcgTjiPHmt1bdU=;
+	s=arc-20240116; t=1710778398; c=relaxed/simple;
+	bh=M7JooqxhdWYea4plzORL0v2OMwlVA0hITUGPfyr/rxw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TtPf3l/ROUEyi9U5MW6vJbG2ppwXMGBzQ5EJsqBxErDgOoT6HBIKodSlrEammvfyn77EeqmhuiElkrShtRcPzzji+TaEVfjGL/Q96pj84C1IN+WYyTq8HX9YFVq9IBguhSkQV7WSScu7CH4wX3f+aIph1bwLZyhPOpcxY92Ozyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oJTRsKNq; arc=none smtp.client-ip=95.215.58.174
+	 In-Reply-To:Content-Type; b=LAP3fK+t5fw1Z8iy9rVcc823pIDdTZkgD5z+ffwI3DH7iBcfi62Z0BHXdNWmF7MVe+WLGJwpgs74ozQLI5MhKyfFxzySHiJzmCQoAJ/ClIl2gltsdBvXIR9nXvcTVBpOeYJzEClBqiQRwyi7we+3ELBmVmt7OtiEZ2QklsWAlDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=W/LMiKkl; arc=none smtp.client-ip=95.215.58.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oJTRsKNq"
-Message-ID: <b849aa68-0f7e-455f-ba09-ff1c811db771@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="W/LMiKkl"
+Message-ID: <4bcdd9cc-6149-490e-b3df-a39346e5035b@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1710778080;
+	t=1710778394;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=fwQPOjQn9KdVqbATUorSxLxTcDNlvestQijqzOe8SZs=;
-	b=oJTRsKNqqrV1j8KZgt32XH+1pFyT52699CiQPGgQObTaFqP2snDQkONaqHQowRki3F02UT
-	Ot7SfvR0evdgnzE9g6SieZbM/2LB+WWHiDQHEYMQB6c/0rjMAEDcjN345VbRKCPLUWkAZm
-	SSoTLg4fBa37DH+apsl7WP7A/2CObTM=
-Date: Mon, 18 Mar 2024 09:07:54 -0700
+	bh=M7JooqxhdWYea4plzORL0v2OMwlVA0hITUGPfyr/rxw=;
+	b=W/LMiKkl6A4zdyQuXXzHGTu6K+ix0qYxeckWn56Lr46JxVD++xmIb6GSHomV5XuUqBTnxN
+	LOhg+TZiWK4q32Hpl4i2AcyLD09newzHoBR+5j9LENN/eoOiAZkWDEc6cbM9sdpw/86qeV
+	iZYKYZuyFvzzKM8Rzo1HI380XLGGl/A=
+Date: Mon, 18 Mar 2024 09:13:11 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next V2] bpf/lpm_trie: inline longest_prefix_match for
- fastpath
+Subject: Re: [PATCH linux-next] bpf: fix warning for crash_kexec
 Content-Language: en-GB
-To: Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org,
- Daniel Borkmann <borkmann@iogearbox.net>
-Cc: Alexei Starovoitov <ast@kernel.org>, martin.lau@kernel.org,
- netdev@vger.kernel.org, bp@alien8.de, kernel-team@cloudflare.com
-References: <171076828575.2141737.18370644069389889027.stgit@firesoul>
+To: Hari Bathini <hbathini@linux.ibm.com>, bpf@vger.kernel.org
+Cc: Kexec-ml <kexec@lists.infradead.org>, Baoquan He <bhe@redhat.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>
+References: <20240209123520.778599-1-hbathini@linux.ibm.com>
+ <6a1d94f7-b4bf-4315-b862-4e278abbaa73@linux.ibm.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <171076828575.2141737.18370644069389889027.stgit@firesoul>
+In-Reply-To: <6a1d94f7-b4bf-4315-b862-4e278abbaa73@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 
-On 3/18/24 6:25 AM, Jesper Dangaard Brouer wrote:
-> The BPF map type LPM (Longest Prefix Match) is used heavily
-> in production by multiple products that have BPF components.
-> Perf data shows trie_lookup_elem() and longest_prefix_match()
-> being part of kernels perf top.
->
-> For every level in the LPM tree trie_lookup_elem() calls out
-> to longest_prefix_match().  The compiler is free to inline this
-> call, but chooses not to inline, because other slowpath callers
-> (that can be invoked via syscall) exists like trie_update_elem(),
-> trie_delete_elem() or trie_get_next_key().
->
->   bcc/tools/funccount -Ti 1 'trie_lookup_elem|longest_prefix_match.isra.0'
->   FUNC                                    COUNT
->   trie_lookup_elem                       664945
->   longest_prefix_match.isra.0           8101507
->
-> Observation on a single random machine shows a factor 12 between
-> the two functions. Given an average of 12 levels in the trie being
-> searched.
->
-> This patch force inlining longest_prefix_match(), but only for
-> the lookup fastpath to balance object instruction size.
->
-> In production with AMD CPUs, measuring the function latency of
-> 'trie_lookup_elem' (bcc/tools/funclatency) we are seeing an improvement
-> function latency reduction 7-8% with this patch applied (to production
-> kernels 6.6 and 6.1). Analyzing perf data, we can explain this rather
-> large improvement due to reducing the overhead for AMD side-channel
-> mitigation SRSO (Speculative Return Stack Overflow).
->
-> Fixes: fb3bd914b3ec ("x86/srso: Add a Speculative RAS Overflow mitigation")
-> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+On 3/17/24 11:52 PM, Hari Bathini wrote:
+> Just checking on whether this will go via bpf or mm tree?
 
-I checked out internal PGO (Profile-Guided Optimization) kernel and
-it did exactly like the above described: longest_prefix_match() is inlined
-to trie_lookup_elem(), but not others.
+Sending to bpf-next should be okay.
+Could you resubmit the patch as CONFIG_CRASH_DUMP probably not
+available to bpf-next when you initially submitted the patch.
 
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
-
-> ---
->   kernel/bpf/lpm_trie.c |   18 +++++++++++++-----
->   1 file changed, 13 insertions(+), 5 deletions(-)
 >
-> diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-> index 050fe1ebf0f7..939620b91c0e 100644
-> --- a/kernel/bpf/lpm_trie.c
-> +++ b/kernel/bpf/lpm_trie.c
-> @@ -155,16 +155,17 @@ static inline int extract_bit(const u8 *data, size_t index)
->   }
->   
->   /**
-> - * longest_prefix_match() - determine the longest prefix
-> + * __longest_prefix_match() - determine the longest prefix
->    * @trie:	The trie to get internal sizes from
->    * @node:	The node to operate on
->    * @key:	The key to compare to @node
->    *
->    * Determine the longest prefix of @node that matches the bits in @key.
->    */
-> -static size_t longest_prefix_match(const struct lpm_trie *trie,
-> -				   const struct lpm_trie_node *node,
-> -				   const struct bpf_lpm_trie_key_u8 *key)
-> +static __always_inline
-> +size_t __longest_prefix_match(const struct lpm_trie *trie,
-> +			      const struct lpm_trie_node *node,
-> +			      const struct bpf_lpm_trie_key_u8 *key)
->   {
->   	u32 limit = min(node->prefixlen, key->prefixlen);
->   	u32 prefixlen = 0, i = 0;
-> @@ -224,6 +225,13 @@ static size_t longest_prefix_match(const struct lpm_trie *trie,
->   	return prefixlen;
->   }
->   
-> +static size_t longest_prefix_match(const struct lpm_trie *trie,
-> +				   const struct lpm_trie_node *node,
-> +				   const struct bpf_lpm_trie_key_u8 *key)
-> +{
-> +	return __longest_prefix_match(trie, node, key);
-> +}
-> +
->   /* Called from syscall or from eBPF program */
->   static void *trie_lookup_elem(struct bpf_map *map, void *_key)
->   {
-> @@ -245,7 +253,7 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
->   		 * If it's the maximum possible prefix for this trie, we have
->   		 * an exact match and can return it directly.
->   		 */
-> -		matchlen = longest_prefix_match(trie, node, key);
-> +		matchlen = __longest_prefix_match(trie, node, key);
->   		if (matchlen == trie->max_prefixlen) {
->   			found = node;
->   			break;
->
->
+> On 09/02/24 6:05 pm, Hari Bathini wrote:
+>> With [1], CONFIG_KEXEC & !CONFIG_CRASH_DUMP is supported but that led
+>> to the below warning:
+>>
+>>    "WARN: resolve_btfids: unresolved symbol crash_kexec"
+>>
+>> Fix it by using the appropriate #ifdef.
+>>
+>> [1] https://lore.kernel.org/all/20240124051254.67105-1-bhe@redhat.com/
+>>
+>> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
+>> ---
+>>   kernel/bpf/helpers.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>> index 4db1c658254c..e408d1115e26 100644
+>> --- a/kernel/bpf/helpers.c
+>> +++ b/kernel/bpf/helpers.c
+>> @@ -2545,7 +2545,7 @@ __bpf_kfunc void bpf_throw(u64 cookie)
+>>   __bpf_kfunc_end_defs();
+>>     BTF_KFUNCS_START(generic_btf_ids)
+>> -#ifdef CONFIG_KEXEC_CORE
+>> +#ifdef CONFIG_CRASH_DUMP
+>>   BTF_ID_FLAGS(func, crash_kexec, KF_DESTRUCTIVE)
+>>   #endif
+>>   BTF_ID_FLAGS(func, bpf_obj_new_impl, KF_ACQUIRE | KF_RET_NULL)
 >
