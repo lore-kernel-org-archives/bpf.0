@@ -1,91 +1,148 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A43B752F79
-	for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 16:07:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C62B52F86
+	for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 16:08:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710778037; cv=none; b=a9WtMG0kPYPm1nni5v4Q8ZOogDyC7PVNvcmgbsVBBuXL/bylsC4jnEfJXno+1JVIhSPiZ0Pwp/3mDELzeiMGSC+p4Hd9L32lhqK/w91JjO/traGz7Al/MispjaSG+u6V+0IYS4n1WZvHmdi6SY81EnTja8+/TL4uXQM/d3WBV5c=
+	t=1710778085; cv=none; b=O8MF3UoySawz5woyzZEXQLyeujXJgCkk6svmog/x7/chC6a2FLKnYZ4GQW2xSl8aEw6mnDxRgSaTm2VWYoWAPSIGx4ut7TFSQ0IBoyVic3LMyuWVzqSz70R8vbDoq7k7LDuZ7BBsGwmCV8VjAskO7H+O2CkXBP62coye2raGgqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710778037; c=relaxed/simple;
-	bh=5PXmXrICF6GrxaIO5e63Q2oLbzQ0JOSVAmmok0aNVlk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=SK5oOHW+sRN8JCaLy67U6lPfwoOsAFa3LMSJ51xEO7/trIwXSnit2CM8BlRN/MxAAf3zUTES25xNoQNekJGyFnwu0PgDaL0XPK9/idyY83OxgLUp6siGHk/uD9SYj8wqKoFpyIBPJ7XuaOrbuL6oZDfioG2P8zRbO5sB5k+xPBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OPMBfRAf; arc=none smtp.client-ip=209.85.219.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sdf.bounces.google.com
+	s=arc-20240116; t=1710778085; c=relaxed/simple;
+	bh=XftcC/cufe2hINAjtjXcT+EDnMGkcOcgTjiPHmt1bdU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TtPf3l/ROUEyi9U5MW6vJbG2ppwXMGBzQ5EJsqBxErDgOoT6HBIKodSlrEammvfyn77EeqmhuiElkrShtRcPzzji+TaEVfjGL/Q96pj84C1IN+WYyTq8HX9YFVq9IBguhSkQV7WSScu7CH4wX3f+aIph1bwLZyhPOpcxY92Ozyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oJTRsKNq; arc=none smtp.client-ip=95.215.58.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OPMBfRAf"
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dcc4563611cso6323318276.3
-        for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 09:07:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710778035; x=1711382835; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BRMBKkFLpx5UEPxApBmIvNsw7kmzwH3SFmSAn82Rk90=;
-        b=OPMBfRAfTDzTP/74uNhVXmO+gTEpKu7gbzJ5Sb5V+BQlqjvDmHP75aMYXGYpfxUqRg
-         7Vo0pnr73pB1E3PJ4b/KwoUeZlkGFYoimtt/WgavjE4oxTi3IuK2ttCq5F2Z2tz2Px8Y
-         EGwMfHmlv9JFlPX4xFLXQzk8IX3RjsP/ZNgs19mRCyItI50rxvv2cIri3oN9dIkSjQZm
-         dQjTtnVfPEGz4B0RnmJGP4UzOqPsIIhzidHZN/8m+LJbATYyelLuB9XeLlpd248TOFo7
-         t3m5bF96seueMF+2AF1+abFHD2UJoJny23BDwfE6GxWPknAyfR0nkyYsHSxQSd3JVlxc
-         0GZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710778035; x=1711382835;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BRMBKkFLpx5UEPxApBmIvNsw7kmzwH3SFmSAn82Rk90=;
-        b=Jb8aV8iS4bBjQVI9/umZyVlRa2KK9pj3rfqXHjRqEIeViia7qsqp0oAMIHVwrG8lIM
-         V3TvICn9vTwsoczEdD7/eXVRbfrQ7HVpDVmPjR10dlMALEF4HcphhVxUAUMMtuYQfN0T
-         cHwCpjj1bCKVqPyyi8bVmc9OXu9f1Y6lN+S50+Syn2v+mnlBYDoIP5Jq+GsyxNcoSCmH
-         FyvzKaM/9iKPqn0msZh9XmXvV6uvDgGwh5CFUUhthJVeoBUd/l6/cPd6kG/upF0rq09o
-         YtkQcpVkfYh+D/1bFDjCohK3UIk+QLZgDjKLcQ7IICDtl2LvCOeOsI1JOXh5dhsXNx4T
-         3TFw==
-X-Forwarded-Encrypted: i=1; AJvYcCVwcdFWsPvKMqo1cSOxqnp1imoICCHTj5a+UJSwuhpLqu+LmcySf5MLTzNPGyNOqd/gwSGiGtW4S1LH4ZtYy9Oxq7e6
-X-Gm-Message-State: AOJu0Yy0aBkSXWz0GPsIdSMthUKl8eyoXR9QvUhnMFRo9t6wFvqzGPTE
-	JvpL3bsKMPybW+h2ELZZJjRAjOULASG/1HVFuocn+wk0b7C3xSAXDMXMX5OephV35g==
-X-Google-Smtp-Source: AGHT+IH5LNfmfR88tF1ClH5Z2TED8izBfSAYp4ik0sspQZmPUIP4mgDyRQxQVlVvUfOwjAEa/ngdslk=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a05:6902:1004:b0:dc7:5aad:8965 with SMTP id
- w4-20020a056902100400b00dc75aad8965mr3240384ybt.0.1710778034738; Mon, 18 Mar
- 2024 09:07:14 -0700 (PDT)
-Date: Mon, 18 Mar 2024 09:07:13 -0700
-In-Reply-To: <20240316162241.628855-1-josef@netflix.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oJTRsKNq"
+Message-ID: <b849aa68-0f7e-455f-ba09-ff1c811db771@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1710778080;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fwQPOjQn9KdVqbATUorSxLxTcDNlvestQijqzOe8SZs=;
+	b=oJTRsKNqqrV1j8KZgt32XH+1pFyT52699CiQPGgQObTaFqP2snDQkONaqHQowRki3F02UT
+	Ot7SfvR0evdgnzE9g6SieZbM/2LB+WWHiDQHEYMQB6c/0rjMAEDcjN345VbRKCPLUWkAZm
+	SSoTLg4fBa37DH+apsl7WP7A/2CObTM=
+Date: Mon, 18 Mar 2024 09:07:54 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240316162241.628855-1-josef@netflix.com>
-Message-ID: <ZfhmsVTIe-khu9uP@google.com>
-Subject: Re: [PATCH V2 bpf-next 1/2] bpf: add bpf_task_get_cgroup kfunc
-From: Stanislav Fomichev <sdf@google.com>
-To: Jose Fernandez <josef@netflix.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Tycho Andersen <tycho@tycho.pizza>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next V2] bpf/lpm_trie: inline longest_prefix_match for
+ fastpath
+Content-Language: en-GB
+To: Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org,
+ Daniel Borkmann <borkmann@iogearbox.net>
+Cc: Alexei Starovoitov <ast@kernel.org>, martin.lau@kernel.org,
+ netdev@vger.kernel.org, bp@alien8.de, kernel-team@cloudflare.com
+References: <171076828575.2141737.18370644069389889027.stgit@firesoul>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <171076828575.2141737.18370644069389889027.stgit@firesoul>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On 03/16, Jose Fernandez wrote:
-> This patch enhances the BPF helpers by adding a kfunc to retrieve the
-> cgroup v2 of a task, addressing a previous limitation where only
-> bpf_task_get_cgroup1 was available for cgroup v1. The new kfunc is
-> particularly useful for scenarios where obtaining the cgroup ID of a
-> task other than the "current" one is necessary, which the existing
-> bpf_get_current_cgroup_id helper cannot accommodate. A specific use
-> case at Netflix involved the sched_switch tracepoint, where we had to
-> get the cgroup IDs of both the prev and next tasks.
-> 
-> The bpf_task_get_cgroup kfunc acquires and returns a reference to a
-> task's default cgroup, ensuring thread-safe access by correctly
-> implementing RCU read locking and unlocking. It leverages the existing
-> cgroup.h helper, and cgroup_tryget to safely acquire a reference to it.
-> 
-> Signed-off-by: Jose Fernandez <josef@netflix.com>
-> Reviewed-by: Tycho Andersen <tycho@tycho.pizza>
 
-Acked-by: Stanislav Fomichev <sdf@google.com>
+On 3/18/24 6:25 AM, Jesper Dangaard Brouer wrote:
+> The BPF map type LPM (Longest Prefix Match) is used heavily
+> in production by multiple products that have BPF components.
+> Perf data shows trie_lookup_elem() and longest_prefix_match()
+> being part of kernels perf top.
+>
+> For every level in the LPM tree trie_lookup_elem() calls out
+> to longest_prefix_match().  The compiler is free to inline this
+> call, but chooses not to inline, because other slowpath callers
+> (that can be invoked via syscall) exists like trie_update_elem(),
+> trie_delete_elem() or trie_get_next_key().
+>
+>   bcc/tools/funccount -Ti 1 'trie_lookup_elem|longest_prefix_match.isra.0'
+>   FUNC                                    COUNT
+>   trie_lookup_elem                       664945
+>   longest_prefix_match.isra.0           8101507
+>
+> Observation on a single random machine shows a factor 12 between
+> the two functions. Given an average of 12 levels in the trie being
+> searched.
+>
+> This patch force inlining longest_prefix_match(), but only for
+> the lookup fastpath to balance object instruction size.
+>
+> In production with AMD CPUs, measuring the function latency of
+> 'trie_lookup_elem' (bcc/tools/funclatency) we are seeing an improvement
+> function latency reduction 7-8% with this patch applied (to production
+> kernels 6.6 and 6.1). Analyzing perf data, we can explain this rather
+> large improvement due to reducing the overhead for AMD side-channel
+> mitigation SRSO (Speculative Return Stack Overflow).
+>
+> Fixes: fb3bd914b3ec ("x86/srso: Add a Speculative RAS Overflow mitigation")
+> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+
+I checked out internal PGO (Profile-Guided Optimization) kernel and
+it did exactly like the above described: longest_prefix_match() is inlined
+to trie_lookup_elem(), but not others.
+
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
+
+> ---
+>   kernel/bpf/lpm_trie.c |   18 +++++++++++++-----
+>   1 file changed, 13 insertions(+), 5 deletions(-)
+>
+> diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+> index 050fe1ebf0f7..939620b91c0e 100644
+> --- a/kernel/bpf/lpm_trie.c
+> +++ b/kernel/bpf/lpm_trie.c
+> @@ -155,16 +155,17 @@ static inline int extract_bit(const u8 *data, size_t index)
+>   }
+>   
+>   /**
+> - * longest_prefix_match() - determine the longest prefix
+> + * __longest_prefix_match() - determine the longest prefix
+>    * @trie:	The trie to get internal sizes from
+>    * @node:	The node to operate on
+>    * @key:	The key to compare to @node
+>    *
+>    * Determine the longest prefix of @node that matches the bits in @key.
+>    */
+> -static size_t longest_prefix_match(const struct lpm_trie *trie,
+> -				   const struct lpm_trie_node *node,
+> -				   const struct bpf_lpm_trie_key_u8 *key)
+> +static __always_inline
+> +size_t __longest_prefix_match(const struct lpm_trie *trie,
+> +			      const struct lpm_trie_node *node,
+> +			      const struct bpf_lpm_trie_key_u8 *key)
+>   {
+>   	u32 limit = min(node->prefixlen, key->prefixlen);
+>   	u32 prefixlen = 0, i = 0;
+> @@ -224,6 +225,13 @@ static size_t longest_prefix_match(const struct lpm_trie *trie,
+>   	return prefixlen;
+>   }
+>   
+> +static size_t longest_prefix_match(const struct lpm_trie *trie,
+> +				   const struct lpm_trie_node *node,
+> +				   const struct bpf_lpm_trie_key_u8 *key)
+> +{
+> +	return __longest_prefix_match(trie, node, key);
+> +}
+> +
+>   /* Called from syscall or from eBPF program */
+>   static void *trie_lookup_elem(struct bpf_map *map, void *_key)
+>   {
+> @@ -245,7 +253,7 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
+>   		 * If it's the maximum possible prefix for this trie, we have
+>   		 * an exact match and can return it directly.
+>   		 */
+> -		matchlen = longest_prefix_match(trie, node, key);
+> +		matchlen = __longest_prefix_match(trie, node, key);
+>   		if (matchlen == trie->max_prefixlen) {
+>   			found = node;
+>   			break;
+>
+>
+>
