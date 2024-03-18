@@ -1,89 +1,126 @@
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9084552F95
-	for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 16:13:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 435C1535A3
+	for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 16:27:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710778398; cv=none; b=nyP3zYLrq0CzFA5Q6LHLK5X5H4J5BKoJyFZCarS1jY6LHYuhy9G9nbfs5ZVTHHUAiRrgz+ob23nxTPJVPy8m1RSEYBAa7v/kzpMRAopiBXt5ps06j641bpUGwHXAlKfhtGUboOyFGcfCWg/CcY69BIVDNRo7ih6XcgA9TCfJmco=
+	t=1710779279; cv=none; b=ATpy1ib99rxbCPghJqS424a6f3f+gjq5QCfeQoGO7ADBCHwmxdriFDGA9nvOcjAfnDRSyiYqtTqZfa+DZ9UyamFb0/guScB23zyIDuAh/MQm7FdpcIBixKSjr7OfAXTnPqnHfTB6ChohPxY6Dx7TWp/kjaLPJibOIwEh8VwalCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710778398; c=relaxed/simple;
-	bh=M7JooqxhdWYea4plzORL0v2OMwlVA0hITUGPfyr/rxw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LAP3fK+t5fw1Z8iy9rVcc823pIDdTZkgD5z+ffwI3DH7iBcfi62Z0BHXdNWmF7MVe+WLGJwpgs74ozQLI5MhKyfFxzySHiJzmCQoAJ/ClIl2gltsdBvXIR9nXvcTVBpOeYJzEClBqiQRwyi7we+3ELBmVmt7OtiEZ2QklsWAlDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=W/LMiKkl; arc=none smtp.client-ip=95.215.58.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1710779279; c=relaxed/simple;
+	bh=QZo9s5ESHQGW9m07Am2nOd80FgXivJ2uUv1el3Ml4Eo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Vqjlpsa6qgKRDhL3XfZAMGt0/e0/bJiW0xYOI3+slIkfm27XnMrrYJQRVvGLFviKgEPYfUChKp70KpwMvw32Aidz7XykUuIxHks4pkPpGm9/+OByNn7XrcwAchQf2S2tK7+LB5SX+qoP8ueapVWW9P8QFU2cWR1IyRvgXzYyIVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P7iYrlFI; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="W/LMiKkl"
-Message-ID: <4bcdd9cc-6149-490e-b3df-a39346e5035b@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1710778394;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=M7JooqxhdWYea4plzORL0v2OMwlVA0hITUGPfyr/rxw=;
-	b=W/LMiKkl6A4zdyQuXXzHGTu6K+ix0qYxeckWn56Lr46JxVD++xmIb6GSHomV5XuUqBTnxN
-	LOhg+TZiWK4q32Hpl4i2AcyLD09newzHoBR+5j9LENN/eoOiAZkWDEc6cbM9sdpw/86qeV
-	iZYKYZuyFvzzKM8Rzo1HI380XLGGl/A=
-Date: Mon, 18 Mar 2024 09:13:11 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P7iYrlFI"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6e6c0098328so3769509b3a.3
+        for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 09:27:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710779277; x=1711384077; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y699/UWVViluLuRLEjXJqXWwacOFKvFvMGgBefP0DGk=;
+        b=P7iYrlFI9O7z5QbiMDJLNZzD2BOyscZBB6bjj9QaRaLZ5YJ/5TppynaV/0+2ZmazYk
+         bB+5ojqICQoepwMogJ16cFLHMxQ7RUic+KNeCAsIiCT5Oua/mpv4OiMx5/s7WfZeV6aP
+         R5NuDZguwZ/bErHf9EN4f21NHAPwZjPE7yiGFV0E0rV7ba1LnwVakiD9ySXsMVt1mmOM
+         +R2qTZmM7RKjuCPBfD2WT4smmyn/TyRDsbkKbpC5OpSYCifZesIYKNqYcO3W4Gt4v6ng
+         ektilqux3SlGlXjd/5iJv8Mc69nSl6ohlFLeWc0gOaxUyOMxxb+T6b+VCRxODZIptc4l
+         8mTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710779277; x=1711384077;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y699/UWVViluLuRLEjXJqXWwacOFKvFvMGgBefP0DGk=;
+        b=rAGD1eQXOZJ9TUa+oCb05EYjjulY1mfX1NbZ2Rp8vVi+EH2WBckTYr8wtCknbCBfY0
+         PGdgIhqZu2SktBkFSGK8LCiNXDSzrDzAQFjVD3pI36mqGmtGwfEJI3OcY7Zg77LZkuI3
+         zObkA8720piQBdgDpGM0oiAjLXfYeaVgM3B35mqA/Ci2g1IYQAA/d33c4xy+xJ4fTUr3
+         RfFgbeWY1C8YNeD1eMwhUUD91Z5TtYnS8oEtLD9UfzdVmoJMZ3ce5x01suRMLs9glgKq
+         g5Yq/12L4x3n953AH4vh4jeVZ2dDS1H4P7z88ZMjybvbgrnFKJ5kvquQr59S+rChn4S6
+         tO0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX3n/YGT92Xk2HP6tVtewDIezAe6xJamY7+A4Az4eCy0odPBnfSA2oRq/mLOHtw1Auys5Gr0oNtEq1BWlbnQ1U+0foU
+X-Gm-Message-State: AOJu0YyFiCpxEeW/qmheHaWfvQeokiIciDdwESZ733puUiAyM/hdweWr
+	SHRjd7SOQhGne5SVzTo/1us8APlK8Q1dbs8bFb+qMV+iVyiV7AjitpM4i1UcKgCJtrHcSAhcgV3
+	7UOj62myr21JpV1cbS1W4Wk4B9imRV6UV
+X-Google-Smtp-Source: AGHT+IEDg3gEigglhnhJRCkhkoGn+0raxMlzOooFDYjFzTcvVoRSEDQMQyRTB33Mxeztp5GCfcKSqZ0wWnmTP6U9pLk=
+X-Received: by 2002:aa7:88cf:0:b0:6e6:8b59:1bad with SMTP id
+ k15-20020aa788cf000000b006e68b591badmr212943pff.25.1710779277362; Mon, 18 Mar
+ 2024 09:27:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH linux-next] bpf: fix warning for crash_kexec
-Content-Language: en-GB
-To: Hari Bathini <hbathini@linux.ibm.com>, bpf@vger.kernel.org
-Cc: Kexec-ml <kexec@lists.infradead.org>, Baoquan He <bhe@redhat.com>,
- Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>
-References: <20240209123520.778599-1-hbathini@linux.ibm.com>
- <6a1d94f7-b4bf-4315-b862-4e278abbaa73@linux.ibm.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <6a1d94f7-b4bf-4315-b862-4e278abbaa73@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20240315204524.967664-1-andrii@kernel.org> <20240315204524.967664-4-andrii@kernel.org>
+ <Zfdu5xIO0ONUCMGr@krava>
+In-Reply-To: <Zfdu5xIO0ONUCMGr@krava>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 18 Mar 2024 09:27:45 -0700
+Message-ID: <CAEf4BzarWYxKximjp4KNwagy6qhGTFrCy=48TXhzY-O36ZQr7Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/5] bpf: support BPF cookie in raw tracepoint
+ (raw_tp, tp_btf) programs
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, martin.lau@kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-On 3/17/24 11:52 PM, Hari Bathini wrote:
-> Just checking on whether this will go via bpf or mm tree?
-
-Sending to bpf-next should be okay.
-Could you resubmit the patch as CONFIG_CRASH_DUMP probably not
-available to bpf-next when you initially submitted the patch.
-
+On Sun, Mar 17, 2024 at 3:30=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
 >
-> On 09/02/24 6:05 pm, Hari Bathini wrote:
->> With [1], CONFIG_KEXEC & !CONFIG_CRASH_DUMP is supported but that led
->> to the below warning:
->>
->>    "WARN: resolve_btfids: unresolved symbol crash_kexec"
->>
->> Fix it by using the appropriate #ifdef.
->>
->> [1] https://lore.kernel.org/all/20240124051254.67105-1-bhe@redhat.com/
->>
->> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
->> ---
->>   kernel/bpf/helpers.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> index 4db1c658254c..e408d1115e26 100644
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -2545,7 +2545,7 @@ __bpf_kfunc void bpf_throw(u64 cookie)
->>   __bpf_kfunc_end_defs();
->>     BTF_KFUNCS_START(generic_btf_ids)
->> -#ifdef CONFIG_KEXEC_CORE
->> +#ifdef CONFIG_CRASH_DUMP
->>   BTF_ID_FLAGS(func, crash_kexec, KF_DESTRUCTIVE)
->>   #endif
->>   BTF_ID_FLAGS(func, bpf_obj_new_impl, KF_ACQUIRE | KF_RET_NULL)
+> On Fri, Mar 15, 2024 at 01:45:22PM -0700, Andrii Nakryiko wrote:
+> > Wire up BPF cookie for raw tracepoint programs (both BTF and non-BTF
+> > aware variants). This brings them up to part w.r.t. BPF cookie usage
+> > with classic tracepoint and fentry/fexit programs.
+> >
+> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > ---
+> >  include/linux/bpf.h            |  1 +
+> >  include/uapi/linux/bpf.h       |  1 +
+> >  kernel/bpf/syscall.c           | 13 +++++++++----
+> >  kernel/trace/bpf_trace.c       | 13 +++++++++++++
+> >  tools/include/uapi/linux/bpf.h |  1 +
+> >  5 files changed, 25 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index f8a09a742e38..32dde6ce7e92 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -1611,6 +1611,7 @@ struct bpf_tracing_link {
+> >  struct bpf_raw_tp_link {
+> >       struct bpf_link link;
+> >       struct bpf_raw_event_map *btp;
+> > +     u64 cookie;
+> >  };
+> >
+> >  struct bpf_link_primer {
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index 3c42b9f1bada..bf80b614c4db 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -1664,6 +1664,7 @@ union bpf_attr {
+> >       struct { /* anonymous struct used by BPF_RAW_TRACEPOINT_OPEN comm=
+and */
+> >               __u64 name;
+> >               __u32 prog_fd;
 >
+> should we add __u32 :32; in here ?
+>
+
+I thought that's why we have __aligned_u64? But I'll look around in
+bpf_attr if we do that elsewhere. I'll need to respin to fix config
+without CONFIG_BPF anyways, so will incorporate this as well.
+
+> jirka
+>
+> > +             __aligned_u64 cookie;
+> >       } raw_tracepoint;
+> >
+> >       struct { /* anonymous struct for BPF_BTF_LOAD */
+
+[...]
