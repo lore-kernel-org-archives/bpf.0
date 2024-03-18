@@ -1,79 +1,70 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70CA2381B1
-	for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 12:19:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2690B381DD
+	for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 12:37:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710764371; cv=none; b=DQNrx+3+0z0pI/o221TcuksyVIGWXDrjDExyI0L3Tf/Khdg2DfY4HAZ4VmRPzcac6MMHQEmIyIFNblThxmbdIzOytaMxoHz/AllGRP3JdIX28MCvSzApWMJhv59Gjx5zCFUfD48o6jdFfLQfIqVdMp8rMNahP+43KeeTEZYOPD8=
+	t=1710765433; cv=none; b=dg0icCBQ3byZPEao3RvOG3A2ykjvaXmf7cY4+SyspfbIVTI/1AEn7ilB1OpNPOsbENnK9gO0wQvB+P4i2SDX2Otq+0hfWXk3v9Ws8RYkgPx/JkluDyRHV1Qr37B2s5vKKXY1MZyrpfLgq2Eyqs43yH72WHRX5VyM2MpNVIP5ruQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710764371; c=relaxed/simple;
-	bh=pOSlkUulYyw5/O4A+X0uYoH/0HZhuQNeAcLk38o/IBk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YAdQsDSm0VVPLTszzP7SGDXpOhTB0AQ31OSXUHchb2/wN88cdGb0SOSCrqm5n4WnGRsF/qUDkTOY7PQSE9kWjPsrIxTIG56hdmiDZVOjj8RUzAYn1TnaoDk+pSprBYyLvNd26aukMJsUyW7tc2uj7XShi8xInEv7qYQkU+65sBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=aaEwdND6; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
+	s=arc-20240116; t=1710765433; c=relaxed/simple;
+	bh=M9ALcJzr0HCGD3fmSiG2S2mtsB1s+S0OgFJOuUsnXR4=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dfnhS1oQNM2VwxPs+kO2Z/5egevvWtjaJHqGEiE77S+QRTmv9Ww0thPjG1S9zkCbKJFd86DIs8TsLE7dohe4Lc/6sZoxjo8GywWdzTCWlk+oYphVVon0ojAoRr9bfHWV6Dcx/z4Rp3SudXtPQb/RXfzV5ZxF5GVP4l66e3KweJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cVe7+Fcm; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="aaEwdND6"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-568d323e7fbso1396475a12.3
-        for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 05:19:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cVe7+Fcm"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-56845954ffeso5703124a12.2
+        for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 05:37:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1710764367; x=1711369167; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710765430; x=1711370230; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pOSlkUulYyw5/O4A+X0uYoH/0HZhuQNeAcLk38o/IBk=;
-        b=aaEwdND64LiE8FYe7nBzBYvjKQD99tn2uikFgpMIZQWr98se8EsGqjiE8aO8+0BLEg
-         Td+mrf2BtIDFn9LNNiRyBh3ZdW6NmnhWqBaKslesdVEzpl+PagC0Pb6DR669E4tnjad7
-         o2a9OBHRJ/hFmqXYZmCy8b/kxZcrhWjDCNj3REai7vuWjl8G883ZuYWM9iu4WYp1oGNo
-         ne3lehklZNdfGovA5oKmJfQyfnYkcly/487nl5DyD3Mu4xV0J15o/GsgcsMlBSplkS3N
-         OSaCf68K14QyFZvweJO3p6ps8DhDAHhB4OrjBsIrsU3POxEuMzaZjUMY6tiCk/o75ixT
-         WyMA==
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=auQbLxN2c/29uy5JBIlEIMSQVmIthlFDdWLRTIGxpp4=;
+        b=cVe7+Fcms2sdCtAn7zhKhYyNJLJQeoy92R7hjd37YGo7kpsifcPM0WcoiKrxnVKETW
+         HwPgljRU9evdIH6TnXDZdXTphGrZJiBBPThDqd+lFgGanc2OQDBEAbGyJRrlMwaYCdgz
+         0oOSO4ON81IloI/PxfcUkgGJuIPRMiCgvQg4TzDtZzq6F/CQo53BvCe6/WuU5UKL50Q0
+         GkRoYvjePB5mGueMujRqgGxtfDHkwBBc3msNspb1KExSxJqWdwG1I4+fgZRdWUYiBJNj
+         aQERXQ8NAwkk/gZ8Nkiqk1wMcLxvuLHGmelVKhU0+NwiXM6eaZPHPkO0Tq/tNnyZ2fCU
+         EXow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710764367; x=1711369167;
+        d=1e100.net; s=20230601; t=1710765430; x=1711370230;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pOSlkUulYyw5/O4A+X0uYoH/0HZhuQNeAcLk38o/IBk=;
-        b=srdBKnMBoPi3EAkumiTIw4LYklWC5pPKRctbRl2i4NyZa3MmEuxqG8Hx/+yGv8bZ3G
-         Hj3vhDBUOSQU5CXbY64tqiqPGswuW9lxHC+wJ2unCUAa5T9jgbGjI4f/Pa2spfUu8ExG
-         YXqs/d0jY6x6quZLicT/MFXL74L3ei1j+NrF9owI+XkhAMddvCDrp8S27OCq6EBVqL7x
-         CxuNRvLb1OvR/oRjBstP6J7/lJRzAZjhcOFTOQ16CYBvwWM47cLJwIs1ncuGlZDtGVgD
-         HDHDXypGtze29mPS2BKZ4gzWAXpVMq6GK90ky5JUIeHA/XjNNpuBVPRgOJOxl/VVXFnS
-         zDcA==
-X-Forwarded-Encrypted: i=1; AJvYcCUKfBkGipVfRR4aI9Yo7i3SsCYGlpENn+EIsds4gWqxDhxmF+9hmJgguRuycCD4oDiPdqn/B07kI8iKjKT/egSvzlGJ
-X-Gm-Message-State: AOJu0YzPofbmCVacfari3lPUldc0nqUkWxxJWAtx5PeKOvU1QFfQXu3G
-	5UD2gTOduko01mFwD7KCFds/a7UomlK0iUi4uvxM/XUwdiyguYwuC6AY5ivqHJ8=
-X-Google-Smtp-Source: AGHT+IHF1tEj7gb/YwVHDW9BOuby74iZuApmYgSUxT3zLZ2JgfbTwLMWpYsP7y0MGCfo/Ko64/Zs/w==
-X-Received: by 2002:a05:6402:c13:b0:568:b391:4ec8 with SMTP id co19-20020a0564020c1300b00568b3914ec8mr5028130edb.12.1710764366639;
-        Mon, 18 Mar 2024 05:19:26 -0700 (PDT)
-Received: from localhost ([193.47.165.251])
-        by smtp.gmail.com with ESMTPSA id h13-20020a0564020e0d00b00568b163c4easm3421073edh.11.2024.03.18.05.19.25
+        bh=auQbLxN2c/29uy5JBIlEIMSQVmIthlFDdWLRTIGxpp4=;
+        b=YsVP9I6Hmws9inm25rWaAep0PdB/AGSIlSj9yMd2Nm9hvVeKXEub1YTE7eo+WPuEHS
+         lFEUA91E5mCIvihgf9FZ8GYCPP9IOp00CYTKFFf6kSM3EItgrU7+2kIuagTisehEdPTA
+         tPNq7hArIWlzweaZjTNwzngbjdtJ3Dw8j3dHuXBwbwkZFM0rqA3iKoOO2hL9hUbjjN4U
+         V/X9TC6TJoLMLxkzmeSiNrbzIM0z3ZKRzcU8kh5TMxfrdqBdu4DHRwXk4p6bd22j48nU
+         ex7gjso84qKdIeFSVPuOAxP7/lVflX/PD621irZvTLJSGZxWmL8rWABb0eEwFMc4uz23
+         FZ/A==
+X-Gm-Message-State: AOJu0YxOTKUq2RwncDYLp/ITm1SiUsVV8ZoZrz9se7t0d0vDVIuUNAQA
+	2gJypifL1GQD9vkpjckbbxcRjDhuPBqB4S90BhNQq0rW5bR9dAmv
+X-Google-Smtp-Source: AGHT+IHzZEZlnjpkGy3TL0YbeXOJNqtvan0FF6aENbSKrPcNI3h9x1afZZLwlAfkz4i0B5alCR8WZw==
+X-Received: by 2002:a05:6402:530d:b0:56b:817a:5bcf with SMTP id eo13-20020a056402530d00b0056b817a5bcfmr522008edb.5.1710765430267;
+        Mon, 18 Mar 2024 05:37:10 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id g13-20020a056402428d00b005689f3d6936sm4602742edc.53.2024.03.18.05.37.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Mar 2024 05:19:25 -0700 (PDT)
-Date: Mon, 18 Mar 2024 13:19:22 +0100
-From: Jiri Pirko <jiri@resnulli.us>
-To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+        Mon, 18 Mar 2024 05:37:10 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 18 Mar 2024 13:37:08 +0100
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@google.com>,
-	Amritha Nambiar <amritha.nambiar@intel.com>,
-	Larysa Zaremba <larysa.zaremba@intel.com>,
-	Sridhar Samudrala <sridhar.samudrala@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	virtualization@lists.linux.dev, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v5 0/9] virtio-net: support device stats
-Message-ID: <ZfgxSug4sekWGyNd@nanopsycho>
-References: <20240318110602.37166-1-xuanzhuo@linux.alibaba.com>
- <Zfgq8k2Q-olYWiuw@nanopsycho>
- <1710762818.1520293-1-xuanzhuo@linux.alibaba.com>
+	John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Yury Namgung <ynamgung@meta.com>
+Subject: Re: [PATCH bpf-next v2 1/5] bpf: Allow helper
+ bpf_get_[ns_]current_pid_tgid() for all prog types
+Message-ID: <Zfg1dO3Wmd_Cj1Jo@krava>
+References: <20240315184849.2974556-1-yonghong.song@linux.dev>
+ <20240315184854.2975190-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,25 +73,108 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1710762818.1520293-1-xuanzhuo@linux.alibaba.com>
+In-Reply-To: <20240315184854.2975190-1-yonghong.song@linux.dev>
 
-Mon, Mar 18, 2024 at 12:53:38PM CET, xuanzhuo@linux.alibaba.com wrote:
->On Mon, 18 Mar 2024 12:52:18 +0100, Jiri Pirko <jiri@resnulli.us> wrote:
->> Mon, Mar 18, 2024 at 12:05:53PM CET, xuanzhuo@linux.alibaba.com wrote:
->> >As the spec:
->> >
->> >https://github.com/oasis-tcs/virtio-spec/commit/42f389989823039724f95bbbd243291ab0064f82
->> >
->> >The virtio net supports to get device stats.
->> >
->> >Please review.
->>
->> net-next is closed. Please resubmit next week.
->
->
->For review.
+On Fri, Mar 15, 2024 at 11:48:54AM -0700, Yonghong Song wrote:
+> Currently bpf_get_current_pid_tgid() is allowed in tracing, cgroup
+> and sk_msg progs while bpf_get_ns_current_pid_tgid() is only allowed
+> in tracing progs.
+> 
+> We have an internal use case where for an application running
+> in a container (with pid namespace), user wants to get
+> the pid associated with the pid namespace in a cgroup bpf
+> program. Currently, cgroup bpf progs already allow
+> bpf_get_current_pid_tgid(). Let us allow bpf_get_ns_current_pid_tgid()
+> as well.
+> 
+> With auditing the code, bpf_get_current_pid_tgid() is also used
+> by sk_msg prog. But there are no side effect to expose these two
+> helpers to all prog types since they do not reveal any kernel specific
+> data. The detailed discussion is in [1].
+> 
+> So with this patch, both bpf_get_current_pid_tgid() and bpf_get_ns_current_pid_tgid()
+> are put in bpf_base_func_proto(), making them available to all
+> program types.
+> 
+>   [1] https://lore.kernel.org/bpf/20240307232659.1115872-1-yonghong.song@linux.dev/
+> 
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 
-RFC, or wait.
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
->
->Thanks.
+jirka
+
+> ---
+>  kernel/bpf/cgroup.c      | 2 --
+>  kernel/bpf/helpers.c     | 4 ++++
+>  kernel/trace/bpf_trace.c | 4 ----
+>  net/core/filter.c        | 2 --
+>  4 files changed, 4 insertions(+), 8 deletions(-)
+> 
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index 82243cb6c54d..8ba73042a239 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+> @@ -2575,8 +2575,6 @@ cgroup_current_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>  	switch (func_id) {
+>  	case BPF_FUNC_get_current_uid_gid:
+>  		return &bpf_get_current_uid_gid_proto;
+> -	case BPF_FUNC_get_current_pid_tgid:
+> -		return &bpf_get_current_pid_tgid_proto;
+>  	case BPF_FUNC_get_current_comm:
+>  		return &bpf_get_current_comm_proto;
+>  #ifdef CONFIG_CGROUP_NET_CLASSID
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index a89587859571..9234174ccb21 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1730,6 +1730,10 @@ bpf_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>  		return &bpf_strtol_proto;
+>  	case BPF_FUNC_strtoul:
+>  		return &bpf_strtoul_proto;
+> +	case BPF_FUNC_get_current_pid_tgid:
+> +		return &bpf_get_current_pid_tgid_proto;
+> +	case BPF_FUNC_get_ns_current_pid_tgid:
+> +		return &bpf_get_ns_current_pid_tgid_proto;
+>  	default:
+>  		break;
+>  	}
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 0a5c4efc73c3..1b041911b1d8 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -1525,8 +1525,6 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>  		return &bpf_ktime_get_boot_ns_proto;
+>  	case BPF_FUNC_tail_call:
+>  		return &bpf_tail_call_proto;
+> -	case BPF_FUNC_get_current_pid_tgid:
+> -		return &bpf_get_current_pid_tgid_proto;
+>  	case BPF_FUNC_get_current_task:
+>  		return &bpf_get_current_task_proto;
+>  	case BPF_FUNC_get_current_task_btf:
+> @@ -1582,8 +1580,6 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>  		return &bpf_send_signal_thread_proto;
+>  	case BPF_FUNC_perf_event_read_value:
+>  		return &bpf_perf_event_read_value_proto;
+> -	case BPF_FUNC_get_ns_current_pid_tgid:
+> -		return &bpf_get_ns_current_pid_tgid_proto;
+>  	case BPF_FUNC_ringbuf_output:
+>  		return &bpf_ringbuf_output_proto;
+>  	case BPF_FUNC_ringbuf_reserve:
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 8adf95765cdd..0c66e4a3fc5b 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -8342,8 +8342,6 @@ sk_msg_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>  		return &bpf_event_output_data_proto;
+>  	case BPF_FUNC_get_current_uid_gid:
+>  		return &bpf_get_current_uid_gid_proto;
+> -	case BPF_FUNC_get_current_pid_tgid:
+> -		return &bpf_get_current_pid_tgid_proto;
+>  	case BPF_FUNC_sk_storage_get:
+>  		return &bpf_sk_storage_get_proto;
+>  	case BPF_FUNC_sk_storage_delete:
+> -- 
+> 2.43.0
+> 
+> 
