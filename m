@@ -1,88 +1,134 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B2958233;
-	Mon, 18 Mar 2024 21:30:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B54658ADF;
+	Mon, 18 Mar 2024 21:37:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710797428; cv=none; b=nHEviqa6ptqRQ0zGd1gwXoeNTfB84VsE0HUPWU+ejt80kkVCA0c0u0uTZ8r2D/QDcAJr0CDYjnw3eYdaGLKsbjYbCO7vPXVpP+o2b9nKFIt/7ADPEWnhN43NhA6NugMzzOdiBdiFCWW+X8BHD7BuMU3FydtBh7nPKVqSmxeN03g=
+	t=1710797860; cv=none; b=V+64OyJDJ8K9lB+kUd99TgqqILiDp4JI6QSeUOty1mQiYZSGxDS9zvzuIsnLI9JSCtSJ8X96PmFCvwwDVSBH/kXQk5c+pi9dVRSAcUCIhU7XcBQvfayt9GERRHNnx8stdJ2SYtRdu/DuYHHoUeEWzw3kXie3xWzV8012FtYxxaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710797428; c=relaxed/simple;
-	bh=IQfDhlfXgR0M/YJ+genNdqvBkoyI4XQyUz4tYdGuLbQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=qJ8+Xf64DWcnuehXQelc2/84hHW9sWQHWEroJDU404qkTshHqfJ8WGpmJgI5keBui6wmUuzLokbdsLOOCYuBmKxMZGzo5x/Clbm0ykUJuK1v5O0NW+mwcCfrJLF+6d7/m5I5xGwVtAzFJLJ6xSobN3uoCA8Aa0QtnSCMF2NHDxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HZ6UiNf0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710797860; c=relaxed/simple;
+	bh=ddA5fr3D5LmbfEYfDAkP0jwL8eKv8+2KFsAx6wyNvQU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qu76xsVpm8wuGIYi5rHqIMxJFcHqHJvSaR+UNC5WmJ2YU0+cg1XLDW/EjDlkyl9pQKdjTvxadNavDD2eIaYp8l9oHBFbeUMfD44e+2mbLdqyugTBjHGDjcQ8MVeAkc7/ll8LhaYuHPu+R4ale9B0CoGrOX4dph4GiIFfaugcrs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cs8yPxag; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HZ6UiNf0"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2D717C433C7;
-	Mon, 18 Mar 2024 21:30:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cs8yPxag"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10B04C433F1;
+	Mon, 18 Mar 2024 21:37:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710797428;
-	bh=IQfDhlfXgR0M/YJ+genNdqvBkoyI4XQyUz4tYdGuLbQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=HZ6UiNf06eWxfyjbW/dbD0mCoYbrtc8CEQdqotsIZg1rPamGZEWJSgiUY8iDg8Ipc
-	 iOQp9jsSIvSKfHN3aSLZVfayfXkcXrVqDucLu1dkf5yeCs1eCnW+yexKCgNJQNrDdf
-	 I/v5CgFITSDH4k87C/+tTf4T7jzXbk+NNGwV1ZqttnRRwxvlRo49/sA8HIfIO/TKA7
-	 uUm72egu10qBnR6w5pehRMfQDYMAkMclvM7u89pSqVCjxS+SArR38rQ4dQKMxpVWEZ
-	 5l+68AAuJSHscbhVFoGW86pz8UV+QxWK1nHDKD22Y/2STmvpTFTPor97i7NESPSTnS
-	 g5PUKrRqniR6g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 189021466CEB;
-	Mon, 18 Mar 2024 21:30:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1710797859;
+	bh=ddA5fr3D5LmbfEYfDAkP0jwL8eKv8+2KFsAx6wyNvQU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cs8yPxagbUznXrCb64F/T27JfTQMj54nlRvrLev9KpPCam/DieIiDfaAV8E1NZ4xb
+	 r7MxltpqySX7uui9zxGNjoF51X+MWbi8PysU2iS9gdiNW4o/wC93bGbvhZN5blFRUg
+	 sg5LjDjCpbSBphBwqBad1IMb64Ao7kRu+JDLIuoMoAbZ6R91SnZ2yYC+8gGdk4Bbgp
+	 K47zmAGnDZNkTMoYcogW3pEAJpJoEGlsYNNuaRqYBqG4b7qUcThYwKrQsD0/9fOwI8
+	 YDdhYW60V7hqPBC1sx5p5qLybADkGtLK0RBcLFXb5JEMvqcqa4k7gEiNxVP5tL2uzX
+	 WAyqzWLB8OaCQ==
+Date: Mon, 18 Mar 2024 18:37:36 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Mike Leach <mike.leach@linaro.org>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Kajol Jain <kjain@linux.ibm.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Atish Patra <atishp@rivosinc.com>,
+	"Steinar H. Gunderson" <sesse@google.com>,
+	Yang Jihong <yangjihong1@huawei.com>,
+	Yang Li <yang.lee@linux.alibaba.com>,
+	Changbin Du <changbin.du@huawei.com>,
+	Sandipan Das <sandipan.das@amd.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Paran Lee <p4ranlee@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Yanteng Si <siyanteng@loongson.cn>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+	bpf@vger.kernel.org, Leo Yan <leo.yan@linux.dev>
+Subject: Re: [PATCH v3 0/8] Clean up libperf cpumap's empty function
+Message-ID: <Zfi0IJV-OKwyDK0r@x1>
+References: <20240202234057.2085863-1-irogers@google.com>
+ <CAP-5=fVjAHqAHHLqE=3v2bP6S6k98psiuZds7TUTFCT7RgMFdQ@mail.gmail.com>
+ <CAM9d7ciPYMd4zckrcgnPtradZ_bvaNOHji1tkkYQu_TTF5=eYw@mail.gmail.com>
+ <CAM9d7cgbxHZoaq4ZLCda-6TW5A+b+-8dSrRApk+AjcTVNC5hNA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: Remove arch_unprotect_bpf_trampoline()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171079742809.5361.11333101875277498978.git-patchwork-notify@kernel.org>
-Date: Mon, 18 Mar 2024 21:30:28 +0000
-References: <42c635bb54d3af91db0f9b85d724c7c290069f67.1710574353.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <42c635bb54d3af91db0f9b85d724c7c290069f67.1710574353.git.christophe.leroy@csgroup.eu>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, zlim.lnx@gmail.com,
- catalin.marinas@arm.com, will@kernel.org, davem@davemloft.net,
- dsahern@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
- thinker.li@gmail.com, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+In-Reply-To: <CAM9d7cgbxHZoaq4ZLCda-6TW5A+b+-8dSrRApk+AjcTVNC5hNA@mail.gmail.com>
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
-
-On Sat, 16 Mar 2024 08:35:40 +0100 you wrote:
-> Last user of arch_unprotect_bpf_trampoline() was removed by
-> commit 187e2af05abe ("bpf: struct_ops supports more than one page for
-> trampolines.")
+On Thu, Mar 07, 2024 at 03:47:00PM -0800, Namhyung Kim wrote:
+> Hi Ian,
 > 
-> Remove arch_unprotect_bpf_trampoline()
+> Sorry for the late reply.
 > 
-> Reported-by: Daniel Borkmann <daniel@iogearbox.net>
-> Fixes: 187e2af05abe ("bpf: struct_ops supports more than one page for trampolines.")
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> 
-> [...]
+> On Fri, Feb 16, 2024 at 5:04 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > On Wed, Feb 14, 2024 at 2:03 PM Ian Rogers <irogers@google.com> wrote:
+> > >
+> > > On Fri, Feb 2, 2024 at 3:41 PM Ian Rogers <irogers@google.com> wrote:
+> > > >
+> > > > Rename and clean up the use of libperf CPU map functions particularly
+> > > > focussing on perf_cpu_map__empty that may return true for maps
+> > > > containing CPUs but also with an "any CPU"/dummy value.
+> > > >
+> > > > perf_cpu_map__nr is also troubling in that iterating an empty CPU map
+> > > > will yield the "any CPU"/dummy value. Reduce the appearance of some
+> > > > calls to this by using the perf_cpu_map__for_each_cpu macro.
+> > > >
+> > > > v3: Address handling of "any" is arm-spe/cs-etm patch.
+> > > > v2: 6 patches were merged by Arnaldo. New patch added ensure empty
+> > > >     maps are allocated as NULL (suggested by James Clark). Hopefully a
+> > > >     fix to "perf arm-spe/cs-etm: Directly iterate CPU maps".
+> > > >
+> > > > Ian Rogers (8):
+> > > >   libperf cpumap: Add any, empty and min helpers
+> > > >   libperf cpumap: Ensure empty cpumap is NULL from alloc
+> > > >   perf arm-spe/cs-etm: Directly iterate CPU maps
+> > > >   perf intel-pt/intel-bts: Switch perf_cpu_map__has_any_cpu_or_is_empty
+> > > >     use
+> > > >   perf cpumap: Clean up use of perf_cpu_map__has_any_cpu_or_is_empty
+> > > >   perf arm64 header: Remove unnecessary CPU map get and put
+> > > >   perf stat: Remove duplicate cpus_map_matched function
+> > > >   perf cpumap: Use perf_cpu_map__for_each_cpu when possible
+> > >
+> > > Ping. Thanks,
+> > > Ian
 
-Here is the summary with links:
-  - [bpf-next,v4,1/2] bpf: Remove arch_unprotect_bpf_trampoline()
-    https://git.kernel.org/bpf/bpf-next/c/e3362acd7967
-  - [bpf-next,v4,2/2] bpf: Check return from set_memory_rox()
-    https://git.kernel.org/bpf/bpf-next/c/c733239f8f53
+> > Adrian and James, are you ok with this now?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> I think James is fine now and the Intel-pt part seems straight-forward
+> so I'd like to merge this change.  Please tell me if you have any concerns.
 
+Namhyung,
 
+	I noticed this hasn't been merged and applies cleanly, so I'm
+adding it to perf-tools-next, from your comment above can I take it as
+an Acked-by or even Reviewed-by?
+
+- Arnaldo
