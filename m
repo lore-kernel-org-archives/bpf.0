@@ -1,195 +1,279 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A9D2030B
-	for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 20:38:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCE8C250EC
+	for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 20:50:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710794317; cv=none; b=ETyflnfufkCSQXdROcCtolQ2KY/b8ZkelCCXsiw3bmwxQZsGpWFIH3p8tc6S/bslo62zjys2uMy8e05VgPHBTUH9nYMbhSegpyF5F+xOQfsS0RsFfdrRXYyuagWzvs7wmSHtra0NHvNkNWKG7oACwHDx0METFIS+0TNDlfho4mA=
+	t=1710795041; cv=none; b=TWjZqDKDU9JFlTmc/aYJLm0fBCTaigZpzu3JZcCv3Sx7iGT2QlgytFrKFNOBhwnZBIxrqsaeVaE61ElGj47BLX8/2ffSLGuAm8DqJF+fV0o56MqkeXub29+HyktU50KNXIRYpj/ZvPtZuj95gHm8skvPV0rmhPC66BXApGK52tU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710794317; c=relaxed/simple;
-	bh=Nkjn0kW03EX9NQ3TjMZ7AFQJxjqx9xaHW8JdILquVlQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=IqxdRFFC2+Go+qQKBMw3Wyiw3I2rUNVgXQNi5HPJZ0ZMfoCtsaEvgsmKRF+BAd101766/PLPZDZ6voDe7Hh410fO1oqKxzvM+JQIgBSHVLReYxpyaYTTwdRmh/BQLRfigW7MYQblkNYPO29i/xdAmeCN2kVZwj5aZTU/bQUzmag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=k+IMhwxE; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1710795041; c=relaxed/simple;
+	bh=Y2Ktp03k4M4BL4hNqLy1bzRgT4KFxGR6SM79ehngwps=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iJh/xY0rKGpe/9O4UNwVFxdcJ73yVPMMG7TjhtGx9Xc2XZF3Kbeq2biVw3DkkOmiH+yITHxIphrg8zUsd4ENkkOHER2vMwTX88pBsTqDQ9NbCGAHD1R385j47C6oVMz7spX2vhhvMY78gptQlP4EdoFSqWR689vC7LLQsbqBgeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dxWm3+v8; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="k+IMhwxE"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42IKNAXJ032645;
-	Mon, 18 Mar 2024 20:38:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=wSjgIYOKp2lEYtGH3CVi9Nv9iBSWo8khr4Kv0ATiydc=;
- b=k+IMhwxEgUSyU0MfXGHPgI3wMEM+/OJLrTYoOk9MRzSUJUjoTIYKukWMkj3Utb0Y1hR/
- 5/lFAem4aoqAwbp28D7ZYeGlfqcm1a7lomfrsEJ2e3M7wCEmMDKP94++qeavhT5ajdqv
- fuhu+HkFurFoWSsST0iGHKACoMBZ4cIzP0z9DkJIbU3E8FqM3daVd5sr7jn2fwTLHHwF
- n/S/Vtk0LSIZuAygOXeC5DsMz9+KO0L/SHAfomKt/AxnHUH77D5mMb1jliFu+jXZId5K
- rJ3zplycoaJ0Y4Y2AmZGBOTjXzei5USAADcdLetM8xgLwUvo6HI1Wr8cG5NB+HgS4/Ss gQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wxvkmg2uq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Mar 2024 20:38:30 +0000
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42IKcUfH028387;
-	Mon, 18 Mar 2024 20:38:30 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wxvkmg2uh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Mar 2024 20:38:30 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42IHSZkK017190;
-	Mon, 18 Mar 2024 20:38:29 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wwnrt3d9m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Mar 2024 20:38:29 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42IKcOfo37028284
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 18 Mar 2024 20:38:26 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EDBF920043;
-	Mon, 18 Mar 2024 20:38:23 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9F09420040;
-	Mon, 18 Mar 2024 20:38:23 +0000 (GMT)
-Received: from heavy (unknown [9.171.85.188])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon, 18 Mar 2024 20:38:23 +0000 (GMT)
-Date: Mon, 18 Mar 2024 21:38:22 +0100
-From: Ilya Leoshkevich <iii@linux.ibm.com>
-To: Kui-Feng Lee <sinquersw@gmail.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Cc: bpf <bpf@vger.kernel.org>, Vasily Gorbik <gor@linux.ibm.com>
-Subject: Re: Crash caused by 778666df60f0 ("s390: compile relocatable kernel
- without -fPIE")
-Message-ID: <ig5bw37zznqrokjeyloobncubiy6bqxh6drszewjkby56y55by@o64a2x4zqo5v>
-References: <c9923c1d-971d-4022-8dc8-1364e929d34c@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c9923c1d-971d-4022-8dc8-1364e929d34c@gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: cW9Er-VX4-jw3BNRxRxvOCrPR7Q15W-s
-X-Proofpoint-ORIG-GUID: 0JsM_eqtiVcG8dtPG9sHdlFpevqRYs0Z
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dxWm3+v8"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1dd10a37d68so39141735ad.2
+        for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 13:50:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710795039; x=1711399839; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6X0Lnyz5OPcRRj5EsLiPKv0i4aH046pg5cWM0rXZZoY=;
+        b=dxWm3+v8r32uYX7lGXvI+O9LfEWRBwd3rGixUwDZwOX6bTiKQeORLoWI+y/HndI70R
+         fris9DFGErVwQcRZz2DjtjWm3P+ML8Avcu19/NbxdGYh7iyy5+e253YvJV4aC8mkKGFa
+         OMRZC5dtNjx2X9tRR9hfzkBlVmbfkVd5bR8rKhS+QprTWdWYbiOkj/0SxLQbSmJ6RULM
+         mcBFQWyAi1Y1S4kOyr22iNuc3wTsds70/LUQdise5VTA/0nCpgFM+6cRO6m4LccOq0Ss
+         aP8YgZp3voC1bfs6uBR4sJZ4E2Rx8m7/JrexGwWU2lp3IRC4/ZUbugs7VPwqFnyUgn2F
+         3sHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710795039; x=1711399839;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6X0Lnyz5OPcRRj5EsLiPKv0i4aH046pg5cWM0rXZZoY=;
+        b=w/8iTv1J7Hv3Mj1Kxg99khhBatwR7RPNL+lYB3IFciPV4i8TlTb732OaeFLX4rivfn
+         YxrzreDG/sc8moHY1lz+v9QtS3pkUTc2hPJ+es0/ru+B1J5fuzRq+p33rjfWxdICmM6M
+         nhoCF8tJtJRMTj0HdvbRcXRE2iNs37o1yYgM27AQdX0/Ex4BK9AQWI4SKV/oYrXJrwPY
+         c1glHJ8jwErXf9kF2Q6LMr/si0WCPsilFHfQatJJZNE+HGdpNToTDuGP58YWTfyRyaHS
+         RaVeQJB1AGF163j7dLr++vA+lZgY1rX8Yds7F0qQ9ZbGQTdo0ZRtL7sT54ke8J0g4XIY
+         z9yA==
+X-Gm-Message-State: AOJu0YxT0XH95U6GZiUDelfB2+4tjqjLTeIeBoXl2z0Rgw3xWKP06ku4
+	d1ppKSpIEm//npNyeLkHy26y2pAHYzLhDBYiu7BmRZWuW6DE0NbRVCa+Zk/QkQlP43/9EOAT2n1
+	WNe7hh4a6kbTrlO8W7+GVTkhjJ5g=
+X-Google-Smtp-Source: AGHT+IHD/d6H5Rzd52m3uWDspDyuDDaESyugxaqty6kHlqDq46If/U1xJJD+Uwh5MFas4DHrEd6gscUDMrzJGGNrAdY=
+X-Received: by 2002:a17:902:a3c5:b0:1de:eac5:9294 with SMTP id
+ q5-20020a170902a3c500b001deeac59294mr10468368plb.13.1710795038822; Mon, 18
+ Mar 2024 13:50:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-18_12,2024-03-18_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1011 mlxscore=0 mlxlogscore=999 phishscore=0 priorityscore=1501
- malwarescore=0 adultscore=0 bulkscore=0 impostorscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2403140000 definitions=main-2403180156
+References: <20240318131808.95959-1-yatsenko@meta.com>
+In-Reply-To: <20240318131808.95959-1-yatsenko@meta.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 18 Mar 2024 13:50:26 -0700
+Message-ID: <CAEf4BzYwo5K4pWxR+S7=n8tRqF_ATQeXUbAJ4EHE97WNfo_GrQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: check bpf_map/bpf_program fd validity
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
+	Mykyta Yatsenko <yatsenko@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 15, 2024 at 09:59:52AM -0700, Kui-Feng Lee wrote:
-> Hi Josh, Sumath, and Heiko,
-> 
-> Recently, all patches submitted to bpf have been failing the selftest
-> "dummy_st_ops/dummy_init_ptr_arg" on the s390x platform. Upon
-> investigation, it was determined that a specific patch, 778666df60f0
-> ("s390: compile relocatable kernel without -fPIE"), is causing the problem.
-> It is the first bad after bisecting. Please take a look.
-> Thank you!
-> 
-> You can reproduce it by running the command
-> 
->     ./test_progs -a dummy_st_ops/dummy_init_ptr_arg
-> 
-> in the tools/testing/selftests/bpf directory in the Linux source tree.
-> This command causes a kernel crash with the following messages. It
-> appears to be related to attaching a trace program at the fentry of a
-> struct_ops operator. The same operator works fine without the trace
-> program. For more details about the test case, please check
-> dummy_st_ops.c in tools/testing/selftests/bpf/prog_tests/.
-> 
-> illegal operation: 0001 ilc:1 [#1] SMP
-> Modules linked in:
-> CPU: 0 PID: 82 Comm: test_progs Tainted: G           OE
-> 6.8.0-rc3-g778666df60f0 #34
-> Hardware name: QEMU 3906 QEMU (KVM/Linux)
-> Krnl PSW : 0704d00180000000 0000000000000002 (0x2)
->            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:1 PM:0 RI:0 EA:3
-> Krnl GPRS: 000003ff800a4956 0000000000000000 0000038000a73d20
-> 0000000082a08b58
->            0000000000000000 000000007083ede2 0000000000000000
-> 0000000000000001
->            00000000009d580e 000000008286bc00 0000037f000000d8
-> 000003ff800b2000
->            0000000081a43c00 00000000011bfe20 000003ff800b208e
-> 0000038000a73c68
-> Krnl Code:#0000000000000000: 0000               illegal
->           >0000000000000002: 0000               illegal
->            0000000000000004: 0000               illegal
->            0000000000000006: 0000               illegal
->            0000000000000008: 0000               illegal
->            000000000000000a: 0000               illegal
->            000000000000000c: 0000               illegal
->            000000000000000e: 0000               illegal
-> Call Trace:
->  [<0000000000000002>] 0x2
->  [<00000000009d5cde>] bpf_struct_ops_test_run+0x156/0x250
->  [<000000000033145a>] __sys_bpf+0xa1a/0xd00
->  [<00000000003319dc>] __s390x_sys_bpf+0x44/0x50
->  [<0000000000c4382c>] __do_syscall+0x244/0x300
->  [<0000000000c59a40>] system_call+0x70/0x98
-> INFO: lockdep is turned off.
-> Last Breaking-Event-Address:
->  [<000003ff800a49ac>] bpf_prog_83ebf4e90b071f2b_test_1+0x5c/0x70
-> Kernel panic - not syncing: Fatal exception: panic_on_oops
-> 
-> 
-> [1]
-> https://github.com/kernel-patches/bpf/actions/runs/8297891630/job/22710267571
+On Mon, Mar 18, 2024 at 6:18=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
+>
 
-Hi,
+We generally use "libbpf: " prefix for patch subject if changes are
+related to libbpf code base. I fixed it up while applying.
 
-thanks for the report, I'm currently looking into it.
+> From: Mykyta Yatsenko <yatsenko@meta.com>
+>
+> libbpf creates bpf_program/bpf_map structs for each program/map that
+> user defines, but it allows to disable creating/loading those objects in
+> kernel, in that case they won't have associated file descriptor
+> (fd < 0). Such functionality is used for backward compatibility
+> with some older kernels.
+>
+> Nothing prevents users from passing these maps or programs with no
+> kernel counterpart to libbpf APIs. This change introduces explicit
+> checks for kernel objects existence, aiming to improve visibility of
+> those edge cases and provide meaningful warnings to users.
+>
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> ---
+>  tools/lib/bpf/libbpf.c | 56 ++++++++++++++++++++++++++++++++++++++----
+>  1 file changed, 51 insertions(+), 5 deletions(-)
+>
 
-The problem is that the following:
+See nits below. I fixed all that up while applying, as it was just
+some text adjustment, so it didn't seem worth another version. Thanks
+for the patch, it will help users!
 
-static void bpf_jit_plt(void *plt, void *ret, void *target)
-{
-	memcpy(plt, bpf_plt, BPF_PLT_SIZE);
-	*(void **)((char *)plt + (bpf_plt_ret - bpf_plt)) = ret;
-	*(void **)((char *)plt + (bpf_plt_target - bpf_plt)) = target ?: ret;
-}
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 604368cfbf02..d1febdb036de 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -8572,6 +8572,12 @@ int bpf_map__pin(struct bpf_map *map, const char *=
+path)
+>                 return libbpf_err(-EINVAL);
+>         }
+>
+> +       if (map->fd < 0) {
+> +               pr_warn("map '%s': can't pin BPF map without FD (was it c=
+reated?)\n",
+> +                       bpf_map__name(map));
+> +               return libbpf_err(-EINVAL);
+> +       }
+> +
+>         if (map->pin_path) {
+>                 if (path && strcmp(path, map->pin_path)) {
+>                         pr_warn("map '%s' already has pin path '%s' diffe=
+rent from '%s'\n",
+> @@ -10316,6 +10322,11 @@ static int validate_map_op(const struct bpf_map =
+*map, size_t key_sz,
+>                 return -EINVAL;
+>         }
+>
+> +       if (map->fd < 0) {
+> +               pr_warn("map '%s': can't use BPF map without FD (was it c=
+reated?)\n", map->name);
+> +               return -EINVAL;
+> +       }
+> +
+>         if (!check_value_sz)
+>                 return 0;
+>
+> @@ -10428,8 +10439,15 @@ long libbpf_get_error(const void *ptr)
+>  int bpf_link__update_program(struct bpf_link *link, struct bpf_program *=
+prog)
+>  {
+>         int ret;
+> +       int prog_fd =3D bpf_program__fd(prog);
+>
+> -       ret =3D bpf_link_update(bpf_link__fd(link), bpf_program__fd(prog)=
+, NULL);
+> +       if (prog_fd < 0) {
+> +               pr_warn("prog '%s': can't use BPF program without FD (was=
+ it created?)\n",
 
-is (mis)compiled to the following:
+maps are created, programs are loaded, so "was it loaded?"?
 
-   0x000000000017a26e <+238>:   stg     %r4,232(%r3,%r15)
-   0x000000000017a274 <+244>:   ltgr    %r11,%r11
-   0x000000000017a278 <+248>:   locgrne %r4,%r11
-   0x000000000017a27c <+252>:   stg     %r4,232(%r1,%r15)
-   0x000000000017a282 <+258>:   la      %r3,232(%r1,%r15)
-   0x000000000017a286 <+262>:   lghi    %r4,8
-   0x000000000017a28a <+266>:   mvc     232(16,%r15),0(%r2)
-   0x000000000017a290 <+272>:   mvc     248(16,%r15),16(%r2)
+> +                       prog->name);
+> +               return libbpf_err(-EINVAL);
+> +       }
+> +
+> +       ret =3D bpf_link_update(bpf_link__fd(link), prog_fd, NULL);
+>         return libbpf_err_errno(ret);
+>  }
+>
+> @@ -11347,6 +11365,13 @@ bpf_program__attach_kprobe_multi_opts(const stru=
+ct bpf_program *prog,
+>         if (!OPTS_VALID(opts, bpf_kprobe_multi_opts))
+>                 return libbpf_err_ptr(-EINVAL);
+>
+> +       prog_fd =3D bpf_program__fd(prog);
+> +       if (prog_fd < 0) {
+> +               pr_warn("prog '%s': can't attach BPF program without FD (=
+was it created?)\n",
 
-Note that memcpy() and assignments are reordered, and this is causing
-the crash. The C code violates the strict aliasing rules, but this
-should be irrelevant for the kernel.
+ditto
 
-The problem does not occur with the latest GCC. Bisect says that the
-following commit fixed it:
+> +                       prog->name);
+> +               return libbpf_err_ptr(-EINVAL);
+> +       }
+> +
+>         syms    =3D OPTS_GET(opts, syms, false);
+>         addrs   =3D OPTS_GET(opts, addrs, false);
+>         cnt     =3D OPTS_GET(opts, cnt, false);
+> @@ -11387,7 +11412,6 @@ bpf_program__attach_kprobe_multi_opts(const struc=
+t bpf_program *prog,
+>         }
+>         link->detach =3D &bpf_link__detach_fd;
+>
+> -       prog_fd =3D bpf_program__fd(prog);
+>         link_fd =3D bpf_link_create(prog_fd, 0, BPF_TRACE_KPROBE_MULTI, &=
+lopts);
+>         if (link_fd < 0) {
+>                 err =3D -errno;
+> @@ -11770,6 +11794,13 @@ bpf_program__attach_uprobe_multi(const struct bp=
+f_program *prog,
+>         if (!OPTS_VALID(opts, bpf_uprobe_multi_opts))
+>                 return libbpf_err_ptr(-EINVAL);
+>
+> +       prog_fd =3D bpf_program__fd(prog);
+> +       if (prog_fd < 0) {
+> +               pr_warn("prog '%s': can't attach BPF program without FD (=
+was it created?)\n",
 
-commit 2e96b5f14e4025691b57d2301d71aa6092ed44bc                                                          
-Author: Aldy Hernandez <aldyh@redhat.com>                                                                
-Date:   Tue Jun 15 12:32:51 2021 +0200                                                                   
-                                                                                                         
-    Backwards jump threader rewrite with ranger.
+loaded
 
-but I think that's accidental. The reordering is done by the sched1
-pass. I plan to find out why it thinks it's okay to reorder these
-memory accesses.
+> +                       prog->name);
+> +               return libbpf_err_ptr(-EINVAL);
+> +       }
+> +
+>         syms =3D OPTS_GET(opts, syms, NULL);
+>         offsets =3D OPTS_GET(opts, offsets, NULL);
+>         ref_ctr_offsets =3D OPTS_GET(opts, ref_ctr_offsets, NULL);
+> @@ -11845,7 +11876,6 @@ bpf_program__attach_uprobe_multi(const struct bpf=
+_program *prog,
+>         }
+>         link->detach =3D &bpf_link__detach_fd;
+>
+> -       prog_fd =3D bpf_program__fd(prog);
+>         link_fd =3D bpf_link_create(prog_fd, 0, BPF_TRACE_UPROBE_MULTI, &=
+lopts);
+>         if (link_fd < 0) {
+>                 err =3D -errno;
+> @@ -12671,6 +12701,12 @@ struct bpf_link *bpf_program__attach(const struc=
+t bpf_program *prog)
+>         if (!prog->sec_def || !prog->sec_def->prog_attach_fn)
+>                 return libbpf_err_ptr(-EOPNOTSUPP);
+>
+> +       if (bpf_program__fd(prog) < 0) {
+> +               pr_warn("prog '%s': can't attach BPF program w/o FD (did =
+you load it?)\n",
 
-Best regards,
-Ilya
+I normalized w/o to without
+
+> +                       prog->name);
+> +               return libbpf_err_ptr(-EINVAL);
+> +       }
+> +
+>         err =3D prog->sec_def->prog_attach_fn(prog, prog->sec_def->cookie=
+, &link);
+>         if (err)
+>                 return libbpf_err_ptr(err);
+> @@ -12711,9 +12747,14 @@ struct bpf_link *bpf_map__attach_struct_ops(cons=
+t struct bpf_map *map)
+>         __u32 zero =3D 0;
+>         int err, fd;
+>
+> -       if (!bpf_map__is_struct_ops(map) || map->fd =3D=3D -1)
+> +       if (!bpf_map__is_struct_ops(map))
+>                 return libbpf_err_ptr(-EINVAL);
+>
+> +       if (map->fd < 0) {
+> +               pr_warn("map '%s': can't attach BPF map w/o FD (did you l=
+oad it?)\n", map->name);
+
+without, "was it created?"
+
+> +               return libbpf_err_ptr(-EINVAL);
+> +       }
+> +
+>         link =3D calloc(1, sizeof(*link));
+>         if (!link)
+>                 return libbpf_err_ptr(-EINVAL);
+> @@ -12760,8 +12801,13 @@ int bpf_link__update_map(struct bpf_link *link, =
+const struct bpf_map *map)
+>         __u32 zero =3D 0;
+>         int err;
+>
+> -       if (!bpf_map__is_struct_ops(map) || !map_is_created(map))
+> +       if (!bpf_map__is_struct_ops(map))
+> +               return -EINVAL;
+> +
+> +       if (map->fd < 0) {
+> +               pr_warn("map '%s': can't use BPF map w/o FD (did you load=
+ it?)\n", map->name);
+
+same about create vs load
+
+>                 return -EINVAL;
+> +       }
+>
+>         st_ops_link =3D container_of(link, struct bpf_link_struct_ops, li=
+nk);
+>         /* Ensure the type of a link is correct */
+> --
+> 2.42.0
+>
