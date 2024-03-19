@@ -1,84 +1,238 @@
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1408D612F6;
-	Tue, 19 Mar 2024 01:35:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84D797B3E5
+	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 02:33:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710812117; cv=none; b=LTyq0hoCXRfMe5LdPPhgm5EgyoAqtGWmuqL3jxTxy/jwdu7qPdVK5+nQPzFT8bidn64oX5dyO9r+hgswsPGs774ErJNoZxDh8aIijXrACoNVrWzYu0wADbbKlOl9Vn3EwPldUvsBVAu2COkxPGkxx37KNF7b+72Lh0/1x7Ivwf8=
+	t=1710815583; cv=none; b=b5WaxGhwzfV/wugYGfl7y8cITco/R3onKOE2UZBNysH67tv2awtFbgHVAWk/9pZDOloaZSTkWMhWD3kFGJ/+fc/+Sc5m/gDSJje0pncnirhztorz2Xv7M2QYujXX/Ho0Ac6Y0+iHEjh5aMCY2XypOaS7YbiZ73eX42+U9SbCjCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710812117; c=relaxed/simple;
-	bh=Sd8bclQ/7iS9zW3jBrxs2+6SaQEBr8bQ3OMru9SXT94=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=Vo5YK+j8bylyvmD/5JOXSPSCpuPRb15gXaMRWpTYGa9haxO6sw0gxpiHpDDmWnaJhI3Qn/F4khlpT2ZV5bPl2g72UYo/BFdXrAGTw+Kt5OnFNm6D4rWhZNy7UQiOO2bUjXTvUabsStK5Db6f8VbobB4NsT0L44FCO4YKSCwtWRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4TzDkC3xRJz1Q9nH;
-	Tue, 19 Mar 2024 09:32:51 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (unknown [7.193.23.68])
-	by mail.maildlp.com (Postfix) with ESMTPS id C14991400F4;
-	Tue, 19 Mar 2024 09:35:05 +0800 (CST)
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Tue, 19 Mar 2024 09:35:04 +0800
-Subject: Re: [linux-next:master] BUILD REGRESSION
- 2e93f143ca010a5013528e1cfdc895f024fe8c21
-To: kernel test robot <lkp@intel.com>, Andrew Morton
-	<akpm@linux-foundation.org>
-CC: Linux Memory Management List <linux-mm@kvack.org>,
-	<amd-gfx@lists.freedesktop.org>, <bpf@vger.kernel.org>,
-	<linux-fsdevel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-	<linux-mtd@lists.infradead.org>, <linux-omap@vger.kernel.org>,
-	<netdev@vger.kernel.org>
-References: <202403182219.XrvfZx4s-lkp@intel.com>
-From: Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <e7ca3f69-7052-616b-68db-f29a66b42edc@huawei.com>
-Date: Tue, 19 Mar 2024 09:35:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+	s=arc-20240116; t=1710815583; c=relaxed/simple;
+	bh=ZvlzHmiqM0PBn3qAhl+WMIP+un56FpRYKp1adoqUp70=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Se6WQgdTuw+4wsiIuWLq/SucwJ9jlGwDBKlxWQvex/wgIirTzTW4b1Fq0SXnZLHi+GVTiySWdX9Z1JK4uEYWD3tkqoY+Hp0YwbhG0A0MWy7R0bOsai43G1e/9N/5ydTted9mA+WDq2hIYjTXyLBN1+tODJyiXa8mlcNSnh/Osxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=DdMzqcEA; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="DdMzqcEA"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5684db9147dso6517767a12.2
+        for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 19:33:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1710815579; x=1711420379; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1/ugjgSVKg/BMvJ6AYVxFTNZ2b8E1qURDrbsQiUbZk8=;
+        b=DdMzqcEAOW1rMXNBlPg7KR8wQBFyTu++Lrrhnzgy81v5I3E9jnIcwh6OTtCWrcHkLr
+         7+2BHbjbopQ2OhsOKFFfDTJYUs+UF37vRpavRU3Mno7L2KH8XSKl+TWw6pYVcMcBil1+
+         h8rGy/s9FNnTPcPef2pe//FIgxCKG3ueawVlVqFrNXr14HVQGgT/nU9zBGR8XQEDnXok
+         F/aQal8f29cTMdmEQpyvcTZUWp4Oz/ZSSgINiDhCF9Y13PJK+lKescMGdNu0S6dWlLIr
+         YokECc0hm45gPe9Jm9M1EskJbVaA5vHaMCNOMLHZXncszy6J0H5EB2p6uRnDMKWg9sdI
+         DpAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710815579; x=1711420379;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1/ugjgSVKg/BMvJ6AYVxFTNZ2b8E1qURDrbsQiUbZk8=;
+        b=DJtC9O/k/XDhes1VplNrtuf4axm2NdAqMbcvjIdNCY1PbwPFSNicmXuyK/4WWQQ++H
+         bHnPSESIwbENIzVVFQ4lXXGExTnaeJXM8DtLqqo9yzIvDmIKATJ/7Wn17Kbw8yiFwipr
+         /7rNa3k7tBLQ8+DpaaqUlmiI0jpaa3ZdHRY/9KKaMy1Tf7w5h+dp4b5sl6niWxDhtomn
+         J8lLVcl+Xy8fNsFOewKFHCTQDnTnZuNHSBkFebFfJZGNH9AwN6K/SUkvBXNw3PdcwMSN
+         FRKrtNll0VhlbHOqBq9PTfC6qsK1TVDfmV+q+yKKgBFFu8rJckTVfAWrgaCRinVSakXx
+         /dpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUM9BBMFfB06GsbVpcKVg+r5is9dRxFM1NVl0ZdvIbDTzOnhdsaNFcJIq3OE+33+6BiK8dmm4KF66nszot2KTL18wi3
+X-Gm-Message-State: AOJu0YwqX7hqvNw73/6kcPxfPAdQYrQY5UqxYe4PuKRJcN34nF479BBQ
+	nzy7WRceCun00RkKWcQHosB1BjNurUl0VRAEeqXNZTtFt2006M5VE5Wo2zhLd/vThq/qM8Ws1dJ
+	f9rfiTLl7JHHIM3tmpz3owai2rn70cn0dOM68QA==
+X-Google-Smtp-Source: AGHT+IHvclE+atGpCjbdPFGYgs5VD3VppiJOsondJO5t2uIPfOW/790Iy8kr+o7yx8R1UtGEsQwfHCPpLzwdhJuCkes=
+X-Received: by 2002:a05:6402:1f03:b0:568:b4c8:9af with SMTP id
+ b3-20020a0564021f0300b00568b4c809afmr7871934edb.17.1710815578912; Mon, 18 Mar
+ 2024 19:32:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <202403182219.XrvfZx4s-lkp@intel.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600013.china.huawei.com (7.193.23.68)
+References: <cover.1710525524.git.yan@cloudflare.com> <491d3af6c7d66dfb3b60b2f210f38e843dfe6ed2.1710525524.git.yan@cloudflare.com>
+ <790ce7e7-a8fd-4d28-aaf3-1b991a898be2@paulmck-laptop> <ZfgecVqd6p-ACSZ5@FVFF77S0Q05N>
+In-Reply-To: <ZfgecVqd6p-ACSZ5@FVFF77S0Q05N>
+From: Yan Zhai <yan@cloudflare.com>
+Date: Mon, 18 Mar 2024 21:32:47 -0500
+Message-ID: <CAO3-Pbp6fCayWeJ11U6JtqHn-Rs3OFXoZ9uMohUefSYUvSGUKA@mail.gmail.com>
+Subject: Re: [PATCH v4 net 1/3] rcu: add a helper to report consolidated
+ flavor QS
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, netdev@vger.kernel.org, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>, 
+	Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Lorenzo Bianconi <lorenzo@kernel.org>, Coco Li <lixiaoyan@google.com>, Wei Wang <weiwan@google.com>, 
+	Alexander Duyck <alexanderduyck@fb.com>, Hannes Frederic Sowa <hannes@stressinduktion.org>, 
+	linux-kernel@vger.kernel.org, rcu@vger.kernel.org, bpf@vger.kernel.org, 
+	kernel-team@cloudflare.com, Joel Fernandes <joel@joelfernandes.org>, 
+	Toke Hoiland-Jorgensen <toke@redhat.com>, Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Jesper Dangaard Brouer <hawk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-ÔÚ 2024/3/18 22:33, kernel test robot Ð´µÀ:
-> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> branch HEAD: 2e93f143ca010a5013528e1cfdc895f024fe8c21  Add linux-next specific files for 20240318
-> 
-> Error/Warning ids grouped by kconfigs:
-> 
-> gcc_recent_errors
-> |-- arc-allmodconfig
-> |   `-- fs-ubifs-journal.c:warning:expecting-prototype-for-wake_up_reservation().-Prototype-was-for-add_or_start_queue()-instead
-> |-- arc-allyesconfig
-> |   `-- fs-ubifs-journal.c:warning:expecting-prototype-for-wake_up_reservation().-Prototype-was-for-add_or_start_queue()-instead
-> |-- arm-allmodconfig
-> |   |-- arch-arm-mach-omap2-prm33xx.c:warning:expecting-prototype-for-am33xx_prm_global_warm_sw_reset().-Prototype-was-for-am33xx_prm_global_sw_reset()-instead
-> |   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_vcn.c:warning:.bin-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-> |   `-- fs-ubifs-journal.c:warning:expecting-prototype-for-wake_up_reservation().-Prototype-was-for-add_or_start_queue()-instead
-> |-- arm-allyesconfig
-> |   |-- arch-arm-mach-omap2-prm33xx.c:warning:expecting-prototype-for-am33xx_prm_global_warm_sw_reset().-Prototype-was-for-am33xx_prm_global_sw_reset()-instead
-> |   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_vcn.c:warning:.bin-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-> |   `-- fs-ubifs-journal.c:warning:expecting-prototype-for-wake_up_reservation().-Prototype-was-for-add_or_start_queue()-instead
-> |-- arm64-defconfig
-> |   `-- fs-ubifs-journal.c:warning:expecting-prototype-for-wake_up_reservation().-Prototype-was-for-add_or_start_queue()-instead
-> |-- csky-allmodconfig
-> |   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_vcn.c:warning:.bin-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-> |   `-- fs-ubifs-journal.c:warning:expecting-prototype-for-wake_up_reservation().-Prototype-was-for-add_or_start_queue()-instead
-> |-- csky-allyesconfig
-> |   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_vcn.c:warning:.bin-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-> |   `-- fs-ubifs-journal.c:warning:expecting-prototype-for-wake_up_reservation().-Prototype-was-for-add_or_start_queue()-instead
+On Mon, Mar 18, 2024 at 5:59=E2=80=AFAM Mark Rutland <mark.rutland@arm.com>=
+ wrote:
+>
+> On Fri, Mar 15, 2024 at 10:40:56PM -0700, Paul E. McKenney wrote:
+> > On Fri, Mar 15, 2024 at 12:55:03PM -0700, Yan Zhai wrote:
+> > > There are several scenario in network processing that can run
+> > > extensively under heavy traffic. In such situation, RCU synchronizati=
+on
+> > > might not observe desired quiescent states for indefinitely long peri=
+od.
+> > > Create a helper to safely raise the desired RCU quiescent states for
+> > > such scenario.
+> > >
+> > > Currently the frequency is locked at HZ/10, i.e. 100ms, which is
+> > > sufficient to address existing problems around RCU tasks. It's unclea=
+r
+> > > yet if there is any future scenario for it to be further tuned down.
+> >
+> > I suggest something like the following for the commit log:
+> >
+> > -----------------------------------------------------------------------=
+-
+> >
+> > When under heavy load, network processing can run CPU-bound for many te=
+ns
+> > of seconds.  Even in preemptible kernels, this can block RCU Tasks grac=
+e
+> > periods, which can cause trace-event removal to take more than a minute=
+,
+> > which is unacceptably long.
+> >
+> > This commit therefore creates a new helper function that passes
+> > through both RCU and RCU-Tasks quiescent states every 100 milliseconds.
+> > This hard-coded value suffices for current workloads.
+>
+> FWIW, this sounds good to me.
+>
+> >
+> > -----------------------------------------------------------------------=
+-
+> >
+> > > Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+> > > Reviewed-by: Jesper Dangaard Brouer <hawk@kernel.org>
+> > > Signed-off-by: Yan Zhai <yan@cloudflare.com>
+> > > ---
+> > > v3->v4: comment fixup
+> > >
+> > > ---
+> > >  include/linux/rcupdate.h | 24 ++++++++++++++++++++++++
+> > >  1 file changed, 24 insertions(+)
+> > >
+> > > diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+> > > index 0746b1b0b663..da224706323e 100644
+> > > --- a/include/linux/rcupdate.h
+> > > +++ b/include/linux/rcupdate.h
+> > > @@ -247,6 +247,30 @@ do { \
+> > >     cond_resched(); \
+> > >  } while (0)
+> > >
+> > > +/**
+> > > + * rcu_softirq_qs_periodic - Periodically report consolidated quiesc=
+ent states
+> > > + * @old_ts: last jiffies when QS was reported. Might be modified in =
+the macro.
+> > > + *
+> > > + * This helper is for network processing in non-RT kernels, where th=
+ere could
+> > > + * be busy polling threads that block RCU synchronization indefinite=
+ly.  In
+> > > + * such context, simply calling cond_resched is insufficient, so giv=
+e it a
+> > > + * stronger push to eliminate all potential blockage of all RCU type=
+s.
+> > > + *
+> > > + * NOTE: unless absolutely sure, this helper should in general be ca=
+lled
+> > > + * outside of bh lock section to avoid reporting a surprising QS to =
+updaters,
+> > > + * who could be expecting RCU read critical section to end at local_=
+bh_enable().
+> > > + */
+> >
+> > How about something like this for the kernel-doc comment?
+> >
+> > /**
+> >  * rcu_softirq_qs_periodic - Report RCU and RCU-Tasks quiescent states
+> >  * @old_ts: jiffies at start of processing.
+> >  *
+> >  * This helper is for long-running softirq handlers, such as those
+> >  * in networking.  The caller should initialize the variable passed in
+> >  * as @old_ts at the beginning of the softirq handler.  When invoked
+> >  * frequently, this macro will invoke rcu_softirq_qs() every 100
+> >  * milliseconds thereafter, which will provide both RCU and RCU-Tasks
+> >  * quiescent states.  Note that this macro modifies its old_ts argument=
+.
+> >  *
+> >  * Note that although cond_resched() provides RCU quiescent states,
+> >  * it does not provide RCU-Tasks quiescent states.
+> >  *
+> >  * Because regions of code that have disabled softirq act as RCU
+> >  * read-side critical sections, this macro should be invoked with softi=
+rq
+> >  * (and preemption) enabled.
+> >  *
+> >  * This macro has no effect in CONFIG_PREEMPT_RT kernels.
+> >  */
+>
+> Considering the note about cond_resched(), does does cond_resched() actua=
+lly
+> provide an RCU quiescent state for fully-preemptible kernels? IIUC for th=
+ose
+> cond_resched() expands to:
+>
+>         __might_resched();
+>         klp_sched_try_switch()
+>
+> ... and AFAICT neither reports an RCU quiescent state.
+>
+> So maybe it's worth dropping the note?
+>
+> Seperately, what's the rationale for not doing this on PREEMPT_RT? Does t=
+hat
+> avoid the problem through other means, or are people just not running eff=
+ected
+> workloads on that?
+>
+It's a bit anti-intuition but yes the RT kernel avoids the problem.
+This is because "schedule()" reports task RCU QS actually, and on RT
+kernel cond_resched() call won't call "__cond_resched()" or
+"__schedule(PREEMPT)" as you already pointed out, which would clear
+need-resched flag. This then allows "schedule()" to be called on hard
+IRQ exit time by time.
 
-Hi, Richard,
-I sent out the warning fix patch in 
-https://patchwork.ozlabs.org/project/linux-mtd/patch/20240227024204.1080739-1-chengzhihao1@huawei.com/
+Yan
+
+> Mark.
+>
+> >
+> >                                                       Thanx, Paul
+> >
+> > > +#define rcu_softirq_qs_periodic(old_ts) \
+> > > +do { \
+> > > +   if (!IS_ENABLED(CONFIG_PREEMPT_RT) && \
+> > > +       time_after(jiffies, (old_ts) + HZ / 10)) { \
+> > > +           preempt_disable(); \
+> > > +           rcu_softirq_qs(); \
+> > > +           preempt_enable(); \
+> > > +           (old_ts) =3D jiffies; \
+> > > +   } \
+> > > +} while (0)
+> > > +
+> > >  /*
+> > >   * Infrastructure to implement the synchronize_() primitives in
+> > >   * TREE_RCU and rcu_barrier_() primitives in TINY_RCU.
+> > > --
+> > > 2.30.2
+> > >
+> > >
