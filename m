@@ -1,113 +1,105 @@
-Received: from dvalin.narfation.org (dvalin.narfation.org [213.160.73.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8D973FBB9;
-	Tue, 19 Mar 2024 13:19:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.73.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C5A80617
+	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 13:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710854376; cv=none; b=E4ZyEl7pDrgfQp/JcQUFJBVejjc9mV5M0NEVUrgJpJ1sB7kvhGb5m5UBb5PdimUwyBO1r3hEzjLpm4KblkAfc7Vl87yJs7un9I3Y4MyVfinoqP/axud3eLj6N/YNDfxGyfCtxcYeGFNBCJaaOomV+uH3WkiNPIIMIYwq2SJdapU=
+	t=1710855110; cv=none; b=droi94AyZHpiEaXtKJKnA5FdK+0oE2I5Ar2hGs7k6Pfqwi+wqsnQruzxPSiSuAxhjp0u2ZkRj74MhX/ms7F19ncA5vHL0V37s+iUIyeZBB/GvLICmYBpmR0rGwK8ESpZUmt5YkrHoH8HCpA0P/sqaMH/OM4vv+G8rJJkaESziMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710854376; c=relaxed/simple;
-	bh=y5PFZZrOqJ9NtxbU4B1OWP5hKkoz13ncb5FkS6JbXw0=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cj6PxbU/7GN6KPgw5PCM4XkQ1/Eu0LiB5bDqX9XLceMxxyJDmg6iIWv0R6Y45WHzM+YgqvkPBvBvTiQLDr0qihcPyLJlTYIWlMyAaTYvrNI0KLXqpumYge9Sqj6XHS1avTrqhh95eUzJLQz/A35SE04vp4NU8TiZyizxEuVD4y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org; spf=pass smtp.mailfrom=narfation.org; dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b=ebQjNwzQ; arc=none smtp.client-ip=213.160.73.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=narfation.org
+	s=arc-20240116; t=1710855110; c=relaxed/simple;
+	bh=oTq3CZN4Zju7qN7EjbzOvd+N3X+RLzsgzvo99LiFzLE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KsRnjBzZ265KVn8psnHrEZJ9721eeEwkQNd1u6UoqdE8/ZaSmSdgpUMPqOzOr3hlZlcVMV/ufJLHdnHYLepJ39X2vWUZKt1D0KxmDkbSFvLyDtdXFP62y1uHW2yYI2zjLw2MrkdTVYsjl5sLMihIKbvvCfV6RWHnldXYfUUmM1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wId3HKGk; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b="ebQjNwzQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
-	s=20121; t=1710854364;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qlMWgzCdIDDA3TfwtyMcSQvofdYr4JxDgv8/lzTuVSY=;
-	b=ebQjNwzQiC9YAQIOw5K3DJugtjjHnKCsOBqUZQHO8KmDFC6CaDWqsrzvDnWawN8KYIvZZJ
-	XbyOlyAJJtqqZAaLqXXGmzYogRHlo7EELioeF50I9zQKOShoFQZ+uFkka5OuOdcK4CNuFI
-	aDWZ+pU6Iwl84el0Fv8w7jzskZmX3xM=
-From: Sven Eckelmann <sven@narfation.org>
-To: akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
- b.a.t.m.a.n@lists.open-mesh.org, bpf@vger.kernel.org, christian@brauner.io,
- daniel@iogearbox.net, dvyukov@google.com, edumazet@google.com,
- elver@google.com, glider@google.com, hdanton@sina.com, jakub@cloudflare.com,
- jannh@google.com, john.fastabend@gmail.com, kasan-dev@googlegroups.com,
- kuba@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- mareklindner@neomailbox.ch, mark.rutland@arm.com, netdev@vger.kernel.org,
- pabeni@redhat.com, shakeelb@google.com, syzkaller-bugs@googlegroups.com,
- syzbot <syzbot+8983d6d4f7df556be565@syzkaller.appspotmail.com>
-Subject: Re: [syzbot] [batman?] [bpf?] possible deadlock in lock_timer_base
-Date: Tue, 19 Mar 2024 14:19:20 +0100
-Message-ID: <2615678.iZASKD2KPV@ripper>
-In-Reply-To: <000000000000901b1c0614010091@google.com>
-References: <000000000000901b1c0614010091@google.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wId3HKGk"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1dee917abd5so152155ad.1
+        for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 06:31:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1710855108; x=1711459908; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YRVBERukyS2wWGyjoD0/ZHq0bNlTnq8NUQZ+B3xdj80=;
+        b=wId3HKGk+TuOB9R/FZKVEozItzgiRAWvqLYFoEG4rLg6g/rw0ixG7SuMeWOlF/NHpu
+         8un6w5OueU8Lmekt+2otFr4Ik9Utl/DTzUvesjDgHpuXd4BoaDJPewBMM6J3iNFjH9pc
+         RMw0yjvf2VROYUcDhDrhD8NQOj2HgAluzh6fxxyTvvtKBoVTLkt50uf8z58N+aEXwCd+
+         0cGSayFDHlL78VSmpwIIVM6x+sKv6gu+c1/+JobT5UqcPcv+y7RpE0cNjZ6TQe0fYJPq
+         bDSA8Ie8ibQtWRa9wTOkP8zGwjjY8IsXGrlBRJWP1Bw8s/7XRu3KfYXlNKx+Sj8Skk9U
+         4XHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710855108; x=1711459908;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YRVBERukyS2wWGyjoD0/ZHq0bNlTnq8NUQZ+B3xdj80=;
+        b=NKfsfDBdDEEEK4dkJ0D7thLwbVtUSvliAekwmX4sVajy0BaKEDbgReUEcSHiESCIzC
+         jvHGg3Q6K11A11LneoiGwNd06ORag3pd2ot5jkKQtr+VAvuuKGUmKaDvmjSQqxqXB2nS
+         4YX9ZF9Emkxc382FVnZtDVcMQjrCJAxVA9EafbNfQa1hV12wKPfArig1KzMKQdA7nIzb
+         wSBpiP+b97uiGqAt35xWRJxklUqC37Q2AQCG+Bbl0AjMUmAXyslclF8MJT2b4VYpVy1v
+         xDu0ijXWAyPaoL86PTv04W7b17zuX5uSS2BTIn04CF+MUnxmfgjbQUzsVOrJGRPCNWdC
+         9GwA==
+X-Forwarded-Encrypted: i=1; AJvYcCUAt75eIL8Tdq29yudZ+KpMhwvMDvoK5wwi335JKRHH8VP0abFkmtwum3oTvv3wlpCXXcSED5D4J+Z5rnes+It0pgkU
+X-Gm-Message-State: AOJu0YzKmvJqDQtFJqCqbhRcfvRjpMPNdx7QBf7Lehx0YwmQ+lfakizr
+	9Ffo7hkFnDAdlIx32cuzJI88VcbulTj0PvRNPwmMSAZ+sgiUvfQuMxt2FSEXeqIifOBIAcqBEko
+	nK7mZPsKEEPIGI9JCS/eby4O+vxueXy1rKjZv
+X-Google-Smtp-Source: AGHT+IFNmXcGYu+lNSQ2iexTWqZe47HUoTeYhNiE93aW579mIfvRqJBheAkUJL1ix5bvm3wn2zyeJjyY46GinXgiC30=
+X-Received: by 2002:a17:903:2303:b0:1dd:65bd:69ec with SMTP id
+ d3-20020a170903230300b001dd65bd69ecmr240302plh.20.1710855107477; Tue, 19 Mar
+ 2024 06:31:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart2316114.PYKUYFuaPT";
- micalg="pgp-sha512"; protocol="application/pgp-signature"
+References: <000000000000901b1c0614010091@google.com> <2615678.iZASKD2KPV@ripper>
+In-Reply-To: <2615678.iZASKD2KPV@ripper>
+From: Aleksandr Nogikh <nogikh@google.com>
+Date: Tue, 19 Mar 2024 14:31:35 +0100
+Message-ID: <CANp29Y7SuK8P8xHa6JzAzs_NxPUN9AvFTiKfMhgLy1POGBodwA@mail.gmail.com>
+Subject: Re: [syzbot] [batman?] [bpf?] possible deadlock in lock_timer_base
+To: Sven Eckelmann <sven@narfation.org>
+Cc: akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org, 
+	b.a.t.m.a.n@lists.open-mesh.org, bpf@vger.kernel.org, christian@brauner.io, 
+	daniel@iogearbox.net, dvyukov@google.com, edumazet@google.com, 
+	elver@google.com, glider@google.com, hdanton@sina.com, jakub@cloudflare.com, 
+	jannh@google.com, john.fastabend@gmail.com, kasan-dev@googlegroups.com, 
+	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	mareklindner@neomailbox.ch, mark.rutland@arm.com, netdev@vger.kernel.org, 
+	pabeni@redhat.com, shakeelb@google.com, syzkaller-bugs@googlegroups.com, 
+	syzbot <syzbot+8983d6d4f7df556be565@syzkaller.appspotmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---nextPart2316114.PYKUYFuaPT
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: Sven Eckelmann <sven@narfation.org>
-Date: Tue, 19 Mar 2024 14:19:20 +0100
-Message-ID: <2615678.iZASKD2KPV@ripper>
-In-Reply-To: <000000000000901b1c0614010091@google.com>
-References: <000000000000901b1c0614010091@google.com>
-MIME-Version: 1.0
+Hi Sven,
 
-On Tuesday, 19 March 2024 11:33:17 CET syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
-> 
-> HEAD commit:    35c3e2791756 Revert "net: Re-use and set mono_delivery_tim..
-> git tree:       net
-> console output: https://syzkaller.appspot.com/x/log.txt?x=10569181180000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=6fb1be60a193d440
-> dashboard link: https://syzkaller.appspot.com/bug?extid=8983d6d4f7df556be565
-> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13d9fa4e180000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=137afac9180000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/26b55a26fc12/disk-35c3e279.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/6f39fa55c828/vmlinux-35c3e279.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/e1e0501539e6/bzImage-35c3e279.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+8983d6d4f7df556be565@syzkaller.appspotmail.com
+On Tue, Mar 19, 2024 at 2:19=E2=80=AFPM Sven Eckelmann <sven@narfation.org>=
+ wrote:
+>
+> On Tuesday, 19 March 2024 11:33:17 CET syzbot wrote:
+> > syzbot has found a reproducer for the following issue on:
+> >
+< ... >
+>
+> Sorry, this is a little bit off-topic. But how does sysbot figure out the
+> subsystems (like "[batman?]"). Because neither the reproducer nor the
+> backtrace nor the console output mention anything batman-adv related.
 
-Sorry, this is a little bit off-topic. But how does sysbot figure out the 
-subsystems (like "[batman?]"). Because neither the reproducer nor the 
-backtrace nor the console output mention anything batman-adv related.
+Syzbot looks at several crash reports to determine the bug subsystems
+and in this case one of those crashes was pointing to
+net/batman-adv/multicast.c:
 
-Kind regards,
-	Sven
---nextPart2316114.PYKUYFuaPT
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+https://syzkaller.appspot.com/text?tag=3DCrashReport&x=3D15afccb3280000
 
------BEGIN PGP SIGNATURE-----
+--=20
+Aleksandr
 
-iQIzBAABCgAdFiEEF10rh2Elc9zjMuACXYcKB8Eme0YFAmX5kNgACgkQXYcKB8Em
-e0aRihAA0kDB39knEezz051yKh214KQyzCHU9DDVkDQEJKEhl9AMpB/1R4O5poka
-SiwAwoSoP5A5kkczS9gtZGmEcCTSCjPx+Zj5aGgGylhgnHsLoA67qxQhiXDu5EWx
-QSXqPtTmfNboRsZ8433zCQcUjN4tHc+r/mxFRkaBcRMWQh5tVXpeYjAB5rkOshVP
-/Gnp/V9b3rVqu7STsr2npZT3F0SDk6yj2Oi810d0pnNzR2y49DmabnqzWtPe7sX4
-d0/zPlX80F7FYrxjbi7LmjNYUoRrudHTXrb8FZaptsa+mIwVQ01UnK7sm/wWW6xF
-BVuEC4j3OyaL9HEHgp9o7lxMNMx7KqYwimrewgPqeMWNHOkYX9swwRGzHUkU5wuC
-TbbtgbAJaTtBroNZ4AqxwWO8LviRFhwwABtA6zb1VD/WOu8chQ7dgxAEJs3QdEUK
-zVXOaOZefHULjIoJzRoPqwcnE67cvYwlmfHZnEVEp9YPXvdcrjswghJ+TeNoBt3s
-+rrgbAsvbTxl/N5EF6Ke4OoVg4qDIY2djOubxk+l5r/Od0thLbHWaFq5vYg2G5Zq
-VCX52iuKimsHb9Uso3kCzkGjcE2a/UcZu+9pgD4njh1CS+5l7bO89eknX8+yY1Kw
-mOLKMD6oyYfDVWWIj7HNhlQxFZdR+mZoiG1FItjoJ7Pof8CRuZk=
-=B2hL
------END PGP SIGNATURE-----
-
---nextPart2316114.PYKUYFuaPT--
-
-
-
+>
+> Kind regards,
+>         Sven
+>
+> --
