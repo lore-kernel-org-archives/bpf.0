@@ -1,80 +1,81 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B4B8179A6;
-	Tue, 19 Mar 2024 17:15:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60FAB2D03B
+	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 17:54:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710868528; cv=none; b=AFxwRfUM4bMBKHM+wabOX/DdezkafF3NXpuuBTEpV2QerFDMo05MjYCcoz2fapO2Jx88ufZgvcbSKsECsl5TKLNNf25cMn1eqxt+fnt+zext/L0RF5OzRQvtvR/ErputLzzipcjMWSraQXz4LssMQln6T+DtVbFBjj1tPDAQNhc=
+	t=1710870858; cv=none; b=WRnIBJxawFiFT/4N0UmPgYUiEOruTJRInm0UinOiUy73V3fib0Ix0qDo1YgEeh29NHAMALU8sK3XPuG3HqcgcR4ZDuKiBzZWukELK7w/bd5j1qT8TJ/jESN7ojm2TcGi5kzgcbFtV2frSFHHksVXefBS9qp5CSyu3o5t3UB+k4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710868528; c=relaxed/simple;
-	bh=cBcB6d6+i4J0E25xFREZKFr8Gi0/HhGKqA6mI9d7Dr8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ozbo94a+rVUuvUbrT3HlHdAgMEZmHd2K9Qz5JrAfMVuGFOCJRxNmI8Lz7czLgOQhjRy+G9GUfCGfUhNSGbNtOf0SwAaUUxvXRsT2gGP9nbp0VsF2wpDXlNxUgeSMaE4qp1gOSdXP28MUbWR4+nr/nm728mQh/fc2hHuFgx0T1Nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BU6FWS3O; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BU6FWS3O"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08106C433C7;
-	Tue, 19 Mar 2024 17:15:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710868527;
-	bh=cBcB6d6+i4J0E25xFREZKFr8Gi0/HhGKqA6mI9d7Dr8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=BU6FWS3Osa9+Dn2am7oAuehEHNRiGwNK1VcKrsKgxxE3jql0jA8XWvsifl5qx/jY5
-	 vy1SOnjA+ZAdBlMn1+BL8mLaFf0qbLyutGv10lYwBXpqUE50ByUhgpLXy3b/UilXlm
-	 Hj4Pja6Bz3fDVNSit3eyirF4oDSjwzR4XECH2lVPKCuLfmKlT+HbXaZnYAUQpO/UgA
-	 OMJEioTmjlsEkUDvTgf6gWeiSu9w1mvER2/PIsU39YhbBvDSLsQIDn7i7r1XHgKHkO
-	 Xg0D+XmimCZNMT/ULptRsVY5ZtS2F+x+rn4A+z7PQJna4KIlQ+eEYmAt/nIpCKQcuo
-	 vqaidrcNkgMyw==
-Date: Tue, 19 Mar 2024 10:15:25 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, Eric 
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, "Michael S.
-  Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, Alexei 
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
- <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@google.com>, Amritha 
- Nambiar <amritha.nambiar@intel.com>, Larysa Zaremba
- <larysa.zaremba@intel.com>, Sridhar Samudrala
- <sridhar.samudrala@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, virtualization@lists.linux.dev,
- bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v4 3/8] virtio_net: support device stats
-Message-ID: <20240319101525.2452065d@kernel.org>
-In-Reply-To: <1710489940.1772969-1-xuanzhuo@linux.alibaba.com>
-References: <20240314085459.115933-1-xuanzhuo@linux.alibaba.com>
-	<20240314085459.115933-4-xuanzhuo@linux.alibaba.com>
-	<20240314155425.74b8c601@kernel.org>
-	<1710489940.1772969-1-xuanzhuo@linux.alibaba.com>
+	s=arc-20240116; t=1710870858; c=relaxed/simple;
+	bh=w8udPClLz+XVxtw2duTpgZqSu7Ab98JDwhPX86uANs8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p0HI9PBv2Xpv94kyhKEV/092EE5MKDP9k05HWVCVISwsd6+bu2biRvYKbT6qBMGQgR57216tikEpMAE49jobKFfj/pk8VSKX2shH5jNaHzQNiAG7DZBGqbhSRsCAavl64GsGfqMFQJ6tJlzEq05GDj8sWqwc/ybOMNfY4lf7/o4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+	id C877C206A7AE; Tue, 19 Mar 2024 10:54:01 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next v2 0/6] bpf: Add bpf_link support for sk_msg and sk_skb progs
+Date: Tue, 19 Mar 2024 10:54:01 -0700
+Message-ID: <20240319175401.2940148-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 15 Mar 2024 16:05:40 +0800 Xuan Zhuo wrote:
-> > Don't duplicate the stats which get reported via the netlink API in
-> > ethtool. Similar story to the rtnl stats:
-> >
-> > https://docs.kernel.org/next/networking/statistics.html#notes-for-driver-authors  
-> 
-> Sorry, this patch set did not follow this.
-> 
-> I will fix in next version.
-> 
-> But I plan that will be done in the commit "virtio-net: support queue stat".
-> This commit in next version will report all stat by ethtool -S.
-> The commit "virtio-net: support queue stat" in next version
-> will not report the duplicate the stats that reported via the netlink API.
-> 
-> Do you think ok?
+One of our internal services started to use sk_msg program and currently
+it used existing prog attach/detach2 as demonstrated in selftests.
+But attach/detach of all other bpf programs are based on bpf_link.
+Consistent attach/detach APIs for all programs will make things easy to
+undersand and less error prone. So this patch added bpf_link
+support for BPF_PROG_TYPE_SK_MSG. Based on comments from
+previous RFC patch, I added BPF_PROG_TYPE_SK_SKB support as well
+as both program types have similar treatment w.r.t. bpf_link
+handling.
 
-I guess that could save time refactoring the code, but we generally
-push authors to go the extra mile and make reviewers life easier.
-Also, in a way, making the evolution of the code base look more
-logical. So I'd prefer if the series was reorganized to never
-expose the standard stats via -S.
+For the patch series, patch 1 added kernel support. Patches 2/3
+added libbpf support. Patch 4 added bpftool support and
+patches 5/6 added some new tests.
+
+Yonghong Song (6):
+  bpf: Add bpf_link support for sk_msg and sk_skb progs
+  libbpf: Add new sec_def "sk_skb/verdict"
+  libbpf: Add bpf_link support for BPF_PROG_TYPE_SK_{MSG,SKB}
+  bpftool: Add link dump support for BPF_LINK_TYPE_SK_{MSG,SKB}
+  selftests/bpf: Refactor out helper functions for a few tests
+  selftests/bpf: Add some tests with new
+    bpf_program__attach_sk_{msg,skb}() APIs
+
+ include/linux/bpf.h                           |  13 ++
+ include/uapi/linux/bpf.h                      |  10 ++
+ kernel/bpf/syscall.c                          |   4 +
+ net/core/skmsg.c                              | 164 ++++++++++++++++++
+ net/core/sock_map.c                           |   6 +-
+ tools/bpf/bpftool/link.c                      |  18 ++
+ tools/include/uapi/linux/bpf.h                |  10 ++
+ tools/lib/bpf/libbpf.c                        |  15 ++
+ tools/lib/bpf/libbpf.h                        |   4 +
+ tools/lib/bpf/libbpf.map                      |   2 +
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 121 +++++++++++--
+ .../selftests/bpf/prog_tests/sockmap_listen.c |  38 ++++
+ .../bpf/progs/test_skmsg_load_helpers.c       |  15 +-
+ .../bpf/progs/test_sockmap_pass_prog.c        |  11 +-
+ .../progs/test_sockmap_skb_verdict_attach.c   |   2 +-
+ 15 files changed, 410 insertions(+), 23 deletions(-)
+
+--=20
+2.43.0
+
