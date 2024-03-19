@@ -1,21 +1,21 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5B51282E1
-	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 17:54:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2205374FA
+	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 17:54:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710870871; cv=none; b=lW8GistlW1a9Z5yatRKYjElwMudGgdqaAG5ncT3cEQhzikZAF7FS2T5cwWb188gCCSmpuu3za0bp9A9J14mREwQhm2GpCokKnY0qoJQPKbWbOa4X1mxx9kBolXRdJ24kf8Q9VrX2oVV+tvf4z72ez/7N3xzNimKmH1POA341G8E=
+	t=1710870875; cv=none; b=AdMOp2Ftc1ZkNn+cEcI+cF3qn1m1fgtkZeQWp3dy85L1shdMmwmDNneE64bWNS8yYsDF3Cr1Q6gen13eVh1Alxn1ZsQk5l53OtFBEhnwUawpoazqcG9TsRJvj7BvYd1L9n5OvQP8U8oUJWyl0SOtSl6b5cD3xWspbpfzqrq32tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710870871; c=relaxed/simple;
-	bh=p1YzNB9+hZZe7AVyVoLFmXihF8VIiYz4cAoJcDexBXE=;
+	s=arc-20240116; t=1710870875; c=relaxed/simple;
+	bh=9vFLJD5W8Eu6fubwC0q7XOuhq/GgjlxpmBKOtEQt0Eg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=S2no4YeWoLygIGZ4P/rB4vMr9opb168MA6pXdhjUslZ5OheldNTTgmO7Ugc8cd91MDgaU10c43k5mMq/d5gk1EFWvZPwZBwDLNN7cLowcCqYaDgTvMF2rIpJ/pgGMZhSayO3rVeiKm55NR9hs0V5AUkDxyD2oDSNTm39Mg9Zw18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+	 MIME-Version; b=Gs63QEN6Tneyb0DNGSl/oC2PnVBYZK2nEANrA7JT/UJMMv9nymHt3omOWAmslw4MhZSSJAYCN6uVtVXw86ZP77CMhYKd2nyonI4VY8GjlOuepktfl+LCjmsd3GEi0s+RZQBi0RzeDBgyctYWSJ2DgQrQgbb439i9qORmSo48fj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 23548206A822; Tue, 19 Mar 2024 10:54:17 -0700 (PDT)
+	id 3EB45206A855; Tue, 19 Mar 2024 10:54:22 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -25,9 +25,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v2 3/6] libbpf: Add bpf_link support for BPF_PROG_TYPE_SK_{MSG,SKB}
-Date: Tue, 19 Mar 2024 10:54:17 -0700
-Message-ID: <20240319175417.2941417-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 4/6] bpftool: Add link dump support for BPF_LINK_TYPE_SK_{MSG,SKB}
+Date: Tue, 19 Mar 2024 10:54:22 -0700
+Message-ID: <20240319175422.2942069-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240319175401.2940148-1-yonghong.song@linux.dev>
 References: <20240319175401.2940148-1-yonghong.song@linux.dev>
@@ -39,80 +39,61 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Introduce two libbpf API functions bpf_program__attach_sk_msg()
-and bpf_program__attach_sk_skb() which allow user to get a bpf_link
-for their corresponding programs.
+An example output looks like:
+  $ bpftool link
+    1776: sk_skb  prog 49730
+            map_id 0  attach_type sk_skb_verdict
+            pids test_progs(8424)
+    1777: sk_skb  prog 49755
+            map_id 0  attach_type sk_skb_stream_verdict
+            pids test_progs(8424)
+    1778: sk_msg  prog 49770
+            map_id 8208  attach_type sk_msg_verdict
+            pids test_progs(8424)
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- tools/lib/bpf/libbpf.c   | 14 ++++++++++++++
- tools/lib/bpf/libbpf.h   |  4 ++++
- tools/lib/bpf/libbpf.map |  2 ++
- 3 files changed, 20 insertions(+)
+ tools/bpf/bpftool/link.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 7d413415d0d5..1b8e1f47a5e6 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -149,6 +149,8 @@ static const char * const link_type_name[] =3D {
- 	[BPF_LINK_TYPE_TCX]			=3D "tcx",
- 	[BPF_LINK_TYPE_UPROBE_MULTI]		=3D "uprobe_multi",
- 	[BPF_LINK_TYPE_NETKIT]			=3D "netkit",
-+	[BPF_LINK_TYPE_SK_MSG]			=3D "sk_msg",
-+	[BPF_LINK_TYPE_SK_SKB]			=3D "sk_skb",
- };
-=20
- static const char * const map_type_name[] =3D {
-@@ -12493,6 +12495,18 @@ bpf_program__attach_netns(const struct bpf_progr=
-am *prog, int netns_fd)
- 	return bpf_program_attach_fd(prog, netns_fd, "netns", NULL);
- }
-=20
-+struct bpf_link *
-+bpf_program__attach_sk_msg(const struct bpf_program *prog, int map_fd)
-+{
-+	return bpf_program_attach_fd(prog, map_fd, "sk_msg", NULL);
-+}
-+
-+struct bpf_link *
-+bpf_program__attach_sk_skb(const struct bpf_program *prog, int map_fd)
-+{
-+	return bpf_program_attach_fd(prog, map_fd, "sk_skb", NULL);
-+}
-+
- struct bpf_link *bpf_program__attach_xdp(const struct bpf_program *prog,=
- int ifindex)
- {
- 	/* target_fd/target_ifindex use the same field in LINK_CREATE */
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 7b510761f545..4a2c04a9c6c3 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -784,6 +784,10 @@ bpf_program__attach_cgroup(const struct bpf_program =
-*prog, int cgroup_fd);
- LIBBPF_API struct bpf_link *
- bpf_program__attach_netns(const struct bpf_program *prog, int netns_fd);
- LIBBPF_API struct bpf_link *
-+bpf_program__attach_sk_msg(const struct bpf_program *prog, int map_fd);
-+LIBBPF_API struct bpf_link *
-+bpf_program__attach_sk_skb(const struct bpf_program *prog, int map_fd);
-+LIBBPF_API struct bpf_link *
- bpf_program__attach_xdp(const struct bpf_program *prog, int ifindex);
- LIBBPF_API struct bpf_link *
- bpf_program__attach_freplace(const struct bpf_program *prog,
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 86804fd90dd1..11a1ad798129 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -410,6 +410,8 @@ LIBBPF_1.3.0 {
-=20
- LIBBPF_1.4.0 {
- 	global:
-+		bpf_program__attach_sk_msg;
-+		bpf_program__attach_sk_skb;
- 		bpf_token_create;
- 		btf__new_split;
- 		btf_ext__raw_data;
+diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
+index afde9d0c2ea1..c01d3c38cdf0 100644
+--- a/tools/bpf/bpftool/link.c
++++ b/tools/bpf/bpftool/link.c
+@@ -526,6 +526,14 @@ static int show_link_close_json(int fd, struct bpf_l=
+ink_info *info)
+ 		show_link_ifindex_json(info->netkit.ifindex, json_wtr);
+ 		show_link_attach_type_json(info->netkit.attach_type, json_wtr);
+ 		break;
++	case BPF_LINK_TYPE_SK_MSG:
++		jsonw_uint_field(json_wtr, "map_id", info->skmsg.map_id);
++		show_link_attach_type_json(info->skmsg.attach_type, json_wtr);
++		break;
++	case BPF_LINK_TYPE_SK_SKB:
++		jsonw_uint_field(json_wtr, "map_id", info->skskb.map_id);
++		show_link_attach_type_json(info->skskb.attach_type, json_wtr);
++		break;
+ 	case BPF_LINK_TYPE_XDP:
+ 		show_link_ifindex_json(info->xdp.ifindex, json_wtr);
+ 		break;
+@@ -915,6 +923,16 @@ static int show_link_close_plain(int fd, struct bpf_=
+link_info *info)
+ 		show_link_ifindex_plain(info->netkit.ifindex);
+ 		show_link_attach_type_plain(info->netkit.attach_type);
+ 		break;
++	case BPF_LINK_TYPE_SK_MSG:
++		printf("\n\t");
++		printf("map_id %u  ", info->skmsg.map_id);
++		show_link_attach_type_plain(info->skmsg.attach_type);
++		break;
++	case BPF_LINK_TYPE_SK_SKB:
++		printf("\n\t");
++		printf("map_id %u  ", info->skskb.map_id);
++		show_link_attach_type_plain(info->skskb.attach_type);
++		break;
+ 	case BPF_LINK_TYPE_XDP:
+ 		printf("\n\t");
+ 		show_link_ifindex_plain(info->xdp.ifindex);
 --=20
 2.43.0
 
