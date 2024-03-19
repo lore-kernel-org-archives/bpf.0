@@ -1,94 +1,80 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EC7B8489
-	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 16:39:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B4B8179A6;
+	Tue, 19 Mar 2024 17:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710866399; cv=none; b=uTpriktyEKdknYS9HHEP5ksQdfSIQn8yb3+qWGXmACyMMgE6/aAWHooYd2Cy9s+0jT+An/izRLDQVaPAasUmw1+VaWc0osxrTTdXCgru7APVVP42iR15RfT/wEPw743nYN0pYFZHu4Jk37qKOtWZE7CpJEVvkxs+xrXD9sW4OMs=
+	t=1710868528; cv=none; b=AFxwRfUM4bMBKHM+wabOX/DdezkafF3NXpuuBTEpV2QerFDMo05MjYCcoz2fapO2Jx88ufZgvcbSKsECsl5TKLNNf25cMn1eqxt+fnt+zext/L0RF5OzRQvtvR/ErputLzzipcjMWSraQXz4LssMQln6T+DtVbFBjj1tPDAQNhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710866399; c=relaxed/simple;
-	bh=6WUhz94+0wyqqe3FiPCsB+Q8ismHCxcSfYZebTOlXqU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XvFY8CyZakzmmeD80KDH00wBKKPzsIR4cEH40a5NOIjyGtAIS8Uk5feKDswMx90RY+ntp5FqbwqQ3j1YOE9REZ5qsWjvS02DNkMaFXtyMgGDT7r1X83zefZ5nrXucRgj9aN7JeoLcC4kbg0NG3F+qCxmqeE7klPRLogpKVgXxMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c9jTCXtR; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1710868528; c=relaxed/simple;
+	bh=cBcB6d6+i4J0E25xFREZKFr8Gi0/HhGKqA6mI9d7Dr8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Ozbo94a+rVUuvUbrT3HlHdAgMEZmHd2K9Qz5JrAfMVuGFOCJRxNmI8Lz7czLgOQhjRy+G9GUfCGfUhNSGbNtOf0SwAaUUxvXRsT2gGP9nbp0VsF2wpDXlNxUgeSMaE4qp1gOSdXP28MUbWR4+nr/nm728mQh/fc2hHuFgx0T1Nw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BU6FWS3O; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c9jTCXtR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1710866396;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6WUhz94+0wyqqe3FiPCsB+Q8ismHCxcSfYZebTOlXqU=;
-	b=c9jTCXtRLk1Jc1pKSdmlBvYCT1bYjCGcu1uEcr4ZF3a5HgRyDTzzo7igQX9zv1woSltrE8
-	gCm1pKG7OjWTeHL6PQoQEVV/afbJES7+jK9W2Jyx/RfGWzKZePPFZrCKq9R8/w0dnZcOmP
-	dihxyvuHzfOPe2GS8z7w+5pohBVsd8w=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-155-5jxCytIoNsG8Njw_Zyv--Q-1; Tue, 19 Mar 2024 12:39:51 -0400
-X-MC-Unique: 5jxCytIoNsG8Njw_Zyv--Q-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 30692800262;
-	Tue, 19 Mar 2024 16:39:50 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.50])
-	by smtp.corp.redhat.com (Postfix) with SMTP id 34625200B3C8;
-	Tue, 19 Mar 2024 16:39:47 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Tue, 19 Mar 2024 17:38:28 +0100 (CET)
-Date: Tue, 19 Mar 2024 17:38:20 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
-Subject: Re: [PATCH RFC bpf-next 4/3] uprobe: ensure sys_uretprobe uses sysret
-Message-ID: <20240319163819.GD20287@redhat.com>
-References: <20240318093139.293497-1-jolsa@kernel.org>
- <20240319102523.GC20287@redhat.com>
- <ZflyM5U67c47i4Oo@krava>
- <CAEf4BzZ-cAByJq8FmgxJgMt7WKAsDME6K00hYJpcS6XiwYO=-w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BU6FWS3O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08106C433C7;
+	Tue, 19 Mar 2024 17:15:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710868527;
+	bh=cBcB6d6+i4J0E25xFREZKFr8Gi0/HhGKqA6mI9d7Dr8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=BU6FWS3Osa9+Dn2am7oAuehEHNRiGwNK1VcKrsKgxxE3jql0jA8XWvsifl5qx/jY5
+	 vy1SOnjA+ZAdBlMn1+BL8mLaFf0qbLyutGv10lYwBXpqUE50ByUhgpLXy3b/UilXlm
+	 Hj4Pja6Bz3fDVNSit3eyirF4oDSjwzR4XECH2lVPKCuLfmKlT+HbXaZnYAUQpO/UgA
+	 OMJEioTmjlsEkUDvTgf6gWeiSu9w1mvER2/PIsU39YhbBvDSLsQIDn7i7r1XHgKHkO
+	 Xg0D+XmimCZNMT/ULptRsVY5ZtS2F+x+rn4A+z7PQJna4KIlQ+eEYmAt/nIpCKQcuo
+	 vqaidrcNkgMyw==
+Date: Tue, 19 Mar 2024 10:15:25 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, Eric 
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, "Michael S.
+  Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, Alexei 
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
+ <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@google.com>, Amritha 
+ Nambiar <amritha.nambiar@intel.com>, Larysa Zaremba
+ <larysa.zaremba@intel.com>, Sridhar Samudrala
+ <sridhar.samudrala@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, virtualization@lists.linux.dev,
+ bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v4 3/8] virtio_net: support device stats
+Message-ID: <20240319101525.2452065d@kernel.org>
+In-Reply-To: <1710489940.1772969-1-xuanzhuo@linux.alibaba.com>
+References: <20240314085459.115933-1-xuanzhuo@linux.alibaba.com>
+	<20240314085459.115933-4-xuanzhuo@linux.alibaba.com>
+	<20240314155425.74b8c601@kernel.org>
+	<1710489940.1772969-1-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzZ-cAByJq8FmgxJgMt7WKAsDME6K00hYJpcS6XiwYO=-w@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 03/19, Andrii Nakryiko wrote:
->
-> On Tue, Mar 19, 2024 at 4:08 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+On Fri, 15 Mar 2024 16:05:40 +0800 Xuan Zhuo wrote:
+> > Don't duplicate the stats which get reported via the netlink API in
+> > ethtool. Similar story to the rtnl stats:
 > >
-> >
-> > I'll run the test with this change
-> >
->
-> I can do some benchmarking on my side as well, given I have everything
-> set up for this anyways. Thanks for the help with speeding all this
-> up!
+> > https://docs.kernel.org/next/networking/statistics.html#notes-for-driver-authors  
+> 
+> Sorry, this patch set did not follow this.
+> 
+> I will fix in next version.
+> 
+> But I plan that will be done in the commit "virtio-net: support queue stat".
+> This commit in next version will report all stat by ethtool -S.
+> The commit "virtio-net: support queue stat" in next version
+> will not report the duplicate the stats that reported via the netlink API.
+> 
+> Do you think ok?
 
-Great, thank you both!
-
-but just in case let me repeat, this is just a poc, the patch is obviously
-incomplete and needs more discussion even _if_ it actually makes the syscall
-faster, and I am not sure it does.
-
-Oleg.
-
+I guess that could save time refactoring the code, but we generally
+push authors to go the extra mile and make reviewers life easier.
+Also, in a way, making the evolution of the code base look more
+logical. So I'd prefer if the series was reorganized to never
+expose the standard stats via -S.
