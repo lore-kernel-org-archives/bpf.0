@@ -1,138 +1,152 @@
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935A22BAE9
-	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 18:12:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709CD39FE9
+	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 19:31:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710871943; cv=none; b=DSm7C9H17Vb2EAtH62v9T6hBMe71oHtt+RloX7tHCnbWrU0wbPc2lL8aYPW/95xf9PW+NB+dLyq6CWB7HoA1TCHbv6ZZI/Vz/P7oII/7jRwh86zHBzm1sbQbqwhknh522kY3DKrrB7dGkm13Ibm6XsSj7qt4EKworEQOC1VK494=
+	t=1710876721; cv=none; b=hlaHVy8O//UVCIXXNVdOKGvh9Z2OGneBlzyJcx6gTPxlLEqeMcDr3bOSON7ok7999eZReOpTwvsWL7JAzIl3HA/URBvfAGpdbPqRFv0Z+T1B0KweUxjj20MCeRem7iLVTdLVaLkZ3vsGYIsP3908IyZ4Chpb53AS6GdNRYE7BQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710871943; c=relaxed/simple;
-	bh=8CwvOpkzHWi5sDEiBu4yO13qK3DYHyI818weqm9THfY=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=X4JkLzTSIQ+tVzS+tQgnUtY2FXAACq/Ikv8GgKaX91l7x8cSft3fYFzMwHeVXREyZ5hPDoVDuLUt19EVNZLV7K29pfg06uWdQWIDcQqAxAevFJIB+j3eFJg/80FtjtGwO/v04iUGo4PWMtMEP0FYCxSViVyuWUwMhuiaePGgcLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7cc7a6a043bso212561539f.0
-        for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 11:12:21 -0700 (PDT)
+	s=arc-20240116; t=1710876721; c=relaxed/simple;
+	bh=wH7tpr3RimBNELsm1EX+IclcVIWHWr0ySDyDkm2JTrg=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FmCIOBl+nPPqdPNrZBXY4trVW7ARHNFgbBfknq9aEm3Y60RJ3JOq7IDxYfMf69LHIZxDkKyqHgVryFD70OPtfZ932AyvJeA0sloqIiHu7qbmJdYerGMw0qYkoejXW3t6vSHKSLvxEMOiMZzaLI+lpDLikELErvBuwoKoSadl4vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gg2/f+AL; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gg2/f+AL"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a44f2d894b7so710575866b.1
+        for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 12:31:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710876718; x=1711481518; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=s0NpchFYyzEXJ+eqB3eo7/ra5EkntoEDOBdlZF9R/v4=;
+        b=gg2/f+ALzcgSfgkUl27dkNyGSg5pkxAvzBxCOD5QLYEY7QVtyqU0hDC/5jdJUxpso0
+         MJwlqFcxsQhOYjYF8U64V8UDZtH5GnuBluoFkhoiqAgVkiFlb8YxUy9+Fa++R+HxvkrO
+         D1IOabOa0wwZqT8Wtt5xN3y2+Jq/RKrxS1UtDuuDvwTuvPIb8nyR4RyhdwYQJ4EdRFDc
+         gVqoD92lMWHQkdNsFVj7yhLB10/0HmN2RHxJzIM2PhQyYmrpPmTy45KG8OhA9USsnvxl
+         KDFmz12gIRCwwxg12kdZceN+AkCjbXFeYNuMLN1yTVctYMvuC7hxgb2ruQpbKFjR/o2P
+         ClKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710871941; x=1711476741;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KUl8KngKDhKat2ID3WrGzxmO4pwALhdfll2XNSs2Xd8=;
-        b=kd6ENcYz3dzU/Ev0ujcyLJiDJc7JgRG+qjXX5qeUqtJbBCnKWJWdWYLmHfKnVyTcIU
-         0MsKC717iU48CEXy1nvyvbsDm+iPAL2+f674wnfItWueGvrpBHu5FpWz4ojhLBBiS/eP
-         tFqJOHbdujViesuFJYcLQzifht80buL+7gBZ6Pkt+0UKUNXLRcgEuhBgZAhsXY4UIgwL
-         RjOE74D5KAi4WanbNI3E9LNstPj2ldbNAfzZeud9bi5ndp3hgF0m8K6n+Kw/FEai8VIV
-         VoZ82SeFOM+tPaB0nLXjlMeot7oH8CsJv/ypLSmNNnKIW/j3fZTmumL5AdtXAlVb/xnb
-         0dMg==
-X-Forwarded-Encrypted: i=1; AJvYcCX+fZnVEFLMJj4ZzILJQ49wTFpISIDLAmwGjUfkUmXP7ux6qS02t8NAATdKIJUvqCfWWsMjZkHvWJD9Zp3rs1Qtz2K9
-X-Gm-Message-State: AOJu0YzYfkZ2lrFUYeJavp3vzoXPaY+e3qYqdyTqeETK9OsDDza+90gl
-	+xkam0tyNrffFXml++mCX5lsER3/BczHHTtNdfqU30BfA4HxlkDdLmon5TMibvh/65QANFy+Qvq
-	kPcbFo4wSyQO7UPMx/s1oq2jZsLAXJO9SQKcUrRQuDlgztQ61AxUKi0Q=
-X-Google-Smtp-Source: AGHT+IHMVS2mCLbNF2hdzoCk8GpLFWyRFSX1ZPuWPNcY8kCgzSWWzeStiW6AYWuYmGmqcqZcY80wuhTt/0Tm5wb/HVekb4fvy3gb
+        d=1e100.net; s=20230601; t=1710876718; x=1711481518;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s0NpchFYyzEXJ+eqB3eo7/ra5EkntoEDOBdlZF9R/v4=;
+        b=AvFvsWUy04XXlOA7/oXB25msqymWd4iO1JkXGNHi5HHKEBUYMJiPye77TfqR0lboKe
+         aneBv3wl+TSu3ctAhLMP7dkGRUarwGEMdA53J/bicpCWrne4WfGQSLJJRQrZjOCYObTn
+         606jD9USq9c/de5+8n4+IcrIZ7dHIZkVomsqah+CN4LnKZD5VEbRBpnPtKp9vV27OFO4
+         T+GZOsVxAJZaTBF1EuYfpSpQPo6VfEOXSeJxZyBla0rE9P6iwsy5Ac8zYuWiuZCNa/7S
+         jPwHqsDGadB95SDxo2AjpRaE+p+VM1vKjEIQl/XYJhSEnG3YsO+z2GcPC/beAYjwXHLR
+         R4Mw==
+X-Forwarded-Encrypted: i=1; AJvYcCWD8uuKyTSGPyQoU5l/ozwvHkpdrnftnlXZsiHLIWai/JMm+xW+oZPbNuczzejfkqzCo3Xx7KZFpYg81VToNcPUqXfc
+X-Gm-Message-State: AOJu0YzsYEa8AQC55/NcpHXYohcxALoYR/SQ0DgDIQMOoEopJ2ocxkrR
+	lTawl6YjYbmcoxXP6aqMqzLJLmyrgPDwDCYkKk0trFwJ75RIVtMB
+X-Google-Smtp-Source: AGHT+IET2xUa9HYGV4S3HfDMO2Oy39SeyHPI/VuLg48JxF3KkUxCqt9I5yihkgSiPqdMDLNHa+cvMw==
+X-Received: by 2002:a17:907:a092:b0:a46:4d76:106b with SMTP id hu18-20020a170907a09200b00a464d76106bmr14459185ejc.34.1710876717417;
+        Tue, 19 Mar 2024 12:31:57 -0700 (PDT)
+Received: from krava ([83.240.63.214])
+        by smtp.gmail.com with ESMTPSA id xe2-20020a170907318200b00a46b10861acsm3483084ejb.208.2024.03.19.12.31.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Mar 2024 12:31:57 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 19 Mar 2024 20:31:55 +0100
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Oleg Nesterov <oleg@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
+Subject: Re: [PATCH RFC bpf-next 4/3] uprobe: ensure sys_uretprobe uses sysret
+Message-ID: <ZfnoK8aQDJMgOYfY@krava>
+References: <20240318093139.293497-1-jolsa@kernel.org>
+ <20240319102523.GC20287@redhat.com>
+ <ZflyM5U67c47i4Oo@krava>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:1693:b0:7cc:ce74:4293 with SMTP id
- s19-20020a056602169300b007ccce744293mr171278iow.0.1710871940020; Tue, 19 Mar
- 2024 11:12:20 -0700 (PDT)
-Date: Tue, 19 Mar 2024 11:12:20 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003dc8e00614076ab6@google.com>
-Subject: [syzbot] [bpf?] UBSAN: array-index-out-of-bounds in check_stack_range_initialized
-From: syzbot <syzbot+33f4297b5f927648741a@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
-	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
-	linux-kernel@vger.kernel.org, martin.lau@linux.dev, netdev@vger.kernel.org, 
-	sdf@google.com, song@kernel.org, syzkaller-bugs@googlegroups.com, 
-	yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZflyM5U67c47i4Oo@krava>
 
-Hello,
+On Tue, Mar 19, 2024 at 12:08:35PM +0100, Jiri Olsa wrote:
+> On Tue, Mar 19, 2024 at 11:25:24AM +0100, Oleg Nesterov wrote:
+> > Obviously not for inclusion yet ;) untested, lacks the comments, and I am not
+> > sure it makes sense.
+> > 
+> > But I am wondering if this change can speedup uretprobes a bit more. Any chance
+> > you can test it?
+> > 
+> > With 1/3 sys_uretprobe() changes regs->r11/cx, this is correct but implies iret.
+> > See the /* SYSRET requires RCX == RIP and R11 == EFLAGS */ code in do_syscall_64().
+> 
+> nice idea, looks like sysexit should be faster
+> 
+> > 
+> > With this patch uretprobe_syscall_entry restores rcx/r11 itself and does retq,
+> > sys_uretprobe() needs to hijack regs->ip after uprobe_handle_trampoline() to
+> > make it possible.
+> > 
+> > Comments?
+> > 
+> > Oleg.
+> > ---
+> > 
+> > diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+> > index 069371e86180..b99f1d80a8c8 100644
+> > --- a/arch/x86/kernel/uprobes.c
+> > +++ b/arch/x86/kernel/uprobes.c
+> > @@ -319,6 +319,9 @@ asm (
+> >  	"pushq %r11\n"
+> >  	"movq $462, %rax\n"
+> >  	"syscall\n"
+> > +	"popq %r11\n"
+> > +	"popq %rcx\n"
+> > +	"retq\n"
+> 
+> using rax space on stack for return pointer, cool :)
+> 
+> I'll run the test with this change
 
-syzbot found the following issue on:
+I got bigger speed up on intel, amd stays the same (I'll double check that)
 
-HEAD commit:    0740b6427e90 Merge branch 'bpf-arena-followups'
-git tree:       bpf
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=12fed769180000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6fb1be60a193d440
-dashboard link: https://syzkaller.appspot.com/bug?extid=33f4297b5f927648741a
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1763a479180000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15c38711180000
+current:
+  base           :   16.133 ± 0.035M/s
+  uprobe-nop     :    3.003 ± 0.002M/s
+  uprobe-push    :    2.829 ± 0.001M/s
+  uprobe-ret     :    1.101 ± 0.001M/s
+  uretprobe-nop  :    1.485 ± 0.001M/s
+  uretprobe-push :    1.447 ± 0.000M/s
+  uretprobe-ret  :    0.812 ± 0.000M/s
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c9e6e9f97566/disk-0740b642.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/78476a588b62/vmlinux-0740b642.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/50cd6fab9ead/bzImage-0740b642.xz
+fix:
+  base           :   16.522 ± 0.103M/s
+  uprobe-nop     :    2.920 ± 0.034M/s
+  uprobe-push    :    2.749 ± 0.047M/s
+  uprobe-ret     :    1.094 ± 0.003M/s
+  uretprobe-nop  :    2.004 ± 0.006M/s  < ~34% speed up
+  uretprobe-push :    1.940 ± 0.003M/s  < ~34% speed up
+  uretprobe-ret  :    0.921 ± 0.050M/s  < ~13% speed up
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+33f4297b5f927648741a@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-UBSAN: array-index-out-of-bounds in kernel/bpf/verifier.c:7190:12
-index -1 is out of range for type 'u8[8]' (aka 'unsigned char[8]')
-CPU: 0 PID: 5071 Comm: syz-executor474 Not tainted 6.8.0-syzkaller-05226-g0740b6427e90 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2e0 lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:217 [inline]
- __ubsan_handle_out_of_bounds+0x121/0x150 lib/ubsan.c:415
- check_stack_range_initialized+0x1668/0x19a0 kernel/bpf/verifier.c:7190
- check_helper_mem_access+0x2eb/0xfa0 kernel/bpf/verifier.c:7294
- check_helper_call+0x263c/0x7220 kernel/bpf/verifier.c:10252
- do_check+0x9e29/0x10530 kernel/bpf/verifier.c:17801
- do_check_common+0x14bd/0x1dd0 kernel/bpf/verifier.c:20500
- do_check_main kernel/bpf/verifier.c:20591 [inline]
- bpf_check+0x136ab/0x19010 kernel/bpf/verifier.c:21261
- bpf_prog_load+0x1667/0x20f0 kernel/bpf/syscall.c:2895
- __sys_bpf+0x4ee/0x810 kernel/bpf/syscall.c:5631
- __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
- __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5736
- do_syscall_64+0xfb/0x240
- entry_SYSCALL_64_after_hwframe+0x6d/0x75
-RIP: 0033:0x7f8416194629
-Code: 48 83 c4 28 c3 e8 37 17 00 00 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffdc6f0fdb8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 00007ffdc6f0ff88 RCX: 00007f8416194629
-RDX: 0000000000000090 RSI: 00000000200000c0 RDI: 0000000000000005
-RBP: 00007f8416207610 R08: 0000000000000000 R09: 00007ffdc6f0ff88
-R10: 00000000fffffff8 R11: 0000000000000246 R12: 0000000000000001
-R13: 00007ffdc6f0ff78 R14: 0000000000000001 R15: 0000000000000001
- </TASK>
----[ end trace ]---
+original fix:
+  base           :   15.704 ± 0.076M/s
+  uprobe-nop     :    2.841 ± 0.008M/s
+  uprobe-push    :    2.666 ± 0.029M/s
+  uprobe-ret     :    1.037 ± 0.008M/s
+  uretprobe-nop  :    1.718 ± 0.010M/s  < ~25% speed up
+  uretprobe-push :    1.658 ± 0.008M/s  < ~23% speed up
+  uretprobe-ret  :    0.853 ± 0.004M/s  < ~14% speed up
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+jirka
