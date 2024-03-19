@@ -1,20 +1,21 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60FAB2D03B
-	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 17:54:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A97C22F1E
+	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 17:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710870858; cv=none; b=WRnIBJxawFiFT/4N0UmPgYUiEOruTJRInm0UinOiUy73V3fib0Ix0qDo1YgEeh29NHAMALU8sK3XPuG3HqcgcR4ZDuKiBzZWukELK7w/bd5j1qT8TJ/jESN7ojm2TcGi5kzgcbFtV2frSFHHksVXefBS9qp5CSyu3o5t3UB+k4M=
+	t=1710870861; cv=none; b=Rb/PgoSxmJ7d5vvgMVWTC28PpTTlzut8odGxwMefW0Yb8/DTn8Uz2gbrR16cNjNpNYmHA2lFKvrktvvPmxzUQieq/uYyXXV6KbOa4nDcvlmTfg6rIIQeBeyOnfqjHi6X/RRkmzKog9FrbONV9i4PprLkmkFgWWEvBAlevifw7hM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710870858; c=relaxed/simple;
-	bh=w8udPClLz+XVxtw2duTpgZqSu7Ab98JDwhPX86uANs8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p0HI9PBv2Xpv94kyhKEV/092EE5MKDP9k05HWVCVISwsd6+bu2biRvYKbT6qBMGQgR57216tikEpMAE49jobKFfj/pk8VSKX2shH5jNaHzQNiAG7DZBGqbhSRsCAavl64GsGfqMFQJ6tJlzEq05GDj8sWqwc/ybOMNfY4lf7/o4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+	s=arc-20240116; t=1710870861; c=relaxed/simple;
+	bh=quuBpusKPuwXe1VYvRrLA3b9w/H15j4c6nFz7/2LmNc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=C9QFIgI5qpNAS4YqpQfcDMH9bFIHTZ26pQ4/5uZqHhZF6ECBFELFs/nHwyncbZg07KbEMWcqJSvPtfOztP2tpU45v9v3a+8WLDhvVIc94Mf83zP/7Y2iGkdZtf2bpWCDetEDVT0g4bLfO3Tkm6hIhrXrKbHWmgHQPxDygFNh76Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id C877C206A7AE; Tue, 19 Mar 2024 10:54:01 -0700 (PDT)
+	id 0A807206A806; Tue, 19 Mar 2024 10:54:12 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,10 +25,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v2 0/6] bpf: Add bpf_link support for sk_msg and sk_skb progs
-Date: Tue, 19 Mar 2024 10:54:01 -0700
-Message-ID: <20240319175401.2940148-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 2/6] libbpf: Add new sec_def "sk_skb/verdict"
+Date: Tue, 19 Mar 2024 10:54:12 -0700
+Message-ID: <20240319175412.2941149-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240319175401.2940148-1-yonghong.song@linux.dev>
+References: <20240319175401.2940148-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -36,46 +39,33 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-One of our internal services started to use sk_msg program and currently
-it used existing prog attach/detach2 as demonstrated in selftests.
-But attach/detach of all other bpf programs are based on bpf_link.
-Consistent attach/detach APIs for all programs will make things easy to
-undersand and less error prone. So this patch added bpf_link
-support for BPF_PROG_TYPE_SK_MSG. Based on comments from
-previous RFC patch, I added BPF_PROG_TYPE_SK_SKB support as well
-as both program types have similar treatment w.r.t. bpf_link
-handling.
+The new sec_def specifies sk_skb program type with
+BPF_SK_SKB_VERDICT attachment type. This way, libbpf
+will set expected_attach_type properly for the program.
+This will make it easier for later bpf_link based
+APIs for sk_skb programs.
 
-For the patch series, patch 1 added kernel support. Patches 2/3
-added libbpf support. Patch 4 added bpftool support and
-patches 5/6 added some new tests.
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ tools/lib/bpf/libbpf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Yonghong Song (6):
-  bpf: Add bpf_link support for sk_msg and sk_skb progs
-  libbpf: Add new sec_def "sk_skb/verdict"
-  libbpf: Add bpf_link support for BPF_PROG_TYPE_SK_{MSG,SKB}
-  bpftool: Add link dump support for BPF_LINK_TYPE_SK_{MSG,SKB}
-  selftests/bpf: Refactor out helper functions for a few tests
-  selftests/bpf: Add some tests with new
-    bpf_program__attach_sk_{msg,skb}() APIs
-
- include/linux/bpf.h                           |  13 ++
- include/uapi/linux/bpf.h                      |  10 ++
- kernel/bpf/syscall.c                          |   4 +
- net/core/skmsg.c                              | 164 ++++++++++++++++++
- net/core/sock_map.c                           |   6 +-
- tools/bpf/bpftool/link.c                      |  18 ++
- tools/include/uapi/linux/bpf.h                |  10 ++
- tools/lib/bpf/libbpf.c                        |  15 ++
- tools/lib/bpf/libbpf.h                        |   4 +
- tools/lib/bpf/libbpf.map                      |   2 +
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 121 +++++++++++--
- .../selftests/bpf/prog_tests/sockmap_listen.c |  38 ++++
- .../bpf/progs/test_skmsg_load_helpers.c       |  15 +-
- .../bpf/progs/test_sockmap_pass_prog.c        |  11 +-
- .../progs/test_sockmap_skb_verdict_attach.c   |   2 +-
- 15 files changed, 410 insertions(+), 23 deletions(-)
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 3a756d61c120..7d413415d0d5 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9312,6 +9312,7 @@ static const struct bpf_sec_def section_defs[] =3D =
+{
+ 	SEC_DEF("sockops",		SOCK_OPS, BPF_CGROUP_SOCK_OPS, SEC_ATTACHABLE_OPT),
+ 	SEC_DEF("sk_skb/stream_parser",	SK_SKB, BPF_SK_SKB_STREAM_PARSER, SEC_A=
+TTACHABLE_OPT),
+ 	SEC_DEF("sk_skb/stream_verdict",SK_SKB, BPF_SK_SKB_STREAM_VERDICT, SEC_=
+ATTACHABLE_OPT),
++	SEC_DEF("sk_skb/verdict",	SK_SKB, BPF_SK_SKB_VERDICT, SEC_ATTACHABLE_OP=
+T),
+ 	SEC_DEF("sk_skb",		SK_SKB, 0, SEC_NONE),
+ 	SEC_DEF("sk_msg",		SK_MSG, BPF_SK_MSG_VERDICT, SEC_ATTACHABLE_OPT),
+ 	SEC_DEF("lirc_mode2",		LIRC_MODE2, BPF_LIRC_MODE2, SEC_ATTACHABLE_OPT),
 --=20
 2.43.0
 
