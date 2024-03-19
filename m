@@ -1,142 +1,198 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7ACFBED
-	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 01:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C20D8465
+	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 01:27:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710811337; cv=none; b=gAxJIY10Hm0iTurvKtGrJ69HG5jpQMpvJv1hlfnKvIjZHkGSY77y2KEg2O5dghbZtPhmkDT6hDpB4GZwucT75JzPr64IdrLFSHO9f/kvEDHBbqSN2j0dsvYUadCzYV2PZ4Zr81k1Gc8DnBJltTEErCfVSfjsWCqRaBYdjmJythY=
+	t=1710811623; cv=none; b=YGoeylOlOALh9vS2PGyVJhTluDKHYuE2D5qcSOZvM0Xzbx/LvZDgpyA3IAtB0qLA4PLwp8lHlCV3BBgXbBeIDkVV9hRnCebd/I7oMsrz7CQNki0ChTBND9fr3nzwzBMv1mFqH35RwyrRauObvVzkGt0FY6NPPIEWP+gfLA2/fZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710811337; c=relaxed/simple;
-	bh=QgusPD7+H6lTkAx7XOfhZiWPQ5wZBhrrZwkYApeut14=;
+	s=arc-20240116; t=1710811623; c=relaxed/simple;
+	bh=uF1M09ZOHElrWt23+graGTrtLvlXtEJP/fROzFQdPf8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TkDZy0jgi0iCo0Jv78INkwYT+sdw4eQT/5mYPWp7EywxFK55jTc0oeRhMG3U2/6+PQlBQ+lSYIwO6EluIpJZXOqnwWQRq4jLJa5Slll544T8AY/fGEjNZPQ8n9/99GGrj/ivdgKRx6d3JfQ9TtEfnyRiG32CbdzAjyRVIZZxNJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T3Kz//kj; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=QNYO4tnFTYgt95f76IS3zx+2q3iV0IiO2j8ADsZdpQecOp82m8C8NYXTZWa+yzcqB7r76lRYFNN0YCzmmHerMVUYnqvtBmkztWtkpypIQbKN7l6Gy16xxWRVmLuJoTCLHTClZj6tbSvvlEDDla2wp15FyHunRehlm3DZjXz7LHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=WvymFvAW; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T3Kz//kj"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1e034607879so9012485ad.0
-        for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 18:22:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="WvymFvAW"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-56b85146589so1547427a12.0
+        for <bpf@vger.kernel.org>; Mon, 18 Mar 2024 18:27:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710811335; x=1711416135; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1710811619; x=1711416419; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LAalt7WWJ4l9RN8A8EOYEY4RLROXN9RMJn1FCaPh0Ak=;
-        b=T3Kz//kjuXRW8TRQM/WB8wN8jcMfWcOtjCLiRJSo23+Pf/osUqrofUbs8rmAKWzRpZ
-         oLm4/R9NLWOB4Cv04JeXvcFRhp6YmrOK+Ra0Aig0RUvV6z76eTGHwKXcfWkoYSbRQqt9
-         SXViFWt92Ru3h0XPZhr+UyUL81LrTcjznLARTOLrLdJ2X6jnUG3hiEJdXEtD0bi3MlqK
-         DgBCk8HC4R0s0yT7EOUXomTo0bUTBYmTdPfq9hM7plDWJSmHVq534Dh5PMxeIYR/0gQ2
-         QhVqin/XjNwyvxagEpu6q7C4Z+3Q1taDk25WsZMTxyyU5nwxdJGQCSlxJLSQ7q+pUn1b
-         R1qQ==
+        bh=YFSq6DTagALYbPcbIPuPh63ocgP8pwtxE9YIUg3PGiA=;
+        b=WvymFvAWtJ+EdPMGzeCRaH16xTdsoa4NE+LM08lNd5C79qCLs0H/Cz0F7uw6jqkhXq
+         cUi0TSAZrfXDjwqCWNWSmi9+kov0sgEkkvOmVEOCYOoStM15EsYIDcxq4Nf6ygZUbkL9
+         J06Gdt5z4Vz4g15NswGMna8l0ojUdRBlhhzDi448Rd3C9eJw3HkMoHCItu+a//Ssug4W
+         oyWBwk8v32NLA9TMj8HQv6AV4UtGjglWUxhIeaETnBJM68/snSHbLdT6syTz/rcxAwTQ
+         kINWQQM/DKdmlz+KnYrUBqvj+LNgskLpaaeEVmrwjL5su4cZnaQWcd8qNSISfc9fkbw1
+         G0UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710811335; x=1711416135;
+        d=1e100.net; s=20230601; t=1710811619; x=1711416419;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LAalt7WWJ4l9RN8A8EOYEY4RLROXN9RMJn1FCaPh0Ak=;
-        b=THgZfyB7MDWtmliSRKZtOlerhqTqMw5uZhR9LATy/1aDpYB2xrGGU98ot+zC4ym0mN
-         EYcSQDf6kYFxOh0VhSK8xiF1m8hyKyIiY2sv+xKjmn7D5TCCWc4g/uHCkdgtNX6f9VEK
-         03ThcISfD4fmaaPHTcwXdqzalB/O+rquHFhxF/RzNQ4lTJoUgzM2/6dW7sb9A8jJywvN
-         guj9/5fVEqud0b3V3riqzRpRCYRYsxg6griVsBuGtD5v8aFcR0p8yXlO67HPunrObFdr
-         M/cHNgl3YQDmAehzimYOi7GIeKE/wAXC9IhWfz/XRY1ngrSpR+41y6jOtX5r6EGOo1BF
-         +Liw==
-X-Forwarded-Encrypted: i=1; AJvYcCUbCqT2GIvaoegUTF0p1O27ilmy4Coi2ShaPZtvGdl+zvcwEZztFSQXQh+Yw/+x1za4vaWpNYrEMYfcgA7ujYaoc30d
-X-Gm-Message-State: AOJu0Ywimv9tgmSEGN0Ddl0L8tDtHD7BRzVsf9ZM4oX67amcEV/H9PPk
-	f9t+3ox4vl6qEk/wdllsJRjVHT5ndhHZVxqxIz7SmCmlexUJYJFh97kddoPAADzc5SPG0JGNlRg
-	jATZfVdRpcPPi5MJPelsfLdCubQpjJrNOSt4=
-X-Google-Smtp-Source: AGHT+IEIOaJ9BQgn20smGKowtpDYvRRJqih5wLv0rkPVcPoNJ5N6zcePwnX4fMt3eO20RtJ2nJjKE/r0o22LIlu7s2M=
-X-Received: by 2002:a17:902:b216:b0:1dc:8f19:8344 with SMTP id
- t22-20020a170902b21600b001dc8f198344mr1389230plr.27.1710811335427; Mon, 18
- Mar 2024 18:22:15 -0700 (PDT)
+        bh=YFSq6DTagALYbPcbIPuPh63ocgP8pwtxE9YIUg3PGiA=;
+        b=PcHy9JuxGUeWYr0QtUClTMazv546nlY5wDB+6HLn6njEjodV5xENQJ8i4DUyVM//Dy
+         gLvvEAA6q4ROv7BYztIn3LK7GdCL0R2AkqyxL25oSn8WZX+XC3JDOFxW22Bge+FTenS0
+         DIMqjlRSn+PUrVWf3/ZVqU5iJHQwmS8FkDbEiqASHggiuqu9U4Lofh/MiOAIE9wpfB7W
+         olHYf566HUzZS95gElumlooELSaH4wYbESQxkWdju6utmnu3tLKtQLCt4jzpGtOK3EkC
+         CIROKZJcQGhlUvuXtZqGcpGZ3d7d3ep/Lwm6o9etBMSi7yYkCpz0wriHiTtQlebHANnM
+         00iA==
+X-Forwarded-Encrypted: i=1; AJvYcCUCDkMIc4utFA96c+KARWcAumfmVIAojuKBWOY969Oudz+vt9qNegaKWa5+oNevtQEJq5Aj+ThZaA7gEdfGgWQLVQci
+X-Gm-Message-State: AOJu0Yy92UTRCb9YOVfax4PL9EdIy1P2J+zqBt88SyxYMnhIwSqt01tg
+	QLCmRP5q6xlU8+GGBXfVVsooBFWjwCvwxGxw6QeZxb22NtkaqeamZ7s7ssNDFzAS/1WD7OihX7Z
+	YF4QwiRPJpZJCFBRXoJYkJYytRL9SSK0gXlvIgQ==
+X-Google-Smtp-Source: AGHT+IHdlISdIaT/ImAoSJpPeaXM5kRQ/Vqqlgzc8RUwbti7lxpVu6RejPXie1u1Hwn/85EmZ+Fd9ZqlSF6Hk1R0Nvs=
+X-Received: by 2002:a05:6402:388b:b0:566:59a2:7a10 with SMTP id
+ fd11-20020a056402388b00b0056659a27a10mr1226565edb.1.1710811619408; Mon, 18
+ Mar 2024 18:26:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240318093139.293497-1-jolsa@kernel.org> <20240318093139.293497-4-jolsa@kernel.org>
-In-Reply-To: <20240318093139.293497-4-jolsa@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 18 Mar 2024 18:22:02 -0700
-Message-ID: <CAEf4BzZxjRuLES-zu6x1FaBp-ujnqMyVa9g_+BpEWVg9sMFAww@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next 3/3] selftests/bpf: Mark uprobe trigger
- functions with nocf_check attribute
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Oleg Nesterov <oleg@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
-	John Fastabend <john.fastabend@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
+References: <cover.1710525524.git.yan@cloudflare.com> <491d3af6c7d66dfb3b60b2f210f38e843dfe6ed2.1710525524.git.yan@cloudflare.com>
+ <790ce7e7-a8fd-4d28-aaf3-1b991a898be2@paulmck-laptop>
+In-Reply-To: <790ce7e7-a8fd-4d28-aaf3-1b991a898be2@paulmck-laptop>
+From: Yan Zhai <yan@cloudflare.com>
+Date: Mon, 18 Mar 2024 20:26:48 -0500
+Message-ID: <CAO3-PbqZ9L5XPAHhD3kojHJZ3RRHre_4AkTq=aERVtLD-SeJKw@mail.gmail.com>
+Subject: Re: [PATCH v4 net 1/3] rcu: add a helper to report consolidated
+ flavor QS
+To: paulmck@kernel.org
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Lorenzo Bianconi <lorenzo@kernel.org>, 
+	Coco Li <lixiaoyan@google.com>, Wei Wang <weiwan@google.com>, 
+	Alexander Duyck <alexanderduyck@fb.com>, Hannes Frederic Sowa <hannes@stressinduktion.org>, 
+	linux-kernel@vger.kernel.org, rcu@vger.kernel.org, bpf@vger.kernel.org, 
+	kernel-team@cloudflare.com, Joel Fernandes <joel@joelfernandes.org>, 
+	=?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, mark.rutland@arm.com, 
+	Jesper Dangaard Brouer <hawk@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 18, 2024 at 2:32=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
+On Sat, Mar 16, 2024 at 12:41=E2=80=AFAM Paul E. McKenney <paulmck@kernel.o=
+rg> wrote:
 >
-> Some distros seem to enable the -fcf-protection=3Dbranch by default,
-> which breaks our setup on first instruction of uprobe trigger
-> functions and place there endbr64 instruction.
+> On Fri, Mar 15, 2024 at 12:55:03PM -0700, Yan Zhai wrote:
+> > There are several scenario in network processing that can run
+> > extensively under heavy traffic. In such situation, RCU synchronization
+> > might not observe desired quiescent states for indefinitely long period=
+.
+> > Create a helper to safely raise the desired RCU quiescent states for
+> > such scenario.
+> >
+> > Currently the frequency is locked at HZ/10, i.e. 100ms, which is
+> > sufficient to address existing problems around RCU tasks. It's unclear
+> > yet if there is any future scenario for it to be further tuned down.
 >
-> Marking them with nocf_check attribute to skip that.
+> I suggest something like the following for the commit log:
 >
-> Adding -Wno-attributes for bench objects, becase nocf_check can
-> be used only when -fcf-protection=3Dbranch is enabled, otherwise
-> we get a warning and break compilation.
+> ------------------------------------------------------------------------
 >
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  tools/include/linux/compiler.h                     | 4 ++++
->  tools/testing/selftests/bpf/Makefile               | 2 +-
->  tools/testing/selftests/bpf/benchs/bench_trigger.c | 6 +++---
->  3 files changed, 8 insertions(+), 4 deletions(-)
+> When under heavy load, network processing can run CPU-bound for many tens
+> of seconds.  Even in preemptible kernels, this can block RCU Tasks grace
+> periods, which can cause trace-event removal to take more than a minute,
+> which is unacceptably long.
 >
-> diff --git a/tools/include/linux/compiler.h b/tools/include/linux/compile=
-r.h
-> index 7b65566f3e42..14038ce04ca4 100644
-> --- a/tools/include/linux/compiler.h
-> +++ b/tools/include/linux/compiler.h
-> @@ -58,6 +58,10 @@
->  #define noinline
->  #endif
+> This commit therefore creates a new helper function that passes
+> through both RCU and RCU-Tasks quiescent states every 100 milliseconds.
+> This hard-coded value suffices for current workloads.
 >
-> +#ifndef __nocfcheck
-> +#define __nocfcheck __attribute__((nocf_check))
-> +#endif
+> ------------------------------------------------------------------------
+>
+> > Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+> > Reviewed-by: Jesper Dangaard Brouer <hawk@kernel.org>
+> > Signed-off-by: Yan Zhai <yan@cloudflare.com>
+> > ---
+> > v3->v4: comment fixup
+> >
+> > ---
+> >  include/linux/rcupdate.h | 24 ++++++++++++++++++++++++
+> >  1 file changed, 24 insertions(+)
+> >
+> > diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+> > index 0746b1b0b663..da224706323e 100644
+> > --- a/include/linux/rcupdate.h
+> > +++ b/include/linux/rcupdate.h
+> > @@ -247,6 +247,30 @@ do { \
+> >       cond_resched(); \
+> >  } while (0)
+> >
+> > +/**
+> > + * rcu_softirq_qs_periodic - Periodically report consolidated quiescen=
+t states
+> > + * @old_ts: last jiffies when QS was reported. Might be modified in th=
+e macro.
+> > + *
+> > + * This helper is for network processing in non-RT kernels, where ther=
+e could
+> > + * be busy polling threads that block RCU synchronization indefinitely=
+.  In
+> > + * such context, simply calling cond_resched is insufficient, so give =
+it a
+> > + * stronger push to eliminate all potential blockage of all RCU types.
+> > + *
+> > + * NOTE: unless absolutely sure, this helper should in general be call=
+ed
+> > + * outside of bh lock section to avoid reporting a surprising QS to up=
+daters,
+> > + * who could be expecting RCU read critical section to end at local_bh=
+_enable().
+> > + */
+>
+> How about something like this for the kernel-doc comment?
+>
+> /**
+>  * rcu_softirq_qs_periodic - Report RCU and RCU-Tasks quiescent states
+>  * @old_ts: jiffies at start of processing.
+>  *
+>  * This helper is for long-running softirq handlers, such as those
+>  * in networking.  The caller should initialize the variable passed in
+>  * as @old_ts at the beginning of the softirq handler.  When invoked
+>  * frequently, this macro will invoke rcu_softirq_qs() every 100
+>  * milliseconds thereafter, which will provide both RCU and RCU-Tasks
+>  * quiescent states.  Note that this macro modifies its old_ts argument.
+>  *
+>  * Note that although cond_resched() provides RCU quiescent states,
+>  * it does not provide RCU-Tasks quiescent states.
+>  *
+>  * Because regions of code that have disabled softirq act as RCU
+>  * read-side critical sections, this macro should be invoked with softirq
+>  * (and preemption) enabled.
+>  *
+>  * This macro has no effect in CONFIG_PREEMPT_RT kernels.
+>  */
+>
+It would be more accurate this way, I like it. Thanks!
 
-Let's preserve spelling of the attribut, __nocf_check ?
+Yan
 
-BTW, just FYI, seems like kernel is defining it as:
-
-#define __noendbr    __attribute__((nocf_check))
-
-Thought somewhere deep in x86-specific code, so probably not a good
-idea to use it here?
-
-> +
->  /* Are two types/vars the same type (ignoring qualifiers)? */
->  #ifndef __same_type
->  # define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeo=
-f(b))
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-> index e425a946276b..506d3d592093 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -726,7 +726,7 @@ $(OUTPUT)/test_cpp: test_cpp.cpp $(OUTPUT)/test_core_=
-extern.skel.h $(BPFOBJ)
->  # Benchmark runner
->  $(OUTPUT)/bench_%.o: benchs/bench_%.c bench.h $(BPFOBJ)
->         $(call msg,CC,,$@)
-> -       $(Q)$(CC) $(CFLAGS) -O2 -c $(filter %.c,$^) $(LDLIBS) -o $@
-> +       $(Q)$(CC) $(CFLAGS) -O2 -Wno-attributes -c $(filter %.c,$^) $(LDL=
-IBS) -o $@
-
-let's better use `#pragma warning disable` in relevant .c files,
-instead of this global flag?
-
->  $(OUTPUT)/bench_rename.o: $(OUTPUT)/test_overhead.skel.h
->  $(OUTPUT)/bench_trigger.o: $(OUTPUT)/trigger_bench.skel.h
->  $(OUTPUT)/bench_ringbufs.o: $(OUTPUT)/ringbuf_bench.skel.h \
-
-[...]
+>                                                         Thanx, Paul
+>
+> > +#define rcu_softirq_qs_periodic(old_ts) \
+> > +do { \
+> > +     if (!IS_ENABLED(CONFIG_PREEMPT_RT) && \
+> > +         time_after(jiffies, (old_ts) + HZ / 10)) { \
+> > +             preempt_disable(); \
+> > +             rcu_softirq_qs(); \
+> > +             preempt_enable(); \
+> > +             (old_ts) =3D jiffies; \
+> > +     } \
+> > +} while (0)
+> > +
+> >  /*
+> >   * Infrastructure to implement the synchronize_() primitives in
+> >   * TREE_RCU and rcu_barrier_() primitives in TINY_RCU.
+> > --
+> > 2.30.2
+> >
+> >
