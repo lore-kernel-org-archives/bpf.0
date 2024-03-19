@@ -1,94 +1,139 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F7F4C626
-	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 21:20:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E4AF3FBBF;
+	Tue, 19 Mar 2024 21:31:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710883216; cv=none; b=A9/0g0g4kGqeRTWCuv3Uejawkr4R4TYibwNx2NaOIKW2s4T5k+ZdQXSbtJ7X1HTCO8M6nfzuxyyFrvSR0GUwrrAKmqK/ALnrWLm6BcSASPXsHUOmLoDPvx/qNlFpbag1afC455WDjkjZF7BYzSYxW52+14/0CBnhN5Fdvign0Ug=
+	t=1710883915; cv=none; b=iQyutkMj49GOMucjWH+yrNSqFjYHacUtjQh19w2k5/iAS9rw5OsChS+xktRaRiSarzo00EEHL28erlq5Z4RT1VM1PY9v2Pm8FylLTOel/AJvPTAGLjzuk5Rzj9Q5dYLf2X10UWahppbQq8+9AYwxYlBkcKnffPP3ZEcayf+k6N4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710883216; c=relaxed/simple;
-	bh=N5J+7UVxM8UbWKxRgq6r4vsJjSVk8Z3GvBBePvlv0XM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ncHVbn60u+EZ4ajNLEIt2w8QEp1k7y94la1CtnmXFZ3j19ze+RH1xM7jmxEjhvPhh4uw8lXTNXzHVnGTdl8EPnw9h14nXxY3imcHSIQ7WGuzqMzRY0kY6AgmKQizSA19vXMR/CNMYEKWJT4zauCY2ePsNig2e0QMoWytseLvpc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jacPFRsS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710883915; c=relaxed/simple;
+	bh=fUaALyLJ2vU18yvgwRSHObW1ENVTzQxDLGlJ50YixzU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AZadhEQii6lTwC7fhxV0psnDELtKy7MWhQW4USh4o9WpK+dB/eCQYZoNqpQ7e5UqEX6jRXoqMzwu7R+mFrW9+sRGAHsdn0RXZrAz+N86Y5FbSMTNCoynduFrHrt+G2Rw4DgdUIxm+/+4Y6puYqRtjgDij0Kl7XywO/F1S6NXIo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gNqxTTDm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jacPFRsS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20DD7C433F1;
-	Tue, 19 Mar 2024 21:20:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gNqxTTDm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49AF9C433C7;
+	Tue, 19 Mar 2024 21:31:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710883216;
-	bh=N5J+7UVxM8UbWKxRgq6r4vsJjSVk8Z3GvBBePvlv0XM=;
-	h=From:To:Cc:Subject:Date:From;
-	b=jacPFRsS5x4/dRVmUaFbS5iRpbQtk/TAqMDmUkfwmmtlaJGFWzFh5Hv1S4d61noIO
-	 +10NT5oSiaOyPLV1EF77lcge3n1R0pctda+wmdRG02ZMUujc+NTFDDnFt077ioZLgV
-	 z/9DOv0SfB5T+EItRJNvlM8HJO7OdIyQxuW+nHI5HTWhUkzWc35/+CcTebjFDLQ/UI
-	 u1GMM93O8q6Doje0xmb0kTKsxnPHLi2NdhczZCWVXF0YDda0gyOH5XkQGGJPiXaoGb
-	 2stipDvORGfDtkGtruUOfIuBz+TFKC8gwA1+5onKpWlCVzrzrX2PKRLAV/SsoJe2rC
-	 XVhh49R9aG6uQ==
-From: Andrii Nakryiko <andrii@kernel.org>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@kernel.org
-Cc: andrii@kernel.org,
-	kernel-team@meta.com,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH bpf-next] bpf: avoid get_kernel_nofault() to fetch kprobe entry IP
-Date: Tue, 19 Mar 2024 14:20:13 -0700
-Message-ID: <20240319212013.1046779-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=k20201202; t=1710883914;
+	bh=fUaALyLJ2vU18yvgwRSHObW1ENVTzQxDLGlJ50YixzU=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=gNqxTTDm2rAVbiV2JjEQ55WiDnbEqbvhFrgXjeSj/7E0j/hVfMyE15Ocidyef4VIc
+	 Uat8d4qhOkfOolvFjBxsk54tqQCwgx6f0RTaAbSK4c4ecOMcT27iyEUkClsGEgvjIj
+	 646ddwAbhWPhJssYtzGlEFr+W+F0nWEZL1fqBFay/o0WylnzGqblvFXqO3fRszR//F
+	 eJ9a6cMUzdPWxGklY5H49oG7E5ePfQxOT5CQ8ZoS5+BocQHlYnfPViuwcG/QneJjIs
+	 1RFl9YXQcruJvWSffyc0oiGBVn05ugJF8Fs3XpMK4FbM54WwLq1QErkmAP73TyugyR
+	 Jaqe+J8eMr6gA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 7D064CE16D7; Tue, 19 Mar 2024 14:31:51 -0700 (PDT)
+Date: Tue, 19 Mar 2024 14:31:51 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Yan Zhai <yan@cloudflare.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Coco Li <lixiaoyan@google.com>, Wei Wang <weiwan@google.com>,
+	Alexander Duyck <alexanderduyck@fb.com>,
+	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+	bpf@vger.kernel.org, kernel-team@cloudflare.com,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>, mark.rutland@arm.com,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [PATCH v5 net 1/3] rcu: add a helper to report consolidated
+ flavor QS
+Message-ID: <6149ecfc-2a3b-4bea-a79f-ef5be0a36cd7@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <cover.1710877680.git.yan@cloudflare.com>
+ <90431d46ee112d2b0af04dbfe936faaca11810a5.1710877680.git.yan@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <90431d46ee112d2b0af04dbfe936faaca11810a5.1710877680.git.yan@cloudflare.com>
 
-get_kernel_nofault() (or, rather, underlying copy_from_kernel_nofault())
-is not free and it does pop up in performance profiles when
-kprobes are heavily utilized with CONFIG_X86_KERNEL_IBT=y config.
+On Tue, Mar 19, 2024 at 01:44:34PM -0700, Yan Zhai wrote:
+> When under heavy load, network processing can run CPU-bound for many
+> tens of seconds. Even in preemptible kernels (non-RT kernel), this can
+> block RCU Tasks grace periods, which can cause trace-event removal to
+> take more than a minute, which is unacceptably long.
+> 
+> This commit therefore creates a new helper function that passes through
+> both RCU and RCU-Tasks quiescent states every 100 milliseconds. This
+> hard-coded value suffices for current workloads.
+> 
+> Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+> Reviewed-by: Jesper Dangaard Brouer <hawk@kernel.org>
+> Signed-off-by: Yan Zhai <yan@cloudflare.com>
 
-Let's avoid using it if we know that fentry_ip - 4 can't cross page
-boundary. We do that by masking lowest 12 bits and checking if they are
->= 4, in which case we can do direct memory read.
+If you would like me to take this one via -rcu, I would be happy to take
+it.  If it would be easier for you to push these as a group though
+networking:
 
-Another benefit (and actually what caused a closer look at this part of
-code) is that now LBR record is (typically) not wasted on
-copy_from_kernel_nofault() call and code, which helps tools like
-retsnoop that grab LBR records from inside BPF code in kretprobes.
+Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
 
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/trace/bpf_trace.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 0a5c4efc73c3..f81adabda38c 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1053,9 +1053,15 @@ static unsigned long get_entry_ip(unsigned long fentry_ip)
- {
- 	u32 instr;
- 
--	/* Being extra safe in here in case entry ip is on the page-edge. */
--	if (get_kernel_nofault(instr, (u32 *) fentry_ip - 1))
--		return fentry_ip;
-+	/* We want to be extra safe in case entry ip is on the page edge,
-+	 * but otherwise we need to avoid get_kernel_nofault()'s overhead.
-+	 */
-+	if ((fentry_ip & ~PAGE_MASK) < ENDBR_INSN_SIZE) {
-+		if (get_kernel_nofault(instr, (u32 *)(fentry_ip - ENDBR_INSN_SIZE)))
-+			return fentry_ip;
-+	} else {
-+		instr = *(u32 *)(fentry_ip - ENDBR_INSN_SIZE);
-+	}
- 	if (is_endbr(instr))
- 		fentry_ip -= ENDBR_INSN_SIZE;
- 	return fentry_ip;
--- 
-2.43.0
-
+> ---
+> v4->v5: adjusted kernel docs and commit message
+> v3->v4: kernel docs error
+> 
+> ---
+>  include/linux/rcupdate.h | 31 +++++++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+> 
+> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+> index 16f519914415..17d7ed5f3ae6 100644
+> --- a/include/linux/rcupdate.h
+> +++ b/include/linux/rcupdate.h
+> @@ -247,6 +247,37 @@ do { \
+>  	cond_resched(); \
+>  } while (0)
+>  
+> +/**
+> + * rcu_softirq_qs_periodic - Report RCU and RCU-Tasks quiescent states
+> + * @old_ts: jiffies at start of processing.
+> + *
+> + * This helper is for long-running softirq handlers, such as NAPI threads in
+> + * networking. The caller should initialize the variable passed in as @old_ts
+> + * at the beginning of the softirq handler. When invoked frequently, this macro
+> + * will invoke rcu_softirq_qs() every 100 milliseconds thereafter, which will
+> + * provide both RCU and RCU-Tasks quiescent states. Note that this macro
+> + * modifies its old_ts argument.
+> + *
+> + * Because regions of code that have disabled softirq act as RCU read-side
+> + * critical sections, this macro should be invoked with softirq (and
+> + * preemption) enabled.
+> + *
+> + * The macro is not needed when CONFIG_PREEMPT_RT is defined. RT kernels would
+> + * have more chance to invoke schedule() calls and provide necessary quiescent
+> + * states. As a contrast, calling cond_resched() only won't achieve the same
+> + * effect because cond_resched() does not provide RCU-Tasks quiescent states.
+> + */
+> +#define rcu_softirq_qs_periodic(old_ts) \
+> +do { \
+> +	if (!IS_ENABLED(CONFIG_PREEMPT_RT) && \
+> +	    time_after(jiffies, (old_ts) + HZ / 10)) { \
+> +		preempt_disable(); \
+> +		rcu_softirq_qs(); \
+> +		preempt_enable(); \
+> +		(old_ts) = jiffies; \
+> +	} \
+> +} while (0)
+> +
+>  /*
+>   * Infrastructure to implement the synchronize_() primitives in
+>   * TREE_RCU and rcu_barrier_() primitives in TINY_RCU.
+> -- 
+> 2.30.2
+> 
+> 
