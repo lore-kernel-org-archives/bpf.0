@@ -1,74 +1,91 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB63365190
-	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 09:19:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A4E7D3F0
+	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 10:12:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710839954; cv=none; b=rfGJg5GGOwtHLlz5eXZXoaJLU8k+m0+aPedKfGha4e5Tv0B0uCnwLQLu1MgeokoJFAlvooUIchaVZaj0a3UpcRoCYDt3Av/wbdfNIIQkyFIkKmpmfrAE9CSR+B/FbGNIXh/mySURTwWypLbrVpa9liRuU2OAWtvQ8pmiRmS9hzQ=
+	t=1710843151; cv=none; b=bbXYmIgqtfL7jKFLNblW9/OF7L0CQVF9H4Zx6PpK8S0ucdXWax3YqXrOluUAzRUwB5uorpWqgYLbRhWX1FO8s0xBAeMdNnFGDslKsKjnOhoyjIvfRcDQxEYQbWCleX/aODNCROv9EN26xMFDwElz+Tpt39HZh+G5vqciJ+pliJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710839954; c=relaxed/simple;
-	bh=YCXnw3bY1tklN/JiRMa7L8wz3VNXz2DhfRaJ2IUlod8=;
+	s=arc-20240116; t=1710843151; c=relaxed/simple;
+	bh=xnsp3gfIoBuqkf9WzUWArWK2Eue0B2a4uf2f2qgcP1s=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tjvhzZeDL4jWazR81wfk4VXJqE0u54A7F+wCV1tthrZG3SR8FsFCqREKMLM0rKs/C+hVfPBRqUUtYJ3oxKEdogP7nmylMkhoa/h7hpL/uG+Mj9LLTSpK0uwhjbCHjJbsTyHuo+Un1mn8AVzt5HwF12/2rDDpNJqvn/TblW9tOJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lkKJpYYI; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:MIME-Version; b=O+5h0kkGrBBNwRLUcEiHwz+MWdY7msstIdme2t1YchqsktlhFGuu5rRnWHlkgtEydN6XAjIC6HGgrpqbNT8lDh3ZUIQ5jKoAPQk1RevAvsoZKsKrIEZrIz3L38OTTO2asBkuRkgtt4y8LfbpPkr9MfCdreoGRTRZHKRKhBewMaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IdOvO8lf; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lkKJpYYI"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-56b92a8f222so635706a12.2
-        for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 02:19:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710839951; x=1711444751; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=oUgjPSX/JKZvMfZ5Ha27YIDlpuiaBBYINf3or/IFbs4=;
-        b=lkKJpYYIbAxd0AoS03jiZ3yDfAjy90caHCd4J05mlQqYInap8fBrIegS5mbVPCa+xV
-         6tPgswqSmhLO8ciDdON1J4kwJahx7Ok3ggMAd0MxXM8XfnXfDLaQIkY53GkNctdXcNCh
-         hzsjXeX2J+Tl+46LxCMRAVBamleewRvd8rCY2fvVHpjaaDArREE2THZ3KFcnNSOzZ3KP
-         8+DTAtRqeDlE7xVNXJnBKBv2BojIi0X8n/9YK7mEyeuY1zNCJUgVfq/W7CjK8Zwe6LXy
-         01DOL+dV88Ln6nzNTN+Z3iGab1+iVMAlokXGnhuPhfAIDhASp4RCa2rIgIeUma8Xlz3n
-         Qsqw==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IdOvO8lf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1710843149;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=xnsp3gfIoBuqkf9WzUWArWK2Eue0B2a4uf2f2qgcP1s=;
+	b=IdOvO8lf+aV5pucZUbL+W7n9ktFJrwBP3YPPF8DFf4f/w7Mc7L+LLhlh6t0NtKgynHOh7L
+	//VcgJ+1gZ/Bc5Hdyziud6rvvxm21BmRG3w1EgqayZ0YuMDsapo0eqMtccHwMZjOCR5TMl
+	As/1Z4KYGvi/UQCHhTR+SGNZ7M/BvQs=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-688-RgzTK8uqPlWu2C1K1mxCFw-1; Tue, 19 Mar 2024 06:12:28 -0400
+X-MC-Unique: RgzTK8uqPlWu2C1K1mxCFw-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-33ec9bdcaa7so1083996f8f.0
+        for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 03:12:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710839951; x=1711444751;
+        d=1e100.net; s=20230601; t=1710843147; x=1711447947;
         h=mime-version:user-agent:content-transfer-encoding:autocrypt
          :references:in-reply-to:date:cc:to:from:subject:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oUgjPSX/JKZvMfZ5Ha27YIDlpuiaBBYINf3or/IFbs4=;
-        b=NkYAaxvWA1vugFhnxD8PpDqnaoXGD2zeymmwzAzuGHqDpLvRfbiLPU5UsCntnpjhfk
-         ah3bF7tgH3nbCUmxZWPYL3LBIJtHjAY+CC5RkRtDP+wJ2UxH1ifvBnZdwAXKI9Hal5S9
-         7kBkBV4zM3W9Hepe/Dk9q6O2dE9syGcIb3PVKHMgDD6bFWtkgeys1Z9qSavwpbnQkG0F
-         Z2QyfPNp/nO3OUMmNAEiae2lNYiJLDLUtIZJJ2wuFw4j8blMkFcHRplheqOBChCo04PO
-         M+/MAd6fbOgRVAQWVCdzvBIMojYsr2BVbQGY0hB4Kd81DGvShRTdfj9z+Sl2t0Xp1Gyy
-         Cggw==
-X-Forwarded-Encrypted: i=1; AJvYcCWpjSJHh3AnKVX5rmlK+gZNovX6C0ZuBjdcWdo2hPjXwQr19hjDMttsAgUr9fj8J2nCdLSeVHnqlwIrF1Jp/vKlfGJn
-X-Gm-Message-State: AOJu0Yw2obvIojv+r4UvNYEE3ZjyPagqpAQmQzDQPgbdu226ZzRYbcNV
-	ODXNytiEqBxd34mL/5mMflyqTgWV5lMTrbBOZSuBCoWuNIrNZHRY
-X-Google-Smtp-Source: AGHT+IEql5NLV/zP/XGdDgFyfplytQw8/p2KihI9VlL5EWZ9YFHT56WBRTXMKbylv4yeady2C0IMOg==
-X-Received: by 2002:a05:6402:3895:b0:568:24dd:3ec6 with SMTP id fd21-20020a056402389500b0056824dd3ec6mr9073170edb.19.1710839950818;
-        Tue, 19 Mar 2024 02:19:10 -0700 (PDT)
-Received: from [192.168.6.255] ([5.1.5.0])
-        by smtp.gmail.com with ESMTPSA id g13-20020a056402428d00b005689f3d6936sm5608023edc.53.2024.03.19.02.19.09
+        bh=xnsp3gfIoBuqkf9WzUWArWK2Eue0B2a4uf2f2qgcP1s=;
+        b=ZD9RFuMLDnW2/VkkbsQ2nGYz8AydGerZe3xBwpNv5fUI3KG+xvCVnOiWvGGBLS113j
+         4JdkfLWpS4ydlRZPueee1kugoHXgc4rvKvz35ROUfh0JHoEmIm7hAbDDtZ25RhMiAaXK
+         vcP6hzajJlFIK+LLHy4UWJpaUIr0gnd7ZI2XIlev9+gBDyp+3vir1fqmJ6bhLO1HM/53
+         BidIvOpHiet9OQx4unrIRKeDE7pBJ2vuMnm9WrJauar+v75m84XpyExdC2d2ueDI6dba
+         xyS7Jg0hmT1kDRjfxWrk+zDoylwQj8YO6fxnTEYLfqa+u/wIVABYiVw+lJJ/Uiy1EWKD
+         reSA==
+X-Forwarded-Encrypted: i=1; AJvYcCV6XioeNU6WAszGf1ts1cNz0z6ia8UTfWD8PLhdxHoP4zsbtI1F6qrqexLW3JfWLTuxRuXm4uypjM2qEKYEXFa7cIdV
+X-Gm-Message-State: AOJu0YzvzfutHrSOYRw+fu16nwGLKOKolbz/MlvRLrqv/78pfMdMhUJ2
+	priAw1/DURMSo0tq598spiVXLAQufyyybWChfcF/a6zNbdnfFDWoA2YmkSWR14ekcBuBYM9cyjD
+	DDigSRLYGq2A0d2VFPzXEypL3YnOPvVQxPNGhVsEIxQEr3hFoXg==
+X-Received: by 2002:adf:e4ca:0:b0:33e:c361:7cdf with SMTP id v10-20020adfe4ca000000b0033ec3617cdfmr1245404wrm.0.1710843146933;
+        Tue, 19 Mar 2024 03:12:26 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF6l9P4AKCtN8uc1X/vjfDKtqMSUpnkdXstRYGAYxc8xRddl7mvdvVQRdQAxQyD/C1foBNwvg==
+X-Received: by 2002:adf:e4ca:0:b0:33e:c361:7cdf with SMTP id v10-20020adfe4ca000000b0033ec3617cdfmr1245378wrm.0.1710843146515;
+        Tue, 19 Mar 2024 03:12:26 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-224-202.dyn.eolo.it. [146.241.224.202])
+        by smtp.gmail.com with ESMTPSA id o14-20020adfe80e000000b0033e8c50fc3fsm11963607wrm.90.2024.03.19.03.12.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Mar 2024 02:19:10 -0700 (PDT)
-Message-ID: <43eaaada2757048eed490ef2bc74d5d310889410.camel@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 3/5] bpf: support BPF cookie in raw
- tracepoint (raw_tp, tp_btf) programs
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
- ast@kernel.org,  daniel@iogearbox.net, martin.lau@kernel.org
-Cc: kernel-team@meta.com, Stanislav Fomichev <sdf@google.com>
-Date: Tue, 19 Mar 2024 11:19:08 +0200
-In-Reply-To: <20240318184037.3209242-4-andrii@kernel.org>
-References: <20240318184037.3209242-1-andrii@kernel.org>
-	 <20240318184037.3209242-4-andrii@kernel.org>
-Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
+        Tue, 19 Mar 2024 03:12:25 -0700 (PDT)
+Message-ID: <316ea06417279a45d2d54bf4cc4afd2d775b419a.camel@redhat.com>
+Subject: Re: [PATCH net-next v5 0/9] virtio-net: support device stats
+From: Paolo Abeni <pabeni@redhat.com>
+To: Jiri Pirko <jiri@resnulli.us>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, "Michael
+ S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
+ <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@google.com>, Amritha
+ Nambiar <amritha.nambiar@intel.com>, Larysa Zaremba
+ <larysa.zaremba@intel.com>, Sridhar Samudrala
+ <sridhar.samudrala@intel.com>,  Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, virtualization@lists.linux.dev,
+ bpf@vger.kernel.org
+Date: Tue, 19 Mar 2024 11:12:23 +0100
+In-Reply-To: <ZfgxSug4sekWGyNd@nanopsycho>
+References: <20240318110602.37166-1-xuanzhuo@linux.alibaba.com>
+	 <Zfgq8k2Q-olYWiuw@nanopsycho>
+	 <1710762818.1520293-1-xuanzhuo@linux.alibaba.com>
+	 <ZfgxSug4sekWGyNd@nanopsycho>
+Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=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
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -76,18 +93,32 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Mon, 2024-03-18 at 11:40 -0700, Andrii Nakryiko wrote:
+On Mon, 2024-03-18 at 13:19 +0100, Jiri Pirko wrote:
+> Mon, Mar 18, 2024 at 12:53:38PM CET, xuanzhuo@linux.alibaba.com wrote:
+> > On Mon, 18 Mar 2024 12:52:18 +0100, Jiri Pirko <jiri@resnulli.us> wrote=
+:
+> > > Mon, Mar 18, 2024 at 12:05:53PM CET, xuanzhuo@linux.alibaba.com wrote=
+:
+> > > > As the spec:
+> > > >=20
+> > > > https://github.com/oasis-tcs/virtio-spec/commit/42f389989823039724f=
+95bbbd243291ab0064f82
+> > > >=20
+> > > > The virtio net supports to get device stats.
+> > > >=20
+> > > > Please review.
+> > >=20
+> > > net-next is closed. Please resubmit next week.
+> >=20
+> >=20
+> > For review.
+>=20
+> RFC, or wait.
 
-[...]
+@Xuan, please note that you received exactly the same feedback on your
+previous submission, a few days ago. While I do understand the legit
+interest in reviews, ignoring explicit feedback tend to bring no
+feedback at all.
 
-> @@ -2373,15 +2378,23 @@ static __always_inline
->  void __bpf_trace_run(struct bpf_raw_tp_link *link, u64 *args)
->  {
->  	struct bpf_prog *prog =3D link->link.prog;
-> +	struct bpf_run_ctx *old_run_ctx;
-> +	struct bpf_trace_run_ctx run_ctx;
+Paolo
 
-The struct bpf_trace_run_ctx has two fields: bpf_cookie, is_uprobe
-(there is also run_ctx but it's size is zero).
-The is_uprobe field is not set by the code below.
-Is it necessary to zero-init `run_ctx` variable?
