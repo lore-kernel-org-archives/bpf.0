@@ -1,175 +1,176 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15C213D387
-	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 21:52:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BDB5FB87
+	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 22:00:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710885155; cv=none; b=XYB+ZDBDWN70/HW6suHNUKltztYbQXLEa8cr2ts86HH3kKkPXu6/KKVnd9Njgbo6V9SDR3R4FiLVbRYxStKdQybyf0euX0797+M3/7mI2oOezMJOcy66FcfOPdwFafo8yhUzPmmwkao9rjiqsbnPxG3Y/g0UCLTnSttlWA305bY=
+	t=1710885639; cv=none; b=nppPGkj3AHibzUyC3dCxbKE5UCDlNMemIzHbpziJdquetCRKCBl8LOaei8AmUAWRKx5AypsuHoYrJaBTg+wfw3p/kz2WXrpy8ak/6YBRqZjXPSxuaOT5/UiHejSGnd91cpy+EXGP0jue8PxLb/w0nmnymz5KPc8te7Z2B6g+9+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710885155; c=relaxed/simple;
-	bh=gxKhswklrUUfPFlGLsX/MvNyDA5fZrFQf5wTylo1HNw=;
+	s=arc-20240116; t=1710885639; c=relaxed/simple;
+	bh=Mc4k+kbklbPnEXg97Kq7UPLqkC4uwhIrgjA+RZ2iDoc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MeWN60RwyJ9ndQEjFHKEtUD9LGtELA+EUfglymF+ZlLYr2aZkKJVk74rXUwrDIE7DrWVYnAroXtl8UEXwsDqB0uJGakK59iIQ0ORKRsTImvYZvWVye22wYxEJ6dEG9sPYmk97XYs6AYMpNthrAOB64mOLJYDsqR/i6t/1GrY92M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V8ho4tmY; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=ncD/ldgFt6z5muLz/bwaH4GnZVqH28fAoKupqBn74SeMfzzo3+0i+lVAMU9nlJBxSteNNJc5aaUFAScR+TlaOcttpoTAR0lnBD9jcbQyF/uOfjq94AUeufiZNXfN9HbmJx1pB7haBPBJzoRhU0vbnfhUmLKhlj/T1zPJeEB0jqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=fsBVhhXI; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V8ho4tmY"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5d4d15ec7c5so4669772a12.1
-        for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 14:52:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="fsBVhhXI"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-56ba6c83805so724331a12.0
+        for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 15:00:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710885153; x=1711489953; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1710885635; x=1711490435; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MvhJvUZ88vBQ63jdGJRpNoiYYjjbdLB63J8+2HpFrp0=;
-        b=V8ho4tmYTgi2YMvZoRR3LpN2M6PYLchO5EJCfS58wQ9SwLNM10dEQ5ns5JCQXPDSKZ
-         2zXtnL5YbQPuq57ig0CtMckna+ChSIAOzaH+wBIGR0X8HDsAF20h36nC8Pzsx0j1dpe9
-         wqFpTT67QV2xhaknOI12rx8Lb8vgpsWgRdejUTI2DDEq83aHkpqRAbNHPnw7WJA+3vvE
-         dW/6KCHFBNlbNcOWpWEsl8lNdtFpHisnT0dMKftOa4MpmFHCH9NdUiDfe3PXF2p6tpNB
-         SUCzfj93Y/j2Mlglg70fJZUSBfyDrO2yFdctcfAc/5It9XEFmaHTJ++JU3M0FAUUjAIF
-         zGAg==
+        bh=UkxJvAO7aT61jpsRIV0uu9cV36OWqHLBjjnDa2Y11rs=;
+        b=fsBVhhXIPndKEUBQK4VZ7vBvQ2ejbexRNkBMegEPJ/XQZd9NKFmitgmA17OvmVHRbS
+         PVnYaThMH+mbn4y9cK5xXcssIRj4eVAiY8lwMOgWi9b9ZnR57353vKPJ+esoPyB8uTua
+         GvxDGyLijna5GbMdtc918Pdt5ifOoUZMLHYFywWqxHHTdOn48iPN0p3/9TcnGSny2mIL
+         iEQZcukO2266tamSEGLnGJheJglSYDLj4rFYTyULKiAHv45oHdsYcHYhKS4t2d3xKSqY
+         5EA2XcbKIpxbiBUOicWH3XdLIVO6oui+00GAGkGNq9u1yfJcSvm7gfJ686Vl3HVjIdBC
+         g2IA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710885153; x=1711489953;
+        d=1e100.net; s=20230601; t=1710885635; x=1711490435;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MvhJvUZ88vBQ63jdGJRpNoiYYjjbdLB63J8+2HpFrp0=;
-        b=dytXDuIuUe1tsObFCxTUNgjMCkv3YfQ89tDXr6YaDjL3kJA8bjKQmURKcj4yHzW7R3
-         S2t75wvksffwW6tAlDw1epDwJ83YKTty8xneiBNwB9+0VntCoV0avhh9EyK4cTH+nWdx
-         PNtMDlC0N9VhB3ALfwGdWyPGTPdmBBlTYNUiY2bPXysu/N4l5qA748njGE0DO43WbXl1
-         cI4weOIGKHjfzR8FMa98wmA6ALWcZXgRH9lcaP/5bJnk5ys34o8SVzyhN1HO86UR1cxs
-         +fVDhyNlckEsww7tuM0mlbn1t6ZmEoe/rl+6fmULSp9/BRs3KbjkdIJaBH6n4l/jWe11
-         rujw==
-X-Forwarded-Encrypted: i=1; AJvYcCUnEmxHjonK2NihGMr5o0+fABGcGoHIYOVYrrOhUuiLRnXx2cYrBb/ebFpeVpofMUr4CfdDaG3CLVAN4aFs2TS6kX2x
-X-Gm-Message-State: AOJu0YwR068/vKjt3cOtUXfJMBnlcVNQGPSUurcIURhuvjzTy5GOBcXN
-	yboQyCNLstiZBanGdvfgtEcFRn76MuHZDfJSnLivddh5MMBuWA+7lafR6F4U4scV/4JjzSDEQhR
-	0m6ve+RTzsydsAX6QRxkwvnUq+p1k5kme
-X-Google-Smtp-Source: AGHT+IEg7HJY22ITIs8jTX6IuHK+bLTiPKD8sKYmtIQOxtNaoBANSu9KjAFAX6fad//FqlUAnD78C78P2UrvQuVQoRM=
-X-Received: by 2002:a05:6a21:3a4a:b0:1a3:564e:a56b with SMTP id
- zu10-20020a056a213a4a00b001a3564ea56bmr4269642pzb.3.1710885153360; Tue, 19
- Mar 2024 14:52:33 -0700 (PDT)
+        bh=UkxJvAO7aT61jpsRIV0uu9cV36OWqHLBjjnDa2Y11rs=;
+        b=tWd8gtCNeJ2+GUIpJQlSYFjpjFyZyf66qCaZrO7L1JQQP17Qngu57gbvJRIoLCrSvK
+         t0stPtijCBz0f+U4HhFllvTbZJqr+r18ko1ZPABKGBneIyIbI003vCF4fIvrNviYL6LI
+         IOzVV2qfNhnbmGcyWvPnQA3kHWMa5HA4QUMhWOY6ZB9C9wrSwhJ7fzgBL1Gl78F2dOTo
+         rO2bKqfdG5cgaE6Bbxery/JxVUG51GavOM7HyMaD+BhdEFArONJZak2A+1VExHLONPLE
+         3+X/tKhig27Pqe5a9Of0ww+xeET21iprxVrUS3HQIfmkHpdHnsmjFj62zCH5ezKMipCs
+         U36Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUaE7oU2780dgdEpaVDiYbp/9wsS1rJZr5y489SpYnxk3cDyfe1L3rJTl/HrjrobuvA8n5VXNClBUWXlH10vkW2/f/e
+X-Gm-Message-State: AOJu0YzDysXWLyKlxjaE6ubKvDrHxfo/18yxjq8oF+zTXXidWEKL5Vzh
+	xWrMj7zuedlu60UdEv9Illegw0XDxtA7nqdKDuDXlVDX6kQQFMCL4jIbZxPhoA3YQkJ8ldY7hxJ
+	S3e0WnUyh44Ai88/dpzrplt0+8BDRsNLTtoAugg==
+X-Google-Smtp-Source: AGHT+IG8DtJ0F0cEhoaRWxpsmdFeQCVtIhOxMVx8byMycPcTIUdxziY9hK5SozaLVMnu+Nykaa/eGLFxsfFWOxEjwfs=
+X-Received: by 2002:a05:6402:5007:b0:566:4aa9:7143 with SMTP id
+ p7-20020a056402500700b005664aa97143mr12964134eda.14.1710885635488; Tue, 19
+ Mar 2024 15:00:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240315184849.2974556-1-yonghong.song@linux.dev>
- <20240315184859.2975543-1-yonghong.song@linux.dev> <ZfgnLQ5ytpU2IcUX@krava> <2af81b55-4be4-4936-a42e-940786c45877@linux.dev>
-In-Reply-To: <2af81b55-4be4-4936-a42e-940786c45877@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 19 Mar 2024 14:52:20 -0700
-Message-ID: <CAEf4BzYWoe1DEOFsXe4=fx+2ceFKEc8ASW5Jt002jOHkErxqHQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/5] selftests/bpf: Replace CHECK with
- ASSERT_* in ns_current_pid_tgid test
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Jiri Olsa <olsajiri@gmail.com>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Yury Namgung <ynamgung@meta.com>
+References: <cover.1710877680.git.yan@cloudflare.com> <90431d46ee112d2b0af04dbfe936faaca11810a5.1710877680.git.yan@cloudflare.com>
+ <6149ecfc-2a3b-4bea-a79f-ef5be0a36cd7@paulmck-laptop>
+In-Reply-To: <6149ecfc-2a3b-4bea-a79f-ef5be0a36cd7@paulmck-laptop>
+From: Yan Zhai <yan@cloudflare.com>
+Date: Tue, 19 Mar 2024 17:00:24 -0500
+Message-ID: <CAO3-PbotP8pRFRC4jX+qgPjmVkRJCfSPGD3ipxa8+ph7vGVr6g@mail.gmail.com>
+Subject: Re: [PATCH v5 net 1/3] rcu: add a helper to report consolidated
+ flavor QS
+To: paulmck@kernel.org
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Lorenzo Bianconi <lorenzo@kernel.org>, 
+	Coco Li <lixiaoyan@google.com>, Wei Wang <weiwan@google.com>, 
+	Alexander Duyck <alexanderduyck@fb.com>, linux-kernel@vger.kernel.org, rcu@vger.kernel.org, 
+	bpf@vger.kernel.org, kernel-team@cloudflare.com, 
+	Joel Fernandes <joel@joelfernandes.org>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, mark.rutland@arm.com, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 18, 2024 at 8:30=E2=80=AFAM Yonghong Song <yonghong.song@linux.=
-dev> wrote:
+Hi Paul,
+
+On Tue, Mar 19, 2024 at 4:31=E2=80=AFPM Paul E. McKenney <paulmck@kernel.or=
+g> wrote:
 >
+> On Tue, Mar 19, 2024 at 01:44:34PM -0700, Yan Zhai wrote:
+> > When under heavy load, network processing can run CPU-bound for many
+> > tens of seconds. Even in preemptible kernels (non-RT kernel), this can
+> > block RCU Tasks grace periods, which can cause trace-event removal to
+> > take more than a minute, which is unacceptably long.
+> >
+> > This commit therefore creates a new helper function that passes through
+> > both RCU and RCU-Tasks quiescent states every 100 milliseconds. This
+> > hard-coded value suffices for current workloads.
+> >
+> > Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+> > Reviewed-by: Jesper Dangaard Brouer <hawk@kernel.org>
+> > Signed-off-by: Yan Zhai <yan@cloudflare.com>
 >
-> On 3/18/24 4:36 AM, Jiri Olsa wrote:
-> > On Fri, Mar 15, 2024 at 11:48:59AM -0700, Yonghong Song wrote:
-> >> Replace CHECK in selftest ns_current_pid_tgid with recommended ASSERT_=
-* style.
-> >> I also shortened subtest name as the prefix of subtest name is covered
-> >> by the test name already.
-> >>
-> >> This patch does fix a testing issue. Currently even if bss->user_{pid,=
-tgid}
-> >> is not correct, the test still passed since the clone func returns 0.
-> >> I fixed it to return a non-zero value if bss->user_{pid,tgid} is incor=
-rect.
-> >>
-> >> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> >> ---
-> >>   .../bpf/prog_tests/ns_current_pid_tgid.c      | 36 ++++++++++-------=
---
-> >>   1 file changed, 19 insertions(+), 17 deletions(-)
-> >>
-> >> diff --git a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgi=
-d.c b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-> >> index 24d493482ffc..3a0664a86243 100644
-> >> --- a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-> >> +++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-> >> @@ -20,19 +20,19 @@ static int test_current_pid_tgid(void *args)
-> >>   {
-> >>      struct test_ns_current_pid_tgid__bss  *bss;
-> >>      struct test_ns_current_pid_tgid *skel;
-> >> -    int err =3D -1, duration =3D 0;
-> >> +    int ret =3D -1, err;
-> >>      pid_t tgid, pid;
-> >>      struct stat st;
-> >>
-> >>      skel =3D test_ns_current_pid_tgid__open_and_load();
-> >> -    if (CHECK(!skel, "skel_open_load", "failed to load skeleton\n"))
-> >> -            goto cleanup;
-> >> +    if (!ASSERT_OK_PTR(skel, "test_ns_current_pid_tgid__open_and_load=
-"))
-> >> +            goto out;
-> > you could just return in here so there's no need for the out label
-> > otherwise lgtm
+> If you would like me to take this one via -rcu, I would be happy to take
+> it.  If it would be easier for you to push these as a group though
+> networking:
 >
-> Since this patch intends to just replace CHECK with ASSERT_*.
-> I tried to keep other parts of codes the same as before. But
-> I can certainly do this. I will wait for other comments
-> before sending another revision.
+> Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
 >
 
-I applied it as is, but feel free to send suggested improvements as a follo=
-w up.
+Since the whole series aims at fixing net problems, going through net
+is probably more consistent.
+Also, thank you for your help through the series!
 
+Yan
 
+> > ---
+> > v4->v5: adjusted kernel docs and commit message
+> > v3->v4: kernel docs error
 > >
-> > Acked-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  include/linux/rcupdate.h | 31 +++++++++++++++++++++++++++++++
+> >  1 file changed, 31 insertions(+)
+> >
+> > diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+> > index 16f519914415..17d7ed5f3ae6 100644
+> > --- a/include/linux/rcupdate.h
+> > +++ b/include/linux/rcupdate.h
+> > @@ -247,6 +247,37 @@ do { \
+> >       cond_resched(); \
+> >  } while (0)
+> >
+> > +/**
+> > + * rcu_softirq_qs_periodic - Report RCU and RCU-Tasks quiescent states
+> > + * @old_ts: jiffies at start of processing.
+> > + *
+> > + * This helper is for long-running softirq handlers, such as NAPI thre=
+ads in
+> > + * networking. The caller should initialize the variable passed in as =
+@old_ts
+> > + * at the beginning of the softirq handler. When invoked frequently, t=
+his macro
+> > + * will invoke rcu_softirq_qs() every 100 milliseconds thereafter, whi=
+ch will
+> > + * provide both RCU and RCU-Tasks quiescent states. Note that this mac=
+ro
+> > + * modifies its old_ts argument.
+> > + *
+> > + * Because regions of code that have disabled softirq act as RCU read-=
+side
+> > + * critical sections, this macro should be invoked with softirq (and
+> > + * preemption) enabled.
+> > + *
+> > + * The macro is not needed when CONFIG_PREEMPT_RT is defined. RT kerne=
+ls would
+> > + * have more chance to invoke schedule() calls and provide necessary q=
+uiescent
+> > + * states. As a contrast, calling cond_resched() only won't achieve th=
+e same
+> > + * effect because cond_resched() does not provide RCU-Tasks quiescent =
+states.
+> > + */
+> > +#define rcu_softirq_qs_periodic(old_ts) \
+> > +do { \
+> > +     if (!IS_ENABLED(CONFIG_PREEMPT_RT) && \
+> > +         time_after(jiffies, (old_ts) + HZ / 10)) { \
+> > +             preempt_disable(); \
+> > +             rcu_softirq_qs(); \
+> > +             preempt_enable(); \
+> > +             (old_ts) =3D jiffies; \
+> > +     } \
+> > +} while (0)
+> > +
+> >  /*
+> >   * Infrastructure to implement the synchronize_() primitives in
+> >   * TREE_RCU and rcu_barrier_() primitives in TINY_RCU.
+> > --
+> > 2.30.2
 > >
 > >
-> > jirka
-> >
-> >>
-> >>      pid =3D syscall(SYS_gettid);
-> >>      tgid =3D getpid();
-> >>
-> >>      err =3D stat("/proc/self/ns/pid", &st);
-> >> -    if (CHECK(err, "stat", "failed /proc/self/ns/pid: %d\n", err))
-> >> +    if (!ASSERT_OK(err, "stat /proc/self/ns/pid"))
-> >>              goto cleanup;
-> >>
-> >>      bss =3D skel->bss;
-> >> @@ -42,24 +42,26 @@ static int test_current_pid_tgid(void *args)
-> >>      bss->user_tgid =3D 0;
-> >>
-> >>      err =3D test_ns_current_pid_tgid__attach(skel);
-> >> -    if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err=
-))
-> >> +    if (!ASSERT_OK(err, "test_ns_current_pid_tgid__attach"))
-> >>              goto cleanup;
-> >>
-> >>      /* trigger tracepoint */
-> >>      usleep(1);
-> >> -    ASSERT_EQ(bss->user_pid, pid, "pid");
-> >> -    ASSERT_EQ(bss->user_tgid, tgid, "tgid");
-> >> -    err =3D 0;
-> >> +    if (!ASSERT_EQ(bss->user_pid, pid, "pid"))
-> >> +            goto cleanup;
-> >> +    if (!ASSERT_EQ(bss->user_tgid, tgid, "tgid"))
-> >> +            goto cleanup;
-> >> +    ret =3D 0;
-> >>
-> >>   cleanup:
-> >> -     test_ns_current_pid_tgid__destroy(skel);
-> >> -
-> >> -    return err;
-> >> +    test_ns_current_pid_tgid__destroy(skel);
-> >> +out:
-> >> +    return ret;
-> >>   }
-> [...]
