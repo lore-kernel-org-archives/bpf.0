@@ -1,124 +1,136 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A4E7D3F0
-	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 10:12:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD3E7D401
+	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 10:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710843151; cv=none; b=bbXYmIgqtfL7jKFLNblW9/OF7L0CQVF9H4Zx6PpK8S0ucdXWax3YqXrOluUAzRUwB5uorpWqgYLbRhWX1FO8s0xBAeMdNnFGDslKsKjnOhoyjIvfRcDQxEYQbWCleX/aODNCROv9EN26xMFDwElz+Tpt39HZh+G5vqciJ+pliJc=
+	t=1710844023; cv=none; b=AJCfE26xlD9y+s+cCe5ndiDkSxnSF+o3ZKcC98+NeR6BNB0Jf+W1ut5jnJOsYaaQDlE6sqxTRCA/4Ug9tWCi0q8/vAx+M14FWBGH37Kpj7aPZ9JnA6uhjv0TOKC2Y+b4zRDZvoIc+w2JBxjBSB+WyD8yDF3IwX0SB2logkO4NYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710843151; c=relaxed/simple;
-	bh=xnsp3gfIoBuqkf9WzUWArWK2Eue0B2a4uf2f2qgcP1s=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=O+5h0kkGrBBNwRLUcEiHwz+MWdY7msstIdme2t1YchqsktlhFGuu5rRnWHlkgtEydN6XAjIC6HGgrpqbNT8lDh3ZUIQ5jKoAPQk1RevAvsoZKsKrIEZrIz3L38OTTO2asBkuRkgtt4y8LfbpPkr9MfCdreoGRTRZHKRKhBewMaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IdOvO8lf; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1710844023; c=relaxed/simple;
+	bh=JDBEgWxmv3lx9ZUJtA88SrYQaM6/7zfXZOtcpSZ+qjQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iCmZC0VGy8zDR8OSD9PMFID7EnHpjVh/NtactKmaVyUfob6N1Jqaycc8cCt8L5A+hCGedAw5WWlyHxGSRefmgWZHjIwtzsHthj97at/BiTWkeu1ZhxKnqs425/6u73S1RUE8gJ71LQlUysdJ5ZO/8RSjG4YRdm2oJ/7S2yIKhBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NNrCw8wq; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IdOvO8lf"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NNrCw8wq"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1710843149;
+	s=mimecast20190719; t=1710844020;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=xnsp3gfIoBuqkf9WzUWArWK2Eue0B2a4uf2f2qgcP1s=;
-	b=IdOvO8lf+aV5pucZUbL+W7n9ktFJrwBP3YPPF8DFf4f/w7Mc7L+LLhlh6t0NtKgynHOh7L
-	//VcgJ+1gZ/Bc5Hdyziud6rvvxm21BmRG3w1EgqayZ0YuMDsapo0eqMtccHwMZjOCR5TMl
-	As/1Z4KYGvi/UQCHhTR+SGNZ7M/BvQs=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-688-RgzTK8uqPlWu2C1K1mxCFw-1; Tue, 19 Mar 2024 06:12:28 -0400
-X-MC-Unique: RgzTK8uqPlWu2C1K1mxCFw-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-33ec9bdcaa7so1083996f8f.0
-        for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 03:12:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710843147; x=1711447947;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xnsp3gfIoBuqkf9WzUWArWK2Eue0B2a4uf2f2qgcP1s=;
-        b=ZD9RFuMLDnW2/VkkbsQ2nGYz8AydGerZe3xBwpNv5fUI3KG+xvCVnOiWvGGBLS113j
-         4JdkfLWpS4ydlRZPueee1kugoHXgc4rvKvz35ROUfh0JHoEmIm7hAbDDtZ25RhMiAaXK
-         vcP6hzajJlFIK+LLHy4UWJpaUIr0gnd7ZI2XIlev9+gBDyp+3vir1fqmJ6bhLO1HM/53
-         BidIvOpHiet9OQx4unrIRKeDE7pBJ2vuMnm9WrJauar+v75m84XpyExdC2d2ueDI6dba
-         xyS7Jg0hmT1kDRjfxWrk+zDoylwQj8YO6fxnTEYLfqa+u/wIVABYiVw+lJJ/Uiy1EWKD
-         reSA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6XioeNU6WAszGf1ts1cNz0z6ia8UTfWD8PLhdxHoP4zsbtI1F6qrqexLW3JfWLTuxRuXm4uypjM2qEKYEXFa7cIdV
-X-Gm-Message-State: AOJu0YzvzfutHrSOYRw+fu16nwGLKOKolbz/MlvRLrqv/78pfMdMhUJ2
-	priAw1/DURMSo0tq598spiVXLAQufyyybWChfcF/a6zNbdnfFDWoA2YmkSWR14ekcBuBYM9cyjD
-	DDigSRLYGq2A0d2VFPzXEypL3YnOPvVQxPNGhVsEIxQEr3hFoXg==
-X-Received: by 2002:adf:e4ca:0:b0:33e:c361:7cdf with SMTP id v10-20020adfe4ca000000b0033ec3617cdfmr1245404wrm.0.1710843146933;
-        Tue, 19 Mar 2024 03:12:26 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF6l9P4AKCtN8uc1X/vjfDKtqMSUpnkdXstRYGAYxc8xRddl7mvdvVQRdQAxQyD/C1foBNwvg==
-X-Received: by 2002:adf:e4ca:0:b0:33e:c361:7cdf with SMTP id v10-20020adfe4ca000000b0033ec3617cdfmr1245378wrm.0.1710843146515;
-        Tue, 19 Mar 2024 03:12:26 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-224-202.dyn.eolo.it. [146.241.224.202])
-        by smtp.gmail.com with ESMTPSA id o14-20020adfe80e000000b0033e8c50fc3fsm11963607wrm.90.2024.03.19.03.12.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Mar 2024 03:12:25 -0700 (PDT)
-Message-ID: <316ea06417279a45d2d54bf4cc4afd2d775b419a.camel@redhat.com>
-Subject: Re: [PATCH net-next v5 0/9] virtio-net: support device stats
-From: Paolo Abeni <pabeni@redhat.com>
-To: Jiri Pirko <jiri@resnulli.us>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, "Michael
- S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
- <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@google.com>, Amritha
- Nambiar <amritha.nambiar@intel.com>, Larysa Zaremba
- <larysa.zaremba@intel.com>, Sridhar Samudrala
- <sridhar.samudrala@intel.com>,  Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, virtualization@lists.linux.dev,
- bpf@vger.kernel.org
-Date: Tue, 19 Mar 2024 11:12:23 +0100
-In-Reply-To: <ZfgxSug4sekWGyNd@nanopsycho>
-References: <20240318110602.37166-1-xuanzhuo@linux.alibaba.com>
-	 <Zfgq8k2Q-olYWiuw@nanopsycho>
-	 <1710762818.1520293-1-xuanzhuo@linux.alibaba.com>
-	 <ZfgxSug4sekWGyNd@nanopsycho>
-Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
+	 in-reply-to:in-reply-to:references:references;
+	bh=WHrOefhxxy4qfibpmG156d30i339Q4R83fPgqzMYdFw=;
+	b=NNrCw8wqrw3VJlpEe5KvO4GUsiNRWzkLu8LefBkUQ6Qz0bGnpi1lY5ibd0yx44sAugaTin
+	EifBBoAnzY5FasI084ZHl0b0Ochp6uHxgFPkuenEvMXAbruzIRK44HsQIn8bSQBqf1IIi8
+	hut0eGY3xzOtb3n4bXWopDp7DlKbb6I=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-557-cYTWm71CPw-NzIhIFZPUiA-1; Tue,
+ 19 Mar 2024 06:26:54 -0400
+X-MC-Unique: cYTWm71CPw-NzIhIFZPUiA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F413D29AB3E5;
+	Tue, 19 Mar 2024 10:26:53 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.50])
+	by smtp.corp.redhat.com (Postfix) with SMTP id 1BA9417A90;
+	Tue, 19 Mar 2024 10:26:50 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Tue, 19 Mar 2024 11:25:31 +0100 (CET)
+Date: Tue, 19 Mar 2024 11:25:24 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
+Subject: [PATCH RFC bpf-next 4/3] uprobe: ensure sys_uretprobe uses sysret
+Message-ID: <20240319102523.GC20287@redhat.com>
+References: <20240318093139.293497-1-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240318093139.293497-1-jolsa@kernel.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
 
-On Mon, 2024-03-18 at 13:19 +0100, Jiri Pirko wrote:
-> Mon, Mar 18, 2024 at 12:53:38PM CET, xuanzhuo@linux.alibaba.com wrote:
-> > On Mon, 18 Mar 2024 12:52:18 +0100, Jiri Pirko <jiri@resnulli.us> wrote=
-:
-> > > Mon, Mar 18, 2024 at 12:05:53PM CET, xuanzhuo@linux.alibaba.com wrote=
-:
-> > > > As the spec:
-> > > >=20
-> > > > https://github.com/oasis-tcs/virtio-spec/commit/42f389989823039724f=
-95bbbd243291ab0064f82
-> > > >=20
-> > > > The virtio net supports to get device stats.
-> > > >=20
-> > > > Please review.
-> > >=20
-> > > net-next is closed. Please resubmit next week.
-> >=20
-> >=20
-> > For review.
->=20
-> RFC, or wait.
+Obviously not for inclusion yet ;) untested, lacks the comments, and I am not
+sure it makes sense.
 
-@Xuan, please note that you received exactly the same feedback on your
-previous submission, a few days ago. While I do understand the legit
-interest in reviews, ignoring explicit feedback tend to bring no
-feedback at all.
+But I am wondering if this change can speedup uretprobes a bit more. Any chance
+you can test it?
 
-Paolo
+With 1/3 sys_uretprobe() changes regs->r11/cx, this is correct but implies iret.
+See the /* SYSRET requires RCX == RIP and R11 == EFLAGS */ code in do_syscall_64().
+
+With this patch uretprobe_syscall_entry restores rcx/r11 itself and does retq,
+sys_uretprobe() needs to hijack regs->ip after uprobe_handle_trampoline() to
+make it possible.
+
+Comments?
+
+Oleg.
+---
+
+diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+index 069371e86180..b99f1d80a8c8 100644
+--- a/arch/x86/kernel/uprobes.c
++++ b/arch/x86/kernel/uprobes.c
+@@ -319,6 +319,9 @@ asm (
+ 	"pushq %r11\n"
+ 	"movq $462, %rax\n"
+ 	"syscall\n"
++	"popq %r11\n"
++	"popq %rcx\n"
++	"retq\n"
+ 	".global uretprobe_syscall_end\n"
+ 	"uretprobe_syscall_end:\n"
+ 	".popsection\n"
+@@ -336,23 +339,20 @@ void *arch_uprobe_trampoline(unsigned long *psize)
+ SYSCALL_DEFINE0(uretprobe)
+ {
+ 	struct pt_regs *regs = task_pt_regs(current);
+-	unsigned long sregs[3], err;
++	unsigned long __user *ax_and_ret = (unsigned long __user *)regs->sp + 2;
++	unsigned long ip, err;
+ 
+-	/*
+-	 * We set rax and syscall itself changes rcx and r11, so the syscall
+-	 * trampoline saves their original values on stack. We need to read
+-	 * them and set original register values and fix the rsp pointer back.
+-	 */
+-	err = copy_from_user((void *) &sregs, (void *) regs->sp, sizeof(sregs));
+-	WARN_ON_ONCE(err);
+-
+-	regs->r11 = sregs[0];
+-	regs->cx = sregs[1];
+-	regs->ax = sregs[2];
++	ip = regs->ip;
+ 	regs->orig_ax = -1;
+-	regs->sp += sizeof(sregs);
++	err = get_user(regs->ax, ax_and_ret);
++	WARN_ON_ONCE(err);
+ 
+ 	uprobe_handle_trampoline(regs);
++
++	err = put_user(regs->ip, ax_and_ret);
++	WARN_ON_ONCE(err);
++	regs->ip = ip;
++
+ 	return regs->ax;
+ }
+ 
 
