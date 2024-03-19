@@ -1,177 +1,97 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A50A839F9
-	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 16:26:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D507D823D0
+	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 16:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710865571; cv=none; b=JyqdQfgVTpDUpiewnn7sUoYnykzI0FfoAoTfo/b8pPcC5Fwb6vdeccDeySTMCrqvobkMFpB1Q+jMWTgn4sRgSMtl0mg1FacH5EHqaG35GjYjwudnz5Ia6tCGBVNeZVDmN2shnJ01al2tA2E2VGl2CBCDqHFMBe/lLE+dSQyeZdQ=
+	t=1710865583; cv=none; b=ARC6CU2caMPcSiJLjj8CRvQdIm9NsQWv2slwcG/lHdlUaRGZEbFpib5fOiYdH9Hwef2aUiDwOPCcIr23kzIY+MMt8pgwlwEjcVWTT937gIbL5NrbBxtC8QOp41B+LWoo0A3G22waaLiD3QmOhYev2m/YqcnVnNw2CleYUnsk4j8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710865571; c=relaxed/simple;
-	bh=KCblTgWje0ra4NildKKMelMwiwKwr6sJEkZHkAXfhmk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IQ+FIvxs8iLPNONyY19nvw2Ij6U9KJhd65R29yyKX+KqbXUyizXpYzLUI5bOl+T0dq1OQwdBYvyRC/IM1Qh7Ko1BEnkleqvXyy2KQ0q9Pa45qvqgA42rOFKnFvhG/pgiXPZ3GmNIfd7BoRpHJchesHPx1+r8bYC6HeQK3ueoXxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HFukWR8O; arc=none smtp.client-ip=209.85.214.180
+	s=arc-20240116; t=1710865583; c=relaxed/simple;
+	bh=2Zvud8jR3Bs/murdkznVoVKbL8lY2br3bmcOJbTKni8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=VF/LDn6GvZV4OCnmircR5mB7ouxAVdSY3SoVFkIjQ40IbRlixRAPAktYvDs8ibm0NkyxX3CGCSu/6PkaxBlYyL1ThWJbFg7nrvMB48+EA6sQR0Kp2L+ADY0ntygB8NF6nnthRQmWv4w0nWg4i3r9g46UI5zXaChvWZBP0iyIu9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=azxKJ6jI; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HFukWR8O"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1dee5ef2a7bso39504025ad.1
-        for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 09:26:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="azxKJ6jI"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-34100f4f9a2so1717488f8f.2
+        for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 09:26:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710865569; x=1711470369; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mUYVfwVzFDjLKHszuUrtGHA4bD3XHmeCuCHK9UxxbR8=;
-        b=HFukWR8Ovenf2lmLnqnb3nVYmF+LPeT06/HtSddXr4Z04E86ieE5z1jRmI5hVaTOC0
-         s34hJTv0eZW1qta0PXyH88o6e4PUDtppQav0mZeu/JqMkDynaqBTa9DyoY79zRCC7vFW
-         FjREFavUeqGLEhQmMqKtZL4hYyKfb9sdd+f+7MVZYpvfjZ9YqDsv4ZJDJMwwrSVAfrUh
-         WVE8mEf0Z68fe1JZxQ1Q7LJYV32PgHOCm1S9fUP0OF/7HH4X+hKioe6sZ/ON9M/N6xvg
-         1f/6GWMKBDSEX1oKXZHyPnVVyMDLcsj9Il6n4hW5JuDesqu6SJ3naLV1RReF0JAKcnYG
-         AJmg==
+        d=gmail.com; s=20230601; t=1710865580; x=1711470380; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2Zvud8jR3Bs/murdkznVoVKbL8lY2br3bmcOJbTKni8=;
+        b=azxKJ6jIxt9YCM91v8fyExtm5KdkDY+Ukf4mgC4IAMCYRlN+XQwHyVzYFz6ho1Saf2
+         hx5A42v77cWnEwM+e4NWYsYBGGWjC6MkMYXl6hwdRMzGVSF8+mhQn7qwQEpS8xuUVvQq
+         Szl6epOz2LwMqfTs/KuhFBpnizxwDg2MevFGMi56eBEf+/mp/SoFb/0RotLUxxAcFH0M
+         q2qYQR7GaXqDMWO/C6sy73Id3Id25oAHMrJf7Qfc4m09wHTwxyva2dMBeRl7LjpgU2p0
+         g/t5smZq1UlZVjEV+oga1Nlnt443SUykodbAe1vZ42LD4hdu5zuxPHAGFYnMJ0tILWkT
+         fcwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710865569; x=1711470369;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mUYVfwVzFDjLKHszuUrtGHA4bD3XHmeCuCHK9UxxbR8=;
-        b=Jvq841bBoUgBktAVGDnJhTOgYACbWtGv+BcRPXaSLvTktdJ0lOScPAbzRFqVA4pWs1
-         dDGLA9bUuHDtl/DSxKidPDutC5I+d2+0cNFin3uGuxpI6uQO9Ppg6SvtJIRRqNQoYrki
-         aVyMxHemqOEdeKjbQQXLzSZrY5Pp1vnd3tagXwExSid+59n3gmJ50uW2MhQP4tYNzgxg
-         IeiJcNR4YeH/vCI2RPzpml1owxKGcy79L70Vlj3Lradz7ozhk3nRs+jMvTBzRYEvF8JB
-         mhdHRxjl/tcmqVtAkdEh+0DqP4EDLzr4KmVZ/hLm2CAcYIVkHUtQOXWfofkp3gKsxiKw
-         kZAg==
-X-Forwarded-Encrypted: i=1; AJvYcCXbiLIhqjxdWgWcfZbSz5luf4u/3Ua4TZwIpM4ybKzsjb0355y8DAnJx+2inak3FKnlSwS5/aqK3Qpo7CRIuJllCWwb
-X-Gm-Message-State: AOJu0YzyFoQZZLBrHlx9Zx2/Tcr1NSERzK6QwfjgeIy4MgPzgCxzqD5O
-	dZZNv2axEPIeGDxB6Ad6h2or2M/KoH23jpOon9A2l9t/do51IqmGZCDjuYV2bqufXaX8HrUi6mE
-	p21QkWAKDGXSbWEH8Jg4gGb3g5qg=
-X-Google-Smtp-Source: AGHT+IHpKVGH50yLhLGqltMZvxnpqOyurKEmH7pSBs6Uy99kaC8JQAMJ6s3hEXnaoDYi3Di8dzi690QcWDSduumFATQ=
-X-Received: by 2002:a17:902:e883:b0:1e0:115e:bae1 with SMTP id
- w3-20020a170902e88300b001e0115ebae1mr9505232plg.56.1710865569545; Tue, 19 Mar
- 2024 09:26:09 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710865580; x=1711470380;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Zvud8jR3Bs/murdkznVoVKbL8lY2br3bmcOJbTKni8=;
+        b=IBn/2E+9KOA3sejaK2vXnD+9cAMLmNBZpmgMVo6kRrO3lEbAiT2efijisTzxzuPnvg
+         jDeEon8rVAmmipPQVyKUBXAneaZ/QfBd2rCvf/ba0B6o7cUiPhzbBqc8uKT5MMHG1Btq
+         Y33mVE08VVC2FmjRQX8wYzCLl86jo0gjt6J0qd8IbKbqBPtuN8Db7tQM5rPLXUFhGT2U
+         1DBFqW3Ad1wBSIqDLhlYtR/VQMfPM8DXGQu6WnuWKBWVIwFnfZCCLcyIWAjHz9fmSK5w
+         z/zQ8b0Rr9Jm51FZ3qtCHlxx7DY7r3ObdL2qmKUhiv31qssR7skVcp5DCgBMaS2uhJoE
+         /W3A==
+X-Forwarded-Encrypted: i=1; AJvYcCXgdQtx55r0ap/CC6vqP5/k5u7jhWWScxt+osrL0/mf90AEb/7ip/pgX80NxQ8sP8I/ado3+A+Ek2pz4QcHj2YOlfsd
+X-Gm-Message-State: AOJu0Yx27mB1M5gpB61YhZF8cgQ73uqSaoKOJ6jvoYLgRHHrzJY5wGWT
+	NxCVeIEz64mjlNN7dO1pZE7EXjbmzmsnsNt2r75RyVGV1TaMvh2f
+X-Google-Smtp-Source: AGHT+IH+rWJ3LgkJgp1pUWCtJqdOQcz0WtBPtK/LB7gVYeu0DRhOTVE1Ice11VIIXBcaC2fMRbNk4w==
+X-Received: by 2002:adf:f1c5:0:b0:33e:d605:b8a3 with SMTP id z5-20020adff1c5000000b0033ed605b8a3mr8402059wro.39.1710865580161;
+        Tue, 19 Mar 2024 09:26:20 -0700 (PDT)
+Received: from [192.168.6.255] ([5.1.5.0])
+        by smtp.gmail.com with ESMTPSA id k4-20020adfe3c4000000b0033e48db23bdsm12710510wrm.100.2024.03.19.09.26.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Mar 2024 09:26:19 -0700 (PDT)
+Message-ID: <20b6174a74fdbf00a1b0f5593b854518cafc92b7.camel@gmail.com>
+Subject: Re: [PATCH v2 bpf-next 3/5] bpf: support BPF cookie in raw
+ tracepoint (raw_tp, tp_btf) programs
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Jiri Olsa
+ <olsajiri@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+ ast@kernel.org,  daniel@iogearbox.net, martin.lau@kernel.org,
+ kernel-team@meta.com, Stanislav Fomichev <sdf@google.com>
+Date: Tue, 19 Mar 2024 18:26:18 +0200
+In-Reply-To: <CAEf4BzYp+rA+jov+GZsk2BjO2nBUYOe6vCL_ndiGQFP4dxH-=g@mail.gmail.com>
+References: <20240318184037.3209242-1-andrii@kernel.org>
+	 <20240318184037.3209242-4-andrii@kernel.org>
+	 <43eaaada2757048eed490ef2bc74d5d310889410.camel@gmail.com>
+	 <ZfmJm21mKaJN4vyh@krava>
+	 <CAEf4BzYp+rA+jov+GZsk2BjO2nBUYOe6vCL_ndiGQFP4dxH-=g@mail.gmail.com>
+Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240318093139.293497-1-jolsa@kernel.org> <20240319102523.GC20287@redhat.com>
- <ZflyM5U67c47i4Oo@krava>
-In-Reply-To: <ZflyM5U67c47i4Oo@krava>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 19 Mar 2024 09:25:57 -0700
-Message-ID: <CAEf4BzZ-cAByJq8FmgxJgMt7WKAsDME6K00hYJpcS6XiwYO=-w@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next 4/3] uprobe: ensure sys_uretprobe uses sysret
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Oleg Nesterov <oleg@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
-	John Fastabend <john.fastabend@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 19, 2024 at 4:08=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
-e:
->
-> On Tue, Mar 19, 2024 at 11:25:24AM +0100, Oleg Nesterov wrote:
-> > Obviously not for inclusion yet ;) untested, lacks the comments, and I =
-am not
-> > sure it makes sense.
-> >
-> > But I am wondering if this change can speedup uretprobes a bit more. An=
-y chance
-> > you can test it?
-> >
-> > With 1/3 sys_uretprobe() changes regs->r11/cx, this is correct but impl=
-ies iret.
-> > See the /* SYSRET requires RCX =3D=3D RIP and R11 =3D=3D EFLAGS */ code=
- in do_syscall_64().
->
-> nice idea, looks like sysexit should be faster
->
-> >
-> > With this patch uretprobe_syscall_entry restores rcx/r11 itself and doe=
-s retq,
-> > sys_uretprobe() needs to hijack regs->ip after uprobe_handle_trampoline=
-() to
-> > make it possible.
-> >
-> > Comments?
-> >
-> > Oleg.
-> > ---
-> >
-> > diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
-> > index 069371e86180..b99f1d80a8c8 100644
-> > --- a/arch/x86/kernel/uprobes.c
-> > +++ b/arch/x86/kernel/uprobes.c
-> > @@ -319,6 +319,9 @@ asm (
-> >       "pushq %r11\n"
-> >       "movq $462, %rax\n"
-> >       "syscall\n"
-> > +     "popq %r11\n"
-> > +     "popq %rcx\n"
-> > +     "retq\n"
->
-> using rax space on stack for return pointer, cool :)
->
-> I'll run the test with this change
->
+On Tue, 2024-03-19 at 09:09 -0700, Andrii Nakryiko wrote:
+[...]
 
-I can do some benchmarking on my side as well, given I have everything
-set up for this anyways. Thanks for the help with speeding all this
-up!
+> > > The struct bpf_trace_run_ctx has two fields: bpf_cookie, is_uprobe
+> > > (there is also run_ctx but it's size is zero).
+> > > The is_uprobe field is not set by the code below.
+> > > Is it necessary to zero-init `run_ctx` variable?
+>=20
+> no, not really, we need to initialize fields that are going to be
+> used, and is_uprobe *shouldn't be used*, but see below
 
-BTW, Jiri, what are you plans regarding sys_uprobe (entry probe
-optimization through syscall), while we are on the topic?
+Ok, thank you and Jiri for explaining.
 
-
-> thanks,
-> jirka
->
-> >       ".global uretprobe_syscall_end\n"
-> >       "uretprobe_syscall_end:\n"
-> >       ".popsection\n"
-> > @@ -336,23 +339,20 @@ void *arch_uprobe_trampoline(unsigned long *psize=
-)
-> >  SYSCALL_DEFINE0(uretprobe)
-> >  {
-> >       struct pt_regs *regs =3D task_pt_regs(current);
-> > -     unsigned long sregs[3], err;
-> > +     unsigned long __user *ax_and_ret =3D (unsigned long __user *)regs=
-->sp + 2;
-> > +     unsigned long ip, err;
-> >
-> > -     /*
-> > -      * We set rax and syscall itself changes rcx and r11, so the sysc=
-all
-> > -      * trampoline saves their original values on stack. We need to re=
-ad
-> > -      * them and set original register values and fix the rsp pointer =
-back.
-> > -      */
-> > -     err =3D copy_from_user((void *) &sregs, (void *) regs->sp, sizeof=
-(sregs));
-> > -     WARN_ON_ONCE(err);
-> > -
-> > -     regs->r11 =3D sregs[0];
-> > -     regs->cx =3D sregs[1];
-> > -     regs->ax =3D sregs[2];
-> > +     ip =3D regs->ip;
-> >       regs->orig_ax =3D -1;
-> > -     regs->sp +=3D sizeof(sregs);
-> > +     err =3D get_user(regs->ax, ax_and_ret);
-> > +     WARN_ON_ONCE(err);
-> >
-> >       uprobe_handle_trampoline(regs);
-> > +
-> > +     err =3D put_user(regs->ip, ax_and_ret);
-> > +     WARN_ON_ONCE(err);
-> > +     regs->ip =3D ip;
-> > +
-> >       return regs->ax;
-> >  }
-> >
-> >
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
