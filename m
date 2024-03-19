@@ -1,120 +1,105 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F56085265;
-	Tue, 19 Mar 2024 16:19:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DEDC81AA7
+	for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 16:20:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710865175; cv=none; b=FUMGnHXhrZrcKslYGUUO8sIGsOT6KSy8QTnbyfjKMxj4dE4eNvpeQ14jur/DNHlUkEB5qfplqFbY6KzisAJ0y/9uEEV8+Z0ZZnV40n1F9Ek+VC7p1frnZtGuhyYBVGOgx4q7kN5Hl3tXe4ZHuSmB3dOy6v/CpDfEV7XI7q1sWDQ=
+	t=1710865252; cv=none; b=hxickZwStKBsa3hKUnvSJz/gRMuC8Di0IvPFjELUDtb54wcziv5UkbGHuiC/etHns9Q/+W9ze4Y3HASwh0OdNpk06ffyoCQch3ZwWbXHbWLePYO4E3FmPkr0sYt9yiNei+783T3KiTU8lMvWtxBIH/JVKgVzfEBDdvGX85TCV6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710865175; c=relaxed/simple;
-	bh=VFaRQas0gSrfP0qC172CcOje6IBtZpzaLgn68X7typs=;
+	s=arc-20240116; t=1710865252; c=relaxed/simple;
+	bh=Bdz6oPIjJS3xdaircPapK+jAu6AigplYSAGaowwxHtc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=avnVmbZOoVzlTYA3F7z5fS3qoWCfd9uB6Kwr263wlKO4FHPU8iE7GL23Z4kf07dnCtSu30XmYKPWfK8iDuZlvsErHPjUK+9q9HyzsmlS6xNTTM6y/8AEs8/oAxroZpixib9jFqL/FVVk+DF/CZuGftkgzkQBmkyE3mu56Ql3WSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jehr51D2; arc=none smtp.client-ip=209.85.214.174
+	 To:Cc:Content-Type; b=d3e6agXNpMX8iVZ7GOJ+XwS6AEtUp3LQW+GqUms8ozuj+tUwUhdccls1Z1z3Re/hw6DuvHXS/M8V29MEzuuZVFoStWw1ffSaNc+WOqCkl8qDGrBpfpcbulQXoBk1E6xo0AJ0cNxonfOiA5tjxKKj7O79fZ85i2g+RV1WS18sEaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V1pQaHMH; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jehr51D2"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1def142ae7bso39071395ad.3;
-        Tue, 19 Mar 2024 09:19:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V1pQaHMH"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6e6cadfffdbso5279112b3a.3
+        for <bpf@vger.kernel.org>; Tue, 19 Mar 2024 09:20:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710865171; x=1711469971; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710865251; x=1711470051; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Epr0Xv4Q3hfU6xbN2E2KtYBZZdf7JymwhQQwouieY7s=;
-        b=jehr51D2+XSPEUdph5sP1wCoe2sw8uZWkb9J0eQRrjyyKzveMA0oLS/w+JP/tX4Wi5
-         S7zc883Fg5Lr1LI8+Dq5aWTv3x1Q5xJC/XiO6rfvIjalmLOFK8Ll5qt2xumc76Hyp0D9
-         UciDCjCTsUV9gYDw8NOmWT+nOiuClhMjZKvRc30IQiuSr8D0W9oVbMImD7HF3jhstBHx
-         vjoJz4skasY2zMIsn3525jTYcB5JpGNvRI4HrYSv3fSeOnrHnCh3UGsQ1+bKboSPGtlA
-         K8Uwu247TDHxLzqUQKOOBp3ut4RCkIBogsSa5B2xARyApps9M/33v8nxDhKbHRhaHzZJ
-         VOqA==
+        bh=e/1MK+K1XKwosILrubtkCE+2IstjKrSSL7BD8tpoRmY=;
+        b=V1pQaHMHtJFedj6l+moUciI24VKkeDKjFrqxNpTdpme0yROLPau0fAfuuS17APIDQ2
+         T+zKuAS4Dl1ZF2+n4UdCaKVT3OOs1kLIP6fy2SkE7+RWNm8ayj3c42RsKGksweizx2Dn
+         J8sDRbZgvM12AB0p1ABsp1EpwJIM8588LYVc0i/CJX7GtoGxVCN2ODyOXHwWtPvIL/SP
+         oVq03j8/rZFRtDTQkQrITXxEIgCYLhyJ0xL6MALUoTZLmHa8taj1BQampBzGUdpifw3S
+         1n+6zkd8Ysg6BaQYRr0J6zygTNxoseYKvVMX40fhwgfPPe4q79PpUUrrFjC18CIIkUHG
+         f5ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710865171; x=1711469971;
+        d=1e100.net; s=20230601; t=1710865251; x=1711470051;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Epr0Xv4Q3hfU6xbN2E2KtYBZZdf7JymwhQQwouieY7s=;
-        b=cRbNDCJKXENyv5l4MlI7uUsB4H1796ntuUn6Cqmc6RRpr4eGycQxwYq7ggx4U+3Wg8
-         JxEaSAcSeM7hWu0OdhZvV9ozR9FJzkpcUM0PZmyUeg/rSDRFmyJmzKr8OcxRrhlK7BW/
-         KR5voC6Xx9sdC1XcCoiP0oZLV7lYhuLhMdfoBLI0vF8SGUTVwxf/PZjS1/4pNImTP0PI
-         L8XjqHF3BVhG049MH0ds3FJKCzHTZoQak2KQPcrM/3o/cHw74coKnK8olyrHg0yqzxy9
-         1Pzh8h9BddseRAnW73eC8crpjkYG/ikrVxej5iV93dSmt4hqWoNCpDpDZcT5SCF2c6cI
-         kwxA==
-X-Forwarded-Encrypted: i=1; AJvYcCUYnUUi5Ze7gFWmPxXtfgQzjkVNjKtg+6i1yK4uNTJ6ByjbNPMndj5pYG22hVkBcjT5B7npRktATq/3GagtPhFLDMC076AjdKU0NDXIZNa35VuDm+L8Pewuzi6Y1YexuguOLHti2Oy3IoP0AjiOTnWQMDYnqAlF5/nHgJOsNYPE2pBXqL0v
-X-Gm-Message-State: AOJu0YzVb3YPk3vzH3myUM1RNAvDIV69JVvFagFf/nEpl22tS8OjU/mv
-	nI29m8/r/j3joQfx8MJbHN1T/wpEutAQejExYaz2LuLWUsUUxOMnqJuhM7HSiAI0sd3SXGrXNSl
-	k6tnmbH00FdAttsBwg9YWtBE85IF8lfCh
-X-Google-Smtp-Source: AGHT+IGFjpRbnCDyRCQ1z3277NWH9fPOrpACKz4p44EkTlkRUxbeqzQQ5mQ1iMoSUIughS59YHq7ZIPUJGj7zKNSrLA=
-X-Received: by 2002:a17:903:1c9:b0:1de:f32d:f5ba with SMTP id
- e9-20020a17090301c900b001def32df5bamr15251700plh.42.1710865171367; Tue, 19
- Mar 2024 09:19:31 -0700 (PDT)
+        bh=e/1MK+K1XKwosILrubtkCE+2IstjKrSSL7BD8tpoRmY=;
+        b=XfXwFIt9VBXLjrdxpz1A3LXgKsbtGn0KgT3uRuayThuGwdg8AWcpxwwVR9unh3Mqw4
+         tVBa2xFNVhU5wec61Onhjyx5HmYCRrOs8Pia+8zSJ0sDglnBfWXDusbOVni/MV2rq/jB
+         2Nbx0LWq13vtklGHskBxsMRCb0069g3XQmybNk2jrbaKah3oQRg2PXgRLl7RuRyDsjsb
+         hHT2Gap7AQd2it5N3RUmYwmuYQt/Vldli2pq8k/PVTGHSPrBO6YuOw9In1/L2m01Lbfr
+         ghaXiaaI8CIl1khnFZfU+tPDtJjg06hw1mXOAouXA06oI5UvLPN1wLKjOsTuvU6p4HF+
+         cDDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXyz87ueS1y90fSMagMfU+iS2ZyiLvLOuzHLtMqVN8lBaEBiYZsHe2dEWetAOsmnzatBlNC5H5d3hbyrIjuQhbQpQno
+X-Gm-Message-State: AOJu0Yxbvpyv6OOhZ86h2farR9Pifbd0vKwmq3hU7pRnYII/2HDMJP+Y
+	aPIakumoqOLxMzW83IyE4fg2ttOBy7vG4OE7ALGizbOfGM2N1V7K1HEZRt8cK7c/fgCeQ0aqWXG
+	LeISXBJ24YmwtTbEO9f7I47HuN/0=
+X-Google-Smtp-Source: AGHT+IFXt+BkaCYgG5pRyJeCU9wHs6xPxA2mFZMJTExMgt5uJ4b02zYY0LehP1MfyOPGn9oZQ6+ahDCbIawK/nOV85w=
+X-Received: by 2002:a05:6a20:7da2:b0:1a3:63fa:f760 with SMTP id
+ v34-20020a056a207da200b001a363faf760mr6669900pzj.14.1710865250876; Tue, 19
+ Mar 2024 09:20:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240318181728.2795838-1-andrii@kernel.org> <20240319132057.78e60d15e4fd07dbef3b14a9@kernel.org>
-In-Reply-To: <20240319132057.78e60d15e4fd07dbef3b14a9@kernel.org>
+References: <20240318093139.293497-1-jolsa@kernel.org> <20240318093139.293497-2-jolsa@kernel.org>
+ <CAEf4BzaKDz-2Tavkb+Uu3zugZHcfVLqO-09F=bEJkWFre747eg@mail.gmail.com> <20240319063219.GB20287@redhat.com>
+In-Reply-To: <20240319063219.GB20287@redhat.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 19 Mar 2024 09:19:19 -0700
-Message-ID: <CAEf4BzaFfQeD8TY7pXEyX4h5UeAg0HZpx8psJF=Z6GJmr3VF5w@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] uprobes: two common case speed ups
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, linux-trace-kernel@vger.kernel.org, 
-	rostedt@goodmis.org, bpf@vger.kernel.org, mathieu.desnoyers@efficios.com, 
-	linux-kernel@vger.kernel.org, oleg@redhat.com, jolsa@kernel.org
+Date: Tue, 19 Mar 2024 09:20:39 -0700
+Message-ID: <CAEf4BzZW9XK1Yu2NdzkLu8PwFhPvQhKwe1_S=he2vQq8kRXKGg@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next 1/3] uprobe: Add uretprobe syscall to speed
+ up return probe
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
+	John Fastabend <john.fastabend@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 18, 2024 at 9:21=E2=80=AFPM Masami Hiramatsu <mhiramat@kernel.o=
-rg> wrote:
+On Mon, Mar 18, 2024 at 11:33=E2=80=AFPM Oleg Nesterov <oleg@redhat.com> wr=
+ote:
 >
-> Hi,
+> On 03/18, Andrii Nakryiko wrote:
+> >
+> > > +       "syscall\n"
+> >
+> > oh, btw, do we need to save flags register as well or it's handled
+> > somehow? I think according to manual syscall instruction does
+> > something to rflags register. So do we need pushfq before syscall?
 >
-> On Mon, 18 Mar 2024 11:17:25 -0700
-> Andrii Nakryiko <andrii@kernel.org> wrote:
+> The comment above entry_SYSCALL_64() says
 >
-> > This patch set implements two speed ups for uprobe/uretprobe runtime ex=
-ecution
-> > path for some common scenarios: BPF-only uprobes (patches #1 and #2) an=
-d
-> > system-wide (non-PID-specific) uprobes (patch #3). Please see individua=
-l
-> > patches for details.
+>         64-bit SYSCALL saves rip to rcx, clears rflags.RF, then saves rfl=
+ags to r11
 >
-> This series looks good to me. Let me pick it on probes/for-next.
+> then entry_SYSCALL_64 does
+>
+>         pushq   %r11                                    /* pt_regs->flags=
+ */
+>
+> which should be restored on return to userspace. So I think that
+> only X86_EFLAGS_RF can be lost, we probably do not care.
+>
 
-Great, at least I guessed the Git repo right, if not the branch.
-Thanks for pulling it in! I assume some other uprobe-related follow up
-patches should be based on probes/for-next as well, right?
+Cool, thanks for elaborating!
 
+
+> Oleg.
 >
-> Thanks!
->
-> >
-> > v1->v2:
-> >   - rebased onto trace/core branch of tracing tree, hopefully I guessed=
- right;
-> >   - simplified user_cpu_buffer usage further (Oleg Nesterov);
-> >   - simplified patch #3, just moved speculative check outside of lock (=
-Oleg);
-> >   - added Reviewed-by from Jiri Olsa.
-> >
-> > Andrii Nakryiko (3):
-> >   uprobes: encapsulate preparation of uprobe args buffer
-> >   uprobes: prepare uprobe args buffer lazily
-> >   uprobes: add speculative lockless system-wide uprobe filter check
-> >
-> >  kernel/trace/trace_uprobe.c | 103 +++++++++++++++++++++---------------
-> >  1 file changed, 59 insertions(+), 44 deletions(-)
-> >
-> > --
-> > 2.43.0
-> >
->
->
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
