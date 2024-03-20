@@ -1,112 +1,191 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-176.mta0.migadu.com (out-176.mta0.migadu.com [91.218.175.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B6618592A
-	for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 20:06:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7DBC12E48
+	for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 20:30:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710965173; cv=none; b=khe10bCiGCDaACyjEEa94vbVzAOyxO0RjMKrhS705BhTj1aj/XjQ9O+NrDtIimwDuja8lBHt2Xhcq4DKGHpiuCb1AQNpBkq+Dtl3QMyBBwGsJ5VSE/pI3UowQ9swwM3bWxA6Y7GuQRBRSkAGbQ73olHUn7OEHHGA8yT0Dzo0TWA=
+	t=1710966656; cv=none; b=fKGpqGbDwYgp6N5I/2UHfcvrG8Xqj+J/lRH3XczsGdMzyGelpfpWjyFLDeq76YDf8dEITX9J0y4eM1jxvePqX+pTHp9+no3MmA6UrioenuagV0D+HA7qxQS7i5JxAw7pelohTaTR6BBBAJ/OFeVz0SV1AH8/1zW0WJeHBb8ayX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710965173; c=relaxed/simple;
-	bh=2phJ7QkwthDNu8T5xsVMkXxbshunQfDBz/hwjFgzEKA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lJ/KZWeBF8KqPDtWR8NtbFZY6snEWR7LcVa1voH98OOADId+v3W1t68ulUa0CL6dgrFmWPqzqikSgwwApTcg8APBUSB3UZMV9J3FeGRaHIT79uDMrtx4o6lS3cN46+Yx0IncKcuKjeuADhUuwwUju8t/QKckOHErGwHpD2L4ZnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BTM6AAdv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710966656; c=relaxed/simple;
+	bh=ZZZObk/YowPHtsO1uwyK8eJ5XKLcbo5ffCQqoEZxZmo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HEQaCub27tIcpq2D3sPllWVCz4bFZe3qCfL8BvqEx223OWXe2JW83vvPFNLnm3UD7Z29JEJDMr2OvhH3VdA/68bNS7xaD0jxQ307YinoL5F584CdSz5l28rCCcyg1p6mCZQZH06SvIh6wzmTTU8HWC3MU6xqPX5oMkfvZqI234c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=trJNLKF7; arc=none smtp.client-ip=91.218.175.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BTM6AAdv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E3BDC433F1;
-	Wed, 20 Mar 2024 20:06:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710965172;
-	bh=2phJ7QkwthDNu8T5xsVMkXxbshunQfDBz/hwjFgzEKA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=BTM6AAdv4EXK4kfjtfQ5373fooR1H8ddxJiPrHXqKYk78LgKGISNQAkfoapQ5Xfok
-	 raVayfb2aU/RHRDqTvauxaeTIw0YRETYYz+prC7SrOvlmyABD2XCTW72w+FRl6SiHE
-	 bJGk1RhBrB+QlW5omY68TrBZTibuymrrL4dpMfyoEq5UgDfRRylBpJG+iS5d0MGAAn
-	 w82ZpzRWlpg0n2+oAzU02BjeKtjAVkC7A0LJpursRLpslN/elqN7NrfCeCpXfiK66v
-	 1b+1MRzy/UXUXNNq4sMtYaITlpV+XISkaMu2MceFZgbI1XTPJ5DsXwBFjOsF/HK+8V
-	 8xHfQ3v2b0jxQ==
-From: Andrii Nakryiko <andrii@kernel.org>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@kernel.org
-Cc: andrii@kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next] bpf: mark kprobe_multi_link_prog_run as always inlined function
-Date: Wed, 20 Mar 2024 13:06:10 -0700
-Message-ID: <20240320200610.2556049-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="trJNLKF7"
+Message-ID: <a3f8eff9-c51b-43d4-9d69-fe8b48f77473@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1710966652;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LF+fu9EHYD3041F1vyxJbb1QuQ8m4zUJPrgflEgxH8I=;
+	b=trJNLKF7FMRuhYIASp1pf1wKk2+AsxTA+3VrKy2Vopp5DFX6yYfzBd2Xqtu/vZWErdhy6o
+	qMcT7L4XXwhwijrrGEO4kU182p6tzBLAvjpXTsoZHhpBXqbuVADtCQsPBl9XFiezZFdH5+
+	K4SZVuWAypNaL2lJjrv63ss/iqfcKfQ=
+Date: Wed, 20 Mar 2024 13:30:44 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH net-next v4] net: Re-use and set mono_delivery_time bit
+ for userspace tstamp packets
+Content-Language: en-US
+To: "Abhishek Chauhan (ABC)" <quic_abchauha@quicinc.com>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, kernel@quicinc.com,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Andrew Halaney <ahalaney@redhat.com>,
+ Martin KaFai Lau <martin.lau@kernel.org>, bpf <bpf@vger.kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>
+References: <20240301201348.2815102-1-quic_abchauha@quicinc.com>
+ <2a4cb416-5d95-459d-8c1c-3fb225240363@linux.dev>
+ <65f16946cd33e_344ff1294fc@willemb.c.googlers.com.notmuch>
+ <28282905-065a-4233-a0a2-53aa9b85f381@linux.dev>
+ <65f2004e65802_3d1e792943e@willemb.c.googlers.com.notmuch>
+ <0dff8f05-e18d-47c8-9f19-351c44ea8624@linux.dev>
+ <e5da91bc-5827-4347-ab38-36c92ae2dfa2@quicinc.com>
+ <65f21d65820fc_3d934129463@willemb.c.googlers.com.notmuch>
+ <bc037db4-58bb-4861-ac31-a361a93841d3@linux.dev>
+ <65f2c81fc7988_3ee61729465@willemb.c.googlers.com.notmuch>
+ <5692ddb3-9558-4440-a7bf-47fcc47401ed@linux.dev>
+ <65f35e00a83c0_2132294f5@willemb.c.googlers.com.notmuch>
+ <e270b646-dae0-41cf-9ef8-e991738b9c57@quicinc.com>
+ <8d245f5a-0c75-4634-9513-3d420eb2c88f@linux.dev>
+ <d10254cc-a908-4d81-98d2-2eed715e521f@quicinc.com>
+ <66ad9e5b-0126-476e-bf0f-6a33f446c976@quicinc.com>
+ <ac03f67c-604a-4fb8-a0ca-c187e27855be@quicinc.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <ac03f67c-604a-4fb8-a0ca-c187e27855be@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-kprobe_multi_link_prog_run() is called both for multi-kprobe and
-multi-kretprobe BPF programs from kprobe_multi_link_handler() and
-kprobe_multi_link_exit_handler(), respectively.
-kprobe_multi_link_prog_run() is doing all the relevant work, with those
-wrappers just satisfying ftrace's interfaces (kprobe callback is
-supposed to return int, while kretprobe returns void).
+On 3/19/24 11:22 PM, Abhishek Chauhan (ABC) wrote:
+> 
+> 
+> On 3/18/2024 12:02 PM, Abhishek Chauhan (ABC) wrote:
+>>
+>>
+>> On 3/14/2024 3:29 PM, Abhishek Chauhan (ABC) wrote:
+>>>
+>>>
+>>> On 3/14/2024 2:48 PM, Martin KaFai Lau wrote:
+>>>> On 3/14/24 1:53 PM, Abhishek Chauhan (ABC) wrote:
+>>>>>>> The bpf_convert_tstamp_{read,write} and the helper bpf_skb_set_tstamp need to be
+>>>>>>> changed to handle the new "user_delivery_time" bit anyway, e.g.
+>>>>>>> bpf_skb_set_tstamp(BPF_SKB_TSTAMP_DELIVERY_MONO) needs to clear the
+>>>>>>> "user_delivery_time" bit.
+>>>>>>>
+>>>>>>> I think the "struct inet_frag_queue" also needs a new "user_delivery_time"
+>>>>>>> field. "mono_delivery_time" is already in there.
+>>>>
+>>>> [ ... ]
+>>>>
+>>
+>> Martin, Do we really need to add user_delivery_time as part of inet_frag_queue struct? I was wondering why is this required since we are using tstamp_type:2 to
+>> distinguish between timestamp anyway .
+>>
+>> Let me know what you think ?
+>>
+>>>> I would think the first step is to revert this patch. I don't think much of the current patch can be reused.
+>>>>
+>>>>> 1. I will raise one patch to introduce rename mono_delivery_time to
+>>>>> tstamp_type
+>>>>
+>>>> Right, I expect something like this:
+>>>>
+>>>> struct sk_buff {
+>>>>          /* ... */
+>>>> -            __u8                    mono_delivery_time:1;
+>>>> +        __u8            tstamp_type:1;
+>>>>          /* ... */
+>>>> };
+>>>>
+>>>
+>>> Okay ,This should be straight-forward.
+>>>
+>>>>> 2. I will introduce setting of userspace timestamp type as the second bit
+>>>>> whem transmit_time is set.
+>>>>
+>>>> I expect the second patch should be introducing the enum first
+>>>>
+>>>> enum skb_tstamp_type {
+>>>>      SKB_TSTAMP_TYPE_RX_REAL = 0, /* A RX (receive) time in real */
+>>>>      SKB_TSTAMP_TYPE_TX_MONO = 1, /* A TX (delivery) time in mono */
+>>>> };
+>>>>
+>>>> and start doing "skb->tstamp_type = SKB_TSTAMP_TYPE_TX_MONO;" instead of
+>>>> "skb->tstamp_type = 1;"
+>>>>
+>>>> and the same for "skb->tstamp_type = SKB_TSTAMP_TYPE_RX_REAL;" instead of
+>>>> "skb->tstamp_type = 0;"
+>>>>
+>>>>
+>>>> This one I am not sure but probably need to change the skb_set_delivery_time() function signature also:
+>>>>
+>>>> static inline void skb_set_delivery_time(struct sk_buff *skb, ktime_t kt,
+>>>> -                                        bool mono)
+>>>> +                     enum skb_tstamp_type tstamp_type)
+>>>>
+>>> This should be straight-forward as well
+>>>
+>>>> The third patch is to change tstamp_type from 1 bit to 2 bits and add SKB_TSTAMP_TYPE_TX_USER.
+>>>>
+>>>> struct sk_buff {
+>>>>          /* ... */
+>>>> -        __u8            tstamp_type:1;
+>>>> +        __u8            tstamp_type:2;
+>>>>          /* ... */
+>>>> };
+>>>>
+>>>> enum skb_tstamp_type {
+>>>>      SKB_TSTAMP_TYPE_RX_REAL = 0,    /* A RX (receive) time in real */
+>>>>      SKB_TSTAMP_TYPE_TX_MONO = 1,    /* A TX (delivery) time in mono */
+>>>> +    SKB_TSTAMP_TYPE_TX_USER = 2,    /* A TX (delivery) time and its clock
+>>>>                       * is in skb->sk->sk_clockid.
+>>>>                       */
+>>>>                 
+>>>> };
+>>>>
+>>>> This will shift a bit out of the byte where tstamp_type lives. It should be the "inner_protocol_type" bit by my hand count. Please check if it is directly used in bpf instruction (filter.c). As far as I look, it is not, so should be fine. Some details about bpf instruction accessible skb bit field here: https://lore.kernel.org/all/20230321014115.997841-1-kuba@kernel.org/
+>>> This is where i would need thorough reviews from you and Willem as my area of expertise is limited to part of network stack and BPF is not one of them.
+>>> But i have plan on this and i know how to do it.
+>>>
+>>> Expect patches to be arriving to your inboxes next week, as we have a long weekend in Qualcomm
+>>> Fingers crossed :)
+>>>
+>>>>
+>>>>
+>>>>> 3. This will be a first step to make the design scalable.
+>>>>> 4. Tomorrow if we have more timestamp to support, upstream community has to do is
+>>>>> update the enum and increase the bitfield from 2=>3 and so on.
+>>>>>
+>>>>> I need help from Martin to test the patch which renames the mono_delivery_time
+>>>>> to tstamp_type (Which i feel should be straight forward as the value of the bit is 1)
+>>>>
+>>>> The bpf change is not a no-op rename of mono_delivery_time. It needs to take care of the new bit added to the tstamp_type. Please see the previous email (and I also left it in the beginning of this email).
+>>>>
+>>>> Thus, you need to compile the selftests/bpf/ and run it to verify the changes when handling the new bit. The Documentation/bpf/bpf_devel_QA.rst has the howto details. You probably only need the newer llvm (newer gcc should work also as bpf CI has been using it) and the newer pahole. I can definitely help if there is issue in running the test_progs in selftests/bpf or you have question on making the changes in filter.c. To run the test: "./test_progs -t tc_redirect/tc_redirect_dtime"
+>>>>
+> 
+> Martin,
+> I was able to compile test_progs and execute the above command mentioned by you . Does the output look okay for you ?
+> 
+> [ 3076.040766] IPv6: ADDRCONF(NETDEV_CHANGE): veth_src_fwd: link becomes ready
+> [ 3076.040809] IPv6: ADDRCONF(NETDEV_CHANGE): veth_src: link becomes ready
+> [ 3076.072844] IPv6: ADDRCONF(NETDEV_CHANGE): veth_dst: link becomes ready
+> [ 3076.072880] IPv6: ADDRCONF(NETDEV_CHANGE): veth_dst_fwd: link becomes ready
+> #214/5   tc_redirect/tc_redirect_dtime:OK
+> #214     tc_redirect:OK
 
-With this structure compile performs tail-call optimization:
-
-Dump of assembler code for function kprobe_multi_link_exit_handler:
-   0xffffffff8122f1e0 <+0>:     add    $0xffffffffffffffc0,%rdi
-   0xffffffff8122f1e4 <+4>:     mov    %rcx,%rdx
-   0xffffffff8122f1e7 <+7>:     jmp    0xffffffff81230080 <kprobe_multi_link_prog_run>
-
-This means that when trying to capture LBR that traces all indirect branches
-we are wasting an entry just to record that kprobe_multi_link_exit_handler
-called/jumped into kprobe_multi_link_prog_run.
-
-LBR entries are especially sparse on AMD CPUs (just 16 entries on latest CPUs
-vs typically 32 on latest Intel CPUs), and every entry counts (and we already
-have a bunch of other LBR entries spent getting to a BPF program), so it would
-be great to not waste any more than necessary.
-
-Marking it as just `static inline` doesn't change anything, compiler
-still performs tail call optimization only. But by marking
-kprobe_multi_link_prog_run() as __always_inline we ensure that compiler
-fully inlines it, avoiding jumps:
-
-Dump of assembler code for function kprobe_multi_link_exit_handler:
-   0xffffffff8122f4e0 <+0>:     push   %r15
-   0xffffffff8122f4e2 <+2>:     push   %r14
-   0xffffffff8122f4e4 <+4>:     push   %r13
-   0xffffffff8122f4e6 <+6>:     push   %r12
-   0xffffffff8122f4e8 <+8>:     push   %rbx
-   0xffffffff8122f4e9 <+9>:     sub    $0x10,%rsp
-   0xffffffff8122f4ed <+13>:    mov    %rdi,%r14
-   0xffffffff8122f4f0 <+16>:    lea    -0x40(%rdi),%rax
-
-   ...
-
-   0xffffffff8122f590 <+176>:   call   0xffffffff8108e420 <sched_clock>
-   0xffffffff8122f595 <+181>:   sub    %r14,%rax
-   0xffffffff8122f598 <+184>:   add    %rax,0x8(%rbx,%r13,1)
-   0xffffffff8122f59d <+189>:   jmp    0xffffffff8122f541 <kprobe_multi_link_exit_handler+97>
-
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/trace/bpf_trace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 434e3ece6688..0bebd6f02e17 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2796,7 +2796,7 @@ static u64 bpf_kprobe_multi_entry_ip(struct bpf_run_ctx *ctx)
- 	return run_ctx->entry_ip;
- }
- 
--static int
-+static __always_inline int
- kprobe_multi_link_prog_run(struct bpf_kprobe_multi_link *link,
- 			   unsigned long entry_ip, struct pt_regs *regs)
- {
--- 
-2.43.0
-
+lgtm. thanks.
