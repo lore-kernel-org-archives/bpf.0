@@ -1,148 +1,111 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5612D134AB
-	for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 00:52:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4671979D0
+	for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 01:23:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710895951; cv=none; b=QUKcRnSn5qdHST5AR0mtYKSQRBWzFG/TvG+Rjb20p+Doa1zswsGL2kY2upAIfBoO+kjxxCzGHB58SPZEuTPl+0+b+avQFSbfTDmNfQqHQ4J+vmnamYJ4bR0i4d5+G4bEyHCTcWfgLe6YIWeB8BjUfbOUFVya3xMxHE3T+uZhbDw=
+	t=1710897783; cv=none; b=HFV8xvsO4E0Sy+pO2hLicGC4ebf1cXWekxny1YOceGqCY26rcg+WPVGu/6y++oq3xyBNkHlsRHBs0oZtvceesRwZrJaSMMaDvAzY0RHGsf52Q3l3RqYX7Nu4ZaUdnZqy7CQO6hzBYZshqBEZcsSsSxXUk3yAR2o/K1vD/5TagCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710895951; c=relaxed/simple;
-	bh=fE8pMWjAksMHdfX0S9AmaIggeMshbq+MW66UB9Ejy0k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KLDt5sCS7AmMc+yfWlLNVdmAz3Xke9qRMeLqGI7q1duKN2ikN/APMLfTITwRrzacC3OIdZ5IOa8VjORruXxSxz96P9NSHLOPgDHQOYHielRrytqcas+QZc8SyH/A7ss31yiGekhX0JoSo8eGDlprG5S8vdJJturZ1++ojSOxNeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qCbVCsDQ; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1710897783; c=relaxed/simple;
+	bh=9jjTmzQMsJPVBIv9YSojScLb2Z/IsQC4JCC9p4egCNM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RJKxVlYieHjUnmHhdlJ6ePSoUb7EcqnKTId4O1JtpEakvWJgYw3HKHcfq/ZbC2OVWMBDnjSwiITzAjCQsP5eB7xc9cFv5NgwgQSHijWJlsiwE0O6syd0WvKQMLLaCpLRmcZOzVw6O3lqb9M2IpFmZ0YHESdux8DnN0AECe0jMlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZJz1dXE7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qCbVCsDQ"
-Message-ID: <39249ae4-4170-4a5c-8923-6e63fcbfe729@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1710895947;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=o1JhMiy1HQIyFsCzmpcBBC7/BM4+FAtmWtiXx1FxqsQ=;
-	b=qCbVCsDQi3hby6cpGWKcCvwkcxmCeExVMYXqsoR9a4MuM9iRBV6EmXPL0lmptSXf89S6y7
-	PtPan7OU47jo7cEt8A4N68WuXrjuB5wc1ant/TSomHlYC4yyc0/Uvco7KwVGTIVs69PSC4
-	NhBNC7fBqqCCyENIpupjXiyl/KoNyos=
-Date: Tue, 19 Mar 2024 17:52:17 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZJz1dXE7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B57AC433F1;
+	Wed, 20 Mar 2024 01:23:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710897783;
+	bh=9jjTmzQMsJPVBIv9YSojScLb2Z/IsQC4JCC9p4egCNM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ZJz1dXE7Lyp7VVCAYQ+cy3lUyU9iFfMPzvt7p5LnXt+DwCu7pMmGQlodj2STQWjBO
+	 Ag+v/1W+JQ0mvPbqMH0NkW3jkZIOAyoJ/lZ8BHgThX2ptug9lAT4FhcI3hWNPb0h7c
+	 S/bPuzR+qiVx9bmyP8PZXjAtgCRGpGE7gxaJ1RpQ78ayBiEFL08fbo54VQF3d+XTQF
+	 EANaxNm9DafJzVsndAvbSXz1uDOFbZdbxs1w89HhSpEOAk3IRdcLPUBiFUjGiYEalN
+	 gzi9RnPMolm4CYjNhZWj2i91YozrwwO9/S6rTwF7OAkIo8qt9zF4WinwAE4julFkff
+	 ZMashKfnz4OYQ==
+From: Quentin Monnet <qmo@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org,
+	Quentin Monnet <qmo@kernel.org>
+Subject: [PATCH bpf-next] bpftool: Enable libbpf logs when loading pid_iter in debug mode
+Date: Wed, 20 Mar 2024 01:22:41 +0000
+Message-Id: <20240320012241.42991-1-qmo@kernel.org>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 2/5] selftests/bpf: Replace CHECK with
- ASSERT_* in ns_current_pid_tgid test
-Content-Language: en-GB
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, bpf@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com,
- Martin KaFai Lau <martin.lau@kernel.org>, Yury Namgung <ynamgung@meta.com>
-References: <20240315184849.2974556-1-yonghong.song@linux.dev>
- <20240315184859.2975543-1-yonghong.song@linux.dev> <ZfgnLQ5ytpU2IcUX@krava>
- <2af81b55-4be4-4936-a42e-940786c45877@linux.dev>
- <CAEf4BzYWoe1DEOFsXe4=fx+2ceFKEc8ASW5Jt002jOHkErxqHQ@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <CAEf4BzYWoe1DEOFsXe4=fx+2ceFKEc8ASW5Jt002jOHkErxqHQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+When trying to load the pid_iter BPF program used to iterate over the
+PIDs of the processes holding file descriptors to BPF links, we would
+unconditionally silence libbpf in order to keep the output clean if the
+kernel does not support iterators and loading fails.
 
-On 3/19/24 2:52 PM, Andrii Nakryiko wrote:
-> On Mon, Mar 18, 2024 at 8:30 AM Yonghong Song <yonghong.song@linux.dev> wrote:
->>
->> On 3/18/24 4:36 AM, Jiri Olsa wrote:
->>> On Fri, Mar 15, 2024 at 11:48:59AM -0700, Yonghong Song wrote:
->>>> Replace CHECK in selftest ns_current_pid_tgid with recommended ASSERT_* style.
->>>> I also shortened subtest name as the prefix of subtest name is covered
->>>> by the test name already.
->>>>
->>>> This patch does fix a testing issue. Currently even if bss->user_{pid,tgid}
->>>> is not correct, the test still passed since the clone func returns 0.
->>>> I fixed it to return a non-zero value if bss->user_{pid,tgid} is incorrect.
->>>>
->>>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->>>> ---
->>>>    .../bpf/prog_tests/ns_current_pid_tgid.c      | 36 ++++++++++---------
->>>>    1 file changed, 19 insertions(+), 17 deletions(-)
->>>>
->>>> diff --git a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
->>>> index 24d493482ffc..3a0664a86243 100644
->>>> --- a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
->>>> +++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
->>>> @@ -20,19 +20,19 @@ static int test_current_pid_tgid(void *args)
->>>>    {
->>>>       struct test_ns_current_pid_tgid__bss  *bss;
->>>>       struct test_ns_current_pid_tgid *skel;
->>>> -    int err = -1, duration = 0;
->>>> +    int ret = -1, err;
->>>>       pid_t tgid, pid;
->>>>       struct stat st;
->>>>
->>>>       skel = test_ns_current_pid_tgid__open_and_load();
->>>> -    if (CHECK(!skel, "skel_open_load", "failed to load skeleton\n"))
->>>> -            goto cleanup;
->>>> +    if (!ASSERT_OK_PTR(skel, "test_ns_current_pid_tgid__open_and_load"))
->>>> +            goto out;
->>> you could just return in here so there's no need for the out label
->>> otherwise lgtm
->> Since this patch intends to just replace CHECK with ASSERT_*.
->> I tried to keep other parts of codes the same as before. But
->> I can certainly do this. I will wait for other comments
->> before sending another revision.
->>
-> I applied it as is, but feel free to send suggested improvements as a follow up.
+Although this is the desirable behaviour in most cases, this may hide
+bugs in the pid_iter program that prevent it from loading, and it makes
+it hard to debug such load failures, even in "debug" mode. Instead, it
+makes more sense to print libbpf's logs when we pass the -d|--debug flag
+to bpftool, so that users get the logs to investigate failures without
+having to edit bpftool's source code.
 
-Thanks! Will send a followup later.
+Signed-off-by: Quentin Monnet <qmo@kernel.org>
+---
+ tools/bpf/bpftool/pids.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
->
->
->>> Acked-by: Jiri Olsa <jolsa@kernel.org>
->>>
->>>
->>> jirka
->>>
->>>>       pid = syscall(SYS_gettid);
->>>>       tgid = getpid();
->>>>
->>>>       err = stat("/proc/self/ns/pid", &st);
->>>> -    if (CHECK(err, "stat", "failed /proc/self/ns/pid: %d\n", err))
->>>> +    if (!ASSERT_OK(err, "stat /proc/self/ns/pid"))
->>>>               goto cleanup;
->>>>
->>>>       bss = skel->bss;
->>>> @@ -42,24 +42,26 @@ static int test_current_pid_tgid(void *args)
->>>>       bss->user_tgid = 0;
->>>>
->>>>       err = test_ns_current_pid_tgid__attach(skel);
->>>> -    if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
->>>> +    if (!ASSERT_OK(err, "test_ns_current_pid_tgid__attach"))
->>>>               goto cleanup;
->>>>
->>>>       /* trigger tracepoint */
->>>>       usleep(1);
->>>> -    ASSERT_EQ(bss->user_pid, pid, "pid");
->>>> -    ASSERT_EQ(bss->user_tgid, tgid, "tgid");
->>>> -    err = 0;
->>>> +    if (!ASSERT_EQ(bss->user_pid, pid, "pid"))
->>>> +            goto cleanup;
->>>> +    if (!ASSERT_EQ(bss->user_tgid, tgid, "tgid"))
->>>> +            goto cleanup;
->>>> +    ret = 0;
->>>>
->>>>    cleanup:
->>>> -     test_ns_current_pid_tgid__destroy(skel);
->>>> -
->>>> -    return err;
->>>> +    test_ns_current_pid_tgid__destroy(skel);
->>>> +out:
->>>> +    return ret;
->>>>    }
->> [...]
+diff --git a/tools/bpf/bpftool/pids.c b/tools/bpf/bpftool/pids.c
+index 00c77edb6331..9b898571b49e 100644
+--- a/tools/bpf/bpftool/pids.c
++++ b/tools/bpf/bpftool/pids.c
+@@ -101,7 +101,6 @@ int build_obj_refs_table(struct hashmap **map, enum bpf_obj_type type)
+ 	char buf[4096 / sizeof(*e) * sizeof(*e)];
+ 	struct pid_iter_bpf *skel;
+ 	int err, ret, fd = -1, i;
+-	libbpf_print_fn_t default_print;
+ 
+ 	*map = hashmap__new(hash_fn_for_key_as_id, equal_fn_for_key_as_id, NULL);
+ 	if (IS_ERR(*map)) {
+@@ -118,12 +117,18 @@ int build_obj_refs_table(struct hashmap **map, enum bpf_obj_type type)
+ 
+ 	skel->rodata->obj_type = type;
+ 
+-	/* we don't want output polluted with libbpf errors if bpf_iter is not
+-	 * supported
+-	 */
+-	default_print = libbpf_set_print(libbpf_print_none);
+-	err = pid_iter_bpf__load(skel);
+-	libbpf_set_print(default_print);
++	if (!verifier_logs) {
++		libbpf_print_fn_t default_print;
++
++		/* Unless debug information is on, we don't want the output to
++		 * be polluted with libbpf errors if bpf_iter is not supported.
++		 */
++		default_print = libbpf_set_print(libbpf_print_none);
++		err = pid_iter_bpf__load(skel);
++		libbpf_set_print(default_print);
++	} else {
++		err = pid_iter_bpf__load(skel);
++	}
+ 	if (err) {
+ 		/* too bad, kernel doesn't support BPF iterators yet */
+ 		err = 0;
+-- 
+2.34.1
+
