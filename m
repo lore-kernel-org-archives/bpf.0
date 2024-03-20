@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B78A1C6AD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7671B7F5;
 	Wed, 20 Mar 2024 06:00:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710914429; cv=none; b=bHopm7MGWAxo5gepYFj+9LITeRYBvUpezfepGVkEz/BpQ4BocoJskE1Bud1PKbFKv54HPypNti4VutQ9F62IU4VFRbI+hVKpYT++ZyED+GSQzsY65FFU87mjUdOtg/fj5d7w7qEEjp8Dw4917E3a+Q+fvCaY0cYOhojukxwgXdQ=
+	t=1710914429; cv=none; b=dVUEJdSGbofC+GQNm3OtpvjUP6C1JqtPjM5t57q9GfxGhKhNxxH9CGPs+vfoAdEy4KCagTi9cdq8kbx+bwlSZ+Yba8aB5e6QE/vmO26YU67MCrEgezK4nQKVxpvQvGO64ePfIyEjRAkj1cQZWOUHyUg2n1TuauW4c02pRjtKgeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1710914429; c=relaxed/simple;
-	bh=ymUy5F0YzcS6a59CGMwBD/LvafHPbiwNmiswNU3m8d0=;
+	bh=F+JD5BzN3CMt5iCweClrZTt7h+6Pfrn3HmIL6h5t0Wk=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=QZeqPD6L+4eRdzISIr/L7GBvcGLMivgH5qsB+voa7JGq1IPAW5UlKrWzRvBimZ+E5K8uoh6Hp29wX3fSXKLTAaw4CGhtpTiChqQvP+Y18Ncy/7LAwqtPKUzzA8zX1Ej/3xxSqKOdKSu+U2EGw+Y7OIW5QkEyf3fZZrSe7mz7HIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GaE/1QxN; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=StCxjdL0yYnXOnMDtV/inxD0pamAjbKoFUYjQRti/qdbA5De1qRUz+1YHBq131d5dxUEcFQJhzj8dk/fPxpv4DeE8m7jmoBCBphYNv3RSL9+JFKzqV0wzXqfGlNaI/VF10ln75EACFaYPJPAbf0W/jDFsurybHW1OI0chzZhw2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E8UbNUox; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GaE/1QxN"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1CE36C43390;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E8UbNUox"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0F868C43394;
 	Wed, 20 Mar 2024 06:00:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1710914429;
-	bh=ymUy5F0YzcS6a59CGMwBD/LvafHPbiwNmiswNU3m8d0=;
+	bh=F+JD5BzN3CMt5iCweClrZTt7h+6Pfrn3HmIL6h5t0Wk=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=GaE/1QxNHJr+guythnnODDUtiQ9Mc6v0MuQONVTV5R31Y00kjCbSbpxgXIzfs7zEv
-	 MPmAjnhM6GEfNjlGIFc9rj+aeacAlBUZmblWP8q6lchCaQIBOPExjJQ/cjiNI51zMJ
-	 wf0yU/NbMRwvHTe3U9cBiN4nkUemNaGtmZhecPIMAvmTOFazDTVaUVboX7GsoKPER9
-	 ojIciAxouQpMLIKJ9qGChz3wcNHgDLbBsJmWCB/2alDH8iVOzqEKi0hheofWlnPVlN
-	 0vR5TziuAFQCD1womvg7zoGF4TVK5keVU7UIFDuIuTCXZs1er1vRAV84PTWGBm4JwD
-	 hwhMluerxNwfA==
+	b=E8UbNUoxjBS40Za7tg92n197VGdLQ+f4LOl9fMFPoNZ9aoZiuhaWZq88UEB640mla
+	 tKyOHjp41qNzFqHglDDCHl4eVDR7U5GBwpYxRZL9S2EkPR/E2XdP7l+V8QWMU0FPSy
+	 cC5GujjtT0yL9oyXl2dnb+Jc55nrAlYgntZ8GWZ8SJiyaCplYE2P/TjzEMlw+5JPIV
+	 ixA1Yc34Xn9NbJSoZRLGhmfbEf1kbvAxUaSXvOT1dXDPxnl4Ev/Rs2tuvzaHTtz+KW
+	 hhsZy9hz4KZNjH6LtuMR5tyVnCsgYpPnDfYmpVGyQBO0WjFu+AimcsMLOhLnFYPFbl
+	 skYbmd5Kn/p9Q==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 040DBD98302;
-	Wed, 20 Mar 2024 06:00:29 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EBB53D84BB1;
+	Wed, 20 Mar 2024 06:00:28 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,39 +37,38 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] s390/bpf: Fix bpf_plt pointer arithmetic
+Subject: Re: [PATCH bpf] bpf, arm64: fix bug in BPF_LDX_MEMSX
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171091442901.8613.10642779913572701774.git-patchwork-notify@kernel.org>
-Date: Wed, 20 Mar 2024 06:00:29 +0000
-References: <20240320015515.11883-1-iii@linux.ibm.com>
-In-Reply-To: <20240320015515.11883-1-iii@linux.ibm.com>
-To: Ilya Leoshkevich <iii@linux.ibm.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
- bpf@vger.kernel.org, linux-s390@vger.kernel.org
+ <171091442896.8613.6941801093368305972.git-patchwork-notify@kernel.org>
+Date: Wed, 20 Mar 2024 06:00:28 +0000
+References: <20240312235917.103626-1-puranjay12@gmail.com>
+In-Reply-To: <20240312235917.103626-1-puranjay12@gmail.com>
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
 Hello:
 
 This patch was applied to bpf/bpf.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Wed, 20 Mar 2024 02:54:12 +0100 you wrote:
-> Kui-Feng Lee reported a crash on s390x triggered by the
-> dummy_st_ops/dummy_init_ptr_arg test [1]:
+On Tue, 12 Mar 2024 23:59:17 +0000 you wrote:
+> A64_LDRSW() takes three registers: Xt, Xn, Xm as arguments and it loads
+> and sign extends the value at address Xn + Xm into register Xt.
 > 
->   [<0000000000000002>] 0x2
->   [<00000000009d5cde>] bpf_struct_ops_test_run+0x156/0x250
->   [<000000000033145a>] __sys_bpf+0xa1a/0xd00
->   [<00000000003319dc>] __s390x_sys_bpf+0x44/0x50
->   [<0000000000c4382c>] __do_syscall+0x244/0x300
->   [<0000000000c59a40>] system_call+0x70/0x98
+> Currently, the offset is being directly used in place of the tmp
+> register which has the offset already loaded by the last emitted
+> instruction.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf] s390/bpf: Fix bpf_plt pointer arithmetic
-    https://git.kernel.org/bpf/bpf/c/7ded842b356d
+  - [bpf] bpf, arm64: fix bug in BPF_LDX_MEMSX
+    https://git.kernel.org/bpf/bpf/c/114b5b3b4bde
 
 You are awesome, thank you!
 -- 
