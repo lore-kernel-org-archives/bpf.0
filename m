@@ -1,109 +1,95 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29BAB3D984;
-	Wed, 20 Mar 2024 11:34:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E6A13FB84
+	for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 11:46:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710934494; cv=none; b=UcEsjR0Qd6uxDh8kldtMDh4asbTazAwXDkBKiUYzyBZJywHuTTXAHSpD3OiqDQlc3lJR1t3idQE0JHaSSyFH2lF4T7aTyvvNu6LOvr11++F/kSjsXBXVXU4Yk1zpaxWrhG9zC3s7pMKbzZbW4SkCAW0/7jAUZTJtBU1blK6V5cc=
+	t=1710935178; cv=none; b=pW2dWlCzHrMOE33YVNf8MMPPOkNoaV8HXrgHcMBwRaK9ti4mk0+eTbwIkRLmvGqq21lCv63RY9huiaMnvF5H+YI/0zqJOQldrXnp5CHQjM89GfDCc/Q1uN3JqrAsdr3q/5Z/j2vK/dpuAMkDY4cExGzN/6rjXx8RP4pYaOVuI4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710934494; c=relaxed/simple;
-	bh=3WaKxkbQWcDCF2kXtI2Am05e+yUdzZw2ITQ8GoPRoSk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Rp56XkgJ4EQVOks4Ul9jdvN+mvxQ0PterGaHzowWqWpzFTOpVZcyOny/XRV0vwI8inNTTZaczUbIpjkUjoEl6Km1peZV6DFQQXPWl3qbmOVAOcJNQQrvKlLS5EldPAHoKyzPu8fC56zooQXd8eBd99GBAclk3v+vOen5tdYuc7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V062D0XMZz4f3l89;
-	Wed, 20 Mar 2024 19:34:44 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id E87C31A0AAE;
-	Wed, 20 Mar 2024 19:34:47 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP4 (Coremail) with SMTP id gCh0CgCX6GrWyfplm5SjHg--.34463S2;
-	Wed, 20 Mar 2024 19:34:47 +0800 (CST)
-Message-ID: <ab5e6307-8d80-4751-940f-4faa5bc41d82@huaweicloud.com>
-Date: Wed, 20 Mar 2024 19:34:46 +0800
+	s=arc-20240116; t=1710935178; c=relaxed/simple;
+	bh=xvxYvvj2PrGZPik1dyr7SNwMcmSA/MFYDySIST/v0SY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cq8Vv422DjEDX4SOLBTlqVZE5vdYJU9G7X4kfugVaJQeTDLNwuOkRLX8tLIfDI+5QGsbCGrNGLB/7DuVpPdnLcleJnI3SdabpTlb7n8idq8hzqIGhs1baFM6wRqpKQjeR2q5b50Mke9sBg4FxEYZ82k6nGeDW72RjfdXcnCUKhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=d4c0jQlX; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="d4c0jQlX"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-33ddd1624beso490717f8f.1
+        for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 04:46:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1710935174; x=1711539974; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=xvxYvvj2PrGZPik1dyr7SNwMcmSA/MFYDySIST/v0SY=;
+        b=d4c0jQlXdAchYQcvianWbp5w1Um+4oUj6Gnzr5s+NBCMjAZmt1AOcL/gzOc+lD25Pj
+         5yPResWvfb+BNdd4B3KywE7HiUVd1tZz9DPsApGGKrE3BL3UKz7SbRehmxaK4aaWh/oO
+         Ldvd+XsnYuopLsZHP0tOnrBildha9vxNkwqvppe0UfKpoiBI9vrn17iSw1fLhlhsug0v
+         YHLvtsWXg6JhiSsWJfzNHtqnjLGgFmc3X6VpS0JFRNeCp++6etkQfxbxkqvmtkYZwJxg
+         9IVkwiDCMUCAaVPYxvFkoWgpUWhYvQZ7ymTPhBwIc5wvTBzYu/mqT87L0akm/RhGjAY5
+         EfmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710935174; x=1711539974;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xvxYvvj2PrGZPik1dyr7SNwMcmSA/MFYDySIST/v0SY=;
+        b=mBBsj9dnrWac+CLyIQsxD1mubNHLW4trXh9d3PU5Z3BQUuhSScI0I06D6GCJqsoEnT
+         I05hmdQZfJgMd6uGFHH3HJdww33DXRb9KULKKsmGE4cBUXrmdB3g6bmvjNrLkeOV6e6m
+         EM6ndTOjsPrhqj0JFOXqwFVG6O+hEWpWWS6scTQ8B7/+ZqMJ4ON6phUGP9B/o65bRsLC
+         AYOB9Rww8YYRJQjtWtKOJZxYvpJ9mGKtcoPmJ6FDWcW7BpJaQdVTDZD9ChcOwv/7lyPL
+         NhRQ2o8ORlry05AMf2oOaKH1OuYK3hb0W4rmSqn4XYAZ6LXS/rj8+bXbk5qkil7G86T4
+         Luxw==
+X-Gm-Message-State: AOJu0Yzq4gUJpyEaV04Z6r96Qnzfdd19LAAilsKVf5F8vXgVB+OT8Nu5
+	Rz2HMukF4fNsbzw1eCO1hdpCvzV1XNB4eeMBq6/7cEdIr6W6ZevdOW/9oDdeLFU=
+X-Google-Smtp-Source: AGHT+IEvyp+DHt43dAosLH0xu/t+KEeQu4t7loU2bJe+oB1ozYbyXGl94zR1LOfuWazWeC8n7oWbEA==
+X-Received: by 2002:adf:ef02:0:b0:33e:c595:fec9 with SMTP id e2-20020adfef02000000b0033ec595fec9mr4921514wro.8.1710935174599;
+        Wed, 20 Mar 2024 04:46:14 -0700 (PDT)
+Received: from u94a (39-14-2-206.adsl.fetnet.net. [39.14.2.206])
+        by smtp.gmail.com with ESMTPSA id l14-20020a17090aaa8e00b0029becfcb97esm1352592pjq.22.2024.03.20.04.46.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Mar 2024 04:46:14 -0700 (PDT)
+Date: Wed, 20 Mar 2024 19:46:08 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Harishankar Vishwanathan <harishankar.vishwanathan@rutgers.edu>
+Cc: "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	Paul Chaignon <paul@isovalent.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Srinivas Narayana Ganapathy <sn624@cs.rutgers.edu>, Santosh Nagarakatte <sn349@cs.rutgers.edu>, 
+	Matan Shachnai <m.shachnai@rutgers.edu>
+Subject: Re: [bpf-next] bpf: Verifying eBPF range analysis on v6.8
+Message-ID: <ja4tftcecd2ozyn55333vi52ixcwxlvk4tc7qbrqb4k56fy54g@okqt4dnxantj>
+References: <SJ2PR14MB650171C32E2AD95B67FD51CD8E2C2@SJ2PR14MB6501.namprd14.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] arm64: bpf: zero upper bits after rev32
-Content-Language: en-US
-To: Artem Savkov <asavkov@redhat.com>, Xi Wang <xi.wang@gmail.com>,
- Catalin Marinas <catalin.marinas@arm.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240313140205.3191564-1-asavkov@redhat.com>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <20240313140205.3191564-1-asavkov@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:gCh0CgCX6GrWyfplm5SjHg--.34463S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7AFyxZF1kur1UJFykAw4Dtwb_yoW8try8pr
-	4ayrZakr4UWr17Aa4FganrJr1vkay2y3yUtryDWrWSka9Yv34kXryfKrW2939IvrW0vw4Y
-	9FyjyF93X3s2v3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-	AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
-	IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
-	KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <SJ2PR14MB650171C32E2AD95B67FD51CD8E2C2@SJ2PR14MB6501.namprd14.prod.outlook.com>
 
-On 3/13/2024 10:02 PM, Artem Savkov wrote:
-> Commit d63903bbc30c7 ("arm64: bpf: fix endianness conversion bugs")
-> added upper bits zeroing to byteswap operations, but it assumes they
-> will be already zeroed after rev32, which is not the case on some
-> systems at least:
-> 
-> [ 9757.262607] test_bpf: #312 BSWAP 16: 0x0123456789abcdef -> 0xefcd jited:1 8 PASS
-> [ 9757.264435] test_bpf: #313 BSWAP 32: 0x0123456789abcdef -> 0xefcdab89 jited:1 ret 1460850314 != -271733879 (0x5712ce8a != 0xefcdab89)FAIL (1 times)
-> [ 9757.266260] test_bpf: #314 BSWAP 64: 0x0123456789abcdef -> 0x67452301 jited:1 8 PASS
-> [ 9757.268000] test_bpf: #315 BSWAP 64: 0x0123456789abcdef >> 32 -> 0xefcdab89 jited:1 8 PASS
-> [ 9757.269686] test_bpf: #316 BSWAP 16: 0xfedcba9876543210 -> 0x1032 jited:1 8 PASS
-> [ 9757.271380] test_bpf: #317 BSWAP 32: 0xfedcba9876543210 -> 0x10325476 jited:1 ret -1460850316 != 271733878 (0xa8ed3174 != 0x10325476)FAIL (1 times)
-> [ 9757.273022] test_bpf: #318 BSWAP 64: 0xfedcba9876543210 -> 0x98badcfe jited:1 7 PASS
-> [ 9757.274721] test_bpf: #319 BSWAP 64: 0xfedcba9876543210 >> 32 -> 0x10325476 jited:1 9 PASS
-> 
-> Fixes: d63903bbc30c7 ("arm64: bpf: fix endianness conversion bugs")
-> Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> ---
->   arch/arm64/net/bpf_jit_comp.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index c5b461dda4385..e86e5ba74dca2 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -944,7 +944,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
->   			break;
->   		case 32:
->   			emit(A64_REV32(is64, dst, dst), ctx);
-> -			/* upper 32 bits already cleared */
-> +			/* zero-extend 32 bits into 64 bits */
-> +			emit(A64_UXTW(is64, dst, dst), ctx);
+On Tue, Mar 19, 2024 at 09:16:25PM +0000, Harishankar Vishwanathan wrote:
+> We wanted to give you an update on our recent results with verifying the
+> soundness of the latest patches (Re: "BPF register bounds logic and testing
+> improvements”) to the eBPF verifier’s range analysis using our tool Agni [1].
+> Specifically, we checked the range analysis in the functions
+> adjust_scalar_min_max_vals and descendants (for arithmetic and logic
+> instructions) and reg_set_min_max and descendants (for branching instructions).
+> We were able to confirm that the range analyses in kernel 6.8 is sound, with the
 
-I think the problem only occurs when is64 == 1. In this case, the generated rev32
-insn reverses byte order in both high and low 32-bit word. To fix it, we could just
-set the first arg to 0 for A64_REV32:
+Thank you all for working on Agni, and the continue effort to verify the
+latest codebase!
 
-emit(A64_REV32(0, dst, dst), ctx);
+> following assumptions: we only consider parts of the verifier concerned with
+> range analysis (that is, the part that updates u/smin, u/smax, and tnums in
+> bpf_reg_state), we only consider scalar types (SCALAR_VALUE) in bpf registers,
+> we assume Agni's translation of the verifier's C code to logic (SMT) is correct.
 
-No need to add an extra uxtw isnn.
+Q: looking at README in Agni's repo both the 64-bit and 32-bit u/smin
+u/smax gets verified, is that right?
 
->   			break;
->   		case 64:
->   			emit(A64_REV64(dst, dst), ctx);
-
+> ...
