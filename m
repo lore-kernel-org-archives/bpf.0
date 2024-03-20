@@ -1,118 +1,82 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385664176F
-	for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 13:38:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F08F45958
+	for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 14:20:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710941941; cv=none; b=KuFBiK1t0I6qhJ6lDmhaLHGst3BHNrqybLWhAyAZRFMrggsf8N1hVL51+fbTucGv77BaWk1gzvdHSAXqlcMraa/KVOBRyU4oVaY235/rtscx4tXCDtR7E84HqZqpoNnTGaLDM5Kb9fGe488x+YjlssPpdT+5tmbe3rkcstG3JZ4=
+	t=1710944407; cv=none; b=ehMPRhVrbnL79526VdPci5S0a+KsoRbC8PIR7Vl279dyBu6EE/EkxSMQKlO+Su68nLtMjS8z0MuoMMXMDHYldWp5VaosmWB32KzytXOHvtcU2ITss623Oevf2T5ICRR6XxP5DKuZ06hzME0oNzIe/3jVq7unDFJxlXOW/hdTFJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710941941; c=relaxed/simple;
-	bh=8HG3lMRM1eo4wBzIUV+zS7eMBAvUauYxIjL5f0ACs14=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kwC0IJp+cUtffXAFRotDeaUMuINswTn+U/lD0tA3l6dBbmmedzt3XeMYjz7Lh47yVngBMpK9ijKgC4uIrFNfY9AlCvu5GjWrk0hlZNbgPqawvNxqmUIertorMSpeEsVQw/HCIRdF1ikm8FE0gw1QgkllPlbEK6kdX329HH3gJa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fIijF2lc; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fIijF2lc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1710941939;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=obHBarWxk+ROrmEnXbSe1lZadfgNP9noxnJHktLqcg0=;
-	b=fIijF2lckeV7fXJY13IxInAZukYg67xcO5Jjv4B2CznYXToVOUrhYz8sRefYuABL9on9Yg
-	FkwzPuQy8eF6ekxBAch5/SWxuhXqBjRXsqpZy0Alz4J4QU2ZwKPZcQYb6oAmfNaNA+1rS1
-	JDrhKoHOY3oILG4FApISHtFKP/J6TIA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-688-pYPacII4OECEEpeoufjukg-1; Wed, 20 Mar 2024 09:38:53 -0400
-X-MC-Unique: pYPacII4OECEEpeoufjukg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D412C8F4121;
-	Wed, 20 Mar 2024 13:38:52 +0000 (UTC)
-Received: from alecto.usersys.redhat.com (unknown [10.43.17.36])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id 713721121306;
-	Wed, 20 Mar 2024 13:38:51 +0000 (UTC)
-Date: Wed, 20 Mar 2024 14:38:49 +0100
-From: Artem Savkov <asavkov@redhat.com>
-To: Xu Kuohai <xukuohai@huaweicloud.com>
-Cc: Xi Wang <xi.wang@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next] arm64: bpf: zero upper bits after rev32
-Message-ID: <20240320133849.GA142600@alecto.usersys.redhat.com>
-References: <20240313140205.3191564-1-asavkov@redhat.com>
- <ab5e6307-8d80-4751-940f-4faa5bc41d82@huaweicloud.com>
+	s=arc-20240116; t=1710944407; c=relaxed/simple;
+	bh=U4PenDBB1njw1+W+z24TpzT7efnUyBjddFGh7Ku/DCs=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=dzy2juY3kuhA72FUgOkQVxvU9CoBdZBCRfRxOx/lNo/2r7iZLew1sB8ObK1pkPPHVlu3YYEjsq8cHc7hqECRKNIGQzGIsstcTj9dv5dHOGd8Kth+yDw+k8F5fFZV4BXe5wjjnwxR0xWyJMpBnS3MPlqzwZTgAJ6PHtInTnjY6wU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7cf265b30e2so2922139f.1
+        for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 07:20:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710944405; x=1711549205;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f1IUsR6kV07MDW8I1wx0WoXxXZKs91pAq00W+bBUR6M=;
+        b=loK3okhfKKRbQyx+599Ow24kx1WbP9wCTAwsCDKDZGnQ2Y4wclXzsp2O1V1NO4VE5q
+         RzKUxW2zelM0UigAWvHBxh4xd4+oXcsUZrgLohM91TxM+JRkjHT+1g8QgQtY7NEiIsdm
+         H6HseUhbYXFQ/U/PuPBDOHWvD9ihz5sa2peQILzguDLRo1egmPxWORJayko2eEKLUeB3
+         JNMaqdydXBInqhwkFn/BKJo0IExL8X0jynusw6O4ZkPowgR4EANfh1B+Rv+uyClhQmcZ
+         WuxbYsxHbzfPd3R+56PpNAaw8GgFzRtXeaVv+nMER4m0pKSwNwj9nZlGrSADkrNdfY/t
+         qvcA==
+X-Forwarded-Encrypted: i=1; AJvYcCUuBriWqVcQOZZCdFuE2kNtJvPBgTnijy2+GdOW3xtJcQ57VSFNyczB3Dnnnfp89e0XRpXmb2vdBdr03Jppra0cZhVK
+X-Gm-Message-State: AOJu0Yzsm/P2XsPaHy6TUUHQDRD/YkrEdm9xpfNVdpY3jcKJ/hrEIOGY
+	6aRuLgHsGuOfyaa0sBK+RETOkWcKBuXETu+F4jWlZmGDtMigYADRSASyyQ+trxkfT+jr94cROzV
+	AT7ow9cb6cgyoei38JcgN9O973DcARA1kHdqyVs0YPtfizW9cct2H12g=
+X-Google-Smtp-Source: AGHT+IEWPHrTc59k7P2wQWzcYopFmKG07JD0uCDKZoWRP8x0fTDj3ZrpQ0kLcy4ldIilE+R1PHKeJuAl3t17ypSJCNHgW+khmHGo
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ab5e6307-8d80-4751-940f-4faa5bc41d82@huaweicloud.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+X-Received: by 2002:a05:6602:1482:b0:7cc:66b1:fa95 with SMTP id
+ a2-20020a056602148200b007cc66b1fa95mr325628iow.3.1710944404652; Wed, 20 Mar
+ 2024 07:20:04 -0700 (PDT)
+Date: Wed, 20 Mar 2024 07:20:04 -0700
+In-Reply-To: <000000000000adb08b061413919e@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007866bb0614184925@google.com>
+Subject: Re: [syzbot] [bpf?] possible deadlock in trie_delete_elem
+From: syzbot <syzbot+9d95beb2a3c260622518@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, elic@nvidia.com, haoluo@google.com, 
+	hdanton@sina.com, jasowang@redhat.com, john.fastabend@gmail.com, 
+	jolsa@kernel.org, kafai@fb.com, kpsingh@kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@linux.dev, mst@redhat.com, 
+	netdev@vger.kernel.org, parav@nvidia.com, sdf@google.com, song@kernel.org, 
+	songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com, 
+	yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Mar 20, 2024 at 07:34:46PM +0800, Xu Kuohai wrote:
-> On 3/13/2024 10:02 PM, Artem Savkov wrote:
-> > Commit d63903bbc30c7 ("arm64: bpf: fix endianness conversion bugs")
-> > added upper bits zeroing to byteswap operations, but it assumes they
-> > will be already zeroed after rev32, which is not the case on some
-> > systems at least:
-> > 
-> > [ 9757.262607] test_bpf: #312 BSWAP 16: 0x0123456789abcdef -> 0xefcd jited:1 8 PASS
-> > [ 9757.264435] test_bpf: #313 BSWAP 32: 0x0123456789abcdef -> 0xefcdab89 jited:1 ret 1460850314 != -271733879 (0x5712ce8a != 0xefcdab89)FAIL (1 times)
-> > [ 9757.266260] test_bpf: #314 BSWAP 64: 0x0123456789abcdef -> 0x67452301 jited:1 8 PASS
-> > [ 9757.268000] test_bpf: #315 BSWAP 64: 0x0123456789abcdef >> 32 -> 0xefcdab89 jited:1 8 PASS
-> > [ 9757.269686] test_bpf: #316 BSWAP 16: 0xfedcba9876543210 -> 0x1032 jited:1 8 PASS
-> > [ 9757.271380] test_bpf: #317 BSWAP 32: 0xfedcba9876543210 -> 0x10325476 jited:1 ret -1460850316 != 271733878 (0xa8ed3174 != 0x10325476)FAIL (1 times)
-> > [ 9757.273022] test_bpf: #318 BSWAP 64: 0xfedcba9876543210 -> 0x98badcfe jited:1 7 PASS
-> > [ 9757.274721] test_bpf: #319 BSWAP 64: 0xfedcba9876543210 >> 32 -> 0x10325476 jited:1 9 PASS
-> > 
-> > Fixes: d63903bbc30c7 ("arm64: bpf: fix endianness conversion bugs")
-> > Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> > ---
-> >   arch/arm64/net/bpf_jit_comp.c | 3 ++-
-> >   1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> > index c5b461dda4385..e86e5ba74dca2 100644
-> > --- a/arch/arm64/net/bpf_jit_comp.c
-> > +++ b/arch/arm64/net/bpf_jit_comp.c
-> > @@ -944,7 +944,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
-> >   			break;
-> >   		case 32:
-> >   			emit(A64_REV32(is64, dst, dst), ctx);
-> > -			/* upper 32 bits already cleared */
-> > +			/* zero-extend 32 bits into 64 bits */
-> > +			emit(A64_UXTW(is64, dst, dst), ctx);
-> 
-> I think the problem only occurs when is64 == 1. In this case, the generated rev32
-> insn reverses byte order in both high and low 32-bit word. To fix it, we could just
-> set the first arg to 0 for A64_REV32:
-> 
-> emit(A64_REV32(0, dst, dst), ctx);
-> 
-> No need to add an extra uxtw isnn.
+syzbot has bisected this issue to:
 
-I can confirm this approach fixes the test issue as well.
+commit a3c06ae158dd6fa8336157c31d9234689d068d02
+Author: Parav Pandit <parav@nvidia.com>
+Date:   Tue Jan 5 10:32:03 2021 +0000
 
-> 
-> >   			break;
-> >   		case 64:
-> >   			emit(A64_REV64(dst, dst), ctx);
-> 
-> 
+    vdpa_sim_net: Add support for user supported devices
 
--- 
- Artem
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1626def1180000
+start commit:   f6e922365faf xsk: Don't assume metadata is always requeste..
+git tree:       bpf
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1526def1180000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1126def1180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6fb1be60a193d440
+dashboard link: https://syzkaller.appspot.com/bug?extid=9d95beb2a3c260622518
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14115c6e180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124fd231180000
 
+Reported-by: syzbot+9d95beb2a3c260622518@syzkaller.appspotmail.com
+Fixes: a3c06ae158dd ("vdpa_sim_net: Add support for user supported devices")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
