@@ -1,116 +1,104 @@
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+Received: from out199-13.us.a.mail.aliyun.com (out199-13.us.a.mail.aliyun.com [47.90.199.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5131210FE
-	for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 07:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8033381AA;
+	Wed, 20 Mar 2024 08:12:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.199.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710919829; cv=none; b=CyTcMRFuXFP/WOuU4i7lDKphwV8pr0zU39XoHzpZ7hdpstQVxOrRAP31W7UqZP8btqJfblW6m3dSlc85zIU+aHTGCGI2tdGeHxWq/7fy/6lIV5x8gMAo89+2abP3+mhNuKRyeGcWWKtx0i3mWWxpZUoE8+T5ziqco/wSBeUvHYQ=
+	t=1710922351; cv=none; b=UxYGRFthWnlEK1BfDPjM4HHl/lo7YtbmXsRhTknEPTmC4Rbr1xn3aotXggUwUDg5FWuMyJB9sNqiYKPsYxZwUKDjp4rGaH0cwiVPdzVZf840RM66OQvbGG9BexEX/gzDkuoRMN9AT02dhkm8tyac2rm6ZDU0Ty6SKl1ml7QLFq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710919829; c=relaxed/simple;
-	bh=2ROv1GJ5AGVwHAmuJlmT49x+qPwpZZF2PlyQYtwg5dk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d71ZxuwppZC96lEWyo9F5YebsVK58SiLe7qJAR2Tqa6Q0G4RVI5p7bXdjtD4TEXjnpWLzbruvfNdBSVTRcIuaYuPKFV6rYkEAw27DhjVL7Jnx8A4Qwugj0HdoSNT8ZCWJ0kIuMjkps+FlNFxqh0grKlL5RxCYkIzs/6Vrv/FPFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
-Received: from fsav117.sakura.ne.jp (fsav117.sakura.ne.jp [27.133.134.244])
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 42K7UOJq005451;
-	Wed, 20 Mar 2024 16:30:24 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav117.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav117.sakura.ne.jp);
- Wed, 20 Mar 2024 16:30:24 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav117.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-	(authenticated bits=0)
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 42K7UOVc005448
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-	Wed, 20 Mar 2024 16:30:24 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <dd264bf7-821b-4cf4-802b-60ae3c7b83bd@I-love.SAKURA.ne.jp>
-Date: Wed, 20 Mar 2024 16:30:24 +0900
+	s=arc-20240116; t=1710922351; c=relaxed/simple;
+	bh=2Oq8Uun0tT2JiU0cIwoDYug7ugm+rPl/BjiEmuLGDr0=;
+	h=Message-ID:Subject:Date:From:To:Cc:References:In-Reply-To; b=JIx8mDh+tkRNnCA/7OQqtLjoVvyb71rQMsHHRFbkyGFvmrkLwJfYuJUr6HSaQpwU/sOsCuDGT8+2BQRQBXeWFukqalmFmuQq7aLE5jwibpHE6XHqIG6fqGmXaIdTxOhtz+1KqB9RXQtWkWrtoeKZUlPHvyiv6B/uxvICHEyF9R4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=xMent+6C; arc=none smtp.client-ip=47.90.199.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="xMent+6C"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1710922330; h=Message-ID:Subject:Date:From:To;
+	bh=2Oq8Uun0tT2JiU0cIwoDYug7ugm+rPl/BjiEmuLGDr0=;
+	b=xMent+6Cd0amDN0wtKwklPgyJhlNIoFx6MSRQON91LDq2g5OKr6deJxXA3vidOjc633ypmu/UbSwIZ4RfKOPROmhzvCf6fyePC5hxGvKlK8GN0RRFhb/AUVvSUpDYouo1EE+vzwo75XY9m69LQNr58caAIV4QFOT7Oh4bXl4rVo=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0W2wfq-K_1710922327;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W2wfq-K_1710922327)
+          by smtp.aliyun-inc.com;
+          Wed, 20 Mar 2024 16:12:08 +0800
+Message-ID: <1710921861.9268863-1-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH net-next v5 0/9] virtio-net: support device stats
+Date: Wed, 20 Mar 2024 16:04:21 +0800
+From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org,
+ "David S. Miller" <davem@davemloft.net>,
+ Eric  Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>,
+ "Michael  S. Tsirkin" <mst@redhat.com>,
+ Jason Wang <jasowang@redhat.com>,
+ Alexei  Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@google.com>,
+ Amritha  Nambiar <amritha.nambiar@intel.com>,
+ Larysa Zaremba <larysa.zaremba@intel.com>,
+ Sridhar Samudrala <sridhar.samudrala@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ virtualization@lists.linux.dev,
+ bpf@vger.kernel.org,
+ Jiri Pirko <jiri@resnulli.us>
+References: <20240318110602.37166-1-xuanzhuo@linux.alibaba.com>
+ <Zfgq8k2Q-olYWiuw@nanopsycho>
+ <1710762818.1520293-1-xuanzhuo@linux.alibaba.com>
+ <ZfgxSug4sekWGyNd@nanopsycho>
+ <316ea06417279a45d2d54bf4cc4afd2d775b419a.camel@redhat.com>
+In-Reply-To: <316ea06417279a45d2d54bf4cc4afd2d775b419a.camel@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [syzbot] [kernel?] possible deadlock in console_flush_all (2)
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: syzbot <syzbot+f78380e4eae53c64125c@syzkaller.appspotmail.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness
- <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-References: <000000000000e40a2906072e9567@google.com>
- <ab273ae2-80ec-45da-910a-e74298c71d50@I-love.SAKURA.ne.jp>
- <CAADnVQLmLMt2bF9aAB26dtBCvy2oUFt+AAKDRgTTrc7Xk_zxJQ@mail.gmail.com>
- <596aad11-ee69-4ef1-b945-7b67a9fb22d7@I-love.SAKURA.ne.jp>
- <CAADnVQL6Q3k0+-5X3Xjov7W_xESxkmVXcsCxQRWitQvhTBsf7A@mail.gmail.com>
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <CAADnVQL6Q3k0+-5X3Xjov7W_xESxkmVXcsCxQRWitQvhTBsf7A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On 2024/03/20 16:12, Alexei Starovoitov wrote:
-> On Wed, Mar 20, 2024 at 12:05 AM Tetsuo Handa
-> <penguin-kernel@i-love.sakura.ne.jp> wrote:
->>
->> On 2024/03/20 15:56, Alexei Starovoitov wrote:
->>> This has nothing to do with bpf.
->>> bpf never calls printk().
->>
->> Please see the Sample crash report in the dashboard.
->> bpf program is hitting printk() via report_bug().
-> 
-> Exactly. local_bh_neable is simply asking for a splat.
-> _this_ bug is in printk.
-> It's a generic issue.
+On Tue, 19 Mar 2024 11:12:23 +0100, Paolo Abeni <pabeni@redhat.com> wrote:
+> On Mon, 2024-03-18 at 13:19 +0100, Jiri Pirko wrote:
+> > Mon, Mar 18, 2024 at 12:53:38PM CET, xuanzhuo@linux.alibaba.com wrote:
+> > > On Mon, 18 Mar 2024 12:52:18 +0100, Jiri Pirko <jiri@resnulli.us> wrote:
+> > > > Mon, Mar 18, 2024 at 12:05:53PM CET, xuanzhuo@linux.alibaba.com wrote:
+> > > > > As the spec:
+> > > > >
+> > > > > https://github.com/oasis-tcs/virtio-spec/commit/42f389989823039724f95bbbd243291ab0064f82
+> > > > >
+> > > > > The virtio net supports to get device stats.
+> > > > >
+> > > > > Please review.
+> > > >
+> > > > net-next is closed. Please resubmit next week.
+> > >
+> > >
+> > > For review.
+> >
+> > RFC, or wait.
+>
+> @Xuan, please note that you received exactly the same feedback on your
+> previous submission, a few days ago. While I do understand the legit
+> interest in reviews, ignoring explicit feedback tend to bring no
+> feedback at all.
 
-I can't catch. printk() is called due to report_bug().
+Sorry.
 
-If the reason report_bug() is called is that spin_unlock_bh() is bad,
-this is a bug in sock_map_delete_elem() rather than a bug in printk(), isn't it.
+I have a question regarding the workflow for feature discussions. If we
+consistently engage in discussions about a particular feature, this may result
+in the submission of multiple patch sets. In light of this, should we modify the
+usage of "PATCH" or "RFC" in our submissions depending on whether the merge
+window is open or closed? This causes the title of our patch sets to keep
+changing.
 
-> 
-> sockmap bug is orthogonal.
-> It's already being looked at.
+Or I miss something.
 
-Then, can we expect that this bug is also fixed shortly?
 
-> 
->> -> #0 (console_owner){....}-{0:0}:
->>        check_prev_add kernel/locking/lockdep.c:3134 [inline]
->>        check_prevs_add kernel/locking/lockdep.c:3253 [inline]
->>        validate_chain+0x18cb/0x58e0 kernel/locking/lockdep.c:3869
->>        __lock_acquire+0x1346/0x1fd0 kernel/locking/lockdep.c:5137
->>        lock_acquire+0x1e4/0x530 kernel/locking/lockdep.c:5754
->>        console_lock_spinning_enable kernel/printk/printk.c:1873 [inline]
->>        console_emit_next_record kernel/printk/printk.c:2901 [inline]
->>        console_flush_all+0x810/0xfd0 kernel/printk/printk.c:2973
->>        console_unlock+0x13b/0x4d0 kernel/printk/printk.c:3042
->>        vprintk_emit+0x5a6/0x770 kernel/printk/printk.c:2342
->>        _printk+0xd5/0x120 kernel/printk/printk.c:2367
->>        __report_bug lib/bug.c:195 [inline]
->>        report_bug+0x346/0x500 lib/bug.c:219
->>        handle_bug+0x3e/0x70 arch/x86/kernel/traps.c:239
->>        exc_invalid_op+0x1a/0x50 arch/x86/kernel/traps.c:260
->>        asm_exc_invalid_op+0x1a/0x20 arch/x86/include/asm/idtentry.h:621
->>        __local_bh_enable_ip+0x1be/0x200 kernel/softirq.c:362
->>        spin_unlock_bh include/linux/spinlock.h:396 [inline]
->>        __sock_map_delete net/core/sock_map.c:424 [inline]
->>        sock_map_delete_elem+0xca/0x140 net/core/sock_map.c:446
->>        bpf_prog_2c29ac5cdc6b1842+0x42/0x46
->>        bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
->>        __bpf_prog_run include/linux/filter.h:657 [inline]
->>        bpf_prog_run include/linux/filter.h:664 [inline]
+Thanks.
 
+
+>
+> Paolo
+>
