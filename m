@@ -1,69 +1,83 @@
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C5F7464;
-	Wed, 20 Mar 2024 01:55:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 141181364
+	for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 01:59:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710899747; cv=none; b=j1ux75H00ZGn568bArRo7hIr0RXr8rDRWRG4/GUkaM3S4AnXB3GTUbe6pQAcyq68e9TEDhy+xLbOwnlJgJOw85tBwPm0EAA2A9wtF7+YSIFngtZObg8ydb/iA2NpwhUkK5yF56j7Az5dKi/GXesAQvWmsbrgsV/GnNiUq9kwzK8=
+	t=1710899955; cv=none; b=ke+tZgdNm/3X2ZHMAXydMywMxwfir9NtsiHzS1iUOojYpmjnqAjIzJ496CeI1BkCPzDPDhDn+e5CPbPFQyKzTWJjfzbk4VNtNMo80NX48bnx483PGSMVMDb0vy+g+Xo6+hMACeCYOKWPB+ac/xh/1+ux1XCW16RKTbah5Bhdt8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710899747; c=relaxed/simple;
-	bh=qwt+oskm3Z2QuQGEi1X58ZXLsbjWCY5LeBU+rkFRJNo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oJzZ9nDXnqNiqxBycIxRnrZkOoLZUoQfxy3Nwfd7Xhgj7hrS7my7t2e6pQ7ogHBbKzikgo4Q6TZ7geQgD7Lx2DY3b9IakXnMIujdzc32K5JByoOk5Dkx2NLbuxMbe3Bp3+QSiWSWNcZGkhucG2khhs76HlkqV5sHl8914DANX0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=qkk7Gjde; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1710899955; c=relaxed/simple;
+	bh=JuXcXYBR9nr16CjwKKjTP7TprArnVEEBIfgHn4nqKBI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=KC4UtEazzmMXou4VL7eWeDbsTdG+PQJSqUwaKJbY3vq+Pz2IqAXuesJEoJwl/4lzY2dPWYPpTR/hgEUvaosdiZZY59CNioMohZTZvuJ9lpKpTvaArgQU2XKLZofHiuYghs9wMPgtoHmzyVwhhC1CVsI7YwQ8e80O4+xXjs6S0+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=g4dyr7VH; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qkk7Gjde"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="g4dyr7VH"
 Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42K1MTJB010884;
-	Wed, 20 Mar 2024 01:55:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=e1GgvWldc0x8EPUNZOz226pGr0ULfy4oaScrjoI1974=;
- b=qkk7GjdeDkeqo02lxIZNO2CawBpKs8FVOYX4C4jTqeDc8b/zGA/d0mAm6UbeJUuWOI9+
- G9XCOlqmfDukm9MzxSLomdNPnM/NcbnpwI/5aC4AM/sBEnMGWOKjw8XfvBWbI1xSgQmM
- lENP7OrV6ibK5Y8AHXQI84C7do1BJXk/9rrSHA2rFPA6xfL8hrSWcwXuZ6W2RF/6UJdd
- VAXP98qwf2Yn7nXGXKlQjCw0sPTmf7jUXbem5+KOTKD5MOwbUaN2ymQVjjVF8/H5fcP/
- 0NjiYOSbsIH520uJYi+S5VAM6OE9Nw3zPeOlHGnZC+RYzmW6S0gsYipS4CxNpX0qZzPe Nw== 
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wyp2u01dc-1
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42K1Ma7s010934;
+	Wed, 20 Mar 2024 01:59:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=MM5UX4HSKlHWhog/B5uTPyRpaYSc1z8GzuZGrpnltzc=;
+ b=g4dyr7VHcL4wZj9iMnpPUX2e+yWkrnKp06oBUKvXFazHCXaVwZBUl31ehAcTFkXa6XmQ
+ JsHJ7/UnyOQSGT9NWZIZgbrsFo9jN81/dBhGiFcWBWY2U2Yw5IBSaSl87OuGlxuAhzib
+ rLpoksQHvXiCrEj0lbLkCja0m5rx8LvUXRqmL214TwjmsWgT/rnsgilUSJRR398R2E9n
+ svbK5eGV0s1jfB+Txy/snadPAUPpn+6Tyj1zBRKFD91ZSPWovZU04nmvXfXaZkTq89Od
+ GNQA/qgJat0H0GtjazQ4TG3qELwUDn68tfAppov+bFODgSUn/2Ya23pbrrKs7/pmPGoL 7A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wyp2u01m6-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 Mar 2024 01:55:26 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42JMnirg011606;
-	Wed, 20 Mar 2024 01:55:24 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wwq8m3a2a-1
+	Wed, 20 Mar 2024 01:59:08 +0000
+Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42K1x8in005707;
+	Wed, 20 Mar 2024 01:59:08 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wyp2u01m2-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 Mar 2024 01:55:24 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42K1tJ9744499380
+	Wed, 20 Mar 2024 01:59:08 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42K0r2Ct017218;
+	Wed, 20 Mar 2024 01:59:07 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wwnrtbp1m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 20 Mar 2024 01:59:07 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42K1x2Z826739264
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 20 Mar 2024 01:55:21 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E2F9F2004B;
-	Wed, 20 Mar 2024 01:55:18 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 661342005A;
-	Wed, 20 Mar 2024 01:55:18 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.171.51.201])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 20 Mar 2024 01:55:18 +0000 (GMT)
+	Wed, 20 Mar 2024 01:59:04 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 17EB72004D;
+	Wed, 20 Mar 2024 01:59:02 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9A24120040;
+	Wed, 20 Mar 2024 01:59:01 +0000 (GMT)
+Received: from heavy (unknown [9.171.51.201])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Wed, 20 Mar 2024 01:59:01 +0000 (GMT)
+Date: Wed, 20 Mar 2024 02:59:00 +0100
 From: Ilya Leoshkevich <iii@linux.ibm.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc: Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>, bpf@vger.kernel.org,
-        linux-s390@vger.kernel.org, Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf] s390/bpf: Fix bpf_plt pointer arithmetic
-Date: Wed, 20 Mar 2024 02:54:12 +0100
-Message-ID: <20240320015515.11883-1-iii@linux.ibm.com>
-X-Mailer: git-send-email 2.44.0
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Kui-Feng Lee <sinquersw@gmail.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>, bpf <bpf@vger.kernel.org>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: Re: Crash caused by 778666df60f0 ("s390: compile relocatable kernel
+ without -fPIE")
+Message-ID: <zltoaje3ekq44nvwkqc4aouoi5v2t4ayyd7hyyt5zgdoicrvuo@2ax4s7qlfont>
+References: <c9923c1d-971d-4022-8dc8-1364e929d34c@gmail.com>
+ <ig5bw37zznqrokjeyloobncubiy6bqxh6drszewjkby56y55by@o64a2x4zqo5v>
+ <CAADnVQJS=YkUVfLgGxVe7kH8x4i560Z1Zx7+cv1AiwMvspXWJQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAADnVQJS=YkUVfLgGxVe7kH8x4i560Z1Zx7+cv1AiwMvspXWJQ@mail.gmail.com>
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ujhJlRs8TOjuK96ZqDlTzSHxsAWwMSiu
-X-Proofpoint-ORIG-GUID: ujhJlRs8TOjuK96ZqDlTzSHxsAWwMSiu
+X-Proofpoint-GUID: mkDYGqnEg9UWxsQ5boBkPXyMaLSzE_hl
+X-Proofpoint-ORIG-GUID: DhSbzRBrHpPr4TpE2mhdmcx2M3FiazOa
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
@@ -77,158 +91,122 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  definitions=2024-03-19_10,2024-03-18_03,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
  adultscore=0 mlxlogscore=999 spamscore=0 mlxscore=0 suspectscore=0
- phishscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1011 bulkscore=0
+ phishscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1015 bulkscore=0
  impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2403140000 definitions=main-2403200012
+ engine=8.12.0-2403140000 definitions=main-2403200013
 
-Kui-Feng Lee reported a crash on s390x triggered by the
-dummy_st_ops/dummy_init_ptr_arg test [1]:
+On Mon, Mar 18, 2024 at 04:31:00PM -0700, Alexei Starovoitov wrote:
+> On Mon, Mar 18, 2024 at 1:38 PM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
+> >
+> > On Fri, Mar 15, 2024 at 09:59:52AM -0700, Kui-Feng Lee wrote:
+> > > Hi Josh, Sumath, and Heiko,
+> > >
+> > > Recently, all patches submitted to bpf have been failing the selftest
+> > > "dummy_st_ops/dummy_init_ptr_arg" on the s390x platform. Upon
+> > > investigation, it was determined that a specific patch, 778666df60f0
+> > > ("s390: compile relocatable kernel without -fPIE"), is causing the problem.
+> > > It is the first bad after bisecting. Please take a look.
+> > > Thank you!
+> > >
+> > > You can reproduce it by running the command
+> > >
+> > >     ./test_progs -a dummy_st_ops/dummy_init_ptr_arg
+> > >
+> > > in the tools/testing/selftests/bpf directory in the Linux source tree.
+> > > This command causes a kernel crash with the following messages. It
+> > > appears to be related to attaching a trace program at the fentry of a
+> > > struct_ops operator. The same operator works fine without the trace
+> > > program. For more details about the test case, please check
+> > > dummy_st_ops.c in tools/testing/selftests/bpf/prog_tests/.
+> > >
+> > > illegal operation: 0001 ilc:1 [#1] SMP
+> > > Modules linked in:
+> > > CPU: 0 PID: 82 Comm: test_progs Tainted: G           OE
+> > > 6.8.0-rc3-g778666df60f0 #34
+> > > Hardware name: QEMU 3906 QEMU (KVM/Linux)
+> > > Krnl PSW : 0704d00180000000 0000000000000002 (0x2)
+> > >            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:1 PM:0 RI:0 EA:3
+> > > Krnl GPRS: 000003ff800a4956 0000000000000000 0000038000a73d20
+> > > 0000000082a08b58
+> > >            0000000000000000 000000007083ede2 0000000000000000
+> > > 0000000000000001
+> > >            00000000009d580e 000000008286bc00 0000037f000000d8
+> > > 000003ff800b2000
+> > >            0000000081a43c00 00000000011bfe20 000003ff800b208e
+> > > 0000038000a73c68
+> > > Krnl Code:#0000000000000000: 0000               illegal
+> > >           >0000000000000002: 0000               illegal
+> > >            0000000000000004: 0000               illegal
+> > >            0000000000000006: 0000               illegal
+> > >            0000000000000008: 0000               illegal
+> > >            000000000000000a: 0000               illegal
+> > >            000000000000000c: 0000               illegal
+> > >            000000000000000e: 0000               illegal
+> > > Call Trace:
+> > >  [<0000000000000002>] 0x2
+> > >  [<00000000009d5cde>] bpf_struct_ops_test_run+0x156/0x250
+> > >  [<000000000033145a>] __sys_bpf+0xa1a/0xd00
+> > >  [<00000000003319dc>] __s390x_sys_bpf+0x44/0x50
+> > >  [<0000000000c4382c>] __do_syscall+0x244/0x300
+> > >  [<0000000000c59a40>] system_call+0x70/0x98
+> > > INFO: lockdep is turned off.
+> > > Last Breaking-Event-Address:
+> > >  [<000003ff800a49ac>] bpf_prog_83ebf4e90b071f2b_test_1+0x5c/0x70
+> > > Kernel panic - not syncing: Fatal exception: panic_on_oops
+> > >
+> > >
+> > > [1]
+> > > https://github.com/kernel-patches/bpf/actions/runs/8297891630/job/22710267571
+> >
+> > Hi,
+> >
+> > thanks for the report, I'm currently looking into it.
+> >
+> > The problem is that the following:
+> >
+> > static void bpf_jit_plt(void *plt, void *ret, void *target)
+> > {
+> >         memcpy(plt, bpf_plt, BPF_PLT_SIZE);
+> >         *(void **)((char *)plt + (bpf_plt_ret - bpf_plt)) = ret;
+> >         *(void **)((char *)plt + (bpf_plt_target - bpf_plt)) = target ?: ret;
+> > }
+> >
+> > is (mis)compiled to the following:
+> >
+> >    0x000000000017a26e <+238>:   stg     %r4,232(%r3,%r15)
+> >    0x000000000017a274 <+244>:   ltgr    %r11,%r11
+> >    0x000000000017a278 <+248>:   locgrne %r4,%r11
+> >    0x000000000017a27c <+252>:   stg     %r4,232(%r1,%r15)
+> >    0x000000000017a282 <+258>:   la      %r3,232(%r1,%r15)
+> >    0x000000000017a286 <+262>:   lghi    %r4,8
+> >    0x000000000017a28a <+266>:   mvc     232(16,%r15),0(%r2)
+> >    0x000000000017a290 <+272>:   mvc     248(16,%r15),16(%r2)
+> >
+> > Note that memcpy() and assignments are reordered, and this is causing
+> > the crash. The C code violates the strict aliasing rules, but this
+> > should be irrelevant for the kernel.
+> >
+> > The problem does not occur with the latest GCC. Bisect says that the
+> > following commit fixed it:
+> >
+> > commit 2e96b5f14e4025691b57d2301d71aa6092ed44bc
+> > Author: Aldy Hernandez <aldyh@redhat.com>
+> > Date:   Tue Jun 15 12:32:51 2021 +0200
+> >
+> >     Backwards jump threader rewrite with ranger.
+> >
+> > but I think that's accidental. The reordering is done by the sched1
+> > pass. I plan to find out why it thinks it's okay to reorder these
+> > memory accesses.
+> 
+> Wow. What a discovery.
+> Does this bug affect other architectures ?
+> Probably yes, since it's sched1 pass ?
+> Should we apply some workaround for now?
 
-  [<0000000000000002>] 0x2
-  [<00000000009d5cde>] bpf_struct_ops_test_run+0x156/0x250
-  [<000000000033145a>] __sys_bpf+0xa1a/0xd00
-  [<00000000003319dc>] __s390x_sys_bpf+0x44/0x50
-  [<0000000000c4382c>] __do_syscall+0x244/0x300
-  [<0000000000c59a40>] system_call+0x70/0x98
+I think it's because bpf_jit_plt() violates the C pointer subtraction
+rules (bpf_plt_ret and bpf_plt are different objects from the C
+perspective), so it should not affect the other architectures, unless
+they use the same pattern elsewhere.
 
-This is caused by GCC moving memcpy() after assignments in
-bpf_jit_plt(), resulting in NULL pointers being written instead of
-the return and the target addresses.
-
-Looking at the GCC internals, the reordering is allowed because the
-alias analysis thinks that the memcpy() destination and the assignments'
-left-hand-sides are based on different objects: new_plt and
-bpf_plt_ret/bpf_plt_target respectively, and therefore they cannot
-alias.
-
-This is in turn due to a violation of the C standard:
-
-  When two pointers are subtracted, both shall point to elements of the
-  same array object, or one past the last element of the array object
-  ...
-
-From the C's perspective, bpf_plt_ret and bpf_plt are distinct objects
-and cannot be subtracted. In the practical terms, doing so confuses the
-GCC's alias analysis.
-
-The code was written this way in order to let the C side know a few
-offsets defined in the assembly. While nice, this is by no means
-necessary. Fix the noncompliance by hardcoding these offsets.
-
-[1] https://lore.kernel.org/bpf/c9923c1d-971d-4022-8dc8-1364e929d34c@gmail.com/
-
-Fixes: f1d5df84cd8c ("s390/bpf: Implement bpf_arch_text_poke()")
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
----
- arch/s390/net/bpf_jit_comp.c | 46 ++++++++++++++++--------------------
- 1 file changed, 20 insertions(+), 26 deletions(-)
-
-diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index b418333bb086..5af0402e94b8 100644
---- a/arch/s390/net/bpf_jit_comp.c
-+++ b/arch/s390/net/bpf_jit_comp.c
-@@ -516,11 +516,12 @@ static void bpf_skip(struct bpf_jit *jit, int size)
-  * PLT for hotpatchable calls. The calling convention is the same as for the
-  * ftrace hotpatch trampolines: %r0 is return address, %r1 is clobbered.
-  */
--extern const char bpf_plt[];
--extern const char bpf_plt_ret[];
--extern const char bpf_plt_target[];
--extern const char bpf_plt_end[];
--#define BPF_PLT_SIZE 32
-+struct bpf_plt {
-+	char code[16];
-+	void *ret;
-+	void *target;
-+} __packed;
-+extern const struct bpf_plt bpf_plt;
- asm(
- 	".pushsection .rodata\n"
- 	"	.balign 8\n"
-@@ -531,15 +532,14 @@ asm(
- 	"	.balign 8\n"
- 	"bpf_plt_ret: .quad 0\n"
- 	"bpf_plt_target: .quad 0\n"
--	"bpf_plt_end:\n"
- 	"	.popsection\n"
- );
- 
--static void bpf_jit_plt(void *plt, void *ret, void *target)
-+static void bpf_jit_plt(struct bpf_plt *plt, void *ret, void *target)
- {
--	memcpy(plt, bpf_plt, BPF_PLT_SIZE);
--	*(void **)((char *)plt + (bpf_plt_ret - bpf_plt)) = ret;
--	*(void **)((char *)plt + (bpf_plt_target - bpf_plt)) = target ?: ret;
-+	memcpy(plt, &bpf_plt, sizeof(*plt));
-+	plt->ret = ret;
-+	plt->target = target;
- }
- 
- /*
-@@ -662,9 +662,9 @@ static void bpf_jit_epilogue(struct bpf_jit *jit, u32 stack_depth)
- 	jit->prg = ALIGN(jit->prg, 8);
- 	jit->prologue_plt = jit->prg;
- 	if (jit->prg_buf)
--		bpf_jit_plt(jit->prg_buf + jit->prg,
-+		bpf_jit_plt((struct bpf_plt *)(jit->prg_buf + jit->prg),
- 			    jit->prg_buf + jit->prologue_plt_ret, NULL);
--	jit->prg += BPF_PLT_SIZE;
-+	jit->prg += sizeof(struct bpf_plt);
- }
- 
- static int get_probe_mem_regno(const u8 *insn)
-@@ -2040,9 +2040,6 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
- 	struct bpf_jit jit;
- 	int pass;
- 
--	if (WARN_ON_ONCE(bpf_plt_end - bpf_plt != BPF_PLT_SIZE))
--		return orig_fp;
--
- 	if (!fp->jit_requested)
- 		return orig_fp;
- 
-@@ -2148,14 +2145,11 @@ bool bpf_jit_supports_far_kfunc_call(void)
- int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 		       void *old_addr, void *new_addr)
- {
-+	struct bpf_plt expected_plt, current_plt, new_plt, *plt;
- 	struct {
- 		u16 opc;
- 		s32 disp;
- 	} __packed insn;
--	char expected_plt[BPF_PLT_SIZE];
--	char current_plt[BPF_PLT_SIZE];
--	char new_plt[BPF_PLT_SIZE];
--	char *plt;
- 	char *ret;
- 	int err;
- 
-@@ -2174,18 +2168,18 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 		 */
- 	} else {
- 		/* Verify the PLT. */
--		plt = (char *)ip + (insn.disp << 1);
--		err = copy_from_kernel_nofault(current_plt, plt, BPF_PLT_SIZE);
-+		plt = ip + (insn.disp << 1);
-+		err = copy_from_kernel_nofault(&current_plt, plt,
-+					       sizeof(current_plt));
- 		if (err < 0)
- 			return err;
- 		ret = (char *)ip + 6;
--		bpf_jit_plt(expected_plt, ret, old_addr);
--		if (memcmp(current_plt, expected_plt, BPF_PLT_SIZE))
-+		bpf_jit_plt(&expected_plt, ret, old_addr);
-+		if (memcmp(&current_plt, &expected_plt, sizeof(current_plt)))
- 			return -EINVAL;
- 		/* Adjust the call address. */
--		bpf_jit_plt(new_plt, ret, new_addr);
--		s390_kernel_write(plt + (bpf_plt_target - bpf_plt),
--				  new_plt + (bpf_plt_target - bpf_plt),
-+		bpf_jit_plt(&new_plt, ret, new_addr);
-+		s390_kernel_write(&plt->target, &new_plt.target,
- 				  sizeof(void *));
- 	}
- 
--- 
-2.44.0
-
+So I posted a patch fixing this in bpf_jit_plt().
