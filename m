@@ -1,151 +1,178 @@
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 518E038DC0
-	for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 08:34:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 107F138F87
+	for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 08:42:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710923657; cv=none; b=TBD+Ae32b4WYwILF/yqpMUgwNL0gF2EPjYndTRqylOfLGPniKDZi00XdphqC3GDl6QPT/1Neth1CLhXj0hp2+dgaZ9uWYd0lrT/oWQBvx4JuMc1MD4BeUzgoMCI7BrwTAHCgXiR9/UAlzD64nO1z1jhR4MyVoZ0VzrJ/c2S/63w=
+	t=1710924143; cv=none; b=Us8AEMFzfYmpxkM7yh3zeGrmPS2qArUxyOVzwK/LpaCafBO9I+QrOTvnj1ulagr/4ldCkzduz3AUOpsZmJRtMq2koMa+Uo4WMS6fvLlvcXzDMMDH++Wx8uudyZR3u5NZUTXlbYBN2tr/vrd5P+D4SjngUVF6b4+NbVk1ezdEFYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710923657; c=relaxed/simple;
-	bh=x2/JS1PipRqIAQdBnHtQ/Lnn44o7sAnzzdZI5eF1158=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vB4cEjCMExMN8OIviPyYn+EbriOYw2BvIjNmnPHI73Mmv66plpofFey2gPM2a55saVSP1lKf9jrJAtgZZOXEIFNDXk61s8oslMnx3D2PFa6dLQfa2LDKAGVqdPLVrz+RsKomoLM4HCu4Q3pY9upCNYyQLLIiRHiKIzIizga091w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BAiFQOgs; arc=none smtp.client-ip=209.85.208.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BAiFQOgs"
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2d094bc2244so87604061fa.1
-        for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 01:34:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710923653; x=1711528453; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oCfGvKEfJR5Jks4nqNQHSwFBppJg5/9jMlRRQa7P4qk=;
-        b=BAiFQOgsigP/Gf2tQHhonan7KCKv8oS+ldGj8q4TnTP3oPZFA3/tMEYFhmADD4+9sJ
-         28umc4lHGdpxSg1eWkZiG3mLvVtYz6SzFBaFvr19SJmsmGYBxwbkirczrbF/TdNF8Iv9
-         x/SdcWnPGQ8Cydf2uPdF07oZmHtWEq+xFPqeP87+8Hr7yWkUr9FetMZ8LS/FWrejA5ix
-         TIJ3YirIsqllbIkxD4xzTCy6Nti0NcMyR6QNe5GoOOp3H6q9gDPLBJ1NE13tUAnrrI8y
-         4SVfu4pEFdpZ55yzgrJoSgC4P5wjchaYyGwxuAAgveuQ7lpJ2OyBCg71PPth8vh8unv1
-         XiNg==
+	s=arc-20240116; t=1710924143; c=relaxed/simple;
+	bh=8R+8pHHqfT6dtAXr0gKaDFBoW2z/4w8pmg1sze2cRDE=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=e80Xh6R39LJIFwJQONdEAm1u+4D6TAp94jN4YNYMCnhG9FGepNEKzLZEV1Mq1xBr4ycOLRjaqqUSvZyVNK/ZZ2L34zG/Whwt7ATx4xH/pDmYXyiDZZLfhsnjpjHZxXzUr+bLtDmwTHX8QZ8LnGW9QnKECAcr38DspQq0s690Mks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7cbf1ea053cso565033239f.1
+        for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 01:42:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710923653; x=1711528453;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oCfGvKEfJR5Jks4nqNQHSwFBppJg5/9jMlRRQa7P4qk=;
-        b=Ix0Pb6iWwU46/dFYoAAf5+tXz8PEWptVCAFsIQcUA+YkX/ks7mtAfcl18QdpmOg/XV
-         oeK9D8tRYagq3vUBb9xnR6WioGLbMKt5W1/Z1DyLfXcwG6zKkGqUDcdkxS+3MNOdSxsu
-         U79mzR7ldv3k2rf6AgR50EEQvRZeXOU0n0fLOnzkFXHyJjvy4THIraFHZd6tEn7QVTLr
-         EX+C/yE5wvHaEFJsOQrwZaEUQ+CZvfWtj2A+QXFlVhTYCog/P5u5Zh2JROqQr5AmaeuF
-         jui2Flu5RkOf4EQwEpH4JH25uWt5woe3QYhPTgvzmw/iTOznykQOHbu22zPpjF7WlLdm
-         WzHw==
-X-Forwarded-Encrypted: i=1; AJvYcCXNtmHkletYhbTgSBB9LgTARd7B5gQSHy1JFEGLqFqbtoFO/8tyg5x9A6oinUMX9q0KeIfK0ZLtROWCGO+pieURfdja
-X-Gm-Message-State: AOJu0YxJ3YMfQjYLFbSCJbEO7WCh3zF6uRV79a0IKuAuGLrmfcg0dmHc
-	jMcGB6sI0fFl+zK0z9Hw0rpiqZLlN948m+hDXCux8RIkFLFHYCQl
-X-Google-Smtp-Source: AGHT+IF8KqI/ceVP79UlTjPH4d0nM1ljjanij72Sq/9rYB+Fo1hiBH5TS2dz/3jkoNjLrhJl+QQHnw==
-X-Received: by 2002:a2e:a99d:0:b0:2d4:ad34:85a7 with SMTP id x29-20020a2ea99d000000b002d4ad3485a7mr4103769ljq.29.1710923653214;
-        Wed, 20 Mar 2024 01:34:13 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id p5-20020a05600c468500b004132ae838absm1458239wmo.43.2024.03.20.01.34.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Mar 2024 01:34:12 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 20 Mar 2024 09:34:10 +0100
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	ast@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org,
-	kernel-team@meta.com, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH bpf-next] bpf: avoid get_kernel_nofault() to fetch kprobe
- entry IP
-Message-ID: <Zfqfgn6lqwRCFQaD@krava>
-References: <20240319212013.1046779-1-andrii@kernel.org>
- <20240320124742.5652f47b8f6dfea24cf84ce9@kernel.org>
+        d=1e100.net; s=20230601; t=1710924141; x=1711528941;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NJo9BSMocNALtvqQ2QnVDTeK7qub3h9dTxH7whp8/KQ=;
+        b=Bgn6dOCX7dp5HJPY7nT6dAJe1aO3wBCVmLb7gq6NfsoxRHba+wwWLcd8S5ZPX6ZYb8
+         GwnuyO59WURhG5VR+zkkcsmETqGvm0q3fWk8nsi4I9W5/HBBje9QEU2wnYA7UfXpzLIm
+         +8svVWotTAxN2JgglU+5RfZ6JAC2KeXlMWzLYwXcZxTBN+8cFXjO7c2aCIF9+plmelZJ
+         j44eLAWHyuSeqwrlPav/CrXS/QT7T+dpL8MIg/DY8C3FdGrNC4RITXzCayaTXt8scL9w
+         qjWg4kDoPpS0grxr6Ys5ebMRbAqx9fC0cnZRT5sSwY5EqTD1J73fbssh/ltPadyoirIM
+         Ylpg==
+X-Forwarded-Encrypted: i=1; AJvYcCXMdSZy9/SONpNEiWTJqHO90kCvCqccj99yn9fVU2BTUb2NW6qSmEL79Mt/l/QbQU3rLuqbkrm6J3ifuix9dzBgXLc3
+X-Gm-Message-State: AOJu0YzueUb1ENLBuexM7E4vL3OcJQIk4p0+eDBdkXLqkcfHlHNkFGlF
+	xUuaphnrk+ufalkKNCQc/gS+sBCTFl6VBGZpI/nwOe5bl/1Oqzdkv2ZZix7/XTMv/KxIKSTEONA
+	pOZiKqugA6OCIA9VCPvLk55WJ8TTy33WAviyjoNELDOa13jhh1OsANxo=
+X-Google-Smtp-Source: AGHT+IE8rm6ifnv6lm3IfjiUY9+6ygJXGx10rSs/4NCR1KNIV2sbKI51XbpmOF1XIjF0HS4Vh23mGFNbU5io2OjBIySQZJemnvJd
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240320124742.5652f47b8f6dfea24cf84ce9@kernel.org>
+X-Received: by 2002:a05:6638:13c3:b0:474:fce1:3f8c with SMTP id
+ i3-20020a05663813c300b00474fce13f8cmr259145jaj.6.1710924141272; Wed, 20 Mar
+ 2024 01:42:21 -0700 (PDT)
+Date: Wed, 20 Mar 2024 01:42:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000adb08b061413919e@google.com>
+Subject: [syzbot] [bpf?] possible deadlock in trie_delete_elem
+From: syzbot <syzbot+9d95beb2a3c260622518@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@linux.dev, netdev@vger.kernel.org, 
+	sdf@google.com, song@kernel.org, syzkaller-bugs@googlegroups.com, 
+	yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Mar 20, 2024 at 12:47:42PM +0900, Masami Hiramatsu wrote:
-> On Tue, 19 Mar 2024 14:20:13 -0700
-> Andrii Nakryiko <andrii@kernel.org> wrote:
-> 
-> > get_kernel_nofault() (or, rather, underlying copy_from_kernel_nofault())
-> > is not free and it does pop up in performance profiles when
-> > kprobes are heavily utilized with CONFIG_X86_KERNEL_IBT=y config.
-> > 
-> > Let's avoid using it if we know that fentry_ip - 4 can't cross page
-> > boundary. We do that by masking lowest 12 bits and checking if they are
-> > >= 4, in which case we can do direct memory read.
-> > 
-> > Another benefit (and actually what caused a closer look at this part of
-> > code) is that now LBR record is (typically) not wasted on
-> > copy_from_kernel_nofault() call and code, which helps tools like
-> > retsnoop that grab LBR records from inside BPF code in kretprobes.
+Hello,
 
-I think this is nice improvement
+syzbot found the following issue on:
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+HEAD commit:    32fa4366cc4d net: phy: fix phy_read_poll_timeout argument ..
+git tree:       net
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=16f5d769180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6fb1be60a193d440
+dashboard link: https://syzkaller.appspot.com/bug?extid=9d95beb2a3c260622518
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14572985180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1676fc6e180000
 
-> 
-> Hmm, we may better to have this function in kprobe side and
-> store a flag which such architecture dependent offset is added.
-> That is more natural.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/bb05871df8fc/disk-32fa4366.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a774323fb6ec/vmlinux-32fa4366.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1742ae20d76c/bzImage-32fa4366.xz
 
-I like the idea of new flag saying the address was adjusted for endbr
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9d95beb2a3c260622518@syzkaller.appspotmail.com
 
-kprobe adjust the address in arch_adjust_kprobe_addr, it could be
-easily added in there and then we'd adjust the address in get_entry_ip
-accordingly
+============================================
+WARNING: possible recursive locking detected
+6.8.0-syzkaller-05242-g32fa4366cc4d #0 Not tainted
+--------------------------------------------
+syz-executor217/5072 is trying to acquire lock:
+ffff88802a0fd9f8 (&trie->lock){....}-{2:2}, at: trie_delete_elem+0x96/0x6a0 kernel/bpf/lpm_trie.c:451
 
-jirka
+but task is already holding lock:
+ffff88802a0fc9f8 (&trie->lock){....}-{2:2}, at: trie_update_elem+0xcb/0xc10 kernel/bpf/lpm_trie.c:324
 
-> 
-> Thanks!
-> 
-> > 
-> > Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > ---
-> >  kernel/trace/bpf_trace.c | 12 +++++++++---
-> >  1 file changed, 9 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index 0a5c4efc73c3..f81adabda38c 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> > @@ -1053,9 +1053,15 @@ static unsigned long get_entry_ip(unsigned long fentry_ip)
-> >  {
-> >  	u32 instr;
-> >  
-> > -	/* Being extra safe in here in case entry ip is on the page-edge. */
-> > -	if (get_kernel_nofault(instr, (u32 *) fentry_ip - 1))
-> > -		return fentry_ip;
-> > +	/* We want to be extra safe in case entry ip is on the page edge,
-> > +	 * but otherwise we need to avoid get_kernel_nofault()'s overhead.
-> > +	 */
-> > +	if ((fentry_ip & ~PAGE_MASK) < ENDBR_INSN_SIZE) {
-> > +		if (get_kernel_nofault(instr, (u32 *)(fentry_ip - ENDBR_INSN_SIZE)))
-> > +			return fentry_ip;
-> > +	} else {
-> > +		instr = *(u32 *)(fentry_ip - ENDBR_INSN_SIZE);
-> > +	}
-> >  	if (is_endbr(instr))
-> >  		fentry_ip -= ENDBR_INSN_SIZE;
-> >  	return fentry_ip;
-> > -- 
-> > 2.43.0
-> > 
-> 
-> 
-> -- 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&trie->lock);
+  lock(&trie->lock);
+
+ *** DEADLOCK ***
+
+ May be due to missing lock nesting notation
+
+3 locks held by syz-executor217/5072:
+ #0: ffffffff8e131920 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:298 [inline]
+ #0: ffffffff8e131920 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:750 [inline]
+ #0: ffffffff8e131920 (rcu_read_lock){....}-{1:2}, at: bpf_map_update_value+0x3c4/0x540 kernel/bpf/syscall.c:202
+ #1: ffff88802a0fc9f8 (&trie->lock){....}-{2:2}, at: trie_update_elem+0xcb/0xc10 kernel/bpf/lpm_trie.c:324
+ #2: ffffffff8e131920 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:298 [inline]
+ #2: ffffffff8e131920 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:750 [inline]
+ #2: ffffffff8e131920 (rcu_read_lock){....}-{1:2}, at: __bpf_trace_run kernel/trace/bpf_trace.c:2380 [inline]
+ #2: ffffffff8e131920 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run4+0x16e/0x490 kernel/trace/bpf_trace.c:2422
+
+stack backtrace:
+CPU: 0 PID: 5072 Comm: syz-executor217 Not tainted 6.8.0-syzkaller-05242-g32fa4366cc4d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2e0 lib/dump_stack.c:106
+ check_deadlock kernel/locking/lockdep.c:3062 [inline]
+ validate_chain+0x15c1/0x58e0 kernel/locking/lockdep.c:3856
+ __lock_acquire+0x1346/0x1fd0 kernel/locking/lockdep.c:5137
+ lock_acquire+0x1e4/0x530 kernel/locking/lockdep.c:5754
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
+ trie_delete_elem+0x96/0x6a0 kernel/bpf/lpm_trie.c:451
+ bpf_prog_2c29ac5cdc6b1842+0x42/0x46
+ bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+ __bpf_prog_run include/linux/filter.h:657 [inline]
+ bpf_prog_run include/linux/filter.h:664 [inline]
+ __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+ bpf_trace_run4+0x25a/0x490 kernel/trace/bpf_trace.c:2422
+ trace_mm_page_alloc include/trace/events/kmem.h:177 [inline]
+ __alloc_pages+0x657/0x680 mm/page_alloc.c:4591
+ __alloc_pages_node include/linux/gfp.h:238 [inline]
+ alloc_pages_node include/linux/gfp.h:261 [inline]
+ __kmalloc_large_node+0x91/0x1f0 mm/slub.c:3926
+ __do_kmalloc_node mm/slub.c:3969 [inline]
+ __kmalloc_node+0x33c/0x4e0 mm/slub.c:3988
+ kmalloc_node include/linux/slab.h:610 [inline]
+ bpf_map_kmalloc_node+0xd3/0x1c0 kernel/bpf/syscall.c:422
+ lpm_trie_node_alloc kernel/bpf/lpm_trie.c:291 [inline]
+ trie_update_elem+0x1d3/0xc10 kernel/bpf/lpm_trie.c:333
+ bpf_map_update_value+0x4d3/0x540 kernel/bpf/syscall.c:203
+ map_update_elem+0x53a/0x6f0 kernel/bpf/syscall.c:1641
+ __sys_bpf+0x76f/0x810 kernel/bpf/syscall.c:5619
+ __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
+ __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5736
+ do_syscall_64+0xfb/0x240
+ entry_SYSCALL_64_after_hwframe+0x6d/0x75
+RIP: 0033:0x7f933485e7a9
+Code: 48 83 c4 28 c3 e8 37 17 00 00 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc8852b528 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
