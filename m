@@ -1,157 +1,162 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6BEB85C7F;
-	Wed, 20 Mar 2024 23:05:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 016AF8613E
+	for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 23:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710975953; cv=none; b=E9ioDgWIR5CqB4pc2wbMkcbplkW77M1JqeaJZGsS5TKLbQN8xKHAWRykBHLimVLW8dNzh2bbR040H0lj1XbHhtnHS9WoZMc143aoMQNpw7Q5oIhvD4g/IBmcG+VVGXtLuGNme+Zuf+3EoUkSNh75WFqownKRFxc9zx4n4vs2dKg=
+	t=1710978394; cv=none; b=MiJBUkyIDkKyvro1K9uK8+N8R1UanSVcqllHkZ55HyuEGC8WZWALapVH5kAL+33BiXdJL9OEO77JwS3o6EO1LNnstJEp8txwbASqv4acCzAqq7n9Y2vRuW4stalakbhvI94obxJKfKtps358kIy9/lX5FVBtFaSG2EalHOTd2DI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710975953; c=relaxed/simple;
-	bh=ELyhYMDZed5LfXvPYq9GtdT7SjQr8w1n1G6fOIXkz9Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KgG3CmcbROjQ9P+0q6r4yvs1qXDUIk/icrljYaQWTV1wbErdLkqOM2Bm85T9Um87+wOv/qtFQX8BUEt68SG6x3fRv/YGvBTAqR2xYYdKSx2Fy1/imVU22mXE7g61s8+7n0OxG3oSvGE9iRYzUBy4xMdvVo3alC6Fz/ibKLQm+m4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XHTaeHuw; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710978394; c=relaxed/simple;
+	bh=QYTlPGkjW39YGcH+/7qPEy3JR4nMT2fEp3Zpz2wl+no=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=H6qpZolo236OYtEsVsSQh3kU68dMe9fCWUEIpQg1qptA6nBBLe84nexJBxBZQ6C9EG4BARVRo3KDuxQeYbFt/LwggNzhd4kv1ZpH17c9tMYXYG3qhV73v12P117i6Dol2rpfU4jew2S8H77MxJ+eCHN5NqnrQ5ggsnbfSoXpBAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TAUaHBBp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XHTaeHuw"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3412f49bac7so239744f8f.0;
-        Wed, 20 Mar 2024 16:05:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710975950; x=1711580750; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yG+x+jaCoD6sMzDeeYBU8wB6RIeoBL6DiU2NzqQrX6g=;
-        b=XHTaeHuwsJJimootsiKCyw4pHycHMCWWEKXQ47rBaewttwFEi4Jpzb311wzMBkAPQb
-         iNIV/vdyC8jYLL2zn8YJPxL/7piVmJ/Viq0JchTIgir+nSVLc9i+QNYNNg13iDc//V8K
-         RCvBJ5sNqZ2/SCq60sV7E08vS5TMzagqUUoltSc+hvEdIKbkKwgkG/3bb8V9+rG0YR5V
-         pOD7MWwfoCaQMTxxZ3btVFpdqA/Ygrc7+CNtqr8ELIOb2Wi1L8zOeE6LUCUMwB/f/kIU
-         OzKD7TnYiSE0FSh6+AVjDEh90PAEiIIH9MOB3mFrmiZ2CiwJmpmUlIRSlLo7g7IGzhb/
-         u05Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710975950; x=1711580750;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yG+x+jaCoD6sMzDeeYBU8wB6RIeoBL6DiU2NzqQrX6g=;
-        b=Xr2X3Y/BaVvkVY8hkMCF481NoSGC8zkX2pjPlgXJZcjQ3jFzsdYaB08Zmez+jT+c0X
-         gvPRe5Js74GFzKw1whb7sWHrJnzdz2tN9VMW48jIUp/IUiMt8uE9vA4MKI7uGygzSypW
-         1ZQtvirqmMcRaXepQFIZdYOx7MwI84hf0PCcgQFgpRxkrsLmwrY3FRH+RHsXyCta1aXB
-         U24YTNJ7M89c6LIJ0MukZDqs0Sd9mTNRjGDO3fAjK4Bap+uvz/a1WAQT4dzaGXANc33W
-         Eck+ltG2sLrrW5uDvXzTPIE6wHldOzBYCrIUZIkOWbAbxXewcr9TB5JBgznPnIsaONRf
-         zOUg==
-X-Forwarded-Encrypted: i=1; AJvYcCWQPRr4E5fXRn4ExlbtxknUIfu8DSqxN8IpmQG24syCzcBO54kUDS0+mfiJvzM2mepY1YKBenkK6u+jW1aOOYw5TrIOrVnp/gPp9rnKlUtb0WEOWCqtzDnt9oqY37METbGkHcqNxf/o7hBXUMOHzVz34tUXmZUvjmhFIetb7khhy3MB
-X-Gm-Message-State: AOJu0YwtkDdnykpiKCItvNNqiGBc3ijkQsbgHRcPUJrVrZqjpCVGQ76w
-	Zmri6DWwI7i8H99Ux2vWsjNH4mlqs+rABbiaZ7qEbRypI3Opan9ANz4xlq2t3XLI/BNIrawMVvs
-	27gQOZNlMhnkQi+8oXnWB5IKnFBo=
-X-Google-Smtp-Source: AGHT+IHjpYfe2cpITcZt0Bmhy3zO3JabTkcQRk31hDBaFg0+bErKPWOGxypSYPor1TZYoSpm5/ECmKeYDVahQzcCwQU=
-X-Received: by 2002:adf:f9d0:0:b0:33e:c528:c900 with SMTP id
- w16-20020adff9d0000000b0033ec528c900mr293487wrr.55.1710975950002; Wed, 20 Mar
- 2024 16:05:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TAUaHBBp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A0CC433F1;
+	Wed, 20 Mar 2024 23:46:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710978393;
+	bh=QYTlPGkjW39YGcH+/7qPEy3JR4nMT2fEp3Zpz2wl+no=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=TAUaHBBpZ24DYS8DmlZkzjTcUTnD3CrZPAJrWs5h6PExIFlu81z1bHrQ8pdNFCP7w
+	 U/AD89nuhbIQnhzwASQ1LLQJNc4bqW1l2ND2U78fEDxZMOM8/0fiwnVF7PwxnLVOqV
+	 FRu6XwyTIKLoOmx+EoLBbObVep1bfqmLeWa5adLCK5UeBcWOoih/q4x4SkziQLVBzy
+	 TimtB89A0msWduP1pzP9eXCLvXasW3ouMzRJwTWV7aFdtnJ+eg53oEVBx20HoGEnA3
+	 LNT/LlYZQE2tOM8YOxpZpPTFEdelUpoKd4NF4GA7vPKn89LwW/S15fhYZUU4GIbMvq
+	 YtUdvjxVq312A==
+Date: Thu, 21 Mar 2024 08:46:28 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, martin.lau@kernel.org, kernel-team@meta.com, Peter
+ Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH bpf-next] bpf: avoid get_kernel_nofault() to fetch
+ kprobe entry IP
+Message-Id: <20240321084628.71442185b1fad5fdd47d0bab@kernel.org>
+In-Reply-To: <CAEf4BzZ_HGWwc2KWGUtu+_e5OYoHEpdzrk0vLDfv7vYvyihniQ@mail.gmail.com>
+References: <20240319212013.1046779-1-andrii@kernel.org>
+	<20240320124742.5652f47b8f6dfea24cf84ce9@kernel.org>
+	<Zfqfgn6lqwRCFQaD@krava>
+	<CAEf4BzZ_HGWwc2KWGUtu+_e5OYoHEpdzrk0vLDfv7vYvyihniQ@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240319050302.1085006-1-josef@netflix.com> <Zfr1jQ6W6yaLsHID@mtj.duckdns.org>
-In-Reply-To: <Zfr1jQ6W6yaLsHID@mtj.duckdns.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 20 Mar 2024 16:05:38 -0700
-Message-ID: <CAADnVQJV83CB+ENhRzwNyFbA8rdq3ZGtx6A8Jm7d+Wx9p2rgow@mail.gmail.com>
-Subject: Re: [PATCH V3 bpf-next 1/2] bpf: add bpf_task_get_cgroup kfunc
-To: Tejun Heo <tj@kernel.org>
-Cc: Jose Fernandez <josef@netflix.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Tycho Andersen <tycho@tycho.pizza>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 20, 2024 at 7:41=E2=80=AFAM Tejun Heo <tj@kernel.org> wrote:
->
-> On Mon, Mar 18, 2024 at 11:03:01PM -0600, Jose Fernandez wrote:
-> > This patch enhances the BPF helpers by adding a kfunc to retrieve the
-> > cgroup v2 of a task, addressing a previous limitation where only
-> > bpf_task_get_cgroup1 was available for cgroup v1. The new kfunc is
-> > particularly useful for scenarios where obtaining the cgroup ID of a
-> > task other than the "current" one is necessary, which the existing
-> > bpf_get_current_cgroup_id helper cannot accommodate. A specific use
-> > case at Netflix involved the sched_switch tracepoint, where we had to
-> > get the cgroup IDs of both the prev and next tasks.
+On Wed, 20 Mar 2024 10:46:54 -0700
+Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+
+> On Wed, Mar 20, 2024 at 1:34 AM Jiri Olsa <olsajiri@gmail.com> wrote:
 > >
-> > The bpf_task_get_cgroup kfunc acquires and returns a reference to a
-> > task's default cgroup, ensuring thread-safe access by correctly
-> > implementing RCU read locking and unlocking. It leverages the existing
-> > cgroup.h helper, and cgroup_tryget to safely acquire a reference to it.
+> > On Wed, Mar 20, 2024 at 12:47:42PM +0900, Masami Hiramatsu wrote:
+> > > On Tue, 19 Mar 2024 14:20:13 -0700
+> > > Andrii Nakryiko <andrii@kernel.org> wrote:
+> > >
+> > > > get_kernel_nofault() (or, rather, underlying copy_from_kernel_nofault())
+> > > > is not free and it does pop up in performance profiles when
+> > > > kprobes are heavily utilized with CONFIG_X86_KERNEL_IBT=y config.
+> > > >
+> > > > Let's avoid using it if we know that fentry_ip - 4 can't cross page
+> > > > boundary. We do that by masking lowest 12 bits and checking if they are
+> > > > >= 4, in which case we can do direct memory read.
+> > > >
+> > > > Another benefit (and actually what caused a closer look at this part of
+> > > > code) is that now LBR record is (typically) not wasted on
+> > > > copy_from_kernel_nofault() call and code, which helps tools like
+> > > > retsnoop that grab LBR records from inside BPF code in kretprobes.
 > >
-> > Signed-off-by: Jose Fernandez <josef@netflix.com>
-> > Reviewed-by: Tycho Andersen <tycho@tycho.pizza>
-> > Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> > Acked-by: Stanislav Fomichev <sdf@google.com>
->
-> Acked-by: Tejun Heo <tj@kernel.org>
->
-> but some questions below
->
-> > +__bpf_kfunc struct cgroup *bpf_task_get_cgroup(struct task_struct *tas=
-k)
-> > +{
-> > +     struct cgroup *cgrp;
-> > +
-> > +     rcu_read_lock();
-> > +     cgrp =3D task_dfl_cgroup(task);
-> > +     if (!cgroup_tryget(cgrp))
-> > +             cgrp =3D NULL;
-> > +     rcu_read_unlock();
-> > +     return cgrp;
-> > +}
->
-> So, as this is a lot easier in cgroup2, the above can probably be written
-> directly in BPF (untested and not sure the necessary annotations are in
-> place, so please take it with a big grain of salt):
->
->         bpf_rcu_read_lock();
->         cgrp =3D task->cgroups->dfl_cgrp;
->         cgrp =3D bpf_cgroup_from_id(cgrp->kn.id);
->         bpf_rcu_read_unlock();
->
-> If all you need is ID, it's even simpler:
->
->         bpf_rcu_read_lock();
->         cgrp_id =3D task->cgroups->dfl_cgrp->kn.id;
->         bpf_rcu_read_unlock();
+> > I think this is nice improvement
+> >
+> > Acked-by: Jiri Olsa <jolsa@kernel.org>
+> >
+> 
+> Masami, are you ok if we land this rather straightforward fix in
+> bpf-next tree for now, and then you or someone a bit more familiar
+> with ftrace/kprobe internals can generalize this in a more generic
+> way?
 
-Good point.
-Looks like this kfunc isn't really needed.
+I'm OK for this change for short term fix. As far as I can see, the
+kprobe-side change may involve more kprobe internal changes, so
 
-We even have the following in one of the selftests:
-        /* simulate bpf_get_current_cgroup_id() helper */
-        bpf_rcu_read_lock();
-        cgroups =3D task->cgroups;
-        if (!cgroups)
-                goto unlock;
-        cgroup_id =3D cgroups->dfl_cgrp->kn->id;
-unlock:
-        bpf_rcu_read_unlock();
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+> 
+> > >
+> > > Hmm, we may better to have this function in kprobe side and
+> > > store a flag which such architecture dependent offset is added.
+> > > That is more natural.
+> >
+> > I like the idea of new flag saying the address was adjusted for endbr
+> >
+> 
+> instead of a flag, can kprobe low-level infrastructure just provide
+> "effective fentry ip" without any flags, so that BPF side of things
+> don't have to care?
+
+It's possible. But it is a bit only for BPF and not fit to kprobe
+itself. I think we can add it in trace_kprobe instead of kprobe,
+which can be accessed from struct kprobe *kp.
+
+Thank you,
+
+> 
+> > kprobe adjust the address in arch_adjust_kprobe_addr, it could be
+> > easily added in there and then we'd adjust the address in get_entry_ip
+> > accordingly
+> >
+> > jirka
+> >
+> > >
+> > > Thanks!
+> > >
+> > > >
+> > > > Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> > > > Cc: Peter Zijlstra <peterz@infradead.org>
+> > > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > > > ---
+> > > >  kernel/trace/bpf_trace.c | 12 +++++++++---
+> > > >  1 file changed, 9 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > > > index 0a5c4efc73c3..f81adabda38c 100644
+> > > > --- a/kernel/trace/bpf_trace.c
+> > > > +++ b/kernel/trace/bpf_trace.c
+> > > > @@ -1053,9 +1053,15 @@ static unsigned long get_entry_ip(unsigned long fentry_ip)
+> > > >  {
+> > > >     u32 instr;
+> > > >
+> > > > -   /* Being extra safe in here in case entry ip is on the page-edge. */
+> > > > -   if (get_kernel_nofault(instr, (u32 *) fentry_ip - 1))
+> > > > -           return fentry_ip;
+> > > > +   /* We want to be extra safe in case entry ip is on the page edge,
+> > > > +    * but otherwise we need to avoid get_kernel_nofault()'s overhead.
+> > > > +    */
+> > > > +   if ((fentry_ip & ~PAGE_MASK) < ENDBR_INSN_SIZE) {
+> > > > +           if (get_kernel_nofault(instr, (u32 *)(fentry_ip - ENDBR_INSN_SIZE)))
+> > > > +                   return fentry_ip;
+> > > > +   } else {
+> > > > +           instr = *(u32 *)(fentry_ip - ENDBR_INSN_SIZE);
+> > > > +   }
+> > > >     if (is_endbr(instr))
+> > > >             fentry_ip -= ENDBR_INSN_SIZE;
+> > > >     return fentry_ip;
+> > > > --
+> > > > 2.43.0
+> > > >
+> > >
+> > >
+> > > --
+> > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > >
 
 
-> In the first example, it's not great that we go from task pointer to cgro=
-up
-> pointer to ID and then back to acquired cgroup pointer. I wonder whether
-> what we really want is to support something like the following:
->
->         bpf_rcu_read_lock();
->         cgrp =3D bpf_cgroup_tryget(task->cgroups->dfl_cgrp);
->         bpf_rcu_read_unlock();
-
-this one should work already.
-that's existing bpf_cgroup_acquire().
-
-pw-bot: cr
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
