@@ -1,79 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B96C4404
-	for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 06:50:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51BCD23D2;
+	Wed, 20 Mar 2024 06:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710917427; cv=none; b=TrED7mH8jlvKESTBWcJ4tlovADlz0//eGO14AX5iYnPWGbB1seVwp94A/MnGa+Hod9vly68vzLIvHqnWu2c8sjcrcrRCPYHpi8I5y1Ko5lxZsrNdLJq2MlFhGdMFHN5xyeYMGWvAV9nVSt+hXTyJd4snB+HHZoXrpU/fdALNZEI=
+	t=1710917805; cv=none; b=SgOEB9G/5szQ2qdSyMzpbWpeM36I4+FS79Ax0kMCMt3OeneYtykEvX9J4yuT7vrSfOn0vq7haSgQcBSxxpMlZLRAtDE4LbwpbpFL2F2LUTj4Ps96ElYqkqOqO4LdSzttP5NM4uTrl+bYnlIKzW3TYmEC/ivlJq3eMj0tkA19X90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710917427; c=relaxed/simple;
-	bh=rWkx5HrdjV6TgxSzt1AQWh3DXWRZUpvD1XKGrP9dBaY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=AL4JDHHNkMiAOTajSPfGHfT4dVUUvAsuHSXBjsokVUHChjYIikp0m70MO4I5VLwrczmnJ8VcBs/jMiRIZr1r4iN6q06p/Q773LeRvLIngHuKmLDT5uoLwUx6AaO64n/BPg+VEUyTqsKhDoPkGbqEzqE0+37P84LmxXlbG0Gbcl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UC5yeWr1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710917805; c=relaxed/simple;
+	bh=/6LpJu5Gelv+Xu8dnK0HmbPpEvk3ncmJRD3iWejc39Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iUUA1dvYd53uQoGqXQNXvSW1x4gWPYLgcVxxs2g7TrMY8N57dDJZb7iFPcBIec69/8ZCBrG0O7zAsQObuooZcVcKjHHhng1tF8cMz6y0Vn/9pzuHZsn9dL/r4cO6pAP6VzxTHduTrXb2nu+zPdsELAIqiIQy+JQBRPpsLcwdWNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PSnPMyf2; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UC5yeWr1"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C8696C433F1;
-	Wed, 20 Mar 2024 06:50:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710917426;
-	bh=rWkx5HrdjV6TgxSzt1AQWh3DXWRZUpvD1XKGrP9dBaY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=UC5yeWr1utnEX8zVE3FQsSVVLRuEJCY7uB/x7g28I16BfI7iGHjwWzkyyEsajSJeU
-	 UtV6SaemsDOj/sBj0Ybe8kmrM/JbutLKHDDNDoZsXnOVbFmwrjrw3qM7tfpDw3LB4j
-	 yyEEYWH4NlNgDkQmqesla7iW/Khwz2jn7VUw3dsSGMcGQn3Q0dAptBufiI5Fe1h5bl
-	 LioFnLJiCO71ltO0hRWXvrC2sI6Mk7m8wF5AOrM0sGNqAvsQ6UPthLNv9mnhGaFPn9
-	 w8kIaj5rTmuaKypIgC8Zp5veSrhkf1QXziWmQvslpBiAdTVGjVnGbiRd1rvN+JMX/O
-	 R/J/1x07hiHiQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B2F15D95060;
-	Wed, 20 Mar 2024 06:50:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PSnPMyf2"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-33e285a33bdso3272549f8f.2;
+        Tue, 19 Mar 2024 23:56:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710917802; x=1711522602; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0CeMrvzRfncq322yxK0GgyYXBvm9ru4HKsKaxloqamU=;
+        b=PSnPMyf2U+EeW7COhkYj2vhhiffCZHqsN3iRV6LWOPIq2PJ8pitirRID1qWvpZnVIk
+         zGfStxhVISG2UtDuytl63sizwDmScJAeU64XoHEOuD+eQql+SW31YhOcXXWQ2Bv4Lgq+
+         80fm9gAlENhfQqVqAM3x2ZYxQ+WjuQ2IvFTstKLqRxoD3sEXvAI7rbLm3bLtjIc0dTTP
+         qDkFuBr95cTsj4qKHYjaAmn6JxaOIOdMoAGUhi5KI/RqubjpbN3gx03AgDDoVAvz8drS
+         /1OIoCcMzMyQ7eEzqkSCL2jWLhvw0i1PIYjmgh4pGNYORzVSJf1xhIeV+dOIE8vRk7NS
+         F4eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710917802; x=1711522602;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0CeMrvzRfncq322yxK0GgyYXBvm9ru4HKsKaxloqamU=;
+        b=ZPgcGGYIfI2jzQPXAq4t/9lGCnp5Mitjz9ymGUAj2zbhDn+em77+xeM2o4ZZ0slA0h
+         gl2mqAAYaVJFY15fDryVPJrOUhlBlHl+0rhCbyXD4eILfTi3u52SXemaO/oKJwDuyHGE
+         aG/9VAPk/bPwA7qaFXTD7P6slMgC02/tgKeww12oTt8WDQfYWCx1OV0Rz6czMOwcQrTX
+         gcmuMDeIDsmC+KZl3+gGVLzBDtuOpW/YKabR6k5oIVW7gqfosND3aKLlLAgdvW77SPKo
+         S63olWETDSoSkoqbQeuQBhn+9vBrpkcB6Vk7QOXcBk89fX0oih+GPqbN7Ap+fTI4qx7z
+         cEVg==
+X-Forwarded-Encrypted: i=1; AJvYcCVChjVwk+VQE7UO2If1S+MnpdU0uFi5xll5zz10DUWEzJF3aBrMuNRjBZcP6ov6ZtE8+HbF/69gw2mY2qRFTKUER3Y2P96FIpHfN/zT5nAN3I165BwC7K/eifK8LjnuKml6
+X-Gm-Message-State: AOJu0YxY6mShuC6SRhXh0Kq8fpnrFNRwKVsRLGYgxz1d4qTteMIt5O1u
+	5X6U18oRg0MampSmzwS7aOVNNTHaG3QUe3AUVsXP79OUWIFmTKn+GrVh6rCvN6QzRO3Gyapt5Rf
+	H2v+yJf2xK8bxccMDwj4YxBD+i/U=
+X-Google-Smtp-Source: AGHT+IERhb89ttNSXo55oFH3XMXHyjyhY9IU4/HbF76LHPa9DEiFbTvmD30AMZ9ayHAZQ0E+nzx0Wt5C8LJ14FPfN1o=
+X-Received: by 2002:a5d:4b86:0:b0:33e:737f:9363 with SMTP id
+ b6-20020a5d4b86000000b0033e737f9363mr10314545wrt.70.1710917802252; Tue, 19
+ Mar 2024 23:56:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 bpf-next] selftests/bpf: scale benchmark counting by using
- per-CPU counters
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171091742672.5028.5566504085932271972.git-patchwork-notify@kernel.org>
-Date: Wed, 20 Mar 2024 06:50:26 +0000
-References: <20240315213329.1161589-1-andrii@kernel.org>
-In-Reply-To: <20240315213329.1161589-1-andrii@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@kernel.org, kernel-team@meta.com
+References: <000000000000e40a2906072e9567@google.com> <ab273ae2-80ec-45da-910a-e74298c71d50@I-love.SAKURA.ne.jp>
+In-Reply-To: <ab273ae2-80ec-45da-910a-e74298c71d50@I-love.SAKURA.ne.jp>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 19 Mar 2024 23:56:31 -0700
+Message-ID: <CAADnVQLmLMt2bF9aAB26dtBCvy2oUFt+AAKDRgTTrc7Xk_zxJQ@mail.gmail.com>
+Subject: Re: [syzbot] [kernel?] possible deadlock in console_flush_all (2)
+To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc: syzbot <syzbot+f78380e4eae53c64125c@syzkaller.appspotmail.com>, 
+	syzkaller-bugs <syzkaller-bugs@googlegroups.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	John Ogness <john.ogness@linutronix.de>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, LKML <linux-kernel@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Tue, Mar 19, 2024 at 11:50=E2=80=AFPM Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
+>
+> Hello, bpf developers.
+>
+> syzbot is reporting circular locking dependency because bpf program is hi=
+tting
+> printk() path. To avoid this dependency, something like
+> https://syzkaller.appspot.com/text?tag=3DPatch&x=3D121c92fe180000 is need=
+ed.
+>
+> Is it possible to call printk_deferred_{enter,exit}() from the bpf side (=
+e.g.
+> bpf_prog_run()) so that we don't need to add overhead on the scheduler si=
+de
+> when bpf programs are not registered?
+>
+> printk_deferred_{enter,exit}() requires that printk_deferred_exit() is ca=
+lled
+> on a CPU which printk_deferred_enter() was called, for percpu counter is =
+used.
+> Is migrate_{disable,enable}() also needed around printk_deferred_{enter,e=
+xit}() ?
+>
+> On 2023/10/08 15:28, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    7d730f1bf6f3 Add linux-next specific files for 20231005
+> > git tree:       linux-next
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D172d36e9680=
+000
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Fri, 15 Mar 2024 14:33:29 -0700 you wrote:
-> When benchmarking with multiple threads (-pN, where N>1), we start
-> contending on single atomic counter that both BPF trigger benchmarks are
-> using, as well as "baseline" tests in user space (trig-base and
-> trig-uprobe-base benchmarks). As such, we start bottlenecking on
-> something completely irrelevant to benchmark at hand.
-> 
-> Scale counting up by using per-CPU counters on BPF side. On use space
-> side we do the next best thing: hash thread ID to approximate per-CPU
-> behavior. It seems to work quite well in practice.
-> 
-> [...]
-
-Here is the summary with links:
-  - [v3,bpf-next] selftests/bpf: scale benchmark counting by using per-CPU counters
-    https://git.kernel.org/bpf/bpf-next/c/520fad2e3206
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+This has nothing to do with bpf.
+bpf never calls printk().
