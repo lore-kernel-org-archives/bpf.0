@@ -1,43 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D64F101EC;
-	Wed, 20 Mar 2024 03:17:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13C8A11712
+	for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 03:47:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710904644; cv=none; b=TzrNzQbRs86Cmk5lFzdfYVIhd3tyPoz3+WZE2UFu4ae1mBrEQ243c/XyXX9wSg5VmTXdI3Af9mY/hplFC2sS1EnXJwLxhuX9OKv2SfMsNNOBTtm0h5yr6WPxP+ceWGLCQKscS46hDEb8hBglB422NddbgSvVfW0oHb4tfDULDkE=
+	t=1710906469; cv=none; b=ILyz2YvYP7CfRjjylwViPtOPsg9Y6SgVwTh5ax0EsgcBor6ZMccto2Mk2ynkfr3MKc/CQ9HKyopuzhFhwcxQQpdkEsK712vGmE4k0es1Ld9SGnvpVXizdlX6Nb4mxBBLNpWAfQwi/q0gtJUImdaAPGdP32IQuuTF405HfnpE+ls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710904644; c=relaxed/simple;
-	bh=FHEe1pX8Lh1a2rackEtx2e+ZX13Jt6G1A6UdQ/Ju+3g=;
+	s=arc-20240116; t=1710906469; c=relaxed/simple;
+	bh=+DQQdj/kNsX9HObb+sHPm0lHmfIq8arihGWeKEmlAeU=;
 	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=Oyehk7uCsDq8KwBh2K9dx70fjDSQAgOIDPuafbmydo8IK1oqnZrDnhz5mwDGSjhB70tgNmDTirvOOF1mktBcA7QQ95hAVHLeg8oPXrwEhJbTiCcK64L+xDMS/VjIaqU+JWGuqvSG1xUBsoRL9T6RJRhW4TnDI+752dZvXp8Ra/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AYwkd9zr; arc=none smtp.client-ip=10.30.226.201
+	 Mime-Version:Content-Type; b=jgXP4gC4TENJcgu+thq9fub6ECc2qDtaTkFWsSVWkgtdDsVEl9ufWFeIFpaYi/JnC9bLcHEV1kvQ5G4k/MPalfvyxCv2AQ+5B6OF7Iu52DUYERxtfm6NbE6X6n+arrD/3UeQB3qeACTfFjz4dYkDO6+H4BQ8znMZeTcKCzh4swc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GxMwANku; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AYwkd9zr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57857C433F1;
-	Wed, 20 Mar 2024 03:17:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GxMwANku"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1C37C433C7;
+	Wed, 20 Mar 2024 03:47:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710904642;
-	bh=FHEe1pX8Lh1a2rackEtx2e+ZX13Jt6G1A6UdQ/Ju+3g=;
+	s=k20201202; t=1710906468;
+	bh=+DQQdj/kNsX9HObb+sHPm0lHmfIq8arihGWeKEmlAeU=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=AYwkd9zrRDoLsoiO+ozA12ei/PoImRASKbJ1GHi0THgDhXHEmpD0R+NT2mB1h9otg
-	 9IUJABMpdYLtAMHoB75EgGVRQar/Uk01T9z0qWK7CLPHE8zLy5kVQrfgtTFNNgTK0b
-	 Xi1W3CSTtcxuOyWKd95eqXdizb0O/UJds6F8azMGlmcGK/EN2g4dntbSkGjGdI1rDa
-	 lF7fcGlfwkpHZkSof0rG4M+ZgpUiaBDaqEUMAuqSeOdovVOL0hsaSKzIVTe7+OFNs0
-	 z19wuQmZwt1jHzL8H3cTh1xz3yVtlm++6MZxf4NGqtpCLatq9DvdiF+3ZcZ+XDdVl1
-	 K5Dz/5ZuzFajg==
-Date: Wed, 20 Mar 2024 12:17:17 +0900
+	b=GxMwANkuqerKzhuMnry93qGDLy9/J9PgAR1JoW5bQvlvNmXFGB8Me3LqjakEGHkSz
+	 /6trYSN1D3sP2eBCflz4pDaxpw+hT9Us+YMpCOcv2fGtNzIOAybkFIMofX8gF3Qzbz
+	 egS21zaEV7l982pdJBSHwk6E1oaHa19ZpmMIOw+ZQtdsM/EgHWezV+rvdH4G+5JWiw
+	 Ov7Wt56IOdlr95LJdylXkPjnd4HjSbyMXsT/TD8IV1w8ZCDXE6nihtmgFROpmQeQ1w
+	 F5Z7dp6wKC5ewsdOEf945u7aYZEMoGkxxPJBB9zqdvg3E5uFURfLi3xS6SriP2Kici
+	 tWt0h7/qZOL7Q==
+Date: Wed, 20 Mar 2024 12:47:42 +0900
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, linux-trace-kernel@vger.kernel.org,
- rostedt@goodmis.org, bpf@vger.kernel.org, mathieu.desnoyers@efficios.com,
- linux-kernel@vger.kernel.org, oleg@redhat.com, jolsa@kernel.org
-Subject: Re: [PATCH v2 0/3] uprobes: two common case speed ups
-Message-Id: <20240320121717.eda8ecd602d8d153925e2236@kernel.org>
-In-Reply-To: <CAEf4BzaFfQeD8TY7pXEyX4h5UeAg0HZpx8psJF=Z6GJmr3VF5w@mail.gmail.com>
-References: <20240318181728.2795838-1-andrii@kernel.org>
-	<20240319132057.78e60d15e4fd07dbef3b14a9@kernel.org>
-	<CAEf4BzaFfQeD8TY7pXEyX4h5UeAg0HZpx8psJF=Z6GJmr3VF5w@mail.gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ martin.lau@kernel.org, kernel-team@meta.com, Masami Hiramatsu
+ <mhiramat@kernel.org>, Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH bpf-next] bpf: avoid get_kernel_nofault() to fetch
+ kprobe entry IP
+Message-Id: <20240320124742.5652f47b8f6dfea24cf84ce9@kernel.org>
+In-Reply-To: <20240319212013.1046779-1-andrii@kernel.org>
+References: <20240319212013.1046779-1-andrii@kernel.org>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -45,61 +44,65 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, 19 Mar 2024 09:19:19 -0700
-Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+On Tue, 19 Mar 2024 14:20:13 -0700
+Andrii Nakryiko <andrii@kernel.org> wrote:
 
-> On Mon, Mar 18, 2024 at 9:21 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > Hi,
-> >
-> > On Mon, 18 Mar 2024 11:17:25 -0700
-> > Andrii Nakryiko <andrii@kernel.org> wrote:
-> >
-> > > This patch set implements two speed ups for uprobe/uretprobe runtime execution
-> > > path for some common scenarios: BPF-only uprobes (patches #1 and #2) and
-> > > system-wide (non-PID-specific) uprobes (patch #3). Please see individual
-> > > patches for details.
-> >
-> > This series looks good to me. Let me pick it on probes/for-next.
+> get_kernel_nofault() (or, rather, underlying copy_from_kernel_nofault())
+> is not free and it does pop up in performance profiles when
+> kprobes are heavily utilized with CONFIG_X86_KERNEL_IBT=y config.
 > 
-> Great, at least I guessed the Git repo right, if not the branch.
-> Thanks for pulling it in! I assume some other uprobe-related follow up
-> patches should be based on probes/for-next as well, right?
+> Let's avoid using it if we know that fentry_ip - 4 can't cross page
+> boundary. We do that by masking lowest 12 bits and checking if they are
+> >= 4, in which case we can do direct memory read.
+> 
+> Another benefit (and actually what caused a closer look at this part of
+> code) is that now LBR record is (typically) not wasted on
+> copy_from_kernel_nofault() call and code, which helps tools like
+> retsnoop that grab LBR records from inside BPF code in kretprobes.
 
-Yes, I'll pick those on linux-trace tree's probes/* branchs
-(if there is an urgent patch, it will go through probes/fixes)
+Hmm, we may better to have this function in kprobe side and
+store a flag which such architecture dependent offset is added.
+That is more natural.
 
-Thank you! 
+Thanks!
 
 > 
-> >
-> > Thanks!
-> >
-> > >
-> > > v1->v2:
-> > >   - rebased onto trace/core branch of tracing tree, hopefully I guessed right;
-> > >   - simplified user_cpu_buffer usage further (Oleg Nesterov);
-> > >   - simplified patch #3, just moved speculative check outside of lock (Oleg);
-> > >   - added Reviewed-by from Jiri Olsa.
-> > >
-> > > Andrii Nakryiko (3):
-> > >   uprobes: encapsulate preparation of uprobe args buffer
-> > >   uprobes: prepare uprobe args buffer lazily
-> > >   uprobes: add speculative lockless system-wide uprobe filter check
-> > >
-> > >  kernel/trace/trace_uprobe.c | 103 +++++++++++++++++++++---------------
-> > >  1 file changed, 59 insertions(+), 44 deletions(-)
-> > >
-> > > --
-> > > 2.43.0
-> > >
-> >
-> >
-> > --
-> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  kernel/trace/bpf_trace.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 0a5c4efc73c3..f81adabda38c 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -1053,9 +1053,15 @@ static unsigned long get_entry_ip(unsigned long fentry_ip)
+>  {
+>  	u32 instr;
+>  
+> -	/* Being extra safe in here in case entry ip is on the page-edge. */
+> -	if (get_kernel_nofault(instr, (u32 *) fentry_ip - 1))
+> -		return fentry_ip;
+> +	/* We want to be extra safe in case entry ip is on the page edge,
+> +	 * but otherwise we need to avoid get_kernel_nofault()'s overhead.
+> +	 */
+> +	if ((fentry_ip & ~PAGE_MASK) < ENDBR_INSN_SIZE) {
+> +		if (get_kernel_nofault(instr, (u32 *)(fentry_ip - ENDBR_INSN_SIZE)))
+> +			return fentry_ip;
+> +	} else {
+> +		instr = *(u32 *)(fentry_ip - ENDBR_INSN_SIZE);
+> +	}
+>  	if (is_endbr(instr))
+>  		fentry_ip -= ENDBR_INSN_SIZE;
+>  	return fentry_ip;
+> -- 
+> 2.43.0
+> 
 
 
 -- 
