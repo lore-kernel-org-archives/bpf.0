@@ -1,178 +1,115 @@
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 107F138F87
-	for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 08:42:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B06B38DE1;
+	Wed, 20 Mar 2024 08:48:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710924143; cv=none; b=Us8AEMFzfYmpxkM7yh3zeGrmPS2qArUxyOVzwK/LpaCafBO9I+QrOTvnj1ulagr/4ldCkzduz3AUOpsZmJRtMq2koMa+Uo4WMS6fvLlvcXzDMMDH++Wx8uudyZR3u5NZUTXlbYBN2tr/vrd5P+D4SjngUVF6b4+NbVk1ezdEFYE=
+	t=1710924490; cv=none; b=uvvDySDkc9a0Y4b259c+ZPm10pRu1Htcgb7LnUyR6be9cTYrytKEJ3c48XtcogNrb7mEGFjX0BCHUkdpkfo3yHXMGv8AcfmhUeLSw8C8M9Uu1ZC7u6wtGmAC1p4X0TZAXtec+Q2JKViyjOZQzpYo6uQAkfss1zwsLO+ekCnj7JI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710924143; c=relaxed/simple;
-	bh=8R+8pHHqfT6dtAXr0gKaDFBoW2z/4w8pmg1sze2cRDE=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=e80Xh6R39LJIFwJQONdEAm1u+4D6TAp94jN4YNYMCnhG9FGepNEKzLZEV1Mq1xBr4ycOLRjaqqUSvZyVNK/ZZ2L34zG/Whwt7ATx4xH/pDmYXyiDZZLfhsnjpjHZxXzUr+bLtDmwTHX8QZ8LnGW9QnKECAcr38DspQq0s690Mks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7cbf1ea053cso565033239f.1
-        for <bpf@vger.kernel.org>; Wed, 20 Mar 2024 01:42:21 -0700 (PDT)
+	s=arc-20240116; t=1710924490; c=relaxed/simple;
+	bh=uXKsSVWCgYYsbuqtwTD65wtWe0vqcX1ynDfeFuCz4Wc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PHhgfoIPqQ1Bn1xIz0Cji+HAKxXo5uM1S3P+vef6n3gzIyEQ1lbptfZGfL85Mlf3GBzU9QRXKuS5qrKzoOhbH7fVZV599j/MtF3c241UrUbHMEnrfQAn43lV8gYhFgNp9+XwPI9PZrkmzcfjdC9tx7Wd1LGjH+yjzztfRLlhpMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HlHYYPYF; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HlHYYPYF"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-33ff53528ceso2448690f8f.0;
+        Wed, 20 Mar 2024 01:48:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710924487; x=1711529287; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uXKsSVWCgYYsbuqtwTD65wtWe0vqcX1ynDfeFuCz4Wc=;
+        b=HlHYYPYFye3hGnhD9buM6rfyJSW7LjLOEPWmdBenb+UhkUnWnE9bt8xHtbQvJsORiS
+         HTk9wFBHFuGu6IuOrFJxNXcq4NAQJCzDG54/7Uy5sK0yGxvh6NRdFbr7tjzFS0LFOjLo
+         R4Mh2uuZnnKYC42wlW2Ci+ID+tQ+ew3dgvsp2aVkZBpQIp3iPz21nm0pNR02CQidWgdd
+         F+nRCidKGVMMbAEO/fX0KSXSs7s+6kMbpLe7SiwirAY1l9V6QTRc9uNlS2iQ10XcCT24
+         z4YJzZ3rtPsDmJd2xpsLOH02pZDl8W5ipzIKdyFTAohr/ssEvf5dzo/DBmA842iVi86B
+         E/bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710924141; x=1711528941;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NJo9BSMocNALtvqQ2QnVDTeK7qub3h9dTxH7whp8/KQ=;
-        b=Bgn6dOCX7dp5HJPY7nT6dAJe1aO3wBCVmLb7gq6NfsoxRHba+wwWLcd8S5ZPX6ZYb8
-         GwnuyO59WURhG5VR+zkkcsmETqGvm0q3fWk8nsi4I9W5/HBBje9QEU2wnYA7UfXpzLIm
-         +8svVWotTAxN2JgglU+5RfZ6JAC2KeXlMWzLYwXcZxTBN+8cFXjO7c2aCIF9+plmelZJ
-         j44eLAWHyuSeqwrlPav/CrXS/QT7T+dpL8MIg/DY8C3FdGrNC4RITXzCayaTXt8scL9w
-         qjWg4kDoPpS0grxr6Ys5ebMRbAqx9fC0cnZRT5sSwY5EqTD1J73fbssh/ltPadyoirIM
-         Ylpg==
-X-Forwarded-Encrypted: i=1; AJvYcCXMdSZy9/SONpNEiWTJqHO90kCvCqccj99yn9fVU2BTUb2NW6qSmEL79Mt/l/QbQU3rLuqbkrm6J3ifuix9dzBgXLc3
-X-Gm-Message-State: AOJu0YzueUb1ENLBuexM7E4vL3OcJQIk4p0+eDBdkXLqkcfHlHNkFGlF
-	xUuaphnrk+ufalkKNCQc/gS+sBCTFl6VBGZpI/nwOe5bl/1Oqzdkv2ZZix7/XTMv/KxIKSTEONA
-	pOZiKqugA6OCIA9VCPvLk55WJ8TTy33WAviyjoNELDOa13jhh1OsANxo=
-X-Google-Smtp-Source: AGHT+IE8rm6ifnv6lm3IfjiUY9+6ygJXGx10rSs/4NCR1KNIV2sbKI51XbpmOF1XIjF0HS4Vh23mGFNbU5io2OjBIySQZJemnvJd
+        d=1e100.net; s=20230601; t=1710924487; x=1711529287;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uXKsSVWCgYYsbuqtwTD65wtWe0vqcX1ynDfeFuCz4Wc=;
+        b=PwUBIBHy+9yI9T/Ts26NPSSUH4gOX6dwmOMY5xvCFYNvP4C8dCccLALV6HQK7cBc5G
+         qutJRjz2NHn1s8n/lZHSxGFa5TzUp8wmvLVjVHORG1c7Aq2vD4O5WXkANIuzuXgWfrC4
+         VcceJCgJc9wzAwg8M7phitCqT4qgAr+B49qTbtVhs1kbNb3m8u8kbBrDdu448BbIBoTS
+         GsyJCA572NQnWQVHOb9EWSdHPwMpHKjDkuxIcIf1vDkR/lclki3SyV5ZUyL2mPRtk8V1
+         kDt2BIOgtegWpwVurYDH8PwTli/LrEBIYN6YxgdTPGW1A8qBlkIL6zUm1D0O6sK3KeW1
+         o6Sg==
+X-Forwarded-Encrypted: i=1; AJvYcCXeNovNnlwCgRHLnMUzVfyOCknYN1qeflItHW7Ox+oejFe48F0XKugX5iNlH+SBsa5LWi0IeKMPwxvflQ/Rpz6qdj5VVU+UrWlXW1rOki/J3tGNp67ez0wv9CVotw9OC0Cw
+X-Gm-Message-State: AOJu0YzTiXYVtYbKRtjUfnAQv244DDKHo45t8GjvuMCX00tn8o7qegL4
+	4VS6nDOwcgiM99j0cMCTagq4dC8V6OViIwtS4PhU4ezIycVX9zV/tcreEuAhzfnMyXWgWmcaIN5
+	BS5kkB9sX8EvyrBJ/LmYJJqk/3SA=
+X-Google-Smtp-Source: AGHT+IEbRSoAf/Cstz4Wwky7NwyWg0XJwZnmR2GVRJGxefhx2KNNwEU+bH2PUJLdWCN3+0n6oVgcJj/nDe3TQ9LYWko=
+X-Received: by 2002:a5d:51c3:0:b0:33e:c03e:62 with SMTP id n3-20020a5d51c3000000b0033ec03e0062mr11674306wrv.40.1710924486606;
+ Wed, 20 Mar 2024 01:48:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:13c3:b0:474:fce1:3f8c with SMTP id
- i3-20020a05663813c300b00474fce13f8cmr259145jaj.6.1710924141272; Wed, 20 Mar
- 2024 01:42:21 -0700 (PDT)
-Date: Wed, 20 Mar 2024 01:42:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000adb08b061413919e@google.com>
-Subject: [syzbot] [bpf?] possible deadlock in trie_delete_elem
-From: syzbot <syzbot+9d95beb2a3c260622518@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
-	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
-	linux-kernel@vger.kernel.org, martin.lau@linux.dev, netdev@vger.kernel.org, 
-	sdf@google.com, song@kernel.org, syzkaller-bugs@googlegroups.com, 
-	yonghong.song@linux.dev
+References: <000000000000e40a2906072e9567@google.com> <ab273ae2-80ec-45da-910a-e74298c71d50@I-love.SAKURA.ne.jp>
+ <CAADnVQLmLMt2bF9aAB26dtBCvy2oUFt+AAKDRgTTrc7Xk_zxJQ@mail.gmail.com>
+ <596aad11-ee69-4ef1-b945-7b67a9fb22d7@I-love.SAKURA.ne.jp>
+ <CAADnVQL6Q3k0+-5X3Xjov7W_xESxkmVXcsCxQRWitQvhTBsf7A@mail.gmail.com> <dd264bf7-821b-4cf4-802b-60ae3c7b83bd@I-love.SAKURA.ne.jp>
+In-Reply-To: <dd264bf7-821b-4cf4-802b-60ae3c7b83bd@I-love.SAKURA.ne.jp>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 20 Mar 2024 01:47:55 -0700
+Message-ID: <CAADnVQJt+aP=Zo4edCu4iQEmdQjiruR1pJn0qyZZboNym+zd0w@mail.gmail.com>
+Subject: Re: [syzbot] [kernel?] possible deadlock in console_flush_all (2)
+To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, 
+	John Fastabend <john.fastabend@gmail.com>
+Cc: syzbot <syzbot+f78380e4eae53c64125c@syzkaller.appspotmail.com>, 
+	syzkaller-bugs <syzkaller-bugs@googlegroups.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Petr Mladek <pmladek@suse.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, John Ogness <john.ogness@linutronix.de>, 
+	Sergey Senozhatsky <senozhatsky@chromium.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On Wed, Mar 20, 2024 at 12:30=E2=80=AFAM Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
+>
+> On 2024/03/20 16:12, Alexei Starovoitov wrote:
+> > On Wed, Mar 20, 2024 at 12:05=E2=80=AFAM Tetsuo Handa
+> > <penguin-kernel@i-love.sakura.ne.jp> wrote:
+> >>
+> >> On 2024/03/20 15:56, Alexei Starovoitov wrote:
+> >>> This has nothing to do with bpf.
+> >>> bpf never calls printk().
+> >>
+> >> Please see the Sample crash report in the dashboard.
+> >> bpf program is hitting printk() via report_bug().
+> >
+> > Exactly. local_bh_neable is simply asking for a splat.
+> > _this_ bug is in printk.
+> > It's a generic issue.
+>
+> I can't catch. printk() is called due to report_bug().
+>
+> If the reason report_bug() is called is that spin_unlock_bh() is bad,
+> this is a bug in sock_map_delete_elem() rather than a bug in printk(), is=
+n't it.
 
-syzbot found the following issue on:
+There are two bugs.
+The one you've started the thread about is in printk.
 
-HEAD commit:    32fa4366cc4d net: phy: fix phy_read_poll_timeout argument ..
-git tree:       net
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=16f5d769180000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6fb1be60a193d440
-dashboard link: https://syzkaller.appspot.com/bug?extid=9d95beb2a3c260622518
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14572985180000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1676fc6e180000
+The sockmap bug that triggered report_bug() is separate.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/bb05871df8fc/disk-32fa4366.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a774323fb6ec/vmlinux-32fa4366.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1742ae20d76c/bzImage-32fa4366.xz
+>
+> >
+> > sockmap bug is orthogonal.
+> > It's already being looked at.
+>
+> Then, can we expect that this bug is also fixed shortly?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9d95beb2a3c260622518@syzkaller.appspotmail.com
-
-============================================
-WARNING: possible recursive locking detected
-6.8.0-syzkaller-05242-g32fa4366cc4d #0 Not tainted
---------------------------------------------
-syz-executor217/5072 is trying to acquire lock:
-ffff88802a0fd9f8 (&trie->lock){....}-{2:2}, at: trie_delete_elem+0x96/0x6a0 kernel/bpf/lpm_trie.c:451
-
-but task is already holding lock:
-ffff88802a0fc9f8 (&trie->lock){....}-{2:2}, at: trie_update_elem+0xcb/0xc10 kernel/bpf/lpm_trie.c:324
-
-other info that might help us debug this:
- Possible unsafe locking scenario:
-
-       CPU0
-       ----
-  lock(&trie->lock);
-  lock(&trie->lock);
-
- *** DEADLOCK ***
-
- May be due to missing lock nesting notation
-
-3 locks held by syz-executor217/5072:
- #0: ffffffff8e131920 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:298 [inline]
- #0: ffffffff8e131920 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:750 [inline]
- #0: ffffffff8e131920 (rcu_read_lock){....}-{1:2}, at: bpf_map_update_value+0x3c4/0x540 kernel/bpf/syscall.c:202
- #1: ffff88802a0fc9f8 (&trie->lock){....}-{2:2}, at: trie_update_elem+0xcb/0xc10 kernel/bpf/lpm_trie.c:324
- #2: ffffffff8e131920 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:298 [inline]
- #2: ffffffff8e131920 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:750 [inline]
- #2: ffffffff8e131920 (rcu_read_lock){....}-{1:2}, at: __bpf_trace_run kernel/trace/bpf_trace.c:2380 [inline]
- #2: ffffffff8e131920 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run4+0x16e/0x490 kernel/trace/bpf_trace.c:2422
-
-stack backtrace:
-CPU: 0 PID: 5072 Comm: syz-executor217 Not tainted 6.8.0-syzkaller-05242-g32fa4366cc4d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2e0 lib/dump_stack.c:106
- check_deadlock kernel/locking/lockdep.c:3062 [inline]
- validate_chain+0x15c1/0x58e0 kernel/locking/lockdep.c:3856
- __lock_acquire+0x1346/0x1fd0 kernel/locking/lockdep.c:5137
- lock_acquire+0x1e4/0x530 kernel/locking/lockdep.c:5754
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
- _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
- trie_delete_elem+0x96/0x6a0 kernel/bpf/lpm_trie.c:451
- bpf_prog_2c29ac5cdc6b1842+0x42/0x46
- bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
- __bpf_prog_run include/linux/filter.h:657 [inline]
- bpf_prog_run include/linux/filter.h:664 [inline]
- __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
- bpf_trace_run4+0x25a/0x490 kernel/trace/bpf_trace.c:2422
- trace_mm_page_alloc include/trace/events/kmem.h:177 [inline]
- __alloc_pages+0x657/0x680 mm/page_alloc.c:4591
- __alloc_pages_node include/linux/gfp.h:238 [inline]
- alloc_pages_node include/linux/gfp.h:261 [inline]
- __kmalloc_large_node+0x91/0x1f0 mm/slub.c:3926
- __do_kmalloc_node mm/slub.c:3969 [inline]
- __kmalloc_node+0x33c/0x4e0 mm/slub.c:3988
- kmalloc_node include/linux/slab.h:610 [inline]
- bpf_map_kmalloc_node+0xd3/0x1c0 kernel/bpf/syscall.c:422
- lpm_trie_node_alloc kernel/bpf/lpm_trie.c:291 [inline]
- trie_update_elem+0x1d3/0xc10 kernel/bpf/lpm_trie.c:333
- bpf_map_update_value+0x4d3/0x540 kernel/bpf/syscall.c:203
- map_update_elem+0x53a/0x6f0 kernel/bpf/syscall.c:1641
- __sys_bpf+0x76f/0x810 kernel/bpf/syscall.c:5619
- __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
- __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5736
- do_syscall_64+0xfb/0x240
- entry_SYSCALL_64_after_hwframe+0x6d/0x75
-RIP: 0033:0x7f933485e7a9
-Code: 48 83 c4 28 c3 e8 37 17 00 00 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc8852b528 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+cc-ing John.
+I don't think it's hi-pri.
