@@ -1,118 +1,109 @@
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9D52BB0A;
-	Wed, 20 Mar 2024 11:26:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29BAB3D984;
+	Wed, 20 Mar 2024 11:34:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710933963; cv=none; b=Ex5ih/zuKdQ/QyLdGfowrKc5eVTjdBhhUE1btX+B/o46fbksL9h2sbxsUVVebVUWF0TQP2IySueOxMqe/OXxQyUu8DyRKxL8ysGihQCXX4eAYezWmDJh0/DfS7ThYejRvl5sjRm9kLUgbZ+RV1VCzuOVkJKLJz+4hIylLdBrewg=
+	t=1710934494; cv=none; b=UcEsjR0Qd6uxDh8kldtMDh4asbTazAwXDkBKiUYzyBZJywHuTTXAHSpD3OiqDQlc3lJR1t3idQE0JHaSSyFH2lF4T7aTyvvNu6LOvr11++F/kSjsXBXVXU4Yk1zpaxWrhG9zC3s7pMKbzZbW4SkCAW0/7jAUZTJtBU1blK6V5cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710933963; c=relaxed/simple;
-	bh=iXfTvVYD/74RU3fz9WyKXv9rogFeN8hhDiMvXWTzzL8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NQXUTWPusP8MO3Ijn+LKFCCqvGExJ8n6wnLkfN5Zt8/3OwgYGQ4Z268anH421UuenPNLXTybVgLQkeyjvJGGaTXHchmFa0ZEQZkrfa5zJ+2zU2GoPBU2JNRtIcOHMnWt9bAlyrRFtGr885pinTz4ZXsLsnaZR24PnLLgBe4AiqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jiJz9UdB; arc=none smtp.client-ip=209.85.208.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jiJz9UdB"
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2d109e82bd0so88575041fa.3;
-        Wed, 20 Mar 2024 04:26:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710933960; x=1711538760; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jMloB9RfRbEnZWDpgulTh3z5yIYHXDXn4Rg20jknDtg=;
-        b=jiJz9UdBsThiM+JVRtUIx+fd6XnLf9gSylO50eQU3Um1vo8oNgpstbulg/SCr5rBCh
-         6HkymlcoEM0Qfl+H4/O/XM3xKVxH+gpH0ksZyvFsNa7AQoNe3urL+iKhFIvE0t0zpznr
-         tQ8FiLfPogm7eS7YeOaa5PTe3zfXDKLF0eApbH0pinZzSCCR6Y6yaodsyO6b/H6pmxzV
-         eg6KxK0Dp4IL/qzNcvEpxEcVQk8+qYrkZzyXqM4U54j5T+r85UGGbUVTCnciOWxQ0L8s
-         Lm0TCb3o/5ms4f9UBLoLSyBXhYRsZBr+FbHVVHrAlxcSocZ6D793jRrDCc59CsKRHw1D
-         dnGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710933960; x=1711538760;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jMloB9RfRbEnZWDpgulTh3z5yIYHXDXn4Rg20jknDtg=;
-        b=FPDLqt35ZmV/F5C0ipV/pnQfe+xUAns94HRGuzZcFaQwUwbTpH2CPrNfT58Jn5YG3O
-         RiFf9he4XQfue4DIc5ojTxQP764H0d1vgDNIFk5XFeRXD0QBZqIqqNCc5WSv5xIw0Jrf
-         +wc1FPf42hDY9kgF5dg1J1y0BYkipzW84wSnXuutxeDkMEZH3MSFy4Tpkq9G/o52hS+D
-         IqdjqDYjJv9SHLUzUrATjtdf7hTz6vSygdGWJwV3N9BgW3Z1C9m/8oaovSnkCjpjFdZI
-         +BPY3KMLnPLdwTuWmz5YQpNEaxvxv5ilBb7o+ElLsmv4xt2TaDCLOKCrgaXbxGM4fu0r
-         YNMg==
-X-Forwarded-Encrypted: i=1; AJvYcCWUT4xFxrdTmAb1pNfL3qtTfZqXhEUi60J4z5QD4otkAnwRpEMzb90XXbI/CTo+C5NbdCKI4rxX7n2DA4mcubf/AaBRP5YyWQM4Kmve50xwheG4JVpIS1Q8WS6DKYw30NcJl1gRtfb4BI4y5N0vH+PauLywri2AwfAK
-X-Gm-Message-State: AOJu0YyMYX5Oz1KtpGB6e15h3GdLL+NrD52N3ug/UT0LoEDBpoOM2i9B
-	YCpI8fM9/hTbqnEI/CelImgf/tJ56qH42Bl6gkYNJwtuuEMvPZzX
-X-Google-Smtp-Source: AGHT+IGadU+b0/+WDY0GhAtI/Nq447ky8ONTSH4gONcBUvaBDixDV3c0Twf26waZnPAkvHChZOIn5A==
-X-Received: by 2002:a05:651c:22f:b0:2d4:78ba:fa45 with SMTP id z15-20020a05651c022f00b002d478bafa45mr1313118ljn.2.1710933959515;
-        Wed, 20 Mar 2024 04:25:59 -0700 (PDT)
-Received: from pc-de-david.. ([2a04:cec0:1033:b0aa:f477:524f:4101:14c3])
-        by smtp.gmail.com with ESMTPSA id z6-20020a05600c0a0600b0041409db0349sm1901170wmp.48.2024.03.20.04.25.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Mar 2024 04:25:58 -0700 (PDT)
-From: David Gouarin <dgouarin@gmail.com>
-To: 
-Cc: david.gouarin@thalesgroup.com,
-	David Gouarin <dgouarin@gmail.com>,
-	Madalin Bucur <madalin.bucur@nxp.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Camelia Groza <camelia.groza@nxp.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net v3] dpaa_eth: fix XDP queue index
-Date: Wed, 20 Mar 2024 12:25:19 +0100
-Message-Id: <20240320112519.5311-1-dgouarin@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <ZenidKFF/gQefijz@boxer>
-References: <ZenidKFF/gQefijz@boxer>
+	s=arc-20240116; t=1710934494; c=relaxed/simple;
+	bh=3WaKxkbQWcDCF2kXtI2Am05e+yUdzZw2ITQ8GoPRoSk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Rp56XkgJ4EQVOks4Ul9jdvN+mvxQ0PterGaHzowWqWpzFTOpVZcyOny/XRV0vwI8inNTTZaczUbIpjkUjoEl6Km1peZV6DFQQXPWl3qbmOVAOcJNQQrvKlLS5EldPAHoKyzPu8fC56zooQXd8eBd99GBAclk3v+vOen5tdYuc7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V062D0XMZz4f3l89;
+	Wed, 20 Mar 2024 19:34:44 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id E87C31A0AAE;
+	Wed, 20 Mar 2024 19:34:47 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP4 (Coremail) with SMTP id gCh0CgCX6GrWyfplm5SjHg--.34463S2;
+	Wed, 20 Mar 2024 19:34:47 +0800 (CST)
+Message-ID: <ab5e6307-8d80-4751-940f-4faa5bc41d82@huaweicloud.com>
+Date: Wed, 20 Mar 2024 19:34:46 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] arm64: bpf: zero upper bits after rev32
+Content-Language: en-US
+To: Artem Savkov <asavkov@redhat.com>, Xi Wang <xi.wang@gmail.com>,
+ Catalin Marinas <catalin.marinas@arm.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240313140205.3191564-1-asavkov@redhat.com>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <20240313140205.3191564-1-asavkov@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgCX6GrWyfplm5SjHg--.34463S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFyxZF1kur1UJFykAw4Dtwb_yoW8try8pr
+	4ayrZakr4UWr17Aa4FganrJr1vkay2y3yUtryDWrWSka9Yv34kXryfKrW2939IvrW0vw4Y
+	9FyjyF93X3s2v3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+	AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
+	IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
+	KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-Make it possible to bind a XDP socket to a queue id.
-The DPAA FQ Id was passed to the XDP program in the
-xdp_rxq_info->queue_index instead of the Ethernet device queue number,
-which made it unusable with bpf_map_redirect.
-Instead of the DPAA FQ Id, initialise the XDP rx queue with the queue number.
+On 3/13/2024 10:02 PM, Artem Savkov wrote:
+> Commit d63903bbc30c7 ("arm64: bpf: fix endianness conversion bugs")
+> added upper bits zeroing to byteswap operations, but it assumes they
+> will be already zeroed after rev32, which is not the case on some
+> systems at least:
+> 
+> [ 9757.262607] test_bpf: #312 BSWAP 16: 0x0123456789abcdef -> 0xefcd jited:1 8 PASS
+> [ 9757.264435] test_bpf: #313 BSWAP 32: 0x0123456789abcdef -> 0xefcdab89 jited:1 ret 1460850314 != -271733879 (0x5712ce8a != 0xefcdab89)FAIL (1 times)
+> [ 9757.266260] test_bpf: #314 BSWAP 64: 0x0123456789abcdef -> 0x67452301 jited:1 8 PASS
+> [ 9757.268000] test_bpf: #315 BSWAP 64: 0x0123456789abcdef >> 32 -> 0xefcdab89 jited:1 8 PASS
+> [ 9757.269686] test_bpf: #316 BSWAP 16: 0xfedcba9876543210 -> 0x1032 jited:1 8 PASS
+> [ 9757.271380] test_bpf: #317 BSWAP 32: 0xfedcba9876543210 -> 0x10325476 jited:1 ret -1460850316 != 271733878 (0xa8ed3174 != 0x10325476)FAIL (1 times)
+> [ 9757.273022] test_bpf: #318 BSWAP 64: 0xfedcba9876543210 -> 0x98badcfe jited:1 7 PASS
+> [ 9757.274721] test_bpf: #319 BSWAP 64: 0xfedcba9876543210 >> 32 -> 0x10325476 jited:1 9 PASS
+> 
+> Fixes: d63903bbc30c7 ("arm64: bpf: fix endianness conversion bugs")
+> Signed-off-by: Artem Savkov <asavkov@redhat.com>
+> ---
+>   arch/arm64/net/bpf_jit_comp.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> index c5b461dda4385..e86e5ba74dca2 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
+> @@ -944,7 +944,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+>   			break;
+>   		case 32:
+>   			emit(A64_REV32(is64, dst, dst), ctx);
+> -			/* upper 32 bits already cleared */
+> +			/* zero-extend 32 bits into 64 bits */
+> +			emit(A64_UXTW(is64, dst, dst), ctx);
 
-Fixes: d57e57d0cd04 ("dpaa_eth: add XDP_TX support")
+I think the problem only occurs when is64 == 1. In this case, the generated rev32
+insn reverses byte order in both high and low 32-bit word. To fix it, we could just
+set the first arg to 0 for A64_REV32:
 
-Signed-off-by: David Gouarin <dgouarin@gmail.com>
----
-v3: reword commit message
-v2: add Fixes: in description
----
- drivers/net/ethernet/freescale/dpaa/dpaa_eth.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+emit(A64_REV32(0, dst, dst), ctx);
 
-diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-index dcbc598b11c6..988dc9237368 100644
---- a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-+++ b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-@@ -1154,7 +1154,7 @@ static int dpaa_fq_init(struct dpaa_fq *dpaa_fq, bool td_enable)
- 	if (dpaa_fq->fq_type == FQ_TYPE_RX_DEFAULT ||
- 	    dpaa_fq->fq_type == FQ_TYPE_RX_PCD) {
- 		err = xdp_rxq_info_reg(&dpaa_fq->xdp_rxq, dpaa_fq->net_dev,
--				       dpaa_fq->fqid, 0);
-+				       dpaa_fq->channel, 0);
- 		if (err) {
- 			dev_err(dev, "xdp_rxq_info_reg() = %d\n", err);
- 			return err;
--- 
-2.34.1
+No need to add an extra uxtw isnn.
+
+>   			break;
+>   		case 64:
+>   			emit(A64_REV64(dst, dst), ctx);
 
