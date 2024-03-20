@@ -1,78 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7671B7F5;
-	Wed, 20 Mar 2024 06:00:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C621A5A2;
+	Wed, 20 Mar 2024 06:03:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710914429; cv=none; b=dVUEJdSGbofC+GQNm3OtpvjUP6C1JqtPjM5t57q9GfxGhKhNxxH9CGPs+vfoAdEy4KCagTi9cdq8kbx+bwlSZ+Yba8aB5e6QE/vmO26YU67MCrEgezK4nQKVxpvQvGO64ePfIyEjRAkj1cQZWOUHyUg2n1TuauW4c02pRjtKgeA=
+	t=1710914609; cv=none; b=mJbIPYwAviDf4QPhygR9QCiG53FM1nZuJwQpJNGPXQsTk2qdSoBsechRCxak6TGQJsGpWfo8MO+N0mp3O3XBfo50Tifj3/RKTJI1ffuP/DoXNZ5U9as0zUhlAZ9ygls2Cy4dSHqXHd+uv0vxdNwcgira0/oLMbqPVNypiCmVNhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710914429; c=relaxed/simple;
-	bh=F+JD5BzN3CMt5iCweClrZTt7h+6Pfrn3HmIL6h5t0Wk=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=StCxjdL0yYnXOnMDtV/inxD0pamAjbKoFUYjQRti/qdbA5De1qRUz+1YHBq131d5dxUEcFQJhzj8dk/fPxpv4DeE8m7jmoBCBphYNv3RSL9+JFKzqV0wzXqfGlNaI/VF10ln75EACFaYPJPAbf0W/jDFsurybHW1OI0chzZhw2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E8UbNUox; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710914609; c=relaxed/simple;
+	bh=Xj+0EJwM7uAPM9IYGHMym6tea0yeShSg9UcqikTwriI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SzTVOuNIK0HdtfiaSnU8H+3ZXj5NJ8/g8eIvz6Y2zsMFvgVIhP6rRdS3FS1bI21DwJtJR/tQN4De9Um0GqGXObQ1rbc+8XPcaLBZpzlRfq2cTsRuE0kciOJLs3nksrAmIPfh6Ywd/hQo+BX9oeOETxhmfhQwl6GZACCm2m7ZcQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PH6vwttF; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E8UbNUox"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0F868C43394;
-	Wed, 20 Mar 2024 06:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710914429;
-	bh=F+JD5BzN3CMt5iCweClrZTt7h+6Pfrn3HmIL6h5t0Wk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=E8UbNUoxjBS40Za7tg92n197VGdLQ+f4LOl9fMFPoNZ9aoZiuhaWZq88UEB640mla
-	 tKyOHjp41qNzFqHglDDCHl4eVDR7U5GBwpYxRZL9S2EkPR/E2XdP7l+V8QWMU0FPSy
-	 cC5GujjtT0yL9oyXl2dnb+Jc55nrAlYgntZ8GWZ8SJiyaCplYE2P/TjzEMlw+5JPIV
-	 ixA1Yc34Xn9NbJSoZRLGhmfbEf1kbvAxUaSXvOT1dXDPxnl4Ev/Rs2tuvzaHTtz+KW
-	 hhsZy9hz4KZNjH6LtuMR5tyVnCsgYpPnDfYmpVGyQBO0WjFu+AimcsMLOhLnFYPFbl
-	 skYbmd5Kn/p9Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EBB53D84BB1;
-	Wed, 20 Mar 2024 06:00:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PH6vwttF"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-341730bfc46so1779863f8f.3;
+        Tue, 19 Mar 2024 23:03:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710914606; x=1711519406; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ao8qG1eSPb4R5Tf5aIIiQnLt3AJxqdYQvtHZM6vC9CY=;
+        b=PH6vwttFtq+Qjy+GnG+JelPOdmjZenrcU8KkxGoZkM7ERCqFC9KVMwto9bNPRIqPyF
+         Akv/ftL3ItZwrM3UTI6OtUSGGANuD+V/qvObV+pLXffW+Bq2USEYOF8cn2HG8/H6jaiO
+         QSiqX5eBWKWxyOUaZxPeu3COzFF23PFk94/K7Mb0nQVRYu97oY87HAI95/Z+qSLV7x32
+         nO/FL+eBdS0RMS5KwAJRJGfZBBbfaSXteeAWUWn/hDeD0xkmsdpU0hD4lpmb1MHDlZaV
+         RS/VejVnd5CwHqgxGdkhiactK2ly7AqaPBj5dt4biG8d5nanq+ikTrjbzY9gdpJzKErB
+         ZxhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710914606; x=1711519406;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ao8qG1eSPb4R5Tf5aIIiQnLt3AJxqdYQvtHZM6vC9CY=;
+        b=ISpBvJab7WrBrKNpJsCdw43Z1tWmTuy+xgQgR/FyT5p/Yy8MjJAvFRZvYoIg3xu44I
+         LUYGBW3dBl5XcNIYABV2GfSZnILAO2TejjFk19s1hYfoSkWXW0i13K75oWnQIQm4ivjB
+         rcicbYLcnj1I8t/Wg8y3J2u13OlKXVOgKUy+tMKO7DTxGe5Uel61NQmyZHY2UO2mpuO7
+         3M7gEMmFW7nRrgowWLsJiEUMx27s07/McOjko/SysW31LpfZQmcrpCiOcUVJk7YA90tP
+         GqB7UO9nlEmnipECOTt6MmbtXoQxnaZG68Xc857BGQqWkWutgKvkMxj2OLkYkcitfAbw
+         8JVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWJY47Du8+YxZkxyPWZnQpI65ZyI5oHih4zyQbgUtiXWTsZuj2jLsW2Vx4RDg/xTocEH0XwVKJlK+02AYF52GdW9vwtm7vc5piiLrrU2B+HdP+wpdLuLUf/3KBNYWMpvd5CS1L+Bi7jlXU9ZY9PhH9UcpFOcnEEhto4Or3IQnIQzhY4
+X-Gm-Message-State: AOJu0YyUvGtmxDUEwwCV/Kkbc3qSDVFrWCioqypnemE0VKsEBtW7/+xi
+	9kCzeuRAWb37/p2tRVYZOJ6QtH/U/6Ana77UYpzSSYcnhvVvJqkAB+VR30qVVpcyxOImsS0Gt3m
+	q1Lxq/G4AW5NznCeMHAIcq/WlTRA=
+X-Google-Smtp-Source: AGHT+IH1rdMb3LEWwbjbirEDhmFBs9QAAhpWIj+p8X1QiKJltlr/RabGEulNmHtplvCFddTMVgDaubwKn8kaCsU1i4k=
+X-Received: by 2002:adf:f38c:0:b0:33e:7a1f:5824 with SMTP id
+ m12-20020adff38c000000b0033e7a1f5824mr12414766wro.0.1710914605898; Tue, 19
+ Mar 2024 23:03:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] bpf, arm64: fix bug in BPF_LDX_MEMSX
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171091442896.8613.6941801093368305972.git-patchwork-notify@kernel.org>
-Date: Wed, 20 Mar 2024 06:00:28 +0000
-References: <20240312235917.103626-1-puranjay12@gmail.com>
-In-Reply-To: <20240312235917.103626-1-puranjay12@gmail.com>
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com,
- haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
+References: <20240319050302.1085006-1-josef@netflix.com>
+In-Reply-To: <20240319050302.1085006-1-josef@netflix.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 19 Mar 2024 23:03:14 -0700
+Message-ID: <CAADnVQJ=HGFBn-8aKb2efUh2NxUe-wJc_FqPKROGZxz6d4L_vQ@mail.gmail.com>
+Subject: Re: [PATCH V3 bpf-next 1/2] bpf: add bpf_task_get_cgroup kfunc
+To: Jose Fernandez <josef@netflix.com>, Tejun Heo <tj@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Tycho Andersen <tycho@tycho.pizza>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Mon, Mar 18, 2024 at 10:04=E2=80=AFPM Jose Fernandez <josef@netflix.com>=
+ wrote:
+>
+> This patch enhances the BPF helpers by adding a kfunc to retrieve the
+> cgroup v2 of a task, addressing a previous limitation where only
+> bpf_task_get_cgroup1 was available for cgroup v1. The new kfunc is
+> particularly useful for scenarios where obtaining the cgroup ID of a
+> task other than the "current" one is necessary, which the existing
+> bpf_get_current_cgroup_id helper cannot accommodate. A specific use
+> case at Netflix involved the sched_switch tracepoint, where we had to
+> get the cgroup IDs of both the prev and next tasks.
+>
+> The bpf_task_get_cgroup kfunc acquires and returns a reference to a
+> task's default cgroup, ensuring thread-safe access by correctly
+> implementing RCU read locking and unlocking. It leverages the existing
+> cgroup.h helper, and cgroup_tryget to safely acquire a reference to it.
+>
+> Signed-off-by: Jose Fernandez <josef@netflix.com>
+> Reviewed-by: Tycho Andersen <tycho@tycho.pizza>
+> Acked-by: Yonghong Song <yonghong.song@linux.dev>
+> Acked-by: Stanislav Fomichev <sdf@google.com>
+> ---
+> V2 -> V3: No changes
+> V1 -> V2: Return a pointer to the cgroup instead of the cgroup ID
+>
+>  kernel/bpf/helpers.c | 26 ++++++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+>
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index a89587859571..bbd19d5eedb6 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2266,6 +2266,31 @@ bpf_task_get_cgroup1(struct task_struct *task, int=
+ hierarchy_id)
+>                 return NULL;
+>         return cgrp;
+>  }
+> +
+> +/**
+> + * bpf_task_get_cgroup - Acquire a reference to the default cgroup of a =
+task.
+> + * @task: The target task
+> + *
+> + * This function returns the task's default cgroup, primarily
+> + * designed for use with cgroup v2. In cgroup v1, the concept of default
+> + * cgroup varies by subsystem, and while this function will work with
+> + * cgroup v1, it's recommended to use bpf_task_get_cgroup1 instead.
+> + * A cgroup returned by this kfunc which is not subsequently stored in a
+> + * map, must be released by calling bpf_cgroup_release().
+> + *
+> + * Return: On success, the cgroup is returned. On failure, NULL is retur=
+ned.
+> + */
+> +__bpf_kfunc struct cgroup *bpf_task_get_cgroup(struct task_struct *task)
+> +{
+> +       struct cgroup *cgrp;
+> +
+> +       rcu_read_lock();
+> +       cgrp =3D task_dfl_cgroup(task);
+> +       if (!cgroup_tryget(cgrp))
+> +               cgrp =3D NULL;
+> +       rcu_read_unlock();
+> +       return cgrp;
+> +}
 
-This patch was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Tejun,
 
-On Tue, 12 Mar 2024 23:59:17 +0000 you wrote:
-> A64_LDRSW() takes three registers: Xt, Xn, Xm as arguments and it loads
-> and sign extends the value at address Xn + Xm into register Xt.
-> 
-> Currently, the offset is being directly used in place of the tmp
-> register which has the offset already loaded by the last emitted
-> instruction.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf] bpf, arm64: fix bug in BPF_LDX_MEMSX
-    https://git.kernel.org/bpf/bpf/c/114b5b3b4bde
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Does this patch look good to you?
