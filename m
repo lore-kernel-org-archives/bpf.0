@@ -1,167 +1,150 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C1C12BF18
-	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 15:58:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59D5712BF15;
+	Thu, 21 Mar 2024 16:00:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711036743; cv=none; b=n+g6zKqEzTjZuH5pX8Uyj2GJZtzYTO8rd05D6E494FaXI3aGPcDyObU4EmX+/CO5f5VUFIri5bDSp2Szmr9a7iGSv6NEH5gbzMs3X32sivOwFM5NmkP7ZwINcGtkQ/okTyl9aR1/ywu01B3DZJLRAFq6CTo3DhqXieQTYUwtsyk=
+	t=1711036812; cv=none; b=nhTD6pwLJjWEcsjpQcQF9uhRNoMVH8NbSV9qGuOeIOo900QjgFLL/Zj7rICbrrooWkRER7b/3Bd4uxRJn+jlo7LTxs0kzhrLTi/TAljOCNTaWWCqiFKhAb3IN7BPOI7SczzW3LFybxMP+UTbIjZVnXKaYlGzNmlQeC+y8UUWfQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711036743; c=relaxed/simple;
-	bh=Iad1tyKhiFMIDC8Xt0/zXsbE/rY3pkbp2kXvv1eL2yo=;
+	s=arc-20240116; t=1711036812; c=relaxed/simple;
+	bh=jgszpCqH/WMZwNM8t5t78GNbQLJNqJmTX2YntToQXyA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ezKclpqa96DqLAea9KFXl3YztiSagxeByu+75y1PedzxVmlkTz3gJI9Yzo3vqVGTGYv4fkMJm1ME6g6NtvBqkPNKcAMEEDAQUeZOuwzTmEKxpwCaODoo0OfktgIUM3ADtFM8A4TttpetLVS/BidegRJ4ST6BtuZNy6NaChCysG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PVMA7iKn; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 To:Cc:Content-Type; b=rlBv2bHmNU/QaMQv6gjCOMgaMcqaxCVZyxl5No6reaKi380RUyt+vV251+G9ihH18HHm9ujii5sm2NSsDKUM9hAGbEVBV3PIos2vOA42xH2vDm2yESyAqJ2teqa2RPXv1LlqkRcTK/4OHMjJSV7wBfLpDEa/ruFQKI0VspLAzNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BsFba1ko; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PVMA7iKn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711036734;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=F/BIMjBq7uK/tVcgzATJ/EBrygqAy5kphRG6l+IH21c=;
-	b=PVMA7iKnN9vg3gNwQbxMvoYHDpetOm0DYhk7VdfxK89/0opX4SrU9MEvmIQ0Jf0W0d3J2M
-	/BgOg5jx74K3/167a9GaAAgtP8c5RCeMS1cImLPiRSw5jc4ZBSMDwszWbblo9apA9n5Vqc
-	Za78FciUZA7mRqhAWdtUX6rOWE/esMc=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-681-Pb2aUo0VOzSJbXJNEQvupg-1; Thu, 21 Mar 2024 11:58:51 -0400
-X-MC-Unique: Pb2aUo0VOzSJbXJNEQvupg-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a46f6c1104eso131899766b.1
-        for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 08:58:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BsFba1ko"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-5cedfc32250so782169a12.0;
+        Thu, 21 Mar 2024 09:00:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711036810; x=1711641610; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JedxGpSetrtUkKTUasSUOChUtssLfFO66jso+nC0zqs=;
+        b=BsFba1kovw/pv+FL+jItcWw2mIXxAd1qJcO2/OQhR8ewktw6UfI8bm9J/kGi8Y8jYZ
+         P4QqBZawv5lOVC44tpraO+Xx/D159Ayr4fnDW66SLfE3cZc6xMIHWvHufmfHLoIwqp3P
+         G9EeI5fLttRZ/o0trmTnl0qUwn1Mth3k/D2NoV9KFBB0j9iATjOPKxKtEg9JTP8KRsNN
+         g9aOdq1iMNu1SYSk9wtIqZzjyE5TtDK6j7/mRwSzwnva7amiZ0ttMo6GmZi7OV0ygt94
+         FGkZqgV0CfD6LPhy2d5DGhUehp+jvfpMAMqAbub3IswPcjNJTWs0rWb0onqOGOECwopR
+         OO9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711036730; x=1711641530;
+        d=1e100.net; s=20230601; t=1711036810; x=1711641610;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=F/BIMjBq7uK/tVcgzATJ/EBrygqAy5kphRG6l+IH21c=;
-        b=u706V5g9ThOsTR2MOCV802rZq4b9CVKvnVP9iQJ9V922Wpz8iBvuTJ0kUeT4/a3m52
-         m3H26Qf9GcNSrqJUCmzF5w+wlsuozkNUvMKkHG6ECLKkc5HF1uwelYGB3n4+pSkB8RKm
-         26kFzJtnsl6jxqr7JfKLdIZIWceR6TBaZ84MZboh37YJfJMTcm0LaGS6GTpdIuXPyoIF
-         yvwurin0fI65x1C5UQWpLm6j5ZIbutZvLn72hRSeYsSjTbWb6eQoM6TEQcX5v+4YnQDi
-         lw2h5Q1kGkSP8vXPMrKgCaHEvOPzd4vcnIctaRWsByv/ZEQch5DxKg2IP05OmrIYP7JX
-         ddpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVQYcyPLq+/dKrV3Gu1qXV19cNA0Ncxrxke9qYXkUIF6BGlUvURMDlvPUR4xx/Ntkx9MvZ8XUdylR0qmR98RxATouuY
-X-Gm-Message-State: AOJu0Yzec+PFyDJSVrRTvgRWmU5SJmc6CQVqlHSarqD94AaK78kQZ9rE
-	6r7zwnC/5/FKL1brTkJnBQCG0mC9DkzVLJ4VpkCLEsAoB93l9s1/QEv7dPog1C470Ea3kTdptxC
-	QhiEp5ReUVm1KXk/eTZv/xznzo38doJLozJ6hLBvBnMU05MMqR4KBIyoo9gt4MOGhxM2bJNu7LD
-	qa6LwlOERuwGnCoe4DFBi2I24X
-X-Received: by 2002:a17:906:c149:b0:a45:bde1:a334 with SMTP id dp9-20020a170906c14900b00a45bde1a334mr3108492ejc.27.1711036730292;
-        Thu, 21 Mar 2024 08:58:50 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHLAjPwlWHH+uhpm++Xyte28ALX+FmmBQ1UMFwPp+aVKCO/tWvAIb4yfOYkcRBNFi+4fGQDhXBDoSX46ViEtiI=
-X-Received: by 2002:a17:906:c149:b0:a45:bde1:a334 with SMTP id
- dp9-20020a170906c14900b00a45bde1a334mr3108485ejc.27.1711036730019; Thu, 21
- Mar 2024 08:58:50 -0700 (PDT)
+        bh=JedxGpSetrtUkKTUasSUOChUtssLfFO66jso+nC0zqs=;
+        b=C9JyLYQVlC9G8o7R6E3WXdjOY5qKmDjrSWHiNgrda7gvLlXXVgioURIV6YmCJWECXr
+         VQM1N5pK6ZfRPgpvxH3E4oPQOn8hDPB7aQTMC7BKu8iD6xKcY18Y4vp884v8+iaibWrO
+         QNMmlizYSq9v9GbRAQTitmQZQ8EQpbsFWlx4FoHW90uLW9adVvsTQFTrzVDO/wneWHV9
+         tWli9mq9YFcpRJcHEfOO1wv/7gzcU94lZdCetC1fQK+C3A9iYOSnj9oO0Ojr4fUwXhUN
+         23Lk6d5CwGStm+dH29Yqi/vDBHrZ1ZesqtB8hP9/hUrqaqyU0YpyibcZCWGTv9J9WaXA
+         AmMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVsK2hHfVQF0GEBewxUUbU2rnWlJc899oePUU+vXJMI5+ZsoFS94+YRCjeT04y5yhUMg31pHQDeSUKnY5BY9Op+Rmr6bGab8h2kWTViZNXLyRehf32sQni/O/2DKTJPiNjFi15uFQ==
+X-Gm-Message-State: AOJu0YyLV4flYgiiGwX1ym27SnHdoUa+q6tsb/FYFvqW9FnV2VXhsyxh
+	APfUFg9vQunIduR2FecmEek4RKcVNjQQfRYmjsVE07Mhd8ITeNg3rKO9EvZrKNmbBi199Za31gX
+	JaLPFumEyCyypKfix9WHftglrn6Q=
+X-Google-Smtp-Source: AGHT+IGvhgHoR/H3/Joew5fwC9WdlIUAZfI4tSWvfbxz0Cmjw6rZcLp6DtCisk5HjPqv4qMcZGzipc9q3RGiyb9GEus=
+X-Received: by 2002:a17:90a:17ed:b0:29b:c17c:5fa6 with SMTP id
+ q100-20020a17090a17ed00b0029bc17c5fa6mr2263229pja.33.1711036809548; Thu, 21
+ Mar 2024 09:00:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240315-hid-bpf-sleepable-v4-0-5658f2540564@kernel.org>
- <20240315-hid-bpf-sleepable-v4-2-5658f2540564@kernel.org> <88fde9a0bb55c74fe34667e891572d8af9eec21d.camel@gmail.com>
-In-Reply-To: <88fde9a0bb55c74fe34667e891572d8af9eec21d.camel@gmail.com>
-From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date: Thu, 21 Mar 2024 16:58:38 +0100
-Message-ID: <CAO-hwJ+bTHfraJkpDDchP4k+JDZKChbv8pb+9Wwc7E45P9X-jw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/6] bpf/verifier: add bpf_timer as a kfunc
- capable type
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+References: <ZfxKeSF5e6mXpnrs@x1>
+In-Reply-To: <ZfxKeSF5e6mXpnrs@x1>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 21 Mar 2024 08:59:57 -0700
+Message-ID: <CAEf4BzY2iVCDPajdzNvJPfFHCjHiMb2eq7rk-rfKejhkD9v48A@mail.gmail.com>
+Subject: Re: [PATCH 1/1] libbpf: Use (uintptr_t) for a u64 cast to a void
+ pointer to fix build on 32-bit arches
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, bpf@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 18, 2024 at 10:59=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.co=
-m> wrote:
+On Thu, Mar 21, 2024 at 8:16=E2=80=AFAM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
 >
-> On Fri, 2024-03-15 at 15:29 +0100, Benjamin Tissoires wrote:
-> [...]
+> Noticed on several perf container builds:
 >
-> > @@ -12021,6 +12034,12 @@ static int check_kfunc_args(struct bpf_verifie=
-r_env *env, struct bpf_kfunc_call_
-> >                       if (ret)
-> >                               return ret;
-> >                       break;
-> > +             case KF_ARG_PTR_TO_TIMER:
-> > +                     if (reg->type !=3D PTR_TO_MAP_VALUE) {
-> > +                             verbose(env, "arg#%d doesn't point to a m=
-ap value\n", i);
-> > +                             return -EINVAL;
-> > +                     }
-> > +                     break;
+>   perfbuilder@number:~$ grep -B1 -A2 "cast to pointer"  dm.log/*\:*
+>   dm.log/ubuntu:18.04-x-arm-libbpf.c: In function 'bpf_object__create_map=
+s':
+>   dm.log/ubuntu:18.04-x-arm:libbpf.c:5355:24: error: cast to pointer from=
+ integer of different size [-Werror=3Dint-to-pointer-cast]
+>   dm.log/ubuntu:18.04-x-arm-     map->mmaped =3D mmap((void *)map->map_ex=
+tra, bpf_map_mmap_sz(map),
+>   dm.log/ubuntu:18.04-x-arm-                        ^
+>   --
+>   dm.log/ubuntu:18.04-x-powerpc-libbpf.c: In function 'bpf_object__create=
+_maps':
+>   dm.log/ubuntu:18.04-x-powerpc:libbpf.c:5355:24: error: cast to pointer =
+from integer of different size [-Werror=3Dint-to-pointer-cast]
+>   dm.log/ubuntu:18.04-x-powerpc-     map->mmaped =3D mmap((void *)map->ma=
+p_extra, bpf_map_mmap_sz(map),
+>   dm.log/ubuntu:18.04-x-powerpc-                        ^
+>   --
+>   dm.log/ubuntu:18.04-x-sh4-libbpf.c: In function 'bpf_object__create_map=
+s':
+>   dm.log/ubuntu:18.04-x-sh4:libbpf.c:5355:24: error: cast to pointer from=
+ integer of different size [-Werror=3Dint-to-pointer-cast]
+>   dm.log/ubuntu:18.04-x-sh4-     map->mmaped =3D mmap((void *)map->map_ex=
+tra, bpf_map_mmap_sz(map),
+>   dm.log/ubuntu:18.04-x-sh4-                        ^
+>   perfbuilder@number:~$
 >
-> I think that pointer offset has to be checked as well,
-> otherwise the following program verifies w/o error:
-
-I initially thought it would be harder than it actually was.
-
-Fixed (with the new test below) in v5.
-
-Cheers,
-Benjamin
-
+> I think Namhyung mentioned as well on a chat conversation about noticing
+> this on a 32-bit build on Debian.
 >
-> --- 8< ----------------------------
->
-> #include <linux/bpf.h>
-> #include <time.h>
-> #include <errno.h>
-> #include <bpf/bpf_helpers.h>
-> #include "bpf_tcp_helpers.h"
->
-> extern int bpf_timer_set_sleepable_cb_impl(struct bpf_timer *timer,
->                 int (callback_fn)(void *map, int *key, struct bpf_timer *=
-timer), void *aux__ign) __ksym;
->
-> #define bpf_timer_set_sleepable_cb(timer, cb) \
->         bpf_timer_set_sleepable_cb_impl(timer, cb, NULL)
->
-> struct elem {
->         struct bpf_timer t;
-> };
->
-> struct {
->         __uint(type, BPF_MAP_TYPE_ARRAY);
->         __uint(max_entries, 2);
->         __type(key, int);
->         __type(value, struct elem);
-> } array SEC(".maps");
->
-> static int cb_sleepable(void *map, int *key, struct bpf_timer *timer)
-> {
->         return 0;
-> }
->
-> SEC("fentry/bpf_fentry_test5")
-> int BPF_PROG2(test_sleepable, int, a)
-> {
->         struct bpf_timer *arr_timer;
->         int array_key =3D 1;
->
->         arr_timer =3D bpf_map_lookup_elem(&array, &array_key);
->         if (!arr_timer)
->                 return 0;
->         bpf_timer_init(arr_timer, &array, CLOCK_MONOTONIC);
->         bpf_timer_set_sleepable_cb((void *)arr_timer + 1, // <-- note inc=
-orrect offset
->                                    cb_sleepable);
->         bpf_timer_start(arr_timer, 0, 0);
->         return 0;
-> }
->
-> char _license[] SEC("license") =3D "GPL";
->
-> ---------------------------- >8 ---
+> Fixes: 79ff13e99169ddb0 ("libbpf: Add support for bpf_arena.")
+> Reported-by: Namhyung Kim <namhyung@kernel.org>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Ian Rogers <irogers@google.com>
+> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> ---
+>  tools/lib/bpf/libbpf.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
 
+We've already landed a similar fix in the bpf tree, see [0].
+
+  [0] https://patchwork.kernel.org/project/netdevbpf/patch/20240319215143.1=
+279312-1-andrii@kernel.org/
+
+
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index efab29b8935bd9f7..af0b0e24978558f8 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -14,6 +14,7 @@
+>  #define _GNU_SOURCE
+>  #endif
+>  #include <stdlib.h>
+> +#include <stdint.h>
+>  #include <stdio.h>
+>  #include <stdarg.h>
+>  #include <libgen.h>
+> @@ -5352,7 +5353,7 @@ bpf_object__create_maps(struct bpf_object *obj)
+>                                         goto err_out;
+>                         }
+>                         if (map->def.type =3D=3D BPF_MAP_TYPE_ARENA) {
+> -                               map->mmaped =3D mmap((void *)map->map_ext=
+ra, bpf_map_mmap_sz(map),
+> +                               map->mmaped =3D mmap((void *)(uintptr_t)m=
+ap->map_extra, bpf_map_mmap_sz(map),
+>                                                    PROT_READ | PROT_WRITE=
+,
+>                                                    map->map_extra ? MAP_S=
+HARED | MAP_FIXED : MAP_SHARED,
+>                                                    map->fd, 0);
+> --
+> 2.44.0
