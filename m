@@ -1,61 +1,61 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0009B55E6A
-	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 15:44:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46BB86637
+	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 15:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711035859; cv=none; b=a4he24m7CjQ19PhnI3sUUJeF+gY1fOMlBV8Yssr5btYGiq9Ha1fUbyyGicwRP+LWlk5QfgYP9xDCDx7TX3/z5JHUbA3qYQu8un8khAPVZquOG3MkJjxn9SSA0ZFbaSoi4LjC33aW9mQBezA55FYX9nnAXCEEkTlXm9Kv+3pL3TU=
+	t=1711035975; cv=none; b=EggWKHc176FExZoe4spz8DUufcIiOZLM3TUolmkoHY0+VybK9KTmleWTtbNgFj+SqBGu3y7+TJldVTk6OsGjPlAquFc4Asf1wSiaA/4it7U8Alen0kljS7JBGm/KJVJK/5LoLnCeqxjxuAicZ57Jcra1ecK2aLzttH4grkLov04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711035859; c=relaxed/simple;
-	bh=phrwu6hEFwR3OmRq0xmE0wJeGnZ2XPtxhImxOPSRs8k=;
+	s=arc-20240116; t=1711035975; c=relaxed/simple;
+	bh=gFqBYv79Oe4VWuydL3wkXy7M4uX3TlLt/bVmuJvy/j4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BDCh2IEw2rZyEVJgzOd+vJKpRfo0V8joI/scSzNVjmJpvZ014bh21B84B7gaTJZJCvkipDk5hsfqbtb8r1Dc+awJpULfmitoPprf65avnYDqno6Qw6RJcY2mPhq4EGZeY1kNcF1oye5ApnEILUWsbPhhXUCULN0T98usJGqtqR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Fs3LJ04Z; arc=none smtp.client-ip=170.10.129.124
+	 To:Cc:Content-Type; b=Hjtt/mePcXpvI7QaZrm0YnAZAeIoxMhDD8OfGkcQIgB0ImshF3vrAxSKAEgkQMhgTL2TjoCZZ7p/nw0dniRozFIUPhvRJDI4f6zrVQpJxkmAiVqRuwc7ynnGWwMR428MhUMuu6HXBABsrSAct1mnueCXDltxuP1gO1HqMbkTclY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dl/fM/eL; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Fs3LJ04Z"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dl/fM/eL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711035857;
+	s=mimecast20190719; t=1711035972;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=l9X/54MANsD/vA3gDB6Zr3YBdoXorm5FGsBGyONKCgo=;
-	b=Fs3LJ04ZtiUPGoM1CQnvBJ4It570s9nkn9kisAUcgEMuMstYAWugyVNJhNeaHrBvIRhXdp
-	WI8rVkE905v0lUM4B6DJjYnNyIrVn3hPIwldfJklSVPG8Fqcr7sv5Zm5w3irj0dyMJzh2r
-	TEeBcKUu3lcYb626Wue3kolOpiJDIRI=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=9u/bDAxkRhGNaI63WaSFbPk3WuTeCpBeNP/DPNnUuVA=;
+	b=dl/fM/eLBsW99JO4lU8aQEo4IjQ9EGQbZNxaiqBLJGG/SJzhPbvvZ9PKlhk+mQL13z7qxT
+	XqN9hUL+XhIY/3wuB2OzSRY3TuFnNWYpece4a/Dto4MtFZ/q+kpsaz6AHB0PDfKVE8GH+a
+	HmDIy34jFH/8uR2vwn3ijBxyntV7Z+4=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-355-eWxy_ehSMyeFynQF-KbwNw-1; Thu, 21 Mar 2024 11:44:15 -0400
-X-MC-Unique: eWxy_ehSMyeFynQF-KbwNw-1
-Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-5159663d035so482592e87.0
-        for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 08:44:15 -0700 (PDT)
+ us-mta-286-OQPe_Z9YO-C-H6_eT-BfMQ-1; Thu, 21 Mar 2024 11:46:09 -0400
+X-MC-Unique: OQPe_Z9YO-C-H6_eT-BfMQ-1
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-568b393f5afso643095a12.1
+        for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 08:46:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711035854; x=1711640654;
+        d=1e100.net; s=20230601; t=1711035968; x=1711640768;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=l9X/54MANsD/vA3gDB6Zr3YBdoXorm5FGsBGyONKCgo=;
-        b=o4xuGsD8dUhm2CcICOdngC6HD8DfJInF45dC/8GRoaMMnT+a4Z0CuEE8Tr1+K/LOIO
-         gWppCadsj8hVPnMpHHt9s5PflLMuXI00D2S/SSOAFKeVNNX5XF09HQrNZa2Gg0OgfRXZ
-         33prHoByyKK89bWVdOLbqOmqV7ZzV5TW/8gerJJAckFiEajie2wmYeFMF33yFVdyrSO3
-         UdXMSZ05RuR6y0/fMid1Q1pW2cr7rgnncjt4lDpVQCBD87I//jhjGwbSeNO2T0wEh6lW
-         7s0EByDC7DDVa1Du1M2wnWQkl5afXRXaz0zp9opEZ839uEDeKeLgSdzDRJqkUlrhPtG2
-         B5MQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUi72cGnm++36KzgMFBQ6+LC2z9lJBUuecxsWaWofxySpezhyJc4wwHgJ+QqrfZlfRPWmDGm01rkn5RYrxV9bu14zyL
-X-Gm-Message-State: AOJu0YwfPKTOcewSsfuodZnILW2QBJRdGpl+ef+K3/fTUtwkqBErGfJq
-	O2IfkAoInh0ZvlVHFpjtRqSIMT5KNqplzEKy5ODC/YghZ34mRyGtA1YBbCJShAfTIxSwEuo4nUj
-	jtY4JeADWmI5XRcMVGU6ULceuLuCEeiMT1tRWe6QxEIzRyL652D6mU0jpm01E3hotJq1rXAdJuz
-	W7KaNrX5ZuB+pRh1vGn01rnja8
-X-Received: by 2002:ac2:5b50:0:b0:513:d82a:8d3a with SMTP id i16-20020ac25b50000000b00513d82a8d3amr2417725lfp.35.1711035854146;
-        Thu, 21 Mar 2024 08:44:14 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEPZIKyQs7CyzkABKXj1SHOyLGf1WPq90wMOMnQeFNTWTzKPNsmeP/5JcobJ6xacp+RlyAuScGQ1FCFgg1A4Yk=
-X-Received: by 2002:ac2:5b50:0:b0:513:d82a:8d3a with SMTP id
- i16-20020ac25b50000000b00513d82a8d3amr2417696lfp.35.1711035853790; Thu, 21
- Mar 2024 08:44:13 -0700 (PDT)
+        bh=9u/bDAxkRhGNaI63WaSFbPk3WuTeCpBeNP/DPNnUuVA=;
+        b=rEcqqEiftfeM2E0lbSzDEetNhNNYgSkhco6WPffcNalg5Vx99kfsvR9mHNx/NvW6s7
+         f9EjN2XCx4MRu09jjW1HuiFWlSyWrMH5I9mHzArOfiWzwIsVFHpeWW0i23aWEXE1s+un
+         go3tQuLlGbqVhkZpH0tsX2YZwO8G/2i9LCnW9TK5Gw3Zu7QEBa2EWaRpovOFuI+wasgF
+         FAz4BKZ5/9ISRefb5UzzpAT5VOfIa4pwQxjNsmK6RMIjDvQWw/SPvT4DcyOehx/wXjdV
+         Jzcuu/XvC8mUnGHAbDq7/2g9OJlEbDElFWxalV7UdWunv/NoutbxDUr7GhXnQGQ/6Z4i
+         2dOg==
+X-Forwarded-Encrypted: i=1; AJvYcCUVWRJENQmTtivowTfXXqHEt54wQENtYdmBYqeSI0RWoINFwrdlY2LOsb7z9/jF+fcTaAFa62Kl/e9ZfI9BSBm4bJ1h
+X-Gm-Message-State: AOJu0YxFtnoIC/HTDrVIQXM5f4kiDwKeB3KlFhujDttQ4zEDPE7rqe75
+	FAHNavqr2yNSqVL89hkmerzPRjL0K9YtgSziQIjJI7lhQuvm2BppkmOfnepZvguzXsCYlsKINQB
+	Oy86ximfibuM6LvoM18PAhdj1omQvSlWiJHZTtQgh1jQRe1LngWqRXm74FeFpaZbGFswx7+8m5U
+	H5f5v4qMHqQTrzZvKwLdWkjUl6
+X-Received: by 2002:a50:d74f:0:b0:568:c4ca:987a with SMTP id i15-20020a50d74f000000b00568c4ca987amr1882705edj.13.1711035968301;
+        Thu, 21 Mar 2024 08:46:08 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFyoGZJ6qMf3KzVRErhXAnVH5+F4wxjV53GrawrpT4L1asy0FRr1gT8G4TR9rt+kUD4VoEMGruWjRF4VmAhHqY=
+X-Received: by 2002:a50:d74f:0:b0:568:c4ca:987a with SMTP id
+ i15-20020a50d74f000000b00568c4ca987amr1882679edj.13.1711035967938; Thu, 21
+ Mar 2024 08:46:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -63,13 +63,12 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240315-hid-bpf-sleepable-v4-0-5658f2540564@kernel.org>
- <20240315-hid-bpf-sleepable-v4-3-5658f2540564@kernel.org> <70ae8d7d2ed950466a61d118f59c16cb07fc9688.camel@gmail.com>
-In-Reply-To: <70ae8d7d2ed950466a61d118f59c16cb07fc9688.camel@gmail.com>
+ <20240315-hid-bpf-sleepable-v4-6-5658f2540564@kernel.org> <89e76fa5834bd34ef94761bcbc987a1be245b261.camel@gmail.com>
+In-Reply-To: <89e76fa5834bd34ef94761bcbc987a1be245b261.camel@gmail.com>
 From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date: Thu, 21 Mar 2024 16:44:01 +0100
-Message-ID: <CAO-hwJLqp4Xm20_CDMvr-GJGFShQ1gSmyWr0MqPvh_+icPJVTw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 3/6] bpf/helpers: introduce
- bpf_timer_set_sleepable_cb() kfunc
+Date: Thu, 21 Mar 2024 16:45:56 +0100
+Message-ID: <CAO-hwJKvK+QYig8jM2MsqB_WSCP7VQGt5NSWXJUZR2=_5+Y1RA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 6/6] selftests/bpf: add sleepable timer tests
 To: Eduard Zingerman <eddyz87@gmail.com>
 Cc: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -82,76 +81,50 @@ Cc: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov <ast@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 18, 2024 at 11:52=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.co=
-m> wrote:
+On Tue, Mar 19, 2024 at 1:20=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
 >
 > On Fri, 2024-03-15 at 15:29 +0100, Benjamin Tissoires wrote:
->
-> This patch looks good to me, please see two nitpicks below.
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-
-Thanks!
-
+> > bpf_experimental.h and ../bpf_testmod/bpf_testmod_kfunc.h are both
+> > including vmlinux.h, which is not compatible with including time.h
+> > or bpf_tcp_helpers.h.
+> >
+> > So prevent vmlinux.h to be included, and override the few missing
+> > types.
+> >
+> > Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 >
 > [...]
 >
-> > @@ -1350,6 +1358,11 @@ BPF_CALL_3(bpf_timer_start, struct bpf_timer_ker=
-n *, timer, u64, nsecs, u64, fla
-> >               goto out;
-> >       }
+> > @@ -6,6 +6,14 @@
+> >  #include <bpf/bpf_helpers.h>
+> >  #include "bpf_tcp_helpers.h"
 > >
-> > +     if (t->is_sleepable && !(flags & BPF_F_TIMER_SLEEPABLE)) {
-> > +             ret =3D -EINVAL;
-> > +             goto out;
-> > +     }
+> > +#define __VMLINUX_H__
+> > +#define u32 __u32
+> > +#define u64 __u64
+> > +#include "bpf_experimental.h"
+> > +struct prog_test_member1;
+> > +#include "../bpf_testmod/bpf_testmod_kfunc.h"
+> > +#undef __VMLINUX_H__
 >
-> Nit:
-> the BPF_F_TIMER_ABS and BPF_F_TIMER_CPU_PIN don't affect
-> sleepable timers, should this check be changed to:
-> '(t->is_sleepable && flags !=3D BPF_F_TIMER_SLEEPABLE)' ?
+> Tbh, this looks very ugly.
 
-Sounds fair enough. Scheduled this for v5
+heh :)
 
->
-> [...]
->
-> > @@ -12151,6 +12175,16 @@ static int check_kfunc_call(struct bpf_verifie=
-r_env *env, struct bpf_insn *insn,
-> >               }
-> >       }
-> >
-> > +     if (is_async_callback_calling_kfunc(meta.func_id)) {
-> > +             err =3D push_callback_call(env, insn, insn_idx, meta.subp=
-rogno,
-> > +                                      set_timer_callback_state);
->
-> Nit: still think that this fragment would be better as:
->
->         if (is_bpf_timer_set_sleepable_cb_impl_kfunc(meta.func_id)) {
->                 err =3D push_callback_call(env, insn, insn_idx, meta.subp=
-rogno,
->                                          set_timer_callback_state);
->
-> Because of the 'set_timer_callback_state' passed to push_callback_call().
+> Would it be possible to create a new tests file sleepable_timer.c
+> and include bpf_experimental.h there, skipping time.h?
 
-Yeah, sorry I missed that part from the previous reviews.
+Sounds like an option, yeah :)
 
-Fixed in v5
+> It appears that for the new tests the only necessary definition from
+> time.h is CLOCK_MONOTONIC.
+>
+
+Yeah, that #define should be the only one missing.
+
+I'll try to come up with better tests in v5 :)
 
 Cheers,
 Benjamin
-
->
-> > +             if (err) {
-> > +                     verbose(env, "kfunc %s#%d failed callback verific=
-ation\n",
-> > +                             func_name, meta.func_id);
-> > +                     return err;
-> > +             }
-> > +     }
-> > +
-> >       rcu_lock =3D is_kfunc_bpf_rcu_read_lock(&meta);
-> >       rcu_unlock =3D is_kfunc_bpf_rcu_read_unlock(&meta);
-> >
->
 
