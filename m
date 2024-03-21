@@ -1,70 +1,42 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9CE61369BD;
-	Thu, 21 Mar 2024 17:04:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F4A7132C3D
+	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 18:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711040694; cv=none; b=cY6owSIc/QHAWoPl2l/YDhjij0UNiEZlLHlbRRACxQixgytm6NlsfX5GrLqbwOrzHyotdZsGoJBQ+hMXwaBnPE61WMqPo6IPkmdnnjnAFOsaT15HL5OOuNTzoIroEYnbjj4itYEpDuf6coab25oQGytquurwuNgXn9TJ1AztMF0=
+	t=1711044307; cv=none; b=MH+akyof7bm4HgIPtTFXv2WvfFbFLr47XvySIxeeyWwZHKIXInSyE/ZKKfPzOfKUBRsWDM+bqJpDVvMA/SmKtx7j3jPdUkj+VZTBS1MZkFrWxOJEjsC7DZsZq/xV77LYpUQo6jWusC3O8Szc10mfLhHvR9/2RtOION2IMNFQB0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711040694; c=relaxed/simple;
-	bh=PBNP6ds/R2JFLiTQd4E4yXtbSLugDnfByIKQ6LMQ4sw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IdHS2x80S6xQjdDPQyO0YrowiwI/Ww+66JecnYCm3/FjLJa8vd85LiG/rdbhv64UOnz0udQIdNeXwJmO42h8dwi3LlXUSoADeUutjR6B9nrmHMkMufWeRzyYLOj/EWRfMU5zR3yCKAxJOBRGsG7wd/QaP+UKOGLQjkkDaErDLVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bx4Ksm6O; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711044307; c=relaxed/simple;
+	bh=4VrMmMAYNdBgObbCahOfUiD5b6XTUkULO1Ntnstnzr0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZHILdrIMbqdP874UDXOL9OVwJ4NdYhbUgeBwkhGxgtpQntAw6Mde5QRqkiIayFk3wvy2ip8vprWYWbtIcw+12OY4Txn8RAim6EUizxbmZqRiiaLOsnxPZg/0aNoPwuImRx7PNYpJihlH46IClieT0qVLXs4l5r1NH3UNOKBqKmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iWKm1HH/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bx4Ksm6O"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1def3340682so9361055ad.1;
-        Thu, 21 Mar 2024 10:04:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711040692; x=1711645492; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nwuoi6LShktW7yNyxvXZVkItWwfCGlWBNcmXdYgjQDY=;
-        b=bx4Ksm6O5LYDsvAMKc5SXJXjXVecj15SetXpdXKdVXKEmCkepGNDE/wt+H4wV9xcTd
-         EmGi2t1GeiQE67gfN+gYOIwNns+An66+pbvDZDr1GszIk10CqFibjSWcSDT/VmgT/DdU
-         Gf9vhlU2mNisixl4XEua0EY4QGn9qId3IT7YJlmxoMjFfjaX90RKNEhZ34oeWMWYp2ke
-         l7TnrrA0Hj1Whb6rH241aXQDG7udEpsuoALg+HSRVK8NMWT4ugdmaR0UFknR6SCk5gDx
-         NBYGJT3OzUKhJYuBSQy39+FQ/8Y+cMzBmDmlpgwUYJLkopuHXKq8vwBiVsYLgSqJlo5q
-         wW7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711040692; x=1711645492;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Nwuoi6LShktW7yNyxvXZVkItWwfCGlWBNcmXdYgjQDY=;
-        b=aQaQmpyN5h7yy2cRzuVkkRaaGr82OXVMRHjx/HdmCVqlkGhunCqXxoaKelSjViIFnM
-         5Vm9w7t8/zHy6yTUlK6hDkB5iWX7wUlF2C/OyJA3geFZcUsKxOVNtp4alTzpa285D1sK
-         SUq0AqZ60NZlQ3d427HZVAakFDSnZCIowdQ7Ke9QrwcOOEiIg4Zul6dF60qplXLel/i+
-         Fch28wmV6vQsd4/ttZufEqYse/rsgAyDi0F3I16x8+li2VzJzKkoXWh+BA+Jw/weKVyI
-         Otblcs8PCH90yCE6+My3DigzPW5tKgALScOX/JcI9dHNZ5A+ufYxwbPtnpn0UTGbIQqj
-         l0aQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWWwnZznPgK4UhTHJQwzFBevI2hBeO+zKTL88U7ZoZ4EzLZ6a9IXex5rYhUncTo9Ac6BmbcViW8ZfPhZ1s9QJAxyBUeRMOUrsbbaVjP
-X-Gm-Message-State: AOJu0YyvkHlBHTIQnm8za1mb5hc4u9XJcFtdWatZ5ETx6dUzZA3VG0OO
-	82g18ilUcQ3GzRwbQ+QzIfX+ZF/8mPrIpnXKmSGb6XRJaTuilYiOdUw+pZqB
-X-Google-Smtp-Source: AGHT+IETbuZGN+thpS4knTRUkn8uk19B26i5JrBb28L79bH1+IP1U6ZmmWFEQggw9iJ/NzCF+F7raw==
-X-Received: by 2002:a17:903:32d0:b0:1df:ffe3:f787 with SMTP id i16-20020a17090332d000b001dfffe3f787mr6939579plr.48.1711040691789;
-        Thu, 21 Mar 2024 10:04:51 -0700 (PDT)
-Received: from localhost ([117.147.31.37])
-        by smtp.gmail.com with ESMTPSA id p10-20020a170902c70a00b001dfffed6058sm59809plp.64.2024.03.21.10.04.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Mar 2024 10:04:51 -0700 (PDT)
-From: Tao Chen <chen.dylane@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	chen.dylane@gmail.com
-Subject: [PATCH] libbpf: add specific btf name info when do core
-Date: Fri, 22 Mar 2024 01:04:44 +0800
-Message-Id: <20240321170444.388225-1-chen.dylane@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iWKm1HH/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1156CC433F1;
+	Thu, 21 Mar 2024 18:05:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711044307;
+	bh=4VrMmMAYNdBgObbCahOfUiD5b6XTUkULO1Ntnstnzr0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=iWKm1HH/THdwrAf5V7GFhrEUTktAyoZNfeozzOSKIvlt+U1rNUM5VigtoYhKV0PCX
+	 D+DIcPqdWZPLAzM68y7Vm6r6wgAF+iDcXHYKo9Mw4xhQ7h4vGz4bwBI01Lb7eZPGOZ
+	 a4eaZhNG6EAnoR8FlCWo9qW+VbSmhW6F1zDjpjUsVVOpVwr/6em80gZz8eG/B9ieWA
+	 MPfeeK0ds7NR89N8IZ+6v89Qny2KBslgJMKpywmGIK1y1jc+LvlzuK9mkxTp21fmu0
+	 DYdyEXzR8UNC+zzX9Bjp5XzpoDPt4sXydrQZ4deQh4eRZ81/RFrP/C2OO8KyycSta+
+	 j4DTIZuGqRvrQ==
+From: Andrii Nakryiko <andrii@kernel.org>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@kernel.org
+Cc: peterz@infradead.org,
+	song@kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH bpf-next 0/3] Inline two LBR-related helpers
+Date: Thu, 21 Mar 2024 11:04:58 -0700
+Message-ID: <20240321180501.734779-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -73,67 +45,138 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-No logic changed, just add specific btf name when core info
-print, maybe it seems more understandable.
+Implement inlining of bpf_get_branch_snapshot() BPF helper using generic BPF
+assembly approach.
 
-Signed-off-by: Tao Chen <chen.dylane@gmail.com>
----
- tools/lib/bpf/libbpf.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+Also inline bpf_get_smp_processor_id() BPF helper but using
+architecture-specific assembly code in x86-64 JIT compiler, given getting CPU
+ID is highly architecture-specific.
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index afd09571c482..b32154288b4a 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5653,7 +5653,8 @@ static int load_module_btfs(struct bpf_object *obj)
- }
- 
- static struct bpf_core_cand_list *
--bpf_core_find_cands(struct bpf_object *obj, const struct btf *local_btf, __u32 local_type_id)
-+bpf_core_find_cands(struct bpf_object *obj, const struct btf *local_btf, __u32 local_type_id,
-+		    const char *targ_btf_path)
- {
- 	struct bpf_core_cand local_cand = {};
- 	struct bpf_core_cand_list *cands;
-@@ -5680,7 +5681,8 @@ bpf_core_find_cands(struct bpf_object *obj, const struct btf *local_btf, __u32 l
- 
- 	/* Attempt to find target candidates in vmlinux BTF first */
- 	main_btf = obj->btf_vmlinux_override ?: obj->btf_vmlinux;
--	err = bpf_core_add_cands(&local_cand, local_essent_len, main_btf, "vmlinux", 1, cands);
-+	err = bpf_core_add_cands(&local_cand, local_essent_len, main_btf,
-+				 targ_btf_path ?: "vmlinux", 1, cands);
- 	if (err)
- 		goto err_out;
- 
-@@ -5793,7 +5795,8 @@ static int bpf_core_resolve_relo(struct bpf_program *prog,
- 				 int relo_idx,
- 				 const struct btf *local_btf,
- 				 struct hashmap *cand_cache,
--				 struct bpf_core_relo_res *targ_res)
-+				 struct bpf_core_relo_res *targ_res,
-+				 const char *targ_btf_path)
- {
- 	struct bpf_core_spec specs_scratch[3] = {};
- 	struct bpf_core_cand_list *cands = NULL;
-@@ -5813,7 +5816,7 @@ static int bpf_core_resolve_relo(struct bpf_program *prog,
- 
- 	if (relo->kind != BPF_CORE_TYPE_ID_LOCAL &&
- 	    !hashmap__find(cand_cache, local_id, &cands)) {
--		cands = bpf_core_find_cands(prog->obj, local_btf, local_id);
-+		cands = bpf_core_find_cands(prog->obj, local_btf, local_id, targ_btf_path);
- 		if (IS_ERR(cands)) {
- 			pr_warn("prog '%s': relo #%d: target candidate search failed for [%d] %s %s: %ld\n",
- 				prog_name, relo_idx, local_id, btf_kind_str(local_type),
-@@ -5920,7 +5923,8 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
- 			if (prog->obj->gen_loader)
- 				continue;
- 
--			err = bpf_core_resolve_relo(prog, rec, i, obj->btf, cand_cache, &targ_res);
-+			err = bpf_core_resolve_relo(prog, rec, i, obj->btf, cand_cache, &targ_res,
-+						    targ_btf_path);
- 			if (err) {
- 				pr_warn("prog '%s': relo #%d: failed to relocate: %d\n",
- 					prog->name, i, err);
+These two helpers are on a criticl direct path to grabbing LBR records from
+BPF program and inlining them help save 3 LBR records in PERF_SAMPLE_BRANCH_ANY
+mode.
+
+Just to give some visual idea of the effect of these changes (and inlining of
+kprobe_multi_link_prog_run() posted as a separte patch) based on retsnoop's
+LBR output (with --lbr=any flag). I only show "wasted" records that are needed
+to go from when some event happened (kernel function return in this case), to
+triggering BPF program that captures LBR *the very first thing* (after getting
+CPU ID to get a temporary buffer).
+
+There are still ways to reduce number of "wasted" records further, this is
+a problem that requires many small and rather independent steps.
+
+fentry mode
+===========
+
+BEFORE
+------
+  [#10] __sys_bpf+0x270                          ->  __x64_sys_bpf+0x18
+  [#09] __x64_sys_bpf+0x1a                       ->  bpf_trampoline_6442508684+0x7f
+  [#08] bpf_trampoline_6442508684+0x9c           ->  __bpf_prog_enter_recur+0x0
+  [#07] __bpf_prog_enter_recur+0x9               ->  migrate_disable+0x0
+  [#06] migrate_disable+0x37                     ->  __bpf_prog_enter_recur+0xe
+  [#05] __bpf_prog_enter_recur+0x43              ->  bpf_trampoline_6442508684+0xa1
+  [#04] bpf_trampoline_6442508684+0xad           ->  bpf_prog_dc54a596b39d4177_fexit1+0x0
+  [#03] bpf_prog_dc54a596b39d4177_fexit1+0x32    ->  bpf_get_smp_processor_id+0x0
+  [#02] bpf_get_smp_processor_id+0xe             ->  bpf_prog_dc54a596b39d4177_fexit1+0x37
+  [#01] bpf_prog_dc54a596b39d4177_fexit1+0xe0    ->  bpf_get_branch_snapshot+0x0
+  [#00] bpf_get_branch_snapshot+0x13             ->  intel_pmu_snapshot_branch_stack+0x0
+
+AFTER
+-----
+  [#07] __sys_bpf+0xdfc                          ->  __x64_sys_bpf+0x18
+  [#06] __x64_sys_bpf+0x1a                       ->  bpf_trampoline_6442508829+0x7f
+  [#05] bpf_trampoline_6442508829+0x9c           ->  __bpf_prog_enter_recur+0x0
+  [#04] __bpf_prog_enter_recur+0x9               ->  migrate_disable+0x0
+  [#03] migrate_disable+0x37                     ->  __bpf_prog_enter_recur+0xe
+  [#02] __bpf_prog_enter_recur+0x43              ->  bpf_trampoline_6442508829+0xa1
+  [#01] bpf_trampoline_6442508829+0xad           ->  bpf_prog_dc54a596b39d4177_fexit1+0x0
+  [#00] bpf_prog_dc54a596b39d4177_fexit1+0x101   ->  intel_pmu_snapshot_branch_stack+0x0
+
+multi-kprobe mode
+=================
+
+BEFORE
+------
+  [#14] __sys_bpf+0x270                          ->  arch_rethook_trampoline+0x0
+  [#13] arch_rethook_trampoline+0x27             ->  arch_rethook_trampoline_callback+0x0
+  [#12] arch_rethook_trampoline_callback+0x31    ->  rethook_trampoline_handler+0x0
+  [#11] rethook_trampoline_handler+0x6f          ->  fprobe_exit_handler+0x0
+  [#10] fprobe_exit_handler+0x3d                 ->  rcu_is_watching+0x0
+  [#09] rcu_is_watching+0x17                     ->  fprobe_exit_handler+0x42
+  [#08] fprobe_exit_handler+0xb4                 ->  kprobe_multi_link_exit_handler+0x0
+  [#07] kprobe_multi_link_exit_handler+0x4       ->  kprobe_multi_link_prog_run+0x0
+  [#06] kprobe_multi_link_prog_run+0x2d          ->  migrate_disable+0x0
+  [#05] migrate_disable+0x37                     ->  kprobe_multi_link_prog_run+0x32
+  [#04] kprobe_multi_link_prog_run+0x58          ->  bpf_prog_2b455b4f8a8d48c5_kexit+0x0
+  [#03] bpf_prog_2b455b4f8a8d48c5_kexit+0x32     ->  bpf_get_smp_processor_id+0x0
+  [#02] bpf_get_smp_processor_id+0xe             ->  bpf_prog_2b455b4f8a8d48c5_kexit+0x37
+  [#01] bpf_prog_2b455b4f8a8d48c5_kexit+0x82     ->  bpf_get_branch_snapshot+0x0
+  [#00] bpf_get_branch_snapshot+0x13             ->  intel_pmu_snapshot_branch_stack+0x0
+
+AFTER
+-----
+  [#10] __sys_bpf+0xdfc                          ->  arch_rethook_trampoline+0x0
+  [#09] arch_rethook_trampoline+0x27             ->  arch_rethook_trampoline_callback+0x0
+  [#08] arch_rethook_trampoline_callback+0x31    ->  rethook_trampoline_handler+0x0
+  [#07] rethook_trampoline_handler+0x6f          ->  fprobe_exit_handler+0x0
+  [#06] fprobe_exit_handler+0x3d                 ->  rcu_is_watching+0x0
+  [#05] rcu_is_watching+0x17                     ->  fprobe_exit_handler+0x42
+  [#04] fprobe_exit_handler+0xb4                 ->  kprobe_multi_link_exit_handler+0x0
+  [#03] kprobe_multi_link_exit_handler+0x31      ->  migrate_disable+0x0
+  [#02] migrate_disable+0x37                     ->  kprobe_multi_link_exit_handler+0x36
+  [#01] kprobe_multi_link_exit_handler+0x5c      ->  bpf_prog_2b455b4f8a8d48c5_kexit+0x0
+  [#00] bpf_prog_2b455b4f8a8d48c5_kexit+0xa3     ->  intel_pmu_snapshot_branch_stack+0x0
+
+
+For default --lbr mode (PERF_SAMPLE_BRANCH_ANY_RETURN), interestingly enough,
+multi-kprobe is *less* wasteful (by one function call):
+
+fentry mode
+===========
+
+BEFORE
+------
+  [#04] __sys_bpf+0x270                          ->  __x64_sys_bpf+0x18
+  [#03] __x64_sys_bpf+0x1a                       ->  bpf_trampoline_6442508684+0x7f
+  [#02] migrate_disable+0x37                     ->  __bpf_prog_enter_recur+0xe
+  [#01] __bpf_prog_enter_recur+0x43              ->  bpf_trampoline_6442508684+0xa1
+  [#00] bpf_get_smp_processor_id+0xe             ->  bpf_prog_dc54a596b39d4177_fexit1+0x37
+
+AFTER
+-----
+  [#03] __sys_bpf+0xdfc                          ->  __x64_sys_bpf+0x18
+  [#02] __x64_sys_bpf+0x1a                       ->  bpf_trampoline_6442508829+0x7f
+  [#01] migrate_disable+0x37                     ->  __bpf_prog_enter_recur+0xe
+  [#00] __bpf_prog_enter_recur+0x43              ->  bpf_trampoline_6442508829+0xa1
+
+multi-kprobe mode
+=================
+
+BEFORE
+------
+  [#03] __sys_bpf+0x270                          ->  arch_rethook_trampoline+0x0
+  [#02] rcu_is_watching+0x17                     ->  fprobe_exit_handler+0x42
+  [#01] migrate_disable+0x37                     ->  kprobe_multi_link_prog_run+0x32
+  [#00] bpf_get_smp_processor_id+0xe             ->  bpf_prog_2b455b4f8a8d48c5_kexit+0x37
+
+AFTER
+-----
+  [#02] __sys_bpf+0xdfc                          ->  arch_rethook_trampoline+0x0
+  [#01] rcu_is_watching+0x17                     ->  fprobe_exit_handler+0x42
+  [#00] migrate_disable+0x37                     ->  kprobe_multi_link_exit_handler+0x36
+
+Andrii Nakryiko (3):
+  bpf: make bpf_get_branch_snapshot() architecture-agnostic
+  bpf: inline bpf_get_branch_snapshot() helper
+  bpf,x86: inline bpf_get_smp_processor_id() on x86-64
+
+ arch/x86/net/bpf_jit_comp.c | 26 +++++++++++++++++++++++++-
+ kernel/bpf/verifier.c       | 37 +++++++++++++++++++++++++++++++++++++
+ kernel/trace/bpf_trace.c    |  4 ----
+ 3 files changed, 62 insertions(+), 5 deletions(-)
+
 -- 
-2.34.1
+2.43.0
 
