@@ -1,221 +1,228 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B86F137923
-	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 21:09:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8064512BE89
+	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 21:26:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711055396; cv=none; b=RoOIsL9BAudp0vnMRyNGcNE5jb7WNtuwv3qv7HVfZeCVnd2k5t1AyQT+UpwE8QO4sqi1U39ytRKDAjSdky9lL2ho3VxhSBCFoeGlGr1PuvAN3tEqf3K9FrmmBwBqEMDh0WsrYioVRlsSSzxTR38lPqffBdGJKdiH3YPNkmmsdMU=
+	t=1711056367; cv=none; b=e3/WqTrid/NjrpyavGtPqP+jrMROj1s6WZgECTHlIkJLfWnDhsD2wPhw4SjwsnZXaaVFc9OCsdjvWHEw5wjXrAzPyUqIXcte1ZvFuOlQKWG0oAFAcIaanlCL/vmAv1Ienj63m6Jd41RUsDO2nCY3OxEf0Ao0Hluz3c1xO5ydqyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711055396; c=relaxed/simple;
-	bh=AYwMNywa9TyrRpfRvPF+3LO6fBFbCwHJhWX9eqhuw3c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qksi4MsW/jnANpNMB86he39Mlt6/e+Fg56v+GDZyrvL2f2t9BaPxxmytxGIV5uMMamPr9ThVy/a9BcejVY492/Q3LWmPL97lthLEpIuP7EM6YVJMaDuTD/iIGfZVOcbYnr6JEHEWgx2Fp+DxObXx8aF85qcLYBXuczYOr7abxJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z11601Dn; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711056367; c=relaxed/simple;
+	bh=gWQoCRsjiZkFlFBTMJ4VIMlmbttTLiVikiLnnafWAnQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fe/lFxLmRUQT+xtPKGrj7BpOHQaebdBlH+iFbCXfA/nR3cvW2O2oATehOVvCwTbpilnLh6l2mfgfqNI1RUH1ctcqUt3azs81BbV1Q4vMQe6J7Zc4SZ+UeDpuUnfVLkXA8nQLh7YdPibawU335E5xM44SuaDcR1QbJFKINYK2Si0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hp/YhN9p; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z11601Dn"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-5dca1efad59so948434a12.2
-        for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 14:09:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711055394; x=1711660194; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/TUzv0dAMv3z5IbhgBfnNGcDkQ6ZK7nOkBedOSh5kww=;
-        b=Z11601Dns1JK4SXLcXAh3vAMTTSI/iinrQ/3xfpoli1zN7R3t/gsRKDllhnivkQuty
-         X7HsI0oY06SuwHdNLxL0FCeA4koAj7I8KqafpvKfsVrZHqw7W0YL0VMEtH/NL8VeaNrH
-         NUbMkiAkVx1JnZRDqgoHTmovwiIHSZXzPq5egr6VtdzWkmiLZvtE6QK/PgsnuSxUoy2b
-         ewulKhbGQcpWBgodLnG2ydHWOYiI16yUh1BB2CAznBq5lxfHzQaL87ynXMBwFv4an6Ju
-         U1qcSPM4X4uZJvQuyWpQooFA92BgDkYSQa/NkprpbvHgRJBvEl82nOwdxSD+u/ehMJsI
-         bhIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711055394; x=1711660194;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/TUzv0dAMv3z5IbhgBfnNGcDkQ6ZK7nOkBedOSh5kww=;
-        b=pAwHP+c302xvg60/+Ipchxo6tr27qb8wyuvHcpULCKfxo0feFeIDiqIjdG07R9k7Pz
-         BwgL+OFHHjRaZzvQg9y49X4Z1z8YTL4iusOPgJSYVLanv6ctv0BieMbbngVi9AnkkyGM
-         lGFXSQDolb0KLGI9my/0lADbnhhPzXsoTeDovbycOyCig5hUrgTiO9J9YIt+HYLf2oun
-         h8fkn3wZuZjkz+9IVXLTipZQYyAwlh+mS1QLfSVcA37mTIaZNC9KS0BcjdtjStoarYSt
-         xlhT//3441IilK5jrBJAE4CpsY885rdAQUPWNmgaq12NBq6vNABjSrdfRPmEwp9LfQiN
-         MHtw==
-X-Forwarded-Encrypted: i=1; AJvYcCUWMWkV6nMQVLs7HDejDZKHDl9WeR67qNCofQNX2owacUqzazZG50Emcdchdwi1eZ/+9NOpq9rC2b+jbxBFXFk+sE3K
-X-Gm-Message-State: AOJu0Yy1pN2L2/liIE5a9eCYh1gWHCGCPeIg3U7WGD+u+lnGTZcJYwRM
-	I9eic3QJzyPT05i0SwnBCwKFh+HopYfIyJGufgLJeLCsDOoQN4W6N+j484SpOchSCCFTAjVIWOM
-	6eOXklY98LeXdTdv8R937ntF/HXc=
-X-Google-Smtp-Source: AGHT+IEUP1MiEpNw6aUFvutn4YQZtCD8s9ap04RjWMr0v7Ttq7jD4Rnqazc4FwrjugPHEQVDoywrV3eryC4jznYuyP0=
-X-Received: by 2002:a17:90b:fd4:b0:29b:3106:7f24 with SMTP id
- gd20-20020a17090b0fd400b0029b31067f24mr573230pjb.37.1711055394346; Thu, 21
- Mar 2024 14:09:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hp/YhN9p"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711056365; x=1742592365;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gWQoCRsjiZkFlFBTMJ4VIMlmbttTLiVikiLnnafWAnQ=;
+  b=hp/YhN9p/r6178Ld37DkeIVQbRgmsWsiwpPpQ8MYv6vMo9EsBAeiqPDS
+   NYck5JFJlW5NuzqhFCl/1c9i+rJuVASliME6Abhk6vVlYAcqniBektyHT
+   Jwxhw2CMx8lZDvRKvgYoc+j9aJXhica0QEWkfOQRAGHSHdRccziY7ij9e
+   hgB6ReIyGcXkdZ5bvD4KiM7Mm6zjEP6Fl/DfGMyJVzxmEATX82VxzCfz4
+   FO3qSsTsnku/uu4dK3MH6v3/IPsyU5F/hoxwzhWULg3PrA0ldjXeGxG4Y
+   R41hC6H57nsRaFTrgkyxXxYf4TjrAU81/B6VJOdRfepoPWV14gXNENpLB
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="23574066"
+X-IronPort-AV: E=Sophos;i="6.07,144,1708416000"; 
+   d="scan'208";a="23574066"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2024 14:26:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,144,1708416000"; 
+   d="scan'208";a="19387166"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 21 Mar 2024 14:26:01 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rnPvD-000Jmt-04;
+	Thu, 21 Mar 2024 21:25:59 +0000
+Date: Fri, 22 Mar 2024 05:25:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>
+Subject: Re: [PATCH bpf-next v2 1/6] bpf: Add bpf_link support for sk_msg and
+ sk_skb progs
+Message-ID: <202403220545.KEzjr9hI-lkp@intel.com>
+References: <20240319175406.2940628-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240321180501.734779-1-andrii@kernel.org> <20240321180501.734779-4-andrii@kernel.org>
- <ZfyhvaGMPPsvqkp-@krava>
-In-Reply-To: <ZfyhvaGMPPsvqkp-@krava>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 21 Mar 2024 14:09:41 -0700
-Message-ID: <CAEf4BzavNBj01bhse_Ag35wnGv2=OhiHSd280f0G6uCWyMq7sg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/3] bpf,x86: inline bpf_get_smp_processor_id()
- on x86-64
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, martin.lau@kernel.org, peterz@infradead.org, 
-	song@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240319175406.2940628-1-yonghong.song@linux.dev>
 
-On Thu, Mar 21, 2024 at 2:08=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wrot=
-e:
->
-> On Thu, Mar 21, 2024 at 11:05:01AM -0700, Andrii Nakryiko wrote:
-> > Add arch-specific inlining of bpf_get_smp_processor_id() using x86-64's
-> > gs segment-based addressing.
-> >
-> > Just to be on the safer side both rip-relative addressing is implemente=
-d
-> > (providing a shorter instruction, but limiting offset to signed 32 bits=
-)
-> > and more universal absolute memory offset addressing is used as
-> > a fallback in (unlikely) scenario that given offset doesn't fit int s32=
-.
-> > The latter is 5 bytes longer, and it seems compilers prefer rip-relativ=
-e
-> > instructions when compiling kernel code.
-> >
-> > Both instructions were tested and confirmed using gdb. We also already
-> > have a BPF selftest (raw_tp_test_run) that validates correctness of
-> > bpf_get_smp_processor_id(), while running target BPF program on each
-> > online CPU.
-> >
-> > Here's a disassembly of bpf_get_smp_processor_id() helper:
-> >
-> > $ gdb -batch -ex 'file vmlinux' -ex 'set disassembly-flavor intel' -ex =
-'disassemble/r bpf_get_smp_processor_id'
-> > Dump of assembler code for function bpf_get_smp_processor_id:
-> >    0xffffffff810fa890 <+0>:     0f 1f 44 00 00          nop    DWORD PT=
-R [rax+rax*1+0x0]
-> >    0xffffffff810fa895 <+5>:     65 8b 05 70 62 f3 7e    mov    eax,DWOR=
-D PTR gs:[rip+0x7ef36270]        # 0x30b0c <pcpu_hot+12>
-> >    0xffffffff810fa89c <+12>:    48 98                   cdqe
-> >    0xffffffff810fa89e <+14>:    c3                      ret
-> > End of assembler dump.
-> >
-> > And here's a GDB disassembly dump of a piece of BPF program calling
-> > bpf_get_smp_processor_id().
-> >
-> >   $ sudo cat /proc/kallsyms | rg 'pcpu_hot|bpf_prog_2b455b4f8a8d48c5_ke=
-xit'
-> >   000000000002d840 A pcpu_hot
-> >   ffffffffa000f8a8 t bpf_prog_2b455b4f8a8d48c5_kexit      [bpf]
-> >
-> > Then attaching GDB to the running kernel in QEMU and breaking inside BP=
-F
-> > program:
-> >
-> > (gdb) b *0xffffffffa000f8e2
-> > Breakpoint 1 at 0xffffffffa000f8e2
-> >
-> > When RIP-relative instruction is used:
-> >
-> >   0xffffffffa000f8e2      mov    %gs:0x6001df63(%rip),%eax        # 0x2=
-d84c <pcpu_hot+12>
-> >   0xffffffffa000f8e9      cltq
-> >
-> > You can see that final address is resolved to <pcpu_hot+12> as expected=
-.
-> >
-> > When absolute addressing is used:
-> >
-> >   0xffffffffa000f8e2      movabs %gs:0x2d84c,%eax
-> >   0xffffffffa000f8ed      cltq
-> >
-> > And here 0x2d84c matches pcpu_hot address from kallsyms (0x2d840),
-> > plus 12 (0xc) bytes offset of cpu_number field.
-> >
-> > This inlining eliminates entire function call for this (rather trivial =
-in terms
-> > of instructions executed) helper, saving a bit of performance, but fore=
-most
-> > saving LBR records (1 for PERF_SAMPLE_BRANCH_ANY_RETURN mode, and 2 for
-> > PERF_SAMPLE_BRANCH_ANY), which is what motivated this work in the first
-> > place.
->
-> this should also 'fix' the k[ret]probe-multi-fast benchmark issue right?
+Hi Yonghong,
 
-I already fixed it locally by switching to bpf_get_numa_node_id(), but
-this change would generally make my original approach not work because
-bpf_get_smp_processor_id() isn't actually called at runtime on x86-64
-:)
+kernel test robot noticed the following build errors:
 
->
-> https://lore.kernel.org/bpf/20240315051813.1320559-2-andrii@kernel.org/
->
-> jirka
->
-> >
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > ---
-> >  arch/x86/net/bpf_jit_comp.c | 26 +++++++++++++++++++++++++-
-> >  1 file changed, 25 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> > index 4900b1ee019f..5b7fdc24b5b8 100644
-> > --- a/arch/x86/net/bpf_jit_comp.c
-> > +++ b/arch/x86/net/bpf_jit_comp.c
-> > @@ -457,6 +457,9 @@ static void emit_prologue(u8 **pprog, u32 stack_dep=
-th, bool ebpf_from_cbpf,
-> >       *pprog =3D prog;
-> >  }
-> >
-> > +/* reference to bpf_get_smp_processor_id() helper implementation to de=
-tect it for inlining */
-> > +extern u64 bpf_get_smp_processor_id(u64, u64, u64, u64, u64);
-> > +
-> >  static int emit_patch(u8 **pprog, void *func, void *ip, u8 opcode)
-> >  {
-> >       u8 *prog =3D *pprog;
-> > @@ -467,7 +470,28 @@ static int emit_patch(u8 **pprog, void *func, void=
- *ip, u8 opcode)
-> >               pr_err("Target call %p is out of range\n", func);
-> >               return -ERANGE;
-> >       }
-> > -     EMIT1_off32(opcode, offset);
-> > +
-> > +     /* inline bpf_get_smp_processor_id() to avoid calls */
-> > +     if (opcode =3D=3D 0xE8 && func =3D=3D &bpf_get_smp_processor_id) =
-{
-> > +             /* 7 to account for the mov instruction itself,
-> > +              * as rip value *after* mov instruction is used
-> > +              */
-> > +             offset =3D (void *)&pcpu_hot.cpu_number - ip - 7;
-> > +             if (is_simm32(offset)) {
-> > +                     /* mov eax,DWORD PTR gs:[rip+<offset>] ; <pcpu_ho=
-t+12> */
-> > +                     EMIT3_off32(0x65, 0x8b, 0x05, (u32)offset);
-> > +             } else {
-> > +                     /* mov eax,DWORD PTR gs:<offset> ; <pcpu_hot+12> =
-*/
-> > +                     offset =3D (s64)(void *)&pcpu_hot.cpu_number;
-> > +                     EMIT2(0x65, 0xa1);
-> > +                     EMIT((u32)offset, 4);
-> > +                     EMIT((u64)offset >> 32, 4);
-> > +             }
-> > +             EMIT2(0x48, 0x98); /* cdqe, zero-extend eax to rax */
-> > +     } else {
-> > +             EMIT1_off32(opcode, offset);
-> > +     }
-> > +
-> >       *pprog =3D prog;
-> >       return 0;
-> >  }
-> > --
-> > 2.43.0
-> >
-> >
+[auto build test ERROR on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yonghong-Song/bpf-Add-bpf_link-support-for-sk_msg-and-sk_skb-progs/20240320-015917
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20240319175406.2940628-1-yonghong.song%40linux.dev
+patch subject: [PATCH bpf-next v2 1/6] bpf: Add bpf_link support for sk_msg and sk_skb progs
+config: nios2-randconfig-001-20240321 (https://download.01.org/0day-ci/archive/20240322/202403220545.KEzjr9hI-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240322/202403220545.KEzjr9hI-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403220545.KEzjr9hI-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   net/core/skmsg.c: In function 'bpf_sk_msg_skb_link_release':
+>> net/core/skmsg.c:1279:23: error: implicit declaration of function 'sock_map_prog_update' [-Werror=implicit-function-declaration]
+    1279 |                 (void)sock_map_prog_update(sk_link->map, NULL, link->prog,
+         |                       ^~~~~~~~~~~~~~~~~~~~
+>> net/core/skmsg.c:1281:17: error: implicit declaration of function 'bpf_map_put_with_uref' [-Werror=implicit-function-declaration]
+    1281 |                 bpf_map_put_with_uref(sk_link->map);
+         |                 ^~~~~~~~~~~~~~~~~~~~~
+   net/core/skmsg.c: At top level:
+>> net/core/skmsg.c:1371:5: warning: no previous prototype for 'bpf_sk_msg_skb_link_create' [-Wmissing-prototypes]
+    1371 | int bpf_sk_msg_skb_link_create(const union bpf_attr *attr, struct bpf_prog *prog)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/core/skmsg.c: In function 'bpf_sk_msg_skb_link_create':
+>> net/core/skmsg.c:1383:15: error: implicit declaration of function 'bpf_map_get_with_uref' [-Werror=implicit-function-declaration]
+    1383 |         map = bpf_map_get_with_uref(attr->link_create.target_fd);
+         |               ^~~~~~~~~~~~~~~~~~~~~
+>> net/core/skmsg.c:1383:13: warning: assignment to 'struct bpf_map *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+    1383 |         map = bpf_map_get_with_uref(attr->link_create.target_fd);
+         |             ^
+   cc1: some warnings being treated as errors
+
+
+vim +/sock_map_prog_update +1279 net/core/skmsg.c
+
+  1272	
+  1273	static void bpf_sk_msg_skb_link_release(struct bpf_link *link)
+  1274	{
+  1275		struct bpf_sk_msg_skb_link *sk_link = bpf_sk_msg_skb_link(link);
+  1276	
+  1277		mutex_lock(&link_mutex);
+  1278		if (sk_link->map) {
+> 1279			(void)sock_map_prog_update(sk_link->map, NULL, link->prog,
+  1280						   sk_link->attach_type);
+> 1281			bpf_map_put_with_uref(sk_link->map);
+  1282			sk_link->map = NULL;
+  1283		}
+  1284		mutex_unlock(&link_mutex);
+  1285	}
+  1286	
+  1287	static int bpf_sk_msg_skb_link_detach(struct bpf_link *link)
+  1288	{
+  1289		bpf_sk_msg_skb_link_release(link);
+  1290		return 0;
+  1291	}
+  1292	
+  1293	static void bpf_sk_msg_skb_link_dealloc(struct bpf_link *link)
+  1294	{
+  1295		kfree(bpf_sk_msg_skb_link(link));
+  1296	}
+  1297	
+  1298	static int bpf_sk_msg_skb_link_update_prog(struct bpf_link *link,
+  1299						   struct bpf_prog *new_prog,
+  1300						   struct bpf_prog *old_prog)
+  1301	{
+  1302		const struct bpf_sk_msg_skb_link *sk_link = bpf_sk_msg_skb_link(link);
+  1303		int ret = 0;
+  1304	
+  1305		mutex_lock(&link_mutex);
+  1306		if (old_prog && link->prog != old_prog) {
+  1307			ret = -EPERM;
+  1308			goto out;
+  1309		}
+  1310	
+  1311		if (link->prog->type != new_prog->type) {
+  1312			ret = -EINVAL;
+  1313			goto out;
+  1314		}
+  1315	
+  1316		ret = sock_map_prog_update(sk_link->map, new_prog, old_prog,
+  1317					   sk_link->attach_type);
+  1318		if (!ret)
+  1319			bpf_prog_inc(new_prog);
+  1320	
+  1321	out:
+  1322		mutex_unlock(&link_mutex);
+  1323		return ret;
+  1324	}
+  1325	
+  1326	static int bpf_sk_msg_skb_link_fill_info(const struct bpf_link *link,
+  1327						 struct bpf_link_info *info)
+  1328	{
+  1329		const struct bpf_sk_msg_skb_link *sk_link = bpf_sk_msg_skb_link(link);
+  1330		u32 map_id = 0;
+  1331	
+  1332		mutex_lock(&link_mutex);
+  1333		if (sk_link->map)
+  1334			map_id = sk_link->map->id;
+  1335		mutex_unlock(&link_mutex);
+  1336	
+  1337		if (link->type == BPF_LINK_TYPE_SK_MSG) {
+  1338			info->skmsg.map_id = map_id;
+  1339			info->skmsg.attach_type = sk_link->attach_type;
+  1340		} else {
+  1341			info->skskb.map_id = map_id;
+  1342			info->skskb.attach_type = sk_link->attach_type;
+  1343		}
+  1344		return 0;
+  1345	}
+  1346	
+  1347	static void bpf_sk_msg_skb_link_show_fdinfo(const struct bpf_link *link,
+  1348						    struct seq_file *seq)
+  1349	{
+  1350		const struct bpf_sk_msg_skb_link *sk_link = bpf_sk_msg_skb_link(link);
+  1351		u32 map_id = 0;
+  1352	
+  1353		mutex_lock(&link_mutex);
+  1354		if (sk_link->map)
+  1355			map_id = sk_link->map->id;
+  1356		mutex_unlock(&link_mutex);
+  1357	
+  1358		seq_printf(seq, "map_id:\t%u\n", map_id);
+  1359		seq_printf(seq, "attach_type:\t%u (...)\n", sk_link->attach_type);
+  1360	}
+  1361	
+  1362	static const struct bpf_link_ops bpf_sk_msg_skb_link_ops = {
+  1363		.release = bpf_sk_msg_skb_link_release,
+  1364		.dealloc = bpf_sk_msg_skb_link_dealloc,
+  1365		.detach = bpf_sk_msg_skb_link_detach,
+  1366		.update_prog = bpf_sk_msg_skb_link_update_prog,
+  1367		.fill_link_info = bpf_sk_msg_skb_link_fill_info,
+  1368		.show_fdinfo = bpf_sk_msg_skb_link_show_fdinfo,
+  1369	};
+  1370	
+> 1371	int bpf_sk_msg_skb_link_create(const union bpf_attr *attr, struct bpf_prog *prog)
+  1372	{
+  1373		struct bpf_link_primer link_primer;
+  1374		struct bpf_sk_msg_skb_link *sk_link;
+  1375		enum bpf_attach_type attach_type;
+  1376		enum bpf_link_type link_type;
+  1377		struct bpf_map *map;
+  1378		int ret;
+  1379	
+  1380		if (attr->link_create.flags)
+  1381			return -EINVAL;
+  1382	
+> 1383		map = bpf_map_get_with_uref(attr->link_create.target_fd);
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
