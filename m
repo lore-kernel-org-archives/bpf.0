@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09B31332A1
-	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 18:05:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB161332A6
+	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 18:05:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711044313; cv=none; b=t6ba9Tu+LJM+2OfvYwMa4ZRQNfI2lb8srWP5apkZwyAFrDnNclSvVLQNlMXNAuGFwxX6/K7OGy5C195wVqBU/ceMEUAF1H7RMLfj8jhDCwsGnzt5p17hJ3MACW+Bk8ApRHY3nRrBG4C0lDOFparfJV06FM6X6hoyQG7D6eOPODE=
+	t=1711044317; cv=none; b=ZgqYpxqVLci5AsynEsTF2DSStOaGHgE2Q2p8eO1pgQqdUiI2NaUGm4HqmEng9CQ1JgXDAs5kl/a0Y5VM2d6XOaLCudAJooR6w43ywnS9/Ko+k3KCre1JjsX7TqwBCfwjNtqSOibMOCkY7K90ccEbsJup0iypx0gWvcb7qPz7hqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711044313; c=relaxed/simple;
-	bh=zs1ViZjfg4YKZFDNnAPthsFgDutL0KGI2N4kW5c7yuU=;
+	s=arc-20240116; t=1711044317; c=relaxed/simple;
+	bh=SuwL/UPeBp6vik5/M7UB35vguIqeg7/KwTpyaUu1iy0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oldcK3Pt9jPfhhhVlLTXqgt3lbnk+TfKNuUloogZEP9DQ51PJRAgfQSFXOLKhQYkj+S5GYtzt1ORL/xne/2Zlm+aOzrjLhuoXZQ9GyORc/QQ7D6eg1bsnR9Stg1KeZGuqtHsxbHhsPqbDHPyN0dhJFE3ex0RTOC/gzD7XFas7dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RLCc3qVu; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=LtdMSo3j0LTzZq+UBz6TceJxhWLrxvgXC0lq+bXDazcRrzxlWl8rKF7jb+jm8izJ1W56E5lOAB5VPUAmdS1ZNMO+tqZ31LdavnWlcSTJJlAt8KgzJ2tyuw0ORaAFfmBy/m+G9D4+Ry6U5lTfDx5sS9JGQreaGpb6euMBIIVsMOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OMtwuL3Z; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RLCc3qVu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F740C433C7;
-	Thu, 21 Mar 2024 18:05:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OMtwuL3Z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B25DFC433C7;
+	Thu, 21 Mar 2024 18:05:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711044313;
-	bh=zs1ViZjfg4YKZFDNnAPthsFgDutL0KGI2N4kW5c7yuU=;
+	s=k20201202; t=1711044316;
+	bh=SuwL/UPeBp6vik5/M7UB35vguIqeg7/KwTpyaUu1iy0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RLCc3qVuS806YjmBQUQSRwXCGG/FNI8t1e3dM14hzmkMIF0iIIfvokmOcoUXzsFLS
-	 oVlhpwla3BvPJ3iznTO/GlB+M1kAhTqTq9qnUwT50G7G5gaj1SBIQdHyhIY3lB/Fhc
-	 cgbQNsTTRN9ltpaY4fS9cvSaeNcSUbuHc+L56M+k4Zz/+oHuTHnafFohwJpxli/OFM
-	 0ZRKPhq3b4fOqfVtKuNF+OHdb61dRVSRpIKAXxzGbOafqC4xeouhwpgfjMBlhT3Srx
-	 sa+fWw0Bcs3ZGh54KkCLxPdGg1LxeOJzjMKthoj8G9GSJTGUKPAn+RrP07d8ArCcKj
-	 J9OWuthQKHQDA==
+	b=OMtwuL3ZOBnMAAxfX/BsXNUjxlRiDmJ1y/0UCD5uoDmclNnAAXuScyO5I5R9rG65R
+	 x2O0xeDixLuZGq5m7kdX5FFMVEU/2ZhxuPBMus512xVz8Jz39aUncoC2MOOV6NqUeS
+	 05OYZBhjejg8iGM2/tWiVS29648Z7FJQJ297k1bUdC1pbAQujQD6Jap8hanAgaBDOF
+	 5loxqD5eFJAUJv1/PFROM2sdy0sVNNSIMbuLUt1usrWFFw1sJhnHuIGcfjhQgnwmzk
+	 vofMGDyrAIsGL5oVEO4jk4Mp17QVRfSYcbyqrWzw7LcZ5naQ0xOp0suDJ7+1BcKLuC
+	 Q9sEAYJXRt8sw==
 From: Andrii Nakryiko <andrii@kernel.org>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -34,9 +34,9 @@ To: bpf@vger.kernel.org,
 Cc: peterz@infradead.org,
 	song@kernel.org,
 	Andrii Nakryiko <andrii@kernel.org>
-Subject: [PATCH bpf-next 2/3] bpf: inline bpf_get_branch_snapshot() helper
-Date: Thu, 21 Mar 2024 11:05:00 -0700
-Message-ID: <20240321180501.734779-3-andrii@kernel.org>
+Subject: [PATCH bpf-next 3/3] bpf,x86: inline bpf_get_smp_processor_id() on x86-64
+Date: Thu, 21 Mar 2024 11:05:01 -0700
+Message-ID: <20240321180501.734779-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240321180501.734779-1-andrii@kernel.org>
 References: <20240321180501.734779-1-andrii@kernel.org>
@@ -48,69 +48,114 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Inline bpf_get_branch_snapshot() helper using architecture-agnostic
-inline BPF code which calls directly into underlying callback of
-perf_snapshot_branch_stack static call. This callback is set early
-during kernel initialization and is never updated or reset, so it's ok
-to fetch actual implementation using static_call_query() and call
-directly into it.
+Add arch-specific inlining of bpf_get_smp_processor_id() using x86-64's
+gs segment-based addressing.
 
-This change eliminates a full function call and saves one LBR entry
-in PERF_SAMPLE_BRANCH_ANY LBR mode.
+Just to be on the safer side both rip-relative addressing is implemented
+(providing a shorter instruction, but limiting offset to signed 32 bits)
+and more universal absolute memory offset addressing is used as
+a fallback in (unlikely) scenario that given offset doesn't fit int s32.
+The latter is 5 bytes longer, and it seems compilers prefer rip-relative
+instructions when compiling kernel code.
+
+Both instructions were tested and confirmed using gdb. We also already
+have a BPF selftest (raw_tp_test_run) that validates correctness of
+bpf_get_smp_processor_id(), while running target BPF program on each
+online CPU.
+
+Here's a disassembly of bpf_get_smp_processor_id() helper:
+
+$ gdb -batch -ex 'file vmlinux' -ex 'set disassembly-flavor intel' -ex 'disassemble/r bpf_get_smp_processor_id'
+Dump of assembler code for function bpf_get_smp_processor_id:
+   0xffffffff810fa890 <+0>:     0f 1f 44 00 00          nop    DWORD PTR [rax+rax*1+0x0]
+   0xffffffff810fa895 <+5>:     65 8b 05 70 62 f3 7e    mov    eax,DWORD PTR gs:[rip+0x7ef36270]        # 0x30b0c <pcpu_hot+12>
+   0xffffffff810fa89c <+12>:    48 98                   cdqe
+   0xffffffff810fa89e <+14>:    c3                      ret
+End of assembler dump.
+
+And here's a GDB disassembly dump of a piece of BPF program calling
+bpf_get_smp_processor_id().
+
+  $ sudo cat /proc/kallsyms | rg 'pcpu_hot|bpf_prog_2b455b4f8a8d48c5_kexit'
+  000000000002d840 A pcpu_hot
+  ffffffffa000f8a8 t bpf_prog_2b455b4f8a8d48c5_kexit      [bpf]
+
+Then attaching GDB to the running kernel in QEMU and breaking inside BPF
+program:
+
+(gdb) b *0xffffffffa000f8e2
+Breakpoint 1 at 0xffffffffa000f8e2
+
+When RIP-relative instruction is used:
+
+  0xffffffffa000f8e2      mov    %gs:0x6001df63(%rip),%eax        # 0x2d84c <pcpu_hot+12>
+  0xffffffffa000f8e9      cltq
+
+You can see that final address is resolved to <pcpu_hot+12> as expected.
+
+When absolute addressing is used:
+
+  0xffffffffa000f8e2      movabs %gs:0x2d84c,%eax
+  0xffffffffa000f8ed      cltq
+
+And here 0x2d84c matches pcpu_hot address from kallsyms (0x2d840),
+plus 12 (0xc) bytes offset of cpu_number field.
+
+This inlining eliminates entire function call for this (rather trivial in terms
+of instructions executed) helper, saving a bit of performance, but foremost
+saving LBR records (1 for PERF_SAMPLE_BRANCH_ANY_RETURN mode, and 2 for
+PERF_SAMPLE_BRANCH_ANY), which is what motivated this work in the first
+place.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 37 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ arch/x86/net/bpf_jit_comp.c | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index de7813947981..4fb6c468e199 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -20130,6 +20130,43 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			goto next_insn;
- 		}
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 4900b1ee019f..5b7fdc24b5b8 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -457,6 +457,9 @@ static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf,
+ 	*pprog = prog;
+ }
  
-+		/* Implement bpf_get_branch_snapshot inline. */
-+		if (prog->jit_requested && BITS_PER_LONG == 64 &&
-+		    insn->imm == BPF_FUNC_get_branch_snapshot) {
-+			/* We are dealing with the following func protos:
-+			 * u64 bpf_get_branch_snapshot(void *buf, u32 size, u64 flags);
-+			 * int perf_snapshot_branch_stack(struct perf_branch_entry *entries, u32 cnt);
-+			 */
-+			const u32 br_entry_size = sizeof(struct perf_branch_entry);
++/* reference to bpf_get_smp_processor_id() helper implementation to detect it for inlining */
++extern u64 bpf_get_smp_processor_id(u64, u64, u64, u64, u64);
 +
-+			/* if (unlikely(flags)) return -EINVAL */
-+			insn_buf[0] = BPF_JMP_IMM(BPF_JNE, BPF_REG_3, 0, 5);
-+			/* transform size (bytes) into entry_cnt */
-+			insn_buf[1] = BPF_ALU32_IMM(BPF_DIV, BPF_REG_2, br_entry_size);
-+			/* call perf_snapshot_branch_stack implementation */
-+			insn_buf[2] = BPF_EMIT_CALL(static_call_query(perf_snapshot_branch_stack));
-+			/* if (entry_cnt == 0) return -ENOENT */
-+			insn_buf[3] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 4);
-+			/* return entry_cnt * sizeof(struct perf_branch_entry) */
-+			insn_buf[4] = BPF_ALU32_IMM(BPF_MUL, BPF_REG_0, br_entry_size);
-+			insn_buf[5] = BPF_JMP_A(3);
-+			/* return -EINVAL; */
-+			insn_buf[6] = BPF_MOV64_IMM(BPF_REG_0, -EINVAL);
-+			insn_buf[7] = BPF_JMP_A(1);
-+			/* return -ENOENT; */
-+			insn_buf[8] = BPF_MOV64_IMM(BPF_REG_0, -ENOENT);
-+			cnt = 9;
+ static int emit_patch(u8 **pprog, void *func, void *ip, u8 opcode)
+ {
+ 	u8 *prog = *pprog;
+@@ -467,7 +470,28 @@ static int emit_patch(u8 **pprog, void *func, void *ip, u8 opcode)
+ 		pr_err("Target call %p is out of range\n", func);
+ 		return -ERANGE;
+ 	}
+-	EMIT1_off32(opcode, offset);
 +
-+			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
-+			if (!new_prog)
-+				return -ENOMEM;
-+
-+			delta    += cnt - 1;
-+			env->prog = prog = new_prog;
-+			insn      = new_prog->insnsi + i + delta;
-+			continue;
++	/* inline bpf_get_smp_processor_id() to avoid calls */
++	if (opcode == 0xE8 && func == &bpf_get_smp_processor_id) {
++		/* 7 to account for the mov instruction itself,
++		 * as rip value *after* mov instruction is used
++		 */
++		offset = (void *)&pcpu_hot.cpu_number - ip - 7;
++		if (is_simm32(offset)) {
++			/* mov eax,DWORD PTR gs:[rip+<offset>] ; <pcpu_hot+12> */
++			EMIT3_off32(0x65, 0x8b, 0x05, (u32)offset);
++		} else {
++			/* mov eax,DWORD PTR gs:<offset> ; <pcpu_hot+12> */
++			offset = (s64)(void *)&pcpu_hot.cpu_number;
++			EMIT2(0x65, 0xa1);
++			EMIT((u32)offset, 4);
++			EMIT((u64)offset >> 32, 4);
 +		}
++		EMIT2(0x48, 0x98); /* cdqe, zero-extend eax to rax */
++	} else {
++		EMIT1_off32(opcode, offset);
++	}
 +
- 		/* Implement bpf_kptr_xchg inline */
- 		if (prog->jit_requested && BITS_PER_LONG == 64 &&
- 		    insn->imm == BPF_FUNC_kptr_xchg &&
+ 	*pprog = prog;
+ 	return 0;
+ }
 -- 
 2.43.0
 
