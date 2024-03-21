@@ -1,86 +1,61 @@
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3401183CAA;
-	Thu, 21 Mar 2024 12:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715F258AA8;
+	Thu, 21 Mar 2024 14:05:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711025211; cv=none; b=NWQtZMYjuK/Uob5hx4F1ZfQwiCFqAIMARMsJ6DLG8lnQN3ow09ttRFlTIOsQGxHmGFNYPz6G+ev1lSN7o2l+NnrCaCrSErKeOLBQtvN7/+QSvjwISZq1gqBjLxVYS0e6L1Vi9gvtZTIsv1q9A+c4uIwC7vSpiVyZcaxTuGzaF0k=
+	t=1711029916; cv=none; b=q7IVoavlhJhsqLyVL40Kq2ClDUrZL1E/Or6mAW9qykyCawly/6LqsCcCHgINKQyGXZZYRB+RMWiaDIYKLC7gm7ckgZsMVrDyeKsZoSnj/Sh5/EeFIZiVu0J6nJHhcX2P20YBfqTIVa3gtxWY/tLAQCEc2EEJGpx5U9pZjxJk0sQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711025211; c=relaxed/simple;
-	bh=H1MMAdCPhar9gXNz90u/PAuWzVl6CuM3vhnqd/TkPuw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FJ3O8GXAXv2O8c27zgRnMlfDPDJRF1S2BUW/BalvUtwdKRrIH1pVYdcVIjIJGCyAe2stu3Lf1KehBdtiAUJGHxXYPGUnod9HZrx0CWsvq/i+/zI5OCg5oTpdyM8p7e4WHH3bcLp/YNbBUhcxSQSCvjToFWmF1o8B0CN9xBEvrNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h3HpHfdL; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711029916; c=relaxed/simple;
+	bh=jH8bQ0u9CUSKqXv05SFVoT15Aw5bdy9ExHvUoS+Bugs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TGU8sLko0CFDb7drVCkmAGB1adNI/mEYRGZuHnIqfNRegBl++pPom43YknxBl6f4gkcQTgeUVRi6UqNm+u0L5etIOoo518O1CojrmVtvxfvkyiFBudBr3c13elq4pYu2uGHxM+xoDQqvXhp2lflyKrozNKkuvwnAgAZzC6HNJFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fV9ZJCbW; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h3HpHfdL"
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2d68c6a4630so12148131fa.3;
-        Thu, 21 Mar 2024 05:46:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711025207; x=1711630007; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=I/SgFGO2MqdHqwExgwk8KY7oTptbTpFN7suTzX47MqE=;
-        b=h3HpHfdLhr1wvmEsLKdYvWd0ReXWJozr9pZNniNoTKwFyCELOiU2OZCXMWB+Y2/+iO
-         m7TObTAdA7MOeR0lVIZBucyvCJ9yMsMjz+s4yTZknenxW6wIaQibh7aDw6Tk2T5rYwai
-         3spqknmqB9p+DehdJ9VbqlI1yf3V5gzOnZ3ADMm8Ls5DzbbNL2iMpZ4LdNU+GiiYX6pc
-         R6IJnCGSM+MjK+ILOeFoULIuLnjzB1XJEV+FiTvnXbhUEcROM5nx19bOxeDZJMAgOQRa
-         66c33N7Tb1Dzf6+5H7B81h2bsqzd9ijbmApjZ5ZEWgS1JK4Hht9otfmARv2A/8duXgrO
-         28AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711025207; x=1711630007;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I/SgFGO2MqdHqwExgwk8KY7oTptbTpFN7suTzX47MqE=;
-        b=foIESnIKb5vbUnO3YNhLDemHXH6B3qL9HGl9euekLQgW8TDNmVvY2glL7lXoV/7k0/
-         xIGVqzp3YUr8QpEfE6G3WcqWP3h0lIAB5evpOeW0b9GrB65tlPNjaLfd4iFvAFXR7cmF
-         5YHEELuivKJgP3oLrp0uVzKSz+uqXaxTyDFPk+oHjWpWNjsn+6h2l6sUZUmOKS1h14Gz
-         PhPMEyPBD5B+4Z04saBNSG0Jmd7tMXV9QnHG5U/kahRVr/T9VIIaDIzzbhAZKjXEjMuI
-         9OABKdyoi7oc4D+sJhNvKrPrVU1M4MYER38UdQr/tpeYdzqP+LfJL4Ef3jT6h2zAWXuX
-         f5ow==
-X-Forwarded-Encrypted: i=1; AJvYcCWTztZ5V6LvcLRun7u9wnRNT6H89XBapp65vulVPIdhaPNEm9sk8LrMbzKZbeddRK/Y8aUMUXAieU99sMu4sFuNuEYfHTOvFQSUOtqap44njkfLbFtd8ANFnuwrSwKnKJirvDMIJQ2GFJFPf58+I/+PIZl0DtVXKYZC
-X-Gm-Message-State: AOJu0Yy9Om4uBn7OzRUL8eYgR5/BJJuPq7E1ixwn0zRlPB2/bV2mdFLV
-	tnYlAMcFMNZ909oonecpYDKBBGke70Yub4sGIFAMwZ3Y9wyrRJKz
-X-Google-Smtp-Source: AGHT+IGLBCGUqDCmTWPGXRDUKebS7w81yY1QauACQh/eo7G5MW+JDI714tqjCv2YdsXFqiBBvptplw==
-X-Received: by 2002:a05:651c:1049:b0:2d4:aae0:1d71 with SMTP id x9-20020a05651c104900b002d4aae01d71mr6010167ljm.43.1711025207052;
-        Thu, 21 Mar 2024 05:46:47 -0700 (PDT)
-Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id m2-20020a05600c3b0200b0041463c2c6ccsm5567314wms.4.2024.03.21.05.46.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Mar 2024 05:46:46 -0700 (PDT)
-From: Puranjay Mohan <puranjay12@gmail.com>
-To: "David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ilya Leoshkevich <iii@linux.ibm.com>
-Cc: puranjay12@gmail.com
-Subject: [PATCH bpf v4] bpf: verifier: prevent userspace memory access
-Date: Thu, 21 Mar 2024 12:46:40 +0000
-Message-Id: <20240321124640.8870-1-puranjay12@gmail.com>
-X-Mailer: git-send-email 2.40.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fV9ZJCbW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711029914; x=1742565914;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jH8bQ0u9CUSKqXv05SFVoT15Aw5bdy9ExHvUoS+Bugs=;
+  b=fV9ZJCbWP2Fy8lvQYvJ3L5NVLdYYz/l6v2QDNHtcy9YRtzZEylOtompg
+   6ruFzeQz07s81/UpCflOQun5Wi2TY3KLtcGFwdnpdNlgi+UHKdgulz4/+
+   dWUym8BZbI/wgfibUi4oAqrtoBWIOandRLM0IHHKKiCIGc6R0qEOXTChu
+   XOpp9br9IRBxQaR8+QQY3Z4oORdCAygziuJpLGIwQ2hAJrWrsHh99y098
+   vefgMGPUVcoim1xVcmWg3pUTGQfPu+xKByZJphXcdooqSITwg2Nzw1AC1
+   jRSiwrnmql9zuN5VeGleeJFV/g3upKzA2swEXPU/jIuEDewKuz9do/7ol
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11019"; a="5910895"
+X-IronPort-AV: E=Sophos;i="6.07,143,1708416000"; 
+   d="scan'208";a="5910895"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2024 07:05:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,143,1708416000"; 
+   d="scan'208";a="14911250"
+Received: from intel.iind.intel.com (HELO brc5..) ([10.190.162.156])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2024 07:05:09 -0700
+From: Tushar Vyavahare <tushar.vyavahare@intel.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	bjorn@kernel.org,
+	magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	jonathan.lemon@gmail.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	tirthendu.sarkar@intel.com,
+	tushar.vyavahare@intel.com
+Subject: [PATCH bpf-next v2 0/7] Selftests/xsk: Test with maximum and minimum HW ring size configurations
+Date: Thu, 21 Mar 2024 13:49:04 +0000
+Message-Id: <20240321134911.120091-1-tushar.vyavahare@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -89,393 +64,87 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-With BPF_PROBE_MEM, BPF allows de-referencing an untrusted pointer. To
-thwart invalid memory accesses, the JITs add an exception table entry
-for all such accesses. But in case the src_reg + offset overflows and
-turns into a userspace address, the BPF program might read that memory if
-the user has mapped it.
+Please find enclosed a patch set that introduces enhancements and new test
+cases to the selftests/xsk framework. These test the robustness and
+reliability of AF_XDP across both minimal and maximal ring size
+configurations.
 
-There are architectural features that prevent the kernel from accessing
-userspace memory, like Privileged Access Never (PAN) on ARM64,
-Supervisor Mode Access Prevention (SMAP) on x86-64, Supervisor User
-Memory access (SUM) on RISC-V, etc. But BPF should not rely on the
-existence of these features.
+While running these tests, a bug [1] was identified when the batch size is
+roughly the same as the NIC ring size. This has now been addressed by
+Maciej's fix.
 
-Make the verifier add guard instructions around such memory accesses and
-skip the load if the address falls into the userspace region.
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=913eda2b08cc49d31f382579e2be34c2709eb789
 
-The JITs need to implement bpf_arch_uaddress_limit() to define where
-the userspace addresses end for that architecture or TASK_SIZE is taken
-as default.
+Patch Summary:
 
-The implementation is as follows:
+1. This commit syncs the ethtool.h header file between the kernel source
+   tree and the tools directory to maintain consistency.
 
-REG_AX =  SRC_REG
-if(offset)
-	REG_AX += offset;
-REG_AX >>= 32;
-if (REG_AX <= (uaddress_limit >> 32))
-	DST_REG = 0;
-else
-	DST_REG = *(size *)(SRC_REG + offset);
+2: Modifies the BATCH_SIZE from a constant to a variable, batch_size, to
+   support dynamic modification at runtime for testing different hardware
+   ring sizes.
 
-Comparing just the upper 32 bits of the load address with the upper
-32 bits of uaddress_limit implies that the values are being aligned down
-to a 4GB boundary before comparison.
+3: Implements a function, get_hw_ring_size, to retrieve the current
+   maximum interface size and store this information in the
+   ethtool_ringparam structure.
 
-The above means that all loads with address <= uaddress_limit + 4GB are
-skipped. This is acceptable because there is a large hole (much larger
-than 4GB) between userspace and kernel space memory, therefore a
-correctly functioning BPF program should not access this 4GB memory
-above the userspace.
+4: Implements a new function, set_hw_ring_size, which allows for the
+   dynamic configuration of the ring size within an interface.
 
-Let's analyze what this patch does to the following fentry program
-dereferencing an untrusted pointer:
+5: Introduce a new function, set_ring_size(), to manage asynchronous AF_XDP
+   socket closure. Make sure to retry the set_hw_ring_size function
+   multiple times, up to SOCK_RECONF_CTR, if it fails due to an active
+   AF_XDP socket. Immediately return an error for non-EBUSY errors.
 
-  SEC("fentry/tcp_v4_connect")
-  int BPF_PROG(fentry_tcp_v4_connect, struct sock *sk)
-  {
-                *(volatile long *)sk;
-                return 0;
-  }
+6: Adds a new test case that puts the AF_XDP driver under stress by
+   configuring minimal hardware and software ring sizes, verifying its
+   functionality under constrained conditions.
 
-    BPF Program before              |           BPF Program after
-    ------------------              |           -----------------
+7: Add a new test case that evaluates the maximum ring sizes for AF_XDP,
+   ensuring its reliability under maximum ring utilization.
 
-  0: (79) r1 = *(u64 *)(r1 +0)          0: (79) r1 = *(u64 *)(r1 +0)
-  -----------------------------------------------------------------------
-  1: (79) r1 = *(u64 *)(r1 +0) --\      1: (bf) r11 = r1
-  ----------------------------\   \     2: (77) r11 >>= 32
-  2: (b7) r0 = 0               \   \    3: (b5) if r11 <= 0x8000 goto pc+2
-  3: (95) exit                  \   \-> 4: (79) r1 = *(u64 *)(r1 +0)
-                                 \      5: (05) goto pc+1
-                                  \     6: (b7) r1 = 0
-                                   \--------------------------------------
-                                        7: (b7) r0 = 0
-                                        8: (95) exit
+Testing Strategy:
 
-As you can see from above, in the best case (off=0), 5 extra instructions
-are emitted.
+Check the system in extreme scenarios, such as maximum and minimum
+configurations. This helps identify and fix any bugs that may occur.
 
-Now, we analyse the same program after it has gone through the JITs of
-X86-64, ARM64, and RISC-V architectures. We follow the single load
-instruction that has the untrusted pointer and see what instrumentation
-has been added around it.
+Tushar Vyavahare (7):
+  tools/include: copy ethtool.h to tools directory
+  selftests/xsk: make batch size variable
+  selftests/bpf: implement get_hw_ring_size function to retrieve current
+    and max interface size
+  selftests/bpf: implement set_hw_ring_size function to configure
+    interface ring size
+  selftests/xsk: introduce set_ring_size function with a retry mechanism
+    for handling AF_XDP socket closures
+  selftests/xsk: test AF_XDP functionality under minimal ring
+    configurations
+  selftests/xsk: add new test case for AF_XDP under max ring sizes
 
-                                x86-64 JIT
-                                ==========
-     JIT's Instrumentation                  Verifier's Instrumentation
-          (upstream)                               (This patch)
-     ---------------------                  --------------------------
+Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
 
-   0:   nopl   0x0(%rax,%rax,1)             0:   nopl   0x0(%rax,%rax,1)
-   5:   xchg   %ax,%ax                      5:   xchg   %ax,%ax
-   7:   push   %rbp                         7:   push   %rbp
-   8:   mov    %rsp,%rbp                    8:   mov    %rsp,%rbp
-   b:   mov    0x0(%rdi),%rdi               b:   mov    0x0(%rdi),%rdi
-  ------------------------------------------------------------------------
-   f:   movabs $0x800000000000,%r11         f:   mov    %rdi,%r10
-  19:   cmp    %r11,%rdi                   12:   shr    $0x20,%r10
-  1c:   jb     0x000000000000002a          16:   cmp    $0x8000,%r10
-  1e:   mov    %rdi,%r11                   1d:   jbe    0x0000000000000025
-  21:   add    $0x0,%r11              /--> 1f:   mov    0x0(%rdi),%rdi
-  28:   jae    0x000000000000002e    /     23:   jmp    0x0000000000000027
-  2a:   xor    %edi,%edi            /      25:   xor    %edi,%edi
-  2c:   jmp    0x0000000000000032  / /------------------------------------
-  2e:   mov    0x0(%rdi),%rdi  ---/ /      27:   xor    %eax,%eax
-  ---------------------------------/       29:   leave
-  32:   xor    %eax,%eax                   2a:   ret
-  34:   leave
-  35:   ret
-
-The x86-64 JIT already emits some instructions to protect against user
-memory access. The implementation in this patch leads to a smaller
-number of instructions being emitted. In the worst case the JIT will
-emit 9 extra instructions and this patch decreases it to 7.
-
-                                  ARM64 JIT
-                                  =========
-
-        No Intrumentation                       Verifier's Instrumentation
-           (upstream)                                  (This patch)
-        -----------------                       --------------------------
-
-   0:   add     x9, x30, #0x0                0:   add     x9, x30, #0x0
-   4:   nop                                  4:   nop
-   8:   paciasp                              8:   paciasp
-   c:   stp     x29, x30, [sp, #-16]!        c:   stp     x29, x30, [sp, #-16]!
-  10:   mov     x29, sp                     10:   mov     x29, sp
-  14:   stp     x19, x20, [sp, #-16]!       14:   stp     x19, x20, [sp, #-16]!
-  18:   stp     x21, x22, [sp, #-16]!       18:   stp     x21, x22, [sp, #-16]!
-  1c:   stp     x25, x26, [sp, #-16]!       1c:   stp     x25, x26, [sp, #-16]!
-  20:   stp     x27, x28, [sp, #-16]!       20:   stp     x27, x28, [sp, #-16]!
-  24:   mov     x25, sp                     24:   mov     x25, sp
-  28:   mov     x26, #0x0                   28:   mov     x26, #0x0
-  2c:   sub     x27, x25, #0x0              2c:   sub     x27, x25, #0x0
-  30:   sub     sp, sp, #0x0                30:   sub     sp, sp, #0x0
-  34:   ldr     x0, [x0]                    34:   ldr     x0, [x0]
---------------------------------------------------------------------------------
-  38:   ldr     x0, [x0] ----------\        38:   add     x9, x0, #0x0
------------------------------------\\       3c:   lsr     x9, x9, #32
-  3c:   mov     x7, #0x0            \\      40:   cmp     x9, #0x10, lsl #12
-  40:   mov     sp, sp               \\     44:   b.ls    0x0000000000000050
-  44:   ldp     x27, x28, [sp], #16   \\--> 48:   ldr     x0, [x0]
-  48:   ldp     x25, x26, [sp], #16    \    4c:   b       0x0000000000000054
-  4c:   ldp     x21, x22, [sp], #16     \   50:   mov     x0, #0x0
-  50:   ldp     x19, x20, [sp], #16      \---------------------------------------
-  54:   ldp     x29, x30, [sp], #16         54:   mov     x7, #0x0
-  58:   add     x0, x7, #0x0                58:   mov     sp, sp
-  5c:   autiasp                             5c:   ldp     x27, x28, [sp], #16
-  60:   ret                                 60:   ldp     x25, x26, [sp], #16
-  64:   nop                                 64:   ldp     x21, x22, [sp], #16
-  68:   ldr     x10, 0x0000000000000070     68:   ldp     x19, x20, [sp], #16
-  6c:   br      x10                         6c:   ldp     x29, x30, [sp], #16
-                                            70:   add     x0, x7, #0x0
-                                            74:   autiasp
-                                            78:   ret
-                                            7c:   nop
-                                            80:   ldr     x10, 0x0000000000000088
-                                            84:   br      x10
-
-There are 6 extra instructions added in ARM64 in the best case. This will
-become 7 in the worst case (off != 0).
-
-                           RISC-V JIT (RISCV_ISA_C Disabled)
-                           ==========
-
-        No Intrumentation           Verifier's Instrumentation
-           (upstream)                      (This patch)
-        -----------------           --------------------------
-
-   0:   nop                            0:   nop
-   4:   nop                            4:   nop
-   8:   li      a6, 33                 8:   li      a6, 33
-   c:   addi    sp, sp, -16            c:   addi    sp, sp, -16
-  10:   sd      s0, 8(sp)             10:   sd      s0, 8(sp)
-  14:   addi    s0, sp, 16            14:   addi    s0, sp, 16
-  18:   ld      a0, 0(a0)             18:   ld      a0, 0(a0)
----------------------------------------------------------------
-  1c:   ld      a0, 0(a0) --\         1c:   mv      t0, a0
---------------------------\  \        20:   srli    t0, t0, 32
-  20:   li      a5, 0      \  \       24:   lui     t1, 4096
-  24:   ld      s0, 8(sp)   \  \      28:   sext.w  t1, t1
-  28:   addi    sp, sp, 16   \  \     2c:   bgeu    t1, t0, 12
-  2c:   sext.w  a0, a5        \  \--> 30:   ld      a0, 0(a0)
-  30:   ret                    \      34:   j       8
-                                \     38:   li      a0, 0
-                                 \------------------------------
-                                      3c:   li      a5, 0
-                                      40:   ld      s0, 8(sp)
-                                      44:   addi    sp, sp, 16
-                                      48:   sext.w  a0, a5
-                                      4c:   ret
-
-There are 7 extra instructions added in RISC-V.
-
-Fixes: 800834285361 ("bpf, arm64: Add BPF exception tables")
-Reported-by: Breno Leitao <leitao@debian.org>
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
 ---
-V3: https://lore.kernel.org/bpf/20240321120842.78983-1-puranjay12@gmail.com/
-Changes in V4:
-- Disable this feature on architectures that don't define
-  CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE.
-- By doing the above, we don't need anything explicitly for s390x.
-
-V2: https://lore.kernel.org/bpf/20240321101058.68530-1-puranjay12@gmail.com/
-Changes in V3:
-- Return 0 from bpf_arch_uaddress_limit() in disabled case because it
-  returns u64.
-- Modify the check in verifier to no do instrumentation when uaddress_limit
-  is 0.
-
-V1: https://lore.kernel.org/bpf/20240320105436.4781-1-puranjay12@gmail.com/
-Changes in V2:
-- Disable this feature on s390x.
+Changelog:
+v1->v2
+- copy ethtool.h to tools directory [Stanislav]
+- Use ethtool_ringparam directly for get_hw_ring_size() [Stanislav]
+- get_hw_ring_size() and get_hw_ring_size() moved to network_helpers.c [Stanislav]
+- return -errno to match the other cases where errors are < 0. [Stanislav]
+- Cleaned up set_ring_size() function by removing unused variables and
+  refactoring logic for clarity. [Alexei]
+- Implement a retry mechanism for the set_ring_size function to handle
+  the asynchronous nature of AF_XDP socket closure. [Magnus]
 ---
- arch/x86/net/bpf_jit_comp.c | 72 +++++--------------------------------
- include/linux/filter.h      |  1 +
- kernel/bpf/core.c           |  9 +++++
- kernel/bpf/verifier.c       | 30 ++++++++++++++++
- 4 files changed, 48 insertions(+), 64 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 4900b1ee019f..9b3136187938 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1327,7 +1327,6 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image
- 		u8 b2 = 0, b3 = 0;
- 		u8 *start_of_ldx;
- 		s64 jmp_offset;
--		s16 insn_off;
- 		u8 jmp_cond;
- 		u8 *func;
- 		int nops;
-@@ -1802,78 +1801,18 @@ st:			if (is_imm8(insn->off))
- 		case BPF_LDX | BPF_PROBE_MEMSX | BPF_B:
- 		case BPF_LDX | BPF_PROBE_MEMSX | BPF_H:
- 		case BPF_LDX | BPF_PROBE_MEMSX | BPF_W:
--			insn_off = insn->off;
--
--			if (BPF_MODE(insn->code) == BPF_PROBE_MEM ||
--			    BPF_MODE(insn->code) == BPF_PROBE_MEMSX) {
--				/* Conservatively check that src_reg + insn->off is a kernel address:
--				 *   src_reg + insn->off >= TASK_SIZE_MAX + PAGE_SIZE
--				 * src_reg is used as scratch for src_reg += insn->off and restored
--				 * after emit_ldx if necessary
--				 */
--
--				u64 limit = TASK_SIZE_MAX + PAGE_SIZE;
--				u8 *end_of_jmp;
--
--				/* At end of these emitted checks, insn->off will have been added
--				 * to src_reg, so no need to do relative load with insn->off offset
--				 */
--				insn_off = 0;
--
--				/* movabsq r11, limit */
--				EMIT2(add_1mod(0x48, AUX_REG), add_1reg(0xB8, AUX_REG));
--				EMIT((u32)limit, 4);
--				EMIT(limit >> 32, 4);
--
--				if (insn->off) {
--					/* add src_reg, insn->off */
--					maybe_emit_1mod(&prog, src_reg, true);
--					EMIT2_off32(0x81, add_1reg(0xC0, src_reg), insn->off);
--				}
--
--				/* cmp src_reg, r11 */
--				maybe_emit_mod(&prog, src_reg, AUX_REG, true);
--				EMIT2(0x39, add_2reg(0xC0, src_reg, AUX_REG));
--
--				/* if unsigned '>=', goto load */
--				EMIT2(X86_JAE, 0);
--				end_of_jmp = prog;
--
--				/* xor dst_reg, dst_reg */
--				emit_mov_imm32(&prog, false, dst_reg, 0);
--				/* jmp byte_after_ldx */
--				EMIT2(0xEB, 0);
--
--				/* populate jmp_offset for JAE above to jump to start_of_ldx */
--				start_of_ldx = prog;
--				end_of_jmp[-1] = start_of_ldx - end_of_jmp;
--			}
-+			start_of_ldx = prog;
- 			if (BPF_MODE(insn->code) == BPF_PROBE_MEMSX ||
- 			    BPF_MODE(insn->code) == BPF_MEMSX)
--				emit_ldsx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn_off);
-+				emit_ldsx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn->off);
- 			else
--				emit_ldx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn_off);
-+				emit_ldx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn->off);
- 			if (BPF_MODE(insn->code) == BPF_PROBE_MEM ||
- 			    BPF_MODE(insn->code) == BPF_PROBE_MEMSX) {
- 				struct exception_table_entry *ex;
- 				u8 *_insn = image + proglen + (start_of_ldx - temp);
- 				s64 delta;
- 
--				/* populate jmp_offset for JMP above */
--				start_of_ldx[-1] = prog - start_of_ldx;
--
--				if (insn->off && src_reg != dst_reg) {
--					/* sub src_reg, insn->off
--					 * Restore src_reg after "add src_reg, insn->off" in prev
--					 * if statement. But if src_reg == dst_reg, emit_ldx
--					 * above already clobbered src_reg, so no need to restore.
--					 * If add src_reg, insn->off was unnecessary, no need to
--					 * restore either.
--					 */
--					maybe_emit_1mod(&prog, src_reg, true);
--					EMIT2_off32(0x81, add_1reg(0xE8, src_reg), insn->off);
--				}
--
- 				if (!bpf_prog->aux->extable)
- 					break;
- 
-@@ -3473,3 +3412,8 @@ bool bpf_jit_supports_ptr_xchg(void)
- {
- 	return true;
- }
-+
-+u64 bpf_arch_uaddress_limit(void)
-+{
-+	return TASK_SIZE_MAX + PAGE_SIZE;
-+}
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index c0d51bff8f96..cf12bfa2a78c 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -965,6 +965,7 @@ bool bpf_jit_supports_far_kfunc_call(void);
- bool bpf_jit_supports_exceptions(void);
- bool bpf_jit_supports_ptr_xchg(void);
- bool bpf_jit_supports_arena(void);
-+u64 bpf_arch_uaddress_limit(void);
- void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp), void *cookie);
- bool bpf_helper_changes_pkt_data(void *func);
- 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 5aacb1d3c4cc..a04695ca82b9 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2958,6 +2958,15 @@ bool __weak bpf_jit_supports_arena(void)
- 	return false;
- }
- 
-+u64 __weak bpf_arch_uaddress_limit(void)
-+{
-+#if defined(CONFIG_64BIT) && defined(CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE)
-+	return TASK_SIZE;
-+#else
-+	return 0;
-+#endif
-+}
-+
- /* Return TRUE if the JIT backend satisfies the following two conditions:
-  * 1) JIT backend supports atomic_xchg() on pointer-sized words.
-  * 2) Under the specific arch, the implementation of xchg() is the same
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index de7813947981..7ce56da6cfa4 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19657,6 +19657,36 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			goto next_insn;
- 		}
- 
-+		/* Make it impossible to de-reference a userspace address */
-+		if (BPF_CLASS(insn->code) == BPF_LDX &&
-+		    (BPF_MODE(insn->code) == BPF_PROBE_MEM ||
-+		     BPF_MODE(insn->code) == BPF_PROBE_MEMSX)) {
-+			struct bpf_insn *patch = &insn_buf[0];
-+			u64 uaddress_limit = bpf_arch_uaddress_limit();
-+
-+			if (!uaddress_limit)
-+				goto next_insn;
-+
-+			*patch++ = BPF_MOV64_REG(BPF_REG_AX, insn->src_reg);
-+			if (insn->off)
-+				*patch++ = BPF_ALU64_IMM(BPF_ADD, BPF_REG_AX, insn->off);
-+			*patch++ = BPF_ALU64_IMM(BPF_RSH, BPF_REG_AX, 32);
-+			*patch++ = BPF_JMP_IMM(BPF_JLE, BPF_REG_AX, uaddress_limit >> 32, 2);
-+			*patch++ = *insn;
-+			*patch++ = BPF_JMP_IMM(BPF_JA, 0, 0, 1);
-+			*patch++ = BPF_MOV64_IMM(insn->dst_reg, 0);
-+
-+			cnt = patch - insn_buf;
-+			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
-+			if (!new_prog)
-+				return -ENOMEM;
-+
-+			delta    += cnt - 1;
-+			env->prog = prog = new_prog;
-+			insn      = new_prog->insnsi + i + delta;
-+			goto next_insn;
-+		}
-+
- 		/* Implement LD_ABS and LD_IND with a rewrite, if supported by the program type. */
- 		if (BPF_CLASS(insn->code) == BPF_LD &&
- 		    (BPF_MODE(insn->code) == BPF_ABS ||
+ tools/include/uapi/linux/ethtool.h            | 2229 ++++++++++++++++-
+ tools/testing/selftests/bpf/Makefile          |    2 +-
+ tools/testing/selftests/bpf/network_helpers.c |   48 +
+ tools/testing/selftests/bpf/network_helpers.h |    5 +
+ tools/testing/selftests/bpf/xdp_hw_metadata.c |   14 -
+ tools/testing/selftests/bpf/xskxceiver.c      |  123 +-
+ tools/testing/selftests/bpf/xskxceiver.h      |   12 +-
+ 7 files changed, 2376 insertions(+), 57 deletions(-)
+
 -- 
-2.40.1
+2.34.1
 
