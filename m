@@ -1,85 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E046FBF;
-	Thu, 21 Mar 2024 04:40:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F2AB6FBF;
+	Thu, 21 Mar 2024 06:08:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710996028; cv=none; b=Rnu8GrJcvaS8M+KuapW45OW3yHwIlvvydVFnbQsXad60/84DnLFFLdZ1b3K+IrVnV23no39+EiwGHJmWdPH12l+qzKcoRfW4ZTdfRhaI/kwhA9PbF3ipZNJA7QnPBLXc3UhdfB4Jw5dxDZCRFdmMIpkUSFsOIEv2Z9eTsGks7ow=
+	t=1711001296; cv=none; b=GZn5pnSKomV04Me6BMyR4CpMWwOUiaCV9480yJN5Sr34eeyut/rP8vt7guAJTKmBXEmtm34ZBOVMl5eSpxmvxHXBLgHqDgH61KoWhM1goG028J+AxHOM6TmPr9jQ3Nk5k8AnqJO+diMC0qhi592I5TPoDWeJwMTJhN7pW32VztQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710996028; c=relaxed/simple;
-	bh=Stz/LtxZ0oNUWGPAkL2Gm2OiNn6QXW8wUeEfkZyKsoU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=nZPFDJnWVY65/wDXyFkQTCQmIEw2jlxOCflq2EiRewrclWCkNls8fBgpmsB0mcr1qDPCNXyID4+HQQBZ47Mwi82wTPAiJwb8vY/sIUh8J2gja5FPEsZhN3SJstJHKolAom8lIU51k3CxNkq2plVeBllDdZ1OTejjWGUH7anp7Q8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O+zbZA2p; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711001296; c=relaxed/simple;
+	bh=Wea1fSqHpz3J/JBua4hd15llvV+QZuuLz+xrfQq/WvE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cQwLv0iPauVoCCnjSHXHkOa7IaCjCSnI3JqkC03wVad8LjgZSkfWHMY7z31fwED9ZHZ/KA6mK1/jelVmHm1o4BC8G/qzOXhi7lOrbzChND6a+YoAmSIF0LUHfgmXA1J3Hw9Ntt+M2CQj1ix5LgyloofkKkhXHYF8QvJXD4TKDg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=joL1OcsK; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O+zbZA2p"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 032DBC433F1;
-	Thu, 21 Mar 2024 04:40:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710996028;
-	bh=Stz/LtxZ0oNUWGPAkL2Gm2OiNn6QXW8wUeEfkZyKsoU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=O+zbZA2pqkmYFD/+/+lpoOlvB35mFNlw9t+ZWFMewtPpQMLzIXXtiMjV77SIowIQJ
-	 52zBlYz3bQbRL2I0vYZbVkDofZ477Pzs/ymzi2XUB/UKMrXA+dxoM+DINL/ZefSwSF
-	 sIT4pHnAIV6csAHBZEYfWIhpXhBTGe1SpFMuD1uoSWheIxSK/oKUxtYAduNylxNiDK
-	 VNWH6cUQfZCMTF2lZrxO5goILCMy14m4Q4DFy4D22LCQdzpjerGYwSTg5bHff8SzfY
-	 HZWbPCDmZWrfV49pEn06fnBOaPcdTCPozuSbw6tXeQtMJB7jio9FmRTFYPuYY+0TUM
-	 poAoYMWUGqFMg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E5818D982E3;
-	Thu, 21 Mar 2024 04:40:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="joL1OcsK"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-33ececeb19eso307831f8f.3;
+        Wed, 20 Mar 2024 23:08:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711001293; x=1711606093; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MAOWqEugmsLZcY5+XlGTS+PYzImgKXVHs0T7fAbF/hY=;
+        b=joL1OcsK5VI1Hooc7A5Lbdq40cfB29ry2iLhCLT9HcdvSM2En78nmBZe1+0mmZ0XlZ
+         J8a5OwP3hfZgsyCzHJ7Epmb3ABe3NGtqhmGK6Tsl6h7wBYC3+q5+dqyLOleDfU4EyHtE
+         VJkzB09g1yBz3XuQ2DwtAsmabV6NRsgRvfG7lB1qBwG5C7F0DXjEPeT9N5a4Ui4mkE3Q
+         8JmPJRwTCtaMIszPZGLVRpK72921T/eyLglFAZMEVVwwWwtZQAirLagoL3/PzT5qNL5Z
+         icDVuvbNktuO0D2LpeLSMc029nETieU2Ni0foKs/cDlg2lfu89akEvvXvYyybz9+mpHJ
+         5uHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711001293; x=1711606093;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MAOWqEugmsLZcY5+XlGTS+PYzImgKXVHs0T7fAbF/hY=;
+        b=GeZHu5IrzI6X4e+1yYGolPkggAsc6PhOONFWOsmPXwZIbYmXGW6A4VpoSzCRpbZuPF
+         CrFwuBZwJ+Ugh5vviDwSnb6mQOSy7bh5ZLp0uBZa8ik/CxKyqWm1db2ofBc5jmwN5tRu
+         iRmJCbd5kL0gqdK6t7GqpgLWR4NtqGKTgESZJuz+4dJVhNN8/sprdxeWuET10tovDrqM
+         WFsoDe9dW4fcQLV+AVjKjwo/R9Z/ffHvRr2xvFKEwBNg9EVWZG8SCkug3l+pKIuLP8Fm
+         J1b1WblRJDoaVOi8ASgbLKIISCb2QAoKtlTnysLBaQAxA1LA81BhXBKXeMeRmsUEP5kO
+         TBvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWHfVhVNcMrGwbxDJPAmwn1+BLlsMtYUyvu/EPgk3e9wRslIPyx/76Py+Cb5JgTMcDPTpihvw84XFekrGkV6avVtzfJhbb7lr3wKveOQ7++F2jTl4F+hzvThQ+7wMc1749jCSdQR1iN6nfDFkfpjLQ+FIMDvIGamK8V
+X-Gm-Message-State: AOJu0Yz2k8vMjUpBZLC+mXGfEeIEhyqL2mSKieXztGbxFENQQBPzF6RN
+	6kszFOMPuSxJydxCxJSORHgNJfdRNM/r2Hpl2W5ipur+6FLIit6cOmoGoSUessvh01lRzSXlkXZ
+	0lPm7g6tsLYeGlkyDjQhmGWVnioY=
+X-Google-Smtp-Source: AGHT+IG1ZQ91dGzNjV3S/a0sal/vPAwq07eP4TWvORk3wU+AEnbxoMNPW+53b4pyrDj05zRUsivgsb8wShGrtFAdUwQ=
+X-Received: by 2002:adf:e005:0:b0:33d:886d:bb51 with SMTP id
+ s5-20020adfe005000000b0033d886dbb51mr673479wrh.60.1711001292385; Wed, 20 Mar
+ 2024 23:08:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v5 net 0/3] Report RCU QS for busy network kthreads
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171099602793.26207.3374009714899466289.git-patchwork-notify@kernel.org>
-Date: Thu, 21 Mar 2024 04:40:27 +0000
-References: <cover.1710877680.git.yan@cloudflare.com>
-In-Reply-To: <cover.1710877680.git.yan@cloudflare.com>
-To: Yan Zhai <yan@cloudflare.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, jiri@resnulli.us, horms@kernel.org,
- daniel@iogearbox.net, lorenzo@kernel.org, lixiaoyan@google.com,
- weiwan@google.com, alexanderduyck@fb.com, linux-kernel@vger.kernel.org,
- rcu@vger.kernel.org, bpf@vger.kernel.org, kernel-team@cloudflare.com,
- joel@joelfernandes.org, paulmck@kernel.org, toke@redhat.com,
- alexei.starovoitov@gmail.com, rostedt@goodmis.org, mark.rutland@arm.com,
- hawk@kernel.org, bigeasy@linutronix.de
+References: <20240320105436.4781-1-puranjay12@gmail.com>
+In-Reply-To: <20240320105436.4781-1-puranjay12@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 20 Mar 2024 23:08:00 -0700
+Message-ID: <CAADnVQJ3o6DsURi=N_KXx+mbW9r7__3LrwYLyYwuoMOsqFHPkw@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: verifier: prevent userspace memory access
+To: Puranjay Mohan <puranjay12@gmail.com>, Ilya Leoshkevich <iii@linux.ibm.com>
+Cc: "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>, 
+	Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Wed, Mar 20, 2024 at 3:55=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.co=
+m> wrote:
+>
+> The JITs need to implement bpf_arch_uaddress_limit() to define where
+> the userspace addresses end for that architecture or TASK_SIZE is taken
+> as default.
+>
+> The implementation is as follows:
+>
+> REG_AX =3D  SRC_REG
+> if(offset)
+>         REG_AX +=3D offset;
+> REG_AX >>=3D 32;
+> if (REG_AX <=3D (uaddress_limit >> 32))
+>         DST_REG =3D 0;
+> else
+>         DST_REG =3D *(size *)(SRC_REG + offset);
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+The patch looks good, but it seems to be causing s390 CI failures.
 
-On Tue, 19 Mar 2024 13:44:30 -0700 you wrote:
-> This changeset fixes a common problem for busy networking kthreads.
-> These threads, e.g. NAPI threads, typically will do:
-> 
-> * polling a batch of packets
-> * if there are more work, call cond_resched() to allow scheduling
-> * continue to poll more packets when rx queue is not empty
-> 
-> [...]
-
-Here is the summary with links:
-  - [v5,net,1/3] rcu: add a helper to report consolidated flavor QS
-    https://git.kernel.org/netdev/net/c/1a77557d48cf
-  - [v5,net,2/3] net: report RCU QS on threaded NAPI repolling
-    https://git.kernel.org/netdev/net/c/d6dbbb11247c
-  - [v5,net,3/3] bpf: report RCU QS in cpumap kthread
-    https://git.kernel.org/netdev/net/c/00bf63122459
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Ilya,
+could you help us understand is this check needed on s390
+and if so, what should be the uaddress_limit ?
