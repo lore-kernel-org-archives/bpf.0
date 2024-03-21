@@ -1,135 +1,157 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998408624B;
-	Thu, 21 Mar 2024 15:39:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0009B55E6A
+	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 15:44:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711035586; cv=none; b=U19SvsbDg0SyAuI5Vac5oxhMjE3ttcywYgUwYH+H3sWf+qKX+R/xyStNiW0yL74z0x7WhVv8tiiarHtqQcQPbyvwoFgb6ssSaMT8I3fWm66GckOPVe8i78cpKx/GU+NNS/7aR6+5rH1v+rRq6f1xqzxqUGmgl5XDqgz2tnDkKjg=
+	t=1711035859; cv=none; b=a4he24m7CjQ19PhnI3sUUJeF+gY1fOMlBV8Yssr5btYGiq9Ha1fUbyyGicwRP+LWlk5QfgYP9xDCDx7TX3/z5JHUbA3qYQu8un8khAPVZquOG3MkJjxn9SSA0ZFbaSoi4LjC33aW9mQBezA55FYX9nnAXCEEkTlXm9Kv+3pL3TU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711035586; c=relaxed/simple;
-	bh=zmAWQQMh7Czalgq6ff5HKbw7t4LUEUkl12QHvaq3bwk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cnq4wZBspb7k5Wzx6CeeOLt5e05XQQJAX1C9dkWCSWUO/x4crHRrSibnjw96JztFs8X1AZcoTbXkf35WBwJPoHGr53i6mra0M0mbSqxsEUzbk6G0nEIrovOrXU2OradwWSaKKUdfR1ofSFVuYKJnd/wqEnaFCknMrz04vhRitUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UTAqrAyE; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711035859; c=relaxed/simple;
+	bh=phrwu6hEFwR3OmRq0xmE0wJeGnZ2XPtxhImxOPSRs8k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BDCh2IEw2rZyEVJgzOd+vJKpRfo0V8joI/scSzNVjmJpvZ014bh21B84B7gaTJZJCvkipDk5hsfqbtb8r1Dc+awJpULfmitoPprf65avnYDqno6Qw6RJcY2mPhq4EGZeY1kNcF1oye5ApnEILUWsbPhhXUCULN0T98usJGqtqR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Fs3LJ04Z; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UTAqrAyE"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-414783a4a4eso1109175e9.0;
-        Thu, 21 Mar 2024 08:39:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711035583; x=1711640383; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=J6DTJ6OPuAKII4pcTJJo4yMQiS4Vgzpfa0hoNMISqtI=;
-        b=UTAqrAyEeGqhTlfXpn/b5BOVrvT8KN11fdhAh0vSHSs18NWsKGkr/vx9sxs+byvr8n
-         2K/2vCqGpjeKR/e9w3gkQY8SUw15TClcaj6ZdlhkaM1shXKPoJer1C4PYT2RVRAsl4D4
-         QBz7kAGMQ0LUp17cKg8TqwG3uYejL1X9kXFzwO8D9Ob5TwZO1IZA1Sm3zGRsQ7pHDOSW
-         2qMK+9FLRkey+unyug75j51HSKXVHUN9Y1Lmtb61YSo5DfoJ1JebQ2ZXQVg5CiXfekZ0
-         Ssz3/0DgsrlU2NZlgVxoFwD3vi80hJY6rIjr7hKGykkfVnslIBA4ENA9E/nPmVCr4kar
-         3agg==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Fs3LJ04Z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1711035857;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=l9X/54MANsD/vA3gDB6Zr3YBdoXorm5FGsBGyONKCgo=;
+	b=Fs3LJ04ZtiUPGoM1CQnvBJ4It570s9nkn9kisAUcgEMuMstYAWugyVNJhNeaHrBvIRhXdp
+	WI8rVkE905v0lUM4B6DJjYnNyIrVn3hPIwldfJklSVPG8Fqcr7sv5Zm5w3irj0dyMJzh2r
+	TEeBcKUu3lcYb626Wue3kolOpiJDIRI=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-355-eWxy_ehSMyeFynQF-KbwNw-1; Thu, 21 Mar 2024 11:44:15 -0400
+X-MC-Unique: eWxy_ehSMyeFynQF-KbwNw-1
+Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-5159663d035so482592e87.0
+        for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 08:44:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711035583; x=1711640383;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=J6DTJ6OPuAKII4pcTJJo4yMQiS4Vgzpfa0hoNMISqtI=;
-        b=KmkgtjGkmn098yw1K1/ttT3NCBNsQ9CaDSNJAqr/FRLky32T0HfZbr/1ro0LMuCz5H
-         qKJQD1v7Fd9WHGDuA+Y1dLl+pxbiBB+/LySS89cSBEiqBHWQUa9LVQ1akS0Q7SMseR65
-         MFAACTdxyQqgLz0mkHWrjl9ghroP4BzZALweV8ka9zwrByDkhfhBZEQCOAu98JbbrZQR
-         u5pL8eYPN30GPMbEK87jjj93iFO0iLZ1UI47KNUMVoyZESsdCiqJU7OH2qXCF/U2kpcz
-         QCt68Nx9RogOXd0Wk62VTs1Kc6VTzNhuZEqnjBoXxCHmsht4w9wvyZGSDPpdARNBTTln
-         B/oA==
-X-Forwarded-Encrypted: i=1; AJvYcCWNeQ6PHzV+XEfe1nSuHzNpJnYg9L7RMjOqqwLTgTheXudnj57b9IusyTMg5sud8DFrfEEf0zQdmFRmuyYydS/zGukSrYIjMc8IO5ME/0MeoGwK34exYMdd0Oz5pQDGvctE
-X-Gm-Message-State: AOJu0YwMqQm9QRRepTgbL6I0CvFp2swqLSvy/+V2esZfebDZ1LzX4ZWS
-	XthINNYO3+XETyNx/GAFkpgESUfDwJ8cL5a576NapQ852wT+VC8Ry300Q/FjRvsgyZt+
-X-Google-Smtp-Source: AGHT+IEhiPIRmvJR0woMqs6zzhGV450+aT5ag5DR7RwlcSbyuGifL7x0RY5n309NWzEUpUZjOkEx3Q==
-X-Received: by 2002:a05:600c:4fd5:b0:414:9d1:d67b with SMTP id o21-20020a05600c4fd500b0041409d1d67bmr3626570wmq.36.1711035582687;
-        Thu, 21 Mar 2024 08:39:42 -0700 (PDT)
-Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id i12-20020a05600c354c00b004101f27737asm5935444wmq.29.2024.03.21.08.39.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Mar 2024 08:39:42 -0700 (PDT)
-From: Puranjay Mohan <puranjay12@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: puranjay12@gmail.com
-Subject: [RESEND PATCH bpf] bpf: verifier: fix addr_space_cast from as(1) to as(0)
-Date: Thu, 21 Mar 2024 15:39:39 +0000
-Message-Id: <20240321153939.113996-1-puranjay12@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        d=1e100.net; s=20230601; t=1711035854; x=1711640654;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l9X/54MANsD/vA3gDB6Zr3YBdoXorm5FGsBGyONKCgo=;
+        b=o4xuGsD8dUhm2CcICOdngC6HD8DfJInF45dC/8GRoaMMnT+a4Z0CuEE8Tr1+K/LOIO
+         gWppCadsj8hVPnMpHHt9s5PflLMuXI00D2S/SSOAFKeVNNX5XF09HQrNZa2Gg0OgfRXZ
+         33prHoByyKK89bWVdOLbqOmqV7ZzV5TW/8gerJJAckFiEajie2wmYeFMF33yFVdyrSO3
+         UdXMSZ05RuR6y0/fMid1Q1pW2cr7rgnncjt4lDpVQCBD87I//jhjGwbSeNO2T0wEh6lW
+         7s0EByDC7DDVa1Du1M2wnWQkl5afXRXaz0zp9opEZ839uEDeKeLgSdzDRJqkUlrhPtG2
+         B5MQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUi72cGnm++36KzgMFBQ6+LC2z9lJBUuecxsWaWofxySpezhyJc4wwHgJ+QqrfZlfRPWmDGm01rkn5RYrxV9bu14zyL
+X-Gm-Message-State: AOJu0YwfPKTOcewSsfuodZnILW2QBJRdGpl+ef+K3/fTUtwkqBErGfJq
+	O2IfkAoInh0ZvlVHFpjtRqSIMT5KNqplzEKy5ODC/YghZ34mRyGtA1YBbCJShAfTIxSwEuo4nUj
+	jtY4JeADWmI5XRcMVGU6ULceuLuCEeiMT1tRWe6QxEIzRyL652D6mU0jpm01E3hotJq1rXAdJuz
+	W7KaNrX5ZuB+pRh1vGn01rnja8
+X-Received: by 2002:ac2:5b50:0:b0:513:d82a:8d3a with SMTP id i16-20020ac25b50000000b00513d82a8d3amr2417725lfp.35.1711035854146;
+        Thu, 21 Mar 2024 08:44:14 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEPZIKyQs7CyzkABKXj1SHOyLGf1WPq90wMOMnQeFNTWTzKPNsmeP/5JcobJ6xacp+RlyAuScGQ1FCFgg1A4Yk=
+X-Received: by 2002:ac2:5b50:0:b0:513:d82a:8d3a with SMTP id
+ i16-20020ac25b50000000b00513d82a8d3amr2417696lfp.35.1711035853790; Thu, 21
+ Mar 2024 08:44:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240315-hid-bpf-sleepable-v4-0-5658f2540564@kernel.org>
+ <20240315-hid-bpf-sleepable-v4-3-5658f2540564@kernel.org> <70ae8d7d2ed950466a61d118f59c16cb07fc9688.camel@gmail.com>
+In-Reply-To: <70ae8d7d2ed950466a61d118f59c16cb07fc9688.camel@gmail.com>
+From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date: Thu, 21 Mar 2024 16:44:01 +0100
+Message-ID: <CAO-hwJLqp4Xm20_CDMvr-GJGFShQ1gSmyWr0MqPvh_+icPJVTw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 3/6] bpf/helpers: introduce
+ bpf_timer_set_sleepable_cb() kfunc
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The verifier currently converts addr_space_cast from as(1) to as(0) that
-is: BPF_ALU64 | BPF_MOV | BPF_X with off=1 and imm=1
-to
-BPF_ALU | BPF_MOV | BPF_X with imm=1 (32-bit mov)
+On Mon, Mar 18, 2024 at 11:52=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.co=
+m> wrote:
+>
+> On Fri, 2024-03-15 at 15:29 +0100, Benjamin Tissoires wrote:
+>
+> This patch looks good to me, please see two nitpicks below.
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-Because of this imm=1, the JITs that have bpf_jit_needs_zext() == true,
-interpret the converted instruction as BPF_ZEXT_REG(DST) which is a
-special form of mov32, used for doing explicit zero extension on dst.
-These JITs will just zero extend the dst reg and will not move the src to
-dst before the zext.
+Thanks!
 
-Fix do_misc_fixups() to set imm=0 when converting addr_space_cast to a
-normal mov32.
+>
+> [...]
+>
+> > @@ -1350,6 +1358,11 @@ BPF_CALL_3(bpf_timer_start, struct bpf_timer_ker=
+n *, timer, u64, nsecs, u64, fla
+> >               goto out;
+> >       }
+> >
+> > +     if (t->is_sleepable && !(flags & BPF_F_TIMER_SLEEPABLE)) {
+> > +             ret =3D -EINVAL;
+> > +             goto out;
+> > +     }
+>
+> Nit:
+> the BPF_F_TIMER_ABS and BPF_F_TIMER_CPU_PIN don't affect
+> sleepable timers, should this check be changed to:
+> '(t->is_sleepable && flags !=3D BPF_F_TIMER_SLEEPABLE)' ?
 
-The JITs that have bpf_jit_needs_zext() == true rely on the verifier to
-emit zext instructions. Mark dst_reg as subreg when doing cast from
-as(1) to as(0) so the verifier emits a zext instruction after the mov.
+Sounds fair enough. Scheduled this for v5
 
-Fixes: 6082b6c328b5 ("bpf: Recognize addr_space_cast instruction in the verifier.")
-Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
----
- kernel/bpf/verifier.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> [...]
+>
+> > @@ -12151,6 +12175,16 @@ static int check_kfunc_call(struct bpf_verifie=
+r_env *env, struct bpf_insn *insn,
+> >               }
+> >       }
+> >
+> > +     if (is_async_callback_calling_kfunc(meta.func_id)) {
+> > +             err =3D push_callback_call(env, insn, insn_idx, meta.subp=
+rogno,
+> > +                                      set_timer_callback_state);
+>
+> Nit: still think that this fragment would be better as:
+>
+>         if (is_bpf_timer_set_sleepable_cb_impl_kfunc(meta.func_id)) {
+>                 err =3D push_callback_call(env, insn, insn_idx, meta.subp=
+rogno,
+>                                          set_timer_callback_state);
+>
+> Because of the 'set_timer_callback_state' passed to push_callback_call().
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index de7813947981..ee796402ef60 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -14046,8 +14046,11 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 				if (insn->imm) {
- 					/* off == BPF_ADDR_SPACE_CAST */
- 					mark_reg_unknown(env, regs, insn->dst_reg);
--					if (insn->imm == 1) /* cast from as(1) to as(0) */
-+					if (insn->imm == 1) { /* cast from as(1) to as(0) */
- 						dst_reg->type = PTR_TO_ARENA;
-+						/* PTR_TO_ARENA is 32-bit */
-+						dst_reg->subreg_def = env->insn_idx + 1;
-+					}
- 				} else if (insn->off == 0) {
- 					/* case: R1 = R2
- 					 * copy register state to dest reg
-@@ -19606,8 +19609,9 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			    (((struct bpf_map *)env->prog->aux->arena)->map_flags & BPF_F_NO_USER_CONV)) {
- 				/* convert to 32-bit mov that clears upper 32-bit */
- 				insn->code = BPF_ALU | BPF_MOV | BPF_X;
--				/* clear off, so it's a normal 'wX = wY' from JIT pov */
-+				/* clear off and imm, so it's a normal 'wX = wY' from JIT pov */
- 				insn->off = 0;
-+				insn->imm = 0;
- 			} /* cast from as(0) to as(1) should be handled by JIT */
- 			goto next_insn;
- 		}
--- 
-2.40.1
+Yeah, sorry I missed that part from the previous reviews.
+
+Fixed in v5
+
+Cheers,
+Benjamin
+
+>
+> > +             if (err) {
+> > +                     verbose(env, "kfunc %s#%d failed callback verific=
+ation\n",
+> > +                             func_name, meta.func_id);
+> > +                     return err;
+> > +             }
+> > +     }
+> > +
+> >       rcu_lock =3D is_kfunc_bpf_rcu_read_lock(&meta);
+> >       rcu_unlock =3D is_kfunc_bpf_rcu_read_unlock(&meta);
+> >
+>
 
