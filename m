@@ -1,66 +1,66 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 430D012B171
-	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 21:08:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8829135403
+	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 21:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711055287; cv=none; b=aw8CKJu0pi5OimO9cTk1EVUgdX8CFGZq9b6xvqHot8CZYIFhJMuS/d55fnzA47iJkfqyxeq1j9UNoCPoCnoEvM5oBeVcUHDcwS1zoBrwT+0gO2qIxUqZrUVz2HQmFJXxo5NNeqdVgfjT/hSp2erVsCKEa9UTggmww2H9ehaQDSY=
+	t=1711055299; cv=none; b=WL4XDHrymE5wfa8P12IYSVdSuLWQUKSKYQxpZqObLTL6zCHHT7SP2gR8/j0REINiRr94g1oKEZhRMSD52/rwKLB1I+f7ACqxCbnSjFFh6DD+8cRex9lGfEERmKvoR0T+xpVYfaByHntR4bJEfZBMtrHZuzgraIaPl8H5Nq1sQh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711055287; c=relaxed/simple;
-	bh=wVBQrk02vOmDXDQRg5kv0Oe0NW1eShS7MzNU0eSPksI=;
+	s=arc-20240116; t=1711055299; c=relaxed/simple;
+	bh=6nGZWaxvEQJPTlxbqaoUfoWRa4rMsd8Vgz47m/3sSrU=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mwHhwtsXtQmyUkbaKBlHzLQ6GTwox1GM3O+Y/2ktagCe/7SwiY9KziAbFKlb4Xx3ZWPA9oHICtMLkzkp3WS6i+7+im+ofTxyIg1oNZbSOvRYZcTMJTzYSIafL5YAYmIDReCCkmmT8AEVIxtsf9AVbVRcMXGNqaVrOaymt7asuFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=acCNwcON; arc=none smtp.client-ip=209.85.208.48
+	 Content-Type:Content-Disposition:In-Reply-To; b=HoOZSgfOTuTVnmioi4P5878VZFpNUjlVYseMbDjrBh+EUgv5YjRv29bdV3D+oTT0ekVSR+5eWSH0eDRyPXRGqAxg7YIcuzASRA258rqtTaBCclAmPpyYI5PaJ+2XN2P/TftO6ioumJTvELctBUlAbH05YVaT46m7uGRYNOlZBho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jSQnTZqR; arc=none smtp.client-ip=209.85.218.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="acCNwcON"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-56b857bac38so784213a12.0
-        for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 14:08:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jSQnTZqR"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a46f0da1b4fso193306166b.2
+        for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 14:08:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711055284; x=1711660084; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711055296; x=1711660096; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=D/sXytAJXqW/aFae7/+ve/xOfmUdZ3s0ZAtb/ZKyuy4=;
-        b=acCNwcON2dp9n8L+If28dmtxGyKkw4ZT4YEi+nJiBa9xiBaub2ymdLjC9WASXi+1uO
-         kIMcPzwTTtuVgZBoEgySQ6KZcdN6JuAh8ofVpPyJROZJZzG5ooRlSSYu7RQQuyvUQjKF
-         A3+AllaHcsO5rBRd9LgqMuKqJh+Fi2W5fYvajperpLBKzJadgw/6U1E6B5SYQmtyoiwi
-         3RVq0RQXJeoNrs4pxUExAKSnvkrqVNnezSdfLyzEOdyOjBeGr2SJ7T43IaPi5f4WKKQs
-         nQebY+O5ZWJTb7jgXmxeecWLnmywCBFQy9b2SP2N5M+BSiRp3m9jLJ8RdU+YNZSycakM
-         9rvw==
+        bh=y3BpDx8a84VkeSvlZ7lDoDk8Lr2e0jtFpbdlPUnEU+8=;
+        b=jSQnTZqReL3AbFMXe7yi8iyXqC9R1CNOeOanm5V0RJ4YQJQQUgQert5FHQ+o0m74ZB
+         zp0w4XzVak2vYKsqJTEo8xB1PXGGmxY/JIWUx6quWpT+moLYIT2bfj5b9f/IUBvKtqHI
+         eYDdNbkIzP1AXPFsJ1fBsFatY/uZhOjz5yFZkj2kyw95deVTCFMntJUXsfB2Bjuh3wV0
+         2PqiGZbIeiOt+HGi7HNVVNnoKCFCBmj2IlqdR42xn9o9Cp7bTVTx7s8ojpJIqbQqV77i
+         a6a96ublC2cyo0Tb18ZcGrjDWHEeGul325Hn31/kQz1B+UKkSalevs7Cex7F8VCW3z4R
+         SFug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711055284; x=1711660084;
+        d=1e100.net; s=20230601; t=1711055296; x=1711660096;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=D/sXytAJXqW/aFae7/+ve/xOfmUdZ3s0ZAtb/ZKyuy4=;
-        b=GqbpAeIgs5t/l8uxxaKuZ+YBsx0eZ/CjCIIkFZ03ffcmVww86SbcFEY77lYvZ23n5Z
-         ZXKTK0aZgijcxQOpFm7+TXbdbDqnC6oSXV9UjzMCeyTiyMhXFa1hn4P6R27dLgSbyoeT
-         +uxeAb9vjY5gCPHWgLWvlMqbKDrbnFZjP+0nrmvVf5a4vSye0GUq57qzAhz65+P4L4fF
-         gRBwcYBvIawffKbeVAyuOmq8TgIHLPSW0SuYtRnjA19ki3zsuT3fPKd9M4mSYzQNe3bI
-         LQq/ZyiIYo0jT8BFE+SSgqCIY/ocr0uwmoiIkn73it6BJc6TGnf+RVqdcHLOPRwVm3S2
-         s3Fg==
-X-Gm-Message-State: AOJu0YzCC3SlQR96JAFKcwUpFpJY4U2O51KNTe9HDAqEEPdavcL0PIwx
-	UYbP2A5TDPXDMaEhS68JuPKs1qo4gmBEifAge24KgrbMT7IIljzc08OoyGsA
-X-Google-Smtp-Source: AGHT+IHrhCxQqgBH7eyAcvolhEdQtxFuJUfH2/5UFvWRCixb5yQ3Y3Yzpai6NWQai/DxDoL2ZN0SeA==
-X-Received: by 2002:a50:8e56:0:b0:568:a90f:2e67 with SMTP id 22-20020a508e56000000b00568a90f2e67mr327226edx.34.1711055284322;
-        Thu, 21 Mar 2024 14:08:04 -0700 (PDT)
+        bh=y3BpDx8a84VkeSvlZ7lDoDk8Lr2e0jtFpbdlPUnEU+8=;
+        b=gqha7lRq7vgNUm5/iLQQuNerNHQkIyrlv4NBWf+QDXdc0YBkIBV7iy3Tw5OzNRUuU9
+         3qujbYudoJuMGyMqH0TKw3YjAMKm/LDyZX/l39KUSS29Q61YoNUseorINd/eK5Eo+AQE
+         dH8GgIohX1urWx+d6Q6NARGvzIYS34O1ZLCgoFZxjo2ePtvklBTcRtWutDzwZ4bhm+Rt
+         4Fc9qWAXZo09HUXjfha66VZ16fITIxSOQURLdHTO0Li2AHPZqDtxob09S5KuOzHUK8VX
+         gbNCWYYNgTujHLT2a9Nj8vwi4VHSxvQmF7+jPwk6hFSau/DHNdXkd3n05E2RqFYcVwtD
+         Mfjg==
+X-Gm-Message-State: AOJu0YzNPx6ui39a1Xlj8F4A8/49ATNQfZu3cthgSPPsm+WrPQEJ0WxO
+	ajlRRD3m13xW7LnAzGZeRKav/Q4vIMJ9uUhD6q4QmXhqK4ri9lI/
+X-Google-Smtp-Source: AGHT+IE6OtwLA14g59viuXJnIN7zYC83/JcxjGCs5XqiHapN69FsVZ5TOfAF74tRDSqqkDjgHKaDTA==
+X-Received: by 2002:a17:906:78f:b0:a45:f271:38cc with SMTP id l15-20020a170906078f00b00a45f27138ccmr405551ejc.43.1711055295857;
+        Thu, 21 Mar 2024 14:08:15 -0700 (PDT)
 Received: from krava ([83.240.62.66])
-        by smtp.gmail.com with ESMTPSA id r11-20020aa7cfcb000000b00568d750f7b2sm251648edy.65.2024.03.21.14.08.03
+        by smtp.gmail.com with ESMTPSA id va15-20020a17090711cf00b00a46778db9e3sm306768ejb.164.2024.03.21.14.08.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Mar 2024 14:08:04 -0700 (PDT)
+        Thu, 21 Mar 2024 14:08:15 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 21 Mar 2024 22:08:02 +0100
+Date: Thu, 21 Mar 2024 22:08:13 +0100
 To: Andrii Nakryiko <andrii@kernel.org>
 Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
 	martin.lau@kernel.org, peterz@infradead.org, song@kernel.org
-Subject: Re: [PATCH bpf-next 1/3] bpf: make bpf_get_branch_snapshot()
- architecture-agnostic
-Message-ID: <ZfyhspVTGeEB-p2Q@krava>
+Subject: Re: [PATCH bpf-next 3/3] bpf,x86: inline bpf_get_smp_processor_id()
+ on x86-64
+Message-ID: <ZfyhvaGMPPsvqkp-@krava>
 References: <20240321180501.734779-1-andrii@kernel.org>
- <20240321180501.734779-2-andrii@kernel.org>
+ <20240321180501.734779-4-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,53 +69,124 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240321180501.734779-2-andrii@kernel.org>
+In-Reply-To: <20240321180501.734779-4-andrii@kernel.org>
 
-On Thu, Mar 21, 2024 at 11:04:59AM -0700, Andrii Nakryiko wrote:
-> perf_snapshot_branch_stack is set up in an architecture-agnostic way, so
-> there is no reason for BPF subsystem to keep track of which
-> architectures do support LBR or not. E.g., it looks like ARM64 might soon
-> get support for BRBE ([0]), which (with proper integration) should be
-> possible to utilize using this BPF helper.
+On Thu, Mar 21, 2024 at 11:05:01AM -0700, Andrii Nakryiko wrote:
+> Add arch-specific inlining of bpf_get_smp_processor_id() using x86-64's
+> gs segment-based addressing.
 > 
-> perf_snapshot_branch_stack static call will point to
-> __static_call_return0() by default, which just returns zero, which will
-> lead to -ENOENT, as expected. So no need to guard anything here.
+> Just to be on the safer side both rip-relative addressing is implemented
+> (providing a shorter instruction, but limiting offset to signed 32 bits)
+> and more universal absolute memory offset addressing is used as
+> a fallback in (unlikely) scenario that given offset doesn't fit int s32.
+> The latter is 5 bytes longer, and it seems compilers prefer rip-relative
+> instructions when compiling kernel code.
 > 
->   [0] https://lore.kernel.org/linux-arm-kernel/20240125094119.2542332-1-anshuman.khandual@arm.com/
+> Both instructions were tested and confirmed using gdb. We also already
+> have a BPF selftest (raw_tp_test_run) that validates correctness of
+> bpf_get_smp_processor_id(), while running target BPF program on each
+> online CPU.
 > 
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> Here's a disassembly of bpf_get_smp_processor_id() helper:
+> 
+> $ gdb -batch -ex 'file vmlinux' -ex 'set disassembly-flavor intel' -ex 'disassemble/r bpf_get_smp_processor_id'
+> Dump of assembler code for function bpf_get_smp_processor_id:
+>    0xffffffff810fa890 <+0>:     0f 1f 44 00 00          nop    DWORD PTR [rax+rax*1+0x0]
+>    0xffffffff810fa895 <+5>:     65 8b 05 70 62 f3 7e    mov    eax,DWORD PTR gs:[rip+0x7ef36270]        # 0x30b0c <pcpu_hot+12>
+>    0xffffffff810fa89c <+12>:    48 98                   cdqe
+>    0xffffffff810fa89e <+14>:    c3                      ret
+> End of assembler dump.
+> 
+> And here's a GDB disassembly dump of a piece of BPF program calling
+> bpf_get_smp_processor_id().
+> 
+>   $ sudo cat /proc/kallsyms | rg 'pcpu_hot|bpf_prog_2b455b4f8a8d48c5_kexit'
+>   000000000002d840 A pcpu_hot
+>   ffffffffa000f8a8 t bpf_prog_2b455b4f8a8d48c5_kexit      [bpf]
+> 
+> Then attaching GDB to the running kernel in QEMU and breaking inside BPF
+> program:
+> 
+> (gdb) b *0xffffffffa000f8e2
+> Breakpoint 1 at 0xffffffffa000f8e2
+> 
+> When RIP-relative instruction is used:
+> 
+>   0xffffffffa000f8e2      mov    %gs:0x6001df63(%rip),%eax        # 0x2d84c <pcpu_hot+12>
+>   0xffffffffa000f8e9      cltq
+> 
+> You can see that final address is resolved to <pcpu_hot+12> as expected.
+> 
+> When absolute addressing is used:
+> 
+>   0xffffffffa000f8e2      movabs %gs:0x2d84c,%eax
+>   0xffffffffa000f8ed      cltq
+> 
+> And here 0x2d84c matches pcpu_hot address from kallsyms (0x2d840),
+> plus 12 (0xc) bytes offset of cpu_number field.
+> 
+> This inlining eliminates entire function call for this (rather trivial in terms
+> of instructions executed) helper, saving a bit of performance, but foremost
+> saving LBR records (1 for PERF_SAMPLE_BRANCH_ANY_RETURN mode, and 2 for
+> PERF_SAMPLE_BRANCH_ANY), which is what motivated this work in the first
+> place.
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+this should also 'fix' the k[ret]probe-multi-fast benchmark issue right?
+
+https://lore.kernel.org/bpf/20240315051813.1320559-2-andrii@kernel.org/
 
 jirka
 
-> ---
->  kernel/trace/bpf_trace.c | 4 ----
->  1 file changed, 4 deletions(-)
 > 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 434e3ece6688..6d000332b17b 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -1182,9 +1182,6 @@ static const struct bpf_func_proto bpf_get_attach_cookie_proto_tracing = {
->  
->  BPF_CALL_3(bpf_get_branch_snapshot, void *, buf, u32, size, u64, flags)
->  {
-> -#ifndef CONFIG_X86
-> -	return -ENOENT;
-> -#else
->  	static const u32 br_entry_size = sizeof(struct perf_branch_entry);
->  	u32 entry_cnt = size / br_entry_size;
->  
-> @@ -1197,7 +1194,6 @@ BPF_CALL_3(bpf_get_branch_snapshot, void *, buf, u32, size, u64, flags)
->  		return -ENOENT;
->  
->  	return entry_cnt * br_entry_size;
-> -#endif
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  arch/x86/net/bpf_jit_comp.c | 26 +++++++++++++++++++++++++-
+>  1 file changed, 25 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 4900b1ee019f..5b7fdc24b5b8 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -457,6 +457,9 @@ static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf,
+>  	*pprog = prog;
 >  }
 >  
->  static const struct bpf_func_proto bpf_get_branch_snapshot_proto = {
+> +/* reference to bpf_get_smp_processor_id() helper implementation to detect it for inlining */
+> +extern u64 bpf_get_smp_processor_id(u64, u64, u64, u64, u64);
+> +
+>  static int emit_patch(u8 **pprog, void *func, void *ip, u8 opcode)
+>  {
+>  	u8 *prog = *pprog;
+> @@ -467,7 +470,28 @@ static int emit_patch(u8 **pprog, void *func, void *ip, u8 opcode)
+>  		pr_err("Target call %p is out of range\n", func);
+>  		return -ERANGE;
+>  	}
+> -	EMIT1_off32(opcode, offset);
+> +
+> +	/* inline bpf_get_smp_processor_id() to avoid calls */
+> +	if (opcode == 0xE8 && func == &bpf_get_smp_processor_id) {
+> +		/* 7 to account for the mov instruction itself,
+> +		 * as rip value *after* mov instruction is used
+> +		 */
+> +		offset = (void *)&pcpu_hot.cpu_number - ip - 7;
+> +		if (is_simm32(offset)) {
+> +			/* mov eax,DWORD PTR gs:[rip+<offset>] ; <pcpu_hot+12> */
+> +			EMIT3_off32(0x65, 0x8b, 0x05, (u32)offset);
+> +		} else {
+> +			/* mov eax,DWORD PTR gs:<offset> ; <pcpu_hot+12> */
+> +			offset = (s64)(void *)&pcpu_hot.cpu_number;
+> +			EMIT2(0x65, 0xa1);
+> +			EMIT((u32)offset, 4);
+> +			EMIT((u64)offset >> 32, 4);
+> +		}
+> +		EMIT2(0x48, 0x98); /* cdqe, zero-extend eax to rax */
+> +	} else {
+> +		EMIT1_off32(opcode, offset);
+> +	}
+> +
+>  	*pprog = prog;
+>  	return 0;
+>  }
 > -- 
 > 2.43.0
 > 
