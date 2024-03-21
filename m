@@ -1,91 +1,85 @@
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36CC6BA28;
-	Thu, 21 Mar 2024 03:57:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E046FBF;
+	Thu, 21 Mar 2024 04:40:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710993482; cv=none; b=SodR9YyzMGj4XdFRC6UPIX9zdjj0XDhGM7tMsYNyATgqHbJ9Tz5f9CQqOmUnugVemWYgqzQwjbkUjNU950XBdKOwels494SiSOEwT9cFB7W8v0pxkKMTH5VipVJaQl72HMpIg0YdO7gHX6wftvDouXt+9oc36qxwWTwuJXrBirI=
+	t=1710996028; cv=none; b=Rnu8GrJcvaS8M+KuapW45OW3yHwIlvvydVFnbQsXad60/84DnLFFLdZ1b3K+IrVnV23no39+EiwGHJmWdPH12l+qzKcoRfW4ZTdfRhaI/kwhA9PbF3ipZNJA7QnPBLXc3UhdfB4Jw5dxDZCRFdmMIpkUSFsOIEv2Z9eTsGks7ow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710993482; c=relaxed/simple;
-	bh=LsJ5UmrAQ2kaskkhM7rR3Y898px0nwRGcdzfCbvbn4k=;
-	h=Message-ID:Subject:Date:From:To:Cc:References:In-Reply-To; b=OZoPm6rWE7mVspEzYM6LJCuHqYz3hYNqLaWq0VGFiKGVC8krcD9wirUqCW9ecQ60C944WIrCxwBUJob4C75Dkkjvr2j8j8jJ1oTpUVFTQL5cOYsHAWo3va/kzoiv4FuyT/wWhDvJ/MO6lq9gY6b++NPSliEbF61p2IN9QEapr9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=oIqKJrrO; arc=none smtp.client-ip=115.124.30.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1710996028; c=relaxed/simple;
+	bh=Stz/LtxZ0oNUWGPAkL2Gm2OiNn6QXW8wUeEfkZyKsoU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=nZPFDJnWVY65/wDXyFkQTCQmIEw2jlxOCflq2EiRewrclWCkNls8fBgpmsB0mcr1qDPCNXyID4+HQQBZ47Mwi82wTPAiJwb8vY/sIUh8J2gja5FPEsZhN3SJstJHKolAom8lIU51k3CxNkq2plVeBllDdZ1OTejjWGUH7anp7Q8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O+zbZA2p; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="oIqKJrrO"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1710993477; h=Message-ID:Subject:Date:From:To;
-	bh=LsJ5UmrAQ2kaskkhM7rR3Y898px0nwRGcdzfCbvbn4k=;
-	b=oIqKJrrOd84ppBKVldB4cXZupIRRyi5DsydtoIva7m1Brts2eSWdWnSVTu0HqL4hjjOOXHDnQGQA/CeAsmIvS9aaYUo2FnRbVVDzGriyrHU7cMGsITgrpPePIgMnl26Amkhh8UIf7/nFPyCeD2ixdKw/c3wo/0YRneDVQmI08t8=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0W2zNK5s_1710993474;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W2zNK5s_1710993474)
-          by smtp.aliyun-inc.com;
-          Thu, 21 Mar 2024 11:57:55 +0800
-Message-ID: <1710993274.7038217-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH net-next v5 0/9] virtio-net: support device stats
-Date: Thu, 21 Mar 2024 11:54:34 +0800
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>,
- netdev@vger.kernel.org,
- "David S.  Miller" <davem@davemloft.net>,
- Eric  Dumazet <edumazet@google.com>,
- "Michael  S. Tsirkin" <mst@redhat.com>,
- Jason Wang <jasowang@redhat.com>,
- Alexei  Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John  Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@google.com>,
- Amritha  Nambiar <amritha.nambiar@intel.com>,
- Larysa Zaremba <larysa.zaremba@intel.com>,
- Sridhar Samudrala <sridhar.samudrala@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- virtualization@lists.linux.dev,
- bpf@vger.kernel.org,
- Jiri Pirko <jiri@resnulli.us>
-References: <20240318110602.37166-1-xuanzhuo@linux.alibaba.com>
- <Zfgq8k2Q-olYWiuw@nanopsycho>
- <1710762818.1520293-1-xuanzhuo@linux.alibaba.com>
- <ZfgxSug4sekWGyNd@nanopsycho>
- <316ea06417279a45d2d54bf4cc4afd2d775b419a.camel@redhat.com>
- <1710921861.9268863-1-xuanzhuo@linux.alibaba.com>
- <20240320203801.5950fb1d@kernel.org>
-In-Reply-To: <20240320203801.5950fb1d@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O+zbZA2p"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 032DBC433F1;
+	Thu, 21 Mar 2024 04:40:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710996028;
+	bh=Stz/LtxZ0oNUWGPAkL2Gm2OiNn6QXW8wUeEfkZyKsoU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=O+zbZA2pqkmYFD/+/+lpoOlvB35mFNlw9t+ZWFMewtPpQMLzIXXtiMjV77SIowIQJ
+	 52zBlYz3bQbRL2I0vYZbVkDofZ477Pzs/ymzi2XUB/UKMrXA+dxoM+DINL/ZefSwSF
+	 sIT4pHnAIV6csAHBZEYfWIhpXhBTGe1SpFMuD1uoSWheIxSK/oKUxtYAduNylxNiDK
+	 VNWH6cUQfZCMTF2lZrxO5goILCMy14m4Q4DFy4D22LCQdzpjerGYwSTg5bHff8SzfY
+	 HZWbPCDmZWrfV49pEn06fnBOaPcdTCPozuSbw6tXeQtMJB7jio9FmRTFYPuYY+0TUM
+	 poAoYMWUGqFMg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E5818D982E3;
+	Thu, 21 Mar 2024 04:40:27 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v5 net 0/3] Report RCU QS for busy network kthreads
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171099602793.26207.3374009714899466289.git-patchwork-notify@kernel.org>
+Date: Thu, 21 Mar 2024 04:40:27 +0000
+References: <cover.1710877680.git.yan@cloudflare.com>
+In-Reply-To: <cover.1710877680.git.yan@cloudflare.com>
+To: Yan Zhai <yan@cloudflare.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, jiri@resnulli.us, horms@kernel.org,
+ daniel@iogearbox.net, lorenzo@kernel.org, lixiaoyan@google.com,
+ weiwan@google.com, alexanderduyck@fb.com, linux-kernel@vger.kernel.org,
+ rcu@vger.kernel.org, bpf@vger.kernel.org, kernel-team@cloudflare.com,
+ joel@joelfernandes.org, paulmck@kernel.org, toke@redhat.com,
+ alexei.starovoitov@gmail.com, rostedt@goodmis.org, mark.rutland@arm.com,
+ hawk@kernel.org, bigeasy@linutronix.de
 
-On Wed, 20 Mar 2024 20:38:01 -0700, Jakub Kicinski <kuba@kernel.org> wrote:
-> On Wed, 20 Mar 2024 16:04:21 +0800 Xuan Zhuo wrote:
-> > I have a question regarding the workflow for feature discussions. If we
-> > consistently engage in discussions about a particular feature, this may result
-> > in the submission of multiple patch sets. In light of this, should we modify the
-> > usage of "PATCH" or "RFC" in our submissions depending on whether the merge
-> > window is open or closed? This causes the title of our patch sets to keep
-> > changing.
->
-> Is switching between RFC and PATCH causing issues?
+Hello:
 
-You know someone may ignore the RFC patches.
-And for me, that the pathsets for the particular feture have differ
-prefix "PATCH" or "RFC" is odd.
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-> Should be a simple modification to the git format-patch argument.
+On Tue, 19 Mar 2024 13:44:30 -0700 you wrote:
+> This changeset fixes a common problem for busy networking kthreads.
+> These threads, e.g. NAPI threads, typically will do:
+> 
+> * polling a batch of packets
+> * if there are more work, call cond_resched() to allow scheduling
+> * continue to poll more packets when rx queue is not empty
+> 
+> [...]
 
-That is ok.
+Here is the summary with links:
+  - [v5,net,1/3] rcu: add a helper to report consolidated flavor QS
+    https://git.kernel.org/netdev/net/c/1a77557d48cf
+  - [v5,net,2/3] net: report RCU QS on threaded NAPI repolling
+    https://git.kernel.org/netdev/net/c/d6dbbb11247c
+  - [v5,net,3/3] bpf: report RCU QS in cpumap kthread
+    https://git.kernel.org/netdev/net/c/00bf63122459
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-> But perhaps your workload is different than mine.
->
-> The merge window is only 2 weeks every 10 weeks, it's not changing
-> often, I don't think.
-
-YES. I'm ok, if that is a rule.
-
-Thanks.
