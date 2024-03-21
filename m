@@ -1,225 +1,113 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CB7134422
-	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 20:01:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61974F4FA
+	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 20:16:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711051299; cv=none; b=sYiFcZ6K9acfXsSeGMy4hjLftZyMRhO1W6Wa1vZYlnLmBWmCfUZbTbfiWHLDUHHR9ETGK48Z8Jjji1APzoH9T3R1f5t5SJxaA95uKuAzR9nGGZAnhO+yh1bmvLNTAq1Zq6RgvM9ptX8i42rkngYj3t1FnxEAvh8PfSagE/jE0ZQ=
+	t=1711052166; cv=none; b=Aj5cz86Xm9y/1B/ttg1DL6f/q9+7oFr8soF1jNERmiczJp+7qj2qPbA4IX5jsYAsHXKpnuZjOphad23l2svm19PyLQzbLSKjjoErxP4EPnZ0TMl4tTQBQzOX7Q/qKjhBDAoSEJyI+ttRYXtOz6z7RvlcBpwmg2OD9XZgggXrAew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711051299; c=relaxed/simple;
-	bh=lwzIDjBWH2bW/fI6EM1MkhMhVQjwWu2r+y47owZB/Zk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YRWkb3/0Cys54B+SdpVXZcBZhDSQs+fIba5B2XRTtzecqk9V8osiOx+XVbgkuoKPeWSzDyy1LyStLegKM0n6b7AgIUJfOx/Z2kjwIwNwkctUWKfh+9Y6rz9qAL3Ivmktd6O9KtWXUwhfwZ9VnrXQD36VZkt3z19iwDb16CU4jFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 4483A22190C3; Thu, 21 Mar 2024 13:01:24 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Add a selftest with available_filter_functions_addrs
-Date: Thu, 21 Mar 2024 13:01:24 -0700
-Message-ID: <20240321200124.2220345-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240321200058.2218328-1-yonghong.song@linux.dev>
-References: <20240321200058.2218328-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1711052166; c=relaxed/simple;
+	bh=Ebh4SGKGOqH890nAvwFna142uYoc9lRGM7ZHFFA0xwQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NWMp5pX3KYsnE2/aWg7DJkYsiZ1vHVsrFI/qZcB+OZ0RORVlL0QeEn6JzBpP2f2bosztOOmKzBnY8jSnFtztz3OTuxygz/6JTuVgaBaElqJsN5y1yEbOFliksdpphbAF3IFNEchFW9DpeMvyGkgSgZv1U/4g7Vo7anf3vuie/+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=v4rIidBq; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="v4rIidBq"
+Message-ID: <945c6059-9149-4018-8a9e-baf65c95612e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1711052160;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Y1RtZSHiIUBBX7opktwgnR5lt+96P2B0XgYwgxshZA4=;
+	b=v4rIidBqdbFp3PKDuur1ZWu7qnWWgTgdJEyBQXGRty8qHSo37vSpnYHt4scXtux0F3fdZG
+	BGOuTRtMOhErh8SdqqY/VDa5qYegULxI7HEa9PJ4FhcrQ7TW8BKTScv8lNYwDLXoPzgCah
+	e+v5swNSwMMiOW0Ehz0TVEj+3NdBrvU=
+Date: Thu, 21 Mar 2024 13:15:51 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next v2 2/5] selftests/bpf: Replace CHECK with
+ ASSERT_* in ns_current_pid_tgid test
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, bpf@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com,
+ Martin KaFai Lau <martin.lau@kernel.org>, Yury Namgung <ynamgung@meta.com>
+References: <20240315184849.2974556-1-yonghong.song@linux.dev>
+ <20240315184859.2975543-1-yonghong.song@linux.dev> <ZfgnLQ5ytpU2IcUX@krava>
+ <2af81b55-4be4-4936-a42e-940786c45877@linux.dev>
+ <CAEf4BzYWoe1DEOFsXe4=fx+2ceFKEc8ASW5Jt002jOHkErxqHQ@mail.gmail.com>
+Content-Language: en-GB
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAEf4BzYWoe1DEOFsXe4=fx+2ceFKEc8ASW5Jt002jOHkErxqHQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-The current kprobe_multi_bench_attach/kernel test
-reads sym names from /sys/kernel/tracing/available_filter_functions.
-Some names do not agree with the corresponding entries in /proc/kallsyms
-since the corresponding /proc/kallsyms syms have suffix '.llvm.<hash>'.
-Actually, if we pass symbol names in /proc/kallsyms,
-kprobe_multi_attach will be okay.
 
-This patch added a new subtest where addresses are retrieved from
-/sys/kernel/tracing/available_filter_functions_addrs, and use the
-address to consule /proc/kallsyms to get the function name.
+On 3/19/24 2:52 PM, Andrii Nakryiko wrote:
+> On Mon, Mar 18, 2024 at 8:30 AM Yonghong Song <yonghong.song@linux.dev> wrote:
+>>
+>> On 3/18/24 4:36 AM, Jiri Olsa wrote:
+>>> On Fri, Mar 15, 2024 at 11:48:59AM -0700, Yonghong Song wrote:
+>>>> Replace CHECK in selftest ns_current_pid_tgid with recommended ASSERT_* style.
+>>>> I also shortened subtest name as the prefix of subtest name is covered
+>>>> by the test name already.
+>>>>
+>>>> This patch does fix a testing issue. Currently even if bss->user_{pid,tgid}
+>>>> is not correct, the test still passed since the clone func returns 0.
+>>>> I fixed it to return a non-zero value if bss->user_{pid,tgid} is incorrect.
+>>>>
+>>>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>>>> ---
+>>>>    .../bpf/prog_tests/ns_current_pid_tgid.c      | 36 ++++++++++---------
+>>>>    1 file changed, 19 insertions(+), 17 deletions(-)
+>>>>
+>>>> diff --git a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
+>>>> index 24d493482ffc..3a0664a86243 100644
+>>>> --- a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
+>>>> +++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
+>>>> @@ -20,19 +20,19 @@ static int test_current_pid_tgid(void *args)
+>>>>    {
+>>>>       struct test_ns_current_pid_tgid__bss  *bss;
+>>>>       struct test_ns_current_pid_tgid *skel;
+>>>> -    int err = -1, duration = 0;
+>>>> +    int ret = -1, err;
+>>>>       pid_t tgid, pid;
+>>>>       struct stat st;
+>>>>
+>>>>       skel = test_ns_current_pid_tgid__open_and_load();
+>>>> -    if (CHECK(!skel, "skel_open_load", "failed to load skeleton\n"))
+>>>> -            goto cleanup;
+>>>> +    if (!ASSERT_OK_PTR(skel, "test_ns_current_pid_tgid__open_and_load"))
+>>>> +            goto out;
+>>> you could just return in here so there's no need for the out label
+>>> otherwise lgtm
+>> Since this patch intends to just replace CHECK with ASSERT_*.
+>> I tried to keep other parts of codes the same as before. But
+>> I can certainly do this. I will wait for other comments
+>> before sending another revision.
+>>
+> I applied it as is, but feel free to send suggested improvements as a follow up.
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../bpf/prog_tests/kprobe_multi_test.c        | 139 ++++++++++++++++++
- 1 file changed, 139 insertions(+)
+Actually the patch (after this commit)
+   4d4bd29e363c  selftests/bpf: Refactor out some functions in ns_current_pid_tgid test
+already did the refactoring. So I don't need to do anything.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b=
-/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-index f6130f4f3d88..142309ced146 100644
---- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-@@ -438,6 +438,102 @@ static int get_syms(char ***symsp, size_t *cntp, bo=
-ol kernel)
- 	return err;
- }
-=20
-+static int get_syms_from_addr(char ***symsp, size_t *cntp)
-+{
-+	char *name =3D NULL, **syms =3D NULL;
-+	size_t cap =3D 0, cnt =3D 0, i;
-+	struct hashmap *map;
-+	struct ksym *ks;
-+	char buf[256];
-+	FILE *f;
-+	int err =3D 0;
-+	void *addr;
-+
-+	if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
-+		return -EINVAL;
-+	/*
-+	 * The available_filter_functions contains many duplicates,
-+	 * but other than that all symbols are usable in kprobe multi
-+	 * interface.
-+	 * Filtering out duplicates by using hashmap__add, which won't
-+	 * add existing entry.
-+	 */
-+
-+	if (access("/sys/kernel/tracing/trace", F_OK) =3D=3D 0)
-+		f =3D fopen("/sys/kernel/tracing/available_filter_functions_addrs", "r=
-");
-+	else
-+		f =3D fopen("/sys/kernel/debug/tracing/available_filter_functions_addr=
-s", "r");
-+
-+	if (!f)
-+		return -ENOENT;
-+
-+	map =3D hashmap__new(symbol_hash, symbol_equal, NULL);
-+	if (IS_ERR(map)) {
-+		err =3D libbpf_get_error(map);
-+		goto error;
-+	}
-+
-+	while (fgets(buf, sizeof(buf), f)) {
-+		if (strchr(buf, '['))
-+			continue;
-+
-+		if (sscanf(buf, "%p$*[^\n]\n", &addr) !=3D 1)
-+			continue;
-+
-+		ks =3D ksym_search((long)addr);
-+		if (!ks)
-+			return -EINVAL;
-+
-+		name =3D ks->name;
-+
-+		/*
-+		 * We attach to almost all kernel functions and some of them
-+		 * will cause 'suspicious RCU usage' when fprobe is attached
-+		 * to them. Filter out the current culprits - arch_cpu_idle
-+		 * default_idle and rcu_* functions.
-+		 */
-+		if (!strcmp(name, "arch_cpu_idle"))
-+			continue;
-+		if (!strcmp(name, "default_idle"))
-+			continue;
-+		if (!strncmp(name, "rcu_", 4))
-+			continue;
-+		if (!strcmp(name, "bpf_dispatcher_xdp_func"))
-+			continue;
-+		if (!strncmp(name, "__ftrace_invalid_address__",
-+			     sizeof("__ftrace_invalid_address__") - 1))
-+			continue;
-+
-+		err =3D hashmap__add(map, name, 0);
-+		if (err =3D=3D -EEXIST) {
-+			err =3D 0;
-+			continue;
-+		}
-+		if (err)
-+			goto error;
-+
-+		err =3D libbpf_ensure_mem((void **) &syms, &cap,
-+					sizeof(*syms), cnt + 1);
-+		if (err)
-+			goto error;
-+
-+		syms[cnt++] =3D name;
-+	}
-+
-+	*symsp =3D syms;
-+	*cntp =3D cnt;
-+
-+error:
-+	fclose(f);
-+	hashmap__free(map);
-+	if (err) {
-+		for (i =3D 0; i < cnt; i++)
-+			free(syms[i]);
-+		free(syms);
-+	}
-+	return err;
-+}
-+
- static void test_kprobe_multi_bench_attach(bool kernel)
- {
- 	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
-@@ -521,6 +617,47 @@ static void test_attach_override(void)
- 	kprobe_multi_override__destroy(skel);
- }
-=20
-+static void test_attach_kernel_addrs_to_sym(void)
-+{
-+	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
-+	struct kprobe_multi_empty *skel;
-+	struct bpf_link *link;
-+	char **syms =3D NULL;
-+	size_t cnt =3D 0;
-+	int i, err;
-+
-+	err =3D get_syms_from_addr(&syms, &cnt);
-+	if (err =3D=3D -ENOENT) {
-+		test__skip();
-+		return;
-+	}
-+	if (!ASSERT_OK(err, "get_syms_from_addr"))
-+		return;
-+
-+	skel =3D kprobe_multi_empty__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "kprobe_multi_empty__open_and_load"))
-+		goto cleanup;
-+
-+	opts.syms =3D (const char **) syms;
-+	opts.cnt =3D cnt;
-+
-+	link =3D bpf_program__attach_kprobe_multi_opts(skel->progs.test_kprobe_=
-empty,
-+						     NULL, &opts);
-+
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_kprobe_multi_opts"))
-+		goto cleanup;
-+
-+	bpf_link__destroy(link);
-+
-+cleanup:
-+	kprobe_multi_empty__destroy(skel);
-+	if (syms) {
-+		for (i =3D 0; i < cnt; i++)
-+			free(syms[i]);
-+		free(syms);
-+	}
-+}
-+
- void serial_test_kprobe_multi_bench_attach(void)
- {
- 	if (test__start_subtest("kernel"))
-@@ -550,4 +687,6 @@ void test_kprobe_multi_test(void)
- 		test_attach_api_fails();
- 	if (test__start_subtest("attach_override"))
- 		test_attach_override();
-+	if (test__start_subtest("kernel_addrs_to_sym"))
-+		test_attach_kernel_addrs_to_sym();
- }
---=20
-2.43.0
-
+>
+>
+>>> Acked-by: Jiri Olsa <jolsa@kernel.org>
+>>>
+>>>
+>>> jirka
+[...]
