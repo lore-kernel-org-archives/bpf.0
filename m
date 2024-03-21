@@ -1,113 +1,411 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61974F4FA
-	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 20:16:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C9A133402;
+	Thu, 21 Mar 2024 20:28:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711052166; cv=none; b=Aj5cz86Xm9y/1B/ttg1DL6f/q9+7oFr8soF1jNERmiczJp+7qj2qPbA4IX5jsYAsHXKpnuZjOphad23l2svm19PyLQzbLSKjjoErxP4EPnZ0TMl4tTQBQzOX7Q/qKjhBDAoSEJyI+ttRYXtOz6z7RvlcBpwmg2OD9XZgggXrAew=
+	t=1711052893; cv=none; b=eaNTBU4yLmAxfcb+9JizW3HfIN4cyynFgPr4gvlnTYvgs4LIfrzWbp7/0ERdKuHJuHUQR1AEhjqKWoHGglTYrlIY63axnhlst4Tovrsiw49obZOtkXj+NMOQgl1G/ytd9UjJsRMH56Z2Fzkv4qrIXRqh3KUSNJrm7Y1xOKa0uZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711052166; c=relaxed/simple;
-	bh=Ebh4SGKGOqH890nAvwFna142uYoc9lRGM7ZHFFA0xwQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NWMp5pX3KYsnE2/aWg7DJkYsiZ1vHVsrFI/qZcB+OZ0RORVlL0QeEn6JzBpP2f2bosztOOmKzBnY8jSnFtztz3OTuxygz/6JTuVgaBaElqJsN5y1yEbOFliksdpphbAF3IFNEchFW9DpeMvyGkgSgZv1U/4g7Vo7anf3vuie/+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=v4rIidBq; arc=none smtp.client-ip=95.215.58.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1711052893; c=relaxed/simple;
+	bh=fv29jsGkpY39loNkVFVRiRflO64Iy3xyWL+d6AJ6Bek=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BbwvZCpKAr4fL979veHzzYT2og/HXAkH8H0n2TmO1bOAF2yYg6V7Wn/A94M0+WLl/H0qwiwv8atdVVyVwLR69SWn8Xl09t1MDLmbTx/x2bz5wPFgQmxMj3pGGWCbnhPgkIO5IejndncJ853q/5MRlaMcvMjz+Z1eFGDwXGOAPfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EPpBJteL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="v4rIidBq"
-Message-ID: <945c6059-9149-4018-8a9e-baf65c95612e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1711052160;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Y1RtZSHiIUBBX7opktwgnR5lt+96P2B0XgYwgxshZA4=;
-	b=v4rIidBqdbFp3PKDuur1ZWu7qnWWgTgdJEyBQXGRty8qHSo37vSpnYHt4scXtux0F3fdZG
-	BGOuTRtMOhErh8SdqqY/VDa5qYegULxI7HEa9PJ4FhcrQ7TW8BKTScv8lNYwDLXoPzgCah
-	e+v5swNSwMMiOW0Ehz0TVEj+3NdBrvU=
-Date: Thu, 21 Mar 2024 13:15:51 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EPpBJteL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49E48C433F1;
+	Thu, 21 Mar 2024 20:28:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711052892;
+	bh=fv29jsGkpY39loNkVFVRiRflO64Iy3xyWL+d6AJ6Bek=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EPpBJteL3VBDttaosg/kR7CL735OSUtwgtdk6Z4hD4f7zPgPd8FqCtg1ZyVRJKiJg
+	 A7c13uYeD+uNt/wRiULZBkruy4GR9dU9c2VSwVE/ZV2qSTFRcsZPXgXTlyjhDno8t/
+	 wX5p5hTbFNJTB6zV/y8u30VuVyLl31lzYII+RzYUeZTBNwaZT0Y5UhGw/aQWVCwOh5
+	 e+a3lg8ckRKT1u8KvUgd38lpvKMbyCjQynRF/2anB7xmiWluwzr9WWCC8G6jxV0a8v
+	 QwJQmIiUPuOcLqED5syJ5SAR91vxKGHN9slK43A+sztpD2fE+cvEL0BNNe0buFgvhm
+	 X1HoLgzhAIpnQ==
+Date: Thu, 21 Mar 2024 17:28:09 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@arm.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= <nabijaczleweli@nabijaczleweli.xyz>,
+	Leo Yan <leo.yan@linux.dev>, Song Liu <song@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Liam Howlett <liam.howlett@oracle.com>,
+	Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+	Ben Gainey <ben.gainey@arm.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Yanteng Si <siyanteng@loongson.cn>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Sun Haiyong <sunhaiyong@loongson.cn>,
+	Changbin Du <changbin.du@huawei.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	zhaimingbing <zhaimingbing@cmss.chinamobile.com>,
+	Paran Lee <p4ranlee@gmail.com>, Li Dong <lidong@vivo.com>,
+	elfring@users.sourceforge.net, Andi Kleen <ak@linux.intel.com>,
+	Markus Elfring <Markus.Elfring@web.de>,
+	Chengen Du <chengen.du@canonical.com>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH v2 01/13] perf dso: Reorder variables to save space in
+ struct dso
+Message-ID: <ZfyYWcu0E-Pcn6Rf@x1>
+References: <20240321160300.1635121-1-irogers@google.com>
+ <20240321160300.1635121-2-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 2/5] selftests/bpf: Replace CHECK with
- ASSERT_* in ns_current_pid_tgid test
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, bpf@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com,
- Martin KaFai Lau <martin.lau@kernel.org>, Yury Namgung <ynamgung@meta.com>
-References: <20240315184849.2974556-1-yonghong.song@linux.dev>
- <20240315184859.2975543-1-yonghong.song@linux.dev> <ZfgnLQ5ytpU2IcUX@krava>
- <2af81b55-4be4-4936-a42e-940786c45877@linux.dev>
- <CAEf4BzYWoe1DEOFsXe4=fx+2ceFKEc8ASW5Jt002jOHkErxqHQ@mail.gmail.com>
-Content-Language: en-GB
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <CAEf4BzYWoe1DEOFsXe4=fx+2ceFKEc8ASW5Jt002jOHkErxqHQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240321160300.1635121-2-irogers@google.com>
 
+On Thu, Mar 21, 2024 at 09:02:48AM -0700, Ian Rogers wrote:
+> Save 40 bytes and move from 8 to 7 cache lines. Make variable dwfl
+> dependent on being a powerpc build. Squeeze bits of int/enum types
+> when appropriate. Remove holes/padding by reordering variables.
 
-On 3/19/24 2:52 PM, Andrii Nakryiko wrote:
-> On Mon, Mar 18, 2024 at 8:30 AM Yonghong Song <yonghong.song@linux.dev> wrote:
->>
->> On 3/18/24 4:36 AM, Jiri Olsa wrote:
->>> On Fri, Mar 15, 2024 at 11:48:59AM -0700, Yonghong Song wrote:
->>>> Replace CHECK in selftest ns_current_pid_tgid with recommended ASSERT_* style.
->>>> I also shortened subtest name as the prefix of subtest name is covered
->>>> by the test name already.
->>>>
->>>> This patch does fix a testing issue. Currently even if bss->user_{pid,tgid}
->>>> is not correct, the test still passed since the clone func returns 0.
->>>> I fixed it to return a non-zero value if bss->user_{pid,tgid} is incorrect.
->>>>
->>>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->>>> ---
->>>>    .../bpf/prog_tests/ns_current_pid_tgid.c      | 36 ++++++++++---------
->>>>    1 file changed, 19 insertions(+), 17 deletions(-)
->>>>
->>>> diff --git a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
->>>> index 24d493482ffc..3a0664a86243 100644
->>>> --- a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
->>>> +++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
->>>> @@ -20,19 +20,19 @@ static int test_current_pid_tgid(void *args)
->>>>    {
->>>>       struct test_ns_current_pid_tgid__bss  *bss;
->>>>       struct test_ns_current_pid_tgid *skel;
->>>> -    int err = -1, duration = 0;
->>>> +    int ret = -1, err;
->>>>       pid_t tgid, pid;
->>>>       struct stat st;
->>>>
->>>>       skel = test_ns_current_pid_tgid__open_and_load();
->>>> -    if (CHECK(!skel, "skel_open_load", "failed to load skeleton\n"))
->>>> -            goto cleanup;
->>>> +    if (!ASSERT_OK_PTR(skel, "test_ns_current_pid_tgid__open_and_load"))
->>>> +            goto out;
->>> you could just return in here so there's no need for the out label
->>> otherwise lgtm
->> Since this patch intends to just replace CHECK with ASSERT_*.
->> I tried to keep other parts of codes the same as before. But
->> I can certainly do this. I will wait for other comments
->> before sending another revision.
->>
-> I applied it as is, but feel free to send suggested improvements as a follow up.
+Thanks, applied.
 
-Actually the patch (after this commit)
-   4d4bd29e363c  selftests/bpf: Refactor out some functions in ns_current_pid_tgid test
-already did the refactoring. So I don't need to do anything.
-
->
->
->>> Acked-by: Jiri Olsa <jolsa@kernel.org>
->>>
->>>
->>> jirka
-[...]
+- Arnaldo
+ 
+> Before:
+> ```
+> struct dso {
+>         struct mutex               lock;                 /*     0    40 */
+>         struct list_head           node;                 /*    40    16 */
+>         struct rb_node             rb_node __attribute__((__aligned__(8))); /*    56    24 */
+>         /* --- cacheline 1 boundary (64 bytes) was 16 bytes ago --- */
+>         struct rb_root *           root;                 /*    80     8 */
+>         struct rb_root_cached      symbols;              /*    88    16 */
+>         struct symbol * *          symbol_names;         /*   104     8 */
+>         size_t                     symbol_names_len;     /*   112     8 */
+>         struct rb_root_cached      inlined_nodes;        /*   120    16 */
+>         /* --- cacheline 2 boundary (128 bytes) was 8 bytes ago --- */
+>         struct rb_root_cached      srclines;             /*   136    16 */
+>         struct {
+>                 u64                addr;                 /*   152     8 */
+>                 struct symbol *    symbol;               /*   160     8 */
+>         } last_find_result;                              /*   152    16 */
+>         void *                     a2l;                  /*   168     8 */
+>         char *                     symsrc_filename;      /*   176     8 */
+>         unsigned int               a2l_fails;            /*   184     4 */
+>         enum dso_space_type        kernel;               /*   188     4 */
+>         /* --- cacheline 3 boundary (192 bytes) --- */
+>         _Bool                      is_kmod;              /*   192     1 */
+> 
+>         /* XXX 3 bytes hole, try to pack */
+> 
+>         enum dso_swap_type         needs_swap;           /*   196     4 */
+>         enum dso_binary_type       symtab_type;          /*   200     4 */
+>         enum dso_binary_type       binary_type;          /*   204     4 */
+>         enum dso_load_errno        load_errno;           /*   208     4 */
+>         u8                         adjust_symbols:1;     /*   212: 0  1 */
+>         u8                         has_build_id:1;       /*   212: 1  1 */
+>         u8                         header_build_id:1;    /*   212: 2  1 */
+>         u8                         has_srcline:1;        /*   212: 3  1 */
+>         u8                         hit:1;                /*   212: 4  1 */
+>         u8                         annotate_warned:1;    /*   212: 5  1 */
+>         u8                         auxtrace_warned:1;    /*   212: 6  1 */
+>         u8                         short_name_allocated:1; /*   212: 7  1 */
+>         u8                         long_name_allocated:1; /*   213: 0  1 */
+>         u8                         is_64_bit:1;          /*   213: 1  1 */
+> 
+>         /* XXX 6 bits hole, try to pack */
+> 
+>         _Bool                      sorted_by_name;       /*   214     1 */
+>         _Bool                      loaded;               /*   215     1 */
+>         u8                         rel;                  /*   216     1 */
+> 
+>         /* XXX 7 bytes hole, try to pack */
+> 
+>         struct build_id            bid;                  /*   224    32 */
+>         /* --- cacheline 4 boundary (256 bytes) --- */
+>         u64                        text_offset;          /*   256     8 */
+>         u64                        text_end;             /*   264     8 */
+>         const char  *              short_name;           /*   272     8 */
+>         const char  *              long_name;            /*   280     8 */
+>         u16                        long_name_len;        /*   288     2 */
+>         u16                        short_name_len;       /*   290     2 */
+> 
+>         /* XXX 4 bytes hole, try to pack */
+> 
+>         void *                     dwfl;                 /*   296     8 */
+>         struct auxtrace_cache *    auxtrace_cache;       /*   304     8 */
+>         int                        comp;                 /*   312     4 */
+> 
+>         /* XXX 4 bytes hole, try to pack */
+> 
+>         /* --- cacheline 5 boundary (320 bytes) --- */
+>         struct {
+>                 struct rb_root     cache;                /*   320     8 */
+>                 int                fd;                   /*   328     4 */
+>                 int                status;               /*   332     4 */
+>                 u32                status_seen;          /*   336     4 */
+> 
+>                 /* XXX 4 bytes hole, try to pack */
+> 
+>                 u64                file_size;            /*   344     8 */
+>                 struct list_head   open_entry;           /*   352    16 */
+>                 u64                elf_base_addr;        /*   368     8 */
+>                 u64                debug_frame_offset;   /*   376     8 */
+>                 /* --- cacheline 6 boundary (384 bytes) --- */
+>                 u64                eh_frame_hdr_addr;    /*   384     8 */
+>                 u64                eh_frame_hdr_offset;  /*   392     8 */
+>         } data;                                          /*   320    80 */
+>         struct {
+>                 u32                id;                   /*   400     4 */
+>                 u32                sub_id;               /*   404     4 */
+>                 struct perf_env *  env;                  /*   408     8 */
+>         } bpf_prog;                                      /*   400    16 */
+>         union {
+>                 void *             priv;                 /*   416     8 */
+>                 u64                db_id;                /*   416     8 */
+>         };                                               /*   416     8 */
+>         struct nsinfo *            nsinfo;               /*   424     8 */
+>         struct dso_id              id;                   /*   432    24 */
+>         /* --- cacheline 7 boundary (448 bytes) was 8 bytes ago --- */
+>         refcount_t                 refcnt;               /*   456     4 */
+>         char                       name[];               /*   460     0 */
+> 
+>         /* size: 464, cachelines: 8, members: 49 */
+>         /* sum members: 440, holes: 4, sum holes: 18 */
+>         /* sum bitfield members: 10 bits, bit holes: 1, sum bit holes: 6 bits */
+>         /* padding: 4 */
+>         /* forced alignments: 1 */
+>         /* last cacheline: 16 bytes */
+> } __attribute__((__aligned__(8)));
+> ```
+> 
+> After:
+> ```
+> struct dso {
+>         struct mutex               lock;                 /*     0    40 */
+>         struct list_head           node;                 /*    40    16 */
+>         struct rb_node             rb_node __attribute__((__aligned__(8))); /*    56    24 */
+>         /* --- cacheline 1 boundary (64 bytes) was 16 bytes ago --- */
+>         struct rb_root *           root;                 /*    80     8 */
+>         struct rb_root_cached      symbols;              /*    88    16 */
+>         struct symbol * *          symbol_names;         /*   104     8 */
+>         size_t                     symbol_names_len;     /*   112     8 */
+>         struct rb_root_cached      inlined_nodes;        /*   120    16 */
+>         /* --- cacheline 2 boundary (128 bytes) was 8 bytes ago --- */
+>         struct rb_root_cached      srclines;             /*   136    16 */
+>         struct {
+>                 u64                addr;                 /*   152     8 */
+>                 struct symbol *    symbol;               /*   160     8 */
+>         } last_find_result;                              /*   152    16 */
+>         struct build_id            bid;                  /*   168    32 */
+>         /* --- cacheline 3 boundary (192 bytes) was 8 bytes ago --- */
+>         u64                        text_offset;          /*   200     8 */
+>         u64                        text_end;             /*   208     8 */
+>         const char  *              short_name;           /*   216     8 */
+>         const char  *              long_name;            /*   224     8 */
+>         void *                     a2l;                  /*   232     8 */
+>         char *                     symsrc_filename;      /*   240     8 */
+>         struct nsinfo *            nsinfo;               /*   248     8 */
+>         /* --- cacheline 4 boundary (256 bytes) --- */
+>         struct auxtrace_cache *    auxtrace_cache;       /*   256     8 */
+>         union {
+>                 void *             priv;                 /*   264     8 */
+>                 u64                db_id;                /*   264     8 */
+>         };                                               /*   264     8 */
+>         struct {
+>                 struct perf_env *  env;                  /*   272     8 */
+>                 u32                id;                   /*   280     4 */
+>                 u32                sub_id;               /*   284     4 */
+>         } bpf_prog;                                      /*   272    16 */
+>         struct {
+>                 struct rb_root     cache;                /*   288     8 */
+>                 struct list_head   open_entry;           /*   296    16 */
+>                 u64                file_size;            /*   312     8 */
+>                 /* --- cacheline 5 boundary (320 bytes) --- */
+>                 u64                elf_base_addr;        /*   320     8 */
+>                 u64                debug_frame_offset;   /*   328     8 */
+>                 u64                eh_frame_hdr_addr;    /*   336     8 */
+>                 u64                eh_frame_hdr_offset;  /*   344     8 */
+>                 int                fd;                   /*   352     4 */
+>                 int                status;               /*   356     4 */
+>                 u32                status_seen;          /*   360     4 */
+>         } data;                                          /*   288    80 */
+> 
+>         /* XXX last struct has 4 bytes of padding */
+> 
+>         struct dso_id              id;                   /*   368    24 */
+>         /* --- cacheline 6 boundary (384 bytes) was 8 bytes ago --- */
+>         unsigned int               a2l_fails;            /*   392     4 */
+>         int                        comp;                 /*   396     4 */
+>         refcount_t                 refcnt;               /*   400     4 */
+>         enum dso_load_errno        load_errno;           /*   404     4 */
+>         u16                        long_name_len;        /*   408     2 */
+>         u16                        short_name_len;       /*   410     2 */
+>         enum dso_binary_type       symtab_type:8;        /*   412: 0  4 */
+>         enum dso_binary_type       binary_type:8;        /*   412: 8  4 */
+>         enum dso_space_type        kernel:2;             /*   412:16  4 */
+>         enum dso_swap_type         needs_swap:2;         /*   412:18  4 */
+> 
+>         /* Bitfield combined with next fields */
+> 
+>         _Bool                      is_kmod:1;            /*   414: 4  1 */
+>         u8                         adjust_symbols:1;     /*   414: 5  1 */
+>         u8                         has_build_id:1;       /*   414: 6  1 */
+>         u8                         header_build_id:1;    /*   414: 7  1 */
+>         u8                         has_srcline:1;        /*   415: 0  1 */
+>         u8                         hit:1;                /*   415: 1  1 */
+>         u8                         annotate_warned:1;    /*   415: 2  1 */
+>         u8                         auxtrace_warned:1;    /*   415: 3  1 */
+>         u8                         short_name_allocated:1; /*   415: 4  1 */
+>         u8                         long_name_allocated:1; /*   415: 5  1 */
+>         u8                         is_64_bit:1;          /*   415: 6  1 */
+> 
+>         /* XXX 1 bit hole, try to pack */
+> 
+>         _Bool                      sorted_by_name;       /*   416     1 */
+>         _Bool                      loaded;               /*   417     1 */
+>         u8                         rel;                  /*   418     1 */
+>         char                       name[];               /*   419     0 */
+> 
+>         /* size: 424, cachelines: 7, members: 48 */
+>         /* sum members: 415 */
+>         /* sum bitfield members: 31 bits, bit holes: 1, sum bit holes: 1 bits */
+>         /* padding: 5 */
+>         /* paddings: 1, sum paddings: 4 */
+>         /* forced alignments: 1 */
+>         /* last cacheline: 40 bytes */
+> } __attribute__((__aligned__(8)));
+> ```
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/dso.h | 84 +++++++++++++++++++++----------------------
+>  1 file changed, 42 insertions(+), 42 deletions(-)
+> 
+> diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+> index 2cdcd1e2ef8b..17dab230a2ca 100644
+> --- a/tools/perf/util/dso.h
+> +++ b/tools/perf/util/dso.h
+> @@ -161,66 +161,66 @@ struct dso {
+>  		u64		addr;
+>  		struct symbol	*symbol;
+>  	} last_find_result;
+> -	void		 *a2l;
+> -	char		 *symsrc_filename;
+> -	unsigned int	 a2l_fails;
+> -	enum dso_space_type	kernel;
+> -	bool			is_kmod;
+> -	enum dso_swap_type	needs_swap;
+> -	enum dso_binary_type	symtab_type;
+> -	enum dso_binary_type	binary_type;
+> -	enum dso_load_errno	load_errno;
+> -	u8		 adjust_symbols:1;
+> -	u8		 has_build_id:1;
+> -	u8		 header_build_id:1;
+> -	u8		 has_srcline:1;
+> -	u8		 hit:1;
+> -	u8		 annotate_warned:1;
+> -	u8		 auxtrace_warned:1;
+> -	u8		 short_name_allocated:1;
+> -	u8		 long_name_allocated:1;
+> -	u8		 is_64_bit:1;
+> -	bool		 sorted_by_name;
+> -	bool		 loaded;
+> -	u8		 rel;
+>  	struct build_id	 bid;
+>  	u64		 text_offset;
+>  	u64		 text_end;
+>  	const char	 *short_name;
+>  	const char	 *long_name;
+> -	u16		 long_name_len;
+> -	u16		 short_name_len;
+> +	void		 *a2l;
+> +	char		 *symsrc_filename;
+> +#if defined(__powerpc__)
+>  	void		*dwfl;			/* DWARF debug info */
+> +#endif
+> +	struct nsinfo	*nsinfo;
+>  	struct auxtrace_cache *auxtrace_cache;
+> -	int		 comp;
+> -
+> +	union { /* Tool specific area */
+> +		void	 *priv;
+> +		u64	 db_id;
+> +	};
+> +	/* bpf prog information */
+> +	struct {
+> +		struct perf_env	*env;
+> +		u32		id;
+> +		u32		sub_id;
+> +	} bpf_prog;
+>  	/* dso data file */
+>  	struct {
+>  		struct rb_root	 cache;
+> -		int		 fd;
+> -		int		 status;
+> -		u32		 status_seen;
+> -		u64		 file_size;
+>  		struct list_head open_entry;
+> +		u64		 file_size;
+>  		u64		 elf_base_addr;
+>  		u64		 debug_frame_offset;
+>  		u64		 eh_frame_hdr_addr;
+>  		u64		 eh_frame_hdr_offset;
+> +		int		 fd;
+> +		int		 status;
+> +		u32		 status_seen;
+>  	} data;
+> -	/* bpf prog information */
+> -	struct {
+> -		u32		id;
+> -		u32		sub_id;
+> -		struct perf_env	*env;
+> -	} bpf_prog;
+> -
+> -	union { /* Tool specific area */
+> -		void	 *priv;
+> -		u64	 db_id;
+> -	};
+> -	struct nsinfo	*nsinfo;
+>  	struct dso_id	 id;
+> +	unsigned int	 a2l_fails;
+> +	int		 comp;
+>  	refcount_t	 refcnt;
+> +	enum dso_load_errno	load_errno;
+> +	u16		 long_name_len;
+> +	u16		 short_name_len;
+> +	enum dso_binary_type	symtab_type:8;
+> +	enum dso_binary_type	binary_type:8;
+> +	enum dso_space_type	kernel:2;
+> +	enum dso_swap_type	needs_swap:2;
+> +	bool			is_kmod:1;
+> +	u8		 adjust_symbols:1;
+> +	u8		 has_build_id:1;
+> +	u8		 header_build_id:1;
+> +	u8		 has_srcline:1;
+> +	u8		 hit:1;
+> +	u8		 annotate_warned:1;
+> +	u8		 auxtrace_warned:1;
+> +	u8		 short_name_allocated:1;
+> +	u8		 long_name_allocated:1;
+> +	u8		 is_64_bit:1;
+> +	bool		 sorted_by_name;
+> +	bool		 loaded;
+> +	u8		 rel;
+>  	char		 name[];
+>  };
+>  
+> -- 
+> 2.44.0.396.g6e790dbe36-goog
+> 
