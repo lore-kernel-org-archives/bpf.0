@@ -1,141 +1,260 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D7961CD1E;
-	Thu, 21 Mar 2024 08:45:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB04C2837F
+	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 09:01:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711010761; cv=none; b=XvpEklfknJgyVsVgUFpbgaPizJ+9JKhHUUt25/gYfubdccjaukBq4PP4YbNsF2L+wLUquOivw+uY6jPPmcGmZgcbJBYnT1X1Bw/SInGcAPw3EwfkvWBkiCNXk9H1PMpVmnYdTMleyoE6XV+FOQFwGS5oeiZ+Uw6dMq9dPwRWEEA=
+	t=1711011690; cv=none; b=aInAtFIsva0ZmlWP+YeBHskO2p6N51tFwW3ftxUfQFeJ5GiD3iPLoHPLjTc1NuwvH+hCqeOlWR89McLjAHaupXWsYNttcOoZ/tLByM5Lonn5/SHk75PQ3+svBG/KwK0ErGNwuOpCwFCdHsghjEJ1+lOjTW/yaFTz/y/fJNQTD7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711010761; c=relaxed/simple;
-	bh=vY+pgNxP5agnZS3lZvczA7j/a5myVK7NY475boIDNL0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A96jZQQiHesxXknOxe/AuYdl5++CRcb4t2TxR6Fjb86YhUMmPi7sO/SDXxzdw5nPR87/x5NmZ2IrHS40rjHMHN/BQXKC6fN6JNO9qasR02LmCp8swipjLf6we3y7AUsNCU7+LcIVJsXBspKMI/6CaBKQkNYD88eTqxpfBxxH/xU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=WLHgw0Oc; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="WLHgw0Oc"
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42L8VgFu006435;
-	Thu, 21 Mar 2024 08:45:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=pp1;
- bh=eON5wf8vXjUbhAWLa3fsuk9PyIi46INytgA4dC5vzVQ=;
- b=WLHgw0Ocq6Z0manE5cztoT1WoD+LXEfUa0QtTLvNJNv0/1KqRSXpRkxV1CojFnbUbI1k
- Z6D1JjqJWTHI0Yt/TEKujnfD0LG3YP17BOS4dKY/E4Arm0kthsQqhivq3Y0zZqEY87q2
- 7w11pnYRlUTmM9Wf2lqETVpshSnxBS47iv2KNAhlxo3UmxXvXSf7t+xOynGSePuRzYPg
- 5PobxeUVyxOrJ5LayeIPRFeg3YVqUA3Z4t3leqaWaAL7+T/mfEbA6CY3e3b2w6274sQw
- xgaLvzamiZiCjhWvLWGZkmga/xfukuYdNBoSAVE0R+zUeVQujoflpCWEX8Lp0I1zz/Kb zg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3x0hfb80vb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 Mar 2024 08:45:14 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42L8jDBD028522;
-	Thu, 21 Mar 2024 08:45:13 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3x0hfb80v4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 Mar 2024 08:45:13 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42L7FR6h019872;
-	Thu, 21 Mar 2024 08:45:12 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wwqykum6x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 Mar 2024 08:45:12 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42L8j8RQ30999282
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 21 Mar 2024 08:45:10 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9324520040;
-	Thu, 21 Mar 2024 08:45:08 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 531A32004B;
-	Thu, 21 Mar 2024 08:45:07 +0000 (GMT)
-Received: from heavy (unknown [9.171.8.38])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Thu, 21 Mar 2024 08:45:07 +0000 (GMT)
-Date: Thu, 21 Mar 2024 09:45:05 +0100
-From: Ilya Leoshkevich <iii@linux.ibm.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Puranjay Mohan <puranjay12@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf] bpf: verifier: prevent userspace memory access
-Message-ID: <ed5cozsc7mduzmgbwrlw3lou4tlb6zpivhs2xrqwgpq2rhvkue@l7aifknll4tb>
-References: <20240320105436.4781-1-puranjay12@gmail.com>
- <CAADnVQJ3o6DsURi=N_KXx+mbW9r7__3LrwYLyYwuoMOsqFHPkw@mail.gmail.com>
+	s=arc-20240116; t=1711011690; c=relaxed/simple;
+	bh=WCVRaPCR4U/UaWO/C2Ofrsna8iAnF+mkFtDhk2Nziyk=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=YWkLpM1Y45XCxQHrDa/74snI3BeJRfGU5s+ugDe7BhWnWUYm5iOytWap+fFSI0ODLZDobulgz+pyWI8mIDZcAc8YgtN+PjEtY4Vm8xbqFi4ZRH0lmjZS8XUYV2fzFX1ry31TJaYbkXlPqGlENygtvwnhqywCwbreF5vG6GcyDIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7c7e21711d0so54320639f.3
+        for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 02:01:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711011688; x=1711616488;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aEdQFGDdkHClnAdzEq+D+vcocFQ9IkwJONhs+T9p4xc=;
+        b=Y9a+tvDhTBaT80P6vM57DtkxsQ35ZpysDnUVFlkOKeWjx1QkFvO4Jc5oc1xTA3W5d1
+         DMjkSi+YRjf5A65zrdHurOcPg0dyXP4CVtdxej3TayTjNWXEK7IKdTxuNnF4epDMH4u/
+         XMsvSDQ+WCAGbLu5IktQj+JdiUviul63avpywpN1A971TniBI1y79vZLW1+oxoipsocS
+         rHDz+Wcz9CIqJAn2653UlVR6OcBROK4DuI0tSHZ0T+LR+82v9n25yuKPf08ZtQ7ILxJA
+         FwrLhS678xhASl/axuqOIj5OVudEH2leRF5vx7hE/ISQKDiX7xhKmuegzMTaWkSAchr3
+         1fOg==
+X-Forwarded-Encrypted: i=1; AJvYcCXmJf5Wsq+4Bo5+JnSvXJCAmlnDHNrhjzdvCiiUdDjhrYlo+KDddO3Scq6SLVOW3ObxbhBbxwnVj8x4z0EcRLiMv6y4
+X-Gm-Message-State: AOJu0YxuSD6Gy8XyZQvkUyoh4BfaljJ1NMflpS6okQ5eDEKJnDhtRwkb
+	9jVVjyQMjYf1U7MbldHII0zhZAXoNEqHjHN7gJV2Womvrs5xwk4RR/8PCwtPeyfxrrPg9+zRNnx
+	9lAFf1KwsDUlWWYh7VfIe3MV79KriDdG1vsUAj6HeyowCYW/RVc7zl9o=
+X-Google-Smtp-Source: AGHT+IHhZyQJuxD69mTUwS3hPVGJVOJpDg9KcngqWJzDT0PU3vEZSOdENrP0TP8oAtzRvl3Cy2B73Mgys+WP+th8j0GJMp1HXcOL
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQJ3o6DsURi=N_KXx+mbW9r7__3LrwYLyYwuoMOsqFHPkw@mail.gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: TYjvFxQwEBdE5__OC1dzjMlHjdsm_YEY
-X-Proofpoint-GUID: Op4zlibBI5OweaTnIoIg1COwJwRAnpk3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-21_06,2024-03-18_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 adultscore=0 bulkscore=0 mlxlogscore=798 priorityscore=1501
- mlxscore=0 spamscore=0 suspectscore=0 malwarescore=0 impostorscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2403140000 definitions=main-2403210059
+X-Received: by 2002:a05:6638:13c3:b0:474:fce1:3f8c with SMTP id
+ i3-20020a05663813c300b00474fce13f8cmr436293jaj.6.1711011687855; Thu, 21 Mar
+ 2024 02:01:27 -0700 (PDT)
+Date: Thu, 21 Mar 2024 02:01:27 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dc8ad7061427f3cd@google.com>
+Subject: [syzbot] [bpf?] [trace?] KASAN: slab-use-after-free Read in bpf_trace_run2
+From: syzbot <syzbot+2cb5a6c573e98db598cc@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	martin.lau@linux.dev, mathieu.desnoyers@efficios.com, mhiramat@kernel.org, 
+	netdev@vger.kernel.org, rostedt@goodmis.org, sdf@google.com, song@kernel.org, 
+	syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Mar 20, 2024 at 11:08:00PM -0700, Alexei Starovoitov wrote:
-> On Wed, Mar 20, 2024 at 3:55 AM Puranjay Mohan <puranjay12@gmail.com> wrote:
-> >
-> > The JITs need to implement bpf_arch_uaddress_limit() to define where
-> > the userspace addresses end for that architecture or TASK_SIZE is taken
-> > as default.
-> >
-> > The implementation is as follows:
-> >
-> > REG_AX =  SRC_REG
-> > if(offset)
-> >         REG_AX += offset;
-> > REG_AX >>= 32;
-> > if (REG_AX <= (uaddress_limit >> 32))
-> >         DST_REG = 0;
-> > else
-> >         DST_REG = *(size *)(SRC_REG + offset);
-> 
-> The patch looks good, but it seems to be causing s390 CI failures.
-> 
-> Ilya,
-> could you help us understand is this check needed on s390
-> and if so, what should be the uaddress_limit ?
+Hello,
 
-s390x does not define ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE.
-Userspace and kernel run in completely different and isolated address
-spaces, so it's not possible to determine from a pointer value whether
-it's a user or a kernel pointer.
-But the good news is that whatever you deference without using
-special instruction sequences will refer to the kernel address space.
-So I wonder if we could somehow disable this check on s390x altogether?
-And if we are not sure whether it's a valid pointer, use BPF_PROBE_MEM
-as always.
+syzbot found the following issue on:
+
+HEAD commit:    520fad2e3206 selftests/bpf: scale benchmark counting by us..
+git tree:       bpf-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=11b967b9180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6fb1be60a193d440
+dashboard link: https://syzkaller.appspot.com/bug?extid=2cb5a6c573e98db598cc
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1257dd85180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14b55c6e180000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4eef3506c5ce/disk-520fad2e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/24d60ebe76cc/vmlinux-520fad2e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8f883e706550/bzImage-520fad2e.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2cb5a6c573e98db598cc@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: slab-use-after-free in __bpf_trace_run kernel/trace/bpf_trace.c:2376 [inline]
+BUG: KASAN: slab-use-after-free in bpf_trace_run2+0xfa/0x530 kernel/trace/bpf_trace.c:2431
+Read of size 8 at addr ffff88802aaea218 by task syz-executor147/10463
+
+CPU: 0 PID: 10463 Comm: syz-executor147 Not tainted 6.8.0-syzkaller-05233-g520fad2e3206 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2e0 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:377 [inline]
+ print_report+0x169/0x550 mm/kasan/report.c:488
+ kasan_report+0x143/0x180 mm/kasan/report.c:601
+ __bpf_trace_run kernel/trace/bpf_trace.c:2376 [inline]
+ bpf_trace_run2+0xfa/0x530 kernel/trace/bpf_trace.c:2431
+ __traceiter_kfree+0x2b/0x50 include/trace/events/kmem.h:94
+ trace_kfree include/trace/events/kmem.h:94 [inline]
+ kfree+0x291/0x380 mm/slub.c:4396
+ tomoyo_realpath_from_path+0xc2/0x5e0 security/tomoyo/realpath.c:250
+ tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+ tomoyo_check_open_permission+0x255/0x500 security/tomoyo/file.c:771
+ security_file_open+0x69/0x570 security/security.c:2933
+ do_dentry_open+0x327/0x15a0 fs/open.c:943
+ do_open fs/namei.c:3643 [inline]
+ path_openat+0x2860/0x3240 fs/namei.c:3800
+ do_filp_open+0x235/0x490 fs/namei.c:3827
+ do_sys_openat2+0x13e/0x1d0 fs/open.c:1407
+ do_sys_open fs/open.c:1422 [inline]
+ __do_sys_openat fs/open.c:1438 [inline]
+ __se_sys_openat fs/open.c:1433 [inline]
+ __x64_sys_openat+0x247/0x2a0 fs/open.c:1433
+ do_syscall_64+0xfb/0x240
+ entry_SYSCALL_64_after_hwframe+0x6d/0x75
+RIP: 0033:0x7f2308d06f51
+Code: 75 57 89 f0 25 00 00 41 00 3d 00 00 41 00 74 49 80 3d 3a 91 07 00 00 74 6d 89 da 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 93 00 00 00 48 8b 54 24 28 64 48 2b 14 25
+RSP: 002b:00007fffb8a33850 EFLAGS: 00000202 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 0000000000080001 RCX: 00007f2308d06f51
+RDX: 0000000000080001 RSI: 00007f2308d51022 RDI: 00000000ffffff9c
+RBP: 00007f2308d51022 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000202 R12: 00007fffb8a338f0
+R13: 00007fffb8a33dcc R14: 00007fffb8a33de0 R15: 00007fffb8a33dd0
+ </TASK>
+
+Allocated by task 10462:
+ kasan_save_stack mm/kasan/common.c:47 [inline]
+ kasan_save_track+0x3f/0x80 mm/kasan/common.c:68
+ poison_kmalloc_redzone mm/kasan/common.c:370 [inline]
+ __kasan_kmalloc+0x98/0xb0 mm/kasan/common.c:387
+ kasan_kmalloc include/linux/kasan.h:211 [inline]
+ kmalloc_trace+0x1d9/0x360 mm/slub.c:4012
+ kmalloc include/linux/slab.h:590 [inline]
+ kzalloc include/linux/slab.h:711 [inline]
+ bpf_raw_tp_link_attach+0x2a0/0x6e0 kernel/bpf/syscall.c:3816
+ bpf_raw_tracepoint_open+0x1c2/0x240 kernel/bpf/syscall.c:3863
+ __sys_bpf+0x3c0/0x810 kernel/bpf/syscall.c:5673
+ __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
+ __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5736
+ do_syscall_64+0xfb/0x240
+ entry_SYSCALL_64_after_hwframe+0x6d/0x75
+
+Freed by task 10462:
+ kasan_save_stack mm/kasan/common.c:47 [inline]
+ kasan_save_track+0x3f/0x80 mm/kasan/common.c:68
+ kasan_save_free_info+0x40/0x50 mm/kasan/generic.c:589
+ poison_slab_object+0xa6/0xe0 mm/kasan/common.c:240
+ __kasan_slab_free+0x37/0x60 mm/kasan/common.c:256
+ kasan_slab_free include/linux/kasan.h:184 [inline]
+ slab_free_hook mm/slub.c:2121 [inline]
+ slab_free mm/slub.c:4299 [inline]
+ kfree+0x14a/0x380 mm/slub.c:4409
+ bpf_link_release+0x3b/0x50 kernel/bpf/syscall.c:3071
+ __fput+0x429/0x8a0 fs/file_table.c:423
+ task_work_run+0x24f/0x310 kernel/task_work.c:180
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xa1b/0x27e0 kernel/exit.c:878
+ do_group_exit+0x207/0x2c0 kernel/exit.c:1027
+ __do_sys_exit_group kernel/exit.c:1038 [inline]
+ __se_sys_exit_group kernel/exit.c:1036 [inline]
+ __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1036
+ do_syscall_64+0xfb/0x240
+ entry_SYSCALL_64_after_hwframe+0x6d/0x75
+
+The buggy address belongs to the object at ffff88802aaea200
+ which belongs to the cache kmalloc-128 of size 128
+The buggy address is located 24 bytes inside of
+ freed 128-byte region [ffff88802aaea200, ffff88802aaea280)
+
+The buggy address belongs to the physical page:
+page:ffffea0000aaba80 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x2aaea
+ksm flags: 0xfff00000000800(slab|node=0|zone=1|lastcpupid=0x7ff)
+page_type: 0xffffffff()
+raw: 00fff00000000800 ffff888014c418c0 ffffea000070d080 0000000000000003
+raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 6819, tgid 6819 (syz-executor147), ts 85383852364, free_ts 85383700647
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook+0x1ea/0x210 mm/page_alloc.c:1533
+ prep_new_page mm/page_alloc.c:1540 [inline]
+ get_page_from_freelist+0x33ea/0x3580 mm/page_alloc.c:3311
+ __alloc_pages+0x256/0x680 mm/page_alloc.c:4569
+ __alloc_pages_node include/linux/gfp.h:238 [inline]
+ alloc_pages_node include/linux/gfp.h:261 [inline]
+ alloc_slab_page+0x5f/0x160 mm/slub.c:2190
+ allocate_slab mm/slub.c:2354 [inline]
+ new_slab+0x84/0x2f0 mm/slub.c:2407
+ ___slab_alloc+0xd1b/0x13e0 mm/slub.c:3540
+ __slab_alloc mm/slub.c:3625 [inline]
+ __slab_alloc_node mm/slub.c:3678 [inline]
+ slab_alloc_node mm/slub.c:3850 [inline]
+ __do_kmalloc_node mm/slub.c:3980 [inline]
+ __kmalloc_node_track_caller+0x2d4/0x4e0 mm/slub.c:4001
+ __do_krealloc mm/slab_common.c:1187 [inline]
+ krealloc+0x7d/0x120 mm/slab_common.c:1220
+ copy_array kernel/bpf/verifier.c:1220 [inline]
+ copy_stack_state kernel/bpf/verifier.c:1274 [inline]
+ copy_func_state kernel/bpf/verifier.c:1407 [inline]
+ copy_verifier_state+0x95a/0xf30 kernel/bpf/verifier.c:1451
+ is_state_visited kernel/bpf/verifier.c:17435 [inline]
+ do_check+0x4327/0x10500 kernel/bpf/verifier.c:17597
+ do_check_common+0x14bd/0x1dd0 kernel/bpf/verifier.c:20497
+ do_check_main kernel/bpf/verifier.c:20588 [inline]
+ bpf_check+0x136ab/0x190c0 kernel/bpf/verifier.c:21258
+ bpf_prog_load+0x1667/0x20f0 kernel/bpf/syscall.c:2895
+ __sys_bpf+0x4ee/0x810 kernel/bpf/syscall.c:5631
+ __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
+ __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5736
+ do_syscall_64+0xfb/0x240
+page last free pid 6819 tgid 6819 stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1140 [inline]
+ free_unref_page_prepare+0x968/0xa90 mm/page_alloc.c:2346
+ free_unref_page+0x37/0x3f0 mm/page_alloc.c:2486
+ vfree+0x186/0x2e0 mm/vmalloc.c:2914
+ bpf_prog_calc_tag+0x663/0x900 kernel/bpf/core.c:357
+ resolve_pseudo_ldimm64+0xe2/0x1650 kernel/bpf/verifier.c:18191
+ bpf_check+0x6175/0x190c0 kernel/bpf/verifier.c:21244
+ bpf_prog_load+0x1667/0x20f0 kernel/bpf/syscall.c:2895
+ __sys_bpf+0x4ee/0x810 kernel/bpf/syscall.c:5631
+ __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
+ __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5736
+ do_syscall_64+0xfb/0x240
+ entry_SYSCALL_64_after_hwframe+0x6d/0x75
+
+Memory state around the buggy address:
+ ffff88802aaea100: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88802aaea180: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff88802aaea200: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                            ^
+ ffff88802aaea280: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88802aaea300: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
