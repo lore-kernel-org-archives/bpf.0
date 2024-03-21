@@ -1,169 +1,277 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A3F134419
-	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 21:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF14A133998
+	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 21:54:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711056482; cv=none; b=g3+O2aAOhZNXeMF74RQGr3fJ0hUzak8jvBrXdnvnyifv8vU689M6L/+xb1CzWnICKXmNj01GDhU1cRaVUEofNy5h9vgDglt39CliS2qjts6U4ehQGebxA2ZD7NmXR4VV3WFsvZD8OCxgq3i2Z1XZFpvfU40XFPVdh/4W12Anaj0=
+	t=1711058058; cv=none; b=mR7UEP2C37g4eAoYqisnr1/do8Mxjq58jhb3mmP0zWdfgTVTuWxtKiIL/LF9s6S3ccnvTOmUpGMaBfTa27dySAwENwB6VFrhjtcZk5i0Aywp/ZHnsDXHnbWJdiwCEasc3K+cfdpDpsRASvDkys0FlycnyHXyxaqUyV8XMWaXEN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711056482; c=relaxed/simple;
-	bh=5YSbow8C7r7LxJmLUAIbW4qlP9Inezwyb4/NQGOCW7w=;
+	s=arc-20240116; t=1711058058; c=relaxed/simple;
+	bh=P0QXRcbYNrOZZQoNeQMQTfhaWovBIb04/1790P72g4M=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UFuN9B03xQPHSYbCEdIcuOXB6qpZGvAn4/KxbKHoqRIybQfOnweqUhxiNTKJZv9rgqmxtPs0u7D9JFxuLTQKwmxpbxNI/JgAf/sjA4ZxMjw0w35G/yxAMssGqbbkV9joM9IppiJ+virPqFjfAgL5jGvbY6ab4ChQ3JLwOXRWMcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m3qtS0hQ; arc=none smtp.client-ip=209.85.215.181
+	 To:Cc:Content-Type; b=gDBc1Z2/3sqQp98sakmMdJ0vP5rOuLfKa5dq4wGhWIe3j39nJOXe6LnxRDsRYhzh6ikuVAH/gh05t49clUZJfATp3TOQbqdZMqmxOr9L9SGcGtmrKyLnXq2vmzjl8jxCL0aaVQyH+KAfXfzm6vP88/CYdeZNFwqfj0mA86CweX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YAcKLEy7; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m3qtS0hQ"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-5d8b519e438so960843a12.1
-        for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 14:28:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YAcKLEy7"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-414776775d3so5143295e9.3
+        for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 14:54:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711056480; x=1711661280; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711058055; x=1711662855; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=a0rEd1Ltltod+ne/x88bJUE0+4B0i0sRPjxSQrEOG1k=;
-        b=m3qtS0hQqw0py6fMgAytGGmRSk85SM9AaL3uYffaUTdm0aJoQbMEGxeUngYPj3Wgxw
-         NKP92J5jcpx9CNRTqnPLc+vqkWR9mY9OokQkfIfOCt9cS2KjiyiyWYNEM6zV0uWXwJct
-         UmQVDsNbEGK6pe1/+xcLqQn8lJdD7wM9TccofpBxF7sfr+UvSNQvfrv7nDv4vpNYSpOK
-         TxdBrg/6f9kdFnAn+Xh4vUVZffp1UYZaJIKxWPbkfmW77f7fs5CHQOKFEumVsCZqzLbB
-         sntNjs5svnYzfsw5FIXdHEXVzZDrxVtW/V1noETTriA7IvjtPl1BLYv/Ub3s6/SGPPwD
-         4xLg==
+        bh=K2gGZaykEWbHPvvJhrVGXXh43k/Ke4nXzWR1IIwz3L4=;
+        b=YAcKLEy7uN2TRuwLMbks1VG+aAuMGtotMHLxxDaiX78X1bVdftF9BzydIXWqhU4diB
+         lI+5o4AMnO3mm4c+rWX6cY6jN1ZLUEPPxf4cod3P0hV9robWYoYC14dme7pSt4moJ8YQ
+         J9tdWdDGiz7JDPjsy//vtfHqhXdVCwdWDXZZ4BrctoScOVdJNfT7EpBaJRDYbr0WKC2J
+         aYwMHeox9HmlxCo9nXoqmmPKNRuNf/Hjo2VYoyAUK+hsDS2RHjEpClDNoz/RyDn8WlkZ
+         VlB9MRET3186AwxAUujCMvqk64ifiVd44Qqwh81T49eawoTRmHEvSUvlpaGyR0ph/jFA
+         A6PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711056480; x=1711661280;
+        d=1e100.net; s=20230601; t=1711058055; x=1711662855;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=a0rEd1Ltltod+ne/x88bJUE0+4B0i0sRPjxSQrEOG1k=;
-        b=knhjSJGsR6daW1/4xi/A7FnW39GgE0CxHdfU2/40YMylYBUJHlrDZgRvyWNyLAuM6P
-         PQAu8qkmzsCYh589toIRyRzPR77tkctw8wT2TKXLODZY0JvhZl+bFUMjxoC9kfXxRSRK
-         aAmO2xNUocvm0n4ZLRClcX4CsJz3Wp5YIm1BImxzI3XxpSUt9TXklPgvmUeSfuhdJhUc
-         TvpF5e+YxBoE+f9MLpxccpcQJOsvTyhSuNbCXMu9KqRprMnGRgREnSa9WdifIEq+jxv7
-         S7HI9Y1g3jjpk15Vdq7jYL122gldgZqyX128QvUVR/DOO5CZRfDGdrwDj/KpplHW/jo0
-         ZXGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU9NjYSBiSUSkK6xCNCeJodJZI43fUHkiNMX/yf0tryzuB27f70KnEH0r6cWGeA38YkiA3Tnip3wfkzz3Gqv8OuCpbi
-X-Gm-Message-State: AOJu0Yx61Dinq45zOIBBm+x5C78Sqv4nkS3/gohQl9rwb1zTlddTdOZb
-	EhsklQ3p0cnRVbldvdQHFyZ7bV+gN2a5yLo7mX1u5gRC8YpR3Yu1BQbdTLJKEu7zNd5RjDfHlXE
-	nmBPZTlIf5Tb2mwTSvJNfJBxwgQ0=
-X-Google-Smtp-Source: AGHT+IG0nBroYVUuRtP5jXI1kv8wEGX/WVw6/QIPMqn5p6msFMbn9yN45TOxVrjGNTDAAEMKszSSiX7IGzLUzlraCTQ=
-X-Received: by 2002:a17:90a:cc0c:b0:29b:c493:5c73 with SMTP id
- b12-20020a17090acc0c00b0029bc4935c73mr562877pju.25.1711056479979; Thu, 21 Mar
- 2024 14:27:59 -0700 (PDT)
+        bh=K2gGZaykEWbHPvvJhrVGXXh43k/Ke4nXzWR1IIwz3L4=;
+        b=NSVLcqIjG2fHCcyCQ+9acGBP5B/fQXqGqcmKCiSMAiXGWTKZkrC40QdSBG9glbjmEN
+         7CrF2FN6SiG6SWK4B+RtaZhgOkL3OwHRoAQN7aSluH0yw+Cvn6yKARUM9YAkHSCbaMoR
+         Ly1phBQd8/byHPtsrooJzpzF6AMP46N/toVFdxmkFkSNT8lQv9NgOpRt+j8Xzo8xBIZA
+         n0AkJZhC3O10iHFINmDEIWujtag6OCgsCOYtdjvljQ131w5qTbprrV+S6RDeDlYBcqcN
+         xf2OP8Xrbz4FT06P+Nusw/7W5k36EBM2/rcR2FwQcWzfLSIYA5MAw6eGL0HXhM5l72HX
+         5O0Q==
+X-Gm-Message-State: AOJu0YzYgX1zk+khOrF2fPJIcbBWoajb1v0xhFQ7aSq4p35mCbxR0TmV
+	ImPFNOM3yoIdvj0VgYw63AUK6wPjDeZwIXR5p8sRZkXFq+9Np/xfrxiI8/H4FkNl0SDSVqiyJ6r
+	nI0wRNCaDYEW2OnfInSNOYgIOO50=
+X-Google-Smtp-Source: AGHT+IHxw1muFPh1JD1zuOqPw904hfjcRO9d4xxjm4v26eY12c7HmXX/9wuXxWCN1CURDdhsGIAdkFh6WoFvvPpVJRo=
+X-Received: by 2002:a05:600c:4f56:b0:414:a49:1327 with SMTP id
+ m22-20020a05600c4f5600b004140a491327mr261577wmq.8.1711058054995; Thu, 21 Mar
+ 2024 14:54:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240321180501.734779-1-andrii@kernel.org> <20240321180501.734779-3-andrii@kernel.org>
- <ZfyhxfpOudwCVaD-@krava>
-In-Reply-To: <ZfyhxfpOudwCVaD-@krava>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 21 Mar 2024 14:27:48 -0700
-Message-ID: <CAEf4BzaqfSELKyHwSj0khuP_hpob0spMVo-47GUp=sE+Ev7nXg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/3] bpf: inline bpf_get_branch_snapshot() helper
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, martin.lau@kernel.org, peterz@infradead.org, 
-	song@kernel.org
+References: <20240321200058.2218328-1-yonghong.song@linux.dev> <20240321200114.2219721-1-yonghong.song@linux.dev>
+In-Reply-To: <20240321200114.2219721-1-yonghong.song@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 21 Mar 2024 14:54:03 -0700
+Message-ID: <CAADnVQL3yAnS4+A59OBmpbhEhQx7Was-EnTcLW9k4ddnXQi31w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/5] libbpf: Handle <orig_name>.llvm.<hash>
+ symbol properly
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Kernel Team <kernel-team@fb.com>, Martin KaFai Lau <martin.lau@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 21, 2024 at 2:08=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wrot=
-e:
+On Thu, Mar 21, 2024 at 1:01=E2=80=AFPM Yonghong Song <yonghong.song@linux.=
+dev> wrote:
 >
-> On Thu, Mar 21, 2024 at 11:05:00AM -0700, Andrii Nakryiko wrote:
-> > Inline bpf_get_branch_snapshot() helper using architecture-agnostic
-> > inline BPF code which calls directly into underlying callback of
-> > perf_snapshot_branch_stack static call. This callback is set early
-> > during kernel initialization and is never updated or reset, so it's ok
-> > to fetch actual implementation using static_call_query() and call
-> > directly into it.
-> >
-> > This change eliminates a full function call and saves one LBR entry
-> > in PERF_SAMPLE_BRANCH_ANY LBR mode.
-> >
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > ---
-> >  kernel/bpf/verifier.c | 37 +++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 37 insertions(+)
-> >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index de7813947981..4fb6c468e199 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -20130,6 +20130,43 @@ static int do_misc_fixups(struct bpf_verifier_=
-env *env)
-> >                       goto next_insn;
-> >               }
-> >
-> > +             /* Implement bpf_get_branch_snapshot inline. */
-> > +             if (prog->jit_requested && BITS_PER_LONG =3D=3D 64 &&
-> > +                 insn->imm =3D=3D BPF_FUNC_get_branch_snapshot) {
-> > +                     /* We are dealing with the following func protos:
-> > +                      * u64 bpf_get_branch_snapshot(void *buf, u32 siz=
-e, u64 flags);
-> > +                      * int perf_snapshot_branch_stack(struct perf_bra=
-nch_entry *entries, u32 cnt);
-> > +                      */
-> > +                     const u32 br_entry_size =3D sizeof(struct perf_br=
-anch_entry);
-> > +
-> > +                     /* if (unlikely(flags)) return -EINVAL */
-> > +                     insn_buf[0] =3D BPF_JMP_IMM(BPF_JNE, BPF_REG_3, 0=
-, 5);
+> With CONFIG_LTO_CLANG_THIN enabled, with some of previous
+> version of kernel code base ([1]), I hit the following
+> error:
+>    test_ksyms:PASS:kallsyms_fopen 0 nsec
+>    test_ksyms:FAIL:ksym_find symbol 'bpf_link_fops' not found
+>    #118     ksyms:FAIL
 >
-> nit, you moved the flags check on top, which I think makes sense and
-> we should do it in bpf_get_branch_snapshot as well to keep it same
+> The reason is that 'bpf_link_fops' is renamed to
+>    bpf_link_fops.llvm.8325593422554671469
+> Due to cross-file inlining, the static variable 'bpf_link_fops'
+> in syscall.c is used by a function in another file. To avoid
+> potential duplicated names, the llvm added suffix
+> '.llvm.<hash>' ([2]) to 'bpf_link_fops' variable.
+> Such renaming caused a problem in libbpf if 'bpf_link_fops'
+> is used in bpf prog as a ksym as 'bpf_link_fops' does not
+> match any symbol in /proc/kallsyms.
 >
+> To fix this issue, libbpf needs to understand that suffix '.llvm.<hash>'
+> is caused by clang lto kernel and to process such symbols properly.
+>
+> With latest bpf-next code base built with CONFIG_LTO_CLANG_THIN,
+> I cannot reproduce the above failure any more. But such an issue
+> could happen with other symbols.
+>
+> For example, with my current kernel, I got the following from
+> /proc/kallsyms:
+>   ffffffff84782154 d __func__.net_ratelimit.llvm.6135436931166841955
+>   ffffffff85f0a500 d tk_core.llvm.726630847145216431
+>   ffffffff85fdb960 d __fs_reclaim_map.llvm.10487989720912350772
+>   ffffffff864c7300 d fake_dst_ops.llvm.54750082607048300
+>
+> I could not easily create a selftest to test newly-added
+> libbpf functionality with a static C test since I do not know
+> which symbol is cross-file inlined. But based on my particular kernel,
+> the following test change can run successfully.
+>
+>   diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms.c b/tools/tes=
+ting/selftests/bpf/prog_tests/ksyms.c
+>   index 6a86d1f07800..904a103f7b1d 100644
+>   --- a/tools/testing/selftests/bpf/prog_tests/ksyms.c
+>   +++ b/tools/testing/selftests/bpf/prog_tests/ksyms.c
+>   @@ -42,6 +42,7 @@ void test_ksyms(void)
+>           ASSERT_EQ(data->out__bpf_link_fops, link_fops_addr, "bpf_link_f=
+ops");
+>           ASSERT_EQ(data->out__bpf_link_fops1, 0, "bpf_link_fops1");
+>           ASSERT_EQ(data->out__btf_size, btf_size, "btf_size");
+>   +       ASSERT_NEQ(data->out__fake_dst_ops, 0, "fake_dst_ops");
+>           ASSERT_EQ(data->out__per_cpu_start, per_cpu_start_addr, "__per_=
+cpu_start");
+>
+>    cleanup:
+>   diff --git a/tools/testing/selftests/bpf/progs/test_ksyms.c b/tools/tes=
+ting/selftests/bpf/progs/test_ksyms.c
+>   index 6c9cbb5a3bdf..fe91eef54b66 100644
+>   --- a/tools/testing/selftests/bpf/progs/test_ksyms.c
+>   +++ b/tools/testing/selftests/bpf/progs/test_ksyms.c
+>   @@ -9,11 +9,13 @@ __u64 out__bpf_link_fops =3D -1;
+>    __u64 out__bpf_link_fops1 =3D -1;
+>    __u64 out__btf_size =3D -1;
+>    __u64 out__per_cpu_start =3D -1;
+>   +__u64 out__fake_dst_ops =3D -1;
+>
+>    extern const void bpf_link_fops __ksym;
+>    extern const void __start_BTF __ksym;
+>    extern const void __stop_BTF __ksym;
+>    extern const void __per_cpu_start __ksym;
+>   +extern const void fake_dst_ops __ksym;
+>    /* non-existing symbol, weak, default to zero */
+>    extern const void bpf_link_fops1 __ksym __weak;
+>
+>   @@ -23,6 +25,7 @@ int handler(const void *ctx)
+>           out__bpf_link_fops =3D (__u64)&bpf_link_fops;
+>           out__btf_size =3D (__u64)(&__stop_BTF - &__start_BTF);
+>           out__per_cpu_start =3D (__u64)&__per_cpu_start;
+>   +       out__fake_dst_ops =3D (__u64)&fake_dst_ops;
+>
+>           out__bpf_link_fops1 =3D (__u64)&bpf_link_fops1;
+>
+> This patch fixed the issue in libbpf such that if clang lto kernel
+> is enabled and the symbol resolution is for ksym's,
+> the suffix '.llvm.<hash>' will be ignored during comparison of
+> bpf prog ksym vs. symbols in /proc/kallsyms, this resolved the issue.
+>
+> Note that currently kernel does not support gcc build with lto.
+>
+>   [1] https://lore.kernel.org/bpf/20240302165017.1627295-1-yonghong.song@=
+linux.dev/
+>   [2] https://github.com/llvm/llvm-project/blob/release/18.x/llvm/include=
+/llvm/IR/ModuleSummaryIndex.h#L1714-L1719
+>
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> ---
+>  tools/lib/bpf/libbpf.c | 64 +++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 63 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index a7a89269148c..8c3861192bc8 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -664,6 +664,7 @@ struct bpf_object {
+>         bool loaded;
+>         bool has_subcalls;
+>         bool has_rodata;
+> +       bool need_kallsyms;
+>
+>         struct bpf_gen *gen_loader;
+>
+> @@ -8016,14 +8017,73 @@ static int libbpf_kallsyms_parse(kallsyms_cb_t cb=
+, void *ctx)
+>         return err;
+>  }
+>
+> +static int check_lto_kernel(void)
+> +{
+> +       static int check_lto =3D 2;
+> +       char buf[PATH_MAX];
+> +       struct utsname uts;
+> +       gzFile file;
+> +       int len;
+> +
+> +       if (check_lto !=3D 2)
+> +               return check_lto;
+> +
+> +       uname(&uts);
+> +       len =3D snprintf(buf, PATH_MAX, "/boot/config-%s", uts.release);
+> +       if (len < 0) {
+> +               check_lto =3D -EINVAL;
+> +               goto out;
+> +       } else if (len >=3D PATH_MAX) {
+> +               check_lto =3D -ENAMETOOLONG;
+> +               goto out;
+> +       }
+> +
+> +       /* gzopen also accepts uncompressed files. */
+> +       file =3D gzopen(buf, "re");
+> +       if (!file)
+> +               file =3D gzopen("/proc/config.gz", "re");
+> +
+> +       if (!file) {
+> +               check_lto =3D -ENOENT;
+> +               goto out;
+> +       }
+> +
+> +       check_lto =3D 0;
+> +       while (gzgets(file, buf, sizeof(buf))) {
+> +               /* buf also contains '\n', skip it during comparison. */
+> +               if (!strncmp(buf, "CONFIG_LTO_CLANG=3Dy", 18)) {
+> +                       check_lto =3D 1;
+> +                       break;
+> +               }
+> +       }
+> +
+> +       gzclose(file);
+> +out:
+> +       return check_lto;
+> +}
+> +
+>  static int kallsyms_cb(unsigned long long sym_addr, char sym_type,
+>                        const char *sym_name, void *ctx)
+>  {
+> +       int lto_enabled =3D check_lto_kernel();
+> +       char orig_name[PATH_MAX], *res;
+>         struct bpf_object *obj =3D ctx;
+>         const struct btf_type *t;
+>         struct extern_desc *ext;
+>
+> -       ext =3D find_extern_by_name(obj, sym_name);
+> +       /* Only check static variables in data sections */
+> +       if (sym_type =3D=3D 'd' && obj->need_kallsyms && lto_enabled =3D=
+=3D 1) {
 
-here I could control that it won't be taken in common case, so if we
-are to do that in BPF helper itself, we should use unlikely() and
-check that compiler actually honored it. I can add that in the next
-revision.
+why bother grepping config.gz ?
+I see no harm in doing below strstr unconditionally.
 
-> jirka
+> +               strcpy(orig_name, sym_name);
+> +               res =3D strstr(orig_name, ".llvm.");
+> +               if (res) {
+> +                       *res =3D '\0';
+> +                       pr_debug("extern (ksym) '%s': use original name '=
+%s' for comparison\n",
+> +                                sym_name, orig_name);
+> +               }
+> +               ext =3D find_extern_by_name(obj, orig_name);
+> +       } else {
+> +               ext =3D find_extern_by_name(obj, sym_name);
+> +       }
+>         if (!ext || ext->type !=3D EXT_KSYM)
+>                 return 0;
 >
-> > +                     /* transform size (bytes) into entry_cnt */
-> > +                     insn_buf[1] =3D BPF_ALU32_IMM(BPF_DIV, BPF_REG_2,=
- br_entry_size);
-> > +                     /* call perf_snapshot_branch_stack implementation=
- */
-> > +                     insn_buf[2] =3D BPF_EMIT_CALL(static_call_query(p=
-erf_snapshot_branch_stack));
-> > +                     /* if (entry_cnt =3D=3D 0) return -ENOENT */
-> > +                     insn_buf[3] =3D BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0=
-, 4);
-> > +                     /* return entry_cnt * sizeof(struct perf_branch_e=
-ntry) */
-> > +                     insn_buf[4] =3D BPF_ALU32_IMM(BPF_MUL, BPF_REG_0,=
- br_entry_size);
-> > +                     insn_buf[5] =3D BPF_JMP_A(3);
-> > +                     /* return -EINVAL; */
-> > +                     insn_buf[6] =3D BPF_MOV64_IMM(BPF_REG_0, -EINVAL)=
-;
-> > +                     insn_buf[7] =3D BPF_JMP_A(1);
-> > +                     /* return -ENOENT; */
-> > +                     insn_buf[8] =3D BPF_MOV64_IMM(BPF_REG_0, -ENOENT)=
-;
-> > +                     cnt =3D 9;
-> > +
-> > +                     new_prog =3D bpf_patch_insn_data(env, i + delta, =
-insn_buf, cnt);
-> > +                     if (!new_prog)
-> > +                             return -ENOMEM;
-> > +
-> > +                     delta    +=3D cnt - 1;
-> > +                     env->prog =3D prog =3D new_prog;
-> > +                     insn      =3D new_prog->insnsi + i + delta;
-> > +                     continue;
-> > +             }
-> > +
-> >               /* Implement bpf_kptr_xchg inline */
-> >               if (prog->jit_requested && BITS_PER_LONG =3D=3D 64 &&
-> >                   insn->imm =3D=3D BPF_FUNC_kptr_xchg &&
-> > --
-> > 2.43.0
-> >
-> >
+> @@ -8322,7 +8382,9 @@ static int bpf_object__resolve_externs(struct bpf_o=
+bject *obj,
+>                         return -EINVAL;
+>         }
+>         if (need_kallsyms) {
+> +               obj->need_kallsyms =3D true;
+>                 err =3D bpf_object__read_kallsyms_file(obj);
+> +               obj->need_kallsyms =3D false;
+>                 if (err)
+>                         return -EINVAL;
+>         }
+> --
+> 2.43.0
+>
