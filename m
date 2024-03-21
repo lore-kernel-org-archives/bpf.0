@@ -1,155 +1,83 @@
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA535730E
-	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 10:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C74457311;
+	Thu, 21 Mar 2024 11:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711018358; cv=none; b=LWGi5oVzjacI+rvb7UceeaRFijqHrVm1ES8OOBYYDa9miE8YA5W7zAUovhYsQXwpzOKybR2/6G4JAkPNGh3Y02lFKeub2bCeoUqk4o8FAwVkuQ86VudrFYwVs4DMJ4/8RlfSj+CdO80JlsUPsDzj52PwNK0zNivWV2DywcSt19w=
+	t=1711018827; cv=none; b=QpAActWO2fXOsN9VdkokJSeEjAuzMGn2GdzbE7CVRRgZdiE/0QPpPgY0EliDopADnLCmdVNu7D2qUh/HVStyDhBLPok/I4lMpmYcJE4kuUn1yGj41+OzW5uC8/UhBIo7no2ido4tGV945xPHHWCUMGqjMrwlNbjRBDR2SrLgQpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711018358; c=relaxed/simple;
-	bh=11tvo2PDjTfRQBPTyFVs5nae7lHuXBhUo1w9fhRUKCQ=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mLNpcSZu2gkG/J03UhoLGhPL33RrBki/mwUPfbz9u6gPgraDzEVT1iKuu6A+iI9MW3otZKQcm7NIQnXQ+lfgaE/06sJhVfcbTQfQGZelKaDu7KwcLw3ZfxWk5vE7zC/CD+GSXywwP9tjkryqmu+U+kJvkIQe8YzDhVocOq3Gbw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mX/ghoGv; arc=none smtp.client-ip=209.85.208.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711018827; c=relaxed/simple;
+	bh=JZ/uFKf0RYrnnxw9jJlX5wLrQamwRfdSTn6ZmoyBLug=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=oiKE2ea628i8Yf6Yre7GJFrEw3OSSfiR52/j9t2ypOf+K4FZ9cbBV31EdX3D6VBoIn4HN4TBbSSuPW9L+ABcMOHR65eT1seSovQ4mxNr8K44jquRpjw3rMnvvnTjJha0TrxFkbLFpEHF+T7CDzhwwdJZaoNZyOqSXfEHgblcRNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ut7WX7Cx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mX/ghoGv"
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2d476d7972aso14719631fa.1
-        for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 03:52:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711018355; x=1711623155; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=45yhYh1c76B5hpMI/AXimlzQQNvaOFbzxBmt05VhGSk=;
-        b=mX/ghoGvYbYetPHhblwgUyVkoIU+dKT1J5T71Foy1rH2jBBP8g90k9vajPif1Syve6
-         7Apm5rJCmQGCyp2uahxPCl37BWDL4s/U+deuR+bkwyvhQyQqs/Fu7TWPB1MeUiPozQk9
-         ZbpY/L3iwVjSokzo1sAhmcJO3eo2GjchfO0653sGzJ1+Kb4otLIPe8JaSe9IdCd4js/C
-         2wrEHB2VqcaNI9cANcvoO+jZdqDUt7ysKcAhY+i/lOmwereM+mjzlN/FV5DQeTz2VD4F
-         bjKZjunbh5HUjZFyIEPyh8JOJTOdRpAgOLZ6F1Z2kUB5MK5pQ4cFMXarfEh8UPbWWDAB
-         3fnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711018355; x=1711623155;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=45yhYh1c76B5hpMI/AXimlzQQNvaOFbzxBmt05VhGSk=;
-        b=v3w3DiwPalMVdJquOfExbW8FG6aJ7rtUlTRAzxG6sYFlyhOA46EBX9KUzR6keivEj9
-         ug4PcHFKVKLMK8KSj/sXEZ4jEgh1Q+YLD8Grr30WrZjloIwh5z1Uc1WMcJrurSs3JnPi
-         LHC4gFdSg24Geiwk3Nw8gWHeaK5dHnya/mjUx0OPKoQ+nfwI8KB6PrXqiqclrQ03w6Bc
-         HMGhhfUXX7jbgNSG0EQAWGdEX/DXO2M9ps//17gA1kx5pKIBMP+qXmDeGE+8+Lnsv4Wi
-         4MRBS5pc9DkrQCJ4eJmhYfi1qUVLwL5DhtkkN2PO5RSH3CbgT7s8w5b6YuflypS2vzDT
-         NH5g==
-X-Forwarded-Encrypted: i=1; AJvYcCWuKUM35XXz5fmTvvvOeSjFXvm96LyUOOtbV9Mcm0qSnGtjEB2YRCoa+7qxkZcH7UcCqZwNzY9AZH1Qtw4QOqJURJsH
-X-Gm-Message-State: AOJu0YyrnuqonrXGNog234oysdSoGBdu4QMTfxYsZXHRCKlRwDspqdSk
-	7ixXaxEENdxVgW8Cp59PWpN1KII6+nBM8fCCQ+pw+Mhg1qc9/pVu
-X-Google-Smtp-Source: AGHT+IHA7NAdCkz2g9hmN8Y2lNwhv9IWurTUIPXzOx5K+NdfMQKS+ek5axkKEgPAuXpamSqXtlHU2Q==
-X-Received: by 2002:a2e:a7d5:0:b0:2d6:a8c3:7f37 with SMTP id x21-20020a2ea7d5000000b002d6a8c37f37mr46424ljp.1.1711018352937;
-        Thu, 21 Mar 2024 03:52:32 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id h13-20020a05600c314d00b004146d736fcdsm4644885wmo.36.2024.03.21.03.52.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Mar 2024 03:52:32 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 21 Mar 2024 11:52:29 +0100
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
-Subject: Re: [PATCH RFC bpf-next 4/3] uprobe: ensure sys_uretprobe uses sysret
-Message-ID: <ZfwRbf0FMHVizZAC@krava>
-References: <20240318093139.293497-1-jolsa@kernel.org>
- <20240319102523.GC20287@redhat.com>
- <ZflyM5U67c47i4Oo@krava>
- <ZfnoK8aQDJMgOYfY@krava>
- <ZfrC0NZWxmWBuUIe@krava>
- <20240320143739.GA32579@redhat.com>
- <20240320152848.GA7613@redhat.com>
- <ZfwFBgfdHUzQBdxS@krava>
- <20240321101750.GB14646@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ut7WX7Cx"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D58ACC433F1;
+	Thu, 21 Mar 2024 11:00:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711018826;
+	bh=JZ/uFKf0RYrnnxw9jJlX5wLrQamwRfdSTn6ZmoyBLug=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Ut7WX7CxUr7mAOvAi8yA1jqWL8pgL9mqvy6e6+Pd4AGyf9nqdcGO+9FYFn6BDEzFX
+	 mJ/y8qj7sYpI7R6pYKFE34hE7CaVyufzNGty5bJK4Y44w3qPfwEDM3+NXKaAXMjsou
+	 JQ6fUN3130aq6ZiiYQHenZOOeERvYhalEoWHlVAzLiV8DqzQyguOKN4iHcBHp/skVs
+	 TQj/tD8EXUiYjLYcyYMuP07upJkT/PbauP1OoVzH0dCCie0tBvLbz+JIvFzSGXwVHN
+	 p3ACx7X2nDmcdlDYwg9oWDNoJ2TD9W/Y4wtT77L6E1bMiXHyZPJPu7WaHLqUc6IiWT
+	 v5FBEGf93o4KA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C3726D84BA6;
+	Thu, 21 Mar 2024 11:00:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240321101750.GB14646@redhat.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2] arm64: bpf: fix 32bit unconditional bswap
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171101882679.21551.11136604027550877391.git-patchwork-notify@kernel.org>
+Date: Thu, 21 Mar 2024 11:00:26 +0000
+References: <20240321081809.158803-1-asavkov@redhat.com>
+In-Reply-To: <20240321081809.158803-1-asavkov@redhat.com>
+To: Artem Savkov <asavkov@redhat.com>
+Cc: xukuohai@huawei.com, xi.wang@gmail.com, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, catalin.marinas@arm.com,
+ linux-kernel@vger.kernel.org, puranjay12@gmail.com
 
-On Thu, Mar 21, 2024 at 11:17:51AM +0100, Oleg Nesterov wrote:
-> On 03/21, Jiri Olsa wrote:
-> >
-> > On Wed, Mar 20, 2024 at 04:28:48PM +0100, Oleg Nesterov wrote:
-> >
-> > SNIP
-> >
-> > > 	SYSCALL_DEFINE0(uretprobe)
-> > > 	{
-> > > 		struct pt_regs *regs = task_pt_regs(current);
-> > > 		unsigned long err, ip, sp, r11_cx_ax[3];
-> > >
-> > > 		err = copy_from_user(r11_cx_ax, (void __user*)regs->sp, sizeof(r11_cx_ax));
-> > > 		WARN_ON_ONCE(err);
-> > >
-> > > 		// Q1: apart from ax, do we really care?
-> > > 		// expose the "right" values of r11/cx/ax/sp to uprobe_consumer's
-> > > 		regs->r11 = r11_cx_ax[0];
-> > > 		regs->cx  = r11_cx_ax[1];
-> > > 		regs->ax  = r11_cx_ax[2];
-> > > 		regs->sp += sizeof(r11_cx_ax);
-> > > 		regs->orig_ax = -1;
-> > >
-> > > 		ip = regs->ip;
-> > > 		sp = regs->sp;
-> > >
-> > > 		uprobe_handle_trampoline(regs);
-> > >
-> > > 		// Q2: is it possible? do we care?
-> > > 		// uprobe_consumer has changed sp, we can do nothing,
-> > > 		// just return via iret.
-> > > 		if (regs->sp != sp)
-> > > 			return regs->ax;
-> > > 		regs->sp -= sizeof(r11_cx_ax);
-> > >
-> > > 		// Q3: is it possible? do we care?
-> > > 		// for the case uprobe_consumer has changed r11/cx
-> > > 		r11_cx_ax[0] = regs->r11;
-> > > 		r11_cx_ax[1] = regs->cx;
-> >
-> > I wonder we could add test for this as well, and check we return
-> > proper register values in case the consuer changed them, will check
-> >
-> > >
-> > > 		// comment to explain this hack
-> > > 		r11_cx_ax[2] = regs->ip;
-> > > 		regs->ip = ip;
-> >
-> > we still need restore regs->ip in case do_syscall_64 decides to do
-> > iret for some reason, right?
+Hello:
+
+This patch was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Thu, 21 Mar 2024 09:18:09 +0100 you wrote:
+> In case when is64 == 1 in emit(A64_REV32(is64, dst, dst), ctx) the
+> generated insn reverses byte order for both high and low 32-bit words,
+> resuling in an incorrect swap as indicated by the jit test:
 > 
-> I don't understand... could you spell?
-
-I was wondering why to restore regs->ip for sysret path, but do_syscall_64
-can decide to do iret return (for which we need proper regs->ip) even if we
-prepare cx/r11 registers for sysexit
-
->
-> AFAICS everything should work correctly even if do_syscall_64() returns F
-> and entry_SYSCALL_64() returns via iret. No?
+> [ 9757.262607] test_bpf: #312 BSWAP 16: 0x0123456789abcdef -> 0xefcd jited:1 8 PASS
+> [ 9757.264435] test_bpf: #313 BSWAP 32: 0x0123456789abcdef -> 0xefcdab89 jited:1 ret 1460850314 != -271733879 (0x5712ce8a != 0xefcdab89)FAIL (1 times)
+> [ 9757.266260] test_bpf: #314 BSWAP 64: 0x0123456789abcdef -> 0x67452301 jited:1 8 PASS
+> [ 9757.268000] test_bpf: #315 BSWAP 64: 0x0123456789abcdef >> 32 -> 0xefcdab89 jited:1 8 PASS
+> [ 9757.269686] test_bpf: #316 BSWAP 16: 0xfedcba9876543210 -> 0x1032 jited:1 8 PASS
+> [ 9757.271380] test_bpf: #317 BSWAP 32: 0xfedcba9876543210 -> 0x10325476 jited:1 ret -1460850316 != 271733878 (0xa8ed3174 != 0x10325476)FAIL (1 times)
+> [ 9757.273022] test_bpf: #318 BSWAP 64: 0xfedcba9876543210 -> 0x98badcfe jited:1 7 PASS
+> [ 9757.274721] test_bpf: #319 BSWAP 64: 0xfedcba9876543210 >> 32 -> 0x10325476 jited:1 9 PASS
 > 
-> > overall lgtm, thanks
-> 
-> OK, great, feel free to update this code according to your preferences and
-> use it in V2.
+> [...]
 
-will do, thanks
+Here is the summary with links:
+  - [bpf-next,v2] arm64: bpf: fix 32bit unconditional bswap
+    https://git.kernel.org/bpf/bpf/c/a51cd6bf8e10
 
-jirka
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
