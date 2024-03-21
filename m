@@ -1,88 +1,71 @@
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2768C134431
-	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 19:28:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 341FE13441F
+	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 20:01:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711049338; cv=none; b=D4EcGcMtMk4VjD/HD2SWEebn2QWR8gsuLWTjECDvm3WsBkpOrSjCCiwKLu5eBEgv49YMCLotOfT9ILHB1PmcxOs/Z0YUDCDc8VfxC2NRfstQshOQyP8GFOacA8fOUQ+kP6JoDmAIp+/tHd880RKvGLqR7QQy6cY1spIYsb/20Oc=
+	t=1711051275; cv=none; b=ib4arOq5Y+aiYaRzhYrn4sc3tCMRPxHMwz2ozABya94nqLMP7rwEmv6GIM6AEvOMglsxMBkScYiv/VGQ6KHZcxzF85Zo4MBhHAvJ0OnV3SSSLfZZ0Jpl1O6oxtixUob5zt2bJKdyNpaGhkGElWn0WUC+kCivN8dRcwKm77V//jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711049338; c=relaxed/simple;
-	bh=dn2C2alSgY4+3sOHc2h++Ogi/kTiIYs5MXW1xiR+TP8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q0MmxjKkmwGABVNrhtHPkbdLUFG461saE0EpKxudYLihrjvEu5QriMspVVuarOcQ8S0+BZmTHZIT7x5WRLfKExN1tqVo6loQzgbe6Nu/4H94Fkm3sQGbRGiqAYELGqZdagP2qu7kDhZy5/McZOPEczyA0C6VvdWPgggPPi0wKaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RLlCtEaD; arc=none smtp.client-ip=209.85.222.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RLlCtEaD"
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-78822e21a9dso78229685a.2
-        for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 12:28:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711049336; x=1711654136; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dn2C2alSgY4+3sOHc2h++Ogi/kTiIYs5MXW1xiR+TP8=;
-        b=RLlCtEaDB4yzpPG0dptXQk9aDUh8+ZIw8fhncEWPASqq1mf2YZzoRpvjddjZTYbYfX
-         llWqrtUJaV2/QoU/nbZk/iFNZ6FXWY6IG273YAPb2rf6HaJrBLnZndJBDoKsmmZvldGj
-         Gxacpsjj3NEUfFdmy9nxKx4eGZNZEYNuz/pe9KscekXSplBDi0XcdaPYMP84aExVSK92
-         Wn3+NPFtsnzeTftS+auQ5yuOe8GWyOwwSDG0gjJ4srDAzXhzV7f8l5AkNsMxmONTAdY+
-         pN06K+DeIjdA7F0VHplwVu6KuMEIFUDbDu/DBcR1BL9YsveRnf48XVt1RpxcbqB512Dr
-         wTBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711049336; x=1711654136;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dn2C2alSgY4+3sOHc2h++Ogi/kTiIYs5MXW1xiR+TP8=;
-        b=NBfoa3zSkHGhD3QpYlR5f0T8e1IG2esLjpP0Ni1QocKEmhHJ+kGJOMoPvUi6s8qQ6n
-         op2OQt4f0D+Ds6UOGfhuC7yThVPlF/KB2k36PNGeRqfQl3eGgc/3q9cSl367fwPUqXG5
-         +uqSuel0z2J8a3x3VVPDHE2znJotWS+lGpJWwqTy9ZTLK3HQP19X0oZCpWpGAwA6QACa
-         as9Bk+dOK9AfIxb/miICpRnd55uPmC7x/FrumYb2NxpFAum2fNH1d5u4EgijxPoyWER4
-         1qOOI8KMsMO9lu7jt+oXlBl5Qd9me6SjzYVotBxZoZrdPobPTqr7GU4Vh1xY+KLNHd+i
-         TE1A==
-X-Forwarded-Encrypted: i=1; AJvYcCWbaWaVqoN3sdZBl6J8Y1FdmtMFhAJmFfHCbgKkkHv5bxK69Qp4YlQfyMNQ8CqfFJBICCcU+zvaMSMPbns6jErfZPcF
-X-Gm-Message-State: AOJu0YzZU/CegCYhxyKZSen59f4AEZihv06Lp1ubVH0fcMCVEnTDe08P
-	V5VzrXPLA7+YiMYEq5VGoKMyfhpvGmxEBCpDRGra5G6KMU9djmBBvtIt2214tRU=
-X-Google-Smtp-Source: AGHT+IEgSOFvl8xwMs5y2gtg7usEdb72Qigix9m/gPYvvQ+LDP1prF9ulwjb7as4dGEUTtvLC2vA4Q==
-X-Received: by 2002:a05:6a20:3ca0:b0:19e:ac58:7b0d with SMTP id b32-20020a056a203ca000b0019eac587b0dmr601889pzj.5.1711048982252;
-        Thu, 21 Mar 2024 12:23:02 -0700 (PDT)
-Received: from valdaarhun.localnet ([223.233.84.240])
-        by smtp.gmail.com with ESMTPSA id c12-20020a170903234c00b001dda336de37sm192762plh.240.2024.03.21.12.22.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Mar 2024 12:23:01 -0700 (PDT)
-From: Sahil <icegambit91@gmail.com>
-To: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- Quentin Monnet <quentin@isovalent.com>, Quentin Monnet <qmo@qmon.net>
-Cc: martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org
-Subject:
- Re: [PATCH bpf-next v2] bpftool: Mount bpffs on provided dir instead of
- parent dir
-Date: Fri, 22 Mar 2024 00:52:55 +0530
-Message-ID: <2745470.mvXUDI8C0e@valdaarhun>
-In-Reply-To: <355ad113-ce6c-4bfb-8ae3-8b1a37bdcda0@qmon.net>
-References:
- <20240308130619.28123-1-icegambit91@gmail.com>
- <10467264.nUPlyArG6x@valdaarhun>
- <355ad113-ce6c-4bfb-8ae3-8b1a37bdcda0@qmon.net>
+	s=arc-20240116; t=1711051275; c=relaxed/simple;
+	bh=rH6WTJamFufej1SdOc0wv0kcmx+3esaryHMV5wA9fVk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PHcBQKocKo6Vp/6GjOwyg9ohcJ6Upwng55V8ze4ynm8dFVYzLif/6+DIYbXF1Eu15xifdmS2z0Jc2GdUYFKiZhIH3IT6Eb+TEOtWCt3we6Q7biqCRMyClXdPjyUeJ4fcpkXX9CIg/fxxi0LGCYDo9LhgcLiME8N8kFy35e5i0ME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+	id BD09D2218FE6; Thu, 21 Mar 2024 13:00:58 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next v2 0/5] bpf: Fix a couple of test failures with LTO kernel
+Date: Thu, 21 Mar 2024 13:00:58 -0700
+Message-ID: <20240321200058.2218328-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+With a LTO kernel built with clang, with one of earlier version of kernel=
+,
+I encountered two test failures, ksyms and kprobe_multi_bench_attach/kern=
+el.
+Now with latest bpf-next, only kprobe_multi_bench_attach/kernel failed.
+But it is possible in the future ksyms selftest may fail again.
 
-Sorry for the delay in my response. I have made
-the relevant changes and have sent v3.
+Both test failures are due to static variable/function renaming
+due to cross-file inlining. For Ksyms failure, the solution is
+to strip .llvm.<hash> suffixes for symbols in /proc/kallsyms before
+comparing against the ksym in bpf program.
+For kprobe_multi_bench_attach/kernel failure, the solution is
+to either provide names in /proc/kallsyms to the kernel or
+ignore those names who have .llvm.<hash> suffix since the kernel
+sym name comparison is against /proc/kallsyms.
 
-Thanks,
-Sahil
+Please see each individual patches for details.
 
+Yonghong Song (5):
+  selftests/bpf: Replace CHECK with ASSERT macros for ksyms test
+  libbpf: Mark libbpf_kallsyms_parse static function
+  libbpf: Handle <orig_name>.llvm.<hash> symbol properly
+  selftests/bpf: Fix kprobe_multi_bench_attach test failure with LTO
+    kernel
+  selftests/bpf: Add a selftest with available_filter_functions_addrs
+
+ tools/lib/bpf/libbpf.c                        |  66 +++++++-
+ tools/lib/bpf/libbpf_internal.h               |   2 -
+ .../bpf/prog_tests/kprobe_multi_test.c        | 151 ++++++++++++++++++
+ .../testing/selftests/bpf/prog_tests/ksyms.c  |  30 ++--
+ 4 files changed, 224 insertions(+), 25 deletions(-)
+
+--=20
+2.43.0
 
