@@ -1,21 +1,21 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A06F13443B
-	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 20:01:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CB7134422
+	for <bpf@vger.kernel.org>; Thu, 21 Mar 2024 20:01:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711051292; cv=none; b=MW3Z/k4Hrac9peR1Eoxb07mVRewDpz9uUKXFHD3XJeJFL2J11YsIR62k3xC4x1mKsuFpFZeCYo2MYP7YqCMF89Lm/QaBkd6WHiZuKdisFPCdnzsXqNqdAGSd3ABofhTwT3Yw45uBcGLgGmmjTry1Vs/xqhCejHPjhPNVCh+OslI=
+	t=1711051299; cv=none; b=sYiFcZ6K9acfXsSeGMy4hjLftZyMRhO1W6Wa1vZYlnLmBWmCfUZbTbfiWHLDUHHR9ETGK48Z8Jjji1APzoH9T3R1f5t5SJxaA95uKuAzR9nGGZAnhO+yh1bmvLNTAq1Zq6RgvM9ptX8i42rkngYj3t1FnxEAvh8PfSagE/jE0ZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711051292; c=relaxed/simple;
-	bh=I8cHHkO582AlMXZEe/J+OllEfpdNGNHr16UWvH57zzk=;
+	s=arc-20240116; t=1711051299; c=relaxed/simple;
+	bh=lwzIDjBWH2bW/fI6EM1MkhMhVQjwWu2r+y47owZB/Zk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EM4SmoELvFykJFQZYp2Ada79vWOZGiboxXNo1+HGGxsEatA2VzMKJ3YL9EJZmbhR2DvYN3iNOxVDO1S1ySZn+eTNJXpu+r8cn6OeyY0NgjA3zLDoonqzePJsTOH8m11TDsrxK3Lff7gQFnLXqhcaLm+AApmLvnBis6oUvA6YEGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+	 MIME-Version; b=YRWkb3/0Cys54B+SdpVXZcBZhDSQs+fIba5B2XRTtzecqk9V8osiOx+XVbgkuoKPeWSzDyy1LyStLegKM0n6b7AgIUJfOx/Z2kjwIwNwkctUWKfh+9Y6rz9qAL3Ivmktd6O9KtWXUwhfwZ9VnrXQD36VZkt3z19iwDb16CU4jFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 2A4852219097; Thu, 21 Mar 2024 13:01:19 -0700 (PDT)
+	id 4483A22190C3; Thu, 21 Mar 2024 13:01:24 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v2 4/5] selftests/bpf: Fix kprobe_multi_bench_attach test failure with LTO kernel
-Date: Thu, 21 Mar 2024 13:01:19 -0700
-Message-ID: <20240321200119.2220027-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Add a selftest with available_filter_functions_addrs
+Date: Thu, 21 Mar 2024 13:01:24 -0700
+Message-ID: <20240321200124.2220345-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240321200058.2218328-1-yonghong.song@linux.dev>
 References: <20240321200058.2218328-1-yonghong.song@linux.dev>
@@ -37,82 +37,189 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-In my locally build clang LTO kernel (enabling CONFIG_LTO and
-CONFIG_LTO_CLANG_THIN), kprobe_multi_bench_attach/kernel subtest
-failed like:
-  test_kprobe_multi_bench_attach:PASS:get_syms 0 nsec
-  test_kprobe_multi_bench_attach:PASS:kprobe_multi_empty__open_and_load 0=
- nsec
-  libbpf: prog 'test_kprobe_empty': failed to attach: No such process
-  test_kprobe_multi_bench_attach:FAIL:bpf_program__attach_kprobe_multi_op=
-ts unexpected error: -3
-  #117/1   kprobe_multi_bench_attach/kernel:FAIL
+The current kprobe_multi_bench_attach/kernel test
+reads sym names from /sys/kernel/tracing/available_filter_functions.
+Some names do not agree with the corresponding entries in /proc/kallsyms
+since the corresponding /proc/kallsyms syms have suffix '.llvm.<hash>'.
+Actually, if we pass symbol names in /proc/kallsyms,
+kprobe_multi_attach will be okay.
 
-There are multiple symbols in /sys/kernel/debug/tracing/available_filter_=
-functions
-are renamed in /proc/kallsyms due to cross file inlining. One example is =
-for
-  static function __access_remote_vm in mm/memory.c.
-In a non-LTO kernel, we have the following call stack:
-  ptrace_access_vm (global, kernel/ptrace.c)
-    access_remote_vm (global, mm/memory.c)
-      __access_remote_vm (static, mm/memory.c)
-
-With LTO kernel, it is possible that access_remote_vm() is inlined by
-ptrace_access_vm(). So we end up with the following call stack:
-  ptrace_access_vm (global, kernel/ptrace.c)
-    __access_remote_vm (static, mm/memory.c)
-The compiler renames __access_remote_vm to __access_remote_vm.llvm.<hash>
-to prevent potential name collision.
-
-The kernel bpf_kprobe_multi_link_attach() and ftrace_lookup_symbols() try
-to find addresses based on /proc/kallsyms, hence the current test failed
-with LTO kenrel.
-
-This patch removed __access_remote_vm and other similar functions from
-kprobe_multi_attach by checking if the symbol like __access_remote_vm
-does not exist in kallsyms with LTO kernel. The test succeeded after this=
- change:
-  #117/1   kprobe_multi_bench_attach/kernel:OK
+This patch added a new subtest where addresses are retrieved from
+/sys/kernel/tracing/available_filter_functions_addrs, and use the
+address to consule /proc/kallsyms to get the function name.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/prog_tests/kprobe_multi_test.c     | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ .../bpf/prog_tests/kprobe_multi_test.c        | 139 ++++++++++++++++++
+ 1 file changed, 139 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b=
 /tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-index 05000810e28e..f6130f4f3d88 100644
+index f6130f4f3d88..142309ced146 100644
 --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
 +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-@@ -345,6 +345,9 @@ static int get_syms(char ***symsp, size_t *cntp, bool=
- kernel)
- 	FILE *f;
- 	int err =3D 0;
+@@ -438,6 +438,102 @@ static int get_syms(char ***symsp, size_t *cntp, bo=
+ol kernel)
+ 	return err;
+ }
 =20
++static int get_syms_from_addr(char ***symsp, size_t *cntp)
++{
++	char *name =3D NULL, **syms =3D NULL;
++	size_t cap =3D 0, cnt =3D 0, i;
++	struct hashmap *map;
++	struct ksym *ks;
++	char buf[256];
++	FILE *f;
++	int err =3D 0;
++	void *addr;
++
 +	if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
 +		return -EINVAL;
++	/*
++	 * The available_filter_functions contains many duplicates,
++	 * but other than that all symbols are usable in kprobe multi
++	 * interface.
++	 * Filtering out duplicates by using hashmap__add, which won't
++	 * add existing entry.
++	 */
 +
- 	/*
- 	 * The available_filter_functions contains many duplicates,
- 	 * but other than that all symbols are usable in kprobe multi
-@@ -393,6 +396,15 @@ static int get_syms(char ***symsp, size_t *cntp, boo=
-l kernel)
- 		if (!strncmp(name, "__ftrace_invalid_address__",
- 			     sizeof("__ftrace_invalid_address__") - 1))
- 			continue;
-+		/*
-+		 * In certain cases, e.g., clang lto kernel, the 'name' here
-+		 * may be different from the one in /proc/kallsyms due to
-+		 * /proc/kallsyms name might be "<name>.llvm.<hash>" instead
-+		 * of "<name>". Exclude these 'name's since they will cause
-+		 * later kprobe_multi_attach failure.
-+		 */
-+		if (ksym_get_addr(name) =3D=3D 0)
++	if (access("/sys/kernel/tracing/trace", F_OK) =3D=3D 0)
++		f =3D fopen("/sys/kernel/tracing/available_filter_functions_addrs", "r=
+");
++	else
++		f =3D fopen("/sys/kernel/debug/tracing/available_filter_functions_addr=
+s", "r");
++
++	if (!f)
++		return -ENOENT;
++
++	map =3D hashmap__new(symbol_hash, symbol_equal, NULL);
++	if (IS_ERR(map)) {
++		err =3D libbpf_get_error(map);
++		goto error;
++	}
++
++	while (fgets(buf, sizeof(buf), f)) {
++		if (strchr(buf, '['))
 +			continue;
++
++		if (sscanf(buf, "%p$*[^\n]\n", &addr) !=3D 1)
++			continue;
++
++		ks =3D ksym_search((long)addr);
++		if (!ks)
++			return -EINVAL;
++
++		name =3D ks->name;
++
++		/*
++		 * We attach to almost all kernel functions and some of them
++		 * will cause 'suspicious RCU usage' when fprobe is attached
++		 * to them. Filter out the current culprits - arch_cpu_idle
++		 * default_idle and rcu_* functions.
++		 */
++		if (!strcmp(name, "arch_cpu_idle"))
++			continue;
++		if (!strcmp(name, "default_idle"))
++			continue;
++		if (!strncmp(name, "rcu_", 4))
++			continue;
++		if (!strcmp(name, "bpf_dispatcher_xdp_func"))
++			continue;
++		if (!strncmp(name, "__ftrace_invalid_address__",
++			     sizeof("__ftrace_invalid_address__") - 1))
++			continue;
++
++		err =3D hashmap__add(map, name, 0);
++		if (err =3D=3D -EEXIST) {
++			err =3D 0;
++			continue;
++		}
++		if (err)
++			goto error;
++
++		err =3D libbpf_ensure_mem((void **) &syms, &cap,
++					sizeof(*syms), cnt + 1);
++		if (err)
++			goto error;
++
++		syms[cnt++] =3D name;
++	}
++
++	*symsp =3D syms;
++	*cntp =3D cnt;
++
++error:
++	fclose(f);
++	hashmap__free(map);
++	if (err) {
++		for (i =3D 0; i < cnt; i++)
++			free(syms[i]);
++		free(syms);
++	}
++	return err;
++}
++
+ static void test_kprobe_multi_bench_attach(bool kernel)
+ {
+ 	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
+@@ -521,6 +617,47 @@ static void test_attach_override(void)
+ 	kprobe_multi_override__destroy(skel);
+ }
 =20
- 		err =3D hashmap__add(map, name, 0);
- 		if (err =3D=3D -EEXIST) {
++static void test_attach_kernel_addrs_to_sym(void)
++{
++	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
++	struct kprobe_multi_empty *skel;
++	struct bpf_link *link;
++	char **syms =3D NULL;
++	size_t cnt =3D 0;
++	int i, err;
++
++	err =3D get_syms_from_addr(&syms, &cnt);
++	if (err =3D=3D -ENOENT) {
++		test__skip();
++		return;
++	}
++	if (!ASSERT_OK(err, "get_syms_from_addr"))
++		return;
++
++	skel =3D kprobe_multi_empty__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "kprobe_multi_empty__open_and_load"))
++		goto cleanup;
++
++	opts.syms =3D (const char **) syms;
++	opts.cnt =3D cnt;
++
++	link =3D bpf_program__attach_kprobe_multi_opts(skel->progs.test_kprobe_=
+empty,
++						     NULL, &opts);
++
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_kprobe_multi_opts"))
++		goto cleanup;
++
++	bpf_link__destroy(link);
++
++cleanup:
++	kprobe_multi_empty__destroy(skel);
++	if (syms) {
++		for (i =3D 0; i < cnt; i++)
++			free(syms[i]);
++		free(syms);
++	}
++}
++
+ void serial_test_kprobe_multi_bench_attach(void)
+ {
+ 	if (test__start_subtest("kernel"))
+@@ -550,4 +687,6 @@ void test_kprobe_multi_test(void)
+ 		test_attach_api_fails();
+ 	if (test__start_subtest("attach_override"))
+ 		test_attach_override();
++	if (test__start_subtest("kernel_addrs_to_sym"))
++		test_attach_kernel_addrs_to_sym();
+ }
 --=20
 2.43.0
 
