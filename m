@@ -1,66 +1,66 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A04DC58207;
-	Thu, 21 Mar 2024 11:05:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C60A58210;
+	Thu, 21 Mar 2024 11:31:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711019131; cv=none; b=pXnjNl1dfd35L70+c2Q4ksURi55nvLkk4s2aPFYqde9rxzVqw57SbkcLeYC/tivwk2NzHzbvtiYKLkRTF2b0WmHH/NLVkHcURmYGN5l9jUSDf28O6uoK0LpdHwk8RWMUxxX28oKzKzWiHceKCXYk+ydqan32vHk7/tee2lSJp+k=
+	t=1711020704; cv=none; b=jDILXFJ763BX0kz6jjIWe4durwt2e69Il6udAJZN6YufzvXHLlIHH8wfY7O2nHiGnXm5KsuNGo7+cXPK5NWtOIsK2vO4XrT0jrCZjgyYRik3wdPlBYATiVhJXgqV8FUx4ZVIM6nhrbxrbOXA94fc0sixrwVdZxDXPm9vgety87g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711019131; c=relaxed/simple;
-	bh=T7oRw9U9YOvtDCNp0N0dPXzwXcNyyNi8HOvwsjPUjMI=;
+	s=arc-20240116; t=1711020704; c=relaxed/simple;
+	bh=DJO28aVkOmnoGoHQnSfeSZEZa0r4jTvfugf4tMA0Cmg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OCxVrP3mEFsegIaowZfZokuapogQQQidozREPiM3pFXMHf64U4rhWpCyJVXLuwVrEaYvVmYyRHS+PeBykIr8biShpKy3WUdQs3p1ibSBfC9supcmtnYW1A9sTNEFOVvKYta3b1F69xG11rmDieiDrFfs2VqPJ86Sa3I5ufp6LG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dRfMWvmS; arc=none smtp.client-ip=209.85.167.41
+	 To:Cc:Content-Type; b=d3FLrjS/dS+5PB9RUW+YKqgqJ5tEbnpTZYDwYGFnOr8Oya6dPDoJOB4+pwox9jb7dp8JoDfNkAd1H6J5ycIxxRfZfWmdv9MkH/LbUz74pBNzJdjJsIGqGUGAQtMaoy5/wD/yQwcGcPAi5ql2iHSJoUYa0qQ1WyGKe7tVdbEKq1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cIa9ZBj0; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dRfMWvmS"
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-513da1c1f26so1133528e87.3;
-        Thu, 21 Mar 2024 04:05:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cIa9ZBj0"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4146e5c719bso6539585e9.2;
+        Thu, 21 Mar 2024 04:31:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711019128; x=1711623928; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711020701; x=1711625501; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ph7DhApLQf9g5u+GJFqkGKLK8oTg9+BlB4tUDorFzNk=;
-        b=dRfMWvmSMzOVV7s3NeF+4+OR5Jv2susbkXvWpU5wn7JaK7wJncV4HhRiXJk6QsnPLZ
-         elFTsRN2zGJkoFpDmV4Oe6/ZUXVqIjuy0BMClYGWmVI1+5J8y+37JDZSa0sXX7ajFISh
-         Jn938ck7H/fBtCsPfRr9QgCQnJtS0Kk2iUwQYinW5FEJNMPdk53xZ5b6dJyVP0+gDcKE
-         xmeRyu5LTdUMgsR8s0eP1it8CcwCNAFaGufEw08/bqh+NsCSJocOgJCsntUln7gSpEZx
-         7GyBLg+aUbdF10Y8pWe0+qLSAmvE83DYZgtLbDBAi5+tUedVm1vMRPTOpgDXH8TmfTEl
-         XrTA==
+        bh=Tm9RUXritdc1cmBd9a/YU9HuV2GGTJD40+SLLBPKFHk=;
+        b=cIa9ZBj0rzk28pfg4tvUCyCKUYnZNrHRyFAe+TIkyo9yXHZVRHw0z+DOI6GgTxgNzj
+         9AoT4+ZbkYq3JRNF201b6FJ7PUzKSjvK6bRZJP6+o4DqAXmvi/nBsNT2/bsEzWK8oqjl
+         5GRGyQ0N+wHf5UAl+v4Ho0zPy8fMTN6sZjtSjGyVNVvGa1Bdg7kaHk1Ih6sFtqUW8OXQ
+         FkbtgVBP//Z4ng6MgTFHyIAfMrjMPVqSnBJGM4iCg0/7E1OnKzouH3yTq+yv2QUXWm6N
+         jrgcz+aPTk1AieTm9aOtUKHhVZTorhfOrmUlXQwtXPKysDis6js8/LKVvVJTzgUhyweB
+         llRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711019128; x=1711623928;
+        d=1e100.net; s=20230601; t=1711020701; x=1711625501;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ph7DhApLQf9g5u+GJFqkGKLK8oTg9+BlB4tUDorFzNk=;
-        b=JehzA7KAJiE2Xec/LjLLcFLim7TRSi/tyGR80tWeqb3XtaTpd0dtYMB/ZJxSXN6IWF
-         hqJ3q24nTsPrWE8dYh8Ylzdx5kK8kW7dXNvhEW6UrgXkZk/7eAuuO1qntdmIGR+5kiz4
-         Sq6zCvpu7rhXiyncfM92BoeYmQyuYlwikX3zxK9Up+086EmvXeYQXsktF+pUqZsrrUuv
-         IqUtMO8yMZOyR7kbpJyQQpIOSI1M20Hva+WlCIJTvOtBtiEdD1uFYhB/z/R5PUpmB+Fl
-         CNnRZLYd5dGxrw6t9/XYCV4qHXmneR1VZ1pcGyVyGGNCI3FI7ff0YEMScvRDlss7DOwM
-         t3pg==
-X-Forwarded-Encrypted: i=1; AJvYcCWVmFoOng4p7dw+Pd7PCHwkepleGV6tYAx8IvZFgxre919jkelyQuSZ0qKe2QNvX+lHjez1Ru9AZ04U29/Zg1n8HUHZrCpcClWxLWjDGA31obgggqFwPZBk/mii4B/xHqwWnB1030NTidsJIlgw+Mm/qKl3RRfL/Myl
-X-Gm-Message-State: AOJu0YzQ7yrBq5VXiq1DFBmF6rH4naeqFtXDJ8IHI/jWLevfznPMwD7x
-	DcYwU3sAo/wZedNp59xgBc1tdfzNbN9QCQOP2FioO6z3v86oE0eZqVWzUw79UImkdI4SwfPfKDw
-	w0MzG4itOH077rkLgKVG4ynu2E6cD2WenBTw=
-X-Google-Smtp-Source: AGHT+IHpE1IvxAZxMsCwH8ke7VHalqSTikT1Qp9JTWVuYMlf3WlhFObfM/yD4osrKm0OAmcEU+VUnbAvw5dE9JTBc10=
-X-Received: by 2002:ac2:5b9c:0:b0:513:dba5:ac67 with SMTP id
- o28-20020ac25b9c000000b00513dba5ac67mr12168547lfn.32.1711019127516; Thu, 21
- Mar 2024 04:05:27 -0700 (PDT)
+        bh=Tm9RUXritdc1cmBd9a/YU9HuV2GGTJD40+SLLBPKFHk=;
+        b=JjYrSsmXo7k5YlQkn5oVJYKAnluQXv5LrPVbCLNKsFJ6Gs/CuNZ1fQ4CBmvrpIzG2E
+         vGknOkXv/1kNP7YJL1Mqg3RJHXOWTuuPMl5nG6uhY1tUxGH7gBLn7otNrrwExpbFjYK/
+         tMoahybDXSbL9lQE1cNon7f8UpbZ/Un+Sha03vjlstOmNaW5kBLR3BBE5gYT4ArfOAgq
+         bnVMvOohH7GFm+OSkzRFYJ1ADU6WKNkamreEkeNRFIksNmahYNPl8NrgdEgzmQC5H43M
+         TNccENtTwoxjtoGvP22V6j9wRbVGQYPwOX0GLkaSKsrQp+Xxi87DWQv21WZHIAb1vzoe
+         TpCw==
+X-Forwarded-Encrypted: i=1; AJvYcCUx5can+MN3BXs8UH5XoVKEOCJRrIZWsiDjilN0ZPG4TQ48cGuBIAOcJdFb0bsb1+ZHwARJ1EmuoIBbIAh/STmxznfMDfWalgzqUIhf1wt62lETDIK4Vxe/opMaid2HWn/Y6Gu4MQXgmtgkE38lKvF1b2B5aEnbIrjs
+X-Gm-Message-State: AOJu0YzTcJeN7e5Lu9sFHnLASdOOBIZKKDFDWib0jO0GaDBRxOwbZ1oF
+	eO4oIaUwiudVxCgsmvDapNOWcJ0+Sa+yvR7uRAtCT+uHwY2UYIKjSi+UEAnqyWFsSt59Nl8sGGC
+	b/Y+vTqUKo2YY8V2uMydcYtHSH50=
+X-Google-Smtp-Source: AGHT+IEGBweFJd+BeGA1qee4nfD63A/jOmAnFJCswQxI8IsENzoWjQqN3QQEBc36ULLJ0pzbxlzmG5i1Hh5X0pNdZio=
+X-Received: by 2002:a5d:668e:0:b0:341:80fc:4913 with SMTP id
+ l14-20020a5d668e000000b0034180fc4913mr2936875wru.67.1711020700630; Thu, 21
+ Mar 2024 04:31:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240321101058.68530-1-puranjay12@gmail.com>
-In-Reply-To: <20240321101058.68530-1-puranjay12@gmail.com>
+References: <20240321101058.68530-1-puranjay12@gmail.com> <CAADnVQLhwLgq=QuXD-Ls=t9Scr_4Zn9JwdkXfZQfZkT=ysx64Q@mail.gmail.com>
+In-Reply-To: <CAADnVQLhwLgq=QuXD-Ls=t9Scr_4Zn9JwdkXfZQfZkT=ysx64Q@mail.gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 21 Mar 2024 04:05:15 -0700
-Message-ID: <CAADnVQLhwLgq=QuXD-Ls=t9Scr_4Zn9JwdkXfZQfZkT=ysx64Q@mail.gmail.com>
+Date: Thu, 21 Mar 2024 04:31:29 -0700
+Message-ID: <CAADnVQLHrmkJ5p2gEUJkf_CRxq9gv8rcSuBm5GeZ_nUJxQOE0Q@mail.gmail.com>
 Subject: Re: [PATCH bpf v2] bpf: verifier: prevent userspace memory access
 To: Puranjay Mohan <puranjay12@gmail.com>, Ilya Leoshkevich <iii@linux.ibm.com>
 Cc: "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
@@ -77,23 +77,38 @@ Cc: "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 21, 2024 at 3:11=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.co=
-m> wrote:
+On Thu, Mar 21, 2024 at 4:05=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-> index e613eebfd349..e61a51a5b4be 100644
-> --- a/arch/s390/net/bpf_jit_comp.c
-> +++ b/arch/s390/net/bpf_jit_comp.c
-> @@ -2691,3 +2691,8 @@ bool bpf_jit_supports_subprog_tailcalls(void)
->  {
->         return true;
->  }
-> +
-> +u64 bpf_arch_uaddress_limit(void)
-> +{
-> +       return -ENOTSUPP;
-> +}
+> On Thu, Mar 21, 2024 at 3:11=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.=
+com> wrote:
+> >
+> > diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.=
+c
+> > index e613eebfd349..e61a51a5b4be 100644
+> > --- a/arch/s390/net/bpf_jit_comp.c
+> > +++ b/arch/s390/net/bpf_jit_comp.c
+> > @@ -2691,3 +2691,8 @@ bool bpf_jit_supports_subprog_tailcalls(void)
+> >  {
+> >         return true;
+> >  }
+> > +
+> > +u64 bpf_arch_uaddress_limit(void)
+> > +{
+> > +       return -ENOTSUPP;
+> > +}
+>
+> Looks good and should work, but s390 CI is still not happy.
+> Ideas?
+> sock tests were not failing before. So something is going on.
 
-Looks good and should work, but s390 CI is still not happy.
-Ideas?
-sock tests were not failing before. So something is going on.
+I think I have an explanation.
+-ENOTSUPP and u64... and later:
+u64 uaddress_limit =3D bpf_arch_uaddress_limit()
+if (uaddress_limit < 0)
+
+I bet the compiler simply removes this check since unsigned cannot
+be negative.
+Odd that there is no compiler warning.
+
+pw-bot: cr
