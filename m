@@ -1,237 +1,374 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DF879955
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 20:16:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B13B656B78;
+	Fri, 22 Mar 2024 20:50:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711138609; cv=none; b=ZChR1ZWvJ0KB6yYsDDhyKCRkZjb/rugIdoCa95mos7Rp1mZYl63WE9gmGT2F8yzMaQtyl/qQkDVpGlR+ZSsrl40073o8eD/B1yhHIHl5S4gDltMRU7tv0cKBM5coqn6lPtuwv73fCN8blRuVczxUVWF8pYwj8stNJr5sq7JSjDQ=
+	t=1711140645; cv=none; b=Y9XcvZ0QP1bEYvl3V7iqzB2VAJEV+kY9xme2TwTpPqbjpbuO5h36w92CwmuZ5pj9juH5Pjt+41Qrv9h4cWWJ5FfIaM9PYljvf23uSVpoH8pMLJ8PXtC4DcP3vjJzwZAzcOaQ58cL1sq7ENuItNxGqm5XFY0zOJTtB+6eb+UaG8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711138609; c=relaxed/simple;
-	bh=CMPUEA4o6RoOnE2yg21NCU3z0mW7qtxuMWN+bAdIGlw=;
+	s=arc-20240116; t=1711140645; c=relaxed/simple;
+	bh=vGI/kIuL9seE6VFtSSJzXe/rjZ9o1WYYkFhZ9/U8Yr4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Urqsy0e8bLwCU0M3Yat9t/Sm2cQHW+nOv/rXvz4UNAK3DwyVf8FKA6aCRsoe5+Coff2SIUgMG+Gr3O+Z3slMBXpvCFc6t3kiGyFDVM6vzR8JDT0dgR19QriZchf1SCvpG7AUMaV/hK3XV7vJKs8uSE8ra2Ly0qusFHcEHH3tWzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PLSmvNdy; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	 To:Cc:Content-Type; b=agJk06fxh1P/8k1xPlVUpgoCfM6g/+BuzxsnAq5aM1XWVMKi3EiOjN8Xfy3kq1zih7FLQ8B64lGEe4gDchQMPErHPeOhV5QLu+sCuKcNSJxenro8iGt2BCjz8XgPgVlTfPNCI8txZhvevt5MhMK55Ep6M/kiYAI/Dmor9xzt2Cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PLSmvNdy"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1deffa23bb9so17908535ad.2
-        for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 13:16:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711138605; x=1711743405; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gp3VFuxo06XCMSN86iezvg//jT11Fn6HNuvruq/5p6w=;
-        b=PLSmvNdyCYRkVnMpoZN4CSb5HqhETGa1G7THbTwj15UFRbPILfRd4fQZXpaAJJltfe
-         XTLaRhJOo0CHsOPVbTJX2NN9jauj361F2Yyrg6oyj11mNTFvGpGAXxMjBZ5QB+9oHYX2
-         f4uc8n0SZ1VCB9an6LwODuUxOHF6J5wrcxPqQBbBMQg+Cad3n5ClunT/eKA7KhtvULRp
-         QcA+rjIQyy8PPrqUaJ1FZq15mIt/nkZXEBThAV0QQOHfu2b9p/ZwLhmR/aEJ46jPFG5c
-         uK8NLDzn/fEfEqJFQEoPz8pZ1Vmne0m/sNBUj3A6x0YaUEHEj6cjfDH5njV/FaQ/fFPZ
-         T9rA==
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3bd72353d9fso1442959b6e.3;
+        Fri, 22 Mar 2024 13:50:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711138605; x=1711743405;
+        d=1e100.net; s=20230601; t=1711140643; x=1711745443;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gp3VFuxo06XCMSN86iezvg//jT11Fn6HNuvruq/5p6w=;
-        b=Pp5ndi1K0SysLirS/IggrTsgjaFMwW/V/pqb1Cxvu+/8gIsNruL5xHbedPSxK1asGN
-         9zaJfpYl5x/Ly0xyapBZxaW2bipt0gPwJFMWduwqLfoWymwiJy5zt2zdIV6o5j97Pw+s
-         1ionAHWeanNLTnfgmnfDBeSo4fkSNOcqOVrxY/fJCMltCkbcuxkgvsrhal/rXigJtNEW
-         UuPaZZjKzBtvZ3senjxfGwstle2j5ORvobvx2RX/qeeSD9qpqcrFaiYCHWPZ0L6pq7nJ
-         LQYS52yf9EhFbgHDaOMD4LmFTbQGImB6QDMgTCZGJ7MeP8Q/5AM2bBJVCe6wCqHamD5U
-         6gsw==
-X-Gm-Message-State: AOJu0YyMPgtKp8uTdxxDP2xPlPsnxAZnX9tRQ1d66BT0SWYJa9U1okxK
-	VzeqMHWjNePQOLcbCBMUZu8WmPqYnIrUsFBveDagHslwSSnIwCe97eV7n9j9+f/+jxN2EeFjl+g
-	O9qjrExphwwd/cD8NT3UVVMgRnyqefK4i
-X-Google-Smtp-Source: AGHT+IGRHq19fHGp51+5MVrKl9ABUoxjgl3d203tWf8Oya1ycRSS7AUTqgYIvwJr/mM8MvUKOm0VuPiGmjYSibuqT8A=
-X-Received: by 2002:a17:902:848e:b0:1dd:2b9a:a1b6 with SMTP id
- c14-20020a170902848e00b001dd2b9aa1b6mr645244plo.25.1711138605089; Fri, 22 Mar
- 2024 13:16:45 -0700 (PDT)
+        bh=Q9gnaVNFDVZDRSrC0DLgGMFlE7DekOKmyqZJ7sHI2co=;
+        b=p5sDcFPlvq7BPElObfFN+Jj/S9T2N0kUHvfu8iDWhQiTYPBln6ORa8sare0iHz6inY
+         RZHBkpcuB3VH08bbsfcsW2K3eH0IGEeJUYIj6E8aQ5ZxjalAdW3k0DbIjSr6FmQFSTen
+         n+rXo4dN2VTW/rqIRipHNN0CSzvLm9kBHgBXTr3n3W99JrLvFT1b5lmXV8y+EDmKvaty
+         htFM+LnwXZCSXmyD7jMv+sX2c1hmED14YOA2vyECkmVjskT6/l4eFrYTEnvLSmeFP90e
+         3/K12k+4fU4r6rThEBOtdV+Pa89ggpMO1FwaBm270AZiHjeSTJ1QxsauGXwebAzOLgfF
+         LgNA==
+X-Forwarded-Encrypted: i=1; AJvYcCWu//ZUC+Hmdc71caU9EEy0w1N4S1/KQJpME9j4iFjZdEL9iL1zCw2G1ajB5M56yv123p7JdFVyY9w5O+rhVFgITB5vEcthr22WpynTqKd1dUfs96Ask9SkIdyzrPyQnhEBNjm6nHg5HLBBehJe27i12hthZC9sOlhjJ6PvKgv+aJHTGQ==
+X-Gm-Message-State: AOJu0YycEbyIkDGKwCvF1JSAHAxBk9PcIzjHKtAdK+MzMph2QxXTwjHq
+	LJV9QAAm4xH3Z1kZN8//rEdwUeWYyCanxoSLeskBPBRrXkyl4ZaH58v0fDcNVeXNvfnM8GGm0En
+	cBFQ5avkrVmI5/r+twAJ6pi6s1Lp63p6D
+X-Google-Smtp-Source: AGHT+IFoph8NtOyo10DOY20bEJdCJLR3/QAedtk0J/jlEWnFy1JbKX904DayeRJEnuy0NcidZ6MuhuKO4vu5LlYgEFs=
+X-Received: by 2002:a05:6a20:4a23:b0:1a3:6194:aa2b with SMTP id
+ fr35-20020a056a204a2300b001a36194aa2bmr604674pzb.23.1711140201879; Fri, 22
+ Mar 2024 13:43:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240319175401.2940148-1-yonghong.song@linux.dev>
- <20240319175406.2940628-1-yonghong.song@linux.dev> <CAEf4BzZxD3xQ_3x_576OuvM2pueki=h19b1eyX5i1cqZtWNA4g@mail.gmail.com>
- <7d6eba04-d70d-4467-9c65-065774b29012@linux.dev>
-In-Reply-To: <7d6eba04-d70d-4467-9c65-065774b29012@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 22 Mar 2024 13:16:33 -0700
-Message-ID: <CAEf4BzbEAKFiuxrMj2qRgQvyUQBeOWLMOqgibO7s9s9Bc3FVqw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/6] bpf: Add bpf_link support for sk_msg and
- sk_skb progs
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com, 
-	Martin KaFai Lau <martin.lau@kernel.org>
+References: <20240321160300.1635121-1-irogers@google.com> <20240321160300.1635121-5-irogers@google.com>
+In-Reply-To: <20240321160300.1635121-5-irogers@google.com>
+From: Namhyung Kim <namhyung@kernel.org>
+Date: Fri, 22 Mar 2024 13:43:10 -0700
+Message-ID: <CAM9d7ciUwKrHsk3GencSDCRDEP0oUX6H99-uRmL=zf4gCgtdHQ@mail.gmail.com>
+Subject: Re: [PATCH v2 04/13] perf dsos: Add dsos__for_each_dso
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@arm.com>, 
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Colin Ian King <colin.i.king@gmail.com>, 
+	=?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= <nabijaczleweli@nabijaczleweli.xyz>, 
+	Leo Yan <leo.yan@linux.dev>, Song Liu <song@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Liam Howlett <liam.howlett@oracle.com>, Ilkka Koskinen <ilkka@os.amperecomputing.com>, 
+	Ben Gainey <ben.gainey@arm.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, Yanteng Si <siyanteng@loongson.cn>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, Sun Haiyong <sunhaiyong@loongson.cn>, 
+	Changbin Du <changbin.du@huawei.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	zhaimingbing <zhaimingbing@cmss.chinamobile.com>, Paran Lee <p4ranlee@gmail.com>, 
+	Li Dong <lidong@vivo.com>, elfring@users.sourceforge.net, 
+	Andi Kleen <ak@linux.intel.com>, Markus Elfring <Markus.Elfring@web.de>, 
+	Chengen Du <chengen.du@canonical.com>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 22, 2024 at 12:18=E2=80=AFPM Yonghong Song <yonghong.song@linux=
-.dev> wrote:
->
->
-> On 3/22/24 11:45 AM, Andrii Nakryiko wrote:
-> > On Tue, Mar 19, 2024 at 10:54=E2=80=AFAM Yonghong Song <yonghong.song@l=
-inux.dev> wrote:
-> >> Add bpf_link support for sk_msg and sk_skb programs. We have an
-> >> internal request to support bpf_link for sk_msg programs so user
-> >> space can have a uniform handling with bpf_link based libbpf
-> >> APIs. Using bpf_link based libbpf API also has a benefit which
-> >> makes system robust by decoupling prog life cycle and
-> >> attachment life cycle.
-> >>
-> >> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> >> ---
-> >>   include/linux/bpf.h            |  13 +++
-> >>   include/uapi/linux/bpf.h       |  10 ++
-> >>   kernel/bpf/syscall.c           |   4 +
-> >>   net/core/skmsg.c               | 164 +++++++++++++++++++++++++++++++=
-++
-> >>   net/core/sock_map.c            |   6 +-
-> >>   tools/include/uapi/linux/bpf.h |  10 ++
-> >>   6 files changed, 203 insertions(+), 4 deletions(-)
-> >>
-> > [...]
-> >
-> >> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> >> index 3c42b9f1bada..c5506cfca4f8 100644
-> >> --- a/include/uapi/linux/bpf.h
-> >> +++ b/include/uapi/linux/bpf.h
-> >> @@ -1135,6 +1135,8 @@ enum bpf_link_type {
-> >>          BPF_LINK_TYPE_TCX =3D 11,
-> >>          BPF_LINK_TYPE_UPROBE_MULTI =3D 12,
-> >>          BPF_LINK_TYPE_NETKIT =3D 13,
-> >> +       BPF_LINK_TYPE_SK_MSG =3D 14,
-> >> +       BPF_LINK_TYPE_SK_SKB =3D 15,
-> > they are both "sockmap attachments", so maybe we should just have
-> > something like BPF_LINK_TYPE_SOCKMAP ?
->
-> Yes, we could do this. Basically it represents all programs
-> which can be attached to sockmap.
->
-> >
-> >>          __MAX_BPF_LINK_TYPE,
-> >>   };
-> >>
-> >> @@ -6718,6 +6720,14 @@ struct bpf_link_info {
-> >>                          __u32 ifindex;
-> >>                          __u32 attach_type;
-> >>                  } netkit;
-> >> +               struct {
-> >> +                       __u32 map_id;
-> >> +                       __u32 attach_type;
-> >> +               } skmsg;
-> >> +               struct {
-> >> +                       __u32 map_id;
-> >> +                       __u32 attach_type;
-> >> +               } skskb;
-> > and then this would be also just one struct, instead of two identical
-> > ones duplicated
->
-> Right, we could do one with name 'sockmap'.
->
-> >
-> >>          };
-> >>   } __attribute__((aligned(8)));
-> >>
-> >> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> >> index ae2ff73bde7e..3d13eec5a30d 100644
-> >> --- a/kernel/bpf/syscall.c
-> >> +++ b/kernel/bpf/syscall.c
-> >> @@ -5213,6 +5213,10 @@ static int link_create(union bpf_attr *attr, bp=
-fptr_t uattr)
-> >>          case BPF_PROG_TYPE_SK_LOOKUP:
-> >>                  ret =3D netns_bpf_link_create(attr, prog);
-> >>                  break;
-> >> +       case BPF_PROG_TYPE_SK_MSG:
-> >> +       case BPF_PROG_TYPE_SK_SKB:
-> >> +               ret =3D bpf_sk_msg_skb_link_create(attr, prog);
-> >> +               break;
-> >>   #ifdef CONFIG_NET
-> >>          case BPF_PROG_TYPE_XDP:
-> >>                  ret =3D bpf_xdp_link_attach(attr, prog);
-> >> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> >> index 4d75ef9d24bf..1aa900ad54d7 100644
-> >> --- a/net/core/skmsg.c
-> >> +++ b/net/core/skmsg.c
-> >> @@ -1256,3 +1256,167 @@ void sk_psock_stop_verdict(struct sock *sk, st=
-ruct sk_psock *psock)
-> >>          sk->sk_data_ready =3D psock->saved_data_ready;
-> >>          psock->saved_data_ready =3D NULL;
-> >>   }
-> >> +
-> >> +struct bpf_sk_msg_skb_link {
-> >> +       struct bpf_link link;
-> >> +       struct bpf_map *map;
-> >> +       enum bpf_attach_type attach_type;
-> >> +};
-> >> +
-> >> +static DEFINE_MUTEX(link_mutex);
-> > maybe more specific name, sockmap_link_mutex? link_mutex sounds very ge=
-neric
->
-> Good idea.
->
-> >
-> >> +
-> >> +static struct bpf_sk_msg_skb_link *bpf_sk_msg_skb_link(const struct b=
-pf_link *link)
-> >> +{
-> >> +       return container_of(link, struct bpf_sk_msg_skb_link, link);
-> >> +}
-> >> +
-> > [...]
-> >
-> >> +       attach_type =3D attr->link_create.attach_type;
-> >> +       bpf_link_init(&sk_link->link, link_type, &bpf_sk_msg_skb_link_=
-ops, prog);
-> >> +       sk_link->map =3D map;
-> >> +       sk_link->attach_type =3D attach_type;
-> >> +
-> >> +       ret =3D bpf_link_prime(&sk_link->link, &link_primer);
-> >> +       if (ret) {
-> >> +               kfree(sk_link);
-> >> +               goto out;
-> >> +       }
-> >> +
-> >> +       ret =3D sock_map_prog_update(map, prog, NULL, attach_type);
-> > Does anything prevent someone else do to remove this program from
-> > user-space, bypassing the link? It's a guarantee of a link that
-> > attachment won't be tampered with (except for SYS_ADMIN-only
-> > force-detachment, which is a completely separate thing).
-> >
-> > It feels like there should be some sort of protection for programs
-> > attached through sockmap link here. Just like we have this for XDP,
-> > for example, or any of cgroup BPF programs attached through BPF link.
->
-> Good point. I have a 'bpf_prog_inc(prog)' below, I could do a refcount in=
-crease
-> before sock_map_prog_update(), we then should be okay.
->
+Hi Ian,
 
-My point was that once you attach a program to sockmap with
-LINK_CREATE, someone else just doing bpf_prog_attac() shouldn't
-replace this program anymore. BPF link preserves *attachment
-lifetime*, not just the program lifetime.
+On Thu, Mar 21, 2024 at 9:03=E2=80=AFAM Ian Rogers <irogers@google.com> wro=
+te:
+>
+> To better abstract the dsos internals, add dsos__for_each_dso that
+> does a callback on each dso. This also means the read lock can be
+> correctly held.
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/builtin-inject.c | 25 +++++++-----
+>  tools/perf/util/build-id.c  | 76 ++++++++++++++++++++-----------------
+>  tools/perf/util/dsos.c      | 16 ++++++++
+>  tools/perf/util/dsos.h      |  8 +---
+>  tools/perf/util/machine.c   | 40 +++++++++++--------
+>  5 files changed, 100 insertions(+), 65 deletions(-)
+>
+> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+> index ef73317e6ae7..ce5e28eaad90 100644
+> --- a/tools/perf/builtin-inject.c
+> +++ b/tools/perf/builtin-inject.c
+> @@ -1187,23 +1187,28 @@ static int synthesize_build_id(struct perf_inject=
+ *inject, struct dso *dso, pid_
+>                                                process_build_id, machine)=
+;
+>  }
+>
+> +static int guest_session__add_build_ids_cb(struct dso *dso, void *data)
+> +{
+> +       struct guest_session *gs =3D data;
+> +       struct perf_inject *inject =3D container_of(gs, struct perf_injec=
+t, guest_session);
+> +
+> +       if (!dso->has_build_id)
+> +               return 0;
+> +
+> +       return synthesize_build_id(inject, dso, gs->machine_pid);
+> +
 
-> >
-> >> +       if (ret) {
-> >> +               bpf_link_cleanup(&link_primer);
-> >> +               goto out;
-> >> +       }
-> >> +
-> >> +       bpf_prog_inc(prog);
-> >> +
-> >> +       return bpf_link_settle(&link_primer);
-> >> +
-> >> +out:
-> >> +       bpf_map_put_with_uref(map);
-> >> +       return ret;
-> >> +}
-> > [...]
+An unnecessary newline.
+
+> +}
+> +
+>  static int guest_session__add_build_ids(struct guest_session *gs)
+>  {
+>         struct perf_inject *inject =3D container_of(gs, struct perf_injec=
+t, guest_session);
+> -       struct machine *machine =3D &gs->session->machines.host;
+> -       struct dso *dso;
+> -       int ret;
+>
+>         /* Build IDs will be put in the Build ID feature section */
+>         perf_header__set_feat(&inject->session->header, HEADER_BUILD_ID);
+>
+> -       dsos__for_each_with_build_id(dso, &machine->dsos.head) {
+> -               ret =3D synthesize_build_id(inject, dso, gs->machine_pid)=
+;
+> -               if (ret)
+> -                       return ret;
+> -       }
+> -
+> -       return 0;
+> +       return dsos__for_each_dso(&gs->session->machines.host.dsos,
+> +                                 guest_session__add_build_ids_cb,
+> +                                 gs);
+>  }
+>
+>  static int guest_session__ksymbol_event(struct perf_tool *tool,
+> diff --git a/tools/perf/util/build-id.c b/tools/perf/util/build-id.c
+> index a617b1917e6b..a6d3c253f19f 100644
+> --- a/tools/perf/util/build-id.c
+> +++ b/tools/perf/util/build-id.c
+> @@ -327,48 +327,56 @@ static int write_buildid(const char *name, size_t n=
+ame_len, struct build_id *bid
+>         return write_padded(fd, name, name_len + 1, len);
+>  }
+>
+> -static int machine__write_buildid_table(struct machine *machine,
+> -                                       struct feat_fd *fd)
+> +struct machine__write_buildid_table_cb_args {
+> +       struct machine *machine;
+> +       struct feat_fd *fd;
+> +       u16 kmisc, umisc;
+> +};
+> +
+> +static int machine__write_buildid_table_cb(struct dso *dso, void *data)
+>  {
+> -       int err =3D 0;
+> -       struct dso *pos;
+> -       u16 kmisc =3D PERF_RECORD_MISC_KERNEL,
+> -           umisc =3D PERF_RECORD_MISC_USER;
+> +       struct machine__write_buildid_table_cb_args *args =3D data;
+> +       const char *name;
+> +       size_t name_len;
+> +       bool in_kernel =3D false;
+>
+> -       if (!machine__is_host(machine)) {
+> -               kmisc =3D PERF_RECORD_MISC_GUEST_KERNEL;
+> -               umisc =3D PERF_RECORD_MISC_GUEST_USER;
+> -       }
+> +       if (!dso->has_build_id)
+> +               return 0;
+>
+> -       dsos__for_each_with_build_id(pos, &machine->dsos.head) {
+> -               const char *name;
+> -               size_t name_len;
+> -               bool in_kernel =3D false;
+> +       if (!dso->hit && !dso__is_vdso(dso))
+> +               return 0;
+>
+> -               if (!pos->hit && !dso__is_vdso(pos))
+> -                       continue;
+> +       if (dso__is_vdso(dso)) {
+> +               name =3D dso->short_name;
+> +               name_len =3D dso->short_name_len;
+> +       } else if (dso__is_kcore(dso)) {
+> +               name =3D args->machine->mmap_name;
+> +               name_len =3D strlen(name);
+> +       } else {
+> +               name =3D dso->long_name;
+> +               name_len =3D dso->long_name_len;
+> +       }
+>
+> -               if (dso__is_vdso(pos)) {
+> -                       name =3D pos->short_name;
+> -                       name_len =3D pos->short_name_len;
+> -               } else if (dso__is_kcore(pos)) {
+> -                       name =3D machine->mmap_name;
+> -                       name_len =3D strlen(name);
+> -               } else {
+> -                       name =3D pos->long_name;
+> -                       name_len =3D pos->long_name_len;
+> -               }
+> +       in_kernel =3D dso->kernel || is_kernel_module(name, PERF_RECORD_M=
+ISC_CPUMODE_UNKNOWN);
+> +       return write_buildid(name, name_len, &dso->bid, args->machine->pi=
+d,
+> +                            in_kernel ? args->kmisc : args->umisc, args-=
+>fd);
+> +}
+>
+> -               in_kernel =3D pos->kernel ||
+> -                               is_kernel_module(name,
+> -                                       PERF_RECORD_MISC_CPUMODE_UNKNOWN)=
+;
+> -               err =3D write_buildid(name, name_len, &pos->bid, machine-=
+>pid,
+> -                                   in_kernel ? kmisc : umisc, fd);
+> -               if (err)
+> -                       break;
+> +static int machine__write_buildid_table(struct machine *machine, struct =
+feat_fd *fd)
+> +{
+> +       struct machine__write_buildid_table_cb_args args =3D {
+> +               .machine =3D machine,
+> +               .fd =3D fd,
+> +               .kmisc =3D PERF_RECORD_MISC_KERNEL,
+> +               .umisc =3D PERF_RECORD_MISC_USER,
+> +       };
+> +
+> +       if (!machine__is_host(machine)) {
+> +               args.kmisc =3D PERF_RECORD_MISC_GUEST_KERNEL;
+> +               args.umisc =3D PERF_RECORD_MISC_GUEST_USER;
+>         }
+>
+> -       return err;
+> +       return dsos__for_each_dso(&machine->dsos, machine__write_buildid_=
+table_cb, &args);
+>  }
+>
+>  int perf_session__write_buildid_table(struct perf_session *session,
+> diff --git a/tools/perf/util/dsos.c b/tools/perf/util/dsos.c
+> index d269e09005a7..d43f64939b12 100644
+> --- a/tools/perf/util/dsos.c
+> +++ b/tools/perf/util/dsos.c
+> @@ -433,3 +433,19 @@ struct dso *dsos__find_kernel_dso(struct dsos *dsos)
+>         up_read(&dsos->lock);
+>         return res;
+>  }
+> +
+> +int dsos__for_each_dso(struct dsos *dsos, int (*cb)(struct dso *dso, voi=
+d *data), void *data)
+> +{
+> +       struct dso *dso;
+> +
+> +       down_read(&dsos->lock);
+> +       list_for_each_entry(dso, &dsos->head, node) {
+> +               int err;
+> +
+> +               err =3D cb(dso, data);
+> +               if (err)
+> +                       return err;
+
+Please break and return the error to release the lock.
+
+Thanks,
+Namhyung
+
+
+> +       }
+> +       up_read(&dsos->lock);
+> +       return 0;
+> +}
+> diff --git a/tools/perf/util/dsos.h b/tools/perf/util/dsos.h
+> index a7c7f723c5ff..317a263f0e37 100644
+> --- a/tools/perf/util/dsos.h
+> +++ b/tools/perf/util/dsos.h
+> @@ -23,12 +23,6 @@ struct dsos {
+>         struct rw_semaphore lock;
+>  };
+>
+> -#define dsos__for_each_with_build_id(pos, head)        \
+> -       list_for_each_entry(pos, head, node)    \
+> -               if (!pos->has_build_id)         \
+> -                       continue;               \
+> -               else
+> -
+>  void dsos__init(struct dsos *dsos);
+>  void dsos__exit(struct dsos *dsos);
+>
+> @@ -55,4 +49,6 @@ struct dso *dsos__findnew_module_dso(struct dsos *dsos,=
+ struct machine *machine,
+>
+>  struct dso *dsos__find_kernel_dso(struct dsos *dsos);
+>
+> +int dsos__for_each_dso(struct dsos *dsos, int (*cb)(struct dso *dso, voi=
+d *data), void *data);
+> +
+>  #endif /* __PERF_DSOS */
+> diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+> index a06b030fba54..bd153bc2c8da 100644
+> --- a/tools/perf/util/machine.c
+> +++ b/tools/perf/util/machine.c
+> @@ -1562,16 +1562,14 @@ int machine__create_kernel_maps(struct machine *m=
+achine)
+>         return ret;
+>  }
+>
+> -static bool machine__uses_kcore(struct machine *machine)
+> +static int machine__uses_kcore_cb(struct dso *dso, void *data __maybe_un=
+used)
+>  {
+> -       struct dso *dso;
+> -
+> -       list_for_each_entry(dso, &machine->dsos.head, node) {
+> -               if (dso__is_kcore(dso))
+> -                       return true;
+> -       }
+> +       return dso__is_kcore(dso) ? 1 : 0;
+> +}
+>
+> -       return false;
+> +static bool machine__uses_kcore(struct machine *machine)
+> +{
+> +       return dsos__for_each_dso(&machine->dsos, machine__uses_kcore_cb,=
+ NULL) !=3D 0 ? true : false;
+>  }
+>
+>  static bool perf_event__is_extra_kernel_mmap(struct machine *machine,
+> @@ -3137,16 +3135,28 @@ char *machine__resolve_kernel_addr(void *vmachine=
+, unsigned long long *addrp, ch
+>         return sym->name;
+>  }
+>
+> +struct machine__for_each_dso_cb_args {
+> +       struct machine *machine;
+> +       machine__dso_t fn;
+> +       void *priv;
+> +};
+> +
+> +static int machine__for_each_dso_cb(struct dso *dso, void *data)
+> +{
+> +       struct machine__for_each_dso_cb_args *args =3D data;
+> +
+> +       return args->fn(dso, args->machine, args->priv);
+> +}
+> +
+>  int machine__for_each_dso(struct machine *machine, machine__dso_t fn, vo=
+id *priv)
+>  {
+> -       struct dso *pos;
+> -       int err =3D 0;
+> +       struct machine__for_each_dso_cb_args args =3D {
+> +               .machine =3D machine,
+> +               .fn =3D fn,
+> +               .priv =3D priv,
+> +       };
+>
+> -       list_for_each_entry(pos, &machine->dsos.head, node) {
+> -               if (fn(pos, machine, priv))
+> -                       err =3D -1;
+> -       }
+> -       return err;
+> +       return dsos__for_each_dso(&machine->dsos, machine__for_each_dso_c=
+b, &args);
+>  }
+>
+>  int machine__for_each_kernel_map(struct machine *machine, machine__map_t=
+ fn, void *priv)
+> --
+> 2.44.0.396.g6e790dbe36-goog
+>
