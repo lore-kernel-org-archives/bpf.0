@@ -1,67 +1,66 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DE086E5EA
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 18:46:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C283C73527
+	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 18:53:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711133166; cv=none; b=Hwdjkjb1gAL99xl4hbBn8/FIz7rAnUE7X7HOStozurB1H+CO6rrWlN0cZL+Z7fEIBP2E85e4eUjldEiLGTC6WhuRwWWQGTpoSiiqidvXFLgudDeObIWTA65i4S3092Dse/ezzSyIfeTkECLCSWxXJSvt8T4UQhWq+Kr+JYYX6OE=
+	t=1711133583; cv=none; b=jYhmLA9PIdlaZgld2tNCtX3q8BGquq3x0xdJ21IFDlZPDf+JJLJHm4juj8MWdI0pu0oMgNFS/+visjxi9SwaAu9JW06Rrp3tSZeZpfv3AFBk3C7YH6YvYVpVpY0lqyZPjfmLCVK8AmW6DxCzqjkEtpI+X8qig5nMrBQQMJ1lJOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711133166; c=relaxed/simple;
-	bh=/exSn3RmNiATv3lWquAMM3fsJs7ZbpcPfqWBIpHN3Ek=;
+	s=arc-20240116; t=1711133583; c=relaxed/simple;
+	bh=9sDutrQpAlcB2a/9Cf2yDfINkIs5tFKJc3tg4Z5NBaI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jcAHFVtIm0PbYqcWWrKd1Bz6ey64hqjc3sGV7rCY7ScJqZwaaIe93PqljAYqxSvPA4HQgQXj35k0SWYVZgEYxuCbNnJnSie/ewffr38mbMZ4iip25PlVrI1yKbOJBuI/9k2wN3eqGkVM6TG03Co9+8tHwVD7A6SOe/Nybs/UQ50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VQFvebZA; arc=none smtp.client-ip=209.85.210.182
+	 To:Cc:Content-Type; b=g6QD+xrEuJ4J+vXGpZ3Wm38by8DRbH1qEEqYlbNdsMf+daJxAoOpJWaX5OhOSpbvnliDz2vTLpBHTHDawqLsfeH7G1+9icCGcxvSy7q1QxgqZBr+6O6saWr0u5GvBqvbK4UwF7GsQ7gn3pukaU8ekFDfrR61Uu8dx4GAl8f6lvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g1fu3Re0; arc=none smtp.client-ip=209.85.219.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VQFvebZA"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6e703e0e5deso1738483b3a.3
-        for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 11:46:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g1fu3Re0"
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dcd7c526cc0so2607073276.1
+        for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 11:53:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711133164; x=1711737964; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711133581; x=1711738381; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=z8WVsTYSme/27zDfzG+gIH200rCx1cHuJJATWUVIbes=;
-        b=VQFvebZAPFDKCPTDxzxVbizu6EP6HIy5j9oAhP0CKZo/0orAyijDiieCg4cBHyyz84
-         P6/JPWJpclU1EKbunYNZPSJcBvTOOhhbTJL347tjzp4/EX/VVULEF0M4n1IfZKENg0u3
-         peGsgR4DQbxUu0hHSEtl7COKsnoG7v/yyqxd6FtqT88pNflxnHEg8Ii8wQENSA0RRhR9
-         rQ0ro5RmxZosCpWW3hie4kRMTkWpAooZeqfaHaQNqOuOYKSPkX/YR2dp8DgQ0jVzDGdv
-         zQitdeG8ZtOrsAYtxMhRmJ6BH5zc+fONCnWFU2RdXpPJN/hDdZjykNuTrr8W1ZwMLDct
-         bzaA==
+        bh=EWpsr2dcqIpPgApuZ3dFqSQ4BkljSuKYYTb/9PY3ksQ=;
+        b=g1fu3Re0aZYbPwpBtbn8xj8d3t5CUXtWwQk6jZj8gi4kEAaRpXXg1Lp5PPniuagi4C
+         oi/DaC/6cS8gDRvJS8O5O1B3EnYaZgQukJp5IyUMloLFEn5nPoPKVY8D6GQNF2k+agJr
+         r+zwBB1KXrZC2JJjRocVuH06WJGQEAxdvFzhxmiHTbcWrAVFqptABeo/OAyMstmYVmPC
+         eZL2QME8hNvkkkgu4oxv4XsO5I0QMR7gVJN0cYm5dmIMiL9R8Ea6GbIGC7OdK8ot6hKa
+         ASqwIXhR2BLr/o8eeQ0ehUBo4tFt1PEBwfkIfW2EnVu1vDID2LuPd31osWCFobYbn+/t
+         dCCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711133164; x=1711737964;
+        d=1e100.net; s=20230601; t=1711133581; x=1711738381;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=z8WVsTYSme/27zDfzG+gIH200rCx1cHuJJATWUVIbes=;
-        b=kLR/EzX1TtzpHfHZ3Ng71HIDKu4rq7kCIak1qiA9XPPA34nTTtlEk8+AcoRZAsmF5l
-         hXuv7JeNK1BWAMPXuiO4Z7trLjRuJxux/f5IQGwEod5CNvsS59habRd750M7SuzRNsU2
-         RdNv1G16/VB+uZasFsWS+hHcWvTwVrFIOhm1EZ80XMsU5iXxzVqNajtx55k9cvkr6VMm
-         JMXJfUuw6lvqk/cLN8oUidmwSLniyDHqTFvjP4qn/L1Sw2kdC4z/Dt6HxOV45SkiKaS0
-         h1iecBaR9QGk4u4psRBfsHdFlKQoC1W1G2JSzysnAozTjHv4gnqT2b9n6fd/4vWAt1cl
-         u8iQ==
-X-Gm-Message-State: AOJu0YzYoYCcsnpoGYfJDDfDKc+2+MA+HZ8+ylSGB1b46Ak5qBxr/1Yl
-	A4JqnUjtuQQEmg78Kq88PPcrUhR8jm4DO8jSISIVxp5NOV5ylzM6gaPK+VKhUGyfqfWgYfauTDD
-	UVXIVjhBaQjC18BQgKxRQEffWatJgtPhM
-X-Google-Smtp-Source: AGHT+IELtgpHypoiKIW9DZj+e/cbu3A7ZyYYUkZctAsyivKsaJit5LtQKAv0uICf+QdxqnPU3nWwgT3/8OYY+mI7uYY=
-X-Received: by 2002:a05:6a00:2349:b0:6ea:9223:54e7 with SMTP id
- j9-20020a056a00234900b006ea922354e7mr590749pfj.32.1711133164309; Fri, 22 Mar
- 2024 11:46:04 -0700 (PDT)
+        bh=EWpsr2dcqIpPgApuZ3dFqSQ4BkljSuKYYTb/9PY3ksQ=;
+        b=KbkiZ+PXjFrJW7XezjcKM6ICSlzSka9uy46MLJzzt/z8SH/HpAz1T0rKc61SsyNR8+
+         nSDnaF7jWBQmk9isZ5+I2jXcwmT3UutbR3LYkEtJxUF+tZcfQkq+aNIKvgZsAIVmxIJE
+         B/iqyxZkBzA1zHClOmeRGwDV3NboNJIO9SrhClxHzCwzX5BU/TGy2TOM8GGGrQl2fcli
+         hDUQnYCRtJYde466HC0SV86fhJSJ25Yb9Dh1WhaXIiWfjDSGXMmcymuff85Jao0EnXMt
+         AxnSU0dfNs9jHOkqJclv7HpkbyoLzB+wqtO5NzO3rZU6cYUzr7PbSiTMm6e2SVCM5VL0
+         NjoA==
+X-Gm-Message-State: AOJu0Ywc30PBnI9zvuJ7apSWZnucrQObPH0zGjtiVZGwmHwJg+RMyO1J
+	ipuMjN/EqzriuvlReP5vLPSYwv4xFaKdIY3nWVJK2yxuOVPwx5ecwh639z1B/0IcstXb4dwYzOL
+	x/bD167Fd0HdBVfriddIWWOV0b4v2HsMstW0=
+X-Google-Smtp-Source: AGHT+IERNuXmJnZudeWNLc55nLbvNjLREweGv74rXc56OhwrSvREASikQHvJx8P+QUafEba1je6KMmDj6sa9Rog5T58=
+X-Received: by 2002:a05:6a20:3baf:b0:1a3:2f19:36b with SMTP id
+ b47-20020a056a203baf00b001a32f19036bmr432102pzh.24.1711133260968; Fri, 22 Mar
+ 2024 11:47:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240319175401.2940148-1-yonghong.song@linux.dev> <20240319175406.2940628-1-yonghong.song@linux.dev>
-In-Reply-To: <20240319175406.2940628-1-yonghong.song@linux.dev>
+References: <20240319175401.2940148-1-yonghong.song@linux.dev> <20240319175412.2941149-1-yonghong.song@linux.dev>
+In-Reply-To: <20240319175412.2941149-1-yonghong.song@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 22 Mar 2024 11:45:52 -0700
-Message-ID: <CAEf4BzZxD3xQ_3x_576OuvM2pueki=h19b1eyX5i1cqZtWNA4g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/6] bpf: Add bpf_link support for sk_msg and
- sk_skb progs
+Date: Fri, 22 Mar 2024 11:47:29 -0700
+Message-ID: <CAEf4BzZTc0H=GkOZPNAuvZ17Jz8W+yqkpBW5k5Diee31ejjiLA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/6] libbpf: Add new sec_def "sk_skb/verdict"
 To: Yonghong Song <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
 	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -73,144 +72,45 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Mar 19, 2024 at 10:54=E2=80=AFAM Yonghong Song <yonghong.song@linux=
 .dev> wrote:
 >
-> Add bpf_link support for sk_msg and sk_skb programs. We have an
-> internal request to support bpf_link for sk_msg programs so user
-> space can have a uniform handling with bpf_link based libbpf
-> APIs. Using bpf_link based libbpf API also has a benefit which
-> makes system robust by decoupling prog life cycle and
-> attachment life cycle.
+> The new sec_def specifies sk_skb program type with
+> BPF_SK_SKB_VERDICT attachment type. This way, libbpf
+> will set expected_attach_type properly for the program.
+> This will make it easier for later bpf_link based
+> APIs for sk_skb programs.
 >
 > Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 > ---
->  include/linux/bpf.h            |  13 +++
->  include/uapi/linux/bpf.h       |  10 ++
->  kernel/bpf/syscall.c           |   4 +
->  net/core/skmsg.c               | 164 +++++++++++++++++++++++++++++++++
->  net/core/sock_map.c            |   6 +-
->  tools/include/uapi/linux/bpf.h |  10 ++
->  6 files changed, 203 insertions(+), 4 deletions(-)
+>  tools/lib/bpf/libbpf.c | 1 +
+>  1 file changed, 1 insertion(+)
 >
 
-[...]
+Seems like this was an omission and this program type is already
+supported, right? Should we apply this to libbpf regardless of BPF
+link stuff?
 
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 3c42b9f1bada..c5506cfca4f8 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -1135,6 +1135,8 @@ enum bpf_link_type {
->         BPF_LINK_TYPE_TCX =3D 11,
->         BPF_LINK_TYPE_UPROBE_MULTI =3D 12,
->         BPF_LINK_TYPE_NETKIT =3D 13,
-> +       BPF_LINK_TYPE_SK_MSG =3D 14,
-> +       BPF_LINK_TYPE_SK_SKB =3D 15,
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-they are both "sockmap attachments", so maybe we should just have
-something like BPF_LINK_TYPE_SOCKMAP ?
 
->         __MAX_BPF_LINK_TYPE,
->  };
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 3a756d61c120..7d413415d0d5 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -9312,6 +9312,7 @@ static const struct bpf_sec_def section_defs[] =3D =
+{
+>         SEC_DEF("sockops",              SOCK_OPS, BPF_CGROUP_SOCK_OPS, SE=
+C_ATTACHABLE_OPT),
+>         SEC_DEF("sk_skb/stream_parser", SK_SKB, BPF_SK_SKB_STREAM_PARSER,=
+ SEC_ATTACHABLE_OPT),
+>         SEC_DEF("sk_skb/stream_verdict",SK_SKB, BPF_SK_SKB_STREAM_VERDICT=
+, SEC_ATTACHABLE_OPT),
+> +       SEC_DEF("sk_skb/verdict",       SK_SKB, BPF_SK_SKB_VERDICT, SEC_A=
+TTACHABLE_OPT),
+>         SEC_DEF("sk_skb",               SK_SKB, 0, SEC_NONE),
+>         SEC_DEF("sk_msg",               SK_MSG, BPF_SK_MSG_VERDICT, SEC_A=
+TTACHABLE_OPT),
+>         SEC_DEF("lirc_mode2",           LIRC_MODE2, BPF_LIRC_MODE2, SEC_A=
+TTACHABLE_OPT),
+> --
+> 2.43.0
 >
-> @@ -6718,6 +6720,14 @@ struct bpf_link_info {
->                         __u32 ifindex;
->                         __u32 attach_type;
->                 } netkit;
-> +               struct {
-> +                       __u32 map_id;
-> +                       __u32 attach_type;
-> +               } skmsg;
-> +               struct {
-> +                       __u32 map_id;
-> +                       __u32 attach_type;
-> +               } skskb;
-
-and then this would be also just one struct, instead of two identical
-ones duplicated
-
->         };
->  } __attribute__((aligned(8)));
 >
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index ae2ff73bde7e..3d13eec5a30d 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -5213,6 +5213,10 @@ static int link_create(union bpf_attr *attr, bpfpt=
-r_t uattr)
->         case BPF_PROG_TYPE_SK_LOOKUP:
->                 ret =3D netns_bpf_link_create(attr, prog);
->                 break;
-> +       case BPF_PROG_TYPE_SK_MSG:
-> +       case BPF_PROG_TYPE_SK_SKB:
-> +               ret =3D bpf_sk_msg_skb_link_create(attr, prog);
-> +               break;
->  #ifdef CONFIG_NET
->         case BPF_PROG_TYPE_XDP:
->                 ret =3D bpf_xdp_link_attach(attr, prog);
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index 4d75ef9d24bf..1aa900ad54d7 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -1256,3 +1256,167 @@ void sk_psock_stop_verdict(struct sock *sk, struc=
-t sk_psock *psock)
->         sk->sk_data_ready =3D psock->saved_data_ready;
->         psock->saved_data_ready =3D NULL;
->  }
-> +
-> +struct bpf_sk_msg_skb_link {
-> +       struct bpf_link link;
-> +       struct bpf_map *map;
-> +       enum bpf_attach_type attach_type;
-> +};
-> +
-> +static DEFINE_MUTEX(link_mutex);
-
-maybe more specific name, sockmap_link_mutex? link_mutex sounds very generi=
-c
-
-> +
-> +static struct bpf_sk_msg_skb_link *bpf_sk_msg_skb_link(const struct bpf_=
-link *link)
-> +{
-> +       return container_of(link, struct bpf_sk_msg_skb_link, link);
-> +}
-> +
-
-[...]
-
-> +       attach_type =3D attr->link_create.attach_type;
-> +       bpf_link_init(&sk_link->link, link_type, &bpf_sk_msg_skb_link_ops=
-, prog);
-> +       sk_link->map =3D map;
-> +       sk_link->attach_type =3D attach_type;
-> +
-> +       ret =3D bpf_link_prime(&sk_link->link, &link_primer);
-> +       if (ret) {
-> +               kfree(sk_link);
-> +               goto out;
-> +       }
-> +
-> +       ret =3D sock_map_prog_update(map, prog, NULL, attach_type);
-
-Does anything prevent someone else do to remove this program from
-user-space, bypassing the link? It's a guarantee of a link that
-attachment won't be tampered with (except for SYS_ADMIN-only
-force-detachment, which is a completely separate thing).
-
-It feels like there should be some sort of protection for programs
-attached through sockmap link here. Just like we have this for XDP,
-for example, or any of cgroup BPF programs attached through BPF link.
-
-> +       if (ret) {
-> +               bpf_link_cleanup(&link_primer);
-> +               goto out;
-> +       }
-> +
-> +       bpf_prog_inc(prog);
-> +
-> +       return bpf_link_settle(&link_primer);
-> +
-> +out:
-> +       bpf_map_put_with_uref(map);
-> +       return ret;
-> +}
-
-[...]
