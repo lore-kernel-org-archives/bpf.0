@@ -1,213 +1,201 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AFDD5C8F8
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 16:45:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C0405D47A
+	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 16:48:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711125933; cv=none; b=RwYnWEJmsN5KNZg+v4YcaFOnW7fuLeqsHbIpqMh0vP4ABmFsk+rNHvhlNlQv7OAS91cpy1a1qagiTqvi9a2U/NZcP3bVyaOy3N+R56PId62isQBN+gjGC65qm0QVTmXEMbaNLv0J0eN6QJkHLIGTcTTwiFl6b3UM62jig4Xgegs=
+	t=1711126118; cv=none; b=DT5ea8zKr5M9N2xJIFtCX0OAtZOpALuyAFcK/zCzaf9/acZCfiL2kjVBqaRcEvOcX/ZsvFSvqeRhkFzio5tuyFnvuUTUgsL2hBu0n5HD63LhBsoPMnIV5vzRZov0SivhE6q5cccpMo5gy3nGoce5wnjA51aNUsL1a5uZAKqTK7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711125933; c=relaxed/simple;
-	bh=nMJERKd+wd1OEm5DSo0FfmVFfpFsmSfVQ2z2Dt4FRx4=;
+	s=arc-20240116; t=1711126118; c=relaxed/simple;
+	bh=/Ih6yVL9ehHDID3woCvNF7Q9BSqu2ycgvyoGzQrLjCg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cn7yuPwbLFE5wcG3FPGFVxURnnWClpZe11ziXOPxIG12tXAot0OgenucwsqHQ2R5p0obpHH96O/qfQBJhZPTeBuiiwSIp1jnXxexO8k1LkkwiKlfXP3Zz9oJjsWMyZuBmH2STUxWVlgMP0EIeBll5T+PEoAXdwF2uF5r/CPCHeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A3wyrp0p; arc=none smtp.client-ip=209.85.216.43
+	 To:Cc:Content-Type; b=euvvw4W7/QuwHnhgDS3aYd+by3KVGpatC5G9KsDNSNjqDdCIgxUe0NDmroJrs3ALF7nSUnhYuMUEGvON07bwH06UH+z4Bbc2dcIWBusfzmSUg2zgs4rTNNtyD6uwizf4olWDit1ArnW3fHjy2YWO/+WtCAO+DLnSLpZ7Ph5KXR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=klezkiUO; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A3wyrp0p"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-29a5f100c1aso1414856a91.0
-        for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 09:45:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="klezkiUO"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-29a8911d11cso1404323a91.1
+        for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 09:48:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711125930; x=1711730730; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711126116; x=1711730916; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Xg09QVoUZKnhKRdG2DTQiLc8j1k9EWvo6w+HSH0CWy0=;
-        b=A3wyrp0pW2g+7Szx2V2fzS2dx7W+Bvj5pwBH5Fm5T/x0d3u1GsKvEADFEoj4wcQwjU
-         AWEz2zm4n76vLfG7LEHY4cTJ67zqXC9n/rNWdDj2IxhhW4yltdheskqurj4VXUSbwSFN
-         Cadv3rWgHUSCCppCIcsXf62XzEheSRyuVt0WX2my0ZkXKvop9fWFRk2mWIPGtukMQ5ZN
-         krBcPNUBvoc//TAya14t0OHmP3D0jyqt2R9wrS1D1mTvqe+eaRNHz5ZFkxj4AXh3pHtJ
-         eFZkyv+xG5Ma7b8/g8U57EaJHUYRMw187I95vzGpFwEej8o0xuZq2HWYZ1ajnUheAFe6
-         jRYw==
+        bh=JFv1ywsJD7mju6Dq1Uo8ptwyWuUry6U+nzXNSZW6ayE=;
+        b=klezkiUOnZQqpkV1K6gW5/+ManCRGqjs2i4hal30zJ5D9oL5fUZGh08pwgdA/42ctR
+         kqymcVUY9Co90Bjs+iKqyVnNjEoCbzMJ0owZ6eGBorTKMikSC17lE0ttKE5Id4+inqD3
+         JQmSFjVA33qK/cgP8YljHW1hTGSUOxYe5Yf8ktx0fSpih0csm0FootpRl7XqxRuM9jAh
+         +gNcQfRNw0d6G/PtdZYnIA6II6/CdoYcOLiYpEDVWpVHSFb1pgGVlSUUwdKNaMdHR2UN
+         5UFFQeiNB7a9vu9n2ux2gKY/zDa5xZtI9U84RErhWh1zWCZeanJWSzGcFUlwGY0xuEon
+         0I3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711125930; x=1711730730;
+        d=1e100.net; s=20230601; t=1711126116; x=1711730916;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Xg09QVoUZKnhKRdG2DTQiLc8j1k9EWvo6w+HSH0CWy0=;
-        b=QKVHOr441g/fplOqW1N8GNTrscLSOyA9gERhl0K3o15R1pQrUu6ldt3znSgcf0yZoO
-         BsQm6m9dllV0uz+e45LbT/kjn5yFh25QiKmSsIM5vL4BGXXShGXzmR13jVY4y08kDElZ
-         1JROhOzTUb/4EMYaAI+fczCiyUaN0PAqJ0jAqagCjpLwcOerYkrAxV5AS/2AKB0Er+cF
-         tycFNhOOECHD+ABIPlTWWiALq6xhgGj2lrPDmr7E2Ny6YZJ9SOnPcV0yuMvMK8ussbj/
-         3tdqrqk7KzBU6FzwhnTwvN4eOenYNvTQdDZT66Wah7X/+EGCrvVxG9NbP5hYDgKRD9oE
-         LvJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXRkq85yqeTTu1bz10eg5U71tJwkKtyp/oeMJpDDKRNmNiM4l4AZama8LOzOl+LxCZ6Sc/FQYkaQqg4AyCR6A21tDdt
-X-Gm-Message-State: AOJu0YwZkvBlsiH9gaWGk8L6trRCa/dV755jvQhVdQdyBR1c0rm2NNiX
-	yi70N4wwPWmXQKeOZZWLCud9510/ubsqUo1l2KosfssFLlQVysL3F4w4wf+cV4aOibYRJnxbdGr
-	/wp16VyVS65kC/g6x8Nm2tVqUkeD3pMVC
-X-Google-Smtp-Source: AGHT+IGu6etZNHQ141yA4P3rpMyJ+xALNZOijOfXY4GRTdDfM/rxg+cAfTzDxwQtg0Z8Wk5nXDfAIpH3t+LzqrS7R/E=
-X-Received: by 2002:a17:90a:ce09:b0:299:3f5d:b5e8 with SMTP id
- f9-20020a17090ace0900b002993f5db5e8mr189095pju.20.1711125930295; Fri, 22 Mar
- 2024 09:45:30 -0700 (PDT)
+        bh=JFv1ywsJD7mju6Dq1Uo8ptwyWuUry6U+nzXNSZW6ayE=;
+        b=iT0s7xOGODHR3jRsMHWBVMisRPMTkdL9W+OSpllfdN+r9C45ZA8zahYcmKuHzYIEAq
+         kWNtqQqifaBcoRlRf5tgqpxfzvB5sopfqpdedJYAujUfcN+eGDMmTxUfncgboql0VE82
+         WTCttEfmcYfA3/nlOUD6HrsFzkPTEu0xc121cvUseWUHjgp5Ns2KQx+W8tK0WhdrNDOY
+         fmot50CNyYz0G8BreF33HBEkB1Fmkok1qNdmZABka/XWUuRCZL9u3eJfiOjEJa5pkLuG
+         oCOG+40lN68vgp0s5MxaVE0K57jaF6U/d2sk8vdLYCSS3ClL1F2NGRNMvk/E3zhBodeR
+         9+0g==
+X-Gm-Message-State: AOJu0YxVvW1p01BptF0yDWcAUcxihCv1Tdw/z3EJ15AEbiED/u59rxhT
+	2mgjxTIcddgUZaRF6ITffVdQ/uTqrnrDd/bz3LBhR8/xrJbAQVM7Q2SnNBEkPVzZKnVFHJAhIj4
+	Getj52//GjVp/C3H9y8zt2kgGZF0=
+X-Google-Smtp-Source: AGHT+IHkmOIjP4r/cBjJ+9VY/sqqH2r4Yxd8IY/8Vbb1x5xiu9yV5xlrbx7pkpqtVyOT7o+9aQmcWBDI2zlX6+KoFMo=
+X-Received: by 2002:a17:90a:8046:b0:29c:289b:1eb3 with SMTP id
+ e6-20020a17090a804600b0029c289b1eb3mr224627pjw.6.1711126116306; Fri, 22 Mar
+ 2024 09:48:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240321180501.734779-1-andrii@kernel.org> <CAADnVQJqnLnv4AUvCaefP13CDcJOXM=kJpSOv33t-u-OTzb0UQ@mail.gmail.com>
-In-Reply-To: <CAADnVQJqnLnv4AUvCaefP13CDcJOXM=kJpSOv33t-u-OTzb0UQ@mail.gmail.com>
+References: <20240321200058.2218328-1-yonghong.song@linux.dev>
+ <20240321200103.2218888-1-yonghong.song@linux.dev> <CAEf4BzZnaWjyUBonL=YBFS+9z7E_FBcJAwEaYuDGGrA-Z6zZ0Q@mail.gmail.com>
+ <b5d76a69-0ca3-4900-980f-2c9c32988f8e@linux.dev>
+In-Reply-To: <b5d76a69-0ca3-4900-980f-2c9c32988f8e@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 22 Mar 2024 09:45:18 -0700
-Message-ID: <CAEf4BzYFc1b-OAXWf4WN_vM2evZgsW7reJqo8iwKP80EXBJMKw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/3] Inline two LBR-related helpers
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Song Liu <song@kernel.org>
+Date: Fri, 22 Mar 2024 09:48:24 -0700
+Message-ID: <CAEf4Bza_geEAGWC1huvT37OcWs18K_pDf+mKDjY=gkrdNuFqHw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/5] selftests/bpf: Replace CHECK with ASSERT
+ macros for ksyms test
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com, 
+	Martin KaFai Lau <martin.lau@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 21, 2024 at 4:46=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Fri, Mar 22, 2024 at 9:41=E2=80=AFAM Yonghong Song <yonghong.song@linux.=
+dev> wrote:
 >
-> On Thu, Mar 21, 2024 at 11:05=E2=80=AFAM Andrii Nakryiko <andrii@kernel.o=
-rg> wrote:
-> >
-> >
-> > There are still ways to reduce number of "wasted" records further, this=
- is
-> > a problem that requires many small and rather independent steps.
 >
-> I feel this is a wrong path to follow.
-> I think it would be better to introduce a flag for kprobe/fentry
-> to do perf_snapshot_branch_stack() as early as possible
-> and then bpf prog can copy these 16 or 32 8-byte entries at
-> its leasure.
+> On 3/22/24 9:13 AM, Andrii Nakryiko wrote:
+> > On Thu, Mar 21, 2024 at 1:01=E2=80=AFPM Yonghong Song <yonghong.song@li=
+nux.dev> wrote:
+> >> I am going to modify ksyms test later so take this opportunity
+> >> to replace old CHECK macros with new ASSERT macros.
+> >> No functionality change.
+> >>
+> >> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> >> ---
+> >>   .../testing/selftests/bpf/prog_tests/ksyms.c  | 30 ++++++-----------=
+--
+> >>   1 file changed, 9 insertions(+), 21 deletions(-)
+> >>
+> >> diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms.c b/tools/te=
+sting/selftests/bpf/prog_tests/ksyms.c
+> >> index b295969b263b..6a86d1f07800 100644
+> >> --- a/tools/testing/selftests/bpf/prog_tests/ksyms.c
+> >> +++ b/tools/testing/selftests/bpf/prog_tests/ksyms.c
+> >> @@ -5,8 +5,6 @@
+> >>   #include "test_ksyms.skel.h"
+> >>   #include <sys/stat.h>
+> >>
+> >> -static int duration;
+> >> -
+> >>   void test_ksyms(void)
+> >>   {
+> >>          const char *btf_path =3D "/sys/kernel/btf/vmlinux";
+> >> @@ -18,43 +16,33 @@ void test_ksyms(void)
+> >>          int err;
+> >>
+> >>          err =3D kallsyms_find("bpf_link_fops", &link_fops_addr);
+> >> -       if (CHECK(err =3D=3D -EINVAL, "kallsyms_fopen", "failed to ope=
+n: %d\n", errno))
+> >> -               return;
+> >> -       if (CHECK(err =3D=3D -ENOENT, "ksym_find", "symbol 'bpf_link_f=
+ops' not found\n"))
+> >> +       if (!ASSERT_TRUE(err !=3D -EINVAL && err !=3D -ENOENT, "bpf_li=
+nk_fops"))
+> >>                  return;
+> > it's best to keep each individual equality test as ASSERT_EQ(), that
+> > way we get more specific and detailed error (with expected vs actual
+> > value), which here we'll just get "wanted true but got false", and
+> > then we'd have to debug some more which of the conditions it is. So
+> > please keep the original granularity of checks everywhere.
+>
+> Do you mean
+>
+>          if (ASSERT_EQ(err, -EINVAL, "..."))
+>                  return;
+>          if (ASSERT_EQ(err, -ENOENT, "..."))
+>                  return;
+>
+> This does not really work, for example if err =3D 0, it will declare test
+> failure.
 
-This is basically how Song started when he was adding this feature a
-few years ago. And I feel like we discussed this and decided that it
-would be cleaner to let the BPF program decide when (and whether) to
-get LBR, based on conditions. It still feels like a right tradeoff.
 
-Granted, for PERF_SAMPLE_BRANCH_ANY you gotta take it immediately (and
-that's what retsnoop does), but for PERF_SAMPLE_BRANCH_ANY_RETURN this
-doesn't have to happen so fast. BPF program can evaluate some
-conditions and grab LBR optionally, saving the overhead.
+if (!ASSERT_NEQ(err, -EINVAL, "..."))
+    return;
+if (!ASSERT_NEQ(err, -NOENT, "..."))
+    return;
 
-With prog flag saying "kernel should capture LBR ASAP", we:
-  a) lose this flexibility to decide whether and when to grab LBR;
-  b) pay overhead regardless if LBR is ever actually used for any
-given prog invocation;
-  c) have to dedicate a pretty large (32 * 24 =3D 768 bytes) per-CPU
-buffers for something that is pretty niche (though hugely valuable
-when needed, of course);
-  d) each program type that supports bpf_get_branch_snapshot() helper
-needs to implement this logic in their corresponding
-`bpf_prog_run_xxx()` running helpers, which is more than a few places.
+It's mirroring original logic. We had two independent checks there? In
+this case the condition is "not equal" (ASSERT_NEQ).
 
-Now, let's see how much we can also realistically save with this approach.
-
-For fentry, we do save a few (2) entries, indeed. With changes in this
-patch we are at:
-
-  [#07] __sys_bpf+0xdfc                          ->  __x64_sys_bpf+0x18
-  [#06] __x64_sys_bpf+0x1a                       ->
-bpf_trampoline_6442508829+0x7f
-  [#05] bpf_trampoline_6442508829+0x9c           ->  __bpf_prog_enter_recur=
-+0x0
-  [#04] __bpf_prog_enter_recur+0x9               ->  migrate_disable+0x0
-  [#03] migrate_disable+0x37                     ->  __bpf_prog_enter_recur=
-+0xe
-  [#02] __bpf_prog_enter_recur+0x43              ->
-bpf_trampoline_6442508829+0xa1
-  [#01] bpf_trampoline_6442508829+0xad           ->
-bpf_prog_dc54a596b39d4177_fexit1+0x0
-  [#00] bpf_prog_dc54a596b39d4177_fexit1+0x101   ->
-intel_pmu_snapshot_branch_stack+0x0
-
-With flag and kernel support, we'll be at something like
-
-  [#07] __sys_bpf+0xdfc                          ->  __x64_sys_bpf+0x18
-  [#06] __x64_sys_bpf+0x1a                       ->
-bpf_trampoline_6442508829+0x7f
-  [#05] bpf_trampoline_6442508829+0x9c           ->  __bpf_prog_enter_recur=
-+0x0
-  [#04] __bpf_prog_enter_recur+0x9               ->  migrate_disable+0x0
-  [#03] migrate_disable+0x37                     ->  __bpf_prog_enter_recur=
-+0xe
-  [#02] __bpf_prog_enter_recur+0x43              ->
-intel_pmu_snapshot_branch_stack+0x0
-
-So we get 2 extra LBRs at the expense of all those downsides I mentioned ab=
-ove.
-
-But for kretprobe-multi it's even worse (just 1). With changes in this
-patch set, we are at:
-
-  [#10] __sys_bpf+0xdfc                          ->  arch_rethook_trampolin=
-e+0x0
-  [#09] arch_rethook_trampoline+0x27             ->
-arch_rethook_trampoline_callback+0x0
-  [#08] arch_rethook_trampoline_callback+0x31    ->
-rethook_trampoline_handler+0x0
-  [#07] rethook_trampoline_handler+0x6f          ->  fprobe_exit_handler+0x=
-0
-  [#06] fprobe_exit_handler+0x3d                 ->  rcu_is_watching+0x0
-  [#05] rcu_is_watching+0x17                     ->  fprobe_exit_handler+0x=
-42
-  [#04] fprobe_exit_handler+0xb4                 ->
-kprobe_multi_link_exit_handler+0x0
-  [#03] kprobe_multi_link_exit_handler+0x31      ->  migrate_disable+0x0
-  [#02] migrate_disable+0x37                     ->
-kprobe_multi_link_exit_handler+0x36
-  [#01] kprobe_multi_link_exit_handler+0x5c      ->
-bpf_prog_2b455b4f8a8d48c5_kexit+0x0
-  [#00] bpf_prog_2b455b4f8a8d48c5_kexit+0xa3     ->
-intel_pmu_snapshot_branch_stack+0x0
-
-With custom flag support:
-
-  [#10] __sys_bpf+0xdfc                          ->  arch_rethook_trampolin=
-e+0x0
-  [#09] arch_rethook_trampoline+0x27             ->
-arch_rethook_trampoline_callback+0x0
-  [#08] arch_rethook_trampoline_callback+0x31    ->
-rethook_trampoline_handler+0x0
-  [#07] rethook_trampoline_handler+0x6f          ->  fprobe_exit_handler+0x=
-0
-  [#06] fprobe_exit_handler+0x3d                 ->  rcu_is_watching+0x0
-  [#05] rcu_is_watching+0x17                     ->  fprobe_exit_handler+0x=
-42
-  [#04] fprobe_exit_handler+0xb4                 ->
-kprobe_multi_link_exit_handler+0x0
-  [#03] kprobe_multi_link_exit_handler+0x31      ->  migrate_disable+0x0
-  [#02] migrate_disable+0x37                     ->
-kprobe_multi_link_exit_handler+0x36
-  [#01] kprobe_multi_link_exit_handler+0x5c      ->
-intel_pmu_snapshot_branch_stack+0x0
-
-We save just 1 extra LBR record.
-
-For PERF_SAMPLE_BRANCH_ANY_RETURN return mode there will be no savings
-at all. Is it really worth it?
-
-Any other improvements (like flattening of rethook call pass somehow)
-will benefit both approaches equally.
-
-> Hacking all over the kernel and requiring bpf prog to call
-> bpf_get_branch_snapshot() in the first few instructions
-> looks like self inflicted pain.
-
-While inlining bpf_get_branch_snapshot() does benefit only LBR use
-case, it's a rather typical BPF helper inlining procedure we do for a
-lot of helpers, so it's not exactly a hack or anything, just an
-optimization.
-
-But inlining bpf_get_smp_processor_id() goes way beyond LBR, it's a
-pretty frequently used helper used to implement various
-BPF-program-specific per-CPU usages (recursion protection, temporary
-storage, or just plain replacing BPF_MAP_TYPE_ARRAY_PERCPU with global
-variables, which is already a bit faster approach, and now will be
-even faster). And the implementation is well-contained.
+>
+>
+> >
+> >>          err =3D kallsyms_find("__per_cpu_start", &per_cpu_start_addr)=
+;
+> >> -       if (CHECK(err =3D=3D -EINVAL, "kallsyms_fopen", "failed to ope=
+n: %d\n", errno))
+> >> -               return;
+> >> -       if (CHECK(err =3D=3D -ENOENT, "ksym_find", "symbol 'per_cpu_st=
+art' not found\n"))
+> >> +       if (!ASSERT_TRUE(err !=3D -EINVAL && err !=3D -ENOENT, "__per_=
+cpu_start"))
+> >>                  return;
+> >>
+> >> -       if (CHECK(stat(btf_path, &st), "stat_btf", "err %d\n", errno))
+> >> +       if (!ASSERT_OK(stat(btf_path, &st), "stat_btf"))
+> >>                  return;
+> >>          btf_size =3D st.st_size;
+> >>
+> >>          skel =3D test_ksyms__open_and_load();
+> >> -       if (CHECK(!skel, "skel_open", "failed to open and load skeleto=
+n\n"))
+> >> +       if (!ASSERT_OK_PTR(skel, "test_ksyms__open_and_load"))
+> >>                  return;
+> >>
+> >>          err =3D test_ksyms__attach(skel);
+> >> -       if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", =
+err))
+> >> +       if (!ASSERT_OK(err, "test_ksyms__attach"))
+> >>                  goto cleanup;
+> >>
+> >>          /* trigger tracepoint */
+> >>          usleep(1);
+> >>
+> >>          data =3D skel->data;
+> >> -       CHECK(data->out__bpf_link_fops !=3D link_fops_addr, "bpf_link_=
+fops",
+> >> -             "got 0x%llx, exp 0x%llx\n",
+> >> -             data->out__bpf_link_fops, link_fops_addr);
+> >> -       CHECK(data->out__bpf_link_fops1 !=3D 0, "bpf_link_fops1",
+> >> -             "got %llu, exp %llu\n", data->out__bpf_link_fops1, (__u6=
+4)0);
+> >> -       CHECK(data->out__btf_size !=3D btf_size, "btf_size",
+> >> -             "got %llu, exp %llu\n", data->out__btf_size, btf_size);
+> >> -       CHECK(data->out__per_cpu_start !=3D per_cpu_start_addr, "__per=
+_cpu_start",
+> >> -             "got %llu, exp %llu\n", data->out__per_cpu_start,
+> >> -             per_cpu_start_addr);
+> >> +       ASSERT_EQ(data->out__bpf_link_fops, link_fops_addr, "bpf_link_=
+fops");
+> >> +       ASSERT_EQ(data->out__bpf_link_fops1, 0, "bpf_link_fops1");
+> >> +       ASSERT_EQ(data->out__btf_size, btf_size, "btf_size");
+> >> +       ASSERT_EQ(data->out__per_cpu_start, per_cpu_start_addr, "__per=
+_cpu_start");
+> >>
+> >>   cleanup:
+> >>          test_ksyms__destroy(skel);
+> >> --
+> >> 2.43.0
+> >>
