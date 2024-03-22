@@ -1,170 +1,151 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C906B5D72B
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 17:28:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B44E65FDA1
+	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 17:40:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711128533; cv=none; b=I7YNjnDah3anW0N6ZSpogsZ7baSklPhMq0wDJqmhBOkYL7I/i4FIe6dUOE//3Q7gbyRpsr3yrTHIXhvTGetfWPaIursZ+YQS9Tkbnx93MCZSQwHOKFYsrDz0pIxrF0GodamHZtrdTt+c9xWPGQkEGPsATW+rsF6omIuj567UoTM=
+	t=1711129243; cv=none; b=OR2dCSZifqLJjSbPBcPRgBf1Jg4NtlQcoazPMLalq2y9LGoodxG8wzIUEgdIYnYyjV/+p40xlD79IDsq1nFN0kukoctpHXzZ3DZGFebplrAEhxWITb7CloHfqfKkFKp24aS3Ai2UgV0P80B22X3YTMncrJ+aN3B5ZazR25/65HE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711128533; c=relaxed/simple;
-	bh=QTkQ4bsy7anIbXZJ1Z5d7KY0LyMntDMKWojB1gK4gDw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R1QB2XS7FP+/BT20bj4H3fVH+rLRSHS5OW9F7WSY4MGT1/Aey2MUFX3g8iyJu0raMIcWdxYbfNHPXYJ2cY0MsAaYEFpw20/5H+IORcby/XrvAiF4oJo0F6bvOjq2gs8dtXPKNdd3cjpbU+h+vw0jhsnn5R8x2JlT7pgbZ3cOep0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UZDjBWnS; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1711129243; c=relaxed/simple;
+	bh=7T0QYgj6Z0QWJ7WZghtr6Q0zZ77ROAwtyZEJQAtnJrY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=A8FI7NXMr68e7sdpmDWAJjuCRtjZsOMfTE0XEMO4dxd9CCgsQ82NGEYJ/s+HsMqTIwr088rcABgZDsipBdcJFM+TtnDvhQpfEFVe10PMIth0+RdkXPs8Zt/h/Abfd8HwVanliuTqm1eRlajeoyPkSApL1xgCO+cGxGaKKJSypbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NuAiMh/M; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UZDjBWnS"
-Message-ID: <101611b6-2c7a-47c0-85dd-9cfe17c4a7e8@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1711128528;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sk9OIb1i3KDEX24h/lyJXCAdyC4mzU7yfYowli/Xb90=;
-	b=UZDjBWnSMLukYrNIrcfY0viimCnakCBsJqou0qfdelPjBmsOjMolMg0Iz6we8zvWt9qiLT
-	XdT+5x0xI+nalAV6sPsGQW8Lr1fMFI7MSk9BIOBkJ5/LbShM7BIWHa9U471Lxr1OKvz4wb
-	vvopKrpkNq/OTew9Sno+qPigtjlZPjU=
-Date: Fri, 22 Mar 2024 10:28:40 -0700
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NuAiMh/M"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a468004667aso340701966b.2
+        for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 10:40:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1711129239; x=1711734039; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7YM4J2ObtCNq8IqrJeUkrlLZCafy3cmXh0Ri66R+dm4=;
+        b=NuAiMh/MosGpuJph6/CXhnqgtnF7qTB4wgozIjMxlP7xwIMTBUkxGp7jiLeBJeNUA8
+         uf3RbWvwApbMZFE+1zAiSE/rUFH1AmO4Inn/LeR4eLLIyJhCb6kAZF5e/IqWygoVbAS0
+         YNddRISS5xPN/6moDsAN0RJLCFP7BYfwoyTBXRz81dPr4VwAGpuAx4kKX1ddy3i+i8J0
+         GW8CtvhZyNMxHOAbds+zU9+r9Ux6hPYEAFI7Xi+I0b4x9bRWTLPNpPCI2wo9BHwHpm54
+         90xv2NndkuSs6tCPxxNLMeQMMbA9UkVREUUY00h8sSJNFZUydz03W+30nass1/Zv6OwQ
+         wtCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711129239; x=1711734039;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7YM4J2ObtCNq8IqrJeUkrlLZCafy3cmXh0Ri66R+dm4=;
+        b=KTc448A5256EuYaro5Y51PfQmDzaqOZs7c1UDs7HHesG7u+4BaULEeuvF8UZUxZ+8c
+         hPkuJeux8YdkwJmXZdm3oQ7QCnYx9r6u0gzp1u9toXdZYfzVjzFvunxUnwa0go+ODSJS
+         2rla6/TZXXprCnMEkwcEzf/8uk+Z7gpjeoNVzFfdu/wvcdj6EEQOUEvBSDA8J2LsogRU
+         NHxOiy3K1CNyy5QZxl4kmW0BV7IYoOnO1rvR1PyuQIlitGExYjpYU8DxDWmJv2z8p6MX
+         BHNIAUuhGboQHVyiOlpvBZK9DGq2UkePWefwZz2QYqqyaafgCs8pJereJiqMmW6FUzHk
+         a7qw==
+X-Forwarded-Encrypted: i=1; AJvYcCXMNmVCm7xsL9IiQ5DVJCez4dsIw7S0URiXwK/VP3WUhx3D5/TtYrvDagahYcJoPStJWNjBiTIXRi/n4hhJS4beXghu
+X-Gm-Message-State: AOJu0YzKLhUVN3M02wS86+x37+pOKK7tRNb6SD6nlppPuv5h8FQJ0t44
+	3nqXCtdVKBztmGxW6VNloBerqUa+yHPETnBFwCalh0Ru9p0hyOJjJUBxICRXe6Pc7Jk2Zn2T8XM
+	hjHb7Qlad2g6SV52OEowIvp/7sG8x0EEeZ6wf
+X-Google-Smtp-Source: AGHT+IH25NX6qQBoFnVnA4psBCYCRYBaiXOTPUtbfU8ggcYNeDelzQNuP6wH36Jj0kmkf8kYIMZ+vwfa54Dm4tCqR3s=
+X-Received: by 2002:a17:906:c2d4:b0:a46:befa:f0b0 with SMTP id
+ ch20-20020a170906c2d400b00a46befaf0b0mr293662ejb.45.1711129238808; Fri, 22
+ Mar 2024 10:40:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 1/5] selftests/bpf: Replace CHECK with ASSERT
- macros for ksyms test
-Content-Language: en-GB
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- kernel-team@fb.com, Martin KaFai Lau <martin.lau@kernel.org>
-References: <20240321200058.2218328-1-yonghong.song@linux.dev>
- <20240321200103.2218888-1-yonghong.song@linux.dev>
- <CAEf4BzZnaWjyUBonL=YBFS+9z7E_FBcJAwEaYuDGGrA-Z6zZ0Q@mail.gmail.com>
- <b5d76a69-0ca3-4900-980f-2c9c32988f8e@linux.dev>
- <CAEf4Bza_geEAGWC1huvT37OcWs18K_pDf+mKDjY=gkrdNuFqHw@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <CAEf4Bza_geEAGWC1huvT37OcWs18K_pDf+mKDjY=gkrdNuFqHw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-3-almasrymina@google.com> <ZfegzB341oNc_Ocz@infradead.org>
+ <b938514c-61cc-41e6-b592-1003b8deccae@davidwei.uk> <ZfjMopBl27-7asBc@infradead.org>
+In-Reply-To: <ZfjMopBl27-7asBc@infradead.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Fri, 22 Mar 2024 10:40:26 -0700
+Message-ID: <CAHS8izMT1Smz6UWu2uwAQRqgZPU7jTfS3GKiA_sDw9KLqoP-JA@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
+ custom page providers
+To: Christoph Hellwig <hch@infradead.org>
+Cc: David Wei <dw@davidwei.uk>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi Christoph,
 
-On 3/22/24 9:48 AM, Andrii Nakryiko wrote:
-> On Fri, Mar 22, 2024 at 9:41 AM Yonghong Song <yonghong.song@linux.dev> wrote:
->>
->> On 3/22/24 9:13 AM, Andrii Nakryiko wrote:
->>> On Thu, Mar 21, 2024 at 1:01 PM Yonghong Song <yonghong.song@linux.dev> wrote:
->>>> I am going to modify ksyms test later so take this opportunity
->>>> to replace old CHECK macros with new ASSERT macros.
->>>> No functionality change.
->>>>
->>>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->>>> ---
->>>>    .../testing/selftests/bpf/prog_tests/ksyms.c  | 30 ++++++-------------
->>>>    1 file changed, 9 insertions(+), 21 deletions(-)
->>>>
->>>> diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms.c b/tools/testing/selftests/bpf/prog_tests/ksyms.c
->>>> index b295969b263b..6a86d1f07800 100644
->>>> --- a/tools/testing/selftests/bpf/prog_tests/ksyms.c
->>>> +++ b/tools/testing/selftests/bpf/prog_tests/ksyms.c
->>>> @@ -5,8 +5,6 @@
->>>>    #include "test_ksyms.skel.h"
->>>>    #include <sys/stat.h>
->>>>
->>>> -static int duration;
->>>> -
->>>>    void test_ksyms(void)
->>>>    {
->>>>           const char *btf_path = "/sys/kernel/btf/vmlinux";
->>>> @@ -18,43 +16,33 @@ void test_ksyms(void)
->>>>           int err;
->>>>
->>>>           err = kallsyms_find("bpf_link_fops", &link_fops_addr);
->>>> -       if (CHECK(err == -EINVAL, "kallsyms_fopen", "failed to open: %d\n", errno))
->>>> -               return;
->>>> -       if (CHECK(err == -ENOENT, "ksym_find", "symbol 'bpf_link_fops' not found\n"))
->>>> +       if (!ASSERT_TRUE(err != -EINVAL && err != -ENOENT, "bpf_link_fops"))
->>>>                   return;
->>> it's best to keep each individual equality test as ASSERT_EQ(), that
->>> way we get more specific and detailed error (with expected vs actual
->>> value), which here we'll just get "wanted true but got false", and
->>> then we'd have to debug some more which of the conditions it is. So
->>> please keep the original granularity of checks everywhere.
->> Do you mean
->>
->>           if (ASSERT_EQ(err, -EINVAL, "..."))
->>                   return;
->>           if (ASSERT_EQ(err, -ENOENT, "..."))
->>                   return;
->>
->> This does not really work, for example if err = 0, it will declare test
->> failure.
+Sorry for the late reply, I've been out for a few days.
+
+On Mon, Mar 18, 2024 at 4:22=E2=80=AFPM Christoph Hellwig <hch@infradead.or=
+g> wrote:
 >
-> if (!ASSERT_NEQ(err, -EINVAL, "..."))
->      return;
-> if (!ASSERT_NEQ(err, -NOENT, "..."))
->      return;
+> On Sun, Mar 17, 2024 at 07:49:43PM -0700, David Wei wrote:
+> > I'm working on a similar proposal for zero copy Rx but to host memory
+> > and depend on this memory provider API.
 >
-> It's mirroring original logic. We had two independent checks there? In
-> this case the condition is "not equal" (ASSERT_NEQ).
-
-I actually tried this as well when I am experimenting ASSERT_EQ
-and somehow I concluded that !ASSERT_NEQ not working either.
-
-Now, I actully tried with adding err = 0, -EINVAL and -ENOENT
-and verified it indeed works. I don't know how I concluded
-it was not working before... Sad.
-
+> How do you need a different provider for that vs just udmabuf?
 >
->>
->>>>           err = kallsyms_find("__per_cpu_start", &per_cpu_start_addr);
->>>> -       if (CHECK(err == -EINVAL, "kallsyms_fopen", "failed to open: %d\n", errno))
->>>> -               return;
->>>> -       if (CHECK(err == -ENOENT, "ksym_find", "symbol 'per_cpu_start' not found\n"))
->>>> +       if (!ASSERT_TRUE(err != -EINVAL && err != -ENOENT, "__per_cpu_start"))
->>>>                   return;
->>>>
->>>> -       if (CHECK(stat(btf_path, &st), "stat_btf", "err %d\n", errno))
->>>> +       if (!ASSERT_OK(stat(btf_path, &st), "stat_btf"))
->>>>                   return;
->>>>           btf_size = st.st_size;
->>>>
->>>>           skel = test_ksyms__open_and_load();
->>>> -       if (CHECK(!skel, "skel_open", "failed to open and load skeleton\n"))
->>>> +       if (!ASSERT_OK_PTR(skel, "test_ksyms__open_and_load"))
->>>>                   return;
->>>>
->>>>           err = test_ksyms__attach(skel);
->>>> -       if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
->>>> +       if (!ASSERT_OK(err, "test_ksyms__attach"))
->>>>                   goto cleanup;
->>>>
->>>>           /* trigger tracepoint */
->>>>           usleep(1);
->>>>
->>>>           data = skel->data;
->>>> -       CHECK(data->out__bpf_link_fops != link_fops_addr, "bpf_link_fops",
->>>> -             "got 0x%llx, exp 0x%llx\n",
->>>> -             data->out__bpf_link_fops, link_fops_addr);
->>>> -       CHECK(data->out__bpf_link_fops1 != 0, "bpf_link_fops1",
->>>> -             "got %llu, exp %llu\n", data->out__bpf_link_fops1, (__u64)0);
->>>> -       CHECK(data->out__btf_size != btf_size, "btf_size",
->>>> -             "got %llu, exp %llu\n", data->out__btf_size, btf_size);
->>>> -       CHECK(data->out__per_cpu_start != per_cpu_start_addr, "__per_cpu_start",
->>>> -             "got %llu, exp %llu\n", data->out__per_cpu_start,
->>>> -             per_cpu_start_addr);
->>>> +       ASSERT_EQ(data->out__bpf_link_fops, link_fops_addr, "bpf_link_fops");
->>>> +       ASSERT_EQ(data->out__bpf_link_fops1, 0, "bpf_link_fops1");
->>>> +       ASSERT_EQ(data->out__btf_size, btf_size, "btf_size");
->>>> +       ASSERT_EQ(data->out__per_cpu_start, per_cpu_start_addr, "__per_cpu_start");
->>>>
->>>>    cleanup:
->>>>           test_ksyms__destroy(skel);
->>>> --
->>>> 2.43.0
->>>>
+
+This was discussed on the io_uring ZC RFC in one of the earliest RFCs.
+Here is a link to Pavel's response:
+
+https://patchwork.kernel.org/project/netdevbpf/patch/20231106024413.2801438=
+-6-almasrymina@google.com/#25589471
+
+The UAPI of wrapping io_uring memory into a udmabuf just to use it
+with devmem TCP only for the user to have to unwrap it is undesirable
+to him.
+
+> > Jakub also designed this API for hugepages too IIRC. Basically there's
+> > going to be at least three fancy ways of providing pages (one of which
+> > isn't actually pages, hence the merged netmem_t series) to drivers.
+>
+> How do hugepages different from a normal page allocation?  They should
+> just a different ordered passed to the page allocator.
+>
+
+Yes, that's more-or-less what's what the hugepage memory provider
+Jakub proposed does. The memory provider would allocate a hugepage and
+hold a reference to it. Then when the page_pool needs a page, it would
+allocate a PAGE_SIZE page from said hugepage region and provide it to
+the page_pool, and the pool back to the driver. This allows the
+hugepages to work without the page_pool and driver to be hugepage
+aware and to insert huge page specific processing in it.
+
+Other designs for this hugepage use case are possible, I'm just
+describing Jakub's idea for it as a potential use-case for these
+hooks. For example technically the page_pool at the moment does
+support non-0 order allocations, but most drivers simply set the order
+to 0 and use the page pool only for PAGE_SIZE allocations. An
+alternative design could be to use this support in the page pool, but
+that requires every driver to adopt this rather than a core networking
+change that can apply transparently (to a large extent) to all
+page_pool drivers.
+
+--=20
+Thanks,
+Mina
