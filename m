@@ -1,117 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5B6A46546
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 14:16:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E752C44C89
+	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 14:25:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711117005; cv=none; b=g2C9lbvRZ4C0GRfNj1LPefYOtWgSREzOhq2y8mtU57k7lc/qzVxxNotjIySNfx8ubFzqrAbm+PDuXdVBML0M5UowQ2No0jbRzfFbqDjCOJGY3BckXy3RcryGesC+HWlHfPZjXkT0LgaQwNej+Gzed978jKo8H8D07fFuJbkNPpM=
+	t=1711117539; cv=none; b=CHWOuu/4NZrcKctJ2VPYgvtKaIz4uWYa4pN4EGssfD09+Zjb1XR0J9qCl7JUGKsHaZAhiAoZEJjJL4iTysckpHjlKI29EKbwEQ5kIQRo0q5q0FQ33ynUojCKzEkMEXtxIV0O+7U/wgdBmyQQYVhfwAdN0BWjnjmyQTja/sA2E2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711117005; c=relaxed/simple;
-	bh=dM534EfADE62EAcMXvCsJRoLZE9hVMXHRQyZjYiLvw8=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=KHjWUIoFSacSQLBZocpH6e4VTTC07kQwlTr7OxUVWODzlohjXEyQoMLfByqiwPS4OBpmY0llPPyQJ6/iIZgyULF4jX/xoFYAtioQCUteuotcQ/rg+FjUCe1ySIxc+TeYadDTWYubpjAY+HtLx8Pq4Cd7gRPcTAaNezvFzwTk4To=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ag92MdLy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711117539; c=relaxed/simple;
+	bh=VtQBT66t2c1TD6mMlG56Go+Ca6yL4crmvVUH7JbH1bo=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=shcLwYNDZGId5G8bFFK9nx6RgT/gne0YR+yPiovy2e1XziUAbf/2giTzaqiXTFVCkv4fuaGxjEa6zVNYwtwQYl8xurk8+VVBMpA156UNhGjj1kpCA8QbG+96EAUMwuaYepNvzWpbkihdD+5XErC0abbCQLrWPPs2P20+L2xu/nc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aS1FuKY0; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ag92MdLy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 812C4C433C7;
-	Fri, 22 Mar 2024 14:16:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711117004;
-	bh=dM534EfADE62EAcMXvCsJRoLZE9hVMXHRQyZjYiLvw8=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-	b=ag92MdLyyOQNAaZLhV6YKidgdu3I4Boy6Xp1f+QzwKDtsTzNlShcEOHvGwspJvGeO
-	 ay6r0wGTbW3+EK3MB4ceWR1TojfK5l5DwtdrqhjCCVT76hIML0ES8X/H2pp4K5L6+4
-	 lvgc/bD0WXIdFH7eAAdDTZKvEvjsO4JxbBvX63URlbnaEdplkJTUUKPzpZErxX2Pel
-	 NwrbcIuHfCJoE+A0CpFW89hFY03MUV9k+2PPfEvBu9uJ8C8CC0fkbInuI6tgXqBSvl
-	 f5xz8E32b3FNtFbncrpqqlK7/vy0mtr0DBKpQJW+Hjbb+RRHHAj/obLaj/iYPL0g+O
-	 fzCZ7ld1ynNbg==
-Message-ID: <c54b3f13-dbdd-4988-9bd0-62679fbbd448@kernel.org>
-Date: Fri, 22 Mar 2024 14:16:39 +0000
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aS1FuKY0"
+Message-ID: <f47e011b-6a02-40a1-aab1-f8c98b66d2d2@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1711117534;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TG5XExd178wk0rcdwkdD/DT5rtRSyEyBtmqTXjoUf+U=;
+	b=aS1FuKY0cushN3PC9X3aD9HlDuxBTf+B6j6RNBVhn94TkeporcP4Al29KurfK1JowBCTNh
+	O2vAp8CNRtG3NdxCgK1f+ZLNb8DEnLm2BqwT1dHJs7vgHzKQXJzbtEOc9S6G7styUOkCyV
+	yGF1pfoRU5zw6tkSOKo1S3ZGVELadx4=
+Date: Fri, 22 Mar 2024 07:25:26 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Quentin Monnet <qmo@kernel.org>
-Subject: Re: [PATCH bpf-next] bpftool: Clean up HOST_CFLAGS, HOST_LDFLAGS for
- bootstrap bpftool
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
- Jiri Olsa <olsajiri@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- bpf@vger.kernel.org, Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <20240320014103.45641-1-qmo@kernel.org> <ZfqjiFeHmLoIO-rS@krava>
- <CAEf4BzYFC_RMW01mLcehrZ4G64R_uQm9-xj3HLKyC7Z0nX+dYw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix flaky test
+ btf_map_in_map/lookup_update
 Content-Language: en-GB
-In-Reply-To: <CAEf4BzYFC_RMW01mLcehrZ4G64R_uQm9-xj3HLKyC7Z0nX+dYw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+ Martin KaFai Lau <martin.lau@kernel.org>
+References: <20240322050716.357983-1-yonghong.song@linux.dev>
+In-Reply-To: <20240322050716.357983-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-2024-03-21 18:55 UTC+0000 ~ Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> On Wed, Mar 20, 2024 at 1:51 AM Jiri Olsa <olsajiri@gmail.com> wrote:
->>
->> On Wed, Mar 20, 2024 at 01:41:03AM +0000, Quentin Monnet wrote:
->>> Bpftool's Makefile uses $(HOST_CFLAGS) to build the bootstrap version of
->>> bpftool, in order to pick the flags for the host (where we run the
->>> bootstrap version) and not for the target system (where we plan to run
->>> the full bpftool binary). But we pass too much information through this
->>> variable.
->>>
->>> In particular, we set HOST_CFLAGS by copying most of the $(CFLAGS); but
->>> we do this after the feature detection for bpftool, which means that
->>> $(CFLAGS), hence $(HOST_CFLAGS), contain all macro definitions for using
->>> the different optional features. For example, -DHAVE_LLVM_SUPPORT may be
->>> passed to the $(HOST_CFLAGS), even though the LLVM disassembler is not
->>> used in the bootstrap version, and the related library may even be
->>> missing for the host architecture.
->>>
->>> A similar thing happens with the $(LDFLAGS), that we use unchanged for
->>> linking the bootstrap version even though they may contains flags to
->>> link against additional libraries.
->>>
->>> To address the $(HOST_CFLAGS) issue, we move the definition of
->>> $(HOST_CFLAGS) earlier in the Makefile, before the $(CFLAGS) update
->>> resulting from the feature probing - none of which being relevant to the
->>> bootstrap version. To clean up the $(LDFLAGS) for the bootstrap version,
->>> we introduce a dedicated $(HOST_LDFLAGS) variable that we base on
->>> $(LDFLAGS), before the feature probing as well.
->>>
->>> On my setup, the following macro and libraries are removed from the
->>> compiler invocation to build bpftool after this patch:
->>>
->>>   -DUSE_LIBCAP
->>>   -DHAVE_LLVM_SUPPORT
->>>   -I/usr/lib/llvm-17/include
->>>   -D_GNU_SOURCE
->>>   -D__STDC_CONSTANT_MACROS
->>>   -D__STDC_FORMAT_MACROS
->>>   -D__STDC_LIMIT_MACROS
->>>   -lLLVM-17
->>>   -L/usr/lib/llvm-17/lib
->>>
->>> Another advantage of cleaning up these flags is that displaying
->>> available features with "bpftool version" becomes more accurate for the
->>> bootstrap bpftool, and no longer reflects the features detected (and
->>> available only) for the final binary.
->>>
->>> Cc: Jean-Philippe Brucker <jean-philippe@linaro.org>
->>> Signed-off-by: Quentin Monnet <qmo@kernel.org>
->>
->> got some fuzz when applying it, but other than that lgtm
->>
->> Acked-by: Jiri Olsa <jolsa@kernel.org>
->>
-> 
-> this was applied, but PW bot didn't notice it. I marked it as accepted
-> in patchworks, just FYI.
 
-Thanks for the notice!
-Quentin
+On 3/21/24 10:07 PM, Yonghong Song wrote:
+> Recently, I frequently hit the following test failure:
+>
+>    [root@arch-fb-vm1 bpf]# ./test_progs -n 33/1
+>    test_lookup_update:PASS:skel_open 0 nsec
+>    ...
+>    test_lookup_update:PASS:sync_rcu 0 nsec
+>    test_lookup_update:FAIL:map1_leak inner_map1 leaked!
+>    #33/1    btf_map_in_map/lookup_update:FAIL
+>    #33      btf_map_in_map:FAIL
+>
+> In the test, after map is closed and then after two rcu grace periods,
+> it is assumed that map_id is not available to user space.
+>
+> But the above assumption cannot be guaranteed. After zero or one
+> or two rcu grace periods in different siturations, the actual
+> freeing-map-work is put into a workqueue. Later on, when the work
+> is dequeued, the map will be actually freed.
+> See bpf_map_put() in kernel/bpf/syscall.c.
+>
+> By using workqueue, there is no ganrantee that map will be actually
+> freed after a couple of rcu grace periods. This patch removed
+> such map leak detection and then the test can pass consistently.
+
+Please ignore this one. There is another patch with the same subject later but
+with one more change to fix compilation error. The reason is I send this
+patch but forget to fold a simple fix in. I waited for half an hour but
+the email didn't reach me or mailing list. I do not know what is going
+and thought it may have some issues. So I amended the fix and send
+another one. It looks like the other patch appeared in the mailing list
+too.
+
+>
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> ---
+>   .../selftests/bpf/prog_tests/btf_map_in_map.c | 24 -------------------
+>   1 file changed, 24 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
+> index a8b53b8736f0..5d389eb16295 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
+> @@ -102,30 +102,6 @@ static void test_lookup_update(void)
+>   	CHECK(map1_id == 0, "map1_id", "failed to get ID 1\n");
+>   	CHECK(map2_id == 0, "map2_id", "failed to get ID 2\n");
+>   
+> -	test_btf_map_in_map__destroy(skel);
+> -	skel = NULL;
+> -
+> -	/* we need to either wait for or force synchronize_rcu(), before
+> -	 * checking for "still exists" condition, otherwise map could still be
+> -	 * resolvable by ID, causing false positives.
+> -	 *
+> -	 * Older kernels (5.8 and earlier) freed map only after two
+> -	 * synchronize_rcu()s, so trigger two, to be entirely sure.
+> -	 */
+> -	CHECK(kern_sync_rcu(), "sync_rcu", "failed\n");
+> -	CHECK(kern_sync_rcu(), "sync_rcu", "failed\n");
+> -
+> -	fd = bpf_map_get_fd_by_id(map1_id);
+> -	if (CHECK(fd >= 0, "map1_leak", "inner_map1 leaked!\n")) {
+> -		close(fd);
+> -		goto cleanup;
+> -	}
+> -	fd = bpf_map_get_fd_by_id(map2_id);
+> -	if (CHECK(fd >= 0, "map2_leak", "inner_map2 leaked!\n")) {
+> -		close(fd);
+> -		goto cleanup;
+> -	}
+> -
+>   cleanup:
+>   	test_btf_map_in_map__destroy(skel);
+>   }
