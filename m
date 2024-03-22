@@ -1,131 +1,180 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f73.google.com (mail-qv1-f73.google.com [209.85.219.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F113EA66;
-	Fri, 22 Mar 2024 11:24:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C1D3FB85
+	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 12:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711106659; cv=none; b=rwNPRLjT8h16KSrxKmtfwZX7WmiPXfOmiA/vbPiR70VFd1R0+aZNpXQxruK6LjhPU/dHQ7C5zCjje/5bnWnQrUp7s48Jkl71SC5dvObI6SEbsgYAGARdZVA6KvUnzdTtvfTOhqAqdStkd5xESP+Wl0rBRHDp9JWYBzLGTy9vxkU=
+	t=1711110253; cv=none; b=qxNWdEcqztET2P6yhdfzlPsNj4kUefmo3MfanF6/roHz9xNC62n5+hHfPN5KXMuQR/vwpqjKG1PfXgwiXlYeTtACHBwg0NwjqlaxjGkBUXKihGLy3JHUwnooD41M88zGFz2kXFbTNpwuXX3gBsEM7SO56Qk8JEtUuosNqSXRp3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711106659; c=relaxed/simple;
-	bh=+oC+fGntP89wG2FVGQS+dTS5BaJOhf8efmrV699I1qk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rkVpKEK8fgISfKezubyqpC5iF9rNOOwRL8Vr9IPgPkz5xmMXCohB3e93TDdOjEVKN57aIEBEIOhso/JU50aW37a3cIxVs+LeFaSsI2UYTwxhXaenWN7zMHAeBtRS6RqpzMHLThJ7QOlS2C+8lpQL+aA/CR8U7O4AbdglXM7IYYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OkJ+CH5o; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=DHoG41s+; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1711110253; c=relaxed/simple;
+	bh=wDj657IbuDZ2v2XsQ+fL2x8EzSha6fPYCWrxI4syeAw=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=oOhKSIR3qwMJuhK9LM2lVUMHSFCn+tD2YeYqVs4Y/L3ka3eRxe2XRMExz4yvh7TNJYnFdHJ6xqGYasztbrp9W3GyMG/nD/aWsCfQZajigb6EHMA0DXcykeyRzAheuOmsChThGpXvAgh6CnDDKsg4XOW6fzWos1jv2UaN9LKVJh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edumazet.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S12cgfqu; arc=none smtp.client-ip=209.85.219.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edumazet.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OkJ+CH5o";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="DHoG41s+"
-Date: Fri, 22 Mar 2024 12:24:13 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1711106655;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tTCYSECJaDRw2zJqZDfA9T1Nb/hL8dmz0bj0oyPmoJQ=;
-	b=OkJ+CH5okK8fKJ/tI2f6lw1iTxPpCit4ZBOGCrIaFom8TLfSRZXfbSAFLSr832IeMuuVaj
-	ao8pSQrhkDXHYZDa6v/5oZhflyY5wGvOzTp+dTTyLo2oU12knLaXEycRRDAbAysizOsqu2
-	y/i3B0dafLaGNXlWlB6Fqriosd3RLrcgo0S4LfPf3mYWEgIrHkQ7mJuv1v99NDRXeeoKvd
-	bT8WndvXS0SV2LsBl6RMsg6yAGqwxwa87tPlUk9Ud2950u/22c5EV5K3vxvcKyvZYqcBva
-	gchOFhx1wCw3MVIaH/HwU2Gw4YB/My58WUdxmleko3WwgUPtFtYq98VNIGJD9A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1711106655;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tTCYSECJaDRw2zJqZDfA9T1Nb/hL8dmz0bj0oyPmoJQ=;
-	b=DHoG41s+SLo2p1pHPoZSvaJTTSbmWZY8A1bvlCemaX2bXGzdq6MwSWnoBzDcj+v+dPV+gS
-	rTid4OVkqYuAGUDA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Yan Zhai <yan@cloudflare.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Coco Li <lixiaoyan@google.com>, Wei Wang <weiwan@google.com>,
-	Alexander Duyck <alexanderduyck@fb.com>,
-	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-	bpf@vger.kernel.org, kernel-team@cloudflare.com,
-	Joel Fernandes <joel@joelfernandes.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>, mark.rutland@arm.com,
-	Jesper Dangaard Brouer <hawk@kernel.org>
-Subject: Re: [PATCH v5 net 1/3] rcu: add a helper to report consolidated
- flavor QS
-Message-ID: <20240322112413.1UZFdBq5@linutronix.de>
-References: <cover.1710877680.git.yan@cloudflare.com>
- <90431d46ee112d2b0af04dbfe936faaca11810a5.1710877680.git.yan@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S12cgfqu"
+Received: by mail-qv1-f73.google.com with SMTP id 6a1803df08f44-69629cf067fso39283246d6.1
+        for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 05:24:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1711110251; x=1711715051; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=c+bsfk+7GnNR3QW1NyI2y0t8bsxNvVv/cq4ocDvOM9s=;
+        b=S12cgfquDJ2u+3ruDxNqBVo3EniW6AsOxUdIccU9OwYNxj3vrRV+iMu+4qM0//dA3e
+         30jDHRPQ8GIECddKkay+leeHou319dodl9JbQOTCMt83BYf7ufe4FlfACf4E2I+96vY+
+         blmjsicgMtKGMxlR1dHWc15o+fSUQ8m6/TbO01uxQtGf5Ox6oCePAjsJ2S9vcmM5wZoK
+         fTTjayo8MvlABm1nwG7ndZ3wl0zihIs8lK3Tttg/XEYCyb5OvSTbxjm2MwCTKfDh5m94
+         3S8ciyfuKkzqsHwc2eEAUWP9GN5x9LTiHhJiXarfibhwGC9dpKnWDW9aS+rUt3Dqj6ri
+         sO1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711110251; x=1711715051;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=c+bsfk+7GnNR3QW1NyI2y0t8bsxNvVv/cq4ocDvOM9s=;
+        b=ww8uinwM0XeiTYCGpf+rb0wEpTl+nBw+fgvtOr2lJmGD9BcPr/h+p4bOfnUq4BVtzS
+         QYuZNeROL7wRl+aDTjbSNEa+XmGtjY/1dusF2cjWk5qnTP1kUJc+dUgZN8kbBhzyoSjr
+         RsqNoUbsJfu0aW23tvizKsnnXW5n8oQf40zRyHEUuUFVhWWkF27+fTjnaYevEkPasond
+         RahRLFWL7jSa9KAj7K7BxmOomil/GM9kZgS+Qf1j6MPmxQ/oBdUcRHvFt8N9yoNu3dQY
+         6YNXEUU8vcypvixDnTpnISbEujNLsOR2WAImjgelLGyUkxaf4S/qkRpSYnOaSY5rUXUE
+         5tLA==
+X-Forwarded-Encrypted: i=1; AJvYcCXq+2vhzxlDnB/T184ciq+sK6r5GZBWFWxXjSBUEo5/ph/1syfzr8316Ncuo89PQK5DOdn05zLSRfphVoNPFjkRIvHm
+X-Gm-Message-State: AOJu0YyMuhovb3IxQqjgBgkZKWgduErqP0oBaKBUY5i52C/3ojLV9A05
+	L5Z4TzMGsK53d2K6sVC0LArVJ8swFZm19ae+oM6cccjmoHqEORb43XoKSHXuRzyrJEJW96cAHVs
+	RTWkYINBZCw==
+X-Google-Smtp-Source: AGHT+IEenSpHKemEGh4wgzSilfm15HdibY9ILeqQlwbV29ijGCTERFJT/eWmlOsLds85//cBD0YvjJa/fDEHgA==
+X-Received: from edumazet1.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:395a])
+ (user=edumazet job=sendgmr) by 2002:a05:6214:570d:b0:690:dc39:176c with SMTP
+ id qn13-20020a056214570d00b00690dc39176cmr20467qvb.9.1711110250311; Fri, 22
+ Mar 2024 05:24:10 -0700 (PDT)
+Date: Fri, 22 Mar 2024 12:24:07 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <90431d46ee112d2b0af04dbfe936faaca11810a5.1710877680.git.yan@cloudflare.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.396.g6e790dbe36-goog
+Message-ID: <20240322122407.1329861-1-edumazet@google.com>
+Subject: [PATCH net] bpf: Don't redirect too small packets
+From: Eric Dumazet <edumazet@google.com>
+To: "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Alexei Starovoitov <ast@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	eric.dumazet@gmail.com, Eric Dumazet <edumazet@google.com>, 
+	syzbot+9e27778c0edc62cb97d8@syzkaller.appspotmail.com, 
+	Stanislav Fomichev <sdf@google.com>, Willem de Bruijn <willemb@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 2024-03-19 13:44:34 [-0700], Yan Zhai wrote:
-> index 16f519914415..17d7ed5f3ae6 100644
-> --- a/include/linux/rcupdate.h
-> +++ b/include/linux/rcupdate.h
-> @@ -247,6 +247,37 @@ do { \
->  	cond_resched(); \
->  } while (0)
->  
-> +/**
-> + * rcu_softirq_qs_periodic - Report RCU and RCU-Tasks quiescent states
-> + * @old_ts: jiffies at start of processing.
-> + *
-> + * This helper is for long-running softirq handlers, such as NAPI threads in
-> + * networking. The caller should initialize the variable passed in as @old_ts
-> + * at the beginning of the softirq handler. When invoked frequently, this macro
-> + * will invoke rcu_softirq_qs() every 100 milliseconds thereafter, which will
-> + * provide both RCU and RCU-Tasks quiescent states. Note that this macro
-> + * modifies its old_ts argument.
-> + *
-> + * Because regions of code that have disabled softirq act as RCU read-side
-> + * critical sections, this macro should be invoked with softirq (and
-> + * preemption) enabled.
-> + *
-> + * The macro is not needed when CONFIG_PREEMPT_RT is defined. RT kernels would
-> + * have more chance to invoke schedule() calls and provide necessary quiescent
-> + * states. As a contrast, calling cond_resched() only won't achieve the same
-> + * effect because cond_resched() does not provide RCU-Tasks quiescent states.
-> + */
+Some drivers ndo_start_xmit() expect a minimal size, as shown
+by various syzbot reports [1].
 
-Paul, so CONFIG_PREEMPTION is affected but CONFIG_PREEMPT_RT is not.
-Why does RT have more scheduling points?
-The RCU-Tasks thread is starving and yet there is no wake-up, correct?
-Shouldn't cond_resched() take care of RCU-Tasks's needs, too?
-This function is used by napi_threaded_poll() which is not invoked in
-softirq it is a simple thread which does disable BH but this is it. Any
-pending softirqs are served before the cond_resched().
+Willem added in commit 217e6fa24ce2 ("net: introduce device min_header_len")
+the missing attribute that can be used by upper layers.
 
-This napi_threaded_poll() case _basically_ a busy thread doing a lot of
-work and delaying RCU-Tasks as far as I understand. The same may happen
-to other busy-worker which have cond_resched() between works, such as
-the kworker. Therefore I would expect to have some kind of timeout at
-which point NEED_RESCHED is set so that cond_resched() can do its work.
+We need to use it in __bpf_redirect_common().
 
-> +#define rcu_softirq_qs_periodic(old_ts) \
-> +do { \
-> +	if (!IS_ENABLED(CONFIG_PREEMPT_RT) && \
-> +	    time_after(jiffies, (old_ts) + HZ / 10)) { \
-> +		preempt_disable(); \
-> +		rcu_softirq_qs(); \
-> +		preempt_enable(); \
-> +		(old_ts) = jiffies; \
-> +	} \
-> +} while (0)
-> +
->  /*
->   * Infrastructure to implement the synchronize_() primitives in
->   * TREE_RCU and rcu_barrier_() primitives in TINY_RCU.
+[1]
 
-Sebastian
+BUG: KMSAN: uninit-value in erspan_build_header+0x170/0x2f0 include/net/erspan.h:197
+  erspan_build_header+0x170/0x2f0 include/net/erspan.h:197
+  erspan_xmit+0x128a/0x1ec0 net/ipv4/ip_gre.c:706
+  __netdev_start_xmit include/linux/netdevice.h:4903 [inline]
+  netdev_start_xmit include/linux/netdevice.h:4917 [inline]
+  xmit_one net/core/dev.c:3531 [inline]
+  dev_hard_start_xmit+0x247/0xa20 net/core/dev.c:3547
+  sch_direct_xmit+0x3c5/0xd50 net/sched/sch_generic.c:343
+  __dev_xmit_skb net/core/dev.c:3760 [inline]
+  __dev_queue_xmit+0x2e6a/0x52c0 net/core/dev.c:4301
+  dev_queue_xmit include/linux/netdevice.h:3091 [inline]
+  __bpf_tx_skb net/core/filter.c:2136 [inline]
+  __bpf_redirect_common net/core/filter.c:2180 [inline]
+  __bpf_redirect+0x14a6/0x1620 net/core/filter.c:2187
+  ____bpf_clone_redirect net/core/filter.c:2460 [inline]
+  bpf_clone_redirect+0x328/0x470 net/core/filter.c:2432
+  ___bpf_prog_run+0x13fe/0xe0f0 kernel/bpf/core.c:1997
+  __bpf_prog_run512+0xb5/0xe0 kernel/bpf/core.c:2238
+  bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+  __bpf_prog_run include/linux/filter.h:657 [inline]
+  bpf_prog_run include/linux/filter.h:664 [inline]
+  bpf_test_run+0x499/0xc30 net/bpf/test_run.c:425
+  bpf_prog_test_run_skb+0x14ea/0x1f20 net/bpf/test_run.c:1058
+  bpf_prog_test_run+0x6b7/0xad0 kernel/bpf/syscall.c:4240
+  __sys_bpf+0x6aa/0xd90 kernel/bpf/syscall.c:5649
+  __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
+  __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
+  __x64_sys_bpf+0xa0/0xe0 kernel/bpf/syscall.c:5736
+ do_syscall_64+0xd5/0x1f0
+ entry_SYSCALL_64_after_hwframe+0x6d/0x75
+
+Uninit was created at:
+  slab_post_alloc_hook mm/slub.c:3804 [inline]
+  slab_alloc_node mm/slub.c:3845 [inline]
+  kmem_cache_alloc_node+0x613/0xc50 mm/slub.c:3888
+  kmalloc_reserve+0x13d/0x4a0 net/core/skbuff.c:577
+  pskb_expand_head+0x222/0x19d0 net/core/skbuff.c:2245
+  __skb_cow include/linux/skbuff.h:3671 [inline]
+  skb_cow_head include/linux/skbuff.h:3705 [inline]
+  erspan_xmit+0xb08/0x1ec0 net/ipv4/ip_gre.c:692
+  __netdev_start_xmit include/linux/netdevice.h:4903 [inline]
+  netdev_start_xmit include/linux/netdevice.h:4917 [inline]
+  xmit_one net/core/dev.c:3531 [inline]
+  dev_hard_start_xmit+0x247/0xa20 net/core/dev.c:3547
+  sch_direct_xmit+0x3c5/0xd50 net/sched/sch_generic.c:343
+  __dev_xmit_skb net/core/dev.c:3760 [inline]
+  __dev_queue_xmit+0x2e6a/0x52c0 net/core/dev.c:4301
+  dev_queue_xmit include/linux/netdevice.h:3091 [inline]
+  __bpf_tx_skb net/core/filter.c:2136 [inline]
+  __bpf_redirect_common net/core/filter.c:2180 [inline]
+  __bpf_redirect+0x14a6/0x1620 net/core/filter.c:2187
+  ____bpf_clone_redirect net/core/filter.c:2460 [inline]
+  bpf_clone_redirect+0x328/0x470 net/core/filter.c:2432
+  ___bpf_prog_run+0x13fe/0xe0f0 kernel/bpf/core.c:1997
+  __bpf_prog_run512+0xb5/0xe0 kernel/bpf/core.c:2238
+  bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+  __bpf_prog_run include/linux/filter.h:657 [inline]
+  bpf_prog_run include/linux/filter.h:664 [inline]
+  bpf_test_run+0x499/0xc30 net/bpf/test_run.c:425
+  bpf_prog_test_run_skb+0x14ea/0x1f20 net/bpf/test_run.c:1058
+  bpf_prog_test_run+0x6b7/0xad0 kernel/bpf/syscall.c:4240
+  __sys_bpf+0x6aa/0xd90 kernel/bpf/syscall.c:5649
+  __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
+  __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
+  __x64_sys_bpf+0xa0/0xe0 kernel/bpf/syscall.c:5736
+ do_syscall_64+0xd5/0x1f0
+ entry_SYSCALL_64_after_hwframe+0x6d/0x75
+
+CPU: 0 PID: 5041 Comm: syz-executor167 Not tainted 6.8.0-syzkaller-11743-ga4145ce1e7bc #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
+
+Fixes: fd1894224407 ("bpf: Don't redirect packets with invalid pkt_len")
+Reported-by: syzbot+9e27778c0edc62cb97d8@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/netdev/000000000000205af206143ece22@google.com/
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Stanislav Fomichev <sdf@google.com>
+Cc: Willem de Bruijn <willemb@google.com>
+---
+ net/core/filter.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 8adf95765cdd967a15b2661dfb454db0ccf350b0..745697c08acb3a74721d26ee93389efa81e973a0 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2175,6 +2175,11 @@ static int __bpf_redirect_common(struct sk_buff *skb, struct net_device *dev,
+ 		return -ERANGE;
+ 	}
+ 
++	if (unlikely(skb->len < dev->min_header_len)) {
++		kfree_skb(skb);
++		return -ERANGE;
++	}
++
+ 	bpf_push_mac_rcsum(skb);
+ 	return flags & BPF_F_INGRESS ?
+ 	       __bpf_rx_skb(dev, skb) : __bpf_tx_skb(dev, skb);
+-- 
+2.44.0.396.g6e790dbe36-goog
+
