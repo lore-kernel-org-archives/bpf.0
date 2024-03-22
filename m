@@ -1,112 +1,131 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C8F3E479
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 11:03:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F113EA66;
+	Fri, 22 Mar 2024 11:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711105407; cv=none; b=IPNgAzJEiyKSTuTD2AAWGwfEHPvRNW0kKrGMJQFdGayTc5hhTjgGcHSVxUOnGEgSQBjLfWxGfmHTMWIunQMmK+QBE0uAcTFTax1k5zjZXzkWBTt4GD9IjG2pLKZGCghT4qaGuygOPsadNCcOXqIbp4QXnbj2F0L1Aaw8p0MS4YA=
+	t=1711106659; cv=none; b=rwNPRLjT8h16KSrxKmtfwZX7WmiPXfOmiA/vbPiR70VFd1R0+aZNpXQxruK6LjhPU/dHQ7C5zCjje/5bnWnQrUp7s48Jkl71SC5dvObI6SEbsgYAGARdZVA6KvUnzdTtvfTOhqAqdStkd5xESP+Wl0rBRHDp9JWYBzLGTy9vxkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711105407; c=relaxed/simple;
-	bh=M1fzVVapk0vgFlSTcgab6RCx0X4YdTe7rAdLeq8NHk0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KaHeBf0+zua8kzO8s3jDwS4nRP8Ne9yNgigixvmvPbcPL6Isz2lJq/Py2lNpPlrdqmiBLlBAdKuQ1LRmtpFws6M3nkd2tc9QfoQD0El0BiLytJo8OJNSHcIMIgWCF0BD3V0EYz2wbcLi9kOsS/5BiE79iJDzwt7a5TBBq8Jn8zg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 9A07A2277B80; Thu, 21 Mar 2024 23:13:53 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
+	s=arc-20240116; t=1711106659; c=relaxed/simple;
+	bh=+oC+fGntP89wG2FVGQS+dTS5BaJOhf8efmrV699I1qk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rkVpKEK8fgISfKezubyqpC5iF9rNOOwRL8Vr9IPgPkz5xmMXCohB3e93TDdOjEVKN57aIEBEIOhso/JU50aW37a3cIxVs+LeFaSsI2UYTwxhXaenWN7zMHAeBtRS6RqpzMHLThJ7QOlS2C+8lpQL+aA/CR8U7O4AbdglXM7IYYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OkJ+CH5o; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=DHoG41s+; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OkJ+CH5o";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="DHoG41s+"
+Date: Fri, 22 Mar 2024 12:24:13 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1711106655;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tTCYSECJaDRw2zJqZDfA9T1Nb/hL8dmz0bj0oyPmoJQ=;
+	b=OkJ+CH5okK8fKJ/tI2f6lw1iTxPpCit4ZBOGCrIaFom8TLfSRZXfbSAFLSr832IeMuuVaj
+	ao8pSQrhkDXHYZDa6v/5oZhflyY5wGvOzTp+dTTyLo2oU12knLaXEycRRDAbAysizOsqu2
+	y/i3B0dafLaGNXlWlB6Fqriosd3RLrcgo0S4LfPf3mYWEgIrHkQ7mJuv1v99NDRXeeoKvd
+	bT8WndvXS0SV2LsBl6RMsg6yAGqwxwa87tPlUk9Ud2950u/22c5EV5K3vxvcKyvZYqcBva
+	gchOFhx1wCw3MVIaH/HwU2Gw4YB/My58WUdxmleko3WwgUPtFtYq98VNIGJD9A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1711106655;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tTCYSECJaDRw2zJqZDfA9T1Nb/hL8dmz0bj0oyPmoJQ=;
+	b=DHoG41s+SLo2p1pHPoZSvaJTTSbmWZY8A1bvlCemaX2bXGzdq6MwSWnoBzDcj+v+dPV+gS
+	rTid4OVkqYuAGUDA==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Yan Zhai <yan@cloudflare.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>, Simon Horman <horms@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next] selftests/bpf: Fix flaky test btf_map_in_map/lookup_update
-Date: Thu, 21 Mar 2024 23:13:53 -0700
-Message-ID: <20240322061353.632136-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.43.0
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Coco Li <lixiaoyan@google.com>, Wei Wang <weiwan@google.com>,
+	Alexander Duyck <alexanderduyck@fb.com>,
+	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+	bpf@vger.kernel.org, kernel-team@cloudflare.com,
+	Joel Fernandes <joel@joelfernandes.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>, mark.rutland@arm.com,
+	Jesper Dangaard Brouer <hawk@kernel.org>
+Subject: Re: [PATCH v5 net 1/3] rcu: add a helper to report consolidated
+ flavor QS
+Message-ID: <20240322112413.1UZFdBq5@linutronix.de>
+References: <cover.1710877680.git.yan@cloudflare.com>
+ <90431d46ee112d2b0af04dbfe936faaca11810a5.1710877680.git.yan@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <90431d46ee112d2b0af04dbfe936faaca11810a5.1710877680.git.yan@cloudflare.com>
 
-Recently, I frequently hit the following test failure:
+On 2024-03-19 13:44:34 [-0700], Yan Zhai wrote:
+> index 16f519914415..17d7ed5f3ae6 100644
+> --- a/include/linux/rcupdate.h
+> +++ b/include/linux/rcupdate.h
+> @@ -247,6 +247,37 @@ do { \
+>  	cond_resched(); \
+>  } while (0)
+>  
+> +/**
+> + * rcu_softirq_qs_periodic - Report RCU and RCU-Tasks quiescent states
+> + * @old_ts: jiffies at start of processing.
+> + *
+> + * This helper is for long-running softirq handlers, such as NAPI threads in
+> + * networking. The caller should initialize the variable passed in as @old_ts
+> + * at the beginning of the softirq handler. When invoked frequently, this macro
+> + * will invoke rcu_softirq_qs() every 100 milliseconds thereafter, which will
+> + * provide both RCU and RCU-Tasks quiescent states. Note that this macro
+> + * modifies its old_ts argument.
+> + *
+> + * Because regions of code that have disabled softirq act as RCU read-side
+> + * critical sections, this macro should be invoked with softirq (and
+> + * preemption) enabled.
+> + *
+> + * The macro is not needed when CONFIG_PREEMPT_RT is defined. RT kernels would
+> + * have more chance to invoke schedule() calls and provide necessary quiescent
+> + * states. As a contrast, calling cond_resched() only won't achieve the same
+> + * effect because cond_resched() does not provide RCU-Tasks quiescent states.
+> + */
 
-  [root@arch-fb-vm1 bpf]# ./test_progs -n 33/1
-  test_lookup_update:PASS:skel_open 0 nsec
-  ...
-  test_lookup_update:PASS:sync_rcu 0 nsec
-  test_lookup_update:FAIL:map1_leak inner_map1 leaked!
-  #33/1    btf_map_in_map/lookup_update:FAIL
-  #33      btf_map_in_map:FAIL
+Paul, so CONFIG_PREEMPTION is affected but CONFIG_PREEMPT_RT is not.
+Why does RT have more scheduling points?
+The RCU-Tasks thread is starving and yet there is no wake-up, correct?
+Shouldn't cond_resched() take care of RCU-Tasks's needs, too?
+This function is used by napi_threaded_poll() which is not invoked in
+softirq it is a simple thread which does disable BH but this is it. Any
+pending softirqs are served before the cond_resched().
 
-In the test, after map is closed and then after two rcu grace periods,
-it is assumed that map_id is not available to user space.
+This napi_threaded_poll() case _basically_ a busy thread doing a lot of
+work and delaying RCU-Tasks as far as I understand. The same may happen
+to other busy-worker which have cond_resched() between works, such as
+the kworker. Therefore I would expect to have some kind of timeout at
+which point NEED_RESCHED is set so that cond_resched() can do its work.
 
-But the above assumption cannot be guaranteed. After zero or one
-or two rcu grace periods in different siturations, the actual
-freeing-map-work is put into a workqueue. Later on, when the work
-is dequeued, the map will be actually freed.
-See bpf_map_put() in kernel/bpf/syscall.c.
+> +#define rcu_softirq_qs_periodic(old_ts) \
+> +do { \
+> +	if (!IS_ENABLED(CONFIG_PREEMPT_RT) && \
+> +	    time_after(jiffies, (old_ts) + HZ / 10)) { \
+> +		preempt_disable(); \
+> +		rcu_softirq_qs(); \
+> +		preempt_enable(); \
+> +		(old_ts) = jiffies; \
+> +	} \
+> +} while (0)
+> +
+>  /*
+>   * Infrastructure to implement the synchronize_() primitives in
+>   * TREE_RCU and rcu_barrier_() primitives in TINY_RCU.
 
-By using workqueue, there is no ganrantee that map will be actually
-freed after a couple of rcu grace periods. This patch removed
-such map leak detection and then the test can pass consistently.
-
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../selftests/bpf/prog_tests/btf_map_in_map.c | 26 +------------------
- 1 file changed, 1 insertion(+), 25 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c b/to=
-ols/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-index a8b53b8736f0..f66ceccd7029 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-@@ -25,7 +25,7 @@ static void test_lookup_update(void)
- 	int map1_fd, map2_fd, map3_fd, map4_fd, map5_fd, map1_id, map2_id;
- 	int outer_arr_fd, outer_hash_fd, outer_arr_dyn_fd;
- 	struct test_btf_map_in_map *skel;
--	int err, key =3D 0, val, i, fd;
-+	int err, key =3D 0, val, i;
-=20
- 	skel =3D test_btf_map_in_map__open_and_load();
- 	if (CHECK(!skel, "skel_open", "failed to open&load skeleton\n"))
-@@ -102,30 +102,6 @@ static void test_lookup_update(void)
- 	CHECK(map1_id =3D=3D 0, "map1_id", "failed to get ID 1\n");
- 	CHECK(map2_id =3D=3D 0, "map2_id", "failed to get ID 2\n");
-=20
--	test_btf_map_in_map__destroy(skel);
--	skel =3D NULL;
--
--	/* we need to either wait for or force synchronize_rcu(), before
--	 * checking for "still exists" condition, otherwise map could still be
--	 * resolvable by ID, causing false positives.
--	 *
--	 * Older kernels (5.8 and earlier) freed map only after two
--	 * synchronize_rcu()s, so trigger two, to be entirely sure.
--	 */
--	CHECK(kern_sync_rcu(), "sync_rcu", "failed\n");
--	CHECK(kern_sync_rcu(), "sync_rcu", "failed\n");
--
--	fd =3D bpf_map_get_fd_by_id(map1_id);
--	if (CHECK(fd >=3D 0, "map1_leak", "inner_map1 leaked!\n")) {
--		close(fd);
--		goto cleanup;
--	}
--	fd =3D bpf_map_get_fd_by_id(map2_id);
--	if (CHECK(fd >=3D 0, "map2_leak", "inner_map2 leaked!\n")) {
--		close(fd);
--		goto cleanup;
--	}
--
- cleanup:
- 	test_btf_map_in_map__destroy(skel);
- }
---=20
-2.43.0
-
+Sebastian
