@@ -1,50 +1,50 @@
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A1B35894
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 10:25:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACC7738DDD
+	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 10:25:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711103159; cv=none; b=g/I3Wfcg/8orflo4EiXSt9QbGQaZiyHelVeJ17nirSXO/qdFBD3scu8K7OJAxGFe5dLrQCcqwuUJwLGbLPaqLkewmIXese0/VeZI9kN82IfsfKOh0C5SYH7WDhSH+T32uG+kGa4ca6SLeYbEYvsHGVZNUiC6/lW2NtCJrbqPy4c=
+	t=1711103161; cv=none; b=T/YlPC4RZGgU/LV8H69yyftEIhH+fjCXoZYiIm+eRPJoy0G8eEiyr+2fqZv3ieYvYJDoq9ee1I60saiBervfPSKRFGzbCAhY/zlzDkRG6rPYtw5ZV6NhRF+pkVyQd+V0BPkMgLkS8lBbGdWPzNLZWVKB9r54DVfWMnO50DHaeYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711103159; c=relaxed/simple;
-	bh=xxAOviqpRIRbN/Cc7ki59O5XFiLSfILoC4pQRMu7j24=;
+	s=arc-20240116; t=1711103161; c=relaxed/simple;
+	bh=WTKyIE9kzxQrCsqDfUZovMhHtbG6Qlh9I538i44D9i4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=j78vVbtykQxIydRndAUDREuygItXAs8qSw3FAZx+e7KNZjxhFSzxmrUuy6p1JGpfJOphE/E1Xa/HXyy8A9ngshJKX+7cZSYSIweBPy0xqWePjK7TVszT4Pjqg6cvDqY01AnW1tQdx6I/QtRCZZcahGfnc+jIgqUiulsH6q46gdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=lEThPbJV; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version; b=pZ87XaSlA2JjhfotBQZDxYhwk7Rr247xgQmnpnvALPETKRBWmELjxZe2uTUS0XWXlKcCo/aNSfEhdWUERCovFbY4PiwulfFi/mFoQ/h6b7f48iAPThpHVri5MMqwhMtMBUsETG3hZUd4KN95ig+rSl6lJ/ooIwVzz6CCt33OP5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Kne8Mt6f; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="lEThPbJV"
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42M7YfeI000995;
-	Fri, 22 Mar 2024 10:25:34 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Kne8Mt6f"
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42M7YXPG008519;
+	Fri, 22 Mar 2024 10:25:39 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2023-11-20;
- bh=UvxdTX8mL+xfDMWIr73kW6vFFWcIT7KCGwolwUK6/mA=;
- b=lEThPbJVC0CEa4ILFnjs55tgsciJ+Mq5pzfpVTrs5V/ow/aF2JEYgsW5GF6jAd3OdLH4
- Z6RbbWcD8WQPPpPIUYtnjjznLr+mGMiclLnRxy3/vPZf6Eb0VQUFLiEi/9psW3K43WZp
- yyRwCoCn1uK9upnAj8vLYkLZ8uO7p0dySNAbie/cSC8sIxxYxI/mz63TWV94bC6B5t/R
- A0PVqeHRDu7DpBhnvkoPyHEmN+7Nn6+J4zCoe6uTyOrfXexMo1xgtaW1k0HKQc3sAJgq
- s3fA4ePF7JV5/8rUnXVZeZ+Kzi4GV+9O8S6O1mtjjTUehM6aG06yO8Js6ByytOEcET3w eg== 
+ bh=dVTLdgupuLj2UdWPTpgSLMn04Pls10YR5cYe2eMWDig=;
+ b=Kne8Mt6fqfWiAILGKttWFk5TNGD3jpZbzsf8PxpiYrcYSxFPQ/AY5PAxHJ1DzzPw/Lpb
+ 5+TKlUlmJwKwbSgXe+w1tugt7PIZtzAwK0BB8eCQHMSU47wl65vb2aXLxwmVXgeHnQcF
+ lYhT8E5+VYf4BshHXkeYIllTWpPpBK0x9HMM2NPgRgC9QJPDqRRRKkGSytaYA1FMyh5p
+ 8E2oYozKvc21BEMKaQ4nTxTEtlTaKBqWJ0uaMEQgqBZsXLJvB4CqStS8MiOpq12UnEMr
+ U+A2PbvIa8xkGxY5pmmQMvJwqpj+3ldIAoim1P2X8XEA1rZ8ibsK9aRtVMH6LRONQoOx zA== 
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3x0wvpgs6f-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3x0wvm8s62-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 22 Mar 2024 10:25:33 +0000
+	Fri, 22 Mar 2024 10:25:38 +0000
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 42M9KQpa014859;
-	Fri, 22 Mar 2024 10:25:32 GMT
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 42M9GraF014999;
+	Fri, 22 Mar 2024 10:25:37 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3x0wvk2hp7-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3x0wvk2hst-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 22 Mar 2024 10:25:32 +0000
+	Fri, 22 Mar 2024 10:25:37 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42MAK0kZ030399;
-	Fri, 22 Mar 2024 10:25:31 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42MAK0kb030399;
+	Fri, 22 Mar 2024 10:25:36 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-175-192-105.vpn.oracle.com [10.175.192.105])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3x0wvk2h75-7;
-	Fri, 22 Mar 2024 10:25:31 +0000
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3x0wvk2h75-8;
+	Fri, 22 Mar 2024 10:25:36 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: andrii@kernel.org, jolsa@kernel.org, acme@redhat.com,
         quentin@isovalent.com
@@ -54,9 +54,9 @@ Cc: eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
         haoluo@google.com, houtao1@huawei.com, bpf@vger.kernel.org,
         masahiroy@kernel.org, mcgrof@kernel.org, nathan@kernel.org,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [RFC bpf-next 05/13] bpftool: support displaying raw split BTF using base reference BTF as base
-Date: Fri, 22 Mar 2024 10:24:47 +0000
-Message-Id: <20240322102455.98558-7-alan.maguire@oracle.com>
+Subject: [RFC bpf-next 06/13] kbuild,bpf: switch to using --btf_features for pahole v1.26 and later
+Date: Fri, 22 Mar 2024 10:24:48 +0000
+Message-Id: <20240322102455.98558-8-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20240322102455.98558-1-alan.maguire@oracle.com>
 References: <20240322102455.98558-1-alan.maguire@oracle.com>
@@ -74,65 +74,39 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phish
  malwarescore=0 suspectscore=0 spamscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2403210000
  definitions=main-2403220074
-X-Proofpoint-GUID: -3bPNmLBm0xqczddyX9Co_iZRRTg8kIi
-X-Proofpoint-ORIG-GUID: -3bPNmLBm0xqczddyX9Co_iZRRTg8kIi
+X-Proofpoint-GUID: 4ntLRm3uTJCfLY_ARYXtiq_IndzgfjTm
+X-Proofpoint-ORIG-GUID: 4ntLRm3uTJCfLY_ARYXtiq_IndzgfjTm
 
-If no base BTF can be found, fall back to checking for the .BTF.base_ref
-section and use it to display raw split BTF.  Note that C format output
-is not supported for base reference BTF as structs and unions are generally
-represented as FWDs.
+The btf_features list can be used for pahole v1.26 and later -
+it is useful because if a feature is not yet implemented it will
+not exit with a failure message.  This will allow us to add feature
+requests to the pahole options without having to check pahole versions
+in future; if the version of pahole supports the feature it will be
+added.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- tools/bpf/bpftool/btf.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ scripts/Makefile.btf | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index 91fcb75babe3..f1e0ea06f05f 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -552,6 +552,7 @@ static int do_dump(int argc, char **argv)
- 	struct btf *btf = NULL, *base = NULL;
- 	__u32 root_type_ids[2];
- 	int root_type_cnt = 0;
-+	bool c_compat = true;
- 	bool dump_c = false;
- 	__u32 btf_id = -1;
- 	const char *src;
-@@ -631,6 +632,21 @@ static int do_dump(int argc, char **argv)
- 			base = get_vmlinux_btf_from_sysfs();
+diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+index 82377e470aed..9694ca3c5252 100644
+--- a/scripts/Makefile.btf
++++ b/scripts/Makefile.btf
+@@ -12,8 +12,11 @@ pahole-flags-$(call test-ge, $(pahole-ver), 121)	+= --btf_gen_floats
  
- 		btf = btf__parse_split(*argv, base ?: base_btf);
-+		/* Finally check for presence of "base reference" base BTF -
-+		 * this will allow dumping in raw but not C format, since
-+		 * base reference BTF will not contain fully-described
-+		 * structs/unions.
-+		 */
-+		if (!btf && !base && !base_btf) {
-+			LIBBPF_OPTS(btf_parse_opts, optp);
+ pahole-flags-$(call test-ge, $(pahole-ver), 122)	+= -j
+ 
+-pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)		+= --lang_exclude=rust
+-
+ pahole-flags-$(call test-ge, $(pahole-ver), 125)	+= --skip_encoding_btf_inconsistent_proto --btf_gen_optimized
+ 
++# Switch to using --btf_features for v1.26 and later.
++pahole-flags-$(call test-ge, $(pahole-ver), 126)	= -j --btf_features=encode_force,var,float,emum64,decl_tag,type_tag,optimized_func,consistent_func
 +
-+			optp.btf_sec = BTF_BASE_REF_ELF_SEC;
-+			base_btf = btf__parse_opts(*argv, &optp);
-+			if (base_btf)
-+				btf = btf__parse_split(*argv, base_btf);
-+			if (btf)
-+				c_compat = false;
-+		}
- 		if (!btf) {
- 			err = -errno;
- 			p_err("failed to load BTF from %s: %s",
-@@ -686,6 +702,11 @@ static int do_dump(int argc, char **argv)
- 	}
- 
- 	if (dump_c) {
-+		if (!c_compat) {
-+			p_err("Cannot represent split BTF with base reference BTF in C format");
-+			err = -ENOTSUP;
-+			goto done;
-+		}
- 		if (json_output) {
- 			p_err("JSON output for C-syntax dump is not supported");
- 			err = -ENOTSUP;
++pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)		+= --lang_exclude=rust
++
+ export PAHOLE_FLAGS := $(pahole-flags-y)
 -- 
 2.39.3
 
