@@ -1,130 +1,208 @@
-Received: from mail-oa1-f66.google.com (mail-oa1-f66.google.com [209.85.160.66])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963DE5674C;
-	Fri, 22 Mar 2024 16:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862095FDA3
+	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 16:52:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711126251; cv=none; b=ICf4M0iS91CF60xBVRBTSxMtNN7aB0gwji4gH1HpygOs4QsrNx95y0hsQcF4tyVG9NxDzI8hNATI/nXsUHExklLh6A/fKhxwuTdMpBMEbwN7u0H9/inNC5toiTHtOK8yc4XwtosZ0V8BiD7v5mC3FIljTQO20P4Z2jm3hCGyFRM=
+	t=1711126356; cv=none; b=SUHGRKfeWZXAZqK/XGK4Y+GtE6TZzgJe4ABcvNqeh33srF2hvalKaBtbtQrg4urP77/Qo/Q8/RxxVcxJTXb7Ggv39D21lWy15qzG6ukGQTGzSGSBzk49p+fqJXvTxBHGQUHhZRl2EXEuKi6n8OVhbZ8cFLVc8LvJ87+TD4GvvmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711126251; c=relaxed/simple;
-	bh=zWVaHDgjOuHVfjlI/i15WMIyLZ98z083v88nOntCkzE=;
+	s=arc-20240116; t=1711126356; c=relaxed/simple;
+	bh=UY9ujOJtr3Gvq+JMR/uMWqJ6cNkKm1xjmSBVb9lVlT0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P7khhA9i2mQ5iZ7ptcIZdkRHgsyUtUp3Byofhi81Qr+73ChhOi3UaxjfBQ9IZc9Qeo0NcguMKHRjkgdZEE5xg7eRyxqpgInvDJBZNbIWMFzZqlvNedmbBve47JUgewTnEzRf+sKlS29FJgRAV0/6bnwjU72vF7w7GfW4g9IEv8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mvwRa8y8; arc=none smtp.client-ip=209.85.160.66
+	 To:Cc:Content-Type; b=myys7rwwpGTmrll/es7rvjbdmoYCqW96O9eJUeZfjA+EPIGEsnlPTRuhz42VQyCbLvfeu+pK+RUpfQKWE//9Ei4lE6VCU+ABCkvBBgYMHx89HcH4ekfwbCey/Myj0eVsIvHp0nweUfdGnHJlyk8aWaOz7VTfbjk7OU0x5RbIR14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WnhMYfAC; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mvwRa8y8"
-Received: by mail-oa1-f66.google.com with SMTP id 586e51a60fabf-221e76cad07so1447972fac.0;
-        Fri, 22 Mar 2024 09:50:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WnhMYfAC"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6e88e4c8500so1644454b3a.2
+        for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 09:52:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711126248; x=1711731048; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IMFU2MbnOsDAXDgvuXOEwtIjtmzVMSKHwsLZ0yMQ728=;
-        b=mvwRa8y8y0NVCZQTP6gYYfL2NdtzJDBAszJKffHH2YUiClTQGqOc4A7sJCPL61vwFa
-         z4PToPUrBUUDrnF+APL75PiEC1ITnc5R5mDLijFRhQ3uwnBGoZXJIwGOavBZXSaS4ejD
-         SpcvzKWPDQaj4cO9ZlnXJv9PGhxJUQyVOkBlRtwkc+k9vlV9FYpkm94dWrEeGoy+R4rn
-         OEtG6oR7qji5iF/3NBZ2eu+yXAEjJZvY9S0zUPMJJ7K8hAVRNz5oT6cScVPErrxfTk3b
-         1Ms9zj9ZjcubL+BRApkOR1Ura0h0w54rJys7J3y+TP/xalGkttS3FBIaPXQAjt3fX5/p
-         /xbg==
+        d=gmail.com; s=20230601; t=1711126354; x=1711731154; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ptm15F6P6FQ96NV2QFT0Vg9sv5KsI32kiRpNkfl6c6E=;
+        b=WnhMYfACwWbAkt38oPRkbW39MMBsFJcN1+23U0VNfjiWFRq1FN/DEw7BmBc51bCSS6
+         Zu9RJv41oWxU/0VJ41xdqvxA47ypmKoDBp5GQXTqXhEATSJ/AdCPROLkMSVPYgSSJx/K
+         R0hgppkIFkcC9aKYUAKNigSgM86rR1ppTUC0x76xfpS9T6ujmm0DT16+sKMefBUZUkmV
+         8jowd6Q+MstHw2MdRkel40WJ+HgxhsD1Dtp7tPqD4GBbAz6dUrSosIT7aex9pFUQHvEo
+         DsH0N45AdV7TMmJQDbtwOuQ++T9Ya6Ed7MGPa6fBKJYHthhRq5NgQkXDbHATGJgn90NI
+         2HFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711126248; x=1711731048;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IMFU2MbnOsDAXDgvuXOEwtIjtmzVMSKHwsLZ0yMQ728=;
-        b=tnBbXGiMUIrYpBFRR1FCrbJmtQw7nBLZaxD2fSkwFoMMmJjMJ3HwVNbAJmcyO3MvWS
-         sM5eJ32dt8v6/J6oBVu/WrqTzPezrppidA3vMYpM++CdH6KciVysm+2AbcashsQ4Ovxo
-         yW51nfT0MfVwgRok/I74qCmU6aPe2hv8XvyybGPSfVYiPqbE1bybCNyDHEyXe08Qry/a
-         dry/OqcatJ7l7tFAeBu4979y6uMH6w708KEqjqLuYaJKoI0RPnnCnpbQ4lf2x5OLveAq
-         k8+w/7P44IzGxauH0gG1Os/cpl2oFMq7E7t2bSmwHUSmJ3C61L7A6J6fOu2psCBEd5+s
-         17hg==
-X-Forwarded-Encrypted: i=1; AJvYcCU3U2JZrFi+3ZV3WoudLu2vis1Un1wQzzidnHqQlFh2ATdruRfs36tLZjYh5+kvYQFMwxgk23b3v60FsIZwPVHC2hzP5lGMPU5tUW0Uoa1bgODczvXblNzmmPXGpA4evHb7XqBKW1/WY2odLGYKmNzn1atltaHvzbl54plPP6QkZs5L
-X-Gm-Message-State: AOJu0Ywcrsq8mqsZP7OIGEtlFApCeuYCXa+aN3YWJT7Kak2LKvNLPuHQ
-	C9yv0xXv7fYvAmR7U1WkNVCJzNMhkioR0ZGAeAjPmSgbS++F8h/MbjNmNI9+A+q6yjuzJdNGLoY
-	5D0WYQlh87M45lwcR95x2ppfhNI0=
-X-Google-Smtp-Source: AGHT+IGPOoEEYRbtKYoZlOJzHAn0rx0HGoNUpSFoPMOl2wuDeaJmXaacZVSR2+zxC3yP7RBZl0VWSvbJ/3xnqjcqyb8=
-X-Received: by 2002:a05:6870:332a:b0:229:b0b5:a3db with SMTP id
- x42-20020a056870332a00b00229b0b5a3dbmr63284oae.3.1711126248523; Fri, 22 Mar
- 2024 09:50:48 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711126354; x=1711731154;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ptm15F6P6FQ96NV2QFT0Vg9sv5KsI32kiRpNkfl6c6E=;
+        b=vmTl7bja+wNkYQeniemkR0lOflhUq3tLuQ13dbcurI1QbSPr3q2niX1Mr4yo2NvnRy
+         6+IWgQuOJoqUmc3uWk7aTZswjmjb6KPcx9x8jPeyRLPxlow2mlTV3iOfLFhE4vkmUqRH
+         kvSw1ldEW4uPInQCf/eIxdc3Oh9aXXD2Aj9sO/YFS31N9qWxwvxHb3f2yNNNyA1ms6aO
+         r5wFcvUNoGVUuwRlsxqO9JbvMkPpv622y02Vdwmjg/aoiOKGJ2H7OGQBSf/9dNsWC5wj
+         tk+XFThhWzQIGlaaZgQdZIlur6ugjhuZYGMl6HvXGN4seFJRvzdpEZBCpOlkqGAK7G9H
+         jQmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW7tuvyqf44VXY3nVVCBIiCv/BJM1jyoqubHXEYVrlHFR4pNIvuHglNMcGWTcjio3ZVXv9VqrhtOyWMW5TeJgQvd52G
+X-Gm-Message-State: AOJu0YyrN912K8OWvgxYpE54KmbHKOhEcRjxt+zfDG/vwS43RUDTnA8N
+	TpUVNCQGSKYhrAsYS4+bemnJr9EcQ7eAWHTQGyJcGQC4cxRwOxfyUOKXsZszE35xKJbi4OhzMIv
+	TLJqFir9MoAEhzwmEHaFNZ9Ic4Rg=
+X-Google-Smtp-Source: AGHT+IFq6c7S4J3Q6xDNdbo0OLX709LwqJdJlxVfdTW3bVXdcowQr0MPtznupDZWEvMimYAba9+aKn3LWms0mAYOGo4=
+X-Received: by 2002:a05:6a00:13a1:b0:6e7:30b0:9cc7 with SMTP id
+ t33-20020a056a0013a100b006e730b09cc7mr289720pfg.15.1711126353632; Fri, 22 Mar
+ 2024 09:52:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322-hid-bpf-sleepable-v5-0-179c7b59eaaa@kernel.org> <20240322-hid-bpf-sleepable-v5-3-179c7b59eaaa@kernel.org>
-In-Reply-To: <20240322-hid-bpf-sleepable-v5-3-179c7b59eaaa@kernel.org>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Fri, 22 Mar 2024 17:50:11 +0100
-Message-ID: <CAP01T74+naPau2_=1G2_TUSjY_ZCAWQ2XVBKxs9xSKHobZcEeQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 3/6] bpf/helpers: introduce
- bpf_timer_set_sleepable_cb() kfunc
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+References: <20240322000041.2919948-1-andrii@kernel.org> <20240322000041.2919948-6-andrii@kernel.org>
+ <Zf2DzQmhI2e8UGrx@krava>
+In-Reply-To: <Zf2DzQmhI2e8UGrx@krava>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 22 Mar 2024 09:52:21 -0700
+Message-ID: <CAEf4BzbXOUCihfQ4iP-MSSrQt6Uy=9b=KAO+3K+eBJ+KywTFaw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 5/6] bpf: add bpf_test_tp() kfunc triggering tp
+ and allowing error injection
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, martin.lau@kernel.org, kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 22 Mar 2024 at 15:57, Benjamin Tissoires <bentiss@kernel.org> wrote:
+On Fri, Mar 22, 2024 at 6:12=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
 >
-> In this patch, bpf_timer_set_sleepable_cb() is functionally equivalent
-> to bpf_timer_set_callback(), to the exception that it enforces
-> the timer to be started with BPF_F_TIMER_SLEEPABLE.
+> On Thu, Mar 21, 2024 at 05:00:40PM -0700, Andrii Nakryiko wrote:
+> > Add a simple bpf_test_tp() kfunc, available to all program types, that
+> > is useful for various testing and benchmarking scenarios, as it allows
+> > to trigger most tracing BPF program types from BPF side, allowing to do
+> > complex testing and benchmarking scenarios.
+> >
+> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 >
-> But given that bpf_timer_set_callback() is a helper when
-> bpf_timer_set_sleepable_cb() is a kfunc, we need to teach the verifier
-> about its attached callback.
-> Marking that callback as sleepable will be done in a separate patch
+> I'm getting compilation fail with this one:
 >
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+>   INSTALL libsubcmd_headers
+>   INSTALL libsubcmd_headers
+>   CALL    scripts/checksyscalls.sh
+>   CC      kernel/bpf/helpers.o
+> In file included from kernel/bpf/bpf_test.h:34,
+>                  from kernel/bpf/helpers.c:30:
+> ./include/trace/define_trace.h:95:42: fatal error: ./bpf_test.h: No such =
+file or directory
+>    95 | #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
+>       |                                          ^
 >
-> ---
-> [...]
->
-> @@ -19548,6 +19582,28 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->                    desc->func_id == special_kfunc_list[KF_bpf_rdonly_cast]) {
->                 insn_buf[0] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
->                 *cnt = 1;
-> +       } else if (is_bpf_timer_set_sleepable_cb_impl_kfunc(desc->func_id)) {
-> +               /* The verifier will process callback_fn as many times as necessary
-> +                * with different maps and the register states prepared by
-> +                * set_timer_callback_state will be accurate.
-> +                *
-> +                * The following use case is valid:
-> +                *   map1 is shared by prog1, prog2, prog3.
-> +                *   prog1 calls bpf_timer_init for some map1 elements
-> +                *   prog2 calls bpf_timer_set_callback for some map1 elements.
-> +                *     Those that were not bpf_timer_init-ed will return -EINVAL.
-> +                *   prog3 calls bpf_timer_start for some map1 elements.
-> +                *     Those that were not both bpf_timer_init-ed and
-> +                *     bpf_timer_set_callback-ed will return -EINVAL.
-> +                */
-> +               struct bpf_insn ld_addrs[2] = {
-> +                       BPF_LD_IMM64(BPF_REG_3, (long)env->prog->aux),
-> +               };
-> +
-> +               insn_buf[0] = ld_addrs[0];
-> +               insn_buf[1] = ld_addrs[1];
-> +               insn_buf[2] = *insn;
-> +               *cnt = 3;
->         }
 
-Would be better to handle the fixup of all kfuncs in one place, i.e.
-fixup_kfunc_call.
+I can't repro even with a clean build. CI also doesn't see any problem ([0]=
+).
 
->         return 0;
->  }
+Maybe we need to have
+
+#include "trace_probe.h"
+#include "trace.h"
+
+Not sure, can you please try?
+
+I tried to do everything just like we do it in
+kernel/trace/bpf_trace.c with trace_bpf_trace_printk().
+
+
+  [0] https://github.com/kernel-patches/bpf/actions/runs/8383349803
+
+
+> jirka
 >
-> --
-> 2.44.0
->
->
+> > ---
+> >  kernel/bpf/bpf_test.h | 34 ++++++++++++++++++++++++++++++++++
+> >  kernel/bpf/helpers.c  | 13 +++++++++++++
+> >  2 files changed, 47 insertions(+)
+> >  create mode 100644 kernel/bpf/bpf_test.h
+> >
+> > diff --git a/kernel/bpf/bpf_test.h b/kernel/bpf/bpf_test.h
+> > new file mode 100644
+> > index 000000000000..c779927d3574
+> > --- /dev/null
+> > +++ b/kernel/bpf/bpf_test.h
+> > @@ -0,0 +1,34 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#undef TRACE_SYSTEM
+> > +#define TRACE_SYSTEM bpf_test
+> > +
+> > +#if !defined(_TRACE_BPF_TEST_H) || defined(TRACE_HEADER_MULTI_READ)
+> > +
+> > +#define _TRACE_BPF_TEST_H
+> > +
+> > +#include <linux/tracepoint.h>
+> > +
+> > +TRACE_EVENT(bpf_test,
+> > +
+> > +     TP_PROTO(int nonce),
+> > +
+> > +     TP_ARGS(nonce),
+> > +
+> > +     TP_STRUCT__entry(
+> > +             __field(int, nonce)
+> > +     ),
+> > +
+> > +     TP_fast_assign(
+> > +             __entry->nonce =3D nonce;
+> > +     ),
+> > +
+> > +     TP_printk("nonce %d", __entry->nonce)
+> > +);
+> > +
+> > +#endif /* _TRACE_BPF_TEST_H */
+> > +
+> > +#undef TRACE_INCLUDE_PATH
+> > +#define TRACE_INCLUDE_PATH .
+> > +#define TRACE_INCLUDE_FILE bpf_test
+> > +
+> > +#include <trace/define_trace.h>
+> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> > index 9234174ccb21..67bf9659c447 100644
+> > --- a/kernel/bpf/helpers.c
+> > +++ b/kernel/bpf/helpers.c
+> > @@ -26,6 +26,10 @@
+> >
+> >  #include "../../lib/kstrtox.h"
+> >
+> > +#define CREATE_TRACE_POINTS
+> > +#include "bpf_test.h"
+> > +
+> > +
+> >  /* If kernel subsystem is allowing eBPF programs to call this function=
+,
+> >   * inside its own verifier_ops->get_func_proto() callback it should re=
+turn
+> >   * bpf_map_lookup_elem_proto, so that verifier can properly check the =
+arguments
+> > @@ -2549,6 +2553,14 @@ __bpf_kfunc void bpf_throw(u64 cookie)
+> >       WARN(1, "A call to BPF exception callback should never return\n")=
+;
+> >  }
+> >
+> > +__bpf_kfunc int bpf_test_tp(int nonce)
+> > +{
+> > +     trace_bpf_test(nonce);
+> > +
+> > +     return nonce;
+> > +}
+> > +ALLOW_ERROR_INJECTION(bpf_test_tp, ERRNO);
+> > +
+> >  __bpf_kfunc_end_defs();
+> >
+> >  BTF_KFUNCS_START(generic_btf_ids)
+> > @@ -2625,6 +2637,7 @@ BTF_ID_FLAGS(func, bpf_dynptr_is_null)
+> >  BTF_ID_FLAGS(func, bpf_dynptr_is_rdonly)
+> >  BTF_ID_FLAGS(func, bpf_dynptr_size)
+> >  BTF_ID_FLAGS(func, bpf_dynptr_clone)
+> > +BTF_ID_FLAGS(func, bpf_test_tp)
+> >  BTF_KFUNCS_END(common_btf_ids)
+> >
+> >  static const struct btf_kfunc_id_set common_kfunc_set =3D {
+> > --
+> > 2.43.0
+> >
+> >
