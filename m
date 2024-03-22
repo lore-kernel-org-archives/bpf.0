@@ -1,158 +1,104 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-185.mta1.migadu.com (out-185.mta1.migadu.com [95.215.58.185])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3AE74CE13;
-	Fri, 22 Mar 2024 15:35:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 335572E62E
+	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 15:37:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711121727; cv=none; b=QcHePE7YsVFI7al9u1AfnTwbN6r8d1nKrR1huyqjGdFzHOs4i6RFMPBBIQfi6RiojcZ0Z0hQHaYTJ5DxJPHpWBmAbIeRUNlLz9R/GkCmNgsB0Ie94nOWtcS8EFzWBfLgQncuqiMm9YgDDwOdTNkdbDURQLOkAdTvBS0RZ1Ye720=
+	t=1711121864; cv=none; b=dC55ZbeYWMF16yc2dq7wEk5ZaIRO1ozmQpathF+qg2f0eTYcVcnGWuJvTQAKQckfDeGEaeGLvwEVxe0vR3FriXp+VPSwmID6Wt+XPbKICogluu7tPpCi4UYzP6fvS89LYBAl3bMBAYdyh5V/Uo/afHNOISLJJ8Nu6ReAbOZ02ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711121727; c=relaxed/simple;
-	bh=02j24gEqA+EZmEVwAp4heMwAZitLAHaWVd6m6M01xKY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WYnXLLfMOtj0//eF+LgfyJcLq+sHAu+VUIckerz1j8fZOvsnFWKPG0a7Lnz17IfAesbP6UH1sCS7eeacec3CHC0CeLzWaW/PWjb6BJEMxyUctuf+vmCx6kaLYgI7QrdPHeL0q/YBEQZ4TyDoPzsBVmpWwmHzUHy8wwjKJAnEVJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nwf/1TxW; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711121864; c=relaxed/simple;
+	bh=SUz8sW5c7pzloRLYqyE4Zb9yx+BR3waGVMCjQH/EivU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pYSA8aFY1yEtbFG45429zZaDa0CwtBQQy19zajngGFAM7IU2+x1CP7bjXJHCkuitwsbd2Slc26bZN0yiiscZdh93HU42bq5ZGAk7FagRW/sSpwd+sh0GbfG9L7me42sPC2XxznKlrSKXEp12bKHy4UIPV0afrT0tEQDJFSmRhlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jv1QyO80; arc=none smtp.client-ip=95.215.58.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nwf/1TxW"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4147e135f4dso3812835e9.2;
-        Fri, 22 Mar 2024 08:35:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711121724; x=1711726524; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=F2r+Sc0zL+nf1gEPeJNoGBVBB9OnWPPwrmsFxPbOcOs=;
-        b=Nwf/1TxWT4KsEXY44PMG5UDee7Jb9a2p1xtYzYtmsLRZ8wd3yV1jjzfUT78lX2G+uT
-         g78NBS2vyz/fzH7vkHCNfnIm2NEMnFVWhRdZAMtAUad7dfBC+U7vQIAhhTUUFakD7zd+
-         B9eP8sjyM6FA1bjTb3JP5RF5hIXFx6tk69QoT3TSizKVQHQBFgOmVW+ljq5E6Kn1lzAm
-         IQwD6z5p57kmVXcSSGoEM1ty9aU/RBMjXclZ68uijsQfqS/IfGh6slMDsxzl+EsDwAwo
-         qgGRnk0O8qZ5V+vr74K5Tuusr8MM0KhmE/b8KdLQOe3tkBN+ZKhHhQUhhSewppP7yJGx
-         8/5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711121724; x=1711726524;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F2r+Sc0zL+nf1gEPeJNoGBVBB9OnWPPwrmsFxPbOcOs=;
-        b=bbXIIMFH3Y3KLvK882gT9KqjhOCVvbvyOqJu4p+ddTBhWn6W7Ye05h3mE0i/zNHwf0
-         DCz5sdF+qxzMp05sJSLLB0SuCND91uWSDiGkGxqZuvGXD2uKSwyE0OkzFrm+31bZCRR/
-         KUVu1tLnEhVzOaLoLOHaLZoH41CgjbTwxXVEX8D2cVYAHNn1cAZRoz49hbziLiNOs2r5
-         JvWf5jJJYxB2sjkozy+prmnIqykIeFyr13JMG50BDCoOg9wKfy6eVLOry7EcZ9u8IwKK
-         SjUtWunKhfJgaL8l8+H8W5bwlTRD0nvSSSEISsEgB8fFRZjFn1UVhivfWW2KuGaXdu5A
-         DoNg==
-X-Forwarded-Encrypted: i=1; AJvYcCVMcE4jqIzMNimGMDSeKTBLXaRa88zrRgbE9nzKPhAqlSXYgycQrPVq4HwhggGYnWEFVtTRA7gPXYtrOdUAt85aEf2yv+pFBzCnH3k1LP+q06UJDrPKOJbgDtp0kgYEIYXu
-X-Gm-Message-State: AOJu0YwegOSH+Ed55n8cwNDsTRmX+tk3dnfbNoKOJHE1npFLtCDFAgvE
-	35DDP2dXGD/o65LIH7CeEczVFEeSaMvRdNixmjPVHfS4U+Xf0cBe
-X-Google-Smtp-Source: AGHT+IH5r7ZjLfQkFRP6jpsoZPsttvkM4rwwQd8yGePSGbgBCVvxMXcPVOeG74OU0p9PqgPr/d9GtQ==
-X-Received: by 2002:a05:600c:21d9:b0:414:f81:e512 with SMTP id x25-20020a05600c21d900b004140f81e512mr1722162wmj.19.1711121724010;
-        Fri, 22 Mar 2024 08:35:24 -0700 (PDT)
-Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id s17-20020adfa291000000b00341b7388dafsm1573716wra.77.2024.03.22.08.35.21
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 22 Mar 2024 08:35:22 -0700 (PDT)
-From: Puranjay Mohan <puranjay12@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: puranjay12@gmail.com
-Subject: [PATCH bpf v2] bpf: verifier: reject addr_space_cast insn without arena
-Date: Fri, 22 Mar 2024 15:35:18 +0000
-Message-Id: <20240322153518.11555-1-puranjay12@gmail.com>
-X-Mailer: git-send-email 2.40.1
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jv1QyO80"
+Message-ID: <68857a01-aa20-42e9-8150-752bd0efca14@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1711121859;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=95q5T/1FHf6LfY/5dkLxD/MMtuDqoQ2lr2ywL+2ghmU=;
+	b=jv1QyO80PIlKtNPMdt9zE2C7zYYDMQB88mtA/LgpgfOuFoQHi/LesizljcIfIjyiAjvZNe
+	ZsCn8ohTBP4x1KjJ1ispNT++/F3jOziPM5dHVquqh+oyMEgN+/utq9T0iIHI4Od9kw8jGG
+	6veTLKQm3PVxIPQEtwqbg5hFEzSITh4=
+Date: Fri, 22 Mar 2024 08:37:31 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 2/5] libbpf: Mark libbpf_kallsyms_parse static
+ function
+Content-Language: en-GB
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ kernel-team@fb.com, Martin KaFai Lau <martin.lau@kernel.org>
+References: <20240321200058.2218328-1-yonghong.song@linux.dev>
+ <20240321200108.2219280-1-yonghong.song@linux.dev> <Zf17mB9SYKiXDneG@krava>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <Zf17mB9SYKiXDneG@krava>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-The verifier allows using the addr_space_cast instruction in a program
-that doesn't have an associated arena. This was caught in the form an
-invalid memory access in do_misc_fixups() when while converting
-addr_space_cast to a normal 32-bit mov, env->prog->aux->arena was
-dereferenced to check for BPF_F_NO_USER_CONV flag.
 
-Reject programs that include the addr_space_cast instruction but don't
-have an associated arena.
+On 3/22/24 5:37 AM, Jiri Olsa wrote:
+> On Thu, Mar 21, 2024 at 01:01:08PM -0700, Yonghong Song wrote:
+>> Currently libbpf_kallsyms_parse() function is declared as a global
+>> function but actually it is not a API and there is no external
+>> users in bpftool/bpf-selftests. So let us mark the function as
+>> static.
+>>
+>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>> ---
+>>   tools/lib/bpf/libbpf.c          | 2 +-
+>>   tools/lib/bpf/libbpf_internal.h | 2 --
+>>   2 files changed, 1 insertion(+), 3 deletions(-)
+>>
+>> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+>> index 86df0d50cba7..a7a89269148c 100644
+>> --- a/tools/lib/bpf/libbpf.c
+>> +++ b/tools/lib/bpf/libbpf.c
+>> @@ -7982,7 +7982,7 @@ static int bpf_object__sanitize_maps(struct bpf_object *obj)
+>>   	return 0;
+>>   }
+>>   
+>> -int libbpf_kallsyms_parse(kallsyms_cb_t cb, void *ctx)
+>> +static int libbpf_kallsyms_parse(kallsyms_cb_t cb, void *ctx)
+>>   {
+>>   	char sym_type, sym_name[500];
+>>   	unsigned long long sym_addr;
+>> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+>> index 864b36177424..b1bbbdcb7792 100644
+>> --- a/tools/lib/bpf/libbpf_internal.h
+>> +++ b/tools/lib/bpf/libbpf_internal.h
+>> @@ -521,8 +521,6 @@ __s32 btf__find_by_name_kind_own(const struct btf *btf, const char *type_name,
+>>   typedef int (*kallsyms_cb_t)(unsigned long long sym_addr, char sym_type,
+>>   			     const char *sym_name, void *ctx);
+>>   
+> there's also kallsyms_cb_t which should be moved to libbpf.c,
+> or perhaps removed and unwinded in libbpf_kallsyms_parse
 
-root@rv-tester:~# ./reproducer
- Unable to handle kernel access to user memory without uaccess routines at virtual address 0000000000000030
- Oops [#1]
- Modules linked in: sch_fq_codel drm fuse i2c_core drm_panel_orientation_quirks backlight configfs ip_tables x_tables
- CPU: 2 PID: 265 Comm: reproducer Not tainted 6.8.0 #3
- Hardware name: riscv-virtio,qemu (DT)
- epc : do_misc_fixups+0x43c/0x1168
-  ra : bpf_check+0xda8/0x22b6
- epc : ffffffff8017eeaa ra : ffffffff801936d6 sp : ff200000011bb890
-  gp : ffffffff82293468 tp : ff60000084fcb840 t0 : ff60000084e38048
-  t1 : 0000000000000048 t2 : ff5fffff80000000 s0 : ff200000011bba60
-  s1 : ff2000000101d058 a0 : ff6000008b980000 a1 : 0000000000000004
-  a2 : 00000000000000e1 a3 : 0000000000000001 a4 : 0000000000010000
-  a5 : 0000000000000000 a6 : 0000000000000001 a7 : ff2000000101d000
-  s2 : 0000000000000002 s3 : 0000000000000000 s4 : 0000000000000000
-  s5 : 0000000000000002 s6 : 0000000000000000 s7 : ff6000008b980aa0
-  s8 : 0000000000010005 s9 : 0000000000000004 s10: ff6000008b980000
-  s11: 0000000000000000 t3 : 0000000000002000 t4 : 0000ff0000000000
-  t5 : 00ff000000000000 t6 : ff20000000000000
- status: 0000000200000120 badaddr: 0000000000000030 cause: 000000000000000d
- [<ffffffff8017eeaa>] do_misc_fixups+0x43c/0x1168
- [<ffffffff801936d6>] bpf_check+0xda8/0x22b6
- [<ffffffff80174b32>] bpf_prog_load+0x486/0x8dc
- [<ffffffff80176566>] __sys_bpf+0xbd8/0x214e
- [<ffffffff80177d14>] __riscv_sys_bpf+0x22/0x2a
- [<ffffffff80d2493a>] do_trap_ecall_u+0x102/0x17c
- [<ffffffff80d3048c>] ret_from_exception+0x0/0x64
- Code: b345 9783 0024 4685 8b63 16d7 3783 008d 7f9c 7fdc (5b9c) 83c9
- ---[ end trace 0000000000000000 ]---
- Kernel panic - not syncing: Fatal exception
- SMP: stopping secondary CPUs
+Thanks for suggestion, will make the change in the next revision.
 
-Fixes: 6082b6c328b5 ("bpf: Recognize addr_space_cast instruction in the verifier.")
-Reported-by: xingwei lee <xrivendell7@gmail.com>
-Reported-by: yue sun <samsun1006219@gmail.com>
-Closes: https://lore.kernel.org/bpf/CABOYnLz09O1+2gGVJuCxd_24a-7UueXzV-Ff+Fr+h5EKFDiYCQ@mail.gmail.com/
-Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
----
-Changes in V2:
-V1: https://lore.kernel.org/bpf/20240322143829.40808-1-puranjay12@gmail.com/
-- Reject programs that have the addr_space_cast instruction without an
-  arena rather than checking for a NULL pointer in do_misc_fixups.
----
- kernel/bpf/verifier.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ca6cacf7b42f..7d0bbee10d71 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -14014,6 +14014,10 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 					verbose(env, "addr_space_cast insn can only convert between address space 1 and 0\n");
- 					return -EINVAL;
- 				}
-+				if (!env->prog->aux->arena) {
-+					verbose(env, "addr_space_cast insn can only be used in a program that has an associated arena\n");
-+					return -EINVAL;
-+				}
- 			} else {
- 				if ((insn->off != 0 && insn->off != 8 && insn->off != 16 &&
- 				     insn->off != 32) || insn->imm) {
--- 
-2.40.1
-
+>
+> jirka
+>
+>> -int libbpf_kallsyms_parse(kallsyms_cb_t cb, void *arg);
+>> -
+>>   /* handle direct returned errors */
+>>   static inline int libbpf_err(int ret)
+>>   {
+>> -- 
+>> 2.43.0
+>>
+>>
