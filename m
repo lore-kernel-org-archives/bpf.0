@@ -1,125 +1,153 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E752C44C89
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 14:25:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A9B481B3;
+	Fri, 22 Mar 2024 14:38:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711117539; cv=none; b=CHWOuu/4NZrcKctJ2VPYgvtKaIz4uWYa4pN4EGssfD09+Zjb1XR0J9qCl7JUGKsHaZAhiAoZEJjJL4iTysckpHjlKI29EKbwEQ5kIQRo0q5q0FQ33ynUojCKzEkMEXtxIV0O+7U/wgdBmyQQYVhfwAdN0BWjnjmyQTja/sA2E2E=
+	t=1711118317; cv=none; b=X8BEoDv5xMo14Z9roH4R+0Re4id1IQfu7t3m/hNiWc+6oNcHgs4rk8t71bpS8yzN+jpXwUeJgvttuQtbqsNkCviTVraB/1br+XhWHxgl5xR2p7pv9Wv8vkI73so0gU9/HcWu0HTH494LaTa50obq18bKa+MG8p/Jcu5VodTDmSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711117539; c=relaxed/simple;
-	bh=VtQBT66t2c1TD6mMlG56Go+Ca6yL4crmvVUH7JbH1bo=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=shcLwYNDZGId5G8bFFK9nx6RgT/gne0YR+yPiovy2e1XziUAbf/2giTzaqiXTFVCkv4fuaGxjEa6zVNYwtwQYl8xurk8+VVBMpA156UNhGjj1kpCA8QbG+96EAUMwuaYepNvzWpbkihdD+5XErC0abbCQLrWPPs2P20+L2xu/nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aS1FuKY0; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1711118317; c=relaxed/simple;
+	bh=UYu09zXduUkm+JBpN/Y+TghaNpL7q3wgNHbep29sdA8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CiL8138RHZbT8H8ae6xqmLR4u2w4AT3HNN1NnpXVaH5vG18BH3WynCQrbPJiJJ1XOEUwpLon2KgAi+/30FM/1bOcinOYA//rwUqCewbx7t4JugRO7440pMDP842P7kHMqw3n+/dfIG7nvaHxZUPOjTAZ2iuxSD15w7h6cy6a24g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f45hVtJO; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aS1FuKY0"
-Message-ID: <f47e011b-6a02-40a1-aab1-f8c98b66d2d2@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1711117534;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TG5XExd178wk0rcdwkdD/DT5rtRSyEyBtmqTXjoUf+U=;
-	b=aS1FuKY0cushN3PC9X3aD9HlDuxBTf+B6j6RNBVhn94TkeporcP4Al29KurfK1JowBCTNh
-	O2vAp8CNRtG3NdxCgK1f+ZLNb8DEnLm2BqwT1dHJs7vgHzKQXJzbtEOc9S6G7styUOkCyV
-	yGF1pfoRU5zw6tkSOKo1S3ZGVELadx4=
-Date: Fri, 22 Mar 2024 07:25:26 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f45hVtJO"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4146fe16a1aso16852595e9.1;
+        Fri, 22 Mar 2024 07:38:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711118314; x=1711723114; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FKzLRPLFfDKfGP0XYZGykBAFy/DE3UMNbmNAv4XV4p4=;
+        b=f45hVtJOtasi0EsOcMms1/CobVX6nLF+YQGdp3uo0qx8jobCzzeix8WOfG8NNS0eHa
+         H0ojapfFQpogIiqjdP1nyyoApJfxABMWYVOsReqHcCLbOTw8HtOH77pVH3H5/nja17ld
+         udpGSqGz7K3oAvc3+lAJl7VK0qAUrc8lkEKrNA0ZXmdXiYyAluD0+ZNQxvWdPBTS0kyA
+         aNfam1L/jPLsEL4uoKD0odWWwer/Cu4RRJQaCEZNkBNz1Q2TAkDi+01P6k7NtTULi+Id
+         25nW8ZMQCcL+JOagRlmq7o6ez5xpW8nQ2EXBlUd6rYHuprpisq7u5JDegOJIoDs13NYl
+         rsiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711118314; x=1711723114;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FKzLRPLFfDKfGP0XYZGykBAFy/DE3UMNbmNAv4XV4p4=;
+        b=XWbWEnTaEvlW35ufaczgx9ZCKUosTd1Li+kLAxUUGMP8R/mE3g/Yr14zndBMnO9u2q
+         FWSdOoRUlbxbxVh231oh/H50HgYPRSqgaObgc6Tbb4prj92CfM5ky7CNjEOESxSSKcB5
+         b7U4PF9o7CMsTqEfPJZcWbt22wx9kyKhjRpkqJDMxN/DZHYRGIfN/yGFGr7blE+HEOWo
+         bfz5FF7BDF1iycmpybCnzN9//woLaaIOCRuh7MkzeU6PJl3p+zPlBbmQ31nfdQ3SJjKV
+         VSxJp7wHUnCn+dbs3sTc4tfxMVZpaFkdnztlrnsE7RjzC29/LC0S1nPmMcdXnLf5sDsO
+         +Liw==
+X-Forwarded-Encrypted: i=1; AJvYcCVwcjMnOfj1F1KrStD595j04HJKaEEbqAy0xVVdBX9scb/WH6OoxtjV/oAGJH5GFfZofyox1OEyicsX0inrf2CLCfPWLONl3Al7YetaXtz/Z+DoFsdVAzorwRYRlhaJelgJ
+X-Gm-Message-State: AOJu0YyqUlHzCUNUnlzBongW1aMzEWOZx4TTtnwy3ScoTB6b2rKm+QLF
+	OyVTM0AHmR4F7M82Os5t3XS8wlgLJaJ10PcdMYxTzPk0wCxDYjEK
+X-Google-Smtp-Source: AGHT+IGzQogvPhukuBYoDN9FrU8Da6oUbBGenCI8NWXeIhXKSt0arOEE+DvWr59JKV87Diz2jxEZRg==
+X-Received: by 2002:a05:600c:1546:b0:414:71b2:73c4 with SMTP id f6-20020a05600c154600b0041471b273c4mr1811485wmg.12.1711118314000;
+        Fri, 22 Mar 2024 07:38:34 -0700 (PDT)
+Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
+        by smtp.gmail.com with ESMTPSA id fl21-20020a05600c0b9500b00414674a1a40sm3244029wmb.45.2024.03.22.07.38.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 22 Mar 2024 07:38:33 -0700 (PDT)
+From: Puranjay Mohan <puranjay12@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Cc: puranjay12@gmail.com
+Subject: [PATCH bpf] bpf: verifier: fix NULL pointer dereference in do_misc_fixups()
+Date: Fri, 22 Mar 2024 14:38:29 +0000
+Message-Id: <20240322143829.40808-1-puranjay12@gmail.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix flaky test
- btf_map_in_map/lookup_update
-Content-Language: en-GB
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
- Martin KaFai Lau <martin.lau@kernel.org>
-References: <20240322050716.357983-1-yonghong.song@linux.dev>
-In-Reply-To: <20240322050716.357983-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
+The addr_space_cast instruction is convered to a normal 32 bit mov by the
+verifier if the cast from as(0) to as(1) or if the user has set the flag
+BPF_F_NO_USER_CONV in the arena.
 
-On 3/21/24 10:07 PM, Yonghong Song wrote:
-> Recently, I frequently hit the following test failure:
->
->    [root@arch-fb-vm1 bpf]# ./test_progs -n 33/1
->    test_lookup_update:PASS:skel_open 0 nsec
->    ...
->    test_lookup_update:PASS:sync_rcu 0 nsec
->    test_lookup_update:FAIL:map1_leak inner_map1 leaked!
->    #33/1    btf_map_in_map/lookup_update:FAIL
->    #33      btf_map_in_map:FAIL
->
-> In the test, after map is closed and then after two rcu grace periods,
-> it is assumed that map_id is not available to user space.
->
-> But the above assumption cannot be guaranteed. After zero or one
-> or two rcu grace periods in different siturations, the actual
-> freeing-map-work is put into a workqueue. Later on, when the work
-> is dequeued, the map will be actually freed.
-> See bpf_map_put() in kernel/bpf/syscall.c.
->
-> By using workqueue, there is no ganrantee that map will be actually
-> freed after a couple of rcu grace periods. This patch removed
-> such map leak detection and then the test can pass consistently.
+If the BPF program doesn't have an associated arena
+env->prog->aux->arena is NULL and the verifier currently doesn't check
+for it being NULL before accessing map_flags. This can cause a NULL
+pointer dereference:
 
-Please ignore this one. There is another patch with the same subject later but
-with one more change to fix compilation error. The reason is I send this
-patch but forget to fold a simple fix in. I waited for half an hour but
-the email didn't reach me or mailing list. I do not know what is going
-and thought it may have some issues. So I amended the fix and send
-another one. It looks like the other patch appeared in the mailing list
-too.
+root@rv-tester:~# ./reproducer
+ Unable to handle kernel access to user memory without uaccess routines at virtual address 0000000000000030
+ Oops [#1]
+ Modules linked in: sch_fq_codel drm fuse i2c_core drm_panel_orientation_quirks backlight configfs ip_tables x_tables
+ CPU: 2 PID: 265 Comm: reproducer Not tainted 6.8.0 #3
+ Hardware name: riscv-virtio,qemu (DT)
+ epc : do_misc_fixups+0x43c/0x1168
+  ra : bpf_check+0xda8/0x22b6
+ epc : ffffffff8017eeaa ra : ffffffff801936d6 sp : ff200000011bb890
+  gp : ffffffff82293468 tp : ff60000084fcb840 t0 : ff60000084e38048
+  t1 : 0000000000000048 t2 : ff5fffff80000000 s0 : ff200000011bba60
+  s1 : ff2000000101d058 a0 : ff6000008b980000 a1 : 0000000000000004
+  a2 : 00000000000000e1 a3 : 0000000000000001 a4 : 0000000000010000
+  a5 : 0000000000000000 a6 : 0000000000000001 a7 : ff2000000101d000
+  s2 : 0000000000000002 s3 : 0000000000000000 s4 : 0000000000000000
+  s5 : 0000000000000002 s6 : 0000000000000000 s7 : ff6000008b980aa0
+  s8 : 0000000000010005 s9 : 0000000000000004 s10: ff6000008b980000
+  s11: 0000000000000000 t3 : 0000000000002000 t4 : 0000ff0000000000
+  t5 : 00ff000000000000 t6 : ff20000000000000
+ status: 0000000200000120 badaddr: 0000000000000030 cause: 000000000000000d
+ [<ffffffff8017eeaa>] do_misc_fixups+0x43c/0x1168
+ [<ffffffff801936d6>] bpf_check+0xda8/0x22b6
+ [<ffffffff80174b32>] bpf_prog_load+0x486/0x8dc
+ [<ffffffff80176566>] __sys_bpf+0xbd8/0x214e
+ [<ffffffff80177d14>] __riscv_sys_bpf+0x22/0x2a
+ [<ffffffff80d2493a>] do_trap_ecall_u+0x102/0x17c
+ [<ffffffff80d3048c>] ret_from_exception+0x0/0x64
+ Code: b345 9783 0024 4685 8b63 16d7 3783 008d 7f9c 7fdc (5b9c) 83c9
+ ---[ end trace 0000000000000000 ]---
+ Kernel panic - not syncing: Fatal exception
+ SMP: stopping secondary CPUs
 
->
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->   .../selftests/bpf/prog_tests/btf_map_in_map.c | 24 -------------------
->   1 file changed, 24 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-> index a8b53b8736f0..5d389eb16295 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-> @@ -102,30 +102,6 @@ static void test_lookup_update(void)
->   	CHECK(map1_id == 0, "map1_id", "failed to get ID 1\n");
->   	CHECK(map2_id == 0, "map2_id", "failed to get ID 2\n");
->   
-> -	test_btf_map_in_map__destroy(skel);
-> -	skel = NULL;
-> -
-> -	/* we need to either wait for or force synchronize_rcu(), before
-> -	 * checking for "still exists" condition, otherwise map could still be
-> -	 * resolvable by ID, causing false positives.
-> -	 *
-> -	 * Older kernels (5.8 and earlier) freed map only after two
-> -	 * synchronize_rcu()s, so trigger two, to be entirely sure.
-> -	 */
-> -	CHECK(kern_sync_rcu(), "sync_rcu", "failed\n");
-> -	CHECK(kern_sync_rcu(), "sync_rcu", "failed\n");
-> -
-> -	fd = bpf_map_get_fd_by_id(map1_id);
-> -	if (CHECK(fd >= 0, "map1_leak", "inner_map1 leaked!\n")) {
-> -		close(fd);
-> -		goto cleanup;
-> -	}
-> -	fd = bpf_map_get_fd_by_id(map2_id);
-> -	if (CHECK(fd >= 0, "map2_leak", "inner_map2 leaked!\n")) {
-> -		close(fd);
-> -		goto cleanup;
-> -	}
-> -
->   cleanup:
->   	test_btf_map_in_map__destroy(skel);
->   }
+Add a check for NULL pointer before checking map_flags.
+
+Fixes: 6082b6c328b5 ("bpf: Recognize addr_space_cast instruction in the verifier.")
+Reported-by: xingwei lee <xrivendell7@gmail.com>
+Reported-by: yue sun <samsun1006219@gmail.com>
+Closes: https://lore.kernel.org/bpf/CABOYnLz09O1+2gGVJuCxd_24a-7UueXzV-Ff+Fr+h5EKFDiYCQ@mail.gmail.com/
+Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+---
+ kernel/bpf/verifier.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ca6cacf7b42f..78945e7b856d 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19607,7 +19607,8 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 	for (i = 0; i < insn_cnt;) {
+ 		if (insn->code == (BPF_ALU64 | BPF_MOV | BPF_X) && insn->imm) {
+ 			if ((insn->off == BPF_ADDR_SPACE_CAST && insn->imm == 1) ||
+-			    (((struct bpf_map *)env->prog->aux->arena)->map_flags & BPF_F_NO_USER_CONV)) {
++			    (env->prog->aux->arena &&
++			     (((struct bpf_map *)env->prog->aux->arena)->map_flags & BPF_F_NO_USER_CONV))) {
+ 				/* convert to 32-bit mov that clears upper 32-bit */
+ 				insn->code = BPF_ALU | BPF_MOV | BPF_X;
+ 				/* clear off, so it's a normal 'wX = wY' from JIT pov */
+-- 
+2.40.1
+
