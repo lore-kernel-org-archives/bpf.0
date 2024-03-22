@@ -1,20 +1,20 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 659D93F9F5
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 11:03:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C8F3E479
+	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 11:03:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711105406; cv=none; b=eaBbK9QmB8NF6s26jK5E01yJAz4dG+33wbvpzB71jF/mrQyydJNeHuA++tZpTx8Ip/s3IMmVh9GGAj0lBjnebMUJQnDxXROUaMnrc2Mg9hgBFLNP+LDcpTvsAK35dRODHqoA457az1N5SMFFfJj2OW4F+UTqJsddlGEW7Hwgxf4=
+	t=1711105407; cv=none; b=IPNgAzJEiyKSTuTD2AAWGwfEHPvRNW0kKrGMJQFdGayTc5hhTjgGcHSVxUOnGEgSQBjLfWxGfmHTMWIunQMmK+QBE0uAcTFTax1k5zjZXzkWBTt4GD9IjG2pLKZGCghT4qaGuygOPsadNCcOXqIbp4QXnbj2F0L1Aaw8p0MS4YA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711105406; c=relaxed/simple;
-	bh=rrvnVLPUooKlsjbkYu5sFGfvDWKb919vzFlZZWITuoA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pbM45bSWanyx4heuNUBAUgWuh0QJj9hvirel8guu5NsGVuRJsv/r03Gs2b4SlIV/SVWO6hSdRpJOzVcUnJbisHDQEzU7ADLPh8f6oaqlfKBM+xhv8lphLRsW43SZtDiuV8Y263BBt+QlIdLENf4N3M34FYuL1IPeB3INu+3XC3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+	s=arc-20240116; t=1711105407; c=relaxed/simple;
+	bh=M1fzVVapk0vgFlSTcgab6RCx0X4YdTe7rAdLeq8NHk0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KaHeBf0+zua8kzO8s3jDwS4nRP8Ne9yNgigixvmvPbcPL6Isz2lJq/Py2lNpPlrdqmiBLlBAdKuQ1LRmtpFws6M3nkd2tc9QfoQD0El0BiLytJo8OJNSHcIMIgWCF0BD3V0EYz2wbcLi9kOsS/5BiE79iJDzwt7a5TBBq8Jn8zg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id AE24C226FA7A; Thu, 21 Mar 2024 22:07:16 -0700 (PDT)
+	id 9A07A2277B80; Thu, 21 Mar 2024 23:13:53 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,8 +23,8 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
 Subject: [PATCH bpf-next] selftests/bpf: Fix flaky test btf_map_in_map/lookup_update
-Date: Thu, 21 Mar 2024 22:07:16 -0700
-Message-ID: <20240322050716.357983-1-yonghong.song@linux.dev>
+Date: Thu, 21 Mar 2024 23:13:53 -0700
+Message-ID: <20240322061353.632136-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -59,14 +59,23 @@ such map leak detection and then the test can pass consistently.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/prog_tests/btf_map_in_map.c | 24 -------------------
- 1 file changed, 24 deletions(-)
+ .../selftests/bpf/prog_tests/btf_map_in_map.c | 26 +------------------
+ 1 file changed, 1 insertion(+), 25 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c b/to=
 ols/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-index a8b53b8736f0..5d389eb16295 100644
+index a8b53b8736f0..f66ceccd7029 100644
 --- a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
 +++ b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
+@@ -25,7 +25,7 @@ static void test_lookup_update(void)
+ 	int map1_fd, map2_fd, map3_fd, map4_fd, map5_fd, map1_id, map2_id;
+ 	int outer_arr_fd, outer_hash_fd, outer_arr_dyn_fd;
+ 	struct test_btf_map_in_map *skel;
+-	int err, key =3D 0, val, i, fd;
++	int err, key =3D 0, val, i;
+=20
+ 	skel =3D test_btf_map_in_map__open_and_load();
+ 	if (CHECK(!skel, "skel_open", "failed to open&load skeleton\n"))
 @@ -102,30 +102,6 @@ static void test_lookup_update(void)
  	CHECK(map1_id =3D=3D 0, "map1_id", "failed to get ID 1\n");
  	CHECK(map2_id =3D=3D 0, "map2_id", "failed to get ID 2\n");
