@@ -1,114 +1,89 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F2C627FC
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 22:23:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6225A7EF05;
+	Fri, 22 Mar 2024 23:19:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711146191; cv=none; b=lv17yKkTouxE1R0Uc02kKfpX04M394dvEku9zXNYUGyrRyNfAiNasZ2/xAH2aEc4Fbq3vSj4ZEvRwgA3jCdgQo9eW9R3n5/DGxNente8ZpB8udq/gjgady4SM79pqMKsXyGsmiC1Yt3lG0+7zaom1EUlHdkz2fNWRXLbV3pY+yc=
+	t=1711149588; cv=none; b=a2h41iclxISNtDykq63G75cGAjlPziiNcrggb6+v2qlIEi29BkIMEoJwODhxjqvxXZw037Tk8RPJxJPZAX1VQjvW3QCAI4MEzE86qgMfQ1ofgWRHAZduLJOyE4umIFLiaiEsZnoWOsxax9Rw/3Q2GJgFLo2zcwM8YsoAzbxicSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711146191; c=relaxed/simple;
-	bh=mBfTcR1k/5sbooD87fn9zMknyUdtHc+AwgSqjzNYlEQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NukOQnz8b1dK5wW6SHpZZqeD4GQzB4Y+dUTb1xlx87Fhx4ibjHu4g7/x5fFlJauDSKV7ozBmiIku10TxQeoaMb/7C664UKHhz0fwitTqO+TOr0F2SAB1Se+hWrxkLk0UK/woijuQxDbY5tb1OF29qN0bp/GxFBerlsSX7Ht001A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rcpwMM6Z; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1711149588; c=relaxed/simple;
+	bh=msieq1rlX+OhvWYoM0YV5KS97Dsg2PJYaBtuHVmZvcg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=O7Z0zjKFbLW2twVBovyLEITwGs2kEFiBvyAVEAKpsdXtE/I5dwwEkED+9gN5c8MvbeekxI9f4GDl8iy4RSUVHlny9rKMbj3kPdBIDa5rW7SR6qTyZQZ5UGuLmxK53ukuIli31AFhVyIug2TA6Jy/HxH2fbsqXU67llLohuOZwlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ka5PHCyY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rcpwMM6Z"
-Message-ID: <0dcd8c00-3b34-4eb8-b60d-1836b7bdce0c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1711146187;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8zLEev0XiP/QmBS9ffYRxqYhRPOSQ600chcF++yPN4A=;
-	b=rcpwMM6ZhFduwT85IJqrauMrXrhcHLwHojhV+tJT3HePjo+YwRh3SiCyv5Fjo6rB7QjHdc
-	lHoojBwslaP1sazCQfPLJZDN9UKcWCYmLH/Jh3AyrffFVhDg1nRi3KbF+Bl8DyBTyuXSmA
-	MN+djZRrK2B9gIkNDIjoqFvzZ40W4pM=
-Date: Fri, 22 Mar 2024 15:23:01 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ka5PHCyY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8F27C433C7;
+	Fri, 22 Mar 2024 23:19:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711149587;
+	bh=msieq1rlX+OhvWYoM0YV5KS97Dsg2PJYaBtuHVmZvcg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ka5PHCyYmoZX9PsvxUAGJqdDBExkTkresHF1kC0nKcGUkpNWTtXfCM9eM3lON00E/
+	 sdTUglbJIwNhSuRIDCc+Shrxp7Q7F8OSC60m4cCVgaPGJWVHsM13+iCe/YoHIFFgiu
+	 5HybDp8YS06v2Xztbb1h0oBMyxoqE2gUndhvBCAbY26U2oBUOD1EZxE7LZ38fBL/QI
+	 5JZ0BUBtxg5FufRT6Zts8zD6NNC0atF7skifKgwBOdLblk5mTaX0LRELnaXdtdEHfX
+	 1o+GQ6VMkk+C/AzTNXltKD4XdDE8tCJ68h7rFM9MN2K/6Z5mQBQ5/GwiPbhToKc2vD
+	 QsSjoQ81Meb1g==
+Date: Fri, 22 Mar 2024 16:19:44 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: Christoph Hellwig <hch@infradead.org>, David Wei <dw@davidwei.uk>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>, Richard Henderson
+ <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+ Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, Willem de Bruijn
+ <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, Sumit
+ Semwal <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
+ <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, Jason
+ Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, Shailend
+ Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>
+Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
+ custom page providers
+Message-ID: <20240322161944.4eba02b6@kernel.org>
+In-Reply-To: <CAHS8izMT1Smz6UWu2uwAQRqgZPU7jTfS3GKiA_sDw9KLqoP-JA@mail.gmail.com>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+	<20240305020153.2787423-3-almasrymina@google.com>
+	<ZfegzB341oNc_Ocz@infradead.org>
+	<b938514c-61cc-41e6-b592-1003b8deccae@davidwei.uk>
+	<ZfjMopBl27-7asBc@infradead.org>
+	<CAHS8izMT1Smz6UWu2uwAQRqgZPU7jTfS3GKiA_sDw9KLqoP-JA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 5/5] selftests/bpf: Add a selftest with
- available_filter_functions_addrs
-Content-Language: en-GB
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, bpf@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
- Martin KaFai Lau <martin.lau@kernel.org>
-References: <20240321200058.2218328-1-yonghong.song@linux.dev>
- <20240321200124.2220345-1-yonghong.song@linux.dev> <Zf147sHXbgMs1yDZ@krava>
- <0bb5c256-a564-417c-b252-166aec017870@linux.dev>
- <CAEf4BzboP30Qto0jtJ=-_dbxqA375qgKsY5J5VAt8DS3=sKE8w@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <CAEf4BzboP30Qto0jtJ=-_dbxqA375qgKsY5J5VAt8DS3=sKE8w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Fri, 22 Mar 2024 10:40:26 -0700 Mina Almasry wrote:
+> Other designs for this hugepage use case are possible, I'm just
+> describing Jakub's idea for it as a potential use-case for these
+> hooks. 
 
-On 3/22/24 2:58 PM, Andrii Nakryiko wrote:
-> On Fri, Mar 22, 2024 at 9:07 AM Yonghong Song <yonghong.song@linux.dev> wrote:
->>
->> On 3/22/24 5:26 AM, Jiri Olsa wrote:
->>> On Thu, Mar 21, 2024 at 01:01:24PM -0700, Yonghong Song wrote:
->>>> The current kprobe_multi_bench_attach/kernel test
->>>> reads sym names from /sys/kernel/tracing/available_filter_functions.
->>>> Some names do not agree with the corresponding entries in /proc/kallsyms
->>>> since the corresponding /proc/kallsyms syms have suffix '.llvm.<hash>'.
->>>> Actually, if we pass symbol names in /proc/kallsyms,
->>>> kprobe_multi_attach will be okay.
->>>>
->>>> This patch added a new subtest where addresses are retrieved from
->>>> /sys/kernel/tracing/available_filter_functions_addrs, and use the
->>>> address to consule /proc/kallsyms to get the function name.
->>> hm, I don't understand the reason for this test.. AFAICS test_kprobe_multi_bench_attach
->>> is doing that already, just reading available_filter_functions file
->>>
->>> both available_filter_functions_addrs and available_filter_functions have the
->>> same functions, there's just extra addresses in available_filter_functions_addrs
->> The goal is to include those kernel functions filtered in patch 4.
->> But we cannot use the names from available_filter_functions[_addrs],
->> and we need to get names from /proc/kallsyms. Hence this patch.
->> This will test if we give names (<name>.llvm.<hash>) to kernel
->> for kprobe_multi_attach, things will be okay.
->>
-> for patch #4 it would be good to not skip those *.llvm.* functions,
-> but find the full name using kallsyms. While here we can use address
-
-Okay, I will change patch #4 to lookup /proc/kallsyms to find the
-full name. If we did that, then current patch #5 is not needed.
-
-> based multi-attachment, while getting addresses from
-> available_filter_functions_addrs? That way we'll have a test that
-> benchmarks both symbol lookup paths in the kernel (where user provides
-> symbol names as strings) and address-based lookup (where user provides
-> raw addresses).
-
-yes, we can use available_filter_functions_addrs
-to have addrs available to kernel to do multi-attach.
-will do. This will be yet another bench test.
-
->
->>>> +    *symsp = syms;
->>>> +    *cntp = cnt;
->>>> +
->>>> +error:
->>>> +    fclose(f);
->>>> +    hashmap__free(map);
->>>> +    if (err) {
->>>> +            for (i = 0; i < cnt; i++)
->>>> +                    free(syms[i]);
->>>> +            free(syms);
->>>> +    }
->>>> +    return err;
->>>> +}
->>>> +
-> [...]
+I made it ops because I had 4 different implementations with different
+recycling algorithms. I think it's a fairly reasonable piece of code.
