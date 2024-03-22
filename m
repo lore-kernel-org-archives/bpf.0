@@ -1,202 +1,284 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAA118060E;
-	Fri, 22 Mar 2024 21:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D81F60B91
+	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 21:50:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711143888; cv=none; b=BWbAeEz0V7FzUNtGSFHUIGvw+h+/U7uzwhtZ56OyfUqam/u3aZ0+YjhG1ZfSqtPC/WIb41JerhRKW7xOCftPk7dqvSmoPnsF/YckXCkThUj7Z3M8GWsoy9EPSzIr2SvK+iVMlQDG3SzOypc5BAfU+6TSLCTMkPmTyOLi3EDBMlQ=
+	t=1711144248; cv=none; b=JedeRqgcbAn1MvFI2hg9CcYaxTkbw/AMs/Po8l/rr4ronb0SInOoJtxqg5S3zssHMZRwbq0CevrIgzVy9Df6bzsK8jq8NyEIcz/sR+1B1YPRgnKp+rgq1eyPvSTFS9tNPq03AnSfy3LfQnfcDNUnOdXzfdOBwweJiWF0nt0vmUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711143888; c=relaxed/simple;
-	bh=ugGFEBr1h8X4jf5cKW2qM0y6LopVw82/fyTHJk1ZHYQ=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K783Ip7s4l4jBxY6qZ9XCzL0pVmfHPafHVm525HIHy5X4pQD/YWpKHWc7s5HLaRxQoQp8oUAPTf/LfQWGAw2JDyF5CSIkV0FEkbLeFPedan76YMEZSDNNFo7zbeSlQiaMQY1ZtcXvc1pJbEdzETaB005xP200JEVmgsz8AlsDWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QNeTCx/a; arc=none smtp.client-ip=209.85.208.43
+	s=arc-20240116; t=1711144248; c=relaxed/simple;
+	bh=8C2uf/2Xh60AaCLS7weoZuwFe46RHbGcrpsZ25FCa/w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mBfMACYYnHfJa+g6twxRBVbhEXiepGM6P697aNA987M3GcluZiepDSGwHTZpKR5+XUCKJz8YCkyyGLUrlR9BE/wbA9mNfxP32dUjXpZQazxlwIUhCg/Ya+6e8cMbevgNldeQAmRcrRt/Kcdbm3jIC2QoXwBqe9qGIsS99VVYlNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cDGemQ7Z; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QNeTCx/a"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-56bb22ff7baso3049389a12.3;
-        Fri, 22 Mar 2024 14:44:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cDGemQ7Z"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6e6b729669bso2030775b3a.3
+        for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 14:50:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711143885; x=1711748685; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4JHNs5OFB27fj7rSvafXUk1wJbR44xuU9Je9Ud5YH8c=;
-        b=QNeTCx/aBDOvumhWAVmIoUdVzA5WFPSsxDn2uUsloCjqG88geA0SKp0VwK/SbhN/gl
-         HGZAvxoenMqEZ2/7sqjaxMfgXJN8tWEBT8tk2C/c9PuivL2e0LfCLFOqKpWP/G8PW1Eq
-         PK3eaylfa3LIN01ppuIESCNJMg0I3CVRmODd2JLq9YzGaqB1d2fr+AALc9r9XU/jG+4M
-         1/QikIjRUBH5ced2xjrYaQeGSckWh36BqoBujf2fw0piKR8OkxWuneXfejE9Wg42MBQG
-         t+UFLuuhyCgAT7PDx9xUP8Fd5HHASRq0+qvyYiXmJra0Jl1pyuhJQq3WkOYUf97yWmP6
-         xrVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711143885; x=1711748685;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1711144246; x=1711749046; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4JHNs5OFB27fj7rSvafXUk1wJbR44xuU9Je9Ud5YH8c=;
-        b=NE4cgQEQMt6e+Q2pHIOuMaQkAtnysMMwLCPkUqECmXV+Ih/mVaud9mO4lH945PeNaV
-         oNZC0PO4yk/RoIrjmBifu8s7jBQnHgvg/iWNRbOCLAObL4V72pQoVvhFrj1Qwd4LouBu
-         8hKSCM2ca5DlTz8CLD/Ci5KpgYNFMK8iPFO2AQxescxQ+l24bDCba7jDYmrz+5fIz7zy
-         F62j+OB6Y6jypVn9EiXyK/HVWkv3xIzr74bGvTOLHvgUHbK9FQE2kEdTeoggcJ1ilk3h
-         zvsN3FFVXam7REV49VqO/LJLu9qSSTQqM88ESJAS6e6wBq2jO92bKgcCvFriEZTyq7O3
-         /KKg==
-X-Forwarded-Encrypted: i=1; AJvYcCVJkZBwRKNlnobGWy3bxygHb9A2SvzOHETX/4UvuR0DFWzcP7cq7qHoTUvV+ksWvnsyUeDYbvEGgmKNZzn7TwMlRWao/EJp3W8ELQljpKw3B13xFiOtN10+6ZsR9En4kRqVS6wHEDp1H0AAeotFJidTFAlPfL/JGNDv
-X-Gm-Message-State: AOJu0Yx1AP/XAIahVAtWKY5aIzDD7mi7kPU2f8xYtthxP4BQ349Zt/5d
-	ew33NbLdGFXf88nOQMV/niKP1E8pUGnVZqqQI2ytHPc1seF4yv35
-X-Google-Smtp-Source: AGHT+IHHfm2exzge9OHBaJP+4gXyGsGrgBXF0HlY/6kGnHo6/Q7weSYuEJSWRf9fZrZF+EfmeL5iEQ==
-X-Received: by 2002:a50:931e:0:b0:565:7ce5:abdc with SMTP id m30-20020a50931e000000b005657ce5abdcmr522312eda.10.1711143884566;
-        Fri, 22 Mar 2024 14:44:44 -0700 (PDT)
-Received: from krava ([83.240.62.66])
-        by smtp.gmail.com with ESMTPSA id g7-20020a056402320700b00568ba57983csm249064eda.0.2024.03.22.14.44.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Mar 2024 14:44:44 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 22 Mar 2024 22:44:42 +0100
-To: syzbot <syzbot+ba82760c63ba37799f70@syzkaller.appspotmail.com>
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com,
-	john.fastabend@gmail.com, kpsingh@kernel.org,
-	linux-kernel@vger.kernel.org, martin.lau@linux.dev,
-	netdev@vger.kernel.org, sdf@google.com, song@kernel.org,
-	syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
-Subject: Re: [syzbot] [bpf?] general protection fault in bpf_check (2)
-Message-ID: <Zf37ygebFR6JCEci@krava>
-References: <0000000000007628d60614449e5d@google.com>
+        bh=2FwYTD40FYW5lSVtXUDV1eGaF8MT09VpHfy8W8oqAWo=;
+        b=cDGemQ7Z0LdJRMc6wq/b3r0fwuRquFPPYSWKNDoHnQ21RPPWcPjUGW4Y24qAlb8136
+         RN5I/FSW0ZlO4NYYgzt+d+tph6LAlxgn0vNbqU1TfitMeYsKrt67oYifjaNdA/qTB3q+
+         ReBT6bdDWOOypFZCidbzcDBa2IXs7iBqegw8BU6DUE028ugB+l/ewUIdgY3Pp9f3ugDH
+         gWvykTeuZ+5vtWy/TvGALpDiTeNl9vkPi3cVlDrzjFqAMr6yhR6bZa8dFLfv4cuV0xcr
+         YedQiMIA1gQb3P0e6IAfFVde8pC5cI+my8gL9VHHFxDst52OcdFv9Fs8lRxCOm7q4x5H
+         bMGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711144246; x=1711749046;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2FwYTD40FYW5lSVtXUDV1eGaF8MT09VpHfy8W8oqAWo=;
+        b=e4xaJcaBKJJiAzm86nDOxLBzOo7Ssx64U/Bx/mwPTTRxTm4p9jrBExrGl4tR/YmZin
+         qr7Ni3ewtGqk61/mzwU5o0adgjVKGZmLYWjntwJApNAU4dxO8ifEvbYkEwCpd3SuZdsO
+         Esb91ilU0nqTJevJiVUGsK0dptmp31KsWKtOaNrsalYCwp4CrcMC3QmDYJW/JgCJkByC
+         4khni5PSqwP4L0p98x7CJb4Re/bczIb9+Hh9SpwTNnX6dFB/PPkiykpzvTF/X6MfiW5q
+         akpIVMEPwQEA5jG10/6m0O4yZxqFVD/nrMZAH6CBb1D85hK5ZR0L+3YTg/S3pLgLIOuf
+         PTrw==
+X-Gm-Message-State: AOJu0YwVIE1dh37HBBdBq9l0KE05AiNuqCW1QhvRnvswkHnPpLoGcjzU
+	A73x7eatBLoZJJ1lbBq1Euo5ByugLKSlwlUVeABEbzBeIgc2Zbm6a++r+ax/GOEMuFVbsmB+Q/l
+	VGwWJZVv+V+98ssOlocXzg2In2NQ=
+X-Google-Smtp-Source: AGHT+IEo2qeSSZemMBwDaFbHkpZ5SVihAmETB7gi8EC3OHu+rIFj79jR2mGxavFaLr4ivh278II6ja6xT8w4Pr6qmHM=
+X-Received: by 2002:a05:6a00:1ad0:b0:6e7:8dd:ed9a with SMTP id
+ f16-20020a056a001ad000b006e708dded9amr1090684pfv.24.1711144246397; Fri, 22
+ Mar 2024 14:50:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000007628d60614449e5d@google.com>
+References: <20240321200058.2218328-1-yonghong.song@linux.dev> <20240321200114.2219721-1-yonghong.song@linux.dev>
+In-Reply-To: <20240321200114.2219721-1-yonghong.song@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 22 Mar 2024 14:50:34 -0700
+Message-ID: <CAEf4BzYt==merToZ_3=dkFBRfGBmmULk7OTNOtUvMC5Gweg+9Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/5] libbpf: Handle <orig_name>.llvm.<hash>
+ symbol properly
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com, 
+	Martin KaFai Lau <martin.lau@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 22, 2024 at 12:13:29PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    ddb2ffdc474a libbpf: Define MFD_CLOEXEC if not available
-> git tree:       bpf
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=14ba06a5180000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=6fb1be60a193d440
-> dashboard link: https://syzkaller.appspot.com/bug?extid=ba82760c63ba37799f70
-> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=115671f1180000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14f14e31180000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/1e40c56954a9/disk-ddb2ffdc.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/738240a7f62b/vmlinux-ddb2ffdc.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/2b2e360f1d3a/bzImage-ddb2ffdc.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+ba82760c63ba37799f70@syzkaller.appspotmail.com
-> 
-> general protection fault, probably for non-canonical address 0xdffffc0000000006: 0000 [#1] PREEMPT SMP KASAN PTI
-> KASAN: null-ptr-deref in range [0x0000000000000030-0x0000000000000037]
-> CPU: 1 PID: 5066 Comm: syz-executor115 Not tainted 6.8.0-syzkaller-05232-gddb2ffdc474a #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
-> RIP: 0010:do_misc_fixups kernel/bpf/verifier.c:19609 [inline]
-> RIP: 0010:bpf_check+0xa19b/0x19010 kernel/bpf/verifier.c:21294
-> Code: 48 c1 e8 03 80 3c 08 00 74 12 48 89 df e8 2d 93 50 00 48 b9 00 00 00 00 00 fc ff df 48 8b 1b 48 83 c3 30 48 89 d8 48 c1 e8 03 <0f> b6 04 08 84 c0 0f 85 e3 4c 00 00 8b 1b be 00 00 04 00 21 de 31
-> RSP: 0018:ffffc900039671e0 EFLAGS: 00010206
-> RAX: 0000000000000006 RBX: 0000000000000030 RCX: dffffc0000000000
-> RDX: ffff888018358000 RSI: 0000000000010000 RDI: 0000000000000001
-> RBP: ffffc90003967b50 R08: ffffffff81a7a128 R09: ffffffff81a7a365
-> R10: 0000000000000004 R11: ffff888018358000 R12: ffffc90000ace072
-> R13: 1ffff92000159c0e R14: 1ffff92000159c0e R15: 0000000000010000
-> FS:  000055555905c380(0000) GS:ffff8880b9500000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00000000111ed398 CR3: 000000002258e000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  bpf_prog_load+0x1667/0x20f0 kernel/bpf/syscall.c:2895
->  __sys_bpf+0x4ee/0x810 kernel/bpf/syscall.c:5631
->  __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
->  __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
->  __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5736
->  do_syscall_64+0xfb/0x240
->  entry_SYSCALL_64_after_hwframe+0x6d/0x75
-
-looks like we might have a fix already:
-  https://lore.kernel.org/bpf/20240322153518.11555-1-puranjay12@gmail.com/T/#u
-
-jirka
-
-> RIP: 0033:0x7f425974e3e9
-> Code: 48 83 c4 28 c3 e8 37 17 00 00 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffe73dd9d38 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-> RAX: ffffffffffffffda RBX: 00007ffe73dd9f18 RCX: 00007f425974e3e9
-> RDX: 0000000000000090 RSI: 00000000200000c0 RDI: 0000000000000005
-> RBP: 00007f42597c1610 R08: 0000000000000000 R09: 0000000000000000
-> R10: 00000000ffffffff R11: 0000000000000246 R12: 0000000000000001
-> R13: 00007ffe73dd9f08 R14: 0000000000000001 R15: 0000000000000001
->  </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:do_misc_fixups kernel/bpf/verifier.c:19609 [inline]
-> RIP: 0010:bpf_check+0xa19b/0x19010 kernel/bpf/verifier.c:21294
-> Code: 48 c1 e8 03 80 3c 08 00 74 12 48 89 df e8 2d 93 50 00 48 b9 00 00 00 00 00 fc ff df 48 8b 1b 48 83 c3 30 48 89 d8 48 c1 e8 03 <0f> b6 04 08 84 c0 0f 85 e3 4c 00 00 8b 1b be 00 00 04 00 21 de 31
-> RSP: 0018:ffffc900039671e0 EFLAGS: 00010206
-> RAX: 0000000000000006 RBX: 0000000000000030 RCX: dffffc0000000000
-> RDX: ffff888018358000 RSI: 0000000000010000 RDI: 0000000000000001
-> RBP: ffffc90003967b50 R08: ffffffff81a7a128 R09: ffffffff81a7a365
-> R10: 0000000000000004 R11: ffff888018358000 R12: ffffc90000ace072
-> R13: 1ffff92000159c0e R14: 1ffff92000159c0e R15: 0000000000010000
-> FS:  000055555905c380(0000) GS:ffff8880b9500000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00000000111ed398 CR3: 000000002258e000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> ----------------
-> Code disassembly (best guess):
->    0:	48 c1 e8 03          	shr    $0x3,%rax
->    4:	80 3c 08 00          	cmpb   $0x0,(%rax,%rcx,1)
->    8:	74 12                	je     0x1c
->    a:	48 89 df             	mov    %rbx,%rdi
->    d:	e8 2d 93 50 00       	call   0x50933f
->   12:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
->   19:	fc ff df
->   1c:	48 8b 1b             	mov    (%rbx),%rbx
->   1f:	48 83 c3 30          	add    $0x30,%rbx
->   23:	48 89 d8             	mov    %rbx,%rax
->   26:	48 c1 e8 03          	shr    $0x3,%rax
-> * 2a:	0f b6 04 08          	movzbl (%rax,%rcx,1),%eax <-- trapping instruction
->   2e:	84 c0                	test   %al,%al
->   30:	0f 85 e3 4c 00 00    	jne    0x4d19
->   36:	8b 1b                	mov    (%rbx),%ebx
->   38:	be 00 00 04 00       	mov    $0x40000,%esi
->   3d:	21 de                	and    %ebx,%esi
->   3f:	31                   	.byte 0x31
-> 
-> 
+On Thu, Mar 21, 2024 at 1:01=E2=80=AFPM Yonghong Song <yonghong.song@linux.=
+dev> wrote:
+>
+> With CONFIG_LTO_CLANG_THIN enabled, with some of previous
+> version of kernel code base ([1]), I hit the following
+> error:
+>    test_ksyms:PASS:kallsyms_fopen 0 nsec
+>    test_ksyms:FAIL:ksym_find symbol 'bpf_link_fops' not found
+>    #118     ksyms:FAIL
+>
+> The reason is that 'bpf_link_fops' is renamed to
+>    bpf_link_fops.llvm.8325593422554671469
+> Due to cross-file inlining, the static variable 'bpf_link_fops'
+> in syscall.c is used by a function in another file. To avoid
+> potential duplicated names, the llvm added suffix
+> '.llvm.<hash>' ([2]) to 'bpf_link_fops' variable.
+> Such renaming caused a problem in libbpf if 'bpf_link_fops'
+> is used in bpf prog as a ksym as 'bpf_link_fops' does not
+> match any symbol in /proc/kallsyms.
+>
+> To fix this issue, libbpf needs to understand that suffix '.llvm.<hash>'
+> is caused by clang lto kernel and to process such symbols properly.
+>
+> With latest bpf-next code base built with CONFIG_LTO_CLANG_THIN,
+> I cannot reproduce the above failure any more. But such an issue
+> could happen with other symbols.
+>
+> For example, with my current kernel, I got the following from
+> /proc/kallsyms:
+>   ffffffff84782154 d __func__.net_ratelimit.llvm.6135436931166841955
+>   ffffffff85f0a500 d tk_core.llvm.726630847145216431
+>   ffffffff85fdb960 d __fs_reclaim_map.llvm.10487989720912350772
+>   ffffffff864c7300 d fake_dst_ops.llvm.54750082607048300
+>
+> I could not easily create a selftest to test newly-added
+> libbpf functionality with a static C test since I do not know
+> which symbol is cross-file inlined. But based on my particular kernel,
+> the following test change can run successfully.
+>
+>   diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms.c b/tools/tes=
+ting/selftests/bpf/prog_tests/ksyms.c
+>   index 6a86d1f07800..904a103f7b1d 100644
+>   --- a/tools/testing/selftests/bpf/prog_tests/ksyms.c
+>   +++ b/tools/testing/selftests/bpf/prog_tests/ksyms.c
+>   @@ -42,6 +42,7 @@ void test_ksyms(void)
+>           ASSERT_EQ(data->out__bpf_link_fops, link_fops_addr, "bpf_link_f=
+ops");
+>           ASSERT_EQ(data->out__bpf_link_fops1, 0, "bpf_link_fops1");
+>           ASSERT_EQ(data->out__btf_size, btf_size, "btf_size");
+>   +       ASSERT_NEQ(data->out__fake_dst_ops, 0, "fake_dst_ops");
+>           ASSERT_EQ(data->out__per_cpu_start, per_cpu_start_addr, "__per_=
+cpu_start");
+>
+>    cleanup:
+>   diff --git a/tools/testing/selftests/bpf/progs/test_ksyms.c b/tools/tes=
+ting/selftests/bpf/progs/test_ksyms.c
+>   index 6c9cbb5a3bdf..fe91eef54b66 100644
+>   --- a/tools/testing/selftests/bpf/progs/test_ksyms.c
+>   +++ b/tools/testing/selftests/bpf/progs/test_ksyms.c
+>   @@ -9,11 +9,13 @@ __u64 out__bpf_link_fops =3D -1;
+>    __u64 out__bpf_link_fops1 =3D -1;
+>    __u64 out__btf_size =3D -1;
+>    __u64 out__per_cpu_start =3D -1;
+>   +__u64 out__fake_dst_ops =3D -1;
+>
+>    extern const void bpf_link_fops __ksym;
+>    extern const void __start_BTF __ksym;
+>    extern const void __stop_BTF __ksym;
+>    extern const void __per_cpu_start __ksym;
+>   +extern const void fake_dst_ops __ksym;
+>    /* non-existing symbol, weak, default to zero */
+>    extern const void bpf_link_fops1 __ksym __weak;
+>
+>   @@ -23,6 +25,7 @@ int handler(const void *ctx)
+>           out__bpf_link_fops =3D (__u64)&bpf_link_fops;
+>           out__btf_size =3D (__u64)(&__stop_BTF - &__start_BTF);
+>           out__per_cpu_start =3D (__u64)&__per_cpu_start;
+>   +       out__fake_dst_ops =3D (__u64)&fake_dst_ops;
+>
+>           out__bpf_link_fops1 =3D (__u64)&bpf_link_fops1;
+>
+> This patch fixed the issue in libbpf such that if clang lto kernel
+> is enabled and the symbol resolution is for ksym's,
+> the suffix '.llvm.<hash>' will be ignored during comparison of
+> bpf prog ksym vs. symbols in /proc/kallsyms, this resolved the issue.
+>
+> Note that currently kernel does not support gcc build with lto.
+>
+>   [1] https://lore.kernel.org/bpf/20240302165017.1627295-1-yonghong.song@=
+linux.dev/
+>   [2] https://github.com/llvm/llvm-project/blob/release/18.x/llvm/include=
+/llvm/IR/ModuleSummaryIndex.h#L1714-L1719
+>
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 > ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> 
-> If the report is already addressed, let syzbot know by replying with:
-> #syz fix: exact-commit-title
-> 
-> If you want syzbot to run the reproducer, reply with:
-> #syz test: git://repo/address.git branch-or-commit-hash
-> If you attach or paste a git patch, syzbot will apply it before testing.
-> 
-> If you want to overwrite report's subsystems, reply with:
-> #syz set subsystems: new-subsystem
-> (See the list of subsystem names on the web dashboard)
-> 
-> If the report is a duplicate of another one, reply with:
-> #syz dup: exact-subject-of-another-report
-> 
-> If you want to undo deduplication, reply with:
-> #syz undup
+>  tools/lib/bpf/libbpf.c | 64 +++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 63 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index a7a89269148c..8c3861192bc8 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -664,6 +664,7 @@ struct bpf_object {
+>         bool loaded;
+>         bool has_subcalls;
+>         bool has_rodata;
+> +       bool need_kallsyms;
+>
+>         struct bpf_gen *gen_loader;
+>
+> @@ -8016,14 +8017,73 @@ static int libbpf_kallsyms_parse(kallsyms_cb_t cb=
+, void *ctx)
+>         return err;
+>  }
+>
+> +static int check_lto_kernel(void)
+> +{
+> +       static int check_lto =3D 2;
+> +       char buf[PATH_MAX];
+> +       struct utsname uts;
+> +       gzFile file;
+> +       int len;
+> +
+> +       if (check_lto !=3D 2)
+> +               return check_lto;
+> +
+> +       uname(&uts);
+> +       len =3D snprintf(buf, PATH_MAX, "/boot/config-%s", uts.release);
+> +       if (len < 0) {
+> +               check_lto =3D -EINVAL;
+> +               goto out;
+> +       } else if (len >=3D PATH_MAX) {
+> +               check_lto =3D -ENAMETOOLONG;
+> +               goto out;
+> +       }
+> +
+> +       /* gzopen also accepts uncompressed files. */
+> +       file =3D gzopen(buf, "re");
+> +       if (!file)
+> +               file =3D gzopen("/proc/config.gz", "re");
+> +
+> +       if (!file) {
+> +               check_lto =3D -ENOENT;
+> +               goto out;
+> +       }
+> +
+> +       check_lto =3D 0;
+> +       while (gzgets(file, buf, sizeof(buf))) {
+> +               /* buf also contains '\n', skip it during comparison. */
+> +               if (!strncmp(buf, "CONFIG_LTO_CLANG=3Dy", 18)) {
+> +                       check_lto =3D 1;
+> +                       break;
+> +               }
+> +       }
+> +
+> +       gzclose(file);
+> +out:
+> +       return check_lto;
+> +}
+> +
+>  static int kallsyms_cb(unsigned long long sym_addr, char sym_type,
+>                        const char *sym_name, void *ctx)
+>  {
+> +       int lto_enabled =3D check_lto_kernel();
+> +       char orig_name[PATH_MAX], *res;
+>         struct bpf_object *obj =3D ctx;
+>         const struct btf_type *t;
+>         struct extern_desc *ext;
+>
+> -       ext =3D find_extern_by_name(obj, sym_name);
+> +       /* Only check static variables in data sections */
+> +       if (sym_type =3D=3D 'd' && obj->need_kallsyms && lto_enabled =3D=
+=3D 1) {
+> +               strcpy(orig_name, sym_name);
+> +               res =3D strstr(orig_name, ".llvm.");
+> +               if (res) {
+> +                       *res =3D '\0';
+> +                       pr_debug("extern (ksym) '%s': use original name '=
+%s' for comparison\n",
+> +                                sym_name, orig_name);
+> +               }
+> +               ext =3D find_extern_by_name(obj, orig_name);
+> +       } else {
+> +               ext =3D find_extern_by_name(obj, sym_name);
+> +       }
+>         if (!ext || ext->type !=3D EXT_KSYM)
+>                 return 0;
+>
+> @@ -8322,7 +8382,9 @@ static int bpf_object__resolve_externs(struct bpf_o=
+bject *obj,
+>                         return -EINVAL;
+>         }
+>         if (need_kallsyms) {
+> +               obj->need_kallsyms =3D true;
+>                 err =3D bpf_object__read_kallsyms_file(obj);
+> +               obj->need_kallsyms =3D false;
+
+I'm not clear on why you need this obj->need_kallsyms? kallsyms_cb is
+used for just this use case, it seems, it should be fine without this
+extra temporary flag.
+
+Ideally we should also switch to the iterator approach for kallsyms,
+just like we did with elf symbols iterator (see elf_sym_iter in
+elf.c), it would be a cleaner approach. Let me know if you are
+interested in doing this as well (it's not mandatory for the changes
+in this patch set, just to be clear).
+
+>                 if (err)
+>                         return -EINVAL;
+>         }
+> --
+> 2.43.0
+>
