@@ -1,182 +1,158 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E1953E22
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 15:25:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3AE74CE13;
+	Fri, 22 Mar 2024 15:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711121110; cv=none; b=CVMhbQXFBBxH6Q3Tq/sUx7l4XehlvAcZZ+SF8bhLdO76NFzxJkY2hJBFZ0rvWgXQeabhmvUY9w5pDju+GdS1Q2gkTC2vWC1PaMoc3HILnIqMDwzJwColY9pjlce5DYuuAz0YUDdiTqV8FUTEdddMhOFShbF+/clXQNmcD+C/2/k=
+	t=1711121727; cv=none; b=QcHePE7YsVFI7al9u1AfnTwbN6r8d1nKrR1huyqjGdFzHOs4i6RFMPBBIQfi6RiojcZ0Z0hQHaYTJ5DxJPHpWBmAbIeRUNlLz9R/GkCmNgsB0Ie94nOWtcS8EFzWBfLgQncuqiMm9YgDDwOdTNkdbDURQLOkAdTvBS0RZ1Ye720=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711121110; c=relaxed/simple;
-	bh=2wLtvbfdZn3x4UVXEGhEhJpxbE8sclowteClLq1fG3c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=UjSifyIZolxgzvsnVEM8fAPf0tosh7u6HVhC7AzJYQQcivZfuC/BwYJcvdFAiUBcfA707wCKJ8vBoNXxJb94kl2OOXAG+qq9MEHoW1+J4WEA+SJ8cuISVcBH6BaiGfxKo88y6h8zxdXluwQF2GPtNf6ojt3EDqiByfbkpy6mKHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xtmDNovo; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1711121727; c=relaxed/simple;
+	bh=02j24gEqA+EZmEVwAp4heMwAZitLAHaWVd6m6M01xKY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WYnXLLfMOtj0//eF+LgfyJcLq+sHAu+VUIckerz1j8fZOvsnFWKPG0a7Lnz17IfAesbP6UH1sCS7eeacec3CHC0CeLzWaW/PWjb6BJEMxyUctuf+vmCx6kaLYgI7QrdPHeL0q/YBEQZ4TyDoPzsBVmpWwmHzUHy8wwjKJAnEVJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nwf/1TxW; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xtmDNovo"
-Message-ID: <b818a791-25df-4902-8999-5829dcfd528c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1711121106;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6Mwt+clMmeFlynCqWeYgsMgQsu2kallWPr96FGjiq3o=;
-	b=xtmDNovo201g+m95MB0sDImmNbElEi6TQzc0YiBIQHQESsZtiGpoNmR0PzChrSRolbmahQ
-	+19KrAQ6hPmRFRd7p7c/WHFbrKV+z5kkUNWdALtfQbxZRDjUn1RyqlEvFiBQmTnoKRy4av
-	0vHv1gP4ngStgN9OcENG/gj1UE7YV5M=
-Date: Fri, 22 Mar 2024 08:24:59 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nwf/1TxW"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4147e135f4dso3812835e9.2;
+        Fri, 22 Mar 2024 08:35:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711121724; x=1711726524; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=F2r+Sc0zL+nf1gEPeJNoGBVBB9OnWPPwrmsFxPbOcOs=;
+        b=Nwf/1TxWT4KsEXY44PMG5UDee7Jb9a2p1xtYzYtmsLRZ8wd3yV1jjzfUT78lX2G+uT
+         g78NBS2vyz/fzH7vkHCNfnIm2NEMnFVWhRdZAMtAUad7dfBC+U7vQIAhhTUUFakD7zd+
+         B9eP8sjyM6FA1bjTb3JP5RF5hIXFx6tk69QoT3TSizKVQHQBFgOmVW+ljq5E6Kn1lzAm
+         IQwD6z5p57kmVXcSSGoEM1ty9aU/RBMjXclZ68uijsQfqS/IfGh6slMDsxzl+EsDwAwo
+         qgGRnk0O8qZ5V+vr74K5Tuusr8MM0KhmE/b8KdLQOe3tkBN+ZKhHhQUhhSewppP7yJGx
+         8/5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711121724; x=1711726524;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F2r+Sc0zL+nf1gEPeJNoGBVBB9OnWPPwrmsFxPbOcOs=;
+        b=bbXIIMFH3Y3KLvK882gT9KqjhOCVvbvyOqJu4p+ddTBhWn6W7Ye05h3mE0i/zNHwf0
+         DCz5sdF+qxzMp05sJSLLB0SuCND91uWSDiGkGxqZuvGXD2uKSwyE0OkzFrm+31bZCRR/
+         KUVu1tLnEhVzOaLoLOHaLZoH41CgjbTwxXVEX8D2cVYAHNn1cAZRoz49hbziLiNOs2r5
+         JvWf5jJJYxB2sjkozy+prmnIqykIeFyr13JMG50BDCoOg9wKfy6eVLOry7EcZ9u8IwKK
+         SjUtWunKhfJgaL8l8+H8W5bwlTRD0nvSSSEISsEgB8fFRZjFn1UVhivfWW2KuGaXdu5A
+         DoNg==
+X-Forwarded-Encrypted: i=1; AJvYcCVMcE4jqIzMNimGMDSeKTBLXaRa88zrRgbE9nzKPhAqlSXYgycQrPVq4HwhggGYnWEFVtTRA7gPXYtrOdUAt85aEf2yv+pFBzCnH3k1LP+q06UJDrPKOJbgDtp0kgYEIYXu
+X-Gm-Message-State: AOJu0YwegOSH+Ed55n8cwNDsTRmX+tk3dnfbNoKOJHE1npFLtCDFAgvE
+	35DDP2dXGD/o65LIH7CeEczVFEeSaMvRdNixmjPVHfS4U+Xf0cBe
+X-Google-Smtp-Source: AGHT+IH5r7ZjLfQkFRP6jpsoZPsttvkM4rwwQd8yGePSGbgBCVvxMXcPVOeG74OU0p9PqgPr/d9GtQ==
+X-Received: by 2002:a05:600c:21d9:b0:414:f81:e512 with SMTP id x25-20020a05600c21d900b004140f81e512mr1722162wmj.19.1711121724010;
+        Fri, 22 Mar 2024 08:35:24 -0700 (PDT)
+Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
+        by smtp.gmail.com with ESMTPSA id s17-20020adfa291000000b00341b7388dafsm1573716wra.77.2024.03.22.08.35.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 22 Mar 2024 08:35:22 -0700 (PDT)
+From: Puranjay Mohan <puranjay12@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: puranjay12@gmail.com
+Subject: [PATCH bpf v2] bpf: verifier: reject addr_space_cast insn without arena
+Date: Fri, 22 Mar 2024 15:35:18 +0000
+Message-Id: <20240322153518.11555-1-puranjay12@gmail.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 1/3] leds: trigger: legtrig-bpf: Add ledtrig-bpf module
-Content-Language: en-GB
-To: Daniel Hodges <hodges.daniel.scott@gmail.com>, ast@kernel.org,
- pavel@ucw.cz, lee@kernel.org, linux-leds@vger.kernel.org,
- daniel@iogearbox.net, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1711113657.git.hodges.daniel.scott@gmail.com>
- <ac8e77881212e18d117059a698affd6afc2607af.1711113657.git.hodges.daniel.scott@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <ac8e77881212e18d117059a698affd6afc2607af.1711113657.git.hodges.daniel.scott@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
+The verifier allows using the addr_space_cast instruction in a program
+that doesn't have an associated arena. This was caught in the form an
+invalid memory access in do_misc_fixups() when while converting
+addr_space_cast to a normal 32-bit mov, env->prog->aux->arena was
+dereferenced to check for BPF_F_NO_USER_CONV flag.
 
-On 3/22/24 7:08 AM, Daniel Hodges wrote:
-> This patch adds a led trigger that interfaces with the bpf subsystem. It
-> allows for BPF programs to control LED activity through calling bpf
-> kfuncs. This functionality is useful in giving users a physical
-> indication that a BPF program has performed an operation such as
-> handling a packet or probe point.
->
-> Signed-off-by: Daniel Hodges <hodges.daniel.scott@gmail.com>
-> ---
->   drivers/leds/trigger/Kconfig       | 10 +++++
->   drivers/leds/trigger/Makefile      |  1 +
->   drivers/leds/trigger/ledtrig-bpf.c | 72 ++++++++++++++++++++++++++++++
->   3 files changed, 83 insertions(+)
->   create mode 100644 drivers/leds/trigger/ledtrig-bpf.c
->
-> diff --git a/drivers/leds/trigger/Kconfig b/drivers/leds/trigger/Kconfig
-> index d11d80176fc0..30b0fd3847be 100644
-> --- a/drivers/leds/trigger/Kconfig
-> +++ b/drivers/leds/trigger/Kconfig
-> @@ -152,4 +152,14 @@ config LEDS_TRIGGER_TTY
->   
->   	  When build as a module this driver will be called ledtrig-tty.
->   
-> +config LEDS_TRIGGER_BPF
-> +	tristate "LED BPF Trigger"
-> +	depends on BPF
-> +	depends on BPF_SYSCALL
-> +	help
-> +	  This allows LEDs to be controlled by the BPF subsystem. This trigger
-> +	  must be used with a loaded BPF program in order to control LED state.
-> +	  BPF programs can control LED state with kfuncs.
-> +	  If unsure, say N.
-> +
->   endif # LEDS_TRIGGERS
-> diff --git a/drivers/leds/trigger/Makefile b/drivers/leds/trigger/Makefile
-> index 25c4db97cdd4..ac47128d406c 100644
-> --- a/drivers/leds/trigger/Makefile
-> +++ b/drivers/leds/trigger/Makefile
-> @@ -16,3 +16,4 @@ obj-$(CONFIG_LEDS_TRIGGER_NETDEV)	+= ledtrig-netdev.o
->   obj-$(CONFIG_LEDS_TRIGGER_PATTERN)	+= ledtrig-pattern.o
->   obj-$(CONFIG_LEDS_TRIGGER_AUDIO)	+= ledtrig-audio.o
->   obj-$(CONFIG_LEDS_TRIGGER_TTY)		+= ledtrig-tty.o
-> +obj-$(CONFIG_LEDS_TRIGGER_BPF)		+= ledtrig-bpf.o
-> diff --git a/drivers/leds/trigger/ledtrig-bpf.c b/drivers/leds/trigger/ledtrig-bpf.c
-> new file mode 100644
-> index 000000000000..e3b0b8281b70
-> --- /dev/null
-> +++ b/drivers/leds/trigger/ledtrig-bpf.c
-> @@ -0,0 +1,72 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * LED BPF Trigger
-> + *
-> + * Author: Daniel Hodges <hodges.daniel.scott@gmail.com>
-> + */
-> +
-> +#include <linux/bpf.h>
-> +#include <linux/btf.h>
-> +#include <linux/btf_ids.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/init.h>
-> +#include <linux/leds.h>
-> +
-> +
-> +DEFINE_LED_TRIGGER(ledtrig_bpf);
-> +
-> +__bpf_hook_start()
-> +
-> +__bpf_kfunc void bpf_ledtrig_blink(unsigned long delay_on, unsigned long delay_off, int invert)
-> +{
-> +	led_trigger_blink_oneshot(ledtrig_bpf, delay_on, delay_off, invert);
-> +}
-> +__bpf_hook_end();
-> +
-> +BTF_SET8_START(ledtrig_bpf_kfunc_ids)
-> +BTF_ID_FLAGS(func, bpf_ledtrig_blink)
-> +BTF_SET8_END(ledtrig_bpf_kfunc_ids)
-> +
-> +static const struct btf_kfunc_id_set ledtrig_bpf_kfunc_set = {
-> +	.owner = THIS_MODULE,
-> +	.set   = &ledtrig_bpf_kfunc_ids,
-> +};
-> +
-> +static int init_bpf(void)
-> +{
-> +	int ret;
-> +
-> +	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
-> +			&ledtrig_bpf_kfunc_set);
+Reject programs that include the addr_space_cast instruction but don't
+have an associated arena.
 
-If you add the kfunc to BPF_PROG_TYPE_UNSPEC, then
-you do not need to add to the following prog types
-since the kernel will search BPF_PROG_TYPE_UNSPEC
-for all prog types.
+root@rv-tester:~# ./reproducer
+ Unable to handle kernel access to user memory without uaccess routines at virtual address 0000000000000030
+ Oops [#1]
+ Modules linked in: sch_fq_codel drm fuse i2c_core drm_panel_orientation_quirks backlight configfs ip_tables x_tables
+ CPU: 2 PID: 265 Comm: reproducer Not tainted 6.8.0 #3
+ Hardware name: riscv-virtio,qemu (DT)
+ epc : do_misc_fixups+0x43c/0x1168
+  ra : bpf_check+0xda8/0x22b6
+ epc : ffffffff8017eeaa ra : ffffffff801936d6 sp : ff200000011bb890
+  gp : ffffffff82293468 tp : ff60000084fcb840 t0 : ff60000084e38048
+  t1 : 0000000000000048 t2 : ff5fffff80000000 s0 : ff200000011bba60
+  s1 : ff2000000101d058 a0 : ff6000008b980000 a1 : 0000000000000004
+  a2 : 00000000000000e1 a3 : 0000000000000001 a4 : 0000000000010000
+  a5 : 0000000000000000 a6 : 0000000000000001 a7 : ff2000000101d000
+  s2 : 0000000000000002 s3 : 0000000000000000 s4 : 0000000000000000
+  s5 : 0000000000000002 s6 : 0000000000000000 s7 : ff6000008b980aa0
+  s8 : 0000000000010005 s9 : 0000000000000004 s10: ff6000008b980000
+  s11: 0000000000000000 t3 : 0000000000002000 t4 : 0000ff0000000000
+  t5 : 00ff000000000000 t6 : ff20000000000000
+ status: 0000000200000120 badaddr: 0000000000000030 cause: 000000000000000d
+ [<ffffffff8017eeaa>] do_misc_fixups+0x43c/0x1168
+ [<ffffffff801936d6>] bpf_check+0xda8/0x22b6
+ [<ffffffff80174b32>] bpf_prog_load+0x486/0x8dc
+ [<ffffffff80176566>] __sys_bpf+0xbd8/0x214e
+ [<ffffffff80177d14>] __riscv_sys_bpf+0x22/0x2a
+ [<ffffffff80d2493a>] do_trap_ecall_u+0x102/0x17c
+ [<ffffffff80d3048c>] ret_from_exception+0x0/0x64
+ Code: b345 9783 0024 4685 8b63 16d7 3783 008d 7f9c 7fdc (5b9c) 83c9
+ ---[ end trace 0000000000000000 ]---
+ Kernel panic - not syncing: Fatal exception
+ SMP: stopping secondary CPUs
 
-But if the kfunc only intends to be used for the following
-program types, I suggest removing the above BPF_PROG_TYPE_UNSPEC
-registration.
+Fixes: 6082b6c328b5 ("bpf: Recognize addr_space_cast instruction in the verifier.")
+Reported-by: xingwei lee <xrivendell7@gmail.com>
+Reported-by: yue sun <samsun1006219@gmail.com>
+Closes: https://lore.kernel.org/bpf/CABOYnLz09O1+2gGVJuCxd_24a-7UueXzV-Ff+Fr+h5EKFDiYCQ@mail.gmail.com/
+Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+---
+Changes in V2:
+V1: https://lore.kernel.org/bpf/20240322143829.40808-1-puranjay12@gmail.com/
+- Reject programs that have the addr_space_cast instruction without an
+  arena rather than checking for a NULL pointer in do_misc_fixups.
+---
+ kernel/bpf/verifier.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> +	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
-> +			&ledtrig_bpf_kfunc_set);
-> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
-> +			&ledtrig_bpf_kfunc_set);
-> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SK_SKB,
-> +			&ledtrig_bpf_kfunc_set);
-> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS,
-> +			&ledtrig_bpf_kfunc_set);
-> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_ACT,
-> +			&ledtrig_bpf_kfunc_set);
-> +	return ret;
-> +}
-> +
-> +static int ledtrig_bpf_init(void)
-> +{
-> +	led_trigger_register_simple("bpf", &ledtrig_bpf);
-> +
-> +	return init_bpf();
-> +}
-> +
-> +static void __exit ledtrig_bpf_exit(void)
-> +{
-> +	led_trigger_unregister_simple(ledtrig_bpf);
-> +}
-> +
-> +module_init(ledtrig_bpf_init);
-> +module_exit(ledtrig_bpf_exit);
-> +
-> +MODULE_AUTHOR("Daniel Hodges <hodges.daniel.scott@gmail.com>");
-> +MODULE_DESCRIPTION("BPF LED trigger");
-> +MODULE_LICENSE("GPL v2");
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ca6cacf7b42f..7d0bbee10d71 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -14014,6 +14014,10 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 					verbose(env, "addr_space_cast insn can only convert between address space 1 and 0\n");
+ 					return -EINVAL;
+ 				}
++				if (!env->prog->aux->arena) {
++					verbose(env, "addr_space_cast insn can only be used in a program that has an associated arena\n");
++					return -EINVAL;
++				}
+ 			} else {
+ 				if ((insn->off != 0 && insn->off != 8 && insn->off != 16 &&
+ 				     insn->off != 32) || insn->imm) {
+-- 
+2.40.1
+
