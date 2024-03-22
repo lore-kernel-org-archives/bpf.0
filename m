@@ -1,50 +1,50 @@
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E3C383B4
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 10:26:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA96383AD
+	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 10:26:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711103170; cv=none; b=bXc6X+Dlq+q7Ket7mC7vBMXGNSJrzQiqbIrPFxnhygUAK9QUPoUPHj77kgJ+KFX403cYZzjAHUkucAnuqLCEhdbZozuYbyUsMKA6WTjXy7hCjxMROV37FrLL2zYOFPR2sfhkHtfqwJbF9lyUtuFF2TTXgiGM4uHckmOKWRb+L6c=
+	t=1711103182; cv=none; b=e0X1HH+xyQEqnsUtHmR280MjIHC3yRCCL2pu9FLNT7cY8byPcC7LQ5Q5rzMlV6zhfoh0Znv8GuaHJrYtiOMr6pcCwgwELb/ArUOBO8jJap2hR9vBjcp7OVMUTbaAXhjV4XRIgLytuxp5w1QTPK6g2xmSKhh2gImrhhuQxye/PtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711103170; c=relaxed/simple;
-	bh=IGSTlWhz8SlzaGd0ZG98dkKuaOg7LmqVixXqU0Cc2Ys=;
+	s=arc-20240116; t=1711103182; c=relaxed/simple;
+	bh=kbjbSavJiGuyahgBI8ERdnGFiTUoeTfRx3WJDFFIJkQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=q0UeMeyooLS39b3E00uS+MW5eT+cjtdlrs0vEJWt+eWdNBSckmpZl9ff+s+L6IafOUwUbxnrFeq7oBo9Zn8BE4W8nMerJ2hawwD6p6TzPl6lw0AQC0GMUkuR3jLjRG+oFI37XJNDHldHolMz6VHpPF96u4rBcvJvEZ1OAy7FFAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=fyjxXhsp; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version; b=XKCtsptrUG582tnT8bV89FrC4uMkvKXJxQ9LNVNGR0CAUSfvkXz4mjM+p9BVHkJPhmiVyL6oKb3M8ddK6tn+xENMypBBX6+/Hg8pC66HeE56g4bGAbYGmc1X5YCEZN9cZ9YQ1KpC7qP/GlTo0p0hyHzvw3BohxtOqMAfPp3CKxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Wz1Txvas; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="fyjxXhsp"
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42M7YePq000929;
-	Fri, 22 Mar 2024 10:25:48 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Wz1Txvas"
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42M7YOF9008447;
+	Fri, 22 Mar 2024 10:25:58 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2023-11-20;
- bh=9C8mcHm0cpmhQM2LeopwjuvF+kDNpASADnKCfHi+27w=;
- b=fyjxXhsp6vYbZZV9BW/G6MRsWLIIa/4QPNNPEOxqpaB4RvTjJTUSwS3Q4+s1P9QmCR8W
- aPpViOefIKRswLbB6IxkgbGoz4beXGcMGQ33P53x52CmZ9YZn27/6LCJN2LE2WTBmhZe
- 4ZsD3u37ZI3ponTB0fiRGtI1WSKypVPfDb8IagjIOfz2x8gYeDrpBxhBd4qGl5OUNru4
- DIkACqzNOOqcA4gmR3y9E44uWDQKaXbUltmqiVfJ0hVeyKNzS3BkASgT/mBNGjT2AHzP
- 7jo1c0rCGTu2tuuJYSFf2ZCIUsbkWtluk3QtUfpDaLNlbFamVR0Hmb/dxM0eVOWHx+QK Bw== 
+ bh=I3g/9YSsG6tlH9epaUQxVVk0aT2CWbN/PJ4JAB3TGvw=;
+ b=Wz1TxvasVPrFiY19qiCOlSzIek/jVi53w8gldCeVDEQIMSheT2WO8WbYQQ5Lgi7Q33Nm
+ Y8ADo/mZF+l6G3x/6NGEqKdYEol9AN6Obrft2pgFF6+YeCstFNp3AjUMXcJGL+pNzA/9
+ CF82JQCrLjxh61JLLJUDzFn+Zv/HWAVnqTTfA60cRmEEN4Dm8rrkiqKmmqVekl81O99A
+ 0G87V42HC68CLD58pR97tGRMkJpGClnOP/Of0BuvfSxF6mLNvSYkrOJEd2rEzvQ5JvYJ
+ NdwkUacxIo0BLbfu8fy++3Y+g6QKd0657vybGJym2eXNby/5SnbOXvYEzyvfeL6UiEBL OA== 
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3x0wvpgs7h-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3x0wvm8s88-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 22 Mar 2024 10:25:48 +0000
+	Fri, 22 Mar 2024 10:25:58 +0000
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 42M9APlW014978;
-	Fri, 22 Mar 2024 10:25:46 GMT
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 42M9KQpr014859;
+	Fri, 22 Mar 2024 10:25:57 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3x0wvk2j25-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3x0wvk2jaf-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 22 Mar 2024 10:25:46 +0000
+	Fri, 22 Mar 2024 10:25:56 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42MAK0kf030399;
-	Fri, 22 Mar 2024 10:25:46 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42MAK0kj030399;
+	Fri, 22 Mar 2024 10:25:56 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-175-192-105.vpn.oracle.com [10.175.192.105])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3x0wvk2h75-10;
-	Fri, 22 Mar 2024 10:25:45 +0000
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3x0wvk2h75-12;
+	Fri, 22 Mar 2024 10:25:56 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: andrii@kernel.org, jolsa@kernel.org, acme@redhat.com,
         quentin@isovalent.com
@@ -54,9 +54,9 @@ Cc: eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
         haoluo@google.com, houtao1@huawei.com, bpf@vger.kernel.org,
         masahiroy@kernel.org, mcgrof@kernel.org, nathan@kernel.org,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [RFC bpf-next 08/13] kbuild, bpf: add module-specific pahole/resolve_btfids flags for base reference BTF
-Date: Fri, 22 Mar 2024 10:24:50 +0000
-Message-Id: <20240322102455.98558-10-alan.maguire@oracle.com>
+Subject: [RFC bpf-next 10/13] module, bpf: store BTF base reference pointer in struct module
+Date: Fri, 22 Mar 2024 10:24:52 +0000
+Message-Id: <20240322102455.98558-12-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20240322102455.98558-1-alan.maguire@oracle.com>
 References: <20240322102455.98558-1-alan.maguire@oracle.com>
@@ -74,61 +74,50 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phish
  malwarescore=0 suspectscore=0 spamscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2403210000
  definitions=main-2403220074
-X-Proofpoint-GUID: AA4vfHdYsM1ORtIE77mTNonAFL42RI-1
-X-Proofpoint-ORIG-GUID: AA4vfHdYsM1ORtIE77mTNonAFL42RI-1
+X-Proofpoint-GUID: ZpfM4SB-wEOMKotFC3QR9g0hZ2ka2FAX
+X-Proofpoint-ORIG-GUID: ZpfM4SB-wEOMKotFC3QR9g0hZ2ka2FAX
 
-Support creation of module BTF along with base reference BTF;
-the latter is stored in a .BTF.base_ref ELF section and supplements
-split BTF references to base BTF with information about base types,
-allowing for later reconciliation of split BTF with a (possibly
-changed) base.  resolve_btfids uses the "-r" option to specify
-that the BTF.ids section should be populated with split BTF
-relative to the added .BTF.base_ref section rather than relative
-to the vmlinux base.
+...as this will allow split BTF modules with a base reference BTF
+representation (rather than the full vmlinux BTF at time of
+BTF encoding) to resolve their references to kernel types in a
+way that is more resilient to small changes in kernel types.
 
-Modules using base reference BTF can be built via
-
-BTF_BASE_REF=1 make -C. -M=path2/module
-
-The default is still to use split BTF relative to vmlinux.
+This will allow modules that are not built every time the kernel
+is to provide more resilient BTF, rather than have it invalidated
+every time BTF ids for core kernel types change.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- scripts/Makefile.btf      | 7 +++++++
- scripts/Makefile.modfinal | 4 ++--
- 2 files changed, 9 insertions(+), 2 deletions(-)
+ include/linux/module.h | 2 ++
+ kernel/module/main.c   | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
-index 9694ca3c5252..c8212b2ab7ca 100644
---- a/scripts/Makefile.btf
-+++ b/scripts/Makefile.btf
-@@ -19,4 +19,11 @@ pahole-flags-$(call test-ge, $(pahole-ver), 126)	= -j --btf_features=encode_forc
- 
- pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)		+= --lang_exclude=rust
- 
-+ifeq ($(BTF_BASE_REF),1)
-+module-pahole-flags-$(call test-ge, $(pahole-ver), 126)	+= --btf_features=base_ref
-+module-resolve-btfids-flags-$(call test-ge, $(pahole-ver), 126) = -r
-+endif
-+
- export PAHOLE_FLAGS := $(pahole-flags-y)
-+export MODULE_PAHOLE_FLAGS := $(module-pahole-flags-y)
-+export MODULE_RESOLVE_BTFIDS_FLAGS := $(module-resolve-btfids-flags-y)
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index 8568d256d6fb..22f5bb0a60a6 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -39,8 +39,8 @@ quiet_cmd_btf_ko = BTF [M] $@
- 	if [ ! -f vmlinux ]; then					\
- 		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
- 	else								\
--		LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) --btf_base vmlinux $@; \
--		$(RESOLVE_BTFIDS) -b vmlinux $@; 			\
-+		LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) $(MODULE_PAHOLE_FLAGS) --btf_base vmlinux $@; \
-+		$(RESOLVE_BTFIDS) $(MODULE_RESOLVE_BTFIDS_FLAGS) -b vmlinux $@; 			\
- 	fi;
- 
- # Same as newer-prereqs, but allows to exclude specified extra dependencies
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 1153b0d99a80..4167175b580b 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -510,6 +510,8 @@ struct module {
+ #ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+ 	unsigned int btf_data_size;
+ 	void *btf_data;
++	unsigned int btf_base_ref_data_size;
++	void *btf_base_ref_data;
+ #endif
+ #ifdef CONFIG_JUMP_LABEL
+ 	struct jump_entry *jump_entries;
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 36681911c05a..d116ca4a5794 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2148,6 +2148,8 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+ #endif
+ #ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+ 	mod->btf_data = any_section_objs(info, ".BTF", 1, &mod->btf_data_size);
++	mod->btf_base_ref_data = any_section_objs(info, ".BTF.base_ref", 1,
++						  &mod->btf_base_ref_data_size);
+ #endif
+ #ifdef CONFIG_JUMP_LABEL
+ 	mod->jump_entries = section_objs(info, "__jump_table",
 -- 
 2.39.3
 
