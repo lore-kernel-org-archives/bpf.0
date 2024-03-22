@@ -1,208 +1,154 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862095FDA3
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 16:52:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79EB15FDA9;
+	Fri, 22 Mar 2024 16:53:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711126356; cv=none; b=SUHGRKfeWZXAZqK/XGK4Y+GtE6TZzgJe4ABcvNqeh33srF2hvalKaBtbtQrg4urP77/Qo/Q8/RxxVcxJTXb7Ggv39D21lWy15qzG6ukGQTGzSGSBzk49p+fqJXvTxBHGQUHhZRl2EXEuKi6n8OVhbZ8cFLVc8LvJ87+TD4GvvmE=
+	t=1711126434; cv=none; b=TbIVGtju+9PBzPLrtD1kX5qqn4d4LfcPylAMRoLv3hp9WChhiEhb984HARgOG6TzQn0LUqaHGp8C4v4oZiVRHH0yz0Y0d5h2R0d/mI0jhH3IvuL200vbjpeGCOpR+yTZ6KQlozgAL+hKVQCCYSgvpq0QRMWsUsu1S03g5068/YE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711126356; c=relaxed/simple;
-	bh=UY9ujOJtr3Gvq+JMR/uMWqJ6cNkKm1xjmSBVb9lVlT0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=myys7rwwpGTmrll/es7rvjbdmoYCqW96O9eJUeZfjA+EPIGEsnlPTRuhz42VQyCbLvfeu+pK+RUpfQKWE//9Ei4lE6VCU+ABCkvBBgYMHx89HcH4ekfwbCey/Myj0eVsIvHp0nweUfdGnHJlyk8aWaOz7VTfbjk7OU0x5RbIR14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WnhMYfAC; arc=none smtp.client-ip=209.85.210.175
+	s=arc-20240116; t=1711126434; c=relaxed/simple;
+	bh=Rc4e+9q8cteiwcWOIW7T38A8/ToMIlusvAVBDyOL15M=;
+	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=S9f987mJBqRcXtUS1B54gNZz9B2zDOITnnnrwUPgaUKDh8wzgIvHxKDocdfUgNm3A3DWvkG6+2xzOlEfW2E1V00h9waHpcsvLITLPDmfgKMymTzVBA4qIlNMfWqUs3fw+8VuVSuWCSMOKzF4uv3HsRPodk3wGpVQnfOGV+BXR5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fSTRqoW8; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WnhMYfAC"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6e88e4c8500so1644454b3a.2
-        for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 09:52:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fSTRqoW8"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-33e570ef661so1085874f8f.1;
+        Fri, 22 Mar 2024 09:53:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711126354; x=1711731154; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ptm15F6P6FQ96NV2QFT0Vg9sv5KsI32kiRpNkfl6c6E=;
-        b=WnhMYfACwWbAkt38oPRkbW39MMBsFJcN1+23U0VNfjiWFRq1FN/DEw7BmBc51bCSS6
-         Zu9RJv41oWxU/0VJ41xdqvxA47ypmKoDBp5GQXTqXhEATSJ/AdCPROLkMSVPYgSSJx/K
-         R0hgppkIFkcC9aKYUAKNigSgM86rR1ppTUC0x76xfpS9T6ujmm0DT16+sKMefBUZUkmV
-         8jowd6Q+MstHw2MdRkel40WJ+HgxhsD1Dtp7tPqD4GBbAz6dUrSosIT7aex9pFUQHvEo
-         DsH0N45AdV7TMmJQDbtwOuQ++T9Ya6Ed7MGPa6fBKJYHthhRq5NgQkXDbHATGJgn90NI
-         2HFw==
+        d=gmail.com; s=20230601; t=1711126431; x=1711731231; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:to:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=prwGqiUDr2MIwI/u9qAD6n1rOIPI2RfxncckA/0+HG4=;
+        b=fSTRqoW8949esGuLPcYwLS05SHr93J/p4Q+HD3xdNqD32TbrFtjBMb/Cq27vplJFav
+         Q4Q2yxfLIwU2IMT9CTvA3raUW3NxxJq0cARd8qNii89PELbVD1y4MrsYX50IC4j38GmE
+         1HLwWRqzv9eSsV6oA7GYDMgBlNYKeB9LkPRYH8o1F98R2hUEBxbga+x4oZgsnbMNyN+q
+         fpzQq3ermhDhLIXPBM4qg6CcTW2HAAa3nTIlGeuq5nz1YP6QpkhnqnvQzlBo4gbXBIey
+         LQEXdzK8+oNky4SuXsOvXNrl14W1P0wKnyOyscIUcThiphObd7hhjplIVShdT6Qp4dBH
+         SxVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711126354; x=1711731154;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ptm15F6P6FQ96NV2QFT0Vg9sv5KsI32kiRpNkfl6c6E=;
-        b=vmTl7bja+wNkYQeniemkR0lOflhUq3tLuQ13dbcurI1QbSPr3q2niX1Mr4yo2NvnRy
-         6+IWgQuOJoqUmc3uWk7aTZswjmjb6KPcx9x8jPeyRLPxlow2mlTV3iOfLFhE4vkmUqRH
-         kvSw1ldEW4uPInQCf/eIxdc3Oh9aXXD2Aj9sO/YFS31N9qWxwvxHb3f2yNNNyA1ms6aO
-         r5wFcvUNoGVUuwRlsxqO9JbvMkPpv622y02Vdwmjg/aoiOKGJ2H7OGQBSf/9dNsWC5wj
-         tk+XFThhWzQIGlaaZgQdZIlur6ugjhuZYGMl6HvXGN4seFJRvzdpEZBCpOlkqGAK7G9H
-         jQmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW7tuvyqf44VXY3nVVCBIiCv/BJM1jyoqubHXEYVrlHFR4pNIvuHglNMcGWTcjio3ZVXv9VqrhtOyWMW5TeJgQvd52G
-X-Gm-Message-State: AOJu0YyrN912K8OWvgxYpE54KmbHKOhEcRjxt+zfDG/vwS43RUDTnA8N
-	TpUVNCQGSKYhrAsYS4+bemnJr9EcQ7eAWHTQGyJcGQC4cxRwOxfyUOKXsZszE35xKJbi4OhzMIv
-	TLJqFir9MoAEhzwmEHaFNZ9Ic4Rg=
-X-Google-Smtp-Source: AGHT+IFq6c7S4J3Q6xDNdbo0OLX709LwqJdJlxVfdTW3bVXdcowQr0MPtznupDZWEvMimYAba9+aKn3LWms0mAYOGo4=
-X-Received: by 2002:a05:6a00:13a1:b0:6e7:30b0:9cc7 with SMTP id
- t33-20020a056a0013a100b006e730b09cc7mr289720pfg.15.1711126353632; Fri, 22 Mar
- 2024 09:52:33 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711126431; x=1711731231;
+        h=mime-version:message-id:date:references:in-reply-to:subject:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=prwGqiUDr2MIwI/u9qAD6n1rOIPI2RfxncckA/0+HG4=;
+        b=m/wT/3ElWiJII232Yc9R3+cqwoqHOEfhKNgR+cKHGP04iFjuBuoTcRObZxv9AdlKPY
+         X/oE1L+vwp7PbuihPBMOkAiLvInbPlV/VkslHA0JlI0/Fsgxy5lVuvzMbivzJKLb7jqQ
+         9xWQ2LvLuqHqKHXgdjPlpINR6c8J2NflLwNsy7JoXSA4E0PGF04uGdS/KGGSTHb9rZkB
+         PmfFJ2Yo7rTWToWbHixJrrmLwPTA4FXx9jaaDqeVx2bms2QIYX0l0YdlPKszoIJi8OmD
+         FY7AQg5RiHNxq3RzOwrI62Bk+ffdUc3fHwu8JKo+exTuUe4ZC1Pm3OqiT9BS/bZ+5NAl
+         NULw==
+X-Forwarded-Encrypted: i=1; AJvYcCV5rhlBgcA4TcW5c+BaenT/qO4MsKUEUqekTmdbX9Eers8Ul12WmVQqbkVINI6zdXyIyVNlfKAmyzG+DHkamO9/lHilmSm8QBz7x2FDlc947jxCXJgSIGXKhuG01AQxpTlnnKbvjm0IbwT+4y/CecWIEdpTEs1n7Gln
+X-Gm-Message-State: AOJu0YzuzuorbiMDA5wObNvxfU9nbYbbAuEhxif043FJJSZpzRZahBHs
+	wqL6ZWeqvb56VP2yMVKgQB4gyBrcK1QQUZs2v3D81vlm7u2DI5fS
+X-Google-Smtp-Source: AGHT+IH3aziBPUEw2pxrSbVmh2Fqw5q35d7kuBZURy7unTQvxoYvMLMvNLA3cDHQEFkQSZnpaw7PLw==
+X-Received: by 2002:a5d:4944:0:b0:33e:7cdd:b559 with SMTP id r4-20020a5d4944000000b0033e7cddb559mr1991710wrs.56.1711126430520;
+        Fri, 22 Mar 2024 09:53:50 -0700 (PDT)
+Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
+        by smtp.gmail.com with ESMTPSA id y17-20020adff151000000b0033e43756d11sm2435796wro.85.2024.03.22.09.53.49
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 22 Mar 2024 09:53:50 -0700 (PDT)
+From: Puranjay Mohan <puranjay12@gmail.com>
+To: Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller"
+ <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, Alexei
+ Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John
+ Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri
+ Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
+ <hpa@zytor.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: Re: [PATCH bpf v4] bpf: verifier: prevent userspace memory access
+In-Reply-To: <15ba79e3-14b2-d92e-3f94-e4f5f963e15d@iogearbox.net>
+References: <20240321124640.8870-1-puranjay12@gmail.com>
+ <9f2b63b5-569c-1e00-a635-93d9cd695517@iogearbox.net>
+ <mb61p4jcyxq5m.fsf@gmail.com>
+ <15ba79e3-14b2-d92e-3f94-e4f5f963e15d@iogearbox.net>
+Date: Fri, 22 Mar 2024 16:53:47 +0000
+Message-ID: <mb61pcyrm8axw.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322000041.2919948-1-andrii@kernel.org> <20240322000041.2919948-6-andrii@kernel.org>
- <Zf2DzQmhI2e8UGrx@krava>
-In-Reply-To: <Zf2DzQmhI2e8UGrx@krava>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 22 Mar 2024 09:52:21 -0700
-Message-ID: <CAEf4BzbXOUCihfQ4iP-MSSrQt6Uy=9b=KAO+3K+eBJ+KywTFaw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 5/6] bpf: add bpf_test_tp() kfunc triggering tp
- and allowing error injection
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, martin.lau@kernel.org, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Fri, Mar 22, 2024 at 6:12=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
-e:
+Daniel Borkmann <daniel@iogearbox.net> writes:
+
+> On 3/22/24 4:05 PM, Puranjay Mohan wrote:
+> [...]
+>>>> +		/* Make it impossible to de-reference a userspace address */
+>>>> +		if (BPF_CLASS(insn->code) == BPF_LDX &&
+>>>> +		    (BPF_MODE(insn->code) == BPF_PROBE_MEM ||
+>>>> +		     BPF_MODE(insn->code) == BPF_PROBE_MEMSX)) {
+>>>> +			struct bpf_insn *patch = &insn_buf[0];
+>>>> +			u64 uaddress_limit = bpf_arch_uaddress_limit();
+>>>> +
+>>>> +			if (!uaddress_limit)
+>>>> +				goto next_insn;
+>>>> +
+>>>> +			*patch++ = BPF_MOV64_REG(BPF_REG_AX, insn->src_reg);
+>>>> +			if (insn->off)
+>>>> +				*patch++ = BPF_ALU64_IMM(BPF_ADD, BPF_REG_AX, insn->off);
+>>>> +			*patch++ = BPF_ALU64_IMM(BPF_RSH, BPF_REG_AX, 32);
+>>>> +			*patch++ = BPF_JMP_IMM(BPF_JLE, BPF_REG_AX, uaddress_limit >> 32, 2);
+>>>> +			*patch++ = *insn;
+>>>> +			*patch++ = BPF_JMP_IMM(BPF_JA, 0, 0, 1);
+>>>> +			*patch++ = BPF_MOV64_IMM(insn->dst_reg, 0);
+>>>
+>>> But how does this address other cases where we could fault e.g. non-canonical,
+>>> vsyscall page, etc? Technically, we would have to call to copy_from_kernel_nofault_allowed()
+>>> to really address all the cases aside from the overflow (good catch btw!) where kernel
+>>> turns into user address.
+>> 
+>> So, we are trying to ~simulate a call to
+>> copy_from_kernel_nofault_allowed() here. If the address under
+>> consideration is below TASK_SIZE (TASK_SIZE + 4GB to be precise) then we
+>> skip that load because that address could be mapped by the user.
+>> 
+>> If the address is above TASK_SIZE + 4GB, we allow the load and it could
+>> cause a fault if the address is invalid, non-canonical etc. Taking the
+>> fault is fine because JIT will add an exception table entry for
+>> for that load with BPF_PBOBE_MEM.
 >
-> On Thu, Mar 21, 2024 at 05:00:40PM -0700, Andrii Nakryiko wrote:
-> > Add a simple bpf_test_tp() kfunc, available to all program types, that
-> > is useful for various testing and benchmarking scenarios, as it allows
-> > to trigger most tracing BPF program types from BPF side, allowing to do
-> > complex testing and benchmarking scenarios.
-> >
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> Are you sure? I don't think the kernel handles non-canonical fixup.
+
+Atleast for ARM64 for I don't see a differentiation between the handling
+of canonical and non-canonical addresses.
+do_translation_fault() checks if addr < TASK_SIZE and calls
+do_page_fault() or if the address is greater than TASK_SIZE (it is a
+kernel address), do_bad_area() is called.
+
+Both of these call __do_kernel_fault() if fault is from kernel mode and it
+does fixup_exception().
+
 >
-> I'm getting compilation fail with this one:
+>> The vsyscall page is special, this approach skips all loads from this
+>> page. I am not sure if that is acceptable.
 >
->   INSTALL libsubcmd_headers
->   INSTALL libsubcmd_headers
->   CALL    scripts/checksyscalls.sh
->   CC      kernel/bpf/helpers.o
-> In file included from kernel/bpf/bpf_test.h:34,
->                  from kernel/bpf/helpers.c:30:
-> ./include/trace/define_trace.h:95:42: fatal error: ./bpf_test.h: No such =
-file or directory
->    95 | #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
->       |                                          ^
+> The bpf_probe_read_kernel() does handle it fine via copy_from_kernel_nofault().
+bpf_probe_read_kernel() is skipping reading from the vsyscall page, that
+is what this patch does as well.
+
+ARM64, RISCV, and some other archs don't implement
+copy_from_kernel_nofault_allowed() so I think the we should fix the
+common case where the BPF program should not be allowed to access memory
+below TASK_SIZE. This would be true for all architectures. 
+
 >
+> So there is tail risk that BPF_PROBE_* could trigger a crash. Other archs might
 
-I can't repro even with a clean build. CI also doesn't see any problem ([0]=
-).
+Can you explain this a bit more, how will BPF_PROBE_* trigger a crash?
 
-Maybe we need to have
+> have other quirks, e.g. in case of loongarch it says highest bit set means kernel
+> space.
 
-#include "trace_probe.h"
-#include "trace.h"
-
-Not sure, can you please try?
-
-I tried to do everything just like we do it in
-kernel/trace/bpf_trace.c with trace_bpf_trace_printk().
-
-
-  [0] https://github.com/kernel-patches/bpf/actions/runs/8383349803
-
-
-> jirka
->
-> > ---
-> >  kernel/bpf/bpf_test.h | 34 ++++++++++++++++++++++++++++++++++
-> >  kernel/bpf/helpers.c  | 13 +++++++++++++
-> >  2 files changed, 47 insertions(+)
-> >  create mode 100644 kernel/bpf/bpf_test.h
-> >
-> > diff --git a/kernel/bpf/bpf_test.h b/kernel/bpf/bpf_test.h
-> > new file mode 100644
-> > index 000000000000..c779927d3574
-> > --- /dev/null
-> > +++ b/kernel/bpf/bpf_test.h
-> > @@ -0,0 +1,34 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +#undef TRACE_SYSTEM
-> > +#define TRACE_SYSTEM bpf_test
-> > +
-> > +#if !defined(_TRACE_BPF_TEST_H) || defined(TRACE_HEADER_MULTI_READ)
-> > +
-> > +#define _TRACE_BPF_TEST_H
-> > +
-> > +#include <linux/tracepoint.h>
-> > +
-> > +TRACE_EVENT(bpf_test,
-> > +
-> > +     TP_PROTO(int nonce),
-> > +
-> > +     TP_ARGS(nonce),
-> > +
-> > +     TP_STRUCT__entry(
-> > +             __field(int, nonce)
-> > +     ),
-> > +
-> > +     TP_fast_assign(
-> > +             __entry->nonce =3D nonce;
-> > +     ),
-> > +
-> > +     TP_printk("nonce %d", __entry->nonce)
-> > +);
-> > +
-> > +#endif /* _TRACE_BPF_TEST_H */
-> > +
-> > +#undef TRACE_INCLUDE_PATH
-> > +#define TRACE_INCLUDE_PATH .
-> > +#define TRACE_INCLUDE_FILE bpf_test
-> > +
-> > +#include <trace/define_trace.h>
-> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> > index 9234174ccb21..67bf9659c447 100644
-> > --- a/kernel/bpf/helpers.c
-> > +++ b/kernel/bpf/helpers.c
-> > @@ -26,6 +26,10 @@
-> >
-> >  #include "../../lib/kstrtox.h"
-> >
-> > +#define CREATE_TRACE_POINTS
-> > +#include "bpf_test.h"
-> > +
-> > +
-> >  /* If kernel subsystem is allowing eBPF programs to call this function=
-,
-> >   * inside its own verifier_ops->get_func_proto() callback it should re=
-turn
-> >   * bpf_map_lookup_elem_proto, so that verifier can properly check the =
-arguments
-> > @@ -2549,6 +2553,14 @@ __bpf_kfunc void bpf_throw(u64 cookie)
-> >       WARN(1, "A call to BPF exception callback should never return\n")=
-;
-> >  }
-> >
-> > +__bpf_kfunc int bpf_test_tp(int nonce)
-> > +{
-> > +     trace_bpf_test(nonce);
-> > +
-> > +     return nonce;
-> > +}
-> > +ALLOW_ERROR_INJECTION(bpf_test_tp, ERRNO);
-> > +
-> >  __bpf_kfunc_end_defs();
-> >
-> >  BTF_KFUNCS_START(generic_btf_ids)
-> > @@ -2625,6 +2637,7 @@ BTF_ID_FLAGS(func, bpf_dynptr_is_null)
-> >  BTF_ID_FLAGS(func, bpf_dynptr_is_rdonly)
-> >  BTF_ID_FLAGS(func, bpf_dynptr_size)
-> >  BTF_ID_FLAGS(func, bpf_dynptr_clone)
-> > +BTF_ID_FLAGS(func, bpf_test_tp)
-> >  BTF_KFUNCS_END(common_btf_ids)
-> >
-> >  static const struct btf_kfunc_id_set common_kfunc_set =3D {
-> > --
-> > 2.43.0
-> >
-> >
+Thanks,
+Puranjay
