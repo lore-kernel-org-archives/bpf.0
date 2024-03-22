@@ -1,186 +1,151 @@
-Received: from mail-oi1-f193.google.com (mail-oi1-f193.google.com [209.85.167.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B307E4411;
-	Fri, 22 Mar 2024 16:31:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998BE5C8F8
+	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 16:41:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711125087; cv=none; b=Lvo3R1r4GwW3/Ds+A2L0W/KR8iD3jYoeIONberTuJWVfZilzBGHA6ai86rR15e5BCcrdyBfuOUPv0Eg4F1xvNcCe49MUmliQ4r6V5PrjhbcbZTzNJ7kWAdmjeOFdvWJKfwpDyyEoF0gSHpfLGebcSx5v7RNY9xTtgq13R8rszxY=
+	t=1711125705; cv=none; b=EhVFETIWjCh+w0lYOXZBQ8QhjlbsBO8SuwprwPMGAeZ53bQsO84cetKg1bhbnHqoLMJAxKU7PDxZ2QoX/1HG0dK1nziE6apL/PHD39IyzSutzJttfkOonQ/ziaa5o2xKwG/kWa0znLOtL2RcEYyi1MVieoOECtkCaHaq4s31J94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711125087; c=relaxed/simple;
-	bh=jv4xl30OffQdBcNiHQX8Jw9miue7Rq0L2m7x+7lmBos=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GSih7O4VXt9rs3eLPTeARkdfOe7n+GNJvU1Jzbp6I9dVLqQMxZ5IcdofZAaGLWOO0XyHDO34qQKwyopYn/P/GNc1B47jj+vsxGGK6MKvPkfM4X52ThsUiK6xRz4KfQ+bcdlGCTs27/CAMMWm1iijaV7NmKKxQJC/fKS1zdTFnYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jLpe1wis; arc=none smtp.client-ip=209.85.167.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711125705; c=relaxed/simple;
+	bh=5/2U7V1+CtlLFFvCfr4Q8rhMIvMI2aFcC9Avuk39RBo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tEojJBCYYHEdQjafaiFbNKe0l0OGxS8uqgDzVgfSAv6oOD8oCWJvZoV+xbjSqvn0VfxrKfRMU6HUqV82aZnQ3zHT+qjtuniCAfRwNKK0Q6QVl4cdsxrZGJ5wRHKjaQToc7d4xkD8rrhkKlnAtP26eIuUy/q+ITY81ocnGToov0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YXV7eC5u; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jLpe1wis"
-Received: by mail-oi1-f193.google.com with SMTP id 5614622812f47-3c36dcb305cso1058020b6e.0;
-        Fri, 22 Mar 2024 09:31:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711125085; x=1711729885; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=31Xzl+gdQnZUFvRLDH3yOLlBVWmU9n4CWu1bwRmZ1EY=;
-        b=jLpe1wisjOyiSRMK+9OA7/fntUNLoD0yCRmo+LZYjEqkBS3XpOYnGKAtRF2hu2DsL3
-         MAu+ZQ/mlAvRgP99VJeASQTC4NWim4bA3t15gnl6guaU3ZFSSLvCyOQBl9rP2mpmElvZ
-         eR5iEgatEedbrBEB88vPA3xjjF1tGo4T+I8WN/7kFuDNZHByYrL7wW+nmP04jfGE4fqV
-         t/NBsVJgxB4dZug1zzP3BHZ9rnynRhO8KfF1712b9yhKHOi8CCchiGjYgviJUsCiZ8YA
-         sophhBFQ9gLzrl5F3uozZ5I+blvWGUhtnorHQS4UjpUA6ufBQrsVNmyRBEKCbrvKSdzq
-         gO4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711125085; x=1711729885;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=31Xzl+gdQnZUFvRLDH3yOLlBVWmU9n4CWu1bwRmZ1EY=;
-        b=ODn5xLfDDo+4Ho74xsnrs/RTPUtmKQh0vFQMPi968ZLvHtAo5BCQtieVOTF37WDLzw
-         uxAVZAotdq5d1qYPB7fDjZHb0r62MOGZB4rltNl1q7gDg0RV3jVoFuglp6Bx7fNi/6l5
-         i0FCxCkZAc7PxWVMnTC+OeDE+46UUm/OieC6oyUvfV9ddvQaJB8bVR7kcihNcuCeN+rj
-         CzTyYHcVjcExi+p0Ed6RI2wadI8ZpK28Bmh1GOP9mfVQH7T8wFOZPg523HH6Ma160XLa
-         xzwXihQSPYFIZaR1BBv7usRTXTdl25OTl8dMbr1pP6DjkSh51QHbRlbSxF463PXP0Tf9
-         D/8g==
-X-Forwarded-Encrypted: i=1; AJvYcCUS6Ls3QwyjBIvANu2up1BoW9QLfO6wZ8RqwNFnkL61kepDxxjd2VJynAH/oPGpU+k3HNw76/9JoYIV/FpMMroBj5EfYx30ML3LpT0HfXSfzuXFhtWX4dvB919QrHSt63fwJxWMQ7Rk47NNjVPjQN1IjCzKt1804zLm52nGOLQxHsBP
-X-Gm-Message-State: AOJu0YyqoqqhvREnw0gyE0UC3ChPSjaKcu3Tir8UMF7ii4EiVEsTHvMY
-	A2LYgMFa/ZJ2L0cOceQDABrtWCZdbCO56GU3BKiXjF4fbbJEZb4T+8Rldyy1PzaTbaK7cCSDWvK
-	I0lM/F3VZFe/Jm2jbp9UOqWRhQkY=
-X-Google-Smtp-Source: AGHT+IHE3n0KTkYfD8Yj8NNJsSoEmcC2B+raJBYpEdqfWFILSH7LndOJX5ZQH98sJ9VDaqaGMoFzmRcrK7N+VhyrjD8=
-X-Received: by 2002:a05:6808:bce:b0:3c3:85f9:550a with SMTP id
- o14-20020a0568080bce00b003c385f9550amr1087400oik.17.1711125084644; Fri, 22
- Mar 2024 09:31:24 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YXV7eC5u"
+Message-ID: <b5d76a69-0ca3-4900-980f-2c9c32988f8e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1711125701;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=auWXzbmmQMtSZG48fU+sSXqAm7tB5WV0Icb8HmAr4eI=;
+	b=YXV7eC5uPU3afhdP/tx8PJBJJPkU+TAtqzPB8WYlg1wRrrUDuiH6UmCCGAX7BBCItcERYo
+	Tl15m/EgykWGOnLnEP+wXgshmDVrd93e7bP0YdwZsW63C9VUjq/rMS8kSjoMM5S1pSozcF
+	iblofE1yN8/CHi+KApLydCUoHGwoYiY=
+Date: Fri, 22 Mar 2024 09:41:33 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322-hid-bpf-sleepable-v5-0-179c7b59eaaa@kernel.org> <20240322-hid-bpf-sleepable-v5-2-179c7b59eaaa@kernel.org>
-In-Reply-To: <20240322-hid-bpf-sleepable-v5-2-179c7b59eaaa@kernel.org>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Fri, 22 Mar 2024 17:30:46 +0100
-Message-ID: <CAP01T76oYpkNdgxXo+6v53afjObvYU4LWRLfkg2S7pNivzaEvg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 2/6] bpf/verifier: add bpf_timer as a kfunc
- capable type
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH bpf-next v2 1/5] selftests/bpf: Replace CHECK with ASSERT
+ macros for ksyms test
+Content-Language: en-GB
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ kernel-team@fb.com, Martin KaFai Lau <martin.lau@kernel.org>
+References: <20240321200058.2218328-1-yonghong.song@linux.dev>
+ <20240321200103.2218888-1-yonghong.song@linux.dev>
+ <CAEf4BzZnaWjyUBonL=YBFS+9z7E_FBcJAwEaYuDGGrA-Z6zZ0Q@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAEf4BzZnaWjyUBonL=YBFS+9z7E_FBcJAwEaYuDGGrA-Z6zZ0Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, 22 Mar 2024 at 15:57, Benjamin Tissoires <bentiss@kernel.org> wrote:
->
-> We need to extend the bpf_timer API, but the way forward relies on kfuncs.
-> So make bpf_timer known for kfuncs from the verifier PoV
->
-> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
->
-> ---
->
-> changes in v5:
-> - also check for the reg offset
->
-> changes in v4:
-> - enforce KF_ARG_PTR_TO_TIMER to be of type PTR_TO_MAP_VALUE
->
-> new in v3 (split from v2 02/10)
-> ---
->  kernel/bpf/verifier.c | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 63749ad5ac6b..24a604e26ec7 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -10826,6 +10826,7 @@ enum {
->         KF_ARG_LIST_NODE_ID,
->         KF_ARG_RB_ROOT_ID,
->         KF_ARG_RB_NODE_ID,
-> +       KF_ARG_TIMER_ID,
->  };
->
->  BTF_ID_LIST(kf_arg_btf_ids)
-> @@ -10834,6 +10835,7 @@ BTF_ID(struct, bpf_list_head)
->  BTF_ID(struct, bpf_list_node)
->  BTF_ID(struct, bpf_rb_root)
->  BTF_ID(struct, bpf_rb_node)
-> +BTF_ID(struct, bpf_timer_kern)
->
->  static bool __is_kfunc_ptr_arg_type(const struct btf *btf,
->                                     const struct btf_param *arg, int type)
-> @@ -10877,6 +10879,12 @@ static bool is_kfunc_arg_rbtree_node(const struct btf *btf, const struct btf_par
->         return __is_kfunc_ptr_arg_type(btf, arg, KF_ARG_RB_NODE_ID);
->  }
->
-> +static bool is_kfunc_arg_timer(const struct btf *btf, const struct btf_param *arg)
-> +{
-> +       bool ret = __is_kfunc_ptr_arg_type(btf, arg, KF_ARG_TIMER_ID);
-> +       return ret;
-> +}
-> +
->  static bool is_kfunc_arg_callback(struct bpf_verifier_env *env, const struct btf *btf,
->                                   const struct btf_param *arg)
->  {
-> @@ -10946,6 +10954,7 @@ enum kfunc_ptr_arg_type {
->         KF_ARG_PTR_TO_NULL,
->         KF_ARG_PTR_TO_CONST_STR,
->         KF_ARG_PTR_TO_MAP,
-> +       KF_ARG_PTR_TO_TIMER,
->  };
->
->  enum special_kfunc_type {
-> @@ -11102,6 +11111,9 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *env,
->         if (is_kfunc_arg_map(meta->btf, &args[argno]))
->                 return KF_ARG_PTR_TO_MAP;
->
-> +       if (is_kfunc_arg_timer(meta->btf, &args[argno]))
-> +               return KF_ARG_PTR_TO_TIMER;
-> +
->         if ((base_type(reg->type) == PTR_TO_BTF_ID || reg2btf_ids[base_type(reg->type)])) {
->                 if (!btf_type_is_struct(ref_t)) {
->                         verbose(env, "kernel function %s args#%d pointer type %s %s is not supported\n",
-> @@ -11735,6 +11747,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->                 case KF_ARG_PTR_TO_CALLBACK:
->                 case KF_ARG_PTR_TO_REFCOUNTED_KPTR:
->                 case KF_ARG_PTR_TO_CONST_STR:
-> +               case KF_ARG_PTR_TO_TIMER:
->                         /* Trusted by default */
->                         break;
->                 default:
-> @@ -12021,6 +12034,16 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->                         if (ret)
->                                 return ret;
->                         break;
-> +               case KF_ARG_PTR_TO_TIMER:
-> +                       if (reg->type != PTR_TO_MAP_VALUE) {
-> +                               verbose(env, "arg#%d doesn't point to a map value\n", i);
-> +                               return -EINVAL;
-> +                       }
-> +                       if (reg->off) {
-> +                               verbose(env, "arg#%d offset can not be greater than 0\n", i);
-> +                               return -EINVAL;
-> +                       }
 
-This won't be correct. You don't really check whether the timer exists
-at reg->off (and if you did, this would still restrict it to 0 offset,
-and not check the variable offset which would be non-zero). What I
-would suggest is calling process_timer_func (see how dynptr calls the
-same underlying process_dynptr_func to enforce type invariants). This
-would allow sharing the same checks and avoid bugs from creeping in.
-It does all checks wrt constant/variable offset and looking up the
-timer field offset and matching it against the one in the pointer.
+On 3/22/24 9:13 AM, Andrii Nakryiko wrote:
+> On Thu, Mar 21, 2024 at 1:01 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+>> I am going to modify ksyms test later so take this opportunity
+>> to replace old CHECK macros with new ASSERT macros.
+>> No functionality change.
+>>
+>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>> ---
+>>   .../testing/selftests/bpf/prog_tests/ksyms.c  | 30 ++++++-------------
+>>   1 file changed, 9 insertions(+), 21 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms.c b/tools/testing/selftests/bpf/prog_tests/ksyms.c
+>> index b295969b263b..6a86d1f07800 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/ksyms.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/ksyms.c
+>> @@ -5,8 +5,6 @@
+>>   #include "test_ksyms.skel.h"
+>>   #include <sys/stat.h>
+>>
+>> -static int duration;
+>> -
+>>   void test_ksyms(void)
+>>   {
+>>          const char *btf_path = "/sys/kernel/btf/vmlinux";
+>> @@ -18,43 +16,33 @@ void test_ksyms(void)
+>>          int err;
+>>
+>>          err = kallsyms_find("bpf_link_fops", &link_fops_addr);
+>> -       if (CHECK(err == -EINVAL, "kallsyms_fopen", "failed to open: %d\n", errno))
+>> -               return;
+>> -       if (CHECK(err == -ENOENT, "ksym_find", "symbol 'bpf_link_fops' not found\n"))
+>> +       if (!ASSERT_TRUE(err != -EINVAL && err != -ENOENT, "bpf_link_fops"))
+>>                  return;
+> it's best to keep each individual equality test as ASSERT_EQ(), that
+> way we get more specific and detailed error (with expected vs actual
+> value), which here we'll just get "wanted true but got false", and
+> then we'd have to debug some more which of the conditions it is. So
+> please keep the original granularity of checks everywhere.
 
-> +                       break;
->                 }
->         }
+Do you mean
+
+         if (ASSERT_EQ(err, -EINVAL, "..."))
+                 return;
+         if (ASSERT_EQ(err, -ENOENT, "..."))
+                 return;
+
+This does not really work, for example if err = 0, it will declare test 
+failure.
+
+
 >
->
-> --
-> 2.44.0
->
->
+>>          err = kallsyms_find("__per_cpu_start", &per_cpu_start_addr);
+>> -       if (CHECK(err == -EINVAL, "kallsyms_fopen", "failed to open: %d\n", errno))
+>> -               return;
+>> -       if (CHECK(err == -ENOENT, "ksym_find", "symbol 'per_cpu_start' not found\n"))
+>> +       if (!ASSERT_TRUE(err != -EINVAL && err != -ENOENT, "__per_cpu_start"))
+>>                  return;
+>>
+>> -       if (CHECK(stat(btf_path, &st), "stat_btf", "err %d\n", errno))
+>> +       if (!ASSERT_OK(stat(btf_path, &st), "stat_btf"))
+>>                  return;
+>>          btf_size = st.st_size;
+>>
+>>          skel = test_ksyms__open_and_load();
+>> -       if (CHECK(!skel, "skel_open", "failed to open and load skeleton\n"))
+>> +       if (!ASSERT_OK_PTR(skel, "test_ksyms__open_and_load"))
+>>                  return;
+>>
+>>          err = test_ksyms__attach(skel);
+>> -       if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
+>> +       if (!ASSERT_OK(err, "test_ksyms__attach"))
+>>                  goto cleanup;
+>>
+>>          /* trigger tracepoint */
+>>          usleep(1);
+>>
+>>          data = skel->data;
+>> -       CHECK(data->out__bpf_link_fops != link_fops_addr, "bpf_link_fops",
+>> -             "got 0x%llx, exp 0x%llx\n",
+>> -             data->out__bpf_link_fops, link_fops_addr);
+>> -       CHECK(data->out__bpf_link_fops1 != 0, "bpf_link_fops1",
+>> -             "got %llu, exp %llu\n", data->out__bpf_link_fops1, (__u64)0);
+>> -       CHECK(data->out__btf_size != btf_size, "btf_size",
+>> -             "got %llu, exp %llu\n", data->out__btf_size, btf_size);
+>> -       CHECK(data->out__per_cpu_start != per_cpu_start_addr, "__per_cpu_start",
+>> -             "got %llu, exp %llu\n", data->out__per_cpu_start,
+>> -             per_cpu_start_addr);
+>> +       ASSERT_EQ(data->out__bpf_link_fops, link_fops_addr, "bpf_link_fops");
+>> +       ASSERT_EQ(data->out__bpf_link_fops1, 0, "bpf_link_fops1");
+>> +       ASSERT_EQ(data->out__btf_size, btf_size, "btf_size");
+>> +       ASSERT_EQ(data->out__per_cpu_start, per_cpu_start_addr, "__per_cpu_start");
+>>
+>>   cleanup:
+>>          test_ksyms__destroy(skel);
+>> --
+>> 2.43.0
+>>
