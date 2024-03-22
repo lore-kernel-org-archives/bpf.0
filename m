@@ -1,166 +1,159 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8FFE45BFF;
-	Fri, 22 Mar 2024 13:37:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701DA605A1
+	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 13:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711114629; cv=none; b=a8EzuOVOIjWovfc3YPmMQ19sr7kI1+ntFhtgYpwyyG7mLTKwyTIEKnp3rvRS4rYpzFkx0DfSk/Y+k8ONKugwnm/msRE6Zjs0/pUEefiwbhFhFLERTH5DNDgIqkDWjXAZEVIzO+rOkg32OyF7VeLi/cdJi63EnAEgnXBojAir4mM=
+	t=1711114814; cv=none; b=gVlDEJIkKlXhD/w3uJ3o+Zm3RCtNe1dhTTv0ZqqouFqkEvYePS3PH5NklsbC8QgHsJ7L0mJi2PPlhuRLURr6eo0BQkZgwzW3jJJPFyywfR+5xQcWdpkp4HoOeZHUv6zUwmlD3MtPgwLDbOtMn7ys+kjhgBjKXbkzI7P8GKxzteY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711114629; c=relaxed/simple;
-	bh=zWiE+XEo6fLJK8Uz6M2Us9666B3kXGXD4OrLzuZTikk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bLYFZAh/Rtw3Mu02YdzQFlR7AY9tfg+gwK7BbIb1dcg6RuxcLa6026Cd0Ns80QTr5nkjx1YtiZlJewOR5nG7I4bbnc7l4KjENqfYwnFsSPvsjkIDtddPajQl4MsbPpOykQ0JQLpkyph8Bv1EcITiazJEv8YjJIDF2p5TbQgqy2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ePXycGfH; arc=none smtp.client-ip=209.85.214.169
+	s=arc-20240116; t=1711114814; c=relaxed/simple;
+	bh=vzR+F7iyYIom41zfRX1BWEFpeANzsiGoTmYyJDAmUTI=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X9rytQuk2MxfHnF4gtK1OCa3xgawt9tNPBu3Q5qC0qNfN34H5NiyH7Fm72ZAqG9Y8+6dRbvu8aH6iXLv0faQGf+uQSYDrMVDOnpFU8YnpEA5JcHZZTDq7mfg/pNDaC/KeCqdts4TzP6tm8jvfUFjFbvIlbSw8Y9bJFtfhYTOdHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EOMkriRj; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ePXycGfH"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1de0f92e649so14143125ad.0;
-        Fri, 22 Mar 2024 06:37:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EOMkriRj"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-33e1d327595so1571385f8f.2
+        for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 06:40:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711114627; x=1711719427; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y4Wtkfs6BPfblQoCnXQVgHKXsh4zcNEQpSQfGx0qDPE=;
-        b=ePXycGfH40j9C0mOKgsmgaMrgOKYMNvN4K6ZY1ZehoQZLyPKGSEUprPPUgy0CJkokr
-         TgQW2xr3wTZQ/IC0LGSgfRsyMedy8Tn488imWQAiLplrMn918vcYLTBcz0vpYUhMIZAH
-         e7foDqGIEhSOIzi7vFf+oFHhLOKBD1DTa7sZkVW3dyg5pkJLToe0gJ8a2+QaPWKWkxue
-         ZchpRIEa9jTtK/cTmN2mkACCt/WaVdDdHg20beI0axknmlg+9dWB0qvKcm6EsK3mL4j1
-         EuHt0ibrgAcXF6hj35sMUNtRsDmmrZAq6FyyFsREf123wUTgJLgq3RQrXA4rA8yPoSqb
-         Wchw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711114627; x=1711719427;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+        d=gmail.com; s=20230601; t=1711114811; x=1711719611; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Y4Wtkfs6BPfblQoCnXQVgHKXsh4zcNEQpSQfGx0qDPE=;
-        b=JUYnsamS6QnQEAypCKAKpKBPh5EXuK5P/DLyx0wdZbs+gdyMK29S0lDKo0cKPEQ3le
-         643v6FaK5LuWdkQwcZR/wy0Z9hXlJFDGpU3XZHq6BPS6E+d5e3SXXleVbAvN3/hvTfQ4
-         ERp9BlY4Ks2IRdz5id1hZwixQxBcextt9l6l3bcAtVhsm3wNat9En7lBaXyMD3LDf/wx
-         qkuyq6K+AVR3fkDrHOzrohS4wsD/wohikTIaG5jzCEg9zhqrYlAHrQdBYS8jTbUHk9vR
-         t0AkRx11cd/8LnO13f827gjADIPzQDakIYPrZfnZbkMtFQCmKUkDIUXutiOQp/Sg3IP0
-         RkBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW6s0f6w91TZcd9IONn4IQp/QaNoCMX/MhY+9vZJxnhNmxc2HpYwFh+e7IDn+EUcYk2eSeiXol6U3VVbrcsejet2RIl0U7z5dIXCz+x/c/c7+dMExVkyAza9tlUgPDn9Xe7
-X-Gm-Message-State: AOJu0YycRyLSKruzMC6jqDY8Wovv8+n2Iv3dmqMcbJUtLVmhHJz8MRXc
-	trG80fkojDhV9XC0w5qFbQ+ebRS/dNkRxe6AT7Dp+jKVC7nmDQpq
-X-Google-Smtp-Source: AGHT+IGnTO5/Hf/Y3NnWgtBdzOnCpX6KAq/m5DFy8zLliheuM/z6MK2l2CsxQWCMgg79lwdRIofjcA==
-X-Received: by 2002:a17:902:c406:b0:1e0:b0d:5b7d with SMTP id k6-20020a170902c40600b001e00b0d5b7dmr3130944plk.36.1711114626249;
-        Fri, 22 Mar 2024 06:37:06 -0700 (PDT)
-Received: from [192.168.0.106] ([117.147.31.37])
-        by smtp.gmail.com with ESMTPSA id h17-20020a170902f55100b001dc3c4e7a12sm1903304plf.14.2024.03.22.06.37.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Mar 2024 06:37:05 -0700 (PDT)
-Message-ID: <f5fe3709-bfc8-4906-a0cc-5fe9b388be6b@gmail.com>
-Date: Fri, 22 Mar 2024 21:36:58 +0800
+        bh=LxIUTU18nYdhH+N7Mid/anyn+VKLn3fJhKJup/6rCs4=;
+        b=EOMkriRjBzUKXDca5fPO4qcBg2Nx37dBB4HsCPiDpOLO4/5937cr/SVdvEQKe3Bx6d
+         QWZPgdP+XrCMp6KEROgLL6ivMSbC6IKa9vxh/EswwGjQDc16SCcaLwa3Y9qSGcb8PDXN
+         arzBpZRqHUWrX5YUbFi/i/7ePNscixwo4kRhegUWaAyqFM2r+bkYiiX2QX60bEHR3HO+
+         KjT0KqikD2ZG6UC+iR60iIej2DbNb82bDAfc8/rzUE4UGa5qaTdZKULi9vlizj72Mr1h
+         AymnfKpP0YiERKGo5n3jcnCR3uRkRD9mjRAhNQ5vQt1jWsFtKb3+0s+7r1yK/BFE2qbL
+         o+pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711114811; x=1711719611;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LxIUTU18nYdhH+N7Mid/anyn+VKLn3fJhKJup/6rCs4=;
+        b=VVR3t65Y+StAmn8BcQ59Pz+BkuVN1L6sN/MQ7v6WlcUDYcZ9iqvD11zTAMXuFvGyIQ
+         p3wZ/WR7y4O7Vafhh6tmg1eGrcUz+72f4VQD/EYuMqf+dNcgQJkM4GjPGsFfdwnIPIjE
+         PtkAT8BRox3BXgpSdMC2kiZuyE88uxYFoEs5Nol8LiSAiGmQ/0g3frgMZQ0mFsjH8VvK
+         PuOYNh/LPYYh7OPcNziQ2cZHNLHw8/SF5dVQepdyhA636hTAiY58wN6EWBzi9RPGOrod
+         54EtPWMlOKwn9/MXVLK6omFBU/k3IdTN+UDRR0RgYN1lL1XFujjV2odQd+VwqqGKF4hm
+         K77w==
+X-Forwarded-Encrypted: i=1; AJvYcCVcEbvmuIhBiveHV3g2Sf3/6JqeFpXrKgyL3DuYQEKrDaGuoKHKKPCV59RINE6YoQGsDVtr525aLoN2HfzsEZAXj66Q
+X-Gm-Message-State: AOJu0YyvEXeiAOwOsBNafpoT1ei/hJZXeSCVp6vTaFWBjkYAM+2wuS3E
+	EwEp5Uopgb5V49iDBQikExeWxGFmi1ak3GtFbZU8DIre1phsawxu
+X-Google-Smtp-Source: AGHT+IFTXmkNI6KlSR17zeF1Tvpgr51gVMcI3a5V9xoCNxJW3GU6xWAtJS4Ur4CffuUIJoxvGMdM5A==
+X-Received: by 2002:a5d:5988:0:b0:33d:73de:cd95 with SMTP id n8-20020a5d5988000000b0033d73decd95mr2222177wri.17.1711114810430;
+        Fri, 22 Mar 2024 06:40:10 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id cl1-20020a5d5f01000000b0033e72e104c5sm1076411wrb.34.2024.03.22.06.40.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Mar 2024 06:40:09 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 22 Mar 2024 14:40:07 +0100
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
+Subject: Re: [PATCH RFC bpf-next 3/3] selftests/bpf: Mark uprobe trigger
+ functions with nocf_check attribute
+Message-ID: <Zf2KN4nw_JzyUTfF@krava>
+References: <20240318093139.293497-1-jolsa@kernel.org>
+ <20240318093139.293497-4-jolsa@kernel.org>
+ <CAEf4BzZxjRuLES-zu6x1FaBp-ujnqMyVa9g_+BpEWVg9sMFAww@mail.gmail.com>
+ <Zflyyh-AqtAAlmse@krava>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] libbpf: add specific btf name info when do core
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240321170444.388225-1-chen.dylane@gmail.com>
- <CAEf4BzYJeEViQaRJb6u06GJSLa6uBmykRZa4JnWJ9VXw+WoX2g@mail.gmail.com>
-From: Tao Chen <chen.dylane@gmail.com>
-In-Reply-To: <CAEf4BzYJeEViQaRJb6u06GJSLa6uBmykRZa4JnWJ9VXw+WoX2g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <Zflyyh-AqtAAlmse@krava>
 
-Hi, Nakryiko, thank you for your reply. I try to familiarize with core 
-in libbpf， the debug info is really helpful for me. But i use the old 
-kernel btf, so origion debuginfo like:
-  struct task_struct___x: found target candidate [130] struct 
-task_struct in [vmlinux]
-I think it may be more clear, if we print btf name when we use old 
-kernel btf like:
-  struct task_struct___x: found target candidate [130] struct 
-task_struct in [/boot/***.btf]
-The patch just solve debug info show for newbies above.
+On Tue, Mar 19, 2024 at 12:11:06PM +0100, Jiri Olsa wrote:
+> On Mon, Mar 18, 2024 at 06:22:02PM -0700, Andrii Nakryiko wrote:
+> > On Mon, Mar 18, 2024 at 2:32 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> > >
+> > > Some distros seem to enable the -fcf-protection=branch by default,
+> > > which breaks our setup on first instruction of uprobe trigger
+> > > functions and place there endbr64 instruction.
+> > >
+> > > Marking them with nocf_check attribute to skip that.
+> > >
+> > > Adding -Wno-attributes for bench objects, becase nocf_check can
+> > > be used only when -fcf-protection=branch is enabled, otherwise
+> > > we get a warning and break compilation.
+> > >
+> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > ---
+> > >  tools/include/linux/compiler.h                     | 4 ++++
+> > >  tools/testing/selftests/bpf/Makefile               | 2 +-
+> > >  tools/testing/selftests/bpf/benchs/bench_trigger.c | 6 +++---
+> > >  3 files changed, 8 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/tools/include/linux/compiler.h b/tools/include/linux/compiler.h
+> > > index 7b65566f3e42..14038ce04ca4 100644
+> > > --- a/tools/include/linux/compiler.h
+> > > +++ b/tools/include/linux/compiler.h
+> > > @@ -58,6 +58,10 @@
+> > >  #define noinline
+> > >  #endif
+> > >
+> > > +#ifndef __nocfcheck
+> > > +#define __nocfcheck __attribute__((nocf_check))
+> > > +#endif
+> > 
+> > Let's preserve spelling of the attribut, __nocf_check ?
+> > 
+> > BTW, just FYI, seems like kernel is defining it as:
+> > 
+> > #define __noendbr    __attribute__((nocf_check))
+> > 
+> > Thought somewhere deep in x86-specific code, so probably not a good
+> > idea to use it here?
+> 
+> ugh, I missed it.. better to use __noendbr
 
-在 2024/3/22 上午2:52, Andrii Nakryiko 写道:
-> On Thu, Mar 21, 2024 at 10:04 AM Tao Chen <chen.dylane@gmail.com> wrote:
->>
->> No logic changed, just add specific btf name when core info
->> print, maybe it seems more understandable.
->>
->> Signed-off-by: Tao Chen <chen.dylane@gmail.com>
->> ---
->>   tools/lib/bpf/libbpf.c | 14 +++++++++-----
->>   1 file changed, 9 insertions(+), 5 deletions(-)
->>
+nah, I'll keep using __nocf_check, __noendbr is bery arch
+specific as you said
+
+jirka
+
 > 
-> Can you elaborate on what problem you are trying to solve?
-> Conceptually libbpf does look for types in vmlinux (meaning main
-> kernel BTF), even if user overrides BTF location (presumably because
-> of old kernel). So even when we emit "vmlinux" in logs, it seems
-> correct.
+> > 
+> > > +
+> > >  /* Are two types/vars the same type (ignoring qualifiers)? */
+> > >  #ifndef __same_type
+> > >  # define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+> > > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> > > index e425a946276b..506d3d592093 100644
+> > > --- a/tools/testing/selftests/bpf/Makefile
+> > > +++ b/tools/testing/selftests/bpf/Makefile
+> > > @@ -726,7 +726,7 @@ $(OUTPUT)/test_cpp: test_cpp.cpp $(OUTPUT)/test_core_extern.skel.h $(BPFOBJ)
+> > >  # Benchmark runner
+> > >  $(OUTPUT)/bench_%.o: benchs/bench_%.c bench.h $(BPFOBJ)
+> > >         $(call msg,CC,,$@)
+> > > -       $(Q)$(CC) $(CFLAGS) -O2 -c $(filter %.c,$^) $(LDLIBS) -o $@
+> > > +       $(Q)$(CC) $(CFLAGS) -O2 -Wno-attributes -c $(filter %.c,$^) $(LDLIBS) -o $@
+> > 
+> > let's better use `#pragma warning disable` in relevant .c files,
+> > instead of this global flag?
 > 
-> pw-bot: cr
+> ok, will try that
 > 
-> 
->> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
->> index afd09571c482..b32154288b4a 100644
->> --- a/tools/lib/bpf/libbpf.c
->> +++ b/tools/lib/bpf/libbpf.c
->> @@ -5653,7 +5653,8 @@ static int load_module_btfs(struct bpf_object *obj)
->>   }
->>
->>   static struct bpf_core_cand_list *
->> -bpf_core_find_cands(struct bpf_object *obj, const struct btf *local_btf, __u32 local_type_id)
->> +bpf_core_find_cands(struct bpf_object *obj, const struct btf *local_btf, __u32 local_type_id,
->> +                   const char *targ_btf_path)
->>   {
->>          struct bpf_core_cand local_cand = {};
->>          struct bpf_core_cand_list *cands;
->> @@ -5680,7 +5681,8 @@ bpf_core_find_cands(struct bpf_object *obj, const struct btf *local_btf, __u32 l
->>
->>          /* Attempt to find target candidates in vmlinux BTF first */
->>          main_btf = obj->btf_vmlinux_override ?: obj->btf_vmlinux;
->> -       err = bpf_core_add_cands(&local_cand, local_essent_len, main_btf, "vmlinux", 1, cands);
->> +       err = bpf_core_add_cands(&local_cand, local_essent_len, main_btf,
->> +                                targ_btf_path ?: "vmlinux", 1, cands);
->>          if (err)
->>                  goto err_out;
->>
->> @@ -5793,7 +5795,8 @@ static int bpf_core_resolve_relo(struct bpf_program *prog,
->>                                   int relo_idx,
->>                                   const struct btf *local_btf,
->>                                   struct hashmap *cand_cache,
->> -                                struct bpf_core_relo_res *targ_res)
->> +                                struct bpf_core_relo_res *targ_res,
->> +                                const char *targ_btf_path)
->>   {
->>          struct bpf_core_spec specs_scratch[3] = {};
->>          struct bpf_core_cand_list *cands = NULL;
->> @@ -5813,7 +5816,7 @@ static int bpf_core_resolve_relo(struct bpf_program *prog,
->>
->>          if (relo->kind != BPF_CORE_TYPE_ID_LOCAL &&
->>              !hashmap__find(cand_cache, local_id, &cands)) {
->> -               cands = bpf_core_find_cands(prog->obj, local_btf, local_id);
->> +               cands = bpf_core_find_cands(prog->obj, local_btf, local_id, targ_btf_path);
->>                  if (IS_ERR(cands)) {
->>                          pr_warn("prog '%s': relo #%d: target candidate search failed for [%d] %s %s: %ld\n",
->>                                  prog_name, relo_idx, local_id, btf_kind_str(local_type),
->> @@ -5920,7 +5923,8 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
->>                          if (prog->obj->gen_loader)
->>                                  continue;
->>
->> -                       err = bpf_core_resolve_relo(prog, rec, i, obj->btf, cand_cache, &targ_res);
->> +                       err = bpf_core_resolve_relo(prog, rec, i, obj->btf, cand_cache, &targ_res,
->> +                                                   targ_btf_path);
->>                          if (err) {
->>                                  pr_warn("prog '%s': relo #%d: failed to relocate: %d\n",
->>                                          prog->name, i, err);
->> --
->> 2.34.1
->>
+> thanks,
+> jirka
