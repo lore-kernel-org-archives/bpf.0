@@ -1,164 +1,194 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE5060BB6
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 17:55:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC00560DED;
+	Fri, 22 Mar 2024 17:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711130111; cv=none; b=HsdLCOzYg+9yXAFV/PHnOZQ6jvKPebOGIoOzOzT+hyZrPD3A2n9I5H5Llu05gv67o18ce6lliDHfIX5d39+qVOFO0HCf52M3sU9k7xrPNa0mK4J1pYUzOPLnlPcAmerWBhI9VPMAYfH1RvEaTUQiMo6KXrL1jJpm92i5ExiySl4=
+	t=1711130274; cv=none; b=n3jg/RIFlNLHRtqFzeMi2eMnxasnPK0nUxPbk8FjsD95lmO7ZtzQzrMhmwklF5eI10eE60iXVZdj/RvCmodWWfFVevp2ARcmKkEu+o46kdkwm4JX2K5UCU6uT5+LcIf8dtK4EV8kxE6g5KpvpUe0pk4Yo3eX3217b+YtiRlkWaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711130111; c=relaxed/simple;
-	bh=l9m99BFxmTnLiVZTWH4IyJEQNsmy+RFkQO1mLY1L5IA=;
+	s=arc-20240116; t=1711130274; c=relaxed/simple;
+	bh=81guNSONTPOzcQbDpdBs9ie/oz1dLsglGR7hW77hskM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z0gbBg7pEfjFqABBL+x9SQBpOPuRzVOxJLFEUBD4nQMRx0Ya28fA70a7/QAwQyqXuwWbgZJHGMKR7BIxZ2jUoua8m/ZCxgT4G03/qJxc0waJSHxR/Pt8yHBphdzUFT0yTjPV5boxKGTBpHBwTwODG/jX/r6pjh/HGirBTKsRtYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RzkND4Bm; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=SBfHIN4C2hoHWuGIfY2BtbISMvByqIgggJIlzkrbwRnW253lxpHN2uz652GfXgQZ4+vo3iXa5ltKjb4/qP1VScDFuhOyZrbXhYgHCbvPwSun9N/AQAbv3Ysft2VtkesJ1xeQ3u8RdotOUHv8SZVXkT3l2pGDw5D61sZHm5fDMmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K03ZKwNT; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RzkND4Bm"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-56b8e4f38a2so3166271a12.3
-        for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 10:55:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K03ZKwNT"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6e73e8bdea2so1892326b3a.0;
+        Fri, 22 Mar 2024 10:57:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711130107; x=1711734907; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711130272; x=1711735072; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6WuYhmNp304wILfLv6V/aQkHKFavalWMa0RSWXYvrPw=;
-        b=RzkND4Bm4wkW3lvcEypkcxdmIg1Pc2XAJIPjja+0m+v/CoeclpPbx3S06/HnLsyDhQ
-         IlE86J50GPqiQotibPDMSZcMLL/LCKx/nc/WNm03EtQrfCMtwRaAGvsZjG31wZg8unia
-         yIO5LSMFoknJfUy3v6TCpywvoCOXS0ROpdyhSG4wgoLxD11Cmr7aC53NpjsGzJZtHEmz
-         sA4xBR4biuHrpF47aakzjpmM+UJ+L8Q/7YjQryfz+gthJ09Xn0G6rQ7Edg5cBODxW7zj
-         U24TMitp1pKP0upk5gxicw9rGF6SY9GuUwm96+GjbXB1pIgu8Q2a3SaUmr9e+3ce/QnJ
-         wkHg==
+        bh=kJU/s9RDeuR4/JqTbCXKWTk7CZccjRYG/vO14Nz0+1M=;
+        b=K03ZKwNT+ZFNwT7o+HX253Uh7f6SBIYx0jaX9wncxTDKLsJkEB4JwaqEhXSDdKStER
+         U6ycRJlVDyaR+X3E/zE69A8Dvrc72yJbd6GaWiLBVVaRp5ortG+KkMs1IICEoQ8KPZmk
+         AAFY3dRaFIW184eDzShyg0Gm/FB8nFVbQV2aNWuL+ASFJNAUBzmG9bqeMe4meS/FRkF0
+         GNntJH9+3jFxdht/bD0ClnleOpTyWDDoVtzsOBOQWTCI93hs0IiWlAvBEchurNP+4ipk
+         vmsV36vNkqHbdJtejcHJTFvpjSrd/nhfSdyZTb/BC8Qqvd97B46dEDOe7o1frcuMMp08
+         gdCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711130107; x=1711734907;
+        d=1e100.net; s=20230601; t=1711130272; x=1711735072;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6WuYhmNp304wILfLv6V/aQkHKFavalWMa0RSWXYvrPw=;
-        b=vBVjhDA0caYbbUNLKn30Cnx5rORhDk9+o/sJWHWY7MRvEAR+9pkPs3KkS58EsdZMYe
-         99EXalssxvQ4bOgKINkwf3dh0oDRAaZeO3sZAwoRJrI786ytlBv6t1kjD2lHDTzS9Rct
-         uBnDIEglZFL7T7eKZvfQbIP3H+KmiKCJVVB51P10e6ARm5xJZBv0gOO88DOxTmouGU39
-         zl7RMVoKfduEN+cDUBCXxJDg/3pf8xO9FDOrSVBDhewxGoTeD2yKxZb5tWk2sT7tf+Ei
-         nWBoYPG6vS555IiQ3ZHl1ADB1NdFpXBjV0BppSQK7SyKBcD1hbq35TNIlX9n/l02ulkO
-         ck7g==
-X-Forwarded-Encrypted: i=1; AJvYcCU9LqYAcw3429Tdoq/S7JbIb9PE6Eqg9sl3jTdGL/yaE4q3aqy3GWgTyiAtztzVz4oR15UGbnHAL+qQxIFvxF5yq0XL
-X-Gm-Message-State: AOJu0YyXzpPRTXdQpN7zQcgmsiGPq0FA/jVZepE86iGPPYSXmgsNzjTu
-	Eh7oWvyfhYYa9hm9xE7XxtmjnuuXOISn43wrxO3atDUEMyuj6JIIgdcVk+fiyzAVfsCwGqbqKHN
-	1gjw0IzHnUYPLsDc53XhKcRRrm0gRKbmCIhVB
-X-Google-Smtp-Source: AGHT+IHTothcuqikFFrMs12/Yd8HwJZ8LnAxmbZMMmJb1jW1wBBEyord9u+K2tzA7reF5OIehczUR0R88m66zZf5tNs=
-X-Received: by 2002:a17:906:d190:b0:a47:e62:4d72 with SMTP id
- c16-20020a170906d19000b00a470e624d72mr331556ejz.15.1711130106762; Fri, 22 Mar
- 2024 10:55:06 -0700 (PDT)
+        bh=kJU/s9RDeuR4/JqTbCXKWTk7CZccjRYG/vO14Nz0+1M=;
+        b=PbD6bwO4JjxTs371Aete4fukCop7n3Vopez9imXM25RO0MepC2AShJvRZ6+iakwRJm
+         +NYFqN1ZXXAtjqP+z0TXTOpJgjzL+NRuOZ0N+shEO3NnkpEhbmqeugttDR0JUDDjsDvk
+         dsfmEVdsC1r9JbDPfmJUZ2PfTEAcSdDJF3l3Y2BJC+jYdoxqkIWjLBx3DTzoXvU2kDaw
+         wKXu0d2Eh6rV77zj39JkKFrNy36TXbJu9BDuNn4X7G4EKPZPchjJPDoFtECK5e0tOIxd
+         1sYgAf2o3KfXzb2KR0yOYHXBKF/KFgmOZmknx3YXaiKwWrQL6mkhBvTyVbrfVOUDQZV9
+         CFxw==
+X-Forwarded-Encrypted: i=1; AJvYcCUEUjVTjh25sduGKjQXsx27QlMYa1FFEZtZDE1V/U2QpEG0jPzqJN+8wxFirrFcm1T+LiE+gK8O9hL+abO54vYaIyQL1MutsEp/sPnQ+By2Kg+UrUQyFidyKg2cx7DMPsAJ
+X-Gm-Message-State: AOJu0YwpdBroNvq2KucDi7CbeeGS4EJjggY8V99zps/DVKHX1AIhNohs
+	Ypd3bbbnnvqHYQ/Ri1BJqUxmA5RxNtOTXGRS8kBuaRV39JrdtNauzKBE9gUgPXKd0me7k2HqyaQ
+	Y6EYutxQbZOgHbvbKjj32dB0hnU4=
+X-Google-Smtp-Source: AGHT+IHiPxBTgYjvi7POvXPnAjNUtTgX1khJTvUa21919HgLJuYp9Dard3QYvMj7fw4mJqo1oI3wTcs6bMPVZ68GAOw=
+X-Received: by 2002:a17:90b:3cc:b0:2a0:20b5:7f1a with SMTP id
+ go12-20020a17090b03cc00b002a020b57f1amr387257pjb.37.1711130272000; Fri, 22
+ Mar 2024 10:57:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-3-almasrymina@google.com> <ZfegzB341oNc_Ocz@infradead.org>
-In-Reply-To: <ZfegzB341oNc_Ocz@infradead.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 22 Mar 2024 10:54:54 -0700
-Message-ID: <CAHS8izOUi6qGp=LSQb_o5oph-EnhNOuhLkPSfbQRU3eniZvbdA@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
- custom page providers
-To: Christoph Hellwig <hch@infradead.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+References: <20240321170444.388225-1-chen.dylane@gmail.com>
+ <CAEf4BzYJeEViQaRJb6u06GJSLa6uBmykRZa4JnWJ9VXw+WoX2g@mail.gmail.com> <f5fe3709-bfc8-4906-a0cc-5fe9b388be6b@gmail.com>
+In-Reply-To: <f5fe3709-bfc8-4906-a0cc-5fe9b388be6b@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 22 Mar 2024 10:57:39 -0700
+Message-ID: <CAEf4Bzb-Wf5sTnDLu29KQ-zWfCnffdUZYLSe_tQTNW_bTSfnPg@mail.gmail.com>
+Subject: Re: [PATCH] libbpf: add specific btf name info when do core
+To: Tao Chen <chen.dylane@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 17, 2024 at 7:03=E2=80=AFPM Christoph Hellwig <hch@infradead.or=
-g> wrote:
+On Fri, Mar 22, 2024 at 6:37=E2=80=AFAM Tao Chen <chen.dylane@gmail.com> wr=
+ote:
 >
-> On Mon, Mar 04, 2024 at 06:01:37PM -0800, Mina Almasry wrote:
-> > From: Jakub Kicinski <kuba@kernel.org>
+> Hi, Nakryiko, thank you for your reply. I try to familiarize with core
+> in libbpf=EF=BC=8C the debug info is really helpful for me. But i use the=
+ old
+> kernel btf, so origion debuginfo like:
+>   struct task_struct___x: found target candidate [130] struct
+> task_struct in [vmlinux]
+
+the idea here is to not emit path to BTF (otherwise we normally should
+emit [/sys/kernel/btf/vmlinux], but rather distinguish whether it's a
+kernel BTF ([vmlinux]) or some kernel module BTF ([<module-name>]).
+
+In your case you are overriding vmlinux BTF by using btf_custom_path
+option (so you should know where to find it, if you need to debug
+something). It's still, conceptually, a [vmlinux], and I'd like to
+keep it this way.
+
+> I think it may be more clear, if we print btf name when we use old
+> kernel btf like:
+>   struct task_struct___x: found target candidate [130] struct
+> task_struct in [/boot/***.btf]
+> The patch just solve debug info show for newbies above.
+>
+> =E5=9C=A8 2024/3/22 =E4=B8=8A=E5=8D=882:52, Andrii Nakryiko =E5=86=99=E9=
+=81=93:
+> > On Thu, Mar 21, 2024 at 10:04=E2=80=AFAM Tao Chen <chen.dylane@gmail.co=
+m> wrote:
+> >>
+> >> No logic changed, just add specific btf name when core info
+> >> print, maybe it seems more understandable.
+> >>
+> >> Signed-off-by: Tao Chen <chen.dylane@gmail.com>
+> >> ---
+> >>   tools/lib/bpf/libbpf.c | 14 +++++++++-----
+> >>   1 file changed, 9 insertions(+), 5 deletions(-)
+> >>
 > >
-> > The page providers which try to reuse the same pages will
-> > need to hold onto the ref, even if page gets released from
-> > the pool - as in releasing the page from the pp just transfers
-> > the "ownership" reference from pp to the provider, and provider
-> > will wait for other references to be gone before feeding this
-> > page back into the pool.
->
-> The word hook always rings a giant warning bell for me, and looking into
-> this series I am concerned indeed.
->
-> The only provider provided here is the dma-buf one, and that basically
-> is the only sensible one for the documented design.
-
-Sorry I don't mean to argue but as David mentioned, there are some
-plans in the works and ones not in the works to extend this to other
-memory types. David mentioned io_uring & Jakub's huge page use cases
-which may want to re-use this design. I have an additional one in
-mind, which is extending devmem TCP for storage devices. Currently
-storage devices do not support dmabuf and my understanding is that
-it's very hard to do so, and NVMe uses pci_p2pdma instead. I wonder if
-it's possible to extend devmem TCP in the future to support pci_p2pdma
-to support nvme devices in the future.
-
-Additionally I've been thinking about a use case of limiting the
-amount of memory the net stack can use. Currently the page pool is
-free to allocate as much memory as it wants from the buddy allocator.
-This may be undesirable in very low memory setups such as overcommited
-VMs. We can imagine a memory provider that allows allocation only if
-the page_pool is below a certain limit. We can also imagine a memory
-provider that preallocates memory and only uses that pinned pool. None
-of these are in the works at the moment, but are examples of how this
-can be (reasonably?) extended.
-
->  So instead of
-> adding hooks that random proprietary crap can hook into,
-
-To be completely honest I'm unsure how to design hooks for proprietary
-code to hook into. I think that would be done on the basis of
-EXPORTED_SYMBOL? We do not export these hooks, nor plan to at the
-moment.
-
-> why not hard
-> code the dma buf provide and just use a flag?  That'll also avoid
-> expensive indirect calls.
->
-
-Thankfully the indirect calls do not seem to be an issue. We've been
-able to hit 95% line rate with devmem TCP and I think the remaining 5%
-are a bottleneck unrelated to the indirect calls. Page_pool benchmarks
-show a very minor degradation in the fast path, so small it may be
-just noise in the measurement (may!):
-
-https://lore.kernel.org/netdev/20240305020153.2787423-1-almasrymina@google.=
-com/T/#m1c308df9665724879947a345c4b1ec3b51ff6856
-
-This is because the code path that does indirect allocations is the
-slow path. The page_pool recycles netmem aggressively.
-
---=20
-Thanks,
-Mina
+> > Can you elaborate on what problem you are trying to solve?
+> > Conceptually libbpf does look for types in vmlinux (meaning main
+> > kernel BTF), even if user overrides BTF location (presumably because
+> > of old kernel). So even when we emit "vmlinux" in logs, it seems
+> > correct.
+> >
+> > pw-bot: cr
+> >
+> >
+> >> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> >> index afd09571c482..b32154288b4a 100644
+> >> --- a/tools/lib/bpf/libbpf.c
+> >> +++ b/tools/lib/bpf/libbpf.c
+> >> @@ -5653,7 +5653,8 @@ static int load_module_btfs(struct bpf_object *o=
+bj)
+> >>   }
+> >>
+> >>   static struct bpf_core_cand_list *
+> >> -bpf_core_find_cands(struct bpf_object *obj, const struct btf *local_b=
+tf, __u32 local_type_id)
+> >> +bpf_core_find_cands(struct bpf_object *obj, const struct btf *local_b=
+tf, __u32 local_type_id,
+> >> +                   const char *targ_btf_path)
+> >>   {
+> >>          struct bpf_core_cand local_cand =3D {};
+> >>          struct bpf_core_cand_list *cands;
+> >> @@ -5680,7 +5681,8 @@ bpf_core_find_cands(struct bpf_object *obj, cons=
+t struct btf *local_btf, __u32 l
+> >>
+> >>          /* Attempt to find target candidates in vmlinux BTF first */
+> >>          main_btf =3D obj->btf_vmlinux_override ?: obj->btf_vmlinux;
+> >> -       err =3D bpf_core_add_cands(&local_cand, local_essent_len, main=
+_btf, "vmlinux", 1, cands);
+> >> +       err =3D bpf_core_add_cands(&local_cand, local_essent_len, main=
+_btf,
+> >> +                                targ_btf_path ?: "vmlinux", 1, cands)=
+;
+> >>          if (err)
+> >>                  goto err_out;
+> >>
+> >> @@ -5793,7 +5795,8 @@ static int bpf_core_resolve_relo(struct bpf_prog=
+ram *prog,
+> >>                                   int relo_idx,
+> >>                                   const struct btf *local_btf,
+> >>                                   struct hashmap *cand_cache,
+> >> -                                struct bpf_core_relo_res *targ_res)
+> >> +                                struct bpf_core_relo_res *targ_res,
+> >> +                                const char *targ_btf_path)
+> >>   {
+> >>          struct bpf_core_spec specs_scratch[3] =3D {};
+> >>          struct bpf_core_cand_list *cands =3D NULL;
+> >> @@ -5813,7 +5816,7 @@ static int bpf_core_resolve_relo(struct bpf_prog=
+ram *prog,
+> >>
+> >>          if (relo->kind !=3D BPF_CORE_TYPE_ID_LOCAL &&
+> >>              !hashmap__find(cand_cache, local_id, &cands)) {
+> >> -               cands =3D bpf_core_find_cands(prog->obj, local_btf, lo=
+cal_id);
+> >> +               cands =3D bpf_core_find_cands(prog->obj, local_btf, lo=
+cal_id, targ_btf_path);
+> >>                  if (IS_ERR(cands)) {
+> >>                          pr_warn("prog '%s': relo #%d: target candidat=
+e search failed for [%d] %s %s: %ld\n",
+> >>                                  prog_name, relo_idx, local_id, btf_ki=
+nd_str(local_type),
+> >> @@ -5920,7 +5923,8 @@ bpf_object__relocate_core(struct bpf_object *obj=
+, const char *targ_btf_path)
+> >>                          if (prog->obj->gen_loader)
+> >>                                  continue;
+> >>
+> >> -                       err =3D bpf_core_resolve_relo(prog, rec, i, ob=
+j->btf, cand_cache, &targ_res);
+> >> +                       err =3D bpf_core_resolve_relo(prog, rec, i, ob=
+j->btf, cand_cache, &targ_res,
+> >> +                                                   targ_btf_path);
+> >>                          if (err) {
+> >>                                  pr_warn("prog '%s': relo #%d: failed =
+to relocate: %d\n",
+> >>                                          prog->name, i, err);
+> >> --
+> >> 2.34.1
+> >>
