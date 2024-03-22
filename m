@@ -1,145 +1,237 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF5C5E3AF
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 19:23:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DF879955
+	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 20:16:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711135416; cv=none; b=aRz/31pGUH+obGuHW0JVKrhx0K9WUcbOsR7O3aLzYCEaEIlGlskspE72h6odGD5/2CAnClppuOoveg/u6/VqUwmNLEYWU8Sb+ZPnf3gSM4mo0aJK3dEYCYrDjjjFh10Tm3wnd5d05F4UwmT8oMigIE4cYbcSwa7YaevtzP4Xbwg=
+	t=1711138609; cv=none; b=ZChR1ZWvJ0KB6yYsDDhyKCRkZjb/rugIdoCa95mos7Rp1mZYl63WE9gmGT2F8yzMaQtyl/qQkDVpGlR+ZSsrl40073o8eD/B1yhHIHl5S4gDltMRU7tv0cKBM5coqn6lPtuwv73fCN8blRuVczxUVWF8pYwj8stNJr5sq7JSjDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711135416; c=relaxed/simple;
-	bh=/1/HNBY05kqHbegOjMsoOgs8qF3+TLtUcoDp1+/X7xM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Uu5fDmRBbwBcKZRw1QfkCqFJ3njyY2/iRs3KMDc3g8LkVFjUW0SofYagTl/xzORRs37cryyjD132GCJVAvZTk+p7f+12LiS+AKiFYi2NZXvRcwQoOhDpYc6HBwn2lc4oLdLu+CpCnafVM60NaKLOMLvRHYWnW+BN4WmQSvLa9BE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WAZd6fge; arc=none smtp.client-ip=95.215.58.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1711138609; c=relaxed/simple;
+	bh=CMPUEA4o6RoOnE2yg21NCU3z0mW7qtxuMWN+bAdIGlw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Urqsy0e8bLwCU0M3Yat9t/Sm2cQHW+nOv/rXvz4UNAK3DwyVf8FKA6aCRsoe5+Coff2SIUgMG+Gr3O+Z3slMBXpvCFc6t3kiGyFDVM6vzR8JDT0dgR19QriZchf1SCvpG7AUMaV/hK3XV7vJKs8uSE8ra2Ly0qusFHcEHH3tWzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PLSmvNdy; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WAZd6fge"
-Message-ID: <3c052b53-021f-46ae-b26e-108bf3bdf565@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1711135412;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Kw65dILsnAqJZU7RUvEDxKiAX3kOBz8ms20tiz0fXXs=;
-	b=WAZd6fge6LjD6s09fCMTBE0yag0VwLPsyKCjNz2SaPb9xE3jKtGLb/4ht2FrNYke3zfpiR
-	cd39T9Jznm1JKjb0ADpbOYPnaJdy1SBWn5JCQvJ44jaxCHib4EP9aF/Q37d9WDwaeeZasm
-	bjliz9M8aj/ULrYQA4VBxgiyx4OBMMs=
-Date: Fri, 22 Mar 2024 12:23:27 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PLSmvNdy"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1deffa23bb9so17908535ad.2
+        for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 13:16:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711138605; x=1711743405; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gp3VFuxo06XCMSN86iezvg//jT11Fn6HNuvruq/5p6w=;
+        b=PLSmvNdyCYRkVnMpoZN4CSb5HqhETGa1G7THbTwj15UFRbPILfRd4fQZXpaAJJltfe
+         XTLaRhJOo0CHsOPVbTJX2NN9jauj361F2Yyrg6oyj11mNTFvGpGAXxMjBZ5QB+9oHYX2
+         f4uc8n0SZ1VCB9an6LwODuUxOHF6J5wrcxPqQBbBMQg+Cad3n5ClunT/eKA7KhtvULRp
+         QcA+rjIQyy8PPrqUaJ1FZq15mIt/nkZXEBThAV0QQOHfu2b9p/ZwLhmR/aEJ46jPFG5c
+         uK8NLDzn/fEfEqJFQEoPz8pZ1Vmne0m/sNBUj3A6x0YaUEHEj6cjfDH5njV/FaQ/fFPZ
+         T9rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711138605; x=1711743405;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gp3VFuxo06XCMSN86iezvg//jT11Fn6HNuvruq/5p6w=;
+        b=Pp5ndi1K0SysLirS/IggrTsgjaFMwW/V/pqb1Cxvu+/8gIsNruL5xHbedPSxK1asGN
+         9zaJfpYl5x/Ly0xyapBZxaW2bipt0gPwJFMWduwqLfoWymwiJy5zt2zdIV6o5j97Pw+s
+         1ionAHWeanNLTnfgmnfDBeSo4fkSNOcqOVrxY/fJCMltCkbcuxkgvsrhal/rXigJtNEW
+         UuPaZZjKzBtvZ3senjxfGwstle2j5ORvobvx2RX/qeeSD9qpqcrFaiYCHWPZ0L6pq7nJ
+         LQYS52yf9EhFbgHDaOMD4LmFTbQGImB6QDMgTCZGJ7MeP8Q/5AM2bBJVCe6wCqHamD5U
+         6gsw==
+X-Gm-Message-State: AOJu0YyMPgtKp8uTdxxDP2xPlPsnxAZnX9tRQ1d66BT0SWYJa9U1okxK
+	VzeqMHWjNePQOLcbCBMUZu8WmPqYnIrUsFBveDagHslwSSnIwCe97eV7n9j9+f/+jxN2EeFjl+g
+	O9qjrExphwwd/cD8NT3UVVMgRnyqefK4i
+X-Google-Smtp-Source: AGHT+IGRHq19fHGp51+5MVrKl9ABUoxjgl3d203tWf8Oya1ycRSS7AUTqgYIvwJr/mM8MvUKOm0VuPiGmjYSibuqT8A=
+X-Received: by 2002:a17:902:848e:b0:1dd:2b9a:a1b6 with SMTP id
+ c14-20020a170902848e00b001dd2b9aa1b6mr645244plo.25.1711138605089; Fri, 22 Mar
+ 2024 13:16:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 3/6] libbpf: Add bpf_link support for
- BPF_PROG_TYPE_SK_{MSG,SKB}
-Content-Language: en-GB
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jakub Sitnicki <jakub@cloudflare.com>,
- John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com,
- Martin KaFai Lau <martin.lau@kernel.org>
 References: <20240319175401.2940148-1-yonghong.song@linux.dev>
- <20240319175417.2941417-1-yonghong.song@linux.dev>
- <CAEf4BzaYVG7dRMwrLWndem5XZr_r5doz+k3GHg8zsVuQ9HQhLg@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <CAEf4BzaYVG7dRMwrLWndem5XZr_r5doz+k3GHg8zsVuQ9HQhLg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+ <20240319175406.2940628-1-yonghong.song@linux.dev> <CAEf4BzZxD3xQ_3x_576OuvM2pueki=h19b1eyX5i1cqZtWNA4g@mail.gmail.com>
+ <7d6eba04-d70d-4467-9c65-065774b29012@linux.dev>
+In-Reply-To: <7d6eba04-d70d-4467-9c65-065774b29012@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 22 Mar 2024 13:16:33 -0700
+Message-ID: <CAEf4BzbEAKFiuxrMj2qRgQvyUQBeOWLMOqgibO7s9s9Bc3FVqw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/6] bpf: Add bpf_link support for sk_msg and
+ sk_skb progs
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com, 
+	Martin KaFai Lau <martin.lau@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-On 3/22/24 11:48 AM, Andrii Nakryiko wrote:
-> On Tue, Mar 19, 2024 at 10:54 AM Yonghong Song <yonghong.song@linux.dev> wrote:
->> Introduce two libbpf API functions bpf_program__attach_sk_msg()
->> and bpf_program__attach_sk_skb() which allow user to get a bpf_link
->> for their corresponding programs.
->>
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->> ---
->>   tools/lib/bpf/libbpf.c   | 14 ++++++++++++++
->>   tools/lib/bpf/libbpf.h   |  4 ++++
->>   tools/lib/bpf/libbpf.map |  2 ++
->>   3 files changed, 20 insertions(+)
->>
->> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
->> index 7d413415d0d5..1b8e1f47a5e6 100644
->> --- a/tools/lib/bpf/libbpf.c
->> +++ b/tools/lib/bpf/libbpf.c
->> @@ -149,6 +149,8 @@ static const char * const link_type_name[] = {
->>          [BPF_LINK_TYPE_TCX]                     = "tcx",
->>          [BPF_LINK_TYPE_UPROBE_MULTI]            = "uprobe_multi",
->>          [BPF_LINK_TYPE_NETKIT]                  = "netkit",
->> +       [BPF_LINK_TYPE_SK_MSG]                  = "sk_msg",
->> +       [BPF_LINK_TYPE_SK_SKB]                  = "sk_skb",
->>   };
->>
->>   static const char * const map_type_name[] = {
->> @@ -12493,6 +12495,18 @@ bpf_program__attach_netns(const struct bpf_program *prog, int netns_fd)
->>          return bpf_program_attach_fd(prog, netns_fd, "netns", NULL);
->>   }
->>
->> +struct bpf_link *
->> +bpf_program__attach_sk_msg(const struct bpf_program *prog, int map_fd)
->> +{
->> +       return bpf_program_attach_fd(prog, map_fd, "sk_msg", NULL);
->> +}
->> +
->> +struct bpf_link *
->> +bpf_program__attach_sk_skb(const struct bpf_program *prog, int map_fd)
->> +{
->> +       return bpf_program_attach_fd(prog, map_fd, "sk_skb", NULL);
->> +}
->> +
->>   struct bpf_link *bpf_program__attach_xdp(const struct bpf_program *prog, int ifindex)
->>   {
->>          /* target_fd/target_ifindex use the same field in LINK_CREATE */
->> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
->> index 7b510761f545..4a2c04a9c6c3 100644
->> --- a/tools/lib/bpf/libbpf.h
->> +++ b/tools/lib/bpf/libbpf.h
->> @@ -784,6 +784,10 @@ bpf_program__attach_cgroup(const struct bpf_program *prog, int cgroup_fd);
->>   LIBBPF_API struct bpf_link *
->>   bpf_program__attach_netns(const struct bpf_program *prog, int netns_fd);
->>   LIBBPF_API struct bpf_link *
->> +bpf_program__attach_sk_msg(const struct bpf_program *prog, int map_fd);
->> +LIBBPF_API struct bpf_link *
->> +bpf_program__attach_sk_skb(const struct bpf_program *prog, int map_fd);
->> +LIBBPF_API struct bpf_link *
->>   bpf_program__attach_xdp(const struct bpf_program *prog, int ifindex);
->>   LIBBPF_API struct bpf_link *
->>   bpf_program__attach_freplace(const struct bpf_program *prog,
->> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
->> index 86804fd90dd1..11a1ad798129 100644
->> --- a/tools/lib/bpf/libbpf.map
->> +++ b/tools/lib/bpf/libbpf.map
->> @@ -410,6 +410,8 @@ LIBBPF_1.3.0 {
->>
->>   LIBBPF_1.4.0 {
->>          global:
->> +               bpf_program__attach_sk_msg;
->> +               bpf_program__attach_sk_skb;
-> same suggestion, it seems like having a more generic
-> bpf_program__attach_sockmap() or something along those lines would be
-> better?
-
-If we will have one link type, I think we should have one attach API
-as well.
-
+On Fri, Mar 22, 2024 at 12:18=E2=80=AFPM Yonghong Song <yonghong.song@linux=
+.dev> wrote:
 >
-> please also see what changes need to be done in bpf_link_create() API
-
-Will do.
-
 >
->>                  bpf_token_create;
->>                  btf__new_split;
->>                  btf_ext__raw_data;
->> --
->> 2.43.0
->>
+> On 3/22/24 11:45 AM, Andrii Nakryiko wrote:
+> > On Tue, Mar 19, 2024 at 10:54=E2=80=AFAM Yonghong Song <yonghong.song@l=
+inux.dev> wrote:
+> >> Add bpf_link support for sk_msg and sk_skb programs. We have an
+> >> internal request to support bpf_link for sk_msg programs so user
+> >> space can have a uniform handling with bpf_link based libbpf
+> >> APIs. Using bpf_link based libbpf API also has a benefit which
+> >> makes system robust by decoupling prog life cycle and
+> >> attachment life cycle.
+> >>
+> >> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> >> ---
+> >>   include/linux/bpf.h            |  13 +++
+> >>   include/uapi/linux/bpf.h       |  10 ++
+> >>   kernel/bpf/syscall.c           |   4 +
+> >>   net/core/skmsg.c               | 164 +++++++++++++++++++++++++++++++=
+++
+> >>   net/core/sock_map.c            |   6 +-
+> >>   tools/include/uapi/linux/bpf.h |  10 ++
+> >>   6 files changed, 203 insertions(+), 4 deletions(-)
+> >>
+> > [...]
+> >
+> >> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> >> index 3c42b9f1bada..c5506cfca4f8 100644
+> >> --- a/include/uapi/linux/bpf.h
+> >> +++ b/include/uapi/linux/bpf.h
+> >> @@ -1135,6 +1135,8 @@ enum bpf_link_type {
+> >>          BPF_LINK_TYPE_TCX =3D 11,
+> >>          BPF_LINK_TYPE_UPROBE_MULTI =3D 12,
+> >>          BPF_LINK_TYPE_NETKIT =3D 13,
+> >> +       BPF_LINK_TYPE_SK_MSG =3D 14,
+> >> +       BPF_LINK_TYPE_SK_SKB =3D 15,
+> > they are both "sockmap attachments", so maybe we should just have
+> > something like BPF_LINK_TYPE_SOCKMAP ?
+>
+> Yes, we could do this. Basically it represents all programs
+> which can be attached to sockmap.
+>
+> >
+> >>          __MAX_BPF_LINK_TYPE,
+> >>   };
+> >>
+> >> @@ -6718,6 +6720,14 @@ struct bpf_link_info {
+> >>                          __u32 ifindex;
+> >>                          __u32 attach_type;
+> >>                  } netkit;
+> >> +               struct {
+> >> +                       __u32 map_id;
+> >> +                       __u32 attach_type;
+> >> +               } skmsg;
+> >> +               struct {
+> >> +                       __u32 map_id;
+> >> +                       __u32 attach_type;
+> >> +               } skskb;
+> > and then this would be also just one struct, instead of two identical
+> > ones duplicated
+>
+> Right, we could do one with name 'sockmap'.
+>
+> >
+> >>          };
+> >>   } __attribute__((aligned(8)));
+> >>
+> >> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> >> index ae2ff73bde7e..3d13eec5a30d 100644
+> >> --- a/kernel/bpf/syscall.c
+> >> +++ b/kernel/bpf/syscall.c
+> >> @@ -5213,6 +5213,10 @@ static int link_create(union bpf_attr *attr, bp=
+fptr_t uattr)
+> >>          case BPF_PROG_TYPE_SK_LOOKUP:
+> >>                  ret =3D netns_bpf_link_create(attr, prog);
+> >>                  break;
+> >> +       case BPF_PROG_TYPE_SK_MSG:
+> >> +       case BPF_PROG_TYPE_SK_SKB:
+> >> +               ret =3D bpf_sk_msg_skb_link_create(attr, prog);
+> >> +               break;
+> >>   #ifdef CONFIG_NET
+> >>          case BPF_PROG_TYPE_XDP:
+> >>                  ret =3D bpf_xdp_link_attach(attr, prog);
+> >> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> >> index 4d75ef9d24bf..1aa900ad54d7 100644
+> >> --- a/net/core/skmsg.c
+> >> +++ b/net/core/skmsg.c
+> >> @@ -1256,3 +1256,167 @@ void sk_psock_stop_verdict(struct sock *sk, st=
+ruct sk_psock *psock)
+> >>          sk->sk_data_ready =3D psock->saved_data_ready;
+> >>          psock->saved_data_ready =3D NULL;
+> >>   }
+> >> +
+> >> +struct bpf_sk_msg_skb_link {
+> >> +       struct bpf_link link;
+> >> +       struct bpf_map *map;
+> >> +       enum bpf_attach_type attach_type;
+> >> +};
+> >> +
+> >> +static DEFINE_MUTEX(link_mutex);
+> > maybe more specific name, sockmap_link_mutex? link_mutex sounds very ge=
+neric
+>
+> Good idea.
+>
+> >
+> >> +
+> >> +static struct bpf_sk_msg_skb_link *bpf_sk_msg_skb_link(const struct b=
+pf_link *link)
+> >> +{
+> >> +       return container_of(link, struct bpf_sk_msg_skb_link, link);
+> >> +}
+> >> +
+> > [...]
+> >
+> >> +       attach_type =3D attr->link_create.attach_type;
+> >> +       bpf_link_init(&sk_link->link, link_type, &bpf_sk_msg_skb_link_=
+ops, prog);
+> >> +       sk_link->map =3D map;
+> >> +       sk_link->attach_type =3D attach_type;
+> >> +
+> >> +       ret =3D bpf_link_prime(&sk_link->link, &link_primer);
+> >> +       if (ret) {
+> >> +               kfree(sk_link);
+> >> +               goto out;
+> >> +       }
+> >> +
+> >> +       ret =3D sock_map_prog_update(map, prog, NULL, attach_type);
+> > Does anything prevent someone else do to remove this program from
+> > user-space, bypassing the link? It's a guarantee of a link that
+> > attachment won't be tampered with (except for SYS_ADMIN-only
+> > force-detachment, which is a completely separate thing).
+> >
+> > It feels like there should be some sort of protection for programs
+> > attached through sockmap link here. Just like we have this for XDP,
+> > for example, or any of cgroup BPF programs attached through BPF link.
+>
+> Good point. I have a 'bpf_prog_inc(prog)' below, I could do a refcount in=
+crease
+> before sock_map_prog_update(), we then should be okay.
+>
+
+My point was that once you attach a program to sockmap with
+LINK_CREATE, someone else just doing bpf_prog_attac() shouldn't
+replace this program anymore. BPF link preserves *attachment
+lifetime*, not just the program lifetime.
+
+> >
+> >> +       if (ret) {
+> >> +               bpf_link_cleanup(&link_primer);
+> >> +               goto out;
+> >> +       }
+> >> +
+> >> +       bpf_prog_inc(prog);
+> >> +
+> >> +       return bpf_link_settle(&link_primer);
+> >> +
+> >> +out:
+> >> +       bpf_map_put_with_uref(map);
+> >> +       return ret;
+> >> +}
+> > [...]
