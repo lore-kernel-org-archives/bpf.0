@@ -1,103 +1,183 @@
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4310580632;
-	Fri, 22 Mar 2024 21:52:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.255.230.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E497F7FA
+	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 21:53:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711144357; cv=none; b=QGQpIsWkQzg0OIj0zasWG2edbHNB6iL6d7hpdiMf9o9XdxBT9fnWUCVt5eo97F5aC5xJkEN+vgah6vl9NGDekU8MddrkfkkXEC3xNSSUoXQYfKDzookBFy41+WM3yypU/O5JKdx4g67RO2VqVnA/vn7ECGB5sczMDyo6GKGBMio=
+	t=1711144404; cv=none; b=LjllJ9EDziZ7s6tMZZkm+gN/jV4HyMX3GlUDWumholOxIPAxdW56aU+g2J3/8VO5FkAiCs1MZbCbWr1k/O096w8DV8BhYzWXhGZRbyRRCv4dV4DWNNfQT0C5x3XKSqGKPyCqzvdjC/rzP2640TyUJK4NZkNhZXWrsD2wvepcio4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711144357; c=relaxed/simple;
-	bh=9AVEqpvegcwayQLsYLiqrLsqGvbY35k/BMs7cZ5TrFo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uAGIuq1UXoQdj1X1KItgFl/umVpzDMmn1zdc7SLkWwxxrGq91Kj9/3MrhcjXlWdJga9fqZc6xqe8NDxIIzU71Jjs8fl8SGxHUbXqaXZ82E1z+75OHnUdC1zEGLgJHFYytdzeYuSLn4g1oJ3rf00e5YKE/GvBLpZzEtRaNFJtHYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz; spf=pass smtp.mailfrom=ucw.cz; dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b=bF9zTDAy; arc=none smtp.client-ip=46.255.230.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ucw.cz
+	s=arc-20240116; t=1711144404; c=relaxed/simple;
+	bh=xihn3Qv79sjSdlIX71RvzuFuLyaMItjD1dcUG01KXqU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JLBnFH/xfgEnLOckP9rYCrdpoQM8EmA3V8J328hqScC91Ipa7OUn/nWduz+R20OWIGg5kXl9Z7/AJGw8LHOb15rPxVoSunKyP0/ODymi1woN3t2A1C5nPfw7SNDxH55AAHcYzkjp7jkS2PrROnY/3q6dWyTXqkPUXrr71HF4BD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PnHZ5nAy; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b="bF9zTDAy"
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-	id DE4701C0071; Fri, 22 Mar 2024 22:52:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-	t=1711144349;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qTYypDyCpf7WWdaBFqdyDpLRaW+o0sjezjr9PtcZ8PU=;
-	b=bF9zTDAy8OH5OZCMJs9NAvRnSONbY5mJB74n8Dl0YNGE05PCpu/FshPiTkTu6X7K9N+9my
-	gdfVC0G2Y532MDuFTAKm7SHwoAZoUxLQ0tAlnrxZTtc3cArcUIWDqzNCzWAGR0nNcqgvYV
-	UnsF6K95sfvUB8CBeb/yAfFbNjPH9Tk=
-Date: Fri, 22 Mar 2024 22:52:29 +0100
-From: Pavel Machek <pavel@ucw.cz>
-To: Daniel Hodges <hodges.daniel.scott@gmail.com>
-Cc: ast@kernel.org, lee@kernel.org, linux-leds@vger.kernel.org,
-	daniel@iogearbox.net, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] leds: trigger: legtrig-bpf: Add ledtrig-bpf module
-Message-ID: <Zf39nYJVOH9/J8cs@duo.ucw.cz>
-References: <cover.1711113657.git.hodges.daniel.scott@gmail.com>
- <ac8e77881212e18d117059a698affd6afc2607af.1711113657.git.hodges.daniel.scott@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PnHZ5nAy"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6ea8a0d1a05so538535b3a.1
+        for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 14:53:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711144402; x=1711749202; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tg+ohytnIAnUt08QkxpOZXeGJQiYVQdzAdeuXhEJyJ4=;
+        b=PnHZ5nAyIoKvLrg3QKoN9VExhaCL7sQZb2DizYvTXBXtjwCfIgh20gq17MwxMagVS7
+         X0D+HgNf9edbTF7fTHUAE/lYP5w36OgmDhxvRXim34zcHYn+UqJCta5E9WHCnX0vgTux
+         l1NZKOp2W7tQ0mt8QPEdbkwry+khKfbYbLkCKedOv7WPX83JN3rnENzyJfovmRFFLWB6
+         eyPzDkKDVxjhFCxEQVSPutsYmliPC5iOAEP2bGv8UqIPhhd2oibE2Lx9Yr1+3VwsXYEO
+         8qWS6GVF/60nrjx9+lFL24zWs2Us2UJqSMgj6olqULBO/4Xo9iBNcIFUHaN3WjHIraRB
+         00Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711144402; x=1711749202;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tg+ohytnIAnUt08QkxpOZXeGJQiYVQdzAdeuXhEJyJ4=;
+        b=ZeQuwqTGDFyWZMmpJ+FXX7KG1N/rkBNDe6c99eDFc5erup9nIUJPxKKHUAUoNTZ4Qk
+         xxiFQgbHmhY7J6Xh7qkeZSi/135kTqlEylsIC1nDYB7ODNVL3hLdQDM6i1WXSIQ4Pa84
+         Y/a3AhpsxiCV/SVcYaotQ7qI6Qvd7KXx407uINlDGemiYsRWP3LUgA5YxNHUmMPEKcws
+         YsXLKsThKPaw7HmJ41M8i99fSqyuxABU161lRdWHOQsIetrFfQC0Z/2cIWVryER+Jgex
+         4wy8n3AILXqVfmWdhFoMOBifzrBwJUhes+YT7btfUObe8fxfU7KYRoIbw41uXB+VyMxn
+         wW3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWIjrHNX3XqTMPwEWWY5szhJjmmKj96AK8hwY1vCWVNOu9B+XEhkmpup/kvQ1axL3W09cxrLPCcJnvxDjkLKXJe7Mok
+X-Gm-Message-State: AOJu0Yyz4QG1/Xauk1rPQ0z5bTSU4bAIqEnCsdE5cHoVhv/VQQP7K+y9
+	tdNis9mFMdJaM1gB5KDL7iapVZ95S8/xFqScIm4+efDUyDdtSzun8DMi9javboDFTj8dIGTtes/
+	j/bhH3CteU7DIrGaBPNzYnZApRNHne0W/
+X-Google-Smtp-Source: AGHT+IFDfSLoxWfD005WRjX/qzVN6mmi3uBUHBqOIxr4IUgVOS4Z1QwmMu1Dz+rw9XPdZkcWjXIIzpMeWIucMKXVmjY=
+X-Received: by 2002:a17:90b:218e:b0:29d:e2dc:bf5d with SMTP id
+ ku14-20020a17090b218e00b0029de2dcbf5dmr289596pjb.16.1711144401694; Fri, 22
+ Mar 2024 14:53:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="N4DJvJWOynbcHMAs"
-Content-Disposition: inline
-In-Reply-To: <ac8e77881212e18d117059a698affd6afc2607af.1711113657.git.hodges.daniel.scott@gmail.com>
-
-
---N4DJvJWOynbcHMAs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240321200058.2218328-1-yonghong.song@linux.dev>
+ <20240321200119.2220027-1-yonghong.song@linux.dev> <Zf17ovmfcfAfAIBa@krava> <3c6729b3-f28c-4fc4-9f2e-4297185e8fa6@linux.dev>
+In-Reply-To: <3c6729b3-f28c-4fc4-9f2e-4297185e8fa6@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 22 Mar 2024 14:53:09 -0700
+Message-ID: <CAEf4Bzbz3Z-NfcJM3h4mLV43E1rFEAO4hY7PmpnMTZxct0TkEw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 4/5] selftests/bpf: Fix kprobe_multi_bench_attach
+ test failure with LTO kernel
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: Jiri Olsa <olsajiri@gmail.com>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com, 
+	Martin KaFai Lau <martin.lau@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi!
+On Fri, Mar 22, 2024 at 9:01=E2=80=AFAM Yonghong Song <yonghong.song@linux.=
+dev> wrote:
+>
+>
+> On 3/22/24 5:37 AM, Jiri Olsa wrote:
+> > On Thu, Mar 21, 2024 at 01:01:19PM -0700, Yonghong Song wrote:
+> >> In my locally build clang LTO kernel (enabling CONFIG_LTO and
+> >> CONFIG_LTO_CLANG_THIN), kprobe_multi_bench_attach/kernel subtest
+> >> failed like:
+> >>    test_kprobe_multi_bench_attach:PASS:get_syms 0 nsec
+> >>    test_kprobe_multi_bench_attach:PASS:kprobe_multi_empty__open_and_lo=
+ad 0 nsec
+> >>    libbpf: prog 'test_kprobe_empty': failed to attach: No such process
+> >>    test_kprobe_multi_bench_attach:FAIL:bpf_program__attach_kprobe_mult=
+i_opts unexpected error: -3
+> >>    #117/1   kprobe_multi_bench_attach/kernel:FAIL
+> >>
+> >> There are multiple symbols in /sys/kernel/debug/tracing/available_filt=
+er_functions
+> >> are renamed in /proc/kallsyms due to cross file inlining. One example =
+is for
+> >>    static function __access_remote_vm in mm/memory.c.
+> >> In a non-LTO kernel, we have the following call stack:
+> >>    ptrace_access_vm (global, kernel/ptrace.c)
+> >>      access_remote_vm (global, mm/memory.c)
+> >>        __access_remote_vm (static, mm/memory.c)
+> >>
+> >> With LTO kernel, it is possible that access_remote_vm() is inlined by
+> >> ptrace_access_vm(). So we end up with the following call stack:
+> >>    ptrace_access_vm (global, kernel/ptrace.c)
+> >>      __access_remote_vm (static, mm/memory.c)
+> >> The compiler renames __access_remote_vm to __access_remote_vm.llvm.<ha=
+sh>
+> >> to prevent potential name collision.
+> >>
+> >> The kernel bpf_kprobe_multi_link_attach() and ftrace_lookup_symbols() =
+try
+> >> to find addresses based on /proc/kallsyms, hence the current test fail=
+ed
+> >> with LTO kenrel.
+> >>
+> >> This patch removed __access_remote_vm and other similar functions from
+> >> kprobe_multi_attach by checking if the symbol like __access_remote_vm
+> >> does not exist in kallsyms with LTO kernel. The test succeeded after t=
+his change:
+> >>    #117/1   kprobe_multi_bench_attach/kernel:OK
+> >>
+> >> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> >> ---
+> >>   .../selftests/bpf/prog_tests/kprobe_multi_test.c     | 12 ++++++++++=
+++
+> >>   1 file changed, 12 insertions(+)
+> >>
+> >> diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.=
+c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> >> index 05000810e28e..f6130f4f3d88 100644
+> >> --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> >> +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> >> @@ -345,6 +345,9 @@ static int get_syms(char ***symsp, size_t *cntp, b=
+ool kernel)
+> >>      FILE *f;
+> >>      int err =3D 0;
+> >>
+> >> +    if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
+> >> +            return -EINVAL;
+> >> +
+> >>      /*
+> >>       * The available_filter_functions contains many duplicates,
+> >>       * but other than that all symbols are usable in kprobe multi
+> >> @@ -393,6 +396,15 @@ static int get_syms(char ***symsp, size_t *cntp, =
+bool kernel)
+> >>              if (!strncmp(name, "__ftrace_invalid_address__",
+> >>                           sizeof("__ftrace_invalid_address__") - 1))
+> >>                      continue;
+> >> +            /*
+> >> +             * In certain cases, e.g., clang lto kernel, the 'name' h=
+ere
+> >> +             * may be different from the one in /proc/kallsyms due to
+> >> +             * /proc/kallsyms name might be "<name>.llvm.<hash>" inst=
+ead
+> >> +             * of "<name>". Exclude these 'name's since they will cau=
+se
+> >> +             * later kprobe_multi_attach failure.
+> >> +             */
+> >> +            if (ksym_get_addr(name) =3D=3D 0)
+> >> +                    continue;
+> > curious how many symbols like that are there?
+>
+> The number of entries in /sys/kernel/tracing/available_filter_functions: =
+50654
+> After existing filtering ('arch_cpu_idle') etc: 50513 (filtering 141)
+> After above ksym_get_addr(name) check: 49437 (further filtering 1076)
+>
 
-> This patch adds a led trigger that interfaces with the bpf subsystem. It
-> allows for BPF programs to control LED activity through calling bpf
-> kfuncs. This functionality is useful in giving users a physical
-> indication that a BPF program has performed an operation such as
-> handling a packet or probe point.
->=20
-> Signed-off-by: Daniel Hodges <hodges.daniel.scott@gmail.com>
+alternatively, you could have found matching func.llvm.* for any func
+in available_filter_functions. Have you considered that?
 
-> +static int init_bpf(void)
-> +{
-> +	int ret;
-> +
-> +	ret =3D register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
-> +			&ledtrig_bpf_kfunc_set);
-> +	ret =3D register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
-> +			&ledtrig_bpf_kfunc_set);
-
-Should have ret ?: here, too?
-
-> +static int ledtrig_bpf_init(void)
-> +{
-> +	led_trigger_register_simple("bpf", &ledtrig_bpf);
-> +
-> +	return init_bpf();
-> +}
-
-Is it somehow possible to have multiple LEDs hooked to bpf
-functionality? I guess someone will want that...
-
-Best regards,
-								Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---N4DJvJWOynbcHMAs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZf39nQAKCRAw5/Bqldv6
-8s0/AJ4ggTuHhsWQVEaesd844GKZQZ9mwgCgvsVcXdfViLuzhTNkVoM55R3JpwE=
-=JQmB
------END PGP SIGNATURE-----
-
---N4DJvJWOynbcHMAs--
+> >
+> > Acked-by: Jiri Olsa <jolsa@kernel.org>
+> >
+> > jirka
+> >
+> >>
+> >>              err =3D hashmap__add(map, name, 0);
+> >>              if (err =3D=3D -EEXIST) {
+> >> --
+> >> 2.43.0
+> >>
+> >>
