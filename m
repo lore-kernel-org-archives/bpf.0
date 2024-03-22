@@ -1,194 +1,102 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-fw-9105.amazon.com (smtp-fw-9105.amazon.com [207.171.188.204])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC00560DED;
-	Fri, 22 Mar 2024 17:57:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F30A65FBB0;
+	Fri, 22 Mar 2024 18:09:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.171.188.204
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711130274; cv=none; b=n3jg/RIFlNLHRtqFzeMi2eMnxasnPK0nUxPbk8FjsD95lmO7ZtzQzrMhmwklF5eI10eE60iXVZdj/RvCmodWWfFVevp2ARcmKkEu+o46kdkwm4JX2K5UCU6uT5+LcIf8dtK4EV8kxE6g5KpvpUe0pk4Yo3eX3217b+YtiRlkWaY=
+	t=1711130943; cv=none; b=lYyJ9E8ggin3tkDwt6yJg5kfRDfxa14mt/LmZmguCxOFAn8stWEhbLt7ts3QIrAoiVPoK7kIBmwgh9wy/Sij+HW/WeiHwoo0KOVkvuLTN86yCa/WHjBWzGudb4U4udVpv77nykyG4YcM2BKPOT17ZPt/a0FozwrmmEcKEUqev6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711130274; c=relaxed/simple;
-	bh=81guNSONTPOzcQbDpdBs9ie/oz1dLsglGR7hW77hskM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SBfHIN4C2hoHWuGIfY2BtbISMvByqIgggJIlzkrbwRnW253lxpHN2uz652GfXgQZ4+vo3iXa5ltKjb4/qP1VScDFuhOyZrbXhYgHCbvPwSun9N/AQAbv3Ysft2VtkesJ1xeQ3u8RdotOUHv8SZVXkT3l2pGDw5D61sZHm5fDMmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K03ZKwNT; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711130943; c=relaxed/simple;
+	bh=g6oLuA619jzBBWFMWetl5CCBwUbcZU/i+Z5gARF8938=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gBediznQqtr7/qcgle1yUGeRpDWmxmat1oAs5WRWbSfkYMuoeK/yZRjw0YduD/aZ2CSMidXeR6GwHh5uaax6m0R3MhK49LW2DxCg79UL2KJTrdh0jLDMNlXGonuKDSwioxlUEv1gvtLYPiQ3I77202KXTOKFfslDsPP4DiYNt/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=W7AtngQY; arc=none smtp.client-ip=207.171.188.204
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K03ZKwNT"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6e73e8bdea2so1892326b3a.0;
-        Fri, 22 Mar 2024 10:57:52 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="W7AtngQY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711130272; x=1711735072; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kJU/s9RDeuR4/JqTbCXKWTk7CZccjRYG/vO14Nz0+1M=;
-        b=K03ZKwNT+ZFNwT7o+HX253Uh7f6SBIYx0jaX9wncxTDKLsJkEB4JwaqEhXSDdKStER
-         U6ycRJlVDyaR+X3E/zE69A8Dvrc72yJbd6GaWiLBVVaRp5ortG+KkMs1IICEoQ8KPZmk
-         AAFY3dRaFIW184eDzShyg0Gm/FB8nFVbQV2aNWuL+ASFJNAUBzmG9bqeMe4meS/FRkF0
-         GNntJH9+3jFxdht/bD0ClnleOpTyWDDoVtzsOBOQWTCI93hs0IiWlAvBEchurNP+4ipk
-         vmsV36vNkqHbdJtejcHJTFvpjSrd/nhfSdyZTb/BC8Qqvd97B46dEDOe7o1frcuMMp08
-         gdCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711130272; x=1711735072;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kJU/s9RDeuR4/JqTbCXKWTk7CZccjRYG/vO14Nz0+1M=;
-        b=PbD6bwO4JjxTs371Aete4fukCop7n3Vopez9imXM25RO0MepC2AShJvRZ6+iakwRJm
-         +NYFqN1ZXXAtjqP+z0TXTOpJgjzL+NRuOZ0N+shEO3NnkpEhbmqeugttDR0JUDDjsDvk
-         dsfmEVdsC1r9JbDPfmJUZ2PfTEAcSdDJF3l3Y2BJC+jYdoxqkIWjLBx3DTzoXvU2kDaw
-         wKXu0d2Eh6rV77zj39JkKFrNy36TXbJu9BDuNn4X7G4EKPZPchjJPDoFtECK5e0tOIxd
-         1sYgAf2o3KfXzb2KR0yOYHXBKF/KFgmOZmknx3YXaiKwWrQL6mkhBvTyVbrfVOUDQZV9
-         CFxw==
-X-Forwarded-Encrypted: i=1; AJvYcCUEUjVTjh25sduGKjQXsx27QlMYa1FFEZtZDE1V/U2QpEG0jPzqJN+8wxFirrFcm1T+LiE+gK8O9hL+abO54vYaIyQL1MutsEp/sPnQ+By2Kg+UrUQyFidyKg2cx7DMPsAJ
-X-Gm-Message-State: AOJu0YwpdBroNvq2KucDi7CbeeGS4EJjggY8V99zps/DVKHX1AIhNohs
-	Ypd3bbbnnvqHYQ/Ri1BJqUxmA5RxNtOTXGRS8kBuaRV39JrdtNauzKBE9gUgPXKd0me7k2HqyaQ
-	Y6EYutxQbZOgHbvbKjj32dB0hnU4=
-X-Google-Smtp-Source: AGHT+IHiPxBTgYjvi7POvXPnAjNUtTgX1khJTvUa21919HgLJuYp9Dard3QYvMj7fw4mJqo1oI3wTcs6bMPVZ68GAOw=
-X-Received: by 2002:a17:90b:3cc:b0:2a0:20b5:7f1a with SMTP id
- go12-20020a17090b03cc00b002a020b57f1amr387257pjb.37.1711130272000; Fri, 22
- Mar 2024 10:57:52 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1711130943; x=1742666943;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=I+ptxNawZAJ42+073zLqw3Fvrnf3JM8XIOukEzY52mc=;
+  b=W7AtngQYDq/2JvasrEXgx7t0wg2ntk9levrc7p/MFpaqReyhA4Hr/ymM
+   hk/MGKseyC3oyICzoXsijI2hcPRH5fxb2MH3reXrh9i1zOUgWYNk8ZBLi
+   DqbteAdJF/julr2LzZBpxhd4esX073YutJ35ofSMomP2JFgEDDHSPGLme
+   M=;
+X-IronPort-AV: E=Sophos;i="6.07,146,1708387200"; 
+   d="scan'208";a="713703306"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
+  by smtp-border-fw-9105.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2024 18:08:54 +0000
+Received: from EX19MTAUWB001.ant.amazon.com [10.0.7.35:28676]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.37.70:2525] with esmtp (Farcaster)
+ id c1f4331b-f630-4ea3-80a5-3f5cc567d229; Fri, 22 Mar 2024 18:08:53 +0000 (UTC)
+X-Farcaster-Flow-ID: c1f4331b-f630-4ea3-80a5-3f5cc567d229
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.28; Fri, 22 Mar 2024 18:08:52 +0000
+Received: from 88665a182662.ant.amazon.com (10.106.101.48) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.28;
+ Fri, 22 Mar 2024 18:08:50 +0000
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
+To: <martin.lau@linux.dev>
+CC: <bpf@vger.kernel.org>, <kuni1840@gmail.com>, <kuniyu@amazon.com>,
+	<netdev@vger.kernel.org>
+Subject: Re: BUG? flaky "migrate_reuseport/IPv4 TCP_NEW_SYN_RECV reqsk_timer_handler" test
+Date: Fri, 22 Mar 2024 11:08:41 -0700
+Message-ID: <20240322180841.54368-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <0edaead1-b20b-4222-9ed5-4347efcebbc2@linux.dev>
+References: <0edaead1-b20b-4222-9ed5-4347efcebbc2@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240321170444.388225-1-chen.dylane@gmail.com>
- <CAEf4BzYJeEViQaRJb6u06GJSLa6uBmykRZa4JnWJ9VXw+WoX2g@mail.gmail.com> <f5fe3709-bfc8-4906-a0cc-5fe9b388be6b@gmail.com>
-In-Reply-To: <f5fe3709-bfc8-4906-a0cc-5fe9b388be6b@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 22 Mar 2024 10:57:39 -0700
-Message-ID: <CAEf4Bzb-Wf5sTnDLu29KQ-zWfCnffdUZYLSe_tQTNW_bTSfnPg@mail.gmail.com>
-Subject: Re: [PATCH] libbpf: add specific btf name info when do core
-To: Tao Chen <chen.dylane@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D036UWC004.ant.amazon.com (10.13.139.205) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
-On Fri, Mar 22, 2024 at 6:37=E2=80=AFAM Tao Chen <chen.dylane@gmail.com> wr=
-ote:
->
-> Hi, Nakryiko, thank you for your reply. I try to familiarize with core
-> in libbpf=EF=BC=8C the debug info is really helpful for me. But i use the=
- old
-> kernel btf, so origion debuginfo like:
->   struct task_struct___x: found target candidate [130] struct
-> task_struct in [vmlinux]
+Hi Martin,
 
-the idea here is to not emit path to BTF (otherwise we normally should
-emit [/sys/kernel/btf/vmlinux], but rather distinguish whether it's a
-kernel BTF ([vmlinux]) or some kernel module BTF ([<module-name>]).
+Thanks for the report.
 
-In your case you are overriding vmlinux BTF by using btf_custom_path
-option (so you should know where to find it, if you need to debug
-something). It's still, conceptually, a [vmlinux], and I'd like to
-keep it this way.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+Date: Thu, 21 Mar 2024 18:39:53 -0700
+> Hi Kuniyuki,
+> 
+> The bpf CI has recently hit failure in the "migrate_reuseport/IPv4 
+> TCP_NEW_SYN_RECV" test. It does not always fail but becomes more flaky recently:
+> https://github.com/kernel-patches/bpf/actions/runs/8354884067/job/22869153115
+> 
+> It could be due to some slowness in the bpf CI environment but failing because 
+> of environment slowness is still not expected.
+> 
+> I took a very quick look. It seems like the test depends on the firing of the 
+> timer's handler "reqsk_timer_handler()", so there is a sleep(1) in the test.
 
-> I think it may be more clear, if we print btf name when we use old
-> kernel btf like:
->   struct task_struct___x: found target candidate [130] struct
-> task_struct in [/boot/***.btf]
-> The patch just solve debug info show for newbies above.
->
-> =E5=9C=A8 2024/3/22 =E4=B8=8A=E5=8D=882:52, Andrii Nakryiko =E5=86=99=E9=
-=81=93:
-> > On Thu, Mar 21, 2024 at 10:04=E2=80=AFAM Tao Chen <chen.dylane@gmail.co=
-m> wrote:
-> >>
-> >> No logic changed, just add specific btf name when core info
-> >> print, maybe it seems more understandable.
-> >>
-> >> Signed-off-by: Tao Chen <chen.dylane@gmail.com>
-> >> ---
-> >>   tools/lib/bpf/libbpf.c | 14 +++++++++-----
-> >>   1 file changed, 9 insertions(+), 5 deletions(-)
-> >>
-> >
-> > Can you elaborate on what problem you are trying to solve?
-> > Conceptually libbpf does look for types in vmlinux (meaning main
-> > kernel BTF), even if user overrides BTF location (presumably because
-> > of old kernel). So even when we emit "vmlinux" in logs, it seems
-> > correct.
-> >
-> > pw-bot: cr
-> >
-> >
-> >> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> >> index afd09571c482..b32154288b4a 100644
-> >> --- a/tools/lib/bpf/libbpf.c
-> >> +++ b/tools/lib/bpf/libbpf.c
-> >> @@ -5653,7 +5653,8 @@ static int load_module_btfs(struct bpf_object *o=
-bj)
-> >>   }
-> >>
-> >>   static struct bpf_core_cand_list *
-> >> -bpf_core_find_cands(struct bpf_object *obj, const struct btf *local_b=
-tf, __u32 local_type_id)
-> >> +bpf_core_find_cands(struct bpf_object *obj, const struct btf *local_b=
-tf, __u32 local_type_id,
-> >> +                   const char *targ_btf_path)
-> >>   {
-> >>          struct bpf_core_cand local_cand =3D {};
-> >>          struct bpf_core_cand_list *cands;
-> >> @@ -5680,7 +5681,8 @@ bpf_core_find_cands(struct bpf_object *obj, cons=
-t struct btf *local_btf, __u32 l
-> >>
-> >>          /* Attempt to find target candidates in vmlinux BTF first */
-> >>          main_btf =3D obj->btf_vmlinux_override ?: obj->btf_vmlinux;
-> >> -       err =3D bpf_core_add_cands(&local_cand, local_essent_len, main=
-_btf, "vmlinux", 1, cands);
-> >> +       err =3D bpf_core_add_cands(&local_cand, local_essent_len, main=
-_btf,
-> >> +                                targ_btf_path ?: "vmlinux", 1, cands)=
-;
-> >>          if (err)
-> >>                  goto err_out;
-> >>
-> >> @@ -5793,7 +5795,8 @@ static int bpf_core_resolve_relo(struct bpf_prog=
-ram *prog,
-> >>                                   int relo_idx,
-> >>                                   const struct btf *local_btf,
-> >>                                   struct hashmap *cand_cache,
-> >> -                                struct bpf_core_relo_res *targ_res)
-> >> +                                struct bpf_core_relo_res *targ_res,
-> >> +                                const char *targ_btf_path)
-> >>   {
-> >>          struct bpf_core_spec specs_scratch[3] =3D {};
-> >>          struct bpf_core_cand_list *cands =3D NULL;
-> >> @@ -5813,7 +5816,7 @@ static int bpf_core_resolve_relo(struct bpf_prog=
-ram *prog,
-> >>
-> >>          if (relo->kind !=3D BPF_CORE_TYPE_ID_LOCAL &&
-> >>              !hashmap__find(cand_cache, local_id, &cands)) {
-> >> -               cands =3D bpf_core_find_cands(prog->obj, local_btf, lo=
-cal_id);
-> >> +               cands =3D bpf_core_find_cands(prog->obj, local_btf, lo=
-cal_id, targ_btf_path);
-> >>                  if (IS_ERR(cands)) {
-> >>                          pr_warn("prog '%s': relo #%d: target candidat=
-e search failed for [%d] %s %s: %ld\n",
-> >>                                  prog_name, relo_idx, local_id, btf_ki=
-nd_str(local_type),
-> >> @@ -5920,7 +5923,8 @@ bpf_object__relocate_core(struct bpf_object *obj=
-, const char *targ_btf_path)
-> >>                          if (prog->obj->gen_loader)
-> >>                                  continue;
-> >>
-> >> -                       err =3D bpf_core_resolve_relo(prog, rec, i, ob=
-j->btf, cand_cache, &targ_res);
-> >> +                       err =3D bpf_core_resolve_relo(prog, rec, i, ob=
-j->btf, cand_cache, &targ_res,
-> >> +                                                   targ_btf_path);
-> >>                          if (err) {
-> >>                                  pr_warn("prog '%s': relo #%d: failed =
-to relocate: %d\n",
-> >>                                          prog->name, i, err);
-> >> --
-> >> 2.34.1
-> >>
+Yes, it depends on the timing of the reqsk tiemr.
+
+
+> May be the timer fired slower and the test failed? If that is the case, it may 
+> help to directly trace the reqsk_timer_handler() and wait for enough time to 
+> ensure it is called.
+
+Sounds good.  I'll give it a try.
+
+Thanks!
+
+> 
+> This test has been temporarily disabled for now 
+> (https://github.com/kernel-patches/vmtest/blob/master/ci/vmtest/configs/DENYLIST). 
+> Once you have a fix, we can re-enable it again to ensure this migrate feature 
+> will not regress.
+> 
+> Thanks,
+> Martin
