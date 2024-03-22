@@ -1,101 +1,125 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79411BDD9;
-	Fri, 22 Mar 2024 08:39:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7511F22331
+	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 08:50:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711096779; cv=none; b=ZJD+CQaEERVZMwnyFqMwcnhrTgXwIPCKbXOrhtncqX98lCASCqSkg12dkRXpeLFbUut2jNnegfLLNiA3J0HDX4CuSpl01DcaPeKWqvhXg3CIaNKunecpWNTab5YpC2P88oHMoGQpNKjsVTank4MLyOBKNn34t/zQvxcd1fr5s+Q=
+	t=1711097413; cv=none; b=KoLWRq6dSN9idUFjhTzrDlSNfSheStmwQS+J2MYvEHYB/0PPW/2K3s2Lj1BhxDPz3m8L0T1fLLerrvUs9HJiGIl4pcQVM4q79j28jjg90p2UDiXmVAeEv3REBH54sDifCejYfpU1LZYYtf4655/HjK4Xnne6yt9gGIKKEmBZ7O8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711096779; c=relaxed/simple;
-	bh=8qz9C1oFZqtOS8DKNo2scRc67XzoLfuI7Z79A8V/CMs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=DHok/06blzm4XFyFhYaVugFmrOgA3XI+NS/jkuWsMOSFzdalfbhE/PexyinIkjcW0qGCS72cQsV9UqNrvgIgiT5wxSi1YjxA+RMttbhIacaXtllDZ7snGSnJw566tmeK8cd6DUlfx8/x5RcujQ/0YfJqZZfz1jNgTSYuLyOdfXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=HbD1IvwZ; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1711097413; c=relaxed/simple;
+	bh=6cSyU2KmaIwyEHF7qurAFpDAmYeckuqAf6rjHAtbAIg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CDD30YrYKsXb2T9FDMCggImXQUUciG2WzplaRqLdFFpLxzowAuAs+cDiOpre/jdybAwGSFtz3ieLQ6cwhzDRVIbK2wJ3JFOINWN65EqmlZhxLqT2hv2to7SJAdOsYd1FBA02iVKJKSTEJvzRyHJ3INvF4dPO0E8lMzK8kAnBN+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fb2fpIhD; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="HbD1IvwZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1711096379;
-	bh=8qz9C1oFZqtOS8DKNo2scRc67XzoLfuI7Z79A8V/CMs=;
-	h=From:Date:Subject:To:Cc:From;
-	b=HbD1IvwZU+Fa0R5+dXd4Z5PtorJ9kamLlngsQfK0DXHSSogIt7EswCusDU8mv0oyu
-	 gqqDARm5PcYZcx9Z9domjyy5fu4OkBPYPRXMiQGYGkAH09iF5Zmt2r4575I3D75+1k
-	 CXlr7MqC0963vTRwAT9PxZIv7q23tpRMGhGycHOg=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Fri, 22 Mar 2024 09:31:19 +0100
-Subject: [PATCH] kbuild: disable pahole multithreading for reproducible
- builds
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fb2fpIhD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1711097410;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QjyRpgToNYd1SsHunwlrm2xWFnHKrYI4Rbg8WhNxCIc=;
+	b=fb2fpIhDM6jQ4tWEOxbcIdQEi3E+WC+D6lA/wADLsyUJz4qnVTh4RUaNdra6vjT0GLtaGY
+	5FpxDHQRNQAzKZQ7JYx41CMeSoRrCYmN3Pgr1ih9DHhBvlzGsEV8CJYclhKeGy2Il9AkCH
+	7b/oClFZYbxaG+jMN9+aJOgEWdT6n7Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-620--0In6_UTOXu87l0Z-AMMlQ-1; Fri, 22 Mar 2024 04:50:04 -0400
+X-MC-Unique: -0In6_UTOXu87l0Z-AMMlQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2F17E800262;
+	Fri, 22 Mar 2024 08:50:03 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.60])
+	by smtp.corp.redhat.com (Postfix) with SMTP id 7EACA8173;
+	Fri, 22 Mar 2024 08:50:00 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Fri, 22 Mar 2024 09:48:40 +0100 (CET)
+Date: Fri, 22 Mar 2024 09:48:33 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
+Subject: Re: [PATCH RFC bpf-next 4/3] uprobe: ensure sys_uretprobe uses sysret
+Message-ID: <20240322084832.GA30928@redhat.com>
+References: <ZflyM5U67c47i4Oo@krava>
+ <ZfnoK8aQDJMgOYfY@krava>
+ <ZfrC0NZWxmWBuUIe@krava>
+ <20240320143739.GA32579@redhat.com>
+ <20240320152848.GA7613@redhat.com>
+ <ZfwFBgfdHUzQBdxS@krava>
+ <20240321101750.GB14646@redhat.com>
+ <ZfwRbf0FMHVizZAC@krava>
+ <20240321121456.GC14646@redhat.com>
+ <ZfyYriG3ttxbkpix@krava>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240322-pahole-reprodicible-v1-1-3eaafb1842da@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIANZB/WUC/x3MSwqAMAxF0a1IxhZqrKJuRRz4eWpAbElBBHHvF
- odncO9DESqI1GUPKS6J4s+EIs9o3sdzg5ElmdiysyWzCePuDxhFUL/ILFOCZbTWwVV1U1Mqg2K
- V+7/2w/t+PO3FuGUAAAA=
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>
-Cc: bpf@vger.kernel.org, linux-kbuild@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1711096377; l=1459;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=8qz9C1oFZqtOS8DKNo2scRc67XzoLfuI7Z79A8V/CMs=;
- b=+1w57nbzBpgRD+AXa4yunHz9+Ji2wjrUngukytktGDUCX3+WZfibC3N9MyodM4RVgH+F813g6
- SR22gH31hmICRM3DTrBN3/7Gg8xNO/qXW16Ne5R8f5pg+i+KcKkCtIy
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZfyYriG3ttxbkpix@krava>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
 
-A BTF type_id is a numeric identifier allocated by pahole through
-libbpfd. Ids are incremented for each allocation.
-Running pahole multithreaded makes the sequence of allocations
-non-deterministic which also makes the type_id itself non-deterministic.
-As the type_id end up in the binary this breaks reproducibility.
+On 03/21, Jiri Olsa wrote:
+>
+> On Thu, Mar 21, 2024 at 01:14:56PM +0100, Oleg Nesterov wrote:
+> > Either way
+> >
+> > 			regs->ip = ip;
+> >
+> > above ensures that usermode returns to uretprobe_syscall_entry right after
+> > the syscall insn.
+>
+> hm, I think above ensures that do_syscall_64 will skip the 'regs->cx != regs->ip'
+> check.. and after the sysret returns to rcx register value and ignores regs->ip
+                                                                 ^^^^^^^^^^^^^^^^
 
-Therefore, if the kernel is built reproducibly as indicated by
-KBUILD_BUILD_TIMESTAMP, disable threading in pahole.
+Yes, that is why do_syscall_64() returns F if regs->cx != regs->ip.
 
-Fixes: b4f72786429c ("scripts/pahole-flags.sh: Parse DWARF and generate BTF with multithreading.")
-Fixes: 72d091846de9 ("kbuild: avoid too many execution of scripts/pahole-flags.sh")
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- scripts/Makefile.btf | 3 +++
- 1 file changed, 3 insertions(+)
+IOW. To oversimplify, the logic is
 
-diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
-index 82377e470aed..2356929e62e4 100644
---- a/scripts/Makefile.btf
-+++ b/scripts/Makefile.btf
-@@ -10,7 +10,10 @@ endif
- 
- pahole-flags-$(call test-ge, $(pahole-ver), 121)	+= --btf_gen_floats
- 
-+# threaded execution randomizes BTF type_id allocation, breaking reproducibility
-+ifeq ($(KBUILD_BUILD_TIMESTAMP),)
- pahole-flags-$(call test-ge, $(pahole-ver), 122)	+= -j
-+endif
- 
- pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)		+= --lang_exclude=rust
- 
+	// %rcx == ret ip
+	entry_SYSCALL_64:
 
----
-base-commit: 8e938e39866920ddc266898e6ae1fffc5c8f51aa
-change-id: 20240322-pahole-reprodicible-02e904e45686
+		pt_regs->ip = %rcx;
+		pt_regs->cx = %rcx;
 
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
+		do-syscall;
+
+		%rcx = pt_regs->cx; // POP_REGS
+
+		if (%rcx == pt_regs->ip) {
+			// OK, we can use sysret which returns to rcx
+			sysret;
+		} else {
+			// debugger/whatever changed rcx or ip, can't use sysret.
+			// return to pt_regs->ip, see the "Return frame for iretq"
+			// comment in struct pt_regs.
+			iret;
+		}
+
+So return-to-usermode always returns to regs->ip and restores all the registers
+from pt_regs, just it can be faster if we can use sysret.
+
+> but in any case we need to set it
+
+Yes, yes, sure.
+
+Oleg.
 
