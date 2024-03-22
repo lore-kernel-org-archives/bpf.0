@@ -1,81 +1,129 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5751A5FB81
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 17:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986131C6AB;
+	Fri, 22 Mar 2024 17:27:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711127430; cv=none; b=tQk25XVlr13PJISImFVDInd64+zGRqLshSJOowRpvTN/bpUWhmoE+DAnvuCHP2jymIQBvv86azegv5iofWT2Dw1jOLtkDxHJ4kUeikT/W/Fge5A/3Al/n7GeY9Cyuy/gIiwLEsidn3OS3p8NXbqADtjClxfRrEVZNWyFCazfePc=
+	t=1711128449; cv=none; b=ZmUWqMtQ3Lw3iSXgsXGPs9ZZxHaU6/Zo9XjJX1nj4tnhZxblC/j/x3xP9lyNf+SySfkd/tDs79G1FfM+f21ywLqIa2rbN6Bn2tVGG7p2NMzPOJ0rLNg7CVLTExr8v2ikrfmQ1yDyEi0iumhleY0aDIhpvl40SiV4bYuZFLM5D84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711127430; c=relaxed/simple;
-	bh=oNnoEVPYYabXLKeoAklVVxAdYk5ezvuxM0GlMM/0KB0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=XeLub+AFfeYnshwHK8ONBVz6fu0cQMYuaZhezCkC8gwYl6jB1CvL7mww3Hpn+6CodkRlppnSX1ehUp1iRS8ny4mRmPEGKlYljLwzK7QdS4UX6MkoXpyINFhWHNoUl8b9IJjL9AWu8/OhRDDRGEDF/PuNlpJdrFlfDYvAH4sQMIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QHsEqYjV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711128449; c=relaxed/simple;
+	bh=8jU4Y94EgTZ2cjnSSp7l1TCrtVwVdXwRUYY1Hz25hzk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wc9h6FJYU0m25x2uzEWF4UiACoevHMluYaqFJ+Zr3V54bEOe8PK1ySuNeGudKxhVmf+jws0ujgaLVs1seyekUqEwc1EBAMb89j4ruUyDPt3eJJcqHDs6BE7MMTdFJn0fd04sL/JMFEG7I6HWn2TeSgaXEpjQzFtB7KKCS9poJQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R53Y9fMA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QHsEqYjV"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CEE5DC43394;
-	Fri, 22 Mar 2024 17:10:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R53Y9fMA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91BCCC433F1;
+	Fri, 22 Mar 2024 17:27:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711127429;
-	bh=oNnoEVPYYabXLKeoAklVVxAdYk5ezvuxM0GlMM/0KB0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=QHsEqYjVR5959fafgn2SlRyh/vKvFYU+bAfcQlbP/t4KD8b7GumysF96oa195XL0Q
-	 88RazU2iorP1e8GRXxk9xMjv6sQk464XVqqxZLS+PgGu5swABDXU9/Y/PSHBmbotIN
-	 7AD04GBTVD/oEhPWHt02W23+XkhjGs9vYpirEVoWygXrLdFtMfDVgjZeqDFj3uxNNE
-	 EYD/zbvRPhOtmCzgg+YijbVlxz5G8U0dv/OOXtlHLN6k2TUQXYFFJGN73d1dZZKVJe
-	 WgH2vBzAgL2qivikF25JkvcwiOlhs50P1mLvR9T2zIJKyKfgU4ugpkBHkYBbbkP8Nf
-	 oIKrlhoRcMlJQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B4989D9505C;
-	Fri, 22 Mar 2024 17:10:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1711128449;
+	bh=8jU4Y94EgTZ2cjnSSp7l1TCrtVwVdXwRUYY1Hz25hzk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=R53Y9fMA3e14/1ff1d4IvrBB//jd7qQ4DJBGT7ibVt+eMuvh38Rvn6sZrEF+/FYtE
+	 VZ+nNoz9Rt+JFCmCu36RheRF34nBzeRhg+RHFM5hQ8q3ArZq8pbantXKE7oDHHVZxz
+	 /V0M7fO/sZz8xqjkKf3P6SgxNNnplgeYLT+uXtb0F45wzDfaSzV/IQIwNlGbXvgdxg
+	 Sa1BH5llQw6qrJHN1WxqDARsTXm8t1g2QkA9sgV3IxZXiLCoejc9lUeoOVKoJbZNPd
+	 zSk5faKwi1g3MOpndx9FuXlZVO/ieMWSGF5oVLud//r8LlX0dOPO2KnE3qlMfNlofO
+	 TbV5ExZWDEnuw==
+Date: Fri, 22 Mar 2024 14:27:26 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, bpf@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kbuild: disable pahole multithreading for reproducible
+ builds
+Message-ID: <Zf2_fgs0cqW82zEu@x1>
+References: <20240322-pahole-reprodicible-v1-1-3eaafb1842da@weissschuh.net>
+ <49fa2bd1-bd6e-4404-a1c7-2170d37f0194@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCHv2 bpf-next] selftests/bpf: Mark uprobe trigger functions with
- nocf_check attribute
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171112742973.3285.4148849344808411338.git-patchwork-notify@kernel.org>
-Date: Fri, 22 Mar 2024 17:10:29 +0000
-References: <20240322134936.1075395-1-jolsa@kernel.org>
-In-Reply-To: <20240322134936.1075395-1-jolsa@kernel.org>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- bpf@vger.kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
- john.fastabend@gmail.com, kpsingh@chromium.org, sdf@google.com,
- haoluo@google.com
+In-Reply-To: <49fa2bd1-bd6e-4404-a1c7-2170d37f0194@oracle.com>
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Fri, 22 Mar 2024 14:49:36 +0100 you wrote:
-> Some distros seem to enable the -fcf-protection=branch by default,
-> which breaks our setup on first instruction of uprobe trigger
-> functions and place there endbr64 instruction.
+On Fri, Mar 22, 2024 at 10:07:00AM +0000, Alan Maguire wrote:
+> On 22/03/2024 08:31, Thomas Weiﬂschuh wrote:
+> > A BTF type_id is a numeric identifier allocated by pahole through
+> > libbpfd. Ids are incremented for each allocation.
+> > Running pahole multithreaded makes the sequence of allocations
+> > non-deterministic which also makes the type_id itself non-deterministic.
+> > As the type_id end up in the binary this breaks reproducibility.
+> > 
+> > Therefore, if the kernel is built reproducibly as indicated by
+> > KBUILD_BUILD_TIMESTAMP, disable threading in pahole.
+> > 
+> > Fixes: b4f72786429c ("scripts/pahole-flags.sh: Parse DWARF and generate BTF with multithreading.")
+> > Fixes: 72d091846de9 ("kbuild: avoid too many execution of scripts/pahole-flags.sh")
+> > Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
 > 
-> Marking them with nocf_check attribute to skip that.
+> Yep, we've talked about sorting final BTF in various ways but until that
+> is implemented, non-parallel execution of pahole is the best way to get
+> reliabily-reproducing BTF ids. We should probably update the pahole
+
+So, the problem is about parallel BTF encoding, not so much about
+parallel DWARF loading, which speeds up the whole process and could
+continue if we make sure that we feed the BTF encoder in the same order
+as when not doing anything in parallel.
+
+I.e. a serial BTF encoding done at the same time as a parallel DWARF
+loading would produce a reproducible build faster than doing
+_everything_ serially.
+
+The important point would be to feed the btf encoder the DWARF CUs in
+the same order as when doing it serially.
+
+No need to order anything, just create a linked list/array of CUs and
+then start loading them and leave the BTF encoder go on taking CUs from
+that linked list/array in the order they are in vmlinux.
+
+- Arnaldo
+
+> manpage to warn about parallel non-deterministic id allocation in the
+> meantime.
 > 
-> Ignoring unknown attribute warning in gcc for bench objects, because
-> nocf_check can be used only when -fcf-protection=branch is enabled,
-> otherwise we get a warning and break compilation.
+> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
 > 
-> [...]
-
-Here is the summary with links:
-  - [PATCHv2,bpf-next] selftests/bpf: Mark uprobe trigger functions with nocf_check attribute
-    https://git.kernel.org/bpf/bpf-next/c/af8d27bf15c8
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> > ---
+> >  scripts/Makefile.btf | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+> > index 82377e470aed..2356929e62e4 100644
+> > --- a/scripts/Makefile.btf
+> > +++ b/scripts/Makefile.btf
+> > @@ -10,7 +10,10 @@ endif
+> >  
+> >  pahole-flags-$(call test-ge, $(pahole-ver), 121)	+= --btf_gen_floats
+> >  
+> > +# threaded execution randomizes BTF type_id allocation, breaking reproducibility
+> > +ifeq ($(KBUILD_BUILD_TIMESTAMP),)
+> >  pahole-flags-$(call test-ge, $(pahole-ver), 122)	+= -j
+> > +endif
+> >  
+> >  pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)		+= --lang_exclude=rust
+> >  
+> > 
+> > ---
+> > base-commit: 8e938e39866920ddc266898e6ae1fffc5c8f51aa
+> > change-id: 20240322-pahole-reprodicible-02e904e45686
+> > 
+> > Best regards,
+> 
