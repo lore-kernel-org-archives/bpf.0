@@ -1,68 +1,57 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A71110F2
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 01:40:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E5565C;
+	Fri, 22 Mar 2024 01:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711071606; cv=none; b=rnZJDw4C/GVWk9wZW8l5zIsPiSzB4wCqYItTzN8x4503GYrxKxWGMg63HErceWMwhlC1ZsZ/dDYH43+fcmatWQ7KT9+8tC2rdlNtcwVm/ZKEWDVpBHO0ahh9BcjySKIvtys8i1gTN7GLnF7tTD/ML65XgSvwfv7ldC6UOqeLCJU=
+	t=1711072484; cv=none; b=Z7Ir9aDd5LFjVU0T8SiASV+hLDd0nc6KWAaHUbY0vyOzqJoeI2nFWmvreDNYeMjA+PrxXeeQ/ZDbwbGdTRe7r6ZNjzBY7wPgUOCgr2dxsApnVUFx9j6QU7d39a1YyKCYPiYTRWBNw5zhcBN2ZM2fht+GhKo9NIpMf8FM7TaFJYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711071606; c=relaxed/simple;
-	bh=FSw3je7gaoFVnx+4DXXiieRmGA2ZMVa24Naitm+peao=;
-	h=Message-ID:Date:MIME-Version:From:To:Subject:Cc:Content-Type; b=ODfGQVpLLopKkSPds9fSPFhaB2vjbn9sdZ3l6hcMSOVhl4nd05Ou+ds6tbHJK7AGZmnW2MrpZ9rhZRumLHI0Dh2TJ27I6LL5BVGZRDwBP+bDH9DpVmPTxVlbcCXTvL5uCGqza1Q0dgupQl67rKY6CJSYLFz6sNKepUePuwaIk/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PECmN9yZ; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1711072484; c=relaxed/simple;
+	bh=Cskx5u7yuBBojGXITmR1BsGPFSCdaJFtSUDscVEPewc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PL/g+4zTjnPrQnjOEugqvA8zFL1Nhenq+7yrv5uxHuv8ABYhIN9FkfMO+QmuBmOmBLfdwgSngLUvBRFrZKLj+k8+b5iOGNYrVfwPd8/E0318TJEumnzLbraB7CuUtAQPuS7oiiHzVzxbJcPw9TZ9rjbz8mBxNidEiHOcv8Is4d8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b02KvSfT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PECmN9yZ"
-Message-ID: <0edaead1-b20b-4222-9ed5-4347efcebbc2@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1711071600;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=IBq5836/mNksjwZnEwNG8ApcvfYSLR1dBN58rdXkk8A=;
-	b=PECmN9yZbBuAfHVOA+DvySPZtJgXsWaoo1ztmSKRq0tm8cENUU9N2oCUQA0U44KwpEiZol
-	mP2FaJ5cEOxibS4t3XcKpb7VjWarq6zTWT3gulSoE/OzsaITi8PMr0QMrQRNmQMWYNv7EL
-	oAYnjMlEVg6D36lcbpBDtgyvJwVwxck=
-Date: Thu, 21 Mar 2024 18:39:53 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b02KvSfT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EC52C433F1;
+	Fri, 22 Mar 2024 01:54:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711072484;
+	bh=Cskx5u7yuBBojGXITmR1BsGPFSCdaJFtSUDscVEPewc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=b02KvSfTT9oYOfm1Ri73hgarLQ/uA6yg+RnoxmamtnP80CJ39Se/RIGavSN1TElba
+	 gzm3s5eh5dIqjYlfsn34iNqx0ue/GQw3KNUspBwHZ2Rb6H9a5QtJQIF0GF+aijqBOn
+	 /NgrJUuk31yI6DedPOzVbP2OT45RkSjLHZR6u7KQV8SPhJOgr5cCxyyOxK/HtsopIi
+	 hHjVYr/vQitf/dpmp4qO59XHw7ldEYetLQutVrdVqmKqEwfkMOVKrjRsgb3mA7tdII
+	 vtw3F6743+MlnzT8Ez3G7cyz1EJxkUd7boVCJmiuWGwfBdsNFOYA/idaWanCnUqpQU
+	 aFCBnr0EdcADg==
+Date: Thu, 21 Mar 2024 18:54:42 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Kuniyuki Iwashima <kuniyu@amazon.com>, bpf <bpf@vger.kernel.org>,
+ Network Development <netdev@vger.kernel.org>, Kuniyuki Iwashima
+ <kuni1840@gmail.com>
+Subject: Re: BUG? flaky "migrate_reuseport/IPv4 TCP_NEW_SYN_RECV
+ reqsk_timer_handler" test
+Message-ID: <20240321185442.551658d5@kernel.org>
+In-Reply-To: <0edaead1-b20b-4222-9ed5-4347efcebbc2@linux.dev>
+References: <0edaead1-b20b-4222-9ed5-4347efcebbc2@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Kuniyuki Iwashima <kuniyu@amazon.com>
-Subject: BUG? flaky "migrate_reuseport/IPv4 TCP_NEW_SYN_RECV
- reqsk_timer_handler" test
-Cc: bpf <bpf@vger.kernel.org>, Network Development <netdev@vger.kernel.org>,
- Kuniyuki Iwashima <kuni1840@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-Hi Kuniyuki,
+On Thu, 21 Mar 2024 18:39:53 -0700 Martin KaFai Lau wrote:
+> The bpf CI has recently hit failure in the "migrate_reuseport/IPv4 
+> TCP_NEW_SYN_RECV" test. It does not always fail but becomes more flaky recently:
+> https://github.com/kernel-patches/bpf/actions/runs/8354884067/job/22869153115
 
-The bpf CI has recently hit failure in the "migrate_reuseport/IPv4 
-TCP_NEW_SYN_RECV" test. It does not always fail but becomes more flaky recently:
-https://github.com/kernel-patches/bpf/actions/runs/8354884067/job/22869153115
-
-It could be due to some slowness in the bpf CI environment but failing because 
-of environment slowness is still not expected.
-
-I took a very quick look. It seems like the test depends on the firing of the 
-timer's handler "reqsk_timer_handler()", so there is a sleep(1) in the test.
-May be the timer fired slower and the test failed? If that is the case, it may 
-help to directly trace the reqsk_timer_handler() and wait for enough time to 
-ensure it is called.
-
-This test has been temporarily disabled for now 
-(https://github.com/kernel-patches/vmtest/blob/master/ci/vmtest/configs/DENYLIST). 
-Once you have a fix, we can re-enable it again to ensure this migrate feature 
-will not regress.
-
-Thanks,
-Martin
+FWIW we had a handful of IPv6 and TCP tests start failing after we
+merged first half of the merge window from Linus as well.
+Maybe something in the scheduler changed and exposed timing problems
+in the tests :(
