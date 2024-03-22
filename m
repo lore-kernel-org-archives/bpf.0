@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C4F5F87D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5751A5FB81
 	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 17:10:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711127430; cv=none; b=Tdl5b72XR4nQwFVKlXptv8jQAoS/eWbqejBW2A6p9mtut+i+N92TCOt1mc60KUecGyxEIMQVHK9wtbBYXqTGYR/Qv0LPJy+pi5hrUCzfHlsatMN9JTYC7+rNecd1pelZuUQUfG6laT1eDe1HWynJeIl+5Kp2StyTQNrMEOn/pKA=
+	t=1711127430; cv=none; b=tQk25XVlr13PJISImFVDInd64+zGRqLshSJOowRpvTN/bpUWhmoE+DAnvuCHP2jymIQBvv86azegv5iofWT2Dw1jOLtkDxHJ4kUeikT/W/Fge5A/3Al/n7GeY9Cyuy/gIiwLEsidn3OS3p8NXbqADtjClxfRrEVZNWyFCazfePc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1711127430; c=relaxed/simple;
-	bh=jUtGpnwSlYMviVqgzxLDbgqKQFsf+PANgqw3j/8YrK8=;
+	bh=oNnoEVPYYabXLKeoAklVVxAdYk5ezvuxM0GlMM/0KB0=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=BhuYr4bXa3q1qHXeSGqmL2X6eiFeN3KPvGBSPCGSD+I0OfdLqNVQsuYbl/vtLWUz5zbpiIawcY0Gi6SyuRwdOMgCp9sFwIVSqfvZBRZVw84XJx4YVEO7iEFpf/Ni9ndKuBmfZIwjak6PCT7ldc8oAjvO9RzGwaRWHybH/jTy53M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DBHMAnWE; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=XeLub+AFfeYnshwHK8ONBVz6fu0cQMYuaZhezCkC8gwYl6jB1CvL7mww3Hpn+6CodkRlppnSX1ehUp1iRS8ny4mRmPEGKlYljLwzK7QdS4UX6MkoXpyINFhWHNoUl8b9IJjL9AWu8/OhRDDRGEDF/PuNlpJdrFlfDYvAH4sQMIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QHsEqYjV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DBHMAnWE"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B8823C43390;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QHsEqYjV"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CEE5DC43394;
 	Fri, 22 Mar 2024 17:10:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1711127429;
-	bh=jUtGpnwSlYMviVqgzxLDbgqKQFsf+PANgqw3j/8YrK8=;
+	bh=oNnoEVPYYabXLKeoAklVVxAdYk5ezvuxM0GlMM/0KB0=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=DBHMAnWEKDQw4V/EvCSx85DDYwOc5C9Zg0cPesxRXuvNao9Y84uqeiM4lXI6LnAn6
-	 zDOCkJ/RPDrbNcArwoWkyJ/P3PyhFku8vuW6vdv/AP2tcRyV3E7UOzt68QyO0Is4mE
-	 xBP8hCT5v7zcho1WCz/CqA8VGfFl3ZM1fF6JGQL5ZJW9+piSVLZcCzsbm1I4RBQ6Pn
-	 vEeWCSpGnLFITgaOD8Es8v8+Gq9DY6msA2ahBTqivhGK4hX2axGeXAMGG7mgt7os7a
-	 p4NPHFHX5ATgbAAIEVI8uceDeVwzDYxzp/zqGmSfD7onv1eqlRXWJ6AW09zqEMN5r7
-	 Og2ZmdtQtuSPw==
+	b=QHsEqYjVR5959fafgn2SlRyh/vKvFYU+bAfcQlbP/t4KD8b7GumysF96oa195XL0Q
+	 88RazU2iorP1e8GRXxk9xMjv6sQk464XVqqxZLS+PgGu5swABDXU9/Y/PSHBmbotIN
+	 7AD04GBTVD/oEhPWHt02W23+XkhjGs9vYpirEVoWygXrLdFtMfDVgjZeqDFj3uxNNE
+	 EYD/zbvRPhOtmCzgg+YijbVlxz5G8U0dv/OOXtlHLN6k2TUQXYFFJGN73d1dZZKVJe
+	 WgH2vBzAgL2qivikF25JkvcwiOlhs50P1mLvR9T2zIJKyKfgU4ugpkBHkYBbbkP8Nf
+	 oIKrlhoRcMlJQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A78ECD9505B;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B4989D9505C;
 	Fri, 22 Mar 2024 17:10:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -37,41 +37,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bench: use syscall(SYS_gettid) as libc
- support for gettid() is sometimes absent
+Subject: Re: [PATCHv2 bpf-next] selftests/bpf: Mark uprobe trigger functions with
+ nocf_check attribute
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171112742968.3285.2618428112557964907.git-patchwork-notify@kernel.org>
+ <171112742973.3285.4148849344808411338.git-patchwork-notify@kernel.org>
 Date: Fri, 22 Mar 2024 17:10:29 +0000
-References: <20240322095728.95671-1-alan.maguire@oracle.com>
-In-Reply-To: <20240322095728.95671-1-alan.maguire@oracle.com>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, houtao1@huawei.com,
- bpf@vger.kernel.org
+References: <20240322134936.1075395-1-jolsa@kernel.org>
+In-Reply-To: <20240322134936.1075395-1-jolsa@kernel.org>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ bpf@vger.kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+ john.fastabend@gmail.com, kpsingh@chromium.org, sdf@google.com,
+ haoluo@google.com
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Fri, 22 Mar 2024 09:57:28 +0000 you wrote:
-> With glibc 2.28, selftests compilation fails for benchs/bench_trigger.c:
+On Fri, 22 Mar 2024 14:49:36 +0100 you wrote:
+> Some distros seem to enable the -fcf-protection=branch by default,
+> which breaks our setup on first instruction of uprobe trigger
+> functions and place there endbr64 instruction.
 > 
-> benchs/bench_trigger.c: In function ‘inc_counter’:
-> benchs/bench_trigger.c:25:23: error: implicit declaration of function ‘gettid’; did you mean ‘getgid’? [-Werror=implicit-function-declaration]
->    25 |                 tid = gettid();
->       |                       ^~~~~~
->       |                       getgid
-> cc1: all warnings being treated as errors
+> Marking them with nocf_check attribute to skip that.
+> 
+> Ignoring unknown attribute warning in gcc for bench objects, because
+> nocf_check can be used only when -fcf-protection=branch is enabled,
+> otherwise we get a warning and break compilation.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next] selftests/bench: use syscall(SYS_gettid) as libc support for gettid() is sometimes absent
-    https://git.kernel.org/bpf/bpf-next/c/1684d6eb99e4
+  - [PATCHv2,bpf-next] selftests/bpf: Mark uprobe trigger functions with nocf_check attribute
+    https://git.kernel.org/bpf/bpf-next/c/af8d27bf15c8
 
 You are awesome, thank you!
 -- 
