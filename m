@@ -1,50 +1,50 @@
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F721383B9
-	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 10:26:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64EFD38FBC
+	for <bpf@vger.kernel.org>; Fri, 22 Mar 2024 10:26:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711103189; cv=none; b=IcsRzUIHvcKYwPvBYLQ70d76pDzYCFfvNz2A7kT827DGURauMTqJmZvCneQbhW0O/RP6gHKEV7cyYUJ4JY61mjVUuFDWfKD8gooYlmCUrSmq65HnVNagQagk876ysHbgjXJTVZtAyckzBbfhzKs5ZsGTft3kzEIrnXnu8NxTwBE=
+	t=1711103194; cv=none; b=TGSZYsWZR23SLCwxaE7eN6ZN9xEioaB217xKsKzB4IAkb91bfxA7SkEIk7/0mmyGWKSc3/+IYStQExA3WNoCdJ3pJMMDmoS9BsEEqPUzJbkk4XckyW6yhPmv23Ei+fw9WlvueE0m9IgfAgGAHb9wk6vxSPUQ24VVzMIbEA3Tyag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711103189; c=relaxed/simple;
-	bh=qBdSKUV6UI4lvjHD0a7kDFiY26J77S/GrPIv9J9YKnM=;
+	s=arc-20240116; t=1711103194; c=relaxed/simple;
+	bh=cYNHsIxBpyGk33Yk//eyC3pq7k2Gb4YMUNnG3TsALJg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Jw1qbH5sk4k4IsoRFzGKij/wsUhcbt76jvr3sbr93tToIIljAvqaps52GgKTqMOeoyT5cwEp/A5y+s1XT/v9lEg0IxwBRBYW/NLLxqTZMUnX0HqBfKThq2YMwS7KPWho02cwC/nxNCZcSi4bMRrL4rYV9lSFtkfMQoIKeba0A7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Kix4oiB7; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version; b=Iu6dHHc4XfBqSxg+n8Ea558dIsjKIit/+QCapmje38MquxKuOFTIfhcDVdp5ZMeI/9xX2+qc5ynuVc5O7nh2zTrmnW4JnPn7Dmc5qI4gRh4QEp57zCp3oELhODvemuhvHuRH80gk9eICAZ0CbQEKJ6TiIeeIY9AEUQ8xZWzdoFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=RaeMtUr5; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Kix4oiB7"
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42M7YqKj032321;
-	Fri, 22 Mar 2024 10:26:08 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="RaeMtUr5"
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42M7YWRI017154;
+	Fri, 22 Mar 2024 10:26:13 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2023-11-20;
- bh=kWfsBUrsa/VbSoOnKv3T23Ea6AOjLZLcdzisMx0qbGI=;
- b=Kix4oiB7xHeImPLMiwjBQpJFFNF4yRfuBoNWT0H8g8lPP4f9MIk9aJqq3B+O32mOoUBV
- 7ow0NaA1UDj726wmJ5RdTUT7vEA0UJjNXUk3ybxsqj8mek/ynAMuzhHyspw5vnrcUjY/
- Gs/1Y2cUxQKbUnKoLIYuRSjXgbfdDslPcr1FAWYoPOxbh3MibAOok/CH0mzam9qCL4LD
- KB7tXmD1qeg/71z67wp7NXk8wCD0m5MZJJwnqvlFtISrGPm89Ooy4W+5sAcLuw+vs6fC
- XqyE0QRNQZaqnKiznJHXpRZgjdC0klHU1TKiMr6SMbFwN7nxrQp/2ZJnedCj7WLzSR+V uw== 
+ bh=/RHaNJNvC9rOXkKXMef3hgJgxhmmloTO0JJ30Zuyr3A=;
+ b=RaeMtUr5rAxMrVL93Rq6Gz2e4bc4OepuWqqid0D+lQ9lHldxQZvuN7J7HgriLkvpydrR
+ 5eMYByfXCGk6q9V/y0t37187hkw7mzhOdLJ+soqK7tY8XkE9QqnaQbjRP+wvbl7dd5MQ
+ mcM2MUJekDiGEs3dnZOM0qfQolS4z3ct7DWxd1X6frV2HS5+xuCFPBsBY7e1okVrSHql
+ AOPbtWhKmI2ANFz/LdF5NQ7M9xHCTqU59pPEhMStdhiYgtYoOVIyE3y3gexdJmbfB8CN
+ b6CGspMjWx7X9/1cVb0jFU60VdgxJYXgfVU9diRUHF0Wvqv/zdYayYeyIeapTI30hAlq 4w== 
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3x0wvqrsbu-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3x0wvp8sah-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 22 Mar 2024 10:26:07 +0000
+	Fri, 22 Mar 2024 10:26:12 +0000
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 42M91WdG015063;
-	Fri, 22 Mar 2024 10:26:06 GMT
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 42M9AG9V014958;
+	Fri, 22 Mar 2024 10:26:11 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3x0wvk2jfu-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3x0wvk2jj3-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 22 Mar 2024 10:26:06 +0000
+	Fri, 22 Mar 2024 10:26:11 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42MAK0kn030399;
-	Fri, 22 Mar 2024 10:26:05 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42MAK0kp030399;
+	Fri, 22 Mar 2024 10:26:10 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-175-192-105.vpn.oracle.com [10.175.192.105])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3x0wvk2h75-14;
-	Fri, 22 Mar 2024 10:26:05 +0000
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3x0wvk2h75-15;
+	Fri, 22 Mar 2024 10:26:10 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: andrii@kernel.org, jolsa@kernel.org, acme@redhat.com,
         quentin@isovalent.com
@@ -54,9 +54,9 @@ Cc: eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
         haoluo@google.com, houtao1@huawei.com, bpf@vger.kernel.org,
         masahiroy@kernel.org, mcgrof@kernel.org, nathan@kernel.org,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [RFC bpf-next 12/13] selftests/bpf: extend base reference tests cover BTF reconciliation
-Date: Fri, 22 Mar 2024 10:24:54 +0000
-Message-Id: <20240322102455.98558-14-alan.maguire@oracle.com>
+Subject: [RFC bpf-next 13/13] bpftool: support displaying reconciled-with-base split BTF
+Date: Fri, 22 Mar 2024 10:24:55 +0000
+Message-Id: <20240322102455.98558-15-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20240322102455.98558-1-alan.maguire@oracle.com>
 References: <20240322102455.98558-1-alan.maguire@oracle.com>
@@ -74,64 +74,159 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phish
  malwarescore=0 suspectscore=0 spamscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2403210000
  definitions=main-2403220074
-X-Proofpoint-ORIG-GUID: vER9ljVgtZAm5ltVnsBsHQ3Kl0yB91EZ
-X-Proofpoint-GUID: vER9ljVgtZAm5ltVnsBsHQ3Kl0yB91EZ
+X-Proofpoint-GUID: WxXW7xR1NEOM8oghuDo4wgM2IV-1m7Qd
+X-Proofpoint-ORIG-GUID: WxXW7xR1NEOM8oghuDo4wgM2IV-1m7Qd
 
-Ensure reconciled BTF looks as expected; in this case identical to
-original split BTF.  More tests needed here for positive/negative
-cases..
+If the -R <base_btf> option is used, we can display BTF
+that has been generated with base reference BTF in its
+reconciled form.  For example if we build a module with
+base reference BTF:
+
+BTF_BASE_REF=1 make -C. M=path/2/module
+
+...we can display its content relative to that base
+reference BTF via
+
+bpftool btf dump file path/2/module
+
+Alternatively, we can display content reconciled with
+(a possibly changed) base BTF via
+
+bpftool btf dump -R vmlinux path/2/module
+
+The latter mirrors how the kernel will handle such split
+BTF; it reconciles its representation with the running
+kernel, and if successful, renumbers BTF ids to reference
+the current vmlinux BTF.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- .../bpf/prog_tests/btf_split_base_ref.c       | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ tools/bpf/bpftool/Documentation/bpftool-btf.rst | 17 +++++++++++++++++
+ tools/bpf/bpftool/btf.c                         | 14 ++++++++++++--
+ tools/bpf/bpftool/main.c                        | 14 +++++++++++++-
+ tools/bpf/bpftool/main.h                        |  2 ++
+ 4 files changed, 44 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_split_base_ref.c b/tools/testing/selftests/bpf/prog_tests/btf_split_base_ref.c
-index d611167fa4b2..3f4382651fc8 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_split_base_ref.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_split_base_ref.c
-@@ -158,6 +158,41 @@ static void test_split_base_ref(void)
- 		"[16] CONST '(anon)' type_id=8",
- 		"[17] PTR '(anon)' type_id=9");
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+index 342716f74ec4..97b6426367e6 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+@@ -90,6 +90,23 @@ OPTIONS
+ 		  to autodetect the path for the base object, and passing
+ 		  this option is optional. When the main BTF object is passed
+ 		  through other handles, this option becomes necessary.
++        -R, --reconcile-base-btf *FILE*
++                  When split BTF is generated with base reference BTF,
++                  the latter is stored in a .BTF.base_ref section and allows
++                  us to later reconcile split BTF and a potentially-changed
++                  base BTF by noting that type ids in the split BTF that
++                  refer to base BTF refer to specific integers, structs etc.
++                  By passing base BTF via the -R option, we can carry out
++                  that reconciliation operation between split/base reference
++                  BTF and base BTF.  If successful, the split BTF will then
++                  refer to the base BTF types from *reconcile-base-btf*.
++
++                  If this argument is not used, split BTF is shown relative
++                  to .BTF.base_ref data as a base; however in this mode
++                  it is not possible to generate "C" output, since the
++                  information retained in .BTF.base_ref is just enough to
++                  clarify what a type id refers to, but does not contain
++                  full type details for all types.
  
-+	if (!ASSERT_EQ(btf__reconcile(btf3, btf1), 0, "reconcile_split"))
-+		goto cleanup;
-+	VALIDATE_RAW_BTF(
-+		btf3,
-+		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[2] PTR '(anon)' type_id=1",
-+		"[3] STRUCT 's1' size=8 vlen=1\n"
-+		"\t'f1' type_id=2 bits_offset=0",
-+		"[4] STRUCT '(anon)' size=12 vlen=2\n"
-+		"\t'f1' type_id=1 bits_offset=0\n"
-+		"\t'f2' type_id=3 bits_offset=32",
-+		"[5] INT 'unsigned int' size=4 bits_offset=0 nr_bits=32 encoding=(none)",
-+		"[6] UNION 'u1' size=12 vlen=2\n"
-+		"\t'f1' type_id=1 bits_offset=0\n"
-+		"\t'f2' type_id=2 bits_offset=0",
-+		"[7] UNION '(anon)' size=4 vlen=1\n"
-+		"\t'f1' type_id=1 bits_offset=0",
-+		"[8] ENUM 'e1' encoding=UNSIGNED size=4 vlen=1\n"
-+		"\t'v1' val=1",
-+		"[9] ENUM '(anon)' encoding=UNSIGNED size=4 vlen=1\n"
-+		"\t'av1' val=2",
-+		"[10] ENUM64 'e641' encoding=SIGNED size=8 vlen=1\n"
-+		"\t'v1' val=1024",
-+		"[11] ENUM64 '(anon)' encoding=SIGNED size=8 vlen=1\n"
-+		"\t'v1' val=1025",
-+		"[12] STRUCT 'unneeded' size=4 vlen=1\n"
-+		"\t'f1' type_id=1 bits_offset=0",
-+		"[13] PTR '(anon)' type_id=3",
-+		"[14] PTR '(anon)' type_id=4",
-+		"[15] CONST '(anon)' type_id=6",
-+		"[16] RESTRICT '(anon)' type_id=7",
-+		"[17] VOLATILE '(anon)' type_id=8",
-+		"[18] TYPEDEF 'et' type_id=9",
-+		"[19] CONST '(anon)' type_id=10",
-+		"[20] PTR '(anon)' type_id=11");
- cleanup:
- 	btf__free(btf4);
- 	btf__free(btf3);
+ EXAMPLES
+ ========
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index f1e0ea06f05f..355b56eff9f2 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -644,8 +644,17 @@ static int do_dump(int argc, char **argv)
+ 			base_btf = btf__parse_opts(*argv, &optp);
+ 			if (base_btf)
+ 				btf = btf__parse_split(*argv, base_btf);
+-			if (btf)
++			if (btf && reconcile_base_btf) {
++				err = btf__reconcile(btf, reconcile_base_btf);
++				if (err) {
++					p_err("coud not reconcile BTF from '%s' with base BTF '%s': %s\n",
++					      *argv, reconcile_base_btf_path,
++					      strerror(-err));
++					goto done;
++				}
++			} else {
+ 				c_compat = false;
++			}
+ 		}
+ 		if (!btf) {
+ 			err = -errno;
+@@ -1088,7 +1097,8 @@ static int do_help(int argc, char **argv)
+ 		"       " HELP_SPEC_MAP "\n"
+ 		"       " HELP_SPEC_PROGRAM "\n"
+ 		"       " HELP_SPEC_OPTIONS " |\n"
+-		"                    {-B|--base-btf} }\n"
++		"                    {-B|--base-btf}\n"
++		"                    {-R|--reconcile-base-btf}}\n"
+ 		"",
+ 		bin_name, "btf");
+ 
+diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+index 08d0ac543c67..33ac0ca77162 100644
+--- a/tools/bpf/bpftool/main.c
++++ b/tools/bpf/bpftool/main.c
+@@ -32,6 +32,8 @@ bool verifier_logs;
+ bool relaxed_maps;
+ bool use_loader;
+ struct btf *base_btf;
++struct btf *reconcile_base_btf;
++const char *reconcile_base_btf_path;
+ struct hashmap *refs_table;
+ 
+ static void __noreturn clean_and_exit(int i)
+@@ -448,6 +450,7 @@ int main(int argc, char **argv)
+ 		{ "debug",	no_argument,	NULL,	'd' },
+ 		{ "use-loader",	no_argument,	NULL,	'L' },
+ 		{ "base-btf",	required_argument, NULL, 'B' },
++		{ "reconcile-base-btf", required_argument, NULL, 'R' },
+ 		{ 0 }
+ 	};
+ 	bool version_requested = false;
+@@ -473,7 +476,7 @@ int main(int argc, char **argv)
+ 	bin_name = "bpftool";
+ 
+ 	opterr = 0;
+-	while ((opt = getopt_long(argc, argv, "VhpjfLmndB:l",
++	while ((opt = getopt_long(argc, argv, "VhpjfLmndB:lR:",
+ 				  options, NULL)) >= 0) {
+ 		switch (opt) {
+ 		case 'V':
+@@ -516,6 +519,15 @@ int main(int argc, char **argv)
+ 				return -1;
+ 			}
+ 			break;
++		case 'R':
++			reconcile_base_btf_path = optarg;
++			reconcile_base_btf = btf__parse(optarg, NULL);
++			if (!reconcile_base_btf) {
++				p_err("failed to parse base BTF for reconciliation at '%s': %d\n",
++				      optarg, -errno);
++				return -1;
++			}
++			break;
+ 		case 'L':
+ 			use_loader = true;
+ 			break;
+diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+index b8bb08d10dec..c84bfc1d9135 100644
+--- a/tools/bpf/bpftool/main.h
++++ b/tools/bpf/bpftool/main.h
+@@ -83,6 +83,8 @@ extern bool verifier_logs;
+ extern bool relaxed_maps;
+ extern bool use_loader;
+ extern struct btf *base_btf;
++extern struct btf *reconcile_base_btf;
++extern const char *reconcile_base_btf_path;
+ extern struct hashmap *refs_table;
+ 
+ void __printf(1, 2) p_err(const char *fmt, ...);
 -- 
 2.39.3
 
