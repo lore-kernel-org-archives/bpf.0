@@ -1,152 +1,124 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B36623BF;
-	Sat, 23 Mar 2024 18:37:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393625914B;
+	Sat, 23 Mar 2024 18:48:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711219081; cv=none; b=tno0Pa6VhxEKjx50FDVKPCp0zP4PBnBXPDGE1b+6hvusSqxZ93yNS3uL887gOjl45JdfsH+ufW5oIIaQ0xLYnIOp3rURsZhxjcxOxg57eU0jE690YWMPRDoe/iZ1pXxD4mwbBHrPtu5mUYQr86K59/p7USzkuWOfQ0eaqMvFvMw=
+	t=1711219728; cv=none; b=crvcY9TQsCRVi72B9hbdD3JgZmBVhKqTSHTAzQKebY+1Ef7aFDuUps7SzH4fOYu5JvaiUui6mbFj7n0p+VkIDN9iaas4v0cCrxGFlcg5K+A+Y6Dsy/+TxcJE1MMh5QI1W/L+MKVodF5j35tAcH3B/4RDdX6hHa4Y68pZX4PIViI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711219081; c=relaxed/simple;
-	bh=NS4fURU7kzpRSrqIPRb1K4MNYCHDTlf5iFlZrDqAgW0=;
+	s=arc-20240116; t=1711219728; c=relaxed/simple;
+	bh=6Mpl4fksmU7IteXk6U17LAVHtOAUQUvMXKCFYyQleH0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KUca1IbkpTh8yTVDP0sp8wch2cU7b6BznQbmtrnTnRk6ojMx171Ftg5h3awnu5hosJ84QQ7+svCALrlvNC+VYqRs3xwfzaOcV3YQQZE08+0cPj7WVWyM1X4ESVeg2fvIHkMz0eaJg80Dw97Pfbp7+9GdPdMpVAiOt/qJy7hvBzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fo/fN+to; arc=none smtp.client-ip=209.85.221.41
+	 To:Cc:Content-Type; b=eR/aWRAmHyCPbX44+COa9USLZXjJ1TiSLZZ3+byyYZ/HfH84I/Gw8jjvN3ldaAWfStjW/o8264i1+pIuM58tRGLUyafCDofJV4snvh5mdWsfQj38BoDPX9rKRvbga9TSjYVN7k/xDES3WtY1+GQ3HHXuyk7hjLL4Q87B7DNe7mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TjQGrGDg; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fo/fN+to"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-33e570ef661so1495352f8f.1;
-        Sat, 23 Mar 2024 11:37:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TjQGrGDg"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-341b9f6fb2eso892080f8f.2;
+        Sat, 23 Mar 2024 11:48:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711219078; x=1711823878; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711219725; x=1711824525; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hfH5WGMGx2/rhyl1QkGDZcJNlwpDJH+Q6GuhYoIntBE=;
-        b=fo/fN+to6jOvVMUajvrEH3+VLfLW5HX3akdgtp9Hevp587Stpej+gtV3Gv56Ndcwh0
-         PW3r/ZucIGlHJccWdX40eh4Ve2pnH7DDjCr7JDyNZfwppuNSVuaxUkFTX+yeoCa4UnqC
-         cxtdjcANJwVKuK76p2uyC86FLOoKdcw8YVa3wdyemRjcQTTWnR+He3DdHHGnumUy92FS
-         Hfal87Ydy26vmDsgQNJgmt4rQILmqdTpoe5V/ACOwWPSXf9lef/PGTY96OrfTwzQKVXE
-         DpMC7BghiRtl0859387X41XToiduqw7VEajUnJNfCNG5Soxxc2VIIhjaI9iUiqw93lD1
-         QtiA==
+        bh=ARn5Da8AgGy7FE68WhzYMw3Qt2QRYNlRmGpn70yH7+g=;
+        b=TjQGrGDgeBZ/BRu0+DTgNPR6E6CY6/1CPUV43qQJZ1nt6AR2O4sH1qq0vZ+Y39jwy6
+         T+GM6oesN3XN6SwW3+Kd80NeEFjRbwrVGWzskfdnycQFqIVw6KaE4UxssiyLtvI+D+pA
+         6gzJFzocQ3gNlCCza96s3hkYcFtwSrocfadUNKETobiAGLcEWOKFBzCa2y5J3ykSjUA3
+         //SFBT7Rid727lHjgtX4BVoyuKgz57Xs8wttbrUAIy7/OIHM4kfvkJNg48GZKENME2GW
+         U7XwrtYvHI++lQ0VXb0YJUGgGwXLyCbnnj51SSv+Vaf2OKfK2sGDJtcj14UijPmBLuaE
+         /Vpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711219078; x=1711823878;
+        d=1e100.net; s=20230601; t=1711219725; x=1711824525;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hfH5WGMGx2/rhyl1QkGDZcJNlwpDJH+Q6GuhYoIntBE=;
-        b=Swf+0KeAwgA9lCLz+PdA3b+MrlIvoVGFbg/yxlEtkqpoHVRmTCrZH2olf+6s34LCvn
-         X6+XwNQzsxTiWhwmfqKfHI5zzlhp2mID7AWJrdrTfT8jHfDbDzOrPvjszl3uWkJIF87u
-         lq8F6+PiEEA3rGwcVOikRBQsLOGfSk0sOVqayT84aWAF/bZz+fQQL87S8Lxaofgq7YoE
-         +wWctArhPycwLPcv7PsnAYxi0x0dm/RV2NPF89j6gJkBMddReVJmTBohJiHlOybN/h7Y
-         Aid0A6Uzo0lJBdiL0t5fv92QfCTQSeCSE/t/onevSVwtPCpUsoKd2u9n4TlzMZxzFD+d
-         6HbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVkFizQURDKokRrDjZF6v82JAgW/f0dkSke4+B0JSvsYA3/PYtAVHhQn+asih/LD7Iw6mBfBYVZ05ustHp4r8yLVJTEIBmEGs5H19cF8qTG8rRnpJDQZgFMdFqLNmXQlO5/
-X-Gm-Message-State: AOJu0Ywofh737bp2JuYPWf1HN6g85Rw6kTgeGP7NB/pwmEE6APDFXkH+
-	MhETztLCHH3EkWFr87jbbWDGEsPra0WfEvXp1A/joPLX0rTck/Km6ainjxFLt2aPjWMdrjheel5
-	BRFFE/ApVZMoLBu7KZF9n7c9KV3Q=
-X-Google-Smtp-Source: AGHT+IEsIxO0glIvBi1dgQLe0aNKeZmhmgRSkvuB69Irs9ZeionhCzyCfv4nsPLzOYyQEumbSGQjon4EjFDDweSh8Ro=
-X-Received: by 2002:a5d:6b0d:0:b0:33e:1ea:2eeb with SMTP id
- v13-20020a5d6b0d000000b0033e01ea2eebmr1950375wrw.67.1711219077568; Sat, 23
- Mar 2024 11:37:57 -0700 (PDT)
+        bh=ARn5Da8AgGy7FE68WhzYMw3Qt2QRYNlRmGpn70yH7+g=;
+        b=XFifQ2+XG9vTV5h209FF07uun5gfHgv7J78JHX3TCZzh57/I2DWyCROrzHbEVrordW
+         Jd4m6na9Cm5v19vBWhPtdmTYgEjeC1KLC3o0KdF/y7tr5cfnzs+oXWx69espRaGOKJC8
+         jbXUGmVxJX7BANqfQzdCNn8mbpeeEnuLTZRmaxbNSZy3ZAYiQNUYVGMoQsGq9nYcu/fV
+         ty+LlUrPGMT/evXiQtxBVSZifHVqF4fPdFrO8voGDalF9vm7oMpbaHblAWaXJQyEdbhp
+         F/dfQyJjrNXQDDihMDVHNhz0gta5wgOYtxCF0Ee2uJDMmNTlsLGyvdvIJE5SwxO7xLXP
+         kA4A==
+X-Forwarded-Encrypted: i=1; AJvYcCVJMa0sUALc3vnNJ8/rRUAkSqc6nr+B8quNBlE+FCm4fzKhQxZojFx5sr0GvqnbaL5fl7E8mDwntBAexwusHGT1+nR0+Kq2+Ypv0J7+zFcx398z128mZ7uxD2wJcVxe9DCs
+X-Gm-Message-State: AOJu0Yx/yLVWk1euKHO5V1TxnA71eJwd9D0lC+I1SQToo8tjmKWI2Spp
+	LZHOAo/p4LoojX7jmVGoNt6CVe+HwoBnGEmjc9UIIpYwc1IzR00SCU+2UZn6q2ur3rtIkEcnbdy
+	HxV2OQkI7Gg9OSCtDiyuy0kcqwGyBkQnzsqY=
+X-Google-Smtp-Source: AGHT+IFStp9f7YpURs1lHif07k9BmlJ7lrxiDAwy7kUVNxSVQS8n4jaqBOn3YN6g7M4EYHMa6REAdnBhRK4o830nEZI=
+X-Received: by 2002:a5d:594a:0:b0:341:9a25:e384 with SMTP id
+ e10-20020a5d594a000000b003419a25e384mr2025122wri.50.1711219725475; Sat, 23
+ Mar 2024 11:48:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240323154652.54572-1-puranjay12@gmail.com> <20240323154652.54572-3-puranjay12@gmail.com>
-In-Reply-To: <20240323154652.54572-3-puranjay12@gmail.com>
+References: <20240323103057.26499-1-puranjay12@gmail.com> <20240323103057.26499-2-puranjay12@gmail.com>
+In-Reply-To: <20240323103057.26499-2-puranjay12@gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sat, 23 Mar 2024 11:37:46 -0700
-Message-ID: <CAADnVQKQiG_mmWFUa5Jzt1upCTOQTOGQP=h98z9Et8VSwm=L_g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] bpf,riscv: Implement bpf_addr_space_cast instruction
+Date: Sat, 23 Mar 2024 11:48:34 -0700
+Message-ID: <CAADnVQ+-Wt=OohzVJL9g3r2pLkaomGXDLLdLdGeGYE4D+f4cAA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: Add arm64 JIT support for
+ PROBE_MEM32 pseudo instructions.
 To: Puranjay Mohan <puranjay12@gmail.com>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, bpf <bpf@vger.kernel.org>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Zi Shen Lim <zlim.lnx@gmail.com>, Xu Kuohai <xukuohai@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Mar 23, 2024 at 8:47=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.co=
+On Sat, Mar 23, 2024 at 3:31=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.co=
 m> wrote:
 >
-> LLVM generates bpf_addr_space_cast instruction while translating
-> pointers between native (zero) address space and
-> __attribute__((address_space(N))). The addr_space=3D0 is reserved as
-> bpf_arena address space.
+> +#define PROBE_MEM32_BASE (MAX_BPF_JIT_REG + 5)
 >
-> rY =3D addr_space_cast(rX, 0, 1) is processed by the verifier and
-> converted to normal 32-bit move: wX =3D wY
->
-> rY =3D addr_space_cast(rX, 1, 0) has to be converted by JIT:
->
-> Here I explain using symbolic language what the JIT is supposed to do:
-> We have:
->         src =3D [src_upper32][src_lower32] // 64 bit src kernel pointer
->         uvm =3D [uvm_upper32][uvm_lower32] // 64 bit user_vm_start
-
-This is a bit misleading.
-src_lower32 are always equal to uvm_lower32
-and src_upper32 are either zero or uvm_upper32.
-
-Hence most of the time llvm doesn't generate this insn,
-since it knows that upper 32 bit are uvm_upper32.
-
-> The JIT has to make the dst reg like following
->         dst =3D [uvm_upper32][src_lower32] // if src_lower32 !=3D 0
->         dst =3D [00000000000][00000000000] // if src_lower32 =3D=3D 0
->
-> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
-> ---
->  arch/riscv/net/bpf_jit.h        |  1 +
->  arch/riscv/net/bpf_jit_comp64.c | 15 +++++++++++++++
->  arch/riscv/net/bpf_jit_core.c   |  1 +
->  3 files changed, 17 insertions(+)
->
-> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
-> index 8a47da08dd9c..5fc374ed98ea 100644
-> --- a/arch/riscv/net/bpf_jit.h
-> +++ b/arch/riscv/net/bpf_jit.h
-> @@ -82,6 +82,7 @@ struct rv_jit_context {
->         unsigned long flags;
->         int stack_size;
->         u64 arena_vm_start;
-> +       u64 user_vm_start;
+>  #define check_imm(bits, imm) do {                              \
+>         if ((((imm) > 0) && ((imm) >> (bits))) ||               \
+> @@ -67,6 +68,8 @@ static const int bpf2a64[] =3D {
+>         /* temporary register for blinding constants */
+>         [BPF_REG_AX] =3D A64_R(9),
+>         [FP_BOTTOM] =3D A64_R(27),
+> +       /* callee saved register for kern_vm_start address */
+> +       [PROBE_MEM32_BASE] =3D A64_R(28),
 >  };
 >
->  /* Convert from ninsns to bytes. */
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
-p64.c
-> index f51b832eafb6..3c389e75cb96 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
-> @@ -1083,6 +1083,16 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn,=
- struct rv_jit_context *ctx,
->         /* dst =3D src */
->         case BPF_ALU | BPF_MOV | BPF_X:
->         case BPF_ALU64 | BPF_MOV | BPF_X:
-> +               if (BPF_CLASS(insn->code) =3D=3D BPF_ALU64 && insn->off =
-=3D=3D BPF_ADDR_SPACE_CAST &&
-> +                   insn->imm =3D=3D 1U << 16) {
+>  struct jit_ctx {
+> @@ -295,7 +298,7 @@ static bool is_lsi_offset(int offset, int scale)
+>  #define PROLOGUE_OFFSET (BTI_INSNS + 2 + PAC_INSNS + 8)
+>
+>  static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf,
+> -                         bool is_exception_cb)
+> +                         bool is_exception_cb, u64 arena_vm_start)
+>  {
+>         const struct bpf_prog *prog =3D ctx->prog;
+>         const bool is_main_prog =3D !bpf_is_subprog(prog);
+> @@ -306,6 +309,7 @@ static int build_prologue(struct jit_ctx *ctx, bool e=
+bpf_from_cbpf,
+>         const u8 fp =3D bpf2a64[BPF_REG_FP];
+>         const u8 tcc =3D bpf2a64[TCALL_CNT];
+>         const u8 fpb =3D bpf2a64[FP_BOTTOM];
+> +       const u8 pb =3D bpf2a64[PROBE_MEM32_BASE];
 
-Let's add a generic helper like insn_is_zext(),
-call it insn_is_cast_user() ?
-and use it in all JIT-s ?
-I should have added it right away when I did x86 part. Sorry.
+In addition to riscv comments please use more verbose name here.
+'pb' is too cryptic.
+'mem32_base' ?
 
-And a comment next to the helper that addr space cast 0->1
-is for converting bpf arena pointers to user vma.
-Hence the name.
+I would also drop PROBE prefix and use:
+#define MEM32_BASE (MAX_BPF_JIT_REG + 5)
 
-Same comments for arm64 JIT arena support.
-
-pw-bot: cr
+From the verifier pov the ld/st mode is BPF_PROBE_MEM32,
+since it's asking JIT to emit code to probe read/write such arena address,
+but from JIT pov the base is a real base that it got from
+bpf_arena_get_kern_vm_start().
+#define KERN_VM_START (MAX_BPF_JIT_REG + 5)
+would be an alternative name that also fits.
+or
+#define ARENA_VM_START ...
