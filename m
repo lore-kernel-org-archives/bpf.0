@@ -1,121 +1,152 @@
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6CE41EB34;
-	Sat, 23 Mar 2024 16:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B36623BF;
+	Sat, 23 Mar 2024 18:37:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711212605; cv=none; b=GI/0KMWYractxgM9bztGnRgoCsua57Uv5zPbWMTjREjOFQpfMbvYR2a0F8chdFeIBa0iHk+Q/RUCkoHo+WhAOFOwPYC6dr8Ghgzuvqag2x0nVnzORdyWxNCrXUarr5eBFV9elv/ftn0+TALHnKBj69npKj2bVjVy8rUHjh7Nbbo=
+	t=1711219081; cv=none; b=tno0Pa6VhxEKjx50FDVKPCp0zP4PBnBXPDGE1b+6hvusSqxZ93yNS3uL887gOjl45JdfsH+ufW5oIIaQ0xLYnIOp3rURsZhxjcxOxg57eU0jE690YWMPRDoe/iZ1pXxD4mwbBHrPtu5mUYQr86K59/p7USzkuWOfQ0eaqMvFvMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711212605; c=relaxed/simple;
-	bh=FCa+zdri2byezl1CH5h7lx8PklCLKuJ3W0WVfBHXkvw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=RG1jfLbPLP4cTwO3b9x0GaMACdO/d/xQyw3zzXKQpBXOOHRHAQb8zeFCcpdXgwL1R8mW4qSkQSJPubAcsirmFj0nCuZtRDV2TkjRVPfwoGoPIvlETyDdoZ8tayyKOiFvIxZgr6MmqJH59ZG2Og6vAXRWHXqFEglA336A63Z+0vQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eDA2v0V3; arc=none smtp.client-ip=209.85.208.169
+	s=arc-20240116; t=1711219081; c=relaxed/simple;
+	bh=NS4fURU7kzpRSrqIPRb1K4MNYCHDTlf5iFlZrDqAgW0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KUca1IbkpTh8yTVDP0sp8wch2cU7b6BznQbmtrnTnRk6ojMx171Ftg5h3awnu5hosJ84QQ7+svCALrlvNC+VYqRs3xwfzaOcV3YQQZE08+0cPj7WVWyM1X4ESVeg2fvIHkMz0eaJg80Dw97Pfbp7+9GdPdMpVAiOt/qJy7hvBzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fo/fN+to; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eDA2v0V3"
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2d49f7e5c2cso42290921fa.2;
-        Sat, 23 Mar 2024 09:50:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fo/fN+to"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-33e570ef661so1495352f8f.1;
+        Sat, 23 Mar 2024 11:37:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711212602; x=1711817402; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HnA+iaUYbG4Zl+BUkgQEG3RRYKiMKGopzjr/nHZbKKo=;
-        b=eDA2v0V3uFLJXnhQg/C+s18QzPZf9FnMadAXqb1AY6riPaHyTph0t06+NDB4uJielv
-         KrLVehHTA7FNeZO4bow/ag1dm1SCraCpRcr80DC+NbQ5Vr/IpVC+84AV6qskKiemW/f2
-         2ndlzhr6grhGfokXk+t8NItC+PeY/SpF0wT0XVow8YJYh+U4ebITo/WVJbkK5Tw8OuFb
-         y9HJyYuC+GnjdfUfln4WgI/1T9zU7o5KAxzmpzzpy7tVD3RDP+gX8sw0ySvEoYcJZGoz
-         kxf7K04H0NxO6anBqjxp6UEv9FEeUz5lz+JRTODptUOehsmOFmrYLSxIvBo8TtCMm2/e
-         cYVg==
+        d=gmail.com; s=20230601; t=1711219078; x=1711823878; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hfH5WGMGx2/rhyl1QkGDZcJNlwpDJH+Q6GuhYoIntBE=;
+        b=fo/fN+to6jOvVMUajvrEH3+VLfLW5HX3akdgtp9Hevp587Stpej+gtV3Gv56Ndcwh0
+         PW3r/ZucIGlHJccWdX40eh4Ve2pnH7DDjCr7JDyNZfwppuNSVuaxUkFTX+yeoCa4UnqC
+         cxtdjcANJwVKuK76p2uyC86FLOoKdcw8YVa3wdyemRjcQTTWnR+He3DdHHGnumUy92FS
+         Hfal87Ydy26vmDsgQNJgmt4rQILmqdTpoe5V/ACOwWPSXf9lef/PGTY96OrfTwzQKVXE
+         DpMC7BghiRtl0859387X41XToiduqw7VEajUnJNfCNG5Soxxc2VIIhjaI9iUiqw93lD1
+         QtiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711212602; x=1711817402;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HnA+iaUYbG4Zl+BUkgQEG3RRYKiMKGopzjr/nHZbKKo=;
-        b=KGVNgmOLHt1x5GWt2yZ1cUtKS0rSZHAfU0JtW5rox5phn1qF0cKIKb+AgWfU25PvQm
-         FwbKUS4+1DR40BdDtFWmC7x52tPk+WEzsFQ1VoKxdHy34C3fL7jwpziEz/5eKaurvm4m
-         T7tACe4KjydPh0rwnFiBO26Av9uXmdKA4daI8duhe802ckYAhXvMZZTevLLu1O4jEr9u
-         Anjs/vh6Fu5WRLSZwVY298e9VcmXgt2TBKEgetr5iO1VW8uR2kQpSS0WvVhRCh7PUzsp
-         KayZiseJyeZXwO9MKnYj9/wcH2aYzah2vTF6+ctiX7Pg5VF3QM1qTwdBlhnvMFFmXZ6T
-         HilA==
-X-Forwarded-Encrypted: i=1; AJvYcCX44ZKe3RvPtalnrtL5s7KlgttjQtXPE30j8lNnIf89TK+5SDYkcZSxB2IA5tUetG2deKBfqRacIQcpERYNxJV68wiSg8e+RL3ChBIEiszGarkvaLK9/us+Lr+22dc8HNdB
-X-Gm-Message-State: AOJu0Yx3RKzCLhBYAFzfwOFigG8SzJA7sp9eFEJn2wWRd3E9uKFu6RBC
-	+TovmdhNmTAZo16IkO3pxxzQYNLv9AU/cQMqC4tC+tzZ4ovPQeZqruK9XG9Rn231vw==
-X-Google-Smtp-Source: AGHT+IHCcxMTH7762NkjXUWik4Nd9KALd68m94V4NNqeQwzxO1MBq0tT9rOVo2N3NsCmmWY/uvGQkA==
-X-Received: by 2002:a05:651c:1042:b0:2d4:764f:8256 with SMTP id x2-20020a05651c104200b002d4764f8256mr1716395ljm.53.1711212601733;
-        Sat, 23 Mar 2024 09:50:01 -0700 (PDT)
-Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id fc19-20020a05600c525300b0041401eb021asm2949255wmb.24.2024.03.23.09.50.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 23 Mar 2024 09:50:01 -0700 (PDT)
-From: Puranjay Mohan <puranjay12@gmail.com>
-To: Pu Lehui <pulehui@huawei.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
- Lau <martin.lau@linux.dev>, "Eduard
- Zingerman" <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, "KP
- Singh" <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, =?utf-8?B?QmrDtnJuIFQ=?=
- =?utf-8?B?w7ZwZWw=?=
- <bjorn@kernel.org>, Luke Nelson <luke.r.nels@gmail.com>, Xi Wang
- <xi.wang@gmail.com>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
- Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 2/2] bpf,riscv: Implement bpf_addr_space_cast
- instruction
-In-Reply-To: <3e07fb21-da08-4183-8bd4-064b519c7ddb@huawei.com>
-References: <20240323154652.54572-1-puranjay12@gmail.com>
- <20240323154652.54572-3-puranjay12@gmail.com>
- <3e07fb21-da08-4183-8bd4-064b519c7ddb@huawei.com>
-Date: Sat, 23 Mar 2024 16:49:54 +0000
-Message-ID: <mb61pjzlslwp9.fsf@gmail.com>
+        d=1e100.net; s=20230601; t=1711219078; x=1711823878;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hfH5WGMGx2/rhyl1QkGDZcJNlwpDJH+Q6GuhYoIntBE=;
+        b=Swf+0KeAwgA9lCLz+PdA3b+MrlIvoVGFbg/yxlEtkqpoHVRmTCrZH2olf+6s34LCvn
+         X6+XwNQzsxTiWhwmfqKfHI5zzlhp2mID7AWJrdrTfT8jHfDbDzOrPvjszl3uWkJIF87u
+         lq8F6+PiEEA3rGwcVOikRBQsLOGfSk0sOVqayT84aWAF/bZz+fQQL87S8Lxaofgq7YoE
+         +wWctArhPycwLPcv7PsnAYxi0x0dm/RV2NPF89j6gJkBMddReVJmTBohJiHlOybN/h7Y
+         Aid0A6Uzo0lJBdiL0t5fv92QfCTQSeCSE/t/onevSVwtPCpUsoKd2u9n4TlzMZxzFD+d
+         6HbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVkFizQURDKokRrDjZF6v82JAgW/f0dkSke4+B0JSvsYA3/PYtAVHhQn+asih/LD7Iw6mBfBYVZ05ustHp4r8yLVJTEIBmEGs5H19cF8qTG8rRnpJDQZgFMdFqLNmXQlO5/
+X-Gm-Message-State: AOJu0Ywofh737bp2JuYPWf1HN6g85Rw6kTgeGP7NB/pwmEE6APDFXkH+
+	MhETztLCHH3EkWFr87jbbWDGEsPra0WfEvXp1A/joPLX0rTck/Km6ainjxFLt2aPjWMdrjheel5
+	BRFFE/ApVZMoLBu7KZF9n7c9KV3Q=
+X-Google-Smtp-Source: AGHT+IEsIxO0glIvBi1dgQLe0aNKeZmhmgRSkvuB69Irs9ZeionhCzyCfv4nsPLzOYyQEumbSGQjon4EjFDDweSh8Ro=
+X-Received: by 2002:a5d:6b0d:0:b0:33e:1ea:2eeb with SMTP id
+ v13-20020a5d6b0d000000b0033e01ea2eebmr1950375wrw.67.1711219077568; Sat, 23
+ Mar 2024 11:37:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20240323154652.54572-1-puranjay12@gmail.com> <20240323154652.54572-3-puranjay12@gmail.com>
+In-Reply-To: <20240323154652.54572-3-puranjay12@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 23 Mar 2024 11:37:46 -0700
+Message-ID: <CAADnVQKQiG_mmWFUa5Jzt1upCTOQTOGQP=h98z9Et8VSwm=L_g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] bpf,riscv: Implement bpf_addr_space_cast instruction
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, bpf <bpf@vger.kernel.org>, 
+	linux-riscv <linux-riscv@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Pu Lehui <pulehui@huawei.com> writes:
+On Sat, Mar 23, 2024 at 8:47=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.co=
+m> wrote:
+>
+> LLVM generates bpf_addr_space_cast instruction while translating
+> pointers between native (zero) address space and
+> __attribute__((address_space(N))). The addr_space=3D0 is reserved as
+> bpf_arena address space.
+>
+> rY =3D addr_space_cast(rX, 0, 1) is processed by the verifier and
+> converted to normal 32-bit move: wX =3D wY
+>
+> rY =3D addr_space_cast(rX, 1, 0) has to be converted by JIT:
+>
+> Here I explain using symbolic language what the JIT is supposed to do:
+> We have:
+>         src =3D [src_upper32][src_lower32] // 64 bit src kernel pointer
+>         uvm =3D [uvm_upper32][uvm_lower32] // 64 bit user_vm_start
 
-> On 2024/3/23 23:46, Puranjay Mohan wrote:
->> LLVM generates bpf_addr_space_cast instruction while translating
-> [snip]
->>   
->>   /* Convert from ninsns to bytes. */
->> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
->> index f51b832eafb6..3c389e75cb96 100644
->> --- a/arch/riscv/net/bpf_jit_comp64.c
->> +++ b/arch/riscv/net/bpf_jit_comp64.c
->> @@ -1083,6 +1083,16 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->>   	/* dst = src */
->>   	case BPF_ALU | BPF_MOV | BPF_X:
->>   	case BPF_ALU64 | BPF_MOV | BPF_X:
->> +		if (BPF_CLASS(insn->code) == BPF_ALU64 && insn->off == BPF_ADDR_SPACE_CAST &&
->> +		    insn->imm == 1U << 16) {
->> +			emit_mv(RV_REG_T1, rs, ctx); > +			emit_zextw(RV_REG_T1, RV_REG_T1, ctx);
-> combine mv and zextw will be better
+This is a bit misleading.
+src_lower32 are always equal to uvm_lower32
+and src_upper32 are either zero or uvm_upper32.
 
-Do you suggest doing:
+Hence most of the time llvm doesn't generate this insn,
+since it knows that upper 32 bit are uvm_upper32.
 
-emit_zextw(RV_REG_T1, rs, ctx);
+> The JIT has to make the dst reg like following
+>         dst =3D [uvm_upper32][src_lower32] // if src_lower32 !=3D 0
+>         dst =3D [00000000000][00000000000] // if src_lower32 =3D=3D 0
+>
+> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+> ---
+>  arch/riscv/net/bpf_jit.h        |  1 +
+>  arch/riscv/net/bpf_jit_comp64.c | 15 +++++++++++++++
+>  arch/riscv/net/bpf_jit_core.c   |  1 +
+>  3 files changed, 17 insertions(+)
+>
+> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+> index 8a47da08dd9c..5fc374ed98ea 100644
+> --- a/arch/riscv/net/bpf_jit.h
+> +++ b/arch/riscv/net/bpf_jit.h
+> @@ -82,6 +82,7 @@ struct rv_jit_context {
+>         unsigned long flags;
+>         int stack_size;
+>         u64 arena_vm_start;
+> +       u64 user_vm_start;
+>  };
+>
+>  /* Convert from ninsns to bytes. */
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
+p64.c
+> index f51b832eafb6..3c389e75cb96 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> @@ -1083,6 +1083,16 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn,=
+ struct rv_jit_context *ctx,
+>         /* dst =3D src */
+>         case BPF_ALU | BPF_MOV | BPF_X:
+>         case BPF_ALU64 | BPF_MOV | BPF_X:
+> +               if (BPF_CLASS(insn->code) =3D=3D BPF_ALU64 && insn->off =
+=3D=3D BPF_ADDR_SPACE_CAST &&
+> +                   insn->imm =3D=3D 1U << 16) {
 
-Will do it in next version.
+Let's add a generic helper like insn_is_zext(),
+call it insn_is_cast_user() ?
+and use it in all JIT-s ?
+I should have added it right away when I did x86 part. Sorry.
 
->> +			emit_imm(rd, (ctx->user_vm_start >> 32) << 32, ctx);
->> +			emit(rv_beq(RV_REG_T1, RV_REG_ZERO, 4), ctx);
->> +			emit_or(RV_REG_T1, rd, RV_REG_T1, ctx);
->> +			emit_mv(rd, RV_REG_T1, ctx);
-> ditto, but for or and mv
+And a comment next to the helper that addr space cast 0->1
+is for converting bpf arena pointers to user vma.
+Hence the name.
 
-How would we combine or and mv? 
-also, we have a beq above and in one case both or and mv should happen,
-but in other case only mv should happen.
+Same comments for arm64 JIT arena support.
 
-Thanks,
-Puranjay
+pw-bot: cr
