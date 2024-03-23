@@ -1,183 +1,126 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF813A1A3;
-	Sat, 23 Mar 2024 14:40:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E97E45BF3;
+	Sat, 23 Mar 2024 15:47:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711204815; cv=none; b=sOYlk3Sz05umFTtPhGKz2IzepUHnKxLeBF7RYKgzwm+B20C9Y17iUXyiKCj3YMPHMF+nQsP2k1kZMgntmxdyYwBv9DZHq5j8D8UDvEgllu+D1Hy0qwB0tM+lseQUnh5CryEEVhAY3eXK7Zc8VdTax7LbXqeoTuvlU5bbKA4Qqgk=
+	t=1711208838; cv=none; b=rr9wbWuJHUxvaH4GYcgFvdzmY74hQq3ByKWZ8TztLaLn80opJ+HpACLF2RyXgxsdKx5rr+OIYeU+DkL7rMl5fnczUSJ12Yjue6PgTZ6oJi637T9xkGdeaiOxdS61C1jgiHm2Nv+UQ2/BZTBsClkilmQEV4IdWAC4VZ3LSYcnLF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711204815; c=relaxed/simple;
-	bh=LIfguKYB9Djf8kpPD3j30oGbgEFgX97d18NhdYb5nko=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PN5lU0qARbnAEgTy1zqUwEY9GPSdVEYanrfnpEKXa5LC5Df6htx39YSTtss8C5RVVfVV30iTX17T000g8kSMswhHBJ9KXKlHPAfv255A+TDUchm3oI0XfkH3aGYSXo6Ydb+bKYp6zxK+TtpYDdhFOEGXwYZOdmWSN+MBgAkPrr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D3p6ufTK; arc=none smtp.client-ip=209.85.214.174
+	s=arc-20240116; t=1711208838; c=relaxed/simple;
+	bh=VwjJtGko5WC6moVs2lpU2UyRd2ZgOQn7/miu/V/CtNQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gw0VarNIEe1xc6gzNwILGOXFKgeuC4HDkyF97NmKyOUajXitTJb0buzQWjKO1RMZ8v8dl62uBuzU4pKEwdlcEkffcjLh2IVKQ8BDxpRYXefj/y1zYeXv6uQTwOOYCUh6nE0ieURGftwsDqI3iVrOp6LfUkSL1LqArx7VuKWfaWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=du1NX8mp; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D3p6ufTK"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1e0878b76f3so12820105ad.0;
-        Sat, 23 Mar 2024 07:40:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="du1NX8mp"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-33ed7ba1a42so1897826f8f.2;
+        Sat, 23 Mar 2024 08:47:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711204813; x=1711809613; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rOjc2RPnmpiTXzEKcY++5BWeNTp0iE6fQolvtms4FQ8=;
-        b=D3p6ufTKYnYztabs4fVEtKohgqXCwBmAAlUdEAVydfxLz7inFwGVIFSj9PSr2dOTps
-         3i982m/rGPZQUOxqwxSAwBPA4jnrk4VEcrJfMr/X0JSvylRUWufoo7qTBS0AL9QUNuGp
-         1r8SyQupkaM7DQ7l+GRm1TF2PGixFYuAvIhjcAkNzwqi/Y19PqpbwMxpwQ6qcO/lO5aW
-         xv63yfIouKPKSrKowneMr6g+XVTR8PNAME8CEUMjUx8mhOfXhfxxXVPJJxlfIuSuVRR8
-         OIjki+lhzL5trO+DP9k7pHnMVcyU1y32Aj+p+53nxeISC2hd+2wszjbiJ2WDEnDHmmr1
-         WrbA==
+        d=gmail.com; s=20230601; t=1711208835; x=1711813635; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tMU5gNAuADzB5Tcq4mD6yx393J+u7FkWid9t2/0ApH0=;
+        b=du1NX8mpkeEzlz81IZMPGWTnKJR4TpnysacGo/70vxEIRs6nxmDjicH5V7uYZ3PO6J
+         obDQBXHpwWnKrPngFDImcnHgI9Fmz1gqmihnGZsDx8dkUm3lnlbHPcLRWBkvT0haCLZz
+         5gORDJpfyKCufDo7q3+K20k+R0Yn0tUIR6AJyYMPQjjlzUy0LqIvmgRnI14cGAxBdGFj
+         vizyD6v3E/WD1MDycP7uVXmrB9/SB4fCFvynmfMhmuNfAPn5mLiiipiSjfloGQ0hxM0S
+         GH1JQ9m50Ab2wUqyy6rCc5j6mXFBCWzDF2+f6uyRXcyoCxhFB68DBe/4L1IeMDNoztoE
+         32AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711204813; x=1711809613;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=rOjc2RPnmpiTXzEKcY++5BWeNTp0iE6fQolvtms4FQ8=;
-        b=qlBPCEt05wbEKdUs6ESeBxzhNqe0VaK/t8RkyS9oWb3hKA1iNCDEszs83PYYJuanDK
-         DWI73q3CQgLG7WGiQ298/0MG9VCR8iGWflLjuOZc+pVa+UEqC7+xHZlLxokvxtPP1cOt
-         FuQyAJBREDeeoTWoQMGSN454lOdPbQmv4RofGmt4+mEtOVgFKWYC0cbFfZPXWFeVepdt
-         6H7RTKxwnShj31Py/EH4mS91soWigVW/cZEh46nKG1omhfsKDlumdQNV8JeS7hCcSRz9
-         expE8LROpPLjrh+lyG5k4NC3AN57B7dkd4RglB8FERhRQ11Z3c7Lb2LwzP2x7rF7W1KO
-         GHVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV7Y04vosV12m/ZUupGvAAjbgGgyLjO0qmMyO/6T1w8bXpqA4SHnXYUC1fScxZuv9+Y1gXUcc8RfXiw6G7QGaY6HDVjjyVwJNDYy3u5d6FzZijf+ccbhOTcHj61anMtfXOV
-X-Gm-Message-State: AOJu0YyEBtywMj+3wxc9nXPfJZ5bgoghM+RA5QOrMxatz+uq8tBWZRCG
-	psHF4QDb77fQ/rZLWGoJC0H4Mndwu7t+viNVHA8iNMfwBxEt562U
-X-Google-Smtp-Source: AGHT+IH2QWiWWMKVd2VZ9/ojjVulzuuqr43nRxs9SFWCgDsm058vFxAPkDMrC+pBYKAnDZ3h6D/ZoQ==
-X-Received: by 2002:a17:903:234b:b0:1e0:2bce:d7e6 with SMTP id c11-20020a170903234b00b001e02bced7e6mr2624148plh.32.1711204812727;
-        Sat, 23 Mar 2024 07:40:12 -0700 (PDT)
-Received: from [192.168.2.64] ([60.163.62.105])
-        by smtp.gmail.com with ESMTPSA id s14-20020a170902b18e00b001def0c700e2sm1631450plr.119.2024.03.23.07.40.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Mar 2024 07:40:12 -0700 (PDT)
-Message-ID: <d3677b19-63fa-4787-8d5b-468ddbad173a@gmail.com>
-Date: Sat, 23 Mar 2024 22:40:04 +0800
+        d=1e100.net; s=20230601; t=1711208835; x=1711813635;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tMU5gNAuADzB5Tcq4mD6yx393J+u7FkWid9t2/0ApH0=;
+        b=IzV8zTCZDK0lIKXZGamhUfBwPiEe0NsNXEwLrlJlpLNvStFgKP1O5yF/FsUX6qMKXO
+         +U0vgTeswRRSXSvnI1Ls+8Bk4ksI7taiywPf1OtL0On/0b75K6kfO/MVWLixNrHvCof9
+         VMUs/O4N5BYnQfwHVIU+srZ4SlKklZEHVDxtdlVEeOza+5gywsq6/o3X5nlwPS3g9BK7
+         Hhmv2wKTSsUdvYX/lQX2Te6xnamhaB/FMfzdnwr9jD85iPjLnFWQLT9T9CsbwHpcGb8l
+         VkQMzzcmXy26sMfPKwGL29Lo9hj6LSa5hxgy8bV/ZJshpRqRtqdlCxQt8I7tZs2aATUd
+         Z4gw==
+X-Forwarded-Encrypted: i=1; AJvYcCVDIQ9CEkmVugb1Vvr5BMjk6MR28tQV7wcPGLEPfy8EwbpJIU1NOKPV11N73KEhlepPUjBNXC4hUD4Nn4z7dHfipsYVZwvz4qYmaqBikfq8dPM7qbOmWHMFcY2kvNeUQNDi
+X-Gm-Message-State: AOJu0YwFKMwZDhiEgrYCnhhPMsQqy6n3SWVit3X6ZSZTj5CL9n1RS3hA
+	w9MD0MpRDJDy84kXvnpleSgL7MzbohzVFSW0S8SaG1dcje8J0Qy6
+X-Google-Smtp-Source: AGHT+IH/IKbgeQ/i+N5Wg6tsT0hn/z/Fll6a4YCP+GxaBGqM4pQZ/LTjS10uSGbsNkzc/9U74IyS8g==
+X-Received: by 2002:a5d:6a0a:0:b0:33e:7979:edc6 with SMTP id m10-20020a5d6a0a000000b0033e7979edc6mr1887414wru.15.1711208834702;
+        Sat, 23 Mar 2024 08:47:14 -0700 (PDT)
+Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
+        by smtp.gmail.com with ESMTPSA id df10-20020a5d5b8a000000b0033e756ed840sm4676011wrb.47.2024.03.23.08.47.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 23 Mar 2024 08:47:14 -0700 (PDT)
+From: Puranjay Mohan <puranjay12@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Luke Nelson <luke.r.nels@gmail.com>,
+	Xi Wang <xi.wang@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Cc: puranjay12@gmail.com
+Subject: [PATCH bpf-next 0/2] bpf,riscv: Add support for BPF Arena
+Date: Sat, 23 Mar 2024 15:46:50 +0000
+Message-Id: <20240323154652.54572-1-puranjay12@gmail.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] libbpf: add specific btf name info when do core
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240321170444.388225-1-chen.dylane@gmail.com>
- <CAEf4BzYJeEViQaRJb6u06GJSLa6uBmykRZa4JnWJ9VXw+WoX2g@mail.gmail.com>
- <f5fe3709-bfc8-4906-a0cc-5fe9b388be6b@gmail.com>
- <CAEf4Bzb-Wf5sTnDLu29KQ-zWfCnffdUZYLSe_tQTNW_bTSfnPg@mail.gmail.com>
-From: Tao Chen <chen.dylane@gmail.com>
-In-Reply-To: <CAEf4Bzb-Wf5sTnDLu29KQ-zWfCnffdUZYLSe_tQTNW_bTSfnPg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Got it, thanks for your detailed reply.
+This series adds the support for PROBE_MEM32 and bpf_addr_space_cast
+instructions to the RISCV BPF JIT. These two instructions allow the
+enablement of BPF Arena.
 
-在 2024/3/23 上午1:57, Andrii Nakryiko 写道:
-> On Fri, Mar 22, 2024 at 6:37 AM Tao Chen <chen.dylane@gmail.com> wrote:
->>
->> Hi, Nakryiko, thank you for your reply. I try to familiarize with core
->> in libbpf， the debug info is really helpful for me. But i use the old
->> kernel btf, so origion debuginfo like:
->>    struct task_struct___x: found target candidate [130] struct
->> task_struct in [vmlinux]
-> 
-> the idea here is to not emit path to BTF (otherwise we normally should
-> emit [/sys/kernel/btf/vmlinux], but rather distinguish whether it's a
-> kernel BTF ([vmlinux]) or some kernel module BTF ([<module-name>]).
-> 
-> In your case you are overriding vmlinux BTF by using btf_custom_path
-> option (so you should know where to find it, if you need to debug
-> something). It's still, conceptually, a [vmlinux], and I'd like to
-> keep it this way.
-> 
->> I think it may be more clear, if we print btf name when we use old
->> kernel btf like:
->>    struct task_struct___x: found target candidate [130] struct
->> task_struct in [/boot/***.btf]
->> The patch just solve debug info show for newbies above.
->>
->> 在 2024/3/22 上午2:52, Andrii Nakryiko 写道:
->>> On Thu, Mar 21, 2024 at 10:04 AM Tao Chen <chen.dylane@gmail.com> wrote:
->>>>
->>>> No logic changed, just add specific btf name when core info
->>>> print, maybe it seems more understandable.
->>>>
->>>> Signed-off-by: Tao Chen <chen.dylane@gmail.com>
->>>> ---
->>>>    tools/lib/bpf/libbpf.c | 14 +++++++++-----
->>>>    1 file changed, 9 insertions(+), 5 deletions(-)
->>>>
->>>
->>> Can you elaborate on what problem you are trying to solve?
->>> Conceptually libbpf does look for types in vmlinux (meaning main
->>> kernel BTF), even if user overrides BTF location (presumably because
->>> of old kernel). So even when we emit "vmlinux" in logs, it seems
->>> correct.
->>>
->>> pw-bot: cr
->>>
->>>
->>>> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
->>>> index afd09571c482..b32154288b4a 100644
->>>> --- a/tools/lib/bpf/libbpf.c
->>>> +++ b/tools/lib/bpf/libbpf.c
->>>> @@ -5653,7 +5653,8 @@ static int load_module_btfs(struct bpf_object *obj)
->>>>    }
->>>>
->>>>    static struct bpf_core_cand_list *
->>>> -bpf_core_find_cands(struct bpf_object *obj, const struct btf *local_btf, __u32 local_type_id)
->>>> +bpf_core_find_cands(struct bpf_object *obj, const struct btf *local_btf, __u32 local_type_id,
->>>> +                   const char *targ_btf_path)
->>>>    {
->>>>           struct bpf_core_cand local_cand = {};
->>>>           struct bpf_core_cand_list *cands;
->>>> @@ -5680,7 +5681,8 @@ bpf_core_find_cands(struct bpf_object *obj, const struct btf *local_btf, __u32 l
->>>>
->>>>           /* Attempt to find target candidates in vmlinux BTF first */
->>>>           main_btf = obj->btf_vmlinux_override ?: obj->btf_vmlinux;
->>>> -       err = bpf_core_add_cands(&local_cand, local_essent_len, main_btf, "vmlinux", 1, cands);
->>>> +       err = bpf_core_add_cands(&local_cand, local_essent_len, main_btf,
->>>> +                                targ_btf_path ?: "vmlinux", 1, cands);
->>>>           if (err)
->>>>                   goto err_out;
->>>>
->>>> @@ -5793,7 +5795,8 @@ static int bpf_core_resolve_relo(struct bpf_program *prog,
->>>>                                    int relo_idx,
->>>>                                    const struct btf *local_btf,
->>>>                                    struct hashmap *cand_cache,
->>>> -                                struct bpf_core_relo_res *targ_res)
->>>> +                                struct bpf_core_relo_res *targ_res,
->>>> +                                const char *targ_btf_path)
->>>>    {
->>>>           struct bpf_core_spec specs_scratch[3] = {};
->>>>           struct bpf_core_cand_list *cands = NULL;
->>>> @@ -5813,7 +5816,7 @@ static int bpf_core_resolve_relo(struct bpf_program *prog,
->>>>
->>>>           if (relo->kind != BPF_CORE_TYPE_ID_LOCAL &&
->>>>               !hashmap__find(cand_cache, local_id, &cands)) {
->>>> -               cands = bpf_core_find_cands(prog->obj, local_btf, local_id);
->>>> +               cands = bpf_core_find_cands(prog->obj, local_btf, local_id, targ_btf_path);
->>>>                   if (IS_ERR(cands)) {
->>>>                           pr_warn("prog '%s': relo #%d: target candidate search failed for [%d] %s %s: %ld\n",
->>>>                                   prog_name, relo_idx, local_id, btf_kind_str(local_type),
->>>> @@ -5920,7 +5923,8 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
->>>>                           if (prog->obj->gen_loader)
->>>>                                   continue;
->>>>
->>>> -                       err = bpf_core_resolve_relo(prog, rec, i, obj->btf, cand_cache, &targ_res);
->>>> +                       err = bpf_core_resolve_relo(prog, rec, i, obj->btf, cand_cache, &targ_res,
->>>> +                                                   targ_btf_path);
->>>>                           if (err) {
->>>>                                   pr_warn("prog '%s': relo #%d: failed to relocate: %d\n",
->>>>                                           prog->name, i, err);
->>>> --
->>>> 2.34.1
->>>>
+All arena related selftests are passing:
+
+  root@rv-tester:~/bpf# uname -p
+  riscv64
+  root@rv-tester:~/bpf# ./test_progs -a "*arena*"
+  #3/1     arena_htab/arena_htab_llvm:OK
+  #3/2     arena_htab/arena_htab_asm:OK
+  #3       arena_htab:OK
+  #4/1     arena_list/arena_list_1:OK
+  #4/2     arena_list/arena_list_1000:OK
+  #4       arena_list:OK
+  #434/1   verifier_arena/basic_alloc1:OK
+  #434/2   verifier_arena/basic_alloc2:OK
+  #434/3   verifier_arena/basic_alloc3:OK
+  #434/4   verifier_arena/iter_maps1:OK
+  #434/5   verifier_arena/iter_maps2:OK
+  #434/6   verifier_arena/iter_maps3:OK
+  #434     verifier_arena:OK
+  Summary: 3/10 PASSED, 0 SKIPPED, 0 FAILED
+
+This needs the following commit in bpf/bpf.git to work correctly:
+https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/commit/?id=f7f5d1808b1b66935a24dd796dd1a0612ca9c147
+
+Puranjay Mohan (2):
+  bpf,riscv: Implement PROBE_MEM32 pseudo instructions
+  bpf,riscv: Implement bpf_addr_space_cast instruction
+
+ arch/riscv/net/bpf_jit.h        |   2 +
+ arch/riscv/net/bpf_jit_comp64.c | 208 +++++++++++++++++++++++++++++++-
+ arch/riscv/net/bpf_jit_core.c   |   3 +
+ 3 files changed, 210 insertions(+), 3 deletions(-)
+
+-- 
+2.40.1
+
