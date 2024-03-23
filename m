@@ -1,174 +1,113 @@
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B66B4D9ED;
-	Sat, 23 Mar 2024 15:47:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1187014AA3;
+	Sat, 23 Mar 2024 16:41:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711208844; cv=none; b=bwdj2Kn3uBWbe/9lotUizOedif3CqTWDf0PxRMKlO5dl/eLff6vmxctAh+bHRjm1ie+/mnqqOJI6R87UZK/eX2PedxxOzucG87r1PnX86XVxAoL0BBu401+weri+GIm7SOWyzDqgeTrCeGeWapfQLhaasZkhxT8u9eEGZo+CnCQ=
+	t=1711212072; cv=none; b=t3l24/4WtxLKnLUtduJweuEYemEv1hoP57aweNO0tM5TKK6YyjycCtzgfpi+iqIUZJOuYBNaoenmlg8j3kNg0BxoaguEJPZWouH3bVnarnZNiM/TR4KxYCQV7cIdSWdMlXNV8OgkO5UYwC98MK6NM45Nagp9gC98mDAfbc4yfJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711208844; c=relaxed/simple;
-	bh=vN2GuPTGMANXSO4mSpjLFQl4+5b43aBZX8eDL5al/Dg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=IgpnnbRdj1f2NwIm194lPJSbsaogBI3EK2mydPPlnKTPGkBOZC/cG3oF/Ygi85OVw6jbzYObVg3L2XjKygxOhL96129pEER6hBYJKq24yAm8p/z4HuczAiJ+kAf610g+U3dpST3ktprPQqKUrq2r3qOeaxVq0g+lldATOuSV794=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dygyLIxz; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dygyLIxz"
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2d46dd8b0b8so39694381fa.2;
-        Sat, 23 Mar 2024 08:47:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711208840; x=1711813640; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ay+jcBPkjGLbrzuCqBdp1fIpXDsG9gp+1V2JFol5/jQ=;
-        b=dygyLIxz2CKTAlnBTfNeW7mxM8wEjm4e42Kq9xvfukmqMafajWkPZc4VXp5rzZIj4A
-         ulevxSUEex9DfjuwsGyWQSa1s9dirCtarqOt65nwAQdw1oui/bfFkgCSZEodx4RTLpr8
-         lZ3B87/ESaemanfKmTxwz6xlEO+m9uESovhfRr7CWDJbERuTs9dCV1meBCKZ4lee0hpF
-         udHWOJig3DNYghPziMuxVojjxVi1FVtQnrG0eMnnVDXBW1EYuvo+9Ico4wDZfYrA7XEh
-         5fiSRGlE5Xv2zYdoibUavg+clHrBf5x+FIfxyD7GLNWMZq2cwFwzMMbZIYNHG7EdJ7NT
-         k1Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711208840; x=1711813640;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ay+jcBPkjGLbrzuCqBdp1fIpXDsG9gp+1V2JFol5/jQ=;
-        b=ji+WT1HRVxzECs0Exbgs9adkNDtJcWAjs5lwm6U//EY2e08VT4CSMmXWgULA7Qa6De
-         AblijQCq3pGexPaBTMxqHW4u/kIgcWAQ/7/kHzU0G0+SUSDZSoggKJYTxPgcFWejgoRr
-         5DPk/xH6nHX64ZKDXfh4S59cqWB9tB99twCj1gNSxqArtF6DqQaLaeUm1Ns++d5kUCj4
-         DwETH+tUwmcuTFkL/y55JvchrzkmrfkBkq6inDk8UK5ZcNNpKErjzDOuuthuH2lko/R5
-         ETDiNSHn+msvLFV8nLDENChXOKV4HavXPjdS0ANBE4JSVuVT5fuxpVBol1sKt4BJuGlc
-         HHXw==
-X-Forwarded-Encrypted: i=1; AJvYcCVpMA5eXuJ7NC+HWr/uZctlVmSUmhsIZfupflxIMJy2rJw8kZnePw4w5oTE92DMAHLGPShMeHPImPNv7EXmcO8YpGIZ6g8L3wyoJ6RUdBADW3CHQcLuT8WVvEJJUd9UIqh+
-X-Gm-Message-State: AOJu0Yx2mPCfbCzC1AscotmQ4pZEiCESCmKHDMH/GCl24cIVrSdkeuM0
-	XbBcAIdeLbe6kdjnA6R7MecOYwESNihbEYN6RhRZyKyzYFOfh7iR
-X-Google-Smtp-Source: AGHT+IFkp577tDhpMqE6g4lzfPBqHjO/0IXLmRGAIlqrGpT/rmtEg6S9Fthz6rn6wJ37q+lXPaTRrQ==
-X-Received: by 2002:a2e:9b8a:0:b0:2d4:9f78:4f62 with SMTP id z10-20020a2e9b8a000000b002d49f784f62mr1644660lji.0.1711208840003;
-        Sat, 23 Mar 2024 08:47:20 -0700 (PDT)
-Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id o19-20020a05600c339300b00414041032casm765572wmp.1.2024.03.23.08.47.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 23 Mar 2024 08:47:19 -0700 (PDT)
-From: Puranjay Mohan <puranjay12@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Luke Nelson <luke.r.nels@gmail.com>,
-	Xi Wang <xi.wang@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Cc: puranjay12@gmail.com
-Subject: [PATCH bpf-next 2/2] bpf,riscv: Implement bpf_addr_space_cast instruction
-Date: Sat, 23 Mar 2024 15:46:52 +0000
-Message-Id: <20240323154652.54572-3-puranjay12@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240323154652.54572-1-puranjay12@gmail.com>
-References: <20240323154652.54572-1-puranjay12@gmail.com>
+	s=arc-20240116; t=1711212072; c=relaxed/simple;
+	bh=atvZrKiUAUvZM2NuYgS1vjg/ulbuXOUdayurW+vjXAY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:CC:From:
+	 In-Reply-To:Content-Type; b=U2N3fcye+CUPoudMd6BDvt5waqw6XlQ/gdMVW07PuqQELOnaulkzB7TYnkWRKT7a6itcWwOi/DN8vkV8nG235SdGbrz69lW3t3OitAh9Cnwe+EQdwnN4fzrFzdZtNrxIq11M4T4fBstgzEHI8xB1PqCPZeFtonkjtpRU0EbiATI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4V24dB1K99z1h2m2;
+	Sun, 24 Mar 2024 00:38:22 +0800 (CST)
+Received: from kwepemd100009.china.huawei.com (unknown [7.221.188.135])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3C7521A0172;
+	Sun, 24 Mar 2024 00:40:58 +0800 (CST)
+Received: from [10.67.109.184] (10.67.109.184) by
+ kwepemd100009.china.huawei.com (7.221.188.135) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.28; Sun, 24 Mar 2024 00:40:57 +0800
+Message-ID: <ea7ec9fe-a2e1-4e0f-b314-de7815bfd614@huawei.com>
+Date: Sun, 24 Mar 2024 00:40:56 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/2] bpf,riscv: Implement PROBE_MEM32 pseudo
+ instructions
+Content-Language: en-US
+To: Puranjay Mohan <puranjay12@gmail.com>
+References: <20240323154652.54572-1-puranjay12@gmail.com>
+ <20240323154652.54572-2-puranjay12@gmail.com>
+CC: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
+	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+	<andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
+ Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+	<yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Luke Nelson
+	<luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, Paul Walmsley
+	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+	<aou@eecs.berkeley.edu>, <bpf@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <20240323154652.54572-2-puranjay12@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemd100009.china.huawei.com (7.221.188.135)
 
-LLVM generates bpf_addr_space_cast instruction while translating
-pointers between native (zero) address space and
-__attribute__((address_space(N))). The addr_space=0 is reserved as
-bpf_arena address space.
 
-rY = addr_space_cast(rX, 0, 1) is processed by the verifier and
-converted to normal 32-bit move: wX = wY
+On 2024/3/23 23:46, Puranjay Mohan wrote:
+> Add support for [LDX | STX | ST], PROBE_MEM32, [B | H | W | DW]
+[snip]
+>   
+>   #define BPF_FIXUP_OFFSET_MASK   GENMASK(26, 0)
+>   #define BPF_FIXUP_REG_MASK      GENMASK(31, 27)
+> +#define DONT_CLEAR		16	/* RV_REG_A6 unused in BPF */
 
-rY = addr_space_cast(rX, 1, 0) has to be converted by JIT:
+This is a bit misleading. RV_REG_A6 is actually used in riscv64. Maybe 
+"RV_REG_A6 unused in pt_regmap" or change to other register will be better.
 
-Here I explain using symbolic language what the JIT is supposed to do:
-We have:
-	src = [src_upper32][src_lower32] // 64 bit src kernel pointer
-	uvm = [uvm_upper32][uvm_lower32] // 64 bit user_vm_start
+>   
+>   bool ex_handler_bpf(const struct exception_table_entry *ex,
+[snip]
+>   
+>   	stack_adjust = round_up(stack_adjust, 16);
+>   	stack_adjust += bpf_stack_adjust;
+> @@ -1794,6 +1974,10 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+>   		emit_sd(RV_REG_SP, store_offset, RV_REG_S6, ctx);
+>   		store_offset -= 8;
+>   	}
+> +	if (ctx->arena_vm_start) {
+> +		emit_sd(RV_REG_SP, store_offset, RV_REG_S11, ctx);
+> +		store_offset -= 8;
+> +	}
 
-The JIT has to make the dst reg like following
-	dst = [uvm_upper32][src_lower32] // if src_lower32 != 0
-	dst = [00000000000][00000000000] // if src_lower32 == 0
+I think it's fine to use s7 and keep the original dynamic stack code style.
 
-Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
----
- arch/riscv/net/bpf_jit.h        |  1 +
- arch/riscv/net/bpf_jit_comp64.c | 15 +++++++++++++++
- arch/riscv/net/bpf_jit_core.c   |  1 +
- 3 files changed, 17 insertions(+)
+>   
+>   	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
+>   
+> @@ -1807,6 +1991,9 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+>   		emit_mv(RV_REG_TCC_SAVED, RV_REG_TCC, ctx);
+>   
+>   	ctx->stack_size = stack_adjust;
+> +
+> +	if (ctx->arena_vm_start)
+> +		emit_imm(RV_REG_S11, ctx->arena_vm_start, ctx);
+>   }
+>   
+>   void bpf_jit_build_epilogue(struct rv_jit_context *ctx)
+> diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
+> index 6b3acac30c06..9b6696b1290a 100644
+> --- a/arch/riscv/net/bpf_jit_core.c
+> +++ b/arch/riscv/net/bpf_jit_core.c
+> @@ -50,6 +50,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>   	int pass = 0, prev_ninsns = 0, i;
+>   	struct rv_jit_data *jit_data;
+>   	struct rv_jit_context *ctx;
+> +	u64 arena_vm_start;
 
-diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
-index 8a47da08dd9c..5fc374ed98ea 100644
---- a/arch/riscv/net/bpf_jit.h
-+++ b/arch/riscv/net/bpf_jit.h
-@@ -82,6 +82,7 @@ struct rv_jit_context {
- 	unsigned long flags;
- 	int stack_size;
- 	u64 arena_vm_start;
-+	u64 user_vm_start;
- };
- 
- /* Convert from ninsns to bytes. */
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index f51b832eafb6..3c389e75cb96 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1083,6 +1083,16 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	/* dst = src */
- 	case BPF_ALU | BPF_MOV | BPF_X:
- 	case BPF_ALU64 | BPF_MOV | BPF_X:
-+		if (BPF_CLASS(insn->code) == BPF_ALU64 && insn->off == BPF_ADDR_SPACE_CAST &&
-+		    insn->imm == 1U << 16) {
-+			emit_mv(RV_REG_T1, rs, ctx);
-+			emit_zextw(RV_REG_T1, RV_REG_T1, ctx);
-+			emit_imm(rd, (ctx->user_vm_start >> 32) << 32, ctx);
-+			emit(rv_beq(RV_REG_T1, RV_REG_ZERO, 4), ctx);
-+			emit_or(RV_REG_T1, rd, RV_REG_T1, ctx);
-+			emit_mv(rd, RV_REG_T1, ctx);
-+			break;
-+		}
- 		if (imm == 1) {
- 			/* Special mov32 for zext */
- 			emit_zextw(rd, rd, ctx);
-@@ -2010,3 +2020,8 @@ bool bpf_jit_supports_ptr_xchg(void)
- {
- 	return true;
- }
-+
-+bool bpf_jit_supports_arena(void)
-+{
-+	return true;
-+}
-diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
-index 9b6696b1290a..aaef1d0c7c46 100644
---- a/arch/riscv/net/bpf_jit_core.c
-+++ b/arch/riscv/net/bpf_jit_core.c
-@@ -82,6 +82,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	}
- 
- 	ctx->arena_vm_start = bpf_arena_get_kern_vm_start(prog->aux->arena);
-+	ctx->user_vm_start = bpf_arena_get_user_vm_start(prog->aux->arena);
- 	ctx->prog = prog;
- 	ctx->offset = kcalloc(prog->len, sizeof(int), GFP_KERNEL);
- 	if (!ctx->offset) {
--- 
-2.40.1
-
+unused variable
