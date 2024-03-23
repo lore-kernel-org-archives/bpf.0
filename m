@@ -1,235 +1,205 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF6D73212;
-	Sat, 23 Mar 2024 07:08:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F7A24C6B;
+	Sat, 23 Mar 2024 07:19:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711177726; cv=none; b=PZ/bWNubTUfCMRm87UHyZ4kVgTzhHnhv5zYMMDjjHufrnUCg4tdRSInsdSnVU70YrqD0WZR0G6NnTz930mJjItmSil4umjVPSAcb40glkiHfgCg9QqrbB1APs9egt93d2GQWKresMVVxD9xkDVElpVmOajiZXvmPvKFs3wfqShU=
+	t=1711178386; cv=none; b=hk1wcy70YFUvV7l6fmmBzQJrpwPAyGxa9nUKTTiRfZvs87ofO94QKky2TZtk2B3dobT7XMJ4iQltHuGBV8HbFzA4dw2Tv60PX7uIvIqGmWm5kiHZhYeXf1vEb6P8AgfzUb1q7s5sYtYGbkqQrSziFas0FSTMpTyv/YnhzmjAQ70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711177726; c=relaxed/simple;
-	bh=fVgspY4EOYpnKDlZKazWyyXfzRIOV9DZ3JRbBOfpaQc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gzc+JUc8TAXsT+Xv06OCu+DS6hnbH8A5rbwsqJoRZcjJeZpvDuMj63Gcvkr/6qxGBhq8Gm87riau2Fhya0GKrlBQgG3CPNR+0BK8NKMAYK+Ok/KwXREAB7Ly9QvzCxyff2rn6Gk4nPLopiNZwTBiCq8oLyPFPjvjOBALC29hUYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hs0nhRCd; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hs0nhRCd"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-33e1d327595so2120807f8f.2;
-        Sat, 23 Mar 2024 00:08:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711177723; x=1711782523; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ioa5IoGRauAC6NGDXDWuGkDiL2WTD7gES4eHlPrc4A8=;
-        b=hs0nhRCdBhZSqR9nnn4CWIx1CcB8DD/45IeLLtZRWHGS2B249tpblE86gtgniI98Bc
-         KSTk9Y+0K43nNH4056dNNxS2R363/bgzvw7WflKIGc7zuHexGVKlIZsm3tlW43fMYb9h
-         6Bo5WGvpHanqUufF4S7cxVaWh6ISV7Rbd5IsQyH0/irvbgooZwcPG1/c1EglCjlB6+Us
-         LGCdguNyKITfYclDswNClpN1FvBvmZmpJ2mc/KIcgGHrj5/y8FFY+7uYbgfddYLNRJQ3
-         hRkfr1bpShu8shOYswKSR+vI1FPfYvD3+8j5hXpbot0j5KmF/G44FTyb+fzSXuMdQ6ZU
-         41YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711177723; x=1711782523;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ioa5IoGRauAC6NGDXDWuGkDiL2WTD7gES4eHlPrc4A8=;
-        b=v8KZqdR5KKA9B2OhNVj/BUsMfy87JTj0aAjad7MjoqMKwHIGSfeUYWs7PYKDZoxCT9
-         6rAPzAtcEcfpGNZ6nR0RuCabkXuAHXa7crCMs57wxYJO/W2sYkUTo+ZUw7HwMsn7yLh2
-         U8zSWxKLCO6RFkkF8J81VwxEHZ7SctqFxrGbvQa6V3Hd9VwC/SD2YsNCdziH6rluFFDD
-         bitwumacJcjPIfIj53waJIiE3CrFxToHgtjoUjXXekd0nFNDZPMpJ8+yJZwTUoPCe9b1
-         nC/ZzJqi+WwsjHcyWQiTccSM6gd4OupwpJdftkOvCnHlbfB6IjI41M+O332MDbH0f5OR
-         1lWA==
-X-Forwarded-Encrypted: i=1; AJvYcCWmWBOVjB1+z9NKcLVLaf/UkR1TIZrjnl/5CNzPXbGZseHmv1XkZmCCv0aWGkzDzaZc3VOt5qK5gb3KsjqECgQNDRgINDLH0Mr093Ud89Y5kq1LcVTKRAJ+NZdyOBjd811tQkOniAdDYFWsFdzH4erm/M/o5i/VKftu
-X-Gm-Message-State: AOJu0Yzn1WEUpOpnMEFw/VJ5Mh8+lWmrSvDcYSlPmsgDy88K7kDnLbjE
-	MM/Qhw50Y4GILxHs2YtYsATOFGZs/LJr7XgsQDKB7acjuk1VBD3hVKLO7ylzUf4zIhoIhv8whaZ
-	3geFgl/DM/OX47rO0GqWeMdXdILw=
-X-Google-Smtp-Source: AGHT+IFd8NLEal2Phry3z0pAo7VE6Qqp40dBpBfgBNPId9t8TVhW/qLam9xv8Loai0iY1sFVTmBqPIPgI4HGVdhAH2I=
-X-Received: by 2002:a5d:5051:0:b0:340:5b4:ba31 with SMTP id
- h17-20020a5d5051000000b0034005b4ba31mr1076129wrt.34.1711177722801; Sat, 23
- Mar 2024 00:08:42 -0700 (PDT)
+	s=arc-20240116; t=1711178386; c=relaxed/simple;
+	bh=BArv9evpT+BKy2w6n6EkUPpK2VXQxbIwzSDdG+dzDoo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=SnYGKENZdYb0r2ZYtdG51hQHkcz+IQvM6RvzbmbUe2pms63elg/j5N4AQVRH2QzqpbVdaXXty9e1jkcRC4phPzL07VqNnOfqu6UsS8vA7AA4zf38Ax0K/i8pIpFapz0LT58TkA6gD+9fyPciweyt862Zh2eADG9Zp5A6bNY6G7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4V1rDH4Cdhz4f3khb;
+	Sat, 23 Mar 2024 15:19:27 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id A4F6E1A016E;
+	Sat, 23 Mar 2024 15:19:33 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP4 (Coremail) with SMTP id gCh0CgDXJ2qEgv5ld8PLHw--.64132S2;
+	Sat, 23 Mar 2024 15:19:33 +0800 (CST)
+Message-ID: <5c66cb9a-8f6e-4839-a590-ffc0d411333e@huaweicloud.com>
+Date: Sat, 23 Mar 2024 15:19:32 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <000000000000dc9aca0613ec855c@google.com> <tencent_F436364A347489774B677A3D13367E968E09@qq.com>
-In-Reply-To: <tencent_F436364A347489774B677A3D13367E968E09@qq.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sat, 23 Mar 2024 00:08:31 -0700
-Message-ID: <CAADnVQJQvcZOA_BbFxPqNyRbMdKTBSMnf=cKvW7NJ8LxxP54sA@mail.gmail.com>
-Subject: Re: [PATCH] bpf, sockmap: fix deadlock in rcu_report_exp_cpu_mult
-To: Edward Adam Davis <eadavis@qq.com>, John Fastabend <john.fastabend@gmail.com>
-Cc: syzbot+c4f4d25859c2e5859988@syzkaller.appspotmail.com, 42.hyeyoo@gmail.com, 
-	andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net, 
-	davem@davemloft.net, edumazet@google.com, jakub@cloudflare.com, kafai@fb.com, 
-	kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org, 
-	namhyung@kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
-	peterz@infradead.org, songliubraving@fb.com, syzkaller-bugs@googlegroups.com, 
-	yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 2/2] bpf: Add arm64 JIT support for
+ bpf_addr_space_cast instruction.
+Content-Language: en-US
+To: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Zi Shen Lim <zlim.lnx@gmail.com>
+References: <20240321153102.103832-1-puranjay12@gmail.com>
+ <20240321153102.103832-3-puranjay12@gmail.com>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <20240321153102.103832-3-puranjay12@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgDXJ2qEgv5ld8PLHw--.64132S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWw1xXr17Xw4fAw1fAw4UCFg_yoWrKrWkpF
+	sxZ3ySkw4vqw1UZFyfArsrWr4F9an7uF40gFy5GrWftr1jqF9rGF1IkFW5CrZ8GFy5Ww4r
+	CFW2kry3ua9rX37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+	7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+	Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+	6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+	AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+	6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-John,
-please review.
-It seems this bug was causing multiple syzbot reports.
-
-On Fri, Mar 22, 2024 at 10:42=E2=80=AFPM Edward Adam Davis <eadavis@qq.com>=
- wrote:
->
-> [Syzbot reported]
-> WARNING: HARDIRQ-safe -> HARDIRQ-unsafe lock order detected
-> 6.8.0-syzkaller-05221-gea80e3ed09ab #0 Not tainted
-> -----------------------------------------------------
-> rcu_exp_gp_kthr/18 [HC0[0]:SC0[2]:HE0:SE0] is trying to acquire:
-> ffff88802b5ab020 (&htab->buckets[i].lock){+...}-{2:2}, at: spin_lock_bh i=
-nclude/linux/spinlock.h:356 [inline]
-> ffff88802b5ab020 (&htab->buckets[i].lock){+...}-{2:2}, at: sock_hash_dele=
-te_elem+0xb0/0x300 net/core/sock_map.c:939
->
-> and this task is already holding:
-> ffffffff8e136558 (rcu_node_0){-.-.}-{2:2}, at: sync_rcu_exp_done_unlocked=
-+0xe/0x140 kernel/rcu/tree_exp.h:169
-> which would create a new lock dependency:
->  (rcu_node_0){-.-.}-{2:2} -> (&htab->buckets[i].lock){+...}-{2:2}
->
-> but this new dependency connects a HARDIRQ-irq-safe lock:
->  (rcu_node_0){-.-.}-{2:2}
->
-> ... which became HARDIRQ-irq-safe at:
->   lock_acquire+0x1e4/0x530 kernel/locking/lockdep.c:5754
->   __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
->   _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
->   rcu_report_exp_cpu_mult+0x27/0x2f0 kernel/rcu/tree_exp.h:238
->   csd_do_func kernel/smp.c:133 [inline]
->   __flush_smp_call_function_queue+0xb2e/0x15b0 kernel/smp.c:542
->   __sysvec_call_function_single+0xa8/0x3e0 arch/x86/kernel/smp.c:271
->   instr_sysvec_call_function_single arch/x86/kernel/smp.c:266 [inline]
->   sysvec_call_function_single+0x9e/0xc0 arch/x86/kernel/smp.c:266
->   asm_sysvec_call_function_single+0x1a/0x20 arch/x86/include/asm/idtentry=
-.h:709
->   __sanitizer_cov_trace_switch+0x90/0x120
->   update_event_printk kernel/trace/trace_events.c:2750 [inline]
->   trace_event_eval_update+0x311/0xf90 kernel/trace/trace_events.c:2922
->   process_one_work kernel/workqueue.c:3254 [inline]
->   process_scheduled_works+0xa00/0x1770 kernel/workqueue.c:3335
->   worker_thread+0x86d/0xd70 kernel/workqueue.c:3416
->   kthread+0x2f0/0x390 kernel/kthread.c:388
->   ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
->   ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
->
-> to a HARDIRQ-irq-unsafe lock:
->  (&htab->buckets[i].lock){+...}-{2:2}
->
-> ... which became HARDIRQ-irq-unsafe at:
-> ...
->   lock_acquire+0x1e4/0x530 kernel/locking/lockdep.c:5754
->   __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
->   _raw_spin_lock_bh+0x35/0x50 kernel/locking/spinlock.c:178
->   spin_lock_bh include/linux/spinlock.h:356 [inline]
->   sock_hash_delete_elem+0xb0/0x300 net/core/sock_map.c:939
->   0xffffffffa0001b0e
->   bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
->   __bpf_prog_run include/linux/filter.h:657 [inline]
->   bpf_prog_run include/linux/filter.h:664 [inline]
->   __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
->   bpf_trace_run2+0x204/0x420 kernel/trace/bpf_trace.c:2420
->   trace_contention_end+0xd7/0x100 include/trace/events/lock.h:122
->   __mutex_lock_common kernel/locking/mutex.c:617 [inline]
->   __mutex_lock+0x2e5/0xd70 kernel/locking/mutex.c:752
->   futex_cleanup_begin kernel/futex/core.c:1091 [inline]
->   futex_exit_release+0x34/0x1f0 kernel/futex/core.c:1143
->   exit_mm_release+0x1a/0x30 kernel/fork.c:1652
->   exit_mm+0xb0/0x310 kernel/exit.c:542
->   do_exit+0x99e/0x27e0 kernel/exit.c:865
->   do_group_exit+0x207/0x2c0 kernel/exit.c:1027
->   __do_sys_exit_group kernel/exit.c:1038 [inline]
->   __se_sys_exit_group kernel/exit.c:1036 [inline]
->   __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1036
->   do_syscall_64+0xfb/0x240
->   entry_SYSCALL_64_after_hwframe+0x6d/0x75
->
-> other info that might help us debug this:
->
->  Possible interrupt unsafe locking scenario:
->
->        CPU0                    CPU1
->        ----                    ----
->   lock(&htab->buckets[i].lock);
->                                local_irq_disable();
->                                lock(rcu_node_0);
->                                lock(&htab->buckets[i].lock);
->   <Interrupt>
->     lock(rcu_node_0);
->
->  *** DEADLOCK ***
-> [Fix]
-> Ensure that the context interrupt state is the same before and after usin=
-g the
-> bucket->lock.
->
-> Reported-and-tested-by: syzbot+c4f4d25859c2e5859988@syzkaller.appspotmail=
-.com
-> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+On 3/21/2024 11:31 PM, Puranjay Mohan wrote:
+> LLVM generates bpf_addr_space_cast instruction while translating
+> pointers between native (zero) address space and
+> __attribute__((address_space(N))). The addr_space=1 is reserved as
+> bpf_arena address space.
+> 
+> rY = addr_space_cast(rX, 0, 1) is processed by the verifier and
+> converted to normal 32-bit move: wX = wY
+> 
+> rY = addr_space_cast(rX, 1, 0) has to be converted by JIT:
+> 
+> Here I explain using symbolic language what the JIT is supposed to do:
+> We have:
+> 	src = [src_upper32][src_lower32] // 64 bit src kernel pointer
+> 	uvm = [uvm_upper32][uvm_lower32] // 64 bit user_vm_start
+> 
+> The JIT has to make the dst reg like following
+> 	dst = [uvm_upper32][src_lower32] // if src_lower32 != 0
+> 	dst = [00000000000][00000000000] // if src_lower32 == 0
+> 
+> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
 > ---
->  net/core/sock_map.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
->
-> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> index 27d733c0f65e..ae8f81b26e16 100644
-> --- a/net/core/sock_map.c
-> +++ b/net/core/sock_map.c
-> @@ -932,11 +932,12 @@ static long sock_hash_delete_elem(struct bpf_map *m=
-ap, void *key)
->         struct bpf_shtab_bucket *bucket;
->         struct bpf_shtab_elem *elem;
->         int ret =3D -ENOENT;
-> +       unsigned long flags;
->
->         hash =3D sock_hash_bucket_hash(key, key_size);
->         bucket =3D sock_hash_select_bucket(htab, hash);
->
-> -       spin_lock_bh(&bucket->lock);
-> +       spin_lock_irqsave(&bucket->lock, flags);
->         elem =3D sock_hash_lookup_elem_raw(&bucket->head, hash, key, key_=
-size);
->         if (elem) {
->                 hlist_del_rcu(&elem->node);
-> @@ -944,7 +945,7 @@ static long sock_hash_delete_elem(struct bpf_map *map=
-, void *key)
->                 sock_hash_free_elem(htab, elem);
->                 ret =3D 0;
->         }
-> -       spin_unlock_bh(&bucket->lock);
-> +       spin_unlock_irqrestore(&bucket->lock, flags);
->         return ret;
->  }
->
-> @@ -1136,6 +1137,7 @@ static void sock_hash_free(struct bpf_map *map)
->         struct bpf_shtab_elem *elem;
->         struct hlist_node *node;
->         int i;
-> +       unsigned long flags;
->
->         /* After the sync no updates or deletes will be in-flight so it
->          * is safe to walk map and remove entries without risking a race
-> @@ -1151,11 +1153,11 @@ static void sock_hash_free(struct bpf_map *map)
->                  * exists, psock exists and holds a ref to socket. That
->                  * lets us to grab a socket ref too.
->                  */
-> -               spin_lock_bh(&bucket->lock);
-> +               spin_lock_irqsave(&bucket->lock, flags);
->                 hlist_for_each_entry(elem, &bucket->head, node)
->                         sock_hold(elem->sk);
->                 hlist_move_list(&bucket->head, &unlink_list);
-> -               spin_unlock_bh(&bucket->lock);
-> +               spin_unlock_irqrestore(&bucket->lock, flags);
->
->                 /* Process removed entries out of atomic context to
->                  * block for socket lock before deleting the psock's
-> --
-> 2.43.0
->
+>   arch/arm64/net/bpf_jit.h                     |  1 +
+>   arch/arm64/net/bpf_jit_comp.c                | 35 ++++++++++++++++++++
+>   tools/testing/selftests/bpf/DENYLIST.aarch64 |  2 --
+>   3 files changed, 36 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
+> index 23b1b34db088..813c3c428fde 100644
+> --- a/arch/arm64/net/bpf_jit.h
+> +++ b/arch/arm64/net/bpf_jit.h
+> @@ -238,6 +238,7 @@
+>   #define A64_LSLV(sf, Rd, Rn, Rm) A64_DATA2(sf, Rd, Rn, Rm, LSLV)
+>   #define A64_LSRV(sf, Rd, Rn, Rm) A64_DATA2(sf, Rd, Rn, Rm, LSRV)
+>   #define A64_ASRV(sf, Rd, Rn, Rm) A64_DATA2(sf, Rd, Rn, Rm, ASRV)
+> +#define A64_RORV(sf, Rd, Rn, Rm) A64_DATA2(sf, Rd, Rn, Rm, RORV)
+>   
+>   /* Data-processing (3 source) */
+>   /* Rd = Ra + Rn * Rm */
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> index b9b5febe64f0..37c94ebd06b2 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
+> @@ -82,6 +82,7 @@ struct jit_ctx {
+>   	__le32 *ro_image;
+>   	u32 stack_size;
+>   	int fpb_offset;
+> +	u64 user_vm_start;
+>   };
+>   
+>   struct bpf_plt {
+> @@ -868,6 +869,34 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+>   	/* dst = src */
+>   	case BPF_ALU | BPF_MOV | BPF_X:
+
+is it legal to encode BPF_ADDR_SPACE_CAST with BPF_ALU?
+
+>   	case BPF_ALU64 | BPF_MOV | BPF_X:
+> +		if (insn->off == BPF_ADDR_SPACE_CAST &&
+> +		    insn->imm == 1U << 16) {
+> +			/* Zero out tmp2 */
+> +			emit(A64_EOR(1, tmp2, tmp2, tmp2), ctx);
+> +
+> +			/* Move lo_32_bits(src) to dst */
+> +			if (dst != src)
+> +				emit(A64_MOV(0, dst, src), ctx);
+> +
+> +			/* Logical shift left by 32 bits */
+> +			emit(A64_LSL(1, dst, dst, 32), ctx);
+> +
+> +			/* Get upper 32 bits of user_vm_start in tmp */
+> +			emit_a64_mov_i(0, tmp, ctx->user_vm_start >> 32, ctx);
+> +
+> +			/* dst |= up_32_bits(user_vm_start) */
+> +			emit(A64_ORR(1, dst, dst, tmp), ctx);
+> +
+> +			/* Rotate by 32 bits to get final result */
+> +			emit_a64_mov_i(0, tmp, 32, ctx);
+> +			emit(A64_RORV(1, dst, dst, tmp), ctx);
+> +
+> +			/* If lo_32_bits(dst) == 0, set dst = tmp2(0) */
+> +			emit(A64_CBZ(0, dst, 2), ctx);
+> +			emit(A64_MOV(1, tmp2, dst), ctx);
+> +			emit(A64_MOV(1, dst, tmp2), ctx);
+
+seems we could simplify it to:
+
+emit_a64_mov_i(0, dst, ctx->user_vm_start >> 32, ctx);
+emit(A64_LSL(1, dst, dst, 32), ctx);
+emit(A64_MOV(0, tmp, src), ctx); // 32-bit mov clears the upper 32 bits
+emit(A64_CBZ(1, tmp, 2), ctx);
+emit(A64_ORR(1, tmp, dst, tmp), ctx);
+emit(A64_MOV(1, dst, tmp), ctx);
+
+> +		break;
+
+not aligned
+
+> +		}
+>   		switch (insn->off) {
+>   		case 0:
+>   			emit(A64_MOV(is64, dst, src), ctx);
+> @@ -1690,6 +1719,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>   	}
+>   
+>   	ctx.fpb_offset = find_fpb_offset(prog);
+> +	ctx.user_vm_start = bpf_arena_get_user_vm_start(prog->aux->arena);
+>   
+>   	/*
+>   	 * 1. Initial fake pass to compute ctx->idx and ctx->offset.
+> @@ -2511,6 +2541,11 @@ bool bpf_jit_supports_exceptions(void)
+>   	return true;
+>   }
+>   
+> +bool bpf_jit_supports_arena(void)
+> +{
+> +	return true;
+> +}
+> +
+>   void bpf_jit_free(struct bpf_prog *prog)
+>   {
+>   	if (prog->jited) {
+> diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 b/tools/testing/selftests/bpf/DENYLIST.aarch64
+> index d8ade15e2789..0445ac38bc07 100644
+> --- a/tools/testing/selftests/bpf/DENYLIST.aarch64
+> +++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
+> @@ -10,5 +10,3 @@ fill_link_info/kprobe_multi_link_info            # bpf_program__attach_kprobe_mu
+>   fill_link_info/kretprobe_multi_link_info         # bpf_program__attach_kprobe_multi_opts unexpected error: -95
+>   fill_link_info/kprobe_multi_invalid_ubuff        # bpf_program__attach_kprobe_multi_opts unexpected error: -95
+>   missed/kprobe_recursion                          # missed_kprobe_recursion__attach unexpected error: -95 (errno 95)
+> -verifier_arena                                   # JIT does not support arena
+> -arena_htab                                       # JIT does not support arena
+
