@@ -1,150 +1,171 @@
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CAE817991;
-	Sun, 24 Mar 2024 10:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F301A33F9;
+	Sun, 24 Mar 2024 10:44:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711276325; cv=none; b=nrq+SjdTDDbNgMheMVzdHz2e/gZ8juckGCAzYrfa5FxHVk+4B6EC5Zm8mYq1MC0EEvAjJiDVpBb5jK91ueO6JTfioeL/1KuUhV5XLJoGpbepBRMjs+0FbcwdLzNR31fc1CLMLf//1FNqQN/iMRq3b2sbG2l0eIfOaOAhMhPhPzY=
+	t=1711277054; cv=none; b=NedWSsl9izTsMqPQYyJkmGET6XNhhbyluGtSowXo8iks3CbezoZ5ir4AiPW7P9dsbtGPv+Pet7QgPvyEvFl9aM231IhnPbXZhBHtO6YNKYHOaokiI0hGeUVbeY60lMmH5Q3TU5uZvoEcsXtuucS0RUndbxiCsSGjbPGV7Q419G4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711276325; c=relaxed/simple;
-	bh=JaLRqPL2VdDNRB2V7rpBmRl8eSyG0Sse/khcixW7Dtc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OEAQMBXQ1SjSU/lkl0DS2C6SV1Rttx6mmYrHdFPpBO9SAXDnckGgWwiN852JG8P8KWHXp5edIFZrF0boHI7O2ZQg9PCUwgehq6jqWaZni3CYMW+nyvST+ITah9+Z+ny34oZWNwbTJr4R319odJe+xBLV646mbTpUcxek0axOHTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V2XRn2YDDz4f3jk6;
-	Sun, 24 Mar 2024 18:31:49 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 518181A0B85;
-	Sun, 24 Mar 2024 18:31:53 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP3 (Coremail) with SMTP id _Ch0CgAXI5sXAQBmLI08Hw--.23015S2;
-	Sun, 24 Mar 2024 18:31:53 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	netdev@vger.kernel.org
-Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Luke Nelson <luke.r.nels@gmail.com>,
-	Pu Lehui <pulehui@huawei.com>,
-	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf] riscv, bpf: Fix kfunc parameters incompatibility between bpf and riscv abi
-Date: Sun, 24 Mar 2024 10:33:06 +0000
-Message-Id: <20240324103306.2202954-1-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1711277054; c=relaxed/simple;
+	bh=MgeEKYRUkfHUMypUhDM+pgDwBgka/ZUioY24LhF9q74=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=tKh2+UiXR3gkuwZF6BzhQnoDEctUU/fRboUzAa7VLA3eN62WwSsJh5ZcPisnY8qQUEHm6GQlb4+nqv55pA2lMpGN+/P8nsbKjtT0f2UrjJYEjBCnu0D0hhO+hjHdkAbrgmH1M6whhigwaKrpUmDe9ioaicEwarRPA/MNJmjVj+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XYvB5sgx; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XYvB5sgx"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4147fbe6146so7198945e9.1;
+        Sun, 24 Mar 2024 03:44:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711277051; x=1711881851; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uUdV8FF+BI4dVa5TN7lmP24qHxhF6e2K9idJyEape4U=;
+        b=XYvB5sgxzQyrNnulg8QKFRvRI1EaZrJ0X6+HuYlmbz242xp6DfPcn6j5LsJWMzmBWV
+         r3RXAux6Ju+BnqKdzpnPZyXr0nlFkQzm8608Hp2cWyW0prLFCURF5PmeJlknU/CihCMG
+         fLnv+T3BUjJ79nLKUCi66u1b3hYCZ7rRkxYcBraxVcp3N5b87u1TuLqw3Je26tkUlt3K
+         SRjm5Ex49eGAjSYGH87BjAXe0w6FF/G3lHGc46eTzApnK8drpCZgt+TzLH4w4QuLtRZa
+         h0ieTxd5QFicRYwQPW/TV2ph6zuJL3lPCW3pOAEaOY5nPs6kxanUC46Iw3/02EFG/0me
+         B3pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711277051; x=1711881851;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uUdV8FF+BI4dVa5TN7lmP24qHxhF6e2K9idJyEape4U=;
+        b=ACAr1C/LV42EZ0sbM7N4irmia6t0Gx574OAmclnJLhKrwuN/Xhp5+OzggKD63AWKl4
+         I3mWMe/M4Ex9rBL0wYq/BfjUcK0a+h8Wc4AwOCjzHrmsLXRBQ9xlo/QJjVG9Zvg14Z2y
+         4HySAsPlMPb9HW5JhvpMCzY9IcIk+KMb/JH5EB6VcQQTS/UygTfOjFbCUhOlwsAHLyeP
+         5sKSxLxy1D06BGL7fSb/cQO/xKA4ixdAVq1f+4sahtU0SCnVU8k9ABG8k86bsl+UMdin
+         ZvI0eE081i9MUoNYVPMKR6QcACO6v8G+1QyyRfuX8A8O6EQTtCxF2y4r6VBu6f38nYB6
+         ysoA==
+X-Forwarded-Encrypted: i=1; AJvYcCUWO8vGdLPUcOyL6URbapdzD/d8gdi3UYpi+0U6FUO/MCufx61gTesKpqN5VSqH8T6v39T76bRb461kawMMbTvPn135GW29RzPearSlwsgEulb846RLK/Vocf16rRexaz+eeFtzWp1CVYL/uCMDPSF6FkNuxkXz8Xmj
+X-Gm-Message-State: AOJu0YwLqHgNviDath94Q/EeopR7ThyuO15XxkgNFc6XmGGBWcgTOW90
+	T4aRilPnFmMMLk4StTIs4Q18p6w/ZKFJcm2qEilWgUQOTu/19wLK
+X-Google-Smtp-Source: AGHT+IEdFXcZjYG/ojvsgSzDOiGLCbVdXamxzEsEZdU9c6RIH093BXmj+TvCSPlBpOH19ScOlJ4vTQ==
+X-Received: by 2002:a05:600c:1391:b0:413:ef69:df65 with SMTP id u17-20020a05600c139100b00413ef69df65mr3064211wmf.20.1711277050892;
+        Sun, 24 Mar 2024 03:44:10 -0700 (PDT)
+Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
+        by smtp.gmail.com with ESMTPSA id i5-20020a05600c354500b004146a304863sm4922142wmq.34.2024.03.24.03.44.10
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 24 Mar 2024 03:44:10 -0700 (PDT)
+From: Puranjay Mohan <puranjay12@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Daniel Borkmann
+ <daniel@iogearbox.net>
+Cc: "David S. Miller" <davem@davemloft.net>, David Ahern
+ <dsahern@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
+ Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner
+ <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+ <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML
+ <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Jean-Philippe Brucker
+ <jean-philippe@linaro.org>, Network Development <netdev@vger.kernel.org>,
+ bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, Ilya
+ Leoshkevich <iii@linux.ibm.com>
+Subject: Re: [PATCH bpf v4] bpf: verifier: prevent userspace memory access
+In-Reply-To: <CAADnVQJhxQV0xBJDWVkTGXJ+XYpsq5kFmMsuMEHBEaqUmkh0iw@mail.gmail.com>
+References: <20240321124640.8870-1-puranjay12@gmail.com>
+ <9f2b63b5-569c-1e00-a635-93d9cd695517@iogearbox.net>
+ <mb61p4jcyxq5m.fsf@gmail.com>
+ <15ba79e3-14b2-d92e-3f94-e4f5f963e15d@iogearbox.net>
+ <CAADnVQJhxQV0xBJDWVkTGXJ+XYpsq5kFmMsuMEHBEaqUmkh0iw@mail.gmail.com>
+Date: Sun, 24 Mar 2024 10:44:08 +0000
+Message-ID: <mb61ple677vuv.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgAXI5sXAQBmLI08Hw--.23015S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7WrW5Xw13GF13Xr48uw4kJFb_yoW8tFy5pF
-	45Gr1Ykr4kXw1xZrnayF48Jr1fCr4v9a1avFyxWFy5GrZFgay5Jr4Yk3yYva45Cr15Wa4a
-	yrWDWrn0k34kA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv014x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-	6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-	n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wryl
-	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-	AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb
-	QVy7UUUUU==
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-From: Pu Lehui <pulehui@huawei.com>
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
-We encountered a failing case when running selftest in no_alu32 mode:
+> On Fri, Mar 22, 2024 at 9:28=E2=80=AFAM Daniel Borkmann <daniel@iogearbox=
+.net> wrote:
+>>
+>> On 3/22/24 4:05 PM, Puranjay Mohan wrote:
+>> [...]
+>> >>> +           /* Make it impossible to de-reference a userspace addres=
+s */
+>> >>> +           if (BPF_CLASS(insn->code) =3D=3D BPF_LDX &&
+>> >>> +               (BPF_MODE(insn->code) =3D=3D BPF_PROBE_MEM ||
+>> >>> +                BPF_MODE(insn->code) =3D=3D BPF_PROBE_MEMSX)) {
+>> >>> +                   struct bpf_insn *patch =3D &insn_buf[0];
+>> >>> +                   u64 uaddress_limit =3D bpf_arch_uaddress_limit();
+>> >>> +
+>> >>> +                   if (!uaddress_limit)
+>> >>> +                           goto next_insn;
+>> >>> +
+>> >>> +                   *patch++ =3D BPF_MOV64_REG(BPF_REG_AX, insn->src=
+_reg);
+>> >>> +                   if (insn->off)
+>> >>> +                           *patch++ =3D BPF_ALU64_IMM(BPF_ADD, BPF_=
+REG_AX, insn->off);
+>> >>> +                   *patch++ =3D BPF_ALU64_IMM(BPF_RSH, BPF_REG_AX, =
+32);
+>> >>> +                   *patch++ =3D BPF_JMP_IMM(BPF_JLE, BPF_REG_AX, ua=
+ddress_limit >> 32, 2);
+>> >>> +                   *patch++ =3D *insn;
+>> >>> +                   *patch++ =3D BPF_JMP_IMM(BPF_JA, 0, 0, 1);
+>> >>> +                   *patch++ =3D BPF_MOV64_IMM(insn->dst_reg, 0);
+>> >>
+>> >> But how does this address other cases where we could fault e.g. non-c=
+anonical,
+>> >> vsyscall page, etc? Technically, we would have to call to copy_from_k=
+ernel_nofault_allowed()
+>> >> to really address all the cases aside from the overflow (good catch b=
+tw!) where kernel
+>> >> turns into user address.
+>> >
+>> > So, we are trying to ~simulate a call to
+>> > copy_from_kernel_nofault_allowed() here. If the address under
+>> > consideration is below TASK_SIZE (TASK_SIZE + 4GB to be precise) then =
+we
+>> > skip that load because that address could be mapped by the user.
+>> >
+>> > If the address is above TASK_SIZE + 4GB, we allow the load and it could
+>> > cause a fault if the address is invalid, non-canonical etc. Taking the
+>> > fault is fine because JIT will add an exception table entry for
+>> > for that load with BPF_PBOBE_MEM.
+>>
+>> Are you sure? I don't think the kernel handles non-canonical fixup.
+>
+> I believe it handles it fine otherwise our selftest bpf_testmod_return_pt=
+r:
+>    case 4: return (void *)(1ull << 60);    /* non-canonical and invalid */
+> would have been crashing for the last 3 years,
+> since we've been running it.
+>
+>> > The vsyscall page is special, this approach skips all loads from this
+>> > page. I am not sure if that is acceptable.
+>>
+>> The bpf_probe_read_kernel() does handle it fine via copy_from_kernel_nof=
+ault().
+>>
+>> So there is tail risk that BPF_PROBE_* could trigger a crash.
+>
+> For this patch let's do
+> return max(TASK_SIZE_MAX + PAGE_SIZE, VSYSCALL_ADDR)
+> to cover both with one check?
 
-The failure case is `kfunc_call/kfunc_call_test4` and its source code is
-like bellow:
-```
-long bpf_kfunc_call_test4(signed char a, short b, int c, long d) __ksym;
-int kfunc_call_test4(struct __sk_buff *skb)
-{
-	...
-	tmp = bpf_kfunc_call_test4(-3, -30, -200, -1000);
-	...
-}
-```
+I agree, will add this in the next version.
 
-And its corresponding asm code is:
-```
-0: r1 = -3
-1: r2 = -30
-2: r3 = 0xffffff38 # opcode: 18 03 00 00 38 ff ff ff 00 00 00 00 00 00 00 00
-4: r4 = -1000
-5: call bpf_kfunc_call_test4
-```
+>> Other archs might
+>> have other quirks, e.g. in case of loongarch it says highest bit set mea=
+ns kernel
+>> space.
+>
+> let's tackle loongarch with whatever quirks it has separately.
 
-insn 2 is parsed to ld_imm64 insn to emit 0x00000000ffffff38 imm, and
-converted to int type and then send to bpf_kfunc_call_test4. But since
-it is zero-extended in the bpf calling convention, riscv jit will
-directly treat it as an unsigned 32-bit int value, and then fails with
-the message "actual 4294966063 != expected -1234".
-
-The reason is the incompatibility between bpf and riscv abi, that is,
-bpf will do zero-extension on uint, but riscv64 requires sign-extension
-on int or uint. We can solve this problem by sign extending the 32-bit
-parameters in kfunc.
-
-The issue is related to [0], and thanks to Yonghong and Alexei.
-
-Link: https://github.com/llvm/llvm-project/pull/84874 [0]
-Fixes: d40c3847b485 ("riscv, bpf: Add kfunc support for RV64")
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- arch/riscv/net/bpf_jit_comp64.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 869e4282a2c4..e3fc39370f7d 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1454,6 +1454,22 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		if (ret < 0)
- 			return ret;
- 
-+		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
-+			const struct btf_func_model *fm;
-+			int idx;
-+
-+			fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
-+			if (!fm)
-+				return -EINVAL;
-+
-+			for (idx = 0; idx < fm->nr_args; idx++) {
-+				u8 reg = bpf_to_rv_reg(BPF_REG_1 + idx, ctx);
-+
-+				if (fm->arg_size[idx] == sizeof(int))
-+					emit_sextw(reg, reg, ctx);
-+			}
-+		}
-+
- 		ret = emit_call(addr, fixed_addr, ctx);
- 		if (ret)
- 			return ret;
--- 
-2.34.1
-
+Yes, having the current patch will not break loongarch, it will help it
+skip some userspace addresses. We can later implement
+bpf_arch_uaddress_limit() in loongarch JIT to handle its specific
+quirks.
