@@ -1,171 +1,201 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F301A33F9;
-	Sun, 24 Mar 2024 10:44:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79ABD1946C
+	for <bpf@vger.kernel.org>; Sun, 24 Mar 2024 15:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711277054; cv=none; b=NedWSsl9izTsMqPQYyJkmGET6XNhhbyluGtSowXo8iks3CbezoZ5ir4AiPW7P9dsbtGPv+Pet7QgPvyEvFl9aM231IhnPbXZhBHtO6YNKYHOaokiI0hGeUVbeY60lMmH5Q3TU5uZvoEcsXtuucS0RUndbxiCsSGjbPGV7Q419G4=
+	t=1711292531; cv=none; b=XKmEMWbxyGuq2ecMia4FNxZc3HOYpe0Th8nDIuhGuTM8/UtYHJQiXjRv9Z8CEv2W9O0/fSlVTupkfER1Ho3LNQQy+gvG13vgpT8EHTVLxlosK2cELhH0cVDSIE6gBjcb59zka2F65xmIxV3hZ9FjBWR0nuZ2RhQybvbpzTJ5HjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711277054; c=relaxed/simple;
-	bh=MgeEKYRUkfHUMypUhDM+pgDwBgka/ZUioY24LhF9q74=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=tKh2+UiXR3gkuwZF6BzhQnoDEctUU/fRboUzAa7VLA3eN62WwSsJh5ZcPisnY8qQUEHm6GQlb4+nqv55pA2lMpGN+/P8nsbKjtT0f2UrjJYEjBCnu0D0hhO+hjHdkAbrgmH1M6whhigwaKrpUmDe9ioaicEwarRPA/MNJmjVj+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XYvB5sgx; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711292531; c=relaxed/simple;
+	bh=S6qfD0zgm/C1QM9Fjq9ddi/LiYV0zs+lIqLpWZeK7t0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N0WNYcpKGo5ea9KxPQJu7IoGKJwqf5OT6k9sXrd0h7d/XRIQ/VrloahYq+yYMaJ7Y6TP6hZqB4hbhjgUHLI4mDo+88WpUpZAPTFLAMPmHuWhHtOJvOtJzoP0QyIqWviDZIiKIXFxptyW/+kqIxwQiHQUgqD6OodThdC0zXIFqVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=B3U1Sp1d; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XYvB5sgx"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4147fbe6146so7198945e9.1;
-        Sun, 24 Mar 2024 03:44:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="B3U1Sp1d"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-34175878e3cso2487696f8f.0
+        for <bpf@vger.kernel.org>; Sun, 24 Mar 2024 08:02:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711277051; x=1711881851; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uUdV8FF+BI4dVa5TN7lmP24qHxhF6e2K9idJyEape4U=;
-        b=XYvB5sgxzQyrNnulg8QKFRvRI1EaZrJ0X6+HuYlmbz242xp6DfPcn6j5LsJWMzmBWV
-         r3RXAux6Ju+BnqKdzpnPZyXr0nlFkQzm8608Hp2cWyW0prLFCURF5PmeJlknU/CihCMG
-         fLnv+T3BUjJ79nLKUCi66u1b3hYCZ7rRkxYcBraxVcp3N5b87u1TuLqw3Je26tkUlt3K
-         SRjm5Ex49eGAjSYGH87BjAXe0w6FF/G3lHGc46eTzApnK8drpCZgt+TzLH4w4QuLtRZa
-         h0ieTxd5QFicRYwQPW/TV2ph6zuJL3lPCW3pOAEaOY5nPs6kxanUC46Iw3/02EFG/0me
-         B3pw==
+        d=isovalent.com; s=google; t=1711292528; x=1711897328; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EwGW9a4Qg8RuP4nfFSPxy3bqmYCTRCuNE09UvfgZEmE=;
+        b=B3U1Sp1dPyJNFkgBDmjST2PC5m2HnkAW1/bEUvsaL53/6TKLaG9iq5nB7RmmSDQH+i
+         MHjR3CiJN4Eg6HMt3Y8Kgce8HN0yTCl26ZU2Ocd+HjhPy0rxXyk+Aq+Sxqc7rin38036
+         X+RpyNfyOTWBrq+KvLUg02uG6S/IBBQLRk0qkqOc8ix/EC+nKQ8CiPV/IQh0UW02zkon
+         LfJ9aY/0QBXiqT73OlMsKKGEUwwpHD0gUuGubK3pir14cBaQOFccpQ0BQriwrc03xDY3
+         sNytQprQLNCTlUFdgtVvzP7anZ/fdESyiuC05F+NPnqtYbPlNWXQck9AYpuUhSegarsR
+         lPxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711277051; x=1711881851;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uUdV8FF+BI4dVa5TN7lmP24qHxhF6e2K9idJyEape4U=;
-        b=ACAr1C/LV42EZ0sbM7N4irmia6t0Gx574OAmclnJLhKrwuN/Xhp5+OzggKD63AWKl4
-         I3mWMe/M4Ex9rBL0wYq/BfjUcK0a+h8Wc4AwOCjzHrmsLXRBQ9xlo/QJjVG9Zvg14Z2y
-         4HySAsPlMPb9HW5JhvpMCzY9IcIk+KMb/JH5EB6VcQQTS/UygTfOjFbCUhOlwsAHLyeP
-         5sKSxLxy1D06BGL7fSb/cQO/xKA4ixdAVq1f+4sahtU0SCnVU8k9ABG8k86bsl+UMdin
-         ZvI0eE081i9MUoNYVPMKR6QcACO6v8G+1QyyRfuX8A8O6EQTtCxF2y4r6VBu6f38nYB6
-         ysoA==
-X-Forwarded-Encrypted: i=1; AJvYcCUWO8vGdLPUcOyL6URbapdzD/d8gdi3UYpi+0U6FUO/MCufx61gTesKpqN5VSqH8T6v39T76bRb461kawMMbTvPn135GW29RzPearSlwsgEulb846RLK/Vocf16rRexaz+eeFtzWp1CVYL/uCMDPSF6FkNuxkXz8Xmj
-X-Gm-Message-State: AOJu0YwLqHgNviDath94Q/EeopR7ThyuO15XxkgNFc6XmGGBWcgTOW90
-	T4aRilPnFmMMLk4StTIs4Q18p6w/ZKFJcm2qEilWgUQOTu/19wLK
-X-Google-Smtp-Source: AGHT+IEdFXcZjYG/ojvsgSzDOiGLCbVdXamxzEsEZdU9c6RIH093BXmj+TvCSPlBpOH19ScOlJ4vTQ==
-X-Received: by 2002:a05:600c:1391:b0:413:ef69:df65 with SMTP id u17-20020a05600c139100b00413ef69df65mr3064211wmf.20.1711277050892;
-        Sun, 24 Mar 2024 03:44:10 -0700 (PDT)
-Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id i5-20020a05600c354500b004146a304863sm4922142wmq.34.2024.03.24.03.44.10
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 24 Mar 2024 03:44:10 -0700 (PDT)
-From: Puranjay Mohan <puranjay12@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Daniel Borkmann
- <daniel@iogearbox.net>
-Cc: "David S. Miller" <davem@davemloft.net>, David Ahern
- <dsahern@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
- Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML
- <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Jean-Philippe Brucker
- <jean-philippe@linaro.org>, Network Development <netdev@vger.kernel.org>,
- bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, Ilya
- Leoshkevich <iii@linux.ibm.com>
-Subject: Re: [PATCH bpf v4] bpf: verifier: prevent userspace memory access
-In-Reply-To: <CAADnVQJhxQV0xBJDWVkTGXJ+XYpsq5kFmMsuMEHBEaqUmkh0iw@mail.gmail.com>
-References: <20240321124640.8870-1-puranjay12@gmail.com>
- <9f2b63b5-569c-1e00-a635-93d9cd695517@iogearbox.net>
- <mb61p4jcyxq5m.fsf@gmail.com>
- <15ba79e3-14b2-d92e-3f94-e4f5f963e15d@iogearbox.net>
- <CAADnVQJhxQV0xBJDWVkTGXJ+XYpsq5kFmMsuMEHBEaqUmkh0iw@mail.gmail.com>
-Date: Sun, 24 Mar 2024 10:44:08 +0000
-Message-ID: <mb61ple677vuv.fsf@gmail.com>
+        d=1e100.net; s=20230601; t=1711292528; x=1711897328;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EwGW9a4Qg8RuP4nfFSPxy3bqmYCTRCuNE09UvfgZEmE=;
+        b=wSfT04T6IGxp9MU6jeSZAxWyaBZDsrx55Eu2DehDuktvNOP6I4Urq/UtnRzd5I/u6i
+         oCpI8hn9K9LrTK4+a2jQyAujyvZuq66vTFcQh558QAaTJQ+qAqstDwALa37gtYxN97Zf
+         d/OsZRQM66Nyzq1+8DMbEjQ9O+xCzrEgEOmS4FG52R5xUrWiovmx1s102vQCd0aPw/ie
+         81pu8cqJ2jQZbnHnCH6gIEuzqvFlY7B0eBdokIUF4mwy69k8rOP3tUuHnf9TdLPxlF6v
+         fMZRRrMr21hJvuNfFIXs1u7CCle10vL6mFUDun6u6pb74j4CpDPLC3zM9OJCok8Ilaza
+         LYIA==
+X-Forwarded-Encrypted: i=1; AJvYcCVVSM7ofZWBOKKsyG6POgJrzcC964TVaw2wJ7jJo0gYsJAh9petIh/WFHfdw6hKXHE+Mn3zfVX7vmnQGKsLgtafAXuZ
+X-Gm-Message-State: AOJu0YzzvMctPK313px0KC/Vq9agxBYlYezlHKJUT4TGa5r1gyrp7ctr
+	VOnL6v86U57lrL5OCggKWncyCmSCmWozPzeEKsO/ddTxgwWxWiVumXbqEibjc44=
+X-Google-Smtp-Source: AGHT+IHI0jRg3J5ZCBnBgPwg4wJJT0IzHTHgGiW+iEnazuNFOaYuYRXy/Bq7C0Ctq/vQ5kY9VEz6gg==
+X-Received: by 2002:adf:cd11:0:b0:341:8083:b2a3 with SMTP id w17-20020adfcd11000000b003418083b2a3mr2953087wrm.30.1711292527738;
+        Sun, 24 Mar 2024 08:02:07 -0700 (PDT)
+Received: from zh-lab-node-5 ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id df4-20020a5d5b84000000b0033e7b433498sm6987249wrb.111.2024.03.24.08.02.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Mar 2024 08:02:07 -0700 (PDT)
+Date: Sun, 24 Mar 2024 15:04:09 +0000
+From: Anton Protopopov <aspsk@isovalent.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Rumen Telbizov <rumen.telbizov@menlosecurity.com>,
+	David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jiri Olsa <jolsa@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH v1 bpf-next 2/2] selftests/bpf: Add BPF_FIB_LOOKUP_MARK
+ tests
+Message-ID: <ZgBA6X0QgP+TMFd9@zh-lab-node-5>
+References: <20240322140244.50971-1-aspsk@isovalent.com>
+ <20240322140244.50971-3-aspsk@isovalent.com>
+ <e8062ef6-b630-45e2-8009-4d2cdc0970ea@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e8062ef6-b630-45e2-8009-4d2cdc0970ea@linux.dev>
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+On Sat, Mar 23, 2024 at 03:34:10PM -0700, Martin KaFai Lau wrote:
+> On 3/22/24 7:02 AM, Anton Protopopov wrote:
+> > This patch extends the fib_lookup test suite by adding a few test
+> > cases for each IP family to test the new BPF_FIB_LOOKUP_MARK flag
+> > to the bpf_fib_lookup:
+> > 
+> >    * Test destination IP address selection with and without a mark
+> >      and/or the BPF_FIB_LOOKUP_MARK flag set
+> > 
+> > To test this functionality another network namespace and a new veth
+> > pair were added to the test.
+> > 
+> 
+> [ ... ]
+> 
+> >   static const struct fib_lookup_test tests[] = {
+> > @@ -90,10 +105,47 @@ static const struct fib_lookup_test tests[] = {
+> >   	  .daddr = IPV6_ADDR_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
+> >   	  .expected_src = IPV6_IFACE_ADDR_SEC,
+> >   	  .lookup_flags = BPF_FIB_LOOKUP_SRC | BPF_FIB_LOOKUP_SKIP_NEIGH, },
+> > +	/* policy routing */
+> > +	{ .desc = "IPv4 policy routing, default",
+> > +	  .daddr = IPV4_REMOTE_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
+> > +	  .expected_dst = IPV4_GW1, .ifname = "veth3",
+> > +	  .lookup_flags = BPF_FIB_LOOKUP_MARK | BPF_FIB_LOOKUP_SKIP_NEIGH, },
+> > +	{ .desc = "IPv4 policy routing, mark doesn't point to a policy",
+> > +	  .daddr = IPV4_REMOTE_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
+> > +	  .expected_dst = IPV4_GW1, .ifname = "veth3",
+> > +	  .lookup_flags = BPF_FIB_LOOKUP_MARK | BPF_FIB_LOOKUP_SKIP_NEIGH,
+> > +	  .mark = MARK_NO_POLICY, },
+> > +	{ .desc = "IPv4 policy routing, mark points to a policy",
+> > +	  .daddr = IPV4_REMOTE_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
+> > +	  .expected_dst = IPV4_GW2, .ifname = "veth3",
+> > +	  .lookup_flags = BPF_FIB_LOOKUP_MARK | BPF_FIB_LOOKUP_SKIP_NEIGH,
+> > +	  .mark = MARK, },
+> > +	{ .desc = "IPv4 policy routing, mark points to a policy, but no flag",
+> > +	  .daddr = IPV4_REMOTE_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
+> > +	  .expected_dst = IPV4_GW1, .ifname = "veth3",
+> > +	  .lookup_flags = BPF_FIB_LOOKUP_SKIP_NEIGH,
+> > +	  .mark = MARK, },
+> > +	{ .desc = "IPv6 policy routing, default",
+> > +	  .daddr = IPV6_REMOTE_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
+> > +	  .expected_dst = IPV6_GW1, .ifname = "veth3",
+> > +	  .lookup_flags = BPF_FIB_LOOKUP_MARK | BPF_FIB_LOOKUP_SKIP_NEIGH, },
+> > +	{ .desc = "IPv6 policy routing, mark doesn't point to a policy",
+> > +	  .daddr = IPV6_REMOTE_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
+> > +	  .expected_dst = IPV6_GW1, .ifname = "veth3",
+> > +	  .lookup_flags = BPF_FIB_LOOKUP_MARK | BPF_FIB_LOOKUP_SKIP_NEIGH,
+> > +	  .mark = MARK_NO_POLICY, },
+> > +	{ .desc = "IPv6 policy routing, mark points to a policy",
+> > +	  .daddr = IPV6_REMOTE_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
+> > +	  .expected_dst = IPV6_GW2, .ifname = "veth3",
+> > +	  .lookup_flags = BPF_FIB_LOOKUP_MARK | BPF_FIB_LOOKUP_SKIP_NEIGH,
+> > +	  .mark = MARK, },
+> > +	{ .desc = "IPv6 policy routing, mark points to a policy, but no flag",
+> > +	  .daddr = IPV6_REMOTE_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
+> > +	  .expected_dst = IPV6_GW1, .ifname = "veth3",
+> > +	  .lookup_flags = BPF_FIB_LOOKUP_SKIP_NEIGH,
+> > +	  .mark = MARK, },
+> >   };
+> > -static int ifindex;
+> > -
+> >   static int setup_netns(void)
+> >   {
+> >   	int err;
+> > @@ -144,12 +196,40 @@ static int setup_netns(void)
+> >   	if (!ASSERT_OK(err, "write_sysctl(net.ipv6.conf.veth1.forwarding)"))
+> >   		goto fail;
+> > +	/* Setup for policy routing tests */
+> > +	SYS(fail, "ip link add veth3 type veth peer name veth4");
+> > +	SYS(fail, "ip link set dev veth3 up");
+> > +	SYS(fail, "ip link set dev veth4 netns %s up", NS_REMOTE);
+> > +
+> > +	SYS(fail, "ip addr add %s/24 dev veth3", IPV4_LOCAL);
+> > +	SYS(fail, "ip netns exec %s ip addr add %s/24 dev veth4", NS_REMOTE, IPV4_GW1);
+> > +	SYS(fail, "ip netns exec %s ip addr add %s/24 dev veth4", NS_REMOTE, IPV4_GW2);
+> > +	SYS(fail, "ip addr add %s/64 dev veth3 nodad", IPV6_LOCAL);
+> > +	SYS(fail, "ip netns exec %s ip addr add %s/64 dev veth4 nodad", NS_REMOTE, IPV6_GW1);
+> > +	SYS(fail, "ip netns exec %s ip addr add %s/64 dev veth4 nodad", NS_REMOTE, IPV6_GW2);
+> 
+> Trying to see if the setup can be simplified.
+> 
+> Does it need to add another netns and setup a reachable IPV[46]_GW[12] gateway?
+> 
+> The test is not sending any traffic and it is a BPF_FIB_LOOKUP_SKIP_NEIGH test.
 
-> On Fri, Mar 22, 2024 at 9:28=E2=80=AFAM Daniel Borkmann <daniel@iogearbox=
-.net> wrote:
->>
->> On 3/22/24 4:05 PM, Puranjay Mohan wrote:
->> [...]
->> >>> +           /* Make it impossible to de-reference a userspace addres=
-s */
->> >>> +           if (BPF_CLASS(insn->code) =3D=3D BPF_LDX &&
->> >>> +               (BPF_MODE(insn->code) =3D=3D BPF_PROBE_MEM ||
->> >>> +                BPF_MODE(insn->code) =3D=3D BPF_PROBE_MEMSX)) {
->> >>> +                   struct bpf_insn *patch =3D &insn_buf[0];
->> >>> +                   u64 uaddress_limit =3D bpf_arch_uaddress_limit();
->> >>> +
->> >>> +                   if (!uaddress_limit)
->> >>> +                           goto next_insn;
->> >>> +
->> >>> +                   *patch++ =3D BPF_MOV64_REG(BPF_REG_AX, insn->src=
-_reg);
->> >>> +                   if (insn->off)
->> >>> +                           *patch++ =3D BPF_ALU64_IMM(BPF_ADD, BPF_=
-REG_AX, insn->off);
->> >>> +                   *patch++ =3D BPF_ALU64_IMM(BPF_RSH, BPF_REG_AX, =
-32);
->> >>> +                   *patch++ =3D BPF_JMP_IMM(BPF_JLE, BPF_REG_AX, ua=
-ddress_limit >> 32, 2);
->> >>> +                   *patch++ =3D *insn;
->> >>> +                   *patch++ =3D BPF_JMP_IMM(BPF_JA, 0, 0, 1);
->> >>> +                   *patch++ =3D BPF_MOV64_IMM(insn->dst_reg, 0);
->> >>
->> >> But how does this address other cases where we could fault e.g. non-c=
-anonical,
->> >> vsyscall page, etc? Technically, we would have to call to copy_from_k=
-ernel_nofault_allowed()
->> >> to really address all the cases aside from the overflow (good catch b=
-tw!) where kernel
->> >> turns into user address.
->> >
->> > So, we are trying to ~simulate a call to
->> > copy_from_kernel_nofault_allowed() here. If the address under
->> > consideration is below TASK_SIZE (TASK_SIZE + 4GB to be precise) then =
-we
->> > skip that load because that address could be mapped by the user.
->> >
->> > If the address is above TASK_SIZE + 4GB, we allow the load and it could
->> > cause a fault if the address is invalid, non-canonical etc. Taking the
->> > fault is fine because JIT will add an exception table entry for
->> > for that load with BPF_PBOBE_MEM.
->>
->> Are you sure? I don't think the kernel handles non-canonical fixup.
->
-> I believe it handles it fine otherwise our selftest bpf_testmod_return_pt=
-r:
->    case 4: return (void *)(1ull << 60);    /* non-canonical and invalid */
-> would have been crashing for the last 3 years,
-> since we've been running it.
->
->> > The vsyscall page is special, this approach skips all loads from this
->> > page. I am not sure if that is acceptable.
->>
->> The bpf_probe_read_kernel() does handle it fine via copy_from_kernel_nof=
-ault().
->>
->> So there is tail risk that BPF_PROBE_* could trigger a crash.
->
-> For this patch let's do
-> return max(TASK_SIZE_MAX + PAGE_SIZE, VSYSCALL_ADDR)
-> to cover both with one check?
+I think this will not work without another namespace, as FIB lookup will
+return DST="final destination", not DST="gateway", as the gateway is in the
+same namespace and can be skipped.
 
-I agree, will add this in the next version.
+Instead of adding a new namespace I can move the second interface to the
+root namespace. This will work, but then we're interfering with the root
+namespace.
 
->> Other archs might
->> have other quirks, e.g. in case of loongarch it says highest bit set mea=
-ns kernel
->> space.
->
-> let's tackle loongarch with whatever quirks it has separately.
-
-Yes, having the current patch will not break loongarch, it will help it
-skip some userspace addresses. We can later implement
-bpf_arch_uaddress_limit() in loongarch JIT to handle its specific
-quirks.
+> > +	SYS(fail, "ip route add %s/32 via %s", IPV4_REMOTE_DST, IPV4_GW1);
+> > +	SYS(fail, "ip route add %s/32 via %s table %s", IPV4_REMOTE_DST, IPV4_GW2, MARK_TABLE);
+> > +	SYS(fail, "ip -6 route add %s/128 via %s", IPV6_REMOTE_DST, IPV6_GW1);
+> > +	SYS(fail, "ip -6 route add %s/128 via %s table %s", IPV6_REMOTE_DST, IPV6_GW2, MARK_TABLE);
+> > +	SYS(fail, "ip rule add prio 2 fwmark %d lookup %s", MARK, MARK_TABLE);
+> > +	SYS(fail, "ip -6 rule add prio 2 fwmark %d lookup %s", MARK, MARK_TABLE);
+> > +
+> > +	err = write_sysctl("/proc/sys/net/ipv4/conf/veth3/forwarding", "1");
+> > +	if (!ASSERT_OK(err, "write_sysctl(net.ipv4.conf.veth3.forwarding)"))
+> > +		goto fail;
+> > +
+> > +	err = write_sysctl("/proc/sys/net/ipv6/conf/veth3/forwarding", "1");
+> > +	if (!ASSERT_OK(err, "write_sysctl(net.ipv6.conf.veth3.forwarding)"))
+> > +		goto fail;
+> > +
+> >   	return 0;
+> >   fail:
+> >   	return -1;
+> >   }
+> 
+> [ ... ]
+> 
+> > @@ -248,6 +337,7 @@ void test_fib_lookup(void)
+> >   	prog_fd = bpf_program__fd(skel->progs.fib_lookup);
+> >   	SYS(fail, "ip netns add %s", NS_TEST);
+> > +	SYS(fail, "ip netns add %s", NS_REMOTE);
+> 
+> 
