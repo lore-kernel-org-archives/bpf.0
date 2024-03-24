@@ -1,124 +1,105 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB08B81E;
-	Sun, 24 Mar 2024 02:12:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3750181E;
+	Sun, 24 Mar 2024 02:18:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711246359; cv=none; b=EtjMgwHCs/jcnizINBnu+N93g6QAvCaoiKWOSAioyHZ0SzmJtmUqH4OGwFS4KAxshyqtiPM03Dic8sHACKGpRoRj4cvPmcHzv+LJ1o2Ziew7q72B+BrOqkhBmcCqa8pRs0Y44PXgByz1Pmv8KNP8XbJmtN5IMKPGBxN5D/w2rz8=
+	t=1711246697; cv=none; b=Ke2KTxSdPWQnnoejH5Ni2Eo28/sXoXfbBH0/XYI01JLqmIuv7L8pocA0lHnDefK6ET8FNNnjuYFIc08jb4lgm7Z8/E9D/cDXaO6yWuW+NTj51vp0ocvMGttNSqgP3lmOytM409lKC/LhRTJj2bkeoZN+cfLpj65pM1zVIm0Sz+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711246359; c=relaxed/simple;
-	bh=ovHUKz8Xzqtw0vfM9uEg01DKZBo+9/U+IEf7Cmmf4X0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gGTHHKGyKXdcd+HmlcrblBmjMAGwfyOp0zdJSQwE8iyCjElXeZkGQkPixs1J4axOZQMw/ealQs0DhzpkkguNP6MWzkeQGy0AQeE+ZvH/YF5PHM4KDUk3u2NFOdDuz5H9wD7ETc0C808r1+nWUH0Ky9BGIAY3tOnIWS2JrMZCf/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ItqIjY5L; arc=none smtp.client-ip=209.85.208.43
+	s=arc-20240116; t=1711246697; c=relaxed/simple;
+	bh=yg2Hm/IVogTNhzTU6kYBtYGgvcIfGxbzMCVal4KJTBE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=kGSCj5NiIE+nlC+/C/o4l+msEpKttEnm2B5v1INS4lfpBhnvd0Joltm6luzp7O0/9+16Cu1zF+xg5NLGDW2BLp3mwXumhQSn7Vu4++lo67NJMmpjL/FRybDTw4hRxJRZGAN02KpwiEZhj+EUHcVAzwyR0vTKQkuTrOuomqnfvL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NWEnTBrL; arc=none smtp.client-ip=209.85.160.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ItqIjY5L"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-56bc753f58eso3991841a12.3;
-        Sat, 23 Mar 2024 19:12:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NWEnTBrL"
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-42f52226f9bso14309921cf.3;
+        Sat, 23 Mar 2024 19:18:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711246356; x=1711851156; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1711246695; x=1711851495; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xHFyLHQgXPjbo6X2x+pg5cZRKKgfaicsQUJCH3BgxQg=;
-        b=ItqIjY5L9G4l/EolYckTAegP2/t89zzCBmoZYS2JG2KPkFKTFXRF6gvUG1NPdCOrM0
-         hevpKSPYg3En4sF6/YtVrpG9UtorMa7ub8sbE/HDC7fuuVYRugSr4HfFsOqHyhpKB922
-         U4XgmbQGLDKR5+//BIyuQNcDWcxWxa2ul+D47Mua1mlU6vnQg2GRhUGqjkkn87Garm50
-         PrWUO5qR62MtP7p6ZLZoex/SCIpo0sPOidsD0ETFB1CsNSHrL/wgP1idNLsclzn09GOB
-         MksMY7kk7j6klxs7W3/zmDXyo3WcI7qezvGwvVchcZFskxKzPdcDv9hc0eq3gkB06Qoq
-         HZxA==
+        bh=jCmO03+9RwSrIzYMZH8CI854XN/NKy5dCm9nFGp2TmQ=;
+        b=NWEnTBrL4GE44uG5IZM46qwETZqc2cMPOyeBvXaX3SibRgKtP/W21lkapksc21p6iL
+         BO1BAW/B1Csz/td5htpoBeE3R00XF+gL9fTPTxL/pev5ZFLNc0KbygdNU/iIpWJ0EHtA
+         eIWyTl+0o9sjhUh+sCZv3KBIGB4FnwjaE93L7xZTjrvn5X+dCsn6NlGJ/ESzticoAaJE
+         jqT5gw8SzoDho/zfAWC6g34Gdk/mNH9KoG0u2EVHV7VmaQ4g1bmtL1yuF5q5Z10a/zQu
+         4USbST/bej0bljKmgcK4ZDvCwSwhyLf5lCZgJ1dBWY/sLTVtz0OpToaXTU50A4JvgbVK
+         WbHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711246356; x=1711851156;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1711246695; x=1711851495;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xHFyLHQgXPjbo6X2x+pg5cZRKKgfaicsQUJCH3BgxQg=;
-        b=Xh9JSN11nGuc74Uz15ldRiU3/MPMaGy5N8GSZtPxC+o7y/hxtdy2GwTql8A+V5BplS
-         3h+nlEczCHQJ2KHPknnVmKWFhkDDeN/H+4jHIi/WG8xomraY2Hr6tTNfqZHHT8oiE2zc
-         GR1StWC/yRGhiKq5LqYX9E1VBNJTYmRsO+eJzT15clnRxjBhix2PL1TZmrov9Cw72NSh
-         s3nyHEVYGD9OYMn+PRn+JiGaRuRC537QVIFT/8AH1r/wlNrPhAoEhM3mKVy+eVuyhX1Q
-         rexoCxcD7vxj29YsQjKx/qkpCbERN/fkj5lBtHROjuUjLF9GVXGtyELr8rFt0z6zKTD6
-         lQ7w==
-X-Forwarded-Encrypted: i=1; AJvYcCUvRhbVe9nxlR4Iuc50vXNgQIXqBt8Ri/Ln6IO+RfGbt2pCxzHuWcrZk4ksYvV+CSWwcjgX6754gBRyifylS4twUHS8arwgpCiLOQva5qwCILGZTiX2k0rX4UBhZ5pcEhO7BPD7+Bi7LJrocBD/VsJIQUzMj0A2lyng
-X-Gm-Message-State: AOJu0YwXl3E0BkURQd9xzndrwj2a8H6uVZDx6xxKVo16ZAm9sDVlkEal
-	ibjDAnLHrGVhWOzcMAF1v4Q0mausLwIAQeZ+oefUuU0FYHI5wZ+4gTnlpCdv6+IFNcPIb03rEOp
-	3/pU2LHj8yhgS4+BVu0qUAhK/UxI=
-X-Google-Smtp-Source: AGHT+IE3n/ABSUmQrtfhds4VBheKUGJxl8W+GXZYl4WJsJsQR1l0p3vVcyqk0Xk5a+Al6NQVoeJTBbmKlDhWEPmrs30=
-X-Received: by 2002:a50:ab49:0:b0:56b:ed78:f58 with SMTP id
- t9-20020a50ab49000000b0056bed780f58mr2235343edc.33.1711246355828; Sat, 23 Mar
- 2024 19:12:35 -0700 (PDT)
+        bh=jCmO03+9RwSrIzYMZH8CI854XN/NKy5dCm9nFGp2TmQ=;
+        b=qSGE56Zyc9ZLHJ7gXR+PW7Zyhu6x+JVqBRfvJzfVv4jE8yDue6ZVepwyFkCy2mKKTB
+         j5Brs+FpZySv/IU6JwqIq7+dwVBinH/dCrWfzJ6rfLdtx7rQfw+6MP5ZqGPXh0C2KHmH
+         yVJDWDchHzyOfBwiuPP1G/uX7hW7jepTtIFKF0HRgvEfKpxN9sSfsV3orM8yt73eRUM+
+         CA/SeWRAc+idNhpHzvNjO3Di7kuvyk3MEHlRmwE8QWj1/dMxELQhAWMpu6UB3Ep5L2ad
+         z2dcu6K5akC2BdUZT4/V840TtA5xJs0dvuQItMYlPfJ/MhYvTFkGkBDHqBMTkhtut6+l
+         YT2A==
+X-Forwarded-Encrypted: i=1; AJvYcCV8q7H8jsB675kYUSd/5T1VTLqlTZAK2dTAhEfUOJgFg+pjlbW5C0/H7gMdV/fOGYZm4O/uJBrFG3a1sGTwHPEtD0RXj/WfLrcwxhjNDBu97EVMy0KjudMF4ce+AyJkya66NFKlpgYpGpOnwhpkVXq05t0X7czZmHyfR83ReA==
+X-Gm-Message-State: AOJu0YwumM5NZ11hduNeNWJIQuD/HzRlB460To42JEJqBPbP7ebsD1+b
+	OFH8g5xfxCN9BOs3eZdIQJrna/2r03geM/tgx/IK4RqJtbyQ6kfF
+X-Google-Smtp-Source: AGHT+IGh/jWvNaLRJjSPNs9Rwcwu8fSVukUF2Zz0KdTMlUOdm3xrgN6zskrs7VdYu1qupJisaB0fPw==
+X-Received: by 2002:a05:622a:14d1:b0:431:1b29:58e9 with SMTP id u17-20020a05622a14d100b004311b2958e9mr5189035qtx.68.1711246694960;
+        Sat, 23 Mar 2024 19:18:14 -0700 (PDT)
+Received: from l1441l.lan0.xorvpn.com (pool-98-116-41-146.nycmny.fios.verizon.net. [98.116.41.146])
+        by smtp.gmail.com with ESMTPSA id bc13-20020a05622a1ccd00b004309b22265asm1266241qtb.75.2024.03.23.19.18.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Mar 2024 19:18:14 -0700 (PDT)
+From: Daniel Hodges <hodges.daniel.scott@gmail.com>
+To: andrew@lunn.ch
+Cc: ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	hodges.daniel.scott@gmail.com,
+	lee@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-leds@vger.kernel.org,
+	pavel@ucw.cz
+Subject: Re: [PATCH 1/3] leds: trigger: legtrig-bpf: Add ledtrig-bpf module
+Date: Sat, 23 Mar 2024 22:15:01 -0400
+Message-ID: <20240324021811.20794-1-hodges.daniel.scott@gmail.com>
+X-Mailer: git-send-email 2.43.2
+In-Reply-To: <a9662071-8050-46b7-8416-d440d45bbb52@lunn.ch>
+References: <a9662071-8050-46b7-8416-d440d45bbb52@lunn.ch>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <0000000000003dc8e00614076ab6@google.com> <CAADnVQLORV5PT0iTAhRER+iLBTkByCYNBYyvBSgjN1T31K+gOw@mail.gmail.com>
- <CABWLsetXQ8Xj-RECoyC7mp4YrdSsPwmSvkS36Eq2JKLfAYULuw@mail.gmail.com> <CAADnVQJAa1SREsqz9LY+-1OnbazWC-=O=TPuq-VEWkzp1ckH1Q@mail.gmail.com>
-In-Reply-To: <CAADnVQJAa1SREsqz9LY+-1OnbazWC-=O=TPuq-VEWkzp1ckH1Q@mail.gmail.com>
-From: Andrei Matei <andreimatei1@gmail.com>
-Date: Sat, 23 Mar 2024 22:12:23 -0400
-Message-ID: <CABWLseuLmAys-YuyFVeug+XR0_xjZROvgRTXz3U6cNiT+pBX0g@mail.gmail.com>
-Subject: Re: stack access issue. Re: [syzbot] [bpf?] UBSAN:
- array-index-out-of-bounds in check_stack_range_initialized
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Edward Adam Davis <eadavis@qq.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eddy Z <eddyz87@gmail.com>, Hao Luo <haoluo@google.com>, 
-	John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
-	KP Singh <kpsingh@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Network Development <netdev@vger.kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Song Liu <song@kernel.org>, 
-	syzkaller-bugs <syzkaller-bugs@googlegroups.com>, Yonghong Song <yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sat, Mar 23, 2024 at 8:52=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Sat, Mar 23, 2024 at 5:50=E2=80=AFPM Andrei Matei <andreimatei1@gmail.=
-com> wrote:
-> >
-> > + Edward
-> >
-> > On Thu, Mar 21, 2024 at 3:33=E2=80=AFAM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > Hi Andrei,
-> > >
-> > > looks like the refactoring of stack access introduced a bug.
-> > > See the reproducer below.
-> > > positive offsets are not caught by check_stack_access_within_bounds()=
-.
-> >
-> > check_stack_access_within_bounds() tries to catch positive offsets;
-> > It does: [1]
-> >
-> > err =3D check_stack_slot_within_bounds(env, min_off, state, type);
-> > if (!err && max_off > 0)
-> >   err =3D -EINVAL; /* out of stack access into non-negative offsets */
-> >
-> > Notice the max_off > 0 in there.
-> > And we have various tests that seem to check that positive offsets are
-> > rejected. Do you know what the bug is?
-> > I'm thinking maybe there's some overflow going on, except that UBSAN
-> > reported an index of -1 as being the problem.
-> >
-> > Edward, I see that you've been tickling the robot trying to narrow the =
-issue;
-> > perhaps you've figured it out?
-> >
-> > If the bug is not immediately apparent to anyone, I would really apprec=
-iate a
-> > bit of tutoring around how to reproduce and get verifier logs.
->
-> The repro is right there in the email I forwarded:
->
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D15c38711180=
-000
 
-I understand, but how does one go from this to either BPF assembly,
-or to running it in such a way that you also get verifier logs?
+> On Fri, Mar 22, 2024 at 10:08:14AM -0400, Daniel Hodges wrote:
+> > This patch adds a led trigger that interfaces with the bpf subsystem. It
+> > allows for BPF programs to control LED activity through calling bpf
+> > kfuncs. This functionality is useful in giving users a physical
+> > indication that a BPF program has performed an operation such as
+> > handling a packet or probe point.
+>
+> Don't you want a mechanism to say which LED it should blink? Say you
+> have a BPF IR receiver, a BPF kernel scheduler and a BPF firewall. All
+> sharing the same LED is probably not what you want. Each probably
+> wants its own LED.
+>
+>       Andrew
+
+Yeah, I think that makes sense. I guess the idea with this patch set was
+more or less to show the simple implementation. Since there can be
+multiple devices the trigger probably needs a registry of the active
+led_classdev names or other id. Alexei mentioned the xt_led which looks
+like it is rather similar as well. I can give this another shot, but I
+didn't want to go too far down the rabbit hole without getting some
+signal on the idea in general.
+
+PS Sorry to folks if I've directly replied to your comments. I'm still in the
+process of setting up my email workflow.
+
+- Daniel
