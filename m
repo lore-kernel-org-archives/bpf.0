@@ -1,104 +1,151 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C8E919E;
-	Sun, 24 Mar 2024 02:39:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD7DD19E;
+	Sun, 24 Mar 2024 02:55:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711247997; cv=none; b=piiwxLpYcDM0JzZvRvsTySYzSm3/Rovtkpgl0G7PACpXjgfGGctaDnEwRUVBIM6jKscDoSJJiP+6oPTD5HxdiZ3w5lTcpZtKyDgh9WVETnnfLjwUg3PpdUWbI59iqSGy0r0uqOZXUEHgLOfPYCgLnEGNEHeOWjDGi9QawwpcLgc=
+	t=1711248925; cv=none; b=pTmh0jy4ALUgFbZ9IvPioXMyTsHRoowIvTrgzv1Ehpq/lcLaK4Gm2R9AYXU5vLzqVMoH+ZgvKuLS0TA76l+LtJwfmaGPW47m4dBPbNMuD7wWSqt2/3e5TAD8lETy5kraLTh9YTmzN7via52qmM4yjH2KHTzjxv7QcPwNLHk36OA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711247997; c=relaxed/simple;
-	bh=/vmD1Hg9GT3TdhXbCTlhgCSzd6lXMUJPnovLcw2v91g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=NZPfvKNKJ88nUpqDtDqvikVbNBaV6eBEDb6X4yXp7MwWvjcLsxTMLKz9TYhj9cYJDh0Bu6wImM+cydIED0IR1HnJSKjiMIuQcEyD7gg2rqdug4vAbdlRTjId/RPIMzewTwRqM3lMiPxYw8IYp3p0PBhk+JB583o39jMzxFowTmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4V2KwN53PpztQWp;
-	Sun, 24 Mar 2024 10:37:24 +0800 (CST)
-Received: from kwepemd100009.china.huawei.com (unknown [7.221.188.135])
-	by mail.maildlp.com (Postfix) with ESMTPS id 9C7CC1404F7;
-	Sun, 24 Mar 2024 10:39:45 +0800 (CST)
-Received: from [10.67.109.184] (10.67.109.184) by
- kwepemd100009.china.huawei.com (7.221.188.135) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Sun, 24 Mar 2024 10:39:44 +0800
-Message-ID: <6095ba3b-ffda-4ca7-9da4-d841782006a2@huawei.com>
-Date: Sun, 24 Mar 2024 10:39:43 +0800
+	s=arc-20240116; t=1711248925; c=relaxed/simple;
+	bh=Ylqipv0aylv4Kc246MypnpDjmK5L3+lEli5iv4IS/ns=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Y47LrwBc9aJczqhmVtWz4NoyQy3iNUHItA8ks+u/6FBNnAum0g4JF95fHtKmHQ7Y71XMIdEy301dCBQb/Lx3hK8exF9gMzdLQGj3eknGcwGjDg1lGAlPJaULPXIp4zSp0sKGTZ4RGGczVg+LdOuIa3tIGLYZiuxeMq02Kd85hUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U9dM9ETP; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U9dM9ETP"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-33ed4d8e9edso2296480f8f.2;
+        Sat, 23 Mar 2024 19:55:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711248922; x=1711853722; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ehPPaGZ2VlG11XjWw/8qFi0hbIsIzlYM6U19gWcBRU8=;
+        b=U9dM9ETPAJ2ewA+VrA7KjLTFdEKTBQRP6MlI1K4uI90mLiNvEeCATFqWrDcPqwOBqC
+         HqmqE1HIToXpEjRZMMp1IiJUUMJ7pK7uxvhH1MYJKoDvrBuTFs3dgVuy1AVczF6A1hpb
+         XzNcaUoW2G6LWbe2OJmE0a38LqhBqWA1ySg9bc4DfcbMnV2z8iSD4YoUkdIoZL5+MSUu
+         lG5ZQonsHfA18rHak91tXsxIu3rDQRZMzs9KWui3pvAaCPHYMNRjWdKOpYL49Tz0TRkz
+         H9lrrtZA3GE+3cNhlthOpLpJjbnWGumF/4NSTWxtQv+FzVt11AeycPe0Z06fDNlmJjtg
+         CG6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711248922; x=1711853722;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ehPPaGZ2VlG11XjWw/8qFi0hbIsIzlYM6U19gWcBRU8=;
+        b=Dz0BPvP41aK2a2QqlzX9jmCP1tSfqsvuzDwEaBbFjykxHAqXwV9zt3Gw0g/CvGLQ6u
+         cGeFqj7uVeUQlB7wzDO8u1gGaiiX3ydBed/KKNi9p1Cf5GgeU/EotL9++8Sal0dLfhpF
+         vzeDsQ6Mb8cT7kiz4ykyRku/QIilf7IqUDZe7u00jcsb2kmEZxFyCVg84kx0m7+T1URV
+         PLLQ/a8HJ1e4IwuA+JLs+wdYvim2ANfFBoueUPrUtvpkfe2LYIyWQhsWLE8vD7+Kd5Oi
+         Uy52HzJwRntrwTw8hoiCMXgjlSZS0DK8nvTWs77tR/Y82p50YowncqKwh9xEaIroOWNM
+         4uvA==
+X-Forwarded-Encrypted: i=1; AJvYcCUSvpshDXwQTvr2n486xH9sitTuPcuMDDlWH0j6LtMIg0mIrI5ccuPqX3DPteDD535W5waBR4NWOpFWNWN0SqKrMuMSfnjmvLE3RkBeH5YJ4yQEwaOtI1OFLX7hXl9ClVg/pH9YOmF7FDETzutzJFRZpjlqivqxx0QY
+X-Gm-Message-State: AOJu0YwstX9wgfZM07yWWSyZ+w1PGx/ZEOUMFQRtyzGiBQ8/FIVIT6iC
+	edPMKER/QWYbce9BUaZn+DoGuY8Soo4KjxCglYpM+JwKOUUoX7cdfNPqy42SJlKH2T+eT+Wu6F9
+	vLv0l21NAv/Hr54fnJokaJspMEIc=
+X-Google-Smtp-Source: AGHT+IGGUPfaF6Yz+LwVSV0pqbrXQCEjpSjVEw5XWStzRVz0IeFdF/+6OiU9nEzC9KY5LAws1LhgupWfofVKj3ihH3I=
+X-Received: by 2002:a05:6000:244:b0:341:bffe:e5b8 with SMTP id
+ m4-20020a056000024400b00341bffee5b8mr2100555wrz.27.1711248921760; Sat, 23 Mar
+ 2024 19:55:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/2] bpf,riscv: Implement bpf_addr_space_cast
- instruction
-Content-Language: en-US
-To: Puranjay Mohan <puranjay12@gmail.com>
-CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
-	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
-	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
-	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
-	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Luke Nelson
-	<luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, Paul Walmsley
-	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
-	<aou@eecs.berkeley.edu>, <bpf@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20240323154652.54572-1-puranjay12@gmail.com>
- <20240323154652.54572-3-puranjay12@gmail.com>
- <3e07fb21-da08-4183-8bd4-064b519c7ddb@huawei.com>
- <mb61pjzlslwp9.fsf@gmail.com>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <mb61pjzlslwp9.fsf@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemd100009.china.huawei.com (7.221.188.135)
+References: <0000000000003dc8e00614076ab6@google.com> <CAADnVQLORV5PT0iTAhRER+iLBTkByCYNBYyvBSgjN1T31K+gOw@mail.gmail.com>
+ <CABWLsetXQ8Xj-RECoyC7mp4YrdSsPwmSvkS36Eq2JKLfAYULuw@mail.gmail.com>
+ <CAADnVQJAa1SREsqz9LY+-1OnbazWC-=O=TPuq-VEWkzp1ckH1Q@mail.gmail.com> <CABWLseuLmAys-YuyFVeug+XR0_xjZROvgRTXz3U6cNiT+pBX0g@mail.gmail.com>
+In-Reply-To: <CABWLseuLmAys-YuyFVeug+XR0_xjZROvgRTXz3U6cNiT+pBX0g@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 23 Mar 2024 19:55:10 -0700
+Message-ID: <CAADnVQ+oqe6EtC8rc9TSFeUPE1Rbf11Oi-CfTyDxfXT9qM0Vpg@mail.gmail.com>
+Subject: Re: stack access issue. Re: [syzbot] [bpf?] UBSAN:
+ array-index-out-of-bounds in check_stack_range_initialized
+To: Andrei Matei <andreimatei1@gmail.com>
+Cc: Edward Adam Davis <eadavis@qq.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Eddy Z <eddyz87@gmail.com>, Hao Luo <haoluo@google.com>, 
+	John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
+	KP Singh <kpsingh@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Network Development <netdev@vger.kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Song Liu <song@kernel.org>, 
+	syzkaller-bugs <syzkaller-bugs@googlegroups.com>, Yonghong Song <yonghong.song@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Sat, Mar 23, 2024 at 7:12=E2=80=AFPM Andrei Matei <andreimatei1@gmail.co=
+m> wrote:
+>
+> On Sat, Mar 23, 2024 at 8:52=E2=80=AFPM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Sat, Mar 23, 2024 at 5:50=E2=80=AFPM Andrei Matei <andreimatei1@gmai=
+l.com> wrote:
+> > >
+> > > + Edward
+> > >
+> > > On Thu, Mar 21, 2024 at 3:33=E2=80=AFAM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > Hi Andrei,
+> > > >
+> > > > looks like the refactoring of stack access introduced a bug.
+> > > > See the reproducer below.
+> > > > positive offsets are not caught by check_stack_access_within_bounds=
+().
+> > >
+> > > check_stack_access_within_bounds() tries to catch positive offsets;
+> > > It does: [1]
+> > >
+> > > err =3D check_stack_slot_within_bounds(env, min_off, state, type);
+> > > if (!err && max_off > 0)
+> > >   err =3D -EINVAL; /* out of stack access into non-negative offsets *=
+/
+> > >
+> > > Notice the max_off > 0 in there.
+> > > And we have various tests that seem to check that positive offsets ar=
+e
+> > > rejected. Do you know what the bug is?
+> > > I'm thinking maybe there's some overflow going on, except that UBSAN
+> > > reported an index of -1 as being the problem.
+> > >
+> > > Edward, I see that you've been tickling the robot trying to narrow th=
+e issue;
+> > > perhaps you've figured it out?
+> > >
+> > > If the bug is not immediately apparent to anyone, I would really appr=
+eciate a
+> > > bit of tutoring around how to reproduce and get verifier logs.
+> >
+> > The repro is right there in the email I forwarded:
+> >
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D15c387111=
+80000
+>
+> I understand, but how does one go from this to either BPF assembly,
+> or to running it in such a way that you also get verifier logs?
+
+Adding logs to repro.c is too hard, but you can
+hack the kernel with printk-s.
+
+Like the following:
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index de7813947981..d158b83ed16c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7179,6 +7179,7 @@ static int check_stack_range_initialized(
+                        return -EFAULT;
+                }
+
++               printk("slot %d %d spi %d\n", slot, slot % BPF_REG_SIZE, sp=
+i);
+                stype =3D &state->stack[spi].slot_type[slot % BPF_REG_SIZE]=
+;
 
 
-
-On 2024/3/24 0:49, Puranjay Mohan wrote:
-> Pu Lehui <pulehui@huawei.com> writes:
-> 
->> On 2024/3/23 23:46, Puranjay Mohan wrote:
->>> LLVM generates bpf_addr_space_cast instruction while translating
->> [snip]
->>>    
->>>    /* Convert from ninsns to bytes. */
->>> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
->>> index f51b832eafb6..3c389e75cb96 100644
->>> --- a/arch/riscv/net/bpf_jit_comp64.c
->>> +++ b/arch/riscv/net/bpf_jit_comp64.c
->>> @@ -1083,6 +1083,16 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->>>    	/* dst = src */
->>>    	case BPF_ALU | BPF_MOV | BPF_X:
->>>    	case BPF_ALU64 | BPF_MOV | BPF_X:
->>> +		if (BPF_CLASS(insn->code) == BPF_ALU64 && insn->off == BPF_ADDR_SPACE_CAST &&
->>> +		    insn->imm == 1U << 16) {
->>> +			emit_mv(RV_REG_T1, rs, ctx); > +			emit_zextw(RV_REG_T1, RV_REG_T1, ctx);
->> combine mv and zextw will be better
-> 
-> Do you suggest doing:
-> 
-> emit_zextw(RV_REG_T1, rs, ctx);
-> 
-> Will do it in next version.
-> 
->>> +			emit_imm(rd, (ctx->user_vm_start >> 32) << 32, ctx);
->>> +			emit(rv_beq(RV_REG_T1, RV_REG_ZERO, 4), ctx);
->>> +			emit_or(RV_REG_T1, rd, RV_REG_T1, ctx);
->>> +			emit_mv(rd, RV_REG_T1, ctx);
->> ditto, but for or and mv
-> 
-> How would we combine or and mv?
-> also, we have a beq above and in one case both or and mv should happen,
-> but in other case only mv should happen.
-> 
-Okay, another branch is that t1 is zero, but not rd.
-
-> Thanks,
-> Puranjay
+shows that spi and slot get negative: -1, -2, ...
