@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7A31E6F7B;
-	Sun, 24 Mar 2024 22:54:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8297820D5EA;
+	Sun, 24 Mar 2024 23:07:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711320862; cv=none; b=SkAt+AVOrM4GbbcFpMNwLg+yUznr2ijfY7hqoNIJR4r8FHyObeFlPBBH5TFNWxM8oZic9E3RxmuQQlpswiRax+b+oAIuwmtJY6qtWgwOG7d/xxrR+hOu6nlhgHyaC2EGtxN679C3JEsEHz0P3ioo+F2rlQwSVSk0CSrWcRJTMyQ=
+	t=1711321651; cv=none; b=RwUAk3XFKsLFMHL8/EZ/se04+T0tX0qPAIal84hKFN4OzSzlBAN/7/VhLaHLZugZ1pfF9jfdIR/8b5a+YqoJ2R5KXT6XYMeyKPBqLEoAsQh2bIBSFOOZNCLJtZ1id70Xed3nkYDY05nHOpPPU3BaUTQJW7Q+tRzdj7DlumeO2rY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711320862; c=relaxed/simple;
-	bh=DmHL2s2aNhW573x0aObu6nLA5eBAXAtj/L9r7KCQk1w=;
+	s=arc-20240116; t=1711321651; c=relaxed/simple;
+	bh=zAJBru5Y6lcMbpsk5V/l75jABud2pBNnY08/Lc4M4HA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Xar2OA4OT796wrYIzoIIlCgsjHJZ8OXiaqvZwHD9VfJYjlibR2wGt7bUsbjVi8fnaqPUgimIuOQOLvoFoynh9S1GOL/deGD1bc/wYufNM7GNSn0pZWuwEJB/0EUMq3QzbTpfAt+7rrxo1mNCsoALaOAWNELsCmuvVkZdMYglqt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YRLttMB3; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=ZlQP89U+ClzEuWGzfTKG5EOuD2OdF87bf8P7i41X0Ije6DpUNOAZoacPnmHjCJUAWHGJ6TzhH09Zs0xUCX3lCSL3Y922ktAFP+gTPeJ7Sv3oEhfM+PlkqzFtx6lcd1zzDjY3lElFppCxD2tX3wHMh/SXeZF13KiBpfLs3nXEkUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UHP6LDqb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YRLttMB3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57E26C43394;
-	Sun, 24 Mar 2024 22:54:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UHP6LDqb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2024EC43394;
+	Sun, 24 Mar 2024 23:07:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711320862;
-	bh=DmHL2s2aNhW573x0aObu6nLA5eBAXAtj/L9r7KCQk1w=;
+	s=k20201202; t=1711321650;
+	bh=zAJBru5Y6lcMbpsk5V/l75jABud2pBNnY08/Lc4M4HA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YRLttMB3ZuqKkg63Fp7U2lgm2OQWF5iFeoP6byzWjn85fq6R3yGBLCgU1DAWC2FSd
-	 ecMfApDOHgwYo4RZjt4Up66bg9+k7GrHTwYwjn8Kh94775g/83mJ22SuNI3BYolKaA
-	 adxZhCBtpjCOoAqvotv6bljczDa70yoaFmUxvlfex4QrzAA7U3oBsb4V23QqvdgXEp
-	 R4DI9O11J0UpM9QrrM8qQtwc9Jgez/x3poMW2O4EaKDKsEapFE8G+hlW16Z0IWfcCT
-	 fVqlwPF8Dueqe/+GPef1KBjT1slr9XWfg+zODaerJ2wlZD0ol8kZyTDew7XfEDYYyP
-	 FNLrHB0v4IxGQ==
+	b=UHP6LDqbWO/UtACAC5GJ9oidG6OEV5pJF8us+3Eu8Yk75aWRereIwJ+rm7H6a9zGa
+	 5J+PcqJu9C69efzJbrFPKDMxqVTIzKGdOHHXq3+fZiRaNSXDZNCkoGnWsMs7lpJQXl
+	 IpokgXg9ovFoUUreloiUptKPbgZImzjMrcqV7VqaeUZaytTCHaaABlUTqnb64dsZuP
+	 dznUI8WUHuxlMMiYwEgvfEmncNf7xHtTjLrsMl9+cZS7Qp3Vb3NWZNAi2H6xU/WX6q
+	 NFoRtJPOi0dNZpf4yOrHJdZ3NpuQ5TggvTTdb+skosDZR3K1xxtrqUfVFDuP09IRME
+	 ePqkrzQ7p9ivw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -39,12 +39,12 @@ Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
 	Arnaldo Carvalho de Melo <acme@redhat.com>,
 	Namhyung Kim <namhyung@kernel.org>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.7 426/713] perf bpf: Clean up the generated/copied vmlinux.h
-Date: Sun, 24 Mar 2024 18:42:32 -0400
-Message-ID: <20240324224720.1345309-427-sashal@kernel.org>
+Subject: [PATCH 6.6 379/638] perf bpf: Clean up the generated/copied vmlinux.h
+Date: Sun, 24 Mar 2024 18:56:56 -0400
+Message-ID: <20240324230116.1348576-380-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240324224720.1345309-1-sashal@kernel.org>
-References: <20240324224720.1345309-1-sashal@kernel.org>
+In-Reply-To: <20240324230116.1348576-1-sashal@kernel.org>
+References: <20240324230116.1348576-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,17 +81,17 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 058c9aecf6087..af22d539f31e2 100644
+index 86569f230e60d..b97224a8a65b9 100644
 --- a/tools/perf/Makefile.perf
 +++ b/tools/perf/Makefile.perf
-@@ -1148,7 +1148,7 @@ bpf-skel:
- endif # CONFIG_PERF_BPF_SKEL
+@@ -1127,7 +1127,7 @@ bpf-skel:
+ endif # BUILD_BPF_SKEL
  
  bpf-skel-clean:
 -	$(call QUIET_CLEAN, bpf-skel) $(RM) -r $(SKEL_TMP_OUT) $(SKELETONS)
 +	$(call QUIET_CLEAN, bpf-skel) $(RM) -r $(SKEL_TMP_OUT) $(SKELETONS) $(SKEL_OUT)/vmlinux.h
  
- clean:: $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBSYMBOL)-clean $(LIBPERF)-clean arm64-sysreg-defs-clean fixdep-clean python-clean bpf-skel-clean tests-coresight-targets-clean
+ clean:: $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBSYMBOL)-clean $(LIBPERF)-clean fixdep-clean python-clean bpf-skel-clean tests-coresight-targets-clean
  	$(call QUIET_CLEAN, core-objs)  $(RM) $(LIBPERF_A) $(OUTPUT)perf-archive $(OUTPUT)perf-iostat $(LANG_BINDINGS)
 -- 
 2.43.0
