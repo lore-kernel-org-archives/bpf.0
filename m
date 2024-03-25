@@ -1,246 +1,78 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D1292208E
-	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 20:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE90487AE;
+	Mon, 25 Mar 2024 20:04:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711396903; cv=none; b=RX6/kH+QgKf+vFLw7xFG/s/zCE0offrs8XSuMZfh5J/FJzv9Vj4Y8M3lnMTtteaacuhEs7BXpMnDXimTctkcEb6836+B7sjK+5E0c84igWv9ZjdJkyb9G0fr8CYKcX4855GXp2yBXi7iEwxn+x2zSPUh6vEYhcl9CphC6ZdmkyE=
+	t=1711397068; cv=none; b=aLFENKEhPFGChM/q6MEub9Htbn16srfWSdXYGfCxVzYsk9a4Er/8FCcVAJSazmFmU8Z6fhP0Kexl5cnYH04+zIHLNbPZm6U0xAXEgSAKTfL8oU92K9UrEHyM3J7onLJ/hOW5GZ2pKEKrbGo9jwVkO2Wyyv7/MEEf5USQzLGRs9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711396903; c=relaxed/simple;
-	bh=XZ1A4YTwH5zEO1GPYQ0f5y2SYvysIqvugydOX2x9Tx4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DDJBE4HXdmvJN1zZMakVwp1MZ6VbSvTHBsOHzYgZ/1rF0nUuOCaSNgxEg6TyODFP3aRcltM6byJgXUrYbnpdroWNtDbGT8NkPYwiTu18LNBrwypPa3KjH+YZP8CjZFzFU7XXEXcP4DdgPwFWYvva9Qpd3riHUmWmirdGJDRPBmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=XWKDKxdZ; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
+	s=arc-20240116; t=1711397068; c=relaxed/simple;
+	bh=MVqf+1W2/O29sWIHzizwdV/AJ1AIoW9I4gu/EhMFulc=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=SwHrLFjcowG63pbTxrDgXU3ptw5uTr5RCfZk8sJoX9+DNHp55AzTJdps6zzpXrESn9EGMePeRZ+PIqv8vKw8Omynq/K1FDrFr8nC8Q0KiaBqohrOUjyHKcR3BNr0bq5NyNEQ1LohqaalCcGxsvLc6V0mqHk1oshNh3qrBQcJPBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=a9mXK77w; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="XWKDKxdZ"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-341cce3e5f0so1336455f8f.1
-        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 13:01:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1711396899; x=1712001699; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tsKNOESdFD0drisVPDLbnpDOi031GKJkcTyWBXm89Js=;
-        b=XWKDKxdZKagSKm0+qOGjn6j/ea3OfSQLNE74Cul2RGWTNVYD+OVpaC+zQtcnFVOrPc
-         7SAp4YRBxyPo0YapY1CRQxOyzWsfrL5wxpSPGFwpxnAf0tuLTEuEwquV60nnZkE3jKJM
-         7Q/xxu39FfN+ObS0SMQyoY7qGdh9V3wfmQP0GkYoaA+j/aJnW3MOC5HiunQCcWubIvq7
-         7WVxQfvex0G0jP0/Z+/3ENVm+nsvxQraVH4YfW23tSZ1tsA46UIQvJUwbDvd3AS6368o
-         Q92rNh+9KyvdVHBZMsAEv/tQJjwd20lI3Fru9DLRAg3Lj2SB93Er59i2tFAHqtNe/b2W
-         otew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711396899; x=1712001699;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tsKNOESdFD0drisVPDLbnpDOi031GKJkcTyWBXm89Js=;
-        b=Q4dg8C4vq2CaFe22DZWohuPiQp60+CgA64Mf5t40AiwMIroB67O3JySg21YGLE3bbc
-         K/zmLpt2ok6uqy4VT7BTlkzjdzV6S9L+lfgKxlfuG5veTbEWfHADgBx/STXlo0L+kdtQ
-         DcCuiqMAse3V/xlmwDFE86GxrIKWnd9DslpH+lXBnPeZzBoJzd7t8QXvYREvr3tjjoiu
-         QEK0o5xzfZAFPZadR1aPDtsRQay9dqXPM/6Bkuh93FE0X3TRYn0upwqPCb+USS7boMts
-         4CVwLP/PWnaj8Zk7tg342mIb0ExKOIER7PAltSloy3/oQ5W/IwY5gf/b/mj8wVbzR1TZ
-         TiqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX5gmZoe0zq1F6CUwUprwAuSOeSKREztRW9jjFoKMvBLJC0I3e/d5NRs8yum1Q553IG/gEDl436lKt34z4Ish/YZ3XY
-X-Gm-Message-State: AOJu0YzIpK9+qvkBUwci52ghtfef7Df1AaHhhneC1kN5g5619egQmwmm
-	2NpJfWUgWcRUS5+V/w/s5cWhXnWUb8IpJ2bXnqK/Y9kEpCdBWGbRjtvxcEDV+oc=
-X-Google-Smtp-Source: AGHT+IEyKGMNdnn1O4slE81e1f84CX12aqMvsP0Lw1U4XMM/80xwbysGLhn0GBoJCzJhYR77O2nhRw==
-X-Received: by 2002:a5d:4ed1:0:b0:33e:bf34:4af1 with SMTP id s17-20020a5d4ed1000000b0033ebf344af1mr6784987wrv.39.1711396899531;
-        Mon, 25 Mar 2024 13:01:39 -0700 (PDT)
-Received: from zh-lab-node-5 ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id w17-20020adfcd11000000b0033e786abf84sm10248652wrm.54.2024.03.25.13.01.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Mar 2024 13:01:38 -0700 (PDT)
-Date: Mon, 25 Mar 2024 20:03:38 +0000
-From: Anton Protopopov <aspsk@isovalent.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Rumen Telbizov <rumen.telbizov@menlosecurity.com>,
-	David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jiri Olsa <jolsa@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH v1 bpf-next 2/2] selftests/bpf: Add BPF_FIB_LOOKUP_MARK
- tests
-Message-ID: <ZgHYmrwaHh39pg//@zh-lab-node-5>
-References: <20240322140244.50971-1-aspsk@isovalent.com>
- <20240322140244.50971-3-aspsk@isovalent.com>
- <e8062ef6-b630-45e2-8009-4d2cdc0970ea@linux.dev>
- <ZgBA6X0QgP+TMFd9@zh-lab-node-5>
- <20e4ebd6-0f75-4472-88f3-96d07af6f665@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="a9mXK77w"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC570C433F1;
+	Mon, 25 Mar 2024 20:04:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1711397067;
+	bh=MVqf+1W2/O29sWIHzizwdV/AJ1AIoW9I4gu/EhMFulc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=a9mXK77waDCkVLz4nDbjGRzZeFm29rSR7jtobIf3ZvNDfIRcIhhPbuCRNaJP/3P0W
+	 gcTK7QJUkpnGxXLy5TOAUUQOEKnyDJyCTsH6VIu2p+QiEeAjXLLswIFVFV6I5Vs3F7
+	 xXliFaODWHltJW/IvV8nIyTZ8paI73yzBlZ4Izl0=
+Date: Mon, 25 Mar 2024 13:04:26 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Edward Liaw <edliaw@google.com>
+Cc: linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+ <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+ <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
+ <justinstitt@google.com>, Jann Horn <jannh@google.com>,
+ linux-kselftest@vger.kernel.org, kernel-team@android.com, Lokesh Gidra
+ <lokeshgidra@google.com>, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-mm@kvack.org, llvm@lists.linux.dev, Peter Xu <peterx@redhat.com>
+Subject: Re: [PATCH v3] selftests/mm: Fix ARM related issue with fork after
+ pthread_create
+Message-Id: <20240325130426.fba5287fcc437475123e76cc@linux-foundation.org>
+In-Reply-To: <20240325194100.775052-1-edliaw@google.com>
+References: <20240325194100.775052-1-edliaw@google.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20e4ebd6-0f75-4472-88f3-96d07af6f665@linux.dev>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 25, 2024 at 11:12:39AM -0700, Martin KaFai Lau wrote:
-> On 3/24/24 8:04 AM, Anton Protopopov wrote:
-> > On Sat, Mar 23, 2024 at 03:34:10PM -0700, Martin KaFai Lau wrote:
-> > > On 3/22/24 7:02 AM, Anton Protopopov wrote:
-> > > > This patch extends the fib_lookup test suite by adding a few test
-> > > > cases for each IP family to test the new BPF_FIB_LOOKUP_MARK flag
-> > > > to the bpf_fib_lookup:
-> > > > 
-> > > >     * Test destination IP address selection with and without a mark
-> > > >       and/or the BPF_FIB_LOOKUP_MARK flag set
-> > > > 
-> > > > To test this functionality another network namespace and a new veth
-> > > > pair were added to the test.
-> > > > 
-> > > 
-> > > [ ... ]
-> > > 
-> > > >    static const struct fib_lookup_test tests[] = {
-> > > > @@ -90,10 +105,47 @@ static const struct fib_lookup_test tests[] = {
-> > > >    	  .daddr = IPV6_ADDR_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
-> > > >    	  .expected_src = IPV6_IFACE_ADDR_SEC,
-> > > >    	  .lookup_flags = BPF_FIB_LOOKUP_SRC | BPF_FIB_LOOKUP_SKIP_NEIGH, },
-> > > > +	/* policy routing */
-> > > > +	{ .desc = "IPv4 policy routing, default",
-> > > > +	  .daddr = IPV4_REMOTE_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
-> > > > +	  .expected_dst = IPV4_GW1, .ifname = "veth3",
-> > > > +	  .lookup_flags = BPF_FIB_LOOKUP_MARK | BPF_FIB_LOOKUP_SKIP_NEIGH, },
-> > > > +	{ .desc = "IPv4 policy routing, mark doesn't point to a policy",
-> > > > +	  .daddr = IPV4_REMOTE_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
-> > > > +	  .expected_dst = IPV4_GW1, .ifname = "veth3",
-> > > > +	  .lookup_flags = BPF_FIB_LOOKUP_MARK | BPF_FIB_LOOKUP_SKIP_NEIGH,
-> > > > +	  .mark = MARK_NO_POLICY, },
-> > > > +	{ .desc = "IPv4 policy routing, mark points to a policy",
-> > > > +	  .daddr = IPV4_REMOTE_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
-> > > > +	  .expected_dst = IPV4_GW2, .ifname = "veth3",
-> > > > +	  .lookup_flags = BPF_FIB_LOOKUP_MARK | BPF_FIB_LOOKUP_SKIP_NEIGH,
-> > > > +	  .mark = MARK, },
-> > > > +	{ .desc = "IPv4 policy routing, mark points to a policy, but no flag",
-> > > > +	  .daddr = IPV4_REMOTE_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
-> > > > +	  .expected_dst = IPV4_GW1, .ifname = "veth3",
-> > > > +	  .lookup_flags = BPF_FIB_LOOKUP_SKIP_NEIGH,
-> > > > +	  .mark = MARK, },
-> > > > +	{ .desc = "IPv6 policy routing, default",
-> > > > +	  .daddr = IPV6_REMOTE_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
-> > > > +	  .expected_dst = IPV6_GW1, .ifname = "veth3",
-> > > > +	  .lookup_flags = BPF_FIB_LOOKUP_MARK | BPF_FIB_LOOKUP_SKIP_NEIGH, },
-> > > > +	{ .desc = "IPv6 policy routing, mark doesn't point to a policy",
-> > > > +	  .daddr = IPV6_REMOTE_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
-> > > > +	  .expected_dst = IPV6_GW1, .ifname = "veth3",
-> > > > +	  .lookup_flags = BPF_FIB_LOOKUP_MARK | BPF_FIB_LOOKUP_SKIP_NEIGH,
-> > > > +	  .mark = MARK_NO_POLICY, },
-> > > > +	{ .desc = "IPv6 policy routing, mark points to a policy",
-> > > > +	  .daddr = IPV6_REMOTE_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
-> > > > +	  .expected_dst = IPV6_GW2, .ifname = "veth3",
-> > > > +	  .lookup_flags = BPF_FIB_LOOKUP_MARK | BPF_FIB_LOOKUP_SKIP_NEIGH,
-> > > > +	  .mark = MARK, },
-> > > > +	{ .desc = "IPv6 policy routing, mark points to a policy, but no flag",
-> > > > +	  .daddr = IPV6_REMOTE_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
-> > > > +	  .expected_dst = IPV6_GW1, .ifname = "veth3",
-> > > > +	  .lookup_flags = BPF_FIB_LOOKUP_SKIP_NEIGH,
-> > > > +	  .mark = MARK, },
-> > > >    };
-> > > > -static int ifindex;
-> > > > -
-> > > >    static int setup_netns(void)
-> > > >    {
-> > > >    	int err;
-> > > > @@ -144,12 +196,40 @@ static int setup_netns(void)
-> > > >    	if (!ASSERT_OK(err, "write_sysctl(net.ipv6.conf.veth1.forwarding)"))
-> > > >    		goto fail;
-> > > > +	/* Setup for policy routing tests */
-> > > > +	SYS(fail, "ip link add veth3 type veth peer name veth4");
-> > > > +	SYS(fail, "ip link set dev veth3 up");
-> > > > +	SYS(fail, "ip link set dev veth4 netns %s up", NS_REMOTE);
-> > > > +
-> > > > +	SYS(fail, "ip addr add %s/24 dev veth3", IPV4_LOCAL);
-> > > > +	SYS(fail, "ip netns exec %s ip addr add %s/24 dev veth4", NS_REMOTE, IPV4_GW1);
-> > > > +	SYS(fail, "ip netns exec %s ip addr add %s/24 dev veth4", NS_REMOTE, IPV4_GW2);
-> > > > +	SYS(fail, "ip addr add %s/64 dev veth3 nodad", IPV6_LOCAL);
-> > > > +	SYS(fail, "ip netns exec %s ip addr add %s/64 dev veth4 nodad", NS_REMOTE, IPV6_GW1);
-> > > > +	SYS(fail, "ip netns exec %s ip addr add %s/64 dev veth4 nodad", NS_REMOTE, IPV6_GW2);
-> > > 
-> > > Trying to see if the setup can be simplified.
-> > > 
-> > > Does it need to add another netns and setup a reachable IPV[46]_GW[12] gateway?
-> > > 
-> > > The test is not sending any traffic and it is a BPF_FIB_LOOKUP_SKIP_NEIGH test.
-> > 
-> > I think this will not work without another namespace, as FIB lookup will
-> > return DST="final destination", not DST="gateway", as the gateway is in the
-> > same namespace and can be skipped.
-> 
-> hmm... not sure I understand why it would get "final destination". Am I missing something?
-> To be specific, there is no need to configure the IPV[46]_GW[12] address:
-> 
-> -	SYS(fail, "ip link set dev veth4 netns %s up", NS_REMOTE);
-> 
-> 	SYS(fail, "ip addr add %s/24 dev veth3", IPV4_LOCAL);
-> -	SYS(fail, "ip netns exec %s ip addr add %s/24 dev veth4", NS_REMOTE, IPV4_GW1);
-> -	SYS(fail, "ip netns exec %s ip addr add %s/24 dev veth4", NS_REMOTE, IPV4_GW2);
-> 	SYS(fail, "ip addr add %s/64 dev veth3 nodad", IPV6_LOCAL);
-> -	SYS(fail, "ip netns exec %s ip addr add %s/64 dev veth4 nodad", NS_REMOTE, IPV6_GW1);
-> -	SYS(fail, "ip netns exec %s ip addr add %s/64 dev veth4 nodad", NS_REMOTE, IPV6_GW2);
-> 	SYS(fail, "ip route add %s/32 via %s", IPV4_REMOTE_DST, IPV4_GW1);
-> 	SYS(fail, "ip route add %s/32 via %s table %s", IPV4_REMOTE_DST, IPV4_GW2, MARK_TABLE);
-> 	SYS(fail, "ip -6 route add %s/128 via %s", IPV6_REMOTE_DST, IPV6_GW1);
-> 	SYS(fail, "ip -6 route add %s/128 via %s table %s", IPV6_REMOTE_DST, IPV6_GW2, MARK_TABLE);
-> 	SYS(fail, "ip rule add prio 2 fwmark %d lookup %s", MARK, MARK_TABLE);
-> 	SYS(fail, "ip -6 rule add prio 2 fwmark %d lookup %s", MARK, MARK_TABLE);
-> 
-> [root@arch-fb-vm1 ~]# ip netns exec fib_lookup_ns /bin/bash
-> 
-> [root@arch-fb-vm1 ~]# ip -6 rule
-> 0:	from all lookup local
-> 2:	from all fwmark 0x2a lookup 200
-> 32766:	from all lookup main
-> 
-> [root@arch-fb-vm1 ~]# ip -6 route show table main
-> be:ef::b0:10 via fd01::1 dev veth3 metric 1024 linkdown pref medium
-> 
-> [root@arch-fb-vm1 ~]# ip -6 route show table 200
-> be:ef::b0:10 via fd01::2 dev veth3 metric 1024 linkdown pref medium
-> 
-> [root@arch-fb-vm1 ~]# ip -6 route get be:ef::b0:10
-> be:ef::b0:10 from :: via fd01::1 dev veth3 src fd01::3 metric 1024 pref medium
-> 
-> [root@arch-fb-vm1 ~]# ip -6 route get be:ef::b0:10 mark 0x2a
-> be:ef::b0:10 from :: via fd01::2 dev veth3 table 200 src fd01::3 metric 1024 pref medium
+On Mon, 25 Mar 2024 19:40:52 +0000 Edward Liaw <edliaw@google.com> wrote:
 
-Ok, thanks. I will send a v2 with a simplified test
-
-> > 
-> > Instead of adding a new namespace I can move the second interface to the
-> > root namespace. This will work, but then we're interfering with the root
-> > namespace.
-> > 
-> > > > +	SYS(fail, "ip route add %s/32 via %s", IPV4_REMOTE_DST, IPV4_GW1);
-> > > > +	SYS(fail, "ip route add %s/32 via %s table %s", IPV4_REMOTE_DST, IPV4_GW2, MARK_TABLE);
-> > > > +	SYS(fail, "ip -6 route add %s/128 via %s", IPV6_REMOTE_DST, IPV6_GW1);
-> > > > +	SYS(fail, "ip -6 route add %s/128 via %s table %s", IPV6_REMOTE_DST, IPV6_GW2, MARK_TABLE);
-> > > > +	SYS(fail, "ip rule add prio 2 fwmark %d lookup %s", MARK, MARK_TABLE);
-> > > > +	SYS(fail, "ip -6 rule add prio 2 fwmark %d lookup %s", MARK, MARK_TABLE);
-> > > > +
-> > > > +	err = write_sysctl("/proc/sys/net/ipv4/conf/veth3/forwarding", "1");
-> > > > +	if (!ASSERT_OK(err, "write_sysctl(net.ipv4.conf.veth3.forwarding)"))
-> > > > +		goto fail;
-> > > > +
-> > > > +	err = write_sysctl("/proc/sys/net/ipv6/conf/veth3/forwarding", "1");
-> > > > +	if (!ASSERT_OK(err, "write_sysctl(net.ipv6.conf.veth3.forwarding)"))
-> > > > +		goto fail;
-> > > > +
-> > > >    	return 0;
-> > > >    fail:
-> > > >    	return -1;
-> > > >    }
-> > > 
-> > > [ ... ]
-> > > 
-> > > > @@ -248,6 +337,7 @@ void test_fib_lookup(void)
-> > > >    	prog_fd = bpf_program__fd(skel->progs.fib_lookup);
-> > > >    	SYS(fail, "ip netns add %s", NS_TEST);
-> > > > +	SYS(fail, "ip netns add %s", NS_REMOTE);
-> > > 
-> > > 
+> Following issue was observed while running the uffd-unit-tests selftest
+> on ARM devices. On x86_64 no issues were detected:
 > 
+> pthread_create followed by fork caused deadlock in certain cases
+> wherein fork required some work to be completed by the created thread.
+> Used synchronization to ensure that created thread's start function has
+> started before invoking fork.
+
+hm, you cc'ed the whole world apart from peterx.  Fixed.
+
+> Signed-off-by: Lokesh Gidra <lokeshgidra@google.com>
+> [edliaw: Refactored to use atomic_bool]
+> Signed-off-by: Edward Liaw <edliaw@google.com>
+
+I'll add cc:stable.  For which a Fixes: is desirable.  I used
+760aee0b71e3 ("selftests/mm: add tests for RO pinning vs fork()"),
+please check that.
+
