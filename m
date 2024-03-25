@@ -1,134 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 173FC12EBC5;
-	Mon, 25 Mar 2024 05:28:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A4A3CE8C5
+	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 03:38:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711344505; cv=none; b=tnULCwPqcrxUT2xdweGVB1ZUMtGMPTxzvDlvQtsa+ATpEraViqDYIs0ortFzcSm89c7bC4vdvVrHJ/+kkMUemrjrSfkZQVvHhi3qVUi2ZbwsBz7/aKPaTOUO/Ite46hjz+O1bkQeQA3HDXHxg7f7TLCP0M1oSzrgSw7MBFuKGzM=
+	t=1711337938; cv=none; b=VzCKwOXgBVzKMWeeW7ldQYDkIbng1GRsV7tXrV8gl6LpyaQl/+YwRRT/kGoh+xqt1Glt2bPd0Lx6Rpfpna8up0BeRmymsd8eE7UXx2vj+nWp0KIsbki0H1gDGvOyofZDqE9msMVptGDlORqixYuKs6zbqxZR5yntXFjDfWyZFX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711344505; c=relaxed/simple;
-	bh=bs0JfZVK/aN1+hpKTWB7rxnBB7XfX24fEF7rMO6xYMQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bM9wHMrZKNLqvHIRRYQbUCcpe/IrnjuAQggO60QKJZeTKCtqJhSCTDIhBGYhXYJPHR07+/J8rICoDgnnKoM8YjpciO8TPvAdoq1sQTVhfFSXI0ea4q4Hp197TdyWXV4IawbboGnXtQtn/CQAwpeXq6mQiN1680XTwox0vSPBssQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MosNkcHF; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MosNkcHF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0F0AC433C7;
-	Mon, 25 Mar 2024 05:28:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711344504;
-	bh=bs0JfZVK/aN1+hpKTWB7rxnBB7XfX24fEF7rMO6xYMQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=MosNkcHFoO0hkLqxiLpw5/C2xcMM5HuXN7gMriIt6QPGmIMvZbkI7H2Wd1L4RTX81
-	 KJBAbZT3TYvKf5xAz/soOXb4hLYOq0LlpBP5C1JHi7ylTWOser7qYe2A+m62sQeTS+
-	 jTWLqnLmghN1onP2VMrGIfRsj1pC2PGfuPCfnNeB/fzYKHCzQeONmzNSrkjtM5HOZ/
-	 GoelWEhSmf8t6vWnxNFBgQc9lN90tt07baoBxzTslIWCH/5zympirCAopfFdLMeJFK
-	 /ytUyjHVI5DMhC0W3J/BSuZtApexYbkdODnLiWzKzNc7UAJG8FZYIgZBhyYhdKPon5
-	 jgEIUVu3q4fbA==
-From: Geliang Tang <geliang@kernel.org>
-To: bpf@vger.kernel.org,
+	s=arc-20240116; t=1711337938; c=relaxed/simple;
+	bh=TIIsnhNC26TlvoI9fq43s6Lexb7AsZtK3Hbfov+OSOI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hM+y+8kED1QpJGh477F27bnIExSxRUW7iqMw7ZC/ucOoiXqzuOYpyX1JR/fqMKzlO9uhC6dvPjeDFIw/QXH/w4cj+0SXG4J3MF417AEqHHqm3crfGNZ0zcu76BWAWZ0NrGbjrl0fn2bwQSCi40IskWK00PNsvP0pRxrpm7yPCTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+	id 9E8C82455F5C; Sun, 24 Mar 2024 20:38:42 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	mptcp@lists.linux.dev
-Subject: [PATCH bpf-next v2] selftests/bpf: Use start_server and connect_fd_to_fd
-Date: Mon, 25 Mar 2024 13:28:09 +0800
-Message-ID: <686400b5c4eefdb930048df57cc513dbd6e94fa1.1711343483.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.40.1
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next] bpf: Sync uapi bpf.h to tools directory
+Date: Sun, 24 Mar 2024 20:38:42 -0700
+Message-ID: <20240325033842.1693553-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Message-ID: <20240325052809.sUfo_rHpGhkX8Z6Pt9o1ONgTkGz9PowCQV1cUcfXLF4@z>
+Content-Transfer-Encoding: quoted-printable
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+There is a difference between kernel uapi bpf.h and tools
+uapi bpf.h. There is no functionality difference, but let
+us sync properly to make it easy for later bpf.h update.
 
-To simplify the code, use BPF selftests helpers start_server() and
-connect_fd_to_fd() in bpf_tcp_ca.c instead of open-coding. These helpers
-are defined in network_helpers.c, and exported in network_helpers.h,
-which is already included in bpf_tcp_ca.c.
-
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
-v2:
- - use connect_fd_to_fd too.
----
- .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 24 +++----------------
- 1 file changed, 3 insertions(+), 21 deletions(-)
+ tools/include/uapi/linux/bpf.h | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-index a88e6e07e4f5..3da3030c9365 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-@@ -78,18 +78,16 @@ static void *server(void *arg)
- 
- static void do_test(const char *tcp_ca, const struct bpf_map *sk_stg_map)
- {
--	struct sockaddr_in6 sa6 = {};
- 	ssize_t nr_recv = 0, bytes = 0;
- 	int lfd = -1, fd = -1;
- 	pthread_t srv_thread;
--	socklen_t addrlen = sizeof(sa6);
- 	void *thread_ret;
- 	char batch[1500];
- 	int err;
- 
- 	WRITE_ONCE(stop, 0);
- 
--	lfd = socket(AF_INET6, SOCK_STREAM, 0);
-+	lfd = start_server(AF_INET6, SOCK_STREAM, NULL, 0, 0);
- 	if (!ASSERT_NEQ(lfd, -1, "socket"))
- 		return;
- 
-@@ -99,23 +97,7 @@ static void do_test(const char *tcp_ca, const struct bpf_map *sk_stg_map)
- 		return;
- 	}
- 
--	if (settcpca(lfd, tcp_ca) || settcpca(fd, tcp_ca) ||
--	    settimeo(lfd, 0) || settimeo(fd, 0))
--		goto done;
--
--	/* bind, listen and start server thread to accept */
--	sa6.sin6_family = AF_INET6;
--	sa6.sin6_addr = in6addr_loopback;
--	err = bind(lfd, (struct sockaddr *)&sa6, addrlen);
--	if (!ASSERT_NEQ(err, -1, "bind"))
--		goto done;
--
--	err = getsockname(lfd, (struct sockaddr *)&sa6, &addrlen);
--	if (!ASSERT_NEQ(err, -1, "getsockname"))
--		goto done;
--
--	err = listen(lfd, 1);
--	if (!ASSERT_NEQ(err, -1, "listen"))
-+	if (settcpca(lfd, tcp_ca) || settcpca(fd, tcp_ca))
- 		goto done;
- 
- 	if (sk_stg_map) {
-@@ -126,7 +108,7 @@ static void do_test(const char *tcp_ca, const struct bpf_map *sk_stg_map)
- 	}
- 
- 	/* connect to server */
--	err = connect(fd, (struct sockaddr *)&sa6, addrlen);
-+	err = connect_fd_to_fd(fd, lfd, 0);
- 	if (!ASSERT_NEQ(err, -1, "connect"))
- 		goto done;
- 
--- 
-2.40.1
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index bf80b614c4db..9585f5345353 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1662,9 +1662,10 @@ union bpf_attr {
+ 	} query;
+=20
+ 	struct { /* anonymous struct used by BPF_RAW_TRACEPOINT_OPEN command */
+-		__u64 name;
+-		__u32 prog_fd;
+-		__aligned_u64 cookie;
++		__u64		name;
++		__u32		prog_fd;
++		__u32		:32;
++		__aligned_u64	cookie;
+ 	} raw_tracepoint;
+=20
+ 	struct { /* anonymous struct for BPF_BTF_LOAD */
+--=20
+2.43.0
 
