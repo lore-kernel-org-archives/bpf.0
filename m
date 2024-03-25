@@ -1,167 +1,159 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB5F13E893;
-	Mon, 25 Mar 2024 15:47:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E43B113E8A0;
+	Mon, 25 Mar 2024 15:47:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711381664; cv=none; b=SVYgpd97y0SyLmKc4B7EI2DqZRng/RwyUE9Hl4iekMEMXFon5MyciKytMUjrjYSJBpibOAWk6f0srnjbKOOyww9CCQ9iG7K75l1ul6CIHIYf9XhX27CsWV9bd0GXhNUHV+LIaQSMarn3I122mlADMPcqa/N71ACfzSWNeVWUTfg=
+	t=1711381680; cv=none; b=TuoP3TSJdOltPTkl10aE5cYmDbhWzmam/DrK6Ny0mD4kwyePsvvk5LnFc6FeZ22GF8h5iXOLHSsdUa52LRwkUK6psFDfKOyvEjZ7zfHjA11CUB8TATDeLAbfgzvDxeVmW+TzwkDXLyn/b4nSSBzfAihmbuhNqM1StTnnZVwoyKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711381664; c=relaxed/simple;
-	bh=AIuss2JLtgk1TNScK2t3uChndlqi+Vu43UzDADtbd+g=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=WLmFjDF03W6vhVbNDvo+fsPmaWEfQRuKdEnj9rBH3/gZEox5MESaLiGVMIJooK9KMvbk9/4o3K0ESb3Xp+0HhtfHFjGYTcx27pt13eIPp3OjL3ReChQppjro/ULpf0UaxRupTL5bt5dqbjOgZMz21oQlFWLXCVFuI87Dull+meM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=FTG/8txX; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1711381680; c=relaxed/simple;
+	bh=mvvdkm7cWc9qKXInCyiVibBC9xDX3H4bRjU01AqzUBg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=noL/28fI3zjGsDGLTJzzTVhzt2C8mxFRdVIGr33hFuKeKFzu/XTfPPr96V6/1vdJaJ08OPrgEIxAPmOELXWXxk+jN5cRM7W/LOswXysphNYCV12xvIHdzrMnyrioyy3nP/SBtvnMBBORx+Y1QHApi+VKSb3/D+aYHS5rnepuRyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZkOjk/Il; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="FTG/8txX"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=5xg4/pPVHXXzu2T59YoVrsb3TXnzTyf/Igx1XL7mxh8=; b=FTG/8txXi/BKZTH95SBg1Go9R9
-	0Etxrr5CgcWEbn0v/iUC+KgFact0nvd93tThv325SzA18B9LcEScNGKxv7hSj2+b+jtPym4VW5tbR
-	WWmULjDlsUQM5VyZklZ9bgeLaZJpDWEl/OvPOF2wY8d16WXloO1+pBIXnqncr5phkpcBbJOHqTYjz
-	s8r8Tgnr2lXjEV9eL67BOFnyiCuDhHGX2KgsHKylWrqsHIWBJr6EAm/hQfmLpMMiBiPXFH4wmaG7V
-	VvhrNJZOA/LHq1RVZBaqj7aDCYIYlnoFQDfUHRYYgqdPXLwhJTm4RZk78RCvzmcKdPuyPBYSwh1W8
-	yDuNelOw==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1romXd-0002kr-Bf; Mon, 25 Mar 2024 16:47:17 +0100
-Received: from [178.197.248.30] (helo=linux.home)
-	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1romXc-006fgf-0c;
-	Mon, 25 Mar 2024 16:47:16 +0100
-Subject: Re: [PATCH net] bpf: Don't redirect too small packets
-To: Eric Dumazet <edumazet@google.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Guillaume Nault <gnault@redhat.com>
-Cc: patchwork-bot+netdevbpf@kernel.org, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Andrii Nakryiko
- <andrii@kernel.org>, Network Development <netdev@vger.kernel.org>,
- bpf <bpf@vger.kernel.org>, Eric Dumazet <eric.dumazet@gmail.com>,
- syzbot+9e27778c0edc62cb97d8@syzkaller.appspotmail.com,
- Stanislav Fomichev <sdf@google.com>, Willem de Bruijn <willemb@google.com>
-References: <20240322122407.1329861-1-edumazet@google.com>
- <171111663201.19374.16295682760005551863.git-patchwork-notify@kernel.org>
- <CAADnVQJy+0=6ZuAz-7dwOPK3sN2QrPiAcxhtojh8p65j0TRNhg@mail.gmail.com>
- <CANn89iLSOeFGNogYMHbeLRC5kOwwArMz3d5_2hZmBn6fibyUhw@mail.gmail.com>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <69bb87ad-bd0a-7cdc-7e01-e8a403c6689f@iogearbox.net>
-Date: Mon, 25 Mar 2024 16:47:13 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZkOjk/Il"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1e0189323b4so33492895ad.1;
+        Mon, 25 Mar 2024 08:47:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711381678; x=1711986478; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4zOZsJzIzK5aa7TbeViHBJbBdj6M2gj9ZvGgoPmIol8=;
+        b=ZkOjk/IluuqPT0l/GcV4Y+VxBWrzikjdG6iXIapQ6AvPk29QSl48vyY3ANf8WmqZ6N
+         jyOJPZkLLTVxuElNAluM6phms0ByJAPMVVsSVDeibfhVJLiBoqxyI5ZuU2cdve4rSNkx
+         R6Oy4DkS2K3CKrOG4Y/sbJNK9BsIzidQygvMFqhXIISDPTeFXlXPD7e1i4ddVJu6RoBx
+         g/3qNJ82N+tkd7ZiNhYp2m/5Q0M5y23HoY9vUcMsSYt9BZTyiWE87jZJp2DKQgWzFpYb
+         tdSrbqdygoJypkJ3I8L2bGIYqwXt/xyuIC1NZRC4LXA+PzkOH/+R9ktZfxGYaD1mohbo
+         OaUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711381678; x=1711986478;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4zOZsJzIzK5aa7TbeViHBJbBdj6M2gj9ZvGgoPmIol8=;
+        b=NkdGXJQKleS+hvLV+9niVgGGm3xWyz3xZyPFDilLxnqDMziLiTz8O1ccnPu+0fDAL1
+         FGyqxQEPrRsVyETs2ik4tLm9hDRfIOxug+JTtdv6M/03VT7WPJpud+o9CzyCbLLvDnMs
+         ZwmGLnf+1Y6Pq7ceYVXtwn3jO0UzwXto/XNZUuTDbnGEOEXyWiAS8dkCuaEBvodyMzdB
+         rX2ewVFxJEweF7gdgAmvTfJ8ziyj481MH6izxweva7m2C4o70FedGcdHIDDI6Q3x/4RB
+         ESclAPSrpTDP+kXCg9oseEqqfQzBvOnxP/vgNNqTZjFBiXPM0dSFuRkxbslueqoxpfUq
+         Fipw==
+X-Forwarded-Encrypted: i=1; AJvYcCVpKb5UktP8M2SpmjC8ZKoeeIG+6xRtD50SAhh+5m8n/gjI05GeQPnxC4RBcR2Scy/TMALFQ4XRpc/xmnpQCkcUEAqHiL59yEIOzApg
+X-Gm-Message-State: AOJu0Yx+5ZRjKaDx/01vrgjnyKR9NhwhF5leG1I6HX6+oYRumSI/Y2C3
+	uBdln7iuiedGNQZRIhUlxiOem8MZgrTMCoD9GYN8RWzYcV5oP0gd
+X-Google-Smtp-Source: AGHT+IGQfsvLiB+KTGC/1TqedzYxCoTvu8iBsJ79QW4P9osVUJfxem2SCwyMRgk5dQeZdXCKY5MgjA==
+X-Received: by 2002:a17:903:1cb:b0:1e0:9c35:e07f with SMTP id e11-20020a17090301cb00b001e09c35e07fmr10097783plh.34.1711381678047;
+        Mon, 25 Mar 2024 08:47:58 -0700 (PDT)
+Received: from localhost ([106.54.237.100])
+        by smtp.gmail.com with ESMTPSA id d2-20020a170903230200b001e0d70680acsm442804plh.268.2024.03.25.08.47.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Mar 2024 08:47:57 -0700 (PDT)
+From: Tao Chen <chen.dylane@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	chen.dylane@gmail.com
+Subject: [RFC PATCH] libbpf: Add bpf_program__set_section_name api
+Date: Mon, 25 Mar 2024 23:47:37 +0800
+Message-Id: <20240325154737.3754820-1-chen.dylane@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CANn89iLSOeFGNogYMHbeLRC5kOwwArMz3d5_2hZmBn6fibyUhw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27225/Mon Mar 25 09:30:27 2024)
 
-On 3/25/24 2:33 PM, Eric Dumazet wrote:
-> On Sat, Mar 23, 2024 at 4:02 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
->> On Fri, Mar 22, 2024 at 7:10 AM <patchwork-bot+netdevbpf@kernel.org> wrote:
->>>
->>> Hello:
->>>
->>> This patch was applied to bpf/bpf.git (master)
->>> by Daniel Borkmann <daniel@iogearbox.net>:
->>>
->>> On Fri, 22 Mar 2024 12:24:07 +0000 you wrote:
->>>> Some drivers ndo_start_xmit() expect a minimal size, as shown
->>>> by various syzbot reports [1].
->>>>
->>>> Willem added in commit 217e6fa24ce2 ("net: introduce device min_header_len")
->>>> the missing attribute that can be used by upper layers.
->>>>
->>>> We need to use it in __bpf_redirect_common().
->>
->> This patch broke empty_skb test:
->> $ test_progs -t empty_skb
->>
->> test_empty_skb:FAIL:ret: veth ETH_HLEN+1 packet ingress
->> [redirect_ingress] unexpected ret: veth ETH_HLEN+1 packet ingress
->> [redirect_ingress]: actual -34 != expected 0
->> test_empty_skb:PASS:err: veth ETH_HLEN+1 packet ingress [redirect_egress] 0 nsec
->> test_empty_skb:FAIL:ret: veth ETH_HLEN+1 packet ingress
->> [redirect_egress] unexpected ret: veth ETH_HLEN+1 packet ingress
->> [redirect_egress]: actual -34 != expected 1
->>
->> And looking at the test I think it's not a test issue.
->> This check
->> if (unlikely(skb->len < dev->min_header_len))
->> is rejecting more than it should.
->>
->> So I reverted this patch for now.
-> 
-> OK, it seems I missed __bpf_rx_skb() vs __bpf_tx_skb(), but even if I
-> move my sanity test in __bpf_tx_skb(),
-> the bpf test program still fails, I am suspecting the test needs to be adjusted.
+The new api can be used to reset the function we want to trace in
+runtime. So we need not to change the code again when we just do
+minor changes to the trace function in kprobe or other ebpf event
+type. We can replace the old section with new section passed in via
+parameter. Maybe the following scenario we can use the api:
 
-Let me take a look, I do think so too that we'd need to adjust the test.
-I'll see to have a patch for the latter so that we can reapply the fix
-as-is along with it given it's correct.
+1. solve "*.isra.o" issue caused by compiler in new kernel
+obj = offcputime_bpf__open();
+bpf_program__set_section_name(*(obj->skeleton->obj),
+"kprobe/finish_task_switch", "kprobe/finish_task_switch.isra.0");
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 745697c08acb3a74721d26ee93389efa81e973a0..e9c0e2087a08f1d8afd2c3e8e7871ddc9231b76d
-> 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2128,6 +2128,12 @@ static inline int __bpf_tx_skb(struct
-> net_device *dev, struct sk_buff *skb)
->                  return -ENETDOWN;
->          }
-> 
-> +       if (unlikely(skb->len < dev->min_header_len)) {
-> +               pr_err_once("__bpf_tx_skb skb->len=%u <
-> dev(%s)->min_header_len(%u)\n", skb->len, dev->name,
-> dev->min_header_len);
-> +               DO_ONCE_LITE(skb_dump, KERN_ERR, skb, false);
-> +               kfree_skb(skb);
-> +               return -ERANGE;
-> +       } // Note: this is before we change skb->dev
->          skb->dev = dev;
->          skb_set_redirected_noclear(skb, skb_at_tc_ingress(skb));
->          skb_clear_tstamp(skb);
-> 
-> 
-> -->
-> 
-> 
-> test_empty_skb:FAIL:ret: veth ETH_HLEN+1 packet ingress
-> [redirect_egress] unexpected ret: veth ETH_HLEN+1 packet ingress
-> [redirect_egress]: actual -34 != expected 1
-> 
-> [   58.382051] __bpf_tx_skb skb->len=1 < dev(veth0)->min_header_len(14)
-> [   58.382778] skb len=1 headroom=78 headlen=1 tailroom=113
->                 mac=(64,14) net=(78,-1) trans=-1
->                 shinfo(txflags=0 nr_frags=0 gso(size=0 type=0 segs=0))
->                 csum(0x0 ip_summed=0 complete_sw=0 valid=0 level=0)
->                 hash(0x0 sw=0 l4=0) proto=0x7f00 pkttype=0 iif=0
-> 
-> Note that veth driver is one of the few 'Ethernet' drivers that make
-> sure to get at least 14 bytes in the skb at ndo_start_xmit()
-> after commit 726e2c5929de841fdcef4e2bf995680688ae1b87 ("veth: Ensure
-> eth header is in skb's linear part")
-> 
-> BTW this last patch (changing veth) should have been done generically
-> from act_mirred
-> 
-> (We do not want to patch ~400 ethernet drivers in the tree)
-> 
+2. dynamic adjustment for trace function offset
+obj = offcputime_bpf__open();
+bpf_program__set_section_name(*(obj->skeleton->obj),
+"kprobe/finish_task_switch+23", "kprobe/finish_task_switch+45");
+
+Signed-off-by: Tao Chen <chen.dylane@gmail.com>
+---
+ tools/lib/bpf/libbpf.c   | 24 ++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.h   |  2 ++
+ tools/lib/bpf/libbpf.map |  1 +
+ 3 files changed, 27 insertions(+)
+
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 96ff1aa4bf6a..94f32e845c61 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -8576,6 +8576,30 @@ const char *bpf_program__section_name(const struct bpf_program *prog)
+ 	return prog->sec_name;
+ }
+ 
++int bpf_program__set_section_name(struct bpf_object *obj, const char *old_sec,
++				  const char *new_sec)
++{
++	struct bpf_program *prog = NULL;
++
++	if (obj == NULL || old_sec == NULL || new_sec == NULL)
++		return libbpf_err(-EINVAL);
++
++	do {
++		prog = bpf_object__next_program(obj, NULL);
++		if (prog) {
++			if (strcmp(prog->sec_name, old_sec) == 0) {
++				free(prog->sec_name);
++				prog->sec_name = strdup(new_sec);
++				if (!prog->sec_name)
++					return libbpf_err(-ENOMEM);
++				return 0;
++			}
++		}
++	} while (prog);
++
++	return libbpf_err(-ENOENT);
++}
++
+ bool bpf_program__autoload(const struct bpf_program *prog)
+ {
+ 	return prog->autoload;
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 0e52621cba43..eb620a9c8b8a 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -307,6 +307,8 @@ LIBBPF_API void bpf_program__set_ifindex(struct bpf_program *prog,
+ 
+ LIBBPF_API const char *bpf_program__name(const struct bpf_program *prog);
+ LIBBPF_API const char *bpf_program__section_name(const struct bpf_program *prog);
++LIBBPF_API int bpf_program__set_section_name(struct bpf_object *obj, const char *old_sec,
++					     const char *new_sec);
+ LIBBPF_API bool bpf_program__autoload(const struct bpf_program *prog);
+ LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, bool autoload);
+ LIBBPF_API bool bpf_program__autoattach(const struct bpf_program *prog);
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 57712321490f..14ac62cff605 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -400,4 +400,5 @@ LIBBPF_1.3.0 {
+ 		bpf_program__attach_netfilter;
+ 		bpf_program__attach_tcx;
+ 		bpf_program__attach_uprobe_multi;
++		bpf_program__set_section_name;
+ } LIBBPF_1.2.0;
+-- 
+2.34.1
 
