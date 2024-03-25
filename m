@@ -1,265 +1,787 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D2E316F83B
-	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 09:52:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711360335; cv=fail; b=a0MgSUbHzWnUKbS6BxmRV01/TOT+0hoRxvZekUznVVSR+ldaecLkgA7ZXv1uWKuMfIcrv5zCx/9zf54ZTIYrB7hAgC4XK3gC/lQ0+L0uKnE0m/zTzNIQdkzFxhVtuUAWMqlFcs+8vK7j6tGanUoz8HalL4OCOOo18Ej6XordxdA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711360335; c=relaxed/simple;
-	bh=LAofXVcGGBWbJCYpSCH8LvUlQWnwfczxy30J8eOhXzs=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=joEPDVLiYZ3eL8b+l1Yfanah0+Quo4oMiAff8KgYNUezjM6RbQWOZFlq+1p2ANpy8R9cMww+RqyZ/as9A5mh7AI9/AUsv7An3BwGF5QEld0z9qnCYDh9IzfJJ11Tu3wFQzOvzNhFUaLAho0c+trccRPZKDC+cz+vgViavzjFsN4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=JVpKKQSn; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=m8Og26Pg; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="JVpKKQSn";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="m8Og26Pg"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42P8pNRb020190;
-	Mon, 25 Mar 2024 09:51:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-11-20;
- bh=UTX5L8+ueAx/Rv6ywnyfbDfjweJCApfd1FvGI0qHPJg=;
- b=JVpKKQSnFlAlTqVnP2fx0WyvFtUBnEknnMAWCinc63CTPoNWTxAtyxNvL684zVbpJ+kF
- g57M+Jz9Mi8KLLGex8ncOBI8NclRDChnyGv/z3Fd4zkfwoV48N4DoIu30eqEilyvpb4s
- 9kiqVhOZjSwyBDTmwXh1hZ/rYANdcH5R7YG9930AXZEQakEVymkeDKhAPsraB/uyA/x8
- dxzaNvxKn0k7/AnnuoIjZTxio3szYkqSJNATMvU0ZLcyykOlM33LEC9P6MiqccpC15VE
- 0rT4wVJJpgDmUS35ExhELlSmwM23pNdo1kEDD4wsmRZ1RcwwtRk5AzkMBXS5QXLNZASW cw== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3x1np2abb6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 25 Mar 2024 09:51:42 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 42P8FSn1039753;
-	Mon, 25 Mar 2024 09:51:41 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2100.outbound.protection.outlook.com [104.47.58.100])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3x1nh5cad9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 25 Mar 2024 09:51:41 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DumnhG9L102repCKpUIcvt2W+NI99XqR2noJO8Fgvf30ACz2eAnfrvMDqXmXBDiCv0cWJDVptXyKJdQHxVw95x+25qTxUcewU+CPXeFjzVI4u24eAaCfyWTTKx4fUinh8GHduBMte9F/4xYgVwWd0XUZZakJ1vBtADrU+XQreJlpDkNbaQXxm8Ooa6FRI8fsXw30VJfGndvrEOlbS27idWZw8Ch12oysXBIwVtjN9Rl8xtqLMvoOh9JJEt7+gosxwQ8LJl66YxSXFDM1CmLq3s6+94ZgX0yLkrh8mqfBJHxfuKJV+Otu6hgDWggjYv3stdiPbMYscu/BFOyLlQokTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UTX5L8+ueAx/Rv6ywnyfbDfjweJCApfd1FvGI0qHPJg=;
- b=Jr4cpsVEZyik3O8QSmkQO4FCx5LlCG7ZXzp9hV3fkD8+1PWhDLbsHP/cqsZpTR66iI+jexajA3Uj9roALkpDUMTCtD/2sMOvSh13q4yKhL9UFIcQsH1nFrdIgiolRmUZI0yzZX3Zn9wFv3tIIuPNfZJ+n80daFU9aPpLB8FOHt/RlPf1w95NYNANbbN9v6bH4UdwvhNhRIvlKXs6R7FyL2H+Ti4pQ1kMqm8Sc5QgEMn/3SKfVg3G3UMAt+INEbc+7LA1szkLaBWPWs2an8Gw3kzt+5o6pBM8w7muVKkOuF78Ofocpf9KltvUKo3VxwsX7snEtNjUsNsAX+idPOkJ7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UTX5L8+ueAx/Rv6ywnyfbDfjweJCApfd1FvGI0qHPJg=;
- b=m8Og26PgunlUjsWLVKj9UwPMeDfxLrgUrCEqQpQEb7xfB+k+QMY9cYXCWMEoB3fN4wqr0+scmIyN9N8uYf01E8umeo2isf71OCXN9iXTiwsQ4vDe9ZLyCp2zH1PBtb8bGfRLMFNHh0MNlC+V5JREORIkBui5c5KSVfkvGvlCUKo=
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
- by DS0PR10MB6053.namprd10.prod.outlook.com (2603:10b6:8:ce::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.31; Mon, 25 Mar
- 2024 09:51:39 +0000
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::372c:5fce:57c3:6a03]) by BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::372c:5fce:57c3:6a03%4]) with mapi id 15.20.7409.028; Mon, 25 Mar 2024
- 09:51:39 +0000
-Message-ID: <96c014da-9ee5-4c54-99ab-bc0ad87f5390@oracle.com>
-Date: Mon, 25 Mar 2024 09:51:34 +0000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC bpf-next 08/13] kbuild, bpf: add module-specific
- pahole/resolve_btfids flags for base reference BTF
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Quentin Monnet <quentin@isovalent.com>, Eddy Z <eddyz87@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Hou Tao <houtao1@huawei.com>,
-        bpf <bpf@vger.kernel.org>, Masahiro Yamada <masahiroy@kernel.org>,
-        "Luis R. Rodriguez"
- <mcgrof@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>
-References: <20240322102455.98558-1-alan.maguire@oracle.com>
- <20240322102455.98558-10-alan.maguire@oracle.com>
- <CAADnVQL+8cm10fg69nqnDKQaSfoFK7NPwa16CB7PQJAdCHsBKQ@mail.gmail.com>
-Content-Language: en-GB
-From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <CAADnVQL+8cm10fg69nqnDKQaSfoFK7NPwa16CB7PQJAdCHsBKQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO4P123CA0583.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:276::13) To BLAPR10MB5267.namprd10.prod.outlook.com
- (2603:10b6:208:30e::22)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A250918AFC8;
+	Mon, 25 Mar 2024 09:52:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711360383; cv=none; b=moZ6gfj7hhWjWL+a0a1ZpB9l2Ko6h4xj/1Rskm0nLSrcWpmdv4h50VbXvl7tw8nXv+OZFJzG2CFDQSgxYK+RHR47ZG349rGdwaCpDktgRojtThrYcfmfxNIjvRjDA6EWpQ3P22cGS5heUTzpiUsJRKm9BYTo8lcAVnDgR/v1Wtk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711360383; c=relaxed/simple;
+	bh=2et27XjiyqsXIzP/R2bSrlz9bJk24jeaeN9jkyTkhbo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Zw4lJHigeMiIjt5JLDRMy7wCvD7jG9IulV33Pa35zwZ2dCJ8nvbKV8UggwihnrQBWjIZQl+HF7CQjR3BmqM7naOwvrtRqksiH64FQ39rtsrKYXbHOmA7gO02ePlK9r3peXWOZxD2MciEB73UiXtfa/dBloaz1EvlnTGZs6VcbjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V37XN2gpyz4f3kkQ;
+	Mon, 25 Mar 2024 17:52:52 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id 5AD441A01B9;
+	Mon, 25 Mar 2024 17:52:56 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+	by APP3 (Coremail) with SMTP id _Ch0CgDn9Jx1SQFmHl6fHw--.8953S3;
+	Mon, 25 Mar 2024 17:52:55 +0800 (CST)
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Florent Revest <revest@chromium.org>,
+	Brendan Jackman <jackmanb@chromium.org>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E . Hallyn" <serge@hallyn.com>,
+	Khadija Kamran <kamrankhadijadj@gmail.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Kees Cook <keescook@chromium.org>,
+	John Johansen <john.johansen@canonical.com>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Subject: [PATCH bpf-next v2 1/7] bpf, lsm: Annotate lsm hook return integer with new macro LSM_RET_INT
+Date: Mon, 25 Mar 2024 17:56:47 +0800
+Message-Id: <20240325095653.1720123-2-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20240325095653.1720123-1-xukuohai@huaweicloud.com>
+References: <20240325095653.1720123-1-xukuohai@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|DS0PR10MB6053:EE_
-X-MS-Office365-Filtering-Correlation-Id: c3a3ba21-1b6e-4cc3-3ef2-08dc4cb12b05
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	3npFbYc4mw+AKas3RNHrXFqg8z8c+MzXkxU+GpIO9I3f9O3cdDSzDr95uD/S/lnfUZE6bVzEXVUtt7JyRTSe3LehpjxLSNCm1FMcqfsY9GZREr+ibQnDglcDlN7S7PEo8m47gPQosjaj3KN06kYDOs8idGog5Pnrrssj7Incq6FADZvm8wYevPfMVXNyiakVGpyzdXo6PurlQ5Fwy3QXJpumcKsMHORV9A5D0ttZmiyJnNYw+RQCEyEfGo7fZnyAz4rKECiXjoGy5bqB1CVe//NY6Ud4BiNZ9jg8r26WOVMzu1e4S/3utQW6h7uYfjaxzKfY4Yw8bQywFruc00uYHZe6PUfnfGkj8517KViazqUABP0o1Ky05THUsjzuDpQ+Njf9yakcRQ7ylMiBY1IIVMZt6CciMiiy1TNiXpz8w3gbJppn8Q+2IVJ12UcbrpQ936IZQTLtWzW0Ad01sBfevIL7P3ca+5k5N8QzO3IQWY7VLvyh5pE1n+/4QO+CIwCQiG2Mp+4ohTVH+2ABxRWEjLxzB65N8R4iz6gBC41Voxib3u0t7reWNMRA+w9Vy7pIMdzgLZ5dLsC7hqfBgEuin64mKWm4AhHsVn8BKHuZnyUvHZh1FOLM3mAMp9EiENVbiDm2WyOzt3j0gtXeo39Av6vf96vwyN+U7sHeNK/dlMU=
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(7416005)(366007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?utf-8?B?QWtZNnVHR0duWWx1WDltbkdsMjJTbE1nclphdjZ1aWEwNXhYbEZKZEpJSldK?=
- =?utf-8?B?QzdEOHF4N0J3eVQrMzFnVlR0SUNac2hHTWdDQWQ1dHFXU1p1cE85WVdyYjFr?=
- =?utf-8?B?V3Y5NkZVRWFlQVFONFhldEVGc0RSa3dSYXRLWUlPUDljYnpGYzlldlNGaU9m?=
- =?utf-8?B?dTQ3UUdZbFRkZnVBdDRUTEgvQVN3cmMzQTRQRUlMMjgyc0FaN1F4VVVwZG9E?=
- =?utf-8?B?TDRxcE04WUJ6TEh4SEhTN0dsVUE2eWUzR04rWStObXJ5MW1JTDFkM1pNNDJm?=
- =?utf-8?B?U2wwNWZKbHlqY0lEVDJ1T2RjelR5WG1EVFFrckNIc1RHYXQ1aVhkanVnRWFE?=
- =?utf-8?B?dkZ4WERVN3hmTTJXaG9IYThnYW9kMVQyZ0x1cjBHM3ZKcGt2UjQzODRqd3Iw?=
- =?utf-8?B?M1pVUEcrcUlSR0IwNkNnSmlJNDFNaDNvQm5RaTZzL3IybVdiQmxHemdtL2Iy?=
- =?utf-8?B?Ujd4MEZBYlNJVi9PaFMxWTJzWHJqWnptUXdHN2JGVHZDRG05NUVnQ3VLY0w2?=
- =?utf-8?B?WDQ5WVBqTjIwOXlRZ3ZybEpybjFPMCtaY1A5Y0RwUWluUG9SOGZHN0dQRmox?=
- =?utf-8?B?WGxjWkp4NVVnY3hzcTU2NkJ1Tk02aW5oaHNaUHNuR2xOclR0Y2Nyb0t0OG5Q?=
- =?utf-8?B?UzlMdUpZalFRaVNoTGNxekhXQTI3ODc5V1JSRWcwbTlDYXA1QWd4Uk5PU2tJ?=
- =?utf-8?B?ckFIUmo3MmhMVTBXdEx1VFYxbXpmUHBNU3duYytEVy9Gd2dJQ29RYjlGOUNX?=
- =?utf-8?B?TDlVOVlNT2Q0TDR5Q05vbkF0L2l3ZTgxWkgvbnIxK1JTcUhYZFZWdWdIR0xr?=
- =?utf-8?B?NE5MdmQrLzJZYlRBSWppRGd3NzcyckZsZzI4Z0J2QmlDWW9PVEo0MkkrR1Nv?=
- =?utf-8?B?dFVxZGN3YmtLcDdvTzlVY2JNdGhncUdPb1I3ZHA1ZGpBdE1kOXZuUm1yVDMw?=
- =?utf-8?B?RVdRdjVIUjlIMklwQWdvakhMVTZNQ0p5NklqdFRMK0g0VkVKOWdOS3J2ZUZa?=
- =?utf-8?B?RmhBVS9DTnFKakpOQy8zb2VZa2ZFYjdwK1gvWHpwV3U0bHNiRzVBRmhBY21i?=
- =?utf-8?B?bXBlbjJIOUJ1eXFHeitrTHVQTExadUVCSE1tTFBYUCtOL2FpSmpIR1VVdVhs?=
- =?utf-8?B?QjZtN1lHT1cwK3Y4S0NJYTdpY2s5RzBGeTZuYjdQUWdPS1orcVBHbGZWTThm?=
- =?utf-8?B?a0dZakV5REhYRU84SXdJdEpOUjU1NG1DbERzWHN5ZGlzWG5PWUxhUXk4UHp3?=
- =?utf-8?B?cjRpRWc4VitnbHhKaU1mdVZtRmVPU0FXMTBKSDNiZXk2cDFYODh2OUprN3RO?=
- =?utf-8?B?bkJtaEhGdHkxTjVTWGxmUjdmMnJocTBWTFlqbk05azREd0R6WlU0dTk4M3Rv?=
- =?utf-8?B?OHhsZ0x6Ui93OXZ4a0E5a0FpZ280RDZ4VGwxVk83Qm9BYktrd3VCcGo5dmlE?=
- =?utf-8?B?ZDNXbTJxUW0yWjhDL1R4TWRUYUZWVTNqNjY5V3ExWTEwTGt4WDVjdUJqS29o?=
- =?utf-8?B?SG9jbmx6MlVqQzljcDg3ZEIzZzVadEdHb3ZieTl1d2xwMVp5dS9GVFp2RnFy?=
- =?utf-8?B?V3MrMjRONFUwNzZ3RTh4bmpSUVVxdkExOUVlODlQYmZrekcxZlRpemc2NmNr?=
- =?utf-8?B?N2ZvaldTSW1KaGtTb25mR3k3TmYrcyt2ZGkzVWRYd2pDK3dkT3p6aGI1a2xj?=
- =?utf-8?B?MVlCRWRmNG5wakovajFrSi9HZS9jQnJIdlVDSW1hWmNDcDdlTWhneGlreXEz?=
- =?utf-8?B?dnkwY29NUE10UWgzN0xKMk1RU1gyVG9ka2Jnd3lTNEd4eGo1YWdHMm4rN1RN?=
- =?utf-8?B?eEpZSWFsc3RnZ3ZPTHh6SklqWVpMeHBJcmt5Z1hBa1N4YXJuMjRLTkhmMUkr?=
- =?utf-8?B?SW9MMEtvMS9sbUNJK1lNZHdMV09uU0VoRXBac2c2SWpXbmNuUkNKWTdNYk5H?=
- =?utf-8?B?SWxBUTl4MUhRYzlOTU0rQlc1VndQWm5HRVJNYmxGamdiK0VYK1VxWFBsejRV?=
- =?utf-8?B?bTIwMnBhMXpWV0tmZ3VKcjlLQzRFTDBUbTF2TnFZYXNwZjloNUVIdGYvOUR3?=
- =?utf-8?B?cngyVXVDQ2VtTnZra1RPclpCelh3YndWVjZzd0NCelE4K1hyODZodkFkTlZl?=
- =?utf-8?B?QlZHajJ4TXRmWUxmR2Z4dndvaGlaUWxmeXdCVU0xWVZuWThJck0wbzZrVlBE?=
- =?utf-8?Q?IKmXeoxg0w1d/jKyQRuLdd4=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	oSXr6sQ15RiNKMlKQxokxrxUvTmufy0VZ4j8Xj6S7spv5HnHOI9JmBG6HGLgqdELdUE+XS/d6ZLb4T1N3KeaK0WXhzbN6BOltSrdUUWG7lPbeFHexjHWkysaXka3I7sKGG9/DgKxA2OsausrGWANc8WvJfVc5KAAPSyzYYf+6hEoVSdy+k6bo3Mj4MLVvufEXYVbMbeuzx9QR6TP2WFnfkcDoxy8ebVRzqLm4QPWn3ngjm8BUBEzhLnmFhPqwQIXICmkEM/mO0YvERET0F02crgSAMBw5lutuFTaCHfAjiJz2a08mym+SiGWwfKiRtrv6xguuOMUvbdqclajMB6ZUd6YoXTkDChrh7b1xqeqLuyAaD6YNkwzoRBWxGovhoKCFz6CUy2NE4njyvH5n8eNpG9TPfMl/K2REbJb3bLKmt1oUOJjjd7CMYI1k7MB9VnOsdzmPLaHOl4LVS/uDYo0PBdyF8+fnuimqPY3dgFPMc0354QjcdsTI0lHDsWOhqrC4wB5BIvOF1uc1ErDk7OQorry9UiNc+7+lBQw9R5niyCTIDZlWA+VGLGNRxuUCu3TwO549RhzBSvSXgfii0vKL89uWi5I7oRB1rB3Oqlu758=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3a3ba21-1b6e-4cc3-3ef2-08dc4cb12b05
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2024 09:51:39.6021
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9KB29EEv339XNqm/1FgD4ciutM66DFhGa+ij4vNUiNLcSdTavC64vCurEs2ri+4bHqMjB6uM+/QYG7RBedmKFQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB6053
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-25_07,2024-03-21_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
- bulkscore=0 spamscore=0 adultscore=0 mlxscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2403210000 definitions=main-2403250054
-X-Proofpoint-GUID: n623i6BkbTt6_9R_UePm1RgGLPX8PbI-
-X-Proofpoint-ORIG-GUID: n623i6BkbTt6_9R_UePm1RgGLPX8PbI-
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_Ch0CgDn9Jx1SQFmHl6fHw--.8953S3
+X-Coremail-Antispam: 1UD129KBjvAXoWDXrW7WF1rCry7CFW7Gw1fCrg_yoWrurW3Wo
+	W7GF9rZr4fWw1rCrWDKr4fJFZxZ3srXrn5tw1DW3s8XanFk34DA393Jr1UXF47XF45G398
+	AFy2y34rAF4kXw1Dn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUYR7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
+	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr
+	4l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2
+	IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4U
+	McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2
+	xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
+	6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2
+	Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
+	Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJw
+	CI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUz5l8UUUU
+	U
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On 23/03/2024 02:50, Alexei Starovoitov wrote:
-> On Fri, Mar 22, 2024 at 3:26 AM Alan Maguire <alan.maguire@oracle.com> wrote:
->>
->> Support creation of module BTF along with base reference BTF;
->> the latter is stored in a .BTF.base_ref ELF section and supplements
->> split BTF references to base BTF with information about base types,
->> allowing for later reconciliation of split BTF with a (possibly
->> changed) base.  resolve_btfids uses the "-r" option to specify
->> that the BTF.ids section should be populated with split BTF
->> relative to the added .BTF.base_ref section rather than relative
->> to the vmlinux base.
->>
->> Modules using base reference BTF can be built via
->>
->> BTF_BASE_REF=1 make -C. -M=path2/module
->>
->> The default is still to use split BTF relative to vmlinux.
->>
->> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
->> ---
->>  scripts/Makefile.btf      | 7 +++++++
->>  scripts/Makefile.modfinal | 4 ++--
->>  2 files changed, 9 insertions(+), 2 deletions(-)
->>
->> diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
->> index 9694ca3c5252..c8212b2ab7ca 100644
->> --- a/scripts/Makefile.btf
->> +++ b/scripts/Makefile.btf
->> @@ -19,4 +19,11 @@ pahole-flags-$(call test-ge, $(pahole-ver), 126)     = -j --btf_features=encode_forc
->>
->>  pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)         += --lang_exclude=rust
->>
->> +ifeq ($(BTF_BASE_REF),1)
->> +module-pahole-flags-$(call test-ge, $(pahole-ver), 126)        += --btf_features=base_ref
->> +module-resolve-btfids-flags-$(call test-ge, $(pahole-ver), 126) = -r
->> +endif
-> 
-> The patch set looks great to me.
-> I wonder whether we should drop this extra BTF_BASE_REF flag
-> and do it unconditionally.
-> Currently btf_parse_module() doesn't have any real checks
-> whether module's btf matches base_btf.
-> All the btf_check_*() might succeed by luck even if vmlinux btf
-> is different.
-> Since .BTF.base_ref is small we can always emit it and
-> during module load the btf_reconcile() step will be that safety check.
-> Less build options, less moving pieces and doing it all the time
-> will make the whole process robust.
-> Conditional BTF_BASE_REF=1 will likely mean that there will be
-> bugs that only few folks will hit.
+From: Xu Kuohai <xukuohai@huawei.com>
 
-We could certainly do it unconditionally for out-of-tree module builds
-(the KBUILD_EXTMOD case); so anytime a user does "make -C.
-M=path/2/module", they would get base reference BTF. With this series,
-that would just mean applying this change:
+Add macro LSM_RET_INT to annotate lsm hook return integer type and the
+default return value. The follow-up patch will use this macro to add
+return value range descriptions.
 
-diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
-index c8212b2ab7ca..0322f8450a89 100644
---- a/scripts/Makefile.btf
-+++ b/scripts/Makefile.btf
-@@ -19,7 +19,7 @@ pahole-flags-$(call test-ge, $(pahole-ver), 126)
-= -j --btf_features=encode_forc
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ include/linux/lsm_hook_defs.h | 424 +++++++++++++++++-----------------
+ include/linux/lsm_hooks.h     |   6 -
+ kernel/bpf/bpf_lsm.c          |  10 +
+ security/security.c           |   1 +
+ 4 files changed, 224 insertions(+), 217 deletions(-)
 
- pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)         +=
---lang_exclude=rust
+diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+index 642272576582..22b64b15faa8 100644
+--- a/include/linux/lsm_hook_defs.h
++++ b/include/linux/lsm_hook_defs.h
+@@ -26,409 +26,411 @@
+  *   #undef LSM_HOOK
+  * };
+  */
+-LSM_HOOK(int, 0, binder_set_context_mgr, const struct cred *mgr)
+-LSM_HOOK(int, 0, binder_transaction, const struct cred *from,
++LSM_HOOK(int, LSM_RET_INT(0), binder_set_context_mgr, const struct cred *mgr)
++LSM_HOOK(int, LSM_RET_INT(0), binder_transaction, const struct cred *from,
+ 	 const struct cred *to)
+-LSM_HOOK(int, 0, binder_transfer_binder, const struct cred *from,
++LSM_HOOK(int, LSM_RET_INT(0), binder_transfer_binder, const struct cred *from,
+ 	 const struct cred *to)
+-LSM_HOOK(int, 0, binder_transfer_file, const struct cred *from,
++LSM_HOOK(int, LSM_RET_INT(0), binder_transfer_file, const struct cred *from,
+ 	 const struct cred *to, const struct file *file)
+-LSM_HOOK(int, 0, ptrace_access_check, struct task_struct *child,
++LSM_HOOK(int, LSM_RET_INT(0), ptrace_access_check, struct task_struct *child,
+ 	 unsigned int mode)
+-LSM_HOOK(int, 0, ptrace_traceme, struct task_struct *parent)
+-LSM_HOOK(int, 0, capget, const struct task_struct *target, kernel_cap_t *effective,
++LSM_HOOK(int, LSM_RET_INT(0), ptrace_traceme, struct task_struct *parent)
++LSM_HOOK(int, LSM_RET_INT(0), capget, const struct task_struct *target, kernel_cap_t *effective,
+ 	 kernel_cap_t *inheritable, kernel_cap_t *permitted)
+-LSM_HOOK(int, 0, capset, struct cred *new, const struct cred *old,
++LSM_HOOK(int, LSM_RET_INT(0), capset, struct cred *new, const struct cred *old,
+ 	 const kernel_cap_t *effective, const kernel_cap_t *inheritable,
+ 	 const kernel_cap_t *permitted)
+-LSM_HOOK(int, 0, capable, const struct cred *cred, struct user_namespace *ns,
++LSM_HOOK(int, LSM_RET_INT(0), capable, const struct cred *cred, struct user_namespace *ns,
+ 	 int cap, unsigned int opts)
+-LSM_HOOK(int, 0, quotactl, int cmds, int type, int id, const struct super_block *sb)
+-LSM_HOOK(int, 0, quota_on, struct dentry *dentry)
+-LSM_HOOK(int, 0, syslog, int type)
+-LSM_HOOK(int, 0, settime, const struct timespec64 *ts,
++LSM_HOOK(int, LSM_RET_INT(0), quotactl, int cmds, int type, int id, const struct super_block *sb)
++LSM_HOOK(int, LSM_RET_INT(0), quota_on, struct dentry *dentry)
++LSM_HOOK(int, LSM_RET_INT(0), syslog, int type)
++LSM_HOOK(int, LSM_RET_INT(0), settime, const struct timespec64 *ts,
+ 	 const struct timezone *tz)
+-LSM_HOOK(int, 1, vm_enough_memory, struct mm_struct *mm, long pages)
+-LSM_HOOK(int, 0, bprm_creds_for_exec, struct linux_binprm *bprm)
+-LSM_HOOK(int, 0, bprm_creds_from_file, struct linux_binprm *bprm, const struct file *file)
+-LSM_HOOK(int, 0, bprm_check_security, struct linux_binprm *bprm)
++LSM_HOOK(int, LSM_RET_INT(1), vm_enough_memory, struct mm_struct *mm, long pages)
++LSM_HOOK(int, LSM_RET_INT(0), bprm_creds_for_exec, struct linux_binprm *bprm)
++LSM_HOOK(int, LSM_RET_INT(0), bprm_creds_from_file, struct linux_binprm *bprm,
++	 const struct file *file)
++LSM_HOOK(int, LSM_RET_INT(0), bprm_check_security, struct linux_binprm *bprm)
+ LSM_HOOK(void, LSM_RET_VOID, bprm_committing_creds, const struct linux_binprm *bprm)
+ LSM_HOOK(void, LSM_RET_VOID, bprm_committed_creds, const struct linux_binprm *bprm)
+-LSM_HOOK(int, 0, fs_context_submount, struct fs_context *fc, struct super_block *reference)
+-LSM_HOOK(int, 0, fs_context_dup, struct fs_context *fc,
++LSM_HOOK(int, LSM_RET_INT(0), fs_context_submount, struct fs_context *fc,
++	 struct super_block *reference)
++LSM_HOOK(int, LSM_RET_INT(0), fs_context_dup, struct fs_context *fc,
+ 	 struct fs_context *src_sc)
+-LSM_HOOK(int, -ENOPARAM, fs_context_parse_param, struct fs_context *fc,
++LSM_HOOK(int, LSM_RET_INT(-ENOPARAM), fs_context_parse_param, struct fs_context *fc,
+ 	 struct fs_parameter *param)
+-LSM_HOOK(int, 0, sb_alloc_security, struct super_block *sb)
++LSM_HOOK(int, LSM_RET_INT(0), sb_alloc_security, struct super_block *sb)
+ LSM_HOOK(void, LSM_RET_VOID, sb_delete, struct super_block *sb)
+ LSM_HOOK(void, LSM_RET_VOID, sb_free_security, struct super_block *sb)
+ LSM_HOOK(void, LSM_RET_VOID, sb_free_mnt_opts, void *mnt_opts)
+-LSM_HOOK(int, 0, sb_eat_lsm_opts, char *orig, void **mnt_opts)
+-LSM_HOOK(int, 0, sb_mnt_opts_compat, struct super_block *sb, void *mnt_opts)
+-LSM_HOOK(int, 0, sb_remount, struct super_block *sb, void *mnt_opts)
+-LSM_HOOK(int, 0, sb_kern_mount, const struct super_block *sb)
+-LSM_HOOK(int, 0, sb_show_options, struct seq_file *m, struct super_block *sb)
+-LSM_HOOK(int, 0, sb_statfs, struct dentry *dentry)
+-LSM_HOOK(int, 0, sb_mount, const char *dev_name, const struct path *path,
++LSM_HOOK(int, LSM_RET_INT(0), sb_eat_lsm_opts, char *orig, void **mnt_opts)
++LSM_HOOK(int, LSM_RET_INT(0), sb_mnt_opts_compat, struct super_block *sb, void *mnt_opts)
++LSM_HOOK(int, LSM_RET_INT(0), sb_remount, struct super_block *sb, void *mnt_opts)
++LSM_HOOK(int, LSM_RET_INT(0), sb_kern_mount, const struct super_block *sb)
++LSM_HOOK(int, LSM_RET_INT(0), sb_show_options, struct seq_file *m, struct super_block *sb)
++LSM_HOOK(int, LSM_RET_INT(0), sb_statfs, struct dentry *dentry)
++LSM_HOOK(int, LSM_RET_INT(0), sb_mount, const char *dev_name, const struct path *path,
+ 	 const char *type, unsigned long flags, void *data)
+-LSM_HOOK(int, 0, sb_umount, struct vfsmount *mnt, int flags)
+-LSM_HOOK(int, 0, sb_pivotroot, const struct path *old_path,
++LSM_HOOK(int, LSM_RET_INT(0), sb_umount, struct vfsmount *mnt, int flags)
++LSM_HOOK(int, LSM_RET_INT(0), sb_pivotroot, const struct path *old_path,
+ 	 const struct path *new_path)
+-LSM_HOOK(int, 0, sb_set_mnt_opts, struct super_block *sb, void *mnt_opts,
++LSM_HOOK(int, LSM_RET_INT(0), sb_set_mnt_opts, struct super_block *sb, void *mnt_opts,
+ 	 unsigned long kern_flags, unsigned long *set_kern_flags)
+-LSM_HOOK(int, 0, sb_clone_mnt_opts, const struct super_block *oldsb,
++LSM_HOOK(int, LSM_RET_INT(0), sb_clone_mnt_opts, const struct super_block *oldsb,
+ 	 struct super_block *newsb, unsigned long kern_flags,
+ 	 unsigned long *set_kern_flags)
+-LSM_HOOK(int, 0, move_mount, const struct path *from_path,
++LSM_HOOK(int, LSM_RET_INT(0), move_mount, const struct path *from_path,
+ 	 const struct path *to_path)
+-LSM_HOOK(int, -EOPNOTSUPP, dentry_init_security, struct dentry *dentry,
++LSM_HOOK(int, LSM_RET_INT(-EOPNOTSUPP), dentry_init_security, struct dentry *dentry,
+ 	 int mode, const struct qstr *name, const char **xattr_name,
+ 	 void **ctx, u32 *ctxlen)
+-LSM_HOOK(int, 0, dentry_create_files_as, struct dentry *dentry, int mode,
++LSM_HOOK(int, LSM_RET_INT(0), dentry_create_files_as, struct dentry *dentry, int mode,
+ 	 struct qstr *name, const struct cred *old, struct cred *new)
+ 
+ #ifdef CONFIG_SECURITY_PATH
+-LSM_HOOK(int, 0, path_unlink, const struct path *dir, struct dentry *dentry)
+-LSM_HOOK(int, 0, path_mkdir, const struct path *dir, struct dentry *dentry,
++LSM_HOOK(int, LSM_RET_INT(0), path_unlink, const struct path *dir, struct dentry *dentry)
++LSM_HOOK(int, LSM_RET_INT(0), path_mkdir, const struct path *dir, struct dentry *dentry,
+ 	 umode_t mode)
+-LSM_HOOK(int, 0, path_rmdir, const struct path *dir, struct dentry *dentry)
+-LSM_HOOK(int, 0, path_mknod, const struct path *dir, struct dentry *dentry,
++LSM_HOOK(int, LSM_RET_INT(0), path_rmdir, const struct path *dir, struct dentry *dentry)
++LSM_HOOK(int, LSM_RET_INT(0), path_mknod, const struct path *dir, struct dentry *dentry,
+ 	 umode_t mode, unsigned int dev)
+-LSM_HOOK(int, 0, path_truncate, const struct path *path)
+-LSM_HOOK(int, 0, path_symlink, const struct path *dir, struct dentry *dentry,
++LSM_HOOK(int, LSM_RET_INT(0), path_truncate, const struct path *path)
++LSM_HOOK(int, LSM_RET_INT(0), path_symlink, const struct path *dir, struct dentry *dentry,
+ 	 const char *old_name)
+-LSM_HOOK(int, 0, path_link, struct dentry *old_dentry,
++LSM_HOOK(int, LSM_RET_INT(0), path_link, struct dentry *old_dentry,
+ 	 const struct path *new_dir, struct dentry *new_dentry)
+-LSM_HOOK(int, 0, path_rename, const struct path *old_dir,
++LSM_HOOK(int, LSM_RET_INT(0), path_rename, const struct path *old_dir,
+ 	 struct dentry *old_dentry, const struct path *new_dir,
+ 	 struct dentry *new_dentry, unsigned int flags)
+-LSM_HOOK(int, 0, path_chmod, const struct path *path, umode_t mode)
+-LSM_HOOK(int, 0, path_chown, const struct path *path, kuid_t uid, kgid_t gid)
+-LSM_HOOK(int, 0, path_chroot, const struct path *path)
++LSM_HOOK(int, LSM_RET_INT(0), path_chmod, const struct path *path, umode_t mode)
++LSM_HOOK(int, LSM_RET_INT(0), path_chown, const struct path *path, kuid_t uid, kgid_t gid)
++LSM_HOOK(int, LSM_RET_INT(0), path_chroot, const struct path *path)
+ #endif /* CONFIG_SECURITY_PATH */
+ 
+ /* Needed for inode based security check */
+-LSM_HOOK(int, 0, path_notify, const struct path *path, u64 mask,
++LSM_HOOK(int, LSM_RET_INT(0), path_notify, const struct path *path, u64 mask,
+ 	 unsigned int obj_type)
+-LSM_HOOK(int, 0, inode_alloc_security, struct inode *inode)
++LSM_HOOK(int, LSM_RET_INT(0), inode_alloc_security, struct inode *inode)
+ LSM_HOOK(void, LSM_RET_VOID, inode_free_security, struct inode *inode)
+-LSM_HOOK(int, -EOPNOTSUPP, inode_init_security, struct inode *inode,
++LSM_HOOK(int, LSM_RET_INT(-EOPNOTSUPP), inode_init_security, struct inode *inode,
+ 	 struct inode *dir, const struct qstr *qstr, struct xattr *xattrs,
+ 	 int *xattr_count)
+-LSM_HOOK(int, 0, inode_init_security_anon, struct inode *inode,
++LSM_HOOK(int, LSM_RET_INT(0), inode_init_security_anon, struct inode *inode,
+ 	 const struct qstr *name, const struct inode *context_inode)
+-LSM_HOOK(int, 0, inode_create, struct inode *dir, struct dentry *dentry,
++LSM_HOOK(int, LSM_RET_INT(0), inode_create, struct inode *dir, struct dentry *dentry,
+ 	 umode_t mode)
+-LSM_HOOK(int, 0, inode_link, struct dentry *old_dentry, struct inode *dir,
++LSM_HOOK(int, LSM_RET_INT(0), inode_link, struct dentry *old_dentry, struct inode *dir,
+ 	 struct dentry *new_dentry)
+-LSM_HOOK(int, 0, inode_unlink, struct inode *dir, struct dentry *dentry)
+-LSM_HOOK(int, 0, inode_symlink, struct inode *dir, struct dentry *dentry,
++LSM_HOOK(int, LSM_RET_INT(0), inode_unlink, struct inode *dir, struct dentry *dentry)
++LSM_HOOK(int, LSM_RET_INT(0), inode_symlink, struct inode *dir, struct dentry *dentry,
+ 	 const char *old_name)
+-LSM_HOOK(int, 0, inode_mkdir, struct inode *dir, struct dentry *dentry,
++LSM_HOOK(int, LSM_RET_INT(0), inode_mkdir, struct inode *dir, struct dentry *dentry,
+ 	 umode_t mode)
+-LSM_HOOK(int, 0, inode_rmdir, struct inode *dir, struct dentry *dentry)
+-LSM_HOOK(int, 0, inode_mknod, struct inode *dir, struct dentry *dentry,
++LSM_HOOK(int, LSM_RET_INT(0), inode_rmdir, struct inode *dir, struct dentry *dentry)
++LSM_HOOK(int, LSM_RET_INT(0), inode_mknod, struct inode *dir, struct dentry *dentry,
+ 	 umode_t mode, dev_t dev)
+-LSM_HOOK(int, 0, inode_rename, struct inode *old_dir, struct dentry *old_dentry,
++LSM_HOOK(int, LSM_RET_INT(0), inode_rename, struct inode *old_dir, struct dentry *old_dentry,
+ 	 struct inode *new_dir, struct dentry *new_dentry)
+-LSM_HOOK(int, 0, inode_readlink, struct dentry *dentry)
+-LSM_HOOK(int, 0, inode_follow_link, struct dentry *dentry, struct inode *inode,
++LSM_HOOK(int, LSM_RET_INT(0), inode_readlink, struct dentry *dentry)
++LSM_HOOK(int, LSM_RET_INT(0), inode_follow_link, struct dentry *dentry, struct inode *inode,
+ 	 bool rcu)
+-LSM_HOOK(int, 0, inode_permission, struct inode *inode, int mask)
+-LSM_HOOK(int, 0, inode_setattr, struct dentry *dentry, struct iattr *attr)
+-LSM_HOOK(int, 0, inode_getattr, const struct path *path)
+-LSM_HOOK(int, 0, inode_setxattr, struct mnt_idmap *idmap,
++LSM_HOOK(int, LSM_RET_INT(0), inode_permission, struct inode *inode, int mask)
++LSM_HOOK(int, LSM_RET_INT(0), inode_setattr, struct dentry *dentry, struct iattr *attr)
++LSM_HOOK(int, LSM_RET_INT(0), inode_getattr, const struct path *path)
++LSM_HOOK(int, LSM_RET_INT(0), inode_setxattr, struct mnt_idmap *idmap,
+ 	 struct dentry *dentry, const char *name, const void *value,
+ 	 size_t size, int flags)
+ LSM_HOOK(void, LSM_RET_VOID, inode_post_setxattr, struct dentry *dentry,
+ 	 const char *name, const void *value, size_t size, int flags)
+-LSM_HOOK(int, 0, inode_getxattr, struct dentry *dentry, const char *name)
+-LSM_HOOK(int, 0, inode_listxattr, struct dentry *dentry)
+-LSM_HOOK(int, 0, inode_removexattr, struct mnt_idmap *idmap,
++LSM_HOOK(int, LSM_RET_INT(0), inode_getxattr, struct dentry *dentry, const char *name)
++LSM_HOOK(int, LSM_RET_INT(0), inode_listxattr, struct dentry *dentry)
++LSM_HOOK(int, LSM_RET_INT(0), inode_removexattr, struct mnt_idmap *idmap,
+ 	 struct dentry *dentry, const char *name)
+-LSM_HOOK(int, 0, inode_set_acl, struct mnt_idmap *idmap,
++LSM_HOOK(int, LSM_RET_INT(0), inode_set_acl, struct mnt_idmap *idmap,
+ 	 struct dentry *dentry, const char *acl_name, struct posix_acl *kacl)
+-LSM_HOOK(int, 0, inode_get_acl, struct mnt_idmap *idmap,
++LSM_HOOK(int, LSM_RET_INT(0), inode_get_acl, struct mnt_idmap *idmap,
+ 	 struct dentry *dentry, const char *acl_name)
+-LSM_HOOK(int, 0, inode_remove_acl, struct mnt_idmap *idmap,
++LSM_HOOK(int, LSM_RET_INT(0), inode_remove_acl, struct mnt_idmap *idmap,
+ 	 struct dentry *dentry, const char *acl_name)
+-LSM_HOOK(int, 0, inode_need_killpriv, struct dentry *dentry)
+-LSM_HOOK(int, 0, inode_killpriv, struct mnt_idmap *idmap,
++LSM_HOOK(int, LSM_RET_INT(0), inode_need_killpriv, struct dentry *dentry)
++LSM_HOOK(int, LSM_RET_INT(0), inode_killpriv, struct mnt_idmap *idmap,
+ 	 struct dentry *dentry)
+-LSM_HOOK(int, -EOPNOTSUPP, inode_getsecurity, struct mnt_idmap *idmap,
++LSM_HOOK(int, LSM_RET_INT(-EOPNOTSUPP), inode_getsecurity, struct mnt_idmap *idmap,
+ 	 struct inode *inode, const char *name, void **buffer, bool alloc)
+-LSM_HOOK(int, -EOPNOTSUPP, inode_setsecurity, struct inode *inode,
++LSM_HOOK(int, LSM_RET_INT(-EOPNOTSUPP), inode_setsecurity, struct inode *inode,
+ 	 const char *name, const void *value, size_t size, int flags)
+-LSM_HOOK(int, 0, inode_listsecurity, struct inode *inode, char *buffer,
++LSM_HOOK(int, LSM_RET_INT(0), inode_listsecurity, struct inode *inode, char *buffer,
+ 	 size_t buffer_size)
+ LSM_HOOK(void, LSM_RET_VOID, inode_getsecid, struct inode *inode, u32 *secid)
+-LSM_HOOK(int, 0, inode_copy_up, struct dentry *src, struct cred **new)
+-LSM_HOOK(int, -EOPNOTSUPP, inode_copy_up_xattr, const char *name)
+-LSM_HOOK(int, 0, kernfs_init_security, struct kernfs_node *kn_dir,
++LSM_HOOK(int, LSM_RET_INT(0), inode_copy_up, struct dentry *src, struct cred **new)
++LSM_HOOK(int, LSM_RET_INT(-EOPNOTSUPP), inode_copy_up_xattr, const char *name)
++LSM_HOOK(int, LSM_RET_INT(0), kernfs_init_security, struct kernfs_node *kn_dir,
+ 	 struct kernfs_node *kn)
+-LSM_HOOK(int, 0, file_permission, struct file *file, int mask)
+-LSM_HOOK(int, 0, file_alloc_security, struct file *file)
++LSM_HOOK(int, LSM_RET_INT(0), file_permission, struct file *file, int mask)
++LSM_HOOK(int, LSM_RET_INT(0), file_alloc_security, struct file *file)
+ LSM_HOOK(void, LSM_RET_VOID, file_free_security, struct file *file)
+-LSM_HOOK(int, 0, file_ioctl, struct file *file, unsigned int cmd,
++LSM_HOOK(int, LSM_RET_INT(0), file_ioctl, struct file *file, unsigned int cmd,
+ 	 unsigned long arg)
+-LSM_HOOK(int, 0, file_ioctl_compat, struct file *file, unsigned int cmd,
++LSM_HOOK(int, LSM_RET_INT(0), file_ioctl_compat, struct file *file, unsigned int cmd,
+ 	 unsigned long arg)
+-LSM_HOOK(int, 0, mmap_addr, unsigned long addr)
+-LSM_HOOK(int, 0, mmap_file, struct file *file, unsigned long reqprot,
++LSM_HOOK(int, LSM_RET_INT(0), mmap_addr, unsigned long addr)
++LSM_HOOK(int, LSM_RET_INT(0), mmap_file, struct file *file, unsigned long reqprot,
+ 	 unsigned long prot, unsigned long flags)
+-LSM_HOOK(int, 0, file_mprotect, struct vm_area_struct *vma,
++LSM_HOOK(int, LSM_RET_INT(0), file_mprotect, struct vm_area_struct *vma,
+ 	 unsigned long reqprot, unsigned long prot)
+-LSM_HOOK(int, 0, file_lock, struct file *file, unsigned int cmd)
+-LSM_HOOK(int, 0, file_fcntl, struct file *file, unsigned int cmd,
++LSM_HOOK(int, LSM_RET_INT(0), file_lock, struct file *file, unsigned int cmd)
++LSM_HOOK(int, LSM_RET_INT(0), file_fcntl, struct file *file, unsigned int cmd,
+ 	 unsigned long arg)
+ LSM_HOOK(void, LSM_RET_VOID, file_set_fowner, struct file *file)
+-LSM_HOOK(int, 0, file_send_sigiotask, struct task_struct *tsk,
++LSM_HOOK(int, LSM_RET_INT(0), file_send_sigiotask, struct task_struct *tsk,
+ 	 struct fown_struct *fown, int sig)
+-LSM_HOOK(int, 0, file_receive, struct file *file)
+-LSM_HOOK(int, 0, file_open, struct file *file)
+-LSM_HOOK(int, 0, file_truncate, struct file *file)
+-LSM_HOOK(int, 0, task_alloc, struct task_struct *task,
++LSM_HOOK(int, LSM_RET_INT(0), file_receive, struct file *file)
++LSM_HOOK(int, LSM_RET_INT(0), file_open, struct file *file)
++LSM_HOOK(int, LSM_RET_INT(0), file_truncate, struct file *file)
++LSM_HOOK(int, LSM_RET_INT(0), task_alloc, struct task_struct *task,
+ 	 unsigned long clone_flags)
+ LSM_HOOK(void, LSM_RET_VOID, task_free, struct task_struct *task)
+-LSM_HOOK(int, 0, cred_alloc_blank, struct cred *cred, gfp_t gfp)
++LSM_HOOK(int, LSM_RET_INT(0), cred_alloc_blank, struct cred *cred, gfp_t gfp)
+ LSM_HOOK(void, LSM_RET_VOID, cred_free, struct cred *cred)
+-LSM_HOOK(int, 0, cred_prepare, struct cred *new, const struct cred *old,
++LSM_HOOK(int, LSM_RET_INT(0), cred_prepare, struct cred *new, const struct cred *old,
+ 	 gfp_t gfp)
+ LSM_HOOK(void, LSM_RET_VOID, cred_transfer, struct cred *new,
+ 	 const struct cred *old)
+ LSM_HOOK(void, LSM_RET_VOID, cred_getsecid, const struct cred *c, u32 *secid)
+-LSM_HOOK(int, 0, kernel_act_as, struct cred *new, u32 secid)
+-LSM_HOOK(int, 0, kernel_create_files_as, struct cred *new, struct inode *inode)
+-LSM_HOOK(int, 0, kernel_module_request, char *kmod_name)
+-LSM_HOOK(int, 0, kernel_load_data, enum kernel_load_data_id id, bool contents)
+-LSM_HOOK(int, 0, kernel_post_load_data, char *buf, loff_t size,
++LSM_HOOK(int, LSM_RET_INT(0), kernel_act_as, struct cred *new, u32 secid)
++LSM_HOOK(int, LSM_RET_INT(0), kernel_create_files_as, struct cred *new, struct inode *inode)
++LSM_HOOK(int, LSM_RET_INT(0), kernel_module_request, char *kmod_name)
++LSM_HOOK(int, LSM_RET_INT(0), kernel_load_data, enum kernel_load_data_id id, bool contents)
++LSM_HOOK(int, LSM_RET_INT(0), kernel_post_load_data, char *buf, loff_t size,
+ 	 enum kernel_load_data_id id, char *description)
+-LSM_HOOK(int, 0, kernel_read_file, struct file *file,
++LSM_HOOK(int, LSM_RET_INT(0), kernel_read_file, struct file *file,
+ 	 enum kernel_read_file_id id, bool contents)
+-LSM_HOOK(int, 0, kernel_post_read_file, struct file *file, char *buf,
++LSM_HOOK(int, LSM_RET_INT(0), kernel_post_read_file, struct file *file, char *buf,
+ 	 loff_t size, enum kernel_read_file_id id)
+-LSM_HOOK(int, 0, task_fix_setuid, struct cred *new, const struct cred *old,
++LSM_HOOK(int, LSM_RET_INT(0), task_fix_setuid, struct cred *new, const struct cred *old,
+ 	 int flags)
+-LSM_HOOK(int, 0, task_fix_setgid, struct cred *new, const struct cred * old,
++LSM_HOOK(int, LSM_RET_INT(0), task_fix_setgid, struct cred *new, const struct cred *old,
+ 	 int flags)
+-LSM_HOOK(int, 0, task_fix_setgroups, struct cred *new, const struct cred * old)
+-LSM_HOOK(int, 0, task_setpgid, struct task_struct *p, pid_t pgid)
+-LSM_HOOK(int, 0, task_getpgid, struct task_struct *p)
+-LSM_HOOK(int, 0, task_getsid, struct task_struct *p)
++LSM_HOOK(int, LSM_RET_INT(0), task_fix_setgroups, struct cred *new, const struct cred *old)
++LSM_HOOK(int, LSM_RET_INT(0), task_setpgid, struct task_struct *p, pid_t pgid)
++LSM_HOOK(int, LSM_RET_INT(0), task_getpgid, struct task_struct *p)
++LSM_HOOK(int, LSM_RET_INT(0), task_getsid, struct task_struct *p)
+ LSM_HOOK(void, LSM_RET_VOID, current_getsecid_subj, u32 *secid)
+ LSM_HOOK(void, LSM_RET_VOID, task_getsecid_obj,
+ 	 struct task_struct *p, u32 *secid)
+-LSM_HOOK(int, 0, task_setnice, struct task_struct *p, int nice)
+-LSM_HOOK(int, 0, task_setioprio, struct task_struct *p, int ioprio)
+-LSM_HOOK(int, 0, task_getioprio, struct task_struct *p)
+-LSM_HOOK(int, 0, task_prlimit, const struct cred *cred,
++LSM_HOOK(int, LSM_RET_INT(0), task_setnice, struct task_struct *p, int nice)
++LSM_HOOK(int, LSM_RET_INT(0), task_setioprio, struct task_struct *p, int ioprio)
++LSM_HOOK(int, LSM_RET_INT(0), task_getioprio, struct task_struct *p)
++LSM_HOOK(int, LSM_RET_INT(0), task_prlimit, const struct cred *cred,
+ 	 const struct cred *tcred, unsigned int flags)
+-LSM_HOOK(int, 0, task_setrlimit, struct task_struct *p, unsigned int resource,
++LSM_HOOK(int, LSM_RET_INT(0), task_setrlimit, struct task_struct *p, unsigned int resource,
+ 	 struct rlimit *new_rlim)
+-LSM_HOOK(int, 0, task_setscheduler, struct task_struct *p)
+-LSM_HOOK(int, 0, task_getscheduler, struct task_struct *p)
+-LSM_HOOK(int, 0, task_movememory, struct task_struct *p)
+-LSM_HOOK(int, 0, task_kill, struct task_struct *p, struct kernel_siginfo *info,
++LSM_HOOK(int, LSM_RET_INT(0), task_setscheduler, struct task_struct *p)
++LSM_HOOK(int, LSM_RET_INT(0), task_getscheduler, struct task_struct *p)
++LSM_HOOK(int, LSM_RET_INT(0), task_movememory, struct task_struct *p)
++LSM_HOOK(int, LSM_RET_INT(0), task_kill, struct task_struct *p, struct kernel_siginfo *info,
+ 	 int sig, const struct cred *cred)
+-LSM_HOOK(int, -ENOSYS, task_prctl, int option, unsigned long arg2,
++LSM_HOOK(int, LSM_RET_INT(-ENOSYS), task_prctl, int option, unsigned long arg2,
+ 	 unsigned long arg3, unsigned long arg4, unsigned long arg5)
+ LSM_HOOK(void, LSM_RET_VOID, task_to_inode, struct task_struct *p,
+ 	 struct inode *inode)
+-LSM_HOOK(int, 0, userns_create, const struct cred *cred)
+-LSM_HOOK(int, 0, ipc_permission, struct kern_ipc_perm *ipcp, short flag)
++LSM_HOOK(int, LSM_RET_INT(0), userns_create, const struct cred *cred)
++LSM_HOOK(int, LSM_RET_INT(0), ipc_permission, struct kern_ipc_perm *ipcp, short flag)
+ LSM_HOOK(void, LSM_RET_VOID, ipc_getsecid, struct kern_ipc_perm *ipcp,
+ 	 u32 *secid)
+-LSM_HOOK(int, 0, msg_msg_alloc_security, struct msg_msg *msg)
++LSM_HOOK(int, LSM_RET_INT(0), msg_msg_alloc_security, struct msg_msg *msg)
+ LSM_HOOK(void, LSM_RET_VOID, msg_msg_free_security, struct msg_msg *msg)
+-LSM_HOOK(int, 0, msg_queue_alloc_security, struct kern_ipc_perm *perm)
++LSM_HOOK(int, LSM_RET_INT(0), msg_queue_alloc_security, struct kern_ipc_perm *perm)
+ LSM_HOOK(void, LSM_RET_VOID, msg_queue_free_security,
+ 	 struct kern_ipc_perm *perm)
+-LSM_HOOK(int, 0, msg_queue_associate, struct kern_ipc_perm *perm, int msqflg)
+-LSM_HOOK(int, 0, msg_queue_msgctl, struct kern_ipc_perm *perm, int cmd)
+-LSM_HOOK(int, 0, msg_queue_msgsnd, struct kern_ipc_perm *perm,
++LSM_HOOK(int, LSM_RET_INT(0), msg_queue_associate, struct kern_ipc_perm *perm, int msqflg)
++LSM_HOOK(int, LSM_RET_INT(0), msg_queue_msgctl, struct kern_ipc_perm *perm, int cmd)
++LSM_HOOK(int, LSM_RET_INT(0), msg_queue_msgsnd, struct kern_ipc_perm *perm,
+ 	 struct msg_msg *msg, int msqflg)
+-LSM_HOOK(int, 0, msg_queue_msgrcv, struct kern_ipc_perm *perm,
++LSM_HOOK(int, LSM_RET_INT(0), msg_queue_msgrcv, struct kern_ipc_perm *perm,
+ 	 struct msg_msg *msg, struct task_struct *target, long type, int mode)
+-LSM_HOOK(int, 0, shm_alloc_security, struct kern_ipc_perm *perm)
++LSM_HOOK(int, LSM_RET_INT(0), shm_alloc_security, struct kern_ipc_perm *perm)
+ LSM_HOOK(void, LSM_RET_VOID, shm_free_security, struct kern_ipc_perm *perm)
+-LSM_HOOK(int, 0, shm_associate, struct kern_ipc_perm *perm, int shmflg)
+-LSM_HOOK(int, 0, shm_shmctl, struct kern_ipc_perm *perm, int cmd)
+-LSM_HOOK(int, 0, shm_shmat, struct kern_ipc_perm *perm, char __user *shmaddr,
++LSM_HOOK(int, LSM_RET_INT(0), shm_associate, struct kern_ipc_perm *perm, int shmflg)
++LSM_HOOK(int, LSM_RET_INT(0), shm_shmctl, struct kern_ipc_perm *perm, int cmd)
++LSM_HOOK(int, LSM_RET_INT(0), shm_shmat, struct kern_ipc_perm *perm, char __user *shmaddr,
+ 	 int shmflg)
+-LSM_HOOK(int, 0, sem_alloc_security, struct kern_ipc_perm *perm)
++LSM_HOOK(int, LSM_RET_INT(0), sem_alloc_security, struct kern_ipc_perm *perm)
+ LSM_HOOK(void, LSM_RET_VOID, sem_free_security, struct kern_ipc_perm *perm)
+-LSM_HOOK(int, 0, sem_associate, struct kern_ipc_perm *perm, int semflg)
+-LSM_HOOK(int, 0, sem_semctl, struct kern_ipc_perm *perm, int cmd)
+-LSM_HOOK(int, 0, sem_semop, struct kern_ipc_perm *perm, struct sembuf *sops,
++LSM_HOOK(int, LSM_RET_INT(0), sem_associate, struct kern_ipc_perm *perm, int semflg)
++LSM_HOOK(int, LSM_RET_INT(0), sem_semctl, struct kern_ipc_perm *perm, int cmd)
++LSM_HOOK(int, LSM_RET_INT(0), sem_semop, struct kern_ipc_perm *perm, struct sembuf *sops,
+ 	 unsigned nsops, int alter)
+-LSM_HOOK(int, 0, netlink_send, struct sock *sk, struct sk_buff *skb)
++LSM_HOOK(int, LSM_RET_INT(0), netlink_send, struct sock *sk, struct sk_buff *skb)
+ LSM_HOOK(void, LSM_RET_VOID, d_instantiate, struct dentry *dentry,
+ 	 struct inode *inode)
+-LSM_HOOK(int, -EOPNOTSUPP, getselfattr, unsigned int attr,
++LSM_HOOK(int, LSM_RET_INT(-EOPNOTSUPP), getselfattr, unsigned int attr,
+ 	 struct lsm_ctx __user *ctx, size_t *size, u32 flags)
+-LSM_HOOK(int, -EOPNOTSUPP, setselfattr, unsigned int attr,
++LSM_HOOK(int, LSM_RET_INT(-EOPNOTSUPP), setselfattr, unsigned int attr,
+ 	 struct lsm_ctx *ctx, size_t size, u32 flags)
+-LSM_HOOK(int, -EINVAL, getprocattr, struct task_struct *p, const char *name,
++LSM_HOOK(int, LSM_RET_INT(-EINVAL), getprocattr, struct task_struct *p, const char *name,
+ 	 char **value)
+-LSM_HOOK(int, -EINVAL, setprocattr, const char *name, void *value, size_t size)
+-LSM_HOOK(int, 0, ismaclabel, const char *name)
+-LSM_HOOK(int, -EOPNOTSUPP, secid_to_secctx, u32 secid, char **secdata,
++LSM_HOOK(int, LSM_RET_INT(-EINVAL), setprocattr, const char *name, void *value, size_t size)
++LSM_HOOK(int, LSM_RET_INT(0), ismaclabel, const char *name)
++LSM_HOOK(int, LSM_RET_INT(-EOPNOTSUPP), secid_to_secctx, u32 secid, char **secdata,
+ 	 u32 *seclen)
+-LSM_HOOK(int, 0, secctx_to_secid, const char *secdata, u32 seclen, u32 *secid)
++LSM_HOOK(int, LSM_RET_INT(0), secctx_to_secid, const char *secdata, u32 seclen, u32 *secid)
+ LSM_HOOK(void, LSM_RET_VOID, release_secctx, char *secdata, u32 seclen)
+ LSM_HOOK(void, LSM_RET_VOID, inode_invalidate_secctx, struct inode *inode)
+-LSM_HOOK(int, 0, inode_notifysecctx, struct inode *inode, void *ctx, u32 ctxlen)
+-LSM_HOOK(int, 0, inode_setsecctx, struct dentry *dentry, void *ctx, u32 ctxlen)
+-LSM_HOOK(int, -EOPNOTSUPP, inode_getsecctx, struct inode *inode, void **ctx,
++LSM_HOOK(int, LSM_RET_INT(0), inode_notifysecctx, struct inode *inode, void *ctx, u32 ctxlen)
++LSM_HOOK(int, LSM_RET_INT(0), inode_setsecctx, struct dentry *dentry, void *ctx, u32 ctxlen)
++LSM_HOOK(int, LSM_RET_INT(-EOPNOTSUPP), inode_getsecctx, struct inode *inode, void **ctx,
+ 	 u32 *ctxlen)
+ 
+ #if defined(CONFIG_SECURITY) && defined(CONFIG_WATCH_QUEUE)
+-LSM_HOOK(int, 0, post_notification, const struct cred *w_cred,
++LSM_HOOK(int, LSM_RET_INT(0), post_notification, const struct cred *w_cred,
+ 	 const struct cred *cred, struct watch_notification *n)
+ #endif /* CONFIG_SECURITY && CONFIG_WATCH_QUEUE */
+ 
+ #if defined(CONFIG_SECURITY) && defined(CONFIG_KEY_NOTIFICATIONS)
+-LSM_HOOK(int, 0, watch_key, struct key *key)
++LSM_HOOK(int, LSM_RET_INT(0), watch_key, struct key *key)
+ #endif /* CONFIG_SECURITY && CONFIG_KEY_NOTIFICATIONS */
+ 
+ #ifdef CONFIG_SECURITY_NETWORK
+-LSM_HOOK(int, 0, unix_stream_connect, struct sock *sock, struct sock *other,
++LSM_HOOK(int, LSM_RET_INT(0), unix_stream_connect, struct sock *sock, struct sock *other,
+ 	 struct sock *newsk)
+-LSM_HOOK(int, 0, unix_may_send, struct socket *sock, struct socket *other)
+-LSM_HOOK(int, 0, socket_create, int family, int type, int protocol, int kern)
+-LSM_HOOK(int, 0, socket_post_create, struct socket *sock, int family, int type,
++LSM_HOOK(int, LSM_RET_INT(0), unix_may_send, struct socket *sock, struct socket *other)
++LSM_HOOK(int, LSM_RET_INT(0), socket_create, int family, int type, int protocol, int kern)
++LSM_HOOK(int, LSM_RET_INT(0), socket_post_create, struct socket *sock, int family, int type,
+ 	 int protocol, int kern)
+-LSM_HOOK(int, 0, socket_socketpair, struct socket *socka, struct socket *sockb)
+-LSM_HOOK(int, 0, socket_bind, struct socket *sock, struct sockaddr *address,
++LSM_HOOK(int, LSM_RET_INT(0), socket_socketpair, struct socket *socka, struct socket *sockb)
++LSM_HOOK(int, LSM_RET_INT(0), socket_bind, struct socket *sock, struct sockaddr *address,
+ 	 int addrlen)
+-LSM_HOOK(int, 0, socket_connect, struct socket *sock, struct sockaddr *address,
++LSM_HOOK(int, LSM_RET_INT(0), socket_connect, struct socket *sock, struct sockaddr *address,
+ 	 int addrlen)
+-LSM_HOOK(int, 0, socket_listen, struct socket *sock, int backlog)
+-LSM_HOOK(int, 0, socket_accept, struct socket *sock, struct socket *newsock)
+-LSM_HOOK(int, 0, socket_sendmsg, struct socket *sock, struct msghdr *msg,
++LSM_HOOK(int, LSM_RET_INT(0), socket_listen, struct socket *sock, int backlog)
++LSM_HOOK(int, LSM_RET_INT(0), socket_accept, struct socket *sock, struct socket *newsock)
++LSM_HOOK(int, LSM_RET_INT(0), socket_sendmsg, struct socket *sock, struct msghdr *msg,
+ 	 int size)
+-LSM_HOOK(int, 0, socket_recvmsg, struct socket *sock, struct msghdr *msg,
++LSM_HOOK(int, LSM_RET_INT(0), socket_recvmsg, struct socket *sock, struct msghdr *msg,
+ 	 int size, int flags)
+-LSM_HOOK(int, 0, socket_getsockname, struct socket *sock)
+-LSM_HOOK(int, 0, socket_getpeername, struct socket *sock)
+-LSM_HOOK(int, 0, socket_getsockopt, struct socket *sock, int level, int optname)
+-LSM_HOOK(int, 0, socket_setsockopt, struct socket *sock, int level, int optname)
+-LSM_HOOK(int, 0, socket_shutdown, struct socket *sock, int how)
+-LSM_HOOK(int, 0, socket_sock_rcv_skb, struct sock *sk, struct sk_buff *skb)
+-LSM_HOOK(int, -ENOPROTOOPT, socket_getpeersec_stream, struct socket *sock,
++LSM_HOOK(int, LSM_RET_INT(0), socket_getsockname, struct socket *sock)
++LSM_HOOK(int, LSM_RET_INT(0), socket_getpeername, struct socket *sock)
++LSM_HOOK(int, LSM_RET_INT(0), socket_getsockopt, struct socket *sock, int level, int optname)
++LSM_HOOK(int, LSM_RET_INT(0), socket_setsockopt, struct socket *sock, int level, int optname)
++LSM_HOOK(int, LSM_RET_INT(0), socket_shutdown, struct socket *sock, int how)
++LSM_HOOK(int, LSM_RET_INT(0), socket_sock_rcv_skb, struct sock *sk, struct sk_buff *skb)
++LSM_HOOK(int, LSM_RET_INT(-ENOPROTOOPT), socket_getpeersec_stream, struct socket *sock,
+ 	 sockptr_t optval, sockptr_t optlen, unsigned int len)
+-LSM_HOOK(int, -ENOPROTOOPT, socket_getpeersec_dgram, struct socket *sock,
++LSM_HOOK(int, LSM_RET_INT(-ENOPROTOOPT), socket_getpeersec_dgram, struct socket *sock,
+ 	 struct sk_buff *skb, u32 *secid)
+-LSM_HOOK(int, 0, sk_alloc_security, struct sock *sk, int family, gfp_t priority)
++LSM_HOOK(int, LSM_RET_INT(0), sk_alloc_security, struct sock *sk, int family, gfp_t priority)
+ LSM_HOOK(void, LSM_RET_VOID, sk_free_security, struct sock *sk)
+ LSM_HOOK(void, LSM_RET_VOID, sk_clone_security, const struct sock *sk,
+ 	 struct sock *newsk)
+ LSM_HOOK(void, LSM_RET_VOID, sk_getsecid, const struct sock *sk, u32 *secid)
+ LSM_HOOK(void, LSM_RET_VOID, sock_graft, struct sock *sk, struct socket *parent)
+-LSM_HOOK(int, 0, inet_conn_request, const struct sock *sk, struct sk_buff *skb,
++LSM_HOOK(int, LSM_RET_INT(0), inet_conn_request, const struct sock *sk, struct sk_buff *skb,
+ 	 struct request_sock *req)
+ LSM_HOOK(void, LSM_RET_VOID, inet_csk_clone, struct sock *newsk,
+ 	 const struct request_sock *req)
+ LSM_HOOK(void, LSM_RET_VOID, inet_conn_established, struct sock *sk,
+ 	 struct sk_buff *skb)
+-LSM_HOOK(int, 0, secmark_relabel_packet, u32 secid)
++LSM_HOOK(int, LSM_RET_INT(0), secmark_relabel_packet, u32 secid)
+ LSM_HOOK(void, LSM_RET_VOID, secmark_refcount_inc, void)
+ LSM_HOOK(void, LSM_RET_VOID, secmark_refcount_dec, void)
+ LSM_HOOK(void, LSM_RET_VOID, req_classify_flow, const struct request_sock *req,
+ 	 struct flowi_common *flic)
+-LSM_HOOK(int, 0, tun_dev_alloc_security, void **security)
++LSM_HOOK(int, LSM_RET_INT(0), tun_dev_alloc_security, void **security)
+ LSM_HOOK(void, LSM_RET_VOID, tun_dev_free_security, void *security)
+-LSM_HOOK(int, 0, tun_dev_create, void)
+-LSM_HOOK(int, 0, tun_dev_attach_queue, void *security)
+-LSM_HOOK(int, 0, tun_dev_attach, struct sock *sk, void *security)
+-LSM_HOOK(int, 0, tun_dev_open, void *security)
+-LSM_HOOK(int, 0, sctp_assoc_request, struct sctp_association *asoc,
++LSM_HOOK(int, LSM_RET_INT(0), tun_dev_create, void)
++LSM_HOOK(int, LSM_RET_INT(0), tun_dev_attach_queue, void *security)
++LSM_HOOK(int, LSM_RET_INT(0), tun_dev_attach, struct sock *sk, void *security)
++LSM_HOOK(int, LSM_RET_INT(0), tun_dev_open, void *security)
++LSM_HOOK(int, LSM_RET_INT(0), sctp_assoc_request, struct sctp_association *asoc,
+ 	 struct sk_buff *skb)
+-LSM_HOOK(int, 0, sctp_bind_connect, struct sock *sk, int optname,
++LSM_HOOK(int, LSM_RET_INT(0), sctp_bind_connect, struct sock *sk, int optname,
+ 	 struct sockaddr *address, int addrlen)
+ LSM_HOOK(void, LSM_RET_VOID, sctp_sk_clone, struct sctp_association *asoc,
+ 	 struct sock *sk, struct sock *newsk)
+-LSM_HOOK(int, 0, sctp_assoc_established, struct sctp_association *asoc,
++LSM_HOOK(int, LSM_RET_INT(0), sctp_assoc_established, struct sctp_association *asoc,
+ 	 struct sk_buff *skb)
+-LSM_HOOK(int, 0, mptcp_add_subflow, struct sock *sk, struct sock *ssk)
++LSM_HOOK(int, LSM_RET_INT(0), mptcp_add_subflow, struct sock *sk, struct sock *ssk)
+ #endif /* CONFIG_SECURITY_NETWORK */
+ 
+ #ifdef CONFIG_SECURITY_INFINIBAND
+-LSM_HOOK(int, 0, ib_pkey_access, void *sec, u64 subnet_prefix, u16 pkey)
+-LSM_HOOK(int, 0, ib_endport_manage_subnet, void *sec, const char *dev_name,
++LSM_HOOK(int, LSM_RET_INT(0), ib_pkey_access, void *sec, u64 subnet_prefix, u16 pkey)
++LSM_HOOK(int, LSM_RET_INT(0), ib_endport_manage_subnet, void *sec, const char *dev_name,
+ 	 u8 port_num)
+-LSM_HOOK(int, 0, ib_alloc_security, void **sec)
++LSM_HOOK(int, LSM_RET_INT(0), ib_alloc_security, void **sec)
+ LSM_HOOK(void, LSM_RET_VOID, ib_free_security, void *sec)
+ #endif /* CONFIG_SECURITY_INFINIBAND */
+ 
+ #ifdef CONFIG_SECURITY_NETWORK_XFRM
+-LSM_HOOK(int, 0, xfrm_policy_alloc_security, struct xfrm_sec_ctx **ctxp,
++LSM_HOOK(int, LSM_RET_INT(0), xfrm_policy_alloc_security, struct xfrm_sec_ctx **ctxp,
+ 	 struct xfrm_user_sec_ctx *sec_ctx, gfp_t gfp)
+-LSM_HOOK(int, 0, xfrm_policy_clone_security, struct xfrm_sec_ctx *old_ctx,
++LSM_HOOK(int, LSM_RET_INT(0), xfrm_policy_clone_security, struct xfrm_sec_ctx *old_ctx,
+ 	 struct xfrm_sec_ctx **new_ctx)
+ LSM_HOOK(void, LSM_RET_VOID, xfrm_policy_free_security,
+ 	 struct xfrm_sec_ctx *ctx)
+-LSM_HOOK(int, 0, xfrm_policy_delete_security, struct xfrm_sec_ctx *ctx)
+-LSM_HOOK(int, 0, xfrm_state_alloc, struct xfrm_state *x,
++LSM_HOOK(int, LSM_RET_INT(0), xfrm_policy_delete_security, struct xfrm_sec_ctx *ctx)
++LSM_HOOK(int, LSM_RET_INT(0), xfrm_state_alloc, struct xfrm_state *x,
+ 	 struct xfrm_user_sec_ctx *sec_ctx)
+-LSM_HOOK(int, 0, xfrm_state_alloc_acquire, struct xfrm_state *x,
++LSM_HOOK(int, LSM_RET_INT(0), xfrm_state_alloc_acquire, struct xfrm_state *x,
+ 	 struct xfrm_sec_ctx *polsec, u32 secid)
+ LSM_HOOK(void, LSM_RET_VOID, xfrm_state_free_security, struct xfrm_state *x)
+-LSM_HOOK(int, 0, xfrm_state_delete_security, struct xfrm_state *x)
+-LSM_HOOK(int, 0, xfrm_policy_lookup, struct xfrm_sec_ctx *ctx, u32 fl_secid)
+-LSM_HOOK(int, 1, xfrm_state_pol_flow_match, struct xfrm_state *x,
++LSM_HOOK(int, LSM_RET_INT(0), xfrm_state_delete_security, struct xfrm_state *x)
++LSM_HOOK(int, LSM_RET_INT(0), xfrm_policy_lookup, struct xfrm_sec_ctx *ctx, u32 fl_secid)
++LSM_HOOK(int, LSM_RET_INT(1), xfrm_state_pol_flow_match, struct xfrm_state *x,
+ 	 struct xfrm_policy *xp, const struct flowi_common *flic)
+-LSM_HOOK(int, 0, xfrm_decode_session, struct sk_buff *skb, u32 *secid,
++LSM_HOOK(int, LSM_RET_INT(0), xfrm_decode_session, struct sk_buff *skb, u32 *secid,
+ 	 int ckall)
+ #endif /* CONFIG_SECURITY_NETWORK_XFRM */
+ 
+ /* key management security hooks */
+ #ifdef CONFIG_KEYS
+-LSM_HOOK(int, 0, key_alloc, struct key *key, const struct cred *cred,
++LSM_HOOK(int, LSM_RET_INT(0), key_alloc, struct key *key, const struct cred *cred,
+ 	 unsigned long flags)
+ LSM_HOOK(void, LSM_RET_VOID, key_free, struct key *key)
+-LSM_HOOK(int, 0, key_permission, key_ref_t key_ref, const struct cred *cred,
++LSM_HOOK(int, LSM_RET_INT(0), key_permission, key_ref_t key_ref, const struct cred *cred,
+ 	 enum key_need_perm need_perm)
+-LSM_HOOK(int, 0, key_getsecurity, struct key *key, char **buffer)
++LSM_HOOK(int, LSM_RET_INT(0), key_getsecurity, struct key *key, char **buffer)
+ #endif /* CONFIG_KEYS */
+ 
+ #ifdef CONFIG_AUDIT
+-LSM_HOOK(int, 0, audit_rule_init, u32 field, u32 op, char *rulestr,
++LSM_HOOK(int, LSM_RET_INT(0), audit_rule_init, u32 field, u32 op, char *rulestr,
+ 	 void **lsmrule)
+-LSM_HOOK(int, 0, audit_rule_known, struct audit_krule *krule)
+-LSM_HOOK(int, 0, audit_rule_match, u32 secid, u32 field, u32 op, void *lsmrule)
++LSM_HOOK(int, LSM_RET_INT(0), audit_rule_known, struct audit_krule *krule)
++LSM_HOOK(int, LSM_RET_INT(0), audit_rule_match, u32 secid, u32 field, u32 op, void *lsmrule)
+ LSM_HOOK(void, LSM_RET_VOID, audit_rule_free, void *lsmrule)
+ #endif /* CONFIG_AUDIT */
+ 
+ #ifdef CONFIG_BPF_SYSCALL
+-LSM_HOOK(int, 0, bpf, int cmd, union bpf_attr *attr, unsigned int size)
+-LSM_HOOK(int, 0, bpf_map, struct bpf_map *map, fmode_t fmode)
+-LSM_HOOK(int, 0, bpf_prog, struct bpf_prog *prog)
+-LSM_HOOK(int, 0, bpf_map_create, struct bpf_map *map, union bpf_attr *attr,
++LSM_HOOK(int, LSM_RET_INT(0), bpf, int cmd, union bpf_attr *attr, unsigned int size)
++LSM_HOOK(int, LSM_RET_INT(0), bpf_map, struct bpf_map *map, fmode_t fmode)
++LSM_HOOK(int, LSM_RET_INT(0), bpf_prog, struct bpf_prog *prog)
++LSM_HOOK(int, LSM_RET_INT(0), bpf_map_create, struct bpf_map *map, union bpf_attr *attr,
+ 	 struct bpf_token *token)
+ LSM_HOOK(void, LSM_RET_VOID, bpf_map_free, struct bpf_map *map)
+-LSM_HOOK(int, 0, bpf_prog_load, struct bpf_prog *prog, union bpf_attr *attr,
++LSM_HOOK(int, LSM_RET_INT(0), bpf_prog_load, struct bpf_prog *prog, union bpf_attr *attr,
+ 	 struct bpf_token *token)
+ LSM_HOOK(void, LSM_RET_VOID, bpf_prog_free, struct bpf_prog *prog)
+-LSM_HOOK(int, 0, bpf_token_create, struct bpf_token *token, union bpf_attr *attr,
++LSM_HOOK(int, LSM_RET_INT(0), bpf_token_create, struct bpf_token *token, union bpf_attr *attr,
+ 	 struct path *path)
+ LSM_HOOK(void, LSM_RET_VOID, bpf_token_free, struct bpf_token *token)
+-LSM_HOOK(int, 0, bpf_token_cmd, const struct bpf_token *token, enum bpf_cmd cmd)
+-LSM_HOOK(int, 0, bpf_token_capable, const struct bpf_token *token, int cap)
++LSM_HOOK(int, LSM_RET_INT(0), bpf_token_cmd, const struct bpf_token *token, enum bpf_cmd cmd)
++LSM_HOOK(int, LSM_RET_INT(0), bpf_token_capable, const struct bpf_token *token, int cap)
+ #endif /* CONFIG_BPF_SYSCALL */
+ 
+-LSM_HOOK(int, 0, locked_down, enum lockdown_reason what)
++LSM_HOOK(int, LSM_RET_INT(0), locked_down, enum lockdown_reason what)
+ 
+ #ifdef CONFIG_PERF_EVENTS
+-LSM_HOOK(int, 0, perf_event_open, struct perf_event_attr *attr, int type)
+-LSM_HOOK(int, 0, perf_event_alloc, struct perf_event *event)
++LSM_HOOK(int, LSM_RET_INT(0), perf_event_open, struct perf_event_attr *attr, int type)
++LSM_HOOK(int, LSM_RET_INT(0), perf_event_alloc, struct perf_event *event)
+ LSM_HOOK(void, LSM_RET_VOID, perf_event_free, struct perf_event *event)
+-LSM_HOOK(int, 0, perf_event_read, struct perf_event *event)
+-LSM_HOOK(int, 0, perf_event_write, struct perf_event *event)
++LSM_HOOK(int, LSM_RET_INT(0), perf_event_read, struct perf_event *event)
++LSM_HOOK(int, LSM_RET_INT(0), perf_event_write, struct perf_event *event)
+ #endif /* CONFIG_PERF_EVENTS */
+ 
+ #ifdef CONFIG_IO_URING
+-LSM_HOOK(int, 0, uring_override_creds, const struct cred *new)
+-LSM_HOOK(int, 0, uring_sqpoll, void)
+-LSM_HOOK(int, 0, uring_cmd, struct io_uring_cmd *ioucmd)
++LSM_HOOK(int, LSM_RET_INT(0), uring_override_creds, const struct cred *new)
++LSM_HOOK(int, LSM_RET_INT(0), uring_sqpoll, void)
++LSM_HOOK(int, LSM_RET_INT(0), uring_cmd, struct io_uring_cmd *ioucmd)
+ #endif /* CONFIG_IO_URING */
+diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+index a2ade0ffe9e7..14690cad4fb9 100644
+--- a/include/linux/lsm_hooks.h
++++ b/include/linux/lsm_hooks.h
+@@ -98,12 +98,6 @@ static inline struct xattr *lsm_get_xattr_slot(struct xattr *xattrs,
+ 	return &xattrs[(*xattr_count)++];
+ }
+ 
+-/*
+- * LSM_RET_VOID is used as the default value in LSM_HOOK definitions for void
+- * LSM hooks (in include/linux/lsm_hook_defs.h).
+- */
+-#define LSM_RET_VOID ((void) 0)
+-
+ /*
+  * Initializing a security_hook_list structure takes
+  * up a lot of space in a source file. This macro takes
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index 68240c3c6e7d..2185dc4c0aed 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -18,6 +18,14 @@
+ #include <linux/ima.h>
+ #include <linux/bpf-cgroup.h>
+ 
++/*
++ * LSM_RET_VOID is used as the default value in LSM_HOOK definitions for void
++ * LSM hooks (in include/linux/lsm_hook_defs.h).
++ */
++#define LSM_RET_VOID ((void) 0)
++
++#define LSM_RET_INT(defval) defval
++
+ /* For every LSM hook that allows attachment of BPF programs, declare a nop
+  * function where a BPF program can be attached.
+  */
+@@ -29,6 +37,8 @@ noinline RET bpf_lsm_##NAME(__VA_ARGS__)	\
+ 
+ #include <linux/lsm_hook_defs.h>
+ #undef LSM_HOOK
++#undef LSM_RET_INT
++#undef LSM_RET_VOID
+ 
+ #define LSM_HOOK(RET, DEFAULT, NAME, ...) BTF_ID(func, bpf_lsm_##NAME)
+ BTF_SET_START(bpf_lsm_hooks)
+diff --git a/security/security.c b/security/security.c
+index aef69632d0a9..72408a9f0822 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -828,6 +828,7 @@ int lsm_fill_user_ctx(struct lsm_ctx __user *uctx, size_t *uctx_len,
+  * The macros below define static constants for the default value of each
+  * LSM hook.
+  */
++#define LSM_RET_INT(defval) defval
+ #define LSM_RET_DEFAULT(NAME) (NAME##_default)
+ #define DECLARE_LSM_RET_DEFAULT_void(DEFAULT, NAME)
+ #define DECLARE_LSM_RET_DEFAULT_int(DEFAULT, NAME) \
+-- 
+2.30.2
 
--ifeq ($(BTF_BASE_REF),1)
-+ifneq ($(KBUILD_EXTMOD),)
- module-pahole-flags-$(call test-ge, $(pahole-ver), 126)        +=
---btf_features=base_ref
- module-resolve-btfids-flags-$(call test-ge, $(pahole-ver), 126) = -r
- endif
-
-So with this approach, in-tree modules don't add base reference BTF
-since they don't need it, while out-of-tree module builds always do.
-We could arrange for bpf_testmod to be built both ways perhaps to ensure
-both approaches get tested in selftests along with kfunc addition etc.
-
-For adding base reference BTF in all cases, I ran the numbers on adding
-base reference BTF across all kernel modules and for x86_64 with 2667
-modules. Base reference BTF adds around 4MB in total. Not huge, but for
-in-tree builds, the only cases we've seen that triggered BTF mismatches
-have been broken cases where vmlinux got built twice during kernel
-build. So my suggestion would be to limit base reference BTF addition to
-the KBUILD_EXTMOD case, and make it unconditional for that case only.
-
-Thanks!
-
-Alan
