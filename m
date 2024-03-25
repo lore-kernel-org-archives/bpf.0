@@ -1,83 +1,53 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB061448DC;
-	Mon, 25 Mar 2024 15:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3EA91428FD
+	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 15:22:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711379275; cv=none; b=Zkj5mh23zsUQkAK3Su0PiMUzUKV976CwdidtbAq/Gbn3vlTn9Tl1HNnuV4SlV/oapsQR9vIXWnSb26nbfog/GvibZukq6RAaZtvhpUK6wi6bVdafG8/125SqsrIdTPChhO9kepK/U5/4EsLeerMCPjg7mH82yw51kLODMjbDShw=
+	t=1711380151; cv=none; b=Oc3sffrGagcXt0D9IDZtMMXxRXAZRzSN9bgujsQ+o9Rk6veLgGxJcjqgYHtn1Fd82wRWeRglRxjMGx0D2TF90GeXKx7gBMeJOcfxlr44pkg0rW12670t/t8/iJrVhoyGw7xfhdiPzkgQ6A0acyxv6hJRHe/1wLuElJELnzJogto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711379275; c=relaxed/simple;
-	bh=WPZJxY64JttEsmo9dhnvvcg4+XVoCTGJflosyMC/1s0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=sPumAyzsX15wwZTslEv5uoRMP10UZG2RisYhM7mnfDTW2SRa5Fpq22aO8+Y4UjIjFlNZaNvc034ijqP6fZIuR8D3Lz3w2A7lod84X9iIh0nI9etLuStrLcRQ+iIbzxV1aq0VJGwFLOcqo5c1Qs9ZbSHMokK9ouJDpmk8Fj7FOpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VqLrrYf8; arc=none smtp.client-ip=209.85.221.43
+	s=arc-20240116; t=1711380151; c=relaxed/simple;
+	bh=mvslh4SFAC/ZdAGaXutOtjBsosEfJYNH6cdRUAOORKU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JAASivn6DS4mApixVzjb01Bzz2P15cFPdRK+zGI1cdsMRQVTmBqHi6jYsdGACz99YvwyHYfAM+tFQ7PWVpBxOxaLDw4kIpoReKdGpStETfW9AtPvVDE9SII78gQvJK7wkqYbMzxmKYiOAdila4IIvSllnUyGMON9QcWu2R7+MDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VqLrrYf8"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-33ececeb19eso2923156f8f.3;
-        Mon, 25 Mar 2024 08:07:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711379272; x=1711984072; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hoq50HiMB9NXZrdEZyv6uWqBCBaEdhgRrvWxBqHbu6s=;
-        b=VqLrrYf8pjSbxGPUa0OM0KkBfgPM0E0DG3+sOieErQlG6vWp0z1Y91nw6yXng6LPUp
-         kwD1q817x6x5hsBy4jkGgckzeWmZkBMda31IID+SDc3EUFQGsaCQJathhkjqXrYcga6Z
-         iQCPOdt/Gc2WRstKhuWsCuzgV1VZx7OGYPmSN/zKTbS2di2S1vqjE/YIJ57xDaRs9zU6
-         Su+r/F8+CYeDqRl3NEFdUO2+Im99l0qv5bBRNVKzdqorm/6L2FcSPB83TaoWHGyxoEFi
-         zSZ25HkcWeHgvv1mS4yv+bJpDaneDrs7RVBveE99PRDfKwzmfVj08UEzpiTB0m7k0eCh
-         jmBw==
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a4a393b699fso140347966b.0
+        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 08:22:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711379272; x=1711984072;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hoq50HiMB9NXZrdEZyv6uWqBCBaEdhgRrvWxBqHbu6s=;
-        b=Pp7lKSWprM/1gpBxpLGDGT1Oudbj1IZ5aFscDYIGMkWk5XCsQYneNx8rRVfodbp1Uh
-         ZCE4aLrgMOxyiuiSCtrsA7NnRVF6ll7uYxS6ILZCOwRd9gF8c7TzcL5jxhh1DNvoT69X
-         30q4BjCVdb3pEzOoD8XFG2YGEMDtRLq2gFQw/5Ip1Uecxw8M7lAXVvaq07Rr+vSCO0/W
-         h/+Wus8qoQtg3vOmBOfnvLGloO/n+MUnaWvmWHueitn1tWSdU57vOTT1Lq4V9ke7oYcD
-         XDVZaVvCuufVYaEy8ciUywqh6tqx+NrDpCGQAN+4vLwdP+5yiYQelYgov83ByFlFfxZp
-         8Tgw==
-X-Forwarded-Encrypted: i=1; AJvYcCVa5oW+LQbMWzl3BhubBEmYlo9gX+Cfpi1VWwwJWR3GTB+9bUnowAIha8p0Qu/+AMWnmVGbM9XQ9DUyxRIfqmZWntiidOz1zpTSWCqDWhTeMyFZuyGHd3qYA1jGvON7Aa/1
-X-Gm-Message-State: AOJu0YxZ6V3YollAEaSriZf4YaN7k16FKKBix3rQYqPCm2YMBpTLL065
-	2HVE0CGqD8TBjS+X6x8LoU8lSJvgL10Dn9Krj4Z4DbSvCKsK1Rjo
-X-Google-Smtp-Source: AGHT+IG1cMwiUEuNrHBMmu6sqUJLhG/rlDeqg1mVtGwOfLgoffq+lA+qEDtufFTRBH9I+6gcWzbsUg==
-X-Received: by 2002:a5d:4612:0:b0:33e:7f51:c2f7 with SMTP id t18-20020a5d4612000000b0033e7f51c2f7mr4458901wrq.52.1711379271822;
-        Mon, 25 Mar 2024 08:07:51 -0700 (PDT)
-Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id ck8-20020a5d5e88000000b00341ba91c1f5sm8505949wrb.102.2024.03.25.08.07.50
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 25 Mar 2024 08:07:50 -0700 (PDT)
-From: Puranjay Mohan <puranjay12@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Zi Shen Lim <zlim.lnx@gmail.com>,
-	Xu Kuohai <xukuohai@huawei.com>
-Cc: puranjay12@gmail.com
-Subject: [PATCH bpf-next v4 2/2] bpf: Add arm64 JIT support for bpf_addr_space_cast instruction.
-Date: Mon, 25 Mar 2024 15:07:16 +0000
-Message-Id: <20240325150716.4387-3-puranjay12@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240325150716.4387-1-puranjay12@gmail.com>
-References: <20240325150716.4387-1-puranjay12@gmail.com>
+        d=1e100.net; s=20230601; t=1711380148; x=1711984948;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z5nDzv3VJ9jhaN5/PKwtL4JM8viNwxHH4cEOJR6xTzs=;
+        b=spJeTD76bod7B3Urel3VsSaR7C0ZzfDSX2xkKDVpH1EZHecVlTlmNJZBUDbQXwYgva
+         M6s3bQtrSKnM0L71TZx/lmvQKykfIxi+e2TqfYBbAAE51V+s3Ym+2tZDYm1KsHJfSiR/
+         yjqqLDVOU7Cplpj7XxvPMwdOY8/R67wv8KWCrbTLd0jwxJ+N+srWS1Yy+t9tA3sM/ntu
+         5OHdvJp4QSdMXslRKwl5G6ERMSc3maqP7yvEM1ubUsRfolvJBvn8B3MVDXYiL7nsc15g
+         dqOnFtl1gXkrW/MtIFKknTOexOPFmheZtNiWVkJkCwX9PjAthZlzE0pAj27Gmky5nSGd
+         reSQ==
+X-Gm-Message-State: AOJu0Ywgnb3thpW5JgxiyTlJ0unlB5QXXmM4/z6HQY9QxX6j6QFz0U+r
+	WeBOeW71hSeHHiSi1nOa3kILsWzwGuXBI9U7dSL/rwrm1luZe+9oJsNLbzK7QkQ=
+X-Google-Smtp-Source: AGHT+IHALKejJ+BJsN2FqUmb6jKKnmeAlvjiE2/bykmBmss3fZ73nEr94RLhCCsRfvLNMAJwQH1ZGQ==
+X-Received: by 2002:a17:907:9804:b0:a49:833d:a9ad with SMTP id ji4-20020a170907980400b00a49833da9admr3295117ejc.38.1711380147697;
+        Mon, 25 Mar 2024 08:22:27 -0700 (PDT)
+Received: from yatsenko-fedora-K2202N0103767.thefacebook.com ([2620:10d:c092:500::4:e1d0])
+        by smtp.gmail.com with ESMTPSA id t23-20020a17090605d700b00a46abaeeb1csm3154351ejt.104.2024.03.25.08.22.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Mar 2024 08:22:27 -0700 (PDT)
+From: Mykyta Yatsenko mykyta.yatsenko5@gmail.com
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	kafai@meta.com,
+	kernel-team@meta.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+Subject: [PATCH bpf-next] bpf: improve error message for unsupported helper
+Date: Mon, 25 Mar 2024 15:22:10 +0000
+Message-ID: <20240325152210.377548-1-yatsenko@meta.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -86,81 +56,132 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-LLVM generates bpf_addr_space_cast instruction while translating
-pointers between native (zero) address space and
-__attribute__((address_space(N))). The addr_space=0 is reserved as
-bpf_arena address space.
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-rY = addr_space_cast(rX, 0, 1) is processed by the verifier and
-converted to normal 32-bit move: wX = wY.
+BPF verifier emits "unknown func" message when given BPF program type
+does not support BPF helper. This message may be confusing for users, as
+important context that helper is unknown only to current program type is
+not provided.
 
-rY = addr_space_cast(rX, 1, 0) : used to convert a bpf arena pointer to
-a pointer in the userspace vma. This has to be converted by the JIT.
+This patch changes message to "program of this type cannot use helper "
+and aligns dependent code in libbpf and tests. Any suggestions on
+improving/changing this message are welcome.
 
-Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- arch/arm64/net/bpf_jit_comp.c                | 16 ++++++++++++++++
- tools/testing/selftests/bpf/DENYLIST.aarch64 |  2 --
- 2 files changed, 16 insertions(+), 2 deletions(-)
+ kernel/bpf/verifier.c                                     | 4 ++--
+ tools/bpf/bpftool/feature.c                               | 3 ++-
+ tools/lib/bpf/libbpf_probes.c                             | 6 ++++--
+ tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c       | 2 +-
+ .../selftests/bpf/progs/verifier_helper_restricted.c      | 8 ++++----
+ 5 files changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index ba6dabf62712..8967388446d5 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -82,6 +82,7 @@ struct jit_ctx {
- 	__le32 *ro_image;
- 	u32 stack_size;
- 	int fpb_offset;
-+	u64 user_vm_start;
- };
- 
- struct bpf_plt {
-@@ -868,6 +869,15 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	/* dst = src */
- 	case BPF_ALU | BPF_MOV | BPF_X:
- 	case BPF_ALU64 | BPF_MOV | BPF_X:
-+		if (insn_is_cast_user(insn)) {
-+			emit(A64_MOV(0, tmp, src), ctx); // 32-bit mov clears the upper 32 bits
-+			emit_a64_mov_i(0, dst, ctx->user_vm_start >> 32, ctx);
-+			emit(A64_LSL(1, dst, dst, 32), ctx);
-+			emit(A64_CBZ(1, tmp, 2), ctx);
-+			emit(A64_ORR(1, tmp, dst, tmp), ctx);
-+			emit(A64_MOV(1, dst, tmp), ctx);
-+			break;
-+		}
- 		switch (insn->off) {
- 		case 0:
- 			emit(A64_MOV(is64, dst, src), ctx);
-@@ -1690,6 +1700,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ca6cacf7b42f..a1a96ba867d9 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10188,8 +10188,8 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 	if (env->ops->get_func_proto)
+ 		fn = env->ops->get_func_proto(func_id, env->prog);
+ 	if (!fn) {
+-		verbose(env, "unknown func %s#%d\n", func_id_name(func_id),
+-			func_id);
++		verbose(env, "program of this type cannot use helper %s#%d\n",
++			func_id_name(func_id), func_id);
+ 		return -EINVAL;
  	}
  
- 	ctx.fpb_offset = find_fpb_offset(prog);
-+	ctx.user_vm_start = bpf_arena_get_user_vm_start(prog->aux->arena);
+diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
+index 708733b0ea06..c754a428c8c6 100644
+--- a/tools/bpf/bpftool/feature.c
++++ b/tools/bpf/bpftool/feature.c
+@@ -664,7 +664,8 @@ probe_helper_ifindex(enum bpf_func_id id, enum bpf_prog_type prog_type,
  
- 	/*
- 	 * 1. Initial fake pass to compute ctx->idx and ctx->offset.
-@@ -2511,6 +2522,11 @@ bool bpf_jit_supports_exceptions(void)
- 	return true;
+ 	probe_prog_load_ifindex(prog_type, insns, ARRAY_SIZE(insns), buf,
+ 				sizeof(buf), ifindex);
+-	res = !grep(buf, "invalid func ") && !grep(buf, "unknown func ");
++	res = !grep(buf, "invalid func ") && !grep(buf, "unknown func ") &&
++		!grep(buf, "program of this type cannot use helper ");
+ 
+ 	switch (get_vendor_id(ifindex)) {
+ 	case 0x19ee: /* Netronome specific */
+diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
+index 302188122439..feef28040cdb 100644
+--- a/tools/lib/bpf/libbpf_probes.c
++++ b/tools/lib/bpf/libbpf_probes.c
+@@ -448,7 +448,8 @@ int libbpf_probe_bpf_helper(enum bpf_prog_type prog_type, enum bpf_func_id helpe
+ 	/* If BPF verifier doesn't recognize BPF helper ID (enum bpf_func_id)
+ 	 * at all, it will emit something like "invalid func unknown#181".
+ 	 * If BPF verifier recognizes BPF helper but it's not supported for
+-	 * given BPF program type, it will emit "unknown func bpf_sys_bpf#166".
++	 * given BPF program type, it will emit "unknown func bpf_sys_bpf#166"
++	 * or "program of this type cannot use helper bpf_sys_bpf#166".
+ 	 * In both cases, provided combination of BPF program type and BPF
+ 	 * helper is not supported by the kernel.
+ 	 * In all other cases, probe_prog_load() above will either succeed (e.g.,
+@@ -457,7 +458,8 @@ int libbpf_probe_bpf_helper(enum bpf_prog_type prog_type, enum bpf_func_id helpe
+ 	 * that), or we'll get some more specific BPF verifier error about
+ 	 * some unsatisfied conditions.
+ 	 */
+-	if (ret == 0 && (strstr(buf, "invalid func ") || strstr(buf, "unknown func ")))
++	if (ret == 0 && (strstr(buf, "invalid func ") || strstr(buf, "unknown func ") ||
++			 strstr(buf, "program of this type cannot use helper ")))
+ 		return 0;
+ 	return 1; /* assume supported */
  }
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+index a88e6e07e4f5..c646c812a3bf 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+@@ -315,7 +315,7 @@ static void test_rel_setsockopt(void)
+ 	struct bpf_dctcp_release *rel_skel;
+ 	libbpf_print_fn_t old_print_fn;
  
-+bool bpf_jit_supports_arena(void)
-+{
-+	return true;
-+}
-+
- void bpf_jit_free(struct bpf_prog *prog)
+-	err_str = "unknown func bpf_setsockopt";
++	err_str = "program of this type cannot use helper bpf_setsockopt";
+ 	found = false;
+ 
+ 	old_print_fn = libbpf_set_print(libbpf_debug_print);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_helper_restricted.c b/tools/testing/selftests/bpf/progs/verifier_helper_restricted.c
+index 0ede0ccd090c..059aa716e3d0 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_helper_restricted.c
++++ b/tools/testing/selftests/bpf/progs/verifier_helper_restricted.c
+@@ -30,7 +30,7 @@ struct {
+ 
+ SEC("kprobe")
+ __description("bpf_ktime_get_coarse_ns is forbidden in BPF_PROG_TYPE_KPROBE")
+-__failure __msg("unknown func bpf_ktime_get_coarse_ns")
++__failure __msg("program of this type cannot use helper bpf_ktime_get_coarse_ns")
+ __naked void in_bpf_prog_type_kprobe_1(void)
  {
- 	if (prog->jited) {
-diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 b/tools/testing/selftests/bpf/DENYLIST.aarch64
-index d8ade15e2789..0445ac38bc07 100644
---- a/tools/testing/selftests/bpf/DENYLIST.aarch64
-+++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
-@@ -10,5 +10,3 @@ fill_link_info/kprobe_multi_link_info            # bpf_program__attach_kprobe_mu
- fill_link_info/kretprobe_multi_link_info         # bpf_program__attach_kprobe_multi_opts unexpected error: -95
- fill_link_info/kprobe_multi_invalid_ubuff        # bpf_program__attach_kprobe_multi_opts unexpected error: -95
- missed/kprobe_recursion                          # missed_kprobe_recursion__attach unexpected error: -95 (errno 95)
--verifier_arena                                   # JIT does not support arena
--arena_htab                                       # JIT does not support arena
+ 	asm volatile ("					\
+@@ -44,7 +44,7 @@ __naked void in_bpf_prog_type_kprobe_1(void)
+ 
+ SEC("tracepoint")
+ __description("bpf_ktime_get_coarse_ns is forbidden in BPF_PROG_TYPE_TRACEPOINT")
+-__failure __msg("unknown func bpf_ktime_get_coarse_ns")
++__failure __msg("program of this type cannot use helper bpf_ktime_get_coarse_ns")
+ __naked void in_bpf_prog_type_tracepoint_1(void)
+ {
+ 	asm volatile ("					\
+@@ -58,7 +58,7 @@ __naked void in_bpf_prog_type_tracepoint_1(void)
+ 
+ SEC("perf_event")
+ __description("bpf_ktime_get_coarse_ns is forbidden in BPF_PROG_TYPE_PERF_EVENT")
+-__failure __msg("unknown func bpf_ktime_get_coarse_ns")
++__failure __msg("program of this type cannot use helper bpf_ktime_get_coarse_ns")
+ __naked void bpf_prog_type_perf_event_1(void)
+ {
+ 	asm volatile ("					\
+@@ -72,7 +72,7 @@ __naked void bpf_prog_type_perf_event_1(void)
+ 
+ SEC("raw_tracepoint")
+ __description("bpf_ktime_get_coarse_ns is forbidden in BPF_PROG_TYPE_RAW_TRACEPOINT")
+-__failure __msg("unknown func bpf_ktime_get_coarse_ns")
++__failure __msg("program of this type cannot use helper bpf_ktime_get_coarse_ns")
+ __naked void bpf_prog_type_raw_tracepoint_1(void)
+ {
+ 	asm volatile ("					\
 -- 
-2.40.1
+2.42.0
 
