@@ -1,119 +1,102 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AED482D90;
-	Mon, 25 Mar 2024 23:14:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D7B82D69
+	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 23:20:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711408472; cv=none; b=W7erh6GZmNnDMh2RKt8Ooi3/+Ydv0ZIRKAuOGLbDnP3NaO/hmRkmVnNNtxKl0HAC/YEIcBZ45ij9PpmIhRKkZQ/yo13/bUxjfPYls/d3o5nVId/p2HNT8MeIavLwl34WuAQnGrqLM2Oq4yGAZJzxPjL+xsMq53l+su7g5+72QeI=
+	t=1711408806; cv=none; b=lF1SS25WHSQBNPp5548GOfM6dToK3130qox8iBIcgHsGMgJ5NFQoG9cX3QykzgyRF9YlmKubMx1n4pLLoT9qNVEQHt71HV0BpL2zEDwdWh3KQXOPF+rdoW50dJRdfhyXppbvYrn/e+qyhfp1s0vORnxytSZJ1ulck8AaTS8ZADM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711408472; c=relaxed/simple;
-	bh=06TOXQCi5RKMcovaZsXCGquZGkXuqjIcnKZqO3Wu4Ro=;
+	s=arc-20240116; t=1711408806; c=relaxed/simple;
+	bh=EAB9kqs4DVTZxHf3pT8YJygMcmIsZZt7COQlFXGh7YY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ItLOPO1wYUGjcwtF/dptXBvDNQytHeAEm8Xan2lj5mCFy4Lxqe/cYeoeQe9ucMjuAhpdy/mwrltSo59fRQmkA2MeWvYo+vetFSo/8EVV9tPv4dUnPE8IYnbPtwRN8ud9KIbhj0KTbbd18pJQR/Af+3kUmSqXGKv2dtv4WUBRFng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iieNI8fM; arc=none smtp.client-ip=209.85.214.182
+	 To:Cc:Content-Type; b=Lu0VRztYm6/3bhQRg/zNlzQUnZx9T9DvAGuE8iEb+0hWwdBJCZARQQSxVdowAF2FwAS1tfpVjNl6BBcq9DFnW0ugOyRQi9PIqlILRtReTWmilwt+XpOqW+RA2VuOVvCfkv4CHFQ/1nnS7ngq7dQ1glExXpQlqWim6488kv/g3GQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hfVgJur+; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iieNI8fM"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1def3340682so40200955ad.1;
-        Mon, 25 Mar 2024 16:14:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hfVgJur+"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1dee5ef2a7bso35336585ad.1
+        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 16:20:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711408470; x=1712013270; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711408803; x=1712013603; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5NA+R3becyndYRGT5f8sRZeSnD9n4TKt3ID9pBHYfjo=;
-        b=iieNI8fMf+U7/f6xvIY/x3uJJ6gAqOUfnDAnwU4TYSeJOSKq4+HixgseY6BAz8Z55D
-         4axv4Q89DF7t8R1sK+HM5xPBLxD55CxniU4sotk5vxu0jyN0A7XZtaQbjADu88lPjqNG
-         9srCw1/AnqPsCCRSnf8/62Y+4/Z2ONS0heiGUW7DYeRDV+aX+AyaGXsyCGxEdEAfFWlf
-         R/iXRAS+dBLQA56it0hn+6+Ftnha0gABxB9fsD+5UeMTeRmAMhELBj4KF10AXN7awOzT
-         mxxsSnb7YmN+PehmW/zR7ua6WVExqYXt+6A31L1bUxyWFh9UriduT/Dhe0074frjEodZ
-         BjDg==
+        bh=LGQ58VgfOIH3h7dVznDl74Y5tKoIt2fxmUy53cbsSws=;
+        b=hfVgJur+5NrKHbaoxyjNORH+X3UYkPocmt7oa9jE6I4rJXXmjj12MnK6mW4huWaOX8
+         E/w88nzoyqrwgM0CrAWeiI6T+MttmErjLpX18Dboj6I6PApujKztRypwLGBlIwHMRruM
+         RQLXaU39sS3gtcE1GGdBqvRyCbqP+UPK2okwO/sNiecxNlztOEFHgV7nJKKvqowB7SK5
+         5Kwh/Dk4laoKu7vOrQOsv8HGkfIGjtGlyg4PjWxpXnS7wzhba6UF/qQNLrzv8omdeg2x
+         ABsqoGOiSakocBcalfieySeksYcMDnQACW693oKIqKc9uyb+hvrp3QVRNk95033ZQhIX
+         HcqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711408470; x=1712013270;
+        d=1e100.net; s=20230601; t=1711408803; x=1712013603;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5NA+R3becyndYRGT5f8sRZeSnD9n4TKt3ID9pBHYfjo=;
-        b=QoOJB44E+iyTqJVk/p3TXAugqRQN31UIZpP07lk7LB93zDT3yqkbW1ihr4RfM/62/7
-         9JDy2MmoKGB25Im+nyH487TvyDHTh7IhNv/shjtgVhSfNKiSTs+65sJV+jtCg3lyyWyN
-         IQ/U86/42WL9uHdSjhlOf76Odfve7tQAV4WCGcSR/ZLTzvUA+CCgOF4m977lEhoHtc96
-         +ekvnD9M51cXNnI/xakVXP49QCRfLP6iTcAKNZrIUu2ZQL6tRTRqHpuLmzB+fsA8lhtF
-         m66UTXO8q3ek7cYP1TZBowm4B5tmVxD3XC9o7ZIiW+OdrT0yYd6KCSMlEvddXGcvM2Qa
-         SDkw==
-X-Forwarded-Encrypted: i=1; AJvYcCWOHmnhJ3F8oesh6LhVh7T9TNrjWBR03gVBXZAeSdiBhZlGO45Mco7ptgmM6ufAqgC3R7JWeIQ1PtKnAOL2hKKo3NuXhNLeQBNtQ2BaKMU5JaO+wzkoyeehxgPVizrxjDqB3CGEI68efBFPTWpeQhnduGlLwzJnrXUsHjhtPnPwdy69zIW8gmcXL0Ajv6aQfvqpmsj9RHSsnAAv5QtPcELhdYTZll5Uyw==
-X-Gm-Message-State: AOJu0YzJdlkUb3LlodBbswYaq+LXX4JTLyHOOhN/Mj6H49fzcPz5KTxi
-	ZVjEAel96YBWPLf26rji4xinf2L1I7OUmiVu8/PRSvzJTTU7pW8rwhF+J01z2QAiFkVNXC/NLKa
-	hg+ykcHWWvePZ7tHMPoUybpOjJuk=
-X-Google-Smtp-Source: AGHT+IFxtJvxausC+t3c2Ddd3qmq7+4yC5kPd5b9eF5t4jHFtC+2YDB2Ym3wRBE6w7MeUZl3AFK1b7sboD4SM2UzNxc=
-X-Received: by 2002:a17:902:dac3:b0:1e0:bd8e:5a66 with SMTP id
- q3-20020a170902dac300b001e0bd8e5a66mr5770221plx.8.1711408470124; Mon, 25 Mar
- 2024 16:14:30 -0700 (PDT)
+        bh=LGQ58VgfOIH3h7dVznDl74Y5tKoIt2fxmUy53cbsSws=;
+        b=IKJTLj6ni/2KOXfDWZwe2afYnXWqIo4WWaEuYKKUvDi9p3p1lnMV3GER/CoFYa6wNB
+         uee+BwtH5GX/1uHui563zdvWxscqC3AOy2Kg9YtMe5wAZsGr2LwW5wDVAnZW1WBfjxde
+         1p3etkKM4IIqsbnqrEW25i56Q/xjWfKdZ5EXy2I8Z2Ers3yo14QWLJKBvJP3I2iwQ8yt
+         N7CIS3a08rif0nqcrAyVGye5GXmvtKZbr0PcxJI+xAqPUBVunqPhDBw4BWPxvmgItIbi
+         4dkDlMTwuI6vd0PtqR7vzWfmcTeeCQ0TYkwQR2SE1qJRSNC4ODwZYHSoIyHTwnmzhPmO
+         bbyQ==
+X-Gm-Message-State: AOJu0YyimhCjHA8gQA7rV9DDvv3vFJ1whkaAET2pnzDwDWHUeEq6H/qT
+	ZjjL1D6qIdS/a8U7NAjTN3UPBrvL9fuJar2KRrWLacQBnkovzLi76yvbV30Ghx2mgkJDzNL9tid
+	oD6BdZMh6ZgYQlH5YnVXTxAVjUG4=
+X-Google-Smtp-Source: AGHT+IFOdk0tQQcH62IdQMRql212dRFAyV1x7Ks6bLigtfzFKrdz2T1HbErlcxM8nrr4b2fVmC+v70qYg1nTK1hh48U=
+X-Received: by 2002:a17:902:650a:b0:1e0:cd8a:581 with SMTP id
+ b10-20020a170902650a00b001e0cd8a0581mr2302960plk.23.1711408803615; Mon, 25
+ Mar 2024 16:20:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240321145736.2373846-1-jonathan.haslam@gmail.com>
- <Zf+d9twfyIDosINf@gmail.com> <syviklbpdblcwr3l2seuwyzfrg2hy2shx5f6ho6yf4s4ce63tc@nbo4by247y6z>
-In-Reply-To: <syviklbpdblcwr3l2seuwyzfrg2hy2shx5f6ho6yf4s4ce63tc@nbo4by247y6z>
+References: <20240325152210.377548-1-yatsenko@meta.com>
+In-Reply-To: <20240325152210.377548-1-yatsenko@meta.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 25 Mar 2024 16:14:18 -0700
-Message-ID: <CAEf4BzZnUcFEk+7r39n8=zopBeK96wfQ4Vtndd2tY2ymqOpCtA@mail.gmail.com>
-Subject: Re: [PATCH] uprobes: reduce contention on uprobes_tree access
-To: Jonthan Haslam <jonathan.haslam@gmail.com>
-Cc: Ingo Molnar <mingo@kernel.org>, linux-trace-kernel@vger.kernel.org, andrii@kernel.org, 
-	bpf@vger.kernel.org, rostedt@goodmis.org, mhiramat@kernel.org, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Mon, 25 Mar 2024 16:19:51 -0700
+Message-ID: <CAEf4Bzb_3d=+PfaBFCDDOSnU3jwb_W1BaVkgZsF-UcVefysOOg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: improve error message for unsupported helper
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
+	Mykyta Yatsenko <yatsenko@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 25, 2024 at 12:12=E2=80=AFPM Jonthan Haslam
-<jonathan.haslam@gmail.com> wrote:
+On Mon, Mar 25, 2024 at 8:22=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
 >
-> Hi Ingo,
+> From: Mykyta Yatsenko <yatsenko@meta.com>
 >
-> > > This change has been tested against production workloads that exhibit
-> > > significant contention on the spinlock and an almost order of magnitu=
-de
-> > > reduction for mean uprobe execution time is observed (28 -> 3.5 micro=
-secs).
-> >
-> > Have you considered/measured per-CPU RW semaphores?
+> BPF verifier emits "unknown func" message when given BPF program type
+> does not support BPF helper. This message may be confusing for users, as
+> important context that helper is unknown only to current program type is
+> not provided.
 >
-> No I hadn't but thanks hugely for suggesting it! In initial measurements
-> it seems to be between 20-100% faster than the RW spinlocks! Apologies fo=
-r
-> all the exclamation marks but I'm very excited. I'll do some more testing
-> tomorrow but so far it's looking very good.
+> This patch changes message to "program of this type cannot use helper "
+> and aligns dependent code in libbpf and tests. Any suggestions on
+> improving/changing this message are welcome.
+>
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> ---
+
+"unknown func bpf_somehelper" is one of the common confusions users
+run into (and I had to explain multiple times), so this more
+meaningful message is definitely an improvement, thanks!
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+>  kernel/bpf/verifier.c                                     | 4 ++--
+>  tools/bpf/bpftool/feature.c                               | 3 ++-
+>  tools/lib/bpf/libbpf_probes.c                             | 6 ++++--
+>  tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c       | 2 +-
+>  .../selftests/bpf/progs/verifier_helper_restricted.c      | 8 ++++----
+>  5 files changed, 13 insertions(+), 10 deletions(-)
 >
 
-Documentation ([0]) says that locking for writing calls
-synchronize_rcu(), is that right? If that's true, attaching multiple
-uprobes (including just attaching a single BPF multi-uprobe) will take
-a really long time. We need to confirm we are not significantly
-regressing this. And if we do, we need to take measures in the BPF
-multi-uprobe attachment code path to make sure that a single
-multi-uprobe attachment is still fast.
-
-If my worries above turn out to be true, it still feels like a first
-good step should be landing this patch as is (and get it backported to
-older kernels), and then have percpu rw-semaphore as a final (and a
-bit more invasive) solution (it's RCU-based, so feels like a good
-primitive to settle on), making sure to not regress multi-uprobes
-(we'll probably will need some batched API for multiple uprobes).
-
-Thoughts?
-
-  [0] https://docs.kernel.org/locking/percpu-rw-semaphore.html
-
-> Thanks again for the input.
->
-> Jon.
+[...]
