@@ -1,150 +1,186 @@
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628EC158A13
-	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 09:36:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC2C16F907;
+	Mon, 25 Mar 2024 09:53:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711359391; cv=none; b=TKj6yJqtIqOWjuLzADa64Zi9lS7V1aPXrXG4URJLJcNqBNBkxKmcLB+X3/obDsYaAPgXk3wuqTBNvWWPvA2+qi2AkEUB7S+vxh0rEMroYDMwflW0Eh1EroXeqPzJwQrTLH3QxmAI80PekH8IOXhpyKszdSXBkYSP1+6oTGM8/7g=
+	t=1711360387; cv=none; b=ksAKqHhlTHEjPcbZ3x9+STBtaKRII2wDqEOeW6ge9aa6I49FKVmI5xxwYGXLvUEY+T9S5N+uXm70FVAXHl3QoyhxRvTJ5YT34RuIJnHcjD04eFgNl2SnpUIz1bHPFZVkDruFfqB6Zp0OHHnLslF+IemLTTkN/JbYDg+W5VOuaIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711359391; c=relaxed/simple;
-	bh=/9PRyWcMS3WKQZX2HiQSGZ3VL3BgBc0ZRFWdSaJQ9OE=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Ywj2aBwFUvYCMQ5eA4hzm3YxdU+TFnaY0tfmETvc15ZNYV7p6eVaH22uVjT9i48IU1B/Touefe4beD2L7/oOzdU1ad8souQ7hQf/QJkC/sKrT3e/66dTs68grWwoniEitND2ICMfiEwxpLYsqOFsupEFYcjF5U6/q8wPK6IZSIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7cbf2ff0e33so431116139f.1
-        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 02:36:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711359388; x=1711964188;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TSNIqPkYvxd6e8DwhHfzguzBJvUVKgTbV1cel72QDnY=;
-        b=tYxNk3/ROsRx4+wBqHMlQfNB1NY96F6yaQbqEvwxVD5+G25nSVdd0aMPP4lG+trjDA
-         TCMsB7RTcSDF8G8QnTjkP3aSiDR/w7ViLiQehLvaeHJkXZU5q1TG6p5qc9H4y2BopnSU
-         B3uERZNlaVd6mRaNDIxTJhdeZ2C5d85IiK9elK9ndIZHtbyZjLYCjDBNble9FUb8YJjx
-         woCsNSEwaOpy3slkMf7z6rci93S+2B9XndpaNTaMlMDwZWDvqFFn4TjiOpCT8SCLChMs
-         F4jgQX09MXaKyzlKjF6S+nnsoFUHR7IlqUMI3E36hWPmJeekmmDVV5f6VVId5tna8P6n
-         k9Sg==
-X-Forwarded-Encrypted: i=1; AJvYcCVXJoyqmOfd8E9bze1Cy8xoqScdfKSSpQh+1uS6ajlg4Obh/nlcKWv6Xmt2ZDjO1CHPRduWjRgkgzecgWnBKbB7zE5Y
-X-Gm-Message-State: AOJu0YyuGS//3I4LHx9hPeQf2sO1l13f32byCw0w5jLxPPkeCRMfpR0+
-	RNdAfKb/tjEMiwLV6R6VinyhalmIa1CZeTMy367yZIWInmZoU2i+c+so0KwZfIGDIPv0+SgnJ7s
-	dCFH+ZP7AvQl0rkLREWwASO72GlUJfwQQ1fD6/rIVmZRY+GRVtBTox1o=
-X-Google-Smtp-Source: AGHT+IGiIKnVaS9EAxan7TjPfAECQrMpgHAmzVJpMvbAAz/7F1Mr6mxydWeOSeapLyDPc2FK+Y9HmSfltI1MhkQBPegpGkybcZ/H
+	s=arc-20240116; t=1711360387; c=relaxed/simple;
+	bh=BRHU7i6ymh6GyHXPngMUaIvqxRCDm24qj8ooIdk4dsI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SPwggIbNRoFb2j5bwDMo72izOSd/yEXcbaSCJ1BZ1PzJUW0lVM1AGQv1XhJF+LNZwmwRujIvWrEI9SCVsHSskWVnQLHZI7lVsTeIZcPt2fYeHvmTzcbjKOU1xmXpO8jxk17WP6u2M1sRilgMUoOX9nD96TQUhuMZI2IUedIJnUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4V37XL001Pz4f3jdW;
+	Mon, 25 Mar 2024 17:52:49 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id 279121A017A;
+	Mon, 25 Mar 2024 17:52:56 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+	by APP3 (Coremail) with SMTP id _Ch0CgDn9Jx1SQFmHl6fHw--.8953S2;
+	Mon, 25 Mar 2024 17:52:54 +0800 (CST)
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Florent Revest <revest@chromium.org>,
+	Brendan Jackman <jackmanb@chromium.org>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E . Hallyn" <serge@hallyn.com>,
+	Khadija Kamran <kamrankhadijadj@gmail.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Kees Cook <keescook@chromium.org>,
+	John Johansen <john.johansen@canonical.com>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Subject: [PATCH bpf-next v2 0/7] Add check for bpf lsm return value
+Date: Mon, 25 Mar 2024 17:56:46 +0800
+Message-Id: <20240325095653.1720123-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:218e:b0:47c:203f:8e68 with SMTP id
- s14-20020a056638218e00b0047c203f8e68mr151665jaj.3.1711359388512; Mon, 25 Mar
- 2024 02:36:28 -0700 (PDT)
-Date: Mon, 25 Mar 2024 02:36:28 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006f876b061478e878@google.com>
-Subject: [syzbot] [bpf?] [net?] KMSAN: uninit-value in dev_map_lookup_elem
-From: syzbot <syzbot+1a3cf6f08d68868f9db3@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com, 
-	haoluo@google.com, hawk@kernel.org, john.fastabend@gmail.com, 
-	jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org, 
-	linux-kernel@vger.kernel.org, martin.lau@linux.dev, netdev@vger.kernel.org, 
-	sdf@google.com, song@kernel.org, syzkaller-bugs@googlegroups.com, 
-	yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_Ch0CgDn9Jx1SQFmHl6fHw--.8953S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCr4kKF48tFWxCF1rAry3CFg_yoW7JFW7pr
+	4YqF18Gr4Iqr4UJF18CF4UJr1fJFW7A3WUXryxJr95AF15Gr1DJr18GrWjqrnxJr4Uur17
+	tF9Fqa1rtry8XaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
+	cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+	IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI
+	42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
+	IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2
+	z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1c4S7UUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-Hello,
+From: Xu Kuohai <xukuohai@huawei.com>
 
-syzbot found the following issue on:
+A bpf prog returning positive number attached to file_alloc_security hook
+will make kernel panic.
 
-HEAD commit:    5e74df2f8f15 Merge tag 'x86-urgent-2024-03-24' of git://gi..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=148872a5180000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e6bd769cb793b98a
-dashboard link: https://syzkaller.appspot.com/bug?extid=1a3cf6f08d68868f9db3
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15921a6e180000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12e081f1180000
+Here is a panic log:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/1a82880723a7/disk-5e74df2f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fd3046ac43b9/vmlinux-5e74df2f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/2097be59cbc1/bzImage-5e74df2f.xz
+[  441.235774] BUG: kernel NULL pointer dereference, address: 00000000000009
+[  441.236748] #PF: supervisor write access in kernel mode
+[  441.237429] #PF: error_code(0x0002) - not-present page
+[  441.238119] PGD 800000000b02f067 P4D 800000000b02f067 PUD b031067 PMD 0
+[  441.238990] Oops: 0002 [#1] PREEMPT SMP PTI
+[  441.239546] CPU: 0 PID: 347 Comm: loader Not tainted 6.8.0-rc6-gafe0cbf23373 #22
+[  441.240496] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b4
+[  441.241933] RIP: 0010:alloc_file+0x4b/0x190
+[  441.242485] Code: 8b 04 25 c0 3c 1f 00 48 8b b0 30 0c 00 00 e8 9c fe ff ff 48 3d 00 f0 ff fb
+[  441.244820] RSP: 0018:ffffc90000c67c40 EFLAGS: 00010203
+[  441.245484] RAX: ffff888006a891a0 RBX: ffffffff8223bd00 RCX: 0000000035b08000
+[  441.246391] RDX: ffff88800b95f7b0 RSI: 00000000001fc110 RDI: f089cd0b8088ffff
+[  441.247294] RBP: ffffc90000c67c58 R08: 0000000000000001 R09: 0000000000000001
+[  441.248209] R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000001
+[  441.249108] R13: ffffc90000c67c78 R14: ffffffff8223bd00 R15: fffffffffffffff4
+[  441.250007] FS:  00000000005f3300(0000) GS:ffff88803ec00000(0000) knlGS:0000000000000000
+[  441.251053] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  441.251788] CR2: 00000000000001a9 CR3: 000000000bdc4003 CR4: 0000000000170ef0
+[  441.252688] Call Trace:
+[  441.253011]  <TASK>
+[  441.253296]  ? __die+0x24/0x70
+[  441.253702]  ? page_fault_oops+0x15b/0x480
+[  441.254236]  ? fixup_exception+0x26/0x330
+[  441.254750]  ? exc_page_fault+0x6d/0x1c0
+[  441.255257]  ? asm_exc_page_fault+0x26/0x30
+[  441.255792]  ? alloc_file+0x4b/0x190
+[  441.256257]  alloc_file_pseudo+0x9f/0xf0
+[  441.256760]  __anon_inode_getfile+0x87/0x190
+[  441.257311]  ? lock_release+0x14e/0x3f0
+[  441.257808]  bpf_link_prime+0xe8/0x1d0
+[  441.258315]  bpf_tracing_prog_attach+0x311/0x570
+[  441.258916]  ? __pfx_bpf_lsm_file_alloc_security+0x10/0x10
+[  441.259605]  __sys_bpf+0x1bb7/0x2dc0
+[  441.260070]  __x64_sys_bpf+0x20/0x30
+[  441.260533]  do_syscall_64+0x72/0x140
+[  441.261004]  entry_SYSCALL_64_after_hwframe+0x6e/0x76
+[  441.261643] RIP: 0033:0x4b0349
+[  441.262045] Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 88
+[  441.264355] RSP: 002b:00007fff74daee38 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+[  441.265293] RAX: ffffffffffffffda RBX: 00007fff74daef30 RCX: 00000000004b0349
+[  441.266187] RDX: 0000000000000040 RSI: 00007fff74daee50 RDI: 000000000000001c
+[  441.267114] RBP: 000000000000001b R08: 00000000005ef820 R09: 0000000000000000
+[  441.268018] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
+[  441.268907] R13: 0000000000000004 R14: 00000000005ef018 R15: 00000000004004e8
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1a3cf6f08d68868f9db3@syzkaller.appspotmail.com
+The reason is that the positive number returned by bpf prog is not a
+valid errno, and could not be filtered out with IS_ERR which is used by
+the file system to check errors. As a result, the filesystem mistakenly
+uses this random positive number as file pointer, causing panic.
 
-=====================================================
-BUG: KMSAN: uninit-value in __dev_map_lookup_elem kernel/bpf/devmap.c:441 [inline]
-BUG: KMSAN: uninit-value in dev_map_lookup_elem+0xf3/0x170 kernel/bpf/devmap.c:796
- __dev_map_lookup_elem kernel/bpf/devmap.c:441 [inline]
- dev_map_lookup_elem+0xf3/0x170 kernel/bpf/devmap.c:796
- ____bpf_map_lookup_elem kernel/bpf/helpers.c:42 [inline]
- bpf_map_lookup_elem+0x5c/0x80 kernel/bpf/helpers.c:38
- ___bpf_prog_run+0x13fe/0xe0f0 kernel/bpf/core.c:1997
- __bpf_prog_run256+0xb5/0xe0 kernel/bpf/core.c:2237
- bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
- __bpf_prog_run include/linux/filter.h:657 [inline]
- bpf_prog_run include/linux/filter.h:664 [inline]
- __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
- bpf_trace_run5+0x16f/0x350 kernel/trace/bpf_trace.c:2423
- __bpf_trace_ext4_remove_blocks+0x45/0x60 include/trace/events/ext4.h:1984
- __traceiter_ext4_remove_blocks+0xb5/0x170 include/trace/events/ext4.h:1984
- trace_ext4_remove_blocks include/trace/events/ext4.h:1984 [inline]
- ext4_remove_blocks fs/ext4/extents.c:2463 [inline]
- ext4_ext_rm_leaf fs/ext4/extents.c:2686 [inline]
- ext4_ext_remove_space+0x4e30/0x7e00 fs/ext4/extents.c:2934
- ext4_ext_truncate+0x1e3/0x390 fs/ext4/extents.c:4440
- ext4_truncate+0x14c6/0x1e10 fs/ext4/inode.c:4146
- ext4_evict_inode+0x1886/0x24d0 fs/ext4/inode.c:258
- evict+0x3ae/0xa60 fs/inode.c:667
- iput_final fs/inode.c:1741 [inline]
- iput+0x9ca/0xe10 fs/inode.c:1767
- d_delete_notify include/linux/fsnotify.h:307 [inline]
- vfs_rmdir+0x53c/0x790 fs/namei.c:4222
- do_rmdir+0x630/0x8b0 fs/namei.c:4268
- __do_sys_rmdir fs/namei.c:4287 [inline]
- __se_sys_rmdir fs/namei.c:4285 [inline]
- __x64_sys_rmdir+0x78/0xb0 fs/namei.c:4285
- do_syscall_64+0xd5/0x1f0
- entry_SYSCALL_64_after_hwframe+0x6d/0x75
+To fix this issue, there are two schemes:
 
-Local variable stack created at:
- __bpf_prog_run256+0x45/0xe0 kernel/bpf/core.c:2237
- bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
- __bpf_prog_run include/linux/filter.h:657 [inline]
- bpf_prog_run include/linux/filter.h:664 [inline]
- __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
- bpf_trace_run5+0x16f/0x350 kernel/trace/bpf_trace.c:2423
+1. Modify the calling sites of file_alloc_security to take positive
+   return values as zero.
 
-CPU: 0 PID: 5017 Comm: syz-executor365 Not tainted 6.8.0-syzkaller-13236-g5e74df2f8f15 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
-=====================================================
+2. Make the bpf verifier to ensure no unpredicted value returned by
+   lsm bpf prog.
 
+Considering that hook file_alloc_security never returned positive number
+before bpf lsm was introduced, and other lsm hooks may have the same
+problem, scheme 2 is more reasonable.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+So this patch set adds lsm return value check in verifier to fix it.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+v2:
+fix bpf ci failure
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+v1:
+https://lore.kernel.org/bpf/20240316122359.1073787-1-xukuohai@huaweicloud.com/
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+Xu Kuohai (7):
+  bpf, lsm: Annotate lsm hook return integer with new macro LSM_RET_INT
+  bpf, lsm: Add return value range description for lsm hook
+  bpf, lsm: Add function to read lsm hook return value range
+  bpf, lsm: Check bpf lsm hook return values in verifier
+  bpf: Fix compare error in function retval_range_within
+  selftests/bpf: Avoid load failure for token_lsm.c
+  selftests/bpf: Add return value checks and corrections for failed
+    progs
 
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+ include/linux/bpf.h                           |   1 +
+ include/linux/bpf_lsm.h                       |   8 +
+ include/linux/lsm_hook_defs.h                 | 433 +++++++++---------
+ include/linux/lsm_hooks.h                     |   6 -
+ kernel/bpf/bpf_lsm.c                          |  66 ++-
+ kernel/bpf/btf.c                              |   5 +-
+ kernel/bpf/verifier.c                         |  59 ++-
+ security/security.c                           |   1 +
+ tools/testing/selftests/bpf/progs/err.h       |  10 +
+ .../selftests/bpf/progs/test_sig_in_xattr.c   |   4 +
+ .../bpf/progs/test_verify_pkcs7_sig.c         |   8 +-
+ tools/testing/selftests/bpf/progs/token_lsm.c |   4 +-
+ .../bpf/progs/verifier_global_subprogs.c      |   7 +-
+ 13 files changed, 376 insertions(+), 236 deletions(-)
 
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
+-- 
+2.30.2
 
-If you want to undo deduplication, reply with:
-#syz undup
