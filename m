@@ -1,80 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E73B131723;
-	Mon, 25 Mar 2024 16:20:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3314DA0C;
+	Mon, 25 Mar 2024 16:21:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711383628; cv=none; b=Ru9HZ3lUMTZLQdWSKz3rPrOQgPs2MotfCOsgAH/sVADurOA2meVG1Wks4wGQFc4CcuP+AWrwDidhIDIbLbjEYL/e73BaBcQ/lu4yLVrIhTn6pckhSrQkCf1afY9hvqo79uyLrDegAhebiIq+tSRBV2m5sUJ8me4Zi52wVgz+LSA=
+	t=1711383702; cv=none; b=BQrF8f6EYmj/+uo2KuYglyPZJKN/K7nc5//ewBnCrhidim2NdwH27KPT4BhxIEszS1iGJYEZEjHDIiLIR/rOHZqoOxCBGIJhwEAMG8xfqUd5ncPGO2Bt4hfcordiNpjc9v50t1mmLmYUrm8hnBLfsFjnyNuSFUOuxiSmaXjBzC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711383628; c=relaxed/simple;
-	bh=ltBtyPVxgqhzLh0IZKywxFfFfTKdkDs61NrhFpBQnzI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=sOVnMIa0MkElDaVWCXFCJHfLdQyp2cdPtv+qTblMtq2UDe8avlfY4ujWbJsJeulgJCD6C1D2zfpkJ4ycYxthhDGrOZtJs6r0Cdfb5dAIYho2sMgHuibIWJF8G2TqH6gjhH2e8SfaQNUGFSAXIgLT1VNV0Wb6NMGNEHF6DhGlInM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iqP4grem; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711383702; c=relaxed/simple;
+	bh=8XxtinYgzZ8px/l3hS1/c0zV25EAZGOJ0XIuQ8fn0WA=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=D+jwLJxya3az4FiaZn6VdGoKH7OHuz06xbl9EUKSrA0/t2OnBBwkC5Jjbg3fsl22segFDLg3Y0d83z8q5ODcUei+oo6ZGj1U+PPxDnwS2xoC7l/SHoaEQ1CIdKm0IlbTcw9o9JZi1av/BQBlH2CgisP6gUvgbrcJ9jRYr/Xxuy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Jktam5yV; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iqP4grem"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4F000C433C7;
-	Mon, 25 Mar 2024 16:20:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711383628;
-	bh=ltBtyPVxgqhzLh0IZKywxFfFfTKdkDs61NrhFpBQnzI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=iqP4gremXlRbe5bmkGC4/oKNuNm9wAt+mn2bxmG38EOsmc8limtkxpbV3YDclyDOV
-	 W9gq6tHuBVx6PrJu10zGi86asC0FDK1+rbHTe4LFI18jpqyGGWJcKN6v5wR07oLloO
-	 3+pJtM9peRuMajMAtnVC7bgcLcbalkBGe4x9G214UjaBpT7Zxn/VcPhNai2nQgjch7
-	 vkobVdZ3bYPPgANIU7tPElIGZmswhirh5gRz5Zs2r3S5HG76Pmhfax16mwj3ZylnGS
-	 92iwgKckRRscrvCO5w3vpAlOVDXSTe/OeEytUW+TtOpwHw3p4Oco08IYxn6AIMTjft
-	 CdY7FbqITZ7NQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 316D1D2D0EA;
-	Mon, 25 Mar 2024 16:20:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Jktam5yV"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=1a25lBRJFEKgdjTodykGfTgFKA83lENmTjWQ+IGA7BM=; b=Jktam5yVwpEZuXlQ6JwYB0PJP0
+	dEsCelikSt/OhWjP0mfyZ+3NXlq70AOk6QxCIp5kKXoP0jQcRbCSiVadNH6h6II/6k+dx9OaSK3Dh
+	bHJuSk1Ce0i2CDBkO+1+LEP47Qyikc2RkViIhzCA/HQIUOM33BX4LyEUmAjZN1q05at8fyc2TGKZZ
+	bdnL2UqfsAd90Ic33Trx0j4/TBLwQw/tLv4Z97EW4x8jpUPt3E8m/14hnYxnN+RYbyhjx1Ztn80T7
+	GByWpcBLOy87QaH62pmhbX7MM2leYWKKCEW6Enqms238G885T+E6gwn4rCFBbAU+SvsS9ehq1H/6K
+	LdUYWIxQ==;
+Received: from sslproxy07.your-server.de ([78.47.199.104])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1ron4q-0006bq-06; Mon, 25 Mar 2024 17:21:36 +0100
+Received: from [178.197.248.30] (helo=linux.home)
+	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1ron4p-0002yT-0H;
+	Mon, 25 Mar 2024 17:21:35 +0100
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Use start_server and
+ connect_fd_to_fd
+To: Geliang Tang <geliang@kernel.org>, bpf@vger.kernel.org,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>, mptcp@lists.linux.dev
+References: <686400b5c4eefdb930048df57cc513dbd6e94fa1.1711343483.git.tanggeliang@kylinos.cn>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <f4e6d3a5-f02a-9895-cc6b-b0ff4795f1c2@iogearbox.net>
+Date: Mon, 25 Mar 2024 17:21:33 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: implement insn_is_cast_user() helper for JITs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171138362819.15634.1745974998731724546.git-patchwork-notify@kernel.org>
-Date: Mon, 25 Mar 2024 16:20:28 +0000
-References: <20240324183226.29674-1-puranjay12@gmail.com>
-In-Reply-To: <20240324183226.29674-1-puranjay12@gmail.com>
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
- haoluo@google.com, jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
- bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <686400b5c4eefdb930048df57cc513dbd6e94fa1.1711343483.git.tanggeliang@kylinos.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27225/Mon Mar 25 09:30:27 2024)
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Sun, 24 Mar 2024 18:32:26 +0000 you wrote:
-> Implement a helper function to check if an instruction is
-> addr_space_cast from as(0) to as(1). Use this helper in the x86 JIT.
+On 3/25/24 6:15 AM, Geliang Tang wrote:
+> From: Geliang Tang <tanggeliang@kylinos.cn>
 > 
-> Other JITs can use this helper when they add support for this instruction.
+> To simplify the code, use BPF selftests helpers start_server() and
+> connect_fd_to_fd() in bpf_tcp_ca.c instead of open-coding. These helpers
+> are defined in network_helpers.c, and exported in network_helpers.h,
+> which is already included in bpf_tcp_ca.c.
 > 
-> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
-> 
-> [...]
+> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+> ---
+> v2:
+>   - use connect_fd_to_fd too.
 
-Here is the summary with links:
-  - [bpf-next] bpf: implement insn_is_cast_user() helper for JITs
-    https://git.kernel.org/bpf/bpf-next/c/770546ae9f4c
+These are two logical changes in one, please send an individual patch for the
+connect_fd_to_fd.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks,
+Daniel
