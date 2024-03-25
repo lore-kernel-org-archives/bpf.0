@@ -1,93 +1,114 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E580418645;
-	Mon, 25 Mar 2024 19:12:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6F3213FF5;
+	Mon, 25 Mar 2024 19:13:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711393956; cv=none; b=DORRLzNFLvT6PB4FLvUOJ1+kZqak9P4K5W5pNcYpLy7tdA6gVaXhlfDp1eb33WibiQYWGyubAHPStuR1SDOT17gOuZuFsT9P4a+v/IbHmjrCt6USbTF9iUi++opdua2miWZTg90RYfQ8NNyrOcXTjP/xjp/IPZ/BLuxFnlQXI2c=
+	t=1711394005; cv=none; b=qZHK6lIAOQ+G/RtPzGLg4o5+fs5ZpNeI6xb3Ffw+vc4zH+yT3lM3ZeweR0ejsYwYtnzt6pxFmaZF3IsSkO6UinTVDsm33XQdqWgzwkqkLCFNU8AV+S01+3kfc48eWN2o4B2RiTiCcziUyDWjNaUIyFB/1gHlKl/tbewbUzBmKnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711393956; c=relaxed/simple;
-	bh=fZOe/tLK1cgFPvkLuZbT3YDA7D2x6EJoWMvIzRbFXsQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fWtVc+ElqD2HdDLFuAn4MOtRYWtgJ8s6WeBigUI3erRMk2SINa6hW3A/xA7avk/5TP9pVjoyskG5IgZuAKbeQ8oWLYF9aRSrjp0Z99jFp/PHcD4UKWuOGpXHVfIKFDREJkXgywtXmVSnKgQkg8wzNMJ31jTCh/ILzgsH1UrUBPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QDe9yiSQ; arc=none smtp.client-ip=209.85.208.53
+	s=arc-20240116; t=1711394005; c=relaxed/simple;
+	bh=mHd8yBTq95tlBMjpkzBSblmDNN2ufxBHwGLG6XPFLiI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KbKq7+3y2ICO78wdBBi0aNaFJ9NQnkNCNqMJnCFZdo5V16ifFP5/5HONO3AXyOwKmAZR92DWuVPDuWsDufQrumgPL2o/SaVQ/LYOhyLB2iUjs8MHTmgzJbZgGtD6vvJ9UNXEjrj8tM1e3Qj/+36oX3rMGoCYCjKF0qhEz6cOzak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bUW1fZJq; arc=none smtp.client-ip=209.85.167.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QDe9yiSQ"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-56c1a65275bso441087a12.1;
-        Mon, 25 Mar 2024 12:12:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bUW1fZJq"
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-51588f70d2dso5512991e87.3;
+        Mon, 25 Mar 2024 12:13:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711393953; x=1711998753; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kky/1shDSavwXJhQDl5uOntgm8L39nVx0FH//gj7QE0=;
-        b=QDe9yiSQ/yj+PFqN7VlI8roQJX7Ea3+ziFvknF/QrFSLFzrM+AsW9hPrqnFDXRVMZb
-         3jL4GmQGwokcNcqAIWLK2kvMTm0a7nu/xVx56Ppe7Zx2BEIWXiHauriqXHj8Z/JVChvQ
-         sei1kEmY4x4gj+dZtBONMJYvePxmX0+67wGUksvBos8IcDg33ScKF4Tg8z10PqzCzKoA
-         qp+vTnOd9U+NBWWaMdB2eXavV3DIdlN7X59Yyut0iChdI3rjijOXIJedG9BlsijPTd1h
-         Y8zGSOfzNWaOZEDfiLIZ2+0IOfyiRnMrH0dvcy5TlaqTQNEIMtKbAS578WZu0xPi0tGk
-         WQqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711393953; x=1711998753;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1711394002; x=1711998802; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kky/1shDSavwXJhQDl5uOntgm8L39nVx0FH//gj7QE0=;
-        b=bsEhzq/nYgWM55q/EzCt5SQvH78NWfU+EVG4YYx0jqZOm9f7iJi8C8cKiZf2hjkSrZ
-         imLYyB0IZUmzQn46zkFWB1FnBatiPhQDu9WpSECQ3dZm/I+y+1fLx56Q4s495ia5DE3k
-         WBO+DS/neCKn1Wxfz8rhCMzwBZlCDkKAOBFJXzpYt/mAFH6tcRvokgqnZRJkvtm/XaSe
-         OVcI0s8Gfeg5vHbokgscIosF+AvR3JAM7C8kfyA9PfwPkLzBPWAqr/K4LltjzYBkAOyu
-         +6Tc+1eWEjxY5XOycR+grcHSVUM/Nk6e9fBzOFr4CiqOmD0gd/PHiMU+XUOjsLII2X/k
-         YYLw==
-X-Forwarded-Encrypted: i=1; AJvYcCV5QBcvLob8MhYzEZ13Vktl9/fxXejWEvApvYkVTOsavDd+DL86UsTjnVVKe3dfZikH84xM8lAZWoWLNb7kTZYjOhtVPOjFjMDg8ypr6pEkiLYmpa5RIEWVzrCR7X0XR4PpOy3w01G4alsiPon+hiGcqePS/8DdEyhMRE0gQkQrVL9qGg==
-X-Gm-Message-State: AOJu0YzRTn05niJxikKV5/b4a7AvAZn+y/sIQ8DjGetSmFj7b8tMjPu4
-	NFa7+1LpL7ll5aRgiPfbwAuDG9mhFm5Y+BKvf2Kqaqx5ovgfyK8V
-X-Google-Smtp-Source: AGHT+IEAfipoBfQy1s/urIUropfZNXPJtkD+58dQ3dDa+IhcHkXqWHjDGD0L+DA1yrW0WEZgt6vXFg==
-X-Received: by 2002:a50:a6d0:0:b0:56c:18b4:d2ab with SMTP id f16-20020a50a6d0000000b0056c18b4d2abmr1882154edc.42.1711393952984;
-        Mon, 25 Mar 2024 12:12:32 -0700 (PDT)
-Received: from jonhaslam-mbp ([2620:10d:c092:500::7:3fad])
-        by smtp.gmail.com with ESMTPSA id et10-20020a056402378a00b0056bed786b9csm3223717edb.17.2024.03.25.12.12.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Mar 2024 12:12:32 -0700 (PDT)
-Date: Mon, 25 Mar 2024 19:12:29 +0000
-From: Jonthan Haslam <jonathan.haslam@gmail.com>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: linux-trace-kernel@vger.kernel.org, andrii@kernel.org, 
-	bpf@vger.kernel.org, rostedt@goodmis.org, mhiramat@kernel.org, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] uprobes: reduce contention on uprobes_tree access
-Message-ID: <syviklbpdblcwr3l2seuwyzfrg2hy2shx5f6ho6yf4s4ce63tc@nbo4by247y6z>
-References: <20240321145736.2373846-1-jonathan.haslam@gmail.com>
- <Zf+d9twfyIDosINf@gmail.com>
+        bh=bgBGkwDpvy+zR/EPv0TXmjkYIf1V+bfMcLLs2S2pnX0=;
+        b=bUW1fZJqFD2ZHHJh2qZt1OFvYdccfTWAzoi5sLu2LO+Z5gJSJ7b7u8eBeD67t4UvGd
+         FNi5Xlmid+Nx6DHbPEFkGZn+M5EdFU0NwO/0IbjytdUvA0qhkh4mrTbBsz0TulC7Lu07
+         RX9quaUkVniaiR4u0PWeJzvHyXph4JmL2Cawl2zcOEwu4lCoeRGHKipZzuMq1MuJRscy
+         cDJkt8MuuuILNElnir70/GCadaqrQhaauw2+dkCP0HsVfgxxrWPAemCzWqhzokNojjxM
+         74Bocq5dZSi8zPY/HosRK4EOLGJ5YyhdqQMNGjQjwHRRmutqWLo9zbBt9/+DVhZGY1xT
+         jv7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711394002; x=1711998802;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bgBGkwDpvy+zR/EPv0TXmjkYIf1V+bfMcLLs2S2pnX0=;
+        b=OU0xMAzbJgpVa121ecj5Wby2VASYIZgYjftqK3dCmw3o3vGYmBRCRRVxmFzm22JirB
+         a/STMEjd1uW3AT9VCl8zukvjLeJUh/unNiOgwdnRPJH3wj9/ejlkb+LCQqnf6TT/aBqT
+         LmS+ExTcmsauyNy8Glu3R/V97yRbG1XmmlO2zChF0KRXJ1CB4TEvnW30bPzdv4iHxyGp
+         IDjD0QDMEqvirdscrfHxYZhZo0m23TSlUuNQDOswe8Jt/QEiMp3ZhiiqWnQRmGteK+0E
+         /+lds20vpO9Wh9GjsH7JDLsjSXuJu1HHKP/dWuzA3e+sTxIh3/t38YU2SuYbC0mLC5l2
+         8swQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUftoFb0H/sZ/+tEdWGdMsKdTMCh+7VqOJuH1OOB3x8djc4IbkM4rMyHeBFNOfncficL25aAk/TBjtx4AXBdHa9Cc4aSdEK6x3GCw9u3drZI0i8HE0jVZgvfRHjDet6wBn9
+X-Gm-Message-State: AOJu0Yx/gv0Xzr/QNV3bQiCFvS0f04AjorbEQpxS8y2cpn0br03YkZba
+	LL8fA9d/8PwTTZ2wtRiPO6cCNkX5M62++HlCH5p6HnjGA1d0elru+qntyUvlzJxkwl8Ae3NSL/k
+	JI/AxPxp3Xe3zCSGoHMu4Wk7aP6I=
+X-Google-Smtp-Source: AGHT+IHC9129UFHKLJVWu59KlrBAFQHjuLJAPXRcIMITBR/y3yl7B/1mDZtCo+FXr/nzrNpi9QW3jmAQMdPb19b2ZOc=
+X-Received: by 2002:a05:6512:328a:b0:513:cc25:d3b5 with SMTP id
+ p10-20020a056512328a00b00513cc25d3b5mr5423878lfe.7.1711394001477; Mon, 25 Mar
+ 2024 12:13:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zf+d9twfyIDosINf@gmail.com>
+References: <20240325155434.65589-1-puranjay12@gmail.com> <20240325155434.65589-3-puranjay12@gmail.com>
+ <20240325-nineteen-unvaried-cb5cb5fd3a73@spud>
+In-Reply-To: <20240325-nineteen-unvaried-cb5cb5fd3a73@spud>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Mon, 25 Mar 2024 20:13:10 +0100
+Message-ID: <CANk7y0gWtwN7EJ24aoY9-RB9629d5Ks-9fMc3wnAAjjERcZhFw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] bpf,riscv: Implement bpf_addr_space_cast instruction
+To: Conor Dooley <conor@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, bpf@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Pu Lehui <pulehui@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ingo,
+On Mon, Mar 25, 2024 at 8:10=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
+te:
+>
+> On Mon, Mar 25, 2024 at 03:54:34PM +0000, Puranjay Mohan wrote:
+> > LLVM generates bpf_addr_space_cast instruction while translating
+> > pointers between native (zero) address space and
+> > __attribute__((address_space(N))). The addr_space=3D0 is reserved as
+> > bpf_arena address space.
+> >
+> > rY =3D addr_space_cast(rX, 0, 1) is processed by the verifier and
+> > converted to normal 32-bit move: wX =3D wY
+> >
+> > rY =3D addr_space_cast(rX, 1, 0) has to be converted by JIT.
+> >
+> > Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+>
+> Doesn't compile for allmodconfig:
+>   ../arch/riscv/net/bpf_jit_comp64.c:1086:7: error: call to undeclared fu=
+nction 'insn_is_cast_user'; ISO C99 and later do not support implicit funct=
+ion declarations [-Wimplicit-function-declaration]
+>
+> Cheers,
+> Conor.
 
-> > This change has been tested against production workloads that exhibit
-> > significant contention on the spinlock and an almost order of magnitude
-> > reduction for mean uprobe execution time is observed (28 -> 3.5 microsecs).
-> 
-> Have you considered/measured per-CPU RW semaphores?
+Yes,
+I mentioned in the cover letter that a patch is required.
+It just got merged in bpf-next/master:
+https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=
+=3D770546ae9f4c1ae1ebcaf0874f0dd9631d77ec97
 
-No I hadn't but thanks hugely for suggesting it! In initial measurements
-it seems to be between 20-100% faster than the RW spinlocks! Apologies for
-all the exclamation marks but I'm very excited. I'll do some more testing
-tomorrow but so far it's looking very good.
+So, rebasing on the latest bpf-next/master should fix the issue.
 
-Thanks again for the input.
-
-Jon.
+Thanks,
+Puranjay
