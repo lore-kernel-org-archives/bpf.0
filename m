@@ -1,238 +1,256 @@
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC8914A0BE
-	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 12:17:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0251F128380
+	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 12:31:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711369040; cv=none; b=AgfD00AdHXZjaUzT/LmL3yX50u+OfuRqQQG2HVI63H6inf/j0OTwyVRLU5S8OkESiCWPxyJDadRp/PpEF3CltoMkmyOHzyHxB10zOLgWzP1/S4RnIcFBLXDlGdAveMLEtA6f4JDJt0eCAhNyFElQySsqEHgSBn6iI/e4fx0BoJM=
+	t=1711369871; cv=none; b=N7ZGJN+5wUTiXneyQxJWgcTdCct99fdMiWNs+fo+Glh3muiMA/5bCgu7OtBkT9M6UM6+G6dHZ5BQYnxk227k74nqCcgzIR/GYlzYOs9+lI84dExakSfJqFhZc8DaW6UKkQ/eq9u6PguS173tDcp8hyrPzkYddhQti+25Qk7Ge7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711369040; c=relaxed/simple;
-	bh=6AMK/q87suqkII+7ZbyK33MkYkUdhsUDBWrYZwGqU3M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ekVM8p4ZCzdbTftY/BkERcu/vqdRRb+9EOJ6I1SrVpiJFt7LFgkBaxXR5QxopDm68YG+Df4h4NkF0Kyps4/7+RnTiE1Ua5RLx6K/NT5zQxzK0NWexOZcvN2+BgRPAPSkYdyluzevpNAPb19m8BwONJSrAZP8OxCEU2hr5UduAnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=fDrMuJmd; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
+	s=arc-20240116; t=1711369871; c=relaxed/simple;
+	bh=aVlbCxffNsImE8sHfAMIWvGJXmWurPG4VbYMHdhQLEE=;
+	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
+	 MIME-Version:Content-Type; b=FnhX6fWPtIqbEjG4Q4QEQdrWVC0cYfoML2hblIm19mSUPTmAwT5IPMwdiUUaSr1tw4t8Yx+S8cOdwywaPAPp/u3uefRJMnKrKoEpzljRSIj25zIYUeuoWrT0lGqDh3OWOOiSxrG4UGjjLn23CTVCy/20wx6ePcsz5Byzej3tqu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Lo7pH32E; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="fDrMuJmd"
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-515a81928faso1307029e87.1
-        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 05:17:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Lo7pH32E"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a46dd7b4bcbso523498966b.3
+        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 05:31:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1711369037; x=1711973837; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1XNMzfamP+H3LCnyrRUavRGrklxrlpW3waKKfl5hr9w=;
-        b=fDrMuJmdRUPEGLzFbiciBHQTPypnEjzv2ZcOTZ3hUy9OcK1cK33BeKHVhOy5HULVCF
-         kw9sWdEkME4Ij856Z1glzfEQz4AkBW+n3BSFpTjdLdKE1M417nBnHn6qmezbau/zWI0q
-         UfpO1ThWz55A8mXriSQSKyiDoue9/bcb+pBP/2XvM0VT81YdpT/qrvHBiyO8BAHIUKaf
-         WGCdwyPrXtfEMzbXKMAiVoxa2ecrc38Kkl9ID+3P1nvSiiizf4r33Xqv2YG9USUTIQ2j
-         +gK6p2MP1/nVKV1nZBoE3Rm5sKarCWmWxL3Es9RlSSd4ZX+ACIKQNogGZnsSdN0NZe2b
-         pT9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711369037; x=1711973837;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=cloudflare.com; s=google09082023; t=1711369867; x=1711974667; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1XNMzfamP+H3LCnyrRUavRGrklxrlpW3waKKfl5hr9w=;
-        b=qE2RDOsAvXc3UWgZTw45wuoMzsq5oeq5UB+rTfQ+Pb5SBhFvHuUCZyB2OB3qgfXKIo
-         um+oQGHy2ctLeZG84SjEpb+TBKfKGoGLbjiRT883mtqF36d4zhysHrUCLm3Y/wmyFIhP
-         2ZOizxYl4L5GLrpHjMgzO1uFP/15gn/g3lcUGahjDu74PxfPeoU48aPhVEVguve0tRVG
-         NVED+9g7jrl+cAb6fuH/ky9GTflK/4AiPl+Ld5cZmUeDHarEwL888+9gR6TqqX8YqezH
-         F04b2bD5k2DH/NUgPPYjxE5o2/8eNsIbGOSrWOb257lXyF9/bNTTzOwiq0Ug1IaCqTje
-         Td6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXKAVdTfcTSRSwqUQufGnzRqkuLt4MMtCRdHb+iFGNkUxYKgAEvcP4rEI8CrR4IJCtlXrnHvFaNKWpqP9WEVpycSLQ/
-X-Gm-Message-State: AOJu0YyFZhsiO2rGTBaK0ZGPH4ySYFv/rsH1RJ+KdC0SBNBa7tcWO0HJ
-	x8gna/yspsUyFHwOKQYPKMqWmBY34ePqRm00kRGmN9JGK7TrZTrkF/iRgQIRSeY=
-X-Google-Smtp-Source: AGHT+IFjvcvbj0q8urHhbZr+7DM7kWiyFmQUvMsttEpbgjFdaQqftjW3QY3zLGnjLP7+mzs7pSPv4Q==
-X-Received: by 2002:a05:6512:3282:b0:515:a8c9:6ec0 with SMTP id p2-20020a056512328200b00515a8c96ec0mr2425698lfe.36.1711369036639;
-        Mon, 25 Mar 2024 05:17:16 -0700 (PDT)
-Received: from zh-lab-node-5 ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id t6-20020a056512208600b005158569860bsm1065871lfr.138.2024.03.25.05.17.15
+        bh=jcU8rzfT1XiiKbhTkgktGjNuFns7iqoHulhoe5/hqUA=;
+        b=Lo7pH32EDvtGcPXVKvcXC+oWlGIjaAtwHInzgo+vICN0fCBF5+04BkcBeaOvTmQxcl
+         hPflHKv1GW3bKNd07k+pu5qQjP1/Vm2r9IEbXIw06l+1buF/Xkw9u+HKtiRoN5wHc3J9
+         Unhhk5DOtoIHgg1bWFAev59Tr8LiHsFUQAs729DIWEVRWznHomIAXdHppKm3bUfSLyAm
+         cV/UgI3t88mz0sFUnyhjw3DvZrF2h+ulC047pqZ4gijZPgENHmjOyfD9ld3XnX+Of5IV
+         4ofFS4167n0xFNx6QiDDtsftGtxgN/3rsUbHbvjm2FNMvVtzk/Ra+Et7il5Z6u77QIC5
+         CTww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711369867; x=1711974667;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jcU8rzfT1XiiKbhTkgktGjNuFns7iqoHulhoe5/hqUA=;
+        b=COec3U+hKZrkbiWDFtVqQT7KR72KZJXR4JBY+q8oYlbExGd2j/6J6rm7+cIMXkr9EI
+         swZ+6boTaKAtgMIA+cLB25p7aUlD/XhNC/hGeyE15gu8+p0wD0ziBv2/L3/SJiGhUnIU
+         RWk6PN+Co6kZ1TxbXYgPZPSi9640tHhk7Psm0ZoEbGVGJrKfoRfCHLs+m3LVRiOAbM+J
+         3OaNhyOEcLT+2I/2GzqJGDSEQZbZWG18ia6kaOdMoeruUvs58jDIgWWFvz9hXcphdw15
+         VCLHAULXsS5d7jYgtq8THq1fAm5bVIShERzm8T17Q/vRznt39G+6q3G315ctjYV9Lwc6
+         2fXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXs9TRKvniUZsmqKw6kq/ELnJJ71LcxuN37nu5+ia9plj/YLuefa8ZGAKfsjhGOsfR+ZQqxsblhDvaAovxaUH7i30uI
+X-Gm-Message-State: AOJu0YwO90ekWnzOtaTytvgxdZ26c8YrNR5mCYJyXc2liOXf8tQcyLSM
+	c3JSsXzn82NxN16/x668Y8lc0ZtSbK6/63IqFD34jLdmQlZqilm0UP2TbAZDoP0=
+X-Google-Smtp-Source: AGHT+IGsrHcYCvS/Zb86Okam1T7FEifHPpoDZSR+RYzLLEafipL8a0Eaa2hp5duWV+Ok7DmwELZZtA==
+X-Received: by 2002:a17:906:d0d7:b0:a47:5265:9aac with SMTP id bq23-20020a170906d0d700b00a4752659aacmr2438772ejb.55.1711369867358;
+        Mon, 25 Mar 2024 05:31:07 -0700 (PDT)
+Received: from cloudflare.com ([2a09:bac5:5064:2dc::49:1a6])
+        by smtp.gmail.com with ESMTPSA id w17-20020a170906385100b00a46d8e5a031sm2988980ejc.209.2024.03.25.05.31.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Mar 2024 05:17:16 -0700 (PDT)
-Date: Mon, 25 Mar 2024 12:19:15 +0000
-From: Anton Protopopov <aspsk@isovalent.com>
-To: David Ahern <dsahern@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org,
-	Rumen Telbizov <rumen.telbizov@menlosecurity.com>,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH v1 bpf-next 1/2] bpf: add support for passing mark with
- bpf_fib_lookup
-Message-ID: <ZgFrwxs4mUipq83e@zh-lab-node-5>
-References: <20240322140244.50971-1-aspsk@isovalent.com>
- <20240322140244.50971-2-aspsk@isovalent.com>
- <6879f076-ff73-496c-84be-a18b639f94f0@kernel.org>
+        Mon, 25 Mar 2024 05:31:06 -0700 (PDT)
+References: <000000000000dc9aca0613ec855c@google.com>
+ <tencent_F436364A347489774B677A3D13367E968E09@qq.com>
+ <CAADnVQJQvcZOA_BbFxPqNyRbMdKTBSMnf=cKvW7NJ8LxxP54sA@mail.gmail.com>
+User-agent: mu4e 1.6.10; emacs 29.2
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Edward Adam Davis
+ <eadavis@qq.com>, John Fastabend <john.fastabend@gmail.com>
+Cc: syzbot+c4f4d25859c2e5859988@syzkaller.appspotmail.com,
+ 42.hyeyoo@gmail.com, andrii@kernel.org, ast@kernel.org,
+ bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+ edumazet@google.com, kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
+ linux-kernel@vger.kernel.org, namhyung@kernel.org, netdev@vger.kernel.org,
+ pabeni@redhat.com, peterz@infradead.org, songliubraving@fb.com,
+ syzkaller-bugs@googlegroups.com, yhs@fb.com
+Subject: Re: [PATCH] bpf, sockmap: fix deadlock in rcu_report_exp_cpu_mult
+Date: Mon, 25 Mar 2024 13:23:07 +0100
+In-reply-to: <CAADnVQJQvcZOA_BbFxPqNyRbMdKTBSMnf=cKvW7NJ8LxxP54sA@mail.gmail.com>
+Message-ID: <87y1a6biie.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6879f076-ff73-496c-84be-a18b639f94f0@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 24, 2024 at 11:38:44AM -0600, David Ahern wrote:
-> On 3/22/24 8:02 AM, Anton Protopopov wrote:
-> > Extend the bpf_fib_lookup() helper by making it to utilize mark if
-> > the BPF_FIB_LOOKUP_MARK flag is set. In order to pass the mark the
-> > four bytes of struct bpf_fib_lookup are used, shared with the
-> > output-only smac/dmac fields.
-> > 
-> > Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
-> > Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-> > ---
-> >  include/uapi/linux/bpf.h       | 20 ++++++++++++++++++--
-> >  net/core/filter.c              | 12 +++++++++---
-> >  tools/include/uapi/linux/bpf.h | 20 ++++++++++++++++++--
-> >  3 files changed, 45 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > index 9585f5345353..96d57e483133 100644
-> > --- a/include/uapi/linux/bpf.h
-> > +++ b/include/uapi/linux/bpf.h
-> > @@ -3394,6 +3394,10 @@ union bpf_attr {
-> >   *			for the nexthop. If the src addr cannot be derived,
-> >   *			**BPF_FIB_LKUP_RET_NO_SRC_ADDR** is returned. In this
-> >   *			case, *params*->dmac and *params*->smac are not set either.
-> > + *		**BPF_FIB_LOOKUP_MARK**
-> > + *			Use the mark present in *params*->mark for the fib lookup.
-> > + *			This option should not be used with BPF_FIB_LOOKUP_DIRECT,
-> > + *			as it only has meaning for full lookups.
-> >   *
-> >   *		*ctx* is either **struct xdp_md** for XDP programs or
-> >   *		**struct sk_buff** tc cls_act programs.
-> > @@ -7120,6 +7124,7 @@ enum {
-> >  	BPF_FIB_LOOKUP_SKIP_NEIGH = (1U << 2),
-> >  	BPF_FIB_LOOKUP_TBID    = (1U << 3),
-> >  	BPF_FIB_LOOKUP_SRC     = (1U << 4),
-> > +	BPF_FIB_LOOKUP_MARK    = (1U << 5),
-> >  };
-> >  
-> >  enum {
-> > @@ -7197,8 +7202,19 @@ struct bpf_fib_lookup {
-> >  		__u32	tbid;
-> >  	};
-> >  
-> > -	__u8	smac[6];     /* ETH_ALEN */
-> > -	__u8	dmac[6];     /* ETH_ALEN */
-> > +	union {
-> > +		/* input */
-> > +		struct {
-> > +			__u32	mark;   /* policy routing */
-> > +			/* 2 4-byte holes for input */
-> > +		};
-> > +
-> > +		/* output: source and dest mac */
-> > +		struct {
-> > +			__u8	smac[6];	/* ETH_ALEN */
-> > +			__u8	dmac[6];	/* ETH_ALEN */
-> > +		};
-> > +	};
-> >  };
-> >  
-> >  struct bpf_redir_neigh {
-> > diff --git a/net/core/filter.c b/net/core/filter.c
-> > index 0c66e4a3fc5b..1205dd777dc2 100644
-> > --- a/net/core/filter.c
-> > +++ b/net/core/filter.c
-> > @@ -5884,7 +5884,10 @@ static int bpf_ipv4_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
-> >  
-> >  		err = fib_table_lookup(tb, &fl4, &res, FIB_LOOKUP_NOREF);
-> >  	} else {
-> > -		fl4.flowi4_mark = 0;
-> > +		if (flags & BPF_FIB_LOOKUP_MARK)
-> > +			fl4.flowi4_mark = params->mark;
-> > +		else
-> > +			fl4.flowi4_mark = 0;
-> >  		fl4.flowi4_secid = 0;
-> >  		fl4.flowi4_tun_key.tun_id = 0;
-> >  		fl4.flowi4_uid = sock_net_uid(net, NULL);
-> > @@ -6027,7 +6030,10 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
-> >  		err = ipv6_stub->fib6_table_lookup(net, tb, oif, &fl6, &res,
-> >  						   strict);
-> >  	} else {
-> > -		fl6.flowi6_mark = 0;
-> > +		if (flags & BPF_FIB_LOOKUP_MARK)
-> > +			fl6.flowi6_mark = params->mark;
-> > +		else
-> > +			fl6.flowi6_mark = 0;
-> >  		fl6.flowi6_secid = 0;
-> >  		fl6.flowi6_tun_key.tun_id = 0;
-> >  		fl6.flowi6_uid = sock_net_uid(net, NULL);
-> > @@ -6105,7 +6111,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
-> >  
-> >  #define BPF_FIB_LOOKUP_MASK (BPF_FIB_LOOKUP_DIRECT | BPF_FIB_LOOKUP_OUTPUT | \
-> >  			     BPF_FIB_LOOKUP_SKIP_NEIGH | BPF_FIB_LOOKUP_TBID | \
-> > -			     BPF_FIB_LOOKUP_SRC)
-> > +			     BPF_FIB_LOOKUP_SRC | BPF_FIB_LOOKUP_MARK)
-> >  
-> >  BPF_CALL_4(bpf_xdp_fib_lookup, struct xdp_buff *, ctx,
-> >  	   struct bpf_fib_lookup *, params, int, plen, u32, flags)
-> > diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-> > index bf80b614c4db..4c9b5bfbd9c6 100644
-> > --- a/tools/include/uapi/linux/bpf.h
-> > +++ b/tools/include/uapi/linux/bpf.h
-> > @@ -3393,6 +3393,10 @@ union bpf_attr {
-> >   *			for the nexthop. If the src addr cannot be derived,
-> >   *			**BPF_FIB_LKUP_RET_NO_SRC_ADDR** is returned. In this
-> >   *			case, *params*->dmac and *params*->smac are not set either.
-> > + *		**BPF_FIB_LOOKUP_MARK**
-> > + *			Use the mark present in *params*->mark for the fib lookup.
-> > + *			This option should not be used with BPF_FIB_LOOKUP_DIRECT,
-> > + *			as it only has meaning for full lookups.
-> >   *
-> >   *		*ctx* is either **struct xdp_md** for XDP programs or
-> >   *		**struct sk_buff** tc cls_act programs.
-> > @@ -7119,6 +7123,7 @@ enum {
-> >  	BPF_FIB_LOOKUP_SKIP_NEIGH = (1U << 2),
-> >  	BPF_FIB_LOOKUP_TBID    = (1U << 3),
-> >  	BPF_FIB_LOOKUP_SRC     = (1U << 4),
-> > +	BPF_FIB_LOOKUP_MARK    = (1U << 5),
-> >  };
-> >  
-> >  enum {
-> > @@ -7196,8 +7201,19 @@ struct bpf_fib_lookup {
-> >  		__u32	tbid;
-> >  	};
-> >  
-> > -	__u8	smac[6];     /* ETH_ALEN */
-> > -	__u8	dmac[6];     /* ETH_ALEN */
-> > +	union {
-> > +		/* input */
-> > +		struct {
-> > +			__u32	mark;   /* policy routing */
-> > +			/* 2 4-byte holes for input */
-> > +		};
-> > +
-> > +		/* output: source and dest mac */
-> > +		struct {
-> > +			__u8	smac[6];	/* ETH_ALEN */
-> > +			__u8	dmac[6];	/* ETH_ALEN */
-> > +		};
-> > +	};
-> >  };
-> >  
-> >  struct bpf_redir_neigh {
-> 
-> It would be good to add
-> 
-> static_assert(sizeof(struct bpf_fib_lookup) == 64, "bpf_fib_lookup size
-> check");
-> 
-> to ensure this struct never exceeds a cacheline.
+On Sat, Mar 23, 2024 at 12:08 AM -07, Alexei Starovoitov wrote:
+> John,
+> please review.
+> It seems this bug was causing multiple syzbot reports.
 
-Thanks, added: https://github.com/aspsk/bpf-next/commit/7cd3685e52d5
+Any chance we could disallow mutating sockhash from interrupt context?
 
-> 
-> The patch itself looks good to me:
-> 
-> Reviewed-by: David Ahern <dsahern@kernel.org>
+If that is not an option, then this looks like a good start of a fix.
+But we also need to cover sock_map_unref->sock_sock_map_del_link called
+from sock_hash_delete_elem. It also grabs a spin lock.
 
-Thanks!
+Also, sockhash is not the only affected map type. I see we're grabbing a
+spin lock in ->map_delete_elem without disabling interrupts as well in:
+
+- sock_map_delete_elem
+- reuseport_array_delete_elem
+- xsk_map_delete_elem
+
+> On Fri, Mar 22, 2024 at 10:42=E2=80=AFPM Edward Adam Davis <eadavis@qq.co=
+m> wrote:
+>>
+>> [Syzbot reported]
+>> WARNING: HARDIRQ-safe -> HARDIRQ-unsafe lock order detected
+>> 6.8.0-syzkaller-05221-gea80e3ed09ab #0 Not tainted
+>> -----------------------------------------------------
+>> rcu_exp_gp_kthr/18 [HC0[0]:SC0[2]:HE0:SE0] is trying to acquire:
+>> ffff88802b5ab020 (&htab->buckets[i].lock){+...}-{2:2}, at: spin_lock_bh =
+include/linux/spinlock.h:356 [inline]
+>> ffff88802b5ab020 (&htab->buckets[i].lock){+...}-{2:2}, at: sock_hash_del=
+ete_elem+0xb0/0x300 net/core/sock_map.c:939
+>>
+>> and this task is already holding:
+>> ffffffff8e136558 (rcu_node_0){-.-.}-{2:2}, at: sync_rcu_exp_done_unlocke=
+d+0xe/0x140 kernel/rcu/tree_exp.h:169
+>> which would create a new lock dependency:
+>>  (rcu_node_0){-.-.}-{2:2} -> (&htab->buckets[i].lock){+...}-{2:2}
+>>
+>> but this new dependency connects a HARDIRQ-irq-safe lock:
+>>  (rcu_node_0){-.-.}-{2:2}
+>>
+>> ... which became HARDIRQ-irq-safe at:
+>>   lock_acquire+0x1e4/0x530 kernel/locking/lockdep.c:5754
+>>   __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+>>   _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
+>>   rcu_report_exp_cpu_mult+0x27/0x2f0 kernel/rcu/tree_exp.h:238
+>>   csd_do_func kernel/smp.c:133 [inline]
+>>   __flush_smp_call_function_queue+0xb2e/0x15b0 kernel/smp.c:542
+>>   __sysvec_call_function_single+0xa8/0x3e0 arch/x86/kernel/smp.c:271
+>>   instr_sysvec_call_function_single arch/x86/kernel/smp.c:266 [inline]
+>>   sysvec_call_function_single+0x9e/0xc0 arch/x86/kernel/smp.c:266
+>>   asm_sysvec_call_function_single+0x1a/0x20 arch/x86/include/asm/idtentr=
+y.h:709
+>>   __sanitizer_cov_trace_switch+0x90/0x120
+>>   update_event_printk kernel/trace/trace_events.c:2750 [inline]
+>>   trace_event_eval_update+0x311/0xf90 kernel/trace/trace_events.c:2922
+>>   process_one_work kernel/workqueue.c:3254 [inline]
+>>   process_scheduled_works+0xa00/0x1770 kernel/workqueue.c:3335
+>>   worker_thread+0x86d/0xd70 kernel/workqueue.c:3416
+>>   kthread+0x2f0/0x390 kernel/kthread.c:388
+>>   ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+>>   ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
+>>
+>> to a HARDIRQ-irq-unsafe lock:
+>>  (&htab->buckets[i].lock){+...}-{2:2}
+>>
+>> ... which became HARDIRQ-irq-unsafe at:
+>> ...
+>>   lock_acquire+0x1e4/0x530 kernel/locking/lockdep.c:5754
+>>   __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+>>   _raw_spin_lock_bh+0x35/0x50 kernel/locking/spinlock.c:178
+>>   spin_lock_bh include/linux/spinlock.h:356 [inline]
+>>   sock_hash_delete_elem+0xb0/0x300 net/core/sock_map.c:939
+>>   0xffffffffa0001b0e
+>>   bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+>>   __bpf_prog_run include/linux/filter.h:657 [inline]
+>>   bpf_prog_run include/linux/filter.h:664 [inline]
+>>   __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+>>   bpf_trace_run2+0x204/0x420 kernel/trace/bpf_trace.c:2420
+>>   trace_contention_end+0xd7/0x100 include/trace/events/lock.h:122
+>>   __mutex_lock_common kernel/locking/mutex.c:617 [inline]
+>>   __mutex_lock+0x2e5/0xd70 kernel/locking/mutex.c:752
+>>   futex_cleanup_begin kernel/futex/core.c:1091 [inline]
+>>   futex_exit_release+0x34/0x1f0 kernel/futex/core.c:1143
+>>   exit_mm_release+0x1a/0x30 kernel/fork.c:1652
+>>   exit_mm+0xb0/0x310 kernel/exit.c:542
+>>   do_exit+0x99e/0x27e0 kernel/exit.c:865
+>>   do_group_exit+0x207/0x2c0 kernel/exit.c:1027
+>>   __do_sys_exit_group kernel/exit.c:1038 [inline]
+>>   __se_sys_exit_group kernel/exit.c:1036 [inline]
+>>   __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1036
+>>   do_syscall_64+0xfb/0x240
+>>   entry_SYSCALL_64_after_hwframe+0x6d/0x75
+>>
+>> other info that might help us debug this:
+>>
+>>  Possible interrupt unsafe locking scenario:
+>>
+>>        CPU0                    CPU1
+>>        ----                    ----
+>>   lock(&htab->buckets[i].lock);
+>>                                local_irq_disable();
+>>                                lock(rcu_node_0);
+>>                                lock(&htab->buckets[i].lock);
+>>   <Interrupt>
+>>     lock(rcu_node_0);
+>>
+>>  *** DEADLOCK ***
+>> [Fix]
+>> Ensure that the context interrupt state is the same before and after usi=
+ng the
+>> bucket->lock.
+>>
+>> Reported-and-tested-by: syzbot+c4f4d25859c2e5859988@syzkaller.appspotmai=
+l.com
+>> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+>> ---
+>>  net/core/sock_map.c | 10 ++++++----
+>>  1 file changed, 6 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+>> index 27d733c0f65e..ae8f81b26e16 100644
+>> --- a/net/core/sock_map.c
+>> +++ b/net/core/sock_map.c
+>> @@ -932,11 +932,12 @@ static long sock_hash_delete_elem(struct bpf_map *=
+map, void *key)
+>>         struct bpf_shtab_bucket *bucket;
+>>         struct bpf_shtab_elem *elem;
+>>         int ret =3D -ENOENT;
+>> +       unsigned long flags;
+>>
+>>         hash =3D sock_hash_bucket_hash(key, key_size);
+>>         bucket =3D sock_hash_select_bucket(htab, hash);
+>>
+>> -       spin_lock_bh(&bucket->lock);
+>> +       spin_lock_irqsave(&bucket->lock, flags);
+>>         elem =3D sock_hash_lookup_elem_raw(&bucket->head, hash, key, key=
+_size);
+>>         if (elem) {
+>>                 hlist_del_rcu(&elem->node);
+>> @@ -944,7 +945,7 @@ static long sock_hash_delete_elem(struct bpf_map *ma=
+p, void *key)
+>>                 sock_hash_free_elem(htab, elem);
+>>                 ret =3D 0;
+>>         }
+>> -       spin_unlock_bh(&bucket->lock);
+>> +       spin_unlock_irqrestore(&bucket->lock, flags);
+>>         return ret;
+>>  }
+>>
+>> @@ -1136,6 +1137,7 @@ static void sock_hash_free(struct bpf_map *map)
+>>         struct bpf_shtab_elem *elem;
+>>         struct hlist_node *node;
+>>         int i;
+>> +       unsigned long flags;
+>>
+>>         /* After the sync no updates or deletes will be in-flight so it
+>>          * is safe to walk map and remove entries without risking a race
+>> @@ -1151,11 +1153,11 @@ static void sock_hash_free(struct bpf_map *map)
+>>                  * exists, psock exists and holds a ref to socket. That
+>>                  * lets us to grab a socket ref too.
+>>                  */
+>> -               spin_lock_bh(&bucket->lock);
+>> +               spin_lock_irqsave(&bucket->lock, flags);
+>>                 hlist_for_each_entry(elem, &bucket->head, node)
+>>                         sock_hold(elem->sk);
+>>                 hlist_move_list(&bucket->head, &unlink_list);
+>> -               spin_unlock_bh(&bucket->lock);
+>> +               spin_unlock_irqrestore(&bucket->lock, flags);
+>>
+>>                 /* Process removed entries out of atomic context to
+>>                  * block for socket lock before deleting the psock's
+>> --
+>> 2.43.0
+>>
+
