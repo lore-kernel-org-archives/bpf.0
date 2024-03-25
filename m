@@ -1,256 +1,148 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0251F128380
-	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 12:31:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D791D6CDD8
+	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 13:27:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711369871; cv=none; b=N7ZGJN+5wUTiXneyQxJWgcTdCct99fdMiWNs+fo+Glh3muiMA/5bCgu7OtBkT9M6UM6+G6dHZ5BQYnxk227k74nqCcgzIR/GYlzYOs9+lI84dExakSfJqFhZc8DaW6UKkQ/eq9u6PguS173tDcp8hyrPzkYddhQti+25Qk7Ge7o=
+	t=1711373252; cv=none; b=Mdjbb/vitQesAlEua5ch9Mvik5+QkD9taLi0NNUai1bu5cBWmTHQPWj/j3xJutMFHYikyWaA5prCVlYGi5tnw8bBKlNGQw9nBbO8bqt1SPj4xcKTZhdPjuthMKxjc3kN2nMYjvlCm0WMs4tG7+NTp6i8B4yP4CrX6b41R+5MtFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711369871; c=relaxed/simple;
-	bh=aVlbCxffNsImE8sHfAMIWvGJXmWurPG4VbYMHdhQLEE=;
-	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
-	 MIME-Version:Content-Type; b=FnhX6fWPtIqbEjG4Q4QEQdrWVC0cYfoML2hblIm19mSUPTmAwT5IPMwdiUUaSr1tw4t8Yx+S8cOdwywaPAPp/u3uefRJMnKrKoEpzljRSIj25zIYUeuoWrT0lGqDh3OWOOiSxrG4UGjjLn23CTVCy/20wx6ePcsz5Byzej3tqu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Lo7pH32E; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Lo7pH32E"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a46dd7b4bcbso523498966b.3
-        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 05:31:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1711369867; x=1711974667; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jcU8rzfT1XiiKbhTkgktGjNuFns7iqoHulhoe5/hqUA=;
-        b=Lo7pH32EDvtGcPXVKvcXC+oWlGIjaAtwHInzgo+vICN0fCBF5+04BkcBeaOvTmQxcl
-         hPflHKv1GW3bKNd07k+pu5qQjP1/Vm2r9IEbXIw06l+1buF/Xkw9u+HKtiRoN5wHc3J9
-         Unhhk5DOtoIHgg1bWFAev59Tr8LiHsFUQAs729DIWEVRWznHomIAXdHppKm3bUfSLyAm
-         cV/UgI3t88mz0sFUnyhjw3DvZrF2h+ulC047pqZ4gijZPgENHmjOyfD9ld3XnX+Of5IV
-         4ofFS4167n0xFNx6QiDDtsftGtxgN/3rsUbHbvjm2FNMvVtzk/Ra+Et7il5Z6u77QIC5
-         CTww==
+	s=arc-20240116; t=1711373252; c=relaxed/simple;
+	bh=P3OWqnkWTXmu2hLFQXYZHkN/5j/+PnQvtI0D/VhpqoA=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=PzudvPphW3hrcU3lT3IteLSeSlYF2GTHFCfmW4mD2vAa9mA9tQcfmXd9inoTMQrvyns9/UEw38iIfsCCu7OYjZ0UFRKYJyRlHtqHFJn7wtOgpB7TJl5ME3/cBtsYPHnIQKh/enMgc2VTBXMgLWYr7p65JfOjh9iSrP8/ZR+muRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-366a7e3099bso44191285ab.0
+        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 06:27:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711369867; x=1711974667;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jcU8rzfT1XiiKbhTkgktGjNuFns7iqoHulhoe5/hqUA=;
-        b=COec3U+hKZrkbiWDFtVqQT7KR72KZJXR4JBY+q8oYlbExGd2j/6J6rm7+cIMXkr9EI
-         swZ+6boTaKAtgMIA+cLB25p7aUlD/XhNC/hGeyE15gu8+p0wD0ziBv2/L3/SJiGhUnIU
-         RWk6PN+Co6kZ1TxbXYgPZPSi9640tHhk7Psm0ZoEbGVGJrKfoRfCHLs+m3LVRiOAbM+J
-         3OaNhyOEcLT+2I/2GzqJGDSEQZbZWG18ia6kaOdMoeruUvs58jDIgWWFvz9hXcphdw15
-         VCLHAULXsS5d7jYgtq8THq1fAm5bVIShERzm8T17Q/vRznt39G+6q3G315ctjYV9Lwc6
-         2fXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXs9TRKvniUZsmqKw6kq/ELnJJ71LcxuN37nu5+ia9plj/YLuefa8ZGAKfsjhGOsfR+ZQqxsblhDvaAovxaUH7i30uI
-X-Gm-Message-State: AOJu0YwO90ekWnzOtaTytvgxdZ26c8YrNR5mCYJyXc2liOXf8tQcyLSM
-	c3JSsXzn82NxN16/x668Y8lc0ZtSbK6/63IqFD34jLdmQlZqilm0UP2TbAZDoP0=
-X-Google-Smtp-Source: AGHT+IGsrHcYCvS/Zb86Okam1T7FEifHPpoDZSR+RYzLLEafipL8a0Eaa2hp5duWV+Ok7DmwELZZtA==
-X-Received: by 2002:a17:906:d0d7:b0:a47:5265:9aac with SMTP id bq23-20020a170906d0d700b00a4752659aacmr2438772ejb.55.1711369867358;
-        Mon, 25 Mar 2024 05:31:07 -0700 (PDT)
-Received: from cloudflare.com ([2a09:bac5:5064:2dc::49:1a6])
-        by smtp.gmail.com with ESMTPSA id w17-20020a170906385100b00a46d8e5a031sm2988980ejc.209.2024.03.25.05.31.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Mar 2024 05:31:06 -0700 (PDT)
-References: <000000000000dc9aca0613ec855c@google.com>
- <tencent_F436364A347489774B677A3D13367E968E09@qq.com>
- <CAADnVQJQvcZOA_BbFxPqNyRbMdKTBSMnf=cKvW7NJ8LxxP54sA@mail.gmail.com>
-User-agent: mu4e 1.6.10; emacs 29.2
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Edward Adam Davis
- <eadavis@qq.com>, John Fastabend <john.fastabend@gmail.com>
-Cc: syzbot+c4f4d25859c2e5859988@syzkaller.appspotmail.com,
- 42.hyeyoo@gmail.com, andrii@kernel.org, ast@kernel.org,
- bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
- edumazet@google.com, kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
- linux-kernel@vger.kernel.org, namhyung@kernel.org, netdev@vger.kernel.org,
- pabeni@redhat.com, peterz@infradead.org, songliubraving@fb.com,
- syzkaller-bugs@googlegroups.com, yhs@fb.com
-Subject: Re: [PATCH] bpf, sockmap: fix deadlock in rcu_report_exp_cpu_mult
-Date: Mon, 25 Mar 2024 13:23:07 +0100
-In-reply-to: <CAADnVQJQvcZOA_BbFxPqNyRbMdKTBSMnf=cKvW7NJ8LxxP54sA@mail.gmail.com>
-Message-ID: <87y1a6biie.fsf@cloudflare.com>
+        d=1e100.net; s=20230601; t=1711373250; x=1711978050;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ctAtBGkbihJIAqFkPSDzB+Db8NzZcNP/xwNYQUVTKnI=;
+        b=stHIIRQQHQij/RwzR1DpO2e5TWksxxDrYJOZypQq/6bngRpJkej4S6qnW9CCQ5tNaL
+         AYi7Vb3CIUOwYH9G12D00psG9mJW+6QAofUcyJb5GUv/Gkr/YsetRVYiXsBKeEx0nf8Y
+         7x95zUPAxyLlbbrEuc/fJHYQXx47cru8c5a7XP6nbtcfeASzsZ+Y5thZ49nvvlp2lOrn
+         g/ONnx+qr5HvBqGr8IeSwbRGxdh7SEopmhzVXroE8LxwNFX6i+ObCMqwsRdT/3YRExO7
+         K2eWEl8oXSTQ6d86BD+dA1lYTsJomuAkU7UDN3PYqoX0NwUFhmSlyqyFaIHyMezuKSPX
+         9t0w==
+X-Forwarded-Encrypted: i=1; AJvYcCUOyNlIEkX7IRse/dSBRM4G+SyKZ4o/dJtVfi12ASuPBPU0RVBPlys+/hVnNbrcc/Vq/rj82Zu+WBn3oQg7NFnaiOVK
+X-Gm-Message-State: AOJu0Yx5h52/08SZvMhptVbRr9v0JQS0gHynG5DcN7K5IngYIdXQu72n
+	ks9TAoTZ5R4h7ps6ArxXwUVzmWIlWCH5qJ8FXANCuhauzGKD4cjXNS8WGzqDCICPbJOYPWe/Rln
+	Qrif1BFltFc5aGF+IHu5q2nAFH/yWsLO2uaqYABvBe1Sk4N2Mg9ygfBY=
+X-Google-Smtp-Source: AGHT+IGmGluipUd2atCJ9yVqGaoUk8r2TJ3zFIvtOyp+7e1pz29myH6X82xI0yqk6k8zElqByK/sZmJlBC8Lz6bl4osd4lT2f4Ya
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a05:6e02:1d02:b0:368:8915:2bd3 with SMTP id
+ i2-20020a056e021d0200b0036889152bd3mr218979ila.1.1711373250048; Mon, 25 Mar
+ 2024 06:27:30 -0700 (PDT)
+Date: Mon, 25 Mar 2024 06:27:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a5c69c06147c2238@google.com>
+Subject: [syzbot] [bpf?] [net?] KMSAN: uninit-value in sock_map_delete_elem
+From: syzbot <syzbot+eb02dc7f03dce0ef39f3@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com, 
+	jakub@cloudflare.com, john.fastabend@gmail.com, kuba@kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Mar 23, 2024 at 12:08 AM -07, Alexei Starovoitov wrote:
-> John,
-> please review.
-> It seems this bug was causing multiple syzbot reports.
+Hello,
 
-Any chance we could disallow mutating sockhash from interrupt context?
+syzbot found the following issue on:
 
-If that is not an option, then this looks like a good start of a fix.
-But we also need to cover sock_map_unref->sock_sock_map_del_link called
-from sock_hash_delete_elem. It also grabs a spin lock.
+HEAD commit:    70293240c5ce Merge tag 'timers-urgent-2024-03-23' of git:/..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=129e4dc9180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e6bd769cb793b98a
+dashboard link: https://syzkaller.appspot.com/bug?extid=eb02dc7f03dce0ef39f3
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13b5bbb9180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14ee1291180000
 
-Also, sockhash is not the only affected map type. I see we're grabbing a
-spin lock in ->map_delete_elem without disabling interrupts as well in:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0de52742d0b8/disk-70293240.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f304697881bf/vmlinux-70293240.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/2b9d8a9376f0/bzImage-70293240.xz
 
-- sock_map_delete_elem
-- reuseport_array_delete_elem
-- xsk_map_delete_elem
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+eb02dc7f03dce0ef39f3@syzkaller.appspotmail.com
 
-> On Fri, Mar 22, 2024 at 10:42=E2=80=AFPM Edward Adam Davis <eadavis@qq.co=
-m> wrote:
->>
->> [Syzbot reported]
->> WARNING: HARDIRQ-safe -> HARDIRQ-unsafe lock order detected
->> 6.8.0-syzkaller-05221-gea80e3ed09ab #0 Not tainted
->> -----------------------------------------------------
->> rcu_exp_gp_kthr/18 [HC0[0]:SC0[2]:HE0:SE0] is trying to acquire:
->> ffff88802b5ab020 (&htab->buckets[i].lock){+...}-{2:2}, at: spin_lock_bh =
-include/linux/spinlock.h:356 [inline]
->> ffff88802b5ab020 (&htab->buckets[i].lock){+...}-{2:2}, at: sock_hash_del=
-ete_elem+0xb0/0x300 net/core/sock_map.c:939
->>
->> and this task is already holding:
->> ffffffff8e136558 (rcu_node_0){-.-.}-{2:2}, at: sync_rcu_exp_done_unlocke=
-d+0xe/0x140 kernel/rcu/tree_exp.h:169
->> which would create a new lock dependency:
->>  (rcu_node_0){-.-.}-{2:2} -> (&htab->buckets[i].lock){+...}-{2:2}
->>
->> but this new dependency connects a HARDIRQ-irq-safe lock:
->>  (rcu_node_0){-.-.}-{2:2}
->>
->> ... which became HARDIRQ-irq-safe at:
->>   lock_acquire+0x1e4/0x530 kernel/locking/lockdep.c:5754
->>   __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
->>   _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
->>   rcu_report_exp_cpu_mult+0x27/0x2f0 kernel/rcu/tree_exp.h:238
->>   csd_do_func kernel/smp.c:133 [inline]
->>   __flush_smp_call_function_queue+0xb2e/0x15b0 kernel/smp.c:542
->>   __sysvec_call_function_single+0xa8/0x3e0 arch/x86/kernel/smp.c:271
->>   instr_sysvec_call_function_single arch/x86/kernel/smp.c:266 [inline]
->>   sysvec_call_function_single+0x9e/0xc0 arch/x86/kernel/smp.c:266
->>   asm_sysvec_call_function_single+0x1a/0x20 arch/x86/include/asm/idtentr=
-y.h:709
->>   __sanitizer_cov_trace_switch+0x90/0x120
->>   update_event_printk kernel/trace/trace_events.c:2750 [inline]
->>   trace_event_eval_update+0x311/0xf90 kernel/trace/trace_events.c:2922
->>   process_one_work kernel/workqueue.c:3254 [inline]
->>   process_scheduled_works+0xa00/0x1770 kernel/workqueue.c:3335
->>   worker_thread+0x86d/0xd70 kernel/workqueue.c:3416
->>   kthread+0x2f0/0x390 kernel/kthread.c:388
->>   ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
->>   ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
->>
->> to a HARDIRQ-irq-unsafe lock:
->>  (&htab->buckets[i].lock){+...}-{2:2}
->>
->> ... which became HARDIRQ-irq-unsafe at:
->> ...
->>   lock_acquire+0x1e4/0x530 kernel/locking/lockdep.c:5754
->>   __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
->>   _raw_spin_lock_bh+0x35/0x50 kernel/locking/spinlock.c:178
->>   spin_lock_bh include/linux/spinlock.h:356 [inline]
->>   sock_hash_delete_elem+0xb0/0x300 net/core/sock_map.c:939
->>   0xffffffffa0001b0e
->>   bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
->>   __bpf_prog_run include/linux/filter.h:657 [inline]
->>   bpf_prog_run include/linux/filter.h:664 [inline]
->>   __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
->>   bpf_trace_run2+0x204/0x420 kernel/trace/bpf_trace.c:2420
->>   trace_contention_end+0xd7/0x100 include/trace/events/lock.h:122
->>   __mutex_lock_common kernel/locking/mutex.c:617 [inline]
->>   __mutex_lock+0x2e5/0xd70 kernel/locking/mutex.c:752
->>   futex_cleanup_begin kernel/futex/core.c:1091 [inline]
->>   futex_exit_release+0x34/0x1f0 kernel/futex/core.c:1143
->>   exit_mm_release+0x1a/0x30 kernel/fork.c:1652
->>   exit_mm+0xb0/0x310 kernel/exit.c:542
->>   do_exit+0x99e/0x27e0 kernel/exit.c:865
->>   do_group_exit+0x207/0x2c0 kernel/exit.c:1027
->>   __do_sys_exit_group kernel/exit.c:1038 [inline]
->>   __se_sys_exit_group kernel/exit.c:1036 [inline]
->>   __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1036
->>   do_syscall_64+0xfb/0x240
->>   entry_SYSCALL_64_after_hwframe+0x6d/0x75
->>
->> other info that might help us debug this:
->>
->>  Possible interrupt unsafe locking scenario:
->>
->>        CPU0                    CPU1
->>        ----                    ----
->>   lock(&htab->buckets[i].lock);
->>                                local_irq_disable();
->>                                lock(rcu_node_0);
->>                                lock(&htab->buckets[i].lock);
->>   <Interrupt>
->>     lock(rcu_node_0);
->>
->>  *** DEADLOCK ***
->> [Fix]
->> Ensure that the context interrupt state is the same before and after usi=
-ng the
->> bucket->lock.
->>
->> Reported-and-tested-by: syzbot+c4f4d25859c2e5859988@syzkaller.appspotmai=
-l.com
->> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
->> ---
->>  net/core/sock_map.c | 10 ++++++----
->>  1 file changed, 6 insertions(+), 4 deletions(-)
->>
->> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
->> index 27d733c0f65e..ae8f81b26e16 100644
->> --- a/net/core/sock_map.c
->> +++ b/net/core/sock_map.c
->> @@ -932,11 +932,12 @@ static long sock_hash_delete_elem(struct bpf_map *=
-map, void *key)
->>         struct bpf_shtab_bucket *bucket;
->>         struct bpf_shtab_elem *elem;
->>         int ret =3D -ENOENT;
->> +       unsigned long flags;
->>
->>         hash =3D sock_hash_bucket_hash(key, key_size);
->>         bucket =3D sock_hash_select_bucket(htab, hash);
->>
->> -       spin_lock_bh(&bucket->lock);
->> +       spin_lock_irqsave(&bucket->lock, flags);
->>         elem =3D sock_hash_lookup_elem_raw(&bucket->head, hash, key, key=
-_size);
->>         if (elem) {
->>                 hlist_del_rcu(&elem->node);
->> @@ -944,7 +945,7 @@ static long sock_hash_delete_elem(struct bpf_map *ma=
-p, void *key)
->>                 sock_hash_free_elem(htab, elem);
->>                 ret =3D 0;
->>         }
->> -       spin_unlock_bh(&bucket->lock);
->> +       spin_unlock_irqrestore(&bucket->lock, flags);
->>         return ret;
->>  }
->>
->> @@ -1136,6 +1137,7 @@ static void sock_hash_free(struct bpf_map *map)
->>         struct bpf_shtab_elem *elem;
->>         struct hlist_node *node;
->>         int i;
->> +       unsigned long flags;
->>
->>         /* After the sync no updates or deletes will be in-flight so it
->>          * is safe to walk map and remove entries without risking a race
->> @@ -1151,11 +1153,11 @@ static void sock_hash_free(struct bpf_map *map)
->>                  * exists, psock exists and holds a ref to socket. That
->>                  * lets us to grab a socket ref too.
->>                  */
->> -               spin_lock_bh(&bucket->lock);
->> +               spin_lock_irqsave(&bucket->lock, flags);
->>                 hlist_for_each_entry(elem, &bucket->head, node)
->>                         sock_hold(elem->sk);
->>                 hlist_move_list(&bucket->head, &unlink_list);
->> -               spin_unlock_bh(&bucket->lock);
->> +               spin_unlock_irqrestore(&bucket->lock, flags);
->>
->>                 /* Process removed entries out of atomic context to
->>                  * block for socket lock before deleting the psock's
->> --
->> 2.43.0
->>
+=====================================================
+BUG: KMSAN: uninit-value in sock_map_delete_elem+0x15e/0x1c0 net/core/sock_map.c:442
+ sock_map_delete_elem+0x15e/0x1c0 net/core/sock_map.c:442
+ ____bpf_map_delete_elem kernel/bpf/helpers.c:77 [inline]
+ bpf_map_delete_elem+0x5c/0x80 kernel/bpf/helpers.c:73
+ ___bpf_prog_run+0x13fe/0xe0f0 kernel/bpf/core.c:1997
+ __bpf_prog_run160+0xb5/0xe0 kernel/bpf/core.c:2236
+ bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+ __bpf_prog_run include/linux/filter.h:657 [inline]
+ bpf_prog_run include/linux/filter.h:664 [inline]
+ __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+ bpf_trace_run8+0x1bd/0x3a0 kernel/trace/bpf_trace.c:2426
+ __bpf_trace_jbd2_handle_stats+0x51/0x70 include/trace/events/jbd2.h:210
+ __traceiter_jbd2_handle_stats+0xc5/0x190 include/trace/events/jbd2.h:210
+ trace_jbd2_handle_stats include/trace/events/jbd2.h:210 [inline]
+ jbd2_journal_stop+0x1157/0x12c0 fs/jbd2/transaction.c:1869
+ __ext4_journal_stop+0x115/0x310 fs/ext4/ext4_jbd2.c:134
+ ext4_do_writepages+0x1c3c/0x62e0 fs/ext4/inode.c:2692
+ ext4_writepages+0x312/0x830 fs/ext4/inode.c:2768
+ do_writepages+0x427/0xc30 mm/page-writeback.c:2612
+ __writeback_single_inode+0x10d/0x12c0 fs/fs-writeback.c:1650
+ writeback_sb_inodes+0xb48/0x1be0 fs/fs-writeback.c:1941
+ __writeback_inodes_wb+0x14c/0x440 fs/fs-writeback.c:2012
+ wb_writeback+0x4da/0xdf0 fs/fs-writeback.c:2119
+ wb_check_old_data_flush fs/fs-writeback.c:2223 [inline]
+ wb_do_writeback fs/fs-writeback.c:2276 [inline]
+ wb_workfn+0x110c/0x1940 fs/fs-writeback.c:2304
+ process_one_work kernel/workqueue.c:3254 [inline]
+ process_scheduled_works+0xa81/0x1bd0 kernel/workqueue.c:3335
+ worker_thread+0xea5/0x1560 kernel/workqueue.c:3416
+ kthread+0x3e2/0x540 kernel/kthread.c:388
+ ret_from_fork+0x6d/0x90 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
 
+Local variable stack created at:
+ __bpf_prog_run160+0x45/0xe0 kernel/bpf/core.c:2236
+ bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+ __bpf_prog_run include/linux/filter.h:657 [inline]
+ bpf_prog_run include/linux/filter.h:664 [inline]
+ __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+ bpf_trace_run8+0x1bd/0x3a0 kernel/trace/bpf_trace.c:2426
+
+CPU: 0 PID: 33 Comm: kworker/u8:2 Not tainted 6.8.0-syzkaller-13213-g70293240c5ce #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
+Workqueue: writeback wb_workfn (flush-8:0)
+=====================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
