@@ -1,181 +1,382 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5056673506
-	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 16:41:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A353DABF3;
+	Mon, 25 Mar 2024 16:53:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711384888; cv=none; b=dHgDIDNfyfeD1eWVlR9Y/VG97V7plM5/2zKYfEBPwlT1qdsBLdskVsPfspghbowQeAbzFSFHg+bZ3Eu+wlTwq1rQoTz3mv2LMDAZvHRnVd1YOqiobUvvE11Vl0epK418C9trNCSqug2eSbI5Gqh7kpkUMU/8dEQde7lNvtC5L1w=
+	t=1711385589; cv=none; b=EbJjXYWpLEXmmXaVhOXsVGGEwBnoQsyc2CnlF3IDmTyuyAVvgHm11DuR0FBWtCbCRcZ77LH3emESr1LKa8HWAPR46ZUv0WpAVafKe8ojq6U41JE8eJU6xQlDKW7I2TUSXpSvwdrTwJyZ7BcbSHELgiEvFwd8msMi72mGfwEFJ9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711384888; c=relaxed/simple;
-	bh=1T9w3DXormCf+o1YL/Bod2kqxa7xAnTuUIK4uECpn6Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OQmDTgQRCbtx9HsNpfcBL8Hc5/SA7pjIeXzz5yLE6UyiJL/pbhnz94oXlg5cylzwex1U3RsDVM09ICcTbko/tdd1/Qmsg7YHY3fUdxGW5zbsogntb2injhqhd2qBEcvtS+W9quhVP02E9vYITF+iU+SAV6hOU/jFIxVVXhkcyos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZN1WdieD; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711385589; c=relaxed/simple;
+	bh=TZW0H+CTcVkomLGdlmekNLlyTQcENG1CcK5sCMi0Ouc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=kXyFl/CYYaYMqwCmRf0WpkrTaZfWS660qxa+McQVMF+9ewpULpCSrFQOhvaM4TJ3KP/aD0ZEt0RyVj8i2NkK7K/QS1noF/TsDtwJgMEOWjlvGN9jzEu+k+pHND/WsLq/id5qmHv6l8yoFnyGnsuvYhgrfpYi9Jtmg/juqsTUDjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FzbCp7JI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZN1WdieD"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-33ed7ef0ae8so3216261f8f.0
-        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 09:41:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711384884; x=1711989684; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Umk9XThnTHyedoU/g11c6m9vYltjqXcMDxN5qxudwIc=;
-        b=ZN1WdieDApTDQ0C5j/MfqvCwUTSNWEx6b2Fbg2RdP05QGBTxg71mhlk2TG4/cC1GOG
-         1QuLEveO4g2vsq8uP56iIZ/nyUaLRWej80Qt/arTNKL3ujv0P0zyhLm9m6vFz9Oh2Toy
-         3j/TRyt5DlLOvWkjVB3t7iQT5Z6dVNIw4ptjngWuU/amPV4sMat2UgIsV4tXpa8e93KC
-         gI01g00n7cVc34YFc+yoBRUzpdC1jz8a67xhjskKVbsoR1C+J6YMSDkXyirTWEcLzJQ7
-         a+sp17jhZVqpgKaFK9NqnkL+kHZU/EzcVN0V1FuIbp0sCegaoiPsaugKi4VFMTSOdXbF
-         R5+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711384884; x=1711989684;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Umk9XThnTHyedoU/g11c6m9vYltjqXcMDxN5qxudwIc=;
-        b=Lj9//SNSgA6LZmsN4KU9wPGurC/2XmdbPzEWacC/lp0V1xmOOPFSmOi/7t0Cuc1s3y
-         MK6hK0PNKS4hUQ5DBYCqGL3QeZNuux47mCQPHSnK0+9eQOOzh7aInWm+RcRGm8YDTEjc
-         vhahO/m7uLJUo//1EIOAXd9yc8xSaMp8xcwQXX8OfLeqQhgA6zIhiY8oA3rhqUV3CCT3
-         BqlnMz5mXEcWt9SAuhecLmB6l64oUD2JlBRyq2JsoCIlMHPCIktFR2fdA100CCClFqjk
-         xBVxUAbAIj3L442fJ7mCU20uHxEBYeizevNc/0DdlrwXKBEZp3uNmYa1RbxCe/zJzU6O
-         E9fQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXvnKzVXDhLgssSZ659N947GeBC7Bbibcs4DWnzujmP8u59QF5oT92v3Pj+wwNPclxoNEvA52ii5/ZenQENaDRH8vhK
-X-Gm-Message-State: AOJu0Yw3t8ae8KH6tm6hW3C9DKPXGbHyW62Ty/K+f9ySKSCqv9oIJGRK
-	SplEeKBRw8U3RjruSEsMTuoSvyq0V37qX3eZPj42AffEY9Zl/YZ3us6Qg5PXKjMrE5s7DRk0zDc
-	S7gES5xUF5UijTp2dIorrLHuqJQc=
-X-Google-Smtp-Source: AGHT+IHYfHIL+QDixYDj7j6HXXKzIzSf1vS0yAKuTIoMO2MOMtS5HHC5rFr7awrgQKgKdwiGdBH0u9OEuVIbiKG+GVg=
-X-Received: by 2002:a5d:4bc7:0:b0:33d:a190:f0c with SMTP id
- l7-20020a5d4bc7000000b0033da1900f0cmr6170751wrt.16.1711384884538; Mon, 25 Mar
- 2024 09:41:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FzbCp7JI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37540C433F1;
+	Mon, 25 Mar 2024 16:53:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711385588;
+	bh=TZW0H+CTcVkomLGdlmekNLlyTQcENG1CcK5sCMi0Ouc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=FzbCp7JIpQUlk/jEi8/FT2aO38/Jm/82QV/sio3VJqVz8P+BPwa+jyIDZYzLbZ63D
+	 OtlFNovOAmkX9B1Gy7fKhQxxtwdZySq465C6d9yJMOCs8ZdC9Zwfsok+OHPVb2FR8O
+	 Q+xX56G09Q9N8egt7NtZhjmRYqdHVClrRsQYY7dve/9C81z2Ebq2DorwL1y1irnPDv
+	 KPLTs9wcdWY5TnC1vXOSum9pN6bWoVuu0+cX9xSCyb/JMMlhWE7n1CRTR7wz1Gh/Zg
+	 4xHm93FAARwhvo0u6nHwpZzRLSgVZfwQI74WPQscD85D7Y+l+ADZb8KXEF+pVXqFkx
+	 7Ut4EUjOndyVw==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
+ Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Luke Nelson
+ <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, bpf@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, Pu Lehui
+ <pulehui@huaweicloud.com>
+Cc: puranjay12@gmail.com
+Subject: Re: [PATCH bpf-next v2 1/2] bpf,riscv: Implement PROBE_MEM32 pseudo
+ instructions
+In-Reply-To: <20240325155434.65589-2-puranjay12@gmail.com>
+References: <20240325155434.65589-1-puranjay12@gmail.com>
+ <20240325155434.65589-2-puranjay12@gmail.com>
+Date: Mon, 25 Mar 2024 17:53:04 +0100
+Message-ID: <875xxafe33.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322102455.98558-1-alan.maguire@oracle.com>
- <20240322102455.98558-10-alan.maguire@oracle.com> <CAADnVQL+8cm10fg69nqnDKQaSfoFK7NPwa16CB7PQJAdCHsBKQ@mail.gmail.com>
- <96c014da-9ee5-4c54-99ab-bc0ad87f5390@oracle.com>
-In-Reply-To: <96c014da-9ee5-4c54-99ab-bc0ad87f5390@oracle.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 25 Mar 2024 09:41:13 -0700
-Message-ID: <CAADnVQJzCGohcg437Zv1-yA=OPTRAVKTHVkaw5p5HD=7O2updw@mail.gmail.com>
-Subject: Re: [RFC bpf-next 08/13] kbuild, bpf: add module-specific
- pahole/resolve_btfids flags for base reference BTF
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@redhat.com>, Quentin Monnet <quentin@isovalent.com>, Eddy Z <eddyz87@gmail.com>, 
-	Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Hou Tao <houtao1@huawei.com>, bpf <bpf@vger.kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, "Luis R. Rodriguez" <mcgrof@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 25, 2024 at 2:51=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
-om> wrote:
->
-> On 23/03/2024 02:50, Alexei Starovoitov wrote:
-> > On Fri, Mar 22, 2024 at 3:26=E2=80=AFAM Alan Maguire <alan.maguire@orac=
-le.com> wrote:
-> >>
-> >> Support creation of module BTF along with base reference BTF;
-> >> the latter is stored in a .BTF.base_ref ELF section and supplements
-> >> split BTF references to base BTF with information about base types,
-> >> allowing for later reconciliation of split BTF with a (possibly
-> >> changed) base.  resolve_btfids uses the "-r" option to specify
-> >> that the BTF.ids section should be populated with split BTF
-> >> relative to the added .BTF.base_ref section rather than relative
-> >> to the vmlinux base.
-> >>
-> >> Modules using base reference BTF can be built via
-> >>
-> >> BTF_BASE_REF=3D1 make -C. -M=3Dpath2/module
-> >>
-> >> The default is still to use split BTF relative to vmlinux.
-> >>
-> >> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> >> ---
-> >>  scripts/Makefile.btf      | 7 +++++++
-> >>  scripts/Makefile.modfinal | 4 ++--
-> >>  2 files changed, 9 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
-> >> index 9694ca3c5252..c8212b2ab7ca 100644
-> >> --- a/scripts/Makefile.btf
-> >> +++ b/scripts/Makefile.btf
-> >> @@ -19,4 +19,11 @@ pahole-flags-$(call test-ge, $(pahole-ver), 126)   =
-  =3D -j --btf_features=3Dencode_forc
-> >>
-> >>  pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)         +=3D --lang_ex=
-clude=3Drust
-> >>
-> >> +ifeq ($(BTF_BASE_REF),1)
-> >> +module-pahole-flags-$(call test-ge, $(pahole-ver), 126)        +=3D -=
--btf_features=3Dbase_ref
-> >> +module-resolve-btfids-flags-$(call test-ge, $(pahole-ver), 126) =3D -=
-r
-> >> +endif
-> >
-> > The patch set looks great to me.
-> > I wonder whether we should drop this extra BTF_BASE_REF flag
-> > and do it unconditionally.
-> > Currently btf_parse_module() doesn't have any real checks
-> > whether module's btf matches base_btf.
-> > All the btf_check_*() might succeed by luck even if vmlinux btf
-> > is different.
-> > Since .BTF.base_ref is small we can always emit it and
-> > during module load the btf_reconcile() step will be that safety check.
-> > Less build options, less moving pieces and doing it all the time
-> > will make the whole process robust.
-> > Conditional BTF_BASE_REF=3D1 will likely mean that there will be
-> > bugs that only few folks will hit.
->
-> We could certainly do it unconditionally for out-of-tree module builds
-> (the KBUILD_EXTMOD case); so anytime a user does "make -C.
-> M=3Dpath/2/module", they would get base reference BTF. With this series,
-> that would just mean applying this change:
->
-> diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
-> index c8212b2ab7ca..0322f8450a89 100644
-> --- a/scripts/Makefile.btf
-> +++ b/scripts/Makefile.btf
-> @@ -19,7 +19,7 @@ pahole-flags-$(call test-ge, $(pahole-ver), 126)
-> =3D -j --btf_features=3Dencode_forc
->
->  pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)         +=3D
-> --lang_exclude=3Drust
->
-> -ifeq ($(BTF_BASE_REF),1)
-> +ifneq ($(KBUILD_EXTMOD),)
->  module-pahole-flags-$(call test-ge, $(pahole-ver), 126)        +=3D
-> --btf_features=3Dbase_ref
->  module-resolve-btfids-flags-$(call test-ge, $(pahole-ver), 126) =3D -r
->  endif
->
-> So with this approach, in-tree modules don't add base reference BTF
-> since they don't need it, while out-of-tree module builds always do.
-> We could arrange for bpf_testmod to be built both ways perhaps to ensure
-> both approaches get tested in selftests along with kfunc addition etc.
->
-> For adding base reference BTF in all cases, I ran the numbers on adding
-> base reference BTF across all kernel modules and for x86_64 with 2667
-> modules. Base reference BTF adds around 4MB in total. Not huge, but for
-> in-tree builds, the only cases we've seen that triggered BTF mismatches
-> have been broken cases where vmlinux got built twice during kernel
-> build. So my suggestion would be to limit base reference BTF addition to
-> the KBUILD_EXTMOD case, and make it unconditional for that case only.
+Puranjay Mohan <puranjay12@gmail.com> writes:
 
-So 4M across 2667 modules is ~1.5Kbyte per module ?
-And how many modules out of 2667 will be loaded?
-Even for 100 loaded modules it's just 150Kbyte of extra memory.
+> Add support for [LDX | STX | ST], PROBE_MEM32, [B | H | W | DW]
+> instructions.  They are similar to PROBE_MEM instructions with the
+> following differences:
+> - PROBE_MEM32 supports store.
+> - PROBE_MEM32 relies on the verifier to clear upper 32-bit of the
+>   src/dst register
+> - PROBE_MEM32 adds 64-bit kern_vm_start address (which is stored in S7
+>   in the prologue). Due to bpf_arena constructions such S7 + reg +
+>   off16 access is guaranteed to be within arena virtual range, so no
+>   address check at run-time.
+> - S7 is a free callee-saved register, so it is used to store kern_vm_start
+> - PROBE_MEM32 allows STX and ST. If they fault the store is a nop. When
+>   LDX faults the destination register is zeroed.
+>
+> To support these on riscv, we do tmp =3D S7 + src/dst reg and then use
+> tmp2 as the new src/dst register. This allows us to reuse most of the
+> code for normal [LDX | STX | ST].
 
-But I'm fine with sticking to KBUILD_EXTMOD only.
-Let's make bpf_testmod with it though unconditionally.
-No need to build it twice.
+Cool to see the RV BPF JIT keeping up with x86 features! ;-) Nice work!
+
+A couple of minor comments below.
+
+> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+> ---
+>  arch/riscv/net/bpf_jit.h        |   1 +
+>  arch/riscv/net/bpf_jit_comp64.c | 193 +++++++++++++++++++++++++++++++-
+>  arch/riscv/net/bpf_jit_core.c   |   1 +
+>  3 files changed, 192 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+> index f4b6b3b9edda..8a47da08dd9c 100644
+> --- a/arch/riscv/net/bpf_jit.h
+> +++ b/arch/riscv/net/bpf_jit.h
+> @@ -81,6 +81,7 @@ struct rv_jit_context {
+>  	int nexentries;
+>  	unsigned long flags;
+>  	int stack_size;
+> +	u64 arena_vm_start;
+>  };
+>=20=20
+>  /* Convert from ninsns to bytes. */
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
+p64.c
+> index 1adf2f39ce59..0c0588e327af 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> @@ -255,6 +255,10 @@ static void __build_epilogue(bool is_tail_call, stru=
+ct rv_jit_context *ctx)
+>  		emit_ld(RV_REG_S6, store_offset, RV_REG_SP, ctx);
+>  		store_offset -=3D 8;
+>  	}
+> +	if (ctx->arena_vm_start) {
+> +		emit_ld(RV_REG_S7, store_offset, RV_REG_SP, ctx);
+> +		store_offset -=3D 8;
+> +	}
+>=20=20
+>  	emit_addi(RV_REG_SP, RV_REG_SP, stack_adjust, ctx);
+>  	/* Set return value. */
+> @@ -548,6 +552,7 @@ static void emit_atomic(u8 rd, u8 rs, s16 off, s32 im=
+m, bool is64,
+>=20=20
+>  #define BPF_FIXUP_OFFSET_MASK   GENMASK(26, 0)
+>  #define BPF_FIXUP_REG_MASK      GENMASK(31, 27)
+> +#define DONT_CLEAR		17	/* RV_REG_A7 unused in pt_regmap */
+
+Hmm, so this is just a a sentinel node, right? Isn't it more robust to
+use, say REG_ZERO which will never be used? Maybe REG_DONT_CLEAR_MARKER
+or smth, so it's obvious how it's used?
+
+
+>  bool ex_handler_bpf(const struct exception_table_entry *ex,
+>  		    struct pt_regs *regs)
+> @@ -555,7 +560,8 @@ bool ex_handler_bpf(const struct exception_table_entr=
+y *ex,
+>  	off_t offset =3D FIELD_GET(BPF_FIXUP_OFFSET_MASK, ex->fixup);
+>  	int regs_offset =3D FIELD_GET(BPF_FIXUP_REG_MASK, ex->fixup);
+>=20=20
+> -	*(unsigned long *)((void *)regs + pt_regmap[regs_offset]) =3D 0;
+> +	if (regs_offset !=3D DONT_CLEAR)
+> +		*(unsigned long *)((void *)regs + pt_regmap[regs_offset]) =3D 0;
+>  	regs->epc =3D (unsigned long)&ex->fixup - offset;
+>=20=20
+>  	return true;
+> @@ -572,7 +578,8 @@ static int add_exception_handler(const struct bpf_ins=
+n *insn,
+>  	off_t fixup_offset;
+>=20=20
+>  	if (!ctx->insns || !ctx->ro_insns || !ctx->prog->aux->extable ||
+> -	    (BPF_MODE(insn->code) !=3D BPF_PROBE_MEM && BPF_MODE(insn->code) !=
+=3D BPF_PROBE_MEMSX))
+> +	    (BPF_MODE(insn->code) !=3D BPF_PROBE_MEM && BPF_MODE(insn->code) !=
+=3D BPF_PROBE_MEMSX &&
+> +	     BPF_MODE(insn->code) !=3D BPF_PROBE_MEM32))
+>  		return 0;
+>=20=20
+>  	if (WARN_ON_ONCE(ctx->nexentries >=3D ctx->prog->aux->num_exentries))
+> @@ -622,6 +629,9 @@ static int add_exception_handler(const struct bpf_ins=
+n *insn,
+>=20=20
+>  	ex->insn =3D ins_offset;
+>=20=20
+> +	if (BPF_CLASS(insn->code) !=3D BPF_LDX)
+> +		dst_reg =3D DONT_CLEAR;
+> +
+
+Instead of having a side-effect, and passing a dummy dst_reg for the
+probe_mem32, just explicitly add DONT_CLEAR when calling
+add_exception_handler(). It's more obvious to me at least.
+
+>  	ex->fixup =3D FIELD_PREP(BPF_FIXUP_OFFSET_MASK, fixup_offset) |
+>  		FIELD_PREP(BPF_FIXUP_REG_MASK, dst_reg);
+>  	ex->type =3D EX_TYPE_BPF;
+> @@ -1063,7 +1073,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, =
+struct rv_jit_context *ctx,
+>  		    BPF_CLASS(insn->code) =3D=3D BPF_JMP;
+>  	int s, e, rvoff, ret, i =3D insn - ctx->prog->insnsi;
+>  	struct bpf_prog_aux *aux =3D ctx->prog->aux;
+> -	u8 rd =3D -1, rs =3D -1, code =3D insn->code;
+> +	u8 rd =3D -1, rs =3D -1, code =3D insn->code, reg_arena_vm_start =3D RV=
+_REG_S7;
+>  	s16 off =3D insn->off;
+>  	s32 imm =3D insn->imm;
+>=20=20
+> @@ -1539,6 +1549,11 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn,=
+ struct rv_jit_context *ctx,
+>  	case BPF_LDX | BPF_PROBE_MEMSX | BPF_B:
+>  	case BPF_LDX | BPF_PROBE_MEMSX | BPF_H:
+>  	case BPF_LDX | BPF_PROBE_MEMSX | BPF_W:
+> +	/* LDX | PROBE_MEM32: dst =3D *(unsigned size *)(src + S7 + off)*/
+> +	case BPF_LDX | BPF_PROBE_MEM32 | BPF_B:
+> +	case BPF_LDX | BPF_PROBE_MEM32 | BPF_H:
+> +	case BPF_LDX | BPF_PROBE_MEM32 | BPF_W:
+> +	case BPF_LDX | BPF_PROBE_MEM32 | BPF_DW:
+>  	{
+>  		int insn_len, insns_start;
+>  		bool sign_ext;
+> @@ -1546,6 +1561,11 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn,=
+ struct rv_jit_context *ctx,
+>  		sign_ext =3D BPF_MODE(insn->code) =3D=3D BPF_MEMSX ||
+>  			   BPF_MODE(insn->code) =3D=3D BPF_PROBE_MEMSX;
+>=20=20
+> +		if (BPF_MODE(insn->code) =3D=3D BPF_PROBE_MEM32) {
+> +			emit_add(RV_REG_T2, rs, reg_arena_vm_start, ctx);
+> +			rs =3D RV_REG_T2;
+> +		}
+> +
+>  		switch (BPF_SIZE(code)) {
+>  		case BPF_B:
+>  			if (is_12b_int(off)) {
+> @@ -1682,6 +1702,87 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn,=
+ struct rv_jit_context *ctx,
+>  		emit_sd(RV_REG_T2, 0, RV_REG_T1, ctx);
+>  		break;
+>=20=20
+> +	case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
+> +	case BPF_ST | BPF_PROBE_MEM32 | BPF_H:
+> +	case BPF_ST | BPF_PROBE_MEM32 | BPF_W:
+> +	case BPF_ST | BPF_PROBE_MEM32 | BPF_DW:
+> +	{
+> +		int insn_len, insns_start;
+> +
+> +		emit_add(RV_REG_T3, rd, reg_arena_vm_start, ctx);
+> +		rd =3D RV_REG_T3;
+> +
+> +		/* Load imm to a register then store it */
+> +		emit_imm(RV_REG_T1, imm, ctx);
+> +
+> +		switch (BPF_SIZE(code)) {
+> +		case BPF_B:
+> +			if (is_12b_int(off)) {
+> +				insns_start =3D ctx->ninsns;
+> +				emit(rv_sb(rd, off, RV_REG_T1), ctx);
+> +				insn_len =3D ctx->ninsns - insns_start;
+> +				break;
+> +			}
+> +
+> +			emit_imm(RV_REG_T2, off, ctx);
+> +			emit_add(RV_REG_T2, RV_REG_T2, rd, ctx);
+> +			insns_start =3D ctx->ninsns;
+> +			emit(rv_sb(RV_REG_T2, 0, RV_REG_T1), ctx);
+> +			insn_len =3D ctx->ninsns - insns_start;
+> +
+> +			break;
+> +
+> +		case BPF_H:
+> +			if (is_12b_int(off)) {
+> +				insns_start =3D ctx->ninsns;
+> +				emit(rv_sh(rd, off, RV_REG_T1), ctx);
+> +				insn_len =3D ctx->ninsns - insns_start;
+> +				break;
+> +			}
+> +
+> +			emit_imm(RV_REG_T2, off, ctx);
+> +			emit_add(RV_REG_T2, RV_REG_T2, rd, ctx);
+> +			insns_start =3D ctx->ninsns;
+> +			emit(rv_sh(RV_REG_T2, 0, RV_REG_T1), ctx);
+> +			insn_len =3D ctx->ninsns - insns_start;
+> +			break;
+> +		case BPF_W:
+> +			if (is_12b_int(off)) {
+> +				insns_start =3D ctx->ninsns;
+> +				emit_sw(rd, off, RV_REG_T1, ctx);
+> +				insn_len =3D ctx->ninsns - insns_start;
+> +				break;
+> +			}
+> +
+> +			emit_imm(RV_REG_T2, off, ctx);
+> +			emit_add(RV_REG_T2, RV_REG_T2, rd, ctx);
+> +			insns_start =3D ctx->ninsns;
+> +			emit_sw(RV_REG_T2, 0, RV_REG_T1, ctx);
+> +			insn_len =3D ctx->ninsns - insns_start;
+> +			break;
+> +		case BPF_DW:
+> +			if (is_12b_int(off)) {
+> +				insns_start =3D ctx->ninsns;
+> +				emit_sd(rd, off, RV_REG_T1, ctx);
+> +				insn_len =3D ctx->ninsns - insns_start;
+> +				break;
+> +			}
+> +
+> +			emit_imm(RV_REG_T2, off, ctx);
+> +			emit_add(RV_REG_T2, RV_REG_T2, rd, ctx);
+> +			insns_start =3D ctx->ninsns;
+> +			emit_sd(RV_REG_T2, 0, RV_REG_T1, ctx);
+> +			insn_len =3D ctx->ninsns - insns_start;
+> +			break;
+> +		}
+
+A lot of similar code, with emit of different sizes. Possible to move
+move out to a function, and wrap the emits? The main loop is hard read
+already!
+
+> +
+> +		ret =3D add_exception_handler(insn, ctx, rd, insn_len);
+> +		if (ret)
+> +			return ret;
+> +
+> +		break;
+> +	}
+> +
+>  	/* STX: *(size *)(dst + off) =3D src */
+>  	case BPF_STX | BPF_MEM | BPF_B:
+>  		if (is_12b_int(off)) {
+> @@ -1728,6 +1829,83 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn,=
+ struct rv_jit_context *ctx,
+>  		emit_atomic(rd, rs, off, imm,
+>  			    BPF_SIZE(code) =3D=3D BPF_DW, ctx);
+>  		break;
+> +
+> +	case BPF_STX | BPF_PROBE_MEM32 | BPF_B:
+> +	case BPF_STX | BPF_PROBE_MEM32 | BPF_H:
+> +	case BPF_STX | BPF_PROBE_MEM32 | BPF_W:
+> +	case BPF_STX | BPF_PROBE_MEM32 | BPF_DW:
+> +	{
+> +		int insn_len, insns_start;
+> +
+> +		emit_add(RV_REG_T2, rd, reg_arena_vm_start, ctx);
+> +		rd =3D RV_REG_T2;
+> +
+> +		switch (BPF_SIZE(code)) {
+> +		case BPF_B:
+> +			if (is_12b_int(off)) {
+> +				insns_start =3D ctx->ninsns;
+> +				emit(rv_sb(rd, off, rs), ctx);
+> +				insn_len =3D ctx->ninsns - insns_start;
+> +				break;
+> +			}
+> +
+> +			emit_imm(RV_REG_T1, off, ctx);
+> +			emit_add(RV_REG_T1, RV_REG_T1, rd, ctx);
+> +			insns_start =3D ctx->ninsns;
+> +			emit(rv_sb(RV_REG_T1, 0, rs), ctx);
+> +			insn_len =3D ctx->ninsns - insns_start;
+> +			break;
+> +		case BPF_H:
+> +			if (is_12b_int(off)) {
+> +				insns_start =3D ctx->ninsns;
+> +				emit(rv_sh(rd, off, rs), ctx);
+> +				insn_len =3D ctx->ninsns - insns_start;
+> +				break;
+> +			}
+> +
+> +			emit_imm(RV_REG_T1, off, ctx);
+> +			emit_add(RV_REG_T1, RV_REG_T1, rd, ctx);
+> +			insns_start =3D ctx->ninsns;
+> +			emit(rv_sh(RV_REG_T1, 0, rs), ctx);
+> +			insn_len =3D ctx->ninsns - insns_start;
+> +			break;
+> +		case BPF_W:
+> +			if (is_12b_int(off)) {
+> +				insns_start =3D ctx->ninsns;
+> +				emit_sw(rd, off, rs, ctx);
+> +				insn_len =3D ctx->ninsns - insns_start;
+> +				break;
+> +			}
+> +
+> +			emit_imm(RV_REG_T1, off, ctx);
+> +			emit_add(RV_REG_T1, RV_REG_T1, rd, ctx);
+> +			insns_start =3D ctx->ninsns;
+> +			emit_sw(RV_REG_T1, 0, rs, ctx);
+> +			insn_len =3D ctx->ninsns - insns_start;
+> +			break;
+> +		case BPF_DW:
+> +			if (is_12b_int(off)) {
+> +				insns_start =3D ctx->ninsns;
+> +				emit_sd(rd, off, rs, ctx);
+> +				insn_len =3D ctx->ninsns - insns_start;
+> +				break;
+> +			}
+> +
+> +			emit_imm(RV_REG_T1, off, ctx);
+> +			emit_add(RV_REG_T1, RV_REG_T1, rd, ctx);
+> +			insns_start =3D ctx->ninsns;
+> +			emit_sd(RV_REG_T1, 0, rs, ctx);
+> +			insn_len =3D ctx->ninsns - insns_start;
+> +			break;
+> +		}
+
+Same comment as above.
+
+
+Bj=C3=B6rn
