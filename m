@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C0605812B;
-	Mon, 25 Mar 2024 20:15:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8BEFC01;
+	Mon, 25 Mar 2024 20:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711397739; cv=none; b=ewUyWjTkwOyDZumYfhzUK74FZGrxL6Z3gEmFaGVoRixsZsR6Hh7uy4oDR2sNJhTg/NjHrn99GJ/if0+BnT3vKADB3IyrM7KWqwglIKfIx9lu1Ls5UsRiT9IF83d3Ch/71We4uQE/SaGQoIzxAyyKQrOk/IcEnFndgTUN4TVcrgs=
+	t=1711397973; cv=none; b=pCDUpTvV/Z//bc0ku419teFgeh4YD1jNgaMLvfdOzSAFmt5+QuqSOcOJ2AnKbKeaqgq1drGxglWsYScuGucQCSr0mvSPg6GMtAqFN/hcRgwNHWGrsPnIxsqIK+ytmLXcJCq9FRYheKZficQHYUbj/9lrBdcCtAW19KjaehhFF7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711397739; c=relaxed/simple;
-	bh=VnLILID+B4AMhTkZ41ybygjTq3wYwO3V7O/AXYomsuk=;
+	s=arc-20240116; t=1711397973; c=relaxed/simple;
+	bh=jHzWHipH1FUjrW3QmoX2gyQBJf9dn+dr+EwQqJeJ2Gc=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=p1OfoWJTO7zaw1mxvRLFReQ7DyZvMD1iMG5V25HBiL4ws6JryV2F/TOqYjKDdD4gNTdJUYzzhYwEXcwheCwl/wS8qYxUNCzMX1Nf04H5B+8G8zvGmHDgtreq/fGUunien6sE6KnxvVMZTdEHT4KlBwNfDqeEerGcHAknwEzwRdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cuh01lJp; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=VMMdW+7n8qQRF5QoHz/Midbc1Xe/Z9FOveAJ76FEEt1Q8WjaQ6U8eu4mE7gqFL/5y3uigRAC/0XGYe43ruVhprY3MzdOd5CQMbVS2aH28kUdsxlYUCwbKbkatqmViJuNc+h2bcFPPxL/cUkPnjILMztzR6yv6o0o/YLaz4Lku8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bum2rFsu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cuh01lJp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DB76C433F1;
-	Mon, 25 Mar 2024 20:15:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bum2rFsu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC190C433F1;
+	Mon, 25 Mar 2024 20:19:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711397738;
-	bh=VnLILID+B4AMhTkZ41ybygjTq3wYwO3V7O/AXYomsuk=;
+	s=k20201202; t=1711397972;
+	bh=jHzWHipH1FUjrW3QmoX2gyQBJf9dn+dr+EwQqJeJ2Gc=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=Cuh01lJp5vogSObIBpycMUzfX0whg8W2LHhV+rxvsyYYcy4Hn3vZH4GKGoaTSj6as
-	 Ho9/uJJWQrZdOFyqv55geuMINcPN7mIrNVAReXXbHMKvCMZ72FAu/9z4yvE+OYz+i/
-	 BOneQVelLQBCjs+4udPyGAb4w8zY8B1OAENKvSZ5qBCpFU25bbkoCvETuayzuj/YZW
-	 GRx7gPPvhXJ1iCoiLPbKBqxG+wqNBEhF91cg4SJOStJkwOI4DhMPBC7IZwJosz7zwA
-	 ywXg1UeD4cFpwxdmAfsPchSbxwRMO6zIvJbyzsf1UhNThOtbQQLaPtWWquNY/FVU+l
-	 f+TYNDP8cHECg==
+	b=Bum2rFsu+JPbqMUpVZ1X5guR1xNpEttm8Bi0nI3fr55l93tXuus0BNLJLeKq6cFCd
+	 caP7tYJXuxFtGlATVhMJ9W+JnBCc26LRFiqW8uAAJSUEmA+9jnmCwbcqaG45Y4E0/h
+	 Vw2l8X+A14Yy2ImoX1HWxBHe0aObKGkgdI9of6Ojoq7Nfi/UwJMsFbwvLPT4aWoL1Z
+	 eI26NO5jq5IGego/V4W6BppAreU9bQumYwzFBHyBd4z6RQIGRd0f/+RqOYNngXfZWz
+	 xmU/KgNGbaNCTCVMYdVBIybqSj4/QaJ6gVsqqYBxP7pbOEUlzBc2ay/67VzrEF2O8o
+	 YlSi505dIgR3Q==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 To: Conor Dooley <conor@kernel.org>, Puranjay Mohan <puranjay12@gmail.com>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
@@ -41,14 +41,16 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
  linux-kernel@vger.kernel.org, Pu Lehui <pulehui@huaweicloud.com>
 Subject: Re: [PATCH bpf-next v2 2/2] bpf,riscv: Implement
  bpf_addr_space_cast instruction
-In-Reply-To: <20240325-perpetual-liking-25f26e485b65@spud>
+In-Reply-To: <20240325-creamed-unlovely-4c80082e9b8c@spud>
 References: <20240325155434.65589-1-puranjay12@gmail.com>
  <20240325155434.65589-3-puranjay12@gmail.com>
  <20240325-nineteen-unvaried-cb5cb5fd3a73@spud>
  <CANk7y0gWtwN7EJ24aoY9-RB9629d5Ks-9fMc3wnAAjjERcZhFw@mail.gmail.com>
  <20240325-perpetual-liking-25f26e485b65@spud>
-Date: Mon, 25 Mar 2024 21:15:35 +0100
-Message-ID: <87il1a3w60.fsf@all.your.base.are.belong.to.us>
+ <CANk7y0jtURUC6PWx5nSDigMpScUT+p3qd=hTtqJkCqAN+Nq32A@mail.gmail.com>
+ <20240325-creamed-unlovely-4c80082e9b8c@spud>
+Date: Mon, 25 Mar 2024 21:19:29 +0100
+Message-ID: <87edby3vzi.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -60,23 +62,20 @@ Content-Transfer-Encoding: quoted-printable
 
 Conor Dooley <conor@kernel.org> writes:
 
-> Bjorn, do you think there's anything we can do about these kinda
-> misleading CI failures for bpf stuff? Some stuff that touches bpf
-> definitely is worth us building, but should we try and build it on top
-> of the bpf tree instead?
+>> Is there a separate CI for RISCV related stuff? is it public?
+>
+> It's based outta patchwork, just like the netdev/bpf stuff:
+> https://patchwork.kernel.org/project/linux-riscv/list/
 
-IMO: The way to go is enabling RV support in the BPF CI (I'll expand on
-this in Puranjay's later mail), and ignore BPF series for the RV
-patchwork CI. I think having multiple trees in the RV CI is not worth
-the pain...
+*salesman mode on*
 
-Sort of related is that I think it could be worthwhile only building
-series that had some human interaction (a pair of eyes -- "yes, this
-does make sense to build"). Right now we're just building everything,
-and we have to pay (money *and* time) for it.
+...and more information on the CI (and source!) can be found here:
 
-...and then the BPF series would e.g. not be built at the RV PW CI.
+  https://github.com/linux-riscv/github-ci/wiki
+  https://wiki.riseproject.dev/display/HOME/PoC+Github+Runners+on+GKE
+
+Improvements are very much welcome. It's pretty much only Conor and me
+doing best effort hacking on the CI.
 
 
-(But mostly me thinking out loud! ;-))
 Bj=C3=B6rn
