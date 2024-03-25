@@ -1,142 +1,184 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3307224DB;
-	Mon, 25 Mar 2024 19:40:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF88A45BF1
+	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 19:41:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711395612; cv=none; b=HgSQapPtAN05a/Bx/X+iJ7EJALQXjqNLkhGsUfwvZAPVI5oRmVLcJUWJPRBpup5xsog1mOjZ7GIpQx8hcOHfjnP1x6JBAh6Y5ASfF9icV7RHCo3XDme9PyMxnGl+20WOIB16wv87uMUS4R1fnBJD6HP6tAhQ7jE7NnnAyKdX1Co=
+	t=1711395667; cv=none; b=cWyoO/V1HUYkfcDBxNhtyTbbIyVobCSauQu/SMV/tp8bWADH79jZxwwGBKlVNk7D+5LNZJ03D9pcOa6eaawvGGw3hLIKYTFTzeJIADQlKB3Uq6hXrlNoiQriZalIvQYut1Fl4U0Pg6mcKV4dleMMU5jxTjgFmTmyRtntGfSYDMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711395612; c=relaxed/simple;
-	bh=g659JFfs5AjSVYM1zIakNFUS3zlJBueU+/TZUE+qaBs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j1sfTF+ZkBCFrrhmFzsOczEDiw/doJKrVyxZJpISPeUT/0+wxcQO5ke5XemVOfV/2qcKhXzUUlutmdcbCjScXJHpPEpBtG0yk5CssPgQwyH0eAgfuGKTTDXJyzy2w6HHyTtWNXigMw0nc9/k6Q6/oYFn+3oWHB6HOcsrS41wmac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gaOY5sQX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711395667; c=relaxed/simple;
+	bh=PgpYmWwF+ZKkxz+jpDH8JrvQco+XVEcrWMSMSoX2y8M=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Ky0sohHAZoR1KFO+EH/l6E3vt8R3lUGp1DMgfJzft9jibPY6d3vuXMWROUVTcNatKF2myF1ufrMyUCXJQzkzoQrejRSZroF2UvjuIsYw3YVdqvHhRTy0F0pjidl13ZmKY6RnEZrbJ9P6C29byS7UPggW4haNwv/I9Zs1EeThwtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eQnbFjAP; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gaOY5sQX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F24BBC433C7;
-	Mon, 25 Mar 2024 19:40:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711395612;
-	bh=g659JFfs5AjSVYM1zIakNFUS3zlJBueU+/TZUE+qaBs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gaOY5sQX73xGJ1WwJdYEk9DzGrGd4x/nYC1/t4EYJ/STpKzpCksYM/pu8XPqFaHMG
-	 X9luV4z5WbBHm0t9j/jSRQlGL0oxs7b0+v0pm5pDTNdHg9AzTsco1Tc5/dKP+LoiUk
-	 nBjKbARri3NJm/sqdxCZwILmkeGpo+GKpSBmHX0LuWiF8QqnCL2rhEUenl6pdcjPt+
-	 cFbkekoZ4bwMugXMO+Ou4F/r7WEefbp5iM6+tNxGWV1DbOAtkQxJ60rbLu22Fxs7WR
-	 r69Gx4tdOEMFLGSaL6UApteTt2w0irHgqXZhX167LzUgYhysZoHonbKJkWAGRQQ/bn
-	 4DZdBXR+atfBw==
-Date: Mon, 25 Mar 2024 19:40:05 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Pu Lehui <pulehui@huaweicloud.com>
-Subject: Re: [PATCH bpf-next v2 2/2] bpf,riscv: Implement bpf_addr_space_cast
- instruction
-Message-ID: <20240325-creamed-unlovely-4c80082e9b8c@spud>
-References: <20240325155434.65589-1-puranjay12@gmail.com>
- <20240325155434.65589-3-puranjay12@gmail.com>
- <20240325-nineteen-unvaried-cb5cb5fd3a73@spud>
- <CANk7y0gWtwN7EJ24aoY9-RB9629d5Ks-9fMc3wnAAjjERcZhFw@mail.gmail.com>
- <20240325-perpetual-liking-25f26e485b65@spud>
- <CANk7y0jtURUC6PWx5nSDigMpScUT+p3qd=hTtqJkCqAN+Nq32A@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eQnbFjAP"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-1dde0e7514bso34957255ad.1
+        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 12:41:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1711395664; x=1712000464; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=cX0Tst/fD3eEaDcxw6zP7p1X7prwnotLNua44hovj0E=;
+        b=eQnbFjAPZuE2cDH3+Mh10RyDVE+oRZe9JmkleOhzl4AKdO873iqBqCbow9sIIDfnmF
+         SqVr9aCDU6TkiIxOoYstytmbcbqHa+/o3mVvRgB9j/yuf20oUsUGsmj+SSg2cIZG92vk
+         i4GFc4w1qcLQcpd6W/hSi6rk/IfHUY9ZcLSg5dmihWqwxDL1Wzl0pLKiS6qzG6nZR/wa
+         kNQG3mvQ39KFHwc7XNlu4NYYoh1GVBoO7jk7fO/rBksBemtJiAESs7rfN5PsYjdQ2U2n
+         HFbX0T6u1uc1yb/j12WRTfUP/VYr3la7D/LAICXdYCGbQrwrdhqrEuH83/it0Bhvq+tL
+         +Gxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711395664; x=1712000464;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cX0Tst/fD3eEaDcxw6zP7p1X7prwnotLNua44hovj0E=;
+        b=mjW1460ae1MODOQFoAzZiw1w5XP6QhW4ZTQcrimwW/BPPpoTHmP3NrJZOS3rWoO1VU
+         pm+GwChuKO7FHO1inG/Qkf04LmDn2FB+yxAffYPdYS1Hu4zxPDv7bgoVjZRxNs1CVDLB
+         crc/tQ0eI/XlxOPbidkwnhjxVEux5WNKENkS2SqihrWoZgBAtmY8WTjQ0Ku9EzW1IdYd
+         ECvElUbiXTlMTygfpZt+RoLVIvA4GuqzYHfgc5ThIIsj4DTuSKpLBmW+3/ZAvGqfmPPq
+         sPD0A87go+fRURKlw12B/w959NpfICkqfpWFfd40MiTOKOSzcYPLkejnkZpM+sd3J2Bg
+         bbcA==
+X-Forwarded-Encrypted: i=1; AJvYcCWQ3UKWDuXz3MxdeA9avB/15Jsvv3gTFqTxk49+982HDFI98XfxMS7ZEiXf8ktPYgo4H5mXQ76u6sk+81549hbWP+fp
+X-Gm-Message-State: AOJu0Yxb9pirQvSUeXzg1LCLp2m9XueOIhp0IqvnZnFS5as1VSSHQd20
+	XiKgwteqFBYM0TevSKdA1qGZ/4kkbZIA1kHhlnFm6NldnDQ1gL5IffmY3y+XHHlaygWTLOodD5s
+	fsA==
+X-Google-Smtp-Source: AGHT+IHu0ZTXU78B+0X+LXpELIc87+D4aJxq4bKR0NhoBZQXd5O+HZEP47xhnKe66UWD9zpspAK+wE700/M=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
+ (user=edliaw job=sendgmr) by 2002:a17:902:d2cf:b0:1de:f18c:ce4 with SMTP id
+ n15-20020a170902d2cf00b001def18c0ce4mr662860plc.0.1711395663954; Mon, 25 Mar
+ 2024 12:41:03 -0700 (PDT)
+Date: Mon, 25 Mar 2024 19:40:52 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="f9ssCXyqoxZRmlTY"
-Content-Disposition: inline
-In-Reply-To: <CANk7y0jtURUC6PWx5nSDigMpScUT+p3qd=hTtqJkCqAN+Nq32A@mail.gmail.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.396.g6e790dbe36-goog
+Message-ID: <20240325194100.775052-1-edliaw@google.com>
+Subject: [PATCH v3] selftests/mm: Fix ARM related issue with fork after pthread_create
+From: Edward Liaw <edliaw@google.com>
+To: linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Jann Horn <jannh@google.com>
+Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com, 
+	Edward Liaw <edliaw@google.com>, Lokesh Gidra <lokeshgidra@google.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
+Following issue was observed while running the uffd-unit-tests selftest
+on ARM devices. On x86_64 no issues were detected:
 
---f9ssCXyqoxZRmlTY
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+pthread_create followed by fork caused deadlock in certain cases
+wherein fork required some work to be completed by the created thread.
+Used synchronization to ensure that created thread's start function has
+started before invoking fork.
 
-On Mon, Mar 25, 2024 at 08:23:18PM +0100, Puranjay Mohan wrote:
-> On Mon, Mar 25, 2024 at 8:19=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
-rote:
-> >
-> > On Mon, Mar 25, 2024 at 08:13:10PM +0100, Puranjay Mohan wrote:
-> > > On Mon, Mar 25, 2024 at 8:10=E2=80=AFPM Conor Dooley <conor@kernel.or=
-g> wrote:
-> > > >
-> > > > On Mon, Mar 25, 2024 at 03:54:34PM +0000, Puranjay Mohan wrote:
-> > > > > LLVM generates bpf_addr_space_cast instruction while translating
-> > > > > pointers between native (zero) address space and
-> > > > > __attribute__((address_space(N))). The addr_space=3D0 is reserved=
- as
-> > > > > bpf_arena address space.
-> > > > >
-> > > > > rY =3D addr_space_cast(rX, 0, 1) is processed by the verifier and
-> > > > > converted to normal 32-bit move: wX =3D wY
-> > > > >
-> > > > > rY =3D addr_space_cast(rX, 1, 0) has to be converted by JIT.
-> > > > >
-> > > > > Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
-> > > >
-> > > > Doesn't compile for allmodconfig:
-> > > >   ../arch/riscv/net/bpf_jit_comp64.c:1086:7: error: call to undecla=
-red function 'insn_is_cast_user'; ISO C99 and later do not support implicit=
- function declarations [-Wimplicit-function-declaration]
-> > > >
-> > > > Cheers,
-> > > > Conor.
-> > >
-> > > Yes,
-> > > I mentioned in the cover letter that a patch is required.
-> > > It just got merged in bpf-next/master:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/comm=
-it/?id=3D770546ae9f4c1ae1ebcaf0874f0dd9631d77ec97
-> > >
-> > > So, rebasing on the latest bpf-next/master should fix the issue.
-> >
-> > Ah, I see now that there was a mention in the cover letter that I did
-> > not see first time around.
-> >
-> > Bjorn, do you think there's anything we can do about these kinda
-> > misleading CI failures for bpf stuff? Some stuff that touches bpf
-> > definitely is worth us building, but should we try and build it on top
-> > of the bpf tree instead?
->=20
-> Is there a separate CI for RISCV related stuff? is it public?
+Signed-off-by: Lokesh Gidra <lokeshgidra@google.com>
+[edliaw: Refactored to use atomic_bool]
+Signed-off-by: Edward Liaw <edliaw@google.com>
+---
 
-It's based outta patchwork, just like the netdev/bpf stuff:
-https://patchwork.kernel.org/project/linux-riscv/list/
+v2: restored accidentally removed uffd_test_case_ops when merging
+v3: fixed commit subject to use selftests/mm prefix
 
-> I would be interested in adding RISC-V support in
-> https://github.com/kernel-patches/bpf
-> Is someone already working on this?
+ tools/testing/selftests/mm/uffd-common.c     |  3 +++
+ tools/testing/selftests/mm/uffd-common.h     |  2 ++
+ tools/testing/selftests/mm/uffd-unit-tests.c | 10 ++++++++++
+ 3 files changed, 15 insertions(+)
 
-If anyone is, it is probably something Bjorn knows about!
+diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
+index b0ac0ec2356d..7ad6ba660c7d 100644
+--- a/tools/testing/selftests/mm/uffd-common.c
++++ b/tools/testing/selftests/mm/uffd-common.c
+@@ -18,6 +18,7 @@ bool test_uffdio_wp = true;
+ unsigned long long *count_verify;
+ uffd_test_ops_t *uffd_test_ops;
+ uffd_test_case_ops_t *uffd_test_case_ops;
++atomic_bool ready_for_fork;
 
---f9ssCXyqoxZRmlTY
-Content-Type: application/pgp-signature; name="signature.asc"
+ static int uffd_mem_fd_create(off_t mem_size, bool hugetlb)
+ {
+@@ -518,6 +519,8 @@ void *uffd_poll_thread(void *arg)
+ 	pollfd[1].fd = pipefd[cpu*2];
+ 	pollfd[1].events = POLLIN;
 
------BEGIN PGP SIGNATURE-----
++	ready_for_fork = true;
++
+ 	for (;;) {
+ 		ret = poll(pollfd, 2, -1);
+ 		if (ret <= 0) {
+diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
+index cb055282c89c..cc5629c3d2aa 100644
+--- a/tools/testing/selftests/mm/uffd-common.h
++++ b/tools/testing/selftests/mm/uffd-common.h
+@@ -32,6 +32,7 @@
+ #include <inttypes.h>
+ #include <stdint.h>
+ #include <sys/random.h>
++#include <stdatomic.h>
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZgHTFQAKCRB4tDGHoIJi
-0kRtAP9o7BqT/u++er+Bnqqvg6xK9tBATuUjDpdT+rOwJ1PesgEAh1ycTqG5uqxR
-xFOf+YAsdnGI0ZmRxmxH+/5isoHdjwg=
-=shXF
------END PGP SIGNATURE-----
+ #include "../kselftest.h"
+ #include "vm_util.h"
+@@ -103,6 +104,7 @@ extern bool map_shared;
+ extern bool test_uffdio_wp;
+ extern unsigned long long *count_verify;
+ extern volatile bool test_uffdio_copy_eexist;
++extern atomic_bool ready_for_fork;
 
---f9ssCXyqoxZRmlTY--
+ extern uffd_test_ops_t anon_uffd_test_ops;
+ extern uffd_test_ops_t shmem_uffd_test_ops;
+diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+index 2b9f8cc52639..4a48dc617c6b 100644
+--- a/tools/testing/selftests/mm/uffd-unit-tests.c
++++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+@@ -775,6 +775,8 @@ static void uffd_sigbus_test_common(bool wp)
+ 	char c;
+ 	struct uffd_args args = { 0 };
+
++	ready_for_fork = false;
++
+ 	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
+
+ 	if (uffd_register(uffd, area_dst, nr_pages * page_size,
+@@ -790,6 +792,9 @@ static void uffd_sigbus_test_common(bool wp)
+ 	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
+ 		err("uffd_poll_thread create");
+
++	while (!ready_for_fork)
++		; /* Wait for the poll_thread to start executing before forking */
++
+ 	pid = fork();
+ 	if (pid < 0)
+ 		err("fork");
+@@ -829,6 +834,8 @@ static void uffd_events_test_common(bool wp)
+ 	char c;
+ 	struct uffd_args args = { 0 };
+
++	ready_for_fork = false;
++
+ 	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
+ 	if (uffd_register(uffd, area_dst, nr_pages * page_size,
+ 			  true, wp, false))
+@@ -838,6 +845,9 @@ static void uffd_events_test_common(bool wp)
+ 	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
+ 		err("uffd_poll_thread create");
+
++	while (!ready_for_fork)
++		; /* Wait for the poll_thread to start executing before forking */
++
+ 	pid = fork();
+ 	if (pid < 0)
+ 		err("fork");
+--
+2.44.0.396.g6e790dbe36-goog
+
