@@ -1,104 +1,102 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2185C8FF
-	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 17:21:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA1D76401;
+	Mon, 25 Mar 2024 17:24:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711387298; cv=none; b=UZGdUxrq/oB6kbNRG+/IYKKOTsQY96d4HMe+6t28H7S/WiB3rdJWjO21K0Ucgynrw4ySHNHY446Gok/hijuPnbU7OF+rKHG0jrbr/QzuEMwphWHxF3LzJn2sdj6BsPlfTE8lXxqVUHpvngYHHu7VAgpf65jHuTnC7OuiZIHH/BY=
+	t=1711387477; cv=none; b=iWzf5IddlpESiOAXf0FbMw8OkEOzYW7LK1IneM/ypKvVhRaJ8Xng2JjJ9I5qJZPsELqVrCOA3I+ito7cmrqT113QlRELyO5UixVTOEKqfTOAAd8SX7LDAyKX7VeivD0bP58esKklNSGQtUK0mTAm2f61X4tCpgSaqPnUQ2zfppQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711387298; c=relaxed/simple;
-	bh=0H+MvSydGiSEO3ytRVXDd82d0wGg5Be97El9yqwiTGA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lxm86xlyxYzNEw26IVfe9g/ZSeLzr6gohjE3us9kkWbgHURWXi5BdcR4KLmq35LBuuFA1SrrEY02/uhTT7zSnmozLy/RVflmE5tuBysovNwqiA1Bbs/SgFeU36aluZ6b3gP+aOM+oaZd3QAdiTw7iRqfp79lUZF3gN1480xea3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aVyQnV6K; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711387477; c=relaxed/simple;
+	bh=U0tpeTPOyTpPTe351qE8OA5AoJGCat0VCds9PVfXYDQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
+	 In-Reply-To:Content-Type; b=oFPpFxy7eLSc3RBBNX9IekYhUYMiHcJ3e34U29IMcfy74qDB1bEs3RCpef4PO2hMqMrmSJBbuQQ6+Sk5yG5WTf+loiW+ZsWE4FIil+S3lUoKfMcIoMfOnCmkEIUpVjbmmQxiXIyU8rUQIG2uAAGDjDgVQUkGhhYaYlbcD7vgu8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=bRWZkVTC; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aVyQnV6K"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-33e285a33bdso2540800f8f.2
-        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 10:21:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711387295; x=1711992095; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YvWUmbB9X45q2JWxyFPcnJvsoPnMSCjnd0QA3FVbJco=;
-        b=aVyQnV6KOo7TNrLGbt/XgZmKPLOC1TOSVGph+WKLmlYxaquQ7fzVaCPn6h1ODJgCy9
-         VYFTbW97HjJfAOs4UtCdU2lHL7moEqPRP0Cjwq/vs6233CzmsN1s/mYwK+KmpkmaOf1C
-         23uOVauX7jLdkXDu7/5W9j4YmzPRZQ8Twfa4xBwE0gidg+YqbJWQtDAfGqInjIwThzr9
-         ejrqrVIWyD5nUuabgp8SUtCrTay+i2dmluiLh4O7TMQCTISc8RnhifX1PdymaPveR0ov
-         U9VGqQyfqwcJXqOpLE+NS3Oy0hWw+bVrsZmV/W1ETFoEC2j9LF6UxrudUh+asjITz+v/
-         /GHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711387295; x=1711992095;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YvWUmbB9X45q2JWxyFPcnJvsoPnMSCjnd0QA3FVbJco=;
-        b=FxWjJ94LIQcFXrjAYwZAG6+91XRW3HbDD8n+hxlsAbsMX5BlsjeX/qoUfdIKyWq4bP
-         7Ox55j1zDXeZeA89YQbfvvXNIIot1WOiX7kicQWAP31w2s5GFdRURqG0V7uCMPn4nHdI
-         GYKLWAuqbjBfsKEEeDGzcSCr1SyIwGEODGjss7qssUB5izmcsoglz6Oz1XBSZsxu+55O
-         c75u3Xj+OO0/aWC3dHLYprrOCA0exo1ORRwxjG0EE7gGcdqdNPZmYUuIkcon0YgQ6iiw
-         g+/9oSMm0wLK+sfOCL12xZv1mVQKnEJwLxH9qeELj8mm3/3AQ9wDaE1XOQlI5vV3dHje
-         TfPw==
-X-Gm-Message-State: AOJu0YxNWDtJ5LKxQ9hPhLKQOSAIWuopUDpsdzP0iiI5NkjoBmX94zQ+
-	RO1uUINwcCwz/F19Cf0+vcFM1AwPjn/HSPTjHiFq+WMhtmhemdPx/ZXr1rJJIxrfLJ/17W7B2WS
-	7vm0eHZ/hgjFKX38E5fd9PLRM7d8=
-X-Google-Smtp-Source: AGHT+IGwQUI6bQagClnRHJq/vJwUustoygc9tVO0nvdpgtlKo8ZPwz7sbHub+wbjimCLTygmhM/lFYBtpw50JUVjobo=
-X-Received: by 2002:a5d:47c9:0:b0:341:751e:49b2 with SMTP id
- o9-20020a5d47c9000000b00341751e49b2mr6639142wrc.32.1711387295542; Mon, 25 Mar
- 2024 10:21:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="bRWZkVTC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1711387398; x=1711992198; i=markus.elfring@web.de;
+	bh=U0tpeTPOyTpPTe351qE8OA5AoJGCat0VCds9PVfXYDQ=;
+	h=X-UI-Sender-Class:Date:Subject:To:References:Cc:From:
+	 In-Reply-To;
+	b=bRWZkVTCzppdEH7uqzBNqYMs/I+Wvd1v3zhBOlzHh3JvP7VRPM7M14eaJdHwffT+
+	 gAH4F3Ndy2JRndaz0L++yVp9mVuezqn8yAisWi+T/7ZgpRVDpmmgygh6AjolOIvit
+	 kNb2ajA0LVr2iMG7p2dRzNlzS7KKaTG/7k/H9gJhARf9pzh47AGEYI19RP0OsWRVN
+	 7MZx3FHo/G8doNCDXvdMO3q2X4WytGjKYFc6BVjpNz2G8suO1gq1/n0fe5ADPBlll
+	 uqD3ntomL9G/wqtWWVR8a0kcq7740Q1sbGpaIZHGqyIe+Zw4JfmDK3UzuDFfaDaUk
+	 57ZRDApFvkWovxo26Q==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.90.95]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MUl9B-1sExm83qRV-00QmJk; Mon, 25
+ Mar 2024 18:23:18 +0100
+Message-ID: <8bb50ff8-ff26-45a2-a35b-956c81eb7e80@web.de>
+Date: Mon, 25 Mar 2024 18:22:59 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322000041.2919948-1-andrii@kernel.org> <20240322000041.2919948-3-andrii@kernel.org>
-In-Reply-To: <20240322000041.2919948-3-andrii@kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 25 Mar 2024 10:21:24 -0700
-Message-ID: <CAADnVQ+pTK9_BF-wPyQBuzK4wUtraEg64Kee33w0d63iqQuiHg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/6] selftests/bpf: add batched, mostly in-kernel
- BPF triggering benchmarks
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Kernel Team <kernel-team@meta.com>, Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 12/13] perf dso: Reference counting related fixes
+To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>,
+ James Clark <james.clark@arm.com>,
+ Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+ Colin Ian King <colin.i.king@gmail.com>,
+ =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= <nabijaczleweli@nabijaczleweli.xyz>,
+ Leo Yan <leo.yan@linux.dev>, Song Liu <song@kernel.org>,
+ Miguel Ojeda <ojeda@kernel.org>, Liam Howlett <liam.howlett@oracle.com>,
+ Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+ Ben Gainey <ben.gainey@arm.com>, K Prateek Nayak <kprateek.nayak@amd.com>,
+ Kan Liang <kan.liang@linux.intel.com>, Yanteng Si <siyanteng@loongson.cn>,
+ Ravi Bangoria <ravi.bangoria@amd.com>, Sun Haiyong <sunhaiyong@loongson.cn>,
+ Changbin Du <changbin.du@huawei.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, zhaimingbing <zhaimingbing@cmss.chinamobile.com>,
+ Paran Lee <p4ranlee@gmail.com>, Li Dong <lidong@vivo.com>,
+ Andi Kleen <ak@linux.intel.com>, Chengen Du <chengen.du@canonical.com>,
+ linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+ kernel-janitors@vger.kernel.org
+References: <20240321160300.1635121-1-irogers@google.com>
+ <20240321160300.1635121-13-irogers@google.com>
+Content-Language: en-GB
+Cc: linux-kernel@vger.kernel.org
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240321160300.1635121-13-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:pskIHGf+C3w8pWYXN3g6cdHPcoa+SpW+UpkcrSPDmFidRUj6+xn
+ 88ySkN74QP0NtfTP2Lmo2qRkZZ3BIeQXWNFyJxVA8ZeybIhJNLIdyR2Sahum1O43vMwyRuw
+ OOV0NDeDZFiJWzgDjCoOtKCVV901Od+NWE8VGMLlycV6fJOfYdsBeBGYjgWmaqRr/bj0TAS
+ 6rlKrKSuiM/YlNuiwzFlg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:v95kMyinJlk=;E5e5fyRIagm+9ibeKx83xJAyNZz
+ MG0zuOKI+XCLrx6OgP0qgokntj0JnQvTBvQMTa28oqFle6B2qKuHjYsmjjHJXabJaj3sc9vyl
+ KUMIK4mTV6o8l19R43uwNK5OVqgZWnfPTCJ2OheBT7420/Rl2RxCFWs4DThYp9PvswCsD4Dqv
+ xRujJQTCA6/0kj6hMF18p/71h3RtcIj26TquPK9RoZ1lv2n0lYS+/UON+7JmV+k2dDUUlx1pa
+ qFftIZa+lXY2qx0aKqrWSBD72WMwtM4k/C1OEfWjhNkwFwGppH27Yxd1Spq7/A1GBKXl4CYFC
+ l8RnDUTn9vb04F7DiJkxD+elzKO3u0fHvMyLsG/NxRINlHa52v+PWa6RKncIiPSUwudlJj3Fz
+ vhz2Eyzr8ERTSI7brjkeJiIDMnw/XySuFb/0sGgy7VLOFGZ2m7U9cmHuVj2GpaEhrasRNkuDM
+ KVSzDv4PvTqmWOgfNF3BKsR77kJgkHsYKQ1PN9aPDL3vxThLNvuCCVn8Swc45NHTn1bxx5e6Q
+ byy17MQnYuxpepr3KpGJg3y8n/4WFVzJgeh/yBZ1Ivb0L0cac+DU596y7PoCfAT2kK31Yh9SA
+ NMpv8qZBaQLFKB9JPbQMbMGJDRG88rF4YvS/Rj7o3ke7RFiqp5CiP17gDFupq3TQe76Bu2Ena
+ 4z8FnxaUz5WpJnZYrTu1rCdKApYJJtIDUFRhjwBxdI3KTKLKtKLcyCRFkaEP+Grfu1l23C8RC
+ /waejXJa3cUUWHC5CQsf9NbKpWlVuR2Otbnve4TYOMgbDH/nF9HDqLLr2CclBx4v8R5AM6TcX
+ It4mU2lidzptegDjpdnhsHBkJivLO5bFhDrJKRH5J5Y4I=
 
-On Thu, Mar 21, 2024 at 5:00=E2=80=AFPM Andrii Nakryiko <andrii@kernel.org>=
- wrote:
-> +
-> +static error_t parse_arg(int key, char *arg, struct argp_state *state)
-> +{
-> +       long ret;
-> +
-> +       switch (key) {
-> +       case ARG_TRIG_BATCH_ITERS:
-> +               ret =3D strtol(arg, NULL, 10);
-> +               if (ret < 1 || ret > UINT_MAX) {
-> +                       fprintf(stderr, "invalid --trig-batch-iters value=
-");
-> +                       argp_usage(state);
-> +               }
+> Ensure gets and puts are better aligned fixing reference couting
 
-...
+How do you think about to avoid a typo in the last word of this text line
+for the final commit?
 
-> +const volatile int batch_iters =3D 0;
-> +
-> +SEC("raw_tp")
-> +int trigger_count(void *ctx)
-> +{
-> +       int i;
-> +
-> +       for (i =3D 0; i < batch_iters; i++)
-> +               inc_counter();
 
-so it's passing the verifier due to bounded loop logic, right?
+> checking problems.
 
-Then let's limit cmd line arg to something small instead of UINT_MAX.
-Otherwise users will be surprised by the errors
-coming from --trig-batch-iters 500k
+
+Regards,
+Markus
