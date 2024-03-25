@@ -1,124 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D11DDC3;
-	Mon, 25 Mar 2024 19:19:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3B7C17579;
+	Mon, 25 Mar 2024 19:23:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711394369; cv=none; b=m7zjD17kjjWgVM1xW7aahL3A1xweGuMEH83vDGymjKj0kugHKPZhE8BEA/gakvuaouRB/STsLNy3toOO1JiU/iuIfLD4s5SMb4XSWm73e8OETCvRit6HgurtPdZN+dJuhCwoUSb1QBC8SUtb/WnoFHKH6g40CmGjJzTraRvMNq4=
+	t=1711394613; cv=none; b=n9BqnlSbeU/qhJfjH/VMui8n+fMwi2IN1R0i2Tyfx58V2PcHQA0tmykiBOksUaR0da2o7c2rrjtaK9S0zfNTRwLeKxJaYEaYWAW3+LufRQO4d2BEQ29BlgrSLfqxI83XkoFQ6bx5qbHMNIUGRJZrloFHkd2N8vXp81B3mkGEq6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711394369; c=relaxed/simple;
-	bh=6ur4nAJ4fwkwsjzeh2IAAOBPeg2ISaHYc8y9oEzYf0s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pzqsmWDjwHcOSE+42f0QpiKiNvozdP27EZzHGR2HTVYdKn5W32NC6TUQbOOaQM8/+IIE5xxkLThRmTFuZIBjqdWMDT6cDrSSShD+SDmOG9mrGULOYMc+ZGeJ05dTzETjSQtoUj6MxdqvRTX76UkhPKVMeX3AP+D+b2ztf6pt1/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sXCND9aJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711394613; c=relaxed/simple;
+	bh=nAX1g5FAYeM8f4OsLvQyu5nop1FxLK7T4/S5kb/qsjk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JMV8vI9iH7DZ3tRc65jspdp6yGqEZLuENMxCNdvjpqcj4DWg2BnlcdsEo5nK4JEyDrC0zKpufwh4A7wA42GWG+O4zYjRYTMyhogTJL7Sz8tRjOwPH/JDLnQ7gV4rkp1j3b50Eqlcmt2px42Ym00LyALv3zk/DZKT/HtvblN7vxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d5+SDgIZ; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sXCND9aJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F160C433C7;
-	Mon, 25 Mar 2024 19:19:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711394368;
-	bh=6ur4nAJ4fwkwsjzeh2IAAOBPeg2ISaHYc8y9oEzYf0s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sXCND9aJ3vGdPTUZkzw3cMJ5Z+8+y+sA3Uk5ODhmOoTed+Me48SbXmwHMI4vFE8q9
-	 OiCwNyFZiIwGt211YsUirguF2WYHc0n7qVLfydSRisg1vsIENQmRU5sNeHlBkWg2X6
-	 boT5bf8k5CSTQIQqX99uqvexvMmap6nQVi8qdsloo9afoa2C99WSfzQFRA7e7VON03
-	 A5Jl1y6Q0BqnWGkJMbmGcJ99RzcFbojNzykJ6tf2KBnlQ2eWBcAGNe79laPQ7mdX3S
-	 nr1V/mKPBZXumk7K4SPNyLpXm33p3Fbe6QtngW7xfbEy8vLqzRtzUMY+9rPVX24GD0
-	 u6MCVVp5Qqfag==
-Date: Mon, 25 Mar 2024 19:19:22 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Pu Lehui <pulehui@huaweicloud.com>
-Subject: Re: [PATCH bpf-next v2 2/2] bpf,riscv: Implement bpf_addr_space_cast
- instruction
-Message-ID: <20240325-perpetual-liking-25f26e485b65@spud>
-References: <20240325155434.65589-1-puranjay12@gmail.com>
- <20240325155434.65589-3-puranjay12@gmail.com>
- <20240325-nineteen-unvaried-cb5cb5fd3a73@spud>
- <CANk7y0gWtwN7EJ24aoY9-RB9629d5Ks-9fMc3wnAAjjERcZhFw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d5+SDgIZ"
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-512e4f4e463so5100460e87.1;
+        Mon, 25 Mar 2024 12:23:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711394610; x=1711999410; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a8aQL/Qh+/g6MnD8suhJB3IMrCXrJXRjBKFx//tw32U=;
+        b=d5+SDgIZcJcmZW/1SQsc6plNPhxjx6yYpjsuY4IdJcy/OTwpKaQBo4yw2gXgsVB3PX
+         jlp1UhI23eW7cwGDh5TKdHg00hRhb1rJtX+9zGToAKdv0j4k/fbzi49Si1FYA7v2sCjh
+         i/yDBiefJDgOglz6gYyye9QbftShPbeEbqT/ukM8KWdxVrQZue6gttKbYtYMA/wlTgf1
+         NXeE5smvOAI4QbH/MEQ9SXUk5WcxNFTl61Y2kmBhksjW9JDiZo6vT90xlkjDm4tpDHEI
+         MdVyvcoRwtWlyhBw7nRyIfPUZFWCHPe4X9k2dN7Xhg/xEVIeMOVKh8ZKMTn/fm1I9omD
+         x4Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711394610; x=1711999410;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a8aQL/Qh+/g6MnD8suhJB3IMrCXrJXRjBKFx//tw32U=;
+        b=KXcNnTNJUG31pMJZDmgIGEYu3EmA62SJ6pRek8jxweknJLVpcE4ioDhpVOVnyY8gA0
+         zRNQfYIK8vA1Sru1Fvo7XaIRdX3bHCJd0J4eqnkPS6FRxMo/XjU0XMZioQbEzNiuxN4r
+         U9FeRcAI0HeqD+EIqp2CluY/t2Mi32lTf7Bb1c4VroSFSoMqSAB7PbNSt+yR6IH9040J
+         bMBOub92yuZNw53K+7Rf7Xky1lylSEMFrFnaRlgx+EIIOps9rk7zr6VsrxyNclkcM3Zv
+         OMjOoOwf+z+LuTQtckVQb+uTNpHLoBRH14WS8gjaKK3g1CarjHpccywCHowY1DxhRwTP
+         VHZw==
+X-Forwarded-Encrypted: i=1; AJvYcCV8Zfs5/iSEOjKDSYRvAzHa6S+HgmkvsLZwEyfjS2n32FldEQlrKhPP9XUldNwG5rDQcogga9e+1yoG9wyYyRqP//sRgPiDYz23JAS2JSHdiipcpwqYJKSsN1Ht6YzowAdL
+X-Gm-Message-State: AOJu0Yxc+q5PF7/XLmsQ3gX5RwtIlHR//F+3hAjDs5SdK4mw79OhjlNk
+	L+y2auy9T2tiDTdRAZ3mBYZGq+6OuIEGDungkrtiTtrGazI2oRqfYmclIV4lt2jZ5qQ7Z8oSu9+
+	vyjLmr2C4xG81WltIvppsdccUz/0=
+X-Google-Smtp-Source: AGHT+IF1vk0UqW4liOGXjTqYiEBinsMXHGgEH6imFqIZGuouD3c8EayVtDMaf81Q2NsKzMpYNbz0b49BjVvEX9PL1hQ=
+X-Received: by 2002:ac2:5df0:0:b0:513:d5bb:3017 with SMTP id
+ z16-20020ac25df0000000b00513d5bb3017mr568024lfq.36.1711394609647; Mon, 25 Mar
+ 2024 12:23:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="PLxoKXZPHO6ffd6M"
-Content-Disposition: inline
-In-Reply-To: <CANk7y0gWtwN7EJ24aoY9-RB9629d5Ks-9fMc3wnAAjjERcZhFw@mail.gmail.com>
-
-
---PLxoKXZPHO6ffd6M
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20240325155434.65589-1-puranjay12@gmail.com> <20240325155434.65589-3-puranjay12@gmail.com>
+ <20240325-nineteen-unvaried-cb5cb5fd3a73@spud> <CANk7y0gWtwN7EJ24aoY9-RB9629d5Ks-9fMc3wnAAjjERcZhFw@mail.gmail.com>
+ <20240325-perpetual-liking-25f26e485b65@spud>
+In-Reply-To: <20240325-perpetual-liking-25f26e485b65@spud>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Mon, 25 Mar 2024 20:23:18 +0100
+Message-ID: <CANk7y0jtURUC6PWx5nSDigMpScUT+p3qd=hTtqJkCqAN+Nq32A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] bpf,riscv: Implement bpf_addr_space_cast instruction
+To: Conor Dooley <conor@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, bpf@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Pu Lehui <pulehui@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 25, 2024 at 08:13:10PM +0100, Puranjay Mohan wrote:
-> On Mon, Mar 25, 2024 at 8:10=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
-rote:
-> >
-> > On Mon, Mar 25, 2024 at 03:54:34PM +0000, Puranjay Mohan wrote:
-> > > LLVM generates bpf_addr_space_cast instruction while translating
-> > > pointers between native (zero) address space and
-> > > __attribute__((address_space(N))). The addr_space=3D0 is reserved as
-> > > bpf_arena address space.
+On Mon, Mar 25, 2024 at 8:19=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
+te:
+>
+> On Mon, Mar 25, 2024 at 08:13:10PM +0100, Puranjay Mohan wrote:
+> > On Mon, Mar 25, 2024 at 8:10=E2=80=AFPM Conor Dooley <conor@kernel.org>=
+ wrote:
 > > >
-> > > rY =3D addr_space_cast(rX, 0, 1) is processed by the verifier and
-> > > converted to normal 32-bit move: wX =3D wY
+> > > On Mon, Mar 25, 2024 at 03:54:34PM +0000, Puranjay Mohan wrote:
+> > > > LLVM generates bpf_addr_space_cast instruction while translating
+> > > > pointers between native (zero) address space and
+> > > > __attribute__((address_space(N))). The addr_space=3D0 is reserved a=
+s
+> > > > bpf_arena address space.
+> > > >
+> > > > rY =3D addr_space_cast(rX, 0, 1) is processed by the verifier and
+> > > > converted to normal 32-bit move: wX =3D wY
+> > > >
+> > > > rY =3D addr_space_cast(rX, 1, 0) has to be converted by JIT.
+> > > >
+> > > > Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
 > > >
-> > > rY =3D addr_space_cast(rX, 1, 0) has to be converted by JIT.
+> > > Doesn't compile for allmodconfig:
+> > >   ../arch/riscv/net/bpf_jit_comp64.c:1086:7: error: call to undeclare=
+d function 'insn_is_cast_user'; ISO C99 and later do not support implicit f=
+unction declarations [-Wimplicit-function-declaration]
 > > >
-> > > Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+> > > Cheers,
+> > > Conor.
 > >
-> > Doesn't compile for allmodconfig:
-> >   ../arch/riscv/net/bpf_jit_comp64.c:1086:7: error: call to undeclared =
-function 'insn_is_cast_user'; ISO C99 and later do not support implicit fun=
-ction declarations [-Wimplicit-function-declaration]
+> > Yes,
+> > I mentioned in the cover letter that a patch is required.
+> > It just got merged in bpf-next/master:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit=
+/?id=3D770546ae9f4c1ae1ebcaf0874f0dd9631d77ec97
 > >
-> > Cheers,
-> > Conor.
->=20
-> Yes,
-> I mentioned in the cover letter that a patch is required.
-> It just got merged in bpf-next/master:
-> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?=
-id=3D770546ae9f4c1ae1ebcaf0874f0dd9631d77ec97
->=20
-> So, rebasing on the latest bpf-next/master should fix the issue.
+> > So, rebasing on the latest bpf-next/master should fix the issue.
+>
+> Ah, I see now that there was a mention in the cover letter that I did
+> not see first time around.
+>
+> Bjorn, do you think there's anything we can do about these kinda
+> misleading CI failures for bpf stuff? Some stuff that touches bpf
+> definitely is worth us building, but should we try and build it on top
+> of the bpf tree instead?
 
-Ah, I see now that there was a mention in the cover letter that I did
-not see first time around.
+Is there a separate CI for RISCV related stuff? is it public?
 
-Bjorn, do you think there's anything we can do about these kinda
-misleading CI failures for bpf stuff? Some stuff that touches bpf
-definitely is worth us building, but should we try and build it on top
-of the bpf tree instead?
-
---PLxoKXZPHO6ffd6M
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZgHOOgAKCRB4tDGHoIJi
-0t9oAQClrCCsg/y60Dzf2CGlzqqLxZlv5uLEMxOHA+AgGxIQiAD/bo+9Ay8m4QJy
-igs4VljEQzP535ZsiOlBcFy7XOh6nAc=
-=InP6
------END PGP SIGNATURE-----
-
---PLxoKXZPHO6ffd6M--
+I would be interested in adding RISC-V support in
+https://github.com/kernel-patches/bpf
+Is someone already working on this?
