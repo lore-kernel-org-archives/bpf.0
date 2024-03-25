@@ -1,155 +1,142 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C67591826E1;
-	Sun, 24 Mar 2024 23:49:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78651309070
+	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 01:08:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711324151; cv=none; b=e2y6V4c11tt/Q1WYynycVBHN84L/TMXF6w6pquca8L3UXgcBwVOb9xOd8I3/KsoxMhmVibSam9v1VyAed+1thzt1wUnbwZJvHBEw7FS/X0GF4Csy6yBG++BoKNmjlfBc3X3BvhOMWLrJfyfYXMUfPMTv3roh6+5rJ50cBmVMK9c=
+	t=1711328887; cv=none; b=EuZ/nimvJBFkCq5ljCqhP1E8nn4ql68IfIc7jqsmuWbH3qoAkyAz7qGZw8TsziaUu284AY4Xkp/H41AgO00MxCc5ZssrqITeUrIvFV3yxBuGIzuMBbRTR9cWBf0IFk5FwJyMyU/Ac1+wMG7oAHo7Hwm6emcz1Mk7Fo3F7sQPDGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711324151; c=relaxed/simple;
-	bh=LFsZTRHTodwxEEOWKO2+M2F3Tn2p02vzi+3C1Wgsjpk=;
+	s=arc-20240116; t=1711328887; c=relaxed/simple;
+	bh=GCXTh24A7mofjoJ4pd1AesdPVvS2J6v2XCBbPRVAI5Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=H+veooiko2pLB/CTedqoG/Je7tRy0Sl5UzxRxSRA/gLfAwIyczxIxhQ60gW1rECbHn3VhVHC5kdlr0jWt8ElkpP47W0bJrfREEUBNkjNk78bnB2jPP+HQOcWmBpEcrx/9YIVYH1Uc44eYAgilZ6Da3CkdUrGIdvgekw9CDqIpfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PmzpY9+l; arc=none smtp.client-ip=209.85.221.54
+	 To:Cc:Content-Type; b=kvqe3OkvWiXC2ybdPbcI3LS28mDkUAKkPyDhxLrHjLhSj0Yw4EEZpwiJ7K185B54cjzgyPmQ/gngZ4n0oBPXG9cElQA53dnrmhycNXSRD5I/6dS1A8+WW2oROJxlf8NQMPT3TZhgu6RcOgtz9taCtFK1VJXOUOcg/nJhTX5dKVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JD/sW5g/; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PmzpY9+l"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3417a3151c5so2460058f8f.1;
-        Sun, 24 Mar 2024 16:49:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JD/sW5g/"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-33ed7ef0ae8so2715957f8f.0
+        for <bpf@vger.kernel.org>; Sun, 24 Mar 2024 18:08:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711324147; x=1711928947; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711328884; x=1711933684; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rymGosSZY4eZQBtQAJDoTYCW4+6dXqpQDiTevlfvmPE=;
-        b=PmzpY9+lzY57zYbpE3RrmQwlk9jXUZ46SX0/iiipIcI2l9pey164dplL5salIwW8vE
-         glhl4/D/Z0GUBsWrla8TG/+T6u5bjUODSWvd7ybnkYDKVlrJJp2GsPwGhvdEy61d80uJ
-         dQ6Ipr3nJAk9Lmfeeb40stERKtrE4KQFANzrqEV9HXJobteNCwtvdbzk2w34EWzbqxBC
-         zgQXd8wJNOhIcsCYKNJXvAyxa0IZdgp+sBQbal2HeGwR6s0tJOJOSQ3Dp1ibTE5OUGDt
-         dh3p8MCy6cgYm/kulPR0cc8O4CR+EimZFK0APVxZ1zwUQkjZO/CWuQQwMII3XTjBuMEf
-         Ke/g==
+        bh=W/0yxVXT6MWMay5c7aPc/hZ2Mpz8OuhYhzUDk2xetZs=;
+        b=JD/sW5g/TR7gL1Q1K9+yaF8sE+L19BTmbZMf+ZbUCvZB2iHiGlQjkoH/4oguXpLYQ9
+         Pgtkp76j1cT5CMgD+24KTD1/uvl4ay6d62Be+GfZiXg2dkzLgBoqMdDHRcEF5JhHhbIX
+         0MTzSqJ7BINiGq5PHrO7Pe2ss4Dgoy+cvIGrARVt9JQtjv6EE6uoJiNfu6aAN0YTSgCn
+         FA1GYGo1g3lUilohEupfT/kP+yCBX90G1uEPrOuyOjmzNt3sBHhytj8iN0+4ncL9fs7p
+         LHo3RwqJOzSazQIfdZYiN2S+/xWiof75n+DK3Dd6/ojtNQbScNc5sbGHZqQsqJOI2f4O
+         7OAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711324147; x=1711928947;
+        d=1e100.net; s=20230601; t=1711328884; x=1711933684;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rymGosSZY4eZQBtQAJDoTYCW4+6dXqpQDiTevlfvmPE=;
-        b=NvpT6xvkvTcsbDc47gkfcnBx7iC0Ne4vuk81NkZAbd2X2xVrG66cPXkWSGrZ/S6FwG
-         KwYT2Bgae3QKwJIaKWgwzGJsPQdRAvk3HrOByPv3bkFnCo9K8XZi+CyOSGOS64hT1WH6
-         +WjlsR0gzsvSrS36eIBGv14aSb5rcJUFjDdsDdktIqloYByixu/TCWFWvaaPuwOVP6I8
-         Y+deI45B+Xy/ZENbljvMloqm4qVGwdiJW1JoW2e0BKfzsquN6YnuN9qQh6eJuRSMk3R6
-         CAnDtwYyWLGsXCuRinR7qsOT7UcfQ16Kp37DNUf7pdfJFk7uR2sYo2aE+RQ6vVjBn4ny
-         SSqg==
-X-Forwarded-Encrypted: i=1; AJvYcCXxb5jBDqJMseBl0+TeJo+Wt56LVTGrkdaFHrtcXEGzigX8DVyRB4HV49y7zR9R8RHoHgWSo1u1eGQWiCa2KtiyXp9MMbciM/uw2gVFFg7BBkH1FRd/XnkzHCHxFGQiWjpsdkJEonHWbdNybHE+udHLC0bqyc4FZvEf
-X-Gm-Message-State: AOJu0YzvgkEi6oAzUQRAIyV90Vxrx40Y/eqeXkhlt0j5XubKVQkvuIWa
-	8t3ZMxdQsgygfOfe/p+yYCs6+Lo8c4H9hWxsxYmI7+ryDe5XxEzQ7QVL0MnGRy4gxehnnTMS6Ne
-	+qqAenFSS0b4xkkF1jBzB5BsgyjE=
-X-Google-Smtp-Source: AGHT+IHCKP1lCoGQBWq085iK334TXrHJHlJK+UFurfZZTtsCL6NXswYufrLlFvKp0pWPSn7nZLF6sIhFzpATPW83QKg=
-X-Received: by 2002:a5d:51d1:0:b0:33e:6cce:c2ea with SMTP id
- n17-20020a5d51d1000000b0033e6ccec2eamr4432251wrv.51.1711324146870; Sun, 24
- Mar 2024 16:49:06 -0700 (PDT)
+        bh=W/0yxVXT6MWMay5c7aPc/hZ2Mpz8OuhYhzUDk2xetZs=;
+        b=oXhBcjgbJRbeyewEW83T61pE7jLA0j4PFBgC5WAj8RZN5FR1HqgGujiBcTaPiElL+0
+         wsuC3iqP9uP2W0TGUitb9nSMh/m+burMzRr194sf0q4b8c35q+CbSr0sxpADWMC2FeZh
+         Jm0tesu0e9WJS+GN7CR6qCy6/31NQ6TceGcyp2ayMykXcQy07bx6mf1gvNPO0Bc1cmfT
+         K0uE0PE0vh243xqkXlowNrHwqtlTR+fRTyoajskfgJ+y5iMt6r4zVwkfrm8uLiMYp/eh
+         lTQv1XQYMCYEj1G6bZSq7N0Yv5i2gYx8CKAqro94z0nraaPNMMe15boq2poHClSg3uQB
+         0R+A==
+X-Gm-Message-State: AOJu0YxdcVbTlyt/y1Lxlk+59wENPtA3XbeAEV1Uf43RbncyI0DJyqhv
+	pgU2avxx6SeIq8A7SPnrPehUcfgiHX9xXxMJyAjOua5l5QJzrIhw8CBpHZBVP69k0jk4v2TaIqb
+	mdzyLlRAbfXvJJPS8NkbjVfn5SmE=
+X-Google-Smtp-Source: AGHT+IEliY8HobaK74GtuJev3L3Ndpt6YcyQyuLglrvBXjhHdgR9CMxRlfEWwEtd3qFI5WkTiWAbmvwwdts61GHiMSI=
+X-Received: by 2002:adf:e052:0:b0:33d:6c9f:39d6 with SMTP id
+ w18-20020adfe052000000b0033d6c9f39d6mr4134584wrh.40.1711328883566; Sun, 24
+ Mar 2024 18:08:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240320105436.4781-1-puranjay12@gmail.com> <CAADnVQJ3o6DsURi=N_KXx+mbW9r7__3LrwYLyYwuoMOsqFHPkw@mail.gmail.com>
- <1686adb401b34adaa3b703ec1a8ffe49@AcuMS.aculab.com> <CAADnVQJzfnK0Mv6HVKZ38VDuAemzbmSMeYscf77YoEy0SgWw+A@mail.gmail.com>
- <c73258ae8425470f90ad31c424cebe3a@AcuMS.aculab.com>
-In-Reply-To: <c73258ae8425470f90ad31c424cebe3a@AcuMS.aculab.com>
+References: <20240324230323.1097685-1-andreimatei1@gmail.com>
+In-Reply-To: <20240324230323.1097685-1-andreimatei1@gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 24 Mar 2024 16:48:55 -0700
-Message-ID: <CAADnVQ+d3pumHKBA1tTwy-8Vm21xu5Xckqv+4y-27FidBVetvQ@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: verifier: prevent userspace memory access
-To: David Laight <David.Laight@aculab.com>
-Cc: Puranjay Mohan <puranjay12@gmail.com>, Ilya Leoshkevich <iii@linux.ibm.com>, 
-	"David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>, 
-	Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>
+Date: Sun, 24 Mar 2024 18:07:52 -0700
+Message-ID: <CAADnVQLouo7SwAsgbA_ELaZ_qsdD3RzhFvLH5xwifBFNyotURg@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: Protect against int overflow for stack access size
+To: Andrei Matei <andreimatei1@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, 
+	syzbot+33f4297b5f927648741a@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 24, 2024 at 3:30=E2=80=AFPM David Laight <David.Laight@aculab.c=
-om> wrote:
+On Sun, Mar 24, 2024 at 4:04=E2=80=AFPM Andrei Matei <andreimatei1@gmail.co=
+m> wrote:
 >
-> From: Alexei Starovoitov
-> > Sent: 24 March 2024 20:43
-> >
-> > On Sun, Mar 24, 2024 at 1:05=E2=80=AFPM David Laight <David.Laight@acul=
-ab.com> wrote:
-> > >
-> > > From: Alexei Starovoitov
-> > > > Sent: 21 March 2024 06:08
-> > > >
-> > > > On Wed, Mar 20, 2024 at 3:55=E2=80=AFAM Puranjay Mohan <puranjay12@=
-gmail.com> wrote:
-> > > > >
-> > > > > The JITs need to implement bpf_arch_uaddress_limit() to define wh=
-ere
-> > > > > the userspace addresses end for that architecture or TASK_SIZE is=
- taken
-> > > > > as default.
-> > > > >
-> > > > > The implementation is as follows:
-> > > > >
-> > > > > REG_AX =3D  SRC_REG
-> > > > > if(offset)
-> > > > >         REG_AX +=3D offset;
-> > > > > REG_AX >>=3D 32;
-> > > > > if (REG_AX <=3D (uaddress_limit >> 32))
-> > > > >         DST_REG =3D 0;
-> > > > > else
-> > > > >         DST_REG =3D *(size *)(SRC_REG + offset);
-> > > >
-> > > > The patch looks good, but it seems to be causing s390 CI failures.
-> > >
-> > > I'm confused by the need for this check (and, IIRC, some other bpf
-> > > code that does kernel copies that can fault - and return an error).
-> > >
-> > > I though that the entire point of bpf was that is sanitised and
-> > > verified everything to limit what the 'program' could do in order
-> > > to stop it overwriting (or even reading) kernel structures that
-> > > is wasn't supposed to access.
-> > >
-> > > So it just shouldn't have a address that might be (in any way)
-> > > invalid.
-> >
-> > bpf tracing progs can call bpf_probe_read_kernel() which
-> > can read any kernel memory.
-> > This is nothing but an inlined version of it.
+> This patch re-introduces protection against the size of access to stack
+> memory being negative; the access size can appear negative as a result
+> of overflowing its signed int representation (the respective function
+> arguments is sometimes converted from a u32 and u64 without any overflow
+> checking), and causes out-of-bounds array accesses in
+> check_stack_range_initialized(). This patch causes the verification of a
+> program with such a non-sensical access size to fail.
 >
-> It was the getsockopt() code were I saw the copy_nocheck() calls.
-> Those have to be broken.
+> This check used to exist in a more indirect way, but was inadvertendly
+> removed in a833a17a.
+>
+> This omission was found by syzkaller. I have failed to actually create a
+> program that triggers the issue (different other protections kick in for
+> different code paths). The syzkaller program is opaque and I failed to
+> fully decipher it; from what I gather, it declares a map with a huge
+> value type (0x80000001 bytes, which is INT_MAX + 2),
 
-No. If you mean csum_partial_copy_nocheck() then they're fine.
+Is that a bloomfilter map?
+Looks like it doesn't have a check for max value_size.
+Pls send a patch to limit it to KMALLOC_MAX_SIZE like
+we do for other maps.
+Hashing over bigger values are pretty hard to do from the bpf side.
 
-> Although the way some of the options use the ptr:len supplied by
-> the application you stand no chance of do an in-kernel call
-> without a proper buffer descriptor argument (with separate optlen
-> and bufferlen fields.)
+> and somehow calls a
+> helper (bpf_map_peek_elem), and manages to pass to it a pointer to the
+> stack while, at the same time, the size of values in this map is being
+> used as the "access size".
 >
-> >
-> > > The only possible address verify is access_ok() to ensure that
-> > > a uses address really is a user address.
-> >
-> > access_ok() considerations don't apply.
-> > We're not dealing with user memory access.
->
-> If you do need a check for 'not a user address' don't you want to just
-> require access_ok() fail?
-> That would be architecture independent.
+> Fixes: a833a17a ("bpf: Fix verification of indirect var-off stack access"=
+)
 
-No. access_ok() can only be used on the user addr.
-access_ok() =3D=3D false on the kernel addr doesn't mean that
-it's a kernel addr.
+The sha is too short. Pls use 12 chars.
+See Documentation/process/submitting-patches.rst.
+
+> Reported-by: syzbot+33f4297b5f927648741a@syzkaller.appspotmail.com
+> Closes: https://lore.kernel.org/bpf/CAADnVQLORV5PT0iTAhRER+iLBTkByCYNBYyv=
+BSgjN1T31K+gOw@mail.gmail.com/
+> ---
+>  kernel/bpf/verifier.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 0bfc0050db28..2019d6177969 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -6701,6 +6701,8 @@ static int check_stack_access_within_bounds(
+>         err =3D check_stack_slot_within_bounds(env, min_off, state, type)=
+;
+>         if (!err && max_off > 0)
+>                 err =3D -EINVAL; /* out of stack access into non-negative=
+ offsets */
+> +       if (!err && access_size < 0)
+> +               err =3D -EINVAL; /* invalid negative access size; integer=
+ overflow? */
+
+This feels like a good place for such a check.
+But it's not an overflow.
+In few other places we have the check against
+#define BPF_MAX_VAR_OFF (1 << 29)
+but this path into check_stack_access_within_bounds()
+didn't hit it.
+
+Since map value_size is negative it is causing all sorts of issues
+and probably not only here.
+Once bloomfilter is fixed this check will not be hit anytime soon,
+but let's add it anyway.
+I would return -EFAULT here and add a comment that this is a bug.
+No need for WARN though.
+
+pw-bot: cr
