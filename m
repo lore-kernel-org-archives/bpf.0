@@ -1,304 +1,176 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B1012B15F;
-	Mon, 25 Mar 2024 17:27:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07FAD272
+	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 17:37:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711387647; cv=none; b=dogkw7WZYmi7eDy9g3ArELj5vABfYNJH1Hl3mA/ubzc7sCaG7gLLUKWXg5R1J+zARqiQDczCbpFIJTgVTtE3xeOX/duMQymWvWw5wzC+2NI9b78cG0nqL6PXI8FnsuqlMGZetIHqIiyWu+wRhTVn2ljBFrNofyIXDsFYzTrCkzo=
+	t=1711388233; cv=none; b=Xvyu+YOkQNlI0IobufNNpherC9GASjxMr5hmzfFmgYH40cjjewn1jgy8V38suAhK5tTieBV/JT2k5IRm5wWwwwVP/KhOeczbNu3pdDKX6wTJ7626DypQBKFdaVsqAyygNnkIj1LK8CM1WwILrie9t8NUdiyLGhd+rnFR31dy+2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711387647; c=relaxed/simple;
-	bh=dQrdbuOdjiEGGzEno9aMxEGBtQjOPNxBBxFXo1KoX4M=;
+	s=arc-20240116; t=1711388233; c=relaxed/simple;
+	bh=dGEH6ynhPNzXD366SZ6UEgZ+XmAaTiHv6IM8eucJA/4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OgFc8wnO8koC7mpsLCt9mbWKVqKFOXytlc0tzoPlSPWhJ9iPc1I1yQQedo6K9b1jBeATmGCiQprdnQ01mNlayRYS+t8OGwbrlvK4KSnRixI/Dv5dbiMLEWaHQaXPwUv9vouGKt08F756yDdIl993VgDdkUDyyr8KuLwH2o6xLWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MQwai1aD; arc=none smtp.client-ip=209.85.210.181
+	 To:Cc:Content-Type; b=IEE2aSiUqfqxRAMI5GgQbqEcypm06ds2HxDC8B0uhGfYdy3/7nyjhQsZZgxMhnWaZOHgHmxuCXKzRE1DIZNtBxa3dJzXjfahHf6Ry0/eG15GjS7Oj2ehYYFUADBrCwmKJNBmIpktN/Xex66l/qJI1b6D/E51GgMdE79IG1gGFRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RSc6I876; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQwai1aD"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6ea9a616cc4so1236761b3a.1;
-        Mon, 25 Mar 2024 10:27:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RSc6I876"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-41488e17e1cso6648115e9.0
+        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 10:37:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711387645; x=1711992445; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711388230; x=1711993030; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CiWdg5pALeavvc4MUKgS8nIDgWUT0n1MqgL7l5Ulwl8=;
-        b=MQwai1aDc0wdQvFe+K+XsD6qWCN7Y9iikBk6Es2dKIYdRf/dS6KS5klBh+4SdOfJM5
-         arfayYQGX4m7VfGD/5FbZf69tVH+7FvqwAHzOFKtLPpItwI8CUgIK6TgbvDWkkm/o0TR
-         P5YnUOp64noTKRwyytK5r1+VrpSfKBgL54iXlTq3yliUptw4M4EDGaDf2mziRjY+nbzz
-         M9dZBHBX0xyAyS3uj521Aqr3EgjpCnDq6hXVHk9alyV4ZDfM40Nq+kMQW6l6H/Q3rC70
-         yB89ouqJPZ+SkDLK4STUrq3uX9mYemSumzBUpTduYEEQKqdxEikJcf/PTEOcX61XUjjL
-         7QiQ==
+        bh=cPre1Nxs7VHxBUWMbZV8gUw3g0sVLsFVu0PpZDCkjP4=;
+        b=RSc6I8762v7QTQpBrp92EdL/nKnx3ofD9I/cItwMwt2SjSJvcUArtdJEzB83d7EB4E
+         3B5WMuqLE/l9/yAUR4y9CcRo7115qMjFNErATDOCQAbfNwrr+kMBGoC1NjBWikYZqB7K
+         2lIgOnEFqsQ/jrTq1R7oRLX/wWPOA3s6Vrp6xKzhWZwH8H/Yh7CRgZcba5PZm/HWAhq+
+         bv9T27qEbKFjCu3dba5fls8QRO2if7jqS7qS5n9PENT/R2ehCkDEG0OrrychXkCMjKq0
+         KcHILObfKz1bfRCQbsAKtflX71zJ0SOoC0w35pePlUuSU1pPXUDI0s/VunP6PNiB9Bdu
+         M0LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711387645; x=1711992445;
+        d=1e100.net; s=20230601; t=1711388230; x=1711993030;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CiWdg5pALeavvc4MUKgS8nIDgWUT0n1MqgL7l5Ulwl8=;
-        b=A0sv4NWAAGAfsjCIcZgyInsoMBDfjwjUD+q9yZhvsvXBnyc3gE5iM9k0SrEH8MksIa
-         2JfIghvqF9SzGIOwe1ef1d2bFhD48DosUPxy7tUA5IgoHst5Cl+b6T8nHR7YsUN+tcjO
-         PIxVqPoIm21pvPl+MuP4FBzXxTq8jbja5JQOe2lYkesYZhzsSSthSrp6PnzuOSyTd0P8
-         AVx79kwMbSRgZ7/YAnNQ2LJoE5H4OaFlYPlm6gVG6ChhEtScAEgY2wxCTkzyhQvWsFKH
-         jEfKqLTpqqPX5/nMoepS3O/5YMqAgE3h97fFj4aLVxmz46mX+Pl+ELBYaUqKLZ6K13JK
-         9riA==
-X-Forwarded-Encrypted: i=1; AJvYcCWKtioncff8uOzU/Yy+kinKs/DpDWhX7JP+/+mMAPq0haybhtq9jHwnB5n8EC3OC7lgEqJtAu/Jn+dClZrSDTTA6ZyHX0yYTKclXw3CoVr4VoUf9urTz8kgdFgjjAjZC0sTaYlyvjdjj31qBc/674RjEV6xHC/altwDm6di5LhJow2iFRXSJbgotKgABBJMLEpQYIUEwR2cgf2NoMc/
-X-Gm-Message-State: AOJu0YzMDkGRH4iS6cQuXdF5BLYFFDnaPH2MVX0RtjwmrCD583c7K+eh
-	n6mJ3bY0eSbtirPoZm4cf38qJFhHjthah86sYSfdhy/vYtQjCZoonrXDwl639xxURNkuV8aS/KB
-	9x8XiUz/nTvkSzBybmuT4VNp3lEixGZ4/
-X-Google-Smtp-Source: AGHT+IHTggu8jlcko6fdXGCHm/T8s5JqK0GqtuBgFIOGmZejHsDXch6InmSAzAf26ZyCVJQhsjoB+GBCBHhF5EByIzI=
-X-Received: by 2002:a05:6a20:1e48:b0:1a3:6f69:d9f3 with SMTP id
- cy8-20020a056a201e4800b001a36f69d9f3mr5653772pzb.61.1711387644641; Mon, 25
- Mar 2024 10:27:24 -0700 (PDT)
+        bh=cPre1Nxs7VHxBUWMbZV8gUw3g0sVLsFVu0PpZDCkjP4=;
+        b=iAuSPSd4lXHvHYQMV5cfElYkWAeW+MDBIDSxAqT+qQsMiodSxfL85Q14JGNF5WFazH
+         cg28vztdiyBATnMX/3+vqUn7yLSGwydsl40f2+Hi1dwlaNfgFLgyQ8/WEWAKDiWWFdJg
+         DB2QJz2vT4EzQz3K8Igyy3MfOzZRb9SB0gajrCIKBbbOgCKwOlYwqQ0KruWv0of4Qs3c
+         BbDy0bPw0HJbPO9Ax4+7agL8JlW9u6r2B15ojfb+7JbH2c9Ye5wAWfwIEl8zpTC/eaHJ
+         82MlZ22D3CfpIJ8kEVVIe2gPWYf+UhbzPpeQQ7DCZeAcVHqfqG218prEfIbXeUR8jdgs
+         4A7w==
+X-Gm-Message-State: AOJu0YxHUz3Qrkh1ytLpGFqz13/DAnI6iTz2laEUJVptUAJOkYccWfTF
+	JmkSFWnHzV4xjPNU20cLcejwmPNeu68m6X6D+eHTN/Cq8xOtQW5VW7UDOE0dsG9tUPOVpactJ2M
+	XwDzciuZL11gGyvQ3F4b0qXvydX0=
+X-Google-Smtp-Source: AGHT+IFm58Xdl2kJ/G9+geG50Ls1tdgbQ360EOVpcDznu7Ew8NIGJ8icGsLYcPItSa1+RdWL3k5+iPVoGpdotpgeqw8=
+X-Received: by 2002:a7b:c347:0:b0:414:7db2:8c04 with SMTP id
+ l7-20020a7bc347000000b004147db28c04mr206274wmj.10.1711388229939; Mon, 25 Mar
+ 2024 10:37:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <000000000000b906b406147069d4@google.com> <CAADnVQLXZ+ro7cKF-K2gnGeit1jxJEPej2Ue3PstvGN+kW02BA@mail.gmail.com>
-In-Reply-To: <CAADnVQLXZ+ro7cKF-K2gnGeit1jxJEPej2Ue3PstvGN+kW02BA@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 25 Mar 2024 10:27:11 -0700
-Message-ID: <CAEf4BzaOk6-w+NLVr9=37QKHFXs3SbPnu5a5YDdsYFx9M91Y4w@mail.gmail.com>
-Subject: Re: raw_tp+cookie is buggy. Was: [syzbot] [bpf?] [trace?] KASAN:
- slab-use-after-free Read in bpf_trace_run1
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: syzbot <syzbot+981935d9485a560bfbcb@syzkaller.appspotmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eddy Z <eddyz87@gmail.com>, Hao Luo <haoluo@google.com>, 
-	John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
-	KP Singh <kpsingh@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-trace-kernel@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Stanislav Fomichev <sdf@google.com>, Song Liu <song@kernel.org>, 
-	syzkaller-bugs <syzkaller-bugs@googlegroups.com>, Yonghong Song <yonghong.song@linux.dev>
+References: <20240322000041.2919948-1-andrii@kernel.org> <20240322000041.2919948-6-andrii@kernel.org>
+In-Reply-To: <20240322000041.2919948-6-andrii@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 25 Mar 2024 10:36:58 -0700
+Message-ID: <CAADnVQ+SWwJMtdXj1s1RtzXJfjXU4Y41eNg+xzFXe2-DNUR8Ag@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 5/6] bpf: add bpf_test_tp() kfunc triggering tp
+ and allowing error injection
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Kernel Team <kernel-team@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 24, 2024 at 5:07=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Thu, Mar 21, 2024 at 5:01=E2=80=AFPM Andrii Nakryiko <andrii@kernel.org>=
+ wrote:
 >
-> Hi Andrii,
+> Add a simple bpf_test_tp() kfunc, available to all program types, that
+> is useful for various testing and benchmarking scenarios, as it allows
+> to trigger most tracing BPF program types from BPF side, allowing to do
+> complex testing and benchmarking scenarios.
 >
-> syzbot found UAF in raw_tp cookie series in bpf-next.
-> Reverting the whole merge
-> 2e244a72cd48 ("Merge branch 'bpf-raw-tracepoint-support-for-bpf-cookie'")
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  kernel/bpf/bpf_test.h | 34 ++++++++++++++++++++++++++++++++++
+>  kernel/bpf/helpers.c  | 13 +++++++++++++
+>  2 files changed, 47 insertions(+)
+>  create mode 100644 kernel/bpf/bpf_test.h
 >
-> fixes the issue.
+> diff --git a/kernel/bpf/bpf_test.h b/kernel/bpf/bpf_test.h
+> new file mode 100644
+> index 000000000000..c779927d3574
+> --- /dev/null
+> +++ b/kernel/bpf/bpf_test.h
+> @@ -0,0 +1,34 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#undef TRACE_SYSTEM
+> +#define TRACE_SYSTEM bpf_test
+> +
+> +#if !defined(_TRACE_BPF_TEST_H) || defined(TRACE_HEADER_MULTI_READ)
+> +
+> +#define _TRACE_BPF_TEST_H
+> +
+> +#include <linux/tracepoint.h>
+> +
+> +TRACE_EVENT(bpf_test,
+> +
+> +       TP_PROTO(int nonce),
+> +
+> +       TP_ARGS(nonce),
+> +
+> +       TP_STRUCT__entry(
+> +               __field(int, nonce)
+> +       ),
+> +
+> +       TP_fast_assign(
+> +               __entry->nonce =3D nonce;
+> +       ),
+> +
+> +       TP_printk("nonce %d", __entry->nonce)
+> +);
+> +
+> +#endif /* _TRACE_BPF_TEST_H */
+> +
+> +#undef TRACE_INCLUDE_PATH
+> +#define TRACE_INCLUDE_PATH .
+> +#define TRACE_INCLUDE_FILE bpf_test
+> +
+> +#include <trace/define_trace.h>
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 9234174ccb21..67bf9659c447 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -26,6 +26,10 @@
 >
-> Pls take a look.
-> See C reproducer below. It splats consistently with CONFIG_KASAN=3Dy
+>  #include "../../lib/kstrtox.h"
 >
-> Thanks.
+> +#define CREATE_TRACE_POINTS
+> +#include "bpf_test.h"
+> +
+> +
+>  /* If kernel subsystem is allowing eBPF programs to call this function,
+>   * inside its own verifier_ops->get_func_proto() callback it should retu=
+rn
+>   * bpf_map_lookup_elem_proto, so that verifier can properly check the ar=
+guments
+> @@ -2549,6 +2553,14 @@ __bpf_kfunc void bpf_throw(u64 cookie)
+>         WARN(1, "A call to BPF exception callback should never return\n")=
+;
+>  }
+>
+> +__bpf_kfunc int bpf_test_tp(int nonce)
+> +{
+> +       trace_bpf_test(nonce);
+> +
+> +       return nonce;
+> +}
+> +ALLOW_ERROR_INJECTION(bpf_test_tp, ERRNO);
 
-Will do, traveling today, so will be offline for a bit, but will check
-first thing afterwards.
+There is a better way with register_btf_fmodret_id_set().
+Error injection can be disabled in config.
 
->
-> On Sun, Mar 24, 2024 at 4:28=E2=80=AFPM syzbot
-> <syzbot+981935d9485a560bfbcb@syzkaller.appspotmail.com> wrote:
-> >
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    520fad2e3206 selftests/bpf: scale benchmark counting by=
- us..
-> > git tree:       bpf-next
-> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D105af946180=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D6fb1be60a19=
-3d440
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D981935d9485a5=
-60bfbcb
-> > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for D=
-ebian) 2.40
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D114f17a51=
-80000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D162bb7a5180=
-000
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/4eef3506c5ce/d=
-isk-520fad2e.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/24d60ebe76cc/vmli=
-nux-520fad2e.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/8f883e706550=
-/bzImage-520fad2e.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the co=
-mmit:
-> > Reported-by: syzbot+981935d9485a560bfbcb@syzkaller.appspotmail.com
-> >
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > BUG: KASAN: slab-use-after-free in __bpf_trace_run kernel/trace/bpf_tra=
-ce.c:2376 [inline]
-> > BUG: KASAN: slab-use-after-free in bpf_trace_run1+0xcb/0x510 kernel/tra=
-ce/bpf_trace.c:2430
-> > Read of size 8 at addr ffff8880290d9918 by task migration/0/19
-> >
-> > CPU: 0 PID: 19 Comm: migration/0 Not tainted 6.8.0-syzkaller-05233-g520=
-fad2e3206 #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS=
- Google 02/29/2024
-> > Stopper: 0x0 <- 0x0
-> > Call Trace:
-> >  <TASK>
-> >  __dump_stack lib/dump_stack.c:88 [inline]
-> >  dump_stack_lvl+0x1e7/0x2e0 lib/dump_stack.c:106
-> >  print_address_description mm/kasan/report.c:377 [inline]
-> >  print_report+0x169/0x550 mm/kasan/report.c:488
-> >  kasan_report+0x143/0x180 mm/kasan/report.c:601
-> >  __bpf_trace_run kernel/trace/bpf_trace.c:2376 [inline]
-> >  bpf_trace_run1+0xcb/0x510 kernel/trace/bpf_trace.c:2430
-> >  __traceiter_rcu_utilization+0x74/0xb0 include/trace/events/rcu.h:27
-> >  trace_rcu_utilization+0x194/0x1c0 include/trace/events/rcu.h:27
-> >  rcu_note_context_switch+0xc7c/0xff0 kernel/rcu/tree_plugin.h:360
-> >  __schedule+0x345/0x4a20 kernel/sched/core.c:6635
-> >  __schedule_loop kernel/sched/core.c:6813 [inline]
-> >  schedule+0x14b/0x320 kernel/sched/core.c:6828
-> >  smpboot_thread_fn+0x61e/0xa30 kernel/smpboot.c:160
-> >  kthread+0x2f0/0x390 kernel/kthread.c:388
-> >  ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
-> >  ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
-> >  </TASK>
-> >
-> > Allocated by task 5075:
-> >  kasan_save_stack mm/kasan/common.c:47 [inline]
-> >  kasan_save_track+0x3f/0x80 mm/kasan/common.c:68
-> >  poison_kmalloc_redzone mm/kasan/common.c:370 [inline]
-> >  __kasan_kmalloc+0x98/0xb0 mm/kasan/common.c:387
-> >  kasan_kmalloc include/linux/kasan.h:211 [inline]
-> >  kmalloc_trace+0x1d9/0x360 mm/slub.c:4012
-> >  kmalloc include/linux/slab.h:590 [inline]
-> >  kzalloc include/linux/slab.h:711 [inline]
-> >  bpf_raw_tp_link_attach+0x2a0/0x6e0 kernel/bpf/syscall.c:3816
-> >  bpf_raw_tracepoint_open+0x1c2/0x240 kernel/bpf/syscall.c:3863
-> >  __sys_bpf+0x3c0/0x810 kernel/bpf/syscall.c:5673
-> >  __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
-> >  __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
-> >  __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5736
-> >  do_syscall_64+0xfb/0x240
-> >  entry_SYSCALL_64_after_hwframe+0x6d/0x75
-> >
-> > Freed by task 5075:
-> >  kasan_save_stack mm/kasan/common.c:47 [inline]
-> >  kasan_save_track+0x3f/0x80 mm/kasan/common.c:68
-> >  kasan_save_free_info+0x40/0x50 mm/kasan/generic.c:589
-> >  poison_slab_object+0xa6/0xe0 mm/kasan/common.c:240
-> >  __kasan_slab_free+0x37/0x60 mm/kasan/common.c:256
-> >  kasan_slab_free include/linux/kasan.h:184 [inline]
-> >  slab_free_hook mm/slub.c:2121 [inline]
-> >  slab_free mm/slub.c:4299 [inline]
-> >  kfree+0x14a/0x380 mm/slub.c:4409
-> >  bpf_link_release+0x3b/0x50 kernel/bpf/syscall.c:3071
-> >  __fput+0x429/0x8a0 fs/file_table.c:423
-> >  task_work_run+0x24f/0x310 kernel/task_work.c:180
-> >  exit_task_work include/linux/task_work.h:38 [inline]
-> >  do_exit+0xa1b/0x27e0 kernel/exit.c:878
-> >  do_group_exit+0x207/0x2c0 kernel/exit.c:1027
-> >  __do_sys_exit_group kernel/exit.c:1038 [inline]
-> >  __se_sys_exit_group kernel/exit.c:1036 [inline]
-> >  __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1036
-> >  do_syscall_64+0xfb/0x240
-> >  entry_SYSCALL_64_after_hwframe+0x6d/0x75
-> >
-> > The buggy address belongs to the object at ffff8880290d9900
-> >  which belongs to the cache kmalloc-128 of size 128
-> > The buggy address is located 24 bytes inside of
-> >  freed 128-byte region [ffff8880290d9900, ffff8880290d9980)
-> >
-> > The buggy address belongs to the physical page:
-> > page:ffffea0000a43640 refcount:1 mapcount:0 mapping:0000000000000000 in=
-dex:0x0 pfn:0x290d9
-> > anon flags: 0xfff00000000800(slab|node=3D0|zone=3D1|lastcpupid=3D0x7ff)
-> > page_type: 0xffffffff()
-> > raw: 00fff00000000800 ffff888014c418c0 0000000000000000 000000000000000=
-1
-> > raw: 0000000000000000 0000000000100010 00000001ffffffff 000000000000000=
-0
-> > page dumped because: kasan: bad access detected
-> > page_owner tracks the page as allocated
-> > page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc=
-0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 4527, tgid 4527 (udevd), ts 4=
-3150902736, free_ts 43094996342
-> >  set_page_owner include/linux/page_owner.h:31 [inline]
-> >  post_alloc_hook+0x1ea/0x210 mm/page_alloc.c:1533
-> >  prep_new_page mm/page_alloc.c:1540 [inline]
-> >  get_page_from_freelist+0x33ea/0x3580 mm/page_alloc.c:3311
-> >  __alloc_pages+0x256/0x680 mm/page_alloc.c:4569
-> >  __alloc_pages_node include/linux/gfp.h:238 [inline]
-> >  alloc_pages_node include/linux/gfp.h:261 [inline]
-> >  alloc_slab_page+0x5f/0x160 mm/slub.c:2190
-> >  allocate_slab mm/slub.c:2354 [inline]
-> >  new_slab+0x84/0x2f0 mm/slub.c:2407
-> >  ___slab_alloc+0xd1b/0x13e0 mm/slub.c:3540
-> >  __slab_alloc mm/slub.c:3625 [inline]
-> >  __slab_alloc_node mm/slub.c:3678 [inline]
-> >  slab_alloc_node mm/slub.c:3850 [inline]
-> >  kmalloc_trace+0x267/0x360 mm/slub.c:4007
-> >  kmalloc include/linux/slab.h:590 [inline]
-> >  kzalloc include/linux/slab.h:711 [inline]
-> >  kernfs_get_open_node fs/kernfs/file.c:523 [inline]
-> >  kernfs_fop_open+0x803/0xcd0 fs/kernfs/file.c:691
-> >  do_dentry_open+0x907/0x15a0 fs/open.c:956
-> >  do_open fs/namei.c:3643 [inline]
-> >  path_openat+0x2860/0x3240 fs/namei.c:3800
-> >  do_filp_open+0x235/0x490 fs/namei.c:3827
-> >  do_sys_openat2+0x13e/0x1d0 fs/open.c:1407
-> >  do_sys_open fs/open.c:1422 [inline]
-> >  __do_sys_openat fs/open.c:1438 [inline]
-> >  __se_sys_openat fs/open.c:1433 [inline]
-> >  __x64_sys_openat+0x247/0x2a0 fs/open.c:1433
-> >  do_syscall_64+0xfb/0x240
-> >  entry_SYSCALL_64_after_hwframe+0x6d/0x75
-> > page last free pid 4526 tgid 4526 stack trace:
-> >  reset_page_owner include/linux/page_owner.h:24 [inline]
-> >  free_pages_prepare mm/page_alloc.c:1140 [inline]
-> >  free_unref_page_prepare+0x968/0xa90 mm/page_alloc.c:2346
-> >  free_unref_page+0x37/0x3f0 mm/page_alloc.c:2486
-> >  rcu_do_batch kernel/rcu/tree.c:2196 [inline]
-> >  rcu_core+0xafd/0x1830 kernel/rcu/tree.c:2471
-> >  __do_softirq+0x2bc/0x943 kernel/softirq.c:554
-> >
-> > Memory state around the buggy address:
-> >  ffff8880290d9800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> >  ffff8880290d9880: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> > >ffff8880290d9900: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> >                             ^
-> >  ffff8880290d9980: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> >  ffff8880290d9a00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >
-> >
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> >
-> > If the report is already addressed, let syzbot know by replying with:
-> > #syz fix: exact-commit-title
-> >
-> > If you want syzbot to run the reproducer, reply with:
-> > #syz test: git://repo/address.git branch-or-commit-hash
-> > If you attach or paste a git patch, syzbot will apply it before testing=
-.
-> >
-> > If you want to overwrite report's subsystems, reply with:
-> > #syz set subsystems: new-subsystem
-> > (See the list of subsystem names on the web dashboard)
-> >
-> > If the report is a duplicate of another one, reply with:
-> > #syz dup: exact-subject-of-another-report
-> >
-> > If you want to undo deduplication, reply with:
-> > #syz undup
+Also we have two such test funcs already:
+bpf_modify_return_test*
+and they can be exercised by bpf_prog_test_run_tracing.
+Let's make it recognize 'repeat' argument and call
+bpf_modify_return_test or 3rd such func multiple times ?
+Exercise of test tracepoint can be there as well.
+Asking bpf prog to call a kfunc to call a tracepoint
+looks like extra hop.
+Existing test_run facility should be able to accommodate.
+
+I still don't get it how modifying the kernel is better than
+adding all that to a kernel module.
+When you want to run bench tool on a different server
+you either need to build/copy bpf_testmod or
+build/copy the whole kernel.
+But fine.
+All the test things in net/bpf/test_run.c will stay.
