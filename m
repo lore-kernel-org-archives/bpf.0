@@ -1,221 +1,537 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 203C214D717
-	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 02:05:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC78E14EC78;
+	Mon, 25 Mar 2024 02:09:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711332358; cv=none; b=fidP5pC7oIiaxby6Kuox35xkKo8yUmxUet3z/4NfEYtXYoKnk/4PkU7vEjL/mPjNfXZ5GeDke9b2+QNL8uPxM/DBcgfKpviuFJRF1qzl5GQWdn0HtC+M4a1Sc9K0vcfV+qdWOJ3yDf799VNt+zIWF+OKHGjcjtNB4MyoyvA7QQA=
+	t=1711332588; cv=none; b=E8mPslnNHG1rbIOSgRFdTblvt/g+mC3xGtV0j3lM/txtmNM6vB+3H+hXThpqLJ9yZYdmJ/pk6p+82CWC4c14aWNzLEi+uw/BYL91aLmjhZj+lpD/6rv3iYDOeYK38WWSgSSCKhC3+HOiPIbVGQVf3afH59zHsFrwUAnwTRd9NW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711332358; c=relaxed/simple;
-	bh=ist6b2W8f51/dCldoqObvp0ORS0RN1sU7oiIBBo3ncs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G9JrucIz9F8Gj9Nko8ybt24lmrw1N8+ChukHDLmFIaScocOkYYuB8yB3IS58+k3jeKOs7KKgkkbNYkWKBgU7nwO4JGOiUWAaq3T+FwORoNJRcqfE9QPdLpxghBkqUR088B5AM0V3D12EbkSiYlhE08sd16QVxLNWdiRe8VrnaMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dcKh1m+n; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711332588; c=relaxed/simple;
+	bh=uLQr/2k4I73u1rkMS14DmF1wxzXBQBl9nMCh4ooF0Os=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JmrZA0lFToko1tdMoC65cihtVfiDrTN8eLb2QF+3agRJhqa3JMzZLJD0B3BaQmMDj9JUHQZ/7e0MfRm6SiuqtdNiwMVkNO3FQahyj70M3OXpiAjGbLf0pG3FNIdvqVMhiPcNU23nU2st0dUYBDvuNASU39Tuff1qlIQukfd7P54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZAvDxnzx; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dcKh1m+n"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-341ccef5058so399199f8f.2
-        for <bpf@vger.kernel.org>; Sun, 24 Mar 2024 19:05:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711332354; x=1711937154; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NRQPHZfFBmWJiYtdRcQoRHlFnkvR3KEopMtRyZgLzJ4=;
-        b=dcKh1m+nZlmmVwygoGzwVCBVhFrjkmM2GvkeDGg6L/yESCp/4mLoMQfnTeoUEOGmSP
-         QQ7gBOIdMQmUTS8EFiB1eBihs2TwKDL91u1gB8JGSk9xFUat07SiPO7iVsYPD2nrUiml
-         mvOj7JASq+yCEMGUW8he+qYgUkqUUg/rpB/9iWaWnqQcf1kaqCUSdwjS1dyGblqcFBVm
-         e22lu8dJHtlXSAwzEf+w7cbkpLzPaejY2OeGdBxc+SaCsnFFKidSo+TKWvkUthG0m2Aw
-         oQEkUdJvMpMxymDX4zE4/4pk5GTNzlvwCQ7hc5zRBEqb2bMg0Luyj1UEDRSCpdMUizhl
-         XgvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711332354; x=1711937154;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NRQPHZfFBmWJiYtdRcQoRHlFnkvR3KEopMtRyZgLzJ4=;
-        b=siCZSNIlYre9rcbOPR9JIafFjX7pWkvoS5+pDAVaN5wBM8KO9GC2a8/67kOg7NdxE/
-         igDFoL2DUCkbzGx41HzDmDgJzU1vCDkW0i4WjXr4TxPLdpoOx3AUwP1dztMzM+WlfCVi
-         N+TkRiJjdksXKDxVhqK4jUujH9TklqCwJG+vIwuWQSY/6ydluEevYIcyWwgnsQ3SLgm+
-         MU5XHPocM5Y1nqUHLNkPdTED3wvX9S6fmonjwi78l7danIWi3e6vwvqQIIpDmNK38bIZ
-         gF8h+2PHKBDP62C8RFOFWGVvo77hvM/BojzvMFGaNj9UwboSMfPfmjWN+cvVus1hDGP/
-         nzFA==
-X-Forwarded-Encrypted: i=1; AJvYcCU1AOxpzF49sG0it527wBp2wlTXmkzEpCmuOa8+e8ySKxFIRX3102oCE8PnsLCp0XZ/WGIvn1AEmAO5JtYSk94SFhhc
-X-Gm-Message-State: AOJu0Yya8hwFIFw46kmW8vColyjXRHopZ6cKpPpq34SWFZUfuyztbCsJ
-	lZvOAk4FtXkPAqOXeXOo92vtXFD8odYj4Jguyz1phHbfjWAPzd4KiJBCGHI4uT3mQrVmu/SCuBj
-	nVBSBEFweYl46Fh7XObx/ML2fxrQ=
-X-Google-Smtp-Source: AGHT+IGuSBVmqV085jDqvQUAf8i68IEUnyytNHkfFRI9GOcvPBBTnyjUT2ikFR7lzMrLMmFDGN42uoRKPnDAghMRcG0=
-X-Received: by 2002:adf:c849:0:b0:341:b997:7a4b with SMTP id
- e9-20020adfc849000000b00341b9977a4bmr3452539wrh.34.1711332354202; Sun, 24 Mar
- 2024 19:05:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZAvDxnzx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711332586; x=1742868586;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uLQr/2k4I73u1rkMS14DmF1wxzXBQBl9nMCh4ooF0Os=;
+  b=ZAvDxnzxYmWQvFFf97N61cX8KcXiX1IJlGjw3LNpGuOBtyRvjyE/YdJa
+   WZUqB/M07c8tCxM17l+NTLqIXm5JJ8ASa21VHrTCOJWf5paP+XVyC7xlT
+   h3BdYbXder2Y7mkDVl8KrU+dAqA3q4eQ5AjzOeANMNaFMFVx2skHmapTF
+   FESzJL5ip5KnqQdd5TOEsOjNhn93jJR/ew9xtg8c9SqSgMSnje9s0cX5H
+   ZJ5Y/v4SfjNstEf47Cte6oZWMgHjf+VEkoeG2rPJXohohDoo8MSUqKx/z
+   cZlCnWIiIzUG4hUuUuwV/eB6rt4MQgrcQ+TAsu8EU103Pz68f90VR+6vj
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="6247916"
+X-IronPort-AV: E=Sophos;i="6.07,152,1708416000"; 
+   d="scan'208";a="6247916"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2024 19:09:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,152,1708416000"; 
+   d="scan'208";a="15874257"
+Received: from p12ill20yoongsia.png.intel.com ([10.88.227.28])
+  by orviesa007.jf.intel.com with ESMTP; 24 Mar 2024 19:09:39 -0700
+From: Song Yoong Siang <yoong.siang.song@intel.com>
+To: Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@google.com>,
+	Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+	Florian Bezdeka <florian.bezdeka@siemens.com>,
+	Kurt Kanzenbach <kurt@linutronix.de>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: intel-wired-lan@lists.osuosl.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	xdp-hints@xdp-project.net
+Subject: [PATCH iwl-next,v4 1/1] igc: Add Tx hardware timestamp request for AF_XDP zero-copy packet
+Date: Mon, 25 Mar 2024 10:09:28 +0800
+Message-Id: <20240325020928.1987947-1-yoong.siang.song@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240321180501.734779-1-andrii@kernel.org> <CAADnVQJqnLnv4AUvCaefP13CDcJOXM=kJpSOv33t-u-OTzb0UQ@mail.gmail.com>
- <CAEf4BzYFc1b-OAXWf4WN_vM2evZgsW7reJqo8iwKP80EXBJMKw@mail.gmail.com>
-In-Reply-To: <CAEf4BzYFc1b-OAXWf4WN_vM2evZgsW7reJqo8iwKP80EXBJMKw@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 24 Mar 2024 19:05:42 -0700
-Message-ID: <CAADnVQ+zT8C=rHtTbbsdoPVw-n7PPufPp0CC+jt2PUn9bB5gxw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/3] Inline two LBR-related helpers
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Song Liu <song@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 22, 2024 at 9:45=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Thu, Mar 21, 2024 at 4:46=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Thu, Mar 21, 2024 at 11:05=E2=80=AFAM Andrii Nakryiko <andrii@kernel=
-.org> wrote:
-> > >
-> > >
-> > > There are still ways to reduce number of "wasted" records further, th=
-is is
-> > > a problem that requires many small and rather independent steps.
-> >
-> > I feel this is a wrong path to follow.
-> > I think it would be better to introduce a flag for kprobe/fentry
-> > to do perf_snapshot_branch_stack() as early as possible
-> > and then bpf prog can copy these 16 or 32 8-byte entries at
-> > its leasure.
->
-> This is basically how Song started when he was adding this feature a
-> few years ago. And I feel like we discussed this and decided that it
-> would be cleaner to let the BPF program decide when (and whether) to
-> get LBR, based on conditions. It still feels like a right tradeoff.
+This patch adds support to per-packet Tx hardware timestamp request to
+AF_XDP zero-copy packet via XDP Tx metadata framework. Please note that
+user needs to enable Tx HW timestamp capability via igc_ioctl() with
+SIOCSHWTSTAMP cmd before sending xsk Tx hardware timestamp request.
 
-Right we discussed it back then and at that time it was about
-collecting stacks.
-What's different now is you want to collect all types of branches
-in retrnoop including plain 'jmp pc+10' and conditional jmps.
-This is not something that C code can control.
-always_inline in C and inline by the verifier reduce call frames,
-but they may have both positive and negative effect when
-all branches are collected.
-Hence __always_inline in kprobe_multi_link_prog_run()
-is a leap of faith with assumptions that compiler won't
-add jmps before calling into prog,
-but lots of different compiler flags add instrumentation:
-kasan, stack protector, security mitigation that count call depth, etc.
+Same as implementation in RX timestamp XDP hints kfunc metadata, Timer 0
+(adjustable clock) is used in xsk Tx hardware timestamp. i225/i226 have
+four sets of timestamping registers. *skb and *xsk_tx_buffer pointers
+are used to indicate whether the timestamping register is already occupied.
 
+Furthermore, a boolean variable named xsk_pending_ts is used to hold the
+transmit completion until the tx hardware timestamp is ready. This is
+because, for i225/i226, the timestamp notification event comes some time
+after the transmit completion event. The driver will retrigger hardware irq
+to clean the packet after retrieve the tx hardware timestamp.
 
-> Granted, for PERF_SAMPLE_BRANCH_ANY you gotta take it immediately (and
-> that's what retsnoop does), but for PERF_SAMPLE_BRANCH_ANY_RETURN this
-> doesn't have to happen so fast. BPF program can evaluate some
-> conditions and grab LBR optionally, saving the overhead.
->
-> With prog flag saying "kernel should capture LBR ASAP", we:
+Besides, xsk_meta is added into struct igc_tx_timestamp_request as a hook
+to the metadata location of the transmit packet. When the Tx timestamp
+interrupt is fired, the interrupt handler will copy the value of Tx hwts
+into metadata location via xsk_tx_metadata_complete().
 
-I was suggesting to use per attachment flag.
-And kprobe is a lost cause.
-I would do it for fentry only where
-we can generate 'save LBR' call first thing in the bpf trampoline.
+This patch is tested with tools/testing/selftests/bpf/xdp_hw_metadata
+on Intel ADL-S platform. Below are the test steps and results.
 
->   a) lose this flexibility to decide whether and when to grab LBR;
->   b) pay overhead regardless if LBR is ever actually used for any
-> given prog invocation;
+Test Step 1: Run xdp_hw_metadata app
+ ./xdp_hw_metadata <iface> > /dev/shm/result.log
 
-when retsnoop attaches a prog the prog gotta call that 'save LBR'
-as soon as possible without any branches.
-So per-attach flag is not really a downside.
+Test Step 2: Enable Tx hardware timestamp
+ hwstamp_ctl -i <iface> -t 1 -r 1
 
->   c) have to dedicate a pretty large (32 * 24 =3D 768 bytes) per-CPU
-> buffers for something that is pretty niche (though hugely valuable
-> when needed, of course);
+Test Step 3: Run ptp4l and phc2sys for time synchronization
 
-I wouldn't worry about such a tiny buffer.
+Test Step 4: Generate UDP packets with 1ms interval for 10s
+ trafgen --dev <iface> '{eth(da=<addr>), udp(dp=9091)}' -t 1ms -n 10000
 
->   d) each program type that supports bpf_get_branch_snapshot() helper
-> needs to implement this logic in their corresponding
-> `bpf_prog_run_xxx()` running helpers, which is more than a few places.
+Test Step 5: Rerun Step 1-3 with 10s iperf3 as background traffic
 
-I think new kfunc that copies from the buffer will do.
-Nothing needs to change.
-Maybe bpf_get_branch_snapshot() can be made smart too,
-but that is optional.
+Test Step 6: Rerun Step 1-4 with 10s iperf3 as background traffic
 
-> Now, let's see how much we can also realistically save with this approach=
-.
->
-> For fentry, we do save a few (2) entries, indeed. With changes in this
-> patch we are at:
->
->   [#07] __sys_bpf+0xdfc                          ->  __x64_sys_bpf+0x18
->   [#06] __x64_sys_bpf+0x1a                       ->
-> bpf_trampoline_6442508829+0x7f
->   [#05] bpf_trampoline_6442508829+0x9c           ->  __bpf_prog_enter_rec=
-ur+0x0
->   [#04] __bpf_prog_enter_recur+0x9               ->  migrate_disable+0x0
->   [#03] migrate_disable+0x37                     ->  __bpf_prog_enter_rec=
-ur+0xe
->   [#02] __bpf_prog_enter_recur+0x43              ->
-> bpf_trampoline_6442508829+0xa1
->   [#01] bpf_trampoline_6442508829+0xad           ->
-> bpf_prog_dc54a596b39d4177_fexit1+0x0
->   [#00] bpf_prog_dc54a596b39d4177_fexit1+0x101   ->
-> intel_pmu_snapshot_branch_stack+0x0
->
-> With flag and kernel support, we'll be at something like
->
->   [#07] __sys_bpf+0xdfc                          ->  __x64_sys_bpf+0x18
->   [#06] __x64_sys_bpf+0x1a                       ->
-> bpf_trampoline_6442508829+0x7f
->   [#05] bpf_trampoline_6442508829+0x9c           ->  __bpf_prog_enter_rec=
-ur+0x0
->   [#04] __bpf_prog_enter_recur+0x9               ->  migrate_disable+0x0
->   [#03] migrate_disable+0x37                     ->  __bpf_prog_enter_rec=
-ur+0xe
->   [#02] __bpf_prog_enter_recur+0x43              ->
-> intel_pmu_snapshot_branch_stack+0x0
+Based on iperf3 results below, the impact of holding tx completion to
+throughput is not observable.
 
-with flag migrate_disable and prog_enter* will be gone.
-It will be only bpf_trampoline_ and intel_pmu_snapshot_branch_stack.
-If we try hard we can inline
-wrmsrl(MSR_CORE_PERF_GLOBAL_CTRL, 0);
-Then it will be bpf_trampoline_ only and
-that's as minimal as it can get. One entry.
-Hacking all over the kernel with inline won't get anywhere close.
+Result of last UDP packet (no. 10000) in Step 4:
+poll: 1 (0) skip=99 fail=0 redir=10000
+xsk_ring_cons__peek: 1
+0x5640a37972d0: rx_desc[9999]->addr=f2110 addr=f2110 comp_addr=f2110 EoP
+rx_hash: 0x2049BE1D with RSS type:0x1
+HW RX-time:   1679819246792971268 (sec:1679819246.7930) delta to User RX-time sec:0.0000 (14.990 usec)
+XDP RX-time:   1679819246792981987 (sec:1679819246.7930) delta to User RX-time sec:0.0000 (4.271 usec)
+No rx_vlan_tci or rx_vlan_proto, err=-95
+0x5640a37972d0: ping-pong with csum=ab19 (want 315b) csum_start=34 csum_offset=6
+0x5640a37972d0: complete tx idx=9999 addr=f010
+HW TX-complete-time:   1679819246793036971 (sec:1679819246.7930) delta to User TX-complete-time sec:0.0001 (77.656 usec)
+XDP RX-time:   1679819246792981987 (sec:1679819246.7930) delta to User TX-complete-time sec:0.0001 (132.640 usec)
+HW RX-time:   1679819246792971268 (sec:1679819246.7930) delta to HW TX-complete-time sec:0.0001 (65.703 usec)
+0x5640a37972d0: complete rx idx=10127 addr=f2110
 
-> For PERF_SAMPLE_BRANCH_ANY_RETURN return mode there will be no savings
-> at all. Is it really worth it?
+Result of iperf3 without tx hwts request in step 5:
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-10.00  sec  2.74 GBytes  2.36 Gbits/sec    0             sender
+[  5]   0.00-10.05  sec  2.74 GBytes  2.34 Gbits/sec                  receiver
 
-any_return is ok today.
-Especially with fentry.
+Result of iperf3 running parallel with trafgen command in step 6:
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-10.00  sec  2.74 GBytes  2.36 Gbits/sec    0             sender
+[  5]   0.00-10.04  sec  2.74 GBytes  2.34 Gbits/sec                  receiver
 
-> While inlining bpf_get_branch_snapshot() does benefit only LBR use
-> case, it's a rather typical BPF helper inlining procedure we do for a
-> lot of helpers, so it's not exactly a hack or anything, just an
-> optimization.
+Co-developed-by: Lai Peter Jun Ann <jun.ann.lai@intel.com>
+Signed-off-by: Lai Peter Jun Ann <jun.ann.lai@intel.com>
+Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+---
+V1: https://patchwork.kernel.org/project/netdevbpf/patch/20231215162158.951925-1-yoong.siang.song@intel.com/
+V2: https://patchwork.kernel.org/project/netdevbpf/cover/20240301162348.898619-1-yoong.siang.song@intel.com/
+V3: https://patchwork.kernel.org/project/netdevbpf/cover/20240303083225.1184165-1-yoong.siang.song@intel.com/
 
-Inlining bpf_get_branch_snapshot() may be ok,
-but the way you're doing is not a clear win.
-Replacing size / 24 (that compiler optimize into mul)
-with actual divide and adding extra mul will be slower.
-div+mul vs mul is quite a difference.
-How noticable is that is questionable,
-but from inlining perspective it doesn't feel right to do
-"inline to avoid extra frame" instead of
-"inline to improve performance".
+changelog:
+V1 -> V2
+- In struct igc_tx_timestamp_request, keep a pointer to igc_tx_buffer,
+  instead of pointing xsk_pending_ts (Vinicius).
+- In struct igc_tx_timestamp_request, introduce buffer_type to indicate
+  whether skb or igc_tx_buffer pointer should be use (Vinicius).
+- In struct igc_metadata_request, remove igc_adapter pointer (Vinicius).
+- When request tx hwts, copy the value of cmd_type, instead of using
+  pointer (Vinicius).
+- For boolean variable, use true and false, instead of 1 and 0 (Vinicius).
+- In igc_xsk_request_timestamp(), make an early return if none of the 4 ts
+  registers is available (Vinicius).
+- Create helper functions to clear tx buffer and skb for tstamp (John).
+- Perform throughput test with mix traffic (Vinicius & John).
+V2 -> V3
+- Improve tstamp reg searching loop for better readability (John).
+- In igc_ptp_free_tx_buffer(), add comment to inform user that
+  tstamp->xsk_tx_buffer and tstamp->skb are in union (John).
+V3 -> V4
+- Add protection with xp_tx_metadata_enabled (Kurt & Maciej).
+---
+---
+ drivers/net/ethernet/intel/igc/igc.h      |  71 ++++++++------
+ drivers/net/ethernet/intel/igc/igc_main.c | 113 ++++++++++++++++++++--
+ drivers/net/ethernet/intel/igc/igc_ptp.c  |  51 ++++++++--
+ 3 files changed, 195 insertions(+), 40 deletions(-)
 
-> But inlining bpf_get_smp_processor_id() goes way beyond LBR, it's a
-> pretty frequently used helper used to implement various
-> BPF-program-specific per-CPU usages (recursion protection, temporary
-> storage, or just plain replacing BPF_MAP_TYPE_ARRAY_PERCPU with global
-> variables, which is already a bit faster approach, and now will be
-> even faster). And the implementation is well-contained.
+diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
+index 90316dc58630..e71cd7d7955d 100644
+--- a/drivers/net/ethernet/intel/igc/igc.h
++++ b/drivers/net/ethernet/intel/igc/igc.h
+@@ -72,13 +72,46 @@ struct igc_rx_packet_stats {
+ 	u64 other_packets;
+ };
+ 
++enum igc_tx_buffer_type {
++	IGC_TX_BUFFER_TYPE_SKB,
++	IGC_TX_BUFFER_TYPE_XDP,
++	IGC_TX_BUFFER_TYPE_XSK,
++};
++
++/* wrapper around a pointer to a socket buffer,
++ * so a DMA handle can be stored along with the buffer
++ */
++struct igc_tx_buffer {
++	union igc_adv_tx_desc *next_to_watch;
++	unsigned long time_stamp;
++	enum igc_tx_buffer_type type;
++	union {
++		struct sk_buff *skb;
++		struct xdp_frame *xdpf;
++	};
++	unsigned int bytecount;
++	u16 gso_segs;
++	__be16 protocol;
++
++	DEFINE_DMA_UNMAP_ADDR(dma);
++	DEFINE_DMA_UNMAP_LEN(len);
++	u32 tx_flags;
++	bool xsk_pending_ts;
++};
++
+ struct igc_tx_timestamp_request {
+-	struct sk_buff *skb;   /* reference to the packet being timestamped */
++	union {                /* reference to the packet being timestamped */
++		struct sk_buff *skb;
++		struct igc_tx_buffer *xsk_tx_buffer;
++	};
++	enum igc_tx_buffer_type buffer_type;
+ 	unsigned long start;   /* when the tstamp request started (jiffies) */
+ 	u32 mask;              /* _TSYNCTXCTL_TXTT_{X} bit for this request */
+ 	u32 regl;              /* which TXSTMPL_{X} register should be used */
+ 	u32 regh;              /* which TXSTMPH_{X} register should be used */
+ 	u32 flags;             /* flags that should be added to the tx_buffer */
++	u8 xsk_queue_index;    /* Tx queue which requesting timestamp */
++	struct xsk_tx_metadata_compl xsk_meta;	/* ref to xsk Tx metadata */
+ };
+ 
+ struct igc_inline_rx_tstamps {
+@@ -322,6 +355,9 @@ void igc_disable_tx_ring(struct igc_ring *ring);
+ void igc_enable_tx_ring(struct igc_ring *ring);
+ int igc_xsk_wakeup(struct net_device *dev, u32 queue_id, u32 flags);
+ 
++/* AF_XDP TX metadata operations */
++extern const struct xsk_tx_metadata_ops igc_xsk_tx_metadata_ops;
++
+ /* igc_dump declarations */
+ void igc_rings_dump(struct igc_adapter *adapter);
+ void igc_regs_dump(struct igc_adapter *adapter);
+@@ -507,32 +543,6 @@ enum igc_boards {
+ #define TXD_USE_COUNT(S)	DIV_ROUND_UP((S), IGC_MAX_DATA_PER_TXD)
+ #define DESC_NEEDED	(MAX_SKB_FRAGS + 4)
+ 
+-enum igc_tx_buffer_type {
+-	IGC_TX_BUFFER_TYPE_SKB,
+-	IGC_TX_BUFFER_TYPE_XDP,
+-	IGC_TX_BUFFER_TYPE_XSK,
+-};
+-
+-/* wrapper around a pointer to a socket buffer,
+- * so a DMA handle can be stored along with the buffer
+- */
+-struct igc_tx_buffer {
+-	union igc_adv_tx_desc *next_to_watch;
+-	unsigned long time_stamp;
+-	enum igc_tx_buffer_type type;
+-	union {
+-		struct sk_buff *skb;
+-		struct xdp_frame *xdpf;
+-	};
+-	unsigned int bytecount;
+-	u16 gso_segs;
+-	__be16 protocol;
+-
+-	DEFINE_DMA_UNMAP_ADDR(dma);
+-	DEFINE_DMA_UNMAP_LEN(len);
+-	u32 tx_flags;
+-};
+-
+ struct igc_rx_buffer {
+ 	union {
+ 		struct {
+@@ -556,6 +566,13 @@ struct igc_xdp_buff {
+ 	struct igc_inline_rx_tstamps *rx_ts; /* data indication bit IGC_RXDADV_STAT_TSIP */
+ };
+ 
++struct igc_metadata_request {
++	struct igc_tx_buffer *tx_buffer;
++	struct xsk_tx_metadata *meta;
++	struct igc_ring *tx_ring;
++	u32 cmd_type;
++};
++
+ struct igc_q_vector {
+ 	struct igc_adapter *adapter;    /* backlink */
+ 	void __iomem *itr_register;
+diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+index 2e1cfbd82f4f..56333b2cdb71 100644
+--- a/drivers/net/ethernet/intel/igc/igc_main.c
++++ b/drivers/net/ethernet/intel/igc/igc_main.c
+@@ -2878,6 +2878,89 @@ static void igc_update_tx_stats(struct igc_q_vector *q_vector,
+ 	q_vector->tx.total_packets += packets;
+ }
+ 
++static void igc_xsk_request_timestamp(void *_priv)
++{
++	struct igc_metadata_request *meta_req = _priv;
++	struct igc_ring *tx_ring = meta_req->tx_ring;
++	struct igc_tx_timestamp_request *tstamp;
++	u32 tx_flags = IGC_TX_FLAGS_TSTAMP;
++	struct igc_adapter *adapter;
++	unsigned long lock_flags;
++	bool found = false;
++	int i;
++
++	if (test_bit(IGC_RING_FLAG_TX_HWTSTAMP, &tx_ring->flags)) {
++		adapter = netdev_priv(tx_ring->netdev);
++
++		spin_lock_irqsave(&adapter->ptp_tx_lock, lock_flags);
++
++		/* Search for available tstamp regs */
++		for (i = 0; i < IGC_MAX_TX_TSTAMP_REGS; i++) {
++			tstamp = &adapter->tx_tstamp[i];
++
++			/* tstamp->skb and tstamp->xsk_tx_buffer are in union.
++			 * When tstamp->skb is equal to NULL,
++			 * tstamp->xsk_tx_buffer is equal to NULL as well.
++			 * This condition means that the particular tstamp reg
++			 * is not occupied by other packet.
++			 */
++			if (!tstamp->skb) {
++				found = true;
++				break;
++			}
++		}
++
++		/* Return if no available tstamp regs */
++		if (!found) {
++			adapter->tx_hwtstamp_skipped++;
++			spin_unlock_irqrestore(&adapter->ptp_tx_lock,
++					       lock_flags);
++			return;
++		}
++
++		tstamp->start = jiffies;
++		tstamp->xsk_queue_index = tx_ring->queue_index;
++		tstamp->xsk_tx_buffer = meta_req->tx_buffer;
++		tstamp->buffer_type = IGC_TX_BUFFER_TYPE_XSK;
++
++		/* Hold the transmit completion until timestamp is ready */
++		meta_req->tx_buffer->xsk_pending_ts = true;
++
++		/* Keep the pointer to tx_timestamp, which is located in XDP
++		 * metadata area. It is the location to store the value of
++		 * tx hardware timestamp.
++		 */
++		xsk_tx_metadata_to_compl(meta_req->meta, &tstamp->xsk_meta);
++
++		/* Set timestamp bit based on the _TSTAMP(_X) bit. */
++		tx_flags |= tstamp->flags;
++		meta_req->cmd_type |= IGC_SET_FLAG(tx_flags,
++						   IGC_TX_FLAGS_TSTAMP,
++						   (IGC_ADVTXD_MAC_TSTAMP));
++		meta_req->cmd_type |= IGC_SET_FLAG(tx_flags,
++						   IGC_TX_FLAGS_TSTAMP_1,
++						   (IGC_ADVTXD_TSTAMP_REG_1));
++		meta_req->cmd_type |= IGC_SET_FLAG(tx_flags,
++						   IGC_TX_FLAGS_TSTAMP_2,
++						   (IGC_ADVTXD_TSTAMP_REG_2));
++		meta_req->cmd_type |= IGC_SET_FLAG(tx_flags,
++						   IGC_TX_FLAGS_TSTAMP_3,
++						   (IGC_ADVTXD_TSTAMP_REG_3));
++
++		spin_unlock_irqrestore(&adapter->ptp_tx_lock, lock_flags);
++	}
++}
++
++static u64 igc_xsk_fill_timestamp(void *_priv)
++{
++	return *(u64 *)_priv;
++}
++
++const struct xsk_tx_metadata_ops igc_xsk_tx_metadata_ops = {
++	.tmo_request_timestamp		= igc_xsk_request_timestamp,
++	.tmo_fill_timestamp		= igc_xsk_fill_timestamp,
++};
++
+ static void igc_xdp_xmit_zc(struct igc_ring *ring)
+ {
+ 	struct xsk_buff_pool *pool = ring->xsk_pool;
+@@ -2899,24 +2982,34 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
+ 	budget = igc_desc_unused(ring);
+ 
+ 	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget--) {
+-		u32 cmd_type, olinfo_status;
++		struct igc_metadata_request meta_req;
++		struct xsk_tx_metadata *meta = NULL;
+ 		struct igc_tx_buffer *bi;
++		u32 olinfo_status;
+ 		dma_addr_t dma;
+ 
+-		cmd_type = IGC_ADVTXD_DTYP_DATA | IGC_ADVTXD_DCMD_DEXT |
+-			   IGC_ADVTXD_DCMD_IFCS | IGC_TXD_DCMD |
+-			   xdp_desc.len;
++		meta_req.cmd_type = IGC_ADVTXD_DTYP_DATA |
++				    IGC_ADVTXD_DCMD_DEXT |
++				    IGC_ADVTXD_DCMD_IFCS |
++				    IGC_TXD_DCMD | xdp_desc.len;
+ 		olinfo_status = xdp_desc.len << IGC_ADVTXD_PAYLEN_SHIFT;
+ 
+ 		dma = xsk_buff_raw_get_dma(pool, xdp_desc.addr);
++		meta = xsk_buff_get_metadata(pool, xdp_desc.addr);
+ 		xsk_buff_raw_dma_sync_for_device(pool, dma, xdp_desc.len);
++		bi = &ring->tx_buffer_info[ntu];
++
++		meta_req.tx_ring = ring;
++		meta_req.tx_buffer = bi;
++		meta_req.meta = meta;
++		xsk_tx_metadata_request(meta, &igc_xsk_tx_metadata_ops,
++					&meta_req);
+ 
+ 		tx_desc = IGC_TX_DESC(ring, ntu);
+-		tx_desc->read.cmd_type_len = cpu_to_le32(cmd_type);
++		tx_desc->read.cmd_type_len = cpu_to_le32(meta_req.cmd_type);
+ 		tx_desc->read.olinfo_status = cpu_to_le32(olinfo_status);
+ 		tx_desc->read.buffer_addr = cpu_to_le64(dma);
+ 
+-		bi = &ring->tx_buffer_info[ntu];
+ 		bi->type = IGC_TX_BUFFER_TYPE_XSK;
+ 		bi->protocol = 0;
+ 		bi->bytecount = xdp_desc.len;
+@@ -2979,6 +3072,13 @@ static bool igc_clean_tx_irq(struct igc_q_vector *q_vector, int napi_budget)
+ 		if (!(eop_desc->wb.status & cpu_to_le32(IGC_TXD_STAT_DD)))
+ 			break;
+ 
++		/* Hold the completions while there's a pending tx hardware
++		 * timestamp request from XDP Tx metadata.
++		 */
++		if (tx_buffer->type == IGC_TX_BUFFER_TYPE_XSK &&
++		    tx_buffer->xsk_pending_ts)
++			break;
++
+ 		/* clear next_to_watch to prevent false hangs */
+ 		tx_buffer->next_to_watch = NULL;
+ 
+@@ -6807,6 +6907,7 @@ static int igc_probe(struct pci_dev *pdev,
+ 
+ 	netdev->netdev_ops = &igc_netdev_ops;
+ 	netdev->xdp_metadata_ops = &igc_xdp_metadata_ops;
++	netdev->xsk_tx_metadata_ops = &igc_xsk_tx_metadata_ops;
+ 	igc_ethtool_set_ops(netdev);
+ 	netdev->watchdog_timeo = 5 * HZ;
+ 
+diff --git a/drivers/net/ethernet/intel/igc/igc_ptp.c b/drivers/net/ethernet/intel/igc/igc_ptp.c
+index 885faaa7b9de..1bb026232efc 100644
+--- a/drivers/net/ethernet/intel/igc/igc_ptp.c
++++ b/drivers/net/ethernet/intel/igc/igc_ptp.c
+@@ -11,6 +11,7 @@
+ #include <linux/ktime.h>
+ #include <linux/delay.h>
+ #include <linux/iopoll.h>
++#include <net/xdp_sock_drv.h>
+ 
+ #define INCVALUE_MASK		0x7fffffff
+ #define ISGN			0x80000000
+@@ -545,6 +546,30 @@ static void igc_ptp_enable_rx_timestamp(struct igc_adapter *adapter)
+ 	wr32(IGC_TSYNCRXCTL, val);
+ }
+ 
++static void igc_ptp_free_tx_buffer(struct igc_adapter *adapter,
++				   struct igc_tx_timestamp_request *tstamp)
++{
++	if (tstamp->buffer_type == IGC_TX_BUFFER_TYPE_XSK) {
++		/* Release the transmit completion */
++		tstamp->xsk_tx_buffer->xsk_pending_ts = false;
++
++		/* Note: tstamp->skb and tstamp->xsk_tx_buffer are in union.
++		 * By setting tstamp->xsk_tx_buffer to NULL, tstamp->skb will
++		 * become NULL as well.
++		 */
++		tstamp->xsk_tx_buffer = NULL;
++		tstamp->buffer_type = 0;
++
++		/* Trigger txrx interrupt for transmit completion */
++		igc_xsk_wakeup(adapter->netdev, tstamp->xsk_queue_index, 0);
++
++		return;
++	}
++
++	dev_kfree_skb_any(tstamp->skb);
++	tstamp->skb = NULL;
++}
++
+ static void igc_ptp_clear_tx_tstamp(struct igc_adapter *adapter)
+ {
+ 	unsigned long flags;
+@@ -555,8 +580,8 @@ static void igc_ptp_clear_tx_tstamp(struct igc_adapter *adapter)
+ 	for (i = 0; i < IGC_MAX_TX_TSTAMP_REGS; i++) {
+ 		struct igc_tx_timestamp_request *tstamp = &adapter->tx_tstamp[i];
+ 
+-		dev_kfree_skb_any(tstamp->skb);
+-		tstamp->skb = NULL;
++		if (tstamp->skb)
++			igc_ptp_free_tx_buffer(adapter, tstamp);
+ 	}
+ 
+ 	spin_unlock_irqrestore(&adapter->ptp_tx_lock, flags);
+@@ -657,8 +682,9 @@ static int igc_ptp_set_timestamp_mode(struct igc_adapter *adapter,
+ static void igc_ptp_tx_timeout(struct igc_adapter *adapter,
+ 			       struct igc_tx_timestamp_request *tstamp)
+ {
+-	dev_kfree_skb_any(tstamp->skb);
+-	tstamp->skb = NULL;
++	if (tstamp->skb)
++		igc_ptp_free_tx_buffer(adapter, tstamp);
++
+ 	adapter->tx_hwtstamp_timeouts++;
+ 
+ 	netdev_warn(adapter->netdev, "Tx timestamp timeout\n");
+@@ -729,10 +755,21 @@ static void igc_ptp_tx_reg_to_stamp(struct igc_adapter *adapter,
+ 	shhwtstamps.hwtstamp =
+ 		ktime_add_ns(shhwtstamps.hwtstamp, adjust);
+ 
+-	tstamp->skb = NULL;
++	/* Copy the tx hardware timestamp into xdp metadata or skb */
++	if (tstamp->buffer_type == IGC_TX_BUFFER_TYPE_XSK) {
++		struct xsk_buff_pool *xsk_pool;
++
++		xsk_pool = adapter->tx_ring[tstamp->xsk_queue_index]->xsk_pool;
++		if (xsk_pool && xp_tx_metadata_enabled(xsk_pool)) {
++			xsk_tx_metadata_complete(&tstamp->xsk_meta,
++						 &igc_xsk_tx_metadata_ops,
++						 &shhwtstamps.hwtstamp);
++		}
++	} else {
++		skb_tstamp_tx(skb, &shhwtstamps);
++	}
+ 
+-	skb_tstamp_tx(skb, &shhwtstamps);
+-	dev_kfree_skb_any(skb);
++	igc_ptp_free_tx_buffer(adapter, tstamp);
+ }
+ 
+ /**
+-- 
+2.34.1
 
-Agree that inlining bpf_get_smp_processor_id() is a good thing,
-but please do it cleanly so that per-cpu accessors can be
-reused in other places.
-I'll reply with details in the other thread.
