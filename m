@@ -1,294 +1,355 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4CF33E1;
-	Mon, 25 Mar 2024 00:07:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3409271752;
+	Mon, 25 Mar 2024 00:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711325228; cv=none; b=THDDXnYXDCrlDJWlZaH0WQ8WBGdSQX4ekVdHHELuppGlj66lQOrJDgM5Op5wNsuhsNFNhytlCmjQSprc3z8geEQwYxxIp0whGB9jyZX9yWzvota585BhDEm7mw1s3tyP4QpqTSPly6MNo39uYTlaPcJSpTJ+DSxf2ihPO8coCTg=
+	t=1711327521; cv=none; b=e5A2480Mz/9HhOg/2upJcCCugXn5bK3g+JQcWfilbOHHccYpCC5RdWpsIUsvI0ngkxfiDozKjAWFdLyN9Wn3IsARFFudGbBAUSzORBNhFyYFpL2BP7jA7sSbp5cBGliLECcoMdhwYx8m+KGY74UDJB/7Vd6ogWA2aN7CXQrOpSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711325228; c=relaxed/simple;
-	bh=G69EA5T+PSpg3mk0W/rx0EwVrFWRCIjGBUKc3zT6CQY=;
+	s=arc-20240116; t=1711327521; c=relaxed/simple;
+	bh=GQnkI34JwPVeoy/b99Bb5KkKeULjUupOcGCKtffSV2M=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HQztnuKlhOn5t54I7s7sKFvEE4tdatPmReBlCkuGfYl4QapRuiA50Zhfqgsat+A3O3rdT+FkbnLrbPwhGM4iVhp3e/a+IUUKmPTu1oe0TKwo+f81Zx1o3m2qZZiDQuY1D+ZKH6URSsQvuHP+hDpqHEwOz9771bHVqwFwP6mg4i8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bwUWXW07; arc=none smtp.client-ip=209.85.221.52
+	 To:Cc:Content-Type; b=InVeaN137moOYogvp3TwzTkl0sRjGhqgVIkLms13eKOzhE+UFsCntAJ7o7TTOHpUmDYWeP9goDkzY7+rb9nuESyDayolCoAELuAOM+99W80eaw9XGhVEbre5aaQgtVkRdq329wnOJXd7uuuiy6npyiKb3bm5mJWW/tJ7AeRLjg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NmMVSH4m; arc=none smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bwUWXW07"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-341cf77b86dso97005f8f.2;
-        Sun, 24 Mar 2024 17:07:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NmMVSH4m"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-33ec7e38b84so2749039f8f.1;
+        Sun, 24 Mar 2024 17:45:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711325224; x=1711930024; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711327517; x=1711932317; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=v7CbTiC0HUxt62RI6EW9XACRZFzQVrMSU/uTtoJ+Vjw=;
-        b=bwUWXW073LGTAvP4ZrKH45I3cK8CRA4RyL6vBoM2yXvhCO6PbdUI9hIGW+jdWxxy2B
-         9WIeLVpwPRfYLCwdDHEEY06CL/ul4IRcNtpM15npDpdTujv5e6qcA437pJXy1SRUZHFA
-         px2U9zdU1ZsMBqIrfavHUjgNXV52pkrcyVpPXu3bHAJzYY0fuoL7EIH1iMe0ISP4LZaU
-         FeyKPMiO01xM334DikHPYwrKUav9oNiI+hDkRdpfl6wg2fv9vtmqfDaiOmD62l0/GGfL
-         k834AYu/APheDDm+IfbyIqpvMCdyf5j1FGVIGr0XsgHdpgBvQO3SbYANvu1Zyo4EmQMf
-         01cw==
+        bh=VFHTCkHsp3z4Z58A/RrTwNT63vqGSQmFCkPu+M5aF5c=;
+        b=NmMVSH4mG+bR8RJzRF5hKoVUzeq8QCUmn77ViL8aQXFtFV/CjuI6RHCzMjVBMCHs/n
+         2ESSKdmJQbGrFwtLXUvDKh/mC8g7dWwUJ4NzAqYAHbO42SssBfTYHq0rYgqvB5FcCOnl
+         xNSMvBJD1A3O1mxj6X1Qulp2nkpr9Cc7hh2mGMK9bqq/86wnBhgScQzTeaXsf2bAaLcd
+         c7WIs0NuVN3wW2tlYan6eXMUp+zJBO7ZNEBoQeCU6vuelrgAKWH3W1LFY5dJkmwdK+bH
+         BRKRgJn5bt4ZYpWY/TN+Nkfsbi7U7fJGYc3m3/eu3dEK+uP8EBoGEzJ3grGvwiNKjFf+
+         ODkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711325224; x=1711930024;
+        d=1e100.net; s=20230601; t=1711327517; x=1711932317;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=v7CbTiC0HUxt62RI6EW9XACRZFzQVrMSU/uTtoJ+Vjw=;
-        b=CSifNXlxtZpXUSw9mA0lRgkNjwfRj0y0nRwwOG66AsCt78FB6pKagf2ISGZG58wBEy
-         UBCArxHT3Tg7+OQLW9p6Mki1YeTo0zyV2iBeoWZCil7dP64uDsQBT1IcpfNpO2dEC2io
-         7wUu5rXpWJxiYWy8SbWbdxhRmznVE1Uo3yd2QLO0VjS9aimDnrVG4B5cxurBhWUp1zy5
-         m/KBvQsgQIVVyxBOhLVKk+2nwVJTGEpjGFcGvJ59P6S0pHwCigu2IhvV8Si1Pk+p6UPJ
-         Ny/AsjpFVquRkoyRFrtP0on5alxsNyvhjd+0SIouhvdgBz0KfTcmSapQxBlJKhAf+yYJ
-         78LQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXLRq020UWzTDiEjOyYJfS4qx24sH964xvlZgFyZQna0C0gXTyQoyhnXoewXSx9MOpPd8Xy7Zy37XtrTo94PnasWO32EQXSHMDw+BPjCIRBVhPaeM7TI3Ctub5mDZRDf4IghXv1HuKtW2SoosTN9gSgfp8V3NHAZeX4VvCsTKGqz+pJbTTXt+JfCQOoQF5PNLeoBY11te56hzznGllm
-X-Gm-Message-State: AOJu0YxJcyNYjX8K8n1Hfl2EMjwDjKRfyKAPX3f5BlWwSt9wpgz1P28d
-	fJMLcuwDitUhDbcdCQAP+oGlYMqKa7OUBCFFvlTbDcgZMhSwWIBnkl/5SU/A6kmdGYu4asSx1Ou
-	xfQH/h64oldGN2F7bPSxHcncyYQA=
-X-Google-Smtp-Source: AGHT+IGc5/JYuckAB39iR0olLtHuRgfAuv7ObQcugER4SGq4Hbr+mnXs3Sbh2VjoscfcobeMPKF8eBQB0SVbjo2NATo=
-X-Received: by 2002:adf:c805:0:b0:33e:7f51:c2fb with SMTP id
- d5-20020adfc805000000b0033e7f51c2fbmr4929221wrh.41.1711325224350; Sun, 24 Mar
- 2024 17:07:04 -0700 (PDT)
+        bh=VFHTCkHsp3z4Z58A/RrTwNT63vqGSQmFCkPu+M5aF5c=;
+        b=bN9JG5A8A8QUX3metJ63hp1zaB2WzfwDNhCHZJWQ9srtmKtoW/DzickAx1iIt1udJH
+         YxB2UVCluxsP20VGnJ9KuGY5KlUEA9VjwxB/b0SctIIDcI0WvbtCU6+cmeQ1Px9rSrgE
+         EONxBHJb1h9mmHgNGsaGl/GRab5qyDs+Htqy6Jce+K8iyZAYDdiWImMGoqWe9EhdEzMy
+         oq+hKO6z+K4f81gR6fvwNfx5SV+gilK/KVFIxKg8yRsOUtiUq4jpYFREvcsQOoLkqefL
+         c+6OnLa5mTT5D8PmWR9qghQh0JYbWKmoP3b+pSoEPu0+Uv+YofYLEvvSzq4UGXzPV/oF
+         wauw==
+X-Forwarded-Encrypted: i=1; AJvYcCWnzPsDzndtkjcesJzpiZUDOWzb7ZFPwO0cliUoF1ygQNdpdnXfa3tEWe1GSgs6QotvrSdvpBwODvSd3Zrf8ITdi8FYjsaDY50NDdV1eBaVHgx9U/L3gYk+2tNHwzpGg82XB+BEahg90idq2rvJxwsCddhSq4RUPR2OiUadH8Jc4nAq
+X-Gm-Message-State: AOJu0Yx6fh/zDYSanDu8264l8MSQ/M1EUL6BF5CANf4VVxAxMtjclZwM
+	vnDX6YCwWHjUfwTuuF2RPxf9eV8CWLi2Phe+QMkIi4bgK1n60EeXL4cJDCyuIGguAoN4PRuDcS4
+	T8d0X+GP730WV+TLkojvdnarIlzE=
+X-Google-Smtp-Source: AGHT+IHoFwtbbPCEgmLxbNI8dDwg4hVtyd2nysCsbGqUOieqzWjZ9ExVaevFZsa/+n0x6wLZaTYo6vrsF8j2i6DYHxs=
+X-Received: by 2002:adf:e102:0:b0:33d:754c:70fc with SMTP id
+ t2-20020adfe102000000b0033d754c70fcmr3468297wrz.14.1711327517329; Sun, 24 Mar
+ 2024 17:45:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <000000000000b906b406147069d4@google.com>
-In-Reply-To: <000000000000b906b406147069d4@google.com>
+References: <20240322-hid-bpf-sleepable-v5-0-179c7b59eaaa@kernel.org> <20240322-hid-bpf-sleepable-v5-1-179c7b59eaaa@kernel.org>
+In-Reply-To: <20240322-hid-bpf-sleepable-v5-1-179c7b59eaaa@kernel.org>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 24 Mar 2024 17:06:53 -0700
-Message-ID: <CAADnVQLXZ+ro7cKF-K2gnGeit1jxJEPej2Ue3PstvGN+kW02BA@mail.gmail.com>
-Subject: raw_tp+cookie is buggy. Was: [syzbot] [bpf?] [trace?] KASAN:
- slab-use-after-free Read in bpf_trace_run1
-To: syzbot <syzbot+981935d9485a560bfbcb@syzkaller.appspotmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eddy Z <eddyz87@gmail.com>, Hao Luo <haoluo@google.com>, 
-	John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
-	KP Singh <kpsingh@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-trace-kernel@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Stanislav Fomichev <sdf@google.com>, Song Liu <song@kernel.org>, 
-	syzkaller-bugs <syzkaller-bugs@googlegroups.com>, Yonghong Song <yonghong.song@linux.dev>
+Date: Sun, 24 Mar 2024 17:45:05 -0700
+Message-ID: <CAADnVQJdm7+7tbJC8yhPqDUijE0DTD9UG4LOQmNRCWchQ3uGsg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 1/6] bpf/helpers: introduce sleepable bpf_timers
+To: Benjamin Tissoires <bentiss@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Andrii,
-
-syzbot found UAF in raw_tp cookie series in bpf-next.
-Reverting the whole merge
-2e244a72cd48 ("Merge branch 'bpf-raw-tracepoint-support-for-bpf-cookie'")
-
-fixes the issue.
-
-Pls take a look.
-See C reproducer below. It splats consistently with CONFIG_KASAN=3Dy
-
-Thanks.
-
-On Sun, Mar 24, 2024 at 4:28=E2=80=AFPM syzbot
-<syzbot+981935d9485a560bfbcb@syzkaller.appspotmail.com> wrote:
+On Fri, Mar 22, 2024 at 7:56=E2=80=AFAM Benjamin Tissoires <bentiss@kernel.=
+org> wrote:
 >
-> Hello,
+> They are implemented as a workqueue, which means that there are no
+> guarantees of timing nor ordering.
 >
-> syzbot found the following issue on:
->
-> HEAD commit:    520fad2e3206 selftests/bpf: scale benchmark counting by u=
-s..
-> git tree:       bpf-next
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D105af94618000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D6fb1be60a193d=
-440
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D981935d9485a560=
-bfbcb
-> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Deb=
-ian) 2.40
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D114f17a5180=
-000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D162bb7a518000=
-0
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/4eef3506c5ce/dis=
-k-520fad2e.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/24d60ebe76cc/vmlinu=
-x-520fad2e.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/8f883e706550/b=
-zImage-520fad2e.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the comm=
-it:
-> Reported-by: syzbot+981935d9485a560bfbcb@syzkaller.appspotmail.com
->
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> BUG: KASAN: slab-use-after-free in __bpf_trace_run kernel/trace/bpf_trace=
-.c:2376 [inline]
-> BUG: KASAN: slab-use-after-free in bpf_trace_run1+0xcb/0x510 kernel/trace=
-/bpf_trace.c:2430
-> Read of size 8 at addr ffff8880290d9918 by task migration/0/19
->
-> CPU: 0 PID: 19 Comm: migration/0 Not tainted 6.8.0-syzkaller-05233-g520fa=
-d2e3206 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
-oogle 02/29/2024
-> Stopper: 0x0 <- 0x0
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0x1e7/0x2e0 lib/dump_stack.c:106
->  print_address_description mm/kasan/report.c:377 [inline]
->  print_report+0x169/0x550 mm/kasan/report.c:488
->  kasan_report+0x143/0x180 mm/kasan/report.c:601
->  __bpf_trace_run kernel/trace/bpf_trace.c:2376 [inline]
->  bpf_trace_run1+0xcb/0x510 kernel/trace/bpf_trace.c:2430
->  __traceiter_rcu_utilization+0x74/0xb0 include/trace/events/rcu.h:27
->  trace_rcu_utilization+0x194/0x1c0 include/trace/events/rcu.h:27
->  rcu_note_context_switch+0xc7c/0xff0 kernel/rcu/tree_plugin.h:360
->  __schedule+0x345/0x4a20 kernel/sched/core.c:6635
->  __schedule_loop kernel/sched/core.c:6813 [inline]
->  schedule+0x14b/0x320 kernel/sched/core.c:6828
->  smpboot_thread_fn+0x61e/0xa30 kernel/smpboot.c:160
->  kthread+0x2f0/0x390 kernel/kthread.c:388
->  ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
->  ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
->  </TASK>
->
-> Allocated by task 5075:
->  kasan_save_stack mm/kasan/common.c:47 [inline]
->  kasan_save_track+0x3f/0x80 mm/kasan/common.c:68
->  poison_kmalloc_redzone mm/kasan/common.c:370 [inline]
->  __kasan_kmalloc+0x98/0xb0 mm/kasan/common.c:387
->  kasan_kmalloc include/linux/kasan.h:211 [inline]
->  kmalloc_trace+0x1d9/0x360 mm/slub.c:4012
->  kmalloc include/linux/slab.h:590 [inline]
->  kzalloc include/linux/slab.h:711 [inline]
->  bpf_raw_tp_link_attach+0x2a0/0x6e0 kernel/bpf/syscall.c:3816
->  bpf_raw_tracepoint_open+0x1c2/0x240 kernel/bpf/syscall.c:3863
->  __sys_bpf+0x3c0/0x810 kernel/bpf/syscall.c:5673
->  __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
->  __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
->  __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5736
->  do_syscall_64+0xfb/0x240
->  entry_SYSCALL_64_after_hwframe+0x6d/0x75
->
-> Freed by task 5075:
->  kasan_save_stack mm/kasan/common.c:47 [inline]
->  kasan_save_track+0x3f/0x80 mm/kasan/common.c:68
->  kasan_save_free_info+0x40/0x50 mm/kasan/generic.c:589
->  poison_slab_object+0xa6/0xe0 mm/kasan/common.c:240
->  __kasan_slab_free+0x37/0x60 mm/kasan/common.c:256
->  kasan_slab_free include/linux/kasan.h:184 [inline]
->  slab_free_hook mm/slub.c:2121 [inline]
->  slab_free mm/slub.c:4299 [inline]
->  kfree+0x14a/0x380 mm/slub.c:4409
->  bpf_link_release+0x3b/0x50 kernel/bpf/syscall.c:3071
->  __fput+0x429/0x8a0 fs/file_table.c:423
->  task_work_run+0x24f/0x310 kernel/task_work.c:180
->  exit_task_work include/linux/task_work.h:38 [inline]
->  do_exit+0xa1b/0x27e0 kernel/exit.c:878
->  do_group_exit+0x207/0x2c0 kernel/exit.c:1027
->  __do_sys_exit_group kernel/exit.c:1038 [inline]
->  __se_sys_exit_group kernel/exit.c:1036 [inline]
->  __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1036
->  do_syscall_64+0xfb/0x240
->  entry_SYSCALL_64_after_hwframe+0x6d/0x75
->
-> The buggy address belongs to the object at ffff8880290d9900
->  which belongs to the cache kmalloc-128 of size 128
-> The buggy address is located 24 bytes inside of
->  freed 128-byte region [ffff8880290d9900, ffff8880290d9980)
->
-> The buggy address belongs to the physical page:
-> page:ffffea0000a43640 refcount:1 mapcount:0 mapping:0000000000000000 inde=
-x:0x0 pfn:0x290d9
-> anon flags: 0xfff00000000800(slab|node=3D0|zone=3D1|lastcpupid=3D0x7ff)
-> page_type: 0xffffffff()
-> raw: 00fff00000000800 ffff888014c418c0 0000000000000000 0000000000000001
-> raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
-> page_owner tracks the page as allocated
-> page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(=
-GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 4527, tgid 4527 (udevd), ts 431=
-50902736, free_ts 43094996342
->  set_page_owner include/linux/page_owner.h:31 [inline]
->  post_alloc_hook+0x1ea/0x210 mm/page_alloc.c:1533
->  prep_new_page mm/page_alloc.c:1540 [inline]
->  get_page_from_freelist+0x33ea/0x3580 mm/page_alloc.c:3311
->  __alloc_pages+0x256/0x680 mm/page_alloc.c:4569
->  __alloc_pages_node include/linux/gfp.h:238 [inline]
->  alloc_pages_node include/linux/gfp.h:261 [inline]
->  alloc_slab_page+0x5f/0x160 mm/slub.c:2190
->  allocate_slab mm/slub.c:2354 [inline]
->  new_slab+0x84/0x2f0 mm/slub.c:2407
->  ___slab_alloc+0xd1b/0x13e0 mm/slub.c:3540
->  __slab_alloc mm/slub.c:3625 [inline]
->  __slab_alloc_node mm/slub.c:3678 [inline]
->  slab_alloc_node mm/slub.c:3850 [inline]
->  kmalloc_trace+0x267/0x360 mm/slub.c:4007
->  kmalloc include/linux/slab.h:590 [inline]
->  kzalloc include/linux/slab.h:711 [inline]
->  kernfs_get_open_node fs/kernfs/file.c:523 [inline]
->  kernfs_fop_open+0x803/0xcd0 fs/kernfs/file.c:691
->  do_dentry_open+0x907/0x15a0 fs/open.c:956
->  do_open fs/namei.c:3643 [inline]
->  path_openat+0x2860/0x3240 fs/namei.c:3800
->  do_filp_open+0x235/0x490 fs/namei.c:3827
->  do_sys_openat2+0x13e/0x1d0 fs/open.c:1407
->  do_sys_open fs/open.c:1422 [inline]
->  __do_sys_openat fs/open.c:1438 [inline]
->  __se_sys_openat fs/open.c:1433 [inline]
->  __x64_sys_openat+0x247/0x2a0 fs/open.c:1433
->  do_syscall_64+0xfb/0x240
->  entry_SYSCALL_64_after_hwframe+0x6d/0x75
-> page last free pid 4526 tgid 4526 stack trace:
->  reset_page_owner include/linux/page_owner.h:24 [inline]
->  free_pages_prepare mm/page_alloc.c:1140 [inline]
->  free_unref_page_prepare+0x968/0xa90 mm/page_alloc.c:2346
->  free_unref_page+0x37/0x3f0 mm/page_alloc.c:2486
->  rcu_do_batch kernel/rcu/tree.c:2196 [inline]
->  rcu_core+0xafd/0x1830 kernel/rcu/tree.c:2471
->  __do_softirq+0x2bc/0x943 kernel/softirq.c:554
->
-> Memory state around the buggy address:
->  ffff8880290d9800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->  ffff8880290d9880: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> >ffff8880290d9900: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->                             ^
->  ffff8880290d9980: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->  ffff8880290d9a00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 >
 > ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
 >
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> no changes in v5
 >
-> If the report is already addressed, let syzbot know by replying with:
-> #syz fix: exact-commit-title
+> changes in v4:
+> - dropped __bpf_timer_compute_key()
+> - use a spin_lock instead of a semaphore
+> - ensure bpf_timer_cancel_and_free is not complaining about
+>   non sleepable context and use cancel_work() instead of
+>   cancel_work_sync()
+> - return -EINVAL if a delay is given to bpf_timer_start() with
+>   BPF_F_TIMER_SLEEPABLE
 >
-> If you want syzbot to run the reproducer, reply with:
-> #syz test: git://repo/address.git branch-or-commit-hash
-> If you attach or paste a git patch, syzbot will apply it before testing.
+> changes in v3:
+> - extracted the implementation in bpf_timer only, without
+>   bpf_timer_set_sleepable_cb()
+> - rely on schedule_work() only, from bpf_timer_start()
+> - add semaphore to ensure bpf_timer_work_cb() is accessing
+>   consistent data
 >
-> If you want to overwrite report's subsystems, reply with:
-> #syz set subsystems: new-subsystem
-> (See the list of subsystem names on the web dashboard)
+> changes in v2 (compared to the one attaches to v1 0/9):
+> - make use of a kfunc
+> - add a (non-used) BPF_F_TIMER_SLEEPABLE
+> - the callback is *not* called, it makes the kernel crashes
+> ---
+>  include/uapi/linux/bpf.h |  4 +++
+>  kernel/bpf/helpers.c     | 86 ++++++++++++++++++++++++++++++++++++++++++=
+++++--
+>  2 files changed, 88 insertions(+), 2 deletions(-)
 >
-> If the report is a duplicate of another one, reply with:
-> #syz dup: exact-subject-of-another-report
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 3c42b9f1bada..b90def29d796 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -7461,10 +7461,14 @@ struct bpf_core_relo {
+>   *     - BPF_F_TIMER_ABS: Timeout passed is absolute time, by default it=
+ is
+>   *       relative to current time.
+>   *     - BPF_F_TIMER_CPU_PIN: Timer will be pinned to the CPU of the cal=
+ler.
+> + *     - BPF_F_TIMER_SLEEPABLE: Timer will run in a sleepable context, w=
+ith
+> + *       no guarantees of ordering nor timing (consider this as being ju=
+st
+> + *       offloaded immediately).
+>   */
+>  enum {
+>         BPF_F_TIMER_ABS =3D (1ULL << 0),
+>         BPF_F_TIMER_CPU_PIN =3D (1ULL << 1),
+> +       BPF_F_TIMER_SLEEPABLE =3D (1ULL << 2),
+>  };
 >
-> If you want to undo deduplication, reply with:
-> #syz undup
+>  /* BPF numbers iterator state */
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index a89587859571..38de73a9df83 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1094,14 +1094,20 @@ const struct bpf_func_proto bpf_snprintf_proto =
+=3D {
+>   * bpf_timer_cancel() cancels the timer and decrements prog's refcnt.
+>   * Inner maps can contain bpf timers as well. ops->map_release_uref is
+>   * freeing the timers when inner map is replaced or deleted by user spac=
+e.
+> + *
+> + * sleepable_lock protects only the setup of the workqueue, not the call=
+back
+> + * itself. This is done to ensure we don't run concurrently a free of th=
+e
+> + * callback or the associated program.
+
+I recall there was a discussion about this lock earlier,
+but I don't remember what the conclusion was.
+The above comment is not enough to understand what it protects.
+
+In general how sleepable cb is fundamentally different
+from non-sleepable one when it comes to races ?
+
+bpf_timer_set_callback() is racy for both sleepable and non-sleepable
+and the latter handles it fine.
+
+Note that struct bpf_hrtimer is rcu protected.
+See kfree_rcu(t, rcu); in bpf_timer_cancel_and_free().
+
+>   */
+>  struct bpf_hrtimer {
+>         struct hrtimer timer;
+> +       struct work_struct work;
+>         struct bpf_map *map;
+>         struct bpf_prog *prog;
+>         void __rcu *callback_fn;
+>         void *value;
+>         struct rcu_head rcu;
+> +       spinlock_t sleepable_lock;
+>  };
+>
+>  /* the actual struct hidden inside uapi struct bpf_timer */
+> @@ -1114,6 +1120,49 @@ struct bpf_timer_kern {
+>         struct bpf_spin_lock lock;
+>  } __attribute__((aligned(8)));
+>
+> +static void bpf_timer_work_cb(struct work_struct *work)
+> +{
+> +       struct bpf_hrtimer *t =3D container_of(work, struct bpf_hrtimer, =
+work);
+> +       struct bpf_map *map =3D t->map;
+> +       bpf_callback_t callback_fn;
+> +       void *value =3D t->value;
+> +       unsigned long flags;
+> +       void *key;
+> +       u32 idx;
+> +
+> +       BTF_TYPE_EMIT(struct bpf_timer);
+> +
+> +       spin_lock_irqsave(&t->sleepable_lock, flags);
+> +
+> +       callback_fn =3D READ_ONCE(t->callback_fn);
+> +       if (!callback_fn) {
+> +               spin_unlock_irqrestore(&t->sleepable_lock, flags);
+> +               return;
+> +       }
+> +
+> +       if (map->map_type =3D=3D BPF_MAP_TYPE_ARRAY) {
+> +               struct bpf_array *array =3D container_of(map, struct bpf_=
+array, map);
+> +
+> +               /* compute the key */
+> +               idx =3D ((char *)value - array->value) / array->elem_size=
+;
+> +               key =3D &idx;
+> +       } else { /* hash or lru */
+> +               key =3D value - round_up(map->key_size, 8);
+> +       }
+> +
+> +       /* prevent the callback to be freed by bpf_timer_cancel() while r=
+unning
+> +        * so we can release the sleepable lock
+> +        */
+> +       bpf_prog_inc(t->prog);
+> +
+> +       spin_unlock_irqrestore(&t->sleepable_lock, flags);
+
+why prog_inc ?
+The sleepable progs need rcu_read_lock_trace() + migrate_disable()
+anyway, which are missing here.
+Probably best to call __bpf_prog_enter_sleepable_recur()
+like kern_sys_bpf() does.
+
+Now with that, the bpf_timer_cancel() can drop prog refcnt to zero
+and it's ok, since rcu_read_lock_trace() will protect it.
+
+> +
+> +       callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, =
+0);
+> +       /* The verifier checked that return value is zero. */
+
+the prog will finish and will be freed after rcu_read_unlock_trace().
+Seems fine to me. No need for inc/dec refcnt.
+
+> +
+> +       bpf_prog_put(t->prog);
+> +}
+> +
+>  static DEFINE_PER_CPU(struct bpf_hrtimer *, hrtimer_running);
+>
+>  static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
+> @@ -1192,6 +1241,8 @@ BPF_CALL_3(bpf_timer_init, struct bpf_timer_kern *,=
+ timer, struct bpf_map *, map
+>         t->prog =3D NULL;
+>         rcu_assign_pointer(t->callback_fn, NULL);
+>         hrtimer_init(&t->timer, clockid, HRTIMER_MODE_REL_SOFT);
+> +       INIT_WORK(&t->work, bpf_timer_work_cb);
+> +       spin_lock_init(&t->sleepable_lock);
+>         t->timer.function =3D bpf_timer_cb;
+>         WRITE_ONCE(timer->timer, t);
+>         /* Guarantee the order between timer->timer and map->usercnt. So
+> @@ -1237,6 +1288,7 @@ BPF_CALL_3(bpf_timer_set_callback, struct bpf_timer=
+_kern *, timer, void *, callb
+>                 ret =3D -EINVAL;
+>                 goto out;
+>         }
+> +       spin_lock(&t->sleepable_lock);
+>         if (!atomic64_read(&t->map->usercnt)) {
+>                 /* maps with timers must be either held by user space
+>                  * or pinned in bpffs. Otherwise timer might still be
+> @@ -1263,6 +1315,8 @@ BPF_CALL_3(bpf_timer_set_callback, struct bpf_timer=
+_kern *, timer, void *, callb
+>         }
+>         rcu_assign_pointer(t->callback_fn, callback_fn);
+>  out:
+> +       if (t)
+> +               spin_unlock(&t->sleepable_lock);
+>         __bpf_spin_unlock_irqrestore(&timer->lock);
+
+If lock is really needed why timer->lock cannot be reused?
+The pattern of two locks in pretty much the same data structure
+is begging for questions about what is going on here.
+
+>         return ret;
+>  }
+> @@ -1283,8 +1337,12 @@ BPF_CALL_3(bpf_timer_start, struct bpf_timer_kern =
+*, timer, u64, nsecs, u64, fla
+>
+>         if (in_nmi())
+>                 return -EOPNOTSUPP;
+> -       if (flags & ~(BPF_F_TIMER_ABS | BPF_F_TIMER_CPU_PIN))
+> +       if (flags & ~(BPF_F_TIMER_ABS | BPF_F_TIMER_CPU_PIN | BPF_F_TIMER=
+_SLEEPABLE))
+>                 return -EINVAL;
+> +
+> +       if ((flags & BPF_F_TIMER_SLEEPABLE) && nsecs)
+> +               return -EINVAL;
+> +
+>         __bpf_spin_lock_irqsave(&timer->lock);
+>         t =3D timer->timer;
+>         if (!t || !t->prog) {
+> @@ -1300,7 +1358,10 @@ BPF_CALL_3(bpf_timer_start, struct bpf_timer_kern =
+*, timer, u64, nsecs, u64, fla
+>         if (flags & BPF_F_TIMER_CPU_PIN)
+>                 mode |=3D HRTIMER_MODE_PINNED;
+>
+> -       hrtimer_start(&t->timer, ns_to_ktime(nsecs), mode);
+> +       if (flags & BPF_F_TIMER_SLEEPABLE)
+> +               schedule_work(&t->work);
+> +       else
+> +               hrtimer_start(&t->timer, ns_to_ktime(nsecs), mode);
+>  out:
+>         __bpf_spin_unlock_irqrestore(&timer->lock);
+>         return ret;
+> @@ -1348,13 +1409,22 @@ BPF_CALL_1(bpf_timer_cancel, struct bpf_timer_ker=
+n *, timer)
+>                 ret =3D -EDEADLK;
+>                 goto out;
+>         }
+> +       spin_lock(&t->sleepable_lock);
+>         drop_prog_refcnt(t);
+> +       spin_unlock(&t->sleepable_lock);
+
+this also looks odd.
+
+>  out:
+>         __bpf_spin_unlock_irqrestore(&timer->lock);
+>         /* Cancel the timer and wait for associated callback to finish
+>          * if it was running.
+>          */
+>         ret =3D ret ?: hrtimer_cancel(&t->timer);
+> +
+> +       /* also cancel the sleepable work, but *do not* wait for
+> +        * it to finish if it was running as we might not be in a
+> +        * sleepable context
+> +        */
+> +       ret =3D ret ?: cancel_work(&t->work);
+> +
+>         rcu_read_unlock();
+>         return ret;
+>  }
+> @@ -1383,11 +1453,13 @@ void bpf_timer_cancel_and_free(void *val)
+>         t =3D timer->timer;
+>         if (!t)
+>                 goto out;
+> +       spin_lock(&t->sleepable_lock);
+>         drop_prog_refcnt(t);
+>         /* The subsequent bpf_timer_start/cancel() helpers won't be able =
+to use
+>          * this timer, since it won't be initialized.
+>          */
+>         WRITE_ONCE(timer->timer, NULL);
+> +       spin_unlock(&t->sleepable_lock);
+
+This one I don't understand either.
+
+pw-bot: cr
