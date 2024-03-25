@@ -1,51 +1,44 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D841C6D1A3;
-	Mon, 25 Mar 2024 21:35:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DED315D723
+	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 21:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711402527; cv=none; b=oMuKzWoUTl6ZVZmABHXbkZTiafCXBq7zPYMrBHvlfiF3M2BQUA26kGF3u2SeFwU8pyxJQjcEnCVP/s94ri008t10aIIkyTfa4E41u1IALSxSHmu7Yk9e7ubvOgEH0etLL0FvLguJ54EOXsl555hbffvTMlZp0afAzpkba8/8Bxo=
+	t=1711403506; cv=none; b=gvfgzVzg284PA5pNgvSJRHflAD8jXbAwidSr39s9262BNe+Z9EhNEi4Cbp6aTFglWiHsJEBm0VUu6FkTxUx1ndxhQRurJ8ELj6m0Boxmc7GpZ52/H4tpjNscd9bOF/Pog1zP3+anxi34/sgxdeH/Wpo9lfyTN/gb1HlArOt8Jlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711402527; c=relaxed/simple;
-	bh=z8rW+gaJh9oEjZWVYfIeBs5QTUurns59h3Zl/6mhWOk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ep44cd+6oduypGNRNT2yG0c85xt3g51TZWPGimz/ErFSCFSFjsypTjGXXFXnCYWv8qaB/CHVUAPMwdRnBCuHGa7zEfiaMtJguATQ0662JWG7V2rbBQdfFPMJ73s3KaPoJHi8mWU1hoQXORKroCLXzNGZTMmRKqFVwg+Ke/lr3UY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=NytJMmSf; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1711403506; c=relaxed/simple;
+	bh=MIR1MjX6ng1gKHee2a5R5770ndkV58F1dCoJiFcEgYw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NUaFEhwGfOqmmtf1rhHBNrVmtmtqv3qDtSsnSExC0itPaEwNRtfpmJAJv7KtLWDzKf3Z11NTHpzbEP3x2wpKJ9SB72S5ehlhMTMrkmtV/TUBE9Dzn5UQOSQnD9WT7kNebgoSL84VvdAJcAcWNl1t4UnY4B0bmhovM97ntOtZnGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YlNwVC6F; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="NytJMmSf"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=/7uCFdLyUcSLoN2CO/QqYsxgNqqrS5ZwWh/yFNNxePU=; b=NytJMmSfMiiFMWamhvlDYQ6iay
-	ZsVdGDTH+EVwLu2HILHKGji4/EXQDmdQfH+cfUIS1kC7vF58F/BIuctmhXSSWeOtUSboiS1WSBDoN
-	JTlY7vo/qKYafRYN2smHEO40gakwc2vSoT8wC4hbj8cVxAfflIIH2LRqvNX6NpKDvq1arYWTohHA0
-	MW1uJxtpSfsS68dZoAXMq6iMdmQVZsjTeXl7OWp1K4g9dpvSGBxV1jJ0UzdlftD2GkJbycpV/5Hzx
-	1rvKK4UfH8XoSFF7bbK2asjQN6VRNF3uldnhUQFp3amdlYNoKXuSs5KfFqxZ3yxsFrsj21IiNoJ6B
-	5qgQAgsA==;
-Received: from 30.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.30] helo=localhost)
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1roryT-000IF1-DU; Mon, 25 Mar 2024 22:35:21 +0100
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: davem@davemloft.net
-Cc: kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	daniel@iogearbox.net,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YlNwVC6F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45A97C43390;
+	Mon, 25 Mar 2024 21:51:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711403506;
+	bh=MIR1MjX6ng1gKHee2a5R5770ndkV58F1dCoJiFcEgYw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=YlNwVC6FknjM64W0+5m7tsB2CMrBAkNB4xaoQQ0vWybijBaceNVgsv0zgGDjoeUGK
+	 vYoJCUfZ4Da8KU97eSp966fHjeJmluXRGgSFLaKkXWDhhudEBSEeT00uGqoAeWunXm
+	 F5hKZCHyIW7pw2QVa2HxXEbIBifz3qRV4lYHTcK9tRgmkQV3xAvX247JX3vN0Cop4m
+	 f6eplmczqtddTv2GTfaghOWuuOx4zlarwm9x65B9LwbY+uSZ5w7lAC6E0be7WoUjSg
+	 CKq1x9+nBdFutmoBHBXrKyxQwAxDDMOA7KvX9MNZBHIjObijL9MKPn2Pe/eLZO1eoS
+	 LZvsJSb/I2B0Q==
+From: Andrii Nakryiko <andrii@kernel.org>
+To: bpf@vger.kernel.org,
 	ast@kernel.org,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: pull-request: bpf 2024-03-25
-Date: Mon, 25 Mar 2024 22:35:20 +0100
-Message-Id: <20240325213520.26688-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
+	daniel@iogearbox.net,
+	martin.lau@kernel.org
+Cc: andrii@kernel.org,
+	kernel-team@meta.com,
+	syzbot+981935d9485a560bfbcb@syzkaller.appspotmail.com,
+	syzbot+2cb5a6c573e98db598cc@syzkaller.appspotmail.com,
+	syzbot+62d8b26793e8a2bd0516@syzkaller.appspotmail.com
+Subject: [PATCH RFC bpf-next] bpf: defer bpf_link dealloc to after RCU grace period
+Date: Mon, 25 Mar 2024 14:51:44 -0700
+Message-ID: <20240325215144.3786732-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,130 +46,82 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27225/Mon Mar 25 09:30:27 2024)
 
-Hi David, hi Jakub, hi Paolo, hi Eric,
+BPF link for some program types is passed as a "context" which can be
+used by those BPF programs to look up additional information. E.g., for
+BPF raw tracepoints, link is used to fetch BPF cookie value, similarly
+for BPF multi-kprobes and multi-uprobes.
 
-The following pull-request contains BPF updates for your *net* tree.
+Because of this runtime dependency, when bpf_link refcnt drops to zero
+that could be still active BPF programs running accessing link data
+(cookie, program pointer, etc).
 
-We've added 17 non-merge commits during the last 12 day(s) which contain
-a total of 19 files changed, 184 insertions(+), 61 deletions(-).
+This patch accommodates this by delaying freeing memory to after RCU GP,
+which will fix BPF raw tp, multi-kprobe, and non-sleepable multi-uprobe.
 
-The main changes are:
+Perhaps a better approach would be to have a per-link flag specifying
+desired behavior: no delay, RCU delay, or task_trace RCU delay? So
+sending this as an RFC fix to discuss desired final solution.
 
-1) Fix an arm64 BPF JIT bug in BPF_LDX_MEMSX implementation's offset handling
-   found via test_bpf module, from Puranjay Mohan.
+Fixes: d4dfc5700e86 ("bpf: pass whole link instead of prog when triggering raw tracepoint")
+Reported-by: syzbot+981935d9485a560bfbcb@syzkaller.appspotmail.com
+Reported-by: syzbot+2cb5a6c573e98db598cc@syzkaller.appspotmail.com
+Reported-by: syzbot+62d8b26793e8a2bd0516@syzkaller.appspotmail.com
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ include/linux/bpf.h  |  8 +++++++-
+ kernel/bpf/syscall.c | 12 ++++++++++--
+ 2 files changed, 17 insertions(+), 3 deletions(-)
 
-2) Various fixups to the BPF arena code in particular in the BPF verifier and
-   around BPF selftests to match latest corresponding LLVM implementation,
-   from Puranjay Mohan and Alexei Starovoitov.
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 62762390c93d..d73a8978c800 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1573,7 +1573,13 @@ struct bpf_link {
+ 	enum bpf_link_type type;
+ 	const struct bpf_link_ops *ops;
+ 	struct bpf_prog *prog;
+-	struct work_struct work;
++	/* rcu is used before freeing, work can be used to schedule that
++	 * RCU-based freeing before that, so they never overlap
++	 */
++	union {
++		struct rcu_head rcu;
++		struct work_struct work;
++	};
+ };
+ 
+ struct bpf_link_ops {
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index e44c276e8617..af1591af10bb 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3024,6 +3024,14 @@ void bpf_link_inc(struct bpf_link *link)
+ 	atomic64_inc(&link->refcnt);
+ }
+ 
++static void bpf_link_dealloc_deferred(struct rcu_head *rcu)
++{
++	struct bpf_link *link = container_of(rcu, struct bpf_link, rcu);
++
++	/* free bpf_link and its containing memory */
++	link->ops->dealloc(link);
++}
++
+ /* bpf_link_free is guaranteed to be called from process context */
+ static void bpf_link_free(struct bpf_link *link)
+ {
+@@ -3033,8 +3041,8 @@ static void bpf_link_free(struct bpf_link *link)
+ 		link->ops->release(link);
+ 		bpf_prog_put(link->prog);
+ 	}
+-	/* free bpf_link and its containing memory */
+-	link->ops->dealloc(link);
++	/* schedule BPF link deallocation after RCU grace period */
++	call_rcu(&link->rcu, bpf_link_dealloc_deferred);
+ }
+ 
+ static void bpf_link_put_deferred(struct work_struct *work)
+-- 
+2.43.0
 
-3) Fix xsk to not assume that metadata is always requested in TX completion,
-   from Stanislav Fomichev.
-
-4) Fix riscv BPF JIT's kfunc parameter incompatibility between BPF and the riscv
-   ABI which requires sign-extension on int/uint, from Pu Lehui.
-
-5) Fix s390x BPF JIT's bpf_plt pointer arithmetic which triggered a crash when
-   testing struct_ops, from Ilya Leoshkevich.
-
-6) Fix libbpf's arena mmap handling which had incorrect u64-to-pointer cast on
-   32-bit architectures, from Andrii Nakryiko.
-
-7) Fix libbpf to define MFD_CLOEXEC when not available, from Arnaldo Carvalho de Melo.
-
-8) Fix arm64 BPF JIT implementation for 32bit unconditional bswap which
-   resulted in an incorrect swap as indicated by test_bpf, from Artem Savkov.
-
-9) Fix BPF man page build script to use silent mode, from Hangbin Liu.
-
-Please consider pulling these changes from:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/for-netdev
-
-Thanks a lot!
-
-Also thanks to reporters, reviewers and testers of commits in this pull-request:
-
-Alejandro Colomar, Daniele Salvatore Albano, Kumar Kartikeya Dwivedi, 
-Puranjay Mohan, Quentin Monnet, Ryan Eatmon, Stanislav Fomichev, xingwei 
-lee, Xu Kuohai, yue sun
-
-----------------------------------------------------------------
-
-The following changes since commit e30cef001da259e8df354b813015d0e5acc08740:
-
-  net: txgbe: fix clk_name exceed MAX_DEV_ID limits (2024-03-14 13:49:02 +0100)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/for-netdev
-
-for you to fetch changes up to 443574b033876c85a35de4c65c14f7fe092222b2:
-
-  riscv, bpf: Fix kfunc parameters incompatibility between bpf and riscv abi (2024-03-25 11:39:31 -0700)
-
-----------------------------------------------------------------
-bpf-for-netdev
-
-----------------------------------------------------------------
-Alexei Starovoitov (4):
-      bpf: Clarify bpf_arena comments.
-      libbpf, selftests/bpf: Adjust libbpf, bpftool, selftests to match LLVM
-      selftests/bpf: Remove hard coded PAGE_SIZE macro.
-      selftests/bpf: Add arena test case for 4Gbyte corner case
-
-Andrii Nakryiko (2):
-      Merge branch 'bpf-arena-followups'
-      libbpf: fix u64-to-pointer cast on 32-bit arches
-
-Arnaldo Carvalho de Melo (1):
-      libbpf: Define MFD_CLOEXEC if not available
-
-Artem Savkov (1):
-      arm64: bpf: fix 32bit unconditional bswap
-
-Hangbin Liu (1):
-      scripts/bpf_doc: Use silent mode when exec make cmd
-
-Ilya Leoshkevich (1):
-      s390/bpf: Fix bpf_plt pointer arithmetic
-
-Pu Lehui (1):
-      riscv, bpf: Fix kfunc parameters incompatibility between bpf and riscv abi
-
-Puranjay Mohan (5):
-      bpf: Temporarily disable atomic operations in BPF arena
-      bpf, arm64: fix bug in BPF_LDX_MEMSX
-      bpf: verifier: fix addr_space_cast from as(1) to as(0)
-      selftests/bpf: verifier_arena: fix mmap address for arm64
-      bpf: verifier: reject addr_space_cast insn without arena
-
-Quentin Monnet (1):
-      MAINTAINERS: Update email address for Quentin Monnet
-
-Stanislav Fomichev (1):
-      xsk: Don't assume metadata is always requested in TX completion
-
- .mailmap                                           |  3 +-
- MAINTAINERS                                        |  2 +-
- arch/arm64/net/bpf_jit_comp.c                      |  4 +-
- arch/riscv/net/bpf_jit_comp64.c                    | 16 +++++
- arch/s390/net/bpf_jit_comp.c                       | 46 +++++++--------
- include/net/xdp_sock.h                             |  2 +
- kernel/bpf/arena.c                                 | 25 +++++---
- kernel/bpf/verifier.c                              | 22 ++++++-
- scripts/bpf_doc.py                                 |  4 +-
- tools/bpf/bpftool/gen.c                            |  2 +-
- tools/lib/bpf/libbpf.c                             | 10 +++-
- tools/testing/selftests/bpf/bpf_arena_common.h     |  2 +-
- .../testing/selftests/bpf/prog_tests/arena_htab.c  |  8 ++-
- .../testing/selftests/bpf/prog_tests/arena_list.c  |  7 ++-
- tools/testing/selftests/bpf/prog_tests/verifier.c  |  2 +
- tools/testing/selftests/bpf/progs/arena_htab.c     |  2 +-
- tools/testing/selftests/bpf/progs/arena_list.c     | 10 ++--
- tools/testing/selftests/bpf/progs/verifier_arena.c | 10 +++-
- .../selftests/bpf/progs/verifier_arena_large.c     | 68 ++++++++++++++++++++++
- 19 files changed, 184 insertions(+), 61 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_arena_large.c
