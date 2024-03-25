@@ -1,176 +1,141 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A38410A39;
-	Mon, 25 Mar 2024 15:56:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0044A4CB2B
+	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 16:00:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711382213; cv=none; b=TmZBUMtC7jBZ0EdW8S7qzK1Z6j2otz2KMF15C/2+IpRg+uagzOY0cd83322Z8HdMtDXXibBCjz3f8ntWdETbhdlhfU4/rT+vkG6r3KCrA65ldyUZb7awyvzoZLJ4LsmjXtsT3vrh2d8D5S3SM/WdnGVtaWm/pE+hMZUnRmEezss=
+	t=1711382451; cv=none; b=saKuqp+z18cNbFWvf33A22ZkI2LTOwcMg7zUOGKYPvj4CRx28Cux30ttn34Obmb1G6Wsr73lR8Q2WwtAbLhrJxgY5G+0PmQ9ufsAFeVnywTopxZnd8xBCmBiR4rQu45RZ/cbVJE+Ir1+h6EviMpgjftLH3xxYgJhUpYwNUheyc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711382213; c=relaxed/simple;
-	bh=9dpLxe8xFJYjvF0jtNreXvJ0wWBEIbcp0RMNxceQQ1M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dn2qDo5n6BjKTXpJAeaUiJ+ycb8DcItHwOuNmoAfFPTbsUbBDH8R39wtdXUBZk7IwyckT6dD82ac9eNj3DmmLkbYEBnQtvmJUI6zZfFw8xxrxbU4BeX+/W49DRHMgqdQHH/UESeREzN+D9Dh3g8FLchxn/BuN7KAV+XgJe5JDoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Igix77CI; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711382451; c=relaxed/simple;
+	bh=wqQe2DJZDzzMYImWv6Ki1IImWaVqSXITlgGJEpik5FA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ULmO3JzDaNQBfWUMOQUdfBp/Eet8heeOye72opSsgDNlDsTrp9lHcv6mVo7X64Iw4VbnBwuYa4l8kRBZAmuBE+yKfwhQZ8+esldNZbLGenM2WzfiQEJSAyKW0BGW7+gsi2Hfnnpe7Y9Xn1fy1tDxHxvIVKj3nhusgZCHQZaGcxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=F4DiX7MJ; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Igix77CI"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4147e135f4dso19639405e9.2;
-        Mon, 25 Mar 2024 08:56:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="F4DiX7MJ"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-33fd12a06fdso3204613f8f.1
+        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 09:00:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711382210; x=1711987010; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9EIPPoE4XE3IVkGslmKnrmiWWAv7/89VqpklJd+6R1k=;
-        b=Igix77CIg/MYZpYW7SS0LsbQJVTDYWj4cl+P/lJMstaw6pY55hh5n04Assf6IeZ1tA
-         sa9eGL/IoG3R1pIq/0wuBNSixokd17pD7yXEYECJbmOCxN4aB0A0nMt8NOR0pilrEDy8
-         xkU2aq1pP+ihS0pb1n/XEnsJBgmiJwK74gMgqCqxJPaYwD9AsrfukgyKd1lF+oI7JFdq
-         0aJE7NDQ46Iw/2ANtjQLNsU9hsIUdzBaGq/G+XiMlqqWtKBOG80YpQPf/JbvYPwv/mV9
-         9ye7JcIdVsN3rg/q8k4CeF4WJp1Qr1fUE3D0CmB8c59Vl7UuAEKFSvZcJ4LawRWnz6ob
-         8Nzg==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1711382447; x=1711987247; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XguyOTPW8SaIMkmqZ21Rgli3joUrKCpC0w2AVoDmBo8=;
+        b=F4DiX7MJqyVEHpWldAiPsZtv6b3WfYNZD0xT7ypua34yOhi0UI6Q7CVUok+CLSUhlu
+         HA5p2jb04ilhNXD/Yk264dQ8YAMZ3lhrMpG3v+/yY6S60NQjBMG09mf0S3g1Oqxhztkk
+         2/ewEBjMfEWQs31rpZ70mYQQxG//XWEEeEalc3V+rogq25pHTz3Fhu2xCNkDyzIDq4J0
+         ZAeKy5cr+sqpRg9GNClvtb+tGX7LcYQTfkoPHlMx2Gb9Y2vLWGpL13uYF7qCgQc6yf8y
+         RwthqhhfdK1DC9Wz1xxpJ5AWLEFCvaKfom2+9BmXcSIWQB3+rGLNUpf3vt2v6Ap1WpAZ
+         FWXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711382210; x=1711987010;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9EIPPoE4XE3IVkGslmKnrmiWWAv7/89VqpklJd+6R1k=;
-        b=SjcAy7d0Hnp6ew+v716xdAYvNVHHduOrez4eXvLa4Z+WyRLxASQV1jT5tXG0TSCch1
-         TuFp7GcFEL0ZxK9ueEkGLieNsSLm7xz5zWjwHyiHeO+mIIXNI7znd9ohrIeDInUfv2tC
-         p0IH6EMG/euYrEv/rkcmgRQnWEnq0ARx9roG9qKY9/LU/tQJM2mtiQLhOd1bNuB3BLJw
-         3Wd82Q/F9FfgZUQA68eOTx0ZE4Q00PdXsXVh+a3ybuYhIWKf663vwmFXSdFHXv6mlX0O
-         vYupadYNmn6JAyv6YQoT4MoP1M4GNVXWm3SG4oje2skbhz8Kem5dRvn42Baskx/hc18T
-         yrsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUqcxGTCMK9xWX2ZmI4dYHG23+O0s4PzJxiKRZXCotr7aPRLuQGOFVFRpRv+8JkpLO7U5+R/UwyoUyU3Q4gtPFDZZfYXKwaDr1x24zRJr0BvT9EHEdA0wHmGvPM
-X-Gm-Message-State: AOJu0Yxq4rCXgCX+7QIpGS9NwsarO0frjQLPhczI8DfSzGaubVC+SXNP
-	s1BJkAw8pFoqwSvANb+4OSH1GOgNid4Ml4FYj5szwsRcZC++soP1OU7Ifp5dKarM2Ed1zx9W8oT
-	r8D/jsavhmT1TT1AJCjeu1pg/MPs=
-X-Google-Smtp-Source: AGHT+IHxfR6k24jFecqQDXHG63S+elULgngDfANzh0qG8uBiCjlocubzCFIIU4l1kFVyS8zvFJOiJtcFyl+oXdXKU24=
-X-Received: by 2002:a05:6000:cb:b0:33e:d15c:3575 with SMTP id
- q11-20020a05600000cb00b0033ed15c3575mr4957677wrx.33.1711382210126; Mon, 25
- Mar 2024 08:56:50 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711382447; x=1711987247;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XguyOTPW8SaIMkmqZ21Rgli3joUrKCpC0w2AVoDmBo8=;
+        b=fo4w8JHN9FuNtxccbw/bwUZHa12efLYCV8WsmwZmrHfrqeFR1AgZlepuElx5ZMOSCZ
+         wKHPND8IORV55jARDakdrVkvNCDrNkxhSPmk8ig+M1Hbr5MC6XpyVAt7F/hOIXMothY/
+         t+4ukXhc0ZbnpvAprlBMb4nS5kMsU+9kVLD0GTOIP+ugNE6s5g2ll0OJq5lJnIBDoyHZ
+         2HM5tw3rSqEf5a6avXYh1XMBnvDEBh+m44ZgBKOJNYj2azDnYsZmU48Tskz8bGqId5sp
+         jhRhvxxgWcRNoX3cz3Wz+9OrIEsjObd2AEY1cKPSv2NGep0+fW0iUXbpIW1BzEHkCman
+         DIbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX+4HKb6MppuDMRfGdo1shiDeYJhn0naU0znPI7cVCrZW54RwmgGg4pSZk3lDw98R/KyKTX4K6eE2lUU5q2NOQYYycq
+X-Gm-Message-State: AOJu0YzKxiqRwcCi6FNgWo8qn5VAhj4e8pGGpWrufk6N0SOe0Ja+82lw
+	O+VkwpB87AHiJioaIdxxKdrgP+XccubHuyM15lQAOBRHTMPQWRaw1rBR7mG5Nmc=
+X-Google-Smtp-Source: AGHT+IHAQQRHljpHUkf1aqxlBTu/wdvUc6/R03vZ10abjHEyq0wyR/SvNz2BJXeAO3tvcYuIXdvPCA==
+X-Received: by 2002:a5d:51d1:0:b0:33e:34b7:895f with SMTP id n17-20020a5d51d1000000b0033e34b7895fmr5048233wrv.24.1711382447213;
+        Mon, 25 Mar 2024 09:00:47 -0700 (PDT)
+Received: from [127.0.1.1] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id r17-20020adff711000000b0033b6e26f0f9sm9839361wrp.42.2024.03.25.09.00.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Mar 2024 09:00:46 -0700 (PDT)
+From: Julien Panis <jpanis@baylibre.com>
+Subject: [PATCH net-next v4 0/3] Add minimal XDP support to TI AM65 CPSW
+ Ethernet driver
+Date: Mon, 25 Mar 2024 17:00:34 +0100
+Message-Id: <20240223-am65-cpsw-xdp-basic-v4-0-2e45e5dec048@baylibre.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322122407.1329861-1-edumazet@google.com> <171111663201.19374.16295682760005551863.git-patchwork-notify@kernel.org>
- <CAADnVQJy+0=6ZuAz-7dwOPK3sN2QrPiAcxhtojh8p65j0TRNhg@mail.gmail.com> <CANn89iLSOeFGNogYMHbeLRC5kOwwArMz3d5_2hZmBn6fibyUhw@mail.gmail.com>
-In-Reply-To: <CANn89iLSOeFGNogYMHbeLRC5kOwwArMz3d5_2hZmBn6fibyUhw@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 25 Mar 2024 08:56:38 -0700
-Message-ID: <CAADnVQ+OhsBetPT0avuNVsEwru13UtMjX1U_6_u6xROXBBn-Yg@mail.gmail.com>
-Subject: Re: [PATCH net] bpf: Don't redirect too small packets
-To: Eric Dumazet <edumazet@google.com>, Stanislav Fomichev <sdf@google.com>
-Cc: Guillaume Nault <gnault@redhat.com>, patchwork-bot+netdevbpf@kernel.org, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Andrii Nakryiko <andrii@kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Eric Dumazet <eric.dumazet@gmail.com>, 
-	syzbot+9e27778c0edc62cb97d8@syzkaller.appspotmail.com, 
-	Willem de Bruijn <willemb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKKfAWYC/42OzWrDMBCEXyXo3G31ZyHn1PcoIexKSq0Sy0Yyj
+ kPwu1fxsYTi4+zMfDsPVkKOobDj4cFymGOJQ6pCvx2Y6zB9B4i+aia51FxKBdibBtxYbrD4EQh
+ LdKA9WWkbbklbVpv1GoAyJtc9uz8jplg+av7cY0zXmMJ55s/gmMMlLtv7L5bCBCksEztVp4tlG
+ vJ92zWLzf93wixAQHvhZBx5VIJ/Et6vkXJ4d0O/IWe5AyOBAxfOOESHROYFRu3AqIppfKs1tt5
+ qfLVG78DoilFWGYFGobb0B7Ou6y/0kPBSwQEAAA==
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Russell King <linux@armlinux.org.uk>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Sumit Semwal <sumit.semwal@linaro.org>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ Simon Horman <horms@kernel.org>, Andrew Lunn <andrew@lunn.ch>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-media@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+ Julien Panis <jpanis@baylibre.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1711382445; l=2133;
+ i=jpanis@baylibre.com; s=20230526; h=from:subject:message-id;
+ bh=wqQe2DJZDzzMYImWv6Ki1IImWaVqSXITlgGJEpik5FA=;
+ b=P1yzfio0eDcxAyUAY/a+nfJisXG0eTNG56agA256QD3aW0IbWjpNBGzvns98Nsg9Qqsm9+Nq5
+ 4QVR/fm2KNpAOWGfAES1MKvawg2+uGBn3Y7SBGyJB+8SciyAJxTQ5R3
+X-Developer-Key: i=jpanis@baylibre.com; a=ed25519;
+ pk=8eSM4/xkiHWz2M1Cw1U3m2/YfPbsUdEJPCWY3Mh9ekQ=
 
-On Mon, Mar 25, 2024 at 6:33=E2=80=AFAM Eric Dumazet <edumazet@google.com> =
-wrote:
->
-> On Sat, Mar 23, 2024 at 4:02=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Fri, Mar 22, 2024 at 7:10=E2=80=AFAM <patchwork-bot+netdevbpf@kernel=
-.org> wrote:
-> > >
-> > > Hello:
-> > >
-> > > This patch was applied to bpf/bpf.git (master)
-> > > by Daniel Borkmann <daniel@iogearbox.net>:
-> > >
-> > > On Fri, 22 Mar 2024 12:24:07 +0000 you wrote:
-> > > > Some drivers ndo_start_xmit() expect a minimal size, as shown
-> > > > by various syzbot reports [1].
-> > > >
-> > > > Willem added in commit 217e6fa24ce2 ("net: introduce device min_hea=
-der_len")
-> > > > the missing attribute that can be used by upper layers.
-> > > >
-> > > > We need to use it in __bpf_redirect_common().
-> >
-> > This patch broke empty_skb test:
-> > $ test_progs -t empty_skb
-> >
-> > test_empty_skb:FAIL:ret: veth ETH_HLEN+1 packet ingress
-> > [redirect_ingress] unexpected ret: veth ETH_HLEN+1 packet ingress
-> > [redirect_ingress]: actual -34 !=3D expected 0
-> > test_empty_skb:PASS:err: veth ETH_HLEN+1 packet ingress [redirect_egres=
-s] 0 nsec
-> > test_empty_skb:FAIL:ret: veth ETH_HLEN+1 packet ingress
-> > [redirect_egress] unexpected ret: veth ETH_HLEN+1 packet ingress
-> > [redirect_egress]: actual -34 !=3D expected 1
-> >
-> > And looking at the test I think it's not a test issue.
-> > This check
-> > if (unlikely(skb->len < dev->min_header_len))
-> > is rejecting more than it should.
-> >
-> > So I reverted this patch for now.
->
-> OK, it seems I missed __bpf_rx_skb() vs __bpf_tx_skb(), but even if I
-> move my sanity test in __bpf_tx_skb(),
-> the bpf test program still fails, I am suspecting the test needs to be ad=
-justed.
->
->
->
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 745697c08acb3a74721d26ee93389efa81e973a0..e9c0e2087a08f1d8afd2c3e8e=
-7871ddc9231b76d
-> 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2128,6 +2128,12 @@ static inline int __bpf_tx_skb(struct
-> net_device *dev, struct sk_buff *skb)
->                 return -ENETDOWN;
->         }
->
-> +       if (unlikely(skb->len < dev->min_header_len)) {
-> +               pr_err_once("__bpf_tx_skb skb->len=3D%u <
-> dev(%s)->min_header_len(%u)\n", skb->len, dev->name,
-> dev->min_header_len);
-> +               DO_ONCE_LITE(skb_dump, KERN_ERR, skb, false);
-> +               kfree_skb(skb);
-> +               return -ERANGE;
-> +       } // Note: this is before we change skb->dev
->         skb->dev =3D dev;
->         skb_set_redirected_noclear(skb, skb_at_tc_ingress(skb));
->         skb_clear_tstamp(skb);
->
->
-> -->
->
->
-> test_empty_skb:FAIL:ret: veth ETH_HLEN+1 packet ingress
-> [redirect_egress] unexpected ret: veth ETH_HLEN+1 packet ingress
-> [redirect_egress]: actual -34 !=3D expected 1
->
-> [   58.382051] __bpf_tx_skb skb->len=3D1 < dev(veth0)->min_header_len(14)
-> [   58.382778] skb len=3D1 headroom=3D78 headlen=3D1 tailroom=3D113
->                mac=3D(64,14) net=3D(78,-1) trans=3D-1
->                shinfo(txflags=3D0 nr_frags=3D0 gso(size=3D0 type=3D0 segs=
-=3D0))
->                csum(0x0 ip_summed=3D0 complete_sw=3D0 valid=3D0 level=3D0=
-)
->                hash(0x0 sw=3D0 l4=3D0) proto=3D0x7f00 pkttype=3D0 iif=3D0
+This patch adds XDP support to TI AM65 CPSW Ethernet driver.
 
-Hmm. Something is off.
-That test creates 15 byte skb.
-It's not obvious to me how it got reduced to 1.
-Something stripped L2 header and the prog is trying to redirect
-such skb into veth that expects skb with L2 ?
+The following features are implemented: NETDEV_XDP_ACT_BASIC,
+NETDEV_XDP_ACT_REDIRECT, and NETDEV_XDP_ACT_NDO_XMIT.
 
-Stan,
-please take a look.
-Since you wrote that test.
+Zero-copy and non-linear XDP buffer supports are NOT implemented.
+
+Besides, the page pool memory model is used to get better performance.
+
+Signed-off-by: Julien Panis <jpanis@baylibre.com>
+---
+Changes in v4:
+- Add skb_mark_for_recycle() in am65_cpsw_nuss_rx_packets() function.
+- Specify napi page pool parameter in am65_cpsw_create_xdp_rxqs() function.
+- Add benchmark numbers (with VS without page pool) in the commit description.
+- Add xdp_do_flush() in am65_cpsw_run_xdp() function for XDP_REDIRECT case.
+- Link to v3: https://lore.kernel.org/r/20240223-am65-cpsw-xdp-basic-v3-0-5d944a9d84a0@baylibre.com
+
+Changes in v3:
+- Fix a potential issue with TX buffer type, which is now set for each buffer.
+- Link to v2: https://lore.kernel.org/r/20240223-am65-cpsw-xdp-basic-v2-0-01c6caacabb6@baylibre.com
+
+Changes in v2:
+- Use page pool memory model instead of MEM_TYPE_PAGE_ORDER0.
+- In am65_cpsw_alloc_skb(), release reference on the page pool page
+in case of error returned by build_skb().
+- [nit] Cleanup am65_cpsw_nuss_common_open/stop() functions.
+- [nit] Arrange local variables in reverse xmas tree order.
+- Link to v1: https://lore.kernel.org/r/20240223-am65-cpsw-xdp-basic-v1-1-9f0b6cbda310@baylibre.com
+
+---
+Julien Panis (3):
+      net: ethernet: ti: Add accessors for struct k3_cppi_desc_pool members
+      net: ethernet: ti: Add desc_infos member to struct k3_cppi_desc_pool
+      net: ethernet: ti: am65-cpsw: Add minimal XDP support
+
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c    | 536 +++++++++++++++++++++++++---
+ drivers/net/ethernet/ti/am65-cpsw-nuss.h    |  13 +
+ drivers/net/ethernet/ti/k3-cppi-desc-pool.c |  36 ++
+ drivers/net/ethernet/ti/k3-cppi-desc-pool.h |   4 +
+ 4 files changed, 539 insertions(+), 50 deletions(-)
+---
+base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+change-id: 20240223-am65-cpsw-xdp-basic-4db828508b48
+
+Best regards,
+-- 
+Julien Panis <jpanis@baylibre.com>
+
