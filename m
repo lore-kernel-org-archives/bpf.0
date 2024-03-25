@@ -1,102 +1,117 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D7B82D69
-	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 23:20:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B1C83CD9
+	for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 23:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711408806; cv=none; b=lF1SS25WHSQBNPp5548GOfM6dToK3130qox8iBIcgHsGMgJ5NFQoG9cX3QykzgyRF9YlmKubMx1n4pLLoT9qNVEQHt71HV0BpL2zEDwdWh3KQXOPF+rdoW50dJRdfhyXppbvYrn/e+qyhfp1s0vORnxytSZJ1ulck8AaTS8ZADM=
+	t=1711408888; cv=none; b=CrTf9rCMIvsSdD1R6uijDSQ8Sfrn++2aard528SFBqDMnRYPuL3CHccxvGRSWwwLpv9lMcc2wwSE/jc+g/+kF3JhK6PbMHgOg7a0n73q83YwZjNT1uEgzwcK4MXNdoUsA+muo2+8OWu5omkMt+pJ1PFIMPyQKUCYomDIVkBYKdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711408806; c=relaxed/simple;
-	bh=EAB9kqs4DVTZxHf3pT8YJygMcmIsZZt7COQlFXGh7YY=;
+	s=arc-20240116; t=1711408888; c=relaxed/simple;
+	bh=tNIHVwhM+Wyb9UWYsk600r/+VyxJkxdP2ttKiG5NpMg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Lu0VRztYm6/3bhQRg/zNlzQUnZx9T9DvAGuE8iEb+0hWwdBJCZARQQSxVdowAF2FwAS1tfpVjNl6BBcq9DFnW0ugOyRQi9PIqlILRtReTWmilwt+XpOqW+RA2VuOVvCfkv4CHFQ/1nnS7ngq7dQ1glExXpQlqWim6488kv/g3GQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hfVgJur+; arc=none smtp.client-ip=209.85.214.174
+	 To:Cc:Content-Type; b=tYyooqcF698agGkQUPFc6owjFM8UtYs4zka7dlNb/HgpBI2KrI4QincKDGjybtAru7hHNhF112baDsNT6KicDCWPGPts2pb+8xBBwXPbS/M9942Nrji+PMkM3a9dhqzn5BSBQ9mLaL7X5NP1qFczWELTPjpmPaSJarkeG+Qgcug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PpIDLMO3; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hfVgJur+"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1dee5ef2a7bso35336585ad.1
-        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 16:20:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PpIDLMO3"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1deffa23bb9so36673135ad.2
+        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 16:21:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711408803; x=1712013603; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711408887; x=1712013687; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LGQ58VgfOIH3h7dVznDl74Y5tKoIt2fxmUy53cbsSws=;
-        b=hfVgJur+5NrKHbaoxyjNORH+X3UYkPocmt7oa9jE6I4rJXXmjj12MnK6mW4huWaOX8
-         E/w88nzoyqrwgM0CrAWeiI6T+MttmErjLpX18Dboj6I6PApujKztRypwLGBlIwHMRruM
-         RQLXaU39sS3gtcE1GGdBqvRyCbqP+UPK2okwO/sNiecxNlztOEFHgV7nJKKvqowB7SK5
-         5Kwh/Dk4laoKu7vOrQOsv8HGkfIGjtGlyg4PjWxpXnS7wzhba6UF/qQNLrzv8omdeg2x
-         ABsqoGOiSakocBcalfieySeksYcMDnQACW693oKIqKc9uyb+hvrp3QVRNk95033ZQhIX
-         HcqQ==
+        bh=XVMTzsIjNPgCz1BhdkIpCxIGPBChcnqnuL+nP/IiBZ0=;
+        b=PpIDLMO3saBSUvFkXzn09h4xecAooIt4ADbifgWEYEG3AlbWLd2zspYqxQ54aoRS5h
+         Ye0/1gjAlOY2FZ6IwBFS6csnVMXmo88geTJuX5nboY6XHUeOQ7u/mmsLRX2LxS83wLLd
+         BEzACtddYTk+rMsJ8FOyubZWxiFqxDex0imRRXXaANk43Gs/9cX6Jwj6UKOH9FuZ1pDt
+         O8JpLBzMlC4z1OdAG+tcHUJxwNiyrEo+dT4VOwRuQdsYihRJ/t/nQxGMJEIlm2feepro
+         mi2BJlfzUIa9nejKrvbYastdfRNn96VmOAo1KhbGqgW4B/u7eyydfmocqdtQiUYiKTP+
+         +IBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711408803; x=1712013603;
+        d=1e100.net; s=20230601; t=1711408887; x=1712013687;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LGQ58VgfOIH3h7dVznDl74Y5tKoIt2fxmUy53cbsSws=;
-        b=IKJTLj6ni/2KOXfDWZwe2afYnXWqIo4WWaEuYKKUvDi9p3p1lnMV3GER/CoFYa6wNB
-         uee+BwtH5GX/1uHui563zdvWxscqC3AOy2Kg9YtMe5wAZsGr2LwW5wDVAnZW1WBfjxde
-         1p3etkKM4IIqsbnqrEW25i56Q/xjWfKdZ5EXy2I8Z2Ers3yo14QWLJKBvJP3I2iwQ8yt
-         N7CIS3a08rif0nqcrAyVGye5GXmvtKZbr0PcxJI+xAqPUBVunqPhDBw4BWPxvmgItIbi
-         4dkDlMTwuI6vd0PtqR7vzWfmcTeeCQ0TYkwQR2SE1qJRSNC4ODwZYHSoIyHTwnmzhPmO
-         bbyQ==
-X-Gm-Message-State: AOJu0YyimhCjHA8gQA7rV9DDvv3vFJ1whkaAET2pnzDwDWHUeEq6H/qT
-	ZjjL1D6qIdS/a8U7NAjTN3UPBrvL9fuJar2KRrWLacQBnkovzLi76yvbV30Ghx2mgkJDzNL9tid
-	oD6BdZMh6ZgYQlH5YnVXTxAVjUG4=
-X-Google-Smtp-Source: AGHT+IFOdk0tQQcH62IdQMRql212dRFAyV1x7Ks6bLigtfzFKrdz2T1HbErlcxM8nrr4b2fVmC+v70qYg1nTK1hh48U=
-X-Received: by 2002:a17:902:650a:b0:1e0:cd8a:581 with SMTP id
- b10-20020a170902650a00b001e0cd8a0581mr2302960plk.23.1711408803615; Mon, 25
- Mar 2024 16:20:03 -0700 (PDT)
+        bh=XVMTzsIjNPgCz1BhdkIpCxIGPBChcnqnuL+nP/IiBZ0=;
+        b=MFxZyEOIkn7GJT7BpzqqJ8rUWXP/JeVui2TU9VJ2THxg7TzwTusbqAapUF9ITxA4dV
+         B/IFUqNyzCwnsNMYBqjS7oxG+MJ/P0zvkCS6d4zMMgxodeDQMc/L3efk5NjVpcQZmFKO
+         eTkXbu8xzZ6HtU8qnUFm95Osd+rrdxsODpePdSfasecMVw+5UJsxVXg+rDB/ttmpd7ie
+         n6jEoSwWtXKiWSJK0S1CkPNsy2vPkIUd/+FUT9Ol3WGrQRjQT0i48OiwuwAvqOADErX7
+         8KywY/0blGZQmJzDe/Vaqgc+QH4MdyhgmyUMqXFf6SXT+0HPtUZA72ni+/WFGLBGGLSq
+         GvrA==
+X-Forwarded-Encrypted: i=1; AJvYcCU0lZtJbiSVU4SOXQIZ0GnxzS2DttNb3jN5znQ8Qa7lnx/32dKV94QLBznWTw5wjGw+rADx4k6+y0Yxbt/FEqDo3eCq
+X-Gm-Message-State: AOJu0YzCIsU95vUMySF28XKFRSfoNC4xGsOUjpk/wxJyYQ7VyToEmE+T
+	d9ILkkCgWbWY4qpmbmIMY8iXaGDPm3PonFRgFjpQMYHWrG59uLVDxfrdE72HoV2/ogFoHTAYQSl
+	eFrfySxBMvMDksYyA8f8qXkipbpA=
+X-Google-Smtp-Source: AGHT+IG5bT5ZIm1osGxgZO0/nIxf7dHuhCjNw920P96nsRYD3bZ9biYE84VzunhowTWB/uVqm+opjp+5CRHQ4idlk4Q=
+X-Received: by 2002:a17:903:234d:b0:1dc:ad9c:4c9d with SMTP id
+ c13-20020a170903234d00b001dcad9c4c9dmr11463458plh.31.1711408886632; Mon, 25
+ Mar 2024 16:21:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240325152210.377548-1-yatsenko@meta.com>
-In-Reply-To: <20240325152210.377548-1-yatsenko@meta.com>
+References: <20240322000041.2919948-1-andrii@kernel.org> <20240322000041.2919948-3-andrii@kernel.org>
+ <CAADnVQ+pTK9_BF-wPyQBuzK4wUtraEg64Kee33w0d63iqQuiHg@mail.gmail.com>
+In-Reply-To: <CAADnVQ+pTK9_BF-wPyQBuzK4wUtraEg64Kee33w0d63iqQuiHg@mail.gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 25 Mar 2024 16:19:51 -0700
-Message-ID: <CAEf4Bzb_3d=+PfaBFCDDOSnU3jwb_W1BaVkgZsF-UcVefysOOg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: improve error message for unsupported helper
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
-	Mykyta Yatsenko <yatsenko@meta.com>
+Date: Mon, 25 Mar 2024 16:21:14 -0700
+Message-ID: <CAEf4Bza1bEq-WaAsZKpCdJGXCMEzCMYHPdCO35rh_GRevVyi0A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/6] selftests/bpf: add batched, mostly in-kernel
+ BPF triggering benchmarks
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@meta.com>, 
+	Jiri Olsa <jolsa@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 25, 2024 at 8:22=E2=80=AFAM Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
+On Mon, Mar 25, 2024 at 10:21=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> From: Mykyta Yatsenko <yatsenko@meta.com>
+> On Thu, Mar 21, 2024 at 5:00=E2=80=AFPM Andrii Nakryiko <andrii@kernel.or=
+g> wrote:
+> > +
+> > +static error_t parse_arg(int key, char *arg, struct argp_state *state)
+> > +{
+> > +       long ret;
+> > +
+> > +       switch (key) {
+> > +       case ARG_TRIG_BATCH_ITERS:
+> > +               ret =3D strtol(arg, NULL, 10);
+> > +               if (ret < 1 || ret > UINT_MAX) {
+> > +                       fprintf(stderr, "invalid --trig-batch-iters val=
+ue");
+> > +                       argp_usage(state);
+> > +               }
 >
-> BPF verifier emits "unknown func" message when given BPF program type
-> does not support BPF helper. This message may be confusing for users, as
-> important context that helper is unknown only to current program type is
-> not provided.
+> ...
 >
-> This patch changes message to "program of this type cannot use helper "
-> and aligns dependent code in libbpf and tests. Any suggestions on
-> improving/changing this message are welcome.
+> > +const volatile int batch_iters =3D 0;
+> > +
+> > +SEC("raw_tp")
+> > +int trigger_count(void *ctx)
+> > +{
+> > +       int i;
+> > +
+> > +       for (i =3D 0; i < batch_iters; i++)
+> > +               inc_counter();
 >
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> ---
+> so it's passing the verifier due to bounded loop logic, right?
 
-"unknown func bpf_somehelper" is one of the common confusions users
-run into (and I had to explain multiple times), so this more
-meaningful message is definitely an improvement, thanks!
+yep
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-
->  kernel/bpf/verifier.c                                     | 4 ++--
->  tools/bpf/bpftool/feature.c                               | 3 ++-
->  tools/lib/bpf/libbpf_probes.c                             | 6 ++++--
->  tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c       | 2 +-
->  .../selftests/bpf/progs/verifier_helper_restricted.c      | 8 ++++----
->  5 files changed, 13 insertions(+), 10 deletions(-)
 >
+> Then let's limit cmd line arg to something small instead of UINT_MAX.
+> Otherwise users will be surprised by the errors
+> coming from --trig-batch-iters 500k
 
-[...]
+sure, I don't think it makes any difference much beyond 100-200, I
+tried 500 and it made no difference. So I can limit it to 500 or a
+1000
