@@ -1,113 +1,87 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D637F128823;
-	Tue, 26 Mar 2024 03:32:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED73129E7C
+	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 04:14:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711423974; cv=none; b=PLrxTrwdjILWshfjMuC5XDmwSW/IMqKlj9FqLkUyO1KIt8GRkUfPuJbIhkC2JX61fkpqwbNF7ITxMW6Pm0CM4KQUiEEp0WpAiMv1qfuxAnVNCJsoryeaiFb6jR3cKkwpJzVkQuXOiw+OsIK5HqIfpwotPjH3VEKPl9caz3gU67g=
+	t=1711426502; cv=none; b=Tj27ctETDpgDWFMOODLc6fqZT7pri3Uqzv2rUWGqeTz+fDEXghcjhh6VsYIZQnnxYQbP90cMH3oT2SErc8RWa3Q+HqYFYtPYwCrT4fgOygC1CUBCqeGSnWvfFcxMYzINmQzlCQWnVrKlg8UU+/Qyy/V4WFvHRDryxxechciFhJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711423974; c=relaxed/simple;
-	bh=f5P7jXuaPxF8gxKTJOiUPKZMuLKQpBGNZmyCMdfpQew=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W8AGvVYmbVUe2apVdz2PsqbPJLgZQSM/KTAOfUD01iaYVo2ZMihkLuX9HAWNCoMwYKUsWAoNAQKu8LyM3KyBqleOwEy0bpgzUuPxFU//s0GFX3sbIuqmt9ji0GzmL1Uffn5h8/1Mg/sa7QspryVqnCUKldOdm70XjBWKMZOhlbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GQ/yKgv4; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GQ/yKgv4"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-41488d6752eso10821765e9.2;
-        Mon, 25 Mar 2024 20:32:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711423971; x=1712028771; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lA5o6h754u6ODWqcXZI/yfZmhgXKlz5ceCEo4tpQucE=;
-        b=GQ/yKgv46sqFnSCBelHnAnN508cFDTH28rJLuZ6V2bjpScVQ3HKjJalz+ylvKz2hmB
-         DBF3ShSXyxxp6u0Kh1ZhSdVJ8hxor/zl5vsZPXMp20oXODQvp5897+fIEUkKcf93x8mL
-         KBbtYe3H2NGGyMYstb37YLWepFJmicNDM/0G0InWzIDnL7gjDG5InDxMlTPBz/nxPNab
-         7cPgbPTjscyAqu5npqXXomA8HAwVfxqTr3TXc4svWbzx41gzXXtezxDS1rc1mJ69ESi3
-         E5ybo69ULxBgoZgrSVqtEtktM/wdkmCLjC9ch73wt+VrBL4JzbIiZoZ9S87j9hApctwr
-         aEmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711423971; x=1712028771;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lA5o6h754u6ODWqcXZI/yfZmhgXKlz5ceCEo4tpQucE=;
-        b=N0klvxvfSE8JxEsdNayWaepFKiRxCYeXN4J1qGYyqy6Tl5G1NkaUHbJsrZWINdG+gh
-         imcVFh7GREh5T9bAALkEHRZG0U88I4Strc90PB2zUd1lQqfYuOM12FlnzDT8VfsegaDY
-         bSSiQlase5SvGmWJcXcvrfqOIlOFmUJNl7sScAloJNZu86gu8pB9tyX6bdiMtdIUaYcB
-         ZUPFY/dbvyO+hOCl8v9mdHxijLUi+yB/tL7Y7/u0C+CoNDx3KFMO+zyDzyFw4DkO+HOB
-         z/SaDAkpcO7WAVKgomKrb6t+D8OUqETOKztnEpoozB088OsswWeZuQFnQy+LytRdcWpP
-         fyjA==
-X-Forwarded-Encrypted: i=1; AJvYcCXt9vUv1hboSJIa2Wk0CGjD1afSVZLRfkz3WSs2uB+fCN65VGYGcmrmRcOfoG4Xs4iKa8chh2WPpcHwo05wQLJltymwj2gQ1X8OJxtW4tq7vtGeV1EstlKt9JT+ekJWHrLEeX+Yg8cRddUlA23iz7n+lW0jjQb96hOWwJhQOgcriKDZAEVBKUoLG0T9E6OpuprnBS2pBKUH15e2XVku5Ifj1qiJFwq3MB4XCEwqIN67kdpvlH0aoDHYJc17pqJ1E5aBxcBNSVhKjATrKvk3NIBb6MgWtcXcbfybFCQwwlBlXgSjJ/OwEDAeTNYxT5JmB/r2qQlCN+3Uma/G+KUoFfNRkT+BBWg8dEc=
-X-Gm-Message-State: AOJu0Yx2L+Ugcmv/iPcXz+KA1Brw1i6kPdtRDEdgyN7EpNBACsVJs0tc
-	NXCkdqwe6fTxnLigincKMPvAT7kV0WCeCuq0mxzZijtq3AI4i0vtMjhznrefb+Iv7GQA/uroAZ9
-	LDyiTZLKcC2GOHr9ryTmt3djgMus=
-X-Google-Smtp-Source: AGHT+IFQ9mbx3pz3lWDfK2p6wsj2aDG+6I6RjpqCge2Sd5poBB31E3vi/9DrtwhPj4IF4gJiiqaho8oQ5gTSaHJ4YJE=
-X-Received: by 2002:a05:6000:120d:b0:33e:a5e1:eccc with SMTP id
- e13-20020a056000120d00b0033ea5e1ecccmr5218777wrx.68.1711423971122; Mon, 25
- Mar 2024 20:32:51 -0700 (PDT)
+	s=arc-20240116; t=1711426502; c=relaxed/simple;
+	bh=VJ4ERxRyAQme67dvpDKgsSqF1beY8Nnobj/HldzlLt4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WBOxjreISdEtHimxbjzdg4R9/cAwMsS8z7CWF6si9oK1TGvpaYmkS09R/VxnITRDASod/hVJnSDrEgFeCkGRT6ysgkrR4c8VZ6JmlHfwq8er/x/sGv1yvddqoxA/A179UD28HQIYUhksegT4nIOZBn1go2hdgg6lHzZnAodnhGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+	id 1346024E7068; Mon, 25 Mar 2024 21:14:43 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next v3 0/8] bpf: Fix a couple of test failures with LTO kernel
+Date: Mon, 25 Mar 2024 21:14:43 -0700
+Message-ID: <20240326041443.1197498-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240326021656.202649-1-rick.p.edgecombe@intel.com> <20240326021656.202649-3-rick.p.edgecombe@intel.com>
-In-Reply-To: <20240326021656.202649-3-rick.p.edgecombe@intel.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 25 Mar 2024 20:32:40 -0700
-Message-ID: <CAADnVQKHtRX2WS9c2qcMUJTmNNda+attkXoiNurFyMKvHNfa=A@mail.gmail.com>
-Subject: Re: [PATCH v4 02/14] mm: Switch mm->get_unmapped_area() to a flag
-To: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc: Liam.Howlett@oracle.com, Andrew Morton <akpm@linux-foundation.org>, 
-	Borislav Petkov <bp@alien8.de>, Mark Brown <broonie@kernel.org>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	debug@rivosinc.com, "H. Peter Anvin" <hpa@zytor.com>, Kees Cook <keescook@chromium.org>, 
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-mm <linux-mm@kvack.org>, linux-s390 <linux-s390@vger.kernel.org>, 
-	sparclinux@vger.kernel.org, linux-sgx@vger.kernel.org, nvdimm@lists.linux.dev, 
-	linux-cxl@vger.kernel.org, Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, 
-	io-uring@vger.kernel.org, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 25, 2024 at 7:17=E2=80=AFPM Rick Edgecombe
-<rick.p.edgecombe@intel.com> wrote:
->
->
-> diff --git a/mm/util.c b/mm/util.c
-> index 669397235787..8619d353a1aa 100644
-> --- a/mm/util.c
-> +++ b/mm/util.c
-> @@ -469,17 +469,17 @@ void arch_pick_mmap_layout(struct mm_struct *mm, st=
-ruct rlimit *rlim_stack)
->
->         if (mmap_is_legacy(rlim_stack)) {
->                 mm->mmap_base =3D TASK_UNMAPPED_BASE + random_factor;
-> -               mm->get_unmapped_area =3D arch_get_unmapped_area;
-> +               clear_bit(MMF_TOPDOWN, &mm->flags);
->         } else {
->                 mm->mmap_base =3D mmap_base(random_factor, rlim_stack);
-> -               mm->get_unmapped_area =3D arch_get_unmapped_area_topdown;
-> +               set_bit(MMF_TOPDOWN, &mm->flags);
->         }
->  }
->  #elif defined(CONFIG_MMU) && !defined(HAVE_ARCH_PICK_MMAP_LAYOUT)
->  void arch_pick_mmap_layout(struct mm_struct *mm, struct rlimit *rlim_sta=
-ck)
->  {
->         mm->mmap_base =3D TASK_UNMAPPED_BASE;
-> -       mm->get_unmapped_area =3D arch_get_unmapped_area;
-> +       clear_bit(MMF_TOPDOWN, &mm->flags);
->  }
->  #endif
+With a LTO kernel built with clang, with one of earlier version of kernel=
+,
+I encountered two test failures, ksyms and kprobe_multi_bench_attach/kern=
+el.
+Now with latest bpf-next, only kprobe_multi_bench_attach/kernel failed.
+But it is possible in the future ksyms selftest may fail again.
 
-Makes sense to me.
-Acked-by: Alexei Starovoitov <ast@kernel.org>
-for the idea and for bpf bits.
+Both test failures are due to static variable/function renaming
+due to cross-file inlining. For Ksyms failure, the solution is
+to strip .llvm.<hash> suffixes for symbols in /proc/kallsyms before
+comparing against the ksym in bpf program.
+For kprobe_multi_bench_attach/kernel failure, the solution is
+to either provide names in /proc/kallsyms to the kernel or
+ignore those names who have .llvm.<hash> suffix since the kernel
+sym name comparison is against /proc/kallsyms.
+
+Please see each individual patches for details.
+
+Changelogs:
+  v2 -> v3:
+    - no need to check config file, directly so strstr with '.llvm.'.
+    - for kprobe_multi_bench with syms, instead of skipping the syms,
+      consult /proc/kallyms to find corresponding names.
+    - add a test with populating addrs to the kernel for kprobe
+      multi attach.
+  v1 -> v2:
+    - Let libbpf handle .llvm.<hash suffixes since it may impact
+      bpf program ksym.
+
+Yonghong Song (8):
+  selftests/bpf: Replace CHECK with ASSERT macros for ksyms test
+  libbpf: Mark libbpf_kallsyms_parse static function
+  libbpf: Handle <orig_name>.llvm.<hash> symbol properly
+  selftests/bpf: Refactor some functions for kprobe_multi_test
+  selftests/bpf: Refactor trace helper func load_kallsyms_local()
+  selftests/bpf: Add {load,search}_kallsyms_custom_local()
+  selftests/bpf: Fix kprobe_multi_bench_attach test failure with LTO
+    kernel
+  selftests/bpf: Add a kprobe_multi subtest to use addrs instead of syms
+
+ tools/lib/bpf/libbpf.c                        |  26 +-
+ tools/lib/bpf/libbpf_internal.h               |   5 -
+ .../bpf/prog_tests/kprobe_multi_test.c        | 248 ++++++++++++++----
+ .../testing/selftests/bpf/prog_tests/ksyms.c  |  30 +--
+ tools/testing/selftests/bpf/trace_helpers.c   |  46 +++-
+ tools/testing/selftests/bpf/trace_helpers.h   |   7 +
+ 6 files changed, 281 insertions(+), 81 deletions(-)
+
+--=20
+2.43.0
+
