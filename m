@@ -1,69 +1,76 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7FE6E61D;
-	Tue, 26 Mar 2024 11:57:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D1D6F09C;
+	Tue, 26 Mar 2024 12:10:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711454264; cv=none; b=USrDyUDbxrTHXCsaC/FoL9kxSgpT+B+QK8wqLMxPXTJNOd+h0gAs0CCGBNlpD3T0eICy0mB1n825GvHvXus7IqSRGm9eK9sn3M+RhjlKa2FNpAaunKdje7B1D0pPTBlWujsm+YOWld3VjRAklwNuvoWfvkhogTFUXn9b3tnvWy0=
+	t=1711455031; cv=none; b=Le4Ozz2tRpTpGD+CcllIyNwr2CMvUSx1o0fW8dfa5MYgm1kqYHx7KI9FgkWxmdw+ebPqDTCeWEEcASqPPPCbni7Jm30ew2hInrX+3rCFMh1o2wlGntjVFFG+jImnTQUCudAJAKh9pqAoZvCaPCVmYCDvGkv9JvgSLU7mpvwg1kA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711454264; c=relaxed/simple;
-	bh=EKJhulSFxLWQLaF7yaxSDnu58jC9IeQn/dXAU0JKliQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=QoPZOEwAk0Yt6nEs/hzNVqxnig8kslz/wTvcTI/TW57XOoaVHHnZzsngqormlyVJfCCu+L+CNjtq9lGn6RcoQwcCmOf405Y9daau7UXgq/mE3zda2M5HjZE67E+o1QZhNHGm4UOdeZl2x3HzdUXJ73us5PAoYPZmZ3Gjm9j5F+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hMw4D1PQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711455031; c=relaxed/simple;
+	bh=a0EZiR5ZF3VP25U2VLBtiwnW6Lc1VH8m8rkFsGfloNo=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=a1bOri5TggKAUp/mWCdsqxQdVvN63d5Y6eTVg7t54tokIJyoF30AvnaV4UgbS/fFLVaKn7lt/Om2oERDP0HV5aUBTvqTWm0sUhf1aLehLkD2i2x5dqGC8VvfKRosgCIxD1Q4qcLFpl03GOSVT2abvmASJfbkZGC07LZnbHPVOhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fL6gqJwV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hMw4D1PQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E9C1C433F1;
-	Tue, 26 Mar 2024 11:57:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fL6gqJwV"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 57290C43390;
+	Tue, 26 Mar 2024 12:10:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711454264;
-	bh=EKJhulSFxLWQLaF7yaxSDnu58jC9IeQn/dXAU0JKliQ=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=hMw4D1PQCahqfw8MtYxsjzHrzUNPiIFh/by6PO26L5JBoud0NXvOoP+pWDolP6A7W
-	 MHWxMfRihenzXqisqycL3g12C+CTWoltIvH4CNPUdz+72PbKPN+WRf81R/oXG8bDpf
-	 T1dkgCTQSYki+AzT7VZB67H8zKEuIGM/3R4nByOKzGAkwCto7GnC2k4qJLIzF7Eq/D
-	 /5kSEGrmMOO3Stz0ZnDtyv2/s9EdzPUq06xhiB22b5Veavz/fy0YY//StezneyCMcw
-	 b0BhOnWShhQodg0X1OfcREnyS8OlaUMwqW9UypBtbcnB46bzRA+9vjV1wmjQjZJ4Bo
-	 J5FymRUa+DgSQ==
+	s=k20201202; t=1711455031;
+	bh=a0EZiR5ZF3VP25U2VLBtiwnW6Lc1VH8m8rkFsGfloNo=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=fL6gqJwVwp3UGqPDckS3tkvFJV8Clrln2BscWiVQovoHRqEEu+R6KnhcpaxhqLxYw
+	 6uLVdh75Hu6qmy6mA0qGvAu5GKo/e1b41KukQZL+dUsJ5KH4P4KXzYJOQG5bZ8A1oM
+	 Pu1dHuJlpgAtVF2ZRPENxBz+LC5YxcsT1XpHtqSNCRHchGsNRrE2Ny1khjy/htMfhB
+	 Dtc+aIASwuAN69Urg+k0zBZFTEtwRELGnr/5rqGKG18nuyOJVagXMDjtXKiq2vbXeK
+	 p/i/r8tlgNo3eAs+rND/ES9YMfPfGW/x6GQJtbFxvvEnvu4YpTi+7dxiYp18+M1X6G
+	 WJ6RLM31TSj1w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 42BCED2D0EE;
+	Tue, 26 Mar 2024 12:10:31 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 26 Mar 2024 13:57:37 +0200
-Message-Id: <D03NWFQM9XP2.1AWMB9VW98Z98@kernel.org>
-Cc: <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
- <linux-s390@vger.kernel.org>, <sparclinux@vger.kernel.org>,
- <linux-sgx@vger.kernel.org>, <nvdimm@lists.linux.dev>,
- <linux-cxl@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
- <io-uring@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: Re: [PATCH v4 02/14] mm: Switch mm->get_unmapped_area() to a flag
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Rick Edgecombe" <rick.p.edgecombe@intel.com>,
- <Liam.Howlett@oracle.com>, <akpm@linux-foundation.org>, <bp@alien8.de>,
- <broonie@kernel.org>, <christophe.leroy@csgroup.eu>,
- <dave.hansen@linux.intel.com>, <debug@rivosinc.com>, <hpa@zytor.com>,
- <keescook@chromium.org>, <kirill.shutemov@linux.intel.com>,
- <luto@kernel.org>, <mingo@redhat.com>, <peterz@infradead.org>,
- <tglx@linutronix.de>, <x86@kernel.org>
-X-Mailer: aerc 0.17.0
-References: <20240326021656.202649-1-rick.p.edgecombe@intel.com>
- <20240326021656.202649-3-rick.p.edgecombe@intel.com>
-In-Reply-To: <20240326021656.202649-3-rick.p.edgecombe@intel.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: pull-request: bpf-next 2024-03-25
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171145503126.25321.16783504439935417546.git-patchwork-notify@kernel.org>
+Date: Tue, 26 Mar 2024 12:10:31 +0000
+References: <20240325233940.7154-1-daniel@iogearbox.net>
+In-Reply-To: <20240325233940.7154-1-daniel@iogearbox.net>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+ edumazet@google.com, ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
+ netdev@vger.kernel.org, bpf@vger.kernel.org
 
-On Tue Mar 26, 2024 at 4:16 AM EET, Rick Edgecombe wrote:
-> The mm_struct contains a function pointer *get_unmapped_area(), which
-> is set to either arch_get_unmapped_area() or
-> arch_get_unmapped_area_topdown() during the initialization of the mm.
+Hello:
 
-In which conditions which path is used during the initialization of mm
-and why is this the case? It is an open claim in the current form.
+This pull request was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-That would be nice to have documented for the sake of being complete
-description. I have zero doubts of the claim being untrue.
+On Tue, 26 Mar 2024 00:39:40 +0100 you wrote:
+> Hi David, hi Jakub, hi Paolo, hi Eric,
+> 
+> The following pull-request contains BPF updates for your *net-next* tree.
+> 
+> We've added 38 non-merge commits during the last 13 day(s) which contain
+> a total of 50 files changed, 867 insertions(+), 274 deletions(-).
+> 
+> [...]
 
-BR, Jarkko
+Here is the summary with links:
+  - pull-request: bpf-next 2024-03-25
+    https://git.kernel.org/netdev/net/c/37ccdf7f11b1
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
