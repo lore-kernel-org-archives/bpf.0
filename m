@@ -1,229 +1,110 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB882139B
-	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 00:28:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92CB1B28D;
+	Tue, 26 Mar 2024 00:41:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711412911; cv=none; b=XoHZ1djbfKg22nSmsFp8gBjCC3a+TPYm6pN7yvLmkXwlhXSozTIUNE/9SdIsflDoVwa1+qVuHdKaRz2NVP1qyXL1lPErvrumd1lZCxFCsAZZXykO2m+7PyFqYW4H45AzL0uGDhgr2uqEcmrjxRcPLLmcQhMHfzKHb+Q0QnIeVdM=
+	t=1711413706; cv=none; b=A6bpKX4t3s1XLH1zT4ZQYq+FNEUYpoHOWPXQRuEUxSkvD8LzviBgng6+L0014TzmJtcFwYSVJKq0VagvXBdY0fajXP4Yh3Yk6VyUBNixi7vl9jReMtf4J0Bdr2Yn4l+WVBblVFWRyokjv2ZXZRqloerZ50gwtpW0JClr4OjQSpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711412911; c=relaxed/simple;
-	bh=q9rJFj0LGRVbIR7Im5V+4jATTEQF0xUdYxt97RfhsCY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gQiHNzm7gjd6bZKvg49+OGiYkNbd42Zqja9a7Ywl7Gd+cbQpNBvIGguKwVcCH8sBHLsiugouWHSp95JgKy6uQ5cvLbbxUMUh0bUoR5gKhmQ4lB2Uxrw+Vb7efbzSLHhFl5EJIfdaUv62esPoyt+GCM6aUCBhehKlFDy1M5IdaRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jwc72MJc; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1711413706; c=relaxed/simple;
+	bh=sO0d/mps9kdY+m5kw8PixGdK4LtIlRtqftGoHYkhLKM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=L6dah08sICqHaw7vavSGem953zcAIxVi7jOuAN9tJ+SubHNyEiaZuES7ib0HoMj/ny8B/bnwuPmwFKR+JvdV/p5jN9A+LB5hg/DHjqKWHENcYTm/CUdSVwt351rhg7hVYXQ7EwEhFcOnuD6xDxXY+GpzgVxTMTwsFau4zA9BsSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bjPrIo17; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jwc72MJc"
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-513e89d0816so6184551e87.0
-        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 17:28:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bjPrIo17"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6ea8a0d1a05so1931425b3a.1;
+        Mon, 25 Mar 2024 17:41:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711412906; x=1712017706; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6AS6qRiVlQsc1+zZ8NlPzKQQkZa8BexCVQalpdaPfxc=;
-        b=jwc72MJcbOv3kNXMWOzcqkprlIA0kzQenPVePAM+2MCIOWNpyQlr6Bod5r9PGyvAtH
-         W6MB0rm6nc8gi1c90MEweCLFgqrpGJGagH8d9WJ+/WPLaNmtIo9qwAX7olhxp7p1+eyd
-         DcyyHKRIsnQpuHfXC265pgCXIuHYOQ18/yzNq9b12LEYr0kPYRM0GpIGdh8sOyaD9+kR
-         qvdPyYoNIACwyhXeSLQae4+A4idpRdC3nULounqP9EtnB1V1RPwCNZ4w4UvOv+JUb4FC
-         0pIfwgms3iFSJGJuud3CMLeDpCdI+yUp2mJeizZI7bwQ90Mb/sYG+eprzKPZ3MZUedo+
-         6zIg==
+        d=gmail.com; s=20230601; t=1711413704; x=1712018504; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oZ0qd1iGxtr/mWs3kOYHpeMOliTzM44U+9k3boYAHSY=;
+        b=bjPrIo17hZCEh+E0X3m2J3ArqkUjbUvIEmYIKLw+WTgiwfpHvaBLEFfDHi3t2YchbY
+         RbLqeYKujv24L+PmZR+xREPgkI7OaxugCGvNnThbisSS7jfo5DSTKIsa3VY0DIPEy+2g
+         asKklHk4gAjQjFuLhU6a/lSFEHjPYQEkxS97T0PKkdcD4lVDsY1xCCPNH9DiligRiyQT
+         GKopjLnI+i6uctSjQmxvuxehspv6l6u/KM1I9z5FeaDHBORcTo4RLO0HLnGscSoJYLTB
+         xTsftPzVh0XMq9s85JhrZyjf8mSZsWjWh+cerReqf/XiWZf6Xuj6Q9oVGUo8mPi5nQMq
+         Qxgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711412906; x=1712017706;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6AS6qRiVlQsc1+zZ8NlPzKQQkZa8BexCVQalpdaPfxc=;
-        b=asThyMHSs3vXnsSmpPrkndrNRUHSDwRb8enpJyP2xWlJDKx/7+CqaS6RS86Z+lpNZr
-         hEsR6upna0I7fplkK1emqNP3lzMkToujpwCCKxCsAzEQiJNSA5dPYUu9jI4Ydyu92R90
-         DBSqYR77uho/jzBW435mHlDEh+5N1ukmVb2UiYZarxjgmNpQh/v/TMnabKrVTD+hfocR
-         6THQkaIAoP/WW37iwhCyDKgsVdRt+KoQLguuXWWFaxwDRtnh3BleHAsszW7aamwwMSIh
-         pUcP0+B3ZIj97qa8xaLXOxZ8M8Rz+6Nvg026z9slu18tgc1LG5W+iedmKdcGnE9DBsYI
-         0WkA==
-X-Forwarded-Encrypted: i=1; AJvYcCVTABCUr0TsczXi+bWYvosf3/PMj2KW8xYdWfObDccwJzcI/6ilDOu2rR4QEHAOpDHuPjPwN7alfC4f0bmDK/C0AxJL
-X-Gm-Message-State: AOJu0Ywhof+C/abvenjmImZc71YxK3RmriFoH0lEqiRblsanQHYzG0pZ
-	nM+xnUDG50tNEiFiBNhkT+V9HBD6MLuOmL4WiQwhVMHzWGeJbYoqcQiSf4nyqIdc+qSkmmE9OL+
-	LLN7VLmNLrS7oG1c8br06aDyncltyzyKKaja6
-X-Google-Smtp-Source: AGHT+IF9aQZZlm3m7qhQmoIyJ6RkPwr/Dop+uoHu7fO/1Q5QVzyOPH34BhQ7Hc1bMJCfX+wA5X9L6ZhSH1TjcEziOMA=
-X-Received: by 2002:a05:6512:456:b0:513:2b35:2520 with SMTP id
- y22-20020a056512045600b005132b352520mr5371798lfk.58.1711412905481; Mon, 25
- Mar 2024 17:28:25 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711413704; x=1712018504;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oZ0qd1iGxtr/mWs3kOYHpeMOliTzM44U+9k3boYAHSY=;
+        b=TaZOlAQaNogdje6sNtxlngi4uM6R0eCHnJsQKFkX9V9sbTGP+MzxtjZSBjFwLB3Bt/
+         osW0qZ6/ifD43tCgsguo4HuyuKzVj+w0pBWJmmbR3yqq4bI56RM/QoIwIyyNq2V4cTfE
+         X0rZjSG+IqKD8KP23j/1bE+vDLzW9fLUtNajQK9HNPo4aTYMauv2f8StMmB5rfaFJPdD
+         cxWELZIIb9caGFtSV5JDw6LWjvhC+pCoGxQfH+KMDseTjS3xqnP53Vh1eN0X+er3H45e
+         P65QmZwGT1iCOenUb5QVyFz3nFYQvOVOL5LQpgps9dzFXfFYJ0OMzYowrCnyTrMBZBVu
+         wzRg==
+X-Forwarded-Encrypted: i=1; AJvYcCX5ruWUurh4ZuKVsgx+vtmdi/kOXNXRoUCir1dv+HsZyXggu7Gnzk78hRPHjyDppfICqgJYBrzj3hfBGZa+THOB8MI+bA72lAvq8Pwu
+X-Gm-Message-State: AOJu0Yw7ozq19rX/FsH+5rEEqlFyJZzw864EHC4Op3tNEewIAtDeuQar
+	2JIKMT3wYXpdqc+Wxf/zY/EYIV36Rmdpi4yYrm/nsEcLPUilx9ns
+X-Google-Smtp-Source: AGHT+IEYA+WGKNoGVFoskptYgEJAnpjVW/jus1NyBr8FPL7f00woF98aIvALMq/Ie3Y4t7IfilsxDg==
+X-Received: by 2002:a17:903:228f:b0:1e0:b5d3:3f99 with SMTP id b15-20020a170903228f00b001e0b5d33f99mr8045499plh.26.1711413704161;
+        Mon, 25 Mar 2024 17:41:44 -0700 (PDT)
+Received: from localhost.localdomain ([190.196.101.184])
+        by smtp.gmail.com with ESMTPSA id o16-20020a170902d4d000b001e0a80bc0casm5005148plg.8.2024.03.25.17.41.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Mar 2024 17:41:43 -0700 (PDT)
+From: Camila Alvarez <cam.alvarez.i@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Camila Alvarez <cam.alvarez.i@gmail.com>,
+	syzbot+d2a2c639d03ac200a4f1@syzkaller.appspotmail.com
+Subject: [PATCH] fix array-index-out-of-bounds in bpf_prog_select_runtime
+Date: Mon, 25 Mar 2024 21:38:35 -0300
+Message-Id: <20240326003832.102750-1-cam.alvarez.i@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <6208950d-6453-e797-7fc3-1dcf15b49dbe@huawei.com> <CAHS8izMwTRyqUS0iRtErfAqDVsXRia5Ajx9PRK3vcfo8utJoUA@mail.gmail.com>
-In-Reply-To: <CAHS8izMwTRyqUS0iRtErfAqDVsXRia5Ajx9PRK3vcfo8utJoUA@mail.gmail.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Mon, 25 Mar 2024 17:28:12 -0700
-Message-ID: <CAHS8izPR+SioMKNv3=2ajK=GGOE26BTaxOMykHJfjttqYjx1wQ@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v6 00/15] Device Memory TCP
-To: Yunsheng Lin <linyunsheng@huawei.com>, YiFei Zhu <zhuyifei@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 5, 2024 at 11:38=E2=80=AFAM Mina Almasry <almasrymina@google.co=
-m> wrote:
->
-> On Tue, Mar 5, 2024 at 4:54=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei.c=
-om> wrote:
-> >
-> > On 2024/3/5 10:01, Mina Almasry wrote:
-> >
-> > ...
-> >
-> > >
-> > > Perf - page-pool benchmark:
-> > > ---------------------------
-> > >
-> > > bench_page_pool_simple.ko tests with and without these changes:
-> > > https://pastebin.com/raw/ncHDwAbn
-> > >
-> > > AFAIK the number that really matters in the perf tests is the
-> > > 'tasklet_page_pool01_fast_path Per elem'. This one measures at about =
-8
-> > > cycles without the changes but there is some 1 cycle noise in some
-> > > results.
-> > >
-> > > With the patches this regresses to 9 cycles with the changes but ther=
-e
-> > > is 1 cycle noise occasionally running this test repeatedly.
-> > >
-> > > Lastly I tried disable the static_branch_unlikely() in
-> > > netmem_is_net_iov() check. To my surprise disabling the
-> > > static_branch_unlikely() check reduces the fast path back to 8 cycles=
-,
-> > > but the 1 cycle noise remains.
-> > >
-> >
-> > The last sentence seems to be suggesting the above 1 ns regresses is ca=
-used
-> > by the static_branch_unlikely() checking?
->
-> Note it's not a 1ns regression, it's looks like maybe a 1 cycle
-> regression (slightly less than 1ns if I'm reading the output of the
-> test correctly):
->
-> # clean net-next
-> time_bench: Type:tasklet_page_pool01_fast_path Per elem: 8 cycles(tsc)
-> 2.993 ns (step:0)
->
-> # with patches
-> time_bench: Type:tasklet_page_pool01_fast_path Per elem: 9 cycles(tsc)
-> 3.679 ns (step:0)
->
-> # with patches and with diff that disables static branching:
-> time_bench: Type:tasklet_page_pool01_fast_path Per elem: 8 cycles(tsc)
-> 3.248 ns (step:0)
->
-> I do see noise in the test results between run and run, and any
-> regression (if any) is slightly obfuscated by the noise, so it's a bit
-> hard to make confident statements. So far it looks like a ~0.25ns
-> regression without static branch and about ~0.65ns with static branch.
->
-> Honestly when I saw all 3 results were within some noise I did not
-> investigate more, but if this looks concerning to you I can dig
-> further. I likely need to gather a few test runs to filter out the
-> noise and maybe investigate the assembly my compiler is generating to
-> maybe narrow down what changes there.
->
+BPF documentation specifies that the maximum stack depth for a BPF
+program is 512 bytes. This is not enforced when selecting a bpf
+interpreter, thus casuing an index out of bounds error when trying to
+obtain an interpreter with a bigger stack size.
 
-I did some more investigation here to gather more data to filter out
-the noise, and recorded the summary here:
+This patch enforces the stack size to be not bigger than
+512.
 
-https://pastebin.com/raw/v5dYRg8L
+Reported-by: syzbot+d2a2c639d03ac200a4f1@syzkaller.appspotmail.com
+Signed-off-by: Camila Alvarez <cam.alvarez.i@gmail.com>
+---
+ kernel/bpf/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Long story short, the page_pool benchmark results are consistent with
-some outlier noise results that I'm discounting here. Currently
-page_pool fast path is at 8 cycles
-
-[ 2115.724510] time_bench: Type:tasklet_page_pool01_fast_path Per
-elem: 8 cycles(tsc) 3.187 ns (step:0) - (measurement period
-time:0.031870585 sec time_interval:31870585) - (invoke count:10000000
-tsc_interval:86043192)
-
-and with this patch series it degrades to 10 cycles, or about a 0.7ns
-degradation or so:
-
-[  498.226127] time_bench: Type:tasklet_page_pool01_fast_path Per
-elem: 10 cycles(tsc) 3.944 ns (step:0) - (measurement period
-time:0.039442539 sec time_interval:39442539) - (invoke count:10000000
-tsc_interval:106485268)
-
-I took the time to dig into where the degradation comes from, and to
-my surprise we can shave off 1 cycle in perf by removing the
-static_branch_unlikely check in netmem_is_net_iov() like so:
-
-diff --git a/include/net/netmem.h b/include/net/netmem.h
-index fe354d11a421..2b4310ac1115 100644
---- a/include/net/netmem.h
-+++ b/include/net/netmem.h
-@@ -122,8 +122,7 @@ typedef unsigned long __bitwise netmem_ref;
- static inline bool netmem_is_net_iov(const netmem_ref netmem)
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 696bc55de8e8..8167b3a721e9 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2196,7 +2196,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+ 		BUG_ON(1);
+ 		return 0;
+ }
+-
++#define BPF_MAX_STACK_SIZE 512
+ #define PROG_NAME(stack_size) __bpf_prog_run##stack_size
+ #define DEFINE_BPF_PROG_RUN(stack_size) \
+ static unsigned int PROG_NAME(stack_size)(const void *ctx, const struct bpf_insn *insn) \
+@@ -2345,7 +2345,7 @@ static void bpf_prog_select_func(struct bpf_prog *fp)
  {
- #ifdef CONFIG_PAGE_POOL
--       return static_branch_unlikely(&page_pool_mem_providers) &&
--              (__force unsigned long)netmem & NET_IOV;
-+       return (__force unsigned long)netmem & NET_IOV;
+ #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+ 	u32 stack_depth = max_t(u32, fp->aux->stack_depth, 1);
+-
++	stack_depth = min_t(u32, stack_depth, BPF_MAX_STACK_SIZE);
+ 	fp->bpf_func = interpreters[(round_up(stack_depth, 32) / 32) - 1];
  #else
-        return false;
- #endif
+ 	fp->bpf_func = __bpf_prog_ret0_warn;
+-- 
+2.34.1
 
-With this change, the fast path is 9 cycles, only  a 1 cycle (~0.35ns)
-regression:
-
-[  199.184429] time_bench: Type:tasklet_page_pool01_fast_path Per
-elem: 9 cycles(tsc) 3.552 ns (step:0) - (measurement period
-time:0.035524013 sec time_interval:35524013) - (invoke count:10000000
-tsc_interval:95907775)
-
-I did some digging with YiFei on why the static_branch_unlikely
-appears to be causing a 1 cycle regression, but could not get an
-answer that makes sense. The # of instructions in
-page_pool_return_page() with the static_branch_unlikely and without is
-about the same in the compiled .o file, and my understanding is that
-static_branch will cause code re-writing anyway so looking at the
-compiled code may not be representative.
-
-Worthy of note is that I get ~95% line rate of devmem TCP regardless
-of the static_branch_unlikely() or not, so impact of the static_branch
-is not large enough to be measurable end-to-end. I'm thinking I want
-to drop the static_branch_unlikely() in the next RFC since it doesn't
-improve the end-to-end throughput number and is resulting in a
-measurable improvement in the page pool benchmark.
-
---=20
-Thanks,
-Mina
