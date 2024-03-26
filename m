@@ -1,133 +1,79 @@
-Received: from mta-64-225.siemens.flowmailer.net (mta-64-225.siemens.flowmailer.net [185.136.64.225])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51551643A
-	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 08:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.64.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31026EAF6;
+	Tue, 26 Mar 2024 10:03:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711443491; cv=none; b=EdQu0lRtbVopF0eEP+HL07lLZflxLHVVd2Y0pP7UMKnFLqo5IqRT56JOoqWfhoAPjd06nbLcJiF9b5pO4WJekusoDIgN7WlfvW2Lh0AXJx+BJ1ytPdriMaEK9LtSpsWkdCQ7Vy8MyIakfjNZGQf8UeBJHYRQZwoms7VsqhtSiig=
+	t=1711447428; cv=none; b=HyG4RT/Z9AdRth1ZYOtF3JgRxoc3N8pTSd1XWr7ztB8dH08HiEl0O4NqTRed5Tu5SS8R6D4h5llRfg1kGNx5e5Vr5FVtnmwV2XUxpCfnb9wnCFBhNlerx0f+Xt4kzCCIESLBCb4h/2xPBAjvB5WJC3Z4LIopG9fVRXOPFcuG7h0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711443491; c=relaxed/simple;
-	bh=2NnN3yr0wpdVoxDzh4ChyQUmMIKdzLGg6sxkzDgAI3o=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=gEJGDjpGroWCRwZrPF+xdVwx/9g3m1F3c6x4xCfybqeCp/nd3WJ0UgDn0XC8mDWjLrBiqekgsh4PHvu49iC8PKrupmwbPhN3KdVOU7V3GaqvCP6VwJUfHoOzkOCzWVRMhMzvXm/CaGrK1NIWeghrcPkWRw7aVZZT8B+nCum+Cu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (1024-bit key) header.d=siemens.com header.i=florian.bezdeka@siemens.com header.b=ZnoEPez1; arc=none smtp.client-ip=185.136.64.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+	s=arc-20240116; t=1711447428; c=relaxed/simple;
+	bh=IDMse0cT7YjYFIOnFFN9uh5CktAo+b0xnAUwzKjEoDw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lxJ8jXGJTXiwSNOyPCzg5tuYptuUGwesc4V7WsUR8/oD1apjc+7u7kiDrbJizbidLJzY2nUuwK+G1Ao2irLDpHPNjZxevr4h1aLOXtMfMnVMeeiPEX+BZ5PEtf3Xb1hWjpvoTCQk971qfwljfqd5q1w9TLy8YnNmHXD+s9VlKZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U90WIQ6S; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=siemens.com header.i=florian.bezdeka@siemens.com header.b="ZnoEPez1"
-Received: by mta-64-225.siemens.flowmailer.net with ESMTPSA id 2024032608565695ee54dbec7522cafe
-        for <bpf@vger.kernel.org>;
-        Tue, 26 Mar 2024 09:57:56 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=florian.bezdeka@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=2NnN3yr0wpdVoxDzh4ChyQUmMIKdzLGg6sxkzDgAI3o=;
- b=ZnoEPez1s9mkret+84aiVoBbI7kPnBo2K4g9LdoGjJ6Vk+54YX25G3Z0y+4eJYiwYj9198
- nShsv9+TKBXTbNRidg9c/ePK/1HTATRNvXrX5F8nP9DbiWexkWFe2E3jYfd0oSnZt4QonXdX
- PS7EotffJHiFxuv+AOwqR675HZ0WQ=;
-Message-ID: <d2623ac0f1cb07a23976416cdcf9eee1986747b0.camel@siemens.com>
-Subject: Re: [PATCH iwl-next,v4 1/1] igc: Add Tx hardware timestamp request
- for AF_XDP zero-copy packet
-From: Florian Bezdeka <florian.bezdeka@siemens.com>
-To: Song Yoong Siang <yoong.siang.song@intel.com>, Jesse Brandeburg
- <jesse.brandeburg@intel.com>, Tony Nguyen <anthony.l.nguyen@intel.com>, 
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Richard Cochran <richardcochran@gmail.com>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
- <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@google.com>, Vinicius
- Costa Gomes <vinicius.gomes@intel.com>, Kurt Kanzenbach
- <kurt@linutronix.de>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, xdp-hints@xdp-project.net
-Date: Tue, 26 Mar 2024 09:56:54 +0100
-In-Reply-To: <20240325020928.1987947-1-yoong.siang.song@intel.com>
-References: <20240325020928.1987947-1-yoong.siang.song@intel.com>
-Autocrypt: =?US-ASCII?Q?addr=3Dflorian.bezdeka@siemen?=
- =?US-ASCII?Q?s.com;_prefer-encrypt=3Dmutual?=
- =?US-ASCII?Q?;_keydata=3DmQENBFwsf8QBCAC2f4AQWu92LZC4bKyUYRxWIpWqGz790s?=
- =?US-ASCII?Q?pcYkXO7M8kfea4iC8qMxv2hT4HT0LTncRP6WiovVN2PeoOBfN5BSa5z?=
- =?US-ASCII?Q?LIrZGVXh7KmbdKhwhVU+ynoTq9G5uaO2Kos7Vv7nNCuatIq8tSNILuoB?=
- =?US-ASCII?Q?DFTAZnJW3y1V7YOwhDCPl5gbLSYqUY3OE0yksbtCcVI5istT4ED6mjQ?=
- =?US-ASCII?Q?9W+3uH1LrgFeEF0oxTjrEPxO5ZYATz0f/TYC8WiM0sMrV+n0eMDntlzA?=
- =?US-ASCII?Q?63D6lcRi5mNp2jPsJkq3tbWqyCrAe1sKPVJB44ekFwCk0kDIuhR13Q3R?=
- =?US-ASCII?Q?HE4Or/9sznhMUQjYueWXvTZfzH/VsQJHABEBAAG0LUZsb3JpYW4gQmV6?=
- =?US-ASCII?Q?ZGVrYSA8Zmxvcmlhbi5iZXpkZWthQHNpZW1lbnMuY29tPokBVAQTAQg?=
- =?US-ASCII?Q?APhYhBAzL4P3jiTHdthsq4cj0O1fnOEBVBQJcLH/FAhsDBQkB4TOABQs?=
- =?US-ASCII?Q?JCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEMj0O1fnOEBVc6YIAJ8oO4x?=
- =?US-ASCII?Q?TjOCpjxaS8XQE6VW50HE9I6ShbQVWUEGhF4qzJaACTQDjdg/aio7qNRa?=
- =?US-ASCII?Q?mnAy83Hy9sAxKVhXs+1R1fstN+JO8zgD3tJspucUkCiXlYu+Qcv2d6C?=
- =?US-ASCII?Q?ostv+h4nv8fkSoeLfsQu3GJt6W0RN7t+8H/9fUMXyuB8GWo4bhaZcti6?=
- =?US-ASCII?Q?78CotGLs6UGZpYEGiAMto8+9zVO/tdY1BkREM6bCVeQ9FnnpTRQy/tU5?=
- =?US-ASCII?Q?xemMWJI64UUP92TUIbQ3TZKAz4iG/Mle+YjiHBGrJM7TxjE3sDg5J2Fa?=
- =?US-ASCII?Q?HX4wmZPKGdB6wANKupf6HMMt2y7gduVmMKzgb8PDMLPZwWBSvjELQqz?=
- =?US-ASCII?Q?hiZAQ0EYLSqZwEIAIR4HMTQC4F4YxatIl6MIDY03zD4M3ZQpgyQ6QFL9?=
- =?US-ASCII?Q?Dq0I+PGc7A6z5rsGl76+D8pDFSN2BBJiLLlQadxKc3ZyTTlRp4bc=09bf?=
- =?US-ASCII?Q?FZRmsAXwVfLtBauXxGo9pkyhk8Vcjb2EJm6XR8PH99buGOXlFfTLsmeA?=
- =?US-ASCII?Q?ji/F4jU3qlUnwZMBvHZwRSFqOGdwKPMvW3FppfmREQ0o4xJ4b/bxGXx?=
- =?US-ASCII?Q?ko21uyR/S5rEJx6X8Ukw95h3JinXHx/g2cjbKHrWBDKoqtX9IZCamDny?=
- =?US-ASCII?Q?R+sfLWQbOKOrLNYLwLAQwOTVlZWTgue10G1q6Zi0r8RQ2T1Uy+ZLYagv?=
- =?US-ASCII?Q?Cbzp/lT7p3mv3ba68llX896c0AEQEAAbQ/QmV6ZGVrYSwgRmxvcmlhbj?=
- =?US-ASCII?Q?sgQmV6ZGVrYSBGbG9yaWFuIDxmbG9yaWFuLmJlemRla2FAc2llbWVuc?=
- =?US-ASCII?Q?y5jb20+iQEcBBABCAAGBQJgtKpnAAoJEEoHyE9rG1dPpJYH+gPnqpu7h?=
- =?US-ASCII?Q?4fsWOxco38e74MsazoUdfndTYP5tgaYTVE51ZhOZBl+4jYaywsmmFm9g?=
- =?US-ASCII?Q?6N4Tw3GiMEDB4YU1X7gQZ60fDKpYL5SnCu5qZirJ4RCV4LDA0789ir+6?=
- =?US-ASCII?Q?8/zfwXBTV5QoMH0+MkXB4BL+Km3f7X/GdN5oRoItAyKDBcEfGJo6afT?=
- =?US-ASCII?Q?PtcUdI9n7ExCSfJwb0SBvvkvUsdNppFDGOOHSioINbEHBs2VUvE43toM?=
- =?US-ASCII?Q?4mPLfhFIAtDcn5Byt80/kotU8v3Iyf86NYCa+0h77xTsKHcCUqe8Rvow?=
- =?US-ASCII?Q?bCIbig9GGbbd54TasfqQQOiAkn/WeGl33+UIVX1Q8zo7eyMJHzLJQ3I=3D?=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U90WIQ6S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B24B9C433F1;
+	Tue, 26 Mar 2024 10:03:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711447427;
+	bh=IDMse0cT7YjYFIOnFFN9uh5CktAo+b0xnAUwzKjEoDw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=U90WIQ6SLIkmc8dDLb0GpKIKBhE5ya2cuau2V4KPYdzd53rfLX9dMxfZK37iRm9d3
+	 B9NoRNqGbQmN2pTKfYwp7XYV/9Kppa3hrfRy09tm6RYDw8dbTZHgEhSVb4YSoAUM4G
+	 o4sO9SwhyQNDNShCV7JyjEnAA2ss16n5oa5DvdJmd8zpLruvm54eXPmeM7uQZrsUz5
+	 KbrRmqyA8P29ELtjIcTTkqIQ4XgMnS7HmX75xuSBI6m2GE3Q1IDzEYyitv7HAraNBU
+	 gYOO2CM/k9cB+e1G7kKfbd7FAycdFpGCuw3v1XakYYFdSIjjQO81oXgvH7YzDbMGrO
+	 ANNBz1LnalsCg==
+From: Geliang Tang <geliang@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>,
+	bpf@vger.kernel.org,
+	mptcp@lists.linux.dev
+Subject: [PATCH bpf-next v4 0/2] Use start_server and connect_fd_to_fd
+Date: Tue, 26 Mar 2024 18:03:37 +0800
+Message-Id: <cover.1711447102.git.tanggeliang@kylinos.cn>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-68982:519-21489:flowmailer
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2024-03-25 at 10:09 +0800, Song Yoong Siang wrote:
-> This patch adds support to per-packet Tx hardware timestamp request to
-> AF_XDP zero-copy packet via XDP Tx metadata framework. Please note that
-> user needs to enable Tx HW timestamp capability via igc_ioctl() with
-> SIOCSHWTSTAMP cmd before sending xsk Tx hardware timestamp request.
->=20
-> Same as implementation in RX timestamp XDP hints kfunc metadata, Timer 0
-> (adjustable clock) is used in xsk Tx hardware timestamp. i225/i226 have
-> four sets of timestamping registers. *skb and *xsk_tx_buffer pointers
-> are used to indicate whether the timestamping register is already occupie=
-d.
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Let me make sure that I fully understand that: In my own words:
+v4:
+ - Matt reminded me that I shouldn't send a square-to patch to BPF (thanks),
+   so I update them into two patches in v4.
 
-With that applied I'm able to get the point in time from the device
-when a specific frame made it to the wire. I have to enable that
-functionality using the mentioned ioctl() call first, and then check
-the meta area (located in the umem right before the frame payload)
-while consuming the completion queue/ring. Correct?
+v3:
+ - split v2 as two patches as Daniel suggested.
+ - The patch "selftests/bpf: Use start_server in bpf_tcp_ca" is merged
+   by Daniel (thanks), but I forgot to drop 'settimeo(lfd, 0)' in it, so
+   I send a squash-to patch to fix this.
 
-If so, we now have a feedback channel for meta information for/from TX.
-Are there any plans - or would it be possible - to support Earliest
-TxTime First (NET_SCHED_ETF) QDisc based on that channel? In the past
-we had the problem that we we're missing a feedback channel to
-communicate back invalid lunch times.
-=20
->=20
-> Furthermore, a boolean variable named xsk_pending_ts is used to hold the
-> transmit completion until the tx hardware timestamp is ready. This is
-> because, for i225/i226, the timestamp notification event comes some time
-> after the transmit completion event. The driver will retrigger hardware i=
-rq
-> to clean the packet after retrieve the tx hardware timestamp.
->=20
-> Besides, xsk_meta is added into struct igc_tx_timestamp_request as a hook
-> to the metadata location of the transmit packet. When the Tx timestamp
-> interrupt is fired, the interrupt handler will copy the value of Tx hwts
-> into metadata location via xsk_tx_metadata_complete().
->=20
-> This patch is tested with tools/testing/selftests/bpf/xdp_hw_metadata
-> on Intel ADL-S platform. Below are the test steps and results.
+Geliang Tang (2):
+  selftests/bpf: Use connect_fd_to_fd in bpf_tcp_ca
+  selftests/bpf: Drop settimeo in do_test
+
+ tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
+
+-- 
+2.40.1
 
