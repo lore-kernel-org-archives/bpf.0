@@ -1,411 +1,237 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CEF313C680;
-	Tue, 26 Mar 2024 14:55:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711464907; cv=none; b=X6t34KzFPiIXsLfq3+g8NIdYDN2+1eLinexjuqjiWVf7uUenMZWs2epfeOZfVNTc0kdIXMjfPyHM/J2PEJnFiObuaxMDKy6JFMEszEwF78+dALIYke5BT+ih6+KdRSPYSUPd2MGIzg7UWl2YmcfmcN2RDrP7Yu0+Zb1gL3drFIg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711464907; c=relaxed/simple;
-	bh=OkKUUc2EsY1HkFkCZesI8s/5V6S6mbVPGD3caXQZEEM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Flh/Yx5l9cePtLa8I+LLtuZdYGjP0OVbclXAjzf0tRobw8sOA9Qm8BKVCNSMmINy7HIB33HOvM18QIZi0t7I6TYOljuEvVAsPxyXLQoBgy1UQvKMPzt+i7uE/10rV9UTbVHCJLWA2GJCG8L4YoFCQoNHMcZ3ksqgaSWRmmrJHIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t4c4OA9v; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58BB01F168;
+	Tue, 26 Mar 2024 14:55:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711464940; cv=fail; b=fiYqN1FWmAJZ/huEJ5jrXL44sVwAJxznOyI/RhFa7O39VqlxZKdnrQ2XlEfc9fGmsrGUL/BRIOYfW4JDmxn4IVvM5DXdJs0RXX8bM7G1y+MBVIHKI4tEFJU45Mwk4pt3v+amrlo35UU4dKvgx2g94u+xg/gZtcVoZG5/kb3b7Wo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711464940; c=relaxed/simple;
+	bh=AFiGdtVpYvGkYQpcQdwjuZS8tPo6pz+PizLTBxbITEc=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=QuQOZxr4Q2Jez7PeP0npaGBMoxHfiUmU0LNgNua+7OESMbSoSC6KkmlaBjMMfH1zSg4K/V6vPJQm34yAj4JkY+c/m+Phoy42z0/h+MU3OConnLd2LnQV2LCk4+1X0xUkt6/dYAQRMOlS9FhvNgnIFtOsWf9wLCOTAkQ5j9ZR+38=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UvryIMkY; arc=fail smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t4c4OA9v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1554C433F1;
-	Tue, 26 Mar 2024 14:55:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711464906;
-	bh=OkKUUc2EsY1HkFkCZesI8s/5V6S6mbVPGD3caXQZEEM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=t4c4OA9vcR5PmSMiLBFdXrYdA07QJFREj+2/8VH5bEIZuPBIYQ/RrTMz7phZMW+an
-	 7HgH0OmQiw/L5py4Ye4IE14uqG7Thd9Efn5b/4dYol4ZZ0ll8JToJLghrRXGdTzeux
-	 8OUPLvpTVgQbdJzdLHshP+lygO5KQ6aXCcfFlp7Kj0H9H0mZbzsEC32ORYF15mqEWk
-	 uFrPB9f/TQVC6Mj2op5oh6IYtwy28Cz1WWtU+ACH/GnAShoI6NwD1c9hUi0qsE/kF1
-	 /bhuglj3TsXSVO8iWKXL3n+cI0uy8YRzljUbT2aJqXmIEqJotCY/iBEe8+gS/EQkcC
-	 3wREc95DfGWiw==
-From: Arnd Bergmann <arnd@kernel.org>
-To: linux-kbuild@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>
-Cc: Nicolas Schier <nicolas@fjasle.eu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Kees Cook <keescook@chromium.org>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org
-Subject: [PATCH 11/12] [v4] kallsyms: rework symbol lookup return codes
-Date: Tue, 26 Mar 2024 15:53:38 +0100
-Message-Id: <20240326145348.3318887-2-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240326144741.3094687-1-arnd@kernel.org>
-References: <20240326144741.3094687-1-arnd@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UvryIMkY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711464938; x=1743000938;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=AFiGdtVpYvGkYQpcQdwjuZS8tPo6pz+PizLTBxbITEc=;
+  b=UvryIMkYH5OqYnhU4AcEbVQTXUOjqE6WV2LGdpG+ySP4OQCBa/EX79fB
+   hYYRaZePM5Ox5zoljydEfUFamWIXbtW4AAdafCC15bKIvnokoLnLv8aAK
+   Suo0yegRmdAsJ8qo1pgPJEnpFWMHk0Cel5pPKwjF0ewgnDy8hBNBuNzDR
+   XboPIaMP4OJ3nTe+GkrsPq7Pb2f9VO43qFENUCMQ4r+P+/ZArBlzIPHAx
+   COvua5JXlCgzGN7WBvKCFYRGB8OnvqwN+4o2JvOOsZhiTf8Ceqsvj6rli
+   UDVkSIwxMFRC3CoflgQpjKpR7i9dFfy+8BJ1e0+HH+uu7orqDtJMf1Vq2
+   A==;
+X-CSE-ConnectionGUID: haHF2h15Rxq6hDMr7SG1WQ==
+X-CSE-MsgGUID: VABtGsYuRiWugtikt/eWDw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="17064666"
+X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
+   d="scan'208";a="17064666"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 07:55:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
+   d="scan'208";a="20705240"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orviesa005.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 26 Mar 2024 07:55:38 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 26 Mar 2024 07:55:37 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Tue, 26 Mar 2024 07:55:37 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Tue, 26 Mar 2024 07:55:36 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BOKaAMvS/XuYUhAhzzX7SNF9y8xpSTuxdZBkA1sWBto4RPHdoXkcHZ1YGwZctloR55QzC2we6AZwZkCM1bFVLaUHxJNpGRSapZZoHG/ypw5a972CS6qpEYfHIVhiROaDflwVnVddEKFlxoUR77Rxe7w4ItCKIpLAFAR8A0piZMgj0cyzsk/T3v4rwLDRAID9fg4+NLzH7zSAdv0ZqInB+op5h4OhKUCevUJXwjZo/VNUlBn2kUHScI3SD+kigl6njCPohshukbbXBI9OwnIG8YlwB8iKefNqVUNhMMsi0NBfEYWnqH+RFvk37rNX1hOpqGZKhYihqEUkKCVHvTitXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AFiGdtVpYvGkYQpcQdwjuZS8tPo6pz+PizLTBxbITEc=;
+ b=fYaXBmYAyFI01mpxbHA9b66s5+o5nto5bfilGuQE2L8KzzDxsBZNgOpcb0CqomEyUBKCC/mPgqWaLOpkL77aHnWmvf4xHWhnid9Pk6jvOW4jIeNQn9mVZ6xsOeUsz2GWXkfmpM1alExp7V39ajhCjHiT6eTJCcvOw0+9/S9At9tS/MmJRNuqhZDd75fuk6Io5Q8e8xkz1MMIhcZSyVn9sku/x8SWRcXc/HoaPf1iDjPC3wceHjM8HlesZR8qJUWTFF8U9wTfilm6i9424NSJWI/D4MKOrJTQ8Ln/kJdtqQVMrn1dXyC9Pxyu5v+N5kXwVommekaBIWiAarPD/nOGuw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from PH0PR11MB5830.namprd11.prod.outlook.com (2603:10b6:510:129::20)
+ by SA1PR11MB8475.namprd11.prod.outlook.com (2603:10b6:806:3a3::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.33; Tue, 26 Mar
+ 2024 14:55:33 +0000
+Received: from PH0PR11MB5830.namprd11.prod.outlook.com
+ ([fe80::9445:5793:b0b7:711a]) by PH0PR11MB5830.namprd11.prod.outlook.com
+ ([fe80::9445:5793:b0b7:711a%7]) with mapi id 15.20.7409.031; Tue, 26 Mar 2024
+ 14:55:33 +0000
+From: "Song, Yoong Siang" <yoong.siang.song@intel.com>
+To: Kurt Kanzenbach <kurt@linutronix.de>, "Bezdeka, Florian"
+	<florian.bezdeka@siemens.com>, "Brandeburg, Jesse"
+	<jesse.brandeburg@intel.com>, "Nguyen, Anthony L"
+	<anthony.l.nguyen@intel.com>, "David S . Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Richard Cochran <richardcochran@gmail.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper
+ Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@google.com>, "Gomes, Vinicius"
+	<vinicius.gomes@intel.com>, "Fijalkowski, Maciej"
+	<maciej.fijalkowski@intel.com>
+CC: "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "xdp-hints@xdp-project.net"
+	<xdp-hints@xdp-project.net>
+Subject: RE: [xdp-hints] Re: [PATCH iwl-next,v4 1/1] igc: Add Tx hardware
+ timestamp request for AF_XDP zero-copy packet
+Thread-Topic: [xdp-hints] Re: [PATCH iwl-next,v4 1/1] igc: Add Tx hardware
+ timestamp request for AF_XDP zero-copy packet
+Thread-Index: AQHaf1vDcRX66gQlB0+gJtjiHFgRbLFJ/peAgAAUiKA=
+Date: Tue, 26 Mar 2024 14:55:33 +0000
+Message-ID: <PH0PR11MB583028B2023E1E809B45B51DD8352@PH0PR11MB5830.namprd11.prod.outlook.com>
+References: <20240325020928.1987947-1-yoong.siang.song@intel.com>
+ <d2623ac0f1cb07a23976416cdcf9eee1986747b0.camel@siemens.com>
+ <87h6gtb0p0.fsf@kurt.kurt.home>
+In-Reply-To: <87h6gtb0p0.fsf@kurt.kurt.home>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR11MB5830:EE_|SA1PR11MB8475:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: mFVgk/6+3g4sIDRq/Eh0X5zPto+0ldenQi3e8iawaUyf/AVw0oOeDmlS0kXIuVVvBWMWM/W+b0QZfFF23IIHgK7MbslP6NU6oIXAAsUNDz74P6AH9q6LJCN/aannqfQn0WHTEB4Rc2qoBIUjSpNIlv1PbHIS5Su9EOdK1n/BCor9ZRkLiJ2CSiX0x6Rsbw26pnPB4qkzmDruH/6ZQZIVd3SDZLWEfWkD39PFDKMzCXDh9ME0aS6ENBwbROFh1H/4BMJ7rEJlp/SFOyo9O7Lfuooi58Dfw8qg/+2fJVnr25tjc9cDq+w6NWyUhh6hOz9FOgTI6dSK2OyWtiQDBcz6bvDyahClCrkpUGluBFO25XtV9kpiMK6DFYFC1fuxrrZ9f1iDeOVOYy9kR64MzfHoD/o16T69z9LT4COD7SU+f0Sp1T+N9DK6oQYrzTMidfXVwybBBChGnNonGhxw8P+nNSSfmGHmhJdPFhrRzdjdXQ49nLtAQDeeSLrWrc+GKXkbW4O7BOK0zjAxzazlX9DRUK60WjVGgZpcioYgtS4rQatuzcIk3yYsRlcTHO/CD0ylO34YiYoBScyEc1qEEg0AZzXqGF2HmmHn2gYWFUoZjBNw8M0+e+h6hjcrQDBxD4o/lXLVgwwvg1ZRPX9nlOfBlg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5830.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015)(7416005)(921011);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?og/6LcLMwYMQGxTSXlch13FqdWAhQD7qFlu5OgdW8pyfz32UV6EprUZ3a6IR?=
+ =?us-ascii?Q?FM8uqCyCj9F4Kbmr6uYr40S6ViLJIwt8GSpkHwInUhP/WKFkbE1c/CRqTdc6?=
+ =?us-ascii?Q?Fnlx+vIMb+dWS2CXd+k4zOh6DHGbopzutSf7qoJOv+bpcpT0ek55C007bV+n?=
+ =?us-ascii?Q?blrPwD5QCAwafIhu9OR7cvMVfLTGJVGBk4CxKMdJc0FMZG2UwECGvkItXF5k?=
+ =?us-ascii?Q?UvI6BbZbu5dhBQADUjjorYzEpFZEmipEodivSc9pe8x8OhZQYKreSL6pMB7D?=
+ =?us-ascii?Q?6DEfh6Gzd74FgUUNuVXqHhKCeCHepn3eMQQGHHFUBw5cUGc9fv0xJdBJd2lU?=
+ =?us-ascii?Q?iVkw4axHXXKBDplm+D9pRs/NevfohkqUPlWIFh4KcdJtGrBV0zrjfEXhWl0j?=
+ =?us-ascii?Q?+zxH7C27t+92YbgJgBORFLiZ2rma8xXmeU5l++1gMvhJDJtQip4UVTAVUPGa?=
+ =?us-ascii?Q?n/rNk5CV7em3/PfgySvfwfbOm0GU68DJN3L4q2nNrCse9D+soU0nJ4upc4oE?=
+ =?us-ascii?Q?9GmNrVd2etLwcE7gBpzVbeJfhuoh4y4JToYtqoPR1ZNX7uKnKWp1Jezy/fX3?=
+ =?us-ascii?Q?TgALBWfAeDGFrn+Ik23eordwjOHhUnUFBOcod1qgb5OqEfpEiBIHWqMoB9OO?=
+ =?us-ascii?Q?9N7WFarsl/RbPK/SV0M4UJYKBVKiyzss1V0X90XSqVyOuLYn8ACoGoL8twcn?=
+ =?us-ascii?Q?LjxqMiQsQRdIO7xemTb92zI1AI4glj6agidsxpz4d1VaoPcJ5FN5JivtxE2C?=
+ =?us-ascii?Q?GOluqh+iAzjMrGMhQZ6Z1hwhw9ptT1y+iNjwzNIs6HUPLUVVUVhpfjexfDHG?=
+ =?us-ascii?Q?C2APDQf6AJ8jIwSL/3vKemEbrrBxTxSzixucpQ08iZ45mC2BbXpM+nt+Q/7T?=
+ =?us-ascii?Q?+I8jIh7FItR3HFhiDW06Ahpp7oZ8yoxkOSjTrnUcZYQVO2nX7tzFpwaOmhaA?=
+ =?us-ascii?Q?94M5J0I140HFqcRfDLwJeL6dTa4zWHN8X0QafYPdznJG4zJcYu4jqAr2l7O0?=
+ =?us-ascii?Q?pQp16BuTWMhwfuoAqKVYdKIY/a22PFxaZOKUzvBFhzKkrd5zJCsCeie96hkK?=
+ =?us-ascii?Q?avTa0vU5vTcM3WqzMIEKpNgSOo1QIc4XFTA96rTO6ab8kxyRe7qkO+XXyWnq?=
+ =?us-ascii?Q?5Bx7M9hgGMQjiGVYh07yfWDuJmGLpSkoQFrqX9c9kyfEnXfRbHe0OYgeqqXA?=
+ =?us-ascii?Q?zErUktcPFnCWAhQAG34FaAHelMeX1KiapTKN1aMqwy2fTgDENepa7KdwL9IL?=
+ =?us-ascii?Q?O3uBF49D9+lGDndJXH1PeGg7NCeAWL0Q3yMY9N5jF2PajxVzlaPs0zwApQ/j?=
+ =?us-ascii?Q?JLZaGfp+CrYade3PcuSTvF97Sba8cM/aKP0LL3xF2PPpO0Fs/3UeAE0Wyr7m?=
+ =?us-ascii?Q?YFxI7KmcMP0aYTIF843idE/YPhcnc4JLAuOyjxRl5HpIrABrijoRUySdJEnW?=
+ =?us-ascii?Q?u0Shlie8Vpg2sLroZ+A/iarwEKaZm2Ni+Zf43jr8LauFlVhFYP4jgkh4SYzC?=
+ =?us-ascii?Q?gVXQ5F18kErGbhCoiyo1zjJxJLZo7aWUkIgw3j9PI7gZLR/furKi1glmqmAx?=
+ =?us-ascii?Q?DlYeMU6kQjmCwBgMnAwB5kaoeACj38jkpcG6le5uta3WeO2jDZJTq99vybrn?=
+ =?us-ascii?Q?+g=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5830.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a1c5213e-82e4-4a90-856e-08dc4da4c9d3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Mar 2024 14:55:33.5628
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UkAxq41FP9fx4KtprjHbZYgUcSmqFkfZ1ZVRPlksHAcHzapw9GJ9P5xlZwJklv/OBSKVnEo9ioFrcR0iDwYI3WreRT8XSR3bcJjQqO2RfAQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB8475
+X-OriginatorOrg: intel.com
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tuesday, March 26, 2024 9:08 PM, Kurt Kanzenbach <kurt@linutronix.de> wr=
+ote:
+>Hi Florian,
+>
+>On Tue Mar 26 2024, Florian Bezdeka wrote:
+>> On Mon, 2024-03-25 at 10:09 +0800, Song Yoong Siang wrote:
+>>> This patch adds support to per-packet Tx hardware timestamp request to
+>>> AF_XDP zero-copy packet via XDP Tx metadata framework. Please note that
+>>> user needs to enable Tx HW timestamp capability via igc_ioctl() with
+>>> SIOCSHWTSTAMP cmd before sending xsk Tx hardware timestamp request.
+>>>
+>>> Same as implementation in RX timestamp XDP hints kfunc metadata, Timer =
+0
+>>> (adjustable clock) is used in xsk Tx hardware timestamp. i225/i226 have
+>>> four sets of timestamping registers. *skb and *xsk_tx_buffer pointers
+>>> are used to indicate whether the timestamping register is already occup=
+ied.
+>>
+>> Let me make sure that I fully understand that: In my own words:
+>>
+>> With that applied I'm able to get the point in time from the device
+>> when a specific frame made it to the wire. I have to enable that
+>> functionality using the mentioned ioctl() call first, and then check
+>> the meta area (located in the umem right before the frame payload)
+>> while consuming the completion queue/ring. Correct?
 
-Building with W=1 in some configurations produces a false positive
-warning for kallsyms:
+Hi Florian,
 
-kernel/kallsyms.c: In function '__sprint_symbol.isra':
-kernel/kallsyms.c:503:17: error: 'strcpy' source argument is the same as destination [-Werror=restrict]
-  503 |                 strcpy(buffer, name);
-      |                 ^~~~~~~~~~~~~~~~~~~~
+Yes, you are right. But before you pass the frame to driver, make sure
+you request Tx metadata hardware timestamp feature by setting
+XDP_TXMD_FLAGS_TIMESTAMP flag.
+You can refer to tools/testing/selftests/bpf/xdp_hw_metadata.c
+on how to do it.=20
 
-This originally showed up while building with -O3, but later started
-happening in other configurations as well, depending on inlining
-decisions. The underlying issue is that the local 'name' variable is
-always initialized to the be the same as 'buffer' in the called functions
-that fill the buffer, which gcc notices while inlining, though it could
-see that the address check always skips the copy.
+>>
+>> If so, we now have a feedback channel for meta information for/from TX.
+>> Are there any plans - or would it be possible - to support Earliest
+>> TxTime First (NET_SCHED_ETF) QDisc based on that channel? In the past
+>> we had the problem that we we're missing a feedback channel to
+>> communicate back invalid lunch times.
+>
+>Just asking: How would that work? AFAIK XDP bypasses the Qdisc
+>layer. Currently invalid Launch Times are accounted in the ETF Qdisc
+>itself. Does that mean every driver has to take care of it?
+>
+>Thanks,
+>Kurt
 
-The calling conventions here are rather unusual, as all of the internal
-lookup functions (bpf_address_lookup, ftrace_mod_address_lookup,
-ftrace_func_address_lookup, module_address_lookup and
-kallsyms_lookup_buildid) already use the provided buffer and either return
-the address of that buffer to indicate success, or NULL for failure,
-but the callers are written to also expect an arbitrary other buffer
-to be returned.
+Florian & Kurt,
 
-Rework the calling conventions to return the length of the filled buffer
-instead of its address, which is simpler and easier to follow as well
-as avoiding the warning. Leave only the kallsyms_lookup() calling conventions
-unchanged, since that is called from 16 different functions and
-adapting this would be a much bigger change.
+Yes, me and Stanislav are trying to add Earliest TxTime First / Launch Time=
+ to the framework.
+Please refer to [1] for the patchset. The metadata framework will just pass=
+ the
+Launch time value to driver, and driver need to handle the rest.
+In the patchset, I am enabling it on stmmac driver only, but we need more d=
+rivers
+to check whether the design is feasible for different drivers, cause each d=
+river is
+having their own limitation on launch time. Therefore, after this tx hwts p=
+atch accepted,
+I will try to enable launch time on igc driver, and submit new version.=20
 
-Link: https://lore.kernel.org/all/20200107214042.855757-1-arnd@arndb.de/
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-v4: fix string length
-v3: use strscpy() instead of strlcpy()
-v2: complete rewrite after the first patch was rejected (in 2020). This
-    is now one of only two warnings that are in the way of enabling
-    -Wextra/-Wrestrict by default.
----
- include/linux/filter.h   | 14 +++++++-------
- include/linux/ftrace.h   |  6 +++---
- include/linux/module.h   | 14 +++++++-------
- kernel/bpf/core.c        |  7 +++----
- kernel/kallsyms.c        | 23 ++++++++++++-----------
- kernel/module/kallsyms.c | 26 +++++++++++++-------------
- kernel/trace/ftrace.c    | 13 +++++--------
- 7 files changed, 50 insertions(+), 53 deletions(-)
+Kurt is right that current metadata framework is lacking a way to feedback =
+whether
+the launch time is invalid or not. Maybe we can try to enable launch time w=
+ithout feedback,
+then discuss about the status report design.
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index c99bc3df2d28..9d4a7c6f023e 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1168,18 +1168,18 @@ static inline bool bpf_jit_kallsyms_enabled(void)
- 	return false;
- }
- 
--const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
-+int __bpf_address_lookup(unsigned long addr, unsigned long *size,
- 				 unsigned long *off, char *sym);
- bool is_bpf_text_address(unsigned long addr);
- int bpf_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
- 		    char *sym);
- struct bpf_prog *bpf_prog_ksym_find(unsigned long addr);
- 
--static inline const char *
-+static inline int
- bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym)
- {
--	const char *ret = __bpf_address_lookup(addr, size, off, sym);
-+	int ret = __bpf_address_lookup(addr, size, off, sym);
- 
- 	if (ret && modname)
- 		*modname = NULL;
-@@ -1223,11 +1223,11 @@ static inline bool bpf_jit_kallsyms_enabled(void)
- 	return false;
- }
- 
--static inline const char *
-+static inline int
- __bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		     unsigned long *off, char *sym)
- {
--	return NULL;
-+	return 0;
- }
- 
- static inline bool is_bpf_text_address(unsigned long addr)
-@@ -1246,11 +1246,11 @@ static inline struct bpf_prog *bpf_prog_ksym_find(unsigned long addr)
- 	return NULL;
- }
- 
--static inline const char *
-+static inline int
- bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym)
- {
--	return NULL;
-+	return 0;
- }
- 
- static inline void bpf_prog_kallsyms_add(struct bpf_prog *fp)
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 54d53f345d14..56834a3fa9be 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -87,15 +87,15 @@ struct ftrace_direct_func;
- 
- #if defined(CONFIG_FUNCTION_TRACER) && defined(CONFIG_MODULES) && \
- 	defined(CONFIG_DYNAMIC_FTRACE)
--const char *
-+int
- ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym);
- #else
--static inline const char *
-+static inline int
- ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym)
- {
--	return NULL;
-+	return 0;
- }
- #endif
- 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 1153b0d99a80..118c36366b35 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -922,11 +922,11 @@ int module_kallsyms_on_each_symbol(const char *modname,
-  * least KSYM_NAME_LEN long: a pointer to namebuf is returned if
-  * found, otherwise NULL.
-  */
--const char *module_address_lookup(unsigned long addr,
--				  unsigned long *symbolsize,
--				  unsigned long *offset,
--				  char **modname, const unsigned char **modbuildid,
--				  char *namebuf);
-+int module_address_lookup(unsigned long addr,
-+			  unsigned long *symbolsize,
-+			  unsigned long *offset,
-+			  char **modname, const unsigned char **modbuildid,
-+			  char *namebuf);
- int lookup_module_symbol_name(unsigned long addr, char *symname);
- int lookup_module_symbol_attrs(unsigned long addr,
- 			       unsigned long *size,
-@@ -955,14 +955,14 @@ static inline int module_kallsyms_on_each_symbol(const char *modname,
- }
- 
- /* For kallsyms to ask for address resolution.  NULL means not found. */
--static inline const char *module_address_lookup(unsigned long addr,
-+static inline int module_address_lookup(unsigned long addr,
- 						unsigned long *symbolsize,
- 						unsigned long *offset,
- 						char **modname,
- 						const unsigned char **modbuildid,
- 						char *namebuf)
- {
--	return NULL;
-+	return 0;
- }
- 
- static inline int lookup_module_symbol_name(unsigned long addr, char *symname)
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 696bc55de8e8..ffc232333643 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -735,11 +735,11 @@ static struct bpf_ksym *bpf_ksym_find(unsigned long addr)
- 	return n ? container_of(n, struct bpf_ksym, tnode) : NULL;
- }
- 
--const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
-+int __bpf_address_lookup(unsigned long addr, unsigned long *size,
- 				 unsigned long *off, char *sym)
- {
- 	struct bpf_ksym *ksym;
--	char *ret = NULL;
-+	int ret = 0;
- 
- 	rcu_read_lock();
- 	ksym = bpf_ksym_find(addr);
-@@ -747,9 +747,8 @@ const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		unsigned long symbol_start = ksym->start;
- 		unsigned long symbol_end = ksym->end;
- 
--		strncpy(sym, ksym->name, KSYM_NAME_LEN);
-+		ret = strscpy(sym, ksym->name, KSYM_NAME_LEN);
- 
--		ret = sym;
- 		if (size)
- 			*size = symbol_end - symbol_start;
- 		if (off)
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 18edd57b5fe8..eeb0e249e0e2 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -394,12 +394,12 @@ int kallsyms_lookup_size_offset(unsigned long addr, unsigned long *symbolsize,
- 	       !!__bpf_address_lookup(addr, symbolsize, offset, namebuf);
- }
- 
--static const char *kallsyms_lookup_buildid(unsigned long addr,
-+static int kallsyms_lookup_buildid(unsigned long addr,
- 			unsigned long *symbolsize,
- 			unsigned long *offset, char **modname,
- 			const unsigned char **modbuildid, char *namebuf)
- {
--	const char *ret;
-+	int ret;
- 
- 	namebuf[KSYM_NAME_LEN - 1] = 0;
- 	namebuf[0] = 0;
-@@ -416,7 +416,7 @@ static const char *kallsyms_lookup_buildid(unsigned long addr,
- 		if (modbuildid)
- 			*modbuildid = NULL;
- 
--		ret = namebuf;
-+		ret = strlen(namebuf);
- 		goto found;
- 	}
- 
-@@ -448,8 +448,13 @@ const char *kallsyms_lookup(unsigned long addr,
- 			    unsigned long *offset,
- 			    char **modname, char *namebuf)
- {
--	return kallsyms_lookup_buildid(addr, symbolsize, offset, modname,
--				       NULL, namebuf);
-+	int ret = kallsyms_lookup_buildid(addr, symbolsize, offset, modname,
-+					  NULL, namebuf);
-+
-+	if (!ret)
-+		return NULL;
-+
-+	return namebuf;
- }
- 
- int lookup_symbol_name(unsigned long addr, char *symname)
-@@ -484,19 +489,15 @@ static int __sprint_symbol(char *buffer, unsigned long address,
- {
- 	char *modname;
- 	const unsigned char *buildid;
--	const char *name;
- 	unsigned long offset, size;
- 	int len;
- 
- 	address += symbol_offset;
--	name = kallsyms_lookup_buildid(address, &size, &offset, &modname, &buildid,
-+	len = kallsyms_lookup_buildid(address, &size, &offset, &modname, &buildid,
- 				       buffer);
--	if (!name)
-+	if (!len)
- 		return sprintf(buffer, "0x%lx", address - symbol_offset);
- 
--	if (name != buffer)
--		strcpy(buffer, name);
--	len = strlen(buffer);
- 	offset -= symbol_offset;
- 
- 	if (add_offset)
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index ef73ae7c8909..6e6619a5b2f1 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -321,14 +321,15 @@ void * __weak dereference_module_function_descriptor(struct module *mod,
-  * For kallsyms to ask for address resolution.  NULL means not found.  Careful
-  * not to lock to avoid deadlock on oopses, simply disable preemption.
-  */
--const char *module_address_lookup(unsigned long addr,
--				  unsigned long *size,
--			    unsigned long *offset,
--			    char **modname,
--			    const unsigned char **modbuildid,
--			    char *namebuf)
-+int module_address_lookup(unsigned long addr,
-+			  unsigned long *size,
-+			  unsigned long *offset,
-+			  char **modname,
-+			  const unsigned char **modbuildid,
-+			  char *namebuf)
- {
--	const char *ret = NULL;
-+	const char *sym;
-+	int ret = 0;
- 	struct module *mod;
- 
- 	preempt_disable();
-@@ -344,13 +345,12 @@ const char *module_address_lookup(unsigned long addr,
- #endif
- 		}
- 
--		ret = find_kallsyms_symbol(mod, addr, size, offset);
--	}
--	/* Make a copy in here where it's safe */
--	if (ret) {
--		strncpy(namebuf, ret, KSYM_NAME_LEN - 1);
--		ret = namebuf;
-+		sym = find_kallsyms_symbol(mod, addr, size, offset);
-+
-+		if (sym)
-+			ret = strscpy(namebuf, sym, KSYM_NAME_LEN);
- 	}
-+
- 	preempt_enable();
- 
- 	return ret;
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index da1710499698..b40f9bd29080 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -6970,7 +6970,7 @@ allocate_ftrace_mod_map(struct module *mod,
- 	return mod_map;
- }
- 
--static const char *
-+static int
- ftrace_func_address_lookup(struct ftrace_mod_map *mod_map,
- 			   unsigned long addr, unsigned long *size,
- 			   unsigned long *off, char *sym)
-@@ -6991,21 +6991,18 @@ ftrace_func_address_lookup(struct ftrace_mod_map *mod_map,
- 			*size = found_func->size;
- 		if (off)
- 			*off = addr - found_func->ip;
--		if (sym)
--			strscpy(sym, found_func->name, KSYM_NAME_LEN);
--
--		return found_func->name;
-+		return strscpy(sym, found_func->name, KSYM_NAME_LEN);
- 	}
- 
--	return NULL;
-+	return 0;
- }
- 
--const char *
-+int
- ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym)
- {
- 	struct ftrace_mod_map *mod_map;
--	const char *ret = NULL;
-+	int ret;
- 
- 	/* mod_map is freed via call_rcu() */
- 	preempt_disable();
--- 
-2.39.2
+[1] https://patchwork.kernel.org/project/netdevbpf/cover/20231203165129.174=
+0512-1-yoong.siang.song@intel.com/
 
+Thanks & Regards
+Siang
