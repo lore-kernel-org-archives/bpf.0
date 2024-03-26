@@ -1,245 +1,205 @@
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C640513DBB3
-	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 23:13:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C9E1E494;
+	Tue, 26 Mar 2024 23:42:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711494797; cv=none; b=YFmzMuj0wXjwKZcCCqu+vH0PLGUkL6shb9f6zuGwUQkuFzxqesCKk5DN1qjon19JbZacLqA50qWDSRqcfXBfGvJSKsbj9ujebKsUqyafnSXgAqGg9IqlnhO3cTW7BfKLUTyg5PRkThe9XQ6H1q9+cYocBdT27hc7eMtvmMfRC7I=
+	t=1711496571; cv=none; b=QcgaoBpBLFIm4N+SRPUdXXuV12AP2TfrfFF4VKYC318a8Y2JiKIzMH0T9S6tem6nJy3jKLeiWcBYOO7inMKdiXnm8Jn/jaKMJ5+jA4NaoPV0wtuvcTHJndKcINhXFTpoLHnuZ+ftLjyMQg1xEU1RydqWvm5KPveTBTxq4FrTlU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711494797; c=relaxed/simple;
-	bh=YCkB0V36Qla/lM8wCEj7/8F0UwlEvr6g+n1hiSiqIGc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V4m/zgrjJmVSWiAf2T9kYfuYZvC/FbQtVc39axEp8ACJpC9Sj3PL6838o35L9v8pUq/ZQj+y5IrLNBjGGjHE+duDaSbXt5lYQsfQLie9y6uJlf+rP0d8FhHsGCB/yIbFqIuXlBkiVDz/7cGGDDi6ztotPCnltOrrILJxznFM13s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=E8saQY8O; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	s=arc-20240116; t=1711496571; c=relaxed/simple;
+	bh=FjP5n+j42VnJWYHH8MMl8FSdezlqHQIMCm7rYqBcEB8=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Ajj8SaM0SLXkfmyHgof0cjtoYf7tj4S8V5qwrbUuWjigPSGHaU8GLoGMigGti0eKA50lFnmOzaoahcl6P5mOEJ6dacO1/a/A17UGVXtPR54UfMkQu1Xyj1/Ny9WwBj9W1zEf7eKCoOyQ51Q6EeTXM799+GvMFlZbQLjOeGC+NP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IUTFzT5C; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="E8saQY8O"
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-60a104601dcso68435817b3.2
-        for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 16:13:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1711494795; x=1712099595; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sFVOAe9ks9X+3V9OFdLT1/W/9Kwon69tRinsdN6sujc=;
-        b=E8saQY8OM7iU/vXiIu8Fl6mf2l3OHcZWd70Nf28Oz0XR4tzAJkS4b+ecITan1JbOaj
-         dkmyTcj7t6msTVpqytEeSS+HGA6s7dDH+Bgt44yVwOefaxhWOIBc80ARCFwq6+ea0Mor
-         N80MuktLH4Rl3CgXAmpq5VImVs6D1f02tW9Ybk31wa+6MLKgZd00Y1D5wHbepfPT0jss
-         i2/epeT2dXP8qQs3kJqN2osRuDRvAL+CrfxltsadAZ0qjQfgkDLrdK+qAmdcUv45QLCU
-         bxPX7m1w1LAVu1yzimKcS8COzc7Um5wooiMzgF7VO1yJcDt9LHWy0E3zCF720f32aKLe
-         MumA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711494795; x=1712099595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sFVOAe9ks9X+3V9OFdLT1/W/9Kwon69tRinsdN6sujc=;
-        b=RW4TeZPxt+RiyykPNSk8GVQAw/beF9Clr/6cNnZcoNj6rqf/dqp6lx2lwylqlJeKV8
-         ENWcpAxdAkrXnUTI6iDc89L/D6xcrwLaxVPDzcBzwuf8WJSa9H5JMav2OyJdpwje0uvK
-         Px/ktSYOEHPMU/l9Yz7v270E4DiAx4qdYGmIv6OGIrqNXdfc/Z2I2ZYGYO5DKtRTqKuX
-         larDvFnA5PjYvXs62YRC5A8i/JeAuFaQLQwHNYznpihpFFIQqErLua3jH/JsevnSxqk9
-         pfdC/VmGXBAWCZMk16rbNncgwvPlw11RBNZ1u7vtIjeVT7OqdcUaa9j48BjAegaYw27G
-         z72A==
-X-Forwarded-Encrypted: i=1; AJvYcCUX8dlfLJT6YfwFY5HfVI52vfRkagl+uCGY6U7jReiuQEqeHE8eibzSPtb83/vp/unMTJlEmgpofB8ywFUGGC8PXA1R
-X-Gm-Message-State: AOJu0YyEnpdVrjrEDB99WsDnmE3Efh1637UZ4bo7znF5B7P78fJ6nmpI
-	2r35lbhTcq1ewIjRVYfJD6LRFk+n1LKrTB5BCJPJg01mmVBJEtKDmawVT2uaVKH9HJceilhb6bP
-	vInSiJFa7AvPZiLXNMUQcVG+2l2NTmEy+ulxq
-X-Google-Smtp-Source: AGHT+IF0CFP7hw7yVitDsxee5TZt9donWj33FQQvvhUabNwuyCkBRFVxVkynHXUU9GFMlUZBGipjC3tiBYFdXdInQLY=
-X-Received: by 2002:a0d:f006:0:b0:611:242e:4116 with SMTP id
- z6-20020a0df006000000b00611242e4116mr4133343ywe.34.1711494794847; Tue, 26 Mar
- 2024 16:13:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IUTFzT5C"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 357F1C433F1;
+	Tue, 26 Mar 2024 23:42:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711496570;
+	bh=FjP5n+j42VnJWYHH8MMl8FSdezlqHQIMCm7rYqBcEB8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=IUTFzT5CTa+9vMCYpQcjKj+Vq5vfFQLP34fHE2oSRQJuHBcAzFVzA75LB8SpXTjaJ
+	 nYG7xl4pWrEfq1Z/3cWkeJUrWV+DdpBeA2dh4ZwJhbBJRBbciuzGTGMa+8NJSKNOG6
+	 8DW91EEZ5W3NpIRlF8MJFrPhux06t+8xdHqJicF1suJ0NzVUfTnExWXWib9QXI30vw
+	 DebLXSyxPOXr62OSj2y7y8VGVaARnAdDRSUfbZPD0W0Co0fgBvZnzXtkvY6BqWwcs4
+	 sABIAb7NsGstc2yp8Q25T9VJPQNZTgDUIkI8/9PMU7aVwyBrBZFPKA21nd9EEiNBAT
+	 xnItDEKrNg8cg==
+Date: Wed, 27 Mar 2024 08:42:45 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Jonathan Haslam <jonathan.haslam@gmail.com>,
+ linux-trace-kernel@vger.kernel.org, andrii@kernel.org, bpf@vger.kernel.org,
+ rostedt@goodmis.org, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar
+ <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung
+ Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander
+ Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
+ <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, Adrian Hunter
+ <adrian.hunter@intel.com>, linux-perf-users@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] uprobes: reduce contention on uprobes_tree access
+Message-Id: <20240327084245.a890ae12e579f0be1902ae4a@kernel.org>
+In-Reply-To: <CAEf4BzZS_QCsSY0oGY_3pGveGfXKK_TkVURyNq=UQXVXSqi2Fw@mail.gmail.com>
+References: <20240321145736.2373846-1-jonathan.haslam@gmail.com>
+	<20240325120323.ec3248d330b2755e73a6571e@kernel.org>
+	<CAEf4BzZS_QCsSY0oGY_3pGveGfXKK_TkVURyNq=UQXVXSqi2Fw@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240325142834.157411-1-jhs@mojatatu.com> <20240325142834.157411-7-jhs@mojatatu.com>
- <ea2ad0773c91709094764474bf46825c146d741b.camel@redhat.com>
-In-Reply-To: <ea2ad0773c91709094764474bf46825c146d741b.camel@redhat.com>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Tue, 26 Mar 2024 19:13:03 -0400
-Message-ID: <CAM0EoMkaa_u+Dd3OTyQDj=7W6KBSyFGf1emHp9VgCOdRRANpUw@mail.gmail.com>
-Subject: Re: [PATCH net-next v13 06/15] p4tc: add P4 data types
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, deb.chatterjee@intel.com, anjali.singhai@intel.com, 
-	namrata.limaye@intel.com, tom@sipanda.io, mleitner@redhat.com, 
-	Mahesh.Shirshyad@amd.com, Vipin.Jain@amd.com, tomasz.osinski@intel.com, 
-	jiri@resnulli.us, xiyou.wangcong@gmail.com, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, vladbu@nvidia.com, horms@kernel.org, 
-	khalidm@nvidia.com, toke@redhat.com, daniel@iogearbox.net, 
-	victor@mojatatu.com, pctammela@mojatatu.com, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 26, 2024 at 10:48=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wr=
-ote:
->
-> On Mon, 2024-03-25 at 10:28 -0400, Jamal Hadi Salim wrote:
-> > +static int p4t_s32_validate(struct p4tc_type *container, void *value,
-> > +                         u16 bitstart, u16 bitend,
-> > +                         struct netlink_ext_ack *extack)
-> > +{
-> > +     s32 minsz =3D S32_MIN, maxsz =3D S32_MAX;
-> > +     s32 *val =3D value;
-> > +
-> > +     if (val && (*val > maxsz || *val < minsz)) {
-> > +             NL_SET_ERR_MSG_MOD(extack, "S32 value out of range");
->
-> I'm sorry for the additional questions/points below which could/should
-> have been flagged earlier.
->
-> Out of sheer ignorance IDK if a single P4 command could use multiple
-> types, possibly use NL_SET_ERR_MSG_FMT_MOD() and specify the bogus
-> value/range.
->
+On Tue, 26 Mar 2024 09:01:47 -0700
+Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 
-yes, that would be a more useful message. Will change.
+> On Sun, Mar 24, 2024 at 8:03 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > On Thu, 21 Mar 2024 07:57:35 -0700
+> > Jonathan Haslam <jonathan.haslam@gmail.com> wrote:
+> >
+> > > Active uprobes are stored in an RB tree and accesses to this tree are
+> > > dominated by read operations. Currently these accesses are serialized by
+> > > a spinlock but this leads to enormous contention when large numbers of
+> > > threads are executing active probes.
+> > >
+> > > This patch converts the spinlock used to serialize access to the
+> > > uprobes_tree RB tree into a reader-writer spinlock. This lock type
+> > > aligns naturally with the overwhelmingly read-only nature of the tree
+> > > usage here. Although the addition of reader-writer spinlocks are
+> > > discouraged [0], this fix is proposed as an interim solution while an
+> > > RCU based approach is implemented (that work is in a nascent form). This
+> > > fix also has the benefit of being trivial, self contained and therefore
+> > > simple to backport.
+> > >
+> > > This change has been tested against production workloads that exhibit
+> > > significant contention on the spinlock and an almost order of magnitude
+> > > reduction for mean uprobe execution time is observed (28 -> 3.5 microsecs).
+> >
+> > Looks good to me.
+> >
+> > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Masami,
+> 
+> Given the discussion around per-cpu rw semaphore and need for
+> (internal) batched attachment API for uprobes, do you think you can
+> apply this patch as is for now? We can then gain initial improvements
+> in scalability that are also easy to backport, and Jonathan will work
+> on a more complete solution based on per-cpu RW semaphore, as
+> suggested by Ingo.
 
-> The same point/question has a few other instances below.
->
-> > +             return -EINVAL;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
->
-> [...]
->
-> > +static int p4t_be32_validate(struct p4tc_type *container, void *value,
-> > +                          u16 bitstart, u16 bitend,
-> > +                          struct netlink_ext_ack *extack)
-> > +{
-> > +     size_t container_maxsz =3D U32_MAX;
-> > +     __be32 *val_u32 =3D value;
-> > +     __u32 val =3D 0;
-> > +     size_t maxval;
-> > +     int ret;
-> > +
-> > +     ret =3D p4t_validate_bitpos(bitstart, bitend, 31, 31, extack);
-> > +     if (ret < 0)
-> > +             return ret;
-> > +
-> > +     if (value)
-> > +             val =3D be32_to_cpu(*val_u32);
-> > +
-> > +     maxval =3D GENMASK(bitend, 0);
-> > +     if (val && (val > container_maxsz || val > maxval)) {
->
-> The first condition 'val > container_maxsz' is a bit confusing
-> (unneeded), as 'val' type is u32 and 'container_maxsz' is U32_MAX
->
+Yeah, it is interesting to use per-cpu rw semaphore on uprobe.
+I would like to wait for the next version.
 
-Good point..
+Thank you,
 
-> > +             NL_SET_ERR_MSG_MOD(extack, "BE32 value out of range");
-> > +             return -EINVAL;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
->
-> [...]
->
-> > +static int p4t_u16_validate(struct p4tc_type *container, void *value,
-> > +                         u16 bitstart, u16 bitend,
-> > +                         struct netlink_ext_ack *extack)
-> > +{
-> > +     u16 container_maxsz =3D U16_MAX;
-> > +     u16 *val =3D value;
-> > +     u16 maxval;
-> > +     int ret;
-> > +
-> > +     ret =3D p4t_validate_bitpos(bitstart, bitend, 15, 15, extack);
-> > +     if (ret < 0)
-> > +             return ret;
-> > +
-> > +     maxval =3D GENMASK(bitend, 0);
-> > +     if (val && (*val > container_maxsz || *val > maxval)) {
->
-> Mutatis mutandis, same thing here
->
-
-noted ;->
-
-> > +             NL_SET_ERR_MSG_MOD(extack, "U16 value out of range");
-> > +             return -EINVAL;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static struct p4tc_type_mask_shift *
-> > +p4t_u16_bitops(u16 bitsiz, u16 bitstart, u16 bitend,
-> > +            struct netlink_ext_ack *extack)
-> > +{
-> > +     struct p4tc_type_mask_shift *mask_shift;
-> > +     u16 mask =3D GENMASK(bitend, bitstart);
-> > +     u16 *cmask;
-> > +
-> > +     mask_shift =3D kzalloc(sizeof(*mask_shift), GFP_KERNEL);
->
-> (Not specifically related to _this_ allocation) I'm wondering if the
-> allocations in this file should GFP_KERNEL_ACCOUNT? If I read correctly
-> the user-space can (and is expected to) create an quite large number of
-> instances of this structs (???)
->
-
-I think changing to GFP_KERNEL_ACCOUNT would be useful regardless
-especially because we are namespace aware.. Yes, there could be
-millions of table entries in some cases.
-
-> [...]
-> > +void __p4tc_type_host_write(const struct p4tc_type_ops *ops,
-> > +                         struct p4tc_type *container,
-> > +                         struct p4tc_type_mask_shift *mask_shift, void=
- *sval,
-> > +                         void *dval)
-> > +{
-> > +     #define HWRITE(cops) \
-> > +     do { \
-> > +             if (ops =3D=3D &(cops)) \
-> > +                     return (cops).host_write(container, mask_shift, s=
-val, \
-> > +                                              dval); \
-> > +     } while (0)
-> > +
-> > +     HWRITE(u8_ops);
-> > +     HWRITE(u16_ops);
-> > +     HWRITE(u32_ops);
-> > +     HWRITE(u64_ops);
-> > +     HWRITE(u128_ops);
-> > +     HWRITE(s16_ops);
-> > +     HWRITE(s32_ops);
-> > +     HWRITE(be16_ops);
-> > +     HWRITE(be32_ops);
-> > +     HWRITE(mac_ops);
-> > +     HWRITE(ipv4_ops);
-> > +     HWRITE(bool_ops);
-> > +     HWRITE(dev_ops);
-> > +     HWRITE(key_ops);
->
-> possibly
->
-> #undef HWRITE
->
-
-Nod.
-
-> ?
->
-> Otherwise LGTM!
+> 
+> >
+> > BTW, how did you measure the overhead? I think spinlock overhead
+> > will depend on how much lock contention happens.
+> >
+> > Thank you,
+> >
+> > >
+> > > [0] https://docs.kernel.org/locking/spinlocks.html
+> > >
+> > > Signed-off-by: Jonathan Haslam <jonathan.haslam@gmail.com>
+> > > ---
+> > >  kernel/events/uprobes.c | 22 +++++++++++-----------
+> > >  1 file changed, 11 insertions(+), 11 deletions(-)
+> > >
+> > > diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+> > > index 929e98c62965..42bf9b6e8bc0 100644
+> > > --- a/kernel/events/uprobes.c
+> > > +++ b/kernel/events/uprobes.c
+> > > @@ -39,7 +39,7 @@ static struct rb_root uprobes_tree = RB_ROOT;
+> > >   */
+> > >  #define no_uprobe_events()   RB_EMPTY_ROOT(&uprobes_tree)
+> > >
+> > > -static DEFINE_SPINLOCK(uprobes_treelock);    /* serialize rbtree access */
+> > > +static DEFINE_RWLOCK(uprobes_treelock);      /* serialize rbtree access */
+> > >
+> > >  #define UPROBES_HASH_SZ      13
+> > >  /* serialize uprobe->pending_list */
+> > > @@ -669,9 +669,9 @@ static struct uprobe *find_uprobe(struct inode *inode, loff_t offset)
+> > >  {
+> > >       struct uprobe *uprobe;
+> > >
+> > > -     spin_lock(&uprobes_treelock);
+> > > +     read_lock(&uprobes_treelock);
+> > >       uprobe = __find_uprobe(inode, offset);
+> > > -     spin_unlock(&uprobes_treelock);
+> > > +     read_unlock(&uprobes_treelock);
+> > >
+> > >       return uprobe;
+> > >  }
+> > > @@ -701,9 +701,9 @@ static struct uprobe *insert_uprobe(struct uprobe *uprobe)
+> > >  {
+> > >       struct uprobe *u;
+> > >
+> > > -     spin_lock(&uprobes_treelock);
+> > > +     write_lock(&uprobes_treelock);
+> > >       u = __insert_uprobe(uprobe);
+> > > -     spin_unlock(&uprobes_treelock);
+> > > +     write_unlock(&uprobes_treelock);
+> > >
+> > >       return u;
+> > >  }
+> > > @@ -935,9 +935,9 @@ static void delete_uprobe(struct uprobe *uprobe)
+> > >       if (WARN_ON(!uprobe_is_active(uprobe)))
+> > >               return;
+> > >
+> > > -     spin_lock(&uprobes_treelock);
+> > > +     write_lock(&uprobes_treelock);
+> > >       rb_erase(&uprobe->rb_node, &uprobes_tree);
+> > > -     spin_unlock(&uprobes_treelock);
+> > > +     write_unlock(&uprobes_treelock);
+> > >       RB_CLEAR_NODE(&uprobe->rb_node); /* for uprobe_is_active() */
+> > >       put_uprobe(uprobe);
+> > >  }
+> > > @@ -1298,7 +1298,7 @@ static void build_probe_list(struct inode *inode,
+> > >       min = vaddr_to_offset(vma, start);
+> > >       max = min + (end - start) - 1;
+> > >
+> > > -     spin_lock(&uprobes_treelock);
+> > > +     read_lock(&uprobes_treelock);
+> > >       n = find_node_in_range(inode, min, max);
+> > >       if (n) {
+> > >               for (t = n; t; t = rb_prev(t)) {
+> > > @@ -1316,7 +1316,7 @@ static void build_probe_list(struct inode *inode,
+> > >                       get_uprobe(u);
+> > >               }
+> > >       }
+> > > -     spin_unlock(&uprobes_treelock);
+> > > +     read_unlock(&uprobes_treelock);
+> > >  }
+> > >
+> > >  /* @vma contains reference counter, not the probed instruction. */
+> > > @@ -1407,9 +1407,9 @@ vma_has_uprobes(struct vm_area_struct *vma, unsigned long start, unsigned long e
+> > >       min = vaddr_to_offset(vma, start);
+> > >       max = min + (end - start) - 1;
+> > >
+> > > -     spin_lock(&uprobes_treelock);
+> > > +     read_lock(&uprobes_treelock);
+> > >       n = find_node_in_range(inode, min, max);
+> > > -     spin_unlock(&uprobes_treelock);
+> > > +     read_unlock(&uprobes_treelock);
+> > >
+> > >       return !!n;
+> > >  }
+> > > --
+> > > 2.43.0
+> > >
+> >
+> >
+> > --
+> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
 
-Thanks for taking the time to review!
-
-cheers,
-jamal
-
->
-> Cheers,
->
-> Paolo
->
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
