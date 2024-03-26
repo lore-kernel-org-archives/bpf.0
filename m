@@ -1,123 +1,207 @@
-Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB5D12AAF3;
-	Tue, 26 Mar 2024 21:11:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A511E884
+	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 21:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711487477; cv=none; b=SMZ6U7jIenAMHhRnK/567M6QXi/bd1cRgi8EtGg2oU1jdek033We5js5rfcUg+6PciSb6y5UeoD+Dm2vE9mHmTpFkS8sKoBYDCXnXpzBe6MmZheWDqih+foh5XAfyHwKJvk1F9eB0ADYUtTtzs/UPMD5KZj2b9XbjdXSFF10Rng=
+	t=1711487669; cv=none; b=TiWjQCwYvNzAdfrehUy4vKw6qE5xb+/gdKHhLHw7h6l1dJIP/Sd9CrsMsj7NK+jOnN53vvjEogda40d0K0GXo12q71/X9ox5D47jTG9m6WGrm9fmsg+hwHSks+Jlw5vAGnUlJI4LshKEWUyC4Ya2wq2divdILs9c8u14UkM+zps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711487477; c=relaxed/simple;
-	bh=DhbIwGimzO1Ys/eDgtivAIaXcxFjjx+5Qj98m0RzjXQ=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=OLLWA1+PMfhryQ/iBZnlwQn4BzSuUjzoP9PzVrkpAKbma+vDQOm0AjuwhVSrZwkSAqyKikGptRMZG7dgWBy5Ou3iwBqPbC5c5cfucvpuEW5jkPpBvCKfk/bkOf6xWr7mupemDm7vtewbkX/WwD2T523WTDicDLoXT8s3Zl1v3jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bGlSc53g; arc=none smtp.client-ip=209.85.217.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711487669; c=relaxed/simple;
+	bh=58aFIKSi458V7TUHnLL5RqixIfUfVYXZDpEdTaGJsQc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aPL3xTYZ7Rl2fzCOIE82J/zom7OeFwtITMI7Ol1MzIMfpoyn5Md9yUQvxTfcPDh0eI0J5qzNc5qn0mR0b5ReEIX3HcIALdTkUhSDHub8CzRJ7bnlIXRI4gWLuFoEZgU0zJCONwaEJ6vcMfFLXm/zlK956hyzVEytFtA60pokvyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CTXzrs+0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bGlSc53g"
-Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-476757820ceso1831622137.1;
-        Tue, 26 Mar 2024 14:11:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711487475; x=1712092275; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=C4E86kR2DKRyNfP7j7T5NXYDBgBKUpRjZk7CC48kM2A=;
-        b=bGlSc53gJffjewX7VH7dFLnSgwfdMIj2KUiyo32cAQ7qSl4+BaUmfX7esZKgCo+x5Z
-         7lbGRPcQf6+fFUNAhHhR725MNz/0V1v/oKizKaxl4LJiwdgTTfP2qlMYwIVOqLM9iWal
-         KKafF08XPVi6TMIekFYO2Lyp07JKkdOU7//cub+V3wZMuch1ByDZceLOwugxlj9JSMbY
-         1C1Re36iBRw+QZ1rf74GnY7iB5IORhv+FdWYE6pCHTIEUATOs43zbNX4J8E2bYrTCyjh
-         tqQUX0IbncN6UNo1uibSx2rTSLjtt/Y7df0HHFpYo4OaL9pJAk/Vux2AJF0jsfQ26xO3
-         616w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711487475; x=1712092275;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C4E86kR2DKRyNfP7j7T5NXYDBgBKUpRjZk7CC48kM2A=;
-        b=AGTszqpYA3a0sTkxDntWEURjLc+t4O4Xmo+8IbNZHORi32+k/6+fLGLvBw4QtpNMUu
-         izaeCh/AmBTAyw/YZ3MwrwZmsmdVpchQmlbeCfVU5/EpCFzWA1NTw4OLBeRzLq3gHTU/
-         5chGxjght53YAAObYKdjUs5ZYAy4TIR1nAkZc1JGeU6CslmdWjjXq7t7egblmeIbCzq+
-         SNkw56xtGhtarecuNmBIMgcwcQrfC12AHqjt9EfmIp6g5PgbBNaGZ9dU8ndkdyFj3YCI
-         BBMn3NhuHDI+JfivDbYEytNLcOn2XM5b8VExg+kUc7Iaw55oLT2iC+8pcQMldJFDdoCf
-         axDw==
-X-Forwarded-Encrypted: i=1; AJvYcCUKIAXrZaIm1Ruf6XN+fWJuusebhSvjsv481Y3Ua+tpDEKCbYPbEyq8kCkrhoX6OkJ5UBarifPK7RI2B1b5JGoK8N95RD38ilqhbX/WaJHAfsI0rAljzN1Ntbm7DVqg692onvC+i+mXOp13eOX/NZpyMnyysjXsna6H
-X-Gm-Message-State: AOJu0YzYljIT7o8VE7pc3Cio2u9dav+xUdrhcbnkEyk7rAVNYg+0mXAc
-	3I5mb5NM1Mv87IWseseR/ef29q+lOVjQTNENCLPb70vaEgp+yBHeocN/YhocpZP0jBp7T7NnOn/
-	6xPBPMOmvpXvTgnFM8gRq3gCjtlY=
-X-Google-Smtp-Source: AGHT+IE7IPPA6+eiifPNtX5vhNKID0Vd5arCLCtKWkE363s0aP8X5jekc/off5y2gyHlDp/JMEXXN7dlJEf7zml3Qc4=
-X-Received: by 2002:a05:6102:12d8:b0:478:23c8:1c23 with SMTP id
- jd24-20020a05610212d800b0047823c81c23mr950756vsb.14.1711487475103; Tue, 26
- Mar 2024 14:11:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CTXzrs+0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18ED6C433C7;
+	Tue, 26 Mar 2024 21:14:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711487669;
+	bh=58aFIKSi458V7TUHnLL5RqixIfUfVYXZDpEdTaGJsQc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=CTXzrs+0l/1V1j90RaVVT/iFIB2VyeE1ocZwuLphbHXWRBcVhx5rAnCNoDdIKvEIA
+	 alyLMVgzNBmUemC1vDaOrGfAEK+PBllxxMSznHeidA25EJFv5C0vQlEswwob4WpNMi
+	 cZZO0vizH0SfzZ9bWK8oQHyBJRkTa66qwpADwDtMCdPKrW3cdDg79Kbll/0daTCsgO
+	 geDAAHflnHxp6QXTtzjT+131CYEh9Ih9T5FcQSOTg5OR01mroq0B6WN/HMQnjLH5sB
+	 8gRSj3ZiUbr52djPQHwWVz2VKCmLeC21jLlTDgJYAhukmjq46ptgaeBgbPr0OI3XlH
+	 FjU7xrdl78Slw==
+From: Andrii Nakryiko <andrii@kernel.org>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@kernel.org
+Cc: andrii@kernel.org,
+	kernel-team@meta.com,
+	syzbot+981935d9485a560bfbcb@syzkaller.appspotmail.com,
+	syzbot+2cb5a6c573e98db598cc@syzkaller.appspotmail.com,
+	syzbot+62d8b26793e8a2bd0516@syzkaller.appspotmail.com
+Subject: [PATCH bpf-next] bpf: support deferring bpf_link dealloc to after RCU grace period
+Date: Tue, 26 Mar 2024 14:14:27 -0700
+Message-ID: <20240326211427.1156080-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Kaiming Huang <lightninghkm96@gmail.com>
-Date: Tue, 26 Mar 2024 17:11:04 -0400
-Message-ID: <CAH3=goWGETBPj+-qcKo4E+sXZv1pT+UeVhXnv-q9N4Yagb1m-g@mail.gmail.com>
-Subject: Re: stack access issue. Re: [syzbot] [bpf?] UBSAN:
- array-index-out-of-bounds in check_stack_range_initialized
-To: Andrei Matei <andreimatei1@gmail.com>
-Cc: alexei.starovoitov@gmail.com, andrii@kernel.org, ast@kernel.org, 
-	bpf@vger.kernel.org, daniel@iogearbox.net, eadavis@qq.com, eddyz87@gmail.com, 
-	haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org, 
-	kpsingh@kernel.org, linux-kernel@vger.kernel.org, martin.lau@linux.dev, 
-	netdev@vger.kernel.org, sdf@google.com, song@kernel.org, 
-	syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi there,
+BPF link for some program types is passed as a "context" which can be
+used by those BPF programs to look up additional information. E.g., for
+BPF raw tracepoints, link is used to fetch BPF cookie value, similarly
+for BPF multi-kprobes and multi-uprobes.
 
-I went across this bug using my static analysis tool as well and was
-glad to find this email thread.
+Because of this runtime dependency, when bpf_link refcnt drops to zero
+there could still be active BPF programs running accessing link data
+(cookie, program pointer, etc).
 
-My understanding is that the root cause of this bug has not been
-identified yet given the previous discussion in this thread.
+This patch adds generic support to defer bpf_link dealloc callback to
+after RCU GP, if requested. This is done by exposing two different
+deallocation callbacks, one synchronous and one deferred. If deferred
+one is provided, bpf_link_free() will schedule dealloc_deferred()
+callback to happen after RCU GP.
 
-This is the line of code that has the issue.
+BPF is using two flavors of RCU: "classic" non-sleepable one and RCU
+tasks trace one. The latter is used when sleepable BPF programs are
+used. bpf_link_free() accommodates that by checking underlying BPF
+program's sleepable flag, and goes either through normal RCU GP only for
+non-sleepable, or through RCU tasks trace GP *and* then normal RCU GP
+(taking into account rcu_trace_implies_rcu_gp() optimization), if BPF
+program is sleepable.
 
-stype = &state->stack[spi].slot_type[slot % BPF_REG_SIZE];
+We use this for raw tracepoint, multi-kprobe, and multi-uprobe links,
+all of which dereference link during program run.
 
-Based on my analysis result, it is the part "slot_type[slot %
-BPF_REG_SIZE]" may result in memory access with a negative index,
-which should not be allowed. spi (as well as min_off, max_off, and
-slot) is(are) supposed to be negative based on my understanding of the
-workflow. But the index of slot_type is not supposed to be negative.
+Fixes: d4dfc5700e86 ("bpf: pass whole link instead of prog when triggering raw tracepoint")
+Fixes: 0dcac2725406 ("bpf: Add multi kprobe link")
+Fixes: 89ae89f53d20 ("bpf: Add multi uprobe link")
+Reported-by: syzbot+981935d9485a560bfbcb@syzkaller.appspotmail.com
+Reported-by: syzbot+2cb5a6c573e98db598cc@syzkaller.appspotmail.com
+Reported-by: syzbot+62d8b26793e8a2bd0516@syzkaller.appspotmail.com
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ include/linux/bpf.h      | 16 +++++++++++++++-
+ kernel/bpf/syscall.c     | 35 ++++++++++++++++++++++++++++++++---
+ kernel/trace/bpf_trace.c |  4 ++--
+ 3 files changed, 49 insertions(+), 6 deletions(-)
 
-The slot_type is defined as below:
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 62762390c93d..e52d5b3ee45e 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1573,12 +1573,26 @@ struct bpf_link {
+ 	enum bpf_link_type type;
+ 	const struct bpf_link_ops *ops;
+ 	struct bpf_prog *prog;
+-	struct work_struct work;
++	/* rcu is used before freeing, work can be used to schedule that
++	 * RCU-based freeing before that, so they never overlap
++	 */
++	union {
++		struct rcu_head rcu;
++		struct work_struct work;
++	};
+ };
+ 
+ struct bpf_link_ops {
+ 	void (*release)(struct bpf_link *link);
++	/* deallocate link resources callback, called without RCU grace period
++	 * waiting
++	 */
+ 	void (*dealloc)(struct bpf_link *link);
++	/* deallocate link resources callback, called after RCU grace period;
++	 * if underlying BPF program is sleepable we go through tasks trace
++	 * RCU GP and then "classic" RCU GP
++	 */
++	void (*dealloc_deferred)(struct bpf_link *link);
+ 	int (*detach)(struct bpf_link *link);
+ 	int (*update_prog)(struct bpf_link *link, struct bpf_prog *new_prog,
+ 			   struct bpf_prog *old_prog);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index e44c276e8617..c0f2f052a02c 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3024,17 +3024,46 @@ void bpf_link_inc(struct bpf_link *link)
+ 	atomic64_inc(&link->refcnt);
+ }
+ 
++static void bpf_link_defer_dealloc_rcu_gp(struct rcu_head *rcu)
++{
++	struct bpf_link *link = container_of(rcu, struct bpf_link, rcu);
++
++	/* free bpf_link and its containing memory */
++	link->ops->dealloc_deferred(link);
++}
++
++static void bpf_link_defer_dealloc_mult_rcu_gp(struct rcu_head *rcu)
++{
++	if (rcu_trace_implies_rcu_gp())
++		bpf_link_defer_dealloc_rcu_gp(rcu);
++	else
++		call_rcu(rcu, bpf_link_defer_dealloc_rcu_gp);
++}
++
+ /* bpf_link_free is guaranteed to be called from process context */
+ static void bpf_link_free(struct bpf_link *link)
+ {
++	bool sleepable = false;
++
+ 	bpf_link_free_id(link->id);
+ 	if (link->prog) {
++		sleepable = link->prog->sleepable;
+ 		/* detach BPF program, clean up used resources */
+ 		link->ops->release(link);
+ 		bpf_prog_put(link->prog);
+ 	}
+-	/* free bpf_link and its containing memory */
+-	link->ops->dealloc(link);
++	if (link->ops->dealloc_deferred) {
++		/* schedule BPF link deallocation; if underlying BPF program
++		 * is sleepable, we need to first wait for RCU tasks trace
++		 * sync, then go through "classic" RCU grace period
++		 */
++		if (sleepable)
++			call_rcu_tasks_trace(&link->rcu, bpf_link_defer_dealloc_mult_rcu_gp);
++		else
++			call_rcu(&link->rcu, bpf_link_defer_dealloc_rcu_gp);
++	}
++	if (link->ops->dealloc)
++		link->ops->dealloc(link);
+ }
+ 
+ static void bpf_link_put_deferred(struct work_struct *work)
+@@ -3539,7 +3568,7 @@ static int bpf_raw_tp_link_fill_link_info(const struct bpf_link *link,
+ 
+ static const struct bpf_link_ops bpf_raw_tp_link_lops = {
+ 	.release = bpf_raw_tp_link_release,
+-	.dealloc = bpf_raw_tp_link_dealloc,
++	.dealloc_deferred = bpf_raw_tp_link_dealloc,
+ 	.show_fdinfo = bpf_raw_tp_link_show_fdinfo,
+ 	.fill_link_info = bpf_raw_tp_link_fill_link_info,
+ };
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 6d0c95638e1b..98eacfacb73a 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -2740,7 +2740,7 @@ static int bpf_kprobe_multi_link_fill_link_info(const struct bpf_link *link,
+ 
+ static const struct bpf_link_ops bpf_kprobe_multi_link_lops = {
+ 	.release = bpf_kprobe_multi_link_release,
+-	.dealloc = bpf_kprobe_multi_link_dealloc,
++	.dealloc_deferred = bpf_kprobe_multi_link_dealloc,
+ 	.fill_link_info = bpf_kprobe_multi_link_fill_link_info,
+ };
+ 
+@@ -3254,7 +3254,7 @@ static int bpf_uprobe_multi_link_fill_link_info(const struct bpf_link *link,
+ 
+ static const struct bpf_link_ops bpf_uprobe_multi_link_lops = {
+ 	.release = bpf_uprobe_multi_link_release,
+-	.dealloc = bpf_uprobe_multi_link_dealloc,
++	.dealloc_deferred = bpf_uprobe_multi_link_dealloc,
+ 	.fill_link_info = bpf_uprobe_multi_link_fill_link_info,
+ };
+ 
+-- 
+2.43.0
 
-u8 slot_type[BPF_REG_SIZE];  //BPF_REG_SIZE is 8
-
-So the type of slot_type is u8[8].
-
-However, given "slot" can be negative, say -1. The result of slot %
-BPF_REG_SIZE is -1. This might sound counter-intuitive as % always
-gives positive results. But in C, % operation keeps the sign of
-dividend (and thus that's why I'm not sure whether the fix will catch
-this).
-
-You can examine this by simply running this short piece of code. The
-result of the modulo operation is -1 on my end, and that is the reason
-that causes the OOB negative index, and this would be an off-by-one on
-the u8[8].
-
-#include <stdio.h>
-#define BPF_REG_SIZE 8
-int main() {
-    int i = -1;
-    unsigned int j = i % BPF_REG_SIZE;
-    printf("%d\n", j);
-    return 0;
-}
-
-A more severe scenario is when interpreting the j in the above example
-as unsigned int, aka integer overflow/wrap-around, in that case, the
-value of j will be 4,294,967,295. If it is the case, then it is a
-classic OOB access on the u8[8].
-
-Hopefully my illustration makes sense, please let me know if you see
-any issues. Thanks.
-
-Best regards,
-Kaiming.
