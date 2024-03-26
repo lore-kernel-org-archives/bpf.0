@@ -1,21 +1,21 @@
 Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A523A12AACE
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2E4312A170
 	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 04:15:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711426525; cv=none; b=gBlEY2CkaL+8Kx/9/j/VLI6g5EB8G1c4t6eYxpRMrv9bVepzoVcY/5Z5Ny+K6CgbPFtLzmndBWagvFdg8IkcqKE36Ej97wQBA3y7ctE9fCaJzwZK5FN4TNCri9XZOpmot9o4TcoRaUlObXhXsN5gfMTKqg6STjYefjjOyBpv6nU=
+	t=1711426524; cv=none; b=o487Ym0BjGc1N+FcWoGVQtWdc6F2jtdy8v/jGpaMT8q1M714P+quXZUjLcKaLn3E2jMzGsfMG+tuVXayl5okUAyXDavG3ui/OFMZiNs59tBwEM0tk8MjBL7r9LwPEDM+7eZxjdlIKT6eCIR3+CCz/BJ2jYKgtVXVyb3eBcyTJaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711426525; c=relaxed/simple;
-	bh=N+ZS0D6/p9van+/GW5y3SOSOUgVt5rrjTA8Am1Cjngk=;
+	s=arc-20240116; t=1711426524; c=relaxed/simple;
+	bh=ReS0VdniNIrU9GDgeJigokQ02rF06djnvoUKR4sGNrw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u/CovSgi1dySh4rz1Utexj808WAX3yOu/c6OtgeYdGDTsk5P2yXv1LxA4nhILD0eiV7VjTBGXS1UL+1xoqBlVe6TVFd83F9mFNZNVsyinjzcIA2mTvKtliVgHejvcUF7gGr8sBYLinlDATXW0qOupgClLj6So2OpLY4Iwyr9LoY=
+	 MIME-Version; b=XDGgmIQZuy7BS25wuymwF7QbsUe5C2c6RD+NmGJU9sU9E5UZmikOjGZjwFIEGnG7X1kXmkF+ItkT/yNF/murvXF+c+LEfLKCbe3f4fr7HYhGa/KO1IhiV+/PihyAIJaE5SCHc07I1+pOYQLPV3ChssqfBRXMpJ7qI8Yp4WBQYZU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 8CB8024E711A; Mon, 25 Mar 2024 21:15:08 -0700 (PDT)
+	id C94B224E7150; Mon, 25 Mar 2024 21:15:18 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v3 5/8] selftests/bpf: Refactor trace helper func load_kallsyms_local()
-Date: Mon, 25 Mar 2024 21:15:08 -0700
-Message-ID: <20240326041508.1199239-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 7/8] selftests/bpf: Fix kprobe_multi_bench_attach test failure with LTO kernel
+Date: Mon, 25 Mar 2024 21:15:18 -0700
+Message-ID: <20240326041518.1199758-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240326041443.1197498-1-yonghong.song@linux.dev>
 References: <20240326041443.1197498-1-yonghong.song@linux.dev>
@@ -37,75 +37,172 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Refactor trace helper function load_kallsyms_local() such that
-it invokes a common function with a compare function as input.
-The common function will be used later for other local functions.
+In my locally build clang LTO kernel (enabling CONFIG_LTO and
+CONFIG_LTO_CLANG_THIN), kprobe_multi_bench_attach/kernel subtest
+failed like:
+  test_kprobe_multi_bench_attach:PASS:get_syms 0 nsec
+  test_kprobe_multi_bench_attach:PASS:kprobe_multi_empty__open_and_load 0=
+ nsec
+  libbpf: prog 'test_kprobe_empty': failed to attach: No such process
+  test_kprobe_multi_bench_attach:FAIL:bpf_program__attach_kprobe_multi_op=
+ts unexpected error: -3
+  #117/1   kprobe_multi_bench_attach/kernel:FAIL
+
+There are multiple symbols in /sys/kernel/debug/tracing/available_filter_=
+functions
+are renamed in /proc/kallsyms due to cross file inlining. One example is =
+for
+  static function __access_remote_vm in mm/memory.c.
+In a non-LTO kernel, we have the following call stack:
+  ptrace_access_vm (global, kernel/ptrace.c)
+    access_remote_vm (global, mm/memory.c)
+      __access_remote_vm (static, mm/memory.c)
+
+With LTO kernel, it is possible that access_remote_vm() is inlined by
+ptrace_access_vm(). So we end up with the following call stack:
+  ptrace_access_vm (global, kernel/ptrace.c)
+    __access_remote_vm (static, mm/memory.c)
+The compiler renames __access_remote_vm to __access_remote_vm.llvm.<hash>
+to prevent potential name collision.
+
+The kernel bpf_kprobe_multi_link_attach() and ftrace_lookup_symbols() try
+to find addresses based on /proc/kallsyms, hence the current test failed
+with LTO kenrel.
+
+This patch consulted /proc/kallsyms to find the corresponding entries
+for the ksym and this solved the issue.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- tools/testing/selftests/bpf/trace_helpers.c | 19 ++++++++++++-------
- tools/testing/selftests/bpf/trace_helpers.h |  2 ++
- 2 files changed, 14 insertions(+), 7 deletions(-)
+ .../bpf/prog_tests/kprobe_multi_test.c        | 62 ++++++++++++++-----
+ 1 file changed, 48 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/=
-selftests/bpf/trace_helpers.c
-index 27fd7ed3e4b0..fc9de4a89aea 100644
---- a/tools/testing/selftests/bpf/trace_helpers.c
-+++ b/tools/testing/selftests/bpf/trace_helpers.c
-@@ -61,12 +61,7 @@ void free_kallsyms_local(struct ksyms *ksyms)
- 	free(ksyms);
+diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b=
+/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+index 46e28edda595..3b9059164360 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+@@ -367,15 +367,49 @@ static bool skip_entry(char *name)
+ 	return false;
  }
 =20
--static int ksym_cmp(const void *p1, const void *p2)
--{
--	return ((struct ksym *)p1)->addr - ((struct ksym *)p2)->addr;
--}
--
--struct ksyms *load_kallsyms_local(void)
-+static struct ksyms *load_kallsyms_local_common(ksym_cmp_t cmp_cb)
++/* Do comparision by ignoring '.llvm.<hash>' suffixes. */
++static int compare_name(const char *name1, const char *name2)
++{
++	const char *res1, *res2;
++	int len1, len2;
++
++	res1 =3D strstr(name1, ".llvm.");
++	res2 =3D strstr(name2, ".llvm.");
++	len1 =3D res1 ? res1 - name1 : strlen(name1);
++	len2 =3D res2 ? res2 - name2 : strlen(name2);
++
++	if (len1 =3D=3D len2)
++		return strncmp(name1, name2, len1);
++	if (len1 < len2)
++		return strncmp(name1, name2, len1) <=3D 0 ? -1 : 1;
++	return strncmp(name1, name2, len2) >=3D 0 ? 1 : -1;
++}
++
++static int load_kallsyms_compare(const void *p1, const void *p2)
++{
++	return compare_name(((const struct ksym *)p1)->name, ((const struct ksy=
+m *)p2)->name);
++}
++
++static int search_kallsyms_compare(const void *p1, const struct ksym *p2=
+)
++{
++	return compare_name(p1, p2->name);
++}
++
+ static int get_syms(char ***symsp, size_t *cntp, bool kernel)
  {
+-	size_t cap =3D 0, cnt =3D 0, i;
+-	char *name =3D NULL, **syms =3D NULL;
++	size_t cap =3D 0, cnt =3D 0;
++	char *name =3D NULL, *ksym_name, **syms =3D NULL;
+ 	struct hashmap *map;
++	struct ksyms *ksyms;
++	struct ksym *ks;
+ 	char buf[256];
  	FILE *f;
- 	char func[256], buf[256];
-@@ -100,7 +95,7 @@ struct ksyms *load_kallsyms_local(void)
- 			goto error;
- 	}
- 	fclose(f);
--	qsort(ksyms->syms, ksyms->sym_cnt, sizeof(struct ksym), ksym_cmp);
-+	qsort(ksyms->syms, ksyms->sym_cnt, sizeof(struct ksym), cmp_cb);
- 	return ksyms;
+ 	int err =3D 0;
 =20
- error:
-@@ -109,6 +104,16 @@ struct ksyms *load_kallsyms_local(void)
- 	return NULL;
++	ksyms =3D load_kallsyms_custom_local(load_kallsyms_compare);
++	if (!ASSERT_OK_PTR(ksyms, "load_kallsyms_custom_local"))
++		return -EINVAL;
++
+ 	/*
+ 	 * The available_filter_functions contains many duplicates,
+ 	 * but other than that all symbols are usable in kprobe multi
+@@ -408,7 +442,14 @@ static int get_syms(char ***symsp, size_t *cntp, boo=
+l kernel)
+ 		if (skip_entry(name))
+ 			continue;
+=20
+-		err =3D hashmap__add(map, name, 0);
++		ks =3D search_kallsyms_custom_local(ksyms, name, search_kallsyms_compa=
+re);
++		if (!ks) {
++			err =3D -EINVAL;
++			goto error;
++		}
++
++		ksym_name =3D ks->name;
++		err =3D hashmap__add(map, ksym_name, 0);
+ 		if (err =3D=3D -EEXIST) {
+ 			err =3D 0;
+ 			continue;
+@@ -421,8 +462,7 @@ static int get_syms(char ***symsp, size_t *cntp, bool=
+ kernel)
+ 		if (err)
+ 			goto error;
+=20
+-		syms[cnt++] =3D name;
+-		name =3D NULL;
++		syms[cnt++] =3D ksym_name;
+ 	}
+=20
+ 	*symsp =3D syms;
+@@ -432,11 +472,8 @@ static int get_syms(char ***symsp, size_t *cntp, boo=
+l kernel)
+ 	free(name);
+ 	fclose(f);
+ 	hashmap__free(map);
+-	if (err) {
+-		for (i =3D 0; i < cnt; i++)
+-			free(syms[i]);
++	if (err)
+ 		free(syms);
+-	}
+ 	return err;
  }
 =20
-+static int ksym_cmp(const void *p1, const void *p2)
-+{
-+	return ((struct ksym *)p1)->addr - ((struct ksym *)p2)->addr;
-+}
-+
-+struct ksyms *load_kallsyms_local(void)
-+{
-+	return load_kallsyms_local_common(ksym_cmp);
-+}
-+
- int load_kallsyms(void)
- {
- 	pthread_mutex_lock(&ksyms_mutex);
-diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/=
-selftests/bpf/trace_helpers.h
-index 04fd1da7079d..9da0d0484eed 100644
---- a/tools/testing/selftests/bpf/trace_helpers.h
-+++ b/tools/testing/selftests/bpf/trace_helpers.h
-@@ -13,6 +13,8 @@ struct ksym {
- };
- struct ksyms;
+@@ -472,7 +509,7 @@ static void test_kprobe_multi_bench_attach(bool kerne=
+l)
+ 	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
+ 	struct kprobe_multi_empty *skel =3D NULL;
+ 	char **syms =3D NULL;
+-	size_t cnt =3D 0, i;
++	size_t cnt =3D 0;
 =20
-+typedef int (*ksym_cmp_t)(const void *p1, const void *p2);
-+
- int load_kallsyms(void);
- struct ksym *ksym_search(long key);
- long ksym_get_addr(const char *name);
+ 	if (!ASSERT_OK(get_syms(&syms, &cnt, kernel), "get_syms"))
+ 		return;
+@@ -488,11 +525,8 @@ static void test_kprobe_multi_bench_attach(bool kern=
+el)
+=20
+ cleanup:
+ 	kprobe_multi_empty__destroy(skel);
+-	if (syms) {
+-		for (i =3D 0; i < cnt; i++)
+-			free(syms[i]);
++	if (syms)
+ 		free(syms);
+-	}
+ }
+=20
+ static void test_attach_override(void)
 --=20
 2.43.0
 
