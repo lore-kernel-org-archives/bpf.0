@@ -1,260 +1,229 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4A218AF8;
-	Mon, 25 Mar 2024 23:39:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB882139B
+	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 00:28:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711409989; cv=none; b=Qrn70c/0kGY+IswgPuae1vFQtcwr1JcpO5AbfN3fWdozBAoE9KKi4pi+3wSz6ZvXazJWzHu+PyqixVoazvdZNMCgMX+kwORl3Mxxxwq+wNDrts81p3RyxQA+hY31nxnwv812MTFR/jlTZQcZtc/wVE4aCqEGh+fIOVlI3UOwJ2M=
+	t=1711412911; cv=none; b=XoHZ1djbfKg22nSmsFp8gBjCC3a+TPYm6pN7yvLmkXwlhXSozTIUNE/9SdIsflDoVwa1+qVuHdKaRz2NVP1qyXL1lPErvrumd1lZCxFCsAZZXykO2m+7PyFqYW4H45AzL0uGDhgr2uqEcmrjxRcPLLmcQhMHfzKHb+Q0QnIeVdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711409989; c=relaxed/simple;
-	bh=XnKuWUJDo7LOxnwLI7qOPjUeET9scrnc2Hnlx/dHh2E=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hDljWQ1T8JLBmD6xlCsmNL/4xrkox8vQjnV7feX/WidehnS8ZUNqcFDjQDr4yadKQ7ORrGl5fENUi3/Og0fDPe803iFQKKsZSHZLDh3D1xQTSyTDWCdDf7+wjDltwAmQ8fVvqmPpWkUpH7wtoIoMUQ5zzFyd0lEWK3JGMw39Aqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=pBgMAGXi; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1711412911; c=relaxed/simple;
+	bh=q9rJFj0LGRVbIR7Im5V+4jATTEQF0xUdYxt97RfhsCY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gQiHNzm7gjd6bZKvg49+OGiYkNbd42Zqja9a7Ywl7Gd+cbQpNBvIGguKwVcCH8sBHLsiugouWHSp95JgKy6uQ5cvLbbxUMUh0bUoR5gKhmQ4lB2Uxrw+Vb7efbzSLHhFl5EJIfdaUv62esPoyt+GCM6aUCBhehKlFDy1M5IdaRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jwc72MJc; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="pBgMAGXi"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=cPfFo5gbrfOC5nG2rK6QxTkgqWk1UOdiNStdjxJwjRM=; b=pBgMAGXieBY8nCZqarecCKtgy5
-	VNtgy7Q4XqHh/0WxiMhJ6Jmn47C9KsgPzzkOlTAsL30ASpYV3Loy32un92f4DBwk+/T/WxUtdL751
-	xRwS9gd6yfgxQsiGJKnVY2PZofGOi0beud6FCZ5WnPsAE32vrQ6NlC34trt77lcmiBKtdqWoQGEZJ
-	6uMg7qmn5nJdTjSG9QOGoFdrc5D+Se6vCEheuDH+tZKLLb4E3hUIe0ooiq+rLPE5Nb7q/S9JKv6Tf
-	txrF1jiH+8Xw9M7ojXi4ZBhR8kZcVTm6qUEg7EahhQCTDcnpQmUyBYCWEzTeJU3Dndyshbg2Fgpvm
-	tCDnK9Nw==;
-Received: from 30.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.30] helo=localhost)
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rotum-0006ZA-Qv; Tue, 26 Mar 2024 00:39:40 +0100
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: davem@davemloft.net
-Cc: kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	daniel@iogearbox.net,
-	ast@kernel.org,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: pull-request: bpf-next 2024-03-25
-Date: Tue, 26 Mar 2024 00:39:40 +0100
-Message-Id: <20240325233940.7154-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jwc72MJc"
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-513e89d0816so6184551e87.0
+        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 17:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1711412906; x=1712017706; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6AS6qRiVlQsc1+zZ8NlPzKQQkZa8BexCVQalpdaPfxc=;
+        b=jwc72MJcbOv3kNXMWOzcqkprlIA0kzQenPVePAM+2MCIOWNpyQlr6Bod5r9PGyvAtH
+         W6MB0rm6nc8gi1c90MEweCLFgqrpGJGagH8d9WJ+/WPLaNmtIo9qwAX7olhxp7p1+eyd
+         DcyyHKRIsnQpuHfXC265pgCXIuHYOQ18/yzNq9b12LEYr0kPYRM0GpIGdh8sOyaD9+kR
+         qvdPyYoNIACwyhXeSLQae4+A4idpRdC3nULounqP9EtnB1V1RPwCNZ4w4UvOv+JUb4FC
+         0pIfwgms3iFSJGJuud3CMLeDpCdI+yUp2mJeizZI7bwQ90Mb/sYG+eprzKPZ3MZUedo+
+         6zIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711412906; x=1712017706;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6AS6qRiVlQsc1+zZ8NlPzKQQkZa8BexCVQalpdaPfxc=;
+        b=asThyMHSs3vXnsSmpPrkndrNRUHSDwRb8enpJyP2xWlJDKx/7+CqaS6RS86Z+lpNZr
+         hEsR6upna0I7fplkK1emqNP3lzMkToujpwCCKxCsAzEQiJNSA5dPYUu9jI4Ydyu92R90
+         DBSqYR77uho/jzBW435mHlDEh+5N1ukmVb2UiYZarxjgmNpQh/v/TMnabKrVTD+hfocR
+         6THQkaIAoP/WW37iwhCyDKgsVdRt+KoQLguuXWWFaxwDRtnh3BleHAsszW7aamwwMSIh
+         pUcP0+B3ZIj97qa8xaLXOxZ8M8Rz+6Nvg026z9slu18tgc1LG5W+iedmKdcGnE9DBsYI
+         0WkA==
+X-Forwarded-Encrypted: i=1; AJvYcCVTABCUr0TsczXi+bWYvosf3/PMj2KW8xYdWfObDccwJzcI/6ilDOu2rR4QEHAOpDHuPjPwN7alfC4f0bmDK/C0AxJL
+X-Gm-Message-State: AOJu0Ywhof+C/abvenjmImZc71YxK3RmriFoH0lEqiRblsanQHYzG0pZ
+	nM+xnUDG50tNEiFiBNhkT+V9HBD6MLuOmL4WiQwhVMHzWGeJbYoqcQiSf4nyqIdc+qSkmmE9OL+
+	LLN7VLmNLrS7oG1c8br06aDyncltyzyKKaja6
+X-Google-Smtp-Source: AGHT+IF9aQZZlm3m7qhQmoIyJ6RkPwr/Dop+uoHu7fO/1Q5QVzyOPH34BhQ7Hc1bMJCfX+wA5X9L6ZhSH1TjcEziOMA=
+X-Received: by 2002:a05:6512:456:b0:513:2b35:2520 with SMTP id
+ y22-20020a056512045600b005132b352520mr5371798lfk.58.1711412905481; Mon, 25
+ Mar 2024 17:28:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27225/Mon Mar 25 09:30:27 2024)
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <6208950d-6453-e797-7fc3-1dcf15b49dbe@huawei.com> <CAHS8izMwTRyqUS0iRtErfAqDVsXRia5Ajx9PRK3vcfo8utJoUA@mail.gmail.com>
+In-Reply-To: <CAHS8izMwTRyqUS0iRtErfAqDVsXRia5Ajx9PRK3vcfo8utJoUA@mail.gmail.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Mon, 25 Mar 2024 17:28:12 -0700
+Message-ID: <CAHS8izPR+SioMKNv3=2ajK=GGOE26BTaxOMykHJfjttqYjx1wQ@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 00/15] Device Memory TCP
+To: Yunsheng Lin <linyunsheng@huawei.com>, YiFei Zhu <zhuyifei@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi David, hi Jakub, hi Paolo, hi Eric,
+On Tue, Mar 5, 2024 at 11:38=E2=80=AFAM Mina Almasry <almasrymina@google.co=
+m> wrote:
+>
+> On Tue, Mar 5, 2024 at 4:54=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei.c=
+om> wrote:
+> >
+> > On 2024/3/5 10:01, Mina Almasry wrote:
+> >
+> > ...
+> >
+> > >
+> > > Perf - page-pool benchmark:
+> > > ---------------------------
+> > >
+> > > bench_page_pool_simple.ko tests with and without these changes:
+> > > https://pastebin.com/raw/ncHDwAbn
+> > >
+> > > AFAIK the number that really matters in the perf tests is the
+> > > 'tasklet_page_pool01_fast_path Per elem'. This one measures at about =
+8
+> > > cycles without the changes but there is some 1 cycle noise in some
+> > > results.
+> > >
+> > > With the patches this regresses to 9 cycles with the changes but ther=
+e
+> > > is 1 cycle noise occasionally running this test repeatedly.
+> > >
+> > > Lastly I tried disable the static_branch_unlikely() in
+> > > netmem_is_net_iov() check. To my surprise disabling the
+> > > static_branch_unlikely() check reduces the fast path back to 8 cycles=
+,
+> > > but the 1 cycle noise remains.
+> > >
+> >
+> > The last sentence seems to be suggesting the above 1 ns regresses is ca=
+used
+> > by the static_branch_unlikely() checking?
+>
+> Note it's not a 1ns regression, it's looks like maybe a 1 cycle
+> regression (slightly less than 1ns if I'm reading the output of the
+> test correctly):
+>
+> # clean net-next
+> time_bench: Type:tasklet_page_pool01_fast_path Per elem: 8 cycles(tsc)
+> 2.993 ns (step:0)
+>
+> # with patches
+> time_bench: Type:tasklet_page_pool01_fast_path Per elem: 9 cycles(tsc)
+> 3.679 ns (step:0)
+>
+> # with patches and with diff that disables static branching:
+> time_bench: Type:tasklet_page_pool01_fast_path Per elem: 8 cycles(tsc)
+> 3.248 ns (step:0)
+>
+> I do see noise in the test results between run and run, and any
+> regression (if any) is slightly obfuscated by the noise, so it's a bit
+> hard to make confident statements. So far it looks like a ~0.25ns
+> regression without static branch and about ~0.65ns with static branch.
+>
+> Honestly when I saw all 3 results were within some noise I did not
+> investigate more, but if this looks concerning to you I can dig
+> further. I likely need to gather a few test runs to filter out the
+> noise and maybe investigate the assembly my compiler is generating to
+> maybe narrow down what changes there.
+>
 
-The following pull-request contains BPF updates for your *net-next* tree.
+I did some more investigation here to gather more data to filter out
+the noise, and recorded the summary here:
 
-We've added 38 non-merge commits during the last 13 day(s) which contain
-a total of 50 files changed, 867 insertions(+), 274 deletions(-).
+https://pastebin.com/raw/v5dYRg8L
 
-The main changes are:
+Long story short, the page_pool benchmark results are consistent with
+some outlier noise results that I'm discounting here. Currently
+page_pool fast path is at 8 cycles
 
-1) Add the ability to specify and retrieve BPF cookie also for raw tracepoint programs in
-   order to ease migration from classic to raw tracepoints, from Andrii Nakryiko.
+[ 2115.724510] time_bench: Type:tasklet_page_pool01_fast_path Per
+elem: 8 cycles(tsc) 3.187 ns (step:0) - (measurement period
+time:0.031870585 sec time_interval:31870585) - (invoke count:10000000
+tsc_interval:86043192)
 
-2) Allow the use of bpf_get_{ns_,}current_pid_tgid() helper for all program types and
-   add additional BPF selftests, from Yonghong Song.
+and with this patch series it degrades to 10 cycles, or about a 0.7ns
+degradation or so:
 
-3) Several improvements to bpftool and its build, for example, enabling libbpf logs when
-   loading pid_iter in debug mode, from Quentin Monnet.
+[  498.226127] time_bench: Type:tasklet_page_pool01_fast_path Per
+elem: 10 cycles(tsc) 3.944 ns (step:0) - (measurement period
+time:0.039442539 sec time_interval:39442539) - (invoke count:10000000
+tsc_interval:106485268)
 
-4) Check the return code of all BPF-related set_memory_*() functions during load and bail
-   out in case they fail, from Christophe Leroy.
+I took the time to dig into where the degradation comes from, and to
+my surprise we can shave off 1 cycle in perf by removing the
+static_branch_unlikely check in netmem_is_net_iov() like so:
 
-5) Avoid a goto in regs_refine_cond_op() such that the verifier can be better integrated
-   into Agni tool which doesn't support backedges yet, from Harishankar Vishwanathan.
+diff --git a/include/net/netmem.h b/include/net/netmem.h
+index fe354d11a421..2b4310ac1115 100644
+--- a/include/net/netmem.h
++++ b/include/net/netmem.h
+@@ -122,8 +122,7 @@ typedef unsigned long __bitwise netmem_ref;
+ static inline bool netmem_is_net_iov(const netmem_ref netmem)
+ {
+ #ifdef CONFIG_PAGE_POOL
+-       return static_branch_unlikely(&page_pool_mem_providers) &&
+-              (__force unsigned long)netmem & NET_IOV;
++       return (__force unsigned long)netmem & NET_IOV;
+ #else
+        return false;
+ #endif
 
-6) Add a small BPF trie perf improvement by always inlining longest_prefix_match,
-   from Jesper Dangaard Brouer.
+With this change, the fast path is 9 cycles, only  a 1 cycle (~0.35ns)
+regression:
 
-7) Small BPF selftest refactor in bpf_tcp_ca.c to utilize start_server() helper instead
-   of open-coding it, from Geliang Tang.
+[  199.184429] time_bench: Type:tasklet_page_pool01_fast_path Per
+elem: 9 cycles(tsc) 3.552 ns (step:0) - (measurement period
+time:0.035524013 sec time_interval:35524013) - (invoke count:10000000
+tsc_interval:95907775)
 
-8) Improve test_tc_tunnel.sh BPF selftest to prevent client connect before the server
-   bind, from Alessandro Carminati.
+I did some digging with YiFei on why the static_branch_unlikely
+appears to be causing a 1 cycle regression, but could not get an
+answer that makes sense. The # of instructions in
+page_pool_return_page() with the static_branch_unlikely and without is
+about the same in the compiled .o file, and my understanding is that
+static_branch will cause code re-writing anyway so looking at the
+compiled code may not be representative.
 
-9) Fix BPF selftest benchmark for older glibc and use syscall(SYS_gettid) instead of
-   gettid(), from Alan Maguire.
+Worthy of note is that I get ~95% line rate of devmem TCP regardless
+of the static_branch_unlikely() or not, so impact of the static_branch
+is not large enough to be measurable end-to-end. I'm thinking I want
+to drop the static_branch_unlikely() in the next RFC since it doesn't
+improve the end-to-end throughput number and is resulting in a
+measurable improvement in the page pool benchmark.
 
-10) Implement a backward-compatible method for struct_ops types with additional fields
-    which are not present in older kernels, from Kui-Feng Lee.
-
-11) Add a small helper to check if an instruction is addr_space_cast from as(0) to as(1)
-    and utilize it in x86-64 JIT, from Puranjay Mohan.
-
-12) Small cleanup to remove unnecessary error check in bpf_struct_ops_map_update_elem,
-    from Martin KaFai Lau.
-
-13) Improvements to libbpf fd validity checks for BPF map/programs, from Mykyta Yatsenko.
-
-Please consider pulling these changes from:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git tags/for-netdev
-
-Thanks a lot!
-
-Also thanks to reporters, reviewers and testers of commits in this pull-request:
-
-Andrii Nakryiko, Daniel Borkmann, Eduard Zingerman, Ilya Leoshkevich, 
-Jiri Olsa, Johan Almbladh, Kees Cook, Masami Hiramatsu (Google), 
-Puranjay Mohan, Quentin Monnet, Stanislav Fomichev, Tiezhu Yang, 
-Yonghong Song
-
-----------------------------------------------------------------
-
-The following changes since commit 9187210eee7d87eea37b45ea93454a88681894a4:
-
-  Merge tag 'net-next-6.9' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next (2024-03-12 17:44:08 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git tags/for-netdev
-
-for you to fetch changes up to 14bb1e8c8d4ad5d9d2febb7d19c70a3cf536e1e5:
-
-  selftests/bpf: Fix flaky test btf_map_in_map/lookup_update (2024-03-25 17:25:54 +0100)
-
-----------------------------------------------------------------
-bpf-next-for-netdev
-
-----------------------------------------------------------------
-Alan Maguire (1):
-      selftests/bpf: Use syscall(SYS_gettid) instead of gettid() wrapper in bench
-
-Alessandro Carminati (Red Hat) (1):
-      selftests/bpf: Prevent client connect before server bind in test_tc_tunnel.sh
-
-Alexei Starovoitov (1):
-      Merge branch 'bpf-raw-tracepoint-support-for-bpf-cookie'
-
-Andrii Nakryiko (10):
-      Merge branch 'ignore-additional-fields-in-the-struct_ops-maps-in-an-updated-version'
-      bpf: preserve sleepable bit in subprog info
-      Merge branch 'current_pid_tgid-for-all-prog-types'
-      bpf: flatten bpf_probe_register call chain
-      bpf: pass whole link instead of prog when triggering raw tracepoint
-      bpf: support BPF cookie in raw tracepoint (raw_tp, tp_btf) programs
-      libbpf: add support for BPF cookie for raw_tp/tp_btf programs
-      selftests/bpf: add raw_tp/tp_btf BPF cookie subtests
-      selftests/bpf: scale benchmark counting by using per-CPU counters
-      bpf: Avoid get_kernel_nofault() to fetch kprobe entry IP
-
-Christophe Leroy (4):
-      bpf: Take return from set_memory_ro() into account with bpf_prog_lock_ro()
-      bpf: Take return from set_memory_rox() into account with bpf_jit_binary_lock_ro()
-      bpf: Remove arch_unprotect_bpf_trampoline()
-      bpf: Check return from set_memory_rox()
-
-Colin Ian King (1):
-      selftests/bpf: Remove second semicolon
-
-Geliang Tang (1):
-      selftests/bpf: Use start_server in bpf_tcp_ca
-
-Harishankar Vishwanathan (1):
-      bpf-next: Avoid goto in regs_refine_cond_op()
-
-Jesper Dangaard Brouer (1):
-      bpf/lpm_trie: Inline longest_prefix_match for fastpath
-
-Jiri Olsa (1):
-      selftests/bpf: Mark uprobe trigger functions with nocf_check attribute
-
-Kui-Feng Lee (3):
-      bpftool: Cast pointers for shadow types explicitly.
-      libbpf: Skip zeroed or null fields if not found in the kernel type.
-      selftests/bpf: Ensure libbpf skip all-zeros fields of struct_ops maps.
-
-Martin KaFai Lau (1):
-      bpf: Remove unnecessary err < 0 check in bpf_struct_ops_map_update_elem
-
-Mykyta Yatsenko (1):
-      libbpbpf: Check bpf_map/bpf_program fd validity
-
-Puranjay Mohan (1):
-      bpf: implement insn_is_cast_user() helper for JITs
-
-Quentin Monnet (4):
-      libbpf: Prevent null-pointer dereference when prog to load has no BTF
-      bpftool: Enable libbpf logs when loading pid_iter in debug mode
-      bpftool: Remove unnecessary source files from bootstrap version
-      bpftool: Clean up HOST_CFLAGS, HOST_LDFLAGS for bootstrap bpftool
-
-Yonghong Song (9):
-      bpftool: Fix missing pids during link show
-      bpf: Allow helper bpf_get_[ns_]current_pid_tgid() for all prog types
-      selftests/bpf: Replace CHECK with ASSERT_* in ns_current_pid_tgid test
-      selftests/bpf: Refactor out some functions in ns_current_pid_tgid test
-      selftests/bpf: Add a cgroup prog bpf_get_ns_current_pid_tgid() test
-      selftests/bpf: Add a sk_msg prog bpf_get_ns_current_pid_tgid() test
-      libbpf: Add new sec_def "sk_skb/verdict"
-      bpf: Sync uapi bpf.h to tools directory
-      selftests/bpf: Fix flaky test btf_map_in_map/lookup_update
-
- arch/arm/net/bpf_jit_32.c                          |  25 ++-
- arch/arm64/net/bpf_jit_comp.c                      |   7 +-
- arch/loongarch/net/bpf_jit.c                       |  22 ++-
- arch/mips/net/bpf_jit_comp.c                       |   3 +-
- arch/parisc/net/bpf_jit_core.c                     |   8 +-
- arch/s390/net/bpf_jit_comp.c                       |   6 +-
- arch/sparc/net/bpf_jit_comp_64.c                   |   6 +-
- arch/x86/net/bpf_jit_comp.c                        |  10 +-
- arch/x86/net/bpf_jit_comp32.c                      |   3 +-
- include/linux/bpf.h                                |   9 +-
- include/linux/filter.h                             |  20 +-
- include/linux/trace_events.h                       |  36 ++--
- include/trace/bpf_probe.h                          |   3 +-
- include/uapi/linux/bpf.h                           |   6 +-
- kernel/bpf/bpf_struct_ops.c                        |  10 +-
- kernel/bpf/cgroup.c                                |   2 -
- kernel/bpf/core.c                                  |  32 ++-
- kernel/bpf/helpers.c                               |   4 +
- kernel/bpf/lpm_trie.c                              |  18 +-
- kernel/bpf/syscall.c                               |  22 +--
- kernel/bpf/trampoline.c                            |  15 +-
- kernel/bpf/verifier.c                              |  31 +--
- kernel/trace/bpf_trace.c                           |  52 +++--
- net/bpf/bpf_dummy_struct_ops.c                     |   4 +-
- net/core/filter.c                                  |   2 -
- tools/bpf/bpftool/Makefile                         |  14 +-
- tools/bpf/bpftool/gen.c                            |   3 +-
- tools/bpf/bpftool/pids.c                           |  19 +-
- tools/bpf/bpftool/skeleton/pid_iter.bpf.c          |   4 +-
- tools/include/linux/compiler.h                     |   4 +
- tools/include/uapi/linux/bpf.h                     |   6 +-
- tools/lib/bpf/bpf.c                                |  16 +-
- tools/lib/bpf/bpf.h                                |   9 +
- tools/lib/bpf/libbpf.c                             | 111 +++++++++--
- tools/lib/bpf/libbpf.h                             |  11 ++
- tools/lib/bpf/libbpf.map                           |   2 +
- .../bpf/benchs/bench_local_storage_create.c        |   2 +-
- tools/testing/selftests/bpf/benchs/bench_trigger.c |  48 ++++-
- .../testing/selftests/bpf/prog_tests/bpf_cookie.c  | 114 ++++++++++-
- .../testing/selftests/bpf/prog_tests/bpf_tcp_ca.c  |  13 +-
- .../selftests/bpf/prog_tests/btf_map_in_map.c      |  26 +--
- .../selftests/bpf/prog_tests/ns_current_pid_tgid.c | 214 ++++++++++++++++++---
- .../bpf/prog_tests/test_struct_ops_module.c        |  47 +++++
- tools/testing/selftests/bpf/progs/iters.c          |   2 +-
- .../selftests/bpf/progs/struct_ops_module.c        |  16 +-
- .../testing/selftests/bpf/progs/test_bpf_cookie.c  |  16 ++
- .../selftests/bpf/progs/test_ns_current_pid_tgid.c |  31 ++-
- tools/testing/selftests/bpf/progs/trigger_bench.c  |  39 ++--
- tools/testing/selftests/bpf/test_cpp.cpp           |   5 +
- tools/testing/selftests/bpf/test_tc_tunnel.sh      |  13 +-
- 50 files changed, 867 insertions(+), 274 deletions(-)
+--=20
+Thanks,
+Mina
