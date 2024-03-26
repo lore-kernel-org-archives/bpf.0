@@ -1,155 +1,199 @@
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A3E129E88
-	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 19:00:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04CD31CAA6
+	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 19:01:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711479637; cv=none; b=BIf8K/PJq/eoZYVOPYG+5Cn0BniVvqV9wJ0rYHClErbL7HLYsTJ4ZDyaCDb2qsjjZpj9fEJKPESileTmKcz7L+7sbaMuUPbHtJkaBVTIet7PmZ0oH9kxvvX85GrxutVVaRnsTDJHO2/8z3FvXSYRZO3By+7jCtX/08xzK/t0F0A=
+	t=1711479686; cv=none; b=auSeNhTu5KxiBx3Y8VL/DCwdjXyHNV4sRYqvldgd19rX6XyNN19h462RGpNBGr93QO3IAI5hqsddqDdtGwItyRuxyXJHWp69TIFZQPYsSonC8a+kK7a6dqAwONBiYhtM1GOQUkpZSEKJrSWNfRw6JKdAqSMaf2V9HA7DXsF+VNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711479637; c=relaxed/simple;
-	bh=7HDloqRSDdn+FNnsv1j7aPLrnomcwb8pA0DxtNg/nrI=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=V0m82jMdpvCDWEh3kku8TNtdCExSBfnhKrQmOmF2HnUIGNTWs9VnRwsS/GduQbrE5PhDsMpMi6XyFfMIVn5NctHqvCgBH00y+tFXXODkneUpAsczbpZ6245iu3avdRyaXTgyRupa/3Q+pbOhmiFTIizX8mL7cb6qiACC+yXKW0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
+	s=arc-20240116; t=1711479686; c=relaxed/simple;
+	bh=uDnkpd/E/ZhmQfliHxZR4eUNWh0TyWgHVUFDClOx2JU=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Z1uFv4YENvx/XwH89nzILkkVyWElExfPsAHfxM9k1PTa7QFz4tkNQrgvrw8MGzoTtqquUVAgGSzvPb8V94Kf/Zzd8D+SDpcpf8gYjmm+0aTTsI+TfLm6FA803kiH1dhGYoOkSU6ItcZ46ZCY7/JbEgPIqAU2gbvKhIOkOL+pk6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-368185c12d7so56331085ab.2
-        for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 12:00:23 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7cc0370e9b0so664711539f.0
+        for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 12:01:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711479623; x=1712084423;
+        d=1e100.net; s=20230601; t=1711479684; x=1712084484;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+EQq1+C0rxxXWWlIywUcuDOKzK5nbEvWmmdoOCe2LpE=;
-        b=YNhDMIu/6VDwavnkhfRydFA+ItdImlioW/CmEc8SmHfptyM2WN8oyCb0UruzwBb1Xz
-         5ZMwNpQWpNVHzcfjG8RpRx2P733ZrkkqNSFAFKxfdQRKUbZ+Ehmt08SpQd1lrg/lb5Rb
-         XFB3fiMjGvM/1d+v9Lg+3gBQWHb5bmRa3QpBPm4TDDMbq/4YpbwW+42tryyT76ppnfDy
-         kjBRPrZMyOQwvu2z0iG2NLlS3w/2Ir3Bqj2W2ipHBcI9DeSx5VsbRrsfXR5qeNJFOWXx
-         RHbCYoFAdmHxJTO3KbgiIGVSV4b3s1z3E6gjfS9RcInpcQLmrSP06au29fIXLE0OdpHr
-         lRtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXjsamLIVo0Y7zfjQKK+SrV0FTGSULwx+rTQeqRPJE7+eaxAsHHadM34Czse185dLwOk0iNvsyPXyr2coM/SWrEm/qK
-X-Gm-Message-State: AOJu0YxIG9U7WFJpe9f7FHxkfLq/DZgwSo82ITq/JWcV+L+ddu7+jlA/
-	D/Yv4HsXNFjb0nihVPGucfIoY/8Oi/Xo0g/Nd4g4tET2Lqloe0AA8SLxsIv5A0UPIFOkXKZBog3
-	0s+8mOsfSF7oKIz8hNXdky0c413MbJTBEZDYUMc/bUedwiPFAhBoE/zc=
-X-Google-Smtp-Source: AGHT+IHbFVVAE7ADdPRwhETSn8OEneL86XBPP2rHXEU6ar59LK9sQo7jJrDfHGKTwtewbJIAbSzSFFXEveEa+Y/TTCYUIeydSiLX
+        bh=uBk5YLO78C1e6LbeCVC01y3eo+IPlOg2beyEL4ZeIME=;
+        b=AhhztoiSkFMosSFmIQD5JZCc8pe5ZEoD+4F1crArM6fkT9itoKYN2s6Ygs3wg8BDDl
+         4uQwCJSl7xVU5M8REgbM1tWRSPI6XM45oLNHypV/VSzl152WAWohZOc+jAGg7z5Wx2Qm
+         ZWdG0cy2GsriM91zHrcwylPgvP7HsFVMleaS6YVoF6S01R0v/lcBkEkYRaR7KQwaUB5B
+         TQrk6h0lIfORN6ilxIrKYF7x5bucljP+I/tLp+vSzzynMTEZNwI8Yzv7WSlHBpfeJS+2
+         LSqTwJZAKb8vajZK5UBl4QRm50bWw8jvqdFrboz6mUsqYpFTTVz2Ao0P1ooHTOR9bCAh
+         aRew==
+X-Forwarded-Encrypted: i=1; AJvYcCXA9jSLGnVzNsqSuKSxDD+oJfwo0cAUmbzVgs3ZPNV+OY5KMTofEwyQRg3AJq0QhHULqXKVkEDYLTA8+zVzTsB+gQ3w
+X-Gm-Message-State: AOJu0YxVqXUabLyKCkbc2TPfKk7XKrYfjHVTHp8xanCjbohwz7elTnt5
+	PxWJBySkM0661Sj9Xq30WlYBetV4xvgpoAg4Fzkb8KRtIKdVLQp8d5C8v3dEE87UPGc3PTfRUrM
+	eysdYPdR+UczSuefD+Ck7CUcmInLQGrF43+FCLWZ4Sst0PtlnLDwcDv0=
+X-Google-Smtp-Source: AGHT+IEA7+UbnRTVERv929IpFZrxKhJAXUoAMW6jMh7SWxzc6Ouqkc9645DBkDDpwh22vhZ94UGSZi9rV/JfdjW5wmWbqUh5iH1X
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:12ea:b0:368:7d6b:a7cd with SMTP id
- l10-20020a056e0212ea00b003687d6ba7cdmr537549iln.3.1711479622876; Tue, 26 Mar
- 2024 12:00:22 -0700 (PDT)
-Date: Tue, 26 Mar 2024 12:00:22 -0700
+X-Received: by 2002:a05:6638:13d0:b0:47c:16cc:5780 with SMTP id
+ i16-20020a05663813d000b0047c16cc5780mr622804jaj.5.1711479684342; Tue, 26 Mar
+ 2024 12:01:24 -0700 (PDT)
+Date: Tue, 26 Mar 2024 12:01:24 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f6531b061494e696@google.com>
-Subject: [syzbot] [bpf?] [net?] general protection fault in dev_map_enqueue
-From: syzbot <syzbot+af9492708df9797198d6@syzkaller.appspotmail.com>
+Message-ID: <000000000000a042d7061494ea83@google.com>
+Subject: [syzbot] [bpf?] [net?] possible deadlock in sk_psock_drop
+From: syzbot <syzbot+59286e53e6c7d1921164@syzkaller.appspotmail.com>
 To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com, 
-	haoluo@google.com, hawk@kernel.org, john.fastabend@gmail.com, 
-	jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org, 
-	linux-kernel@vger.kernel.org, martin.lau@linux.dev, netdev@vger.kernel.org, 
-	sdf@google.com, song@kernel.org, syzkaller-bugs@googlegroups.com, 
-	yonghong.song@linux.dev
+	daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com, 
+	jakub@cloudflare.com, john.fastabend@gmail.com, kuba@kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
+	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 
 Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    fe46a7dd189e Merge tag 'sound-6.9-rc1' of git://git.kernel..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=158ad421180000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fe78468a74fdc3b7
-dashboard link: https://syzkaller.appspot.com/bug?extid=af9492708df9797198d6
+HEAD commit:    f99c5f563c17 Merge tag 'nf-24-03-21' of git://git.kernel.o..
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=15a444b1180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6fb1be60a193d440
+dashboard link: https://syzkaller.appspot.com/bug?extid=59286e53e6c7d1921164
 compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0f7abe4afac7/disk-fe46a7dd.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/82598d09246c/vmlinux-fe46a7dd.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/efa23788c875/bzImage-fe46a7dd.xz
+disk image: https://storage.googleapis.com/syzbot-assets/65d3f3eb786e/disk-f99c5f56.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/799cf7f28ff8/vmlinux-f99c5f56.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ab26c60c3845/bzImage-f99c5f56.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+af9492708df9797198d6@syzkaller.appspotmail.com
+Reported-by: syzbot+59286e53e6c7d1921164@syzkaller.appspotmail.com
 
-general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN NOPTI
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 1 PID: 13398 Comm: syz-executor.3 Not tainted 6.8.0-syzkaller-08951-gfe46a7dd189e #0
+======================================================
+WARNING: possible circular locking dependency detected
+6.8.0-syzkaller-05271-gf99c5f563c17 #0 Not tainted
+------------------------------------------------------
+syz-executor.4/21268 is trying to acquire lock:
+ffff88802248b238 (&psock->ingress_lock){+...}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:356 [inline]
+ffff88802248b238 (&psock->ingress_lock){+...}-{2:2}, at: sk_psock_stop net/core/skmsg.c:802 [inline]
+ffff88802248b238 (&psock->ingress_lock){+...}-{2:2}, at: sk_psock_drop+0x2fb/0x500 net/core/skmsg.c:846
+
+but task is already holding lock:
+ffff88802c949620 (&htab->buckets[i].lock){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:356 [inline]
+ffff88802c949620 (&htab->buckets[i].lock){+.-.}-{2:2}, at: sock_hash_delete_elem+0xb0/0x300 net/core/sock_map.c:939
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&htab->buckets[i].lock){+.-.}-{2:2}:
+       lock_acquire+0x1e4/0x530 kernel/locking/lockdep.c:5754
+       __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+       _raw_spin_lock_bh+0x35/0x50 kernel/locking/spinlock.c:178
+       spin_lock_bh include/linux/spinlock.h:356 [inline]
+       sock_hash_delete_elem+0xb0/0x300 net/core/sock_map.c:939
+       0xffffffffa000095f
+       bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+       __bpf_prog_run include/linux/filter.h:657 [inline]
+       bpf_prog_run include/linux/filter.h:664 [inline]
+       __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+       bpf_trace_run2+0x204/0x420 kernel/trace/bpf_trace.c:2420
+       trace_kfree include/trace/events/kmem.h:94 [inline]
+       kfree+0x291/0x380 mm/slub.c:4396
+       sk_psock_cork_free include/linux/skmsg.h:430 [inline]
+       sk_psock_stop+0xc5/0x110 net/core/skmsg.c:804
+       sock_map_close+0x1b2/0x2d0 net/core/sock_map.c:1645
+       inet_release+0x17d/0x200 net/ipv4/af_inet.c:437
+       __sock_release net/socket.c:659 [inline]
+       sock_close+0xbc/0x240 net/socket.c:1421
+       __fput+0x429/0x8a0 fs/file_table.c:423
+       __do_sys_close fs/open.c:1557 [inline]
+       __se_sys_close fs/open.c:1542 [inline]
+       __x64_sys_close+0x7f/0x110 fs/open.c:1542
+       do_syscall_64+0xfb/0x240
+       entry_SYSCALL_64_after_hwframe+0x6d/0x75
+
+-> #0 (&psock->ingress_lock){+...}-{2:2}:
+       check_prev_add kernel/locking/lockdep.c:3134 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3253 [inline]
+       validate_chain+0x18cb/0x58e0 kernel/locking/lockdep.c:3869
+       __lock_acquire+0x1346/0x1fd0 kernel/locking/lockdep.c:5137
+       lock_acquire+0x1e4/0x530 kernel/locking/lockdep.c:5754
+       __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+       _raw_spin_lock_bh+0x35/0x50 kernel/locking/spinlock.c:178
+       spin_lock_bh include/linux/spinlock.h:356 [inline]
+       sk_psock_stop net/core/skmsg.c:802 [inline]
+       sk_psock_drop+0x2fb/0x500 net/core/skmsg.c:846
+       sock_hash_delete_elem+0x27e/0x300 net/core/sock_map.c:943
+       map_delete_elem+0x464/0x5e0 kernel/bpf/syscall.c:1696
+       __sys_bpf+0x598/0x810 kernel/bpf/syscall.c:5622
+       __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
+       __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
+       __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5736
+       do_syscall_64+0xfb/0x240
+       entry_SYSCALL_64_after_hwframe+0x6d/0x75
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&htab->buckets[i].lock);
+                               lock(&psock->ingress_lock);
+                               lock(&htab->buckets[i].lock);
+  lock(&psock->ingress_lock);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor.4/21268:
+ #0: ffffffff8e131920 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:329 [inline]
+ #0: ffffffff8e131920 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:781 [inline]
+ #0: ffffffff8e131920 (rcu_read_lock){....}-{1:2}, at: map_delete_elem+0x388/0x5e0 kernel/bpf/syscall.c:1695
+ #1: ffff88802c949620 (&htab->buckets[i].lock){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:356 [inline]
+ #1: ffff88802c949620 (&htab->buckets[i].lock){+.-.}-{2:2}, at: sock_hash_delete_elem+0xb0/0x300 net/core/sock_map.c:939
+
+stack backtrace:
+CPU: 1 PID: 21268 Comm: syz-executor.4 Not tainted 6.8.0-syzkaller-05271-gf99c5f563c17 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
-RIP: 0010:dev_map_enqueue+0x31/0x3e0 kernel/bpf/devmap.c:539
-Code: 41 56 41 55 41 54 53 48 83 ec 18 49 89 d4 49 89 f5 48 89 fd 49 be 00 00 00 00 00 fc ff df e8 56 3a d8 ff 48 89 e8 48 c1 e8 03 <42> 80 3c 30 00 74 08 48 89 ef e8 60 89 3b 00 4c 8b 7d 00 48 83 c5
-RSP: 0018:ffffc90010e6f688 EFLAGS: 00010256
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000040000
-RDX: ffffc9000fb19000 RSI: 0000000000000c96 RDI: 0000000000000c97
-RBP: 0000000000000000 R08: 0000000000000005 R09: ffffffff8954502e
-R10: 0000000000000004 R11: ffff88805bde3c00 R12: ffff88807e182000
-R13: ffff88805595d070 R14: dffffc0000000000 R15: ffff8880b953c288
-FS:  00007fe7632126c0(0000) GS:ffff8880b9500000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b32d23000 CR3: 000000006b1cc000 CR4: 0000000000350ef0
 Call Trace:
  <TASK>
- __xdp_do_redirect_frame net/core/filter.c:4384 [inline]
- xdp_do_redirect_frame+0x20d/0x4d0 net/core/filter.c:4438
- xdp_test_run_batch net/bpf/test_run.c:336 [inline]
- bpf_test_run_xdp_live+0xe8a/0x1e90 net/bpf/test_run.c:384
- bpf_prog_test_run_xdp+0x813/0x11b0 net/bpf/test_run.c:1267
- bpf_prog_test_run+0x33c/0x3b0 kernel/bpf/syscall.c:4240
- __sys_bpf+0x48d/0x810 kernel/bpf/syscall.c:5649
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2e0 lib/dump_stack.c:106
+ check_noncircular+0x36a/0x4a0 kernel/locking/lockdep.c:2187
+ check_prev_add kernel/locking/lockdep.c:3134 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3253 [inline]
+ validate_chain+0x18cb/0x58e0 kernel/locking/lockdep.c:3869
+ __lock_acquire+0x1346/0x1fd0 kernel/locking/lockdep.c:5137
+ lock_acquire+0x1e4/0x530 kernel/locking/lockdep.c:5754
+ __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+ _raw_spin_lock_bh+0x35/0x50 kernel/locking/spinlock.c:178
+ spin_lock_bh include/linux/spinlock.h:356 [inline]
+ sk_psock_stop net/core/skmsg.c:802 [inline]
+ sk_psock_drop+0x2fb/0x500 net/core/skmsg.c:846
+ sock_hash_delete_elem+0x27e/0x300 net/core/sock_map.c:943
+ map_delete_elem+0x464/0x5e0 kernel/bpf/syscall.c:1696
+ __sys_bpf+0x598/0x810 kernel/bpf/syscall.c:5622
  __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
  __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
  __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5736
- do_syscall_64+0xfd/0x240
+ do_syscall_64+0xfb/0x240
  entry_SYSCALL_64_after_hwframe+0x6d/0x75
-RIP: 0033:0x7fe76247dda9
+RIP: 0033:0x7f008787dda9
 Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 20 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fe7632120c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 00007fe7625abf80 RCX: 00007fe76247dda9
-RDX: 0000000000000050 RSI: 0000000020000240 RDI: 000000000000000a
-RBP: 00007fe7624ca47a R08: 0000000000000000 R09: 0000000000000000
+RSP: 002b:00007f00885cd0c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007f00879abf80 RCX: 00007f008787dda9
+RDX: 0000000000000020 RSI: 00000000200000c0 RDI: 0000000000000003
+RBP: 00007f00878ca47a R08: 0000000000000000 R09: 0000000000000000
 R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 000000000000000b R14: 00007fe7625abf80 R15: 00007ffcf8e59e58
+R13: 000000000000000b R14: 00007f00879abf80 R15: 00007fff30ed4838
  </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:dev_map_enqueue+0x31/0x3e0 kernel/bpf/devmap.c:539
-Code: 41 56 41 55 41 54 53 48 83 ec 18 49 89 d4 49 89 f5 48 89 fd 49 be 00 00 00 00 00 fc ff df e8 56 3a d8 ff 48 89 e8 48 c1 e8 03 <42> 80 3c 30 00 74 08 48 89 ef e8 60 89 3b 00 4c 8b 7d 00 48 83 c5
-RSP: 0018:ffffc90010e6f688 EFLAGS: 00010256
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000040000
-RDX: ffffc9000fb19000 RSI: 0000000000000c96 RDI: 0000000000000c97
-RBP: 0000000000000000 R08: 0000000000000005 R09: ffffffff8954502e
-R10: 0000000000000004 R11: ffff88805bde3c00 R12: ffff88807e182000
-R13: ffff88805595d070 R14: dffffc0000000000 R15: ffff8880b953c288
-FS:  00007fe7632126c0(0000) GS:ffff8880b9500000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b32d23000 CR3: 000000006b1cc000 CR4: 0000000000350ef0
-----------------
-Code disassembly (best guess):
-   0:	41 56                	push   %r14
-   2:	41 55                	push   %r13
-   4:	41 54                	push   %r12
-   6:	53                   	push   %rbx
-   7:	48 83 ec 18          	sub    $0x18,%rsp
-   b:	49 89 d4             	mov    %rdx,%r12
-   e:	49 89 f5             	mov    %rsi,%r13
-  11:	48 89 fd             	mov    %rdi,%rbp
-  14:	49 be 00 00 00 00 00 	movabs $0xdffffc0000000000,%r14
-  1b:	fc ff df
-  1e:	e8 56 3a d8 ff       	call   0xffd83a79
-  23:	48 89 e8             	mov    %rbp,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	42 80 3c 30 00       	cmpb   $0x0,(%rax,%r14,1) <-- trapping instruction
-  2f:	74 08                	je     0x39
-  31:	48 89 ef             	mov    %rbp,%rdi
-  34:	e8 60 89 3b 00       	call   0x3b8999
-  39:	4c 8b 7d 00          	mov    0x0(%rbp),%r15
-  3d:	48                   	rex.W
-  3e:	83                   	.byte 0x83
-  3f:	c5                   	.byte 0xc5
 
 
 ---
