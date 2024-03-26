@@ -1,120 +1,69 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501411E485;
-	Tue, 26 Mar 2024 11:55:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7FE6E61D;
+	Tue, 26 Mar 2024 11:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711454118; cv=none; b=RRfn3wbGfwaWMkXjaT79j1PJ0XARdYoYtMnDhK63gW6Pw81C3vnCfWMuXNqRoIy2oecQlh68RimxqOE/z0lO2WObNSE/udoQ5TRzj02xewl7jA2duw0RYKfay7OSH+F1VIZWvUjNc+RU9g/H8gk7PMu3m4eyHT8pSAfXTyqV2dw=
+	t=1711454264; cv=none; b=USrDyUDbxrTHXCsaC/FoL9kxSgpT+B+QK8wqLMxPXTJNOd+h0gAs0CCGBNlpD3T0eICy0mB1n825GvHvXus7IqSRGm9eK9sn3M+RhjlKa2FNpAaunKdje7B1D0pPTBlWujsm+YOWld3VjRAklwNuvoWfvkhogTFUXn9b3tnvWy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711454118; c=relaxed/simple;
-	bh=uCcHRj1EPqJseqwLf22pNV9+UeLCYFNEJtYoMZqpZh0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FTZ0Rg5Kli23QWqb3lh2ao9euSFF/fwwGoE0TfjUNJ3wvUYyIlJlWqHLTn6GBf3kNBwMV5IFE5HueNUpF6K9hsRk0YdwuGI+Hk65BiStxA0wkusyKxi5QY0TON2Nfq/neOktHGdwA5l/Y8wJSvdXa5ZWEbHXbNpasEwJvHRDFfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XWJvw+bR; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711454264; c=relaxed/simple;
+	bh=EKJhulSFxLWQLaF7yaxSDnu58jC9IeQn/dXAU0JKliQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=QoPZOEwAk0Yt6nEs/hzNVqxnig8kslz/wTvcTI/TW57XOoaVHHnZzsngqormlyVJfCCu+L+CNjtq9lGn6RcoQwcCmOf405Y9daau7UXgq/mE3zda2M5HjZE67E+o1QZhNHGm4UOdeZl2x3HzdUXJ73us5PAoYPZmZ3Gjm9j5F+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hMw4D1PQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XWJvw+bR"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a46d0a8399aso1070146066b.1;
-        Tue, 26 Mar 2024 04:55:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711454114; x=1712058914; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qr/4I2RJUe85l43HNxbnkFvc01YkMgJpGYtWHzCf1GQ=;
-        b=XWJvw+bRAsiEQ+0qGNbbKn0G2JJVPnSjfOk7wNE+W4zfWzH5VcyodArHA5PVj3Iy0g
-         NCcs4HGgO3LPSdaH99AWWHP3mNBySm+YDqAORfmpwWgfL67XzxkUe/WsD5K5WLfLs04x
-         D0JXORkuTBnSdCKWT8lwfvSy2IxwpmjT7Kwaufx3QndwpBupfQztsHz576nXLFuA3u2u
-         5zK9/jGTzlGmF1z3bzCP4AghKKC6hWQSs/Yb+cn3yERyFC3qDKiKS8AfMwYLSNeU2nZ4
-         NHYol5O+blQqhvnlftuGPOVLUiipqyjxeRevEsX2sAMVe3/RuaRPZt2eWt/L4XL4nYi7
-         gtnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711454114; x=1712058914;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qr/4I2RJUe85l43HNxbnkFvc01YkMgJpGYtWHzCf1GQ=;
-        b=XhpGPq1JTYgdB27QgrxgB/KQ+mZ8rL2FqSeunrPnAIrZRrppB6VwAb4F/serb3Vdgg
-         Td+hK1nXPHyBLUS6ngbNVfBztaBhTuQBoRLXMCWgkwJfAwVpPlTCutqg4sWE1kY5cepe
-         EY3KIMugEQKXl3h+fBqIBSb6rwwHZg5C4UOz8fHNILk5/E1aIwZp5QVVAtUzPptJtDAx
-         sEg6fVgl+6OG9H/29wh+o1oHaE4kz6mLQTipklTKnFyFZhGut59ZvV3S60thQlk1tAsC
-         +8eD/ysQfXIc9F/O2/t5adHNDcfDzZogknRXAwMLOJdNLz2wYJWZ+v+dTje6Z/l/XP4C
-         f6sA==
-X-Forwarded-Encrypted: i=1; AJvYcCVGeSHjy6L4qn4vmpJgRryBABb6T879N0rcmsQf5Tu/7VXof4OeG+ZC+KCWgPZvoYVTiHkX23fGD86knmh4gMdQ7PuMXDQmPRkvVce43qF4G85zh2lR5pxvMi2JIUA2yK/AVIXP2K1Q9XY/oMwLFT76FrrACZo4Z8AMV/hydbnIi8bzxqtJ1CNHU/NESCsHL8mm5J+9zaTvIhHeD+7kXFgPJ6yBBACexQ==
-X-Gm-Message-State: AOJu0YyXKOlJyKA3eoMKddgCUj1JTkQe8wUJ6BvB26dOsMm+HlNPAge/
-	CfpoksbSm0qDB2AJmktJeR0mpx4zbE8I8TJU/WXs0wGxQIp6Jlyl
-X-Google-Smtp-Source: AGHT+IGj7Coyzs0BQ3HvVy0I0XPj/KsFEkGhQjLHg0IkJe32C19rYisvF2RsktnUZUadBtnSCF4VYA==
-X-Received: by 2002:a17:907:97d5:b0:a47:4563:e5ba with SMTP id js21-20020a17090797d500b00a474563e5bamr1293548ejc.19.1711454114378;
-        Tue, 26 Mar 2024 04:55:14 -0700 (PDT)
-Received: from jonhaslam-mbp.dhcp.thefacebook.com ([2620:10d:c092:400::5:35a3])
-        by smtp.gmail.com with ESMTPSA id o1-20020a1709064f8100b00a4a38d10801sm1958414eju.35.2024.03.26.04.55.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Mar 2024 04:55:14 -0700 (PDT)
-Date: Tue, 26 Mar 2024 11:55:12 +0000
-From: Jonthan Haslam <jonathan.haslam@gmail.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Ingo Molnar <mingo@kernel.org>, linux-trace-kernel@vger.kernel.org, 
-	andrii@kernel.org, bpf@vger.kernel.org, rostedt@goodmis.org, mhiramat@kernel.org, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] uprobes: reduce contention on uprobes_tree access
-Message-ID: <45ei3cgqjuwcatz622nodyb4eal4ue4diclswpahc36gctdvri@2gfjlmljrisg>
-References: <20240321145736.2373846-1-jonathan.haslam@gmail.com>
- <Zf+d9twfyIDosINf@gmail.com>
- <syviklbpdblcwr3l2seuwyzfrg2hy2shx5f6ho6yf4s4ce63tc@nbo4by247y6z>
- <CAEf4BzZnUcFEk+7r39n8=zopBeK96wfQ4Vtndd2tY2ymqOpCtA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hMw4D1PQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E9C1C433F1;
+	Tue, 26 Mar 2024 11:57:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711454264;
+	bh=EKJhulSFxLWQLaF7yaxSDnu58jC9IeQn/dXAU0JKliQ=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=hMw4D1PQCahqfw8MtYxsjzHrzUNPiIFh/by6PO26L5JBoud0NXvOoP+pWDolP6A7W
+	 MHWxMfRihenzXqisqycL3g12C+CTWoltIvH4CNPUdz+72PbKPN+WRf81R/oXG8bDpf
+	 T1dkgCTQSYki+AzT7VZB67H8zKEuIGM/3R4nByOKzGAkwCto7GnC2k4qJLIzF7Eq/D
+	 /5kSEGrmMOO3Stz0ZnDtyv2/s9EdzPUq06xhiB22b5Veavz/fy0YY//StezneyCMcw
+	 b0BhOnWShhQodg0X1OfcREnyS8OlaUMwqW9UypBtbcnB46bzRA+9vjV1wmjQjZJ4Bo
+	 J5FymRUa+DgSQ==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZnUcFEk+7r39n8=zopBeK96wfQ4Vtndd2tY2ymqOpCtA@mail.gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 26 Mar 2024 13:57:37 +0200
+Message-Id: <D03NWFQM9XP2.1AWMB9VW98Z98@kernel.org>
+Cc: <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+ <linux-s390@vger.kernel.org>, <sparclinux@vger.kernel.org>,
+ <linux-sgx@vger.kernel.org>, <nvdimm@lists.linux.dev>,
+ <linux-cxl@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+ <io-uring@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH v4 02/14] mm: Switch mm->get_unmapped_area() to a flag
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Rick Edgecombe" <rick.p.edgecombe@intel.com>,
+ <Liam.Howlett@oracle.com>, <akpm@linux-foundation.org>, <bp@alien8.de>,
+ <broonie@kernel.org>, <christophe.leroy@csgroup.eu>,
+ <dave.hansen@linux.intel.com>, <debug@rivosinc.com>, <hpa@zytor.com>,
+ <keescook@chromium.org>, <kirill.shutemov@linux.intel.com>,
+ <luto@kernel.org>, <mingo@redhat.com>, <peterz@infradead.org>,
+ <tglx@linutronix.de>, <x86@kernel.org>
+X-Mailer: aerc 0.17.0
+References: <20240326021656.202649-1-rick.p.edgecombe@intel.com>
+ <20240326021656.202649-3-rick.p.edgecombe@intel.com>
+In-Reply-To: <20240326021656.202649-3-rick.p.edgecombe@intel.com>
 
-> > > Have you considered/measured per-CPU RW semaphores?
-> >
-> > No I hadn't but thanks hugely for suggesting it! In initial measurements
-> > it seems to be between 20-100% faster than the RW spinlocks! Apologies for
-> > all the exclamation marks but I'm very excited. I'll do some more testing
-> > tomorrow but so far it's looking very good.
-> >
-> 
-> Documentation ([0]) says that locking for writing calls
-> synchronize_rcu(), is that right? If that's true, attaching multiple
-> uprobes (including just attaching a single BPF multi-uprobe) will take
-> a really long time. We need to confirm we are not significantly
-> regressing this. And if we do, we need to take measures in the BPF
-> multi-uprobe attachment code path to make sure that a single
-> multi-uprobe attachment is still fast.
-> 
-> If my worries above turn out to be true, it still feels like a first
-> good step should be landing this patch as is (and get it backported to
-> older kernels), and then have percpu rw-semaphore as a final (and a
-> bit more invasive) solution (it's RCU-based, so feels like a good
-> primitive to settle on), making sure to not regress multi-uprobes
-> (we'll probably will need some batched API for multiple uprobes).
-> 
-> Thoughts?
+On Tue Mar 26, 2024 at 4:16 AM EET, Rick Edgecombe wrote:
+> The mm_struct contains a function pointer *get_unmapped_area(), which
+> is set to either arch_get_unmapped_area() or
+> arch_get_unmapped_area_topdown() during the initialization of the mm.
 
-Agreed. In the percpu_down_write() path we call rcu_sync_enter() which is
-what calls into synchronize_rcu(). I haven't done the measurements yet but
-I would imagine this has to regress probe attachment, at least in the
-uncontended case. Of course, reads are by far the dominant mode here but
-we probably shouldn't punish writes excessively. I will do some
-measurements to quantify the write penalty here.
+In which conditions which path is used during the initialization of mm
+and why is this the case? It is an open claim in the current form.
 
-I agree that a batched interface for probe attachment is needed here. The
-usual mode of operation for us is that we have a number of USDTs (uprobes)
-in hand and we want to enable and disable them in one shot. Removing the
-need to do multiple locking operations is definitely an efficiency
-improvement that needs to be done. Tie that together with per-CPU RW
-semaphores and this should scale extremely well in both a read and write
-case.
+That would be nice to have documented for the sake of being complete
+description. I have zero doubts of the claim being untrue.
 
-Jon.
+BR, Jarkko
