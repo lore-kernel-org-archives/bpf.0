@@ -1,48 +1,74 @@
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D961763E6
-	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 14:36:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2EFED9;
+	Tue, 26 Mar 2024 14:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711463802; cv=none; b=R2YCKE9W7YjLC9iZ/tMsxmgNauYMNsGCAVOPWvLShd3usAzzPSGEsqmh0/SI9S6wJ9wwWR3xndEhXI2Fla49cpQ7SB0rl0H+AI4lf/2vsF8+Hk2otuEO5XBDHyFXC92CQlCir1kTaMdsTr5WLOgqVrFZPPD4/DkDPTfB4Xq3qL8=
+	t=1711464475; cv=none; b=PAfCurn4xudZRybbuD85+d1vw6LsFdeT7zqCxPDo39QLV7XhXMOJGm1k1yxRKqyi/JSfoG5+YLF4ugZ6nQjqqvREPql0L07GKtHxjbtZpDu9b+lkaM+lIs+RJpyd7A7k6CQ1yWwUuidiIwpPiYFOs/JkpbbCUNCgv3waKKlOwc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711463802; c=relaxed/simple;
-	bh=BnnobBd+nr5OHqVJN5LxehhCkRKzOcKDzEnKk6VcuBc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=T3anWe4cjY5VNjnGzD/E5cQMVo7NU3lDxF0SY6off2AtrgOeg1BLoK0QMclpW/eHhHty4l5VPiorURFugicNoefRBGgx7ZfHdUE6ehr9pk98f6s+Fm5gK8KAKksXpJ/mc6Zc+gHegssV8RsbMfgomLs+WgES8eu+F0onyi6QOFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V3sn54wb1z4f3l1m
-	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 22:36:25 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id C7CB01A0172
-	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 22:36:33 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP1 (Coremail) with SMTP id cCh0CgD3Ew1w3QJmjdyVIA--.25246S2;
-	Tue, 26 Mar 2024 22:36:33 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
+	s=arc-20240116; t=1711464475; c=relaxed/simple;
+	bh=2VRodtLYji0E2iO14KF37hDwen2VjVMAvwAcrcgPpT4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RP8DQWyViGOgZmbG2QgzfPgzfywKA/8kNopgnvNdc4T6EGj7lUY4r7gXw1Opte+0uc+fUuisIXtCDlUPqjnQW03IOAW28kHepgtmA8eSrcorHK9W+3xOlMOLutz9UQHP5vIMjzlkvWulGnlVHp5NSC5gpQjGL6gYvjuJAQ743BE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E4BQDDTk; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E4BQDDTk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C54DC433F1;
+	Tue, 26 Mar 2024 14:47:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711464475;
+	bh=2VRodtLYji0E2iO14KF37hDwen2VjVMAvwAcrcgPpT4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=E4BQDDTkgrdwdIkmMvielkRpTAsqHIEG3dNSrY21fnxwoLYvLOoCje+XGKi0Q6+lb
+	 vXFNIViLU9NTXcLVTR3XwdRIIouf6xWYpzwnmHI2t5ZxiCoyK5CtJGLAMaMQhP4GqM
+	 LFJItP61E8WSzWQOgV3iidHNLT5C63yxLkS/wCtha2CzziKBhSzJgJ8mdUJnDc4MsM
+	 mHMWnrCmz0M9BMr26mXQL/Ot8TdiiiLpbc7Z6ykNI9wEj4r4WuyvPMGjqE0R7U0B4a
+	 JYlh8463XR1dZ+1yi/iNsx2NnACkLOIgc70LBf5p2SbJ28JbOOieq3jHp29R//i1VX
+	 XyBZZot1G0W0w==
+From: Arnd Bergmann <arnd@kernel.org>
+To: linux-kbuild@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: Nicolas Schier <nicolas@fjasle.eu>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Bill Metzenthen <billm@melbpc.org.au>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	x86@kernel.org,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Harry Wentland <harry.wentland@amd.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Sergey Shtylyov <s.shtylyov@omp.ru>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	"Manoj N. Kumar" <manoj@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
 	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Pu Lehui <pulehui@huawei.com>,
-	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf-next] selftests/bpf: Enable cross platform testing for local vmtest
-Date: Tue, 26 Mar 2024 14:37:48 +0000
-Message-Id: <20240326143748.3338473-1-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
+	Steven Rostedt <rostedt@goodmis.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Greg Kroah-Hartman <gregkh@suse.de>,
+	linux-kernel@vger.kernel.org,
+	linux-ide@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org,
+	nouveau@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org,
+	netdev@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-scsi@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-mm@kvack.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 00/12] kbuild: enable some -Wextra warnings by default
+Date: Tue, 26 Mar 2024 15:47:15 +0100
+Message-Id: <20240326144741.3094687-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,127 +76,107 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgD3Ew1w3QJmjdyVIA--.25246S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZr48uFWDCFWkAw17XFyfCrg_yoW5uw1rpw
-	s5Zw4aya4ruF1Sgwn7AF409FWfGwn5ZrW7Gry7X343XwnaqFn2yryftayqqrnxWryftrsx
-	ZF92gF90k3WUZ37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-	6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-	n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wryl
-	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-	AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v2
-	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
-	UdHUDUUUUU=
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-From: Pu Lehui <pulehui@huawei.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-The variable $ARCH in the current script is platform semantics, not
-kernel semantics. Rename it to $PLATFORM so that we can easily use $ARCH
-in cross-compilation. For now, Using PLATFORM= and CROSS_COMPILE=
-options will enable cross platform testing:
+This is a follow-up on a couple of patch series I sent in the past,
+enabling -Wextra (aside from stuff that is explicitly disabled),
+-Wcast-function-pointer-strict and -Wrestrict.
 
-  PLATFORM=<platform> CROSS_COMPILE=<toolchain> vmtest.sh -- ./test_progs
+I have tested these on 'defconfig' and 'allmodconfig' builds across
+all architectures, as well as many 'randconfig' builds on x86, arm and
+arm64. It would be nice to have all the Makefile.extrawarn changes in
+v6.10, hopefully with the driver fixes going in before that through
+the respective subsystem trees.
 
-Meanwhile, some descriptions have been corrected.
+     Arnd
 
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- tools/testing/selftests/bpf/vmtest.sh | 34 ++++++++++++++++++++-------
- 1 file changed, 25 insertions(+), 9 deletions(-)
+Arnd Bergmann (12):
+  kbuild: make -Woverride-init warnings more consistent
+  [v3] parport: mfc3: avoid empty-body warning
+  kbuild: turn on -Wextra by default
+  kbuild: remove redundant extra warning flags
+  firmware: dmi-id: add a release callback function
+  nouveau: fix function cast warning
+  cxlflash: fix function pointer cast warnings
+  x86: math-emu: fix function cast warnings
+  kbuild: enable -Wcast-function-type-strict unconditionally
+  sata: sx4: fix pdc20621_get_from_dimm() on 64-bit
+  [v4] kallsyms: rework symbol lookup return codes
+  kbuild: turn on -Wrestrict by default
 
-diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
-index 65d14f3bbe30..10e24f25cd40 100755
---- a/tools/testing/selftests/bpf/vmtest.sh
-+++ b/tools/testing/selftests/bpf/vmtest.sh
-@@ -4,28 +4,34 @@
- set -u
- set -e
- 
--# This script currently only works for x86_64 and s390x, as
--# it is based on the VM image used by the BPF CI, which is
-+# This script currently only works for the following platforms,
-+# as it is based on the VM image used by the BPF CI, which is
- # available only for these architectures.
--ARCH="$(uname -m)"
--case "${ARCH}" in
-+PLATFORM="${PLATFORM:-$(uname -m)}"
-+case "${PLATFORM}" in
- s390x)
- 	QEMU_BINARY=qemu-system-s390x
- 	QEMU_CONSOLE="ttyS1"
--	QEMU_FLAGS=(-smp 2)
-+	HOST_FLAGS=(-smp 2 -enable-kvm)
-+	CROSS_FLAGS=(-smp 2)
- 	BZIMAGE="arch/s390/boot/vmlinux"
-+	ARCH="s390"
- 	;;
- x86_64)
- 	QEMU_BINARY=qemu-system-x86_64
- 	QEMU_CONSOLE="ttyS0,115200"
--	QEMU_FLAGS=(-cpu host -smp 8)
-+	HOST_FLAGS=(-cpu host -enable-kvm -smp 8)
-+	CROSS_FLAGS=(-smp 8)
- 	BZIMAGE="arch/x86/boot/bzImage"
-+	ARCH="x86"
- 	;;
- aarch64)
- 	QEMU_BINARY=qemu-system-aarch64
- 	QEMU_CONSOLE="ttyAMA0,115200"
--	QEMU_FLAGS=(-M virt,gic-version=3 -cpu host -smp 8)
-+	HOST_FLAGS=(-M virt,gic-version=3 -cpu host -enable-kvm -smp 8)
-+	CROSS_FLAGS=(-M virt,gic-version=3 -smp 8)
- 	BZIMAGE="arch/arm64/boot/Image"
-+	ARCH="arm64"
- 	;;
- *)
- 	echo "Unsupported architecture"
-@@ -58,6 +64,10 @@ tools/testing/selftests/bpf. e.g:
- If no command is specified and a debug shell (-s) is not requested,
- "${DEFAULT_COMMAND}" will be run by default.
- 
-+Using PLATFORM= and CROSS_COMPILE= options will enable cross platform testing:
-+
-+  PLATFORM=<platform> CROSS_COMPILE=<toolchain> $0 -- ./test_progs -t test_lsm
-+
- If you build your kernel using KBUILD_OUTPUT= or O= options, these
- can be passed as environment variables to the script:
- 
-@@ -244,12 +254,17 @@ EOF
- 		exit 1
- 	fi
- 
-+	if [[ "${CROSS_COMPILE}" != "" ]]; then
-+		QEMU_FLAGS=("${CROSS_FLAGS[@]}")
-+	else
-+		QEMU_FLAGS=("${HOST_FLAGS[@]}")
-+	fi
-+
- 	${QEMU_BINARY} \
- 		-nodefaults \
- 		-display none \
- 		-serial mon:stdio \
- 		"${QEMU_FLAGS[@]}" \
--		-enable-kvm \
- 		-m 4G \
- 		-drive file="${rootfs_img}",format=raw,index=1,media=disk,if=virtio,cache=none \
- 		-kernel "${kernel_bzimage}" \
-@@ -384,7 +399,8 @@ main()
- 	fi
- 
- 	local kconfig_file="${OUTPUT_DIR}/latest.config"
--	local make_command="make -j ${NUM_COMPILE_JOBS} KCONFIG_CONFIG=${kconfig_file}"
-+	local make_command="make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} \
-+			    -j ${NUM_COMPILE_JOBS} KCONFIG_CONFIG=${kconfig_file}"
- 
- 	# Figure out where the kernel is being built.
- 	# O takes precedence over KBUILD_OUTPUT.
+ arch/x86/math-emu/fpu_etc.c                   |  9 +++--
+ arch/x86/math-emu/fpu_trig.c                  |  6 ++--
+ arch/x86/math-emu/reg_constant.c              |  7 +++-
+ drivers/ata/sata_sx4.c                        |  6 ++--
+ drivers/firmware/dmi-id.c                     |  7 +++-
+ .../gpu/drm/amd/display/dc/dce110/Makefile    |  2 +-
+ .../gpu/drm/amd/display/dc/dce112/Makefile    |  2 +-
+ .../gpu/drm/amd/display/dc/dce120/Makefile    |  2 +-
+ drivers/gpu/drm/amd/display/dc/dce60/Makefile |  2 +-
+ drivers/gpu/drm/amd/display/dc/dce80/Makefile |  2 +-
+ drivers/gpu/drm/i915/Makefile                 |  6 ++--
+ .../drm/nouveau/nvkm/subdev/bios/shadowof.c   |  7 +++-
+ drivers/gpu/drm/xe/Makefile                   |  4 +--
+ drivers/net/ethernet/renesas/sh_eth.c         |  2 +-
+ drivers/parport/parport_mfc3.c                |  3 +-
+ drivers/pinctrl/aspeed/Makefile               |  2 +-
+ drivers/scsi/cxlflash/lunmgt.c                |  4 +--
+ drivers/scsi/cxlflash/main.c                  | 14 ++++----
+ drivers/scsi/cxlflash/superpipe.c             | 34 +++++++++----------
+ drivers/scsi/cxlflash/superpipe.h             | 11 +++---
+ drivers/scsi/cxlflash/vlun.c                  |  7 ++--
+ fs/proc/Makefile                              |  2 +-
+ include/linux/filter.h                        | 14 ++++----
+ include/linux/ftrace.h                        |  6 ++--
+ include/linux/module.h                        | 14 ++++----
+ kernel/bpf/Makefile                           |  2 +-
+ kernel/bpf/core.c                             |  7 ++--
+ kernel/kallsyms.c                             | 23 +++++++------
+ kernel/module/kallsyms.c                      | 26 +++++++-------
+ kernel/trace/ftrace.c                         | 13 +++----
+ mm/Makefile                                   |  3 +-
+ scripts/Makefile.extrawarn                    | 33 ++++--------------
+ 32 files changed, 134 insertions(+), 148 deletions(-)
+
 -- 
-2.34.1
+2.39.2
 
+Cc: Bill Metzenthen <billm@melbpc.org.au>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: x86@kernel.org
+Cc: Damien Le Moal <dlemoal@kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Harry Wentland <harry.wentland@amd.com>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc: Andrew Jeffery <andrew@codeconstruct.com.au>
+Cc: "Manoj N. Kumar" <manoj@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nicolas Schier <nicolas@fjasle.eu>
+Cc: Greg Kroah-Hartman <gregkh@suse.de>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-ide@vger.kernel.org
+Cc: amd-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: intel-gfx@lists.freedesktop.org
+Cc: nouveau@lists.freedesktop.org
+Cc: intel-xe@lists.freedesktop.org
+Cc: netdev@vger.kernel.org
+Cc: linux-renesas-soc@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-scsi@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: linux-trace-kernel@vger.kernel.org
+Cc: linux-modules@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-kbuild@vger.kernel.org
+Cc: llvm@lists.linux.dev
