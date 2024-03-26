@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 577F613CA82
-	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 16:22:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33AB813C9DF
+	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 16:22:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711470133; cv=none; b=Q9Ve1XRG9+WvMHP+fG0S6NYY44kJwYR78otljWtfOt9txsrpLAtUTgjn7D53BAdhg++2OYFUG4yA+yYgmHm1w2Vg7sZPIa7rxF5tehWLHtw4bJxpuByPKfpRzudMJye0FS2y4WlWaJCUdesSAM30SWZYu+99plupQmCWCmZHsZc=
+	t=1711470136; cv=none; b=UbXCs5/VSNL9exiRnRUmgpZR5pf4Eyu10oT6YqirD8LVwnUEZj0ZE1FS56YLUwu9v8CJybtn2xPbRIx43s8FPEoXNvfDQQ5Uc/w2W/rQmpioxgBK8fZMt9YVqWQWFSwVk3/kuRTFqBnHRaXc5kW5/gAU9H/ulPhKlKLLjMDn1EY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711470133; c=relaxed/simple;
-	bh=FHse5wFkBT2C5doki9aJ9Lrjl8HOY2rW4r0iaCWsUQQ=;
+	s=arc-20240116; t=1711470136; c=relaxed/simple;
+	bh=t61VyhBQy668DN9CUuo3t/duCOYg1KMBy2ezf2LPEa4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=svB2KSYKxIH/fs3I3zPoeqUlHzVMWIDYOoDknF/OFh4OCvusVtuFmESWzYNb46edcY9AKxkNQZyfgKzdqOhX5x4yL1ZPjdWpANX7X1PP86DZhZIhgdTZR7c1y0nkXZGRkeZ+GZ94LrAO0DmtQ2L1KdwgUR54opKcIa2UTSR4/2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UH289cUn; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=LmkhLrZ/CbmKA6OsZt8++5cLjxZhaDR7xa0de5cCKrvYfS/nC+Bqpplfs6E81XBy+R9q+qd9WsCnFdGWzTqsgnPbsUMCS3TAJ09cSFhLc2JL7I/2g6fB96OZB5dOhBEiEWvLU7C8+mjJgriJOX4KtjTjgJOApxRGwUSLTkbTC/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ps5JQEEq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UH289cUn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC546C433C7;
-	Tue, 26 Mar 2024 16:22:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ps5JQEEq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDE7FC43390;
+	Tue, 26 Mar 2024 16:22:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711470132;
-	bh=FHse5wFkBT2C5doki9aJ9Lrjl8HOY2rW4r0iaCWsUQQ=;
+	s=k20201202; t=1711470136;
+	bh=t61VyhBQy668DN9CUuo3t/duCOYg1KMBy2ezf2LPEa4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UH289cUnVxTpf+BVs/4kFMx6Twtt7AqWggVII6nZMvAaNlEnkLSFs0HWl5Hkm3q0/
-	 WDXh6Hbl+pXWT0W/CHsuzyCC/OQ+nPnLHyBavIUsYqIYAk1UZIJKfe8DfDLnTfCbSB
-	 aJolH1t6Mh5ha1vb1EZbvdv1Qa6kTPZpK2vGrfIPR4eG1Bjcz0y3jlX89mOotD8NxB
-	 Rhx0Opkw025y7KdvuYZaRqDYaJ17vhKA6QjxReLfLOr0KjVnFc3bzIDGlDDG4QJgyM
-	 gXgRKkcfyxjetmCCC6mv0yGYwHsc51sdSa5+YLZadUmnJJbWADUP8z+lAaKwQlm8xZ
-	 piIs43scAExnA==
+	b=Ps5JQEEqgSNvp3SIGiQiPqAjJwhLXYBZaBiCnRYRT3YgRc4Qz8xBR2OuijK5nqE4I
+	 PtVg7ipYU8HISKM9EpCBMoVH9BqChQygje6Ge2YAK+28t00Qf0uAHcH7/3pTZBnO12
+	 KREpyPdVIu03v19tHZRCBb/ybGh5zMgHlqvJopB6WfNuKJ6iNGibQIbsB4hxEjSfWZ
+	 QWsmDL+JFGuel5lEEFf180HEkkaMztlmeW0X1wkyJPna72wmTadW98eOqb6A4mumFC
+	 TjfvxHFrReDGleYC9A+R8Hesio3VWsoCD7AB/8fA4KPVoGy796j8vYOzFdVXeZjHPb
+	 N+B/oa7LU+jFg==
 From: Andrii Nakryiko <andrii@kernel.org>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -33,9 +33,9 @@ To: bpf@vger.kernel.org,
 	martin.lau@kernel.org
 Cc: andrii@kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH v2 bpf-next 5/6] bpf: add bpf_modify_return_test_tp() kfunc triggering tracepoint
-Date: Tue, 26 Mar 2024 09:21:50 -0700
-Message-ID: <20240326162151.3981687-6-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 6/6] selftests/bpf: add batched tp/raw_tp/fmodret tests
+Date: Tue, 26 Mar 2024 09:21:51 -0700
+Message-ID: <20240326162151.3981687-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240326162151.3981687-1-andrii@kernel.org>
 References: <20240326162151.3981687-1-andrii@kernel.org>
@@ -47,87 +47,165 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a simple bpf_modify_return_test_tp() kfunc, available to all program
-types, that is useful for various testing and benchmarking scenarios, as
-it allows to trigger most tracing BPF program types from BPF side,
-allowing to do complex testing and benchmarking scenarios.
+Utilize bpf_modify_return_test_tp() kfunc to have a fast way to trigger
+tp/raw_tp/fmodret programs from another BPF program, which gives us
+comparable batched benchmarks to (batched) kprobe/fentry benchmarks.
 
-It is also attachable to for fmod_ret programs, making it a good and
-simple way to trigger fmod_ret program under test/benchmark.
+We don't switch kprobe/fentry batched benchmarks to this kfunc to make
+bench tool usable on older kernels as well.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/trace/events/bpf_test_run.h | 17 +++++++++++++++++
- kernel/bpf/helpers.c                |  1 +
- net/bpf/test_run.c                  |  8 ++++++++
- 3 files changed, 26 insertions(+)
+ tools/testing/selftests/bpf/bench.c           |  6 +++
+ .../selftests/bpf/benchs/bench_trigger.c      | 39 +++++++++++++++++++
+ .../selftests/bpf/benchs/run_bench_trigger.sh |  3 +-
+ .../selftests/bpf/progs/trigger_bench.c       | 34 ++++++++++++++++
+ 4 files changed, 81 insertions(+), 1 deletion(-)
 
-diff --git a/include/trace/events/bpf_test_run.h b/include/trace/events/bpf_test_run.h
-index 265447e3f71a..0c924d39b7cb 100644
---- a/include/trace/events/bpf_test_run.h
-+++ b/include/trace/events/bpf_test_run.h
-@@ -7,6 +7,23 @@
+diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
+index 8b16841a3dec..82de56c8162e 100644
+--- a/tools/testing/selftests/bpf/bench.c
++++ b/tools/testing/selftests/bpf/bench.c
+@@ -506,6 +506,9 @@ extern const struct bench bench_trig_kprobe_multi;
+ extern const struct bench bench_trig_kretprobe_multi;
+ extern const struct bench bench_trig_fentry;
+ extern const struct bench bench_trig_fexit;
++extern const struct bench bench_trig_fmodret;
++extern const struct bench bench_trig_tp;
++extern const struct bench bench_trig_rawtp;
  
- #include <linux/tracepoint.h>
- 
-+TRACE_EVENT(bpf_trigger_tp,
-+
-+	TP_PROTO(int nonce),
-+
-+	TP_ARGS(nonce),
-+
-+	TP_STRUCT__entry(
-+		__field(int, nonce)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->nonce = nonce;
-+	),
-+
-+	TP_printk("nonce %d", __entry->nonce)
-+);
-+
- DECLARE_EVENT_CLASS(bpf_test_finish,
- 
- 	TP_PROTO(int *err),
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 9234174ccb21..f89c35a17546 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2625,6 +2625,7 @@ BTF_ID_FLAGS(func, bpf_dynptr_is_null)
- BTF_ID_FLAGS(func, bpf_dynptr_is_rdonly)
- BTF_ID_FLAGS(func, bpf_dynptr_size)
- BTF_ID_FLAGS(func, bpf_dynptr_clone)
-+BTF_ID_FLAGS(func, bpf_modify_return_test_tp)
- BTF_KFUNCS_END(common_btf_ids)
- 
- static const struct btf_kfunc_id_set common_kfunc_set = {
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 61efeadaff8d..f6aad4ed2ab2 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -575,6 +575,13 @@ __bpf_kfunc int bpf_modify_return_test2(int a, int *b, short c, int d,
- 	return a + *b + c + d + (long)e + f + g;
+ /* uprobe/uretprobe benchmarks */
+ extern const struct bench bench_trig_uprobe_nop;
+@@ -556,6 +559,9 @@ static const struct bench *benchs[] = {
+ 	&bench_trig_kretprobe_multi,
+ 	&bench_trig_fentry,
+ 	&bench_trig_fexit,
++	&bench_trig_fmodret,
++	&bench_trig_tp,
++	&bench_trig_rawtp,
+ 	/* uprobes */
+ 	&bench_trig_uprobe_nop,
+ 	&bench_trig_uretprobe_nop,
+diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools/testing/selftests/bpf/benchs/bench_trigger.c
+index 2c477808a6f0..4b05539f167d 100644
+--- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
++++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
+@@ -233,6 +233,42 @@ static void trigger_fexit_setup(void)
+ 	attach_bpf(ctx.skel->progs.bench_trigger_fexit);
  }
  
-+__bpf_kfunc int bpf_modify_return_test_tp(int nonce)
++static void trigger_fmodret_setup(void)
 +{
-+	trace_bpf_trigger_tp(nonce);
-+
-+	return nonce;
++	setup_ctx();
++	bpf_program__set_autoload(ctx.skel->progs.trigger_driver, false);
++	bpf_program__set_autoload(ctx.skel->progs.trigger_driver_kfunc, true);
++	bpf_program__set_autoload(ctx.skel->progs.bench_trigger_fmodret, true);
++	load_ctx();
++	/* override driver program */
++	ctx.driver_prog_fd = bpf_program__fd(ctx.skel->progs.trigger_driver_kfunc);
++	attach_bpf(ctx.skel->progs.bench_trigger_fmodret);
 +}
 +
- int noinline bpf_fentry_shadow_test(int a)
- {
- 	return a + 1;
-@@ -622,6 +629,7 @@ __bpf_kfunc_end_defs();
- BTF_KFUNCS_START(bpf_test_modify_return_ids)
- BTF_ID_FLAGS(func, bpf_modify_return_test)
- BTF_ID_FLAGS(func, bpf_modify_return_test2)
-+BTF_ID_FLAGS(func, bpf_modify_return_test_tp)
- BTF_ID_FLAGS(func, bpf_fentry_test1, KF_SLEEPABLE)
- BTF_KFUNCS_END(bpf_test_modify_return_ids)
++static void trigger_tp_setup(void)
++{
++	setup_ctx();
++	bpf_program__set_autoload(ctx.skel->progs.trigger_driver, false);
++	bpf_program__set_autoload(ctx.skel->progs.trigger_driver_kfunc, true);
++	bpf_program__set_autoload(ctx.skel->progs.bench_trigger_tp, true);
++	load_ctx();
++	/* override driver program */
++	ctx.driver_prog_fd = bpf_program__fd(ctx.skel->progs.trigger_driver_kfunc);
++	attach_bpf(ctx.skel->progs.bench_trigger_tp);
++}
++
++static void trigger_rawtp_setup(void)
++{
++	setup_ctx();
++	bpf_program__set_autoload(ctx.skel->progs.trigger_driver, false);
++	bpf_program__set_autoload(ctx.skel->progs.trigger_driver_kfunc, true);
++	bpf_program__set_autoload(ctx.skel->progs.bench_trigger_rawtp, true);
++	load_ctx();
++	/* override driver program */
++	ctx.driver_prog_fd = bpf_program__fd(ctx.skel->progs.trigger_driver_kfunc);
++	attach_bpf(ctx.skel->progs.bench_trigger_rawtp);
++}
++
+ /* make sure call is not inlined and not avoided by compiler, so __weak and
+  * inline asm volatile in the body of the function
+  *
+@@ -395,6 +431,9 @@ BENCH_TRIG_KERNEL(kprobe_multi, "kprobe-multi");
+ BENCH_TRIG_KERNEL(kretprobe_multi, "kretprobe-multi");
+ BENCH_TRIG_KERNEL(fentry, "fentry");
+ BENCH_TRIG_KERNEL(fexit, "fexit");
++BENCH_TRIG_KERNEL(fmodret, "fmodret");
++BENCH_TRIG_KERNEL(tp, "tp");
++BENCH_TRIG_KERNEL(rawtp, "rawtp");
  
+ /* uprobe benchmarks */
+ #define BENCH_TRIG_USERMODE(KIND, PRODUCER, NAME)			\
+diff --git a/tools/testing/selftests/bpf/benchs/run_bench_trigger.sh b/tools/testing/selftests/bpf/benchs/run_bench_trigger.sh
+index 6e790e294260..a690f5a68b6b 100755
+--- a/tools/testing/selftests/bpf/benchs/run_bench_trigger.sh
++++ b/tools/testing/selftests/bpf/benchs/run_bench_trigger.sh
+@@ -4,7 +4,8 @@ set -eufo pipefail
+ 
+ def_tests=( \
+ 	usermode-count kernel-count syscall-count \
+-	fentry fexit \
++	fentry fexit fmodret \
++	rawtp tp \
+ 	kprobe kprobe-multi \
+ 	kretprobe kretprobe-multi \
+ )
+diff --git a/tools/testing/selftests/bpf/progs/trigger_bench.c b/tools/testing/selftests/bpf/progs/trigger_bench.c
+index 07587cb3c9f5..2619ed193c65 100644
+--- a/tools/testing/selftests/bpf/progs/trigger_bench.c
++++ b/tools/testing/selftests/bpf/progs/trigger_bench.c
+@@ -56,6 +56,19 @@ int trigger_driver(void *ctx)
+ 	return 0;
+ }
+ 
++extern int bpf_modify_return_test_tp(int nonce) __ksym __weak;
++
++SEC("?raw_tp")
++int trigger_driver_kfunc(void *ctx)
++{
++	int i;
++
++	for (i = 0; i < batch_iters; i++)
++		(void)bpf_modify_return_test_tp(0); /* attach point for benchmarking */
++
++	return 0;
++}
++
+ SEC("?kprobe/bpf_get_numa_node_id")
+ int bench_trigger_kprobe(void *ctx)
+ {
+@@ -97,3 +110,24 @@ int bench_trigger_fexit(void *ctx)
+ 	inc_counter();
+ 	return 0;
+ }
++
++SEC("?fmod_ret/bpf_modify_return_test_tp")
++int bench_trigger_fmodret(void *ctx)
++{
++	inc_counter();
++	return -22;
++}
++
++SEC("?tp/bpf_test_run/bpf_trigger_tp")
++int bench_trigger_tp(void *ctx)
++{
++	inc_counter();
++	return 0;
++}
++
++SEC("?raw_tp/bpf_trigger_tp")
++int bench_trigger_rawtp(void *ctx)
++{
++	inc_counter();
++	return 0;
++}
 -- 
 2.43.0
 
