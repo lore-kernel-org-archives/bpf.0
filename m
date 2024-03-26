@@ -1,137 +1,123 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F367513D266
-	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 20:19:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB5D12AAF3;
+	Tue, 26 Mar 2024 21:11:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711484377; cv=none; b=c/Sxo/YjkOacJ3qYONWN3R4S5WrPnL1DLlwKDWnP5hGJLaDO66eh9p/BkQPx7YWnUyygP7rgH9wm7umRIRKkTgKgeK96yR3mNQybripDIiiIniVCp02UmhxatYlINNHJ0S9jdrzaJSMFma6+b1M/JxycDQbcdTA5lKstOEzf43c=
+	t=1711487477; cv=none; b=SMZ6U7jIenAMHhRnK/567M6QXi/bd1cRgi8EtGg2oU1jdek033We5js5rfcUg+6PciSb6y5UeoD+Dm2vE9mHmTpFkS8sKoBYDCXnXpzBe6MmZheWDqih+foh5XAfyHwKJvk1F9eB0ADYUtTtzs/UPMD5KZj2b9XbjdXSFF10Rng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711484377; c=relaxed/simple;
-	bh=/HolUtBGOSvO7vytyqHWVK1okzyRfH/uWmvtvWb27FA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VkpydVnmN0rU9Kv6NBAqSaOTly2U70IQmsEC+so+dhFwj2vPSCL9yEACN3sGwXVE6ivtGHcSb4972moCS8EdW8oyz6LXTrgktd7prrMo5F3JBhCakRNcExjKQIPFYRaEmEB3IMt0VBMAhsdY4WiBUPtS3jrkC/edYMbDi0JjwcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1gm41FVZ; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1711487477; c=relaxed/simple;
+	bh=DhbIwGimzO1Ys/eDgtivAIaXcxFjjx+5Qj98m0RzjXQ=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=OLLWA1+PMfhryQ/iBZnlwQn4BzSuUjzoP9PzVrkpAKbma+vDQOm0AjuwhVSrZwkSAqyKikGptRMZG7dgWBy5Ou3iwBqPbC5c5cfucvpuEW5jkPpBvCKfk/bkOf6xWr7mupemDm7vtewbkX/WwD2T523WTDicDLoXT8s3Zl1v3jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bGlSc53g; arc=none smtp.client-ip=209.85.217.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1gm41FVZ"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5684db9147dso7009467a12.2
-        for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 13:19:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bGlSc53g"
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-476757820ceso1831622137.1;
+        Tue, 26 Mar 2024 14:11:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711484373; x=1712089173; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/HolUtBGOSvO7vytyqHWVK1okzyRfH/uWmvtvWb27FA=;
-        b=1gm41FVZkSn4Ai7WlX1D0mAvsiIhXcNKLG0Z0iVMbEyuhSc6lAFnYsQce/3uLx2VOQ
-         F13pVTO9dMRWzS/d7sfOBXIkS3ngp/9f5y9jWOoAa6189WcyF2NonArWAQ719WFAi114
-         zU2eBR/j4Sp8dRmx3JNiO0l7Z06mGs29qV6F7W7oAwBVZ4wOXL0SG4oZfOKMR4pofar8
-         GukfmgjQtDxSyZ4EeIfkAX4mF4CDBv3LOIhV1e4bHqCsqkAZkHkXbxpNT7BTyqBDSwo0
-         t6V0x1PQN7YCjKQ72LzuDlwkJ2sQ1fUKugFapN4Dt5u28GWEdnMNP+fAmqirbn6HeFth
-         mCEw==
+        d=gmail.com; s=20230601; t=1711487475; x=1712092275; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=C4E86kR2DKRyNfP7j7T5NXYDBgBKUpRjZk7CC48kM2A=;
+        b=bGlSc53gJffjewX7VH7dFLnSgwfdMIj2KUiyo32cAQ7qSl4+BaUmfX7esZKgCo+x5Z
+         7lbGRPcQf6+fFUNAhHhR725MNz/0V1v/oKizKaxl4LJiwdgTTfP2qlMYwIVOqLM9iWal
+         KKafF08XPVi6TMIekFYO2Lyp07JKkdOU7//cub+V3wZMuch1ByDZceLOwugxlj9JSMbY
+         1C1Re36iBRw+QZ1rf74GnY7iB5IORhv+FdWYE6pCHTIEUATOs43zbNX4J8E2bYrTCyjh
+         tqQUX0IbncN6UNo1uibSx2rTSLjtt/Y7df0HHFpYo4OaL9pJAk/Vux2AJF0jsfQ26xO3
+         616w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711484373; x=1712089173;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/HolUtBGOSvO7vytyqHWVK1okzyRfH/uWmvtvWb27FA=;
-        b=p6tt3v5pA/cssFioAM/CkOPGPVgj8WkGIvxprdTE6rZ83PHctl3oADHwp97kzMsjUw
-         siUS2a7lNN2uZ/47wYswMCYQ3R/VnP0JUN7p9P0Y26gropSIwpja4FvVC3QgJ/fRwAGC
-         eAYM30aHQhiJixnqtSUD7nt6amTXN735hb713L6/a7TKYZMDYz9i4fQtKKOHQTwNwAKg
-         k5gKSJlYU12G6C1QBGPQzLu+x3KgZm70cof+j8FHzrz+NZxoQYFRG+WD1XEPCtI7vS4w
-         COyErKVVHrZ5AEqeTZdkS8+4UBTIRON8ReCWi9yY9PjBsDkTdMlJvuWfxU9ZGCMDYLhF
-         Ls8w==
-X-Forwarded-Encrypted: i=1; AJvYcCUJtFG/Yy4tWyztjg5WW9I2MtbamMz/fov3Ju9jm82nqJ2+zxvYmLlFU/8oKgu4buJ6vcgLO+lKiujUX80O5+ajQSL3
-X-Gm-Message-State: AOJu0Ywq0wtD6/EkXcXEYaAocYes1yvLY/RYfDVMbz8ew1LXBzgH7kM6
-	fZkaedEWuGr2mbE4uegQjhScXnXskpTM7ebB48JVjKAQsrYTfRNlI7vc1EO1Opk1GR0duOVEkFK
-	CO5JtTqWdoXoj0aI6yh0kAGKpLvjZZntkYQCb
-X-Google-Smtp-Source: AGHT+IFjAY/eoFDY4BwdVzDOePbePtoPltk1wuczOVWu/9VSVvPKPc9DWk1TgGZAdfUjGFfCBB9+wtsJgpHCZYEgPKU=
-X-Received: by 2002:a17:906:2dc9:b0:a46:70d1:dda6 with SMTP id
- h9-20020a1709062dc900b00a4670d1dda6mr1426517eji.28.1711484372999; Tue, 26 Mar
- 2024 13:19:32 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711487475; x=1712092275;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C4E86kR2DKRyNfP7j7T5NXYDBgBKUpRjZk7CC48kM2A=;
+        b=AGTszqpYA3a0sTkxDntWEURjLc+t4O4Xmo+8IbNZHORi32+k/6+fLGLvBw4QtpNMUu
+         izaeCh/AmBTAyw/YZ3MwrwZmsmdVpchQmlbeCfVU5/EpCFzWA1NTw4OLBeRzLq3gHTU/
+         5chGxjght53YAAObYKdjUs5ZYAy4TIR1nAkZc1JGeU6CslmdWjjXq7t7egblmeIbCzq+
+         SNkw56xtGhtarecuNmBIMgcwcQrfC12AHqjt9EfmIp6g5PgbBNaGZ9dU8ndkdyFj3YCI
+         BBMn3NhuHDI+JfivDbYEytNLcOn2XM5b8VExg+kUc7Iaw55oLT2iC+8pcQMldJFDdoCf
+         axDw==
+X-Forwarded-Encrypted: i=1; AJvYcCUKIAXrZaIm1Ruf6XN+fWJuusebhSvjsv481Y3Ua+tpDEKCbYPbEyq8kCkrhoX6OkJ5UBarifPK7RI2B1b5JGoK8N95RD38ilqhbX/WaJHAfsI0rAljzN1Ntbm7DVqg692onvC+i+mXOp13eOX/NZpyMnyysjXsna6H
+X-Gm-Message-State: AOJu0YzYljIT7o8VE7pc3Cio2u9dav+xUdrhcbnkEyk7rAVNYg+0mXAc
+	3I5mb5NM1Mv87IWseseR/ef29q+lOVjQTNENCLPb70vaEgp+yBHeocN/YhocpZP0jBp7T7NnOn/
+	6xPBPMOmvpXvTgnFM8gRq3gCjtlY=
+X-Google-Smtp-Source: AGHT+IE7IPPA6+eiifPNtX5vhNKID0Vd5arCLCtKWkE363s0aP8X5jekc/off5y2gyHlDp/JMEXXN7dlJEf7zml3Qc4=
+X-Received: by 2002:a05:6102:12d8:b0:478:23c8:1c23 with SMTP id
+ jd24-20020a05610212d800b0047823c81c23mr950756vsb.14.1711487475103; Tue, 26
+ Mar 2024 14:11:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-3-almasrymina@google.com> <ZfegzB341oNc_Ocz@infradead.org>
- <CAHS8izOUi6qGp=LSQb_o5oph-EnhNOuhLkPSfbQRU3eniZvbdA@mail.gmail.com> <ZgC5JoSiWAYf3IgX@infradead.org>
-In-Reply-To: <ZgC5JoSiWAYf3IgX@infradead.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 26 Mar 2024 13:19:20 -0700
-Message-ID: <CAHS8izO5-giYhM1bVCLLOXRXq-Xd0=pi0kPq5E1-R=3i=XihmQ@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
- custom page providers
-To: Christoph Hellwig <hch@infradead.org>, shakeel.butt@linux.dev
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>
+From: Kaiming Huang <lightninghkm96@gmail.com>
+Date: Tue, 26 Mar 2024 17:11:04 -0400
+Message-ID: <CAH3=goWGETBPj+-qcKo4E+sXZv1pT+UeVhXnv-q9N4Yagb1m-g@mail.gmail.com>
+Subject: Re: stack access issue. Re: [syzbot] [bpf?] UBSAN:
+ array-index-out-of-bounds in check_stack_range_initialized
+To: Andrei Matei <andreimatei1@gmail.com>
+Cc: alexei.starovoitov@gmail.com, andrii@kernel.org, ast@kernel.org, 
+	bpf@vger.kernel.org, daniel@iogearbox.net, eadavis@qq.com, eddyz87@gmail.com, 
+	haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org, 
+	kpsingh@kernel.org, linux-kernel@vger.kernel.org, martin.lau@linux.dev, 
+	netdev@vger.kernel.org, sdf@google.com, song@kernel.org, 
+	syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 24, 2024 at 4:37=E2=80=AFPM Christoph Hellwig <hch@infradead.or=
-g> wrote:
->
-> On Fri, Mar 22, 2024 at 10:54:54AM -0700, Mina Almasry wrote:
-> > Sorry I don't mean to argue but as David mentioned, there are some
-> > plans in the works and ones not in the works to extend this to other
-> > memory types. David mentioned io_uring & Jakub's huge page use cases
-> > which may want to re-use this design. I have an additional one in
-> > mind, which is extending devmem TCP for storage devices. Currently
-> > storage devices do not support dmabuf and my understanding is that
-> > it's very hard to do so, and NVMe uses pci_p2pdma instead. I wonder if
-> > it's possible to extend devmem TCP in the future to support pci_p2pdma
-> > to support nvme devices in the future.
->
-> The block layer needs to suppotr dmabuf for this kind of I/O.
-> Any special netdev to block side channel will be NAKed before you can
-> even send it out.
+Hi there,
 
-Thanks, a few questions if you have time to help me understand the
-potential of extending this to storage devices.
+I went across this bug using my static analysis tool as well and was
+glad to find this email thread.
 
-Are you envisioning that dmabuf support would be added to the block
-layer (which I understand is part of the VFS and not driver specific),
-or as part of the specific storage driver (like nvme for example)? If
-we can add dmabuf support to the block layer itself that sounds
-awesome. We may then be able to do devmem TCP on all/most storage
-devices without having to modify each individual driver.
+My understanding is that the root cause of this bug has not been
+identified yet given the previous discussion in this thread.
 
-In your estimation, is adding dmabuf support to the block layer
-something technically feasible & acceptable upstream? I notice you
-suggested it so I'm guessing yes to both, but I thought I'd confirm.
+This is the line of code that has the issue.
 
-Worthy of note this is all pertaining to potential follow up use
-cases, nothing in this particular proposal is trying to do any of this
-yet.
+stype = &state->stack[spi].slot_type[slot % BPF_REG_SIZE];
 
---=20
-Thanks,
-Mina
+Based on my analysis result, it is the part "slot_type[slot %
+BPF_REG_SIZE]" may result in memory access with a negative index,
+which should not be allowed. spi (as well as min_off, max_off, and
+slot) is(are) supposed to be negative based on my understanding of the
+workflow. But the index of slot_type is not supposed to be negative.
+
+The slot_type is defined as below:
+
+u8 slot_type[BPF_REG_SIZE];  //BPF_REG_SIZE is 8
+
+So the type of slot_type is u8[8].
+
+However, given "slot" can be negative, say -1. The result of slot %
+BPF_REG_SIZE is -1. This might sound counter-intuitive as % always
+gives positive results. But in C, % operation keeps the sign of
+dividend (and thus that's why I'm not sure whether the fix will catch
+this).
+
+You can examine this by simply running this short piece of code. The
+result of the modulo operation is -1 on my end, and that is the reason
+that causes the OOB negative index, and this would be an off-by-one on
+the u8[8].
+
+#include <stdio.h>
+#define BPF_REG_SIZE 8
+int main() {
+    int i = -1;
+    unsigned int j = i % BPF_REG_SIZE;
+    printf("%d\n", j);
+    return 0;
+}
+
+A more severe scenario is when interpreting the j in the above example
+as unsigned int, aka integer overflow/wrap-around, in that case, the
+value of j will be 4,294,967,295. If it is the case, then it is a
+classic OOB access on the u8[8].
+
+Hopefully my illustration makes sense, please let me know if you see
+any issues. Thanks.
+
+Best regards,
+Kaiming.
