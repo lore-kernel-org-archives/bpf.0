@@ -1,74 +1,72 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D4A3DAC02
-	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 10:57:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501411E485;
+	Tue, 26 Mar 2024 11:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711450681; cv=none; b=uH/1vNm8MDKrGWmB8BY9l/u4iPwYs3jL2BTB8DC1cs636fz2dcCzOX7Wj2q8bAHYfSEP71xjDsrrxQLJBD8KKWhx0J4kt/v3pkxFJbfJuVKeNn3iIILW8pZelzmIAXCG1Vur3TgfncntgRESkEIJgxls7DUyDyWyJWWntgJLOqg=
+	t=1711454118; cv=none; b=RRfn3wbGfwaWMkXjaT79j1PJ0XARdYoYtMnDhK63gW6Pw81C3vnCfWMuXNqRoIy2oecQlh68RimxqOE/z0lO2WObNSE/udoQ5TRzj02xewl7jA2duw0RYKfay7OSH+F1VIZWvUjNc+RU9g/H8gk7PMu3m4eyHT8pSAfXTyqV2dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711450681; c=relaxed/simple;
-	bh=2ivGfYRpdQgZemw9rb77JkAkZ409pzS2I4XDWey5FSY=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=czUuK5RnmTADoqHMOeZ0wx1wExWO8lZQLh3WY9Knptj1TZgL3N7Rn3d04UKEC2FvI3pSu2RPEjlfYN9SbeOgI6vkoMU6y2OeIAKgCaWxsW8LDtcn0Rf6efPiPwGoBoeQvGpy32hoJO+7aB+a5cbrMBIJpYTPOVsL0SMZ8GFO+fo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YHKN/3BZ; arc=none smtp.client-ip=209.85.218.45
+	s=arc-20240116; t=1711454118; c=relaxed/simple;
+	bh=uCcHRj1EPqJseqwLf22pNV9+UeLCYFNEJtYoMZqpZh0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FTZ0Rg5Kli23QWqb3lh2ao9euSFF/fwwGoE0TfjUNJ3wvUYyIlJlWqHLTn6GBf3kNBwMV5IFE5HueNUpF6K9hsRk0YdwuGI+Hk65BiStxA0wkusyKxi5QY0TON2Nfq/neOktHGdwA5l/Y8wJSvdXa5ZWEbHXbNpasEwJvHRDFfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XWJvw+bR; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YHKN/3BZ"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a46dd7b4bcbso653689566b.3
-        for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 03:57:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XWJvw+bR"
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a46d0a8399aso1070146066b.1;
+        Tue, 26 Mar 2024 04:55:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711450678; x=1712055478; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711454114; x=1712058914; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tLYTZcXLMERi71fcEURWW+TL0AycLOFwuLq8X7zfoAE=;
-        b=YHKN/3BZ9rlpsUSmCbxrsDMr/ZsurnhGpiTp6fGrGzy/cNsokRWa6m5OU1HTvD8EcT
-         3vPu8LWxoRDKd8PGDxlt+Z/Asxqq3Ju8K2RyXkvtJYO/tNpzwEGALS7U2et9QFPP434Y
-         1xR6JyNYbklGzJRVBEuqSk0RQSGUOEF6UNE6/t3DYqUZeZRNPMvGGBCnb7RWGoqXBRp0
-         4PGR3qG6dRxkQd+ifpNDnKRdZt/Z25YvnRBc/9zscpLtsCEbMic0iOjbvH22Ij/LLRiO
-         FaGXGqilln4KtWpRpqDAhhI2WOkuk9RPmwxvcO+dxOBii6XdvjwbB28ujHH9pNRYZqVH
-         dj8g==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qr/4I2RJUe85l43HNxbnkFvc01YkMgJpGYtWHzCf1GQ=;
+        b=XWJvw+bRAsiEQ+0qGNbbKn0G2JJVPnSjfOk7wNE+W4zfWzH5VcyodArHA5PVj3Iy0g
+         NCcs4HGgO3LPSdaH99AWWHP3mNBySm+YDqAORfmpwWgfL67XzxkUe/WsD5K5WLfLs04x
+         D0JXORkuTBnSdCKWT8lwfvSy2IxwpmjT7Kwaufx3QndwpBupfQztsHz576nXLFuA3u2u
+         5zK9/jGTzlGmF1z3bzCP4AghKKC6hWQSs/Yb+cn3yERyFC3qDKiKS8AfMwYLSNeU2nZ4
+         NHYol5O+blQqhvnlftuGPOVLUiipqyjxeRevEsX2sAMVe3/RuaRPZt2eWt/L4XL4nYi7
+         gtnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711450678; x=1712055478;
+        d=1e100.net; s=20230601; t=1711454114; x=1712058914;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tLYTZcXLMERi71fcEURWW+TL0AycLOFwuLq8X7zfoAE=;
-        b=vdWQihWzSDYyZJvIY66eJ96LZcWS2Ml0PswgHu5nkSZJRO+Yd3BjkXuGDg8IBvJ8vv
-         KWtO6hwr2EYG3s5Ky5hfvxRwiwUuQrjNuNZSRw4jf3eLrJGl4Tg/qBL6BVzXTvfHpiXj
-         JFKqb6IdczdiTUSLD5Up5B1djVIWfSDMHTZIG0uzZdvdkwQuq5Jqshq9Lq6fRHa/NhKT
-         42rp9kgkDh0HrR6epB6WsOQP8IGen5/wy6ZOcuGLcj0IsvebV42GxkV4c1RqYaGMb/ih
-         WN5buIguThJj3RCQABy0r+PkWcZWkc08T09lY0gwW3PuMYaOP9wF/4i5q8etWNczdh1P
-         zOng==
-X-Forwarded-Encrypted: i=1; AJvYcCXUjYdyaTZYR27/t0/URcdCc2F4I9Vex3ST03deKs2cARzU6o+eQ7J4Ll3rKG43sn5RLk2HDlQHvA1NlHs0pZ/7mxUn
-X-Gm-Message-State: AOJu0Yy8r2s5W/85iJIGhxyrZSwqDyalWPKJsl2yNRc08h+iVdBfPIAk
-	FkBJNSx6Nn98Q2vi+8q6xHLPlIss//oHyBUDOxz+sn/ZdZorJmH5
-X-Google-Smtp-Source: AGHT+IEZRJ8fvEthRm2YyejBxaO2wXxaEfqbrmxApQ4gN7V/2GPJBmmHDyn9++4sU6dux8xDHMVZTA==
-X-Received: by 2002:a17:906:55d2:b0:a46:1426:f7c with SMTP id z18-20020a17090655d200b00a4614260f7cmr616009ejp.63.1711450678186;
-        Tue, 26 Mar 2024 03:57:58 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id yr5-20020a170907334500b00a465fd3977esm4134831ejb.143.2024.03.26.03.57.57
+        bh=Qr/4I2RJUe85l43HNxbnkFvc01YkMgJpGYtWHzCf1GQ=;
+        b=XhpGPq1JTYgdB27QgrxgB/KQ+mZ8rL2FqSeunrPnAIrZRrppB6VwAb4F/serb3Vdgg
+         Td+hK1nXPHyBLUS6ngbNVfBztaBhTuQBoRLXMCWgkwJfAwVpPlTCutqg4sWE1kY5cepe
+         EY3KIMugEQKXl3h+fBqIBSb6rwwHZg5C4UOz8fHNILk5/E1aIwZp5QVVAtUzPptJtDAx
+         sEg6fVgl+6OG9H/29wh+o1oHaE4kz6mLQTipklTKnFyFZhGut59ZvV3S60thQlk1tAsC
+         +8eD/ysQfXIc9F/O2/t5adHNDcfDzZogknRXAwMLOJdNLz2wYJWZ+v+dTje6Z/l/XP4C
+         f6sA==
+X-Forwarded-Encrypted: i=1; AJvYcCVGeSHjy6L4qn4vmpJgRryBABb6T879N0rcmsQf5Tu/7VXof4OeG+ZC+KCWgPZvoYVTiHkX23fGD86knmh4gMdQ7PuMXDQmPRkvVce43qF4G85zh2lR5pxvMi2JIUA2yK/AVIXP2K1Q9XY/oMwLFT76FrrACZo4Z8AMV/hydbnIi8bzxqtJ1CNHU/NESCsHL8mm5J+9zaTvIhHeD+7kXFgPJ6yBBACexQ==
+X-Gm-Message-State: AOJu0YyXKOlJyKA3eoMKddgCUj1JTkQe8wUJ6BvB26dOsMm+HlNPAge/
+	CfpoksbSm0qDB2AJmktJeR0mpx4zbE8I8TJU/WXs0wGxQIp6Jlyl
+X-Google-Smtp-Source: AGHT+IGj7Coyzs0BQ3HvVy0I0XPj/KsFEkGhQjLHg0IkJe32C19rYisvF2RsktnUZUadBtnSCF4VYA==
+X-Received: by 2002:a17:907:97d5:b0:a47:4563:e5ba with SMTP id js21-20020a17090797d500b00a474563e5bamr1293548ejc.19.1711454114378;
+        Tue, 26 Mar 2024 04:55:14 -0700 (PDT)
+Received: from jonhaslam-mbp.dhcp.thefacebook.com ([2620:10d:c092:400::5:35a3])
+        by smtp.gmail.com with ESMTPSA id o1-20020a1709064f8100b00a4a38d10801sm1958414eju.35.2024.03.26.04.55.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Mar 2024 03:57:57 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 26 Mar 2024 11:57:55 +0100
+        Tue, 26 Mar 2024 04:55:14 -0700 (PDT)
+Date: Tue, 26 Mar 2024 11:55:12 +0000
+From: Jonthan Haslam <jonathan.haslam@gmail.com>
 To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Kernel Team <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next 5/6] bpf: add bpf_test_tp() kfunc triggering tp
- and allowing error injection
-Message-ID: <ZgKqMwmrjkr-ByYE@krava>
-References: <20240322000041.2919948-1-andrii@kernel.org>
- <20240322000041.2919948-6-andrii@kernel.org>
- <CAADnVQ+SWwJMtdXj1s1RtzXJfjXU4Y41eNg+xzFXe2-DNUR8Ag@mail.gmail.com>
- <CAEf4BzbNRhjALGK7LpHmHsnSHEfmrzserOy07RDyP3aSbF5HcQ@mail.gmail.com>
- <CAEf4Bzbu_4OZwgXREAbxY4fjwG2zFhox8nXpRgd_p6aUENCufg@mail.gmail.com>
+Cc: Ingo Molnar <mingo@kernel.org>, linux-trace-kernel@vger.kernel.org, 
+	andrii@kernel.org, bpf@vger.kernel.org, rostedt@goodmis.org, mhiramat@kernel.org, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] uprobes: reduce contention on uprobes_tree access
+Message-ID: <45ei3cgqjuwcatz622nodyb4eal4ue4diclswpahc36gctdvri@2gfjlmljrisg>
+References: <20240321145736.2373846-1-jonathan.haslam@gmail.com>
+ <Zf+d9twfyIDosINf@gmail.com>
+ <syviklbpdblcwr3l2seuwyzfrg2hy2shx5f6ho6yf4s4ce63tc@nbo4by247y6z>
+ <CAEf4BzZnUcFEk+7r39n8=zopBeK96wfQ4Vtndd2tY2ymqOpCtA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,43 +75,46 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEf4Bzbu_4OZwgXREAbxY4fjwG2zFhox8nXpRgd_p6aUENCufg@mail.gmail.com>
+In-Reply-To: <CAEf4BzZnUcFEk+7r39n8=zopBeK96wfQ4Vtndd2tY2ymqOpCtA@mail.gmail.com>
 
-On Mon, Mar 25, 2024 at 06:43:29PM -0700, Andrii Nakryiko wrote:
-
-SNIP
-
-> > I'll add bpf_modify_return_test_tp() to not touch all the tests using
-> > bpf_modify_return_test() and bpf_modify_return_test2(), if that's ok.
-> > Existing ones expect some memory pointer, dereference it, etc, it
-> > seems cleaner to have a dedicated tp-triggering one for this.
+> > > Have you considered/measured per-CPU RW semaphores?
 > >
-> > > Exercise of test tracepoint can be there as well.
-> > > Asking bpf prog to call a kfunc to call a tracepoint
-> > > looks like extra hop.
-> > > Existing test_run facility should be able to accommodate.
-> >
-> > You mean if I add bpf_modify_return_test_tp() above, I should pass an
-> > argument of how many times that tracepoint should be triggered? Or you
-> > mean to use test_run's repeat argument to trigger "driver program" N
-> > times, and the driver program would just call
-> > bpf_modify_return_test_tp() once? If the latter, I'm not sure it's the
-> > same as calling the driver program once and doing a loop inside, as
-> > we'll measure more of calling driver program overhead (N times vs 1
-> > time right now, per each N tp/fmod_ret calls).
-> >
-> > (But tbh, not having to use test_run's repeat functionality is a
-> > benefit, IMO, we can have more flexible counting/timing code and
-> > whatever else we might need, I'm not sure why using test_run's repeat
-> > is advantageous here)
-> >
-> > Not sure what you are trying to optimize for here, please clarify.
+> > No I hadn't but thanks hugely for suggesting it! In initial measurements
+> > it seems to be between 20-100% faster than the RW spinlocks! Apologies for
+> > all the exclamation marks but I'm very excited. I'll do some more testing
+> > tomorrow but so far it's looking very good.
 > >
 > 
-> So I currently have these changes. I moved tp into bpf_test_run.h
-> (didn't know we have that, this should eliminate the issue that Jiri
-> saw as well). Moved kfunc into net/bpf/test_run.c and renamed it to
+> Documentation ([0]) says that locking for writing calls
+> synchronize_rcu(), is that right? If that's true, attaching multiple
+> uprobes (including just attaching a single BPF multi-uprobe) will take
+> a really long time. We need to confirm we are not significantly
+> regressing this. And if we do, we need to take measures in the BPF
+> multi-uprobe attachment code path to make sure that a single
+> multi-uprobe attachment is still fast.
+> 
+> If my worries above turn out to be true, it still feels like a first
+> good step should be landing this patch as is (and get it backported to
+> older kernels), and then have percpu rw-semaphore as a final (and a
+> bit more invasive) solution (it's RCU-based, so feels like a good
+> primitive to settle on), making sure to not regress multi-uprobes
+> (we'll probably will need some batched API for multiple uprobes).
+> 
+> Thoughts?
 
-sorry I did not get to it yet.. will test the new version
+Agreed. In the percpu_down_write() path we call rcu_sync_enter() which is
+what calls into synchronize_rcu(). I haven't done the measurements yet but
+I would imagine this has to regress probe attachment, at least in the
+uncontended case. Of course, reads are by far the dominant mode here but
+we probably shouldn't punish writes excessively. I will do some
+measurements to quantify the write penalty here.
 
-jirka
+I agree that a batched interface for probe attachment is needed here. The
+usual mode of operation for us is that we have a number of USDTs (uprobes)
+in hand and we want to enable and disable them in one shot. Removing the
+need to do multiple locking operations is definitely an efficiency
+improvement that needs to be done. Tie that together with per-CPU RW
+semaphores and this should scale extremely well in both a read and write
+case.
+
+Jon.
