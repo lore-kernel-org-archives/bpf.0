@@ -1,112 +1,133 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mta-64-225.siemens.flowmailer.net (mta-64-225.siemens.flowmailer.net [185.136.64.225])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21AF1133980
-	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 08:12:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51551643A
+	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 08:58:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.64.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711440748; cv=none; b=ic+NtxLEFGHwgS/mIZAl8IWeo3hywBzqkb+ss1E/AXsdqDW4KSof8V/CgGj4eEtQHBuRY6KSD/LwLkvEhP0KOv8B5aE1KrQZjNRQ/Me1kXgzxXnQvd5YYyuVwrHJKXfE61HLmW0wtKKDdTHrAf52jT8Q6l/6XoosnB9pePBuw+8=
+	t=1711443491; cv=none; b=EdQu0lRtbVopF0eEP+HL07lLZflxLHVVd2Y0pP7UMKnFLqo5IqRT56JOoqWfhoAPjd06nbLcJiF9b5pO4WJekusoDIgN7WlfvW2Lh0AXJx+BJ1ytPdriMaEK9LtSpsWkdCQ7Vy8MyIakfjNZGQf8UeBJHYRQZwoms7VsqhtSiig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711440748; c=relaxed/simple;
-	bh=lgJMr0YqY0zRK/JTqdBounRfSHXOu2VBoOM/18z1zj4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sLi2+PSY5mVxlMHPvtMxAa7PPqdl5wPmQN5de+0F3Ler6DbJPDQPW7Z2g1UoMd7mvrqpBXu7mC39hjf4Bnn9VPqvrNHdMVunnixujryunvHTTQXjwIVZGDI3oiK4L7XqPFSIL15H53Lt29Mn8sWhw5tEO/G4WhYjaRgZunI4JqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=enKn/8J6; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711443491; c=relaxed/simple;
+	bh=2NnN3yr0wpdVoxDzh4ChyQUmMIKdzLGg6sxkzDgAI3o=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=gEJGDjpGroWCRwZrPF+xdVwx/9g3m1F3c6x4xCfybqeCp/nd3WJ0UgDn0XC8mDWjLrBiqekgsh4PHvu49iC8PKrupmwbPhN3KdVOU7V3GaqvCP6VwJUfHoOzkOCzWVRMhMzvXm/CaGrK1NIWeghrcPkWRw7aVZZT8B+nCum+Cu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (1024-bit key) header.d=siemens.com header.i=florian.bezdeka@siemens.com header.b=ZnoEPez1; arc=none smtp.client-ip=185.136.64.225
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="enKn/8J6"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1e0f3052145so2567605ad.2
-        for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 01:12:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711440746; x=1712045546; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z2MuKLWtlklci7+tcbom4ug5qrUNhnb2kY1MAbzGiGc=;
-        b=enKn/8J61/ooz30wRjN5xdUuZphmn8HNI31OLhx3vKo6hT3c5fmMxrz9p7nyStGZDO
-         kH4EMU3tirY+K0JJ87zEdingbjLvrdchHM/TxpuphnCOIZkbVsb2gxW/hAQRuX5t5MRS
-         VTK/BSY5KCdiNRozpRt4JAwjyAJSpEgofP2s3Yo1NHzjXtBIhAcGrUXinMIVKHwpWyf8
-         cPoj6D0ZiW1MUHX8NXZGVF+tazHVnM9WO3W2PQS7S4n0QKBqAaOxX2c9Fsj3MMZwkba7
-         CU6fK5Rq4ITO/bP+hj9ovc1z+UFq8K/MElilH2oNB9jWsD2YNQKO4M7Y8w5c7s50nmZZ
-         sU9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711440746; x=1712045546;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z2MuKLWtlklci7+tcbom4ug5qrUNhnb2kY1MAbzGiGc=;
-        b=W5szthO6cVmSdWjchMtNsKu8mFV0w55lCs5XEYE1t5YDCZV+KYq3H2GvRDRoI6B8ch
-         TI4vBU0GVvxRyEUQuCEmbUXGHSibgQYn2qvMGn9z3A6Z8B17SAuLhrVI2HZuJ+k1JBHJ
-         Noa36RiGXry0rdyr61AcydbrfUFZOlpM4E4IDmVhwt3RaN+G7y44d19MZrfCN4Wjrmsd
-         NyT4KFwZ73ptGofjxKDGryr2KpyznmND92wkqg/ctrDaapKWHCMm9Xjyb3PaszbRUstn
-         TR50e6zacL+kx7xWHR9fftzDeAI7qeMYrLmbk9DefizKGWR06xtrwK5UgVqugFkcWT6N
-         oxAQ==
-X-Gm-Message-State: AOJu0YweGmYPStZ4z5U+9MVB1zAxihkhxuANYcTFZCoZhdxDfTula/E5
-	0e9xJjJV0/hsWtTo0XaZQXwApn0K7yGHp5NIzvJ6P5mmkMj28/cO
-X-Google-Smtp-Source: AGHT+IHN/rlX4+7e1mT8kgzRAqdUnvhbc3/G88MW1gBXxdz2Jl+DR6Zy52hGOskss8iBjaKDthI6VQ==
-X-Received: by 2002:a17:902:cf04:b0:1de:f82b:4c53 with SMTP id i4-20020a170902cf0400b001def82b4c53mr434085plg.12.1711440746395;
-        Tue, 26 Mar 2024 01:12:26 -0700 (PDT)
-Received: from localhost.localdomain ([39.144.105.210])
-        by smtp.gmail.com with ESMTPSA id y1-20020a17090322c100b001e043df262dsm6139872plg.33.2024.03.26.01.12.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 26 Mar 2024 01:12:25 -0700 (PDT)
-From: Yafang Shao <laoar.shao@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org
-Cc: bpf@vger.kernel.org,
-	Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next] bpf: Mitigate latency spikes associated with freeing non-preallocated htab
-Date: Tue, 26 Mar 2024 16:12:07 +0800
-Message-Id: <20240326081207.73375-1-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+	dkim=pass (1024-bit key) header.d=siemens.com header.i=florian.bezdeka@siemens.com header.b="ZnoEPez1"
+Received: by mta-64-225.siemens.flowmailer.net with ESMTPSA id 2024032608565695ee54dbec7522cafe
+        for <bpf@vger.kernel.org>;
+        Tue, 26 Mar 2024 09:57:56 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=florian.bezdeka@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
+ bh=2NnN3yr0wpdVoxDzh4ChyQUmMIKdzLGg6sxkzDgAI3o=;
+ b=ZnoEPez1s9mkret+84aiVoBbI7kPnBo2K4g9LdoGjJ6Vk+54YX25G3Z0y+4eJYiwYj9198
+ nShsv9+TKBXTbNRidg9c/ePK/1HTATRNvXrX5F8nP9DbiWexkWFe2E3jYfd0oSnZt4QonXdX
+ PS7EotffJHiFxuv+AOwqR675HZ0WQ=;
+Message-ID: <d2623ac0f1cb07a23976416cdcf9eee1986747b0.camel@siemens.com>
+Subject: Re: [PATCH iwl-next,v4 1/1] igc: Add Tx hardware timestamp request
+ for AF_XDP zero-copy packet
+From: Florian Bezdeka <florian.bezdeka@siemens.com>
+To: Song Yoong Siang <yoong.siang.song@intel.com>, Jesse Brandeburg
+ <jesse.brandeburg@intel.com>, Tony Nguyen <anthony.l.nguyen@intel.com>, 
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Richard Cochran <richardcochran@gmail.com>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
+ <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@google.com>, Vinicius
+ Costa Gomes <vinicius.gomes@intel.com>, Kurt Kanzenbach
+ <kurt@linutronix.de>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, xdp-hints@xdp-project.net
+Date: Tue, 26 Mar 2024 09:56:54 +0100
+In-Reply-To: <20240325020928.1987947-1-yoong.siang.song@intel.com>
+References: <20240325020928.1987947-1-yoong.siang.song@intel.com>
+Autocrypt: =?US-ASCII?Q?addr=3Dflorian.bezdeka@siemen?=
+ =?US-ASCII?Q?s.com;_prefer-encrypt=3Dmutual?=
+ =?US-ASCII?Q?;_keydata=3DmQENBFwsf8QBCAC2f4AQWu92LZC4bKyUYRxWIpWqGz790s?=
+ =?US-ASCII?Q?pcYkXO7M8kfea4iC8qMxv2hT4HT0LTncRP6WiovVN2PeoOBfN5BSa5z?=
+ =?US-ASCII?Q?LIrZGVXh7KmbdKhwhVU+ynoTq9G5uaO2Kos7Vv7nNCuatIq8tSNILuoB?=
+ =?US-ASCII?Q?DFTAZnJW3y1V7YOwhDCPl5gbLSYqUY3OE0yksbtCcVI5istT4ED6mjQ?=
+ =?US-ASCII?Q?9W+3uH1LrgFeEF0oxTjrEPxO5ZYATz0f/TYC8WiM0sMrV+n0eMDntlzA?=
+ =?US-ASCII?Q?63D6lcRi5mNp2jPsJkq3tbWqyCrAe1sKPVJB44ekFwCk0kDIuhR13Q3R?=
+ =?US-ASCII?Q?HE4Or/9sznhMUQjYueWXvTZfzH/VsQJHABEBAAG0LUZsb3JpYW4gQmV6?=
+ =?US-ASCII?Q?ZGVrYSA8Zmxvcmlhbi5iZXpkZWthQHNpZW1lbnMuY29tPokBVAQTAQg?=
+ =?US-ASCII?Q?APhYhBAzL4P3jiTHdthsq4cj0O1fnOEBVBQJcLH/FAhsDBQkB4TOABQs?=
+ =?US-ASCII?Q?JCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEMj0O1fnOEBVc6YIAJ8oO4x?=
+ =?US-ASCII?Q?TjOCpjxaS8XQE6VW50HE9I6ShbQVWUEGhF4qzJaACTQDjdg/aio7qNRa?=
+ =?US-ASCII?Q?mnAy83Hy9sAxKVhXs+1R1fstN+JO8zgD3tJspucUkCiXlYu+Qcv2d6C?=
+ =?US-ASCII?Q?ostv+h4nv8fkSoeLfsQu3GJt6W0RN7t+8H/9fUMXyuB8GWo4bhaZcti6?=
+ =?US-ASCII?Q?78CotGLs6UGZpYEGiAMto8+9zVO/tdY1BkREM6bCVeQ9FnnpTRQy/tU5?=
+ =?US-ASCII?Q?xemMWJI64UUP92TUIbQ3TZKAz4iG/Mle+YjiHBGrJM7TxjE3sDg5J2Fa?=
+ =?US-ASCII?Q?HX4wmZPKGdB6wANKupf6HMMt2y7gduVmMKzgb8PDMLPZwWBSvjELQqz?=
+ =?US-ASCII?Q?hiZAQ0EYLSqZwEIAIR4HMTQC4F4YxatIl6MIDY03zD4M3ZQpgyQ6QFL9?=
+ =?US-ASCII?Q?Dq0I+PGc7A6z5rsGl76+D8pDFSN2BBJiLLlQadxKc3ZyTTlRp4bc=09bf?=
+ =?US-ASCII?Q?FZRmsAXwVfLtBauXxGo9pkyhk8Vcjb2EJm6XR8PH99buGOXlFfTLsmeA?=
+ =?US-ASCII?Q?ji/F4jU3qlUnwZMBvHZwRSFqOGdwKPMvW3FppfmREQ0o4xJ4b/bxGXx?=
+ =?US-ASCII?Q?ko21uyR/S5rEJx6X8Ukw95h3JinXHx/g2cjbKHrWBDKoqtX9IZCamDny?=
+ =?US-ASCII?Q?R+sfLWQbOKOrLNYLwLAQwOTVlZWTgue10G1q6Zi0r8RQ2T1Uy+ZLYagv?=
+ =?US-ASCII?Q?Cbzp/lT7p3mv3ba68llX896c0AEQEAAbQ/QmV6ZGVrYSwgRmxvcmlhbj?=
+ =?US-ASCII?Q?sgQmV6ZGVrYSBGbG9yaWFuIDxmbG9yaWFuLmJlemRla2FAc2llbWVuc?=
+ =?US-ASCII?Q?y5jb20+iQEcBBABCAAGBQJgtKpnAAoJEEoHyE9rG1dPpJYH+gPnqpu7h?=
+ =?US-ASCII?Q?4fsWOxco38e74MsazoUdfndTYP5tgaYTVE51ZhOZBl+4jYaywsmmFm9g?=
+ =?US-ASCII?Q?6N4Tw3GiMEDB4YU1X7gQZ60fDKpYL5SnCu5qZirJ4RCV4LDA0789ir+6?=
+ =?US-ASCII?Q?8/zfwXBTV5QoMH0+MkXB4BL+Km3f7X/GdN5oRoItAyKDBcEfGJo6afT?=
+ =?US-ASCII?Q?PtcUdI9n7ExCSfJwb0SBvvkvUsdNppFDGOOHSioINbEHBs2VUvE43toM?=
+ =?US-ASCII?Q?4mPLfhFIAtDcn5Byt80/kotU8v3Iyf86NYCa+0h77xTsKHcCUqe8Rvow?=
+ =?US-ASCII?Q?bCIbig9GGbbd54TasfqQQOiAkn/WeGl33+UIVX1Q8zo7eyMJHzLJQ3I=3D?=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-68982:519-21489:flowmailer
 
-Following the recent upgrade of one of our BPF programs, we encountered
-significant latency spikes affecting other applications running on the same
-host. After thorough investigation, we identified that these spikes were
-primarily caused by the prolonged duration required to free a
-non-preallocated htab with approximately 2 million keys.
+On Mon, 2024-03-25 at 10:09 +0800, Song Yoong Siang wrote:
+> This patch adds support to per-packet Tx hardware timestamp request to
+> AF_XDP zero-copy packet via XDP Tx metadata framework. Please note that
+> user needs to enable Tx HW timestamp capability via igc_ioctl() with
+> SIOCSHWTSTAMP cmd before sending xsk Tx hardware timestamp request.
+>=20
+> Same as implementation in RX timestamp XDP hints kfunc metadata, Timer 0
+> (adjustable clock) is used in xsk Tx hardware timestamp. i225/i226 have
+> four sets of timestamping registers. *skb and *xsk_tx_buffer pointers
+> are used to indicate whether the timestamping register is already occupie=
+d.
 
-Notably, our kernel configuration lacks the presence of CONFIG_PREEMPT. In
-scenarios where kernel execution extends excessively, other threads might
-be starved of CPU time, resulting in latency issues across the system. To
-mitigate this, we've adopted a proactive approach by incorporating
-cond_resched() calls within the kernel code. This ensures that during
-lengthy kernel operations, the scheduler is invoked periodically to provide
-opportunities for other threads to execute.
+Let me make sure that I fully understand that: In my own words:
 
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
----
- kernel/bpf/hashtab.c | 1 +
- 1 file changed, 1 insertion(+)
+With that applied I'm able to get the point in time from the device
+when a specific frame made it to the wire. I have to enable that
+functionality using the mentioned ioctl() call first, and then check
+the meta area (located in the umem right before the frame payload)
+while consuming the completion queue/ring. Correct?
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 3a088a5349bc..d3d5aad045cc 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -1489,6 +1489,7 @@ static void delete_all_elements(struct bpf_htab *htab)
- 		hlist_nulls_for_each_entry_safe(l, n, head, hash_node) {
- 			hlist_nulls_del_rcu(&l->hash_node);
- 			htab_elem_free(htab, l);
-+			cond_resched();
- 		}
- 	}
- 	migrate_enable();
--- 
-2.30.1 (Apple Git-130)
+If so, we now have a feedback channel for meta information for/from TX.
+Are there any plans - or would it be possible - to support Earliest
+TxTime First (NET_SCHED_ETF) QDisc based on that channel? In the past
+we had the problem that we we're missing a feedback channel to
+communicate back invalid lunch times.
+=20
+>=20
+> Furthermore, a boolean variable named xsk_pending_ts is used to hold the
+> transmit completion until the tx hardware timestamp is ready. This is
+> because, for i225/i226, the timestamp notification event comes some time
+> after the transmit completion event. The driver will retrigger hardware i=
+rq
+> to clean the packet after retrieve the tx hardware timestamp.
+>=20
+> Besides, xsk_meta is added into struct igc_tx_timestamp_request as a hook
+> to the metadata location of the transmit packet. When the Tx timestamp
+> interrupt is fired, the interrupt handler will copy the value of Tx hwts
+> into metadata location via xsk_tx_metadata_complete().
+>=20
+> This patch is tested with tools/testing/selftests/bpf/xdp_hw_metadata
+> on Intel ADL-S platform. Below are the test steps and results.
 
