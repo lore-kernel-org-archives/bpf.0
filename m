@@ -1,57 +1,58 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66BF367C53
-	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 10:15:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD956CDAF
+	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 10:15:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711448146; cv=none; b=Ya4I9SRJt6+Yj7DS2386uRCmWt0mTNvO0hHWpNQ8gPwRKAwPergy4atl5wC1AT7XHYHrg8sO47gRYDF7fyodEOd0Ct4EKtgdstcoz9a93vs/TAx+FI/jhe0cZX4xefTO+Rv8Ps1Fy/lt8ToKTbjQN6D/cHyV2DsiDE/maaev2ug=
+	t=1711448147; cv=none; b=qrM0RvZOhArdDYEmZTM/Yq8B4R5zcP5IQ49s4/DU9KJdYBkHPYe6n8pJ+x6EwPls308WuLFmOZ4PPUpktg/pcuPZKYfcO3hiZZdRitDXuIXga/L28LPqeHxVHTkmwTKp+7LsslmzJnSjWpJxxE2AdfjOZvwwe/XC1KQ6jNSVpsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711448146; c=relaxed/simple;
-	bh=Z1OLtf6E5PMf/9kBkrbl2MYiXuIUdmgv/xvrpj2tdUo=;
+	s=arc-20240116; t=1711448147; c=relaxed/simple;
+	bh=djIyxHQXg9LMS+10uh5V4dqBu3eyfNdtobBCVn6BOOA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MIrrO0eksPegr8iQ7XU38Zg5hQ9qAl0RaR32Tor7z32Eet1fxUYrcTZhhoVX9KkHJ/Ik6beoS5xjG7WPBcNmZ5cRB67qYOYOQg/bClx81rEgAvUc56SkIQNz8U0qkOX4+Wt33hGcg5w39O155fmWZBapMQSNbSeJFsQ0Uz5gwPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=IFufQG6y; arc=none smtp.client-ip=209.85.221.41
+	 MIME-Version; b=KG3W0rV49o8E4O7S7QhJp6QwkVj/clyyawPiZYHgMP0lxF8G4mdgFKMCCWxwGuxiDoI4Ltl5BgKqQm2/WPQPAGjqYmmMT6pbtZVq0VwEbC8u0hH2ugE3xVqPhC+/l1wqDzd6LfaQZ+7f/Q0MZpywDRIg+hHPdnppWxfSuU+2CH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=jPTrlZ4H; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="IFufQG6y"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-341d381d056so659608f8f.0
-        for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 03:15:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="jPTrlZ4H"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-341b9f6fb2eso2622227f8f.2
+        for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 03:15:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1711448141; x=1712052941; darn=vger.kernel.org;
+        d=isovalent.com; s=google; t=1711448144; x=1712052944; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VDmXYhaNeAX6UOxwM63OVSsZVxNn+rHfTehIiUnUGCo=;
-        b=IFufQG6yKf7r6pXrInqZlI8Nbr0dOh1fv7tC9n3TYxl2IfFB11mmTala4Xuag1udUL
-         tcb61NHineQ7JNCG2wt2Y9hh90wE5cp4RJwjT9xwHo8BwFgPJmtK+9iXlWjGNHvFOnCs
-         q83RZguYdSh9m1Hg3R6hQxz7JuV2EZs/iQKsBCbKZizCF7vdqPaGronanZ4BluJU8QEc
-         gqzh6ha6PoHd2SgAS+TuVdcHkVHFTbKHguwt75+xCmBedwqEoE8GrP9SSL6LAQLCiHG4
-         Fi61/X1PAa7W638BVW7socAKQL7GzOoBfPotCQRzV8XfOZPG2zfQX0xv4R0vOFUft2ey
-         ICOQ==
+        bh=GMvdSrKOet2j2j0islGkHR/rklL0ZcdZ3YUXMPQWIeI=;
+        b=jPTrlZ4HSgacLfrWnUST1D9fGQuGlkXgf4u63Zsnk0uVwf11pIqAnVf3KoxqwGFRgL
+         JDsc5px/Jw3ajQ/sv3oZXp4Es8kOTTjDVNPTh3hKXg7pp5vtrG0D31ad7KemEv9gATe6
+         w05ex2o81zj4k6hp0hhY1dRoW9papK9uHZRQmkwrLBkUb9HHiqTiyqGQak+4xsaOU0n7
+         YzQKorKPLxutmlnnWq7rPJlQnDBCI8c66cYMrinGh4b/IWe6KH3HuDTjRJXATW9b6B4Z
+         do1HKPjHQV9+vkmAs98g7tiZbelgSkiLlsCJ4hZdEKGRlH8UlPoer08xUKgYT+day+lS
+         gIDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711448141; x=1712052941;
+        d=1e100.net; s=20230601; t=1711448144; x=1712052944;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VDmXYhaNeAX6UOxwM63OVSsZVxNn+rHfTehIiUnUGCo=;
-        b=PwXGTFT0ron6XoZBEzRBsyDecETwM1pdgjLxlaMOb25RcvEHtIgkCDW4SAhYmpSGUa
-         ZmBCFYrRBqgHN8vrtYlUMap8d9W16OM+ObA3BNqRcadoq89Jrj2MoIH7FQtjdx1JDIv+
-         u3KzJCK7GdVXYHIMUYp9Cxn82oi17PMGcHEKl8QsJhisn36jUitdw/xSACmdLOgW6bHv
-         eVtPT1KUYSwhgSpwHT9fPFIA2WqOQhOyvAbkbNIkIECM9VtXCAkGBNxdLvGe+t8boAWo
-         LM25OYcEXLoe9gccz+BbEVmI58TQo5xx4yBiGyTOY7FnGVBWAuhRHrbseJV+72IGCGxd
-         /JWA==
-X-Forwarded-Encrypted: i=1; AJvYcCVQPS4fZ4RUhkVKSo8a6Ga5OxJcLkNWR4nFjWhWs41D01ETlHLE4RiGmzBZzdqs2k7QtVPrt8jx2dQqN9lGFV9zCvgZ
-X-Gm-Message-State: AOJu0Yx4qz3J0y4BQuV9u9qBwT8x4ob0gi7IQJ38cl4JkIPAPDsJptWY
-	3oayS1rljm3wlWS4iMaFxCBFhJA4GTGGLxV/DQiEbZSK+4XNeSWM9t+AoBW8l40=
-X-Google-Smtp-Source: AGHT+IFUlgvk84qtsV5V1cnnTCRyaV8l8W6P6+ueM8nZYoIoHbegrkiuZ5CT2oje2EiqQwBnVHbbxQ==
-X-Received: by 2002:adf:eed1:0:b0:341:a63a:d253 with SMTP id a17-20020adfeed1000000b00341a63ad253mr5659647wrp.53.1711448140767;
-        Tue, 26 Mar 2024 03:15:40 -0700 (PDT)
+        bh=GMvdSrKOet2j2j0islGkHR/rklL0ZcdZ3YUXMPQWIeI=;
+        b=UUY0IZrDhV+pXKVn/jhNPMbswZlnNxA72Ilxy0d9IUiLuKJDFI7ouUEhVVry0pLgJz
+         hF6WrmzwIkfmOUmLpD129ctZb4CM0Lc6oUEu5mVHcNGDlKNAoaHyRaDowssc9AcewsUd
+         Tz+CVdz03suJJnhunJ1dV75QpV85SNlwKKi5fK1b+A8fn5gfgVIrRrASU+LgL03rmu7q
+         AueQI1K9g0pRwF2Zzcm75RSBHfdP6LcwTqvIzU6sAcLLwHRxbuxCT5OwE+3lVXX5Ww7W
+         gOr1809wvEJEHObxU8ZJOm8ZJg8rmxOjHby/+RRUt32yGoiN1UrEJm/ikJSrg19hjDql
+         2sWA==
+X-Forwarded-Encrypted: i=1; AJvYcCWwRvFdQEFNTNQaE5yInjMgzHS4tfpQ8oN3dhWlBlzBrX8y7jDfkzicEk9mC46nlVHxvBbAEH0DNqQp0jkyiC84qgQG
+X-Gm-Message-State: AOJu0Yz67S8SQi90/igunGs0rhtxNCfsDy8PCdjty/UxoYd9h2aq3lWA
+	Wc1j++ur5ZCTAPxjfwlXWbGY6OwAPiFFN9p9YFg2IHwIJC/KT+TbwUyZzNrLgY8eGUL/sK3y1j7
+	F
+X-Google-Smtp-Source: AGHT+IEHdVK1zowcKGRyP/ZFBeCiA4Xz9Uwaa3wtj+sK4a2CzzVaD08K+Blo0eVE+LvsZSocHh3E9Q==
+X-Received: by 2002:a05:6000:147:b0:33e:7d7e:9af4 with SMTP id r7-20020a056000014700b0033e7d7e9af4mr6645799wrx.12.1711448144108;
+        Tue, 26 Mar 2024 03:15:44 -0700 (PDT)
 Received: from zh-lab-node-5.home ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id co20-20020a0560000a1400b00341d4722a9asm1891743wrb.21.2024.03.26.03.15.38
+        by smtp.gmail.com with ESMTPSA id co20-20020a0560000a1400b00341d4722a9asm1891743wrb.21.2024.03.26.03.15.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Mar 2024 03:15:39 -0700 (PDT)
+        Tue, 26 Mar 2024 03:15:42 -0700 (PDT)
 From: Anton Protopopov <aspsk@isovalent.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -64,9 +65,9 @@ Cc: Anton Protopopov <aspsk@isovalent.com>,
 	Rumen Telbizov <rumen.telbizov@menlosecurity.com>,
 	David Ahern <dsahern@kernel.org>,
 	netdev@vger.kernel.org
-Subject: [PATCH v2 bpf-next 1/3] bpf: add support for passing mark with bpf_fib_lookup
-Date: Tue, 26 Mar 2024 10:17:40 +0000
-Message-Id: <20240326101742.17421-2-aspsk@isovalent.com>
+Subject: [PATCH v2 bpf-next 3/3] bpf: add a check for struct bpf_fib_lookup size
+Date: Tue, 26 Mar 2024 10:17:42 +0000
+Message-Id: <20240326101742.17421-4-aspsk@isovalent.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240326101742.17421-1-aspsk@isovalent.com>
 References: <20240326101742.17421-1-aspsk@isovalent.com>
@@ -78,147 +79,29 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Extend the bpf_fib_lookup() helper by making it to utilize mark if
-the BPF_FIB_LOOKUP_MARK flag is set. In order to pass the mark the
-four bytes of struct bpf_fib_lookup are used, shared with the
-output-only smac/dmac fields.
+The struct bpf_fib_lookup should not grow outside of its 64 bytes.
+Add a static assert to validate this.
 
+Suggested-by: David Ahern <dsahern@kernel.org>
 Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: David Ahern <dsahern@kernel.org>
 ---
- include/uapi/linux/bpf.h       | 20 ++++++++++++++++++--
- net/core/filter.c              | 12 +++++++++---
- tools/include/uapi/linux/bpf.h | 20 ++++++++++++++++++--
- 3 files changed, 45 insertions(+), 7 deletions(-)
+ net/core/filter.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 9585f5345353..96d57e483133 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3394,6 +3394,10 @@ union bpf_attr {
-  *			for the nexthop. If the src addr cannot be derived,
-  *			**BPF_FIB_LKUP_RET_NO_SRC_ADDR** is returned. In this
-  *			case, *params*->dmac and *params*->smac are not set either.
-+ *		**BPF_FIB_LOOKUP_MARK**
-+ *			Use the mark present in *params*->mark for the fib lookup.
-+ *			This option should not be used with BPF_FIB_LOOKUP_DIRECT,
-+ *			as it only has meaning for full lookups.
-  *
-  *		*ctx* is either **struct xdp_md** for XDP programs or
-  *		**struct sk_buff** tc cls_act programs.
-@@ -7120,6 +7124,7 @@ enum {
- 	BPF_FIB_LOOKUP_SKIP_NEIGH = (1U << 2),
- 	BPF_FIB_LOOKUP_TBID    = (1U << 3),
- 	BPF_FIB_LOOKUP_SRC     = (1U << 4),
-+	BPF_FIB_LOOKUP_MARK    = (1U << 5),
- };
- 
- enum {
-@@ -7197,8 +7202,19 @@ struct bpf_fib_lookup {
- 		__u32	tbid;
- 	};
- 
--	__u8	smac[6];     /* ETH_ALEN */
--	__u8	dmac[6];     /* ETH_ALEN */
-+	union {
-+		/* input */
-+		struct {
-+			__u32	mark;   /* policy routing */
-+			/* 2 4-byte holes for input */
-+		};
-+
-+		/* output: source and dest mac */
-+		struct {
-+			__u8	smac[6];	/* ETH_ALEN */
-+			__u8	dmac[6];	/* ETH_ALEN */
-+		};
-+	};
- };
- 
- struct bpf_redir_neigh {
 diff --git a/net/core/filter.c b/net/core/filter.c
-index 0c66e4a3fc5b..1205dd777dc2 100644
+index 1205dd777dc2..786d792ac816 100644
 --- a/net/core/filter.c
 +++ b/net/core/filter.c
-@@ -5884,7 +5884,10 @@ static int bpf_ipv4_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
+@@ -87,6 +87,9 @@
  
- 		err = fib_table_lookup(tb, &fl4, &res, FIB_LOOKUP_NOREF);
- 	} else {
--		fl4.flowi4_mark = 0;
-+		if (flags & BPF_FIB_LOOKUP_MARK)
-+			fl4.flowi4_mark = params->mark;
-+		else
-+			fl4.flowi4_mark = 0;
- 		fl4.flowi4_secid = 0;
- 		fl4.flowi4_tun_key.tun_id = 0;
- 		fl4.flowi4_uid = sock_net_uid(net, NULL);
-@@ -6027,7 +6030,10 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
- 		err = ipv6_stub->fib6_table_lookup(net, tb, oif, &fl6, &res,
- 						   strict);
- 	} else {
--		fl6.flowi6_mark = 0;
-+		if (flags & BPF_FIB_LOOKUP_MARK)
-+			fl6.flowi6_mark = params->mark;
-+		else
-+			fl6.flowi6_mark = 0;
- 		fl6.flowi6_secid = 0;
- 		fl6.flowi6_tun_key.tun_id = 0;
- 		fl6.flowi6_uid = sock_net_uid(net, NULL);
-@@ -6105,7 +6111,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
+ #include "dev.h"
  
- #define BPF_FIB_LOOKUP_MASK (BPF_FIB_LOOKUP_DIRECT | BPF_FIB_LOOKUP_OUTPUT | \
- 			     BPF_FIB_LOOKUP_SKIP_NEIGH | BPF_FIB_LOOKUP_TBID | \
--			     BPF_FIB_LOOKUP_SRC)
-+			     BPF_FIB_LOOKUP_SRC | BPF_FIB_LOOKUP_MARK)
- 
- BPF_CALL_4(bpf_xdp_fib_lookup, struct xdp_buff *, ctx,
- 	   struct bpf_fib_lookup *, params, int, plen, u32, flags)
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 9585f5345353..96d57e483133 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3394,6 +3394,10 @@ union bpf_attr {
-  *			for the nexthop. If the src addr cannot be derived,
-  *			**BPF_FIB_LKUP_RET_NO_SRC_ADDR** is returned. In this
-  *			case, *params*->dmac and *params*->smac are not set either.
-+ *		**BPF_FIB_LOOKUP_MARK**
-+ *			Use the mark present in *params*->mark for the fib lookup.
-+ *			This option should not be used with BPF_FIB_LOOKUP_DIRECT,
-+ *			as it only has meaning for full lookups.
-  *
-  *		*ctx* is either **struct xdp_md** for XDP programs or
-  *		**struct sk_buff** tc cls_act programs.
-@@ -7120,6 +7124,7 @@ enum {
- 	BPF_FIB_LOOKUP_SKIP_NEIGH = (1U << 2),
- 	BPF_FIB_LOOKUP_TBID    = (1U << 3),
- 	BPF_FIB_LOOKUP_SRC     = (1U << 4),
-+	BPF_FIB_LOOKUP_MARK    = (1U << 5),
- };
- 
- enum {
-@@ -7197,8 +7202,19 @@ struct bpf_fib_lookup {
- 		__u32	tbid;
- 	};
- 
--	__u8	smac[6];     /* ETH_ALEN */
--	__u8	dmac[6];     /* ETH_ALEN */
-+	union {
-+		/* input */
-+		struct {
-+			__u32	mark;   /* policy routing */
-+			/* 2 4-byte holes for input */
-+		};
++/* Keep the struct bpf_fib_lookup small so that it fits into a cacheline */
++static_assert(sizeof(struct bpf_fib_lookup) == 64, "struct bpf_fib_lookup size check");
 +
-+		/* output: source and dest mac */
-+		struct {
-+			__u8	smac[6];	/* ETH_ALEN */
-+			__u8	dmac[6];	/* ETH_ALEN */
-+		};
-+	};
- };
+ static const struct bpf_func_proto *
+ bpf_sk_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog);
  
- struct bpf_redir_neigh {
 -- 
 2.34.1
 
