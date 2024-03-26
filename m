@@ -1,221 +1,196 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 784D22574B;
-	Tue, 26 Mar 2024 16:02:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31D166CDD9;
+	Tue, 26 Mar 2024 16:16:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711468923; cv=none; b=kcpIp+7zWp/Mv55on3hZsV9BTNCOgMvCjpuNoUUGWZYmGTCKWvU9VMXUuhnOXGBLnMyK/T6zWFiRXZxcR6aQj0a1DOjBI1CF4ZSZfKPJTsET6FR5IbYvQ2qrXlLVHntK5cPCuMhdmgN6JVQVXCSeZ+UH/y2afyd1wcLdyHIYjgI=
+	t=1711469809; cv=none; b=qrJkzt5qZroCngKU0EcL1SPlKBoj9A4wZd1IxY/7a6UyKQwOuMa2pWPF7rUvNWVbMD2NivqFidoklk7Bq11qMqg7BhfNvg/wy2ZUOV3H+S1AbVOyb906eugE4RVxeK/PTXuWV6OrswqN2nkrcNcv5a+nJT7eb+DV52gwlRp800o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711468923; c=relaxed/simple;
-	bh=IjbfE8tFOdfjNx4MkilscMXL9i5JKvzYqCkq93qx1DI=;
+	s=arc-20240116; t=1711469809; c=relaxed/simple;
+	bh=Hu751i6KRZc0EauBOtfdQ3K2MwbwDVkz3AtJAI1/HCY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Zf5WFUFs7oZtBkbymupksJMDJybJRaTyr9w2hwOcqYhdjSwITBs52Kb3mRkThvz07TDrWen+eerCvo6NG5Glqx4BEIyyiwEtN/lmt+4RLCQudPzKUp5akd5lb+XRGCC+1kgga6bAubw5LBpvRTuKlw/DU8TU9TZoK0tJZrKBdyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I+AVg4pM; arc=none smtp.client-ip=209.85.214.175
+	 To:Cc:Content-Type; b=rfT/QL5JfV+b3V+FTDh4Hf+dZNMHc4mS6zboTXnhPr4rink0FmvLfc4Yh9KECfXa9XUOTDjhSxri15MahYST7SNyUAQX4li/u3oXcfKOAnyXa32z2EmYXm9y58H2nrhG4yt7gjbsOaDwJmqAc0q+6W7QH6UBdWpsMo4yn2RVSYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M1L2huhj; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I+AVg4pM"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1e0f2798b47so5211775ad.1;
-        Tue, 26 Mar 2024 09:02:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M1L2huhj"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1e0b213efa3so20252935ad.0;
+        Tue, 26 Mar 2024 09:16:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711468920; x=1712073720; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711469805; x=1712074605; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aQJPy88vBYo4nQyyX6JO+jPm5JtOURILAq3nriLwYbQ=;
-        b=I+AVg4pMGd1gzfEoz6Uq8v/9YC+YvYSeTaAiyRhtTnNeYvxqaxCXtahDtSH0Yzxl0b
-         dPokTHz6GZQWZ6JqdpOrNc8I7LabJejcpMu8vuxFYRiZLuXgtt8bU6ZIKP3hmgB02A20
-         8QrbargXJ2GlhYvGsxEespqzME3YB4IorZq46woaCh5JVeRiZTqcQ0JbTwU1w+VFi//2
-         Max75S5+Ya+pdOpTe67owOLHLSlM6IMdvG7CG2+1ONmjT8BpM0Wttev6gV8GnFC0KbSB
-         64ztF3PZTfkkJ3LzW6ieamFi1X+wHyVdPlA+VXzR3nK+tglXrmzZsj2UEVVB2BFdzTwu
-         ZJHA==
+        bh=elq26VvqKMTOYoZX8ejkefRVkYcEJb3PZ8dLMFD5KMY=;
+        b=M1L2huhj2wsuRuEYbvx+ZINm4yBVbMP2xe3FtPhn78EuTEnOMFhE1HR9X00dFZJh/h
+         Vs5qTLpOznGmw/ma+xYpe4ziKToWAJAUfjvJLlHPuhwllBD2XBU96vTc1ifCoXKT4xPt
+         zlw72hyc6Npes83zBu7B/fZ02EUiiyWZt08zsRFfr0FmblQrNJuK9nT4NWRChK/qGL5r
+         YEPg4npufRwJa+w5E8ONCPu3+QGwb8SLWPCszoRTZ16krE98OkDJyhvsxqjTN2bGLYJF
+         9hFWzjRyke28NcoETiOlM3bqqm+/SFWeCoSrR5Dam3P0YBw1677WaB7L9XiicAwrJ4xK
+         AnhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711468920; x=1712073720;
+        d=1e100.net; s=20230601; t=1711469805; x=1712074605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aQJPy88vBYo4nQyyX6JO+jPm5JtOURILAq3nriLwYbQ=;
-        b=wTWmj+E0pMc+2kBqXP/5Sh6+hjiM0ob1QgOaOEujSgKmgt/5iwRTpesSGUOY4kg/kU
-         2/nfjGdq0wMqqxF8p88iayWs1IijDFrdtVM2IReM61NvUkCJceMdH7F/gze1HiVcetWg
-         K+zdF2cWIgpJaDXCAxi5TvGG4OivweCiHV7c13KO/mCvbGryQbXeH7ekRo9sGrnjOTVd
-         S/83Gl33d9VbnUqgelQS3R8Wzg3tqBYeqVtj3xP92XBEN17Q69gTOuxbo6oJunck9lCE
-         jWr1KVyFlFDAs0fHIy3F7h8jZ52jcOuBJYcU6jn/iEn95l8VXnxt23C8M3UaHDm/yXoU
-         JM2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVuGvkc4rfpLe5NHyZtl36fj8QLiRmT0XBcj9YV3vBf6iW5YG7XOUoMu+VpTLMLZ+qlaCRC/eDY8pmQDMpm0U6/Hl5XFAG0rNDjpx8K6BUFf/phLszpVpK7E5KVZd6yQfTmGdvRVhZ7PVwQURSPhx6NJak5xElLK/E7W8zRfJZzb32B7IB8UZLgnI2uTcKmn2RUpTik/tju2qYjT6aLs1toZNzIs+B2mA==
-X-Gm-Message-State: AOJu0YxI2Ua17tn5tN/pxuvLnoKanWJFlgh70WAFA18jE6OjwksuHhwX
-	NJIEvI5zHk7dx4kdB+uAS5W24qDC/hg7cEE8y9ByFEmQx7F1JiOuum2Kpt2Bkx+TtuzfwUW9lqZ
-	+Ho+VwnvMcbxATsqZ3C8tsWwpk+w=
-X-Google-Smtp-Source: AGHT+IHtfConeE4djnAj96ZFcg6gNNv5l9VculGG8dY053dAspbyKZxpxh/zkIuAVWRiJAqk6iJIDniUnCwGli8dbQg=
-X-Received: by 2002:a17:902:e748:b0:1e0:e011:e3cb with SMTP id
- p8-20020a170902e74800b001e0e011e3cbmr3326261plf.15.1711468919504; Tue, 26 Mar
- 2024 09:01:59 -0700 (PDT)
+        bh=elq26VvqKMTOYoZX8ejkefRVkYcEJb3PZ8dLMFD5KMY=;
+        b=upSTKtGLe2Bd7onGx+JM9F5R8eVx4blx6h3rXO1ddpmz69GKq+gvHOGKRmfvtNBBbk
+         jVabaXYXFOuw3okylbfmH+21UrsO/Uh9cjmcZB6RRdwru/VXdvZKMlBHi6ApobasrfyJ
+         E2AU5vPmLJsMNxnK2mUKZJZp57nhXTe7p1Feklqws8JkAW2OnUvDWAhYyX6QgH90RLHE
+         1WhbAm/EPWiUui9vjRoY13tabNZC1YWbyqjzQkigLYb9rew15wDUOZiL+qKPR81rICX0
+         JXwwslb3kcGyB0vOu7RwHeacWtiupeAFnFYoXSaO0xXgYX87yBugXlp0/3X3QPJ6HKdz
+         l2cQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX9z0VghgL9BdtWF2E8vzGwA0mmK2tLzAjopwJgYbUkxlkD90b+5U7zUhnwAbxnn0P8uMDQjAXGOze4jwOfZPrSNe7al+dQp7DoDS9WwverfWrCsG2gl/b+C6ZWvhuSSxDSGstS0ige
+X-Gm-Message-State: AOJu0YyyPpZBKMeccJrcAvyadh/vQv/WUXFsoS8xEmA+jLZMI2SgOABI
+	Ww6NZm+c2efEfSHLK3VI11CIwlvSjUdG0disXGSC6OeYPjbWSCo0lGSaaqwUf5SoTHCzzjMP58+
+	YOPQp4bvSgeQ3mN1Yby01v38Q3sI/4462
+X-Google-Smtp-Source: AGHT+IGcGbVKO4Mp0HgLCsCrJhDWTqluZ8ZhttodhRfazx1mj/6+60HSyIhNiI2N9kw75dPF4YAjsL5DTsrId6wDmsI=
+X-Received: by 2002:a17:902:e806:b0:1e0:f51b:12e2 with SMTP id
+ u6-20020a170902e80600b001e0f51b12e2mr1764536plg.2.1711469805327; Tue, 26 Mar
+ 2024 09:16:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240321145736.2373846-1-jonathan.haslam@gmail.com> <20240325120323.ec3248d330b2755e73a6571e@kernel.org>
-In-Reply-To: <20240325120323.ec3248d330b2755e73a6571e@kernel.org>
+References: <20240322160323.2463329-1-andrii@kernel.org> <20240325113848.32a70948d1cdb0fa76225690@kernel.org>
+ <20240325181338.39376089@gandalf.local.home>
+In-Reply-To: <20240325181338.39376089@gandalf.local.home>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 26 Mar 2024 09:01:47 -0700
-Message-ID: <CAEf4BzZS_QCsSY0oGY_3pGveGfXKK_TkVURyNq=UQXVXSqi2Fw@mail.gmail.com>
-Subject: Re: [PATCH] uprobes: reduce contention on uprobes_tree access
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Jonathan Haslam <jonathan.haslam@gmail.com>, linux-trace-kernel@vger.kernel.org, 
-	andrii@kernel.org, bpf@vger.kernel.org, rostedt@goodmis.org, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Tue, 26 Mar 2024 09:16:33 -0700
+Message-ID: <CAEf4BzazyWqLRmruj6XPXMYSYrrFPRAJRizWGhKtTt9A8zWE3A@mail.gmail.com>
+Subject: Re: [PATCH] ftrace: make extra rcu_is_watching() validation check optional
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, jolsa@kernel.org, 
+	"Paul E . McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 24, 2024 at 8:03=E2=80=AFPM Masami Hiramatsu <mhiramat@kernel.o=
-rg> wrote:
+On Mon, Mar 25, 2024 at 3:11=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
+> wrote:
 >
-> On Thu, 21 Mar 2024 07:57:35 -0700
-> Jonathan Haslam <jonathan.haslam@gmail.com> wrote:
+> On Mon, 25 Mar 2024 11:38:48 +0900
+> Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
 >
-> > Active uprobes are stored in an RB tree and accesses to this tree are
-> > dominated by read operations. Currently these accesses are serialized b=
-y
-> > a spinlock but this leads to enormous contention when large numbers of
-> > threads are executing active probes.
+> > On Fri, 22 Mar 2024 09:03:23 -0700
+> > Andrii Nakryiko <andrii@kernel.org> wrote:
 > >
-> > This patch converts the spinlock used to serialize access to the
-> > uprobes_tree RB tree into a reader-writer spinlock. This lock type
-> > aligns naturally with the overwhelmingly read-only nature of the tree
-> > usage here. Although the addition of reader-writer spinlocks are
-> > discouraged [0], this fix is proposed as an interim solution while an
-> > RCU based approach is implemented (that work is in a nascent form). Thi=
-s
-> > fix also has the benefit of being trivial, self contained and therefore
-> > simple to backport.
+> > > Introduce CONFIG_FTRACE_VALIDATE_RCU_IS_WATCHING config option to
+> > > control whether ftrace low-level code performs additional
+> > > rcu_is_watching()-based validation logic in an attempt to catch noins=
+tr
+> > > violations.
+> > >
+> > > This check is expected to never be true in practice and would be best
+> > > controlled with extra config to let users decide if they are willing =
+to
+> > > pay the price.
 > >
-> > This change has been tested against production workloads that exhibit
-> > significant contention on the spinlock and an almost order of magnitude
-> > reduction for mean uprobe execution time is observed (28 -> 3.5 microse=
-cs).
+> > Hmm, for me, it sounds like "WARN_ON(something) never be true in practi=
+ce
+> > so disable it by default". I think CONFIG_FTRACE_VALIDATE_RCU_IS_WATCHI=
+NG
+> > is OK, but tht should be set to Y by default. If you have already verif=
+ied
+> > that your system never make it true and you want to optimize your ftrac=
+e
+> > path, you can manually set it to N at your own risk.
+> >
 >
-> Looks good to me.
+> Really, it's for debugging. I would argue that it should *not* be default=
+ y.
+> Peter added this to find all the locations that could be called where RCU
+> is not watching. But the issue I have is that this is that it *does cause
+> overhead* with function tracing.
 >
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> I believe we found pretty much all locations that were an issue, and we
+> should now just make it an option for developers.
+>
+> It's no different than lockdep. Test boxes should have it enabled, but
+> there's no reason to have this enabled in a production system.
+>
 
-Masami,
+I tend to agree with Steven here (which is why I sent this patch as it
+is), but I'm happy to do it as an opt-out, if Masami insists. Please
+do let me know if I need to send v2 or this one is actually the one
+we'll end up using. Thanks!
 
-Given the discussion around per-cpu rw semaphore and need for
-(internal) batched attachment API for uprobes, do you think you can
-apply this patch as is for now? We can then gain initial improvements
-in scalability that are also easy to backport, and Jonathan will work
-on a more complete solution based on per-cpu RW semaphore, as
-suggested by Ingo.
-
->
-> BTW, how did you measure the overhead? I think spinlock overhead
-> will depend on how much lock contention happens.
->
-> Thank you,
->
-> >
-> > [0] https://docs.kernel.org/locking/spinlocks.html
-> >
-> > Signed-off-by: Jonathan Haslam <jonathan.haslam@gmail.com>
-> > ---
-> >  kernel/events/uprobes.c | 22 +++++++++++-----------
-> >  1 file changed, 11 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-> > index 929e98c62965..42bf9b6e8bc0 100644
-> > --- a/kernel/events/uprobes.c
-> > +++ b/kernel/events/uprobes.c
-> > @@ -39,7 +39,7 @@ static struct rb_root uprobes_tree =3D RB_ROOT;
-> >   */
-> >  #define no_uprobe_events()   RB_EMPTY_ROOT(&uprobes_tree)
-> >
-> > -static DEFINE_SPINLOCK(uprobes_treelock);    /* serialize rbtree acces=
-s */
-> > +static DEFINE_RWLOCK(uprobes_treelock);      /* serialize rbtree acces=
-s */
-> >
-> >  #define UPROBES_HASH_SZ      13
-> >  /* serialize uprobe->pending_list */
-> > @@ -669,9 +669,9 @@ static struct uprobe *find_uprobe(struct inode *ino=
-de, loff_t offset)
-> >  {
-> >       struct uprobe *uprobe;
-> >
-> > -     spin_lock(&uprobes_treelock);
-> > +     read_lock(&uprobes_treelock);
-> >       uprobe =3D __find_uprobe(inode, offset);
-> > -     spin_unlock(&uprobes_treelock);
-> > +     read_unlock(&uprobes_treelock);
-> >
-> >       return uprobe;
-> >  }
-> > @@ -701,9 +701,9 @@ static struct uprobe *insert_uprobe(struct uprobe *=
-uprobe)
-> >  {
-> >       struct uprobe *u;
-> >
-> > -     spin_lock(&uprobes_treelock);
-> > +     write_lock(&uprobes_treelock);
-> >       u =3D __insert_uprobe(uprobe);
-> > -     spin_unlock(&uprobes_treelock);
-> > +     write_unlock(&uprobes_treelock);
-> >
-> >       return u;
-> >  }
-> > @@ -935,9 +935,9 @@ static void delete_uprobe(struct uprobe *uprobe)
-> >       if (WARN_ON(!uprobe_is_active(uprobe)))
-> >               return;
-> >
-> > -     spin_lock(&uprobes_treelock);
-> > +     write_lock(&uprobes_treelock);
-> >       rb_erase(&uprobe->rb_node, &uprobes_tree);
-> > -     spin_unlock(&uprobes_treelock);
-> > +     write_unlock(&uprobes_treelock);
-> >       RB_CLEAR_NODE(&uprobe->rb_node); /* for uprobe_is_active() */
-> >       put_uprobe(uprobe);
-> >  }
-> > @@ -1298,7 +1298,7 @@ static void build_probe_list(struct inode *inode,
-> >       min =3D vaddr_to_offset(vma, start);
-> >       max =3D min + (end - start) - 1;
-> >
-> > -     spin_lock(&uprobes_treelock);
-> > +     read_lock(&uprobes_treelock);
-> >       n =3D find_node_in_range(inode, min, max);
-> >       if (n) {
-> >               for (t =3D n; t; t =3D rb_prev(t)) {
-> > @@ -1316,7 +1316,7 @@ static void build_probe_list(struct inode *inode,
-> >                       get_uprobe(u);
-> >               }
-> >       }
-> > -     spin_unlock(&uprobes_treelock);
-> > +     read_unlock(&uprobes_treelock);
-> >  }
-> >
-> >  /* @vma contains reference counter, not the probed instruction. */
-> > @@ -1407,9 +1407,9 @@ vma_has_uprobes(struct vm_area_struct *vma, unsig=
-ned long start, unsigned long e
-> >       min =3D vaddr_to_offset(vma, start);
-> >       max =3D min + (end - start) - 1;
-> >
-> > -     spin_lock(&uprobes_treelock);
-> > +     read_lock(&uprobes_treelock);
-> >       n =3D find_node_in_range(inode, min, max);
-> > -     spin_unlock(&uprobes_treelock);
-> > +     read_unlock(&uprobes_treelock);
-> >
-> >       return !!n;
-> >  }
-> > --
-> > 2.43.0
-> >
+> -- Steve
 >
 >
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > >
+> > > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > > Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> > > Cc: Paul E. McKenney <paulmck@kernel.org>
+> > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > > ---
+> > >  include/linux/trace_recursion.h |  2 +-
+> > >  kernel/trace/Kconfig            | 13 +++++++++++++
+> > >  2 files changed, 14 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/include/linux/trace_recursion.h b/include/linux/trace_re=
+cursion.h
+> > > index d48cd92d2364..24ea8ac049b4 100644
+> > > --- a/include/linux/trace_recursion.h
+> > > +++ b/include/linux/trace_recursion.h
+> > > @@ -135,7 +135,7 @@ extern void ftrace_record_recursion(unsigned long=
+ ip, unsigned long parent_ip);
+> > >  # define do_ftrace_record_recursion(ip, pip)       do { } while (0)
+> > >  #endif
+> > >
+> > > -#ifdef CONFIG_ARCH_WANTS_NO_INSTR
+> > > +#ifdef CONFIG_FTRACE_VALIDATE_RCU_IS_WATCHING
+> > >  # define trace_warn_on_no_rcu(ip)                                  \
+> > >     ({                                                              \
+> > >             bool __ret =3D !rcu_is_watching();                       =
+ \
+> >
+> > BTW, maybe we can add "unlikely" in the next "if" line?
+> >
+> > > diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> > > index 61c541c36596..19bce4e217d6 100644
+> > > --- a/kernel/trace/Kconfig
+> > > +++ b/kernel/trace/Kconfig
+> > > @@ -974,6 +974,19 @@ config FTRACE_RECORD_RECURSION_SIZE
+> > >       This file can be reset, but the limit can not change in
+> > >       size at runtime.
+> > >
+> > > +config FTRACE_VALIDATE_RCU_IS_WATCHING
+> > > +   bool "Validate RCU is on during ftrace recursion check"
+> > > +   depends on FUNCTION_TRACER
+> > > +   depends on ARCH_WANTS_NO_INSTR
+> >
+> >       default y
+> >
+> > > +   help
+> > > +     All callbacks that attach to the function tracing have some sor=
+t
+> > > +     of protection against recursion. This option performs additiona=
+l
+> > > +     checks to make sure RCU is on when ftrace callbacks recurse.
+> > > +
+> > > +     This will add more overhead to all ftrace-based invocations.
+> >
+> >       ... invocations, but keep it safe.
+> >
+> > > +
+> > > +     If unsure, say N
+> >
+> >       If unsure, say Y
+> >
+> > Thank you,
+> >
+> > > +
+> > >  config RING_BUFFER_RECORD_RECURSION
+> > >     bool "Record functions that recurse in the ring buffer"
+> > >     depends on FTRACE_RECORD_RECURSION
+> > > --
+> > > 2.43.0
+> > >
+> >
+> >
+>
