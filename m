@@ -1,308 +1,272 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97F3A14265;
-	Tue, 26 Mar 2024 18:59:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7919C1CD37
+	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 19:00:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711479587; cv=none; b=DKLWpVzPr7vEFbVg5f4C0UzWzRXVb7+3bG4lLBem0bk0QHsLbNg30/jE7OYq05wW2w3GS1gcQ1iwDdlATWHxWPy3roazxOpiCzIP6c/8lEYwvIkl9PZtQmFKkrv7fnzndJi/QcjG6OqA1YVST3WCz6tlSYEv6HJHhi+iqlraEMc=
+	t=1711479633; cv=none; b=YcK9tZ0/EbFGJuMQNclFGeSSt2AfqACg2qyWDttu/BNPPawngtYi+Anp/hC/12wbkudfYTxj3Kg5Z7fexPXOkuzBRAiKrP4hUqGob1mlJPDYurazfgcZrE4qcbB1Dzngc/OoxyM4H7rtInsQdj4dBTUt8sx/grMdDIwFLgBYLDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711479587; c=relaxed/simple;
-	bh=2HjFY0yw0cSUnGd0uidraidATyozNzx0CSvEuLWgRbA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=upDuR1LCvA8noQLYVmhiYOIHky69JBJhoTbyZEyKZJUoMEka3mAZbLT5E0BLA7Qc/vA3QMe8RhMj9tJU+6Px6/RyJE3r7g16CwPerfdnQH1qi1TC4Qa7wsrBT76qKJ7gYXzYBns9CPgL+w3oMudL34KuegYdFLOg418BWN9pJ2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 342FE2F4;
-	Tue, 26 Mar 2024 12:00:17 -0700 (PDT)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.35.184])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AD7703F64C;
-	Tue, 26 Mar 2024 11:59:40 -0700 (PDT)
-Date: Tue, 26 Mar 2024 18:59:34 +0000
-From: Mark Rutland <mark.rutland@arm.com>
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Zi Shen Lim <zlim.lnx@gmail.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Mark Brown <broonie@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" <bpf@vger.kernel.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: [PATCH bpf-next v2 1/1] arm64/cfi,bpf: Support kCFI + BPF on
- arm64
-Message-ID: <ZgMbFqWpmZgahiV6@FVFF77S0Q05N.cambridge.arm.com>
-References: <20240324211518.93892-1-puranjay12@gmail.com>
- <20240324211518.93892-2-puranjay12@gmail.com>
+	s=arc-20240116; t=1711479633; c=relaxed/simple;
+	bh=UxodHAc2Q0YMvk9hnxmLqATQNH3AP0kpy/ZDYoiwVx8=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=U+Kz0gH50s/wi4bJbx8plcb77/i1jbzEosDx8MkVUJsvonb2Zkatm3qBKVJAyOruXjpf25yVDZlQPNsbU08xbAOBj0LgfDQEO3rzGyF4zp3ssDgGIGcaDRVDtFopnrTbKtmx/ystAw3qqXL8zaUi4IRU6vJrgEZJ/99odJddRiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7cbf1aea97fso618155939f.2
+        for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 12:00:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711479622; x=1712084422;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Zh9AoJ3VjIEQxaTVlE60MJ0B18WO2d4RcQKlFIUA598=;
+        b=QTJcGF6ZvPP6w/jNyUXIXuGdU+TA39/WZ0oQdY24cZqw6jI7PwBUq584IIxJb6+Gvw
+         R3OkY+B3qxnqWyyg4ngq2DJYkxPsmR6pWwuXJ9o79i3l8Eiighpb97wgLN2betl133hz
+         RXDD+WPFAiofEfDLgKFFtgSwHPZqB5BHAnBql5MnQKS1ORuXm77Ry3MrS98aO0YL/DKU
+         EkCea5w3NFjfQ+8VdQcGmNDdehzOkIPqVRw+0aC/8e0iDfFX/uf7IfeaZvKSSr1XcoXg
+         iUHYR+RooyETV4xtXAV4xV1XzlLCskhP/vQKP3ZxioeNjqp8rTjHvFYCCCrbkMJ5s9rA
+         Dqww==
+X-Forwarded-Encrypted: i=1; AJvYcCWdwZ9z1VfFK0x6pLhznl8WEcFSNN/MEQou3/fH5ACPXhHbQGxkcMSYZjMGeQvBPhxoVM5ofWZV7NiLddHViB2dm+lS
+X-Gm-Message-State: AOJu0YwzcwBLaVnGjWtl5CIEuyWnND/0+PV5Ax8NH4DFFXIkJc6Jl2Ck
+	Tx1aXr4AGAcy/Rpt46OkJIc1yY47i7fd6VBasxdiDSQPugHSMlhjz3YqFW+LvOfGKanObewSNQF
+	muY611rdeCyWjlMaqnWHM2uwEmSvnGroed6jqyA/uAOi5+aqwHjebR8E=
+X-Google-Smtp-Source: AGHT+IF4fN1sZMIozYI+TXiMYCQp1Z5/tfPycHxfUVVuaz6y73FkQ7p3GYXYrNuPOEA+R6jx/Nz5+SDo+GBNiNCUlcxF3x7ssfua
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240324211518.93892-2-puranjay12@gmail.com>
+X-Received: by 2002:a05:6602:341e:b0:7cf:1f32:e6f2 with SMTP id
+ n30-20020a056602341e00b007cf1f32e6f2mr520853ioz.3.1711479622654; Tue, 26 Mar
+ 2024 12:00:22 -0700 (PDT)
+Date: Tue, 26 Mar 2024 12:00:22 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f2f0c0061494e610@google.com>
+Subject: [syzbot] [bpf?] possible deadlock in kvfree_call_rcu
+From: syzbot <syzbot+1fa663a2100308ab6eab@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@google.com, 
+	song@kernel.org, syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Puranjay,
+Hello,
 
-On Sun, Mar 24, 2024 at 09:15:18PM +0000, Puranjay Mohan wrote:
-> Currently, bpf_dispatcher_*_func() is marked with `__nocfi` therefore
-> calling BPF programs from this interface doesn't cause CFI warnings.
-> 
-> When BPF programs are called directly from C: from BPF helpers or
-> struct_ops, CFI warnings are generated.
-> 
-> Implement proper CFI prologues for the BPF programs and callbacks and
-> drop __nocfi for arm64. Fix the trampoline generation code to emit kCFI
-> prologue when a struct_ops trampoline is being prepared.
-> 
-> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+syzbot found the following issue on:
 
-Presumably this'll need a Cc stable and a Fixes tag?
+HEAD commit:    fe46a7dd189e Merge tag 'sound-6.9-rc1' of git://git.kernel..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11547a65180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4d90a36f0cab495a
+dashboard link: https://syzkaller.appspot.com/bug?extid=1fa663a2100308ab6eab
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
 
-> ---
->  arch/arm64/include/asm/cfi.h    | 23 ++++++++++++++
->  arch/arm64/kernel/alternative.c | 54 +++++++++++++++++++++++++++++++++
->  arch/arm64/net/bpf_jit_comp.c   | 28 +++++++++++++----
->  3 files changed, 99 insertions(+), 6 deletions(-)
->  create mode 100644 arch/arm64/include/asm/cfi.h
-> 
-> diff --git a/arch/arm64/include/asm/cfi.h b/arch/arm64/include/asm/cfi.h
-> new file mode 100644
-> index 000000000000..670e191f8628
-> --- /dev/null
-> +++ b/arch/arm64/include/asm/cfi.h
-> @@ -0,0 +1,23 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_ARM64_CFI_H
-> +#define _ASM_ARM64_CFI_H
-> +
-> +#ifdef CONFIG_CFI_CLANG
-> +#define __bpfcall
-> +static inline int cfi_get_offset(void)
-> +{
-> +	return 4;
-> +}
-> +#define cfi_get_offset cfi_get_offset
-> +extern u32 cfi_bpf_hash;
-> +extern u32 cfi_bpf_subprog_hash;
-> +extern u32 cfi_get_func_hash(void *func);
-> +#else
-> +#define cfi_bpf_hash 0U
-> +#define cfi_bpf_subprog_hash 0U
-> +static inline u32 cfi_get_func_hash(void *func)
-> +{
-> +	return 0;
-> +}
-> +#endif /* CONFIG_CFI_CLANG */
-> +#endif /* _ASM_ARM64_CFI_H */
-> diff --git a/arch/arm64/kernel/alternative.c b/arch/arm64/kernel/alternative.c
-> index 8ff6610af496..1715da7df137 100644
-> --- a/arch/arm64/kernel/alternative.c
-> +++ b/arch/arm64/kernel/alternative.c
-> @@ -13,6 +13,7 @@
->  #include <linux/elf.h>
->  #include <asm/cacheflush.h>
->  #include <asm/alternative.h>
-> +#include <asm/cfi.h>
->  #include <asm/cpufeature.h>
->  #include <asm/insn.h>
->  #include <asm/module.h>
-> @@ -298,3 +299,56 @@ noinstr void alt_cb_patch_nops(struct alt_instr *alt, __le32 *origptr,
->  		updptr[i] = cpu_to_le32(aarch64_insn_gen_nop());
->  }
->  EXPORT_SYMBOL(alt_cb_patch_nops);
-> +
-> +#ifdef CONFIG_CFI_CLANG
-> +struct bpf_insn;
-> +
-> +/* Must match bpf_func_t / DEFINE_BPF_PROG_RUN() */
-> +extern unsigned int __bpf_prog_runX(const void *ctx,
-> +				    const struct bpf_insn *insn);
-> +
-> +/*
-> + * Force a reference to the external symbol so the compiler generates
-> + * __kcfi_typid.
-> + */
-> +__ADDRESSABLE(__bpf_prog_runX);
-> +
-> +/* u32 __ro_after_init cfi_bpf_hash = __kcfi_typeid___bpf_prog_runX; */
-> +asm (
-> +"	.pushsection	.data..ro_after_init,\"aw\",@progbits	\n"
-> +"	.type	cfi_bpf_hash,@object				\n"
-> +"	.globl	cfi_bpf_hash					\n"
-> +"	.p2align	2, 0x0					\n"
-> +"cfi_bpf_hash:							\n"
-> +"	.word	__kcfi_typeid___bpf_prog_runX			\n"
-> +"	.size	cfi_bpf_hash, 4					\n"
-> +"	.popsection						\n"
-> +);
-> +
-> +/* Must match bpf_callback_t */
-> +extern u64 __bpf_callback_fn(u64, u64, u64, u64, u64);
-> +
-> +__ADDRESSABLE(__bpf_callback_fn);
-> +
-> +/* u32 __ro_after_init cfi_bpf_subprog_hash = __kcfi_typeid___bpf_callback_fn; */
-> +asm (
-> +"	.pushsection	.data..ro_after_init,\"aw\",@progbits	\n"
-> +"	.type	cfi_bpf_subprog_hash,@object			\n"
-> +"	.globl	cfi_bpf_subprog_hash				\n"
-> +"	.p2align	2, 0x0					\n"
-> +"cfi_bpf_subprog_hash:						\n"
-> +"	.word	__kcfi_typeid___bpf_callback_fn			\n"
-> +"	.size	cfi_bpf_subprog_hash, 4				\n"
-> +"	.popsection						\n"
-> +);
-> +
-> +u32 cfi_get_func_hash(void *func)
-> +{
-> +	u32 hash;
-> +
-> +	if (get_kernel_nofault(hash, func - cfi_get_offset()))
-> +		return 0;
-> +
-> +	return hash;
-> +}
-> +#endif
+Unfortunately, I don't have any reproducer for this issue yet.
 
-I realise this is following the example of x86, but this has nothing to do with
-alternatives, so could we please place it elsewhere? e.g. add a new
-arch/arm64/net/bpf_cfi.c?
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f6c04726a2ae/disk-fe46a7dd.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/09c26ce901ea/vmlinux-fe46a7dd.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/134acf7f5322/bzImage-fe46a7dd.xz
 
-Which functions is cfi_get_func_hash() used against? The comment in the code
-below says:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1fa663a2100308ab6eab@syzkaller.appspotmail.com
 
-	if (flags & BPF_TRAMP_F_INDIRECT) {
-		/*
-		 * Indirect call for bpf_struct_ops
-		 */
-		emit_kcfi(cfi_get_func_hash(func_addr), ctx);
-	}
+======================================================
+WARNING: possible circular locking dependency detected
+6.8.0-syzkaller-08951-gfe46a7dd189e #0 Not tainted
+------------------------------------------------------
+syz-executor.3/6590 is trying to acquire lock:
+ffff8880b9529470 (krc.lock){..-.}-{2:2}, at: krc_this_cpu_lock kernel/rcu/tree.c:2960 [inline]
+ffff8880b9529470 (krc.lock){..-.}-{2:2}, at: add_ptr_to_bulk_krc_lock kernel/rcu/tree.c:3359 [inline]
+ffff8880b9529470 (krc.lock){..-.}-{2:2}, at: kvfree_call_rcu+0x18a/0x790 kernel/rcu/tree.c:3444
 
-... but it's not clear to me which functions specifically would be in that
-'func_addr', not why returning 0 is fine -- surely we should fail compilation
-if the provided function pointer causes a fault and we don't have a valid
-typeid?
+but task is already holding lock:
+ffff888021a271f8 (&trie->lock){..-.}-{2:2}, at: trie_update_elem+0xcb/0xc10 kernel/bpf/lpm_trie.c:324
 
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index bc16eb694657..2372812bb47c 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -17,6 +17,7 @@
->  #include <asm/asm-extable.h>
->  #include <asm/byteorder.h>
->  #include <asm/cacheflush.h>
-> +#include <asm/cfi.h>
->  #include <asm/debug-monitors.h>
->  #include <asm/insn.h>
->  #include <asm/patching.h>
-> @@ -158,6 +159,12 @@ static inline void emit_bti(u32 insn, struct jit_ctx *ctx)
->  		emit(insn, ctx);
->  }
->  
-> +static inline void emit_kcfi(u32 hash, struct jit_ctx *ctx)
-> +{
-> +	if (IS_ENABLED(CONFIG_CFI_CLANG))
-> +		emit(hash, ctx);
-> +}
-> +
->  /*
->   * Kernel addresses in the vmalloc space use at most 48 bits, and the
->   * remaining bits are guaranteed to be 0x1. So we can compose the address
-> @@ -295,7 +302,7 @@ static bool is_lsi_offset(int offset, int scale)
->  #define PROLOGUE_OFFSET (BTI_INSNS + 2 + PAC_INSNS + 8)
->  
->  static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf,
-> -			  bool is_exception_cb)
-> +			  bool is_exception_cb, bool is_subprog)
->  {
->  	const struct bpf_prog *prog = ctx->prog;
->  	const bool is_main_prog = !bpf_is_subprog(prog);
-> @@ -306,7 +313,6 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf,
->  	const u8 fp = bpf2a64[BPF_REG_FP];
->  	const u8 tcc = bpf2a64[TCALL_CNT];
->  	const u8 fpb = bpf2a64[FP_BOTTOM];
-> -	const int idx0 = ctx->idx;
->  	int cur_offset;
->  
->  	/*
-> @@ -332,6 +338,8 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf,
->  	 *
->  	 */
->  
-> +	emit_kcfi(is_subprog ? cfi_bpf_subprog_hash : cfi_bpf_hash, ctx);
-> +	const int idx0 = ctx->idx;
->  	/* bpf function may be invoked by 3 instruction types:
->  	 * 1. bl, attached via freplace to bpf prog via short jump
->  	 * 2. br, attached via freplace to bpf prog via long jump
-> @@ -1648,7 +1656,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->  	 * BPF line info needs ctx->offset[i] to be the offset of
->  	 * instruction[i] in jited image, so build prologue first.
->  	 */
-> -	if (build_prologue(&ctx, was_classic, prog->aux->exception_cb)) {
-> +	if (build_prologue(&ctx, was_classic, prog->aux->exception_cb,
-> +			   bpf_is_subprog(prog))) {
->  		prog = orig_prog;
->  		goto out_off;
->  	}
-> @@ -1696,7 +1705,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->  	ctx.idx = 0;
->  	ctx.exentry_idx = 0;
->  
-> -	build_prologue(&ctx, was_classic, prog->aux->exception_cb);
-> +	build_prologue(&ctx, was_classic, prog->aux->exception_cb,
-> +		       bpf_is_subprog(prog));
->  
->  	if (build_body(&ctx, extra_pass)) {
->  		prog = orig_prog;
-> @@ -1745,9 +1755,9 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->  		jit_data->ro_header = ro_header;
->  	}
->  
-> -	prog->bpf_func = (void *)ctx.ro_image;
-> +	prog->bpf_func = (void *)ctx.ro_image + cfi_get_offset();
->  	prog->jited = 1;
-> -	prog->jited_len = prog_size;
-> +	prog->jited_len = prog_size - cfi_get_offset();
->  
->  	if (!prog->is_func || extra_pass) {
->  		int i;
-> @@ -2011,6 +2021,12 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
->  	/* return address locates above FP */
->  	retaddr_off = stack_size + 8;
->  
-> +	if (flags & BPF_TRAMP_F_INDIRECT) {
-> +		/*
-> +		 * Indirect call for bpf_struct_ops
-> +		 */
-> +		emit_kcfi(cfi_get_func_hash(func_addr), ctx);
-> +	}
+which lock already depends on the new lock.
 
-I'm confused; why does the trampoline need this?
 
-The code that branches to the trampoline doesn't check the type hash: either
-the callsite branches directly (hence no check), or the common ftrace
-trampoline does so indirectly, and the latter doesn't know the expected typeid,
-so it cannot check.
+the existing dependency chain (in reverse order) is:
 
-If we wanted a tpyeid here, that should probably be distinct from the original
-function tpyeid, since the trampoline calling convention is different.
+-> #2 (&trie->lock){..-.}-{2:2}:
+       lock_acquire+0x1e4/0x530 kernel/locking/lockdep.c:5754
+       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+       _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
+       trie_delete_elem+0x96/0x6a0 kernel/bpf/lpm_trie.c:451
+       bpf_prog_510c7248c5f60c92+0x2e/0x46
+       bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+       __bpf_prog_run include/linux/filter.h:657 [inline]
+       bpf_prog_run include/linux/filter.h:664 [inline]
+       __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+       bpf_trace_run2+0x204/0x420 kernel/trace/bpf_trace.c:2420
+       trace_timer_start include/trace/events/timer.h:52 [inline]
+       enqueue_timer+0x396/0x550 kernel/time/timer.c:663
+       internal_add_timer kernel/time/timer.c:688 [inline]
+       __mod_timer+0xa0e/0xeb0 kernel/time/timer.c:1183
+       call_timer_fn+0x17e/0x600 kernel/time/timer.c:1792
+       expire_timers kernel/time/timer.c:1843 [inline]
+       __run_timers kernel/time/timer.c:2408 [inline]
+       __run_timer_base+0x66a/0x8e0 kernel/time/timer.c:2419
+       run_timer_base kernel/time/timer.c:2428 [inline]
+       run_timer_softirq+0xb7/0x170 kernel/time/timer.c:2438
+       __do_softirq+0x2bc/0x943 kernel/softirq.c:554
+       invoke_softirq kernel/softirq.c:428 [inline]
+       __irq_exit_rcu+0xf2/0x1c0 kernel/softirq.c:633
+       irq_exit_rcu+0x9/0x30 kernel/softirq.c:645
+       instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1043 [inline]
+       sysvec_apic_timer_interrupt+0xa6/0xc0 arch/x86/kernel/apic/apic.c:1043
+       asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+       memory_is_poisoned_n mm/kasan/generic.c:130 [inline]
+       memory_is_poisoned mm/kasan/generic.c:161 [inline]
+       check_region_inline mm/kasan/generic.c:180 [inline]
+       kasan_check_range+0x4f/0x290 mm/kasan/generic.c:189
+       instrument_atomic_read_write include/linux/instrumented.h:96 [inline]
+       atomic_try_cmpxchg_acquire include/linux/atomic/atomic-instrumented.h:1301 [inline]
+       queued_spin_lock include/asm-generic/qspinlock.h:111 [inline]
+       do_raw_spin_lock+0x14f/0x370 kernel/locking/spinlock_debug.c:116
+       spin_lock include/linux/spinlock.h:351 [inline]
+       lockref_get+0x15/0x60 lib/lockref.c:50
+       dget include/linux/dcache.h:333 [inline]
+       __traverse_mounts+0x3b4/0x580 fs/namei.c:1401
+       traverse_mounts fs/namei.c:1442 [inline]
+       handle_mounts fs/namei.c:1545 [inline]
+       step_into+0x5e5/0x1080 fs/namei.c:1842
+       walk_component fs/namei.c:2010 [inline]
+       link_path_walk+0x748/0xea0 fs/namei.c:2331
+       path_lookupat+0xa9/0x450 fs/namei.c:2484
+       filename_lookup+0x256/0x610 fs/namei.c:2514
+       user_path_at_empty+0x42/0x60 fs/namei.c:2921
+       do_readlinkat+0x118/0x3b0 fs/stat.c:499
+       __do_sys_readlink fs/stat.c:532 [inline]
+       __se_sys_readlink fs/stat.c:529 [inline]
+       __x64_sys_readlink+0x7f/0x90 fs/stat.c:529
+       do_syscall_64+0xfb/0x240
+       entry_SYSCALL_64_after_hwframe+0x6d/0x75
 
-IIUC this isn't reachable today regardless since CALL_OPS and KCFI are
-currently mutually exclusive.
+-> #1 (&base->lock){-.-.}-{2:2}:
+       lock_acquire+0x1e4/0x530 kernel/locking/lockdep.c:5754
+       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+       _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
+       lock_timer_base+0x112/0x240 kernel/time/timer.c:1051
+       __mod_timer+0x1ca/0xeb0 kernel/time/timer.c:1132
+       queue_delayed_work_on+0x15a/0x260 kernel/workqueue.c:2595
+       kvfree_call_rcu+0x47f/0x790 kernel/rcu/tree.c:3472
+       rtnl_register_internal+0x482/0x590 net/core/rtnetlink.c:265
+       rtnl_register+0x36/0x80 net/core/rtnetlink.c:315
+       ip_rt_init+0x2f5/0x3a0 net/ipv4/route.c:3719
+       ip_init+0xe/0x20 net/ipv4/ip_output.c:1664
+       inet_init+0x3d8/0x580 net/ipv4/af_inet.c:2022
+       do_one_initcall+0x238/0x830 init/main.c:1241
+       do_initcall_level+0x157/0x210 init/main.c:1303
+       do_initcalls+0x3f/0x80 init/main.c:1319
+       kernel_init_freeable+0x435/0x5d0 init/main.c:1550
+       kernel_init+0x1d/0x2a0 init/main.c:1439
+       ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+       ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
 
-Either I've misunderstood what's going on here, or this can be removed.
+-> #0 (krc.lock){..-.}-{2:2}:
+       check_prev_add kernel/locking/lockdep.c:3134 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3253 [inline]
+       validate_chain+0x18cb/0x58e0 kernel/locking/lockdep.c:3869
+       __lock_acquire+0x1346/0x1fd0 kernel/locking/lockdep.c:5137
+       lock_acquire+0x1e4/0x530 kernel/locking/lockdep.c:5754
+       __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+       _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+       krc_this_cpu_lock kernel/rcu/tree.c:2960 [inline]
+       add_ptr_to_bulk_krc_lock kernel/rcu/tree.c:3359 [inline]
+       kvfree_call_rcu+0x18a/0x790 kernel/rcu/tree.c:3444
+       trie_update_elem+0x819/0xc10 kernel/bpf/lpm_trie.c:385
+       bpf_map_update_value+0x4d3/0x540 kernel/bpf/syscall.c:203
+       generic_map_update_batch+0x60d/0x900 kernel/bpf/syscall.c:1876
+       bpf_map_do_batch+0x3e0/0x690 kernel/bpf/syscall.c:5145
+       __sys_bpf+0x377/0x810
+       __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
+       __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
+       __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5736
+       do_syscall_64+0xfb/0x240
+       entry_SYSCALL_64_after_hwframe+0x6d/0x75
 
-Thanks,
-Mark.
+other info that might help us debug this:
+
+Chain exists of:
+  krc.lock --> &base->lock --> &trie->lock
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&trie->lock);
+                               lock(&base->lock);
+                               lock(&trie->lock);
+  lock(krc.lock);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor.3/6590:
+ #0: ffffffff8e132020 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:298 [inline]
+ #0: ffffffff8e132020 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:750 [inline]
+ #0: ffffffff8e132020 (rcu_read_lock){....}-{1:2}, at: bpf_map_update_value+0x3c4/0x540 kernel/bpf/syscall.c:202
+ #1: ffff888021a271f8 (&trie->lock){..-.}-{2:2}, at: trie_update_elem+0xcb/0xc10 kernel/bpf/lpm_trie.c:324
+
+stack backtrace:
+CPU: 1 PID: 6590 Comm: syz-executor.3 Not tainted 6.8.0-syzkaller-08951-gfe46a7dd189e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x241/0x360 lib/dump_stack.c:114
+ check_noncircular+0x36a/0x4a0 kernel/locking/lockdep.c:2187
+ check_prev_add kernel/locking/lockdep.c:3134 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3253 [inline]
+ validate_chain+0x18cb/0x58e0 kernel/locking/lockdep.c:3869
+ __lock_acquire+0x1346/0x1fd0 kernel/locking/lockdep.c:5137
+ lock_acquire+0x1e4/0x530 kernel/locking/lockdep.c:5754
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+ krc_this_cpu_lock kernel/rcu/tree.c:2960 [inline]
+ add_ptr_to_bulk_krc_lock kernel/rcu/tree.c:3359 [inline]
+ kvfree_call_rcu+0x18a/0x790 kernel/rcu/tree.c:3444
+ trie_update_elem+0x819/0xc10 kernel/bpf/lpm_trie.c:385
+ bpf_map_update_value+0x4d3/0x540 kernel/bpf/syscall.c:203
+ generic_map_update_batch+0x60d/0x900 kernel/bpf/syscall.c:1876
+ bpf_map_do_batch+0x3e0/0x690 kernel/bpf/syscall.c:5145
+ __sys_bpf+0x377/0x810
+ __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
+ __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5736
+ do_syscall_64+0xfb/0x240
+ entry_SYSCALL_64_after_hwframe+0x6d/0x75
+RIP: 0033:0x7fe5f987dda9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 20 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fe5fa6000c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007fe5f99abf80 RCX: 00007fe5f987dda9
+RDX: 0000000000000038 RSI: 0000000020000240 RDI: 000000000000001a
+RBP: 00007fe5f98ca47a R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 000000000000000b R14: 00007fe5f99abf80 R15: 00007ffe908076c8
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
