@@ -1,204 +1,196 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DCFA57314
-	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 03:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C036C182DB
+	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 03:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711422810; cv=none; b=RJZu160WnA7l+dMj3h+VbXQKtttLJIEz5dnHf7j3nCkYklAAdfB0GR1a8lNGZhOhMqbWvIXM0G0Hd98xz8xfQ0iqt0Z52N6T/aSijhNxPglxUmEZixbSEHPaTHM/cx+mndMwfVcJ5MlfJXULIPUDoUF947gB1JAukAkgIih4Ieo=
+	t=1711422922; cv=none; b=kNeQFMp6M9s1kKaB0ndzsRVVPLYLdvffyE7oL+Ay2sWObEMQ/5uhWCFmGNgLTPuodp9li/zhU2i9hgajw6qr8Gk7XVSr/mXd1ew+spKex+fPgl75SJEdLTZ3fGUfnRY+PEb4R0CZogVrmpbmsDq3FeuOasdhRSmX/tQAT+g5Y9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711422810; c=relaxed/simple;
-	bh=vKp8D3sR9i3z3I9PGsE34ROPqtuujqiZ+chx2bF98cw=;
+	s=arc-20240116; t=1711422922; c=relaxed/simple;
+	bh=YRfTVK98IojhAvG5IoCnnk8eTk+u0RpE1SePBFzCcBo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PJbjtI8w0/BOvcC2JCsbiV7sACJl1fagJKiOpAo6pVgcp5uozlZZWuwR+mC5dLSi+BmOVjiCrodfu3sfE6Jo6fojm4TTWxJDtE/uucP+rXyDFCNwFh3RF8YlR5JxM43sXkrPJVe1O8Z5qiBn1HPkk3Aq+Io0PWgoeh7nBmEn9Js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JzjhbsQb; arc=none smtp.client-ip=209.85.221.43
+	 To:Cc:Content-Type; b=DAtQqM1+x80L9mH+hdzWjmE3OB3GBQT2x/ER5AepRZJRM0HtiRQyGM+x9PUZEUEkDQuVsPqLwdi2EMFcga29AqRFxevesX2jhdReoGSNcnpaXMNtf6Am7l2PUwAFcZaSEanQd84gyytjyzG83jscRLyJmhBqZe4qLZie7jmJ+Rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JTPfxvCW; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JzjhbsQb"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-341d730bdfcso255326f8f.1
-        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 20:13:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JTPfxvCW"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-33ececeb19eso3295292f8f.3
+        for <bpf@vger.kernel.org>; Mon, 25 Mar 2024 20:15:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711422807; x=1712027607; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711422919; x=1712027719; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=B9JGedcMfFDONTZH+5sZfqwn4NjGkHINS//sfkCtaMg=;
-        b=JzjhbsQbTQp1cAz9RKhzFtTMkm3RoOSmeyu851oy/AXrBTQn/YJsoGxLqjKqSomdrX
-         +ce0n5pPH8+/WacLC8+t/xnPUgaNj1ykNoyKpi7rk+Wilyzrqk+lYsjvEcrgKBEqBceS
-         4SBF2NLiGHeW0pM2b7YuukcBZnFibPqPEPLg4LYl8BSsBIX+ClYtciXVFNfh0vuP6Afa
-         pSg8LWnRm0h5gKysjQn01YzK+9v4Xvf7L4RZA+yBRvQfRpHuKGy9xnSKj399wnexS3rR
-         TS8hoIR7l1eoPUbgbuphD+cRyDRCK3kOHcX1C0OLuSISSHsGnQhVc+S1MXYaQwirIE71
-         GZAQ==
+        bh=kIUWNOQNXDdQHQ7wfd+HZ4iV5Kim08zXI4nYnGfswiA=;
+        b=JTPfxvCWMUuhIbhxx4y29/3loj3UFucnNS6GBuGoyVwjTmt4uu8Erc9kKcNMGAaZBJ
+         GRXvQL9fE4XaOmU8y9rlpucFi1v8BJocuHvEqWD8CZjJxU3moAkxdJCcBxlVGjjmeTJB
+         4Ah1dVkaylJ1bkqDW6vWd1W+OhG7DRsaeF1v4uIOMXYaBdxSUBdYohFtBKvoq3344y0E
+         rkRFsTBwd2KzAVwryeXjMsurUHMs/0Uyed6iuuXjm+GV+dXrYP9oPjxL5WWOkLQu4E8p
+         Dto7kgF+XNUhQF90evMEvywaspFSzdgnomsBsz0sGnS7UYtX5Py3KQ60AgwBJI0xrivV
+         LNMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711422807; x=1712027607;
+        d=1e100.net; s=20230601; t=1711422919; x=1712027719;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=B9JGedcMfFDONTZH+5sZfqwn4NjGkHINS//sfkCtaMg=;
-        b=BjT6PWqPusMWTTP/4oiJ2SWBvJntVE5L8IYxtpHn/Px+vfeVsIzNT29nPg1kHetwq2
-         miv5BT6onxk7rpL6HMO3wDKr3swnsnMV7Q9FOSLRySwNmJKxyI7pvrb1j8t7a9i+3IJc
-         8tZt+cxnjEVv+f17yWG0mz/RweR09313XuqJYlDJpfbv1vBVoEwDMe1dKBtmUmke1qgg
-         ayrCuDboaDa55sYgUa0cBJftijeuYA5Dk+KcaiRISGqnkFTIYHJkLcIlKG85p1XmF7wp
-         klpkZedUpUXmkQvDk5U/R7a9t8TgX7BH/D2C5SkQZ1EpOvZ7COyhGCUng4oPWGKK82z2
-         WGlA==
-X-Forwarded-Encrypted: i=1; AJvYcCUNYHUmr5JBOLeX62VBbQ6B3KoWlzFUQzZtf3nxfCKLW0T3nIX8KbFW0giMM5cDxOiJURmmDnNESHcu+jAY4GbDvWGD
-X-Gm-Message-State: AOJu0YxIWwL5P8EFegP++QHJzYeADEsYuztzqHjaIqE3Z5EGjO4lnxMV
-	Aqa4uplaz0nXXWdy9KASPUf8YjnJfC2vZiXqyowzsni0B+CxH9OwxI5BgEVEs9SpvRcpluipTdC
-	4EXmDtgBSkweUT0xUHChmwTG00Fs=
-X-Google-Smtp-Source: AGHT+IF1rpP2eOdhsDozF663LhyG8Vw2QvVe3B9FeDrXkWSyjZo/XA8chtMAI7b0Fgn0Jwg1MU8acE/AK5KJkoxe9fM=
-X-Received: by 2002:adf:e044:0:b0:33d:c572:7641 with SMTP id
- w4-20020adfe044000000b0033dc5727641mr5894476wrh.14.1711422807065; Mon, 25 Mar
- 2024 20:13:27 -0700 (PDT)
+        bh=kIUWNOQNXDdQHQ7wfd+HZ4iV5Kim08zXI4nYnGfswiA=;
+        b=FKIRwOPeSnSQ28vJgkQc9kl/FVssIF4si8g/wnrmpSrzEu2MY2smjpcaQpPHOw9y/G
+         IMo2vWS+M3jouft1JNxQOjzOP3YCnx+yP5615L4rjUiOwt0F5NliArFu4teKNALYdajQ
+         aBaCfOeg99zxQjFZjWqlQ8Qo9xOsQnBlyrg9ZYxNhJuMC9PJXCsQtUOI700eO727qvhB
+         FvIoM9OZD8GFQZ0uR/tDAcDWtx9FnukNfZykrlPDLQJCumSuGTs/ohjca+VryKi+BrWG
+         W4K5/JZ4DqfUSpnOpo1qLQrCWFlsF60UG/I+iHxq//S1cg3ogg2kXDxD+LZi/L+DTWYo
+         OhlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXA81zIKxq9U/H+VxNtwO9qj9/2wRFq0P+KVdTl6PsRzMZBpI3NKUW69dPsnsc/14Pso+h39Y8QjMg0//u7aICHSl47
+X-Gm-Message-State: AOJu0Yzm1vFybNTlO+ojETkvRptLEMoey0TLCHuC2o/I+Bk6gWSfSRpu
+	5FsDTqDX/WQBYegFwZLz3UoK8jEFsh6aX5snib1qrNoYd+AE5P/pL7kuGLRSd6zT5XMJPSAH4Wm
+	3vIESMNWKQI9Aj+LgC+H70wmVgWo=
+X-Google-Smtp-Source: AGHT+IH4ki6cWMIXAvoLq4rUaeOGSvwyq+m60iBFB4SQG+LkWMxYqjXbV9wI5QZiKXoFsIk3+dazx/h6/8DBtx8CKqk=
+X-Received: by 2002:adf:e4cf:0:b0:341:b4c4:3b2 with SMTP id
+ v15-20020adfe4cf000000b00341b4c403b2mr5721208wrm.50.1711422919055; Mon, 25
+ Mar 2024 20:15:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240321180501.734779-1-andrii@kernel.org> <CAADnVQJqnLnv4AUvCaefP13CDcJOXM=kJpSOv33t-u-OTzb0UQ@mail.gmail.com>
- <CAEf4BzYFc1b-OAXWf4WN_vM2evZgsW7reJqo8iwKP80EXBJMKw@mail.gmail.com>
- <CAADnVQ+zT8C=rHtTbbsdoPVw-n7PPufPp0CC+jt2PUn9bB5gxw@mail.gmail.com> <CAEf4BzZqem6OQX=LHwz7cfvCGXmbFVHzSgD-9i6C8dfMJTMT3Q@mail.gmail.com>
-In-Reply-To: <CAEf4BzZqem6OQX=LHwz7cfvCGXmbFVHzSgD-9i6C8dfMJTMT3Q@mail.gmail.com>
+References: <20240325215144.3786732-1-andrii@kernel.org> <CAADnVQJ6SDtLKTx_68iBuLXv+=tthNy81r_cFhrwTbED6N-10A@mail.gmail.com>
+ <CAEf4BzYa0-6-awZght3qbhXMSkNFV6OVYBAk9DwW33SZe7xOAw@mail.gmail.com>
+In-Reply-To: <CAEf4BzYa0-6-awZght3qbhXMSkNFV6OVYBAk9DwW33SZe7xOAw@mail.gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 25 Mar 2024 20:13:15 -0700
-Message-ID: <CAADnVQLUVEWZB2WgkdCGkyh3T7ocZf1SkqWLAz6jGK+9LU_MYw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/3] Inline two LBR-related helpers
+Date: Mon, 25 Mar 2024 20:15:08 -0700
+Message-ID: <CAADnVQJxougTiJBj7iGP4aT927PDXCc9iTNdUE_6FR-KhF9TCw@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next] bpf: defer bpf_link dealloc to after RCU
+ grace period
 To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Song Liu <song@kernel.org>
+	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@meta.com>, 
+	syzbot <syzbot+981935d9485a560bfbcb@syzkaller.appspotmail.com>, 
+	syzbot+2cb5a6c573e98db598cc@syzkaller.appspotmail.com, 
+	syzbot+62d8b26793e8a2bd0516@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 25, 2024 at 10:21=E2=80=AFAM Andrii Nakryiko
+On Mon, Mar 25, 2024 at 7:59=E2=80=AFPM Andrii Nakryiko
 <andrii.nakryiko@gmail.com> wrote:
 >
-> On Sun, Mar 24, 2024 at 7:05=E2=80=AFPM Alexei Starovoitov
+> On Mon, Mar 25, 2024 at 7:16=E2=80=AFPM Alexei Starovoitov
 > <alexei.starovoitov@gmail.com> wrote:
 > >
-> > On Fri, Mar 22, 2024 at 9:45=E2=80=AFAM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
+> > On Mon, Mar 25, 2024 at 2:51=E2=80=AFPM Andrii Nakryiko <andrii@kernel.=
+org> wrote:
 > > >
-> > > On Thu, Mar 21, 2024 at 4:46=E2=80=AFPM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Thu, Mar 21, 2024 at 11:05=E2=80=AFAM Andrii Nakryiko <andrii@ke=
-rnel.org> wrote:
-> > > > >
-> > > > >
-> > > > > There are still ways to reduce number of "wasted" records further=
-, this is
-> > > > > a problem that requires many small and rather independent steps.
-> > > >
-> > > > I feel this is a wrong path to follow.
-> > > > I think it would be better to introduce a flag for kprobe/fentry
-> > > > to do perf_snapshot_branch_stack() as early as possible
-> > > > and then bpf prog can copy these 16 or 32 8-byte entries at
-> > > > its leasure.
+> > > BPF link for some program types is passed as a "context" which can be
+> > > used by those BPF programs to look up additional information. E.g., f=
+or
+> > > BPF raw tracepoints, link is used to fetch BPF cookie value, similarl=
+y
+> > > for BPF multi-kprobes and multi-uprobes.
 > > >
-> > > This is basically how Song started when he was adding this feature a
-> > > few years ago. And I feel like we discussed this and decided that it
-> > > would be cleaner to let the BPF program decide when (and whether) to
-> > > get LBR, based on conditions. It still feels like a right tradeoff.
+> > > Because of this runtime dependency, when bpf_link refcnt drops to zer=
+o
+> > > that could be still active BPF programs running accessing link data
+> > > (cookie, program pointer, etc).
+> > >
+> > > This patch accommodates this by delaying freeing memory to after RCU =
+GP,
+> > > which will fix BPF raw tp, multi-kprobe, and non-sleepable multi-upro=
+be.
+> > >
+> > > Perhaps a better approach would be to have a per-link flag specifying
+> > > desired behavior: no delay, RCU delay, or task_trace RCU delay? So
+> > > sending this as an RFC fix to discuss desired final solution.
+> > >
+> > > Fixes: d4dfc5700e86 ("bpf: pass whole link instead of prog when trigg=
+ering raw tracepoint")
+> > > Reported-by: syzbot+981935d9485a560bfbcb@syzkaller.appspotmail.com
+> > > Reported-by: syzbot+2cb5a6c573e98db598cc@syzkaller.appspotmail.com
+> > > Reported-by: syzbot+62d8b26793e8a2bd0516@syzkaller.appspotmail.com
+> > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > > ---
+> > >  include/linux/bpf.h  |  8 +++++++-
+> > >  kernel/bpf/syscall.c | 12 ++++++++++--
+> > >  2 files changed, 17 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > > index 62762390c93d..d73a8978c800 100644
+> > > --- a/include/linux/bpf.h
+> > > +++ b/include/linux/bpf.h
+> > > @@ -1573,7 +1573,13 @@ struct bpf_link {
+> > >         enum bpf_link_type type;
+> > >         const struct bpf_link_ops *ops;
+> > >         struct bpf_prog *prog;
+> > > -       struct work_struct work;
+> > > +       /* rcu is used before freeing, work can be used to schedule t=
+hat
+> > > +        * RCU-based freeing before that, so they never overlap
+> > > +        */
+> > > +       union {
+> > > +               struct rcu_head rcu;
+> > > +               struct work_struct work;
+> > > +       };
+> > >  };
+> > >
+> > >  struct bpf_link_ops {
+> > > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > > index e44c276e8617..af1591af10bb 100644
+> > > --- a/kernel/bpf/syscall.c
+> > > +++ b/kernel/bpf/syscall.c
+> > > @@ -3024,6 +3024,14 @@ void bpf_link_inc(struct bpf_link *link)
+> > >         atomic64_inc(&link->refcnt);
+> > >  }
+> > >
+> > > +static void bpf_link_dealloc_deferred(struct rcu_head *rcu)
+> > > +{
+> > > +       struct bpf_link *link =3D container_of(rcu, struct bpf_link, =
+rcu);
+> > > +
+> > > +       /* free bpf_link and its containing memory */
+> > > +       link->ops->dealloc(link);
+> > > +}
+> > > +
+> > >  /* bpf_link_free is guaranteed to be called from process context */
+> > >  static void bpf_link_free(struct bpf_link *link)
+> > >  {
+> > > @@ -3033,8 +3041,8 @@ static void bpf_link_free(struct bpf_link *link=
+)
+> > >                 link->ops->release(link);
+> > >                 bpf_prog_put(link->prog);
+> > >         }
+> > > -       /* free bpf_link and its containing memory */
+> > > -       link->ops->dealloc(link);
+> > > +       /* schedule BPF link deallocation after RCU grace period */
+> > > +       call_rcu(&link->rcu, bpf_link_dealloc_deferred);
 > >
-> > Right we discussed it back then and at that time it was about
-> > collecting stacks.
-> > What's different now is you want to collect all types of branches
+> > Do we have any sleepable progs that access link as well?
+> > If so then call_rcu_tasks_trace ?
 >
-> I was using --lbr=3Dany
-
-and that's probably something to fix.
-I suspect retsnoop quality won't suffer if ARCH_LBR_REL_JMP is disabled.
-To figure out the path to return in the code
-ARCH_LBR_JCC      |
-ARCH_LBR_REL_CALL |
-ARCH_LBR_IND_CALL |
-ARCH_LBR_RETURN
-
-might be good enough and there won't be a need to do
-inling in odd places just to avoid tail jmp.
-
-> do this to get almost all the benefit. I just need to inline
-> bpf_get_branch_snapshot().
-
-If that is the only one that needs inling then fine,
-but I really don't like to always_inline
-kprobe_multi_link_prog_run().
-A day goes by and somebody will send a patch
-to save 500 bytes of kernel .text by removing always_inline.
-The argument that it's there to help a user space tool that
-wants to do lbr=3Dall instead of excluding rel_jmp
-won't look good.
-
+> yep, multi-uprobe, can be sleepable
 >
-> I don't think we can get rid of migrate_disable, we need to make sure
-> we are freezing LBR on the CPU on which BPF program will run. So it's
-> either preempt_disable or migrate_disable.
-
-we cannot extend preempt disable across the prog
-and migrate_disable won't really help, since
-there could be another prog on the same cpu
-doing the same "save lbr" action in a different hook
-that will trash per-cpu scratch space.
-
-But we don't need to either migrate_disable or preempt_disable.
-We can have a 32*24 byte buffer per attach point.
-In case of fentry it can be in bpf_trampoline or in bpf_link
-(I didn't analyze pros/cons too far) and
-fentry will only do the single "call intel_pmu_snapshot_branch_stack"
-with that address.
-That's a trivial addition to arch_prepare_bpf_trampoline.
-
-Then bpf prog will take entries from link, since it has access to it.
-
-Same thing for kprobes. As soon as it's triggered it will
-call intel_pmu_snapshot_branch_stack.
-Should be simple to add.
-
-Recursion can overwrite that per-attach buffer, but
-lbr is screwed anyway if we recursed. So not a concern.
-
-> Note also __x64_sys_bpf+0x1a, it's the artifact of how fexit is
-> implemented, we call into original function and it returns into
-> trampoline. So this seems unavoidable as well without completely
-> changing how trampoline works for fexit. Multi-kprobe actually,
-> conveniently, avoids this problem.
-
-Definitely do not want to redesign that to help retsnoop save an lbr entry.
-
-> > Inlining bpf_get_branch_snapshot() may be ok,
-> > but the way you're doing is not a clear win.
-> > Replacing size / 24 (that compiler optimize into mul)
-> > with actual divide and adding extra mul will be slower.
-> > div+mul vs mul is quite a difference.
-> > How noticable is that is questionable,
-> > but from inlining perspective it doesn't feel right to do
-> > "inline to avoid extra frame" instead of
-> > "inline to improve performance".
+> > and check rcu_trace_implies_rcu_gp to avoid extra call_rcu.
 >
-> Yes, I saw this division-through-multiplication division. I can
-> replicate that as well, but it will be pretty hard to understand, so I
-> thought it is probably not worth it. Note that
-> bpf_get_branch_snapshot() is not some sort of performance-critical
-> helper, if you are calling it on some super frequent kprobe/fentry,
-> you are paying a lot of price just for copying 700+ bytes (and
-> probably a bunch of other stuff).
+> yep, saw that for maps
+>
+> >
+> > Doing that for all link types like networking that don't look
+> > into link is not great. Probably needs to look into link type?
+> > Or look into prog->type and do the extra work only for raw_tp,
+> > multi-[ku]probe ?
+>
+> so I was thinking that bpf_link_init() can accept an enum or flags to
+> specify what needs to be done, instead of trying to guess/derive that.
+> That seems less error-prone, more explicit, easier to audit. WDYT?
 
-div is the slowest instruction.
-On skylake it takes 57 uops and 40-90 cycles while mul takes 3 cycles.
-L1 cache is 1-2.
-So it might be faster to copy 768 bytes than do a single div.
+yeah. makes sense.
 
-I still think that adding call intel_pmu_snapshot_branch_stack
-to fenty and kprobes is a simpler and cleaner solution that eliminates
-all guess work of compiler inlining and optimizations.
+> This should work ok given this is normally dependent on program type,
+> the only exception (that we currently don't have) would be if
+> LINK_UPDATE command replaces non-sleepable BPF program (say uprobe)
+> with sleepable one. But we don't support that for kprobe/uprobe and
+> other tracing programs, so it's a future problem (but we'll be able to
+> support it, when we get to this).
 
-We can potentially optimize it further.
-Since arch_prepare_bpf_trampoline() is arch specific,
-for x86 we can inline:
-        local_irq_save(flags);
-        __intel_pmu_disable_all(false);
-        __intel_pmu_lbr_disable();
-into generated trampoline (since above is just 5-6 instructions)
-and call into __intel_pmu_snapshot_branch_stack.
+that would be weird. future problem indeed.
