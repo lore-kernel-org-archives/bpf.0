@@ -1,129 +1,207 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29DCE13C698;
-	Tue, 26 Mar 2024 14:56:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2724C13C82E
+	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 15:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711464971; cv=none; b=gPXX/lSW/kF6yuHXTFpiIH+RHsvwN2cubmKoM8GE99P5uQObF9c4xtdqEjzER1Y8xXN0me1JLtXuOGL87Y2ullpXmurpPP3x+okUKeV2Cz2Bm+1REDOd2I4heuo0gsvaP613AxD36U8EMAuyzLVoR8K3jxJreH1QIdihJpqVPQw=
+	t=1711468590; cv=none; b=Fa7vUO/+vG2I9tEO2enOGaGFgPRw08uwsVBVvJSxnhy0rUOXbl6ZixwujE+ehj0ukuUYbSOVqcrj9RxgAswEbLZcnmX7VBBxHwtu7BV0xfVMRkTenzzUgYTxN+Mw0b0rBzOQtu3XKXLwU+1598+EG7dl2pyj8uaG3aNgN/IO4GA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711464971; c=relaxed/simple;
-	bh=Ao9xrtlBjjMHKg6mAXNmAgHvzUgtjPOcVb3C9HD4Ym4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C/OHBB3EDxMx8JLjpA4q35YfhyAicWCADkTOQgn9EQtAxeZhs8pQzInAzTIVTSF4AEVCra/x9pewTtVKmQgVGgSGaU4p7hAJ2xY0tkQLgdbi2Z9ugGTEwPNPUXmsllLyA3TcLXKt1atuEK9AfjpTcwgsS4mRsYyI7mom/YGVyEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jdLWA5mw; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jdLWA5mw"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-6e704078860so4028139b3a.0;
-        Tue, 26 Mar 2024 07:56:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711464968; x=1712069768; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ea+4Fw+41iIKXXGA7q/TyXxJtlrOYEAjwc3VHw2gqU8=;
-        b=jdLWA5mwVzj1M3SH3c2iJjgbbd4ecuL6BK+Uka3QvCFzuf4ZjfnV+9qV+BAaoRgmWv
-         EFGEAQHNONtzsGF+86Z0NCjMPQJzwz/C1q/CTtSC2WVAU+6OQVqhBzq3WlXh+61Tx21c
-         3gvfeg7+w2wHktigwNPJPhh4w4DotQ6bFEKtZoeRRkX+Qg7qNPq5pCX+Fds+shRDY9Q+
-         VSGQBazb+4kMPPPcF17Gtt3ZIy1Dc4SDbBtPp6KtcsGkqfcMQ0CM1fKsC/ILOQHN+1f9
-         tNUsnvsjN5CzK35B54F9X2EA8yoZrJF0xQylr9PbhXKerPHPDCcLQ4Lxpp7QyaYr4jOv
-         zePg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711464968; x=1712069768;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Ea+4Fw+41iIKXXGA7q/TyXxJtlrOYEAjwc3VHw2gqU8=;
-        b=Fy4InEuvQHBpAWfJGGvQ8W5UidJXHmz4/IavyaLnYd/wpQH1rc2HbeUfX+h8XqKujG
-         edaUEJQYUD8y9qFvw5FlTSOCUp8qGcMSzr3HerFzDKIaFNMQ89M6hALgpaNBTL8KAhFd
-         1kIhLs/P2re1+Xlsh4/phmz0r+txiOipTEKUdhESgBo9cl5qMnhRC9nzMumkVRK2p5L8
-         RKe9ppPnvFW3tshhWC1JLLcy7RmhrQGsAp+rAVM7Pw8g/Xe6Jxy0A0EgQIsfOJUIfU3O
-         uDQ2bhuFP1IkaSuOycGFRwQA3AZs6cIHunXPTFvm+RRB3zafSGFIjXoAR6czIzhufy0U
-         wR4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWwshkcb3LijR+lwKVc4Pc22nl1SZqW+IMHgQ79iMg7pllf+JgvTnP8/h2+L33WOM4I1PKp43hcYQvoMGaZoujZpijSHYF2iu2Nfhb5eOxNZtg+H0KCkoMkU4qvdTZXcz+Q
-X-Gm-Message-State: AOJu0YzbGaLqfA5KjCt7Yoo7VeU7tVWcgMTPXYzHhI1qn1cERTWsjB/Z
-	y9AcHmDEuTaYpAILNNx+5gqRzCKyVTz7iE5gKIAoHWPcSCDCFXKM
-X-Google-Smtp-Source: AGHT+IHutcjK2KIIFE7BfCUSIhG136DuJ9KPGu7ULPaOdcq2MXtZjrAcep2ywRxg5COswSSU6S9AxQ==
-X-Received: by 2002:a05:6a00:4656:b0:6ea:950f:7d25 with SMTP id kp22-20020a056a00465600b006ea950f7d25mr1134370pfb.18.1711464968309;
-        Tue, 26 Mar 2024 07:56:08 -0700 (PDT)
-Received: from [192.168.0.104] ([117.147.31.37])
-        by smtp.gmail.com with ESMTPSA id p23-20020a056a000a1700b006eaafccff73sm2959677pfh.212.2024.03.26.07.56.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Mar 2024 07:56:07 -0700 (PDT)
-Message-ID: <47529e7e-437e-4601-a5dc-518b38aaf496@gmail.com>
-Date: Tue, 26 Mar 2024 22:54:53 +0800
+	s=arc-20240116; t=1711468590; c=relaxed/simple;
+	bh=SFVYgiAhN5n6ZboWPwZfMLTQxgSPFPXa88h8H3kQ6e0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=seUdTQj+hzg0hsabrcJbmYb1fz2l6BkfmD1WIiULFK6UMGfn6qTBcFuuyjboblGt9PMcRSMZFWfIGhzfOJTluMH4O/sMaM+NMbjOFDok7zE5beUZYhLfdwiN6V3VQAd4Yo5FD+plc0SVNzL0Qh5g1ZuAHh5ZGBGCsaeOLUedurA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4V3vYF28PLz4f3jdT
+	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 23:56:17 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 7CE9A1A0199
+	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 23:56:23 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP4 (Coremail) with SMTP id gCh0CgBnu20k8AJmr1UrIQ--.65159S2;
+	Tue, 26 Mar 2024 23:56:21 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Pu Lehui <pulehui@huawei.com>,
+	Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next v2] selftests/bpf: Enable cross platform testing for local vmtest
+Date: Tue, 26 Mar 2024 15:57:36 +0000
+Message-Id: <20240326155736.3480081-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] libbpf: Add bpf_program__set_section_name api
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240325154737.3754820-1-chen.dylane@gmail.com>
- <CAEf4Bzag72gYXWJ2+mPnWaysyTK0OC3NjnasxNsb+N0NxXY2fw@mail.gmail.com>
-From: Tao Chen <chen.dylane@gmail.com>
-In-Reply-To: <CAEf4Bzag72gYXWJ2+mPnWaysyTK0OC3NjnasxNsb+N0NxXY2fw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgBnu20k8AJmr1UrIQ--.65159S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZr1kKrW3uw45Ww48ArykGrg_yoWrur15pw
+	48Zr4ay3WrWF1Sgwn7ZF409FWfGrs5ZrW7CryUXry5Zw1xKF97ArySyayqqrnxW3s5Arsx
+	ZF9agF98Cw17Z3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+	0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+	jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+	1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
+	n2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
+	AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCI
+	c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
+	AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUb
+	XdbUUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-Hi, Andrii, thank you for your reply. I read the apis again in libbpf.h, 
-as you say, it seems that this patch no need. Thanks again.
+From: Pu Lehui <pulehui@huawei.com>
 
-在 2024/3/26 上午1:25, Andrii Nakryiko 写道:
-> On Mon, Mar 25, 2024 at 8:48 AM Tao Chen <chen.dylane@gmail.com> wrote:
->>
->> The new api can be used to reset the function we want to trace in
->> runtime. So we need not to change the code again when we just do
->> minor changes to the trace function in kprobe or other ebpf event
->> type. We can replace the old section with new section passed in via
->> parameter. Maybe the following scenario we can use the api:
->>
->> 1. solve "*.isra.o" issue caused by compiler in new kernel
->> obj = offcputime_bpf__open();
->> bpf_program__set_section_name(*(obj->skeleton->obj),
->> "kprobe/finish_task_switch", "kprobe/finish_task_switch.isra.0");
->>
->> 2. dynamic adjustment for trace function offset
->> obj = offcputime_bpf__open();
->> bpf_program__set_section_name(*(obj->skeleton->obj),
->> "kprobe/finish_task_switch+23", "kprobe/finish_task_switch+45");
->>
->> Signed-off-by: Tao Chen <chen.dylane@gmail.com>
->> ---
->>   tools/lib/bpf/libbpf.c   | 24 ++++++++++++++++++++++++
->>   tools/lib/bpf/libbpf.h   |  2 ++
->>   tools/lib/bpf/libbpf.map |  1 +
->>   3 files changed, 27 insertions(+)
->>
-> 
-> This is a wrong approach. SEC() is immutable and serves as a hint to
-> libbpf on program type and possibly some attach parameters. But after
-> that libbpf allows to override all of them though APIs like
-> bpf_program__set_type() and others. Attach APIs always allow to
-> specify all the target parameters, including kprobe function name and
-> so on.
-> 
-> Please check all of the libbpf APIs in libbpf.h.
-> 
-> pw-bot: cr
-> 
->> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
->> index 96ff1aa4bf6a..94f32e845c61 100644
->> --- a/tools/lib/bpf/libbpf.c
->> +++ b/tools/lib/bpf/libbpf.c
->> @@ -8576,6 +8576,30 @@ const char *bpf_program__section_name(const struct bpf_program *prog)
->>          return prog->sec_name;
->>   }
->>
-> 
-> [...]
+The variable $ARCH in the current script is platform semantics, not
+kernel semantics. Rename it to $PLATFORM so that we can easily use $ARCH
+in cross-compilation. For now, Using PLATFORM= and CROSS_COMPILE=
+options will enable cross platform testing:
+
+  PLATFORM=<platform> CROSS_COMPILE=<toolchain> vmtest.sh -- ./test_progs
+
+Meanwhile, some descriptions have been corrected.
+
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+v2:
+- Specifies the -cpu for the ARM64.
+- Completely renamed ARCH to PLATFORM.
+
+ tools/testing/selftests/bpf/vmtest.sh | 40 +++++++++++++++++++--------
+ 1 file changed, 28 insertions(+), 12 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
+index 65d14f3bbe30..825149a905e5 100755
+--- a/tools/testing/selftests/bpf/vmtest.sh
++++ b/tools/testing/selftests/bpf/vmtest.sh
+@@ -4,28 +4,34 @@
+ set -u
+ set -e
+ 
+-# This script currently only works for x86_64 and s390x, as
+-# it is based on the VM image used by the BPF CI, which is
++# This script currently only works for the following platforms,
++# as it is based on the VM image used by the BPF CI, which is
+ # available only for these architectures.
+-ARCH="$(uname -m)"
+-case "${ARCH}" in
++PLATFORM="${PLATFORM:-$(uname -m)}"
++case "${PLATFORM}" in
+ s390x)
+ 	QEMU_BINARY=qemu-system-s390x
+ 	QEMU_CONSOLE="ttyS1"
+-	QEMU_FLAGS=(-smp 2)
++	HOST_FLAGS=(-smp 2 -enable-kvm)
++	CROSS_FLAGS=(-smp 2)
+ 	BZIMAGE="arch/s390/boot/vmlinux"
++	ARCH="s390"
+ 	;;
+ x86_64)
+ 	QEMU_BINARY=qemu-system-x86_64
+ 	QEMU_CONSOLE="ttyS0,115200"
+-	QEMU_FLAGS=(-cpu host -smp 8)
++	HOST_FLAGS=(-cpu host -enable-kvm -smp 8)
++	CROSS_FLAGS=(-smp 8)
+ 	BZIMAGE="arch/x86/boot/bzImage"
++	ARCH="x86"
+ 	;;
+ aarch64)
+ 	QEMU_BINARY=qemu-system-aarch64
+ 	QEMU_CONSOLE="ttyAMA0,115200"
+-	QEMU_FLAGS=(-M virt,gic-version=3 -cpu host -smp 8)
++	HOST_FLAGS=(-M virt,gic-version=3 -cpu host -enable-kvm -smp 8)
++	CROSS_FLAGS=(-M virt,gic-version=3 -cpu cortex-a76 -smp 8)
+ 	BZIMAGE="arch/arm64/boot/Image"
++	ARCH="arm64"
+ 	;;
+ *)
+ 	echo "Unsupported architecture"
+@@ -38,7 +44,7 @@ ROOTFS_IMAGE="root.img"
+ OUTPUT_DIR="$HOME/.bpf_selftests"
+ KCONFIG_REL_PATHS=("tools/testing/selftests/bpf/config"
+ 	"tools/testing/selftests/bpf/config.vm"
+-	"tools/testing/selftests/bpf/config.${ARCH}")
++	"tools/testing/selftests/bpf/config.${PLATFORM}")
+ INDEX_URL="https://raw.githubusercontent.com/libbpf/ci/master/INDEX"
+ NUM_COMPILE_JOBS="$(nproc)"
+ LOG_FILE_BASE="$(date +"bpf_selftests.%Y-%m-%d_%H-%M-%S")"
+@@ -58,6 +64,10 @@ tools/testing/selftests/bpf. e.g:
+ If no command is specified and a debug shell (-s) is not requested,
+ "${DEFAULT_COMMAND}" will be run by default.
+ 
++Using PLATFORM= and CROSS_COMPILE= options will enable cross platform testing:
++
++  PLATFORM=<platform> CROSS_COMPILE=<toolchain> $0 -- ./test_progs -t test_lsm
++
+ If you build your kernel using KBUILD_OUTPUT= or O= options, these
+ can be passed as environment variables to the script:
+ 
+@@ -109,7 +119,7 @@ newest_rootfs_version()
+ {
+ 	{
+ 	for file in "${!URLS[@]}"; do
+-		if [[ $file =~ ^"${ARCH}"/libbpf-vmtest-rootfs-(.*)\.tar\.zst$ ]]; then
++		if [[ $file =~ ^"${PLATFORM}"/libbpf-vmtest-rootfs-(.*)\.tar\.zst$ ]]; then
+ 			echo "${BASH_REMATCH[1]}"
+ 		fi
+ 	done
+@@ -126,7 +136,7 @@ download_rootfs()
+ 		exit 1
+ 	fi
+ 
+-	download "${ARCH}/libbpf-vmtest-rootfs-$rootfsversion.tar.zst" |
++	download "${PLATFORM}/libbpf-vmtest-rootfs-$rootfsversion.tar.zst" |
+ 		zstd -d | sudo tar -C "$dir" -x
+ }
+ 
+@@ -244,12 +254,17 @@ EOF
+ 		exit 1
+ 	fi
+ 
++	if [[ "${CROSS_COMPILE}" != "" ]]; then
++		QEMU_FLAGS=("${CROSS_FLAGS[@]}")
++	else
++		QEMU_FLAGS=("${HOST_FLAGS[@]}")
++	fi
++
+ 	${QEMU_BINARY} \
+ 		-nodefaults \
+ 		-display none \
+ 		-serial mon:stdio \
+ 		"${QEMU_FLAGS[@]}" \
+-		-enable-kvm \
+ 		-m 4G \
+ 		-drive file="${rootfs_img}",format=raw,index=1,media=disk,if=virtio,cache=none \
+ 		-kernel "${kernel_bzimage}" \
+@@ -384,7 +399,8 @@ main()
+ 	fi
+ 
+ 	local kconfig_file="${OUTPUT_DIR}/latest.config"
+-	local make_command="make -j ${NUM_COMPILE_JOBS} KCONFIG_CONFIG=${kconfig_file}"
++	local make_command="make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} \
++			    -j ${NUM_COMPILE_JOBS} KCONFIG_CONFIG=${kconfig_file}"
+ 
+ 	# Figure out where the kernel is being built.
+ 	# O takes precedence over KBUILD_OUTPUT.
+-- 
+2.34.1
+
