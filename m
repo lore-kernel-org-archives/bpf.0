@@ -1,66 +1,72 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92CB1B28D;
-	Tue, 26 Mar 2024 00:41:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFFBC1CA81;
+	Tue, 26 Mar 2024 01:14:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711413706; cv=none; b=A6bpKX4t3s1XLH1zT4ZQYq+FNEUYpoHOWPXQRuEUxSkvD8LzviBgng6+L0014TzmJtcFwYSVJKq0VagvXBdY0fajXP4Yh3Yk6VyUBNixi7vl9jReMtf4J0Bdr2Yn4l+WVBblVFWRyokjv2ZXZRqloerZ50gwtpW0JClr4OjQSpU=
+	t=1711415688; cv=none; b=VUq+mmZHrCoCYtZ5NIxjrsgD9e/Gkzm/sHzizNqaBa8oxX8EDBqhWl+4aYuHrw5wYOq9h/s/qBwyGq5BXUm6tJpRi2jQvpwF07OnuIEflNtNXzAGTC4to36udThk/XtQsP0IT08ocyjz4/vXjy8awcgZuyNPXzdIjP3fgpXMetA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711413706; c=relaxed/simple;
-	bh=sO0d/mps9kdY+m5kw8PixGdK4LtIlRtqftGoHYkhLKM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=L6dah08sICqHaw7vavSGem953zcAIxVi7jOuAN9tJ+SubHNyEiaZuES7ib0HoMj/ny8B/bnwuPmwFKR+JvdV/p5jN9A+LB5hg/DHjqKWHENcYTm/CUdSVwt351rhg7hVYXQ7EwEhFcOnuD6xDxXY+GpzgVxTMTwsFau4zA9BsSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bjPrIo17; arc=none smtp.client-ip=209.85.210.179
+	s=arc-20240116; t=1711415688; c=relaxed/simple;
+	bh=LLQxCz98l1HU/C5oc6qGP8SS9cYXAQ4/0d3AcJ3xSNc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=rzAXhFxrcEKIoAOE3hKfjJh7Nx5hvjvIRSglEEAHi+O0NQHbPQFUodpiHXs4wFAR/F38Q7V11My6/zSaPQ4+gorrWh/R6tO+uuhYz69gsMQK3UeDYHg348GNxHwJ8/5hTWL3DBKx/rPs8o2/+3gFRBqPIrN6S9X/Rfzf8gQ8BX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jsL9gQ9W; arc=none smtp.client-ip=209.85.219.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bjPrIo17"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6ea8a0d1a05so1931425b3a.1;
-        Mon, 25 Mar 2024 17:41:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jsL9gQ9W"
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-dd045349d42so4371607276.2;
+        Mon, 25 Mar 2024 18:14:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711413704; x=1712018504; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oZ0qd1iGxtr/mWs3kOYHpeMOliTzM44U+9k3boYAHSY=;
-        b=bjPrIo17hZCEh+E0X3m2J3ArqkUjbUvIEmYIKLw+WTgiwfpHvaBLEFfDHi3t2YchbY
-         RbLqeYKujv24L+PmZR+xREPgkI7OaxugCGvNnThbisSS7jfo5DSTKIsa3VY0DIPEy+2g
-         asKklHk4gAjQjFuLhU6a/lSFEHjPYQEkxS97T0PKkdcD4lVDsY1xCCPNH9DiligRiyQT
-         GKopjLnI+i6uctSjQmxvuxehspv6l6u/KM1I9z5FeaDHBORcTo4RLO0HLnGscSoJYLTB
-         xTsftPzVh0XMq9s85JhrZyjf8mSZsWjWh+cerReqf/XiWZf6Xuj6Q9oVGUo8mPi5nQMq
-         Qxgg==
+        d=gmail.com; s=20230601; t=1711415686; x=1712020486; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dfZ+cFkGGCKMx3euXyT4Jc1q9tHjn2niWtHTG/CydvY=;
+        b=jsL9gQ9WiKA5l3/WMwLuVw2GwCdeuOe0sn5QUTbeSjQChLqXRLiX8k97s/f2wUnkjn
+         G44xJ743QtM7t3ubiZq2KM8x0JyxlLhgPt00yCVI9GZ3EzeiKqZl5lUDuQxgH7hB2bp7
+         nbOLxAh0Y2EunGTMy5hbYWjsVyz2m+/H5D0KxI+sC7/d5wyYXJlPt2vhT59GGqFSaX7s
+         9DXoqvU29l1XWZ9yW6KrnOa0qpq00j4NoeteEnc8cxKCFEhrN4u5iNiviAPzHrUA9MaI
+         Y6A5nFtbfKypcKFdywMHaAuemTr+WskmvFynSpyeCF1m5x8Bq5E3ZM4/fpCzTh4K9Qww
+         qixw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711413704; x=1712018504;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oZ0qd1iGxtr/mWs3kOYHpeMOliTzM44U+9k3boYAHSY=;
-        b=TaZOlAQaNogdje6sNtxlngi4uM6R0eCHnJsQKFkX9V9sbTGP+MzxtjZSBjFwLB3Bt/
-         osW0qZ6/ifD43tCgsguo4HuyuKzVj+w0pBWJmmbR3yqq4bI56RM/QoIwIyyNq2V4cTfE
-         X0rZjSG+IqKD8KP23j/1bE+vDLzW9fLUtNajQK9HNPo4aTYMauv2f8StMmB5rfaFJPdD
-         cxWELZIIb9caGFtSV5JDw6LWjvhC+pCoGxQfH+KMDseTjS3xqnP53Vh1eN0X+er3H45e
-         P65QmZwGT1iCOenUb5QVyFz3nFYQvOVOL5LQpgps9dzFXfFYJ0OMzYowrCnyTrMBZBVu
-         wzRg==
-X-Forwarded-Encrypted: i=1; AJvYcCX5ruWUurh4ZuKVsgx+vtmdi/kOXNXRoUCir1dv+HsZyXggu7Gnzk78hRPHjyDppfICqgJYBrzj3hfBGZa+THOB8MI+bA72lAvq8Pwu
-X-Gm-Message-State: AOJu0Yw7ozq19rX/FsH+5rEEqlFyJZzw864EHC4Op3tNEewIAtDeuQar
-	2JIKMT3wYXpdqc+Wxf/zY/EYIV36Rmdpi4yYrm/nsEcLPUilx9ns
-X-Google-Smtp-Source: AGHT+IEYA+WGKNoGVFoskptYgEJAnpjVW/jus1NyBr8FPL7f00woF98aIvALMq/Ie3Y4t7IfilsxDg==
-X-Received: by 2002:a17:903:228f:b0:1e0:b5d3:3f99 with SMTP id b15-20020a170903228f00b001e0b5d33f99mr8045499plh.26.1711413704161;
-        Mon, 25 Mar 2024 17:41:44 -0700 (PDT)
-Received: from localhost.localdomain ([190.196.101.184])
-        by smtp.gmail.com with ESMTPSA id o16-20020a170902d4d000b001e0a80bc0casm5005148plg.8.2024.03.25.17.41.42
+        d=1e100.net; s=20230601; t=1711415686; x=1712020486;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dfZ+cFkGGCKMx3euXyT4Jc1q9tHjn2niWtHTG/CydvY=;
+        b=tQ1Bk2ZWTJgYYSZepK3fMaaZF7wh+r+Ai18Tm326lvj9/6u3ci6/iDbitSZgDzrQiU
+         qNG28U9NqEAyZq0eq9L7e5tWbqnAfXHXC2mjq8sxW6xZYzP54gE6nU64MfoCAoLUoXRo
+         ZCXSgGnI2DDUlNq56jKAbigE6vwMiMDQNVzxr0YxQbU3cZFlYsvHkWtJHQyAG21r9LRE
+         AUpx8KgQjr/WhRh+qre2QGhoslrzp+KPUVki5nodfLv2nqxUG4jxdii6C0sNIlo900lO
+         s8j+hePBzBq6ZtBupIO7U8HdMYG4QL+bTjhfuK8zb3jgt2Sb99bJrVABzEBw4r2dVVUu
+         rdlA==
+X-Forwarded-Encrypted: i=1; AJvYcCVTITrWEYbWRlLQOi3fGCIWyAdlRuyLrEEaKwzq9OE6UKXu6HflzpLUDhlwH+1foLpWgJJFkPexSbRAJk8ej3+hvixZN/zZMG3ORuO4HzpLd6imW7OquYoytDRqo1qbZmeZ/YWkvDqOCLyXngFOWC79JEA0mf6ugZqtflrdgQ==
+X-Gm-Message-State: AOJu0YwMPDbuoLj7srVRiM7LZQLe6Qspbn9WXMqOM4V7iho3umXM/r2O
+	LpYw4PdEXmA/5ZwIN3sQuy5elI9KtheSpMALOr58vpU3UdgHkeTh
+X-Google-Smtp-Source: AGHT+IH82aTqIQFxcCRU5qkkrUKNlOFqXtLXkvAZSnYXUskFSa/RL43K1QGW0T1mKy82fq8UH0DSIA==
+X-Received: by 2002:a5b:c45:0:b0:dcc:84ae:9469 with SMTP id d5-20020a5b0c45000000b00dcc84ae9469mr6483905ybr.64.1711415685933;
+        Mon, 25 Mar 2024 18:14:45 -0700 (PDT)
+Received: from l1441l.lan0.xorvpn.com (pool-98-116-41-146.nycmny.fios.verizon.net. [98.116.41.146])
+        by smtp.gmail.com with ESMTPSA id c5-20020a056214224500b006968d8f1c05sm1697208qvc.26.2024.03.25.18.14.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Mar 2024 17:41:43 -0700 (PDT)
-From: Camila Alvarez <cam.alvarez.i@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net
-Cc: bpf@vger.kernel.org,
+        Mon, 25 Mar 2024 18:14:45 -0700 (PDT)
+From: Daniel Hodges <hodges.daniel.scott@gmail.com>
+To: hodges.daniel.scott@gmail.com
+Cc: ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	lee@kernel.org,
 	linux-kernel@vger.kernel.org,
-	Camila Alvarez <cam.alvarez.i@gmail.com>,
-	syzbot+d2a2c639d03ac200a4f1@syzkaller.appspotmail.com
-Subject: [PATCH] fix array-index-out-of-bounds in bpf_prog_select_runtime
-Date: Mon, 25 Mar 2024 21:38:35 -0300
-Message-Id: <20240326003832.102750-1-cam.alvarez.i@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	linux-leds@vger.kernel.org,
+	pavel@ucw.cz
+Subject: [PATCH v2 0/3] leds: trigger: legtrig-bpf: Add ledtrig-bpf trigger
+Date: Mon, 25 Mar 2024 21:14:44 -0400
+Message-ID: <cover.1711415233.git.hodges.daniel.scott@gmail.com>
+X-Mailer: git-send-email 2.43.2
+In-Reply-To: <ac8e77881212e18d117059a698affd6afc2607af.1711113657.git.hodges.daniel.scott@gmail.com>
+References: <ac8e77881212e18d117059a698affd6afc2607af.1711113657.git.hodges.daniel.scott@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,42 +75,35 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-BPF documentation specifies that the maximum stack depth for a BPF
-program is 512 bytes. This is not enforced when selecting a bpf
-interpreter, thus casuing an index out of bounds error when trying to
-obtain an interpreter with a bigger stack size.
+This patch set adds a led trigger that interfaces with the bpf
+subsystem. It allows for BPF programs to control LED activity using bpf
+kfuncs. This functionality is useful in giving users a physical
+indication that a BPF program has performed an operation such as
+handling a packet or probe point.
 
-This patch enforces the stack size to be not bigger than
-512.
+V1: https://lore.kernel.org/bpf/cover.1711113657.git.hodges.daniel.scott@gmail.com/
+Changes in V2:
+- Change kfunc to trigger based on LED name.
+- Fix kfunc registration of BPF_PROG_TYPE_UNSPEC.
+- Use new kfunc helpers off bpf-next branch.
 
-Reported-by: syzbot+d2a2c639d03ac200a4f1@syzkaller.appspotmail.com
-Signed-off-by: Camila Alvarez <cam.alvarez.i@gmail.com>
----
- kernel/bpf/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Daniel Hodges (3):
+  leds: trigger: legtrig-bpf: Add ledtrig-bpf trigger
+  selftests/bpf: Add selftests for bpf led programs
+  leds: trigger: Add documentation for ledtrig-bpf
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 696bc55de8e8..8167b3a721e9 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2196,7 +2196,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
- 		BUG_ON(1);
- 		return 0;
- }
--
-+#define BPF_MAX_STACK_SIZE 512
- #define PROG_NAME(stack_size) __bpf_prog_run##stack_size
- #define DEFINE_BPF_PROG_RUN(stack_size) \
- static unsigned int PROG_NAME(stack_size)(const void *ctx, const struct bpf_insn *insn) \
-@@ -2345,7 +2345,7 @@ static void bpf_prog_select_func(struct bpf_prog *fp)
- {
- #ifndef CONFIG_BPF_JIT_ALWAYS_ON
- 	u32 stack_depth = max_t(u32, fp->aux->stack_depth, 1);
--
-+	stack_depth = min_t(u32, stack_depth, BPF_MAX_STACK_SIZE);
- 	fp->bpf_func = interpreters[(round_up(stack_depth, 32) / 32) - 1];
- #else
- 	fp->bpf_func = __bpf_prog_ret0_warn;
+ Documentation/leds/index.rst                  |  1 +
+ Documentation/leds/ledtrig-bpf.rst            | 13 ++++
+ drivers/leds/trigger/Kconfig                  | 10 +++
+ drivers/leds/trigger/Makefile                 |  1 +
+ drivers/leds/trigger/ledtrig-bpf.c            | 73 +++++++++++++++++++
+ tools/testing/selftests/bpf/config            |  1 +
+ .../testing/selftests/bpf/progs/ledtrig_bpf.c | 32 ++++++++
+ 7 files changed, 131 insertions(+)
+ create mode 100644 Documentation/leds/ledtrig-bpf.rst
+ create mode 100644 drivers/leds/trigger/ledtrig-bpf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/ledtrig_bpf.c
+
 -- 
-2.34.1
+2.43.2
 
