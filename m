@@ -1,183 +1,175 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD8B129A83
-	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 04:17:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B88C29B0;
+	Tue, 26 Mar 2024 04:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711426673; cv=none; b=C+EspFWQHc6eU83e7PJ7KbMn64abNTlKP8kMaS4Qx+Dmlf83li/YFCHdiisYmCyQxlBForddZel4itUVNfYAtYzwElqNJjur5/aSFYPLxBZf/rlWWcVIxQz1Sllx5KXm+Xp3CMoFtAfT5gDmL+tGkHXHYJyebDkhuMX5EoWPKV8=
+	t=1711428661; cv=none; b=qxW98Q5VSjQLAOma2CtHYY5uQvp3cMA8XQH4da/HLV9BKruoA4gQyRzlQ6+4vFOv+Q0bvm4cr/XZRHusKqNSLcayy6zG6TJIePpEuM2z+wPr73V/6+XgBktqgvHg1zRrt6SkkQivUf/p7CqnhvIeRCiAAUtpo+qUuqwvkGGQr+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711426673; c=relaxed/simple;
-	bh=LfmKLgVAxQqcsERLP9Q1EgRruvPuNvOP2njfdtBc6NE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mZN9b11BemDxq+ZdQLDa1BBISqhEr6dWSYK8rGeRMHswzg7SGzLxDv60JMNR87l4acnId/Iws/0dTd64sOl805T3Dms4oN3m8/g/ATSeD/k8XOanvXuMUvlSndma5639F7qBzlGWUz3o3SeIk+UWc8zrwgFXkBuqLNIw3gQqOlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id E43DA24E7180; Mon, 25 Mar 2024 21:15:23 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v3 8/8] selftests/bpf: Add a kprobe_multi subtest to use addrs instead of syms
-Date: Mon, 25 Mar 2024 21:15:23 -0700
-Message-ID: <20240326041523.1200301-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240326041443.1197498-1-yonghong.song@linux.dev>
-References: <20240326041443.1197498-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1711428661; c=relaxed/simple;
+	bh=F5JKSRogf2llIBkzzf0hpoa6S0VY2RBJ8xYm+J6GbQI=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GrVs5QGsnVlzzSTUYBEhQPQNgOnLm3i3uy8jGdpAm44vYWVblFgammmf6jnM29LCdbd3i49ZV5l2ChoiwbkI1izxBDL9ufUJHBkGXqn340nAg+9ass6mNuU+jIvFPcsDmAA2SF8KnswLjFnbRVompgwKm/wNHhwf8Ql81apK3NE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=RoW+3/ZK; arc=none smtp.client-ip=67.231.156.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="RoW+3/ZK"
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42PMIxAe009321;
+	Mon, 25 Mar 2024 21:50:13 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=pfpt0220; bh=9EyZHpQZPtNoiJ0ASAEMb+
+	9ZjiK6Us0t8XuxBxb61RY=; b=RoW+3/ZKAryUcbnF//1Pwcp2mZD0LhFslGpJgq
+	DNVQNxquyUWqj0Fcdw5wqxwPk7zv6dgrF7uSnuI5HQ8wC0RAbYZdUVOA2ADajE9v
+	quCZEkVPiJQDY/EmKFOqutsjsDIGFxRHycGJ5FkySb+inBrs/9F0SZUFNqfxOvRv
+	I/ERMQZPLNgWds1t+XiFj+9eZ2usURlzwV24EerF2lkogF+xv6CdWL+opNBwJNZI
+	EPVxsf/KPp4VXiWUArLFEkILZY6s0SGPFhrHAN6eWE5WfruSVc7PN5hbmCHRfbD6
+	N9v5lEwK64LSExoNJ2BCtT0dFkV8ZV0CV5DPZmQVwFHG0NgA==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3x3hy1s47q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 25 Mar 2024 21:50:12 -0700 (PDT)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Mon, 25 Mar 2024 21:50:11 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
+ Transport; Mon, 25 Mar 2024 21:50:11 -0700
+Received: from maili.marvell.com (unknown [10.28.36.165])
+	by maili.marvell.com (Postfix) with SMTP id A7E6E3F703F;
+	Mon, 25 Mar 2024 21:50:05 -0700 (PDT)
+Date: Tue, 26 Mar 2024 10:20:04 +0530
+From: Ratheesh Kannoth <rkannoth@marvell.com>
+To: Julien Panis <jpanis@baylibre.com>
+CC: "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni
+	<pabeni@redhat.com>, Russell King <linux@armlinux.org.uk>,
+        Alexei Starovoitov
+	<ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard
+ Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Sumit
+ Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?=
+	<christian.koenig@amd.com>,
+        Simon Horman <horms@kernel.org>, Andrew Lunn
+	<andrew@lunn.ch>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <linaro-mm-sig@lists.linaro.org>
+Subject: Re: [PATCH net-next v4 2/3] net: ethernet: ti: Add desc_infos member
+ to struct k3_cppi_desc_pool
+Message-ID: <20240326045004.GA1362097@maili.marvell.com>
+References: <20240223-am65-cpsw-xdp-basic-v4-0-2e45e5dec048@baylibre.com>
+ <20240223-am65-cpsw-xdp-basic-v4-2-2e45e5dec048@baylibre.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240223-am65-cpsw-xdp-basic-v4-2-2e45e5dec048@baylibre.com>
+X-Proofpoint-GUID: IFJZH7V3Fi2mQzI6h7hsUbbGIVLBJOBJ
+X-Proofpoint-ORIG-GUID: IFJZH7V3Fi2mQzI6h7hsUbbGIVLBJOBJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-26_02,2024-03-21_02,2023-05-22_02
 
-Get addrs directly from available_filter_functions_addrs and
-send to the kernel during kprobe_multi_attach. This avoids
-consultation of /proc/kallsyms. But available_filter_functions_addrs
-is introduced in 6.5, i.e., it is introduced recently,
-so I skip the test if the kernel does not support it.
+On 2024-03-25 at 21:30:36, Julien Panis (jpanis@baylibre.com) wrote:
+> This patch introduces a member and the related accessors which can be
+> used to store descriptor specific additional information. This member
+> can store, for instance, an ID to differentiate a skb TX buffer type
+> from a xdpf TX buffer type.
+>
+> Signed-off-by: Julien Panis <jpanis@baylibre.com>
+> ---
+>  drivers/net/ethernet/ti/k3-cppi-desc-pool.c | 24 ++++++++++++++++++++++++
+>  drivers/net/ethernet/ti/k3-cppi-desc-pool.h |  2 ++
+>  2 files changed, 26 insertions(+)
+>
+> diff --git a/drivers/net/ethernet/ti/k3-cppi-desc-pool.c b/drivers/net/ethernet/ti/k3-cppi-desc-pool.c
+> index fe8203c05731..d0c68d722ef2 100644
+> --- a/drivers/net/ethernet/ti/k3-cppi-desc-pool.c
+> +++ b/drivers/net/ethernet/ti/k3-cppi-desc-pool.c
+> @@ -22,6 +22,7 @@ struct k3_cppi_desc_pool {
+>  	size_t			mem_size;
+>  	size_t			num_desc;
+>  	struct gen_pool		*gen_pool;
+> +	void			**desc_infos;
+>  };
+>
+>  void k3_cppi_desc_pool_destroy(struct k3_cppi_desc_pool *pool)
+> @@ -72,6 +73,15 @@ k3_cppi_desc_pool_create_name(struct device *dev, size_t size,
+>  		goto gen_pool_create_fail;
+>  	}
+>
+> +	pool->desc_infos = devm_kcalloc(dev, pool->num_desc,
+> +					sizeof(*pool->desc_infos), GFP_KERNEL);
+This should be freed as well, right ?
+.set_channels() in ethtool ops cleans pools; but not this. This wont
+result in memory leak ? s/devm_kcalloc/kcalloc if my comment
+is correct.
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../bpf/prog_tests/kprobe_multi_test.c        | 98 +++++++++++++++++++
- 1 file changed, 98 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b=
-/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-index 3b9059164360..51628455b6f5 100644
---- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-@@ -477,6 +477,69 @@ static int get_syms(char ***symsp, size_t *cntp, boo=
-l kernel)
- 	return err;
- }
-=20
-+static int get_addrs(unsigned long **addrsp, size_t *cntp, bool kernel)
-+{
-+	unsigned long *addr, *addrs, *tmp_addrs;
-+	int err =3D 0, max_cnt, inc_cnt;
-+	char *name =3D NULL;
-+	size_t cnt =3D 0;
-+	char buf[256];
-+	FILE *f;
-+
-+	if (access("/sys/kernel/tracing/trace", F_OK) =3D=3D 0)
-+		f =3D fopen("/sys/kernel/tracing/available_filter_functions_addrs", "r=
-");
-+	else
-+		f =3D fopen("/sys/kernel/debug/tracing/available_filter_functions_addr=
-s", "r");
-+
-+	if (!f)
-+		return -ENOENT;
-+
-+	/* In my local setup, the number of entries is 50k+ so Let us initially
-+	 * allocate space to hold 64k entries. If 64k is not enough, incrementa=
-lly
-+	 * increase 1k each time.
-+	 */
-+	max_cnt =3D 65536;
-+	inc_cnt =3D 1024;
-+	addrs =3D malloc(max_cnt * sizeof(long));
-+	if (addrs =3D=3D NULL) {
-+		err =3D -ENOMEM;
-+		goto error;
-+	}
-+
-+	while (fgets(buf, sizeof(buf), f)) {
-+		if (is_invalid_entry(buf, kernel))
-+			continue;
-+
-+		free(name);
-+		if (sscanf(buf, "%p %ms$*[^\n]\n", &addr, &name) !=3D 2)
-+			continue;
-+		if (skip_entry(name))
-+			continue;
-+
-+		if (cnt =3D=3D max_cnt) {
-+			max_cnt +=3D inc_cnt;
-+			tmp_addrs =3D realloc(addrs, max_cnt);
-+			if (!tmp_addrs) {
-+				err =3D -ENOMEM;
-+				goto error;
-+			}
-+			addrs =3D tmp_addrs;
-+		}
-+
-+		addrs[cnt++] =3D (unsigned long)addr;
-+	}
-+
-+	*addrsp =3D addrs;
-+	*cntp =3D cnt;
-+
-+error:
-+	free(name);
-+	fclose(f);
-+	if (err)
-+		free(addrs);
-+	return err;
-+}
-+
- static void do_bench_test(struct kprobe_multi_empty *skel, struct bpf_kp=
-robe_multi_opts *opts)
- {
- 	long attach_start_ns, attach_end_ns;
-@@ -529,6 +592,37 @@ static void test_kprobe_multi_bench_attach(bool kern=
-el)
- 		free(syms);
- }
-=20
-+static void test_kprobe_multi_bench_attach_addr(bool kernel)
-+{
-+	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
-+	struct kprobe_multi_empty *skel =3D NULL;
-+	unsigned long *addrs =3D NULL;
-+	size_t cnt =3D 0;
-+	int err;
-+
-+	err =3D get_addrs(&addrs, &cnt, kernel);
-+	if (err =3D=3D -ENOENT) {
-+		test__skip();
-+		return;
-+	}
-+
-+	if (!ASSERT_OK(err, "get_addrs"))
-+		return;
-+
-+	skel =3D kprobe_multi_empty__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "kprobe_multi_empty__open_and_load"))
-+		goto cleanup;
-+
-+	opts.addrs =3D addrs;
-+	opts.cnt =3D cnt;
-+
-+	do_bench_test(skel, &opts);
-+
-+cleanup:
-+	kprobe_multi_empty__destroy(skel);
-+	free(addrs);
-+}
-+
- static void test_attach_override(void)
- {
- 	struct kprobe_multi_override *skel =3D NULL;
-@@ -569,6 +663,10 @@ void serial_test_kprobe_multi_bench_attach(void)
- 		test_kprobe_multi_bench_attach(true);
- 	if (test__start_subtest("modules"))
- 		test_kprobe_multi_bench_attach(false);
-+	if (test__start_subtest("kernel"))
-+		test_kprobe_multi_bench_attach_addr(true);
-+	if (test__start_subtest("modules"))
-+		test_kprobe_multi_bench_attach_addr(false);
- }
-=20
- void test_kprobe_multi_test(void)
---=20
-2.43.0
-
+> +	if (!pool->desc_infos) {
+> +		ret = -ENOMEM;
+> +		dev_err(pool->dev, "pool descriptor infos alloc failed %d\n", ret);
+> +		kfree_const(pool_name);
+> +		goto gen_pool_desc_infos_alloc_fail;
+> +	}
+> +
+>  	pool->gen_pool->name = pool_name;
+>
+>  	pool->cpumem = dma_alloc_coherent(pool->dev, pool->mem_size,
+> @@ -94,6 +104,8 @@ k3_cppi_desc_pool_create_name(struct device *dev, size_t size,
+>  	dma_free_coherent(pool->dev, pool->mem_size, pool->cpumem,
+>  			  pool->dma_addr);
+>  dma_alloc_fail:
+> +	devm_kfree(pool->dev, pool->desc_infos);
+> +gen_pool_desc_infos_alloc_fail:
+>  	gen_pool_destroy(pool->gen_pool);	/* frees pool->name */
+>  gen_pool_create_fail:
+>  	devm_kfree(pool->dev, pool);
+> @@ -144,5 +156,17 @@ void *k3_cppi_desc_pool_cpuaddr(struct k3_cppi_desc_pool *pool)
+>  }
+>  EXPORT_SYMBOL_GPL(k3_cppi_desc_pool_cpuaddr);
+>
+> +void k3_cppi_desc_pool_desc_info_set(struct k3_cppi_desc_pool *pool, int desc_idx, void *info)
+> +{
+> +	pool->desc_infos[desc_idx] = info;
+> +}
+> +EXPORT_SYMBOL_GPL(k3_cppi_desc_pool_desc_info_set);
+> +
+> +void *k3_cppi_desc_pool_desc_info(struct k3_cppi_desc_pool *pool, int desc_idx)
+> +{
+> +	return pool->desc_infos[desc_idx];
+> +}
+> +EXPORT_SYMBOL_GPL(k3_cppi_desc_pool_desc_info);
+> +
+>  MODULE_LICENSE("GPL");
+>  MODULE_DESCRIPTION("TI K3 CPPI5 descriptors pool API");
+> diff --git a/drivers/net/ethernet/ti/k3-cppi-desc-pool.h b/drivers/net/ethernet/ti/k3-cppi-desc-pool.h
+> index 149d5579a5e2..0076596307e7 100644
+> --- a/drivers/net/ethernet/ti/k3-cppi-desc-pool.h
+> +++ b/drivers/net/ethernet/ti/k3-cppi-desc-pool.h
+> @@ -28,5 +28,7 @@ void k3_cppi_desc_pool_free(struct k3_cppi_desc_pool *pool, void *addr);
+>  size_t k3_cppi_desc_pool_avail(struct k3_cppi_desc_pool *pool);
+>  size_t k3_cppi_desc_pool_desc_size(struct k3_cppi_desc_pool *pool);
+>  void *k3_cppi_desc_pool_cpuaddr(struct k3_cppi_desc_pool *pool);
+> +void k3_cppi_desc_pool_desc_info_set(struct k3_cppi_desc_pool *pool, int desc_idx, void *info);
+> +void *k3_cppi_desc_pool_desc_info(struct k3_cppi_desc_pool *pool, int desc_idx);
+>
+>  #endif /* K3_CPPI_DESC_POOL_H_ */
+>
+> --
+> 2.37.3
+>
