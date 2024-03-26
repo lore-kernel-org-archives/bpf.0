@@ -1,207 +1,221 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2724C13C82E
-	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 15:56:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 784D22574B;
+	Tue, 26 Mar 2024 16:02:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711468590; cv=none; b=Fa7vUO/+vG2I9tEO2enOGaGFgPRw08uwsVBVvJSxnhy0rUOXbl6ZixwujE+ehj0ukuUYbSOVqcrj9RxgAswEbLZcnmX7VBBxHwtu7BV0xfVMRkTenzzUgYTxN+Mw0b0rBzOQtu3XKXLwU+1598+EG7dl2pyj8uaG3aNgN/IO4GA=
+	t=1711468923; cv=none; b=kcpIp+7zWp/Mv55on3hZsV9BTNCOgMvCjpuNoUUGWZYmGTCKWvU9VMXUuhnOXGBLnMyK/T6zWFiRXZxcR6aQj0a1DOjBI1CF4ZSZfKPJTsET6FR5IbYvQ2qrXlLVHntK5cPCuMhdmgN6JVQVXCSeZ+UH/y2afyd1wcLdyHIYjgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711468590; c=relaxed/simple;
-	bh=SFVYgiAhN5n6ZboWPwZfMLTQxgSPFPXa88h8H3kQ6e0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=seUdTQj+hzg0hsabrcJbmYb1fz2l6BkfmD1WIiULFK6UMGfn6qTBcFuuyjboblGt9PMcRSMZFWfIGhzfOJTluMH4O/sMaM+NMbjOFDok7zE5beUZYhLfdwiN6V3VQAd4Yo5FD+plc0SVNzL0Qh5g1ZuAHh5ZGBGCsaeOLUedurA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4V3vYF28PLz4f3jdT
-	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 23:56:17 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 7CE9A1A0199
-	for <bpf@vger.kernel.org>; Tue, 26 Mar 2024 23:56:23 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP4 (Coremail) with SMTP id gCh0CgBnu20k8AJmr1UrIQ--.65159S2;
-	Tue, 26 Mar 2024 23:56:21 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Pu Lehui <pulehui@huawei.com>,
-	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf-next v2] selftests/bpf: Enable cross platform testing for local vmtest
-Date: Tue, 26 Mar 2024 15:57:36 +0000
-Message-Id: <20240326155736.3480081-1-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1711468923; c=relaxed/simple;
+	bh=IjbfE8tFOdfjNx4MkilscMXL9i5JKvzYqCkq93qx1DI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Zf5WFUFs7oZtBkbymupksJMDJybJRaTyr9w2hwOcqYhdjSwITBs52Kb3mRkThvz07TDrWen+eerCvo6NG5Glqx4BEIyyiwEtN/lmt+4RLCQudPzKUp5akd5lb+XRGCC+1kgga6bAubw5LBpvRTuKlw/DU8TU9TZoK0tJZrKBdyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I+AVg4pM; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I+AVg4pM"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1e0f2798b47so5211775ad.1;
+        Tue, 26 Mar 2024 09:02:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711468920; x=1712073720; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aQJPy88vBYo4nQyyX6JO+jPm5JtOURILAq3nriLwYbQ=;
+        b=I+AVg4pMGd1gzfEoz6Uq8v/9YC+YvYSeTaAiyRhtTnNeYvxqaxCXtahDtSH0Yzxl0b
+         dPokTHz6GZQWZ6JqdpOrNc8I7LabJejcpMu8vuxFYRiZLuXgtt8bU6ZIKP3hmgB02A20
+         8QrbargXJ2GlhYvGsxEespqzME3YB4IorZq46woaCh5JVeRiZTqcQ0JbTwU1w+VFi//2
+         Max75S5+Ya+pdOpTe67owOLHLSlM6IMdvG7CG2+1ONmjT8BpM0Wttev6gV8GnFC0KbSB
+         64ztF3PZTfkkJ3LzW6ieamFi1X+wHyVdPlA+VXzR3nK+tglXrmzZsj2UEVVB2BFdzTwu
+         ZJHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711468920; x=1712073720;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aQJPy88vBYo4nQyyX6JO+jPm5JtOURILAq3nriLwYbQ=;
+        b=wTWmj+E0pMc+2kBqXP/5Sh6+hjiM0ob1QgOaOEujSgKmgt/5iwRTpesSGUOY4kg/kU
+         2/nfjGdq0wMqqxF8p88iayWs1IijDFrdtVM2IReM61NvUkCJceMdH7F/gze1HiVcetWg
+         K+zdF2cWIgpJaDXCAxi5TvGG4OivweCiHV7c13KO/mCvbGryQbXeH7ekRo9sGrnjOTVd
+         S/83Gl33d9VbnUqgelQS3R8Wzg3tqBYeqVtj3xP92XBEN17Q69gTOuxbo6oJunck9lCE
+         jWr1KVyFlFDAs0fHIy3F7h8jZ52jcOuBJYcU6jn/iEn95l8VXnxt23C8M3UaHDm/yXoU
+         JM2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVuGvkc4rfpLe5NHyZtl36fj8QLiRmT0XBcj9YV3vBf6iW5YG7XOUoMu+VpTLMLZ+qlaCRC/eDY8pmQDMpm0U6/Hl5XFAG0rNDjpx8K6BUFf/phLszpVpK7E5KVZd6yQfTmGdvRVhZ7PVwQURSPhx6NJak5xElLK/E7W8zRfJZzb32B7IB8UZLgnI2uTcKmn2RUpTik/tju2qYjT6aLs1toZNzIs+B2mA==
+X-Gm-Message-State: AOJu0YxI2Ua17tn5tN/pxuvLnoKanWJFlgh70WAFA18jE6OjwksuHhwX
+	NJIEvI5zHk7dx4kdB+uAS5W24qDC/hg7cEE8y9ByFEmQx7F1JiOuum2Kpt2Bkx+TtuzfwUW9lqZ
+	+Ho+VwnvMcbxATsqZ3C8tsWwpk+w=
+X-Google-Smtp-Source: AGHT+IHtfConeE4djnAj96ZFcg6gNNv5l9VculGG8dY053dAspbyKZxpxh/zkIuAVWRiJAqk6iJIDniUnCwGli8dbQg=
+X-Received: by 2002:a17:902:e748:b0:1e0:e011:e3cb with SMTP id
+ p8-20020a170902e74800b001e0e011e3cbmr3326261plf.15.1711468919504; Tue, 26 Mar
+ 2024 09:01:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgBnu20k8AJmr1UrIQ--.65159S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZr1kKrW3uw45Ww48ArykGrg_yoWrur15pw
-	48Zr4ay3WrWF1Sgwn7ZF409FWfGrs5ZrW7CryUXry5Zw1xKF97ArySyayqqrnxW3s5Arsx
-	ZF9agF98Cw17Z3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-	0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-	jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-	1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
-	n2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
-	AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCI
-	c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
-	AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUb
-	XdbUUUUUU==
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+References: <20240321145736.2373846-1-jonathan.haslam@gmail.com> <20240325120323.ec3248d330b2755e73a6571e@kernel.org>
+In-Reply-To: <20240325120323.ec3248d330b2755e73a6571e@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 26 Mar 2024 09:01:47 -0700
+Message-ID: <CAEf4BzZS_QCsSY0oGY_3pGveGfXKK_TkVURyNq=UQXVXSqi2Fw@mail.gmail.com>
+Subject: Re: [PATCH] uprobes: reduce contention on uprobes_tree access
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Jonathan Haslam <jonathan.haslam@gmail.com>, linux-trace-kernel@vger.kernel.org, 
+	andrii@kernel.org, bpf@vger.kernel.org, rostedt@goodmis.org, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Pu Lehui <pulehui@huawei.com>
+On Sun, Mar 24, 2024 at 8:03=E2=80=AFPM Masami Hiramatsu <mhiramat@kernel.o=
+rg> wrote:
+>
+> On Thu, 21 Mar 2024 07:57:35 -0700
+> Jonathan Haslam <jonathan.haslam@gmail.com> wrote:
+>
+> > Active uprobes are stored in an RB tree and accesses to this tree are
+> > dominated by read operations. Currently these accesses are serialized b=
+y
+> > a spinlock but this leads to enormous contention when large numbers of
+> > threads are executing active probes.
+> >
+> > This patch converts the spinlock used to serialize access to the
+> > uprobes_tree RB tree into a reader-writer spinlock. This lock type
+> > aligns naturally with the overwhelmingly read-only nature of the tree
+> > usage here. Although the addition of reader-writer spinlocks are
+> > discouraged [0], this fix is proposed as an interim solution while an
+> > RCU based approach is implemented (that work is in a nascent form). Thi=
+s
+> > fix also has the benefit of being trivial, self contained and therefore
+> > simple to backport.
+> >
+> > This change has been tested against production workloads that exhibit
+> > significant contention on the spinlock and an almost order of magnitude
+> > reduction for mean uprobe execution time is observed (28 -> 3.5 microse=
+cs).
+>
+> Looks good to me.
+>
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-The variable $ARCH in the current script is platform semantics, not
-kernel semantics. Rename it to $PLATFORM so that we can easily use $ARCH
-in cross-compilation. For now, Using PLATFORM= and CROSS_COMPILE=
-options will enable cross platform testing:
+Masami,
 
-  PLATFORM=<platform> CROSS_COMPILE=<toolchain> vmtest.sh -- ./test_progs
+Given the discussion around per-cpu rw semaphore and need for
+(internal) batched attachment API for uprobes, do you think you can
+apply this patch as is for now? We can then gain initial improvements
+in scalability that are also easy to backport, and Jonathan will work
+on a more complete solution based on per-cpu RW semaphore, as
+suggested by Ingo.
 
-Meanwhile, some descriptions have been corrected.
-
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
-v2:
-- Specifies the -cpu for the ARM64.
-- Completely renamed ARCH to PLATFORM.
-
- tools/testing/selftests/bpf/vmtest.sh | 40 +++++++++++++++++++--------
- 1 file changed, 28 insertions(+), 12 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
-index 65d14f3bbe30..825149a905e5 100755
---- a/tools/testing/selftests/bpf/vmtest.sh
-+++ b/tools/testing/selftests/bpf/vmtest.sh
-@@ -4,28 +4,34 @@
- set -u
- set -e
- 
--# This script currently only works for x86_64 and s390x, as
--# it is based on the VM image used by the BPF CI, which is
-+# This script currently only works for the following platforms,
-+# as it is based on the VM image used by the BPF CI, which is
- # available only for these architectures.
--ARCH="$(uname -m)"
--case "${ARCH}" in
-+PLATFORM="${PLATFORM:-$(uname -m)}"
-+case "${PLATFORM}" in
- s390x)
- 	QEMU_BINARY=qemu-system-s390x
- 	QEMU_CONSOLE="ttyS1"
--	QEMU_FLAGS=(-smp 2)
-+	HOST_FLAGS=(-smp 2 -enable-kvm)
-+	CROSS_FLAGS=(-smp 2)
- 	BZIMAGE="arch/s390/boot/vmlinux"
-+	ARCH="s390"
- 	;;
- x86_64)
- 	QEMU_BINARY=qemu-system-x86_64
- 	QEMU_CONSOLE="ttyS0,115200"
--	QEMU_FLAGS=(-cpu host -smp 8)
-+	HOST_FLAGS=(-cpu host -enable-kvm -smp 8)
-+	CROSS_FLAGS=(-smp 8)
- 	BZIMAGE="arch/x86/boot/bzImage"
-+	ARCH="x86"
- 	;;
- aarch64)
- 	QEMU_BINARY=qemu-system-aarch64
- 	QEMU_CONSOLE="ttyAMA0,115200"
--	QEMU_FLAGS=(-M virt,gic-version=3 -cpu host -smp 8)
-+	HOST_FLAGS=(-M virt,gic-version=3 -cpu host -enable-kvm -smp 8)
-+	CROSS_FLAGS=(-M virt,gic-version=3 -cpu cortex-a76 -smp 8)
- 	BZIMAGE="arch/arm64/boot/Image"
-+	ARCH="arm64"
- 	;;
- *)
- 	echo "Unsupported architecture"
-@@ -38,7 +44,7 @@ ROOTFS_IMAGE="root.img"
- OUTPUT_DIR="$HOME/.bpf_selftests"
- KCONFIG_REL_PATHS=("tools/testing/selftests/bpf/config"
- 	"tools/testing/selftests/bpf/config.vm"
--	"tools/testing/selftests/bpf/config.${ARCH}")
-+	"tools/testing/selftests/bpf/config.${PLATFORM}")
- INDEX_URL="https://raw.githubusercontent.com/libbpf/ci/master/INDEX"
- NUM_COMPILE_JOBS="$(nproc)"
- LOG_FILE_BASE="$(date +"bpf_selftests.%Y-%m-%d_%H-%M-%S")"
-@@ -58,6 +64,10 @@ tools/testing/selftests/bpf. e.g:
- If no command is specified and a debug shell (-s) is not requested,
- "${DEFAULT_COMMAND}" will be run by default.
- 
-+Using PLATFORM= and CROSS_COMPILE= options will enable cross platform testing:
-+
-+  PLATFORM=<platform> CROSS_COMPILE=<toolchain> $0 -- ./test_progs -t test_lsm
-+
- If you build your kernel using KBUILD_OUTPUT= or O= options, these
- can be passed as environment variables to the script:
- 
-@@ -109,7 +119,7 @@ newest_rootfs_version()
- {
- 	{
- 	for file in "${!URLS[@]}"; do
--		if [[ $file =~ ^"${ARCH}"/libbpf-vmtest-rootfs-(.*)\.tar\.zst$ ]]; then
-+		if [[ $file =~ ^"${PLATFORM}"/libbpf-vmtest-rootfs-(.*)\.tar\.zst$ ]]; then
- 			echo "${BASH_REMATCH[1]}"
- 		fi
- 	done
-@@ -126,7 +136,7 @@ download_rootfs()
- 		exit 1
- 	fi
- 
--	download "${ARCH}/libbpf-vmtest-rootfs-$rootfsversion.tar.zst" |
-+	download "${PLATFORM}/libbpf-vmtest-rootfs-$rootfsversion.tar.zst" |
- 		zstd -d | sudo tar -C "$dir" -x
- }
- 
-@@ -244,12 +254,17 @@ EOF
- 		exit 1
- 	fi
- 
-+	if [[ "${CROSS_COMPILE}" != "" ]]; then
-+		QEMU_FLAGS=("${CROSS_FLAGS[@]}")
-+	else
-+		QEMU_FLAGS=("${HOST_FLAGS[@]}")
-+	fi
-+
- 	${QEMU_BINARY} \
- 		-nodefaults \
- 		-display none \
- 		-serial mon:stdio \
- 		"${QEMU_FLAGS[@]}" \
--		-enable-kvm \
- 		-m 4G \
- 		-drive file="${rootfs_img}",format=raw,index=1,media=disk,if=virtio,cache=none \
- 		-kernel "${kernel_bzimage}" \
-@@ -384,7 +399,8 @@ main()
- 	fi
- 
- 	local kconfig_file="${OUTPUT_DIR}/latest.config"
--	local make_command="make -j ${NUM_COMPILE_JOBS} KCONFIG_CONFIG=${kconfig_file}"
-+	local make_command="make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} \
-+			    -j ${NUM_COMPILE_JOBS} KCONFIG_CONFIG=${kconfig_file}"
- 
- 	# Figure out where the kernel is being built.
- 	# O takes precedence over KBUILD_OUTPUT.
--- 
-2.34.1
-
+>
+> BTW, how did you measure the overhead? I think spinlock overhead
+> will depend on how much lock contention happens.
+>
+> Thank you,
+>
+> >
+> > [0] https://docs.kernel.org/locking/spinlocks.html
+> >
+> > Signed-off-by: Jonathan Haslam <jonathan.haslam@gmail.com>
+> > ---
+> >  kernel/events/uprobes.c | 22 +++++++++++-----------
+> >  1 file changed, 11 insertions(+), 11 deletions(-)
+> >
+> > diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+> > index 929e98c62965..42bf9b6e8bc0 100644
+> > --- a/kernel/events/uprobes.c
+> > +++ b/kernel/events/uprobes.c
+> > @@ -39,7 +39,7 @@ static struct rb_root uprobes_tree =3D RB_ROOT;
+> >   */
+> >  #define no_uprobe_events()   RB_EMPTY_ROOT(&uprobes_tree)
+> >
+> > -static DEFINE_SPINLOCK(uprobes_treelock);    /* serialize rbtree acces=
+s */
+> > +static DEFINE_RWLOCK(uprobes_treelock);      /* serialize rbtree acces=
+s */
+> >
+> >  #define UPROBES_HASH_SZ      13
+> >  /* serialize uprobe->pending_list */
+> > @@ -669,9 +669,9 @@ static struct uprobe *find_uprobe(struct inode *ino=
+de, loff_t offset)
+> >  {
+> >       struct uprobe *uprobe;
+> >
+> > -     spin_lock(&uprobes_treelock);
+> > +     read_lock(&uprobes_treelock);
+> >       uprobe =3D __find_uprobe(inode, offset);
+> > -     spin_unlock(&uprobes_treelock);
+> > +     read_unlock(&uprobes_treelock);
+> >
+> >       return uprobe;
+> >  }
+> > @@ -701,9 +701,9 @@ static struct uprobe *insert_uprobe(struct uprobe *=
+uprobe)
+> >  {
+> >       struct uprobe *u;
+> >
+> > -     spin_lock(&uprobes_treelock);
+> > +     write_lock(&uprobes_treelock);
+> >       u =3D __insert_uprobe(uprobe);
+> > -     spin_unlock(&uprobes_treelock);
+> > +     write_unlock(&uprobes_treelock);
+> >
+> >       return u;
+> >  }
+> > @@ -935,9 +935,9 @@ static void delete_uprobe(struct uprobe *uprobe)
+> >       if (WARN_ON(!uprobe_is_active(uprobe)))
+> >               return;
+> >
+> > -     spin_lock(&uprobes_treelock);
+> > +     write_lock(&uprobes_treelock);
+> >       rb_erase(&uprobe->rb_node, &uprobes_tree);
+> > -     spin_unlock(&uprobes_treelock);
+> > +     write_unlock(&uprobes_treelock);
+> >       RB_CLEAR_NODE(&uprobe->rb_node); /* for uprobe_is_active() */
+> >       put_uprobe(uprobe);
+> >  }
+> > @@ -1298,7 +1298,7 @@ static void build_probe_list(struct inode *inode,
+> >       min =3D vaddr_to_offset(vma, start);
+> >       max =3D min + (end - start) - 1;
+> >
+> > -     spin_lock(&uprobes_treelock);
+> > +     read_lock(&uprobes_treelock);
+> >       n =3D find_node_in_range(inode, min, max);
+> >       if (n) {
+> >               for (t =3D n; t; t =3D rb_prev(t)) {
+> > @@ -1316,7 +1316,7 @@ static void build_probe_list(struct inode *inode,
+> >                       get_uprobe(u);
+> >               }
+> >       }
+> > -     spin_unlock(&uprobes_treelock);
+> > +     read_unlock(&uprobes_treelock);
+> >  }
+> >
+> >  /* @vma contains reference counter, not the probed instruction. */
+> > @@ -1407,9 +1407,9 @@ vma_has_uprobes(struct vm_area_struct *vma, unsig=
+ned long start, unsigned long e
+> >       min =3D vaddr_to_offset(vma, start);
+> >       max =3D min + (end - start) - 1;
+> >
+> > -     spin_lock(&uprobes_treelock);
+> > +     read_lock(&uprobes_treelock);
+> >       n =3D find_node_in_range(inode, min, max);
+> > -     spin_unlock(&uprobes_treelock);
+> > +     read_unlock(&uprobes_treelock);
+> >
+> >       return !!n;
+> >  }
+> > --
+> > 2.43.0
+> >
+>
+>
+> --
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
