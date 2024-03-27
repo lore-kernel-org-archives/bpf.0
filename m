@@ -1,122 +1,111 @@
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A72137C34
-	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 15:32:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF9C12D762
+	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 16:05:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711553579; cv=none; b=eUQCo0Jyyyi9dTtNZvUoH7GhOyj0c6qzERUaCdcuzlzLVIpkPxGJRKf4ZVr4ZflDd9JMfN3hfhBktIe2DopUe3Lve/1hg9NyqOrJewfTHdh57wu9ZE3idL2odiF/YYS7qcFtgbEXxMFYRB2CYg7ETXBvUw0vAdJf2eB+jasTrmQ=
+	t=1711555523; cv=none; b=mXdLlNXWmnxKYtJJgiKb4kIqrv7rBUzTCfDa9NoUmEjSTvRIxZ58gmlOHFKJpj+zFtU6ernDNe8xEyxJzWWC++lFfEWkH65IAj4bP3WYVuEH78JBIJWBRxVPXeLx1Ud4Y2x7JQ0Z/m9nTpf3lLCYWVWW1+HppoTbT692Xzqz3YA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711553579; c=relaxed/simple;
-	bh=P8G03x5KCTx8TF0jsmww7PVADh6Q30jFkCYr5AuRElA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K5CADT+69xueHPkNCIn4oL5v7TC3mmMByc7P4PLCbfqV2H+TQlo2xiUMnKKNFFvDqbls9em/UxpkdV7PHjR16WiaPXNPCFY9XKfk6EF779Cn8hKk2Hsv69pNZbdVSs8zoKTIxyfln6EXPGlYVpprm/Yjbr/OGjAX8g49lUIwnkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=dj9cK6Ah; arc=none smtp.client-ip=209.85.166.170
+	s=arc-20240116; t=1711555523; c=relaxed/simple;
+	bh=EXr7t5ZyXFX9wXSbTzc9vLveFmblL3BI0CqEVyK8kVA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=I6xaMJlwFcvrRC4SXznkAD4hbK8l424bRRxIGRyozoUSXHAH3KbZSSZxR4zUPmgaxhMbAmnggm9fJjraVBd4lzpBn2JnlyfD67F7CYylkvWSt86iWUHO5SsTlJt9QEbMtzxzFdhykBdyvnrG9kVSxI9ysDK82cwkMJYydYQtixA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=kj55+KDY; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="dj9cK6Ah"
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-368713f2f23so23593695ab.3
-        for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 08:32:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="kj55+KDY"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6e8f51d0bf0so11959b3a.3
+        for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 09:05:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1711553577; x=1712158377; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PF7BpT7xgpetmn2SxPDafvgaaG8xfRfOiIeigueJv44=;
-        b=dj9cK6AhEWzqlbDhCvRDfli7Y1bPpYgYfvcKbdrLqmxFosf8oE9jmwoETfSouaKb3l
-         QJTKmLGzg8NhQVEcAz88u95V6k+gKfSaPV5dZGHf474ULtUAvrhQ0MWY80qz4LQvDiH6
-         bPgWqaPbp1b2gZDm4OZLIrgi7SpLRzCm3/IyIxKgDT09IXhItQiu/0yFVRyXnwhHBaR5
-         3STqfhsTjkwL4Dh0xBsasslrlYsc2GTmd2lkgtuk5cmPfJ5NE0731fdnjdazTlUOkm+p
-         8jR5YrUrNYwHqegjzz+w9SHRZZmc0UMvFOBtPuamlIBG6mt8qkfrgmVzmJZo4pFvXTuf
-         L7og==
+        d=sifive.com; s=google; t=1711555522; x=1712160322; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kwbw8Bfq5TVdPAVwgD2UahVCoOXtlyfhsdDWXgrrMaI=;
+        b=kj55+KDYAdr/AEgfzPfnFh6UmQT/rKlyrwHbKWZ4X6VwcJIRS+hJV5AXAhl4N0mCne
+         VpZveojmj0F1gKUuaVIAwjWXOeMeWLcU/7Uw3glu4EaUluKq0wskuKFZWQpuvsVRxwft
+         2AltJBTF7rj2Fr8EG4f8xuwyNmhMvpTYB4Ey6Lge6Z7NpNi1/7IR632D36BiALXER0ku
+         Cn2YZKqHdx/iAWjHvdEraAdAsDwVBRcCuaNMilVWCD/ftA1+/jzYmoiusSLuTStULuAu
+         GqriH9sBOPgucTtm/kBs6ehYNfXLpUCn8e4/1WnqaGswaTGutMZ6KYlxlHdo+fme7CQ4
+         xB7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711553577; x=1712158377;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PF7BpT7xgpetmn2SxPDafvgaaG8xfRfOiIeigueJv44=;
-        b=gRxyaEIqLEECGh6mdIHoGp9nR7OQPN0/hDTjPNIvMlxLBxrMI2HsYm65akoM5UMBs1
-         iTnPl7sql0CAgw7p370kSm7dj64BnERaP5Sl3NFW0tdXcXt0E2VGiZF2CI84bdHidtDl
-         uTpoOfUfiV0lUwzajSG3AW2lly8rXezMhRoiDk8ioi76JnsoUN9HKkx4L+VvuU7CFNu0
-         EMS2ZI1y00qn4N9+ilqnenuAe0o903TSMkZr3mgViSmeXozGTcRuwp/w9pG1eWTuYwAQ
-         9UcCL77fIJVLx9r71gRyBnkd+WFL1CF186NA9iyDpPxlpLuaSAI1fsqymYwUi5FlPhvh
-         u2rA==
-X-Forwarded-Encrypted: i=1; AJvYcCXS5C4cB3DJJbFhRY5T/+TammngZwxnNweYMBGXRurbOuJEJv+3bZhe/IxMGf1dCIUpb5BuMx7dq0Q/9TAcSgBvZtEs
-X-Gm-Message-State: AOJu0Ywdfzop9vPiaUvtThkweDrE0D6lbOx1xhTDNfM2r4E6gtRcontl
-	r3yVcCNAU4MBaQmNOMXGX90vR2G7RwOav02KIZXx6aIjDaehKEBd+lQ+psjJwtQ=
-X-Google-Smtp-Source: AGHT+IGdMChH50XwuKfroi9Ldx4vewY2tL5TXEOV1NEDYN3TGmpIkbk/uE2En+YsZ29z9C1dTS/OdQ==
-X-Received: by 2002:a92:c68e:0:b0:368:980a:d879 with SMTP id o14-20020a92c68e000000b00368980ad879mr354346ilg.17.1711553577622;
-        Wed, 27 Mar 2024 08:32:57 -0700 (PDT)
-Received: from [100.64.0.1] ([170.85.6.190])
-        by smtp.gmail.com with ESMTPSA id r10-20020a922a0a000000b003687950b384sm3021534ile.18.2024.03.27.08.32.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Mar 2024 08:32:57 -0700 (PDT)
-Message-ID: <c63150d8-a479-4d75-a826-3f87b1a792b9@sifive.com>
-Date: Wed, 27 Mar 2024 10:32:54 -0500
+        d=1e100.net; s=20230601; t=1711555522; x=1712160322;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Kwbw8Bfq5TVdPAVwgD2UahVCoOXtlyfhsdDWXgrrMaI=;
+        b=uQWVjHXMuMo5GCjH34Q3XuIeIkhdDv6GgTQuSyHsxtU/hHWUDNUWPfna1PS+wQu5Ct
+         aAKRUDzGdXE/QsxrREc6yme+ZXD+j+Vy7DmAyfr08fiqDdFYMR6K9nNjgtQkMHPnbmkI
+         1sT2KOY6arC2PYfVl7oGWAlu9eJehLHTOi5eeQagvFKtzym+ja86so3D9wMmEpXroD5X
+         xv0yQijE/o1DN5HEnTNJY3mJkc8+vxa/fabW68wSUnGIGnDXskFdfh3leStL2mElfotC
+         buE7W6xPosCUD9eXY2pPoxavYzIIq5g/q6m//lvedb80n67MSl1Tk1X+X4WMCKHXYeGW
+         zRMA==
+X-Forwarded-Encrypted: i=1; AJvYcCUu0YOZ65MRubqTLjm9syr5YwiB1NcJMkVVBDqzNXR7/ZH2JPoCFkl0pJVq34Clxtn6hp3H3Z7+TbE5xjDnrj3NDZmY
+X-Gm-Message-State: AOJu0YwaR05XpRuH8HW/J7hPadfl6bK2Cka7kFxPxORm/W+bhLysWM2t
+	9AWV586t9l8i4xjPMUImSrx1BhYqZy+SMF8cZwC9VRQgKrexJZp+Bspbd8Y4dJo=
+X-Google-Smtp-Source: AGHT+IHrHUQx8CTOsGUx7d9I0wuSaSBLdTL7D/z7DZEE6/9Njp7t/Ngzy8GHegWFTHCH7uUVnbidfQ==
+X-Received: by 2002:a17:903:11c4:b0:1de:ff9f:aee9 with SMTP id q4-20020a17090311c400b001deff9faee9mr138103plh.11.1711555521786;
+        Wed, 27 Mar 2024 09:05:21 -0700 (PDT)
+Received: from sw06.internal.sifive.com ([4.53.31.132])
+        by smtp.gmail.com with ESMTPSA id bf4-20020a170902b90400b001e14807f9cesm1718226plb.125.2024.03.27.09.05.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Mar 2024 09:05:21 -0700 (PDT)
+From: Samuel Holland <samuel.holland@sifive.com>
+To: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jason Baron <jbaron@akamai.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	bpf@vger.kernel.org
+Subject: [PATCH v2 0/7] riscv: Various text patching improvements
+Date: Wed, 27 Mar 2024 09:04:39 -0700
+Message-ID: <20240327160520.791322-1-samuel.holland@sifive.com>
+X-Mailer: git-send-email 2.43.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/7] riscv: Various text patching improvements
-To: Andrea Parri <parri.andrea@gmail.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Jason Baron <jbaron@akamai.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Steven Rostedt <rostedt@goodmis.org>, bpf@vger.kernel.org,
- Alexandre Ghiti <alexghiti@rivosinc.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@rivosinc.com>
-References: <20240212025529.1971876-1-samuel.holland@sifive.com>
- <ZctnfZWWO3HCiXe5@andrea>
-Content-Language: en-US
-From: Samuel Holland <samuel.holland@sifive.com>
-In-Reply-To: <ZctnfZWWO3HCiXe5@andrea>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Andrea,
+Here are a few changes to minimize calls to stop_machine() and
+flush_icache_*() in the various text patching functions, as well as
+to simplify the code.
 
-On 2024-02-13 6:58 AM, Andrea Parri wrote:
-> On Sun, Feb 11, 2024 at 06:55:11PM -0800, Samuel Holland wrote:
->> Here are a few changes to minimize calls to stop_machine() and
->> flush_icache_*() in the various text patching functions, as well as
->> to simplify the code.
->>
->>
->> Samuel Holland (7):
->>   riscv: jump_label: Batch icache maintenance
->>   riscv: jump_label: Simplify assembly syntax
->>   riscv: kprobes: Use patch_text_nosync() for insn slots
->>   riscv: Simplify text patching loops
->>   riscv: Pass patch_text() the length in bytes
->>   riscv: Use offset_in_page() in text patching functions
->>   riscv: Remove extra variable in patch_text_nosync()
-> 
-> This does look like a nice clean-up.  Just curious (a "teach me"-like question),
-> how did you test these changes? kselftests, micro-benchmarks, other?
+This series is based on "[PATCH v3 0/2] riscv: fix patching with IPI"[1].
 
-For all my patches, I do boot testing on various physical boards (Unmatched, D1,
-some internal hardware), plus some standard internal workloads. For
-performance-related patches, I run microbenchmarks or whole-system benchmarks
-(e.g. UnixBench). For this series specifically, I didn't do any extra
-benchmarking, as all of the functional changes should be as fast or faster by
-virtue of simply doing less work.
+[1]: https://lore.kernel.org/linux-riscv/20240229121056.203419-1-alexghiti@rivosinc.com/
 
-> BTW, I recall a parallel work from Alex and Bjorn [1] that might have some minor
-> conflict with these changes; + both of them to Cc: for further sync.
+Changes in v2:
+ - Remove unnecessary line wrapping
+ - Further simplify patch_insn_set()/patch_insn_write() loop conditions
+ - Use min() instead of min_t() since both sides are unsigned long
 
-As suggested by Alex, v2 of this series will be based on the latest version of
-that patch.
+Samuel Holland (7):
+  riscv: jump_label: Batch icache maintenance
+  riscv: jump_label: Simplify assembly syntax
+  riscv: kprobes: Use patch_text_nosync() for insn slots
+  riscv: Simplify text patching loops
+  riscv: Pass patch_text() the length in bytes
+  riscv: Use offset_in_page() in text patching functions
+  riscv: Remove extra variable in patch_text_nosync()
 
-Regards,
-Samuel
+ arch/riscv/include/asm/jump_label.h |  4 +-
+ arch/riscv/include/asm/patch.h      |  2 +-
+ arch/riscv/kernel/jump_label.c      | 16 +++++--
+ arch/riscv/kernel/patch.c           | 69 ++++++++++++++---------------
+ arch/riscv/kernel/probes/kprobes.c  | 19 ++++----
+ arch/riscv/net/bpf_jit_comp64.c     |  7 +--
+ 6 files changed, 63 insertions(+), 54 deletions(-)
 
-> 
->   Andrea
-> 
-> [1] https://lore.kernel.org/lkml/20240206204607.527195-1-alexghiti@rivosinc.com/
+-- 
+2.43.1
 
