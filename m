@@ -1,178 +1,118 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7539152E17
-	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 22:16:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C152D2EB04;
+	Wed, 27 Mar 2024 22:54:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711577788; cv=none; b=oMjnNaMfmqwDTzD8069mudqBkoyeojSIsCfZ3ldTQtmn5XkGam6vrh+4KbgNAdSwni+Wjqq6io8LusBP3a/mrWvfTetz8FpIu+McIttQmgNbMRazVX7nmcBJrgu20rnOuBLD49IB7Si2Q0rZ5R2LPOa1qtwwHrJRFFBdfhbxaTc=
+	t=1711580090; cv=none; b=BloZVl3iC5pDrj16S+g43NmUasnD8RLtNovTo3YVt/GODSI9b8Cvh6tPRu+L1stN3NBnbtJeHOcH/J/fFyTIszLzqwGXbRTdyQr83q/P6TVj0iemiBodXyRnaPDatSezDRZDR8ZVAEtrIuzw9Dyu6E5230n7k5Rx9YYWqeKPN8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711577788; c=relaxed/simple;
-	bh=TL38rdaM2fQ9Y+5FhIl1zc5uqD5U3p45jsJRIMDvQP0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BQ3j/dnzyuISBAWKtXJuwuOob4evLULS3MDa26TheDRUNhk21uig/Glv2PEe//1bT6ivJY5krmdhWnaEeDYvRNwRNBsrONY/UoxsLNsn4a2+Z/9MDF7sLMJ3nZeSyGJDWz/3g+SC8enktibHALHVsrnP8RnZ61motx01QhPb5yY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=N0J7uWQT; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1711580090; c=relaxed/simple;
+	bh=B4kQ7Md5GvHsR2L+XgbgKogJenUHgF+GDFDTZ3omF3c=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ORPFDO2pm2QK8dSlaCnZhWu/IZGMUCqdQECTh/G9Yx5kXQGivFvrr4/7ITYk2UmenMD1ZuGlCI1Lcn2qwt0LLAuAE/p1fI6Eb3A3rFcfW+9shCZfRMWNTgg94d2IIVx6jbKQxSwYxMsogk8InNIYZH8AU7NCN54AT8oiuBDHn9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BgsOZ+JQ; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="N0J7uWQT"
-Message-ID: <649dc1dc-ca80-4686-ae37-62d7c81dde8b@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1711577783;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uhS1cYr0b+J7i2oT4omrAU15v3XtnTOguzp54SXOCQI=;
-	b=N0J7uWQTyZ6m2rCZR5vCqOCF8LFZ97B9Qh2zySkgqlOdPOAY/OStiAeTy+TXwJ3xUT71Nt
-	kUCRYs0qRUSYamP3DS9vqNmf4wBPFm75cq6gJPoxBq0PIITrTH19ofRa4ivxSBJhPs38vO
-	vYESVjEDBS7EEkDKF9jnrZxaQT9vuNM=
-Date: Wed, 27 Mar 2024 15:16:16 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BgsOZ+JQ"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-34100f4f9a2so162724f8f.2;
+        Wed, 27 Mar 2024 15:54:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711580087; x=1712184887; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G15/cZOUwJ4wAwK3pv4/rQlxMz/GUR4FC5RGf/w3iUA=;
+        b=BgsOZ+JQH2nJUYy46m09uxxwJ2bqyPAio0LRk7LBu6Y6JCEIXzj1yw4g0ao+ZpoRPG
+         BQMW9INaHpPeC6VKysMxpxksQim8xwTRGJZJASfxbCWOmoxUo1K/vuSPcVfXD955G5kF
+         qy9S2Jn9NWdtFZ+urA2jRG1SXvm6MwOhmUR44DJpfgJwxPOsMrZQeTxga5+Z7SXIcetz
+         XcZ8H3Dh4TefXYBbEOcvszOQ4G9PVG9FxrI2T2+CHfEv52ozE8IqumsXrjxHHHyQIpWj
+         JouBMzvg7owUNN5vwlcPlbA8wQMzzkrdwKOtgfIgJzenw5rjLE6Q7kH83Rr4vgOD1yar
+         PQ4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711580087; x=1712184887;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G15/cZOUwJ4wAwK3pv4/rQlxMz/GUR4FC5RGf/w3iUA=;
+        b=ioMugbPVZ7NEMzGG0Z+I5fcxi1XH4RRGZZ5eDANgQhi6DhYlVbU0x2bFQ43XyQzIgY
+         5jT2z72LJnt0ICok9GLe6IHaRrjNLmC3OzVM4rWNZHvxxDLNTiA6bwtjjOExSMt9KPM1
+         tVUhWaaey+7P02IhvPm74gUNLG+SkVPhR6L4OQzL0ikbTBWcWvbL5Evabl+t18I87YP/
+         GzsF9Flmu1tvKPy7S0qkLASCMdvP8CFsSq+MZX9krtAG3afTqsZzN0SGwqnq68IyAev0
+         HOHk6ueUDBMJIyXjLGLGWm1sfg+ql681YbInpnYun/X154vRedvIyUFTAKBUKA+YhAsL
+         MLdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWr3UFDKITQ+sQVpwylQiD46pls6J28lERwOsDcdTDM0243xS09EWm4rPtkyBlbPAZJZ8yxIxmkz0Uz5XhA0YwrkbHICclURfZXLKc+kMX0+tGiMKx9llLKfMPAvzkR6er5iYw3NXxmB4YGPYI1iuMX+7cphHzbghUBjZbL/pX0HKp2+yjLCci0rPbtGavp0Cxrp+8A62ugPKoplg==
+X-Gm-Message-State: AOJu0YzbQ5U8ISo92LYsMTpyFjpebbKCCL6zYHhlZcoCMqtypwvpPoNH
+	QcBFRAJ+GmtlK1ZAvLb4w404cANlfFaEmQVbm9Y4u7Y966V4WzM6
+X-Google-Smtp-Source: AGHT+IFiZCk0HkqbCAQsllCUbaI0r3bBk8XB4pcoHzbYn3a/kHovV8RAYQ6NsVr5EfUqdqm/zagQUA==
+X-Received: by 2002:a5d:400e:0:b0:33e:69a8:fe85 with SMTP id n14-20020a5d400e000000b0033e69a8fe85mr858630wrp.37.1711580086806;
+        Wed, 27 Mar 2024 15:54:46 -0700 (PDT)
+Received: from rorona-tty.. ([154.121.114.3])
+        by smtp.googlemail.com with ESMTPSA id cc7-20020a5d5c07000000b0033e75e5f280sm152348wrb.113.2024.03.27.15.54.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Mar 2024 15:54:46 -0700 (PDT)
+From: Djalal Harouni <tixxdz@gmail.com>
+To: tixxdz@gmail.com
+Cc: Tejun Heo <tj@kernel.org>,
+	Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH bpf-next 0/3] bpf: freeze a task cgroup from bpf
+Date: Wed, 27 Mar 2024 23:53:22 +0100
+Message-Id: <20240327225334.58474-1-tixxdz@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240327-ccb56fc7a6e80136db80876c@djalal>
+References: <20240327-ccb56fc7a6e80136db80876c@djalal>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: mptcp splat
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Paolo Abeni <pabeni@redhat.com>
-Cc: Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
- MPTCP Upstream <mptcp@lists.linux.dev>, Matthieu Baerts
- <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>
-References: <CAADnVQKCxxETthqDpcE1xMGwa5au8JuLr_49QuwemL7uBKfiVg@mail.gmail.com>
- <8410a6f61e7a778117819ebeda667687353ffb21.camel@redhat.com>
- <CAADnVQLj9bQDonRzJO5z2hMZ7kf6zdU-s6Cm_7_kj-wP3CiUSA@mail.gmail.com>
- <d917d3a5690a0115cb8136e1dda5fbe5621dcd95.camel@redhat.com>
- <CAADnVQKXcEhL680E85=rrYuu4eVvVTH60kYRY_VnAKzZo1qKYg@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <CAADnVQKXcEhL680E85=rrYuu4eVvVTH60kYRY_VnAKzZo1qKYg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-On 3/27/24 11:50 AM, Alexei Starovoitov wrote:
-> On Wed, Mar 27, 2024 at 11:33 AM Paolo Abeni <pabeni@redhat.com> wrote:
->>
->> On Wed, 2024-03-27 at 10:00 -0700, Alexei Starovoitov wrote:
->>> On Wed, Mar 27, 2024 at 9:56 AM Paolo Abeni <pabeni@redhat.com> wrote:
->>>>
->>>> On Wed, 2024-03-27 at 09:43 -0700, Alexei Starovoitov wrote:
->>>>> I ffwded bpf tree with the recent net fixes and caught this:
->>>>>
->>>>> [   48.386337] WARNING: CPU: 32 PID: 3276 at net/mptcp/subflow.c:1430
->>>>> subflow_data_ready+0x147/0x1c0
->>>>> [   48.392012] Modules linked in: dummy bpf_testmod(O) [last unloaded:
->>>>> bpf_test_no_cfi(O)]
->>>>> [   48.396609] CPU: 32 PID: 3276 Comm: test_progs Tainted: G
->>>>> O       6.8.0-12873-g2c43c33bfd23 #1014
->>>>> #[   48.467143] Call Trace:
->>>>> [   48.469094]  <TASK>
->>>>> [   48.472159]  ? __warn+0x80/0x180
->>>>> [   48.475019]  ? subflow_data_ready+0x147/0x1c0
->>>>> [   48.478068]  ? report_bug+0x189/0x1c0
->>>>> [   48.480725]  ? handle_bug+0x36/0x70
->>>>> [   48.483061]  ? exc_invalid_op+0x13/0x60
->>>>> [   48.485809]  ? asm_exc_invalid_op+0x16/0x20
->>>>> [   48.488754]  ? subflow_data_ready+0x147/0x1c0
->>>>> [   48.492159]  mptcp_set_rcvlowat+0x79/0x1d0
->>>>> [   48.495026]  sk_setsockopt+0x6c0/0x1540
->>>>>
->>>>> It doesn't reproduce all the time though.
->>>>> Some race?
->>>>> Known issue?
->>>>
->>>> It was not known to me. Looks like something related to not so recent
->>>> changes (rcvlowat support).
->>>>
->>>> Definitely looks lie a race.
->>>>
->>>> If you could share more info about the running context and/or a full
->>>> decoded splat it could help, thanks!
->>>
->>> This is just running bpf selftests in parallel:
->>> test_progs -j
->>>
->>> The end of the splat:
->>> [   48.500075]  __bpf_setsockopt+0x6f/0x90
->>> [   48.503124]  bpf_sock_ops_setsockopt+0x3c/0x90
->>> [   48.506053]  bpf_prog_509ce5db2c7f9981_bpf_test_sockopt_int+0xb4/0x11b
->>> [   48.510178]  bpf_prog_dce07e362d941d2b_bpf_test_socket_sockopt+0x12b/0x132
->>> [   48.515070]  bpf_prog_348c9b5faaf10092_skops_sockopt+0x954/0xe86
->>> [   48.519050]  __cgroup_bpf_run_filter_sock_ops+0xbc/0x250
->>> [   48.523836]  tcp_connect+0x879/0x1160
->>> [   48.527239]  ? ktime_get_with_offset+0x8d/0x140
->>> [   48.531362]  tcp_v6_connect+0x50c/0x870
->>> [   48.534609]  ? mptcp_connect+0x129/0x280
->>> [   48.538483]  mptcp_connect+0x129/0x280
->>> [   48.542436]  __inet_stream_connect+0xce/0x370
->>> [   48.546664]  ? rcu_is_watching+0xd/0x40
->>> [   48.549063]  ? lock_release+0x1c4/0x280
->>> [   48.553497]  ? inet_stream_connect+0x22/0x50
->>> [   48.557289]  ? rcu_is_watching+0xd/0x40
->>> [   48.560430]  inet_stream_connect+0x36/0x50
->>> [   48.563604]  bpf_trampoline_6442491565+0x49/0xef
->>> [   48.567770]  ? security_socket_connect+0x34/0x50
->>> [   48.575400]  inet_stream_connect+0x5/0x50
->>> [   48.577721]  __sys_connect+0x63/0x90
->>> [   48.580189]  ? bpf_trace_run2+0xb0/0x1a0
->>> [   48.583171]  ? rcu_is_watching+0xd/0x40
->>> [   48.585802]  ? syscall_trace_enter+0xfb/0x1e0
->>> [   48.588836]  __x64_sys_connect+0x14/0x20
->>
->> Ouch, it looks bad. BPF should not allow any action on mptcp subflows
->> that go through sk_socket. They touch the mptcp main socket, which is
->> _not_ protected by the subflow socket lock.
->>
->> AFICS currently the relevant set of racing sockopt allowed by bpf boils
->> down to SO_RCVLOWAT only - sk_setsockopt(SO_RCVLOWAT) will call sk-
->>> sk_socket->ops->set_rcvlowat()
->>
->> So something like the following (completely untested) should possibly
->> address the issue at hand, but I think it would be better/safer
->> completely disable ebpf on mptcp subflows, WDYT?
->>
->> Thanks,
->>
->> Paolo
->>
->> ---
->> diff --git a/net/mptcp/sockopt.c b/net/mptcp/sockopt.c
->> index dcd1c76d2a3b..6e5e64c2cf89 100644
->> --- a/net/mptcp/sockopt.c
->> +++ b/net/mptcp/sockopt.c
->> @@ -1493,6 +1493,9 @@ int mptcp_set_rcvlowat(struct sock *sk, int val)
->>          struct mptcp_subflow_context *subflow;
->>          int space, cap;
->>
->> +       if (has_current_bpf_ctx())
->> +               return -EINVAL;
->> +
-> 
-> Looks fine to me.
-> 
-> Martin,
-> 
-> Do you have any better ideas?
-> 
-> The splat explains the race.
-> In this case setget_sockopt test happen to run in parallel
-> with mptcp/bpf test and the former one was TCP connect request
-> but it was for subflow.
-> 
-> We can disable that callback when tcp flow is a subflow,
-> but that doesn't feel right.
+This patch series adds support to freeze the task cgroup hierarchy
+that is on a default cgroup v2 without going through kernfs interface.
 
-I am also not sure if we can disable all set/getsockopt for tcp subflows. Not 
-clear if there is use case that depends on this to setsockopt the subflow.
+For some cases we want to freeze the cgroup of a task based on some
+signals, doing so from bpf is better than user space which could be
+too late.
 
-> I think Paolo's targeted fix is cleaner.
+Planned users of this feature are: tetragon and systemd when freezing
+a cgroup hierarchy that could be a K8s pod, container, system service
+or a user session.
 
-I will also go with Paolo's fix. The radius is smaller. I don't have a better idea.
+Patch 1: cgroup: add cgroup_freeze_no_kn() to freeze a cgroup from bpf
+Patch 2: bpf: add bpf_task_freeze_cgroup() to freeze the cgroup of a task
+Patch 3: selftests/bpf: add selftest for bpf_task_freeze_cgroup
 
-Unrelated, is there a way to tell if a tcp_sock is a subflow? bpf prog can use 
-it to decide if it wants to setsockopt on a subflow or not.
+ include/linux/cgroup.h                                      |   2 ++
+ kernel/bpf/helpers.c                                        |  31 ++++
+ kernel/cgroup/cgroup.c                                      |  67 ++++++++
+ tools/testing/selftests/bpf/prog_tests/task_freeze_cgroup.c | 165 +++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_task_freeze_cgroup.c | 110 ++++++++++++++
+ 5 files changed, 375 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/task_freeze_cgroup.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_task_freeze_cgroup.c
+
+-- 
+2.34.1
 
