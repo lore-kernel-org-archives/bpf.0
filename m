@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00AF9139589
-	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 16:30:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DFF139D1F;
+	Wed, 27 Mar 2024 16:30:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711557037; cv=none; b=icKJLl+7SiFDAzq/sRP0b7H3RxStkiUUGaLJYBMwLtjHUa+lHGLJg0a5sHRWSK7VeQStgL/PH4uGky7m+mmEgRW2wBqG1Sd6gHNbOvTDX1vaK5wFzjherDWiw74Q8/eL1XKwX0/L1owtLJSr2lMPHcAKJO5NM/KNBeiQAMm2I1k=
+	t=1711557037; cv=none; b=vEJxAmZ4CMAx3kLQFTPzXJBM9W0tFRUMDFynFe7UZamrGSWsorHyLBM779g+TspUSAjS3h+2nLTs/5G27gnZktJDspLg+Fn4XMHIfblbraGZ9qecD6cteDe7ednJivDzBVdlxzMeClNvbPKuIf/umJw4YcMeFDLDR+3yptUVCW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1711557037; c=relaxed/simple;
-	bh=juDkeDzotP3uJps0XSMfXNYUxgsPmeWL9RIl7vdcllI=;
+	bh=3r2GdWJyaKfFcnANbvchFIN7KbuZq69dsR3O+aW8wpY=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=IE0lxKcL1YlWtQ7B2vLx8cyi6bOFxapVcuWgqEwWGX2sIs0e1cVt6RCW4TfhO0suLf82KVdutCLtGLqVJT5qWfrgkXkzDhQqtPFqqokMsxT95QIacCd8Y8VqcbbulLrMQHqjDceL0kpXw+Xt6mcOvAGH3KOJuPGA/m1wXvxqFaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a3/J+tRJ; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=C4gdEdjwlYnl7GXchfiswbH2e4H0cFgWg7XHEnx413IurYpnyJgidMg+8MZkvI4ylIlHGnRw94wG8WB0TI64uMhv6Z2OYvrpZ4mCMjKWeZ/kyje2tM3nvIOYmZiyPOZq5H3ZDM0D0SZYZCtLHBGM6VvHcWRNCechPCM7WY+y/0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fuFky6Ka; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a3/J+tRJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 78DF5C43394;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fuFky6Ka"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 85805C433F1;
 	Wed, 27 Mar 2024 16:30:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1711557036;
-	bh=juDkeDzotP3uJps0XSMfXNYUxgsPmeWL9RIl7vdcllI=;
+	bh=3r2GdWJyaKfFcnANbvchFIN7KbuZq69dsR3O+aW8wpY=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=a3/J+tRJ5oit11oMg2bUBL7M7QGk7fT+Mym4SmhsheR6DnebL3bQkQQVywN3ymWeF
-	 wEGeIUa6no/EtIg86zKZrPeAAA+GzhSuIKYrbAvuSMQ/A0sgNMw31JpT+LrW1R6OjH
-	 G0FiDpsw7zsS3j1NJ8gLM9JWpafLOVqnFPq2KULOxIM6NCcq59B22XxA/GbJsqPQXs
-	 cjPjxLJI3Iv0QfAm6eFEVMXCcx+2OrJtJGlX2B5F6dOHa1YjmMsgeuMrXH+4k6aIYY
-	 CwNggjjvY3mhFWKk37vcurrCdt3q28aiOLdUE2bpS0f13bndUw+XAyyYOy4ee8Hrfb
-	 6LqRTecd7+0Jg==
+	b=fuFky6Ka/i1qcOzcPj8bTRjvnBEZ/X9McH3zktrcdb29GNYie3YryohlRgS6RWnEq
+	 Sbr/sM3R5YwZojxFednFZVs0DsBrKaQFY3etD1cc7YEmUfzshSmZZplG1DRleZ1+C5
+	 CWZYBdjcihpYAppl1EkIQHR2q6VmsfzRjvh+ap5Y1PYEcy9vUvjhYGMym8a2HNsQ15
+	 b7U/WQvwN8yLTZn6xl0Y9IqllgXIJbtdkbyBVTmro5wRv+8VZsUG0+tn9dPjmh5fjj
+	 3+OB2uO2UTCHKfOfRCg+zMkY2ZvPrhMuT7IDYLJhhXABxaDMtMDDIUKwmvvqteuoOn
+	 /rUGmoxblHGug==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6A655D95063;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7421CD2D0EB;
 	Wed, 27 Mar 2024 16:30:36 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -37,35 +37,37 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: improve error message for unsupported helper
+Subject: Re: [PATCH v1] bpf,arena: Use helper sizeof_field in struct accessors
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171155703643.16147.8693476873039047007.git-patchwork-notify@kernel.org>
+ <171155703647.16147.8985215906993391479.git-patchwork-notify@kernel.org>
 Date: Wed, 27 Mar 2024 16:30:36 +0000
-References: <20240325152210.377548-1-yatsenko@meta.com>
-In-Reply-To: <20240325152210.377548-1-yatsenko@meta.com>
-To: None <"Mykyta Yatsenkomykyta.yatsenko5"@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, yatsenko@meta.com
+References: <20240327065334.8140-1-haiyue.wang@intel.com>
+In-Reply-To: <20240327065334.8140-1-haiyue.wang@intel.com>
+To: Haiyue Wang <haiyue.wang@intel.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+ linux-kernel@vger.kernel.org
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Mon, 25 Mar 2024 15:22:10 +0000 you wrote:
-> From: Mykyta Yatsenko <yatsenko@meta.com>
+On Wed, 27 Mar 2024 14:53:29 +0800 you wrote:
+> Use the well defined helper sizeof_field() to calculate the size of a
+> struct member, instead of doing custom calculations.
 > 
-> BPF verifier emits "unknown func" message when given BPF program type
-> does not support BPF helper. This message may be confusing for users, as
-> important context that helper is unknown only to current program type is
-> not provided.
-> 
-> [...]
+> Signed-off-by: Haiyue Wang <haiyue.wang@intel.com>
+> ---
+>  kernel/bpf/arena.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Here is the summary with links:
-  - [bpf-next] bpf: improve error message for unsupported helper
-    https://git.kernel.org/bpf/bpf-next/c/4c91c5925ac1
+  - [v1] bpf,arena: Use helper sizeof_field in struct accessors
+    https://git.kernel.org/bpf/bpf-next/c/45a683b2d815
 
 You are awesome, thank you!
 -- 
