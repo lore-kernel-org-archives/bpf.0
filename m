@@ -1,191 +1,271 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09EF14EC5E
-	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 18:33:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E532514D28C
+	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 18:39:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711564383; cv=none; b=NZO3E6SjOsOIPAmOe1fSPfZHEzVVfHNmCLRC3Y8EDpYbHDoDxFK9sk/GBfVP+awmSnaOul0hy2XkWmWxzDOMw+Es1H+sedhaN2uNXoszdYdhdzDHmOclv2Hvup1SBvIalrNubFzGKy3VdVtXjdPKcx7BnYNkn+7sKdles8WVc8A=
+	t=1711564784; cv=none; b=Uxx7o7K6SjI8oAq9pyQDPiPFnf3/A3X9DYcxGvpnBVVyRfdcfqNqlqTIpq7HcaIaZ/EAU9RNi4xg1fKK2iSk3idxtbI/pzRIdLYzId8qyHtUcZ3Q22clMO3kdEzbKxa3TWVf6iKkbCdIlDCVvBQoLbZ/qnBc6bcue68FeSwNR1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711564383; c=relaxed/simple;
-	bh=7ol7Ff8aJ42SSiteL67K7hwIVNb+ruR/XfYaOmuU2pk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=D8OrNSyqO83LGoFMIDmoMdHUGsy58IXiAuCLyR34ttUB5Msi4P1fBSoCIxgGkRtpSZPXYRXazoVwI7hhi+vhajezaG14HB21XL9jhVXrxNrG4f4tPO1UEvDgKTbeEDGu191OnlidsRjS0M4+81Cp/wrB5st9kAbWZubTw8Gjj4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZtA4Zjpe; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZtA4Zjpe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711564380;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=x8ai1eCaG/6j0FeboJtQr63tU8mIb1SaZAhTgsAvgv8=;
-	b=ZtA4ZjpemYPQgMaUiYZlP65SLR2Aa6a0KYZI6DVWHo+5r7uhOtEc9FtsSek8BG42tO+3tk
-	LnTdrGNUHpV9bQsvaktTOWwM3mkkw+Wr0ttpABrs82VLFX1Qa71i2GiWJPgL8IrB5uOLtO
-	qeO/U7SgQf3UU0FxFuJnlx0z5b3sKmY=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-621-nm-GaXgLMjKZjTLp585U4g-1; Wed, 27 Mar 2024 14:32:58 -0400
-X-MC-Unique: nm-GaXgLMjKZjTLp585U4g-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-341c35fb2eeso17005f8f.0
-        for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 11:32:57 -0700 (PDT)
+	s=arc-20240116; t=1711564784; c=relaxed/simple;
+	bh=OWnp5CThg6tDaMMBTNnmJeJJvyZT4nNOOliFcNl8/dI=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Z56GVvgY4EP26uoCr2HnGrtCJbcSt7hGmTp8tkGNwXG28f21woIYsSA2YMQ4hmkFpsXtGp0Dt4m2WIsO/xq82bforu+RKhXXT0+AdN/VAj22zRNylEg8+cb0URrDmNZZ8297nTKyh16UZLVn2S8OyXbjsOLsEvbbO3eiTbIzaHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7cc7a6a043bso13452939f.0
+        for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 11:39:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711564377; x=1712169177;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x8ai1eCaG/6j0FeboJtQr63tU8mIb1SaZAhTgsAvgv8=;
-        b=QXnOjoHShEK0rEh89YyLlJ7PBn2EXKQB72BLdeg5CWlM04jqtSseje3vaMOBJmN3Nf
-         N5Yu/pvMj6PxLtrUfg3TXAoITdPelmKn9MGap5KKFupzGIjyY65srisInS8tan3MCCFy
-         uomJPGXH/XRsLpI8+AsA2DgxR3adovZ4MoA9vY+eUIhp4rF0VghBam8c5FixQ+01X7VI
-         H1jsgjCYeGYxAgmIldlvo7BUGqLZqkkvyxL/ZW5gU7QWtOZE/vT6L18qyATLp3gUeD6q
-         /+DyLwLQybBwiV8Ck18eTZwsVSDVJ5+ii+NFJODD/DTLq+Qo8a7JseABYJ6UbAFcWb5X
-         Q4YA==
-X-Forwarded-Encrypted: i=1; AJvYcCXQrEVB6Tt97lJX2k9Dh4+solIGU4UYbkuMw1aVsmlUEm6519jjj9yotiyX5/g8O8aSh9HXEeE6C8l2q8f860lqPkJw
-X-Gm-Message-State: AOJu0YzaTJwx2VZGe5rlYfoeff3lgtjwRepWkfQfVPKP8Pbdm00ffvDb
-	sgLjuxG+kmFc/U7JVZdpjZPLCKQipGR5axOUWSjmq8XJxGYitzHjEdlPlL8sPncOoLcqpOjd/Fn
-	+HiBdfH4OfeoKqDx8NWrnR2+PNNz+ToVsAD4GTDWzsafnpk4qJA==
-X-Received: by 2002:a05:6000:1818:b0:341:e617:8f6d with SMTP id m24-20020a056000181800b00341e6178f6dmr519835wrh.7.1711564376848;
-        Wed, 27 Mar 2024 11:32:56 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHFsTVwVp4sS0n+5Nqbdq8XPsApUrLlE4WRNDsIYC+XYK2AgDGPF11U32d+cnpoNsa3JDsyYA==
-X-Received: by 2002:a05:6000:1818:b0:341:e617:8f6d with SMTP id m24-20020a056000181800b00341e6178f6dmr519824wrh.7.1711564376439;
-        Wed, 27 Mar 2024 11:32:56 -0700 (PDT)
-Received: from gerbillo.redhat.com ([2a0d:3341:b0aa:8c10::f71])
-        by smtp.gmail.com with ESMTPSA id ck19-20020a5d5e93000000b00341c6440c36sm11735690wrb.74.2024.03.27.11.32.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Mar 2024 11:32:56 -0700 (PDT)
-Message-ID: <d917d3a5690a0115cb8136e1dda5fbe5621dcd95.camel@redhat.com>
-Subject: Re: mptcp splat
-From: Paolo Abeni <pabeni@redhat.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-  MPTCP Upstream <mptcp@lists.linux.dev>, Matthieu Baerts
- <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>,  Jakub Kicinski
- <kuba@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>
-Date: Wed, 27 Mar 2024 19:32:54 +0100
-In-Reply-To: <CAADnVQLj9bQDonRzJO5z2hMZ7kf6zdU-s6Cm_7_kj-wP3CiUSA@mail.gmail.com>
-References: 
-	<CAADnVQKCxxETthqDpcE1xMGwa5au8JuLr_49QuwemL7uBKfiVg@mail.gmail.com>
-	 <8410a6f61e7a778117819ebeda667687353ffb21.camel@redhat.com>
-	 <CAADnVQLj9bQDonRzJO5z2hMZ7kf6zdU-s6Cm_7_kj-wP3CiUSA@mail.gmail.com>
-Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=mQINBGISiDUBEAC5uMdJicjm3ZlWQJG4u2EU1EhWUSx8IZLUTmEE8zmjPJFSYDcjtfGcbzLPb63BvX7FADmTOkO7gwtDgm501XnQaZgBUnCOUT8qv5MkKsFH20h1XJyqjPeGM55YFAXc+a4WD0YyO5M0+KhDeRLoildeRna1ey944VlZ6Inf67zMYw9vfE5XozBtytFIrRyGEWkQwkjaYhr1cGM8ia24QQVQid3P7SPkR78kJmrT32sGk+TdR4YnZzBvVaojX4AroZrrAQVdOLQWR+w4w1mONfJvahNdjq73tKv51nIpu4SAC1Zmnm3x4u9r22mbMDr0uWqDqwhsvkanYmn4umDKc1ZkBnDIbbumd40x9CKgG6ogVlLYeJa9WyfVMOHDF6f0wRjFjxVoPO6p/ZDkuEa67KCpJnXNYipLJ3MYhdKWBZw0xc3LKiKc+nMfQlo76T/qHMDfRMaMhk+L8gWc3ZlRQFG0/Pd1pdQEiRuvfM5DUXDo/YOZLV0NfRFU9SmtIPhbdm9cV8Hf8mUwubihiJB/9zPvVq8xfiVbdT0sPzBtxW0fXwrbFxYAOFvT0UC2MjlIsukjmXOUJtdZqBE3v3Jf7VnjNVj9P58+MOx9iYo8jl3fNd7biyQWdPDfYk9ncK8km4skfZQIoUVqrWqGDJjHO1W9CQLAxkfOeHrmG29PK9tHIwARAQABtB9QYW9sbyBBYmVuaSA8cGFiZW5pQHJlZGhhdC5jb20+iQJSBBMBCAA8FiEEg1AjqC77wbdLX2LbKSR5jcyPE6QFAmISiDUCGwMFCwkIBwIDIgIBBhUKCQgLAgQWAgMBAh4HAheAAAoJECkkeY3MjxOkJSYQAJcc6MTsuFxYdYZkeWjW//zbD3ApRHzpNlHLVSuJqHr9/aDS+tyszgS8jj9MiqALzgq4iZbg
- 7ZxN9ZsDL38qVIuFkSpgMZCiUHdxBC11J8nbBSLlpnc924UAyr5XrGA99 6Wl5I4Km3128GY6iAkH54pZpOmpoUyBjcxbJWHstzmvyiXrjA2sMzYjt3Xkqp0cJfIEekOi75wnNPofEEJg28XPcFrpkMUFFvB4Aqrdc2yyR8Y36rbw18sIX3dJdomIP3dL7LoJi9mfUKOnr86Z0xltgcLPGYoCiUZMlXyWgB2IPmmcMP2jLJrusICjZxLYJJLofEjznAJSUEwB/3rlvFrSYvkKkVmfnfro5XEr5nStVTECxfy7RTtltwih85LlZEHP8eJWMUDj3P4Q9CWNgz2pWr1t68QuPHWaA+PrXyasDlcRpRXHZCOcvsKhAaCOG8TzCrutOZ5NxdfXTe3f1jVIEab7lNgr+7HiNVS+UPRzmvBc73DAyToKQBn9kC4jh9HoWyYTepjdcxnio0crmara+/HEyRZDQeOzSexf85I4dwxcdPKXv0fmLtxrN57Ae82bHuRlfeTuDG3x3vl/Bjx4O7Lb+oN2BLTmgpYq7V1WJPUwikZg8M+nvDNcsOoWGbU417PbHHn3N7yS0lLGoCCWyrK1OY0QM4EVsL3TjOfUtCNQYW9sbyBBYmVuaSA8cGFvbG8uYWJlbmlAZ21haWwuY29tPokCUgQTAQgAPBYhBINQI6gu+8G3S19i2ykkeY3MjxOkBQJiEoitAhsDBQsJCAcCAyICAQYVCgkICwIEFgIDAQIeBwIXgAAKCRApJHmNzI8TpBzHD/45pUctaCnhee1vkQnmStAYvHmwrWwIEH1lzDMDCpJQHTUQOOJWDAZOFnE/67bxSS81Wie0OKW2jvg1ylmpBA0gPpnzIExQmfP72cQ1TBoeVColVT6Io35BINn+ymM7c0Bn8RvngSEpr3jBtqvvWXjvtnJ5/HbOVQCg62NC6ewosoKJPWpGXMJ9SKsVIOUHsmoWK60spzeiJoSmAwm3zTJQnM5kRh2q
- iWjoCy8L35zPqR5TV+f5WR5hTVCqmLHSgm1jxwKhPg9L+GfuE4d0SWd84y GeOB3sSxlhWsuTj1K6K3MO9srD9hr0puqjO9sAizd0BJP8ucf/AACfrgmzIqZXCfVS7jJ/M+0ic+j1Si3yY8wYPEi3dvbVC0zsoGj9n1R7B7L9c3g1pZ4L9ui428vnPiMnDN3jh9OsdaXeWLvSvTylYvw9q0DEXVQTv4/OkcoMrfEkfbXbtZ3PRlAiddSZA5BDEkkm6P9KA2YAuooi1OD9d4MW8LFAeEicvHG+TPO6jtKTacdXDRe611EfRwTjBs19HmabSUfFcumL6BlVyceIoSqXFe5jOfGpbBevTZtg4kTSHqymGb6ra6sKs+/9aJiONs5NXY7iacZ55qG3Ib1cpQTps9bQILnqpwL2VTaH9TPGWwMY3Nc2VEc08zsLrXnA/yZKqZ1YzSY9MGXWYLkCDQRiEog1ARAAyXMKL+x1lDvLZVQjSUIVlaWswc0nV5y2EzBdbdZZCP3ysGC+s+n7xtq0o1wOvSvaG9h5q7sYZs+AKbuUbeZPu0bPWKoO02i00yVoSgWnEqDbyNeiSW+vI+VdiXITV83lG6pS+pAoTZlRROkpb5xo0gQ5ZeYok8MrkEmJbsPjdoKUJDBFTwrRnaDOfb+Qx1D22PlAZpdKiNtwbNZWiwEQFm6mHkIVSTUe2zSemoqYX4QQRvbmuMyPIbwbdNWlItukjHsffuPivLF/XsI1gDV67S1cVnQbBgrpFDxN62USwewXkNl+ndwa+15wgJFyq4Sd+RSMTPDzDQPFovyDfA/jxN2SK1Lizam6o+LBmvhIxwZOfdYH8bdYCoSpqcKLJVG3qVcTwbhGJr3kpRcBRz39Ml6iZhJyI3pEoX3bJTlR5Pr1Kjpx13qGydSMos94CIYWAKhegI06aTdvvuiigBwjngo/Rk5S+iEGR5KmTqGyp27o6YxZy6D4NIc6PKUzhIUxfvuHNvfu
- sD2W1U7eyLdm/jCgticGDsRtweytsgCSYfbz0gdgUuL3EBYN3JLbAU+UZpy v/fyD4cHDWaizNy/KmOI6FFjvVh4LRCpGTGDVPHsQXaqvzUybaMb7HSfmBBzZqqfVbq9n5FqPjAgD2lJ0rkzb9XnVXHgr6bmMRlaTlBMAEQEAAYkCNgQYAQgAIBYhBINQI6gu+8G3S19i2ykkeY3MjxOkBQJiEog1AhsMAAoJECkkeY3MjxOkY1YQAKdGjHyIdOWSjM8DPLdGJaPgJdugHZowaoyCxffilMGXqc8axBtmYjUIoXurpl+f+a7S0tQhXjGUt09zKlNXxGcebL5TEPFqgJTHN/77ayLslMTtZVYHE2FiIxkvW48yDjZUlefmphGpfpoXe4nRBNto1mMB9Pb9vR47EjNBZCtWWbwJTIEUwHP2Z5fV9nMx9Zw2BhwrfnODnzI8xRWVqk7/5R+FJvl7s3nY4F+svKGD9QHYmxfd8Gx42PZc/qkeCjUORaOf1fsYyChTtJI4iNm6iWbD9HK5LTMzwl0n0lL7CEsBsCJ97i2swm1DQiY1ZJ95G2Nz5PjNRSiymIw9/neTvUT8VJJhzRl3Nb/EmO/qeahfiG7zTpqSn2dEl+AwbcwQrbAhTPzuHIcoLZYV0xDWzAibUnn7pSrQKja+b8kHD9WF+m7dPlRVY7soqEYXylyCOXr5516upH8vVBmqweCIxXSWqPAhQq8d3hB/Ww2A0H0PBTN1REVw8pRLNApEA7C2nX6RW0XmA53PIQvAP0EAakWsqHoKZ5WdpeOcH9iVlUQhRgemQSkhfNaP9LqR1XKujlTuUTpoyT3xwAzkmSxN1nABoutHEO/N87fpIbpbZaIdinF7b9srwUvDOKsywfs5HMiUZhLKoZzCcU/AEFjQsPTATACGsWf3JYPnWxL9
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
+        d=1e100.net; s=20230601; t=1711564782; x=1712169582;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9qaU8+7hCAeHtG22S06R4fg9IvsPb1R87rOtdnNLurY=;
+        b=dNKibQHOUFtCgDGBW8p1GrTZI5ssWbAHEgg+CU4PsqaUNWNffjTmX+1UYRWkQChLD1
+         GLzhod2F0s5mW+vaMMpQne0TuuCKQB3tmcrtB93q7OI5O5WIvTS8ACewvszDou5TgoQB
+         e6wkL0Om1ITBdyIPO5alzCUBeoqf5viy5UIEiYQsssDSxrQm9T/SqWWr+YolcACjzksn
+         t3yftKZf6d7tPIcGwpB/e9U3TjrPKDPpVQ5jSPlughea9Hit3n1SPOxPoWoTP7SaqdW8
+         SvponlkL1nS1QCqFYC19L7XzvtGjVD28QyxEKaIBRYYmwJQVf4IdT/nrED6JknoIEaBN
+         0N5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVhFmjhK+OZGeNI9Vr5UPUAL1kLVRUzt06XT5va3aN5cEHYXnjK0F+ezmAUpiGX3qId1mHq5SrXBwnbq/UDAPPjPbxH
+X-Gm-Message-State: AOJu0Yx2ajyp9oV9OOszfSMBH1awbba/2h5qg6+QlhB4muV1aKxcNCVo
+	MSnhQeaeliBbhV6y6ksCAj9dRrX8vngITKIaoFiUfMr+zfQtALE7HQfN1PgXAMzG0GnIDXN6wWu
+	Vxlbl79uriZB7GpqiYsieWhfUphp2nLzcpfOizAsnakWTa1/zJxE/+zg=
+X-Google-Smtp-Source: AGHT+IHAc5G1hVpV92BoddyxjZu+Gig9KK9KQQnKhUpJoZrt0Zu1Wj3+QjL1lPPaaOAHLlPa9hjB+S2sTZ19enmFdqO44FeKNMn1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:1e09:b0:368:85e5:c1f8 with SMTP id
+ g9-20020a056e021e0900b0036885e5c1f8mr13344ila.0.1711564782114; Wed, 27 Mar
+ 2024 11:39:42 -0700 (PDT)
+Date: Wed, 27 Mar 2024 11:39:42 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d929dd0614a8ba8c@google.com>
+Subject: [syzbot] [audit?] [bpf?] INFO: rcu detected stall in kauditd_thread (4)
+From: syzbot <syzbot+81f5ca46b043d4a1b789@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, audit@vger.kernel.org, 
+	bpf@vger.kernel.org, daniel@iogearbox.net, eparis@redhat.com, 
+	linux-kernel@vger.kernel.org, paul@paul-moore.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 2024-03-27 at 10:00 -0700, Alexei Starovoitov wrote:
-> On Wed, Mar 27, 2024 at 9:56=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> w=
-rote:
-> >=20
-> > On Wed, 2024-03-27 at 09:43 -0700, Alexei Starovoitov wrote:
-> > > I ffwded bpf tree with the recent net fixes and caught this:
-> > >=20
-> > > [   48.386337] WARNING: CPU: 32 PID: 3276 at net/mptcp/subflow.c:1430
-> > > subflow_data_ready+0x147/0x1c0
-> > > [   48.392012] Modules linked in: dummy bpf_testmod(O) [last unloaded=
-:
-> > > bpf_test_no_cfi(O)]
-> > > [   48.396609] CPU: 32 PID: 3276 Comm: test_progs Tainted: G
-> > > O       6.8.0-12873-g2c43c33bfd23 #1014
-> > > #[   48.467143] Call Trace:
-> > > [   48.469094]  <TASK>
-> > > [   48.472159]  ? __warn+0x80/0x180
-> > > [   48.475019]  ? subflow_data_ready+0x147/0x1c0
-> > > [   48.478068]  ? report_bug+0x189/0x1c0
-> > > [   48.480725]  ? handle_bug+0x36/0x70
-> > > [   48.483061]  ? exc_invalid_op+0x13/0x60
-> > > [   48.485809]  ? asm_exc_invalid_op+0x16/0x20
-> > > [   48.488754]  ? subflow_data_ready+0x147/0x1c0
-> > > [   48.492159]  mptcp_set_rcvlowat+0x79/0x1d0
-> > > [   48.495026]  sk_setsockopt+0x6c0/0x1540
-> > >=20
-> > > It doesn't reproduce all the time though.
-> > > Some race?
-> > > Known issue?
-> >=20
-> > It was not known to me. Looks like something related to not so recent
-> > changes (rcvlowat support).
-> >=20
-> > Definitely looks lie a race.
-> >=20
-> > If you could share more info about the running context and/or a full
-> > decoded splat it could help, thanks!
->=20
-> This is just running bpf selftests in parallel:
-> test_progs -j
->=20
-> The end of the splat:
-> [   48.500075]  __bpf_setsockopt+0x6f/0x90
-> [   48.503124]  bpf_sock_ops_setsockopt+0x3c/0x90
-> [   48.506053]  bpf_prog_509ce5db2c7f9981_bpf_test_sockopt_int+0xb4/0x11b
-> [   48.510178]  bpf_prog_dce07e362d941d2b_bpf_test_socket_sockopt+0x12b/0=
-x132
-> [   48.515070]  bpf_prog_348c9b5faaf10092_skops_sockopt+0x954/0xe86
-> [   48.519050]  __cgroup_bpf_run_filter_sock_ops+0xbc/0x250
-> [   48.523836]  tcp_connect+0x879/0x1160
-> [   48.527239]  ? ktime_get_with_offset+0x8d/0x140
-> [   48.531362]  tcp_v6_connect+0x50c/0x870
-> [   48.534609]  ? mptcp_connect+0x129/0x280
-> [   48.538483]  mptcp_connect+0x129/0x280
-> [   48.542436]  __inet_stream_connect+0xce/0x370
-> [   48.546664]  ? rcu_is_watching+0xd/0x40
-> [   48.549063]  ? lock_release+0x1c4/0x280
-> [   48.553497]  ? inet_stream_connect+0x22/0x50
-> [   48.557289]  ? rcu_is_watching+0xd/0x40
-> [   48.560430]  inet_stream_connect+0x36/0x50
-> [   48.563604]  bpf_trampoline_6442491565+0x49/0xef
-> [   48.567770]  ? security_socket_connect+0x34/0x50
-> [   48.575400]  inet_stream_connect+0x5/0x50
-> [   48.577721]  __sys_connect+0x63/0x90
-> [   48.580189]  ? bpf_trace_run2+0xb0/0x1a0
-> [   48.583171]  ? rcu_is_watching+0xd/0x40
-> [   48.585802]  ? syscall_trace_enter+0xfb/0x1e0
-> [   48.588836]  __x64_sys_connect+0x14/0x20
+Hello,
 
-Ouch, it looks bad. BPF should not allow any action on mptcp subflows
-that go through sk_socket. They touch the mptcp main socket, which is
-_not_ protected by the subflow socket lock.
+syzbot found the following issue on:
 
-AFICS currently the relevant set of racing sockopt allowed by bpf boils
-down to SO_RCVLOWAT only - sk_setsockopt(SO_RCVLOWAT) will call sk-
->sk_socket->ops->set_rcvlowat()
+HEAD commit:    fe46a7dd189e Merge tag 'sound-6.9-rc1' of git://git.kernel..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=121a9e21180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=aef2a55903e5791c
+dashboard link: https://syzkaller.appspot.com/bug?extid=81f5ca46b043d4a1b789
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12104f9e180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=112840ee180000
 
-So something like the following (completely untested) should possibly
-address the issue at hand, but I think it would be better/safer
-completely disable ebpf on mptcp subflows, WDYT?
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/089e25869df5/disk-fe46a7dd.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/423b1787914f/vmlinux-fe46a7dd.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/4c043e30c07d/bzImage-fe46a7dd.xz
 
-Thanks,
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+81f5ca46b043d4a1b789@syzkaller.appspotmail.com
 
-Paolo
+rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+rcu: 	1-...!: (1 ticks this GP) idle=9bf4/1/0x4000000000000000 softirq=6591/6591 fqs=5
+rcu: 	(detected by 0, t=10502 jiffies, g=7873, q=65 ncpus=2)
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 PID: 28 Comm: kauditd Not tainted 6.8.0-syzkaller-08951-gfe46a7dd189e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
+RIP: 0010:write_comp_data+0x0/0x90 kernel/kcov.c:230
+Code: 48 8b 05 13 e2 76 7e 48 8b 80 08 16 00 00 c3 cc cc cc cc 0f 1f 80 00 00 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 <49> 89 d2 49 89 f8 49 89 f1 65 48 8b 15 df e1 76 7e 65 8b 05 e0 e1
+RSP: 0018:ffffc90000a08d78 EFLAGS: 00000046
+RAX: 0000000000000001 RBX: 0000000000000001 RCX: ffffffff88e73a44
+RDX: 0000000000000001 RSI: 0000000000000000 RDI: 0000000000000005
+RBP: 000000000003d3cc R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000002 R12: ffff8880b952cac0
+R13: ffff88802abeb340 R14: ffff88802abeb340 R15: ffffffff88e73220
+FS:  0000000000000000(0000) GS:ffff8880b9500000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000555582f0dca8 CR3: 000000002bcea000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <NMI>
+ </NMI>
+ <IRQ>
+ advance_sched+0x824/0xc60 net/sched/sch_taprio.c:925
+ __run_hrtimer kernel/time/hrtimer.c:1692 [inline]
+ __hrtimer_run_queues+0x20c/0xc20 kernel/time/hrtimer.c:1756
+ hrtimer_interrupt+0x31b/0x800 kernel/time/hrtimer.c:1818
+ local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1032 [inline]
+ __sysvec_apic_timer_interrupt+0x10f/0x410 arch/x86/kernel/apic/apic.c:1049
+ instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1043 [inline]
+ sysvec_apic_timer_interrupt+0x90/0xb0 arch/x86/kernel/apic/apic.c:1043
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+RIP: 0010:console_flush_all+0xa19/0xd70 kernel/printk/printk.c:2979
+Code: e8 9c dd 25 00 9c 5b 81 e3 00 02 00 00 31 ff 48 89 de e8 0a c9 1e 00 48 85 db 0f 85 8b 01 00 00 e8 ec cd 1e 00 fb 48 8b 04 24 <4c> 89 fa 83 e2 07 0f b6 00 38 d0 7f 08 84 c0 0f 85 a9 02 00 00 41
+RSP: 0018:ffffc90000a47a98 EFLAGS: 00000293
+RAX: fffff52000148f7a RBX: 0000000000000000 RCX: ffffffff816e2ab6
+RDX: ffff888018ee9e00 RSI: ffffffff816e2ac4 RDI: 0000000000000007
+RBP: dffffc0000000000 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000003 R12: 0000000000000200
+R13: ffffffff8e3995f8 R14: ffffffff8e3995a0 R15: ffffc90000a47bd0
+ console_unlock+0xae/0x290 kernel/printk/printk.c:3042
+ vprintk_emit kernel/printk/printk.c:2342 [inline]
+ vprintk_emit+0x11a/0x5a0 kernel/printk/printk.c:2297
+ vprintk+0x7f/0xa0 kernel/printk/printk_safe.c:45
+ _printk+0xc8/0x100 kernel/printk/printk.c:2367
+ kauditd_printk_skb kernel/audit.c:546 [inline]
+ kauditd_hold_skb+0x1fb/0x240 kernel/audit.c:581
+ kauditd_send_queue+0x236/0x290 kernel/audit.c:766
+ kauditd_thread+0x61e/0xa80 kernel/audit.c:890
+ kthread+0x2c1/0x3a0 kernel/kthread.c:388
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
+ </TASK>
+INFO: NMI handler (nmi_cpu_backtrace_handler) took too long to run: 2.415 msecs
+rcu: rcu_preempt kthread starved for 10491 jiffies! g7873 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=0
+rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
+rcu: RCU grace-period kthread stack dump:
+task:rcu_preempt     state:R  running task     stack:28304 pid:16    tgid:16    ppid:2      flags:0x00004000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5409 [inline]
+ __schedule+0xf15/0x5c70 kernel/sched/core.c:6736
+ __schedule_loop kernel/sched/core.c:6813 [inline]
+ schedule+0xe7/0x350 kernel/sched/core.c:6828
+ schedule_timeout+0x136/0x2a0 kernel/time/timer.c:2572
+ rcu_gp_fqs_loop+0x1eb/0xb00 kernel/rcu/tree.c:1663
+ rcu_gp_kthread+0x271/0x380 kernel/rcu/tree.c:1862
+ kthread+0x2c1/0x3a0 kernel/kthread.c:388
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
+ </TASK>
+rcu: Stack dump where RCU GP kthread last ran:
+CPU: 0 PID: 43 Comm: kworker/u8:3 Not tainted 6.8.0-syzkaller-08951-gfe46a7dd189e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
+Workqueue: events_unbound toggle_allocation_gate
+RIP: 0010:csd_lock_wait kernel/smp.c:311 [inline]
+RIP: 0010:smp_call_function_many_cond+0x4e7/0x1590 kernel/smp.c:855
+Code: 0c 00 85 ed 74 4d 48 b8 00 00 00 00 00 fc ff df 4d 89 f4 4c 89 f5 49 c1 ec 03 83 e5 07 49 01 c4 83 c5 03 e8 4b 05 0c 00 f3 90 <41> 0f b6 04 24 40 38 c5 7c 08 84 c0 0f 85 5d 0e 00 00 8b 43 08 31
+RSP: 0018:ffffc90000b37910 EFLAGS: 00000293
+RAX: 0000000000000000 RBX: ffff8880b9544380 RCX: ffffffff8180f38b
+RDX: ffff8880192f0000 RSI: ffffffff8180f365 RDI: 0000000000000005
+RBP: 0000000000000003 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000006 R12: ffffed10172a8871
+R13: 0000000000000001 R14: ffff8880b9544388 R15: ffff8880b943f840
+FS:  0000000000000000(0000) GS:ffff8880b9400000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055e176bb4000 CR3: 000000000d57a000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ </IRQ>
+ <TASK>
+ on_each_cpu_cond_mask+0x40/0x90 kernel/smp.c:1023
+ on_each_cpu include/linux/smp.h:71 [inline]
+ text_poke_sync arch/x86/kernel/alternative.c:2086 [inline]
+ text_poke_bp_batch+0x22b/0x760 arch/x86/kernel/alternative.c:2296
+ text_poke_flush arch/x86/kernel/alternative.c:2487 [inline]
+ text_poke_flush arch/x86/kernel/alternative.c:2484 [inline]
+ text_poke_finish+0x30/0x40 arch/x86/kernel/alternative.c:2494
+ arch_jump_label_transform_apply+0x1c/0x30 arch/x86/kernel/jump_label.c:146
+ jump_label_update+0x1d7/0x400 kernel/jump_label.c:829
+ static_key_enable_cpuslocked+0x1b7/0x270 kernel/jump_label.c:205
+ static_key_enable+0x1a/0x20 kernel/jump_label.c:218
+ toggle_allocation_gate mm/kfence/core.c:826 [inline]
+ toggle_allocation_gate+0xf8/0x250 mm/kfence/core.c:818
+ process_one_work+0x9a9/0x1a60 kernel/workqueue.c:3254
+ process_scheduled_works kernel/workqueue.c:3335 [inline]
+ worker_thread+0x6c8/0xf70 kernel/workqueue.c:3416
+ kthread+0x2c1/0x3a0 kernel/kthread.c:388
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
+ </TASK>
+watchdog: BUG: soft lockup - CPU#0 stuck for 246s! [kworker/u8:3:43]
+Modules linked in:
+irq event stamp: 519008
+hardirqs last  enabled at (519007): [<ffffffff8ad251cb>] irqentry_exit+0x3b/0x90 kernel/entry/common.c:351
+hardirqs last disabled at (519008): [<ffffffff8ad239ae>] sysvec_apic_timer_interrupt+0xe/0xb0 arch/x86/kernel/apic/apic.c:1043
+softirqs last  enabled at (519006): [<ffffffff8ad63156>] softirq_handle_end kernel/softirq.c:400 [inline]
+softirqs last  enabled at (519006): [<ffffffff8ad63156>] __do_softirq+0x596/0x8de kernel/softirq.c:583
+softirqs last disabled at (518991): [<ffffffff8151a149>] invoke_softirq kernel/softirq.c:428 [inline]
+softirqs last disabled at (518991): [<ffffffff8151a149>] __irq_exit_rcu kernel/softirq.c:633 [inline]
+softirqs last disabled at (518991): [<ffffffff8151a149>] irq_exit_rcu+0xb9/0x120 kernel/softirq.c:645
+CPU: 0 PID: 43 Comm: kworker/u8:3 Not tainted 6.8.0-syzkaller-08951-gfe46a7dd189e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
+Workqueue: events_unbound toggle_allocation_gate
+RIP: 0010:preempt_count arch/x86/include/asm/preempt.h:26 [inline]
+RIP: 0010:check_kcov_mode kernel/kcov.c:173 [inline]
+RIP: 0010:write_comp_data+0x11/0x90 kernel/kcov.c:236
+Code: cc cc 0f 1f 80 00 00 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 49 89 d2 49 89 f8 49 89 f1 65 48 8b 15 df e1 76 7e <65> 8b 05 e0 e1 76 7e a9 00 01 ff 00 74 0f f6 c4 01 74 59 8b 82 14
+RSP: 0018:ffffc90000b37908 EFLAGS: 00000202
+RAX: 0000000000000001 RBX: ffff8880b9544380 RCX: ffffffff8180f38b
+RDX: ffff8880192f0000 RSI: 0000000000000000 RDI: 0000000000000005
+RBP: 0000000000000003 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000006 R12: ffffed10172a8871
+R13: 0000000000000001 R14: ffff8880b9544388 R15: ffff8880b943f840
+FS:  0000000000000000(0000) GS:ffff8880b9400000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055e176bb4000 CR3: 000000000d57a000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ </IRQ>
+ <TASK>
+ csd_lock_wait kernel/smp.c:311 [inline]
+ smp_call_function_many_cond+0x50b/0x1590 kernel/smp.c:855
+ on_each_cpu_cond_mask+0x40/0x90 kernel/smp.c:1023
+ on_each_cpu include/linux/smp.h:71 [inline]
+ text_poke_sync arch/x86/kernel/alternative.c:2086 [inline]
+ text_poke_bp_batch+0x22b/0x760 arch/x86/kernel/alternative.c:2296
+ text_poke_flush arch/x86/kernel/alternative.c:2487 [inline]
+ text_poke_flush arch/x86/kernel/alternative.c:2484 [inline]
+ text_poke_finish+0x30/0x40 arch/x86/kernel/alternative.c:2494
+ arch_jump_label_transform_apply+0x1c/0x30 arch/x86/kernel/jump_label.c:146
+ jump_label_update+0x1d7/0x400 kernel/jump_label.c:829
+ static_key_enable_cpuslocked+0x1b7/0x270 kernel/jump_label.c:205
+ static_key_enable+0x1a/0x20 kernel/jump_label.c:218
+ toggle_allocation_gate mm/kfence/core.c:826 [inline]
+ toggle_allocation_gate+0xf8/0x250 mm/kfence/core.c:818
+ process_one_work+0x9a9/0x1a60 kernel/workqueue.c:3254
+ process_scheduled_works kernel/workqueue.c:3335 [inline]
+ worker_thread+0x6c8/0xf70 kernel/workqueue.c:3416
+ kthread+0x2c1/0x3a0 kernel/kthread.c:388
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
+ </TASK>
+
 
 ---
-diff --git a/net/mptcp/sockopt.c b/net/mptcp/sockopt.c
-index dcd1c76d2a3b..6e5e64c2cf89 100644
---- a/net/mptcp/sockopt.c
-+++ b/net/mptcp/sockopt.c
-@@ -1493,6 +1493,9 @@ int mptcp_set_rcvlowat(struct sock *sk, int val)
- 	struct mptcp_subflow_context *subflow;
- 	int space, cap;
-=20
-+	if (has_current_bpf_ctx())
-+		return -EINVAL;
-+
- 	if (sk->sk_userlocks & SOCK_RCVBUF_LOCK)
- 		cap =3D sk->sk_rcvbuf >> 1;
- 	else
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
