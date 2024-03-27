@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989501DDD1
-	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 22:10:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989E1153511;
+	Wed, 27 Mar 2024 22:10:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711577433; cv=none; b=koBXC2zyX7tYs3a51lWjFVwEEwHDeyJtwnhfFSU+YOdSe7P7NhC9HKcTvxc1jldkaC1T0lNzVqSnkCS0vdME45iMebG2yfCtHWbp/PoCHt9x5RkTFmZvfeE6SeNkCrkmqh53+exYchuAlaIE3xLyVxr6ZMg2s2MFq0PFdzzBb/g=
+	t=1711577433; cv=none; b=kqV4ruboyW2wdK3TNl5Qmf5eDWd1rE+aaq5CKdoBMhHQMecQKLj3U96bVpandnO8M9hGK3F9bQezM8OvAfEqcZXjFvtjXHucQhjdGf7UrSZXDY3PegwKGRqWoQpoCtEXAEBjX5q8htL2MN5qDYpN25gaygj6FVNDLXV89VzY9C8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1711577433; c=relaxed/simple;
-	bh=pDYGyawPGEmDGFPRCqJt+G4naw1fg9dnue6C4Jh0Lkw=;
+	bh=++k0Av1KN6XD6lDnmn+sB/vOhM/0gXGBQQjyUi7oo/E=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Q9YplzTYRt61X9BBA4UZDadnuaj/Y/UbSVF3qXtopQBo+qpmrF/f8wzBmYW3zffvswoAq+AhATm8MJ5GFNIImIoDGZJZ7bQeNu74D+G2ISEwTshVDV4wlL8mdhRs/dY6wCvX73mcIWpn0ljVeVXx/eDdH6WBCzs129JS5d/YxmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g5vJ4rQf; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=Mo5w9aP1/LQK25UgrfL9v3X4wzUikYLL2YZRy70KnOW4cH0BuY1zrFdt1Dl1V/iub9H9zEpLYV6Gs5RRxEC8I6vpD1cwe5mhvxcADz5AcnKnZlbOsC6/5Da6jvzgv0+ov5J7CVzsrqQfzOetts+9SdggvHshfS1aIfBhcf0mwD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ba8aXH8U; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g5vJ4rQf"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 215DDC43390;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ba8aXH8U"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 34264C433F1;
 	Wed, 27 Mar 2024 22:10:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1711577433;
-	bh=pDYGyawPGEmDGFPRCqJt+G4naw1fg9dnue6C4Jh0Lkw=;
+	bh=++k0Av1KN6XD6lDnmn+sB/vOhM/0gXGBQQjyUi7oo/E=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=g5vJ4rQf9+0SFGkdMHejVf07pi+g8A33QwFrV1mWi7VlS7wqfk89djZeXCp24TZz5
-	 VT1OxLShG+IXEPj61vlskez7NuCBNb/Yt3YJFY72stfg+qo2Z7p0PA4ZLELF0vY24K
-	 PoRtEcIsG/oGXbo0YNJwvHRw0YAYuvrlWmenD9muG2hhSyWN7M9ljJMXDyAYwB2xmg
-	 5CPxDL4QHkO2ahCozvPgeqqtUY8RgCI3Owp07S7p77JGySaosc3e/FrJQe3uzN4kEe
-	 875Ab3YKH/qxtksHw2ndsUp5beVwoysMr37HWsqZD4ilQEo3SSATQ7TsteRg8ugG/l
-	 J3i6HiOqyWZtw==
+	b=Ba8aXH8Ut+LFva1gZgboycMtv8egaEOlXjkLLeKkBpQL9a4CsPU1zmlNIbrjzNPCG
+	 j+6L03vnNxf2WT2ph+yXJPR+UgbybXXZCMiqNGlQOvGdS8eWhRIFgvJ3ihkfrcPkuh
+	 4lkwCrUCGp5n/tFrflKUgEsbVPhVrjUHNetcaRFoGeICgJDt2msA6/iycVvzB20Yav
+	 H6HLSQEtlqorO2zjJw+uZwhYyCNHh31eeMewU1jE96cxU6SwppJ1qhPc/4T+PTix13
+	 yizJKaHs3hMEPEM2urEUgJHOk7w1V0/JNVMFhQ6wSJP+xHNAoE/r1Y68ytjd3/MBDP
+	 QPheC0340Haog==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 08E88D2D0EB;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 21C26D9505F;
 	Wed, 27 Mar 2024 22:10:33 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -37,51 +37,40 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 bpf-next 0/6] bench: fast in-kernel triggering benchmarks
+Subject: Re: [PATCH bpf-next 1/2] bpf: Remove CONFIG_X86 and CONFIG_DYNAMIC_FTRACE
+ guard from the tcp-cc kfuncs
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171157743303.7147.9524380873313435641.git-patchwork-notify@kernel.org>
+ <171157743313.7147.9400834997000407590.git-patchwork-notify@kernel.org>
 Date: Wed, 27 Mar 2024 22:10:33 +0000
-References: <20240326162151.3981687-1-andrii@kernel.org>
-In-Reply-To: <20240326162151.3981687-1-andrii@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@kernel.org, kernel-team@meta.com
+References: <20240322191433.4133280-1-martin.lau@linux.dev>
+In-Reply-To: <20240322191433.4133280-1-martin.lau@linux.dev>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, netdev@vger.kernel.org, kernel-team@meta.com,
+ jolsa@kernel.org
 
 Hello:
 
 This series was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Tue, 26 Mar 2024 09:21:45 -0700 you wrote:
-> Remove "legacy" triggering benchmarks which rely on syscalls (and thus syscall
-> overhead is a noticeable part of benchmark, unfortunately). Replace them with
-> faster versions that rely on triggering BPF programs in-kernel through another
-> simple "driver" BPF program. See patch #2 with comparison results.
+On Fri, 22 Mar 2024 12:14:32 -0700 you wrote:
+> From: Martin KaFai Lau <martin.lau@kernel.org>
 > 
-> raw_tp/tp/fmodret benchmarks required adding a simple kfunc in kernel to be
-> able to trigger a simple tracepoint from BPF program (plus it is also allowed
-> to be replaced by fmod_ret programs). This limits raw_tp/tp/fmodret benchmarks
-> to new kernels only, but it keeps bench tool itself very portable and most of
-> other benchmarks will still work on wide variety of kernels without the need
-> to worry about building and deploying custom kernel module. See patches #5
-> and #6 for details.
+> The commit 7aae231ac93b ("bpf: tcp: Limit calling some tcp cc functions to CONFIG_DYNAMIC_FTRACE")
+> added CONFIG_DYNAMIC_FTRACE guard because pahole was only generating
+> btf for ftrace-able functions. The ftrace filter had already been
+> removed from pahole, so the CONFIG_DYNAMIC_FTRACE guard can be
+> removed.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2,bpf-next,1/6] selftests/bpf: rename and clean up userspace-triggered benchmarks
-    https://git.kernel.org/bpf/bpf-next/c/8f54386ea7ec
-  - [v2,bpf-next,2/6] selftests/bpf: add batched, mostly in-kernel BPF triggering benchmarks
-    https://git.kernel.org/bpf/bpf-next/c/e6c97e34ad7e
-  - [v2,bpf-next,3/6] selftests/bpf: remove syscall-driven benchs, keep syscall-count only
-    https://git.kernel.org/bpf/bpf-next/c/850860ee6712
-  - [v2,bpf-next,4/6] selftests/bpf: lazy-load trigger bench BPF programs
-    https://git.kernel.org/bpf/bpf-next/c/f328a70ab28b
-  - [v2,bpf-next,5/6] bpf: add bpf_modify_return_test_tp() kfunc triggering tracepoint
-    https://git.kernel.org/bpf/bpf-next/c/c55e25089eba
-  - [v2,bpf-next,6/6] selftests/bpf: add batched tp/raw_tp/fmodret tests
-    https://git.kernel.org/bpf/bpf-next/c/b1d5f62f825d
+  - [bpf-next,1/2] bpf: Remove CONFIG_X86 and CONFIG_DYNAMIC_FTRACE guard from the tcp-cc kfuncs
+    https://git.kernel.org/bpf/bpf-next/c/88be2ea40f94
+  - [bpf-next,2/2] selftests/bpf: Test loading bpf-tcp-cc prog calling the kernel tcp-cc kfuncs
+    https://git.kernel.org/bpf/bpf-next/c/74c8edc68573
 
 You are awesome, thank you!
 -- 
