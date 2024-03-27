@@ -1,80 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989E1153511;
-	Wed, 27 Mar 2024 22:10:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63648150982;
+	Wed, 27 Mar 2024 22:15:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711577433; cv=none; b=kqV4ruboyW2wdK3TNl5Qmf5eDWd1rE+aaq5CKdoBMhHQMecQKLj3U96bVpandnO8M9hGK3F9bQezM8OvAfEqcZXjFvtjXHucQhjdGf7UrSZXDY3PegwKGRqWoQpoCtEXAEBjX5q8htL2MN5qDYpN25gaygj6FVNDLXV89VzY9C8=
+	t=1711577710; cv=none; b=G87xTNC68QF1JGe3dTjhdnNL4p719HWxoybEtShdY6zsPOoGGI0USYeKNutrrUdt75yjgFKIuBeLCRJZtvmvFIHlm0wEhS9Xugi0Cjg68UkjZg3DZD7EUisLfqqz2PBWHLwbalX+gGBcOxoHOZasYqoWxV7u1oVS/g7B7gYcz5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711577433; c=relaxed/simple;
-	bh=++k0Av1KN6XD6lDnmn+sB/vOhM/0gXGBQQjyUi7oo/E=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Mo5w9aP1/LQK25UgrfL9v3X4wzUikYLL2YZRy70KnOW4cH0BuY1zrFdt1Dl1V/iub9H9zEpLYV6Gs5RRxEC8I6vpD1cwe5mhvxcADz5AcnKnZlbOsC6/5Da6jvzgv0+ov5J7CVzsrqQfzOetts+9SdggvHshfS1aIfBhcf0mwD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ba8aXH8U; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711577710; c=relaxed/simple;
+	bh=EmGfbaHPm+aFTlR4ccslw1IMrcCRecczkG1J6vjkS7g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PrTBiUMHPzInL6bEd9zoHVVznw5/TvynGNRvZcUmHNs4Aa0bQTbPS23FNLI3gWNq6SpPyBhEhJ+yqqYbuClk1aZ+z9RyGCacwP+4z+SXx27HJUlZWNTfyJFAOstiqGBKsvl8IDsD2LwZ6bGT2RjaK2qo8DkA02XW5fyZPILPDzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mywy/MLX; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ba8aXH8U"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 34264C433F1;
-	Wed, 27 Mar 2024 22:10:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711577433;
-	bh=++k0Av1KN6XD6lDnmn+sB/vOhM/0gXGBQQjyUi7oo/E=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Ba8aXH8Ut+LFva1gZgboycMtv8egaEOlXjkLLeKkBpQL9a4CsPU1zmlNIbrjzNPCG
-	 j+6L03vnNxf2WT2ph+yXJPR+UgbybXXZCMiqNGlQOvGdS8eWhRIFgvJ3ihkfrcPkuh
-	 4lkwCrUCGp5n/tFrflKUgEsbVPhVrjUHNetcaRFoGeICgJDt2msA6/iycVvzB20Yav
-	 H6HLSQEtlqorO2zjJw+uZwhYyCNHh31eeMewU1jE96cxU6SwppJ1qhPc/4T+PTix13
-	 yizJKaHs3hMEPEM2urEUgJHOk7w1V0/JNVMFhQ6wSJP+xHNAoE/r1Y68ytjd3/MBDP
-	 QPheC0340Haog==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 21C26D9505F;
-	Wed, 27 Mar 2024 22:10:33 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mywy/MLX"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4149532da36so2732015e9.0;
+        Wed, 27 Mar 2024 15:15:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711577707; x=1712182507; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Auzs3g7lc20T4kV1ZR58p05peuhuFlI73ot3Pl+s/Hg=;
+        b=Mywy/MLXMHi2DoQEw4S7+FSMyxsoSOOaF7Vf3RyrC2+0kuZRDyJGzIwGEqCBk5NgYV
+         L0vray300PchH4TqdTS0CKRECbfHCrD83MSI11qzMf6DjfMkDhvCPlDbvSBtBaVimLqW
+         Qdt1zGoAfgBe1h8jWyZ8m4OvKSSlz6Zxd01lio8MTOBA07R2IRgo5j07wfXlTmqWF9CE
+         IiQbn6kWLyRPDoBRqxsLe8WCTfSyVTZKISvgCjZ0w/RrUYFp+VgXiqQUBT7A8P1hgL8B
+         /pq8EecS03UklkYKiBM1qiPWCol1tKmEhF/CDZzuUs28obf+No7k94kZL/yJDbTWIsKw
+         fkVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711577707; x=1712182507;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Auzs3g7lc20T4kV1ZR58p05peuhuFlI73ot3Pl+s/Hg=;
+        b=ATN+RDsKLh9u5k+Lj0ylnivBoGx0qj4snyX8Rw1IizP0n7aao5Bd35qwVXxNwpDZhy
+         AYO2MHFWIk1g0mitLEsQ0z/+5KSollkL7iiBsB8ryA2QgdBlGpkZFR7xi5NN6k43+tNh
+         ZR+Dtcgi6CWiaOBd8B0+BkvHp/9Q5w0thxPzK+OpjRJw2ZT5+oByQIrZzjf7ixGWLgDK
+         gO9AnQSs+LGlh5BFyrvkCcNewjy7qSZ9AvnEhDOUpghw9cVXlgFKhvVEEchiwtzu7k1e
+         rV0aBE2/k5jqRswi5bmjB5PY1FAqF4PkPJdgGyQgGQd/yzuPRjjHuif9EqEn+AmsEKbt
+         WvIA==
+X-Forwarded-Encrypted: i=1; AJvYcCVsnRjdhfqfvjwOKbPE62UsvAJjPKvQXfQ7rCmucMZKNFB6LaBhX3yumSHK7yeJMTLr0tE5PDuOYnD/ja16Nd5bo8MHW2p9dLKY3x31/Tb4oGuzljh7eOyGREF8PWbxKQx/
+X-Gm-Message-State: AOJu0YwDewqkmj1uiFGxkPNMAPYoP5L6E3wy7yWWslvqe7gU82504U32
+	kMPuAjpM0PhYfx8Pb6wNsbRvac57GT/yiUMr+S1r0DyjZm1lYL2eUzQs2ySfcILUhdf5r86+C98
+	Vhqkb00mSlwnXZWAiK2P2NgFtdCQ=
+X-Google-Smtp-Source: AGHT+IEpvuMiIiuE5X2OxxBkqw+arGCfXvVvpYJ504Na3WVmQ8g8bHXmvyvm636hSMCK6hYsO3XBOKMLXeSaHnXc6lQ=
+X-Received: by 2002:a05:600c:35cb:b0:414:910c:450b with SMTP id
+ r11-20020a05600c35cb00b00414910c450bmr881775wmq.4.1711577704932; Wed, 27 Mar
+ 2024 15:15:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 1/2] bpf: Remove CONFIG_X86 and CONFIG_DYNAMIC_FTRACE
- guard from the tcp-cc kfuncs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171157743313.7147.9400834997000407590.git-patchwork-notify@kernel.org>
-Date: Wed, 27 Mar 2024 22:10:33 +0000
-References: <20240322191433.4133280-1-martin.lau@linux.dev>
-In-Reply-To: <20240322191433.4133280-1-martin.lau@linux.dev>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, netdev@vger.kernel.org, kernel-team@meta.com,
- jolsa@kernel.org
+References: <20240326003832.102750-1-cam.alvarez.i@gmail.com>
+In-Reply-To: <20240326003832.102750-1-cam.alvarez.i@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 27 Mar 2024 15:14:53 -0700
+Message-ID: <CAADnVQLfo0m+j6g03epR5Or46AycWbFb7yER2R9RNCT6-6Tx1A@mail.gmail.com>
+Subject: Re: [PATCH] fix array-index-out-of-bounds in bpf_prog_select_runtime
+To: Camila Alvarez <cam.alvarez.i@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	syzbot+d2a2c639d03ac200a4f1@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Mon, Mar 25, 2024 at 5:41=E2=80=AFPM Camila Alvarez <cam.alvarez.i@gmail=
+.com> wrote:
+>
+> BPF documentation specifies that the maximum stack depth for a BPF
+> program is 512 bytes. This is not enforced when selecting a bpf
+> interpreter, thus casuing an index out of bounds error when trying to
+> obtain an interpreter with a bigger stack size.
+>
+> This patch enforces the stack size to be not bigger than
+> 512.
+>
+> Reported-by: syzbot+d2a2c639d03ac200a4f1@syzkaller.appspotmail.com
+> Signed-off-by: Camila Alvarez <cam.alvarez.i@gmail.com>
+> ---
+>  kernel/bpf/core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 696bc55de8e8..8167b3a721e9 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2196,7 +2196,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct =
+bpf_insn *insn)
+>                 BUG_ON(1);
+>                 return 0;
+>  }
+> -
+> +#define BPF_MAX_STACK_SIZE 512
+>  #define PROG_NAME(stack_size) __bpf_prog_run##stack_size
+>  #define DEFINE_BPF_PROG_RUN(stack_size) \
+>  static unsigned int PROG_NAME(stack_size)(const void *ctx, const struct =
+bpf_insn *insn) \
+> @@ -2345,7 +2345,7 @@ static void bpf_prog_select_func(struct bpf_prog *f=
+p)
+>  {
+>  #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+>         u32 stack_depth =3D max_t(u32, fp->aux->stack_depth, 1);
+> -
+> +       stack_depth =3D min_t(u32, stack_depth, BPF_MAX_STACK_SIZE);
+>         fp->bpf_func =3D interpreters[(round_up(stack_depth, 32) / 32) - =
+1];
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+That's not the root cause of the issue.
+syzbot is saying: index 16 is out of range for type '<unknown> *[16]'
 
-On Fri, 22 Mar 2024 12:14:32 -0700 you wrote:
-> From: Martin KaFai Lau <martin.lau@kernel.org>
-> 
-> The commit 7aae231ac93b ("bpf: tcp: Limit calling some tcp cc functions to CONFIG_DYNAMIC_FTRACE")
-> added CONFIG_DYNAMIC_FTRACE guard because pahole was only generating
-> btf for ftrace-able functions. The ftrace filter had already been
-> removed from pahole, so the CONFIG_DYNAMIC_FTRACE guard can be
-> removed.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,1/2] bpf: Remove CONFIG_X86 and CONFIG_DYNAMIC_FTRACE guard from the tcp-cc kfuncs
-    https://git.kernel.org/bpf/bpf-next/c/88be2ea40f94
-  - [bpf-next,2/2] selftests/bpf: Test loading bpf-tcp-cc prog calling the kernel tcp-cc kfuncs
-    https://git.kernel.org/bpf/bpf-next/c/74c8edc68573
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+somehow stack depth got bigger than 512.
+The bug is somewhere in the verifier.
+Please debug it further.
