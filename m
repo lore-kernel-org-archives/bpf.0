@@ -1,465 +1,125 @@
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D139F74BE8
-	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 12:00:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8E017A911;
+	Wed, 27 Mar 2024 12:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711540815; cv=none; b=Lm6dHAqHiGVDpPZcxt2VKDEPShzeRliy8gKCDKK9BxrhLS1gtvQ05SDG84zmkxo51c1ZOY8Ls4246kNOd/TSTPzZ9Memkt56yCOLfiWhBEdm6H0UI1p1kg33vTL+ck942y6VGxSN8A5Fa1qbJW8coLmn4+7+ISaOik8Dhd9j1pI=
+	t=1711542251; cv=none; b=Lhao6yi2d6JJXetG3m+wDiQvakHF7qOX99qEm7VwuR1PD4mUYbuZy9V3/Zx7lV35Lswc7zmK0RfMc/LmtlDofxbQzG3aQ9mh8U+d2d1GxMKt1IWn+E6cobpMtWCJrJPFkBaYYsOHusrOhAt1XmkQLOUkL20ZcW9WRxeVaeSO9BI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711540815; c=relaxed/simple;
-	bh=yLjW5rCXwB7sRVJivKLXR9ozM8e318MFwzeHOiPmlCI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tIgRUMVCP8a9C83i+1BOzQHBAWCPXH+eXWeGJkbVsgWATxozwB3t4qVAPZSIuw2+i3E39Z6yC0WACiacC1cRdooR6E1ejBj+aDDNok39jHpttasRUEyhPaCfoaB5bXfBI7lkeAIhaVR29HXAYo+RrcLRfUWGGYTjpYm0r+oZKQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g3XLi1cM; arc=none smtp.client-ip=209.85.160.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711542251; c=relaxed/simple;
+	bh=aILctM/4IaWB0TVDutDw4QQqKI+aELVY+YewBrIQIbs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BkVau4HwsmcDN7Pfdot3W4Q1YUZ6wYISuIocDjFjpe4D+T+8V8icUIQpZ+Qij64vluRZTZ6wDClNq9P9ZxTmsSQQkHm62XzNwb2/plbwyf8iOHak2DZ1oVKLwi8U+jRWHMWFrjkChaeMtq5okcMB7eluEc7UBCcyuAkLm/NicDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyn+UApI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g3XLi1cM"
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-221a9e5484aso4011622fac.0
-        for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 05:00:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711540813; x=1712145613; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G9QJQrBqCWHPJ3fd8MBbTx/85A6Ik1GzdbQ8sHqi6oY=;
-        b=g3XLi1cMq1GwL02Tru57+RWAXaZ9FSrZ/E4HeRYWJjXNwTiaUwD1Ei7QA1WwK7PUJk
-         kvTvuvNVfl/uhN4uQVgvOeM11HsMYCo/1PjTr03m2DwT87LWilu5GLxK6XMqIWk5hBB8
-         /DPK+Opa3vQPMwZMdvbG0APlGUDqlJrcqlPJHC9PGuVRxyExdWkRMixFwov66y87excJ
-         rTsl/i1NhW5TU1PN7dgLD9nQO7RezObKYPgXl0z+4aFVNRTLL+Z+9WpS1LalfRiPFs8l
-         O6ez8sjuR0uO8L0KnG+QR00vnSB2cHbPPrW9Mo/IDVoML9moaDFm9oXSxl59ij4vr+ot
-         gzzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711540813; x=1712145613;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G9QJQrBqCWHPJ3fd8MBbTx/85A6Ik1GzdbQ8sHqi6oY=;
-        b=mQ8paj89umz02fPwf7Nuxml0k+QFWRVJPYRa6fQZRss4hMabdG3I3JeQwz8j+PHcgq
-         Na5zYWDoSevvF5T3qRK6RHo+5mOBrJANRpPrPGpouq+4uPkSjbYNSZ8W2J4T+9FyeYmK
-         4l3/8S7pUnJiBiGSgfxp2yuvyPYmUZotKFyTvIknKLGfIuAOg5l0xXGWBL1/QsmgBFDL
-         xMh4Z20mLePQKy5G2QUku4sNCd0JZQB96qzsOqxQZ0mGeuWZLpgWZDhvJn8uBrKF2z6A
-         Z7NqtUyygkodAsnNC+MPGzLo6oM7Ij7pmth8ATTqyxQzSW771Vl5CicKfIOa8jhKdGkx
-         s8pg==
-X-Gm-Message-State: AOJu0Yxb7R74xfHg5CHGMfMYFO5fsFec11aOQTDFBpUlJn7cIrWYu8qZ
-	9ocjw1EgTC90Q0xVBlNfokDvkHt45rQdnRhjFdzSPaWJIYotuyVywugXKNeF/h+FLw==
-X-Google-Smtp-Source: AGHT+IGXwhdDBiuceakeQS//Ag8vD1mUNDWJ/BcjqB5QP5BC1jRxjCp155v5cFZGkLdlvO9ThR9QeA==
-X-Received: by 2002:a05:6870:96ac:b0:22a:828b:57ea with SMTP id o44-20020a05687096ac00b0022a828b57eamr1645273oaq.53.1711540812892;
-        Wed, 27 Mar 2024 05:00:12 -0700 (PDT)
-Received: from localhost.localdomain ([39.144.106.203])
-        by smtp.gmail.com with ESMTPSA id fa26-20020a056a002d1a00b006ea7b343877sm7675695pfb.9.2024.03.27.04.59.58
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 27 Mar 2024 05:00:12 -0700 (PDT)
-From: Yafang Shao <laoar.shao@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org
-Cc: bpf@vger.kernel.org,
-	Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Add selftest for bits iter
-Date: Wed, 27 Mar 2024 19:58:48 +0800
-Message-Id: <20240327115848.84695-3-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20240327115848.84695-1-laoar.shao@gmail.com>
-References: <20240327115848.84695-1-laoar.shao@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lyn+UApI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 822D0C433B1;
+	Wed, 27 Mar 2024 12:24:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711542251;
+	bh=aILctM/4IaWB0TVDutDw4QQqKI+aELVY+YewBrIQIbs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=lyn+UApI7G6jvuwj8RDzwBHEzsxkiild9br+8R95OBWE/hoE6C6D83/Y11m+WRbax
+	 5KNcaLV6FEYOUcAvTRJBppcRwUBWDq1KWNwGDGRXartaesCMMvPxHsGEmwMvOzg9Tp
+	 Tm9mTKX0Vm0TPkhTDgxVv965YljQs+jwcNsLWIeJhZUXQ5Pw9Lgk4fe/MF4509rKyH
+	 brQ3hFBFhwzTjnMtGN02oY2Uotft08nHbJdKjTdqcJr+wH0n4aa23LH/LxD7zTbRX/
+	 wEJycNoT6XNubPIZdTcxwZnMxYMws24voL9XGQXwb3DvEJE3HoWgPjw6riY04U0mse
+	 GZqYHLV+YfcYQ==
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a4a39ab1a10so441487666b.1;
+        Wed, 27 Mar 2024 05:24:11 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV/ub6RndJuhGQxC4OCQbHens+xLo2vJ+VCNfqvB9Xa8LrWay5Y+d3WZPMGpyfbuDH08DrG9tYR0Iw1vqoMGvt3wfV3CZ2gwDx1OXwnbRwwLkPeLFG67BlnE1WJ2QzlBcg4
+X-Gm-Message-State: AOJu0Yz+rp5vZQN4sBrDVHF0q78/kNDmCw68f7tLDMjg5XpbMD8kBcyb
+	QoBI2T8jURdQrFVkKAmNkBQz6G4iejlK+oDZtmpk/yjrUYJDHs79HO2kH/MgDH18OD8GZPPBBOY
+	HhX4KUm1GP+w5ZO1eiJ3Aagmsc30=
+X-Google-Smtp-Source: AGHT+IH5QG4gK2oTVi3ncpzY0t5JIQmgvy6v0aZwbtRBomJdCe823Y8g9QFMk8+duWZLnOUiQv1hA8IKlQ37EBfGEDU=
+X-Received: by 2002:a17:906:3610:b0:a47:ae0:160 with SMTP id
+ q16-20020a170906361000b00a470ae00160mr1774953ejb.73.1711542250005; Wed, 27
+ Mar 2024 05:24:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240326224943.86912-1-puranjay12@gmail.com>
+In-Reply-To: <20240326224943.86912-1-puranjay12@gmail.com>
+From: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Date: Wed, 27 Mar 2024 13:23:58 +0100
+X-Gmail-Original-Message-ID: <CAJ+HfNgi=nB1qneuAGkpEb7GihGoegVJFVp5ZN8o-m2v3UG1yw@mail.gmail.com>
+Message-ID: <CAJ+HfNgi=nB1qneuAGkpEb7GihGoegVJFVp5ZN8o-m2v3UG1yw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/2] bpf,riscv: Add support for BPF Arena
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, bpf@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Pu Lehui <pulehui@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add selftests for the newly added bits iter.
-- bits_iter_success
-  - percpu data extracted from the percpu struct should be expected
-  - RCU lock is not required
-  - It is fine without calling bpf_iter_cpumask_next()
-  - It can work as expected when invalid arguments are passed
+On Tue, 26 Mar 2024 at 23:49, Puranjay Mohan <puranjay12@gmail.com> wrote:
+>
+> Changes in V3
+> V2: https://lore.kernel.org/bpf/20240325155434.65589-1-puranjay12@gmail.c=
+om/
+> - Use REG_DONT_CLEAR_MARKER in place of DONT_CLEAR as the name.
+> - Use RV_REG_ZERO for the above as it is guaranteed to be never used in a=
+s
+>   dst/src register in BPF LDX/STX/ST instructions.
+> - Use #define RV_REG_ARENA for RV_REG_S7
+>
+> Changes in V2
+> V1: https://lore.kernel.org/bpf/20240323154652.54572-1-puranjay12@gmail.c=
+om/
+> - Used S7 in place of S11 for storing the kernel_vm_start
+> - Used 17 in place of 16 for DONT_CLEAR marker
+> - Remove an unused variable
+> - Removed some misleading information from the commit message.
+>
+> This series adds the support for PROBE_MEM32 and bpf_addr_space_cast
+> instructions to the RISCV BPF JIT. These two instructions allow the
+> enablement of BPF Arena.
+>
+> All arena related selftests are passing:
+>
+>   root@rv-tester:~/bpf# uname -p
+>   riscv64
+>   root@rv-tester:~/bpf# ./test_progs -a "*arena*"
+>   #3/1     arena_htab/arena_htab_llvm:OK
+>   #3/2     arena_htab/arena_htab_asm:OK
+>   #3       arena_htab:OK
+>   #4/1     arena_list/arena_list_1:OK
+>   #4/2     arena_list/arena_list_1000:OK
+>   #4       arena_list:OK
+>   #434/1   verifier_arena/basic_alloc1:OK
+>   #434/2   verifier_arena/basic_alloc2:OK
+>   #434/3   verifier_arena/basic_alloc3:OK
+>   #434/4   verifier_arena/iter_maps1:OK
+>   #434/5   verifier_arena/iter_maps2:OK
+>   #434/6   verifier_arena/iter_maps3:OK
+>   #434     verifier_arena:OK
+>   Summary: 3/10 PASSED, 0 SKIPPED, 0 FAILED
+>
+> This feature needs the following two fixes in the bpf/bpf.git to work
+> properly:
+>
+> f7f5d1808b1b6 ("bpf: verifier: fix addr_space_cast from as(1) to as(0)")
+> 443574b033876 ("riscv, bpf: Fix kfunc parameters incompatibility between =
+bpf and riscv abi")
+>
+> There is a lot of code repetition for LDX, STX, and ST. I will be sending=
+ a
+> follow-up patch to refactor these.
 
-- bits_iter_failure
-  - bpf_iter_bits_destroy() is required after calling
-    bpf_iter_bits_new()
-  - bpf_iter_bits_destroy() can only destroy an initialized iter
-  - bpf_iter_bits_next() must use an initialized iter
+Thank you, and please address Lehui's remarks as well.
 
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
----
- .../selftests/bpf/prog_tests/bits_iter.c      | 139 +++++++++++++++++
- .../bpf/progs/test_bits_iter_failure.c        |  54 +++++++
- .../bpf/progs/test_bits_iter_success.c        | 146 ++++++++++++++++++
- 3 files changed, 339 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bits_iter.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_bits_iter_failure.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_bits_iter_success.c
+For the series:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bits_iter.c b/tools/testing/selftests/bpf/prog_tests/bits_iter.c
-new file mode 100644
-index 000000000000..0e2520a9dc62
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bits_iter.c
-@@ -0,0 +1,139 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2024 Yafang Shao <laoar.shao@gmail.com> */
-+
-+#define _GNU_SOURCE
-+#include <sched.h>
-+
-+#include <test_progs.h>
-+#include "test_bits_iter_success.skel.h"
-+#include "test_bits_iter_failure.skel.h"
-+#include "cgroup_helpers.h"
-+
-+static const char * const positive_testcases[] = {
-+	"cpumask_memalloc",
-+	"cpumask_copy",
-+};
-+
-+static const char * const negative_testcases[] = {
-+	"null_pointer",
-+	"zero_bit",
-+	"no_mem",
-+	"invalid_bits",
-+};
-+
-+static int read_percpu_data(struct bpf_link *link)
-+{
-+	int iter_fd, len;
-+	char buf[128];
-+	size_t left;
-+	char *p;
-+
-+	iter_fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_GE(iter_fd, 0, "iter_fd"))
-+		return -1;
-+
-+	memset(buf, 0, sizeof(buf));
-+	left = ARRAY_SIZE(buf);
-+	p = buf;
-+	while ((len = read(iter_fd, p, left)) > 0) {
-+		p += len;
-+		left -= len;
-+	}
-+
-+	close(iter_fd);
-+	return 0;
-+}
-+
-+static void verify_iter_success(const char *prog_name, bool negative)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	struct test_bits_iter_success *skel;
-+	union bpf_iter_link_info linfo;
-+	int cgrp_fd, err, i, nr_cpus;
-+	struct bpf_program *prog;
-+	struct bpf_link *link;
-+	cpu_set_t set;
-+
-+	if (setup_cgroup_environment())
-+		return;
-+
-+	/* Utilize the cgroup iter */
-+	cgrp_fd = get_root_cgroup();
-+	if (!ASSERT_GE(cgrp_fd, 0, "create_cgrp"))
-+		goto cleanup;
-+
-+	skel = test_bits_iter_success__open();
-+	if (!ASSERT_OK_PTR(skel, "cpumask_iter_success__open"))
-+		goto close_fd;
-+
-+	skel->bss->pid = getpid();
-+	nr_cpus = libbpf_num_possible_cpus();
-+	skel->bss->total_nr_cpus = nr_cpus;
-+
-+	err = test_bits_iter_success__load(skel);
-+	if (!ASSERT_OK(err, "cpumask_iter_success__load"))
-+		goto destroy;
-+
-+	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
-+	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
-+		goto destroy;
-+
-+	memset(&linfo, 0, sizeof(linfo));
-+	linfo.cgroup.cgroup_fd = cgrp_fd;
-+	linfo.cgroup.order = BPF_CGROUP_ITER_SELF_ONLY;
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+	link = bpf_program__attach_iter(prog, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach"))
-+		goto destroy;
-+
-+	if (negative)
-+		goto negative;
-+
-+	CPU_ZERO(&set);
-+	/* To guarantee the success of "cpumask_copy" at all times */
-+	if (nr_cpus > 16)
-+		nr_cpus = 16;
-+	for (i = 0; i < nr_cpus; i++)
-+		CPU_SET(i, &set);
-+	err = sched_setaffinity(skel->bss->pid, sizeof(set), &set);
-+	if (!ASSERT_OK(err, "setaffinity_all_cpus"))
-+		goto free_link;
-+	err = read_percpu_data(link);
-+	if (!ASSERT_OK(err, "read_percpu_data"))
-+		goto free_link;
-+
-+negative:
-+	ASSERT_OK(skel->bss->err, "task_running");
-+
-+free_link:
-+	bpf_link__destroy(link);
-+destroy:
-+	test_bits_iter_success__destroy(skel);
-+close_fd:
-+	close(cgrp_fd);
-+cleanup:
-+	cleanup_cgroup_environment();
-+}
-+
-+void test_bits_iter(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(positive_testcases); i++) {
-+		if (!test__start_subtest(positive_testcases[i]))
-+			continue;
-+
-+		verify_iter_success(positive_testcases[i], false);
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(negative_testcases); i++) {
-+		if (!test__start_subtest(negative_testcases[i]))
-+			continue;
-+
-+		verify_iter_success(negative_testcases[i], true);
-+	}
-+
-+	RUN_TESTS(test_bits_iter_success);
-+	RUN_TESTS(test_bits_iter_failure);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_bits_iter_failure.c b/tools/testing/selftests/bpf/progs/test_bits_iter_failure.c
-new file mode 100644
-index 000000000000..974d0b7a540e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_bits_iter_failure.c
-@@ -0,0 +1,54 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2024 Yafang Shao <laoar.shao@gmail.com> */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+#include "bpf_misc.h"
-+#include "task_kfunc_common.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int bpf_iter_bits_new(struct bpf_iter_bits *it, const void *unsafe_ptr__ign,
-+		      u32 nr_bits) __ksym __weak;
-+int *bpf_iter_bits_next(struct bpf_iter_bits *it) __ksym __weak;
-+void bpf_iter_bits_destroy(struct bpf_iter_bits *it) __ksym __weak;
-+
-+SEC("iter.s/cgroup")
-+__failure __msg("Unreleased reference id=3 alloc_insn=10")
-+int BPF_PROG(no_destroy, struct bpf_iter_meta *meta, struct cgroup *cgrp)
-+{
-+	struct bpf_iter_bits it;
-+	struct task_struct *p;
-+
-+	p = bpf_task_from_pid(1);
-+	if (!p)
-+		return 1;
-+
-+	bpf_iter_bits_new(&it, p->cpus_ptr, 8192);
-+
-+	bpf_iter_bits_next(&it);
-+	bpf_task_release(p);
-+	return 0;
-+}
-+
-+SEC("iter/cgroup")
-+__failure __msg("expected an initialized iter_bits as arg #1")
-+int BPF_PROG(next_uninit, struct bpf_iter_meta *meta, struct cgroup *cgrp)
-+{
-+	struct bpf_iter_bits *it = NULL;
-+
-+	bpf_iter_bits_next(it);
-+	return 0;
-+}
-+
-+SEC("iter/cgroup")
-+__failure __msg("expected an initialized iter_bits as arg #1")
-+int BPF_PROG(destroy_uninit, struct bpf_iter_meta *meta, struct cgroup *cgrp)
-+{
-+	struct bpf_iter_bits it = {};
-+
-+	bpf_iter_bits_destroy(&it);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_bits_iter_success.c b/tools/testing/selftests/bpf/progs/test_bits_iter_success.c
-new file mode 100644
-index 000000000000..67f4e810e1d2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_bits_iter_success.c
-@@ -0,0 +1,146 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2024 Yafang Shao <laoar.shao@gmail.com> */
-+
-+#include "vmlinux.h"
-+#include <linux/const.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+#include "task_kfunc_common.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+extern const struct rq runqueues __ksym __weak;
-+
-+int bpf_iter_bits_new(struct bpf_iter_bits *it, const void *unsafe_ptr__ign,
-+		      u32 nr_bits) __ksym __weak;
-+int *bpf_iter_bits_next(struct bpf_iter_bits *it) __ksym __weak;
-+void bpf_iter_bits_destroy(struct bpf_iter_bits *it) __ksym __weak;
-+
-+int pid, err, total_nr_cpus;
-+
-+static int cpumask_iter(struct bpf_iter_meta *meta, struct cgroup *cgrp, u32 nr_cpus)
-+{
-+	struct task_struct *p;
-+	u32 nr_running = 0;
-+	struct rq *rq;
-+	int *cpu;
-+
-+	/* epilogue */
-+	if (!cgrp)
-+		return 0;
-+
-+	p = bpf_task_from_pid(pid);
-+	if (!p)
-+		return 1;
-+
-+	bpf_for_each(bits, cpu, p->cpus_ptr, nr_cpus) {
-+		rq = (struct rq *)bpf_per_cpu_ptr(&runqueues, *cpu);
-+		/* Every valid CPU should possess a runqueue, even in the event of being offline */
-+		if (!rq)
-+			break;
-+		nr_running += rq->nr_running;
-+	}
-+	if (nr_running == 0)
-+		err = 1;
-+	bpf_task_release(p);
-+	return 0;
-+}
-+
-+SEC("iter.s/cgroup")
-+int BPF_PROG(cpumask_memalloc, struct bpf_iter_meta *meta, struct cgroup *cgrp)
-+{
-+	return cpumask_iter(meta, cgrp, 128);
-+}
-+
-+SEC("iter.s/cgroup")
-+int BPF_PROG(cpumask_copy, struct bpf_iter_meta *meta, struct cgroup *cgrp)
-+{
-+	return cpumask_iter(meta, cgrp, 16);
-+}
-+
-+SEC("iter.s/cgroup")
-+int BPF_PROG(null_pointer, struct bpf_iter_meta *meta, struct cgroup *cgrp)
-+{
-+	int *cpu;
-+
-+	bpf_for_each(bits, cpu, NULL, 8192)
-+		err++;
-+	return 0;
-+}
-+
-+SEC("iter.s/cgroup")
-+int BPF_PROG(zero_bit, struct bpf_iter_meta *meta, struct cgroup *cgrp)
-+{
-+	struct task_struct *p;
-+	int *cpu;
-+
-+	p = bpf_task_from_pid(pid);
-+	if (!p)
-+		return 1;
-+
-+	bpf_for_each(bits, cpu, p->cpus_ptr, 0)
-+		err++;
-+	bpf_task_release(p);
-+	return 0;
-+}
-+
-+SEC("iter.s/cgroup")
-+int BPF_PROG(no_mem, struct bpf_iter_meta *meta, struct cgroup *cgrp)
-+{
-+	struct task_struct *p;
-+	int *cpu;
-+
-+	p = bpf_task_from_pid(pid);
-+	if (!p)
-+		return 1;
-+
-+	/* The max number of memalloc is 4096, thus it will fail to allocate (8192 * 8) */
-+	bpf_for_each(bits, cpu, p->cpus_ptr, 8192 * 8)
-+		err++;
-+	bpf_task_release(p);
-+	return 0;
-+}
-+
-+SEC("iter.s/cgroup")
-+int BPF_PROG(no_next, struct bpf_iter_meta *meta, struct cgroup *cgrp)
-+{
-+	struct bpf_iter_bits it;
-+	struct task_struct *p;
-+
-+	p = bpf_task_from_pid(1);
-+	if (!p)
-+		return 1;
-+
-+	bpf_iter_bits_new(&it, p->cpus_ptr, 8192);
-+
-+	/* It functions properly without invoking bpf_iter_bits_next(). */
-+
-+	bpf_iter_bits_destroy(&it);
-+	bpf_task_release(p);
-+	return 0;
-+}
-+
-+SEC("iter.s/cgroup")
-+int BPF_PROG(invalid_bits, struct bpf_iter_meta *meta, struct cgroup *cgrp)
-+{
-+	struct task_struct *p;
-+	struct rq *rq;
-+	int *cpu;
-+
-+	p = bpf_task_from_pid(pid);
-+	if (!p)
-+		return 1;
-+
-+	bpf_for_each(bits, cpu, p->cpus_ptr, 8192) {
-+		rq = (struct rq *)bpf_per_cpu_ptr(&runqueues, *cpu);
-+		/* For invalid CPU IDs, the rq must be NULL. */
-+		if (!rq)
-+			err++;
-+	}
-+	bpf_task_release(p);
-+
-+	if (err)
-+		err -= 8192 - total_nr_cpus;
-+	return 0;
-+}
--- 
-2.39.1
-
+Tested-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
