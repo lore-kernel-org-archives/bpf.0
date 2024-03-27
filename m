@@ -1,699 +1,618 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1126A2E645
-	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 08:26:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A59554C600
+	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 10:14:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711527991; cv=none; b=ctXcfD5E4aHq8xgONz4SuYV47GTchE23ywxzntoT+LeWmT/EdDyU8JCOZefdGa0gyeDDYBkapi0ojMNlf2Uds8DEt1PrLWdPi/HlMuVBqKIJP8njxiDAb45AKZKAHxZ3hc/NTRmjvRWF+mkWGdUDwWxyU0nhcP/XOjuM3OQD6IA=
+	t=1711534464; cv=none; b=GRdwHEL60URZGR90oN0eiyldHmeBFdIncFCspVgsi4p7Xw5qtoMpY3MeKpE7PJKEcgDLYRmI7G7Jg4YyFhHVHVo/jfaJgQZ6/vyX8SK1g6Rf2iVB1kOqQL177giSmgZy7ljCOudZ8o9yKGYLvAIGmwI27qzO7MTuC1eX6RLrmIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711527991; c=relaxed/simple;
-	bh=3C82D8fQzuxMsIpMmROY6tapuBrTCnLxauDtUn+PloY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Zbl/+Slx6+SeBrHMpuTSeWUmDUF5qbRNG85Gtjzkx4GMi6kZvl+TNhLWOaAPfcmU4WnZPBqC6+nLfSz+DbExZCq2smGG/YYx9jOKISKAcinFzktrNuqK1cu6bVP7cuuDKEiRTrP0wEHy2kmPOOkgSUjvA0zWpHXa42xwVcPg3x4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sVQq5T7D; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sVQq5T7D"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a46ba938de0so856022666b.3
-        for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 01:26:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711527986; x=1712132786; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IpvizSH+ZSaDBljky7qIjMyPhQvjVnrZhS5XW0BMTHM=;
-        b=sVQq5T7D8qhYIurL368fsq8pjJxn1X9wmL33PqZSqcfGBahpcOSp6sKwopr8FgBc3z
-         MivKZCx+NU/U26mykF88eZmATR9k4ry3MR2j/Ak5vIE2bvR5EhHjD4+MOHZJ8q7EkzJC
-         DydphZLh04cO2B7zuOgBYiKUppy/JA4laRekCkh4xWuWus2VN+bm1vsqPTa1lMU70kTS
-         Z94bm71w9XjbSd3uo+QhSJGNAU8FDJnIJk2H0uGYNVCi87yX1AfXD7WLO4f06E9GjqZ/
-         qJuo3JzGm1uNMHA5KppsoqPBNLS/pWkJOgLeeusyRtbCyT39s1+ilyDRWIm/WQ+zXcof
-         M+Tw==
+	s=arc-20240116; t=1711534464; c=relaxed/simple;
+	bh=MYUxqwJ15Au6j+tzRF+Kb1ngq4X8ptxy3u0nngYX5D0=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Y21c1c64Gd1U1tsR9c/Vk4o37QpqRcjHTvl4ljy1zhUQqARwxTVwqXOIVHUDk/ceO8aTGWuQhXktk+eiiZaioN90vwqVClec1CL740KesZ6yKBqvgyAhGNm+u+tQmOp65DBi1R/EcKYyV7ZscBhXwW4gw6INmwxCKEzlZLv1eMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-368a72042b9so5796735ab.1
+        for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 03:14:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711527986; x=1712132786;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IpvizSH+ZSaDBljky7qIjMyPhQvjVnrZhS5XW0BMTHM=;
-        b=K9vlG9V6UZ5v22hISJEcU3icBQZwzWZpF5FNU7tX0wcM7ibDFI0qUdCK/MZLfZBMZL
-         AuyiqJL9kjPByquWUi+/zH6dQLIy05UNk1pe9Y5LnKvsl4mIofuKkCkPqVueZQzxaaQL
-         s2SESFnMlT/59D6q42xn0abcDiOAQueMiv803dMMR2S8nImoDw82Nci0LL/aF0oSkEOW
-         9yyk7uxJiaW6tX0ytcoIwlI9n8ai4X/NfN2IaARlAsuthOySpQymw9u5uEB2t1Gx9+Nz
-         9znnSWhu6JCBT6aSDVfkMTroGjPZAF55UHqGI/SSE0UKg6f/XEcKVCWL2CckxaSb9RgW
-         lEBA==
-X-Forwarded-Encrypted: i=1; AJvYcCX3zGb53zPLK8Hb4ZFUGwWRTj/rmXn9w4uEEpOuRoCI6Cjzs5G3LRKVttQB1i17wSz2kv478dPjecH6+LKZ9PeGjba+
-X-Gm-Message-State: AOJu0YzjyAQxYfd6O0Z59gnwt16AI4PgF6xvYeM4mQXLRPXpeQww9YLp
-	RT83i2xkAnq37cbUXgNf4efZjbtjCeY0nbvorAqRJIHWg49NQbJPlyiiYJuTwuer8mbJsiT09BM
-	qqklCA1SY5O4XbzHrsv+6sj3piKTJy2/ff3I0
-X-Google-Smtp-Source: AGHT+IGImKja0cMVGG4Ytxw30THqGP1apyT6MfN65eDTe2m9pqFb33CWRFsiDBl9pNhB+4bc94ErH1NDW6DntKRmkuo=
-X-Received: by 2002:a17:906:f2c4:b0:a46:d2eb:1792 with SMTP id
- gz4-20020a170906f2c400b00a46d2eb1792mr3491863ejb.65.1711527986130; Wed, 27
- Mar 2024 01:26:26 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711534461; x=1712139261;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g0x6QznP0naXlFBKhvXrKZHgMeDX4diMgnDySQGYLOM=;
+        b=mc6WBDchj1faJUBmP8yLkveuN53E2ADJCcunTistWAtEbBaHXr0AInO5Y0JRcle+bQ
+         +EHkyL47m39kxodV9XEBo0j4u6lFGgiaqoensW98bHr/QcN8MJZga/su2aHbeOFONO20
+         F9gTkK0A/x2FnKI0LnruMm2d3TKgPNEl/JOFpxRrzYAN7kr1Wb1T1Ri4uMRPsoqEBVop
+         fYEe9VkgPLQjqrQS4L2HeQlg+/EQJ3FroFmMD44OB6nuseuhdAUQ+qfTcHUHXJ1Cl05n
+         ZWLhojsAEOXcPTDoyOrF5st8Lw8jWo4Iz0WpuiFLUO/PJ5HjG7Po+US/qGVeki4VPy5E
+         94DA==
+X-Forwarded-Encrypted: i=1; AJvYcCWF/Ucp62FcT+5uDS0XVYkBUvt+9xgA5/XiFOjnkmNHX96bleb9bD8n6xMRugpI5K5Uo3NIaTlIIrwa6SCiPP/sXisR
+X-Gm-Message-State: AOJu0Yw639pfBsDbDL1IOSNp/c++acaD4eQ/PWh4P9qwAteOHvmy2gJt
+	TBkDxhU9HAbbJYMuiYMUtH/dXFy80e2Y3RQfTwKhd36Yqu/ORUegECIqlGVgfXPtiLX0+EPHaoD
+	6nGkMnLg/rmiZWYHbwD+Sz04njgzmPyuPiQdDND0l1yHngblHbS8Ez+U=
+X-Google-Smtp-Source: AGHT+IETCBh5u6IdKmQut9xl9QiE3UB3Uunj6qxqrxg1m73vxJVwunBZ9Ja5YUCwg2CzfITLrhbLAsIyH5Oo+nNw+3dQaw2TkSgz
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240326225048.785801-1-almasrymina@google.com> <20240326225048.785801-8-almasrymina@google.com>
-In-Reply-To: <20240326225048.785801-8-almasrymina@google.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 27 Mar 2024 01:26:14 -0700
-Message-ID: <CAHS8izMLY_bZhtUy8S5qz+F64qzO40rYa-3z+0xWhXx+2-KfMg@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v7 07/14] page_pool: devmem support
-To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, Linux-MM <linux-mm@kvack.org>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
-	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
-	Matthew Wilcox <willy@infradead.org>
+X-Received: by 2002:a05:6e02:1d0e:b0:366:bbfb:5866 with SMTP id
+ i14-20020a056e021d0e00b00366bbfb5866mr192030ila.3.1711534460953; Wed, 27 Mar
+ 2024 03:14:20 -0700 (PDT)
+Date: Wed, 27 Mar 2024 03:14:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000090fe770614a1ab17@google.com>
+Subject: [syzbot] [bpf?] [net?] possible deadlock in ahci_single_level_irq_intr
+From: syzbot <syzbot+d4066896495db380182e@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com, 
+	jakub@cloudflare.com, john.fastabend@gmail.com, kuba@kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
+	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 26, 2024 at 3:51=E2=80=AFPM Mina Almasry <almasrymina@google.co=
-m> wrote:
->
-> Convert netmem to be a union of struct page and struct netmem. Overload
-> the LSB of struct netmem* to indicate that it's a net_iov, otherwise
-> it's a page.
->
-> Currently these entries in struct page are rented by the page_pool and
-> used exclusively by the net stack:
->
-> struct {
->         unsigned long pp_magic;
->         struct page_pool *pp;
->         unsigned long _pp_mapping_pad;
->         unsigned long dma_addr;
->         atomic_long_t pp_ref_count;
-> };
->
-> Mirror these (and only these) entries into struct net_iov and implement
-> netmem helpers that can access these common fields regardless of
-> whether the underlying type is page or net_iov.
->
-> Implement checks for net_iov in netmem helpers which delegate to mm
-> APIs, to ensure net_iov are never passed to the mm stack.
->
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
->
-> ---
->
-> v7:
-> - Remove static_branch_unlikely from netmem_to_net_iov(). We're getting
->   better results from the fast path in bench_page_pool_simple tests
->   without the static_branch_unlikely, and the addition of
->   static_branch_unlikely doesn't improve performance of devmem TCP.
->
->   Additionally only check netmem_to_net_iov() if
->   CONFIG_DMA_SHARED_BUFFER is enabled, otherwise dmabuf net_iovs cannot
->   exist anyway.
->
->   net-next base: 8 cycle fast path.
->   with static_branch_unlikely: 10 cycle fast path.
->   without static_branch_unlikely: 9 cycle fast path.
->   CONFIG_DMA_SHARED_BUFFER disabled: 8 cycle fast path as baseline.
->
->   Performance of devmem TCP is at 95% line rate is regardless of
->   static_branch_unlikely or not.
->
-> v6:
-> - Rebased on top of the merged netmem_ref type.
-> - Rebased on top of the merged skb_pp_frag_ref() changes.
->
-> v5:
-> - Use netmem instead of page* with LSB set.
-> - Use pp_ref_count for refcounting net_iov.
-> - Removed many of the custom checks for netmem.
->
-> v1:
-> - Disable fragmentation support for iov properly.
-> - fix napi_pp_put_page() path (Yunsheng).
-> - Use pp_frag_count for devmem refcounting.
->
-> To: linux-mm@kvack.org
+Hello,
 
-It looks like this tag to add linux-mm did not work as intended. CCing
-linux-mm manually.
+syzbot found the following issue on:
 
-> Cc: Matthew Wilcox <willy@infradead.org>
->
-> ---
->  include/net/netmem.h            | 143 ++++++++++++++++++++++++++++++--
->  include/net/page_pool/helpers.h |  25 +++---
->  include/net/page_pool/types.h   |   1 +
->  net/core/page_pool.c            |  26 +++---
->  net/core/skbuff.c               |  23 +++--
->  5 files changed, 171 insertions(+), 47 deletions(-)
->
-> diff --git a/include/net/netmem.h b/include/net/netmem.h
-> index 21f53b29e5fe..74eeaa34883e 100644
-> --- a/include/net/netmem.h
-> +++ b/include/net/netmem.h
-> @@ -9,14 +9,51 @@
->  #define _NET_NETMEM_H
->
->  #include <net/devmem.h>
-> +#include <net/net_debug.h>
->
->  /* net_iov */
->
-> +DECLARE_STATIC_KEY_FALSE(page_pool_mem_providers);
-> +
-> +/*  We overload the LSB of the struct page pointer to indicate whether i=
-t's
-> + *  a page or net_iov.
-> + */
-> +#define NET_IOV 0x01UL
-> +
->  struct net_iov {
-> +       unsigned long __unused_padding;
-> +       unsigned long pp_magic;
-> +       struct page_pool *pp;
->         struct dmabuf_genpool_chunk_owner *owner;
->         unsigned long dma_addr;
-> +       atomic_long_t pp_ref_count;
->  };
->
-> +/* These fields in struct page are used by the page_pool and net stack:
-> + *
-> + *     struct {
-> + *             unsigned long pp_magic;
-> + *             struct page_pool *pp;
-> + *             unsigned long _pp_mapping_pad;
-> + *             unsigned long dma_addr;
-> + *             atomic_long_t pp_ref_count;
-> + *     };
-> + *
-> + * We mirror the page_pool fields here so the page_pool can access these=
- fields
-> + * without worrying whether the underlying fields belong to a page or ne=
-t_iov.
-> + *
-> + * The non-net stack fields of struct page are private to the mm stack a=
-nd must
-> + * never be mirrored to net_iov.
-> + */
-> +#define NET_IOV_ASSERT_OFFSET(pg, iov)             \
-> +       static_assert(offsetof(struct page, pg) =3D=3D \
-> +                     offsetof(struct net_iov, iov))
-> +NET_IOV_ASSERT_OFFSET(pp_magic, pp_magic);
-> +NET_IOV_ASSERT_OFFSET(pp, pp);
-> +NET_IOV_ASSERT_OFFSET(dma_addr, dma_addr);
-> +NET_IOV_ASSERT_OFFSET(pp_ref_count, pp_ref_count);
-> +#undef NET_IOV_ASSERT_OFFSET
-> +
->  static inline struct dmabuf_genpool_chunk_owner *
->  net_iov_owner(const struct net_iov *niov)
->  {
-> @@ -50,7 +87,7 @@ static inline dma_addr_t net_iov_dma_addr(const struct =
-net_iov *niov)
->                ((dma_addr_t)net_iov_idx(niov) << PAGE_SHIFT);
->  }
->
-> -static inline struct netdev_dmabuf_binding *
-> +static inline struct net_devmem_dmabuf_binding *
->  net_iov_binding(const struct net_iov *niov)
->  {
->         return net_iov_owner(niov)->binding;
-> @@ -69,20 +106,26 @@ net_iov_binding(const struct net_iov *niov)
->   */
->  typedef unsigned long __bitwise netmem_ref;
->
-> +static inline bool netmem_is_net_iov(const netmem_ref netmem)
-> +{
-> +#if defined(CONFIG_PAGE_POOL) && defined(CONFIG_DMA_SHARED_BUFFER)
-> +       return (__force unsigned long)netmem & NET_IOV;
-> +#else
-> +       return false;
-> +#endif
-> +}
-> +
->  /* This conversion fails (returns NULL) if the netmem_ref is not struct =
-page
->   * backed.
-> - *
-> - * Currently struct page is the only possible netmem, and this helper ne=
-ver
-> - * fails.
->   */
->  static inline struct page *netmem_to_page(netmem_ref netmem)
->  {
-> +       if (WARN_ON_ONCE(netmem_is_net_iov(netmem)))
-> +               return NULL;
-> +
->         return (__force struct page *)netmem;
->  }
->
-> -/* Converting from page to netmem is always safe, because a page can alw=
-ays be
-> - * a netmem.
-> - */
->  static inline netmem_ref page_to_netmem(struct page *page)
->  {
->         return (__force netmem_ref)page;
-> @@ -90,17 +133,103 @@ static inline netmem_ref page_to_netmem(struct page=
- *page)
->
->  static inline int netmem_ref_count(netmem_ref netmem)
->  {
-> +       /* The non-pp refcount of net_iov is always 1. On net_iov, we onl=
-y
-> +        * support pp refcounting which uses the pp_ref_count field.
-> +        */
-> +       if (netmem_is_net_iov(netmem))
-> +               return 1;
-> +
->         return page_ref_count(netmem_to_page(netmem));
->  }
->
->  static inline unsigned long netmem_to_pfn(netmem_ref netmem)
->  {
-> +       if (netmem_is_net_iov(netmem))
-> +               return 0;
-> +
->         return page_to_pfn(netmem_to_page(netmem));
->  }
->
-> +static inline struct net_iov *__netmem_clear_lsb(netmem_ref netmem)
-> +{
-> +       return (struct net_iov *)((__force unsigned long)netmem & ~NET_IO=
-V);
-> +}
-> +
-> +static inline unsigned long netmem_get_pp_magic(netmem_ref netmem)
-> +{
-> +       return __netmem_clear_lsb(netmem)->pp_magic;
-> +}
-> +
-> +static inline void netmem_or_pp_magic(netmem_ref netmem, unsigned long p=
-p_magic)
-> +{
-> +       __netmem_clear_lsb(netmem)->pp_magic |=3D pp_magic;
-> +}
-> +
-> +static inline void netmem_clear_pp_magic(netmem_ref netmem)
-> +{
-> +       __netmem_clear_lsb(netmem)->pp_magic =3D 0;
-> +}
-> +
-> +static inline struct page_pool *netmem_get_pp(netmem_ref netmem)
-> +{
-> +       return __netmem_clear_lsb(netmem)->pp;
-> +}
-> +
-> +static inline void netmem_set_pp(netmem_ref netmem, struct page_pool *po=
-ol)
-> +{
-> +       __netmem_clear_lsb(netmem)->pp =3D pool;
-> +}
-> +
-> +static inline unsigned long netmem_get_dma_addr(netmem_ref netmem)
-> +{
-> +       return __netmem_clear_lsb(netmem)->dma_addr;
-> +}
-> +
-> +static inline void netmem_set_dma_addr(netmem_ref netmem,
-> +                                      unsigned long dma_addr)
-> +{
-> +       __netmem_clear_lsb(netmem)->dma_addr =3D dma_addr;
-> +}
-> +
-> +static inline atomic_long_t *netmem_get_pp_ref_count_ref(netmem_ref netm=
-em)
-> +{
-> +       return &__netmem_clear_lsb(netmem)->pp_ref_count;
-> +}
-> +
-> +static inline bool netmem_is_pref_nid(netmem_ref netmem, int pref_nid)
-> +{
-> +       /* Assume net_iov are on the preferred node without actually
-> +        * checking...
-> +        *
-> +        * This check is only used to check for recycling memory in the p=
-age
-> +        * pool's fast paths. Currently the only implementation of net_io=
-v
-> +        * is dmabuf device memory. It's a deliberate decision by the use=
-r to
-> +        * bind a certain dmabuf to a certain netdev, and the netdev rx q=
-ueue
-> +        * would not be able to reallocate memory from another dmabuf tha=
-t
-> +        * exists on the preferred node, so, this check doesn't make much=
- sense
-> +        * in this case. Assume all net_iovs can be recycled for now.
-> +        */
-> +       if (netmem_is_net_iov(netmem))
-> +               return true;
-> +
-> +       return page_to_nid(netmem_to_page(netmem)) =3D=3D pref_nid;
-> +}
-> +
->  static inline netmem_ref netmem_compound_head(netmem_ref netmem)
->  {
-> +       /* niov are never compounded */
-> +       if (netmem_is_net_iov(netmem))
-> +               return netmem;
-> +
->         return page_to_netmem(compound_head(netmem_to_page(netmem)));
->  }
->
-> +static inline void *netmem_address(netmem_ref netmem)
-> +{
-> +       if (netmem_is_net_iov(netmem))
-> +               return NULL;
-> +
-> +       return page_address(netmem_to_page(netmem));
-> +}
-> +
->  #endif /* _NET_NETMEM_H */
-> diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/help=
-ers.h
-> index 61814f91a458..c6a55eddefae 100644
-> --- a/include/net/page_pool/helpers.h
-> +++ b/include/net/page_pool/helpers.h
-> @@ -215,7 +215,7 @@ inline enum dma_data_direction page_pool_get_dma_dir(=
-struct page_pool *pool)
->
->  static inline void page_pool_fragment_netmem(netmem_ref netmem, long nr)
->  {
-> -       atomic_long_set(&netmem_to_page(netmem)->pp_ref_count, nr);
-> +       atomic_long_set(netmem_get_pp_ref_count_ref(netmem), nr);
->  }
->
->  /**
-> @@ -243,7 +243,7 @@ static inline void page_pool_fragment_page(struct pag=
-e *page, long nr)
->
->  static inline long page_pool_unref_netmem(netmem_ref netmem, long nr)
->  {
-> -       struct page *page =3D netmem_to_page(netmem);
-> +       atomic_long_t *pp_ref_count =3D netmem_get_pp_ref_count_ref(netme=
-m);
->         long ret;
->
->         /* If nr =3D=3D pp_ref_count then we have cleared all remaining
-> @@ -260,19 +260,19 @@ static inline long page_pool_unref_netmem(netmem_re=
-f netmem, long nr)
->          * initially, and only overwrite it when the page is partitioned =
-into
->          * more than one piece.
->          */
-> -       if (atomic_long_read(&page->pp_ref_count) =3D=3D nr) {
-> +       if (atomic_long_read(pp_ref_count) =3D=3D nr) {
->                 /* As we have ensured nr is always one for constant case =
-using
->                  * the BUILD_BUG_ON(), only need to handle the non-consta=
-nt case
->                  * here for pp_ref_count draining, which is a rare case.
->                  */
->                 BUILD_BUG_ON(__builtin_constant_p(nr) && nr !=3D 1);
->                 if (!__builtin_constant_p(nr))
-> -                       atomic_long_set(&page->pp_ref_count, 1);
-> +                       atomic_long_set(pp_ref_count, 1);
->
->                 return 0;
->         }
->
-> -       ret =3D atomic_long_sub_return(nr, &page->pp_ref_count);
-> +       ret =3D atomic_long_sub_return(nr, pp_ref_count);
->         WARN_ON(ret < 0);
->
->         /* We are the last user here too, reset pp_ref_count back to 1 to
-> @@ -281,7 +281,7 @@ static inline long page_pool_unref_netmem(netmem_ref =
-netmem, long nr)
->          * page_pool_unref_page() currently.
->          */
->         if (unlikely(!ret))
-> -               atomic_long_set(&page->pp_ref_count, 1);
-> +               atomic_long_set(pp_ref_count, 1);
->
->         return ret;
->  }
-> @@ -400,9 +400,7 @@ static inline void page_pool_free_va(struct page_pool=
- *pool, void *va,
->
->  static inline dma_addr_t page_pool_get_dma_addr_netmem(netmem_ref netmem=
-)
->  {
-> -       struct page *page =3D netmem_to_page(netmem);
-> -
-> -       dma_addr_t ret =3D page->dma_addr;
-> +       dma_addr_t ret =3D netmem_get_dma_addr(netmem);
->
->         if (PAGE_POOL_32BIT_ARCH_WITH_64BIT_DMA)
->                 ret <<=3D PAGE_SHIFT;
-> @@ -425,18 +423,17 @@ static inline dma_addr_t page_pool_get_dma_addr(str=
-uct page *page)
->  static inline bool page_pool_set_dma_addr_netmem(netmem_ref netmem,
->                                                  dma_addr_t addr)
->  {
-> -       struct page *page =3D netmem_to_page(netmem);
-> -
->         if (PAGE_POOL_32BIT_ARCH_WITH_64BIT_DMA) {
-> -               page->dma_addr =3D addr >> PAGE_SHIFT;
-> +               netmem_set_dma_addr(netmem, addr >> PAGE_SHIFT);
->
->                 /* We assume page alignment to shave off bottom bits,
->                  * if this "compression" doesn't work we need to drop.
->                  */
-> -               return addr !=3D (dma_addr_t)page->dma_addr << PAGE_SHIFT=
-;
-> +               return addr !=3D (dma_addr_t)netmem_get_dma_addr(netmem)
-> +                                      << PAGE_SHIFT;
->         }
->
-> -       page->dma_addr =3D addr;
-> +       netmem_set_dma_addr(netmem, addr);
->         return false;
->  }
->
-> diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.=
-h
-> index 0d164624f16d..f04af1613f59 100644
-> --- a/include/net/page_pool/types.h
-> +++ b/include/net/page_pool/types.h
-> @@ -6,6 +6,7 @@
->  #include <linux/dma-direction.h>
->  #include <linux/ptr_ring.h>
->  #include <linux/types.h>
-> +#include <net/netmem.h>
->
->  #define PP_FLAG_DMA_MAP                BIT(0) /* Should page_pool do the=
- DMA
->                                         * map/unmap
-> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-> index c8125be3a6e2..c7bffd08218b 100644
-> --- a/net/core/page_pool.c
-> +++ b/net/core/page_pool.c
-> @@ -25,7 +25,7 @@
->
->  #include "page_pool_priv.h"
->
-> -static DEFINE_STATIC_KEY_FALSE(page_pool_mem_providers);
-> +DEFINE_STATIC_KEY_FALSE(page_pool_mem_providers);
->
->  #define DEFER_TIME (msecs_to_jiffies(1000))
->  #define DEFER_WARN_INTERVAL (60 * HZ)
-> @@ -359,7 +359,7 @@ static noinline netmem_ref page_pool_refill_alloc_cac=
-he(struct page_pool *pool)
->                 if (unlikely(!netmem))
->                         break;
->
-> -               if (likely(page_to_nid(netmem_to_page(netmem)) =3D=3D pre=
-f_nid)) {
-> +               if (likely(netmem_is_pref_nid(netmem, pref_nid))) {
->                         pool->alloc.cache[pool->alloc.count++] =3D netmem=
-;
->                 } else {
->                         /* NUMA mismatch;
-> @@ -446,10 +446,8 @@ static bool page_pool_dma_map(struct page_pool *pool=
-, netmem_ref netmem)
->
->  static void page_pool_set_pp_info(struct page_pool *pool, netmem_ref net=
-mem)
->  {
-> -       struct page *page =3D netmem_to_page(netmem);
-> -
-> -       page->pp =3D pool;
-> -       page->pp_magic |=3D PP_SIGNATURE;
-> +       netmem_set_pp(netmem, pool);
-> +       netmem_or_pp_magic(netmem, PP_SIGNATURE);
->
->         /* Ensuring all pages have been split into one fragment initially=
-:
->          * page_pool_set_pp_info() is only called once for every page whe=
-n it
-> @@ -464,10 +462,8 @@ static void page_pool_set_pp_info(struct page_pool *=
-pool, netmem_ref netmem)
->
->  static void page_pool_clear_pp_info(netmem_ref netmem)
->  {
-> -       struct page *page =3D netmem_to_page(netmem);
-> -
-> -       page->pp_magic =3D 0;
-> -       page->pp =3D NULL;
-> +       netmem_clear_pp_magic(netmem);
-> +       netmem_set_pp(netmem, NULL);
->  }
->
->  static struct page *__page_pool_alloc_page_order(struct page_pool *pool,
-> @@ -695,8 +691,9 @@ static bool page_pool_recycle_in_cache(netmem_ref net=
-mem,
->
->  static bool __page_pool_page_can_be_recycled(netmem_ref netmem)
->  {
-> -       return page_ref_count(netmem_to_page(netmem)) =3D=3D 1 &&
-> -              !page_is_pfmemalloc(netmem_to_page(netmem));
-> +       return netmem_is_net_iov(netmem) ||
-> +              (page_ref_count(netmem_to_page(netmem)) =3D=3D 1 &&
-> +               !page_is_pfmemalloc(netmem_to_page(netmem)));
->  }
->
->  /* If the page refcnt =3D=3D 1, this will try to recycle the page.
-> @@ -718,7 +715,7 @@ __page_pool_put_page(struct page_pool *pool, netmem_r=
-ef netmem,
->          * refcnt =3D=3D 1 means page_pool owns page, and can recycle it.
->          *
->          * page is NOT reusable when allocated when system is under
-> -        * some pressure. (page_is_pfmemalloc)
-> +        * some pressure. (page_pool_page_is_pfmemalloc)
->          */
->         if (likely(__page_pool_page_can_be_recycled(netmem))) {
->                 /* Read barrier done in page_ref_count / READ_ONCE */
-> @@ -734,6 +731,7 @@ __page_pool_put_page(struct page_pool *pool, netmem_r=
-ef netmem,
->                 /* Page found as candidate for recycling */
->                 return netmem;
->         }
-> +
->         /* Fallback/non-XDP mode: API user have elevated refcnt.
->          *
->          * Many drivers split up the page into fragments, and some
-> @@ -928,7 +926,7 @@ static void page_pool_empty_ring(struct page_pool *po=
-ol)
->         /* Empty recycle ring */
->         while ((netmem =3D (__force netmem_ref)ptr_ring_consume_bh(&pool-=
->ring))) {
->                 /* Verify the refcnt invariant of cached pages */
-> -               if (!(page_ref_count(netmem_to_page(netmem)) =3D=3D 1))
-> +               if (!(netmem_ref_count(netmem) =3D=3D 1))
->                         pr_crit("%s() page_pool refcnt %d violation\n",
->                                 __func__, netmem_ref_count(netmem));
->
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 7193ee9737a0..b7e974f0ae51 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -907,9 +907,9 @@ static void skb_clone_fraglist(struct sk_buff *skb)
->                 skb_get(list);
->  }
->
-> -static bool is_pp_page(struct page *page)
-> +static bool is_pp_netmem(netmem_ref netmem)
->  {
-> -       return (page->pp_magic & ~0x3UL) =3D=3D PP_SIGNATURE;
-> +       return (netmem_get_pp_magic(netmem) & ~0x3UL) =3D=3D PP_SIGNATURE=
-;
->  }
->
->  int skb_pp_cow_data(struct page_pool *pool, struct sk_buff **pskb,
-> @@ -1007,11 +1007,10 @@ EXPORT_SYMBOL(skb_cow_data_for_xdp);
->  #if IS_ENABLED(CONFIG_PAGE_POOL)
->  bool napi_pp_put_page(netmem_ref netmem, bool napi_safe)
->  {
-> -       struct page *page =3D netmem_to_page(netmem);
->         bool allow_direct =3D false;
->         struct page_pool *pp;
->
-> -       page =3D compound_head(page);
-> +       netmem =3D netmem_compound_head(netmem);
->
->         /* page->pp_magic is OR'ed with PP_SIGNATURE after the allocation
->          * in order to preserve any existing bits, such as bit 0 for the
-> @@ -1020,10 +1019,10 @@ bool napi_pp_put_page(netmem_ref netmem, bool nap=
-i_safe)
->          * and page_is_pfmemalloc() is checked in __page_pool_put_page()
->          * to avoid recycling the pfmemalloc page.
->          */
-> -       if (unlikely(!is_pp_page(page)))
-> +       if (unlikely(!is_pp_netmem(netmem)))
->                 return false;
->
-> -       pp =3D page->pp;
-> +       pp =3D netmem_get_pp(netmem);
->
->         /* Allow direct recycle if we have reasons to believe that we are
->          * in the same context as the consumer would run, so there's
-> @@ -1044,7 +1043,7 @@ bool napi_pp_put_page(netmem_ref netmem, bool napi_=
-safe)
->          * The page will be returned to the pool here regardless of the
->          * 'flipped' fragment being in use or not.
->          */
-> -       page_pool_put_full_netmem(pp, page_to_netmem(page), allow_direct)=
-;
-> +       page_pool_put_full_netmem(pp, netmem, allow_direct);
->
->         return true;
->  }
-> @@ -1071,7 +1070,7 @@ static bool skb_pp_recycle(struct sk_buff *skb, voi=
-d *data, bool napi_safe)
->  static int skb_pp_frag_ref(struct sk_buff *skb)
->  {
->         struct skb_shared_info *shinfo;
-> -       struct page *head_page;
-> +       netmem_ref head_netmem;
->         int i;
->
->         if (!skb->pp_recycle)
-> @@ -1080,11 +1079,11 @@ static int skb_pp_frag_ref(struct sk_buff *skb)
->         shinfo =3D skb_shinfo(skb);
->
->         for (i =3D 0; i < shinfo->nr_frags; i++) {
-> -               head_page =3D compound_head(skb_frag_page(&shinfo->frags[=
-i]));
-> -               if (likely(is_pp_page(head_page)))
-> -                       page_pool_ref_page(head_page);
-> +               head_netmem =3D netmem_compound_head(shinfo->frags[i].net=
-mem);
-> +               if (likely(is_pp_netmem(head_netmem)))
-> +                       page_pool_ref_netmem(head_netmem);
->                 else
-> -                       page_ref_inc(head_page);
-> +                       page_ref_inc(netmem_to_page(head_netmem));
->         }
->         return 0;
->  }
-> --
-> 2.44.0.396.g6e790dbe36-goog
->
+HEAD commit:    bfa8f18691ed Merge tag 'scsi-misc' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11bbb1be180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8f186ceee5fcb0b8
+dashboard link: https://syzkaller.appspot.com/bug?extid=d4066896495db380182e
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-bfa8f186.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c7a06d439e10/vmlinux-bfa8f186.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8bc8cb9cde60/bzImage-bfa8f186.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d4066896495db380182e@syzkaller.appspotmail.com
+
+=====================================================
+WARNING: HARDIRQ-safe -> HARDIRQ-unsafe lock order detected
+6.8.0-syzkaller-13161-gbfa8f18691ed #0 Not tainted
+-----------------------------------------------------
+syz-executor.0/5916 [HC0[0]:SC0[2]:HE0:SE0] is trying to acquire:
+ffff888011e92a00 (&stab->lock){+...}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:356 [inline]
+ffff888011e92a00 (&stab->lock){+...}-{2:2}, at: __sock_map_delete net/core/sock_map.c:414 [inline]
+ffff888011e92a00 (&stab->lock){+...}-{2:2}, at: sock_map_delete_elem+0xc8/0x150 net/core/sock_map.c:446
+
+and this task is already holding:
+ffff888021ffe418 (&host->lock){-.-.}-{2:2}, at: ata_scsi_queuecmd+0x86/0x160 drivers/ata/libata-scsi.c:4194
+which would create a new lock dependency:
+ (&host->lock){-.-.}-{2:2} -> (&stab->lock){+...}-{2:2}
+
+but this new dependency connects a HARDIRQ-irq-safe lock:
+ (&host->lock){-.-.}-{2:2}
+
+... which became HARDIRQ-irq-safe at:
+  lock_acquire kernel/locking/lockdep.c:5754 [inline]
+  lock_acquire+0x1b1/0x560 kernel/locking/lockdep.c:5719
+  __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+  _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+  spin_lock include/linux/spinlock.h:351 [inline]
+  ahci_single_level_irq_intr+0xc7/0x120 drivers/ata/libahci.c:2022
+  __handle_irq_event_percpu+0x229/0x7c0 kernel/irq/handle.c:158
+  handle_irq_event_percpu kernel/irq/handle.c:193 [inline]
+  handle_irq_event+0xab/0x1e0 kernel/irq/handle.c:210
+  handle_edge_irq+0x263/0xd10 kernel/irq/chip.c:831
+  generic_handle_irq_desc include/linux/irqdesc.h:161 [inline]
+  handle_irq arch/x86/kernel/irq.c:238 [inline]
+  __common_interrupt+0xde/0x250 arch/x86/kernel/irq.c:257
+  common_interrupt+0xab/0xd0 arch/x86/kernel/irq.c:247
+  asm_common_interrupt+0x26/0x40 arch/x86/include/asm/idtentry.h:693
+  native_safe_halt arch/x86/include/asm/irqflags.h:48 [inline]
+  arch_safe_halt arch/x86/include/asm/irqflags.h:86 [inline]
+  default_idle+0xf/0x20 arch/x86/kernel/process.c:742
+  default_idle_call+0x6d/0xb0 kernel/sched/idle.c:117
+  cpuidle_idle_call kernel/sched/idle.c:191 [inline]
+  do_idle+0x32c/0x3f0 kernel/sched/idle.c:332
+  cpu_startup_entry+0x4f/0x60 kernel/sched/idle.c:430
+  start_secondary+0x220/0x2b0 arch/x86/kernel/smpboot.c:313
+  common_startup_64+0x13e/0x148
+
+to a HARDIRQ-irq-unsafe lock:
+ (&stab->lock){+...}-{2:2}
+
+... which became HARDIRQ-irq-unsafe at:
+...
+  lock_acquire kernel/locking/lockdep.c:5754 [inline]
+  lock_acquire+0x1b1/0x560 kernel/locking/lockdep.c:5719
+  __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+  _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
+  spin_lock_bh include/linux/spinlock.h:356 [inline]
+  __sock_map_delete net/core/sock_map.c:414 [inline]
+  sock_map_delete_elem+0xc8/0x150 net/core/sock_map.c:446
+  ___bpf_prog_run+0x3e51/0xae80 kernel/bpf/core.c:1997
+  __bpf_prog_run32+0xc1/0x100 kernel/bpf/core.c:2236
+  bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+  __bpf_prog_run include/linux/filter.h:657 [inline]
+  bpf_prog_run include/linux/filter.h:664 [inline]
+  __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+  bpf_trace_run4+0x176/0x460 kernel/trace/bpf_trace.c:2422
+  trace_mm_page_alloc include/trace/events/kmem.h:177 [inline]
+  __alloc_pages+0x3ad/0x2460 mm/page_alloc.c:4597
+  alloc_pages_mpol+0x275/0x610 mm/mempolicy.c:2264
+  pipe_write+0xe4a/0x1b50 fs/pipe.c:513
+  call_write_iter include/linux/fs.h:2108 [inline]
+  new_sync_write fs/read_write.c:497 [inline]
+  vfs_write+0x6db/0x1100 fs/read_write.c:590
+  ksys_write+0x1f8/0x260 fs/read_write.c:643
+  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+  do_syscall_64+0xd2/0x260 arch/x86/entry/common.c:83
+  entry_SYSCALL_64_after_hwframe+0x6d/0x75
+
+other info that might help us debug this:
+
+ Possible interrupt unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&stab->lock);
+                               local_irq_disable();
+                               lock(&host->lock);
+                               lock(&stab->lock);
+  <Interrupt>
+    lock(&host->lock);
+
+ *** DEADLOCK ***
+
+5 locks held by syz-executor.0/5916:
+ #0: ffff888023da0b98 (&sbi->s_writepages_rwsem){++++}-{0:0}, at: do_writepages+0x1a3/0x7f0 mm/page-writeback.c:2612
+ #1: ffff888023da2950 (jbd2_handle){++++}-{0:0}, at: start_this_handle+0x1125/0x1620 fs/jbd2/transaction.c:463
+ #2: ffffffff8dbb1420 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:329 [inline]
+ #2: ffffffff8dbb1420 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:781 [inline]
+ #2: ffffffff8dbb1420 (rcu_read_lock){....}-{1:2}, at: blk_mq_run_hw_queue+0x619/0x9a0 block/blk-mq.c:2273
+ #3: ffff888021ffe418 (&host->lock){-.-.}-{2:2}, at: ata_scsi_queuecmd+0x86/0x160 drivers/ata/libata-scsi.c:4194
+ #4: ffffffff8dbb1420 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:329 [inline]
+ #4: ffffffff8dbb1420 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:781 [inline]
+ #4: ffffffff8dbb1420 (rcu_read_lock){....}-{1:2}, at: __bpf_trace_run kernel/trace/bpf_trace.c:2380 [inline]
+ #4: ffffffff8dbb1420 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run4+0x107/0x460 kernel/trace/bpf_trace.c:2422
+
+the dependencies between HARDIRQ-irq-safe lock and the holding lock:
+-> (&host->lock){-.-.}-{2:2} {
+   IN-HARDIRQ-W at:
+                    lock_acquire kernel/locking/lockdep.c:5754 [inline]
+                    lock_acquire+0x1b1/0x560 kernel/locking/lockdep.c:5719
+                    __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+                    _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+                    spin_lock include/linux/spinlock.h:351 [inline]
+                    ahci_single_level_irq_intr+0xc7/0x120 drivers/ata/libahci.c:2022
+                    __handle_irq_event_percpu+0x229/0x7c0 kernel/irq/handle.c:158
+                    handle_irq_event_percpu kernel/irq/handle.c:193 [inline]
+                    handle_irq_event+0xab/0x1e0 kernel/irq/handle.c:210
+                    handle_edge_irq+0x263/0xd10 kernel/irq/chip.c:831
+                    generic_handle_irq_desc include/linux/irqdesc.h:161 [inline]
+                    handle_irq arch/x86/kernel/irq.c:238 [inline]
+                    __common_interrupt+0xde/0x250 arch/x86/kernel/irq.c:257
+                    common_interrupt+0xab/0xd0 arch/x86/kernel/irq.c:247
+                    asm_common_interrupt+0x26/0x40 arch/x86/include/asm/idtentry.h:693
+                    native_safe_halt arch/x86/include/asm/irqflags.h:48 [inline]
+                    arch_safe_halt arch/x86/include/asm/irqflags.h:86 [inline]
+                    default_idle+0xf/0x20 arch/x86/kernel/process.c:742
+                    default_idle_call+0x6d/0xb0 kernel/sched/idle.c:117
+                    cpuidle_idle_call kernel/sched/idle.c:191 [inline]
+                    do_idle+0x32c/0x3f0 kernel/sched/idle.c:332
+                    cpu_startup_entry+0x4f/0x60 kernel/sched/idle.c:430
+                    start_secondary+0x220/0x2b0 arch/x86/kernel/smpboot.c:313
+                    common_startup_64+0x13e/0x148
+   IN-SOFTIRQ-W at:
+                    lock_acquire kernel/locking/lockdep.c:5754 [inline]
+                    lock_acquire+0x1b1/0x560 kernel/locking/lockdep.c:5719
+                    __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+                    _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+                    spin_lock include/linux/spinlock.h:351 [inline]
+                    ahci_single_level_irq_intr+0xc7/0x120 drivers/ata/libahci.c:2022
+                    __handle_irq_event_percpu+0x229/0x7c0 kernel/irq/handle.c:158
+                    handle_irq_event_percpu kernel/irq/handle.c:193 [inline]
+                    handle_irq_event+0xab/0x1e0 kernel/irq/handle.c:210
+                    handle_edge_irq+0x263/0xd10 kernel/irq/chip.c:831
+                    generic_handle_irq_desc include/linux/irqdesc.h:161 [inline]
+                    handle_irq arch/x86/kernel/irq.c:238 [inline]
+                    __common_interrupt+0xde/0x250 arch/x86/kernel/irq.c:257
+                    common_interrupt+0x52/0xd0 arch/x86/kernel/irq.c:247
+                    asm_common_interrupt+0x26/0x40 arch/x86/include/asm/idtentry.h:693
+                    variable_ffs arch/x86/include/asm/bitops.h:321 [inline]
+                    __do_softirq+0x1dc/0x922 kernel/softirq.c:542
+                    invoke_softirq kernel/softirq.c:428 [inline]
+                    __irq_exit_rcu kernel/softirq.c:633 [inline]
+                    irq_exit_rcu+0xb9/0x120 kernel/softirq.c:645
+                    instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1043 [inline]
+                    sysvec_apic_timer_interrupt+0x95/0xb0 arch/x86/kernel/apic/apic.c:1043
+                    asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+                    console_flush_all+0xa19/0xd70 kernel/printk/printk.c:2979
+                    console_unlock+0xae/0x290 kernel/printk/printk.c:3042
+                    vprintk_emit kernel/printk/printk.c:2342 [inline]
+                    vprintk_emit+0x11a/0x5a0 kernel/printk/printk.c:2297
+                    dev_vprintk_emit drivers/base/core.c:4930 [inline]
+                    dev_printk_emit+0xfb/0x140 drivers/base/core.c:4941
+                    __dev_printk+0xf5/0x270 drivers/base/core.c:4953
+                    _dev_printk+0xde/0x120 drivers/base/core.c:4970
+                    sdev_prefix_printk+0x1a2/0x230 drivers/scsi/scsi_logging.c:78
+                    sd_print_capacity drivers/scsi/sd.c:2824 [inline]
+                    sd_revalidate_disk.isra.0+0x2988/0x9d10 drivers/scsi/sd.c:3653
+                    sd_probe+0x8ef/0xfe0 drivers/scsi/sd.c:3907
+                    call_driver_probe drivers/base/dd.c:578 [inline]
+                    really_probe+0x23e/0xa90 drivers/base/dd.c:656
+                    __driver_probe_device+0x1de/0x440 drivers/base/dd.c:798
+                    driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:828
+                    __device_attach_driver+0x1df/0x310 drivers/base/dd.c:956
+                    bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:457
+                    __device_attach_async_helper+0x1d3/0x290 drivers/base/dd.c:985
+                    async_run_entry_fn+0x9c/0x530 kernel/async.c:129
+                    process_one_work+0x9a9/0x1ac0 kernel/workqueue.c:3254
+                    process_scheduled_works kernel/workqueue.c:3335 [inline]
+                    worker_thread+0x6c8/0xf70 kernel/workqueue.c:3416
+                    kthread+0x2c1/0x3a0 kernel/kthread.c:388
+                    ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+                    ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
+   INITIAL USE at:
+                   lock_acquire kernel/locking/lockdep.c:5754 [inline]
+                   lock_acquire+0x1b1/0x560 kernel/locking/lockdep.c:5719
+                   __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+                   _raw_spin_lock_irqsave+0x3a/0x60 kernel/locking/spinlock.c:162
+                   ata_dev_init+0x1b4/0x410 drivers/ata/libata-core.c:5399
+                   ata_link_init+0x19c/0x300 drivers/ata/libata-core.c:5444
+                   ata_port_alloc+0x4a1/0x590 drivers/ata/libata-core.c:5519
+                   ata_host_alloc+0x21c/0x2c0 drivers/ata/libata-core.c:5631
+                   ata_host_alloc_pinfo+0x2b/0x3f0 drivers/ata/libata-core.c:5674
+                   ahci_init_one+0x132a/0x2de0 drivers/ata/ahci.c:1885
+                   local_pci_probe+0xde/0x1b0 drivers/pci/pci-driver.c:324
+                   pci_call_probe drivers/pci/pci-driver.c:392 [inline]
+                   __pci_device_probe drivers/pci/pci-driver.c:417 [inline]
+                   pci_device_probe+0x29d/0x7b0 drivers/pci/pci-driver.c:451
+                   call_driver_probe drivers/base/dd.c:578 [inline]
+                   really_probe+0x23e/0xa90 drivers/base/dd.c:656
+                   __driver_probe_device+0x1de/0x440 drivers/base/dd.c:798
+                   driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:828
+                   __driver_attach+0x283/0x580 drivers/base/dd.c:1214
+                   bus_for_each_dev+0x13c/0x1d0 drivers/base/bus.c:368
+                   bus_add_driver+0x2ed/0x640 drivers/base/bus.c:673
+                   driver_register+0x15c/0x4b0 drivers/base/driver.c:246
+                   do_one_initcall+0x128/0x700 init/main.c:1238
+                   do_initcall_level init/main.c:1300 [inline]
+                   do_initcalls init/main.c:1316 [inline]
+                   do_basic_setup init/main.c:1335 [inline]
+                   kernel_init_freeable+0x69d/0xca0 init/main.c:1548
+                   kernel_init+0x1c/0x2b0 init/main.c:1437
+                   ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+                   ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
+ }
+ ... key      at: [<ffffffff94d99ee0>] __key.5+0x0/0x40
+
+the dependencies between the lock to be acquired
+ and HARDIRQ-irq-unsafe lock:
+-> (&stab->lock){+...}-{2:2} {
+   HARDIRQ-ON-W at:
+                    lock_acquire kernel/locking/lockdep.c:5754 [inline]
+                    lock_acquire+0x1b1/0x560 kernel/locking/lockdep.c:5719
+                    __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+                    _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
+                    spin_lock_bh include/linux/spinlock.h:356 [inline]
+                    __sock_map_delete net/core/sock_map.c:414 [inline]
+                    sock_map_delete_elem+0xc8/0x150 net/core/sock_map.c:446
+                    ___bpf_prog_run+0x3e51/0xae80 kernel/bpf/core.c:1997
+                    __bpf_prog_run32+0xc1/0x100 kernel/bpf/core.c:2236
+                    bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+                    __bpf_prog_run include/linux/filter.h:657 [inline]
+                    bpf_prog_run include/linux/filter.h:664 [inline]
+                    __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+                    bpf_trace_run4+0x176/0x460 kernel/trace/bpf_trace.c:2422
+                    trace_mm_page_alloc include/trace/events/kmem.h:177 [inline]
+                    __alloc_pages+0x3ad/0x2460 mm/page_alloc.c:4597
+                    alloc_pages_mpol+0x275/0x610 mm/mempolicy.c:2264
+                    pipe_write+0xe4a/0x1b50 fs/pipe.c:513
+                    call_write_iter include/linux/fs.h:2108 [inline]
+                    new_sync_write fs/read_write.c:497 [inline]
+                    vfs_write+0x6db/0x1100 fs/read_write.c:590
+                    ksys_write+0x1f8/0x260 fs/read_write.c:643
+                    do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+                    do_syscall_64+0xd2/0x260 arch/x86/entry/common.c:83
+                    entry_SYSCALL_64_after_hwframe+0x6d/0x75
+   INITIAL USE at:
+                   lock_acquire kernel/locking/lockdep.c:5754 [inline]
+                   lock_acquire+0x1b1/0x560 kernel/locking/lockdep.c:5719
+                   __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+                   _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
+                   spin_lock_bh include/linux/spinlock.h:356 [inline]
+                   __sock_map_delete net/core/sock_map.c:414 [inline]
+                   sock_map_delete_elem+0xc8/0x150 net/core/sock_map.c:446
+                   ___bpf_prog_run+0x3e51/0xae80 kernel/bpf/core.c:1997
+                   __bpf_prog_run32+0xc1/0x100 kernel/bpf/core.c:2236
+                   bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+                   __bpf_prog_run include/linux/filter.h:657 [inline]
+                   bpf_prog_run include/linux/filter.h:664 [inline]
+                   __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+                   bpf_trace_run4+0x176/0x460 kernel/trace/bpf_trace.c:2422
+                   trace_mm_page_alloc include/trace/events/kmem.h:177 [inline]
+                   __alloc_pages+0x3ad/0x2460 mm/page_alloc.c:4597
+                   alloc_pages_mpol+0x275/0x610 mm/mempolicy.c:2264
+                   pipe_write+0xe4a/0x1b50 fs/pipe.c:513
+                   call_write_iter include/linux/fs.h:2108 [inline]
+                   new_sync_write fs/read_write.c:497 [inline]
+                   vfs_write+0x6db/0x1100 fs/read_write.c:590
+                   ksys_write+0x1f8/0x260 fs/read_write.c:643
+                   do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+                   do_syscall_64+0xd2/0x260 arch/x86/entry/common.c:83
+                   entry_SYSCALL_64_after_hwframe+0x6d/0x75
+ }
+ ... key      at: [<ffffffff94e2b680>] __key.1+0x0/0x40
+ ... acquired at:
+   lock_acquire kernel/locking/lockdep.c:5754 [inline]
+   lock_acquire+0x1b1/0x560 kernel/locking/lockdep.c:5719
+   __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+   _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
+   spin_lock_bh include/linux/spinlock.h:356 [inline]
+   __sock_map_delete net/core/sock_map.c:414 [inline]
+   sock_map_delete_elem+0xc8/0x150 net/core/sock_map.c:446
+   ___bpf_prog_run+0x3e51/0xae80 kernel/bpf/core.c:1997
+   __bpf_prog_run32+0xc1/0x100 kernel/bpf/core.c:2236
+   bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+   __bpf_prog_run include/linux/filter.h:657 [inline]
+   bpf_prog_run include/linux/filter.h:664 [inline]
+   __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+   bpf_trace_run4+0x176/0x460 kernel/trace/bpf_trace.c:2422
+   trace_mm_page_alloc include/trace/events/kmem.h:177 [inline]
+   __alloc_pages+0x3ad/0x2460 mm/page_alloc.c:4597
+   __alloc_pages_node include/linux/gfp.h:238 [inline]
+   alloc_pages_node include/linux/gfp.h:261 [inline]
+   alloc_pgtable_page+0xe6/0x1e0 drivers/iommu/intel/iommu.c:306
+   pfn_to_dma_pte+0x2ca/0x5a0 drivers/iommu/intel/iommu.c:870
+   __domain_mapping+0x35e/0xc20 drivers/iommu/intel/iommu.c:2105
+   intel_iommu_map drivers/iommu/intel/iommu.c:4050 [inline]
+   intel_iommu_map_pages+0x270/0x390 drivers/iommu/intel/iommu.c:4069
+   __iommu_map+0x2f1/0x680 drivers/iommu/iommu.c:2464
+   iommu_map_sg+0x1a5/0x4b0 drivers/iommu/iommu.c:2615
+   iommu_dma_map_sg+0x79b/0xc80 drivers/iommu/dma-iommu.c:1454
+   __dma_map_sg_attrs+0xd6/0x230 kernel/dma/mapping.c:201
+   dma_map_sg_attrs+0x34/0x50 kernel/dma/mapping.c:236
+   ata_sg_setup drivers/ata/libata-core.c:4741 [inline]
+   ata_qc_issue+0x81a/0xf50 drivers/ata/libata-core.c:5043
+   ata_scsi_translate drivers/ata/libata-scsi.c:1717 [inline]
+   __ata_scsi_queuecmd+0xa39/0x13c0 drivers/ata/libata-scsi.c:4153
+   ata_scsi_queuecmd+0xac/0x160 drivers/ata/libata-scsi.c:4198
+   scsi_dispatch_cmd drivers/scsi/scsi_lib.c:1610 [inline]
+   scsi_queue_rq+0x12af/0x36a0 drivers/scsi/scsi_lib.c:1852
+   blk_mq_dispatch_rq_list+0x452/0x2030 block/blk-mq.c:2058
+   __blk_mq_do_dispatch_sched block/blk-mq-sched.c:170 [inline]
+   blk_mq_do_dispatch_sched block/blk-mq-sched.c:184 [inline]
+   __blk_mq_sched_dispatch_requests+0xcdf/0x1620 block/blk-mq-sched.c:309
+   blk_mq_sched_dispatch_requests+0xd4/0x150 block/blk-mq-sched.c:331
+   blk_mq_run_hw_queue+0x645/0x9a0 block/blk-mq.c:2273
+   blk_mq_dispatch_plug_list block/blk-mq.c:2774 [inline]
+   blk_mq_flush_plug_list.part.0+0x611/0x1d90 block/blk-mq.c:2822
+   blk_mq_flush_plug_list block/blk-mq.c:1296 [inline]
+   blk_add_rq_to_plug+0x117/0x540 block/blk-mq.c:1299
+   blk_mq_submit_bio+0x1602/0x20f0 block/blk-mq.c:3014
+   __submit_bio+0xfd/0x310 block/blk-core.c:619
+   __submit_bio_noacct_mq block/blk-core.c:698 [inline]
+   submit_bio_noacct_nocheck+0x98a/0xd50 block/blk-core.c:727
+   submit_bio_noacct+0x746/0x1ba0 block/blk-core.c:837
+   ext4_io_submit fs/ext4/page-io.c:378 [inline]
+   io_submit_add_bh fs/ext4/page-io.c:419 [inline]
+   ext4_bio_write_folio+0x76f/0x1da0 fs/ext4/page-io.c:563
+   mpage_submit_folio+0x1c0/0x350 fs/ext4/inode.c:1869
+   mpage_map_and_submit_buffers+0x57b/0xac0 fs/ext4/inode.c:2115
+   mpage_map_and_submit_extent fs/ext4/inode.c:2254 [inline]
+   ext4_do_writepages+0x186c/0x3250 fs/ext4/inode.c:2679
+   ext4_writepages+0x303/0x730 fs/ext4/inode.c:2768
+   do_writepages+0x1a3/0x7f0 mm/page-writeback.c:2612
+   filemap_fdatawrite_wbc mm/filemap.c:397 [inline]
+   filemap_fdatawrite_wbc+0x148/0x1c0 mm/filemap.c:387
+   __filemap_fdatawrite_range+0xba/0x100 mm/filemap.c:430
+   ext4_alloc_da_blocks+0x202/0x2c0 fs/ext4/inode.c:3072
+   ext4_release_file+0x17c/0x370 fs/ext4/file.c:169
+   __fput+0x270/0xb80 fs/file_table.c:422
+   task_work_run+0x14e/0x250 kernel/task_work.c:180
+   exit_task_work include/linux/task_work.h:38 [inline]
+   do_exit+0xa7d/0x2c10 kernel/exit.c:878
+   do_group_exit+0xd3/0x2a0 kernel/exit.c:1027
+   get_signal+0x2616/0x2710 kernel/signal.c:2911
+   arch_do_signal_or_restart+0x90/0x7e0 arch/x86/kernel/signal.c:310
+   exit_to_user_mode_loop kernel/entry/common.c:105 [inline]
+   exit_to_user_mode_prepare include/linux/entry-common.h:328 [inline]
+   irqentry_exit_to_user_mode+0x139/0x280 kernel/entry/common.c:225
+   asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:623
 
 
---=20
-Thanks,
-Mina
+stack backtrace:
+CPU: 3 PID: 5916 Comm: syz-executor.0 Not tainted 6.8.0-syzkaller-13161-gbfa8f18691ed #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:114
+ print_bad_irq_dependency kernel/locking/lockdep.c:2626 [inline]
+ check_irq_usage+0xe3c/0x1490 kernel/locking/lockdep.c:2865
+ check_prev_add kernel/locking/lockdep.c:3138 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3253 [inline]
+ validate_chain kernel/locking/lockdep.c:3869 [inline]
+ __lock_acquire+0x248e/0x3b30 kernel/locking/lockdep.c:5137
+ lock_acquire kernel/locking/lockdep.c:5754 [inline]
+ lock_acquire+0x1b1/0x560 kernel/locking/lockdep.c:5719
+ __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+ _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
+ spin_lock_bh include/linux/spinlock.h:356 [inline]
+ __sock_map_delete net/core/sock_map.c:414 [inline]
+ sock_map_delete_elem+0xc8/0x150 net/core/sock_map.c:446
+ ___bpf_prog_run+0x3e51/0xae80 kernel/bpf/core.c:1997
+ __bpf_prog_run32+0xc1/0x100 kernel/bpf/core.c:2236
+ bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+ __bpf_prog_run include/linux/filter.h:657 [inline]
+ bpf_prog_run include/linux/filter.h:664 [inline]
+ __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+ bpf_trace_run4+0x176/0x460 kernel/trace/bpf_trace.c:2422
+ trace_mm_page_alloc include/trace/events/kmem.h:177 [inline]
+ __alloc_pages+0x3ad/0x2460 mm/page_alloc.c:4597
+ __alloc_pages_node include/linux/gfp.h:238 [inline]
+ alloc_pages_node include/linux/gfp.h:261 [inline]
+ alloc_pgtable_page+0xe6/0x1e0 drivers/iommu/intel/iommu.c:306
+ pfn_to_dma_pte+0x2ca/0x5a0 drivers/iommu/intel/iommu.c:870
+ __domain_mapping+0x35e/0xc20 drivers/iommu/intel/iommu.c:2105
+ intel_iommu_map drivers/iommu/intel/iommu.c:4050 [inline]
+ intel_iommu_map_pages+0x270/0x390 drivers/iommu/intel/iommu.c:4069
+ __iommu_map+0x2f1/0x680 drivers/iommu/iommu.c:2464
+ iommu_map_sg+0x1a5/0x4b0 drivers/iommu/iommu.c:2615
+ iommu_dma_map_sg+0x79b/0xc80 drivers/iommu/dma-iommu.c:1454
+ __dma_map_sg_attrs+0xd6/0x230 kernel/dma/mapping.c:201
+ dma_map_sg_attrs+0x34/0x50 kernel/dma/mapping.c:236
+ ata_sg_setup drivers/ata/libata-core.c:4741 [inline]
+ ata_qc_issue+0x81a/0xf50 drivers/ata/libata-core.c:5043
+ ata_scsi_translate drivers/ata/libata-scsi.c:1717 [inline]
+ __ata_scsi_queuecmd+0xa39/0x13c0 drivers/ata/libata-scsi.c:4153
+ ata_scsi_queuecmd+0xac/0x160 drivers/ata/libata-scsi.c:4198
+ scsi_dispatch_cmd drivers/scsi/scsi_lib.c:1610 [inline]
+ scsi_queue_rq+0x12af/0x36a0 drivers/scsi/scsi_lib.c:1852
+ blk_mq_dispatch_rq_list+0x452/0x2030 block/blk-mq.c:2058
+ __blk_mq_do_dispatch_sched block/blk-mq-sched.c:170 [inline]
+ blk_mq_do_dispatch_sched block/blk-mq-sched.c:184 [inline]
+ __blk_mq_sched_dispatch_requests+0xcdf/0x1620 block/blk-mq-sched.c:309
+ blk_mq_sched_dispatch_requests+0xd4/0x150 block/blk-mq-sched.c:331
+ blk_mq_run_hw_queue+0x645/0x9a0 block/blk-mq.c:2273
+ blk_mq_dispatch_plug_list block/blk-mq.c:2774 [inline]
+ blk_mq_flush_plug_list.part.0+0x611/0x1d90 block/blk-mq.c:2822
+ blk_mq_flush_plug_list block/blk-mq.c:1296 [inline]
+ blk_add_rq_to_plug+0x117/0x540 block/blk-mq.c:1299
+ blk_mq_submit_bio+0x1602/0x20f0 block/blk-mq.c:3014
+ __submit_bio+0xfd/0x310 block/blk-core.c:619
+ __submit_bio_noacct_mq block/blk-core.c:698 [inline]
+ submit_bio_noacct_nocheck+0x98a/0xd50 block/blk-core.c:727
+ submit_bio_noacct+0x746/0x1ba0 block/blk-core.c:837
+ ext4_io_submit fs/ext4/page-io.c:378 [inline]
+ io_submit_add_bh fs/ext4/page-io.c:419 [inline]
+ ext4_bio_write_folio+0x76f/0x1da0 fs/ext4/page-io.c:563
+ mpage_submit_folio+0x1c0/0x350 fs/ext4/inode.c:1869
+ mpage_map_and_submit_buffers+0x57b/0xac0 fs/ext4/inode.c:2115
+ mpage_map_and_submit_extent fs/ext4/inode.c:2254 [inline]
+ ext4_do_writepages+0x186c/0x3250 fs/ext4/inode.c:2679
+ ext4_writepages+0x303/0x730 fs/ext4/inode.c:2768
+ do_writepages+0x1a3/0x7f0 mm/page-writeback.c:2612
+ filemap_fdatawrite_wbc mm/filemap.c:397 [inline]
+ filemap_fdatawrite_wbc+0x148/0x1c0 mm/filemap.c:387
+ __filemap_fdatawrite_range+0xba/0x100 mm/filemap.c:430
+ ext4_alloc_da_blocks+0x202/0x2c0 fs/ext4/inode.c:3072
+ ext4_release_file+0x17c/0x370 fs/ext4/file.c:169
+ __fput+0x270/0xb80 fs/file_table.c:422
+ task_work_run+0x14e/0x250 kernel/task_work.c:180
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xa7d/0x2c10 kernel/exit.c:878
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1027
+ get_signal+0x2616/0x2710 kernel/signal.c:2911
+ arch_do_signal_or_restart+0x90/0x7e0 arch/x86/kernel/signal.c:310
+ exit_to_user_mode_loop kernel/entry/common.c:105 [inline]
+ exit_to_user_mode_prepare include/linux/entry-common.h:328 [inline]
+ irqentry_exit_to_user_mode+0x139/0x280 kernel/entry/common.c:225
+ asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:623
+RIP: 0033:0x7f38e3228807
+Code: Unable to access opcode bytes at 0x7f38e32287dd.
+RSP: 002b:00007f38e3fc6260 EFLAGS: 00010206
+RAX: 0000000000000000 RBX: 000000000000000b RCX: 00007f38e327dda9
+RDX: 00007f38e3fc6280 RSI: 00007f38e3fc63b0 RDI: 000000000000000b
+RBP: 00007f38e32ca47a R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000206 R12: 0000000000000000
+R13: 000000000000000b R14: 00007f38e33abf80 R15: 00007ffc0d25d6f8
+ </TASK>
+------------[ cut here ]------------
+raw_local_irq_restore() called with IRQs enabled
+WARNING: CPU: 3 PID: 5916 at kernel/locking/irqflag-debug.c:10 warn_bogus_irq_restore+0x29/0x30 kernel/locking/irqflag-debug.c:10
+Modules linked in:
+CPU: 3 PID: 5916 Comm: syz-executor.0 Not tainted 6.8.0-syzkaller-13161-gbfa8f18691ed #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+RIP: 0010:warn_bogus_irq_restore+0x29/0x30 kernel/locking/irqflag-debug.c:10
+Code: 90 f3 0f 1e fa 90 80 3d fc f1 ec 04 00 74 06 90 c3 cc cc cc cc c6 05 ed f1 ec 04 01 90 48 c7 c7 c0 c2 2c 8b e8 38 3c 72 f6 90 <0f> 0b 90 90 eb df 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+RSP: 0018:ffffc900038f6978 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff888021ffe400 RCX: ffffffff814fe149
+RDX: ffff888026514880 RSI: ffffffff814fe156 RDI: 0000000000000001
+RBP: 0000000000000246 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 61636f6c5f776172 R12: ffff88802328a680
+R13: 0000000000000246 R14: ffff888023288010 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff88806b300000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020450000 CR3: 0000000108534000 CR4: 0000000000350ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+ _raw_spin_unlock_irqrestore+0x74/0x80 kernel/locking/spinlock.c:194
+ spin_unlock_irqrestore include/linux/spinlock.h:406 [inline]
+ ata_scsi_queuecmd+0xda/0x160 drivers/ata/libata-scsi.c:4204
+ scsi_dispatch_cmd drivers/scsi/scsi_lib.c:1610 [inline]
+ scsi_queue_rq+0x12af/0x36a0 drivers/scsi/scsi_lib.c:1852
+ blk_mq_dispatch_rq_list+0x452/0x2030 block/blk-mq.c:2058
+ __blk_mq_do_dispatch_sched block/blk-mq-sched.c:170 [inline]
+ blk_mq_do_dispatch_sched block/blk-mq-sched.c:184 [inline]
+ __blk_mq_sched_dispatch_requests+0xcdf/0x1620 block/blk-mq-sched.c:309
+ blk_mq_sched_dispatch_requests+0xd4/0x150 block/blk-mq-sched.c:331
+ blk_mq_run_hw_queue+0x645/0x9a0 block/blk-mq.c:2273
+ blk_mq_dispatch_plug_list block/blk-mq.c:2774 [inline]
+ blk_mq_flush_plug_list.part.0+0x611/0x1d90 block/blk-mq.c:2822
+ blk_mq_flush_plug_list block/blk-mq.c:1296 [inline]
+ blk_add_rq_to_plug+0x117/0x540 block/blk-mq.c:1299
+ blk_mq_submit_bio+0x1602/0x20f0 block/blk-mq.c:3014
+ __submit_bio+0xfd/0x310 block/blk-core.c:619
+ __submit_bio_noacct_mq block/blk-core.c:698 [inline]
+ submit_bio_noacct_nocheck+0x98a/0xd50 block/blk-core.c:727
+ submit_bio_noacct+0x746/0x1ba0 block/blk-core.c:837
+ ext4_io_submit fs/ext4/page-io.c:378 [inline]
+ io_submit_add_bh fs/ext4/page-io.c:419 [inline]
+ ext4_bio_write_folio+0x76f/0x1da0 fs/ext4/page-io.c:563
+ mpage_submit_folio+0x1c0/0x350 fs/ext4/inode.c:1869
+ mpage_map_and_submit_buffers+0x57b/0xac0 fs/ext4/inode.c:2115
+ mpage_map_and_submit_extent fs/ext4/inode.c:2254 [inline]
+ ext4_do_writepages+0x186c/0x3250 fs/ext4/inode.c:2679
+ ext4_writepages+0x303/0x730 fs/ext4/inode.c:2768
+ do_writepages+0x1a3/0x7f0 mm/page-writeback.c:2612
+ filemap_fdatawrite_wbc mm/filemap.c:397 [inline]
+ filemap_fdatawrite_wbc+0x148/0x1c0 mm/filemap.c:387
+ __filemap_fdatawrite_range+0xba/0x100 mm/filemap.c:430
+ ext4_alloc_da_blocks+0x202/0x2c0 fs/ext4/inode.c:3072
+ ext4_release_file+0x17c/0x370 fs/ext4/file.c:169
+ __fput+0x270/0xb80 fs/file_table.c:422
+ task_work_run+0x14e/0x250 kernel/task_work.c:180
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xa7d/0x2c10 kernel/exit.c:878
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1027
+ get_signal+0x2616/0x2710 kernel/signal.c:2911
+ arch_do_signal_or_restart+0x90/0x7e0 arch/x86/kernel/signal.c:310
+ exit_to_user_mode_loop kernel/entry/common.c:105 [inline]
+ exit_to_user_mode_prepare include/linux/entry-common.h:328 [inline]
+ irqentry_exit_to_user_mode+0x139/0x280 kernel/entry/common.c:225
+ asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:623
+RIP: 0033:0x7f38e3228807
+Code: Unable to access opcode bytes at 0x7f38e32287dd.
+RSP: 002b:00007f38e3fc6260 EFLAGS: 00010206
+RAX: 0000000000000000 RBX: 000000000000000b RCX: 00007f38e327dda9
+RDX: 00007f38e3fc6280 RSI: 00007f38e3fc63b0 RDI: 000000000000000b
+RBP: 00007f38e32ca47a R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000206 R12: 0000000000000000
+R13: 000000000000000b R14: 00007f38e33abf80 R15: 00007ffc0d25d6f8
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
