@@ -1,77 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA0112F5A2
-	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 16:50:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8789114D70E
+	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 16:56:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711558232; cv=none; b=Q3+N00zQuek8SMH1wJ2F1gVKCaR82GtetEOdaXS7HhRZBvqlEf8mB0xZek4emaSZXsiVHD2s/I066PiR2LnHFYbqeqCsomQo1ktDjzq91V8KADgZ61USp5zlqXsFeepj//aPZRwugg8rIKcGRNuFRMawjW9+47MY1LBh/LIyPr0=
+	t=1711558572; cv=none; b=hUAku6sEaKOW3q1nr1Y2xhuIXyLA8t0MaGCxBOGE9xvBnmFT9wKspieCMIuUMloSyL92LXjHzevbQN/wG5kA/UumyYpDYmpdBm1AlvWrwoVKD+d9Gu0HVJOJTcepXAhGwv6gO0mrpKaWxshKs+zQbfu0wBzhLRqmfaTDvq3xqQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711558232; c=relaxed/simple;
-	bh=D6OhoZwlpvWinHQgPMO4Ym+zFaTB/BdkqfMryTftGAg=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=S8J29Y8C1z60AYcr2sooGSXJ0cRRVMIGhfKPTFKVg613bNFVCILBIdh716WcqLemjhhbarNQ/4k63wHVB1A2lOKcv5p/aysgrSgENqkBrKvK7UgIi/EUAL/sKT2kChtOQAUhao5r0SlYWXteNGW8IREeDsRc9C83hjt0yl0/qPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D1B2tWsu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711558572; c=relaxed/simple;
+	bh=2v7aLHwG3xBNYzKIzJCv7AnZ5MRpT0U1cdtqi6Tzb+U=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=I4vKzs3W/XXze9ExaQI+HUaExmO3NfIXBTKyGVFCfaObxjaEdC9ZrOS6daTk+aTN4lcWFMTGelS+WYKy2Hfngmew0DGZLMEF7Q9Dbl+MVeLnyzeemWf3UEnWhQoZkesJyc8xfDn7TVK2JE/6YsSfmZuXZaksEf/+xiaA0GUsSKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=clZymOYN; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D1B2tWsu"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E8BBEC43390;
-	Wed, 27 Mar 2024 16:50:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711558231;
-	bh=D6OhoZwlpvWinHQgPMO4Ym+zFaTB/BdkqfMryTftGAg=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=D1B2tWsuh3etjIoXHD5Ozot23q9JoRAnTiQHG5S+BouB2BMbNqIuB0Xizki+7ted0
-	 fohz9T6ruRbtwEKtW52MiFACDy/pobMBO2DCOmlk34qfpKoz2kiNd7ycVhoJ1igaQj
-	 eGcYWPckOSjX6Skh4Oa1GDl1Ibuw1uqdFrzMLKpEc9JGiBSzwHXPfYosngkBEjo+u+
-	 CoUL3pS1qDxdYZwBqLq7Fijs3Y4WqlKrJ5AHFECOm+V3+AeFVBR8oBg/L0YCeY4SQ9
-	 48yIj3lG8QvpYFBjWjB8F077nq397WVcWZsPHPGp5SZAzqihk3xWmjpeNxJw9OPjsf
-	 DC+2l9msGHz5w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D8334D95061;
-	Wed, 27 Mar 2024 16:50:31 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="clZymOYN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1711558569;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=0grGr2vs7g8LZk25gVO01eJHrHioop+8opYOjWTngeo=;
+	b=clZymOYNe4emwBm4QrMOS3Wvvbeskf83MUvQPSJrWS7o3/SlUEN1QiawUpCXzW/IGlWnub
+	wRGRc2N5dh/1QxqUa5iDuuo5rSOVmUORu6l2xKAUisEzFaUYlYNFFKoiRJ/sCSLwc9JDgO
+	vj+2JTemUFMCCwhWicGLZDuhjVIsyzU=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-584-8-ysLBGsN3StXeBssyGLCQ-1; Wed, 27 Mar 2024 12:56:08 -0400
+X-MC-Unique: 8-ysLBGsN3StXeBssyGLCQ-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-341c35fb2eeso780774f8f.0
+        for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 09:56:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711558567; x=1712163367;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0grGr2vs7g8LZk25gVO01eJHrHioop+8opYOjWTngeo=;
+        b=kaOH+3DCgqubQlXf5RJoWChSt92CZ9pqBvumaUNuPH6FF0UpioKrRaJWNRCuDDKmTk
+         iFYav214kIWtj+tSUihbgdBhhymkOdsWJQENfolRHuNCkhXXeApCr7HgCbYwgMGJTYTB
+         s0CFjfMMaBE5iVLJWYyndy1rT6IBu0zEDcz7tKB/WkyKCh70VxqQkICL9GK8Yj58aI5E
+         cpY7o8xc0QSqeCefWZ3DhpwVyyLWVNzOaMZcQwWMikw1Pl2lcVnD+jLHhCLzgRoAmEhi
+         7FBPmCm9mCrVygFKW2acY3+4k/+3Z3ldvxIBEUaR0JMYG71C2K7rC3/rScW04mJuBaBJ
+         JFEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU9MN0PmOOeRffuVG2J+pJf5XWf4ZJ0oBEvyVtZiB1HgGHWWkXBzz6BZ3nTTuSykBo+9s+jbciGFqkuBezmoytvUfDa
+X-Gm-Message-State: AOJu0YyEuXPOMH0X2+Yr/i5ZIvaSEgg8zQhFoQnqngKHgrvOxDYa/SU5
+	jSxNmWP5mbtLROUhDgoQ6mGVoIOsBNVtEMqNAlqCQfq8mD69VGZggxyfBnfFZpO+HT2ziA4nvzD
+	YUAkVlL+8LSl1clRVFOUepmeMvvfSrbkX3GcnLsnj5///IbwUTQ==
+X-Received: by 2002:a05:6000:1818:b0:341:e617:8f6d with SMTP id m24-20020a056000181800b00341e6178f6dmr343079wrh.7.1711558566940;
+        Wed, 27 Mar 2024 09:56:06 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEzQKN1dAufZbQQUXLp6v3dofv6/SA+gzYRqZDhHX5s8KmiBqhQCEb+F7oRcTeE3/OX0GqXLg==
+X-Received: by 2002:a05:6000:1818:b0:341:e617:8f6d with SMTP id m24-20020a056000181800b00341e6178f6dmr343063wrh.7.1711558566579;
+        Wed, 27 Mar 2024 09:56:06 -0700 (PDT)
+Received: from gerbillo.redhat.com ([2a0d:3341:b0aa:8c10::f71])
+        by smtp.gmail.com with ESMTPSA id by9-20020a056000098900b00341e67a7a90sm802934wrb.19.2024.03.27.09.56.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Mar 2024 09:56:06 -0700 (PDT)
+Message-ID: <8410a6f61e7a778117819ebeda667687353ffb21.camel@redhat.com>
+Subject: Re: mptcp splat
+From: Paolo Abeni <pabeni@redhat.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Network Development
+ <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, MPTCP Upstream
+ <mptcp@lists.linux.dev>, Matthieu Baerts <matttbe@kernel.org>, Mat
+ Martineau <martineau@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Martin
+ KaFai Lau <martin.lau@kernel.org>
+Date: Wed, 27 Mar 2024 17:56:04 +0100
+In-Reply-To: <CAADnVQKCxxETthqDpcE1xMGwa5au8JuLr_49QuwemL7uBKfiVg@mail.gmail.com>
+References: 
+	<CAADnVQKCxxETthqDpcE1xMGwa5au8JuLr_49QuwemL7uBKfiVg@mail.gmail.com>
+Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH V2 bpf 0/2] Check bloom filter map value size
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171155823187.28682.4569570365467320556.git-patchwork-notify@kernel.org>
-Date: Wed, 27 Mar 2024 16:50:31 +0000
-References: <20240327024245.318299-1-andreimatei1@gmail.com>
-In-Reply-To: <20240327024245.318299-1-andreimatei1@gmail.com>
-To: Andrei Matei <andreimatei1@gmail.com>
-Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com
 
-Hello:
+On Wed, 2024-03-27 at 09:43 -0700, Alexei Starovoitov wrote:
+> I ffwded bpf tree with the recent net fixes and caught this:
+>=20
+> [   48.386337] WARNING: CPU: 32 PID: 3276 at net/mptcp/subflow.c:1430
+> subflow_data_ready+0x147/0x1c0
+> [   48.392012] Modules linked in: dummy bpf_testmod(O) [last unloaded:
+> bpf_test_no_cfi(O)]
+> [   48.396609] CPU: 32 PID: 3276 Comm: test_progs Tainted: G
+> O       6.8.0-12873-g2c43c33bfd23 #1014
+> #[   48.467143] Call Trace:
+> [   48.469094]  <TASK>
+> [   48.472159]  ? __warn+0x80/0x180
+> [   48.475019]  ? subflow_data_ready+0x147/0x1c0
+> [   48.478068]  ? report_bug+0x189/0x1c0
+> [   48.480725]  ? handle_bug+0x36/0x70
+> [   48.483061]  ? exc_invalid_op+0x13/0x60
+> [   48.485809]  ? asm_exc_invalid_op+0x16/0x20
+> [   48.488754]  ? subflow_data_ready+0x147/0x1c0
+> [   48.492159]  mptcp_set_rcvlowat+0x79/0x1d0
+> [   48.495026]  sk_setsockopt+0x6c0/0x1540
+>=20
+> It doesn't reproduce all the time though.
+> Some race?
+> Known issue?
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+It was not known to me. Looks like something related to not so recent
+changes (rcvlowat support).
 
-On Tue, 26 Mar 2024 22:42:43 -0400 you wrote:
-> v1->v2:
-> - prepend a patch addressing the bloom map specifically
-> - change low-level rejection error to EFAULT, to indicate a bug
-> 
-> Andrei Matei (2):
->   bpf: Check bloom filter map value size
->   bpf: Protect against int overflow for stack access size
-> 
-> [...]
+Definitely looks lie a race.
 
-Here is the summary with links:
-  - [V2,bpf,1/2] bpf: Check bloom filter map value size
-    https://git.kernel.org/bpf/bpf/c/b018c30d030a
-  - [V2,bpf,2/2] bpf: Protect against int overflow for stack access size
-    https://git.kernel.org/bpf/bpf/c/8a1f008933b6
+If you could share more info about the running context and/or a full
+decoded splat it could help, thanks!
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Paolo
 
