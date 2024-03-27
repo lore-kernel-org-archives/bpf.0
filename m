@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989A014C59E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989501DDD1
 	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 22:10:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711577433; cv=none; b=JISr0xliEaRtS2tHjUCBDSz30JtHLMr9OaPTIFr45/+/cvahPRkUxFtMyRApeXUGjJwBTe7uy1HM41A1LzTMNSYyI4h2KPb6JPfp0xxhUf9bE/bCZLtR99rifFtwyMABktKfELlPxRkVvhWtjik2QQY7urH05O+Ra73sLKh0pk4=
+	t=1711577433; cv=none; b=koBXC2zyX7tYs3a51lWjFVwEEwHDeyJtwnhfFSU+YOdSe7P7NhC9HKcTvxc1jldkaC1T0lNzVqSnkCS0vdME45iMebG2yfCtHWbp/PoCHt9x5RkTFmZvfeE6SeNkCrkmqh53+exYchuAlaIE3xLyVxr6ZMg2s2MFq0PFdzzBb/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1711577433; c=relaxed/simple;
-	bh=N7uSYx5fxAIM211OQxu7ovqyRWkOtVPpdS7bBoKp40M=;
+	bh=pDYGyawPGEmDGFPRCqJt+G4naw1fg9dnue6C4Jh0Lkw=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=qXCI5T+7m9GvlWqN8FcSOvcUWqvhIXbHlZon8RMa9pDEwyI+/rQM2WxrhCjdVfacUlARWE52Ooyk8V+JEY1Vqkfi2+1LD6Ud+u7ghsA4XemGm5i02bo6Roo2B1HtHlYw08a/cFqIl0j35jq93Pt0CJkEcqVg337Q9nlvQOgxh2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dfYlKRIO; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=Q9YplzTYRt61X9BBA4UZDadnuaj/Y/UbSVF3qXtopQBo+qpmrF/f8wzBmYW3zffvswoAq+AhATm8MJ5GFNIImIoDGZJZ7bQeNu74D+G2ISEwTshVDV4wlL8mdhRs/dY6wCvX73mcIWpn0ljVeVXx/eDdH6WBCzs129JS5d/YxmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g5vJ4rQf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dfYlKRIO"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 28071C43394;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g5vJ4rQf"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 215DDC43390;
 	Wed, 27 Mar 2024 22:10:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1711577433;
-	bh=N7uSYx5fxAIM211OQxu7ovqyRWkOtVPpdS7bBoKp40M=;
+	bh=pDYGyawPGEmDGFPRCqJt+G4naw1fg9dnue6C4Jh0Lkw=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=dfYlKRIOUArloi+7Q1bOjiHIazYeshO11/gPeNN6NRrvZVlep8Rn8X+s9Ia1QxDFA
-	 FJDHp2YzEzd9WqJWoM0iYtlY+o8MZH2/rHJHsuvrQacnbt1HlY229/MYR4gGUJVt1Y
-	 OMUJgmi9ypJqHyO8NYqDypsuI5U81G5p72e0OCjE2lMdltZxfInn+V1Rk30aixbKfB
-	 SpaJGJDQxFs4MkuELCY41pKfKcKT5rBzP7Xzlh8B8qaOdyMj/LFSuFDpqwZnHkZyEU
-	 07TDN8piujr2nHhgrrk73h0X4YeCQ1/0s8TO2qgMKJrouHXRAupFgb5JMine1fJeRQ
-	 VAzjXNxhJNZRw==
+	b=g5vJ4rQf9+0SFGkdMHejVf07pi+g8A33QwFrV1mWi7VlS7wqfk89djZeXCp24TZz5
+	 VT1OxLShG+IXEPj61vlskez7NuCBNb/Yt3YJFY72stfg+qo2Z7p0PA4ZLELF0vY24K
+	 PoRtEcIsG/oGXbo0YNJwvHRw0YAYuvrlWmenD9muG2hhSyWN7M9ljJMXDyAYwB2xmg
+	 5CPxDL4QHkO2ahCozvPgeqqtUY8RgCI3Owp07S7p77JGySaosc3e/FrJQe3uzN4kEe
+	 875Ab3YKH/qxtksHw2ndsUp5beVwoysMr37HWsqZD4ilQEo3SSATQ7TsteRg8ugG/l
+	 J3i6HiOqyWZtw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 16206D95063;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 08E88D2D0EB;
 	Wed, 27 Mar 2024 22:10:33 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -37,45 +37,51 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [bpf-next v2 1/1] bpf: Mitigate latency spikes associated with
- freeing non-preallocated htab
+Subject: Re: [PATCH v2 bpf-next 0/6] bench: fast in-kernel triggering benchmarks
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171157743308.7147.94289008814836168.git-patchwork-notify@kernel.org>
+ <171157743303.7147.9524380873313435641.git-patchwork-notify@kernel.org>
 Date: Wed, 27 Mar 2024 22:10:33 +0000
-References: <20240327032022.78391-1-laoar.shao@gmail.com>
-In-Reply-To: <20240327032022.78391-1-laoar.shao@gmail.com>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com,
- haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org
+References: <20240326162151.3981687-1-andrii@kernel.org>
+In-Reply-To: <20240326162151.3981687-1-andrii@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ martin.lau@kernel.org, kernel-team@meta.com
 
 Hello:
 
-This patch was applied to bpf/bpf-next.git (master)
+This series was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Wed, 27 Mar 2024 11:20:22 +0800 you wrote:
-> Following the recent upgrade of one of our BPF programs, we encountered
-> significant latency spikes affecting other applications running on the same
-> host. After thorough investigation, we identified that these spikes were
-> primarily caused by the prolonged duration required to free a
-> non-preallocated htab with approximately 2 million keys.
+On Tue, 26 Mar 2024 09:21:45 -0700 you wrote:
+> Remove "legacy" triggering benchmarks which rely on syscalls (and thus syscall
+> overhead is a noticeable part of benchmark, unfortunately). Replace them with
+> faster versions that rely on triggering BPF programs in-kernel through another
+> simple "driver" BPF program. See patch #2 with comparison results.
 > 
-> Notably, our kernel configuration lacks the presence of CONFIG_PREEMPT. In
-> scenarios where kernel execution extends excessively, other threads might
-> be starved of CPU time, resulting in latency issues across the system. To
-> mitigate this, we've adopted a proactive approach by incorporating
-> cond_resched() calls within the kernel code. This ensures that during
-> lengthy kernel operations, the scheduler is invoked periodically to provide
-> opportunities for other threads to execute.
+> raw_tp/tp/fmodret benchmarks required adding a simple kfunc in kernel to be
+> able to trigger a simple tracepoint from BPF program (plus it is also allowed
+> to be replaced by fmod_ret programs). This limits raw_tp/tp/fmodret benchmarks
+> to new kernels only, but it keeps bench tool itself very portable and most of
+> other benchmarks will still work on wide variety of kernels without the need
+> to worry about building and deploying custom kernel module. See patches #5
+> and #6 for details.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v2,1/1] bpf: Mitigate latency spikes associated with freeing non-preallocated htab
-    https://git.kernel.org/bpf/bpf-next/c/cb7b8322017e
+  - [v2,bpf-next,1/6] selftests/bpf: rename and clean up userspace-triggered benchmarks
+    https://git.kernel.org/bpf/bpf-next/c/8f54386ea7ec
+  - [v2,bpf-next,2/6] selftests/bpf: add batched, mostly in-kernel BPF triggering benchmarks
+    https://git.kernel.org/bpf/bpf-next/c/e6c97e34ad7e
+  - [v2,bpf-next,3/6] selftests/bpf: remove syscall-driven benchs, keep syscall-count only
+    https://git.kernel.org/bpf/bpf-next/c/850860ee6712
+  - [v2,bpf-next,4/6] selftests/bpf: lazy-load trigger bench BPF programs
+    https://git.kernel.org/bpf/bpf-next/c/f328a70ab28b
+  - [v2,bpf-next,5/6] bpf: add bpf_modify_return_test_tp() kfunc triggering tracepoint
+    https://git.kernel.org/bpf/bpf-next/c/c55e25089eba
+  - [v2,bpf-next,6/6] selftests/bpf: add batched tp/raw_tp/fmodret tests
+    https://git.kernel.org/bpf/bpf-next/c/b1d5f62f825d
 
 You are awesome, thank you!
 -- 
