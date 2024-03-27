@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433043839D
-	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 10:21:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94B02C85C
+	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 10:21:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711534863; cv=none; b=T6RysY+Bw8GM8na3PAFnEC2apyveouFWRf3t+9MnxQCHIQZYssUs5nrHMAhr1Nzr9MtuSuwiDlPpLi3kOEi5Bf80YY7OOjFsCyH3PxQIO3LKaIGc4Vnk6YJVzyeViJShBMPXoRLTwzNCQ3O95NBHwYZH1JwSw+5D2VIiZ6hrm/U=
+	t=1711534873; cv=none; b=jieBAAYyMG2X57Lxpsje8bS2EuGUxWY6cbKNRp7Yu+vYGZW/vKpqyvylU6CmEzv/dWjjOGDDSvMaoloyIwdK2Rio7MxN1AVkrS6yiOoWjdsf7dxUv0K241ETC8vNPgartgwK6HydByUBiZJGoCJyxY7bOJLF+ttOvBpDZ2AF7pM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711534863; c=relaxed/simple;
-	bh=TWNui25s1EkfmXvPFiumY0g49m2WT4pvcj6b0M6ToxA=;
+	s=arc-20240116; t=1711534873; c=relaxed/simple;
+	bh=tomicRR3vcowf6vztsNpDk2bUezEGRemrbboijL8tTQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GAda43xiSM+QGlzgZu5TMpuSgvh4oBG7q6yUC4ZNGQXiY8ZpN3uP3qxkdWxhBFkB450q21nh4SRYRD4iUGYUhUwt+9jwxEuNixKIlSLDPFkQqCpwz6UFeON45XienRDmGt+w9auS26C/F0FckXo+DuAm1gves6CVDK919M3AGoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lILBquth; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=ZFH9v1a0TH+eT+KgGkLtlcNTg+sZUzv4Crsass/BCVDB5Hv6JIvOPH2ALePE/2KIDC8uYLx2PqLprg8ZvMbVSlNSYK6BC8QpSxyVMTbcWriJq2RHCNTRmdbrpNvrQthDPbz6pAWIXIM0MEWKwM4PzB0OYGHZ+b5KCIjOaVtOMRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ssfn/YTM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lILBquth"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8E6BC433F1;
-	Wed, 27 Mar 2024 10:20:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ssfn/YTM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A087C433F1;
+	Wed, 27 Mar 2024 10:21:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711534862;
-	bh=TWNui25s1EkfmXvPFiumY0g49m2WT4pvcj6b0M6ToxA=;
+	s=k20201202; t=1711534873;
+	bh=tomicRR3vcowf6vztsNpDk2bUezEGRemrbboijL8tTQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lILBquthIBCwhF/ZUcFHOY8wGMDOB8rkdxRwrrtgQRX1dC0l4tZ1HT1jLRV+ik1y9
-	 pSySisgLV9xTz3bYRxFy9rq3vKUFb5o6EPqrkL38ymwOB+/3gDMXiM5T+sZTUwdjv0
-	 xMI+pVFygMDwNmYGV2X9jyCy8Ujw1HALMRZ6CY9JFdyWgLvK9NPgWARbhR1WMqHzaL
-	 R67iQIF0Phoh7UezmMnt2+PvwQd80pZEAoSViYZDVaujvom7ZYKe9YQ1KKwQ6qDfti
-	 ob4dlzuGB+/KhQa5SxnITNvbJVWlVmsEBW8Wl0WCfBGN6uvsOjVAQvpKuhhPL0Lv5R
-	 Omj9BkOQ0WUMQ==
+	b=Ssfn/YTM6stOEsjTOBwrtb/uJ57PIhLxvajua6W5IlkQ0tELX7I1yX7kqQQOlZDT3
+	 7/R/doMtoVoS3t+KBR7mS5WlelZQxS4vUbRxr2VbBZBa5oggpqJqVrWQnzYE1kgWei
+	 bohZrV/X+K8euUDBfDepIn+KJ5itYcJs1kGqR3Z2wpDdXKqPMHleR8A9S/TATvRAwx
+	 qVqw3/Qqfm5ZOfduDlLNEu6OoWyy925UuqYVdblE6DJm8oB7Jl4aWbCxu+LR2jNSAk
+	 o1+YsR/MHfUJl9GszIBy/BPC7vPP0+mI/mlI8ajMDJO2KUTSUtrs0KRxBJU4KvM267
+	 9LOGEajgTpgGw==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Oleg Nesterov <oleg@redhat.com>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -39,9 +39,9 @@ Cc: bpf@vger.kernel.org,
 	Thomas Gleixner <tglx@linutronix.de>,
 	"Borislav Petkov (AMD)" <bp@alien8.de>,
 	x86@kernel.org
-Subject: [PATCH bpf-next 2/3] selftests/bpf: Add uretprobe syscall test for regs integrity
-Date: Wed, 27 Mar 2024 11:20:35 +0100
-Message-ID: <20240327102036.543283-3-jolsa@kernel.org>
+Subject: [PATCH bpf-next 3/3] selftests/bpf: Add uretprobe syscall test for regs changes
+Date: Wed, 27 Mar 2024 11:20:36 +0100
+Message-ID: <20240327102036.543283-4-jolsa@kernel.org>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240327102036.543283-1-jolsa@kernel.org>
 References: <20240327102036.543283-1-jolsa@kernel.org>
@@ -53,224 +53,265 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add uretprobe syscall test that compares register values before
-and after the uretprobe is hit. It also compares the register
-values seen from attached bpf program.
+Adding test that creates uprobe consumer on uretprobe which changes some
+of the registers. Making sure the changed registers are propagated to the
+user space when the ureptobe syscall trampoline is used on x86_64.
+
+To be able to do this, adding support to bpf_testmod to create uprobe via
+new attribute file:
+  /sys/kernel/bpf_testmod_uprobe
+
+This file is expecting file offset and creates related uprobe on current
+process exe file and removes existing uprobe if offset is 0. The can be
+only single uprobe at any time.
+
+The uprobe has specific consumer that changes registers used in ureprobe
+syscall trampoline and which are later checked in the test.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/include/linux/compiler.h                |   4 +
- .../selftests/bpf/prog_tests/uprobe_syscall.c | 163 ++++++++++++++++++
- .../selftests/bpf/progs/uprobe_syscall.c      |  15 ++
- 3 files changed, 182 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
- create mode 100644 tools/testing/selftests/bpf/progs/uprobe_syscall.c
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 119 +++++++++++++++++-
+ .../selftests/bpf/prog_tests/uprobe_syscall.c |  67 ++++++++++
+ 2 files changed, 185 insertions(+), 1 deletion(-)
 
-diff --git a/tools/include/linux/compiler.h b/tools/include/linux/compiler.h
-index 8a63a9913495..6f7f22ac9da5 100644
---- a/tools/include/linux/compiler.h
-+++ b/tools/include/linux/compiler.h
-@@ -62,6 +62,10 @@
- #define __nocf_check __attribute__((nocf_check))
- #endif
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+index 39ad96a18123..163b6cc64b4f 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+@@ -10,6 +10,7 @@
+ #include <linux/percpu-defs.h>
+ #include <linux/sysfs.h>
+ #include <linux/tracepoint.h>
++#include <linux/namei.h>
+ #include "bpf_testmod.h"
+ #include "bpf_testmod_kfunc.h"
  
-+#ifndef __naked
-+#define __naked __attribute__((__naked__))
-+#endif
-+
- /* Are two types/vars the same type (ignoring qualifiers)? */
- #ifndef __same_type
- # define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-new file mode 100644
-index 000000000000..14b1cf7a53b4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-@@ -0,0 +1,163 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+
+@@ -343,6 +344,118 @@ static struct bin_attribute bin_attr_bpf_testmod_file __ro_after_init = {
+ 	.write = bpf_testmod_test_write,
+ };
+ 
++/* bpf_testmod_uprobe sysfs attribute is so far enabled for x86_64 only,
++ * please see test_uretprobe_regs_change test  */
 +#ifdef __x86_64__
 +
-+#include <unistd.h>
-+#include <asm/ptrace.h>
-+#include <linux/compiler.h>
-+#include "uprobe_syscall.skel.h"
++static int
++uprobe_ret_handler(struct uprobe_consumer *self, unsigned long func,
++		   struct pt_regs *regs)
 +
-+__naked unsigned long uprobe_syscall_arch_test(void)
 +{
-+	asm volatile (
-+		"movq $0xdeadbeef, %rax\n"
-+		"ret\n"
-+	);
++	regs->ax  = 0x12345678deadbeef;
++	regs->cx  = 0x87654321feebdaed;
++	regs->r11 = (u64) -1;
++	return true;
 +}
 +
-+__naked void uprobe_syscall_arch(struct pt_regs *before, struct pt_regs *after)
++struct testmod_uprobe {
++	struct path path;
++	loff_t offset;
++	struct uprobe_consumer consumer;
++};
++
++static DEFINE_MUTEX(testmod_uprobe_mutex);
++
++static struct testmod_uprobe uprobe = {
++	.consumer.ret_handler = uprobe_ret_handler,
++};
++
++static int testmod_register_uprobe(loff_t offset)
 +{
-+	asm volatile (
-+		"movq %r15,   0(%rdi)\n"
-+		"movq %r14,   8(%rdi)\n"
-+		"movq %r13,  16(%rdi)\n"
-+		"movq %r12,  24(%rdi)\n"
-+		"movq %rbp,  32(%rdi)\n"
-+		"movq %rbx,  40(%rdi)\n"
-+		"movq %r11,  48(%rdi)\n"
-+		"movq %r10,  56(%rdi)\n"
-+		"movq  %r9,  64(%rdi)\n"
-+		"movq  %r8,  72(%rdi)\n"
-+		"movq %rax,  80(%rdi)\n"
-+		"movq %rcx,  88(%rdi)\n"
-+		"movq %rdx,  96(%rdi)\n"
-+		"movq %rsi, 104(%rdi)\n"
-+		"movq %rdi, 112(%rdi)\n"
-+		"movq   $0, 120(%rdi)\n" /* orig_rax */
-+		"movq   $0, 128(%rdi)\n" /* rip      */
-+		"movq   $0, 136(%rdi)\n" /* cs       */
-+		"pushf\n"
-+		"pop %rax\n"
-+		"movq %rax, 144(%rdi)\n" /* eflags   */
-+		"movq %rsp, 152(%rdi)\n" /* rsp      */
-+		"movq   $0, 160(%rdi)\n" /* ss       */
++	int err = -EBUSY;
 +
-+		/* save 2nd argument */
-+		"pushq %rsi\n"
-+		"call uprobe_syscall_arch_test\n"
++	if (uprobe.offset)
++		return -EBUSY;
 +
-+		/* save  return value and load 2nd argument pointer to rax */
-+		"pushq %rax\n"
-+		"movq 8(%rsp), %rax\n"
++	mutex_lock(&testmod_uprobe_mutex);
 +
-+		"movq %r15,   0(%rax)\n"
-+		"movq %r14,   8(%rax)\n"
-+		"movq %r13,  16(%rax)\n"
-+		"movq %r12,  24(%rax)\n"
-+		"movq %rbp,  32(%rax)\n"
-+		"movq %rbx,  40(%rax)\n"
-+		"movq %r11,  48(%rax)\n"
-+		"movq %r10,  56(%rax)\n"
-+		"movq  %r9,  64(%rax)\n"
-+		"movq  %r8,  72(%rax)\n"
-+		"movq %rcx,  88(%rax)\n"
-+		"movq %rdx,  96(%rax)\n"
-+		"movq %rsi, 104(%rax)\n"
-+		"movq %rdi, 112(%rax)\n"
-+		"movq   $0, 120(%rax)\n" /* orig_rax */
-+		"movq   $0, 128(%rax)\n" /* rip      */
-+		"movq   $0, 136(%rax)\n" /* cs       */
++	if (uprobe.offset)
++		goto out;
 +
-+		/* restore return value and 2nd argument */
-+		"pop %rax\n"
-+		"pop %rsi\n"
++	err = kern_path("/proc/self/exe", LOOKUP_FOLLOW, &uprobe.path);
++	if (err)
++		goto out;
 +
-+		"movq %rax,  80(%rsi)\n"
++	err = uprobe_register_refctr(d_real_inode(uprobe.path.dentry),
++				     offset, 0, &uprobe.consumer);
++	if (err)
++		path_put(&uprobe.path);
++	else
++		uprobe.offset = offset;
 +
-+		"pushf\n"
-+		"pop %rax\n"
-+
-+		"movq %rax, 144(%rsi)\n" /* eflags   */
-+		"movq %rsp, 152(%rsi)\n" /* rsp      */
-+		"movq   $0, 160(%rsi)\n" /* ss       */
-+		"ret\n"
-+);
++out:
++	mutex_unlock(&testmod_uprobe_mutex);
++	return err;
 +}
 +
-+static void test_uretprobe_regs_equal(void)
++static void testmod_unregister_uprobe(void)
 +{
-+	struct uprobe_syscall *skel = NULL;
++	mutex_lock(&testmod_uprobe_mutex);
++
++	if (uprobe.offset) {
++		uprobe_unregister(d_real_inode(uprobe.path.dentry),
++				  uprobe.offset, &uprobe.consumer);
++		uprobe.offset = 0;
++	}
++
++	mutex_unlock(&testmod_uprobe_mutex);
++}
++
++static ssize_t
++bpf_testmod_uprobe_write(struct file *file, struct kobject *kobj,
++			 struct bin_attribute *bin_attr,
++			 char *buf, loff_t off, size_t len)
++{
++	unsigned long offset;
++	int err;
++
++	if (kstrtoul(buf, 0, &offset))
++		return -EINVAL;
++
++	if (offset)
++		err = testmod_register_uprobe(offset);
++	else
++		testmod_unregister_uprobe();
++
++	return err ?: strlen(buf);
++}
++
++static struct bin_attribute bin_attr_bpf_testmod_uprobe_file __ro_after_init = {
++	.attr = { .name = "bpf_testmod_uprobe", .mode = 0666, },
++	.write = bpf_testmod_uprobe_write,
++};
++
++static int register_bpf_testmod_uprobe(void)
++{
++	return sysfs_create_bin_file(kernel_kobj, &bin_attr_bpf_testmod_uprobe_file);
++}
++
++static void unregister_bpf_testmod_uprobe(void)
++{
++	testmod_unregister_uprobe();
++	sysfs_remove_bin_file(kernel_kobj, &bin_attr_bpf_testmod_uprobe_file);
++}
++
++#else
++static int register_bpf_testmod_uprobe(void)
++{
++	return 0;
++}
++
++static void unregister_bpf_testmod_uprobe(void) { }
++#endif
++
+ BTF_KFUNCS_START(bpf_testmod_common_kfunc_ids)
+ BTF_ID_FLAGS(func, bpf_iter_testmod_seq_new, KF_ITER_NEW)
+ BTF_ID_FLAGS(func, bpf_iter_testmod_seq_next, KF_ITER_NEXT | KF_RET_NULL)
+@@ -650,7 +763,10 @@ static int bpf_testmod_init(void)
+ 		return ret;
+ 	if (bpf_fentry_test1(0) < 0)
+ 		return -EINVAL;
+-	return sysfs_create_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
++	ret = sysfs_create_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
++	if (ret < 0)
++		return ret;
++	return register_bpf_testmod_uprobe();
+ }
+ 
+ static void bpf_testmod_exit(void)
+@@ -664,6 +780,7 @@ static void bpf_testmod_exit(void)
+ 		msleep(20);
+ 
+ 	sysfs_remove_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
++	unregister_bpf_testmod_uprobe();
+ }
+ 
+ module_init(bpf_testmod_init);
+diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+index 14b1cf7a53b4..7042da10bb69 100644
+--- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
++++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+@@ -149,15 +149,82 @@ static void test_uretprobe_regs_equal(void)
+ cleanup:
+ 	uprobe_syscall__destroy(skel);
+ }
++
++#define BPF_TESTMOD_UPROBE_TEST_FILE "/sys/kernel/bpf_testmod_uprobe"
++
++static int write_bpf_testmod_uprobe(unsigned long offset)
++{
++	size_t n, ret;
++	char buf[30];
++	int fd;
++
++	n = sprintf(buf, "%lu", offset);
++
++	fd = open(BPF_TESTMOD_UPROBE_TEST_FILE, O_WRONLY);
++	if (fd < 0)
++		return -errno;
++
++	ret = write(fd, buf, n);
++	close(fd);
++	return ret != n ? (int) ret : 0;
++}
++
++static void test_uretprobe_regs_change(void)
++{
 +	struct pt_regs before = {}, after = {};
 +	unsigned long *pb = (unsigned long *) &before;
 +	unsigned long *pa = (unsigned long *) &after;
-+	unsigned long *pp;
-+	unsigned int i, cnt;
-+	int err;
++	unsigned long cnt = sizeof(before)/sizeof(*pb);
++	unsigned int i, err, offset;
 +
-+	skel = uprobe_syscall__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "uprobe_syscall__open_and_load"))
-+		goto cleanup;
++	offset = get_uprobe_offset(uprobe_syscall_arch_test);
 +
-+	err = uprobe_syscall__attach(skel);
-+	if (!ASSERT_OK(err, "uprobe_syscall__attach"))
-+		goto cleanup;
++	err = write_bpf_testmod_uprobe(offset);
++	if (!ASSERT_OK(err, "register_uprobe"))
++		return;
 +
 +	uprobe_syscall_arch(&before, &after);
 +
-+	pp = (unsigned long *) &skel->bss->regs;
-+	cnt = sizeof(before)/sizeof(*pb);
++	err = write_bpf_testmod_uprobe(0);
++	if (!ASSERT_OK(err, "unregister_uprobe"))
++		return;
 +
 +	for (i = 0; i < cnt; i++) {
 +		unsigned int offset = i * sizeof(unsigned long);
 +
-+		/*
-+		 * Check register before and after uprobe_syscall_arch_test call
-+		 * that triggers the uretprobe.
-+		 */
 +		switch (offset) {
 +		case offsetof(struct pt_regs, rax):
-+			ASSERT_EQ(pa[i], 0xdeadbeef, "return value");
++			ASSERT_EQ(pa[i], 0x12345678deadbeef, "rax");
++			break;
++		case offsetof(struct pt_regs, rcx):
++			ASSERT_EQ(pa[i], 0x87654321feebdaed, "rcx");
++			break;
++		case offsetof(struct pt_regs, r11):
++			ASSERT_EQ(pa[i], (__u64) -1, "r11");
 +			break;
 +		default:
-+			if (!ASSERT_EQ(pb[i], pa[i], "register before-after value check"))
-+				fprintf(stdout, "failed register offset %u\n", offset);
-+		}
-+
-+		/*
-+		 * Check register seen from bpf program and register after
-+		 * uprobe_syscall_arch_test call
-+		 */
-+		switch (offset) {
-+		/*
-+		 * These values will be different (not set in uprobe_syscall_arch),
-+		 * we don't care.
-+		 */
-+		case offsetof(struct pt_regs, orig_rax):
-+		case offsetof(struct pt_regs, rip):
-+		case offsetof(struct pt_regs, cs):
-+		case offsetof(struct pt_regs, rsp):
-+		case offsetof(struct pt_regs, ss):
-+			break;
-+		default:
-+			if (!ASSERT_EQ(pp[i], pa[i], "register prog-after value check"))
++			if (!ASSERT_EQ(pa[i], pb[i], "register before-after value check"))
 +				fprintf(stdout, "failed register offset %u\n", offset);
 +		}
 +	}
-+
-+cleanup:
-+	uprobe_syscall__destroy(skel);
 +}
-+#else
-+static void test_uretprobe_regs_equal(void)
++
+ #else
+ static void test_uretprobe_regs_equal(void)
+ {
+ 	test__skip();
+ }
++
++static void test_uretprobe_regs_change(void)
 +{
 +	test__skip();
 +}
-+#endif
-+
-+void test_uprobe_syscall(void)
-+{
-+	if (test__start_subtest("uretprobe_regs_equal"))
-+		test_uretprobe_regs_equal();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/uprobe_syscall.c b/tools/testing/selftests/bpf/progs/uprobe_syscall.c
-new file mode 100644
-index 000000000000..3b7e0a63f659
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/uprobe_syscall.c
-@@ -0,0 +1,15 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <string.h>
-+
-+struct pt_regs regs;
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("uretprobe//proc/self/exe:uprobe_syscall_arch_test")
-+int uretprobe(struct pt_regs *ctx)
-+{
-+	__builtin_memcpy(&regs, ctx, sizeof(regs));
-+	return 0;
-+}
+ #endif
+ 
+ void test_uprobe_syscall(void)
+ {
+ 	if (test__start_subtest("uretprobe_regs_equal"))
+ 		test_uretprobe_regs_equal();
++	if (test__start_subtest("uretprobe_regs_change"))
++		test_uretprobe_regs_change();
+ }
 -- 
 2.44.0
 
