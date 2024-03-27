@@ -1,317 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94B02C85C
-	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 10:21:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ECF754F93;
+	Wed, 27 Mar 2024 11:06:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711534873; cv=none; b=jieBAAYyMG2X57Lxpsje8bS2EuGUxWY6cbKNRp7Yu+vYGZW/vKpqyvylU6CmEzv/dWjjOGDDSvMaoloyIwdK2Rio7MxN1AVkrS6yiOoWjdsf7dxUv0K241ETC8vNPgartgwK6HydByUBiZJGoCJyxY7bOJLF+ttOvBpDZ2AF7pM=
+	t=1711537594; cv=none; b=HJ8PINlkY54QUBMGasPOAYHJeJSkY9/81wbGApA6viz9mz89bXjBZ4oUvjW9k8ZaAdi90+OuNRM9lbv/MMvuJPINYSSqQk8uzm8B5btxD3xHGxoQ3b6xSK/IE0E/kKI4B4ClO1bzuZ9cE0Je1NP6QGDp4mCoLmphsN5noRIkaS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711534873; c=relaxed/simple;
-	bh=tomicRR3vcowf6vztsNpDk2bUezEGRemrbboijL8tTQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZFH9v1a0TH+eT+KgGkLtlcNTg+sZUzv4Crsass/BCVDB5Hv6JIvOPH2ALePE/2KIDC8uYLx2PqLprg8ZvMbVSlNSYK6BC8QpSxyVMTbcWriJq2RHCNTRmdbrpNvrQthDPbz6pAWIXIM0MEWKwM4PzB0OYGHZ+b5KCIjOaVtOMRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ssfn/YTM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711537594; c=relaxed/simple;
+	bh=4gucVPD3DfynGTKWdQGFWZ/XTgMS02NP6ZxMcGAEjfU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=a1wyUOpavdNvC/wbYTHTLxUW42y4Cm3vhO8do0nrEynVNnwUJ2SNsZcSHLlAGKzOz9+Eq0SV4J5nfzLbOcuLCjiFNGZwyT0hzR/eHPgIJsxUPKDYMP6bdahYv68fPbYxZ/ht8ksygz2m4zG3b5wpk3oVnMJbfcdgPEfJB450H14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=g+4cUP4w; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=WMFsreSA; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ssfn/YTM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A087C433F1;
-	Wed, 27 Mar 2024 10:21:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711534873;
-	bh=tomicRR3vcowf6vztsNpDk2bUezEGRemrbboijL8tTQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ssfn/YTM6stOEsjTOBwrtb/uJ57PIhLxvajua6W5IlkQ0tELX7I1yX7kqQQOlZDT3
-	 7/R/doMtoVoS3t+KBR7mS5WlelZQxS4vUbRxr2VbBZBa5oggpqJqVrWQnzYE1kgWei
-	 bohZrV/X+K8euUDBfDepIn+KJ5itYcJs1kGqR3Z2wpDdXKqPMHleR8A9S/TATvRAwx
-	 qVqw3/Qqfm5ZOfduDlLNEu6OoWyy925UuqYVdblE6DJm8oB7Jl4aWbCxu+LR2jNSAk
-	 o1+YsR/MHfUJl9GszIBy/BPC7vPP0+mI/mlI8ajMDJO2KUTSUtrs0KRxBJU4KvM267
-	 9LOGEajgTpgGw==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Oleg Nesterov <oleg@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org,
-	Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Borislav Petkov (AMD)" <bp@alien8.de>,
-	x86@kernel.org
-Subject: [PATCH bpf-next 3/3] selftests/bpf: Add uretprobe syscall test for regs changes
-Date: Wed, 27 Mar 2024 11:20:36 +0100
-Message-ID: <20240327102036.543283-4-jolsa@kernel.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240327102036.543283-1-jolsa@kernel.org>
-References: <20240327102036.543283-1-jolsa@kernel.org>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="g+4cUP4w";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="WMFsreSA"
+From: John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1711537588;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4gucVPD3DfynGTKWdQGFWZ/XTgMS02NP6ZxMcGAEjfU=;
+	b=g+4cUP4wgA3jnhcXJvy2HjOxDppJB2AisicmLklG4LNzvO5aw+Zsu5LrJdrmg17a837eX1
+	9DkFuA7EHzWVH1o6Oyno7+ndFz5Vew0UovvRX/qeuhqUCyt/X4fGQyO9Hm2Cli/sDZrjVg
+	4dwl3W9+NVsWo82wn6QMgQXS3cj25Yqd1qITFF1QLeL0oNXNmdJVdh7cB0yFixwNjEntOS
+	1lLSE/NsGlBQ4RBZ5d9s6fw2MMxLYRM2JamJBY5uqzIBmMhGDcZg/+RD7ug3XwVXL2wdY9
+	01ZCyUt7nntKqHgvI8EGJ5T1ysHHWgK/xyiCzSAS1v4Yagaz//ujLDKDzjsi5A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1711537588;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4gucVPD3DfynGTKWdQGFWZ/XTgMS02NP6ZxMcGAEjfU=;
+	b=WMFsreSAJVn4jnO2Y1QE5jaY333dr8sccARpr6pLHREPxD4OEL0jQYd7PuLueDWsUsBeJh
+	X04++JF9mzwatQAA==
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Tetsuo Handa
+ <penguin-kernel@i-love.sakura.ne.jp>, John Fastabend
+ <john.fastabend@gmail.com>
+Cc: syzbot <syzbot+f78380e4eae53c64125c@syzkaller.appspotmail.com>,
+ syzkaller-bugs <syzkaller-bugs@googlegroups.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Petr Mladek
+ <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, Sergey
+ Senozhatsky <senozhatsky@chromium.org>, Thomas Gleixner
+ <tglx@linutronix.de>, LKML <linux-kernel@vger.kernel.org>, bpf
+ <bpf@vger.kernel.org>
+Subject: Re: [syzbot] [kernel?] possible deadlock in console_flush_all (2)
+In-Reply-To: <CAADnVQJt+aP=Zo4edCu4iQEmdQjiruR1pJn0qyZZboNym+zd0w@mail.gmail.com>
+References: <000000000000e40a2906072e9567@google.com>
+ <ab273ae2-80ec-45da-910a-e74298c71d50@I-love.SAKURA.ne.jp>
+ <CAADnVQLmLMt2bF9aAB26dtBCvy2oUFt+AAKDRgTTrc7Xk_zxJQ@mail.gmail.com>
+ <596aad11-ee69-4ef1-b945-7b67a9fb22d7@I-love.SAKURA.ne.jp>
+ <CAADnVQL6Q3k0+-5X3Xjov7W_xESxkmVXcsCxQRWitQvhTBsf7A@mail.gmail.com>
+ <dd264bf7-821b-4cf4-802b-60ae3c7b83bd@I-love.SAKURA.ne.jp>
+ <CAADnVQJt+aP=Zo4edCu4iQEmdQjiruR1pJn0qyZZboNym+zd0w@mail.gmail.com>
+Date: Wed, 27 Mar 2024 12:11:31 +0106
+Message-ID: <87o7b0szno.fsf@jogness.linutronix.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Adding test that creates uprobe consumer on uretprobe which changes some
-of the registers. Making sure the changed registers are propagated to the
-user space when the ureptobe syscall trampoline is used on x86_64.
+On 2024-03-20, Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> On Wed, Mar 20, 2024 at 12:30=E2=80=AFAM Tetsuo Handa
+> <penguin-kernel@i-love.sakura.ne.jp> wrote:
+>>
+>> On 2024/03/20 16:12, Alexei Starovoitov wrote:
+>> > On Wed, Mar 20, 2024 at 12:05=E2=80=AFAM Tetsuo Handa
+>> > <penguin-kernel@i-love.sakura.ne.jp> wrote:
+>> >>
+>> >> On 2024/03/20 15:56, Alexei Starovoitov wrote:
+>> >>> This has nothing to do with bpf.
+>> >>> bpf never calls printk().
+>> >>
+>> >> Please see the Sample crash report in the dashboard.
+>> >> bpf program is hitting printk() via report_bug().
+>> >
+>> > Exactly. local_bh_neable is simply asking for a splat.
+>> > _this_ bug is in printk.
+>> > It's a generic issue.
+>>
+>> I can't catch. printk() is called due to report_bug().
+>>
+>> If the reason report_bug() is called is that spin_unlock_bh() is bad,
+>> this is a bug in sock_map_delete_elem() rather than a bug in printk(), i=
+sn't it.
+>
+> There are two bugs.
+> The one you've started the thread about is in printk.
 
-To be able to do this, adding support to bpf_testmod to create uprobe via
-new attribute file:
-  /sys/kernel/bpf_testmod_uprobe
+The printk rework (which is not yet fully mainline) will correctly
+handle this context.
 
-This file is expecting file offset and creates related uprobe on current
-process exe file and removes existing uprobe if offset is 0. The can be
-only single uprobe at any time.
+As to the patch [0] you suggested, it would be more appropriate to
+perform deferred_enter/_exit *within* the locked critical section. But
+we really only want these whack-a-mole workarounds for cases that can
+occur in a non-bug situation. IMHO this is not such a case and falls
+into the category of "known problem, the rework will handle it".
 
-The uprobe has specific consumer that changes registers used in ureprobe
-syscall trampoline and which are later checked in the test.
+John Ogness
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 119 +++++++++++++++++-
- .../selftests/bpf/prog_tests/uprobe_syscall.c |  67 ++++++++++
- 2 files changed, 185 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-index 39ad96a18123..163b6cc64b4f 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-@@ -10,6 +10,7 @@
- #include <linux/percpu-defs.h>
- #include <linux/sysfs.h>
- #include <linux/tracepoint.h>
-+#include <linux/namei.h>
- #include "bpf_testmod.h"
- #include "bpf_testmod_kfunc.h"
- 
-@@ -343,6 +344,118 @@ static struct bin_attribute bin_attr_bpf_testmod_file __ro_after_init = {
- 	.write = bpf_testmod_test_write,
- };
- 
-+/* bpf_testmod_uprobe sysfs attribute is so far enabled for x86_64 only,
-+ * please see test_uretprobe_regs_change test  */
-+#ifdef __x86_64__
-+
-+static int
-+uprobe_ret_handler(struct uprobe_consumer *self, unsigned long func,
-+		   struct pt_regs *regs)
-+
-+{
-+	regs->ax  = 0x12345678deadbeef;
-+	regs->cx  = 0x87654321feebdaed;
-+	regs->r11 = (u64) -1;
-+	return true;
-+}
-+
-+struct testmod_uprobe {
-+	struct path path;
-+	loff_t offset;
-+	struct uprobe_consumer consumer;
-+};
-+
-+static DEFINE_MUTEX(testmod_uprobe_mutex);
-+
-+static struct testmod_uprobe uprobe = {
-+	.consumer.ret_handler = uprobe_ret_handler,
-+};
-+
-+static int testmod_register_uprobe(loff_t offset)
-+{
-+	int err = -EBUSY;
-+
-+	if (uprobe.offset)
-+		return -EBUSY;
-+
-+	mutex_lock(&testmod_uprobe_mutex);
-+
-+	if (uprobe.offset)
-+		goto out;
-+
-+	err = kern_path("/proc/self/exe", LOOKUP_FOLLOW, &uprobe.path);
-+	if (err)
-+		goto out;
-+
-+	err = uprobe_register_refctr(d_real_inode(uprobe.path.dentry),
-+				     offset, 0, &uprobe.consumer);
-+	if (err)
-+		path_put(&uprobe.path);
-+	else
-+		uprobe.offset = offset;
-+
-+out:
-+	mutex_unlock(&testmod_uprobe_mutex);
-+	return err;
-+}
-+
-+static void testmod_unregister_uprobe(void)
-+{
-+	mutex_lock(&testmod_uprobe_mutex);
-+
-+	if (uprobe.offset) {
-+		uprobe_unregister(d_real_inode(uprobe.path.dentry),
-+				  uprobe.offset, &uprobe.consumer);
-+		uprobe.offset = 0;
-+	}
-+
-+	mutex_unlock(&testmod_uprobe_mutex);
-+}
-+
-+static ssize_t
-+bpf_testmod_uprobe_write(struct file *file, struct kobject *kobj,
-+			 struct bin_attribute *bin_attr,
-+			 char *buf, loff_t off, size_t len)
-+{
-+	unsigned long offset;
-+	int err;
-+
-+	if (kstrtoul(buf, 0, &offset))
-+		return -EINVAL;
-+
-+	if (offset)
-+		err = testmod_register_uprobe(offset);
-+	else
-+		testmod_unregister_uprobe();
-+
-+	return err ?: strlen(buf);
-+}
-+
-+static struct bin_attribute bin_attr_bpf_testmod_uprobe_file __ro_after_init = {
-+	.attr = { .name = "bpf_testmod_uprobe", .mode = 0666, },
-+	.write = bpf_testmod_uprobe_write,
-+};
-+
-+static int register_bpf_testmod_uprobe(void)
-+{
-+	return sysfs_create_bin_file(kernel_kobj, &bin_attr_bpf_testmod_uprobe_file);
-+}
-+
-+static void unregister_bpf_testmod_uprobe(void)
-+{
-+	testmod_unregister_uprobe();
-+	sysfs_remove_bin_file(kernel_kobj, &bin_attr_bpf_testmod_uprobe_file);
-+}
-+
-+#else
-+static int register_bpf_testmod_uprobe(void)
-+{
-+	return 0;
-+}
-+
-+static void unregister_bpf_testmod_uprobe(void) { }
-+#endif
-+
- BTF_KFUNCS_START(bpf_testmod_common_kfunc_ids)
- BTF_ID_FLAGS(func, bpf_iter_testmod_seq_new, KF_ITER_NEW)
- BTF_ID_FLAGS(func, bpf_iter_testmod_seq_next, KF_ITER_NEXT | KF_RET_NULL)
-@@ -650,7 +763,10 @@ static int bpf_testmod_init(void)
- 		return ret;
- 	if (bpf_fentry_test1(0) < 0)
- 		return -EINVAL;
--	return sysfs_create_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
-+	ret = sysfs_create_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
-+	if (ret < 0)
-+		return ret;
-+	return register_bpf_testmod_uprobe();
- }
- 
- static void bpf_testmod_exit(void)
-@@ -664,6 +780,7 @@ static void bpf_testmod_exit(void)
- 		msleep(20);
- 
- 	sysfs_remove_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
-+	unregister_bpf_testmod_uprobe();
- }
- 
- module_init(bpf_testmod_init);
-diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-index 14b1cf7a53b4..7042da10bb69 100644
---- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-+++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-@@ -149,15 +149,82 @@ static void test_uretprobe_regs_equal(void)
- cleanup:
- 	uprobe_syscall__destroy(skel);
- }
-+
-+#define BPF_TESTMOD_UPROBE_TEST_FILE "/sys/kernel/bpf_testmod_uprobe"
-+
-+static int write_bpf_testmod_uprobe(unsigned long offset)
-+{
-+	size_t n, ret;
-+	char buf[30];
-+	int fd;
-+
-+	n = sprintf(buf, "%lu", offset);
-+
-+	fd = open(BPF_TESTMOD_UPROBE_TEST_FILE, O_WRONLY);
-+	if (fd < 0)
-+		return -errno;
-+
-+	ret = write(fd, buf, n);
-+	close(fd);
-+	return ret != n ? (int) ret : 0;
-+}
-+
-+static void test_uretprobe_regs_change(void)
-+{
-+	struct pt_regs before = {}, after = {};
-+	unsigned long *pb = (unsigned long *) &before;
-+	unsigned long *pa = (unsigned long *) &after;
-+	unsigned long cnt = sizeof(before)/sizeof(*pb);
-+	unsigned int i, err, offset;
-+
-+	offset = get_uprobe_offset(uprobe_syscall_arch_test);
-+
-+	err = write_bpf_testmod_uprobe(offset);
-+	if (!ASSERT_OK(err, "register_uprobe"))
-+		return;
-+
-+	uprobe_syscall_arch(&before, &after);
-+
-+	err = write_bpf_testmod_uprobe(0);
-+	if (!ASSERT_OK(err, "unregister_uprobe"))
-+		return;
-+
-+	for (i = 0; i < cnt; i++) {
-+		unsigned int offset = i * sizeof(unsigned long);
-+
-+		switch (offset) {
-+		case offsetof(struct pt_regs, rax):
-+			ASSERT_EQ(pa[i], 0x12345678deadbeef, "rax");
-+			break;
-+		case offsetof(struct pt_regs, rcx):
-+			ASSERT_EQ(pa[i], 0x87654321feebdaed, "rcx");
-+			break;
-+		case offsetof(struct pt_regs, r11):
-+			ASSERT_EQ(pa[i], (__u64) -1, "r11");
-+			break;
-+		default:
-+			if (!ASSERT_EQ(pa[i], pb[i], "register before-after value check"))
-+				fprintf(stdout, "failed register offset %u\n", offset);
-+		}
-+	}
-+}
-+
- #else
- static void test_uretprobe_regs_equal(void)
- {
- 	test__skip();
- }
-+
-+static void test_uretprobe_regs_change(void)
-+{
-+	test__skip();
-+}
- #endif
- 
- void test_uprobe_syscall(void)
- {
- 	if (test__start_subtest("uretprobe_regs_equal"))
- 		test_uretprobe_regs_equal();
-+	if (test__start_subtest("uretprobe_regs_change"))
-+		test_uretprobe_regs_change();
- }
--- 
-2.44.0
-
+[0] https://syzkaller.appspot.com/text?tag=3DPatch&x=3D121c92fe180000
