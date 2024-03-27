@@ -1,91 +1,69 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E071CAAF
-	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 11:47:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9683D12D74B
+	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 11:58:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711540039; cv=none; b=FRJR8XkgV9xhZRlvC9N+IAnuLzga2iCpoY2+OWG83m4jFhIFpa7KZpZ3u4bYUZPTgwccWm1fo1sIRhf9kXEKI1hNhc3yqqe6yWlhz5ccoxuFcehffzOkxzWzoCBt8DqudLUf94Gn2b5CQJ5TlFCj+rW3S4yHfNK3vXGnk6L2VdE=
+	t=1711540697; cv=none; b=BHcY0X0FYXxgJ79Vp6/fX/AiOZBbzpTiqW17KunHU2TWYXT0e3y3uRyEUnZocA2tPP8+TO//CLtorx9WYkTofClifu1tUXkzedPSoa5ylTpBQuWHug5oinYRhiRA4YMc/gALhWYkPnHUUcEfQla/nm6dY3Ymxw449NQtKC8nRls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711540039; c=relaxed/simple;
-	bh=bR0Y9MPxEKos8gbJe2Wfol3VDdsY1MLLBChzsH2cZBU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QT4zkiu+KJx5Pdh/Z5c3r+wf8sehP/m1ecrgNugtW3jVEh65onB6eBiJayFCz/JJjATetTd+IPvTgkThB3AhXxt7Ykd3z8S1+wsqSpsEjCCdBK2aa+rKru1FKQapj4V3EYpyhxjgx7nuQZYaha1crK6feTiivrbkNEcf9tAh6Sc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DFk81TeO; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1711540697; c=relaxed/simple;
+	bh=yXFOgrp9Mbok60jY0wKqFY2cCYzTnAOOAAjfDm6Q9xo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rJWV9zGaF4eP7KXFYdilW1lKBUGnJyLr3mqDqhzy2NLJOtADx/gpt4SjK6arQOxb01U88adNyeeBGLWk+rtiDCPBUTIk5KpvowietBPzizx5G7W294InlypU/mndOI8AXHEyx7BjDBsGnTlOCrHk6pa+fsQZgbho89Ubb6EsGzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=titzVpoj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DFk81TeO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711540037;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mVmgwIKJN1ru/dayL4eQoR5SU5vVYZpG5XATnKIZSgc=;
-	b=DFk81TeOfuecKojkGDJHaVOnI3+7jgsjoapfI2I0wfHEJoyiHFkVCdJgu3Oq2FhTy+n6Sc
-	gr605KGGE+6Yswfe6bwXXmlrJQKZvkp+XX3qFcpI07cV3B+GOA0ksjo6AlgjsPmnjJdjzU
-	/gh4OEu3uVE0/hqc7JKPDbG95nvQJ14=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-686-h_eURUJPNcS48U_ei9bb4A-1; Wed, 27 Mar 2024 07:47:13 -0400
-X-MC-Unique: h_eURUJPNcS48U_ei9bb4A-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 81951101A58D;
-	Wed, 27 Mar 2024 11:47:12 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.227])
-	by smtp.corp.redhat.com (Postfix) with SMTP id 88CDF3C20;
-	Wed, 27 Mar 2024 11:47:09 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Wed, 27 Mar 2024 12:45:48 +0100 (CET)
-Date: Wed, 27 Mar 2024 12:45:25 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
-Subject: Re: [PATCH bpf-next 1/3] uprobe: Add uretprobe syscall to speed up
- return probe
-Message-ID: <20240327114524.GA20596@redhat.com>
-References: <20240327102036.543283-1-jolsa@kernel.org>
- <20240327102036.543283-2-jolsa@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="titzVpoj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4BCBC433C7;
+	Wed, 27 Mar 2024 11:58:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711540697;
+	bh=yXFOgrp9Mbok60jY0wKqFY2cCYzTnAOOAAjfDm6Q9xo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=titzVpojUOXjiQnxRCtfh5KHeIH62GwUw0DY+Jr6y6BiXzGFRyzTyUfgg1AMyrzsI
+	 BZRkz+XKs0k1EDhkVO8FYE5hVVF3OuARs1QR15jaxRbm/8xEU2Fpl1ggXmLZDuvj+q
+	 Z213JmhILCUfCzE8ke66haPgX/+V+1dbqqYYNor38+XYCps6cvb36iTi3tRbjC+R++
+	 YlJZVVqE6/NljtQw6eOGYvfx/CLNa1kA2sNMKvsi+4qfxLEtOD8v1UnG5/2OuFgMdb
+	 GQ/WD+lczaokH0p+8af6C4MOML94xOeC1M4I4pqFVCbcZELCBimX5c5Xw/8PpQsNoO
+	 FHgSI4WD993Lw==
+Message-ID: <5ab89ff4-57c2-4779-bb89-5a1ca23364dd@kernel.org>
+Date: Wed, 27 Mar 2024 11:58:13 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240327102036.543283-2-jolsa@kernel.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 3/5] bpftool: Add link dump support for
+ BPF_LINK_TYPE_SOCKMAP
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Jakub Sitnicki
+ <jakub@cloudflare.com>, John Fastabend <john.fastabend@gmail.com>,
+ kernel-team@fb.com, Martin KaFai Lau <martin.lau@kernel.org>
+References: <20240326022153.656006-1-yonghong.song@linux.dev>
+ <20240326022209.656999-1-yonghong.song@linux.dev>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20240326022209.656999-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 03/27, Jiri Olsa wrote:
->
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Oleg Nesterov <oleg@redhat.com>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  arch/x86/entry/syscalls/syscall_64.tbl |  1 +
->  arch/x86/kernel/uprobes.c              | 83 ++++++++++++++++++++++++++
->  include/linux/syscalls.h               |  2 +
->  include/linux/uprobes.h                |  2 +
->  include/uapi/asm-generic/unistd.h      |  5 +-
->  kernel/events/uprobes.c                | 18 ++++--
->  kernel/sys_ni.c                        |  2 +
->  7 files changed, 108 insertions(+), 5 deletions(-)
+2024-03-26 02:22 UTC+0000 ~ Yonghong Song <yonghong.song@linux.dev>
+> An example output looks like:
+>   $ bpftool link
+>     1776: sk_skb  prog 49730
+>             map_id 0  attach_type sk_skb_verdict
+>             pids test_progs(8424)
+>     1777: sk_skb  prog 49755
+>             map_id 0  attach_type sk_skb_stream_verdict
+>             pids test_progs(8424)
+>     1778: sk_msg  prog 49770
+>             map_id 8208  attach_type sk_msg_verdict
+>             pids test_progs(8424)
+> 
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 
-Just in case,
-
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+Reviewed-by: Quentin Monnet <qmo@kernel.org>
 
