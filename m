@@ -1,108 +1,74 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB7814F9EB
-	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 20:05:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED0B1534E4
+	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 20:32:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711569934; cv=none; b=ulU6lSNtMdeVNumsNgUTfWKsS9mAAsCjK+2X+keQt8Po2MFA1dybei4aUx2wPKTqlNTtQEkQY+7b3ReI4jFJ5mnpPXxlEnPacJOR896RJH01QryyPogw2nCcSY1IVtTMbIiEdOw0r1P/YIdFOnnGH0CHnCDM4mmxjudGiDCnOUY=
+	t=1711571525; cv=none; b=k1ZSPQyTmqz9u+0GnCaMPOuiU6kJFHelPDKFw+Igq2Mk9bIL7Gok3ILAUTvTtO5DsSLOAunIyg/wpZUKlkzuRUyZokkInm052lkW+2MzPVvgsQ10VxpAhoQ4tEh6dyxfRy1/f74gqe1s4f1/I9hhgE4vZz3pygUyrHLsRqs9MO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711569934; c=relaxed/simple;
-	bh=vEqW1DgEW62eOOy14MyVRf55lhpBDCMsX9Ci6MBuZh0=;
-	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
-	 MIME-Version:Content-Type; b=eiKoxCaVEhnTbHawzn5+kPuggmMUpyJ+hxVvkJ1TQSAX2MHWUJvDQU17wpr3N1UPXRbuLsqHEDTmdMHCaPFVPHuOrlkJm3M9ij28t9ho0DwXDWZlz+55IVJkn6VlWJISOKu1HsXHEBKh/XRF5kB+4r8BuJO62/l2Iuti829g2yQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=RphAf+5/; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="RphAf+5/"
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-515b69e8f38so141426e87.1
-        for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 13:05:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1711569931; x=1712174731; darn=vger.kernel.org;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=b2UM2vsGB2GKXA0Y54jKwuEcNzrtJZ7/0VEz1DmAe7I=;
-        b=RphAf+5/lB1G6vMvCsx1B8vPCs9oU5BEy5y4VLcvYP62BaDJyKweVKsAjuhpbrFo6g
-         Bf/co8jrPLd9w8Re4+F6jDrQ34UuXX8RUrU/NIXFakh4k8e0YWXm2jBlPT6vCLW+Ituf
-         QZ26VYrypgtS/5d0nuNsJrZ/6xl0r+EczBaXztKamED6ZS4iD9Hq0mx9EZoe/KiP0CWm
-         p7hlNih+RY7b4DBLIhr+J3Xw+XmJOzy6adiqJYZ6oxe9daxRRYg81S4nCzXolkmJHTEG
-         WDs3/SlpIPFTyeOiHXmWrTivVHHOJtvEfB30/6/TkBDi8JzBKqW5Gs+QyoBSAKpAA78P
-         tJww==
+	s=arc-20240116; t=1711571525; c=relaxed/simple;
+	bh=nRwlE/hA+5kIdWWS/56V+tZqn6E78CxeZd1m1w7AwQ4=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=NUY4uuF0lEdO8fVCjiGETWHWrZHZOYCxNFenEISyGoH2qdbl/zoqbO5CjCy6wNhgbW5DHm0J3NFRMrCMtc4x60+u+RzK3tvvG+HsFzu6q9lrCQfrlrJxatIiG7EJka+J3OXvWFZRkTQvAboqJ3MAfgZnC8L4dmAUlYD6DExhmmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7c88a694b46so20704539f.1
+        for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 13:32:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711569931; x=1712174731;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b2UM2vsGB2GKXA0Y54jKwuEcNzrtJZ7/0VEz1DmAe7I=;
-        b=VBVMcfE8lnYzB2RlqAs8iBTNSg+VIxzHXqDfEz2YdJ/2JQzQp48A1hGRDa0mO8kUBS
-         DtAP8Vw+MUtAB6kUG0rHeQGmczreu6fG0Vnc+137cpZYwzcQyAXWxdEOphvGLvZXgwxJ
-         lvieMV3YhDIlUkTD+1nnnSAipk+5aXJR4F5OpEgh5HI85U1ZM9HMZw7bcyHREgBBCvCi
-         yglUV8yrgumzHm0ToPKE4Q0sFg1chxn4FlF5pkvHhMsyz/l97Cmraq9LU8jBR6QSToiA
-         CSkhHksGs1L2M6u3HikZCKcltuiOFmG1/iezPbshiIyFBp8dBgJFsZBFD1rY+N8w1/Wl
-         WHkw==
-X-Forwarded-Encrypted: i=1; AJvYcCWOg28wFGVA32DdvWULta4gpzH+csEfuxjrlED2lM3PMy2kPWAujqzPvrXblQ1sVGE0okG/fLpP+w2MM4fgr9/oTYZx
-X-Gm-Message-State: AOJu0Yw4AtRlXslcF0deW1y7kFqdSGPsRbmQltZwfTRag/W7Ld2t+dcJ
-	JEkA0jUHKbZ3bQUXrqFzS667k9IIOUtbQn475IFZao6VK7qbDpEZ/uL/pfweqFg=
-X-Google-Smtp-Source: AGHT+IHrkNFl1ffopNxKTETahIleS+aShL7P58PRcF7paaJk0m/WuLamCzDi5i0y3x8TPSw6eSx/Fg==
-X-Received: by 2002:ac2:4c34:0:b0:515:a670:3a6c with SMTP id u20-20020ac24c34000000b00515a6703a6cmr369582lfq.23.1711569930579;
-        Wed, 27 Mar 2024 13:05:30 -0700 (PDT)
-Received: from cloudflare.com ([2a09:bac5:5064:2dc::49:159])
-        by smtp.gmail.com with ESMTPSA id x20-20020a170906b09400b00a469e55767dsm5797266ejy.214.2024.03.27.13.05.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Mar 2024 13:05:29 -0700 (PDT)
-References: <00000000000090fe770614a1ab17@google.com>
- <0000000000007a208d0614a9a9e0@google.com>
-User-agent: mu4e 1.6.10; emacs 29.2
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: syzbot <syzbot+d4066896495db380182e@syzkaller.appspotmail.com>
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
- daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com,
- john.fastabend@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [bpf?] [net?] possible deadlock in
- ahci_single_level_irq_intr
-Date: Wed, 27 Mar 2024 21:04:14 +0100
-In-reply-to: <0000000000007a208d0614a9a9e0@google.com>
-Message-ID: <87le63bfuf.fsf@cloudflare.com>
+        d=1e100.net; s=20230601; t=1711571523; x=1712176323;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GrIQKBS2v/d7YU14An08GRjqL5ZRUdHZeXnpNFfQdUk=;
+        b=ZoSt/RmC2L7tCXTwytyTeW33V6zX1VY3Ll+FvneFeGCrSMqyE+0sOAN/P57VOnpbqF
+         miXI5ZjHYQbtV9D6T4QNnpyfl/f5+yMCSgSkONPFwNt3vF1fhmuwoGM9iTUxUJX0OYl9
+         w4S0tG+NIYZ/7MTlb4eEaqTbtXmhLIxAIcTEm3sM0jT7Hw7Bu6Z7KWZ62VATPMM+43Vb
+         tg1VfQk1uAgVvZpuU4b+gDIWXF3ENNUHngpOkFRpUwHhEHL7+a7UYYlRimenAsbI00AC
+         9/DyWtYGZD7YbPq044PbpB3/NS9qpwvpLHiob5JHp0OC9txuGRsCor+NZDTsuHuAPHD/
+         HxHA==
+X-Forwarded-Encrypted: i=1; AJvYcCUDh3CiKJKXaSZr5vKh4u86VBhKPAne2Spq9SMHVAikAKYIKTUeIzsP97ey2B/KTx5plwpSw5OdWH1B099H/UAcRNAf
+X-Gm-Message-State: AOJu0Yw+mLWxnYMQ+lz1orC7VL+Q7uZ7oS3hmXVnyK6+IWEB5uZKffhy
+	ua2PPcb0dSks/0sSJh4grgMYI+WQ9HW0rV49fEarSDHBFGjN9nxuG8Fr8CMKECD2+tCL1F3LnDU
+	e9o0w+sZBIreqkLoBzLQyHQRmiqOKrI96OAhYc9pszQ8jL3zYzHr4v0o=
+X-Google-Smtp-Source: AGHT+IEv1GS0F1bIQIoueTKC7US/um1YmwFLw785Q/O0DHu40YUikpwnw4dFaz1J6Vc+zuxa3ZZur/MOvmSybjnXmQSPHjqMWXYb
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Received: by 2002:a05:6602:2d81:b0:7c8:c7ec:2b71 with SMTP id
+ k1-20020a0566022d8100b007c8c7ec2b71mr4702iow.3.1711571523139; Wed, 27 Mar
+ 2024 13:32:03 -0700 (PDT)
+Date: Wed, 27 Mar 2024 13:32:03 -0700
+In-Reply-To: <87le63bfuf.fsf@cloudflare.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a50cbd0614aa4ceb@google.com>
+Subject: Re: [syzbot] [bpf?] [net?] possible deadlock in ahci_single_level_irq_intr
+From: syzbot <syzbot+d4066896495db380182e@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com, 
+	jakub@cloudflare.com, john.fastabend@gmail.com, kuba@kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
+Hello,
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 27d733c0f65e..3692f7256dd6 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -907,6 +907,7 @@ static void sock_hash_delete_from_link(struct bpf_map *map, struct sock *sk,
- 	struct bpf_shtab_elem *elem_probe, *elem = link_raw;
- 	struct bpf_shtab_bucket *bucket;
- 
-+	WARN_ON_ONCE(irqs_disabled());
- 	WARN_ON_ONCE(!rcu_read_lock_held());
- 	bucket = sock_hash_select_bucket(htab, elem->hash);
- 
-@@ -933,6 +934,10 @@ static long sock_hash_delete_elem(struct bpf_map *map, void *key)
- 	struct bpf_shtab_elem *elem;
- 	int ret = -ENOENT;
- 
-+	/* Can't run. We don't to play nice with hardirq-safe locks. */
-+	if (irqs_disabled())
-+		return -EOPNOTSUPP;
-+
- 	hash = sock_hash_bucket_hash(key, key_size);
- 	bucket = sock_hash_select_bucket(htab, hash);
- 
-@@ -986,6 +991,7 @@ static int sock_hash_update_common(struct bpf_map *map, void *key,
- 	struct sk_psock *psock;
- 	int ret;
- 
-+	WARN_ON_ONCE(irqs_disabled());
- 	WARN_ON_ONCE(!rcu_read_lock_held());
- 	if (unlikely(flags > BPF_EXIST))
- 		return -EINVAL;
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+
+Reported-and-tested-by: syzbot+d4066896495db380182e@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         4dd65107 bpf: update BPF LSM designated reviewer list
+git tree:       bpf
+console output: https://syzkaller.appspot.com/x/log.txt?x=116d23e6180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5826764df8e788a7
+dashboard link: https://syzkaller.appspot.com/bug?extid=d4066896495db380182e
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1593c145180000
+
+Note: testing is done by a robot and is best-effort only.
