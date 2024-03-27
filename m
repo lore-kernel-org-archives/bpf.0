@@ -1,155 +1,264 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45518FBF3;
-	Wed, 27 Mar 2024 01:07:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C247318C36
+	for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 01:14:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711501670; cv=none; b=RHWCap2r1bpGmzSdrvyV5mKCHBVhO/Ou5ix32G+WgfjXZdERhSl9+t1FlJhzt5+ZyO3vbspzTYwA7PaW/5VVml4tgYUaTBxVnpC1nTYJ0KbIv/+cOf+FmL2f9vu0l03zlaghjpig75wPa/43lZaCbm0ipy/O2i2+B2dfDF99G1U=
+	t=1711502097; cv=none; b=IPHMOmbQ41yo0BORRWvl11ZyLJgFDeK4uV24ahHUEXhQjBufejv6t2Wxh9FGwqK/4AgEmrTTU+dXBJGjov6X7BuVvz5Z88ir/mf7z6i+kTFbLcsXD0i0Fto4P27c/J4fUcTXGtp5YV35MwCGJPtg00oJc0/LcsrI7LTajLCJ6zE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711501670; c=relaxed/simple;
-	bh=hD2cjHS/Tqt9C0VCpflFTu+0Yjy8Iey2SCgJPXIV95M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eou2owHpK00Q0FzHx7wHKhNuJhETAuHKMSB0FwO3CKLAk2V/RBwG38KzQNteoRFU4KUAZsahLgN83p5uL8l0D7WXz/jEm2ZDB6r0lIV1B+FO8Bj+L67RAVaIwtIZEka1U0SDm/grGK7vix0zEaFVfX972Zvmuv4JVsBnMkFpctU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rul+llgw; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711502097; c=relaxed/simple;
+	bh=D33s9UFjNEmhrQM7ET7lHvtQvnzVqr/8bpZtPixabSY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=N7jK/BUFya5H//BSPDuDUsheUic9whXoPi2N0Mgk4cmzIIy7iTYiM04j4VGP9GnIgm/j8zMmz9afcMddUlbAzwCJo81TWXBwn644xxLzeYY3MPl6W1K/OmwnTb+UyWkUzwZJI9JV21mQPFSuewEMPxRxOUhaamQvOujT5jCmrcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CwHI/Hr8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rul+llgw"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-33ed5b6bf59so4411961f8f.0;
-        Tue, 26 Mar 2024 18:07:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711501666; x=1712106466; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/mkHEfMse9h6YXI+Og+/iiUhyCAWdI4OdWFAFndX8Dc=;
-        b=Rul+llgwDnI5YJUapt/UrkroJO9FqNu0V/ZpneoySkZEE1FIwM59+3dPBAQgl2pTbM
-         HBEv3d1pC33ISzx3gy98iLQRNCeE5qAY7UNOravTaEhc6hljiBkavO1JRIzh66K/Vwf1
-         OWL42JVquv2FybZSy0HHp/K0psqih1/i4oKC1rU3C78mnbj4YfF5Qz0OmSqs59YrIh42
-         7b+5uZt4awXnZXciVv/nbxUdX4afcSKr5B7c2xZCfIf6/R5riSE2UIo42kARQr1f11ud
-         V0NFgEPN6s1x1g4GeqgizPb2x0Uw//wxylSSImhdNO9BQPxYdJanhs29mKI+VrjTXrIX
-         X8Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711501666; x=1712106466;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/mkHEfMse9h6YXI+Og+/iiUhyCAWdI4OdWFAFndX8Dc=;
-        b=PMAmZYi4FlyoPIFMe+AT9oPd8YyGg137GxNKAjSmrC3XB9OrdlZJQaYebjkKAB8tyN
-         1Rfz2b/EJiZrmTYg7bZ5DhzYJpJgBNUKwszScJu9MLxfDZZ8Gt4LWOb4mcPfNZJ13Vrv
-         yG7LT5zVDc3svjQ0xVj0QvxHLHfp6dGidYdYJ2MMnwrYG/WkBl3YefV/EjpqbfQzVv6N
-         SVY7dSgHUHSo6TVEJbHKop8EwSUvwtj3crstuWNujqkjVNbBj3v5wXR77B5WYncRD7OZ
-         rILV5TmqZFeGsgdvWD6a36LSyx7hd1jPuHlrEve1r51LU1cDuk6lBH2VP2RpYzpfNJEP
-         q89A==
-X-Forwarded-Encrypted: i=1; AJvYcCW0wOCL9p3vujXM3EytX0kW5XRagOfndeifNb6g+/26mYuy06IPZXovmPuwDkEY8aEIzA0/MBieD++IkfyriXI5SyJa66qxcbHgZ2Pn127rYIy4Qsb1zO9vhJwT2zchOQDBggqGh37Kbdtwjp7BTsehQJiS3QhXJPwP
-X-Gm-Message-State: AOJu0YzuD1C0KbNh3H38Gpfu6+5IQtQgyOLWCeJVdya1xtUXtXTp533s
-	p+lhyRF/th3SK+c+YLBKJ+zQPOT0a+TBKDl/OV7qSwA10pGizoEe5oqoazdMKaqSCqC99/544jB
-	St+HCNSoEKdQjCmh9qLmXi0MkAAw=
-X-Google-Smtp-Source: AGHT+IHKO+MI/cRpXRx4nUYx8wr8uD46Z/chGaNxpSsow+FmjTz97oaonbfR4Qj7TvEixYtGIRtUb/VYncXMxmY+ark=
-X-Received: by 2002:a5d:5090:0:b0:341:c2a9:ceb with SMTP id
- a16-20020a5d5090000000b00341c2a90cebmr1812475wrt.42.1711501666313; Tue, 26
- Mar 2024 18:07:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CwHI/Hr8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8DBBC433F1;
+	Wed, 27 Mar 2024 01:14:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711502097;
+	bh=D33s9UFjNEmhrQM7ET7lHvtQvnzVqr/8bpZtPixabSY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=CwHI/Hr8sdNH6DeV16xatiEHDjRFnffo3+2OKhYpKQHcOUYQUiYX+aLx00jVRmxMR
+	 S2+VyuSJw0eCNnjsW0CuZS4I/77Ds6bbjzFmwOXiHTIxnXlGbFTpcd8qg+AzETuf9f
+	 kI3HmS0RFKUcWxadO/WWy6/h9InUAmMpESJ6Oj0drIrL7+qtlTL9zR/5FTRAn/y1KK
+	 YImFLqzVF8q+/3rOd40+p/XowNjh8H9OuRtJXVgxiHWjI1h8EejJqq7r8ahlQmY8Ev
+	 SMp3qUFocJUifwEOU2TGfDpEF7mwE1hr4+QkIhLbV7wtlsQGM4SzIy78QI47viKlMs
+	 HpybjOWImtytw==
+Message-ID: <dfcab867-0b5d-4d3c-aeb0-43633b571196@kernel.org>
+Date: Wed, 27 Mar 2024 01:14:52 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <0000000000006f876b061478e878@google.com> <a402206e-a9c9-40bd-bf78-710054506071@linux.dev>
-In-Reply-To: <a402206e-a9c9-40bd-bf78-710054506071@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 26 Mar 2024 18:07:34 -0700
-Message-ID: <CAADnVQLXyQ_o5hSA0OpHYj231WKPFNRNMyr0NePMr2ypusiLmg@mail.gmail.com>
-Subject: Re: [syzbot] [bpf?] [net?] KMSAN: uninit-value in dev_map_lookup_elem
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Yonghong Song <yonghong.song@linux.dev>, 
-	syzbot <syzbot+1a3cf6f08d68868f9db3@syzkaller.appspotmail.com>, 
-	bpf <bpf@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>, Eddy Z <eddyz87@gmail.com>, 
-	Hao Luo <haoluo@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
-	KP Singh <kpsingh@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Song Liu <song@kernel.org>, 
-	syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH bpf-next v3] bpftool: Mount bpffs on provided dir instead
+ of parent dir
+To: Sahil Siddiq <icegambit91@gmail.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org
+Cc: martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org
+References: <20240321191955.24992-1-icegambit91@gmail.com>
+Content-Language: en-GB
+From: Quentin Monnet <qmo@kernel.org>
+In-Reply-To: <20240321191955.24992-1-icegambit91@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 26, 2024 at 5:54=E2=80=AFPM Martin KaFai Lau <martin.lau@linux.=
-dev> wrote:
->
-> On 3/25/24 2:36 AM, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    5e74df2f8f15 Merge tag 'x86-urgent-2024-03-24' of git:/=
-/gi..
-> > git tree:       upstream
-> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D148872a5180=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3De6bd769cb79=
-3b98a
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D1a3cf6f08d688=
-68f9db3
-> > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for D=
-ebian) 2.40
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D15921a6e1=
-80000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D12e081f1180=
-000
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/1a82880723a7/d=
-isk-5e74df2f.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/fd3046ac43b9/vmli=
-nux-5e74df2f.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/2097be59cbc1=
-/bzImage-5e74df2f.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the co=
-mmit:
-> > Reported-by: syzbot+1a3cf6f08d68868f9db3@syzkaller.appspotmail.com
-> >
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-> > BUG: KMSAN: uninit-value in __dev_map_lookup_elem kernel/bpf/devmap.c:4=
-41 [inline]
-> > BUG: KMSAN: uninit-value in dev_map_lookup_elem+0xf3/0x170 kernel/bpf/d=
-evmap.c:796
-> >   __dev_map_lookup_elem kernel/bpf/devmap.c:441 [inline]
-> >   dev_map_lookup_elem+0xf3/0x170 kernel/bpf/devmap.c:796
-> >   ____bpf_map_lookup_elem kernel/bpf/helpers.c:42 [inline]
-> >   bpf_map_lookup_elem+0x5c/0x80 kernel/bpf/helpers.c:38
-> >   ___bpf_prog_run+0x13fe/0xe0f0 kernel/bpf/core.c:1997
-> >   __bpf_prog_run256+0xb5/0xe0 kernel/bpf/core.c:2237
->
-> It should be in the interpreter mode.
->
-> The C reproducer is trying to run the following bpf prog:
->
->     0: (18) r0 =3D 0x0
->     2: (18) r1 =3D map[id:49]
->     4: (b7) r8 =3D 16777216
->     5: (7b) *(u64 *)(r10 -8) =3D r8
->     6: (bf) r2 =3D r10
->     7: (07) r2 +=3D -229
->             ^^^^^^^^^^
->
->     8: (b7) r3 =3D 8
->     9: (b7) r4 =3D 0
->    10: (85) call dev_map_lookup_elem#1543472
->    11: (95) exit
->
-> I think this KMSAN report (and a few others related to lookup/delete_elem=
-)
-> should only happen in the interpreter mode.
->
-> Does it worth to suppress it by always initializing the stack in the inte=
-rpreter
-> mode considering the interpreter is not very speed sensitive ?
+Hi Sahil, sorry for the delay, and thanks for the v3! I've got some 
+minor comments on the error messages, but the rest of the code looks 
+mostly good - although you forgot to rename a function and it currently 
+fails to compile. Please see inline below.
 
-Maybe we can mark it as initialized from kmsan pov ?
-There are kasan_poison/unpoison helpers that may fit ?
+On 21/03/2024 19:19, Sahil Siddiq wrote:
+> When pinning programs/objects under PATH (eg: during "bpftool prog
+> loadall") the bpffs is mounted on the parent dir of PATH in the
+> following situations:
+> - the given dir exists but it is not bpffs.
+> - the given dir doesn't exist and the parent dir is not bpffs.
+> 
+> Mounting on the parent dir can also have the unintentional side-
+> effect of hiding other files located under the parent dir.
+> 
+> If the given dir exists but is not bpffs, then the bpffs should
+> be mounted on the given dir and not its parent dir.
+> 
+> Similarly, if the given dir doesn't exist and its parent dir is not
+> bpffs, then the given dir should be created and the bpffs should be
+> mounted on this new dir.
+> 
+> Link: https://lore.kernel.org/bpf/2da44d24-74ae-a564-1764-afccf395eeec@isovalent.com/T/#t
+> Closes: https://github.com/libbpf/bpftool/issues/100
+> Fixes: 2a36c26fe3b8 ("bpftool: Support bpffs mountpoint as pin path for prog loadall")
+> 
+> Changes since v1:
+>   - Split "mount_bpffs_for_pin" into two functions.
+>     This is done to improve maintainability and readability.
+> 
+> Changes since v2:
+> - mount_bpffs_for_pin: rename to "create_and_mount_bpffs_dir".
+> - mount_bpffs_given_file: rename to "mount_bpffs_given_file".
+
+That's the same!
+
+> - create_and_mount_bpffs_dir:
+>    - introduce "dir_exists" boolean.
+>    - remove new dir if "mnt_fs" fails.
+> - improve error handling and error messages.
+> 
+> Signed-off-by: Sahil Siddiq <icegambit91@gmail.com>
+> ---
+>   tools/bpf/bpftool/common.c     | 93 ++++++++++++++++++++++++++++++----
+>   tools/bpf/bpftool/iter.c       |  2 +-
+>   tools/bpf/bpftool/main.h       |  3 +-
+>   tools/bpf/bpftool/prog.c       |  5 +-
+>   tools/bpf/bpftool/struct_ops.c |  2 +-
+>   5 files changed, 90 insertions(+), 15 deletions(-)
+> 
+> diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
+> index cc6e6aae2447..dce73105b0a5 100644
+> --- a/tools/bpf/bpftool/common.c
+> +++ b/tools/bpf/bpftool/common.c
+> @@ -244,24 +244,95 @@ int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type)
+>   	return fd;
+>   }
+>   
+> -int mount_bpffs_for_pin(const char *name, bool is_dir)
+> +int create_and_mount_bpffs_dir(const char *dir_name)
+>   {
+>   	char err_str[ERR_MAX_LEN];
+> -	char *file;
+> -	char *dir;
+>   	int err = 0;
+> +	bool dir_exists;
+
+Nit: "reverse Christmas tree order": In the absence of other criteria, 
+we tend to sort the variable definitions by line length. Please swap 
+dir_exists and err.
+
+>   
+> -	if (is_dir && is_bpffs(name))
+> +	if (is_bpffs(dir_name))
+>   		return err;
+>   
+> -	file = malloc(strlen(name) + 1);
+> -	if (!file) {
+> +	dir_exists = (access(dir_name, F_OK) == 0);
+> +
+> +	if (!dir_exists) {
+> +		char *temp_name;
+> +		char *parent_name;
+> +
+> +		temp_name = malloc(strlen(dir_name) + 1);
+> +		if (!temp_name) {
+> +			p_err("mem alloc failed");
+> +			return -1;
+> +		}
+> +
+> +		strcpy(temp_name, dir_name);
+> +		parent_name = dirname(temp_name);
+> +
+> +		if (is_bpffs(parent_name)) {
+> +			/* nothing to do if already mounted */
+> +			free(temp_name);
+> +			return err;
+> +		}
+> +
+> +		if (access(parent_name, F_OK) == -1) {
+> +			p_err("bpf object can't be pinned since dir (%s) does not exist",
+
+Maybe "can't create directory '%s' to pin BPF object: parent dir %s does 
+not exist"?
+
+> +			      parent_name);
+> +			free(temp_name);
+> +			return -1;
+> +		}
+> +
+> +		free(temp_name);
+> +	}
+> +
+> +	if (block_mount) {
+> +		p_err("no BPF file system found, not mounting it due to --nomount option");
+> +		return -1;
+> +	}
+> +
+> +	if (!dir_exists) {
+> +		err = mkdir(dir_name, 0700);
+> +		if (err) {
+> +			p_err("failed to create dir (%s): %s", dir_name, strerror(errno));
+
+Or "failed to create directory '%s': %s".
+
+> +			return err;
+> +		}
+> +	}
+> +
+> +	err = mnt_fs(dir_name, "bpf", err_str, ERR_MAX_LEN);
+> +	if (err) {
+> +		err_str[ERR_MAX_LEN - 1] = '\0';
+> +		p_err("can't mount BPF file system on given dir (%s): %s",
+> +		      dir_name, err_str);
+> +
+> +		if (!dir_exists) {
+> +			if (rmdir(dir_name) == -1)
+> +				p_err("failed to remove newly created dir (%s): %s",
+> +				      dir_name, strerror(errno));
+
+We're already on an error path, I'd maybe drop the check on the return 
+value from rmdir(). It doesn't matter much if it fails, I think.
+
+> +		}
+> +	}
+> +
+> +	return err;
+> +}
+> +
+> +int mount_bpffs_given_file(const char *file_name)
+
+This function must be renamed, as you did at the call sites.
+
+> +{
+> +	char err_str[ERR_MAX_LEN];
+> +	char *temp_name;
+> +	char *dir;
+> +	int err = 0;
+> +
+> +	if (access(file_name, F_OK) != -1) {
+> +		p_err("bpf object can't be pinned since file (%s) already exists", file_name);
+
+Not sure why the parenthesis, let's use quotes? Can we also replace 
+"since" with "because", or "given that", or simply a colon, please? And 
+I'd drop the passive voice, here's what I would use:
+
+     "can't pin BPF object: path '%s' already exists"
+
+> +		return -1;
+> +	}
+> +
+> +	temp_name = malloc(strlen(file_name) + 1);
+> +	if (!temp_name) {
+>   		p_err("mem alloc failed");
+>   		return -1;
+>   	}
+>   
+> -	strcpy(file, name);
+> -	dir = dirname(file);
+> +	strcpy(temp_name, file_name);
+> +	dir = dirname(temp_name);
+>   
+>   	if (is_bpffs(dir))
+>   		/* nothing to do if already mounted */
+> @@ -277,11 +348,11 @@ int mount_bpffs_for_pin(const char *name, bool is_dir)
+>   	if (err) {
+>   		err_str[ERR_MAX_LEN - 1] = '\0';
+>   		p_err("can't mount BPF file system to pin the object (%s): %s",
+
+"object '%s'" instead of "the object (%s)" please.
+
+> -		      name, err_str);
+> +		      file_name, err_str);
+>   	}
+>   
+>   out_free:
+> -	free(file);
+> +	free(temp_name);
+>   	return err;
+>   }
+>   
+> @@ -289,7 +360,7 @@ int do_pin_fd(int fd, const char *name)
+>   {
+>   	int err;
+>   
+> -	err = mount_bpffs_for_pin(name, false);
+> +	err = mount_bpffs_for_file(name);
+
+Compiler says "undefined reference to `mount_bpffs_for_file`", please 
+build and test your patch. See also how most CI jobs fail:
+https://github.com/kernel-patches/bpf/pull/6614
+
+Quentin
