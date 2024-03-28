@@ -1,35 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC3DD1BF58;
-	Thu, 28 Mar 2024 04:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA7CBD304
+	for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 05:24:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711601428; cv=none; b=R0RqDbemUmZ0s6le8rzc/HqauElqyOxAMGFshgjdKFvALE8+nsrb+/lganM8vl71ri7q60C4T/WdFXlSaWmEJMadGJ+xF212nyVl0V29KzN29zT6zyhalhZlFx/V6gowLAew5pHVvgyEkWkFPhPkcOOneJRU41Gq0f/xvsBN0WA=
+	t=1711603468; cv=none; b=fZKU+bkOG4A3vzfvNXOTD+M/WXd2d/SYd3jHHrghq4GvwvVXa3UlHo9FM48Hc12JibktaRyDRCJmu76+tDqBBOeY403Fp+h5y+2CX2F5mZnjL/VDhtIxTPomzL0DlrXMnLWPfGgC0a4t1nul7qIuVAVYsIjvb68Dnc3rCLYTjH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711601428; c=relaxed/simple;
-	bh=udkx8TTOn6zSn1nUXC3etJTiKnUwSJqFpdlj/Uf9YxY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=dk0TWpDFE44jaS2o4IVnIZCtiUXpLmpXfTzDtoa9pEhk4IVDyfyQQiqjGbbLDZY9GcBTkqZ7Dalx57Qh4zBbETd5p7RLzsQJXxda9qfz8ZEjd3zspkeFdzwVESt1aR85AZyytRTVnzEexCmV9ENBaIBhgEE1fwARGkPDlhudlPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HWNMOrWC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711603468; c=relaxed/simple;
+	bh=MGRS7pTbKLKg0ILrOu32KJ4QlyQZKi2nfA5IIxTn5Hk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n52nEs/XvDsUNJ1mDD47nr9VD7pmxymVRHZ+2kvL/EcxjhhRodIZD/xamMMnm5xABMulClfJjhfwlZgS7+KaY0iOv9oX4Xd66CnlmowkzRrN7o9D9DUDRrK06xP6qxHSjTLJT+SmRJAl9TAxV/X/xoHQ9PMH+EWFYAAeTMCo+tU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RhXxpWpp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HWNMOrWC"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 755F0C43390;
-	Thu, 28 Mar 2024 04:50:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RhXxpWpp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F348DC433C7;
+	Thu, 28 Mar 2024 05:24:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711601428;
-	bh=udkx8TTOn6zSn1nUXC3etJTiKnUwSJqFpdlj/Uf9YxY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=HWNMOrWCITNutmYhz5aJ0wIP1HPyzd5foHbIjmOLLYdjVgJKGj6Ofei52Ab/EUeoC
-	 uQz1/vYPFLZjbaFLjYCteY4rISOsjMXwKgxaKz/6gtXBzHeliFMBS/I1I+dImNv/UI
-	 YOGkwXIC7PYwfIbP48gGaM00xabMf2Imn9TqSUxmIwInr+lAr3O18dAa++Ai7uGpHK
-	 jW+cFo716bml5ykintObajJRh4jLEh88g8oDghT5gGoXCRc6HxvMo2qyi9X/npGCPl
-	 E2ZEpySuoQlJIeE9ZxfNeKHCAdYXwcmqdpUgqlhQRlMsjE15I/goPjYCZVJPLEH8ui
-	 UbMz9kSpUmj9A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5CDEDD9505E;
-	Thu, 28 Mar 2024 04:50:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1711603468;
+	bh=MGRS7pTbKLKg0ILrOu32KJ4QlyQZKi2nfA5IIxTn5Hk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=RhXxpWpp5WmgEei6sJdkoPYwtZKp4qwP6CcD3Sq/HCMUqo3Oeww1xeRE5hnaouPmF
+	 47rxLsF3bnVOYTKTq+TEmCc693+bzTapQ41zZeimIbNAX7IuoOHrPy7wYZyOm5+r4h
+	 CnXgDT1UuQxeNFV95D5mrHfjMUSeQ0hDvEmsIQJxN43PrNh+RxnyiGdsc2W+gRaouP
+	 5yobWMjrscWLwuppn58GHZ7BijFCbgYO1uckuodXTE0MWOArd8sauSd1JFJknUlL3Y
+	 HKaCCQSTpI4qJvaIsWQtPYa/fW5WFQxDfZPCuPrez4DJyOUkUok65HDtlldzZQypoq
+	 E8bOZQMr/2VOw==
+From: Andrii Nakryiko <andrii@kernel.org>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@kernel.org
+Cc: jolsa@kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH bpf 1/2] bpf: put uprobe link's path and task in release callback
+Date: Wed, 27 Mar 2024 22:24:25 -0700
+Message-ID: <20240328052426.3042617-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,49 +43,48 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/2] Use start_server and connect_fd_to_fd
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171160142837.898.15588043044071096564.git-patchwork-notify@kernel.org>
-Date: Thu, 28 Mar 2024 04:50:28 +0000
-References: <cover.1711447102.git.tanggeliang@kylinos.cn>
-In-Reply-To: <cover.1711447102.git.tanggeliang@kylinos.cn>
-To: Geliang Tang <geliang@kernel.org>
-Cc: andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- tanggeliang@kylinos.cn, bpf@vger.kernel.org, mptcp@lists.linux.dev
 
-Hello:
+There is no need to delay putting either path or task to deallocation
+step. It can be done right after bpf_uprobe_unregister. Between release
+and dealloc, there could be still some running BPF programs, but they
+don't access either task or path, only data in link->uprobes, so it is
+safe to do.
 
-This series was applied to bpf/bpf-next.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
+On the other hand, doing path_put() in dealloc callback makes this
+dealloc sleepable because path_put() itself might sleep. Which is
+problematic due to the need to call uprobe's dealloc through call_rcu(),
+which is what is done in the next bug fix patch. So solve the problem by
+releasing these resources early.
 
-On Tue, 26 Mar 2024 18:03:37 +0800 you wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
-> 
-> v4:
->  - Matt reminded me that I shouldn't send a square-to patch to BPF (thanks),
->    so I update them into two patches in v4.
-> 
-> v3:
->  - split v2 as two patches as Daniel suggested.
->  - The patch "selftests/bpf: Use start_server in bpf_tcp_ca" is merged
->    by Daniel (thanks), but I forgot to drop 'settimeo(lfd, 0)' in it, so
->    I send a squash-to patch to fix this.
-> 
-> [...]
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ kernel/trace/bpf_trace.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Here is the summary with links:
-  - [bpf-next,v4,1/2] selftests/bpf: Use connect_fd_to_fd in bpf_tcp_ca
-    https://git.kernel.org/bpf/bpf-next/c/ed1697153d40
-  - [bpf-next,v4,2/2] selftests/bpf: Drop settimeo in do_test
-    https://git.kernel.org/bpf/bpf-next/c/9a3aa22de842
-
-You are awesome, thank you!
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 0a5c4efc73c3..0b73fe5f7206 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -3157,6 +3157,9 @@ static void bpf_uprobe_multi_link_release(struct bpf_link *link)
+ 
+ 	umulti_link = container_of(link, struct bpf_uprobe_multi_link, link);
+ 	bpf_uprobe_unregister(&umulti_link->path, umulti_link->uprobes, umulti_link->cnt);
++	if (umulti_link->task)
++		put_task_struct(umulti_link->task);
++	path_put(&umulti_link->path);
+ }
+ 
+ static void bpf_uprobe_multi_link_dealloc(struct bpf_link *link)
+@@ -3164,9 +3167,6 @@ static void bpf_uprobe_multi_link_dealloc(struct bpf_link *link)
+ 	struct bpf_uprobe_multi_link *umulti_link;
+ 
+ 	umulti_link = container_of(link, struct bpf_uprobe_multi_link, link);
+-	if (umulti_link->task)
+-		put_task_struct(umulti_link->task);
+-	path_put(&umulti_link->path);
+ 	kvfree(umulti_link->uprobes);
+ 	kfree(umulti_link);
+ }
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
