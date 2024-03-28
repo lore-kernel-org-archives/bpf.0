@@ -1,132 +1,143 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B2A2C6AD;
-	Thu, 28 Mar 2024 15:10:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 835B712AAD3;
+	Thu, 28 Mar 2024 15:44:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711638651; cv=none; b=RTF9NSHXD+5MhH16WmzEsgBTAMHv5ymC3bHdaNYbwEbeBwYZmuhtjESbIG32YEAU/3A9o9B9sRqpH813TbJ1VJlV9ScMQoC5me7S318cwAXy0IDCcrc/rueWivK4dn2euhCnfWdvrVO79K6rnoW+CmrqWHIywX9Mu3knaQYMK1A=
+	t=1711640657; cv=none; b=qUKV+gdXzS7HH2pePYDFBhx5xskps/wd5fe1dtin65q3ZA6DcxZe1wFBJz6itFA7rXAIB6r9jbVSkepH+zGUWzEmGjTwgBSeIiSzh3OdgQjJIu9dXPVy0nP0skJoB6ELvYu5EqIuN6zv/SVvQ4Hrl/T5zIGOUXR/SDvGHFJX8MU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711638651; c=relaxed/simple;
-	bh=r2D0EqkpCrFqFode/ZlZv88Dg4Xknt6j7iyrIgxbYTU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZrLs/p/darscR+NvP4+RVCZY73NhOQzeshRJ3qXd6r1FWuvJGfJv0F4JqW6gZYetnh3TH61LJ9Zc1Ch7Kb0z0CYuRI+BHxvs9E5PKPZqVeFXneU3UMXcNHyTC7QUddAc6/+WXNB0fbW87TAnaNWrSnH93X9jJXa8kxH/O/lhXDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D2BC433C7;
-	Thu, 28 Mar 2024 15:10:47 +0000 (UTC)
-Date: Thu, 28 Mar 2024 11:13:30 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Jiri Olsa
- <jolsa@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Christian Borntraeger
- <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, "David S.
- Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, Dave
- Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, Mathieu
- Desnoyers <mathieu.desnoyers@efficios.com>, Quentin Monnet
- <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>, linux-arm-kernel
- <linux-arm-kernel@lists.infradead.org>, LKML
- <linux-kernel@vger.kernel.org>, linux-riscv
- <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>,
- Network Development <netdev@vger.kernel.org>,
- linux-trace-kernel@vger.kernel.org, "open list:KERNEL SELFTEST FRAMEWORK"
- <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add
- support to record and check the accessed args
-Message-ID: <20240328111330.194dcbe5@gandalf.local.home>
-In-Reply-To: <CALz3k9jG5Jrqw=BGjt05yMkEF-1u909GbBYrV-02W0dQtm6KQQ@mail.gmail.com>
-References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
-	<20240311093526.1010158-2-dongmenglong.8@bytedance.com>
-	<CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
-	<CALz3k9i5G5wWi+rtvHPwVLOUAXVMCiU_8QUZs87TEYgR_0wpPA@mail.gmail.com>
-	<CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail.com>
-	<CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
-	<CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
-	<CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
-	<CAADnVQLHpi3J6cBJ0QBgCQ2aY6fWGnVvNGdfi3W-jmoa9d1eVQ@mail.gmail.com>
-	<CALz3k9g-U8ih=ycJPRbyU9x_9cp00fNkU3PGQ6jP0WJ+=uKmqQ@mail.gmail.com>
-	<CALz3k9jG5Jrqw=BGjt05yMkEF-1u909GbBYrV-02W0dQtm6KQQ@mail.gmail.com>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1711640657; c=relaxed/simple;
+	bh=V9eApfrx/luUPTr0ui9HIhkRp0aZQ7q1nffr8rRLCu8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Y4hHOU3QGmL3ev0PxQ/w/ZItVei9zeM4LKp2c4tMBndCLQXhx2HtqNim/hCq4nyPiwJrXa6lLLZSE6sIbX/Q1AGg6CiAPtXVPHhMDanrmWyPQlNVPAXbP06yKeRvqy8fYIS+sdEuI9jf1o0vZ+Bpa1Gwo4pSJCB9UB01xbLiWSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Th2X6ibv; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Th2X6ibv"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4E039C43330;
+	Thu, 28 Mar 2024 15:44:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711640657;
+	bh=V9eApfrx/luUPTr0ui9HIhkRp0aZQ7q1nffr8rRLCu8=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=Th2X6ibvVdQ+kgNVc65KbGnF7WOCx3uMpiu8utEkAUXEGRRyiJ3LbFumLPaz3pwRm
+	 hcw4QdtEZZuBdny5UnP4IaNjE7dVBkQCCEdiObTSlwHmPC7kom1wsZymTk2r/jHMak
+	 dncXWL3zaqzj7Qbr7PHgWpgppPhXFHvwYxZi1ZDQcjru8Hu65ql3UUvqT77YNsHI/e
+	 Iw8CpuIG4z8NiKPFFQ5Bjt7RoAXs54ourHz77o36j2YkJUX5lMkxEX7NfG9IDOkTxm
+	 CKkvDgPkYHnfHpKMepZQh9d5AmD8z4/9xbnYX+CBXGKyqJQMfByDIF2BwOcJV20P/+
+	 35HeG/vANiIlA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34012C54E64;
+	Thu, 28 Mar 2024 15:44:17 +0000 (UTC)
+From: Joel Granados via B4 Relay <devnull+j.granados.samsung.com@kernel.org>
+Date: Thu, 28 Mar 2024 16:44:04 +0100
+Subject: [PATCH v3 03/10] ftrace: Remove the now superfluous sentinel
+ elements from ctl_table array
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240328-jag-sysctl_remove_empty_elem_kernel-v3-3-285d273912fe@samsung.com>
+References: <20240328-jag-sysctl_remove_empty_elem_kernel-v3-0-285d273912fe@samsung.com>
+In-Reply-To: <20240328-jag-sysctl_remove_empty_elem_kernel-v3-0-285d273912fe@samsung.com>
+To: Luis Chamberlain <mcgrof@kernel.org>, josh@joshtriplett.org, 
+ Kees Cook <keescook@chromium.org>, Eric Biederman <ebiederm@xmission.com>, 
+ Iurii Zaikin <yzaikin@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Thomas Gleixner <tglx@linutronix.de>, John Stultz <jstultz@google.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Andy Lutomirski <luto@amacapital.net>, 
+ Will Drewry <wad@chromium.org>, Ingo Molnar <mingo@redhat.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
+ Vincent Guittot <vincent.guittot@linaro.org>, 
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+ Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+ Daniel Bristot de Oliveira <bristot@redhat.com>, 
+ Valentin Schneider <vschneid@redhat.com>, Petr Mladek <pmladek@suse.com>, 
+ John Ogness <john.ogness@linutronix.de>, 
+ Sergey Senozhatsky <senozhatsky@chromium.org>, 
+ "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
+ Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Balbir Singh <bsingharora@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>
+Cc: linux-kernel@vger.kernel.org, kexec@lists.infradead.org, 
+ linux-fsdevel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, Joel Granados <j.granados@samsung.com>
+X-Mailer: b4 0.13-dev-2d940
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1508;
+ i=j.granados@samsung.com; h=from:subject:message-id;
+ bh=1araE0kn/61sWG3kWH8OhE3BK5Hy2HOuryBQQ689H28=;
+ b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGYFkEpW98gjG1D2aFsgWF2O5xiJynGheSz82
+ sXxRtohHqsNOIkBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJmBZBKAAoJELqXzVK3
+ lkFPCzUL/0SG+3ODZAcC8VOhC+0GoOi4kE7faOWvyEi+zuJjGTMcwSwNf4IntNxUSlKxLruqmu/
+ sXS4rISd6LajFHPlALx1lSwYZelfgle5kubkTKxbxuV4A4EpjxsYLKDFRoFS9tmt60X7MzNuPrv
+ 2ARWH2eTismjVuHNYgaovyHiC3/nZ7Eq0vltmN6f9/mtI49KNhKAy6wgXicwxtfN5J5aRPKDmKF
+ +Crd6eRk4VyjwwB2aR2w++kmDsP6Cjnha4ho87e4AWqV/7W9HLnSNaPkAilDaK+ZwdYvCX/6rhb
+ nSA1+bIMwy8cuyKK461nhWqG3gxm1jyfzvwyM3bhD6Z4yl22JmRQg2TxIPM6rEulBpeOGoNfhm8
+ 60+H0uxestVapnhLqg3gSUklk+b5Qv4YsJ9XowjlmPrCMKeLBtb6t8Wxpm+72Jba9Nba9Gyx7wB
+ 6nHOXmVGMy7L5w1LCv/2Im1SpQ9JngLB+Gni4XCGVVQhaq/cxpd2dV7EQKFfhCDOo17ZGL+oWK6
+ +0=
+X-Developer-Key: i=j.granados@samsung.com; a=openpgp;
+ fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
+X-Endpoint-Received: by B4 Relay for j.granados@samsung.com/default with
+ auth_id=70
+X-Original-From: Joel Granados <j.granados@samsung.com>
+Reply-To: j.granados@samsung.com
 
-On Thu, 28 Mar 2024 22:43:46 +0800
-=E6=A2=A6=E9=BE=99=E8=91=A3 <dongmenglong.8@bytedance.com> wrote:
+From: Joel Granados <j.granados@samsung.com>
 
-> I have done a simple benchmark on creating 1000
-> trampolines. It is slow, quite slow, which consume up to
-> 60s. We can't do it this way.
->=20
-> Now, I have a bad idea. How about we introduce
-> a "dynamic trampoline"? The basic logic of it can be:
->=20
-> """
-> save regs
-> bpfs =3D trampoline_lookup_ip(ip)
-> fentry =3D bpfs->fentries
-> while fentry:
->   fentry(ctx)
->   fentry =3D fentry->next
->=20
-> call origin
-> save return value
->=20
-> fexit =3D bpfs->fexits
-> while fexit:
->   fexit(ctx)
->   fexit =3D fexit->next
->=20
-> xxxxxx
-> """
->=20
-> And we lookup the "bpfs" by the function ip in a hash map
-> in trampoline_lookup_ip. The type of "bpfs" is:
->=20
-> struct bpf_array {
->   struct bpf_prog *fentries;
->  struct bpf_prog *fexits;
->   struct bpf_prog *modify_returns;
-> }
->=20
-> When we need to attach the bpf progA to function A/B/C,
-> we only need to create the bpf_arrayA, bpf_arrayB, bpf_arrayC
-> and add the progA to them, and insert them to the hash map
-> "direct_call_bpfs", and attach the "dynamic trampoline" to
-> A/B/C. If bpf_arrayA exist, just add progA to the tail of
-> bpf_arrayA->fentries. When we need to attach progB to
-> B/C, just add progB to bpf_arrayB->fentries and
-> bpf_arrayB->fentries.
->=20
-> Compared to the trampoline, extra overhead is introduced
-> by the hash lookuping.
->=20
-> I have not begun to code yet, and I am not sure the overhead is
-> acceptable. Considering that we also need to do hash lookup
-> by the function in kprobe_multi, maybe the overhead is
-> acceptable?
+This commit comes at the tail end of a greater effort to remove the
+empty elements at the end of the ctl_table arrays (sentinels) which
+will reduce the overall build time size of the kernel and run time
+memory bloat by ~64 bytes per sentinel (further information Link :
+https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
 
-Sounds like you are just recreating the function management that ftrace
-has. It also can add thousands of trampolines very quickly, because it does
-it in batches. It takes special synchronization steps to attach to fentry.
-ftrace (and I believe multi-kprobes) updates all the attachments for each
-step, so the synchronization needed is only done once.
+Remove sentinel elements from ftrace_sysctls and user_event_sysctls
 
-If you really want to have thousands of functions, why not just register it
-with ftrace itself. It will give you the arguments via the ftrace_regs
-structure. Can't you just register a program as the callback?
+Acked-by: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Acked-by: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Signed-off-by: Joel Granados <j.granados@samsung.com>
+---
+ kernel/trace/ftrace.c            | 1 -
+ kernel/trace/trace_events_user.c | 1 -
+ 2 files changed, 2 deletions(-)
 
-It will probably make your accounting much easier, and just let ftrace
-handle the fentry logic. That's what it was made to do.
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index da1710499698..6cec53aa45a6 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -8270,7 +8270,6 @@ static struct ctl_table ftrace_sysctls[] = {
+ 		.mode           = 0644,
+ 		.proc_handler   = ftrace_enable_sysctl,
+ 	},
+-	{}
+ };
+ 
+ static int __init ftrace_sysctl_init(void)
+diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+index 70d428c394b6..304ceed9fd7d 100644
+--- a/kernel/trace/trace_events_user.c
++++ b/kernel/trace/trace_events_user.c
+@@ -2833,7 +2833,6 @@ static struct ctl_table user_event_sysctls[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= set_max_user_events_sysctl,
+ 	},
+-	{}
+ };
+ 
+ static int __init trace_events_user_init(void)
 
--- Steve
+-- 
+2.43.0
+
+
