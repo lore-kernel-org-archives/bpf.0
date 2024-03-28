@@ -1,138 +1,118 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE53368;
-	Thu, 28 Mar 2024 01:29:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E1E25757;
+	Thu, 28 Mar 2024 01:55:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711589385; cv=none; b=Ila4FHJ+Bm9xidHCXaSS7ai5cMGReYbqqQkb/6V7TafVQsrys8BZ8g0os6KMuSFSThE9UZ+3YrNuFNb5NJDJAaTW7aAaLAhHe/pg2T93w++RWGSF8eSN4XTc8NBflI45KNoGDVZ225tl8xQQN6oRkmjgaATG2gos1I3Ehb9FXwo=
+	t=1711590916; cv=none; b=sSmau78tWRP2q2modaV51c1qCfZCcUFXBNFDqj85O5ih2URQ/h2zCvI1Y8swtOATqyT5iZ1FW+5ElF1QLdHVg7d6QHWZgSp+ebVq3CcB9Rp5OTnV8OjmVoWyleVsrer33W5DcD1y5JPBTB8pS5e8xyE909Kt1Ae7FVzQ/VSeN5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711589385; c=relaxed/simple;
-	bh=GjZawt6xoy98e3Xp/Y+236Wtagn1P4gXHsS7RC+0S60=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dLxRI2gW84wnsQPvbzaAwSTvcxGKuA3cSIMWkaIplI2ESzEZ+knkN/AueEkBLEylQEhK1VrSg0S/yVTMa5+Zl3J7fctgW3r43pglyIcl3FR7yslVRMCZvkrCbBntgytoftJu0/n4nXp30rT02rjQT6xuKoC86PbEYtrGTOJ8Z4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ckhifJt8; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711590916; c=relaxed/simple;
+	bh=xDB7sPWd4OnVmNLvMLUsrFbj890UIaBB83RsRg8BA1A=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=sGujQb2HZTDjSwaHQqWBJZdirWv3AvLGClocEHIABQCjVpObd0dXgKD92uycMt8rbm7OOuZFXB7GxbPyy0N3tXaitLWhsCklk5uHc+aun5zuNlrwTQuvWsSniJSA94uc6mGmwC08UCRAVD6TKX/0mLCGe3EhowvKilxAitoCvuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=LHWXxeR5; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ckhifJt8"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6ea8a0d1a05so1024838b3a.1;
-        Wed, 27 Mar 2024 18:29:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711589384; x=1712194184; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pnr6mD1K3zXgGPE0SDwjtoTMxIipbCVjzzKQw/uc1b8=;
-        b=ckhifJt8cASI+G1pXT21xBoEh+7o/cGGEVkNOfWByEYSKPxVItTNTxRkqEkN/6Ck3M
-         MoWKDbhnqmXAzQpbP53oG3X6YPFZTr6oTZm5YKNy07gXmqejkI0HUZoOc88Rd0EkmChH
-         MrHLzUJtb+4XDUtfs9141kuz/rO9qNtam3+nzPt5apGw0Uuiyn178EQc3wNSmqgeE/t+
-         bcU559ZQ0vZDhQW2znZYnZpwW1qmTGGmdujmuy7Iso6kbQQk+FR1o+dA+98nFGOi4jVA
-         SrwWMAS+Jb2dXlH31NQfqn9U+NOQMUdRfNan2OIPFjGNituk2WN8AcTVUXMJDuUN1zUv
-         Z7zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711589384; x=1712194184;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pnr6mD1K3zXgGPE0SDwjtoTMxIipbCVjzzKQw/uc1b8=;
-        b=GiM4bJoxFCpc+aqlIgdSwCNqyz2t2efo9GVOY2hC+hTUv/cEsmRp227POMgFTunPHV
-         2QZ6OjADkXnvz3Ktl+BbI1ij1prXm7tMxJkPM8dV7/t+myKCUaoCNAx/cleAYwjz94AK
-         54D8L9P8xeMpPjg6yMLDyBgOdyOfv1wbYg6GSXuupdSBIt6PVhfGcesQ24dbOQjtS0Jd
-         W2E2uqJKVF0nuvoG/U55xLUa4fIrBXgNLjqsZ1Snm2FryOfujUzmOvNAYz2j8iKiUS85
-         XtHzQPec745s0hEZR63M0dgyKWZYrHIuYEDBzjilwLsY7SXnWOkoIXnCh9RQpC91CIay
-         2yFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXF2TOGwizXDpl7zTbyxtq5YoaDjTVXSx9KC41EXy7fMSoOBsHv9yXjRvLljFAVpfcOpors5fWP7vfsan3p+sLHftimVhNgOZFkyc9cWNeBoOVejyFEI5ncV5LV
-X-Gm-Message-State: AOJu0YxL3GnuVkDdA9SfJjH80K4ZqZMJkR3A8wQoMQdw1EECylcT6qfc
-	027QGbQfvTNG+FAiqiNydGewCUfF4f8UdTh336+shkKaFT3Fy5GM
-X-Google-Smtp-Source: AGHT+IFECPtMYMPkz/XyDf2wvLowijIT5I7aeAW6f+9oJSADgOj1T6V6Mlh2GFflyTvYOC1wApR58w==
-X-Received: by 2002:a17:902:da85:b0:1e0:e85c:72dc with SMTP id j5-20020a170902da8500b001e0e85c72dcmr1439310plx.19.1711589382252;
-        Wed, 27 Mar 2024 18:29:42 -0700 (PDT)
-Received: from macbook-pro-49.dhcp.thefacebook.com ([2620:10d:c090:400::5:21bc])
-        by smtp.gmail.com with ESMTPSA id k5-20020a170902694500b001e038619e34sm187995plt.221.2024.03.27.18.29.40
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 27 Mar 2024 18:29:41 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: kuba@kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@kernel.org,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	kernel-team@fb.com
-Subject: pull-request: bpf 2024-03-27
-Date: Wed, 27 Mar 2024 18:29:38 -0700
-Message-Id: <20240328012938.24249-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.39.3 (Apple Git-145)
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="LHWXxeR5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1711590905;
+	bh=gQ5jvnXKjeGT+zlOUdI+tO76QxTh7Bb0Dm3E6LrAe0g=;
+	h=Date:From:To:Cc:Subject:From;
+	b=LHWXxeR5skiYg1Dpq0xI1mjqNEm3sKIm+Av+28ASdFE0bZFt+uuBnIJ/GHK3u+HTA
+	 Ml1kpqSkkZP4p92DUGZk0R3pR68Gr6pTRS27zkwvssfqRXoA0ONrpRMT5iCI5HyHSt
+	 7RZKLtZ867EzEZzbj1NANz35VjLGP4Xn68B//JxkkfZF+o4xM861vQhvj1BbqMX4NB
+	 e1HE6Giu6+CMNRC7/MkGvtuCJRzvdzqFYDz3kAm9MImEFahMkr9hJgKF/ksBJ9Bg2k
+	 LcszhxU7111BauleD11T71gyRMdOOU/+2pSHx/Gfi329CTe0UhqXQW03YGsrtH3rV5
+	 aWQ2jCEHW0OHA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V4mnh1jTJz4wc3;
+	Thu, 28 Mar 2024 12:55:03 +1100 (AEDT)
+Date: Thu, 28 Mar 2024 12:55:00 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, David Miller
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>
+Cc: bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>, Haiyue
+ Wang <haiyue.wang@intel.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the bpf-next tree with the net tree
+Message-ID: <20240328125500.2582492e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/Ss/gieERHw1WxJDgq1s66Ig";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hi David, hi Jakub, hi Paolo, hi Eric,
+--Sig_/Ss/gieERHw1WxJDgq1s66Ig
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The following pull-request contains BPF updates for your *net* tree.
+Hi all,
 
-We've added 4 non-merge commits during the last 1 day(s) which contain
-a total of 5 files changed, 26 insertions(+), 3 deletions(-).
+Today's linux-next merge of the bpf-next tree got a conflict in:
 
-The main changes are:
+  kernel/bpf/arena.c
 
-1) Fix bloom filter value size validation and protect the verifier
-   against such mistakes, from Andrei.
+between commit:
 
-2) Fix build due to CONFIG_KEXEC_CORE/CRASH_DUMP split, from Hari.
+  ee498a38f317 ("bpf: Clarify bpf_arena comments.")
 
-3) Update bpf_lsm maintainers entry, from Matt.
+from the net tree and commit:
 
-Please consider pulling these changes from:
+  45a683b2d815 ("bpf,arena: Use helper sizeof_field in struct accessors")
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/for-net
+from the bpf-next tree.
 
-Thanks a lot!
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-Also thanks to reporters, reviewers and testers of commits in this pull-request:
+--=20
+Cheers,
+Stephen Rothwell
 
-Andrii Nakryiko, Baoquan He, Jiri Olsa, KP Singh, Stanislav Fomichev
+diff --cc kernel/bpf/arena.c
+index 343c3456c8dd,af5cae640669..000000000000
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@@ -37,8 -37,8 +37,8 @@@
+   */
+ =20
+  /* number of bytes addressable by LDX/STX insn with 16-bit 'off' field */
+- #define GUARD_SZ (1ull << sizeof(((struct bpf_insn *)0)->off) * 8)
++ #define GUARD_SZ (1ull << sizeof_field(struct bpf_insn, off) * 8)
+ -#define KERN_VM_SZ ((1ull << 32) + GUARD_SZ)
+ +#define KERN_VM_SZ (SZ_4G + GUARD_SZ)
+ =20
+  struct bpf_arena {
+  	struct bpf_map map;
 
-----------------------------------------------------------------
+--Sig_/Ss/gieERHw1WxJDgq1s66Ig
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-The following changes since commit afbf75e8da8ce8a0698212953d350697bb4355a6:
+-----BEGIN PGP SIGNATURE-----
 
-  selftests: netdevsim: set test timeout to 10 minutes (2024-03-27 11:29:27 +0000)
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYEzfQACgkQAVBC80lX
+0GwTlAf+ODseBCg0yaiW+cSUeGlEO16EWDh/ubJdBthEL820EVsMhIyYOxXxg6zn
+lfqimw2UtpyXTuY5pWbZ1++PDrU7u3ZI84PPCJrlcDEZ1jT2nk0B3Dv1NGuiX4s7
+yuzJBAz1Gi11MTBjLnJGo1b0tuuiICL1jzrOmSWV8kaSi0x4QI7u1FpdZnpbeipr
+QTEpYKjs7jk8BXOYbOKxlfGzg4UA6YP8Fhz/XUflBfa0fjsOm3vhR+a4L/OvUlmp
+4pOYoKMW7GbwsH9KNsfccx6ZLWwV6oW7+3yAcaXYNKVySGQSLYOwkLqyLa7Vdpc8
+EOOKPufZo14M9dWb1K7kHCz6kBYzLw==
+=M0aJ
+-----END PGP SIGNATURE-----
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/for-net
-
-for you to fetch changes up to 4dd651076ef0e5f09940f763a1b4e8a209dab7ab:
-
-  bpf: update BPF LSM designated reviewer list (2024-03-27 11:10:36 -0700)
-
-----------------------------------------------------------------
-for-net
-
-----------------------------------------------------------------
-Alexei Starovoitov (1):
-      Merge branch 'check-bloom-filter-map-value-size'
-
-Andrei Matei (2):
-      bpf: Check bloom filter map value size
-      bpf: Protect against int overflow for stack access size
-
-Hari Bathini (1):
-      bpf: fix warning for crash_kexec
-
-Matt Bobrowski (1):
-      bpf: update BPF LSM designated reviewer list
-
- MAINTAINERS                                               |  3 +--
- kernel/bpf/bloom_filter.c                                 | 13 +++++++++++++
- kernel/bpf/helpers.c                                      |  2 +-
- kernel/bpf/verifier.c                                     |  5 +++++
- tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c |  6 ++++++
- 5 files changed, 26 insertions(+), 3 deletions(-)
+--Sig_/Ss/gieERHw1WxJDgq1s66Ig--
