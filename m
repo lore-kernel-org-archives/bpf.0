@@ -1,64 +1,57 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264C813A41A;
-	Thu, 28 Mar 2024 20:02:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA73913A407;
+	Thu, 28 Mar 2024 20:38:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711656134; cv=none; b=VPOSgAWbAtLKXvfcq7MX/HMn2YeUg6DDPlBWmysC6QeVU+uggUW2m0pGIQfZxojFhIT5saVW/FJi6QOhvQ+KNVllfeyiVKzDd3geIvdCC6Fn716jL/WPDRTVogJnuDYwYv6GKq6pssdpQ/ugIkq6hJhUawEZwHDJ8fRPbWC6cmY=
+	t=1711658302; cv=none; b=hHHaFNqYuI9fyEIptO1yDSE6C2TaxhafvFDW7XVfYu0V70oeiOPIUzAPvGkp8QnpD9Jge4jlhBifd4jb9+7j2z/vQv7M5d7j3oIkb47ZVKnxYu+mDXeCBmB1P3TcpMhutuLlxdtl+R8UA3e5ZKvTLCblKI4mRuAhUYd/1rXK6Eg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711656134; c=relaxed/simple;
-	bh=Z7vcjNq9iuDxV3o65whbRSs5plrB2OCKjhzQZCsPSbg=;
+	s=arc-20240116; t=1711658302; c=relaxed/simple;
+	bh=4V4w7fC0EBbm7te+ffIKRQDvDxxoYpzMpaa3f0AoWlE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IMyU9ISjTT1AmSt06kfVMRwxUeYvcH6Ku9K0h+htsNz0s76ddVq6ldC2cd1lkERPFhyWeNPwPvUi2g3Oyrzg82iSymgmO+Ej8dP2ffrC2m3vETts7b6kxUfGrtZOoRSL2ZU9dko92i3YdcvnAvH6NTYdXR5PlzpDUI5w7/M74L0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JDLQvDAT; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=R9ZcLK3fDdjNJfw7QbQUGOnuhDgy38LU7BworcsUB7xsk6qRlaD8OuwBstohGL4I/Wg9Z3iSOAtE/ECbk5jHMVMx/vc6KyO4uoPHFcx/ObqiA3pQicp+SEQ0bsEcQR41UB+25r4A1cvT3uMDjYF118Mqfxna02nTb90zZ8bukHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dRfKVHSc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JDLQvDAT"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-6eae2b57ff2so436850b3a.2;
-        Thu, 28 Mar 2024 13:02:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711656132; x=1712260932; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=exQ2zy2WHkjHmygTSs/OFLcB/44Kfp63nWW6TTuS9co=;
-        b=JDLQvDATelqKwgvM919l1qpGY5jD68CEsZD2Oj7HPTFx1TYhuLPv7YjOLekxJQF1/o
-         GGfxmAdVxvj2cOdTuyg3akcNfonF3bBZ6fydV9+wipVYqqPXxqdC1oyftqkOuUcPNOxg
-         LphaY/Jp+SBSHNqoREf3vFtHmDgrJi/mZPyEfcD256UBoYa2ZmN+waeAH+gHBqZhRUDr
-         poWnByGkV0UR3J4tEx+cZCtCGufFmvl7QtyIx4U2Xpf6h6L57fiT3atpmBvhCJ7pGoo8
-         6DcGHh8dqqWKuuwd8dDlxkNhbZE4Z+lnZpnwNRJs8q02oaufw9///Xp6mm0LuRAq/I+n
-         jc1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711656132; x=1712260932;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=exQ2zy2WHkjHmygTSs/OFLcB/44Kfp63nWW6TTuS9co=;
-        b=nmILSvvEgpmg0x88uj+Ikuvpffnp6oEAtUABkOi5ZTiX33bU23Vur9GX77nqM17MHT
-         jyPL996ME2pn0IauddA0ynC5zZHgVO17pAqb+HQRZjn2VzZuDtBhHWaRABNH0iYikt7a
-         qoozqvqXxyEzOk+c0z9L0wsoDq7so00I6JESZ0BU8y/PchlygP6Co8MwOBFk7+z0m80T
-         +9taoRZgQWA6Spr5WswKJgsKBd/nhE2tnbeH5hU9IGyfJD6qR+SvsKTppFPRtsuG4sJm
-         ZwhRxAhU2mjPPybA746XYGcUawfjW+AZQjz51KSgZtTKS+XIa6QD5ohyHhfE20r3BuRO
-         0MUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWbVOUrCA+bVvhJqKqkImq1mImOS4+Gqj+seURchDPzsy1UHAzLrJ6azVd1rkTiblsMnPMq4dZ25xD9TywQUKBJKPIMZpLgC1iDHJ9urOS9bNvxbI0PGATii3ZYFLSXghtr6DwslXuyclY6K67Qxb5FdHzmXX1qd7gYW/bKkxmc94wNJJrPFzP9au3u5pl673XqG+ULUzp95wqGDQ==
-X-Gm-Message-State: AOJu0YwSBNLtKXmmIMLCmHkcEPDaOMMGXAI5s3Vg/A2ysgEbjMh4jIrv
-	bGgq5FoQZpd8ivz5TUF8XVzciEXG2iAVS10Tjez4Jf2T+TY6lY6d
-X-Google-Smtp-Source: AGHT+IFACNiaq+1NYDRgLNEhercMPfzINXB3PvhMHD2tixWVt5eUtCDZPiJ0ztdRKKdkNFaCLHZpVQ==
-X-Received: by 2002:a17:903:1c8:b0:1e0:b60e:2cd9 with SMTP id e8-20020a17090301c800b001e0b60e2cd9mr602011plh.30.1711656132474;
-        Thu, 28 Mar 2024 13:02:12 -0700 (PDT)
-Received: from localhost (dhcp-141-239-158-86.hawaiiantel.net. [141.239.158.86])
-        by smtp.gmail.com with ESMTPSA id u10-20020a170902e5ca00b001e042dc5202sm2026332plf.80.2024.03.28.13.02.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Mar 2024 13:02:12 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date: Thu, 28 Mar 2024 10:02:11 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Djalal Harouni <tixxdz@gmail.com>, Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Alexei Starovoitov <ast@kernel.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dRfKVHSc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEC19C433F1;
+	Thu, 28 Mar 2024 20:38:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711658301;
+	bh=4V4w7fC0EBbm7te+ffIKRQDvDxxoYpzMpaa3f0AoWlE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dRfKVHScDsH8tRE1//91CYwzd5KWuDIPzdzz4FYy70fYNQxTI4FdYsr0rnVlRlDzy
+	 bg2yy/d0f1eEfdelx5bbivx7vjt1I2XcdZlEKOdXeDikFSelU1LkYAktJZJQE5tLsR
+	 aWlyXBPbOFfiGkb1rQ9ZnTbgEL0YbJ4i2SbETO+aCf/YHhMcqNdelehX5uFfKS1xll
+	 hu+eiqfLfnMN5AkY0NodQO3KanPcw3aHDw1BYdD1SX/2LmnaHHwN/NMDk0K7Em2Psg
+	 C2FdKw3cfmIzQDuZNhqbtY1LdZDhPcphkaPSG7Rh5XQWxlmM7Qthw7AzeTMMxiHvhg
+	 jCFiIDoVfirww==
+Date: Thu, 28 Mar 2024 20:38:08 +0000
+From: Simon Horman <horms@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
@@ -67,67 +60,137 @@ Cc: Djalal Harouni <tixxdz@gmail.com>, Zefan Li <lizefan.x@bytedance.com>,
 	John Fastabend <john.fastabend@gmail.com>,
 	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
 	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	"open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [RFC PATCH bpf-next 0/3] bpf: freeze a task cgroup from bpf
-Message-ID: <ZgXMww9kJiKi4Vmd@slm.duckdns.org>
-References: <20240327-ccb56fc7a6e80136db80876c@djalal>
- <20240327225334.58474-1-tixxdz@gmail.com>
- <ZgWnPZtwBYfHEFzf@slm.duckdns.org>
- <CAADnVQK6BUGZFCATD8Ejcfob5sKK-b8HUD_4o8Q6s9FM72L4iQ@mail.gmail.com>
- <ZgWv19ySvoACAll4@slm.duckdns.org>
- <CAADnVQLhWDcX-7XCdo-W=jthU=9iPqODwrE6c9fvU8sfAJ5ARg@mail.gmail.com>
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Ahern <dsahern@kernel.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Shailend Chand <shailend@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Kaiyuan Zhang <kaiyuanz@google.com>
+Subject: Re: [RFC PATCH net-next v7 04/14] netdev: support binding dma-buf to
+ netdevice
+Message-ID: <20240328203808.GL651713@kernel.org>
+References: <20240326225048.785801-1-almasrymina@google.com>
+ <20240326225048.785801-5-almasrymina@google.com>
+ <20240328182812.GJ651713@kernel.org>
+ <CAHS8izMZuRwQZsL7PQdoRcrgeh6rEa7n1NMhbm-aZMes2QHVzg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAADnVQLhWDcX-7XCdo-W=jthU=9iPqODwrE6c9fvU8sfAJ5ARg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHS8izMZuRwQZsL7PQdoRcrgeh6rEa7n1NMhbm-aZMes2QHVzg@mail.gmail.com>
 
-Hello,
+On Thu, Mar 28, 2024 at 11:55:23AM -0700, Mina Almasry wrote:
+> On Thu, Mar 28, 2024 at 11:28 AM Simon Horman <horms@kernel.org> wrote:
+> >
+> > On Tue, Mar 26, 2024 at 03:50:35PM -0700, Mina Almasry wrote:
+> > > Add a netdev_dmabuf_binding struct which represents the
+> > > dma-buf-to-netdevice binding. The netlink API will bind the dma-buf to
+> > > rx queues on the netdevice. On the binding, the dma_buf_attach
+> > > & dma_buf_map_attachment will occur. The entries in the sg_table from
+> > > mapping will be inserted into a genpool to make it ready
+> > > for allocation.
+> > >
+> > > The chunks in the genpool are owned by a dmabuf_chunk_owner struct which
+> > > holds the dma-buf offset of the base of the chunk and the dma_addr of
+> > > the chunk. Both are needed to use allocations that come from this chunk.
+> > >
+> > > We create a new type that represents an allocation from the genpool:
+> > > net_iov. We setup the net_iov allocation size in the
+> > > genpool to PAGE_SIZE for simplicity: to match the PAGE_SIZE normally
+> > > allocated by the page pool and given to the drivers.
+> > >
+> > > The user can unbind the dmabuf from the netdevice by closing the netlink
+> > > socket that established the binding. We do this so that the binding is
+> > > automatically unbound even if the userspace process crashes.
+> > >
+> > > The binding and unbinding leaves an indicator in struct netdev_rx_queue
+> > > that the given queue is bound, but the binding doesn't take effect until
+> > > the driver actually reconfigures its queues, and re-initializes its page
+> > > pool.
+> > >
+> > > The netdev_dmabuf_binding struct is refcounted, and releases its
+> > > resources only when all the refs are released.
+> > >
+> > > Signed-off-by: Willem de Bruijn <willemb@google.com>
+> > > Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+> > > Signed-off-by: Mina Almasry <almasrymina@google.com>
+> >
+> > ...
+> >
+> > > +int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
+> > > +                                 struct net_devmem_dmabuf_binding *binding)
+> > > +{
+> > > +     struct netdev_rx_queue *rxq;
+> > > +     u32 xa_idx;
+> > > +     int err;
+> > > +
+> > > +     if (rxq_idx >= dev->num_rx_queues)
+> > > +             return -ERANGE;
+> > > +
+> > > +     rxq = __netif_get_rx_queue(dev, rxq_idx);
+> > > +     if (rxq->mp_params.mp_priv)
+> > > +             return -EEXIST;
+> > > +
+> > > +     err = xa_alloc(&binding->bound_rxq_list, &xa_idx, rxq, xa_limit_32b,
+> > > +                    GFP_KERNEL);
+> > > +     if (err)
+> > > +             return err;
+> > > +
+> > > +     /* We hold the rtnl_lock while binding/unbinding dma-buf, so we can't
+> > > +      * race with another thread that is also modifying this value. However,
+> > > +      * the driver may read this config while it's creating its * rx-queues.
+> > > +      * WRITE_ONCE() here to match the READ_ONCE() in the driver.
+> > > +      */
+> > > +     WRITE_ONCE(rxq->mp_params.mp_ops, &dmabuf_devmem_ops);
+> >
+> > Hi Mina,
+> >
+> > This causes a build failure because mabuf_devmem_ops is not added until a
+> > subsequent patch in this series.
+> >
+> 
+> My apologies. I do notice the failure in patchwork now. I'll do a
+> patch by patch build for the next iteration.
 
-On Thu, Mar 28, 2024 at 12:46:03PM -0700, Alexei Starovoitov wrote:
-> To use kernel_file_open() it would need path, inode, cred.
+Thanks, much appreciated.
 
-Yeah, it's more involved and potentially more controversial. That said, just
-to push the argument a bit further, at least for path, it'd be nice to have
-a helper anyway which can return cgroup path. I don't know whether we'd need
-direct inode access. For cred, just share some root cred?
-
-> None of that is available now.
-> Allocating all these structures just to wrap a cgroup pointer
-> feels like overkill.
-> Of course, it would solve the need to introduce other
-> cgroup apis that are already available via text based cgroupfs
-> read/write. So there are pros and cons in both approaches.
-> Maybe the 3rd option would be to expose:
-> cgroup_lock() as a special blend of acquire plus lock.
-
-Oh, let's not expose that. That has been a source of problem for some use
-cases and we may have to change how cgroups are locked.
-
-> Then there will be no need for bpf_task_freeze_cgroup() with task
-> argument. Instead cgroup_freeze() will be such kfunc that
-> takes cgroup argument and the verifier will check that
-> cgroup was acquired/locked.
-> Sort-of what we check to access bpf_rb_root.
-
-There's also cgroup.kill which would be useful for similar use cases. We can
-add interface for both but idk. Let's say we have something like the
-following (pardon the bad naming):
-
-  bpf_cgroup_knob_write(struct cgroup *cgrp, char *filename, char *buf)
-
-Would that work? I'm not necessarily in love with the idea or against adding
-separate helpers but the duplication still bothers me a bit.
-
-Thanks.
-
--- 
-tejun
+> > > +     WRITE_ONCE(rxq->mp_params.mp_priv, binding);
+> > > +
+> > > +     err = net_devmem_restart_rx_queue(dev, rxq_idx);
+> > > +     if (err)
+> > > +             goto err_xa_erase;
+> > > +
+> > > +     return 0;
+> > > +
+> > > +err_xa_erase:
+> > > +     WRITE_ONCE(rxq->mp_params.mp_ops, NULL);
+> > > +     WRITE_ONCE(rxq->mp_params.mp_priv, NULL);
+> > > +     xa_erase(&binding->bound_rxq_list, xa_idx);
+> > > +
+> > > +     return err;
+> > > +}
+> >
+> > ...
+> 
+> 
+> 
+> -- 
+> Thanks,
+> Mina
+> 
