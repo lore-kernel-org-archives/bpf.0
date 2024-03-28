@@ -1,484 +1,243 @@
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79DE657B9
-	for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 10:01:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 831A04E1C3
+	for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 10:10:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711620064; cv=none; b=aE/uI1SJYhig1r2En01F3Icz4LIm358d6Ab8iLqAds1ztnoQ4mUGfGlo6lVu8JNTP3UIenMDGZY8UQpSyjZDBDUi6/gPmV7TGXvP0RaJTBWeg0TK5myWU9vf/+Wz5xVB0fgyAUua/V8eVTK8X2PMNdCyLXGed5+YC+vtWU3j4+4=
+	t=1711620619; cv=none; b=VMDcapoNw/Kr27l3Go5OiiUpA+2TgTE32+r4+RYfOvCk6ZAvd/qES0gaEUlCQooc2uOdbHGMMkmBL/IMqaZdu8QGaWL6kCt4aeRe+LTkSarZhO1f7mg/IPACy8jLOEFzdvIy4NBp5ZnSGGuSjQitcsLLIgfTz1Cw/k+OSoE3KKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711620064; c=relaxed/simple;
-	bh=+6LHEoV9s46N51EU+LWqDbmOctNRbs5eK1bWjSv2IdI=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=QkrUcdOsDl5Lya8fQXN7Jq0p0v7Urb/DmrVLsVBKohcG1ByFYwbHpyr32axzaHIO1Ll6uuQQlrxBCdBQWqUCt8y+/3rayQpvC9gDbyHb5wrwPpg/KvxfXBasaZqzP8C6MVOnIwwCIOfbqTM59SQRhSlX16/DYKDASwsLunNBY0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7cf265b30e2so71428339f.1
-        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 03:01:02 -0700 (PDT)
+	s=arc-20240116; t=1711620619; c=relaxed/simple;
+	bh=vUPmsAlgXADMw+I4LeCOmPWp0BShK33t+qaX8e1GD9M=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EjR6BqNrbM2RnDkisKj4CXiLvpukR8RUKasee74bxoY4kKxaufGJgV4YeTY9I0RzH8spZ6LF0p385o7h1uLmoq6Nm/67S+RZ/9DvN1Klrk6T1heTaGH0hcmvayplFu5QGCoZYTjXeeadY/7Kpt328+8EhTErkqkJj6tI3NodFjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WuulvcPd; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WuulvcPd"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5684db9147dso823885a12.2
+        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 03:10:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711620616; x=1712225416; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gEh/owVKAx9ogDaK9lXHFtQC3glGOXZV7pOyRsbAbgw=;
+        b=WuulvcPdcCpOj4wrmuMswzHjtT9Yd+a2cQSc+lMT50eoCJt8CcDae6/4A1fANdkvsa
+         FoD3UclBRwA9wst/geSKjw4wNwGCXQJJbs1o4FkdN3/t7kg/luvXSt5oUXWqOaeme8Nf
+         bAfD3DA5CBHi8ItNYFjG1pRA0YjTxBlNgRrcO3Sh00Clf0RDG4CzNg5xPh84pN5R5bBh
+         YP2hTke2aF8ZB9DP0O1NnaSFNh8SZ1nPtqQG6ouFcwXhkm4NIfDBmGatHuQbO76kUkqI
+         TOH2ZNkvh+xJzNTxpRhAfJVHF5fzUEm6x1+b5iToRhbklNgs/7wrtggJrJS5eqW/KPK6
+         H9Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711620062; x=1712224862;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ab8qw9AVrknDLGgJj+5LJ6dILUHEmB6hGFiour98v3c=;
-        b=tt81AlQFc2pLcMpluFOl4dWyePjCkn1co+z7kOYPeHanHQu48DerRrP58hE210GQCa
-         gFxxucANubLHf1Yzl+TzBI+B2Uou2HqjSmISF+wGQq+Nt8/Cw4Dn17TIjur6b0QWgowI
-         RlbeIJcC+d96vdEaI1H0ighfdo4lO0sOBPgwFr6nmF8VswcFF1FQFIA9jgLV9mY3+B5y
-         WEBWtN83IWg5EzmR5pO/cUJz/Xd5qUISo4hasAOuF/K7AHUYj1NcJLXsvmsTyiTqCF+i
-         1HTzPv//P5jxYt0xliTgINyqa1ebdwF8NqOfo5Y6eP9c/38e3xq5RMuHTRfKM/ReQiJu
-         jH/g==
-X-Forwarded-Encrypted: i=1; AJvYcCXLO7RG0hy3twwzf+TGf+eIF5i9sW5i2UWWJdoTDVp+TjEWVp2YY60cIEzmpOrSRPbSRC3DzHTF4rBwrOmGh8AFmEhi
-X-Gm-Message-State: AOJu0Yxm/wbalnd65SkYTG0GzRD+L6aof4hxzK7clhjsT1/l+WkWS2Dg
-	wNoV84iNwvKtaQGS03k9gWcGxv65nrmc+Cnsjhy7yAERnMLNMuj52IcjxPusF1GQAghJNTN7dS5
-	xWb1DbLHk/YAx/ZG1SPg3l8hq8zmvjdqeFPn2JVLCDxKVQ/iQDwDk544=
-X-Google-Smtp-Source: AGHT+IEw78GzKmoKx2Mo4gzNfjYiJopkXff13tBAzWtmZlgMSwm8qSfkO4ezX6DFTCrt51Eb36dR1A4A5F3vFt64swA4HhSKKse8
+        d=1e100.net; s=20230601; t=1711620616; x=1712225416;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gEh/owVKAx9ogDaK9lXHFtQC3glGOXZV7pOyRsbAbgw=;
+        b=ODM805KUzgGZ5ot5+T0patbdri7qNOG1XpTlSnU3gg4lp9huTcjg5w+aBeyfsNc2Xf
+         4xYoo93On7/jbZnkwSiba8D3kWhfiC2ZHRb09tHMw3siCr1amNyOVdc8xzdV/siic3NR
+         tSqHDp6CkdW+G3F/qFNoZ6kyZIANVQQeblYqzHXFgEO75CVutqcPw3Zyx7qBj3fsZVS5
+         Ur4dnEpyx2zT1EGYfQwiMRFy9GB8n9O/QqA66tdL42LHh4yymZc2KitEVpasBvdj05M7
+         xAqGI9K3mX1phRWSI7OkTDb7exHPPxUAuyBVBwld4SM8PieQXOO7Sk3VdkQhygd0tNA7
+         cAuQ==
+X-Gm-Message-State: AOJu0Yz4jpbQNxdRrbEXFpEFVRJOr7HrFtMfxt1jhWcogddvCqf/cjcu
+	MC25WFpH85qzYG40+cfyJ94HgkjgQuyTJCn0CojnMNpN4p45t7V2dexYpv4m
+X-Google-Smtp-Source: AGHT+IH6fK44OhJUstSgyoFPWTmeNHsV23v85OQ/JIO5Nn49afXsg28or73v/0CvhuhwtGZBOKlZAA==
+X-Received: by 2002:a50:d750:0:b0:565:e610:c358 with SMTP id i16-20020a50d750000000b00565e610c358mr1588380edj.38.1711620615482;
+        Thu, 28 Mar 2024 03:10:15 -0700 (PDT)
+Received: from krava (78-80-61-208.customers.tmcz.cz. [78.80.61.208])
+        by smtp.gmail.com with ESMTPSA id er13-20020a056402448d00b0056c0a3d91easm640629edb.12.2024.03.28.03.10.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Mar 2024 03:10:15 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 28 Mar 2024 11:10:13 +0100
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+	martin.lau@kernel.org,
+	syzbot+981935d9485a560bfbcb@syzkaller.appspotmail.com,
+	syzbot+2cb5a6c573e98db598cc@syzkaller.appspotmail.com,
+	syzbot+62d8b26793e8a2bd0516@syzkaller.appspotmail.com
+Subject: Re: [PATCH bpf 2/2] bpf: support deferring bpf_link dealloc to after
+ RCU grace period
+Message-ID: <ZgVCBRPqlHaNAQbv@krava>
+References: <20240328052426.3042617-1-andrii@kernel.org>
+ <20240328052426.3042617-2-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:3f90:b0:7cf:16d5:1820 with SMTP id
- fb16-20020a0566023f9000b007cf16d51820mr62462iob.2.1711620061971; Thu, 28 Mar
- 2024 03:01:01 -0700 (PDT)
-Date: Thu, 28 Mar 2024 03:01:01 -0700
-In-Reply-To: <c621f56d-6354-45a3-8c41-1380f5f03b1f@linux.dev>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c8d6b00614b599a2@google.com>
-Subject: Re: [syzbot] [bpf?] [net?] KMSAN: uninit-value in dev_map_lookup_elem
-From: syzbot <syzbot+1a3cf6f08d68868f9db3@syzkaller.appspotmail.com>
-To: alexei.starovoitov@gmail.com, andrii@kernel.org, ast@kernel.org, 
-	bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net, 
-	eddyz87@gmail.com, haoluo@google.com, hawk@kernel.org, 
-	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, martin.lau@linux.dev, 
-	netdev@vger.kernel.org, sdf@google.com, song@kernel.org, 
-	syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240328052426.3042617-2-andrii@kernel.org>
 
-Hello,
+On Wed, Mar 27, 2024 at 10:24:26PM -0700, Andrii Nakryiko wrote:
+> BPF link for some program types is passed as a "context" which can be
+> used by those BPF programs to look up additional information. E.g., for
+> multi-kprobes and multi-uprobes, link is used to fetch BPF cookie values.
+> 
+> Because of this runtime dependency, when bpf_link refcnt drops to zero
+> there could still be active BPF programs running accessing link data.
+> 
+> This patch adds generic support to defer bpf_link dealloc callback to
+> after RCU GP, if requested. This is done by exposing two different
+> deallocation callbacks, one synchronous and one deferred. If deferred
+> one is provided, bpf_link_free() will schedule dealloc_deferred()
+> callback to happen after RCU GP.
+> 
+> BPF is using two flavors of RCU: "classic" non-sleepable one and RCU
+> tasks trace one. The latter is used when sleepable BPF programs are
+> used. bpf_link_free() accommodates that by checking underlying BPF
+> program's sleepable flag, and goes either through normal RCU GP only for
+> non-sleepable, or through RCU tasks trace GP *and* then normal RCU GP
+> (taking into account rcu_trace_implies_rcu_gp() optimization), if BPF
+> program is sleepable.
+> 
+> We use this for multi-kprobe and multi-uprobe links, which dereference
+> link during program run. We also preventively switch raw_tp link to use
+> deferred dealloc callback, as upcoming changes in bpf-next tree expose
+> raw_tp link data (specifically, cookie value) to BPF program at runtime
+> as well.
 
-syzbot tried to test the proposed patch but the build/boot failed:
+nice catch.. I thought there'd be more link types accesing link
+data in runtime.. but looks like it's just [ku]probe_multi
 
-.o
-  CC      fs/aio.o
-  CC      drivers/hid/hid-gt683r.o
-  CC      drivers/hid/hid-gyration.o
-  CC      drivers/hid/hid-holtek-kbd.o
-  CC      drivers/platform/x86/p2sb.o
-  CC      drivers/iio/buffer/industrialio-triggered-buffer.o
-  CC      drivers/staging/rtl8712/rtl871x_ioctl_set.o
-  CC      drivers/staging/rtl8712/rtl8712_led.o
-  AR      drivers/mailbox/built-in.a
-  CC      fs/btrfs/uuid-tree.o
-  CC      fs/xfs/xfs_dquot.o
-  CC      fs/dax.o
-  AR      drivers/iio/accel/built-in.a
-  AR      drivers/iio/cdc/built-in.a
-  CC      fs/locks.o
-  CC      drivers/iio/adc/viperboard_adc.o
-  CC      drivers/gpu/drm/i915/display/intel_plane_initial.o
-  CC      fs/binfmt_misc.o
-  CC      fs/binfmt_script.o
-  CC      net/netfilter/xt_length.o
-  CC      drivers/hid/hid-holtek-mouse.o
-  AR      drivers/iio/chemical/built-in.a
-  CC      fs/xfs/xfs_dquot_item.o
-  AR      drivers/iio/common/cros_ec_sensors/built-in.a
-  CC      drivers/iio/common/hid-sensors/hid-sensor-attributes.o
-  CC      drivers/extcon/devres.o
-  CC      fs/bcachefs/opts.o
-  CC      drivers/iio/common/hid-sensors/hid-sensor-trigger.o
-  CC      fs/binfmt_elf.o
-  AR      drivers/media/usb/pvrusb2/built-in.a
-  CC      fs/xfs/xfs_trans_dquot.o
-  AR      drivers/iio/common/inv_sensors/built-in.a
-  CC      fs/xfs/xfs_qm_syscalls.o
-  CC      fs/xfs/xfs_qm_bhv.o
-  CC      drivers/staging/rtl8712/rtl871x_mlme.o
-  AR      drivers/iio/dac/built-in.a
-  CC      drivers/hid/hid-holtekff.o
-  CC      drivers/hid/hid-icade.o
-  CC      drivers/iio/buffer/kfifo_buf.o
-  AR      drivers/iio/common/ms_sensors/built-in.a
-  CC      net/netfilter/xt_limit.o
-  CC      net/netfilter/xt_mac.o
-  AR      drivers/iio/common/scmi_sensors/built-in.a
-  CC      drivers/thunderbolt/nhi.o
-  AR      drivers/hwtracing/intel_th/built-in.a
-  AR      drivers/iio/adc/built-in.a
-  CC      net/netfilter/xt_multiport.o
-  AR      drivers/iio/common/ssp_sensors/built-in.a
-  CC      drivers/gpu/drm/i915/display/intel_pmdemand.o
-  AR      drivers/iio/dummy/built-in.a
-  CC      drivers/thunderbolt/nhi_ops.o
-  CC      fs/btrfs/props.o
-  AR      drivers/iio/common/st_sensors/built-in.a
-  CC      net/netfilter/xt_nfacct.o
-  CC      fs/xfs/xfs_qm.o
-  CC      net/netfilter/xt_osf.o
-  AR      drivers/platform/x86/built-in.a
-  CC      fs/xfs/xfs_quotaops.o
-  AR      drivers/platform/built-in.a
-  CC      fs/xfs/xfs_rtalloc.o
-  CC      drivers/android/binderfs.o
-  CC      drivers/iio/gyro/hid-sensor-gyro-3d.o
-  CC      drivers/extcon/extcon-intel-cht-wc.o
-  CC      fs/compat_binfmt_elf.o
-  CC      fs/xfs/xfs_acl.o
-  CC      drivers/thunderbolt/ctl.o
-  CC      drivers/thunderbolt/tb.o
-  CC      fs/btrfs/free-space-tree.o
-  CC      fs/btrfs/tree-checker.o
-  CC      fs/xfs/xfs_sysctl.o
-  CC      drivers/hid/hid-ite.o
-  CC      drivers/staging/rtl8712/ieee80211.o
-  CC      drivers/staging/rtl8712/rtl871x_mp_ioctl.o
-  CC      drivers/staging/rtl8712/rtl871x_mp.o
-  CC      fs/btrfs/space-info.o
-  CC      drivers/thunderbolt/switch.o
-  CC      net/netfilter/xt_owner.o
-  CC      drivers/hid/hid-kensington.o
-  AR      drivers/nvmem/layouts/built-in.a
-  CC      drivers/nvmem/core.o
-  CC      drivers/staging/rtl8712/mlme_linux.o
-  CC      fs/backing-file.o
-  CC      drivers/staging/rtl8712/recv_linux.o
-  CC      drivers/staging/rtl8712/xmit_linux.o
-  CC      drivers/thunderbolt/cap.o
-  CC      fs/bcachefs/printbuf.o
-  AR      drivers/ras/built-in.a
-  CC      fs/mbcache.o
-  AR      drivers/iio/filter/built-in.a
-  CC      drivers/counter/counter-core.o
-  AR      drivers/iio/buffer/built-in.a
-  CC      fs/posix_acl.o
-  CC      drivers/staging/rtl8712/usb_intf.o
-  CC      fs/coredump.o
-  AR      drivers/iio/frequency/built-in.a
-  AR      drivers/iio/health/built-in.a
-  CC      drivers/most/core.o
-  AR      drivers/extcon/built-in.a
-  CC      drivers/counter/counter-sysfs.o
-  CC      drivers/counter/counter-chrdev.o
-  CC      net/netfilter/xt_cgroup.o
-  AR      drivers/iio/gyro/built-in.a
-  AR      drivers/iio/common/hid-sensors/built-in.a
-  CC      fs/drop_caches.o
-  AR      drivers/iio/common/built-in.a
-  CC      drivers/iio/humidity/hid-sensor-humidity.o
-  CC      fs/sysctls.o
-  CC      drivers/hid/hid-keytouch.o
-  CC      fs/xfs/xfs_ioctl32.o
-  CC      drivers/thunderbolt/path.o
-  CC      drivers/thunderbolt/tunnel.o
-  AR      fs/ocfs2/built-in.a
-  CC      drivers/thunderbolt/eeprom.o
-  CC      net/netfilter/xt_physdev.o
-  CC      fs/fhandle.o
-  CC      drivers/android/binder.o
-  CC      drivers/staging/rtl8712/os_intfs.o
-  CC      fs/btrfs/block-rsv.o
-  CC      drivers/android/binder_alloc.o
-  CC      drivers/hid/hid-kye.o
-  CC      drivers/most/configfs.o
-  AR      drivers/iio/imu/bmi160/built-in.a
-  AR      drivers/iio/imu/bmi323/built-in.a
-  AR      drivers/iio/imu/bno055/built-in.a
-  CC      fs/bcachefs/quota.o
-  CC      drivers/iio/light/hid-sensor-als.o
-  CC      drivers/iio/light/hid-sensor-prox.o
-  AR      drivers/iio/imu/inv_icm42600/built-in.a
-  AR      drivers/iio/imu/inv_mpu6050/built-in.a
-  CC      fs/btrfs/delalloc-space.o
-  AR      drivers/iio/imu/st_lsm6dsx/built-in.a
-  CC      fs/btrfs/block-group.o
-  AR      drivers/iio/imu/st_lsm9ds0/built-in.a
-  CC      fs/btrfs/discard.o
-  AR      drivers/iio/imu/built-in.a
-  CC      fs/btrfs/reflink.o
-  CC      drivers/staging/rtl8712/rtl871x_pwrctrl.o
-  CC      fs/bcachefs/rebalance.o
-  CC      drivers/iio/magnetometer/hid-sensor-magn-3d.o
-  CC      fs/btrfs/subpage.o
-  CC      drivers/thunderbolt/domain.o
-  CC      fs/btrfs/tree-mod-log.o
-  CC      net/netfilter/xt_pkttype.o
-  CC      fs/btrfs/extent-io-tree.o
-  AR      drivers/iio/multiplexer/built-in.a
-  CC      drivers/iio/orientation/hid-sensor-incl-3d.o
-  CC      drivers/gpu/drm/i915/display/intel_psr.o
-  AR      drivers/media/usb/gspca/built-in.a
-  AR      drivers/iio/position/built-in.a
-  CC      drivers/iio/orientation/hid-sensor-rotation.o
-  AR      drivers/media/usb/built-in.a
-  CC      net/netfilter/xt_policy.o
-  CC      net/netfilter/xt_quota.o
-  AR      drivers/iio/potentiometer/built-in.a
-  CC      drivers/nvmem/layouts.o
-  CC      drivers/staging/rtl8712/rtl8712_recv.o
-  AR      drivers/media/built-in.a
-  CC      fs/bcachefs/recovery.o
-  CC      fs/xfs/xfs_pnfs.o
-  CC      drivers/gpu/drm/i915/display/intel_quirks.o
-  CC      fs/btrfs/fs.o
-  AR      drivers/iio/potentiostat/built-in.a
-  CC      drivers/hid/hid-lcpower.o
-  CC      drivers/hid/hid-lenovo.o
-  CC      drivers/hid/hid-lg.o
-  CC      drivers/hid/hid-lgff.o
-  AR      drivers/iio/humidity/built-in.a
-  CC      net/netfilter/xt_rateest.o
-  AR      drivers/iio/resolver/built-in.a
-  AR      drivers/iio/proximity/built-in.a
-  CC      drivers/gpu/drm/i915/display/intel_sprite.o
-  CC      drivers/iio/pressure/hid-sensor-press.o
-  CC      drivers/iio/temperature/hid-sensor-temperature.o
-  CC      drivers/gpu/drm/i915/display/intel_sprite_uapi.o
-  CC      fs/btrfs/messages.o
-  CC      drivers/gpu/drm/i915/display/intel_tc.o
-  AR      drivers/counter/built-in.a
-  CC      drivers/gpu/drm/i915/display/intel_vblank.o
-  CC      drivers/gpu/drm/i915/display/intel_vga.o
-  CC      drivers/hid/hid-lg2ff.o
-  CC      drivers/thunderbolt/dma_port.o
-  CC      fs/btrfs/bio.o
-  AR      drivers/iio/light/built-in.a
-  AR      drivers/iio/test/built-in.a
-  AR      drivers/iio/trigger/built-in.a
-  CC      drivers/thunderbolt/icm.o
-  CC      net/netfilter/xt_realm.o
-  CC      net/netfilter/xt_recent.o
-  CC      net/netfilter/xt_sctp.o
-  CC      drivers/thunderbolt/property.o
-  AR      drivers/iio/magnetometer/built-in.a
-  CC      drivers/hid/hid-lg3ff.o
-  AR      drivers/most/built-in.a
-  CC      drivers/thunderbolt/xdomain.o
-  CC      drivers/hid/hid-lg4ff.o
-  CC      net/netfilter/xt_socket.o
-  CC      drivers/thunderbolt/lc.o
-  CC      net/netfilter/xt_state.o
-  CC      drivers/hid/hid-lg-g15.o
-  CC      fs/btrfs/lru_cache.o
-  CC      drivers/staging/rtl8712/rtl871x_recv.o
-  CC      drivers/iio/industrialio-core.o
-  CC      drivers/gpu/drm/i915/display/intel_wm.o
-  AR      drivers/iio/orientation/built-in.a
-  CC      net/netfilter/xt_statistic.o
-  CC      drivers/iio/industrialio-event.o
-  CC      drivers/iio/inkern.o
-  CC      net/netfilter/xt_string.o
-  CC      fs/btrfs/raid-stripe-tree.o
-  CC      net/netfilter/xt_tcpmss.o
-  CC      net/netfilter/xt_time.o
-  CC      drivers/iio/industrialio-buffer.o
-  CC      drivers/hid/hid-logitech-dj.o
-  CC      drivers/gpu/drm/i915/display/skl_scaler.o
-  AR      drivers/nvmem/built-in.a
-  CC      drivers/iio/industrialio-trigger.o
-  CC      drivers/gpu/drm/i915/display/skl_universal_plane.o
-  CC      drivers/thunderbolt/tmu.o
-  AR      drivers/iio/temperature/built-in.a
-  CC      fs/btrfs/acl.o
-  CC      drivers/hid/hid-logitech-hidpp.o
-  CC      drivers/hid/hid-magicmouse.o
-  AR      drivers/iio/pressure/built-in.a
-  CC      drivers/thunderbolt/usb4.o
-  CC      drivers/thunderbolt/usb4_port.o
-  CC      drivers/staging/rtl8712/rtl871x_sta_mgt.o
-  CC      drivers/gpu/drm/i915/display/skl_watermark.o
-  CC      drivers/hid/hid-mf.o
-  CC      net/netfilter/xt_u32.o
-  CC      fs/bcachefs/reflink.o
-  CC      drivers/staging/rtl8712/rtl871x_xmit.o
-  CC      fs/btrfs/ref-verify.o
-  CC      drivers/thunderbolt/nvm.o
-  CC      net/netfilter/nf_hooks_lwtunnel.o
-  CC      drivers/staging/rtl8712/rtl8712_xmit.o
-  CC      fs/bcachefs/sb-clean.o
-  CC      drivers/hid/hid-microsoft.o
-  CC      fs/bcachefs/replicas.o
-  CC      fs/btrfs/zoned.o
-  CC      drivers/gpu/drm/i915/display/intel_acpi.o
-  CC      fs/bcachefs/sb-counters.o
-  CC      drivers/hid/hid-monterey.o
-  CC      drivers/gpu/drm/i915/display/intel_opregion.o
-  CC      fs/btrfs/verity.o
-  CC      fs/bcachefs/sb-downgrade.o
-  CC      fs/bcachefs/sb-errors.o
-  CC      fs/bcachefs/sb-members.o
-  CC      fs/bcachefs/siphash.o
-  CC      drivers/hid/hid-multitouch.o
-  CC      drivers/hid/hid-nti.o
-  CC      drivers/hid/hid-ntrig.o
-  CC      drivers/gpu/drm/i915/display/intel_fbdev.o
-  CC      drivers/thunderbolt/retimer.o
-  CC      fs/bcachefs/six.o
-  CC      fs/bcachefs/snapshot.o
-  CC      drivers/thunderbolt/quirks.o
-  CC      drivers/thunderbolt/clx.o
-  CC      drivers/thunderbolt/acpi.o
-  CC      drivers/hid/hid-ortek.o
-  CC      drivers/hid/hid-prodikeys.o
-  CC      drivers/hid/hid-pl.o
-  CC      drivers/gpu/drm/i915/display/intel_fbdev_fb.o
-  CC      drivers/hid/hid-penmount.o
-  CC      drivers/thunderbolt/debugfs.o
-  CC      drivers/hid/hid-petalynx.o
-  CC      drivers/hid/hid-picolcd_core.o
-  CC      drivers/hid/hid-picolcd_fb.o
-  CC      drivers/hid/hid-picolcd_backlight.o
-  CC      drivers/hid/hid-picolcd_lcd.o
-  CC      drivers/gpu/drm/i915/display/intel_display_debugfs.o
-  CC      drivers/gpu/drm/i915/display/intel_display_debugfs_params.o
-  CC      drivers/hid/hid-picolcd_leds.o
-  CC      drivers/gpu/drm/i915/display/intel_pipe_crc.o
-  CC      drivers/hid/hid-picolcd_cir.o
-  CC      drivers/gpu/drm/i915/display/dvo_ch7017.o
-  CC      drivers/gpu/drm/i915/display/dvo_ch7xxx.o
-  CC      drivers/hid/hid-picolcd_debugfs.o
-  CC      drivers/gpu/drm/i915/display/dvo_ivch.o
-  CC      fs/bcachefs/subvolume.o
-  CC      fs/bcachefs/super.o
-  CC      fs/bcachefs/super-io.o
-  CC      fs/bcachefs/sysfs.o
-  CC      drivers/hid/hid-plantronics.o
-  CC      fs/bcachefs/tests.o
-  CC      fs/bcachefs/time_stats.o
-  CC      fs/bcachefs/thread_with_file.o
-  CC      drivers/hid/hid-primax.o
-  CC      fs/bcachefs/trace.o
-  CC      drivers/hid/hid-redragon.o
-  CC      drivers/hid/hid-retrode.o
-  CC      drivers/hid/hid-roccat.o
-  CC      drivers/hid/hid-roccat-common.o
-  CC      fs/bcachefs/two_state_shared_lock.o
-  CC      drivers/hid/hid-roccat-arvo.o
-  CC      fs/bcachefs/util.o
-  CC      fs/bcachefs/varint.o
-  CC      drivers/hid/hid-roccat-isku.o
-  CC      drivers/gpu/drm/i915/display/dvo_ns2501.o
-  CC      drivers/hid/hid-roccat-kone.o
-  CC      fs/bcachefs/xattr.o
-  CC      drivers/hid/hid-roccat-koneplus.o
-  CC      drivers/gpu/drm/i915/display/dvo_sil164.o
-  CC      drivers/hid/hid-roccat-konepure.o
-  CC      drivers/hid/hid-roccat-kovaplus.o
-  CC      drivers/gpu/drm/i915/display/dvo_tfp410.o
-  CC      drivers/gpu/drm/i915/display/g4x_dp.o
-  AR      drivers/iio/built-in.a
-  AR      drivers/staging/rtl8712/built-in.a
-  CC      drivers/hid/hid-roccat-lua.o
-  CC      drivers/gpu/drm/i915/display/g4x_hdmi.o
-  AR      drivers/staging/built-in.a
-  CC      drivers/hid/hid-roccat-pyra.o
-  CC      drivers/hid/hid-roccat-ryos.o
-  CC      drivers/hid/hid-roccat-savu.o
-  AR      net/netfilter/built-in.a
-  CC      drivers/hid/hid-rmi.o
-  CC      drivers/gpu/drm/i915/display/icl_dsi.o
-  CC      drivers/hid/hid-saitek.o
-  AR      fs/xfs/built-in.a
-  CC      drivers/hid/hid-samsung.o
-  AR      net/built-in.a
-  CC      drivers/hid/hid-sjoy.o
-  CC      drivers/hid/hid-sony.o
-  CC      drivers/hid/hid-speedlink.o
-  CC      drivers/hid/hid-steelseries.o
-  CC      drivers/gpu/drm/i915/display/intel_backlight.o
-  CC      drivers/hid/hid-sunplus.o
-  CC      drivers/gpu/drm/i915/display/intel_crt.o
-  CC      drivers/gpu/drm/i915/display/intel_cx0_phy.o
-  CC      drivers/hid/hid-gaff.o
-  CC      drivers/hid/hid-tmff.o
-  CC      drivers/hid/hid-thrustmaster.o
-  CC      drivers/gpu/drm/i915/display/intel_ddi.o
-  CC      drivers/hid/hid-tivo.o
-  CC      drivers/gpu/drm/i915/display/intel_ddi_buf_trans.o
-  CC      drivers/hid/hid-topseed.o
-  CC      drivers/hid/hid-twinhan.o
-  CC      drivers/hid/hid-uclogic-core.o
-  CC      drivers/hid/hid-uclogic-rdesc.o
-  CC      drivers/hid/hid-uclogic-params.o
-  AR      drivers/thunderbolt/built-in.a
-  CC      drivers/hid/hid-udraw-ps3.o
-  CC      drivers/hid/hid-led.o
-  CC      drivers/hid/hid-xinmo.o
-  CC      drivers/hid/hid-zpff.o
-  CC      drivers/hid/hid-zydacron.o
-  CC      drivers/hid/wacom_wac.o
-  CC      drivers/hid/wacom_sys.o
-  CC      drivers/hid/hid-waltop.o
-  CC      drivers/hid/hid-wiimote-core.o
-  CC      drivers/hid/hid-wiimote-modules.o
-  CC      drivers/hid/hid-wiimote-debug.o
-  CC      drivers/hid/hid-sensor-hub.o
-  CC      drivers/gpu/drm/i915/display/intel_display_device.o
-  CC      drivers/hid/hid-sensor-custom.o
-  CC      drivers/gpu/drm/i915/display/intel_display_trace.o
-  CC      drivers/gpu/drm/i915/display/intel_dkl_phy.o
-  CC      drivers/gpu/drm/i915/display/intel_dp.o
-  CC      drivers/gpu/drm/i915/display/intel_dp_aux.o
-  CC      drivers/gpu/drm/i915/display/intel_dp_aux_backlight.o
-  CC      drivers/gpu/drm/i915/display/intel_dp_hdcp.o
-  CC      drivers/gpu/drm/i915/display/intel_dp_link_training.o
-  CC      drivers/gpu/drm/i915/display/intel_dp_mst.o
-  CC      drivers/gpu/drm/i915/display/intel_dsi.o
-  CC      drivers/gpu/drm/i915/display/intel_dsi_dcs_backlight.o
-  CC      drivers/gpu/drm/i915/display/intel_dsi_vbt.o
-  CC      drivers/gpu/drm/i915/display/intel_gmbus.o
-  CC      drivers/gpu/drm/i915/display/intel_dvo.o
-  CC      drivers/gpu/drm/i915/display/intel_hdmi.o
-  CC      drivers/gpu/drm/i915/display/intel_lspcon.o
-  CC      drivers/gpu/drm/i915/display/intel_lvds.o
-  CC      drivers/gpu/drm/i915/display/intel_panel.o
-  CC      drivers/gpu/drm/i915/display/intel_pps.o
-  CC      drivers/gpu/drm/i915/display/intel_qp_tables.o
-  CC      drivers/gpu/drm/i915/display/intel_sdvo.o
-  CC      drivers/gpu/drm/i915/display/intel_snps_phy.o
-  CC      drivers/gpu/drm/i915/display/intel_tv.o
-  CC      drivers/gpu/drm/i915/display/intel_vdsc.o
-  CC      drivers/gpu/drm/i915/display/vlv_dsi.o
-  CC      drivers/gpu/drm/i915/display/intel_vrr.o
-  CC      drivers/gpu/drm/i915/display/vlv_dsi_pll.o
-  CC      drivers/gpu/drm/i915/display/intel_dp_tunnel.o
-  AR      fs/btrfs/built-in.a
-  CC      drivers/gpu/drm/i915/i915_perf.o
-  CC      drivers/gpu/drm/i915/pxp/intel_pxp.o
-  CC      drivers/gpu/drm/i915/pxp/intel_pxp_huc.o
-  CC      drivers/gpu/drm/i915/pxp/intel_pxp_tee.o
-  CC      drivers/gpu/drm/i915/i915_gpu_error.o
-  CC      drivers/gpu/drm/i915/i915_vgpu.o
-  AR      drivers/android/built-in.a
-  AR      fs/bcachefs/built-in.a
-  AR      fs/built-in.a
-  AR      drivers/hid/built-in.a
-  AR      drivers/gpu/drm/i915/built-in.a
-  AR      drivers/gpu/drm/built-in.a
-  AR      drivers/gpu/built-in.a
-  AR      drivers/built-in.a
-  AR      built-in.a
-  AR      vmlinux.a
-  LD      vmlinux.o
-Killed
-make[2]: *** [scripts/Makefile.vmlinux_o:62: vmlinux.o] Error 137
-make[2]: *** Deleting file 'vmlinux.o'
-make[1]: *** [/syzkaller/jobs/linux/kernel/Makefile:1141: vmlinux_o] Error 2
-make: *** [Makefile:240: __sub-make] Error 2
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
+jirka
 
-Error text is too large and was truncated, full error text is at:
-https://syzkaller.appspot.com/x/error.txt?x=12986595180000
-
-
-Tested on:
-
-commit:         d8889e86 bpf: Mark bpf prog stack with kmsan_unposion_..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/martin.lau/bpf-next.git interpreter.kmsan
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e6bd769cb793b98a
-dashboard link: https://syzkaller.appspot.com/bug?extid=1a3cf6f08d68868f9db3
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-
-Note: no patches were applied.
+> 
+> Fixes: 0dcac2725406 ("bpf: Add multi kprobe link")
+> Fixes: 89ae89f53d20 ("bpf: Add multi uprobe link")
+> Reported-by: syzbot+981935d9485a560bfbcb@syzkaller.appspotmail.com
+> Reported-by: syzbot+2cb5a6c573e98db598cc@syzkaller.appspotmail.com
+> Reported-by: syzbot+62d8b26793e8a2bd0516@syzkaller.appspotmail.com
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  include/linux/bpf.h      | 16 +++++++++++++++-
+>  kernel/bpf/syscall.c     | 35 ++++++++++++++++++++++++++++++++---
+>  kernel/trace/bpf_trace.c |  4 ++--
+>  3 files changed, 49 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 4f20f62f9d63..890e152d553e 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1574,12 +1574,26 @@ struct bpf_link {
+>  	enum bpf_link_type type;
+>  	const struct bpf_link_ops *ops;
+>  	struct bpf_prog *prog;
+> -	struct work_struct work;
+> +	/* rcu is used before freeing, work can be used to schedule that
+> +	 * RCU-based freeing before that, so they never overlap
+> +	 */
+> +	union {
+> +		struct rcu_head rcu;
+> +		struct work_struct work;
+> +	};
+>  };
+>  
+>  struct bpf_link_ops {
+>  	void (*release)(struct bpf_link *link);
+> +	/* deallocate link resources callback, called without RCU grace period
+> +	 * waiting
+> +	 */
+>  	void (*dealloc)(struct bpf_link *link);
+> +	/* deallocate link resources callback, called after RCU grace period;
+> +	 * if underlying BPF program is sleepable we go through tasks trace
+> +	 * RCU GP and then "classic" RCU GP
+> +	 */
+> +	void (*dealloc_deferred)(struct bpf_link *link);
+>  	int (*detach)(struct bpf_link *link);
+>  	int (*update_prog)(struct bpf_link *link, struct bpf_prog *new_prog,
+>  			   struct bpf_prog *old_prog);
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index ae2ff73bde7e..c287925471f6 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -3024,17 +3024,46 @@ void bpf_link_inc(struct bpf_link *link)
+>  	atomic64_inc(&link->refcnt);
+>  }
+>  
+> +static void bpf_link_defer_dealloc_rcu_gp(struct rcu_head *rcu)
+> +{
+> +	struct bpf_link *link = container_of(rcu, struct bpf_link, rcu);
+> +
+> +	/* free bpf_link and its containing memory */
+> +	link->ops->dealloc_deferred(link);
+> +}
+> +
+> +static void bpf_link_defer_dealloc_mult_rcu_gp(struct rcu_head *rcu)
+> +{
+> +	if (rcu_trace_implies_rcu_gp())
+> +		bpf_link_defer_dealloc_rcu_gp(rcu);
+> +	else
+> +		call_rcu(rcu, bpf_link_defer_dealloc_rcu_gp);
+> +}
+> +
+>  /* bpf_link_free is guaranteed to be called from process context */
+>  static void bpf_link_free(struct bpf_link *link)
+>  {
+> +	bool sleepable = false;
+> +
+>  	bpf_link_free_id(link->id);
+>  	if (link->prog) {
+> +		sleepable = link->prog->sleepable;
+>  		/* detach BPF program, clean up used resources */
+>  		link->ops->release(link);
+>  		bpf_prog_put(link->prog);
+>  	}
+> -	/* free bpf_link and its containing memory */
+> -	link->ops->dealloc(link);
+> +	if (link->ops->dealloc_deferred) {
+> +		/* schedule BPF link deallocation; if underlying BPF program
+> +		 * is sleepable, we need to first wait for RCU tasks trace
+> +		 * sync, then go through "classic" RCU grace period
+> +		 */
+> +		if (sleepable)
+> +			call_rcu_tasks_trace(&link->rcu, bpf_link_defer_dealloc_mult_rcu_gp);
+> +		else
+> +			call_rcu(&link->rcu, bpf_link_defer_dealloc_rcu_gp);
+> +	}
+> +	if (link->ops->dealloc)
+> +		link->ops->dealloc(link);
+>  }
+>  
+>  static void bpf_link_put_deferred(struct work_struct *work)
+> @@ -3544,7 +3573,7 @@ static int bpf_raw_tp_link_fill_link_info(const struct bpf_link *link,
+>  
+>  static const struct bpf_link_ops bpf_raw_tp_link_lops = {
+>  	.release = bpf_raw_tp_link_release,
+> -	.dealloc = bpf_raw_tp_link_dealloc,
+> +	.dealloc_deferred = bpf_raw_tp_link_dealloc,
+>  	.show_fdinfo = bpf_raw_tp_link_show_fdinfo,
+>  	.fill_link_info = bpf_raw_tp_link_fill_link_info,
+>  };
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 0b73fe5f7206..9dc605f08a23 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -2728,7 +2728,7 @@ static int bpf_kprobe_multi_link_fill_link_info(const struct bpf_link *link,
+>  
+>  static const struct bpf_link_ops bpf_kprobe_multi_link_lops = {
+>  	.release = bpf_kprobe_multi_link_release,
+> -	.dealloc = bpf_kprobe_multi_link_dealloc,
+> +	.dealloc_deferred = bpf_kprobe_multi_link_dealloc,
+>  	.fill_link_info = bpf_kprobe_multi_link_fill_link_info,
+>  };
+>  
+> @@ -3242,7 +3242,7 @@ static int bpf_uprobe_multi_link_fill_link_info(const struct bpf_link *link,
+>  
+>  static const struct bpf_link_ops bpf_uprobe_multi_link_lops = {
+>  	.release = bpf_uprobe_multi_link_release,
+> -	.dealloc = bpf_uprobe_multi_link_dealloc,
+> +	.dealloc_deferred = bpf_uprobe_multi_link_dealloc,
+>  	.fill_link_info = bpf_uprobe_multi_link_fill_link_info,
+>  };
+>  
+> -- 
+> 2.43.0
+> 
