@@ -1,137 +1,158 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBA0813A244;
-	Thu, 28 Mar 2024 21:29:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE671448DA;
+	Thu, 28 Mar 2024 22:07:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711661346; cv=none; b=tTxZ8tHF/8tkQ2vw9raAeofoSaQbT0c2gM9zSyryf3eIVQu5EdfBaIIlMRmBfp0tlRJ20tLfJuiMvlw9AgfNEK6fNV6sgezv4W6qU0cOGJBCYW/YwGJi7IeqQlbhgQJksaaNJ4OLwjKAka8l3MdwuU9YyKmuwcNxHpVHLVHUqic=
+	t=1711663650; cv=none; b=qar7Mbl1p1ZkcGuyKdHmdSBrEQJ6iquXu75U4w7grAseeEmKzQ1PYsQkfutg8fwQV/pf5O2wgJ48DF8nkjssF/Krvo+n+nmi4C+gEQmt5zkyUTWuZeAkF/Ry9sm27qUWgR5FssJlX++lgEUHDNw/JZlVDySGxvGc5AtpWZOuBQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711661346; c=relaxed/simple;
-	bh=fu9vUyiydStv12IrbMDN19YasY8MTA7HLFJT94T3dNY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KC4mmtA4yD2P/l6oXss3CISRulBgFlo6JIIA9Mlg1UOuJUTUcm4par3dxGqCmSbk6VwG/7KQQaP7PMq7nV4YQQVtWNGb+876R3GbjUnzSxPYCeUQ8bHsFDMXg6WLLZzSG0KMSNP+htmdtOeAIEmWc+Cpfm5H436AaG1KxYE99WY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q815/UKF; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711663650; c=relaxed/simple;
+	bh=qy7UxkfEbTXP0fG7wTtOhGPzbFidkRhVmLz4VIILo8w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ohkCd3ympkEcQk8ic6P2I7hUCT+uWSVjXdJLRnO2paC43ywyb74+dSfoDhhuVSoBOgnwFW9pRitzCqVLUww49eb2uFPzOUbru6Qo8ZxrGs5bFKoc2PR1Vs5P1mhYCcjBQucQ/tT+x+1kiFuwa+54Z+sI1I8iiVOOo92Y0p2+vEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PiY+MAvZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q815/UKF"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-33ed6078884so1365193f8f.1;
-        Thu, 28 Mar 2024 14:29:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711661343; x=1712266143; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7rZ5v4VYB7xFxkylJdxU/zw8gdhhfD99ak8fXt5M6cs=;
-        b=Q815/UKFhLZgHH2DPzS7HNK8+2Kw8u7gnSGggT3Yc2LTSITyeD8UrF0SCh9A0NwGyw
-         Bakn/NtkGmXfHWiFvyKaY0S/27xmG6lsRMspt+GNkL4XHej0mgwHTgP8t2O7ww5K6SHl
-         u/g4luUdSl7hXuS/uQd1Qotq20z9mb4Alp5bz9DoEO0wtEw5rV/qtM3WoDCtM+N40D4G
-         y4uVUSbPOoQPY1WxF5SObSZp20AuD4ERNaXVQtZIo+C1KO3cPLruDc6zEd0O1AeT8e+l
-         3nInnEWmxYLFdfWRLPNdTr4zgtruOmY0InsOu0ueJBhjJL8XB4w1cnSRLcuCdZHSbctc
-         sASQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711661343; x=1712266143;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7rZ5v4VYB7xFxkylJdxU/zw8gdhhfD99ak8fXt5M6cs=;
-        b=r+C+EfMrsHpBQORYSxqRWSiAlSniXsZEA/hdv2lG0p8xW8gRzkbh07335OF/dLV3tW
-         67d0pQRX0mlH1/j9rBetNRGb0b1oT1b4FJFLWtUY8A0g1DLt5ktxXzEiaKAvybvcpGDD
-         6oks55LorDf3V3uO4RWDq8QaDvUcO4N0eEJENb/hHYX3woHwQg6dDATh2CJD8bdy92iF
-         DhoqxxxfHaFKgeeesOZQ/G7RKpF53mDbxrHltu9y0B0odk4jHnMbAYB3pFH0tAAMt0Xr
-         IEkX0FnfdS6oltUpxybmeaZB/Km16awfDkN1PZHGE2tu+JI9dKD4oB57cAJfGLaYzHAD
-         mPLg==
-X-Forwarded-Encrypted: i=1; AJvYcCUJBBt3duXQK07lAchJ1gmKVEe20UjjCSl2WgiDM7lHwjh5qb9K6WaDxSN8ZnhYBkfNcdX7+ffaQQS8esT0BqGSdSCQAMZ+Lx+5Hcg95o7MW+oZVMrCjn3Bgnl0OMmWaddPWE/KJt4xySjvz1oQkfgYlIG5X0PQXNUPGcR4coE7D3bM5OaYv0NJ/IdMZr3Ub9J+n9iYclUag9iT4g==
-X-Gm-Message-State: AOJu0YxgEzRCct6JP53fDhO/N/Ra5Mca5MXytm2ALRkW1Gr7ppq0LDV+
-	wObdDVLV4YEvh/8Bd4TjdtiBz+j3eVbq08ys/twrOG6MM3uV8OLCR36w6kY21n+/CTyMN2hdLLH
-	Xu4KwHrbfz7B8Ewr7uAj14oM0hQs=
-X-Google-Smtp-Source: AGHT+IFzIhW2YQyUd9cAOcumnuAgNA8lL7LVX7R3nvoZOS1vxlZNbuJ3S0Kc3PqSPmS2+VvmBf1rEWus56RvmsoxrqI=
-X-Received: by 2002:adf:e606:0:b0:342:d5ac:c712 with SMTP id
- p6-20020adfe606000000b00342d5acc712mr609862wrm.7.1711661342976; Thu, 28 Mar
- 2024 14:29:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PiY+MAvZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDCAEC433C7;
+	Thu, 28 Mar 2024 22:07:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711663649;
+	bh=qy7UxkfEbTXP0fG7wTtOhGPzbFidkRhVmLz4VIILo8w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PiY+MAvZ71RFRJLOV9wNKnH78WzuQ+yoDrFEDHLeDYUytCNt8LwKz0Sygxq8mN3zB
+	 zQ6z9aJ/UtcJQYb+0Ix1xOcUvBTzmGnVrlnLp0Gmy7zuin8SEKFIMvaRgai8sI5mNa
+	 rT0GGDmlNev4jmnp2j+eIlSQgjrssSa+StiYbos4MJYWh8B1/94h4hBeRi0O8f134x
+	 7uE7DuBDy9eZNkcQZ17ObD+cwHa1FuZ5aWLMcVBNPO0eRbV2uVEVu77DeIN5SRax/v
+	 JzK10wMVrXwQSwVmxMsxsApYaUSTFjSerYL/VPgvBRQMixcY7jSB7TVLmYTpiDnk/3
+	 kwyow4tk4wpsA==
+Date: Thu, 28 Mar 2024 22:07:23 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Stefan O'Rear <sorear@fastmail.com>
+Cc: Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Manu Bretelle <chantr4@gmail.com>,
+	Pu Lehui <pulehui@huawei.com>
+Subject: Re: [PATCH bpf-next 2/5] riscv, bpf: Relax restrictions on Zbb
+ instructions
+Message-ID: <20240328-ferocity-repose-c554f75a676c@spud>
+References: <20240328124916.293173-1-pulehui@huaweicloud.com>
+ <20240328124916.293173-3-pulehui@huaweicloud.com>
+ <3ed9fe94-2610-41eb-8a00-a9f37fcf2b1a@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240327-ccb56fc7a6e80136db80876c@djalal> <20240327225334.58474-1-tixxdz@gmail.com>
- <ZgWnPZtwBYfHEFzf@slm.duckdns.org> <CAADnVQK6BUGZFCATD8Ejcfob5sKK-b8HUD_4o8Q6s9FM72L4iQ@mail.gmail.com>
- <ZgWv19ySvoACAll4@slm.duckdns.org> <CAADnVQLhWDcX-7XCdo-W=jthU=9iPqODwrE6c9fvU8sfAJ5ARg@mail.gmail.com>
- <ZgXMww9kJiKi4Vmd@slm.duckdns.org> <CAADnVQK970_Nx3918V41ue031RkGs+WsteOAm6EJOY7oSwzS1A@mail.gmail.com>
- <ZgXallkHApJC-adM@slm.duckdns.org>
-In-Reply-To: <ZgXallkHApJC-adM@slm.duckdns.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 28 Mar 2024 14:28:51 -0700
-Message-ID: <CAADnVQLSDOfKccynu2jt-7=8nJqoLtoNkRchvHo1NCUEYOQJ7Q@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 0/3] bpf: freeze a task cgroup from bpf
-To: Tejun Heo <tj@kernel.org>
-Cc: Djalal Harouni <tixxdz@gmail.com>, Zefan Li <lizefan.x@bytedance.com>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="AbnF/Y1LlP5Fvmu+"
+Content-Disposition: inline
+In-Reply-To: <3ed9fe94-2610-41eb-8a00-a9f37fcf2b1a@app.fastmail.com>
+
+
+--AbnF/Y1LlP5Fvmu+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 28, 2024 at 2:01=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> On Thu, Mar 28, 2024 at 01:45:56PM -0700, Alexei Starovoitov wrote:
-> > On Thu, Mar 28, 2024 at 1:02=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote=
-:
-> > >
-> > > There's also cgroup.kill which would be useful for similar use cases.=
- We can
-> > > add interface for both but idk. Let's say we have something like the
-> > > following (pardon the bad naming):
-> > >
-> > >   bpf_cgroup_knob_write(struct cgroup *cgrp, char *filename, char *bu=
-f)
-> > >
-> > > Would that work? I'm not necessarily in love with the idea or against=
- adding
-> > > separate helpers but the duplication still bothers me a bit.
+On Thu, Mar 28, 2024 at 03:34:31PM -0400, Stefan O'Rear wrote:
+> On Thu, Mar 28, 2024, at 8:49 AM, Pu Lehui wrote:
+> > From: Pu Lehui <pulehui@huawei.com>
 > >
-> > I liked it.
-> > So filename will be one of cgroup_base_files[].name ?
-> > We probably don't want psi or cgroup1_base_files in there.
->
-> Would it matter?
+> > This patch relaxes the restrictions on the Zbb instructions. The hardwa=
+re
+> > is capable of recognizing the Zbb instructions independently, eliminati=
+ng
+> > the need for reliance on kernel compile configurations.
+>=20
+> This doesn't make sense to me.
 
-Few weak reasons:
-. cgroup_psi_files have show/write/poll/release which
-  doesn't map to this bpf_cgroup_knob_write/read ?
-. cgroup1_base_files probably needs to a separate kfunc
-  bpf_cgroup1_...
+It doesn't make sense to me either. Of course the hardware's capability
+to understand an instruction is independent of whether or not a
+toolchain is capable of actually emitting the instruction.
 
-> If the user has root perm, they can do whatever with the
-> files anyway, so I'm not sure why we'd restrict any specific knob. Maybe =
-we
-> wanna make sure @filename doesn't include '/'? Or is it that you don't wa=
-nt
-> to go through the usual file name look up?
+> RISCV_ISA_ZBB is defined as:
+>=20
+>            Adds support to dynamically detect the presence of the ZBB
+>            extension (basic bit manipulation) and enable its usage.
+>=20
+> In other words, RISCV_ISA_ZBB=3Dn should disable everything that attempts
+> to detect Zbb at runtime. It is mostly relevant for code size reduction,
+> which is relevant for BPF since if RISCV_ISA_ZBB=3Dn all rvzbb_enabled()
+> checks can be constant-folded.
+>=20
+> If BPF needs to become an exception (why?), this should be mentioned in
+> Kconfig.
 
-yeah. why do a file lookup? The names are there in the array.
-cgroup pointer gives that "relative path" and knob name is the last
-part of such "path". Easy to search in that array(s).
+And in the commit message. On one hand I think this could be a reasonable
+thing to do in bpf as it is acting as a jit here, and doesn't actually
+need the alternatives that we are using elsewhere to enable the
+optimisations nor the compiler support. On the other the intention of
+that kconfig option is to control optimisations like rvzbb_enabled()
+gates, so this is gonna need a proper justification as to
 
-> > From the verifier pov 2nd arg can be "char *knob__str" and
-> > the verifier will make sure it's a constant NULL terminated string,
-> > so at runtime it will be easier to search cgroup_base_files array.
-> > And 'buf' can be: void *mem, int mem__sz with kfunc doing
-> > run-time validation that there a null there.
->
-> That all sound good.
->
-> Thanks.
->
-> --
-> tejun
+As I said on IRC to you earlier, I think the Kconfig options here are in
+need of a bit of a spring cleaning - they should be modified to explain
+their individual purposes, be that enabling optimisations in the kernel
+or being required for userspace. I'll try to send a patch for that if
+I remember tomorrow.
+
+Thanks,
+Conor.
+
+> > Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> > ---
+> >  arch/riscv/net/bpf_jit.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+> > index 5fc374ed98ea..bcf109b88df5 100644
+> > --- a/arch/riscv/net/bpf_jit.h
+> > +++ b/arch/riscv/net/bpf_jit.h
+> > @@ -20,7 +20,7 @@ static inline bool rvc_enabled(void)
+> >=20
+> >  static inline bool rvzbb_enabled(void)
+> >  {
+> > -	return IS_ENABLED(CONFIG_RISCV_ISA_ZBB) &&=20
+> > riscv_has_extension_likely(RISCV_ISA_EXT_ZBB);
+> > +	return riscv_has_extension_likely(RISCV_ISA_EXT_ZBB);
+> >  }
+> >=20
+> >  enum {
+> > --=20
+> > 2.34.1
+> >
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+>=20
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
+--AbnF/Y1LlP5Fvmu+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZgXqGwAKCRB4tDGHoIJi
+0n9mAQCMUUZGliN/KpdYVcNTscPK+ff5W8UCov2gCxTu1Rgs/gD/aDZv9SYF6EQx
+SpQgWucp0nYikxazDlNmYYOtPAZn8QE=
+=TrHF
+-----END PGP SIGNATURE-----
+
+--AbnF/Y1LlP5Fvmu+--
