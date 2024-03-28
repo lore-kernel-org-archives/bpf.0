@@ -1,306 +1,484 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30270657BD
-	for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 09:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79DE657B9
+	for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 10:01:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711619825; cv=none; b=g0g0WGb8tlHk6zAmdqbVkD5HNvHj3AOeYmFf7U+94F62ULAtlAIlMPXGKhBkxMxtQo+DHJod0so+P+P/RxdTqx4f4pwNoZpxAbZJtXgvAfuor6Pl0aqtY+4ebimD7CPlPSveeWkd+BkkhUXjZr9nPP9xr2ZybfmT2cB3wnvBK/0=
+	t=1711620064; cv=none; b=aE/uI1SJYhig1r2En01F3Icz4LIm358d6Ab8iLqAds1ztnoQ4mUGfGlo6lVu8JNTP3UIenMDGZY8UQpSyjZDBDUi6/gPmV7TGXvP0RaJTBWeg0TK5myWU9vf/+Wz5xVB0fgyAUua/V8eVTK8X2PMNdCyLXGed5+YC+vtWU3j4+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711619825; c=relaxed/simple;
-	bh=kfQwd9dnYccpYR3X434eeW8ynOtMyp/LZb6SZjOjEkY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=O3fagX9E1QOZhM/m+MQxoESSOmpwGB+hOQ+rV7+IDOr2K3RJpcdujk1MfbExti0X6l0KbAnuFXsB90Wk5I7S/FgGyEteBtbSV2NJlzqB4tJhqV3Nqanid7zQFEyyIMgJyLQGeemSO5/Xbf0EuC+hrMGYi2UDzFVp6QAEUCz+gOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=YCAcLIv9; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="YCAcLIv9"
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2d4360ab3daso7966631fa.3
-        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 02:57:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1711619821; x=1712224621; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GeDRkOuZc+1pJREINI73rlwAX5+zgKb+h3LyrDO+EO0=;
-        b=YCAcLIv9HWqAGS19TbavzhIzrfXNEzBttICiMyNZoet0qVhuqmT+ug28k5YMAM285l
-         ym8fmAhSTdlqJ9AroyAJ31A4rfrNmicDELM2Ofi8Bjw2ULiGpqiniNAnJA8vtKTdKOzc
-         QT8phf9k3oL0EmBJRcx979m3LrwjxD52LFxunakt+pABJe8nzAhed22ivfgeXr9izoKd
-         8LcQ/6qZR2NK4EvS+Fup7PQ7eMxzrn573ANoYGs81FGgHHoXsin9kgMJnKy5r70ig26b
-         vyCXq+zwzvKGUxesw1yBQtD2SxSyL5mg8EB9ZrM8m+/sisDVm6ms2OkOlQoNOtl7o0pD
-         Rv1Q==
+	s=arc-20240116; t=1711620064; c=relaxed/simple;
+	bh=+6LHEoV9s46N51EU+LWqDbmOctNRbs5eK1bWjSv2IdI=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=QkrUcdOsDl5Lya8fQXN7Jq0p0v7Urb/DmrVLsVBKohcG1ByFYwbHpyr32axzaHIO1Ll6uuQQlrxBCdBQWqUCt8y+/3rayQpvC9gDbyHb5wrwPpg/KvxfXBasaZqzP8C6MVOnIwwCIOfbqTM59SQRhSlX16/DYKDASwsLunNBY0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7cf265b30e2so71428339f.1
+        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 03:01:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711619821; x=1712224621;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GeDRkOuZc+1pJREINI73rlwAX5+zgKb+h3LyrDO+EO0=;
-        b=W1kXKQgYJLhp4Pl+d7dK/tfbW8eRFfbcJtjKS1CgFDcj+73CGI6Ls4mh+R0cqMDPZ7
-         AJvm50TExwHRnwW0nAS+UiqmY+9tnc4qeo777TKlMuuPeTQelblUdZMlxg9HeDhgEOBH
-         bHnBn45JRp09XqTqqBVlSpEljHail4+lpx3Fsf2SgoPy6HZr76YGUj8sLDqEeIK7y8ZA
-         Bqwovuf2gAl3n9vCECkWqmcQKZ9y7R+1uTZcuVLF/xo6y19E7nFfuZxVxQ24R9nAWCne
-         +e97iQq1Kvtysmx92ghGJzJb9kFoqEs+5goquFKXo2YuZG3WZR0qTbkn2kKGPkkRRdA2
-         ulcw==
-X-Forwarded-Encrypted: i=1; AJvYcCWiuBLteD/WrvZvuXjOIafs5FZrG+Ojvj/qJdQGlc9t2f380dv/Hlbv0ZwyQcTH7M2Mj2bPRk0CIUPXl/ZG0NPnALCS
-X-Gm-Message-State: AOJu0Yyue5JBlc5KNiVuCoKar8CZ6xVItx0/sLhqghZK/290CtjCpnkK
-	aDFh7rPmEKK7dg/GQ4KIEeL1qGpcrRrbkffEn3sCdlSDKutmh4VHMV+SGkXkaXU=
-X-Google-Smtp-Source: AGHT+IFbtFowa5nBQJZWrM4SlmUATORLD0mIO1dsxjjFCZZa8DTYVqVOQid11b1k28HayQLDTtaX+A==
-X-Received: by 2002:a2e:9acd:0:b0:2d2:4108:72a with SMTP id p13-20020a2e9acd000000b002d24108072amr1845690ljj.12.1711619821167;
-        Thu, 28 Mar 2024 02:57:01 -0700 (PDT)
-Received: from lavr.home ([2a02:168:f656:0:6017:91c3:e5e1:b05])
-        by smtp.gmail.com with ESMTPSA id bd17-20020a05600c1f1100b0041493615585sm1754437wmb.39.2024.03.28.02.57.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Mar 2024 02:57:00 -0700 (PDT)
-From: Anton Protopopov <aspsk@isovalent.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Stanislav Fomichev <sdf@google.com>,
-	bpf@vger.kernel.org
-Cc: Anton Protopopov <aspsk@isovalent.com>
-Subject: [PATCH bpf-next 1/1] bpf: fix possible file descriptor leaks in verifier
-Date: Thu, 28 Mar 2024 10:56:57 +0100
-Message-Id: <20240328095657.1995763-1-aspsk@isovalent.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1711620062; x=1712224862;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ab8qw9AVrknDLGgJj+5LJ6dILUHEmB6hGFiour98v3c=;
+        b=tt81AlQFc2pLcMpluFOl4dWyePjCkn1co+z7kOYPeHanHQu48DerRrP58hE210GQCa
+         gFxxucANubLHf1Yzl+TzBI+B2Uou2HqjSmISF+wGQq+Nt8/Cw4Dn17TIjur6b0QWgowI
+         RlbeIJcC+d96vdEaI1H0ighfdo4lO0sOBPgwFr6nmF8VswcFF1FQFIA9jgLV9mY3+B5y
+         WEBWtN83IWg5EzmR5pO/cUJz/Xd5qUISo4hasAOuF/K7AHUYj1NcJLXsvmsTyiTqCF+i
+         1HTzPv//P5jxYt0xliTgINyqa1ebdwF8NqOfo5Y6eP9c/38e3xq5RMuHTRfKM/ReQiJu
+         jH/g==
+X-Forwarded-Encrypted: i=1; AJvYcCXLO7RG0hy3twwzf+TGf+eIF5i9sW5i2UWWJdoTDVp+TjEWVp2YY60cIEzmpOrSRPbSRC3DzHTF4rBwrOmGh8AFmEhi
+X-Gm-Message-State: AOJu0Yxm/wbalnd65SkYTG0GzRD+L6aof4hxzK7clhjsT1/l+WkWS2Dg
+	wNoV84iNwvKtaQGS03k9gWcGxv65nrmc+Cnsjhy7yAERnMLNMuj52IcjxPusF1GQAghJNTN7dS5
+	xWb1DbLHk/YAx/ZG1SPg3l8hq8zmvjdqeFPn2JVLCDxKVQ/iQDwDk544=
+X-Google-Smtp-Source: AGHT+IEw78GzKmoKx2Mo4gzNfjYiJopkXff13tBAzWtmZlgMSwm8qSfkO4ezX6DFTCrt51Eb36dR1A4A5F3vFt64swA4HhSKKse8
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6602:3f90:b0:7cf:16d5:1820 with SMTP id
+ fb16-20020a0566023f9000b007cf16d51820mr62462iob.2.1711620061971; Thu, 28 Mar
+ 2024 03:01:01 -0700 (PDT)
+Date: Thu, 28 Mar 2024 03:01:01 -0700
+In-Reply-To: <c621f56d-6354-45a3-8c41-1380f5f03b1f@linux.dev>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c8d6b00614b599a2@google.com>
+Subject: Re: [syzbot] [bpf?] [net?] KMSAN: uninit-value in dev_map_lookup_elem
+From: syzbot <syzbot+1a3cf6f08d68868f9db3@syzkaller.appspotmail.com>
+To: alexei.starovoitov@gmail.com, andrii@kernel.org, ast@kernel.org, 
+	bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net, 
+	eddyz87@gmail.com, haoluo@google.com, hawk@kernel.org, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
+	kuba@kernel.org, linux-kernel@vger.kernel.org, martin.lau@linux.dev, 
+	netdev@vger.kernel.org, sdf@google.com, song@kernel.org, 
+	syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-The resolve_pseudo_ldimm64() function might have leaked file
-descriptors when BPF_MAP_TYPE_ARENA was used in a program (some
-error paths missed a corresponding fdput).
+Hello,
 
-Fix leaks and also extract code which adds maps to env->used_maps
-into a separate function. This simplifies code of resolve_pseudo_ldimm64
-and makes it possible to reuse this code later.  While at it, also add a
-verifier verbose message when the maps usage limit is reached.
+syzbot tried to test the proposed patch but the build/boot failed:
 
-Fixes: 6082b6c328b5 ("bpf: Recognize addr_space_cast instruction in the verifier.")
-Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
----
- kernel/bpf/verifier.c | 150 ++++++++++++++++++++++--------------------
- 1 file changed, 79 insertions(+), 71 deletions(-)
+.o
+  CC      fs/aio.o
+  CC      drivers/hid/hid-gt683r.o
+  CC      drivers/hid/hid-gyration.o
+  CC      drivers/hid/hid-holtek-kbd.o
+  CC      drivers/platform/x86/p2sb.o
+  CC      drivers/iio/buffer/industrialio-triggered-buffer.o
+  CC      drivers/staging/rtl8712/rtl871x_ioctl_set.o
+  CC      drivers/staging/rtl8712/rtl8712_led.o
+  AR      drivers/mailbox/built-in.a
+  CC      fs/btrfs/uuid-tree.o
+  CC      fs/xfs/xfs_dquot.o
+  CC      fs/dax.o
+  AR      drivers/iio/accel/built-in.a
+  AR      drivers/iio/cdc/built-in.a
+  CC      fs/locks.o
+  CC      drivers/iio/adc/viperboard_adc.o
+  CC      drivers/gpu/drm/i915/display/intel_plane_initial.o
+  CC      fs/binfmt_misc.o
+  CC      fs/binfmt_script.o
+  CC      net/netfilter/xt_length.o
+  CC      drivers/hid/hid-holtek-mouse.o
+  AR      drivers/iio/chemical/built-in.a
+  CC      fs/xfs/xfs_dquot_item.o
+  AR      drivers/iio/common/cros_ec_sensors/built-in.a
+  CC      drivers/iio/common/hid-sensors/hid-sensor-attributes.o
+  CC      drivers/extcon/devres.o
+  CC      fs/bcachefs/opts.o
+  CC      drivers/iio/common/hid-sensors/hid-sensor-trigger.o
+  CC      fs/binfmt_elf.o
+  AR      drivers/media/usb/pvrusb2/built-in.a
+  CC      fs/xfs/xfs_trans_dquot.o
+  AR      drivers/iio/common/inv_sensors/built-in.a
+  CC      fs/xfs/xfs_qm_syscalls.o
+  CC      fs/xfs/xfs_qm_bhv.o
+  CC      drivers/staging/rtl8712/rtl871x_mlme.o
+  AR      drivers/iio/dac/built-in.a
+  CC      drivers/hid/hid-holtekff.o
+  CC      drivers/hid/hid-icade.o
+  CC      drivers/iio/buffer/kfifo_buf.o
+  AR      drivers/iio/common/ms_sensors/built-in.a
+  CC      net/netfilter/xt_limit.o
+  CC      net/netfilter/xt_mac.o
+  AR      drivers/iio/common/scmi_sensors/built-in.a
+  CC      drivers/thunderbolt/nhi.o
+  AR      drivers/hwtracing/intel_th/built-in.a
+  AR      drivers/iio/adc/built-in.a
+  CC      net/netfilter/xt_multiport.o
+  AR      drivers/iio/common/ssp_sensors/built-in.a
+  CC      drivers/gpu/drm/i915/display/intel_pmdemand.o
+  AR      drivers/iio/dummy/built-in.a
+  CC      drivers/thunderbolt/nhi_ops.o
+  CC      fs/btrfs/props.o
+  AR      drivers/iio/common/st_sensors/built-in.a
+  CC      net/netfilter/xt_nfacct.o
+  CC      fs/xfs/xfs_qm.o
+  CC      net/netfilter/xt_osf.o
+  AR      drivers/platform/x86/built-in.a
+  CC      fs/xfs/xfs_quotaops.o
+  AR      drivers/platform/built-in.a
+  CC      fs/xfs/xfs_rtalloc.o
+  CC      drivers/android/binderfs.o
+  CC      drivers/iio/gyro/hid-sensor-gyro-3d.o
+  CC      drivers/extcon/extcon-intel-cht-wc.o
+  CC      fs/compat_binfmt_elf.o
+  CC      fs/xfs/xfs_acl.o
+  CC      drivers/thunderbolt/ctl.o
+  CC      drivers/thunderbolt/tb.o
+  CC      fs/btrfs/free-space-tree.o
+  CC      fs/btrfs/tree-checker.o
+  CC      fs/xfs/xfs_sysctl.o
+  CC      drivers/hid/hid-ite.o
+  CC      drivers/staging/rtl8712/ieee80211.o
+  CC      drivers/staging/rtl8712/rtl871x_mp_ioctl.o
+  CC      drivers/staging/rtl8712/rtl871x_mp.o
+  CC      fs/btrfs/space-info.o
+  CC      drivers/thunderbolt/switch.o
+  CC      net/netfilter/xt_owner.o
+  CC      drivers/hid/hid-kensington.o
+  AR      drivers/nvmem/layouts/built-in.a
+  CC      drivers/nvmem/core.o
+  CC      drivers/staging/rtl8712/mlme_linux.o
+  CC      fs/backing-file.o
+  CC      drivers/staging/rtl8712/recv_linux.o
+  CC      drivers/staging/rtl8712/xmit_linux.o
+  CC      drivers/thunderbolt/cap.o
+  CC      fs/bcachefs/printbuf.o
+  AR      drivers/ras/built-in.a
+  CC      fs/mbcache.o
+  AR      drivers/iio/filter/built-in.a
+  CC      drivers/counter/counter-core.o
+  AR      drivers/iio/buffer/built-in.a
+  CC      fs/posix_acl.o
+  CC      drivers/staging/rtl8712/usb_intf.o
+  CC      fs/coredump.o
+  AR      drivers/iio/frequency/built-in.a
+  AR      drivers/iio/health/built-in.a
+  CC      drivers/most/core.o
+  AR      drivers/extcon/built-in.a
+  CC      drivers/counter/counter-sysfs.o
+  CC      drivers/counter/counter-chrdev.o
+  CC      net/netfilter/xt_cgroup.o
+  AR      drivers/iio/gyro/built-in.a
+  AR      drivers/iio/common/hid-sensors/built-in.a
+  CC      fs/drop_caches.o
+  AR      drivers/iio/common/built-in.a
+  CC      drivers/iio/humidity/hid-sensor-humidity.o
+  CC      fs/sysctls.o
+  CC      drivers/hid/hid-keytouch.o
+  CC      fs/xfs/xfs_ioctl32.o
+  CC      drivers/thunderbolt/path.o
+  CC      drivers/thunderbolt/tunnel.o
+  AR      fs/ocfs2/built-in.a
+  CC      drivers/thunderbolt/eeprom.o
+  CC      net/netfilter/xt_physdev.o
+  CC      fs/fhandle.o
+  CC      drivers/android/binder.o
+  CC      drivers/staging/rtl8712/os_intfs.o
+  CC      fs/btrfs/block-rsv.o
+  CC      drivers/android/binder_alloc.o
+  CC      drivers/hid/hid-kye.o
+  CC      drivers/most/configfs.o
+  AR      drivers/iio/imu/bmi160/built-in.a
+  AR      drivers/iio/imu/bmi323/built-in.a
+  AR      drivers/iio/imu/bno055/built-in.a
+  CC      fs/bcachefs/quota.o
+  CC      drivers/iio/light/hid-sensor-als.o
+  CC      drivers/iio/light/hid-sensor-prox.o
+  AR      drivers/iio/imu/inv_icm42600/built-in.a
+  AR      drivers/iio/imu/inv_mpu6050/built-in.a
+  CC      fs/btrfs/delalloc-space.o
+  AR      drivers/iio/imu/st_lsm6dsx/built-in.a
+  CC      fs/btrfs/block-group.o
+  AR      drivers/iio/imu/st_lsm9ds0/built-in.a
+  CC      fs/btrfs/discard.o
+  AR      drivers/iio/imu/built-in.a
+  CC      fs/btrfs/reflink.o
+  CC      drivers/staging/rtl8712/rtl871x_pwrctrl.o
+  CC      fs/bcachefs/rebalance.o
+  CC      drivers/iio/magnetometer/hid-sensor-magn-3d.o
+  CC      fs/btrfs/subpage.o
+  CC      drivers/thunderbolt/domain.o
+  CC      fs/btrfs/tree-mod-log.o
+  CC      net/netfilter/xt_pkttype.o
+  CC      fs/btrfs/extent-io-tree.o
+  AR      drivers/iio/multiplexer/built-in.a
+  CC      drivers/iio/orientation/hid-sensor-incl-3d.o
+  CC      drivers/gpu/drm/i915/display/intel_psr.o
+  AR      drivers/media/usb/gspca/built-in.a
+  AR      drivers/iio/position/built-in.a
+  CC      drivers/iio/orientation/hid-sensor-rotation.o
+  AR      drivers/media/usb/built-in.a
+  CC      net/netfilter/xt_policy.o
+  CC      net/netfilter/xt_quota.o
+  AR      drivers/iio/potentiometer/built-in.a
+  CC      drivers/nvmem/layouts.o
+  CC      drivers/staging/rtl8712/rtl8712_recv.o
+  AR      drivers/media/built-in.a
+  CC      fs/bcachefs/recovery.o
+  CC      fs/xfs/xfs_pnfs.o
+  CC      drivers/gpu/drm/i915/display/intel_quirks.o
+  CC      fs/btrfs/fs.o
+  AR      drivers/iio/potentiostat/built-in.a
+  CC      drivers/hid/hid-lcpower.o
+  CC      drivers/hid/hid-lenovo.o
+  CC      drivers/hid/hid-lg.o
+  CC      drivers/hid/hid-lgff.o
+  AR      drivers/iio/humidity/built-in.a
+  CC      net/netfilter/xt_rateest.o
+  AR      drivers/iio/resolver/built-in.a
+  AR      drivers/iio/proximity/built-in.a
+  CC      drivers/gpu/drm/i915/display/intel_sprite.o
+  CC      drivers/iio/pressure/hid-sensor-press.o
+  CC      drivers/iio/temperature/hid-sensor-temperature.o
+  CC      drivers/gpu/drm/i915/display/intel_sprite_uapi.o
+  CC      fs/btrfs/messages.o
+  CC      drivers/gpu/drm/i915/display/intel_tc.o
+  AR      drivers/counter/built-in.a
+  CC      drivers/gpu/drm/i915/display/intel_vblank.o
+  CC      drivers/gpu/drm/i915/display/intel_vga.o
+  CC      drivers/hid/hid-lg2ff.o
+  CC      drivers/thunderbolt/dma_port.o
+  CC      fs/btrfs/bio.o
+  AR      drivers/iio/light/built-in.a
+  AR      drivers/iio/test/built-in.a
+  AR      drivers/iio/trigger/built-in.a
+  CC      drivers/thunderbolt/icm.o
+  CC      net/netfilter/xt_realm.o
+  CC      net/netfilter/xt_recent.o
+  CC      net/netfilter/xt_sctp.o
+  CC      drivers/thunderbolt/property.o
+  AR      drivers/iio/magnetometer/built-in.a
+  CC      drivers/hid/hid-lg3ff.o
+  AR      drivers/most/built-in.a
+  CC      drivers/thunderbolt/xdomain.o
+  CC      drivers/hid/hid-lg4ff.o
+  CC      net/netfilter/xt_socket.o
+  CC      drivers/thunderbolt/lc.o
+  CC      net/netfilter/xt_state.o
+  CC      drivers/hid/hid-lg-g15.o
+  CC      fs/btrfs/lru_cache.o
+  CC      drivers/staging/rtl8712/rtl871x_recv.o
+  CC      drivers/iio/industrialio-core.o
+  CC      drivers/gpu/drm/i915/display/intel_wm.o
+  AR      drivers/iio/orientation/built-in.a
+  CC      net/netfilter/xt_statistic.o
+  CC      drivers/iio/industrialio-event.o
+  CC      drivers/iio/inkern.o
+  CC      net/netfilter/xt_string.o
+  CC      fs/btrfs/raid-stripe-tree.o
+  CC      net/netfilter/xt_tcpmss.o
+  CC      net/netfilter/xt_time.o
+  CC      drivers/iio/industrialio-buffer.o
+  CC      drivers/hid/hid-logitech-dj.o
+  CC      drivers/gpu/drm/i915/display/skl_scaler.o
+  AR      drivers/nvmem/built-in.a
+  CC      drivers/iio/industrialio-trigger.o
+  CC      drivers/gpu/drm/i915/display/skl_universal_plane.o
+  CC      drivers/thunderbolt/tmu.o
+  AR      drivers/iio/temperature/built-in.a
+  CC      fs/btrfs/acl.o
+  CC      drivers/hid/hid-logitech-hidpp.o
+  CC      drivers/hid/hid-magicmouse.o
+  AR      drivers/iio/pressure/built-in.a
+  CC      drivers/thunderbolt/usb4.o
+  CC      drivers/thunderbolt/usb4_port.o
+  CC      drivers/staging/rtl8712/rtl871x_sta_mgt.o
+  CC      drivers/gpu/drm/i915/display/skl_watermark.o
+  CC      drivers/hid/hid-mf.o
+  CC      net/netfilter/xt_u32.o
+  CC      fs/bcachefs/reflink.o
+  CC      drivers/staging/rtl8712/rtl871x_xmit.o
+  CC      fs/btrfs/ref-verify.o
+  CC      drivers/thunderbolt/nvm.o
+  CC      net/netfilter/nf_hooks_lwtunnel.o
+  CC      drivers/staging/rtl8712/rtl8712_xmit.o
+  CC      fs/bcachefs/sb-clean.o
+  CC      drivers/hid/hid-microsoft.o
+  CC      fs/bcachefs/replicas.o
+  CC      fs/btrfs/zoned.o
+  CC      drivers/gpu/drm/i915/display/intel_acpi.o
+  CC      fs/bcachefs/sb-counters.o
+  CC      drivers/hid/hid-monterey.o
+  CC      drivers/gpu/drm/i915/display/intel_opregion.o
+  CC      fs/btrfs/verity.o
+  CC      fs/bcachefs/sb-downgrade.o
+  CC      fs/bcachefs/sb-errors.o
+  CC      fs/bcachefs/sb-members.o
+  CC      fs/bcachefs/siphash.o
+  CC      drivers/hid/hid-multitouch.o
+  CC      drivers/hid/hid-nti.o
+  CC      drivers/hid/hid-ntrig.o
+  CC      drivers/gpu/drm/i915/display/intel_fbdev.o
+  CC      drivers/thunderbolt/retimer.o
+  CC      fs/bcachefs/six.o
+  CC      fs/bcachefs/snapshot.o
+  CC      drivers/thunderbolt/quirks.o
+  CC      drivers/thunderbolt/clx.o
+  CC      drivers/thunderbolt/acpi.o
+  CC      drivers/hid/hid-ortek.o
+  CC      drivers/hid/hid-prodikeys.o
+  CC      drivers/hid/hid-pl.o
+  CC      drivers/gpu/drm/i915/display/intel_fbdev_fb.o
+  CC      drivers/hid/hid-penmount.o
+  CC      drivers/thunderbolt/debugfs.o
+  CC      drivers/hid/hid-petalynx.o
+  CC      drivers/hid/hid-picolcd_core.o
+  CC      drivers/hid/hid-picolcd_fb.o
+  CC      drivers/hid/hid-picolcd_backlight.o
+  CC      drivers/hid/hid-picolcd_lcd.o
+  CC      drivers/gpu/drm/i915/display/intel_display_debugfs.o
+  CC      drivers/gpu/drm/i915/display/intel_display_debugfs_params.o
+  CC      drivers/hid/hid-picolcd_leds.o
+  CC      drivers/gpu/drm/i915/display/intel_pipe_crc.o
+  CC      drivers/hid/hid-picolcd_cir.o
+  CC      drivers/gpu/drm/i915/display/dvo_ch7017.o
+  CC      drivers/gpu/drm/i915/display/dvo_ch7xxx.o
+  CC      drivers/hid/hid-picolcd_debugfs.o
+  CC      drivers/gpu/drm/i915/display/dvo_ivch.o
+  CC      fs/bcachefs/subvolume.o
+  CC      fs/bcachefs/super.o
+  CC      fs/bcachefs/super-io.o
+  CC      fs/bcachefs/sysfs.o
+  CC      drivers/hid/hid-plantronics.o
+  CC      fs/bcachefs/tests.o
+  CC      fs/bcachefs/time_stats.o
+  CC      fs/bcachefs/thread_with_file.o
+  CC      drivers/hid/hid-primax.o
+  CC      fs/bcachefs/trace.o
+  CC      drivers/hid/hid-redragon.o
+  CC      drivers/hid/hid-retrode.o
+  CC      drivers/hid/hid-roccat.o
+  CC      drivers/hid/hid-roccat-common.o
+  CC      fs/bcachefs/two_state_shared_lock.o
+  CC      drivers/hid/hid-roccat-arvo.o
+  CC      fs/bcachefs/util.o
+  CC      fs/bcachefs/varint.o
+  CC      drivers/hid/hid-roccat-isku.o
+  CC      drivers/gpu/drm/i915/display/dvo_ns2501.o
+  CC      drivers/hid/hid-roccat-kone.o
+  CC      fs/bcachefs/xattr.o
+  CC      drivers/hid/hid-roccat-koneplus.o
+  CC      drivers/gpu/drm/i915/display/dvo_sil164.o
+  CC      drivers/hid/hid-roccat-konepure.o
+  CC      drivers/hid/hid-roccat-kovaplus.o
+  CC      drivers/gpu/drm/i915/display/dvo_tfp410.o
+  CC      drivers/gpu/drm/i915/display/g4x_dp.o
+  AR      drivers/iio/built-in.a
+  AR      drivers/staging/rtl8712/built-in.a
+  CC      drivers/hid/hid-roccat-lua.o
+  CC      drivers/gpu/drm/i915/display/g4x_hdmi.o
+  AR      drivers/staging/built-in.a
+  CC      drivers/hid/hid-roccat-pyra.o
+  CC      drivers/hid/hid-roccat-ryos.o
+  CC      drivers/hid/hid-roccat-savu.o
+  AR      net/netfilter/built-in.a
+  CC      drivers/hid/hid-rmi.o
+  CC      drivers/gpu/drm/i915/display/icl_dsi.o
+  CC      drivers/hid/hid-saitek.o
+  AR      fs/xfs/built-in.a
+  CC      drivers/hid/hid-samsung.o
+  AR      net/built-in.a
+  CC      drivers/hid/hid-sjoy.o
+  CC      drivers/hid/hid-sony.o
+  CC      drivers/hid/hid-speedlink.o
+  CC      drivers/hid/hid-steelseries.o
+  CC      drivers/gpu/drm/i915/display/intel_backlight.o
+  CC      drivers/hid/hid-sunplus.o
+  CC      drivers/gpu/drm/i915/display/intel_crt.o
+  CC      drivers/gpu/drm/i915/display/intel_cx0_phy.o
+  CC      drivers/hid/hid-gaff.o
+  CC      drivers/hid/hid-tmff.o
+  CC      drivers/hid/hid-thrustmaster.o
+  CC      drivers/gpu/drm/i915/display/intel_ddi.o
+  CC      drivers/hid/hid-tivo.o
+  CC      drivers/gpu/drm/i915/display/intel_ddi_buf_trans.o
+  CC      drivers/hid/hid-topseed.o
+  CC      drivers/hid/hid-twinhan.o
+  CC      drivers/hid/hid-uclogic-core.o
+  CC      drivers/hid/hid-uclogic-rdesc.o
+  CC      drivers/hid/hid-uclogic-params.o
+  AR      drivers/thunderbolt/built-in.a
+  CC      drivers/hid/hid-udraw-ps3.o
+  CC      drivers/hid/hid-led.o
+  CC      drivers/hid/hid-xinmo.o
+  CC      drivers/hid/hid-zpff.o
+  CC      drivers/hid/hid-zydacron.o
+  CC      drivers/hid/wacom_wac.o
+  CC      drivers/hid/wacom_sys.o
+  CC      drivers/hid/hid-waltop.o
+  CC      drivers/hid/hid-wiimote-core.o
+  CC      drivers/hid/hid-wiimote-modules.o
+  CC      drivers/hid/hid-wiimote-debug.o
+  CC      drivers/hid/hid-sensor-hub.o
+  CC      drivers/gpu/drm/i915/display/intel_display_device.o
+  CC      drivers/hid/hid-sensor-custom.o
+  CC      drivers/gpu/drm/i915/display/intel_display_trace.o
+  CC      drivers/gpu/drm/i915/display/intel_dkl_phy.o
+  CC      drivers/gpu/drm/i915/display/intel_dp.o
+  CC      drivers/gpu/drm/i915/display/intel_dp_aux.o
+  CC      drivers/gpu/drm/i915/display/intel_dp_aux_backlight.o
+  CC      drivers/gpu/drm/i915/display/intel_dp_hdcp.o
+  CC      drivers/gpu/drm/i915/display/intel_dp_link_training.o
+  CC      drivers/gpu/drm/i915/display/intel_dp_mst.o
+  CC      drivers/gpu/drm/i915/display/intel_dsi.o
+  CC      drivers/gpu/drm/i915/display/intel_dsi_dcs_backlight.o
+  CC      drivers/gpu/drm/i915/display/intel_dsi_vbt.o
+  CC      drivers/gpu/drm/i915/display/intel_gmbus.o
+  CC      drivers/gpu/drm/i915/display/intel_dvo.o
+  CC      drivers/gpu/drm/i915/display/intel_hdmi.o
+  CC      drivers/gpu/drm/i915/display/intel_lspcon.o
+  CC      drivers/gpu/drm/i915/display/intel_lvds.o
+  CC      drivers/gpu/drm/i915/display/intel_panel.o
+  CC      drivers/gpu/drm/i915/display/intel_pps.o
+  CC      drivers/gpu/drm/i915/display/intel_qp_tables.o
+  CC      drivers/gpu/drm/i915/display/intel_sdvo.o
+  CC      drivers/gpu/drm/i915/display/intel_snps_phy.o
+  CC      drivers/gpu/drm/i915/display/intel_tv.o
+  CC      drivers/gpu/drm/i915/display/intel_vdsc.o
+  CC      drivers/gpu/drm/i915/display/vlv_dsi.o
+  CC      drivers/gpu/drm/i915/display/intel_vrr.o
+  CC      drivers/gpu/drm/i915/display/vlv_dsi_pll.o
+  CC      drivers/gpu/drm/i915/display/intel_dp_tunnel.o
+  AR      fs/btrfs/built-in.a
+  CC      drivers/gpu/drm/i915/i915_perf.o
+  CC      drivers/gpu/drm/i915/pxp/intel_pxp.o
+  CC      drivers/gpu/drm/i915/pxp/intel_pxp_huc.o
+  CC      drivers/gpu/drm/i915/pxp/intel_pxp_tee.o
+  CC      drivers/gpu/drm/i915/i915_gpu_error.o
+  CC      drivers/gpu/drm/i915/i915_vgpu.o
+  AR      drivers/android/built-in.a
+  AR      fs/bcachefs/built-in.a
+  AR      fs/built-in.a
+  AR      drivers/hid/built-in.a
+  AR      drivers/gpu/drm/i915/built-in.a
+  AR      drivers/gpu/drm/built-in.a
+  AR      drivers/gpu/built-in.a
+  AR      drivers/built-in.a
+  AR      built-in.a
+  AR      vmlinux.a
+  LD      vmlinux.o
+Killed
+make[2]: *** [scripts/Makefile.vmlinux_o:62: vmlinux.o] Error 137
+make[2]: *** Deleting file 'vmlinux.o'
+make[1]: *** [/syzkaller/jobs/linux/kernel/Makefile:1141: vmlinux_o] Error 2
+make: *** [Makefile:240: __sub-make] Error 2
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a1a96ba867d9..0a9c8cd3b01b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -18099,6 +18099,12 @@ static bool is_tracing_prog_type(enum bpf_prog_type type)
- 	}
- }
- 
-+static bool bpf_map_is_cgroup_storage(struct bpf_map *map)
-+{
-+	return (map->map_type == BPF_MAP_TYPE_CGROUP_STORAGE ||
-+		map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE);
-+}
-+
- static int check_map_prog_compatibility(struct bpf_verifier_env *env,
- 					struct bpf_map *map,
- 					struct bpf_prog *prog)
-@@ -18170,13 +18176,77 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
- 			return -EINVAL;
- 		}
- 
-+	if (bpf_map_is_cgroup_storage(map) &&
-+			bpf_cgroup_storage_assign(env->prog->aux, map)) {
-+		verbose(env, "only one cgroup storage of each type is allowed\n");
-+		return -EBUSY;
-+	}
-+
-+	if (map->map_type == BPF_MAP_TYPE_ARENA) {
-+		if (env->prog->aux->arena) {
-+			verbose(env, "Only one arena per program\n");
-+			return -EBUSY;
-+		}
-+		if (!env->allow_ptr_leaks || !env->bpf_capable) {
-+			verbose(env, "CAP_BPF and CAP_PERFMON are required to use arena\n");
-+			return -EPERM;
-+		}
-+		if (!env->prog->jit_requested) {
-+			verbose(env, "JIT is required to use arena\n");
-+			return -EOPNOTSUPP;
-+		}
-+		if (!bpf_jit_supports_arena()) {
-+			verbose(env, "JIT doesn't support arena\n");
-+			return -EOPNOTSUPP;
-+		}
-+		env->prog->aux->arena = (void *)map;
-+		if (!bpf_arena_get_user_vm_start(env->prog->aux->arena)) {
-+			verbose(env, "arena's user address must be set via map_extra or mmap()\n");
-+			return -EINVAL;
-+		}
-+	}
-+
- 	return 0;
- }
- 
--static bool bpf_map_is_cgroup_storage(struct bpf_map *map)
-+static int env_record_map(struct bpf_verifier_env *env, struct bpf_map *map,
-+			  int *map_index_ptr)
- {
--	return (map->map_type == BPF_MAP_TYPE_CGROUP_STORAGE ||
--		map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE);
-+	int map_index;
-+	int err;
-+
-+	/* check whether we recorded this map already */
-+	for (map_index = 0; map_index < env->used_map_cnt; map_index++) {
-+		if (env->used_maps[map_index] == map)
-+			goto ret_index;
-+	}
-+
-+	err = check_map_prog_compatibility(env, map, env->prog);
-+	if (err)
-+		return err;
-+
-+	if (env->used_map_cnt >= MAX_USED_MAPS) {
-+		verbose(env, "The map usage limit of %u is reached\n",
-+			MAX_USED_MAPS);
-+		return -E2BIG;
-+	}
-+
-+	if (env->prog->sleepable)
-+		atomic64_inc(&map->sleepable_refcnt);
-+
-+	/* hold the map. If the program is rejected by verifier,
-+	 * the map will be released by release_maps() or it
-+	 * will be used by the valid program until it's unloaded
-+	 * and all maps are released in bpf_free_used_maps()
-+	 */
-+	bpf_map_inc(map);
-+
-+	env->used_maps[env->used_map_cnt++] = map;
-+
-+ret_index:
-+	if (map_index_ptr)
-+		*map_index_ptr = map_index;
-+	return 0;
- }
- 
- /* find and rewrite pseudo imm in ld_imm64 instructions:
-@@ -18190,7 +18260,7 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
- {
- 	struct bpf_insn *insn = env->prog->insnsi;
- 	int insn_cnt = env->prog->len;
--	int i, j, err;
-+	int i, err;
- 
- 	err = bpf_prog_calc_tag(env->prog);
- 	if (err)
-@@ -18278,13 +18348,12 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
- 				return PTR_ERR(map);
- 			}
- 
--			err = check_map_prog_compatibility(env, map, env->prog);
--			if (err) {
--				fdput(f);
-+			aux = &env->insn_aux_data[i];
-+			err = env_record_map(env, map, &aux->map_index);
-+			fdput(f);
-+			if (err < 0)
- 				return err;
--			}
- 
--			aux = &env->insn_aux_data[i];
- 			if (insn[0].src_reg == BPF_PSEUDO_MAP_FD ||
- 			    insn[0].src_reg == BPF_PSEUDO_MAP_IDX) {
- 				addr = (unsigned long)map;
-@@ -18293,13 +18362,11 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
- 
- 				if (off >= BPF_MAX_VAR_OFF) {
- 					verbose(env, "direct value offset of %u is not allowed\n", off);
--					fdput(f);
- 					return -EINVAL;
- 				}
- 
- 				if (!map->ops->map_direct_value_addr) {
- 					verbose(env, "no direct value access support for this map type\n");
--					fdput(f);
- 					return -EINVAL;
- 				}
- 
-@@ -18307,7 +18374,6 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
- 				if (err) {
- 					verbose(env, "invalid access to map value pointer, value_size=%u off=%u\n",
- 						map->value_size, off);
--					fdput(f);
- 					return err;
- 				}
- 
-@@ -18318,66 +18384,8 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
- 			insn[0].imm = (u32)addr;
- 			insn[1].imm = addr >> 32;
- 
--			/* check whether we recorded this map already */
--			for (j = 0; j < env->used_map_cnt; j++) {
--				if (env->used_maps[j] == map) {
--					aux->map_index = j;
--					fdput(f);
--					goto next_insn;
--				}
--			}
--
--			if (env->used_map_cnt >= MAX_USED_MAPS) {
--				fdput(f);
--				return -E2BIG;
--			}
--
--			if (env->prog->sleepable)
--				atomic64_inc(&map->sleepable_refcnt);
--			/* hold the map. If the program is rejected by verifier,
--			 * the map will be released by release_maps() or it
--			 * will be used by the valid program until it's unloaded
--			 * and all maps are released in bpf_free_used_maps()
--			 */
--			bpf_map_inc(map);
--
--			aux->map_index = env->used_map_cnt;
--			env->used_maps[env->used_map_cnt++] = map;
--
--			if (bpf_map_is_cgroup_storage(map) &&
--			    bpf_cgroup_storage_assign(env->prog->aux, map)) {
--				verbose(env, "only one cgroup storage of each type is allowed\n");
--				fdput(f);
--				return -EBUSY;
--			}
--			if (map->map_type == BPF_MAP_TYPE_ARENA) {
--				if (env->prog->aux->arena) {
--					verbose(env, "Only one arena per program\n");
--					fdput(f);
--					return -EBUSY;
--				}
--				if (!env->allow_ptr_leaks || !env->bpf_capable) {
--					verbose(env, "CAP_BPF and CAP_PERFMON are required to use arena\n");
--					fdput(f);
--					return -EPERM;
--				}
--				if (!env->prog->jit_requested) {
--					verbose(env, "JIT is required to use arena\n");
--					return -EOPNOTSUPP;
--				}
--				if (!bpf_jit_supports_arena()) {
--					verbose(env, "JIT doesn't support arena\n");
--					return -EOPNOTSUPP;
--				}
--				env->prog->aux->arena = (void *)map;
--				if (!bpf_arena_get_user_vm_start(env->prog->aux->arena)) {
--					verbose(env, "arena's user address must be set via map_extra or mmap()\n");
--					return -EINVAL;
--				}
--			}
--
--			fdput(f);
- next_insn:
-+			/* jump over insn[1] */
- 			insn++;
- 			i++;
- 			continue;
--- 
-2.34.1
 
+Error text is too large and was truncated, full error text is at:
+https://syzkaller.appspot.com/x/error.txt?x=12986595180000
+
+
+Tested on:
+
+commit:         d8889e86 bpf: Mark bpf prog stack with kmsan_unposion_..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/martin.lau/bpf-next.git interpreter.kmsan
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e6bd769cb793b98a
+dashboard link: https://syzkaller.appspot.com/bug?extid=1a3cf6f08d68868f9db3
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+
+Note: no patches were applied.
