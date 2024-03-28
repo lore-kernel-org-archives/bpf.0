@@ -1,128 +1,160 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BCFA3F9EA;
-	Thu, 28 Mar 2024 23:23:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409E91327E6;
+	Thu, 28 Mar 2024 23:52:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711668206; cv=none; b=GgPpP40mfkaA5eElv27qi2lZ2ZZKEqQimNI+jYR0ZtnWeLk7ELCEr92RH0oYsQa5bGD/GlTcgxtiNEiJvwmuu3mRpB1rE3+cKyztc7V+rE4LH2QZgyHFtPVPsrzBYQ2LpVkAotYvk1wFFPTgy8I7kznZJHlSd7UDgHa7wMuyYA8=
+	t=1711669959; cv=none; b=CCKZbwlgnZmWeU0mNQnUjPqWvlw7WCpms/L8Iab9Harqq66ysbXhN8/gmE08st0wQwX+MiTJhx2I8qudSvKhK/0hQ06D+4Vg8EUKNooiyvtHtcJtdi96qsI2KSH3S76zpn6tngYyOGFUgxUeKxFXORG2R73gY2ZnknifB0JLNtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711668206; c=relaxed/simple;
-	bh=f+Fn0IVd1CXhIBMUfKxmbY6PpiZuXCT5Jwa6jncWG1c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j/fSNAuRKHY70oeLFpbQJrkOQRTZC74Rzd3F80pUUEO2pdKpxCWohIHCt10bBhMJg1N7mIHCaOFObjJs39ogovKHht08nLs41pUVcJgHN5bgIqf1pywJhHubkXP3ANBwoFKSOjVThNGlSfT0FPfGfhkJUzA3PGv7Ss0PoeDPeoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HsUzo0Dx; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+	s=arc-20240116; t=1711669959; c=relaxed/simple;
+	bh=Dui4JcdqJdFEvq+w6+x4V9SEJobLhQzTvcXhr5TIfhw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sLHEtjuArN/uMklHkvElUpTOvsZirR6HbTFN/By/gVGF4hh1n6Hs/0ta20rcLPA6kdRvuzbsYfC13Dhf0fgvPTZWtcRrnwvvGN4Fl8dSyrgDmYkHdH+uxYBFEX3usBx3MnwTNLnJVBlQaSbewseyKz3Ho/6PjM867Gk/5jhzSF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HsUzo0Dx"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6e740fff1d8so1327639b3a.1;
-        Thu, 28 Mar 2024 16:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711668204; x=1712273004; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pjgXiS9mThv24KOLFrcYAxjGt4bSxcV19+6gwf0UgxU=;
-        b=HsUzo0Dxh1VYe4WWFqSmxN/uGTbMb4jeaLMWzKxAivvIRD0w2fi3P21vdDhPCAd8xw
-         vkJnbMUX1GuJsC6Mzsp1HqFfwL5ahrzWcPHk8o2qSStAvMj/h5JQYNWY6biSAcYU4/0T
-         LBu5TKHZzLpoQj5YcH8oeDLzYw3ZQerXZhWbwSazCn8ltQDYdZn3oAq7InXrK1w2cIJ/
-         7InQeSASODFeYc+z9kAgFJEq+P/MKRJqSvgo+OTSdAFHazZ6v1zLaO3OfRfxGD+C7iUe
-         Was0zY43K57AYYD1x9NfgcH7KJd/fCXC0WSt81ebZ5sDGlVTGZxWl1kkq9T6ZBLOM7Fb
-         O0lw==
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-56bb22ff7baso1701315a12.3;
+        Thu, 28 Mar 2024 16:52:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711668204; x=1712273004;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1711669955; x=1712274755;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pjgXiS9mThv24KOLFrcYAxjGt4bSxcV19+6gwf0UgxU=;
-        b=BZhyGagJTBWm047299r0wwnleZ6YGjF0nfBOOTO5bz7t3xuTjwPfcEGniZBG9W8Hle
-         oPXcnBfDqLwCuYXddeQrBd3uWfLndmaCEpUiHuCcFceVPPFYuS54EblFyNAnUdRi7D4k
-         2llGqxXodgUIeNOTSFnrO9TXc+YtRYHAdlFru8cex4zptPLHq2JxbvKjOJwfGz62dmRW
-         8eaOeINZzAMQ4VUCgGVSIsnw4lpr7oPlsQHn8mRZHQVvtYQd5UDbsJjZHgKDXPoiGdSL
-         uCvczGotbLh0YOYoW79WhKySGuw04VzzXG381i0jbnGS3utCt63jfGWQPzcKc2gvYfsy
-         BofQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXNRAFsaUFyMf+wds197nQJULS2/AKiVooK0hu2LNbcpptbNq+nVLSMZbBrdqaJs984/prRz+3GTl4DQYclPkiaUZzt74Qs2dQbGETLsXFQNJzHfzJAuv6+dQngVSnIrRm/xP2C3XOr3D8mWM+DSOJNjbEi8Te7w2OaCGbpv5RYxlEkKgQf8urZ2ReANN1WD4DTMNqHNdM4YjqzFg==
-X-Gm-Message-State: AOJu0YzXM9fsVEc/cc39dLqXHxbJrNgcrqqKcuryKpArpf4/n+yKaIgi
-	sromWI4DFK1ilTOI9MN0HO3gejLtxWL84vO9AVXE6pBukvZOwMlG
-X-Google-Smtp-Source: AGHT+IED4+zMpS52gRLtiDL2tuGN2olL7XAhhBJZ5TcYamtrSCl87g6jlNerqqK47bJO7a629WacbA==
-X-Received: by 2002:a05:6a00:9284:b0:6ea:c2ef:3b71 with SMTP id jw4-20020a056a00928400b006eac2ef3b71mr927159pfb.20.1711668203684;
-        Thu, 28 Mar 2024 16:23:23 -0700 (PDT)
-Received: from localhost (dhcp-141-239-158-86.hawaiiantel.net. [141.239.158.86])
-        by smtp.gmail.com with ESMTPSA id e5-20020aa79805000000b006eac9c54f7csm1968972pfl.96.2024.03.28.16.23.23
+        bh=xqtSjhsIGMw3eisHvYjf5GhA8W6tXJZWoW+tqNLCeD8=;
+        b=ZRenh+4sU6BBQcinnp0m3Gbp7aLj+EyqBUJe1JsutkSW8MefoGjCbmBMahRxmTsIoH
+         XtoO2koWOgXLghVVfKv0jj1fcDc0jtMpJ7yFhf5SI0Kf9vxp5Wio0aIgp74vhE9+blDo
+         x54Ohk3Cx02HKQG06ewtPNU72n2twTGaAb6/w3qhim7cJmsmOq8/gFKyDJxTkACw0qYG
+         wdyxc/KtbCjWXCDYWVg0YO6H3kWagO0wnr83nNjRYTlzXCgvGYneWaE6WnJbx7mXNoHt
+         4rq79SZmXzx29oVCAza0UhHn132KZrdYsmeLSJSLvOzwmRtt5wgH8y8r4pfAFuK9A/zp
+         f0Gg==
+X-Forwarded-Encrypted: i=1; AJvYcCXvOupbB1hVYPnUHycJJ6FmZjM37ZdMIRCEUyySVieBrsV8nibzehJFBQ+ryATVff9X6Tok0m3mvt/97VYpthEwxmJtOaRO7XRq54XVNZ99xXQ0urw9EjL5kQuN3Y2bE1MDxiZSSMlIyv5WQP6w7WH50IUBAhO9ELeO
+X-Gm-Message-State: AOJu0YzA2RmhwljtXwdlO27bl3qGvjwo6BlGCsz9n+Xm2PP0iFs00NOL
+	rD1ObHd/XFCIMxWPKRbM78alW8/rkOmQMq7VwRrgwSGN3GIXyEZn
+X-Google-Smtp-Source: AGHT+IG9vSwUMvZ2P+h61oiaTZLpn1bcN9YYag5Q+BphmZLDkUC5jfCveqGuLgKEPPELDEQBqvfaag==
+X-Received: by 2002:a17:906:2dc1:b0:a4d:ffcb:1f4e with SMTP id h1-20020a1709062dc100b00a4dffcb1f4emr391810eji.75.1711669955247;
+        Thu, 28 Mar 2024 16:52:35 -0700 (PDT)
+Received: from localhost (fwdproxy-lla-005.fbsv.net. [2a03:2880:30ff:5::face:b00c])
+        by smtp.gmail.com with ESMTPSA id gl17-20020a170906e0d100b00a4df6442e69sm1274302ejb.152.2024.03.28.16.52.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Mar 2024 16:23:23 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date: Thu, 28 Mar 2024 13:23:22 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Djalal Harouni <tixxdz@gmail.com>, Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
+        Thu, 28 Mar 2024 16:52:34 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+To: aleksander.lobakin@intel.com,
+	kuba@kernel.org,
+	davem@davemloft.net,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	Felix Fietkau <nbd@nbd.name>,
+	Sean Wang <sean.wang@mediatek.com>,
+	Mark Lee <Mark-MC.Lee@mediatek.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	"open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [RFC PATCH bpf-next 0/3] bpf: freeze a task cgroup from bpf
-Message-ID: <ZgX76nX2NfcxuYb8@slm.duckdns.org>
-References: <20240327-ccb56fc7a6e80136db80876c@djalal>
- <20240327225334.58474-1-tixxdz@gmail.com>
- <ZgWnPZtwBYfHEFzf@slm.duckdns.org>
- <CAADnVQK6BUGZFCATD8Ejcfob5sKK-b8HUD_4o8Q6s9FM72L4iQ@mail.gmail.com>
- <ZgWv19ySvoACAll4@slm.duckdns.org>
- <CAADnVQLhWDcX-7XCdo-W=jthU=9iPqODwrE6c9fvU8sfAJ5ARg@mail.gmail.com>
- <ZgXMww9kJiKi4Vmd@slm.duckdns.org>
- <CAADnVQK970_Nx3918V41ue031RkGs+WsteOAm6EJOY7oSwzS1A@mail.gmail.com>
- <ZgXallkHApJC-adM@slm.duckdns.org>
- <CAADnVQLSDOfKccynu2jt-7=8nJqoLtoNkRchvHo1NCUEYOQJ7Q@mail.gmail.com>
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>
+Cc: quic_jjohnson@quicinc.com,
+	kvalo@kernel.org,
+	leon@kernel.org,
+	dennis.dalessandro@cornelisnetworks.com,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC support),
+	linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC support),
+	bpf@vger.kernel.org (open list:XDP (eXpress Data Path):Keyword:(?:\b|_)xdp(?:\b|_))
+Subject: [PATCH net-next v2 3/5] net: mediatek: mtk_eth_sock: allocate dummy net_device dynamically
+Date: Thu, 28 Mar 2024 16:52:03 -0700
+Message-ID: <20240328235214.4079063-4-leitao@debian.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240328235214.4079063-1-leitao@debian.org>
+References: <20240328235214.4079063-1-leitao@debian.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQLSDOfKccynu2jt-7=8nJqoLtoNkRchvHo1NCUEYOQJ7Q@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hello,
+Embedding net_device into structures prohibits the usage of flexible
+arrays in the net_device structure. For more details, see the discussion
+at [1].
 
-On Thu, Mar 28, 2024 at 02:28:51PM -0700, Alexei Starovoitov wrote:
-> > > So filename will be one of cgroup_base_files[].name ?
-> > > We probably don't want psi or cgroup1_base_files in there.
-> >
-> > Would it matter?
-> 
-> Few weak reasons:
-> . cgroup_psi_files have show/write/poll/release which
->   doesn't map to this bpf_cgroup_knob_write/read ?
-> . cgroup1_base_files probably needs to a separate kfunc
->   bpf_cgroup1_...
-> 
-> > If the user has root perm, they can do whatever with the
-> > files anyway, so I'm not sure why we'd restrict any specific knob. Maybe we
-> > wanna make sure @filename doesn't include '/'? Or is it that you don't want
-> > to go through the usual file name look up?
-> 
-> yeah. why do a file lookup? The names are there in the array.
-> cgroup pointer gives that "relative path" and knob name is the last
-> part of such "path". Easy to search in that array(s).
+Un-embed the net_device from the private struct by converting it
+into a pointer. Then use the leverage the new alloc_netdev_dummy()
+helper to allocate and initialize dummy devices.
 
-Difficult to tell without looking at the implementation but I don't have
-strong opinions. The interface makes sense to me and as long as we can hook
-it up in a reasonably way, it should be okay. We can always change internal
-implementation later if necessary.
+[1] https://lore.kernel.org/all/20240229225910.79e224cf@kernel.org/
 
-Thanks.
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c | 17 +++++++++++++----
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h |  2 +-
+ 2 files changed, 14 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+index caa13b9cedff..cef96c048fdf 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -1710,7 +1710,7 @@ static struct page_pool *mtk_create_page_pool(struct mtk_eth *eth,
+ 	if (IS_ERR(pp))
+ 		return pp;
+ 
+-	err = __xdp_rxq_info_reg(xdp_q, &eth->dummy_dev, id,
++	err = __xdp_rxq_info_reg(xdp_q, eth->dummy_dev, id,
+ 				 eth->rx_napi.napi_id, PAGE_SIZE);
+ 	if (err < 0)
+ 		goto err_free_pp;
+@@ -4188,6 +4188,8 @@ static int mtk_free_dev(struct mtk_eth *eth)
+ 		metadata_dst_free(eth->dsa_meta[i]);
+ 	}
+ 
++	kfree(eth->dummy_dev);
++
+ 	return 0;
+ }
+ 
+@@ -4983,9 +4985,14 @@ static int mtk_probe(struct platform_device *pdev)
+ 	/* we run 2 devices on the same DMA ring so we need a dummy device
+ 	 * for NAPI to work
+ 	 */
+-	init_dummy_netdev(&eth->dummy_dev);
+-	netif_napi_add(&eth->dummy_dev, &eth->tx_napi, mtk_napi_tx);
+-	netif_napi_add(&eth->dummy_dev, &eth->rx_napi, mtk_napi_rx);
++	eth->dummy_dev = alloc_netdev_dummy(0);
++	if (!eth->dummy_dev) {
++		err = -ENOMEM;
++		dev_err(eth->dev, "failed to allocated dummy device\n");
++		goto err_unreg_netdev;
++	}
++	netif_napi_add(eth->dummy_dev, &eth->tx_napi, mtk_napi_tx);
++	netif_napi_add(eth->dummy_dev, &eth->rx_napi, mtk_napi_rx);
+ 
+ 	platform_set_drvdata(pdev, eth);
+ 	schedule_delayed_work(&eth->reset.monitor_work,
+@@ -4993,6 +5000,8 @@ static int mtk_probe(struct platform_device *pdev)
+ 
+ 	return 0;
+ 
++err_unreg_netdev:
++	mtk_unreg_dev(eth);
+ err_deinit_ppe:
+ 	mtk_ppe_deinit(eth);
+ 	mtk_mdio_cleanup(eth);
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+index 9ae3b8a71d0e..723fc637027c 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+@@ -1242,7 +1242,7 @@ struct mtk_eth {
+ 	spinlock_t			page_lock;
+ 	spinlock_t			tx_irq_lock;
+ 	spinlock_t			rx_irq_lock;
+-	struct net_device		dummy_dev;
++	struct net_device		*dummy_dev;
+ 	struct net_device		*netdev[MTK_MAX_DEVS];
+ 	struct mtk_mac			*mac[MTK_MAX_DEVS];
+ 	int				irq[3];
 -- 
-tejun
+2.43.0
+
