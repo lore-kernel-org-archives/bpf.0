@@ -1,169 +1,176 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE90208CA
-	for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 22:54:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89F73BBF1;
+	Thu, 28 Mar 2024 23:17:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711666453; cv=none; b=IK8yTXtNE0Wd4U5na0rDbnexa8c+TmHe3xwU3LPGorE4ELKbZAesYjCRLTt3B5doJXdNNGK/5PveWcL/5+EjTSulRJxDUnPvUUuAmRgV8JaET/r0FKs4XPgfFMrscNlMZXpaFkGBz1Z83G6u/6HWDYALm5tcwifRKWo59S+ZXEo=
+	t=1711667854; cv=none; b=GXxLly7f42ZVPohQUJrkguieuROh8N+zEdKyQb56kiNhdvp8POAgArD5exAMwV6QkDULSaoYxipMDgWgU2Nfv9RheM7nQsRuoabVtkzsLZaXnBaP2tcxYAd1BngnxixHwJa6NJy47kYInW+nAh24wzgqv0dASW7JVqpd2kSebPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711666453; c=relaxed/simple;
-	bh=iyfyPI9ZMqUKkXcCqyZ30ho0nIWAaisUou6rEyfWPQM=;
+	s=arc-20240116; t=1711667854; c=relaxed/simple;
+	bh=lxs2ZFR/bExqKNMSEhSfupLSlYECG6xtGJZ2Htju2B4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Om9Qc/VSmZ90KyQsNqwEDdozTwyu5oKHVoUBQdRrkGBcSW18AYcnN0GNiJmleR9rss3xKu7x4vE9Eku9oN/YTaSYux1cUGasHZO57mqTJu1iNRecmW9YV/ezDXInOPjUs9W3NakGyyDh0s9aFDDN8xT8vz9hOBVYoUXS8M7KuQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GgsRkZsR; arc=none smtp.client-ip=209.85.215.170
+	 To:Cc:Content-Type; b=FIHMp4GUzrUUQ3yTRz/G/FMagjavFSfHSAJrrYmzV7/hTROS/LtudG66Fm/dZ0199SEms9GgsmwvQmVjkXoORw/rIdTZ5VB+sOE40K7GzykLs5AOmru4r53RlmfsmiWuCM6ZiAef1Gh6t7E7diOrBeLx+KgrekEJNREJAwu0wQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FZORLLVM; arc=none smtp.client-ip=209.85.208.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GgsRkZsR"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5d42e7ab8a9so901472a12.3
-        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 15:54:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FZORLLVM"
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2d717603aa5so586161fa.0;
+        Thu, 28 Mar 2024 16:17:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711666452; x=1712271252; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711667851; x=1712272651; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=04wGNV2FOq+2Ciiraub2vsrzgc+rQwyjpbWoqZuUAvQ=;
-        b=GgsRkZsRBQi21qDRYZtCEq8FsmuDoj24wev0QPoiCNIkYsXJBd3Tj7LbqpE+rRoedY
-         BV1YLKPOCyWsZ1M9v/WpQqajiaOcgPH3mPyFznmjr0Tledckh/HvVpoSgB5ZqxLLtUze
-         82DhuDqbp2jWWvdunLPJAO+5aZ+l7vr0yQ2uwqzDUIQqfxwsblJx2yME8oxUDSZO72Vk
-         +CLtaOKTyorWT8cB7VohzU7Iv3t1mw25Insx2yVS1ULIF5xeQoMfYTTKo5ycToDBx2IP
-         oJpKWvsZEWolgmSqSDmoUf+odTBSluLv0dYS58St4Msg5IGfYSQnuq84XcodfsJKtGp2
-         NQuQ==
+        bh=VBPtswbRJVFEjRlZATnnC5PXpnMT+l8bd9tpx27HnBM=;
+        b=FZORLLVM4zTQrqx2Nmbsi0cxFMKlY+f0aT4H8rCdE6yZSJYjqMDcdjuqe/TEn+Wo7F
+         ghBvacZZoOJOcpwzMcXvG0TG3S/0fOKIdwHFmFRxu2LYqVYBt+rMN7bjgyQnaJBxPkf9
+         h+liqXbkE9MUNcLcxMa0vOhpY7I582D/xgj+HRQALIYoSnC6YUy45xGAbxV5SB/1JeCy
+         6BMhl4d9G3np8DiZMRhYLdJ2NDZd9berzJVlhWriMAj/RaXWcZ2fqquz1dnEdRGvTgGw
+         cT79hNvmyuCk+jFeZoKG0m2pdrOzjq4LEZYArlYYR9pzXxo4ZxayLmm+RDHtfH7PcfSu
+         u3mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711666452; x=1712271252;
+        d=1e100.net; s=20230601; t=1711667851; x=1712272651;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=04wGNV2FOq+2Ciiraub2vsrzgc+rQwyjpbWoqZuUAvQ=;
-        b=Uxt8oFzp6yzknzjVHFEPq4e0/chSpwn5/xMrVm+2mA335vt8D8aqekGbD1L/4Qnmy9
-         Le636gINjvqwLd0MQtolXvEV0JdmOTJYcnmort6aHNgTn45rASJNQ4nr0twbEiOT8/hX
-         vXRNiQVQfDrZRKuLfd1lL582UppZhUSRXGObzJDA0+yMT4KjVD72aomo8O5Ydo1YL4HQ
-         9nL+1nw6yBKRg1GO1N0/4TogTNB5HL/exGdx2kaYwZP2yBw608oKlkJ92U0Iew4+vV8t
-         tK7x7nsZzRgXLLkGAewVwnlKzvKR7NiEQczqqi8UIALR8u81z6mxtY7f9eyMGTDhlRea
-         T8pQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVA4yg04B4+1OIpXpNo2v310vFYYc+yI3YZt1K298hbMETSOayIx2FeL3Ne6AbtLAoIybWSI6roxdDtHNYisvmBvKKx
-X-Gm-Message-State: AOJu0YzIW1abqts3s1etnJcsziCE41H4okmaFWvT7sG+s/Ac89AbK2Ox
-	5gKmwNGcQUW2BeSrrMNOHFJetk40aZ4guaRBjRN+YuwcsmCXOk2MreOlm1fGJ7Slc29evyeuTeM
-	UpeAXnVw1iQANM/XOZ8DPzUJS/iY=
-X-Google-Smtp-Source: AGHT+IGZYzsrGzppwi3Firmx04LqugPf5fD+3Wglmw7igbG4SjFF7Lb+/q52aksHrZiGxUiG6/G3hxwLQwPvDz6Dy1w=
-X-Received: by 2002:a05:6a20:d387:b0:1a3:3c5f:2ebd with SMTP id
- iq7-20020a056a20d38700b001a33c5f2ebdmr767919pzb.59.1711666451522; Thu, 28 Mar
- 2024 15:54:11 -0700 (PDT)
+        bh=VBPtswbRJVFEjRlZATnnC5PXpnMT+l8bd9tpx27HnBM=;
+        b=xBC3yMEy+HMKWfXGDitVEIWuIyFzdFfJiXpOKiUUO55CbpduuFFsIX6Q1nmtUIiqAa
+         yrh0Z7vpFFSJbot1mO0B24HeDaMMxLSdUgOElK38mwLLx/JvhSShIKrH6zcCEwgzCFz0
+         EjIVA8mk/ITVub1JKA1wPoflbfpkYtdZWUqpIr3wxmVRMmDBw3VASGu2r5MDfvStJP/3
+         EiZ/w40Vwv7pAb7wrcVkSCcYva05Fy1SZ7lAuezqiZdBD03BB0kiagmOIiTcri9SUOCx
+         FEgcPpaDRxaW6WU9myeJA6xhY8P4eBl++2bSBMep53snjpUDpxqH0Wn3m4khbZkdzx1Z
+         dIdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUrEhk9ZCNz2T3dkDxm800rRE2SbENK0BG54VELoFgUmeu90XQvXJYAaBWTJb0R/vKfbyGH1N+YU+X4V6FmXQZhvezuJm96cn+XHgqFU/L7f+19eWedq3rADJ3G6q2Y4iTpjdYR3e1CuDm7MUcY7d+Hu1xZxHYiBEshJBjQU/NIS33K7Hx5f3u+u2mk5hjYCHQjjZvuyu3Q0gNUpiOA+w36R7dhy7k4zS9tUlEmDs6kXHb9HgvmU72zuHkzrunOk3HnMrroQzgUNW1kPcmiBr06JnzXwNwo7keA5A==
+X-Gm-Message-State: AOJu0YzLkPKp0+yi/a53yiskBjpLMm/atVgfDkEzvBTNZVeSz9RK3D39
+	0c6gtF6WEEu20HS2BbEKxaMfXuNlIJXO6MBhMDxIvA0xoCXpUQq3YmQb+BLMhmo6KjNFzPleVX6
+	jUb/86upMXvx4sSYsD90CpFmTiPs=
+X-Google-Smtp-Source: AGHT+IG5xIH2Dr8kwrbaPKFwGkwQN2RxPioeS2J7HN42D01hRwbUDEoBKIDHKJKBLqNdT3QFt8lsl8OnqZLOHWZb5Wo=
+X-Received: by 2002:a05:651c:1692:b0:2d6:c7b5:989c with SMTP id
+ bd18-20020a05651c169200b002d6c7b5989cmr378385ljb.28.1711667850565; Thu, 28
+ Mar 2024 16:17:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240321180501.734779-1-andrii@kernel.org> <CAADnVQJqnLnv4AUvCaefP13CDcJOXM=kJpSOv33t-u-OTzb0UQ@mail.gmail.com>
- <CAEf4BzYFc1b-OAXWf4WN_vM2evZgsW7reJqo8iwKP80EXBJMKw@mail.gmail.com>
- <CAADnVQ+zT8C=rHtTbbsdoPVw-n7PPufPp0CC+jt2PUn9bB5gxw@mail.gmail.com>
- <CAEf4BzZqem6OQX=LHwz7cfvCGXmbFVHzSgD-9i6C8dfMJTMT3Q@mail.gmail.com>
- <CAADnVQLUVEWZB2WgkdCGkyh3T7ocZf1SkqWLAz6jGK+9LU_MYw@mail.gmail.com>
- <CAEf4BzZXYmDCP5WJ786UN+zBS4d9TrZM=cLQCZ9QihRjbriyUw@mail.gmail.com> <CAADnVQJKdwz0n207qV0LJeGyjbht4S=mme92RjwJfhCS4_dF2g@mail.gmail.com>
-In-Reply-To: <CAADnVQJKdwz0n207qV0LJeGyjbht4S=mme92RjwJfhCS4_dF2g@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 28 Mar 2024 15:53:58 -0700
-Message-ID: <CAEf4BzYsX__LrYpisqT2K0BpKWYoa4aXeZgcGHE7WL68Xz2djA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/3] Inline two LBR-related helpers
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
+ <20240311093526.1010158-2-dongmenglong.8@bytedance.com> <CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
+ <CALz3k9i5G5wWi+rtvHPwVLOUAXVMCiU_8QUZs87TEYgR_0wpPA@mail.gmail.com>
+ <CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail.com>
+ <CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
+ <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
+ <CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
+ <CAADnVQLHpi3J6cBJ0QBgCQ2aY6fWGnVvNGdfi3W-jmoa9d1eVQ@mail.gmail.com>
+ <CALz3k9g-U8ih=ycJPRbyU9x_9cp00fNkU3PGQ6jP0WJ+=uKmqQ@mail.gmail.com>
+ <CALz3k9jG5Jrqw=BGjt05yMkEF-1u909GbBYrV-02W0dQtm6KQQ@mail.gmail.com> <20240328111330.194dcbe5@gandalf.local.home>
+In-Reply-To: <20240328111330.194dcbe5@gandalf.local.home>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 28 Mar 2024 16:17:19 -0700
+Message-ID: <CAADnVQKsuV2OhT4rc+k=WDmVMQxbjDiC4+zNbre2Kpj1hod5xw@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add support
+ to record and check the accessed args
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Song Liu <song@kernel.org>
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	X86 ML <x86@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
+	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 27, 2024 at 2:59=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Thu, Mar 28, 2024 at 8:10=E2=80=AFAM Steven Rostedt <rostedt@goodmis.org=
+> wrote:
 >
-> On Tue, Mar 26, 2024 at 9:50=E2=80=AFAM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > Fix in the sense to adjust or add another generic
-> > PERF_SAMPLE_BRANCH_xxx value? Or you mean stop using --lbr=3Dany mode?
-> >
-> > > I suspect retsnoop quality won't suffer if ARCH_LBR_REL_JMP is disabl=
-ed.
-> > > To figure out the path to return in the code
-> > > ARCH_LBR_JCC      |
-> > > ARCH_LBR_REL_CALL |
-> > > ARCH_LBR_IND_CALL |
-> > > ARCH_LBR_RETURN
-> > >
-> > > might be good enough and there won't be a need to do
-> > > inling in odd places just to avoid tail jmp.
-> >
-> > retsnoop supports all modes perf exposes generically (see [0]), I
-> > believe I tried all of them and keep gravitating back to --lbr=3Dany as
-> > most useful, unfortunately.
+> On Thu, 28 Mar 2024 22:43:46 +0800
+> =E6=A2=A6=E9=BE=99=E8=91=A3 <dongmenglong.8@bytedance.com> wrote:
 >
-> I mean to use PERF_SAMPLE_BRANCH_ANY_CALL | PERF_SAMPLE_BRANCH_COND
-> which I suspect will exclude ARCH_LBR_REL_JMP
-> and will avoid counting normal goto-s.
-
-This would be equivalent to passing `--lbr=3Dany_call --lbr=3Dcond` to
-retsnoop. And yes, you are right that it doesn't record unconditional
-jumps, saving a few more LBR frames. The problem is that it makes it
-super hard to follow what's going on without disassembling all
-relevant functions down to assembly and following *very carefully* to
-understand the flow of logic. This is normally absolutely unnecessary
-with --lbr=3Dany (unless DWARF line info is screwed up, of course).
---lbr=3Dany allows to understand C statement-level code flow based on
-file:line information alone.
-
-So, in summary, yes `--lbr=3Dany_call --lbr=3Dcond` is a good last resort
-option if a few more LBR records are necessary. But it doesn't feel
-like something I'd recommend typical users to start with.
-
->
-> > I'm missing how we can get away from having a per-CPU buffer. LBRs on
-> > different CPU cores are completely independent and one BPF prog
-> > attachment can be simultaneously running on many CPUs.
+> > I have done a simple benchmark on creating 1000
+> > trampolines. It is slow, quite slow, which consume up to
+> > 60s. We can't do it this way.
 > >
-> > Or do you mean per-CPU allocation for each attach point?
+> > Now, I have a bad idea. How about we introduce
+> > a "dynamic trampoline"? The basic logic of it can be:
 > >
-> > We can do LBR capture before migrate_disable calls and still have
-> > correct data most of the time (hopefully), though, so yeah, it can be
-> > another improvement (but with inlining of those two BPF helpers I'm
-> > not sure we have to do this just yet).
+> > """
+> > save regs
+> > bpfs =3D trampoline_lookup_ip(ip)
+> > fentry =3D bpfs->fentries
+> > while fentry:
+> >   fentry(ctx)
+> >   fentry =3D fentry->next
+> >
+> > call origin
+> > save return value
+> >
+> > fexit =3D bpfs->fexits
+> > while fexit:
+> >   fexit(ctx)
+> >   fexit =3D fexit->next
+> >
+> > xxxxxx
+> > """
+> >
+> > And we lookup the "bpfs" by the function ip in a hash map
+> > in trampoline_lookup_ip. The type of "bpfs" is:
+> >
+> > struct bpf_array {
+> >   struct bpf_prog *fentries;
+> >  struct bpf_prog *fexits;
+> >   struct bpf_prog *modify_returns;
+> > }
+> >
+> > When we need to attach the bpf progA to function A/B/C,
+> > we only need to create the bpf_arrayA, bpf_arrayB, bpf_arrayC
+> > and add the progA to them, and insert them to the hash map
+> > "direct_call_bpfs", and attach the "dynamic trampoline" to
+> > A/B/C. If bpf_arrayA exist, just add progA to the tail of
+> > bpf_arrayA->fentries. When we need to attach progB to
+> > B/C, just add progB to bpf_arrayB->fentries and
+> > bpf_arrayB->fentries.
+> >
+> > Compared to the trampoline, extra overhead is introduced
+> > by the hash lookuping.
+> >
+> > I have not begun to code yet, and I am not sure the overhead is
+> > acceptable. Considering that we also need to do hash lookup
+> > by the function in kprobe_multi, maybe the overhead is
+> > acceptable?
 >
-> I meant 32*24 buffer per attachment.
-> Doing per-attachment per-cpu might not scale?
-> It's certainly cleaner with per-cpu though.
-> With a single per-attach buffer the assumption was that the different
-> cpus will likely take the same path towards that kprobe.
+> Sounds like you are just recreating the function management that ftrace
+> has. It also can add thousands of trampolines very quickly, because it do=
+es
+> it in batches. It takes special synchronization steps to attach to fentry=
+.
+> ftrace (and I believe multi-kprobes) updates all the attachments for each
+> step, so the synchronization needed is only done once.
+>
+> If you really want to have thousands of functions, why not just register =
+it
+> with ftrace itself. It will give you the arguments via the ftrace_regs
+> structure. Can't you just register a program as the callback?
+>
+> It will probably make your accounting much easier, and just let ftrace
+> handle the fentry logic. That's what it was made to do.
 
-This is a rather bold assumption. It might be true in a lot of cases,
-but certainly not always. Think about tracing __sys_bpf for errors.
-There could be many simultaneous bpf() syscalls in the system, some
-returning expected -ENOENT for expected map element iteration (so not
-really interesting), but some resulting in confusing failures (and
-thus "interesting"). It's even worse with some file system related
-functions.
+Absolutely agree.
+There is no point re-inventing this logic.
 
-My point is that in retsnoop I don't want to rely on these
-assumptions. I won't stop anyone trying to add this functionality in
-the kernel, but I don't see retsnoop relying on something like that.
-
-> retsnoop doesn't care which cpu it collected that stack trace from.
-> It cares about the code path and it will be there.
-
-It does, retsnoop has a bunch of filters to narrow down specific
-conditions, where process information is taken into account, among
-other things. And this filtering capabilities will just grow over
-time.
-
-> We can make the whole thing configurable.
-> bpf_link_attach would specify a buffer or per-cpu or
-> a buffer right in the bpf map array that should be used
-> to store the lbr trace.
-
-I'm pretty happy with existing functionality and don't really need new
-APIs. I'll be posting a few more patches improving performance (not
-just LBR usage) over the next few days. With those I get close enough:
-4 LBR records waste with --lbr=3Dany.
-
-Thanks for the brainstorming, internal per-CPU instruction
-implementation turned out pretty well, I'll be sending a patch set
-soon.
+Menlong,
+before you hook up into ftrace check whether
+it's going to be any different from kprobe-multi,
+since it's the same ftrace underneath.
+I suspect it will look exactly the same.
+So it sounds like multi-fentry idea will be shelved once again.
