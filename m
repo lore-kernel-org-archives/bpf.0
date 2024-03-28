@@ -1,102 +1,97 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7E98465;
-	Thu, 28 Mar 2024 01:58:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC1423773
+	for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 02:00:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711591083; cv=none; b=LIl7ic2C5yyzC8N6uqL51dW9qJtOpbny7gtMDVBlWP5aPeiev/q+uZlzS96fWxgHipwysqEsiKa1O/vcDnPCQ3rm1ZZPMIcQCO/KjWXUZ8Sx3UE/Qyh90X1BF4oAHCvw/oOcHue4xohvHdBZNq36cbiWUw49FWrviJalL88IXyA=
+	t=1711591233; cv=none; b=uuSMki83QsjLG6BmDsKgI8dAVmeGNUdJaeeVCzMkv7DkL+EQB02jXhlsx5/kUHpN2m0XJnzeBB4VkT9ZhaLCX7skP/2FgMy4OPbE5iffNSFNjAZ3jbiAKQORApRZI+Lr1JwalRK3yo1+mL8bY6RqdIVuy9kA8mTnzN6rI7c6/k0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711591083; c=relaxed/simple;
-	bh=17frHZKHa4HTS0M444Swz4V9jidjHHSAtk9DQb/zVs8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gCwsCHJYB2KLGY0CXZhBUvWEueqtUAdCpcEwgUBww1zPWCdfgvcvWl5++lbb43WzoF302jA4KDzgBrTA4gi/8T9c6CHF/FYNEdexW1PztDa7LdxuwATv/4NPDTzZ31HXX32XbTfJ3ZvTSa8qAoV5mt1tVzZM1ZyDmA6qsua7ZOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KX7zyqJg; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711591233; c=relaxed/simple;
+	bh=ztzwhAx9QyovKIbqUWmr8NLeDc7klSii1xxtKWycqNg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=b3t5KBTvSAA2IivWye4HPhvMTLFeMyTwZRMkQ49t8rxsxoSVGldZNE14QyjD+sxsyqtOzg+EIzoev+PjqcBWSz9zo7FNGvj2fj3zCC+uvRNYokRQZrVXmX4KHSDFMeC6LuNUkba2iB1HFZC0BOKtkLzS2mRH/UFi0p3FizFXHRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d6QR12Yb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KX7zyqJg"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-33ed7ba1a42so241524f8f.2;
-        Wed, 27 Mar 2024 18:58:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711591079; x=1712195879; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tosp/xHwhQFOv14TlgTnZk/pGUufTB1z88IENWTkKck=;
-        b=KX7zyqJgBoyUxD9psSlG4exqFfRjo/QdJ2GFaaq15bCl+5jHJbB/s3TwKXWfc14bqb
-         +wYMZP6+fKJZxwhKn9J4UpwgZXuc6DiPNs3G2NgHFTm455CRaiLA30rE3hmrg5GkZFI2
-         YCG6jFSyMcIOIQOydDQaD9Z5URKbbeKCXFqGxjefwGI2BUHvERHtGrm607Y/cNoB4x8W
-         0gVJP2cedfe/CkSgWprQGNa3oLulvYB9ZHm1CW0xMMNazpMeHlF3ElqhXIr7QU59PTgd
-         8jbGDlLBJxQqaumIUqrEUtgWPuC1xRAoqJemt0B+PHGx8XBNChSdzqNp+fiGr7ikpik2
-         HGiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711591079; x=1712195879;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tosp/xHwhQFOv14TlgTnZk/pGUufTB1z88IENWTkKck=;
-        b=eCunpIlnN7xz04k09abi7b5nkxNYDUAkwCH1w+qjTadSC9/SPya75aUiaTIX/694Fd
-         7BDt/rzeqs5LT/ZtkEl5ysS89WoenNCQ8XiiFGdsTREkGmeDqez3jm/d2y6WT3BBPcHn
-         Eo5gr+L4IP39k04jDFzKf/0OxrF9sX/FuOXUSnugAq9j3Tio7B7WdqsIXJJzfy3ZMjhC
-         gTJ17p2w6954n3y7U3ihBHinhowSUv+iSQJ2szx8b+1vU00e6dFK94xQWzchlT8SWNE6
-         ruNxYnFLavnGlcMa6fHKL8Vzrpd+rJY3xMEt/Id5o4rXaB8JyUIF7RJaVRtR3mdI+Ngt
-         xrFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVDyC0/Z2TvBh0wkZRp5667OAI49Pe0ToLxFAWqkSHwH7Bwr/WRUGPHmdMwo7nSYLz9C3PYV+NPmnjXxLZPw75M9LW5A3xNGwEdMVW2SlszTV/CW/OScoUNp8RqpAaTtR8P91W+Ugx2BastKtGJUwzT/5EhJANMPo6xLiAMcJyyKOdqbLWp9abHVNvty/15Zy3k+pmj5Q==
-X-Gm-Message-State: AOJu0YwrZNLtkXYXl18o1pih5tqn5zV/FdnIPAWJ4dZLAb4g/K9mUMjR
-	y14pAF9h2gBR4O8xDpwig0DNpSFg2o0GpdYzohtyhFra9jUBQODg4rNsxdymy4tU7HhqUFdI3Os
-	xNECOMak8632yo/Lz8LZjVJQUvoA=
-X-Google-Smtp-Source: AGHT+IHsz6xL8bOK7aBf8BF761yTQJSarhpeyqPNrxEeiReNWPZGeG4ZKWWYpHZ4dezNtkqzoqFjScaO3BflrBK3mSs=
-X-Received: by 2002:a5d:5486:0:b0:341:c775:68b8 with SMTP id
- h6-20020a5d5486000000b00341c77568b8mr1135611wrv.57.1711591079229; Wed, 27 Mar
- 2024 18:57:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d6QR12Yb"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5D823C43390;
+	Thu, 28 Mar 2024 02:00:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711591232;
+	bh=ztzwhAx9QyovKIbqUWmr8NLeDc7klSii1xxtKWycqNg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=d6QR12YbChSCB43huIzAP+x5QXpSmtt7sdapvWtFRYH15kA4Z9fI0Ti/o42CI8CoC
+	 o32aLpo3kL11M17sXhpwjUMhr50qmykzm3tHe6jRoRhH1AhBfwBUEjw8RECgIPBaH+
+	 JokZQjh1E/p5ZNuCF21eh9CbL9aZIqobc5eZmwWtukH32Q//jn7c2vkeOJu6Rn99ZF
+	 ktA+tv0lQCxgxckfI8XnSm1fdYP5vLIuXDNrPPn4ywdFpDZr1jlA7svNdFOSxauLOw
+	 iMW0FkxWLMYpPCXIbQprz99fsI2MF8T4ATzW+6f66nOyWvKUhUSY/juRnS8JkJemzQ
+	 tXE27s3TUs81w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4E8CAD2D0EB;
+	Thu, 28 Mar 2024 02:00:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240328125500.2582492e@canb.auug.org.au>
-In-Reply-To: <20240328125500.2582492e@canb.auug.org.au>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 27 Mar 2024 18:57:47 -0700
-Message-ID: <CAADnVQJ3S2DpCTe6m2xxjwgmUO5wLknDdV68Y5S7Lit+jZy51Q@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the bpf-next tree with the net tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, David Miller <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, bpf <bpf@vger.kernel.org>, 
-	Networking <netdev@vger.kernel.org>, Haiyue Wang <haiyue.wang@intel.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v3 0/8] bpf: Fix a couple of test failures with LTO
+ kernel
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171159123231.4663.15865277356511584592.git-patchwork-notify@kernel.org>
+Date: Thu, 28 Mar 2024 02:00:32 +0000
+References: <20240326041443.1197498-1-yonghong.song@linux.dev>
+In-Reply-To: <20240326041443.1197498-1-yonghong.song@linux.dev>
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, kernel-team@fb.com, martin.lau@kernel.org
 
-On Wed, Mar 27, 2024 at 6:55=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the bpf-next tree got a conflict in:
->
->   kernel/bpf/arena.c
->
-> between commit:
->
->   ee498a38f317 ("bpf: Clarify bpf_arena comments.")
->
-> from the net tree and commit:
->
->   45a683b2d815 ("bpf,arena: Use helper sizeof_field in struct accessors")
->
-> from the bpf-next tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+Hello:
 
-Thanks for headsup.
-We'll fix it up when bpf-next gets ffwded in a day or two.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Mon, 25 Mar 2024 21:14:43 -0700 you wrote:
+> With a LTO kernel built with clang, with one of earlier version of kernel,
+> I encountered two test failures, ksyms and kprobe_multi_bench_attach/kernel.
+> Now with latest bpf-next, only kprobe_multi_bench_attach/kernel failed.
+> But it is possible in the future ksyms selftest may fail again.
+> 
+> Both test failures are due to static variable/function renaming
+> due to cross-file inlining. For Ksyms failure, the solution is
+> to strip .llvm.<hash> suffixes for symbols in /proc/kallsyms before
+> comparing against the ksym in bpf program.
+> For kprobe_multi_bench_attach/kernel failure, the solution is
+> to either provide names in /proc/kallsyms to the kernel or
+> ignore those names who have .llvm.<hash> suffix since the kernel
+> sym name comparison is against /proc/kallsyms.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v3,1/8] selftests/bpf: Replace CHECK with ASSERT macros for ksyms test
+    https://git.kernel.org/bpf/bpf-next/c/779012842209
+  - [bpf-next,v3,2/8] libbpf: Mark libbpf_kallsyms_parse static function
+    https://git.kernel.org/bpf/bpf-next/c/2c8bc4cf4d03
+  - [bpf-next,v3,3/8] libbpf: Handle <orig_name>.llvm.<hash> symbol properly
+    https://git.kernel.org/bpf/bpf-next/c/afc6524702c5
+  - [bpf-next,v3,4/8] selftests/bpf: Refactor some functions for kprobe_multi_test
+    https://git.kernel.org/bpf/bpf-next/c/de2c50ce88ec
+  - [bpf-next,v3,5/8] selftests/bpf: Refactor trace helper func load_kallsyms_local()
+    https://git.kernel.org/bpf/bpf-next/c/8cfdd77e94e6
+  - [bpf-next,v3,6/8] selftests/bpf: Add {load,search}_kallsyms_custom_local()
+    https://git.kernel.org/bpf/bpf-next/c/3fa5b1626130
+  - [bpf-next,v3,7/8] selftests/bpf: Fix kprobe_multi_bench_attach test failure with LTO kernel
+    https://git.kernel.org/bpf/bpf-next/c/ba4a347e17d0
+  - [bpf-next,v3,8/8] selftests/bpf: Add a kprobe_multi subtest to use addrs instead of syms
+    https://git.kernel.org/bpf/bpf-next/c/aa17f462133f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
