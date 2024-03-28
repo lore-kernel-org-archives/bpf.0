@@ -1,131 +1,147 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from fout4-smtp.messagingengine.com (fout4-smtp.messagingengine.com [103.168.172.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B12B15338F
-	for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 18:58:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A124142AA1;
+	Thu, 28 Mar 2024 19:34:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711652299; cv=none; b=gwkcNsL3+Pmw9YPcjs94V6NBEFORP8OfVX6nH6AYlBfP5Dt5611moJ3eslilRXrR0D7GTTtuzhNr6e0C9FuQR1h7P3CJqvg5xrkQDa8ikTlAImmeAy7sS1C8K373WLff9zfMN/zJK+pSHjaq18Cj1wnT/frGlu30QMTsY957wzY=
+	t=1711654496; cv=none; b=aMg2EMlWa8zKD+Frctw42ObCIp/yQTMmG4455kCoMBVIJTlPjR4EaPDdE98c1mCMuV2xyvVa3pfYpEsv2BdaSLMBQOGzgYFpunzeuOla0dRoQKvqb0ZcrSwBGMQDpJiOnJIBicjpg3GBjNEmJjkl7AuSgYwvRFxJ9kAs+E8wPiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711652299; c=relaxed/simple;
-	bh=6KBACc7iQdR8vmsr+fH4D088ePeS62u9Vkt0wcV4qKY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eMULCMcnamRqYUopcImyRvA7byRuyvsP3A+ry6H2du15ruHwz3SQSsdT/1TYnBYNpMyHhJ+dM++9fIHQke7v1zd8kWLLPyvWnHl6ij/dK0bNvm6Q8Xgdm3TBlAy5mwRh8apJlQjbwRKZ0c4zh5aOAyhW7pAuvpZirS6CD6YAJdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oIhhoICj; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1711654496; c=relaxed/simple;
+	bh=fn90D6+lhR67Cb3LtrdExtrCKXPFb2f9sLVIpRQ5rwg=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=BenJ4MazQRgeP9Xsb63NH3HBuIlAP5+dCCamBq6GZ+pNbv3GCpTtXZVYIQAv+N3G4Pk7AsQtAkydtKNNkKp8RVP1xoRU7Z8QtT2Pm3VP4iUtvdmbar2Zumt7UnZmd7uiI2xF2tVdJhFpjUPQSt7Wlnv/ThfYtNWwzGF9cnqQctc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com; spf=pass smtp.mailfrom=fastmail.com; dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b=RprfkRrb; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=AtPqO5pq; arc=none smtp.client-ip=103.168.172.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oIhhoICj"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1711652294;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=4HX7L7UaGJ8M04rqspSMOrtTI+UTNg6jMnHN6nUQDu0=;
-	b=oIhhoICjh9RCVHry/CnXYMPNFgc22RzUVzeuVLWtB1sP370TH9jkTcl0Zx9fo3He6iNcZu
-	ur6CIcQ/Zz9TE4FpKrRKLQXKrMjQP2eFesyUO+U6hnY1YSkNJvsRIQRHMa9r07Ktw38vxs
-	ASqQT+q7TDXQo4Y81hSZwWIK7N0RSyc=
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	kernel-team@meta.com,
-	syzbot+603bcd9b0bf1d94dbb9b@syzkaller.appspotmail.com,
-	syzbot+eb02dc7f03dce0ef39f3@syzkaller.appspotmail.com,
-	syzbot+b4e65ca24fd4d0c734c3@syzkaller.appspotmail.com,
-	syzbot+d2b113dc9fea5e1d2848@syzkaller.appspotmail.com,
-	syzbot+1a3cf6f08d68868f9db3@syzkaller.appspotmail.com,
-	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next] bpf: Mark bpf prog stack with kmsan_unposion_memory in interpreter mode
-Date: Thu, 28 Mar 2024 11:58:01 -0700
-Message-ID: <20240328185801.1843078-1-martin.lau@linux.dev>
+	dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b="RprfkRrb";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="AtPqO5pq"
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 8E0EF1380073;
+	Thu, 28 Mar 2024 15:34:53 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute3.internal (MEProxy); Thu, 28 Mar 2024 15:34:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
+	cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1711654493; x=1711740893; bh=1wroJ6gxxD
+	eLsMepRfJkcEGfQ+xzSMYnsCgYqPB17lg=; b=RprfkRrb4lqIie2zx95VsX0uSA
+	tXwkUzQVzseArejgb0Q6q7S5h9svGYJnU53jnHsRy9tqgBqDtiF6dFxH27RRRt43
+	jPpiNBtRTwMqTo5DIRgDRUf3wa0FJKcNAPFQE0vEelg2FjmcCubQsKuz+Nzc2e0g
+	IDT/axyESPyX/cmZ2BzkRU+aB8e1NqF1/xskFOjYRxpkVXw3X+d33BXn2bLJoYPq
+	p7ChI2r9jB89zQakTo9Y4/ucsCB8AnKVHqylPzmI76y9oLLNh2Eq3o3IwafWEtrB
+	aFZBnQ+5Umhx9gTeaTld9LinH35/YgDR7BnA0ed2Gyp9XQ3Zg5qW8JTb7PnA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1711654493; x=1711740893; bh=1wroJ6gxxDeLsMepRfJkcEGfQ+xz
+	SMYnsCgYqPB17lg=; b=AtPqO5pq3O71xO6KoCsopStmRibJz8M3+hmXJq5sFCe3
+	Xlh9ZzmjugGZIENWlwEccYsEu0mNvSyTy1iYUGEr8AQDO32cFOycDyCZwElzUuZq
+	uXOWaEfFCN698bH/Fc0+r2X/C4SwDYpdmY60Xpf40RCID7ga9ojGvojsxuVo2eeD
+	R9xbwVqA6FthsOHJTCSH9s4I9PxdB9oUNJc8gwuICzErvHfookupC1vh2nzqs0h4
+	HwThBwL2w/ljn8noyJXzYId4A/JigT9uqVTsMWpYFk7JoSqPfPct5XHnmJe9zRf0
+	b6GjIHcVz6NtDbrxCbHCLt6Gj6SA2A0/lcS+R0II/g==
+X-ME-Sender: <xms:XMYFZvXOjUEGtnpA8XzCxMC43uUDZSFlPUSxpiYOj_TooUWPx4Zrjw>
+    <xme:XMYFZnlYI9my23lE7rICO0ngkE2vU6YgDghotGjd_7NikrG3dbDBBiJCW1y637Mxi
+    qC73eHWm92gpIiN1g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudduledguddviecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfu
+    thgvfhgrnhcuqfdktfgvrghrfdcuoehsohhrvggrrhesfhgrshhtmhgrihhlrdgtohhmqe
+    enucggtffrrghtthgvrhhnpeejueehgedtueetgefhheejjeeigffhieefjeehuddvueeg
+    tdfhheevgfeggfektdenucffohhmrghinhepihhnfhhrrgguvggrugdrohhrghenucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsohhrvggrrhes
+    fhgrshhtmhgrihhlrdgtohhm
+X-ME-Proxy: <xmx:XMYFZra5dar7f5APnXX6SzlwCPDUbMVtWUev97Y14pSvGW9Q_1Mkng>
+    <xmx:XMYFZqUCpaU983LCXMujiM8VyMCRwC94XpA5B8UC60vlOVgb1hDw_g>
+    <xmx:XMYFZpkiAooXC84y8E5rVCnVKubZo9Zgm_7AYNp7HD_LtTih72O_1g>
+    <xmx:XMYFZnfN8MG3jzc1XVwjlUsEE2dC0zp16KyDmRqNhILN9E842ZpULw>
+    <xmx:XcYFZpEDIvVHwGqtCqHR7VUu9aptWV4uJNyoXcuVhraZ-ZzKfsfDEw>
+Feedback-ID: i84414492:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 6D5391700093; Thu, 28 Mar 2024 15:34:52 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-333-gbfea15422e-fm-20240327.001-gbfea1542
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <3ed9fe94-2610-41eb-8a00-a9f37fcf2b1a@app.fastmail.com>
+In-Reply-To: <20240328124916.293173-3-pulehui@huaweicloud.com>
+References: <20240328124916.293173-1-pulehui@huaweicloud.com>
+ <20240328124916.293173-3-pulehui@huaweicloud.com>
+Date: Thu, 28 Mar 2024 15:34:31 -0400
+From: "Stefan O'Rear" <sorear@fastmail.com>
+To: "Pu Lehui" <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
+ linux-riscv@lists.infradead.org, netdev@vger.kernel.org
+Cc: =?UTF-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>,
+ "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yhs@fb.com>, "John Fastabend" <john.fastabend@gmail.com>,
+ "KP Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@google.com>,
+ "Hao Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Mykola Lysenko" <mykolal@fb.com>, "Manu Bretelle" <chantr4@gmail.com>,
+ "Pu Lehui" <pulehui@huawei.com>
+Subject: Re: [PATCH bpf-next 2/5] riscv, bpf: Relax restrictions on Zbb instructions
+Content-Type: text/plain
 
-From: Martin KaFai Lau <martin.lau@kernel.org>
+On Thu, Mar 28, 2024, at 8:49 AM, Pu Lehui wrote:
+> From: Pu Lehui <pulehui@huawei.com>
+>
+> This patch relaxes the restrictions on the Zbb instructions. The hardware
+> is capable of recognizing the Zbb instructions independently, eliminating
+> the need for reliance on kernel compile configurations.
 
-syzbot reported uninit memory usages during map_{lookup,delete}_elem.
+This doesn't make sense to me.
 
-==========
-BUG: KMSAN: uninit-value in __dev_map_lookup_elem kernel/bpf/devmap.c:441 [inline]
-BUG: KMSAN: uninit-value in dev_map_lookup_elem+0xf3/0x170 kernel/bpf/devmap.c:796
-__dev_map_lookup_elem kernel/bpf/devmap.c:441 [inline]
-dev_map_lookup_elem+0xf3/0x170 kernel/bpf/devmap.c:796
-____bpf_map_lookup_elem kernel/bpf/helpers.c:42 [inline]
-bpf_map_lookup_elem+0x5c/0x80 kernel/bpf/helpers.c:38
-___bpf_prog_run+0x13fe/0xe0f0 kernel/bpf/core.c:1997
-__bpf_prog_run256+0xb5/0xe0 kernel/bpf/core.c:2237
-==========
+RISCV_ISA_ZBB is defined as:
 
-The reproducer should be in the interpreter mode.
+           Adds support to dynamically detect the presence of the ZBB
+           extension (basic bit manipulation) and enable its usage.
 
-The C reproducer is trying to run the following bpf prog:
+In other words, RISCV_ISA_ZBB=n should disable everything that attempts
+to detect Zbb at runtime. It is mostly relevant for code size reduction,
+which is relevant for BPF since if RISCV_ISA_ZBB=n all rvzbb_enabled()
+checks can be constant-folded.
 
-    0: (18) r0 = 0x0
-    2: (18) r1 = map[id:49]
-    4: (b7) r8 = 16777216
-    5: (7b) *(u64 *)(r10 -8) = r8
-    6: (bf) r2 = r10
-    7: (07) r2 += -229
-            ^^^^^^^^^^
+If BPF needs to become an exception (why?), this should be mentioned in
+Kconfig.
 
-    8: (b7) r3 = 8
-    9: (b7) r4 = 0
-   10: (85) call dev_map_lookup_elem#1543472
-   11: (95) exit
+-s
 
-It is due to the "void *key" (r2) passed to the helper. bpf allows uninit
-stack memory access for bpf prog with the right privileges. This patch
-uses kmsan_unpoison_memory() to mark the stack as initialized.
-
-This should address different syzbot reports on the uninit "void *key"
-argument during map_{lookup,delete}_elem.
-
-Reported-by: syzbot+603bcd9b0bf1d94dbb9b@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/bpf/000000000000f9ce6d061494e694@google.com/
-Reported-by: syzbot+eb02dc7f03dce0ef39f3@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/bpf/000000000000a5c69c06147c2238@google.com/
-Reported-by: syzbot+b4e65ca24fd4d0c734c3@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/bpf/000000000000ac56fb06143b6cfa@google.com/
-Reported-by: syzbot+d2b113dc9fea5e1d2848@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/bpf/0000000000000d69b206142d1ff7@google.com/
-Reported-by: syzbot+1a3cf6f08d68868f9db3@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/bpf/0000000000006f876b061478e878@google.com/
-Tested-by: syzbot+1a3cf6f08d68868f9db3@syzkaller.appspotmail.com
-Suggested-by: Yonghong Song <yonghong.song@linux.dev>
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
----
- kernel/bpf/core.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 5aacb1d3c4cc..ab400cdd7d7a 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2218,6 +2218,7 @@ static unsigned int PROG_NAME(stack_size)(const void *ctx, const struct bpf_insn
- 	u64 stack[stack_size / sizeof(u64)]; \
- 	u64 regs[MAX_BPF_EXT_REG] = {}; \
- \
-+	kmsan_unpoison_memory(stack, sizeof(stack)); \
- 	FP = (u64) (unsigned long) &stack[ARRAY_SIZE(stack)]; \
- 	ARG1 = (u64) (unsigned long) ctx; \
- 	return ___bpf_prog_run(regs, insn); \
-@@ -2231,6 +2232,7 @@ static u64 PROG_NAME_ARGS(stack_size)(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5, \
- 	u64 stack[stack_size / sizeof(u64)]; \
- 	u64 regs[MAX_BPF_EXT_REG]; \
- \
-+	kmsan_unpoison_memory(stack, sizeof(stack)); \
- 	FP = (u64) (unsigned long) &stack[ARRAY_SIZE(stack)]; \
- 	BPF_R1 = r1; \
- 	BPF_R2 = r2; \
--- 
-2.43.0
-
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> ---
+>  arch/riscv/net/bpf_jit.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+> index 5fc374ed98ea..bcf109b88df5 100644
+> --- a/arch/riscv/net/bpf_jit.h
+> +++ b/arch/riscv/net/bpf_jit.h
+> @@ -20,7 +20,7 @@ static inline bool rvc_enabled(void)
+> 
+>  static inline bool rvzbb_enabled(void)
+>  {
+> -	return IS_ENABLED(CONFIG_RISCV_ISA_ZBB) && 
+> riscv_has_extension_likely(RISCV_ISA_EXT_ZBB);
+> +	return riscv_has_extension_likely(RISCV_ISA_EXT_ZBB);
+>  }
+> 
+>  enum {
+> -- 
+> 2.34.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
