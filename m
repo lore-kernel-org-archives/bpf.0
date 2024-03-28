@@ -1,211 +1,203 @@
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F6D67D081
-	for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 12:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8089D405FF;
+	Thu, 28 Mar 2024 13:34:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711630278; cv=none; b=hNeZKw1hpi3luNDcX1i16jTTGhB3py1bMofJ2pV0TU5ve0dNg6aKQW5IY8Hy9TZF4sUT0Lr1p1Nw/nvRMocMi5qWRWHmeg3bMX1GbqGAg+/FaykByORorxTiz+F29sefe3heE+JshaqR+6jktAgzGW42gXrKbvLYPYAP3gy7wn4=
+	t=1711632854; cv=none; b=ozOP/i682DLl5YVI43aIXYna/qI5c9XC/F3GXWRvDFDsGLTZD0jz6NhDz3BFUQjS+HjiiF5EOblRHX13zoin9zIKF84vAKjQvO9+FDEQTjTnVaCZaBbloBIJcBDN22SssSeAS2zfJsDMi1K2SJssd+yByNFo2yKbdzSwrMXdDBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711630278; c=relaxed/simple;
-	bh=izYN5Fka+442b0SI0O1anwz7wF5N3skaqgGrc9Y3kiA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AXmtXLck4fRuJe8wdncV+sq4AJe1GZK4RzwLrcsmbX99AYhaavG7WsqXTUN0kvKGY2trZv3gpWkU+HmIhGDaB0HuDNcq51OgQydNtWMdVzxeiUVZ2DlhWTTTu70Bkwcy20cxlCBi2V24Hwipk/Cqike04i+dpsKyWGy2OJ4qZGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V53Lc385kz4f3mHZ
-	for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 20:51:04 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 99B3F1A0172
-	for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 20:51:12 +0800 (CST)
-Received: from [10.67.109.184] (unknown [10.67.109.184])
-	by APP4 (Coremail) with SMTP id gCh0CgDnOm29ZwVmwX7vIQ--.18322S2;
-	Thu, 28 Mar 2024 20:51:10 +0800 (CST)
-Message-ID: <3236d084-fbc3-4e25-a2e8-ccc6cffe1437@huaweicloud.com>
-Date: Thu, 28 Mar 2024 20:51:09 +0800
+	s=arc-20240116; t=1711632854; c=relaxed/simple;
+	bh=MTl+MqWhM6jFgml8aciVqT+UCwUjsKjEyPmh+mIzli8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SdRZRUKyMQSKpR4Jc/8UVXKI+hPZsBUpd/SZfOaFxrn2sx5bksJBfTPGDNFVWx73soHJ9LHlyt9t5pwr2KGvWqQH5Aq2TRRQt3jqXHO7bXqUWLVfbyTu82BpTNS2tr27VVtXjzxNcHxNeNP0NI9x4Gz2Oh76aySS6AST7/xwUO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oRSajtaA; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oRSajtaA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4713C43390;
+	Thu, 28 Mar 2024 13:34:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711632854;
+	bh=MTl+MqWhM6jFgml8aciVqT+UCwUjsKjEyPmh+mIzli8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=oRSajtaAg2292U7sKWoJVPr5I6l9Ou3Ab4TTn3OJQP2jHoXgjivlAv6NRgY1OmdlX
+	 6YwdaUicc5iopAXC/FejF8GMKHJw1qljOavV/tCZFDKdgOR9TG/gDpRylqYPDvvhBJ
+	 0CSdyU6ek/wcS1dwtLUVwmqks8sM9cPv8XVHw4vpvsAQh5YB3BGilHHluXVNKe9i3y
+	 3+iyc/KLSqI5fyTvUtjuJwMDwT5Num+iIHq8HpXaB2TU71bg8CcMhlBRj9XVYCTYVp
+	 BC9C//xuNHqCzb0IYeh1A9bU4eZLxPbUa7l6XQJmmu6AtCTJ01ChDGmdZxVlYbyT23
+	 SUJX4L5be6hsQ==
+From: Andrii Nakryiko <andrii@kernel.org>
+To: x86@kernel.org,
+	peterz@infradead.org,
+	mingo@redhat.com,
+	tglx@linutronix.de
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	jolsa@kernel.org,
+	song@kernel.org,
+	kernel-team@meta.com,
+	Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH v2] perf/x86/amd: support capturing LBR from software events
+Date: Thu, 28 Mar 2024 06:33:59 -0700
+Message-ID: <20240328133359.731818-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Enable cross platform testing
- for local vmtest
-Content-Language: en-US
-To: bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Pu Lehui <pulehui@huawei.com>
-References: <20240326155736.3480081-1-pulehui@huaweicloud.com>
-From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <20240326155736.3480081-1-pulehui@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:gCh0CgDnOm29ZwVmwX7vIQ--.18322S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXFyrXF17Xr4xtrW5Xr4xJFb_yoWrKw48pw
-	48Zr4aka4rWF1Sgrn7Za109FWfJr4vvrW7CryUX345Zw17tr97Ar92yFWjqrnxW3s5ur43
-	ZasagF90kw18Z3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkCb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-	7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-	Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIccxYrVCFb41lIxkGc2Ij
-	64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr
-	1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r4j6F4U
-	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUgCztUU
-	UUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+Content-Transfer-Encoding: 8bit
 
-Gather this to riscv64 patchset [0] for better regression:
+[0] added ability to capture LBR (Last Branch Records) on Intel CPUs
+from inside BPF program at pretty much any arbitrary point. This is
+extremely useful capability that allows to figure out otherwise
+hard-to-debug problems, because LBR is now available based on some
+application-defined conditions, not just hardware-supported events.
 
-Link: 
-https://lore.kernel.org/bpf/20240328124916.293173-1-pulehui@huaweicloud.com/ 
-[0]
+retsnoop ([1]) is one such tool that takes a huge advantage of this
+functionality and has proved to be an extremely useful tool in
+practice.
 
-On 2024/3/26 23:57, Pu Lehui wrote:
-> From: Pu Lehui <pulehui@huawei.com>
-> 
-> The variable $ARCH in the current script is platform semantics, not
-> kernel semantics. Rename it to $PLATFORM so that we can easily use $ARCH
-> in cross-compilation. For now, Using PLATFORM= and CROSS_COMPILE=
-> options will enable cross platform testing:
-> 
->    PLATFORM=<platform> CROSS_COMPILE=<toolchain> vmtest.sh -- ./test_progs
-> 
-> Meanwhile, some descriptions have been corrected.
-> 
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> ---
-> v2:
-> - Specifies the -cpu for the ARM64.
-> - Completely renamed ARCH to PLATFORM.
-> 
->   tools/testing/selftests/bpf/vmtest.sh | 40 +++++++++++++++++++--------
->   1 file changed, 28 insertions(+), 12 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
-> index 65d14f3bbe30..825149a905e5 100755
-> --- a/tools/testing/selftests/bpf/vmtest.sh
-> +++ b/tools/testing/selftests/bpf/vmtest.sh
-> @@ -4,28 +4,34 @@
->   set -u
->   set -e
->   
-> -# This script currently only works for x86_64 and s390x, as
-> -# it is based on the VM image used by the BPF CI, which is
-> +# This script currently only works for the following platforms,
-> +# as it is based on the VM image used by the BPF CI, which is
->   # available only for these architectures.
-> -ARCH="$(uname -m)"
-> -case "${ARCH}" in
-> +PLATFORM="${PLATFORM:-$(uname -m)}"
-> +case "${PLATFORM}" in
->   s390x)
->   	QEMU_BINARY=qemu-system-s390x
->   	QEMU_CONSOLE="ttyS1"
-> -	QEMU_FLAGS=(-smp 2)
-> +	HOST_FLAGS=(-smp 2 -enable-kvm)
-> +	CROSS_FLAGS=(-smp 2)
->   	BZIMAGE="arch/s390/boot/vmlinux"
-> +	ARCH="s390"
->   	;;
->   x86_64)
->   	QEMU_BINARY=qemu-system-x86_64
->   	QEMU_CONSOLE="ttyS0,115200"
-> -	QEMU_FLAGS=(-cpu host -smp 8)
-> +	HOST_FLAGS=(-cpu host -enable-kvm -smp 8)
-> +	CROSS_FLAGS=(-smp 8)
->   	BZIMAGE="arch/x86/boot/bzImage"
-> +	ARCH="x86"
->   	;;
->   aarch64)
->   	QEMU_BINARY=qemu-system-aarch64
->   	QEMU_CONSOLE="ttyAMA0,115200"
-> -	QEMU_FLAGS=(-M virt,gic-version=3 -cpu host -smp 8)
-> +	HOST_FLAGS=(-M virt,gic-version=3 -cpu host -enable-kvm -smp 8)
-> +	CROSS_FLAGS=(-M virt,gic-version=3 -cpu cortex-a76 -smp 8)
->   	BZIMAGE="arch/arm64/boot/Image"
-> +	ARCH="arm64"
->   	;;
->   *)
->   	echo "Unsupported architecture"
-> @@ -38,7 +44,7 @@ ROOTFS_IMAGE="root.img"
->   OUTPUT_DIR="$HOME/.bpf_selftests"
->   KCONFIG_REL_PATHS=("tools/testing/selftests/bpf/config"
->   	"tools/testing/selftests/bpf/config.vm"
-> -	"tools/testing/selftests/bpf/config.${ARCH}")
-> +	"tools/testing/selftests/bpf/config.${PLATFORM}")
->   INDEX_URL="https://raw.githubusercontent.com/libbpf/ci/master/INDEX"
->   NUM_COMPILE_JOBS="$(nproc)"
->   LOG_FILE_BASE="$(date +"bpf_selftests.%Y-%m-%d_%H-%M-%S")"
-> @@ -58,6 +64,10 @@ tools/testing/selftests/bpf. e.g:
->   If no command is specified and a debug shell (-s) is not requested,
->   "${DEFAULT_COMMAND}" will be run by default.
->   
-> +Using PLATFORM= and CROSS_COMPILE= options will enable cross platform testing:
-> +
-> +  PLATFORM=<platform> CROSS_COMPILE=<toolchain> $0 -- ./test_progs -t test_lsm
-> +
->   If you build your kernel using KBUILD_OUTPUT= or O= options, these
->   can be passed as environment variables to the script:
->   
-> @@ -109,7 +119,7 @@ newest_rootfs_version()
->   {
->   	{
->   	for file in "${!URLS[@]}"; do
-> -		if [[ $file =~ ^"${ARCH}"/libbpf-vmtest-rootfs-(.*)\.tar\.zst$ ]]; then
-> +		if [[ $file =~ ^"${PLATFORM}"/libbpf-vmtest-rootfs-(.*)\.tar\.zst$ ]]; then
->   			echo "${BASH_REMATCH[1]}"
->   		fi
->   	done
-> @@ -126,7 +136,7 @@ download_rootfs()
->   		exit 1
->   	fi
->   
-> -	download "${ARCH}/libbpf-vmtest-rootfs-$rootfsversion.tar.zst" |
-> +	download "${PLATFORM}/libbpf-vmtest-rootfs-$rootfsversion.tar.zst" |
->   		zstd -d | sudo tar -C "$dir" -x
->   }
->   
-> @@ -244,12 +254,17 @@ EOF
->   		exit 1
->   	fi
->   
-> +	if [[ "${CROSS_COMPILE}" != "" ]]; then
-> +		QEMU_FLAGS=("${CROSS_FLAGS[@]}")
-> +	else
-> +		QEMU_FLAGS=("${HOST_FLAGS[@]}")
-> +	fi
-> +
->   	${QEMU_BINARY} \
->   		-nodefaults \
->   		-display none \
->   		-serial mon:stdio \
->   		"${QEMU_FLAGS[@]}" \
-> -		-enable-kvm \
->   		-m 4G \
->   		-drive file="${rootfs_img}",format=raw,index=1,media=disk,if=virtio,cache=none \
->   		-kernel "${kernel_bzimage}" \
-> @@ -384,7 +399,8 @@ main()
->   	fi
->   
->   	local kconfig_file="${OUTPUT_DIR}/latest.config"
-> -	local make_command="make -j ${NUM_COMPILE_JOBS} KCONFIG_CONFIG=${kconfig_file}"
-> +	local make_command="make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} \
-> +			    -j ${NUM_COMPILE_JOBS} KCONFIG_CONFIG=${kconfig_file}"
->   
->   	# Figure out where the kernel is being built.
->   	# O takes precedence over KBUILD_OUTPUT.
+Now, AMD Zen4 CPUs got support for similar LBR functionality, but
+necessary wiring inside the kernel is not yet setup. This patch seeks to
+rectify this and follows a similar approach to the original patch [0]
+for Intel CPUs.
+
+Given LBR can be set up to capture any indirect jumps, it's critical to
+minimize indirect jumps on the way to requesting LBR from BPF program,
+so we split amd_pmu_lbr_disable_all() into a wrapper with some generic
+conditions vs always-inlined __amd_pmu_lbr_disable() called directly
+from BPF subsystem (through perf_snapshot_branch_stack static call).
+
+Now that it's possible to capture LBR on AMD CPU from BPF at arbitrary
+point, there is no reason to artificially limit this feature to sampling
+events. So corresponding check is removed. AFAIU, there is no
+correctness implications of doing this (and it was possible to bypass
+this check by just setting perf_event's sample_period to 1 anyways, so
+it doesn't guard all that much).
+
+This was tested on AMD Bergamo CPU and worked well when utilized from
+the aforementioned retsnoop tool.
+
+  [0] https://lore.kernel.org/bpf/20210910183352.3151445-2-songliubraving@fb.com/
+  [1] https://github.com/anakryiko/retsnoop
+
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ arch/x86/events/amd/core.c   | 29 ++++++++++++++++++++++++++++-
+ arch/x86/events/amd/lbr.c    | 11 +----------
+ arch/x86/events/perf_event.h | 11 +++++++++++
+ 3 files changed, 40 insertions(+), 11 deletions(-)
+
+diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+index aec16e581f5b..88f6d0701342 100644
+--- a/arch/x86/events/amd/core.c
++++ b/arch/x86/events/amd/core.c
+@@ -618,7 +618,7 @@ static void amd_pmu_cpu_dead(int cpu)
+ 	}
+ }
+ 
+-static inline void amd_pmu_set_global_ctl(u64 ctl)
++static __always_inline void amd_pmu_set_global_ctl(u64 ctl)
+ {
+ 	wrmsrl(MSR_AMD64_PERF_CNTR_GLOBAL_CTL, ctl);
+ }
+@@ -878,6 +878,29 @@ static int amd_pmu_handle_irq(struct pt_regs *regs)
+ 	return amd_pmu_adjust_nmi_window(handled);
+ }
+ 
++static int amd_pmu_v2_snapshot_branch_stack(struct perf_branch_entry *entries, unsigned int cnt)
++{
++	struct cpu_hw_events *cpuc;
++	unsigned long flags;
++
++	/* must not have branches... */
++	local_irq_save(flags);
++	amd_pmu_core_disable_all();
++	__amd_pmu_lbr_disable();
++	/*            ... until here */
++
++	cpuc = this_cpu_ptr(&cpu_hw_events);
++
++	amd_pmu_lbr_read();
++	cnt = min_t(unsigned int, cnt, x86_pmu.lbr_nr);
++	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * cnt);
++
++	amd_pmu_v2_enable_all(0);
++	local_irq_restore(flags);
++
++	return cnt;
++}
++
+ static int amd_pmu_v2_handle_irq(struct pt_regs *regs)
+ {
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+@@ -1414,6 +1437,10 @@ static int __init amd_core_pmu_init(void)
+ 		static_call_update(amd_pmu_branch_reset, amd_pmu_lbr_reset);
+ 		static_call_update(amd_pmu_branch_add, amd_pmu_lbr_add);
+ 		static_call_update(amd_pmu_branch_del, amd_pmu_lbr_del);
++
++		/* only support branch_stack snapshot on perfmon v2 */
++		if (x86_pmu.handle_irq == amd_pmu_v2_handle_irq)
++			static_call_update(perf_snapshot_branch_stack, amd_pmu_v2_snapshot_branch_stack);
+ 	} else if (!amd_brs_init()) {
+ 		/*
+ 		 * BRS requires special event constraints and flushing on ctxsw.
+diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
+index 4a1e600314d5..75920f895d67 100644
+--- a/arch/x86/events/amd/lbr.c
++++ b/arch/x86/events/amd/lbr.c
+@@ -310,10 +310,6 @@ int amd_pmu_lbr_hw_config(struct perf_event *event)
+ {
+ 	int ret = 0;
+ 
+-	/* LBR is not recommended in counting mode */
+-	if (!is_sampling_event(event))
+-		return -EINVAL;
+-
+ 	ret = amd_pmu_lbr_setup_filter(event);
+ 	if (!ret)
+ 		event->attach_state |= PERF_ATTACH_SCHED_CB;
+@@ -412,16 +408,11 @@ void amd_pmu_lbr_enable_all(void)
+ void amd_pmu_lbr_disable_all(void)
+ {
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+-	u64 dbg_ctl, dbg_extn_cfg;
+ 
+ 	if (!cpuc->lbr_users || !x86_pmu.lbr_nr)
+ 		return;
+ 
+-	rdmsrl(MSR_AMD_DBG_EXTN_CFG, dbg_extn_cfg);
+-	rdmsrl(MSR_IA32_DEBUGCTLMSR, dbg_ctl);
+-
+-	wrmsrl(MSR_AMD_DBG_EXTN_CFG, dbg_extn_cfg & ~DBG_EXTN_CFG_LBRV2EN);
+-	wrmsrl(MSR_IA32_DEBUGCTLMSR, dbg_ctl & ~DEBUGCTLMSR_FREEZE_LBRS_ON_PMI);
++	__amd_pmu_lbr_disable();
+ }
+ 
+ __init int amd_pmu_lbr_init(void)
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index fb56518356ec..4dddf0a7e81e 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -1329,6 +1329,17 @@ void amd_pmu_lbr_enable_all(void);
+ void amd_pmu_lbr_disable_all(void);
+ int amd_pmu_lbr_hw_config(struct perf_event *event);
+ 
++static __always_inline void __amd_pmu_lbr_disable(void)
++{
++	u64 dbg_ctl, dbg_extn_cfg;
++
++	rdmsrl(MSR_AMD_DBG_EXTN_CFG, dbg_extn_cfg);
++	rdmsrl(MSR_IA32_DEBUGCTLMSR, dbg_ctl);
++
++	wrmsrl(MSR_AMD_DBG_EXTN_CFG, dbg_extn_cfg & ~DBG_EXTN_CFG_LBRV2EN);
++	wrmsrl(MSR_IA32_DEBUGCTLMSR, dbg_ctl & ~DEBUGCTLMSR_FREEZE_LBRS_ON_PMI);
++}
++
+ #ifdef CONFIG_PERF_EVENTS_AMD_BRS
+ 
+ #define AMD_FAM19H_BRS_EVENT 0xc4 /* RETIRED_TAKEN_BRANCH_INSTRUCTIONS */
+-- 
+2.43.0
 
