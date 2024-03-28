@@ -1,110 +1,415 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40AD22E419;
-	Thu, 28 Mar 2024 17:58:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 277B012F38B;
+	Thu, 28 Mar 2024 18:09:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711648731; cv=none; b=p3U/576+mjN6esatUMq6i6AIzOQ79+kq1aWnKWF99qOuhNpDxVPthFmAyUnP+BCqxMZJ2r46D/YdHjirS2qlpugF70IXI/Y2Emg4DWjb454a/cdErGzKTnmZ2aUq7h8qqIFVnlCJFtQ4so/OBM/GbE8w6fUjBDyPdV3zC7qzH4Q=
+	t=1711649370; cv=none; b=jkPVXoHsvJPFjBCqzapNBdsQbiuviOHw8YB32fBnwu2pPqChGk9hY/YmzycrPyBBc5/rXw239jbNXbzKbGsntJHIIRmJI91I3sZAUyk9F9efNwMnOOVAcHQB4skjFpkfVWgH4KRNjV57MNYYoqxT8Z+JawyjN0nEdP0hOxF1pFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711648731; c=relaxed/simple;
-	bh=eoW/Ol+Fztd1pjIFLPvuQ9Q/3JpA1yu2NX4LAFYFqoY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AivFopBkAaiscBtQKzFysWhak/9B2Tm/AzO3fbHPcGmNOnX57uY888xXf3CA3bDdAvswtUuOm3lW+A7znhh9aAs10PljAJD8DAZ1lxgeE59mSW9lRkkbnyu1ahtKjei8mm0+RKD946GSpxQAPhUZyM7w2rVj4ZKfVrA1TxPUVhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cbH0VmiL; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711649370; c=relaxed/simple;
+	bh=8Oz5LlefiSyj0IqSXmONWSOYVH7o3oZ8gdsoXmI5o/E=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=NRYzkiH0vKbwaRcaUmWpnck6zBm4n3sXqVTjCYtEN9V7NE2+TTC/94dwff17LNgtQlOT26ry/jGPillN+mX3SJqe5CqiCRGr4bcFPtiz1ujDF1WjncSbeKBSTS8zOWqQybWyCQhVzKrVoDDXaJYFF+y+sDm1w21jypcXXy9MaCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EgWYH9HJ; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cbH0VmiL"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-6ead4093f85so1219499b3a.3;
-        Thu, 28 Mar 2024 10:58:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711648729; x=1712253529; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UTZjV+7S2zxd1Kd89MiyQnHfAcCtg3m3Sh+mN+X+VE4=;
-        b=cbH0VmiLQgKd6eGr0Ib/dvR9ScAd3mNzQEY50dN/F5Z6sTv6qjZME5s2yjJnKJBdyv
-         xXeGtTmd49rRR4+k5CQQalJnuC6eLSEu9sw1E/+i0GlbrUIYAOUbAdWEmqCjZsPoyl7+
-         Gh85J53btlYHnXcke29bFI0dmaafkmm2rCmfNlSU4NzIhByNbQbC+FvgEpNJ0Y5j4WjU
-         xMHKJiPyv1O97sR3D5czMH8UC4HUCAso3gwqij6zKpnD1DhThEhIZUVwPt58mv2slHHK
-         H+cSV6IYQwjT219q9+CXGmp/99yRiElJOSciSAjtQJwzmsIahed0pAZYUJSV3s4LmCcJ
-         EcDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711648729; x=1712253529;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UTZjV+7S2zxd1Kd89MiyQnHfAcCtg3m3Sh+mN+X+VE4=;
-        b=SUAyfc/n1T1v7gM+EpHrTPXm1+66T/OODCna3XTorSJHSow7/oHeGPQgZP9KhCgk35
-         6M6iHBpxVE1/XL6YCJGG4e+Ho4lp+5itDzdgaPgv9McWy4l+Ev/wmYNt0Mi+0o+2vaKm
-         /CcX7LFpAPVcGaPaEQ+uzLUHH4HXdHuMggfNHDpSkgfDNu3nncUgckp+asg02jV1gZVf
-         TzInCC21Yjwkf3Cp3adt7aJfcMi+A8p/4VgZGuojtBimUubvNNqd3ClyY/Njpt0S1DOV
-         6kRBoEleVv1P4ftPHL+nl9GKUFLtdUZ5b8soLirEPxLFnjdi6j8p87ffNaXPDS3/3swj
-         UIyg==
-X-Forwarded-Encrypted: i=1; AJvYcCU5K48kIiuJhN4ncih6qIZL7k+U9aOHg5K3r1yZJNB9MSWch6sIN6QAkPNNpobjxdqE40Ku9fPqV88OLGNKIhYGa//cKif2yTHXERltE6keMiTlx+2tmWvWEgpra/4ZQOqaLgX/wssX/DHcPgjOy7/Yl4qyCSG665V0KMF6phU8PYT7jipZTa8Rf7mYjGDIY93fe4TQo9ltBSh8Aw==
-X-Gm-Message-State: AOJu0YxzA1/EtY2JrFfMMu+ask4cs+fsH0LQJrld7/vINPFn2FD28VSO
-	j8OS/QW59D5R9jGx4Z+nj9TzV7cjiIJ2kg0nPFZ8sciKa9PrvWt+
-X-Google-Smtp-Source: AGHT+IH09lCUtZaPss1VyFYl40VeAXb9We1fTAAJJrYddWEHb5BMLEhDDxsPchyUikJpWi2lOU8z8Q==
-X-Received: by 2002:a05:6a00:a82:b0:6ea:d10d:c96d with SMTP id b2-20020a056a000a8200b006ead10dc96dmr4950pfl.19.1711648729400;
-        Thu, 28 Mar 2024 10:58:49 -0700 (PDT)
-Received: from localhost (dhcp-141-239-158-86.hawaiiantel.net. [141.239.158.86])
-        by smtp.gmail.com with ESMTPSA id k24-20020aa78218000000b006eadd0f4803sm1282084pfi.206.2024.03.28.10.58.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Mar 2024 10:58:49 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date: Thu, 28 Mar 2024 07:58:47 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Djalal Harouni <tixxdz@gmail.com>, Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	"open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [RFC PATCH bpf-next 0/3] bpf: freeze a task cgroup from bpf
-Message-ID: <ZgWv19ySvoACAll4@slm.duckdns.org>
-References: <20240327-ccb56fc7a6e80136db80876c@djalal>
- <20240327225334.58474-1-tixxdz@gmail.com>
- <ZgWnPZtwBYfHEFzf@slm.duckdns.org>
- <CAADnVQK6BUGZFCATD8Ejcfob5sKK-b8HUD_4o8Q6s9FM72L4iQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EgWYH9HJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711649368; x=1743185368;
+  h=date:from:to:cc:subject:message-id;
+  bh=8Oz5LlefiSyj0IqSXmONWSOYVH7o3oZ8gdsoXmI5o/E=;
+  b=EgWYH9HJCJ3Y+ivP2wUMew2+3JvlRYAqjFwfo9GLwJ20srevHvOJRtvY
+   zcRp4uUnRQl7FZNWpizZu2Z41+RqNtL5N6OhU0Ag75OK1TQwoVVUXAI/j
+   9lZLE73JeMcdpe3MteY/HgPkA6O58cSkNDfUpSRubiNJ6gISCOYtYcVxR
+   w6BV6mUnvUeitKZoTRfv281X8OvmfVkqMgAbCOh52GC2tD3qIC+U+TKRj
+   vl/Sgy5E/GHsmPpq2NPZrIqQHSlmf5gTRamxCRPD2VVuR8/sSN0uxTtWr
+   IEeUaQNTjmytuP6AsgrBesD5bjWXoepw0NjQEsuBMer+FcCYjvC67E5Uc
+   g==;
+X-CSE-ConnectionGUID: cds04U+lQUeU0Q8zyizlxg==
+X-CSE-MsgGUID: U2+f1xFESWK5tqJaroLG5A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11027"; a="24270744"
+X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
+   d="scan'208";a="24270744"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 11:09:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
+   d="scan'208";a="21380588"
+Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 28 Mar 2024 11:09:18 -0700
+Received: from kbuild by be39aa325d23 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rpuBf-0002PQ-38;
+	Thu, 28 Mar 2024 18:09:15 +0000
+Date: Fri, 29 Mar 2024 02:09:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linux Memory Management List <linux-mm@kvack.org>,
+ amd-gfx@lists.freedesktop.org, bpf@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-omap@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ nouveau@lists.freedesktop.org, spice-devel@lists.freedesktop.org,
+ virtualization@lists.linux.dev
+Subject: [linux-next:master] BUILD REGRESSION
+ a6bd6c9333397f5a0e2667d4d82fef8c970108f2
+Message-ID: <202403290256.clPzQnUm-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQK6BUGZFCATD8Ejcfob5sKK-b8HUD_4o8Q6s9FM72L4iQ@mail.gmail.com>
 
-Hello, Alexei.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: a6bd6c9333397f5a0e2667d4d82fef8c970108f2  Add linux-next specific files for 20240328
 
-On Thu, Mar 28, 2024 at 10:32:24AM -0700, Alexei Starovoitov wrote:
-> > It bothers me a bit that it's adding a dedicated interface for something
-> > which already has a defined userspace interface. Would it be better to have
-> > kfunc wrappers for kernel_read() and kernel_write()?
-> 
-> How would that look ?
-> prog cannot and shouldn't open a file.
+Error/Warning: (recently discovered and may have been fixed)
 
-Oh, I didn't know. Why is that?
+ERROR: modpost: "memcpy" [crypto/chacha20poly1305.ko] undefined!
+ERROR: modpost: "memcpy" [fs/efs/efs.ko] undefined!
+ERROR: modpost: "memcpy" [mm/z3fold.ko] undefined!
+drivers/gpu/drm/lima/lima_drv.c:387:13: error: cast to smaller integer type 'enum lima_gpu_id' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+drivers/gpu/drm/panthor/panthor_sched.c:2048:6: error: variable 'csg_mod_mask' set but not used [-Werror,-Wunused-but-set-variable]
+drivers/gpu/drm/pl111/pl111_versatile.c:488:24: error: cast to smaller integer type 'enum versatile_clcd' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+drivers/gpu/drm/qxl/qxl_cmd.c:424:6: error: variable 'count' set but not used [-Werror,-Wunused-but-set-variable]
+drivers/gpu/drm/qxl/qxl_ioctl.c:148:14: error: variable 'num_relocs' set but not used [-Werror,-Wunused-but-set-variable]
+include/asm-generic/io.h:547:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+mm/mempolicy.c:2223: warning: expecting prototype for alloc_pages_mpol_noprof(). Prototype was for alloc_pages_mpol() instead
+mm/mempolicy.c:2298: warning: expecting prototype for vma_alloc_folio_noprof(). Prototype was for vma_alloc_folio() instead
+mm/mempolicy.c:2326: warning: expecting prototype for alloc_pages_noprof(). Prototype was for alloc_pages() instead
+mm/page_alloc.c:4857: warning: expecting prototype for alloc_pages_exact_noprof(). Prototype was for alloc_pages_exact() instead
+mm/page_alloc.c:4882: warning: expecting prototype for alloc_pages_exact_nid_noprof(). Prototype was for alloc_pages_exact_nid() instead
+mm/page_alloc.c:6348: warning: expecting prototype for alloc_contig_range_noprof(). Prototype was for alloc_contig_range() instead
+mm/page_alloc.c:6535: warning: expecting prototype for alloc_contig_pages_noprof(). Prototype was for alloc_contig_pages() instead
 
-> The seq_file would be passed/pinned by user space?
+Unverified Error/Warning (likely false positive, please contact us if interested):
 
-Would it work if it's just "open this file, write this and then close it"?
+{standard input}:2055: Error: unknown pseudo-op: `.cfi_restore_st'
 
-Thanks.
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-randconfig-r015-20220508
+|   `-- ERROR:memcpy-mm-z3fold.ko-undefined
+|-- alpha-randconfig-r034-20220715
+|   `-- ERROR:memcpy-fs-efs-efs.ko-undefined
+|-- alpha-randconfig-r062-20240328
+|   `-- ERROR:memcpy-crypto-chacha20poly1305.ko-undefined
+|-- parisc-allmodconfig
+|   `-- drivers-gpu-drm-nouveau-nvif-object.c:error:memcpy-accessing-or-more-bytes-at-offsets-and-overlaps-bytes-at-offset
+|-- parisc-allyesconfig
+|   `-- drivers-gpu-drm-nouveau-nvif-object.c:error:memcpy-accessing-or-more-bytes-at-offsets-and-overlaps-bytes-at-offset
+|-- sh-allmodconfig
+|   `-- drivers-pwm-pwm-stm32.c:error:implicit-declaration-of-function-devm_clk_rate_exclusive_get
+|-- sh-allyesconfig
+|   `-- drivers-pwm-pwm-stm32.c:error:implicit-declaration-of-function-devm_clk_rate_exclusive_get
+|-- sh-buildonly-randconfig-r003-20221218
+|   `-- standard-input:Error:unknown-pseudo-op:cfi_restore_st
+|-- sparc-allmodconfig
+|   |-- mm-mempolicy.c:warning:expecting-prototype-for-alloc_pages_mpol_noprof().-Prototype-was-for-alloc_pages_mpol()-instead
+|   |-- mm-mempolicy.c:warning:expecting-prototype-for-alloc_pages_noprof().-Prototype-was-for-alloc_pages()-instead
+|   `-- mm-mempolicy.c:warning:expecting-prototype-for-vma_alloc_folio_noprof().-Prototype-was-for-vma_alloc_folio()-instead
+|-- sparc-randconfig-001-20240328
+|   |-- (.head.text):relocation-truncated-to-fit:R_SPARC_WDISP22-against-init.text
+|   `-- (.init.text):relocation-truncated-to-fit:R_SPARC_WDISP22-against-symbol-leon_smp_cpu_startup-defined-in-.text-section-in-arch-sparc-kernel-trampoline_32.o
+|-- um-randconfig-002-20240328
+|   `-- sound-soc-codecs-rk3308_codec.c:warning:rk3308_codec_of_match-defined-but-not-used
+|-- x86_64-randconfig-073-20240328
+|   |-- mm-mempolicy.c:warning:expecting-prototype-for-alloc_pages_mpol_noprof().-Prototype-was-for-alloc_pages_mpol()-instead
+|   |-- mm-mempolicy.c:warning:expecting-prototype-for-alloc_pages_noprof().-Prototype-was-for-alloc_pages()-instead
+|   `-- mm-mempolicy.c:warning:expecting-prototype-for-vma_alloc_folio_noprof().-Prototype-was-for-vma_alloc_folio()-instead
+|-- x86_64-randconfig-121-20240328
+|   |-- mm-mempolicy.c:warning:expecting-prototype-for-alloc_pages_mpol_noprof().-Prototype-was-for-alloc_pages_mpol()-instead
+|   |-- mm-mempolicy.c:warning:expecting-prototype-for-alloc_pages_noprof().-Prototype-was-for-alloc_pages()-instead
+|   `-- mm-mempolicy.c:warning:expecting-prototype-for-vma_alloc_folio_noprof().-Prototype-was-for-vma_alloc_folio()-instead
+|-- x86_64-randconfig-123-20240328
+|   |-- mm-mempolicy.c:warning:expecting-prototype-for-alloc_pages_mpol_noprof().-Prototype-was-for-alloc_pages_mpol()-instead
+|   |-- mm-mempolicy.c:warning:expecting-prototype-for-alloc_pages_noprof().-Prototype-was-for-alloc_pages()-instead
+|   `-- mm-mempolicy.c:warning:expecting-prototype-for-vma_alloc_folio_noprof().-Prototype-was-for-vma_alloc_folio()-instead
+`-- x86_64-randconfig-r071-20240327
+    |-- mm-page_alloc.c:warning:expecting-prototype-for-alloc_contig_pages_noprof().-Prototype-was-for-alloc_contig_pages()-instead
+    |-- mm-page_alloc.c:warning:expecting-prototype-for-alloc_contig_range_noprof().-Prototype-was-for-alloc_contig_range()-instead
+    |-- mm-page_alloc.c:warning:expecting-prototype-for-alloc_pages_exact_nid_noprof().-Prototype-was-for-alloc_pages_exact_nid()-instead
+    `-- mm-page_alloc.c:warning:expecting-prototype-for-alloc_pages_exact_noprof().-Prototype-was-for-alloc_pages_exact()-instead
+clang_recent_errors
+|-- arm-defconfig
+|   `-- arch-arm-mach-omap2-prm33xx.c:warning:expecting-prototype-for-am33xx_prm_global_warm_sw_reset().-Prototype-was-for-am33xx_prm_global_sw_reset()-instead
+|-- arm-randconfig-r051-20240328
+|   `-- drivers-firmware-arm_scmi-raw_mode.c:WARNING:scmi_dbg_raw_mode_reset_fops:write()-has-stream-semantic-safe-to-change-nonseekable_open-stream_open.
+|-- arm64-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-amd_asic_type-and-enum-amd_chip_flags-)-Werror-Wenum-enum-conversion
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_ras.c:error:arithmetic-between-different-enumeration-types-(-enum-amdgpu_ras_block-and-enum-amdgpu_ras_mca_block-)-Werror-Wenum-enum-conversion
+|   |-- drivers-gpu-drm-lima-lima_drv.c:error:cast-to-smaller-integer-type-enum-lima_gpu_id-from-const-void-Werror-Wvoid-pointer-to-enum-cast
+|   |-- drivers-gpu-drm-panthor-panthor_sched.c:error:variable-csg_mod_mask-set-but-not-used-Werror-Wunused-but-set-variable
+|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
+|   |-- drivers-gpu-drm-qxl-qxl_cmd.c:error:variable-count-set-but-not-used-Werror-Wunused-but-set-variable
+|   |-- drivers-gpu-drm-qxl-qxl_ioctl.c:error:variable-num_relocs-set-but-not-used-Werror-Wunused-but-set-variable
+|   |-- drivers-gpu-drm-radeon-radeon_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-radeon_family-and-enum-radeon_chip_flags-)-Werror-Wenum-enum-conversion
+|   |-- drivers-gpu-drm-renesas-rcar-du-rcar_cmm.c:error:unused-function-rcar_cmm_read-Werror-Wunused-function
+|   |-- kernel-bpf-bpf_struct_ops.c:warning:bitwise-operation-between-different-enumeration-types-(-enum-bpf_type_flag-and-enum-bpf_reg_type-)
+|   |-- mm-mempolicy.c:warning:expecting-prototype-for-alloc_pages_mpol_noprof().-Prototype-was-for-alloc_pages_mpol()-instead
+|   |-- mm-mempolicy.c:warning:expecting-prototype-for-alloc_pages_noprof().-Prototype-was-for-alloc_pages()-instead
+|   `-- mm-mempolicy.c:warning:expecting-prototype-for-vma_alloc_folio_noprof().-Prototype-was-for-vma_alloc_folio()-instead
+|-- hexagon-allmodconfig
+|   `-- include-asm-generic-io.h:error:performing-pointer-arithmetic-on-a-null-pointer-has-undefined-behavior-Werror-Wnull-pointer-arithmetic
+|-- hexagon-allyesconfig
+|   `-- include-asm-generic-io.h:error:performing-pointer-arithmetic-on-a-null-pointer-has-undefined-behavior-Werror-Wnull-pointer-arithmetic
+|-- i386-randconfig-141-20240328
+|   `-- drivers-usb-dwc2-hcd_ddma.c-dwc2_cmpl_host_isoc_dma_desc()-warn:variable-dereferenced-before-check-qtd-urb-(see-line-)
+|-- powerpc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-amd_asic_type-and-enum-amd_chip_flags-)-Werror-Wenum-enum-conversion
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_ras.c:error:arithmetic-between-different-enumeration-types-(-enum-amdgpu_ras_block-and-enum-amdgpu_ras_mca_block-)-Werror-Wenum-enum-conversion
+|   |-- drivers-gpu-drm-lima-lima_drv.c:error:cast-to-smaller-integer-type-enum-lima_gpu_id-from-const-void-Werror-Wvoid-pointer-to-enum-cast
+|   |-- drivers-gpu-drm-nouveau-nvkm-subdev-bios-shadowof.c:error:cast-from-void-(-)(const-void-)-to-void-(-)(void-)-converts-to-incompatible-function-type-Werror-Wcast-function-type-strict
+|   |-- drivers-gpu-drm-panthor-panthor_sched.c:error:variable-csg_mod_mask-set-but-not-used-Werror-Wunused-but-set-variable
+|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
+|   |-- drivers-gpu-drm-qxl-qxl_cmd.c:error:variable-count-set-but-not-used-Werror-Wunused-but-set-variable
+|   |-- drivers-gpu-drm-qxl-qxl_ioctl.c:error:variable-num_relocs-set-but-not-used-Werror-Wunused-but-set-variable
+|   |-- drivers-gpu-drm-radeon-radeon_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-radeon_family-and-enum-radeon_chip_flags-)-Werror-Wenum-enum-conversion
+|   `-- kernel-bpf-bpf_struct_ops.c:warning:bitwise-operation-between-different-enumeration-types-(-enum-bpf_type_flag-and-enum-bpf_reg_type-)
+|-- powerpc-randconfig-r113-20240328
+|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-bios-shadowof.c:error:cast-from-void-(-)(const-void-)-to-void-(-)(void-)-converts-to-incompatible-function-type-Werror-Wcast-function-type-strict
+|-- riscv-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-amd_asic_type-and-enum-amd_chip_flags-)-Werror-Wenum-enum-conversion
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_ras.c:error:arithmetic-between-different-enumeration-types-(-enum-amdgpu_ras_block-and-enum-amdgpu_ras_mca_block-)-Werror-Wenum-enum-conversion
+|   |-- drivers-gpu-drm-lima-lima_drv.c:error:cast-to-smaller-integer-type-enum-lima_gpu_id-from-const-void-Werror-Wvoid-pointer-to-enum-cast
+|   |-- drivers-gpu-drm-panthor-panthor_sched.c:error:variable-csg_mod_mask-set-but-not-used-Werror-Wunused-but-set-variable
+|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
+|   |-- drivers-gpu-drm-qxl-qxl_cmd.c:error:variable-count-set-but-not-used-Werror-Wunused-but-set-variable
+|   |-- drivers-gpu-drm-qxl-qxl_ioctl.c:error:variable-num_relocs-set-but-not-used-Werror-Wunused-but-set-variable
+|   |-- drivers-gpu-drm-radeon-radeon_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-radeon_family-and-enum-radeon_chip_flags-)-Werror-Wenum-enum-conversion
+|   `-- kernel-bpf-bpf_struct_ops.c:warning:bitwise-operation-between-different-enumeration-types-(-enum-bpf_type_flag-and-enum-bpf_reg_type-)
+|-- riscv-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-amd_asic_type-and-enum-amd_chip_flags-)-Werror-Wenum-enum-conversion
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_ras.c:error:arithmetic-between-different-enumeration-types-(-enum-amdgpu_ras_block-and-enum-amdgpu_ras_mca_block-)-Werror-Wenum-enum-conversion
+|   |-- drivers-gpu-drm-lima-lima_drv.c:error:cast-to-smaller-integer-type-enum-lima_gpu_id-from-const-void-Werror-Wvoid-pointer-to-enum-cast
+|   |-- drivers-gpu-drm-panthor-panthor_sched.c:error:variable-csg_mod_mask-set-but-not-used-Werror-Wunused-but-set-variable
+|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
+|   |-- drivers-gpu-drm-qxl-qxl_cmd.c:error:variable-count-set-but-not-used-Werror-Wunused-but-set-variable
+|   |-- drivers-gpu-drm-qxl-qxl_ioctl.c:error:variable-num_relocs-set-but-not-used-Werror-Wunused-but-set-variable
+|   |-- drivers-gpu-drm-radeon-radeon_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-radeon_family-and-enum-radeon_chip_flags-)-Werror-Wenum-enum-conversion
+|   `-- kernel-bpf-bpf_struct_ops.c:warning:bitwise-operation-between-different-enumeration-types-(-enum-bpf_type_flag-and-enum-bpf_reg_type-)
+|-- s390-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-amd_asic_type-and-enum-amd_chip_flags-)-Werror-Wenum-enum-conversion
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_ras.c:error:arithmetic-between-different-enumeration-types-(-enum-amdgpu_ras_block-and-enum-amdgpu_ras_mca_block-)-Werror-Wenum-enum-conversion
+|   |-- drivers-gpu-drm-lima-lima_drv.c:error:cast-to-smaller-integer-type-enum-lima_gpu_id-from-const-void-Werror-Wvoid-pointer-to-enum-cast
+|   |-- drivers-gpu-drm-panthor-panthor_sched.c:error:variable-csg_mod_mask-set-but-not-used-Werror-Wunused-but-set-variable
+|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
+|   |-- drivers-gpu-drm-qxl-qxl_cmd.c:error:variable-count-set-but-not-used-Werror-Wunused-but-set-variable
+|   |-- drivers-gpu-drm-qxl-qxl_ioctl.c:error:variable-num_relocs-set-but-not-used-Werror-Wunused-but-set-variable
+|   |-- drivers-gpu-drm-radeon-radeon_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-radeon_family-and-enum-radeon_chip_flags-)-Werror-Wenum-enum-conversion
+|   |-- include-asm-generic-io.h:error:performing-pointer-arithmetic-on-a-null-pointer-has-undefined-behavior-Werror-Wnull-pointer-arithmetic
+|   `-- kernel-bpf-bpf_struct_ops.c:warning:bitwise-operation-between-different-enumeration-types-(-enum-bpf_type_flag-and-enum-bpf_reg_type-)
+|-- s390-defconfig
+|   `-- kernel-bpf-bpf_struct_ops.c:warning:bitwise-operation-between-different-enumeration-types-(-enum-bpf_type_flag-and-enum-bpf_reg_type-)
+|-- x86_64-allmodconfig
+|   |-- drivers-gpu-drm-lima-lima_drv.c:error:cast-to-smaller-integer-type-enum-lima_gpu_id-from-const-void-Werror-Wvoid-pointer-to-enum-cast
+|   |-- drivers-gpu-drm-panthor-panthor_sched.c:error:variable-csg_mod_mask-set-but-not-used-Werror-Wunused-but-set-variable
+|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
+|   |-- drivers-gpu-drm-qxl-qxl_cmd.c:error:variable-count-set-but-not-used-Werror-Wunused-but-set-variable
+|   `-- drivers-gpu-drm-qxl-qxl_ioctl.c:error:variable-num_relocs-set-but-not-used-Werror-Wunused-but-set-variable
+|-- x86_64-allyesconfig
+|   |-- drivers-gpu-drm-lima-lima_drv.c:error:cast-to-smaller-integer-type-enum-lima_gpu_id-from-const-void-Werror-Wvoid-pointer-to-enum-cast
+|   |-- drivers-gpu-drm-panthor-panthor_sched.c:error:variable-csg_mod_mask-set-but-not-used-Werror-Wunused-but-set-variable
+|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
+|   |-- drivers-gpu-drm-qxl-qxl_cmd.c:error:variable-count-set-but-not-used-Werror-Wunused-but-set-variable
+|   `-- drivers-gpu-drm-qxl-qxl_ioctl.c:error:variable-num_relocs-set-but-not-used-Werror-Wunused-but-set-variable
+`-- x86_64-randconfig-072-20240328
+    |-- mm-mempolicy.c:warning:expecting-prototype-for-alloc_pages_mpol_noprof().-Prototype-was-for-alloc_pages_mpol()-instead
+    |-- mm-mempolicy.c:warning:expecting-prototype-for-alloc_pages_noprof().-Prototype-was-for-alloc_pages()-instead
+    `-- mm-mempolicy.c:warning:expecting-prototype-for-vma_alloc_folio_noprof().-Prototype-was-for-vma_alloc_folio()-instead
+
+elapsed time: 724m
+
+configs tested: 179
+configs skipped: 3
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                     haps_hs_smp_defconfig   gcc  
+arc                   randconfig-001-20240328   gcc  
+arc                   randconfig-002-20240328   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                          ixp4xx_defconfig   gcc  
+arm                          moxart_defconfig   gcc  
+arm                       multi_v4t_defconfig   clang
+arm                   randconfig-001-20240328   gcc  
+arm                   randconfig-002-20240328   gcc  
+arm                   randconfig-003-20240328   gcc  
+arm                   randconfig-004-20240328   gcc  
+arm                         s5pv210_defconfig   gcc  
+arm                           sama5_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240328   gcc  
+arm64                 randconfig-002-20240328   gcc  
+arm64                 randconfig-003-20240328   gcc  
+arm64                 randconfig-004-20240328   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240328   gcc  
+csky                  randconfig-002-20240328   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240328   clang
+hexagon               randconfig-002-20240328   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240328   gcc  
+i386         buildonly-randconfig-002-20240328   gcc  
+i386         buildonly-randconfig-003-20240328   clang
+i386         buildonly-randconfig-004-20240328   gcc  
+i386         buildonly-randconfig-005-20240328   gcc  
+i386         buildonly-randconfig-006-20240328   gcc  
+i386                                defconfig   clang
+i386                  randconfig-001-20240328   clang
+i386                  randconfig-002-20240328   clang
+i386                  randconfig-003-20240328   clang
+i386                  randconfig-004-20240328   clang
+i386                  randconfig-005-20240328   gcc  
+i386                  randconfig-006-20240328   gcc  
+i386                  randconfig-011-20240328   clang
+i386                  randconfig-012-20240328   clang
+i386                  randconfig-013-20240328   clang
+i386                  randconfig-014-20240328   clang
+i386                  randconfig-015-20240328   clang
+i386                  randconfig-016-20240328   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240328   gcc  
+loongarch             randconfig-002-20240328   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                         amcore_defconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                          ath25_defconfig   clang
+mips                           gcw0_defconfig   clang
+mips                           ip22_defconfig   gcc  
+mips                           ip32_defconfig   clang
+mips                     loongson1c_defconfig   gcc  
+mips                           rs90_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240328   gcc  
+nios2                 randconfig-002-20240328   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240328   gcc  
+parisc                randconfig-002-20240328   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc               randconfig-001-20240328   clang
+powerpc               randconfig-002-20240328   clang
+powerpc               randconfig-003-20240328   clang
+powerpc                  storcenter_defconfig   gcc  
+powerpc64             randconfig-001-20240328   clang
+powerpc64             randconfig-002-20240328   gcc  
+powerpc64             randconfig-003-20240328   gcc  
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240328   gcc  
+riscv                 randconfig-002-20240328   gcc  
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240328   clang
+s390                  randconfig-002-20240328   clang
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                        dreamcast_defconfig   gcc  
+sh                    randconfig-001-20240328   gcc  
+sh                    randconfig-002-20240328   gcc  
+sh                          urquell_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240328   gcc  
+sparc64               randconfig-002-20240328   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240328   gcc  
+um                    randconfig-002-20240328   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240328   gcc  
+x86_64       buildonly-randconfig-002-20240328   clang
+x86_64       buildonly-randconfig-003-20240328   gcc  
+x86_64       buildonly-randconfig-004-20240328   gcc  
+x86_64       buildonly-randconfig-005-20240328   gcc  
+x86_64       buildonly-randconfig-006-20240328   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240328   clang
+x86_64                randconfig-002-20240328   gcc  
+x86_64                randconfig-003-20240328   clang
+x86_64                randconfig-004-20240328   gcc  
+x86_64                randconfig-005-20240328   clang
+x86_64                randconfig-006-20240328   clang
+x86_64                randconfig-011-20240328   clang
+x86_64                randconfig-012-20240328   clang
+x86_64                randconfig-013-20240328   gcc  
+x86_64                randconfig-014-20240328   gcc  
+x86_64                randconfig-015-20240328   clang
+x86_64                randconfig-016-20240328   clang
+x86_64                randconfig-071-20240328   gcc  
+x86_64                randconfig-072-20240328   clang
+x86_64                randconfig-073-20240328   gcc  
+x86_64                randconfig-074-20240328   gcc  
+x86_64                randconfig-075-20240328   gcc  
+x86_64                randconfig-076-20240328   clang
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+xtensa                randconfig-001-20240328   gcc  
+xtensa                randconfig-002-20240328   gcc  
 
 -- 
-tejun
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
