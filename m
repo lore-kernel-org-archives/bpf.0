@@ -1,131 +1,163 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BD039FC5;
-	Thu, 28 Mar 2024 13:35:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40ED739FC5;
+	Thu, 28 Mar 2024 13:40:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711632912; cv=none; b=F3uBZB2Dy8TcB+e7Hit9PlId/2VFkN1oj+6UDfeQChLO4tRPIe+O1bbRSRdPOMtzwDDVrcT7sOt8ON9+B5O7ArUbqe3sWdtcHUaMHo7HWS/c42oUzoNwWXkIq/CyYrYVv1/Pdn/cLqwFDJLXZXjYTc3VUwxruaLTk+WhZT91DHA=
+	t=1711633243; cv=none; b=Qe/CxG35pRmglu3wDyCVbNpzFKklU5p3/ocWKSCU3d6NjSVW4VqeRb79kx/zyP2iMbiTIZgNLWu9ckf+ow1MzY0KgqauruvYnnEtpbP8JUSgBH/ETfOaGMRmAbfvF3mHNsyqxm1qJiRbQvHaSqeGkwPG2fn9UEiVgAzl2f0sD+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711632912; c=relaxed/simple;
-	bh=gPlyhI5KaHAlebKciw6gQDR4Gt5cdCPS7Ok+oAgfY7M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ALuyNLVytqrKp6pbUJKV3l56gu+bGQiIsdUHJwmEV+ThbSKZ/k3XXbg8/GgsubQIXw0fOkLvIOmLCx8aNWIfmnGwzfqwS7CaNr8Nb8TXWCGE1V6/3SDsMeTuvOc8cUhaikUMT/H8DHTP19ARqiKMrpzI0XLalYmA9QL78v/3+jo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kn8+648q; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kn8+648q"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-29c14800a7fso724219a91.2;
-        Thu, 28 Mar 2024 06:35:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711632910; x=1712237710; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s7gWMquWMEP5WUZVZfuRWZzoKAl90pc70ak+JLNTWME=;
-        b=kn8+648qNy5CJ9Yb/AxC78upcKaqIClepIQGPzoCFenQWagSHD8r2Uu+sQBVYcpEmA
-         ChJO5eZLrVWlDt/s67oNpkudb6ZO3FMu/BG4Py74Mr3/b5JCTkHznevB3Kt0IFA2HoU3
-         +LXpNhMCGVkCPUDIkyFqRmTLz1/vRvhIRzGR8gYRD+6TF5Dqp8MJ5eqk9929ayXytDaw
-         ntaxnOXM1asWWMmVApPBIBxtKBnuz4ivnk1sTPyZ1Xu+WgiCZUzpkt2+2iekR4Q+n5hs
-         SxRrE2jNJQvQ/5nIAZBUmsrR+zeoa6Jhq8nJEdhTS98B+2m+PJMZPSnmfXf3neZA0BOz
-         VLDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711632910; x=1712237710;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s7gWMquWMEP5WUZVZfuRWZzoKAl90pc70ak+JLNTWME=;
-        b=AJ2SI8RLVtYxHh22BDMubLCV+V0GsQQvRvCGxSEegv3X4jbtn86knIQ869wDCZVXAG
-         ZfvetsJzdKmrpGICoPESHWWCiPtD16Ug/RDRYJk498q5HdIHmplz0DYSkBiGDd4wKCvL
-         JvahnCPysM2J/I4FZCl8LUMBfXOQyp+fXb/f/R7/vLvmVbbx2PxLLTIbU7O/a03z+V16
-         KuU3CQaljHz8vICyMRo7o9jGjZfPf02U6SH7f+anLXj3LHqAFix9enZGfJHiVxJHnPHw
-         brAkiQTztmGMs6b2qDhdfsJZB/eBTPjQtF9FaENTnXwDAmoUvl0snagIogwlwRf8FXcS
-         fjzw==
-X-Forwarded-Encrypted: i=1; AJvYcCWUxrZHh2KTZ4DTDgCBzw6uJOx+JT43izhhctr6Dbl1yX7FUVrdwVhdvvkSohK6WQx3F820zzz/+Hf2lz2zoA766V2n1Dk/CDrHBiGTVUYH4w+nFM9mMAzDVBB81w9pMw9R
-X-Gm-Message-State: AOJu0YwX5TOGy7946d3vv7yZeYJw+UPSkL7FZI/6FGLAHdzidUMVsKlX
-	T5+g66fPsqBcGxEiXfaFk67x9RDvUtojhQ8hEQLm0oq0NF4bkZE3HbNaFvST2GYofYwbON7QKgX
-	eCySHovJV+aUpemq2LTiUpuZu3DI=
-X-Google-Smtp-Source: AGHT+IHp6ph7RmGK2HoK5ixxWEfUD8LTfTMfPXktCyofWyZcfhnme0K/1L41evxrtPMR3kwDYQzoGVom44XATQStoec=
-X-Received: by 2002:a17:90a:4a09:b0:29f:eeae:e6bf with SMTP id
- e9-20020a17090a4a0900b0029feeaee6bfmr2603996pjh.38.1711632910131; Thu, 28 Mar
- 2024 06:35:10 -0700 (PDT)
+	s=arc-20240116; t=1711633243; c=relaxed/simple;
+	bh=y/oraJ5CGRMf0aDMagJKBOG+7nPO1Z4eZNfOqBzfZ8w=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GlLbzqMjfKbRNaIdHAKZ5D9M1yQagQjOIJwDOXW73kOJGrtfcI0SRnJrxR6eKywCI4jaV9iKYNfSUOYssDUlGk1po/US95/LWxMH3ob3hA0Cx0erptXHYP2sPT0lHw/KJokGgmxoa7WRYiFV3SR7ve5viO2NV8t3AVDIYBnaShk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4V54Ng4jTvz1R88n;
+	Thu, 28 Mar 2024 21:37:55 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
+	by mail.maildlp.com (Postfix) with ESMTPS id 83CC11402CA;
+	Thu, 28 Mar 2024 21:40:36 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Thu, 28 Mar 2024 21:40:36 +0800
+From: Yunsheng Lin <linyunsheng@huawei.com>
+To: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Yunsheng Lin
+	<linyunsheng@huawei.com>, Alexander Duyck <alexander.duyck@gmail.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Alexei Starovoitov
+	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<bpf@vger.kernel.org>
+Subject: [PATCH RFC 00/10] First try to replace page_frag with page_frag_cache
+Date: Thu, 28 Mar 2024 21:38:29 +0800
+Message-ID: <20240328133839.13620-1-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240319224206.1612000-1-andrii@kernel.org> <ZgVSxPJ4Yi/UPgjb@gmail.com>
-In-Reply-To: <ZgVSxPJ4Yi/UPgjb@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 28 Mar 2024 06:34:57 -0700
-Message-ID: <CAEf4BzZkn2atLmN35tviXBu1EggRRg3Yqh2pHAnd6xe7V5xkUA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] perf, amd: support capturing LBR from software events
-To: Ingo Molnar <mingo@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, peterz@infradead.org, 
-	mingo@redhat.com, linux-kernel@vger.kernel.org, jolsa@kernel.org, 
-	song@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
 
-On Thu, Mar 28, 2024 at 4:21=E2=80=AFAM Ingo Molnar <mingo@kernel.org> wrot=
-e:
->
->
-> * Andrii Nakryiko <andrii@kernel.org> wrote:
->
-> > [0] added ability to capture LBR (Last Branch Records) on Intel CPUs
-> > from inside BPF program at pretty much any arbitrary point. This is
-> > extremely useful capability that allows to figure out otherwise
-> > hard-to-debug problems, because LBR is now available based on some
-> > application-defined conditions, not just hardware-supported events.
-> >
-> > retsnoop ([1]) is one such tool that takes a huge advantage of this
-> > functionality and has proved to be an extremely useful tool in
-> > practice.
-> >
-> > Now, AMD Zen4 CPUs got support for similar LBR functionality, but
-> > necessary wiring inside the kernel is not yet setup. This patch seeks t=
-o
-> > rectify this and follows a similar approach to the original patch [0]
-> > for Intel CPUs.
-> >
-> > Given LBR can be set up to capture any indirect jumps, it's critical to
-> > minimize indirect jumps on the way to requesting LBR from BPF program,
-> > so we split amd_pmu_lbr_disable_all() into a wrapper with some generic
-> > conditions vs always-inlined __amd_pmu_lbr_disable() called directly
-> > from BPF subsystem (through perf_snapshot_branch_stack static call).
-> >
-> > Now that it's possible to capture LBR on AMD CPU from BPF at arbitrary
-> > point, there is no reason to artificially limit this feature to samplin=
-g
-> > events. So corresponding check is removed. AFAIU, there is no
-> > correctness implications of doing this (and it was possible to bypass
-> > this check by just setting perf_event's sample_period to 1 anyways, so
-> > it doesn't guard all that much).
-> >
-> > This was tested on AMD Bergamo CPU and worked well when utilized from
-> > the aforementioned retsnoop tool.
-> >
-> >   [0] https://lore.kernel.org/bpf/20210910183352.3151445-2-songliubravi=
-ng@fb.com/
-> >   [1] https://github.com/anakryiko/retsnoop
-> >
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > ---
-> >  arch/x86/events/amd/core.c   | 29 ++++++++++++++++++++++++++++-
-> >  arch/x86/events/amd/lbr.c    | 11 +----------
-> >  arch/x86/events/perf_event.h | 11 +++++++++++
-> >  3 files changed, 40 insertions(+), 11 deletions(-)
->
-> Please do not queue these up in the BPF tree, all similar changes to
-> perf code should go through the perf tree.
->
+After [1], Only there are two implementations for page frag:
 
-Absolutely, I rebased on top of tip's perf/core branch and sent it as
-v2. Thanks!
+1. mm/page_alloc.c: net stack seems to be using it in the
+   rx part with 'struct page_frag_cache' and the main API
+   being page_frag_alloc_align().
+2. net/core/sock.c: net stack seems to be using it in the
+   tx part with 'struct page_frag' and the main API being
+   skb_page_frag_refill().
 
-> Thanks,
->
->         Ingo
+This patchset tries to unfiy the page frag implementation
+by replacing page_frag with page_frag_cache for sk_page_frag()
+first. And will try to replace the rest of page_frag in the
+follow patchset.
+
+After this patchset, we are not only able to unify the page
+frag implementation a little, but seems able to have about
+0.5% performance boost testing by using the vhost_net_test
+introduced in [1] too.
+
+Before this patch:
+Performance counter stats for './vhost_net_test' (10 runs):
+
+         603027.29 msec task-clock                       #    1.756 CPUs utilized               ( +-  0.04% )
+           2097713      context-switches                 #    3.479 K/sec                       ( +-  0.00% )
+               212      cpu-migrations                   #    0.352 /sec                        ( +-  4.72% )
+                40      page-faults                      #    0.066 /sec                        ( +-  1.18% )
+      467215266413      cycles                           #    0.775 GHz                         ( +-  0.12% )  (66.02%)
+      131736729037      stalled-cycles-frontend          #   28.20% frontend cycles idle        ( +-  2.38% )  (64.34%)
+       77728393294      stalled-cycles-backend           #   16.64% backend cycles idle         ( +-  3.98% )  (65.42%)
+      345874254764      instructions                     #    0.74  insn per cycle
+                                                  #    0.38  stalled cycles per insn     ( +-  0.75% )  (70.28%)
+      105166217892      branches                         #  174.397 M/sec                       ( +-  0.65% )  (68.56%)
+        9649321070      branch-misses                    #    9.18% of all branches             ( +-  0.69% )  (65.38%)
+
+           343.376 +- 0.147 seconds time elapsed  ( +-  0.04% )
+
+
+After this patch:
+Performance counter stats for './vhost_net_test' (10 runs):
+
+         598081.02 msec task-clock                       #    1.752 CPUs utilized               ( +-  0.11% )
+           2097738      context-switches                 #    3.507 K/sec                       ( +-  0.00% )
+               220      cpu-migrations                   #    0.368 /sec                        ( +-  6.58% )
+                40      page-faults                      #    0.067 /sec                        ( +-  0.92% )
+      469788205101      cycles                           #    0.785 GHz                         ( +-  0.27% )  (64.86%)
+      137108509582      stalled-cycles-frontend          #   29.19% frontend cycles idle        ( +-  0.96% )  (63.62%)
+       75499065401      stalled-cycles-backend           #   16.07% backend cycles idle         ( +-  1.04% )  (65.86%)
+      345469451681      instructions                     #    0.74  insn per cycle
+                                                  #    0.40  stalled cycles per insn     ( +-  0.37% )  (70.16%)
+      102782224964      branches                         #  171.853 M/sec                       ( +-  0.62% )  (69.28%)
+        9295357532      branch-misses                    #    9.04% of all branches             ( +-  1.08% )  (66.21%)
+
+           341.466 +- 0.305 seconds time elapsed  ( +-  0.09% )
+
+CC: Alexander Duyck <alexander.duyck@gmail.com>
+
+1. https://lore.kernel.org/all/20240228093013.8263-1-linyunsheng@huawei.com/
+
+Yunsheng Lin (10):
+  mm: Move the page fragment allocator from page_alloc into its own file
+  mm: page_frag: use initial zero offset for page_frag_alloc_align()
+  mm: page_frag: change page_frag_alloc_* API to accept align param
+  mm: page_frag: add '_va' suffix to page_frag API
+  mm: page_frag: add two inline helper for page_frag API
+  mm: page_frag: reuse MSB of 'size' field for pfmemalloc
+  mm: page_frag: reuse existing bit field of 'va' for pagecnt_bias
+  net: introduce the skb_copy_to_va_nocache() helper
+  mm: page_frag: introduce prepare/commit API for page_frag
+  net: replace page_frag with page_frag_cache
+
+ drivers/net/ethernet/google/gve/gve_rx.c      |   4 +-
+ drivers/net/ethernet/intel/ice/ice_txrx.c     |   2 +-
+ drivers/net/ethernet/intel/ice/ice_txrx.h     |   2 +-
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c |   2 +-
+ .../net/ethernet/intel/ixgbevf/ixgbevf_main.c |   4 +-
+ .../marvell/octeontx2/nic/otx2_common.c       |   2 +-
+ drivers/net/ethernet/mediatek/mtk_wed_wo.c    |   4 +-
+ drivers/net/tun.c                             |  36 ++---
+ drivers/nvme/host/tcp.c                       |   8 +-
+ drivers/nvme/target/tcp.c                     |  22 +--
+ drivers/vhost/net.c                           |   6 +-
+ include/linux/gfp.h                           |  22 ---
+ include/linux/mm_types.h                      |  18 ---
+ include/linux/page_frag_cache.h               | 142 ++++++++++++++++
+ include/linux/sched.h                         |   5 +-
+ include/linux/skbuff.h                        |  15 +-
+ include/net/sock.h                            |  22 ++-
+ kernel/bpf/cpumap.c                           |   2 +-
+ kernel/exit.c                                 |   3 +-
+ kernel/fork.c                                 |   2 +-
+ mm/Makefile                                   |   1 +
+ mm/page_alloc.c                               | 136 ----------------
+ mm/page_frag_alloc.c                          | 152 ++++++++++++++++++
+ net/core/skbuff.c                             |  54 ++++---
+ net/core/skmsg.c                              |  24 +--
+ net/core/sock.c                               |  24 +--
+ net/core/xdp.c                                |   2 +-
+ net/ipv4/ip_output.c                          |  37 +++--
+ net/ipv4/tcp.c                                |  33 ++--
+ net/ipv4/tcp_output.c                         |  30 ++--
+ net/ipv6/ip6_output.c                         |  37 +++--
+ net/kcm/kcmsock.c                             |  28 ++--
+ net/mptcp/protocol.c                          |  72 ++++++---
+ net/rxrpc/txbuf.c                             |  16 +-
+ net/sunrpc/svcsock.c                          |   4 +-
+ net/tls/tls_device.c                          | 139 +++++++++-------
+ 36 files changed, 661 insertions(+), 451 deletions(-)
+ create mode 100644 include/linux/page_frag_cache.h
+ create mode 100644 mm/page_frag_alloc.c
+
+-- 
+2.33.0
+
