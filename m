@@ -1,132 +1,106 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE507D417
-	for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 12:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EDAA64CE1;
+	Thu, 28 Mar 2024 12:48:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711629266; cv=none; b=p1Qz88blmgKg65COqxdT/z0ilt30UNTxWcjjNcLt3qitrf1yNBguvJQMgKIuBWyg4wXCSIyp7v6qZmQ/BuH7yIEiq+EHnGAIsqVEHnMhxeuQUzrEECzmwmt4byBZXV8UOKafoihHAkIR7EJjPXU3yjjc7pZhxAfeMmy9b/YMi+I=
+	t=1711630087; cv=none; b=ojPCuwc59uDTX3mEcQC0EXqZg531UAzZXMwhKM6Y/vUm7EiIrerjLuYuSwIZ1lhyoTcfQY+u2un/X5YuTA4j/z8Ibcoica6fzo2X+EnYHga78rUIwEtwf56OIMpdfG7ogPmpfo0alFe5Y62SoaVvNR802zjIYAaibc/rnKMEv1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711629266; c=relaxed/simple;
-	bh=zX2GWYXPtC7qjhq9kFDCMg3asCTHBNFGRevEEyfJ4pU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZWb+zxZuC/fBxmqauUvXcha/nLy6sU3va+yXYHwsTG8caGzS8YefljPIw6MuR3fCD/H1JjQJFjinqf8WqQHolKB0iZlLXxe8N5/wanjok9ddlMOJOqUu04UmqN8HlrDCgIUn1+Fjf+JmYpGMhs23UNOL8314uoXOHD4rF49ro08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=NSyWSFj6; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="NSyWSFj6"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-415455fc8e8so3340985e9.2
-        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 05:34:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1711629262; x=1712234062; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qWn4vKf6jmo6u/KAkidvDYA7hMTdnPHRFemGgPWSlIk=;
-        b=NSyWSFj68eR8wToM0XskqZHMJ29ZmkRU/fJ+NFfAUHhG0HmaKu0bBTvq4QkfzMGjmH
-         jUAEtrsdZFPxsSvlIAdvu4Dw2VNqcrSAaVGTmQf7otdSslwPlTAOxxHk4+wM/q7R5jYd
-         KSY+/dmahb4erl5kG39qfc7NCHptH8BslDFoGHXL7NCC9zHoBtIB11axS9h9RaBGx97k
-         X5oms86dove+9KITXsvdyYjeGMDys13gA0NLPZC1fuxEtRywv1WlTYQ9f1OtasQZgD7w
-         X4XnDgNPOs93OKplHCkWKCufTJoFx/W5yj33Q4qbIkk5yI24Ti8upUn+0ni+haAdNNHu
-         PtDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711629262; x=1712234062;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qWn4vKf6jmo6u/KAkidvDYA7hMTdnPHRFemGgPWSlIk=;
-        b=ir0uRxZDxbg4nZ5SWOkH4fefqoKg1fscGF7+uQ4EZmguEzhKChJDCky2latgG2+7jb
-         hV1KVyHp1JJywVNnjEOgRsdOEvfIFbPVBls6fy/x0ST73QbwLFJ5ZsVaRHOXgxvHNqA6
-         bb/G22aHR9ohH2OOh1rD26gwSV2iLA+LpIK6Pq05yrv9yP+57CSJpC5wYY3R2nhIByKZ
-         akuZQAsmNPBJG+NBDdCQJ0XmtvZyqBRutweld10HgzNO8iRnYI2ebTCB1LoarqSOVTCo
-         7kOQ79ioBSR9RPRco5sFDCnXndpWkb8q05u/wfM1UYYG/1JW75yZzY+HxzMr+CRiP/jD
-         ky5g==
-X-Forwarded-Encrypted: i=1; AJvYcCUDjFrMe7HHC1shQDrj8F7d+cS7hYB3Ylp99tlBmK7qAMx+kyec2WqTEnIfq+twBGv/Cl+nn8UctzQr5D/TucpLcnKI
-X-Gm-Message-State: AOJu0Yx9K4A62GdrDsx3zWz5CDNFYUh9qm2sC8J5XmTECXzQD0s/t82c
-	c9H6K3LHesxrNVPfoO2ZSdHLQW7UKOPqqHuaG67yrfeZJWOahYqMzth79Vte00g=
-X-Google-Smtp-Source: AGHT+IFLB/cUHJWkbnWrK10eduOa8rRtXuIj5s2I8YXRQ+IvMFyMnMJuaj5WaCt6J4TWoyPiuBZHlA==
-X-Received: by 2002:a05:600c:45ca:b0:414:8948:621c with SMTP id s10-20020a05600c45ca00b004148948621cmr2473201wmo.8.1711629262250;
-        Thu, 28 Mar 2024 05:34:22 -0700 (PDT)
-Received: from [10.1.5.112] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id fc9-20020a05600c524900b004154399fbd9sm2287689wmb.45.2024.03.28.05.34.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Mar 2024 05:34:22 -0700 (PDT)
-Message-ID: <34f9a771-08dd-4db6-9790-cc5f70f707c7@baylibre.com>
-Date: Thu, 28 Mar 2024 13:34:21 +0100
+	s=arc-20240116; t=1711630087; c=relaxed/simple;
+	bh=7qoh3oEdB5IkpuGCpkQQ0RnqCoMmUu3UFWepfHa29dQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=u5ZiuDe5JZp1Fpbx/G2nqhAWMRKza46Aaia2CSzdf+RiolKwdR1GSqZX1+Xjk00BumRdv2te5uhcUpWiqlbjO0FNV4ttoTUQJI0Yzpp/5N6jJhuUYJmW1S+nn0bQx27XTBTNf6V2GYXbNGCfyK0UxgHBUKUHr8MKSGNtvAQnwzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V53H14Tbmz4f3jk6;
+	Thu, 28 Mar 2024 20:47:57 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id B029F1A0D1B;
+	Thu, 28 Mar 2024 20:48:01 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP2 (Coremail) with SMTP id Syh0CgAnlQj+ZgVmTvYNIg--.31354S4;
+	Thu, 28 Mar 2024 20:48:01 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	netdev@vger.kernel.org
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Manu Bretelle <chantr4@gmail.com>,
+	Pu Lehui <pulehui@huawei.com>,
+	Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next 2/5] riscv, bpf: Relax restrictions on Zbb instructions
+Date: Thu, 28 Mar 2024 12:49:13 +0000
+Message-Id: <20240328124916.293173-3-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240328124916.293173-1-pulehui@huaweicloud.com>
+References: <20240328124916.293173-1-pulehui@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v5 3/3] net: ethernet: ti: am65-cpsw: Add minimal
- XDP support
-To: Ratheesh Kannoth <rkannoth@marvell.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Russell King <linux@armlinux.org.uk>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Simon Horman <horms@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linaro-mm-sig@lists.linaro.org
-References: <20240223-am65-cpsw-xdp-basic-v5-0-bc1739170bc6@baylibre.com>
- <20240223-am65-cpsw-xdp-basic-v5-3-bc1739170bc6@baylibre.com>
- <20240328114245.GA1560669@maili.marvell.com>
-Content-Language: en-US
-From: Julien Panis <jpanis@baylibre.com>
-In-Reply-To: <20240328114245.GA1560669@maili.marvell.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:Syh0CgAnlQj+ZgVmTvYNIg--.31354S4
+X-Coremail-Antispam: 1UD129KBjvdXoW7GF4kuw4DAw4fJFW3Cw4UJwb_yoWfGrgEkr
+	yxtryI9w4Fy3Z7X3WDGr4rJr17C395tFy8GF1agr4jvFn8XrsxA3ykt34UA3y5ur4kJr93
+	WF1kJrZayw42qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbD8FF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXwA2048vs2IY02
+	0Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+	wVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM2
+	8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
+	xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
+	vE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
+	r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04
+	v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_
+	Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x
+	0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWx
+	JVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMI
+	IF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUHbyAUUUUU
+	=
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-On 3/28/24 12:42, Ratheesh Kannoth wrote:
-> On 2024-03-28 at 14:56:42, Julien Panis (jpanis@baylibre.com) wrote:
->> This patch adds XDP (eXpress Data Path) support to TI AM65 CPSW
->> Ethernet driver. The following features are implemented:
->> - NETDEV_XDP_ACT_BASIC (XDP_PASS, XDP_TX, XDP_DROP, XDP_ABORTED)
->> - NETDEV_XDP_ACT_REDIRECT (XDP_REDIRECT)
->> - NETDEV_XDP_ACT_NDO_XMIT (ndo_xdp_xmit callback)
->>
->> The page pool memory model is used to get better performance.
->> Below are benchmark results obtained for the receiver with iperf3 default
->> parameters:
->> - Without page pool: 495 Mbits/sec
->> - With page pool: 505 Mbits/sec (actually 510 Mbits/sec, with a 5 Mbits/sec
->> loss due to extra processing in the hot path to handle XDP).
->>
->> Signed-off-by: Julien Panis <jpanis@baylibre.com>
->> ---
+From: Pu Lehui <pulehui@huawei.com>
 
-[...]
+This patch relaxes the restrictions on the Zbb instructions. The hardware
+is capable of recognizing the Zbb instructions independently, eliminating
+the need for reliance on kernel compile configurations.
 
->> +static struct sk_buff *am65_cpsw_alloc_skb(struct am65_cpsw_rx_chn *rx_chn,
->> +					   struct net_device *ndev,
->> +					   unsigned int len,
->> +					   int desc_idx)
->> +{
->> +	struct sk_buff *skb;
->> +	struct page *page;
->> +
->> +	page = page_pool_dev_alloc_pages(rx_chn->page_pool);
->> +	if (unlikely(!page))
->> +		return NULL;
->> +
->> +	len += AM65_CPSW_HEADROOM;
->> +
->> +	skb = build_skb(page_address(page), len);
->> +	if (unlikely(!skb)) {
->> +		page_pool_put_full_page(rx_chn->page_pool, page, ndev);
-> Is it compiling ? third argument should be a bool.
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ arch/riscv/net/bpf_jit.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thank you for the time you spent on this patch.
-
-Yes, it is compiling.
-This was intentional but it may be unclear indeed.
-I'll make the bool using more explicit in next version.
+diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+index 5fc374ed98ea..bcf109b88df5 100644
+--- a/arch/riscv/net/bpf_jit.h
++++ b/arch/riscv/net/bpf_jit.h
+@@ -20,7 +20,7 @@ static inline bool rvc_enabled(void)
+ 
+ static inline bool rvzbb_enabled(void)
+ {
+-	return IS_ENABLED(CONFIG_RISCV_ISA_ZBB) && riscv_has_extension_likely(RISCV_ISA_EXT_ZBB);
++	return riscv_has_extension_likely(RISCV_ISA_EXT_ZBB);
+ }
+ 
+ enum {
+-- 
+2.34.1
 
