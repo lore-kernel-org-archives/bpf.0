@@ -1,187 +1,127 @@
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5573124219
-	for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 06:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E32F2561F;
+	Thu, 28 Mar 2024 07:31:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711605613; cv=none; b=lh0IIc+IPqI22UQbN7dAx83s41/9z4yZKdU1Jn486p5FCzUR7zn5wFm+KVXIcG2grZeRvpuZCsEc10+W0+4D8XDOmERbORTv9ueyA2CqDkprxQ9Qpeg6W0uP4It/Yd0HzId2SkYr+oFwJqDlnUFLzDIqO303uQ5Mw/fdU06nUDQ=
+	t=1711611101; cv=none; b=l35qVSooQJgulXf8OEKXM4ee0eiW9zEiabwibizv6f8FKhsfkL2kBsAFdsaSVFGnwEn/j5SNqdoECfx+4U/wzWExWXSMbiYW1R5710zGqQWe24Zt57/6WWij+zk0Y4X16uKXZLVUG59umzXIyA3yrmEdXTITyXfMyzhZ9bFyVQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711605613; c=relaxed/simple;
-	bh=SzVDkRIUg6dPAe1KOPa8tHiOYvDb5bOxmnWNR2s9HBY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uyARREACFd1ko3bnEhhZoo9/7q6YuVhcl572wV565jQ3KNRj1JrZRfa5Tejz0nsAluYkCHtSwAfL6e/Eqp6+Zsc51JJSZFWTBTg67gSlduhDqtR1010AdqDnGCl9DzJCEC6eX8+zCvBcwi5vxS9FUo1OP2iFj1HssQ6BrgZ3h/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dJ3Lk6uB; arc=none smtp.client-ip=209.85.222.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711611101; c=relaxed/simple;
+	bh=UiexvZQWK+4Yc+SMZ9M3zHpPBZVoEYHrn9anANb9C5w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d5Fm6ImLcHPV6UYzlsQeYNsjvAQufCBZvBPsa210F2htuofaAshATEDf/2A5+yv08JlFkWpjmTYRAyXYwW6T0YT/0SU5eCH/gYnEQ9pXljqsRinJCl/lnkDFftrLbeUWzIEzBr/O7AtKnfMOcFBuMtBpAoSVFpTIrHmgldSXXD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=gcYWJotu; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dJ3Lk6uB"
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-789db917876so31763385a.1
-        for <bpf@vger.kernel.org>; Wed, 27 Mar 2024 23:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711605611; x=1712210411; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1la4TtuGNKnIXTkIswkxLbTUfQUsqIVrT35fhy5dGzE=;
-        b=dJ3Lk6uBhI9Moix0IuBkttzEB4XkNOUpsLgOdhbRcCd1nD6KLlNZtOTCwdzT/pDkyi
-         To9+O6izrsVwpkEwSdQxYlE/ISEWZBjq+4p92r38AkaSI49HC4UWT6fiq2/wiy0NBaS9
-         PVall7JlhtZrcq/RuZ016QahFBusURgAElsNw47ddqlvDrD6RNrtEiwgfhoI2NU1H5qA
-         OKcgdNEXxdsIuiiC4jkEsyuMTWLCcvARp12t7VSnjtZTGqcI/w04VOwvh0yIQUFSniqy
-         MeI6eyH3xDb5L4vLd0s1txq7bP1/PrCRs+XpSCE+GfeDIgo9KDlQMpi2HPuQUEXS8XSm
-         k1nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711605611; x=1712210411;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1la4TtuGNKnIXTkIswkxLbTUfQUsqIVrT35fhy5dGzE=;
-        b=J3zl3QXK+4BWFEiHbLLP8C3N5m2hJPmTa8ZKJJ0pusGFUzMWQEpWQCuOcAjQkCTmyB
-         OeoxM6s0WVMS3B+7xD9W1Ieg7UyOxP2n/DYLkcYkr4fybQXy/Yv1t7zv7HxbF2L9YFAb
-         wgeZz60exQYkgXC2JyEfh0yj9ebj27wyjJiai8RRSwCgaSCg738OcHztDRSUBFgtGXvJ
-         ZgSYlf/M4Czyh2DFA2cWAvc2ex1/abhWiptF2/uqTWxkcggA83ZFFI6K2AkUA5zZzxht
-         ApEtLlW7dDbAuRrMkz/ZErlGUcZdeBqDYmndlYo1QdbIEFOg/H9f+fCBfNjQjNN6urRp
-         DSTg==
-X-Forwarded-Encrypted: i=1; AJvYcCV6ukVM2ryCv5kTOr61JKapI1nPQ3flJw/2OYaE5cYUc5mEL7/0k97+554YJMT39gPtW+2qcqiBgrEeD2BR/UhAxoKx
-X-Gm-Message-State: AOJu0YxquFEBHzfJHWJrgEuVUgc3WbZlgJAp6ZikoHBt52/zECjxMzdp
-	z1RWkhTubGIoabQlmV1BzEHXGH7283/lscqfdvcubBG0v5lML2YyDgIz/4j5fw5ccJwtoHVD/NL
-	wj/pKgqD26UKQPAA8hacAneuoDXE=
-X-Google-Smtp-Source: AGHT+IFMQDiWkawe9J0cVgQZRRB5eekHsHPyLwYa2X7LliPPTOift3ZJDOIrk4haDcSVbYs+e0pBhIdhmM76IC3V9/0=
-X-Received: by 2002:a05:6214:2d09:b0:690:dce7:76e7 with SMTP id
- mz9-20020a0562142d0900b00690dce776e7mr1653959qvb.25.1711605611226; Wed, 27
- Mar 2024 23:00:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="gcYWJotu"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=vttzHoZOnFV3RpiKvH6mM16x2BnNpMVa6ppcy7eNO+k=; b=gcYWJotuQVW8GYZ0l03Qd1Y7Rx
+	geRqzubUVBuSA9E2/DAQoiPMRqhx1n9l+w28Wiufj/ZAExFJaqfwavTjC8gzuWje1jZN2jUSkE+qE
+	Q15FOsZFQN2b0luQEwgHnGe7lzK15zDdvK7FQjfmrbwwmVTazNYcBHn8mWmTha+YKF08jxIWc0REQ
+	+8EyFi9U6Gl0G+TAuZmP4Qd6h8HYQgYngvPlmHvo3Jo8XSRKsSWUmgiFQ8nfw+lmfCUH+lF0bMRBm
+	3NB7t68iGeniQOu1nPNBlIsx+leXTDUB9ZbdcRiTXuwjN/rjZyp29U3bvNZvER0Ozv/NSab0o7bxJ
+	CYLe7RCQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rpkEV-0000000CslI-1PHG;
+	Thu, 28 Mar 2024 07:31:31 +0000
+Date: Thu, 28 Mar 2024 00:31:31 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: Christoph Hellwig <hch@infradead.org>, shakeel.butt@linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	David Ahern <dsahern@kernel.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Shailend Chand <shailend@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
+ custom page providers
+Message-ID: <ZgUc07Szbx5x-obb@infradead.org>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-3-almasrymina@google.com>
+ <ZfegzB341oNc_Ocz@infradead.org>
+ <CAHS8izOUi6qGp=LSQb_o5oph-EnhNOuhLkPSfbQRU3eniZvbdA@mail.gmail.com>
+ <ZgC5JoSiWAYf3IgX@infradead.org>
+ <CAHS8izO5-giYhM1bVCLLOXRXq-Xd0=pi0kPq5E1-R=3i=XihmQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240327115848.84695-1-laoar.shao@gmail.com> <20240327115848.84695-3-laoar.shao@gmail.com>
- <CAEf4BzZ6L2NWf25gJ2CaMo-+rY4tL2Z4UWTqut1BHUEhxLjpUw@mail.gmail.com>
-In-Reply-To: <CAEf4BzZ6L2NWf25gJ2CaMo-+rY4tL2Z4UWTqut1BHUEhxLjpUw@mail.gmail.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Thu, 28 Mar 2024 13:59:34 +0800
-Message-ID: <CALOAHbBT5rRzZveVMSaMRr2SVW5UJS+ZfTagCXg=DPJ3M5-72w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: Add selftest for bits iter
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com, 
-	haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHS8izO5-giYhM1bVCLLOXRXq-Xd0=pi0kPq5E1-R=3i=XihmQ@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Thu, Mar 28, 2024 at 1:48=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Wed, Mar 27, 2024 at 5:00=E2=80=AFAM Yafang Shao <laoar.shao@gmail.com=
-> wrote:
-> >
-> > Add selftests for the newly added bits iter.
-> > - bits_iter_success
-> >   - percpu data extracted from the percpu struct should be expected
-> >   - RCU lock is not required
-> >   - It is fine without calling bpf_iter_cpumask_next()
-> >   - It can work as expected when invalid arguments are passed
-> >
-> > - bits_iter_failure
-> >   - bpf_iter_bits_destroy() is required after calling
-> >     bpf_iter_bits_new()
-> >   - bpf_iter_bits_destroy() can only destroy an initialized iter
-> >   - bpf_iter_bits_next() must use an initialized iter
-> >
-> > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> > ---
-> >  .../selftests/bpf/prog_tests/bits_iter.c      | 139 +++++++++++++++++
-> >  .../bpf/progs/test_bits_iter_failure.c        |  54 +++++++
-> >  .../bpf/progs/test_bits_iter_success.c        | 146 ++++++++++++++++++
-> >  3 files changed, 339 insertions(+)
-> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/bits_iter.c
-> >  create mode 100644 tools/testing/selftests/bpf/progs/test_bits_iter_fa=
-ilure.c
-> >  create mode 100644 tools/testing/selftests/bpf/progs/test_bits_iter_su=
-ccess.c
-> >
->
-> I think all the cgroup and bpf_iter related parts of tests seems like
-> an unnecessary complications and just more code to support than
-> necessary. We have tests for cgroup iterators, so we know it will
-> work. You are adding bits iterator, so let's just add tests that
-> validate bits iterator works. We don't need iterator programs and
-> cgroups for that. Can we just leave RUN_TESTS-based tests and not add
-> yet another test runner mini-setup (I mean those positive_testcases
-> and negative_testcases)?
+On Tue, Mar 26, 2024 at 01:19:20PM -0700, Mina Almasry wrote:
+> 
+> Are you envisioning that dmabuf support would be added to the block
+> layer
 
-Thanks for your suggestion. I will consider your suggestion carefully.
+Yes.
 
->
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/bits_iter.c b/tools=
-/testing/selftests/bpf/prog_tests/bits_iter.c
-> > new file mode 100644
-> > index 000000000000..0e2520a9dc62
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/prog_tests/bits_iter.c
-> > @@ -0,0 +1,139 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/* Copyright (c) 2024 Yafang Shao <laoar.shao@gmail.com> */
-> > +
-> > +#define _GNU_SOURCE
-> > +#include <sched.h>
-> > +
-> > +#include <test_progs.h>
-> > +#include "test_bits_iter_success.skel.h"
-> > +#include "test_bits_iter_failure.skel.h"
->
-> I'd cut out all of this code I cut out from email.
+> (which I understand is part of the VFS and not driver specific),
 
-will do it.
+The block layer isn't really the VFS, it's just another core stack
+like the network stack.
 
->
-> [...]
->
-> > +
-> > +       RUN_TESTS(test_bits_iter_success);
-> > +       RUN_TESTS(test_bits_iter_failure);
->
-> and I'd put these into prog_tests/verifier.c
+> or as part of the specific storage driver (like nvme for example)? If
+> we can add dmabuf support to the block layer itself that sounds
+> awesome. We may then be able to do devmem TCP on all/most storage
+> devices without having to modify each individual driver.
 
-will do it.
+I suspect we'll still need to touch the drivers to understand it,
+but hopefully all the main infrastructure can live in the block layer.
 
->
-> > +}
-> > diff --git a/tools/testing/selftests/bpf/progs/test_bits_iter_failure.c=
- b/tools/testing/selftests/bpf/progs/test_bits_iter_failure.c
-> > new file mode 100644
-> > index 000000000000..974d0b7a540e
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/test_bits_iter_failure.c
-> > @@ -0,0 +1,54 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/* Copyright (c) 2024 Yafang Shao <laoar.shao@gmail.com> */
-> > +
-> > +#include "vmlinux.h"
-> > +#include <bpf/bpf_helpers.h>
-> > +#include <bpf/bpf_tracing.h>
-> > +
-> > +#include "bpf_misc.h"
-> > +#include "task_kfunc_common.h"
-> > +
-> > +char _license[] SEC("license") =3D "GPL";
-> > +
-> > +int bpf_iter_bits_new(struct bpf_iter_bits *it, const void *unsafe_ptr=
-__ign,
-> > +                     u32 nr_bits) __ksym __weak;
-> > +int *bpf_iter_bits_next(struct bpf_iter_bits *it) __ksym __weak;
-> > +void bpf_iter_bits_destroy(struct bpf_iter_bits *it) __ksym __weak;
-> > +
-> > +SEC("iter.s/cgroup")
-> > +__failure __msg("Unreleased reference id=3D3 alloc_insn=3D10")
->
-> you don't control assembly instruction generation, so let's not rely
-> on specific instruction number in error message
+> In your estimation, is adding dmabuf support to the block layer
+> something technically feasible & acceptable upstream? I notice you
+> suggested it so I'm guessing yes to both, but I thought I'd confirm.
 
-will do it.
+I think so, and I know there has been quite some interest to at least
+pre-register userspace memory so that the iommu overhead can be
+pre-loaded.  It also is a much better interface for Peer to Peer
+transfers than what we currently have.
 
---=20
-Regards
-Yafang
