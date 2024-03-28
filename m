@@ -1,103 +1,169 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7EA130E50
-	for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 16:18:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 645B91386A4
+	for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 16:37:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711642737; cv=none; b=WLaPo9RUkK0ZQTIYkkN03aqoc9N3yO42z4DnCgxsa1JNFuB5J4VrcMUSvpG0lia9QN/zaTUikW/2Yic72/CnziDFagan6WKvTFz198Jpq8cmcivdPXq1siHE9EchKQIZU2uaBWtW6bttbwvM+KHqxVMUvWeARdntNkBxnP18xv4=
+	t=1711643830; cv=none; b=YRO/yEAyEdJaa8viPJGdzTIcG4nhihfvLxNBe8VbZS9SyDGFhDFDJtnXJyAr8P+TTTF1CqqPxOvzAQbtCqFrXdP34o3yjDrKjj41AIE80YoXD62QG2BCZUIOCiqATgmxcNrotz0QF3lfAdBQuWPIKBsLIYeFyVqmTOQsaWC0WEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711642737; c=relaxed/simple;
-	bh=GBsn4xh0VH3bSK4OltJrohHyGLgnl+zZmaIezM4iDdA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=jz+r5Gral+cwYJ7ksW9fn8vZAK8Odc8sViIWbTsFu9uePxpb7w9o8++DMO0zCMJ6KoT7MFebnlQsXOqShikvfRs5F4vgNigdX88I92QfA0EXPELg9zVK98iFwNPOz5VNvxWLQxT8epvXkT1KtE6kFl8BYakXUOA9uCBJYGsgyVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--gthelen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0r/vY99k; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--gthelen.bounces.google.com
+	s=arc-20240116; t=1711643830; c=relaxed/simple;
+	bh=GzLx8CXyxdSq5vH7JAZZ7776+FKG2k4AtM3tYluwfLY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=khKIjY38qNdNIGVMMVX7Pus7VTMkO6+JoCzbg/6mK0KRXbIeiNCRojmYSlKefp0s+kKjrNuu0SpeHVgagQPeluxzfxTqRrCLB8AQy/rki0ppBYwpTBob0Vf4leTzMpZUEXbM1CiRNkKBTRDDl0Qsy5ShLvQ/fbGVXVQ6PqC6tJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=iruIjeKb; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0r/vY99k"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dcbee93a3e1so1667199276.3
-        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 09:18:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="iruIjeKb"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-415482307b0so5567005e9.0
+        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 09:37:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711642734; x=1712247534; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=umIDKJbLUeVjB30WBmxntoX4c0W2blxouvOQBNQgTYQ=;
-        b=0r/vY99kXoMzxkp4WPFgKJ0GDP+V8Gwm+QmvZ+Fc9oyjqDd5/gHMIjMRlRhtHIY10D
-         WVDAlKUYiZWlKgYN67wG3236TFGcol02GKfz0/4C0dUcq25hVT4GJk+RFoGPsmFBSGLt
-         KK5rOj1yqtH7/2QFgvAuwJf9X7QMZfYvkLZCGs9c0u7h4hbhxSh2VlLzdXGYrn02EEkX
-         ix7r9HQCoNchwR6mXhKkBziU3ubyXuEMouTDkkeOH63kgPA5AdHsK3YdXechPbqHEP6c
-         Q169M/2uYfBbNUDkJSEkiMvdeXyImB4UCpnzJwl7joD4KsmkbKeuJfvTjdEZDeyhE9pd
-         2fNA==
+        d=isovalent.com; s=google; t=1711643827; x=1712248627; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=nUDRZCkgx5/3xip2LXBg5gNLMYFvJpvbSrcpUOSNmcA=;
+        b=iruIjeKbemX2Z1+ZDSv2RnOKgqcy+d49A9FKAXPfEeWJsVYJiJVU8Npw0buVUfOxjk
+         n+kzNcqSnNMyabGKj+apb06gSNrxQ6N1zG/Gw3bgBQcZoygVNaOZgRu32DX+ix3+YpdH
+         CDY6oGoHKF/3x0naNAUu2sFf/IihMBBcRV/mpDD0ZY/ys+XO0bjk8VSHHqmLGIFAMch+
+         x78D++v07HglfoqbLaOJ3/Q5Z+gIANfVJsYR3U3yueZecLDCFKte2CRGzKSthze1K4Q6
+         oWGYiD2dtDOcHR6rjXPHJfhGE/rhr8tD8AF+awmjDvvQC9eWm46mbg+i0bowfD6xZsDe
+         2NnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711642734; x=1712247534;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=umIDKJbLUeVjB30WBmxntoX4c0W2blxouvOQBNQgTYQ=;
-        b=w3+ARUqZtiW794uLRCpj4TYalZf/G97/ldFj0ZUVIF33hVd83UyQM60BmCXI2XHvQ+
-         KOS0ss9QKqWmHxYAIeCmu6oy/OoKMUjRsOwhM6SenjrcdH7YmS7sq9QxoZne5FmBy+eN
-         eExvAvv2QW3KynAAGBDEaQka1t0bE3tcP/RSsp9r5snT3KqLnzrzHG+xpij7skMGxUI+
-         yQZmnHf+iZMZGDrwIO/5XiB/hEBGAMrysSpnTpCGkPgIytgtvIRM7cNuB+jgmGfn0It+
-         ewW/xKZp0SidmuPPI5q9ipLe0kVf2IKOByhnbShMGC6HT/lvN/raTrlmiH9q3a2HdKHl
-         nXlw==
-X-Forwarded-Encrypted: i=1; AJvYcCUVhBkcVjZviGUqPzeokZjQn2U1yo3nlSvxzg0Uz95ODeNiFjCgU5DHgn4b/Y7dJBsUECZauQ8/yuW23g/flPATx9Xn
-X-Gm-Message-State: AOJu0YyJeSqjwOf/OxY0+QviHqcxCBVi3gYFhOd4H4RskPTJ/VipCP6I
-	Sb0au8tYFPDuRfiLQSfPrHKEkNcH9RuzZwlkNO0caRpGC2PXJXJ0GU/h6i9w8C9hCwJ76H+sRUA
-	FZYROrg==
-X-Google-Smtp-Source: AGHT+IG3wG69Xu1UOnAeobYYfeZbnbL1W7AO1OICQ5yW749ORUJQcN09ufbTLMPe/kI+kz+CtqMiH5GZrRAU
-X-Received: from gthelen-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1b13])
- (user=gthelen job=sendgmr) by 2002:a05:6902:2292:b0:ddd:7581:1234 with SMTP
- id dn18-20020a056902229200b00ddd75811234mr194893ybb.11.1711642734480; Thu, 28
- Mar 2024 09:18:54 -0700 (PDT)
-Date: Thu, 28 Mar 2024 09:18:52 -0700
-In-Reply-To: <20240328110103.28734-1-ncopa@alpinelinux.org>
+        d=1e100.net; s=20230601; t=1711643827; x=1712248627;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nUDRZCkgx5/3xip2LXBg5gNLMYFvJpvbSrcpUOSNmcA=;
+        b=MHk3wCExauhjqX8xINnGqAAU50+lKOwPT1IRtJEEmCKlYeEqP7G0J30quyeUPPbdsU
+         ji8uHyDzs/50QXGERdEzTV7mM240wz94xAvdmZrCrEeDp+ZOQ9Q+XbebBv3Pa7lOLY3K
+         8sPPIHfns0wQvlXCBl/bmnr0Qu7/Zjh86znsAIReYyQWjQwH8HQ1rP5IyZLVgQ0E0DzR
+         iNJPshlzCntPp4ylU7QLjVjAalgGtZ4SaFL2woGQDbh+M8LZP3W83xR8WAifTBKv8zgD
+         i+LfP2EDnop7/XJcXuDAspDma56lw0CVtkuQjCYlXwkd/V8WSbP2Kv0u+UMlX+g8y0+K
+         6lMA==
+X-Forwarded-Encrypted: i=1; AJvYcCVeQJP16qL4KKDJo4/uKpFaLpfZEwbWGGl40OBeCLlk0x5fxPXJY/BZRuV5c8COSFDZJN9SLdadyd2TZcDUERO2NJ8u
+X-Gm-Message-State: AOJu0YyYdb0kM+rtD4MZGg69l0HbqeV4xt0Zdy0l78d6PhkoVvzldM2h
+	8dJZwguGdY83umrw1vOt3K67101tyFp8tBpworiQ/03u6Dv2TsG9Bg3xebx0Myw=
+X-Google-Smtp-Source: AGHT+IFj+4EhHIWdI12xkC1CNl3O7Ra5TfJ01osQVmuu6JAWAAmHjmzs8BM9lrSG6oWkJ6wIyHXPZw==
+X-Received: by 2002:a05:600c:4f13:b0:413:ee55:8bba with SMTP id l19-20020a05600c4f1300b00413ee558bbamr3298423wmq.4.1711643826708;
+        Thu, 28 Mar 2024 09:37:06 -0700 (PDT)
+Received: from lavr ([2a02:168:f656:0:6017:91c3:e5e1:b05])
+        by smtp.gmail.com with ESMTPSA id p12-20020a05600c468c00b00413eb5aa694sm2796737wmo.38.2024.03.28.09.37.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Mar 2024 09:37:06 -0700 (PDT)
+Date: Thu, 28 Mar 2024 17:37:04 +0100
+From: Anton Protopopov <aspsk@isovalent.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Stanislav Fomichev <sdf@google.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH v1 bpf-next 3/9] bpf: expose how xlated insns map to
+ jitted insns
+Message-ID: <ZgWcsKZR23JIg51e@lavr>
+References: <CAADnVQJ+_+ok_io1_W7e5z_dZhxSqhEFZQkumRgmY4AJRYwW7g@mail.gmail.com>
+ <ZehJFP11vi5sv/eW@zh-lab-node-5>
+ <CAADnVQJnh+j9etPYkst7hhnepvsoBuJY-ds-AF0fn3VqqJNXNg@mail.gmail.com>
+ <ZfK9Y5c7RuOu0YiN@zh-lab-node-5>
+ <CAADnVQLXok7niyyvpUaJxq4pNFFrBP5Vsk47NNxw1V4ipBdRrg@mail.gmail.com>
+ <CAEf4BzbkkrFACwWQQQkESrdRKWUvJz=NyWdrtu4v6m2aOJKztw@mail.gmail.com>
+ <CAADnVQKdvKqNt0GJ5+vJFEHHjRF_YGUR_htrs+QjQ0SgUV5woA@mail.gmail.com>
+ <CAEf4BzY9wov5rS_MmzPWLErr8RKxKmFGV17Y2zsMCQCz6HKx6Q@mail.gmail.com>
+ <CAADnVQLOB6HHgrewH48RWYkx94aA2nkqJfmzrys5pTeQibVo3Q@mail.gmail.com>
+ <CAEf4BzbTgEzAv01hLWHJHHN24byEy-VWr32ijrLah-G55OS6Zw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240328110103.28734-1-ncopa@alpinelinux.org>
-Message-ID: <xr93zfuifhxv.fsf@gthelen-cloudtop.c.googlers.com>
-Subject: Re: [PATCH] tools/resolve_btfids: fix build with musl libc
-From: Greg Thelen <gthelen@google.com>
-To: Natanael Copa <ncopa@alpinelinux.org>, bpf@vger.kernel.org
-Cc: Natanael Copa <ncopa@alpinelinux.org>, stable@vger.kernel.org, 
-	Viktor Malik <vmalik@redhat.com>, Daniel Xu <dxu@dxuuu.xyz>, Alexei Starovoitov <ast@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	linux-kernel@vger.kernel.org, Khazhy Kumykov <khazhy@chromium.org>, 
-	Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzbTgEzAv01hLWHJHHN24byEy-VWr32ijrLah-G55OS6Zw@mail.gmail.com>
 
-Natanael Copa <ncopa@alpinelinux.org> wrote:
+On 24/03/15 10:29, Andrii Nakryiko wrote:
+> On Fri, Mar 15, 2024 at 10:23 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Fri, Mar 15, 2024 at 9:33 AM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > On Thu, Mar 14, 2024 at 2:41 PM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > On Thu, Mar 14, 2024 at 1:06 PM Andrii Nakryiko
+> > > > <andrii.nakryiko@gmail.com> wrote:
+> > > > > >
+> > > > > > > What could work and what I am proposing is to pass a list of bound
+> > > > > > > maps in prog_load attributes. Then such maps can be used during the
+> > > > > > > verification. For normal maps
+> > > > > > >
+> > > > > > >   prog = prog_load(attr={.bound_maps=maps})
+> > > > > > >
+> > > > > > > will be semantically the same as
+> > > > > > >
+> > > > > > >   prog = prog_load()
+> > > > > > >   bpf_prog_bind_map(prog, maps)
+> > > > > >
+> > > > > > Instead of a whole new api, let's make libbpf insert
+> > > > > > ld_imm64 r0, map
+> > > > > > as the first insn for this case for now.
+> > > > >
+> > > > > This sounds like a big hack and unnecessary complication, tbh. I'd
+> > > > > like to avoid having to do this in libbpf.
+> > > > >
+> > > > > But I think we almost have this already supported. In BPF_PROG_LOAD
+> > > > > UAPI we have fd_array property, right? I think right now we lazily
+> > > > > refcnt referenced maps. But I think it makes total sense to just
+> > > > > define that bpf_prog will keep references to all BPF objects passed in
+> > > > > through fd_array, WDYT? Verifier will just iterate all provided FDs,
+> > > > > determine kind of BPF object it is (and reject unknown ones), and then
+> > > > > just take refcnts on each of them once. On prog free we'll just do the
+> > > > > same in reverse and be done with it.
+> > > > >
+> > > > > It also can be used as a batch and single-step (in the sense it will
+> > > > > be done as part of program load instead of a separate command)
+> > > > > alternative for bpf_prog_bind_map(), I suppose.
+> > > >
+> > > > fd_array approach also works. There can be map and btf fds in there.
+> > > > I would only bind maps this way.
+> > >
+> > > Any reason why we should have non-uniform behavior between maps and
+> > > BTFs? Seems more error-prone to have a difference here, tbh.
+> >
+> > because maps are only held in used_maps while btfs are held
+> > in used_btfs and in kfunc_btf_tab.
+> > And looking at btf_fd it's not clear whether it will be in ld_imm64
+> > and hence used_btf or it's kfunc and will be in kfunc_btf_tab.
+> > All btfs can be stored unconditionally in used_btf,
+> > but that's unnecessary refcnt inc and module_get too.
+> > Doesn't hurt, but makes it harder to reason about everything.
+> > At least to me.
+> > I guess if the whole refcnt of maps and btfs is factored out
+> > and cleaned up into uniform used_maps/used_btf then it's ok,
+> > but fd_array is optional. So it feels messy.
+> 
+> Yeah, I was imagining that we'd iterate fd_array (if it's provided)
+> and add any map/btf into used_{map,btf}, refcnt. Then during
+> verification we'll just know that any referenced map or btf from
+> fd_array is already refcounted, so we wouldn't do it there. But I
+> haven't looked at kfunc_btf_tab, if that's causing some troubles with
+> this approach, then it's fine by me.
+> 
+> The assumption was that a uniform approach will be less messy and
+> simplify code and reasoning about the behavior, not the other way. If
+> that's not the case we can do it just for maps for now.
 
-> Include the header that defines u32.
-
-> Fixes: 9707ac4fe2f5 ("tools/resolve_btfids: Refactor set sorting with  
-> types from btf_ids.h")
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218647
-
-Tested-by: Greg Thelen <gthelen@google.com>
-
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Natanael Copa <ncopa@alpinelinux.org>
-> ---
-> This fixes build of 6.6.23 and 6.1.83 kernels for Alpine Linux, which
-> uses musl libc. I assume that GNU libc indirecly pulls in linux/types.h.
-
->   tools/include/linux/btf_ids.h | 2 ++
->   1 file changed, 2 insertions(+)
-
-> diff --git a/tools/include/linux/btf_ids.h b/tools/include/linux/btf_ids.h
-> index 72535f00572f..72ea363d434d 100644
-> --- a/tools/include/linux/btf_ids.h
-> +++ b/tools/include/linux/btf_ids.h
-> @@ -3,6 +3,8 @@
->   #ifndef _LINUX_BTF_IDS_H
->   #define _LINUX_BTF_IDS_H
-
-> +#include <linux/types.h> /* for u32 */
-> +
->   struct btf_id_set {
->   	u32 cnt;
->   	u32 ids[];
+fd_array is sent in attrs without specifying its size, so individual
+fds are copied to kernel as needed. Therefore, this is not possible
+to pass extra fds (not used directly by the program) without changing
+the API. So either a pair of new fields, say, (fd_extra,fd_extra_len),
+or just another field fd_array_len should be added. What sounds better?
