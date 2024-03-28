@@ -1,260 +1,138 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5861619479;
-	Thu, 28 Mar 2024 00:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE53368;
+	Thu, 28 Mar 2024 01:29:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711586751; cv=none; b=Ua8Ywi8ScUwa1VfPEWWVnAt/pZztzwZq+ckFig4ylLnlqimjnkQg3K8MdMcV4xH+im9Ujl1AotskxV31pbJMgm6+uyIKHjx9aCLFMgf3ppWVZ7irJCXqPXye0dRCeVkRJi7qz+zSp58HsiTg9aIZEYsjKGQ1nao/k/fMEeCRjxE=
+	t=1711589385; cv=none; b=Ila4FHJ+Bm9xidHCXaSS7ai5cMGReYbqqQkb/6V7TafVQsrys8BZ8g0os6KMuSFSThE9UZ+3YrNuFNb5NJDJAaTW7aAaLAhHe/pg2T93w++RWGSF8eSN4XTc8NBflI45KNoGDVZ225tl8xQQN6oRkmjgaATG2gos1I3Ehb9FXwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711586751; c=relaxed/simple;
-	bh=ZT60A2mwFpyTdyfb6cjW6OdhzBClWNMVq24Fogaaf3c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FAE69v16QRBUzrCpEXBlaeqGRfK6KuQgLvt8feMG38w3/VhIa8Iv1c8t8L6maDb/fPP7e+JAzCYhcI/AM+HTSGHQB0zc6L4vabgQqQslQUYbskBi5U9IyWp2CaFDQyMoicaIfpn9X6/MnDUD+w3a0xzA7HBpgyp/8xEn7hO4yEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mzMKjw6D; arc=none smtp.client-ip=209.85.210.171
+	s=arc-20240116; t=1711589385; c=relaxed/simple;
+	bh=GjZawt6xoy98e3Xp/Y+236Wtagn1P4gXHsS7RC+0S60=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dLxRI2gW84wnsQPvbzaAwSTvcxGKuA3cSIMWkaIplI2ESzEZ+knkN/AueEkBLEylQEhK1VrSg0S/yVTMa5+Zl3J7fctgW3r43pglyIcl3FR7yslVRMCZvkrCbBntgytoftJu0/n4nXp30rT02rjQT6xuKoC86PbEYtrGTOJ8Z4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ckhifJt8; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mzMKjw6D"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6ead4093f85so441637b3a.3;
-        Wed, 27 Mar 2024 17:45:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ckhifJt8"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6ea8a0d1a05so1024838b3a.1;
+        Wed, 27 Mar 2024 18:29:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711586749; x=1712191549; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9jgFg7/Se2gP2Slxoyf+gmLzNt05ZQGYEDydGAiD2AQ=;
-        b=mzMKjw6D65a3hEv1u9ZdTZn9hxzuPqIdcYE+D69/o6bbHzcv0fdSgDm/lgGwfrRc0G
-         FInWA0yBch+DyTQIjX8gATsToOJ8BlTyco/e9epKfB4asY4VE19hNWk+dPs//Wn18RSp
-         zcqkh/2gCA9bSQw+c/OHcSCuljXAtG2Jicdbekov+CnqecOAkLJeBqLnFJA49ExJIRSB
-         lAM/1/womCprSyOWUcvGQhQVKCEKOiI1fMm0m87cepVEOxK8dzQQY5F8k0ha3fvyeVRe
-         q0wt/sbK4WEA9Q95ukFDSizoLZAkFP8vE9ITZdyIdgl+G1/FX6Z4n+9zNwL6CUVTJWDf
-         zi4A==
+        d=gmail.com; s=20230601; t=1711589384; x=1712194184; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pnr6mD1K3zXgGPE0SDwjtoTMxIipbCVjzzKQw/uc1b8=;
+        b=ckhifJt8cASI+G1pXT21xBoEh+7o/cGGEVkNOfWByEYSKPxVItTNTxRkqEkN/6Ck3M
+         MoWKDbhnqmXAzQpbP53oG3X6YPFZTr6oTZm5YKNy07gXmqejkI0HUZoOc88Rd0EkmChH
+         MrHLzUJtb+4XDUtfs9141kuz/rO9qNtam3+nzPt5apGw0Uuiyn178EQc3wNSmqgeE/t+
+         bcU559ZQ0vZDhQW2znZYnZpwW1qmTGGmdujmuy7Iso6kbQQk+FR1o+dA+98nFGOi4jVA
+         SrwWMAS+Jb2dXlH31NQfqn9U+NOQMUdRfNan2OIPFjGNituk2WN8AcTVUXMJDuUN1zUv
+         Z7zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711586749; x=1712191549;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9jgFg7/Se2gP2Slxoyf+gmLzNt05ZQGYEDydGAiD2AQ=;
-        b=IhdrpNekCgLHteD8vP4iGVkhwsRF5sEC0ci6WtrMT6FhAejF73hUK2AMEgXUF1IQeV
-         5Evk5vtliVhTiU66Doxs/rxJmEjug/mCAxV0+qQDnqXrsG1udrZ3Y+wC5wy/dDrcFFLP
-         I2A/ufyKg4f3boNdFmBYqTRRVdEkYiLqK42ZSjtSaUPo51Xbwzs5E+si9m1EznK8n585
-         aQQckEOmKNSxL/wAR+TBefaT02hSxqFhWB+jvhzT4VD+QIilmKqLfUfnZZy/E7OrISh2
-         VV3a69iVyMvpZLpF/gBgsJh9xH3o7HmmNUftlZL0KiwIjJb5Sh7qFW9VCFIvbJW2NV+l
-         nsUA==
-X-Forwarded-Encrypted: i=1; AJvYcCWXK5lRu6NzdpXeqBP0db+MLBxvkjiBzI5IOLY5pVz3XFCmeAWNGIMP9c/qFKp/WlJ/a4j8TJjOp4j6U+bDMbIipPiksiLMr7Lc24673F/MLepP5q/WiZPJSwaWd+YMZ88gQAhQ2PmNkeAxInxcATJXaoNPyg/EhIO0mvgt7k85wjE8CxalDiHMACrV8RfzLb1+ggFXKwTBwCC7qP8XPVyNfKAap4C0sw==
-X-Gm-Message-State: AOJu0YwyjmPq8qz6sgcwlBrfRTIvaq25qyI9c7Ur56v1Pnx2czMVhBnI
-	A6KUkh8eeqb4/+6WglDJcy7OUf8LZIYHp6GuUfrn9aPJPQwWJs2XsDM5KxlhPv6qJqpmewMCw+t
-	sdhZO0mm8hYjdQ21B3NSPUiarufw=
-X-Google-Smtp-Source: AGHT+IFlKICW8fz6iHVeO34uBd3ttW60uqKrvw2Bvh9gRLxr0htA6R2XTOfaVpcr13VrMRzeVaXelEnyPNY9lvIUoZg=
-X-Received: by 2002:a05:6a20:af14:b0:1a3:67cb:f7c4 with SMTP id
- dr20-20020a056a20af1400b001a367cbf7c4mr1323907pzb.34.1711586748531; Wed, 27
- Mar 2024 17:45:48 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711589384; x=1712194184;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pnr6mD1K3zXgGPE0SDwjtoTMxIipbCVjzzKQw/uc1b8=;
+        b=GiM4bJoxFCpc+aqlIgdSwCNqyz2t2efo9GVOY2hC+hTUv/cEsmRp227POMgFTunPHV
+         2QZ6OjADkXnvz3Ktl+BbI1ij1prXm7tMxJkPM8dV7/t+myKCUaoCNAx/cleAYwjz94AK
+         54D8L9P8xeMpPjg6yMLDyBgOdyOfv1wbYg6GSXuupdSBIt6PVhfGcesQ24dbOQjtS0Jd
+         W2E2uqJKVF0nuvoG/U55xLUa4fIrBXgNLjqsZ1Snm2FryOfujUzmOvNAYz2j8iKiUS85
+         XtHzQPec745s0hEZR63M0dgyKWZYrHIuYEDBzjilwLsY7SXnWOkoIXnCh9RQpC91CIay
+         2yFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXF2TOGwizXDpl7zTbyxtq5YoaDjTVXSx9KC41EXy7fMSoOBsHv9yXjRvLljFAVpfcOpors5fWP7vfsan3p+sLHftimVhNgOZFkyc9cWNeBoOVejyFEI5ncV5LV
+X-Gm-Message-State: AOJu0YxL3GnuVkDdA9SfJjH80K4ZqZMJkR3A8wQoMQdw1EECylcT6qfc
+	027QGbQfvTNG+FAiqiNydGewCUfF4f8UdTh336+shkKaFT3Fy5GM
+X-Google-Smtp-Source: AGHT+IFECPtMYMPkz/XyDf2wvLowijIT5I7aeAW6f+9oJSADgOj1T6V6Mlh2GFflyTvYOC1wApR58w==
+X-Received: by 2002:a17:902:da85:b0:1e0:e85c:72dc with SMTP id j5-20020a170902da8500b001e0e85c72dcmr1439310plx.19.1711589382252;
+        Wed, 27 Mar 2024 18:29:42 -0700 (PDT)
+Received: from macbook-pro-49.dhcp.thefacebook.com ([2620:10d:c090:400::5:21bc])
+        by smtp.gmail.com with ESMTPSA id k5-20020a170902694500b001e038619e34sm187995plt.221.2024.03.27.18.29.40
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 27 Mar 2024 18:29:41 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: kuba@kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@kernel.org,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	kernel-team@fb.com
+Subject: pull-request: bpf 2024-03-27
+Date: Wed, 27 Mar 2024 18:29:38 -0700
+Message-Id: <20240328012938.24249-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.39.3 (Apple Git-145)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240321145736.2373846-1-jonathan.haslam@gmail.com>
- <20240325120323.ec3248d330b2755e73a6571e@kernel.org> <CAEf4BzZS_QCsSY0oGY_3pGveGfXKK_TkVURyNq=UQXVXSqi2Fw@mail.gmail.com>
- <20240327084245.a890ae12e579f0be1902ae4a@kernel.org> <54jakntmdyedadce7yrf6kljcjapbwyoqqt26dnllrqvs3pg7x@itra4a2ikgqw>
- <20240328091841.ce9cc613db375536de843cfb@kernel.org>
-In-Reply-To: <20240328091841.ce9cc613db375536de843cfb@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 27 Mar 2024 17:45:36 -0700
-Message-ID: <CAEf4BzYCJWXAzdV3q5ex+8hj5ZFCnu5CT=w8eDbZCGqm+CGYOQ@mail.gmail.com>
-Subject: Re: [PATCH] uprobes: reduce contention on uprobes_tree access
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Jonthan Haslam <jonathan.haslam@gmail.com>, linux-trace-kernel@vger.kernel.org, 
-	andrii@kernel.org, bpf@vger.kernel.org, rostedt@goodmis.org, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 27, 2024 at 5:18=E2=80=AFPM Masami Hiramatsu <mhiramat@kernel.o=
-rg> wrote:
->
-> On Wed, 27 Mar 2024 17:06:01 +0000
-> Jonthan Haslam <jonathan.haslam@gmail.com> wrote:
->
-> > > > Masami,
-> > > >
-> > > > Given the discussion around per-cpu rw semaphore and need for
-> > > > (internal) batched attachment API for uprobes, do you think you can
-> > > > apply this patch as is for now? We can then gain initial improvemen=
-ts
-> > > > in scalability that are also easy to backport, and Jonathan will wo=
-rk
-> > > > on a more complete solution based on per-cpu RW semaphore, as
-> > > > suggested by Ingo.
-> > >
-> > > Yeah, it is interesting to use per-cpu rw semaphore on uprobe.
-> > > I would like to wait for the next version.
-> >
-> > My initial tests show a nice improvement on the over RW spinlocks but
-> > significant regression in acquiring a write lock. I've got a few days
-> > vacation over Easter but I'll aim to get some more formalised results o=
-ut
-> > to the thread toward the end of next week.
->
-> As far as the write lock is only on the cold path, I think you can choose
-> per-cpu RW semaphore. Since it does not do busy wait, the total system
-> performance impact will be small.
+Hi David, hi Jakub, hi Paolo, hi Eric,
 
-No, Masami, unfortunately it's not as simple. In BPF we have BPF
-multi-uprobe, which can be used to attach to thousands of user
-functions. It currently creates one uprobe at a time, as we don't
-really have a batched API. If each such uprobe registration will now
-take a (relatively) long time, when multiplied by number of attach-to
-user functions, it will be a horrible regression in terms of
-attachment/detachment performance.
+The following pull-request contains BPF updates for your *net* tree.
 
-So when we switch to per-CPU rw semaphore, we'll need to provide an
-internal batch uprobe attach/detach API to make sure that attaching to
-multiple uprobes is still fast.
+We've added 4 non-merge commits during the last 1 day(s) which contain
+a total of 5 files changed, 26 insertions(+), 3 deletions(-).
 
-Which is why I was asking to land this patch as is, as it relieves the
-scalability pains in production and is easy to backport to old
-kernels. And then we can work on batched APIs and switch to per-CPU rw
-semaphore.
+The main changes are:
 
-So I hope you can reconsider and accept improvements in this patch,
-while Jonathan will keep working on even better final solution.
-Thanks!
+1) Fix bloom filter value size validation and protect the verifier
+   against such mistakes, from Andrei.
 
-> I look forward to your formalized results :)
->
-> Thank you,
->
-> >
-> > Jon.
-> >
-> > >
-> > > Thank you,
-> > >
-> > > >
-> > > > >
-> > > > > BTW, how did you measure the overhead? I think spinlock overhead
-> > > > > will depend on how much lock contention happens.
-> > > > >
-> > > > > Thank you,
-> > > > >
-> > > > > >
-> > > > > > [0] https://docs.kernel.org/locking/spinlocks.html
-> > > > > >
-> > > > > > Signed-off-by: Jonathan Haslam <jonathan.haslam@gmail.com>
-> > > > > > ---
-> > > > > >  kernel/events/uprobes.c | 22 +++++++++++-----------
-> > > > > >  1 file changed, 11 insertions(+), 11 deletions(-)
-> > > > > >
-> > > > > > diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-> > > > > > index 929e98c62965..42bf9b6e8bc0 100644
-> > > > > > --- a/kernel/events/uprobes.c
-> > > > > > +++ b/kernel/events/uprobes.c
-> > > > > > @@ -39,7 +39,7 @@ static struct rb_root uprobes_tree =3D RB_ROO=
-T;
-> > > > > >   */
-> > > > > >  #define no_uprobe_events()   RB_EMPTY_ROOT(&uprobes_tree)
-> > > > > >
-> > > > > > -static DEFINE_SPINLOCK(uprobes_treelock);    /* serialize rbtr=
-ee access */
-> > > > > > +static DEFINE_RWLOCK(uprobes_treelock);      /* serialize rbtr=
-ee access */
-> > > > > >
-> > > > > >  #define UPROBES_HASH_SZ      13
-> > > > > >  /* serialize uprobe->pending_list */
-> > > > > > @@ -669,9 +669,9 @@ static struct uprobe *find_uprobe(struct in=
-ode *inode, loff_t offset)
-> > > > > >  {
-> > > > > >       struct uprobe *uprobe;
-> > > > > >
-> > > > > > -     spin_lock(&uprobes_treelock);
-> > > > > > +     read_lock(&uprobes_treelock);
-> > > > > >       uprobe =3D __find_uprobe(inode, offset);
-> > > > > > -     spin_unlock(&uprobes_treelock);
-> > > > > > +     read_unlock(&uprobes_treelock);
-> > > > > >
-> > > > > >       return uprobe;
-> > > > > >  }
-> > > > > > @@ -701,9 +701,9 @@ static struct uprobe *insert_uprobe(struct =
-uprobe *uprobe)
-> > > > > >  {
-> > > > > >       struct uprobe *u;
-> > > > > >
-> > > > > > -     spin_lock(&uprobes_treelock);
-> > > > > > +     write_lock(&uprobes_treelock);
-> > > > > >       u =3D __insert_uprobe(uprobe);
-> > > > > > -     spin_unlock(&uprobes_treelock);
-> > > > > > +     write_unlock(&uprobes_treelock);
-> > > > > >
-> > > > > >       return u;
-> > > > > >  }
-> > > > > > @@ -935,9 +935,9 @@ static void delete_uprobe(struct uprobe *up=
-robe)
-> > > > > >       if (WARN_ON(!uprobe_is_active(uprobe)))
-> > > > > >               return;
-> > > > > >
-> > > > > > -     spin_lock(&uprobes_treelock);
-> > > > > > +     write_lock(&uprobes_treelock);
-> > > > > >       rb_erase(&uprobe->rb_node, &uprobes_tree);
-> > > > > > -     spin_unlock(&uprobes_treelock);
-> > > > > > +     write_unlock(&uprobes_treelock);
-> > > > > >       RB_CLEAR_NODE(&uprobe->rb_node); /* for uprobe_is_active(=
-) */
-> > > > > >       put_uprobe(uprobe);
-> > > > > >  }
-> > > > > > @@ -1298,7 +1298,7 @@ static void build_probe_list(struct inode=
- *inode,
-> > > > > >       min =3D vaddr_to_offset(vma, start);
-> > > > > >       max =3D min + (end - start) - 1;
-> > > > > >
-> > > > > > -     spin_lock(&uprobes_treelock);
-> > > > > > +     read_lock(&uprobes_treelock);
-> > > > > >       n =3D find_node_in_range(inode, min, max);
-> > > > > >       if (n) {
-> > > > > >               for (t =3D n; t; t =3D rb_prev(t)) {
-> > > > > > @@ -1316,7 +1316,7 @@ static void build_probe_list(struct inode=
- *inode,
-> > > > > >                       get_uprobe(u);
-> > > > > >               }
-> > > > > >       }
-> > > > > > -     spin_unlock(&uprobes_treelock);
-> > > > > > +     read_unlock(&uprobes_treelock);
-> > > > > >  }
-> > > > > >
-> > > > > >  /* @vma contains reference counter, not the probed instruction=
-. */
-> > > > > > @@ -1407,9 +1407,9 @@ vma_has_uprobes(struct vm_area_struct *vm=
-a, unsigned long start, unsigned long e
-> > > > > >       min =3D vaddr_to_offset(vma, start);
-> > > > > >       max =3D min + (end - start) - 1;
-> > > > > >
-> > > > > > -     spin_lock(&uprobes_treelock);
-> > > > > > +     read_lock(&uprobes_treelock);
-> > > > > >       n =3D find_node_in_range(inode, min, max);
-> > > > > > -     spin_unlock(&uprobes_treelock);
-> > > > > > +     read_unlock(&uprobes_treelock);
-> > > > > >
-> > > > > >       return !!n;
-> > > > > >  }
-> > > > > > --
-> > > > > > 2.43.0
-> > > > > >
-> > > > >
-> > > > >
-> > > > > --
-> > > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > >
-> > >
-> > > --
-> > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
->
->
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2) Fix build due to CONFIG_KEXEC_CORE/CRASH_DUMP split, from Hari.
+
+3) Update bpf_lsm maintainers entry, from Matt.
+
+Please consider pulling these changes from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/for-net
+
+Thanks a lot!
+
+Also thanks to reporters, reviewers and testers of commits in this pull-request:
+
+Andrii Nakryiko, Baoquan He, Jiri Olsa, KP Singh, Stanislav Fomichev
+
+----------------------------------------------------------------
+
+The following changes since commit afbf75e8da8ce8a0698212953d350697bb4355a6:
+
+  selftests: netdevsim: set test timeout to 10 minutes (2024-03-27 11:29:27 +0000)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/for-net
+
+for you to fetch changes up to 4dd651076ef0e5f09940f763a1b4e8a209dab7ab:
+
+  bpf: update BPF LSM designated reviewer list (2024-03-27 11:10:36 -0700)
+
+----------------------------------------------------------------
+for-net
+
+----------------------------------------------------------------
+Alexei Starovoitov (1):
+      Merge branch 'check-bloom-filter-map-value-size'
+
+Andrei Matei (2):
+      bpf: Check bloom filter map value size
+      bpf: Protect against int overflow for stack access size
+
+Hari Bathini (1):
+      bpf: fix warning for crash_kexec
+
+Matt Bobrowski (1):
+      bpf: update BPF LSM designated reviewer list
+
+ MAINTAINERS                                               |  3 +--
+ kernel/bpf/bloom_filter.c                                 | 13 +++++++++++++
+ kernel/bpf/helpers.c                                      |  2 +-
+ kernel/bpf/verifier.c                                     |  5 +++++
+ tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c |  6 ++++++
+ 5 files changed, 26 insertions(+), 3 deletions(-)
