@@ -1,127 +1,138 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E32F2561F;
-	Thu, 28 Mar 2024 07:31:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9379342A88
+	for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 08:12:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711611101; cv=none; b=l35qVSooQJgulXf8OEKXM4ee0eiW9zEiabwibizv6f8FKhsfkL2kBsAFdsaSVFGnwEn/j5SNqdoECfx+4U/wzWExWXSMbiYW1R5710zGqQWe24Zt57/6WWij+zk0Y4X16uKXZLVUG59umzXIyA3yrmEdXTITyXfMyzhZ9bFyVQA=
+	t=1711613548; cv=none; b=g5ZleLxff0HKTdqH94isZCF3BXpR83ptT42TdfENu7nR7ZCyEUVZBMlDBFw2BDLwH+SxuE9xuW1sI1VGMJSdDzIg5RYchPSf0v+DVHH/CnxWsbQwdO21TWGK6jT3Zk+NZMoS8yEAqOVAqDS3fbWJ+Cq8/GZIP+RNhhMY8/rpbeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711611101; c=relaxed/simple;
-	bh=UiexvZQWK+4Yc+SMZ9M3zHpPBZVoEYHrn9anANb9C5w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d5Fm6ImLcHPV6UYzlsQeYNsjvAQufCBZvBPsa210F2htuofaAshATEDf/2A5+yv08JlFkWpjmTYRAyXYwW6T0YT/0SU5eCH/gYnEQ9pXljqsRinJCl/lnkDFftrLbeUWzIEzBr/O7AtKnfMOcFBuMtBpAoSVFpTIrHmgldSXXD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=gcYWJotu; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	s=arc-20240116; t=1711613548; c=relaxed/simple;
+	bh=gb6MKVyB1Z8XbC5BzK8Z2vs4Yz7PgGAmQ7D3YG5+8D4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=G+BfOHscyuZ2igH05lxX3lzAcujyKp9h5soV+DHW9hRJ/a75037zWm/ByLXFgAwjO1UdRCPIaaAy6JNFc6v5b3sU2Nn0X6yytVpw+VfNIrUGuac92JrNlhbT4SOvPn42MfpEDkUZq/A84WxaZ3KdMcdit9s9pV8An2bwLWvXjE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=none smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=Sz3KYgQ7; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=daynix.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="gcYWJotu"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=vttzHoZOnFV3RpiKvH6mM16x2BnNpMVa6ppcy7eNO+k=; b=gcYWJotuQVW8GYZ0l03Qd1Y7Rx
-	geRqzubUVBuSA9E2/DAQoiPMRqhx1n9l+w28Wiufj/ZAExFJaqfwavTjC8gzuWje1jZN2jUSkE+qE
-	Q15FOsZFQN2b0luQEwgHnGe7lzK15zDdvK7FQjfmrbwwmVTazNYcBHn8mWmTha+YKF08jxIWc0REQ
-	+8EyFi9U6Gl0G+TAuZmP4Qd6h8HYQgYngvPlmHvo3Jo8XSRKsSWUmgiFQ8nfw+lmfCUH+lF0bMRBm
-	3NB7t68iGeniQOu1nPNBlIsx+leXTDUB9ZbdcRiTXuwjN/rjZyp29U3bvNZvER0Ozv/NSab0o7bxJ
-	CYLe7RCQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rpkEV-0000000CslI-1PHG;
-	Thu, 28 Mar 2024 07:31:31 +0000
-Date: Thu, 28 Mar 2024 00:31:31 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Christoph Hellwig <hch@infradead.org>, shakeel.butt@linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
- custom page providers
-Message-ID: <ZgUc07Szbx5x-obb@infradead.org>
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-3-almasrymina@google.com>
- <ZfegzB341oNc_Ocz@infradead.org>
- <CAHS8izOUi6qGp=LSQb_o5oph-EnhNOuhLkPSfbQRU3eniZvbdA@mail.gmail.com>
- <ZgC5JoSiWAYf3IgX@infradead.org>
- <CAHS8izO5-giYhM1bVCLLOXRXq-Xd0=pi0kPq5E1-R=3i=XihmQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="Sz3KYgQ7"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-56c4ca65dc6so736545a12.1
+        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 01:12:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1711613545; x=1712218345; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j7rvoFRBKxf0yE7YY8RQnWrAo8fviROdMGC4hs1RKLE=;
+        b=Sz3KYgQ7g2JZNBQ1+wrfP7/MNRWdJ1TLoLN0kDTWwxQJns/xx7qtHS8+RHVteDUra1
+         91PA8T1WqO8BM/9GPZlLWzwfwmKkqHAdhjUoDjvxes+GqDGjRuHpHXmbPp14286YGU8z
+         xC1KHBeE2ww9fOnIpkNxzvuJ+8FvbOcIQawEJQzB3Kec7DoF1vzDpHMbusiLFhsNGGuy
+         kmxeVBZ1Um/oZCoQDGxo+7m2pjFqCJHpeCOSz7YhpvR9BoukfdE/jYPdHP7L4IlBiBFR
+         9hi8JY19fw9CzJmBUqI9UtcXg/tZcBnooD3FuKRbe8clRRwXYo74fguza3ngLXD9tJfQ
+         faog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711613545; x=1712218345;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j7rvoFRBKxf0yE7YY8RQnWrAo8fviROdMGC4hs1RKLE=;
+        b=QblnozEufxHJ2yWm9Wfj+NJl2jFVQ2ZfiyJ9Ph+RYJKiye/tiH5QtiVrV+Es+azcN1
+         LwyuN45LWP+dqlwKiyRrcztMrof2U6PYoZrvi5vkyHlcMakLiz8Oewy+LVtgCe85Hyku
+         hDrtTpKsM/ATbW8lTPGOEM2B3wJO+1UG8leDgOw9yhu8QXg8IXA5cfea5gAzaY55wDFb
+         8g/2gORi7Ln2dSBkO9ukWYdhxcCn372XXyw19yDoUrYFhfWmfYuYFvw3hZs7wwZX1KZ8
+         Wj4eLcFTtA/RK+QEk+sKfDnrajP16gDp3aY5zbQAVgBCMHTO7sQiwdO5sOXuGt4QX5Oe
+         2nvA==
+X-Forwarded-Encrypted: i=1; AJvYcCXI8i4Gzoom6R1PoNME3SDM2O/OJNmJ0DCaEYEKuOxIKgNOMRwDDhkc93wU/WnxlmVrOZR/O84RDpxXoWEzmSUfQSRm
+X-Gm-Message-State: AOJu0YwaDkpTS/GtBvcfkFKHzuTI05U/H71lAA424sn8dI7RDboB6ziZ
+	H1Zs2wk3ZmHUy/aE+8/zfKo1M+volqUmFZn7F7PK1VZ7AruWNLW/XuN16u3Nh36PWVuV1gaCNCl
+	kAOwNdMkkYeIHTu5F87ELJIC5jK6Y2T27luWn4g==
+X-Google-Smtp-Source: AGHT+IFhAfd17DEM8g97DoHFH/S7dRUsoNxHZs84UzKZHQqH0hGnUpb1JsLJhLdhVjny84cLIFvqAV6Qd+lOthHSzAA=
+X-Received: by 2002:a50:c318:0:b0:56c:d64:26b2 with SMTP id
+ a24-20020a50c318000000b0056c0d6426b2mr1397511edb.9.1711613544772; Thu, 28 Mar
+ 2024 01:12:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHS8izO5-giYhM1bVCLLOXRXq-Xd0=pi0kPq5E1-R=3i=XihmQ@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20240327231826.1725488-1-andrew@daynix.com> <CACGkMEuW8jLvje0_oqCT=-ih9JEgxOrWRsvjvfwQXw=OWT_RtQ@mail.gmail.com>
+In-Reply-To: <CACGkMEuW8jLvje0_oqCT=-ih9JEgxOrWRsvjvfwQXw=OWT_RtQ@mail.gmail.com>
+From: Andrew Melnichenko <andrew@daynix.com>
+Date: Thu, 28 Mar 2024 09:46:36 +0200
+Message-ID: <CABcq3pFRookhQ8a8Sf9ri2ONOhHME9mXBMUZEOG1eGkJvAxQNw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] vhost: Added pad cleanup if vnet_hdr is not present.
+To: Jason Wang <jasowang@redhat.com>
+Cc: mst@redhat.com, ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net, 
+	kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, 
+	kvm@vger.kernel.org, virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	yuri.benditovich@daynix.com, yan@daynix.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 26, 2024 at 01:19:20PM -0700, Mina Almasry wrote:
-> 
-> Are you envisioning that dmabuf support would be added to the block
-> layer
+Thanks, I'll look into it.
 
-Yes.
-
-> (which I understand is part of the VFS and not driver specific),
-
-The block layer isn't really the VFS, it's just another core stack
-like the network stack.
-
-> or as part of the specific storage driver (like nvme for example)? If
-> we can add dmabuf support to the block layer itself that sounds
-> awesome. We may then be able to do devmem TCP on all/most storage
-> devices without having to modify each individual driver.
-
-I suspect we'll still need to touch the drivers to understand it,
-but hopefully all the main infrastructure can live in the block layer.
-
-> In your estimation, is adding dmabuf support to the block layer
-> something technically feasible & acceptable upstream? I notice you
-> suggested it so I'm guessing yes to both, but I thought I'd confirm.
-
-I think so, and I know there has been quite some interest to at least
-pre-register userspace memory so that the iommu overhead can be
-pre-loaded.  It also is a much better interface for Peer to Peer
-transfers than what we currently have.
-
+On Thu, Mar 28, 2024 at 6:03=E2=80=AFAM Jason Wang <jasowang@redhat.com> wr=
+ote:
+>
+> On Thu, Mar 28, 2024 at 7:44=E2=80=AFAM Andrew Melnychenko <andrew@daynix=
+.com> wrote:
+> >
+> > When the Qemu launched with vhost but without tap vnet_hdr,
+> > vhost tries to copy vnet_hdr from socket iter with size 0
+> > to the page that may contain some trash.
+> > That trash can be interpreted as unpredictable values for
+> > vnet_hdr.
+> > That leads to dropping some packets and in some cases to
+> > stalling vhost routine when the vhost_net tries to process
+> > packets and fails in a loop.
+> >
+> > Qemu options:
+> >   -netdev tap,vhost=3Don,vnet_hdr=3Doff,...
+> >
+> > From security point of view, wrong values on field used later
+> > tap's tap_get_user_xdp() and will affect skb gso and options.
+> > Later the header(and data in headroom) should not be used by the stack.
+> > Using custom socket as a backend to vhost_net can reveal some data
+> > in the vnet_hdr, although it would require kernel access to implement.
+> >
+> > The issue happens because the value of sock_len in virtqueue is 0.
+> > That value is set at vhost_net_set_features() with
+> > VHOST_NET_F_VIRTIO_NET_HDR, also it's set to zero at device open()
+> > and reset() routine.
+> > So, currently, to trigger the issue, we need to set up qemu with
+> > vhost=3Don,vnet_hdr=3Doff, or do not configure vhost in the custom prog=
+ram.
+> >
+> > Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
+>
+> Acked-by: Jason Wang <jasowang@redhat.com>
+>
+> It seems it has been merged by Michael.
+>
+> Thanks
+>
+> > ---
+> >  drivers/vhost/net.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
+> > index f2ed7167c848..57411ac2d08b 100644
+> > --- a/drivers/vhost/net.c
+> > +++ b/drivers/vhost/net.c
+> > @@ -735,6 +735,9 @@ static int vhost_net_build_xdp(struct vhost_net_vir=
+tqueue *nvq,
+> >         hdr =3D buf;
+> >         gso =3D &hdr->gso;
+> >
+> > +       if (!sock_hlen)
+> > +               memset(buf, 0, pad);
+> > +
+> >         if ((gso->flags & VIRTIO_NET_HDR_F_NEEDS_CSUM) &&
+> >             vhost16_to_cpu(vq, gso->csum_start) +
+> >             vhost16_to_cpu(vq, gso->csum_offset) + 2 >
+> > --
+> > 2.43.0
+> >
+>
