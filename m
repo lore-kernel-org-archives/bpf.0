@@ -1,73 +1,70 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91DA120319
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 06:53:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56633B1B2
+	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 06:59:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711695216; cv=none; b=mwrHv2NixcqWsQjSUVRw3jyrrmYvbtRBHg9pxaSouqQOrku8HArU+5lsaYhRuzGdb8qKeos57N26ouKphPj84WOLkPsxyJDell+s6cYM9m/+8hGXg0/FNYKbpgOVrvZZCJClziGyAGUTk3SeSOdZOkksj9RoHAlpWnfz0ZCfmLo=
+	t=1711695547; cv=none; b=hHW4aay7EctKbGz1e3Z6oB80aMh7fgIOewNLeQ97ZtUsf91h8RiheA7NYzSKxK3UpEdtZBREJUzGpA64Jey08KrwxB4eHbe0C42mHsKGO7aWGOPu5oLun6X5Fnj2kDAWh7873oeSx+y9r8RN7WvMyqM96s+jvR1iMpf0lg13Dhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711695216; c=relaxed/simple;
-	bh=wcXR61i87gB4ld+xFW+Urk6TWyhdRMxzkgOdBLrbUxI=;
+	s=arc-20240116; t=1711695547; c=relaxed/simple;
+	bh=h9iH+NxgICqla6Vj+dParRCdvqnXOQckpwZGUKlEjpQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H70absrmm0i9e9L79GsRSdLXe4KAPi+JiHZ4A3c9zleweo5TZRm30vIsCbIgya/RrSOgCCcH0z4YB3QXQZo//I28BlTMu14E+IXJm6AiuhgaQTaYdS/55V1FvukRjttNeLMZVW/2xw2AbE2yOKrHVkcVboksvQflPtQn8DCgs8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=LCldFd8y; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y8fjNV+y0HyRbDQ1nFVawkKuCpV34xrCjvLeTCrqdOWFvgs3p3C7oorYLcVMvK3Y8dqrBKO8ouYuv6vB4QUkNaBlbrZvbxLroVlNT206a7Qyq9Mn0GMGfYMKI5zbPfQoDSSVJh0t0ESPd3GFD6ZPzsAQNMtbRZiH+v3CHJ/hesI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=dslQfvOW; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="LCldFd8y"
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a4a3a5e47baso218092366b.2
-        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 23:53:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="dslQfvOW"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3416df43cabso1183688f8f.3
+        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 23:59:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1711695213; x=1712300013; darn=vger.kernel.org;
+        d=isovalent.com; s=google; t=1711695544; x=1712300344; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wcXR61i87gB4ld+xFW+Urk6TWyhdRMxzkgOdBLrbUxI=;
-        b=LCldFd8ytl2Qna87QTl1jDk1dOC+xx5aeNSmy1juv4QS76+Mw+SdoeK/Dl7uVyn/MW
-         eDNMGjWH3ebSoCExgJwHlxp8WZWKrP/bXcPV9WS5b9VwwROBMSf3H/0g+pK7i9Zv6uoJ
-         LXrvFI6FfMjmggJkyeli7xKJwX6cmlKC9NVNGIPGSr+83u6ap+P5sXVY0dFo5KXfpg8C
-         E4v6e6WdlrQSABaUnFVMG3GdvvpezHJvHIDIA5FWqLjpV/lGPKdCQ7uajYAa/TqhC5Q/
-         gcu3FZaC4q2kcdUL5Ba97pv8FnAQ7KaLtmUGm3z+o1cFAzImwbMn2NcTbznaG917zt5b
-         pDzg==
+        bh=1VOjvoiA8FXc2XWbJRypxPluT3CeOZ4Wnh9ISuCix+c=;
+        b=dslQfvOW9z0iHjaqV2BwWUQKpKdeiHEACHFkIntalTk0XeH9UsGjWARwFJAfKb1t9C
+         Z9KyY58NO22NkH7HYbpo/FHK5Cpmhg474rrm+cUpO77VniImarN5X5d+QND0NDgKtJx0
+         R6mgqjqsB4oJhCOo29dIbyaImScKdJYuJ10cEMPaZdgMVmhmyHtNyWbpLBTWRAzZ5Hvy
+         3rGYnNw9sAbX3ZPKioJF0YXao1Uq0+Cv3Fpj3rPRr1+uLtrP5qKfpvxcs31hPWGXgXzr
+         77usv0ik+O43Gcvez18XLaLNCfLTM2Z7ATn115G1c9weVI+fm0GfFLxr/qgvpXTPgciW
+         RTdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711695213; x=1712300013;
+        d=1e100.net; s=20230601; t=1711695544; x=1712300344;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wcXR61i87gB4ld+xFW+Urk6TWyhdRMxzkgOdBLrbUxI=;
-        b=Vpj9NaIce2BajFMJIRfYQxI1w5mTh0P+2vOXF9YBOsXh5DV3gqmxx5GWCPPV6nbMrh
-         WBiT6ubJBzNpEgZnyWQQw95GyBelkUOXSOiYv4MRaZonKNSa6267DYtX/pBGGTOU/cy+
-         eVrdGVZFDqVZCNDZ466IWywuTTDURU35xnT1PXbka/jCzc7SoBeTbu+f5Lr0vgZ5GfE+
-         v8C6Cxgve0bJ4xyaJS74ZfdOaUs8mfMB6mV/OaUaipFXLPZx4W0WrHjjqKJH8Xs1KDNr
-         8+ZvBKb/R4zoAQ+l44xACGNTvJCt/QxRkbqYVDdRlDIaBEPVH+a1J/o8zCye0jJYAwlJ
-         0WLg==
-X-Forwarded-Encrypted: i=1; AJvYcCXtqgl7qwFCmKEVR9UYOHqW6S2ZNEA4NfHHXkl2aeT6AiWsZVlkbHp9JKqeGa75UxkwyyzjDEkyQnhx3E6IP+oBkaym
-X-Gm-Message-State: AOJu0YxoCqdT8Ilf1gUaO23iid2MSceNE4NSrtKYrJzeYuls/HNW5ct9
-	GUmC+sh6aIME/FgZo5riZeZgSfIZSlc09ja3DCtFOT92t5XJMYNBJb9MJvB3ISo=
-X-Google-Smtp-Source: AGHT+IG0JFu+Ik/0xsYF2sKJvwQC8WMfDBELf60Gw3unUkzIdk7GlnrFb8mf7yF9RXSl1NDEz+Dw4Q==
-X-Received: by 2002:a17:906:52d1:b0:a44:51c1:733c with SMTP id w17-20020a17090652d100b00a4451c1733cmr980442ejn.39.1711695213035;
-        Thu, 28 Mar 2024 23:53:33 -0700 (PDT)
-Received: from u94a ([2401:e180:8810:bf68:a132:2657:d239:3e12])
-        by smtp.gmail.com with ESMTPSA id gq21-20020a170906e25500b00a4e373ff59dsm307019ejb.98.2024.03.28.23.53.23
+        bh=1VOjvoiA8FXc2XWbJRypxPluT3CeOZ4Wnh9ISuCix+c=;
+        b=Kpc5d7mkz/VVKzebu7XrPvYs2RMvJ6WzFxLxDs47ldEeS+fSoyk6XriQ+N2ONepBSf
+         5OINFZ1Gq5NwqwzWKrUndeGIsXBLf00pOJvZVGzOHOX1Ct3f1IstaNB+TuUKmYrF489Y
+         lc5od/3am6CZHVWcWeDzvfpWp1MgzMsVUH/JhLsaCY8CXUzWzdq8WDvmE/Xbl97mK34A
+         tgsKshekXa1soeqqpJiUS/6Axn1WpeUu5VYf7GgCa/dhCBHnwmBo0BzzJu2zI+4c8xj3
+         3V4t10FU0WkBMsU6vFvdX7sPFsq/STZadSa1pyWjwCfljZb58BEsSvEVgAymucPg8FPR
+         QcIA==
+X-Forwarded-Encrypted: i=1; AJvYcCVjGRhyGN4ZVAZsMp5mgmpYpwsGzoQ4ILdS1/imxJLM3uGBX6D9+93fVnrCLx4W0d491lIQ8zriOLJ0tWzFdwOpmuVI
+X-Gm-Message-State: AOJu0Yx+hN/Vh6ZKh5S3xXs4FyxAGfholkaQ/lQ30rWj/Pa2UXqm6Zfh
+	ySSI0ZVZGeZPAvCLZUePb7A3la4IGgEn8ht57oyUFRAjee6QnLokWtPZDWaZ0kQ=
+X-Google-Smtp-Source: AGHT+IGfwx+D4Dm21Z2pHTYDXNf4jBW17+Wbo8y3sLJOJM3sL0jfuUcTq0Was6vXO/kXpVvVfUY2AA==
+X-Received: by 2002:a05:6000:ec3:b0:33e:b9df:8445 with SMTP id ea3-20020a0560000ec300b0033eb9df8445mr766966wrb.38.1711695544044;
+        Thu, 28 Mar 2024 23:59:04 -0700 (PDT)
+Received: from zh-lab-node-5 ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id q18-20020a05600000d200b0033e03a6b1ecsm3476555wrx.18.2024.03.28.23.59.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Mar 2024 23:53:32 -0700 (PDT)
-Date: Fri, 29 Mar 2024 14:53:18 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
-Cc: ast@kernel.org, harishankar.vishwanathan@rutgers.edu, 
-	sn624@cs.rutgers.edu, sn349@cs.rutgers.edu, m.shachnai@rutgers.edu, paul@isovalent.com, 
-	Srinivas Narayana <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH bpf-next] Fix latent unsoundness in and/or/xor value
- tracking
-Message-ID: <7o5espvlmyttj74awibexz3q7dkvrerswgsn3x7vxesjxf5ggu@urrrltbmsqir>
-References: <20240329030119.29995-1-harishankar.vishwanathan@gmail.com>
- <7s76qe3ucxiyjctbztrpuevwu4hxeogrm7bbarewjbu6bhsyfr@m4dkjap7hiyy>
+        Thu, 28 Mar 2024 23:59:03 -0700 (PDT)
+Date: Fri, 29 Mar 2024 07:01:11 +0000
+From: Anton Protopopov <aspsk@isovalent.com>
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next 1/1] bpf: fix possible file descriptor leaks in
+ verifier
+Message-ID: <ZgZnNyeKSyEMxxYj@zh-lab-node-5>
+References: <20240328095657.1995763-1-aspsk@isovalent.com>
+ <cf8d5e75-dc75-4f86-be60-013f7ed7c688@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -76,14 +73,42 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7s76qe3ucxiyjctbztrpuevwu4hxeogrm7bbarewjbu6bhsyfr@m4dkjap7hiyy>
+In-Reply-To: <cf8d5e75-dc75-4f86-be60-013f7ed7c688@linux.dev>
 
-On Fri, Mar 29, 2024 at 02:34:00PM +0800, Shung-Hsi Yu wrote:
+On Thu, Mar 28, 2024 at 08:23:03PM -0700, Yonghong Song wrote:
+> 
+> On 3/28/24 2:56 AM, Anton Protopopov wrote:
+> > The resolve_pseudo_ldimm64() function might have leaked file
+> > descriptors when BPF_MAP_TYPE_ARENA was used in a program (some
+> > error paths missed a corresponding fdput).
+> > 
+> > Fix leaks and also extract code which adds maps to env->used_maps
+> > into a separate function. This simplifies code of resolve_pseudo_ldimm64
+> > and makes it possible to reuse this code later.  While at it, also add a
+> > verifier verbose message when the maps usage limit is reached.
+> 
+> Could you break this single patch into a series? For example,
+> for 'to reuse this code later', refactoring the code (without
+> funcitonality change) can be a separate patch, could you explain
+> what do you mean reusing the code later? Do you have some plans
+> to reuse the code later?
+
+Yes, to pre-process file descriptors in attrs.fd_array (or a similar array).
+See this thread https://lore.kernel.org/bpf/ZgWcsKZR23JIg51e@lavr/
+
+> The fix for missing fdput() should be its own patch with
+> Fixes tag below.
+> 
+> You can have yet another patch to enhance verifier by adding
+> verbose messages.
+
+Thanks. I will just send two fixes for fdput and the verifier message.
+I will send a patch which refactors code when it is needed.
+
+> > 
+> > Fixes: 6082b6c328b5 ("bpf: Recognize addr_space_cast instruction in the verifier.")
+> > Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
+> > ---
+> >   kernel/bpf/verifier.c | 150 ++++++++++++++++++++++--------------------
+> >   1 file changed, 79 insertions(+), 71 deletions(-)
 > [...]
-> Fixed: b03c9f9fdc37 ("bpf/verifier: track signed and unsigned min/max values")
-
-Should have been
-
-Fixes: b03c9f9fdc37 ("bpf/verifier: track signed and unsigned min/max values")
-
-Sorry for the noise.
