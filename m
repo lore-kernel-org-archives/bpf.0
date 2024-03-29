@@ -1,215 +1,534 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C58B4F606;
-	Fri, 29 Mar 2024 11:24:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC5F13E885
+	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 13:06:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711711445; cv=none; b=rD1GfBUUDili56Ji7xFrEBcyNoGatKPjvmUp3sfXZRUUykU9JCsYWfano8nwpwnrQo7MMTlwWT0lJL9u6qfCwdUHVOs7ZwfEmMLcfQPRSmfPfOipA3szdSwa9MtrFYSS5M0u4/Lsb5FowCkVotuRHwGHKbb2Vynbc5Exw0rF4t0=
+	t=1711717583; cv=none; b=kc+z0rwEMeIXDdmq+EjDBrEE/Au3vIGRlTIKJ4i2Kw1DQCc3IuDIqMIfgT/iS3RqozHhXyqVHxzTWNh5uJhEFC0NSiMtQ7z+TRhFB92yKTi7N4v7dwRUzBaZR46Vmdox6P2a8gdhI0wQTt35nSq+zqe5UAngH870vc69ktbkLpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711711445; c=relaxed/simple;
-	bh=Jrj6syQt8Qu+9vJQGs9hIoWtYWx8WSpMoq0M4O6W0DA=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A6ltcb9gB+248Kyeja5CgEhvPl8SeGXkbMm59/kbVVHo6e9CVA6mhhjfnTVtP0liTKq2Dng9iG9kyxZRysnHSySaTBlhtC/i5dNl/m6qkKW9eoJez/ujv6p3Ii8oEreiZUQy2ll02ydIFwA3b6GwdfPPtH3tudgRjxevI69wHtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=gRcV3oo1; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="gRcV3oo1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1711711444; x=1743247444;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Jrj6syQt8Qu+9vJQGs9hIoWtYWx8WSpMoq0M4O6W0DA=;
-  b=gRcV3oo1WcHwDMPx7zCdyScfSCh8EaQjICxjzVkJDUnq+AZBpNFZQ3al
-   boptGZxx1M7Tdi1dyA6/z7c61JdKeFBWX1My1r6Jpdv/iczY0TqDdWLHe
-   YiIc5o7KcA6o7NAofWQJyXmrRW9j5ctLlPSVENDZFYY5bILzgdTwj5lFD
-   InciI0STENJWp53Q8Yg4YpKh7vpc4AqgaDvPbW14xHXK2jvGkyCA0frdU
-   SvwKCs3l5vwokHmKqTG2LwyPh8sFgL+sgAhwALodriN+sotyOv0JdnYlQ
-   56bw4eCb8FuOqsF0dkOfWv4gYG0CaaITYwxBVri1yBOKOOAc2sMXZvLQ3
-   A==;
-X-CSE-ConnectionGUID: /1VBts7pSJCRmgq1ilCSXw==
-X-CSE-MsgGUID: AX2flsgOTj6YYO4PNZ7U1w==
-X-IronPort-AV: E=Sophos;i="6.07,164,1708412400"; 
-   d="asc'?scan'208";a="249424125"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Mar 2024 04:24:01 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 29 Mar 2024 04:23:58 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex04.mchp-main.com (10.10.85.152)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Fri, 29 Mar 2024 04:23:54 -0700
-Date: Fri, 29 Mar 2024 11:23:06 +0000
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Conor Dooley <conor@kernel.org>
-CC: Stefan O'Rear <sorear@fastmail.com>, Pu Lehui <pulehui@huaweicloud.com>,
-	<bpf@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<netdev@vger.kernel.org>, =?iso-8859-1?Q?Bj=F6rn_T=F6pel?=
-	<bjorn@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
-	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
-	<song@kernel.org>, Yonghong Song <yhs@fb.com>, John Fastabend
-	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
-	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Manu Bretelle <chantr4@gmail.com>, Pu Lehui
-	<pulehui@huawei.com>
-Subject: Re: [PATCH bpf-next 2/5] riscv, bpf: Relax restrictions on Zbb
- instructions
-Message-ID: <20240329-linguini-uncured-380cb4cff61c@wendy>
-References: <20240328124916.293173-1-pulehui@huaweicloud.com>
- <20240328124916.293173-3-pulehui@huaweicloud.com>
- <3ed9fe94-2610-41eb-8a00-a9f37fcf2b1a@app.fastmail.com>
- <20240328-ferocity-repose-c554f75a676c@spud>
+	s=arc-20240116; t=1711717583; c=relaxed/simple;
+	bh=8ovlNW7/szjlK/bECUQ6scAoXLodJrB2ZD5JObgKLiY=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=XaUlqvx2aNJfL7riXyuWrllgc1FTdM38z9JsyKCvox8tiXqkT4ChVNrEWkrRu2JHQnooXZwvmfch+j7tZ3dzudOcMyEc53jk2oD/v89YKVfVSBCT1dLeIRPrU5e6gXnuDmS5/2hRNnn/YcjTW6BT8YoGoG8Ch4bmXtjOQ6YTwmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7cbffd468acso173226139f.0
+        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 06:06:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711717580; x=1712322380;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YnP0p+iOwXEaXmMUFQSEdcHEGqtl4hJsrYDZ6+5/KWI=;
+        b=DK9YeXopbMANoLdAnPA7FJX7A/JFzjtPqxp8UqsXEVS690VOwgKsvQazDkrhLm8VkS
+         t2qiOpkSPq4Qe1T4TwpD+xOhvLY+2wHczRvmeMkzGwop4bLep/wYyG+tvmzeTCPLMopD
+         h2C81vf8PdvjbC+qRxAMoo7Kw1GvVrA+laH+xd9qqvQysZHUxKexZtLVHGJQVJat4GC+
+         /8ienv7fZq1tL/cZ4Q1yA3UWl1TjnB5aaDWQIdkeyW5b2LOqEBE6c7gSkEVnLK5MaphW
+         4ik4nlUalim2napP6MkCZ0OVKXklcjWTOVUeWZecVTou32uofU4/Ypu+zPyOeXdd4Z8n
+         Yetg==
+X-Forwarded-Encrypted: i=1; AJvYcCXttTh0Omn3ytfLaIxbKwxCRSITBMA3ij70GG+CqlyHUXmMEKxdzp8p61j/20/sDkawVx7H42p2cKoEA/k9HTJ+jS1V
+X-Gm-Message-State: AOJu0Yx9+L4MLO/G/qd9CU6mVps1BGl6LYv/5mLkOyKFd5370yYUYvi/
+	tAuNEQB/GP4zXXEkVRbIT9TR41Wz7YDA/WVvPM8fk/IGuwszkHAHGVgPonirD/RPz5iwh6DfdRC
+	dt+TaSIjorAIhcsFRbNOX5BM1vJS30QfSsHCTwxk4CB0+AOcBIlR07QQ=
+X-Google-Smtp-Source: AGHT+IF9JfaRrg3bohG+NUJbYdCpZhKNIDBIznBRUlObsKeSjXXng+CqZpoFfpeSYlN28kwPxts3cBVK54cFmV1sX+MuRGmagEEC
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="3w5FiosotNHZDrPp"
-Content-Disposition: inline
-In-Reply-To: <20240328-ferocity-repose-c554f75a676c@spud>
+X-Received: by 2002:a05:6638:13c5:b0:47e:c495:3a19 with SMTP id
+ i5-20020a05663813c500b0047ec4953a19mr56345jaj.2.1711717579990; Fri, 29 Mar
+ 2024 06:06:19 -0700 (PDT)
+Date: Fri, 29 Mar 2024 06:06:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004fbc7a0614cc4eb9@google.com>
+Subject: [syzbot] [bpf?] [net?] possible deadlock in tick_setup_sched_timer
+From: syzbot <syzbot+e4374f6c021d422de3d1@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com, 
+	jakub@cloudflare.com, john.fastabend@gmail.com, kuba@kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
---3w5FiosotNHZDrPp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-On Thu, Mar 28, 2024 at 10:07:23PM +0000, Conor Dooley wrote:
+syzbot found the following issue on:
 
-> As I said on IRC to you earlier, I think the Kconfig options here are in
-> need of a bit of a spring cleaning - they should be modified to explain
-> their individual purposes, be that enabling optimisations in the kernel
-> or being required for userspace. I'll try to send a patch for that if
-> I remember tomorrow.
+HEAD commit:    fe46a7dd189e Merge tag 'sound-6.9-rc1' of git://git.kernel..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=169feab1180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=aef2a55903e5791c
+dashboard link: https://syzkaller.appspot.com/bug?extid=e4374f6c021d422de3d1
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1422aeb1180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17103c51180000
 
-Something like this:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/089e25869df5/disk-fe46a7dd.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/423b1787914f/vmlinux-fe46a7dd.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/4c043e30c07d/bzImage-fe46a7dd.xz
 
--- >8 --
-commit 5125504beaedd669b082bf74b02003a77360670f
-Author: Conor Dooley <conor.dooley@microchip.com>
-Date:   Fri Mar 29 11:13:22 2024 +0000
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e4374f6c021d422de3d1@syzkaller.appspotmail.com
 
-    RISC-V: clarify what some RISCV_ISA* config options do
-   =20
-    During some discussion on IRC yesterday and on Pu's bpf patch [1]
-    I noticed that these RISCV_ISA* Kconfig options are not really clear
-    about their implications. Many of these options have no impact on what
-    userspace is allowed to do, for example an application can use Zbb
-    regardless of whether or not the kernel does. Change the help text to
-    try and clarify whether or not an option affects just the kernel, or
-    also userspace. None of these options actually control whether or not an
-    extension is detected dynamically as that's done regardless of Kconfig
-    options, so drop any text that implies the option is required for
-    dynamic detection, rewording them as "do x when y is detected".
-   =20
-    Link: https://lore.kernel.org/linux-riscv/20240328-ferocity-repose-c554=
-f75a676c@spud/ [1]
-    Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-    ---
-    I did this based on top of Samuel's changes dropping the MMU
-    requurements just in case, but I don't think there's a conflict:
-    https://lore.kernel.org/linux-riscv/20240227003630.3634533-4-samuel.hol=
-land@sifive.com/
+=====================================================
+WARNING: HARDIRQ-safe -> HARDIRQ-unsafe lock order detected
+6.8.0-syzkaller-08951-gfe46a7dd189e #0 Not tainted
+-----------------------------------------------------
+swapper/0/0 [HC0[0]:SC1[3]:HE0:SE0] is trying to acquire:
+ffffc900036083e0 (&htab->buckets[i].lock){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:356 [inline]
+ffffc900036083e0 (&htab->buckets[i].lock){+.-.}-{2:2}, at: sock_hash_delete_elem+0xcb/0x260 net/core/sock_map.c:939
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index d8a777f59402..f327a8ac648f 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -501,8 +501,8 @@ config RISCV_ISA_SVNAPOT
- 	depends on RISCV_ALTERNATIVE
- 	default y
- 	help
--	  Allow kernel to detect the Svnapot ISA-extension dynamically at boot
--	  time and enable its usage.
-+	  Add support for the Svnapot ISA-extension when it is detected by
-+	  the kernel at boot.
-=20
- 	  The Svnapot extension is used to mark contiguous PTEs as a range
- 	  of contiguous virtual-to-physical translations for a naturally
-@@ -520,9 +520,9 @@ config RISCV_ISA_SVPBMT
- 	depends on RISCV_ALTERNATIVE
- 	default y
- 	help
--	   Adds support to dynamically detect the presence of the Svpbmt
--	   ISA-extension (Supervisor-mode: page-based memory types) and
--	   enable its usage.
-+	   Add support for the Svpbmt ISA-extension (Supervisor-mode:
-+	   page-based memory types) when it is detected by the kernel at
-+	   boot.
-=20
- 	   The memory type for a page contains a combination of attributes
- 	   that indicate the cacheability, idempotency, and ordering
-@@ -541,14 +541,15 @@ config TOOLCHAIN_HAS_V
- 	depends on AS_HAS_OPTION_ARCH
-=20
- config RISCV_ISA_V
--	bool "VECTOR extension support"
-+	bool "Vector extension support"
- 	depends on TOOLCHAIN_HAS_V
- 	depends on FPU
- 	select DYNAMIC_SIGFRAME
- 	default y
- 	help
- 	  Say N here if you want to disable all vector related procedure
--	  in the kernel.
-+	  in the kernel. Without this option enabled, neither the kernel nor
-+	  userspace may use vector.
-=20
- 	  If you don't know what to do here, say Y.
-=20
-@@ -606,8 +607,8 @@ config RISCV_ISA_ZBB
- 	depends on RISCV_ALTERNATIVE
- 	default y
- 	help
--	   Adds support to dynamically detect the presence of the ZBB
--	   extension (basic bit manipulation) and enable its usage.
-+	   Add support for enabling optimisations in the kernel when the
-+	   Zbb extension is detected at boot.
-=20
- 	   The Zbb extension provides instructions to accelerate a number
- 	   of bit-specific operations (count bit population, sign extending,
-@@ -623,9 +624,9 @@ config RISCV_ISA_ZICBOM
- 	select RISCV_DMA_NONCOHERENT
- 	select DMA_DIRECT_REMAP
- 	help
--	   Adds support to dynamically detect the presence of the ZICBOM
--	   extension (Cache Block Management Operations) and enable its
--	   usage.
-+	   Add support for the Zicbom extension (Cache Block Management
-+	   Operations) and enable its use in the kernel when it is detected
-+	   at boot.
-=20
- 	   The Zicbom extension can be used to handle for example
- 	   non-coherent DMA support on devices that need it.
-@@ -684,7 +685,8 @@ config FPU
- 	default y
- 	help
- 	  Say N here if you want to disable all floating-point related procedure
--	  in the kernel.
-+	  in the kernel. Without this option enabled, neither the kernel nor
-+	  userspace may use vector.
-=20
- 	  If you don't know what to do here, say Y.
-=20
+and this task is already holding:
+ffff8880b943d5d8 (&pool->lock){-.-.}-{2:2}, at: __queue_work+0x38e/0x1170 kernel/workqueue.c:2357
+which would create a new lock dependency:
+ (&pool->lock){-.-.}-{2:2} -> (&htab->buckets[i].lock){+.-.}-{2:2}
+
+but this new dependency connects a HARDIRQ-irq-safe lock:
+ (&pool->lock){-.-.}-{2:2}
+
+... which became HARDIRQ-irq-safe at:
+  lock_acquire kernel/locking/lockdep.c:5754 [inline]
+  lock_acquire+0x1b1/0x540 kernel/locking/lockdep.c:5719
+  __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+  _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+  __queue_work+0x39e/0x1170 kernel/workqueue.c:2360
+  queue_work_on+0xf4/0x120 kernel/workqueue.c:2435
+  tick_nohz_activate kernel/time/tick-sched.c:1491 [inline]
+  tick_setup_sched_timer+0x47c/0x790 kernel/time/tick-sched.c:1592
+  hrtimer_switch_to_hres kernel/time/hrtimer.c:750 [inline]
+  hrtimer_run_queues+0x33c/0x450 kernel/time/hrtimer.c:1918
+  run_local_timers kernel/time/timer.c:2453 [inline]
+  update_process_times+0xcf/0x220 kernel/time/timer.c:2475
+  tick_periodic+0x7e/0x230 kernel/time/tick-common.c:100
+  tick_handle_periodic+0x45/0x120 kernel/time/tick-common.c:112
+  local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1032 [inline]
+  __sysvec_apic_timer_interrupt+0x10f/0x410 arch/x86/kernel/apic/apic.c:1049
+  instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1043 [inline]
+  sysvec_apic_timer_interrupt+0x90/0xb0 arch/x86/kernel/apic/apic.c:1043
+  asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+  console_flush_all+0xa19/0xd70 kernel/printk/printk.c:2979
+  console_unlock+0xae/0x290 kernel/printk/printk.c:3042
+  vprintk_emit kernel/printk/printk.c:2342 [inline]
+  vprintk_emit+0x11a/0x5a0 kernel/printk/printk.c:2297
+  vprintk+0x7f/0xa0 kernel/printk/printk_safe.c:45
+  _printk+0xc8/0x100 kernel/printk/printk.c:2367
+  __clocksource_select+0x33f/0x400 kernel/time/clocksource.c:1046
+  clocksource_select kernel/time/clocksource.c:1061 [inline]
+  clocksource_done_booting+0x39/0x50 kernel/time/clocksource.c:1085
+  do_one_initcall+0x128/0x690 init/main.c:1241
+  do_initcall_level init/main.c:1303 [inline]
+  do_initcalls init/main.c:1319 [inline]
+  do_basic_setup init/main.c:1338 [inline]
+  kernel_init_freeable+0x69d/0xc40 init/main.c:1550
+  kernel_init+0x1c/0x2a0 init/main.c:1439
+  ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+  ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
+
+to a HARDIRQ-irq-unsafe lock:
+ (&htab->buckets[i].lock){+.-.}-{2:2}
+
+... which became HARDIRQ-irq-unsafe at:
+...
+  lock_acquire kernel/locking/lockdep.c:5754 [inline]
+  lock_acquire+0x1b1/0x540 kernel/locking/lockdep.c:5719
+  __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+  _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
+  spin_lock_bh include/linux/spinlock.h:356 [inline]
+  sock_hash_free+0x130/0x820 net/core/sock_map.c:1154
+  bpf_map_free_deferred+0x1ce/0x420 kernel/bpf/syscall.c:734
+  process_one_work+0x9a9/0x1a60 kernel/workqueue.c:3254
+  process_scheduled_works kernel/workqueue.c:3335 [inline]
+  worker_thread+0x6c8/0xf70 kernel/workqueue.c:3416
+  kthread+0x2c1/0x3a0 kernel/kthread.c:388
+  ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+  ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
+
+other info that might help us debug this:
+
+ Possible interrupt unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&htab->buckets[i].lock);
+                               local_irq_disable();
+                               lock(&pool->lock);
+                               lock(&htab->buckets[i].lock);
+  <Interrupt>
+    lock(&pool->lock);
+
+ *** DEADLOCK ***
+
+4 locks held by swapper/0/0:
+ #0: ffffc90000007cb0 (&(&krcp->monitor_work)->timer){..-.}-{0:0}, at: call_timer_fn+0x11a/0x5b0 kernel/time/timer.c:1789
+ #1: ffffffff8d7b08e0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:298 [inline]
+ #1: ffffffff8d7b08e0 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:750 [inline]
+ #1: ffffffff8d7b08e0 (rcu_read_lock){....}-{1:2}, at: __queue_work+0xf2/0x1170 kernel/workqueue.c:2324
+ #2: ffff8880b943d5d8 (&pool->lock){-.-.}-{2:2}, at: __queue_work+0x38e/0x1170 kernel/workqueue.c:2357
+ #3: ffffffff8d7b08e0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:298 [inline]
+ #3: ffffffff8d7b08e0 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:750 [inline]
+ #3: ffffffff8d7b08e0 (rcu_read_lock){....}-{1:2}, at: __bpf_trace_run kernel/trace/bpf_trace.c:2380 [inline]
+ #3: ffffffff8d7b08e0 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run1+0xdc/0x410 kernel/trace/bpf_trace.c:2419
+
+the dependencies between HARDIRQ-irq-safe lock and the holding lock:
+-> (&pool->lock){-.-.}-{2:2} {
+   IN-HARDIRQ-W at:
+                    lock_acquire kernel/locking/lockdep.c:5754 [inline]
+                    lock_acquire+0x1b1/0x540 kernel/locking/lockdep.c:5719
+                    __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+                    _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+                    __queue_work+0x39e/0x1170 kernel/workqueue.c:2360
+                    queue_work_on+0xf4/0x120 kernel/workqueue.c:2435
+                    tick_nohz_activate kernel/time/tick-sched.c:1491 [inline]
+                    tick_setup_sched_timer+0x47c/0x790 kernel/time/tick-sched.c:1592
+                    hrtimer_switch_to_hres kernel/time/hrtimer.c:750 [inline]
+                    hrtimer_run_queues+0x33c/0x450 kernel/time/hrtimer.c:1918
+                    run_local_timers kernel/time/timer.c:2453 [inline]
+                    update_process_times+0xcf/0x220 kernel/time/timer.c:2475
+                    tick_periodic+0x7e/0x230 kernel/time/tick-common.c:100
+                    tick_handle_periodic+0x45/0x120 kernel/time/tick-common.c:112
+                    local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1032 [inline]
+                    __sysvec_apic_timer_interrupt+0x10f/0x410 arch/x86/kernel/apic/apic.c:1049
+                    instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1043 [inline]
+                    sysvec_apic_timer_interrupt+0x90/0xb0 arch/x86/kernel/apic/apic.c:1043
+                    asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+                    console_flush_all+0xa19/0xd70 kernel/printk/printk.c:2979
+                    console_unlock+0xae/0x290 kernel/printk/printk.c:3042
+                    vprintk_emit kernel/printk/printk.c:2342 [inline]
+                    vprintk_emit+0x11a/0x5a0 kernel/printk/printk.c:2297
+                    vprintk+0x7f/0xa0 kernel/printk/printk_safe.c:45
+                    _printk+0xc8/0x100 kernel/printk/printk.c:2367
+                    __clocksource_select+0x33f/0x400 kernel/time/clocksource.c:1046
+                    clocksource_select kernel/time/clocksource.c:1061 [inline]
+                    clocksource_done_booting+0x39/0x50 kernel/time/clocksource.c:1085
+                    do_one_initcall+0x128/0x690 init/main.c:1241
+                    do_initcall_level init/main.c:1303 [inline]
+                    do_initcalls init/main.c:1319 [inline]
+                    do_basic_setup init/main.c:1338 [inline]
+                    kernel_init_freeable+0x69d/0xc40 init/main.c:1550
+                    kernel_init+0x1c/0x2a0 init/main.c:1439
+                    ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+                    ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
+   IN-SOFTIRQ-W at:
+                    lock_acquire kernel/locking/lockdep.c:5754 [inline]
+                    lock_acquire+0x1b1/0x540 kernel/locking/lockdep.c:5719
+                    __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+                    _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+                    __queue_work+0x39e/0x1170 kernel/workqueue.c:2360
+                    call_timer_fn+0x1a0/0x5b0 kernel/time/timer.c:1792
+                    expire_timers kernel/time/timer.c:1838 [inline]
+                    __run_timers+0x567/0xab0 kernel/time/timer.c:2408
+                    __run_timer_base kernel/time/timer.c:2419 [inline]
+                    __run_timer_base kernel/time/timer.c:2412 [inline]
+                    run_timer_base+0x111/0x190 kernel/time/timer.c:2428
+                    run_timer_softirq+0x1a/0x40 kernel/time/timer.c:2438
+                    __do_softirq+0x218/0x8de kernel/softirq.c:554
+                    invoke_softirq kernel/softirq.c:428 [inline]
+                    __irq_exit_rcu kernel/softirq.c:633 [inline]
+                    irq_exit_rcu+0xb9/0x120 kernel/softirq.c:645
+                    instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1043 [inline]
+                    sysvec_apic_timer_interrupt+0x95/0xb0 arch/x86/kernel/apic/apic.c:1043
+                    asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+                    native_safe_halt arch/x86/include/asm/irqflags.h:48 [inline]
+                    arch_safe_halt arch/x86/include/asm/irqflags.h:86 [inline]
+                    default_idle+0xf/0x20 arch/x86/kernel/process.c:742
+                    default_idle_call+0x6d/0xb0 kernel/sched/idle.c:117
+                    cpuidle_idle_call kernel/sched/idle.c:191 [inline]
+                    do_idle+0x32c/0x3f0 kernel/sched/idle.c:332
+                    cpu_startup_entry+0x4f/0x60 kernel/sched/idle.c:430
+                    rest_init+0x16f/0x2b0 init/main.c:730
+                    arch_call_rest_init+0x13/0x40 init/main.c:831
+                    start_kernel+0x3a3/0x490 init/main.c:1077
+                    x86_64_start_reservations+0x18/0x30 arch/x86/kernel/head64.c:509
+                    x86_64_start_kernel+0xb2/0xc0 arch/x86/kernel/head64.c:490
+                    common_startup_64+0x13e/0x148
+   INITIAL USE at:
+                   lock_acquire kernel/locking/lockdep.c:5754 [inline]
+                   lock_acquire+0x1b1/0x540 kernel/locking/lockdep.c:5719
+                   __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+                   _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+                   __queue_work+0x39e/0x1170 kernel/workqueue.c:2360
+                   queue_work_on+0xf4/0x120 kernel/workqueue.c:2435
+                   queue_work include/linux/workqueue.h:605 [inline]
+                   start_poll_synchronize_rcu_expedited+0x147/0x180 kernel/rcu/tree_exp.h:1017
+                   rcu_init+0x1625/0x20c0 kernel/rcu/tree.c:5240
+                   start_kernel+0x19e/0x490 init/main.c:969
+                   x86_64_start_reservations+0x18/0x30 arch/x86/kernel/head64.c:509
+                   x86_64_start_kernel+0xb2/0xc0 arch/x86/kernel/head64.c:490
+                   common_startup_64+0x13e/0x148
+ }
+ ... key      at: [<ffffffff929d9de0>] __key.17+0x0/0x40
+
+the dependencies between the lock to be acquired
+ and HARDIRQ-irq-unsafe lock:
+-> (&htab->buckets[i].lock){+.-.}-{2:2} {
+   HARDIRQ-ON-W at:
+                    lock_acquire kernel/locking/lockdep.c:5754 [inline]
+                    lock_acquire+0x1b1/0x540 kernel/locking/lockdep.c:5719
+                    __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+                    _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
+                    spin_lock_bh include/linux/spinlock.h:356 [inline]
+                    sock_hash_free+0x130/0x820 net/core/sock_map.c:1154
+                    bpf_map_free_deferred+0x1ce/0x420 kernel/bpf/syscall.c:734
+                    process_one_work+0x9a9/0x1a60 kernel/workqueue.c:3254
+                    process_scheduled_works kernel/workqueue.c:3335 [inline]
+                    worker_thread+0x6c8/0xf70 kernel/workqueue.c:3416
+                    kthread+0x2c1/0x3a0 kernel/kthread.c:388
+                    ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+                    ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
+   IN-SOFTIRQ-W at:
+                    lock_acquire kernel/locking/lockdep.c:5754 [inline]
+                    lock_acquire+0x1b1/0x540 kernel/locking/lockdep.c:5719
+                    __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+                    _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
+                    spin_lock_bh include/linux/spinlock.h:356 [inline]
+                    sock_hash_delete_elem+0xcb/0x260 net/core/sock_map.c:939
+                    ___bpf_prog_run+0x3e51/0xae80 kernel/bpf/core.c:1997
+                    __bpf_prog_run32+0xc1/0x100 kernel/bpf/core.c:2236
+                    bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+                    __bpf_prog_run include/linux/filter.h:657 [inline]
+                    bpf_prog_run include/linux/filter.h:664 [inline]
+                    __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+                    bpf_trace_run1+0x149/0x410 kernel/trace/bpf_trace.c:2419
+                    __bpf_trace_workqueue_activate_work+0x98/0xd0 include/trace/events/workqueue.h:59
+                    trace_workqueue_activate_work include/trace/events/workqueue.h:59 [inline]
+                    __queue_work+0xd0d/0x1170 kernel/workqueue.c:2399
+                    call_timer_fn+0x1a0/0x5b0 kernel/time/timer.c:1792
+                    expire_timers kernel/time/timer.c:1838 [inline]
+                    __run_timers+0x567/0xab0 kernel/time/timer.c:2408
+                    __run_timer_base kernel/time/timer.c:2419 [inline]
+                    __run_timer_base kernel/time/timer.c:2412 [inline]
+                    run_timer_base+0x111/0x190 kernel/time/timer.c:2428
+                    run_timer_softirq+0x1a/0x40 kernel/time/timer.c:2438
+                    __do_softirq+0x218/0x8de kernel/softirq.c:554
+                    invoke_softirq kernel/softirq.c:428 [inline]
+                    __irq_exit_rcu kernel/softirq.c:633 [inline]
+                    irq_exit_rcu+0xb9/0x120 kernel/softirq.c:645
+                    instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1043 [inline]
+                    sysvec_apic_timer_interrupt+0x95/0xb0 arch/x86/kernel/apic/apic.c:1043
+                    asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+                    native_safe_halt arch/x86/include/asm/irqflags.h:48 [inline]
+                    arch_safe_halt arch/x86/include/asm/irqflags.h:86 [inline]
+                    acpi_safe_halt+0x1a/0x20 drivers/acpi/processor_idle.c:112
+                    acpi_idle_enter+0xc5/0x160 drivers/acpi/processor_idle.c:707
+                    cpuidle_enter_state+0x85/0x510 drivers/cpuidle/cpuidle.c:267
+                    cpuidle_enter+0x4e/0xa0 drivers/cpuidle/cpuidle.c:388
+                    cpuidle_idle_call kernel/sched/idle.c:236 [inline]
+                    do_idle+0x313/0x3f0 kernel/sched/idle.c:332
+                    cpu_startup_entry+0x4f/0x60 kernel/sched/idle.c:430
+                    rest_init+0x16f/0x2b0 init/main.c:730
+                    arch_call_rest_init+0x13/0x40 init/main.c:831
+                    start_kernel+0x3a3/0x490 init/main.c:1077
+                    x86_64_start_reservations+0x18/0x30 arch/x86/kernel/head64.c:509
+                    x86_64_start_kernel+0xb2/0xc0 arch/x86/kernel/head64.c:490
+                    common_startup_64+0x13e/0x148
+   INITIAL USE at:
+                   lock_acquire kernel/locking/lockdep.c:5754 [inline]
+                   lock_acquire+0x1b1/0x540 kernel/locking/lockdep.c:5719
+                   __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+                   _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
+                   spin_lock_bh include/linux/spinlock.h:356 [inline]
+                   sock_hash_free+0x130/0x820 net/core/sock_map.c:1154
+                   bpf_map_free_deferred+0x1ce/0x420 kernel/bpf/syscall.c:734
+                   process_one_work+0x9a9/0x1a60 kernel/workqueue.c:3254
+                   process_scheduled_works kernel/workqueue.c:3335 [inline]
+                   worker_thread+0x6c8/0xf70 kernel/workqueue.c:3416
+                   kthread+0x2c1/0x3a0 kernel/kthread.c:388
+                   ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+                   ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
+ }
+ ... key      at: [<ffffffff949c67c0>] __key.0+0x0/0x40
+ ... acquired at:
+   lock_acquire kernel/locking/lockdep.c:5754 [inline]
+   lock_acquire+0x1b1/0x540 kernel/locking/lockdep.c:5719
+   __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+   _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
+   spin_lock_bh include/linux/spinlock.h:356 [inline]
+   sock_hash_delete_elem+0xcb/0x260 net/core/sock_map.c:939
+   ___bpf_prog_run+0x3e51/0xae80 kernel/bpf/core.c:1997
+   __bpf_prog_run32+0xc1/0x100 kernel/bpf/core.c:2236
+   bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+   __bpf_prog_run include/linux/filter.h:657 [inline]
+   bpf_prog_run include/linux/filter.h:664 [inline]
+   __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+   bpf_trace_run1+0x149/0x410 kernel/trace/bpf_trace.c:2419
+   __bpf_trace_workqueue_activate_work+0x98/0xd0 include/trace/events/workqueue.h:59
+   trace_workqueue_activate_work include/trace/events/workqueue.h:59 [inline]
+   __queue_work+0xd0d/0x1170 kernel/workqueue.c:2399
+   call_timer_fn+0x1a0/0x5b0 kernel/time/timer.c:1792
+   expire_timers kernel/time/timer.c:1838 [inline]
+   __run_timers+0x567/0xab0 kernel/time/timer.c:2408
+   __run_timer_base kernel/time/timer.c:2419 [inline]
+   __run_timer_base kernel/time/timer.c:2412 [inline]
+   run_timer_base+0x111/0x190 kernel/time/timer.c:2428
+   run_timer_softirq+0x1a/0x40 kernel/time/timer.c:2438
+   __do_softirq+0x218/0x8de kernel/softirq.c:554
+   invoke_softirq kernel/softirq.c:428 [inline]
+   __irq_exit_rcu kernel/softirq.c:633 [inline]
+   irq_exit_rcu+0xb9/0x120 kernel/softirq.c:645
+   instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1043 [inline]
+   sysvec_apic_timer_interrupt+0x95/0xb0 arch/x86/kernel/apic/apic.c:1043
+   asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+   native_safe_halt arch/x86/include/asm/irqflags.h:48 [inline]
+   arch_safe_halt arch/x86/include/asm/irqflags.h:86 [inline]
+   acpi_safe_halt+0x1a/0x20 drivers/acpi/processor_idle.c:112
+   acpi_idle_enter+0xc5/0x160 drivers/acpi/processor_idle.c:707
+   cpuidle_enter_state+0x85/0x510 drivers/cpuidle/cpuidle.c:267
+   cpuidle_enter+0x4e/0xa0 drivers/cpuidle/cpuidle.c:388
+   cpuidle_idle_call kernel/sched/idle.c:236 [inline]
+   do_idle+0x313/0x3f0 kernel/sched/idle.c:332
+   cpu_startup_entry+0x4f/0x60 kernel/sched/idle.c:430
+   rest_init+0x16f/0x2b0 init/main.c:730
+   arch_call_rest_init+0x13/0x40 init/main.c:831
+   start_kernel+0x3a3/0x490 init/main.c:1077
+   x86_64_start_reservations+0x18/0x30 arch/x86/kernel/head64.c:509
+   x86_64_start_kernel+0xb2/0xc0 arch/x86/kernel/head64.c:490
+   common_startup_64+0x13e/0x148
 
 
---3w5FiosotNHZDrPp
-Content-Type: application/pgp-signature; name="signature.asc"
+stack backtrace:
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.8.0-syzkaller-08951-gfe46a7dd189e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/27/2024
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:114
+ print_bad_irq_dependency kernel/locking/lockdep.c:2626 [inline]
+ check_irq_usage+0xe3c/0x1490 kernel/locking/lockdep.c:2865
+ check_prev_add kernel/locking/lockdep.c:3138 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3253 [inline]
+ validate_chain kernel/locking/lockdep.c:3869 [inline]
+ __lock_acquire+0x248e/0x3b30 kernel/locking/lockdep.c:5137
+ lock_acquire kernel/locking/lockdep.c:5754 [inline]
+ lock_acquire+0x1b1/0x540 kernel/locking/lockdep.c:5719
+ __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+ _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
+ spin_lock_bh include/linux/spinlock.h:356 [inline]
+ sock_hash_delete_elem+0xcb/0x260 net/core/sock_map.c:939
+ ___bpf_prog_run+0x3e51/0xae80 kernel/bpf/core.c:1997
+ __bpf_prog_run32+0xc1/0x100 kernel/bpf/core.c:2236
+ bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+ __bpf_prog_run include/linux/filter.h:657 [inline]
+ bpf_prog_run include/linux/filter.h:664 [inline]
+ __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+ bpf_trace_run1+0x149/0x410 kernel/trace/bpf_trace.c:2419
+ __bpf_trace_workqueue_activate_work+0x98/0xd0 include/trace/events/workqueue.h:59
+ trace_workqueue_activate_work include/trace/events/workqueue.h:59 [inline]
+ __queue_work+0xd0d/0x1170 kernel/workqueue.c:2399
+ call_timer_fn+0x1a0/0x5b0 kernel/time/timer.c:1792
+ expire_timers kernel/time/timer.c:1838 [inline]
+ __run_timers+0x567/0xab0 kernel/time/timer.c:2408
+ __run_timer_base kernel/time/timer.c:2419 [inline]
+ __run_timer_base kernel/time/timer.c:2412 [inline]
+ run_timer_base+0x111/0x190 kernel/time/timer.c:2428
+ run_timer_softirq+0x1a/0x40 kernel/time/timer.c:2438
+ __do_softirq+0x218/0x8de kernel/softirq.c:554
+ invoke_softirq kernel/softirq.c:428 [inline]
+ __irq_exit_rcu kernel/softirq.c:633 [inline]
+ irq_exit_rcu+0xb9/0x120 kernel/softirq.c:645
+ instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1043 [inline]
+ sysvec_apic_timer_interrupt+0x95/0xb0 arch/x86/kernel/apic/apic.c:1043
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+RIP: 0010:native_irq_disable arch/x86/include/asm/irqflags.h:37 [inline]
+RIP: 0010:arch_local_irq_disable arch/x86/include/asm/irqflags.h:72 [inline]
+RIP: 0010:acpi_safe_halt+0x1a/0x20 drivers/acpi/processor_idle.c:113
+Code: 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 65 48 8b 05 d8 60 31 75 48 8b 00 a8 08 75 0c 66 90 0f 00 2d c8 73 a7 00 fb f4 <fa> c3 cc cc cc cc 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+RSP: 0018:ffffffff8d407d68 EFLAGS: 00000246
+RAX: 0000000000004000 RBX: 0000000000000001 RCX: ffffffff8ad255f9
+RDX: 0000000000000001 RSI: ffff88801bab8000 RDI: ffff88801bab8064
+RBP: ffff88801bab8064 R08: 0000000000000001 R09: ffffed1017286fdd
+R10: ffff8880b9437eeb R11: 0000000000000000 R12: ffff8880173d4800
+R13: ffffffff8e31fbc0 R14: 0000000000000000 R15: 0000000000000000
+ acpi_idle_enter+0xc5/0x160 drivers/acpi/processor_idle.c:707
+ cpuidle_enter_state+0x85/0x510 drivers/cpuidle/cpuidle.c:267
+ cpuidle_enter+0x4e/0xa0 drivers/cpuidle/cpuidle.c:388
+ cpuidle_idle_call kernel/sched/idle.c:236 [inline]
+ do_idle+0x313/0x3f0 kernel/sched/idle.c:332
+ cpu_startup_entry+0x4f/0x60 kernel/sched/idle.c:430
+ rest_init+0x16f/0x2b0 init/main.c:730
+ arch_call_rest_init+0x13/0x40 init/main.c:831
+ start_kernel+0x3a3/0x490 init/main.c:1077
+ x86_64_start_reservations+0x18/0x30 arch/x86/kernel/head64.c:509
+ x86_64_start_kernel+0xb2/0xc0 arch/x86/kernel/head64.c:490
+ common_startup_64+0x13e/0x148
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	90                   	nop
+   1:	90                   	nop
+   2:	90                   	nop
+   3:	90                   	nop
+   4:	90                   	nop
+   5:	90                   	nop
+   6:	90                   	nop
+   7:	90                   	nop
+   8:	90                   	nop
+   9:	90                   	nop
+   a:	90                   	nop
+   b:	90                   	nop
+   c:	90                   	nop
+   d:	90                   	nop
+   e:	90                   	nop
+   f:	90                   	nop
+  10:	65 48 8b 05 d8 60 31 	mov    %gs:0x753160d8(%rip),%rax        # 0x753160f0
+  17:	75
+  18:	48 8b 00             	mov    (%rax),%rax
+  1b:	a8 08                	test   $0x8,%al
+  1d:	75 0c                	jne    0x2b
+  1f:	66 90                	xchg   %ax,%ax
+  21:	0f 00 2d c8 73 a7 00 	verw   0xa773c8(%rip)        # 0xa773f0
+  28:	fb                   	sti
+  29:	f4                   	hlt
+* 2a:	fa                   	cli <-- trapping instruction
+  2b:	c3                   	ret
+  2c:	cc                   	int3
+  2d:	cc                   	int3
+  2e:	cc                   	int3
+  2f:	cc                   	int3
+  30:	90                   	nop
+  31:	90                   	nop
+  32:	90                   	nop
+  33:	90                   	nop
+  34:	90                   	nop
+  35:	90                   	nop
+  36:	90                   	nop
+  37:	90                   	nop
+  38:	90                   	nop
+  39:	90                   	nop
+  3a:	90                   	nop
+  3b:	90                   	nop
+  3c:	90                   	nop
+  3d:	90                   	nop
+  3e:	90                   	nop
+  3f:	90                   	nop
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZgakmgAKCRB4tDGHoIJi
-0i5uAQDpfKrD3sCVEMzQmkCAyMoGFe2KN23qp4Qq8wsF4GUwWAEAolnPKacUQiAa
-bHyHhXo7v4OmhrqQ8dWqPmvM5Fqb4Q8=
-=a121
------END PGP SIGNATURE-----
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
---3w5FiosotNHZDrPp--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
