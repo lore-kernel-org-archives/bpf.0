@@ -1,74 +1,35 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409E91327E6;
-	Thu, 28 Mar 2024 23:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C44AD5223;
+	Fri, 29 Mar 2024 00:31:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711669959; cv=none; b=CCKZbwlgnZmWeU0mNQnUjPqWvlw7WCpms/L8Iab9Harqq66ysbXhN8/gmE08st0wQwX+MiTJhx2I8qudSvKhK/0hQ06D+4Vg8EUKNooiyvtHtcJtdi96qsI2KSH3S76zpn6tngYyOGFUgxUeKxFXORG2R73gY2ZnknifB0JLNtc=
+	t=1711672270; cv=none; b=cJDmmfF1CIJkHNsax94VJaEbazK20ZMJWhtI6Z42eOOZqOBB5qrce7P6eHqo8xiqdaoxeHi76je88LtVkAOHgQ+iIAPYByINuLYmoGr5AX5iVidsWvy8I/KEfUOHui/g6ZEgGz5BaO47qOka6C06xoJGMhxTs6FsenMhv5VKdMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711669959; c=relaxed/simple;
-	bh=Dui4JcdqJdFEvq+w6+x4V9SEJobLhQzTvcXhr5TIfhw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sLHEtjuArN/uMklHkvElUpTOvsZirR6HbTFN/By/gVGF4hh1n6Hs/0ta20rcLPA6kdRvuzbsYfC13Dhf0fgvPTZWtcRrnwvvGN4Fl8dSyrgDmYkHdH+uxYBFEX3usBx3MnwTNLnJVBlQaSbewseyKz3Ho/6PjM867Gk/5jhzSF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-56bb22ff7baso1701315a12.3;
-        Thu, 28 Mar 2024 16:52:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711669955; x=1712274755;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xqtSjhsIGMw3eisHvYjf5GhA8W6tXJZWoW+tqNLCeD8=;
-        b=ZRenh+4sU6BBQcinnp0m3Gbp7aLj+EyqBUJe1JsutkSW8MefoGjCbmBMahRxmTsIoH
-         XtoO2koWOgXLghVVfKv0jj1fcDc0jtMpJ7yFhf5SI0Kf9vxp5Wio0aIgp74vhE9+blDo
-         x54Ohk3Cx02HKQG06ewtPNU72n2twTGaAb6/w3qhim7cJmsmOq8/gFKyDJxTkACw0qYG
-         wdyxc/KtbCjWXCDYWVg0YO6H3kWagO0wnr83nNjRYTlzXCgvGYneWaE6WnJbx7mXNoHt
-         4rq79SZmXzx29oVCAza0UhHn132KZrdYsmeLSJSLvOzwmRtt5wgH8y8r4pfAFuK9A/zp
-         f0Gg==
-X-Forwarded-Encrypted: i=1; AJvYcCXvOupbB1hVYPnUHycJJ6FmZjM37ZdMIRCEUyySVieBrsV8nibzehJFBQ+ryATVff9X6Tok0m3mvt/97VYpthEwxmJtOaRO7XRq54XVNZ99xXQ0urw9EjL5kQuN3Y2bE1MDxiZSSMlIyv5WQP6w7WH50IUBAhO9ELeO
-X-Gm-Message-State: AOJu0YzA2RmhwljtXwdlO27bl3qGvjwo6BlGCsz9n+Xm2PP0iFs00NOL
-	rD1ObHd/XFCIMxWPKRbM78alW8/rkOmQMq7VwRrgwSGN3GIXyEZn
-X-Google-Smtp-Source: AGHT+IG9vSwUMvZ2P+h61oiaTZLpn1bcN9YYag5Q+BphmZLDkUC5jfCveqGuLgKEPPELDEQBqvfaag==
-X-Received: by 2002:a17:906:2dc1:b0:a4d:ffcb:1f4e with SMTP id h1-20020a1709062dc100b00a4dffcb1f4emr391810eji.75.1711669955247;
-        Thu, 28 Mar 2024 16:52:35 -0700 (PDT)
-Received: from localhost (fwdproxy-lla-005.fbsv.net. [2a03:2880:30ff:5::face:b00c])
-        by smtp.gmail.com with ESMTPSA id gl17-20020a170906e0d100b00a4df6442e69sm1274302ejb.152.2024.03.28.16.52.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Mar 2024 16:52:34 -0700 (PDT)
-From: Breno Leitao <leitao@debian.org>
-To: aleksander.lobakin@intel.com,
-	kuba@kernel.org,
-	davem@davemloft.net,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	Felix Fietkau <nbd@nbd.name>,
-	Sean Wang <sean.wang@mediatek.com>,
-	Mark Lee <Mark-MC.Lee@mediatek.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>
-Cc: quic_jjohnson@quicinc.com,
-	kvalo@kernel.org,
-	leon@kernel.org,
-	dennis.dalessandro@cornelisnetworks.com,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC support),
-	linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC support),
-	bpf@vger.kernel.org (open list:XDP (eXpress Data Path):Keyword:(?:\b|_)xdp(?:\b|_))
-Subject: [PATCH net-next v2 3/5] net: mediatek: mtk_eth_sock: allocate dummy net_device dynamically
-Date: Thu, 28 Mar 2024 16:52:03 -0700
-Message-ID: <20240328235214.4079063-4-leitao@debian.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240328235214.4079063-1-leitao@debian.org>
-References: <20240328235214.4079063-1-leitao@debian.org>
+	s=arc-20240116; t=1711672270; c=relaxed/simple;
+	bh=qT743jPxa1XDwbNz9fp9wTjjmM0T0DFvYjRIAeLmIPY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=ttQJyjxPjBq1q94wYV0p0UOV7+58CZpSw7mvIdlN3/P1HV9UFH0BGhn89y6tYaBA/5CTeQbeyofZVoesTfzl0WMaOVG1FKVlFLUbYkQ+gRO98JYLVcTtoBocQXpmCCBxB6s4cfS2bqg9CdRuA14uE77reRN+7cIjWhUxy5Z3id0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VxB1x4Xc; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VxB1x4Xc"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 55175C43394;
+	Fri, 29 Mar 2024 00:31:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711672270;
+	bh=qT743jPxa1XDwbNz9fp9wTjjmM0T0DFvYjRIAeLmIPY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=VxB1x4XcveMTl4sW1vWHos+K2NAEOrk2XOeynE7/cLU3qAoIAgcn6cAoXLheUOd51
+	 hkETwfxQUTvc5cTEjFCPmlbVigQc9wWvSNqifU9e25JFw9FIiUVjh/2VLziAOb8A8M
+	 I6mnp7Hj++z8FUlIsD85827iKLdrucbTaUHlo7zGvQ9KHOwSMlyZ6Ppyx9w6FbffUP
+	 8dYd9RoSpUR/E3ouqSloN7gny8wktxaB7WPWDwsRyEo50jpGFsdo0ZJ1zptH4F0k6T
+	 dQ6JXAdzQMpPY/Zp1Vhc0/2yspuTkKCKLr5K06ru3gvmGKBX/Z17DE0H1cdCeqVjYg
+	 bGtaC5SMOM/Nw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 43318D2D0E1;
+	Fri, 29 Mar 2024 00:31:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -76,85 +37,49 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3] selftests/mm: Fix ARM related issue with fork after
+ pthread_create
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171167227027.28813.3759046936061373590.git-patchwork-notify@kernel.org>
+Date: Fri, 29 Mar 2024 00:31:10 +0000
+References: <20240325194100.775052-1-edliaw@google.com>
+In-Reply-To: <20240325194100.775052-1-edliaw@google.com>
+To: Edward Liaw <edliaw@google.com>
+Cc: linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ akpm@linux-foundation.org, shuah@kernel.org, nathan@kernel.org,
+ ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+ jannh@google.com, linux-kselftest@vger.kernel.org, kernel-team@android.com,
+ lokeshgidra@google.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-mm@kvack.org, llvm@lists.linux.dev
 
-Embedding net_device into structures prohibits the usage of flexible
-arrays in the net_device structure. For more details, see the discussion
-at [1].
+Hello:
 
-Un-embed the net_device from the private struct by converting it
-into a pointer. Then use the leverage the new alloc_netdev_dummy()
-helper to allocate and initialize dummy devices.
+This patch was applied to netdev/net.git (main)
+by Andrew Morton <akpm@linux-foundation.org>:
 
-[1] https://lore.kernel.org/all/20240229225910.79e224cf@kernel.org/
+On Mon, 25 Mar 2024 19:40:52 +0000 you wrote:
+> Following issue was observed while running the uffd-unit-tests selftest
+> on ARM devices. On x86_64 no issues were detected:
+> 
+> pthread_create followed by fork caused deadlock in certain cases
+> wherein fork required some work to be completed by the created thread.
+> Used synchronization to ensure that created thread's start function has
+> started before invoking fork.
+> 
+> [...]
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 17 +++++++++++++----
- drivers/net/ethernet/mediatek/mtk_eth_soc.h |  2 +-
- 2 files changed, 14 insertions(+), 5 deletions(-)
+Here is the summary with links:
+  - [v3] selftests/mm: Fix ARM related issue with fork after pthread_create
+    https://git.kernel.org/netdev/net/c/8c864371b2a1
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index caa13b9cedff..cef96c048fdf 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -1710,7 +1710,7 @@ static struct page_pool *mtk_create_page_pool(struct mtk_eth *eth,
- 	if (IS_ERR(pp))
- 		return pp;
- 
--	err = __xdp_rxq_info_reg(xdp_q, &eth->dummy_dev, id,
-+	err = __xdp_rxq_info_reg(xdp_q, eth->dummy_dev, id,
- 				 eth->rx_napi.napi_id, PAGE_SIZE);
- 	if (err < 0)
- 		goto err_free_pp;
-@@ -4188,6 +4188,8 @@ static int mtk_free_dev(struct mtk_eth *eth)
- 		metadata_dst_free(eth->dsa_meta[i]);
- 	}
- 
-+	kfree(eth->dummy_dev);
-+
- 	return 0;
- }
- 
-@@ -4983,9 +4985,14 @@ static int mtk_probe(struct platform_device *pdev)
- 	/* we run 2 devices on the same DMA ring so we need a dummy device
- 	 * for NAPI to work
- 	 */
--	init_dummy_netdev(&eth->dummy_dev);
--	netif_napi_add(&eth->dummy_dev, &eth->tx_napi, mtk_napi_tx);
--	netif_napi_add(&eth->dummy_dev, &eth->rx_napi, mtk_napi_rx);
-+	eth->dummy_dev = alloc_netdev_dummy(0);
-+	if (!eth->dummy_dev) {
-+		err = -ENOMEM;
-+		dev_err(eth->dev, "failed to allocated dummy device\n");
-+		goto err_unreg_netdev;
-+	}
-+	netif_napi_add(eth->dummy_dev, &eth->tx_napi, mtk_napi_tx);
-+	netif_napi_add(eth->dummy_dev, &eth->rx_napi, mtk_napi_rx);
- 
- 	platform_set_drvdata(pdev, eth);
- 	schedule_delayed_work(&eth->reset.monitor_work,
-@@ -4993,6 +5000,8 @@ static int mtk_probe(struct platform_device *pdev)
- 
- 	return 0;
- 
-+err_unreg_netdev:
-+	mtk_unreg_dev(eth);
- err_deinit_ppe:
- 	mtk_ppe_deinit(eth);
- 	mtk_mdio_cleanup(eth);
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-index 9ae3b8a71d0e..723fc637027c 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-@@ -1242,7 +1242,7 @@ struct mtk_eth {
- 	spinlock_t			page_lock;
- 	spinlock_t			tx_irq_lock;
- 	spinlock_t			rx_irq_lock;
--	struct net_device		dummy_dev;
-+	struct net_device		*dummy_dev;
- 	struct net_device		*netdev[MTK_MAX_DEVS];
- 	struct mtk_mac			*mac[MTK_MAX_DEVS];
- 	int				irq[3];
+You are awesome, thank you!
 -- 
-2.43.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
