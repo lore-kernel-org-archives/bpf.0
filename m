@@ -1,170 +1,96 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F5C28DC1
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 22:24:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EDB141A94
+	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 22:27:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711751079; cv=none; b=owEFPd3/A7A/77Du7wEf13hYec/Z7CJ6YntPHW6XjA5J8dS/sbByDneFxQYzatmcp2rfXNqJTWqopOeR5Ku56o+5BFaVLV1EBejiETIy2toL8ioVgC0Kgh2tuc6dYHIp/KOigq3vBCpFete8Bksdvx8YHH0htZ2v/uq7+UnF9UE=
+	t=1711751276; cv=none; b=pcIhXFs6++eOf7p/lyVGzuO+5L4u2uiSVzM/Qyarcz9QPN3eI39h6Q88eeWvFTZm1L7FwMjasabI1vx1zJtZXE/fpOEHbtLwlOdY++y9Y8bd9Qm2OJ6ckQgiBFtnQvVDP1iTm908e+rbRLxrrKpURig5LmHWUb+awHnGwbcZZR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711751079; c=relaxed/simple;
-	bh=iZOtJzg8K1icR2/0aS96DfbalxXpy8vDTbdV+OCD93A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RrGkWY0WBFvEQHKAd2IQ0VXmQ3OvB7xxlFvtGOgGIXI2+yUTlc0wA1KvIDXEdSoImKwuMtxShfWMGLKSRQh9AhrwHbWEm/gWtwlZM/CIZXSHWJt5x7jOiujX/6SxmGYs6ozUP0dsGrYJ516sjlMpQkMHTSeN+PomGcvQ1Riuplo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dlELE9VA; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711751276; c=relaxed/simple;
+	bh=OItPe4IxJL0pCs1NqBvO0JG+rzxeP0lBb2Zs+NNTtBM=;
+	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
+	 MIME-Version:Content-Type; b=F/RbEmDQByxRjf5dbRRPN0VJc0tvpj9A3xWDLSd9Zqn2KsA7flVbKHedAKVExOqGGKEUZGRwoQzvZK282cJDfQ5PTtmUV5ZrVZU8dVZUxW6eQY2mscq5hqhcFDKJST8ezOPbzuTIIV8c2IuJg0wRZiUs72HLe1acF+omymhXeD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=IEoMp3dl; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dlELE9VA"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so1684498a12.1
-        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 15:24:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="IEoMp3dl"
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-513e6777af4so3841194e87.2
+        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 15:27:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711751077; x=1712355877; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=cloudflare.com; s=google09082023; t=1711751272; x=1712356072; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j9yG8XjU7MloqXzmL7VIUnYlW55ptSST+5pV2/6iufo=;
-        b=dlELE9VAiHNWNj2CZENJ7zqzCJ0+C3zx8fcVJIGUf9T1hxlhcwL9cKrjjaDnEpikSF
-         1ospu6y4BeO7pydC3wi9DD17lVfupaQTIId8feLaQJxnkRLIEEiBrinprwBzOWUZGuVE
-         CiCu+ODa39sA/DpGrlKWSty/PyHpyU6dOMsqKvtgMCR7skAeSd6IrJhs2xTFU43WEtkk
-         Wtyz+JAYF0ckgsdFWhqgj4R8ygLmO53/foG504GJa9HALeQKPe6uRj8iUd8EJKWe/RFk
-         3zKWVU9YB9Qz9ZA1rL9viGGtQiS5zH+ICS2cqtzc6i0zHyeuLxeyX3cn6vxQkNX3SHcG
-         ZX4w==
+        bh=OItPe4IxJL0pCs1NqBvO0JG+rzxeP0lBb2Zs+NNTtBM=;
+        b=IEoMp3dlIWtpBiY2R9r6Kivqjltt3CHCUbiRTzTAZPfpkfE5AJLRgykkK7kyPPwgvW
+         1jJpa1/VUWJ4gFg/zQPQXj2IoV4U2mZ/jglOfijIu691GmWPLDvromMNYRjJwrwIUHLU
+         KY0umPL3tQhomdW99GxRiayRU2kdXJQ4+rh5/FsMIpze/UOEhK1Bf/7dpDHrbx/FKuWJ
+         UQIqSRcE4xJXF/11HckRQ3axggF+24rFyeTqlCrRnS2X6zVkDnlatBPr5EVvbatkxWI8
+         YVY3fumZuTcDrBIBvUiQPBPGSo9g1H3mI3R6tuzoaSZC7vRFnguCSINo3T34ylHMNKv0
+         OI2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711751077; x=1712355877;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j9yG8XjU7MloqXzmL7VIUnYlW55ptSST+5pV2/6iufo=;
-        b=PBbM03EtIngySeP7mZWTEukoAWA225inmLyshAhgsEEfVaF+xxW7Ez9Q1eikpxSFKm
-         9dG6Gx8F8xFgvEXoKEmH3YklXIRvY8IrU3J5qkpOafm0/TgqzZEPAlZfZ/7i5Lfx94Yj
-         UGFrKW2vnFmDfacepzOJyMxdlrpQcpLe+rQ56+MagdZQ0dPdt77fR7xySHj/a+/s7+VJ
-         GmCnl15Ud9qFK2uPo4whjOITSV8QNPUc7hLoj6s2S3h5wSYaU4lfeczIX11vY+Q/jtld
-         m7j64L+dQfdDDGIa+UlgjKEhqHDmTSz7xp00GMVEN58v4+vrmqnKEE0a0/rV57inDHKB
-         aYLg==
-X-Forwarded-Encrypted: i=1; AJvYcCWVt/TgjYUkYKAQ1kWjL/EXMeAuBZjz5mb6/hEo5i5TkmSEOHmgIUnitQTFegnBfd78h8aex7y83WQydXqGlNaa2huV
-X-Gm-Message-State: AOJu0YzkWqZfJxRIomnMm2upFhSq+FirT2pRnew9BCzndO7tweRAVGwZ
-	goFYOK7QeTLCG2+Nvmh0U/yg4OUsRGgX8oNZ+1mjUaseJdUtrRAe48B6kD4lytPLc0AfNM9zgtF
-	qKPREMGiMbuLh+XBtc8z3ZywsoQa6iyw9AAE=
-X-Google-Smtp-Source: AGHT+IElqPyQ8gGPj7TCrZfMfKCYzRKgyKxn6ClIRC/jSdnI6qVuCA5DttWghTvX1VwlN7PEoo4gQ0rGyyS9nZmPxAc=
-X-Received: by 2002:a17:90a:134b:b0:2a1:fe2c:75e9 with SMTP id
- y11-20020a17090a134b00b002a1fe2c75e9mr3554574pjf.42.1711751077248; Fri, 29
- Mar 2024 15:24:37 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711751272; x=1712356072;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=OItPe4IxJL0pCs1NqBvO0JG+rzxeP0lBb2Zs+NNTtBM=;
+        b=HI5mh7+eKuIFdlYEIeSvY+VcjGFK/ZQzPuEKK2xRyOvG8fB/q8Z2lhI7qr9XtezHQD
+         +MO7eqHoHL8V4X7lPzUL/8f2daztyjvNjVWH4t2aZdlluNmuGi3gURHgXFLepNVK59Dy
+         is+++ukp6N5wHLo2i2nlbnvS6oLAv12sqCOmAxA8ElMez4EPTTPUe1+I79tUJsMfxKSf
+         BTHraNd0Ej4F4R9BD2m2tXQT9SjbzArYKQL/dnL2Ynkzb2TJWpg3p8fcgTVKNSwftH0M
+         WGfyowAZh21eRgo5jbmqOslgYfjZjSf5fwXdsS40pyxzOzUgi89WqUZpBFvqwxrNLpQ/
+         J51g==
+X-Forwarded-Encrypted: i=1; AJvYcCVKbd6+IZmiEJxuwFbd5YvqZK2lTgxMH8ThuEK25rWvyBGwyS1a/TIThqcpwKx/jXMzlwQrbmF0k3ODs/x5QhX/VSsF
+X-Gm-Message-State: AOJu0Yyms2n/igd3/jAQ8jmHPBWRU27DP7YLjD7FCNSU527NZNuY10PX
+	9oXhIU6Zq41z8tqfUB+HhLqsBW/+Bo5cZuFN2vqzH/6GxQVFuFLh7nMcK6FA5Ak=
+X-Google-Smtp-Source: AGHT+IHMmXVGYK4oukisP78/fV5DWJ//WlRa6i3lXOGdqxqsLxiY7kMWE+d0zU8MiSuQc0nB3HJWxA==
+X-Received: by 2002:ac2:4d92:0:b0:515:d176:dfd1 with SMTP id g18-20020ac24d92000000b00515d176dfd1mr2034213lfe.56.1711751271625;
+        Fri, 29 Mar 2024 15:27:51 -0700 (PDT)
+Received: from cloudflare.com ([2a09:bac5:5064:2dc::49:1a6])
+        by smtp.gmail.com with ESMTPSA id z11-20020a170906240b00b00a46be5169f1sm2396680eja.181.2024.03.29.15.27.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Mar 2024 15:27:50 -0700 (PDT)
+References: <00000000000090fe770614a1ab17@google.com>
+ <0000000000007a208d0614a9a9e0@google.com> <87le63bfuf.fsf@cloudflare.com>
+ <CAADnVQK7rpbNbo4XQRfX2G6v7Mx=2rZNu6D9my9KCi+jRpTUJw@mail.gmail.com>
+User-agent: mu4e 1.6.10; emacs 29.2
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: syzbot <syzbot+d4066896495db380182e@syzkaller.appspotmail.com>, Andrii
+ Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, bpf
+ <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, John
+ Fastabend <john.fastabend@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, Network Development
+ <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>, syzkaller-bugs
+ <syzkaller-bugs@googlegroups.com>
+Subject: Re: [syzbot] [bpf?] [net?] possible deadlock in
+ ahci_single_level_irq_intr
+Date: Fri, 29 Mar 2024 23:27:06 +0100
+In-reply-to: <CAADnVQK7rpbNbo4XQRfX2G6v7Mx=2rZNu6D9my9KCi+jRpTUJw@mail.gmail.com>
+Message-ID: <87cyrcbrmi.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240327102036.543283-1-jolsa@kernel.org> <20240327102036.543283-2-jolsa@kernel.org>
-In-Reply-To: <20240327102036.543283-2-jolsa@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 29 Mar 2024 15:24:24 -0700
-Message-ID: <CAEf4BzbLaeTcDUWrB91kSRLDuA9dwvjv_kAewHBWW9HFnTWWgg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/3] uprobe: Add uretprobe syscall to speed up
- return probe
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Oleg Nesterov <oleg@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
-	John Fastabend <john.fastabend@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 27, 2024 at 3:20=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
+On Wed, Mar 27, 2024 at 02:43 PM -07, Alexei Starovoitov wrote:
+> On Wed, Mar 27, 2024 at 1:05=E2=80=AFPM Jakub Sitnicki <jakub@cloudflare.=
+com> wrote:
+>>
+>> #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git mas=
+ter
+>>
+>> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
 >
-> Adding uretprobe syscall instead of trap to speed up return probe.
->
-> At the moment the uretprobe setup/path is:
->
->   - install entry uprobe
->
->   - when the uprobe is hit, it overwrites probed function's return addres=
-s
->     on stack with address of the trampoline that contains breakpoint
->     instruction
->
->   - the breakpoint trap code handles the uretprobe consumers execution an=
-d
->     jumps back to original return address
->
-> This patch replaces the above trampoline's breakpoint instruction with ne=
-w
-> ureprobe syscall call. This syscall does exactly the same job as the trap
-> with some more extra work:
->
->   - syscall trampoline must save original value for rax/r11/rcx registers
->     on stack - rax is set to syscall number and r11/rcx are changed and
->     used by syscall instruction
->
->   - the syscall code reads the original values of those registers and
->     restore those values in task's pt_regs area
->
-> Even with the extra registers handling code the having uretprobes handled
-> by syscalls shows speed improvement.
->
->   On Intel (11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz)
->
->   current:
->
->     base           :   15.888 =C2=B1 0.033M/s
->     uprobe-nop     :    3.016 =C2=B1 0.000M/s
->     uprobe-push    :    2.832 =C2=B1 0.005M/s
->     uprobe-ret     :    1.104 =C2=B1 0.000M/s
->     uretprobe-nop  :    1.487 =C2=B1 0.000M/s
->     uretprobe-push :    1.456 =C2=B1 0.000M/s
->     uretprobe-ret  :    0.816 =C2=B1 0.001M/s
->
->   with the fix:
->
->     base           :   15.116 =C2=B1 0.045M/s
->     uprobe-nop     :    3.001 =C2=B1 0.045M/s
->     uprobe-push    :    2.831 =C2=B1 0.004M/s
->     uprobe-ret     :    1.102 =C2=B1 0.001M/s
->     uretprobe-nop  :    1.969 =C2=B1 0.001M/s  < 32% speedup
->     uretprobe-push :    1.905 =C2=B1 0.004M/s  < 30% speedup
->     uretprobe-ret  :    0.933 =C2=B1 0.002M/s  < 14% speedup
->
->   On Amd (AMD Ryzen 7 5700U)
->
->   current:
->
->     base           :    5.105 =C2=B1 0.003M/s
->     uprobe-nop     :    1.552 =C2=B1 0.002M/s
->     uprobe-push    :    1.408 =C2=B1 0.003M/s
->     uprobe-ret     :    0.827 =C2=B1 0.001M/s
->     uretprobe-nop  :    0.779 =C2=B1 0.001M/s
->     uretprobe-push :    0.750 =C2=B1 0.001M/s
->     uretprobe-ret  :    0.539 =C2=B1 0.001M/s
->
->   with the fix:
->
->     base           :    5.119 =C2=B1 0.002M/s
->     uprobe-nop     :    1.523 =C2=B1 0.003M/s
->     uprobe-push    :    1.384 =C2=B1 0.003M/s
->     uprobe-ret     :    0.826 =C2=B1 0.002M/s
->     uretprobe-nop  :    0.866 =C2=B1 0.002M/s  < 11% speedup
->     uretprobe-push :    0.826 =C2=B1 0.002M/s  < 10% speedup
->     uretprobe-ret  :    0.581 =C2=B1 0.001M/s  <  7% speedup
->
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Oleg Nesterov <oleg@redhat.com>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  arch/x86/entry/syscalls/syscall_64.tbl |  1 +
->  arch/x86/kernel/uprobes.c              | 83 ++++++++++++++++++++++++++
->  include/linux/syscalls.h               |  2 +
->  include/linux/uprobes.h                |  2 +
->  include/uapi/asm-generic/unistd.h      |  5 +-
->  kernel/events/uprobes.c                | 18 ++++--
->  kernel/sys_ni.c                        |  2 +
->  7 files changed, 108 insertions(+), 5 deletions(-)
->
+> Great. Please submit it officially. Hopefully bpf CI also will be happy.
 
-Great work and results, thanks!
+Will do.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-
-[...]
+Just had to verify if we need a similar check for map_update_elem.
