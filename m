@@ -1,135 +1,122 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE462C692
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 18:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648341C0DC0
+	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 18:47:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711737035; cv=none; b=DuEwAPQfU2YbTsd2d8YPhHdG6zWshCKWI3m5qNhjkHIogzpA1DSwjddtA4k244xOYlv7QXKHGYPZGKIiWLbAw+fvrfn8Rn7XFxSraXm34CMtEXAJd1HkDCZPcF2wZ9OAWLQIk34U9JDMMn/rchs+jBRELbeamOmPVc5Eb/LN/CA=
+	t=1711738063; cv=none; b=s1Zpw4mr0kCemD3JWKHgfnNdaH15bx+Q03iGB+eaG0mYblXatTVd2Kiv0tmC8b3sxZtjdlsA8FSmSqIO6E7q3dgUuyxUBJKExM7hhZeUowwsSDjpk2PKTsam/d/HlP5mRcTiE/rVmCcfI+in+Bo25WaYcVKa3uGUMXtJ3GlVUTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711737035; c=relaxed/simple;
-	bh=q/F1TNYPkJhFsuDuppKsN8HVYoImbE00nNc6S2CCJac=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FO8coDWR+9EU2LQIdtQeE2evR9gUz58OMsQ9KuwgO756XGxZkCae+MDTcmBCH4Jgx+QIA1cNJymVB3lnmzhXCm+W23/GNFdRu3xPo0L6iqcJ4LufJ0cNjkJy7K1nMTd2mlhYKmRVVyBYoKsi1ky5D28pTy1i2e68PnadmYvf0pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WOUbBHtT; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711738063; c=relaxed/simple;
+	bh=5Ty67EH0kEAuO0qo/J3iqT5AnAa/5Cl18ue4GH0npgg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bBmimRF91Pp7UVSTAsbGRGOAei5zT1ZkOsRY4Xe8QIXWubMkCE+uV0NeEUOkkI/5UWvSTI2xmc9UqHCFvRovC9U4cX5lv1Mqx00pAwXB5qOH9h4qIz7PI2upwjjaDZ3kc9tNNFaovKEUAMH2Q0fbyvFtC2VV6G+lYn38r5MuDag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fsIu2JAW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WOUbBHtT"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-29dd91f3aaeso1636372a91.3
-        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 11:30:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711737033; x=1712341833; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J05HSZIDd8jTGpq5C2OUElFJzTTpntn4mQdyHRKZmoM=;
-        b=WOUbBHtTzlZPPEGh+ACpkWE75aFGnw3Z0Ue3QPvlj158vcOR5C4LCUFr2L65QKJXXs
-         Aw48KBU2kvxV2dNHBHsZW/7F2K0JJBibVIZNV4gZIeLXVuWWq33DWK/VHMbCw9K1JjcV
-         ND2m/QL/J31ApjwndTJcTB8ugikqSH08yF8uDtBvrkEPsX+b+d6XM0wkfg2vNJQyDXC6
-         bkkJQEL58YkJyVeAMz1xB6CrBMJS+vFYW1WvtRKZ5yj+NVpLw7v8D3bW3KqZxkp6VvKW
-         SWtgQ7oMbbyEegDLwzx4Q56lR0pZkHEw/HoPmdzXLBIx/BOXCswVY9dgZCf/HnbToUg2
-         4PJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711737033; x=1712341833;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=J05HSZIDd8jTGpq5C2OUElFJzTTpntn4mQdyHRKZmoM=;
-        b=kJLSUUkaQJ0KB6mO2onD/qvQI2LcZ/qI8H/eRS6BbIUDG9YrqCTMaA7hmytoYzKWCP
-         H4fmm9MT56zm7YpRJJzsCXDEi1PY+f3Frbxk3iHUvo6aN0zhrr1moEd0ZZwsEiWvhzup
-         oDQWila2u+aTzzaW2s9nq9hmTUXINCvT6Pcz/11gStXJkygI0u9cRrljR6BUGVPXdVus
-         atoe/exZy29BKRvkX2YqFvD6sxlILZCKB1M5Zf+QRkxdpemWeoGFBs9SyMSc4ZV1UQHj
-         NIWvw558c7jw7Z6V2mLeKt9+w74xAa9Vt1IluJqbyS1zhOd9Iop+FRR2+TQIuTd/ZsMn
-         uo3g==
-X-Forwarded-Encrypted: i=1; AJvYcCXZRP8TWVTc+EqEFe6mzNu02YtcCe5OPlHVQ6W/HA8enTvETyj/xIaDOADn0MkLGKTfoAek7iiLK4knybcqaVYHf2V2
-X-Gm-Message-State: AOJu0YwuVkmvXY84LipLH0Ld3ZsFLRDTyYo4X9VsiFo6goe0dC8wY+iZ
-	wz+ZhQ3ZPqyk0uRUi9aH3eTYnurO6I62mayMNGbfuZMz/PKnjDEt1zrCC1tmebGRW/1Ox6IBYYd
-	y7wYJiaOoInmlfF9cHAb4ro1ezimNaOTQ
-X-Google-Smtp-Source: AGHT+IE9y4Naod0ZuC9aj7oPrnLuZfXQWr7q7WRJT0YlqgjCZFvXghS6URohH5fywjTzuN8oUQbM87Lgp95xeN/VkRU=
-X-Received: by 2002:a17:90a:df97:b0:29a:6c13:f0a with SMTP id
- p23-20020a17090adf9700b0029a6c130f0amr2720746pjv.16.1711737033137; Fri, 29
- Mar 2024 11:30:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fsIu2JAW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4450C433C7;
+	Fri, 29 Mar 2024 18:47:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711738062;
+	bh=5Ty67EH0kEAuO0qo/J3iqT5AnAa/5Cl18ue4GH0npgg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=fsIu2JAW4fdqq6SWlrvYKVlCfM0MdHFBdvpKvHq7LyERJpiuo7tAECFOj2gs8oHlf
+	 pu/knlrGdLSyp+1KJbuKnA8epY6WABdnwYwH3B6+GVd4AsT3L7AjRL7C0n7cRfIRik
+	 AgoEDd6jr8i6cB67CapgdVoaX+ZjbSGRtigBV/436EcIo0T/8TZ62vuxPivuBw25fJ
+	 CJrO8QZXcrcFRR0INdrmcuMAiBTo/ybqS8p+7CQ+k+09L3LDFCmWyph/0cR0QBj6h3
+	 6Nm0Y0j0hcpqazj8twMpU+AeqRe6CGTIxB0FuHTqsLvrCNuDqoIDPHN2///JjkRgqJ
+	 NrZPh6y8Y8ZbA==
+From: Andrii Nakryiko <andrii@kernel.org>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@kernel.org
+Cc: andrii@kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next 0/4] Add internal-only BPF per-CPU instructions
+Date: Fri, 29 Mar 2024 11:47:36 -0700
+Message-ID: <20240329184740.4084786-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240329173654.3174156-1-andrii@kernel.org> <CAADnVQ+8ZHKu54A4E=drNb_gUW988x=T+ojNfVJNs+aMQ-7i+Q@mail.gmail.com>
-In-Reply-To: <CAADnVQ+8ZHKu54A4E=drNb_gUW988x=T+ojNfVJNs+aMQ-7i+Q@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 29 Mar 2024 11:30:20 -0700
-Message-ID: <CAEf4BzabrOvorkt+cjYdqfSrHDLSycOB8vGEgP-E0UngQnrKdg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: make multi-uprobe tests work in
- RELEASE=1 mode
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 29, 2024 at 11:21=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Mar 29, 2024 at 10:37=E2=80=AFAM Andrii Nakryiko <andrii@kernel.o=
-rg> wrote:
-> >
-> > When BPF selftests are built in RELEASE=3D1 mode with -O2 optimization
-> > level, uprobe_multi binary, called from multi-uprobe tests is optimized
-> > to the point that all the thousands of target uprobe_multi_func_XXX
-> > functions are eliminated, breaking tests.
-> >
-> > So ensure they are preserved through noinline + asm volatile trick.
-> >
-> > But, actually, compiling uprobe_multi binary with -O2 takes a really
-> > long time, and is quite useless (it's not a benchmark). So in addition
-> > to ensuring that uprobe_multi_func_XXX functions are preserved, opt-out
-> > of -O2 explicitly in Makefile and stick to -O0. This saves a lot of
-> > compilation time.
-> >
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > ---
-> >  tools/testing/selftests/bpf/Makefile       | 2 +-
-> >  tools/testing/selftests/bpf/uprobe_multi.c | 4 +++-
-> >  2 files changed, 4 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selft=
-ests/bpf/Makefile
-> > index 3b9eb40d6343..b0ac3dd80acf 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -759,7 +759,7 @@ $(OUTPUT)/veristat: $(OUTPUT)/veristat.o
-> >
-> >  $(OUTPUT)/uprobe_multi: uprobe_multi.c
-> >         $(call msg,BINARY,,$@)
-> > -       $(Q)$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o $@
-> > +       $(Q)$(CC) $(CFLAGS) -O0 $(LDFLAGS) $^ $(LDLIBS) -o $@
-> >
-> >  EXTRA_CLEAN :=3D $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)                   =
-   \
-> >         prog_tests/tests.h map_tests/tests.h verifier/tests.h          =
- \
-> > diff --git a/tools/testing/selftests/bpf/uprobe_multi.c b/tools/testing=
-/selftests/bpf/uprobe_multi.c
-> > index a61ceab60b68..e38228563766 100644
-> > --- a/tools/testing/selftests/bpf/uprobe_multi.c
-> > +++ b/tools/testing/selftests/bpf/uprobe_multi.c
-> > @@ -9,7 +9,9 @@
-> >
-> >  #define NAME(name, idx) PASTE(name, idx)
-> >
-> > -#define DEF(name, idx)  int NAME(name, idx)(void) { return 0; }
-> > +#define DEF(name, idx) \
-> > +       int __attribute__((noinline)) \
-> > +       NAME(name, idx)(void) { asm volatile (""); return 0; }
->
-> I prefer to use __weak to avoid inlining and compiler optimizations.
-> It's less work for compiler as well,
-> since noinline doesn't tell compiler to stop analyzing the body
-> of the function, while __weak does have such an effect.
-> And asm won't be necessary as well.
+Add two new BPF instructions for dealing with per-CPU memory.
 
+One, BPF_LDX | BPF_ADDR_PERCPU | BPF_DW (where BPF_ADD_PERCPU is unused
+0xe0 opcode), resolved provided per-CPU address (offset) to an absolute
+address where per-CPU data resides for "this" CPU. This is the most universal,
+and, strictly speaking, the only per-CPU BPF instruction necessary.
 
-makes sense, will do __weak, maybe it will make -O0 unnecessary as well
+I also added BPF_LDX | BPF_MEM_PERCPU | BPF_{B,H,W,DW} (BPF_MEM_PERCPU using
+another unused 0xc0 opcode), which can be considered an optimization
+instruction, which allows to *read* per-CPU data up to 8 bytes in one
+instruction, without having to first resolve the address and then
+dereferencing the memory. This one is used in inlining of
+bpf_get_smp_processor_id(), but it would be fine to implement the latter with
+BPF_ADD_PERCPU, followed by normal BPF_LDX | BPF_MEM, so I'm fine dropping
+this one, if requested.
+
+This instructions are currently supported by x86-64 BPF JIT, but it would be
+great if this was added for other arches ASAP, of course.
+
+In either case, we also implement inlining for three cases:
+  - bpf_get_smp_processor_id(), which allows to avoid unnecessary trivial
+    function call, saving a bit of performance and also not polluting LBR
+    records with unnecessary function call/return records;
+  - PERCPU_ARRAY's bpf_map_lookup_elem() is completely inlined, bringing its
+    performance to implementing per-CPU data structures using global variables
+    in BPF (which is an awesome improvement, see benchmarks below);
+  - PERCPU_HASH's bpf_map_lookup_elem() is partially inlined, just like the
+    same for non-PERCPU HASH map; this still saves a bit of overhead.
+
+To validate performance benefits, I hacked together a tiny benchmark doing
+only bpf_map_lookup_elem() and incrementing the value by 1 for PERCPU_ARRAY
+(arr-inc benchmark below) and PERCPU_HASH (hash-inc benchmark below) maps. To
+establish a baseline, I also implemented logic similar to PERCPU_ARRAY based
+on global variable array using bpf_get_smp_processor_id() to index array for
+current CPU (glob-arr-inc benchmark below).
+
+BEFORE
+======
+glob-arr-inc   :  163.685 ± 0.092M/s
+arr-inc        :  138.096 ± 0.160M/s
+hash-inc       :   66.855 ± 0.123M/s
+
+AFTER
+=====
+glob-arr-inc   :  173.921 ± 0.039M/s (+6%)
+arr-inc        :  170.729 ± 0.210M/s (+23.7%)
+hash-inc       :   68.673 ± 0.070M/s (+2.7%)
+
+As can be seen, PERCPU_HASH gets a modest +2.7% improvement, while global
+array-based gets a nice +6% due to inlining of bpf_get_smp_processor_id().
+
+But what's really important is that arr-inc benchmark basically catches up
+with glob-arr-inc, resulting in +23.7% improvement. This means that in
+practice it won't be necessary to avoid PERCPU_ARRAY anymore if performance is
+critical (e.g., high-frequent stats collection, which is often a practical use
+for PERCPU_ARRAY today).
+
+Andrii Nakryiko (4):
+  bpf: add internal-only per-CPU LDX instructions
+  bpf: inline bpf_get_smp_processor_id() helper
+  bpf: inline bpf_map_lookup_elem() for PERCPU_ARRAY maps
+  bpf: inline bpf_map_lookup_elem() helper for PERCPU_HASH map
+
+ arch/x86/net/bpf_jit_comp.c | 29 +++++++++++++++++++++++++++++
+ include/linux/filter.h      | 27 +++++++++++++++++++++++++++
+ kernel/bpf/arraymap.c       | 33 +++++++++++++++++++++++++++++++++
+ kernel/bpf/core.c           |  5 +++++
+ kernel/bpf/disasm.c         | 33 ++++++++++++++++++++++++++-------
+ kernel/bpf/hashtab.c        | 21 +++++++++++++++++++++
+ kernel/bpf/verifier.c       | 17 +++++++++++++++++
+ 7 files changed, 158 insertions(+), 7 deletions(-)
+
+-- 
+2.43.0
+
