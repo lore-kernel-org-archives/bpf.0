@@ -1,223 +1,136 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F92E1E897;
-	Fri, 29 Mar 2024 21:53:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101683D0C4
+	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 22:00:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711749199; cv=none; b=YcUIPWpHs7mLZnVdaPh2sGq8r5F5xF21yFPDxMZ/gm0YeJrT/TWfFs/Gh9WnFRa71L3nMBK9Nnv6q1uk/kZxQqMajeyclU7BgxRjaaMsw/eReYwfsEd5M1f1xxGZ/6c71chWZmsbAHPSHVYj437pvbvRgRDUvYwenfjdDa7AKfY=
+	t=1711749611; cv=none; b=Cl1dB8xRq38M4/00MWcJrbcMdh0AJ7Y+Cf6m/c8PCVVTKRm2ZCafFgHdFNx8aYRtRFdZK1Clp5oHqOKsWyRPMmw10kygYj9YYstyZHxvjy48CulgSSlrRC9pRG4jFX+VIQvMmT4xoa5hvYRTYkpZFbY788ekFNjxzjxgwG886Gk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711749199; c=relaxed/simple;
-	bh=ZkGv2aECxPpKjlvqInjY5t6BAWJ1JpiWyKfHeeHLgFY=;
+	s=arc-20240116; t=1711749611; c=relaxed/simple;
+	bh=pR6QTHaLQRPpv8HHpTHBgdRM7+Ir7ETa/5eOrBEwZUw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N4wUMXak4yyRayehjv1ar0r8EyyPLMwBc3uJ0bwl/C4uF0p7B7G/bWOwvNeZYeq6b3W3Vcfr0NdbT29Ffwzm149FPXaVcG2iO3WP/b1G80f4/vw74ISsQwa8epN/zn528A3NyNmNXX0nycQdjpBblQ7EyQAtFDKts98b9c+Xxik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DtFEeVUc; arc=none smtp.client-ip=209.85.221.54
+	 To:Cc:Content-Type; b=N0dbn4KGaAXQvsxYLoBWOkz5f0FjmNQvfpbhWzN4pzTx0d1Dd6LuiMMIalg7QV+fZUOa6jQ3c9cnXBB8f3+/ewfOt3Ly1lsCLwFFt9kurANJEZACXwMh+nsqVMODBPzSz+e4viqV5IChHKgV0GEPabWVJc7/TQCh4DbGFmKTcPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F8OX9LOe; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DtFEeVUc"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-341e3682c78so1377084f8f.0;
-        Fri, 29 Mar 2024 14:53:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F8OX9LOe"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-29f69710cbbso1633583a91.1
+        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 15:00:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711749195; x=1712353995; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711749609; x=1712354409; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oSnIkrXKOxIFx664NuP3H7hYth27RezAKOIyptzRih0=;
-        b=DtFEeVUcXHxQSM1acoLPB3xIZ2HSM6vWTSGbB4Vn2PTFo59S2qm9Wdb/PYmKmlkt7q
-         bweDNoN2FkFdd+biODVbvTAWaLZraY63rTLXLI3Uj2YXC5gXRj51NmN6ndvk0CmDMb0e
-         HIob6o5pR32SYbzkWHSn4Jg4Btu/S+g0UAjgMXPRMh1EcOgJV/whXSYiykrw7f/6s77P
-         /H5ZCsxnDWl4kNYCj9mzXKbfqQBAv6Lnt80sLG1vRk3gD9HqNaAkNP/seJmggh7Vb0eo
-         x3i++yNtv1UR3TkN0hCOiKzOfpwFxG/x3+oaCYHUq4IcorpsSpcrx239+6AZFAOrQdbA
-         WyHA==
+        bh=KvV2fYO6oE+qJ8+9n7NnfZbzi5Pg23zvcOCfwlrguBk=;
+        b=F8OX9LOedGYw4IzMIWXd4NEtitN2xQETmd0q5/sQ03U+3Tz80RKxQ+NZFCkXb8Z2BG
+         Gdf1DJhjML9PUMGPDIuTFtDKUZEjyMeCCDpTPD4tG/edhnAOv3yh+Cfzehj/K8ijgbbh
+         542Um9uLXXnaE3l4Fi6qj0FtcbLZOlPl3zJJW8sqoemRa59fGKSyePtW9krImZR8jX8Q
+         BjmZXdh3FoHCNU/GtMuyVvU6KTWJ+ojnxADKy3etk/QVqh2DwRKHTg4ulnrZCBxl7nKf
+         O/UdY7SouHdTMqygQ3QOxMvuo/DCNfk1LOTMv6eeh/l4gdKV6DgwsfbDe3YAFP2va3Mi
+         Vn7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711749195; x=1712353995;
+        d=1e100.net; s=20230601; t=1711749609; x=1712354409;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oSnIkrXKOxIFx664NuP3H7hYth27RezAKOIyptzRih0=;
-        b=oKWLVHtPvz9J+QXVTc54yStjx+NkapzU4nW5NsuqPQ5h82t98mF43eq2fZPnUSPhaT
-         MGdf9ycXYZkO41VrOpN62JqHNhZQR/quC5iGCtAX8SbX3Zql03mdeT6pd9hdt04AMwNI
-         v7s3h6cmiqq3SNt6pWwVBYRqxOm+JPpZT5yDuDLXj7HFAWYEdMSKpeIILWSrLfRqeGmF
-         0Wu0zy7UE5pH6ZQnPhhEBhM4jmoqIk7Jl9U1SyEn4ioN3y3x18oyrKxSulpIT55d/yc8
-         64AGB3PNnhGmaMJktfTQg6iokvhAcecEo9Sr4wvXZuzD5l1KTyylDAgGYGp2D5OwKZyP
-         iGgw==
-X-Forwarded-Encrypted: i=1; AJvYcCUd4xvQHL/oaQCMtCuugnR3C+1mNP+kYnHMed8zOGO5hdRvAX21HlPyuCzWSAKy8Bt5pMwgz3toD1E3Xn4ARVBMo22+kQWtIVLj26ICYQSx1B5RhgBvSbm3JXQKMiyRL5E4gFZ/VAumoFjE2Vcpg7zLq5/DEIrGAbwW
-X-Gm-Message-State: AOJu0YyKhnyWxAp7UfXLi6lEMSL4950T9e1nKDvTnmG9yMcApYpszSgu
-	6nlrYsSq1udaQLoImKyk+HbI3U4g2GsYOT0pZe1ZoHsOJsdjCd5+EVv1QU8gEWIM6DBowMLNfme
-	dpizDXQEt670AhG7mMjM3Cbt2ZFB5CMSUPpA=
-X-Google-Smtp-Source: AGHT+IESQ34cqmbczYM0CtTFQ4n7hfhahLrps7uGUEuczD5xhOvFv09EChC/YJ/FIRR8VtuzAy4gIzrPZKwGa0EMMVQ=
-X-Received: by 2002:a5d:6d49:0:b0:341:e4f4:4399 with SMTP id
- k9-20020a5d6d49000000b00341e4f44399mr1687491wri.68.1711749195364; Fri, 29 Mar
- 2024 14:53:15 -0700 (PDT)
+        bh=KvV2fYO6oE+qJ8+9n7NnfZbzi5Pg23zvcOCfwlrguBk=;
+        b=rZ6lGYhE4Xf75MY+o2Dv2jUQbsqng/d0xWyk0oHKTwZ3B+XN/asf5DCPvd6rAE6HZN
+         /WpevmLopxKmea2Ib21Rk3fWnt1s93MslyD6bxeFhMnuXTl/uxrK/W7Al8bZ2cJ+GCsJ
+         IHNeGWLZ2oAq9fId4oGH1ZSOq3t/5gQh+qjRWBOgzJz9UosH6psvB2d/XN27oiE2ced/
+         58Gr9CVU+HQ6bdIjlNraSEZa0o+W0KDsvDeUw6gniklJN6F/6Iurbs9tAs8t8dste0Lf
+         5WfQY1U5rmMU6gQHeLdxC/kHZ94Dtv479V1PFBy1GvIihgXSDETJtOtWz4F+pcw6CGoX
+         aOdw==
+X-Forwarded-Encrypted: i=1; AJvYcCVArsoGPug3mpqceEgzw/dq4rlSq2QnWIvEAREVHlpqBGjEGPDiHkbyLtmXbfGxRG4a+bWnNvbzaMDOek/NYZ/zhxeR
+X-Gm-Message-State: AOJu0YxXqPuMwTTCD2d8KC1gqVid++lU8u8BL+8ZOzVMvKLjHKw8y37a
+	SxKRrBcFW+TZAHgRyW7PfDl4bwMdyU89ecvBg0FSuAGaUoTjorVN9GKOihUFYICWJiBOMFXRbLI
+	z7Df7Qc24REmH0oi4qMWzXFbb81w=
+X-Google-Smtp-Source: AGHT+IEyOnmVgCnQG2eex+E/qBRr8ZyRe6jiGW1jEwaDVFkPMsBix8rs+oUc7tCTSH8IkXknfdXUvH5Mijmkmu7tMfg=
+X-Received: by 2002:a17:90b:30c6:b0:2a1:fbdd:4219 with SMTP id
+ hi6-20020a17090b30c600b002a1fbdd4219mr8899420pjb.2.1711749608453; Fri, 29 Mar
+ 2024 15:00:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240329094906.18147-1-ubizjak@gmail.com> <20240329094906.18147-3-ubizjak@gmail.com>
-In-Reply-To: <20240329094906.18147-3-ubizjak@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 29 Mar 2024 14:53:03 -0700
-Message-ID: <CAADnVQ+6D++hCXaP=aK+Q5wienMzhHo3h9YCvpA_7sHjMt+q6A@mail.gmail.com>
-Subject: Re: [PATCH RESEND bpf 2/2] x86/bpf: Fix IP for relocating call depth accounting
-To: Uros Bizjak <ubizjak@gmail.com>
-Cc: X86 ML <x86@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	=?UTF-8?Q?Joan_Bruguera_Mic=C3=B3?= <joanbrugueram@gmail.com>, 
-	Ingo Molnar <mingo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>
+References: <20240322102455.98558-1-alan.maguire@oracle.com> <20240322102455.98558-3-alan.maguire@oracle.com>
+In-Reply-To: <20240322102455.98558-3-alan.maguire@oracle.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 29 Mar 2024 14:59:54 -0700
+Message-ID: <CAEf4BzYX84vG1J2EPO_pBhfydbPf4kiFO7YcQ+h7a3eNUz1vnA@mail.gmail.com>
+Subject: Re: [RFC bpf-next 01/13] libbpf: add support to btf__add_fwd() for ENUM64
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: andrii@kernel.org, jolsa@kernel.org, acme@redhat.com, 
+	quentin@isovalent.com, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, 
+	daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@google.com, haoluo@google.com, houtao1@huawei.com, bpf@vger.kernel.org, 
+	masahiroy@kernel.org, mcgrof@kernel.org, nathan@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 29, 2024 at 2:49=E2=80=AFAM Uros Bizjak <ubizjak@gmail.com> wro=
-te:
+On Fri, Mar 22, 2024 at 3:25=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
+om> wrote:
 >
-> From: Joan Bruguera Mic=C3=B3 <joanbrugueram@gmail.com>
+> Forward declaration of BTF_KIND_ENUM64 is added by supporting BTF_FWD_ENU=
+M64
+> as an enumerated value for btf_fwd_kind; an ENUM64 forward is an 8-byte
+> signed enum64 with no values.
 >
-> The recently introduced support for %rip-relative relocations in the
-> call thunk template assumes that the code is being patched in-place,
-> so the destination of the relocation matches the address of the code.
-> This is not true for the call depth accounting emitted by the BPF JIT,
-> so the calculated address is wrong and usually causes a page fault.
-
-Could you share the link to what this 'rip-relative' relocation is ?
-
-> Pass the destination IP when the BPF JIT emits call depth accounting.
->
-> Fixes: 17bce3b2ae2d ("x86/callthunks: Handle %rip-relative relocations in=
- call thunk template")
-
-Ohh. It's buried inside that patch.
-Pls make commit log a bit more clear that that commit 17bce3b2ae2d
-broke x86_call_depth_emit_accounting logic.
-
-> Signed-off-by: Joan Bruguera Mic=C3=B3 <joanbrugueram@gmail.com>
-> Reviewed-by: Uros Bizjak <ubizjak@gmail.com>
-> Acked-by: Ingo Molnar <mingo@kernel.org>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 > ---
->  arch/x86/include/asm/alternative.h |  4 ++--
->  arch/x86/kernel/callthunks.c       |  4 ++--
->  arch/x86/net/bpf_jit_comp.c        | 19 ++++++++-----------
->  3 files changed, 12 insertions(+), 15 deletions(-)
+>  tools/lib/bpf/btf.c | 7 ++++++-
+>  tools/lib/bpf/btf.h | 1 +
+>  2 files changed, 7 insertions(+), 1 deletion(-)
 >
-> diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/al=
-ternative.h
-> index fcd20c6dc7f9..67b68d0d17d1 100644
-> --- a/arch/x86/include/asm/alternative.h
-> +++ b/arch/x86/include/asm/alternative.h
-> @@ -117,7 +117,7 @@ extern void callthunks_patch_builtin_calls(void);
->  extern void callthunks_patch_module_calls(struct callthunk_sites *sites,
->                                           struct module *mod);
->  extern void *callthunks_translate_call_dest(void *dest);
-> -extern int x86_call_depth_emit_accounting(u8 **pprog, void *func);
-> +extern int x86_call_depth_emit_accounting(u8 **pprog, void *func, void *=
-ip);
->  #else
->  static __always_inline void callthunks_patch_builtin_calls(void) {}
->  static __always_inline void
-> @@ -128,7 +128,7 @@ static __always_inline void *callthunks_translate_cal=
-l_dest(void *dest)
->         return dest;
->  }
->  static __always_inline int x86_call_depth_emit_accounting(u8 **pprog,
-> -                                                         void *func)
-> +                                                         void *func, voi=
-d *ip)
->  {
->         return 0;
->  }
-> diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
-> index 30335182b6b0..e92ff0c11db8 100644
-> --- a/arch/x86/kernel/callthunks.c
-> +++ b/arch/x86/kernel/callthunks.c
-> @@ -314,7 +314,7 @@ static bool is_callthunk(void *addr)
->         return !bcmp(pad, insn_buff, tmpl_size);
->  }
->
-> -int x86_call_depth_emit_accounting(u8 **pprog, void *func)
-> +int x86_call_depth_emit_accounting(u8 **pprog, void *func, void *ip)
->  {
->         unsigned int tmpl_size =3D SKL_TMPL_SIZE;
->         u8 insn_buff[MAX_PATCH_LEN];
-> @@ -327,7 +327,7 @@ int x86_call_depth_emit_accounting(u8 **pprog, void *=
-func)
->                 return 0;
->
->         memcpy(insn_buff, skl_call_thunk_template, tmpl_size);
-> -       apply_relocation(insn_buff, tmpl_size, *pprog,
-> +       apply_relocation(insn_buff, tmpl_size, ip,
-
-Did the logic inside apply_relocation() change to have
-a new meaning for 'dest' and 'src'?
-Answering to myself... yes. in that commit.
-Better commit log would have made the code review so much easier.
-
->                          skl_call_thunk_template, tmpl_size);
->
->         memcpy(*pprog, insn_buff, tmpl_size);
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index 09f7dc9d4d65..f2e8769f5eee 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -481,7 +481,7 @@ static int emit_rsb_call(u8 **pprog, void *func, void=
- *ip)
->  {
->         void *adjusted_ip;
->         OPTIMIZER_HIDE_VAR(func);
-> -       adjusted_ip =3D ip + x86_call_depth_emit_accounting(pprog, func);
-> +       adjusted_ip =3D ip + x86_call_depth_emit_accounting(pprog, func, =
-ip);
-
-Now I see why you added extra var in the previous patch.
-Should have mentioned it in the commit log.
-
->         return emit_patch(pprog, func, adjusted_ip, 0xE8);
->  }
->
-> @@ -1973,20 +1973,17 @@ st:                     if (is_imm8(insn->off))
->
->                         /* call */
->                 case BPF_JMP | BPF_CALL: {
-> -                       int offs;
-> +                       u8 *ip =3D image + addrs[i - 1];
->
->                         func =3D (u8 *) __bpf_call_base + imm32;
->                         if (tail_call_reachable) {
->                                 RESTORE_TAIL_CALL_CNT(bpf_prog->aux->stac=
-k_depth);
-> -                               if (!imm32)
-> -                                       return -EINVAL;
-> -                               offs =3D 7 + x86_call_depth_emit_accounti=
-ng(&prog, func);
-> -                       } else {
-> -                               if (!imm32)
-> -                                       return -EINVAL;
-> -                               offs =3D x86_call_depth_emit_accounting(&=
-prog, func);
-> +                               ip +=3D 7;
->                         }
-> -                       if (emit_call(&prog, func, image + addrs[i - 1] +=
- offs))
-> +                       if (!imm32)
-> +                               return -EINVAL;
-> +                       ip +=3D x86_call_depth_emit_accounting(&prog, fun=
-c, ip);
-> +                       if (emit_call(&prog, func, ip))
->                                 return -EINVAL;
->                         break;
->                 }
-> @@ -2836,7 +2833,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf=
-_tramp_image *im, void *rw_im
->                  * Direct-call fentry stub, as such it needs accounting f=
-or the
->                  * __fentry__ call.
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index 2d0840ef599a..dcff6c29c851 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -2418,7 +2418,7 @@ int btf__add_enum64_value(struct btf *btf, const ch=
+ar *name, __u64 value)
+>   * Append new BTF_KIND_FWD type with:
+>   *   - *name*, non-empty/non-NULL name;
+>   *   - *fwd_kind*, kind of forward declaration, one of BTF_FWD_STRUCT,
+> - *     BTF_FWD_UNION, or BTF_FWD_ENUM;
+> + *     BTF_FWD_UNION, BTF_FWD_ENUM or BTF_FWD_ENUM64;
+>   * Returns:
+>   *   - >0, type ID of newly added BTF type;
+>   *   - <0, on error.
+> @@ -2446,6 +2446,11 @@ int btf__add_fwd(struct btf *btf, const char *name=
+, enum btf_fwd_kind fwd_kind)
+>                  * values; we also assume a standard 4-byte size for it
 >                  */
-> -               x86_call_depth_emit_accounting(&prog, NULL);
-> +               x86_call_depth_emit_accounting(&prog, NULL, image);
+>                 return btf__add_enum(btf, name, sizeof(int));
+> +       case BTF_FWD_ENUM64:
+> +               /* enum64 forward is similarly just an enum64 with no enu=
+m
+> +                * values; assume 8 byte size, signed.
+> +                */
+> +               return btf__add_enum64(btf, name, 8, true);
 
-Overall it all makes sense.
-Pls respin with more precise commit logs.
+nit: let's do sizeof(__u64) to keep it consistent with the FWD_ENUM case
+
+
+>         default:
+>                 return libbpf_err(-EINVAL);
+>         }
+> diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+> index 8e6880d91c84..47d3e00b25c7 100644
+> --- a/tools/lib/bpf/btf.h
+> +++ b/tools/lib/bpf/btf.h
+> @@ -194,6 +194,7 @@ enum btf_fwd_kind {
+>         BTF_FWD_STRUCT =3D 0,
+>         BTF_FWD_UNION =3D 1,
+>         BTF_FWD_ENUM =3D 2,
+> +       BTF_FWD_ENUM64 =3D 3,
+>  };
+>
+>  LIBBPF_API int btf__add_fwd(struct btf *btf, const char *name, enum btf_=
+fwd_kind fwd_kind);
+> --
+> 2.39.3
+>
