@@ -1,99 +1,104 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022CE39FD8
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 07:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844A337152;
+	Fri, 29 Mar 2024 07:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711696730; cv=none; b=XI0mD1gOV7JKsybrhyMCgFxR0nIgF2kgHmsWYyAHkJ5tskBiDFZ3B9uGspJMNdYRAfNZJ2LVPhcWGQ01/rzkiVT2qV7zoC02OxdO5x5jE0UTYsrgxLahuaong+Gs6r2Sy34oVcN7TIHnjNADl8ee9veQ2bWwmlhQKVrSnIvtjZQ=
+	t=1711698199; cv=none; b=E9/5jU0v7fFDW2m7bVqy7BmKBWCpFh3+jno2rlh7kxVO3/s6cAtePPEzVVyt/HyJw60qasDkSfXPPynWEUaylBq7p4XLo8wq94BybejsamIXzUv8qjDKNNDv6sfr7Zclkh67kWv+6y2vT6dvBCWnuWPvpHBeFeotLkzpuWwl278=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711696730; c=relaxed/simple;
-	bh=TwaHVFCHQ70BeTVqRO21kzPvFWiz1VsbRoZxLc49ayg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=U3FKtErPAQ5Imy0aQX0Ki8jZoh3nZv4mlblx3GqeMvcIerXSq8EbUnCnMhROdwOS2BTby+Y1ZVXVvCio62qgHXpvgzc0uLEwIeHIhx0v9jA20QTTFd2/iNftMchreNmRj3bNHPzI0p4CdR/q7o/0xbzse0cwLTG/VEussSQS2dM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=c0AKn8cs; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
+	s=arc-20240116; t=1711698199; c=relaxed/simple;
+	bh=FvFma6wKIx8yA4Hz9Pt9JN8wMlJPx5hRoa8V9FhhsDg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gM2QeArh3gzKOF48oz20q6Rdr/cBB0i5ZCTufOhWQEFt39kFRwvzeBn6JOEA/20rL2wzU1Za8J7thkK5mZ/0tXTwIG/4nFV564hUbJ82CU60pmfFh7ejykS5xN34KZ8AkMMb4k9MBAuEgx2zTKIiwvcjeM6RIwvQwcjLkKm41ZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d+XFv2c9; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="c0AKn8cs"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-41488e17e1cso10564385e9.0
-        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 00:18:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d+XFv2c9"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a466e53f8c0so217922166b.1;
+        Fri, 29 Mar 2024 00:43:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1711696726; x=1712301526; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=krS2D9ecgFkqS97xIEeJ9AxALCcjlxzIgSfRElPb5PA=;
-        b=c0AKn8csY6fOKeQbqGmCXYWZ00qQWSk24yYTOW8/TScs9xNdSGzV1XHEmA7oCT+P5I
-         qZs9lNOASLVcwB4VspDU38KnWoihEsn5/c3lUlBXg1yQxJ3/6XLO0ES97S+INfkr6hBL
-         bll+3Q1dL7peEv2WzxlNXnGIRyYsFfK6qzb8RUGOdg5InS0gs/tdTR4bZNJpRZ7w/8vK
-         z4D82CCIkRYLqgbAjg6NnEeFCqR+7oGxUzaCxC8pRcaflTQoSU583K1UAtCPO7npnLKL
-         NncEG7VwUSYDmcn43o9y9yF6qdkShpGWHTPVi4G4V+u4X+Q1n5A1/16YazaZb0v4glop
-         On7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711696726; x=1712301526;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1711698196; x=1712302996; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=krS2D9ecgFkqS97xIEeJ9AxALCcjlxzIgSfRElPb5PA=;
-        b=Y2ih2oUzM4jrqT17Tst5uXs74mPdVYzSncu2SkuTzLe1dtSurR82JAAf1lNZp+Dz5q
-         ldROSM7a63kjHnkSZ3ciOInU3GyFL7J0eJJzW4yI2CXdqCgRj/FmcqrnbatQ6ORQGZJs
-         yk1deGTHMLLOcAOWF6dXkPpLRZ9xmrA8oe5H0rA/tBWmz/uxfBtZ+Hla/TojrvH0qAT/
-         TdHFmsWuD3wTmDDcqh3iTJ43A5fqGL87jgFkhSJ0Dr9cDssgGT7X74S9kxHb0IgpNWzV
-         CkxiDkKqrdpbh7CpBfCHSI0IIV9G/G3VieVTnp41RUO99G23abzM2bFh9jitL9k+oiY6
-         X8nw==
-X-Forwarded-Encrypted: i=1; AJvYcCX7zAbOQrzGJpT3bzVZcuejRnj94CBN5uwB7yesXCUovm+2IeDCxJLaBSFxuChtXindblbQsyD3YEYlqAiEE0CjalGP
-X-Gm-Message-State: AOJu0Yyoeg+R1VUCWzfVW3u3qau7BdY/ljfVqSezqIVLfKenDCBQ9ldT
-	5IqZ/4g5ZTYu1V/6qiqkY6t5w5NmLtLVdydsT1rglmcDvcWO0drfDHfrFSgRgbQ=
-X-Google-Smtp-Source: AGHT+IGvCGV5hX08Fnpvw3B3BdBVzfCRVAHpCYpmyO5jxa9ci6bswKwPiaRVKK/oFpMoVPVfth3tAA==
-X-Received: by 2002:a05:600c:4f90:b0:415:43f2:332b with SMTP id n16-20020a05600c4f9000b0041543f2332bmr1118723wmq.2.1711696726258;
-        Fri, 29 Mar 2024 00:18:46 -0700 (PDT)
-Received: from zh-lab-node-5.home ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id iw1-20020a05600c54c100b0041550e03bc6sm554986wmb.44.2024.03.29.00.18.45
+        bh=/1GqML3E9IQNFqyYxYdi7v748JJTsivkrRrprbO0bu0=;
+        b=d+XFv2c9LrBiXUtoRYW5v3HccWeiclqzlZCzQjsph1dAsi5HdhRM8fWBaxZL7xSo3t
+         EFHvlbzIyElLhvzLpzhmnmJejtMOU9JtYeMjSDRuLx1WXqQLgvOIsKerKLTCqQASWRlk
+         NPJ9oUeHJBcpZcb4wKoCM4aVdq6EvVFZSASF5xCe2/ZnUK7OTpg8ZHYRyoFRGS2GUcDm
+         f+y0TQG7rFvfX+bDU+Elu+iyPowibjh174125v0eFmdjzH/hpDYXsEk7kYj6FtM3cn3H
+         NNbU8idu9vT2s9JywjnfVthXRVbVKvsLb9N0vHvhl8oKpqC0j/3g0uceJOc/fuVVOkmH
+         RkHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711698196; x=1712302996;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/1GqML3E9IQNFqyYxYdi7v748JJTsivkrRrprbO0bu0=;
+        b=td+GM4WFexVY+DiR+5ObiqoZxqxhHKTYrSxnR5svnp1OoIrdHowmspimpY6habNzGL
+         m3QGLmA8ahlf5/uxm5KXNTSntg5go8fB2eeSZwTo5e77OL3mg57eKL9BjiX1l0qWZbXv
+         kBOxyM7HbjnrAtDS9IKUQvtEjrSsKanliVZVuag4bSxIaX680v3Xtaluwoh74lWScbMr
+         DXNhEdwIimpabAWrqCtBr83PGOCHTlsSjLSc5eW5ZgfDof+jEYh7Ci+siPw3pjm9XSMP
+         DzB17knDtOylta9YEL08GsTcw+4WgdhRdhuAeSYj4W9D8OvPkkEUb5v30ZpepmQeXOVv
+         sQKg==
+X-Forwarded-Encrypted: i=1; AJvYcCV6NK6xatRWYBTGk2Ra2m/YvlsXb5uwy/ZvzW12rqbcBZkOiX9y4bdKr8e+93r+i1vpeXLExPSTS/CEjB2CXbRfwW9Nd+cAGCAAr7LM8zgq2jtsncnxCV9rdhlZGNtFFF7k
+X-Gm-Message-State: AOJu0Yx2T/elBJLMY4ulprMYyj4MnXsi53zTe/8/0BIZ2yEp4lERvFL/
+	53/1G8ySnWUPSI/m7dWVdih5Lkj5VR3iBN/2Nyj+5LA0fhQBvrxB
+X-Google-Smtp-Source: AGHT+IF/GWh0I2FC6gMF2DdWsHl0+T92DodzN5cejRHFxFzf1FNiC9ZnOxylXZcW3i4h0V34lNCrlg==
+X-Received: by 2002:a17:907:20b6:b0:a4d:f56a:19fc with SMTP id pw22-20020a17090720b600b00a4df56a19fcmr994404ejb.13.1711698195583;
+        Fri, 29 Mar 2024 00:43:15 -0700 (PDT)
+Received: from gmail.com (195-38-112-2.pool.digikabel.hu. [195.38.112.2])
+        by smtp.gmail.com with ESMTPSA id lh23-20020a170906f8d700b00a46ab5aaffcsm1636675ejb.178.2024.03.29.00.43.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Mar 2024 00:18:45 -0700 (PDT)
-From: Anton Protopopov <aspsk@isovalent.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Stanislav Fomichev <sdf@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	bpf@vger.kernel.org
-Cc: Anton Protopopov <aspsk@isovalent.com>
-Subject: [PATCH bpf-next] bpf: add a verbose message if map limit is reached
-Date: Fri, 29 Mar 2024 07:20:50 +0000
-Message-Id: <20240329072050.68289-1-aspsk@isovalent.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 29 Mar 2024 00:43:15 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date: Fri, 29 Mar 2024 08:43:13 +0100
+From: Ingo Molnar <mingo@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: x86@kernel.org, peterz@infradead.org, mingo@redhat.com,
+	tglx@linutronix.de, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jolsa@kernel.org, song@kernel.org,
+	kernel-team@meta.com
+Subject: Re: [PATCH v2] perf/x86/amd: support capturing LBR from software
+ events
+Message-ID: <ZgZxEcRuYBO3N2WY@gmail.com>
+References: <20240328133359.731818-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240328133359.731818-1-andrii@kernel.org>
 
-When more than 64 maps are used by a program the verifier return -E2BIG.
-Add a verbose message which highlights the error and also prints the
-actual limit.
 
-Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
----
- kernel/bpf/verifier.c | 2 ++
- 1 file changed, 2 insertions(+)
+* Andrii Nakryiko <andrii@kernel.org> wrote:
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 58952f040761..fa73009d05bc 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -18348,6 +18348,8 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
- 			}
- 
- 			if (env->used_map_cnt >= MAX_USED_MAPS) {
-+				verbose(env, "The map usage limit of %u is reached\n",
-+					MAX_USED_MAPS);
- 				fdput(f);
- 				return -E2BIG;
- 			}
--- 
-2.34.1
+> Now that it's possible to capture LBR on AMD CPU from BPF at arbitrary
+> point, there is no reason to artificially limit this feature to sampling
+> events. So corresponding check is removed. AFAIU, there is no
+> correctness implications of doing this (and it was possible to bypass
+> this check by just setting perf_event's sample_period to 1 anyways, so
+> it doesn't guard all that much).
 
+> diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
+> index 4a1e600314d5..75920f895d67 100644
+> --- a/arch/x86/events/amd/lbr.c
+> +++ b/arch/x86/events/amd/lbr.c
+> @@ -310,10 +310,6 @@ int amd_pmu_lbr_hw_config(struct perf_event *event)
+>  {
+>  	int ret = 0;
+>  
+> -	/* LBR is not recommended in counting mode */
+> -	if (!is_sampling_event(event))
+> -		return -EINVAL;
+> -
+
+Could you please split out this change into a separate patch?
+
+Thanks,
+
+	Ingo
