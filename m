@@ -1,138 +1,351 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33221107A8
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 06:34:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF919A3D;
+	Fri, 29 Mar 2024 06:45:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711694062; cv=none; b=EkF5K+UeHCG4xfyo9AYImif9AMKy54o4S/xxV0KluRs1T8ldNJB5fpXrxOnCZocTIUFVY0jfOIXTdyYRzW4Yng4gbEmHxT2xNv9hwN+rNaKPJo+Iy32D2pQUrasTwnJpqvvcLwMQKkHCtYvnYbhmGbL7ICoKBWUvZktmgmu/wAg=
+	t=1711694707; cv=none; b=Jsn+9WH7rT07PEQKn8ZjkTW7FNiW6TPPCpXWAmhkFYqETrBs93ha1EoM5ZdravwsV5MDfMYENNqVhTFk/fsimrOLsq0sYMSvPEBsyhlsUnYbQymmI6Ho3UHO7/RBDDgI9uiY8D88B9oX7oDA+OFzfaEUYmUf8a80rxCL5QlISp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711694062; c=relaxed/simple;
-	bh=InZLmeQ3D9yy+muH32Y9kpVlOGSmf5QONrD2IJR4d/8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MIYrcBSmlizHneF5ai/PFyYHyKABONrDszIuNaDsKHpte+T+C2ldKCvQznCPU67P4hIx94CJF0Oh+QM7Ab3vMND3r6wHH5Pl235v0MfuZ6bc/J4JdD95TBLb8Tz8MBB3q5mFk+zlbQU52LA6LjJgzaMIstwAUp6wC2PD+rxj4hs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=T4aeuhhb; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1711694707; c=relaxed/simple;
+	bh=91mAmkafELsib3/Quhgpb5ItlPGTm6Mk6VFAqIUThjM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LO895PpsOqBJDJ3c1xhxR02J34g3WYN1Mga0Gts4NqqjGI1WRg4YoZULydspVuajFrU0qmLxdll0JfktAjXhqvWOjBrMNONbMvWLG+uWLe2nT3fUb/4VH/sf9MAmrziRkYVJmoQu1KtFASBW9Yo5IMH2xwQOy9onaVKIJoH7uxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JHDvpK6G; arc=none smtp.client-ip=209.85.222.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="T4aeuhhb"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a46ea03c2a5so313041366b.1
-        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 23:34:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JHDvpK6G"
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-789d0c90cadso110719185a.3;
+        Thu, 28 Mar 2024 23:45:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1711694058; x=1712298858; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Ma+vtqvSlr0gujBxsYgzn0X6HBjLP9HhEs0oHeEYF4=;
-        b=T4aeuhhbPtsoYaHdWuoJfZ8F3X8nbY50dfgFPit6OCc6XqJDw7ndHJBqT7WIGiWizK
-         umClgGSBSI2grtI9/26hSI3YWJRAX2GGNxbI0FWfN83QgnStCaq4ZFZJ+m6B+FIIlZdu
-         Lh+1kVaEd+2t1WNC41YjhJaeHWH9B9qvFIOtd8Rd8+1ifTfIggS8YmpfzjrOxv4HSz2T
-         XTlgD6rrCQmClg8zNyLpSeXlTOLAPGBGnqcQ0Tejv/y1E5oY0JxQb5d7v2hc3JatuFjl
-         NV5gg6VUrl8OWPjNpw7gkJDe6jLXFSyK5ipteo7EytMGNgrRYGiaCR2occiH3L+0VU3l
-         ZC6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711694058; x=1712298858;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1711694705; x=1712299505; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9Ma+vtqvSlr0gujBxsYgzn0X6HBjLP9HhEs0oHeEYF4=;
-        b=dFfzTYtZIDwjhcMgn29wHm6ckcqkjg+xlhAIDIihpTqU8WYg74hpcveH0LeaefQ5Nn
-         1bQiK3MuFG9cV55orDtdavT+fVrEqbhKED4t9mtqDGkt09jHrx5CV+xp4MkuwtB5nMTA
-         6BgCCGuSZX+K8pCOR3ilBl/bJOOSM/3XtEsPTkGmAOOgThOTU+ai18o2YCEwH5dzryvr
-         FNvG5tbQ+QsxcN2BC2mRfQJiRprTXiN8U5ycH39aTL7+n5vHU+pBZCzxghE45XMQrrZP
-         zlD5CW2EP1vvf01esG2P9MOrDeF+LzT7WXFRRvFc1aDvcvaFLxibwemHGGwAiq6A/WeR
-         ofHg==
-X-Forwarded-Encrypted: i=1; AJvYcCWtbVqHL6LSbKQhzMiztHf2UYxZW9MxpsLm90XiuUaguHGzm1NNjAZzSPkCSW+DLNIFrzgYykGSGQzZl+/uR1Jg+e0c
-X-Gm-Message-State: AOJu0YzX54qAswxckNjUgxp1VOlJgOUKu5m+J5dvYT8b357cjvZnTt3u
-	1OV9zJ8HnqhiZV/q0Ef+BhcBGsyNYqKTaJelonrfYY6FsV70KGW3kItWjB5Lydw=
-X-Google-Smtp-Source: AGHT+IH1VcKzFcTm54dsRZaQxbNj3vOYMOpgXud+tLc/JjE1XgeD1l3eoB/yHtw3XXtCfSLCUPRrGQ==
-X-Received: by 2002:a17:906:d112:b0:a4e:3910:72fd with SMTP id b18-20020a170906d11200b00a4e391072fdmr353448ejz.20.1711694058444;
-        Thu, 28 Mar 2024 23:34:18 -0700 (PDT)
-Received: from u94a ([2401:e180:8810:bf68:a132:2657:d239:3e12])
-        by smtp.gmail.com with ESMTPSA id bw17-20020a170906c1d100b00a46b4544da2sm1558477ejb.125.2024.03.28.23.34.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Mar 2024 23:34:17 -0700 (PDT)
-Date: Fri, 29 Mar 2024 14:34:00 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
-Cc: ast@kernel.org, harishankar.vishwanathan@rutgers.edu, 
-	sn624@cs.rutgers.edu, sn349@cs.rutgers.edu, m.shachnai@rutgers.edu, paul@isovalent.com, 
-	Srinivas Narayana <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next] Fix latent unsoundness in and/or/xor value
- tracking
-Message-ID: <7s76qe3ucxiyjctbztrpuevwu4hxeogrm7bbarewjbu6bhsyfr@m4dkjap7hiyy>
-References: <20240329030119.29995-1-harishankar.vishwanathan@gmail.com>
+        bh=31N9TyVfVhzvjR4DYFnbZjnn+IXdbLMNFIsB62iZTO8=;
+        b=JHDvpK6G9nfAGkShGY8HVaGArh5JogInb1x0imG6cccj7Pzq9LsGE5zzx4dIAitRn1
+         f5ZzaYZPhqDAgcRBMo5nqQ0bxNYU4yIW3WNUrJ1t6PWy3oJevi05eSUEV0CcwqRyum3D
+         73yInEyzPic0GpEPEi+7MBuFy2x+IU19Y+N71gU+cJRtvC9QrCzPRVAqfMJv8TKG+lMx
+         nE4+TZ+T+94fcaFFhbCD++fFQH0xsUgW1a5TGh0yoeiYsX0hoijGhgitzT14noiy5OHc
+         N0Uxg2AY1EmvcZgfg7no6XBjq3GOTu1FOnLFwKdLU1CX7er/2B9/zfKvXduKltxXe4ET
+         lyrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711694705; x=1712299505;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=31N9TyVfVhzvjR4DYFnbZjnn+IXdbLMNFIsB62iZTO8=;
+        b=vXi0vYpI0jblMkz+yoKW3lpoWXHjFSaEfVuyD4Wg8i2Lg3a13UrgGukUH3AqPBZJlQ
+         36xJ7vPAaN4PsNoeNAu2+Pdch7PBZWkWyaPAEryADN4v9gRz3xonpwpyZe2QvG4QA+Nq
+         y2pY2OmdomnBOG7pn/sZRFkARnnTyRfUTWcpdq5HVl8nS/ppjdOxhGMJBMRkmtCkrDeV
+         On4RzlczZunaYLcz46SOD7HEXqPC5vhDSCJvQO7T5fGUdgTQ76jcfaFu/WL5U8HpMmf0
+         Le4Cna3FNXrPlsK/4P69pB+wuccDFHbG64q8wxdafVCpQNybMtd0r8vJqsCcbkFbYtr1
+         SeKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXtMBadl+JqqKmZPqaJLsOoq1KMWkQV4nZlM5ADYFONMoGXqdlYbKc59mZUWvvoZPqdCOdeXY04gvMFQmYqOLLDf586kEIWKrV7yQQCBewmzL+vpbwkLF9bYYeY3pjegiLG4diIFdGxj3HXre7aUsN89gFbseB+heH4hFQWDcRbvXwP2PAfX6RLMWW4quk8aRpxK3SueTUmAOuFqsmErCw=
+X-Gm-Message-State: AOJu0YyVgD6guHTt4/iLTJcCaALLV73QvYHf79eyhOP4W/bV+H7yNNlw
+	pq44VImXjypygfzjkoFxFTfVlfp/l5apE/eXl4pLiaBox5fPioWCb1UV2j5YqWFmL9WtlHY3iTb
+	wzfi58UZkHvNVpbk82Rau4izcw80=
+X-Google-Smtp-Source: AGHT+IG/TIKeSGMqKW6YChPWLmBMKKX3Gy9OdlipXJCgr21BbSHGjntCg3DDkBO9VhRmJoaGJJ94yJ2lJWoCLnINQBI=
+X-Received: by 2002:a0c:fbc8:0:b0:696:a42d:898f with SMTP id
+ n8-20020a0cfbc8000000b00696a42d898fmr1452653qvp.10.1711694704845; Thu, 28 Mar
+ 2024 23:45:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240329030119.29995-1-harishankar.vishwanathan@gmail.com>
+References: <20240329015351.624249-1-drosen@google.com>
+In-Reply-To: <20240329015351.624249-1-drosen@google.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Fri, 29 Mar 2024 09:44:53 +0300
+Message-ID: <CAOQ4uxhLPw9AKBWmUcom3RUrsov0q39tiNhh2Mw7qJbwKr1yRQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v4 00/36] Fuse-BPF and plans on merging with Fuse Passthrough
+To: Daniel Rosenberg <drosen@google.com>
+Cc: Miklos Szeredi <miklos@szeredi.hu>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Joanne Koong <joannelkoong@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
+	Christian Brauner <brauner@kernel.org>, kernel-team@android.com, 
+	Bernd Schubert <bschubert@ddn.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 28, 2024 at 11:01:19PM -0400, Harishankar Vishwanathan wrote:
-> The scalar(32)_min_max_and/or/xor functions can exhibit unsound behavior
-> when setting signed bounds. The following example illustrates the issue for
-> scalar_min_max_and(), but it applies to the other functions.
-> 
-> In scalar_min_max_and() the following clause is executed when ANDing
-> positive numbers:
-> 
-> 		/* ANDing two positives gives a positive, so safe to
-> 		 * cast result into s64.
-> 		 */
-> 		dst_reg->smin_value = dst_reg->umin_value;
-> 		dst_reg->smax_value = dst_reg->umax_value;
-> 
-> However, if umin_value and umax_value of dst_reg cross the sign boundary
-> (i.e., if (s64)dst_reg->umin_value > (s64)dst_reg->umax_value), then we
-> will end up with smin_value > smax_value, which is unsound.
-> 
-> Previous works [1, 2] have discovered and reported this issue. Our tool
-> Agni [3] consideres it a false positive. This is because, during the
-> verification of the abstract operator scalar_min_max_and(), Agni restricts
-> its inputs to those passing through reg_bounds_sync(). This mimics
-> real-world verifier behavior, as reg_bounds_sync() is invariably executed
-> at the tail of every abstract operator. Therefore, such behavior is
-> unlikely in an actual verifier execution.
-> 
-> However, it is still unsound for an abstract operator to exhibit behavior
-> where smin_value > smax_value. This patch fixes it, making the abstract
-> operator sound for all (well-formed) inputs.
-> 
-> It's worth noting that this patch only modifies the output signed bounds
-> (smin/smax_value) in cases where it was previously unsound. As such, there
-> is no change in precision. When the unsigned bounds (umin/umax_value) cross
-> the sign boundary, they shouldn't be used to update  the signed bounds
-> (smin/max_value). In only such cases, we set the output signed bounds to
-> unbounded [S64_MIN, S64_MAX]. We confirmed through SMT verification that
-> the problem occurs if and only if the unsigned bounds cross the sign
-> boundary.
-> 
-> [1] https://sanjit-bhat.github.io/assets/pdf/ebpf-verifier-range-analysis22.pdf
-> [2] https://github.com/bpfverif/agni
-> [3] https://link.springer.com/chapter/10.1007/978-3-031-37709-9_12
-> 
-> Co-developed-by: Matan Shachnai <m.shachnai@rutgers.edu>
-> Signed-off-by: Matan Shachnai <m.shachnai@rutgers.edu>
-> Co-developed-by: Srinivas Narayana <srinivas.narayana@rutgers.edu>
-> Signed-off-by: Srinivas Narayana <srinivas.narayana@rutgers.edu>
-> Co-developed-by: Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
-> Signed-off-by: Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
-> Signed-off-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+Hi Daniel,
 
-I'd suggest adding a fixes tag as well. This seems to go all the way
-back to the signed/unsigned split.
+On Fri, Mar 29, 2024 at 4:54=E2=80=AFAM Daniel Rosenberg <drosen@google.com=
+> wrote:
+>
+> I've recently gotten some time to re-focus on fuse-bpf efforts, and
 
-Fixed: b03c9f9fdc37 ("bpf/verifier: track signed and unsigned min/max values")
+Glad to hear that this effort is still on track!
 
-Otherwise
+> had some questions on how to best integrate with recent changes that
+> have landed in the last year. I've included a rebased version (ontop
+> of bpf-next e63985ecd226 ("bpf, riscv64/cfi: Support kCFI + BPF on
+> riscv64") of the old patchset for reference here.
+>
+> On the bpf end, I'm struggling a little bit with the interface for
+> selecting programs. I'd like to be able to pass the map id to fuse,
+> since that's a value userspace already knows the program by. Would it
+> be reasonable to either pass that ID down to the registration
+> function, or otherwise provide a path for a separate module to
+> translate from a map id to a struct_op program?
+>
+> On the fuse end, I'm wondering how the interface will extend to
+> directories. At LSFMMBPF last year, some people brought up concerns
+> with the interface we had, specifically that it required opens to get
+> fds, which we'd then use to respond to lookup requests, adding a lot
+> of extra overhead. I had been planning to switch to a path that the
+> response would supply instead, likely limited by RESOLVE_BENEATH. That
+> seems pretty different from Fuse Passthrough's approach. Are there any
+> current plans on how that interface will extend for a directory
+> passthrough?
+>
 
-Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+My plan was to start from passthrough ioctl with O_PATH fd on lookup
+and deal with performance improvements later when there are actual
+workloads that report a problem and that depends where the overhead is.
+
+Is it with the opening of O_PATH fds?
+Is it with the passthtough ioctls?
+If latter, then when fuse uring is merged, I think we could get loose
+the ioctls anyway.
+
+> Could someone clarify why passthrough has an extra layer to register
+> for use as a backing file? Does the ioctl provide some additional
+> tracking purpose? I recall there being some security issue around
+> directly responding with the fd. In fuse-bpf, we were handling this by
+> responding to the fuse request via an ioctl in those cases.
+>
+
+The original reason was to mitigate an attack vector of fooling a
+privileged process into writing the fd (number) to /dev/fuse to
+gain access to a backing file this way.
+
+The fuse-bpf way of doing all responds with ioctls seems fine for
+this purpose, but note that the explicit setup also provides feedback
+to the server in case the passthrough cannot be accomplished
+for a specific inode (e.g. because of stacking depths overflow)
+and that is a big benefit IMO.
+
+> Passthrough also maintains a separate cred instance for each backing
+> file. I had been planning to have a single one for the userspace
+> daemon, likely grabbed during the init response. I'm unsure how the
+> current Passthrough method there should scale to directories.
+>
+
+Using a global cred should be fine, just as overlayfs does.
+The specific inode passthrough setup could mention if the global
+cred should be used.
+
+However, note that overlayfs needs to handle some special cases
+when using mounter creds (e.g.: ovl_create_or_link() and dropping
+of CAP_SYS_RESOURCE).
+
+If you are going to mimic all this, better have that in the stacking fs
+common code.
+
+> Now on to my plans. Struct ops programs have more dynamic support now
+> [1]. I'm hoping to be able to move most of the Fuse BPF related code
+> to live closer to Fuse, and to have it more neatly encapsulated when
+> building as a module. I'm not sure if everything that's needed for
+> that exists, but I need to play with it a bit more to understand what
+> I'm missing. I'll probably show up at bpf office hours at some point.
+>
+> Struct ops have proper multi page support now [2], which removes
+> another patch. I'm still slightly over the struct ops limit, but that
+> may change with other changes I'm considering.
+>
+> I'm very excited to see the new generic stacking filesystem support
+> with backing-file [3]. I imagine in time we'll extend that to have a
+> backing-inode as well, for the various inode_operations. That will
+
+Yes, that was the plan.
+I had initially planned to start an fsstack library, but I found out that
+this "library" already exists (fs/stack.c), but it has code that is not a
+good abstraction for ovl/fuse and ecryptfs will not be changed to
+improve the abstraction, so we first need to burn this lib and start over:
+https://github.com/amir73il/linux/commits/fsstack
+Then, we can move backing_file.c into fs/stack/.
+
+> definitely involve a lot of refactoring of the way fuse-bpf is
+> currently structured, but it's clearly the right way forward.
+>
+> I'm glad to see fuse passthrough, which provides a subset of the
+> fuse-bpf functionality, has landed[4]. I'm planning to rework the
+> patch set to integrate better with that. First off, I've been
+> considering splitting up the bpf progam into a dentry, inode, and file
+
+That sounds like a good plan, but also, please remember Miklos' request -
+please split the patch sets for review to:
+1. FUSE-passthrough-all-mode
+2. Attach BPF program
+
+We FUSE developers must be able to review the FUSE/passthough changes
+without any BPF code at all (which we have little understanding thereof)
+
+As a merge strategy, I think we need to aim for merging all the FUSE
+passthrough infrastructure needed for passthrough of inode operations
+strictly before merging any FUSE-BPF specific code.
+
+In parallel you may get BPF infrastructure merged, but integrating FUSE+BPF=
+,
+should be done only after all infrastructure is already merged IMO.
+
+> set. That has the added bonus of pushing us back down below the
+> current struct_op function list limits. I would want to establish some
+> linkage between the sets, so that you could still just set the bpf
+> program at a folder level, and have all objects underneath inherit the
+> correct program. That's not an issue for a version with just file
+> support, but I'll want to ensure the interface extends naturally. With
+> the increased module support, I plan to redo all of the bpf program
+> linking anyways. The existing code was a temporary placeholder while
+> the method of registering struct ops programs was still in flux.
+>
+
+So I don't think there is any point in anyone actually reviewing the
+v4 patch set that you just posted?
+
+> My plan for the next patch set is to prune down to just the file
+
+Please explain what you mean by that.
+How are fuse-bpf file operations expected to be used and specifically,
+How are they expected to extend the current FUSE passthrough functionality?
+
+Do you mean that an passthrough setup will include a reference to a bpf
+program that will be used to decide per read/write/splice operation
+whether it should be passed through to backing file or sent to server
+direct_io style?
+
+I just wanted to make sure that you are aware of the fact that direct io
+to server is the only mode of io that is allowed on an inode with an attach=
+ed
+backing file.
+
+Thanks,
+Amir.
+
+> operations. That removes a lot of the tricky questions for the moment,
+> and should shrink down the patch set massively. Along with that, I'll
+> clean up the struct_op implementation to take more advantage of the
+> recent bpf additions.
+>
+> [1] https://lore.kernel.org/r/20240119225005.668602-12-thinker.li@gmail.c=
+om
+> [2] https://lore.kernel.org/all/20240224223418.526631-3-thinker.li@gmail.=
+com/
+> [3] https://lore.kernel.org/all/20240105-vfs-rw-9b5809292b57@brauner/
+> [4] https://lore.kernel.org/all/CAJfpegsZoLMfcpBXBPr7wdAnuXfAYUZYyinru3jr=
+OWWEz7DJPQ@mail.gmail.com/
+>
+>
+> Daniel Rosenberg (36):
+>   fuse-bpf: Update fuse side uapi
+>   fuse-bpf: Add data structures for fuse-bpf
+>   fuse-bpf: Prepare for fuse-bpf patch
+>   fuse: Add fuse-bpf, a stacked fs extension for FUSE
+>   fuse-bpf: Add ioctl interface for /dev/fuse
+>   fuse-bpf: Don't support export_operations
+>   fuse-bpf: Add support for access
+>   fuse-bpf: Partially add mapping support
+>   fuse-bpf: Add lseek support
+>   fuse-bpf: Add support for fallocate
+>   fuse-bpf: Support file/dir open/close
+>   fuse-bpf: Support mknod/unlink/mkdir/rmdir
+>   fuse-bpf: Add support for read/write iter
+>   fuse-bpf: support readdir
+>   fuse-bpf: Add support for sync operations
+>   fuse-bpf: Add Rename support
+>   fuse-bpf: Add attr support
+>   fuse-bpf: Add support for FUSE_COPY_FILE_RANGE
+>   fuse-bpf: Add xattr support
+>   fuse-bpf: Add symlink/link support
+>   fuse-bpf: Add partial flock support
+>   fuse-bpf: Add partial ioctl support
+>   fuse-bpf: allow mounting with no userspace daemon
+>   fuse-bpf: Add fuse-bpf constants
+>   bpf: Increase struct_op max members
+>   WIP: bpf: Add fuse_ops struct_op programs
+>   fuse-bpf: Export Functions
+>   fuse: Provide registration functions for fuse-bpf
+>   fuse-bpf: Set fuse_ops at mount or lookup time
+>   fuse-bpf: Call bpf for pre/post filters
+>   fuse-bpf: Add userspace pre/post filters
+>   WIP: fuse-bpf: add error_out
+>   fuse-bpf: Add default filter op
+>   tools: Add FUSE, update bpf includes
+>   fuse-bpf: Add selftests
+>   fuse: Provide easy way to test fuse struct_op call
+>
+>  fs/fuse/Kconfig                               |    8 +
+>  fs/fuse/Makefile                              |    1 +
+>  fs/fuse/backing.c                             | 4287 +++++++++++++++++
+>  fs/fuse/bpf_register.c                        |  207 +
+>  fs/fuse/control.c                             |    2 +-
+>  fs/fuse/dev.c                                 |   85 +-
+>  fs/fuse/dir.c                                 |  318 +-
+>  fs/fuse/file.c                                |  126 +-
+>  fs/fuse/fuse_i.h                              |  472 +-
+>  fs/fuse/inode.c                               |  377 +-
+>  fs/fuse/ioctl.c                               |   11 +-
+>  fs/fuse/readdir.c                             |    5 +
+>  fs/fuse/xattr.c                               |   18 +
+>  include/linux/bpf.h                           |    2 +-
+>  include/linux/bpf_fuse.h                      |  285 ++
+>  include/uapi/linux/bpf.h                      |   13 +
+>  include/uapi/linux/fuse.h                     |   41 +
+>  kernel/bpf/Makefile                           |    4 +
+>  kernel/bpf/bpf_fuse.c                         |  716 +++
+>  kernel/bpf/bpf_struct_ops.c                   |    2 +
+>  kernel/bpf/btf.c                              |    1 +
+>  kernel/bpf/verifier.c                         |   10 +-
+>  tools/include/uapi/linux/bpf.h                |   13 +
+>  tools/include/uapi/linux/fuse.h               | 1197 +++++
+>  .../selftests/filesystems/fuse/.gitignore     |    2 +
+>  .../selftests/filesystems/fuse/Makefile       |  189 +
+>  .../testing/selftests/filesystems/fuse/OWNERS |    2 +
+>  .../selftests/filesystems/fuse/bpf_common.h   |   51 +
+>  .../selftests/filesystems/fuse/bpf_loader.c   |  597 +++
+>  .../testing/selftests/filesystems/fuse/fd.txt |   21 +
+>  .../selftests/filesystems/fuse/fd_bpf.bpf.c   |  397 ++
+>  .../selftests/filesystems/fuse/fuse_daemon.c  |  300 ++
+>  .../selftests/filesystems/fuse/fuse_test.c    | 2476 ++++++++++
+>  .../filesystems/fuse/struct_op_test.bpf.c     |  642 +++
+>  .../selftests/filesystems/fuse/test.bpf.c     | 1045 ++++
+>  .../filesystems/fuse/test_framework.h         |  172 +
+>  .../selftests/filesystems/fuse/test_fuse.h    |  494 ++
+>  37 files changed, 14385 insertions(+), 204 deletions(-)
+>  create mode 100644 fs/fuse/backing.c
+>  create mode 100644 fs/fuse/bpf_register.c
+>  create mode 100644 include/linux/bpf_fuse.h
+>  create mode 100644 kernel/bpf/bpf_fuse.c
+>  create mode 100644 tools/include/uapi/linux/fuse.h
+>  create mode 100644 tools/testing/selftests/filesystems/fuse/.gitignore
+>  create mode 100644 tools/testing/selftests/filesystems/fuse/Makefile
+>  create mode 100644 tools/testing/selftests/filesystems/fuse/OWNERS
+>  create mode 100644 tools/testing/selftests/filesystems/fuse/bpf_common.h
+>  create mode 100644 tools/testing/selftests/filesystems/fuse/bpf_loader.c
+>  create mode 100644 tools/testing/selftests/filesystems/fuse/fd.txt
+>  create mode 100644 tools/testing/selftests/filesystems/fuse/fd_bpf.bpf.c
+>  create mode 100644 tools/testing/selftests/filesystems/fuse/fuse_daemon.=
+c
+>  create mode 100644 tools/testing/selftests/filesystems/fuse/fuse_test.c
+>  create mode 100644 tools/testing/selftests/filesystems/fuse/struct_op_te=
+st.bpf.c
+>  create mode 100644 tools/testing/selftests/filesystems/fuse/test.bpf.c
+>  create mode 100644 tools/testing/selftests/filesystems/fuse/test_framewo=
+rk.h
+>  create mode 100644 tools/testing/selftests/filesystems/fuse/test_fuse.h
+>
+>
+> base-commit: e63985ecd22681c7f5975f2e8637187a326b6791
+> --
+> 2.44.0.478.gd926399ef9-goog
+>
