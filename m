@@ -1,68 +1,68 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF3FB13B2B8
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 22:01:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B5513C9AF
+	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 22:01:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711749677; cv=none; b=Hnhz2LxjBa5/9Hwb1986YFyZtGtfBBFbG2+xqZWyp9bH8VjEqmNM6kxR4mPE6Wd5h7ucuCE/JOeHeH7q92s6aFpTu/G+zxLyw09u94XIYZJ8vjsBGaMRfjUFiJvkN0LCuU5+gS2iAXgC9pl5WHejWfIJLPvJEC/UJ9x1p5QaHD0=
+	t=1711749685; cv=none; b=G074atiGG1ukviPjbA03BlQ/C+b5Z7HkGj4PJYgx7cpLloejSS72fOHhpdvewj2ZhJa36aSPYMv5oqfZvREacnzkLg5qYrTgs1Cn3k6fckgb8n+fD3zJLYcSuAR/y0gvFMir1KqT6F8IGY1Xd6DAIVYvBcZynpc8qE6LqZ/kXLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711749677; c=relaxed/simple;
-	bh=kG2ilv+ptdgx0p0VH4ytP2EfQEf92a4w9oQTtM0jEwE=;
+	s=arc-20240116; t=1711749685; c=relaxed/simple;
+	bh=7yp+GfJkUVyfQWb1v0nYSA4qyI2wVytYT7c0mac9+6g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R67F3oMDMMd/SFbC24qAHr5djyP0RgohIQ26ddjRvMnmuOeWOYOskZfZ62b4pDR+fDe3kUmUWsN+RRjLGYeEdwszi6XKUozE8dJ603vFRYhYm/RDqLcEWmvF2/su2NInJ58k7rud5gCJRsSMUYRZtxnXPo0WMtqVvimJpqp0TJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WrV+yTcq; arc=none smtp.client-ip=209.85.208.48
+	 To:Cc:Content-Type; b=btvAXrrBTSKDHNdJ89tSrxDJE24yZN/umQgEHfeQhgeYMahEISvcJ9gV96wDxBtBwzniXFylBmG/Z8jqEP756Fpgtyy8oCVKbY0kprSo7d2iWuUXTvOMKWHF6jAEINQvA9sUA0BK2AGA5GQqhwHXKT5ufwE7v434e4sSbNhUuSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OAUXWuIy; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WrV+yTcq"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-56899d9bf52so3061519a12.2
-        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 15:01:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OAUXWuIy"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a4a387ff7acso292581466b.2
+        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 15:01:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711749674; x=1712354474; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711749682; x=1712354482; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M5kGyE0FX/ono87O7FcUBRC90Dg7H28s3LGhc9FYlXU=;
-        b=WrV+yTcql0IgcKCtXPTwt7X3dPzu/P1y9t8qgfLjbFyqW2rMp7028FxD8OHCKZm0gQ
-         LquavPibp7Y/WjTDxGxeMqEOcDpSztFyauoiQUwsTJtEKZkItDi7CS5VoUvjQoKUTCbm
-         SBN2ei6i/2pSdRB3fbT8d8VdcPan9GWricMmeLexjzfGgIQ8kJTkuIqpeVYUqxKU84gc
-         tiZffuBXDMSTRMauHOmi8+RIdnAoaZpoBw5lsW3wD0nj5huMZ56Tn20h+RbxUe3kojyL
-         dRptC8u4lDZ5PsQpXsVenqmdpy9TZpQw8xkrYDhHk9NZ9gINC9IEdqBN/99etUywK5Rp
-         pz+Q==
+        bh=OM17T8yif91gEGVp6nPkERQV9c4hunLcQJVV8VLCjtY=;
+        b=OAUXWuIyzoIpp9XxHw8VIAJ9pIbZhsJr+9uAbwncedX/t9/jhEHk7rjtJ3egJk6Tw6
+         ruaSUgiXC0IlNSuW2JgUORAmmvWxrPUmlIqk2KDcSchbN1m2jto1UHQfZnnI9pM7YYss
+         T2l3KNLdd4CSdIagmGVxL1lmzs47CiUdaFDALKR3G4RRaLV3B6mtrdHr7hbUb2OeRiBO
+         QrjpMtIoACajcFhwIiYUin7Dp1f1Z3l+UdhHTxDcLSAdQZCPlLIjl7XedSdj/X+dkt2t
+         YG/2t1/lwDE440LQHjKUiEwZ3jboUEY02Lc/Xmx9JWcMZ9VsfhJJiP/f0i2tmONPiK1V
+         oaXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711749674; x=1712354474;
+        d=1e100.net; s=20230601; t=1711749682; x=1712354482;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=M5kGyE0FX/ono87O7FcUBRC90Dg7H28s3LGhc9FYlXU=;
-        b=EFiDfIO2kmfr7H5qn0YYPIc3JJkxdpfF+OqqWxsZMruFPjf8oTljgxWCIGwVc1bg7i
-         IxF0IcrdDdVUoz6QdKWtbv7aCp6FB38Ql13DwT7pY3t5gUx1YsMEzP/P4DtuEO9JtGRZ
-         8iAxlTo4csg8NoSCgppacWX/D4i2y7VvtnmY+uO+WD2O1iLb/Y6lJ+Qgh/RXlxWtIJa3
-         fhmg830qt3eJoH2ffaY/2Ir5zkAIkdyl7jwcFx5rFFo4tiz+/06NH3IHU0ax73Hy8d9I
-         7r5p14hYaJVXBg6ZiFx+BgjABMPO1jEayYSL2DST7KJE/iVh7LCsrM15tSUYNXsb70sO
-         o7HA==
-X-Forwarded-Encrypted: i=1; AJvYcCXAo3N0ebL6ZDffqGw9qUSSDQcE41AHlLvEvbE3ghbWHZNuAmlH85IUB/Rq0st+7WOPjXHoWSCyEthkzZ7fv3BbR0wA
-X-Gm-Message-State: AOJu0Yw9tEeVWMeB0m48wEz0GlWjwcrEKELy6UXb8YNwoO8RlR4u6Vzi
-	l/JBw5rJ/QZvJrPcBJy3rIvLMgVOEYDeFhsz07et4iU3YghufcfKVEAFqqMhLihqP3YQixZyzhO
-	T8F84xu/0DYDCLkLzPw9GWdRaNIc=
-X-Google-Smtp-Source: AGHT+IHQAbHv4k7IMa/Hrc0/A+tszxaxsuDe+8BFvVDmWOLm9iolf5oHY1DobmmbvTBWuiu0MbRQva4B9CY6qTovKcw=
-X-Received: by 2002:a17:906:1744:b0:a4e:2d7d:3fd5 with SMTP id
- d4-20020a170906174400b00a4e2d7d3fd5mr2516290eje.1.1711749673920; Fri, 29 Mar
- 2024 15:01:13 -0700 (PDT)
+        bh=OM17T8yif91gEGVp6nPkERQV9c4hunLcQJVV8VLCjtY=;
+        b=oDukCa4x5krNmByhufMSw6rECcniooQBDsO01eWFAb84Z58Snp37dFGcunY1fOsS91
+         moRYPDrlrmlrHGNbOAzNqsv+enxZ4P5UaTifFj1DP3vwhy/aHLkQ+65X71O/zgPc7gJp
+         RRQL15n+zNHlpv44GeD100d9jDBRcoyaOd3wn4oX8D1Wd03Exc5NGiuf2MqjwGS89zgi
+         E+ylmRMkdUKWTVHCf0phItjIKHVih1QZCkWhaGe3naJ0ZX74zJf2qlKcXJFdeM55YvP8
+         WWPqa+KvQdvK5nxRkkmUfIY1IHb2UqgHgtrDdtvQ0FfqMpw8cUeTFLirTkNrB6k/ixY0
+         gaTg==
+X-Forwarded-Encrypted: i=1; AJvYcCWT9lG8dKszdFLfXQ5HXkOdhracShdX8l4U2ArGJSR0INrVT3GnQwdXRckhE25bibawjQfz4dZDf5A4adyt/dQp1/7Z
+X-Gm-Message-State: AOJu0Yym1d1xOd03q+wa0WLY745U0FCFUxcGM9R8j+nKfTNLbkSz/kMT
+	f/6KY2fbAs7rgD/0wMCF61N+xzDramctxi1dwu6Y+le/MmxdwA/4Altu9ih7ETFJ/W5dwWDAwh3
+	ipfn+O9fT4W7EHyrYjeAvoGd54a8=
+X-Google-Smtp-Source: AGHT+IFygwz6rtdkvE7cNOrrq3Xd28MoILqUqYxjczeNqp3tIBq5gHAA0zmLEqc9TbXtUMiPgotV28nNmPzu7nua1gY=
+X-Received: by 2002:a17:907:972a:b0:a46:575c:a9a2 with SMTP id
+ jg42-20020a170907972a00b00a46575ca9a2mr2836746ejc.45.1711749681974; Fri, 29
+ Mar 2024 15:01:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322102455.98558-1-alan.maguire@oracle.com> <20240322102455.98558-6-alan.maguire@oracle.com>
-In-Reply-To: <20240322102455.98558-6-alan.maguire@oracle.com>
+References: <20240322102455.98558-1-alan.maguire@oracle.com> <20240322102455.98558-8-alan.maguire@oracle.com>
+In-Reply-To: <20240322102455.98558-8-alan.maguire@oracle.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 29 Mar 2024 15:00:53 -0700
-Message-ID: <CAEf4BzbWHPah0_QaU8a9kNo7C24RB4mR0mLcwXvFQyf3qNbYnA@mail.gmail.com>
-Subject: Re: [RFC bpf-next 04/13] libbpf: add btf__parse_opts() API for
- flexible BTF parsing
+Date: Fri, 29 Mar 2024 15:01:02 -0700
+Message-ID: <CAEf4Bzag6ZteES3JKvXZK-SJ2GkUwo+31Aq==bPXMi=hknmg8g@mail.gmail.com>
+Subject: Re: [RFC bpf-next 06/13] kbuild,bpf: switch to using --btf_features
+ for pahole v1.26 and later
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: andrii@kernel.org, jolsa@kernel.org, acme@redhat.com, 
 	quentin@isovalent.com, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, 
@@ -76,140 +76,46 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, Mar 22, 2024 at 3:25=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
 om> wrote:
 >
-> Options cover existing parsing scenarios (ELF, raw, retrieving
-> .BTF.ext) and also allow specification of the ELF section name
-> containing BTF.  This will allow consumers to retrieve BTF from
-> .BTF.base_ref sections (BTF_BASE_REF_ELF_SEC) also.
+> The btf_features list can be used for pahole v1.26 and later -
+> it is useful because if a feature is not yet implemented it will
+> not exit with a failure message.  This will allow us to add feature
+> requests to the pahole options without having to check pahole versions
+> in future; if the version of pahole supports the feature it will be
+> added.
 >
 > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 > ---
->  tools/lib/bpf/btf.c      | 24 ++++++++++++++++++------
->  tools/lib/bpf/btf.h      | 32 ++++++++++++++++++++++++++++++++
->  tools/lib/bpf/libbpf.map |  1 +
->  3 files changed, 51 insertions(+), 6 deletions(-)
+>  scripts/Makefile.btf | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 >
+> diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+> index 82377e470aed..9694ca3c5252 100644
+> --- a/scripts/Makefile.btf
+> +++ b/scripts/Makefile.btf
+> @@ -12,8 +12,11 @@ pahole-flags-$(call test-ge, $(pahole-ver), 121)     +=
+=3D --btf_gen_floats
+>
+>  pahole-flags-$(call test-ge, $(pahole-ver), 122)       +=3D -j
+>
+> -pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)         +=3D --lang_exclu=
+de=3Drust
+> -
+>  pahole-flags-$(call test-ge, $(pahole-ver), 125)       +=3D --skip_encod=
+ing_btf_inconsistent_proto --btf_gen_optimized
+>
+> +# Switch to using --btf_features for v1.26 and later.
+> +pahole-flags-$(call test-ge, $(pahole-ver), 126)       =3D -j --btf_feat=
+ures=3Dencode_force,var,float,emum64,decl_tag,type_tag,optimized_func,consi=
+stent_func
 
-[...]
+typo: enum64
 
-> +struct btf *btf__parse_opts(const char *path, struct btf_parse_opts *opt=
-s)
-> +{
-> +       if (!OPTS_VALID(opts, btf_parse_opts))
-> +               return libbpf_err_ptr(-EINVAL);
-> +       if (opts && !opts->btf_sec)
 
-please use OPTS_GET() macro to access members of opts structs
-
-> +               return btf__parse_raw_split(path, opts ? opts->base_btf :=
- NULL);
-
-this should still work for ELF parsing, so use btf_parse() which can
-deal both with raw BTF and parse ELF (defaulting to .BTF section)
-
-> +       return libbpf_ptr(btf_parse_elf(path,
-> +                                       opts ? opts->btf_sec : BTF_ELF_SE=
-C,
-> +                                       opts ? opts->base_btf : NULL,
-> +                                       opts ? &opts->btf_ext : NULL));
-
-ditto
-
-> +}
 > +
->  static struct btf *btf_parse(const char *path, struct btf *base_btf, str=
-uct btf_ext **btf_ext)
->  {
->         struct btf *btf;
-> @@ -1307,7 +1319,7 @@ static struct btf *btf_parse(const char *path, stru=
-ct btf *base_btf, struct btf_
->                 return btf;
->         if (err !=3D -EPROTO)
->                 return ERR_PTR(err);
-> -       return btf_parse_elf(path, base_btf, btf_ext);
-> +       return btf_parse_elf(path, BTF_ELF_SEC, base_btf, btf_ext);
->  }
->
->  struct btf *btf__parse(const char *path, struct btf_ext **btf_ext)
-> diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-> index f2a853d6fa55..c63043520149 100644
-> --- a/tools/lib/bpf/btf.h
-> +++ b/tools/lib/bpf/btf.h
-> @@ -18,6 +18,7 @@ extern "C" {
->
->  #define BTF_ELF_SEC ".BTF"
->  #define BTF_EXT_ELF_SEC ".BTF.ext"
-> +#define BTF_BASE_REF_ELF_SEC ".BTF.base_ref"
->  #define MAPS_ELF_SEC ".maps"
->
->  struct btf;
-> @@ -129,6 +130,37 @@ LIBBPF_API struct btf *btf__parse_elf_split(const ch=
-ar *path, struct btf *base_b
->  LIBBPF_API struct btf *btf__parse_raw(const char *path);
->  LIBBPF_API struct btf *btf__parse_raw_split(const char *path, struct btf=
- *base_btf);
->
-> +struct btf_parse_opts {
-> +       size_t sz;
-> +       /* use base BTF to parse split BTF */
-> +       struct btf *base_btf;
-> +       /* retrieve optional .BTF.ext info */
-> +       struct btf_ext *btf_ext;
-
-shouldn't this be a pointer to a pointer, it's an output parameter,
-right? This will give control to users to define if they are
-interested in .BTF.ext content or not (NULL means "don't bother
-parsing")
-
-> +       /* BTF section name */
-> +       const char *btf_sec;
-> +        size_t:0;
-> +};
+> +pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)         +=3D --lang_exclu=
+de=3Drust
 > +
-> +#define btf_parse_opts__last_field btf_sec
-> +
-> +/* @brief **btf__parse_opts()** parses BTF information from either a
-> + * raw BTF file (*btf_sec* is NULL) or from the specified BTF section,
-> + * also retrieving  .BTF.ext info if *btf_ext* is non-NULL.  If
-> + * *base_btf* is specified, use it to parse split BTF from the
-> + * specified location.
-> + *
-> + * @return new BTF object instance which has to be eventually freed with
-> + * **btf__free()**
-> + *
-> + * On error, error-code-encoded-as-pointer is returned, not a NULL. To e=
-xtract
-> + * error code from such a pointer `libbpf_get_error()` should be used. I=
-f
-> + * `libbpf_set_strict_mode(LIBBPF_STRICT_CLEAN_PTRS)` is enabled, NULL i=
-s
-> + * returned on error instead. In both cases thread-local `errno` variabl=
-e is
-> + * always set to error code as well.
-> + */
-> +
-> +LIBBPF_API struct btf *btf__parse_opts(const char *path, struct btf_pars=
-e_opts *opts);
-> +
->  LIBBPF_API struct btf *btf__load_vmlinux_btf(void);
->  LIBBPF_API struct btf *btf__load_module_btf(const char *module_name, str=
-uct btf *vmlinux_btf);
->
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index 3d53b1781af1..e9a7cb9c3c5b 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -415,5 +415,6 @@ LIBBPF_1.4.0 {
->                 bpf_token_create;
->                 btf__new_split;
->                 btf__new_split_base_ref;
-> +               btf__parse_opts;
-
-for the next revision, please put it into 1.5.0 section, we'll have
-1.4 release soon, so let's avoid accidentally adding this back to 1.4
-
->                 btf_ext__raw_data;
->  } LIBBPF_1.3.0;
-
+>  export PAHOLE_FLAGS :=3D $(pahole-flags-y)
 > --
 > 2.39.3
 >
