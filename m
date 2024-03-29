@@ -1,197 +1,163 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDA251C42;
-	Fri, 29 Mar 2024 09:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3593D0D2;
+	Fri, 29 Mar 2024 10:05:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711705770; cv=none; b=KNJwWR9XzkvuisRUQ+IuveOS/Gi39IJddkOjMNhjfSnlejuxky1En1JmgcLgqbYIkbNdGyPcOYXM+OZ0icCw6POYuEQRDvrjU/g7N/Digx3cctgqhnKM/8a8kZksAr4nWhcTvjNAQw+lcXWkB48zH+JxCxDrgNelQv8K8LI6idc=
+	t=1711706760; cv=none; b=ioqasBo9rTaOfIXUPiWtCmp5fIzzRJHFTi9HErmR3BDU5tqG1yt8N7mAoYOylGf8UUf7JcbBcljNx+gARx+ijyKfUzZhxrShT5DaE91kV3PExCK5ZuqfyBmlfEXuujNea8ODV0bfruoc1nFRFHGL62cvHNAsnBUErdgZZOnVd9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711705770; c=relaxed/simple;
-	bh=hqCljvC32qy1aJQwAmFON1j9oPrqVbZVDNy4RJHdb/k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OJfoeq3xB6gj/Z3OKMB6Plrd4L1t46XGQLHywduhCTsx7Sm12jTUQxC8vyXco5cOOsBtVpNGS7AHaxV36WL0P9LbD4mLxW8OXlKpp0c0KFFa4VV9+A7Z941vX2RE3OnDv5GWToImbMQAPmybZKdT6/kYlUYztEre9Dx3Yt0aW7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XOuc8Zbn; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XOuc8Zbn"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a465ddc2c09so106847366b.2;
-        Fri, 29 Mar 2024 02:49:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711705767; x=1712310567; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hHSOVIWxWM7IMY+bvKjJnZsIEx5Dhp5jPlyzSlliO1I=;
-        b=XOuc8ZbnT4/sl8dT+PMdlpcpLVbvrYF8IQleYXBpogqn9A3HmkRQZBD4zl82jzi0hy
-         iCrshPuTjeXNu1guMVvwsIKn/PZZ4PcPVKVrtmZSVD8LxdW3hRUcFNN3Z8a5dR94Govb
-         zl4mLE4eC3+8LfRWnUULgEUfQdGLB8I5rfqS+pqz77HDV0hTRIzFV/hNSplQVm31hcth
-         CqIN0Ex3fhjApKWbTfcGlgCXC0me6GvK62rjDxuyKsOcAJedsKMbf5VpU2I+UTrwUNgs
-         gcyxbKx8DYuAIe5u7/kpU6/Tv/Mt2gU4p1IyQ/aixMXKpbob+1WjYt0g8tcING4A8JWH
-         R32Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711705767; x=1712310567;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hHSOVIWxWM7IMY+bvKjJnZsIEx5Dhp5jPlyzSlliO1I=;
-        b=p+22zyOZFBV40qTQMmjZkjkJX3oLlFncuSDdFLCTEeJtCB8oJsMiMg3hXrenjJnGfz
-         P9Nr/rMmiSNXO9gqkveGBNxLZ08EwMzUNeTVTiXFKfIIZIRySt53wwGIgJgFfhCRp9Om
-         bhGcw5BkQtrh0zqVgIXQFECCiOENAOR3ZOtpQ+staVuG0Qz+KETlWMZh5MZ7raPgx2Vm
-         GNIH6dc/DGoaZyg+UIIrtrBne1pd9fZz30uBXjC8pLbxze+NTV4Yhn5UL5km/oCN4gV5
-         GN9GT+kEOg457bZKKlqPPduDkM7hA+xq4PoVPt306dwFk86skpa10VnyoVEq7a08IuAD
-         tAXA==
-X-Forwarded-Encrypted: i=1; AJvYcCWpQ3yKvp4UjjNTBYmMpfFN0aMIWtC9sSjYMtvQcQjGtII+9WIYQIBZ+LxtU4kEh+V5vzMy64t1M3GdzpDsQCCy/4rv20rXqedQnzR4lve2Dnqk3Bqbf8yN+CR7tBaGTFwomnIptl8DUNpgh+a8s3ty8nPFZjy8iC0f
-X-Gm-Message-State: AOJu0YxjF5D59pPmtImtLdw/MlfbkkeEZAT5ySucdFKET4IJhQC3k2Fb
-	LdqjRCJrSlvrKp9Boii5HU4FyM4Zq17WDLXujeqbyZFO/CWwCe1a
-X-Google-Smtp-Source: AGHT+IFACKnbtBeJLF5ik9tpo0Ya/WArpgeSL7iNa9UO8o7ombLR0YWPBn0KSIsUuamOWRvaMhglxg==
-X-Received: by 2002:a05:6402:13d6:b0:56c:5a7b:5dbf with SMTP id a22-20020a05640213d600b0056c5a7b5dbfmr2019197edx.2.1711705766578;
-        Fri, 29 Mar 2024 02:49:26 -0700 (PDT)
-Received: from fedora.iskraemeco.si ([193.77.86.250])
-        by smtp.gmail.com with ESMTPSA id b4-20020a0564021f0400b0056c1cca33bfsm1829733edb.6.2024.03.29.02.49.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Mar 2024 02:49:25 -0700 (PDT)
-From: Uros Bizjak <ubizjak@gmail.com>
-To: x86@kernel.org,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: =?UTF-8?q?Joan=20Bruguera=20Mic=C3=B3?= <joanbrugueram@gmail.com>,
-	Uros Bizjak <ubizjak@gmail.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH RESEND bpf 2/2] x86/bpf: Fix IP for relocating call depth accounting
-Date: Fri, 29 Mar 2024 10:46:18 +0100
-Message-ID: <20240329094906.18147-3-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240329094906.18147-1-ubizjak@gmail.com>
-References: <20240329094906.18147-1-ubizjak@gmail.com>
+	s=arc-20240116; t=1711706760; c=relaxed/simple;
+	bh=aqgWLAlXcnotGgSYgY9TrilUarV/SJyTu/HI/BjiZp8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EOzdht9AS3lP1BnviCQvWSOxRwFml7+mLwiPqWI4mPC8wWuMn4L9ASFZxw656zLlfHFxIzjTnGJ3v8ghyjBert95PoftbBJPglhyXoim4jrD0kkpLMjMmYiw99T1vqK+t3GIu9Mq7i7cRv9H0o3zwMYwPqpg+5w8s8qs3maIEvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V5bdG5nCfz4f3mHL;
+	Fri, 29 Mar 2024 18:05:38 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 07B5C1A0172;
+	Fri, 29 Mar 2024 18:05:47 +0800 (CST)
+Received: from [10.67.109.184] (unknown [10.67.109.184])
+	by APP1 (Coremail) with SMTP id cCh0CgCXZg91kgZmxne1IQ--.1768S2;
+	Fri, 29 Mar 2024 18:05:43 +0800 (CST)
+Message-ID: <ed3debc9-f2a9-41fb-9cf9-dc6419de5c01@huaweicloud.com>
+Date: Fri, 29 Mar 2024 18:05:41 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/5] riscv, bpf: Relax restrictions on Zbb
+ instructions
+Content-Language: en-US
+To: Stefan O'Rear <sorear@fastmail.com>, Conor Dooley <conor@kernel.org>
+Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+ netdev@vger.kernel.org, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Manu Bretelle <chantr4@gmail.com>, Pu Lehui <pulehui@huawei.com>
+References: <20240328124916.293173-1-pulehui@huaweicloud.com>
+ <20240328124916.293173-3-pulehui@huaweicloud.com>
+ <3ed9fe94-2610-41eb-8a00-a9f37fcf2b1a@app.fastmail.com>
+ <20240328-ferocity-repose-c554f75a676c@spud>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <20240328-ferocity-repose-c554f75a676c@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:cCh0CgCXZg91kgZmxne1IQ--.1768S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJF43GrWDCry7Wr1rZr1rXrb_yoW5tF47pa
+	10kF1qka1DJa4Ik392qF18Wr1YvF4rKr43Jrn8J348A34jqrW2qF1kKa15uF1DXryrGr1j
+	qr4UKF17u34DZFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+	7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+	Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+	6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+	AIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+	aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-From: Joan Bruguera Micó <joanbrugueram@gmail.com>
 
-The recently introduced support for %rip-relative relocations in the
-call thunk template assumes that the code is being patched in-place,
-so the destination of the relocation matches the address of the code.
-This is not true for the call depth accounting emitted by the BPF JIT,
-so the calculated address is wrong and usually causes a page fault.
 
-Pass the destination IP when the BPF JIT emits call depth accounting.
+On 2024/3/29 6:07, Conor Dooley wrote:
+> On Thu, Mar 28, 2024 at 03:34:31PM -0400, Stefan O'Rear wrote:
+>> On Thu, Mar 28, 2024, at 8:49 AM, Pu Lehui wrote:
+>>> From: Pu Lehui <pulehui@huawei.com>
+>>>
+>>> This patch relaxes the restrictions on the Zbb instructions. The hardware
+>>> is capable of recognizing the Zbb instructions independently, eliminating
+>>> the need for reliance on kernel compile configurations.
+>>
+>> This doesn't make sense to me.
+> 
+> It doesn't make sense to me either. Of course the hardware's capability
+> to understand an instruction is independent of whether or not a
+> toolchain is capable of actually emitting the instruction.
+> 
+>> RISCV_ISA_ZBB is defined as:
+>>
+>>             Adds support to dynamically detect the presence of the ZBB
+>>             extension (basic bit manipulation) and enable its usage.
+>>
+>> In other words, RISCV_ISA_ZBB=n should disable everything that attempts
+>> to detect Zbb at runtime. It is mostly relevant for code size reduction,
+>> which is relevant for BPF since if RISCV_ISA_ZBB=n all rvzbb_enabled()
+>> checks can be constant-folded.
 
-Fixes: 17bce3b2ae2d ("x86/callthunks: Handle %rip-relative relocations in call thunk template")
-Signed-off-by: Joan Bruguera Micó <joanbrugueram@gmail.com>
-Reviewed-by: Uros Bizjak <ubizjak@gmail.com>
-Acked-by: Ingo Molnar <mingo@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
----
- arch/x86/include/asm/alternative.h |  4 ++--
- arch/x86/kernel/callthunks.c       |  4 ++--
- arch/x86/net/bpf_jit_comp.c        | 19 ++++++++-----------
- 3 files changed, 12 insertions(+), 15 deletions(-)
+Thanks for review. My initial thought was the same as yours, but after 
+discussions [0] and test verifications, the hardware can indeed 
+recognize the zbb instruction even if the kernel has not enabled 
+CONFIG_RISCV_ISA_ZBB. As Conor mentioned, we are just acting as a JIT to 
+emit zbb instruction here. Maybe is_hw_zbb_capable() will be better?
 
-diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/alternative.h
-index fcd20c6dc7f9..67b68d0d17d1 100644
---- a/arch/x86/include/asm/alternative.h
-+++ b/arch/x86/include/asm/alternative.h
-@@ -117,7 +117,7 @@ extern void callthunks_patch_builtin_calls(void);
- extern void callthunks_patch_module_calls(struct callthunk_sites *sites,
- 					  struct module *mod);
- extern void *callthunks_translate_call_dest(void *dest);
--extern int x86_call_depth_emit_accounting(u8 **pprog, void *func);
-+extern int x86_call_depth_emit_accounting(u8 **pprog, void *func, void *ip);
- #else
- static __always_inline void callthunks_patch_builtin_calls(void) {}
- static __always_inline void
-@@ -128,7 +128,7 @@ static __always_inline void *callthunks_translate_call_dest(void *dest)
- 	return dest;
- }
- static __always_inline int x86_call_depth_emit_accounting(u8 **pprog,
--							  void *func)
-+							  void *func, void *ip)
- {
- 	return 0;
- }
-diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
-index 30335182b6b0..e92ff0c11db8 100644
---- a/arch/x86/kernel/callthunks.c
-+++ b/arch/x86/kernel/callthunks.c
-@@ -314,7 +314,7 @@ static bool is_callthunk(void *addr)
- 	return !bcmp(pad, insn_buff, tmpl_size);
- }
- 
--int x86_call_depth_emit_accounting(u8 **pprog, void *func)
-+int x86_call_depth_emit_accounting(u8 **pprog, void *func, void *ip)
- {
- 	unsigned int tmpl_size = SKL_TMPL_SIZE;
- 	u8 insn_buff[MAX_PATCH_LEN];
-@@ -327,7 +327,7 @@ int x86_call_depth_emit_accounting(u8 **pprog, void *func)
- 		return 0;
- 
- 	memcpy(insn_buff, skl_call_thunk_template, tmpl_size);
--	apply_relocation(insn_buff, tmpl_size, *pprog,
-+	apply_relocation(insn_buff, tmpl_size, ip,
- 			 skl_call_thunk_template, tmpl_size);
- 
- 	memcpy(*pprog, insn_buff, tmpl_size);
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 09f7dc9d4d65..f2e8769f5eee 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -481,7 +481,7 @@ static int emit_rsb_call(u8 **pprog, void *func, void *ip)
- {
- 	void *adjusted_ip;
- 	OPTIMIZER_HIDE_VAR(func);
--	adjusted_ip = ip + x86_call_depth_emit_accounting(pprog, func);
-+	adjusted_ip = ip + x86_call_depth_emit_accounting(pprog, func, ip);
- 	return emit_patch(pprog, func, adjusted_ip, 0xE8);
- }
- 
-@@ -1973,20 +1973,17 @@ st:			if (is_imm8(insn->off))
- 
- 			/* call */
- 		case BPF_JMP | BPF_CALL: {
--			int offs;
-+			u8 *ip = image + addrs[i - 1];
- 
- 			func = (u8 *) __bpf_call_base + imm32;
- 			if (tail_call_reachable) {
- 				RESTORE_TAIL_CALL_CNT(bpf_prog->aux->stack_depth);
--				if (!imm32)
--					return -EINVAL;
--				offs = 7 + x86_call_depth_emit_accounting(&prog, func);
--			} else {
--				if (!imm32)
--					return -EINVAL;
--				offs = x86_call_depth_emit_accounting(&prog, func);
-+				ip += 7;
- 			}
--			if (emit_call(&prog, func, image + addrs[i - 1] + offs))
-+			if (!imm32)
-+				return -EINVAL;
-+			ip += x86_call_depth_emit_accounting(&prog, func, ip);
-+			if (emit_call(&prog, func, ip))
- 				return -EINVAL;
- 			break;
- 		}
-@@ -2836,7 +2833,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 		 * Direct-call fentry stub, as such it needs accounting for the
- 		 * __fentry__ call.
- 		 */
--		x86_call_depth_emit_accounting(&prog, NULL);
-+		x86_call_depth_emit_accounting(&prog, NULL, image);
- 	}
- 	EMIT1(0x55);		 /* push rbp */
- 	EMIT3(0x48, 0x89, 0xE5); /* mov rbp, rsp */
--- 
-2.44.0
+Link: 
+https://lore.kernel.org/bpf/20240129-d06c79a17a5091b3403fc5b6@orel/ [0]
+
+>>
+>> If BPF needs to become an exception (why?), this should be mentioned in
+>> Kconfig.
+> 
+> And in the commit message. On one hand I think this could be a reasonable
+> thing to do in bpf as it is acting as a jit here, and doesn't actually
+> need the alternatives that we are using elsewhere to enable the
+> optimisations nor the compiler support. On the other the intention of
+> that kconfig option is to control optimisations like rvzbb_enabled()
+> gates, so this is gonna need a proper justification as to
+> 
+> As I said on IRC to you earlier, I think the Kconfig options here are in
+> need of a bit of a spring cleaning - they should be modified to explain
+> their individual purposes, be that enabling optimisations in the kernel
+> or being required for userspace. I'll try to send a patch for that if
+> I remember tomorrow.
+> 
+> Thanks,
+> Conor.
+> 
+>>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>>> ---
+>>>   arch/riscv/net/bpf_jit.h | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+>>> index 5fc374ed98ea..bcf109b88df5 100644
+>>> --- a/arch/riscv/net/bpf_jit.h
+>>> +++ b/arch/riscv/net/bpf_jit.h
+>>> @@ -20,7 +20,7 @@ static inline bool rvc_enabled(void)
+>>>
+>>>   static inline bool rvzbb_enabled(void)
+>>>   {
+>>> -	return IS_ENABLED(CONFIG_RISCV_ISA_ZBB) &&
+>>> riscv_has_extension_likely(RISCV_ISA_EXT_ZBB);
+>>> +	return riscv_has_extension_likely(RISCV_ISA_EXT_ZBB);
+>>>   }
+>>>
+>>>   enum {
+>>> -- 
+>>> 2.34.1
+>>>
+>>>
+>>> _______________________________________________
+>>> linux-riscv mailing list
+>>> linux-riscv@lists.infradead.org
+>>> http://lists.infradead.org/mailman/listinfo/linux-riscv
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
