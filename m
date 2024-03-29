@@ -1,142 +1,160 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8B9D1422D9;
-	Fri, 29 Mar 2024 13:22:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2BB81C0DED;
+	Fri, 29 Mar 2024 13:40:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711718556; cv=none; b=sKqaHgW14G2b4KNi1KWfYsUX/dFHCUp+b0UUxm/rviwzZ18/rtW3B8T8lswKbwIu39URy6ulE4DchDcCBS1XEQuZDU2EIkE/qFAK2ri50YT4WPAo6QkiZ93bjWj7Lgo3vmVNU6oEWKAlBZh/8C0fUCTJzes/dTGoRVu3lbmQCDM=
+	t=1711719654; cv=none; b=GTxEP60nY7kwvZSdvEJ+MXOcZozKBeVaSqbfXsOcVRQrM8KI/+2XTssJRA09H7AhqrQz+dJqaNrmzubTLgUPsiBuF6MonNuiThqRynT/bJUfGI1CYPbnRElQV81gXPges8QSXlmF/Z70ZWF2X9pqHVHo4d+DAoHI6R48fKPhCYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711718556; c=relaxed/simple;
-	bh=AnvJ5kofMrFFJqZi34ryz5OBe6mw7RXfXxGMEtAbKAs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Tg7Jji0Hz8e5mk/1KIDs+52CWUlV010jRKPhA9HC9sfo1eH1VYgOyXmyR6bRMpGkXExBFFFQLfwDcSY3kxQZx6EPf5qf7HWkblmq84PRUj450YlNucdWsTlrdR9vyZBrNqu1aYDVYsLzIUxwpIpyL9DGMASqS21RVL+MQ+WS9EY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Je4jNSGa; arc=none smtp.client-ip=209.85.128.45
+	s=arc-20240116; t=1711719654; c=relaxed/simple;
+	bh=5834Rh+cWz88KoVcr0LtQ3rKmVWIk8tBTuV6dc0JRnM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Q5vAgtvLx1D4ZSdHJcA4e9x8QImAgp0263HKFMZAbFj4NZH7UHXu+M57lSgZ7B9+V4Kq6lqZTyt7fJlNwU6jm82YvlXeI/NJ05M4JIdEnoGqxUJefkSK3VzwzT7z0m95tIhUx2Vv/HzZu3BxWZ5kiX20hZz1MUVakYKZb+PWwVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CQRwA0MK; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Je4jNSGa"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-415446af364so9121465e9.0;
-        Fri, 29 Mar 2024 06:22:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CQRwA0MK"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6e6f4ad4c57so1600515b3a.2;
+        Fri, 29 Mar 2024 06:40:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711718553; x=1712323353; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T7xEQIH74hDY+Lda40i905LEC8Iht3ogaURW2kap73s=;
-        b=Je4jNSGaJtYIX22uI04dL/yhpsXkEPu/CP6RrpVIfw5ru1l6gvPoxvyiDTMUG7Aj/a
-         lP9S10cCk8TkTAtvd2TQxOjX9R95T7YsnRcbnRrbZvKBwrvnLetP2MA6dvlvpvMGH7Pv
-         +XbioBaYnIO0LYhKz4s76/23mXpbTDU1hef+cegeXC8S2NDWNdRmj/viJ1gcmNQPa86w
-         zs+1OARs3T/MV9sTSeaYVPrm5DFZw/RgRvN7iR3EYhFBzGD5iYqOgNQo7SXNtbZwFe3R
-         rpGB04gBDJaG8RAJ+SEnoGYuWGPZARimWB5NctgnCTDv7GOy2u/AjSdiMXy+MAlkl7ih
-         j0DA==
+        d=gmail.com; s=20230601; t=1711719652; x=1712324452; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kvAS4gLGQo67RMtmhD+Lxk6MPomwl2ABlEwmaS69Els=;
+        b=CQRwA0MKEHy+hkqZNE8Do4tdOrXuPsPhMSX4I+ewQuzrqZZUElwcxdVoELTa5hIC+3
+         3UG/gGNIbqq/NxLVkA8rBr7PHIMNq+U3bzJHaXhOLs9SrCyTwP7s5I1MlKW9UjrY47N9
+         xTKfE6nBmXVhfc0IHN7bAMo0H89LTgHvd1UQ+6q4q/haAT5TlVyd/FI7NR+JNIGCNkg9
+         7K85+bhqivf2TSJMO9jEpc5y3J8kXk4NmtgzB/2ISQCn/yogkumhfO+cdJLuaALQU7D2
+         lhPBUic60/qhYNb7WHozgYZ0uhvtaqvk5o7oNniubRBhFKBx3vyaSyPDgFc8IwvvsmEp
+         Ub5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711718553; x=1712323353;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T7xEQIH74hDY+Lda40i905LEC8Iht3ogaURW2kap73s=;
-        b=R3Lze86XldhwJl9PgYeh98NuhSsNaQH7PtlASkbQWWlL+I5RGYuPddmp0cvF+a2CaN
-         g1CR+fvvERh2Mv7aeZOsJisRLhUZQqGt7mwiwzKh1uVS1K7P92ph/gM4uG9tgJRfIxE6
-         c5+KGBvRi/v4xEQLM/wu5qKeAxpxnJTnxdl6qRw65uBdu3F3IMeZx99RrK21jJYjnf+d
-         9sDwaegZG94O1G8XN8Z9WvgoAt/fMmINmQEFmntgKfgtMg+DNFwmZp0RwMWbVqKB8f5A
-         WDBKYC7jbuoR55+zooXpqv7kDu8Je7AcD8mS/wElRYbWdAq5WQTut4P8T05115fGvP4g
-         9RxA==
-X-Forwarded-Encrypted: i=1; AJvYcCVHMoHOyjXWLv8LFyite9Ptqvjj9i5T3sJBK4S/c2l+tsk/iALVsLrBN6BK/xcoifBNEueynO69WQDEWRLV4EeQLmzsx9VPLF41w/qnDw7sQFfo203HmUc/v5KsRLsIirViFijANjUORNt9L0iWqXULY1Vc3KziqRLvLettV8aC6IhE+qkdsvAS72KVSkHT9VjdPcxC7ln+z9GVFw==
-X-Gm-Message-State: AOJu0YyP5EpejNdmWNLnK9aEPdNwTIIy7oltT0NwiriZON6y1G6NY0+R
-	dd+5GniO0j3FYmW+sCaxQt34hh/zGTJUNFQ+mb2OP1qnxrFMU65c
-X-Google-Smtp-Source: AGHT+IEQnvVhjcJMskx1plsjPX+2uuWCMni3mouaDGDO8Y6eWc7PNFBU4mWPxr+4JuiHYzv0f2n1wA==
-X-Received: by 2002:a05:600c:3c99:b0:414:90ea:34ad with SMTP id bg25-20020a05600c3c9900b0041490ea34admr4775141wmb.6.1711718552890;
-        Fri, 29 Mar 2024 06:22:32 -0700 (PDT)
-Received: from [192.168.1.113] ([105.107.228.62])
-        by smtp.gmail.com with ESMTPSA id n17-20020a05600c501100b0041550a2ac10sm1499996wmr.6.2024.03.29.06.22.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Mar 2024 06:22:32 -0700 (PDT)
-Message-ID: <bcb084ae-c934-4eba-aadd-95bbec2a63cb@gmail.com>
-Date: Fri, 29 Mar 2024 14:22:28 +0100
+        d=1e100.net; s=20230601; t=1711719652; x=1712324452;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kvAS4gLGQo67RMtmhD+Lxk6MPomwl2ABlEwmaS69Els=;
+        b=sDFZJg/DVLR6NcDTdpIXS1TSgr9J/+SkkcN/4jgrfoPw7FvY/LatS637aKn9hU3808
+         JnvbVzWo3dKEw3zKeNgApzBda5IkDYIs+agSJtvLHiEFLJvEQRQPmd9kuMpWnoQrEqPN
+         5/TpexotRnZGMe7Ya8YPxzr3pVh2ExyTdAGCzhjrymjeSIIf0JwlAxCeE/LmX4i7TP1K
+         SIvgupQG1R26BwMLbQCZeciRMY4cxNvgvEGuXYG7i5HBWLFwH8kAnWdvbc7oBW1DPfUO
+         uDuYoc5HCrJAW/I+Vswa8OCIJfAzR5EsyXc1OmxtcqhXdLfmVuZWkFB51/9/jbAUW4G4
+         uAMw==
+X-Forwarded-Encrypted: i=1; AJvYcCXrzHzNFJkX3g6LRe83473RkxwbZqmMs0N3iG+bBhbswoyf8u6j0z/mQSbMcvFcmRQbtkuyhzRbVNqn/k6y1fFap8ih
+X-Gm-Message-State: AOJu0YywTwMcQ4p370E+wNinJGArljksF7gyp8F1ddQUQfxHHY8qULsQ
+	pPCGCyzzysXPxHHAu3lC22Q/2nCtN/q//sMa/Okk9Hpog92cgBcS
+X-Google-Smtp-Source: AGHT+IFWlOxpNgsGLYJqX6FEzJNKpQ8garMBF1crYscVokC1V2Yk2I2rcH2n1P2EsUWQSJLAw2vXjQ==
+X-Received: by 2002:a05:6a00:92a9:b0:6e6:6cc8:ac9d with SMTP id jw41-20020a056a0092a900b006e66cc8ac9dmr2491907pfb.28.1711719651433;
+        Fri, 29 Mar 2024 06:40:51 -0700 (PDT)
+Received: from KERNELXING-MB0.tencent.com ([111.201.28.7])
+        by smtp.gmail.com with ESMTPSA id s17-20020aa78d51000000b006eaec9b623asm899994pfe.89.2024.03.29.06.40.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Mar 2024 06:40:50 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: john.fastabend@gmail.com,
+	edumazet@google.com,
+	jakub@cloudflare.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	daniel@iogearbox.net,
+	ast@kernel.org
+Cc: netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>,
+	syzbot+aa8c8ec2538929f18f2d@syzkaller.appspotmail.com
+Subject: [PATCH net] bpf, skmsg: fix NULL pointer dereference in sk_psock_skb_ingress_enqueue
+Date: Fri, 29 Mar 2024 21:40:37 +0800
+Message-Id: <20240329134037.92124-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH bpf-next 0/3] bpf: freeze a task cgroup from bpf
-To: Tejun Heo <tj@kernel.org>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Zefan Li <lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
- bpf <bpf@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <20240327-ccb56fc7a6e80136db80876c@djalal>
- <20240327225334.58474-1-tixxdz@gmail.com> <ZgWnPZtwBYfHEFzf@slm.duckdns.org>
- <CAADnVQK6BUGZFCATD8Ejcfob5sKK-b8HUD_4o8Q6s9FM72L4iQ@mail.gmail.com>
- <ZgWv19ySvoACAll4@slm.duckdns.org>
- <CAADnVQLhWDcX-7XCdo-W=jthU=9iPqODwrE6c9fvU8sfAJ5ARg@mail.gmail.com>
- <ZgXMww9kJiKi4Vmd@slm.duckdns.org>
- <CAADnVQK970_Nx3918V41ue031RkGs+WsteOAm6EJOY7oSwzS1A@mail.gmail.com>
- <ZgXallkHApJC-adM@slm.duckdns.org>
-Content-Language: en-US
-From: Djalal Harouni <tixxdz@gmail.com>
-In-Reply-To: <ZgXallkHApJC-adM@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hello Tejun, Alexei,
+From: Jason Xing <kernelxing@tencent.com>
 
-On 3/28/24 22:01, Tejun Heo wrote:
-> Hello,
-> 
-> On Thu, Mar 28, 2024 at 01:45:56PM -0700, Alexei Starovoitov wrote:
->> On Thu, Mar 28, 2024 at 1:02 PM Tejun Heo <tj@kernel.org> wrote:
->>>
->>> There's also cgroup.kill which would be useful for similar use cases. We can
->>> add interface for both but idk. Let's say we have something like the
->>> following (pardon the bad naming):
->>>
+Fix NULL pointer data-races in sk_psock_skb_ingress_enqueue() which
+syzbot reported [1].
 
-Yes having the cgroup.kill from bpf would be useful!
+[1]
+BUG: KCSAN: data-race in sk_psock_drop / sk_psock_skb_ingress_enqueue
 
+write to 0xffff88814b3278b8 of 8 bytes by task 10724 on cpu 1:
+ sk_psock_stop_verdict net/core/skmsg.c:1257 [inline]
+ sk_psock_drop+0x13e/0x1f0 net/core/skmsg.c:843
+ sk_psock_put include/linux/skmsg.h:459 [inline]
+ sock_map_close+0x1a7/0x260 net/core/sock_map.c:1648
+ unix_release+0x4b/0x80 net/unix/af_unix.c:1048
+ __sock_release net/socket.c:659 [inline]
+ sock_close+0x68/0x150 net/socket.c:1421
+ __fput+0x2c1/0x660 fs/file_table.c:422
+ __fput_sync+0x44/0x60 fs/file_table.c:507
+ __do_sys_close fs/open.c:1556 [inline]
+ __se_sys_close+0x101/0x1b0 fs/open.c:1541
+ __x64_sys_close+0x1f/0x30 fs/open.c:1541
+ do_syscall_64+0xd3/0x1d0
+ entry_SYSCALL_64_after_hwframe+0x6d/0x75
 
->>>   bpf_cgroup_knob_write(struct cgroup *cgrp, char *filename, char *buf)
->>>
->>> Would that work? I'm not necessarily in love with the idea or against adding
->>> separate helpers but the duplication still bothers me a bit.
->>
->> I liked it.
->> So filename will be one of cgroup_base_files[].name ?
->> We probably don't want psi or cgroup1_base_files in there.
-> 
-> Would it matter? If the user has root perm, they can do whatever with the
-> files anyway, so I'm not sure why we'd restrict any specific knob. Maybe we
-> wanna make sure @filename doesn't include '/'? Or is it that you don't want
-> to go through the usual file name look up?
+read to 0xffff88814b3278b8 of 8 bytes by task 10713 on cpu 0:
+ sk_psock_data_ready include/linux/skmsg.h:464 [inline]
+ sk_psock_skb_ingress_enqueue+0x32d/0x390 net/core/skmsg.c:555
+ sk_psock_skb_ingress_self+0x185/0x1e0 net/core/skmsg.c:606
+ sk_psock_verdict_apply net/core/skmsg.c:1008 [inline]
+ sk_psock_verdict_recv+0x3e4/0x4a0 net/core/skmsg.c:1202
+ unix_read_skb net/unix/af_unix.c:2546 [inline]
+ unix_stream_read_skb+0x9e/0xf0 net/unix/af_unix.c:2682
+ sk_psock_verdict_data_ready+0x77/0x220 net/core/skmsg.c:1223
+ unix_stream_sendmsg+0x527/0x860 net/unix/af_unix.c:2339
+ sock_sendmsg_nosec net/socket.c:730 [inline]
+ __sock_sendmsg+0x140/0x180 net/socket.c:745
+ ____sys_sendmsg+0x312/0x410 net/socket.c:2584
+ ___sys_sendmsg net/socket.c:2638 [inline]
+ __sys_sendmsg+0x1e9/0x280 net/socket.c:2667
+ __do_sys_sendmsg net/socket.c:2676 [inline]
+ __se_sys_sendmsg net/socket.c:2674 [inline]
+ __x64_sys_sendmsg+0x46/0x50 net/socket.c:2674
+ do_syscall_64+0xd3/0x1d0
+ entry_SYSCALL_64_after_hwframe+0x6d/0x75
 
-It would be easy at least for me if I just start with cgroupv2 and
-ensure that it has same available filenames as if we go through kernfs.
-Not a root cgroup node and maybe only freeze and kill for now that are
-part of cgroup_base_files.
+value changed: 0xffffffff83d7feb0 -> 0x0000000000000000
 
-So if I get it right, somehow like what I did but we endup with:
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 0 PID: 10713 Comm: syz-executor.4 Tainted: G        W          6.8.0-syzkaller-08951-gfe46a7dd189e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
 
-In bpf, cgroup was already acquired.
+Prior to this, commit 4cd12c6065df ("bpf, sockmap: Fix NULL pointer
+dereference in sk_psock_verdict_data_ready()") fixed one NULL pointer
+similarly due to no protection of saved_data_ready. Here is another
+different caller causing the same issue because of the same reason. So
+we should protect it with sk_callback_lock read lock because the writer
+side in the sk_psock_drop() uses "write_lock_bh(&sk->sk_callback_lock);".
 
-bpf_cgroup_knob_write(cgroup, "freeze", buf)
-|_ parse params -> lock cgroup_mutex -> cgroup_freeze() -> unlock
+Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+Reported-by: syzbot+aa8c8ec2538929f18f2d@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=aa8c8ec2538929f18f2d
+Signed-off-by: Jason Xing <kernelxing@tencent.com>
+---
+ net/core/skmsg.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
-cgroup_freeze_write(struct kernfs_open_file *of, char *buf,...)
-|_ parse params -> cgroup_ref++ -> krnfs_active_ref--  ->
-     -> lock cgroup_mutex -> cgroup_freeze() -> unlock + krnfs++ ...
-
-Please let me know if I missed something.
-
-Thanks!
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 4d75ef9d24bf..67c4c01c5235 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -552,7 +552,9 @@ static int sk_psock_skb_ingress_enqueue(struct sk_buff *skb,
+ 	msg->skb = skb;
+ 
+ 	sk_psock_queue_msg(psock, msg);
++	read_lock_bh(&sk->sk_callback_lock);
+ 	sk_psock_data_ready(sk, psock);
++	read_unlock_bh(&sk->sk_callback_lock);
+ 	return copied;
+ }
+ 
+-- 
+2.37.3
 
