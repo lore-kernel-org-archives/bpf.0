@@ -1,54 +1,54 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 158124F20C
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 09:34:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A763B5102A
+	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 09:34:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711704857; cv=none; b=GoT1L+0KPh9wpVuofOVg19zlheRCnMbmCrGvwzpUNIPGSAeswuLzENCeNtebLqqeNBcdVQZFBW78uTFR0iV2G7BsaNxpupnlOY2SeliGaKQ/V1gBO+GSVMkV4JtDmw4G1tUaohVpssZEx8jXo7+u66an/Y/2Yjg2dEqFgRW7E/s=
+	t=1711704859; cv=none; b=ECA7czsI2C6taE3l+Ed3uN5kCt5SJxxVNk2jqoPVbWOEOXkvvLrYfTJDFem16FsOyEEuOurqAzv/0Dx+rqRlXpvh6JY/uv6AYKNhXgxQrMgQpO2aCrYoapVq8DrMht6biwlriyhrK/xsHcQsn9JJb8C+N/jp4euzAzNIZxqBYCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711704857; c=relaxed/simple;
-	bh=ne1nIh0Qwrvg61AZAr4OTz8Z0LGxASlvMGm2cM6SR1I=;
+	s=arc-20240116; t=1711704859; c=relaxed/simple;
+	bh=KUC09wtYmay5oVx7+9C+OUpDt1KQS0U9lKvW1u+lUzg=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=KcQ47tBvL4L3pGxzOFvQHf5sZEFaYNnW2+4NmyqJ9vNVoOQkKQhDqdVIAjfX2vTfX0aKpbsLcqqpDUXr4T7JKA6NyEH+8qpAeghcVDicA6uWDovlvESj+zV3wT9pNbsTye0X1n1czmsSlg3KQBx04vUiAaLSTo/rZ9xKaVBB66E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Dlk4AmJd; arc=none smtp.client-ip=209.85.128.73
+	 To:Cc:Content-Type; b=mwjmX8HhaIMs7y8rhtnnJR2f/2TtGcNCBRFwS59Q708/cYUc03NBKzh2E0VqE3jK97ZDFrkU9CCit6IyOyexZ1U7N687XOHTldM/Xs4c9N3huYMgNoelxZ5OPdlKXd8IW/wWfqmYfHwyz362lA8TMAs2AaFSG5fT9qMLLR1RWXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s+I6ES4A; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Dlk4AmJd"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-40e4478a3afso9405245e9.1
-        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 02:34:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s+I6ES4A"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-610b96c8ca2so34297867b3.2
+        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 02:34:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711704854; x=1712309654; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1711704856; x=1712309656; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=24D5emD5FgWK1X1kR0N5gec4wW0lY0v4XxqAgq53xkE=;
-        b=Dlk4AmJdYHMZwZboC4rO5mMhtdndQIzNjUynYqSw3qMVV3d1PLIvcP9cxXDWGkDXaO
-         dpo8wsza87cWt270/bZYj7vxmUUZNM2fhP/IxJENaV5SRhPMjcGsuH4zaWRDzG50qe9A
-         fjk1cUW1XL6FmG/7E8J+tUbnyC6DFS7D11XBQvG2deoo5Qjd13R8OEJ1vrFVg5DLLmT0
-         WZGUVViY0cD7NQiCuYqLaC0HA7y50yt+PrdSpGD+TYm31SJqcRyOAGHYW6dPCscaaWt2
-         d/tPoavHG6vSUhWfQjlZ/wTk72ii+asGCdLl0UfCUwxXlI9EdRxzUP+yDA58wiXSnTqm
-         c6jQ==
+        bh=dw09Gs88ogil/diQ6Vr0EqHQANsVVhIyP+7ZdKbyIx8=;
+        b=s+I6ES4AxBivvRDaHcnmARZ5DuByeyfrx7ret5p6QdLqpF4G5hBbJD7OM6QquLzzGN
+         nQZJnG704OtoxB/YvIv/j4LWqYHRjl3vE+bNJhD+FcyIOzq6KfNwYz8ofy3ht11skszm
+         vJHQFbiOsYLQygbAGN5Bf0BOuzsWekUxq0idM0WfK4LE0WMbrIW7XqNc+ug7nqk8VhXo
+         7pxLt7sToGvZxirUO2fRPZPbUMfQsxFJPYNdMS78ORalL/uoHMZ1rdWWzh55eNKtNRws
+         LY6mSdec3zxiLVCulWyL1FYVpMH8N+Ynj0Gqi5onHgcAiXddad9rjBZKVg/f09rA4GCK
+         YN0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711704854; x=1712309654;
+        d=1e100.net; s=20230601; t=1711704856; x=1712309656;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=24D5emD5FgWK1X1kR0N5gec4wW0lY0v4XxqAgq53xkE=;
-        b=dQ2iM9tCpvbSvCM/PT1pjVYBjUiik1Lvlet1VuIr6U9isSgW1JFxspeU4f/qyuwg6f
-         oZGlwjeBdAb/uhimR19A1mCVSEHjH6jpyZhBO1jb+ajlldMlwizHRgQmWXYQs8vPxocI
-         5z0/Wd/M8JZ/HOAaLx7DylSxKYOBaxBsGXrNH9nSAg5IPBiDgIxG9mnH2hh9c/1jBTzZ
-         L5bC7KEsio1K4MO+MfmZnjlLDzy9C+M8xv1iMaPwX22wd6g0J3eUX6T0o7CuWSU3xouc
-         bEd+fCH//VjwGf1UeKtREBgm9zhBjzGy5q7opw/+sd6uRBjrA0tvyRuHYo4aHLI+1Mqk
-         jNIg==
-X-Forwarded-Encrypted: i=1; AJvYcCXzwFmhMu+699uBePao18v3dbOgoO+Bp9Ey2+I/N52vDPKz4sbcf0F0GLeF5uJMsu6XdySmAzpo0OnxPFCPciD90E7W
-X-Gm-Message-State: AOJu0YxVX1gl41aEClyxArnkqOPBdXZaspFnk3Se+e2Yz426aJxY67+O
-	f8LWmICUGimOKRzWTK1awSg4RPLaTeIHaax0srD6L44bovih87cHxjVwkIUGOjcocA18yA==
-X-Google-Smtp-Source: AGHT+IERC/xlx8lH+yq6bq8yyIt9cEBvXeqlbzaAJ1b5JFraFrYGAoAaIl2LTkJk5C+U336G9ed99TBB
+        bh=dw09Gs88ogil/diQ6Vr0EqHQANsVVhIyP+7ZdKbyIx8=;
+        b=wdbtyBfYOJlcSrubZ2vwDzkS6tFYMEjdVWRHQH8pfzRc5JvYqLY7RuRuBv+Xikkfp6
+         Wj+Q91dbH4Yi8NxuDqQufWwfaDrp4ruj4wZRduqvRSzBPKvfHabgcMwV5j8+Gh5ldW8k
+         jfe0TYQe85BFHwUeLzOHADpZNqj61TJRO10Lxe+m5aLrbitFFTGBU+QnMIb8QapimMzo
+         5Kws934+u8nEXqO4a3E5LBtykSZ0T2JTGryhwCWNihccmLg/GN5c44/vA7yjlu1wjLdw
+         blbZhAx4/id/UPBpXQU0of7xvT46G8uQOaQ0FI1rqnbdMMgcK6qePR0YJaMBVD+R8hY3
+         kg0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWVyhl/WWYUmnunpOI+HnTZVWGa09l8oL6UZfjSVNe4YTvfQINQbyKPHSIjRh/vxUoiili5KVNwYN5h2O3+Im32WMlg
+X-Gm-Message-State: AOJu0YxVrgymLDG93daLmla3HHiR436QbEXB8KZ2XFVRwVwK9WuLLke/
+	6IrOaABlWcS7pTz25dyAA4SJhBi40SdBOV48j9WGAy0NDm78nNGPzM+I2CkrET34nCvsfg==
+X-Google-Smtp-Source: AGHT+IHww5cAwsi1pr9pBu+czX3UmFai9nj7XcxpaVhRpi1LgYQNcAUBxrSuXEicaf9NQtedota600ow
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a05:600c:5114:b0:413:f62a:aaf8 with SMTP id
- o20-20020a05600c511400b00413f62aaaf8mr58714wms.4.1711704854514; Fri, 29 Mar
- 2024 02:34:14 -0700 (PDT)
-Date: Fri, 29 Mar 2024 10:33:59 +0100
+ (user=ardb job=sendgmr) by 2002:a0d:dd03:0:b0:611:7573:72b9 with SMTP id
+ g3-20020a0ddd03000000b00611757372b9mr538832ywe.5.1711704856741; Fri, 29 Mar
+ 2024 02:34:16 -0700 (PDT)
+Date: Fri, 29 Mar 2024 10:34:00 +0100
 In-Reply-To: <20240329093356.276289-5-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,14 +58,14 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240329093356.276289-5-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1618; i=ardb@kernel.org;
- h=from:subject; bh=ORZChgCpQukYWaId1hq+FAluQSgY7FsL4Hz5iVd1jE8=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIY2tm51pL9M1t7Sty6RbsvftP5R05JPTl/bSvhflPYdjj
- uy5XCjfUcrCIMbBICumyCIw+++7nacnStU6z5KFmcPKBDKEgYtTACZSc4CRYQJjuz+PZ9rFEKu2
- +t2GcpNi7xqs4OGL4PA34HglprvnEsM/hY23dhiJF2lWfq2SYn16s9jzF3vsjmqBE99mHezX/3m BGwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1581; i=ardb@kernel.org;
+ h=from:subject; bh=q5UGicb35M6dvlAOCgO0axQESJYA1rUn+GPk9ZrI1w0=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIY2tm2OlVN6iHxUr9jYWMgmymJk94z0V9u5k6qIdE5rSD
+ 26LOdPVUcrCIMbBICumyCIw+++7nacnStU6z5KFmcPKBDKEgYtTACbSb8fwPzp8VsaB3SU2Br47
+ 13TyqzMf+HazQXOCcIe1VeufXy6Jrxn+Cj68+VHg2BXetLa8nEmMt64kzV5teF7ibP27fVkbfDK XsQEA
 X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
-Message-ID: <20240329093356.276289-7-ardb+git@google.com>
-Subject: [PATCH 2/3] vmlinux: Avoid weak reference to notes section
+Message-ID: <20240329093356.276289-8-ardb+git@google.com>
+Subject: [PATCH 3/3] btf: Avoid weak external references
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
@@ -75,50 +75,48 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-Weak references are references that are permitted to remain unsatisfied
-in the final link. This means they cannot be implemented using place
-relative relocations, resulting in GOT entries when using position
-independent code generation.
+If the BTF code is enabled in the build configuration, the start/stop
+BTF markers are guaranteed to exist in the final link but not during the
+first linker pass.
 
-The notes section should always exist, so the weak annotations can be
-omitted.
+Avoid GOT based relocations to these markers in the final executable by
+providing preliminary definitions that will be used by the first linker
+pass, and superseded by the actual definitions in the subsequent ones.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- kernel/ksysfs.c | 4 ++--
- lib/buildid.c   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ include/asm-generic/vmlinux.lds.h | 2 ++
+ kernel/bpf/btf.c                  | 4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/ksysfs.c b/kernel/ksysfs.c
-index 495b69a71a5d..07fb5987b42b 100644
---- a/kernel/ksysfs.c
-+++ b/kernel/ksysfs.c
-@@ -228,8 +228,8 @@ KERNEL_ATTR_RW(rcu_normal);
- /*
-  * Make /sys/kernel/notes give the raw contents of our kernel .notes section.
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index e8449be62058..141bddb511ee 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -456,6 +456,8 @@
+  * independent code.
   */
--extern const void __start_notes __weak;
--extern const void __stop_notes __weak;
-+extern const void __start_notes;
-+extern const void __stop_notes;
- #define	notes_size (&__stop_notes - &__start_notes)
+ #define PRELIMINARY_SYMBOL_DEFINITIONS					\
++	PROVIDE(__start_BTF = .);					\
++	PROVIDE(__stop_BTF = .);					\
+ 	PROVIDE(kallsyms_addresses = .);				\
+ 	PROVIDE(kallsyms_offsets = .);					\
+ 	PROVIDE(kallsyms_names = .);					\
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 90c4a32d89ff..46a56bf067a8 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -5642,8 +5642,8 @@ static struct btf *btf_parse(const union bpf_attr *attr, bpfptr_t uattr, u32 uat
+ 	return ERR_PTR(err);
+ }
  
- static ssize_t notes_read(struct file *filp, struct kobject *kobj,
-diff --git a/lib/buildid.c b/lib/buildid.c
-index 898301b49eb6..7954dd92e36c 100644
---- a/lib/buildid.c
-+++ b/lib/buildid.c
-@@ -182,8 +182,8 @@ unsigned char vmlinux_build_id[BUILD_ID_SIZE_MAX] __ro_after_init;
-  */
- void __init init_vmlinux_build_id(void)
- {
--	extern const void __start_notes __weak;
--	extern const void __stop_notes __weak;
-+	extern const void __start_notes;
-+	extern const void __stop_notes;
- 	unsigned int size = &__stop_notes - &__start_notes;
+-extern char __weak __start_BTF[];
+-extern char __weak __stop_BTF[];
++extern char __start_BTF[];
++extern char __stop_BTF[];
+ extern struct btf *btf_vmlinux;
  
- 	build_id_parse_buf(&__start_notes, vmlinux_build_id, size);
+ #define BPF_MAP_TYPE(_id, _ops)
 -- 
 2.44.0.478.gd926399ef9-goog
 
