@@ -1,82 +1,189 @@
-Received: from out-184.mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.forwardemail.net (smtp.forwardemail.net [149.28.215.223])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5CC939AC1
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 03:23:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FC9C3A1DC
+	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 04:25:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=149.28.215.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711682596; cv=none; b=UDuISSu3OcfBNSIRpuDn/xsI+5e+KCN9ZsKwrmybTq+6GAKluONVhSNNJlgvQKkfdeCqQZJA2Z9hRTYEb4QLpkuVr7yQzaO+TWmbd00wC6oIxrZ2TPmt7HSDUCvRIzRTykWLukksk6gW1lTp+klRv2/Q7ta3u4cJqjK8BvBx2TE=
+	t=1711686356; cv=none; b=gzNbzsq7b+covjHEDOmsPa0kiF04IH+BWqqxgiDH6/5H7qHv5lj/oy1oslvkHbuEBrwmUXAIAYQEgT3QsaJjZBB8nGpkJ93pe5+TSoubxsDjG8QF1/6KxmUkrrHRTawoL/Dk/zMlj3E/toqQN/hSA/p5o3a65zSOy8JaPiBz5AE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711682596; c=relaxed/simple;
-	bh=6xzV/n3RZo8Osk/HoXuZDS0UbfBF6Fv8rNTUdjCiZhs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=jVhvpX9EVBoKHLiv47SZkSipiz0DSuO1W3g+vYZ92Gvq3s/nOEBzN/Is8BLWSe9DLFMktanivm0FWDkdmT/QcvApPezm8C8d9Tku7f6q94fzcBTNKJ0ZduBy4gvhH9xnNH1Tm4YMBL4ebqe4WOune28Lukfwr5U6kDfBFhp4rNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lGzp4Su6; arc=none smtp.client-ip=95.215.58.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1711686356; c=relaxed/simple;
+	bh=nNay1aV4TfSASqPJjXCxeAzelDK7osT+yJa9FnMByoA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tAkf6UXLRUO52qkrOabvZ5f0WClQpoRhmUUl9e0uvaCmdErsU4JSgxwxK/IbrqPvg6SG4H0iePM0c97KtJSsucd3GxN8oXb4iYxrYqlUVytKlw+cNbT5jZagbUCA/6WYwdiuPHNN59W0hymMvNhpamsYexlgJglJW/qjWVZXE8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=faucet.nz; spf=pass smtp.mailfrom=fe-bounces.faucet.nz; dkim=pass (1024-bit key) header.d=faucet.nz header.i=@faucet.nz header.b=dlRoWXaV; arc=none smtp.client-ip=149.28.215.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=faucet.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fe-bounces.faucet.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lGzp4Su6"
-Message-ID: <cf8d5e75-dc75-4f86-be60-013f7ed7c688@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1711682591;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=enwHo9F0kA6u98m3PQof3etjy89jBUpZ2VWwFFKo2G4=;
-	b=lGzp4Su6KANBgOGBTw/S1akA2mJQG+awn78UEEV7yiQBJ1lJlyYzVVFshWPAPGDJxOLaAv
-	uc/WbuLnjM9AUH2GwViYknpmsfuSUFPD65xVDVudUcTQELfmyzladoWft8jHrBVDib1Lhq
-	t/x0kXUfGcDTgZwCcy+dvslpDOtd200=
-Date: Thu, 28 Mar 2024 20:23:03 -0700
+	dkim=pass (1024-bit key) header.d=faucet.nz header.i=@faucet.nz header.b="dlRoWXaV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=faucet.nz;
+ h=Content-Transfer-Encoding: MIME-Version: Message-Id: Date: Subject: Cc:
+ To: From; q=dns/txt; s=fe-4ed8c67516; t=1711686350;
+ bh=CMNwW1fTsHqMDxsO3OxcQETZvoxbiQrweBGQH4nUay8=;
+ b=dlRoWXaVQOdOuQOARy8mpfgbkrf3f53IJHGJQccuZnkM6Jkb4Ywx30QT4oX7pE8l1SWhSrAw5
+ AqhzbOUlfnl0iroK7EBDHmipINGPa6VRPTettiSg8UbF2UsqCbn7ebkhQ2fWK4SHgmHyDzX9yF5
+ Rmt4/frqpWL5HQ23/STS4bo=
+From: Brad Cowie <brad@faucet.nz>
+To: bpf@vger.kernel.org
+Cc: lorenzo@kernel.org, memxor@gmail.com, pablo@netfilter.org,
+ davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+ song@kernel.org, john.fastabend@gmail.com, sdf@google.com,
+ jolsa@kernel.org, netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+ netdev@vger.kernel.org, Brad Cowie <brad@faucet.nz>
+Subject: [PATCH bpf-next] net: netfilter: Make ct zone id configurable for bpf ct helper functions
+Date: Fri, 29 Mar 2024 17:14:30 +1300
+Message-Id: <20240329041430.2176860-1-brad@faucet.nz>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 1/1] bpf: fix possible file descriptor leaks in
- verifier
-Content-Language: en-GB
-To: Anton Protopopov <aspsk@isovalent.com>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Jiri Olsa <jolsa@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Stanislav Fomichev
- <sdf@google.com>, bpf@vger.kernel.org
-References: <20240328095657.1995763-1-aspsk@isovalent.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20240328095657.1995763-1-aspsk@isovalent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+X-Report-Abuse-To: abuse@forwardemail.net
+X-Report-Abuse: abuse@forwardemail.net
+X-Complaints-To: abuse@forwardemail.net
+X-ForwardEmail-Version: 0.4.40
+X-ForwardEmail-Sender: rfc822; brad@faucet.nz, smtp.forwardemail.net,
+ 149.28.215.223
+X-ForwardEmail-ID: 660640461a1a38b2e7c2e855
 
+Add ct zone id to bpf_ct_opts so that arbitrary ct zone can be
+set for xdp/tc bpf ct helper functions bpf_{xdp,skb}_ct_alloc
+and bpf_{xdp,skb}_ct_lookup.
 
-On 3/28/24 2:56 AM, Anton Protopopov wrote:
-> The resolve_pseudo_ldimm64() function might have leaked file
-> descriptors when BPF_MAP_TYPE_ARENA was used in a program (some
-> error paths missed a corresponding fdput).
->
-> Fix leaks and also extract code which adds maps to env->used_maps
-> into a separate function. This simplifies code of resolve_pseudo_ldimm64
-> and makes it possible to reuse this code later.  While at it, also add a
-> verifier verbose message when the maps usage limit is reached.
+Signed-off-by: Brad Cowie <brad@faucet.nz>
+---
+ net/netfilter/nf_conntrack_bpf.c              | 23 ++++++++++---------
+ .../testing/selftests/bpf/prog_tests/bpf_nf.c |  1 -
+ .../testing/selftests/bpf/progs/test_bpf_nf.c | 13 ++---------
+ 3 files changed, 14 insertions(+), 23 deletions(-)
 
-Could you break this single patch into a series? For example,
-for 'to reuse this code later', refactoring the code (without
-funcitonality change) can be a separate patch, could you explain
-what do you mean reusing the code later? Do you have some plans
-to reuse the code later?
+diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrack_bpf.c
+index d2492d050fe6..a0f8a64751ec 100644
+--- a/net/netfilter/nf_conntrack_bpf.c
++++ b/net/netfilter/nf_conntrack_bpf.c
+@@ -30,7 +30,6 @@
+  * @error      - Out parameter, set for any errors encountered
+  *		 Values:
+  *		   -EINVAL - Passed NULL for bpf_tuple pointer
+- *		   -EINVAL - opts->reserved is not 0
+  *		   -EINVAL - netns_id is less than -1
+  *		   -EINVAL - opts__sz isn't NF_BPF_CT_OPTS_SZ (12)
+  *		   -EPROTO - l4proto isn't one of IPPROTO_TCP or IPPROTO_UDP
+@@ -42,16 +41,14 @@
+  *		 Values:
+  *		   IPPROTO_TCP, IPPROTO_UDP
+  * @dir:       - connection tracking tuple direction.
+- * @reserved   - Reserved member, will be reused for more options in future
+- *		 Values:
+- *		   0
++ * @ct_zone    - connection tracking zone id.
+  */
+ struct bpf_ct_opts {
+ 	s32 netns_id;
+ 	s32 error;
+ 	u8 l4proto;
+ 	u8 dir;
+-	u8 reserved[2];
++	u16 ct_zone;
+ };
+ 
+ enum {
+@@ -104,11 +101,11 @@ __bpf_nf_ct_alloc_entry(struct net *net, struct bpf_sock_tuple *bpf_tuple,
+ 			u32 timeout)
+ {
+ 	struct nf_conntrack_tuple otuple, rtuple;
++	struct nf_conntrack_zone ct_zone;
+ 	struct nf_conn *ct;
+ 	int err;
+ 
+-	if (!opts || !bpf_tuple || opts->reserved[0] || opts->reserved[1] ||
+-	    opts_len != NF_BPF_CT_OPTS_SZ)
++	if (!opts || !bpf_tuple || opts_len != NF_BPF_CT_OPTS_SZ)
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	if (unlikely(opts->netns_id < BPF_F_CURRENT_NETNS))
+@@ -130,7 +127,9 @@ __bpf_nf_ct_alloc_entry(struct net *net, struct bpf_sock_tuple *bpf_tuple,
+ 			return ERR_PTR(-ENONET);
+ 	}
+ 
+-	ct = nf_conntrack_alloc(net, &nf_ct_zone_dflt, &otuple, &rtuple,
++	nf_ct_zone_init(&ct_zone, opts->ct_zone, NF_CT_DEFAULT_ZONE_DIR, 0);
++
++	ct = nf_conntrack_alloc(net, &ct_zone, &otuple, &rtuple,
+ 				GFP_ATOMIC);
+ 	if (IS_ERR(ct))
+ 		goto out;
+@@ -152,11 +151,11 @@ static struct nf_conn *__bpf_nf_ct_lookup(struct net *net,
+ {
+ 	struct nf_conntrack_tuple_hash *hash;
+ 	struct nf_conntrack_tuple tuple;
++	struct nf_conntrack_zone ct_zone;
+ 	struct nf_conn *ct;
+ 	int err;
+ 
+-	if (!opts || !bpf_tuple || opts->reserved[0] || opts->reserved[1] ||
+-	    opts_len != NF_BPF_CT_OPTS_SZ)
++	if (!opts || !bpf_tuple || opts_len != NF_BPF_CT_OPTS_SZ)
+ 		return ERR_PTR(-EINVAL);
+ 	if (unlikely(opts->l4proto != IPPROTO_TCP && opts->l4proto != IPPROTO_UDP))
+ 		return ERR_PTR(-EPROTO);
+@@ -174,7 +173,9 @@ static struct nf_conn *__bpf_nf_ct_lookup(struct net *net,
+ 			return ERR_PTR(-ENONET);
+ 	}
+ 
+-	hash = nf_conntrack_find_get(net, &nf_ct_zone_dflt, &tuple);
++	nf_ct_zone_init(&ct_zone, opts->ct_zone, NF_CT_DEFAULT_ZONE_DIR, 0);
++
++	hash = nf_conntrack_find_get(net, &ct_zone, &tuple);
+ 	if (opts->netns_id >= 0)
+ 		put_net(net);
+ 	if (!hash)
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+index b30ff6b3b81a..25c3c4e87ed5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+@@ -103,7 +103,6 @@ static void test_bpf_nf_ct(int mode)
+ 		goto end;
+ 
+ 	ASSERT_EQ(skel->bss->test_einval_bpf_tuple, -EINVAL, "Test EINVAL for NULL bpf_tuple");
+-	ASSERT_EQ(skel->bss->test_einval_reserved, -EINVAL, "Test EINVAL for reserved not set to 0");
+ 	ASSERT_EQ(skel->bss->test_einval_netns_id, -EINVAL, "Test EINVAL for netns_id < -1");
+ 	ASSERT_EQ(skel->bss->test_einval_len_opts, -EINVAL, "Test EINVAL for len__opts != NF_BPF_CT_OPTS_SZ");
+ 	ASSERT_EQ(skel->bss->test_eproto_l4proto, -EPROTO, "Test EPROTO for l4proto != TCP or UDP");
+diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+index 77ad8adf68da..4adb73bc1b33 100644
+--- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
++++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+@@ -45,7 +45,8 @@ struct bpf_ct_opts___local {
+ 	s32 netns_id;
+ 	s32 error;
+ 	u8 l4proto;
+-	u8 reserved[3];
++	u8 dir;
++	u16 ct_zone;
+ } __attribute__((preserve_access_index));
+ 
+ struct nf_conn *bpf_xdp_ct_alloc(struct xdp_md *, struct bpf_sock_tuple *, u32,
+@@ -84,16 +85,6 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+ 	else
+ 		test_einval_bpf_tuple = opts_def.error;
+ 
+-	opts_def.reserved[0] = 1;
+-	ct = lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
+-		       sizeof(opts_def));
+-	opts_def.reserved[0] = 0;
+-	opts_def.l4proto = IPPROTO_TCP;
+-	if (ct)
+-		bpf_ct_release(ct);
+-	else
+-		test_einval_reserved = opts_def.error;
+-
+ 	opts_def.netns_id = -2;
+ 	ct = lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
+ 		       sizeof(opts_def));
+-- 
+2.34.1
 
-The fix for missing fdput() should be its own patch with
-Fixes tag below.
-
-You can have yet another patch to enhance verifier by adding
-verbose messages.
-
->
-> Fixes: 6082b6c328b5 ("bpf: Recognize addr_space_cast instruction in the verifier.")
-> Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
-> ---
->   kernel/bpf/verifier.c | 150 ++++++++++++++++++++++--------------------
->   1 file changed, 79 insertions(+), 71 deletions(-)
-[...]
