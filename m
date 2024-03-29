@@ -1,55 +1,55 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529BE6A35F
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 01:54:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7096A03E
+	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 01:54:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711677295; cv=none; b=F7dTap6JPjkL03tDfNgVKV+BXAphqZltYa8MdlaTorUEEie67EPoCXDLEDUoPQOiHY0RSIHjRIggPfHSXZtIuwSNHsZXRQaNXqTuGv9JZPjuKWMIJhJQErn7MRzRF9ggaWmGWqJBhRN4mqZNwSgfs/f1c/kN0TXu5cqMyjNTZZ0=
+	t=1711677298; cv=none; b=qpGSu86OSH3iuVHVExA+b6dkKPyuR2ar6ubYjJKmaFsOJMsuThtRVYufjHK/GlxHy6PDk071suXDwX8QZv/eLoFZ7nC6i/c34FiV8Tyjd5jtHEtmZckqOveqdc8J0npllYX5XZUcdl/zs8s6ZUow0VBPAyTBf7VDRXTB+p/6FrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711677295; c=relaxed/simple;
-	bh=lg0g6uOF3iAO/ssiLRAcrWry2HIbZpoqzls2TxKy5ms=;
+	s=arc-20240116; t=1711677298; c=relaxed/simple;
+	bh=pk9Ej0arFqeZkCMlr0ALuLSLryIAG82IwMSP2yyNpaA=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=kb+x73CoEtoGQTOnetK5ErspRiqAWJEVI2Rz5MtAJPsbwWbdek38w//vu7ebXrRBvpkwLwPqrABzdliJJmZQLi5TyAOuIFTirN2i0FaeXNxfvf5QHoREMQ/+YCKkWeNOOwl403m1cLTGBcxmmZ7HNJQQ4r9Al1AmG84H4qblV98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--drosen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=x4mYQJZa; arc=none smtp.client-ip=209.85.219.202
+	 To:Cc:Content-Type; b=phslBRFHJKQlQEgcLUz9t1c8kBluvCn4xmCfrpVYbvd2r+UodaTKKLIJbvE6XwgKWvSkhz/cqPV1J2EXjsQzkK5wOgoBl43vfUdSFNrw/mah+BV/7jzRiNNzgp1BqgT9sfSK/k+HkxsBhIUReAx8OdTDLkHs4qj1oPDcb/baC10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--drosen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=c0KGDrY2; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--drosen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="x4mYQJZa"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dce775fa8adso2712973276.1
-        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 18:54:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="c0KGDrY2"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-60cd62fa20fso30395367b3.3
+        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 18:54:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711677292; x=1712282092; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1711677295; x=1712282095; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=od0eLderVP8wkPdPrI4ENNCsb2rG+V1Fgj/sF5+lSuM=;
-        b=x4mYQJZa5N8yMZBMXbwKAQkbqX4tgVORq6SXljK1YvZG2YQaow9FUihPpsUQy/7sxB
-         87U18Ceo/QJ08muJc84lHbltw6/mtmtbxT5hOsBKyulrS8wbBCX32tj4sdiXPR9Ud9t7
-         +Fr03dmcXrLT2FL2gsKS5bfDPbarhDJeH4fgs0JMx3ws3tYlQaeYbFmfXcxcLerRaIzk
-         Y8VCX13ytsiUWeIGEunk3HaMpjQyIkm1Fo/yqOvUhcGcDd5g2TCe0c5n/nFY/OAxNNTi
-         6gI0gbIdeP+wZVVjwvv4b+vmTpz/MtanosebtA27LStRbdTzra+LyHE4U70meWDng0BN
-         7iIQ==
+        bh=+fgPCyEdk35RPimkCV3pdmwq6y+0q0t2sbyu7i903QQ=;
+        b=c0KGDrY2SPDw7zdMWf7UKCH98zvhJzG5zHgEHZyv7iZqIWji2kfPU5fOBB0d+q7/tC
+         sbc7rMYqc6L8RFBccXpQcrptd2BE1gQratTe3haaO2f8/xKijqG9k2WRACjCsoLy8NHd
+         jei0sJMtzUZEah1ZaIuKQrxYyYgdSyrwVDRCLfZ7tFj0fSD5utRFrdQMe37n18DjgUaM
+         wLN4HU0S9IDoEAgpwkPoEByCwPsq+dkz2chMXrVLay6J01QpCsAsQJkVfaPK56J/Uqa+
+         WgWA9kIDia9oaW3km2QfVIYRnSedBxB+pKe87ftQGxhMBcW+J2CPYt0m66ERPTH2QYMb
+         kpTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711677292; x=1712282092;
+        d=1e100.net; s=20230601; t=1711677295; x=1712282095;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=od0eLderVP8wkPdPrI4ENNCsb2rG+V1Fgj/sF5+lSuM=;
-        b=MrdktscnfNVBj935+zgpZGCrsyj3JXh5qpY95VpggHFG7tORq5OJylAUnjYwxg9fZr
-         RvpF8qkyOjEU2FyUZ0E2NYAHbSMdAhD2r8cL3zc6BM4Ey1ehUyq+jpM04EDZYcCPpZZY
-         wceVSkpmXzIK8vTMm/RdcdaTPYQI37j1uiSGPR993oDXTqmjIMf5QdMXq+9zZY+/q8O8
-         erA0lXv0RW+0wBhUQVjC9zRocwlVirhlYMdrY0bGw4o7JSw6cJ+GWAXASJZc966laBb8
-         ueThG8/xzKZYVGrCt8+jleDy7KgrKekwhJVKmiYodoxJvJyfOKnaUV+D80W++rRsMTXz
-         SZwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUF2ME0wyfD9Hxw1RW23Pg8TTLNtvjzytRZutnFv4J1hBPS2cHdkCakoAsPpoEA/yb9rKkdImdsLeQsj7u/sdaMEs4n
-X-Gm-Message-State: AOJu0YxbV4Gt2Q0KdYnUNYY0QN2F/4aKj+UOo/vQQgq8oRidzCoIw00E
-	1x9T1e7zEFE45bf0KwYBPzXYs6eYlb0yjlR48Dax8tXtKpmGmAtMLqHlh3NKzGqLl3ef+RGymLZ
-	gdA==
-X-Google-Smtp-Source: AGHT+IFNeB7P0RtQ53mC8zg19/JpPgaA07h8+WRkHIS3dG7DeGgWdytZdjnC5CdjHQubEzDWWlIhriwU/f0=
+        bh=+fgPCyEdk35RPimkCV3pdmwq6y+0q0t2sbyu7i903QQ=;
+        b=I312t3Mf8m9jo/LmHSuzaPymbSVhSRzVL2Ky+HfxzBLTp2fTqIHPfPRRRw+vVz2Q3P
+         A0J2ANCK/HwKQp291I8O3+x812Y9AdgM3PC72gVOwfUEUqcrNw0Xk6L9tpcEZQ07+tUp
+         bos07nJJbzSG321Rnf67435E0h4SFw2V2i78QG7uzyPHmTglDOd172U7jSzsS0fcLXWN
+         4aS8PWZPyLLAKc+H2gg6rRI0/43DEOAgByqCTl4OuWvvqtd3hqpU4DJctTO1lATpmkuc
+         Pq1I/rv8CVokbCIPtLajTPwZ0bPcR9/WIGpFGJPLKD+Z1QGRLJenhVPrj9dzN1VAw0rM
+         VPNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUwkwog7eMwt054yCZ2i3rxESbJWV43iLn/OC0PTAaRWLTP7gnj0c8GxsnZmivr/HR40m0IaAMwe8OoxVKofMa2w6Qg
+X-Gm-Message-State: AOJu0Yzmmz1iYlyvUQ2fWUQTdlz5TyCSW9LnvNkOsVIGBhT1e8Lats9+
+	TrQXXXoJjBZ/qxREevvzzNqlEPJqXxtssQ8i48EQV1mAyme2/dBivmDfAFZTmeNYQRZjwHEqhwQ
+	zsw==
+X-Google-Smtp-Source: AGHT+IHo+ItJCz1vEMlMJs25DEazsRdzqnfW39HVVXO67q+uyT3d5CUr2ZMLHU+KkcK6U1vReIfsPel7clY=
 X-Received: from drosen.mtv.corp.google.com ([2620:15c:211:201:fcce:d6ab:804c:b94b])
- (user=drosen job=sendgmr) by 2002:a05:6902:2841:b0:dcb:bc80:8333 with SMTP id
- ee1-20020a056902284100b00dcbbc808333mr293843ybb.13.1711677292440; Thu, 28 Mar
- 2024 18:54:52 -0700 (PDT)
-Date: Thu, 28 Mar 2024 18:53:38 -0700
+ (user=drosen job=sendgmr) by 2002:a0d:d9c8:0:b0:613:eb1a:6407 with SMTP id
+ b191-20020a0dd9c8000000b00613eb1a6407mr266377ywe.9.1711677294719; Thu, 28 Mar
+ 2024 18:54:54 -0700 (PDT)
+Date: Thu, 28 Mar 2024 18:53:39 -0700
 In-Reply-To: <20240329015351.624249-1-drosen@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240329015351.624249-1-drosen@google.com>
 X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
-Message-ID: <20240329015351.624249-24-drosen@google.com>
-Subject: [RFC PATCH v4 23/36] fuse-bpf: allow mounting with no userspace daemon
+Message-ID: <20240329015351.624249-25-drosen@google.com>
+Subject: [RFC PATCH v4 24/36] fuse-bpf: Add fuse-bpf constants
 From: Daniel Rosenberg <drosen@google.com>
 To: Miklos Szeredi <miklos@szeredi.hu>, bpf@vger.kernel.org, 
 	Alexei Starovoitov <ast@kernel.org>
@@ -73,126 +73,38 @@ Cc: Amir Goldstein <amir73il@gmail.com>, linux-kernel@vger.kernel.org,
 	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
 	Joanne Koong <joannelkoong@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
 	Christian Brauner <brauner@kernel.org>, kernel-team@android.com, 
-	Daniel Rosenberg <drosen@google.com>, Paul Lawrence <paullawrence@google.com>
+	Daniel Rosenberg <drosen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-When using fuse-bpf in pure passthrough mode, we don't explicitly need a
-userspace daemon. This allows simple testing of the backing operations.
+This adds constants that fuse_op programs will rely on for communicating
+what action fuse should take next.
 
 Signed-off-by: Daniel Rosenberg <drosen@google.com>
-Signed-off-by: Paul Lawrence <paullawrence@google.com>
 ---
- fs/fuse/fuse_i.h |  4 ++++
- fs/fuse/inode.c  | 25 +++++++++++++++++++------
- 2 files changed, 23 insertions(+), 6 deletions(-)
+ include/uapi/linux/bpf.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-index 81639c006ac5..f1a8f8a97f1f 100644
---- a/fs/fuse/fuse_i.h
-+++ b/fs/fuse/fuse_i.h
-@@ -586,6 +586,7 @@ struct fuse_fs_context {
- 	bool no_control:1;
- 	bool no_force_umount:1;
- 	bool legacy_opts_show:1;
-+	bool no_daemon:1;
- 	enum fuse_dax_mode dax_mode;
- 	unsigned int max_read;
- 	unsigned int blksize;
-@@ -873,6 +874,9 @@ struct fuse_conn {
- 	/* Is statx not implemented by fs? */
- 	unsigned int no_statx:1;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 85ec7fc799d7..46c1a3e3166d 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -7461,4 +7461,16 @@ struct bpf_iter_num {
+ 	__u64 __opaque[1];
+ } __attribute__((aligned(8)));
  
-+	/** BPF Only, no Daemon running */
-+	unsigned int no_daemon:1;
++/* Return Codes for Fuse BPF struct_op programs */
++#define BPF_FUSE_CONTINUE		0
++#define BPF_FUSE_USER			1
++#define BPF_FUSE_USER_PREFILTER		2
++#define BPF_FUSE_POSTFILTER		3
++#define BPF_FUSE_USER_POSTFILTER	4
 +
- 	/** The number of requests waiting for completion */
- 	atomic_t num_waiting;
- 
-diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
-index bc504e0d0e80..b4332416e23a 100644
---- a/fs/fuse/inode.c
-+++ b/fs/fuse/inode.c
-@@ -829,6 +829,7 @@ enum {
- 	OPT_MAX_READ,
- 	OPT_BLKSIZE,
- 	OPT_ROOT_DIR,
-+	OPT_NO_DAEMON,
- 	OPT_ERR
- };
- 
-@@ -844,6 +845,7 @@ static const struct fs_parameter_spec fuse_fs_parameters[] = {
- 	fsparam_u32	("blksize",		OPT_BLKSIZE),
- 	fsparam_string	("subtype",		OPT_SUBTYPE),
- 	fsparam_u32	("root_dir",		OPT_ROOT_DIR),
-+	fsparam_flag	("no_daemon",		OPT_NO_DAEMON),
- 	{}
- };
- 
-@@ -933,6 +935,11 @@ static int fuse_parse_param(struct fs_context *fsc, struct fs_parameter *param)
- 			return invalfc(fsc, "Unable to open root directory");
- 		break;
- 
-+	case OPT_NO_DAEMON:
-+		ctx->no_daemon = true;
-+		ctx->fd_present = true;
-+		break;
++/* Op Code Filter values for BPF Programs */
++#define FUSE_OPCODE_FILTER	0x0ffff
++#define FUSE_PREFILTER		0x10000
++#define FUSE_POSTFILTER		0x20000
 +
- 	default:
- 		return -EINVAL;
- 	}
-@@ -1506,7 +1513,7 @@ void fuse_send_init(struct fuse_mount *fm)
- 	ia->args.nocreds = true;
- 	ia->args.end = process_init_reply;
- 
--	if (fuse_simple_background(fm, &ia->args, GFP_KERNEL) != 0)
-+	if (unlikely(fm->fc->no_daemon) || fuse_simple_background(fm, &ia->args, GFP_KERNEL) != 0)
- 		process_init_reply(fm, &ia->args, -ENOTCONN);
- }
- EXPORT_SYMBOL_GPL(fuse_send_init);
-@@ -1798,6 +1805,7 @@ int fuse_fill_super_common(struct super_block *sb, struct fuse_fs_context *ctx)
- 	fc->destroy = ctx->destroy;
- 	fc->no_control = ctx->no_control;
- 	fc->no_force_umount = ctx->no_force_umount;
-+	fc->no_daemon = ctx->no_daemon;
- 
- 	err = -ENOMEM;
- 	root = fuse_get_root_inode(sb, ctx->rootmode, ctx->root_dir);
-@@ -1844,7 +1852,7 @@ static int fuse_fill_super(struct super_block *sb, struct fs_context *fsc)
- 	struct fuse_fs_context *ctx = fsc->fs_private;
- 	int err;
- 
--	if (!ctx->file || !ctx->rootmode_present ||
-+	if (!!ctx->file == ctx->no_daemon || !ctx->rootmode_present ||
- 	    !ctx->user_id_present || !ctx->group_id_present)
- 		return -EINVAL;
- 
-@@ -1852,10 +1860,12 @@ static int fuse_fill_super(struct super_block *sb, struct fs_context *fsc)
- 	 * Require mount to happen from the same user namespace which
- 	 * opened /dev/fuse to prevent potential attacks.
- 	 */
--	if ((ctx->file->f_op != &fuse_dev_operations) ||
--	    (ctx->file->f_cred->user_ns != sb->s_user_ns))
--		return -EINVAL;
--	ctx->fudptr = &ctx->file->private_data;
-+	if (ctx->file) {
-+		if ((ctx->file->f_op != &fuse_dev_operations) ||
-+		    (ctx->file->f_cred->user_ns != sb->s_user_ns))
-+			return -EINVAL;
-+		ctx->fudptr = &ctx->file->private_data;
-+	}
- 
- 	err = fuse_fill_super_common(sb, ctx);
- 	if (err)
-@@ -1905,6 +1915,9 @@ static int fuse_get_tree(struct fs_context *fsc)
- 
- 	fsc->s_fs_info = fm;
- 
-+	if (ctx->no_daemon)
-+		return get_tree_nodev(fsc, fuse_fill_super);;
-+
- 	if (ctx->fd_present)
- 		ctx->file = fget(ctx->fd);
- 
+ #endif /* _UAPI__LINUX_BPF_H__ */
 -- 
 2.44.0.478.gd926399ef9-goog
 
