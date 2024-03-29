@@ -1,133 +1,180 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 774D439FD6;
-	Fri, 29 Mar 2024 22:09:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002BD79DF;
+	Fri, 29 Mar 2024 22:19:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711750193; cv=none; b=LCJbqHT+BnRlc2TliWVOCilRovqmJ4jHSON/5dHQmB7ueJd8laXbr6Y8jpfuXUyyTmweZOdmofoE0Kjvzz4XDCe8BAndmpoXmcJb5xl/V0CfbqhB3z7TfmRapKCauIb+Z+g2ASAyvs0L4I+PnmmBQrHwJ4BH0ZsG3EvL35uPWbs=
+	t=1711750788; cv=none; b=hc8co0G9xIMT/oVcfsq1nqbLbgIRByceqOx1miKuDcLR/lA+TlkGLDdDsSVEWvsp2Z1ML2msFnjxDtbXVWYeoWZxi+a5uJjH3TsGCKopNYXjqqDc/2rMnm+A8GSdmnnkZ0mtnZXZsm3UnDVtcdpcCn2ay0NpOx9yYXr5+uTLj7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711750193; c=relaxed/simple;
-	bh=APnv61COTtDCJ6Qzg4G3KuYC9o9q8lUsfZq/wAf5jvc=;
+	s=arc-20240116; t=1711750788; c=relaxed/simple;
+	bh=R2WU90g1cLuEDJZk3E6aleef6JXzOr4Axg53ZSaOO+8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cDlB9+5JRfuPUrxB12sAMGMmCsb+HQ5P0xn7RB8tFw6SfxwUPMjDyKVSbqi0Q+VzL7/BcZR0Oe9wdLl4NksBsmRx/TV4jB1S7jsMg2G0BfF2lx4C40IOJEIfTx4OsuhJLM8zL5Gfg7Dhyip+rajRMPG5wd91KnJAGw+i8A1ETGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YbnA9wdW; arc=none smtp.client-ip=209.85.218.47
+	 To:Cc:Content-Type; b=JPMCPJDyE8dC+KXdL/TjL60lA2tVzRuIZCXEMPj2MYNYQuTs6scNVk7dwti9FuLeUkRVdCGKiJMhKrrZSwHKe7KmXJ2RPReIUgkB7+7zJrFWHR8uh1D+hsBh95bg+JQjBy6lGwFCc48GhKreQwHI58r3TtyDYzJhu77ANq3eM+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oyxzrm6j; arc=none smtp.client-ip=209.85.218.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YbnA9wdW"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a46cd9e7fcaso305127866b.1;
-        Fri, 29 Mar 2024 15:09:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oyxzrm6j"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a2f22bfb4e6so322877266b.0;
+        Fri, 29 Mar 2024 15:19:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711750190; x=1712354990; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711750785; x=1712355585; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JxkK35lFdR1p3nAj6ONZyvQKPyBvTq4KRhMXv8rS1mY=;
-        b=YbnA9wdW1nfAEUHgGc53U84Wh64a1VYLxb+9KShGa6m1lJVYtRXz6zRv2EUlMlo4bg
-         7NlnQf+xDZaRKTZwBXfPdpcecrtY4qHI+tQ7UGfAKszgTocNMff27YduCBNMYXlPmwb7
-         9mRouYZCu4c9DqByPtaL50NvRBgoOzqxwD5bl3hfFFuEGFnrWkA+kKaAtwypyS+XNqEC
-         F/uSEt6VHCTNZR6ZquwespsQeUqkid0U4zfnZ23wmHBbYN9ITT8pq7yKJZRIyAG8npvB
-         xQ2iR9CAO9nd8jqL+J2vqgCr/UYl1T3SxTJhtUh/7cFSVu06DBAoLpdswuo3Z8dFL8LE
-         UzBQ==
+        bh=zMnaIYbqA7d/kZC+ybw/xWIqwL2oTfIft72gidYLOFE=;
+        b=Oyxzrm6j0lAuhDsmlgxUzUJVkkyWxS8lEh5kqUJjdyKvQcgfBRvk35LnoPx92OeSuL
+         07KHoAt/lk/f4ldM+mYs1FzoT3mCSGqPV0GvKeRtElkZHRf/4TWdgLsM+gO/pug9VlQi
+         WGWMo7mHN6OXwqGXKmQY2lpeAR3RTH65du0AE2NjN0czZ70kUbPLkl+0sWr+/KlPTZgw
+         LKUAs3Nj6bIOD72BDo53yHJHLNtTj2HgHc+tclEhApMovAOoaN8YOfjsGmN5GINbcI6G
+         cpJYY3shr3xb2Ph4ve46zw4dL2G/uNDxCdayvxPg51UVW7mfeXEcVIlH8y3nHtVnhAtW
+         KbAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711750190; x=1712354990;
+        d=1e100.net; s=20230601; t=1711750785; x=1712355585;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JxkK35lFdR1p3nAj6ONZyvQKPyBvTq4KRhMXv8rS1mY=;
-        b=HV4paS84sSWCanoPcVZEwJkRGhWRub4SVQ9oGMFTalLzRgOrhonXovuSjrgB/qNI17
-         pl3e4fBPKLTp2+sfD1tzQcAKglV4Hc6q2nzXDMX8vMsOe/RySjGhFCFsUCpPvCSIuyNS
-         1JWO3azo+CNUnMFsoCLxGLfer+yAVuYa7ZRouKfaOCidgrllBcdT6subvj04/cgf4+uH
-         wzTwxyO0IyQfGoAEsRoavfQzf6Mt3gdBht7r0gbITeseCljvY9TjNsODVcaMqzDmhb7N
-         4CxJK3bvymVU4NFBEDOL3o1ul8qU7P1GPZDODr9dtXlo83hfPSKEnTkShKskf/PU7a6A
-         ctdg==
-X-Forwarded-Encrypted: i=1; AJvYcCUxCb2yVB96UPGFat916RkR6BKGPcZ0iP0npWk9OpCkwwp+UCD7fSseu5tI7r/0VUYhBH8n2kz+QkVNw4Llrbzub824xFFbmrySHBRjsYWYQuP9oAfLzOEK+pr6xmPyzEAIYs7Flgpo
-X-Gm-Message-State: AOJu0YzQbhSfiZOfcUs7tycQVkWQrGrJlq45lJZu2eHMBrD+O/b0iyXq
-	k0m6EJteHXeVLajkGDsjZODAH3y4el37WNOJ/P7GbEfR/3+S1a6dIlZ4Oe23SDvnoLANuf80zEv
-	cAZrRSCyaNO1mxT11fOIw/GHo1cs=
-X-Google-Smtp-Source: AGHT+IFfzXXrKpD+5hfmBnKPRig47WB3T+3H62/QXWsDLkxNELXWlzbFASuowBFdLRBLkfyZgVl4l9PoMRXM8aQbJSw=
-X-Received: by 2002:a17:907:9915:b0:a47:61d:7d38 with SMTP id
- ka21-20020a170907991500b00a47061d7d38mr2741292ejc.0.1711750189737; Fri, 29
- Mar 2024 15:09:49 -0700 (PDT)
+        bh=zMnaIYbqA7d/kZC+ybw/xWIqwL2oTfIft72gidYLOFE=;
+        b=K5j3ZozFu9FbIqWNtnvQz9TGTJgMCZBpkTKNJrafGFWlYsaa1Dwd3PbBcTzXZCtVSm
+         8uzlRbuqVhF3NRKmLf4uJenwjJW4h53UCL3FMLKB+E5unRDugZhjr6q0HzmJ/510qOJb
+         LZ+g5D6YESsd/Ped9BYL32cGR3lD1PjinYoX9KkGGAFcTJugiY02IzJ1sepFsucBt2d1
+         qYq1SqDWMFUtGtbv+FDe5YJp43mrb7wEG+qtlJ8y9RL+SMC/tfPQ4in4ywXHcbYc3YRM
+         GAfzmW3brpEao1UQCR1/6RLLJ0j9s6U6A2vMMiT6Xc383EvexPgkuW0aqKzlUkqHnw34
+         lZ3A==
+X-Forwarded-Encrypted: i=1; AJvYcCVRVyhTewPQv2FstE1TD2Tj4+EccjDTQ0xB+AzYmC6LV9IEgJ7cnV5PyWOwo/HrQEJGbT7ffnaItOczXteokfAAaSHUr8rYMD5rdjKql+kx23yQjpwElyXPj/r8XD7rr8IX
+X-Gm-Message-State: AOJu0Yz452HOKmkNJLD/JxNhNgAYRvjDufiPTccoYVdOgiKaFLRbLKwb
+	cpNUhUp4oM2XjfpMaX1eSQzG8RQWUU3m8knV0rTQfe13KRIBLNVdAO7M59j3rAUuQgLB6rBujZL
+	HeNqTIv1np4UPE2DA2MzPZtTFN88=
+X-Google-Smtp-Source: AGHT+IFXIbeetyUUcfpsB1mfhgd0tjV6olzfU9ERH0JD+fDwz7cIJECdgZPPgfSgLSc7dChwPedJk9jE2Xa6DamkmsA=
+X-Received: by 2002:a17:906:1716:b0:a4e:292e:7e8d with SMTP id
+ c22-20020a170906171600b00a4e292e7e8dmr1980553eje.19.1711750785361; Fri, 29
+ Mar 2024 15:19:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240329191907.1808635-1-jrife@google.com> <20240329191907.1808635-2-jrife@google.com>
-In-Reply-To: <20240329191907.1808635-2-jrife@google.com>
+References: <20240329030119.29995-1-harishankar.vishwanathan@gmail.com>
+In-Reply-To: <20240329030119.29995-1-harishankar.vishwanathan@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 29 Mar 2024 15:09:31 -0700
-Message-ID: <CAEf4BzarqE+t35r-+3r5AYHVcw9qaraaG+h0CTjn-b-9vX4dYg@mail.gmail.com>
-Subject: Re: [PATCH v1 bpf-next 1/8] selftests/bpf: Introduce sock_addr_testmod
-To: Jordan Rife <jrife@google.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+Date: Fri, 29 Mar 2024 15:19:30 -0700
+Message-ID: <CAEf4BzZOxqPTPYAm7VFjqaUsSNVJBdZx-z6dgQdZWFoGNAnJgg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] Fix latent unsoundness in and/or/xor value tracking
+To: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+Cc: ast@kernel.org, harishankar.vishwanathan@rutgers.edu, sn624@cs.rutgers.edu, 
+	sn349@cs.rutgers.edu, m.shachnai@rutgers.edu, paul@isovalent.com, 
+	Srinivas Narayana <srinivas.narayana@rutgers.edu>, 
+	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
 	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Daan De Meyer <daan.j.demeyer@gmail.com>
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 29, 2024 at 12:20=E2=80=AFPM Jordan Rife <jrife@google.com> wro=
-te:
+On Thu, Mar 28, 2024 at 8:02=E2=80=AFPM Harishankar Vishwanathan
+<harishankar.vishwanathan@gmail.com> wrote:
 >
-> sock_addr_testmod provides a mechanism for the sock_addr_kern prog_test
-> to drive socket operations in kernel space. On init, one of the
-> following socket operations is performed based on the module parameters:
-> kernel_bind(), kernel_connect(), or sock_sendmsg()/kernel_sendmsg() and
-> results are exposed through debugfs.
+> The scalar(32)_min_max_and/or/xor functions can exhibit unsound behavior
+> when setting signed bounds. The following example illustrates the issue f=
+or
+> scalar_min_max_and(), but it applies to the other functions.
 >
-> Signed-off-by: Jordan Rife <jrife@google.com>
-> ---
->  tools/testing/selftests/bpf/Makefile          |  11 +-
->  .../bpf/sock_addr_testmod/.gitignore          |   6 +
->  .../selftests/bpf/sock_addr_testmod/Makefile  |  20 ++
->  .../bpf/sock_addr_testmod/sock_addr_testmod.c | 256 ++++++++++++++++++
->  4 files changed, 292 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/bpf/sock_addr_testmod/.gitign=
-ore
->  create mode 100644 tools/testing/selftests/bpf/sock_addr_testmod/Makefil=
+> In scalar_min_max_and() the following clause is executed when ANDing
+> positive numbers:
+>
+>                 /* ANDing two positives gives a positive, so safe to
+>                  * cast result into s64.
+>                  */
+>                 dst_reg->smin_value =3D dst_reg->umin_value;
+>                 dst_reg->smax_value =3D dst_reg->umax_value;
+>
+> However, if umin_value and umax_value of dst_reg cross the sign boundary
+> (i.e., if (s64)dst_reg->umin_value > (s64)dst_reg->umax_value), then we
+> will end up with smin_value > smax_value, which is unsound.
+>
+> Previous works [1, 2] have discovered and reported this issue. Our tool
+> Agni [3] consideres it a false positive. This is because, during the
+> verification of the abstract operator scalar_min_max_and(), Agni restrict=
+s
+> its inputs to those passing through reg_bounds_sync(). This mimics
+> real-world verifier behavior, as reg_bounds_sync() is invariably executed
+> at the tail of every abstract operator. Therefore, such behavior is
+> unlikely in an actual verifier execution.
+>
+> However, it is still unsound for an abstract operator to exhibit behavior
+> where smin_value > smax_value. This patch fixes it, making the abstract
+> operator sound for all (well-formed) inputs.
+>
+> It's worth noting that this patch only modifies the output signed bounds
+> (smin/smax_value) in cases where it was previously unsound. As such, ther=
 e
->  create mode 100644 tools/testing/selftests/bpf/sock_addr_testmod/sock_ad=
-dr_testmod.c
+> is no change in precision. When the unsigned bounds (umin/umax_value) cro=
+ss
+> the sign boundary, they shouldn't be used to update  the signed bounds
+> (smin/max_value). In only such cases, we set the output signed bounds to
+> unbounded [S64_MIN, S64_MAX]. We confirmed through SMT verification that
+> the problem occurs if and only if the unsigned bounds cross the sign
+> boundary.
 >
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-> index 3b9eb40d63436..b5d02ff724957 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -132,7 +132,7 @@ TEST_GEN_PROGS_EXTENDED =3D test_sock_addr test_skb_c=
-group_id_user \
->         flow_dissector_load test_flow_dissector test_tcp_check_syncookie_=
-user \
->         test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod=
-.ko \
->         xskxceiver xdp_redirect_multi xdp_synproxy veristat xdp_hw_metada=
-ta \
-> -       xdp_features bpf_test_no_cfi.ko
-> +       xdp_features bpf_test_no_cfi.ko sock_addr_testmod.ko
+> [1] https://sanjit-bhat.github.io/assets/pdf/ebpf-verifier-range-analysis=
+22.pdf
+> [2] https://github.com/bpfverif/agni
+> [3] https://link.springer.com/chapter/10.1007/978-3-031-37709-9_12
 >
+> Co-developed-by: Matan Shachnai <m.shachnai@rutgers.edu>
+> Signed-off-by: Matan Shachnai <m.shachnai@rutgers.edu>
+> Co-developed-by: Srinivas Narayana <srinivas.narayana@rutgers.edu>
+> Signed-off-by: Srinivas Narayana <srinivas.narayana@rutgers.edu>
+> Co-developed-by: Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+> Signed-off-by: Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+> Signed-off-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.c=
+om>
+> ---
+>  kernel/bpf/verifier.c | 76 +++++++++++++++++++++++--------------------
+>  1 file changed, 40 insertions(+), 36 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index ca6cacf7b42f..9bc4c2b1ca2e 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -13318,18 +13318,19 @@ static void scalar32_min_max_and(struct bpf_reg=
+_state *dst_reg,
+>          */
+>         dst_reg->u32_min_value =3D var32_off.value;
+>         dst_reg->u32_max_value =3D min(dst_reg->u32_max_value, umax_val);
+> -       if (dst_reg->s32_min_value < 0 || smin_val < 0) {
+> +       if (dst_reg->s32_min_value >=3D 0 && smin_val >=3D 0 &&
+> +               (s32)dst_reg->u32_min_value < (s32)dst_reg->u32_max_value=
+) {
+> +               /* ANDing two positives gives a positive, so safe to cast
+> +                * u32 result into s32 when u32 doesn't cross sign bounda=
+ry.
+> +                */
+> +               dst_reg->s32_min_value =3D dst_reg->u32_min_value;
+> +               dst_reg->s32_max_value =3D dst_reg->u32_max_value;
+> +       } else {
+>                 /* Lose signed bounds when ANDing negative numbers,
+>                  * ain't nobody got time for that.
+>                  */
+>                 dst_reg->s32_min_value =3D S32_MIN;
+>                 dst_reg->s32_max_value =3D S32_MAX;
+> -       } else {
+> -               /* ANDing two positives gives a positive, so safe to
+> -                * cast result into s64.
+> -                */
+> -               dst_reg->s32_min_value =3D dst_reg->u32_min_value;
+> -               dst_reg->s32_max_value =3D dst_reg->u32_max_value;
+>         }
 
-Do we need yet another kernel module? Can this be done as part of
-existing bpf_testmod module?
+have you tried just unconditionally setting s32_{min,max}_value to
+S32_{MIN,MAX} and letting reg_bounds_sync perform u32/s32 bounds
+derivation?
 
->  TEST_GEN_FILES +=3D liburandom_read.so urandom_read sign-file uprobe_mul=
-ti
->
-> @@ -160,6 +160,7 @@ override define CLEAN
->         $(Q)$(RM) -r $(TEST_GEN_FILES)
->         $(Q)$(RM) -r $(EXTRA_CLEAN)
->         $(Q)$(MAKE) -C bpf_testmod clean
-> +       $(Q)$(MAKE) -C sock_addr_testmod clean
->         $(Q)$(MAKE) docs-clean
->  endef
+>  }
 >
 
 [...]
