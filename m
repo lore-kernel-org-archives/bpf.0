@@ -1,115 +1,285 @@
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFA037165
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 02:59:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE5185240;
+	Fri, 29 Mar 2024 03:02:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711681163; cv=none; b=n9ChgP+zxAKS7QEui/LHHJMbgL4x78Y1REqufJVKEoU4a6Ya/QK3KPXewWbZ6ClxLqaJeplVCEg6M4K8cmopdRlJlIKo8kf+ooc+HiL7Fs4z51JvZhO8QbBT+oI3vVkypPqPe3G1hygT4QBcd25xl45Zf55Jc4qjBEJkB0PeWYM=
+	t=1711681334; cv=none; b=NSn4XyO82GAiLr3wcvByeQgLhtfXWe3JWmX1vI6/wewsTvVpDz7RBq/RZceoj+B7UBtNhAx6F1rCg6Eblbk9LedUWgSGL8VWGPrmNSjuarpzQcuevwYs3YZRTeyjCYfkYDbE1plDWzcLl7L1kjLB/zsRFgc39JZBhsij3Vs2G8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711681163; c=relaxed/simple;
-	bh=dGtETsdt0QT/4xvEP76pejvB7FB1g2easUs9qA8vpVk=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=SW1KedaWfki4KavNoaAfmnVikO04cev/DhyoanX0eWK6uqMM0HQgkWGlBfYwlp/bKvArHtXNC5XcARKA0IYc9jqTA7BUd8oKAeifWgFteYi3GvUxCj7PzBHthHJU8yJc9J1Bqb+WsXwBQZa5v2rxO6T01Nuvx8yH5ERKkunooo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7cf179c3da4so167176039f.2
-        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 19:59:22 -0700 (PDT)
+	s=arc-20240116; t=1711681334; c=relaxed/simple;
+	bh=8V0U4DB9z5K4ycINEZCU0ZBS7/ypUDM+I7MWJRoz/5c=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=M1slR39Wv61NK+JUmoM897bYhRS10aE0QAaJ2l8ospiIR9UVVvdXOwE0zhuWy4BkNVGoZHDzDQfc2wWKcdImA1Dk/xdbpzHkcrhjeODVAFsGh5ou5hsOfMAXSx8D0R45UgORF43lS0rw1224KfqaIWStGMC6vNMi9jrhqIdbinY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NSV3564m; arc=none smtp.client-ip=209.85.219.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NSV3564m"
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-69107859bedso8721856d6.2;
+        Thu, 28 Mar 2024 20:02:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711681331; x=1712286131; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=l426lvUh6BeVGhTpyuaZE5yCtyB0uVXfxVVqg1kMx08=;
+        b=NSV3564mXSYYHqdjBaiwZxrssiDgWBSs396tK6j+/Awx/Lo4mdxYrme77NfJpe4GWb
+         kLNvBJaVBT2CRhjuzUBQeJ7jlM9Hhy1UxexxSDvqVdfuGm2/QgPxewNXpRzxbDOFEf1E
+         4sLn4in+ejeiyMu6Mh20/xzYrkkPnk3AbdZp+nH/aNtQufjCzZ6lbSHdZY54DoPYn+GY
+         rtsoRQn6+ajBB2VMf2QeKA23yxbji/zqQ8Y2OVEa8ZPr6tbOv5SDecRD3I1V+bRGcA3Z
+         RFStQtELw/iJVrULHrhp7i+pLLJZ2xl9YIoCsdwsfMiazI4dJKd+pBJyrQMk0miBlwCe
+         3R8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711681161; x=1712285961;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6n7QmXOvYboAd7Cq7lfplGqLO69ROJHflHj1c62Ec4U=;
-        b=puXx+sJrb+DrZ01mzD5kJS7IrndUKa5VM2/vFJouGdI5Hn/BmSsj/+r2YlwHcL9Ove
-         FYrbTKZ1AEgb18fgdW8kmefhIRsfShmX76T1NBUFVR0Dal525Su5lqCFTWhYJ0CwPjGm
-         B2zeuAlov36aHMDRIeLVf49Tk/xMIqplZ/DvauzWcDzEtFXyD55oE9UuCp5XNC3q+2fo
-         Ieeihz9T6Vcs6VG9K4WhHQNjqfp200mwrOKSKRKphJ2ogeghCScCZanHrvi65jH+IFVq
-         IDaRFwAAJ1RIaLct8ju9YkLLo67TQjWpT5wY+gb/vUdJFryWIgQTVUzJZ9W6ZNW1F4QQ
-         vj/A==
-X-Forwarded-Encrypted: i=1; AJvYcCXrzJad946dpGqhwu3ds8f9YYqpzEWsEbgPK2fezXs2O/0KljSRWh4M0Vi3Epx+mR+XJRUV7QLK0SnRdl4w4PB4vrsp
-X-Gm-Message-State: AOJu0Yz2vSW8Tl7+3Z3umVniMPVGC8VcB9oCEuQfbaI6+3eIbda3KA3+
-	qKi4J1YXChXqycrCyZV8X+jnaw0vf6MdPtHOKCdYwxTwQZzDEI68znPVG2+ds28FyP8sjdec0CI
-	t7P0qEBff8mksn7Asp0ZXEkFndyYYpJ7MEwRnOx9tDbVtlOFmkOC2mHw=
-X-Google-Smtp-Source: AGHT+IGolnO7oOOyMon/XNOqd2HDi6/YkPAAhYiO/AndRNtsW+20fOtvMU0XJp762Ja0wcdLnnnlR/MH80jR7+0s7mokZjDFOJb1
+        d=1e100.net; s=20230601; t=1711681331; x=1712286131;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l426lvUh6BeVGhTpyuaZE5yCtyB0uVXfxVVqg1kMx08=;
+        b=gs2VbVNJ2p7t3+EsT2ADiXQEocha7BANOd4HzCppTMB5mlD9xzP6yEtA2EOyQ1NSm7
+         IWR1ssQsX+4UizuU9+CyEpzkl+RAY7mw3jnviwzImEmKF+RpkpvUEDbMl0DgPO6D+aBm
+         x7nJnMSo3dAdC1av9VYxVd/yZsiQMfNJnDeMvtet2sXMApmDQTHEOYRYShE1rBT3Ir7c
+         qr8equQP9Xpu6IUPDbYeD3qS5GofxfovoAvau7kx2NMDF2BWRQhSHdZiW9d0Vx307saz
+         DYkIV2rzWBE96S0gZ8jErRPLM92qRVd6AtmS70Cv/hgpIaAycWEZwoNq5ZuLuarB4oHF
+         saVA==
+X-Forwarded-Encrypted: i=1; AJvYcCUJl0MkYRvYUio1A5O/F9Ur9KblzCaiGQDmrCjjAlHk9giVsJVVA+zHWg29cLrJ+cSsdIlyTLCs3Dm8VzLw8d4mu8uokqDny+HVuoFNBk7ci4LtpWDPpC9n9h7F5Q33a3Mb
+X-Gm-Message-State: AOJu0Yyh23ab57473vZ+SmP9Kcz9sjjTp/xdntUL0yCfJu10ZGC7K8D/
+	5Eo/JN1BKhGTdD2xUoIex/UaPY6v2TivriQ7IWs4QSBGGVh4Q1zR
+X-Google-Smtp-Source: AGHT+IGVivKY+Q00Qw5qKAM5GfkIGdVIVFj1+sHIQgR1GRlfbJbP0aPHt01EPP4snf2ol27b8XCZ2A==
+X-Received: by 2002:a05:6214:1803:b0:691:3b1e:d44b with SMTP id o3-20020a056214180300b006913b1ed44bmr976803qvw.34.1711681331488;
+        Thu, 28 Mar 2024 20:02:11 -0700 (PDT)
+Received: from lima-default.myfiosgateway.com (pool-108-50-252-180.nwrknj.fios.verizon.net. [108.50.252.180])
+        by smtp.gmail.com with ESMTPSA id s2-20020a0562140ca200b00698ecf70710sm441626qvs.65.2024.03.28.20.02.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Mar 2024 20:02:11 -0700 (PDT)
+From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+To: ast@kernel.org
+Cc: harishankar.vishwanathan@rutgers.edu,
+	sn624@cs.rutgers.edu,
+	sn349@cs.rutgers.edu,
+	m.shachnai@rutgers.edu,
+	paul@isovalent.com,
+	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
+	Srinivas Narayana <srinivas.narayana@rutgers.edu>,
+	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] Fix latent unsoundness in and/or/xor value tracking
+Date: Thu, 28 Mar 2024 23:01:19 -0400
+Message-Id: <20240329030119.29995-1-harishankar.vishwanathan@gmail.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:378d:b0:47e:d028:3eff with SMTP id
- w13-20020a056638378d00b0047ed0283effmr21880jal.2.1711681161467; Thu, 28 Mar
- 2024 19:59:21 -0700 (PDT)
-Date: Thu, 28 Mar 2024 19:59:21 -0700
-In-Reply-To: <00000000000011b2f00614076749@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009925b60614c3d39d@google.com>
-Subject: Re: [syzbot] [bpf?] KMSAN: uninit-value in __bpf_strtoull
-From: syzbot <syzbot+8ac8b7b2292ea867a162@syzkaller.appspotmail.com>
-To: alexei.starovoitov@gmail.com, andrii@kernel.org, ast@kernel.org, 
-	bpf@vger.kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, 
-	haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org, 
-	kpsingh@kernel.org, linux-kernel@vger.kernel.org, martin.lau@linux.dev, 
-	samsun1006219@gmail.com, sdf@google.com, song@kernel.org, 
-	syzkaller-bugs@googlegroups.com, xrivendell7@gmail.com, 
-	yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-syzbot has found a reproducer for the following issue on:
+The scalar(32)_min_max_and/or/xor functions can exhibit unsound behavior
+when setting signed bounds. The following example illustrates the issue for
+scalar_min_max_and(), but it applies to the other functions.
 
-HEAD commit:    8d025e2092e2 Merge tag 'erofs-for-6.9-rc2-fixes' of git://..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=10f2ffe6180000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e2599baf258ef795
-dashboard link: https://syzkaller.appspot.com/bug?extid=8ac8b7b2292ea867a162
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15b3ac29180000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=160153c9180000
+In scalar_min_max_and() the following clause is executed when ANDing
+positive numbers:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/5ccde1a19e22/disk-8d025e20.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/45420817e7d9/vmlinux-8d025e20.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/354bdafd8c8f/bzImage-8d025e20.xz
+		/* ANDing two positives gives a positive, so safe to
+		 * cast result into s64.
+		 */
+		dst_reg->smin_value = dst_reg->umin_value;
+		dst_reg->smax_value = dst_reg->umax_value;
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8ac8b7b2292ea867a162@syzkaller.appspotmail.com
+However, if umin_value and umax_value of dst_reg cross the sign boundary
+(i.e., if (s64)dst_reg->umin_value > (s64)dst_reg->umax_value), then we
+will end up with smin_value > smax_value, which is unsound.
 
-=====================================================
-BUG: KMSAN: uninit-value in __bpf_strtoull+0x245/0x5b0 kernel/bpf/helpers.c:465
- __bpf_strtoull+0x245/0x5b0 kernel/bpf/helpers.c:465
- __bpf_strtoll kernel/bpf/helpers.c:504 [inline]
- ____bpf_strtol kernel/bpf/helpers.c:525 [inline]
- bpf_strtol+0x7c/0x270 kernel/bpf/helpers.c:519
- ___bpf_prog_run+0x13fe/0xe0f0 kernel/bpf/core.c:1997
- __bpf_prog_run96+0xb5/0xe0 kernel/bpf/core.c:2236
- bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
- __bpf_prog_run include/linux/filter.h:657 [inline]
- bpf_prog_run_xdp include/net/xdp.h:514 [inline]
- bpf_test_run+0x43e/0xc30 net/bpf/test_run.c:423
- bpf_prog_test_run_xdp+0xeaa/0x1a40 net/bpf/test_run.c:1269
- bpf_prog_test_run+0x6b7/0xad0 kernel/bpf/syscall.c:4240
- __sys_bpf+0x6aa/0xd90 kernel/bpf/syscall.c:5649
- __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
- __x64_sys_bpf+0xa0/0xe0 kernel/bpf/syscall.c:5736
- do_syscall_64+0xd5/0x1f0
- entry_SYSCALL_64_after_hwframe+0x6d/0x75
+Previous works [1, 2] have discovered and reported this issue. Our tool
+Agni [3] consideres it a false positive. This is because, during the
+verification of the abstract operator scalar_min_max_and(), Agni restricts
+its inputs to those passing through reg_bounds_sync(). This mimics
+real-world verifier behavior, as reg_bounds_sync() is invariably executed
+at the tail of every abstract operator. Therefore, such behavior is
+unlikely in an actual verifier execution.
 
-Local variable stack created at:
- __bpf_prog_run96+0x45/0xe0 kernel/bpf/core.c:2236
- bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
- __bpf_prog_run include/linux/filter.h:657 [inline]
- bpf_prog_run_xdp include/net/xdp.h:514 [inline]
- bpf_test_run+0x43e/0xc30 net/bpf/test_run.c:423
+However, it is still unsound for an abstract operator to exhibit behavior
+where smin_value > smax_value. This patch fixes it, making the abstract
+operator sound for all (well-formed) inputs.
 
-CPU: 1 PID: 5019 Comm: syz-executor335 Not tainted 6.9.0-rc1-syzkaller-00061-g8d025e2092e2 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/27/2024
-=====================================================
+It's worth noting that this patch only modifies the output signed bounds
+(smin/smax_value) in cases where it was previously unsound. As such, there
+is no change in precision. When the unsigned bounds (umin/umax_value) cross
+the sign boundary, they shouldn't be used to update  the signed bounds
+(smin/max_value). In only such cases, we set the output signed bounds to
+unbounded [S64_MIN, S64_MAX]. We confirmed through SMT verification that
+the problem occurs if and only if the unsigned bounds cross the sign
+boundary.
 
+[1] https://sanjit-bhat.github.io/assets/pdf/ebpf-verifier-range-analysis22.pdf
+[2] https://github.com/bpfverif/agni
+[3] https://link.springer.com/chapter/10.1007/978-3-031-37709-9_12
 
+Co-developed-by: Matan Shachnai <m.shachnai@rutgers.edu>
+Signed-off-by: Matan Shachnai <m.shachnai@rutgers.edu>
+Co-developed-by: Srinivas Narayana <srinivas.narayana@rutgers.edu>
+Signed-off-by: Srinivas Narayana <srinivas.narayana@rutgers.edu>
+Co-developed-by: Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+Signed-off-by: Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+Signed-off-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
 ---
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+ kernel/bpf/verifier.c | 76 +++++++++++++++++++++++--------------------
+ 1 file changed, 40 insertions(+), 36 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ca6cacf7b42f..9bc4c2b1ca2e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -13318,18 +13318,19 @@ static void scalar32_min_max_and(struct bpf_reg_state *dst_reg,
+ 	 */
+ 	dst_reg->u32_min_value = var32_off.value;
+ 	dst_reg->u32_max_value = min(dst_reg->u32_max_value, umax_val);
+-	if (dst_reg->s32_min_value < 0 || smin_val < 0) {
++	if (dst_reg->s32_min_value >= 0 && smin_val >= 0 &&
++		(s32)dst_reg->u32_min_value < (s32)dst_reg->u32_max_value) {
++		/* ANDing two positives gives a positive, so safe to cast
++		 * u32 result into s32 when u32 doesn't cross sign boundary.
++		 */
++		dst_reg->s32_min_value = dst_reg->u32_min_value;
++		dst_reg->s32_max_value = dst_reg->u32_max_value;
++	} else {
+ 		/* Lose signed bounds when ANDing negative numbers,
+ 		 * ain't nobody got time for that.
+ 		 */
+ 		dst_reg->s32_min_value = S32_MIN;
+ 		dst_reg->s32_max_value = S32_MAX;
+-	} else {
+-		/* ANDing two positives gives a positive, so safe to
+-		 * cast result into s64.
+-		 */
+-		dst_reg->s32_min_value = dst_reg->u32_min_value;
+-		dst_reg->s32_max_value = dst_reg->u32_max_value;
+ 	}
+ }
+ 
+@@ -13351,18 +13352,19 @@ static void scalar_min_max_and(struct bpf_reg_state *dst_reg,
+ 	 */
+ 	dst_reg->umin_value = dst_reg->var_off.value;
+ 	dst_reg->umax_value = min(dst_reg->umax_value, umax_val);
+-	if (dst_reg->smin_value < 0 || smin_val < 0) {
++	if (dst_reg->smin_value >= 0 && smin_val >= 0 &&
++		(s64)dst_reg->umin_value <= (s64)dst_reg->umax_value) {
++		/* ANDing two positives gives a positive, so safe to cast
++		 * u64 result into s64, when u64 doesn't cross sign boundary.
++		 */
++		dst_reg->smin_value = dst_reg->umin_value;
++		dst_reg->smax_value = dst_reg->umax_value;
++	} else {
+ 		/* Lose signed bounds when ANDing negative numbers,
+ 		 * ain't nobody got time for that.
+ 		 */
+ 		dst_reg->smin_value = S64_MIN;
+ 		dst_reg->smax_value = S64_MAX;
+-	} else {
+-		/* ANDing two positives gives a positive, so safe to
+-		 * cast result into s64.
+-		 */
+-		dst_reg->smin_value = dst_reg->umin_value;
+-		dst_reg->smax_value = dst_reg->umax_value;
+ 	}
+ 	/* We may learn something more from the var_off */
+ 	__update_reg_bounds(dst_reg);
+@@ -13387,18 +13389,19 @@ static void scalar32_min_max_or(struct bpf_reg_state *dst_reg,
+ 	 */
+ 	dst_reg->u32_min_value = max(dst_reg->u32_min_value, umin_val);
+ 	dst_reg->u32_max_value = var32_off.value | var32_off.mask;
+-	if (dst_reg->s32_min_value < 0 || smin_val < 0) {
++	if (dst_reg->s32_min_value > 0 && smin_val > 0 &&
++		(s32)dst_reg->u32_min_value <= (s32)dst_reg->u32_max_value) {
++		/* ORing two positives gives a positive, so safe to cast
++		 * u32 result into s32 when u32 doesn't cross sign boundary.
++		 */
++		dst_reg->s32_min_value = dst_reg->u32_min_value;
++		dst_reg->s32_max_value = dst_reg->u32_max_value;
++	} else {
+ 		/* Lose signed bounds when ORing negative numbers,
+ 		 * ain't nobody got time for that.
+ 		 */
+ 		dst_reg->s32_min_value = S32_MIN;
+ 		dst_reg->s32_max_value = S32_MAX;
+-	} else {
+-		/* ORing two positives gives a positive, so safe to
+-		 * cast result into s64.
+-		 */
+-		dst_reg->s32_min_value = dst_reg->u32_min_value;
+-		dst_reg->s32_max_value = dst_reg->u32_max_value;
+ 	}
+ }
+ 
+@@ -13420,18 +13423,19 @@ static void scalar_min_max_or(struct bpf_reg_state *dst_reg,
+ 	 */
+ 	dst_reg->umin_value = max(dst_reg->umin_value, umin_val);
+ 	dst_reg->umax_value = dst_reg->var_off.value | dst_reg->var_off.mask;
+-	if (dst_reg->smin_value < 0 || smin_val < 0) {
++	if (dst_reg->smin_value >= 0 && smin_val >= 0 &&
++		(s64)dst_reg->umin_value <= (s64)dst_reg->umax_value) {
++		/* ORing two positives gives a positive, so safe to cast
++		 * u64 result into s64 when u64 doesn't cross sign boundary.
++		 */
++		dst_reg->smin_value = dst_reg->umin_value;
++		dst_reg->smax_value = dst_reg->umax_value;
++	} else {
+ 		/* Lose signed bounds when ORing negative numbers,
+ 		 * ain't nobody got time for that.
+ 		 */
+ 		dst_reg->smin_value = S64_MIN;
+ 		dst_reg->smax_value = S64_MAX;
+-	} else {
+-		/* ORing two positives gives a positive, so safe to
+-		 * cast result into s64.
+-		 */
+-		dst_reg->smin_value = dst_reg->umin_value;
+-		dst_reg->smax_value = dst_reg->umax_value;
+ 	}
+ 	/* We may learn something more from the var_off */
+ 	__update_reg_bounds(dst_reg);
+@@ -13453,10 +13457,10 @@ static void scalar32_min_max_xor(struct bpf_reg_state *dst_reg,
+ 	/* We get both minimum and maximum from the var32_off. */
+ 	dst_reg->u32_min_value = var32_off.value;
+ 	dst_reg->u32_max_value = var32_off.value | var32_off.mask;
+-
+-	if (dst_reg->s32_min_value >= 0 && smin_val >= 0) {
+-		/* XORing two positive sign numbers gives a positive,
+-		 * so safe to cast u32 result into s32.
++	if (dst_reg->s32_min_value > 0 && smin_val > 0 &&
++		(s32)dst_reg->u32_min_value <= (s32)dst_reg->u32_max_value) {
++		/* XORing two positives gives a positive, so safe to cast
++		 * u32 result into s32 when u32 doesn't cross sign boundary.
+ 		 */
+ 		dst_reg->s32_min_value = dst_reg->u32_min_value;
+ 		dst_reg->s32_max_value = dst_reg->u32_max_value;
+@@ -13482,10 +13486,10 @@ static void scalar_min_max_xor(struct bpf_reg_state *dst_reg,
+ 	/* We get both minimum and maximum from the var_off. */
+ 	dst_reg->umin_value = dst_reg->var_off.value;
+ 	dst_reg->umax_value = dst_reg->var_off.value | dst_reg->var_off.mask;
+-
+-	if (dst_reg->smin_value >= 0 && smin_val >= 0) {
+-		/* XORing two positive sign numbers gives a positive,
+-		 * so safe to cast u64 result into s64.
++	if (dst_reg->smin_value >= 0 && smin_val >= 0 &&
++		(s64)dst_reg->umin_value <= (s64)dst_reg->umax_value) {
++		/* XORing two positives gives a positive, so safe to cast
++		 * u64 result into s64 when u64 doesn't cross sign boundary.
+ 		 */
+ 		dst_reg->smin_value = dst_reg->umin_value;
+ 		dst_reg->smax_value = dst_reg->umax_value;
+-- 
+2.40.1
+
