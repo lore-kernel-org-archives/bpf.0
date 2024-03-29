@@ -1,189 +1,123 @@
-Received: from smtp.forwardemail.net (smtp.forwardemail.net [149.28.215.223])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FC9C3A1DC
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 04:25:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=149.28.215.223
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5E18494;
+	Fri, 29 Mar 2024 05:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711686356; cv=none; b=gzNbzsq7b+covjHEDOmsPa0kiF04IH+BWqqxgiDH6/5H7qHv5lj/oy1oslvkHbuEBrwmUXAIAYQEgT3QsaJjZBB8nGpkJ93pe5+TSoubxsDjG8QF1/6KxmUkrrHRTawoL/Dk/zMlj3E/toqQN/hSA/p5o3a65zSOy8JaPiBz5AE=
+	t=1711690180; cv=none; b=W01mAHahEKMIpYW+5QcKhBm876bkV/2PhoiSYAh9RXfwLRMWmRtmNt7HFgj5ikoMnB0805Un+BWrdYMGxTZoMcp3q7INP0LcCcQovzGX9MhLNsQ6u9oUbrDMHbYV8acqVXD7Q1Fc3YcEZrjPjt2mRgyDontooltIUOJDNLwHZYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711686356; c=relaxed/simple;
-	bh=nNay1aV4TfSASqPJjXCxeAzelDK7osT+yJa9FnMByoA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tAkf6UXLRUO52qkrOabvZ5f0WClQpoRhmUUl9e0uvaCmdErsU4JSgxwxK/IbrqPvg6SG4H0iePM0c97KtJSsucd3GxN8oXb4iYxrYqlUVytKlw+cNbT5jZagbUCA/6WYwdiuPHNN59W0hymMvNhpamsYexlgJglJW/qjWVZXE8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=faucet.nz; spf=pass smtp.mailfrom=fe-bounces.faucet.nz; dkim=pass (1024-bit key) header.d=faucet.nz header.i=@faucet.nz header.b=dlRoWXaV; arc=none smtp.client-ip=149.28.215.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=faucet.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fe-bounces.faucet.nz
+	s=arc-20240116; t=1711690180; c=relaxed/simple;
+	bh=ZOl/Bo99tToaWRhqhSoUQflRSQemaKlEpXFd9o9Gttk=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=PxUuaPOcTIj9QQedzwBnCayX3xC07fzxOegOe7FX8qExgck7x2D/QSA7NjCspJ/V+nQCfLecuFYvU4DVnDdyoqIQBsFvJcu64AB3X3NuoJZausKAKOvp7KaMEeMIQne66ZYlnt7oj3Yh+E0HWOpbG/OIqPSFB7+csQH/ry/g9Wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=luWyhTZd; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=faucet.nz header.i=@faucet.nz header.b="dlRoWXaV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=faucet.nz;
- h=Content-Transfer-Encoding: MIME-Version: Message-Id: Date: Subject: Cc:
- To: From; q=dns/txt; s=fe-4ed8c67516; t=1711686350;
- bh=CMNwW1fTsHqMDxsO3OxcQETZvoxbiQrweBGQH4nUay8=;
- b=dlRoWXaVQOdOuQOARy8mpfgbkrf3f53IJHGJQccuZnkM6Jkb4Ywx30QT4oX7pE8l1SWhSrAw5
- AqhzbOUlfnl0iroK7EBDHmipINGPa6VRPTettiSg8UbF2UsqCbn7ebkhQ2fWK4SHgmHyDzX9yF5
- Rmt4/frqpWL5HQ23/STS4bo=
-From: Brad Cowie <brad@faucet.nz>
-To: bpf@vger.kernel.org
-Cc: lorenzo@kernel.org, memxor@gmail.com, pablo@netfilter.org,
- davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
- song@kernel.org, john.fastabend@gmail.com, sdf@google.com,
- jolsa@kernel.org, netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
- netdev@vger.kernel.org, Brad Cowie <brad@faucet.nz>
-Subject: [PATCH bpf-next] net: netfilter: Make ct zone id configurable for bpf ct helper functions
-Date: Fri, 29 Mar 2024 17:14:30 +1300
-Message-Id: <20240329041430.2176860-1-brad@faucet.nz>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="luWyhTZd"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6e6f4ad4c57so1378328b3a.2;
+        Thu, 28 Mar 2024 22:29:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711690178; x=1712294978; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k18c6xmm/eyPrEWQ3tkt+ZDWH10CDlh6h0RH3Bi3qC0=;
+        b=luWyhTZdloMMQc1OKGWhj73srxsVfkFGXqkmAaACjAXsLbDZUVN9HhCY1WekUnxdW9
+         /Qv2gNj4UAJpN7XoC7LqT4d/ihwyrjAFIbMvzSzwxMc1kVdXArjygNqg+DPdIl8f+WC5
+         ohxe/as9BS6DnkF4tJFpgqekZpgivQtSej5BMBeqiLoVG58zWUzB25r436Q6K59bG8FL
+         GDWF58cOzf2cgKQ9ZHWj0TAe1yd5AX/BJebjD75X7tPhJOFUZr/G7rOFBdK+2flFuxkN
+         GIoRbqjB4hoNHPs7D9UKWqqtU9nlUOh9xeTk91+/bRqyL4w5gcfuK78KMHogo46TQlnK
+         +7iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711690178; x=1712294978;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=k18c6xmm/eyPrEWQ3tkt+ZDWH10CDlh6h0RH3Bi3qC0=;
+        b=EnQsA1t6rxj67hUKuaAm8kbx8n4lWUSaS9QibY+yh7RROwl4/d7qSfe7dhQeljSS6+
+         /4HxN99aBtJn1Lr1NjFL35h4x8OXYDkW4eBBIn4TXGb2j9mttWYGhpW8kgKt3UcQD3LZ
+         h1BVi1Y340IqnFhEGOUWswOoNIx1vaJg8McFuJxgWx91hkJEWV88UmPveRK/Rwh6u13B
+         zBegLvJnDblwtmh6bH4+ejgLORYRe9bZyRFkhXf7B+9p7W3fO8nGQPtcGmpmG8c8yHdG
+         6nNvWDach/EoRjo+qS40MfCrCjqVUfIaCvPd4FR3PW1pGy+dqp9f8NzMzF2g6nuJPnRT
+         mMkw==
+X-Forwarded-Encrypted: i=1; AJvYcCVnTJuWcqDMJYkiVM+muIxrLvxRko/vOKry+Ks0f8I19HefSWkme0O/raAnZZkNKtGZZxC4nZ2qfpv1yRbcjUhLVQRAmu21vy1WR4Na51p/rSu3ewfhMHTkpULNoqDKSnZ7zOU0utwHdA2/d4rRvTfYin+uROztQDYS
+X-Gm-Message-State: AOJu0Yzqisr0qPAlKgE7/4dbQNS5T+6BWgiF1M9lwZiIPSCe4nCpT5en
+	vWCG+w5Vr5aHWQhMLhOTC7YVfnJh3GEzeUzB2dxvcwv2n+i78q/J
+X-Google-Smtp-Source: AGHT+IGF0zcDXBCDqaaqa/Kc9ue+cRHKReQB2M9kPl0XrXRl7s+yKAQU7+YMrGsaWmIr628uT6J05g==
+X-Received: by 2002:a05:6a21:398b:b0:1a3:e168:4deb with SMTP id ad11-20020a056a21398b00b001a3e1684debmr1460271pzc.32.1711690177987;
+        Thu, 28 Mar 2024 22:29:37 -0700 (PDT)
+Received: from localhost ([98.97.36.54])
+        by smtp.gmail.com with ESMTPSA id u10-20020a170902e5ca00b001e042dc5202sm2603318plf.80.2024.03.28.22.29.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Mar 2024 22:29:37 -0700 (PDT)
+Date: Thu, 28 Mar 2024 22:29:36 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: Jakub Sitnicki <jakub@cloudflare.com>, 
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+ Edward Adam Davis <eadavis@qq.com>, 
+ John Fastabend <john.fastabend@gmail.com>
+Cc: syzbot+c4f4d25859c2e5859988@syzkaller.appspotmail.com, 
+ 42.hyeyoo@gmail.com, 
+ andrii@kernel.org, 
+ ast@kernel.org, 
+ bpf@vger.kernel.org, 
+ daniel@iogearbox.net, 
+ davem@davemloft.net, 
+ edumazet@google.com, 
+ kafai@fb.com, 
+ kpsingh@kernel.org, 
+ kuba@kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ namhyung@kernel.org, 
+ netdev@vger.kernel.org, 
+ pabeni@redhat.com, 
+ peterz@infradead.org, 
+ songliubraving@fb.com, 
+ syzkaller-bugs@googlegroups.com, 
+ yhs@fb.com
+Message-ID: <660651c0707f5_22b5520880@john.notmuch>
+In-Reply-To: <87ttkuber7.fsf@cloudflare.com>
+References: <000000000000dc9aca0613ec855c@google.com>
+ <tencent_F436364A347489774B677A3D13367E968E09@qq.com>
+ <CAADnVQJQvcZOA_BbFxPqNyRbMdKTBSMnf=cKvW7NJ8LxxP54sA@mail.gmail.com>
+ <87y1a6biie.fsf@cloudflare.com>
+ <87ttkuber7.fsf@cloudflare.com>
+Subject: Re: [PATCH] bpf, sockmap: fix deadlock in rcu_report_exp_cpu_mult
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Report-Abuse-To: abuse@forwardemail.net
-X-Report-Abuse: abuse@forwardemail.net
-X-Complaints-To: abuse@forwardemail.net
-X-ForwardEmail-Version: 0.4.40
-X-ForwardEmail-Sender: rfc822; brad@faucet.nz, smtp.forwardemail.net,
- 149.28.215.223
-X-ForwardEmail-ID: 660640461a1a38b2e7c2e855
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Add ct zone id to bpf_ct_opts so that arbitrary ct zone can be
-set for xdp/tc bpf ct helper functions bpf_{xdp,skb}_ct_alloc
-and bpf_{xdp,skb}_ct_lookup.
+Jakub Sitnicki wrote:
+> On Mon, Mar 25, 2024 at 01:23 PM +01, Jakub Sitnicki wrote:
+> 
+> [...]
+> 
+> > But we also need to cover sock_map_unref->sock_sock_map_del_link called
+> > from sock_hash_delete_elem. It also grabs a spin lock.
+> 
+> On second look, no need to disable interrupts in
+> sock_map_unref->sock_sock_map_del_link. Call is enclosed in the critical
+> section in sock_hash_delete_elem that has been updated.
+> 
+> I have a question, though, why are we patching sock_hash_free? It
+> doesn't get called unless there are no more existing users of the BPF
+> map. So nothing can mutate it from interrupt context.
+> 
+> [...]
 
-Signed-off-by: Brad Cowie <brad@faucet.nz>
----
- net/netfilter/nf_conntrack_bpf.c              | 23 ++++++++++---------
- .../testing/selftests/bpf/prog_tests/bpf_nf.c |  1 -
- .../testing/selftests/bpf/progs/test_bpf_nf.c | 13 ++---------
- 3 files changed, 14 insertions(+), 23 deletions(-)
+Agree sock_hash_free should be only after all refs are dropped.
 
-diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrack_bpf.c
-index d2492d050fe6..a0f8a64751ec 100644
---- a/net/netfilter/nf_conntrack_bpf.c
-+++ b/net/netfilter/nf_conntrack_bpf.c
-@@ -30,7 +30,6 @@
-  * @error      - Out parameter, set for any errors encountered
-  *		 Values:
-  *		   -EINVAL - Passed NULL for bpf_tuple pointer
-- *		   -EINVAL - opts->reserved is not 0
-  *		   -EINVAL - netns_id is less than -1
-  *		   -EINVAL - opts__sz isn't NF_BPF_CT_OPTS_SZ (12)
-  *		   -EPROTO - l4proto isn't one of IPPROTO_TCP or IPPROTO_UDP
-@@ -42,16 +41,14 @@
-  *		 Values:
-  *		   IPPROTO_TCP, IPPROTO_UDP
-  * @dir:       - connection tracking tuple direction.
-- * @reserved   - Reserved member, will be reused for more options in future
-- *		 Values:
-- *		   0
-+ * @ct_zone    - connection tracking zone id.
-  */
- struct bpf_ct_opts {
- 	s32 netns_id;
- 	s32 error;
- 	u8 l4proto;
- 	u8 dir;
--	u8 reserved[2];
-+	u16 ct_zone;
- };
- 
- enum {
-@@ -104,11 +101,11 @@ __bpf_nf_ct_alloc_entry(struct net *net, struct bpf_sock_tuple *bpf_tuple,
- 			u32 timeout)
- {
- 	struct nf_conntrack_tuple otuple, rtuple;
-+	struct nf_conntrack_zone ct_zone;
- 	struct nf_conn *ct;
- 	int err;
- 
--	if (!opts || !bpf_tuple || opts->reserved[0] || opts->reserved[1] ||
--	    opts_len != NF_BPF_CT_OPTS_SZ)
-+	if (!opts || !bpf_tuple || opts_len != NF_BPF_CT_OPTS_SZ)
- 		return ERR_PTR(-EINVAL);
- 
- 	if (unlikely(opts->netns_id < BPF_F_CURRENT_NETNS))
-@@ -130,7 +127,9 @@ __bpf_nf_ct_alloc_entry(struct net *net, struct bpf_sock_tuple *bpf_tuple,
- 			return ERR_PTR(-ENONET);
- 	}
- 
--	ct = nf_conntrack_alloc(net, &nf_ct_zone_dflt, &otuple, &rtuple,
-+	nf_ct_zone_init(&ct_zone, opts->ct_zone, NF_CT_DEFAULT_ZONE_DIR, 0);
-+
-+	ct = nf_conntrack_alloc(net, &ct_zone, &otuple, &rtuple,
- 				GFP_ATOMIC);
- 	if (IS_ERR(ct))
- 		goto out;
-@@ -152,11 +151,11 @@ static struct nf_conn *__bpf_nf_ct_lookup(struct net *net,
- {
- 	struct nf_conntrack_tuple_hash *hash;
- 	struct nf_conntrack_tuple tuple;
-+	struct nf_conntrack_zone ct_zone;
- 	struct nf_conn *ct;
- 	int err;
- 
--	if (!opts || !bpf_tuple || opts->reserved[0] || opts->reserved[1] ||
--	    opts_len != NF_BPF_CT_OPTS_SZ)
-+	if (!opts || !bpf_tuple || opts_len != NF_BPF_CT_OPTS_SZ)
- 		return ERR_PTR(-EINVAL);
- 	if (unlikely(opts->l4proto != IPPROTO_TCP && opts->l4proto != IPPROTO_UDP))
- 		return ERR_PTR(-EPROTO);
-@@ -174,7 +173,9 @@ static struct nf_conn *__bpf_nf_ct_lookup(struct net *net,
- 			return ERR_PTR(-ENONET);
- 	}
- 
--	hash = nf_conntrack_find_get(net, &nf_ct_zone_dflt, &tuple);
-+	nf_ct_zone_init(&ct_zone, opts->ct_zone, NF_CT_DEFAULT_ZONE_DIR, 0);
-+
-+	hash = nf_conntrack_find_get(net, &ct_zone, &tuple);
- 	if (opts->netns_id >= 0)
- 		put_net(net);
- 	if (!hash)
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-index b30ff6b3b81a..25c3c4e87ed5 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-@@ -103,7 +103,6 @@ static void test_bpf_nf_ct(int mode)
- 		goto end;
- 
- 	ASSERT_EQ(skel->bss->test_einval_bpf_tuple, -EINVAL, "Test EINVAL for NULL bpf_tuple");
--	ASSERT_EQ(skel->bss->test_einval_reserved, -EINVAL, "Test EINVAL for reserved not set to 0");
- 	ASSERT_EQ(skel->bss->test_einval_netns_id, -EINVAL, "Test EINVAL for netns_id < -1");
- 	ASSERT_EQ(skel->bss->test_einval_len_opts, -EINVAL, "Test EINVAL for len__opts != NF_BPF_CT_OPTS_SZ");
- 	ASSERT_EQ(skel->bss->test_eproto_l4proto, -EPROTO, "Test EPROTO for l4proto != TCP or UDP");
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-index 77ad8adf68da..4adb73bc1b33 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-@@ -45,7 +45,8 @@ struct bpf_ct_opts___local {
- 	s32 netns_id;
- 	s32 error;
- 	u8 l4proto;
--	u8 reserved[3];
-+	u8 dir;
-+	u16 ct_zone;
- } __attribute__((preserve_access_index));
- 
- struct nf_conn *bpf_xdp_ct_alloc(struct xdp_md *, struct bpf_sock_tuple *, u32,
-@@ -84,16 +85,6 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
- 	else
- 		test_einval_bpf_tuple = opts_def.error;
- 
--	opts_def.reserved[0] = 1;
--	ct = lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
--		       sizeof(opts_def));
--	opts_def.reserved[0] = 0;
--	opts_def.l4proto = IPPROTO_TCP;
--	if (ct)
--		bpf_ct_release(ct);
--	else
--		test_einval_reserved = opts_def.error;
--
- 	opts_def.netns_id = -2;
- 	ct = lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
- 		       sizeof(opts_def));
--- 
-2.34.1
+Edward, did you want to send a v2 for this? Also if you want fixing the
+sockmap case as well would be useful. Also happy to finish up the patches
+if you would rather not.
 
+Thanks,
+John
