@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9904B225A8
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 18:47:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC6463B1AC
+	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 18:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711738069; cv=none; b=tlMaWmagQsbGvhtOYcvtUNKJ4rygQuAjeJubPJjdEkeEkQTbNz4oYpNDlLG6lt0T2Gj6SODsk66N5TjEiEh5EcXsxCoC7akYcc2UsQAF3qlzdYOVDxmAoJOyIh3FWiB32fLS6l/O8CDcpfVOLOY+YnM2HujMCGe8r/9/k1Z5z+o=
+	t=1711738072; cv=none; b=mIoReL4graQmkluAN2u1vXbJOrLmSMdiUz84QosO6RcYO5j+9e72+LlkiRBEAtLMa+6By+1et0ZN8abWV3Pk687UiETf7wJJNVV5TVY8uQfKdYrYkeSaC9NbyVHZTZfaMbtDDk5/peYKvCTq3G/SLD0eHOtqIlSRIIzDH607jOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711738069; c=relaxed/simple;
-	bh=bKWtYC2Zn55ptgsWc3tn3d/Y9QuPa0RDYZ/pP2P65kQ=;
+	s=arc-20240116; t=1711738072; c=relaxed/simple;
+	bh=/WLgrEbfVw01tVbYMD6LgpIF8WYcDH3vzzknKD8nRWk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IEoGJG1j5CZgnXZFK0Ev3xsDg04EIOdYf294kKkcOR33P1Wy/5wn6caaf7lwlIL/rvsy6RdNvzNqCFdEd7BNeSd16B0csdoONik3Rlx16hA+k9iLidNS6eg2K9HylkXa+oYU+3c2bNT0rIFeJsQak6T+afp39O8ml2vsH5KrfJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gBROYdZu; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=lv5UzmZj7YmvklNi0tTsr32dyCrw7Eo7Po42nN/6UBcabLTJCB3y/VaG0GFbyLa2xGC/D2Un9HTQcOqdakdUJkxOPaIW8fewOMmLS8rY44x7Kr93GIKNtjuNMEkFBHrEjQ7luo014JnoNQcibJJYET0suNYX0nCIu3vRVlmop3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q2bG/juA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gBROYdZu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19FE5C433C7;
-	Fri, 29 Mar 2024 18:47:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q2bG/juA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38641C433C7;
+	Fri, 29 Mar 2024 18:47:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711738069;
-	bh=bKWtYC2Zn55ptgsWc3tn3d/Y9QuPa0RDYZ/pP2P65kQ=;
+	s=k20201202; t=1711738072;
+	bh=/WLgrEbfVw01tVbYMD6LgpIF8WYcDH3vzzknKD8nRWk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gBROYdZuyZ5vJgkKX6foaJ6DlkpXwwmBGyNfm/NnShTJu3WHVqj9uVbWz3f2MsAgJ
-	 pLpTzcobK/DtTEV1eVIo5haaplNDl7J1MBrHEhutb9Zx84SzoTjCadGrF/EeWOz5dn
-	 jxaKJZfCSs7Xb6VOPk5pIlfQ76Bajtb9IoWAelLr8LWN+DCd47OFRPb9j8MzR6VEyW
-	 bTJ+iilJgTTBoUvAT67qEtePEzX5B18LQZpI8HIcjiAw8Vak+jTc0hiU3t+qApw6a2
-	 Abq8k9TYeQWKsEPZi0fdWhGEu3RyNlDCaF502FaCDwF1fG0Y9uOeANu2yj5QCLIgr9
-	 wt10+LuyF0IQw==
+	b=Q2bG/juAB5EAY69bTukQ233H6Q/YDAap3RFfKvSajyg3A0/nd2Pd93m3sHQQWNbzq
+	 kk2Yww5ZlM4tE+CYRQocSwLMQrGVeeXkdUh5k3pjFJ4KkxZhuP0pR7MDSuw62fWrvT
+	 qcWOq0uhIK8SnJj418r0/lz2Hmc7z7k8UEqKnwthmvW1KMF1D4Tm4/BsqJVYUSPjkl
+	 F6SnWGE3haByZclEmLiq3j2ZenNklv/USN4A+wRFwgqHzvNhDaL/PkAiIrB8QK9DMt
+	 VyBX/7/lhpFk7eyta7IJ3Lycs+nBAE3Z7XCkB4B1X9dkNjybqPoTfEhc++vhJfHHfk
+	 raQiCwxaGi36Q==
 From: Andrii Nakryiko <andrii@kernel.org>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -33,9 +33,9 @@ To: bpf@vger.kernel.org,
 	martin.lau@kernel.org
 Cc: andrii@kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next 2/4] bpf: inline bpf_get_smp_processor_id() helper
-Date: Fri, 29 Mar 2024 11:47:38 -0700
-Message-ID: <20240329184740.4084786-3-andrii@kernel.org>
+Subject: [PATCH bpf-next 3/4] bpf: inline bpf_map_lookup_elem() for PERCPU_ARRAY maps
+Date: Fri, 29 Mar 2024 11:47:39 -0700
+Message-ID: <20240329184740.4084786-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240329184740.4084786-1-andrii@kernel.org>
 References: <20240329184740.4084786-1-andrii@kernel.org>
@@ -47,42 +47,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-If BPF JIT supports per-CPU LDX instructions, inline
-bpf_get_smp_processor_id() to eliminate unnecessary function calls.
+Using new per-CPU BPF instructions implement inlining for per-CPU ARRAY
+map lookup helper, if BPF JIT support is present.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ kernel/bpf/arraymap.c | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index edb650667f44..24caec8b200d 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -20072,6 +20072,23 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			goto next_insn;
- 		}
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 13358675ff2e..557661b96cf2 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -246,6 +246,38 @@ static void *percpu_array_map_lookup_elem(struct bpf_map *map, void *key)
+ 	return this_cpu_ptr(array->pptrs[index & array->index_mask]);
+ }
  
-+		/* Implement bpf_get_smp_processor_id() inline. */
-+		if (insn->imm == BPF_FUNC_get_smp_processor_id &&
-+		    prog->jit_requested && bpf_jit_supports_percpu_insns()) {
-+			insn_buf[0] = BPF_MOV32_IMM(BPF_REG_0, (u32)(long)&pcpu_hot.cpu_number);
-+			insn_buf[1] = BPF_LDX_MEM_PERCPU(BPF_W, BPF_REG_0, BPF_REG_0, 0);
-+			cnt = 2;
++/* emit BPF instructions equivalent to C code of percpu_array_map_lookup_elem() */
++static int percpu_array_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
++{
++	struct bpf_array *array = container_of(map, struct bpf_array, map);
++	struct bpf_insn *insn = insn_buf;
 +
-+			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
-+			if (!new_prog)
-+				return -ENOMEM;
++	if (!bpf_jit_supports_percpu_insns())
++		return -EOPNOTSUPP;
 +
-+			delta    += cnt - 1;
-+			env->prog = prog = new_prog;
-+			insn      = new_prog->insnsi + i + delta;
-+			goto next_insn;
-+		}
++	if (map->map_flags & BPF_F_INNER_MAP)
++		return -EOPNOTSUPP;
 +
- 		/* Implement bpf_get_func_arg inline. */
- 		if (prog_type == BPF_PROG_TYPE_TRACING &&
- 		    insn->imm == BPF_FUNC_get_func_arg) {
++	BUILD_BUG_ON(offsetof(struct bpf_array, map) != 0);
++	*insn++ = BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, offsetof(struct bpf_array, pptrs));
++
++	*insn++ = BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_2, 0);
++	if (!map->bypass_spec_v1) {
++		*insn++ = BPF_JMP_IMM(BPF_JGE, BPF_REG_0, map->max_entries, 6);
++		*insn++ = BPF_ALU32_IMM(BPF_AND, BPF_REG_0, array->index_mask);
++	} else {
++		*insn++ = BPF_JMP_IMM(BPF_JGE, BPF_REG_0, map->max_entries, 5);
++	}
++
++	*insn++ = BPF_ALU64_IMM(BPF_LSH, BPF_REG_0, 3);
++	*insn++ = BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_1);
++	*insn++ = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, 0);
++	*insn++ = BPF_LDX_ADDR_PERCPU(BPF_REG_0, BPF_REG_0, 0);
++	*insn++ = BPF_JMP_IMM(BPF_JA, 0, 0, 1);
++	*insn++ = BPF_MOV64_IMM(BPF_REG_0, 0);
++	return insn - insn_buf;
++}
++
+ static void *percpu_array_map_lookup_percpu_elem(struct bpf_map *map, void *key, u32 cpu)
+ {
+ 	struct bpf_array *array = container_of(map, struct bpf_array, map);
+@@ -776,6 +808,7 @@ const struct bpf_map_ops percpu_array_map_ops = {
+ 	.map_free = array_map_free,
+ 	.map_get_next_key = array_map_get_next_key,
+ 	.map_lookup_elem = percpu_array_map_lookup_elem,
++	.map_gen_lookup = percpu_array_map_gen_lookup,
+ 	.map_update_elem = array_map_update_elem,
+ 	.map_delete_elem = array_map_delete_elem,
+ 	.map_lookup_percpu_elem = percpu_array_map_lookup_percpu_elem,
 -- 
 2.43.0
 
