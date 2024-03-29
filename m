@@ -1,104 +1,137 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844A337152;
-	Fri, 29 Mar 2024 07:43:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C43247F72;
+	Fri, 29 Mar 2024 07:46:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711698199; cv=none; b=E9/5jU0v7fFDW2m7bVqy7BmKBWCpFh3+jno2rlh7kxVO3/s6cAtePPEzVVyt/HyJw60qasDkSfXPPynWEUaylBq7p4XLo8wq94BybejsamIXzUv8qjDKNNDv6sfr7Zclkh67kWv+6y2vT6dvBCWnuWPvpHBeFeotLkzpuWwl278=
+	t=1711698365; cv=none; b=VGKfbSrxdWjoG7/EL2pKgg0M67BNOqwCR/6Imv3tNvWoJI3GYsZ/BbaacbLANmpN5ptowoo2uPsGZWIO1C7sxek3tUA3QfvjJfZy/gHnNSMTGRa6AkY319WxpSLBtkRwbhrNPYCQVHSPf222c9VHg0PdAPU4UnKCXaNqCFkBcEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711698199; c=relaxed/simple;
-	bh=FvFma6wKIx8yA4Hz9Pt9JN8wMlJPx5hRoa8V9FhhsDg=;
+	s=arc-20240116; t=1711698365; c=relaxed/simple;
+	bh=cIQGV4no67TZGCVXh3aHtkM6DpSuoHxi9Ne/BxaufHA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gM2QeArh3gzKOF48oz20q6Rdr/cBB0i5ZCTufOhWQEFt39kFRwvzeBn6JOEA/20rL2wzU1Za8J7thkK5mZ/0tXTwIG/4nFV564hUbJ82CU60pmfFh7ejykS5xN34KZ8AkMMb4k9MBAuEgx2zTKIiwvcjeM6RIwvQwcjLkKm41ZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d+XFv2c9; arc=none smtp.client-ip=209.85.218.51
+	 Content-Type:Content-Disposition:In-Reply-To; b=ChyAuf5rZQPTkpyuZ1LtPGS8o8voAXKk4krHGZpRP5II5K0wQzKSb9Mf0g3XHdtgjrvl/iL/gZ21W4+ZhzH7p9HrGSY7aCgyI8hqgyujtWbRprTmnGoRsDX26wgRHAq8u07BIvzB/xdg3ntlvWDAPF4SdAbtBJ8FfHBsHtr83K0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QXR7g0yQ; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d+XFv2c9"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a466e53f8c0so217922166b.1;
-        Fri, 29 Mar 2024 00:43:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QXR7g0yQ"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-56829f41f81so2494063a12.2;
+        Fri, 29 Mar 2024 00:46:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711698196; x=1712302996; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/1GqML3E9IQNFqyYxYdi7v748JJTsivkrRrprbO0bu0=;
-        b=d+XFv2c9LrBiXUtoRYW5v3HccWeiclqzlZCzQjsph1dAsi5HdhRM8fWBaxZL7xSo3t
-         EFHvlbzIyElLhvzLpzhmnmJejtMOU9JtYeMjSDRuLx1WXqQLgvOIsKerKLTCqQASWRlk
-         NPJ9oUeHJBcpZcb4wKoCM4aVdq6EvVFZSASF5xCe2/ZnUK7OTpg8ZHYRyoFRGS2GUcDm
-         f+y0TQG7rFvfX+bDU+Elu+iyPowibjh174125v0eFmdjzH/hpDYXsEk7kYj6FtM3cn3H
-         NNbU8idu9vT2s9JywjnfVthXRVbVKvsLb9N0vHvhl8oKpqC0j/3g0uceJOc/fuVVOkmH
-         RkHg==
+        d=gmail.com; s=20230601; t=1711698362; x=1712303162; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XXT7CUSk8l4wjXwLdeSj0Hr6QLguW0zMSkZ3sxTxHBg=;
+        b=QXR7g0yQI5w11AjGnmJhKguJLGuxonzloSHmHPMLTAqZR4G/gOjjIuAQbZOM8Zg8zI
+         of0/crN8tEtRL/YSF9abObHgqcQq1v4fU/RzcNumkk18+sADHSGz43+lWzmrphropXY1
+         AR1Nm0ibJuCiFIuuGFJsaGyMYnM/OT8yhHPhRM+jKBtPuFdaUlj7u79ec3TX/Xb6i0xb
+         EdE6yB8JyAzaEBS0F5xJZNrNgqroFvVdayDDb5eCNw1Vm9b88W3Jv8xD4OyCwOnyJ2Bs
+         C5xgqXE0ybkgrzKJ3Eg5GfSoH9y+IshuQ9U1SvUj4FBfsL3+RrzossKEppCcHKGnBdax
+         XSFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711698196; x=1712302996;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/1GqML3E9IQNFqyYxYdi7v748JJTsivkrRrprbO0bu0=;
-        b=td+GM4WFexVY+DiR+5ObiqoZxqxhHKTYrSxnR5svnp1OoIrdHowmspimpY6habNzGL
-         m3QGLmA8ahlf5/uxm5KXNTSntg5go8fB2eeSZwTo5e77OL3mg57eKL9BjiX1l0qWZbXv
-         kBOxyM7HbjnrAtDS9IKUQvtEjrSsKanliVZVuag4bSxIaX680v3Xtaluwoh74lWScbMr
-         DXNhEdwIimpabAWrqCtBr83PGOCHTlsSjLSc5eW5ZgfDof+jEYh7Ci+siPw3pjm9XSMP
-         DzB17knDtOylta9YEL08GsTcw+4WgdhRdhuAeSYj4W9D8OvPkkEUb5v30ZpepmQeXOVv
-         sQKg==
-X-Forwarded-Encrypted: i=1; AJvYcCV6NK6xatRWYBTGk2Ra2m/YvlsXb5uwy/ZvzW12rqbcBZkOiX9y4bdKr8e+93r+i1vpeXLExPSTS/CEjB2CXbRfwW9Nd+cAGCAAr7LM8zgq2jtsncnxCV9rdhlZGNtFFF7k
-X-Gm-Message-State: AOJu0Yx2T/elBJLMY4ulprMYyj4MnXsi53zTe/8/0BIZ2yEp4lERvFL/
-	53/1G8ySnWUPSI/m7dWVdih5Lkj5VR3iBN/2Nyj+5LA0fhQBvrxB
-X-Google-Smtp-Source: AGHT+IF/GWh0I2FC6gMF2DdWsHl0+T92DodzN5cejRHFxFzf1FNiC9ZnOxylXZcW3i4h0V34lNCrlg==
-X-Received: by 2002:a17:907:20b6:b0:a4d:f56a:19fc with SMTP id pw22-20020a17090720b600b00a4df56a19fcmr994404ejb.13.1711698195583;
-        Fri, 29 Mar 2024 00:43:15 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711698362; x=1712303162;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XXT7CUSk8l4wjXwLdeSj0Hr6QLguW0zMSkZ3sxTxHBg=;
+        b=XvO0ocSlEyZmJIFFpqSrxy4AekNkmHsjebBR+gw+LBEn7c3h0PgUBdjxkgo5yYWmPP
+         czTxGn0cLEnjBciBtg5H/WKYM3+2ZOSCi3IaDcoJi1JlZPe2YvumCpCbSZh24U49MFWX
+         NvvNj52rA2WeINYG53KO5eVq8L/Xiw4NTC7Vx9YE9YhZ0A3+IPqebGViFw3JFefkDXFf
+         MKub50EjjCKg7SDDtjShpDIWQyOdPzXyUi4chjcnKCZCFT7Ut9mVbOi00vF5t3mwpHbf
+         u0BE2LqvCzaquCgrHCfmRzliFGIm4ygyi+sV3zuwvTC/Ur9Mk0B7D4VZMLzTWJuhZ8Wl
+         H3FQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXWA++hRmRKCDJv7DekQHDwm7kRqDyGM1y0l0Z0xV0HGdaI9UsE1ey00RF8sech+tHQtvuohgY1B5QbKVGIAn4UrVY0lVAlk7uLpf5zTrFos1iFtoXU/IKfTvkmnObEkc3s
+X-Gm-Message-State: AOJu0YxbAEoiae0yA8IEBhRPEeici6VxvXvZyu3EUd3wMgmTHBd1QbLP
+	ZSUsoekLL9yvpSv59S5oQ8KCM6ChQV88leMTRtoXAwFB+gNhlectPdb1/ogp3bA=
+X-Google-Smtp-Source: AGHT+IGc+j+itDWRUb1Gj7sF2MGo3T4hhdqDL8UhvGGTMBZd6P4wffkz0YnkrJ1thAoKjjKbv39H1Q==
+X-Received: by 2002:a50:9344:0:b0:56b:fd17:3522 with SMTP id n4-20020a509344000000b0056bfd173522mr915869eda.14.1711698362153;
+        Fri, 29 Mar 2024 00:46:02 -0700 (PDT)
 Received: from gmail.com (195-38-112-2.pool.digikabel.hu. [195.38.112.2])
-        by smtp.gmail.com with ESMTPSA id lh23-20020a170906f8d700b00a46ab5aaffcsm1636675ejb.178.2024.03.29.00.43.14
+        by smtp.gmail.com with ESMTPSA id fd6-20020a056402388600b0056c53ea5affsm1492882edb.77.2024.03.29.00.46.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Mar 2024 00:43:15 -0700 (PDT)
+        Fri, 29 Mar 2024 00:46:01 -0700 (PDT)
 Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date: Fri, 29 Mar 2024 08:43:13 +0100
+Date: Fri, 29 Mar 2024 08:45:59 +0100
 From: Ingo Molnar <mingo@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: x86@kernel.org, peterz@infradead.org, mingo@redhat.com,
-	tglx@linutronix.de, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, jolsa@kernel.org, song@kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH v2] perf/x86/amd: support capturing LBR from software
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	peterz@infradead.org, mingo@redhat.com,
+	linux-kernel@vger.kernel.org, jolsa@kernel.org, song@kernel.org
+Subject: Re: [PATCH bpf-next] perf, amd: support capturing LBR from software
  events
-Message-ID: <ZgZxEcRuYBO3N2WY@gmail.com>
-References: <20240328133359.731818-1-andrii@kernel.org>
+Message-ID: <ZgZxt9ypus++f5me@gmail.com>
+References: <20240319224206.1612000-1-andrii@kernel.org>
+ <ZgVSxPJ4Yi/UPgjb@gmail.com>
+ <CAEf4BzZkn2atLmN35tviXBu1EggRRg3Yqh2pHAnd6xe7V5xkUA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240328133359.731818-1-andrii@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzZkn2atLmN35tviXBu1EggRRg3Yqh2pHAnd6xe7V5xkUA@mail.gmail.com>
 
 
-* Andrii Nakryiko <andrii@kernel.org> wrote:
+* Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 
-> Now that it's possible to capture LBR on AMD CPU from BPF at arbitrary
-> point, there is no reason to artificially limit this feature to sampling
-> events. So corresponding check is removed. AFAIU, there is no
-> correctness implications of doing this (and it was possible to bypass
-> this check by just setting perf_event's sample_period to 1 anyways, so
-> it doesn't guard all that much).
+> On Thu, Mar 28, 2024 at 4:21 AM Ingo Molnar <mingo@kernel.org> wrote:
+> >
+> >
+> > * Andrii Nakryiko <andrii@kernel.org> wrote:
+> >
+> > > [0] added ability to capture LBR (Last Branch Records) on Intel CPUs
+> > > from inside BPF program at pretty much any arbitrary point. This is
+> > > extremely useful capability that allows to figure out otherwise
+> > > hard-to-debug problems, because LBR is now available based on some
+> > > application-defined conditions, not just hardware-supported events.
+> > >
+> > > retsnoop ([1]) is one such tool that takes a huge advantage of this
+> > > functionality and has proved to be an extremely useful tool in
+> > > practice.
+> > >
+> > > Now, AMD Zen4 CPUs got support for similar LBR functionality, but
+> > > necessary wiring inside the kernel is not yet setup. This patch seeks to
+> > > rectify this and follows a similar approach to the original patch [0]
+> > > for Intel CPUs.
+> > >
+> > > Given LBR can be set up to capture any indirect jumps, it's critical to
+> > > minimize indirect jumps on the way to requesting LBR from BPF program,
+> > > so we split amd_pmu_lbr_disable_all() into a wrapper with some generic
+> > > conditions vs always-inlined __amd_pmu_lbr_disable() called directly
+> > > from BPF subsystem (through perf_snapshot_branch_stack static call).
+> > >
+> > > Now that it's possible to capture LBR on AMD CPU from BPF at arbitrary
+> > > point, there is no reason to artificially limit this feature to sampling
+> > > events. So corresponding check is removed. AFAIU, there is no
+> > > correctness implications of doing this (and it was possible to bypass
+> > > this check by just setting perf_event's sample_period to 1 anyways, so
+> > > it doesn't guard all that much).
+> > >
+> > > This was tested on AMD Bergamo CPU and worked well when utilized from
+> > > the aforementioned retsnoop tool.
+> > >
+> > >   [0] https://lore.kernel.org/bpf/20210910183352.3151445-2-songliubraving@fb.com/
+> > >   [1] https://github.com/anakryiko/retsnoop
+> > >
+> > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > > ---
+> > >  arch/x86/events/amd/core.c   | 29 ++++++++++++++++++++++++++++-
+> > >  arch/x86/events/amd/lbr.c    | 11 +----------
+> > >  arch/x86/events/perf_event.h | 11 +++++++++++
+> > >  3 files changed, 40 insertions(+), 11 deletions(-)
+> >
+> > Please do not queue these up in the BPF tree, all similar changes to
+> > perf code should go through the perf tree.
+> >
+> 
+> Absolutely, I rebased on top of tip's perf/core branch and sent it as
+> v2. Thanks!
 
-> diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
-> index 4a1e600314d5..75920f895d67 100644
-> --- a/arch/x86/events/amd/lbr.c
-> +++ b/arch/x86/events/amd/lbr.c
-> @@ -310,10 +310,6 @@ int amd_pmu_lbr_hw_config(struct perf_event *event)
->  {
->  	int ret = 0;
->  
-> -	/* LBR is not recommended in counting mode */
-> -	if (!is_sampling_event(event))
-> -		return -EINVAL;
-> -
-
-Could you please split out this change into a separate patch?
-
-Thanks,
+Thanks, much appreciated!
 
 	Ingo
