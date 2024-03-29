@@ -1,86 +1,136 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A486101D0
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 15:24:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248F2386
+	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 15:29:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711725890; cv=none; b=P7kuiV4Ta4zeBNMehqP3QMGn/aWFrImUKdU4XBhnw4vHortu6lAZ2g6ZTExtFZcdGFNIOkTzMkkJrqEwliyhWqypkn7hCm8on+JZNWXNNeP8LexkxrorAded5NzsFC6jQVNj9RBOvuKI+W6E8vNYh2JputTsgN8NVHVatW810cg=
+	t=1711726199; cv=none; b=eAyjvd136dG+orwdfLPaewHCFOA1xafcs+PSgd2iWtTmVOYRqvNa4HJz+Qc2preWKWrrVY+viVrDSoXUCOUvrGyl7/me+Cl68IhTasiJDzl2HCwKAlL5WFWxLldz3M1p/shEvVp1kg2nJNph5ZIAsKXXNOJSrdpeoR77xsoOGdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711725890; c=relaxed/simple;
-	bh=VEy3fYo9Vf3Q8twOFOmT4/3+47in3yCIVBJjp+ZU+j8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d7Jcr5FyFSapaFJ4VEZzxl+1aIr6yCvAD0wcyVEAkCyqKtABhCGoon1ENvI33RoSViLfmvch2MJpJDkvChCo+QVBx9fWZ0PRyvR/yY9yxNP+ihaZAd9NDMJhSV4cqvKNRz7BVYdwezie6sna4PMt80YUfbcno3QtrsCHR5y8xus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RR3zyWGt; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1711726199; c=relaxed/simple;
+	bh=H/eGfiCoPpDQTvPeEIon83ZcTYLiotzPPecPoDgU+tQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Rz5UZ7yYnJIHdTNBJqH3O8T/VFvwQ8ba3F0fUe5ay5QwxuZfxEU/lyBveRfeUTFTPMbFgaq3mW0GxBjyrDdm+Qdg1QtwrrTnG8COfhxeY/FxoTSFOOeX13VtMQQk+m5u927EPJmV28stfTAMlmXJDV/qDZHHYDT0E44C8ZMLBdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Z8Ryn5eB; arc=none smtp.client-ip=209.85.167.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RR3zyWGt"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a4715d4c2cbso283004766b.1
-        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 08:24:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Z8Ryn5eB"
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3c393b5f0e3so1004604b6e.1
+        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 08:29:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1711725887; x=1712330687; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ni/i7P5ED8HyT9z4QPlleLZS/5AvuItyMQEbyI5EX5E=;
-        b=RR3zyWGt9sO4U1dV3NRgxAhtatuyIRDm8RmPKTmyXylUkbWeSozFzzBxiN56OI8XH8
-         vp4d0g/KAXP9LIRXXJzgsX2zFk2hFGy+Mz5ZrevHw3QdDiJFvgTBwr+AWdJKkeRSg1H2
-         +WCQVaHRTzouNchKoHOLHa7GrY0PPQRK64xAEmpADYpgzlkClG5EYbiGDeGW2F2QNfqV
-         AveEr0ZVjzIT+lsAQLhTbhlfEp3Enma9S7vTtAbW5ABBRWq5yergYqoACTI8f0CTJiem
-         9LBOKbFG0vGegkAVvSJTRmO8Yqi5mHHYJqygfDkZRnBir60FL7bH9gxxF7cDa5AfB9i8
-         QGGQ==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1711726195; x=1712330995; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tzNSZ6G1qWiFUQSQyVJPr7JWiuaZBzmUWG+3hwZo+Pk=;
+        b=Z8Ryn5eBpINZnhhRqMNTW8m7RO9oWGQNSP67gljQ7JlSO9/I1XFtfQAcu5GZMTurAn
+         sGjP7FdWof1blfj1SVJxBbWkIz8NuxAbFkd5VK++NmrGbhIXRsG4rktUfAfxSL/uH0p2
+         aK0rWRvrI5PEslQtp4aAz8C0TH5fDUUvq0p8XobcVaIZhWRtbEaImMWGVEmvcRjws662
+         tuaY2tPj0TwX47aCw/5UCrmvDZqG2wMK7KPqV15zp7hxsccD8YKiOvkCBir4BWxBT4+1
+         IooQmabP8aITSTmOTYNp6N2/5r1vAvX43TP5KjnPTX/D71KBZ1+X4rJfq8mbqh27x3tB
+         BZwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711725887; x=1712330687;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ni/i7P5ED8HyT9z4QPlleLZS/5AvuItyMQEbyI5EX5E=;
-        b=Igqv2z3r1DjjIbjE1p0dJ5zBupS6KBdiAGvqkZKrU09mChgTvgh6USqwMcPBChdaYt
-         DNUfJCuBg3hb5/ivRWziJ6fBdBVCdHPVHWuTVyumBe7ZBqnYPEEhbM5QMaOGMHNkgClS
-         1142ykpxq0HJ8+YxC/TICxnOB4Co3eLOOdtdvK9FPAzNdr7H86btAw0lG80Lf19fTanc
-         hMoDrVeRH+X7HomQAR2HAJfsPIqNZ8/JwA6Shci3MdrAbR1plkCGhDywaBXyxkC1beTe
-         /bxn9PNSdb63zC37Y+mmbSerllg6TNNIyf6mJ/Ko3qE6L1ddJZ9MmH/fySiCyY8/0xo9
-         NE9w==
-X-Forwarded-Encrypted: i=1; AJvYcCX6DgOabQIcznH9n2e7aOPIdmK/1SydUJbX9tDzD7lwX0slnhGD1UiWc6vQqdIULn6kFLv7GJ1hm2kPb/BajrU2VWsF
-X-Gm-Message-State: AOJu0Ywgg0BnQ+keKM7Ng4DpgUb+9lFIjE/DXl2GJSt7d8m8WHmAnZ3T
-	7vDYDdZ5u5PaUt0rKYxPsoFYDlgFG7CNR6G8L3GIMikNcqwXb85LPQtcp+P0XwI=
-X-Google-Smtp-Source: AGHT+IGnRvXYyJSndjF4GpamTLF3qLn2OMLND8aSig4bSExIqZKdpcuyfY/DVujE4sL5uXuxdiesqg==
-X-Received: by 2002:a17:906:f10c:b0:a4e:3a09:4854 with SMTP id gv12-20020a170906f10c00b00a4e3a094854mr1030284ejb.61.1711725887046;
-        Fri, 29 Mar 2024 08:24:47 -0700 (PDT)
-Received: from u94a (27-51-1-75.adsl.fetnet.net. [27.51.1.75])
-        by smtp.gmail.com with ESMTPSA id l3-20020a1709067d4300b00a466af74ef2sm2031562ejp.2.2024.03.29.08.24.41
+        d=1e100.net; s=20230601; t=1711726195; x=1712330995;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tzNSZ6G1qWiFUQSQyVJPr7JWiuaZBzmUWG+3hwZo+Pk=;
+        b=jSMrZ/6wX30bVFOtczKuVtSe57WpC3x8kvBJP78AUElhsTuafk1SMAMiU7MXUXWdLG
+         vt6/FhphjgDJ6qS0r3oNJxXz4x9oBeUD/PwXiZlhIwlK0cX2CLyVLtDIL2I1LrlF3Wh/
+         VM20QT/5BckQD23Ig4xqP00kU2gPqzpWqTpLaXZVzXF8dVKkDFKNYMU2abgbAE6T3he8
+         W8sUscApnoV9K3w994JhN25Jjti9JnZxKMxY/wRmur6BYcu2AbzjfUmLEmLP4VCAEH68
+         IpG2tzA8tL+74sSI/XmPvf76IwjRtsTIwG++apFuh0GBDZ0h0HCkN4MwC3ed3VWB+pmn
+         Rysg==
+X-Gm-Message-State: AOJu0YzXhHUVUPI1tms3Rj/cGOdUan7kVj7EO45Ypr9GOpUwTUD0bHfN
+	hcjeBVsvPc2lBha6Cf1hMONDWOujjLnfcA30IXSuhwugRaE7cYhnpPYjficuhVoluiyPKMwB/a/
+	r
+X-Google-Smtp-Source: AGHT+IFR2fMOFIk1UfXLrPnEC1CztADEvHc1ABiWkLvqjwKnCTR2YYBFRmBwhz7IIBv/kRjlDulqlg==
+X-Received: by 2002:a05:6808:11cf:b0:3c3:84c5:173e with SMTP id p15-20020a05680811cf00b003c384c5173emr2529550oiv.50.1711726195157;
+        Fri, 29 Mar 2024 08:29:55 -0700 (PDT)
+Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id cr4-20020a056808368400b003c1e577140asm602225oib.25.2024.03.29.08.29.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Mar 2024 08:24:46 -0700 (PDT)
-Date: Fri, 29 Mar 2024 23:24:36 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Anton Protopopov <aspsk@isovalent.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jiri Olsa <jolsa@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Stanislav Fomichev <sdf@google.com>, Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Subject: Re: [PATCH v2 bpf-next] bpf: fix possible file descriptor leaks in
- verifier
-Message-ID: <kehz34vf6x7jxevw5eomccydd3wdf7t265dgsrxmgqoipuczyv@nvcm74bxto2w>
-References: <20240329071106.67968-1-aspsk@isovalent.com>
+        Fri, 29 Mar 2024 08:29:54 -0700 (PDT)
+From: David Lechner <dlechner@baylibre.com>
+To: bpf@vger.kernel.org
+Cc: David Lechner <dlechner@baylibre.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] bpf: fix typo in uapi doc comments
+Date: Fri, 29 Mar 2024 10:28:46 -0500
+Message-ID: <20240329152900.398260-2-dlechner@baylibre.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240329071106.67968-1-aspsk@isovalent.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 29, 2024 at 07:11:06AM +0000, Anton Protopopov wrote:
-> The resolve_pseudo_ldimm64() function might have leaked file
-> descriptors when BPF_MAP_TYPE_ARENA was used in a program (some
-> error paths missed a corresponding fdput). Add missing fdputs.
-> 
-> v2:
->   remove unrelated changes from the fix
-> 
-> Fixes: 6082b6c328b5 ("bpf: Recognize addr_space_cast instruction in the verifier.")
-> Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
+In a few places in the bpf uapi headers, EOPNOTSUPP is missing a "P" in
+the doc comments. This adds the missing "P".
 
-Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Signed-off-by: David Lechner <dlechner@baylibre.com>
+---
+ include/uapi/linux/bpf.h       | 4 ++--
+ tools/include/uapi/linux/bpf.h | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 3c42b9f1bada..f83a4de0ac30 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5020,7 +5020,7 @@ union bpf_attr {
+  *		bytes will be copied to *dst*
+  *	Return
+  *		The **hash_algo** is returned on success,
+- *		**-EOPNOTSUP** if IMA is disabled or **-EINVAL** if
++ *		**-EOPNOTSUPP** if IMA is disabled or **-EINVAL** if
+  *		invalid arguments are passed.
+  *
+  * struct socket *bpf_sock_from_file(struct file *file)
+@@ -5506,7 +5506,7 @@ union bpf_attr {
+  *		bytes will be copied to *dst*
+  *	Return
+  *		The **hash_algo** is returned on success,
+- *		**-EOPNOTSUP** if the hash calculation failed or **-EINVAL** if
++ *		**-EOPNOTSUPP** if the hash calculation failed or **-EINVAL** if
+  *		invalid arguments are passed.
+  *
+  * void *bpf_kptr_xchg(void *map_value, void *ptr)
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 3c42b9f1bada..f83a4de0ac30 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -5020,7 +5020,7 @@ union bpf_attr {
+  *		bytes will be copied to *dst*
+  *	Return
+  *		The **hash_algo** is returned on success,
+- *		**-EOPNOTSUP** if IMA is disabled or **-EINVAL** if
++ *		**-EOPNOTSUPP** if IMA is disabled or **-EINVAL** if
+  *		invalid arguments are passed.
+  *
+  * struct socket *bpf_sock_from_file(struct file *file)
+@@ -5506,7 +5506,7 @@ union bpf_attr {
+  *		bytes will be copied to *dst*
+  *	Return
+  *		The **hash_algo** is returned on success,
+- *		**-EOPNOTSUP** if the hash calculation failed or **-EINVAL** if
++ *		**-EOPNOTSUPP** if the hash calculation failed or **-EINVAL** if
+  *		invalid arguments are passed.
+  *
+  * void *bpf_kptr_xchg(void *map_value, void *ptr)
+-- 
+2.43.2
+
