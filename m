@@ -1,55 +1,55 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70ADE3309E
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 01:54:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A997C39AFD
+	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 01:54:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711677255; cv=none; b=bE8R4Pm6ZzWnk3loAyXqOSfTEkeI/cUvCbvbWiqAr8nT0mEPQ7DDPdXqtf53f4Z/VdJdba6nLl49k8EjJaKJ2WkDlfKQpm7wkPiCsq2/aUab4VVD/Rjf9Bc8R/W3T45dISH9veVElWx1RdDlgxxW3JkDqhDEGcu0LJm25ztQa90=
+	t=1711677258; cv=none; b=tSRPM9qkg9V0/Jns9U+7FjxvCg2kwTIBDm6LMpW4IQwVDI0vCrOiy2ey8wrv4+3G23opGAyDQZPSYkM8bVp+SZNn5cP1xsR9ZFwOWq044tkbbOJke458xaqjRI/vKJJG3AIBXJo4E8iAIA64U0foHsJYYNSZsh+4DRVcb3Iz20I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711677255; c=relaxed/simple;
-	bh=eksvIxAmmQXuXXW8c6928tLpQjkLP4OTZFUN7IvQeAw=;
+	s=arc-20240116; t=1711677258; c=relaxed/simple;
+	bh=tFmf24Mjc0l+J1FvLtlzPLbHQwNkOVITHodym4M2p8g=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=U3TQ7sAEL5B8eZJnXESJetorimKGnmK5ARYr9+Iy4CVwiHv0rZVE7gCKMEmPpL70awcYcO+rwJvz/KJM8H6LAcf04hjBpA1oJfoFyGv8ZX/KRaZdXIsAz1kOWBxmQeBkz1vbFz/xIEOtdvaQIsRA6wKDRpk6NjwEni5vDhXlZkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--drosen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=izwZp+BM; arc=none smtp.client-ip=209.85.219.201
+	 To:Cc:Content-Type; b=WObKOj1Hw4oCDFo8Z0H4v/LKhCJ6HuMqKdwHHHhDvh8TSq228T2zgGILg4Fj55rTGNlvU8hRIjuh/gFNi7maVgvC+Kq5hRx3FiVY5pHi3R/tO7033fZ5xFa6I/Bp5Hvrg6zPcSV4qLnZqfCGln/NYNMC2t+N+a8tiwlMdboRruI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--drosen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YmargXJs; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--drosen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="izwZp+BM"
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dcc58cddb50so2789180276.0
-        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 18:54:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YmargXJs"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-60ff1816749so27306067b3.3
+        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 18:54:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711677252; x=1712282052; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1711677255; x=1712282055; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MmbRuGQ/QD3ODDkbWEuu2YWzLi7SZ6xa0DaniExgEL0=;
-        b=izwZp+BMYISb1jG3g8WkhEkmwaGBXQcVF5KA84EDfxMQRwssSDCNH2O+QRdsW10UNn
-         PvRZ3moPyi8KRkUdsWgMBHi5FCCGG5usvt0qIebLoxhsEqotNFamSD1y/rUbfvnSzzTD
-         MdduiNUmO7ZLKHom7E1RRbnsd618QjpJywNm5lft8tiK/KR0DSvaR9cDvZxQEjks6wqw
-         67RGbNMYH8plU8rJUsM6OY65jj0Umme/lS/goQG0KCSUljM/0E3ealzhaMDGHYd0rNJo
-         OFTrIWkKMPEHHwcqJV38LDPrQ6Xb9fgxmH/j771u/vwBUMsxRKJsaarIeEav1T1jVAXb
-         OEWA==
+        bh=eeuNGA+8CuovI+htgf5CrcA9lpm9o2FtGFCkGxKFo9c=;
+        b=YmargXJsKh02pEkO2JoheAf/ikD8SSfSQ51Blbp5F8DAr5dPQ/rnMKP/5o8iF8+jRv
+         7mFRutAXe0FIFDAAWby/UVsz8XTcP8AjpQ1LOwhtLzjPdinT+jauAaBhUymSJOZCvMqb
+         1FNIFM2djvTlX3jj3gGgSa9fEPCY0SOrTP9MwQNmkjmmhOqmIqFE4huYbJcpZIy/AAbX
+         9FzZUvtp61PhBrXzdY1GPSDadvIX1nht7opJRX0OvTXnhhdTCX98ZJvI8MWkL1VK3fTz
+         xzLBQzXRYxFaR8Yp+Kti9kNO2amKVzfC13R7/c/a1EWwZfJzQS8S9SrE7QekU068oUGm
+         RRww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711677252; x=1712282052;
+        d=1e100.net; s=20230601; t=1711677255; x=1712282055;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MmbRuGQ/QD3ODDkbWEuu2YWzLi7SZ6xa0DaniExgEL0=;
-        b=p7nVYO8+Hie2xP3FDXn0sM1UL37xO3+CERSqwRotdxebtSV+emtkWIXO6qZLo6pm7U
-         XLu4tdUK+lYRtfcy6hiSOro1p0oT/dvv+xxv3o/LgF+Z7VkOX+SlrVr00cdTpjW2k0z6
-         C6Gcx3QWFpxFjH152Iba+vSgtvjqzrBOD9vRews6EL5VeU1NwEu2ykJR+PugDqBn7KrK
-         KwbYV1TQeABOM7VQAEzXVjgysGm4aFIDzDB/FobI3LpRyLeh0jdZ8V8pNOLafU/R4mk1
-         t7rlKk8z5RvlqSoIKa7K/R+XhezHqPNhNoKHA4cx5eFeIuPMC5/5zSfSDUAEQ1EpKnHq
-         Rw9w==
-X-Forwarded-Encrypted: i=1; AJvYcCXmKrC0uL13AJUQsTS001nD9Tuqc63e0b8MpiG3ciFwcheitzg7O5SNRCZUtqnKQW8FHzw9/g1LQcHKJ0pHkSpLvmn+
-X-Gm-Message-State: AOJu0Yx4EI7eMZ6oiw+IiZvgVzdXQQ0GbvlVP1Mxx9hP0/xNbXGQvDRb
-	jw4S2QnqY0HJvYoImaYyk7M4YPJtFghDzHtZRQN3QBOmMCZsEThqW8RjqayublJpEpFB7HRvkYJ
-	EJw==
-X-Google-Smtp-Source: AGHT+IHTtbLuJY0/Xd21xc4JGUtsmkGoiiTVX+jnYhPEA0lXMA0moNx8uO5mPUiTFXzzmc0XQmcHJ+pEMF4=
+        bh=eeuNGA+8CuovI+htgf5CrcA9lpm9o2FtGFCkGxKFo9c=;
+        b=WIBQtuljCE9dzaaGx/m53nrxYMsvYkhP7DpkDnsV7p7O1mmqO3VTlSHijjfXuyxmu2
+         5xR7QS3fknfB/E+7OJbrAMQZBfuG6i5UTz7epMbnPg8XYLSfDsp1JBxS06GOhxXjXRxL
+         HWVtArk/GvlI3RUc1dr/LppgsGKWlhO/bY4EhpEAI26cFyZ4nhT1BslP2fkCMoKyus02
+         ZNW5n1LamIYDFDaLzxPKOhqSv+zzpuYzGdL5XXfb2FceqH7X+EZt9Fvk5/zJM4Q5WwR2
+         lPacC9of8h4Qm2LxllALJB4te2CCOozeOZuhacz5OTH2qPUFeb1bPnWgRF1dB7zayVm+
+         yCzA==
+X-Forwarded-Encrypted: i=1; AJvYcCV7iwK8S9ObCO86mbTN4dIi+8uGEfiQOUR3l74tzrvlAy3LR7f/LriUzTaI9G8ywFXZmo0aIAtgicp0Mi76KUZEZt04
+X-Gm-Message-State: AOJu0YxXaHvpWiu6TnBRAxZHjcwoxsxR2cTnaYowrA3pYpvd/Ap1gJgz
+	+mYxJbnZJYNrxWqaMS1WQUeaA0tkZtOJauzDZBQIf+koGm6ZVOv9Fs4tL6TM+dctW598CbZ+XRq
+	5lw==
+X-Google-Smtp-Source: AGHT+IHRQU6ab0eRho+UjDvwkzeb9d7pS8VugdyuU3acPa0I9eBDEaOKo5pla1Pw5XzmlyStLuGkngRj8h4=
 X-Received: from drosen.mtv.corp.google.com ([2620:15c:211:201:fcce:d6ab:804c:b94b])
- (user=drosen job=sendgmr) by 2002:a05:6902:1b84:b0:dcc:e1a6:aca9 with SMTP id
- ei4-20020a0569021b8400b00dcce1a6aca9mr294907ybb.9.1711677252599; Thu, 28 Mar
- 2024 18:54:12 -0700 (PDT)
-Date: Thu, 28 Mar 2024 18:53:21 -0700
+ (user=drosen job=sendgmr) by 2002:a81:4e10:0:b0:611:5ca6:59c3 with SMTP id
+ c16-20020a814e10000000b006115ca659c3mr248817ywb.6.1711677254863; Thu, 28 Mar
+ 2024 18:54:14 -0700 (PDT)
+Date: Thu, 28 Mar 2024 18:53:22 -0700
 In-Reply-To: <20240329015351.624249-1-drosen@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240329015351.624249-1-drosen@google.com>
 X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
-Message-ID: <20240329015351.624249-7-drosen@google.com>
-Subject: [RFC PATCH v4 06/36] fuse-bpf: Don't support export_operations
+Message-ID: <20240329015351.624249-8-drosen@google.com>
+Subject: [RFC PATCH v4 07/36] fuse-bpf: Add support for access
 From: Daniel Rosenberg <drosen@google.com>
 To: Miklos Szeredi <miklos@szeredi.hu>, bpf@vger.kernel.org, 
 	Alexei Starovoitov <ast@kernel.org>
@@ -73,42 +73,122 @@ Cc: Amir Goldstein <amir73il@gmail.com>, linux-kernel@vger.kernel.org,
 	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
 	Joanne Koong <joannelkoong@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
 	Christian Brauner <brauner@kernel.org>, kernel-team@android.com, 
-	Daniel Rosenberg <drosen@google.com>
+	Daniel Rosenberg <drosen@google.com>, Paul Lawrence <paullawrence@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-In the future, we may choose to support these, but it poses some
-challenges. In order to create a disconnected dentry/inode, we'll need
-to encode the mountpoint and bpf into the file_handle, which means we'd
-need a stable representation of them. This also won't hold up to cases
-where the bpf is not stateless. One possibility is registering bpf
-programs and mounts in a specific order, so they can be assigned
-consistent ids we can use in the file_handle. We can defer to the lower
-filesystem for the lower inode's representation in the file_handle.
+This adds backing support for FUSE_ACCESS
 
 Signed-off-by: Daniel Rosenberg <drosen@google.com>
+Signed-off-by: Paul Lawrence <paullawrence@google.com>
 ---
- fs/fuse/inode.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ fs/fuse/backing.c | 47 +++++++++++++++++++++++++++++++++++++++++++++++
+ fs/fuse/dir.c     |  6 ++++++
+ fs/fuse/fuse_i.h  |  6 ++++++
+ 3 files changed, 59 insertions(+)
 
-diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
-index 6570fe7a9b53..b47b2e41e5e4 100644
---- a/fs/fuse/inode.c
-+++ b/fs/fuse/inode.c
-@@ -1187,6 +1187,14 @@ static int fuse_encode_fh(struct inode *inode, u32 *fh, int *max_len,
- 	nodeid = get_fuse_inode(inode)->nodeid;
- 	generation = inode->i_generation;
- 
-+#ifdef CONFIG_FUSE_BPF
-+	/* TODO: Does it make sense to support this in some cases? */
-+	if (!nodeid && get_fuse_inode(inode)->backing_inode) {
-+		*max_len = 0;
-+		return FILEID_INVALID;
-+	}
-+#endif
+diff --git a/fs/fuse/backing.c b/fs/fuse/backing.c
+index 14fcc2032764..a94d99ff9862 100644
+--- a/fs/fuse/backing.c
++++ b/fs/fuse/backing.c
+@@ -420,3 +420,50 @@ int fuse_revalidate_backing(struct dentry *entry, unsigned int flags)
+ 		return backing_entry->d_op->d_revalidate(backing_entry, flags);
+ 	return 1;
+ }
 +
- 	fh[0] = (u32)(nodeid >> 32);
- 	fh[1] = (u32)(nodeid & 0xffffffff);
- 	fh[2] = generation;
++static int fuse_access_initialize_in(struct bpf_fuse_args *fa, struct fuse_access_in *in,
++				     struct inode *inode, int mask)
++{
++	*in = (struct fuse_access_in) {
++		.mask = mask,
++	};
++
++	*fa = (struct bpf_fuse_args) {
++		.info = (struct bpf_fuse_meta_info) {
++			.opcode = FUSE_ACCESS,
++			.nodeid = get_node_id(inode),
++		},
++		.in_numargs = 1,
++		.in_args[0].size = sizeof(*in),
++		.in_args[0].value = in,
++	};
++
++	return 0;
++}
++
++static int fuse_access_initialize_out(struct bpf_fuse_args *fa, struct fuse_access_in *in,
++				      struct inode *inode, int mask)
++{
++	return 0;
++}
++
++static int fuse_access_backing(struct bpf_fuse_args *fa, int *out, struct inode *inode, int mask)
++{
++	struct fuse_inode *fi = get_fuse_inode(inode);
++	const struct fuse_access_in *fai = fa->in_args[0].value;
++
++	*out = inode_permission(&nop_mnt_idmap, fi->backing_inode, fai->mask);
++	return 0;
++}
++
++static int fuse_access_finalize(struct bpf_fuse_args *fa, int *out, struct inode *inode, int mask)
++{
++	return 0;
++}
++
++int fuse_bpf_access(int *out, struct inode *inode, int mask)
++{
++	return bpf_fuse_backing(inode, struct fuse_access_in, out,
++				fuse_access_initialize_in, fuse_access_initialize_out,
++				fuse_access_backing, fuse_access_finalize, inode, mask);
++}
+diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
+index 6503c91886f6..8db6eb6a0848 100644
+--- a/fs/fuse/dir.c
++++ b/fs/fuse/dir.c
+@@ -1563,6 +1563,9 @@ static int fuse_access(struct inode *inode, int mask)
+ 	struct fuse_access_in inarg;
+ 	int err;
+ 
++	if (fuse_bpf_access(&err, inode, mask))
++		return err;
++
+ 	BUG_ON(mask & MAY_NOT_BLOCK);
+ 
+ 	if (fm->fc->no_access)
+@@ -1619,6 +1622,9 @@ static int fuse_permission(struct mnt_idmap *idmap,
+ 	if (!fuse_allow_current_process(fc))
+ 		return -EACCES;
+ 
++	if (fuse_bpf_access(&err, inode, mask))
++		return err;
++
+ 	/*
+ 	 * If attributes are needed, refresh them before proceeding
+ 	 */
+diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
+index dd62e78e474c..08ee98b7bb95 100644
+--- a/fs/fuse/fuse_i.h
++++ b/fs/fuse/fuse_i.h
+@@ -1439,6 +1439,7 @@ int parse_fuse_bpf_entry(struct fuse_bpf_entry *fbe, int num_entries);
+ #ifdef CONFIG_FUSE_BPF
+ 
+ int fuse_bpf_lookup(struct dentry **out, struct inode *dir, struct dentry *entry, unsigned int flags);
++int fuse_bpf_access(int *out, struct inode *inode, int mask);
+ 
+ #else
+ 
+@@ -1447,6 +1448,11 @@ static inline int fuse_bpf_lookup(struct dentry **out, struct inode *dir, struct
+ 	return 0;
+ }
+ 
++static inline int fuse_bpf_access(int *out, struct inode *inode, int mask)
++{
++	return 0;
++}
++
+ #endif // CONFIG_FUSE_BPF
+ 
+ int fuse_handle_backing(struct fuse_bpf_entry *feb, struct path *backing_path);
 -- 
 2.44.0.478.gd926399ef9-goog
 
