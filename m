@@ -1,55 +1,55 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7096A03E
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 01:54:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2807BB17
+	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 01:54:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711677298; cv=none; b=qpGSu86OSH3iuVHVExA+b6dkKPyuR2ar6ubYjJKmaFsOJMsuThtRVYufjHK/GlxHy6PDk071suXDwX8QZv/eLoFZ7nC6i/c34FiV8Tyjd5jtHEtmZckqOveqdc8J0npllYX5XZUcdl/zs8s6ZUow0VBPAyTBf7VDRXTB+p/6FrA=
+	t=1711677299; cv=none; b=mrSIi0yyn2Ow5qKY0zygOfQSLp1TIRaw1U9ZRGOnUiy3cJ4f7sDtiejD8FmrbOrEPR5FncgFyBpRph8vVVqyyVzVO4sordtqyNQPeyxEKBYu6++SVncW4+3/PcJnJGVoMacL2Uh6jRNfWdfByHnBIq2tXloOBLWYvpgJ+VK3TGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711677298; c=relaxed/simple;
-	bh=pk9Ej0arFqeZkCMlr0ALuLSLryIAG82IwMSP2yyNpaA=;
+	s=arc-20240116; t=1711677299; c=relaxed/simple;
+	bh=9iXCNP+EW0+2+JC2nl2OoNy89uZqvybM8NUQJ2K/ih4=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=phslBRFHJKQlQEgcLUz9t1c8kBluvCn4xmCfrpVYbvd2r+UodaTKKLIJbvE6XwgKWvSkhz/cqPV1J2EXjsQzkK5wOgoBl43vfUdSFNrw/mah+BV/7jzRiNNzgp1BqgT9sfSK/k+HkxsBhIUReAx8OdTDLkHs4qj1oPDcb/baC10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--drosen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=c0KGDrY2; arc=none smtp.client-ip=209.85.128.201
+	 To:Cc:Content-Type; b=pKziXDPWzcE6fuyB4XNHdPyvEtXHn3hYkjQG9uycfctAKwS8y9uGLGMGQDaODW7UdjURgxf7FRw3YJ6kzv7eR0zUmj6nyqUqC6JD7lnXmBqRatWdU9xg/JCPtLIr3xd/acfz+FPJuRJWtRZEAbAIvFJ+goUaEDJozOCeC8CFOBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--drosen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RH0NkW3B; arc=none smtp.client-ip=209.85.219.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--drosen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="c0KGDrY2"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-60cd62fa20fso30395367b3.3
-        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 18:54:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RH0NkW3B"
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dd0ae66422fso2959478276.0
+        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 18:54:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711677295; x=1712282095; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1711677297; x=1712282097; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+fgPCyEdk35RPimkCV3pdmwq6y+0q0t2sbyu7i903QQ=;
-        b=c0KGDrY2SPDw7zdMWf7UKCH98zvhJzG5zHgEHZyv7iZqIWji2kfPU5fOBB0d+q7/tC
-         sbc7rMYqc6L8RFBccXpQcrptd2BE1gQratTe3haaO2f8/xKijqG9k2WRACjCsoLy8NHd
-         jei0sJMtzUZEah1ZaIuKQrxYyYgdSyrwVDRCLfZ7tFj0fSD5utRFrdQMe37n18DjgUaM
-         wLN4HU0S9IDoEAgpwkPoEByCwPsq+dkz2chMXrVLay6J01QpCsAsQJkVfaPK56J/Uqa+
-         WgWA9kIDia9oaW3km2QfVIYRnSedBxB+pKe87ftQGxhMBcW+J2CPYt0m66ERPTH2QYMb
-         kpTg==
+        bh=RmiND9fJytE7hp4aS6EZvp2Qf4FYwUyLzLHSobY4D+U=;
+        b=RH0NkW3B64RQtwllzuYjxkJLeWIXvju90EGmkhpDAz0nu27JSAa8QfHI3qW91Vqow+
+         eRXrh0VfoR/RqJXz9uPpOW9nnkwroxtdVxgvB4pEoRVZdrKSJ/BaFrWhT8nhwXouMuE7
+         DuVQbnWdIAXCWUWT4cEr9RUtloHYA0IxI7huyL16H040Xc5u8FQg7bGz53WOyIGrEjgS
+         zJS2In2dshIrjarZ0Y6nr8UbNEn9WON+ce0oQnx0RKdEoIjFOCbiLF6Cth/OKtBVlIeq
+         LBEdaDwUPogsXUH6HIvcXNM472ZnUFGwQENthMc1Bc1hsSGKCE27Y7oR0gYUmYXWeaER
+         4x8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711677295; x=1712282095;
+        d=1e100.net; s=20230601; t=1711677297; x=1712282097;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+fgPCyEdk35RPimkCV3pdmwq6y+0q0t2sbyu7i903QQ=;
-        b=I312t3Mf8m9jo/LmHSuzaPymbSVhSRzVL2Ky+HfxzBLTp2fTqIHPfPRRRw+vVz2Q3P
-         A0J2ANCK/HwKQp291I8O3+x812Y9AdgM3PC72gVOwfUEUqcrNw0Xk6L9tpcEZQ07+tUp
-         bos07nJJbzSG321Rnf67435E0h4SFw2V2i78QG7uzyPHmTglDOd172U7jSzsS0fcLXWN
-         4aS8PWZPyLLAKc+H2gg6rRI0/43DEOAgByqCTl4OuWvvqtd3hqpU4DJctTO1lATpmkuc
-         Pq1I/rv8CVokbCIPtLajTPwZ0bPcR9/WIGpFGJPLKD+Z1QGRLJenhVPrj9dzN1VAw0rM
-         VPNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUwkwog7eMwt054yCZ2i3rxESbJWV43iLn/OC0PTAaRWLTP7gnj0c8GxsnZmivr/HR40m0IaAMwe8OoxVKofMa2w6Qg
-X-Gm-Message-State: AOJu0Yzmmz1iYlyvUQ2fWUQTdlz5TyCSW9LnvNkOsVIGBhT1e8Lats9+
-	TrQXXXoJjBZ/qxREevvzzNqlEPJqXxtssQ8i48EQV1mAyme2/dBivmDfAFZTmeNYQRZjwHEqhwQ
-	zsw==
-X-Google-Smtp-Source: AGHT+IHo+ItJCz1vEMlMJs25DEazsRdzqnfW39HVVXO67q+uyT3d5CUr2ZMLHU+KkcK6U1vReIfsPel7clY=
+        bh=RmiND9fJytE7hp4aS6EZvp2Qf4FYwUyLzLHSobY4D+U=;
+        b=Wvgm2sznepZM1oXuL/AtwFV6uzePE+bo6f3+NGRQf91+RNkCQQWQUEuVNZZuhwC3uK
+         erLY1d/6KUqhpoIzcw9NikcpbtVQkx1iUH2fYL6zy/nIGgqVGNN4wNh7OX3uOGt3RMk6
+         VHUodGn4HxuEURZr8ef08pdN3ClwQvT2Krq0IoGKql+VeDyHVveAVCjdX0P6YP1qY81G
+         HbNBEomXJL9VVkePPfQoX/nOupdg3HLF2rVe2V19J2jazeR2ihii+2F52ztvyaEltBJL
+         tDRpW1V5dLqAKaxDcffwZW9vO0c/AtwEod1ZddNPmMhoC2UKa+e37D2ho0Ol5/QBo+D3
+         gKgg==
+X-Forwarded-Encrypted: i=1; AJvYcCXklJh5/9LGCbREpXvv66BzdaZDAsXH+DVHtTG3a6n8ig4Df2CKgTDCXiZwyC9o/EApNXnd1gUxSOVcffmDEQL9NPrq
+X-Gm-Message-State: AOJu0YzQRjw2ACkIbD6PvZ968GT/wRrMMayShDhk3ZhLUmI2DhA5nzrQ
+	Po11s12HdMogr/f/d7DFwCnJU1Hhaxw17BfcxST8C2RtZSTDreZiFyrps9e2aQ2IGU6VCliwgfy
+	f8A==
+X-Google-Smtp-Source: AGHT+IHeiHkMKp379qbywYMCr+diDVdq9JP2CxLadyp3LUxzIJLjH2ayb4pU1zwCCzZ0jFp6BgvxfUk/s6M=
 X-Received: from drosen.mtv.corp.google.com ([2620:15c:211:201:fcce:d6ab:804c:b94b])
- (user=drosen job=sendgmr) by 2002:a0d:d9c8:0:b0:613:eb1a:6407 with SMTP id
- b191-20020a0dd9c8000000b00613eb1a6407mr266377ywe.9.1711677294719; Thu, 28 Mar
- 2024 18:54:54 -0700 (PDT)
-Date: Thu, 28 Mar 2024 18:53:39 -0700
+ (user=drosen job=sendgmr) by 2002:a05:6902:1004:b0:dda:c4ec:7db5 with SMTP id
+ w4-20020a056902100400b00ddac4ec7db5mr365495ybt.4.1711677296744; Thu, 28 Mar
+ 2024 18:54:56 -0700 (PDT)
+Date: Thu, 28 Mar 2024 18:53:40 -0700
 In-Reply-To: <20240329015351.624249-1-drosen@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240329015351.624249-1-drosen@google.com>
 X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
-Message-ID: <20240329015351.624249-25-drosen@google.com>
-Subject: [RFC PATCH v4 24/36] fuse-bpf: Add fuse-bpf constants
+Message-ID: <20240329015351.624249-26-drosen@google.com>
+Subject: [RFC PATCH v4 25/36] bpf: Increase struct_op max members
 From: Daniel Rosenberg <drosen@google.com>
 To: Miklos Szeredi <miklos@szeredi.hu>, bpf@vger.kernel.org, 
 	Alexei Starovoitov <ast@kernel.org>
@@ -76,35 +76,27 @@ Cc: Amir Goldstein <amir73il@gmail.com>, linux-kernel@vger.kernel.org,
 	Daniel Rosenberg <drosen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-This adds constants that fuse_op programs will rely on for communicating
-what action fuse should take next.
+Fuse bpf goes a bit past the '64' limit here.
+This doubles the limit, although fuse-bpf currently uses 66.
 
 Signed-off-by: Daniel Rosenberg <drosen@google.com>
 ---
- include/uapi/linux/bpf.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ include/linux/bpf.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 85ec7fc799d7..46c1a3e3166d 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -7461,4 +7461,16 @@ struct bpf_iter_num {
- 	__u64 __opaque[1];
- } __attribute__((aligned(8)));
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 785660810e6a..7a5a806e97ad 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1636,7 +1636,7 @@ struct bpf_token {
+ struct bpf_struct_ops_value;
+ struct btf_member;
  
-+/* Return Codes for Fuse BPF struct_op programs */
-+#define BPF_FUSE_CONTINUE		0
-+#define BPF_FUSE_USER			1
-+#define BPF_FUSE_USER_PREFILTER		2
-+#define BPF_FUSE_POSTFILTER		3
-+#define BPF_FUSE_USER_POSTFILTER	4
-+
-+/* Op Code Filter values for BPF Programs */
-+#define FUSE_OPCODE_FILTER	0x0ffff
-+#define FUSE_PREFILTER		0x10000
-+#define FUSE_POSTFILTER		0x20000
-+
- #endif /* _UAPI__LINUX_BPF_H__ */
+-#define BPF_STRUCT_OPS_MAX_NR_MEMBERS 64
++#define BPF_STRUCT_OPS_MAX_NR_MEMBERS 128
+ /**
+  * struct bpf_struct_ops - A structure of callbacks allowing a subsystem to
+  *			   define a BPF_MAP_TYPE_STRUCT_OPS map type composed
 -- 
 2.44.0.478.gd926399ef9-goog
 
