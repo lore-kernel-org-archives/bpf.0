@@ -1,122 +1,103 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A763B5102A
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 09:34:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A654D9E4;
+	Fri, 29 Mar 2024 09:49:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711704859; cv=none; b=ECA7czsI2C6taE3l+Ed3uN5kCt5SJxxVNk2jqoPVbWOEOXkvvLrYfTJDFem16FsOyEEuOurqAzv/0Dx+rqRlXpvh6JY/uv6AYKNhXgxQrMgQpO2aCrYoapVq8DrMht6biwlriyhrK/xsHcQsn9JJb8C+N/jp4euzAzNIZxqBYCo=
+	t=1711705767; cv=none; b=tIP+gJPJkpCc/lN85nZp0c88DsiuKE/BzHk5UOrbMm0iaycyGReRYOYQt4gQjG4NAR5AQ2r/Kzb6oJGgmS+PAw6rMWhw3Sg927BHTCWn+6bxZFSRtPZSKO93U19VXc7I0p6FiGN8Or+FPyjgsexStmOve8rJtA+xZnr62lOoJC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711704859; c=relaxed/simple;
-	bh=KUC09wtYmay5oVx7+9C+OUpDt1KQS0U9lKvW1u+lUzg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=mwjmX8HhaIMs7y8rhtnnJR2f/2TtGcNCBRFwS59Q708/cYUc03NBKzh2E0VqE3jK97ZDFrkU9CCit6IyOyexZ1U7N687XOHTldM/Xs4c9N3huYMgNoelxZ5OPdlKXd8IW/wWfqmYfHwyz362lA8TMAs2AaFSG5fT9qMLLR1RWXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s+I6ES4A; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+	s=arc-20240116; t=1711705767; c=relaxed/simple;
+	bh=DvUbrtPIF4GBmAsevCPo7ZbTOF7jHWk2TFBBpRZ2HfM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FgtaqaNs4s1VZLwAyCLRKs8FbNm6qNcaZssGXfuCsa4GmWuirSJe4PGBQKT8HNVCSCKe9zXMMYVUlSPz6pWA+AjOLekoEj4rDR2vfYe0aK0QqDLYCm6QIdfWH4rfZqXR8HmidoR3PdXndldr9hVeGEl4WhHLm38DM6IfmMfgv+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LVSL5i1v; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s+I6ES4A"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-610b96c8ca2so34297867b3.2
-        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 02:34:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LVSL5i1v"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-56b0af675deso2100704a12.1;
+        Fri, 29 Mar 2024 02:49:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711704856; x=1712309656; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dw09Gs88ogil/diQ6Vr0EqHQANsVVhIyP+7ZdKbyIx8=;
-        b=s+I6ES4AxBivvRDaHcnmARZ5DuByeyfrx7ret5p6QdLqpF4G5hBbJD7OM6QquLzzGN
-         nQZJnG704OtoxB/YvIv/j4LWqYHRjl3vE+bNJhD+FcyIOzq6KfNwYz8ofy3ht11skszm
-         vJHQFbiOsYLQygbAGN5Bf0BOuzsWekUxq0idM0WfK4LE0WMbrIW7XqNc+ug7nqk8VhXo
-         7pxLt7sToGvZxirUO2fRPZPbUMfQsxFJPYNdMS78ORalL/uoHMZ1rdWWzh55eNKtNRws
-         LY6mSdec3zxiLVCulWyL1FYVpMH8N+Ynj0Gqi5onHgcAiXddad9rjBZKVg/f09rA4GCK
-         YN0g==
+        d=gmail.com; s=20230601; t=1711705764; x=1712310564; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jHuZMAvqETWpA2oAM/qjqgqoLGUBb7pOip+JvCK0Qno=;
+        b=LVSL5i1vP5Z0UcGpPjjwyjSxptleJyEOTwBla+95OxY4kkyKmtMq5dVl6hr7i+JG+m
+         p1vRw/JR2fIophcDmfStMwep4MTUUHlRfcdV5k4wCvrkPVFYX8oxqTN7AJlYNczqyQ5R
+         fLwqiHWOjJ3nVWmRR1gFtv79nGXnHLglvC2ynpuPdLlt3mvU5PieecLnWnP+WcjPc9lc
+         GdHGyj68GqWIVR1p1idv5klY+AFTQE7IW2qv5vmEK3sZ9krAtGBtoM4YoNLFv4GEuZ2e
+         7AcCxSOIp2T5a0mC8Ij46GkntZKoSi4/XsWMvyp30Bhzt8+kH6TdW0DhYSCgikccY7Bg
+         9dZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711704856; x=1712309656;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dw09Gs88ogil/diQ6Vr0EqHQANsVVhIyP+7ZdKbyIx8=;
-        b=wdbtyBfYOJlcSrubZ2vwDzkS6tFYMEjdVWRHQH8pfzRc5JvYqLY7RuRuBv+Xikkfp6
-         Wj+Q91dbH4Yi8NxuDqQufWwfaDrp4ruj4wZRduqvRSzBPKvfHabgcMwV5j8+Gh5ldW8k
-         jfe0TYQe85BFHwUeLzOHADpZNqj61TJRO10Lxe+m5aLrbitFFTGBU+QnMIb8QapimMzo
-         5Kws934+u8nEXqO4a3E5LBtykSZ0T2JTGryhwCWNihccmLg/GN5c44/vA7yjlu1wjLdw
-         blbZhAx4/id/UPBpXQU0of7xvT46G8uQOaQ0FI1rqnbdMMgcK6qePR0YJaMBVD+R8hY3
-         kg0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWVyhl/WWYUmnunpOI+HnTZVWGa09l8oL6UZfjSVNe4YTvfQINQbyKPHSIjRh/vxUoiili5KVNwYN5h2O3+Im32WMlg
-X-Gm-Message-State: AOJu0YxVrgymLDG93daLmla3HHiR436QbEXB8KZ2XFVRwVwK9WuLLke/
-	6IrOaABlWcS7pTz25dyAA4SJhBi40SdBOV48j9WGAy0NDm78nNGPzM+I2CkrET34nCvsfg==
-X-Google-Smtp-Source: AGHT+IHww5cAwsi1pr9pBu+czX3UmFai9nj7XcxpaVhRpi1LgYQNcAUBxrSuXEicaf9NQtedota600ow
-X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a0d:dd03:0:b0:611:7573:72b9 with SMTP id
- g3-20020a0ddd03000000b00611757372b9mr538832ywe.5.1711704856741; Fri, 29 Mar
- 2024 02:34:16 -0700 (PDT)
-Date: Fri, 29 Mar 2024 10:34:00 +0100
-In-Reply-To: <20240329093356.276289-5-ardb+git@google.com>
+        d=1e100.net; s=20230601; t=1711705764; x=1712310564;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jHuZMAvqETWpA2oAM/qjqgqoLGUBb7pOip+JvCK0Qno=;
+        b=jU7dFtbych6vZTGhwn78J9tAmibdDCFEQD72ru2m0mPfQK6KLKk4xgzOHkPHyBuu4x
+         158dUiSHWnx7JUKUIW3quVNC6/Yv/NxX/dvUJo5HyyAZyOgqJzTZiAyMdJz9kqB+XXW4
+         OCTcTf3Tzi9nVXh8bbhCXw1k003XGb95E3KUbdKjc69BL6AyxQArHZVp5Dpytrhvl+ia
+         V7iy5BiEcEBmrEtWxLMoDtsGuLRJj/cCiC91ZSwpQlOyh3pcg8CkRHQ6IizIXT1p28ue
+         f9zKYIgYTNAnA8iJ2JHeylIA2L4Au+NRpsP8zPFmXkZdpvuFy/XRZRjamUXkMX8biBt/
+         jN+w==
+X-Forwarded-Encrypted: i=1; AJvYcCX8zP6IdrekPR6XbTRVSDkl2uk+2qAkY5IymBDR5MzFX/EoWQgCew8JhN5EyQRxMC6C9W2LnYrhhxw8sqFksiSJLP6jaJan2m/OwHAJJHuzCHx5NSkgPefLmx8RbflcTS3v+1/0prPLHH0/WEHjaVTFvcU9bWXdYXJd
+X-Gm-Message-State: AOJu0YzwXOpHDngbMtDdphJI7bYJ9F3xM7+svrSMcwPtSngu00uJd1q4
+	4D7gV0QkmMnHW5rvsvqbT/7JUrg8QzuGq3d/IHczvOyEAC+Wf8VuOL3ZQSaPnlY=
+X-Google-Smtp-Source: AGHT+IHoVn8hIB47ZCKxyMTgTq6t93yCHp4FgQTK3MkjlvHnU/TvWN699cAYQPO0H2u3PPM2GtATiw==
+X-Received: by 2002:a05:6402:35ca:b0:56b:b5a1:4685 with SMTP id z10-20020a05640235ca00b0056bb5a14685mr1393321edc.27.1711705763631;
+        Fri, 29 Mar 2024 02:49:23 -0700 (PDT)
+Received: from fedora.iskraemeco.si ([193.77.86.250])
+        by smtp.gmail.com with ESMTPSA id b4-20020a0564021f0400b0056c1cca33bfsm1829733edb.6.2024.03.29.02.49.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Mar 2024 02:49:23 -0700 (PDT)
+From: Uros Bizjak <ubizjak@gmail.com>
+To: x86@kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Uros Bizjak <ubizjak@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	=?UTF-8?q?Joan=20Bruguera=20Mic=C3=B3?= <joanbrugueram@gmail.com>
+Subject: [PATCH RESEND bpf 0/2] x86/bpf: Fixes for the BPF JIT with retbleed=stuff
+Date: Fri, 29 Mar 2024 10:46:16 +0100
+Message-ID: <20240329094906.18147-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240329093356.276289-5-ardb+git@google.com>
-X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1581; i=ardb@kernel.org;
- h=from:subject; bh=q5UGicb35M6dvlAOCgO0axQESJYA1rUn+GPk9ZrI1w0=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIY2tm2OlVN6iHxUr9jYWMgmymJk94z0V9u5k6qIdE5rSD
- 26LOdPVUcrCIMbBICumyCIw+++7nacnStU6z5KFmcPKBDKEgYtTACbSb8fwPzp8VsaB3SU2Br47
- 13TyqzMf+HazQXOCcIe1VeufXy6Jrxn+Cj68+VHg2BXetLa8nEmMt64kzV5teF7ibP27fVkbfDK XsQEA
-X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
-Message-ID: <20240329093356.276289-8-ardb+git@google.com>
-Subject: [PATCH 3/3] btf: Avoid weak external references
-From: Ard Biesheuvel <ardb+git@google.com>
-To: linux-kernel@vger.kernel.org
-Cc: Ard Biesheuvel <ardb@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, linux-arch@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-From: Ard Biesheuvel <ardb@kernel.org>
+From: Joan Bruguera Micó <joanbrugueram@gmail.com>
 
-If the BTF code is enabled in the build configuration, the start/stop
-BTF markers are guaranteed to exist in the final link but not during the
-first linker pass.
+Fixes two issues that cause kernels panic when using the BPF JIT with
+the call depth tracking / stuffing mitigation for Skylake processors
+(`retbleed=stuff`). Both issues can be triggered by running simple
+BPF programs (e.g. running the test suite should trigger both).
 
-Avoid GOT based relocations to these markers in the final executable by
-providing preliminary definitions that will be used by the first linker
-pass, and superseded by the actual definitions in the subsequent ones.
+The first (resubmit) fixes a trivial issue related to calculating the
+destination IP for call instructions with call depth tracking.
 
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
- include/asm-generic/vmlinux.lds.h | 2 ++
- kernel/bpf/btf.c                  | 4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+The second is related to using the correct IP for relocations, related
+to the recently introduced %rip-relative addressing for PER_CPU_VAR.
 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index e8449be62058..141bddb511ee 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -456,6 +456,8 @@
-  * independent code.
-  */
- #define PRELIMINARY_SYMBOL_DEFINITIONS					\
-+	PROVIDE(__start_BTF = .);					\
-+	PROVIDE(__stop_BTF = .);					\
- 	PROVIDE(kallsyms_addresses = .);				\
- 	PROVIDE(kallsyms_offsets = .);					\
- 	PROVIDE(kallsyms_names = .);					\
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 90c4a32d89ff..46a56bf067a8 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -5642,8 +5642,8 @@ static struct btf *btf_parse(const union bpf_attr *attr, bpfptr_t uattr, u32 uat
- 	return ERR_PTR(err);
- }
- 
--extern char __weak __start_BTF[];
--extern char __weak __stop_BTF[];
-+extern char __start_BTF[];
-+extern char __stop_BTF[];
- extern struct btf *btf_vmlinux;
- 
- #define BPF_MAP_TYPE(_id, _ops)
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Joan Bruguera Micó <joanbrugueram@gmail.com>
+
+Joan Bruguera Micó (2):
+  x86/bpf: Fix IP after emitting call depth accounting
+  x86/bpf: Fix IP for relocating call depth accounting
+
+ arch/x86/include/asm/alternative.h |  4 ++--
+ arch/x86/kernel/callthunks.c       |  4 ++--
+ arch/x86/net/bpf_jit_comp.c        | 22 ++++++++++------------
+ 3 files changed, 14 insertions(+), 16 deletions(-)
+
 -- 
-2.44.0.478.gd926399ef9-goog
+2.44.0
 
