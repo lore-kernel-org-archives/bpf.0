@@ -1,84 +1,100 @@
 Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810D914D43C;
-	Sun, 31 Mar 2024 16:27:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58EA147C93;
+	Sun, 31 Mar 2024 16:28:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=62.96.220.36
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711902491; cv=fail; b=XyC8dpB73/apZtoW/lkKcPKg/qOTYw2ZvMLgGeR/cyDxIvteCa0OoCoSOZWxWuyvIWO0ziJDIxIydSYGUJl5afQ1AjeVOOpfNBeONKKbpKe4P1lXgWWVu7j4gB5yMNZLpqcMQSPv6K172dIaK8UyIvzaxKXgycp4hCSZgvfNuUI=
+	t=1711902510; cv=fail; b=uZPcz9iPgjLy9idYPDdFHEp/G2CUu1YvoosBiUgg4oRTjkfK7tW7M9STmFvWSlSrMlfOTjw/l9aKEE4LLBDsWXW8qzrvHjKr8wUfq2YoBmsun8SoDkPspP1wSCPsgkSKXmESGLM97bv8mPYycoFDjbeyGhh6lZdI2DeGeNdDJcM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711902491; c=relaxed/simple;
-	bh=lxdlk9jfPzMxUWRkL5fxXBcQWBmKGUTXM5mEyWmp80k=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=huQyBghRjg7ayBAcIBnRDx8vyD4+hgvr8OPPjieTHnN5lsQ8Fib4Ljg/WuOWdXTZcJhXCxKu/pOsjfNKr8jqethNMX2qZVU9kmIw9BnyDXz0LiAtnyiiNzloaVTrLrgGD8eq3H+D2Msf7LuBQl87p76FWDDj0gK6BDLf2Kj4JmU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=fail smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=fail smtp.client-ip=62.96.220.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=huaweicloud.com
+	s=arc-20240116; t=1711902510; c=relaxed/simple;
+	bh=lKNdfIJPzLfABJnWQROq4vNaLeRH+VdaQ+eVJkhZq6c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uqXIBd0Gh1mYCNKWaBiI/y0m9CvP5h5gKmkmnQwOkYVBL8qNMXymozEvF/jG1AuoZiWnOOxMt0KyfkGt1tS9GSL52Xdx2UKl0ROwgxwkPh0TqbGMZx9i6Q1D9zsIvC9e/Nv0pvfr6hdx4mty9R8UjFpOqad+plz/Apv05aNajMg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; dkim=fail (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DtFEeVUc reason="signature verification failed"; arc=none smtp.client-ip=209.85.221.54; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; arc=fail smtp.client-ip=62.96.220.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DtFEeVUc"
 Received: from localhost (localhost [127.0.0.1])
-	by a.mx.secunet.com (Postfix) with ESMTP id 28A1A20185;
-	Sun, 31 Mar 2024 18:27:14 +0200 (CEST)
+	by a.mx.secunet.com (Postfix) with ESMTP id A4A2420185;
+	Sun, 31 Mar 2024 18:28:26 +0200 (CEST)
 X-Virus-Scanned: by secunet
 Received: from a.mx.secunet.com ([127.0.0.1])
 	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1J2iHdlZ6JU0; Sun, 31 Mar 2024 18:27:10 +0200 (CEST)
-Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
+	with ESMTP id J8SPew8I-Hlm; Sun, 31 Mar 2024 18:28:25 +0200 (CEST)
+Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by a.mx.secunet.com (Postfix) with ESMTPS id 93591208B8;
-	Sun, 31 Mar 2024 18:27:10 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 93591208B8
+	by a.mx.secunet.com (Postfix) with ESMTPS id 1CB8520826;
+	Sun, 31 Mar 2024 18:28:25 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 1CB8520826
 Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-	by mailout2.secunet.com (Postfix) with ESMTP id 862D2800051;
-	Sun, 31 Mar 2024 18:27:10 +0200 (CEST)
+	by mailout1.secunet.com (Postfix) with ESMTP id 0FE4B800058;
+	Sun, 31 Mar 2024 18:28:25 +0200 (CEST)
 Received: from mbx-essen-01.secunet.de (10.53.40.197) by
  cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Sun, 31 Mar 2024 18:27:10 +0200
+ 15.1.2507.35; Sun, 31 Mar 2024 18:28:24 +0200
 Received: from Pickup by mbx-essen-01.secunet.de with Microsoft SMTP Server id
- 15.1.2507.17; Sun, 31 Mar 2024 16:24:03 +0000
-X-sender: <netdev+bounces-83574-peter.schumann=secunet.com@vger.kernel.org>
+ 15.1.2507.17; Sun, 31 Mar 2024 16:23:33 +0000
+X-sender: <netdev+bounces-83468-peter.schumann=secunet.com@vger.kernel.org>
 X-Receiver: <peter.schumann@secunet.com>
  ORCPT=rfc822;peter.schumann@secunet.com NOTIFY=NEVER;
  X-ExtendedProps=BQAVABYAAgAAAAUAFAARAJ05ab4WgQhHsqdZ7WUjHykPADUAAABNaWNyb3NvZnQuRXhjaGFuZ2UuVHJhbnNwb3J0LkRpcmVjdG9yeURhdGEuSXNSZXNvdXJjZQIAAAUAagAJAAEAAAAAAAAABQAWAAIAAAUAQwACAAAFAEYABwADAAAABQBHAAIAAAUAEgAPAGAAAAAvbz1zZWN1bmV0L291PUV4Y2hhbmdlIEFkbWluaXN0cmF0aXZlIEdyb3VwIChGWURJQk9IRjIzU1BETFQpL2NuPVJlY2lwaWVudHMvY249UGV0ZXIgU2NodW1hbm41ZTcFAAsAFwC+AAAAQ5IZ35DtBUiRVnd98bETxENOPURCNCxDTj1EYXRhYmFzZXMsQ049RXhjaGFuZ2UgQWRtaW5pc3RyYXRpdmUgR3JvdXAgKEZZRElCT0hGMjNTUERMVCksQ049QWRtaW5pc3RyYXRpdmUgR3JvdXBzLENOPXNlY3VuZXQsQ049TWljcm9zb2Z0IEV4Y2hhbmdlLENOPVNlcnZpY2VzLENOPUNvbmZpZ3VyYXRpb24sREM9c2VjdW5ldCxEQz1kZQUADgARAC7JU/le071Fhs0mWv1VtVsFAB0ADwAMAAAAbWJ4LWVzc2VuLTAxBQA8AAIAAA8ANgAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5EaXNwbGF5TmFtZQ8ADwAAAFNjaHVtYW5uLCBQZXRlcgUADAACAAAFAGwAAgAABQBYABcASAAAAJ05ab4WgQhHsqdZ7WUjHylDTj1TY2h1bWFubiBQZXRlcixPVT1Vc2VycyxPVT1NaWdyYXRpb24sREM9c2VjdW5ldCxEQz1kZQUAJgACAAEFACIADwAxAAAAQXV0b1Jlc3BvbnNlU3VwcHJlc3M6IDANClRyYW5zbWl0SGlzdG9yeTogRmFsc
 	2UNCg8ALwAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuRXhwYW5zaW9uR3JvdXBUeXBlDwAVAAAATWVtYmVyc0dyb3VwRXhwYW5zaW9uBQAjAAIAAQ==
 X-CreatedBy: MSExchange15
 X-HeloDomain: a.mx.secunet.com
-X-ExtendedProps: BQBjAAoAM8xAQuxQ3AgFAGEACAABAAAABQA3AAIAAA8APAAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5Pcmdhbml6YXRpb25TY29wZREAAAAAAAAAAAAAAAAAAAAAAAUASQACAAEFAGIACgBRAAAAr4oAAAUABAAUIAEAAAAaAAAAcGV0ZXIuc2NodW1hbm5Ac2VjdW5ldC5jb20FAAYAAgABBQApAAIAAQ8ACQAAAENJQXVkaXRlZAIAAQUAAgAHAAEAAAAFAAMABwAAAAAABQAFAAIAAQUAZAAPAAMAAABIdWI=
+X-ExtendedProps: BQBjAAoAPpLp8x1Q3AgFAGEACAABAAAABQA3AAIAAA8APAAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5Pcmdhbml6YXRpb25TY29wZREAAAAAAAAAAAAAAAAAAAAAAAUASQACAAEFAGIACgC5AAAAi4oAAAUABAAUIAEAAAAaAAAAcGV0ZXIuc2NodW1hbm5Ac2VjdW5ldC5jb20FAAYAAgABBQApAAIAAQ8ACQAAAENJQXVkaXRlZAIAAQUAAgAHAAEAAAAFAAMABwAAAAAABQAFAAIAAQUAZAAPAAMAAABIdWI=
 X-Source: SMTP:Default MBX-DRESDEN-01
 X-SourceIPAddress: 62.96.220.36
-X-EndOfInjectedXHeaders: 22185
+X-EndOfInjectedXHeaders: 23330
 X-Virus-Scanned: by secunet
-Received-SPF: Pass (sender SPF authorized) identity=mailfrom; client-ip=139.178.88.99; helo=sv.mirrors.kernel.org; envelope-from=netdev+bounces-83574-peter.schumann=secunet.com@vger.kernel.org; receiver=peter.schumann@secunet.com 
-DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 3233C207D8
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+Received-SPF: Pass (sender SPF authorized) identity=mailfrom; client-ip=147.75.80.249; helo=am.mirrors.kernel.org; envelope-from=netdev+bounces-83468-peter.schumann=secunet.com@vger.kernel.org; receiver=peter.schumann@secunet.com 
+DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 48CEE20882
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal: i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711876971; cv=none; b=hv2V0jigilROcK8EYto6mRFG8DmuWtzxXZdqHtz9fMG0J+dkwO3J41ISZ+hTRcRxWrMDvtPfqrGiOO2Pa5vS9Hw9hNW0+rcY8I0q3N1C1xYo9KnGofkVAWYNtZ045WxaXdk92DZrHEodFCKU10wDs2vIdFY6zGSn/djqvoiqa+0=
+	t=1711749199; cv=none; b=YcUIPWpHs7mLZnVdaPh2sGq8r5F5xF21yFPDxMZ/gm0YeJrT/TWfFs/Gh9WnFRa71L3nMBK9Nnv6q1uk/kZxQqMajeyclU7BgxRjaaMsw/eReYwfsEd5M1f1xxGZ/6c71chWZmsbAHPSHVYj437pvbvRgRDUvYwenfjdDa7AKfY=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711876971; c=relaxed/simple;
-	bh=NU/seP21mtWkdilB97nH/1Auom8uGHKorbHfj6W3x1U=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=t5VU4JM9HWfq6ydlfdq15M8AHsNevxb1HZ/WRW7e5KCGFbuynlYb35Qx1hbwhN8rTBK/vhMo3wMg6IQKk1cvjnlml0wLsB2fxmf42iOXZsYiZWVGRgHzQLCt/253/+2SOkeNOhmEUNNNocVPFZzGfHby5lZfh2NLhB8+aGYDVJ8=
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: <bpf@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<netdev@vger.kernel.org>
-CC: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>, Alexei Starovoitov
-	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
-	<andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, "Eduard
- Zingerman" <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
-	<yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh
-	<kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
-	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Palmer Dabbelt
-	<palmer@dabbelt.com>, Pu Lehui <pulehui@huawei.com>, Pu Lehui
-	<pulehui@huaweicloud.com>
-Subject: [PATCH bpf-next 1/2] riscv, bpf: Add 12-argument support for RV64 bpf trampoline
-Date: Sun, 31 Mar 2024 09:24:04 +0000
-Message-ID: <20240331092405.822571-2-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240331092405.822571-1-pulehui@huaweicloud.com>
-References: <20240331092405.822571-1-pulehui@huaweicloud.com>
+	s=arc-20240116; t=1711749199; c=relaxed/simple;
+	bh=ZkGv2aECxPpKjlvqInjY5t6BAWJ1JpiWyKfHeeHLgFY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=N4wUMXak4yyRayehjv1ar0r8EyyPLMwBc3uJ0bwl/C4uF0p7B7G/bWOwvNeZYeq6b3W3Vcfr0NdbT29Ffwzm149FPXaVcG2iO3WP/b1G80f4/vw74ISsQwa8epN/zn528A3NyNmNXX0nycQdjpBblQ7EyQAtFDKts98b9c+Xxik=
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DtFEeVUc; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711749195; x=1712353995; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oSnIkrXKOxIFx664NuP3H7hYth27RezAKOIyptzRih0=;
+        b=DtFEeVUcXHxQSM1acoLPB3xIZ2HSM6vWTSGbB4Vn2PTFo59S2qm9Wdb/PYmKmlkt7q
+         bweDNoN2FkFdd+biODVbvTAWaLZraY63rTLXLI3Uj2YXC5gXRj51NmN6ndvk0CmDMb0e
+         HIob6o5pR32SYbzkWHSn4Jg4Btu/S+g0UAjgMXPRMh1EcOgJV/whXSYiykrw7f/6s77P
+         /H5ZCsxnDWl4kNYCj9mzXKbfqQBAv6Lnt80sLG1vRk3gD9HqNaAkNP/seJmggh7Vb0eo
+         x3i++yNtv1UR3TkN0hCOiKzOfpwFxG/x3+oaCYHUq4IcorpsSpcrx239+6AZFAOrQdbA
+         WyHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711749195; x=1712353995;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oSnIkrXKOxIFx664NuP3H7hYth27RezAKOIyptzRih0=;
+        b=oKWLVHtPvz9J+QXVTc54yStjx+NkapzU4nW5NsuqPQ5h82t98mF43eq2fZPnUSPhaT
+         MGdf9ycXYZkO41VrOpN62JqHNhZQR/quC5iGCtAX8SbX3Zql03mdeT6pd9hdt04AMwNI
+         v7s3h6cmiqq3SNt6pWwVBYRqxOm+JPpZT5yDuDLXj7HFAWYEdMSKpeIILWSrLfRqeGmF
+         0Wu0zy7UE5pH6ZQnPhhEBhM4jmoqIk7Jl9U1SyEn4ioN3y3x18oyrKxSulpIT55d/yc8
+         64AGB3PNnhGmaMJktfTQg6iokvhAcecEo9Sr4wvXZuzD5l1KTyylDAgGYGp2D5OwKZyP
+         iGgw==
+X-Forwarded-Encrypted: i=1; AJvYcCUd4xvQHL/oaQCMtCuugnR3C+1mNP+kYnHMed8zOGO5hdRvAX21HlPyuCzWSAKy8Bt5pMwgz3toD1E3Xn4ARVBMo22+kQWtIVLj26ICYQSx1B5RhgBvSbm3JXQKMiyRL5E4gFZ/VAumoFjE2Vcpg7zLq5/DEIrGAbwW
+X-Gm-Message-State: AOJu0YyKhnyWxAp7UfXLi6lEMSL4950T9e1nKDvTnmG9yMcApYpszSgu
+	6nlrYsSq1udaQLoImKyk+HbI3U4g2GsYOT0pZe1ZoHsOJsdjCd5+EVv1QU8gEWIM6DBowMLNfme
+	dpizDXQEt670AhG7mMjM3Cbt2ZFB5CMSUPpA=
+X-Google-Smtp-Source: AGHT+IESQ34cqmbczYM0CtTFQ4n7hfhahLrps7uGUEuczD5xhOvFv09EChC/YJ/FIRR8VtuzAy4gIzrPZKwGa0EMMVQ=
+X-Received: by 2002:a5d:6d49:0:b0:341:e4f4:4399 with SMTP id
+ k9-20020a5d6d49000000b00341e4f44399mr1687491wri.68.1711749195364; Fri, 29 Mar
+ 2024 14:53:15 -0700 (PDT)
 Precedence: bulk
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -86,408 +102,383 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240329094906.18147-1-ubizjak@gmail.com> <20240329094906.18147-3-ubizjak@gmail.com>
+In-Reply-To: <20240329094906.18147-3-ubizjak@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 29 Mar 2024 14:53:03 -0700
+Message-ID: <CAADnVQ+6D++hCXaP=aK+Q5wienMzhHo3h9YCvpA_7sHjMt+q6A@mail.gmail.com>
+Subject: Re: [PATCH RESEND bpf 2/2] x86/bpf: Fix IP for relocating call depth accounting
+To: Uros Bizjak <ubizjak@gmail.com>
+Cc: X86 ML <x86@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	=?UTF-8?Q?Joan_Bruguera_Mic=C3=B3?= <joanbrugueram@gmail.com>, 
+	Ingo Molnar <mingo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-CM-TRANSID: gCh0CgCH2WtkKwlmesQWIw--.11467S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3Ar15Jw13Kr1kAF13Cr45ZFb_yoWxJr4Dpa
-	1DKrsxAFyvqa17Xa97WF1UXF1aya1qva43CFW7Gas3uFWYqr98GayFkF4jyry5GryrAw1f
-	AFs0vF98KF17GrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBE14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-	x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-	0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-	IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-	Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
-	xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
-	6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2
-	Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
-	Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
-	IF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUSYLPUUUUU
-	=
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-Message-ID: <20240331092404.FYMsyghucPdYZtUoFypI_VyWTzhI4rdR_NpkWD4zMhI@z>
+Message-ID: <20240329215303.rABKd7VetIxzQIhHWEVS9_FIOPypnHqT-LmlQqMCHfY@z>
 
-From: Pu Lehui <pulehui@huawei.com>
+On Fri, Mar 29, 2024 at 2:49=E2=80=AFAM Uros Bizjak <ubizjak@gmail.com> wro=
+te:
+>
+> From: Joan Bruguera Mic=C3=B3 <joanbrugueram@gmail.com>
+>
+> The recently introduced support for %rip-relative relocations in the
+> call thunk template assumes that the code is being patched in-place,
+> so the destination of the relocation matches the address of the code.
+> This is not true for the call depth accounting emitted by the BPF JIT,
+> so the calculated address is wrong and usually causes a page fault.
 
-This patch adds 12 function arguments support for riscv64 bpf
-trampoline. The current bpf trampoline supports <=3D sizeof(u64) bytes
-scalar arguments [0] and <=3D 16 bytes struct arguments [1]. Therefore, we
-focus on the situation where scalars are at most XLEN bits and
-aggregates whose total size does not exceed 2=C3=97XLEN bits in the riscv
-calling convention [2].
+Could you share the link to what this 'rip-relative' relocation is ?
 
-Link: https://elixir.bootlin.com/linux/v6.8/source/kernel/bpf/btf.c#L6184 [=
-0]
-Link: https://elixir.bootlin.com/linux/v6.8/source/kernel/bpf/btf.c#L6769 [=
-1]
-Link: https://github.com/riscv-non-isa/riscv-elf-psabi-doc/releases/downloa=
-d/draft-20230929-e5c800e661a53efe3c2678d71a306323b60eb13b/riscv-abi.pdf [2]
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- arch/riscv/net/bpf_jit_comp64.c | 63 +++++++++++++++++++++++----------
- 1 file changed, 44 insertions(+), 19 deletions(-)
+> Pass the destination IP when the BPF JIT emits call depth accounting.
+>
+> Fixes: 17bce3b2ae2d ("x86/callthunks: Handle %rip-relative relocations in=
+ call thunk template")
 
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp6=
-4.c
-index 77ea306452d4..2aec69e4c116 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -14,6 +14,7 @@
- #include <asm/cfi.h>
- #include "bpf_jit.h"
-=20
-+#define RV_MAX_ARG_REGS 8
- #define RV_FENTRY_NINSNS 2
-=20
- #define RV_REG_TCC RV_REG_A6
-@@ -688,26 +689,43 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_t=
-ype poke_type,
- 	return ret;
- }
-=20
--static void store_args(int nregs, int args_off, struct rv_jit_context *ctx=
-)
-+static void store_args(int nr_arg_slots, int args_off, struct rv_jit_conte=
-xt *ctx)
- {
- 	int i;
-=20
--	for (i =3D 0; i < nregs; i++) {
--		emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
-+	for (i =3D 0; i < nr_arg_slots; i++) {
-+		if (i < RV_MAX_ARG_REGS) {
-+			emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
-+		} else {
-+			emit_ld(RV_REG_T1, 16 + (i - RV_MAX_ARG_REGS) * 8, RV_REG_FP, ctx);
-+			emit_sd(RV_REG_FP, -args_off, RV_REG_T1, ctx);
-+		}
- 		args_off -=3D 8;
- 	}
- }
-=20
--static void restore_args(int nregs, int args_off, struct rv_jit_context *c=
-tx)
-+static void restore_args(int nr_args_reg, int args_off, struct rv_jit_cont=
-ext *ctx)
- {
- 	int i;
-=20
--	for (i =3D 0; i < nregs; i++) {
-+	for (i =3D 0; i < nr_args_reg; i++) {
- 		emit_ld(RV_REG_A0 + i, -args_off, RV_REG_FP, ctx);
- 		args_off -=3D 8;
- 	}
- }
-=20
-+static void restore_stack_args(int nr_args_stack, int args_off, int stk_ar=
-g_off, struct rv_jit_context *ctx)
-+{
-+	int i;
-+
-+	for (i =3D 0; i < nr_args_stack; i++) {
-+		emit_ld(RV_REG_T1, -(args_off - RV_MAX_ARG_REGS * 8), RV_REG_FP, ctx);
-+		emit_sd(RV_REG_FP, -stk_arg_off, RV_REG_T1, ctx);
-+		args_off -=3D 8;
-+		stk_arg_off -=3D 8;
-+	}
-+}
-+
- static int invoke_bpf_prog(struct bpf_tramp_link *l, int args_off, int ret=
-val_off,
- 			   int run_ctx_off, bool save_ret, struct rv_jit_context *ctx)
- {
-@@ -780,8 +798,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tra=
-mp_image *im,
- {
- 	int i, ret, offset;
- 	int *branches_off =3D NULL;
--	int stack_size =3D 0, nregs =3D m->nr_args;
--	int retval_off, args_off, nregs_off, ip_off, run_ctx_off, sreg_off;
-+	int stack_size =3D 0, nr_arg_slots =3D 0;
-+	int retval_off, args_off, nregs_off, ip_off, run_ctx_off, sreg_off, stk_a=
-rg_off;
- 	struct bpf_tramp_links *fentry =3D &tlinks[BPF_TRAMP_FENTRY];
- 	struct bpf_tramp_links *fexit =3D &tlinks[BPF_TRAMP_FEXIT];
- 	struct bpf_tramp_links *fmod_ret =3D &tlinks[BPF_TRAMP_MODIFY_RETURN];
-@@ -827,20 +845,21 @@ static int __arch_prepare_bpf_trampoline(struct bpf_t=
-ramp_image *im,
- 	 * FP - sreg_off    [ callee saved reg	]
- 	 *
- 	 *		    [ pads              ] pads for 16 bytes alignment
-+	 *
-+	 *		    [ stack_argN        ]
-+	 *		    [ ...               ]
-+	 * FP - stk_arg_off [ stack_arg1        ] BPF_TRAMP_F_CALL_ORIG
- 	 */
-=20
- 	if (flags & (BPF_TRAMP_F_ORIG_STACK | BPF_TRAMP_F_SHARE_IPMODIFY))
- 		return -ENOTSUPP;
-=20
--	/* extra regiters for struct arguments */
--	for (i =3D 0; i < m->nr_args; i++)
--		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
--			nregs +=3D round_up(m->arg_size[i], 8) / 8 - 1;
--
--	/* 8 arguments passed by registers */
--	if (nregs > 8)
-+	if (m->nr_args > MAX_BPF_FUNC_ARGS)
- 		return -ENOTSUPP;
-=20
-+	for (i =3D 0; i < m->nr_args; i++)
-+		nr_arg_slots +=3D round_up(m->arg_size[i], 8) / 8;
-+
- 	/* room of trampoline frame to store return address and frame pointer */
- 	stack_size +=3D 16;
-=20
-@@ -850,7 +869,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tra=
-mp_image *im,
- 		retval_off =3D stack_size;
- 	}
-=20
--	stack_size +=3D nregs * 8;
-+	stack_size +=3D nr_arg_slots * 8;
- 	args_off =3D stack_size;
-=20
- 	stack_size +=3D 8;
-@@ -867,8 +886,13 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tr=
-amp_image *im,
- 	stack_size +=3D 8;
- 	sreg_off =3D stack_size;
-=20
-+	if (nr_arg_slots - RV_MAX_ARG_REGS > 0)
-+		stack_size +=3D (nr_arg_slots - RV_MAX_ARG_REGS) * 8;
-+
- 	stack_size =3D round_up(stack_size, 16);
-=20
-+	stk_arg_off =3D stack_size;
-+
- 	if (!is_struct_ops) {
- 		/* For the trampoline called from function entry,
- 		 * the frame of traced function and the frame of
-@@ -904,10 +928,10 @@ static int __arch_prepare_bpf_trampoline(struct bpf_t=
-ramp_image *im,
- 		emit_sd(RV_REG_FP, -ip_off, RV_REG_T1, ctx);
- 	}
-=20
--	emit_li(RV_REG_T1, nregs, ctx);
-+	emit_li(RV_REG_T1, nr_arg_slots, ctx);
- 	emit_sd(RV_REG_FP, -nregs_off, RV_REG_T1, ctx);
-=20
--	store_args(nregs, args_off, ctx);
-+	store_args(nr_arg_slots, args_off, ctx);
-=20
- 	/* skip to actual body of traced function */
- 	if (flags & BPF_TRAMP_F_SKIP_FRAME)
-@@ -947,7 +971,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tra=
-mp_image *im,
- 	}
-=20
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
--		restore_args(nregs, args_off, ctx);
-+		restore_args(min_t(int, nr_arg_slots, RV_MAX_ARG_REGS), args_off, ctx);
-+		restore_stack_args(nr_arg_slots - RV_MAX_ARG_REGS, args_off, stk_arg_off=
-, ctx);
- 		ret =3D emit_call((const u64)orig_call, true, ctx);
- 		if (ret)
- 			goto out;
-@@ -982,7 +1007,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tr=
-amp_image *im,
- 	}
-=20
- 	if (flags & BPF_TRAMP_F_RESTORE_REGS)
--		restore_args(nregs, args_off, ctx);
-+		restore_args(min_t(int, nr_arg_slots, RV_MAX_ARG_REGS), args_off, ctx);
-=20
- 	if (save_ret) {
- 		emit_ld(RV_REG_A0, -retval_off, RV_REG_FP, ctx);
---=20
-2.34.1
+Ohh. It's buried inside that patch.
+Pls make commit log a bit more clear that that commit 17bce3b2ae2d
+broke x86_call_depth_emit_accounting logic.
 
+> Signed-off-by: Joan Bruguera Mic=C3=B3 <joanbrugueram@gmail.com>
+> Reviewed-by: Uros Bizjak <ubizjak@gmail.com>
+> Acked-by: Ingo Molnar <mingo@kernel.org>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> ---
+>  arch/x86/include/asm/alternative.h |  4 ++--
+>  arch/x86/kernel/callthunks.c       |  4 ++--
+>  arch/x86/net/bpf_jit_comp.c        | 19 ++++++++-----------
+>  3 files changed, 12 insertions(+), 15 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/al=
+ternative.h
+> index fcd20c6dc7f9..67b68d0d17d1 100644
+> --- a/arch/x86/include/asm/alternative.h
+> +++ b/arch/x86/include/asm/alternative.h
+> @@ -117,7 +117,7 @@ extern void callthunks_patch_builtin_calls(void);
+>  extern void callthunks_patch_module_calls(struct callthunk_sites *sites,
+>                                           struct module *mod);
+>  extern void *callthunks_translate_call_dest(void *dest);
+> -extern int x86_call_depth_emit_accounting(u8 **pprog, void *func);
+> +extern int x86_call_depth_emit_accounting(u8 **pprog, void *func, void *=
+ip);
+>  #else
+>  static __always_inline void callthunks_patch_builtin_calls(void) {}
+>  static __always_inline void
+> @@ -128,7 +128,7 @@ static __always_inline void *callthunks_translate_cal=
+l_dest(void *dest)
+>         return dest;
+>  }
+>  static __always_inline int x86_call_depth_emit_accounting(u8 **pprog,
+> -                                                         void *func)
+> +                                                         void *func, voi=
+d *ip)
+>  {
+>         return 0;
+>  }
+> diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
+> index 30335182b6b0..e92ff0c11db8 100644
+> --- a/arch/x86/kernel/callthunks.c
+> +++ b/arch/x86/kernel/callthunks.c
+> @@ -314,7 +314,7 @@ static bool is_callthunk(void *addr)
+>         return !bcmp(pad, insn_buff, tmpl_size);
+>  }
+>
+> -int x86_call_depth_emit_accounting(u8 **pprog, void *func)
+> +int x86_call_depth_emit_accounting(u8 **pprog, void *func, void *ip)
+>  {
+>         unsigned int tmpl_size =3D SKL_TMPL_SIZE;
+>         u8 insn_buff[MAX_PATCH_LEN];
+> @@ -327,7 +327,7 @@ int x86_call_depth_emit_accounting(u8 **pprog, void *=
+func)
+>                 return 0;
+>
+>         memcpy(insn_buff, skl_call_thunk_template, tmpl_size);
+> -       apply_relocation(insn_buff, tmpl_size, *pprog,
+> +       apply_relocation(insn_buff, tmpl_size, ip,
 
-X-sender: <netdev+bounces-83574-steffen.klassert=3Dsecunet.com@vger.kernel.=
-org>
-X-Receiver: <steffen.klassert@secunet.com> ORCPT=3Drfc822;steffen.klassert@=
-secunet.com NOTIFY=3DNEVER; X-ExtendedProps=3DBQAVABYAAgAAAAUAFAARAPDFCS25B=
-AlDktII2g02frgPADUAAABNaWNyb3NvZnQuRXhjaGFuZ2UuVHJhbnNwb3J0LkRpcmVjdG9yeURh=
-dGEuSXNSZXNvdXJjZQIAAAUAagAJAAEAAAAAAAAABQAWAAIAAAUAQwACAAAFAEYABwADAAAABQB=
-HAAIAAAUAEgAPAGIAAAAvbz1zZWN1bmV0L291PUV4Y2hhbmdlIEFkbWluaXN0cmF0aXZlIEdyb3=
-VwIChGWURJQk9IRjIzU1BETFQpL2NuPVJlY2lwaWVudHMvY249U3RlZmZlbiBLbGFzc2VydDY4Y=
-wUACwAXAL4AAACheZxkHSGBRqAcAp3ukbifQ049REI2LENOPURhdGFiYXNlcyxDTj1FeGNoYW5n=
-ZSBBZG1pbmlzdHJhdGl2ZSBHcm91cCAoRllESUJPSEYyM1NQRExUKSxDTj1BZG1pbmlzdHJhdGl=
-2ZSBHcm91cHMsQ049c2VjdW5ldCxDTj1NaWNyb3NvZnQgRXhjaGFuZ2UsQ049U2VydmljZXMsQ0=
-49Q29uZmlndXJhdGlvbixEQz1zZWN1bmV0LERDPWRlBQAOABEABiAS9uuMOkqzwmEZDvWNNQUAH=
-QAPAAwAAABtYngtZXNzZW4tMDIFADwAAgAADwA2AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5z=
-cG9ydC5NYWlsUmVjaXBpZW50LkRpc3BsYXlOYW1lDwARAAAAS2xhc3NlcnQsIFN0ZWZmZW4FAAw=
-AAgAABQBsAAIAAAUAWAAXAEoAAADwxQktuQQJQ5LSCNoNNn64Q049S2xhc3NlcnQgU3RlZmZlbi=
-xPVT1Vc2VycyxPVT1NaWdyYXRpb24sREM9c2VjdW5ldCxEQz1kZQUAJgACAAEFACIADwAxAAAAQ=
-XV0b1Jlc3BvbnNlU3VwcHJlc3M6IDANClRyYW5zbWl0SGlzdG9yeTogRmFsc2UNCg8ALwAAAE1p=
-Y3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuRXhwYW5zaW9uR3JvdXBUeXBlDwAVAAAATWVtYmV=
-yc0dyb3VwRXhwYW5zaW9uBQAjAAIAAQ=3D=3D
+Did the logic inside apply_relocation() change to have
+a new meaning for 'dest' and 'src'?
+Answering to myself... yes. in that commit.
+Better commit log would have made the code review so much easier.
+
+>                          skl_call_thunk_template, tmpl_size);
+>
+>         memcpy(*pprog, insn_buff, tmpl_size);
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 09f7dc9d4d65..f2e8769f5eee 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -481,7 +481,7 @@ static int emit_rsb_call(u8 **pprog, void *func, void=
+ *ip)
+>  {
+>         void *adjusted_ip;
+>         OPTIMIZER_HIDE_VAR(func);
+> -       adjusted_ip =3D ip + x86_call_depth_emit_accounting(pprog, func);
+> +       adjusted_ip =3D ip + x86_call_depth_emit_accounting(pprog, func, =
+ip);
+
+Now I see why you added extra var in the previous patch.
+Should have mentioned it in the commit log.
+
+>         return emit_patch(pprog, func, adjusted_ip, 0xE8);
+>  }
+>
+> @@ -1973,20 +1973,17 @@ st:                     if (is_imm8(insn->off))
+>
+>                         /* call */
+>                 case BPF_JMP | BPF_CALL: {
+> -                       int offs;
+> +                       u8 *ip =3D image + addrs[i - 1];
+>
+>                         func =3D (u8 *) __bpf_call_base + imm32;
+>                         if (tail_call_reachable) {
+>                                 RESTORE_TAIL_CALL_CNT(bpf_prog->aux->stac=
+k_depth);
+> -                               if (!imm32)
+> -                                       return -EINVAL;
+> -                               offs =3D 7 + x86_call_depth_emit_accounti=
+ng(&prog, func);
+> -                       } else {
+> -                               if (!imm32)
+> -                                       return -EINVAL;
+> -                               offs =3D x86_call_depth_emit_accounting(&=
+prog, func);
+> +                               ip +=3D 7;
+>                         }
+> -                       if (emit_call(&prog, func, image + addrs[i - 1] +=
+ offs))
+> +                       if (!imm32)
+> +                               return -EINVAL;
+> +                       ip +=3D x86_call_depth_emit_accounting(&prog, fun=
+c, ip);
+> +                       if (emit_call(&prog, func, ip))
+>                                 return -EINVAL;
+>                         break;
+>                 }
+> @@ -2836,7 +2833,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf=
+_tramp_image *im, void *rw_im
+>                  * Direct-call fentry stub, as such it needs accounting f=
+or the
+>                  * __fentry__ call.
+>                  */
+> -               x86_call_depth_emit_accounting(&prog, NULL);
+> +               x86_call_depth_emit_accounting(&prog, NULL, image);
+
+Overall it all makes sense.
+Pls respin with more precise commit logs.
+
+X-sender: <linux-kernel+bounces-125454-steffen.klassert=3Dcunet.com@vger.ke=
+rnel.org>
+X-Receiver: <steffen.klassert@secunet.com> ORCPT=3Dc822;steffen.klassert@se=
+cunet.com NOTIFY=3DVER; X-ExtendedProps=3DAVABYAAgAAAAUAFAARAPDFCS25BAlDktI=
+I2g02frgPADUAAABNaWNyb3NvZnQuRXhjaGFuZ2UuVHJhbnNwb3J0LkRpcmVjdG9yeURhdGEuSX=
+NSZXNvdXJjZQIAAAUAagAJAAEAAAAAAAAABQAWAAIAAAUAQwACAAAFAEYABwADAAAABQBHAAIAA=
+AUAEgAPAGIAAAAvbz1zZWN1bmV0L291PUV4Y2hhbmdlIEFkbWluaXN0cmF0aXZlIEdyb3VwIChG=
+WURJQk9IRjIzU1BETFQpL2NuPVJlY2lwaWVudHMvY249U3RlZmZlbiBLbGFzc2VydDY4YwUACwA=
+XAL4AAACheZxkHSGBRqAcAp3ukbifQ049REI2LENOPURhdGFiYXNlcyxDTj1FeGNoYW5nZSBBZG=
+1pbmlzdHJhdGl2ZSBHcm91cCAoRllESUJPSEYyM1NQRExUKSxDTj1BZG1pbmlzdHJhdGl2ZSBHc=
+m91cHMsQ049c2VjdW5ldCxDTj1NaWNyb3NvZnQgRXhjaGFuZ2UsQ049U2VydmljZXMsQ049Q29u=
+ZmlndXJhdGlvbixEQz1zZWN1bmV0LERDPWRlBQAOABEABiAS9uuMOkqzwmEZDvWNNQUAHQAPAAw=
+AAABtYngtZXNzZW4tMDIFADwAAgAADwA2AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC=
+5NYWlsUmVjaXBpZW50LkRpc3BsYXlOYW1lDwARAAAAS2xhc3NlcnQsIFN0ZWZmZW4FAAwAAgAAB=
+QBsAAIAAAUAWAAXAEoAAADwxQktuQQJQ5LSCNoNNn64Q049S2xhc3NlcnQgU3RlZmZlbixPVT1V=
+c2VycyxPVT1NaWdyYXRpb24sREM9c2VjdW5ldCxEQz1kZQUAJgACAAEFACIADwAxAAAAQXV0b1J=
+lc3BvbnNlU3VwcHJlc3M6IDANClRyYW5zbWl0SGlzdG9yeTogRmFsc2UNCg8ALwAAAE1pY3Jvc2=
+9mdC5FeGNoYW5nZS5UcmFuc3BvcnQuRXhwYW5zaW9uR3JvdXBUeXBlDwAVAAAATWVtYmVyc0dyb=
+3VwRXhwYW5zaW9uBQAjAAIAAQ=3D=0A=
 X-CreatedBy: MSExchange15
-X-HeloDomain: a.mx.secunet.com
-X-ExtendedProps: BQBjAAoAM8xAQuxQ3AgFAGEACAABAAAABQA3AAIAAA8APAAAAE1pY3Jvc2=
+X-HeloDomain: b.mx.secunet.com
+X-ExtendedProps: BQBjAAoAPpLp8x1Q3AgFAGEACAABAAAABQA3AAIAAA8APAAAAE1pY3Jvc2=
 9mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5Pcmdhbml6YXRpb25TY29wZREAA=
-AAAAAAAAAAAAAAAAAAAAAUASQACAAEFAGIACgBSAAAAr4oAAAUABAAUIAEAAAAcAAAAc3RlZmZl=
+AAAAAAAAAAAAAAAAAAAAAUASQACAAEFAGIACgC7AAAAi4oAAAUABAAUIAEAAAAcAAAAc3RlZmZl=
 bi5rbGFzc2VydEBzZWN1bmV0LmNvbQUABgACAAEFACkAAgABDwAJAAAAQ0lBdWRpdGVkAgABBQA=
-CAAcAAQAAAAUAAwAHAAAAAAAFAAUAAgABBQBkAA8AAwAAAEh1Yg=3D=3D
+CAAcAAQAAAAUAAwAHAAAAAAAFAAUAAgABBQBkAA8AAwAAAEh1Yg=3D=0A=
 X-Source: SMTP:Default MBX-DRESDEN-01
-X-SourceIPAddress: 62.96.220.36
-X-EndOfInjectedXHeaders: 22207
+X-SourceIPAddress: 62.96.220.37
+X-EndOfInjectedXHeaders: 23484
 Received: from cas-essen-02.secunet.de (10.53.40.202) by
  mbx-dresden-01.secunet.de (10.53.40.199) with Microsoft SMTP Server
- (version=3DTLS1_2, cipher=3DTLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.37; Sun, 31 Mar 2024 11:23:15 +0200
-Received: from a.mx.secunet.com (62.96.220.36) by cas-essen-02.secunet.de
- (10.53.40.202) with Microsoft SMTP Server (version=3DTLS1_2,
- cipher=3DTLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37 via Fronte=
-nd
- Transport; Sun, 31 Mar 2024 11:23:15 +0200
+ (version=3DS1_2, cipher=3DS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.37; Fri, 29 Mar 2024 22:53:44 +0100
+Received: from b.mx.secunet.com (62.96.220.37) by cas-essen-02.secunet.de
+ (10.53.40.202) with Microsoft SMTP Server (version=3DS1_2,
+ cipher=3DS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Fri, 29 Mar 2024 22:53:44 +0100
 Received: from localhost (localhost [127.0.0.1])
-	by a.mx.secunet.com (Postfix) with ESMTP id E0867207D8
-	for <steffen.klassert@secunet.com>; Sun, 31 Mar 2024 11:23:15 +0200 (CEST)
+	by b.mx.secunet.com (Postfix) with ESMTP id 131EF2032C
+	for <steffen.klassert@secunet.com>; Fri, 29 Mar 2024 22:53:44 +0100 (CET)
 X-Virus-Scanned: by secunet
 X-Spam-Flag: NO
-X-Spam-Score: -4.951
+X-Spam-Score: -2.749
 X-Spam-Level:
-X-Spam-Status: No, score=3D-4.951 tagged_above=3D-999 required=3D2.1
-	tests=3D[BAYES_00=3D-1.9, HEADER_FROM_DIFFERENT_DOMAINS=3D0.249,
-	MAILING_LIST_MULTI=3D-1, RCVD_IN_DNSWL_MED=3D-2.3, SPF_HELO_NONE=3D0.001,
-	SPF_PASS=3D-0.001] autolearn=3Dunavailable autolearn_force=3Dno
-Received: from a.mx.secunet.com ([127.0.0.1])
+X-Spam-Status: No, score=3D.749 tagged_above=3D99 required=3D1
+	tests=3DAYES_00=3D.9, DKIM_SIGNED=3D1, DKIM_VALID=3D.1,
+	DKIM_VALID_AU=3D.1, FREEMAIL_FORGED_FROMDOMAIN=3D001,
+	FREEMAIL_FROM=3D001, HEADER_FROM_DIFFERENT_DOMAINS=3D249,
+	MAILING_LIST_MULTI=3D, RCVD_IN_DNSWL_NONE=3D.0001,
+	SPF_HELO_NONE=3D001, SPF_PASS=3D.001]
+	autolearn=3Davailable autolearn_force=3D
+Authentication-Results: a.mx.secunet.com (amavisd-new);
+	dkim=3Dss (2048-bit key) header.d=3Dail.com
+Received: from b.mx.secunet.com ([127.0.0.1])
 	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FgcpQXHOp7KE for <steffen.klassert@secunet.com>;
-	Sun, 31 Mar 2024 11:23:12 +0200 (CEST)
-Received-SPF: Pass (sender SPF authorized) identity=3Dmailfrom; client-ip=
-=3D139.178.88.99; helo=3Dsv.mirrors.kernel.org; envelope-from=3Dnetdev+boun=
-ces-83574-steffen.klassert=3Dsecunet.com@vger.kernel.org; receiver=3Dsteffe=
-n.klassert@secunet.com=20
-DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 48F6220892
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99]=
-)
+	with ESMTP id d5KexhzrzbVj for <steffen.klassert@secunet.com>;
+	Fri, 29 Mar 2024 22:53:43 +0100 (CET)
+Received-SPF: Pass (sender SPF authorized) identity=3Dilfrom; client-ip=147=
+.75.199.223; helo=3D.mirrors.kernel.org; envelope-from=3Dnux-kernel+bounces=
+-125454-steffen.klassert=3Dcunet.com@vger.kernel.org; receiver=3Deffen.klas=
+sert@secunet.com=20
+DKIM-Filter: OpenDKIM Filter v2.11.0 b.mx.secunet.com 3B5E2200BB
+Authentication-Results: b.mx.secunet.com;
+	dkim=3Dss (2048-bit key) header.d=3Dail.com header.i=3Dmail.com header.b=
+=3DtFEeVUc"
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223=
+])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by a.mx.secunet.com (Postfix) with ESMTPS id 48F6220892
-	for <steffen.klassert@secunet.com>; Sun, 31 Mar 2024 11:23:12 +0200 (CEST)
+	by b.mx.secunet.com (Postfix) with ESMTPS id 3B5E2200BB
+	for <steffen.klassert@secunet.com>; Fri, 29 Mar 2024 22:53:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.2=
 5.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D836A2828E6
-	for <steffen.klassert@secunet.com>; Sun, 31 Mar 2024 09:23:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB9C71C211BB
+	for <steffen.klassert@secunet.com>; Fri, 29 Mar 2024 21:53:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B78147764E;
-	Sun, 31 Mar 2024 09:22:51 +0000 (UTC)
-X-Original-To: netdev@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B9A513CF9A;
+	Fri, 29 Mar 2024 21:53:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=3Dss (2048-bit key) header.d=3Dail.com header.i=3Dmail.com header.b=
+=3DtFEeVUc"
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221=
+.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2228B6E5E8;
-	Sun, 31 Mar 2024 09:22:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=3Dnone smtp.client-ip=
-=3D45.249.212.51
-ARC-Seal: i=3D1; a=3Drsa-sha256; d=3Dsubspace.kernel.org; s=3Darc-20240116;
-	t=3D1711876971; cv=3Dnone; b=3Dhv2V0jigilROcK8EYto6mRFG8DmuWtzxXZdqHtz9fMG=
-0J+dkwO3J41ISZ+hTRcRxWrMDvtPfqrGiOO2Pa5vS9Hw9hNW0+rcY8I0q3N1C1xYo9KnGofkVAW=
-YNtZ045WxaXdk92DZrHEodFCKU10wDs2vIdFY6zGSn/djqvoiqa+0=3D
-ARC-Message-Signature: i=3D1; a=3Drsa-sha256; d=3Dsubspace.kernel.org;
-	s=3Darc-20240116; t=3D1711876971; c=3Drelaxed/simple;
-	bh=3DNU/seP21mtWkdilB97nH/1Auom8uGHKorbHfj6W3x1U=3D;
-	h=3DFrom:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=3Dt5VU4JM9HWfq6ydlfdq15M8AHsNevxb1HZ/WRW7e5K=
-CGFbuynlYb35Qx1hbwhN8rTBK/vhMo3wMg6IQKk1cvjnlml0wLsB2fxmf42iOXZsYiZWVGRgHzQ=
-LCt/253/+2SOkeNOhmEUNNNocVPFZzGfHby5lZfh2NLhB8+aGYDVJ8=3D
-ARC-Authentication-Results: i=3D1; smtp.subspace.kernel.org; dmarc=3Dnone (=
-p=3Dnone dis=3Dnone) header.from=3Dhuaweicloud.com; spf=3Dpass smtp.mailfro=
-m=3Dhuaweicloud.com; arc=3Dnone smtp.client-ip=3D45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=3Dnone (p=3Dnone di=
-s=3Dnone) header.from=3Dhuaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=3Dpass smtp.mailfrom=
-=3Dhuaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V6pZh3SXWz4f3lgR;
-	Sun, 31 Mar 2024 17:22:36 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id B51391A0DDA;
-	Sun, 31 Mar 2024 17:22:44 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP4 (Coremail) with SMTP id gCh0CgCH2WtkKwlmesQWIw--.11467S3;
-	Sun, 31 Mar 2024 17:22:44 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: <bpf@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<netdev@vger.kernel.org>
-CC: =3D?UTF-8?q?Bj=3DC3=3DB6rn=3D20T=3DC3=3DB6pel?=3D <bjorn@kernel.org>, A=
-lexei Starovoitov
-	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
-	<andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
- Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
-	<yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh
-	<kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
-	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Palmer Dabbelt
-	<palmer@dabbelt.com>, Pu Lehui <pulehui@huawei.com>, Pu Lehui
-	<pulehui@huaweicloud.com>
-Subject: [PATCH bpf-next 1/2] riscv, bpf: Add 12-argument support for RV64 =
-bpf trampoline
-Date: Sun, 31 Mar 2024 09:24:04 +0000
-Message-ID: <20240331092405.822571-2-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240331092405.822571-1-pulehui@huaweicloud.com>
-References: <20240331092405.822571-1-pulehui@huaweicloud.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F92E1E897;
+	Fri, 29 Mar 2024 21:53:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=3Dne smtp.client-ip 9=
+.85.221.54
+ARC-Seal: i=3D a=3Da-sha256; d=3Dbspace.kernel.org; s=3Dc-20240116;
+	t=1711749199; cv=3Dne; b=3DUIPWpHs7mLZnVdaPh2sGq8r5F5xF21yFPDxMZ/gm0YeJrT/=
+TWfFs/Gh9WnFRa71L3nMBK9Nnv6q1uk/kZxQqMajeyclU7BgxRjaaMsw/eReYwfsEd5M1f1xxGZ=
+/6c71chWZmsbAHPSHVYj437pvbvRgRDUvYwenfjdDa7AKfYARC-Message-Signature: i=3D =
+a=3Da-sha256; d=3Dbspace.kernel.org;
+	s=3Dc-20240116; t=1711749199; c=3Dlaxed/simple;
+	bh=3DGv2aECxPpKjlvqInjY5t6BAWJ1JpiWyKfHeeHLgFY=3D=0A=
+	h=3DME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=3DwUMXak4yyRayehjv1ar0r8EyyPLMwBc3uJ0bwl/C4uF0p7B7G=
+/bWOwvNeZYeq6b3W3Vcfr0NdbT29Ffwzm149FPXaVcG2iO3WP/b1G80f4/vw74ISsQwa8epN/zn=
+528A3NyNmNXX0nycQdjpBblQ7EyQAtFDKts98b9c+XxikARC-Authentication-Results: i=
+=3D smtp.subspace.kernel.org; dmarc=3Dss (p=3Dne dis=3Dne) header.from=3Dai=
+l.com; spf=3Dss smtp.mailfrom=3Dail.com; dkim=3Dss (2048-bit key) header.d=
+=3Dail.com header.i=3Dmail.com header.b=3DFEeVUc; arc=3Dne smtp.client-ip 9=
+.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=3Dss (p=3Dne dis=3D=
+ne) header.from=3Dail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=3Dss smtp.mailfrom=3D=
+ail.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-341e3682c78=
+so1377084f8f.0;
+        Fri, 29 Mar 2024 14:53:16 -0700 (PDT)
+DKIM-Signature: v=3D a=3Da-sha256; c=3Dlaxed/relaxed;
+        d=3Dail.com; s 230601; t=1711749195; x=1712353995; darn=3Der.kernel=
+.org;
+        h=3Dntent-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3DnIkrXKOxIFx664NuP3H7hYth27RezAKOIyptzRih0=3D=0A=
+        b=3DFEeVUcXHxQSM1acoLPB3xIZ2HSM6vWTSGbB4Vn2PTFo59S2qm9Wdb/PYmKmlkt7=
+q
+         bweDNoN2FkFdd+biODVbvTAWaLZraY63rTLXLI3Uj2YXC5gXRj51NmN6ndvk0CmDMb=
+0e
+         HIob6o5pR32SYbzkWHSn4Jg4Btu/S+g0UAjgMXPRMh1EcOgJV/whXSYiykrw7f/6s7=
+7P
+         /H5ZCsxnDWl4kNYCj9mzXKbfqQBAv6Lnt80sLG1vRk3gD9HqNaAkNP/seJmggh7Vb0=
+eo
+         x3i++yNtv1UR3TkN0hCOiKzOfpwFxG/x3+oaCYHUq4IcorpsSpcrx239+6AZFAOrQd=
+bA
+         WyHA=3D=0A=
+X-Google-DKIM-Signature: v=3D a=3Da-sha256; c=3Dlaxed/relaxed;
+        d=1E100.net; s 230601; t=1711749195; x=1712353995;
+        h=3Dntent-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3DnIkrXKOxIFx664NuP3H7hYth27RezAKOIyptzRih0=3D=0A=
+        b=3DWLVHtPvz9J+QXVTc54yStjx+NkapzU4nW5NsuqPQ5h82t98mF43eq2fZPnUSPha=
+T
+         MGdf9ycXYZkO41VrOpN62JqHNhZQR/quC5iGCtAX8SbX3Zql03mdeT6pd9hdt04AMw=
+NI
+         v7s3h6cmiqq3SNt6pWwVBYRqxOm+JPpZT5yDuDLXj7HFAWYEdMSKpeIILWSrLfRqeG=
+mF
+         0Wu0zy7UE5pH6ZQnPhhEBhM4jmoqIk7Jl9U1SyEn4ioN3y3x18oyrKxSulpIT55d/y=
+c8
+         64AGB3PNnhGmaMJktfTQg6iokvhAcecEo9Sr4wvXZuzD5l1KTyylDAgGYGp2D5OwKZ=
+yP
+         iGgw=3D=0A=
+X-Forwarded-Encrypted: i=3D AJvYcCUd4xvQHL/oaQCMtCuugnR3C+1mNP+kYnHMed8zOGO=
+5hdRvAX21HlPyuCzWSAKy8Bt5pMwgz3toD1E3Xn4ARVBMo22+kQWtIVLj26ICYQSx1B5RhgBvSb=
+m3JXQKMiyRL5E4gFZ/VAumoFjE2Vcpg7zLq5/DEIrGAbwW
+X-Gm-Message-State: AOJu0YyKhnyWxAp7UfXLi6lEMSL4950T9e1nKDvTnmG9yMcApYpszSg=
+u
+	6nlrYsSq1udaQLoImKyk+HbI3U4g2GsYOT0pZe1ZoHsOJsdjCd5+EVv1QU8gEWIM6DBowMLNfm=
+e
+	dpizDXQEt670AhG7mMjM3Cbt2ZFB5CMSUPpAX-Google-Smtp-Source: AGHT+IESQ34cqmbc=
+zYM0CtTFQ4n7hfhahLrps7uGUEuczD5xhOvFv09EChC/YJ/FIRR8VtuzAy4gIzrPZKwGa0EMMVQ=
+X-Received: by 2002:a5d:6d49:0:b0:341:e4f4:4399 with SMTP id
+ k9-20020a5d6d49000000b00341e4f44399mr1687491wri.68.1711749195364; Fri, 29 =
+Mar
+ 2024 14:53:15 -0700 (PDT)
 Precedence: bulk
-X-Mailing-List: netdev@vger.kernel.org
-List-Id: <netdev.vger.kernel.org>
-List-Subscribe: <mailto:netdev+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:netdev+unsubscribe@vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+List-Id: <linux-kernel.vger.kernel.org>
+List-Subscribe: <mailto:linux-kernel+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-kernel+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=3D"UTF-8"
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCH2WtkKwlmesQWIw--.11467S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3Ar15Jw13Kr1kAF13Cr45ZFb_yoWxJr4Dpa
-	1DKrsxAFyvqa17Xa97WF1UXF1aya1qva43CFW7Gas3uFWYqr98GayFkF4jyry5GryrAw1f
-	AFs0vF98KF17GrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBE14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-	x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-	0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-	IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-	Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
-	xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
-	6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2
-	Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
-	Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
-	IF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUSYLPUUUUU
-	=3D
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
-Return-Path: netdev+bounces-83574-steffen.klassert=3Dsecunet.com@vger.kerne=
-l.org
-X-MS-Exchange-Organization-OriginalArrivalTime: 31 Mar 2024 09:23:15.9421
+References: <20240329094906.18147-1-ubizjak@gmail.com> <20240329094906.1814=
+7-3-ubizjak@gmail.com>
+In-Reply-To: <20240329094906.18147-3-ubizjak@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 29 Mar 2024 14:53:03 -0700
+Message-ID: <CAADnVQ+6D++hCXaP=3D+Q5wienMzhHo3h9YCvpA_7sHjMt+q6A@mail.gmail=
+.com>
+Subject: Re: [PATCH RESEND bpf 2/2] x86/bpf: Fix IP for relocating call dep=
+th accounting
+To: Uros Bizjak <ubizjak@gmail.com>
+Cc: X86 ML <x86@kernel.org>, bpf <bpf@vger.kernel.org>,=20
+	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kern=
+el.org>,=20
+	=3DTF-8?Q?Joan_Bruguera_Mic=C3=B3?=3Doanbrugueram@gmail.com>,=20
+	Ingo Molnar <mingo@kernel.org>, Alexei Starovoitov <ast@kernel.org>,=20
+	Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset=3DTF-8"
+Content-Transfer-Encoding: quoted-printable
+Return-Path: linux-kernel+bounces-125454-steffen.klassert=3Dcunet.com@vger.=
+kernel.org
+X-MS-Exchange-Organization-OriginalArrivalTime: 29 Mar 2024 21:53:44.1103
  (UTC)
-X-MS-Exchange-Organization-Network-Message-Id: d051c5e4-93c2-4f22-1379-08dc=
-51643222
-X-MS-Exchange-Organization-OriginalClientIPAddress: 62.96.220.36
+X-MS-Exchange-Organization-Network-Message-Id: b06851bb-1973-4a64-ca20-08dc=
+503ab42f
+X-MS-Exchange-Organization-OriginalClientIPAddress: 62.96.220.37
 X-MS-Exchange-Organization-OriginalServerIPAddress: 10.53.40.202
 X-MS-Exchange-Organization-Cross-Premises-Headers-Processed: cas-essen-02.s=
 ecunet.de
-X-MS-Exchange-Organization-OrderedPrecisionLatencyInProgress: LSRV=3Dmbx-dr=
-esden-01.secunet.de:TOTAL-HUB=3D0.409|SMR=3D0.346(SMRDE=3D0.036|SMRC=3D0.30=
-9(SMRCL=3D0.103|X-SMRCR=3D0.309))|CAT=3D0.062(CATOS=3D0.016
- (CATSM=3D0.016(CATSM-Malware
- Agent=3D0.015))|CATRESL=3D0.020(CATRESLP2R=3D0.001)|CATORES=3D0.023
- (CATRS=3D0.023(CATRS-Index Routing Agent=3D0.022)));2024-03-31T09:23:16.39=
-2Z
+X-MS-Exchange-Organization-OrderedPrecisionLatencyInProgress: LSRV=3Dx-dres=
+den-01.secunet.de:TOTAL-HUB=3D405|SMR=3D340(SMRDE=3D035|SMRC=3D304(SMRCL=3D=
+101|X-SMRCR=3D305))|CAT=3D064(CATOS=3D011
+ (CATSM=3D011(CATSM-Malware
+ Agent=3D011))|CATRESL=3D024(CATRESLP2R=3D001)|CATORES=3D026
+ (CATRS=3D026(CATRS-Index Routing Agent=3D025)));2024-03-29T21:53:44.520Z
 X-MS-Exchange-Forest-ArrivalHubServer: mbx-dresden-01.secunet.de
 X-MS-Exchange-Organization-AuthSource: cas-essen-02.secunet.de
 X-MS-Exchange-Organization-AuthAs: Anonymous
 X-MS-Exchange-Organization-FromEntityHeader: Internet
-X-MS-Exchange-Organization-OriginalSize: 13819
+X-MS-Exchange-Organization-OriginalSize: 14782
 X-MS-Exchange-Organization-HygienePolicy: Standard
-X-MS-Exchange-Organization-MessageLatency: SRV=3Dcas-essen-02.secunet.de:TO=
-TAL-FE=3D0.040|SMR=3D0.023(SMRPI=3D0.021(SMRPI-FrontendProxyAgent=3D0.021))=
-|SMS=3D0.017
+X-MS-Exchange-Organization-MessageLatency: SRV=CAs-essen-02.secunet.de:TOTA=
+L-FE=3D012|SMR=3D011(SMRPI=3D008(SMRPI-FrontendProxyAgent=3D008))
 X-MS-Exchange-Organization-AVStamp-Enterprise: 1.0
 X-MS-Exchange-Organization-Recipient-Limit-Verified: True
 X-MS-Exchange-Organization-TotalRecipientCount: 1
@@ -497,326 +488,286 @@ X-MS-Exchange-Organization-Rules-Execution-History: 0b0cf904-14ac-4724-8bdf=
 6-8c5d-b3d6ddbb3d55%%%16355082-c50b-4214-9c7d-d39575f9f79b
 X-MS-Exchange-Forest-RulesExecuted: mbx-dresden-01
 X-MS-Exchange-Organization-RulesExecuted: mbx-dresden-01
-X-MS-Exchange-Forest-IndexAgent-0: AQ0CZW4AAa4MAAAPAAADH4sIAAAAAAAEAM1Ze1Mb=
-yRGf1VsCgU3Z5t
- 4Z31VdAL2FLInzo8wRuLgOYwpw6q5clGq1GomNJa1qd4VxEn+D/J9P
- kk+QL5bumX3MrlYWnLlUtiiY7enpx697enqWf7cOTGP0Az2e0kN2Md
- Xpk8l0iIPnF1P1HdPLmjF6ls/lc2cXukUnqq1dULXXs2itTvvTsWbr
- xpiq5mA6YmPbotZ0MjFMm/YNk5q6pV02G7Q76edztqmOJsZQH7MyPb
- tgVJuaJqzASerPuest+uQptfS/MaO/MW02Nmn3vc2sfM7S1KFqSvre
- VM+pOu4he60puKhlm1PNlplq51ypycAsVqTvWD7XN7SpRcF2G4yxdH
- uqck/eIRcVaiwQwahq05Fh2fSXw/0j2tVBHOjL59TBwGQDFfW9uzAs
- Rm3DVofcZtozgDo2bMquNMZ6tP6ff/mrdaGSg5PPgSLwe0A1Y3wJtq
- IJb+rnZQT8UB+//YFe2PbE+qFSYUP9SjfLXcOwYQFGpQJ/p1eVy2a5
- XbGMqamxyltmjtmwAphWuna/rH132Ky1GwjSbYlrNXcQzrC4gW5fTL
- tcDHesNDbGJd1SnTc27JcmltrVSz1Dq5hsyFSLWZWe8W48NNRepWeq
- fbtUr9a3qzv1nRJ7pLWrVdZs1tRH26zPtrV6s9XutWrqdrW5Xd/uNq
- usW9vuOtJBbnnS6yNw+dypPhizXsno90vd9wvTulQq5XMQZu1CyKqM
- mY3+dv6q2x1gmTQbZY3+gza3aSH6KXkPCKrRvj6E3L5QxwPWK9JGA8
- JtMRPjam0UNou0tkN74L4glDYxzj2936elEkBI1coiU7qLOPI5fdxj
- V7TVYohW41G91yiX6yrTmjusodVgl9SqQG9w5xdrzOfAyeuoff6clm
- qNYpMW4HeLPn8OeHynj7XhtMfoE9UaVbS+Xr54JpO/dcSUL75FJArf
- 9Vgfq8DJXzovd3/p7J781DnZ/+mUtnGRP3ewf3R28mvn6MXR6dEpre
- NSeRqWdM729tzhblMY12y3i3Uwr9neKTa2wUCIDa8/HfStY7MruzMx
- 3rKNS0Pv0S19UqRsPB1xDm+yY7+fMOqNiqDZeUxmT80x/nkMxA9oVM
- myoapolAu0bKg9oGpgbaDeMVQPq8hNQFoHErboVi7z0sF2jHrplmZf
- QaYUPioNxx1raNg3E0r/7nuAy/TH3HCHglV8Q6dPafUxhS0kjIZhob
- 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
- goeVE3RPnyx466xNei8Lrnn7BhldsA0MXIXQ5vnEuGcTKDmQawg4Wr
- mJ+iLDhOQb3NiB2RRvBXJZt9C5MIVEogluKSA744bCuzwv0t72y95U
- +QLxNXQl6nSE5Q7nBKiqyFGJIkG6TcDTG4WtKCvu7IgZqfn1fSrxeO
- O1IxQRv4gVVPkHu88ie8HiVLHrkV+2UwUVMufQWI97lktwX5mrcyeJ
- A9kOgQU6B84VJ4A/BVimQy5DPRDIiDMksehPaglAmw8EFMJBJGR4hK
- CgPcpuQbUJ1E10SzgpwZvi8cmU4Oi/Ga6BmyPFK8T0D5XmLEAtoRw7
- vOoQBurnPj7y+w1j9frmEVWRMNnGjyvDbRa7/S5J6bzBke+tyn7cr7
- btp70fzKHWQ8EDzK7MbxSp/Lc9czj5uUnjXvJlmaD0iLUhcLnOCZqA
- rsIkay8zmF/FWXM+1FyjUgxc2+E5X/azFeIvK8GYuTL4VM4Q54x3vd
- L73uGYgZt99Dyvze7JoRjDxQvJIVPE2+imIWvcFq5FSwQ4vkCdRJSZ
- ebCfzolE4fD+SkLFxiuCe2gEDPRew+tzMTLinK0qfl/xee2GAF+9xr
- hIK2rfsNEujgt4l40JFg6xhe6zUqc1PRbycCxw0sj/Mp3oSnxP3Ce0
- 3g6zqH/RtuW1aGJUmgyqR+GyyfubCk0ev13wEW3MLua3RD6B3NgQQT
- N2clJjYOjv8LqELODXIrAAABCtgBPD94bWwgdmVyc2lvbj0iMS4wIi
- BlbmNvZGluZz0idXRmLTE2Ij8+DQo8RW1haWxTZXQ+DQogIDxWZXJz
- aW9uPjE1LjAuMC4wPC9WZXJzaW9uPg0KICA8RW1haWxzPg0KICAgID
- xFbWFpbCBTdGFydEluZGV4PSIxNiI+DQogICAgICA8RW1haWxTdHJp
- bmc+cHVsZWh1aUBodWF3ZWkuY29tPC9FbWFpbFN0cmluZz4NCiAgIC
- A8L0VtYWlsPg0KICA8L0VtYWlscz4NCjwvRW1haWxTZXQ+AQurBTw/
- eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9InV0Zi0xNiI/Pg0KPF
- VybFNldD4NCiAgPFZlcnNpb24+MTUuMC4wLjA8L1ZlcnNpb24+DQog
- IDxVcmxzPg0KICAgIDxVcmwgU3RhcnRJbmRleD0iNDEzIiBQb3NpdG
- lvbj0iT3RoZXIiIFR5cGU9IlVybCI+DQogICAgICA8VXJsU3RyaW5n
- Pmh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L3Y2Ljgvc2
- 91cmNlL2tlcm5lbC9icGYvYnRmLmMjTDYxODQ8L1VybFN0cmluZz4N
- CiAgICA8L1VybD4NCiAgICA8VXJsIFN0YXJ0SW5kZXg9IjQ5MiIgUG
- 9zaXRpb249Ik90aGVyIiBUeXBlPSJVcmwiPg0KICAgICAgPFVybFN0
- cmluZz5odHRwczovL2VsaXhpci5ib290bGluLmNvbS9saW51eC92Ni
- 44L3NvdXJjZS9rZXJuZWwvYnBmL2J0Zi5jI0w2NzY5PC9VcmxTdHJp
- bmc+DQogICAgPC9Vcmw+DQogICAgPFVybCBTdGFydEluZGV4PSI1Nz
- EiIFBvc2l0aW9uPSJPdGhlciIgVHlwZT0iVXJsIj4NCiAgICAgIDxV
- cmxTdHJpbmc+aHR0cHM6Ly9naXRodWIuY29tL3Jpc2N2LW5vbi1pc2
- EvcmlzY3YtZWxmLXBzYWJpLWRvYy9yZWxlYXNlcy9kb3dubG9hZC9k
- cmFmdC0yMDIzMDkyOS1lNWM4MDBlNjYxYTUzZWZlM2MyNjc4ZDcxYT
- MwNjMyM2I2MGViMTNiL3Jpc2N2LWFiaS5wZGY8L1VybFN0cmluZz4N
- CiAgICA8L1VybD4NCiAgPC9VcmxzPg0KPC9VcmxTZXQ+AQzaAzw/eG
- 1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9InV0Zi0xNiI/Pg0KPENv
- bnRhY3RTZXQ+DQogIDxWZXJzaW9uPjE1LjAuMC4wPC9WZXJzaW9uPg
- 0KICA8Q29udGFjdHM+DQogICAgPENvbnRhY3QgU3RhcnRJbmRleD0i
- NiI+DQogICAgICA8UGVyc29uIFN0YXJ0SW5kZXg9IjYiPg0KICAgIC
- AgICA8UGVyc29uU3RyaW5nPlB1PC9QZXJzb25TdHJpbmc+DQogICAg
- ICA8L1BlcnNvbj4NCiAgICAgIDxFbWFpbHM+DQogICAgICAgIDxFbW
- FpbCBTdGFydEluZGV4PSIxNiI+DQogICAgICAgICAgPEVtYWlsU3Ry
- aW5nPnB1bGVodWlAaHVhd2VpLmNvbTwvRW1haWxTdHJpbmc+DQogIC
- AgICAgIDwvRW1haWw+DQogICAgICA8L0VtYWlscz4NCiAgICAgIDxD
- b250YWN0U3RyaW5nPlB1IExlaHVpICZsdDtwdWxlaHVpQGh1YXdlaS
- 5jb208L0NvbnRhY3RTdHJpbmc+DQogICAgPC9Db250YWN0Pg0KICA8
- L0NvbnRhY3RzPg0KPC9Db250YWN0U2V0PgEOzgFSZXRyaWV2ZXJPcG
- VyYXRvciwxMCwwO1JldHJpZXZlck9wZXJhdG9yLDExLDE7UG9zdERv
- Y1BhcnNlck9wZXJhdG9yLDEwLDA7UG9zdERvY1BhcnNlck9wZXJhdG
- 9yLDExLDA7UG9zdFdvcmRCcmVha2VyRGlhZ25vc3RpY09wZXJhdG9y
- LDEwLDM7UG9zdFdvcmRCcmVha2VyRGlhZ25vc3RpY09wZXJhdG9yLD
- ExLDA7VHJhbnNwb3J0V3JpdGVyUHJvZHVjZXIsMjAsOQ=3D=3D
-X-MS-Exchange-Forest-IndexAgent: 1 4852
-X-MS-Exchange-Forest-EmailMessageHash: 7B5AE8ED
+X-MS-Exchange-Forest-IndexAgent-0: AQ0CZW4AAYsLAAAPAAADH4sIAAAAAAAEAMVYeW8b=
+1xF/Sy4PUZKdOH
+ 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
+ gCYkt0gAKXzJrcJ/vvSWjVSKwUODx9lF+VGISgTK2+OFyj0t8AAYS+
+ Mjh82YLKPpHIr6AZCNQqGvwZ+fsA6enoBEWKolIMH6o4SJTvpgcoYf
+ UhqWYfEX5mWAtq4D7VtZqWDIml8QZNBbOXSXKnjG4uq0nVXC+uOcrL
+ H1W2dIWeqjiPcglsI1GPC8OST5J71RHYf0gyl0jmZ4Wco38uRQW/Lq
+ 3AFiVjSXko4yzxNlxLvCnqpwRUefbV5OGCZ5ZMeoUGgzLkpYRZhgYC
+ 8amoSbcsyxqUY1WNJsAi+30Zx4/WGGt/N86LUmZyI9VViSiZJjmwqf
+ 8H9miA7vkiAAABAu0CPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGlu
+ Zz0idXRmLTE2Ij8+DQo8VGFza1NldD4NCiAgPFZlcnNpb24+MTUuMC
+ 4wLjA8L1ZlcnNpb24+DQogIDxUYXNrcz4NCiAgICA8VGFzayBTdGFy
+ dEluZGV4PSI0OTYiPg0KICAgICAgPFRhc2tTdHJpbmc+Q291bGQgeW
+ 91IHNoYXJlIHRoZSBsaW5rIHRvIHdoYXQgdGhpcyAncmlwLXJlbGF0
+ aXZlJyByZWxvY2F0aW9uIGlzID88L1Rhc2tTdHJpbmc+DQogICAgIC
+ A8QXNzaWduZWVzPg0KICAgICAgICA8RW1haWxVc2VyIElkPSJ1Yml6
+ amFrQGdtYWlsLmNvbSI+VXJvcyBCaXpqYWs8L0VtYWlsVXNlcj4NCi
+ AgICAgIDwvQXNzaWduZWVzPg0KICAgIDwvVGFzaz4NCiAgPC9UYXNr
+ cz4NCjwvVGFza1NldD4BCpIFPD94bWwgdmVyc2lvbj0iMS4wIiBlbm
+ NvZGluZz0idXRmLTE2Ij8+DQo8RW1haWxTZXQ+DQogIDxWZXJzaW9u
+ PjE1LjAuMC4wPC9WZXJzaW9uPg0KICA8RW1haWxzPg0KICAgIDxFbW
+ FpbCBTdGFydEluZGV4PSI0NSI+DQogICAgICA8RW1haWxTdHJpbmc+
+ dWJpempha0BnbWFpbC5jb208L0VtYWlsU3RyaW5nPg0KICAgIDwvRW
+ 1haWw+DQogICAgPEVtYWlsIFN0YXJ0SW5kZXg9IjEwMyI+DQogICAg
+ ICA8RW1haWxTdHJpbmc+am9hbmJydWd1ZXJhbUBnbWFpbC5jb208L0
+ VtYWlsU3RyaW5nPg0KICAgIDwvRW1haWw+DQogICAgPEVtYWlsIFN0
+ YXJ0SW5kZXg9IjEwMzMiIFBvc2l0aW9uPSJPdGhlciI+DQogICAgIC
+ A8RW1haWxTdHJpbmc+bWluZ29Aa2VybmVsLm9yZzwvRW1haWxTdHJp
+ bmc+DQogICAgPC9FbWFpbD4NCiAgICA8RW1haWwgU3RhcnRJbmRleD
+ 0iMTA3OCIgUG9zaXRpb249Ik90aGVyIj4NCiAgICAgIDxFbWFpbFN0
+ cmluZz5hc3RAa2VybmVsLm9yZzwvRW1haWxTdHJpbmc+DQogICAgPC
+ 9FbWFpbD4NCiAgICA8RW1haWwgU3RhcnRJbmRleD0iMTExOCIgUG9z
+ aXRpb249Ik90aGVyIj4NCiAgICAgIDxFbWFpbFN0cmluZz5kYW5pZW
+ xAaW9nZWFyYm94Lm5ldDwvRW1haWxTdHJpbmc+DQogICAgPC9FbWFp
+ bD4NCiAgPC9FbWFpbHM+DQo8L0VtYWlsU2V0PgEM4wY8P3htbCB2ZX
+ JzaW9uPSIxLjAiIGVuY29kaW5nPSJ1dGYtMTYiPz4NCjxDb250YWN0
+ U2V0Pg0KICA8VmVyc2lvbj4xNS4wLjAuMDwvVmVyc2lvbj4NCiAgPE
+ NvbnRhY3RzPg0KICAgIDxDb250YWN0IFN0YXJ0SW5kZXg9IjMyIj4N
+ CiAgICAgIDxQZXJzb24gU3RhcnRJbmRleD0iMzIiPg0KICAgICAgIC
+ A8UGVyc29uU3RyaW5nPlVyb3MgQml6amFrPC9QZXJzb25TdHJpbmc+
+ DQogICAgICA8L1BlcnNvbj4NCiAgICAgIDxFbWFpbHM+DQogICAgIC
+ AgIDxFbWFpbCBTdGFydEluZGV4PSI0NSI+DQogICAgICAgICAgPEVt
+ YWlsU3RyaW5nPnViaXpqYWtAZ21haWwuY29tPC9FbWFpbFN0cmluZz
+ 4NCiAgICAgICAgPC9FbWFpbD4NCiAgICAgIDwvRW1haWxzPg0KICAg
+ ICAgPENvbnRhY3RTdHJpbmc+VXJvcyBCaXpqYWsgJmx0O3ViaXpqYW
+ tAZ21haWwuY29tPC9Db250YWN0U3RyaW5nPg0KICAgIDwvQ29udGFj
+ dD4NCiAgICA8Q29udGFjdCBTdGFydEluZGV4PSI4MyI+DQogICAgIC
+ A8UGVyc29uIFN0YXJ0SW5kZXg9IjgzIj4NCiAgICAgICAgPFBlcnNv
+ blN0cmluZz5Kb2FuIEJydWd1ZXJhPC9QZXJzb25TdHJpbmc+DQogIC
+ AgICA8L1BlcnNvbj4NCiAgICAgIDxFbWFpbHM+DQogICAgICAgIDxF
+ bWFpbCBTdGFydEluZGV4PSIxMDMiPg0KICAgICAgICAgIDxFbWFpbF
+ N0cmluZz5qb2FuYnJ1Z3VlcmFtQGdtYWlsLmNvbTwvRW1haWxTdHJp
+ bmc+DQogICAgICAgIDwvRW1haWw+DQogICAgICA8L0VtYWlscz4NCi
+ AgICAgIDxDb250YWN0U3RyaW5nPkpvYW4gQnJ1Z3VlcmEgTWljw7Mg
+ Jmx0O2pvYW5icnVndWVyYW1AZ21haWwuY29tPC9Db250YWN0U3RyaW
+ 5nPg0KICAgIDwvQ29udGFjdD4NCiAgPC9Db250YWN0cz4NCjwvQ29u
+ dGFjdFNldD4BDs8BUmV0cmlldmVyT3BlcmF0b3IsMTAsMTtSZXRyaW
+ V2ZXJPcGVyYXRvciwxMSwxO1Bvc3REb2NQYXJzZXJPcGVyYXRvciwx
+ MCwwO1Bvc3REb2NQYXJzZXJPcGVyYXRvciwxMSwwO1Bvc3RXb3JkQn
+ JlYWtlckRpYWdub3N0aWNPcGVyYXRvciwxMCwyO1Bvc3RXb3JkQnJl
+ YWtlckRpYWdub3N0aWNPcGVyYXRvciwxMSwwO1RyYW5zcG9ydFdyaX RlclByb2R1Y2VyLDIwL=
+DEy
+X-MS-Exchange-Forest-IndexAgent: 1 5079
+X-MS-Exchange-Forest-EmailMessageHash: E9B9F661
 X-MS-Exchange-Forest-Language: en
 X-MS-Exchange-Organization-Processed-By-Journaling: Journal Agent
 
-From: Pu Lehui <pulehui@huawei.com>
+On Fri, Mar 29, 2024 at 2:49=E2=80=AFAM Uros Bizjak <ubizjak@gmail.com> wro=
+te:
+>
+> From: Joan Bruguera Mic=C3=B3 <joanbrugueram@gmail.com>
+>
+> The recently introduced support for %rip-relative relocations in the
+> call thunk template assumes that the code is being patched in-place,
+> so the destination of the relocation matches the address of the code.
+> This is not true for the call depth accounting emitted by the BPF JIT,
+> so the calculated address is wrong and usually causes a page fault.
 
-This patch adds 12 function arguments support for riscv64 bpf
-trampoline. The current bpf trampoline supports <=3D sizeof(u64) bytes
-scalar arguments [0] and <=3D 16 bytes struct arguments [1]. Therefore, we
-focus on the situation where scalars are at most XLEN bits and
-aggregates whose total size does not exceed 2=C3=97XLEN bits in the riscv
-calling convention [2].
+Could you share the link to what this 'rip-relative' relocation is ?
 
-Link: https://elixir.bootlin.com/linux/v6.8/source/kernel/bpf/btf.c#L6184 [=
-0]
-Link: https://elixir.bootlin.com/linux/v6.8/source/kernel/bpf/btf.c#L6769 [=
-1]
-Link: https://github.com/riscv-non-isa/riscv-elf-psabi-doc/releases/downloa=
-d/draft-20230929-e5c800e661a53efe3c2678d71a306323b60eb13b/riscv-abi.pdf [2]
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- arch/riscv/net/bpf_jit_comp64.c | 63 +++++++++++++++++++++++----------
- 1 file changed, 44 insertions(+), 19 deletions(-)
+> Pass the destination IP when the BPF JIT emits call depth accounting.
+>
+> Fixes: 17bce3b2ae2d ("x86/callthunks: Handle %rip-relative relocations in=
+ call thunk template")
 
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp6=
-4.c
-index 77ea306452d4..2aec69e4c116 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -14,6 +14,7 @@
- #include <asm/cfi.h>
- #include "bpf_jit.h"
-=20
-+#define RV_MAX_ARG_REGS 8
- #define RV_FENTRY_NINSNS 2
-=20
- #define RV_REG_TCC RV_REG_A6
-@@ -688,26 +689,43 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_t=
-ype poke_type,
- 	return ret;
- }
-=20
--static void store_args(int nregs, int args_off, struct rv_jit_context *ctx=
-)
-+static void store_args(int nr_arg_slots, int args_off, struct rv_jit_conte=
-xt *ctx)
- {
- 	int i;
-=20
--	for (i =3D 0; i < nregs; i++) {
--		emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
-+	for (i =3D 0; i < nr_arg_slots; i++) {
-+		if (i < RV_MAX_ARG_REGS) {
-+			emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
-+		} else {
-+			emit_ld(RV_REG_T1, 16 + (i - RV_MAX_ARG_REGS) * 8, RV_REG_FP, ctx);
-+			emit_sd(RV_REG_FP, -args_off, RV_REG_T1, ctx);
-+		}
- 		args_off -=3D 8;
- 	}
- }
-=20
--static void restore_args(int nregs, int args_off, struct rv_jit_context *c=
-tx)
-+static void restore_args(int nr_args_reg, int args_off, struct rv_jit_cont=
-ext *ctx)
- {
- 	int i;
-=20
--	for (i =3D 0; i < nregs; i++) {
-+	for (i =3D 0; i < nr_args_reg; i++) {
- 		emit_ld(RV_REG_A0 + i, -args_off, RV_REG_FP, ctx);
- 		args_off -=3D 8;
- 	}
- }
-=20
-+static void restore_stack_args(int nr_args_stack, int args_off, int stk_ar=
-g_off, struct rv_jit_context *ctx)
-+{
-+	int i;
-+
-+	for (i =3D 0; i < nr_args_stack; i++) {
-+		emit_ld(RV_REG_T1, -(args_off - RV_MAX_ARG_REGS * 8), RV_REG_FP, ctx);
-+		emit_sd(RV_REG_FP, -stk_arg_off, RV_REG_T1, ctx);
-+		args_off -=3D 8;
-+		stk_arg_off -=3D 8;
-+	}
-+}
-+
- static int invoke_bpf_prog(struct bpf_tramp_link *l, int args_off, int ret=
-val_off,
- 			   int run_ctx_off, bool save_ret, struct rv_jit_context *ctx)
- {
-@@ -780,8 +798,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tra=
-mp_image *im,
- {
- 	int i, ret, offset;
- 	int *branches_off =3D NULL;
--	int stack_size =3D 0, nregs =3D m->nr_args;
--	int retval_off, args_off, nregs_off, ip_off, run_ctx_off, sreg_off;
-+	int stack_size =3D 0, nr_arg_slots =3D 0;
-+	int retval_off, args_off, nregs_off, ip_off, run_ctx_off, sreg_off, stk_a=
-rg_off;
- 	struct bpf_tramp_links *fentry =3D &tlinks[BPF_TRAMP_FENTRY];
- 	struct bpf_tramp_links *fexit =3D &tlinks[BPF_TRAMP_FEXIT];
- 	struct bpf_tramp_links *fmod_ret =3D &tlinks[BPF_TRAMP_MODIFY_RETURN];
-@@ -827,20 +845,21 @@ static int __arch_prepare_bpf_trampoline(struct bpf_t=
-ramp_image *im,
- 	 * FP - sreg_off    [ callee saved reg	]
- 	 *
- 	 *		    [ pads              ] pads for 16 bytes alignment
-+	 *
-+	 *		    [ stack_argN        ]
-+	 *		    [ ...               ]
-+	 * FP - stk_arg_off [ stack_arg1        ] BPF_TRAMP_F_CALL_ORIG
- 	 */
-=20
- 	if (flags & (BPF_TRAMP_F_ORIG_STACK | BPF_TRAMP_F_SHARE_IPMODIFY))
- 		return -ENOTSUPP;
-=20
--	/* extra regiters for struct arguments */
--	for (i =3D 0; i < m->nr_args; i++)
--		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
--			nregs +=3D round_up(m->arg_size[i], 8) / 8 - 1;
--
--	/* 8 arguments passed by registers */
--	if (nregs > 8)
-+	if (m->nr_args > MAX_BPF_FUNC_ARGS)
- 		return -ENOTSUPP;
-=20
-+	for (i =3D 0; i < m->nr_args; i++)
-+		nr_arg_slots +=3D round_up(m->arg_size[i], 8) / 8;
-+
- 	/* room of trampoline frame to store return address and frame pointer */
- 	stack_size +=3D 16;
-=20
-@@ -850,7 +869,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tra=
-mp_image *im,
- 		retval_off =3D stack_size;
- 	}
-=20
--	stack_size +=3D nregs * 8;
-+	stack_size +=3D nr_arg_slots * 8;
- 	args_off =3D stack_size;
-=20
- 	stack_size +=3D 8;
-@@ -867,8 +886,13 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tr=
-amp_image *im,
- 	stack_size +=3D 8;
- 	sreg_off =3D stack_size;
-=20
-+	if (nr_arg_slots - RV_MAX_ARG_REGS > 0)
-+		stack_size +=3D (nr_arg_slots - RV_MAX_ARG_REGS) * 8;
-+
- 	stack_size =3D round_up(stack_size, 16);
-=20
-+	stk_arg_off =3D stack_size;
-+
- 	if (!is_struct_ops) {
- 		/* For the trampoline called from function entry,
- 		 * the frame of traced function and the frame of
-@@ -904,10 +928,10 @@ static int __arch_prepare_bpf_trampoline(struct bpf_t=
-ramp_image *im,
- 		emit_sd(RV_REG_FP, -ip_off, RV_REG_T1, ctx);
- 	}
-=20
--	emit_li(RV_REG_T1, nregs, ctx);
-+	emit_li(RV_REG_T1, nr_arg_slots, ctx);
- 	emit_sd(RV_REG_FP, -nregs_off, RV_REG_T1, ctx);
-=20
--	store_args(nregs, args_off, ctx);
-+	store_args(nr_arg_slots, args_off, ctx);
-=20
- 	/* skip to actual body of traced function */
- 	if (flags & BPF_TRAMP_F_SKIP_FRAME)
-@@ -947,7 +971,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tra=
-mp_image *im,
- 	}
-=20
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
--		restore_args(nregs, args_off, ctx);
-+		restore_args(min_t(int, nr_arg_slots, RV_MAX_ARG_REGS), args_off, ctx);
-+		restore_stack_args(nr_arg_slots - RV_MAX_ARG_REGS, args_off, stk_arg_off=
-, ctx);
- 		ret =3D emit_call((const u64)orig_call, true, ctx);
- 		if (ret)
- 			goto out;
-@@ -982,7 +1007,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tr=
-amp_image *im,
- 	}
-=20
- 	if (flags & BPF_TRAMP_F_RESTORE_REGS)
--		restore_args(nregs, args_off, ctx);
-+		restore_args(min_t(int, nr_arg_slots, RV_MAX_ARG_REGS), args_off, ctx);
-=20
- 	if (save_ret) {
- 		emit_ld(RV_REG_A0, -retval_off, RV_REG_FP, ctx);
---=20
-2.34.1
+Ohh. It's buried inside that patch.
+Pls make commit log a bit more clear that that commit 17bce3b2ae2d
+broke x86_call_depth_emit_accounting logic.
 
+> Signed-off-by: Joan Bruguera Mic=C3=B3 <joanbrugueram@gmail.com>
+> Reviewed-by: Uros Bizjak <ubizjak@gmail.com>
+> Acked-by: Ingo Molnar <mingo@kernel.org>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> ---
+>  arch/x86/include/asm/alternative.h |  4 ++--
+>  arch/x86/kernel/callthunks.c       |  4 ++--
+>  arch/x86/net/bpf_jit_comp.c        | 19 ++++++++-----------
+>  3 files changed, 12 insertions(+), 15 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/al=
+ternative.h
+> index fcd20c6dc7f9..67b68d0d17d1 100644
+> --- a/arch/x86/include/asm/alternative.h
+> +++ b/arch/x86/include/asm/alternative.h
+> @@ -117,7 +117,7 @@ extern void callthunks_patch_builtin_calls(void);
+>  extern void callthunks_patch_module_calls(struct callthunk_sites *sites,
+>                                           struct module *mod);
+>  extern void *callthunks_translate_call_dest(void *dest);
+> -extern int x86_call_depth_emit_accounting(u8 **pprog, void *func);
+> +extern int x86_call_depth_emit_accounting(u8 **pprog, void *func, void *=
+ip);
+>  #else
+>  static __always_inline void callthunks_patch_builtin_calls(void) {}
+>  static __always_inline void
+> @@ -128,7 +128,7 @@ static __always_inline void *callthunks_translate_cal=
+l_dest(void *dest)
+>         return dest;
+>  }
+>  static __always_inline int x86_call_depth_emit_accounting(u8 **pprog,
+> -                                                         void *func)
+> +                                                         void *func, voi=
+d *ip)
+>  {
+>         return 0;
+>  }
+> diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
+> index 30335182b6b0..e92ff0c11db8 100644
+> --- a/arch/x86/kernel/callthunks.c
+> +++ b/arch/x86/kernel/callthunks.c
+> @@ -314,7 +314,7 @@ static bool is_callthunk(void *addr)
+>         return !bcmp(pad, insn_buff, tmpl_size);
+>  }
+>
+> -int x86_call_depth_emit_accounting(u8 **pprog, void *func)
+> +int x86_call_depth_emit_accounting(u8 **pprog, void *func, void *ip)
+>  {
+>         unsigned int tmpl_size =3D SKL_TMPL_SIZE;
+>         u8 insn_buff[MAX_PATCH_LEN];
+> @@ -327,7 +327,7 @@ int x86_call_depth_emit_accounting(u8 **pprog, void *=
+func)
+>                 return 0;
+>
+>         memcpy(insn_buff, skl_call_thunk_template, tmpl_size);
+> -       apply_relocation(insn_buff, tmpl_size, *pprog,
+> +       apply_relocation(insn_buff, tmpl_size, ip,
+
+Did the logic inside apply_relocation() change to have
+a new meaning for 'dest' and 'src'?
+Answering to myself... yes. in that commit.
+Better commit log would have made the code review so much easier.
+
+>                          skl_call_thunk_template, tmpl_size);
+>
+>         memcpy(*pprog, insn_buff, tmpl_size);
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 09f7dc9d4d65..f2e8769f5eee 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -481,7 +481,7 @@ static int emit_rsb_call(u8 **pprog, void *func, void=
+ *ip)
+>  {
+>         void *adjusted_ip;
+>         OPTIMIZER_HIDE_VAR(func);
+> -       adjusted_ip =3D ip + x86_call_depth_emit_accounting(pprog, func);
+> +       adjusted_ip =3D ip + x86_call_depth_emit_accounting(pprog, func, =
+ip);
+
+Now I see why you added extra var in the previous patch.
+Should have mentioned it in the commit log.
+
+>         return emit_patch(pprog, func, adjusted_ip, 0xE8);
+>  }
+>
+> @@ -1973,20 +1973,17 @@ st:                     if (is_imm8(insn->off))
+>
+>                         /* call */
+>                 case BPF_JMP | BPF_CALL: {
+> -                       int offs;
+> +                       u8 *ip =3D image + addrs[i - 1];
+>
+>                         func =3D (u8 *) __bpf_call_base + imm32;
+>                         if (tail_call_reachable) {
+>                                 RESTORE_TAIL_CALL_CNT(bpf_prog->aux->stac=
+k_depth);
+> -                               if (!imm32)
+> -                                       return -EINVAL;
+> -                               offs =3D 7 + x86_call_depth_emit_accounti=
+ng(&prog, func);
+> -                       } else {
+> -                               if (!imm32)
+> -                                       return -EINVAL;
+> -                               offs =3D x86_call_depth_emit_accounting(&=
+prog, func);
+> +                               ip +=3D 7;
+>                         }
+> -                       if (emit_call(&prog, func, image + addrs[i - 1] +=
+ offs))
+> +                       if (!imm32)
+> +                               return -EINVAL;
+> +                       ip +=3D x86_call_depth_emit_accounting(&prog, fun=
+c, ip);
+> +                       if (emit_call(&prog, func, ip))
+>                                 return -EINVAL;
+>                         break;
+>                 }
+> @@ -2836,7 +2833,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf=
+_tramp_image *im, void *rw_im
+>                  * Direct-call fentry stub, as such it needs accounting f=
+or the
+>                  * __fentry__ call.
+>                  */
+> -               x86_call_depth_emit_accounting(&prog, NULL);
+> +               x86_call_depth_emit_accounting(&prog, NULL, image);
+
+Overall it all makes sense.
+Pls respin with more precise commit logs.
 
