@@ -1,187 +1,130 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E8F12FB12;
-	Fri, 29 Mar 2024 19:54:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C64F1DFD1
+	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 20:27:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711742046; cv=none; b=ouE3rxCtJwhYADvaQnL9nlupheQcLw3+NdASrliPDQTsPbYAZh03TwttJnaEuGKCs+ylQgVLeNzleQbL6BOyvd6XwcVFBr4ilxwjUUjeb6KnmBoNFPSjdYOYOU9W8J3IaCxXdX83HKXQOvydbM39sgHd1VEX4Tk/3p3UC/NXvbE=
+	t=1711744047; cv=none; b=WTA/WVvUpbTF8J7KBX5d+2vGuTtOHisTo+J37fs76dGrEWFjd/lJKlC11/WrKmS6Zb4sjjHoTOV+axq0249CZ4FaKs+vfi3WjnKEL5m7EMstiUnN5XaqjaydXyB0fXslVx/gt0yaPgBLyzsNSf/USVFQsnv0qVKXDFZihG+vBPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711742046; c=relaxed/simple;
-	bh=7FIgZdhSuFmBFq7x61DjTJQ6bzsgrfBW8fIPAWIE+MU=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=n6PikM7JyVbcz/ILB1pCaYVakWY7coAO0Q1F8epSZlNYh3fiZU7PcQUw/opb/qrJKXSpns6vPxsdE3opxDLzMku8PdSH01/QlSC9v+Qz/ZUbkHQD8vkPOMWPjfC3id0ysxdyqZ1+UJRYSMynWFOebhGytOV1nHSM/Ipvl4V5CZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=GKkycvFk; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1711744047; c=relaxed/simple;
+	bh=bAgTInjbJv3XwD7/O1jbeULAQI+aUyjRMAofpspPLo4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=i5EYgE6DyLYmU+v/FTpRdjkdkQrVBhOIBreCrQjAXaXD3nEGsIfcCGG+HVu6hyru152kyTCnijMLTdm8YAXJ8DJpCqOLHcnmuax/SHMGb+ImGZDhYNf4usAwnnOTNIvw+hA1eJ377OGxPK15jpvuCMzvVTyTR2N7KcVtFbGV/M0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NvQOKLQB; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="GKkycvFk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1711742042;
-	bh=7FIgZdhSuFmBFq7x61DjTJQ6bzsgrfBW8fIPAWIE+MU=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=GKkycvFkCWp+5HTjbw8G0xXWaauEjnFnSHlwt8uaT6BT4Bg/7HmDKPatTDArsxdRm
-	 G+Lcy90jN5PMAcqWlHcl/GVZpMc1HPY/ckbwi0RXmo5Qjp0g3WKVHfyOd5TX79bwWy
-	 CfRH41Gu6cQjnLTEUjGg9EcODbPekwDb+vR3jzVzkx7zrV0z2AzNMnat27He8ow+dV
-	 UGZ1nAyaT1MDSBBJuGm+sMND3htxnkklKcJUZbF0+3ECEj/PIbmBFV+XfUKNE2vMlP
-	 PRmK74mnrrbVPG6NMDXqSyk5PY/vQDEyX9XWJ5pRTK1+y9pgiGeO/N5kkwJyYRUBFy
-	 Ba0POAplPiXKA==
-Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 94ED33781FCE;
-	Fri, 29 Mar 2024 19:53:50 +0000 (UTC)
-Message-ID: <c54bae70-3655-4188-aad7-358bb7897c3c@collabora.com>
-Date: Sat, 30 Mar 2024 00:54:20 +0500
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NvQOKLQB"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1e0d82c529fso20871725ad.2
+        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 13:27:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711744045; x=1712348845; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tkGjmID5X3szaNox8llG1m/dFN6ZL3vp2qboF9OSt44=;
+        b=NvQOKLQBqp/A23E/Zr5yntzIv9UW6N+modQ8/Vi7qeWO9WgMKKaFWC9Kyfi/80PEPe
+         7EyyfSY8VBfQK8rpoqJo+Po5r3fd6UAtmkbU7MYxMts5Dl/AKeS8Vldh/YTxYz8khWcy
+         IoPqhqLwhqG/MDGHhj387TZEIKh94d0xl5TX9NB16ebtdWTuwIbUQJt7/YNN71ccF3D2
+         3jMaiMYqN+SX1qWyCd9HLuC6SXXgsxstvBj74SFJHKEwdhZYLA6a6KsoMCllshioGyUL
+         ejK54lyVG8T/uktLqmRnj6RHlrJQgJYa018I7S1c870gBbxQpxxGkxQ5Rqq8UPaQoyXc
+         ZODg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711744045; x=1712348845;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tkGjmID5X3szaNox8llG1m/dFN6ZL3vp2qboF9OSt44=;
+        b=aIsZUDIm5gCtEPkjt2Rou30jMFNqF89rY7raNt8FbhXkFno6TpLD8XsbNtMqdYAGkk
+         6Y/yzQySJpn8teV4Q1q6GrWjF7t7EbKwjMY08PcVDite1ifnSY3xYQQV9RVvGCM23lm+
+         m1q1iGXVIU5ViFT/jbfRz1zaSJgmU72SdBxTFUtYobYdoMM9Wh/IAZzcGm9dj0MMqsJT
+         +V2+mtKU+V+xmgYLaCMSnpyteKj6r/QYVxzdbsYsRwZZZlqggLdrCckmz2UynG2l+krt
+         +NBX3/NGPF0/cBIhIjBvxwhz/63ZOSbaqnzO6+CV2CDBA/58C0hsLpeq5/ndENe5tChn
+         x77A==
+X-Gm-Message-State: AOJu0YyNKpK8LykbyVLh+zlhSbkBjTJpfl5UW91S6BYUSZY21g6yudvW
+	OD7r+l/STh5FtDrfwldmVG1bGg+Pzqte7uyHRS2tTb9u1OqR3JzleHWAap+7Ab1iMnpU94gMY6+
+	UdYpr1M9pZ5OTU9WMlcCg+mkvAB8=
+X-Google-Smtp-Source: AGHT+IEB7o5Ju+A6MWy5aanVPlbK+3cCZj7I/7qXvAuYOGj59SUS1XIgNupZkhhqL9vAP/otQ2vM8GhjjjzKCz/akD0=
+X-Received: by 2002:a17:902:e804:b0:1e0:e85f:3882 with SMTP id
+ u4-20020a170902e80400b001e0e85f3882mr4140730plg.38.1711744045013; Fri, 29 Mar
+ 2024 13:27:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- linux-kselftest@vger.kernel.org, kernel-team@android.com,
- Lokesh Gidra <lokeshgidra@google.com>, bpf@vger.kernel.org,
- netdev@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3] selftests/mm: Fix ARM related issue with fork after
- pthread_create
-To: Edward Liaw <edliaw@google.com>, linux-kernel@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jann Horn <jannh@google.com>
-References: <20240325194100.775052-1-edliaw@google.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240325194100.775052-1-edliaw@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240329184740.4084786-1-andrii@kernel.org> <20240329184740.4084786-3-andrii@kernel.org>
+In-Reply-To: <20240329184740.4084786-3-andrii@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 29 Mar 2024 13:27:12 -0700
+Message-ID: <CAEf4BzZk-iHvSMW-9S44NdqVhQE55dhvSz952Fm_3yWhm6wBeA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/4] bpf: inline bpf_get_smp_processor_id() helper
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	martin.lau@kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/26/24 12:40 AM, Edward Liaw wrote:
-> Following issue was observed while running the uffd-unit-tests selftest
-> on ARM devices. On x86_64 no issues were detected:
-> 
-> pthread_create followed by fork caused deadlock in certain cases
-> wherein fork required some work to be completed by the created thread.
-> Used synchronization to ensure that created thread's start function has
-> started before invoking fork.
-> 
-> Signed-off-by: Lokesh Gidra <lokeshgidra@google.com>
-> [edliaw: Refactored to use atomic_bool]
-> Signed-off-by: Edward Liaw <edliaw@google.com>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-
+On Fri, Mar 29, 2024 at 11:47=E2=80=AFAM Andrii Nakryiko <andrii@kernel.org=
+> wrote:
+>
+> If BPF JIT supports per-CPU LDX instructions, inline
+> bpf_get_smp_processor_id() to eliminate unnecessary function calls.
+>
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 > ---
-> 
-> v2: restored accidentally removed uffd_test_case_ops when merging
-> v3: fixed commit subject to use selftests/mm prefix
-> 
->  tools/testing/selftests/mm/uffd-common.c     |  3 +++
->  tools/testing/selftests/mm/uffd-common.h     |  2 ++
->  tools/testing/selftests/mm/uffd-unit-tests.c | 10 ++++++++++
->  3 files changed, 15 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
-> index b0ac0ec2356d..7ad6ba660c7d 100644
-> --- a/tools/testing/selftests/mm/uffd-common.c
-> +++ b/tools/testing/selftests/mm/uffd-common.c
-> @@ -18,6 +18,7 @@ bool test_uffdio_wp = true;
->  unsigned long long *count_verify;
->  uffd_test_ops_t *uffd_test_ops;
->  uffd_test_case_ops_t *uffd_test_case_ops;
-> +atomic_bool ready_for_fork;
-> 
->  static int uffd_mem_fd_create(off_t mem_size, bool hugetlb)
->  {
-> @@ -518,6 +519,8 @@ void *uffd_poll_thread(void *arg)
->  	pollfd[1].fd = pipefd[cpu*2];
->  	pollfd[1].events = POLLIN;
-> 
-> +	ready_for_fork = true;
-> +
->  	for (;;) {
->  		ret = poll(pollfd, 2, -1);
->  		if (ret <= 0) {
-> diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
-> index cb055282c89c..cc5629c3d2aa 100644
-> --- a/tools/testing/selftests/mm/uffd-common.h
-> +++ b/tools/testing/selftests/mm/uffd-common.h
-> @@ -32,6 +32,7 @@
->  #include <inttypes.h>
->  #include <stdint.h>
->  #include <sys/random.h>
-> +#include <stdatomic.h>
-> 
->  #include "../kselftest.h"
->  #include "vm_util.h"
-> @@ -103,6 +104,7 @@ extern bool map_shared;
->  extern bool test_uffdio_wp;
->  extern unsigned long long *count_verify;
->  extern volatile bool test_uffdio_copy_eexist;
-> +extern atomic_bool ready_for_fork;
-> 
->  extern uffd_test_ops_t anon_uffd_test_ops;
->  extern uffd_test_ops_t shmem_uffd_test_ops;
-> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-> index 2b9f8cc52639..4a48dc617c6b 100644
-> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
-> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-> @@ -775,6 +775,8 @@ static void uffd_sigbus_test_common(bool wp)
->  	char c;
->  	struct uffd_args args = { 0 };
-> 
-> +	ready_for_fork = false;
-> +
->  	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
-> 
->  	if (uffd_register(uffd, area_dst, nr_pages * page_size,
-> @@ -790,6 +792,9 @@ static void uffd_sigbus_test_common(bool wp)
->  	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
->  		err("uffd_poll_thread create");
-> 
-> +	while (!ready_for_fork)
-> +		; /* Wait for the poll_thread to start executing before forking */
-> +
->  	pid = fork();
->  	if (pid < 0)
->  		err("fork");
-> @@ -829,6 +834,8 @@ static void uffd_events_test_common(bool wp)
->  	char c;
->  	struct uffd_args args = { 0 };
-> 
-> +	ready_for_fork = false;
-> +
->  	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
->  	if (uffd_register(uffd, area_dst, nr_pages * page_size,
->  			  true, wp, false))
-> @@ -838,6 +845,9 @@ static void uffd_events_test_common(bool wp)
->  	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
->  		err("uffd_poll_thread create");
-> 
-> +	while (!ready_for_fork)
-> +		; /* Wait for the poll_thread to start executing before forking */
-> +
->  	pid = fork();
->  	if (pid < 0)
->  		err("fork");
-> --
-> 2.44.0.396.g6e790dbe36-goog
-> 
-> 
+>  kernel/bpf/verifier.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index edb650667f44..24caec8b200d 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -20072,6 +20072,23 @@ static int do_misc_fixups(struct bpf_verifier_en=
+v *env)
+>                         goto next_insn;
+>                 }
+>
+> +               /* Implement bpf_get_smp_processor_id() inline. */
+> +               if (insn->imm =3D=3D BPF_FUNC_get_smp_processor_id &&
+> +                   prog->jit_requested && bpf_jit_supports_percpu_insns(=
+)) {
+> +                       insn_buf[0] =3D BPF_MOV32_IMM(BPF_REG_0, (u32)(lo=
+ng)&pcpu_hot.cpu_number);
 
--- 
-BR,
-Muhammad Usama Anjum
+so CI reminds me that this part will have to be architecture-specific.
+
+We can keep BPF_FUNC_get_smp_processor_id inlining here in
+kernel/bpf/verifier.c, but have arch-specific #ifdef/#elif/#endif
+logic? Or we can have an arch_bpf_inline_helper() call or something,
+where different architectures can more cleanly implement arch-specific
+inlining logic? What would be the preferred way?
+
+For arm64, it seems we need to just do &cpu_number instead of
+&pcpu_hot.cpu_number. For s390x there is some S390_lowcore thing
+involved, which I have no idea about, so I'll be asking for someone's
+help there.
+
+> +                       insn_buf[1] =3D BPF_LDX_MEM_PERCPU(BPF_W, BPF_REG=
+_0, BPF_REG_0, 0);
+> +                       cnt =3D 2;
+> +
+> +                       new_prog =3D bpf_patch_insn_data(env, i + delta, =
+insn_buf, cnt);
+> +                       if (!new_prog)
+> +                               return -ENOMEM;
+> +
+> +                       delta    +=3D cnt - 1;
+> +                       env->prog =3D prog =3D new_prog;
+> +                       insn      =3D new_prog->insnsi + i + delta;
+> +                       goto next_insn;
+> +               }
+> +
+>                 /* Implement bpf_get_func_arg inline. */
+>                 if (prog_type =3D=3D BPF_PROG_TYPE_TRACING &&
+>                     insn->imm =3D=3D BPF_FUNC_get_func_arg) {
+> --
+> 2.43.0
+>
