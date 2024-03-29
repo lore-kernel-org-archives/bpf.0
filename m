@@ -1,120 +1,119 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCF1E85C6C;
-	Fri, 29 Mar 2024 19:46:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8EC113A24A
+	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 19:52:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711741595; cv=none; b=SjE7xRnK+3Bko97HFZd9QVYaXM0HTxO0k2hkADFdk/Eo68Jh6WbBNt11f6XQmgEnhp7BDo46kKqvN8sXG93oocXGkxLxCWV8X+7mmmMSAIwnZtNU6qMQrfQpGWL9hjTj7FBb/hKooIsfetDIVMPW6CyRhRJWHxyjIUJAx+f4jk4=
+	t=1711741942; cv=none; b=j+J/x/NKgHKVv1o/TkY4jf6SuFoqEM1kPwMKZI3xFYf9PA8GMivVncst+wf8umDdDjB59zO0y84+UsV42vQZKHTFTvJskT5IHAjw4RD+R1pH3DSSnRhSk9/tuVAYT36hGsgFKsnD+5hh0c8FzCXG8JHbhH5stKACs1WGydrzK6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711741595; c=relaxed/simple;
-	bh=7R3QtvHYzMzuiw1RGORFqm02LVmLFTRbpuXiYqhc06w=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dBFlcPrJrQovixBdTc850f/T5swARTQi0UeQHEZsJlrrkYxorbrWeLDHnoVzy4bU6z7qegV1Et7970emKwSOdYvAGSezvjcafE1NWNKjgubXrPpVPwOGzFNLceUH4dRI/YpiYl9V04WEu+lwtISe19/COSBoRDUIa+RggFTKi08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VhYmnGbk; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VhYmnGbk"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a46cca2a979so139249466b.3;
-        Fri, 29 Mar 2024 12:46:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711741592; x=1712346392; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iRbhTuKdGVdgcCtOxKjPCp9tzZ0RXndz1gW7/Urj2f8=;
-        b=VhYmnGbkugOOYWpu4kk7MFsSNqqCYzQ6FTGWiaw2apYPrK7xWhFmL46U1xz9Sryh2V
-         i4rJTO7U111ONA++lkX0J8eWVx7CUkvNVDPBEebr3pp1dbl7lsMKMldRgH5LTMQ0vV43
-         wKKZE2XI3ZsKeE7N9rpKgacVzS2LQnoBvjQVH+q+CZdr2zslQUlRKMB0IhqIP0rhjscL
-         rwn1vWL8I8ByiQIu1x+7xJpdkaFdJfjSQr+YTTXBZTgrKoT9GnbnI704a57CGIgWEZGl
-         OqX9Wol5WLoeLzlouNKPBEnShSBVqU4mjPalkZ9vdITtR3BB2whiLVrqpAK4dksx9IEI
-         clpA==
+	s=arc-20240116; t=1711741942; c=relaxed/simple;
+	bh=a2h325s6mCISuYH1DqYyyIpbJ3ezamrQpkSHPoYkj+M=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=a8Mj1+qvo1LrDneelnvB+0hsvzKZjxWXstVGDAbXV8eDbdrLhRqcq97LZWiLcg1w9YepYL4g7QG6zg7eqUQnSkzMF6sL97TxXYAVbGIrD4+32+Ymp3yzIQ49Vw7AS6lBGt39FU5aMLfgiFmFEr8imE8tTwD7+S6gp06h58Ncajo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7cbf1aea97fso240373739f.2
+        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 12:52:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711741592; x=1712346392;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
+        d=1e100.net; s=20230601; t=1711741940; x=1712346740;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iRbhTuKdGVdgcCtOxKjPCp9tzZ0RXndz1gW7/Urj2f8=;
-        b=RBS+eCZnLg1v/siGoXppPaNXu406A57imzWvq0OcHfditkeCIC8P2+wDqRjg4BK+M0
-         4pdpBRUQTsg16ViGpSW04jiuXK5glDohF58MOzLVnMaVJTx6sPgz6AMSRzvjMCUv0Icr
-         p0G+382qT2I6ewYoEILumbF2bDDRz5DVj7XTUsZKpG7p9V5d088iK11JkBA1NNQjrC5n
-         hBivhGkoVxpqeDqngwpHqYZ8WeTKXfMCbuAMyRxHkR9SPS0jXvIVPucfcFQjQAzMaybz
-         u/5Xeyn1E9mlrFBVCI0fyPnVB7mzgKOTBWBiYmanj5CA/pTFEw6/D+SPzLuY4p9hOt+R
-         NGIA==
-X-Forwarded-Encrypted: i=1; AJvYcCUmzE6iEPzugdHtjpbXRANcz1GCUfjpFfcgVhqFRs9E+vmGCiAi4oNmDBZiPPIGklSc8uZaMbswLYFDs4vCwNM+QoVSuV6+gLW2KI5UspMNoQSK8dfc9ia+WESD
-X-Gm-Message-State: AOJu0Yz39WvV2hu+Leif70ad8nWexmucRYu7FChN71Dmi9bLz4euPB0r
-	p+B8IGudzj3oG3Xd1BAAXQAeaQTrEgunx7e8tuarpeh3gDhO5mWCBbzjhiqn9X2z8w==
-X-Google-Smtp-Source: AGHT+IFeoi9VX0eigQunOE3+7oIKVGDHZNovNgU3K34137TXC0OWeeil7vlqVFwtH1vghv5nVyPSMA==
-X-Received: by 2002:a05:6402:13d6:b0:56c:5a7b:5dbf with SMTP id a22-20020a05640213d600b0056c5a7b5dbfmr3477343edx.2.1711741591953;
-        Fri, 29 Mar 2024 12:46:31 -0700 (PDT)
-Received: from ?IPv6:2a00:1858:1027:8084:dcff:fef3:4040:e18d? ([2a00:1858:1027:8084:dcff:fef3:4040:e18d])
-        by smtp.gmail.com with ESMTPSA id l2-20020a056402124200b0056c4ca20d48sm2386458edw.49.2024.03.29.12.46.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Mar 2024 12:46:31 -0700 (PDT)
-Message-ID: <f91237f311f183d57c4620bc2e6099df8aefccb0.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 0/5] Support local vmtest for riscv64
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, netdev@vger.kernel.org
-Cc: =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
- <song@kernel.org>, Yonghong Song <yhs@fb.com>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>,  Mykola Lysenko <mykolal@fb.com>, Manu Bretelle
- <chantr4@gmail.com>, Pu Lehui <pulehui@huawei.com>
-Date: Fri, 29 Mar 2024 21:46:14 +0200
-In-Reply-To: <e995a1f1-0b48-4ce3-a061-5cbe68beb6dd@huaweicloud.com>
-References: <20240328124916.293173-1-pulehui@huaweicloud.com>
-	 <32b3358903bf8ba408812a2636f39a275493eb91.camel@gmail.com>
-	 <e995a1f1-0b48-4ce3-a061-5cbe68beb6dd@huaweicloud.com>
-Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+        bh=74gSyGe2u5NLrtHEKMkfIuxKfdeVAtqYmdtlLuPRQU4=;
+        b=ap6kKDpI5vBWzhS6ALxadCt/6752q/Qn8iU6V7dApDg92UQkCwC/RBPI3Q1E53TSTM
+         yiSSNR3Tn2QKK/b5fGRuVQUCLYSdR5QAbVXYJDlF9clHG7ffC4MgCCZzquJ9ksQuNnfl
+         R9iH08Bp1oUKnYxpq5j7zoFP4HerVUAKTM+JnnkHh6AXnzNv0MS8LYkA/WYp524JJZHj
+         WKZHqYp3vCAGByp0LJwzE9mQWCTL0gIGnfJK+H/YAo1tZcoJBafl2Sm8pZYJUG91iiCF
+         BmwESkr1HeIUXaCOryfAnoy/4jOqZ1P+dJ0Kyx+k7W/phV4r2W2ulDckvCsYoOxVRn4m
+         sxVw==
+X-Forwarded-Encrypted: i=1; AJvYcCVMJFzBLN+Ykfcdbqo8+GaxoNmjiiPUsExV3SfHTdG4hXijM8nxEhKTrDhK6dVkfMqsEd792rpW9ZL9KdLkC/KK763z
+X-Gm-Message-State: AOJu0Yzj/1pjBIAENkdRfj2Kg6qjtgzeuLrwlmHcBml26Qvu6sARjzkc
+	kP7DW/5ybeAREwCBrLRR/zslGNDWAVNkoTetBjQuJFR56WS+LrtuQQI7FS+iCTRPoRwhtvsPei/
+	IMuzc2Uz53lXKrX8UIkFfi1F5qTIUzvkYTV2h3g5ANs48+drF5kqIF0U=
+X-Google-Smtp-Source: AGHT+IGCtHUORaSZfV0tUiYNH5gfEYgXqK6+I05PpkJI/5BHzGng1u9nSPWYpIPkqxFFVmqGSo2E+SymcJs/SrH1jbzOlPWE2zh/
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:3206:b0:368:c21e:3898 with SMTP id
+ cd6-20020a056e02320600b00368c21e3898mr208846ilb.3.1711741940029; Fri, 29 Mar
+ 2024 12:52:20 -0700 (PDT)
+Date: Fri, 29 Mar 2024 12:52:20 -0700
+In-Reply-To: <000000000000f9ce6d061494e694@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000486e1f0614d1fa5f@google.com>
+Subject: Re: [syzbot] [bpf?] KMSAN: uninit-value in trie_delete_elem
+From: syzbot <syzbot+603bcd9b0bf1d94dbb9b@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kernel-team@meta.com, 
+	kpsingh@kernel.org, linux-kernel@vger.kernel.org, martin.lau@linux.dev, 
+	patchwork-bot@kernel.org, sdf@google.com, song@kernel.org, 
+	syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 2024-03-29 at 18:10 +0800, Pu Lehui wrote:
-[...]
+syzbot has found a reproducer for the following issue on:
 
-> > Apparently jammy does not have binaries built for riscv64, or I'm faili=
-ng to find correct mirror.
-> > Could you please provide some instructions on how to prepare rootfs?
->=20
-> Hi Eduard, We need the mirror repository of ubuntu-ports, you could try=
-=20
-> http://de.ports.ubuntu.com/.
+HEAD commit:    317c7bc0ef03 Merge tag 'mmc-v6.9-rc1' of git://git.kernel...
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=121ddb95180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e2599baf258ef795
+dashboard link: https://syzkaller.appspot.com/bug?extid=603bcd9b0bf1d94dbb9b
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15af8b0d180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1590903d180000
 
-Hi Pu, thank you this mirrorm it works.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/eea0b23c3f68/disk-317c7bc0.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/440f7aea55b5/vmlinux-317c7bc0.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ecb91ede16f9/bzImage-317c7bc0.xz
 
-Unfortunately my local setup is still not good enough.
-I've installed cross-riscv64-gcc14 but it seems that a few more
-libraries are necessary, as I get the following compilation errors:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+603bcd9b0bf1d94dbb9b@syzkaller.appspotmail.com
 
-  $ PLATFORM=3Driscv64 CROSS_COMPILE=3Driscv64-suse-linux- ./vmtest.sh -- .=
-/test_verifier
-  ... kernel compiles ok ...
-  ../../../../scripts/sign-file.c:25:10: fatal error: openssl/opensslv.h: N=
-o such file or directory
-     25 | #include <openssl/opensslv.h>
-        |          ^~~~~~~~~~~~~~~~~~~~
-  compilation terminated.
-    CC      /home/eddy/work/bpf-next/tools/testing/selftests/bpf/tools/buil=
-d/host/libbpf/sharedobjs/bpf.o
-  In file included from nlattr.c:14:
-  libbpf_internal.h:19:10: fatal error: libelf.h: No such file or directory
-     19 | #include <libelf.h>
-  ...
+=====================================================
+BUG: KMSAN: uninit-value in trie_delete_elem+0xc0/0xbe0 kernel/bpf/lpm_trie.c:448
+ trie_delete_elem+0xc0/0xbe0 kernel/bpf/lpm_trie.c:448
+ ____bpf_map_delete_elem kernel/bpf/helpers.c:77 [inline]
+ bpf_map_delete_elem+0x5c/0x80 kernel/bpf/helpers.c:73
+ ___bpf_prog_run+0x13fe/0xe0f0 kernel/bpf/core.c:1997
+ __bpf_prog_run96+0xb5/0xe0 kernel/bpf/core.c:2236
+ bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+ __bpf_prog_run include/linux/filter.h:657 [inline]
+ bpf_prog_run include/linux/filter.h:664 [inline]
+ __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+ bpf_trace_run2+0x116/0x300 kernel/trace/bpf_trace.c:2420
+ __bpf_trace_kfree+0x29/0x40 include/trace/events/kmem.h:94
+ trace_kfree include/trace/events/kmem.h:94 [inline]
+ kfree+0x6a5/0xa30 mm/slub.c:4377
+ bpf_free_used_maps kernel/bpf/core.c:2723 [inline]
+ bpf_prog_free_deferred+0x390/0xc70 kernel/bpf/core.c:2761
+ process_one_work kernel/workqueue.c:3254 [inline]
+ process_scheduled_works+0xa81/0x1bd0 kernel/workqueue.c:3335
+ worker_thread+0xea5/0x1560 kernel/workqueue.c:3416
+ kthread+0x3e2/0x540 kernel/kthread.c:388
+ ret_from_fork+0x6d/0x90 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
 
-Looks like I won't be able to test this patch-set, unless you have
-some writeup on how to create a riscv64 dev environment at hand.
-Sorry for the noise.
+Local variable stack created at:
+ __bpf_prog_run96+0x45/0xe0 kernel/bpf/core.c:2236
+ bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+ __bpf_prog_run include/linux/filter.h:657 [inline]
+ bpf_prog_run include/linux/filter.h:664 [inline]
+ __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+ bpf_trace_run2+0x116/0x300 kernel/trace/bpf_trace.c:2420
+
+CPU: 0 PID: 7 Comm: kworker/0:0 Not tainted 6.9.0-rc1-syzkaller-00178-g317c7bc0ef03 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/27/2024
+Workqueue: events bpf_prog_free_deferred
+=====================================================
+
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
