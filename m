@@ -1,133 +1,187 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37DBE8825
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 16:34:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 152601C0DF5;
+	Fri, 29 Mar 2024 16:37:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711730054; cv=none; b=TZDsWVld07ug80vHAaoyrKQlCftCYUrDhfHhS5x1L9QawY75x66FRPNE25AujdI3cjVaDWjGuGUa3gzDbfmTwhI1FobkwemseiYwRESvYdzzPHts7x6A1PQJwogw2rhc3dR8tRg8uIAG/havITesi4zBtAeJSLIJdwJFBq6j2vM=
+	t=1711730246; cv=none; b=D75ew9cxCvYTPQFAJnOtMKoapVheI1SdVGZarYsyl9o7uapoArgiBnyThBE/EuHV+wbMY8OhF+9t2BwZA0lhGOqrYX1fqd1ObOI0r0pcg2CP7tHHS+jP24huBq5GvhHcLoqS46ORyXi8HGC0tNcCKfnSXHdvVswrdgCCn508tfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711730054; c=relaxed/simple;
-	bh=2H8JVcLKr6i+5o1D6bATxDH4/oWcNSR3rFdDIOXQc9U=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pfEfk4FQMiiCpmTNFcH2I+flHnQdE8btG6ssdjeBgTwwQTyVja47d2BY+xgzixNdHmE7KeIb8wbaxCHuW+51P6YUg4m3CGSqp+6HyHbb5ahX17oYVcuRqNONF7eXB/zxUvIUBMiUOuEyndPrFeQkImNGEpTScYM4sunP/hz6TPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=b7l+/YTU; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1711730246; c=relaxed/simple;
+	bh=ZdWSNCNjQ68IX2rHd7NbPcbBVzEbZRUXZn0KGl56Wg4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YJPsKiOqVuwOc8BRFhAwXWO1SGUwbrKS/WTQrmAL1UfEdIX/BPRRHZdp8LX19/iSE/lTnhVdSfavJM9LDvtPaQJmCo2EpmRMpZ6aqYad92loHQo9ALYDqQT8BfkPfXROgXCFaDjha/hI21VEhi/inUPiJA8W+Y61t0X79AFlvHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UQqlzQKl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b7l+/YTU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711730052;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=2H8JVcLKr6i+5o1D6bATxDH4/oWcNSR3rFdDIOXQc9U=;
-	b=b7l+/YTUGzZUjPI79x5zA87dwfZJEbyGtk0oXYclCm4TsbjYKLBkJIc3NmJU2ffH9g9mwb
-	oygW0loWD0vXUspSt85STLIPFHeupsb1EKT20Lwlw0cP/Kjc59Ow3nnaREk1YlgMZ6QWJs
-	M7F8OZkahBVvtNDOIZHhTd+XezJXuaw=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-213-BjPYkIJeNQSQunyHykVelQ-1; Fri, 29 Mar 2024 12:34:10 -0400
-X-MC-Unique: BjPYkIJeNQSQunyHykVelQ-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-341bdc085faso437078f8f.0
-        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 09:34:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711730049; x=1712334849;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2H8JVcLKr6i+5o1D6bATxDH4/oWcNSR3rFdDIOXQc9U=;
-        b=xVkBJoK5gS2ov2J11gZ8WhB62Jk+WbGiyZJldoIgPBatxEgVpvJ3zXHkWhLtfLCBYn
-         SW2obmOGYnxwyb9XKGwPcZAps1UsE/f4q+D7MUvEI0xuIZ9R0kNkQyHZgyxQ97oDpEp/
-         hXXoPRvWyifPTLPnggBhvQVKPZ4dkl5VCeehe4H3uZBiJOog3rXfP19j5bDkOgXoh577
-         Quze3GZFCzridWj/V+llcBaX83m5/9cvZMJImIU3P8SbfrM8J+PFaUjI2nLaJFcBcezb
-         F6Y5xoiS6VOzYBER8Jnegm6gWqG3adka994ENbguv3DsjyxFiKambJc4QzrjWan8jaGv
-         iCOw==
-X-Forwarded-Encrypted: i=1; AJvYcCWwpLuGSrdZXlcRB6eMa1qcMSCM6hfBRCcfnvb5eVVfiaCGjVqjmaQIqDN38n66numdq/suhrM7Tqan2zvAlbM4hCmy
-X-Gm-Message-State: AOJu0YyCdMqwyUazVa0tZ6dne1Eut4AeYyiQm6AZfdc7pMnXIKHrn5VH
-	Cs6wfMhVgSZ3wyc4r2MQ0SyWa58KD0OML7mmR+dgUZ7lU4d91NwchT4wotkCbhiE0G8Bv4I/Bk5
-	FF9KjBicOAt7E1z6i76sNKx9zwVeVBc8EUp1jHYq8PlvoDJAPfA==
-X-Received: by 2002:a05:600c:3b9c:b0:414:93ba:3bc0 with SMTP id n28-20020a05600c3b9c00b0041493ba3bc0mr1919279wms.2.1711730049746;
-        Fri, 29 Mar 2024 09:34:09 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHSrmlv0hiqQXmYe9F29rvkSULi7BTfUh4hk86ESICIuFXZgejTpYNjQx6p5o++LZ3C2hsRBw==
-X-Received: by 2002:a05:600c:3b9c:b0:414:93ba:3bc0 with SMTP id n28-20020a05600c3b9c00b0041493ba3bc0mr1919258wms.2.1711730049273;
-        Fri, 29 Mar 2024 09:34:09 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-249-47.dyn.eolo.it. [146.241.249.47])
-        by smtp.gmail.com with ESMTPSA id bh8-20020a05600c3d0800b004132ae838absm5883570wmb.43.2024.03.29.09.34.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Mar 2024 09:34:08 -0700 (PDT)
-Message-ID: <2ee8745cfa411fa2c397af8b1323f77e1bd00d29.camel@redhat.com>
-Subject: Re: mptcp splat
-From: Paolo Abeni <pabeni@redhat.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Matthieu Baerts
-	 <matttbe@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Network Development
- <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, MPTCP Upstream
- <mptcp@lists.linux.dev>, Mat Martineau <martineau@kernel.org>, Jakub
- Kicinski <kuba@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>,
- Geliang Tang <geliang@kernel.org>
-Date: Fri, 29 Mar 2024 17:34:07 +0100
-In-Reply-To: <CAADnVQJxsqbJgu9K-ML2-1tRcgEmHY-UuQOCDxqv8_6iVkW7Tg@mail.gmail.com>
-References: 
-	<CAADnVQKCxxETthqDpcE1xMGwa5au8JuLr_49QuwemL7uBKfiVg@mail.gmail.com>
-	 <8410a6f61e7a778117819ebeda667687353ffb21.camel@redhat.com>
-	 <CAADnVQLj9bQDonRzJO5z2hMZ7kf6zdU-s6Cm_7_kj-wP3CiUSA@mail.gmail.com>
-	 <d917d3a5690a0115cb8136e1dda5fbe5621dcd95.camel@redhat.com>
-	 <CAADnVQKXcEhL680E85=rrYuu4eVvVTH60kYRY_VnAKzZo1qKYg@mail.gmail.com>
-	 <649dc1dc-ca80-4686-ae37-62d7c81dde8b@linux.dev>
-	 <5fe3398c-0ed6-48b8-a5b4-2cc7329b554a@kernel.org>
-	 <CAADnVQJxsqbJgu9K-ML2-1tRcgEmHY-UuQOCDxqv8_6iVkW7Tg@mail.gmail.com>
-Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UQqlzQKl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EEE1C433F1;
+	Fri, 29 Mar 2024 16:37:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711730245;
+	bh=ZdWSNCNjQ68IX2rHd7NbPcbBVzEbZRUXZn0KGl56Wg4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=UQqlzQKlyfMFSqlsAscjGsKS5EPm6OFhMHBbZR+3cfNw6r1UBbwGIo2oY9NksW90A
+	 4vu6SL04JVP4NlArkuDzDx8bv3cZIxlNzhk5sRShD1AzYTdsHT9DbN7/mUjcwntfmG
+	 +Ly997qw3NxYzSEVLQfchmQ8cCy8r/csU1dCgfzBiIuxLOlKPzB33Jy828L69Eon2a
+	 5B4Hn7InKXq7ytwoyQpESdX/R9n524tYOSvPjgu6qfWkEj55lCZDl8alkQRoqD5ppK
+	 PiMiMw7o/ChF+UpKVluI6PsX/hAnj6h3/Fwi4fvoY7fIUtrw03M0E1+kKciDymV569
+	 xyYJYbWIpxwLw==
+From: Andrii Nakryiko <andrii@kernel.org>
+To: x86@kernel.org,
+	peterz@infradead.org,
+	mingo@redhat.com,
+	tglx@linutronix.de
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	jolsa@kernel.org,
+	song@kernel.org,
+	kernel-team@meta.com,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Sandipan Das <sandipan.das@amd.com>
+Subject: [PATCH v3 1/2] perf/x86/amd: support capturing LBR from software events
+Date: Fri, 29 Mar 2024 09:37:21 -0700
+Message-ID: <20240329163722.2776730-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, 2024-03-29 at 09:26 -0700, Alexei Starovoitov wrote:
-> On Thu, Mar 28, 2024 at 10:35=E2=80=AFAM Matthieu Baerts <matttbe@kernel.=
-org> wrote:
-> >=20
-> > Hi Martin,
-> >=20
-> > On 27/03/2024 23:16, Martin KaFai Lau wrote:
-> >=20
-> > (...)
-> >=20
-> > > Unrelated, is there a way to tell if a tcp_sock is a subflow?
-> >=20
-> > Yes, you can use "sk_is_mptcp(sk)". Please note that this 'sk' *has* to
-> > be a tcp_sock, this is not checked by the helper.
-> >=20
-> > That's what is used with bpf_mptcp_sock_from_subflow()
-> >=20
-> > https://elixir.bootlin.com/linux/latest/source/net/mptcp/bpf.c#L15
-> >=20
-> > > bpf prog
-> > > can use it to decide if it wants to setsockopt on a subflow or not.
-> > I think it is important to keep the possibility to set socket options
-> > per subflow. If the original issue discussed here is limited to
-> > set_rcvlowat(), best to address it there.
->=20
->=20
-> All makes sense to me.
->=20
-> Paolo,
-> could you send an official patch?
+[0] added ability to capture LBR (Last Branch Records) on Intel CPUs
+from inside BPF program at pretty much any arbitrary point. This is
+extremely useful capability that allows to figure out otherwise
+hard-to-debug problems, because LBR is now available based on some
+application-defined conditions, not just hardware-supported events.
 
-Sure, thank you for reminding me. This was falling off my radar. I'll
-send it after some testing.
+retsnoop ([1]) is one such tool that takes a huge advantage of this
+functionality and has proved to be an extremely useful tool in
+practice.
 
-Thanks!
+Now, AMD Zen4 CPUs got support for similar LBR functionality, but
+necessary wiring inside the kernel is not yet setup. This patch seeks to
+rectify this and follows a similar approach to the original patch [0]
+for Intel CPUs.
 
-Paolo
+Given LBR can be set up to capture any indirect jumps, it's critical to
+minimize indirect jumps on the way to requesting LBR from BPF program,
+so we split amd_pmu_lbr_disable_all() into a wrapper with some generic
+conditions vs always-inlined __amd_pmu_lbr_disable() called directly
+from BPF subsystem (through perf_snapshot_branch_stack static call).
+
+This was tested on AMD Bergamo CPU and worked well when utilized from
+the aforementioned retsnoop tool.
+
+  [0] https://lore.kernel.org/bpf/20210910183352.3151445-2-songliubraving@fb.com/
+  [1] https://github.com/anakryiko/retsnoop
+
+Reviewed-by: Sandipan Das <sandipan.das@amd.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ arch/x86/events/amd/core.c   | 29 ++++++++++++++++++++++++++++-
+ arch/x86/events/amd/lbr.c    |  7 +------
+ arch/x86/events/perf_event.h | 11 +++++++++++
+ 3 files changed, 40 insertions(+), 7 deletions(-)
+
+diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+index aec16e581f5b..88f6d0701342 100644
+--- a/arch/x86/events/amd/core.c
++++ b/arch/x86/events/amd/core.c
+@@ -618,7 +618,7 @@ static void amd_pmu_cpu_dead(int cpu)
+ 	}
+ }
+ 
+-static inline void amd_pmu_set_global_ctl(u64 ctl)
++static __always_inline void amd_pmu_set_global_ctl(u64 ctl)
+ {
+ 	wrmsrl(MSR_AMD64_PERF_CNTR_GLOBAL_CTL, ctl);
+ }
+@@ -878,6 +878,29 @@ static int amd_pmu_handle_irq(struct pt_regs *regs)
+ 	return amd_pmu_adjust_nmi_window(handled);
+ }
+ 
++static int amd_pmu_v2_snapshot_branch_stack(struct perf_branch_entry *entries, unsigned int cnt)
++{
++	struct cpu_hw_events *cpuc;
++	unsigned long flags;
++
++	/* must not have branches... */
++	local_irq_save(flags);
++	amd_pmu_core_disable_all();
++	__amd_pmu_lbr_disable();
++	/*            ... until here */
++
++	cpuc = this_cpu_ptr(&cpu_hw_events);
++
++	amd_pmu_lbr_read();
++	cnt = min_t(unsigned int, cnt, x86_pmu.lbr_nr);
++	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * cnt);
++
++	amd_pmu_v2_enable_all(0);
++	local_irq_restore(flags);
++
++	return cnt;
++}
++
+ static int amd_pmu_v2_handle_irq(struct pt_regs *regs)
+ {
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+@@ -1414,6 +1437,10 @@ static int __init amd_core_pmu_init(void)
+ 		static_call_update(amd_pmu_branch_reset, amd_pmu_lbr_reset);
+ 		static_call_update(amd_pmu_branch_add, amd_pmu_lbr_add);
+ 		static_call_update(amd_pmu_branch_del, amd_pmu_lbr_del);
++
++		/* only support branch_stack snapshot on perfmon v2 */
++		if (x86_pmu.handle_irq == amd_pmu_v2_handle_irq)
++			static_call_update(perf_snapshot_branch_stack, amd_pmu_v2_snapshot_branch_stack);
+ 	} else if (!amd_brs_init()) {
+ 		/*
+ 		 * BRS requires special event constraints and flushing on ctxsw.
+diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
+index 4a1e600314d5..0e4de028590d 100644
+--- a/arch/x86/events/amd/lbr.c
++++ b/arch/x86/events/amd/lbr.c
+@@ -412,16 +412,11 @@ void amd_pmu_lbr_enable_all(void)
+ void amd_pmu_lbr_disable_all(void)
+ {
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+-	u64 dbg_ctl, dbg_extn_cfg;
+ 
+ 	if (!cpuc->lbr_users || !x86_pmu.lbr_nr)
+ 		return;
+ 
+-	rdmsrl(MSR_AMD_DBG_EXTN_CFG, dbg_extn_cfg);
+-	rdmsrl(MSR_IA32_DEBUGCTLMSR, dbg_ctl);
+-
+-	wrmsrl(MSR_AMD_DBG_EXTN_CFG, dbg_extn_cfg & ~DBG_EXTN_CFG_LBRV2EN);
+-	wrmsrl(MSR_IA32_DEBUGCTLMSR, dbg_ctl & ~DEBUGCTLMSR_FREEZE_LBRS_ON_PMI);
++	__amd_pmu_lbr_disable();
+ }
+ 
+ __init int amd_pmu_lbr_init(void)
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index fb56518356ec..4dddf0a7e81e 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -1329,6 +1329,17 @@ void amd_pmu_lbr_enable_all(void);
+ void amd_pmu_lbr_disable_all(void);
+ int amd_pmu_lbr_hw_config(struct perf_event *event);
+ 
++static __always_inline void __amd_pmu_lbr_disable(void)
++{
++	u64 dbg_ctl, dbg_extn_cfg;
++
++	rdmsrl(MSR_AMD_DBG_EXTN_CFG, dbg_extn_cfg);
++	rdmsrl(MSR_IA32_DEBUGCTLMSR, dbg_ctl);
++
++	wrmsrl(MSR_AMD_DBG_EXTN_CFG, dbg_extn_cfg & ~DBG_EXTN_CFG_LBRV2EN);
++	wrmsrl(MSR_IA32_DEBUGCTLMSR, dbg_ctl & ~DEBUGCTLMSR_FREEZE_LBRS_ON_PMI);
++}
++
+ #ifdef CONFIG_PERF_EVENTS_AMD_BRS
+ 
+ #define AMD_FAM19H_BRS_EVENT 0xc4 /* RETIRED_TAKEN_BRANCH_INSTRUCTIONS */
+-- 
+2.43.0
 
