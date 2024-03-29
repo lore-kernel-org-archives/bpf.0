@@ -1,68 +1,68 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7070948CCD
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 22:00:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF3FB13B2B8
+	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 22:01:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711749643; cv=none; b=cyjqV9eh4cSLxYIhndMlnrHMIeAqcag5DvSB0SJT5oavpwzxJQzxHJ85IIy71eA7xdxtavgscRlDHgwpTfHeVMyc7MubvG0noqJUV45hhPTlQB8US0HPp2Xw2u6kSTbjRplIFgvk2N2PwFC6rTnxmza+mXURajhsm8VWOeyNLjw=
+	t=1711749677; cv=none; b=Hnhz2LxjBa5/9Hwb1986YFyZtGtfBBFbG2+xqZWyp9bH8VjEqmNM6kxR4mPE6Wd5h7ucuCE/JOeHeH7q92s6aFpTu/G+zxLyw09u94XIYZJ8vjsBGaMRfjUFiJvkN0LCuU5+gS2iAXgC9pl5WHejWfIJLPvJEC/UJ9x1p5QaHD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711749643; c=relaxed/simple;
-	bh=XHeRQE1xEXFx804XnAi9BPHnSWhIjuUegR1PiXi9YIE=;
+	s=arc-20240116; t=1711749677; c=relaxed/simple;
+	bh=kG2ilv+ptdgx0p0VH4ytP2EfQEf92a4w9oQTtM0jEwE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qe38FHs2SZVbF/XF0hfQMQ8+5vHB+LpYkXmBjHz7owaIKIjwdTFtEcWemqSuBy8MmPmSmA2Y6X7TnKhMxsAh5lcvUCUey5Yhd1cyWx59nWhZ3rGpMFwxNIaM6jshsbJ+Deccu24fec1XeNzwsVX8u/cqQ/5ycm0errcTsJl++Us=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QWipfJ8M; arc=none smtp.client-ip=209.85.214.177
+	 To:Cc:Content-Type; b=R67F3oMDMMd/SFbC24qAHr5djyP0RgohIQ26ddjRvMnmuOeWOYOskZfZ62b4pDR+fDe3kUmUWsN+RRjLGYeEdwszi6XKUozE8dJ603vFRYhYm/RDqLcEWmvF2/su2NInJ58k7rud5gCJRsSMUYRZtxnXPo0WMtqVvimJpqp0TJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WrV+yTcq; arc=none smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QWipfJ8M"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1e0d82c529fso21412185ad.2
-        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 15:00:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WrV+yTcq"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-56899d9bf52so3061519a12.2
+        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 15:01:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711749641; x=1712354441; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711749674; x=1712354474; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JTRSLTS1bUQ820u7zdm6K1Pw0lYuBj471SKvweSnSqY=;
-        b=QWipfJ8MsDgqFxawi4cjsrusaaSLaomVGPUBVUbQa5lwpJzJajRzeTPS9yPYxNH/02
-         Hc2tAyqTuTjXviGu02f74oygTtzYscRXtcknJNm6xejoL6LvNoztXznd0a5l61Y3s656
-         bKzRGYFS6C97+Ws5d3wSwkrNnK6+SabP59gulFciW/b8vXJ6R78pPIT7LY0Hi+OFkbh/
-         G3Y9V4lfjMqoMKwClL/vmvTuPhgsYLCsufss8hb2U9Zry8SeCjFOQ6KfkXOesPpEHGSV
-         XzLsVbFpiIkrgdn2yKDs7aTlkOyPRyWGb3S4ptRivI4Ns5Ix/AWjj4+hsnF5HpX+RCUb
-         B4iQ==
+        bh=M5kGyE0FX/ono87O7FcUBRC90Dg7H28s3LGhc9FYlXU=;
+        b=WrV+yTcql0IgcKCtXPTwt7X3dPzu/P1y9t8qgfLjbFyqW2rMp7028FxD8OHCKZm0gQ
+         LquavPibp7Y/WjTDxGxeMqEOcDpSztFyauoiQUwsTJtEKZkItDi7CS5VoUvjQoKUTCbm
+         SBN2ei6i/2pSdRB3fbT8d8VdcPan9GWricMmeLexjzfGgIQ8kJTkuIqpeVYUqxKU84gc
+         tiZffuBXDMSTRMauHOmi8+RIdnAoaZpoBw5lsW3wD0nj5huMZ56Tn20h+RbxUe3kojyL
+         dRptC8u4lDZ5PsQpXsVenqmdpy9TZpQw8xkrYDhHk9NZ9gINC9IEdqBN/99etUywK5Rp
+         pz+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711749641; x=1712354441;
+        d=1e100.net; s=20230601; t=1711749674; x=1712354474;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JTRSLTS1bUQ820u7zdm6K1Pw0lYuBj471SKvweSnSqY=;
-        b=xUe8mu7rDgrkjq+9ckdXSDryuKSqSIK88UoUsuFjpWQwDrAQlg6iWxp6GwosQQbFNz
-         QRAhAJJ3mMNcqi72m4ksdl2wi1Vbafgkb0buYxdxmSOX/hRUPtukzKiCNXuKHllFRnAv
-         FskNudyPrRCoG9LPpfORdQnQ34UWJAoSpSmoBobn7t+Zq1COCtE2fX/kT+lWuU4VMWDU
-         BjpbYoEd8C5gGteJ8ZLPPx75lg2qvMZaHSaxbAGjIUNvh+KnOf3M90bO9oFnct8ueyA/
-         vlh6mQAeAd7QIL+5IkPOYrGGAcO/iyYZv3NIt8/d8bP07E5pJyN0osaSCPuc8ZaQt/yf
-         jMAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXJPqCrb24gTCgTEYfJWp2EMbnximIYrvRfYqLNK68uRSxGhbq7Y89tVUxhUDUmNSH2m4hRw6DQoqz+oXELrGyxJP+q
-X-Gm-Message-State: AOJu0YyGbMnldBER9aubo/EigSECnlIw/AAEmscMr83aTrqPGqnVm57t
-	Nvg4QHIgrFPnxrujj4zZV4+XiaEk9INF/gDCXHTHvlnxcevPgz6zo6SAndWoOlnzsFi1bJ7t+Lm
-	ra5OpufP/+JjylI5R5wzImql4hMI=
-X-Google-Smtp-Source: AGHT+IFKh9dS7DQwBuJJCMxkW7ft1Q+USlOmQLA+w7Wvsrq4sOB2zSlI7Onj+zZX32BQ6hGvKB5AzfrpPfgdEUp0vN0=
-X-Received: by 2002:a17:90a:fa04:b0:2a0:4ec2:f653 with SMTP id
- cm4-20020a17090afa0400b002a04ec2f653mr3134957pjb.4.1711749640633; Fri, 29 Mar
- 2024 15:00:40 -0700 (PDT)
+        bh=M5kGyE0FX/ono87O7FcUBRC90Dg7H28s3LGhc9FYlXU=;
+        b=EFiDfIO2kmfr7H5qn0YYPIc3JJkxdpfF+OqqWxsZMruFPjf8oTljgxWCIGwVc1bg7i
+         IxF0IcrdDdVUoz6QdKWtbv7aCp6FB38Ql13DwT7pY3t5gUx1YsMEzP/P4DtuEO9JtGRZ
+         8iAxlTo4csg8NoSCgppacWX/D4i2y7VvtnmY+uO+WD2O1iLb/Y6lJ+Qgh/RXlxWtIJa3
+         fhmg830qt3eJoH2ffaY/2Ir5zkAIkdyl7jwcFx5rFFo4tiz+/06NH3IHU0ax73Hy8d9I
+         7r5p14hYaJVXBg6ZiFx+BgjABMPO1jEayYSL2DST7KJE/iVh7LCsrM15tSUYNXsb70sO
+         o7HA==
+X-Forwarded-Encrypted: i=1; AJvYcCXAo3N0ebL6ZDffqGw9qUSSDQcE41AHlLvEvbE3ghbWHZNuAmlH85IUB/Rq0st+7WOPjXHoWSCyEthkzZ7fv3BbR0wA
+X-Gm-Message-State: AOJu0Yw9tEeVWMeB0m48wEz0GlWjwcrEKELy6UXb8YNwoO8RlR4u6Vzi
+	l/JBw5rJ/QZvJrPcBJy3rIvLMgVOEYDeFhsz07et4iU3YghufcfKVEAFqqMhLihqP3YQixZyzhO
+	T8F84xu/0DYDCLkLzPw9GWdRaNIc=
+X-Google-Smtp-Source: AGHT+IHQAbHv4k7IMa/Hrc0/A+tszxaxsuDe+8BFvVDmWOLm9iolf5oHY1DobmmbvTBWuiu0MbRQva4B9CY6qTovKcw=
+X-Received: by 2002:a17:906:1744:b0:a4e:2d7d:3fd5 with SMTP id
+ d4-20020a170906174400b00a4e2d7d3fd5mr2516290eje.1.1711749673920; Fri, 29 Mar
+ 2024 15:01:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322102455.98558-1-alan.maguire@oracle.com> <20240322102455.98558-4-alan.maguire@oracle.com>
-In-Reply-To: <20240322102455.98558-4-alan.maguire@oracle.com>
+References: <20240322102455.98558-1-alan.maguire@oracle.com> <20240322102455.98558-6-alan.maguire@oracle.com>
+In-Reply-To: <20240322102455.98558-6-alan.maguire@oracle.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 29 Mar 2024 15:00:28 -0700
-Message-ID: <CAEf4BzZ-rezyjmsR2CJdZMbY0LUzp0KBOV1oVfXVDpXgyWMAYg@mail.gmail.com>
-Subject: Re: [RFC bpf-next 02/13] libbpf: add btf__new_split_base_ref()
- creating split BTF with reference base BTF
+Date: Fri, 29 Mar 2024 15:00:53 -0700
+Message-ID: <CAEf4BzbWHPah0_QaU8a9kNo7C24RB4mR0mLcwXvFQyf3qNbYnA@mail.gmail.com>
+Subject: Re: [RFC bpf-next 04/13] libbpf: add btf__parse_opts() API for
+ flexible BTF parsing
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: andrii@kernel.org, jolsa@kernel.org, acme@redhat.com, 
 	quentin@isovalent.com, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, 
@@ -76,285 +76,140 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, Mar 22, 2024 at 3:25=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
 om> wrote:
 >
-> To support more robust split BTF, adding supplemental context for the
-> base BTF type ids that split BTF refers to is required.  Without such
-> references, a simple shuffling of base BTF type ids (without any other
-> significant change) invalidates the split BTF.  Here the attempt is made
-> to store additional context to make split BTF more robust.
->
-> This context comes in the form of "reference" base BTF - this base BTF
-> constitutes the minimal BTF representation needed to disambiguate split B=
-TF
-> references to base BTF.  So for example if a struct is referred to from
-> split -> base BTF, a forward representation of that struct is retained
-
-so you decided to not bother with recording expected size? Remember we
-were talking about situations where vmlinux struct can be embedded
-inside the kernel module's struct. In this case *exact* struct size is
-very important and can't be changed without breaking compatibility.
-Shouldn't we keep track of this?
-
-> in reference base BTF, and split BTF refers to it.  Base types are kept
-> intact in reference base BTF, and reference types like pointers are store=
-d
-> as-is.  Avoiding struct/union/enum/enum64 expansion is important to keep
-> reference base BTF representation to a minimum size; however anonymous
-> struct, union and enum[64] types are represented in full since type detai=
-ls
-> are needed to disambiguate the reference - the name is not enough in thos=
-e
-> cases since there is no name.  In practice these are rare; in sample
-> cases where reference base BTF was generated for in-tree kernel modules,
-> only a few were needed in base reference BTF.  These represent the
-> anonymous struct/unions that are used by the module but were de-duplicate=
-d
-> to use base vmlinux BTF ids instead.
->
-> When successful, a new representation of the split BTF passed in is
-> returned.  It refers to the reference BTF as its base, and both returned
-> split and base BTF need to be freed by the caller.
->
-> So to take a simple example, with split BTF with a type referring
-> to "struct sk_buff", we will generate base reference BTF with a
-> FWD struct sk_buff, and the split BTF will refer to it instead.
->
-> Tools like pahole can utilize such split BTF to popuate the .BTF section
-
-typo: populate
-
-> (split BTF) and an additional .BTF.base_ref section (base reference BTF).
-> Then when the split BTF is loaded, the base reference BTF can be used
-> to reconcile split BTF and the current - and possibly changed - base BTF.
->
-> So for example if "struct sk_buff" was id 502 when the split BTF was
-> originally generated,  we can use the reference base BTF to see that
-> id 502 refers to a "struct sk_buff" and replace instances of id 502
-> with the current (reconciled) base BTF sk_buff type id.
->
-> Base reference BTF is small; when building a kernel with all modules
-> using base reference BTF as a test, the average size for module
-> base reference BTF is 1555 bytes (standard deviation 1563).  The
-> maximum base reference BTF size across ~2700 modules was 37895 bytes.
+> Options cover existing parsing scenarios (ELF, raw, retrieving
+> .BTF.ext) and also allow specification of the ELF section name
+> containing BTF.  This will allow consumers to retrieve BTF from
+> .BTF.base_ref sections (BTF_BASE_REF_ELF_SEC) also.
 >
 > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 > ---
->  tools/lib/bpf/btf.c      | 215 +++++++++++++++++++++++++++++++++++++--
->  tools/lib/bpf/btf.h      |  15 +++
->  tools/lib/bpf/libbpf.map |   1 +
->  3 files changed, 225 insertions(+), 6 deletions(-)
+>  tools/lib/bpf/btf.c      | 24 ++++++++++++++++++------
+>  tools/lib/bpf/btf.h      | 32 ++++++++++++++++++++++++++++++++
+>  tools/lib/bpf/libbpf.map |  1 +
+>  3 files changed, 51 insertions(+), 6 deletions(-)
 >
 
 [...]
 
-> +static int btf_add_ref_type_ids(__u32 *id, void *ctx)
+> +struct btf *btf__parse_opts(const char *path, struct btf_parse_opts *opt=
+s)
 > +{
-> +       struct btf_ref *ref =3D ctx;
-> +       struct btf_type *t =3D btf_type_by_id(ref->pipe.src, *id);
-> +       int ret;
-> +
-> +       /* split BTF id, not needed */
-> +       if (*id > ref->nr_base_types)
-> +               return 0;
-> +       /* already added ? */
-> +       if (ref->ids[*id] <=3D BTF_MAX_NR_TYPES)
-> +               return 0;
-> +       ref->ids[*id] =3D *id;
-> +
-> +       /* struct/union members not needed, except for anonymous structs
-> +        * and unions, which we need since name won't help us determine
-> +        * matches; so if a named struct/union, no need to recurse
-> +        * into members.
-> +        */
-> +       if (btf_is_eligible_named_fwd(t))
-> +               return 0;
+> +       if (!OPTS_VALID(opts, btf_parse_opts))
+> +               return libbpf_err_ptr(-EINVAL);
+> +       if (opts && !opts->btf_sec)
 
-Let's be a bit more robust here. There are three cases for BTF types
-(kinds) in "base reference BTF": forward-declared (non-anonymous
-structs/unions/enums), copied-as-is (anonymous
-struct/union/enum/func_proto, plus INT/FLOAT; maybe something else),
-but also there is a third kind that shouldn't be referenced from split
-BTF (datasec, funcs, vars, etc). I'd like us to be strict in checking
-that we don't accidentally and silently support the latter. It should
-mean a misuse of this approach and we should error out in this case.
+please use OPTS_GET() macro to access members of opts structs
 
-> +
-> +       /* ensure references in type are added also. */
-> +       ret =3D btf_type_visit_type_ids(t, btf_add_ref_type_ids, ctx);
-> +       if (ret < 0)
-> +               return ret;
-> +       return 0;
+> +               return btf__parse_raw_split(path, opts ? opts->base_btf :=
+ NULL);
+
+this should still work for ELF parsing, so use btf_parse() which can
+deal both with raw BTF and parse ELF (defaulting to .BTF section)
+
+> +       return libbpf_ptr(btf_parse_elf(path,
+> +                                       opts ? opts->btf_sec : BTF_ELF_SE=
+C,
+> +                                       opts ? opts->base_btf : NULL,
+> +                                       opts ? &opts->btf_ext : NULL));
+
+ditto
+
 > +}
 > +
-> +/* All split BTF ids will be shifted downwards since there are less base=
- BTF
-> + * in reference base BTF, and for those that refer to base BTF, we use t=
-he
-> + * reference map to map from original base BTF to reference base BTF id.
+>  static struct btf *btf_parse(const char *path, struct btf *base_btf, str=
+uct btf_ext **btf_ext)
+>  {
+>         struct btf *btf;
+> @@ -1307,7 +1319,7 @@ static struct btf *btf_parse(const char *path, stru=
+ct btf *base_btf, struct btf_
+>                 return btf;
+>         if (err !=3D -EPROTO)
+>                 return ERR_PTR(err);
+> -       return btf_parse_elf(path, base_btf, btf_ext);
+> +       return btf_parse_elf(path, BTF_ELF_SEC, base_btf, btf_ext);
+>  }
+>
+>  struct btf *btf__parse(const char *path, struct btf_ext **btf_ext)
+> diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+> index f2a853d6fa55..c63043520149 100644
+> --- a/tools/lib/bpf/btf.h
+> +++ b/tools/lib/bpf/btf.h
+> @@ -18,6 +18,7 @@ extern "C" {
+>
+>  #define BTF_ELF_SEC ".BTF"
+>  #define BTF_EXT_ELF_SEC ".BTF.ext"
+> +#define BTF_BASE_REF_ELF_SEC ".BTF.base_ref"
+>  #define MAPS_ELF_SEC ".maps"
+>
+>  struct btf;
+> @@ -129,6 +130,37 @@ LIBBPF_API struct btf *btf__parse_elf_split(const ch=
+ar *path, struct btf *base_b
+>  LIBBPF_API struct btf *btf__parse_raw(const char *path);
+>  LIBBPF_API struct btf *btf__parse_raw_split(const char *path, struct btf=
+ *base_btf);
+>
+> +struct btf_parse_opts {
+> +       size_t sz;
+> +       /* use base BTF to parse split BTF */
+> +       struct btf *base_btf;
+> +       /* retrieve optional .BTF.ext info */
+> +       struct btf_ext *btf_ext;
+
+shouldn't this be a pointer to a pointer, it's an output parameter,
+right? This will give control to users to define if they are
+interested in .BTF.ext content or not (NULL means "don't bother
+parsing")
+
+> +       /* BTF section name */
+> +       const char *btf_sec;
+> +        size_t:0;
+> +};
+> +
+> +#define btf_parse_opts__last_field btf_sec
+> +
+> +/* @brief **btf__parse_opts()** parses BTF information from either a
+> + * raw BTF file (*btf_sec* is NULL) or from the specified BTF section,
+> + * also retrieving  .BTF.ext info if *btf_ext* is non-NULL.  If
+> + * *base_btf* is specified, use it to parse split BTF from the
+> + * specified location.
+> + *
+> + * @return new BTF object instance which has to be eventually freed with
+> + * **btf__free()**
+> + *
+> + * On error, error-code-encoded-as-pointer is returned, not a NULL. To e=
+xtract
+> + * error code from such a pointer `libbpf_get_error()` should be used. I=
+f
+> + * `libbpf_set_strict_mode(LIBBPF_STRICT_CLEAN_PTRS)` is enabled, NULL i=
+s
+> + * returned on error instead. In both cases thread-local `errno` variabl=
+e is
+> + * always set to error code as well.
 > + */
-> +static int btf_update_ref_type_ids(__u32 *id, void *ctx)
-> +{
-> +       struct btf_ref *ref =3D ctx;
 > +
-> +       if (*id >=3D ref->nr_base_types)
-> +               *id -=3D ref->diff_id;
-> +       else
-> +               *id =3D ref->ids[*id];
-> +       return 0;
-> +}
+> +LIBBPF_API struct btf *btf__parse_opts(const char *path, struct btf_pars=
+e_opts *opts);
 > +
-> +/* Create updated split BTF with "reference" base BTF; reference base BT=
-F
-> + * consists of BTF information required to clarify the types that split
-> + * BTF refers to, omitting unneeded details.  Specifically it will conta=
-in
-> + * base types and forward declarations of structs, unions and enumerated
-> + * types, along with associated reference types like pointers, arrays et=
-c.
-> + *
-> + * The only case where structs, unions or enumerated types are fully rep=
-resented
-> + * is when they are anonymous; in such cases, info about type content is=
- needed
-> + * to clarify type references.
-> + *
-> + * We return newly-created split BTF where the split BTf refers to a new=
-ly-created
-> + * base reference BTF. Both must be freed separately by the caller.
-> + *
-> + * When creating the BTF representation for a module and provided with t=
-he
-> + * base_ref option, pahole will create split BTF using this API, and sto=
-re
-> + * the base reference BTF in the .BTF.base.reference section.
-> + */
-> +struct btf *btf__new_split_base_ref(struct btf *src_btf)
+>  LIBBPF_API struct btf *btf__load_vmlinux_btf(void);
+>  LIBBPF_API struct btf *btf__load_module_btf(const char *module_name, str=
+uct btf *vmlinux_btf);
+>
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index 3d53b1781af1..e9a7cb9c3c5b 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -415,5 +415,6 @@ LIBBPF_1.4.0 {
+>                 bpf_token_create;
+>                 btf__new_split;
+>                 btf__new_split_base_ref;
+> +               btf__parse_opts;
 
-I find this name very confusing, for some reason. btf__new*/btf__parse
-is generally used to either create a new empty instance, or just
-parse/index pre-existing BTF information. In this case I feel like
-it's actually a different operation, where we create a derived BTF, so
-I'd name it distinctively. How do you feel about something with
-"distill" terminology as an action performed here. E.g.,
-btf__distill_base() or something like that?
+for the next revision, please put it into 1.5.0 section, we'll have
+1.4 release soon, so let's avoid accidentally adding this back to 1.4
 
-The API contract is also suboptimal, given back split BTF where base
-BTF is owned (and has to be freed). Let's keep it a bit more explicit,
-something like:
+>                 btf_ext__raw_data;
+>  } LIBBPF_1.3.0;
 
-int btf__distill_base(struct btf *new_base_btf, struct btf *new_split_btf);
-
-WDYT?
-
-> +{
-> +       unsigned int n =3D btf__type_cnt(src_btf);
-> +       const struct btf_type *t;
-> +       struct btf_ref ref =3D {};
-> +       struct btf *base_btf =3D NULL, *split_btf =3D NULL;
-> +       __u32 i, id =3D 0;
-> +       int ret =3D 0;
-> +
-> +       /* src BTF must be split BTF. */
-> +       if (!btf__base_btf(src_btf)) {
-> +               errno =3D -EINVAL;
-> +               return NULL;
-> +       }
-> +       base_btf =3D btf__new_empty();
-
-I was confused, it's baseref_btf or something, we already have
-"base_btf", which is coming from btf__base_btf(src_btf), so let's
-distinguish all those "base" BTFs?
-
-> +       if (!base_btf)
-> +               return NULL;
-> +       ref.ids =3D calloc(n, sizeof(*ref.ids));
-> +       if (!ref.ids) {
-> +               ret =3D -ENOMEM;
-> +               goto err_out;
-> +       }
-> +       for (i =3D 1; i < n; i++)
-> +               ref.ids[i] =3D BTF_UNPROCESSED_ID;
-
-by now we generally expect BTF IDs to be a positive integer, so I'd
-use int for ids and just use explicit -1, and then a bit more natural
-check for >=3D 0 in btf_add_ref_type_ids
-
-> +       ref.pipe.src =3D src_btf;
-> +       ref.pipe.dst =3D base_btf;
-> +       ref.pipe.str_off_map =3D hashmap__new(btf_dedup_identity_hash_fn,=
- btf_dedup_equal_fn, NULL);
-> +       if (IS_ERR(ref.pipe.str_off_map)) {
-> +               ret =3D -ENOMEM;
-> +               goto err_out;
-> +       }
-
-[...]
-
-> +                       default:
-> +                               pr_warn("unexpected kind [%u] when creati=
-ng base reference BTF.\n",
-> +                                       btf_kind(t));
-> +                               goto err_out;
-> +                       }
-> +                       ret =3D btf__add_fwd(base_btf, btf__name_by_offse=
-t(src_btf, t->name_off),
-> +                                          fwd_kind);
-> +               } else {
-> +                       ret =3D btf_add_type(&ref.pipe, t);
-
-see comment above, we should detect erroneous uses of referencing
-"non-relocatable" kinds like VAR/DATASEC
-
-> +               }
-> +               if (ret < 0)
-> +                       goto err_out;
-> +               ref.ids[i] =3D ++id;
-> +       }
-> +       /* now create new split BTF with reference base BTF as its base; =
-we end up with
-> +        * split BTF that has base BTF that represents enough about its b=
-ase references
-> +        * to allow it to be reconciled with the base BTF available.
-> +        */
-> +       split_btf =3D btf__new_empty_split(base_btf);
-> +       if (!split_btf)
-> +               goto err_out;
-> +
-> +       ref.pipe.dst =3D split_btf;
-> +       /* all split BTF ids will be shifted downwards since there are le=
-ss base BTF ids
-> +        * in reference base BTF.
-> +        */
-> +       ref.diff_id =3D ref.nr_base_types - btf__type_cnt(base_btf);
-> +
-> +       /* First add all split types */
-> +       for (i =3D src_btf->start_id; i < n; i++) {
-> +               t =3D btf_type_by_id(src_btf, i);
-> +               ret =3D btf_add_type(&ref.pipe, t);
-> +               if (ret < 0)
-> +                       goto err_out;
-> +       }
-> +       /* Now update base/split BTF ids. */
-> +       for (i =3D 1; i < btf__type_cnt(split_btf); i++) {
-
-nit: cache this btf__type_cnt() result, no need to keep calling it all the =
-time
-
-> +               t =3D btf_type_by_id(split_btf, i);
-> +
-> +               ret =3D btf_type_visit_type_ids((struct btf_type *)t,  bt=
-f_update_ref_type_ids, &ref);
-
-nit: it's a bit annoying to cast t here, given btf_type_by_id()
-returns non-const type as you need it. Just mark t as non-const and
-use btf_type_by_id() everywhere?
-
-
-
-> +               if (ret < 0)
-> +                       goto err_out;
-> +       }
-> +       free(ref.ids);
-> +       hashmap__free(ref.pipe.str_off_map);
-> +       return split_btf;
-
-[...]
+> --
+> 2.39.3
+>
