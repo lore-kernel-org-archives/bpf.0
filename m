@@ -1,55 +1,55 @@
 Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61DC021100
-	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 01:54:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C032B9AD
+	for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 01:54:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711677246; cv=none; b=QYRMuTRcluHCQkUQ7uWI5AWvkpjhSgXHlAzxNqp78q4VoTtvVjz8qlHxybAxLMCqhrnd0BYe4Q/brdWWYt8pwPE0FqYadga9gAHEVBwV6JpHNao5SHOmNcvEnVI9OjbdyHO6I9y9b3MlvR5QFU/G9MW0BR+6iVS6CMZxVaIMPhk=
+	t=1711677249; cv=none; b=E6uWhCe+2m1cAavk/89m67emWR6oUqcbLhAokkvmrFsRFBJjbMoimdW3McNVejjyACM0t6dHlYBja4zrNIxt71GxDLAmmkI3HsqqdSdljIvEmabWjh7YyVV1lZBW3XunBVhEl8W8mApZ83kgv2Keb/qA83EQUAKP+G92cacOPKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711677246; c=relaxed/simple;
-	bh=Wc6g5oUwOwJMcy8zr/T7dnynkvOgSwhcOrIXewXrDos=;
+	s=arc-20240116; t=1711677249; c=relaxed/simple;
+	bh=WHF1cQ6wftLpEUkLh/arn81XtKeZBIuOooiwZcqzz24=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=teO9D3AS3Gpn/wFqvZD3ZBVb0dRcp+qn47MR9VAovUX8EadTTuESYFmzkRrAqwDGrQi+I7zjQB8NptpD6azS0u9szu945tJHp/uXquw9MT602916tZvfYiGsMndsL7nfp6D6fpL4G3vw+6+VKJbF3dv/fYhq1uYvATWnLWIQwVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--drosen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VVRlV2AB; arc=none smtp.client-ip=209.85.219.202
+	 To:Cc:Content-Type; b=l2Wg4Nr1FSEQQBeJ/dPVZqy07SvnPS3bNyjTgCluKgsiljrgFeYJfRHqHNjysfxRrtvxKYrHC3BWdBhFVupaDnXDR9+DI+T0iNFk1D0mrxK9X19OZ/woqRhb9t26ZZjqVWXWs7g+ZWexk4bxt9OKyUPEMSDyJ7kddY9GXfgwm3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--drosen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ohkuFqn0; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--drosen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VVRlV2AB"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dcbee93a3e1so2390291276.3
-        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 18:54:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ohkuFqn0"
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc6b26845cdso2314391276.3
+        for <bpf@vger.kernel.org>; Thu, 28 Mar 2024 18:54:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711677244; x=1712282044; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1711677246; x=1712282046; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/zH4C1QJ9QRhJsDuWqk5xHws80AiBqqvhiaKJmoPnqo=;
-        b=VVRlV2AB4xLteIv7NdqAcWA487whBLy522o5Uoqki3PBN2l1tVi7VZYIMv36wcWfIF
-         2h6DavLDcwkX20y7dV3tKxoRF3V5gulrKAGtDonIc/bi/Y/IUO8H+dhjq9iMFgx/WafB
-         o1DlV31/hO1e90foGbMyYrix1k9czDEXIN99mRV9RrZwcTvm2zbcQRYsasropiDwxwnq
-         rM9+aVFAuwEZUFPySGXXQjrGOr4U9w2heyUYBc0kn48DWmWqLHD1JpZkElvBMDSHj8Iz
-         8kIox+T7X/e2otUw1nqqODbYcx3+3jgEDe5Z6UGb0zVa4NUQLXSWBylVRYjnNDpEjPWq
-         O/2A==
+        bh=1TWHZ6CjfZzMP0P6lR3s6R//pEvlviDj7MeL1JlKB90=;
+        b=ohkuFqn0UVk+BjOZ6e/RSq+48ILEeFYpINfxRwudlqaBWyFbnkpPawUTBv2CuqMfD1
+         nKkruG6I9j8NGgSA9NVtg7HFFnTUqmFC29sod1XHXTCBRYdW3S2Ir/T+QbLZT3239gae
+         E3pKZvFzV7WBF8aL/cfmUln6QiwAysATkK9SOwcL7Y/LT4r3vpzE+dtbvj3ImOHvxzcO
+         p5GdAoDK2j2Pj/oOVRZ4bHmUl77HwudnBv7cMP6VYmH3vegQkSeCFVq3Buqg+0w5BDAN
+         bBklfy6rYVEQEw1nKMN8V3/ButYEI+bfHgut2Ye4IsUsZ1OlhTZKMBSPur38HYhTtAv9
+         vutA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711677244; x=1712282044;
+        d=1e100.net; s=20230601; t=1711677246; x=1712282046;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/zH4C1QJ9QRhJsDuWqk5xHws80AiBqqvhiaKJmoPnqo=;
-        b=snl4I+yPx8uktQIVY5mAQ+pGTnu5ZlN5tgkBLSvpqjOF81kpPkMGl8xzCxP9AVn17b
-         6Wf6DLhj481ftK0m0P1C0VYNUYB4bXFCMOShkhT0pIu7nMpm0VNvvxh3RayeznI+xF5k
-         6a+2fDY/R3/OpydPlUIkq7e9pkByaezgb6gV/Mb9utLncuThluWV/oXlqSgmqqX1FE5D
-         WQ9CX3hPYhw7Szvu2yHRud+rjONheeKGm5nu4XlS2N9bWzRO7PovPlCnu/IcNTZjP5/8
-         0h70uCp6fwSjnT+QLu9q1FOrr9cCmGnhHXs54rnveBV+MicOM4N9sVOxcrU5OdceVLbu
-         KgQg==
-X-Forwarded-Encrypted: i=1; AJvYcCWw4S61ACxhCht+7Q7wGJrshVFYx2nJfI7y89H18T+2keLRpTezwr9X951WBE0MsSZ7kaS+IQtRiUrps8ngP2IKCRMC
-X-Gm-Message-State: AOJu0YxXvV4S7UAB956ejua5OgPq/GtjyvDp126TcV39SEoorGuUp0+G
-	QmHyQU8ilP4VEJ3kTGyP0+e7nUwzjuCsWrgA+ZoQwpD9jztwBzg+yP55KZQtdPmAVbAMMrq944m
-	6Jg==
-X-Google-Smtp-Source: AGHT+IECUo0Pk+Dy4BEAGGBe6rMjNQ00Kce7FlbJjQhechcikFYw4a3/fGgjQkC9x+edNOdwWHxstE0cb78=
+        bh=1TWHZ6CjfZzMP0P6lR3s6R//pEvlviDj7MeL1JlKB90=;
+        b=PAcE0S1kLxwxJwv4NC+vloOP+gx1L+eJoeS0N3eN7+n5xIGRb2ygzf9v7ScYFfz4zI
+         8/xNSN5ClOZEFZD1E/1//W/ooWn5KV/FtZTelrjlxNDzL1tHRlPi0yHy7uSSPyxGGlFU
+         6LlMamFt+Y9ZpTkGv0LZknUO9hZYyYIuTv6k7IyZ+WZvXU3CfexDvfnWvtxid/riD1D+
+         EhdH7DSgoLIqXyLYw2iXSAQSSTyrUrwYGVeRK1woDIaz7PktWFgHgpRKcMvbvo5cb5Vz
+         pKlXGliKXcxfAs80FeQI0ZpQFyG4pcwgQvcq49hVl0nbK6X2FNGdEa6/FHEjt5sNcNsa
+         FR1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXRCS/FjRwrzkRBV2Tr8yqgosKvImpZ7TTCof3fyWBHeWQV5NdzlfemyT5YmFYNcmSsgou9WfFtEYuXcpBlRBzZ/OfS
+X-Gm-Message-State: AOJu0Yzz5SMpjf0XTssS+rdG7GiR03aXuV9cs467amoPzBGbfg6OokCG
+	gC2L6uGGUjwfUtePj7ZC6HDBOJYyccnWVx1PrzfW97Pc356XbYwWcSbr5OdpeiaS1g/Z7F0BHDA
+	9/w==
+X-Google-Smtp-Source: AGHT+IEi4wBl0taMuZM199uicOLSQKEshdiXi8Hiat+CV3OzSJuBGo9P6id8BJm2lQgMqafkSWILsniPSE4=
 X-Received: from drosen.mtv.corp.google.com ([2620:15c:211:201:fcce:d6ab:804c:b94b])
- (user=drosen job=sendgmr) by 2002:a05:6902:e0f:b0:dc6:44d4:bee0 with SMTP id
- df15-20020a0569020e0f00b00dc644d4bee0mr85414ybb.7.1711677244476; Thu, 28 Mar
- 2024 18:54:04 -0700 (PDT)
-Date: Thu, 28 Mar 2024 18:53:17 -0700
+ (user=drosen job=sendgmr) by 2002:a05:6902:72c:b0:dc2:3441:897f with SMTP id
+ l12-20020a056902072c00b00dc23441897fmr300435ybt.6.1711677246590; Thu, 28 Mar
+ 2024 18:54:06 -0700 (PDT)
+Date: Thu, 28 Mar 2024 18:53:18 -0700
 In-Reply-To: <20240329015351.624249-1-drosen@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240329015351.624249-1-drosen@google.com>
 X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
-Message-ID: <20240329015351.624249-3-drosen@google.com>
-Subject: [RFC PATCH v4 02/36] fuse-bpf: Add data structures for fuse-bpf
+Message-ID: <20240329015351.624249-4-drosen@google.com>
+Subject: [RFC PATCH v4 03/36] fuse-bpf: Prepare for fuse-bpf patch
 From: Daniel Rosenberg <drosen@google.com>
 To: Miklos Szeredi <miklos@szeredi.hu>, bpf@vger.kernel.org, 
 	Alexei Starovoitov <ast@kernel.org>
@@ -73,108 +73,124 @@ Cc: Amir Goldstein <amir73il@gmail.com>, linux-kernel@vger.kernel.org,
 	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
 	Joanne Koong <joannelkoong@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
 	Christian Brauner <brauner@kernel.org>, kernel-team@android.com, 
-	Daniel Rosenberg <drosen@google.com>
+	Daniel Rosenberg <drosen@google.com>, Paul Lawrence <paullawrence@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-These structures will be used to interact between the fuse bpf calls and
-normal userspace calls
+This moves some functions and structs around to make the following patch
+easier to read.
 
 Signed-off-by: Daniel Rosenberg <drosen@google.com>
+Signed-off-by: Paul Lawrence <paullawrence@google.com>
 ---
- include/linux/bpf_fuse.h | 84 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 84 insertions(+)
- create mode 100644 include/linux/bpf_fuse.h
+ fs/fuse/dir.c    |  4 ----
+ fs/fuse/fuse_i.h |  8 ++++++++
+ fs/fuse/inode.c  | 52 ++++++++++++++++++++++++------------------------
+ 3 files changed, 34 insertions(+), 30 deletions(-)
 
-diff --git a/include/linux/bpf_fuse.h b/include/linux/bpf_fuse.h
-new file mode 100644
-index 000000000000..ce8b1b347496
---- /dev/null
-+++ b/include/linux/bpf_fuse.h
-@@ -0,0 +1,84 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright 2022 Google LLC.
-+ */
-+
-+#ifndef _BPF_FUSE_H
-+#define _BPF_FUSE_H
-+
-+#include <linux/types.h>
-+#include <linux/fuse.h>
-+
-+struct fuse_buffer {
-+	void *data;
-+	unsigned size;
-+	unsigned alloc_size;
-+	unsigned max_size;
-+	int flags;
+diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
+index d19cbf34c634..cd8d6b2f6d78 100644
+--- a/fs/fuse/dir.c
++++ b/fs/fuse/dir.c
+@@ -46,10 +46,6 @@ static inline u64 fuse_dentry_time(const struct dentry *entry)
+ }
+ 
+ #else
+-union fuse_dentry {
+-	u64 time;
+-	struct rcu_head rcu;
+-};
+ 
+ static inline void __fuse_dentry_settime(struct dentry *dentry, u64 time)
+ {
+diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
+index bcbe34488862..797bcfd6fa06 100644
+--- a/fs/fuse/fuse_i.h
++++ b/fs/fuse/fuse_i.h
+@@ -76,6 +76,14 @@ struct fuse_submount_lookup {
+ 	struct fuse_forget_link *forget;
+ };
+ 
++/** FUSE specific dentry data */
++#if BITS_PER_LONG < 64
++union fuse_dentry {
++	u64 time;
++	struct rcu_head rcu;
 +};
++#endif
 +
-+/* These flags are used internally to track information about the fuse buffers.
-+ * Fuse sets some of the flags in init. The helper functions sets others, depending on what
-+ * was requested by the bpf program.
-+ */
-+// Flags set by FUSE
-+#define BPF_FUSE_IMMUTABLE	(1 << 0) // Buffer may not be written to
-+#define BPF_FUSE_VARIABLE_SIZE	(1 << 1) // Buffer length may be changed (growth requires alloc)
-+#define BPF_FUSE_MUST_ALLOCATE	(1 << 2) // Buffer must be re allocated before allowing writes
+ /** FUSE inode */
+ struct fuse_inode {
+ 	/** Inode data */
+diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
+index 516ea2979a90..8eff618ac47b 100644
+--- a/fs/fuse/inode.c
++++ b/fs/fuse/inode.c
+@@ -197,6 +197,32 @@ static ino_t fuse_squash_ino(u64 ino64)
+ 	return ino;
+ }
+ 
++static void fuse_fill_attr_from_inode(struct fuse_attr *attr,
++				      const struct fuse_inode *fi)
++{
++	struct timespec64 atime = inode_get_atime(&fi->inode);
++	struct timespec64 mtime = inode_get_mtime(&fi->inode);
++	struct timespec64 ctime = inode_get_ctime(&fi->inode);
 +
-+// Flags set by helper function
-+#define BPF_FUSE_MODIFIED	(1 << 3) // The helper function allowed writes to the buffer
-+#define BPF_FUSE_ALLOCATED	(1 << 4) // The helper function allocated the buffer
-+
-+/*
-+ * BPF Fuse Args
-+ *
-+ * Used to translate between bpf program parameters and their userspace equivalent calls.
-+ * Variable sized arguments are held in fuse_buffers. To access these, bpf programs must
-+ * use kfuncs to access them as dynptrs.
-+ *
-+ */
-+
-+#define FUSE_MAX_ARGS_IN 3
-+#define FUSE_MAX_ARGS_OUT 2
-+
-+struct bpf_fuse_arg {
-+	union {
-+		void *value;
-+		struct fuse_buffer *buffer;
++	*attr = (struct fuse_attr){
++		.ino		= fi->inode.i_ino,
++		.size		= fi->inode.i_size,
++		.blocks		= fi->inode.i_blocks,
++		.atime		= atime.tv_sec,
++		.mtime		= mtime.tv_sec,
++		.ctime		= ctime.tv_sec,
++		.atimensec	= atime.tv_nsec,
++		.mtimensec	= mtime.tv_nsec,
++		.ctimensec	= ctime.tv_nsec,
++		.mode		= fi->inode.i_mode,
++		.nlink		= fi->inode.i_nlink,
++		.uid		= fi->inode.i_uid.val,
++		.gid		= fi->inode.i_gid.val,
++		.rdev		= fi->inode.i_rdev,
++		.blksize	= 1u << fi->inode.i_blkbits,
 +	};
-+	unsigned size;
-+	bool is_buffer;
-+};
-+
-+struct bpf_fuse_meta_info {
-+	uint64_t nodeid;
-+	uint32_t opcode;
-+	uint32_t error_in;
-+};
-+
-+struct bpf_fuse_args {
-+	struct bpf_fuse_meta_info info;
-+	uint32_t in_numargs;
-+	uint32_t out_numargs;
-+	uint32_t flags;
-+	struct bpf_fuse_arg in_args[FUSE_MAX_ARGS_IN];
-+	struct bpf_fuse_arg out_args[FUSE_MAX_ARGS_OUT];
-+};
-+
-+// Mirrors for struct fuse_args flags
-+#define FUSE_BPF_FORCE (1 << 0)
-+#define FUSE_BPF_OUT_ARGVAR (1 << 6)
-+#define FUSE_BPF_IS_LOOKUP (1 << 11)
-+
-+static inline void *bpf_fuse_arg_value(const struct bpf_fuse_arg *arg)
-+{
-+	return arg->is_buffer ? arg->buffer : arg->value;
 +}
 +
-+static inline unsigned bpf_fuse_arg_size(const struct bpf_fuse_arg *arg)
-+{
-+	return arg->is_buffer ? arg->buffer->size : arg->size;
-+}
-+
-+#endif /* _BPF_FUSE_H */
+ void fuse_change_attributes_common(struct inode *inode, struct fuse_attr *attr,
+ 				   struct fuse_statx *sx,
+ 				   u64 attr_valid, u32 cache_mask)
+@@ -1477,32 +1503,6 @@ void fuse_dev_free(struct fuse_dev *fud)
+ }
+ EXPORT_SYMBOL_GPL(fuse_dev_free);
+ 
+-static void fuse_fill_attr_from_inode(struct fuse_attr *attr,
+-				      const struct fuse_inode *fi)
+-{
+-	struct timespec64 atime = inode_get_atime(&fi->inode);
+-	struct timespec64 mtime = inode_get_mtime(&fi->inode);
+-	struct timespec64 ctime = inode_get_ctime(&fi->inode);
+-
+-	*attr = (struct fuse_attr){
+-		.ino		= fi->inode.i_ino,
+-		.size		= fi->inode.i_size,
+-		.blocks		= fi->inode.i_blocks,
+-		.atime		= atime.tv_sec,
+-		.mtime		= mtime.tv_sec,
+-		.ctime		= ctime.tv_sec,
+-		.atimensec	= atime.tv_nsec,
+-		.mtimensec	= mtime.tv_nsec,
+-		.ctimensec	= ctime.tv_nsec,
+-		.mode		= fi->inode.i_mode,
+-		.nlink		= fi->inode.i_nlink,
+-		.uid		= fi->inode.i_uid.val,
+-		.gid		= fi->inode.i_gid.val,
+-		.rdev		= fi->inode.i_rdev,
+-		.blksize	= 1u << fi->inode.i_blkbits,
+-	};
+-}
+-
+ static void fuse_sb_defaults(struct super_block *sb)
+ {
+ 	sb->s_magic = FUSE_SUPER_MAGIC;
 -- 
 2.44.0.478.gd926399ef9-goog
 
