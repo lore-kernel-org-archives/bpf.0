@@ -1,102 +1,68 @@
 Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15EEF15EFA2;
-	Sun, 31 Mar 2024 16:43:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD59615D5A6;
+	Sun, 31 Mar 2024 16:43:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=62.96.220.36
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711903428; cv=fail; b=lE3lSLsURiaV9RinuguqDvOtx3tElXXLYVlNYcz83dDMBgFTbfHiyC6D762tZt25x0jmXKByqEPwj33sAVuHTAhjU4YH6TPhMuivfuNXM7gJi0TqzOKLeYEQcVXHQrN7CZqGSPnxr8/0oiY2p+HFdhjZh2idRbby5cQRjQZeXww=
+	t=1711903437; cv=fail; b=ZdlSB4PRwBuyml+Rz2KnhFJhz0ghOwGQ2rvlsdzEpzpwFphzMShrK3mosMaepvjzbd8UCLRXQr8VELcNTMqGVr8ZZqQGA5E+JEGZtRa2CUPz84aeXFHfm5WdlAuC/zcMu+4J1FyIu/gbzVo3qLNaA8kzz0uDvMjeo3CN3iS9IIU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711903428; c=relaxed/simple;
-	bh=K02O6tXWhQvm0ZWKP9nwjiuHSAsZNDuVatGLv6Lpks4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NvSqbNc6JA4KQgCRJWlfjr+Qn+YaJy6xn5wZBpwaLn7XUQxY8OTteJaTr+K35ptWcfyxWDUKr88+tszf37EmsroveddPlbvmZOkorK9dL5ZeUA5NCUwBz81SZ59Nbl+LjBY1pHZj05dO5HGumLcl8pypJ8whsdBbKpGnarOp5rs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; dkim=fail (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jy2AymGs reason="signature verification failed"; arc=none smtp.client-ip=209.85.166.50; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; arc=fail smtp.client-ip=62.96.220.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jy2AymGs"
+	s=arc-20240116; t=1711903437; c=relaxed/simple;
+	bh=lDvoRfVI/sDWhWUhMn/62KX2kyaTOHoVXpx1hWFWUPs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=VMuB3VTpVISQ/+6L8w3eORIVW+gK9KTUuWRRi2umJ597vnNPjAz588xEI2+bCmcmx05iZnEYnR3WPaNGNs2VkvVIiflO6UKD0Djt+AYZdjzllFa9CKOVoQWPy1/cFBTMweNQPv+UGgTjQ9FwqdN/KtAf0GVITkSA2woOwCrAr1U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=fail smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=fail smtp.client-ip=62.96.220.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=huaweicloud.com
 Received: from localhost (localhost [127.0.0.1])
-	by a.mx.secunet.com (Postfix) with ESMTP id 92492208C8;
-	Sun, 31 Mar 2024 18:43:43 +0200 (CEST)
+	by a.mx.secunet.com (Postfix) with ESMTP id 6C28720184;
+	Sun, 31 Mar 2024 18:43:06 +0200 (CEST)
 X-Virus-Scanned: by secunet
 Received: from a.mx.secunet.com ([127.0.0.1])
 	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SMQTNbjbghYG; Sun, 31 Mar 2024 18:43:41 +0200 (CEST)
+	with ESMTP id Pjo1MgY72iUk; Sun, 31 Mar 2024 18:43:04 +0200 (CEST)
 Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by a.mx.secunet.com (Postfix) with ESMTPS id 522A7208BE;
-	Sun, 31 Mar 2024 18:43:40 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 522A7208BE
+	by a.mx.secunet.com (Postfix) with ESMTPS id 7593420847;
+	Sun, 31 Mar 2024 18:43:04 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 7593420847
 Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-	by mailout1.secunet.com (Postfix) with ESMTP id 42D94800060;
-	Sun, 31 Mar 2024 18:43:40 +0200 (CEST)
+	by mailout1.secunet.com (Postfix) with ESMTP id 665BA80005E;
+	Sun, 31 Mar 2024 18:43:04 +0200 (CEST)
 Received: from mbx-essen-01.secunet.de (10.53.40.197) by
  cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Sun, 31 Mar 2024 18:43:40 +0200
+ 15.1.2507.35; Sun, 31 Mar 2024 18:43:04 +0200
 Received: from Pickup by mbx-essen-01.secunet.de with Microsoft SMTP Server id
- 15.1.2507.17; Sun, 31 Mar 2024 16:36:27 +0000
-X-sender: <netdev+bounces-83537-steffen.klassert=secunet.com@vger.kernel.org>
-X-Receiver: <steffen.klassert@secunet.com>
- ORCPT=rfc822;steffen.klassert@secunet.com NOTIFY=NEVER;
- X-ExtendedProps=BQAVABYAAgAAAAUAFAARAPDFCS25BAlDktII2g02frgPADUAAABNaWNyb3NvZnQuRXhjaGFuZ2UuVHJhbnNwb3J0LkRpcmVjdG9yeURhdGEuSXNSZXNvdXJjZQIAAAUAagAJAAEAAAAAAAAABQAWAAIAAAUAQwACAAAFAEYABwADAAAABQBHAAIAAAUAEgAPAGIAAAAvbz1zZWN1bmV0L291PUV4Y2hhbmdlIEFkbWluaXN0cmF0aXZlIEdyb3VwIChGWURJQk9IRjIzU1BETFQpL2NuPVJlY2lwaWVudHMvY249U3RlZmZlbiBLbGFzc2VydDY4YwUACwAXAL4AAACheZxkHSGBRqAcAp3ukbifQ049REI2LENOPURhdGFiYXNlcyxDTj1FeGNoYW5nZSBBZG1pbmlzdHJhdGl2ZSBHcm91cCAoRllESUJPSEYyM1NQRExUKSxDTj1BZG1pbmlzdHJhdGl2ZSBHcm91cHMsQ049c2VjdW5ldCxDTj1NaWNyb3NvZnQgRXhjaGFuZ2UsQ049U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixEQz1zZWN1bmV0LERDPWRlBQAOABEABiAS9uuMOkqzwmEZDvWNNQUAHQAPAAwAAABtYngtZXNzZW4tMDIFADwAAgAADwA2AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5NYWlsUmVjaXBpZW50LkRpc3BsYXlOYW1lDwARAAAAS2xhc3NlcnQsIFN0ZWZmZW4FAAwAAgAABQBsAAIAAAUAWAAXAEoAAADwxQktuQQJQ5LSCNoNNn64Q049S2xhc3NlcnQgU3RlZmZlbixPVT1Vc2VycyxPVT1NaWdyYXRpb24sREM9c2VjdW5ldCxEQz1kZQUAJgACAAEFACIADwAxAAAAQXV0b1Jlc3BvbnNlU3VwcHJlc3M6IDANClRyYW5zbWl0SGlzdG9ye
-	TogRmFsc2UNCg8ALwAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuRXhwYW5zaW9uR3JvdXBUeXBlDwAVAAAATWVtYmVyc0dyb3VwRXhwYW5zaW9uBQAjAAIAAQ==
+ 15.1.2507.17; Sun, 31 Mar 2024 16:36:22 +0000
+X-sender: <netdev+bounces-83499-peter.schumann=secunet.com@vger.kernel.org>
+X-Receiver: <peter.schumann@secunet.com>
+ ORCPT=rfc822;peter.schumann@secunet.com NOTIFY=NEVER;
+ X-ExtendedProps=BQAVABYAAgAAAAUAFAARAJ05ab4WgQhHsqdZ7WUjHykPADUAAABNaWNyb3NvZnQuRXhjaGFuZ2UuVHJhbnNwb3J0LkRpcmVjdG9yeURhdGEuSXNSZXNvdXJjZQIAAAUAagAJAAEAAAAAAAAABQAWAAIAAAUAQwACAAAFAEYABwADAAAABQBHAAIAAAUAEgAPAGAAAAAvbz1zZWN1bmV0L291PUV4Y2hhbmdlIEFkbWluaXN0cmF0aXZlIEdyb3VwIChGWURJQk9IRjIzU1BETFQpL2NuPVJlY2lwaWVudHMvY249UGV0ZXIgU2NodW1hbm41ZTcFAAsAFwC+AAAAQ5IZ35DtBUiRVnd98bETxENOPURCNCxDTj1EYXRhYmFzZXMsQ049RXhjaGFuZ2UgQWRtaW5pc3RyYXRpdmUgR3JvdXAgKEZZRElCT0hGMjNTUERMVCksQ049QWRtaW5pc3RyYXRpdmUgR3JvdXBzLENOPXNlY3VuZXQsQ049TWljcm9zb2Z0IEV4Y2hhbmdlLENOPVNlcnZpY2VzLENOPUNvbmZpZ3VyYXRpb24sREM9c2VjdW5ldCxEQz1kZQUADgARAC7JU/le071Fhs0mWv1VtVsFAB0ADwAMAAAAbWJ4LWVzc2VuLTAxBQA8AAIAAA8ANgAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5EaXNwbGF5TmFtZQ8ADwAAAFNjaHVtYW5uLCBQZXRlcgUADAACAAAFAGwAAgAABQBYABcASAAAAJ05ab4WgQhHsqdZ7WUjHylDTj1TY2h1bWFubiBQZXRlcixPVT1Vc2VycyxPVT1NaWdyYXRpb24sREM9c2VjdW5ldCxEQz1kZQUAJgACAAEFACIADwAxAAAAQXV0b1Jlc3BvbnNlU3VwcHJlc3M6IDANClRyYW5zbWl0SGlzdG9yeTogRmFsc
+	2UNCg8ALwAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuRXhwYW5zaW9uR3JvdXBUeXBlDwAVAAAATWVtYmVyc0dyb3VwRXhwYW5zaW9uBQAjAAIAAQ==
 X-CreatedBy: MSExchange15
 X-HeloDomain: b.mx.secunet.com
-X-ExtendedProps: BQBjAAoAJWsFfe5Q3AgFAGEACAABAAAABQA3AAIAAA8APAAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5Pcmdhbml6YXRpb25TY29wZREAAAAAAAAAAAAAAAAAAAAAAAUASQACAAEFAAQAFCABAAAAHAAAAHN0ZWZmZW4ua2xhc3NlcnRAc2VjdW5ldC5jb20FAAYAAgABBQApAAIAAQ8ACQAAAENJQXVkaXRlZAIAAQUAAgAHAAEAAAAFAAMABwAAAAAABQAFAAIAAQUAYgAKAGEAAADpigAABQBkAA8AAwAAAEh1Yg==
+X-ExtendedProps: BQBjAAoAU4mmlidQ3AgFAGEACAABAAAABQA3AAIAAA8APAAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5Pcmdhbml6YXRpb25TY29wZREAAAAAAAAAAAAAAAAAAAAAAAUASQACAAEFAAQAFCABAAAAGgAAAHBldGVyLnNjaHVtYW5uQHNlY3VuZXQuY29tBQAGAAIAAQUAKQACAAEPAAkAAABDSUF1ZGl0ZWQCAAEFAAIABwABAAAABQADAAcAAAAAAAUABQACAAEFAGIACgBjAAAA2YoAAAUAZAAPAAMAAABIdWI=
 X-Source: SMTP:Default MBX-ESSEN-02
 X-SourceIPAddress: 62.96.220.37
-X-EndOfInjectedXHeaders: 17450
+X-EndOfInjectedXHeaders: 20998
 X-Virus-Scanned: by secunet
-Received-SPF: Pass (sender SPF authorized) identity=mailfrom; client-ip=147.75.48.161; helo=sy.mirrors.kernel.org; envelope-from=netdev+bounces-83537-steffen.klassert=secunet.com@vger.kernel.org; receiver=steffen.klassert@secunet.com 
-DKIM-Filter: OpenDKIM Filter v2.11.0 b.mx.secunet.com BD08C20199
-Authentication-Results: b.mx.secunet.com;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jy2AymGs"
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
+Received-SPF: Pass (sender SPF authorized) identity=mailfrom; client-ip=147.75.199.223; helo=ny.mirrors.kernel.org; envelope-from=netdev+bounces-83499-peter.schumann=secunet.com@vger.kernel.org; receiver=peter.schumann@secunet.com 
+DKIM-Filter: OpenDKIM Filter v2.11.0 b.mx.secunet.com 163672025D
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal: i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711852487; cv=none; b=jWMqKNBstHic1NnNqtmEhklFX98fH400WfQDTFyqhKjtIXY7tRb0YqsOvtGOZyXx0wEWKPJAKd86o+m1j+A6/1WE8pCEXzgUX6SKfC6W0ezZ25Rzsz2fAVlUyUeM5EEuntcuT+ehdeWbAQcf77zyAw8axusWoE4oQeU/ECfd/vE=
+	t=1711793981; cv=none; b=XjBCD05gp0RzPexcO+ruoj3Fvp0FHXH+g1yfSbBCSauFIO1tUJvCAj18ickaY2KtMh11GdCoGwv3yLyQZoDDBinyTfTzxZ5XaxHx7XGBoBo5iGdcqn7ARJxFLji2YUWRwxjWGn6aW3Oinox5cToQXAPElCFyZ7MFApmpor1VULY=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711852487; c=relaxed/simple;
-	bh=gV26OU7eK1E3sOOfCTy+tBkXi+05uIIvVJ+TP4hGj4w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QmzYeAGSaMyIjDZPlrwMo3hgPPsMOffRH8URPmCTR8dQMZhq7GO//lFDYMSk6tPcMuQTRTFRf2OrVj1ugqK0lxJM3vFBFuu/N7HMnZBcdqNyXGtnkhCp/notTFUWHOF2ByvyVCUhghBbJ/tO3SGu2dV2uOZN7pwqyGJffONCsRk=
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jy2AymGs; arc=none smtp.client-ip=209.85.166.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711852485; x=1712457285; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gV26OU7eK1E3sOOfCTy+tBkXi+05uIIvVJ+TP4hGj4w=;
-        b=Jy2AymGsN5lMSc1UzWBQqYEmctJu9hcEFMrLk1EvVIPUQ2vRWGvrki52sw7v23NLNy
-         PJRpVeNV/9llTQ9/EMyMHfhE3PGEFhw1ToIkfDHcu4G1MtDeAmPMGmvoQVD2ytyOBfP9
-         1k2Xm1jfRY4gUYOSigq2OoU+Ho3HoOiPnoIQxo10pvq1GTvxA/OcXA+fq6TRplYNpRAp
-         fdai6ZVFdNN0dNmPdfkij0KZIsOnGnXl0Cln4cRXfOqX51cSkigiXGyKO4QieVXSKSXV
-         CUYMuTkl3aX2Q2MAX4cEY+tEewnezwTFzF6/t0lpTHAi4cbvhL5i75u/2uT5rVPpvl4n
-         4IGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711852485; x=1712457285;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gV26OU7eK1E3sOOfCTy+tBkXi+05uIIvVJ+TP4hGj4w=;
-        b=rdUmY+KCUxxZt/KqUHDvByexlAZtEIH4XrbOIIDE9I6XBIVvHCTPgiV21Nr3oWYET5
-         4yi797sJtaxzpP3l0L6AfMJZE1jq7q/JletLXiVED8JM2Mkgmh8pgemMqK+pjU5snNqj
-         4SmAIY9xpkUFJTwb6KQRCHmClshfbax662MBwNLdyc71cKI+Ht6zOLscmyap13Cm8Jdl
-         Pvwlu0PYjCt12ID8IEZH3heQS/YN134MrRK3B4SP56jTUo+ckVMsH43yk55Yq86rvUs/
-         gxA5UuIqE4dGMSW497CceIm6gFxtwaAaA60xM1XmcEKkoJKn5MK0/KWEaiB12sZMfuDR
-         xm/A==
-X-Forwarded-Encrypted: i=1; AJvYcCW84S9V+AQQkYp+0Pg3uFJiqkrinKOD+cj0jo9RwHYKPgQTM0ca31x7++jsQaCnCHVrKhB4AZsrCgxGVc8F2iXDhlG9Twpbk1TuCelrLjExzQK5aDvFn2pyX1jXjUlDgWGnQskZ+ly86pfRZuSc6zLRTs1VtmYF1ktL1pi43uQwDvDiil12jcTRLBPiIPHnFnT4xag5EJJM5dDha3MF/IDYBm+KEn5/IQcomA3GYVFHVuXIiU3syvBp4mciUubTWnoJGGoBTfuVBZ+umC0D3La4taNF/wXygvGVcQ==
-X-Gm-Message-State: AOJu0YxBCqzw8NXdwxSkflidZiBTQf2FxMt5MAFfeqN8T6V6IoSKYHDr
-	LtNNbixGctgBJMaMxDf8ZKejURE+MphiwvxQexQkxWspvI/JgsQUap7XnuBlDVsr+sE+TBpgATD
-	eqRNYh5vFsGTaYQ4ptCAJ0U5K7iE=
-X-Google-Smtp-Source: AGHT+IEUljvEWt6RLJvm0ZvDNAAvbKF98d8W07FBneubUp0ru50ICaCtTHNp6cmd+wxEi3ZRk7j/LT8mS1rRQW2OsKc=
-X-Received: by 2002:a05:6e02:3710:b0:366:ab6f:f63 with SMTP id
- ck16-20020a056e02371000b00366ab6f0f63mr8646788ilb.3.1711852485494; Sat, 30
- Mar 2024 19:34:45 -0700 (PDT)
+	s=arc-20240116; t=1711793981; c=relaxed/simple;
+	bh=Kj8wuHAHZVd+Kvn7QFiN9E4M/87APJxMIBq/ikHQ35Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ilzO63a9w9glrMWlidF2JyKlGjQXsTBHUwYWqKLjURwPleSvCK0pu0qEQdVpkPgBj5Tx3dxnOZS852pfce8pAD873pPxN2FP6XW++Ruqeqw5s1oHFlXc5dC6RReHxltRJkkBQ+ajCbNKwPRUITLQoWw6vma09F/1Pl3fF0oK81s=
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Message-ID: <95e1978f-341c-4de5-a665-e057fe97a060@huaweicloud.com>
+Date: Sat, 30 Mar 2024 18:19:24 +0800
 Precedence: bulk
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -104,318 +70,364 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail.com>
- <CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
- <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
- <CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
- <CAADnVQLHpi3J6cBJ0QBgCQ2aY6fWGnVvNGdfi3W-jmoa9d1eVQ@mail.gmail.com>
- <CALz3k9g-U8ih=ycJPRbyU9x_9cp00fNkU3PGQ6jP0WJ+=uKmqQ@mail.gmail.com>
- <CALz3k9jG5Jrqw=BGjt05yMkEF-1u909GbBYrV-02W0dQtm6KQQ@mail.gmail.com>
- <20240328111330.194dcbe5@gandalf.local.home> <CAEf4BzYgzOti+Hfdn3SUCjuofGedXRSGApVDD+K2TdG6oNE-pw@mail.gmail.com>
- <20240330082755.1cbeb8c6@rorschach.local.home> <ZghRXtc8ZiTOKMR3@krava>
-In-Reply-To: <ZghRXtc8ZiTOKMR3@krava>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Sat, 30 Mar 2024 19:34:33 -0700
-Message-ID: <CAEf4BzbOAwLZ9=QnMQo-W5oHxTA7nM5ERRp0Q=WihuC8b+Y1Ww@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add support
- to record and check the accessed args
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>, 
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	X86 ML <x86@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/5] riscv, bpf: Relax restrictions on Zbb
+ instructions
+Content-Language: en-US
+To: Conor Dooley <conor@kernel.org>
+CC: Stefan O'Rear <sorear@fastmail.com>, <bpf@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
+	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Alexei Starovoitov
+	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+	<andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+	<yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh
+	<kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko
+	<mykolal@fb.com>, Manu Bretelle <chantr4@gmail.com>, Pu Lehui
+	<pulehui@huawei.com>
+References: <20240328124916.293173-1-pulehui@huaweicloud.com>
+ <20240328124916.293173-3-pulehui@huaweicloud.com>
+ <3ed9fe94-2610-41eb-8a00-a9f37fcf2b1a@app.fastmail.com>
+ <20240328-ferocity-repose-c554f75a676c@spud>
+ <20240329-linguini-uncured-380cb4cff61c@wendy>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <20240329-linguini-uncured-380cb4cff61c@wendy>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: quoted-printable
+X-CM-TRANSID: Syh0CgCXug0s5wdmXWTTIg--.19989S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxur4UGFW5XF4UXrWDGFW5GFg_yoWrtF4DpF
+	WfKF1xKFn7Jw1fZ393Xw18Wr1093Z7Kw43GrykG34Fy343ur1xGw1qy3ZrXFyDZrn3Gr1a
+	v390gF1q93WUCFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+	7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+	Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+	6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+	AIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+	aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbG2NtUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-Message-ID: <20240331023433.XN3LvHBqbGEoHb5SuuRwH-k2aur9bZzvJMFpVzc4WU8@z>
+Message-ID: <20240330101924.d40d0fEx7AWzmxzipL-m3C0FMSDDIiVWJ0kubkH097U@z>
 
-On Sat, Mar 30, 2024 at 10:52=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wro=
-te:
->
-> On Sat, Mar 30, 2024 at 08:27:55AM -0400, Steven Rostedt wrote:
-> > On Fri, 29 Mar 2024 16:28:33 -0700
-> > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >
-> > > I thought I'll just ask instead of digging through code, sorry for
-> > > being lazy :) Is there any way to pass pt_regs/ftrace_regs captured
-> > > before function execution to a return probe (fexit/kretprobe)? I.e.,
-> > > how hard is it to pass input function arguments to a kretprobe? That'=
-s
-> > > the biggest advantage of fexit over kretprobe, and if we can make
-> > > these original pt_regs/ftrace_regs available to kretprobe, then
-> > > multi-kretprobe will effectively be this multi-fexit.
-> >
-> > This should be possible with the updates that Masami is doing with the
-> > fgraph code.
->
-> yes, I have bpf kprobe-multi link support for that [0] (it's on top of
-> Masami's fprobe-over-fgraph changes) we discussed that in [1]
+Thanks for the clarification, looks good.
 
-Sorry, I forgot the regs/args part, mostly remembering we discussed
-session cookie ideas. Thanks for reminder!
+On 2024/3/29 19:23, Conor Dooley wrote:
+> On Thu, Mar 28, 2024 at 10:07:23PM +0000, Conor Dooley wrote:
+>=20
+>> As I said on IRC to you earlier, I think the Kconfig options here are in
+>> need of a bit of a spring cleaning - they should be modified to explain
+>> their individual purposes, be that enabling optimisations in the kernel
+>> or being required for userspace. I'll try to send a patch for that if
+>> I remember tomorrow.
+>=20
+> Something like this:
+>=20
+> -- >8 --
+> commit 5125504beaedd669b082bf74b02003a77360670f
+> Author: Conor Dooley <conor.dooley@microchip.com>
+> Date:   Fri Mar 29 11:13:22 2024 +0000
+>=20
+>      RISC-V: clarify what some RISCV_ISA* config options do
+>     =20
+>      During some discussion on IRC yesterday and on Pu's bpf patch [1]
+>      I noticed that these RISCV_ISA* Kconfig options are not really clear
+>      about their implications. Many of these options have no impact on wh=
+at
+>      userspace is allowed to do, for example an application can use Zbb
+>      regardless of whether or not the kernel does. Change the help text t=
+o
+>      try and clarify whether or not an option affects just the kernel, or
+>      also userspace. None of these options actually control whether or no=
+t an
+>      extension is detected dynamically as that's done regardless of Kconf=
+ig
+>      options, so drop any text that implies the option is required for
+>      dynamic detection, rewording them as "do x when y is detected".
+>     =20
+>      Link: https://lore.kernel.org/linux-riscv/20240328-ferocity-repose-c=
+554f75a676c@spud/ [1]
+>      Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>      ---
+>      I did this based on top of Samuel's changes dropping the MMU
+>      requurements just in case, but I don't think there's a conflict:
+>      https://lore.kernel.org/linux-riscv/20240227003630.3634533-4-samuel.=
+holland@sifive.com/
+>=20
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index d8a777f59402..f327a8ac648f 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -501,8 +501,8 @@ config RISCV_ISA_SVNAPOT
+>   	depends on RISCV_ALTERNATIVE
+>   	default y
+>   	help
+> -	  Allow kernel to detect the Svnapot ISA-extension dynamically at boot
+> -	  time and enable its usage.
+> +	  Add support for the Svnapot ISA-extension when it is detected by
+> +	  the kernel at boot.
+>  =20
+>   	  The Svnapot extension is used to mark contiguous PTEs as a range
+>   	  of contiguous virtual-to-physical translations for a naturally
+> @@ -520,9 +520,9 @@ config RISCV_ISA_SVPBMT
+>   	depends on RISCV_ALTERNATIVE
+>   	default y
+>   	help
+> -	   Adds support to dynamically detect the presence of the Svpbmt
+> -	   ISA-extension (Supervisor-mode: page-based memory types) and
+> -	   enable its usage.
+> +	   Add support for the Svpbmt ISA-extension (Supervisor-mode:
+> +	   page-based memory types) when it is detected by the kernel at
+> +	   boot.
+>  =20
+>   	   The memory type for a page contains a combination of attributes
+>   	   that indicate the cacheability, idempotency, and ordering
+> @@ -541,14 +541,15 @@ config TOOLCHAIN_HAS_V
+>   	depends on AS_HAS_OPTION_ARCH
+>  =20
+>   config RISCV_ISA_V
+> -	bool "VECTOR extension support"
+> +	bool "Vector extension support"
+>   	depends on TOOLCHAIN_HAS_V
+>   	depends on FPU
+>   	select DYNAMIC_SIGFRAME
+>   	default y
+>   	help
+>   	  Say N here if you want to disable all vector related procedure
+> -	  in the kernel.
+> +	  in the kernel. Without this option enabled, neither the kernel nor
+> +	  userspace may use vector.
+>  =20
+>   	  If you don't know what to do here, say Y.
+>  =20
+> @@ -606,8 +607,8 @@ config RISCV_ISA_ZBB
+>   	depends on RISCV_ALTERNATIVE
+>   	default y
+>   	help
+> -	   Adds support to dynamically detect the presence of the ZBB
+> -	   extension (basic bit manipulation) and enable its usage.
+> +	   Add support for enabling optimisations in the kernel when the
+> +	   Zbb extension is detected at boot.
+>  =20
+>   	   The Zbb extension provides instructions to accelerate a number
+>   	   of bit-specific operations (count bit population, sign extending,
+> @@ -623,9 +624,9 @@ config RISCV_ISA_ZICBOM
+>   	select RISCV_DMA_NONCOHERENT
+>   	select DMA_DIRECT_REMAP
+>   	help
+> -	   Adds support to dynamically detect the presence of the ZICBOM
+> -	   extension (Cache Block Management Operations) and enable its
+> -	   usage.
+> +	   Add support for the Zicbom extension (Cache Block Management
+> +	   Operations) and enable its use in the kernel when it is detected
+> +	   at boot.
+>  =20
+>   	   The Zicbom extension can be used to handle for example
+>   	   non-coherent DMA support on devices that need it.
+> @@ -684,7 +685,8 @@ config FPU
+>   	default y
+>   	help
+>   	  Say N here if you want to disable all floating-point related procedu=
+re
+> -	  in the kernel.
+> +	  in the kernel. Without this option enabled, neither the kernel nor
+> +	  userspace may use vector.
+>  =20
+>   	  If you don't know what to do here, say Y.
+>  =20
+>=20
 
->
-> jirka
->
-> [0] https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/log/?h=
-=3Dbpf/session_data
-> [1] https://lore.kernel.org/bpf/20240228090242.4040210-1-jolsa@kernel.org=
-/
 
-X-sender: <linux-kernel+bounces-125930-steffen.klassert=3Dcunet.com@vger.ke=
-rnel.org>
-X-Receiver: <steffen.klassert@secunet.com> ORCPT=3Dc822;steffen.klassert@se=
-cunet.com NOTIFY=3DVER; X-ExtendedProps=3DAVABYAAgAAAAUAFAARAPDFCS25BAlDktI=
-I2g02frgPADUAAABNaWNyb3NvZnQuRXhjaGFuZ2UuVHJhbnNwb3J0LkRpcmVjdG9yeURhdGEuSX=
-NSZXNvdXJjZQIAAAUAagAJAAEAAAAAAAAABQAWAAIAAAUAQwACAAAFAEYABwADAAAABQBHAAIAA=
-AUAEgAPAGIAAAAvbz1zZWN1bmV0L291PUV4Y2hhbmdlIEFkbWluaXN0cmF0aXZlIEdyb3VwIChG=
-WURJQk9IRjIzU1BETFQpL2NuPVJlY2lwaWVudHMvY249U3RlZmZlbiBLbGFzc2VydDY4YwUACwA=
-XAL4AAACheZxkHSGBRqAcAp3ukbifQ049REI2LENOPURhdGFiYXNlcyxDTj1FeGNoYW5nZSBBZG=
-1pbmlzdHJhdGl2ZSBHcm91cCAoRllESUJPSEYyM1NQRExUKSxDTj1BZG1pbmlzdHJhdGl2ZSBHc=
-m91cHMsQ049c2VjdW5ldCxDTj1NaWNyb3NvZnQgRXhjaGFuZ2UsQ049U2VydmljZXMsQ049Q29u=
-ZmlndXJhdGlvbixEQz1zZWN1bmV0LERDPWRlBQAOABEABiAS9uuMOkqzwmEZDvWNNQUAHQAPAAw=
-AAABtYngtZXNzZW4tMDIFADwAAgAADwA2AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC=
-5NYWlsUmVjaXBpZW50LkRpc3BsYXlOYW1lDwARAAAAS2xhc3NlcnQsIFN0ZWZmZW4FAAwAAgAAB=
-QBsAAIAAAUAWAAXAEoAAADwxQktuQQJQ5LSCNoNNn64Q049S2xhc3NlcnQgU3RlZmZlbixPVT1V=
-c2VycyxPVT1NaWdyYXRpb24sREM9c2VjdW5ldCxEQz1kZQUAJgACAAEFACIADwAxAAAAQXV0b1J=
-lc3BvbnNlU3VwcHJlc3M6IDANClRyYW5zbWl0SGlzdG9yeTogRmFsc2UNCg8ALwAAAE1pY3Jvc2=
-9mdC5FeGNoYW5nZS5UcmFuc3BvcnQuRXhwYW5zaW9uR3JvdXBUeXBlDwAVAAAATWVtYmVyc0dyb=
-3VwRXhwYW5zaW9uBQAjAAIAAQ=3D=0A=
+X-sender: <netdev+bounces-83499-steffen.klassert=3Dsecunet.com@vger.kernel.=
+org>
+X-Receiver: <steffen.klassert@secunet.com> ORCPT=3Drfc822;steffen.klassert@=
+secunet.com NOTIFY=3DNEVER; X-ExtendedProps=3DBQAVABYAAgAAAAUAFAARAPDFCS25B=
+AlDktII2g02frgPADUAAABNaWNyb3NvZnQuRXhjaGFuZ2UuVHJhbnNwb3J0LkRpcmVjdG9yeURh=
+dGEuSXNSZXNvdXJjZQIAAAUAagAJAAEAAAAAAAAABQAWAAIAAAUAQwACAAAFAEYABwADAAAABQB=
+HAAIAAAUAEgAPAGIAAAAvbz1zZWN1bmV0L291PUV4Y2hhbmdlIEFkbWluaXN0cmF0aXZlIEdyb3=
+VwIChGWURJQk9IRjIzU1BETFQpL2NuPVJlY2lwaWVudHMvY249U3RlZmZlbiBLbGFzc2VydDY4Y=
+wUACwAXAL4AAACheZxkHSGBRqAcAp3ukbifQ049REI2LENOPURhdGFiYXNlcyxDTj1FeGNoYW5n=
+ZSBBZG1pbmlzdHJhdGl2ZSBHcm91cCAoRllESUJPSEYyM1NQRExUKSxDTj1BZG1pbmlzdHJhdGl=
+2ZSBHcm91cHMsQ049c2VjdW5ldCxDTj1NaWNyb3NvZnQgRXhjaGFuZ2UsQ049U2VydmljZXMsQ0=
+49Q29uZmlndXJhdGlvbixEQz1zZWN1bmV0LERDPWRlBQAOABEABiAS9uuMOkqzwmEZDvWNNQUAH=
+QAPAAwAAABtYngtZXNzZW4tMDIFADwAAgAADwA2AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5z=
+cG9ydC5NYWlsUmVjaXBpZW50LkRpc3BsYXlOYW1lDwARAAAAS2xhc3NlcnQsIFN0ZWZmZW4FAAw=
+AAgAABQBsAAIAAAUAWAAXAEoAAADwxQktuQQJQ5LSCNoNNn64Q049S2xhc3NlcnQgU3RlZmZlbi=
+xPVT1Vc2VycyxPVT1NaWdyYXRpb24sREM9c2VjdW5ldCxEQz1kZQUAJgACAAEFACIADwAxAAAAQ=
+XV0b1Jlc3BvbnNlU3VwcHJlc3M6IDANClRyYW5zbWl0SGlzdG9yeTogRmFsc2UNCg8ALwAAAE1p=
+Y3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuRXhwYW5zaW9uR3JvdXBUeXBlDwAVAAAATWVtYmV=
+yc0dyb3VwRXhwYW5zaW9uBQAjAAIAAQ=3D=3D
 X-CreatedBy: MSExchange15
 X-HeloDomain: b.mx.secunet.com
-X-ExtendedProps: BQBjAAoAJWsFfe5Q3AgFAGEACAABAAAABQA3AAIAAA8APAAAAE1pY3Jvc2=
+X-ExtendedProps: BQBjAAoAU4mmlidQ3AgFAGEACAABAAAABQA3AAIAAA8APAAAAE1pY3Jvc2=
 9mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5Pcmdhbml6YXRpb25TY29wZREAA=
 AAAAAAAAAAAAAAAAAAAAAUASQACAAEFAAQAFCABAAAAHAAAAHN0ZWZmZW4ua2xhc3NlcnRAc2Vj=
 dW5ldC5jb20FAAYAAgABBQApAAIAAQ8ACQAAAENJQXVkaXRlZAIAAQUAAgAHAAEAAAAFAAMABwA=
-AAAAABQAFAAIAAQUAYgAKAGIAAADpigAABQBkAA8AAwAAAEh1Yg=3D=0A=
+AAAAABQAFAAIAAQUAYgAKAGQAAADZigAABQBkAA8AAwAAAEh1Yg=3D=3D
 X-Source: SMTP:Default MBX-ESSEN-02
 X-SourceIPAddress: 62.96.220.37
-X-EndOfInjectedXHeaders: 17433
-Received: from cas-essen-01.secunet.de (10.53.40.201) by
+X-EndOfInjectedXHeaders: 21009
+Received: from cas-essen-02.secunet.de (10.53.40.202) by
  mbx-essen-02.secunet.de (10.53.40.198) with Microsoft SMTP Server
- (version=3DS1_2, cipher=3DS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.37; Sun, 31 Mar 2024 04:35:13 +0200
-Received: from b.mx.secunet.com (62.96.220.37) by cas-essen-01.secunet.de
- (10.53.40.201) with Microsoft SMTP Server (version=3DS1_2,
- cipher=3DS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37 via Frontend
- Transport; Sun, 31 Mar 2024 04:35:12 +0200
+ (version=3DTLS1_2, cipher=3DTLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.37; Sat, 30 Mar 2024 11:19:50 +0100
+Received: from b.mx.secunet.com (62.96.220.37) by cas-essen-02.secunet.de
+ (10.53.40.202) with Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Fronte=
+nd
+ Transport; Sat, 30 Mar 2024 11:19:50 +0100
 Received: from localhost (localhost [127.0.0.1])
-	by b.mx.secunet.com (Postfix) with ESMTP id E266220322
-	for <steffen.klassert@secunet.com>; Sun, 31 Mar 2024 04:35:12 +0200 (CEST)
+	by b.mx.secunet.com (Postfix) with ESMTP id DA4E3202BE
+	for <steffen.klassert@secunet.com>; Sat, 30 Mar 2024 11:19:50 +0100 (CET)
 X-Virus-Scanned: by secunet
 X-Spam-Flag: NO
-X-Spam-Score: -2.749
+X-Spam-Score: -2.651
 X-Spam-Level:
-X-Spam-Status: No, score=3D.749 tagged_above=3D99 required=3D1
-	tests=3DAYES_00=3D.9, DKIM_SIGNED=3D1, DKIM_VALID=3D.1,
-	DKIM_VALID_AU=3D.1, FREEMAIL_FORGED_FROMDOMAIN=3D001,
-	FREEMAIL_FROM=3D001, HEADER_FROM_DIFFERENT_DOMAINS=3D249,
-	MAILING_LIST_MULTI=3D, RCVD_IN_DNSWL_NONE=3D.0001,
-	SPF_HELO_NONE=3D001, SPF_PASS=3D.001]
-	autolearn=3Davailable autolearn_force=3D
-Authentication-Results: a.mx.secunet.com (amavisd-new);
-	dkim=3Dss (2048-bit key) header.d=3Dail.com
+X-Spam-Status: No, score=3D-2.651 tagged_above=3D-999 required=3D2.1
+	tests=3D[BAYES_00=3D-1.9, HEADER_FROM_DIFFERENT_DOMAINS=3D0.249,
+	MAILING_LIST_MULTI=3D-1, RCVD_IN_DNSWL_NONE=3D-0.0001,
+	SPF_HELO_NONE=3D0.001, SPF_PASS=3D-0.001]
+	autolearn=3Dunavailable autolearn_force=3Dno
 Received: from b.mx.secunet.com ([127.0.0.1])
 	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7swtypsqutpn for <steffen.klassert@secunet.com>;
-	Sun, 31 Mar 2024 04:35:12 +0200 (CEST)
-Received-SPF: Pass (sender SPF authorized) identity=3Dilfrom; client-ip=147=
-.75.80.249; helo=3D.mirrors.kernel.org; envelope-from=3Dnux-kernel+bounces-=
-125930-steffen.klassert=3Dcunet.com@vger.kernel.org; receiver=3Deffen.klass=
-ert@secunet.com=20
-DKIM-Filter: OpenDKIM Filter v2.11.0 b.mx.secunet.com 297DC20199
-Authentication-Results: b.mx.secunet.com;
-	dkim=3Dss (2048-bit key) header.d=3Dail.com header.i=3Dmail.com header.b=
-=3Dy2AymGs"
+	with ESMTP id 19NrXs2x69LU for <steffen.klassert@secunet.com>;
+	Sat, 30 Mar 2024 11:19:49 +0100 (CET)
+Received-SPF: Pass (sender SPF authorized) identity=3Dmailfrom; client-ip=
+=3D147.75.80.249; helo=3Dam.mirrors.kernel.org; envelope-from=3Dnetdev+boun=
+ces-83499-steffen.klassert=3Dsecunet.com@vger.kernel.org; receiver=3Dsteffe=
+n.klassert@secunet.com=20
+DKIM-Filter: OpenDKIM Filter v2.11.0 b.mx.secunet.com D53502025D
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249]=
 )
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by b.mx.secunet.com (Postfix) with ESMTPS id 297DC20199
-	for <steffen.klassert@secunet.com>; Sun, 31 Mar 2024 04:35:12 +0200 (CEST)
+	by b.mx.secunet.com (Postfix) with ESMTPS id D53502025D
+	for <steffen.klassert@secunet.com>; Sat, 30 Mar 2024 11:19:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.2=
 5.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E4A51F218DC
-	for <steffen.klassert@secunet.com>; Sun, 31 Mar 2024 02:35:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5FB3D1F22438
+	for <steffen.klassert@secunet.com>; Sat, 30 Mar 2024 10:19:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F935611B;
-	Sun, 31 Mar 2024 02:34:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=3Dss (2048-bit key) header.d=3Dail.com header.i=3Dmail.com header.b=
-=3Dy2AymGs"
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166=
-.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F26528DDF;
+	Sat, 30 Mar 2024 10:19:41 +0000 (UTC)
+X-Original-To: netdev@vger.kernel.org
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7384E1396;
-	Sun, 31 Mar 2024 02:34:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=3Dne smtp.client-ip 9=
-.85.166.50
-ARC-Seal: i=3D a=3Da-sha256; d=3Dbspace.kernel.org; s=3Dc-20240116;
-	t=1711852487; cv=3Dne; b=3DMqKNBstHic1NnNqtmEhklFX98fH400WfQDTFyqhKjtIXY7t=
-Rb0YqsOvtGOZyXx0wEWKPJAKd86o+m1j+A6/1WE8pCEXzgUX6SKfC6W0ezZ25Rzsz2fAVlUyUeM=
-5EEuntcuT+ehdeWbAQcf77zyAw8axusWoE4oQeU/ECfd/vEARC-Message-Signature: i=3D =
-a=3Da-sha256; d=3Dbspace.kernel.org;
-	s=3Dc-20240116; t=1711852487; c=3Dlaxed/simple;
-	bh=3D26OU7eK1E3sOOfCTy+tBkXi+05uIIvVJ+TP4hGj4w=3D=0A=
-	h=3DME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=3DzYeAGSaMyIjDZPlrwMo3hgPPsMOffRH8URPmCTR8dQMZhq7GO=
-//lFDYMSk6tPcMuQTRTFRf2OrVj1ugqK0lxJM3vFBFuu/N7HMnZBcdqNyXGtnkhCp/notTFUWHO=
-F2ByvyVCUhghBbJ/tO3SGu2dV2uOZN7pwqyGJffONCsRkARC-Authentication-Results: i=
-=3D smtp.subspace.kernel.org; dmarc=3Dss (p=3Dne dis=3Dne) header.from=3Dai=
-l.com; spf=3Dss smtp.mailfrom=3Dail.com; dkim=3Dss (2048-bit key) header.d=
-=3Dail.com header.i=3Dmail.com header.b=3D2AymGs; arc=3Dne smtp.client-ip 9=
-.85.166.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=3Dss (p=3Dne dis=3D=
-ne) header.from=3Dail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=3Dss smtp.mailfrom=3D=
-ail.com
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-7cc01644f51=
-so159554639f.2;
-        Sat, 30 Mar 2024 19:34:46 -0700 (PDT)
-DKIM-Signature: v=3D a=3Da-sha256; c=3Dlaxed/relaxed;
-        d=3Dail.com; s 230601; t=1711852485; x=1712457285; darn=3Der.kernel=
-.org;
-        h=3Dntent-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3D26OU7eK1E3sOOfCTy+tBkXi+05uIIvVJ+TP4hGj4w=3D=0A=
-        b=3D2AymGsN5lMSc1UzWBQqYEmctJu9hcEFMrLk1EvVIPUQ2vRWGvrki52sw7v23NLN=
-y
-         PJRpVeNV/9llTQ9/EMyMHfhE3PGEFhw1ToIkfDHcu4G1MtDeAmPMGmvoQVD2ytyOBf=
-P9
-         1k2Xm1jfRY4gUYOSigq2OoU+Ho3HoOiPnoIQxo10pvq1GTvxA/OcXA+fq6TRplYNpR=
-Ap
-         fdai6ZVFdNN0dNmPdfkij0KZIsOnGnXl0Cln4cRXfOqX51cSkigiXGyKO4QieVXSKS=
-XV
-         CUYMuTkl3aX2Q2MAX4cEY+tEewnezwTFzF6/t0lpTHAi4cbvhL5i75u/2uT5rVPpvl=
-4n
-         4IGQ=3D=0A=
-X-Google-DKIM-Signature: v=3D a=3Da-sha256; c=3Dlaxed/relaxed;
-        d=1E100.net; s 230601; t=1711852485; x=1712457285;
-        h=3Dntent-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3D26OU7eK1E3sOOfCTy+tBkXi+05uIIvVJ+TP4hGj4w=3D=0A=
-        b=3DUmY+KCUxxZt/KqUHDvByexlAZtEIH4XrbOIIDE9I6XBIVvHCTPgiV21Nr3oWYET=
-5
-         4yi797sJtaxzpP3l0L6AfMJZE1jq7q/JletLXiVED8JM2Mkgmh8pgemMqK+pjU5snN=
-qj
-         4SmAIY9xpkUFJTwb6KQRCHmClshfbax662MBwNLdyc71cKI+Ht6zOLscmyap13Cm8J=
-dl
-         Pvwlu0PYjCt12ID8IEZH3heQS/YN134MrRK3B4SP56jTUo+ckVMsH43yk55Yq86rvU=
-s/
-         gxA5UuIqE4dGMSW497CceIm6gFxtwaAaA60xM1XmcEKkoJKn5MK0/KWEaiB12sZMfu=
-DR
-         xm/A=3D=0A=
-X-Forwarded-Encrypted: i=3D AJvYcCW84S9V+AQQkYp+0Pg3uFJiqkrinKOD+cj0jo9RwHY=
-KPgQTM0ca31x7++jsQaCnCHVrKhB4AZsrCgxGVc8F2iXDhlG9Twpbk1TuCelrLjExzQK5aDvFn2=
-pyX1jXjUlDgWGnQskZ+ly86pfRZuSc6zLRTs1VtmYF1ktL1pi43uQwDvDiil12jcTRLBPiIPHnF=
-nT4xag5EJJM5dDha3MF/IDYBm+KEn5/IQcomA3GYVFHVuXIiU3syvBp4mciUubTWnoJGGoBTfuV=
-BZ+umC0D3La4taNF/wXygvGVcQ=3D=0A=
-X-Gm-Message-State: AOJu0YxBCqzw8NXdwxSkflidZiBTQf2FxMt5MAFfeqN8T6V6IoSKYHD=
-r
-	LtNNbixGctgBJMaMxDf8ZKejURE+MphiwvxQexQkxWspvI/JgsQUap7XnuBlDVsr+sE+TBpgAT=
-D
-	eqRNYh5vFsGTaYQ4ptCAJ0U5K7iEX-Google-Smtp-Source: AGHT+IEUljvEWt6RLJvm0ZvD=
-NAAvbKF98d8W07FBneubUp0ru50ICaCtTHNp6cmd+wxEi3ZRk7j/LT8mS1rRQW2OsKcX-Receiv=
-ed: by 2002:a05:6e02:3710:b0:366:ab6f:f63 with SMTP id
- ck16-20020a056e02371000b00366ab6f0f63mr8646788ilb.3.1711852485494; Sat, 30
- Mar 2024 19:34:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE2C11712;
+	Sat, 30 Mar 2024 10:19:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=3Dnone smtp.client-ip=
+=3D45.249.212.51
+ARC-Seal: i=3D1; a=3Drsa-sha256; d=3Dsubspace.kernel.org; s=3Darc-20240116;
+	t=3D1711793981; cv=3Dnone; b=3DXjBCD05gp0RzPexcO+ruoj3Fvp0FHXH+g1yfSbBCSau=
+FIO1tUJvCAj18ickaY2KtMh11GdCoGwv3yLyQZoDDBinyTfTzxZ5XaxHx7XGBoBo5iGdcqn7ARJ=
+xFLji2YUWRwxjWGn6aW3Oinox5cToQXAPElCFyZ7MFApmpor1VULY=3D
+ARC-Message-Signature: i=3D1; a=3Drsa-sha256; d=3Dsubspace.kernel.org;
+	s=3Darc-20240116; t=3D1711793981; c=3Drelaxed/simple;
+	bh=3DKj8wuHAHZVd+Kvn7QFiN9E4M/87APJxMIBq/ikHQ35Y=3D;
+	h=3DMessage-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=3DilzO63a9w9glrMWlidF2JyKlGjQXsTBHUwYWqKLjURw=
+PleSvCK0pu0qEQdVpkPgBj5Tx3dxnOZS852pfce8pAD873pPxN2FP6XW++Ruqeqw5s1oHFlXc5d=
+C6RReHxltRJkkBQ+ajCbNKwPRUITLQoWw6vma09F/1Pl3fF0oK81s=3D
+ARC-Authentication-Results: i=3D1; smtp.subspace.kernel.org; dmarc=3Dnone (=
+p=3Dnone dis=3Dnone) header.from=3Dhuaweicloud.com; spf=3Dpass smtp.mailfro=
+m=3Dhuaweicloud.com; arc=3Dnone smtp.client-ip=3D45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=3Dnone (p=3Dnone di=
+s=3Dnone) header.from=3Dhuaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=3Dpass smtp.mailfrom=
+=3Dhuaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V6Ctd17Lrz4f3lgL;
+	Sat, 30 Mar 2024 18:19:21 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id 64B191A0568;
+	Sat, 30 Mar 2024 18:19:29 +0800 (CST)
+Received: from [10.67.109.184] (unknown [10.67.109.184])
+	by APP2 (Coremail) with SMTP id Syh0CgCXug0s5wdmXWTTIg--.19989S2;
+	Sat, 30 Mar 2024 18:19:25 +0800 (CST)
+Message-ID: <95e1978f-341c-4de5-a665-e057fe97a060@huaweicloud.com>
+Date: Sat, 30 Mar 2024 18:19:24 +0800
 Precedence: bulk
-X-Mailing-List: linux-kernel@vger.kernel.org
-List-Id: <linux-kernel.vger.kernel.org>
-List-Subscribe: <mailto:linux-kernel+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-kernel+unsubscribe@vger.kernel.org>
+X-Mailing-List: netdev@vger.kernel.org
+List-Id: <netdev.vger.kernel.org>
+List-Subscribe: <mailto:netdev+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:netdev+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail=
-.com>
- <CALz3k9icPePb0c4FE67q=3DU0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
- <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
- <CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
- <CAADnVQLHpi3J6cBJ0QBgCQ2aY6fWGnVvNGdfi3W-jmoa9d1eVQ@mail.gmail.com>
- <CALz3k9g-U8ih=3DJPRbyU9x_9cp00fNkU3PGQ6jP0WJ+=3DmqQ@mail.gmail.com>
- <CALz3k9jG5Jrqw=3Djt05yMkEF-1u909GbBYrV-02W0dQtm6KQQ@mail.gmail.com>
- <20240328111330.194dcbe5@gandalf.local.home> <CAEf4BzYgzOti+Hfdn3SUCjuofGe=
-dXRSGApVDD+K2TdG6oNE-pw@mail.gmail.com>
- <20240330082755.1cbeb8c6@rorschach.local.home> <ZghRXtc8ZiTOKMR3@krava>
-In-Reply-To: <ZghRXtc8ZiTOKMR3@krava>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Sat, 30 Mar 2024 19:34:33 -0700
-Message-ID: <CAEf4BzbOAwLZ9=3DMQo-W5oHxTA7nM5ERRp0Q=3DhuC8b+Y1Ww@mail.gmail=
-.com>
-Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add suppo=
-rt
- to record and check the accessed args
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, =3DTF-8?B?5qKm6b6Z6JGj?=3Dongmeng=
-long.8@bytedance.com>,=20
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Andrii Nakryiko <andrii=
-@kernel.org>,=20
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net=
->,=20
-	Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, Song =
-Liu <song@kernel.org>,=20
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gm=
-ail.com>,=20
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Lu=
-o <haoluo@google.com>,=20
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntra=
-eger@linux.ibm.com>,=20
-	Sven Schnelle <svens@linux.ibm.com>, "David S. Miller" <davem@davemloft.ne=
-t>,=20
-	David Ahern <dsahern@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com=
->,=20
-	X86 ML <x86@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com=
->,=20
-	Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>,=20
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kerne=
-l@vger.kernel.org>,=20
-	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger=
-.kernel.org>,=20
-	Network Development <netdev@vger.kernel.org>, linux-trace-kernel@vger.kern=
-el.org,=20
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, l=
-inux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset=3DTF-8"
-Content-Transfer-Encoding: quoted-printable
-Return-Path: linux-kernel+bounces-125930-steffen.klassert=3Dcunet.com@vger.=
-kernel.org
-X-MS-Exchange-Organization-OriginalArrivalTime: 31 Mar 2024 02:35:12.9064
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/5] riscv, bpf: Relax restrictions on Zbb
+ instructions
+Content-Language: en-US
+To: Conor Dooley <conor@kernel.org>
+CC: Stefan O'Rear <sorear@fastmail.com>, <bpf@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
+	=3D?UTF-8?B?QmrDtnJuIFTDtnBlbA=3D=3D?=3D <bjorn@kernel.org>, Alexei Starov=
+oitov
+	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+	<andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
+ Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+	<yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh
+	<kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko
+	<mykolal@fb.com>, Manu Bretelle <chantr4@gmail.com>, Pu Lehui
+	<pulehui@huawei.com>
+References: <20240328124916.293173-1-pulehui@huaweicloud.com>
+ <20240328124916.293173-3-pulehui@huaweicloud.com>
+ <3ed9fe94-2610-41eb-8a00-a9f37fcf2b1a@app.fastmail.com>
+ <20240328-ferocity-repose-c554f75a676c@spud>
+ <20240329-linguini-uncured-380cb4cff61c@wendy>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <20240329-linguini-uncured-380cb4cff61c@wendy>
+Content-Type: text/plain; charset=3D"UTF-8"; format=3Dflowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: Syh0CgCXug0s5wdmXWTTIg--.19989S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxur4UGFW5XF4UXrWDGFW5GFg_yoWrtF4DpF
+	WfKF1xKFn7Jw1fZ393Xw18Wr1093Z7Kw43GrykG34Fy343ur1xGw1qy3ZrXFyDZrn3Gr1a
+	v390gF1q93WUCFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+	7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+	Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+	6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+	AIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+	aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbG2NtUUUUU=3D=3D
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+Return-Path: netdev+bounces-83499-steffen.klassert=3Dsecunet.com@vger.kerne=
+l.org
+X-MS-Exchange-Organization-OriginalArrivalTime: 30 Mar 2024 10:19:50.9305
  (UTC)
-X-MS-Exchange-Organization-Network-Message-Id: bd0d62d3-6a24-4f47-4e50-08dc=
-512b311b
+X-MS-Exchange-Organization-Network-Message-Id: 922a0c38-9365-43f6-727c-08dc=
+50a2ef4a
 X-MS-Exchange-Organization-OriginalClientIPAddress: 62.96.220.37
-X-MS-Exchange-Organization-OriginalServerIPAddress: 10.53.40.201
-X-MS-Exchange-Organization-Cross-Premises-Headers-Processed: cas-essen-01.s=
+X-MS-Exchange-Organization-OriginalServerIPAddress: 10.53.40.202
+X-MS-Exchange-Organization-Cross-Premises-Headers-Processed: cas-essen-02.s=
 ecunet.de
-X-MS-Exchange-Organization-OrderedPrecisionLatencyInProgress: LSRV=3Dx-esse=
-n-02.secunet.de:TOTAL-HUB=3D405|SMR=3D332(SMRDE=3D005|SMRC=3D326(SMRCL=3D10=
-2|X-SMRCR=3D326))|CAT=3D070(CATOS=3D001
- |CATRESL=3D029(CATRESLP2R=3D023)|CATORES=3D037(CATRS=3D037(CATRS-Transport
- Rule Agent=3D001 |CATRS-Index Routing Agent=3D035)));2024-03-31T02:35:13.4=
-14Z
+X-MS-Exchange-Organization-OrderedPrecisionLatencyInProgress: LSRV=3Dmbx-es=
+sen-02.secunet.de:TOTAL-HUB=3D0.192|SMR=3D0.113(SMRDE=3D0.003|SMRC=3D0.109(=
+SMRCL=3D0.108|X-SMRCR=3D0.065))|CAT=3D0.078(CATOS=3D0.001
+ |CATRESL=3D0.027(CATRESLP2R=3D0.021)|CATORES=3D0.047(CATRS=3D0.047(CATRS-T=
+ransport
+ Rule Agent=3D0.001 (X-ETREX=3D0.001)|CATRS-Index Routing
+ Agent=3D0.045)));2024-03-30T10:19:51.131Z
 X-MS-Exchange-Forest-ArrivalHubServer: mbx-essen-02.secunet.de
-X-MS-Exchange-Organization-AuthSource: cas-essen-01.secunet.de
+X-MS-Exchange-Organization-AuthSource: cas-essen-02.secunet.de
 X-MS-Exchange-Organization-AuthAs: Anonymous
 X-MS-Exchange-Organization-FromEntityHeader: Internet
-X-MS-Exchange-Organization-OriginalSize: 11569
+X-MS-Exchange-Organization-OriginalSize: 12913
 X-MS-Exchange-Organization-HygienePolicy: Standard
-X-MS-Exchange-Organization-MessageLatency: SRV=CAs-essen-01.secunet.de:TOTA=
-L-FE=3D103|SMR=3D007(SMRPI=3D005(SMRPI-FrontendProxyAgent=3D005))|SMS=3D095
+X-MS-Exchange-Organization-MessageLatency: SRV=3Dcas-essen-02.secunet.de:TO=
+TAL-FE=3D0.008|SMR=3D0.008(SMRPI=3D0.006(SMRPI-FrontendProxyAgent=3D0.006))
 X-MS-Exchange-Organization-Recipient-Limit-Verified: True
 X-MS-Exchange-Organization-TotalRecipientCount: 1
 X-MS-Exchange-Organization-Rules-Execution-History: 0b0cf904-14ac-4724-8bdf=
@@ -424,375 +436,253 @@ X-MS-Exchange-Organization-Rules-Execution-History: 0b0cf904-14ac-4724-8bdf=
 6-8c5d-b3d6ddbb3d55%%%16355082-c50b-4214-9c7d-d39575f9f79b
 X-MS-Exchange-Forest-RulesExecuted: mbx-essen-02
 X-MS-Exchange-Organization-RulesExecuted: mbx-essen-02
-X-MS-Exchange-Forest-IndexAgent-0: AQ0CZW4AATwEAAAPAAADH4sIAAAAAAAEAHVUTY/b=
-NhClbMtfu07a9N
- Tb9JQsYFuyd7fZGOlucgmwBbYBmqCXIAhoi5K5kkWBpOx1T/0R/R/9
- T/0lnSFtr4EmACGMhm/evHmk9Hf/fQkfuB3CHddwHg9hGk8vgFuYxL
- PL6b9//fP2Dn6VWsL7wnB4rfB5j69vshWXxXihVtew0cqK2aB/jQu+
- RRdfzaYvZ5eXSDeKL2Lc+WDFWpTwuzJWJPaRBRzJOy2x+JXjcRyTn2
- fTq9n5OZa/jGOPe1smWkr4jed6K3MFr7lLjMtd4qsq4doXX8Mt2KWq
- s6WF2+dFAfe1scBNDrJESTwBlUIis0yWGQI1IWGhEjEEo7TeQqr0nm
- kuCFTwP7cwO4Nbg3ihBfByCxu+Baug4sZAZb9okZkotZovhIthwStb
- a5E8UiGvgLQuF1aqEsSDWNQuQhYOWiC6hEqruYAXqXiQNsox6RJnN3
- A7FuPhnmupNrDkOgFpQNqDDFlWtX3swHVWr0Rpje9wYLuBj0tun5s9
- G84Ec/RDkE3JmpeWZ4JMcipArYV+LB7i8Ng3hY3AEUtY8VwcERks1B
- Kt5cVXXeFrPDg+LwRpOiLF0nJPs6oLK0eHTdhIPESRpgLHWotii1Yi
- Hkf3QKdyfHQBPtKewRtQJAStlDGSOm6kXbph6yrhVtBh4gW+44avJD
- mZKDrsPcpzpZnmlb8e492XsBVmiFdsyddoW5VC7lSOnBgoZJmDqatK
- aUsXyff4FH+GFxItB3fcFZpLTL41ZlNPQU6P9h2XvMQTOSOfE2kWtT
- Ei8WyyhE+Tz4P+oP+B7iuJwU6Zsm44ZzkePd5KrvGDXeF3iJ5psRKr
- udBuxCPKQd8I9Ad1LZTKpQCZCG7GdEXK3LgRsFSWidA/UUtnAf4pcr
- 6LabaltZWZRVGGB5ELXYpijIKiqp5HZrGK0JT6IfIbhInu6XcTVUKn
- Y3otVBbdLH9BM6OdmC94QNyxTx7ZC/x+jukJT7+QeDq9il9hMB1f4C
- 9oOolHk5Fr8eYITeIZa7Bmk4XNgJ3iYq0Ga7VY2AiaXca6rIdxi7W7
- AXvGeiFrIzJkg2+WBMxVdTEOGQtZp806HdYN2akvaQTsBBfFrVYQEj
- joOeQJIrus3w7YjxQcev0QsAYyOBkhVmGMVPh0ybaDneCTBLAmLpdp
- NUlV06liHRe0qW8Hgy77zvXq9VgfMciPryGtdo+dNtmg6cdxbJ4Et4
- 7xPVL7xIvxSS8A875vww/ITn3h/zX4KsQTJmBPqXUf8yfOKOpISJzu
- e6piHUz6s/BND0nft8l6baJF8VjX8LA2HU3HA7DEGY45Fuync1JJXp
- sOt+M5O6iWhPWddS2HRxkd75J3xl8JfPVqcQrk9x56TJc9C4OBq22i
- oD9cd7/lV+jKfeDVeuW76YLeofbdflhf+IQ9RQAidwz/Ac+HXw/UBw
- AAAQrVAjw/eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9InV0Zi0x
- NiI/Pg0KPEVtYWlsU2V0Pg0KICA8VmVyc2lvbj4xNS4wLjAuMDwvVm
- Vyc2lvbj4NCiAgPEVtYWlscz4NCiAgICA8RW1haWwgU3RhcnRJbmRl
- eD0iNDQiPg0KICAgICAgPEVtYWlsU3RyaW5nPm9sc2FqaXJpQGdtYW
- lsLmNvbTwvRW1haWxTdHJpbmc+DQogICAgPC9FbWFpbD4NCiAgICA8
- RW1haWwgU3RhcnRJbmRleD0iMjAzIiBQb3NpdGlvbj0iU2lnbmF0dX
- JlIj4NCiAgICAgIDxFbWFpbFN0cmluZz5hbmRyaWkubmFrcnlpa29A
- Z21haWwuY29tPC9FbWFpbFN0cmluZz4NCiAgICA8L0VtYWlsPg0KIC
- A8L0VtYWlscz4NCjwvRW1haWxTZXQ+AQuyAzw/eG1sIHZlcnNpb249
- IjEuMCIgZW5jb2Rpbmc9InV0Zi0xNiI/Pg0KPFVybFNldD4NCiAgPF
- ZlcnNpb24+MTUuMC4wLjA8L1ZlcnNpb24+DQogIDxVcmxzPg0KICAg
- IDxVcmwgU3RhcnRJbmRleD0iMTEzMCIgVHlwZT0iVXJsIj4NCiAgIC
- AgIDxVcmxTdHJpbmc+aHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIv
- c2NtL2xpbnV4L2tlcm5lbC9naXQvam9sc2EvcGVyZi5naXQvbG9nLz
- 9oPWJwZi9zZXNzaW9uX2RhdGE8L1VybFN0cmluZz4NCiAgICA8L1Vy
- bD4NCiAgICA8VXJsIFN0YXJ0SW5kZXg9IjEyMjQiIFR5cGU9IlVybC
- I+DQogICAgICA8VXJsU3RyaW5nPmh0dHBzOi8vbG9yZS5rZXJuZWwu
- b3JnL2JwZi8yMDI0MDIyODA5MDI0Mi40MDQwMjEwLTEtam9sc2FAa2
- VybmVsLm9yZy88L1VybFN0cmluZz4NCiAgICA8L1VybD4NCiAgPC9V
- cmxzPg0KPC9VcmxTZXQ+AQzyBzw/eG1sIHZlcnNpb249IjEuMCIgZW
- 5jb2Rpbmc9InV0Zi0xNiI/Pg0KPENvbnRhY3RTZXQ+DQogIDxWZXJz
- aW9uPjE1LjAuMC4wPC9WZXJzaW9uPg0KICA8Q29udGFjdHM+DQogIC
- AgPENvbnRhY3QgU3RhcnRJbmRleD0iMzMiPg0KICAgICAgPFBlcnNv
- biBTdGFydEluZGV4PSIzMyI+DQogICAgICAgIDxQZXJzb25TdHJpbm
- c+SmlyaSBPbHNhPC9QZXJzb25TdHJpbmc+DQogICAgICA8L1BlcnNv
- bj4NCiAgICAgIDxFbWFpbHM+DQogICAgICAgIDxFbWFpbCBTdGFydE
- luZGV4PSI0NCI+DQogICAgICAgICAgPEVtYWlsU3RyaW5nPm9sc2Fq
- aXJpQGdtYWlsLmNvbTwvRW1haWxTdHJpbmc+DQogICAgICAgIDwvRW
- 1haWw+DQogICAgICA8L0VtYWlscz4NCiAgICAgIDxDb250YWN0U3Ry
- aW5nPkppcmkgT2xzYSAmbHQ7b2xzYWppcmlAZ21haWwuY29tPC9Db2
- 50YWN0U3RyaW5nPg0KICAgIDwvQ29udGFjdD4NCiAgICA8Q29udGFj
- dCBTdGFydEluZGV4PSIxMTkiIFBvc2l0aW9uPSJTaWduYXR1cmUiPg
- 0KICAgICAgPFBlcnNvbiBTdGFydEluZGV4PSIxMTkiIFBvc2l0aW9u
- PSJTaWduYXR1cmUiPg0KICAgICAgICA8UGVyc29uU3RyaW5nPlN0ZX
- ZlbiBSb3N0ZWR0PC9QZXJzb25TdHJpbmc+DQogICAgICA8L1BlcnNv
- bj4NCiAgICAgIDxFbWFpbHM+DQogICAgICAgIDxFbWFpbCBTdGFydE
- luZGV4PSIyMDMiIFBvc2l0aW9uPSJTaWduYXR1cmUiPg0KICAgICAg
- ICAgIDxFbWFpbFN0cmluZz5hbmRyaWkubmFrcnlpa29AZ21haWwuY2
- 9tPC9FbWFpbFN0cmluZz4NCiAgICAgICAgPC9FbWFpbD4NCiAgICAg
- IDwvRW1haWxzPg0KICAgICAgPENvbnRhY3RTdHJpbmc+U3RldmVuIF
- Jvc3RlZHQgd3JvdGU6DQomZ3Q7ICZndDsgT24gRnJpLCAyOSBNYXIg
- MjAyNCAxNjoyODozMyAtMDcwMA0KJmd0OyAmZ3Q7IEFuZHJpaSBOYW
- tyeWlrbyAmbHQ7YW5kcmlpLm5ha3J5aWtvQGdtYWlsLmNvbTwvQ29u
- dGFjdFN0cmluZz4NCiAgICA8L0NvbnRhY3Q+DQogIDwvQ29udGFjdH
- M+DQo8L0NvbnRhY3RTZXQ+AQ7PAVJldHJpZXZlck9wZXJhdG9yLDEw
- LDE7UmV0cmlldmVyT3BlcmF0b3IsMTEsMjtQb3N0RG9jUGFyc2VyT3
- BlcmF0b3IsMTAsMDtQb3N0RG9jUGFyc2VyT3BlcmF0b3IsMTEsMDtQ
- b3N0V29yZEJyZWFrZXJEaWFnbm9zdGljT3BlcmF0b3IsMTAsMDtQb3
- N0V29yZEJyZWFrZXJEaWFnbm9zdGljT3BlcmF0b3IsMTEsMDtUcmFu
- c3BvcnRXcml0ZXJQcm9kdWNlciwyMCwxMw=3D=0A=
-X-MS-Exchange-Forest-IndexAgent: 1 3103
-X-MS-Exchange-Forest-EmailMessageHash: B1968A4D
+X-MS-Exchange-Forest-IndexAgent-0: AQ0CZW4AAUILAAAPAAADH4sIAAAAAAAEAN1Ya2/b=
+yBUdWbJsS34lu9
+ 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
+ JyptQ/y9HOBukeQQILuXBVrHDDpMdvWJj2stkcybT0KoufZsUSicHn
+ /4AVVbN3NHlPWczIfIcA5e2J87jKDT9PN2eZJ5nSzHNqBQQFbbt41a
+ DtD5IYmO5aefKFnOfHZ/SI6JiTq+n2sfJZ8nOYvPM2aL8gmdX7VC9I
+ fluQrOVngHqJ7c/y8LMGW8vLP+s2X+fh53tWvrHOVBqfQIDT+ln6QW
+ JZLHB3/V1I+C/a/EeECx4AAAEK4QE8P3htbCB2ZXJzaW9uPSIxLjAi
+ IGVuY29kaW5nPSJ1dGYtMTYiPz4NCjxFbWFpbFNldD4NCiAgPFZlcn
+ Npb24+MTUuMC4wLjA8L1ZlcnNpb24+DQogIDxFbWFpbHM+DQogICAg
+ PEVtYWlsIFN0YXJ0SW5kZXg9IjU5OSI+DQogICAgICA8RW1haWxTdH
+ Jpbmc+Y29ub3IuZG9vbGV5QG1pY3JvY2hpcC5jb208L0VtYWlsU3Ry
+ aW5nPg0KICAgIDwvRW1haWw+DQogIDwvRW1haWxzPg0KPC9FbWFpbF
+ NldD4BC7wDPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRm
+ LTE2Ij8+DQo8VXJsU2V0Pg0KICA8VmVyc2lvbj4xNS4wLjAuMDwvVm
+ Vyc2lvbj4NCiAgPFVybHM+DQogICAgPFVybCBTdGFydEluZGV4PSIx
+ NTIxIiBUeXBlPSJVcmwiPg0KICAgICAgPFVybFN0cmluZz5odHRwcz
+ ovL2xvcmUua2VybmVsLm9yZy9saW51eC1yaXNjdi8yMDI0MDMyOC1m
+ ZXJvY2l0eS1yZXBvc2UtYzU1NGY3NWE2NzZjQHNwdWQvPC9VcmxTdH
+ Jpbmc+DQogICAgPC9Vcmw+DQogICAgPFVybCBTdGFydEluZGV4PSIx
+ ODMyIiBUeXBlPSJVcmwiPg0KICAgICAgPFVybFN0cmluZz5odHRwcz
+ ovL2xvcmUua2VybmVsLm9yZy9saW51eC1yaXNjdi8yMDI0MDIyNzAw
+ MzYzMC4zNjM0NTMzLTQtc2FtdWVsLmhvbGxhbmRAc2lmaXZlLmNvbS
+ 88L1VybFN0cmluZz4NCiAgICA8L1VybD4NCiAgPC9VcmxzPg0KPC9V
+ cmxTZXQ+AQz9Bjw/eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9In
+ V0Zi0xNiI/Pg0KPENvbnRhY3RTZXQ+DQogIDxWZXJzaW9uPjE1LjAu
+ MC4wPC9WZXJzaW9uPg0KICA8Q29udGFjdHM+DQogICAgPENvbnRhY3
+ QgU3RhcnRJbmRleD0iNTg1Ij4NCiAgICAgIDxQZXJzb24gU3RhcnRJ
+ bmRleD0iNTg1Ij4NCiAgICAgICAgPFBlcnNvblN0cmluZz5Db25vci
+ BEb29sZXk8L1BlcnNvblN0cmluZz4NCiAgICAgIDwvUGVyc29uPg0K
+ ICAgICAgPEVtYWlscz4NCiAgICAgICAgPEVtYWlsIFN0YXJ0SW5kZX
+ g9IjU5OSI+DQogICAgICAgICAgPEVtYWlsU3RyaW5nPmNvbm9yLmRv
+ b2xleUBtaWNyb2NoaXAuY29tPC9FbWFpbFN0cmluZz4NCiAgICAgIC
+ AgPC9FbWFpbD4NCiAgICAgIDwvRW1haWxzPg0KICAgICAgPENvbnRh
+ Y3RTdHJpbmc+Q29ub3IgRG9vbGV5ICZsdDtjb25vci5kb29sZXlAbW
+ ljcm9jaGlwLmNvbTwvQ29udGFjdFN0cmluZz4NCiAgICA8L0NvbnRh
+ Y3Q+DQogICAgPENvbnRhY3QgU3RhcnRJbmRleD0iMTYyOCI+DQogIC
+ AgICA8UGVyc29uIFN0YXJ0SW5kZXg9IjE2MjgiPg0KICAgICAgICA8
+ UGVyc29uU3RyaW5nPkNvbm9yIERvb2xleTwvUGVyc29uU3RyaW5nPg
+ 0KICAgICAgPC9QZXJzb24+DQogICAgICA8RW1haWxzPg0KICAgICAg
+ ICA8RW1haWwgU3RhcnRJbmRleD0iMTY0MiI+DQogICAgICAgICAgPE
+ VtYWlsU3RyaW5nPmNvbm9yLmRvb2xleUBtaWNyb2NoaXAuY29tPC9F
+ bWFpbFN0cmluZz4NCiAgICAgICAgPC9FbWFpbD4NCiAgICAgIDwvRW
+ 1haWxzPg0KICAgICAgPENvbnRhY3RTdHJpbmc+Q29ub3IgRG9vbGV5
+ ICZsdDtjb25vci5kb29sZXlAbWljcm9jaGlwLmNvbTwvQ29udGFjdF
+ N0cmluZz4NCiAgICA8L0NvbnRhY3Q+DQogIDwvQ29udGFjdHM+DQo8
+ L0NvbnRhY3RTZXQ+AQ7PAVJldHJpZXZlck9wZXJhdG9yLDEwLDI7Um
+ V0cmlldmVyT3BlcmF0b3IsMTEsMjtQb3N0RG9jUGFyc2VyT3BlcmF0
+ b3IsMTAsMTtQb3N0RG9jUGFyc2VyT3BlcmF0b3IsMTEsMDtQb3N0V2
+ 9yZEJyZWFrZXJEaWFnbm9zdGljT3BlcmF0b3IsMTAsNTtQb3N0V29y
+ ZEJyZWFrZXJEaWFnbm9zdGljT3BlcmF0b3IsMTEsMDtUcmFuc3Bvcn
+ RXcml0ZXJQcm9kdWNlciwyMCwyMg=3D=3D
+X-MS-Exchange-Forest-IndexAgent: 1 4678
+X-MS-Exchange-Forest-EmailMessageHash: 06F33EE3
 X-MS-Exchange-Forest-Language: en
 X-MS-Exchange-Organization-Processed-By-Journaling: Journal Agent
 
-On Sat, Mar 30, 2024 at 10:52=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wro=
-te:
->
-> On Sat, Mar 30, 2024 at 08:27:55AM -0400, Steven Rostedt wrote:
-> > On Fri, 29 Mar 2024 16:28:33 -0700
-> > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >
-> > > I thought I'll just ask instead of digging through code, sorry for
-> > > being lazy :) Is there any way to pass pt_regs/ftrace_regs captured
-> > > before function execution to a return probe (fexit/kretprobe)? I.e.,
-> > > how hard is it to pass input function arguments to a kretprobe? That'=
-s
-> > > the biggest advantage of fexit over kretprobe, and if we can make
-> > > these original pt_regs/ftrace_regs available to kretprobe, then
-> > > multi-kretprobe will effectively be this multi-fexit.
-> >
-> > This should be possible with the updates that Masami is doing with the
-> > fgraph code.
->
-> yes, I have bpf kprobe-multi link support for that [0] (it's on top of
-> Masami's fprobe-over-fgraph changes) we discussed that in [1]
+Thanks for the clarification, looks good.
 
-Sorry, I forgot the regs/args part, mostly remembering we discussed
-session cookie ideas. Thanks for reminder!
+On 2024/3/29 19:23, Conor Dooley wrote:
+> On Thu, Mar 28, 2024 at 10:07:23PM +0000, Conor Dooley wrote:
+>=20
+>> As I said on IRC to you earlier, I think the Kconfig options here are in
+>> need of a bit of a spring cleaning - they should be modified to explain
+>> their individual purposes, be that enabling optimisations in the kernel
+>> or being required for userspace. I'll try to send a patch for that if
+>> I remember tomorrow.
+>=20
+> Something like this:
+>=20
+> -- >8 --
+> commit 5125504beaedd669b082bf74b02003a77360670f
+> Author: Conor Dooley <conor.dooley@microchip.com>
+> Date:   Fri Mar 29 11:13:22 2024 +0000
+>=20
+>      RISC-V: clarify what some RISCV_ISA* config options do
+>     =20
+>      During some discussion on IRC yesterday and on Pu's bpf patch [1]
+>      I noticed that these RISCV_ISA* Kconfig options are not really clear
+>      about their implications. Many of these options have no impact on wh=
+at
+>      userspace is allowed to do, for example an application can use Zbb
+>      regardless of whether or not the kernel does. Change the help text t=
+o
+>      try and clarify whether or not an option affects just the kernel, or
+>      also userspace. None of these options actually control whether or no=
+t an
+>      extension is detected dynamically as that's done regardless of Kconf=
+ig
+>      options, so drop any text that implies the option is required for
+>      dynamic detection, rewording them as "do x when y is detected".
+>     =20
+>      Link: https://lore.kernel.org/linux-riscv/20240328-ferocity-repose-c=
+554f75a676c@spud/ [1]
+>      Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>      ---
+>      I did this based on top of Samuel's changes dropping the MMU
+>      requurements just in case, but I don't think there's a conflict:
+>      https://lore.kernel.org/linux-riscv/20240227003630.3634533-4-samuel.=
+holland@sifive.com/
+>=20
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index d8a777f59402..f327a8ac648f 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -501,8 +501,8 @@ config RISCV_ISA_SVNAPOT
+>   	depends on RISCV_ALTERNATIVE
+>   	default y
+>   	help
+> -	  Allow kernel to detect the Svnapot ISA-extension dynamically at boot
+> -	  time and enable its usage.
+> +	  Add support for the Svnapot ISA-extension when it is detected by
+> +	  the kernel at boot.
+>  =20
+>   	  The Svnapot extension is used to mark contiguous PTEs as a range
+>   	  of contiguous virtual-to-physical translations for a naturally
+> @@ -520,9 +520,9 @@ config RISCV_ISA_SVPBMT
+>   	depends on RISCV_ALTERNATIVE
+>   	default y
+>   	help
+> -	   Adds support to dynamically detect the presence of the Svpbmt
+> -	   ISA-extension (Supervisor-mode: page-based memory types) and
+> -	   enable its usage.
+> +	   Add support for the Svpbmt ISA-extension (Supervisor-mode:
+> +	   page-based memory types) when it is detected by the kernel at
+> +	   boot.
+>  =20
+>   	   The memory type for a page contains a combination of attributes
+>   	   that indicate the cacheability, idempotency, and ordering
+> @@ -541,14 +541,15 @@ config TOOLCHAIN_HAS_V
+>   	depends on AS_HAS_OPTION_ARCH
+>  =20
+>   config RISCV_ISA_V
+> -	bool "VECTOR extension support"
+> +	bool "Vector extension support"
+>   	depends on TOOLCHAIN_HAS_V
+>   	depends on FPU
+>   	select DYNAMIC_SIGFRAME
+>   	default y
+>   	help
+>   	  Say N here if you want to disable all vector related procedure
+> -	  in the kernel.
+> +	  in the kernel. Without this option enabled, neither the kernel nor
+> +	  userspace may use vector.
+>  =20
+>   	  If you don't know what to do here, say Y.
+>  =20
+> @@ -606,8 +607,8 @@ config RISCV_ISA_ZBB
+>   	depends on RISCV_ALTERNATIVE
+>   	default y
+>   	help
+> -	   Adds support to dynamically detect the presence of the ZBB
+> -	   extension (basic bit manipulation) and enable its usage.
+> +	   Add support for enabling optimisations in the kernel when the
+> +	   Zbb extension is detected at boot.
+>  =20
+>   	   The Zbb extension provides instructions to accelerate a number
+>   	   of bit-specific operations (count bit population, sign extending,
+> @@ -623,9 +624,9 @@ config RISCV_ISA_ZICBOM
+>   	select RISCV_DMA_NONCOHERENT
+>   	select DMA_DIRECT_REMAP
+>   	help
+> -	   Adds support to dynamically detect the presence of the ZICBOM
+> -	   extension (Cache Block Management Operations) and enable its
+> -	   usage.
+> +	   Add support for the Zicbom extension (Cache Block Management
+> +	   Operations) and enable its use in the kernel when it is detected
+> +	   at boot.
+>  =20
+>   	   The Zicbom extension can be used to handle for example
+>   	   non-coherent DMA support on devices that need it.
+> @@ -684,7 +685,8 @@ config FPU
+>   	default y
+>   	help
+>   	  Say N here if you want to disable all floating-point related procedu=
+re
+> -	  in the kernel.
+> +	  in the kernel. Without this option enabled, neither the kernel nor
+> +	  userspace may use vector.
+>  =20
+>   	  If you don't know what to do here, say Y.
+>  =20
+>=20
 
->
-> jirka
->
-> [0] https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/log/?h=
-=3Dbpf/session_data
-> [1] https://lore.kernel.org/bpf/20240228090242.4040210-1-jolsa@kernel.org=
-/
-
-X-sender: <netdev+bounces-83537-peter.schumann=3Dcunet.com@vger.kernel.org>
-X-Receiver: <peter.schumann@secunet.com> ORCPT=3Dc822;peter.schumann@secune=
-t.com
-X-CreatedBy: MSExchange15
-X-HeloDomain: mbx-dresden-01.secunet.de
-X-ExtendedProps: BQBjAAoAPWsFfe5Q3AgFADcAAgAADwA8AAAATWljcm9zb2Z0LkV4Y2hhbm=
-dlLlRyYW5zcG9ydC5NYWlsUmVjaXBpZW50Lk9yZ2FuaXphdGlvblNjb3BlEQAAAAAAAAAAAAAAA=
-AAAAAAADwA/AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5EaXJlY3RvcnlEYXRhLk1h=
-aWxEZWxpdmVyeVByaW9yaXR5DwADAAAATG93
-X-Source: SMTP:Default MBX-ESSEN-02
-X-SourceIPAddress: 10.53.40.199
-X-EndOfInjectedXHeaders: 12095
-Received: from mbx-dresden-01.secunet.de (10.53.40.199) by
- mbx-essen-02.secunet.de (10.53.40.198) with Microsoft SMTP Server
- (version=3DS1_2, cipher=3DS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.37; Sun, 31 Mar 2024 04:34:59 +0200
-Received: from b.mx.secunet.com (62.96.220.37) by cas-essen-02.secunet.de
- (10.53.40.202) with Microsoft SMTP Server (version=3DS1_2,
- cipher=3DS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37 via Frontend
- Transport; Sun, 31 Mar 2024 04:34:59 +0200
-Received: from localhost (localhost [127.0.0.1])
-	by b.mx.secunet.com (Postfix) with ESMTP id 141EE20322
-	for <peter.schumann@secunet.com>; Sun, 31 Mar 2024 04:34:59 +0200 (CEST)
-X-Virus-Scanned: by secunet
-X-Spam-Flag: NO
-X-Spam-Score: -2.749
-X-Spam-Level:
-X-Spam-Status: No, score=3D.749 tagged_above=3D99 required=3D1
-	tests=3DAYES_00=3D.9, DKIM_SIGNED=3D1, DKIM_VALID=3D.1,
-	DKIM_VALID_AU=3D.1, FREEMAIL_FORGED_FROMDOMAIN=3D001,
-	FREEMAIL_FROM=3D001, HEADER_FROM_DIFFERENT_DOMAINS=3D249,
-	MAILING_LIST_MULTI=3D, RCVD_IN_DNSWL_NONE=3D.0001,
-	SPF_HELO_NONE=3D001, SPF_PASS=3D.001] autolearn=3Dm autolearn_force=3D
-Authentication-Results: a.mx.secunet.com (amavisd-new);
-	dkim=3Dss (2048-bit key) header.d=3Dail.com
-Received: from b.mx.secunet.com ([127.0.0.1])
-	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OpKISkofR2pT for <peter.schumann@secunet.com>;
-	Sun, 31 Mar 2024 04:34:54 +0200 (CEST)
-Received-SPF: Pass (sender SPF authorized) identity=3Dilfrom; client-ip=147=
-.75.199.223; helo=3D.mirrors.kernel.org; envelope-from=3Dtdev+bounces-83537=
--peter.schumann=3Dcunet.com@vger.kernel.org; receiver=3Dter.schumann@secune=
-t.com=20
-DKIM-Filter: OpenDKIM Filter v2.11.0 b.mx.secunet.com 8423120199
-Authentication-Results: b.mx.secunet.com;
-	dkim=3Dss (2048-bit key) header.d=3Dail.com header.i=3Dmail.com header.b=
-=3Dy2AymGs"
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223=
-])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by b.mx.secunet.com (Postfix) with ESMTPS id 8423120199
-	for <peter.schumann@secunet.com>; Sun, 31 Mar 2024 04:34:54 +0200 (CEST)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.2=
-5.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 479A61C20B9E
-	for <peter.schumann@secunet.com>; Sun, 31 Mar 2024 02:34:53 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F234410FA;
-	Sun, 31 Mar 2024 02:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=3Dss (2048-bit key) header.d=3Dail.com header.i=3Dmail.com header.b=
-=3Dy2AymGs"
-X-Original-To: netdev@vger.kernel.org
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166=
-.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7384E1396;
-	Sun, 31 Mar 2024 02:34:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=3Dne smtp.client-ip 9=
-.85.166.50
-ARC-Seal: i=3D a=3Da-sha256; d=3Dbspace.kernel.org; s=3Dc-20240116;
-	t=1711852487; cv=3Dne; b=3DMqKNBstHic1NnNqtmEhklFX98fH400WfQDTFyqhKjtIXY7t=
-Rb0YqsOvtGOZyXx0wEWKPJAKd86o+m1j+A6/1WE8pCEXzgUX6SKfC6W0ezZ25Rzsz2fAVlUyUeM=
-5EEuntcuT+ehdeWbAQcf77zyAw8axusWoE4oQeU/ECfd/vEARC-Message-Signature: i=3D =
-a=3Da-sha256; d=3Dbspace.kernel.org;
-	s=3Dc-20240116; t=1711852487; c=3Dlaxed/simple;
-	bh=3D26OU7eK1E3sOOfCTy+tBkXi+05uIIvVJ+TP4hGj4w=3D=0A=
-	h=3DME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=3DzYeAGSaMyIjDZPlrwMo3hgPPsMOffRH8URPmCTR8dQMZhq7GO=
-//lFDYMSk6tPcMuQTRTFRf2OrVj1ugqK0lxJM3vFBFuu/N7HMnZBcdqNyXGtnkhCp/notTFUWHO=
-F2ByvyVCUhghBbJ/tO3SGu2dV2uOZN7pwqyGJffONCsRkARC-Authentication-Results: i=
-=3D smtp.subspace.kernel.org; dmarc=3Dss (p=3Dne dis=3Dne) header.from=3Dai=
-l.com; spf=3Dss smtp.mailfrom=3Dail.com; dkim=3Dss (2048-bit key) header.d=
-=3Dail.com header.i=3Dmail.com header.b=3D2AymGs; arc=3Dne smtp.client-ip 9=
-.85.166.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=3Dss (p=3Dne dis=3D=
-ne) header.from=3Dail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=3Dss smtp.mailfrom=3D=
-ail.com
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-7cc01644f51=
-so159554639f.2;
-        Sat, 30 Mar 2024 19:34:46 -0700 (PDT)
-DKIM-Signature: v=3D a=3Da-sha256; c=3Dlaxed/relaxed;
-        d=3Dail.com; s 230601; t=1711852485; x=1712457285; darn=3Der.kernel=
-.org;
-        h=3Dntent-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3D26OU7eK1E3sOOfCTy+tBkXi+05uIIvVJ+TP4hGj4w=3D=0A=
-        b=3D2AymGsN5lMSc1UzWBQqYEmctJu9hcEFMrLk1EvVIPUQ2vRWGvrki52sw7v23NLN=
-y
-         PJRpVeNV/9llTQ9/EMyMHfhE3PGEFhw1ToIkfDHcu4G1MtDeAmPMGmvoQVD2ytyOBf=
-P9
-         1k2Xm1jfRY4gUYOSigq2OoU+Ho3HoOiPnoIQxo10pvq1GTvxA/OcXA+fq6TRplYNpR=
-Ap
-         fdai6ZVFdNN0dNmPdfkij0KZIsOnGnXl0Cln4cRXfOqX51cSkigiXGyKO4QieVXSKS=
-XV
-         CUYMuTkl3aX2Q2MAX4cEY+tEewnezwTFzF6/t0lpTHAi4cbvhL5i75u/2uT5rVPpvl=
-4n
-         4IGQ=3D=0A=
-X-Google-DKIM-Signature: v=3D a=3Da-sha256; c=3Dlaxed/relaxed;
-        d=1E100.net; s 230601; t=1711852485; x=1712457285;
-        h=3Dntent-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3D26OU7eK1E3sOOfCTy+tBkXi+05uIIvVJ+TP4hGj4w=3D=0A=
-        b=3DUmY+KCUxxZt/KqUHDvByexlAZtEIH4XrbOIIDE9I6XBIVvHCTPgiV21Nr3oWYET=
-5
-         4yi797sJtaxzpP3l0L6AfMJZE1jq7q/JletLXiVED8JM2Mkgmh8pgemMqK+pjU5snN=
-qj
-         4SmAIY9xpkUFJTwb6KQRCHmClshfbax662MBwNLdyc71cKI+Ht6zOLscmyap13Cm8J=
-dl
-         Pvwlu0PYjCt12ID8IEZH3heQS/YN134MrRK3B4SP56jTUo+ckVMsH43yk55Yq86rvU=
-s/
-         gxA5UuIqE4dGMSW497CceIm6gFxtwaAaA60xM1XmcEKkoJKn5MK0/KWEaiB12sZMfu=
-DR
-         xm/A=3D=0A=
-X-Forwarded-Encrypted: i=3D AJvYcCW84S9V+AQQkYp+0Pg3uFJiqkrinKOD+cj0jo9RwHY=
-KPgQTM0ca31x7++jsQaCnCHVrKhB4AZsrCgxGVc8F2iXDhlG9Twpbk1TuCelrLjExzQK5aDvFn2=
-pyX1jXjUlDgWGnQskZ+ly86pfRZuSc6zLRTs1VtmYF1ktL1pi43uQwDvDiil12jcTRLBPiIPHnF=
-nT4xag5EJJM5dDha3MF/IDYBm+KEn5/IQcomA3GYVFHVuXIiU3syvBp4mciUubTWnoJGGoBTfuV=
-BZ+umC0D3La4taNF/wXygvGVcQ=3D=0A=
-X-Gm-Message-State: AOJu0YxBCqzw8NXdwxSkflidZiBTQf2FxMt5MAFfeqN8T6V6IoSKYHD=
-r
-	LtNNbixGctgBJMaMxDf8ZKejURE+MphiwvxQexQkxWspvI/JgsQUap7XnuBlDVsr+sE+TBpgAT=
-D
-	eqRNYh5vFsGTaYQ4ptCAJ0U5K7iEX-Google-Smtp-Source: AGHT+IEUljvEWt6RLJvm0ZvD=
-NAAvbKF98d8W07FBneubUp0ru50ICaCtTHNp6cmd+wxEi3ZRk7j/LT8mS1rRQW2OsKcX-Receiv=
-ed: by 2002:a05:6e02:3710:b0:366:ab6f:f63 with SMTP id
- ck16-20020a056e02371000b00366ab6f0f63mr8646788ilb.3.1711852485494; Sat, 30
- Mar 2024 19:34:45 -0700 (PDT)
-Precedence: bulk
-X-Mailing-List: netdev@vger.kernel.org
-List-Id: <netdev.vger.kernel.org>
-List-Subscribe: <mailto:netdev+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:netdev+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail=
-.com>
- <CALz3k9icPePb0c4FE67q=3DU0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
- <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
- <CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
- <CAADnVQLHpi3J6cBJ0QBgCQ2aY6fWGnVvNGdfi3W-jmoa9d1eVQ@mail.gmail.com>
- <CALz3k9g-U8ih=3DJPRbyU9x_9cp00fNkU3PGQ6jP0WJ+=3DmqQ@mail.gmail.com>
- <CALz3k9jG5Jrqw=3Djt05yMkEF-1u909GbBYrV-02W0dQtm6KQQ@mail.gmail.com>
- <20240328111330.194dcbe5@gandalf.local.home> <CAEf4BzYgzOti+Hfdn3SUCjuofGe=
-dXRSGApVDD+K2TdG6oNE-pw@mail.gmail.com>
- <20240330082755.1cbeb8c6@rorschach.local.home> <ZghRXtc8ZiTOKMR3@krava>
-In-Reply-To: <ZghRXtc8ZiTOKMR3@krava>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Sat, 30 Mar 2024 19:34:33 -0700
-Message-ID: <CAEf4BzbOAwLZ9=3DMQo-W5oHxTA7nM5ERRp0Q=3DhuC8b+Y1Ww@mail.gmail=
-.com>
-Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add suppo=
-rt
- to record and check the accessed args
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, =3DTF-8?B?5qKm6b6Z6JGj?=3Dongmeng=
-long.8@bytedance.com>,=20
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Andrii Nakryiko <andrii=
-@kernel.org>,=20
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net=
->,=20
-	Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, Song =
-Liu <song@kernel.org>,=20
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gm=
-ail.com>,=20
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Lu=
-o <haoluo@google.com>,=20
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntra=
-eger@linux.ibm.com>,=20
-	Sven Schnelle <svens@linux.ibm.com>, "David S. Miller" <davem@davemloft.ne=
-t>,=20
-	David Ahern <dsahern@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com=
->,=20
-	X86 ML <x86@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com=
->,=20
-	Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>,=20
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kerne=
-l@vger.kernel.org>,=20
-	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger=
-.kernel.org>,=20
-	Network Development <netdev@vger.kernel.org>, linux-trace-kernel@vger.kern=
-el.org,=20
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, l=
-inux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset=3DTF-8"
-Content-Transfer-Encoding: quoted-printable
-Return-Path: netdev+bounces-83537-peter.schumann=3Dcunet.com@vger.kernel.or=
-g
-X-MS-Exchange-Organization-OriginalArrivalTime: 31 Mar 2024 02:34:59.1620
- (UTC)
-X-MS-Exchange-Organization-Network-Message-Id: 84b93fda-0cf0-47dc-3a87-08dc=
-512b28ea
-X-MS-Exchange-Organization-OriginalClientIPAddress: 62.96.220.37
-X-MS-Exchange-Organization-OriginalServerIPAddress: 10.53.40.202
-X-MS-Exchange-Organization-Cross-Premises-Headers-Processed: cas-essen-02.s=
-ecunet.de
-X-MS-Exchange-Organization-OrderedPrecisionLatencyInProgress: LSRV=CAs-esse=
-n-02.secunet.de:TOTAL-FE=3D011|SMR=3D011(SMRPI=3D008(SMRPI-FrontendProxyAge=
-nt=3D008));2024-03-31T02:34:59.174Z
-X-MS-Exchange-Forest-ArrivalHubServer: mbx-essen-02.secunet.de
-X-MS-Exchange-Organization-AuthSource: cas-essen-02.secunet.de
-X-MS-Exchange-Organization-AuthAs: Anonymous
-X-MS-Exchange-Organization-OriginalSize: 11546
-X-MS-Exchange-Organization-Transport-Properties: DeliveryPriority=3Dw
-X-MS-Exchange-Organization-Prioritization: 2:ShadowRedundancy
-X-MS-Exchange-Organization-IncludeInSla: False:ShadowRedundancy
-
-On Sat, Mar 30, 2024 at 10:52=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wro=
-te:
->
-> On Sat, Mar 30, 2024 at 08:27:55AM -0400, Steven Rostedt wrote:
-> > On Fri, 29 Mar 2024 16:28:33 -0700
-> > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >
-> > > I thought I'll just ask instead of digging through code, sorry for
-> > > being lazy :) Is there any way to pass pt_regs/ftrace_regs captured
-> > > before function execution to a return probe (fexit/kretprobe)? I.e.,
-> > > how hard is it to pass input function arguments to a kretprobe? That'=
-s
-> > > the biggest advantage of fexit over kretprobe, and if we can make
-> > > these original pt_regs/ftrace_regs available to kretprobe, then
-> > > multi-kretprobe will effectively be this multi-fexit.
-> >
-> > This should be possible with the updates that Masami is doing with the
-> > fgraph code.
->
-> yes, I have bpf kprobe-multi link support for that [0] (it's on top of
-> Masami's fprobe-over-fgraph changes) we discussed that in [1]
-
-Sorry, I forgot the regs/args part, mostly remembering we discussed
-session cookie ideas. Thanks for reminder!
-
->
-> jirka
->
-> [0] https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/log/?h=
-=3Dbpf/session_data
-> [1] https://lore.kernel.org/bpf/20240228090242.4040210-1-jolsa@kernel.org=
-/
 
