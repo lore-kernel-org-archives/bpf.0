@@ -1,275 +1,228 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690C24C99;
-	Sat, 30 Mar 2024 00:36:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C51B1851
+	for <bpf@vger.kernel.org>; Sat, 30 Mar 2024 00:59:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711758997; cv=none; b=aJYnkLMP/hx8h5cXw1agNxu/TXM/A8GFGi2/Da6/0ow8ugVlA9NpvIlMKNAV++NydOfztyNwLnLATjITXsypoMHts7lgseKJ3Htj73pKRaDxN/iRGZ/SZ/yYBtjZVICRVMRkRIJ4dhTzcCldFWNRpJ7Gm5N8tCW1ZN9s6II3m4Y=
+	t=1711760387; cv=none; b=SpXNodpkUzJPmJsuaK/fe3y0ojIXyCm167SrX9ry7sZKI+E1TFRjwTwHA/TOQODwRzHZlmF8e13NZQrfiVHCcgGIQal+8DXIqq0kzE+GNiU7/xafKxjxAxTaf2l8nB3Szu6j4O/xEGhdmImdOaqKy5g1q5xWxGPQ9wUdHI6ZMyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711758997; c=relaxed/simple;
-	bh=Ab+AY7ZyWjpeu6FnqcS57xd1DicB744MIAHuv5agtGA=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=NYteGYA59tTgIWKVD1/2AoveuwbTibp1YB2WlGNq0RS5l60/IpFr5b7uDpKb3WKWHH9Z4QUfy2NLMpRwoFyo90IN9xOOGDhgnptoes3FWzQJPDZU+sicPCK899eAtIrXf3Cobwdpi2tFPMT6DTLQVRWoSvOXpzvkXApkGO6pAE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AZXHiFll; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711760387; c=relaxed/simple;
+	bh=uNZdNcX9/iroWo3FyJaRCAOgU46ZuzE0lebtkWKYFL4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NwGTeJC+P+559q2yMUPa2El1FtFmZqNjzGutBnJIKSYsH32Yfe0BoAE7nmMJWiRDD7gMu2OeAVwqSyYWCJidF/sLG0QdHE/+IzJy5L1S6SXXXiuEeyvYrBOk3wEeBIP16wZwUblvhmTHWd4seyvF3i8Fj7qmZ8zsgx49PYwtozY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4I1SvwBV; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AZXHiFll"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 392F4C433C7;
-	Sat, 30 Mar 2024 00:36:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711758996;
-	bh=Ab+AY7ZyWjpeu6FnqcS57xd1DicB744MIAHuv5agtGA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=AZXHiFllv8n5dEaSG9m4+IXHeGilu8MA8ZUo6p+KaOcte1zmtfBf+jY8/nBvOgW/I
-	 ai1q2UJHlVf956ZvihVKGnslmGGvU3irYFpvNniaPIKZQsFffeIse4JwIsUUBMRETt
-	 0P1IYSAQi0EHzxbRsTY5HrURviRvdA2Qa1TK2nNsGxcpB/gDvJMAmakNAX1WvtzdrN
-	 2dEGvyeZTeNi2FwfB0tSqbmYKcexm69MPa9h9sl70npMH+TAvsctqxdmKkMIlSVkNz
-	 1vdFb1WSJyFTEDdJSrkuQsPR0JimgzdoclZ9Mh5/uG1SQvXl/GKJFW+mxSv4G9LYX+
-	 dtZkOsjeRbWnA==
-Date: Sat, 30 Mar 2024 09:36:31 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Jonthan Haslam <jonathan.haslam@gmail.com>,
- linux-trace-kernel@vger.kernel.org, andrii@kernel.org, bpf@vger.kernel.org,
- rostedt@goodmis.org, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar
- <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung
- Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander
- Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
- <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, Adrian Hunter
- <adrian.hunter@intel.com>, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] uprobes: reduce contention on uprobes_tree access
-Message-Id: <20240330093631.72273967ba818cb16aeb58b6@kernel.org>
-In-Reply-To: <CAEf4BzbSvMa2+hdTifMKTsNiOL6X=P7eor4LpPKfHM=Y9-71fw@mail.gmail.com>
-References: <20240321145736.2373846-1-jonathan.haslam@gmail.com>
-	<20240325120323.ec3248d330b2755e73a6571e@kernel.org>
-	<CAEf4BzZS_QCsSY0oGY_3pGveGfXKK_TkVURyNq=UQXVXSqi2Fw@mail.gmail.com>
-	<20240327084245.a890ae12e579f0be1902ae4a@kernel.org>
-	<54jakntmdyedadce7yrf6kljcjapbwyoqqt26dnllrqvs3pg7x@itra4a2ikgqw>
-	<20240328091841.ce9cc613db375536de843cfb@kernel.org>
-	<CAEf4BzYCJWXAzdV3q5ex+8hj5ZFCnu5CT=w8eDbZCGqm+CGYOQ@mail.gmail.com>
-	<CAEf4BzbSvMa2+hdTifMKTsNiOL6X=P7eor4LpPKfHM=Y9-71fw@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4I1SvwBV"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-33ed4d8e9edso1851388f8f.2
+        for <bpf@vger.kernel.org>; Fri, 29 Mar 2024 17:59:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1711760384; x=1712365184; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uNZdNcX9/iroWo3FyJaRCAOgU46ZuzE0lebtkWKYFL4=;
+        b=4I1SvwBVGoq4hHVZqk9OHvp4M2fm0MN/NDUGXzD6iffrAQuukF9cVD0VgX2oX75ImR
+         8M58QKON58QoPCaut8GNZe9zkDZ6tzD2WFb4aJkJCLoYWUBEFk50hY7Gxs6u8MtRdY8f
+         /Fw53PwrAqxW2FDdW9kibmLDdCv1PmzK/uut/UPc/Ox/cUxqF9JNizDBpXkKE6kg4ycV
+         u2Zhpx19Aj6s3RfefsYR3npWeZJSw2n/i6JXe1HMRAB2YGrUgxqiqK6b3cUNkwrFkrkV
+         tsicKP84YjaojsUO9/XrxBAbXkheNFY4tpXq03P3Dx5+/pm15K1jL+ZhspCubzGBG3EW
+         PM8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711760384; x=1712365184;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uNZdNcX9/iroWo3FyJaRCAOgU46ZuzE0lebtkWKYFL4=;
+        b=j/ejKjHD32GfTy0ci46FXAvq7OkVswq5yYlYsbnWpE2JCf8BtwgjFq4jH6JKrOtKDc
+         66GqRlHD7ShFEsWoNC6O5Mp/No9SfyDcCD9QMqEJKXyRlMmvEVYRemq0NUqlKZCzsX/I
+         z6iI21VTJyDEFKC6KM1KgP5Obp177wyNeCOAWdNO9Xx6TKmbdOJYby7ExKkcxNuvtfFb
+         UmMcRADW7ai6Q3WxmLAAmZZLpxgcCbeV3i9rHgwsu4MCvL5/VaWJuASsM/Jj++CSaebn
+         VE+vJw+HKaqA54+bGyeHmp7mM1QsP4NZE5irUp781bFKEzHeYuh7K4LrVrGHdA8PPGYA
+         yDug==
+X-Forwarded-Encrypted: i=1; AJvYcCVrDSw/gf9BeoHh0MJIqGORFbur2FqI1jHSn73qiDQk1CxOk3kDfZTmBCC0dmTOz5pet21KNsiaAJQG4+zUrTxp/FB9
+X-Gm-Message-State: AOJu0YxgqlWDr5G0DvaGEAGPg+6T5LWvgCx8kgvXNfFJxG2dHbXbcC1g
+	7hy/ZOZ/NYw3Q0dUJwrIC/y5G3ygh1f8ar8Ft7otpldmptbqbMNH6JvTkCHKbLcVwC8RO/O4TR4
+	tOdJb3Ab4oZpFob8pZZIMshK84+HRg4hnXsn2
+X-Google-Smtp-Source: AGHT+IGIPqolQwpHSX+ihYnJ0wVakUMRORlII1tHrJ8qiOdMXwNJEAEjlpAvn3m2jWN7AU3Y15/7gDmsWFTWJwPsyyM=
+X-Received: by 2002:adf:f18e:0:b0:33d:64c7:5619 with SMTP id
+ h14-20020adff18e000000b0033d64c75619mr2622657wro.70.1711760383544; Fri, 29
+ Mar 2024 17:59:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+References: <20240329015351.624249-1-drosen@google.com> <CAOQ4uxhLPw9AKBWmUcom3RUrsov0q39tiNhh2Mw7qJbwKr1yRQ@mail.gmail.com>
+In-Reply-To: <CAOQ4uxhLPw9AKBWmUcom3RUrsov0q39tiNhh2Mw7qJbwKr1yRQ@mail.gmail.com>
+From: Daniel Rosenberg <drosen@google.com>
+Date: Fri, 29 Mar 2024 17:59:30 -0700
+Message-ID: <CA+PiJmQR17nwkHaZXUhw=YRM06TfF14bhozc=nM9cw51aiiB6g@mail.gmail.com>
+Subject: Re: [RFC PATCH v4 00/36] Fuse-BPF and plans on merging with Fuse Passthrough
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Miklos Szeredi <miklos@szeredi.hu>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Joanne Koong <joannelkoong@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
+	Christian Brauner <brauner@kernel.org>, kernel-team@android.com, 
+	Bernd Schubert <bschubert@ddn.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 29 Mar 2024 10:33:57 -0700
-Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+On Thu, Mar 28, 2024 at 11:45=E2=80=AFPM Amir Goldstein <amir73il@gmail.com=
+> wrote:
+>
+> My plan was to start from passthrough ioctl with O_PATH fd on lookup
+> and deal with performance improvements later when there are actual
+> workloads that report a problem and that depends where the overhead is.
+>
+> Is it with the opening of O_PATH fds?
+> Is it with the passthtough ioctls?
+> If latter, then when fuse uring is merged, I think we could get loose
+> the ioctls anyway.
+>
 
-> On Wed, Mar 27, 2024 at 5:45 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Wed, Mar 27, 2024 at 5:18 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > >
-> > > On Wed, 27 Mar 2024 17:06:01 +0000
-> > > Jonthan Haslam <jonathan.haslam@gmail.com> wrote:
-> > >
-> > > > > > Masami,
-> > > > > >
-> > > > > > Given the discussion around per-cpu rw semaphore and need for
-> > > > > > (internal) batched attachment API for uprobes, do you think you can
-> > > > > > apply this patch as is for now? We can then gain initial improvements
-> > > > > > in scalability that are also easy to backport, and Jonathan will work
-> > > > > > on a more complete solution based on per-cpu RW semaphore, as
-> > > > > > suggested by Ingo.
-> > > > >
-> > > > > Yeah, it is interesting to use per-cpu rw semaphore on uprobe.
-> > > > > I would like to wait for the next version.
-> > > >
-> > > > My initial tests show a nice improvement on the over RW spinlocks but
-> > > > significant regression in acquiring a write lock. I've got a few days
-> > > > vacation over Easter but I'll aim to get some more formalised results out
-> > > > to the thread toward the end of next week.
-> > >
-> > > As far as the write lock is only on the cold path, I think you can choose
-> > > per-cpu RW semaphore. Since it does not do busy wait, the total system
-> > > performance impact will be small.
-> >
-> > No, Masami, unfortunately it's not as simple. In BPF we have BPF
-> > multi-uprobe, which can be used to attach to thousands of user
-> > functions. It currently creates one uprobe at a time, as we don't
-> > really have a batched API. If each such uprobe registration will now
-> > take a (relatively) long time, when multiplied by number of attach-to
-> > user functions, it will be a horrible regression in terms of
-> > attachment/detachment performance.
+I'm not terribly sure. Ideally I would have cc'ed them on this email,
+but I didn't take down contact info with my notes. I was under the
+impression that it was triggering all of the opens before an actual
+open was needed, for example, during ls -l, but I don't know if that
+was with O_PATH fds. I was a bit concerned that a performance fix
+there might end up needing a different interface, and managing
+multiple of those could get pretty cluttered. But I agree that it
+doesn't make sense to do anything there without a concrete use-case
+and issue.
 
-Ah, got it. So attachment/detachment performance should be counted.
+>
+> The original reason was to mitigate an attack vector of fooling a
+> privileged process into writing the fd (number) to /dev/fuse to
+> gain access to a backing file this way.
+>
+> The fuse-bpf way of doing all responds with ioctls seems fine for
+> this purpose, but note that the explicit setup also provides feedback
+> to the server in case the passthrough cannot be accomplished
+> for a specific inode (e.g. because of stacking depths overflow)
+> and that is a big benefit IMO.
+>
 
-> >
-> > So when we switch to per-CPU rw semaphore, we'll need to provide an
-> > internal batch uprobe attach/detach API to make sure that attaching to
-> > multiple uprobes is still fast.
+That certainly informs the daemon of the error earlier. So long as we
+can still run the complete passthrough mode serverless that's fine by
+me. I've found that mode helpful for running filesystem tests on pure
+backing mode, plus I imagine some simple Fuse filesystems could get
+away with only the bpf programs.
 
-Yeah, we need such interface like register_uprobes(...).
+>
+> Using a global cred should be fine, just as overlayfs does.
+> The specific inode passthrough setup could mention if the global
+> cred should be used.
+>
+> However, note that overlayfs needs to handle some special cases
+> when using mounter creds (e.g.: ovl_create_or_link() and dropping
+> of CAP_SYS_RESOURCE).
+>
+> If you are going to mimic all this, better have that in the stacking fs
+> common code.
+>
 
-> >
-> > Which is why I was asking to land this patch as is, as it relieves the
-> > scalability pains in production and is easy to backport to old
-> > kernels. And then we can work on batched APIs and switch to per-CPU rw
-> > semaphore.
+Sure. The less duplicate code the better :)
 
-OK, then I'll push this to for-next at this moment.
-Please share if you have a good idea for the batch interface which can be
-backported. I guess it should involve updating userspace changes too.
+>
+> That sounds like a good plan, but also, please remember Miklos' request -
+> please split the patch sets for review to:
+> 1. FUSE-passthrough-all-mode
+> 2. Attach BPF program
+>
+> We FUSE developers must be able to review the FUSE/passthough changes
+> without any BPF code at all (which we have little understanding thereof)
+>
+> As a merge strategy, I think we need to aim for merging all the FUSE
+> passthrough infrastructure needed for passthrough of inode operations
+> strictly before merging any FUSE-BPF specific code.
+>
+> In parallel you may get BPF infrastructure merged, but integrating FUSE+B=
+PF,
+> should be done only after all infrastructure is already merged IMO.
+>
 
-Thank you!
+Ok. I'll probably mess around with the module stuff at least, in order
+to work out if everything I need is present on the bpf side. Do you
+know if anyone is actively working on extending the file-backing work
+to something like inode-backing? I don't want to duplicate work there,
+but I'd be happy to start looking at it. Otherwise I'd focus on the
+bpf end for now. I expect we'll want to be able to optionally set the
+bpf program at the same place where we set the backing file/inode.
+Hence the spit into a file and inode program set. I'm still thinking
+over what the best way to address the programs is...
 
-> >
-> > So I hope you can reconsider and accept improvements in this patch,
-> > while Jonathan will keep working on even better final solution.
-> > Thanks!
-> >
-> > > I look forward to your formalized results :)
-> > >
-> 
-> BTW, as part of BPF selftests, we have a multi-attach test for uprobes
-> and USDTs, reporting attach/detach timings:
-> $ sudo ./test_progs -v -t uprobe_multi_test/bench
-> bpf_testmod.ko is already unloaded.
-> Loading bpf_testmod.ko...
-> Successfully loaded bpf_testmod.ko.
-> test_bench_attach_uprobe:PASS:uprobe_multi_bench__open_and_load 0 nsec
-> test_bench_attach_uprobe:PASS:uprobe_multi_bench__attach 0 nsec
-> test_bench_attach_uprobe:PASS:uprobes_count 0 nsec
-> test_bench_attach_uprobe: attached in   0.120s
-> test_bench_attach_uprobe: detached in   0.092s
-> #400/5   uprobe_multi_test/bench_uprobe:OK
-> test_bench_attach_usdt:PASS:uprobe_multi__open 0 nsec
-> test_bench_attach_usdt:PASS:bpf_program__attach_usdt 0 nsec
-> test_bench_attach_usdt:PASS:usdt_count 0 nsec
-> test_bench_attach_usdt: attached in   0.124s
-> test_bench_attach_usdt: detached in   0.064s
-> #400/6   uprobe_multi_test/bench_usdt:OK
-> #400     uprobe_multi_test:OK
-> Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
-> Successfully unloaded bpf_testmod.ko.
-> 
-> So it should be easy for Jonathan to validate his changes with this.
-> 
-> > > Thank you,
-> > >
-> > > >
-> > > > Jon.
-> > > >
-> > > > >
-> > > > > Thank you,
-> > > > >
-> > > > > >
-> > > > > > >
-> > > > > > > BTW, how did you measure the overhead? I think spinlock overhead
-> > > > > > > will depend on how much lock contention happens.
-> > > > > > >
-> > > > > > > Thank you,
-> > > > > > >
-> > > > > > > >
-> > > > > > > > [0] https://docs.kernel.org/locking/spinlocks.html
-> > > > > > > >
-> > > > > > > > Signed-off-by: Jonathan Haslam <jonathan.haslam@gmail.com>
-> > > > > > > > ---
-> > > > > > > >  kernel/events/uprobes.c | 22 +++++++++++-----------
-> > > > > > > >  1 file changed, 11 insertions(+), 11 deletions(-)
-> > > > > > > >
-> > > > > > > > diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-> > > > > > > > index 929e98c62965..42bf9b6e8bc0 100644
-> > > > > > > > --- a/kernel/events/uprobes.c
-> > > > > > > > +++ b/kernel/events/uprobes.c
-> > > > > > > > @@ -39,7 +39,7 @@ static struct rb_root uprobes_tree = RB_ROOT;
-> > > > > > > >   */
-> > > > > > > >  #define no_uprobe_events()   RB_EMPTY_ROOT(&uprobes_tree)
-> > > > > > > >
-> > > > > > > > -static DEFINE_SPINLOCK(uprobes_treelock);    /* serialize rbtree access */
-> > > > > > > > +static DEFINE_RWLOCK(uprobes_treelock);      /* serialize rbtree access */
-> > > > > > > >
-> > > > > > > >  #define UPROBES_HASH_SZ      13
-> > > > > > > >  /* serialize uprobe->pending_list */
-> > > > > > > > @@ -669,9 +669,9 @@ static struct uprobe *find_uprobe(struct inode *inode, loff_t offset)
-> > > > > > > >  {
-> > > > > > > >       struct uprobe *uprobe;
-> > > > > > > >
-> > > > > > > > -     spin_lock(&uprobes_treelock);
-> > > > > > > > +     read_lock(&uprobes_treelock);
-> > > > > > > >       uprobe = __find_uprobe(inode, offset);
-> > > > > > > > -     spin_unlock(&uprobes_treelock);
-> > > > > > > > +     read_unlock(&uprobes_treelock);
-> > > > > > > >
-> > > > > > > >       return uprobe;
-> > > > > > > >  }
-> > > > > > > > @@ -701,9 +701,9 @@ static struct uprobe *insert_uprobe(struct uprobe *uprobe)
-> > > > > > > >  {
-> > > > > > > >       struct uprobe *u;
-> > > > > > > >
-> > > > > > > > -     spin_lock(&uprobes_treelock);
-> > > > > > > > +     write_lock(&uprobes_treelock);
-> > > > > > > >       u = __insert_uprobe(uprobe);
-> > > > > > > > -     spin_unlock(&uprobes_treelock);
-> > > > > > > > +     write_unlock(&uprobes_treelock);
-> > > > > > > >
-> > > > > > > >       return u;
-> > > > > > > >  }
-> > > > > > > > @@ -935,9 +935,9 @@ static void delete_uprobe(struct uprobe *uprobe)
-> > > > > > > >       if (WARN_ON(!uprobe_is_active(uprobe)))
-> > > > > > > >               return;
-> > > > > > > >
-> > > > > > > > -     spin_lock(&uprobes_treelock);
-> > > > > > > > +     write_lock(&uprobes_treelock);
-> > > > > > > >       rb_erase(&uprobe->rb_node, &uprobes_tree);
-> > > > > > > > -     spin_unlock(&uprobes_treelock);
-> > > > > > > > +     write_unlock(&uprobes_treelock);
-> > > > > > > >       RB_CLEAR_NODE(&uprobe->rb_node); /* for uprobe_is_active() */
-> > > > > > > >       put_uprobe(uprobe);
-> > > > > > > >  }
-> > > > > > > > @@ -1298,7 +1298,7 @@ static void build_probe_list(struct inode *inode,
-> > > > > > > >       min = vaddr_to_offset(vma, start);
-> > > > > > > >       max = min + (end - start) - 1;
-> > > > > > > >
-> > > > > > > > -     spin_lock(&uprobes_treelock);
-> > > > > > > > +     read_lock(&uprobes_treelock);
-> > > > > > > >       n = find_node_in_range(inode, min, max);
-> > > > > > > >       if (n) {
-> > > > > > > >               for (t = n; t; t = rb_prev(t)) {
-> > > > > > > > @@ -1316,7 +1316,7 @@ static void build_probe_list(struct inode *inode,
-> > > > > > > >                       get_uprobe(u);
-> > > > > > > >               }
-> > > > > > > >       }
-> > > > > > > > -     spin_unlock(&uprobes_treelock);
-> > > > > > > > +     read_unlock(&uprobes_treelock);
-> > > > > > > >  }
-> > > > > > > >
-> > > > > > > >  /* @vma contains reference counter, not the probed instruction. */
-> > > > > > > > @@ -1407,9 +1407,9 @@ vma_has_uprobes(struct vm_area_struct *vma, unsigned long start, unsigned long e
-> > > > > > > >       min = vaddr_to_offset(vma, start);
-> > > > > > > >       max = min + (end - start) - 1;
-> > > > > > > >
-> > > > > > > > -     spin_lock(&uprobes_treelock);
-> > > > > > > > +     read_lock(&uprobes_treelock);
-> > > > > > > >       n = find_node_in_range(inode, min, max);
-> > > > > > > > -     spin_unlock(&uprobes_treelock);
-> > > > > > > > +     read_unlock(&uprobes_treelock);
-> > > > > > > >
-> > > > > > > >       return !!n;
-> > > > > > > >  }
-> > > > > > > > --
-> > > > > > > > 2.43.0
-> > > > > > > >
-> > > > > > >
-> > > > > > >
-> > > > > > > --
-> > > > > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > > >
-> > > > >
-> > > > > --
-> > > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > >
-> > >
-> > > --
-> > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>
+> So I don't think there is any point in anyone actually reviewing the
+> v4 patch set that you just posted?
+>
 
+Correct. The only reason I included it was as a reference for the sort
+of stuff fuse-bpf is currently doing.
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>
+> Please explain what you mean by that.
+> How are fuse-bpf file operations expected to be used and specifically,
+> How are they expected to extend the current FUSE passthrough functionalit=
+y?
+>
+> Do you mean that an passthrough setup will include a reference to a bpf
+> program that will be used to decide per read/write/splice operation
+> whether it should be passed through to backing file or sent to server
+> direct_io style?
+>
+
+So in the current fuse-bpf setup, the bpf program does two things. It
+can edit certain parameters, and it can indicate what the next action
+should be. That action could be queuing up the post filter after the
+backing operation, deferring to a userspace pre/post filter, or going
+back to normal fuse operations.
+The latter one isn't currently very well fleshed out. Unless you do
+some specific tracking, under existing fuse-bpf you'd have a node id
+of 0, and userspace can't make much out of that. With that aside,
+there's all sorts of caching nightmares to deal with there.
+
+We're only using the parameter changing currently in our use cases. I
+wouldn't be opposed to leaving the falling back to fuse for specific
+operations out of v1 of the bpf enhancements, especially if we have
+the userspace pre/post filters available.
+So you'd optionally specify a bpf program to use with the backing
+file. That would allow you to manipulate some data in the files like
+you might in Fuse itself. For instance, data redaction. You could null
+out location metadata in images, provided a map or something with the
+offsets that should be nulled. You could also prepend some data at the
+beginning of a file by adjusting offsets and attrs and whatnot. I
+could imagine having multiple backing files, and the bpf program
+splitting a read into multiple parts to handle parts of it using
+different backing files, although that's not in the current design.
+
+>
+> I just wanted to make sure that you are aware of the fact that direct io
+> to server is the only mode of io that is allowed on an inode with an atta=
+ched
+> backing file.
+>
+> Thanks,
+> Amir.
+>
+
+Can you not read/write without interacting with the server? Or do you
+mean FOPEN_DIRECT_IO sends some file ops to the server even in
+passthrough mode? At the moment I'm tempted to follow the same
+mechanics passthrough is using. The only exception would be possibly
+tossing back to the server, which I mentioned above. That'd only
+happen for, say, read, if we're not under FOPEN_DIRECT_IO. I've not
+looked too closely at FOPEN_DIRECT_IO. In Fuse bpf we currently have
+bpf mode taking priority. Are there any email threads I should look at
+for more background there?
+
+-Daniel
