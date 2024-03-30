@@ -1,183 +1,256 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C339C881F;
-	Sat, 30 Mar 2024 05:28:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2F7847E;
+	Sat, 30 Mar 2024 09:01:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711776538; cv=none; b=ZlULKB+hSZTnsEdwTtFc58KZ2mcF9ZHxEoCr0j43SULFOpNL73AOvaeavUOPulyvxEgZur2mXK/CSGgcE1X3asr0PUKmj4qaWtDfx8RJQeG/R9QaXhCHhLRfzkthEYrvX9W6RELxVj/H/1msgZivrWzzwJvyJy9qpVO6F3sjtKw=
+	t=1711789276; cv=none; b=LJliKGtxdDA5DncUU3WQ86IqJfxxDdmZL62lReMe091FMMVzSAkVNUab0eixlHeqVTjIQ9EEtdUySkdcLp6rFtixRUTTmQdeeFsygIBsVZzOYDo25RMQNI1crLiHrVMDdGnqz68Wu6CyxrARRiiLwfKV6AS/7WwNSvW09W60zck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711776538; c=relaxed/simple;
-	bh=EUcUQklyNbH8/SNk483PELZG1vakzV9Wr9CnM70ULio=;
+	s=arc-20240116; t=1711789276; c=relaxed/simple;
+	bh=CFUfaZfb7X/JJv0DB5cn0CBJrMrECWzMZrlMK1UCZYA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W/2HkhYnWh/MXJeBWuxa99I/vLb4mzb/L8ltsD1b2Is/d8fU3yrv19FjTR1UsVLt3Cz0Fj5qBNnwoebNTiNG4U7nYuI2w/zBKi3f2IPShJiRbDRcbR8zEVpEwVTXciWc1K/BFzSouuAwasS7WNnzWPqt4CM40+IVU4zaaSz15NE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VsQ6MkHy; arc=none smtp.client-ip=209.85.215.174
+	 To:Cc:Content-Type; b=o3BMwVDUvqhNVOZ/cIBlL/eEF8qwRIumKR1fMWrSA7H4zcSOpuQv/ioQzXQqrodsIUyARBuvkzwtgX1F3ahG1oBV9JsqyrWjN58qqzsylGWNrONt419EuA+HV2Hnb6GN/l1yLYA/QgPCW6C6kp/GDTzIPXK00zlXkPjIpLmtnu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nle+vzJj; arc=none smtp.client-ip=209.85.208.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VsQ6MkHy"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-5dbd519bde6so1799905a12.1;
-        Fri, 29 Mar 2024 22:28:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nle+vzJj"
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2d6ee6c9945so20258311fa.3;
+        Sat, 30 Mar 2024 02:01:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711776536; x=1712381336; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711789272; x=1712394072; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HzHyUcYN9rBRgPi5AsHIJZShKuTLwgsqehdZBFMpuRw=;
-        b=VsQ6MkHyvVdqeiFVmzVlhzKOw6JRtj+QvUwAY8SvSxvePwH+sZUYByZb1JeCUAQwHG
-         BA4LB6O61zDE5U9WxBAlnZfBHicnhVJp3Sj4uXf4oEml9b3bTfYWvqbofRrF0xhAn5WC
-         3mNlXgxfn/5fM/H6Rupr22TT0RAaYItPUozWMNpiBODV4b5NG1tl6lW6fWqyvZDMtQzI
-         fNnPhUbqX59yeHSFYLQGw2OvHVoyABsZUB5eUgcaUhfoFVeCSsv/imoE4h9DOnZ/+5uL
-         75Z8U6nci78KGtagRgeK4ZYDhRpA333gMYmMddraJn7XxwATDn6MwB2tgtqk19aZAt+h
-         I8+A==
+        bh=cbl/CLMq3nWKqNjaubWInMz1kaQBbZVVwZ4B6Yhcsik=;
+        b=Nle+vzJjShWs0Ti3+DNi47la3wp5ECIHDAW+EvbhX+Ton8pxr5GAT+OKLN9tkpsdWp
+         7pmY92Vv0JN9muB7m6ZKKOed2eTaDIbVC7yQe3iYoQYmuzNt6FG/2CRXCn5axo5T0Er+
+         mIawl+AjZ9LcJ+2LwfqLqtGS9Swzi333W06D5Rkope/9r9oRpQjGT7vy46uzFz6Xcl6b
+         S77spLQ2G+CQpl+4BKwdDBzhD3S36TpnXk6mrY+NzXkbO3VsCQIQvMCBSh38nAhwLdwg
+         DDcnS4Gu8cVLbgH/tpVDy41vXbLuY8G8wYbQmHDkXrHBBWVRq9R4WCn8orBArD2q7glw
+         BXGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711776536; x=1712381336;
+        d=1e100.net; s=20230601; t=1711789272; x=1712394072;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HzHyUcYN9rBRgPi5AsHIJZShKuTLwgsqehdZBFMpuRw=;
-        b=Xl3nDi5Z/KSywfmLTG6gei40BJ195czVu4SnU0SAYqHO51SoqCN/Fd5OSCITJD6e2I
-         7nQVIT4miWfaZbpf/HTY6JM4zOWx4xwyytRk1+a4YoyLWcPe2Da/vmfDV3o1Tys/khVL
-         snOwTSMCM70d+dikgwvzXFBWHVXSyQvcsmPIIAHT7bo586tnUfml0XxM2et+ANM+D/aZ
-         qKdJOqgjupwHE1wuHB2Glb/F30NxgBdLOdNlu6OaqNpViVHAEx0LqQGaPwIB8tG7N6yD
-         tFsVMcz/+ir//EuUCwhkborG0fmkvVZeDzk3TldPMychd/3yrVZ2MPvFzrEBvJjczzIE
-         j4UA==
-X-Forwarded-Encrypted: i=1; AJvYcCWmG7kHfmLwGkU4VlTdzqbmDyd8b5uow1tDs5et6M99JOCSbAm2Mg+gTl9nl7lsfUmB/LZx6xnWL86iy+QcORYf9tFLnuFbfvxudqpjBdIOBio5+QH9SJ1Lyc/tNYxeAik2
-X-Gm-Message-State: AOJu0Yx2MgyPJzkT1Q8EeVrltkb0T0mCBMGgchfNW+rVQ/PA1qQ/bnM1
-	UjJApPRgScm17UKw7M2Oe1gBTLJHmzTJztR2Ss7GO/Vf7AUk0nmo4S+Wb3YDmdaYzEYmy/4rMcO
-	tedPz4mHuPLo+l1v4boNz7D5GgHY=
-X-Google-Smtp-Source: AGHT+IE0MVT9pzRAM4noGtnm12NIysa9FA5dVdlH91BgPyrOq2n6tRTkiYTvswlcdbgXxDAO+ZA4y/uo7gKe30cZaSo=
-X-Received: by 2002:a05:6a21:3384:b0:1a5:6fde:8303 with SMTP id
- yy4-20020a056a21338400b001a56fde8303mr4307453pzb.38.1711776535998; Fri, 29
- Mar 2024 22:28:55 -0700 (PDT)
+        bh=cbl/CLMq3nWKqNjaubWInMz1kaQBbZVVwZ4B6Yhcsik=;
+        b=SissUbPdoWrUM0u1xqTsea9iktJot0W8ikz/21w6oDLw29oHo1E/zyykrKQer/3OWO
+         qPdKEegxJqdMg3v5GqOnOKWhyGLwFbh6p2b85j1Ts+6BbLFl9oFkAqze+79DH3UTgvpX
+         8eHg+dcra2W81v3T0kNwO/Rz19x/a4qUnJoY4xXfsGku0ULlQwIKn/HG4uSfeFFaQsvQ
+         uTzuZm8A/9h9KcYqL8SvAcdlpvE/AK5/d243lGtC7Es8bpk5HpBF6YLgEqB9CQU7scmf
+         XLKGETg+gvfwQ/3vIK2nDBH9GUewEyTA+wZonkJx4DDqfRJaO4cU3mQBB6idP5IB1mep
+         Hw+g==
+X-Forwarded-Encrypted: i=1; AJvYcCXMPjsPXXatSVDH641eiZD9Tylx5ujw2zvU8pLsO9HYR1XJhfBDwIOO8cDOnkZQvsFw51iNGrNYsj+ZOC9s/nmtelqQeBg/s4CmUPCyx03PDGJu4fX5flrhGr2i0fu9s/8eCySMSfdAa696W6WVC4RItEDieQnLUtLc
+X-Gm-Message-State: AOJu0YxogawIyIXt1FmwtLXKYPIfA7/NqcoJp2+CkbXskVq401KWqBS9
+	dv/uHIbm1VAuF/Vdv+59bCR/JaF94WfnbXteVNB+T1wBqWVEkaHONlAM1xQ2s4fdMV8thx39cxA
+	tPcarlYh9vw0yYnOBdeRY+OsGAlI=
+X-Google-Smtp-Source: AGHT+IGeaymGC7cAQwieQg4TakZq0ARBnpQFix3PExtV6ez87eomevGZHhs6eDxl1CtxiB/HrZm8Uq2a8idogtbdJIc=
+X-Received: by 2002:a2e:8612:0:b0:2d6:a5ce:b261 with SMTP id
+ a18-20020a2e8612000000b002d6a5ceb261mr2175202lji.25.1711789271815; Sat, 30
+ Mar 2024 02:01:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240329030119.29995-1-harishankar.vishwanathan@gmail.com>
- <f2e1c5dc6f6ea2c7f046e8673dd364dd14056781.camel@gmail.com> <CAM=Ch04JAJDS84xYHFUfjrShwqSSc8gQ5a_sLCoRNAsf6tyjYQ@mail.gmail.com>
-In-Reply-To: <CAM=Ch04JAJDS84xYHFUfjrShwqSSc8gQ5a_sLCoRNAsf6tyjYQ@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 29 Mar 2024 22:28:43 -0700
-Message-ID: <CAEf4BzZp69diFeyjUAa8-jbZatDouwSaexwuakJdXHTdHwsBLQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] Fix latent unsoundness in and/or/xor value tracking
-To: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, ast@kernel.org, harishankar.vishwanathan@rutgers.edu, 
-	sn624@cs.rutgers.edu, sn349@cs.rutgers.edu, m.shachnai@rutgers.edu, 
-	paul@isovalent.com, Srinivas Narayana <srinivas.narayana@rutgers.edu>, 
-	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240329094906.18147-1-ubizjak@gmail.com> <20240329094906.18147-3-ubizjak@gmail.com>
+ <CAADnVQ+6D++hCXaP=aK+Q5wienMzhHo3h9YCvpA_7sHjMt+q6A@mail.gmail.com>
+In-Reply-To: <CAADnVQ+6D++hCXaP=aK+Q5wienMzhHo3h9YCvpA_7sHjMt+q6A@mail.gmail.com>
+From: Uros Bizjak <ubizjak@gmail.com>
+Date: Sat, 30 Mar 2024 10:01:04 +0100
+Message-ID: <CAFULd4b6juiw3wC3Z61V9=-UnA+NGyUt4231vC14UnGAATk6tA@mail.gmail.com>
+Subject: Re: [PATCH RESEND bpf 2/2] x86/bpf: Fix IP for relocating call depth accounting
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: X86 ML <x86@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	=?UTF-8?Q?Joan_Bruguera_Mic=C3=B3?= <joanbrugueram@gmail.com>, 
+	Ingo Molnar <mingo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 29, 2024 at 8:25=E2=80=AFPM Harishankar Vishwanathan
-<harishankar.vishwanathan@gmail.com> wrote:
+On Fri, Mar 29, 2024 at 10:53=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> On Fri, Mar 29, 2024 at 6:27=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.c=
-om> wrote:
+> On Fri, Mar 29, 2024 at 2:49=E2=80=AFAM Uros Bizjak <ubizjak@gmail.com> w=
+rote:
 > >
-> > On Thu, 2024-03-28 at 23:01 -0400, Harishankar Vishwanathan wrote:
+> > From: Joan Bruguera Mic=C3=B3 <joanbrugueram@gmail.com>
 > >
-> > [...]
+> > The recently introduced support for %rip-relative relocations in the
+> > call thunk template assumes that the code is being patched in-place,
+> > so the destination of the relocation matches the address of the code.
+> > This is not true for the call depth accounting emitted by the BPF JIT,
+> > so the calculated address is wrong and usually causes a page fault.
+>
+> Could you share the link to what this 'rip-relative' relocation is ?
+
+Please see the "RIP relative addressing" section in [1].
+
+[1] https://compas.cs.stonybrook.edu/~nhonarmand/courses/sp17/cse506/ref/as=
+sembly.html
+
+In our case:
+
+The callthunks patching creates a call thunk template in the .rodata
+section (please see arch/x86/kernel/callthunks.c)  that is later
+copied to the .text section at the correct place. The template uses
+X86_call_depth in the pcpu_hot structure. Previously, the template
+used absolute location for X86_call_depth and the linker resolved the
+address in the template to this absolute location. There is no issue
+when this template is copied to the various places in the .text
+section.
+
+When we want to use PC relative relocations (to reduce the code size),
+then the linker calculates the address of the variable in the template
+according to the PC in the .rodata section. If we want to copy the
+template to its final location, then the address of X86_call_depth,
+relative to the PC, has to be adjusted, as explained in
+arch/x86/kernel/alternative.c, in the comment above apply_reloc_n
+macro.
+
+Uros.
+
+> > Pass the destination IP when the BPF JIT emits call depth accounting.
 > >
-> > > @@ -13387,18 +13389,19 @@ static void scalar32_min_max_or(struct bpf_=
-reg_state *dst_reg,
-> > >        */
-> > >       dst_reg->u32_min_value =3D max(dst_reg->u32_min_value, umin_val=
+> > Fixes: 17bce3b2ae2d ("x86/callthunks: Handle %rip-relative relocations =
+in call thunk template")
+>
+> Ohh. It's buried inside that patch.
+> Pls make commit log a bit more clear that that commit 17bce3b2ae2d
+> broke x86_call_depth_emit_accounting logic.
+>
+> > Signed-off-by: Joan Bruguera Mic=C3=B3 <joanbrugueram@gmail.com>
+> > Reviewed-by: Uros Bizjak <ubizjak@gmail.com>
+> > Acked-by: Ingo Molnar <mingo@kernel.org>
+> > Cc: Alexei Starovoitov <ast@kernel.org>
+> > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > ---
+> >  arch/x86/include/asm/alternative.h |  4 ++--
+> >  arch/x86/kernel/callthunks.c       |  4 ++--
+> >  arch/x86/net/bpf_jit_comp.c        | 19 ++++++++-----------
+> >  3 files changed, 12 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/=
+alternative.h
+> > index fcd20c6dc7f9..67b68d0d17d1 100644
+> > --- a/arch/x86/include/asm/alternative.h
+> > +++ b/arch/x86/include/asm/alternative.h
+> > @@ -117,7 +117,7 @@ extern void callthunks_patch_builtin_calls(void);
+> >  extern void callthunks_patch_module_calls(struct callthunk_sites *site=
+s,
+> >                                           struct module *mod);
+> >  extern void *callthunks_translate_call_dest(void *dest);
+> > -extern int x86_call_depth_emit_accounting(u8 **pprog, void *func);
+> > +extern int x86_call_depth_emit_accounting(u8 **pprog, void *func, void=
+ *ip);
+> >  #else
+> >  static __always_inline void callthunks_patch_builtin_calls(void) {}
+> >  static __always_inline void
+> > @@ -128,7 +128,7 @@ static __always_inline void *callthunks_translate_c=
+all_dest(void *dest)
+> >         return dest;
+> >  }
+> >  static __always_inline int x86_call_depth_emit_accounting(u8 **pprog,
+> > -                                                         void *func)
+> > +                                                         void *func, v=
+oid *ip)
+> >  {
+> >         return 0;
+> >  }
+> > diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.=
+c
+> > index 30335182b6b0..e92ff0c11db8 100644
+> > --- a/arch/x86/kernel/callthunks.c
+> > +++ b/arch/x86/kernel/callthunks.c
+> > @@ -314,7 +314,7 @@ static bool is_callthunk(void *addr)
+> >         return !bcmp(pad, insn_buff, tmpl_size);
+> >  }
+> >
+> > -int x86_call_depth_emit_accounting(u8 **pprog, void *func)
+> > +int x86_call_depth_emit_accounting(u8 **pprog, void *func, void *ip)
+> >  {
+> >         unsigned int tmpl_size =3D SKL_TMPL_SIZE;
+> >         u8 insn_buff[MAX_PATCH_LEN];
+> > @@ -327,7 +327,7 @@ int x86_call_depth_emit_accounting(u8 **pprog, void=
+ *func)
+> >                 return 0;
+> >
+> >         memcpy(insn_buff, skl_call_thunk_template, tmpl_size);
+> > -       apply_relocation(insn_buff, tmpl_size, *pprog,
+> > +       apply_relocation(insn_buff, tmpl_size, ip,
+>
+> Did the logic inside apply_relocation() change to have
+> a new meaning for 'dest' and 'src'?
+> Answering to myself... yes. in that commit.
+> Better commit log would have made the code review so much easier.
+>
+> >                          skl_call_thunk_template, tmpl_size);
+> >
+> >         memcpy(*pprog, insn_buff, tmpl_size);
+> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> > index 09f7dc9d4d65..f2e8769f5eee 100644
+> > --- a/arch/x86/net/bpf_jit_comp.c
+> > +++ b/arch/x86/net/bpf_jit_comp.c
+> > @@ -481,7 +481,7 @@ static int emit_rsb_call(u8 **pprog, void *func, vo=
+id *ip)
+> >  {
+> >         void *adjusted_ip;
+> >         OPTIMIZER_HIDE_VAR(func);
+> > -       adjusted_ip =3D ip + x86_call_depth_emit_accounting(pprog, func=
 );
-> > >       dst_reg->u32_max_value =3D var32_off.value | var32_off.mask;
-> > > -     if (dst_reg->s32_min_value < 0 || smin_val < 0) {
-> > > +     if (dst_reg->s32_min_value > 0 && smin_val > 0 &&
+> > +       adjusted_ip =3D ip + x86_call_depth_emit_accounting(pprog, func=
+, ip);
+>
+> Now I see why you added extra var in the previous patch.
+> Should have mentioned it in the commit log.
+>
+> >         return emit_patch(pprog, func, adjusted_ip, 0xE8);
+> >  }
 > >
-> > Hello,
+> > @@ -1973,20 +1973,17 @@ st:                     if (is_imm8(insn->off))
 > >
-> > Could you please elaborate a bit, why do you use "> 0" not ">=3D 0" her=
-e?
-> > It seems that having one of the min values as 0 shouldn't be an issue,
-> > but maybe I miss something.
->
-> You are right, this is a mistake, I sent the wrong version of the patch. =
-Thanks
-> for catching it. I will send a new patch.
->
-> Note that in the correct version i'll be sending, instead of the followin=
-g
-> if condition,
->
-> if (dst_reg->s32_min_value >=3D 0 && smin_val >=3D 0 &&
-> (s32)dst_reg->u32_min_value <=3D (s32)dst_reg->u32_max_value)
->
-> it will use this if condition:
->
-> if ((s32)dst_reg->u32_min_value <=3D (s32)dst_reg->u32_max_value)
->
-> Inside the if, the output signed bounds are updated using the unsigned
-> bounds; the only case in which this is unsafe is when the unsigned
-> bounds cross the sign boundary.  The shortened if condition is enough to
-> prevent this. The shortened has the added benefit of being more
-> precise. We will make a note of this in the new commit message.
-
-And that's exactly what reg_bounds_sync() checks as well, which is why
-my question/suggestion to not duplicate this logic, rather reset s32
-bounds to unknown (S32_MIN/S32_MAX), and let generic reg_bounds_sync()
-handle the re-derivation of whatever can be derived.
-
->
-> This applies to all scalar(32)_min_max_and/or/xor.
->
-> > > +             (s32)dst_reg->u32_min_value <=3D (s32)dst_reg->u32_max_=
-value) {
-> > > +             /* ORing two positives gives a positive, so safe to cas=
-t
-> > > +              * u32 result into s32 when u32 doesn't cross sign boun=
-dary.
-> > > +              */
-> > > +             dst_reg->s32_min_value =3D dst_reg->u32_min_value;
-> > > +             dst_reg->s32_max_value =3D dst_reg->u32_max_value;
-> > > +     } else {
-> > >               /* Lose signed bounds when ORing negative numbers,
-> > >                * ain't nobody got time for that.
-> > >                */
-> > >               dst_reg->s32_min_value =3D S32_MIN;
-> > >               dst_reg->s32_max_value =3D S32_MAX;
-> > > -     } else {
-> > > -             /* ORing two positives gives a positive, so safe to
-> > > -              * cast result into s64.
-> > > -              */
-> > > -             dst_reg->s32_min_value =3D dst_reg->u32_min_value;
-> > > -             dst_reg->s32_max_value =3D dst_reg->u32_max_value;
-> > >       }
-> > >  }
+> >                         /* call */
+> >                 case BPF_JMP | BPF_CALL: {
+> > -                       int offs;
+> > +                       u8 *ip =3D image + addrs[i - 1];
 > >
-> > [...]
-> >
-> > > @@ -13453,10 +13457,10 @@ static void scalar32_min_max_xor(struct bpf=
-_reg_state *dst_reg,
-> > >       /* We get both minimum and maximum from the var32_off. */
-> > >       dst_reg->u32_min_value =3D var32_off.value;
-> > >       dst_reg->u32_max_value =3D var32_off.value | var32_off.mask;
-> > > -
-> > > -     if (dst_reg->s32_min_value >=3D 0 && smin_val >=3D 0) {
-> > > -             /* XORing two positive sign numbers gives a positive,
-> > > -              * so safe to cast u32 result into s32.
-> > > +     if (dst_reg->s32_min_value > 0 && smin_val > 0 &&
-> >
-> > Same question here.
-> >
-> > > +             (s32)dst_reg->u32_min_value <=3D (s32)dst_reg->u32_max_=
-value) {
-> > > +             /* XORing two positives gives a positive, so safe to ca=
-st
-> > > +              * u32 result into s32 when u32 doesn't cross sign boun=
-dary.
-> > >                */
-> > >               dst_reg->s32_min_value =3D dst_reg->u32_min_value;
-> > >               dst_reg->s32_max_value =3D dst_reg->u32_max_value;
-> >
-> > [...]
+> >                         func =3D (u8 *) __bpf_call_base + imm32;
+> >                         if (tail_call_reachable) {
+> >                                 RESTORE_TAIL_CALL_CNT(bpf_prog->aux->st=
+ack_depth);
+> > -                               if (!imm32)
+> > -                                       return -EINVAL;
+> > -                               offs =3D 7 + x86_call_depth_emit_accoun=
+ting(&prog, func);
+> > -                       } else {
+> > -                               if (!imm32)
+> > -                                       return -EINVAL;
+> > -                               offs =3D x86_call_depth_emit_accounting=
+(&prog, func);
+> > +                               ip +=3D 7;
+> >                         }
+> > -                       if (emit_call(&prog, func, image + addrs[i - 1]=
+ + offs))
+> > +                       if (!imm32)
+> > +                               return -EINVAL;
+> > +                       ip +=3D x86_call_depth_emit_accounting(&prog, f=
+unc, ip);
+> > +                       if (emit_call(&prog, func, ip))
+> >                                 return -EINVAL;
+> >                         break;
+> >                 }
+> > @@ -2836,7 +2833,7 @@ static int __arch_prepare_bpf_trampoline(struct b=
+pf_tramp_image *im, void *rw_im
+> >                  * Direct-call fentry stub, as such it needs accounting=
+ for the
+> >                  * __fentry__ call.
+> >                  */
+> > -               x86_call_depth_emit_accounting(&prog, NULL);
+> > +               x86_call_depth_emit_accounting(&prog, NULL, image);
+>
+> Overall it all makes sense.
+> Pls respin with more precise commit logs.
