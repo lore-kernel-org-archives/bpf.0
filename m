@@ -1,101 +1,84 @@
 Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DABE0145B37;
-	Sun, 31 Mar 2024 16:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810D914D43C;
+	Sun, 31 Mar 2024 16:27:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=62.96.220.36
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711902324; cv=fail; b=ppQcurWb//Y9DOmUY3GLYxMEqjvRy9RFUW3U2p2Khh/r4BbE/OJtEkdaad0EeN3dgZHL4PMytqfJK+XML4zkgKWGbOeeh0/qVuipIaOO74SJZeDLyLsmRpYSEqWuKWAGIoT2qPkcTJgEnhyDvzpNaUPH8IHb0UbTt75XCQY4Gyk=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711902324; c=relaxed/simple;
-	bh=S6L0aMDSpr9JXtrGomNM3mxeaZv0TjafWVbFhd/0rqQ=;
-	h=From:To:CC:Subject:Date:Message-Id:Content-Type:MIME-Version; b=EkmK0dAWuohVCFzSlLyJGCnG5xHIf5W/ltV2bKTEyPqoPQkctsNcVJbfWJKlEp4ileIpbZW0ASYlrG82emoJEplTwNHbnLXMRKIUt/RSEJgzGpjOo+COIDA+ftC+/mJ9euiQqN8xda67DPtft2+t/8mmWv1ZunoAx89CqVb48zA=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com; spf=fail smtp.mailfrom=microsoft.com; dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b=fYd9G8pK; arc=fail smtp.client-ip=52.101.46.30; dmarc=pass (p=reject dis=none) header.from=microsoft.com; spf=pass smtp.mailfrom=microsoft.com; arc=fail smtp.client-ip=62.96.220.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=microsoft.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b="fYd9G8pK"
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711902491; cv=fail; b=XyC8dpB73/apZtoW/lkKcPKg/qOTYw2ZvMLgGeR/cyDxIvteCa0OoCoSOZWxWuyvIWO0ziJDIxIydSYGUJl5afQ1AjeVOOpfNBeONKKbpKe4P1lXgWWVu7j4gB5yMNZLpqcMQSPv6K172dIaK8UyIvzaxKXgycp4hCSZgvfNuUI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711902491; c=relaxed/simple;
+	bh=lxdlk9jfPzMxUWRkL5fxXBcQWBmKGUTXM5mEyWmp80k=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=huQyBghRjg7ayBAcIBnRDx8vyD4+hgvr8OPPjieTHnN5lsQ8Fib4Ljg/WuOWdXTZcJhXCxKu/pOsjfNKr8jqethNMX2qZVU9kmIw9BnyDXz0LiAtnyiiNzloaVTrLrgGD8eq3H+D2Msf7LuBQl87p76FWDDj0gK6BDLf2Kj4JmU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=fail smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=fail smtp.client-ip=62.96.220.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=huaweicloud.com
 Received: from localhost (localhost [127.0.0.1])
-	by a.mx.secunet.com (Postfix) with ESMTP id 852CB20612;
-	Sun, 31 Mar 2024 18:25:20 +0200 (CEST)
+	by a.mx.secunet.com (Postfix) with ESMTP id 28A1A20185;
+	Sun, 31 Mar 2024 18:27:14 +0200 (CEST)
 X-Virus-Scanned: by secunet
 Received: from a.mx.secunet.com ([127.0.0.1])
 	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O422Qc7HCdBS; Sun, 31 Mar 2024 18:25:20 +0200 (CEST)
-Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
+	with ESMTP id 1J2iHdlZ6JU0; Sun, 31 Mar 2024 18:27:10 +0200 (CEST)
+Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by a.mx.secunet.com (Postfix) with ESMTPS id E0C7F20842;
-	Sun, 31 Mar 2024 18:25:19 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com E0C7F20842
+	by a.mx.secunet.com (Postfix) with ESMTPS id 93591208B8;
+	Sun, 31 Mar 2024 18:27:10 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 93591208B8
 Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-	by mailout1.secunet.com (Postfix) with ESMTP id D2BAF80004E;
-	Sun, 31 Mar 2024 18:25:19 +0200 (CEST)
+	by mailout2.secunet.com (Postfix) with ESMTP id 862D2800051;
+	Sun, 31 Mar 2024 18:27:10 +0200 (CEST)
 Received: from mbx-essen-01.secunet.de (10.53.40.197) by
  cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Sun, 31 Mar 2024 18:25:19 +0200
+ 15.1.2507.35; Sun, 31 Mar 2024 18:27:10 +0200
 Received: from Pickup by mbx-essen-01.secunet.de with Microsoft SMTP Server id
- 15.1.2507.17; Sun, 31 Mar 2024 16:23:32 +0000
-X-sender: <netdev+bounces-83466-peter.schumann=secunet.com@vger.kernel.org>
+ 15.1.2507.17; Sun, 31 Mar 2024 16:24:03 +0000
+X-sender: <netdev+bounces-83574-peter.schumann=secunet.com@vger.kernel.org>
 X-Receiver: <peter.schumann@secunet.com>
  ORCPT=rfc822;peter.schumann@secunet.com NOTIFY=NEVER;
  X-ExtendedProps=BQAVABYAAgAAAAUAFAARAJ05ab4WgQhHsqdZ7WUjHykPADUAAABNaWNyb3NvZnQuRXhjaGFuZ2UuVHJhbnNwb3J0LkRpcmVjdG9yeURhdGEuSXNSZXNvdXJjZQIAAAUAagAJAAEAAAAAAAAABQAWAAIAAAUAQwACAAAFAEYABwADAAAABQBHAAIAAAUAEgAPAGAAAAAvbz1zZWN1bmV0L291PUV4Y2hhbmdlIEFkbWluaXN0cmF0aXZlIEdyb3VwIChGWURJQk9IRjIzU1BETFQpL2NuPVJlY2lwaWVudHMvY249UGV0ZXIgU2NodW1hbm41ZTcFAAsAFwC+AAAAQ5IZ35DtBUiRVnd98bETxENOPURCNCxDTj1EYXRhYmFzZXMsQ049RXhjaGFuZ2UgQWRtaW5pc3RyYXRpdmUgR3JvdXAgKEZZRElCT0hGMjNTUERMVCksQ049QWRtaW5pc3RyYXRpdmUgR3JvdXBzLENOPXNlY3VuZXQsQ049TWljcm9zb2Z0IEV4Y2hhbmdlLENOPVNlcnZpY2VzLENOPUNvbmZpZ3VyYXRpb24sREM9c2VjdW5ldCxEQz1kZQUADgARAC7JU/le071Fhs0mWv1VtVsFAB0ADwAMAAAAbWJ4LWVzc2VuLTAxBQA8AAIAAA8ANgAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5EaXNwbGF5TmFtZQ8ADwAAAFNjaHVtYW5uLCBQZXRlcgUADAACAAAFAGwAAgAABQBYABcASAAAAJ05ab4WgQhHsqdZ7WUjHylDTj1TY2h1bWFubiBQZXRlcixPVT1Vc2VycyxPVT1NaWdyYXRpb24sREM9c2VjdW5ldCxEQz1kZQUAJgACAAEFACIADwAxAAAAQXV0b1Jlc3BvbnNlU3VwcHJlc3M6IDANClRyYW5zbWl0SGlzdG9yeTogRmFsc
 	2UNCg8ALwAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuRXhwYW5zaW9uR3JvdXBUeXBlDwAVAAAATWVtYmVyc0dyb3VwRXhwYW5zaW9uBQAjAAIAAQ==
 X-CreatedBy: MSExchange15
 X-HeloDomain: a.mx.secunet.com
-X-ExtendedProps: BQBjAAoABpLp8x1Q3AgFAGEACAABAAAABQA3AAIAAA8APAAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5Pcmdhbml6YXRpb25TY29wZREAAAAAAAAAAAAAAAAAAAAAAAUASQACAAEFAGIACgCQAAAAi4oAAAUABAAUIAEAAAAaAAAAcGV0ZXIuc2NodW1hbm5Ac2VjdW5ldC5jb20FAAYAAgABBQApAAIAAQ8ACQAAAENJQXVkaXRlZAIAAQUAAgAHAAEAAAAFAAMABwAAAAAABQAFAAIAAQUAZAAPAAMAAABIdWI=
+X-ExtendedProps: BQBjAAoAM8xAQuxQ3AgFAGEACAABAAAABQA3AAIAAA8APAAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5Pcmdhbml6YXRpb25TY29wZREAAAAAAAAAAAAAAAAAAAAAAAUASQACAAEFAGIACgBRAAAAr4oAAAUABAAUIAEAAAAaAAAAcGV0ZXIuc2NodW1hbm5Ac2VjdW5ldC5jb20FAAYAAgABBQApAAIAAQ8ACQAAAENJQXVkaXRlZAIAAQUAAgAHAAEAAAAFAAMABwAAAAAABQAFAAIAAQUAZAAPAAMAAABIdWI=
 X-Source: SMTP:Default MBX-DRESDEN-01
 X-SourceIPAddress: 62.96.220.36
-X-EndOfInjectedXHeaders: 19971
+X-EndOfInjectedXHeaders: 22185
 X-Virus-Scanned: by secunet
-Received-SPF: Pass (sender SPF authorized) identity=mailfrom; client-ip=139.178.88.99; helo=sv.mirrors.kernel.org; envelope-from=netdev+bounces-83466-peter.schumann=secunet.com@vger.kernel.org; receiver=peter.schumann@secunet.com 
-DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com A091720826
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.30
-ARC-Seal: i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711748262; cv=fail; b=iZ9ijgBMrEzSwGtKXfCOIIz5l76jgxQxCztwzrsr2v2tWGePAS8B8YbYCP3O23qo8FYz/wSJE3g7clJOMaUxLNYVpCgfRw3Ao25ru5dRg8i4Yy3B8FeH4TvtxLNPRXNsgutNfae3/nHsP9bly8h7xlhbV2C/ix/HRJLkrVVeIS4=
-ARC-Message-Signature: i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711748262; c=relaxed/simple;
-	bh=S6L0aMDSpr9JXtrGomNM3mxeaZv0TjafWVbFhd/0rqQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=gyMEQbOJCv84m0pdHazmbwakaOv8XxjfD2pmSbQoPswacqg9FURsA6qwZWu0Hf+sqEsyw9Y3OaABpf4DKmofitkdFyagF/fpLKUormXXIbj3daiLdi8HdnRZITCLo1H7Q01Qs0yzYIJqbaUpMwmqsLhj0MOOVHTkMR5biqhYU+k=
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com; spf=pass smtp.mailfrom=microsoft.com; dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b=fYd9G8pK; arc=fail smtp.client-ip=52.101.46.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microsoft.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G+up8M1R6nWQO0DXaYd+wBDKKGB1/bicu40p0/YdAkv5mb6OJWhdTlP17CsBYvU1cTe2Vu1zbbW6YoTYwwd5z7S6kl6IQHUEC0jVb43ZLNW3tj7LDj2raILYWoEZYKLAH9zyXdXnOl7SOSi3sysssQobfkShSKfrG7Ryok6ZfoZRaqFJdOUtSMhassJPjrGCVm+vRhZP1yAdu4Hvy7HqUlMb1DRItidTQpQVxDQySKDKS38WWy7J186NC3WxvAIPzpVARGxDwaEZsEYY22ygnefkgr9AYW2iQBv1uoDT7TkXzNnCi8BQr5901BOXsVzNRVC6Lvxdp964ME/YMDJgTA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MfHPjpSdpb3n5TmADUT51NotEHU/T8x/LYgaeWnszD4=;
- b=aUj3LJd3Ycvr0X8wVDCBA+o8mkkhLHtN9ZiOsnIh5olXttKBTwCbXIRoC0lcxj1hw0EqW+pqkqEN+8c1JJzbZZOEE0/7AAhxsiOgWLO+UHcuX9Js1Vlfqv3C6A8O/8l0hWiUg1iDBDAzao1x2NJAJKy/8u8Jsf2Df1QEtBzIafwlUZdCJyLIUO1dpqnbrtFXnwmCyLPFFjbr5OKs3ElFhkEqsMpxkrzN7LpbuZ+by9Wdx5f8yztSBYsoPwiZo0DODN70WlrBNZpJXqkcFghQWiSDWgY0urDSSaq17d/MtOnED8MC8FEVqXr3SQEDi/13645W+q7K/XJ4hxyxUQKEFA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MfHPjpSdpb3n5TmADUT51NotEHU/T8x/LYgaeWnszD4=;
- b=fYd9G8pK/2EHHOyku2boMZZTEYjJil93H8Okh3VJ+6wmjgw0AN9tZ4ZdDJdGMumeTHFSqQ0bEwApO+U4Sh1kSdhCXJFwpcrEL090BWAyTVunPzM9/Y9HoAXH0hDO86WeTR0EFfigssLcFOoaZUZSVPNtGOVcFLEhnLmCB5bLOAQ=
-From: Haiyang Zhang <haiyangz@microsoft.com>
-To: <linux-hyperv@vger.kernel.org>, <netdev@vger.kernel.org>
-CC: <haiyangz@microsoft.com>, <decui@microsoft.com>,
-	<stephen@networkplumber.org>, <kys@microsoft.com>, <paulros@microsoft.com>,
-	<olaf@aepfle.de>, <vkuznets@redhat.com>, <davem@davemloft.net>,
-	<wei.liu@kernel.org>, <edumazet@google.com>, <kuba@kernel.org>,
-	<pabeni@redhat.com>, <leon@kernel.org>, <longli@microsoft.com>,
-	<ssengar@linux.microsoft.com>, <linux-rdma@vger.kernel.org>,
-	<daniel@iogearbox.net>, <john.fastabend@gmail.com>, <bpf@vger.kernel.org>,
-	<ast@kernel.org>, <sharmaajay@microsoft.com>, <hawk@kernel.org>,
-	<tglx@linutronix.de>, <shradhagupta@linux.microsoft.com>,
-	<linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: [PATCH net] net: mana: Fix Rx DMA datasize and skb_over_panic
-Date: Fri, 29 Mar 2024 14:36:53 -0700
-Message-ID: <1711748213-30517-1-git-send-email-haiyangz@microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR03CA0210.namprd03.prod.outlook.com
- (2603:10b6:303:b8::35) To BY5PR21MB1443.namprd21.prod.outlook.com
- (2603:10b6:a03:21f::18)
+Received-SPF: Pass (sender SPF authorized) identity=mailfrom; client-ip=139.178.88.99; helo=sv.mirrors.kernel.org; envelope-from=netdev+bounces-83574-peter.schumann=secunet.com@vger.kernel.org; receiver=peter.schumann@secunet.com 
+DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 3233C207D8
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+ARC-Seal: i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711876971; cv=none; b=hv2V0jigilROcK8EYto6mRFG8DmuWtzxXZdqHtz9fMG0J+dkwO3J41ISZ+hTRcRxWrMDvtPfqrGiOO2Pa5vS9Hw9hNW0+rcY8I0q3N1C1xYo9KnGofkVAWYNtZ045WxaXdk92DZrHEodFCKU10wDs2vIdFY6zGSn/djqvoiqa+0=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711876971; c=relaxed/simple;
+	bh=NU/seP21mtWkdilB97nH/1Auom8uGHKorbHfj6W3x1U=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=t5VU4JM9HWfq6ydlfdq15M8AHsNevxb1HZ/WRW7e5KCGFbuynlYb35Qx1hbwhN8rTBK/vhMo3wMg6IQKk1cvjnlml0wLsB2fxmf42iOXZsYiZWVGRgHzQLCt/253/+2SOkeNOhmEUNNNocVPFZzGfHby5lZfh2NLhB8+aGYDVJ8=
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: <bpf@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+	<netdev@vger.kernel.org>
+CC: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>, Alexei Starovoitov
+	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+	<andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+	<yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh
+	<kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Palmer Dabbelt
+	<palmer@dabbelt.com>, Pu Lehui <pulehui@huawei.com>, Pu Lehui
+	<pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next 1/2] riscv, bpf: Add 12-argument support for RV64 bpf trampoline
+Date: Sun, 31 Mar 2024 09:24:04 +0000
+Message-ID: <20240331092405.822571-2-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240331092405.822571-1-pulehui@huaweicloud.com>
+References: <20240331092405.822571-1-pulehui@huaweicloud.com>
 Precedence: bulk
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -103,115 +86,737 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Sender: LKML haiyangz <lkmlhyz@microsoft.com>
-X-MS-Exchange-MessageSentRepresentingType: 2
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR21MB1443:EE_|SJ1PR21MB3483:EE_
-X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2Ku/LBwCcqrbaEx6WajYxO2bJE1wRc1/UmkkB1NQjnCLJv/iKgt9h7GpsW+ghqYk02boFss1T8LHLMKhIRzRY/33/YzLMxLUJw3lOXSlJ9U986LDKYqhjGpDgeg2rTNL6GGV7W59dbgTAyGUmtoOhyWIJR87QK5s2Zy5yCCMnFMNPINGcyybxpNMIGU6rtfhrWUD2VhNKIZWC5uM4Hlq0U5hc2daefmZaN4u9+a0xsfB3W4PPXcKimkfQwNelA3wmi33J+yi74mq/oMcjp79R6GECaUFmxYh0W9k/rV5eNaU71QLByO2nwZROkj6u3AOd9c4q5nUJLI1GTHWbCMY6d5lVHFaU9sF5rcOwP3JLUcWuNckouUW/3ibxfUBslG9+w2aANVnFa9PvG3J8kmqEtKqOf6GAEXH6jCT7F88w0KSHA747RtIsP8KSFWLFC2r/6n0vdOGP7UdGiNUpby/OCQAyDD2yCe77C0fnFLhpEJ+yLaCXv3P7/whpDFta9pzX4QrthuFKRTo5zP3CB4IwUhUess9Wk+EUkcMq/Hww/27g++JIPQkyIhCsthN5ikSoMn9XFqXhhW0M57njmQn3ZMN/Bt4UKvs98l968yZoWZ2XXgeOSypq9OfrwVR9o7QZf+/pOA18a9pBJksxOdHI+lK6gJXL2o55PIGmH18Sgo//MXWhHoAN/8yp+PcRFkfOELKdetoyC2P2RkcgIGFUKIDljA8iVtUEx4HikFzEAw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR21MB1443.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(7416005)(1800799015)(52116005)(376005)(38350700005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RRifRCih3C8HkWBa8isOeD8NZLiEjS6Sx0Ha6ACgXSDSbbudtEc4pY7tMBWP?=
- =?us-ascii?Q?AXPuUNiTlJzCDh3KZ0krvkrrmbVW6ubMf7utbQ5GdifXuPwzaj4hHTATytyY?=
- =?us-ascii?Q?wfUElHzsJgdqBlkYD2l5Z9nBQyUKVtcC9/91I9RtMEOnX/Qf7c8lb+tHd+5i?=
- =?us-ascii?Q?sdtDOAQcHI3nZqEo0/ZBCeSI+eKe4bxYqskPqpNt2EOjmoonoq+pw8Y8i5+A?=
- =?us-ascii?Q?z7gyHg+Up6p+nbetWV8Ztyq2J30/blP7zyzrxcFS624iyKQ5jN5GlKV1sJxQ?=
- =?us-ascii?Q?Yv135/UYBX7n87+EGGW/9hS7O+vOpJV2jkbWk0CPAtNi0g/o7J15TePfYppp?=
- =?us-ascii?Q?VghHsNq6ouqc8Z+Wjsyhph4Rxe5H/PDNZzRKOe+i87Wk9T9XL4UGgLz6KJvf?=
- =?us-ascii?Q?yDP5Jts6TF0jnJl0O8Y7c28SCIxJNBtpthTXQnxuruVBwtbpIWQTJjTONR07?=
- =?us-ascii?Q?Q05b/bVl4TrHIsdURrX56B+vn/t6UU+Mvc3wnH3ywN+uPzRqNu1VHlSGft2C?=
- =?us-ascii?Q?7jjoL+twQfrW6QwFSVSBJJZDqjXQHTssVD+SAJsDgkociG/hrhAz5q1V721m?=
- =?us-ascii?Q?5tIaGkClBT62EOcXnNUSrb1UpDgaA8aVbn9VxivjhiHfMO6pylv2aIK+4yMZ?=
- =?us-ascii?Q?+7LCrKz7IzdC/LtUl/s4HJ73wg0TjFXI/8LdMGaMMSDqPESbMCeHTJqTr7bM?=
- =?us-ascii?Q?0iAkVYn1BwdQvdUi1F4fCRIvDSDf/usQR8L1jGm4L8h/zW2rxmn1WtRWZZTN?=
- =?us-ascii?Q?NL6gZEYDamc+Ogd6G+PpEgBGFJ1NOJhIhNUD0L0/WLTO1iMZxoOV8aJodCgr?=
- =?us-ascii?Q?14jFdr2sIl4tetbQxXN/lnEEYKEz+neUSlyVGlOuvVZ+eE/6oPRNbj0aTCr3?=
- =?us-ascii?Q?hRkJWh/eBah/Ye3UpPgRlHgJ0+2CK/8Hcb0j3W2qMneCDNyc1Duzx30r714r?=
- =?us-ascii?Q?hVnwMM92AvBh4zqJRTd0/Sdpyud9536MHJ7NV6+5Qy6MCS7akyLFfIoW3Tth?=
- =?us-ascii?Q?qeBusz54Oh0Yv2jo2BzHfE+w//n5Ck65WwYFqY75UBO90R+UTsSatlE6Yp+z?=
- =?us-ascii?Q?VLQyccetYjE29NvHb5lODYNJ+MZVKy865+aO4VNkL/y/YMUHtSRT5wBztIZb?=
- =?us-ascii?Q?AAkd3ZIQCDQ70+53B+/GcIjZE/rLn3gJKzfHNZusXsjcSZ6BXrBMMXzV5/Xf?=
- =?us-ascii?Q?6iu/ra1IeHLp98NybXOr8osG9W35BVz1zKYVfCVuzP7+L6fi8ezyWZYXJLee?=
- =?us-ascii?Q?gfU602kWOMB3mqlAcsdpN49m/+CYiGXS79DLXkgs89ZlcxGiFN1u1p/c/QkP?=
- =?us-ascii?Q?1CAoQCb1U/Bb9DIJqmn+xjXyhbONwRwbQ/fx3fAFuzQUve1dt2g5+fs2yVP8?=
- =?us-ascii?Q?7egUEO9oLwNY3qQH+zRxTBse2w4maiFr45+/tc5DuL1tu09A0iwksVFzu7ON?=
- =?us-ascii?Q?4VItwdDsp5ScS7EQbwD8G22yOFUS8h3amjS7SWkm4Iax1LGaexrf1EjrKV90?=
- =?us-ascii?Q?ANSX8G2E3wB+LK8/jNpJbFJ+/pcYobj8762g99YqkbdQsGE5LwebyrV7Zt0E?=
- =?us-ascii?Q?90rCt/vq117uE//06IlTzmUNPqJIqchODzyFb7oG?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb4d1d7b-73b5-462e-bfb8-08dc50387312
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR21MB1443.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2024 21:37:36.3715
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /nUR1qXP88MO1DAlmIlbknB4ftO0UuN97J7nsOcGE5t/lRakagsLUVErp3YlCGNIkfx0TlaJKjBWQsFwXnKwMA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR21MB3483
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-CM-TRANSID: gCh0CgCH2WtkKwlmesQWIw--.11467S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3Ar15Jw13Kr1kAF13Cr45ZFb_yoWxJr4Dpa
+	1DKrsxAFyvqa17Xa97WF1UXF1aya1qva43CFW7Gas3uFWYqr98GayFkF4jyry5GryrAw1f
+	AFs0vF98KF17GrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBE14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
+	x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
+	0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+	IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+	Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
+	xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
+	6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2
+	Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
+	Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
+	IF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUSYLPUUUUU
+	=
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-Message-ID: <20240329213653.dCl3SudTAw-wdu6RT04xf6AdGlDayDmY1GPxZ-gxY_k@z>
+Message-ID: <20240331092404.FYMsyghucPdYZtUoFypI_VyWTzhI4rdR_NpkWD4zMhI@z>
 
-mana_get_rxbuf_cfg() aligns the RX buffer's DMA datasize to be
-multiple of 64. So a packet slightly bigger than mtu+14, say 1536,
-can be received and cause skb_over_panic.
+From: Pu Lehui <pulehui@huawei.com>
 
-Sample dmesg:
-[ 5325.237162] skbuff: skb_over_panic: text:ffffffffc043277a len:1536 put:1536 head:ff1100018b517000 data:ff1100018b517100 tail:0x700 end:0x6ea dev:<NULL>
-[ 5325.243689] ------------[ cut here ]------------
-[ 5325.245748] kernel BUG at net/core/skbuff.c:192!
-[ 5325.247838] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-[ 5325.258374] RIP: 0010:skb_panic+0x4f/0x60
-[ 5325.302941] Call Trace:
-[ 5325.304389]  <IRQ>
-[ 5325.315794]  ? skb_panic+0x4f/0x60
-[ 5325.317457]  ? asm_exc_invalid_op+0x1f/0x30
-[ 5325.319490]  ? skb_panic+0x4f/0x60
-[ 5325.321161]  skb_put+0x4e/0x50
-[ 5325.322670]  mana_poll+0x6fa/0xb50 [mana]
-[ 5325.324578]  __napi_poll+0x33/0x1e0
-[ 5325.326328]  net_rx_action+0x12e/0x280
+This patch adds 12 function arguments support for riscv64 bpf
+trampoline. The current bpf trampoline supports <=3D sizeof(u64) bytes
+scalar arguments [0] and <=3D 16 bytes struct arguments [1]. Therefore, we
+focus on the situation where scalars are at most XLEN bits and
+aggregates whose total size does not exceed 2=C3=97XLEN bits in the riscv
+calling convention [2].
 
-As discussed internally, this alignment is not necessary. To fix
-this bug, remove it from the code. So oversized packets will be
-marked as CQE_RX_TRUNCATED by NIC, and dropped.
-
-Cc: stable@vger.kernel.org
-Fixes: ca9c54d2d6a5 ("net: mana: Add a driver for Microsoft Azure Network Adapter (MANA)")
-Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
+Link: https://elixir.bootlin.com/linux/v6.8/source/kernel/bpf/btf.c#L6184 [=
+0]
+Link: https://elixir.bootlin.com/linux/v6.8/source/kernel/bpf/btf.c#L6769 [=
+1]
+Link: https://github.com/riscv-non-isa/riscv-elf-psabi-doc/releases/downloa=
+d/draft-20230929-e5c800e661a53efe3c2678d71a306323b60eb13b/riscv-abi.pdf [2]
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
- drivers/net/ethernet/microsoft/mana/mana_en.c | 2 +-
- include/net/mana/mana.h                       | 1 -
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ arch/riscv/net/bpf_jit_comp64.c | 63 +++++++++++++++++++++++----------
+ 1 file changed, 44 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
-index 59287c6e6cee..d8af5e7e15b4 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-@@ -601,7 +601,7 @@ static void mana_get_rxbuf_cfg(int mtu, u32 *datasize, u32 *alloc_size,
- 
- 	*alloc_size = mtu + MANA_RXBUF_PAD + *headroom;
- 
--	*datasize = ALIGN(mtu + ETH_HLEN, MANA_RX_DATA_ALIGN);
-+	*datasize = mtu + ETH_HLEN;
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp6=
+4.c
+index 77ea306452d4..2aec69e4c116 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -14,6 +14,7 @@
+ #include <asm/cfi.h>
+ #include "bpf_jit.h"
+=20
++#define RV_MAX_ARG_REGS 8
+ #define RV_FENTRY_NINSNS 2
+=20
+ #define RV_REG_TCC RV_REG_A6
+@@ -688,26 +689,43 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_t=
+ype poke_type,
+ 	return ret;
  }
- 
- static int mana_pre_alloc_rxbufs(struct mana_port_context *mpc, int new_mtu)
-diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
-index 76147feb0d10..4eeedf14711b 100644
---- a/include/net/mana/mana.h
-+++ b/include/net/mana/mana.h
-@@ -39,7 +39,6 @@ enum TRI_STATE {
- #define COMP_ENTRY_SIZE 64
- 
- #define RX_BUFFERS_PER_QUEUE 512
--#define MANA_RX_DATA_ALIGN 64
- 
- #define MAX_SEND_BUFFERS_PER_QUEUE 256
- 
--- 
+=20
+-static void store_args(int nregs, int args_off, struct rv_jit_context *ctx=
+)
++static void store_args(int nr_arg_slots, int args_off, struct rv_jit_conte=
+xt *ctx)
+ {
+ 	int i;
+=20
+-	for (i =3D 0; i < nregs; i++) {
+-		emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
++	for (i =3D 0; i < nr_arg_slots; i++) {
++		if (i < RV_MAX_ARG_REGS) {
++			emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
++		} else {
++			emit_ld(RV_REG_T1, 16 + (i - RV_MAX_ARG_REGS) * 8, RV_REG_FP, ctx);
++			emit_sd(RV_REG_FP, -args_off, RV_REG_T1, ctx);
++		}
+ 		args_off -=3D 8;
+ 	}
+ }
+=20
+-static void restore_args(int nregs, int args_off, struct rv_jit_context *c=
+tx)
++static void restore_args(int nr_args_reg, int args_off, struct rv_jit_cont=
+ext *ctx)
+ {
+ 	int i;
+=20
+-	for (i =3D 0; i < nregs; i++) {
++	for (i =3D 0; i < nr_args_reg; i++) {
+ 		emit_ld(RV_REG_A0 + i, -args_off, RV_REG_FP, ctx);
+ 		args_off -=3D 8;
+ 	}
+ }
+=20
++static void restore_stack_args(int nr_args_stack, int args_off, int stk_ar=
+g_off, struct rv_jit_context *ctx)
++{
++	int i;
++
++	for (i =3D 0; i < nr_args_stack; i++) {
++		emit_ld(RV_REG_T1, -(args_off - RV_MAX_ARG_REGS * 8), RV_REG_FP, ctx);
++		emit_sd(RV_REG_FP, -stk_arg_off, RV_REG_T1, ctx);
++		args_off -=3D 8;
++		stk_arg_off -=3D 8;
++	}
++}
++
+ static int invoke_bpf_prog(struct bpf_tramp_link *l, int args_off, int ret=
+val_off,
+ 			   int run_ctx_off, bool save_ret, struct rv_jit_context *ctx)
+ {
+@@ -780,8 +798,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tra=
+mp_image *im,
+ {
+ 	int i, ret, offset;
+ 	int *branches_off =3D NULL;
+-	int stack_size =3D 0, nregs =3D m->nr_args;
+-	int retval_off, args_off, nregs_off, ip_off, run_ctx_off, sreg_off;
++	int stack_size =3D 0, nr_arg_slots =3D 0;
++	int retval_off, args_off, nregs_off, ip_off, run_ctx_off, sreg_off, stk_a=
+rg_off;
+ 	struct bpf_tramp_links *fentry =3D &tlinks[BPF_TRAMP_FENTRY];
+ 	struct bpf_tramp_links *fexit =3D &tlinks[BPF_TRAMP_FEXIT];
+ 	struct bpf_tramp_links *fmod_ret =3D &tlinks[BPF_TRAMP_MODIFY_RETURN];
+@@ -827,20 +845,21 @@ static int __arch_prepare_bpf_trampoline(struct bpf_t=
+ramp_image *im,
+ 	 * FP - sreg_off    [ callee saved reg	]
+ 	 *
+ 	 *		    [ pads              ] pads for 16 bytes alignment
++	 *
++	 *		    [ stack_argN        ]
++	 *		    [ ...               ]
++	 * FP - stk_arg_off [ stack_arg1        ] BPF_TRAMP_F_CALL_ORIG
+ 	 */
+=20
+ 	if (flags & (BPF_TRAMP_F_ORIG_STACK | BPF_TRAMP_F_SHARE_IPMODIFY))
+ 		return -ENOTSUPP;
+=20
+-	/* extra regiters for struct arguments */
+-	for (i =3D 0; i < m->nr_args; i++)
+-		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
+-			nregs +=3D round_up(m->arg_size[i], 8) / 8 - 1;
+-
+-	/* 8 arguments passed by registers */
+-	if (nregs > 8)
++	if (m->nr_args > MAX_BPF_FUNC_ARGS)
+ 		return -ENOTSUPP;
+=20
++	for (i =3D 0; i < m->nr_args; i++)
++		nr_arg_slots +=3D round_up(m->arg_size[i], 8) / 8;
++
+ 	/* room of trampoline frame to store return address and frame pointer */
+ 	stack_size +=3D 16;
+=20
+@@ -850,7 +869,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tra=
+mp_image *im,
+ 		retval_off =3D stack_size;
+ 	}
+=20
+-	stack_size +=3D nregs * 8;
++	stack_size +=3D nr_arg_slots * 8;
+ 	args_off =3D stack_size;
+=20
+ 	stack_size +=3D 8;
+@@ -867,8 +886,13 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tr=
+amp_image *im,
+ 	stack_size +=3D 8;
+ 	sreg_off =3D stack_size;
+=20
++	if (nr_arg_slots - RV_MAX_ARG_REGS > 0)
++		stack_size +=3D (nr_arg_slots - RV_MAX_ARG_REGS) * 8;
++
+ 	stack_size =3D round_up(stack_size, 16);
+=20
++	stk_arg_off =3D stack_size;
++
+ 	if (!is_struct_ops) {
+ 		/* For the trampoline called from function entry,
+ 		 * the frame of traced function and the frame of
+@@ -904,10 +928,10 @@ static int __arch_prepare_bpf_trampoline(struct bpf_t=
+ramp_image *im,
+ 		emit_sd(RV_REG_FP, -ip_off, RV_REG_T1, ctx);
+ 	}
+=20
+-	emit_li(RV_REG_T1, nregs, ctx);
++	emit_li(RV_REG_T1, nr_arg_slots, ctx);
+ 	emit_sd(RV_REG_FP, -nregs_off, RV_REG_T1, ctx);
+=20
+-	store_args(nregs, args_off, ctx);
++	store_args(nr_arg_slots, args_off, ctx);
+=20
+ 	/* skip to actual body of traced function */
+ 	if (flags & BPF_TRAMP_F_SKIP_FRAME)
+@@ -947,7 +971,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tra=
+mp_image *im,
+ 	}
+=20
+ 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+-		restore_args(nregs, args_off, ctx);
++		restore_args(min_t(int, nr_arg_slots, RV_MAX_ARG_REGS), args_off, ctx);
++		restore_stack_args(nr_arg_slots - RV_MAX_ARG_REGS, args_off, stk_arg_off=
+, ctx);
+ 		ret =3D emit_call((const u64)orig_call, true, ctx);
+ 		if (ret)
+ 			goto out;
+@@ -982,7 +1007,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tr=
+amp_image *im,
+ 	}
+=20
+ 	if (flags & BPF_TRAMP_F_RESTORE_REGS)
+-		restore_args(nregs, args_off, ctx);
++		restore_args(min_t(int, nr_arg_slots, RV_MAX_ARG_REGS), args_off, ctx);
+=20
+ 	if (save_ret) {
+ 		emit_ld(RV_REG_A0, -retval_off, RV_REG_FP, ctx);
+--=20
+2.34.1
+
+
+X-sender: <netdev+bounces-83574-steffen.klassert=3Dsecunet.com@vger.kernel.=
+org>
+X-Receiver: <steffen.klassert@secunet.com> ORCPT=3Drfc822;steffen.klassert@=
+secunet.com NOTIFY=3DNEVER; X-ExtendedProps=3DBQAVABYAAgAAAAUAFAARAPDFCS25B=
+AlDktII2g02frgPADUAAABNaWNyb3NvZnQuRXhjaGFuZ2UuVHJhbnNwb3J0LkRpcmVjdG9yeURh=
+dGEuSXNSZXNvdXJjZQIAAAUAagAJAAEAAAAAAAAABQAWAAIAAAUAQwACAAAFAEYABwADAAAABQB=
+HAAIAAAUAEgAPAGIAAAAvbz1zZWN1bmV0L291PUV4Y2hhbmdlIEFkbWluaXN0cmF0aXZlIEdyb3=
+VwIChGWURJQk9IRjIzU1BETFQpL2NuPVJlY2lwaWVudHMvY249U3RlZmZlbiBLbGFzc2VydDY4Y=
+wUACwAXAL4AAACheZxkHSGBRqAcAp3ukbifQ049REI2LENOPURhdGFiYXNlcyxDTj1FeGNoYW5n=
+ZSBBZG1pbmlzdHJhdGl2ZSBHcm91cCAoRllESUJPSEYyM1NQRExUKSxDTj1BZG1pbmlzdHJhdGl=
+2ZSBHcm91cHMsQ049c2VjdW5ldCxDTj1NaWNyb3NvZnQgRXhjaGFuZ2UsQ049U2VydmljZXMsQ0=
+49Q29uZmlndXJhdGlvbixEQz1zZWN1bmV0LERDPWRlBQAOABEABiAS9uuMOkqzwmEZDvWNNQUAH=
+QAPAAwAAABtYngtZXNzZW4tMDIFADwAAgAADwA2AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5z=
+cG9ydC5NYWlsUmVjaXBpZW50LkRpc3BsYXlOYW1lDwARAAAAS2xhc3NlcnQsIFN0ZWZmZW4FAAw=
+AAgAABQBsAAIAAAUAWAAXAEoAAADwxQktuQQJQ5LSCNoNNn64Q049S2xhc3NlcnQgU3RlZmZlbi=
+xPVT1Vc2VycyxPVT1NaWdyYXRpb24sREM9c2VjdW5ldCxEQz1kZQUAJgACAAEFACIADwAxAAAAQ=
+XV0b1Jlc3BvbnNlU3VwcHJlc3M6IDANClRyYW5zbWl0SGlzdG9yeTogRmFsc2UNCg8ALwAAAE1p=
+Y3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuRXhwYW5zaW9uR3JvdXBUeXBlDwAVAAAATWVtYmV=
+yc0dyb3VwRXhwYW5zaW9uBQAjAAIAAQ=3D=3D
+X-CreatedBy: MSExchange15
+X-HeloDomain: a.mx.secunet.com
+X-ExtendedProps: BQBjAAoAM8xAQuxQ3AgFAGEACAABAAAABQA3AAIAAA8APAAAAE1pY3Jvc2=
+9mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5Pcmdhbml6YXRpb25TY29wZREAA=
+AAAAAAAAAAAAAAAAAAAAAUASQACAAEFAGIACgBSAAAAr4oAAAUABAAUIAEAAAAcAAAAc3RlZmZl=
+bi5rbGFzc2VydEBzZWN1bmV0LmNvbQUABgACAAEFACkAAgABDwAJAAAAQ0lBdWRpdGVkAgABBQA=
+CAAcAAQAAAAUAAwAHAAAAAAAFAAUAAgABBQBkAA8AAwAAAEh1Yg=3D=3D
+X-Source: SMTP:Default MBX-DRESDEN-01
+X-SourceIPAddress: 62.96.220.36
+X-EndOfInjectedXHeaders: 22207
+Received: from cas-essen-02.secunet.de (10.53.40.202) by
+ mbx-dresden-01.secunet.de (10.53.40.199) with Microsoft SMTP Server
+ (version=3DTLS1_2, cipher=3DTLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.37; Sun, 31 Mar 2024 11:23:15 +0200
+Received: from a.mx.secunet.com (62.96.220.36) by cas-essen-02.secunet.de
+ (10.53.40.202) with Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37 via Fronte=
+nd
+ Transport; Sun, 31 Mar 2024 11:23:15 +0200
+Received: from localhost (localhost [127.0.0.1])
+	by a.mx.secunet.com (Postfix) with ESMTP id E0867207D8
+	for <steffen.klassert@secunet.com>; Sun, 31 Mar 2024 11:23:15 +0200 (CEST)
+X-Virus-Scanned: by secunet
+X-Spam-Flag: NO
+X-Spam-Score: -4.951
+X-Spam-Level:
+X-Spam-Status: No, score=3D-4.951 tagged_above=3D-999 required=3D2.1
+	tests=3D[BAYES_00=3D-1.9, HEADER_FROM_DIFFERENT_DOMAINS=3D0.249,
+	MAILING_LIST_MULTI=3D-1, RCVD_IN_DNSWL_MED=3D-2.3, SPF_HELO_NONE=3D0.001,
+	SPF_PASS=3D-0.001] autolearn=3Dunavailable autolearn_force=3Dno
+Received: from a.mx.secunet.com ([127.0.0.1])
+	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FgcpQXHOp7KE for <steffen.klassert@secunet.com>;
+	Sun, 31 Mar 2024 11:23:12 +0200 (CEST)
+Received-SPF: Pass (sender SPF authorized) identity=3Dmailfrom; client-ip=
+=3D139.178.88.99; helo=3Dsv.mirrors.kernel.org; envelope-from=3Dnetdev+boun=
+ces-83574-steffen.klassert=3Dsecunet.com@vger.kernel.org; receiver=3Dsteffe=
+n.klassert@secunet.com=20
+DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 48F6220892
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99]=
+)
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by a.mx.secunet.com (Postfix) with ESMTPS id 48F6220892
+	for <steffen.klassert@secunet.com>; Sun, 31 Mar 2024 11:23:12 +0200 (CEST)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.2=
+5.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D836A2828E6
+	for <steffen.klassert@secunet.com>; Sun, 31 Mar 2024 09:23:10 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B78147764E;
+	Sun, 31 Mar 2024 09:22:51 +0000 (UTC)
+X-Original-To: netdev@vger.kernel.org
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2228B6E5E8;
+	Sun, 31 Mar 2024 09:22:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=3Dnone smtp.client-ip=
+=3D45.249.212.51
+ARC-Seal: i=3D1; a=3Drsa-sha256; d=3Dsubspace.kernel.org; s=3Darc-20240116;
+	t=3D1711876971; cv=3Dnone; b=3Dhv2V0jigilROcK8EYto6mRFG8DmuWtzxXZdqHtz9fMG=
+0J+dkwO3J41ISZ+hTRcRxWrMDvtPfqrGiOO2Pa5vS9Hw9hNW0+rcY8I0q3N1C1xYo9KnGofkVAW=
+YNtZ045WxaXdk92DZrHEodFCKU10wDs2vIdFY6zGSn/djqvoiqa+0=3D
+ARC-Message-Signature: i=3D1; a=3Drsa-sha256; d=3Dsubspace.kernel.org;
+	s=3Darc-20240116; t=3D1711876971; c=3Drelaxed/simple;
+	bh=3DNU/seP21mtWkdilB97nH/1Auom8uGHKorbHfj6W3x1U=3D;
+	h=3DFrom:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=3Dt5VU4JM9HWfq6ydlfdq15M8AHsNevxb1HZ/WRW7e5K=
+CGFbuynlYb35Qx1hbwhN8rTBK/vhMo3wMg6IQKk1cvjnlml0wLsB2fxmf42iOXZsYiZWVGRgHzQ=
+LCt/253/+2SOkeNOhmEUNNNocVPFZzGfHby5lZfh2NLhB8+aGYDVJ8=3D
+ARC-Authentication-Results: i=3D1; smtp.subspace.kernel.org; dmarc=3Dnone (=
+p=3Dnone dis=3Dnone) header.from=3Dhuaweicloud.com; spf=3Dpass smtp.mailfro=
+m=3Dhuaweicloud.com; arc=3Dnone smtp.client-ip=3D45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=3Dnone (p=3Dnone di=
+s=3Dnone) header.from=3Dhuaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=3Dpass smtp.mailfrom=
+=3Dhuaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V6pZh3SXWz4f3lgR;
+	Sun, 31 Mar 2024 17:22:36 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id B51391A0DDA;
+	Sun, 31 Mar 2024 17:22:44 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP4 (Coremail) with SMTP id gCh0CgCH2WtkKwlmesQWIw--.11467S3;
+	Sun, 31 Mar 2024 17:22:44 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: <bpf@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+	<netdev@vger.kernel.org>
+CC: =3D?UTF-8?q?Bj=3DC3=3DB6rn=3D20T=3DC3=3DB6pel?=3D <bjorn@kernel.org>, A=
+lexei Starovoitov
+	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+	<andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
+ Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+	<yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh
+	<kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Palmer Dabbelt
+	<palmer@dabbelt.com>, Pu Lehui <pulehui@huawei.com>, Pu Lehui
+	<pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next 1/2] riscv, bpf: Add 12-argument support for RV64 =
+bpf trampoline
+Date: Sun, 31 Mar 2024 09:24:04 +0000
+Message-ID: <20240331092405.822571-2-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240331092405.822571-1-pulehui@huaweicloud.com>
+References: <20240331092405.822571-1-pulehui@huaweicloud.com>
+Precedence: bulk
+X-Mailing-List: netdev@vger.kernel.org
+List-Id: <netdev.vger.kernel.org>
+List-Subscribe: <mailto:netdev+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:netdev+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=3D"UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCH2WtkKwlmesQWIw--.11467S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3Ar15Jw13Kr1kAF13Cr45ZFb_yoWxJr4Dpa
+	1DKrsxAFyvqa17Xa97WF1UXF1aya1qva43CFW7Gas3uFWYqr98GayFkF4jyry5GryrAw1f
+	AFs0vF98KF17GrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBE14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
+	x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
+	0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+	IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+	Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
+	xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
+	6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2
+	Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
+	Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
+	IF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUSYLPUUUUU
+	=3D
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+Return-Path: netdev+bounces-83574-steffen.klassert=3Dsecunet.com@vger.kerne=
+l.org
+X-MS-Exchange-Organization-OriginalArrivalTime: 31 Mar 2024 09:23:15.9421
+ (UTC)
+X-MS-Exchange-Organization-Network-Message-Id: d051c5e4-93c2-4f22-1379-08dc=
+51643222
+X-MS-Exchange-Organization-OriginalClientIPAddress: 62.96.220.36
+X-MS-Exchange-Organization-OriginalServerIPAddress: 10.53.40.202
+X-MS-Exchange-Organization-Cross-Premises-Headers-Processed: cas-essen-02.s=
+ecunet.de
+X-MS-Exchange-Organization-OrderedPrecisionLatencyInProgress: LSRV=3Dmbx-dr=
+esden-01.secunet.de:TOTAL-HUB=3D0.409|SMR=3D0.346(SMRDE=3D0.036|SMRC=3D0.30=
+9(SMRCL=3D0.103|X-SMRCR=3D0.309))|CAT=3D0.062(CATOS=3D0.016
+ (CATSM=3D0.016(CATSM-Malware
+ Agent=3D0.015))|CATRESL=3D0.020(CATRESLP2R=3D0.001)|CATORES=3D0.023
+ (CATRS=3D0.023(CATRS-Index Routing Agent=3D0.022)));2024-03-31T09:23:16.39=
+2Z
+X-MS-Exchange-Forest-ArrivalHubServer: mbx-dresden-01.secunet.de
+X-MS-Exchange-Organization-AuthSource: cas-essen-02.secunet.de
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-Exchange-Organization-FromEntityHeader: Internet
+X-MS-Exchange-Organization-OriginalSize: 13819
+X-MS-Exchange-Organization-HygienePolicy: Standard
+X-MS-Exchange-Organization-MessageLatency: SRV=3Dcas-essen-02.secunet.de:TO=
+TAL-FE=3D0.040|SMR=3D0.023(SMRPI=3D0.021(SMRPI-FrontendProxyAgent=3D0.021))=
+|SMS=3D0.017
+X-MS-Exchange-Organization-AVStamp-Enterprise: 1.0
+X-MS-Exchange-Organization-Recipient-Limit-Verified: True
+X-MS-Exchange-Organization-TotalRecipientCount: 1
+X-MS-Exchange-Organization-Rules-Execution-History: 0b0cf904-14ac-4724-8bdf=
+-482ee6223cf2%%%fd34672d-751c-45ae-a963-ed177fcabe23%%%d8080257-b0c3-47b4-b=
+0db-23bc0c8ddb3c%%%95e591a2-5d7d-4afa-b1d0-7573d6c0a5d9%%%f7d0f6bc-4dcc-487=
+6-8c5d-b3d6ddbb3d55%%%16355082-c50b-4214-9c7d-d39575f9f79b
+X-MS-Exchange-Forest-RulesExecuted: mbx-dresden-01
+X-MS-Exchange-Organization-RulesExecuted: mbx-dresden-01
+X-MS-Exchange-Forest-IndexAgent-0: AQ0CZW4AAa4MAAAPAAADH4sIAAAAAAAEAM1Ze1Mb=
+yRGf1VsCgU3Z5t
+ 4Z31VdAL2FLInzo8wRuLgOYwpw6q5clGq1GomNJa1qd4VxEn+D/J9P
+ kk+QL5bumX3MrlYWnLlUtiiY7enpx697enqWf7cOTGP0Az2e0kN2Md
+ Xpk8l0iIPnF1P1HdPLmjF6ls/lc2cXukUnqq1dULXXs2itTvvTsWbr
+ xpiq5mA6YmPbotZ0MjFMm/YNk5q6pV02G7Q76edztqmOJsZQH7MyPb
+ tgVJuaJqzASerPuest+uQptfS/MaO/MW02Nmn3vc2sfM7S1KFqSvre
+ VM+pOu4he60puKhlm1PNlplq51ypycAsVqTvWD7XN7SpRcF2G4yxdH
+ uqck/eIRcVaiwQwahq05Fh2fSXw/0j2tVBHOjL59TBwGQDFfW9uzAs
+ Rm3DVofcZtozgDo2bMquNMZ6tP6ff/mrdaGSg5PPgSLwe0A1Y3wJtq
+ IJb+rnZQT8UB+//YFe2PbE+qFSYUP9SjfLXcOwYQFGpQJ/p1eVy2a5
+ XbGMqamxyltmjtmwAphWuna/rH132Ky1GwjSbYlrNXcQzrC4gW5fTL
+ tcDHesNDbGJd1SnTc27JcmltrVSz1Dq5hsyFSLWZWe8W48NNRepWeq
+ fbtUr9a3qzv1nRJ7pLWrVdZs1tRH26zPtrV6s9XutWrqdrW5Xd/uNq
+ usW9vuOtJBbnnS6yNw+dypPhizXsno90vd9wvTulQq5XMQZu1CyKqM
+ mY3+dv6q2x1gmTQbZY3+gza3aSH6KXkPCKrRvj6E3L5QxwPWK9JGA8
+ JtMRPjam0UNou0tkN74L4glDYxzj2936elEkBI1coiU7qLOPI5fdxj
+ V7TVYohW41G91yiX6yrTmjusodVgl9SqQG9w5xdrzOfAyeuoff6clm
+ qNYpMW4HeLPn8OeHynj7XhtMfoE9UaVbS+Xr54JpO/dcSUL75FJArf
+ 9Vgfq8DJXzovd3/p7J781DnZ/+mUtnGRP3ewf3R28mvn6MXR6dEpre
+ NSeRqWdM729tzhblMY12y3i3Uwr9neKTa2wUCIDa8/HfStY7MruzMx
+ 3rKNS0Pv0S19UqRsPB1xDm+yY7+fMOqNiqDZeUxmT80x/nkMxA9oVM
+ myoapolAu0bKg9oGpgbaDeMVQPq8hNQFoHErboVi7z0sF2jHrplmZf
+ QaYUPioNxx1raNg3E0r/7nuAy/TH3HCHglV8Q6dPafUxhS0kjIZhob
+ CJC10292EjUGD1NhzgD46LtOTb4YajSgtUL1LUD8oKc1X5HvkaCyGN
+ eh8XPQknTCTvbVjpPh8oG0LNX6Rl6Gk5qxXxgCqguaVZc7do21ONBs
+ 1ReyMXUOU88/2gu4+7nJae0vZjf/5DZDKb7HbTOUIeH3dA7P8unz+e
+ i9wYn3lBwN0Emo2LFN8bByESNKBpb2eh4+QwePhm2Zz7OjGSQHHRLC
+ zGiWuev2kjtkZpw3d9pvrD5ti8zu6I2hUBXxdvjHAAwvOSuDALxKfw
+ gcNDnSBxxMaXeFbgGTIxjcGGAzc/U7Dr7UDX9ZZuDaPiBEfJpTrk77
+ OpIj2cdzrugE9iMXR10Imqlwwy1r7GhsHTsdWuFtu00Nppwx8gSD50
+ xAE5MdkEGuKOZzvv2Gc90kfqgMH5OSpGbMci5SaBmZY4KKXJra6pjr
+ ULJiLwlB69Pjx87G9ekbqY6rzJhqwrig0Mw1HpmZN8oQUShhK6fJkD
+ 9ET8DQBowTyOHgfTf1a7f0bxXRBk/zTdRTnZJKQiM8iiW324PpjvwY
+ zvbU558+PxQefsZPflsdMvnV9LyBW0odEyfnlxdi0RI6OHeRcp5eWr
+ P704+BV24dnrkyOUhqnXrreKdSiX7cajYr12i8nnPlv04Bjqiosskt
+ 5QvHkxxrcJltIBpefyksDymecN3IThDhx4zgUNi6J3FVWHcB3BS6hU
+ SrbkcZRor54feaIXLSmXyyFacInwXypekpaa74AU7s7e7uFh59XJi5
+ 9kJCq813YebL76QxU24Pd0Q16KqzqnZ7t7P8PVSZ44/fPuyX7nxbFI
+ g83N2bLmdNGl/aNXZ6evj48Dx3dlC27UEGcMl24zU4A9c91HK+ed+F
+ Kh4OfTbBOLXgEXAsWde6Ofg38/nh10DsDs/UNw7OT13hkeTxGr3UcU
+ psJTahrTca8znbgysXqAyCKcabRC2xCWGpasgJNtyZmJalmQoN333G
+ mLey07iOYKZc9ApFSAhBuOszCJRyrG4uD10R4af3pd9Oed9rNQhk/L
+ QH1cjIVoLtzFgINpGCM4KuTvQ30Y4rcWcQFyDVZ7PWiG+JcZh2NiQP
+ FgJofKlSiV7wJ+LuLe8QL0qAo31kK7ucMvrrddfnxwneMAMPRtCbZ5
+ fmCD1ooQbwU6jjCHBPZWoH30upqQ3nnQtN3C3GxhT9BuN4u17dsHZl
+ apN+NW6hmD5fQOeDzbNj6j1YicDCpdIGPTRTzSaCmhfSpe8zYDpspl
+ N+RPIVhMH+rYOyNyHWNiRd4yYFccwD7EL4jSruBnGaY+7BfvoyzvB6
+ I6xy2+XOwTsbs0XOx9zIVNJDOIXNipNoo1OKR36m38+7vtkqgm3u2T
+ Zvv3yJ0j7he6fL9wrqehrj+SUf6QEtISZZvUzs2aJ+9m73rr2OJ3hC
+ GrAqyyNTMrAsXSeqtPsDCqmj1Vh3AH6L2Piq5cEOUDPHBM//wC/sDL
+ /qYT/EYLC+ROq3arlwM5eIts8tqRyC9Pge8HiwCOXDTSxx0b78/hHA
+ iXhBsIli7mH68zxcDnDenGOuc7gWiveTri1t/YgEudZVP8T4lh6gNO
+ LELop2yuCMQZxEQ0Ae4zMCCbjKntHAY77TrmQK1abf0ep+S1kuBk//
+ TsFXSQPBD/b1kQNN+9fl/vWxEUEvm2OPutA/+9UC9vN8o1VJTPEZIg
+ qRiJJ0k6rZA1kkmRdJxkEiSZJKmEkowRArMZks2SXJpk4iTBfydzZN
+ kdJ3JkKUOW+UJYlYZBVllSCFFIPK6khQSQJtETWbIUI4kkVx3H1xyM
+ hTSggHbxwxUtwRQa41ASKSXNhcQERUhA+0kmpyzzqTQ4lVTIHndHiB
+ W6YFWKWwgU+IHXpCMt8ZuX/FNxUMMFgkkMxG/ADn5gDL83yKbDoySF
+ iJRC8nxtjHseDMOyCAPnJytcMtAVJYGYKn/0UEgrWYFyTlkVgyy5k+
+ BiBUOEEBAwdwqjtUxWlpV8ipAUWZ7PmZ47pQAFwEugkUrMH5NMmmRd
+ KFM4BinOK3oNZq3yiMJPwkEpKeh3SBwj4aCfFsScywzjLB/HFAg/cX
+ JXiftj18g1jFzS/YEY42uYjtJgsMoDATik0U1UlxJZmOTwotE8TYUx
+ K9wA7mB6dgkwLLvJ+tG1axyNFZhSHNDAOlylkM8SCBcmve8vt1aIko
+ m4/chqSIhsA0iLoaJEAHPy8IYqPk8QGrFEZClJheUrGWGMJAfof7i2
+ UmDecuhOJjwQUKfRtcyNoiMvAYYlXnri/PU3RefOLNqezHmxUyRdQT
+ fX57kJ9SEpJVWeqwi5LFJ9iWM+34uI9PCkzTE45apIBcPq1MRZF2Zd
+ lg37qMv3fE6Hsi4qbQpVc3+5a6LycExSPCcDOKRwDwLzwxAmCSnBwv
+ goeVE3RPnyx466xNei8Lrnn7BhldsA0MXIXQ5vnEuGcTKDmQawg4Wr
+ mJ+iLDhOQb3NiB2RRvBXJZt9C5MIVEogluKSA744bCuzwv0t72y95U
+ +QLxNXQl6nSE5Q7nBKiqyFGJIkG6TcDTG4WtKCvu7IgZqfn1fSrxeO
+ O1IxQRv4gVVPkHu88ie8HiVLHrkV+2UwUVMufQWI97lktwX5mrcyeJ
+ A9kOgQU6B84VJ4A/BVimQy5DPRDIiDMksehPaglAmw8EFMJBJGR4hK
+ CgPcpuQbUJ1E10SzgpwZvi8cmU4Oi/Ga6BmyPFK8T0D5XmLEAtoRw7
+ vOoQBurnPj7y+w1j9frmEVWRMNnGjyvDbRa7/S5J6bzBke+tyn7cr7
+ btp70fzKHWQ8EDzK7MbxSp/Lc9czj5uUnjXvJlmaD0iLUhcLnOCZqA
+ rsIkay8zmF/FWXM+1FyjUgxc2+E5X/azFeIvK8GYuTL4VM4Q54x3vd
+ L73uGYgZt99Dyvze7JoRjDxQvJIVPE2+imIWvcFq5FSwQ4vkCdRJSZ
+ ebCfzolE4fD+SkLFxiuCe2gEDPRew+tzMTLinK0qfl/xee2GAF+9xr
+ hIK2rfsNEujgt4l40JFg6xhe6zUqc1PRbycCxw0sj/Mp3oSnxP3Ce0
+ 3g6zqH/RtuW1aGJUmgyqR+GyyfubCk0ev13wEW3MLua3RD6B3NgQQT
+ N2clJjYOjv8LqELODXIrAAABCtgBPD94bWwgdmVyc2lvbj0iMS4wIi
+ BlbmNvZGluZz0idXRmLTE2Ij8+DQo8RW1haWxTZXQ+DQogIDxWZXJz
+ aW9uPjE1LjAuMC4wPC9WZXJzaW9uPg0KICA8RW1haWxzPg0KICAgID
+ xFbWFpbCBTdGFydEluZGV4PSIxNiI+DQogICAgICA8RW1haWxTdHJp
+ bmc+cHVsZWh1aUBodWF3ZWkuY29tPC9FbWFpbFN0cmluZz4NCiAgIC
+ A8L0VtYWlsPg0KICA8L0VtYWlscz4NCjwvRW1haWxTZXQ+AQurBTw/
+ eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9InV0Zi0xNiI/Pg0KPF
+ VybFNldD4NCiAgPFZlcnNpb24+MTUuMC4wLjA8L1ZlcnNpb24+DQog
+ IDxVcmxzPg0KICAgIDxVcmwgU3RhcnRJbmRleD0iNDEzIiBQb3NpdG
+ lvbj0iT3RoZXIiIFR5cGU9IlVybCI+DQogICAgICA8VXJsU3RyaW5n
+ Pmh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L3Y2Ljgvc2
+ 91cmNlL2tlcm5lbC9icGYvYnRmLmMjTDYxODQ8L1VybFN0cmluZz4N
+ CiAgICA8L1VybD4NCiAgICA8VXJsIFN0YXJ0SW5kZXg9IjQ5MiIgUG
+ 9zaXRpb249Ik90aGVyIiBUeXBlPSJVcmwiPg0KICAgICAgPFVybFN0
+ cmluZz5odHRwczovL2VsaXhpci5ib290bGluLmNvbS9saW51eC92Ni
+ 44L3NvdXJjZS9rZXJuZWwvYnBmL2J0Zi5jI0w2NzY5PC9VcmxTdHJp
+ bmc+DQogICAgPC9Vcmw+DQogICAgPFVybCBTdGFydEluZGV4PSI1Nz
+ EiIFBvc2l0aW9uPSJPdGhlciIgVHlwZT0iVXJsIj4NCiAgICAgIDxV
+ cmxTdHJpbmc+aHR0cHM6Ly9naXRodWIuY29tL3Jpc2N2LW5vbi1pc2
+ EvcmlzY3YtZWxmLXBzYWJpLWRvYy9yZWxlYXNlcy9kb3dubG9hZC9k
+ cmFmdC0yMDIzMDkyOS1lNWM4MDBlNjYxYTUzZWZlM2MyNjc4ZDcxYT
+ MwNjMyM2I2MGViMTNiL3Jpc2N2LWFiaS5wZGY8L1VybFN0cmluZz4N
+ CiAgICA8L1VybD4NCiAgPC9VcmxzPg0KPC9VcmxTZXQ+AQzaAzw/eG
+ 1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9InV0Zi0xNiI/Pg0KPENv
+ bnRhY3RTZXQ+DQogIDxWZXJzaW9uPjE1LjAuMC4wPC9WZXJzaW9uPg
+ 0KICA8Q29udGFjdHM+DQogICAgPENvbnRhY3QgU3RhcnRJbmRleD0i
+ NiI+DQogICAgICA8UGVyc29uIFN0YXJ0SW5kZXg9IjYiPg0KICAgIC
+ AgICA8UGVyc29uU3RyaW5nPlB1PC9QZXJzb25TdHJpbmc+DQogICAg
+ ICA8L1BlcnNvbj4NCiAgICAgIDxFbWFpbHM+DQogICAgICAgIDxFbW
+ FpbCBTdGFydEluZGV4PSIxNiI+DQogICAgICAgICAgPEVtYWlsU3Ry
+ aW5nPnB1bGVodWlAaHVhd2VpLmNvbTwvRW1haWxTdHJpbmc+DQogIC
+ AgICAgIDwvRW1haWw+DQogICAgICA8L0VtYWlscz4NCiAgICAgIDxD
+ b250YWN0U3RyaW5nPlB1IExlaHVpICZsdDtwdWxlaHVpQGh1YXdlaS
+ 5jb208L0NvbnRhY3RTdHJpbmc+DQogICAgPC9Db250YWN0Pg0KICA8
+ L0NvbnRhY3RzPg0KPC9Db250YWN0U2V0PgEOzgFSZXRyaWV2ZXJPcG
+ VyYXRvciwxMCwwO1JldHJpZXZlck9wZXJhdG9yLDExLDE7UG9zdERv
+ Y1BhcnNlck9wZXJhdG9yLDEwLDA7UG9zdERvY1BhcnNlck9wZXJhdG
+ 9yLDExLDA7UG9zdFdvcmRCcmVha2VyRGlhZ25vc3RpY09wZXJhdG9y
+ LDEwLDM7UG9zdFdvcmRCcmVha2VyRGlhZ25vc3RpY09wZXJhdG9yLD
+ ExLDA7VHJhbnNwb3J0V3JpdGVyUHJvZHVjZXIsMjAsOQ=3D=3D
+X-MS-Exchange-Forest-IndexAgent: 1 4852
+X-MS-Exchange-Forest-EmailMessageHash: 7B5AE8ED
+X-MS-Exchange-Forest-Language: en
+X-MS-Exchange-Organization-Processed-By-Journaling: Journal Agent
+
+From: Pu Lehui <pulehui@huawei.com>
+
+This patch adds 12 function arguments support for riscv64 bpf
+trampoline. The current bpf trampoline supports <=3D sizeof(u64) bytes
+scalar arguments [0] and <=3D 16 bytes struct arguments [1]. Therefore, we
+focus on the situation where scalars are at most XLEN bits and
+aggregates whose total size does not exceed 2=C3=97XLEN bits in the riscv
+calling convention [2].
+
+Link: https://elixir.bootlin.com/linux/v6.8/source/kernel/bpf/btf.c#L6184 [=
+0]
+Link: https://elixir.bootlin.com/linux/v6.8/source/kernel/bpf/btf.c#L6769 [=
+1]
+Link: https://github.com/riscv-non-isa/riscv-elf-psabi-doc/releases/downloa=
+d/draft-20230929-e5c800e661a53efe3c2678d71a306323b60eb13b/riscv-abi.pdf [2]
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ arch/riscv/net/bpf_jit_comp64.c | 63 +++++++++++++++++++++++----------
+ 1 file changed, 44 insertions(+), 19 deletions(-)
+
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp6=
+4.c
+index 77ea306452d4..2aec69e4c116 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -14,6 +14,7 @@
+ #include <asm/cfi.h>
+ #include "bpf_jit.h"
+=20
++#define RV_MAX_ARG_REGS 8
+ #define RV_FENTRY_NINSNS 2
+=20
+ #define RV_REG_TCC RV_REG_A6
+@@ -688,26 +689,43 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_t=
+ype poke_type,
+ 	return ret;
+ }
+=20
+-static void store_args(int nregs, int args_off, struct rv_jit_context *ctx=
+)
++static void store_args(int nr_arg_slots, int args_off, struct rv_jit_conte=
+xt *ctx)
+ {
+ 	int i;
+=20
+-	for (i =3D 0; i < nregs; i++) {
+-		emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
++	for (i =3D 0; i < nr_arg_slots; i++) {
++		if (i < RV_MAX_ARG_REGS) {
++			emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
++		} else {
++			emit_ld(RV_REG_T1, 16 + (i - RV_MAX_ARG_REGS) * 8, RV_REG_FP, ctx);
++			emit_sd(RV_REG_FP, -args_off, RV_REG_T1, ctx);
++		}
+ 		args_off -=3D 8;
+ 	}
+ }
+=20
+-static void restore_args(int nregs, int args_off, struct rv_jit_context *c=
+tx)
++static void restore_args(int nr_args_reg, int args_off, struct rv_jit_cont=
+ext *ctx)
+ {
+ 	int i;
+=20
+-	for (i =3D 0; i < nregs; i++) {
++	for (i =3D 0; i < nr_args_reg; i++) {
+ 		emit_ld(RV_REG_A0 + i, -args_off, RV_REG_FP, ctx);
+ 		args_off -=3D 8;
+ 	}
+ }
+=20
++static void restore_stack_args(int nr_args_stack, int args_off, int stk_ar=
+g_off, struct rv_jit_context *ctx)
++{
++	int i;
++
++	for (i =3D 0; i < nr_args_stack; i++) {
++		emit_ld(RV_REG_T1, -(args_off - RV_MAX_ARG_REGS * 8), RV_REG_FP, ctx);
++		emit_sd(RV_REG_FP, -stk_arg_off, RV_REG_T1, ctx);
++		args_off -=3D 8;
++		stk_arg_off -=3D 8;
++	}
++}
++
+ static int invoke_bpf_prog(struct bpf_tramp_link *l, int args_off, int ret=
+val_off,
+ 			   int run_ctx_off, bool save_ret, struct rv_jit_context *ctx)
+ {
+@@ -780,8 +798,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tra=
+mp_image *im,
+ {
+ 	int i, ret, offset;
+ 	int *branches_off =3D NULL;
+-	int stack_size =3D 0, nregs =3D m->nr_args;
+-	int retval_off, args_off, nregs_off, ip_off, run_ctx_off, sreg_off;
++	int stack_size =3D 0, nr_arg_slots =3D 0;
++	int retval_off, args_off, nregs_off, ip_off, run_ctx_off, sreg_off, stk_a=
+rg_off;
+ 	struct bpf_tramp_links *fentry =3D &tlinks[BPF_TRAMP_FENTRY];
+ 	struct bpf_tramp_links *fexit =3D &tlinks[BPF_TRAMP_FEXIT];
+ 	struct bpf_tramp_links *fmod_ret =3D &tlinks[BPF_TRAMP_MODIFY_RETURN];
+@@ -827,20 +845,21 @@ static int __arch_prepare_bpf_trampoline(struct bpf_t=
+ramp_image *im,
+ 	 * FP - sreg_off    [ callee saved reg	]
+ 	 *
+ 	 *		    [ pads              ] pads for 16 bytes alignment
++	 *
++	 *		    [ stack_argN        ]
++	 *		    [ ...               ]
++	 * FP - stk_arg_off [ stack_arg1        ] BPF_TRAMP_F_CALL_ORIG
+ 	 */
+=20
+ 	if (flags & (BPF_TRAMP_F_ORIG_STACK | BPF_TRAMP_F_SHARE_IPMODIFY))
+ 		return -ENOTSUPP;
+=20
+-	/* extra regiters for struct arguments */
+-	for (i =3D 0; i < m->nr_args; i++)
+-		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
+-			nregs +=3D round_up(m->arg_size[i], 8) / 8 - 1;
+-
+-	/* 8 arguments passed by registers */
+-	if (nregs > 8)
++	if (m->nr_args > MAX_BPF_FUNC_ARGS)
+ 		return -ENOTSUPP;
+=20
++	for (i =3D 0; i < m->nr_args; i++)
++		nr_arg_slots +=3D round_up(m->arg_size[i], 8) / 8;
++
+ 	/* room of trampoline frame to store return address and frame pointer */
+ 	stack_size +=3D 16;
+=20
+@@ -850,7 +869,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tra=
+mp_image *im,
+ 		retval_off =3D stack_size;
+ 	}
+=20
+-	stack_size +=3D nregs * 8;
++	stack_size +=3D nr_arg_slots * 8;
+ 	args_off =3D stack_size;
+=20
+ 	stack_size +=3D 8;
+@@ -867,8 +886,13 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tr=
+amp_image *im,
+ 	stack_size +=3D 8;
+ 	sreg_off =3D stack_size;
+=20
++	if (nr_arg_slots - RV_MAX_ARG_REGS > 0)
++		stack_size +=3D (nr_arg_slots - RV_MAX_ARG_REGS) * 8;
++
+ 	stack_size =3D round_up(stack_size, 16);
+=20
++	stk_arg_off =3D stack_size;
++
+ 	if (!is_struct_ops) {
+ 		/* For the trampoline called from function entry,
+ 		 * the frame of traced function and the frame of
+@@ -904,10 +928,10 @@ static int __arch_prepare_bpf_trampoline(struct bpf_t=
+ramp_image *im,
+ 		emit_sd(RV_REG_FP, -ip_off, RV_REG_T1, ctx);
+ 	}
+=20
+-	emit_li(RV_REG_T1, nregs, ctx);
++	emit_li(RV_REG_T1, nr_arg_slots, ctx);
+ 	emit_sd(RV_REG_FP, -nregs_off, RV_REG_T1, ctx);
+=20
+-	store_args(nregs, args_off, ctx);
++	store_args(nr_arg_slots, args_off, ctx);
+=20
+ 	/* skip to actual body of traced function */
+ 	if (flags & BPF_TRAMP_F_SKIP_FRAME)
+@@ -947,7 +971,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tra=
+mp_image *im,
+ 	}
+=20
+ 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+-		restore_args(nregs, args_off, ctx);
++		restore_args(min_t(int, nr_arg_slots, RV_MAX_ARG_REGS), args_off, ctx);
++		restore_stack_args(nr_arg_slots - RV_MAX_ARG_REGS, args_off, stk_arg_off=
+, ctx);
+ 		ret =3D emit_call((const u64)orig_call, true, ctx);
+ 		if (ret)
+ 			goto out;
+@@ -982,7 +1007,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tr=
+amp_image *im,
+ 	}
+=20
+ 	if (flags & BPF_TRAMP_F_RESTORE_REGS)
+-		restore_args(nregs, args_off, ctx);
++		restore_args(min_t(int, nr_arg_slots, RV_MAX_ARG_REGS), args_off, ctx);
+=20
+ 	if (save_ret) {
+ 		emit_ld(RV_REG_A0, -retval_off, RV_REG_FP, ctx);
+--=20
 2.34.1
 
 
