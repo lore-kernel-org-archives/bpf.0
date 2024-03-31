@@ -1,61 +1,63 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EAC99463
-	for <bpf@vger.kernel.org>; Sun, 31 Mar 2024 19:32:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CCA0146D65
+	for <bpf@vger.kernel.org>; Sun, 31 Mar 2024 19:37:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711913528; cv=none; b=lnUcOCnNiyczl0Gm6iETgySPXMNLI29byI2Nq7hG3yYZwsskdAF+azTmMYxRMh+z8XtXNWR+DvnaUwA1gJkA7tp1VWYCvFtrRMgOL7QtpQ8P6pcfOMNnEZTjgDTR02cQZov/7WT6wCAY9KEXh75ZNpn3KXudaZLwiV1sIwJtB/E=
+	t=1711913829; cv=none; b=d+rGrtEFCkYFc3FmAzF56ZbyxIbhWAJhykdfgoXIJLEFM6LqDKpN6VkZsgfMdHGTfIvNMqHdia2sQZ7a24/3x3lwOvffuX0IbTK1Gc1lhzAHw66z1SeivPebSQIY7Zpb6T2u4nRgKFQNSUj37abCduOWh2+zvXRDL1WyNIzJRCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711913528; c=relaxed/simple;
-	bh=DR4PdXf6v6kIt30HN4ScBj02IhwqckXL6wI5NRXnhq8=;
+	s=arc-20240116; t=1711913829; c=relaxed/simple;
+	bh=gHdlRdlt/ABFlwPOqowdAbKXf4xGUngo3sp81YkMpCA=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BAs37FtpB2H2y9OgpSOGPjz+49LW2r6k4b9iSF8v0USmVDPlOjKwrDAxm9uyqkFf1+FAhVHli0IbwXZMepLyGAPEN7l0wKTAxtLXlVv9xIHYks35FKPjqRa/mlyXgJ4K9SmZedPJDA6By1k29ajPrNNr2DRbDWvR85IAV7Ax87Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Voy+CZSS; arc=none smtp.client-ip=209.85.128.41
+	 Content-Type:Content-Disposition:In-Reply-To; b=GOLJOfPm4vI05yDeyZMNy+zz14OV1hJp4Grlmm+XudX8n7774eB6XiRWQYw8WHZjm0vCNnInaX/xvDtNUqJ8z8+laIk7lB92d9xC9g5eyzqcGljm9ZJ/ANuKXUb3FhU+RYriANMXTmsu6C9uiCuUijb0Pr1Jg+8tpOycaI3thh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F/4CPmKA; arc=none smtp.client-ip=209.85.221.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Voy+CZSS"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-415649984c6so2027265e9.3
-        for <bpf@vger.kernel.org>; Sun, 31 Mar 2024 12:32:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F/4CPmKA"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-33ddd1624beso2163913f8f.1
+        for <bpf@vger.kernel.org>; Sun, 31 Mar 2024 12:37:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711913525; x=1712518325; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711913826; x=1712518626; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:date:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=bStw9VC/7dF2VsZNDTWp+aPn1A9Np+5C/xD4gM3V0JY=;
-        b=Voy+CZSS2dC3yo7P1+8a2w+WINm6esdoJGIj3XGjW5xxYx4yUyJRvCvwJPejcpnA4j
-         PyjQVAFtPeL6LxOOmC8uBnPwyMdvkBOUb1Ku15ZoZ4/7sR8nzbTcyj/nO4lxCl/QPz/U
-         ag3ohh3uq8SoI4ybLIRJw8IQYWQS3iglbj+3Pdbp8s+QVDIXaRtezeYdDEx6Xg8C5OXa
-         GesdWwn9EJwpeuoGbBsrDdzMuvBpWF6Cj+t0SUGx6UkhD0bZ5WLHnzzvwPXArA3iVpH/
-         KSCZ8bht6BzYrpFC9tjVlwmFfPXk9KD01VE2e/PLbmU2TvRNPdr4XDnNnUg+JMeNidQ+
-         o8jA==
+        bh=5/mTsUGCckh6ZVyWzbdkp99lB6BYn+WoiGmpAdkvTeQ=;
+        b=F/4CPmKAzauG8n4n9WptYDRhu/bz+u5Ntycpvc1/22gfJn6cf7I9J9ODqMn0CEj1WU
+         XDPwyD4mSU4KmI1PE3g3SHbenMAxkOMZwXQd+IIwbzADTg2N8aPOjc9wWC/pOs5ml9Fv
+         RcPaLa6EKIc26MmbA90p2t48JwkWsCWeaNLEpIxD9f+WCWlr5PLQHeIJSs1aUAw50+Li
+         fGmoyMY/aUyG1kyXVzjrPhY6RPK8y0A7IFmm3EBnhNz8gUse0zwnRZwQilmYyU44Nnhk
+         9yaY1+R2L5Cjxoun4uTOIOMgG3w2RTH5ngBoOJd2vU0qfFuKEdkqUqVphIOrKKt8rZdQ
+         GJUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711913525; x=1712518325;
+        d=1e100.net; s=20230601; t=1711913826; x=1712518626;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bStw9VC/7dF2VsZNDTWp+aPn1A9Np+5C/xD4gM3V0JY=;
-        b=O8h/GuiW0lgl+xhVwE7UODM2I4FBvA9zW5l+6t+QhEggnZL2Xh3N6TDCbp1FosmOrn
-         49yqMFHT4TJssvWmZUT4w0zSsU4efUDpgAiTbWgmZEjNUbkbdZDj/ipONuKF6fV1572Z
-         ZPKJPMjcJ9i6SIgibR+mOLhAhZKEEz+YAj6ckQhVV/Zo3ZOqXAyPpJvETIkjA+BUGWC4
-         tRxDScdUz+VzifpJQhSWwddYN1xDFasSB9WVVRFoZD7rlR8Hu+8Iq0eNzW0JwHJ8cb/T
-         bmBHnXjR12Q7GDDBKJznuaBA8qSlNwcb4F6lahVIua3viz937nFwgsPLm6ruDjcUy88Y
-         uCtg==
-X-Forwarded-Encrypted: i=1; AJvYcCUTKLMsZYpdqpcsbSZUOEeGFu1N9Vqx8gL5Ka6crck/oA7uPkl2wzbT2SolJxzMoW+6d7tRLF67JfaCPYrT1Q6Voz9A
-X-Gm-Message-State: AOJu0Yxf/l0TYgJTZfcEWWqYpM5VKv1q14TVW5f/467wafqhHUwX8gbN
-	4qfUD6ypLYoVTPFnFRrBjjQOhPEonmQFZHDYqcfFz8pIQbuBc3dA
-X-Google-Smtp-Source: AGHT+IEs9D9yRpz/GxVwYv/UPTNOxaf2niaV7ysphXDXSPoQn43A8A+eBOIgSiBIukVYQeLypc1NCw==
-X-Received: by 2002:a05:600c:1f94:b0:415:540e:74e7 with SMTP id je20-20020a05600c1f9400b00415540e74e7mr3872650wmb.16.1711913525287;
-        Sun, 31 Mar 2024 12:32:05 -0700 (PDT)
+        bh=5/mTsUGCckh6ZVyWzbdkp99lB6BYn+WoiGmpAdkvTeQ=;
+        b=fWvDMKu0gn0u5n3ZAZviuLw90ZKLdVg3pDCOhM4rEH+5+4oSvhUYjxzjxhHx/1Dp2n
+         Acwi6UIWm8YbpZzlHSUnyotmnLxUQwMHcGpcET4ilfM+R4TwSNzQqjGEpvkyDBq27/3g
+         2sn7VfRMkabTsu6OLv22jLVQHb6E4lwoS7/j36VJYIeQkcRC1cRSwwHEV5axmqo4Evxd
+         nXIVkls8/ZMYLod4tiZqbYEyX7xH+YFwJM0Wp7Kn7tuT1TQlWxr6XCig1NrlH9UqsXh8
+         3Ahl7AsESrScKLMYAV10Pe8O/XCK78uhk7k4eZJdK/qatGu35OD5tf6Ot/8qLXPUdI3q
+         U03A==
+X-Forwarded-Encrypted: i=1; AJvYcCUVobc/TRZCXwTCC2FXLU6sSMOGw2X3jqgqnLs845BLWA5fbHpF3/Spm6lnVUwmnoZn3pZpj6G54MtqvW2kmyxz0eUr
+X-Gm-Message-State: AOJu0YzvEfA00Rqu3iTAF1BqpxGt8RlxkTxiN19GWMDhBF4HbAlv583M
+	3iBDG7XyhwJ3rvANLYmyCUeR8JmMumNjRf3wZmnyNHZ5CrKjrPhB
+X-Google-Smtp-Source: AGHT+IF0SGDs7Ubg0c8wujOEvYPhRxrmK4BBbx7cjhHb7hzDay7VPZ38ZT3kCh3h8o2/WZ6HIEA2mQ==
+X-Received: by 2002:a5d:4583:0:b0:343:35b5:240 with SMTP id p3-20020a5d4583000000b0034335b50240mr6322747wrq.29.1711913825799;
+        Sun, 31 Mar 2024 12:37:05 -0700 (PDT)
 Received: from krava ([83.240.62.118])
-        by smtp.gmail.com with ESMTPSA id h9-20020a05600c314900b004147b824b08sm12481400wmo.7.2024.03.31.12.32.04
+        by smtp.gmail.com with ESMTPSA id fs11-20020a05600c3f8b00b004146dd6bfe2sm12392687wmb.47.2024.03.31.12.37.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Mar 2024 12:32:04 -0700 (PDT)
+        Sun, 31 Mar 2024 12:37:05 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sun, 31 Mar 2024 21:32:02 +0200
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Sun, 31 Mar 2024 21:37:03 +0200
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>
 Cc: Oleg Nesterov <oleg@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
@@ -64,12 +66,12 @@ Cc: Oleg Nesterov <oleg@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	"Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
-Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Add uretprobe syscall test
- for regs changes
-Message-ID: <Zgm6Mjg0Ke8BaEBA@krava>
+Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: Add uretprobe syscall test
+ for regs integrity
+Message-ID: <Zgm7X1_3iRewLNQQ@krava>
 References: <20240327102036.543283-1-jolsa@kernel.org>
- <20240327102036.543283-4-jolsa@kernel.org>
- <CAEf4BzYXFX3Mx+3Z2BLHrUw5dG7qaz7R2Tfc82R+OMhT14rDBg@mail.gmail.com>
+ <20240327102036.543283-3-jolsa@kernel.org>
+ <CAEf4BzZps+OdPoyRz1=7mEzh=shjVjT=ZznhMD0Y-w98GW782g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,75 +81,75 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzYXFX3Mx+3Z2BLHrUw5dG7qaz7R2Tfc82R+OMhT14rDBg@mail.gmail.com>
+In-Reply-To: <CAEf4BzZps+OdPoyRz1=7mEzh=shjVjT=ZznhMD0Y-w98GW782g@mail.gmail.com>
 
-On Fri, Mar 29, 2024 at 03:34:00PM -0700, Andrii Nakryiko wrote:
+On Fri, Mar 29, 2024 at 03:30:11PM -0700, Andrii Nakryiko wrote:
 > On Wed, Mar 27, 2024 at 3:21 AM Jiri Olsa <jolsa@kernel.org> wrote:
 > >
-> > Adding test that creates uprobe consumer on uretprobe which changes some
-> > of the registers. Making sure the changed registers are propagated to the
-> > user space when the ureptobe syscall trampoline is used on x86_64.
-> >
-> > To be able to do this, adding support to bpf_testmod to create uprobe via
-> > new attribute file:
-> >   /sys/kernel/bpf_testmod_uprobe
-> >
-> > This file is expecting file offset and creates related uprobe on current
-> > process exe file and removes existing uprobe if offset is 0. The can be
-> > only single uprobe at any time.
-> >
-> > The uprobe has specific consumer that changes registers used in ureprobe
-> > syscall trampoline and which are later checked in the test.
+> > Add uretprobe syscall test that compares register values before
+> > and after the uretprobe is hit. It also compares the register
+> > values seen from attached bpf program.
 > >
 > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > > ---
-> >  .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 119 +++++++++++++++++-
-> >  .../selftests/bpf/prog_tests/uprobe_syscall.c |  67 ++++++++++
-> >  2 files changed, 185 insertions(+), 1 deletion(-)
-> >
-> 
-> LGTM:
-> 
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> >  tools/include/linux/compiler.h                |   4 +
+> >  .../selftests/bpf/prog_tests/uprobe_syscall.c | 163 ++++++++++++++++++
+> >  .../selftests/bpf/progs/uprobe_syscall.c      |  15 ++
+> >  3 files changed, 182 insertions(+)
+> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> >  create mode 100644 tools/testing/selftests/bpf/progs/uprobe_syscall.c
 > 
 > [...]
 > 
-> >  BTF_KFUNCS_START(bpf_testmod_common_kfunc_ids)
-> >  BTF_ID_FLAGS(func, bpf_iter_testmod_seq_new, KF_ITER_NEW)
-> >  BTF_ID_FLAGS(func, bpf_iter_testmod_seq_next, KF_ITER_NEXT | KF_RET_NULL)
-> > @@ -650,7 +763,10 @@ static int bpf_testmod_init(void)
-> >                 return ret;
-> >         if (bpf_fentry_test1(0) < 0)
-> >                 return -EINVAL;
-> > -       return sysfs_create_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
-> > +       ret = sysfs_create_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
-> > +       if (ret < 0)
-> > +               return ret;
-> > +       return register_bpf_testmod_uprobe();
+> > +__naked unsigned long uprobe_syscall_arch_test(void)
+> > +{
+> > +       asm volatile (
+> > +               "movq $0xdeadbeef, %rax\n"
+> > +               "ret\n"
+> > +       );
+> > +}
+> > +
+> > +__naked void uprobe_syscall_arch(struct pt_regs *before, struct pt_regs *after)
 > 
-> nit: keep using the same pattern to make adding more actions easier in
-> the future:
-> 
-> ret = register_bpf_testmod_uprobe();
-> if (ret < 0)
->     return ret;
-> return 0;
+> don't you get compiler warnings for using __naked with explicit
+> function arguments?
 
-ok, will change 
+nope, both gcc and clang are silent
+
+> 
+> > +{
+> > +       asm volatile (
+> > +               "movq %r15,   0(%rdi)\n"
+> > +               "movq %r14,   8(%rdi)\n"
+> 
+> [...]
+> 
+> > +       err = uprobe_syscall__attach(skel);
+> > +       if (!ASSERT_OK(err, "uprobe_syscall__attach"))
+> > +               goto cleanup;
+> > +
+> > +       uprobe_syscall_arch(&before, &after);
+> 
+> uprobe_syscall_arch() doesn't really do an explicit `syscall
+> uretprobe`, it should work for int3-based uretprobes as well? Let's
+> call it something a bit more generic then?
+
+ok, how about
+
+  uprobe_syscall_arch -> uretprobe_regs
+  uprobe_syscall_arch_test -> uretprobe_regs_trigger
+
+> 
+> Also, I think patch #1 will go through Masami's trace tree, right? But
+> we can land selftests into bpf-next even before that, given they
+> should work for both syscall and interrupt based uretprobes.
+
+hm, not sure.. I did not originally cc Masami/Steven :-\  adding now
+
+Masami, could patch 1 go through:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
+  probes/for-next
 
 thanks,
 jirka
-
-> 
-> >  }
-> >
-> >  static void bpf_testmod_exit(void)
-> > @@ -664,6 +780,7 @@ static void bpf_testmod_exit(void)
-> >                 msleep(20);
-> >
-> >         sysfs_remove_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
-> > +       unregister_bpf_testmod_uprobe();
-> >  }
-> >
-> 
-> [...]
