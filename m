@@ -1,56 +1,56 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 122CD110A
-	for <bpf@vger.kernel.org>; Sun, 31 Mar 2024 03:44:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D60C91C2E
+	for <bpf@vger.kernel.org>; Sun, 31 Mar 2024 03:44:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711856676; cv=none; b=hSEt6iw8UbfiPrueAuNtUhNXKjnKuF+ryRnvmL7/AWjH8rvx4E7fjDAxVnW9OoDYB69CNvLLW5eBnExaCuKZGNZAO56/pZXgBlps/CuVcvumRQsgguWZ1QWjFmygpUfZnfexoFgwpFwY8KVdM6bcK7XLF8NBQlCMX3HcMSbqrlY=
+	t=1711856691; cv=none; b=XBMhVhbRhYQCL9mDxnaN+0TGwb31qs9X9eBbZQSyz4qTQZm4Bf+rC/21qWLr4wvzOVr/R3eMXCuWnl6cKLix+ZcEji7XqSKCqxSql6EasJO7W5nluYWjP8rEVkcBYdMiEGDyG4jTuq8qS8nagsKFwco6l0TOB9OgZzTWwp0XEuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711856676; c=relaxed/simple;
-	bh=dTOH/jT+xl9iMYSWoSvujdD0ZbqUZR86+BcR/iEq6VQ=;
+	s=arc-20240116; t=1711856691; c=relaxed/simple;
+	bh=2gk2QUz7Pe9EcZbKhZpiDLgwEAlvYUqAxuquAlzemHA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=L5nlZmvdQ5OtuKsuWmZzfgCc/i/LPaQbYl11T2SjXrWp2G01naFiPmGTHaQObuIiU7fAmTe1nUwT/wYBJ4na73n9/iM+cxkxd4JD3R7wsxMJZsd6YhWsVz4ImhMEAlM3g6uhQy26O+FJiL1m/KZLwq5J9UcmWUEc0AmKE4CybCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WuJQVKvH; arc=none smtp.client-ip=209.85.214.173
+	 MIME-Version; b=cW1VRg/ZZ19vILVFAGbyucHStVGRpq656BbUybf8kfq2cfTAPIkT/avKCg4LRm1cQHDjDhCEeQ9i8iD2pvPn/4AippFgsNX5G25sv0xs4Y54N30aCczBI8EFySpcI5mBtyxRmtJqQDNrBqJZ/mw3Ce9QIcT+j1/rDXHP2Y1ropc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=etU/Bmj/; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WuJQVKvH"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1e24985beadso2706825ad.1
-        for <bpf@vger.kernel.org>; Sat, 30 Mar 2024 20:44:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="etU/Bmj/"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1e00d1e13acso20720575ad.0
+        for <bpf@vger.kernel.org>; Sat, 30 Mar 2024 20:44:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711856674; x=1712461474; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711856689; x=1712461489; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=P2RRJnLxVo1hxqPOCx7ze6xs5wfBeyecuePLuk6TwxI=;
-        b=WuJQVKvH0zAHp1nKX1RGYhjeSVYQbR4Y0JDvxja9lQoauR+6WPO8CSzQqFJGsgMSVu
-         IB/Y/7vR9Tny9pNKAHEBghG4zBFoBQ+cZHMGvzYCnfxXnmBkmwUhl31oU2kCcmmH07nd
-         tFH3IN1MWn7rgXzU83XwZAmGN+Lb0fIA7wWqo89GefBlDxl0JYVt1zZhE+cFXBZ4cPdA
-         OgZ+UYltXVPrA5kHrpl5LOSq9VFfftcrCaCCX2/LWMjebR8vwrY/kBNgzIGvyqtQh3w9
-         jszcwTiGn0ESOLLENAZ0rMorrY7nhVAEOjCmNIQAN8bqeLR6ovrMqMspJlwrYAXzDwMz
-         OpFA==
+        bh=x3RorT8LDLGdGitvlFg1jRWV4yHE1BdxHCOgnMOQBFA=;
+        b=etU/Bmj/KC9iGeztjUmz/sCYgARa/6Ww+KIz90NzKvjblVXzjhgYLqgFzifITSQYuN
+         nUpi+IFfZSZZQzWFe0hqNqC0gH6HvtiKB0GSerjkGtcOr1DeYuZ5pZpum9ip09J5XTze
+         cdRb0PxV/bkpLOOhoh5yle+0jFP/BfauNToa8qZUmHfwfs1AR45JJyUH60bNMIqLg7f0
+         rtJH9r4GQTb1jy3m9uR882jaXCY3HZcGWsG6PkpGALJWVSjGTx+wYBrAOLs3HHkuF9pa
+         yDjOFWoz7LWolc7ELVX9542q4wvqQb+q5OhBPpLnCy/k3NoIJGYEb0tl/PRlq3jD/axu
+         7I4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711856674; x=1712461474;
+        d=1e100.net; s=20230601; t=1711856689; x=1712461489;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=P2RRJnLxVo1hxqPOCx7ze6xs5wfBeyecuePLuk6TwxI=;
-        b=XjXCdgH++WHk9+vZpS9mmwXfNzocjB36qmVniFPBx317t8PPzafCaF/X5VxeihRtFF
-         8e8jUzC7TZEr1g4Pi2x/uAzUMYaiTSxEf5bi2Tp5cXyPfSXdtlTi9TxDYZopR9ExoshZ
-         yG0Is+XcGP/67n3DF8LaYIDs1qI841HfrIkGuOt7X7zJGeRtg2Tl64F1p4BPqWHGdvrm
-         pCSR6ZKklgwPekKkPjb1GyfS24CuQQLKvL4mP/KrYZi6wr5DWHhfNVlFrGNoQzRoeV4Z
-         saAKfXwej1sEQoMKK7WGMlNrAtyl5zRNPGj522A+w94B+y8I8dyZczaht3JJaq2IrrjZ
-         vYCQ==
-X-Gm-Message-State: AOJu0YwiPhI6SYH1Bh0AMBLV7a4KqLQFh0wzgmXo4Pk59T70D75773To
-	9OgI3MiEPtMMAPEcO+H8hSEPaeIK54GWWFBKD6XvOKDyBsk/CrzC
-X-Google-Smtp-Source: AGHT+IHX3sLMTqiLqhZDi76p1muBuH2nOBOIK1pDowXseK+j55RmX209idMJhtbkZ9RXHPa1Dd5dBw==
-X-Received: by 2002:a17:903:446:b0:1e0:cea:257e with SMTP id iw6-20020a170903044600b001e00cea257emr9909542plb.2.1711856674257;
-        Sat, 30 Mar 2024 20:44:34 -0700 (PDT)
+        bh=x3RorT8LDLGdGitvlFg1jRWV4yHE1BdxHCOgnMOQBFA=;
+        b=qj0bFcj21Gvdp3YiHlzJ2/TuGOgBL/yJ/kA6goIpSKxZW7hBgpU+GFNLuNfSHER4uY
+         v6q8/z9gLeLi3tAAqwyNHgkG0XEUj4c8HU2pHn31YirtSNgUthrY9pqP+PbQLuEwgSbi
+         03M8Q9iq9Orv6envzkwfXcpN3hHbGwmrHZ+lzrNrBm/PGJ4J4ctiKbOc9W8vZ5scTINj
+         aa4GGgAVT/RxdEnlFkmJcq0SRxeP2iaArpDXbqxej/Pnw9NBbUHip934ZvQ6jqut9QBP
+         h9Be46C9Snxet4SLkGnnPkNWjb9FWOK+2BnKq7gaK1CMh9kt1UOxvdgK+akZFbbP3okL
+         dTWw==
+X-Gm-Message-State: AOJu0YwQrs9Kn8bguVoyMxdqcYqHClCKOGZscB3tfbYUOSkMfpVCYIQf
+	yXhux0ZnoBjJdVycDGpSzJwhqwq2KyLRDpQJTwZb8HWWTaeqmUuKkQDxcqf5z578+w==
+X-Google-Smtp-Source: AGHT+IFMk+EoFwoZYHLinUyhTLBusGPjBycSdX3l7iFiXLdLOBFto+O+ACgrnhVUAPfBNAy6q1443g==
+X-Received: by 2002:a17:902:f304:b0:1e2:a71:a127 with SMTP id c4-20020a170902f30400b001e20a71a127mr5327969ple.49.1711856689070;
+        Sat, 30 Mar 2024 20:44:49 -0700 (PDT)
 Received: from localhost.localdomain ([39.144.105.37])
-        by smtp.gmail.com with ESMTPSA id y19-20020a170902e19300b001dcfc68e7desm6030239pla.75.2024.03.30.20.44.22
+        by smtp.gmail.com with ESMTPSA id y19-20020a170902e19300b001dcfc68e7desm6030239pla.75.2024.03.30.20.44.34
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 30 Mar 2024 20:44:33 -0700 (PDT)
+        Sat, 30 Mar 2024 20:44:48 -0700 (PDT)
 From: Yafang Shao <laoar.shao@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -66,9 +66,9 @@ To: ast@kernel.org,
 	jolsa@kernel.org
 Cc: bpf@vger.kernel.org,
 	Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v5 1/2] bpf: Add bits iterator
-Date: Sun, 31 Mar 2024 11:41:53 +0800
-Message-Id: <20240331034154.16284-2-laoar.shao@gmail.com>
+Subject: [PATCH bpf-next v5 2/2] selftests/bpf: Add selftest for bits iter
+Date: Sun, 31 Mar 2024 11:41:54 +0800
+Message-Id: <20240331034154.16284-3-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 In-Reply-To: <20240331034154.16284-1-laoar.shao@gmail.com>
 References: <20240331034154.16284-1-laoar.shao@gmail.com>
@@ -80,163 +80,102 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add three new kfuncs for the bits iterator:
-- bpf_iter_bits_new
-  Initialize a new bits iterator for a given memory area. Due to the
-  limitation of bpf memalloc, the max number of bits that can be iterated
-  over is limited to (4096 * 8).
-- bpf_iter_bits_next
-  Get the next bit in a bpf_iter_bits
-- bpf_iter_bits_destroy
-  Destroy a bpf_iter_bits
-
-The bits iterator facilitates the iteration of the bits of a memory area,
-such as cpumask. It can be used in any context and on any address.
+Add test cases for the bits iter:
+  - bpf_iter_bits_destroy() is required after calling
+    bpf_iter_bits_new()
+  - bpf_iter_bits_destroy() can only destroy an initialized iter
+  - bpf_iter_bits_next() must use an initialized iter
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/helpers.c | 120 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 120 insertions(+)
+ .../selftests/bpf/prog_tests/verifier.c       |  2 +
+ .../selftests/bpf/progs/verifier_bits_iter.c  | 57 +++++++++++++++++++
+ 2 files changed, 59 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_bits_iter.c
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index d9e7aca8ae9e..dec5d3ccd25b 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2549,6 +2549,123 @@ __bpf_kfunc void bpf_throw(u64 cookie)
- 	WARN(1, "A call to BPF exception callback should never return\n");
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index c4f9f306646e..7e04ecaaa20a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -84,6 +84,7 @@
+ #include "verifier_xadd.skel.h"
+ #include "verifier_xdp.skel.h"
+ #include "verifier_xdp_direct_packet_access.skel.h"
++#include "verifier_bits_iter.skel.h"
  
-+struct bpf_iter_bits {
-+	__u64 __opaque[2];
-+} __aligned(8);
+ #define MAX_ENTRIES 11
+ 
+@@ -198,6 +199,7 @@ void test_verifier_var_off(void)              { RUN(verifier_var_off); }
+ void test_verifier_xadd(void)                 { RUN(verifier_xadd); }
+ void test_verifier_xdp(void)                  { RUN(verifier_xdp); }
+ void test_verifier_xdp_direct_packet_access(void) { RUN(verifier_xdp_direct_packet_access); }
++void test_verifier_bits_iter(void) { RUN(verifier_bits_iter); }
+ 
+ static int init_test_val_map(struct bpf_object *obj, char *map_name)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bits_iter.c b/tools/testing/selftests/bpf/progs/verifier_bits_iter.c
+new file mode 100644
+index 000000000000..5401b0944ca7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_bits_iter.c
+@@ -0,0 +1,57 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2024 Yafang Shao <laoar.shao@gmail.com> */
 +
-+struct bpf_iter_bits_kern {
-+	union {
-+		unsigned long *bits;
-+		unsigned long bits_copy;
-+	};
-+	u32 nr_bits;
-+	int bit;
-+} __aligned(8);
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
 +
-+/**
-+ * bpf_iter_bits_new() - Initialize a new bits iterator for a given memory area
-+ * @it: The new bpf_iter_bits to be created
-+ * @unsafe_ptr__ign: A ponter pointing to a memory area to be iterated over
-+ * @nr_bits: The number of bits to be iterated over. Due to the limitation of
-+ * memalloc, it can't greater than (4096 * 8).
-+ *
-+ * This function initializes a new bpf_iter_bits structure for iterating over
-+ * a memory area which is specified by the @unsafe_ptr__ign and @nr_bits. It
-+ * copy the data of the memory area to the newly created bpf_iter_bits @it for
-+ * subsequent iteration operations.
-+ *
-+ * On success, 0 is returned. On failure, ERR is returned.
-+ */
-+__bpf_kfunc int
-+bpf_iter_bits_new(struct bpf_iter_bits *it, const void *unsafe_ptr__ign, u32 nr_bits)
++#include "bpf_misc.h"
++#include "task_kfunc_common.h"
++
++char _license[] SEC("license") = "GPL";
++
++int bpf_iter_bits_new(struct bpf_iter_bits *it, const void *unsafe_ptr__ign,
++		      u32 nr_bits) __ksym __weak;
++int *bpf_iter_bits_next(struct bpf_iter_bits *it) __ksym __weak;
++void bpf_iter_bits_destroy(struct bpf_iter_bits *it) __ksym __weak;
++
++SEC("iter.s/cgroup")
++__description("bits iter without destroy")
++__failure __msg("Unreleased reference")
++int BPF_PROG(no_destroy, struct bpf_iter_meta *meta, struct cgroup *cgrp)
 +{
-+	u32 size = BITS_TO_LONGS(nr_bits) * sizeof(unsigned long);
-+	struct bpf_iter_bits_kern *kit = (void *)it;
-+	int err;
++	struct bpf_iter_bits it;
++	struct task_struct *p;
 +
-+	BUILD_BUG_ON(sizeof(struct bpf_iter_bits_kern) != sizeof(struct bpf_iter_bits));
-+	BUILD_BUG_ON(__alignof__(struct bpf_iter_bits_kern) !=
-+		     __alignof__(struct bpf_iter_bits));
++	p = bpf_task_from_pid(1);
++	if (!p)
++		return 1;
 +
-+	if (!unsafe_ptr__ign || !nr_bits) {
-+		kit->bits = NULL;
-+		return -EINVAL;
-+	}
++	bpf_iter_bits_new(&it, p->cpus_ptr, 8192);
 +
-+	kit->nr_bits = 0;
-+	kit->bits_copy = 0;
-+	/* Optimization for u64/u32 mask */
-+	if (nr_bits <= 64) {
-+		err = bpf_probe_read_kernel_common(&kit->bits_copy, size, unsafe_ptr__ign);
-+		if (err)
-+			return -EFAULT;
-+
-+		kit->nr_bits = nr_bits;
-+		kit->bit = -1;
-+		return 0;
-+	}
-+
-+	/* Fallback to memalloc */
-+	kit->bits = bpf_mem_alloc(&bpf_global_ma, size);
-+	if (!kit->bits)
-+		return -ENOMEM;
-+
-+	err = bpf_probe_read_kernel_common(kit->bits, size, unsafe_ptr__ign);
-+	if (err) {
-+		bpf_mem_free(&bpf_global_ma, kit->bits);
-+		return err;
-+	}
-+
-+	kit->nr_bits = nr_bits;
-+	kit->bit = -1;
++	bpf_iter_bits_next(&it);
++	bpf_task_release(p);
 +	return 0;
 +}
 +
-+/**
-+ * bpf_iter_bits_next() - Get the next bit in a bpf_iter_bits
-+ * @it: The bpf_iter_bits to be checked
-+ *
-+ * This function returns a pointer to a number representing the value of the
-+ * next bit in the bits.
-+ *
-+ * If there are no further bit available, it returns NULL.
-+ */
-+__bpf_kfunc int *bpf_iter_bits_next(struct bpf_iter_bits *it)
++SEC("iter/cgroup")
++__description("bits iter with uninitialized iter in ->next()")
++__failure __msg("expected an initialized iter_bits as arg #1")
++int BPF_PROG(next_uninit, struct bpf_iter_meta *meta, struct cgroup *cgrp)
 +{
-+	struct bpf_iter_bits_kern *kit = (void *)it;
-+	u32 nr_bits = kit->nr_bits;
-+	const unsigned long *bits;
-+	int bit;
++	struct bpf_iter_bits *it = NULL;
 +
-+	if (nr_bits == 0)
-+		return NULL;
-+
-+	bits = nr_bits <= 64 ? &kit->bits_copy : kit->bits;
-+	bit = find_next_bit(bits, nr_bits, kit->bit + 1);
-+	if (bit >= nr_bits) {
-+		kit->nr_bits = 0;
-+		return NULL;
-+	}
-+
-+	kit->bit = bit;
-+	return &kit->bit;
++	bpf_iter_bits_next(it);
++	return 0;
 +}
 +
-+/**
-+ * bpf_iter_bits_destroy() - Destroy a bpf_iter_bits
-+ * @it: The bpf_iter_bits to be destroyed
-+ *
-+ * Destroy the resource associated with the bpf_iter_bits.
-+ */
-+__bpf_kfunc void bpf_iter_bits_destroy(struct bpf_iter_bits *it)
++SEC("iter/cgroup")
++__description("bits iter with uninitialized iter in ->destroy()")
++__failure __msg("expected an initialized iter_bits as arg #1")
++int BPF_PROG(destroy_uninit, struct bpf_iter_meta *meta, struct cgroup *cgrp)
 +{
-+	struct bpf_iter_bits_kern *kit = (void *)it;
++	struct bpf_iter_bits it = {};
 +
-+	if (kit->nr_bits <= 64)
-+		return;
-+	bpf_mem_free(&bpf_global_ma, kit->bits);
++	bpf_iter_bits_destroy(&it);
++	return 0;
 +}
-+
- __bpf_kfunc_end_defs();
- 
- BTF_KFUNCS_START(generic_btf_ids)
-@@ -2626,6 +2743,9 @@ BTF_ID_FLAGS(func, bpf_dynptr_is_rdonly)
- BTF_ID_FLAGS(func, bpf_dynptr_size)
- BTF_ID_FLAGS(func, bpf_dynptr_clone)
- BTF_ID_FLAGS(func, bpf_modify_return_test_tp)
-+BTF_ID_FLAGS(func, bpf_iter_bits_new, KF_ITER_NEW)
-+BTF_ID_FLAGS(func, bpf_iter_bits_next, KF_ITER_NEXT | KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_iter_bits_destroy, KF_ITER_DESTROY)
- BTF_KFUNCS_END(common_btf_ids)
- 
- static const struct btf_kfunc_id_set common_kfunc_set = {
 -- 
 2.30.1 (Apple Git-130)
 
