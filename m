@@ -1,34 +1,34 @@
 Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 366AD15A4A4;
-	Sun, 31 Mar 2024 16:41:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D092215A4B6;
+	Sun, 31 Mar 2024 16:41:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=62.96.220.36
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711903342; cv=fail; b=IthvP/DbQz4pfpZTC//KNdgX+yOs5d14B4Ni4ThS+91u74NvpUtZFTa9cFgfCx0ZUCKXym7VMddYsrdcyYPsLeSawPlXdxtYbjWQllDRI3Mj4o9UR6b4jq/heWvsk9jfnkjixB8TE8kCufMXb9hlLboy/hfBpwf9yZQBhzDMqNg=
+	t=1711903342; cv=fail; b=G5eOiYVywV1YlKTwarCz8MG8Px3Zfv9jCGDo6h8y+ILDH/xuFybcl/IpDr2DYxgg55ghEico0YAv1wzLNJgT3LWeymoODhkLSp7KSuM6H20fUNglkwGrXFwYZfzPQ+FoNIbi4d/VKWnoQxTpfP1mgUkGPqhoU679fOnw+fGovwc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1711903342; c=relaxed/simple;
-	bh=6rB2zenkNiONAvljEnfSd8bG24wAyvBeKWA9FK4cabk=;
+	bh=PQc/GZlJdy2wQCpG3P25fWw8d/nM2cnDg0EbtlbI6dc=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=F/6rEEN6EtmmOSRfcZoOLHFwzHGibymwMcTw9wQwfWfEwqdf/TRPfCuNtxj/IoE//c8OlSb8hIhz7WD3s9OoeJkxEw9qmL4aXJ2puQyXYTSYa+IdAQ0ucHXp9degMTxvq3pLslF/uIm+fNhEtVXYoP5eQoQEZdrPsIkUW6iD63g=
+	 MIME-Version:Content-Type; b=LjnUlQLPHyHKNg18vw3ebV0wpc87qerunyQlDJ2iliqdYuFiixM4X5HpnTHUGUht2Q3Ywv/MdwMLMW5uU9DhnoGgKQOZyMK6QDbzcibro9T57BVvb0XSWoLVXqw+l6+3PwEp494QqRfpgUxz9TSoiaHmFhrSJ+y+m1JKJdh858U=
 ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=fail smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=fail smtp.client-ip=62.96.220.36
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=huaweicloud.com
 Received: from localhost (localhost [127.0.0.1])
-	by a.mx.secunet.com (Postfix) with ESMTP id C3408208B2;
+	by a.mx.secunet.com (Postfix) with ESMTP id 810F7208C8;
 	Sun, 31 Mar 2024 18:41:30 +0200 (CEST)
 X-Virus-Scanned: by secunet
 Received: from a.mx.secunet.com ([127.0.0.1])
 	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ItlOSB6j9osf; Sun, 31 Mar 2024 18:41:29 +0200 (CEST)
+	with ESMTP id UhGMyAIsQ6TG; Sun, 31 Mar 2024 18:41:29 +0200 (CEST)
 Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by a.mx.secunet.com (Postfix) with ESMTPS id 56CF1208B7;
+	by a.mx.secunet.com (Postfix) with ESMTPS id AB63E208B2;
 	Sun, 31 Mar 2024 18:41:29 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 56CF1208B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com AB63E208B2
 Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-	by mailout2.secunet.com (Postfix) with ESMTP id 485C580005E;
+	by mailout2.secunet.com (Postfix) with ESMTP id 9E1CE80005E;
 	Sun, 31 Mar 2024 18:41:29 +0200 (CEST)
 Received: from mbx-essen-01.secunet.de (10.53.40.197) by
  cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
@@ -36,25 +36,25 @@ Received: from mbx-essen-01.secunet.de (10.53.40.197) by
  15.1.2507.35; Sun, 31 Mar 2024 18:41:29 +0200
 Received: from Pickup by mbx-essen-01.secunet.de with Microsoft SMTP Server id
  15.1.2507.17; Sun, 31 Mar 2024 16:37:13 +0000
-X-sender: <netdev+bounces-83574-peter.schumann=secunet.com@vger.kernel.org>
-X-Receiver: <peter.schumann@secunet.com> ORCPT=rfc822;peter.schumann@secunet.com
+X-sender: <netdev+bounces-83573-steffen.klassert=secunet.com@vger.kernel.org>
+X-Receiver: <steffen.klassert@secunet.com> ORCPT=rfc822;steffen.klassert@secunet.com
 X-CreatedBy: MSExchange15
-X-HeloDomain: mbx-dresden-01.secunet.de
-X-ExtendedProps: BQBjAAoA33YFfe5Q3AgFADcAAgAADwA8AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5NYWlsUmVjaXBpZW50Lk9yZ2FuaXphdGlvblNjb3BlEQAAAAAAAAAAAAAAAAAAAAAADwA/AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5EaXJlY3RvcnlEYXRhLk1haWxEZWxpdmVyeVByaW9yaXR5DwADAAAATG93
+X-HeloDomain: mbx-essen-01.secunet.de
+X-ExtendedProps: BQBjAAoA3nYFfe5Q3AgFADcAAgAADwA8AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5NYWlsUmVjaXBpZW50Lk9yZ2FuaXphdGlvblNjb3BlEQAAAAAAAAAAAAAAAAAAAAAADwA/AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5EaXJlY3RvcnlEYXRhLk1haWxEZWxpdmVyeVByaW9yaXR5DwADAAAATG93
 X-Source: SMTP:Default MBX-ESSEN-02
-X-SourceIPAddress: 10.53.40.199
-X-EndOfInjectedXHeaders: 14346
+X-SourceIPAddress: 10.53.40.197
+X-EndOfInjectedXHeaders: 13282
 X-Virus-Scanned: by secunet
-Received-SPF: Pass (sender SPF authorized) identity=mailfrom; client-ip=139.178.88.99; helo=sv.mirrors.kernel.org; envelope-from=netdev+bounces-83574-peter.schumann=secunet.com@vger.kernel.org; receiver=peter.schumann@secunet.com 
-DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 3233C207D8
+Received-SPF: Pass (sender SPF authorized) identity=mailfrom; client-ip=147.75.80.249; helo=am.mirrors.kernel.org; envelope-from=netdev+bounces-83573-steffen.klassert=secunet.com@vger.kernel.org; receiver=steffen.klassert@secunet.com 
+DKIM-Filter: OpenDKIM Filter v2.11.0 b.mx.secunet.com 4F748202D2
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal: i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711876971; cv=none; b=hv2V0jigilROcK8EYto6mRFG8DmuWtzxXZdqHtz9fMG0J+dkwO3J41ISZ+hTRcRxWrMDvtPfqrGiOO2Pa5vS9Hw9hNW0+rcY8I0q3N1C1xYo9KnGofkVAWYNtZ045WxaXdk92DZrHEodFCKU10wDs2vIdFY6zGSn/djqvoiqa+0=
+	t=1711876970; cv=none; b=pqv0fOh1BRUwnqb31m/vKdSpalyuojaeQUUQUdp6s1Dj4SzY+JgF53xpy0r1anznOxmJFxAbLeE0ew/dBkD+dB2zE+Mn0KakNY8wNsCWX24pUOJ+HsbEtqZyp46LaeFnLWIKkhDB0Ocv8sGaFvosjJ4zSImuCz3k0dwc9uRGP5o=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711876971; c=relaxed/simple;
-	bh=NU/seP21mtWkdilB97nH/1Auom8uGHKorbHfj6W3x1U=;
+	s=arc-20240116; t=1711876970; c=relaxed/simple;
+	bh=PQc/GZlJdy2wQCpG3P25fWw8d/nM2cnDg0EbtlbI6dc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=t5VU4JM9HWfq6ydlfdq15M8AHsNevxb1HZ/WRW7e5KCGFbuynlYb35Qx1hbwhN8rTBK/vhMo3wMg6IQKk1cvjnlml0wLsB2fxmf42iOXZsYiZWVGRgHzQLCt/253/+2SOkeNOhmEUNNNocVPFZzGfHby5lZfh2NLhB8+aGYDVJ8=
+	 MIME-Version; b=RlDzTyVB0FWIJ758WIsM18DrQRZ56G3nWzbs6izsegxDnqtZnP3zpsO0YKz4jNPXYeu9Lf5FJxJqMUPQUi9FlVyBBuppgwqKcO1cRoXlYGLAFdIWE27d1meKBKM5qc6r66l9//qY3ZfQPpRb2GO4qC00qc+fIBedC4Xt1iRjI6o=
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
@@ -70,9 +70,9 @@ CC: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>, Alexei Starovoitov
 	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Palmer Dabbelt
 	<palmer@dabbelt.com>, Pu Lehui <pulehui@huawei.com>, Pu Lehui
 	<pulehui@huaweicloud.com>
-Subject: [PATCH bpf-next 1/2] riscv, bpf: Add 12-argument support for RV64 bpf trampoline
-Date: Sun, 31 Mar 2024 09:24:04 +0000
-Message-ID: <20240331092405.822571-2-pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Add testcase where 7th argment is struct
+Date: Sun, 31 Mar 2024 09:24:05 +0000
+Message-ID: <20240331092405.822571-3-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240331092405.822571-1-pulehui@huaweicloud.com>
 References: <20240331092405.822571-1-pulehui@huaweicloud.com>
@@ -83,15 +83,14 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-CM-TRANSID: gCh0CgCH2WtkKwlmesQWIw--.11467S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3Ar15Jw13Kr1kAF13Cr45ZFb_yoWxJr4Dpa
-	1DKrsxAFyvqa17Xa97WF1UXF1aya1qva43CFW7Gas3uFWYqr98GayFkF4jyry5GryrAw1f
-	AFs0vF98KF17GrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBE14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-	x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCH2WtkKwlmesQWIw--.11467S4
+X-Coremail-Antispam: 1UD129KBjvJXoW3JrWDWr1UCF4rZFy7XF4DCFg_yoW7Wr4xpa
+	48Xw1jyFWrJr48Wry7GF4UZr4S9rZ3Xr1UJF47J3s0vry0q34DtF18KF1jy3Z5G3y5ur1a
+	ya98KrZxCa17JaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPj14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
 	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
 	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
 	0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
@@ -99,208 +98,161 @@ X-Coremail-Antispam: 1UD129KBjvJXoW3Ar15Jw13Kr1kAF13Cr45ZFb_yoWxJr4Dpa
 	Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
 	xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
 	6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2
-	Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
-	Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
-	IF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUSYLPUUUUU
-	=
+	Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
+	Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8Jw
+	CI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUFrcTDUUU
+	U
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-Message-ID: <20240331092404.0QsNys2SNfklRWProsn0_8lrrZaBHI4Oa3Ae9BMUHFI@z>
+Message-ID: <20240331092405.fiiOuGb9SB_gYCpM1G1Krvc6MSck9n8NbJ-HJMwtCME@z>
 
 From: Pu Lehui <pulehui@huawei.com>
 
-This patch adds 12 function arguments support for riscv64 bpf
-trampoline. The current bpf trampoline supports <=3D sizeof(u64) bytes
-scalar arguments [0] and <=3D 16 bytes struct arguments [1]. Therefore, we
-focus on the situation where scalars are at most XLEN bits and
-aggregates whose total size does not exceed 2=C3=97XLEN bits in the riscv
-calling convention [2].
+Add testcase where 7th argument is struct for architectures with 8
+argument registers, and increase the complexity of the struct.
 
-Link: https://elixir.bootlin.com/linux/v6.8/source/kernel/bpf/btf.c#L6184 [=
-0]
-Link: https://elixir.bootlin.com/linux/v6.8/source/kernel/bpf/btf.c#L6769 [=
-1]
-Link: https://github.com/riscv-non-isa/riscv-elf-psabi-doc/releases/downloa=
-d/draft-20230929-e5c800e661a53efe3c2678d71a306323b60eb13b/riscv-abi.pdf [2]
 Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
- arch/riscv/net/bpf_jit_comp64.c | 63 +++++++++++++++++++++++----------
- 1 file changed, 44 insertions(+), 19 deletions(-)
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 19 ++++++++++
+ .../selftests/bpf/prog_tests/tracing_struct.c | 13 +++++++
+ .../selftests/bpf/progs/tracing_struct.c      | 35 +++++++++++++++++++
+ 3 files changed, 67 insertions(+)
 
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp6=
-4.c
-index 77ea306452d4..2aec69e4c116 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -14,6 +14,7 @@
- #include <asm/cfi.h>
- #include "bpf_jit.h"
-=20
-+#define RV_MAX_ARG_REGS 8
- #define RV_FENTRY_NINSNS 2
-=20
- #define RV_REG_TCC RV_REG_A6
-@@ -688,26 +689,43 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_t=
-ype poke_type,
- 	return ret;
- }
-=20
--static void store_args(int nregs, int args_off, struct rv_jit_context *ctx=
-)
-+static void store_args(int nr_arg_slots, int args_off, struct rv_jit_conte=
-xt *ctx)
- {
- 	int i;
-=20
--	for (i =3D 0; i < nregs; i++) {
--		emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
-+	for (i =3D 0; i < nr_arg_slots; i++) {
-+		if (i < RV_MAX_ARG_REGS) {
-+			emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
-+		} else {
-+			emit_ld(RV_REG_T1, 16 + (i - RV_MAX_ARG_REGS) * 8, RV_REG_FP, ctx);
-+			emit_sd(RV_REG_FP, -args_off, RV_REG_T1, ctx);
-+		}
- 		args_off -=3D 8;
- 	}
- }
-=20
--static void restore_args(int nregs, int args_off, struct rv_jit_context *c=
-tx)
-+static void restore_args(int nr_args_reg, int args_off, struct rv_jit_cont=
-ext *ctx)
- {
- 	int i;
-=20
--	for (i =3D 0; i < nregs; i++) {
-+	for (i =3D 0; i < nr_args_reg; i++) {
- 		emit_ld(RV_REG_A0 + i, -args_off, RV_REG_FP, ctx);
- 		args_off -=3D 8;
- 	}
- }
-=20
-+static void restore_stack_args(int nr_args_stack, int args_off, int stk_ar=
-g_off, struct rv_jit_context *ctx)
-+{
-+	int i;
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+index 39ad96a18123..4973d9de10af 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+@@ -41,6 +41,13 @@ struct bpf_testmod_struct_arg_4 {
+ 	int b;
+ };
+ 
++struct bpf_testmod_struct_arg_5 {
++	char a;
++	short b;
++	int c;
++	long d;
++};
 +
-+	for (i =3D 0; i < nr_args_stack; i++) {
-+		emit_ld(RV_REG_T1, -(args_off - RV_MAX_ARG_REGS * 8), RV_REG_FP, ctx);
-+		emit_sd(RV_REG_FP, -stk_arg_off, RV_REG_T1, ctx);
-+		args_off -=3D 8;
-+		stk_arg_off -=3D 8;
-+	}
+ __bpf_hook_start();
+ 
+ noinline int
+@@ -98,6 +105,15 @@ bpf_testmod_test_struct_arg_8(u64 a, void *b, short c, int d, void *e,
+ 	return bpf_testmod_test_struct_arg_result;
+ }
+ 
++noinline int
++bpf_testmod_test_struct_arg_9(u64 a, void *b, short c, int d, void *e, char f,
++			      short g, struct bpf_testmod_struct_arg_5 h, long i)
++{
++	bpf_testmod_test_struct_arg_result = a + (long)b + c + d + (long)e +
++		f + g + h.a + h.b + h.c + h.d + i;
++	return bpf_testmod_test_struct_arg_result;
 +}
 +
- static int invoke_bpf_prog(struct bpf_tramp_link *l, int args_off, int ret=
-val_off,
- 			   int run_ctx_off, bool save_ret, struct rv_jit_context *ctx)
- {
-@@ -780,8 +798,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tra=
-mp_image *im,
- {
- 	int i, ret, offset;
- 	int *branches_off =3D NULL;
--	int stack_size =3D 0, nregs =3D m->nr_args;
--	int retval_off, args_off, nregs_off, ip_off, run_ctx_off, sreg_off;
-+	int stack_size =3D 0, nr_arg_slots =3D 0;
-+	int retval_off, args_off, nregs_off, ip_off, run_ctx_off, sreg_off, stk_a=
-rg_off;
- 	struct bpf_tramp_links *fentry =3D &tlinks[BPF_TRAMP_FENTRY];
- 	struct bpf_tramp_links *fexit =3D &tlinks[BPF_TRAMP_FEXIT];
- 	struct bpf_tramp_links *fmod_ret =3D &tlinks[BPF_TRAMP_MODIFY_RETURN];
-@@ -827,20 +845,21 @@ static int __arch_prepare_bpf_trampoline(struct bpf_t=
-ramp_image *im,
- 	 * FP - sreg_off    [ callee saved reg	]
- 	 *
- 	 *		    [ pads              ] pads for 16 bytes alignment
-+	 *
-+	 *		    [ stack_argN        ]
-+	 *		    [ ...               ]
-+	 * FP - stk_arg_off [ stack_arg1        ] BPF_TRAMP_F_CALL_ORIG
- 	 */
-=20
- 	if (flags & (BPF_TRAMP_F_ORIG_STACK | BPF_TRAMP_F_SHARE_IPMODIFY))
- 		return -ENOTSUPP;
-=20
--	/* extra regiters for struct arguments */
--	for (i =3D 0; i < m->nr_args; i++)
--		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
--			nregs +=3D round_up(m->arg_size[i], 8) / 8 - 1;
--
--	/* 8 arguments passed by registers */
--	if (nregs > 8)
-+	if (m->nr_args > MAX_BPF_FUNC_ARGS)
- 		return -ENOTSUPP;
-=20
-+	for (i =3D 0; i < m->nr_args; i++)
-+		nr_arg_slots +=3D round_up(m->arg_size[i], 8) / 8;
+ noinline int
+ bpf_testmod_test_arg_ptr_to_struct(struct bpf_testmod_struct_arg_1 *a) {
+ 	bpf_testmod_test_struct_arg_result = a->a;
+@@ -254,6 +270,7 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+ 	struct bpf_testmod_struct_arg_2 struct_arg2 = {2, 3};
+ 	struct bpf_testmod_struct_arg_3 *struct_arg3;
+ 	struct bpf_testmod_struct_arg_4 struct_arg4 = {21, 22};
++	struct bpf_testmod_struct_arg_5 struct_arg5 = {23, 24, 25, 26};
+ 	int i = 1;
+ 
+ 	while (bpf_testmod_return_ptr(i))
+@@ -268,6 +285,8 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+ 					    (void *)20, struct_arg4);
+ 	(void)bpf_testmod_test_struct_arg_8(16, (void *)17, 18, 19,
+ 					    (void *)20, struct_arg4, 23);
++	(void)bpf_testmod_test_struct_arg_9(16, (void *)17, 18, 19, (void *)20,
++					    21, 22, struct_arg5, 27);
+ 
+ 	(void)bpf_testmod_test_arg_ptr_to_struct(&struct_arg1_2);
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+index fe0fb0c9849a..5a8eeb07a6ba 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
++++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+@@ -74,6 +74,19 @@ static void test_fentry(void)
+ 	ASSERT_EQ(skel->bss->t8_g, 23, "t8:g");
+ 	ASSERT_EQ(skel->bss->t8_ret, 156, "t8 ret");
+ 
++	ASSERT_EQ(skel->bss->t9_a, 16, "t9:a");
++	ASSERT_EQ(skel->bss->t9_b, 17, "t9:b");
++	ASSERT_EQ(skel->bss->t9_c, 18, "t9:c");
++	ASSERT_EQ(skel->bss->t9_d, 19, "t9:d");
++	ASSERT_EQ(skel->bss->t9_e, 20, "t9:e");
++	ASSERT_EQ(skel->bss->t9_f, 21, "t9:f");
++	ASSERT_EQ(skel->bss->t9_g, 22, "t9:f");
++	ASSERT_EQ(skel->bss->t9_h_a, 23, "t9:h.a");
++	ASSERT_EQ(skel->bss->t9_h_b, 24, "t9:h.b");
++	ASSERT_EQ(skel->bss->t9_h_c, 25, "t9:h.c");
++	ASSERT_EQ(skel->bss->t9_h_d, 26, "t9:h.d");
++	ASSERT_EQ(skel->bss->t9_i, 27, "t9:i");
++	ASSERT_EQ(skel->bss->t9_ret, 258, "t9 ret");
+ 	tracing_struct__detach(skel);
+ destroy_skel:
+ 	tracing_struct__destroy(skel);
+diff --git a/tools/testing/selftests/bpf/progs/tracing_struct.c b/tools/testing/selftests/bpf/progs/tracing_struct.c
+index 515daef3c84b..bfe96bab94c0 100644
+--- a/tools/testing/selftests/bpf/progs/tracing_struct.c
++++ b/tools/testing/selftests/bpf/progs/tracing_struct.c
+@@ -23,6 +23,13 @@ struct bpf_testmod_struct_arg_4 {
+ 	int b;
+ };
+ 
++struct bpf_testmod_struct_arg_5 {
++	char a;
++	short b;
++	int c;
++	long d;
++};
 +
- 	/* room of trampoline frame to store return address and frame pointer */
- 	stack_size +=3D 16;
-=20
-@@ -850,7 +869,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tra=
-mp_image *im,
- 		retval_off =3D stack_size;
- 	}
-=20
--	stack_size +=3D nregs * 8;
-+	stack_size +=3D nr_arg_slots * 8;
- 	args_off =3D stack_size;
-=20
- 	stack_size +=3D 8;
-@@ -867,8 +886,13 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tr=
-amp_image *im,
- 	stack_size +=3D 8;
- 	sreg_off =3D stack_size;
-=20
-+	if (nr_arg_slots - RV_MAX_ARG_REGS > 0)
-+		stack_size +=3D (nr_arg_slots - RV_MAX_ARG_REGS) * 8;
+ long t1_a_a, t1_a_b, t1_b, t1_c, t1_ret, t1_nregs;
+ __u64 t1_reg0, t1_reg1, t1_reg2, t1_reg3;
+ long t2_a, t2_b_a, t2_b_b, t2_c, t2_ret;
+@@ -32,6 +39,7 @@ long t5_ret;
+ int t6;
+ long t7_a, t7_b, t7_c, t7_d, t7_e, t7_f_a, t7_f_b, t7_ret;
+ long t8_a, t8_b, t8_c, t8_d, t8_e, t8_f_a, t8_f_b, t8_g, t8_ret;
++long t9_a, t9_b, t9_c, t9_d, t9_e, t9_f, t9_g, t9_h_a, t9_h_b, t9_h_c, t9_h_d, t9_i, t9_ret;
+ 
+ 
+ SEC("fentry/bpf_testmod_test_struct_arg_1")
+@@ -184,4 +192,31 @@ int BPF_PROG2(test_struct_arg_15, __u64, a, void *, b, short, c, int, d,
+ 	return 0;
+ }
+ 
++SEC("fentry/bpf_testmod_test_struct_arg_9")
++int BPF_PROG2(test_struct_arg_16, __u64, a, void *, b, short, c, int, d, void *, e,
++	      char, f, short, g, struct bpf_testmod_struct_arg_5, h, long, i)
++{
++	t9_a = a;
++	t9_b = (long)b;
++	t9_c = c;
++	t9_d = d;
++	t9_e = (long)e;
++	t9_f = f;
++	t9_g = g;
++	t9_h_a = h.a;
++	t9_h_b = h.b;
++	t9_h_c = h.c;
++	t9_h_d = h.d;
++	t9_i = i;
++	return 0;
++}
 +
- 	stack_size =3D round_up(stack_size, 16);
-=20
-+	stk_arg_off =3D stack_size;
++SEC("fexit/bpf_testmod_test_struct_arg_9")
++int BPF_PROG2(test_struct_arg_17, __u64, a, void *, b, short, c, int, d, void *, e,
++	      char, f, short, g, struct bpf_testmod_struct_arg_5, h, long, i, int, ret)
++{
++	t9_ret = ret;
++	return 0;
++}
 +
- 	if (!is_struct_ops) {
- 		/* For the trampoline called from function entry,
- 		 * the frame of traced function and the frame of
-@@ -904,10 +928,10 @@ static int __arch_prepare_bpf_trampoline(struct bpf_t=
-ramp_image *im,
- 		emit_sd(RV_REG_FP, -ip_off, RV_REG_T1, ctx);
- 	}
-=20
--	emit_li(RV_REG_T1, nregs, ctx);
-+	emit_li(RV_REG_T1, nr_arg_slots, ctx);
- 	emit_sd(RV_REG_FP, -nregs_off, RV_REG_T1, ctx);
-=20
--	store_args(nregs, args_off, ctx);
-+	store_args(nr_arg_slots, args_off, ctx);
-=20
- 	/* skip to actual body of traced function */
- 	if (flags & BPF_TRAMP_F_SKIP_FRAME)
-@@ -947,7 +971,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tra=
-mp_image *im,
- 	}
-=20
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
--		restore_args(nregs, args_off, ctx);
-+		restore_args(min_t(int, nr_arg_slots, RV_MAX_ARG_REGS), args_off, ctx);
-+		restore_stack_args(nr_arg_slots - RV_MAX_ARG_REGS, args_off, stk_arg_off=
-, ctx);
- 		ret =3D emit_call((const u64)orig_call, true, ctx);
- 		if (ret)
- 			goto out;
-@@ -982,7 +1007,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tr=
-amp_image *im,
- 	}
-=20
- 	if (flags & BPF_TRAMP_F_RESTORE_REGS)
--		restore_args(nregs, args_off, ctx);
-+		restore_args(min_t(int, nr_arg_slots, RV_MAX_ARG_REGS), args_off, ctx);
-=20
- 	if (save_ret) {
- 		emit_ld(RV_REG_A0, -retval_off, RV_REG_FP, ctx);
---=20
+ char _license[] SEC("license") = "GPL";
+-- 
 2.34.1
 
 
