@@ -1,221 +1,153 @@
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EFFE2F3A
-	for <bpf@vger.kernel.org>; Sun, 31 Mar 2024 17:49:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EAC99463
+	for <bpf@vger.kernel.org>; Sun, 31 Mar 2024 19:32:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711907370; cv=none; b=cTy3gCHKyMJMMYz294FqOMRDwUsMS5nz3yoqcYWoCIVSwuPV2I205QDj/J+D25RF6UnqLqX8gUoP+AviLtfG2MM1+DW4+pkeKoEK7SIcSz8LwtBjPTCCTl61oa7MVQ4kUijz5KiCj9Z5pI1RBKbHMapN+q+vfbtNzC5Qxef4ZU4=
+	t=1711913528; cv=none; b=lnUcOCnNiyczl0Gm6iETgySPXMNLI29byI2Nq7hG3yYZwsskdAF+azTmMYxRMh+z8XtXNWR+DvnaUwA1gJkA7tp1VWYCvFtrRMgOL7QtpQ8P6pcfOMNnEZTjgDTR02cQZov/7WT6wCAY9KEXh75ZNpn3KXudaZLwiV1sIwJtB/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711907370; c=relaxed/simple;
-	bh=M9PKvfM1XUlJ0yz9fk8ZoJ3lQb4yr51ocsoenz5m5wU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IGwO5JncPkwY97lwM3/W4c7Zo5FaWUwcGXFdkqCsiZzVsWdh0x7w1CO23WCbKG5K5Yjx+mH/WOjFFzqRSAjarNgSWswMmEWkyHGPEczgtquDfqF+gj0E4qdklPubCk6T/dbHvn38aKz+juyzR5mm7nokob0Djuw3K8b9G0iqC7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=WCsvNNkZ; arc=none smtp.client-ip=209.85.166.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+	s=arc-20240116; t=1711913528; c=relaxed/simple;
+	bh=DR4PdXf6v6kIt30HN4ScBj02IhwqckXL6wI5NRXnhq8=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BAs37FtpB2H2y9OgpSOGPjz+49LW2r6k4b9iSF8v0USmVDPlOjKwrDAxm9uyqkFf1+FAhVHli0IbwXZMepLyGAPEN7l0wKTAxtLXlVv9xIHYks35FKPjqRa/mlyXgJ4K9SmZedPJDA6By1k29ajPrNNr2DRbDWvR85IAV7Ax87Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Voy+CZSS; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="WCsvNNkZ"
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-7d0262036afso186843339f.3
-        for <bpf@vger.kernel.org>; Sun, 31 Mar 2024 10:49:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Voy+CZSS"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-415649984c6so2027265e9.3
+        for <bpf@vger.kernel.org>; Sun, 31 Mar 2024 12:32:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1711907367; x=1712512167; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wfXG+wF/tlnzwlpe6WnuuMRMbwNdJXyeLBAyx26A1ms=;
-        b=WCsvNNkZbr0QOheJJPKfdpCrPQuw8lubWFXMKkpnzzAiddBfOm58EVKY/3yHFLAzxN
-         37D6vkD9MeK9UlTW0W3a3wQPhhpV1UMRbkWok8ITOdkICQra0flPbJF9EY7Ck3dP1X7O
-         +/V0NaaqLd0sns+6nrvUb7mpmzwuPLDUeI7zr8aseEFvYEPLyvxj0JElNFYrPZn2b08C
-         5Gk5sJfSVvRqQeQQa7Ax0dZITu/4W+cOxPuyI0ydLBZmj0aI4P/eVit2SN4RRlMaLYvx
-         Jm/Oq8i9dU2k+xQ3PIuCIBkGCYarWFX297oeqA+pySYdk+W/zSdmOK0jzvb86lIvfo8m
-         Wr4g==
+        d=gmail.com; s=20230601; t=1711913525; x=1712518325; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=bStw9VC/7dF2VsZNDTWp+aPn1A9Np+5C/xD4gM3V0JY=;
+        b=Voy+CZSS2dC3yo7P1+8a2w+WINm6esdoJGIj3XGjW5xxYx4yUyJRvCvwJPejcpnA4j
+         PyjQVAFtPeL6LxOOmC8uBnPwyMdvkBOUb1Ku15ZoZ4/7sR8nzbTcyj/nO4lxCl/QPz/U
+         ag3ohh3uq8SoI4ybLIRJw8IQYWQS3iglbj+3Pdbp8s+QVDIXaRtezeYdDEx6Xg8C5OXa
+         GesdWwn9EJwpeuoGbBsrDdzMuvBpWF6Cj+t0SUGx6UkhD0bZ5WLHnzzvwPXArA3iVpH/
+         KSCZ8bht6BzYrpFC9tjVlwmFfPXk9KD01VE2e/PLbmU2TvRNPdr4XDnNnUg+JMeNidQ+
+         o8jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711907367; x=1712512167;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1711913525; x=1712518325;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wfXG+wF/tlnzwlpe6WnuuMRMbwNdJXyeLBAyx26A1ms=;
-        b=Fr39lRatLnvj8XR9MHQoNWwL6Zih8mXB7SvnieRej8NqPKFo782ok5OqRf33Bn5GgI
-         69UOl7CicMdOQka3QJpVzXdx/MvN299dPjYFD4UuYRSZYcU8+wd5LCYdhUsIu5AmFFv9
-         p3S03dRk+2EqJPTIimkijlGDuPHzVFsM3ZcSW+4lMYzAhT5PQ4p+DB2+pfMjRoQ6/qEL
-         B5RX4Zi+P9hRvqToKTSBoUMcBaYbwlrvabdTBkihBV6PcrVLs9I+q/U+CETNSmy2iBXw
-         NOOgkAO3aIy25xLq1jYbNAQkz/RJwP1FNd/3UA7oe2YmMJo0bIvfoTd5VfCTOET13LDI
-         X4iA==
-X-Forwarded-Encrypted: i=1; AJvYcCXZqOWObXuSpG+gmIZK9iN9DlEyvs7XmniceWThupcYM60BMoZiipOH2ALamO+gNV7GVmvQw7PQMQ2iNbkNyoo7fLc7
-X-Gm-Message-State: AOJu0Yyw2Hf0/NicSjqCKv2VESJCEvoRSF2YtdnvlS0NGvrQDTnjAVoL
-	WvB4DBQFNtyqQ6YDzYBIdCS0T92Q6qeMXyDp7TGNt0c2vkymOqQzx//ZmLtBm8g=
-X-Google-Smtp-Source: AGHT+IH22sqGdmww4qFmYTNoUoblTRsZ8MDo9UbAH2NhKT2PnzajCNIkvwGlbGpFRCb0Dt+t3AU9/g==
-X-Received: by 2002:a6b:6e0b:0:b0:7d0:bee7:b660 with SMTP id d11-20020a6b6e0b000000b007d0bee7b660mr2804375ioh.4.1711907366685;
-        Sun, 31 Mar 2024 10:49:26 -0700 (PDT)
-Received: from [100.64.0.1] ([170.85.6.190])
-        by smtp.gmail.com with ESMTPSA id d11-20020a5d964b000000b007cc840d1d0bsm2217439ios.25.2024.03.31.10.49.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 31 Mar 2024 10:49:26 -0700 (PDT)
-Message-ID: <c8e3507b-cab0-4215-9936-cd706f043103@sifive.com>
-Date: Sun, 31 Mar 2024 12:49:23 -0500
+        bh=bStw9VC/7dF2VsZNDTWp+aPn1A9Np+5C/xD4gM3V0JY=;
+        b=O8h/GuiW0lgl+xhVwE7UODM2I4FBvA9zW5l+6t+QhEggnZL2Xh3N6TDCbp1FosmOrn
+         49yqMFHT4TJssvWmZUT4w0zSsU4efUDpgAiTbWgmZEjNUbkbdZDj/ipONuKF6fV1572Z
+         ZPKJPMjcJ9i6SIgibR+mOLhAhZKEEz+YAj6ckQhVV/Zo3ZOqXAyPpJvETIkjA+BUGWC4
+         tRxDScdUz+VzifpJQhSWwddYN1xDFasSB9WVVRFoZD7rlR8Hu+8Iq0eNzW0JwHJ8cb/T
+         bmBHnXjR12Q7GDDBKJznuaBA8qSlNwcb4F6lahVIua3viz937nFwgsPLm6ruDjcUy88Y
+         uCtg==
+X-Forwarded-Encrypted: i=1; AJvYcCUTKLMsZYpdqpcsbSZUOEeGFu1N9Vqx8gL5Ka6crck/oA7uPkl2wzbT2SolJxzMoW+6d7tRLF67JfaCPYrT1Q6Voz9A
+X-Gm-Message-State: AOJu0Yxf/l0TYgJTZfcEWWqYpM5VKv1q14TVW5f/467wafqhHUwX8gbN
+	4qfUD6ypLYoVTPFnFRrBjjQOhPEonmQFZHDYqcfFz8pIQbuBc3dA
+X-Google-Smtp-Source: AGHT+IEs9D9yRpz/GxVwYv/UPTNOxaf2niaV7ysphXDXSPoQn43A8A+eBOIgSiBIukVYQeLypc1NCw==
+X-Received: by 2002:a05:600c:1f94:b0:415:540e:74e7 with SMTP id je20-20020a05600c1f9400b00415540e74e7mr3872650wmb.16.1711913525287;
+        Sun, 31 Mar 2024 12:32:05 -0700 (PDT)
+Received: from krava ([83.240.62.118])
+        by smtp.gmail.com with ESMTPSA id h9-20020a05600c314900b004147b824b08sm12481400wmo.7.2024.03.31.12.32.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 Mar 2024 12:32:04 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Sun, 31 Mar 2024 21:32:02 +0200
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Oleg Nesterov <oleg@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
+Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Add uretprobe syscall test
+ for regs changes
+Message-ID: <Zgm6Mjg0Ke8BaEBA@krava>
+References: <20240327102036.543283-1-jolsa@kernel.org>
+ <20240327102036.543283-4-jolsa@kernel.org>
+ <CAEf4BzYXFX3Mx+3Z2BLHrUw5dG7qaz7R2Tfc82R+OMhT14rDBg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/5] riscv, bpf: Relax restrictions on Zbb
- instructions
-To: Conor Dooley <conor.dooley@microchip.com>, Conor Dooley <conor@kernel.org>
-Cc: Stefan O'Rear <sorear@fastmail.com>, Pu Lehui <pulehui@huaweicloud.com>,
- bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
- netdev@vger.kernel.org, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Manu Bretelle <chantr4@gmail.com>, Pu Lehui <pulehui@huawei.com>
-References: <20240328124916.293173-1-pulehui@huaweicloud.com>
- <20240328124916.293173-3-pulehui@huaweicloud.com>
- <3ed9fe94-2610-41eb-8a00-a9f37fcf2b1a@app.fastmail.com>
- <20240328-ferocity-repose-c554f75a676c@spud>
- <20240329-linguini-uncured-380cb4cff61c@wendy>
-From: Samuel Holland <samuel.holland@sifive.com>
-Content-Language: en-US
-In-Reply-To: <20240329-linguini-uncured-380cb4cff61c@wendy>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzYXFX3Mx+3Z2BLHrUw5dG7qaz7R2Tfc82R+OMhT14rDBg@mail.gmail.com>
 
-Hi Conor,
+On Fri, Mar 29, 2024 at 03:34:00PM -0700, Andrii Nakryiko wrote:
+> On Wed, Mar 27, 2024 at 3:21 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > Adding test that creates uprobe consumer on uretprobe which changes some
+> > of the registers. Making sure the changed registers are propagated to the
+> > user space when the ureptobe syscall trampoline is used on x86_64.
+> >
+> > To be able to do this, adding support to bpf_testmod to create uprobe via
+> > new attribute file:
+> >   /sys/kernel/bpf_testmod_uprobe
+> >
+> > This file is expecting file offset and creates related uprobe on current
+> > process exe file and removes existing uprobe if offset is 0. The can be
+> > only single uprobe at any time.
+> >
+> > The uprobe has specific consumer that changes registers used in ureprobe
+> > syscall trampoline and which are later checked in the test.
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 119 +++++++++++++++++-
+> >  .../selftests/bpf/prog_tests/uprobe_syscall.c |  67 ++++++++++
+> >  2 files changed, 185 insertions(+), 1 deletion(-)
+> >
+> 
+> LGTM:
+> 
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> 
+> [...]
+> 
+> >  BTF_KFUNCS_START(bpf_testmod_common_kfunc_ids)
+> >  BTF_ID_FLAGS(func, bpf_iter_testmod_seq_new, KF_ITER_NEW)
+> >  BTF_ID_FLAGS(func, bpf_iter_testmod_seq_next, KF_ITER_NEXT | KF_RET_NULL)
+> > @@ -650,7 +763,10 @@ static int bpf_testmod_init(void)
+> >                 return ret;
+> >         if (bpf_fentry_test1(0) < 0)
+> >                 return -EINVAL;
+> > -       return sysfs_create_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
+> > +       ret = sysfs_create_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
+> > +       if (ret < 0)
+> > +               return ret;
+> > +       return register_bpf_testmod_uprobe();
+> 
+> nit: keep using the same pattern to make adding more actions easier in
+> the future:
+> 
+> ret = register_bpf_testmod_uprobe();
+> if (ret < 0)
+>     return ret;
+> return 0;
 
-Looks good except for one typo.
+ok, will change 
 
-On 2024-03-29 6:23 AM, Conor Dooley wrote:
-> On Thu, Mar 28, 2024 at 10:07:23PM +0000, Conor Dooley wrote:
-> 
->> As I said on IRC to you earlier, I think the Kconfig options here are in
->> need of a bit of a spring cleaning - they should be modified to explain
->> their individual purposes, be that enabling optimisations in the kernel
->> or being required for userspace. I'll try to send a patch for that if
->> I remember tomorrow.
-> 
-> Something like this:
-> 
-> -- >8 --
-> commit 5125504beaedd669b082bf74b02003a77360670f
-> Author: Conor Dooley <conor.dooley@microchip.com>
-> Date:   Fri Mar 29 11:13:22 2024 +0000
-> 
->     RISC-V: clarify what some RISCV_ISA* config options do
->     
->     During some discussion on IRC yesterday and on Pu's bpf patch [1]
->     I noticed that these RISCV_ISA* Kconfig options are not really clear
->     about their implications. Many of these options have no impact on what
->     userspace is allowed to do, for example an application can use Zbb
->     regardless of whether or not the kernel does. Change the help text to
->     try and clarify whether or not an option affects just the kernel, or
->     also userspace. None of these options actually control whether or not an
->     extension is detected dynamically as that's done regardless of Kconfig
->     options, so drop any text that implies the option is required for
->     dynamic detection, rewording them as "do x when y is detected".
->     
->     Link: https://lore.kernel.org/linux-riscv/20240328-ferocity-repose-c554f75a676c@spud/ [1]
->     Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->     ---
->     I did this based on top of Samuel's changes dropping the MMU
->     requurements just in case, but I don't think there's a conflict:
->     https://lore.kernel.org/linux-riscv/20240227003630.3634533-4-samuel.holland@sifive.com/
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index d8a777f59402..f327a8ac648f 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -501,8 +501,8 @@ config RISCV_ISA_SVNAPOT
->  	depends on RISCV_ALTERNATIVE
->  	default y
->  	help
-> -	  Allow kernel to detect the Svnapot ISA-extension dynamically at boot
-> -	  time and enable its usage.
-> +	  Add support for the Svnapot ISA-extension when it is detected by
-> +	  the kernel at boot.
->  
->  	  The Svnapot extension is used to mark contiguous PTEs as a range
->  	  of contiguous virtual-to-physical translations for a naturally
-> @@ -520,9 +520,9 @@ config RISCV_ISA_SVPBMT
->  	depends on RISCV_ALTERNATIVE
->  	default y
->  	help
-> -	   Adds support to dynamically detect the presence of the Svpbmt
-> -	   ISA-extension (Supervisor-mode: page-based memory types) and
-> -	   enable its usage.
-> +	   Add support for the Svpbmt ISA-extension (Supervisor-mode:
-> +	   page-based memory types) when it is detected by the kernel at
-> +	   boot.
->  
->  	   The memory type for a page contains a combination of attributes
->  	   that indicate the cacheability, idempotency, and ordering
-> @@ -541,14 +541,15 @@ config TOOLCHAIN_HAS_V
->  	depends on AS_HAS_OPTION_ARCH
->  
->  config RISCV_ISA_V
-> -	bool "VECTOR extension support"
-> +	bool "Vector extension support"
->  	depends on TOOLCHAIN_HAS_V
->  	depends on FPU
->  	select DYNAMIC_SIGFRAME
->  	default y
->  	help
->  	  Say N here if you want to disable all vector related procedure
-> -	  in the kernel.
-> +	  in the kernel. Without this option enabled, neither the kernel nor
-> +	  userspace may use vector.
->  
->  	  If you don't know what to do here, say Y.
->  
-> @@ -606,8 +607,8 @@ config RISCV_ISA_ZBB
->  	depends on RISCV_ALTERNATIVE
->  	default y
->  	help
-> -	   Adds support to dynamically detect the presence of the ZBB
-> -	   extension (basic bit manipulation) and enable its usage.
-> +	   Add support for enabling optimisations in the kernel when the
-> +	   Zbb extension is detected at boot.
->  
->  	   The Zbb extension provides instructions to accelerate a number
->  	   of bit-specific operations (count bit population, sign extending,
-> @@ -623,9 +624,9 @@ config RISCV_ISA_ZICBOM
->  	select RISCV_DMA_NONCOHERENT
->  	select DMA_DIRECT_REMAP
->  	help
-> -	   Adds support to dynamically detect the presence of the ZICBOM
-> -	   extension (Cache Block Management Operations) and enable its
-> -	   usage.
-> +	   Add support for the Zicbom extension (Cache Block Management
-> +	   Operations) and enable its use in the kernel when it is detected
-> +	   at boot.
->  
->  	   The Zicbom extension can be used to handle for example
->  	   non-coherent DMA support on devices that need it.
-> @@ -684,7 +685,8 @@ config FPU
->  	default y
->  	help
->  	  Say N here if you want to disable all floating-point related procedure
-> -	  in the kernel.
-> +	  in the kernel. Without this option enabled, neither the kernel nor
-> +	  userspace may use vector.
+thanks,
+jirka
 
-s/vector/floating point/ here.
-
-Regards,
-Samuel
-
->  
->  	  If you don't know what to do here, say Y.
->  
 > 
+> >  }
+> >
+> >  static void bpf_testmod_exit(void)
+> > @@ -664,6 +780,7 @@ static void bpf_testmod_exit(void)
+> >                 msleep(20);
+> >
+> >         sysfs_remove_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
+> > +       unregister_bpf_testmod_uprobe();
+> >  }
+> >
 > 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
-
+> [...]
