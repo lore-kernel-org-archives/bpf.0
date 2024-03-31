@@ -1,155 +1,92 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CCA0146D65
-	for <bpf@vger.kernel.org>; Sun, 31 Mar 2024 19:37:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 000D114534F
+	for <bpf@vger.kernel.org>; Sun, 31 Mar 2024 20:03:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711913829; cv=none; b=d+rGrtEFCkYFc3FmAzF56ZbyxIbhWAJhykdfgoXIJLEFM6LqDKpN6VkZsgfMdHGTfIvNMqHdia2sQZ7a24/3x3lwOvffuX0IbTK1Gc1lhzAHw66z1SeivPebSQIY7Zpb6T2u4nRgKFQNSUj37abCduOWh2+zvXRDL1WyNIzJRCk=
+	t=1711915436; cv=none; b=mD4Nj0pA9MGmvUpDBnuKUQKXhjI60qfQ7m/cs0G9DvzJU/pxwmmbKGbGLecUsFZmNz9ZpixaV5mKe6fDVlK1RWmgJd4rZWDCnXDzeQiw9YfAUkBxQEVTiiEg58K0CG5kASx499IYxGkKEvJHoaQlSbu+KOIUrz7ErWcoVb6pgDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711913829; c=relaxed/simple;
-	bh=gHdlRdlt/ABFlwPOqowdAbKXf4xGUngo3sp81YkMpCA=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GOLJOfPm4vI05yDeyZMNy+zz14OV1hJp4Grlmm+XudX8n7774eB6XiRWQYw8WHZjm0vCNnInaX/xvDtNUqJ8z8+laIk7lB92d9xC9g5eyzqcGljm9ZJ/ANuKXUb3FhU+RYriANMXTmsu6C9uiCuUijb0Pr1Jg+8tpOycaI3thh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F/4CPmKA; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711915436; c=relaxed/simple;
+	bh=l+TXHcBg5UfJdK/+qrd+Jay80oNs1nvkDKeGdEMVJLQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dvgTD+sKlLcJth/++B4V/uwr44JFOY3trneAa6oZRWStxlkjG0unJiA0we9HF32MK3yMKuVv2uddi2xbEU8JJ1es1IolBXGLrvlaLp0DaUaHhv7KM2PkhZkOj38WTPb3Ac/lf6z8itM7zsw0EDv49uvDsPSV2NjPUm+ufJS91aI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aJG8E8Ll; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F/4CPmKA"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-33ddd1624beso2163913f8f.1
-        for <bpf@vger.kernel.org>; Sun, 31 Mar 2024 12:37:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711913826; x=1712518626; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5/mTsUGCckh6ZVyWzbdkp99lB6BYn+WoiGmpAdkvTeQ=;
-        b=F/4CPmKAzauG8n4n9WptYDRhu/bz+u5Ntycpvc1/22gfJn6cf7I9J9ODqMn0CEj1WU
-         XDPwyD4mSU4KmI1PE3g3SHbenMAxkOMZwXQd+IIwbzADTg2N8aPOjc9wWC/pOs5ml9Fv
-         RcPaLa6EKIc26MmbA90p2t48JwkWsCWeaNLEpIxD9f+WCWlr5PLQHeIJSs1aUAw50+Li
-         fGmoyMY/aUyG1kyXVzjrPhY6RPK8y0A7IFmm3EBnhNz8gUse0zwnRZwQilmYyU44Nnhk
-         9yaY1+R2L5Cjxoun4uTOIOMgG3w2RTH5ngBoOJd2vU0qfFuKEdkqUqVphIOrKKt8rZdQ
-         GJUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711913826; x=1712518626;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5/mTsUGCckh6ZVyWzbdkp99lB6BYn+WoiGmpAdkvTeQ=;
-        b=fWvDMKu0gn0u5n3ZAZviuLw90ZKLdVg3pDCOhM4rEH+5+4oSvhUYjxzjxhHx/1Dp2n
-         Acwi6UIWm8YbpZzlHSUnyotmnLxUQwMHcGpcET4ilfM+R4TwSNzQqjGEpvkyDBq27/3g
-         2sn7VfRMkabTsu6OLv22jLVQHb6E4lwoS7/j36VJYIeQkcRC1cRSwwHEV5axmqo4Evxd
-         nXIVkls8/ZMYLod4tiZqbYEyX7xH+YFwJM0Wp7Kn7tuT1TQlWxr6XCig1NrlH9UqsXh8
-         3Ahl7AsESrScKLMYAV10Pe8O/XCK78uhk7k4eZJdK/qatGu35OD5tf6Ot/8qLXPUdI3q
-         U03A==
-X-Forwarded-Encrypted: i=1; AJvYcCUVobc/TRZCXwTCC2FXLU6sSMOGw2X3jqgqnLs845BLWA5fbHpF3/Spm6lnVUwmnoZn3pZpj6G54MtqvW2kmyxz0eUr
-X-Gm-Message-State: AOJu0YzvEfA00Rqu3iTAF1BqpxGt8RlxkTxiN19GWMDhBF4HbAlv583M
-	3iBDG7XyhwJ3rvANLYmyCUeR8JmMumNjRf3wZmnyNHZ5CrKjrPhB
-X-Google-Smtp-Source: AGHT+IF0SGDs7Ubg0c8wujOEvYPhRxrmK4BBbx7cjhHb7hzDay7VPZ38ZT3kCh3h8o2/WZ6HIEA2mQ==
-X-Received: by 2002:a5d:4583:0:b0:343:35b5:240 with SMTP id p3-20020a5d4583000000b0034335b50240mr6322747wrq.29.1711913825799;
-        Sun, 31 Mar 2024 12:37:05 -0700 (PDT)
-Received: from krava ([83.240.62.118])
-        by smtp.gmail.com with ESMTPSA id fs11-20020a05600c3f8b00b004146dd6bfe2sm12392687wmb.47.2024.03.31.12.37.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Mar 2024 12:37:05 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sun, 31 Mar 2024 21:37:03 +0200
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>
-Cc: Oleg Nesterov <oleg@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aJG8E8Ll"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF493C433C7;
+	Sun, 31 Mar 2024 20:03:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711915435;
+	bh=l+TXHcBg5UfJdK/+qrd+Jay80oNs1nvkDKeGdEMVJLQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=aJG8E8Llk3fo/4pGU+xnJOsq19g0wRZPDBzfx7xwp73dVgwEayf/KZAG6+L/vBUTp
+	 5OOhk+Z3TA2Qjc9+pVf8E6tRpczrwGqd7/FI52AreuMpz0PI0mGsBWsSna53GO1BKE
+	 6FtXDCFpsgh8ImUiNVFvSMwJvwt/rIM+hSLaDTPPNa7yIb7hAO95KMaXLeSEzinJ1Y
+	 G7M1fLXy9HKB8j+Akl3gSMathM8LEos5+c4b1tTniNj2AANJvFxO9SXtrzmSrYJY4G
+	 dzZVWRtZVzdW7LausP0NK+/S9AExtiaXqBcS85DJLVDNDNQ44YXFGo22F8aUg1ySUk
+	 ERN6X3uI9Ky9w==
+From: Quentin Monnet <qmo@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
 	John Fastabend <john.fastabend@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
-Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: Add uretprobe syscall test
- for regs integrity
-Message-ID: <Zgm7X1_3iRewLNQQ@krava>
-References: <20240327102036.543283-1-jolsa@kernel.org>
- <20240327102036.543283-3-jolsa@kernel.org>
- <CAEf4BzZps+OdPoyRz1=7mEzh=shjVjT=ZznhMD0Y-w98GW782g@mail.gmail.com>
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org,
+	Rameez Rehman <rameezrehman408@hotmail.com>,
+	Quentin Monnet <qmo@kernel.org>
+Subject: [PATCH bpf-next 0/3] bpftool: Clean up indentation and formatting in docs
+Date: Sun, 31 Mar 2024 21:03:43 +0100
+Message-Id: <20240331200346.29118-1-qmo@kernel.org>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzZps+OdPoyRz1=7mEzh=shjVjT=ZznhMD0Y-w98GW782g@mail.gmail.com>
 
-On Fri, Mar 29, 2024 at 03:30:11PM -0700, Andrii Nakryiko wrote:
-> On Wed, Mar 27, 2024 at 3:21 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > Add uretprobe syscall test that compares register values before
-> > and after the uretprobe is hit. It also compares the register
-> > values seen from attached bpf program.
-> >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  tools/include/linux/compiler.h                |   4 +
-> >  .../selftests/bpf/prog_tests/uprobe_syscall.c | 163 ++++++++++++++++++
-> >  .../selftests/bpf/progs/uprobe_syscall.c      |  15 ++
-> >  3 files changed, 182 insertions(+)
-> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> >  create mode 100644 tools/testing/selftests/bpf/progs/uprobe_syscall.c
-> 
-> [...]
-> 
-> > +__naked unsigned long uprobe_syscall_arch_test(void)
-> > +{
-> > +       asm volatile (
-> > +               "movq $0xdeadbeef, %rax\n"
-> > +               "ret\n"
-> > +       );
-> > +}
-> > +
-> > +__naked void uprobe_syscall_arch(struct pt_regs *before, struct pt_regs *after)
-> 
-> don't you get compiler warnings for using __naked with explicit
-> function arguments?
+The rST manual pages for bpftool would use a mix of tabs and spaces for
+indentation. While this is the norm in C code, this is rather unusual
+for rST documents, and over time we've seen many contributors use wrong
+levels of indentation for documentation update. This series simplifies
+the indentation in the rST files by removing some unnecessary levels of
+indent, and by using spaces only for what remains.
 
-nope, both gcc and clang are silent
+This clean-up is done in the firt patch. The following two patches
+contain some additional formatting clean-ups or typo fixes.
 
-> 
-> > +{
-> > +       asm volatile (
-> > +               "movq %r15,   0(%rdi)\n"
-> > +               "movq %r14,   8(%rdi)\n"
-> 
-> [...]
-> 
-> > +       err = uprobe_syscall__attach(skel);
-> > +       if (!ASSERT_OK(err, "uprobe_syscall__attach"))
-> > +               goto cleanup;
-> > +
-> > +       uprobe_syscall_arch(&before, &after);
-> 
-> uprobe_syscall_arch() doesn't really do an explicit `syscall
-> uretprobe`, it should work for int3-based uretprobes as well? Let's
-> call it something a bit more generic then?
+Rameez Rehman did most of the work; I added a few fixes myself, rebased,
+and formatted the patch set.
 
-ok, how about
+Rameez Rehman (3):
+  bpftool: Use simpler indentation in source rST for documentation
+  bpftool: Remove useless emphasis on command description in man pages
+  bpftool: Clean-up typos, punctuation, list formatting in docs
 
-  uprobe_syscall_arch -> uretprobe_regs
-  uprobe_syscall_arch_test -> uretprobe_regs_trigger
+ tools/bpf/bpftool/Documentation/Makefile      |   6 +-
+ .../bpf/bpftool/Documentation/bpftool-btf.rst | 116 +++--
+ .../bpftool/Documentation/bpftool-cgroup.rst  | 193 ++++----
+ .../bpftool/Documentation/bpftool-feature.rst | 115 +++--
+ .../bpf/bpftool/Documentation/bpftool-gen.rst | 338 +++++++-------
+ .../bpftool/Documentation/bpftool-iter.rst    |  52 +--
+ .../bpftool/Documentation/bpftool-link.rst    |  73 ++-
+ .../bpf/bpftool/Documentation/bpftool-map.rst | 232 +++++-----
+ .../bpf/bpftool/Documentation/bpftool-net.rst |  98 ++--
+ .../bpftool/Documentation/bpftool-perf.rst    |  34 +-
+ .../bpftool/Documentation/bpftool-prog.rst    | 426 +++++++++---------
+ .../Documentation/bpftool-struct_ops.rst      |  71 ++-
+ tools/bpf/bpftool/Documentation/bpftool.rst   |  60 +--
+ .../bpftool/Documentation/common_options.rst  |  26 +-
+ 14 files changed, 876 insertions(+), 964 deletions(-)
 
-> 
-> Also, I think patch #1 will go through Masami's trace tree, right? But
-> we can land selftests into bpf-next even before that, given they
-> should work for both syscall and interrupt based uretprobes.
+-- 
+2.34.1
 
-hm, not sure.. I did not originally cc Masami/Steven :-\  adding now
-
-Masami, could patch 1 go through:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-  probes/for-next
-
-thanks,
-jirka
