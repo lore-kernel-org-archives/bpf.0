@@ -1,126 +1,134 @@
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D323C1DFF4
-	for <bpf@vger.kernel.org>; Mon,  1 Apr 2024 17:59:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4318E481C6;
+	Mon,  1 Apr 2024 18:03:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711994399; cv=none; b=LsrY5dKISeB/vftfFFSR1D3K8C/DsR+Ji4qiLeRFCxEE8pBiSXfQhwOSpVgbRwhiolmdX5GXX6oXDP8e1GRMo1aZu2Z6+cvR7nxw8cHsNp6MhqN5uN56Mdisk2M750ycu5pdZgBBL6g2qS8un8Cldh3E8tKdewpBvWa8xgCgfMM=
+	t=1711994594; cv=none; b=DVti2xeus4xPqCoYrgnTrNS5fpLfHcBdK/CdVmtj27KY+0sjWcLc7IHX9n19aAlYaDY3DX5+BtAtS0TT/Dgdov8dIZ9ZSBPAmZG1x8EsN2v3O2hzd77wosHLdXUoVC4G1Gy4IM6vm+FuZwHrTSWCNJ8yqCDxqAWTY8zSqQUEcBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711994399; c=relaxed/simple;
-	bh=YO788xMr+ALxFwqLzE4CCwS3cB4GYIXmPoZEPpY5CMc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gPfCv3QRg+vFto75K/Amem4HhnXqLQRTMcumCCOLToM7NcTVQ2WmObt4LGVwxhYkEfEXGigNAS8xOW+zxaqUO7r2HLJgjsiWFP5X3E6xhGecQhiCu7Mqz3zDMy9JnodqSXr0savi75/K5CvkRx7EEG2H+LBk3SeriDx9j5/EetY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FbmnyWiI; arc=none smtp.client-ip=209.85.210.50
+	s=arc-20240116; t=1711994594; c=relaxed/simple;
+	bh=dJpGXu0C9rO7fmzbAKI1TioiM08l2gECNbt1RRXQXIM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hd44rhaSBd5HkmWo85CIztYJX49fD3HUaCcfBz2xVN+Q+lHGn7ZlUYXpz1FQt0ytDXqdIQletN2/bsSs0f7H4XxRLiQEG+UtHDxGRndZJRn44uUroN/WnzYdTjFIOovLDgXzPtM8l4fYPMkNtqA5nudWawE3zYrpjo0mB6KOIDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TCqP7Tus; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FbmnyWiI"
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6e8a1b8cf28so502844a34.1
-        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 10:59:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TCqP7Tus"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3434c6e1941so465941f8f.0;
+        Mon, 01 Apr 2024 11:03:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711994397; x=1712599197; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y3j9qYfQ9XJ3HIAxAy1vWv9DgHh1u7RgDTYNESmyt1Q=;
-        b=FbmnyWiIfy/ly1Pj0FgUi/wD4TbpFXGnk542QJfPmpw9gpH3sd5yT2nmA1FbbqbXKo
-         dIul+v1BsicPNtjBV2Xy2LC6ckJAs/+RbK4EANhOFB+DUEkSiaR+TJ+T9esy3zivTKny
-         W7173lyqNld5TBRJuwICiTDwZ5GhYJ/Y7gAfLy7eNYBOnm2PNYIkP/JzKeqDIHH9vV1H
-         fqRuapM+hm6SPeI4VYSGxJI1tdABOlI9L3B8KjR40mF5+/c+MfeUUgDRaPVfTRbH9XF0
-         8lQ9qfnZAUZEi17y4kg20LPWoE7yMMMufDVdZ1j/QQzCOKPCwF3LcayEyWS+Qua/Oru2
-         z4UA==
+        d=gmail.com; s=20230601; t=1711994591; x=1712599391; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6JaPPNMEgkwh4HfN+ukbZ/toOf6Bi9mBKsKcLnPIOUU=;
+        b=TCqP7TusWZgzdoKmAF6d+BtqpVpiTtv4KhGRoHG0I8NxP5B3gjXLFHUifuCdk/nBj1
+         KWpKAw/fqZMRfsMDJzR09CQ55bWFYsqh6xm8m/zteMhKtRXi66L39BVpaTRWFxnRXV9o
+         ZYWX6MCHQwe5yyw5mF4jFLd4LNAKNWU69zn7Lf74e2CMrsP12ircEvhXeMxymPCgPVVi
+         XZO4Gl66FU3UhHOky1pYI7FwHczQgigdNfmqr4sEIEVPR3SwTTz1Ot1HDFRfUCK8Xej/
+         00j6ysC7aTiupRZI2y9JzoEpFGGbQoNGcA/x8SBU2Iwo69/yqeW0ChpsEe+qfWfOSl5Y
+         NZQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711994397; x=1712599197;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y3j9qYfQ9XJ3HIAxAy1vWv9DgHh1u7RgDTYNESmyt1Q=;
-        b=rfDAiI2xsDE9HGv0pfrQD70QK5KP5EFWtI++HPeY2HSeRBcWpWAnKZHMyuO3RcMmzQ
-         yAC5ujStU9/JRypqYSj1DkBqeSToit21lmW+LlST936iAmaocbihUrsPTPQ1DfKBSMJX
-         jJtlGW6ZO6g+a7NHzug5hZQLyOR3M/HR3E77Zm+J1EgHp0gwBdczJ4AGFn9N9EUtxxSs
-         /Nva/sdRsL+Vk3ehxWstFFpbKNuBysBLlBbnaLQW6K0pkoEIIpsPkQh4SSr+s2++JklP
-         gECTZsCgEPnLiPlnXRwQZt234qBbhwdwYM5cdilkyyTqV8Vf9yGLx33sCikL7agTAUxK
-         dUPA==
-X-Forwarded-Encrypted: i=1; AJvYcCVhD6KhhTAHHOFGzOxn2+r7+HFrVkIszKntxj5YzYI952yF8POZkgk4mPJGJbQv1PYkbDxztHRndEKtTwAEpswAOVQc
-X-Gm-Message-State: AOJu0YxH6JJMkd2NoKYLCB+19cpUoJ+vdwCJJD20rpeoG9uQLra8EBgV
-	VfPd3nE5h3iEJPDdjU1gGP68c6FBDLghgGIwGarlI+3jWu7lKPS9
-X-Google-Smtp-Source: AGHT+IFdO7RXhNEjUyh8TQCmhc11sp/RIma8hVPRSaYYeliCJ7gRj5mRWIaMsjEIWOFfxRPogyh6fg==
-X-Received: by 2002:a05:6808:1649:b0:3c3:e3d7:678d with SMTP id az9-20020a056808164900b003c3e3d7678dmr12307267oib.24.1711994396824;
-        Mon, 01 Apr 2024 10:59:56 -0700 (PDT)
-Received: from ?IPV6:2600:1700:6cf8:1240:769d:e8e1:4c99:3e97? ([2600:1700:6cf8:1240:769d:e8e1:4c99:3e97])
-        by smtp.gmail.com with ESMTPSA id 15-20020aca090f000000b003c3ede3ac23sm1586964oij.2.2024.04.01.10.59.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Apr 2024 10:59:56 -0700 (PDT)
-Message-ID: <b5af75b1-892d-4640-9222-7fe8006d1da9@gmail.com>
-Date: Mon, 1 Apr 2024 10:59:55 -0700
+        d=1e100.net; s=20230601; t=1711994591; x=1712599391;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6JaPPNMEgkwh4HfN+ukbZ/toOf6Bi9mBKsKcLnPIOUU=;
+        b=awAf5iIab2UnWSHquR32lLKDXkQ1mYIj/cQGZm2pD96m+Mke1pLpTGX0fiHNe+RsmM
+         3Kn6D/sTRAa9D55KJs8UA+ut5p7Dc4v63Sv/oT1sA3UhhA8fY7gYnV7q7aiF/tkqqvSy
+         /7A5HjKSiylZzZPIizb1AAR1PZMEFKsWuOBdeh5qaqHmaTdE33TNsGfG0GdtFaN6f7jm
+         VEbFV2n+xPRv5lCgRQEihEccBxK5GkjnjJT9i8lUJghWgY53sGL3gig456R2nKxGVuyj
+         K4jiMv0IUNDs7iiYc7zV96AvlcAfbKQKjDdraZIsvtaqHR8pMk7tVzmqrml3ac8H7o8p
+         5BcA==
+X-Forwarded-Encrypted: i=1; AJvYcCU+oyODtERkwcb2ESwsHFz8eIoGM5+h4UCGNNfRdmYGStRPbdz1Cw3UaVuw4QPXkvuwJc89PJzbPoXV1zSUgIqXmb+GFhwKrd0cKcJX/Ck+yfAK+evH1/QrlUAwlq0xOuRSNHRHYaoQaJB/Oc2Sr+EjMTtwUyENRMyD
+X-Gm-Message-State: AOJu0YzRLaoeZRcF0j6fDCx3foBwgMdT4fWYGz5vNoF7EukWiD2uL0cZ
+	HQxwNDTwihKUSd1eaoHYhLPiSbIdx/nz8E2chc8LKYtHAoDU4L2vT3ANmI8DAOLbCTsd4zNA18r
+	i2YRcLAMol0M962+p1RijHjjurC0=
+X-Google-Smtp-Source: AGHT+IHrNStCNtNQGmdjEnbKYU7NKwXc/9dP2cUhAQzSjTICwnMFZo4Sj7nLR7UnIZj7+3aq3HEl8pNjaGLzL+dDelI=
+X-Received: by 2002:adf:edcc:0:b0:33e:40a3:22c8 with SMTP id
+ v12-20020adfedcc000000b0033e40a322c8mr6490749wro.33.1711994591321; Mon, 01
+ Apr 2024 11:03:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] bpftool: use __typeof__() instead of typeof() in
- BPF skeleton
-To: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org,
- daniel@iogearbox.net, martin.lau@kernel.org
-Cc: kernel-team@meta.com
-References: <20240401170713.2081368-1-andrii@kernel.org>
-Content-Language: en-US
-From: Kui-Feng Lee <sinquersw@gmail.com>
-In-Reply-To: <20240401170713.2081368-1-andrii@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240329094906.18147-1-ubizjak@gmail.com> <20240329094906.18147-3-ubizjak@gmail.com>
+ <CAADnVQ+6D++hCXaP=aK+Q5wienMzhHo3h9YCvpA_7sHjMt+q6A@mail.gmail.com> <CAFULd4b6juiw3wC3Z61V9=-UnA+NGyUt4231vC14UnGAATk6tA@mail.gmail.com>
+In-Reply-To: <CAFULd4b6juiw3wC3Z61V9=-UnA+NGyUt4231vC14UnGAATk6tA@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 1 Apr 2024 11:02:59 -0700
+Message-ID: <CAADnVQKqxQxLLQ6OwZCWni8==-fioeOZ_AH7YVjjCwvYNYmCqg@mail.gmail.com>
+Subject: Re: [PATCH RESEND bpf 2/2] x86/bpf: Fix IP for relocating call depth accounting
+To: Uros Bizjak <ubizjak@gmail.com>
+Cc: X86 ML <x86@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	=?UTF-8?Q?Joan_Bruguera_Mic=C3=B3?= <joanbrugueram@gmail.com>, 
+	Ingo Molnar <mingo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Sat, Mar 30, 2024 at 2:01=E2=80=AFAM Uros Bizjak <ubizjak@gmail.com> wro=
+te:
+>
+> On Fri, Mar 29, 2024 at 10:53=E2=80=AFPM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Fri, Mar 29, 2024 at 2:49=E2=80=AFAM Uros Bizjak <ubizjak@gmail.com>=
+ wrote:
+> > >
+> > > From: Joan Bruguera Mic=C3=B3 <joanbrugueram@gmail.com>
+> > >
+> > > The recently introduced support for %rip-relative relocations in the
+> > > call thunk template assumes that the code is being patched in-place,
+> > > so the destination of the relocation matches the address of the code.
+> > > This is not true for the call depth accounting emitted by the BPF JIT=
+,
+> > > so the calculated address is wrong and usually causes a page fault.
+> >
+> > Could you share the link to what this 'rip-relative' relocation is ?
+>
+> Please see the "RIP relative addressing" section in [1].
+>
+> [1] https://compas.cs.stonybrook.edu/~nhonarmand/courses/sp17/cse506/ref/=
+assembly.html
+>
+> In our case:
+>
+> The callthunks patching creates a call thunk template in the .rodata
+> section (please see arch/x86/kernel/callthunks.c)  that is later
+> copied to the .text section at the correct place. The template uses
+> X86_call_depth in the pcpu_hot structure. Previously, the template
+> used absolute location for X86_call_depth and the linker resolved the
+> address in the template to this absolute location. There is no issue
+> when this template is copied to the various places in the .text
+> section.
+>
+> When we want to use PC relative relocations (to reduce the code size),
+> then the linker calculates the address of the variable in the template
+> according to the PC in the .rodata section. If we want to copy the
+> template to its final location, then the address of X86_call_depth,
+> relative to the PC, has to be adjusted, as explained in
+> arch/x86/kernel/alternative.c, in the comment above apply_reloc_n
+> macro.
 
-
-On 4/1/24 10:07, Andrii Nakryiko wrote:
-> When generated BPF skeleton header is included in C++ code base, some
-> compiler setups will emit warning about using language extensions due to
-> typeof() usage, resulting in something like:
-> 
->    error: extension used [-Werror,-Wlanguage-extension-token]
->    obj->struct_ops.empty_tcp_ca = (typeof(obj->struct_ops.empty_tcp_ca))
->                                    ^
-> 
-> It looks like __typeof__() is a preferred way to do typeof() with better
-> C++ compatibility behavior, so switch to that. With __typeof__() we get
-> no such warning.
-> 
-> Fixes: c2a0257c1edf ("bpftool: Cast pointers for shadow types explicitly.")
-> Fixes: 00389c58ffe9 ("bpftool: Add support for subskeletons")
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
->   tools/bpf/bpftool/gen.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-> index 786268f1a483..b3979ddc0189 100644
-> --- a/tools/bpf/bpftool/gen.c
-> +++ b/tools/bpf/bpftool/gen.c
-> @@ -386,7 +386,7 @@ static int codegen_subskel_datasecs(struct bpf_object *obj, const char *obj_name
->   			 */
->   			needs_typeof = btf_is_array(var) || btf_is_ptr_to_func_proto(btf, var);
->   			if (needs_typeof)
-> -				printf("typeof(");
-> +				printf("__typeof__(");
->   
->   			err = btf_dump__emit_type_decl(d, var_type_id, &opts);
->   			if (err)
-> @@ -1131,7 +1131,7 @@ static void gen_st_ops_shadow_init(struct btf *btf, struct bpf_object *obj)
->   			continue;
->   		codegen("\
->   			\n\
-> -				obj->struct_ops.%1$s = (typeof(obj->struct_ops.%1$s))\n\
-> +				obj->struct_ops.%1$s = (__typeof__(obj->struct_ops.%1$s))\n\
->   					bpf_map__initial_value(obj->maps.%1$s, NULL);\n\
->   			\n\
->   			", ident);
-
-
-LGTM!
-
-Acked-by: Kui-Feng Lee <thinker.li@gmail.com>
-
-Thanks!
+I didn't mean to ask for info about the definition of rip-relative,
+but how it's used in this case and what you've been trying
+to achieve with commit 17bce3b2ae2d that broke call depth accounting.
+And the whole sequence of events that caused this breakage.
+Something like:
+commit 59bec00ace28 ("x86/percpu: Introduce %rip-relative addressing
+to PER_CPU_VAR()")
+made PER_CPU_VAR() to use rip-relative addressing,
+hence INCREMENT_CALL_DEPTH macro and skl_call_thunk_template
+got rip-relative asm code inside of it.
+Hence x86_call_depth_emit_accounting() was changed
+in commit 17bce3b2ae2d ("x86/callthunks: Handle %rip-relative
+relocations in call thunk template") to use apply_relocation(),
+but it was mistakenly made to use *pprog as dest ip,
+so jit-ed bpf progs on kernels with call depth tracking got broken.
+Such details should be in the commit log.
