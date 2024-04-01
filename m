@@ -1,203 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEEC814534F
-	for <bpf@vger.kernel.org>; Sun, 31 Mar 2024 20:04:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F441388
+	for <bpf@vger.kernel.org>; Mon,  1 Apr 2024 02:28:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711915445; cv=none; b=KCIrAFhz7RM9hOF+GaT2XZHjxBH7IHRb6q0Y+jJDInLjfiZqnOagLOyGr6PjdjYgEpw96gdCb2WI8xuz+1uaCIlMusdqchlfyDhCWKV2YPhLpn0B0xWaNf/oMCjL5LBhQn/8AJf85tQZdCkc2CT13IESd4hrezQ5wE3rxmI5nnI=
+	t=1711938511; cv=none; b=q5+A8sP1vrKvDHcT6UCcwVq+ayDNSfI2tTleI5+fKCCmwZG+uoEV96YH1A+IyhNg3bm3ALZJbkSjl3Dct2C3jwhId383gDEw78x2DOqA51etC9DaI20K2oxauIHJ16fzxFn2dKhkcXx65PNJRVbIReglei4DjhjQfMvnjYCJ+gI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711915445; c=relaxed/simple;
-	bh=gKuSNBSsY/2u3lY/nG0np6qohP4wbB3CGXo0102HunE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CzaZM/dVFFAHn2Ab4TXiL5Vh7G0QwRc/xO8afn8OfeihAtIN3mKtc7ZJMzO5GzPMZKRKUejroMTNj/Wda28i98v5DKeA2rG68Z+4+G9xPd707RUvj3521EvDV0CXSer6CcbXXMg88sXZ01c0bHDVYY1FypYJ9i7Pfq63Ibtohtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=onKn46Jh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711938511; c=relaxed/simple;
+	bh=lKYTnWKj8aFybgNfcmvkcPZSxsoRl/ozkQQU3rEQW/s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Xznt+sXoiEs5xVdFGUUUkAPA089fmBKUsWAybdva2yStRkf0l5u6wZWKUGBF1sMPjYbwCnsr+hhsDarTTStlviEt7+jlUK/VhWo5GpqiU8uG1KWRLSGaetB3j0U+/SJle/CW2Yq8WvWwwd2LqRPivMjVycR75dtO5VnGKHsK6kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=P9LU1I5j; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="onKn46Jh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DF2CC43330;
-	Sun, 31 Mar 2024 20:04:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711915445;
-	bh=gKuSNBSsY/2u3lY/nG0np6qohP4wbB3CGXo0102HunE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=onKn46Jhn8OmvAW5Q/jLlXafUW/oL2s0iDe98lAooDVtudyUIMj9gi5VYQP5ppTNT
-	 0R6aX117XU/8Q5SCe//bIRiYUhukoThAMn2Dp9urUiXLuUctO/jE7g06oCkAyoWgp1
-	 2VD+zYz+lPHWbe3D5ZjtysXvEp/wwcbLKW1NsZDBZPCw2HmN1yeKfTRMPJje/mzTmB
-	 DZzHscvHNxLeQL+7qj/+wlc/fm1LxOZNexUnLwGS6hbAV5oypH8SK3+gnFRHZJnzPy
-	 +GmLbpDJufEupo3pQO1b7y2qd0AwPjCvTSefVbbMSTj6Z4WON5Lux8pDjIbaHPvBpg
-	 RcvybrQ+y9/iA==
-From: Quentin Monnet <qmo@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	bpf@vger.kernel.org,
-	Rameez Rehman <rameezrehman408@hotmail.com>,
-	Quentin Monnet <qmo@kernel.org>
-Subject: [PATCH bpf-next 3/3] bpftool: Clean-up typos, punctuation, list formatting in docs
-Date: Sun, 31 Mar 2024 21:03:46 +0100
-Message-Id: <20240331200346.29118-4-qmo@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240331200346.29118-1-qmo@kernel.org>
-References: <20240331200346.29118-1-qmo@kernel.org>
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="P9LU1I5j"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6eae2b57ff2so2573863b3a.2
+        for <bpf@vger.kernel.org>; Sun, 31 Mar 2024 19:28:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1711938509; x=1712543309; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IXMeLoImPZ33R4zJ3SWpn56WCPhsxXC6Los6ajh1i8M=;
+        b=P9LU1I5jukjBMKO1LqMu6jlbfGHWLyHQxqQEbnkNnlfzzWygJn8dddUXQxUiTYGYJk
+         pIU80nb/2WZVl3/N78k9aRjLZDKKH6J8167B9QXy68cqQHfQubEORLoFjlDhJVM7VM3B
+         6Na+rY+eTZa0JSAL6z3h7R/HVgj9AeTdTOE8/TY6IYzAzKStiN8pUlJs4+N6Qa/6A3ya
+         7EDlKJEIHYKWInZL5oH0u5OH7XiI1OuKJWLwWhynNDiDm4rNYpwWeBGxtyJngpicWEL+
+         88rxTY76vW1XtH7NDjlmMxvBnSri98lhy/GpFpqlgYW5itg2Oxs+cqcpgtblJ2t/vYuY
+         YDog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711938509; x=1712543309;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IXMeLoImPZ33R4zJ3SWpn56WCPhsxXC6Los6ajh1i8M=;
+        b=At/K5reuR0oBqENmpFkqSQvTubSvzPITItW1uLQQRourQuFvv1wrnk/Hf+3vBKK0nX
+         9g5ikIvSXPkf3TrXzGruZvu+MoyP3B3NITgW8PtJPfyEklT7XZlk9mdYfXst3FZRjo1u
+         cd3fICpOlfSsLCthY29vObAuQZKBF2xO1LPoTps3YqKzEX2xblsGF3sAU5PIqGisuqaL
+         28Tj5OTH8Xg6fPDbCgAEyZ+Ft4UO5zTuHCV6GCg+u/sdv5G5FdIh0Dzq+LY1wQDF3PCR
+         0AWRUoO0oJbawRSUa3yyfMhpR2p1s9sTGYTWJv/EP+GBm4OxvhmTZzFwWg+31gGv/5bw
+         FTmA==
+X-Forwarded-Encrypted: i=1; AJvYcCV0DO8QXgICtVvlst7q9LptafFVe9AjJfoYpGe5qeMQ55Go6XjE6Xv7OX6Cc0TEPa462HVGblQIfL1W1V4F/3VFPoZ4
+X-Gm-Message-State: AOJu0Yw8jvdeKd67E6i7D8T8VsrXckfCG/g1wLCgko+km9PZAPh5ES1h
+	GGtcSpljBOIJcZb4SyqLKICqyYtyxwnYs87dtMaQNIFR/dxj1jVk+3rfJ5/zAUWRAc7hCd2Suem
+	qyv4u0FE2fV7UDekcNOw5ypmKzUDCnzGfKHsTmw==
+X-Google-Smtp-Source: AGHT+IGzGQQaneP5xALvw57pZKTHGiCwen67uykrwqg6rWGJrnO4HP/K70Vm6Xhliw5Ne2x0YoSn10U7kH5Lflzm9D8=
+X-Received: by 2002:a05:6a20:550a:b0:1a3:6a74:2e6a with SMTP id
+ ko10-20020a056a20550a00b001a36a742e6amr8586402pzb.14.1711938508724; Sun, 31
+ Mar 2024 19:28:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240311093526.1010158-1-dongmenglong.8@bytedance.com>
+ <20240311093526.1010158-2-dongmenglong.8@bytedance.com> <CAADnVQKQPS5NcvEouH4JqZ2fKgQAC+LtcwhX9iXYoiEkF_M94Q@mail.gmail.com>
+ <CALz3k9i5G5wWi+rtvHPwVLOUAXVMCiU_8QUZs87TEYgR_0wpPA@mail.gmail.com>
+ <CAADnVQJ_ZCzMmT1aBsNXEBFfYNSVBdBXmLocjR0PPEWtYQrQFw@mail.gmail.com>
+ <CALz3k9icPePb0c4FE67q=u1U0hrePorN9gDpQrKTR_sXbLMfDA@mail.gmail.com>
+ <CAADnVQLwgw8bQ7OHBbqLhcPJ2QpxiGw3fkMFur+2cjZpM_78oA@mail.gmail.com>
+ <CALz3k9g9k7fEwdTZVLhrmGoXp8CE47Q+83r-AZDXrzzuR+CjVA@mail.gmail.com>
+ <CAADnVQLHpi3J6cBJ0QBgCQ2aY6fWGnVvNGdfi3W-jmoa9d1eVQ@mail.gmail.com>
+ <CALz3k9g-U8ih=ycJPRbyU9x_9cp00fNkU3PGQ6jP0WJ+=uKmqQ@mail.gmail.com>
+ <CALz3k9jG5Jrqw=BGjt05yMkEF-1u909GbBYrV-02W0dQtm6KQQ@mail.gmail.com>
+ <20240328111330.194dcbe5@gandalf.local.home> <CALz3k9idLX10+Gh18xWepwtgvp4VZ3zQfY4aoNXn0gCh8Fs_fA@mail.gmail.com>
+ <20240330153722.65104301@gandalf.local.home>
+In-Reply-To: <20240330153722.65104301@gandalf.local.home>
+From: =?UTF-8?B?5qKm6b6Z6JGj?= <dongmenglong.8@bytedance.com>
+Date: Mon, 1 Apr 2024 10:28:17 +0800
+Message-ID: <CALz3k9j_RGqSMdN+GvbHEjRqMWYe4R9VNZRANG7jbfL_jVpoVg@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH bpf-next v2 1/9] bpf: tracing: add support
+ to record and check the accessed args
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	X86 ML <x86@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
+	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Rameez Rehman <rameezrehman408@hotmail.com>
+On Sun, Mar 31, 2024 at 3:34=E2=80=AFAM Steven Rostedt <rostedt@goodmis.org=
+> wrote:
+>
+> On Sat, 30 Mar 2024 11:18:29 +0800
+> =E6=A2=A6=E9=BE=99=E8=91=A3 <dongmenglong.8@bytedance.com> wrote:
+>
+> > > If you really want to have thousands of functions, why not just regis=
+ter it
+> > > with ftrace itself. It will give you the arguments via the ftrace_reg=
+s
+> > > structure. Can't you just register a program as the callback?
+> > >
+> >
+> > Ennn...I don't understand. The main purpose for
+> > me to use TRACING is:
+> >
+> > 1. we can directly access the memory, which is more
+> >    efficient.
+>
+> I'm not sure what you mean by the above. Access what memory?
+>
 
-Improve the formatting of the attach flags for cgroup programs in the
-relevant man page, and fix typos ("can be on of", "an userspace inet
-socket") when introducing that list. Also fix a couple of other trivial
-issues in docs.
+We need to use the helper of bpf_probe_read_kernel
+when we read "skb->sk" in kprobe, and the "skb" is the
+1st arg in ip_rcv(). And we can directly read "skb->sk"
+in tracing, which is more efficient. Isn't it?
 
-[ Quentin: Fixed trival issues in bpftool-gen.rst and bpftool-iter.rst ]
+> > 2. we can obtain the function args in FEXIT, which
+> >     kretprobe can't do it. And this is the main reason.
+>
+> I didn't mention kretprobe. If you need access to the exit of the functio=
+n,
+> you can use Masami's fgraph update.
+>
+>  fentry -> ftrace_trampoline -> your_code
+>
+> For fgraph:
+>
+>  fentry -> ftrace_trampoline -> fgraph [sets up return call] -> your_entr=
+y_code
+>
+>  function ret -> fgraph_ret_handler -> your_exit_code
+>
+> And you will be able to pass data from the entry to the exit code,
+> including parameters.
 
-Signed-off-by: Rameez Rehman <rameezrehman408@hotmail.com>
-Signed-off-by: Quentin Monnet <qmo@kernel.org>
----
- .../bpftool/Documentation/bpftool-cgroup.rst  | 65 +++++++++----------
- .../bpf/bpftool/Documentation/bpftool-gen.rst |  8 +--
- .../bpftool/Documentation/bpftool-iter.rst    |  2 +-
- 3 files changed, 35 insertions(+), 40 deletions(-)
+Yeah, the fgraph sounds like a nice solution to my problem.
+I'll have a try on it.
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-index 1acf9f58fca2..b2610d169e60 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-@@ -90,41 +90,36 @@ bpftool cgroup attach *CGROUP* *ATTACH_TYPE* *PROG* [*ATTACH_FLAGS*]
- 
-     Non-default *ATTACH_FLAGS* are supported by kernel version 4.14 and later.
- 
--    *ATTACH_TYPE* can be on of:
--    **ingress** ingress path of the inet socket (since 4.10);
--    **egress** egress path of the inet socket (since 4.10);
--    **sock_create** opening of an inet socket (since 4.10);
--    **sock_ops** various socket operations (since 4.12);
--    **device** device access (since 4.15);
--    **bind4** call to bind(2) for an inet4 socket (since 4.17);
--    **bind6** call to bind(2) for an inet6 socket (since 4.17);
--    **post_bind4** return from bind(2) for an inet4 socket (since 4.17);
--    **post_bind6** return from bind(2) for an inet6 socket (since 4.17);
--    **connect4** call to connect(2) for an inet4 socket (since 4.17);
--    **connect6** call to connect(2) for an inet6 socket (since 4.17);
--    **connect_unix** call to connect(2) for a unix socket (since 6.7);
--    **sendmsg4** call to sendto(2), sendmsg(2), sendmmsg(2) for an unconnected
--    udp4 socket (since 4.18);
--    **sendmsg6** call to sendto(2), sendmsg(2), sendmmsg(2) for an unconnected
--    udp6 socket (since 4.18);
--    **sendmsg_unix** call to sendto(2), sendmsg(2), sendmmsg(2) for an
--    unconnected unix socket (since 6.7);
--    **recvmsg4** call to recvfrom(2), recvmsg(2), recvmmsg(2) for an
--    unconnected udp4 socket (since 5.2);
--    **recvmsg6** call to recvfrom(2), recvmsg(2), recvmmsg(2) for an
--    unconnected udp6 socket (since 5.2);
--    **recvmsg_unix** call to recvfrom(2), recvmsg(2), recvmmsg(2) for an
--    unconnected unix socket (since 6.7);
--    **sysctl** sysctl access (since 5.2);
--    **getsockopt** call to getsockopt (since 5.3);
--    **setsockopt** call to setsockopt (since 5.3);
--    **getpeername4** call to getpeername(2) for an inet4 socket (since 5.8);
--    **getpeername6** call to getpeername(2) for an inet6 socket (since 5.8);
--    **getpeername_unix** call to getpeername(2) for a unix socket (since 6.7);
--    **getsockname4** call to getsockname(2) for an inet4 socket (since 5.8);
--    **getsockname6** call to getsockname(2) for an inet6 socket (since 5.8).
--    **getsockname_unix** call to getsockname(2) for a unix socket (since 6.7);
--    **sock_release** closing an userspace inet socket (since 5.9).
-+    *ATTACH_TYPE* can be one of:
-+
-+    - **ingress** ingress path of the inet socket (since 4.10)
-+    - **egress** egress path of the inet socket (since 4.10)
-+    - **sock_create** opening of an inet socket (since 4.10)
-+    - **sock_ops** various socket operations (since 4.12)
-+    - **device** device access (since 4.15)
-+    - **bind4** call to bind(2) for an inet4 socket (since 4.17)
-+    - **bind6** call to bind(2) for an inet6 socket (since 4.17)
-+    - **post_bind4** return from bind(2) for an inet4 socket (since 4.17)
-+    - **post_bind6** return from bind(2) for an inet6 socket (since 4.17)
-+    - **connect4** call to connect(2) for an inet4 socket (since 4.17)
-+    - **connect6** call to connect(2) for an inet6 socket (since 4.17)
-+    - **connect_unix** call to connect(2) for a unix socket (since 6.7)
-+    - **sendmsg4** call to sendto(2), sendmsg(2), sendmmsg(2) for an unconnected udp4 socket (since 4.18)
-+    - **sendmsg6** call to sendto(2), sendmsg(2), sendmmsg(2) for an unconnected udp6 socket (since 4.18)
-+    - **sendmsg_unix** call to sendto(2), sendmsg(2), sendmmsg(2) for an unconnected unix socket (since 6.7)
-+    - **recvmsg4** call to recvfrom(2), recvmsg(2), recvmmsg(2) for an unconnected udp4 socket (since 5.2)
-+    - **recvmsg6** call to recvfrom(2), recvmsg(2), recvmmsg(2) for an unconnected udp6 socket (since 5.2)
-+    - **recvmsg_unix** call to recvfrom(2), recvmsg(2), recvmmsg(2) for an unconnected unix socket (since 6.7)
-+    - **sysctl** sysctl access (since 5.2)
-+    - **getsockopt** call to getsockopt (since 5.3)
-+    - **setsockopt** call to setsockopt (since 5.3)
-+    - **getpeername4** call to getpeername(2) for an inet4 socket (since 5.8)
-+    - **getpeername6** call to getpeername(2) for an inet6 socket (since 5.8)
-+    - **getpeername_unix** call to getpeername(2) for a unix socket (since 6.7)
-+    - **getsockname4** call to getsockname(2) for an inet4 socket (since 5.8)
-+    - **getsockname6** call to getsockname(2) for an inet6 socket (since 5.8)
-+    - **getsockname_unix** call to getsockname(2) for a unix socket (since 6.7)
-+    - **sock_release** closing a userspace inet socket (since 5.9)
- 
- bpftool cgroup detach *CGROUP* *ATTACH_TYPE* *PROG*
-     Detach *PROG* from the cgroup *CGROUP* and attach type *ATTACH_TYPE*.
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-index e9589c21e9c3..c768e6d4ae09 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-@@ -110,7 +110,7 @@ bpftool gen skeleton *FILE*
-     - **example__open_and_load** combines **example__open** and
-       **example__load** invocations in one commonly used operation.
- 
--    - **example__attach** and **example__detach**
-+    - **example__attach** and **example__detach**.
-       This pair of functions allow to attach and detach, correspondingly,
-       already loaded BPF object. Only BPF programs of types supported by libbpf
-       for auto-attachment will be auto-attached and their corresponding BPF
-@@ -119,7 +119,7 @@ bpftool gen skeleton *FILE*
-       **example__detach** will detach both links created automatically, as well
-       as those populated by user manually.
- 
--    - **example__destroy**
-+    - **example__destroy**.
-       Detach and unload BPF programs, free up all the resources used by
-       skeleton and BPF object.
- 
-@@ -146,11 +146,11 @@ bpftool gen subskeleton *FILE*
- 
-     Consequently, there are only two functions defined for subskeletons:
- 
--    - **example__open(bpf_object\*)**
-+    - **example__open(bpf_object\*)**.
-       Instantiates a subskeleton from an already opened (but not necessarily
-       loaded) **bpf_object**.
- 
--    - **example__destroy()**
-+    - **example__destroy()**.
-       Frees the storage for the subskeleton but *does not* unload any BPF
-       programs or maps.
- 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-iter.rst b/tools/bpf/bpftool/Documentation/bpftool-iter.rst
-index 7bcb4e993d7d..2e5d81c906dc 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-iter.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-iter.rst
-@@ -21,7 +21,7 @@ SYNOPSIS
- *COMMANDS* := { **pin** | **help** }
- 
- ITER COMMANDS
--===================
-+=============
- 
- | **bpftool** **iter pin** *OBJ* *PATH* [**map** *MAP*]
- | **bpftool** **iter help**
--- 
-2.34.1
+Thanks!
+Menglong Dong
 
+>
+> -- Steve
+>
+>
