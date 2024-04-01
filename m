@@ -1,150 +1,287 @@
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C7F41FBA;
-	Mon,  1 Apr 2024 18:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 108E829CFA
+	for <bpf@vger.kernel.org>; Mon,  1 Apr 2024 18:53:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711996698; cv=none; b=Sj0Rys6jwDTV6UeYpGOgsWhmGgHnUpcx3obgYi3oza1xTZbJwtkCI5vkkSGtBnUOx5IU+p571M9uotPYW7BFC0bpJCwy1AncOUd04Qzd0eaFgxvS0I0iHrInbS49ILn3xwkg0O6I7iUz1wCDwRZDNwiEP1/BoIT9vH8u3J42MCs=
+	t=1711997605; cv=none; b=OdH7TRdDAkra6uz1TA67h7J3WudGN5YSOB8OE7vNPVWt2qXpNzP4qVMu2BQg3Ok6052lX6Etx/1+yjDADAlk/h6UQ/MsfVPfH2/ycfsjgO0DBxaJNC4thUoWKrc88y0hg0tSj9Hw8gBpYWY6c/j1Us1bHRrVLTvvoXw5VQGxlG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711996698; c=relaxed/simple;
-	bh=j4ehAdE/QzkOJbJysQusRVbWuR621qTwZB8WUIcsxsg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BpwS+uiKuhNnArROkYap0ZfWUz02cW8WZ7+JLQmBPB3laEeQtZeLYKNJrI3t8KfeRBSwZPvpg1PMbed4+hxwyKOb2riZaanj3FFGoa3CgftJmHl4/UhfZMfoZSnBb1Ssd2lULE/EBGssHMyALc17BoTnWybl2mfMf6GbXrEUyNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TzCIsVIk; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711997605; c=relaxed/simple;
+	bh=yV8aLM1BNUJXdq5Dblt4rHJNCh3gARz7lOjjZ2L1VFY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aVDlCVYMQ60pDTAsbuO0goz6JR1AOrpAVuRkHzslmfqSp5CFuSgaMH79USLKuNcSwHn0S+i7WOHa/C2hmfgSwtMF+y557saaYM+AIJW1jc4qJE+7aXgf+7WoKU03Gq3JeMU5Y79lsMHp0oTn3EfErFeN82HfbbC9H8cMGbzFu2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OaRiiBOJ; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TzCIsVIk"
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2d4360ab3daso55683221fa.3;
-        Mon, 01 Apr 2024 11:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711996695; x=1712601495; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=25Kv1l4+GlOP5k18RqpZVh0+lNMaMtcidh6hzpsaBak=;
-        b=TzCIsVIkFBIYmd6lhddaF8WuMzI5S2udeZra5rBygiAv8VFlypnpGYEi/OumShbvJE
-         BEeok54HBbNsliZpcD0nClXV1SX06rCxh8c7A074guFBozZY9NUyzAtDG+3YHo4XUX1T
-         nWe6jljdsIiJur09c/et+5pXkb8ANDPYasF20aQzwEeBRIA6UIz+/jRD6YhIpTzgO25W
-         x3lzm322GN8HRXLEQlrVsyJq7T9o/uggadNCQZWsVvxGtgaB2b3yA24nWyo7CxDVuOvl
-         Zclea6FITscJXh49/jp7eiTLiufImPBuV76LuyUJU0fFG9iSKYGG6ptxOCnOSa6jQh2U
-         pqmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711996695; x=1712601495;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=25Kv1l4+GlOP5k18RqpZVh0+lNMaMtcidh6hzpsaBak=;
-        b=XDM/xFEEL2qfCG/eacvn3oJ1IaD3CAwh+AF1WCmef7oDsMOsbVF7WPfglvDYPaIXKb
-         Eh7T8Ck8qqEx+4dmXa0slFWRb8Pjy0DJRi8SyRndwaT4cJjmoj41OKgXAWUz78bOPx3O
-         8lEsLkvfDNYICeSDOH+DCo/W8ihKGPHPFYW1bSTyKkXGBKBD+fQgSHEx3XDKr1GtWhoQ
-         PZ7Qq3rB0zez0rhGk69+i67QElFyB8Cp4Bmur83z0eglZfpoQiuZT4hQHcH8al4RBhKO
-         yNP9Mm/pDr9H4NDvNYEBM15l3CBIFs2/uWJqgfM5YTKgu46APBq2+fzKb7+O/ClEian3
-         0ulg==
-X-Forwarded-Encrypted: i=1; AJvYcCXNxljV/mz4AxAf4aLO5XAkyOHns20x6q/Ke81+Yx4H76efBMl/devKSz1eMZFXhZLYqAL3hFnv4NwuKBbFE7hCpgpA4SeOZtAw29tKK+uuL+GeP0AixGOurHZ4H8MjUWgvqodlNpNK9beqoxasY818bLQM1zm/nIYg
-X-Gm-Message-State: AOJu0YwWL1J51CyPgnlY2Qy8embTgmh+2FVk2p6TkhFThct8VK0aQxgZ
-	J0kClWCVlpaxLhREOl9HjVhwaD2VQ6xrGq4x/9oBUldp2Wd3eCSv044hxFvPmuTWDnKaiZFup5m
-	g5Xunu12NIlcgdu2UVC0mXXxxG56wi9ZF
-X-Google-Smtp-Source: AGHT+IElc/m9n7djfQT2DrLm/RbZ2i8dNVd8JGzSbLCeNy1615HXBpUXl481rv7ld4/uhvoGh0j/FwsarpbeXFAE84E=
-X-Received: by 2002:a2e:8513:0:b0:2d8:127f:e3f with SMTP id
- j19-20020a2e8513000000b002d8127f0e3fmr2648439lji.45.1711996694363; Mon, 01
- Apr 2024 11:38:14 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OaRiiBOJ"
+Message-ID: <92e1cce6-5f26-4a49-86b6-81e1e80d1aaa@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1711997601;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=K6IGwiIpHA7QsaURG4tae7nD5mxWT/YzxPrg7GR5D+c=;
+	b=OaRiiBOJgFCE0wYI9dhleD9ZIa4TX4nJMSZ0Zrh4dVGdq3hlxMeKqQUKgrLlvXobUbQOx2
+	9xqFLo5Lkfx3uK+BRotZLUHn+PWpkFOmb6Bfs0VTEca9uHsYg7i5YP2p9V4pZwRaPYOekg
+	hU1J71miUIJ/nkjXqH5mgSh33C7gDP0=
+Date: Mon, 1 Apr 2024 11:53:12 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240329094906.18147-1-ubizjak@gmail.com> <20240329094906.18147-3-ubizjak@gmail.com>
- <CAADnVQ+6D++hCXaP=aK+Q5wienMzhHo3h9YCvpA_7sHjMt+q6A@mail.gmail.com>
- <CAFULd4b6juiw3wC3Z61V9=-UnA+NGyUt4231vC14UnGAATk6tA@mail.gmail.com> <CAADnVQKqxQxLLQ6OwZCWni8==-fioeOZ_AH7YVjjCwvYNYmCqg@mail.gmail.com>
-In-Reply-To: <CAADnVQKqxQxLLQ6OwZCWni8==-fioeOZ_AH7YVjjCwvYNYmCqg@mail.gmail.com>
-From: Uros Bizjak <ubizjak@gmail.com>
-Date: Mon, 1 Apr 2024 20:38:02 +0200
-Message-ID: <CAFULd4ZvxSesz0QhMB7FWS-_H_PpEZhkfqHJ0kmhQUkgL=ASfQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND bpf 2/2] x86/bpf: Fix IP for relocating call depth accounting
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: X86 ML <x86@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	=?UTF-8?Q?Joan_Bruguera_Mic=C3=B3?= <joanbrugueram@gmail.com>, 
-	Ingo Molnar <mingo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next v3] selftests/bpf: Move test_dev_cgroup to
+ prog_tests
+Content-Language: en-GB
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc: kernel@collabora.com, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20240401123455.1377896-1-usama.anjum@collabora.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20240401123455.1377896-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Apr 1, 2024 at 8:03=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+
+On 4/1/24 5:34 AM, Muhammad Usama Anjum wrote:
+> Move test_dev_cgroup.c to prog_tests/dev_cgroup.c to be able to run it
+> with test_progs. Replace dev_cgroup.bpf.o with skel header file,
+> dev_cgroup.skel.h and load program from it accourdingly.
 >
-> On Sat, Mar 30, 2024 at 2:01=E2=80=AFAM Uros Bizjak <ubizjak@gmail.com> w=
-rote:
-> >
-> > On Fri, Mar 29, 2024 at 10:53=E2=80=AFPM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Fri, Mar 29, 2024 at 2:49=E2=80=AFAM Uros Bizjak <ubizjak@gmail.co=
-m> wrote:
-> > > >
-> > > > From: Joan Bruguera Mic=C3=B3 <joanbrugueram@gmail.com>
-> > > >
-> > > > The recently introduced support for %rip-relative relocations in th=
-e
-> > > > call thunk template assumes that the code is being patched in-place=
-,
-> > > > so the destination of the relocation matches the address of the cod=
-e.
-> > > > This is not true for the call depth accounting emitted by the BPF J=
-IT,
-> > > > so the calculated address is wrong and usually causes a page fault.
-> > >
-> > > Could you share the link to what this 'rip-relative' relocation is ?
-> >
-> > Please see the "RIP relative addressing" section in [1].
-> >
-> > [1] https://compas.cs.stonybrook.edu/~nhonarmand/courses/sp17/cse506/re=
-f/assembly.html
-> >
-> > In our case:
-> >
-> > The callthunks patching creates a call thunk template in the .rodata
-> > section (please see arch/x86/kernel/callthunks.c)  that is later
-> > copied to the .text section at the correct place. The template uses
-> > X86_call_depth in the pcpu_hot structure. Previously, the template
-> > used absolute location for X86_call_depth and the linker resolved the
-> > address in the template to this absolute location. There is no issue
-> > when this template is copied to the various places in the .text
-> > section.
-> >
-> > When we want to use PC relative relocations (to reduce the code size),
-> > then the linker calculates the address of the variable in the template
-> > according to the PC in the .rodata section. If we want to copy the
-> > template to its final location, then the address of X86_call_depth,
-> > relative to the PC, has to be adjusted, as explained in
-> > arch/x86/kernel/alternative.c, in the comment above apply_reloc_n
-> > macro.
+>    ./test_progs -t dev_cgroup
+>    mknod: /tmp/test_dev_cgroup_null: Operation not permitted
+>    64+0 records in
+>    64+0 records out
+>    32768 bytes (33 kB, 32 KiB) copied, 0.000856684 s, 38.2 MB/s
+>    dd: failed to open '/dev/full': Operation not permitted
+>    dd: failed to open '/dev/random': Operation not permitted
+>    #72     test_dev_cgroup:OK
+>    Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+> Changes since v2:
+> - Replace test_dev_cgroup with serial_test_dev_cgroup as there is
+>    probability that the test is racing against another cgroup test
+> - Minor changes to the commit message above
 >
-> I didn't mean to ask for info about the definition of rip-relative,
-> but how it's used in this case and what you've been trying
-> to achieve with commit 17bce3b2ae2d that broke call depth accounting.
-> And the whole sequence of events that caused this breakage.
-> Something like:
-> commit 59bec00ace28 ("x86/percpu: Introduce %rip-relative addressing
-> to PER_CPU_VAR()")
-> made PER_CPU_VAR() to use rip-relative addressing,
-> hence INCREMENT_CALL_DEPTH macro and skl_call_thunk_template
-> got rip-relative asm code inside of it.
-> Hence x86_call_depth_emit_accounting() was changed
-> in commit 17bce3b2ae2d ("x86/callthunks: Handle %rip-relative
-> relocations in call thunk template") to use apply_relocation(),
-> but it was mistakenly made to use *pprog as dest ip,
-> so jit-ed bpf progs on kernels with call depth tracking got broken.
-> Such details should be in the commit log.
+> I've tested the patch with vmtest.sh on bpf-next/for-next and linux
+> next. It is passing on both. Not sure why it was failed on BPFCI.
+> Test run with vmtest.h:
+> sudo LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh ./test_progs -t dev_cgroup
+> ./test_progs -t dev_cgroup
+> mknod: /tmp/test_dev_cgroup_null: Operation not permitted
+> 64+0 records in
+> 64+0 records out
+> 32768 bytes (33 kB, 32 KiB) copied, 0.000403432 s, 81.2 MB/s
+> dd: failed to open '/dev/full': Operation not permitted
+> dd: failed to open '/dev/random': Operation not permitted
+>   #69      dev_cgroup:OK
+> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
 
-Oh, I was not sure that all those x86 specific details should be in
-the commit log, since x86 maintainers already acked the patch. Sure,
-I'll add your description of the fix to the patch commit message, it
-really describes the problem in a way, understandable also to non-x86
-people.
+The CI failure:
 
-Thanks,
-Uros.
+
+Error: #72 dev_cgroup
+serial_test_dev_cgroup:PASS:skel_open_and_load 0 nsec
+serial_test_dev_cgroup:PASS:cgroup_setup_and_join 0 nsec
+serial_test_dev_cgroup:PASS:bpf_attach 0 nsec
+serial_test_dev_cgroup:PASS:bpf_query 0 nsec
+serial_test_dev_cgroup:PASS:bpf_query 0 nsec
+serial_test_dev_cgroup:PASS:rm 0 nsec
+serial_test_dev_cgroup:PASS:mknod 0 nsec
+serial_test_dev_cgroup:PASS:rm 0 nsec
+serial_test_dev_cgroup:PASS:rm 0 nsec
+serial_test_dev_cgroup:FAIL:mknod unexpected mknod: actual 256 != 
+expected 0
+serial_test_dev_cgroup:PASS:rm 0 nsec
+serial_test_dev_cgroup:PASS:dd 0 nsec
+serial_test_dev_cgroup:PASS:dd 0 nsec
+serial_test_dev_cgroup:PASS:dd 0 nsec
+
+(cgroup_helpers.c:353: errno: Device or resource busy) umount cgroup2
+
+The error code 256 means mknod execution has some issues. Maybe you need 
+to find specific errno to find out what is going on. I think you can do 
+ci on-demanding test to debug.
+
+https://www.kernel.org/doc/Documentation/bpf/bpf_devel_QA.rst
+
+>
+> Changes since v1:
+> - Rename file from test_dev_cgroup.c to dev_cgroup.c
+> - Use ASSERT_* in-place of CHECK
+> ---
+>   .../selftests/bpf/prog_tests/dev_cgroup.c     | 58 +++++++++++++
+>   tools/testing/selftests/bpf/test_dev_cgroup.c | 85 -------------------
+>   2 files changed, 58 insertions(+), 85 deletions(-)
+>   create mode 100644 tools/testing/selftests/bpf/prog_tests/dev_cgroup.c
+>   delete mode 100644 tools/testing/selftests/bpf/test_dev_cgroup.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/dev_cgroup.c b/tools/testing/selftests/bpf/prog_tests/dev_cgroup.c
+> new file mode 100644
+> index 0000000000000..da0bc209d6a21
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/dev_cgroup.c
+> @@ -0,0 +1,58 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* Copyright (c) 2017 Facebook
+> + */
+> +
+> +#include <test_progs.h>
+> +#include <time.h>
+> +#include "cgroup_helpers.h"
+> +#include "dev_cgroup.skel.h"
+> +
+> +#define TEST_CGROUP "/test-bpf-based-device-cgroup/"
+> +
+> +void serial_test_dev_cgroup(void)
+> +{
+> +	struct dev_cgroup *skel;
+> +	int cgroup_fd, err;
+> +	__u32 prog_cnt;
+> +
+> +	skel = dev_cgroup__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
+> +		goto cleanup;
+> +
+> +	cgroup_fd = cgroup_setup_and_join(TEST_CGROUP);
+> +	if (!ASSERT_GT(cgroup_fd, 0, "cgroup_setup_and_join"))
+> +		goto cleanup;
+> +
+> +	err = bpf_prog_attach(bpf_program__fd(skel->progs.bpf_prog1), cgroup_fd,
+> +			      BPF_CGROUP_DEVICE, 0);
+> +	if (!ASSERT_EQ(err, 0, "bpf_attach"))
+> +		goto cleanup;
+> +
+> +	err = bpf_prog_query(cgroup_fd, BPF_CGROUP_DEVICE, 0, NULL, NULL, &prog_cnt);
+> +	if (!ASSERT_EQ(err, 0, "bpf_query") || (!ASSERT_EQ(prog_cnt, 1, "bpf_query")))
+> +		goto cleanup;
+> +
+> +	/* All operations with /dev/zero and /dev/urandom are allowed,
+> +	 * everything else is forbidden.
+> +	 */
+> +	ASSERT_EQ(system("rm -f /tmp/test_dev_cgroup_null"), 0, "rm");
+> +	ASSERT_NEQ(system("mknod /tmp/test_dev_cgroup_null c 1 3"), 0, "mknod");
+> +	ASSERT_EQ(system("rm -f /tmp/test_dev_cgroup_null"), 0, "rm");
+> +
+> +	/* /dev/zero is whitelisted */
+> +	ASSERT_EQ(system("rm -f /tmp/test_dev_cgroup_zero"), 0, "rm");
+> +	ASSERT_EQ(system("mknod /tmp/test_dev_cgroup_zero c 1 5"), 0, "mknod");
+> +	ASSERT_EQ(system("rm -f /tmp/test_dev_cgroup_zero"), 0, "rm");
+> +
+> +	ASSERT_EQ(system("dd if=/dev/urandom of=/dev/zero count=64"), 0, "dd");
+> +
+> +	/* src is allowed, target is forbidden */
+> +	ASSERT_NEQ(system("dd if=/dev/urandom of=/dev/full count=64"), 0, "dd");
+> +
+> +	/* src is forbidden, target is allowed */
+> +	ASSERT_NEQ(system("dd if=/dev/random of=/dev/zero count=64"), 0, "dd");
+> +
+> +cleanup:
+> +	cleanup_cgroup_environment();
+> +	dev_cgroup__destroy(skel);
+> +}
+> diff --git a/tools/testing/selftests/bpf/test_dev_cgroup.c b/tools/testing/selftests/bpf/test_dev_cgroup.c
+> deleted file mode 100644
+> index adeaf63cb6fa3..0000000000000
+> --- a/tools/testing/selftests/bpf/test_dev_cgroup.c
+> +++ /dev/null
+> @@ -1,85 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0-only
+> -/* Copyright (c) 2017 Facebook
+> - */
+> -
+> -#include <stdio.h>
+> -#include <stdlib.h>
+> -#include <string.h>
+> -#include <errno.h>
+> -#include <assert.h>
+> -#include <sys/time.h>
+> -
+> -#include <linux/bpf.h>
+> -#include <bpf/bpf.h>
+> -#include <bpf/libbpf.h>
+> -
+> -#include "cgroup_helpers.h"
+> -#include "testing_helpers.h"
+> -
+> -#define DEV_CGROUP_PROG "./dev_cgroup.bpf.o"
+> -
+> -#define TEST_CGROUP "/test-bpf-based-device-cgroup/"
+> -
+> -int main(int argc, char **argv)
+> -{
+> -	struct bpf_object *obj;
+> -	int error = EXIT_FAILURE;
+> -	int prog_fd, cgroup_fd;
+> -	__u32 prog_cnt;
+> -
+> -	/* Use libbpf 1.0 API mode */
+> -	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
+> -
+> -	if (bpf_prog_test_load(DEV_CGROUP_PROG, BPF_PROG_TYPE_CGROUP_DEVICE,
+> -			  &obj, &prog_fd)) {
+> -		printf("Failed to load DEV_CGROUP program\n");
+> -		goto out;
+> -	}
+> -
+> -	cgroup_fd = cgroup_setup_and_join(TEST_CGROUP);
+> -	if (cgroup_fd < 0) {
+> -		printf("Failed to create test cgroup\n");
+> -		goto out;
+> -	}
+> -
+> -	/* Attach bpf program */
+> -	if (bpf_prog_attach(prog_fd, cgroup_fd, BPF_CGROUP_DEVICE, 0)) {
+> -		printf("Failed to attach DEV_CGROUP program");
+> -		goto err;
+> -	}
+> -
+> -	if (bpf_prog_query(cgroup_fd, BPF_CGROUP_DEVICE, 0, NULL, NULL,
+> -			   &prog_cnt)) {
+> -		printf("Failed to query attached programs");
+> -		goto err;
+> -	}
+> -
+> -	/* All operations with /dev/zero and and /dev/urandom are allowed,
+> -	 * everything else is forbidden.
+> -	 */
+> -	assert(system("rm -f /tmp/test_dev_cgroup_null") == 0);
+> -	assert(system("mknod /tmp/test_dev_cgroup_null c 1 3"));
+> -	assert(system("rm -f /tmp/test_dev_cgroup_null") == 0);
+> -
+> -	/* /dev/zero is whitelisted */
+> -	assert(system("rm -f /tmp/test_dev_cgroup_zero") == 0);
+> -	assert(system("mknod /tmp/test_dev_cgroup_zero c 1 5") == 0);
+> -	assert(system("rm -f /tmp/test_dev_cgroup_zero") == 0);
+> -
+> -	assert(system("dd if=/dev/urandom of=/dev/zero count=64") == 0);
+> -
+> -	/* src is allowed, target is forbidden */
+> -	assert(system("dd if=/dev/urandom of=/dev/full count=64"));
+> -
+> -	/* src is forbidden, target is allowed */
+> -	assert(system("dd if=/dev/random of=/dev/zero count=64"));
+> -
+> -	error = 0;
+> -	printf("test_dev_cgroup:PASS\n");
+> -
+> -err:
+> -	cleanup_cgroup_environment();
+> -
+> -out:
+> -	return error;
+> -}
