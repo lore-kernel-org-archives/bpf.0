@@ -1,92 +1,168 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CAAE53384
-	for <bpf@vger.kernel.org>; Mon,  1 Apr 2024 19:17:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89ADC48CDD
+	for <bpf@vger.kernel.org>; Mon,  1 Apr 2024 19:22:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711999051; cv=none; b=k0BZzwXTvexp3fYEVgDsEH3PsEwzOSzV11Uu4eEJ/7puPNDaEnKCR/BuP6RdO4nfsPXc5AP7mQlk0dYyTG7HtA06KplbI3V71lSy4KuSgC3t02HUOSz2+/swBgVQSE+VVqe6s/bSD6HgoTXRyRXYtBPe4IXeSlx8XPTn4UOF5+g=
+	t=1711999360; cv=none; b=K8rsox0EW5qHd2eZrrJskGOg1jVcv9QKRVOI7IDbCr2LDQC3pp8cHsf82jGtQsmBpswsW2Z5/DV1uii3Zdu/sv1EE3WIviwE/RWqTYdFotdU6C1CTpv7go+sBczHy/uwjuFeBb3CKR3GAhbsWqEJ+g/If3xOj7d/GLvY745unuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711999051; c=relaxed/simple;
-	bh=HulfUPQNpC+qxMLkipOzHkdsDRCw8iYcUldG308ddGU=;
-	h=From:References:MIME-Version:In-Reply-To:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YxXzWhJqf4GBVVnCBYdj95J09j6PK2K9VOOlqZCO4jMoNOJEJ0MnuR/sDm+iPG0n+8yZfMduu/9Vqzoch/tv+TywYWRh3pJipcI+HqKPuGExdAfAjpkmZFaSoseSMDV5ZBmny1OwV2e9+Yg8I9yoQmgggv1yE54D+fcDzg0sExk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CqL5EzRy; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1711999360; c=relaxed/simple;
+	bh=8oUFGMmpkpqLpkNpA3EMKT/yDO5+7f6Bm1WN7AwolPE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WYLi/tfjQqypM4wmkE2RaOPW1cxc1xsCS1vr7JWUmT00T6Q1P8+Y6u9wiVfYJ775lrSrpiwQVrusHKvjNXU2v+Vq5dEpQNhVNnhsyMyyBHXxj/5u62+xCU2pSpS9hx1hEoeEnq1SxDe5IShW2b79uimGSFDzjUV6ojfEHxTOvsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=22uWaDKI; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CqL5EzRy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711999048;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HulfUPQNpC+qxMLkipOzHkdsDRCw8iYcUldG308ddGU=;
-	b=CqL5EzRyIocKv3/ft3cOzuL8ajzqTmX5l0sPBwSLNM/YPsEYLKScyYu7A/ftwNIOUpst5F
-	hJfY2rwQ6Dw5JijXZkm4SJYEp93iXziOXyHX44fUqD9B3vp261V5f4Q/2E8NFwYqcm/vOU
-	XnsogVNrsS3YLHwsBX8EMuJwKE9H358=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-512-B7MZbX6QNUGBrh6Shji3Fw-1; Mon, 01 Apr 2024 15:17:27 -0400
-X-MC-Unique: B7MZbX6QNUGBrh6Shji3Fw-1
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-5689f41cf4dso3668081a12.3
-        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 12:17:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="22uWaDKI"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a4e7e2a257cso71753966b.1
+        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 12:22:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1711999357; x=1712604157; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pRKdoK98qnZzkUcUn3OGBOuDQ1g75ltD3kRhKb3BL0c=;
+        b=22uWaDKINClGQOvJi06fBpyOOT7pMDPbf3vKhzp0A0EZNqEMJZEU9ZEQI+hZSku6MG
+         bDpe0EjXvO13ddBX37ofmNnPNsgpJXqGc4AuCCQ8nuthzsZBfIFoF3l84MfjgVpQ/rMz
+         X8r0RgAF5nL/37G5R4ZMVUu7g7ccxrgvXJyBok31bWJ4U/eF8uRTx4l9dRQ4jGtBlNPe
+         xA9xU5PEKcZ6Mo8JfTxnSnXSqVcfGA88I4+hdQ1b5EIF6VP5bvS6Re5X1nESesLYTzOM
+         keFQM0jW7oXypgbtrwSnBZZnye/NvRo6H4FNnGy3aoPjs0A0kSwZBaIAE8vZ+9L09KAa
+         hy5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711999046; x=1712603846;
-        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HulfUPQNpC+qxMLkipOzHkdsDRCw8iYcUldG308ddGU=;
-        b=K1NypXzzOL3dRLZ8eHf+SeuKrBiknIXiOBbTFkSK7s4Sc9OolW8K/Ared6mWX2XTTw
-         suOYQbKgoBd1fLQnW6VFiz58i+31k3Km0SpdmcCJSl/NgJxx18RZXftxz/Ca2t/CwovA
-         Le6W2kL8BtBlcdvUWdBsdE/mXjbwo4Hb040ZsBb80SNpqPV3a2DtkjEj5yQgyXhLocP0
-         Uzd98zszEDvcO08zIuTEnM1tXwNoDYtdTvcNsLAJsaqRD9Ih3KyY7x7DpoyIa53b5iCF
-         rcQC0OuNSeospjLWY1o6MMgvREjv93B+DuXdBk3J/jvrMWc2GytAOQRA3YuRRVBIzlrk
-         9I2w==
-X-Forwarded-Encrypted: i=1; AJvYcCVGbdZhUn/RvKytNqDx6LNXRM2LSSF251Rf4qTprweVFQy4zb2LnoB6zlQQ91Y8fJT76NWdP18QneXO5cvI5URDuJ06
-X-Gm-Message-State: AOJu0YyldcFjiNs3EBdex6wRBuVaHRWvluvVv+bbJy6bZS2LQ51rg3z3
-	onlFOc2YQYOsD5AQTCjxViCbzB9sK85SA40UWlcgRsmMBApKEEhzbW8XEUZsDaKLUo3o/eodFwH
-	egwG2YSIPuDQppAEcmW9+mQzULeybA2pq6CFvMlF6lATRwoduf5fuPTctQY/JCKjQgkZvS1wljs
-	pgiT0mJ19yQUcr9jbCc9X0GN4m3l07HVtx
-X-Received: by 2002:a50:d48d:0:b0:567:824:e36c with SMTP id s13-20020a50d48d000000b005670824e36cmr7000219edi.14.1711999046049;
-        Mon, 01 Apr 2024 12:17:26 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHOhbBukYqXLYWTftwKRHjLG6yHJ6cBm6u4VvEtvFvKjjF1MpNgvkMlxNSn0UPDrgNIES0COK4PcDqRIbFVSqk=
-X-Received: by 2002:a50:d48d:0:b0:567:824:e36c with SMTP id
- s13-20020a50d48d000000b005670824e36cmr7000186edi.14.1711999045687; Mon, 01
- Apr 2024 12:17:25 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 1 Apr 2024 12:17:24 -0700
-From: Marcelo Ricardo Leitner <mleitner@redhat.com>
-References: <20240325142834.157411-1-jhs@mojatatu.com> <20240325142834.157411-15-jhs@mojatatu.com>
+        d=1e100.net; s=20230601; t=1711999357; x=1712604157;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pRKdoK98qnZzkUcUn3OGBOuDQ1g75ltD3kRhKb3BL0c=;
+        b=nwlPizKTHz1ZbU08k187MY3bHt8Ui/UTVo/6DEF2wAXAA47lOy7e8SETNkm2pcD+pb
+         ZlFT0DP1+H7janDe8PWb+YWhLeZpRi/bwrAYzqxkAWigmmtoYUBbetpspyBSOgN3Jgej
+         dtLcjNmk2bdGMdEscoHWXI+0pu3ietvEBBothEvGdZggmnr7ZgZLzAGm+sBaNIXziqB5
+         E0o/u1FpnnDFxUFS7nOd5xM59ocLG0OMvYRv27TFQosdR7BNjiVR3ZeUP5e5aeWhcjHz
+         0SdmbTh1biiF9yen1bkIkTfZPY7w9ROB9q8UEB4wwc8SLI4w3yy4lXk2aj4i8CJPJd7S
+         P7sw==
+X-Forwarded-Encrypted: i=1; AJvYcCXJDaKSyIkm8azAwle9b/aHhRJbGKakHgbSicn3I7fL14yRYcJxagByt6U8EtfHaCE+Y6TCqnnt+I0iJRaQMQ+XsTPX
+X-Gm-Message-State: AOJu0YxKzr+xcZQD7yO/OQtHt62zgKddEHSbOl3v0uHJS5951E8J9hsD
+	UP+XJpgFooXUXHmoxd4Q8Jy5iJOT3LnT5VxRdMN7fl0of4yjH2lRc+ryibQ+bxKAMxF4l14A6qy
+	jFxdx79nTWah3NQWiAg98RC4MSOrux5LzLrEp
+X-Google-Smtp-Source: AGHT+IFnZAdqBNjychftax9hJ9HmWGsuFKJlToxmGxuKATUcrfF8Wqh8ADOKipJFMzVFEgjjXqwoqI01MVv3yIjrd3E=
+X-Received: by 2002:a17:906:f289:b0:a46:d978:bf02 with SMTP id
+ gu9-20020a170906f28900b00a46d978bf02mr6594862ejb.34.1711999356578; Mon, 01
+ Apr 2024 12:22:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240325142834.157411-15-jhs@mojatatu.com>
-Date: Mon, 1 Apr 2024 12:17:24 -0700
-Message-ID: <CALnP8ZZYF45uST4S68Y_-Sx_YirSfY9eNY8=bombEXm8+3W1Zg@mail.gmail.com>
-Subject: Re: [PATCH net-next v13 14/15] p4tc: add set of P4TC table kfuncs
-To: Jamal Hadi Salim <jhs@mojatatu.com>
-Cc: netdev@vger.kernel.org, deb.chatterjee@intel.com, anjali.singhai@intel.com, 
-	namrata.limaye@intel.com, tom@sipanda.io, Mahesh.Shirshyad@amd.com, 
-	Vipin.Jain@amd.com, tomasz.osinski@intel.com, jiri@resnulli.us, 
-	xiyou.wangcong@gmail.com, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, vladbu@nvidia.com, horms@kernel.org, 
-	khalidm@nvidia.com, toke@redhat.com, daniel@iogearbox.net, 
-	victor@mojatatu.com, pctammela@mojatatu.com, bpf@vger.kernel.org
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-3-almasrymina@google.com> <ZfegzB341oNc_Ocz@infradead.org>
+ <CAHS8izOUi6qGp=LSQb_o5oph-EnhNOuhLkPSfbQRU3eniZvbdA@mail.gmail.com>
+ <ZgC5JoSiWAYf3IgX@infradead.org> <CAHS8izO5-giYhM1bVCLLOXRXq-Xd0=pi0kPq5E1-R=3i=XihmQ@mail.gmail.com>
+ <ZgUc07Szbx5x-obb@infradead.org>
+In-Reply-To: <ZgUc07Szbx5x-obb@infradead.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Mon, 1 Apr 2024 12:22:24 -0700
+Message-ID: <CAHS8izM8iLC9J1xSHScMrMkVyoY5HZ_nFMRO4V7HYarHhZhk6Q@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
+ custom page providers
+To: Christoph Hellwig <hch@infradead.org>, Marc Harvey <marcharvey@google.com>, 
+	"Cong Wang ." <cong.wang@bytedance.com>
+Cc: shakeel.butt@linux.dev, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 25, 2024 at 10:28:33AM -0400, Jamal Hadi Salim wrote:
-> Co-developed-by: Victor Nogueira <victor@mojatatu.com>
-> Signed-off-by: Victor Nogueira <victor@mojatatu.com>
-> Co-developed-by: Pedro Tammela <pctammela@mojatatu.com>
-> Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
-> Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+On Thu, Mar 28, 2024 at 12:31=E2=80=AFAM Christoph Hellwig <hch@infradead.o=
+rg> wrote:
+>
+> On Tue, Mar 26, 2024 at 01:19:20PM -0700, Mina Almasry wrote:
+> >
+> > Are you envisioning that dmabuf support would be added to the block
+> > layer
+>
+> Yes.
+>
+> > (which I understand is part of the VFS and not driver specific),
+>
+> The block layer isn't really the VFS, it's just another core stack
+> like the network stack.
+>
+> > or as part of the specific storage driver (like nvme for example)? If
+> > we can add dmabuf support to the block layer itself that sounds
+> > awesome. We may then be able to do devmem TCP on all/most storage
+> > devices without having to modify each individual driver.
+>
+> I suspect we'll still need to touch the drivers to understand it,
+> but hopefully all the main infrastructure can live in the block layer.
+>
+> > In your estimation, is adding dmabuf support to the block layer
+> > something technically feasible & acceptable upstream? I notice you
+> > suggested it so I'm guessing yes to both, but I thought I'd confirm.
+>
+> I think so, and I know there has been quite some interest to at least
+> pre-register userspace memory so that the iommu overhead can be
+> pre-loaded.  It also is a much better interface for Peer to Peer
+> transfers than what we currently have.
+>
 
-Be noted that I don't know much of eBPF code. But otherwise, things
-LGTM here.
+I think this is positively thrilling news for me. I was worried that
+adding devmemTCP support to storage devices would involve using a
+non-dmabuf standard of buffer sharing like pci_p2pdma_
+(drivers/pci/p2pdma.c) and that would require messy changes to
+pci_p2pdma_ that would get nacked. Also it would require adding
+pci_p2pdma_ support to devmem TCP, which is a can of worms. If adding
+dma-buf support to storage devices is feasible and desirable, that's a
+much better approach IMO. (a) it will maybe work with devmem TCP
+without any changes needed on the netdev side of things and (b)
+dma-buf support may be generically useful and a good contribution even
+outside of devmem TCP.
 
-Reviewed-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+I don't have a concrete user for devmem TCP for storage devices but
+the use case is very similar to GPU and I imagine the benefits in perf
+can be significant in some setups.
 
+Christoph, if you have any hints or rough specific design in mind for
+how dma-buf support can be added to the block layer, please do let us
+know and we'll follow your hints to investigate. But I don't want to
+use up too much of your time. Marc and I can definitely read enough
+code to figure out how to do it ourselves :-)
+
+Marc, please review and consider this thread and work, this could be a
+good project for you and I. I imagine the work would be:
+
+1. Investigate how to add dma-buf support to the block layer (maybe
+write a prototype code, and maybe even test it with devmem TCP).
+2. Share a code or no-code proposal with netdev/fs/block layer mailing
+list and try to work through concerns/nacks.
+3. Finally share RFC through merging etc.
+
+--
+Thanks,
+Mina
