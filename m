@@ -1,104 +1,147 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75E9247A74
-	for <bpf@vger.kernel.org>; Mon,  1 Apr 2024 16:28:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9A35481D7
+	for <bpf@vger.kernel.org>; Mon,  1 Apr 2024 16:51:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711988940; cv=none; b=XChQLSr1V20rpft3BvN25YnlSEbq7xTXIR+8G3WQCphjbwT0KXoSMPySf7TeK5onlcNMw4QDfotAWpB1TcdHaHczuStGBAhGuE7sMaf4JuBn5olUVoMHgl7bSOs/x7ToB311+kpqXEW/APk5DXPBXJ6ak0zcm1bV4NhyZuGc28Y=
+	t=1711990282; cv=none; b=ImU7mho93aghlKFGUUf1kwl5fF+bjVfg79CjknxHXjynDIVrTEAYW0KkT82d4GAfEC8LZeYQ8Squ+a9x0W9ArvnpI0sF1sW7G77bw9Yy5EAzc5i3AJ6uxiE4ZLdBA3xPzj1/n938WCbfwMAlMhVIMVS1ZGixTIClt5ryVfgvxNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711988940; c=relaxed/simple;
-	bh=SU++947sBd/Af2hmdh3NJzIugtlKzhQM68m6dXAGaI8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fRGhW6c7ph/S5j6MzEcGO4Q+wG/VxxVpEeUVzMHW3I8XLq5xDtjqRKiTVBwX1VzOJCWoMCriFeKnqvXpNV7Zx4RjsUJ6vw/OMfdJuqc6q4KLBwG60WcCDK7C/+SgAokNzbuDl86q1zdXHxy93uXwKs+BbviepGOry43oKpQYzDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h13fHe/3; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h13fHe/3"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-563cb3ba9daso4009260a12.3
-        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 09:28:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711988937; x=1712593737; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SU++947sBd/Af2hmdh3NJzIugtlKzhQM68m6dXAGaI8=;
-        b=h13fHe/3aXtohl8EyN4T9H9w5P18Kry7AuDG5XMi9/JsOzYdGIEQjudgVOUmQxn7zi
-         dLW1dAxW5YEeD4GlXH6VLXzWhVA9CZQqwXhKGJ4jrAXnAe/aK+oWppoe8SpMZZf4Vq00
-         zYX2BDsGjlNRG8e+8BAfSTkMrHcAiPZNFSb3tFY8HgkcwrsvLq1dtk8DrE+AgToTjycy
-         MWh4Lcd6/YDfhHvbz7eSrVU01Zd1Ctt6CVxHtxPs2LJZbXPLCvzl5PCIEAPttAFK8XtZ
-         +s0Vw0FD8Apew/p0P9QB2v8RsMWqFVphSqPQKhhr6dJQpG3UI/tFW79bpOKUESEziWtv
-         TfQw==
+	s=arc-20240116; t=1711990282; c=relaxed/simple;
+	bh=+YpLD+4LiDllvY8qBsgrDSTA9AJ0+xQFee1/kxIpYlc=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=LdRJr9kMTxTd91SyKRJIWMEVoVS8IJ7PUBs+Bf+OuzDNbXw/JPTVZCXFQPBPNLi9hg9JlrQvhqouNpwG2y97XnoPI+rn0VhGiJmLoEyi+1+02HLGcz3MZ5mMt4+59tXQL+l4WA2oltoHxO+SvzOQqW1Zd7DsBYWHnxMWpJrm2RA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7cf179c3da4so475398139f.2
+        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 09:51:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711988937; x=1712593737;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SU++947sBd/Af2hmdh3NJzIugtlKzhQM68m6dXAGaI8=;
-        b=PLhSRGg0EmP2dcPmW1Wz+05atPpThDBSfwfixilZpnxgDAGaiJDxQ5Wi815CJGI6xy
-         07CaoIM6Tg1Ig+ofJ3JDGQMIUCaS+fgy857YPlEDHMLRQGEllJIr2MkYQXNJ05eXxj4O
-         YFgelaw6zsuw4KJJJ9a7G2uIX1s/eLDLm8uy1dxER//PdnskXllweisiolonrD8pgfVJ
-         gZPNmbkeprlwTcrcUbRbBFyPdaTc/ado0DbagxeRXsCPfKEtf7YAsgYr6ULySmBTdfbU
-         odJiZcubRh9M7k4yR6eayW6bbG9pFM+++ZwUBomBolTwrRdjelxuSqyFA5KnxcuntUhg
-         568w==
-X-Forwarded-Encrypted: i=1; AJvYcCViuvHGRTuBFEQNpw7leXi6awPpE4+8erA/USZ/XVaC06mWdDEPrZm07CkIeXXpbsLJHQOlKuDs2fJeNajOEQpVl9oZ
-X-Gm-Message-State: AOJu0Yw2er9BePCVMMzyJz0pTowIf4rygiuEH5Cg+J4PxQ9ikjYhJxI2
-	F7pwUgk4jUUKGnyqyou6K+5MFV6nw0dx6FTTLr/qYQ/Im3N/AIHQFAeSDIdOTcA=
-X-Google-Smtp-Source: AGHT+IEyi3E2+sn2fWAkU2em2ApkmsyFGCN+RI2rMTO3i1FZ0DPBzTIs+Tb1qVBhKzOPiKTovALb3g==
-X-Received: by 2002:a05:6402:518b:b0:56a:e8e4:9aef with SMTP id q11-20020a056402518b00b0056ae8e49aefmr9144834edd.7.1711988936501;
-        Mon, 01 Apr 2024 09:28:56 -0700 (PDT)
-Received: from [192.168.100.206] ([89.28.99.140])
-        by smtp.gmail.com with ESMTPSA id y11-20020aa7c24b000000b0056bdec673c3sm5765369edo.38.2024.04.01.09.28.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Apr 2024 09:28:56 -0700 (PDT)
-Message-ID: <e0426944e09d865946876f9bbd8acb7cf23d8705.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 0/4] Add internal-only BPF per-CPU instructions
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
- ast@kernel.org,  daniel@iogearbox.net, martin.lau@kernel.org
-Cc: kernel-team@meta.com
-Date: Mon, 01 Apr 2024 19:28:54 +0300
-In-Reply-To: <20240329184740.4084786-1-andrii@kernel.org>
-References: <20240329184740.4084786-1-andrii@kernel.org>
-Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+        d=1e100.net; s=20230601; t=1711990280; x=1712595080;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mdk8hs5YwRs0MgKKaMSnooSWizCujgZiOxORDfdAX/0=;
+        b=eQ7fmT6J10jt2azeDEw39u9azUKznjQfQw6bneV4hmLoyrGzmd0lDIYHifNuUe5Ebc
+         XtbbekGXRIM8NyHmbn+dcTKJxUHMcU/gzv7JNu/GY+LiqcYsxoWZpA2ZDWAAg5iGWqmY
+         kqRiKS2HnMRJP3tnbVsU7f7cV2fOtkiZ7l1LZqCTgSoCJ3rPmvgYmIWzkzt2N9r9qmm9
+         aRBVF7X/IcyyGNOc5SerGwgvmH8MZnTXj4E+PYY1EtxoM4suQWwIhNmKs4/3tRL3kpdy
+         tRIoR1rM8xTkcXp9zAbohAYCmcLNgbVp4Fwb6JSfhz8zRRdi+n3KH0r5eM7xLs2teuKg
+         Ed6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWW5BYjiqGBqt1YOYo3rpwvGCv8+oNFMhjJDek777vSB3UQ6UMQ5mDrhMpfLOd9Vux2qg8VfcOxtBL5S0DIoBDezLxh
+X-Gm-Message-State: AOJu0Yx9kIWk0fw95I0+Qw2uLz86htEHRTvP7YZAiIoT24+uA63WXC2P
+	kSdTtWyuS0vnirgNzJMoAYX0R3faTKZQofEtR63ZFU74uGtkKzmEx1g8XSROt1E/2apjtOZnbQB
+	BGtV/y705tv4pKyRbThxc9al515KwQp5RlF+rKb68jz6LKBoUljQm3bk=
+X-Google-Smtp-Source: AGHT+IGvh+h9Q7ZKk4dzQgcg/ciJVMmq/GBMv8Wtyz3R29FKzahTPJgHxJnFFV/WhUXFq7csn3ZGP0Txvp4nKR+njrehwDhRFGim
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Received: by 2002:a05:6602:150c:b0:7d0:ad03:af10 with SMTP id
+ g12-20020a056602150c00b007d0ad03af10mr179166iow.1.1711990280083; Mon, 01 Apr
+ 2024 09:51:20 -0700 (PDT)
+Date: Mon, 01 Apr 2024 09:51:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000081146c06150bcc2a@google.com>
+Subject: [syzbot] [bpf?] WARNING in __mark_chain_precision (4)
+From: syzbot <syzbot+148110ee7cf72f39f33e@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@google.com, 
+	song@kernel.org, syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 2024-03-29 at 11:47 -0700, Andrii Nakryiko wrote:
-> Add two new BPF instructions for dealing with per-CPU memory.
->=20
-> One, BPF_LDX | BPF_ADDR_PERCPU | BPF_DW (where BPF_ADD_PERCPU is unused
-> 0xe0 opcode), resolved provided per-CPU address (offset) to an absolute
-> address where per-CPU data resides for "this" CPU. This is the most unive=
-rsal,
-> and, strictly speaking, the only per-CPU BPF instruction necessary.
->=20
-> I also added BPF_LDX | BPF_MEM_PERCPU | BPF_{B,H,W,DW} (BPF_MEM_PERCPU us=
-ing
-> another unused 0xc0 opcode), which can be considered an optimization
-> instruction, which allows to *read* per-CPU data up to 8 bytes in one
-> instruction, without having to first resolve the address and then
-> dereferencing the memory. This one is used in inlining of
-> bpf_get_smp_processor_id(), but it would be fine to implement the latter =
-with
-> BPF_ADD_PERCPU, followed by normal BPF_LDX | BPF_MEM, so I'm fine droppin=
-g
-> this one, if requested.
+Hello,
 
-Hi Andrii,
+syzbot found the following issue on:
 
-I've read through the series and it looks good
-(modulo architecture related issues reported by CI).
+HEAD commit:    fe46a7dd189e Merge tag 'sound-6.9-rc1' of git://git.kernel..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=14024776180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4d90a36f0cab495a
+dashboard link: https://syzkaller.appspot.com/bug?extid=148110ee7cf72f39f33e
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10c51c1d180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=127285b1180000
 
-Thanks,
-Eduard
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f6c04726a2ae/disk-fe46a7dd.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/09c26ce901ea/vmlinux-fe46a7dd.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/134acf7f5322/bzImage-fe46a7dd.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+148110ee7cf72f39f33e@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+verifier backtracking bug
+WARNING: CPU: 0 PID: 5066 at kernel/bpf/verifier.c:3714 backtrack_insn kernel/bpf/verifier.c:3714 [inline]
+WARNING: CPU: 0 PID: 5066 at kernel/bpf/verifier.c:3714 __mark_chain_precision+0x7027/0x7520 kernel/bpf/verifier.c:4255
+Modules linked in:
+CPU: 0 PID: 5066 Comm: syz-executor296 Not tainted 6.8.0-syzkaller-08951-gfe46a7dd189e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/27/2024
+RIP: 0010:backtrack_insn kernel/bpf/verifier.c:3714 [inline]
+RIP: 0010:__mark_chain_precision+0x7027/0x7520 kernel/bpf/verifier.c:4255
+Code: 8b e8 ed df b0 ff 90 0f 0b 90 90 e9 7d f2 ff ff e8 9e 0b ee ff c6 05 41 c2 c9 0d 01 90 48 c7 c7 c0 af b0 8b e8 ca df b0 ff 90 <0f> 0b 90 90 e9 5a f2 ff ff e8 7b 0b ee ff c6 05 1f c2 c9 0d 01 90
+RSP: 0018:ffffc900043f6ac0 EFLAGS: 00010246
+RAX: 3bf0d782b73e5400 RBX: ffff8880236c5600 RCX: ffff88802a9dbc00
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffffc900043f6d10 R08: ffffffff8157cb22 R09: 1ffff110172851a2
+R10: dffffc0000000000 R11: ffffed10172851a3 R12: 0000000080000000
+R13: 0000000000000010 R14: 0000000000000001 R15: ffff8880236c0000
+FS:  000055557d2fe380(0000) GS:ffff8880b9400000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000082 CR3: 00000000231d4000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ mark_chain_precision kernel/bpf/verifier.c:4358 [inline]
+ check_return_code+0xbe0/0x11e0 kernel/bpf/verifier.c:15500
+ do_check+0xb91f/0x10500 kernel/bpf/verifier.c:17867
+ do_check_common+0x14bd/0x1dd0 kernel/bpf/verifier.c:20492
+ do_check_main kernel/bpf/verifier.c:20583 [inline]
+ bpf_check+0x136ab/0x19010 kernel/bpf/verifier.c:21253
+ bpf_prog_load+0x1667/0x20f0 kernel/bpf/syscall.c:2895
+ __sys_bpf+0x4ee/0x810 kernel/bpf/syscall.c:5631
+ __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
+ __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5736
+ do_syscall_64+0xfb/0x240
+ entry_SYSCALL_64_after_hwframe+0x6d/0x75
+RIP: 0033:0x7f6484f2a469
+Code: 48 83 c4 28 c3 e8 37 17 00 00 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc85bd0a08 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007ffc85bd0be8 RCX: 00007f6484f2a469
+RDX: 0000000000000090 RSI: 0000000020000600 RDI: 0000000000000005
+RBP: 00007f6484f9d610 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
+R13: 00007ffc85bd0bd8 R14: 0000000000000001 R15: 0000000000000001
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
