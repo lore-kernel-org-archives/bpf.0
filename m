@@ -1,90 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025CC40876
-	for <bpf@vger.kernel.org>; Mon,  1 Apr 2024 17:07:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3264D108;
+	Mon,  1 Apr 2024 17:22:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711991238; cv=none; b=VS7pDGtEQUm/0X3Qg6EB0L7MuqqJqrQ/ZJanLYzaMkElI0gOBEig508StCrpOsf3f9MqeJ2vf226xojZTBJ5poy25edZjjAam6uSEROvJlY5n1st5LKRwfatxa3e06o+Bcrngyu/9Jya07ET+eTMUEqzOKwFAPPu8ZmHjpi7928=
+	t=1711992144; cv=none; b=HRU8+MnYAtVHmnfXsY7HXzSEQu5d6qa0NvJWrmJAAjNfHNYtWKmzyvNEUtDvWVVbKynSZuZeOBe2o0e1iuvEVnjNyfX3Z7rSAkkKFlRbnr0owk449HJtLhxTffS4svB3zhseuVHEX5duBGXIPE5z6/ZTtchvYpTP9H8iWR1ndOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711991238; c=relaxed/simple;
-	bh=dbfcN9kCn0v8+Pi5E2GU16u0bFxzvCdOsF0Eqn2OPHA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dr+S5vr9v2MUaXKoP2RU39XrDVnYqLX3Pn6oIT/I0pK84/QayFb31sUzoCMU3ixRcONOxaEw8cDOlJ236PFChqxkw9CWpeFkQl5atOe8D63Npn4B26RS3QNNOgasoUUchxiEmFuqpTcZ7NM2Ztpp851Cn+KQZ9GAZCwBTUN8Ttg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A2AkzDUV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711992144; c=relaxed/simple;
+	bh=n3qx8PX4JbbZebPyKUvOKWYF9rn/34UmufglT9snIf4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NgpKyepws2OgV7vgOtplkThFc08l2WPzpvktgdnELD+Z782aEbiEabGZFYyGIykT873cxjCsC35AHbIBgRiqD4HBIeSUn92AlbEw+xvcYqRlyU9P2oNH/ZhZTVsCTV97equu58vUG/wQnqmZD9dSYbzwekyjU0oc6PjAbADqqTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MyIuFMBr; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A2AkzDUV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 901A9C433F1;
-	Mon,  1 Apr 2024 17:07:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711991237;
-	bh=dbfcN9kCn0v8+Pi5E2GU16u0bFxzvCdOsF0Eqn2OPHA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=A2AkzDUV0ihgC13HuCMgxLb4Ep4SD5olCcbiXhH9+yLfZbxkIQs7MhFBNFBJzCGdq
-	 K1rr404FZ4CFkyubJngbbufVGD2vu+ao00Dpe2mCrgxI0rgkwFFcuik9LopYCa+QPx
-	 3r42QoEwHclRP1XrxqhsDSchK03d5syhgelKKr6hrXqhtFPyowRxKOzYRMNoq97jqB
-	 DP/M2/9DqXvP4/3Vjx/AJqDYCcnuf57g6c2lXKMOklYterhCe5ocHU7rFcQsXvNQle
-	 Zw0eGBy8SzcK2sgGR3o1G1vCuCfxPH1W02oaSu3ZnZPrEsVSjR29A0OpbQqFhqjtOT
-	 S2URfj9TyVnoA==
-From: Andrii Nakryiko <andrii@kernel.org>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@kernel.org
-Cc: andrii@kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next] bpftool: use __typeof__() instead of typeof() in BPF skeleton
-Date: Mon,  1 Apr 2024 10:07:13 -0700
-Message-ID: <20240401170713.2081368-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MyIuFMBr"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-415a84ea9bbso122565e9.2;
+        Mon, 01 Apr 2024 10:22:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711992141; x=1712596941; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IGC/TKgrB+BipUfQftnYw5ChRevIFw8JCi+U2tc1K9Y=;
+        b=MyIuFMBrN9Th1EIT6wEXaBQbEHAyUS2rydWo9Jn2hNYdRR+GyBATJLRxnKDd94njRz
+         dVu2YA+un4Ciy2LRN+qjs/TTagDputU0EsORFXBXBYgzznX0woApz2FJKNZV7oPxVFz0
+         IqqSKXjGv3peU7VH2FeLydlsgeyEf6i6I4ro9o/GmW2iHvldzZLiWpUcFXVxRAEkjII9
+         WqWMVzF2QChL4d41y4C7MXSgUogGuqSxYk6a4udGjrSSdo57QuwXNE3DimE/p7Bh3RSn
+         SXUn1xMvurmblTCKBP/mQp4rBxp/f3T3c6AAola1P8QwAUPWj1xQ5n5aQmCUP1vIPTRI
+         WEMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711992141; x=1712596941;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IGC/TKgrB+BipUfQftnYw5ChRevIFw8JCi+U2tc1K9Y=;
+        b=rdVF/SoUj7H6CGWkPVu6X8k6y+9Tx5olyDEf2w8W6+iplahfWPuLMebp2jYXnwduhx
+         np2csk4fbwWjJ9+YaEG3Ay1NjKfHmIA2OSTv/yV7tfUbWgH0vfETaEJC0MEaV24AYbMC
+         bsdrjlUNx87aMrv7E7zudScOY5X+zxyado9q4OtR0XAHilMAVfSoZCOjNuuVC75nHsZJ
+         annZLoKEZjS+FqPsZt5i12NZy5Lt8z4fq0N3ivCTpKA4ythH2Qo7RVnaYGpqr2zCOExv
+         TJkwTiSW5Etzpwt6sVGgRxbGIZLFtXNIcB0STOjF+Ae/8kELWdfK/nW2hDErU/PTyehc
+         KBbw==
+X-Forwarded-Encrypted: i=1; AJvYcCXbU7TROc3c1D0Niih11gznI/n31Ly1mycnKZr4EmCuNMT671jl4OS9c2kbAcyaYNh2tJfAt8nic9OTGsXRxpCCNSe55RGYDxetJvvGP5+QL3Td8KgYtbQEtHWoa+MKYsMEd8g8mOY3IDs1eCfFlpAZkieN2YcJPgI/
+X-Gm-Message-State: AOJu0YwIHixHgz2ln+Mgj1up+yVj0AOUNzdKs70PSIKLLq5i3JB2uAdn
+	Mm5g5EHIkPEawCMXgk36HV/PpzrMXH2fZSssWzXAhY1mTqb7FSbg
+X-Google-Smtp-Source: AGHT+IFumMkbth+FRuxtOb0CUug8cOu07jUVwMuGxFXooWULx8JA7teM0x+UwusYqBxv2gUPLxENGw==
+X-Received: by 2002:a05:600c:4f86:b0:414:8e02:e441 with SMTP id n6-20020a05600c4f8600b004148e02e441mr8237421wmq.13.1711992141086;
+        Mon, 01 Apr 2024 10:22:21 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id t20-20020a05600c199400b0041401eb021asm15273108wmq.24.2024.04.01.10.22.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Apr 2024 10:22:20 -0700 (PDT)
+From: Uros Bizjak <ubizjak@gmail.com>
+To: x86@kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Uros Bizjak <ubizjak@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf v2 0/2] x86/bpf: Fixes for the BPF JIT with retbleed=stuff
+Date: Mon,  1 Apr 2024 19:18:58 +0200
+Message-ID: <20240401172157.5717-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-When generated BPF skeleton header is included in C++ code base, some
-compiler setups will emit warning about using language extensions due to
-typeof() usage, resulting in something like:
+Fixes two issues that cause kernels panic when using the BPF JIT with
+the call depth tracking / stuffing mitigation for Skylake processors
+(`retbleed=stuff`). Both issues can be triggered by running simple
+BPF programs (e.g. running the test suite should trigger both).
 
-  error: extension used [-Werror,-Wlanguage-extension-token]
-  obj->struct_ops.empty_tcp_ca = (typeof(obj->struct_ops.empty_tcp_ca))
-                                  ^
+The first (resubmit) fixes a trivial issue related to calculating the
+destination IP for call instructions with call depth tracking.
 
-It looks like __typeof__() is a preferred way to do typeof() with better
-C++ compatibility behavior, so switch to that. With __typeof__() we get
-no such warning.
+The second is related to using the correct IP for relocations, related
+to the recently introduced %rip-relative addressing for PER_CPU_VAR.
 
-Fixes: c2a0257c1edf ("bpftool: Cast pointers for shadow types explicitly.")
-Fixes: 00389c58ffe9 ("bpftool: Add support for subskeletons")
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
 ---
- tools/bpf/bpftool/gen.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v2:
+  Simplify calculation of "ip".
+  Explicitly list offending commit in the commit message.
 
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-index 786268f1a483..b3979ddc0189 100644
---- a/tools/bpf/bpftool/gen.c
-+++ b/tools/bpf/bpftool/gen.c
-@@ -386,7 +386,7 @@ static int codegen_subskel_datasecs(struct bpf_object *obj, const char *obj_name
- 			 */
- 			needs_typeof = btf_is_array(var) || btf_is_ptr_to_func_proto(btf, var);
- 			if (needs_typeof)
--				printf("typeof(");
-+				printf("__typeof__(");
- 
- 			err = btf_dump__emit_type_decl(d, var_type_id, &opts);
- 			if (err)
-@@ -1131,7 +1131,7 @@ static void gen_st_ops_shadow_init(struct btf *btf, struct bpf_object *obj)
- 			continue;
- 		codegen("\
- 			\n\
--				obj->struct_ops.%1$s = (typeof(obj->struct_ops.%1$s))\n\
-+				obj->struct_ops.%1$s = (__typeof__(obj->struct_ops.%1$s))\n\
- 					bpf_map__initial_value(obj->maps.%1$s, NULL);\n\
- 			\n\
- 			", ident);
+Joan Bruguera Micó (1):
+  x86/bpf: Fix IP for relocating call depth accounting
+
+Uros Bizjak (1):
+  x86/bpf: Fix IP after emitting call depth accounting
+
+ arch/x86/include/asm/alternative.h |  4 ++--
+ arch/x86/kernel/callthunks.c       |  4 ++--
+ arch/x86/net/bpf_jit_comp.c        | 19 ++++++++-----------
+ 3 files changed, 12 insertions(+), 15 deletions(-)
+
 -- 
-2.43.0
+2.42.0
 
