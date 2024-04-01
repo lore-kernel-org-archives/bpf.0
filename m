@@ -1,148 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F13510A3E
-	for <bpf@vger.kernel.org>; Mon,  1 Apr 2024 09:47:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C35B10A12
+	for <bpf@vger.kernel.org>; Mon,  1 Apr 2024 09:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711964827; cv=none; b=apvr9nXzfYyTsqstNcAbW096TtU4VXz3Z50Hwx3tlGsuBAPyfiR0SmQI1rygx9H5fA53JnD03OLTVmF/Xigv2BmzVH78E2FOUCFtQNWU+4N8mEzL3cfCDlfnH1artkhZ/pYkEUdDvCDZjBF9CmOo1EU7QuP6MNFwhLqlFkykOGw=
+	t=1711965579; cv=none; b=SptZgsm60GkWWqaeKwIm3A7oNMRiCM8V08rjg9RUOTao4HAD31nfDEUmZVYlfuUMVWhsraNBV0vT+ttT9wAAHtfVgsm9A6N1aB0g0kwINtRHxLfo0P0NJlwf81NQk6Fy6uQtqaipSdPWZQ49Fi/GGK7+9EA7UB9BRsbW5mAfYj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711964827; c=relaxed/simple;
-	bh=c4iN5KKDP2ORl5rtTNfbEYRFiRwBmlnV0Me7/XKC89g=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=QntJQBYzDq4vHQkwgOUXCxqemuzCJ3r5yoAgidSvHOIMQhN7yA0d68qxAQWP6A9piyauTqEImKivZ7D6WgpRc3PRYyVSxsbNz+eRoFfCTu3VDM9/H0/Iw47rqsw5to9f+HoHC/x/78wNWIseeW+OvjTyOz/n6Ky1OW8ZauKPkZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oe76QBc+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711965579; c=relaxed/simple;
+	bh=NuaWxwWBmhsYXymqFEf/pRk/Mi0mnzpQzdB5w54C6B8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=m5Hbvsft2yE90rSef/F7waYl9amA/n3P2GhpOnBRpoE1Vzz5qGbi99j5auO9geJGSate0XFPXIcV6B9LLbCSujS9V99RhNmRvwUR+SPivjzrjFzaN6HnwQHcgmkYARkDLid2Oe3Y2tlMhKDb+Q1lPamYB82Xszj63ct9uB4MrNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=HDsWcWe8; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oe76QBc+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70C75C433F1;
-	Mon,  1 Apr 2024 09:47:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711964826;
-	bh=c4iN5KKDP2ORl5rtTNfbEYRFiRwBmlnV0Me7/XKC89g=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=oe76QBc+GlfOR1n1VXj6PglRY4RwXO5Q1lRqfFb+thria4r5MYf+NoeaKnsr+179F
-	 7KpQKs675X4tgs8HXw4UuCsfztAG50FOfZLEbOh9/LbeepRBxeeKlgyVZo9M3s8j7W
-	 BukPxRH5PhTlLTtqU4/1UeWO5ku5vDUi5xUbxF+BMWHqgtR3QjSRbwoDS7y1JRlNgL
-	 29EcrL8w0L+yuZ0KZIGZX8RYaC1N5a1aCijgzNnhOfi80p1unTM4vdjD/r5F+LykhG
-	 JFMuMu1GwE7SLvQkRtNVzd6Ow43iSH9GTfYkGgDIQ/aO1PHUf0lLrWXsSma71tnuUu
-	 aeRJ2VanGP/Sw==
-Date: Mon, 1 Apr 2024 18:47:00 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Steven Rostedt
- <rostedt@goodmis.org>, Oleg Nesterov <oleg@redhat.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, bpf@vger.kernel.org, Song Liu <songliubraving@fb.com>,
- Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
- Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner
- <tglx@linutronix.de>, "Borislav Petkov (AMD)" <bp@alien8.de>,
- x86@kernel.org
-Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: Add uretprobe syscall test
- for regs integrity
-Message-Id: <20240401184700.2ffdbb7fea8b95d2e716675c@kernel.org>
-In-Reply-To: <Zgm7X1_3iRewLNQQ@krava>
-References: <20240327102036.543283-1-jolsa@kernel.org>
-	<20240327102036.543283-3-jolsa@kernel.org>
-	<CAEf4BzZps+OdPoyRz1=7mEzh=shjVjT=ZznhMD0Y-w98GW782g@mail.gmail.com>
-	<Zgm7X1_3iRewLNQQ@krava>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="HDsWcWe8"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4156c7664d1so1022665e9.0
+        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 02:59:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1711965576; x=1712570376; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tex3jXTphEhl78osorKcXj9Q2DFvqeV+FdD0gQRprT8=;
+        b=HDsWcWe87bqbUg7CLSOpNEJuBinHfAsWwPNmKrEZGoCIIZmmPa34PTgO+rHbPcf8OW
+         EQLq1Seec/HrALi8uiGmWem6m0T/ut+gl9XTC8ZnbshjJtWjesBlR0z0bGIQeKUfDTNe
+         DZyA5RIuNl/BkhXr5FIkMY3H/OgkYQ18ZpK09pQc4/FYthldg4xPXU+Iofs2/u4FlxsJ
+         fIk2Q9sw5lXR4zV00g51cDSd7lJMUj6HMRFpyg/osQ9mx5e+f6ls1EBW1JT66Mv7DxjF
+         QWZaO/3yMc+kuy68MANM3O4/F1c5HcMOWHMZonek8tPIgDa9xRlGdUcImZlgnurj25Jg
+         f/yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711965576; x=1712570376;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tex3jXTphEhl78osorKcXj9Q2DFvqeV+FdD0gQRprT8=;
+        b=e/Vtrf3rKq3b/TIfG+01wn2ehTjiRoJXC4808dp4SVV+EIgbKWc2pSdhWZmdvGR+yE
+         xuGI50/LJs3QHV9IHrXiUSRIy4FFECH4RRzuo7XW9jQXG9aQSdN1TsKssrlEKkqR7oge
+         VixXb1t7R6YMUvBtTZlizktQwybbWtJjn8P1Eyk8Vj/vQ9xFGjf5bKyjGx79fG6OP/s5
+         XZ9IpMArI00LJTPdO5f1q0x34xpSers60hOanqxG9RDBNxQUH4MbpxIlFp9vbiAPkeOT
+         Sv4PSvLWpQL/lRiSrSxpV/An7fkWVPdGDyIpbLbKgdMJhYhQm8VPzjiQpXWs9MnFODW/
+         B5jw==
+X-Forwarded-Encrypted: i=1; AJvYcCWLnzLsV7ynTLHPN9yl6YqBCHr4b6FVXROvix2bTu/ry2q798aFmbaNmocxUrnrEpJi7C3q6vZ+mt8YQ8wSd5V8S2tr
+X-Gm-Message-State: AOJu0YwxrgzRqIhh0rJJ7SZ5x+iDB55mv/qhEEI/OKNKAzUsgX42NN98
+	4wTt7WrWyGzyniLYXDcUiH9t4h19Uu+rH+faQHVsdBswWrJ7orSYGGZKHwQA8zE=
+X-Google-Smtp-Source: AGHT+IEZnVUrkkbfmJWd+Nq4QbtdrV6NP7W1fsw83jQk3QZLW4i/gwmP6OrAtVZc5BnqF4G0A4fB8Q==
+X-Received: by 2002:a05:600c:3c88:b0:415:46be:622f with SMTP id bg8-20020a05600c3c8800b0041546be622fmr8064977wmb.14.1711965575732;
+        Mon, 01 Apr 2024 02:59:35 -0700 (PDT)
+Received: from zh-lab-node-5.home ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id f18-20020a05600c4e9200b004156506921asm3046373wmq.32.2024.04.01.02.59.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Apr 2024 02:59:34 -0700 (PDT)
+From: Anton Protopopov <aspsk@isovalent.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Stanislav Fomichev <sdf@google.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	bpf@vger.kernel.org
+Cc: Anton Protopopov <aspsk@isovalent.com>
+Subject: [PATCH v2 bpf-next] bpf: add a verbose message if map limit is reached
+Date: Mon,  1 Apr 2024 10:01:32 +0000
+Message-Id: <20240401100132.167226-1-aspsk@isovalent.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi Jiri,
+When more than 64 maps are used by a program and its subprograms the
+verifier returns -E2BIG. Add a verbose message which highlights the
+source of the error and also print the actual limit.
 
-On Sun, 31 Mar 2024 21:37:03 +0200
-Jiri Olsa <olsajiri@gmail.com> wrote:
+v1 -> v2:
+  * make the message more clear (Alexey)
 
-> On Fri, Mar 29, 2024 at 03:30:11PM -0700, Andrii Nakryiko wrote:
-> > On Wed, Mar 27, 2024 at 3:21 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> > >
-> > > Add uretprobe syscall test that compares register values before
-> > > and after the uretprobe is hit. It also compares the register
-> > > values seen from attached bpf program.
-> > >
-> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > ---
-> > >  tools/include/linux/compiler.h                |   4 +
-> > >  .../selftests/bpf/prog_tests/uprobe_syscall.c | 163 ++++++++++++++++++
-> > >  .../selftests/bpf/progs/uprobe_syscall.c      |  15 ++
-> > >  3 files changed, 182 insertions(+)
-> > >  create mode 100644 tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> > >  create mode 100644 tools/testing/selftests/bpf/progs/uprobe_syscall.c
-> > 
-> > [...]
-> > 
-> > > +__naked unsigned long uprobe_syscall_arch_test(void)
-> > > +{
-> > > +       asm volatile (
-> > > +               "movq $0xdeadbeef, %rax\n"
-> > > +               "ret\n"
-> > > +       );
-> > > +}
-> > > +
-> > > +__naked void uprobe_syscall_arch(struct pt_regs *before, struct pt_regs *after)
-> > 
-> > don't you get compiler warnings for using __naked with explicit
-> > function arguments?
-> 
-> nope, both gcc and clang are silent
-> 
-> > 
-> > > +{
-> > > +       asm volatile (
-> > > +               "movq %r15,   0(%rdi)\n"
-> > > +               "movq %r14,   8(%rdi)\n"
-> > 
-> > [...]
-> > 
-> > > +       err = uprobe_syscall__attach(skel);
-> > > +       if (!ASSERT_OK(err, "uprobe_syscall__attach"))
-> > > +               goto cleanup;
-> > > +
-> > > +       uprobe_syscall_arch(&before, &after);
-> > 
-> > uprobe_syscall_arch() doesn't really do an explicit `syscall
-> > uretprobe`, it should work for int3-based uretprobes as well? Let's
-> > call it something a bit more generic then?
-> 
-> ok, how about
-> 
->   uprobe_syscall_arch -> uretprobe_regs
->   uprobe_syscall_arch_test -> uretprobe_regs_trigger
-> 
-> > 
-> > Also, I think patch #1 will go through Masami's trace tree, right? But
-> > we can land selftests into bpf-next even before that, given they
-> > should work for both syscall and interrupt based uretprobes.
-> 
-> hm, not sure.. I did not originally cc Masami/Steven :-\  adding now
+Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ kernel/bpf/verifier.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Would you mean this patch?
-
-https://lore.kernel.org/all/20240327102036.543283-2-jolsa@kernel.org/
-
-It seems you don't Cc/To me nor linux-kernel-trace ML.
-
-> 
-> Masami, could patch 1 go through:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
->   probes/for-next
-
-Could you resend it to linux-kernel-trace ML?  (only the first one?)
-
-Thank you,
-
-> 
-> thanks,
-> jirka
-
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index edb650667f44..559526191ae7 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -18348,6 +18348,8 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
+ 			}
+ 
+ 			if (env->used_map_cnt >= MAX_USED_MAPS) {
++				verbose(env, "The total number of maps per program is reached the limit of %u\n",
++					MAX_USED_MAPS);
+ 				fdput(f);
+ 				return -E2BIG;
+ 			}
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.34.1
+
