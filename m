@@ -1,111 +1,186 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7769182BE;
-	Mon,  1 Apr 2024 09:30:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C6E16430
+	for <bpf@vger.kernel.org>; Mon,  1 Apr 2024 09:45:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711963803; cv=none; b=aKn8uDsXtQUTx9Euc2xyOey7ZxUEL+8v0Jg10/hcMpfcD0vaadHjBIUQzEhNYniG+JrsW5wqFSYmpdvFuLo1+XhSW2PQ977mDh8NCQyCnlFyA41qvKrXKD+3YbdqeoaCZU+GtFh1ASPnSTTotNtIPbq3NRoFonXXumKENfNt12g=
+	t=1711964743; cv=none; b=vAvgF8vYy4x6fpR2cIbkpecjWiTrmaUDDrElTXfEIKGpEF6nCObCYt/fQmmpPjHHTfAaZTSXD7wEtQBjVkA3CGT5WEjNLUIqFnPSkU7UljlhtuTaQjQXokuGV7Sr+stfjsYEUKfZyh6whSg4EaieMWZPg9mLDUPH3Que8vGrKo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711963803; c=relaxed/simple;
-	bh=rkQU0E47V9cQNuNbdmccVzjqdfD0TLNiFYUMgLn8uQ0=;
+	s=arc-20240116; t=1711964743; c=relaxed/simple;
+	bh=Xnir7bE2MdnVZAz9YFVp0FfbvxDkRagirVcGNWwrTaw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rrTJfsECB1mSyKW9PpR/Lqg1X33wQUBs2nym+m0GN95enD05Tud8ubGl7MiGllKDLdze721TG7nWPDlKe0UI+U+Q2hNgzw05c3ZnyA2XeXZK+12/jI0m1OFiZOc06Kg7Ga223QzB+Ek0XRV4S4R030JwYI+dpLw0UGlYuAXt5Rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V9kHskLK; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=uLPA0KBHKASGpdmJDOIrCWlsY1xsK022MmDAI0uwmzThhZIh4VtUkBHHz9Hu1YnOacw+5Bpli7+c6M3mRbsXbk4CAqxn2cpC/pFCJhhE/U8I53GUWa8nGpOVEdRbiAIodJGURK2eIIGJVTV0fTwICQPaajWVQHYvemlm8pFyJmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=KtxQ10Vk; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V9kHskLK"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a46a7208eedso493327866b.0;
-        Mon, 01 Apr 2024 02:30:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="KtxQ10Vk"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-415515178ceso15112945e9.0
+        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 02:45:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711963800; x=1712568600; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TzvXmCSYtRNk7KRlSnum6WriN69z0KpOciEJnQVFIQc=;
-        b=V9kHskLKB+yIfmwtu1xAuXiVuYbQ4O8jBu5QfLEmBXEUaTP5PKNZPHDxfYzDZpF2l2
-         ywSo4XGax6xTSiTBugiW2ByqI53NoCqsjYTZO4xPkg9EVi3x6fSsg5BG23dHoSwtGhk4
-         lV1B/UaHyjIC4nTNJYdom7lt4bQ+D8Fo7CbqSZF0CIev77Pe6rDghQHPft3KfgANucTp
-         OJsBsmI07Wjsb5r9gD9UoOVPl1vKXXyh1JflhWXMmBVA8SoMK22dFaBAOr39yEQOhL0T
-         Hif45lXdCPYGPqWs4u8Kmkg3dJFBrwgl3NJNBIwCWD7iEsuBKhUYblqoIs7b6jAtWXP6
-         lXvQ==
+        d=isovalent.com; s=google; t=1711964740; x=1712569540; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KTWj/FPi4ObdvvImdKRLHz7YPuEfL9j4fg9pGXL5/lM=;
+        b=KtxQ10VkR2X/24TocM1vz0vIHb04UtA+L1Ft7JNlWmJpxEMgu4Ivg1LevxsHr/GQL+
+         RrwSZUyKk851fhQKHS0r2YvofQX+skQLwO/TJRBf4dtyz9EvlAFSo7m6bIq6ALnWywjV
+         LWoyl43+wbZHAmCKEbVji08m2OYUxhiDAhfeZROKLGQCiOAEZveXJqOhCDc7G4Yu07gD
+         IygDgS7JAR+KfvnaHaMLkiEgHhC7PPM4kyJWF1SFLDiTMlWZASLWxikLzFgqO1lIGrWA
+         sK+ha9Fx8qg+QWRpWJ/1hXHTSMjyOD8Nbsdojoh1xfS7OWhnNfsVi0T7BdW3E5L/Crtg
+         rc1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711963800; x=1712568600;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TzvXmCSYtRNk7KRlSnum6WriN69z0KpOciEJnQVFIQc=;
-        b=V1XUbIlRBO65Gn704RT+9niqgWUYbnCnOfvAR8kInMenw31alWjMklJvuYUFL1JAYq
-         RB674zQQ6E0IUKcmkki4zJXgOwcXzbEVxOdfPI8D4K1K+KlANzJhLRpxnv+h+IaAGkMd
-         KocBMP0pf6YSpB9Xjg8joEUvlkuJFpMKccOzrScZvQurW4+I29AVv7rzSkeFBs+/CN15
-         mqRXgtSZAvZb90upj++7f4yjRwYCRlS7D+F+v7tO2g4H2XCSvpFVY7RgLCLd35UopxEV
-         Vz94xDuhsQDb1czWhZ6QCGnYv2zrAX0pcbpp/VXOxOBqkyP3NSHUctOeBrUQUvdL7P46
-         xbgg==
-X-Forwarded-Encrypted: i=1; AJvYcCW/vNIMYptcB7mf5PyoOsH0ROx1mZzATen4UG6/5vThKj/BkFq5jPqpDEzWOidEFIkJovVJIz8KtYSR1C26trT4koYbhRPindtPHm08PYrS0kTtE+x6vSMYWV3FB1Or07s0
-X-Gm-Message-State: AOJu0YwDrciH8pRYJWQ7pHYTN/LBnl8gIHelgNIFIjjRo+1dDX609K7q
-	6J4Yj5VrEv0GkKdX0yXDDpKnltFfEzpiaPA14dY2jSpARXwgy6PmeKK4+TNQ2Z0=
-X-Google-Smtp-Source: AGHT+IEumhouyEX9Dvs628YP4tjp8k5N3mf2pCGZ1A0bS8gLInZF+Cl8NLSl3HNnvQhmtD+ULfgCJA==
-X-Received: by 2002:a17:906:3755:b0:a4e:4336:5550 with SMTP id e21-20020a170906375500b00a4e43365550mr4292050ejc.27.1711963799700;
-        Mon, 01 Apr 2024 02:29:59 -0700 (PDT)
-Received: from gmail.com (84-236-113-97.pool.digikabel.hu. [84.236.113.97])
-        by smtp.gmail.com with ESMTPSA id n7-20020a170906840700b00a46caa13e67sm5112440ejx.105.2024.04.01.02.29.58
+        d=1e100.net; s=20230601; t=1711964740; x=1712569540;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KTWj/FPi4ObdvvImdKRLHz7YPuEfL9j4fg9pGXL5/lM=;
+        b=W/cXC6O4QUR2w2oLBG2LwQTbOJ0Jj0fdRR4kGfZUzuB0f5gGvfL4nMzFlROEKqxxR7
+         1W8mAkwJEaflB5/rPuJOBJBjwWUicULVX/2LZLGdYRRvd0rUphgHfjDDR8Y32FaGAszd
+         Ve3gHiLAN3Nxz12QGhLE8JafIxmVfuSmDVW3K3bg1Od06tRbOib8rK1cTZhOSXkXbk+3
+         kUeG0Ox3beQq55K4Pf/u3UQkhA8sEYwGJG1JxgGI/IwQSnoL4uslxzyVNht5MyCDwpgi
+         CENy3A3kirwGpN4LHcnERPQua8aGgsJYKbWgYYjbnr3ykjzulQM6evGUWTOVHK0OksWL
+         5RNg==
+X-Forwarded-Encrypted: i=1; AJvYcCV1NzNvZX2ZbwGDDTtLdrSw3Aisp+Sxvz7QQKJ0GNYJ6pu5G5NjWdH48QzT1xrH8x3Pxk1rF5KiOL1zlyyqnztwS6Hj
+X-Gm-Message-State: AOJu0YyDq23Z99Ia7/KeL6mnHKSGCK6XzRogbqLwNJfO8mK+ewWCfrKV
+	VJfWMq6ipUFm6SqCXmNGOvL3eA1kOpaZ+W38yNp3p9i7cc88vPokqnEDcHjqAHg=
+X-Google-Smtp-Source: AGHT+IEh7Si4ES1hcx8woq2y2VVXxpXAiDR8CrY77kGuL6BHc+4/QNTCmKKjLe6vbJNYmHevAv+zTA==
+X-Received: by 2002:a05:600c:458b:b0:413:1741:28b5 with SMTP id r11-20020a05600c458b00b00413174128b5mr6727686wmo.9.1711964740190;
+        Mon, 01 Apr 2024 02:45:40 -0700 (PDT)
+Received: from zh-lab-node-5 ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id n17-20020a05600c3b9100b0041493aae77esm17451049wms.23.2024.04.01.02.45.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Apr 2024 02:29:59 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date: Mon, 1 Apr 2024 11:29:57 +0200
-From: Ingo Molnar <mingo@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: x86@kernel.org, peterz@infradead.org, mingo@redhat.com,
-	tglx@linutronix.de, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, jolsa@kernel.org, song@kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH v4 0/4] perf/x86/amd: add LBR capture support outside of
- hardware events
-Message-ID: <Zgp+lYLOZU3OkO7w@gmail.com>
-References: <20240331041830.2806741-1-andrii@kernel.org>
+        Mon, 01 Apr 2024 02:45:39 -0700 (PDT)
+Date: Mon, 1 Apr 2024 09:47:38 +0000
+From: Anton Protopopov <aspsk@isovalent.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Stanislav Fomichev <sdf@google.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH v1 bpf-next 3/9] bpf: expose how xlated insns map to
+ jitted insns
+Message-ID: <ZgqCuuGSP8cmMvXz@zh-lab-node-5>
+References: <CAADnVQJnh+j9etPYkst7hhnepvsoBuJY-ds-AF0fn3VqqJNXNg@mail.gmail.com>
+ <ZfK9Y5c7RuOu0YiN@zh-lab-node-5>
+ <CAADnVQLXok7niyyvpUaJxq4pNFFrBP5Vsk47NNxw1V4ipBdRrg@mail.gmail.com>
+ <CAEf4BzbkkrFACwWQQQkESrdRKWUvJz=NyWdrtu4v6m2aOJKztw@mail.gmail.com>
+ <CAADnVQKdvKqNt0GJ5+vJFEHHjRF_YGUR_htrs+QjQ0SgUV5woA@mail.gmail.com>
+ <CAEf4BzY9wov5rS_MmzPWLErr8RKxKmFGV17Y2zsMCQCz6HKx6Q@mail.gmail.com>
+ <CAADnVQLOB6HHgrewH48RWYkx94aA2nkqJfmzrys5pTeQibVo3Q@mail.gmail.com>
+ <CAEf4BzbTgEzAv01hLWHJHHN24byEy-VWr32ijrLah-G55OS6Zw@mail.gmail.com>
+ <ZgWcsKZR23JIg51e@lavr>
+ <CAEf4BzaMtK1D7yo_FWHEbF8E_SE9Pqte0u8uFr56CaBQSbYfeA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240331041830.2806741-1-andrii@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzaMtK1D7yo_FWHEbF8E_SE9Pqte0u8uFr56CaBQSbYfeA@mail.gmail.com>
 
-
-* Andrii Nakryiko <andrii@kernel.org> wrote:
-
-> Add AMD-specific implementation of perf_snapshot_branch_stack static call that
-> allows LBR capture from arbitrary points in the kernel. This is utilized by
-> BPF programs. See patch #3 for all the details.
+On Fri, Mar 29, 2024 at 03:44:04PM -0700, Andrii Nakryiko wrote:
+> On Thu, Mar 28, 2024 at 9:37 AM Anton Protopopov <aspsk@isovalent.com> wrote:
+> >
+> > On 24/03/15 10:29, Andrii Nakryiko wrote:
+> > > On Fri, Mar 15, 2024 at 10:23 AM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > On Fri, Mar 15, 2024 at 9:33 AM Andrii Nakryiko
+> > > > <andrii.nakryiko@gmail.com> wrote:
+> > > > >
+> > > > > On Thu, Mar 14, 2024 at 2:41 PM Alexei Starovoitov
+> > > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > > >
+> > > > > > On Thu, Mar 14, 2024 at 1:06 PM Andrii Nakryiko
+> > > > > > <andrii.nakryiko@gmail.com> wrote:
+> > > > > > > >
+> > > > > > > > > What could work and what I am proposing is to pass a list of bound
+> > > > > > > > > maps in prog_load attributes. Then such maps can be used during the
+> > > > > > > > > verification. For normal maps
+> > > > > > > > >
+> > > > > > > > >   prog = prog_load(attr={.bound_maps=maps})
+> > > > > > > > >
+> > > > > > > > > will be semantically the same as
+> > > > > > > > >
+> > > > > > > > >   prog = prog_load()
+> > > > > > > > >   bpf_prog_bind_map(prog, maps)
+> > > > > > > >
+> > > > > > > > Instead of a whole new api, let's make libbpf insert
+> > > > > > > > ld_imm64 r0, map
+> > > > > > > > as the first insn for this case for now.
+> > > > > > >
+> > > > > > > This sounds like a big hack and unnecessary complication, tbh. I'd
+> > > > > > > like to avoid having to do this in libbpf.
+> > > > > > >
+> > > > > > > But I think we almost have this already supported. In BPF_PROG_LOAD
+> > > > > > > UAPI we have fd_array property, right? I think right now we lazily
+> > > > > > > refcnt referenced maps. But I think it makes total sense to just
+> > > > > > > define that bpf_prog will keep references to all BPF objects passed in
+> > > > > > > through fd_array, WDYT? Verifier will just iterate all provided FDs,
+> > > > > > > determine kind of BPF object it is (and reject unknown ones), and then
+> > > > > > > just take refcnts on each of them once. On prog free we'll just do the
+> > > > > > > same in reverse and be done with it.
+> > > > > > >
+> > > > > > > It also can be used as a batch and single-step (in the sense it will
+> > > > > > > be done as part of program load instead of a separate command)
+> > > > > > > alternative for bpf_prog_bind_map(), I suppose.
+> > > > > >
+> > > > > > fd_array approach also works. There can be map and btf fds in there.
+> > > > > > I would only bind maps this way.
+> > > > >
+> > > > > Any reason why we should have non-uniform behavior between maps and
+> > > > > BTFs? Seems more error-prone to have a difference here, tbh.
+> > > >
+> > > > because maps are only held in used_maps while btfs are held
+> > > > in used_btfs and in kfunc_btf_tab.
+> > > > And looking at btf_fd it's not clear whether it will be in ld_imm64
+> > > > and hence used_btf or it's kfunc and will be in kfunc_btf_tab.
+> > > > All btfs can be stored unconditionally in used_btf,
+> > > > but that's unnecessary refcnt inc and module_get too.
+> > > > Doesn't hurt, but makes it harder to reason about everything.
+> > > > At least to me.
+> > > > I guess if the whole refcnt of maps and btfs is factored out
+> > > > and cleaned up into uniform used_maps/used_btf then it's ok,
+> > > > but fd_array is optional. So it feels messy.
+> > >
+> > > Yeah, I was imagining that we'd iterate fd_array (if it's provided)
+> > > and add any map/btf into used_{map,btf}, refcnt. Then during
+> > > verification we'll just know that any referenced map or btf from
+> > > fd_array is already refcounted, so we wouldn't do it there. But I
+> > > haven't looked at kfunc_btf_tab, if that's causing some troubles with
+> > > this approach, then it's fine by me.
+> > >
+> > > The assumption was that a uniform approach will be less messy and
+> > > simplify code and reasoning about the behavior, not the other way. If
+> > > that's not the case we can do it just for maps for now.
+> >
+> > fd_array is sent in attrs without specifying its size, so individual
+> > fds are copied to kernel as needed. Therefore, this is not possible
+> > to pass extra fds (not used directly by the program) without changing
+> > the API. So either a pair of new fields, say, (fd_extra,fd_extra_len),
+> > or just another field fd_array_len should be added. What sounds better?
 > 
-> Patches #1 and #2 are preparatory steps to ensure LBR freezing is completely
-> inlined and have no branches, to minimize LBR snapshot contamination.
+> I'd say we should extend fd_array with (optional) fd_array_cnt and
+> have the following logic:
 > 
-> Patch #4 removes an artificial restriction on perf events with LBR enabled.
+>   - if fd_array != NULL and fd_array_cnt == 0, then only maps/btfs
+> referenced from BPF program instructions should be refcnt/fetched;
+>   - if fd_array != NULL and fd_array_cnt > 0, we can eagerly fetch all
+> FDs and refcnt, as discussed. If any instruction uses the fd index
+> which is >= fd_array_cnt, that's an error (the user didn't provide a
+> big enough FD array and we can now detect this).
 > 
-> Andrii Nakryiko (4):
->   perf/x86/amd: ensure amd_pmu_core_disable_all() is always inlined
->   perf/x86/amd: avoid taking branches before disabling LBR
->   perf/x86/amd: support capturing LBR from software events
->   perf/x86/amd: don't reject non-sampling events with configured LBR
-> 
->  arch/x86/events/amd/core.c   | 37 +++++++++++++++++++++++++++++++++++-
->  arch/x86/events/amd/lbr.c    | 11 +----------
->  arch/x86/events/perf_event.h | 11 +++++++++++
->  3 files changed, 48 insertions(+), 11 deletions(-)
+> WDYT?
 
-So there's a new conflict with patch #2, probably due to interaction 
-with this recent fix that is now upstream:
-
-   598c2fafc06f ("perf/x86/amd/lbr: Use freeze based on availability")
-
-I don't think it should change the logic of the snapshot feature 
-materially, X86_FEATURE_AMD_LBR_PMC_FREEZE should be orthogonal to it, 
-as the LBR snapshot isn't taken from a PMI.
-
-Thanks,
-
-	Ingo
+Yes, thanks, I've thought the same way. I will use this API
