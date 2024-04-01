@@ -1,156 +1,104 @@
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E9F748E
-	for <bpf@vger.kernel.org>; Mon,  1 Apr 2024 22:31:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 891B429CFA
+	for <bpf@vger.kernel.org>; Mon,  1 Apr 2024 22:54:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712010667; cv=none; b=TvoFjrrSEvRRFh92bW8e4CxB2irKEn0hOsiN2bJ9hj5/TgYFTKTSUQHD8IB7lVpmHj2Ci016sR8erTdIOYBX7lRYhxfYTBv91xJrFA6s4bacwnx5ybhJ9R7NlcW8WyrvU1vhlI0HJTdHUqELqUj7E9mWl3cPD39n7Bvey6nq9hg=
+	t=1712012092; cv=none; b=eLZNbYi2ivKCdJhwOaISFlKs6gSxFUujAryS67kRXuBzW2r0plq1frFsfFrfPykYqV+T5xa2SPNl7+dw963ePVT3cTOIN1KiWlr0Qoa7+4rvMQ1AJUnv9q7AvQbwxrsJlnG6f0pj09Pe1KoszQSGF4HJEXuCXTCzb8XT4vZHmDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712010667; c=relaxed/simple;
-	bh=aTh+v8HytePw5FDk8VEohwLw+yK1hfUfLnv6aeWErRE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hzJQGmDe6wsz8RKoEbSQgr7Z3mGxpaxnDHqOXuG3zcYb24jcYk2gqp63mPrUFnVkeKFisQuSQDKnsupgZPt4KQlStxuWrZd5hY1ctnQuzklOY3WeUeDgEB7fEI3kAEh70DcTwqlvUFyed+3/22Xty8wuqfYvslj0F6q79dSbVVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R/JEogq1; arc=none smtp.client-ip=209.85.161.51
+	s=arc-20240116; t=1712012092; c=relaxed/simple;
+	bh=QKVEnIHLo0zza9B8a4PgXra4f1L0SnwO9T1UUfz2twc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AlOWViJYl34/UCxjb1vhlm2jxjeqOiE36opQZQkO2f38rH/XlG90i0U+nXP8UP2T71JwEcY31HSCxjUjpWixkck0//XI9Bx8M3goQrBOcELnexxGQbvLN/vW6THtuq9+MA+55vdhfM+dmUsf1hJd0Lskj56HSarlKsouh4KsihY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F4GpyhBo; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R/JEogq1"
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5a480985625so3051223eaf.0
-        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 15:31:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F4GpyhBo"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2a04ac98cf7so3049501a91.0
+        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 15:54:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712010665; x=1712615465; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TVx1cA7H/jY/lpUDOEdDbSQiZ1XlbmiZUilWHBLmejU=;
-        b=R/JEogq1Sm5SFGAPyyysJoUfsTdF1/gRbt/59TqmgFBoylJ+cJ9orfwkXZK7acFd41
-         C7NiAB9QQ+fEEq2gvi8iEGQWdz5eAV6NsddzDLmkWWcO03GwjWgXox1Z2SHRYBoQvFnT
-         T3pWoH+X/HV7APMioDSQb1EXHKw3bApnKWpy1IqN8McBhxqrGjOdIU8UyH7RtXf4BpBr
-         epUvNVa1q1Kb/VW+wqrSLbz4v2Xrpqf77ZZNi8SG9KzNt3I2pRzrVOxSGGPUbphWxQdL
-         coqXoi7QCXTQqt4rP+wH3xhhTOkJ782h5oekxjjzB4Uc8Qsz1ACE4E+N307EIH8tD80N
-         YN2Q==
+        d=gmail.com; s=20230601; t=1712012091; x=1712616891; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QKVEnIHLo0zza9B8a4PgXra4f1L0SnwO9T1UUfz2twc=;
+        b=F4GpyhBoziAfGJFzksLcWZXQNbZYaKeZFS5tlnwus2KP4xNTNG2ztdTAUsIsFhiii0
+         H5TGpBIwDbpCgzh63sqzfd1tfy526QoTDpS9LocvOuC5JdaVw67C6/ugEn6RDfanOteM
+         E5L/zu6jFaMhnoimVOFUWbqofmN70aQebrqoKQscaxs5/tVhnbFrRXOI/PCi13UJn+fS
+         xE7Kaicu8IlJjrHLcZOUaSDVWFbFhPTyUol/GVd2ROntXuqAz2EUIx3iDUDRzT05NHQn
+         xmxSz+AD9iEvJtVgz2cog8pYIkBssVrbsxu2uh5j7xr4rD5DFJJmmLPOIizhRy6780t2
+         J0dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712010665; x=1712615465;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TVx1cA7H/jY/lpUDOEdDbSQiZ1XlbmiZUilWHBLmejU=;
-        b=OxfRcmA8TfALqIzsCUJQZQwCtmBkhLUqy/negyHbgX51nA2HjC4CttSysRMYd3uVLS
-         gvmDuknFR6fhDLxs+feRFDnLF7QVcCxyIhnFIR3VlEA5VoB/LEJFZl5S0QwHHyNDNql9
-         Hh18Iao9AaQ5BGeH9E1QjT1NvZBq4WaJfvyMzINk9rzZvx88rN0OyshFqKXL/lpl1k3F
-         wsEfuEP/kkIX3UUeIxcJFcdXg1dx9NUalagsTJnTq4IPj+nfZLLL7y4TbDPBhe907WDk
-         Epqa2cyCLnOJvELUaiO5DiQNxWra9xaHFjA3S+Y1Sy/wcZvyoI3lrfNCbc5EvPYbmhnt
-         oHVA==
-X-Gm-Message-State: AOJu0YxigT76a74spFcHiF0VdwVQhzIz/KjLRnx+C6l0AVO3FlhboOwC
-	rjxuF9jcJEesIaWcB/HwPcZMPVoW4U4QTDYEcJYw87xipyYzDLYtXxS/GDcL
-X-Google-Smtp-Source: AGHT+IFcRc20/+YVX+vhF+BxAXImtMaUxHZaacm3GYK/Hi0eNAf4o6KlgqpGkO9y+xsCMiodYCCuDg==
-X-Received: by 2002:a05:6820:2715:b0:5a5:21df:7eef with SMTP id db21-20020a056820271500b005a521df7eefmr10116420oob.2.1712010664964;
-        Mon, 01 Apr 2024 15:31:04 -0700 (PDT)
-Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:769d:e8e1:4c99:3e97])
-        by smtp.gmail.com with ESMTPSA id ck19-20020a056820229300b005a1cfb2f4b0sm2462534oob.48.2024.04.01.15.31.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Apr 2024 15:31:04 -0700 (PDT)
-From: Kui-Feng Lee <thinker.li@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	kernel-team@meta.com,
-	andrii@kernel.org
-Cc: sinquersw@gmail.com,
-	kuifeng@meta.com,
-	Kui-Feng Lee <thinker.li@gmail.com>
-Subject: [PATCH bpf-next] selftests/bpf: Make sure libbpf doesn't enforce the signature of a func pointer.
-Date: Mon,  1 Apr 2024 15:30:58 -0700
-Message-Id: <20240401223058.1503400-1-thinker.li@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1712012091; x=1712616891;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QKVEnIHLo0zza9B8a4PgXra4f1L0SnwO9T1UUfz2twc=;
+        b=Rxc7DcnekPVSIuYwQta0TBSVj8gaALST1/tpfSlkzHTY6ow5BPfOOR/znFPbHCokoA
+         nc7FDB/WiqVapLe5t2qmcwqWCwYv48Aq0sTRDZ+p0PaPu1wmVIYDfTxh4A48afDa0VdB
+         hiCGPMcjxvmRKcOoOUx0NUEJo/Q43h53zErNUXc8/5HMb4K8SaZszHjKV5Acp7ykS8HI
+         ZvXx21HUuxa7qYzAmQkHr7naAmONE8JDwsvyJP5h6OGalG2DvE+gzue0RUO3E4rvdwLN
+         gaungcXB0ugpg+wAYSd2q3K7rPx42GvQcqDtxAoG7ZOno+r1VwO2/o1GlpSkbr7Zr7ON
+         kwLg==
+X-Forwarded-Encrypted: i=1; AJvYcCUvKr5vqe6aWz5N2SrRRFoSagG6dDVW1/dQepxDfwSr0NJGx4UivdytubGvvHNegwPA0ezbrE+BmQL4ztuN0RvHY844
+X-Gm-Message-State: AOJu0YyJb73gZpC6VSl4oZ7HXrho5QNUFndzwLdeNg12yKybBGWGMkEZ
+	5g4yrfBLRHHn+T/Ge+Xtu9CTnj1ajTsdjL/Xf4NnfD+JbVIbCVs9ZGwQdiWxT5wkkAUfjQCjNhC
+	UktW6POQIJZTMWbh62qF63bRAuio=
+X-Google-Smtp-Source: AGHT+IHNpWCGn9GhKp6dckDGK1dxGwmhTdm38qGCbY59c0SuWv0v+jiTbtA0dGWpSe/KmVcZdcCUxyUpoF7epFaHXGM=
+X-Received: by 2002:a17:90a:bf91:b0:2a1:f8be:17d3 with SMTP id
+ d17-20020a17090abf9100b002a1f8be17d3mr18386760pjs.23.1712012090678; Mon, 01
+ Apr 2024 15:54:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240329184740.4084786-1-andrii@kernel.org> <e0426944e09d865946876f9bbd8acb7cf23d8705.camel@gmail.com>
+In-Reply-To: <e0426944e09d865946876f9bbd8acb7cf23d8705.camel@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 1 Apr 2024 15:54:38 -0700
+Message-ID: <CAEf4BzaSaWt6pLR1xj4Lv=dccr2sQhac4AC__BrR13ryb3Fymg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/4] Add internal-only BPF per-CPU instructions
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, martin.lau@kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The verifier in the kernel checks the signatures of struct_ops
-operators. Libbpf should not verify it in order to allow flexibility in
-loading different implementations of an operator with different signatures
-to try to comply with the kernel, even if the signature defined in the BPF
-programs does not match with the implementations and the kernel.
+On Mon, Apr 1, 2024 at 9:29=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com>=
+ wrote:
+>
+> On Fri, 2024-03-29 at 11:47 -0700, Andrii Nakryiko wrote:
+> > Add two new BPF instructions for dealing with per-CPU memory.
+> >
+> > One, BPF_LDX | BPF_ADDR_PERCPU | BPF_DW (where BPF_ADD_PERCPU is unused
+> > 0xe0 opcode), resolved provided per-CPU address (offset) to an absolute
+> > address where per-CPU data resides for "this" CPU. This is the most uni=
+versal,
+> > and, strictly speaking, the only per-CPU BPF instruction necessary.
+> >
+> > I also added BPF_LDX | BPF_MEM_PERCPU | BPF_{B,H,W,DW} (BPF_MEM_PERCPU =
+using
+> > another unused 0xc0 opcode), which can be considered an optimization
+> > instruction, which allows to *read* per-CPU data up to 8 bytes in one
+> > instruction, without having to first resolve the address and then
+> > dereferencing the memory. This one is used in inlining of
+> > bpf_get_smp_processor_id(), but it would be fine to implement the latte=
+r with
+> > BPF_ADD_PERCPU, followed by normal BPF_LDX | BPF_MEM, so I'm fine dropp=
+ing
+> > this one, if requested.
+>
+> Hi Andrii,
+>
+> I've read through the series and it looks good
+> (modulo architecture related issues reported by CI).
 
-This feature enables user space applications to manage the variations
-between different versions of the kernel by attempting various
-implementations of an operator.
+Should I add your acks in the next revision?
 
-This is a follow-up of the commit c911fc61a7ce ("libbpf: Skip zeroed or
-null fields if not found in the kernel type.")
-
-Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
----
- .../bpf/prog_tests/test_struct_ops_module.c   | 24 +++++++++++++++++++
- .../selftests/bpf/progs/struct_ops_module.c   | 13 ++++++++++
- 2 files changed, 37 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-index 098776d00ab4..7cf2b9ddd3e1 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-@@ -138,11 +138,35 @@ static void test_struct_ops_not_zeroed(void)
- 	struct_ops_module__destroy(skel);
- }
- 
-+/* The signature of an implementation might not match the signature of the
-+ * function pointer prototype defined in the BPF program. This mismatch
-+ * should be allowed as long as the behavior of the operator program
-+ * adheres to the signature in the kernel. Libbpf should not enforce the
-+ * signature; rather, let the kernel verifier handle the enforcement.
-+ */
-+static void test_struct_ops_incompatible(void)
-+{
-+	struct struct_ops_module *skel;
-+	struct bpf_link *link;
-+
-+	skel = struct_ops_module__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	link = bpf_map__attach_struct_ops(skel->maps.testmod_incompatible);
-+	if (ASSERT_OK_PTR(link, "attach_struct_ops"))
-+		bpf_link__destroy(link);
-+
-+	struct_ops_module__destroy(skel);
-+}
-+
- void serial_test_struct_ops_module(void)
- {
- 	if (test__start_subtest("test_struct_ops_load"))
- 		test_struct_ops_load();
- 	if (test__start_subtest("test_struct_ops_not_zeroed"))
- 		test_struct_ops_not_zeroed();
-+	if (test__start_subtest("test_struct_ops_incompatible"))
-+		test_struct_ops_incompatible();
- }
- 
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_module.c b/tools/testing/selftests/bpf/progs/struct_ops_module.c
-index 86e1e50c5531..63b065dae002 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_module.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_module.c
-@@ -68,3 +68,16 @@ struct bpf_testmod_ops___zeroed testmod_zeroed = {
- 	.test_1 = (void *)test_1,
- 	.test_2 = (void *)test_2_v2,
- };
-+
-+struct bpf_testmod_ops___incompatible {
-+	int (*test_1)(void);
-+	void (*test_2)(int *a);
-+	int data;
-+};
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops___incompatible testmod_incompatible = {
-+	.test_1 = (void *)test_1,
-+	.test_2 = (void *)test_2,
-+	.data = 3,
-+};
--- 
-2.34.1
-
+>
+> Thanks,
+> Eduard
