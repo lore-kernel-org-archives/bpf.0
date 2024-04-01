@@ -1,186 +1,262 @@
-Received: from outbound-ip168a.ess.barracuda.com (outbound-ip168a.ess.barracuda.com [209.222.82.36])
+Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11022010.outbound.protection.outlook.com [52.101.56.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF21341A81
-	for <bpf@vger.kernel.org>; Mon,  1 Apr 2024 23:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=209.222.82.36
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C15156B65;
+	Mon,  1 Apr 2024 23:21:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.10
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712012596; cv=fail; b=n5toWKfQ2QqPZHHZWm2ccLd87JDernLkNIeF+Sq+V6rzXc6v0kqog7F0rI4/XF3wkAbYUMG5APLR79swjRcvqZ0oM2XUpNJAgMgKmdIOUl7HY7ovb1eBEsEN8vbz99nlDGRRQVYTHD0oOjfxcK7fsYQWcnKyuaayhiB3vQ+H90Q=
+	t=1712013676; cv=fail; b=ev27c9RmzTLlc4uwF6eQz5HBiBiJ507Jyj2ufeeMawJoSCOOxgMLkUZCybROLZmk6fnSa4V8Iz9KxHTH/CJsu2lN9wD+PWC554dnbBxzkKyHSoiZi2UbUwF8zQihsmDMwdgZ9CTtUOXG7luz6je5Uf3mktnqO19U2xqql6I3FHE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712012596; c=relaxed/simple;
-	bh=WTwboFga6Y/xRoLt8ARDQnkpcDyBGO4888VaL28zywM=;
+	s=arc-20240116; t=1712013676; c=relaxed/simple;
+	bh=C1FmXASU5cNJ8Z6XaCTYmUFzWEaHQWGkDp59yUnPj+Q=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=SVyfFWoJkDYlypFslS4aL/Wj8G3M8XqUneXuLCVipPNBzfIXIqaR15YF/yZexYp9mMPLtZIEoCwATy63N74F8iFOSqAH2woptMty4zHKRTGeBrAJt0VmlKbvXNxoYSd2rItNAR5XGVfA8ukKskDcRLltcksBiJC2Rad67pDRgpY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ddn.com; spf=pass smtp.mailfrom=ddn.com; dkim=pass (1024-bit key) header.d=ddn.com header.i=@ddn.com header.b=XUPY+Qwl; arc=fail smtp.client-ip=209.222.82.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ddn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ddn.com
+	 Content-Type:MIME-Version; b=shg/8jNdotcE74+eYgbuMxeR72Tx35p7+ywPJMRKwJfBZQkS2M0bWx0jsFQKOvgXU0Z8xPAMhkhi7kk65DWQEgW4tzUmsMxTpbqg4KPIsnx6z3hdOJwBq8YdzjwCuewa3SvRgslGqrohI08lQlXfMRKt8BNuweEUzqeh2HfSyA8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com; spf=pass smtp.mailfrom=microsoft.com; dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b=DBm9rGj+; arc=fail smtp.client-ip=52.101.56.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ddn.com header.i=@ddn.com header.b="XUPY+Qwl"
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2169.outbound.protection.outlook.com [104.47.59.169]) by mx-outbound-ea15-210.us-east-2a.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Mon, 01 Apr 2024 23:03:12 +0000
+	dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b="DBm9rGj+"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GJC/ObjWvNgn37vqdpnIv7ZginalqADbJt/iAF4GY+fv4xFqnhNrg/k2odUnanOEl88t65/mBiqDZqJ0ly/Iu3Ts+9tUHXb4tJiDLsWCjmXXQdpPsX1pOkpW0kTaVZwAp0twlsDYWsHDHL3PWFeFJOrR+7SHUqAi4CorzeTX7uTaP30wEfVeazRmUtENSPsSQfWLSMBGldC0GZYs8PsEyDJdA22HfKUqDg9XnIFAOmXHVzHzHAzhdFeWxjqH4dVf9fNjlcgKt3i8JvIJNdK65AOknBom9dAvPyGMxE3l9AM7rBOavz6VLx70/tmAuddSrpouDqKR7lObLGWgMm4H/Q==
+ b=OyDejsjF23IngqXoiWhXJa6Xfjl47ebg0Ro4GcTB+q7eCSnhSmAN8hSs9qXSwAC9qSNtO7pXXhYtl2D3ahl9qJQ+IDFZK2UU6qz9hSTQs8LkVM3Ez23cfyN6qGBm652ftV9RzsOyYyOdM1zxbwd5f1xucMcL7+V/gGQimYp+jm7BZgEh1EanEenQ2rxuPozW21eiB5lPzpx8nNbxYX4CeQyzFS5chtnziM3YEhT3FTbPKPamGhtY4sFsWR3NGXUDIxb7FFGkIsjX3fLKvucB6kHviaCEZ+af5ja6s89YSqEZn7koRgfTnIU2lnRH0TGHzyII0dt5B8xLebk3Wztvzw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WTwboFga6Y/xRoLt8ARDQnkpcDyBGO4888VaL28zywM=;
- b=GqE56Gr07OeVj3QMVXKcMkYOmrpbh4QJ8nM1V/U+2AZP1T4anhrjDvxzN6tDbSsb4LTyXhRAWfsv19m9jmjySM36y1SHZn8ffjpfS9P+bUWADcM+zjSs+EfQbHCngpeRgzJBCjIEFwTz4sy1FC+g2kDPKG0BIDN1Rcp0Y5ka6+EOgy0JczD6hg0TGYgOpw9GCqXZgcjUHuJX6k596NnnCYxdBJEEWBdpkonx7fXWfQ1h6ssGawUhv35dBL2sezK16zw4FtOr6HvwEk4f3FZFcytXB+JmDlMrYPVaKGkj2MgyV4ZJp1VQqzOhIW4jhERZS2u8XHC1BEC4g9BH9U888Q==
+ bh=6L6Ilcaidr9Rn6NrB9HA5AShNaGcdr8h07rDmXiOWn4=;
+ b=hhlhMnHc+IQ0z2bemRVAbt+PonYCB6UsalOrcANvWByFSS32NhBy6h1ZIAf4ze2l9gm39Soj48vRK6rosyTH2MdffjJnaMQphvJbtTj6Fe8DoZdPmB9mVnYt1rBfcVM6cR0epR65qH5JZ7fS6uaf9s4qJSMq8bY54yeRfPi2X3WVynJcMkCZr7RfoUjtlq5TAMV0z+8bdC6ZBsRcrw9jEwN9vqCDmU1AhnrOJh43oZ02/zpHdaj4Cv5cicbPq/lhAHQKeFYcn0FePv9d6/MIv3m1wu1gs3r/kog3aH0HT6ciJcXxixoXeDj0+T0/22/HqN/Io/oqDvP2TSJ5xKBDAg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=ddn.com; dmarc=pass action=none header.from=ddn.com; dkim=pass
- header.d=ddn.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ddn.com; s=selector2;
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WTwboFga6Y/xRoLt8ARDQnkpcDyBGO4888VaL28zywM=;
- b=XUPY+QwlNSTSLWc1TMHSEv2ymcjo3z4dtm63H8bslLAi/UBbr/YmM5MYqE92QmCBLzXDqlJCuR1CTtt0UdOrJ2K4GyhzhtvwbUJ8GoeNChYavSXYUpwTI62Vigmhyktwu/78DQBZojkdxqKvx7Mevq31EQ8IJwz1hyk1M8VRwyM=
-Received: from CH2PR19MB3864.namprd19.prod.outlook.com (2603:10b6:610:93::21)
- by DM6PR19MB4261.namprd19.prod.outlook.com (2603:10b6:5:2be::12) with
+ bh=6L6Ilcaidr9Rn6NrB9HA5AShNaGcdr8h07rDmXiOWn4=;
+ b=DBm9rGj+lRFNvO7LHI2uiSn2S6n43AC8gzJ0yM16xyx0KkOeWvnh+FkJBRBDq+ATiKccPoRdF8Hqo/mjSMBJfMISEh7MBS5rh9TVYpLfr5QgyBmmfxi6DsLpM0xW2y6t6jWdzwh6WGtzCDeS1zR8ospoqK+RfSHwsWWeX5f/x0E=
+Received: from CH2PR21MB1480.namprd21.prod.outlook.com (2603:10b6:610:87::22)
+ by PH7PR21MB3945.namprd21.prod.outlook.com (2603:10b6:510:249::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Mon, 1 Apr
- 2024 20:27:55 +0000
-Received: from CH2PR19MB3864.namprd19.prod.outlook.com
- ([fe80::56da:efcb:e6c4:8ef]) by CH2PR19MB3864.namprd19.prod.outlook.com
- ([fe80::56da:efcb:e6c4:8ef%7]) with mapi id 15.20.7409.038; Mon, 1 Apr 2024
- 20:27:55 +0000
-From: Bernd Schubert <bschubert@ddn.com>
-To: Amir Goldstein <amir73il@gmail.com>, Daniel Rosenberg <drosen@google.com>
-CC: Miklos Szeredi <miklos@szeredi.hu>, "bpf@vger.kernel.org"
-	<bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-unionfs@vger.kernel.org" <linux-unionfs@vger.kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Yonghong
- Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
-	<jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet
-	<corbet@lwn.net>, Joanne Koong <joannelkoong@gmail.com>, Mykola Lysenko
-	<mykolal@fb.com>, Christian Brauner <brauner@kernel.org>,
-	"kernel-team@android.com" <kernel-team@android.com>
-Subject: Re: [RFC PATCH v4 00/36] Fuse-BPF and plans on merging with Fuse
- Passthrough
-Thread-Topic: [RFC PATCH v4 00/36] Fuse-BPF and plans on merging with Fuse
- Passthrough
-Thread-Index: AQHagaSmPDWp/jRQbUmYhZCU2Zu3srFPd8EAgAQK4ACAAGA7gA==
-Date: Mon, 1 Apr 2024 20:27:55 +0000
-Message-ID: <bdf73614-0f74-4cb1-be2f-a2786e1f1850@ddn.com>
-References: <20240329015351.624249-1-drosen@google.com>
- <CAOQ4uxhLPw9AKBWmUcom3RUrsov0q39tiNhh2Mw7qJbwKr1yRQ@mail.gmail.com>
- <CA+PiJmQR17nwkHaZXUhw=YRM06TfF14bhozc=nM9cw51aiiB6g@mail.gmail.com>
- <CAOQ4uxiyS9viEpOwT8f2Np=wuMdWwUqqyHFRrBX9+Acy_i3OHw@mail.gmail.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.6; Mon, 1 Apr
+ 2024 23:21:07 +0000
+Received: from CH2PR21MB1480.namprd21.prod.outlook.com
+ ([fe80::70d6:9c52:d97e:3401]) by CH2PR21MB1480.namprd21.prod.outlook.com
+ ([fe80::70d6:9c52:d97e:3401%4]) with mapi id 15.20.7472.002; Mon, 1 Apr 2024
+ 23:21:06 +0000
+From: Haiyang Zhang <haiyangz@microsoft.com>
+To: Dexuan Cui <decui@microsoft.com>, "linux-hyperv@vger.kernel.org"
+	<linux-hyperv@vger.kernel.org>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>
+CC: stephen <stephen@networkplumber.org>, KY Srinivasan <kys@microsoft.com>,
+	Paul Rosswurm <paulros@microsoft.com>, "olaf@aepfle.de" <olaf@aepfle.de>,
+	"vkuznets@redhat.com" <vkuznets@redhat.com>, "davem@davemloft.net"
+	<davem@davemloft.net>, "wei.liu@kernel.org" <wei.liu@kernel.org>,
+	"edumazet@google.com" <edumazet@google.com>, "kuba@kernel.org"
+	<kuba@kernel.org>, "pabeni@redhat.com" <pabeni@redhat.com>, "leon@kernel.org"
+	<leon@kernel.org>, Long Li <longli@microsoft.com>,
+	"ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
+	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>, "john.fastabend@gmail.com"
+	<john.fastabend@gmail.com>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"ast@kernel.org" <ast@kernel.org>, "sharmaajay@microsoft.com"
+	<sharmaajay@microsoft.com>, "hawk@kernel.org" <hawk@kernel.org>,
+	"tglx@linutronix.de" <tglx@linutronix.de>, "shradhagupta@linux.microsoft.com"
+	<shradhagupta@linux.microsoft.com>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "stable@vger.kernel.org"
+	<stable@vger.kernel.org>
+Subject: RE: [PATCH net] net: mana: Fix Rx DMA datasize and skb_over_panic
+Thread-Topic: [PATCH net] net: mana: Fix Rx DMA datasize and skb_over_panic
+Thread-Index: AQHagiFTMR5ZlnaVikeExhfsF+DuY7FPaYIAgASmJ+A=
+Date: Mon, 1 Apr 2024 23:21:06 +0000
+Message-ID:
+ <CH2PR21MB1480E02C74E7BB5A52A71859CA3F2@CH2PR21MB1480.namprd21.prod.outlook.com>
+References: <1711748213-30517-1-git-send-email-haiyangz@microsoft.com>
+ <CY5PR21MB375904FD3437BA610E6BDBD1BF392@CY5PR21MB3759.namprd21.prod.outlook.com>
 In-Reply-To:
- <CAOQ4uxiyS9viEpOwT8f2Np=wuMdWwUqqyHFRrBX9+Acy_i3OHw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
+ <CY5PR21MB375904FD3437BA610E6BDBD1BF392@CY5PR21MB3759.namprd21.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
-user-agent: Mozilla Thunderbird
+msip_labels:
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=59ee9ed2-1d2f-476e-81a2-fdbc522a1f8e;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2024-03-29T22:45:42Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR19MB3864:EE_|DM6PR19MB4261:EE_
+x-ms-traffictypediagnostic: CH2PR21MB1480:EE_|PH7PR21MB3945:EE_
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
 x-microsoft-antispam-message-info:
- wgOIfsE1f6+EQhFJEvxd6S/RevA8QEHAqYLW4VnkUBCtrUeeUt8d2mZO2UpkSx8fJCxrH9CP6rjkk11+JAmYTyCGfa+F+AsLauJ4e94Md1sRiQjiUSZn0iGtqkWV6DHvW5mO08IlJeDy3bsQpsSDns6lltvhOOWraFEG/GLi3LDvTz4jk1iNTIoeWLxbM6J/zUZOLB3X2Q0x3VQRZEYLQkNNyWvkKAvxBa1NZUlRaW3RY3uuZ/bXogsnSzdp2SUJZcIkEyQ+FP7phAp0XDO+TO+9hvwM8Q4pCxhK9ScCTF0h4spmH/JZ84GcVqrgQ5MS09kRaEgjKATKn2nTysLSzFohrnWTs6LtVsK4bqTxLCJRwHeqGKMeEFaDevYMCNvJsqTPQW22Bb5TiaOTBvhxf/8EhZfc+ng02U47VFUq6lby8qmL8hL93csQSh5VJ//o9STv7dQCRK04mmt4iKfG+utyE1LLh9J0FKz0MSnsGLOmd+MowZDs5FpbNcVPyuwzsJbArjFkwzEwxQVzD6ux3b1QhORzbEAAXQ5uWSvIjmtfBtfcQ4r+YvpDLc9NoiBRsKlWSVTi5L3h4j2e2HtEEPzP/L98grzEcS16jM/zAMQ=
+ h9jvz3KlGUjge0YtfRZuLJ3JvwmvmPmih3u7bc2na4kz8l4UbvYUKy6LMYlKjPCYPfUkVSd4UjomZcl0KiZemI7k3wyVuaWxdvQmPmnyIugR5BmGyJ15HZaC2GqdU0JVM47jMd/U/f6DbhhOWggutX0gH4y1iDzu/8wsCnKfvN+ooaoozWGtGhzOAcRsrgV/vYDF5hw/ZpuRmRts1lk8nfC3YFX1l46mO8OpW3FVINd42WOQ1QZtR9Fi0Bn1A6W/i5I/e2iRWDm+oXuOwMPbVDrIFnMX7a+d0xgEl8RGkX0ZABIX1c2czkQgVjwFsGiKtBQ4eKUYjxzb0o7y6+e0rHUaXU8J6We5EjlughcgSiyOtITGh72gEy1KOrvAJ3rilIBE4jwLeSKJ1+sZVXZMhcDEdLUva9DgIyjjfomGTHQluhIBbZ8xMhCE92WkSM3/JOs9RuIYB82R2ZZvr90wSy0J8cqidX4o/0B4n1xyqn1o1u7SpDn7CCkqEW6XG/R28ZcsU6fGcDXgFeMR3EXoEnskXvQZahTOFOY8x3wyE5gbKxlmZ5kYVo4906N9ukLK85Ok+3mA2Iuavhw2JHZ1J7ekHBDVLVxCfPDn+f5vbcNlAjhZI3syrv2SSQERF3Ad62v9eygwR17FfAhgVLuhZJUdBprbyckHYZ+qanpZDek=
 x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR19MB3864.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(7416005)(376005)(1800799015);DIR:OUT;SFP:1102;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR21MB1480.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(376005)(1800799015)(366007);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?THN3QXV6aDNSTDYzYUxCbTNtQXVESkM1SEVyTTJEY0tjQjkzSEN2TG81Nnhm?=
- =?utf-8?B?YUE0S1pqVzdkdEk0UnYwLzlCTjRWVFpiZjM5RXJxUzQ0eFBNYnkzNUxNU2wz?=
- =?utf-8?B?S2ZjUWdsSE1LbGd5eitzQjJ0YWt1eG9NNUY5VmljNm0vQmF3d2FjcHdreTRs?=
- =?utf-8?B?bGlXZWtGZDBIekE5bnF2TWkvRmZRSlkxUTJ0SEkxa0hzVEE0YldtZStrWEdG?=
- =?utf-8?B?YUY0dVI0aEpmc0grckFGL1JCd1ZxeUVzVW5BSm9QUUNFL0YzbHZ5bk1mQnF1?=
- =?utf-8?B?ZU5ZTWcyWDc4TXViNUJzZEtmOFI5TGNidFJ4dkVpWG52VWpwMFhEekNENjBk?=
- =?utf-8?B?VzBveTg4NUZCYXJOcWNieDJjNFFLN1dML2lkazcrVnZwUHRSWEtRZCtxcjBY?=
- =?utf-8?B?Znd5d2ZwcjJWRHlzSXd1eCtnYm9jeVg1VGtEWkpjV2hEWHI5dlArMVpmQlJq?=
- =?utf-8?B?VkRPRmxlQTJoMVdpd3dOSmd2WHNQZU9wN00wbkdXcUdQcjQ3RTNncVVTaTds?=
- =?utf-8?B?aFZhNWM1Q1NtZTRpemFYeTlTQzBseG9CZ3U0SVg1MHR3Q2pESVQ0b1htM2tY?=
- =?utf-8?B?NW9BZmQ0T29MVi96OUc2cnYzcWhGKy9PUWQ3cFJjSlVGWXo3YTFjSEcyaUJ3?=
- =?utf-8?B?d0o3YU5jYzZPcnJtdUh1QTFRVWVaTHg1bmc2YzVwNWtyTXFWdWw5Nm13UVpZ?=
- =?utf-8?B?RG1rYWh6TDNGalBIbmNwbGtjWDhKSlk4NGF5YVBwdXNjQnlmRnFYakRFTkhZ?=
- =?utf-8?B?djNoeEpqZUN2WGJDNEJwOElGaWwxL0srRnQ4L3UxT2VzT1IyajI2UkZnUEl1?=
- =?utf-8?B?UzYrOStnN0txejlLdkV6Mm9KU1llR1BVT1FXZFdmRk5RQ0RoNDI5SlNEU0pM?=
- =?utf-8?B?YWVqM2loZFBZN3ZDUlZ0bzlPYVVydngwaFhXc3MxQW96b2JyNnhyc2IxTGdk?=
- =?utf-8?B?dEZsTkhjWXE3UzJ1Sm96OWFKNmRuUU55VjMwWUl5eEk3TFVLYjZrb21CSFRW?=
- =?utf-8?B?VGVHb25zcVFmb0lsMEtQM2pqTkE5ZVdaT241L0FSMFZlZWkyc2tJQktGTzdQ?=
- =?utf-8?B?VDNudEoxRmQ1bkc1aFVHdzNNVlFIdUMzYW1BMmRrMGFtMEI5V29YelRlVGpF?=
- =?utf-8?B?Tk1BZVBMdTRlYmhZemZKQjkvNGZneWczRXdOZHlDUkFUNmNtMlJLNWcrMzdz?=
- =?utf-8?B?Q01EbExuMDNlZC9hb2dsd2FsMjBGYVRLM1RHRU5YWGU3ckhvcFBzTmtXWStW?=
- =?utf-8?B?VlF4L2E2NHBTQ0pBZjhvcnJSN0lDVjNWc1RZNHphc0RhZUJtcVNEK04rVURD?=
- =?utf-8?B?RGU0R25ETFFiYTRqOFBTeFFnVTNpTk16UEd3MHJmNk53SHJndzZBUWZkeUdR?=
- =?utf-8?B?RzFUSG5rVnVrWm5HZ1V3cDFhclkweU9EQzlEMjZUVlUzQ1JLb010WmF1aTZw?=
- =?utf-8?B?eVU1QkFuRjI4WDVFUFoyTkpyaVBrV2lENlFQdTJtVDJ4eHAwTU52aUsyUk52?=
- =?utf-8?B?c2dQOFBUZzgzV0dRbWxKSGdjR1o1N04rMFhQQlR5RVVNcWR6YjNNWk1ucEtz?=
- =?utf-8?B?SitKOUh4T0UrK2dPSzZ2ZC9OUzl0TFl4WmVhYjZuVHkyWFhteWtkYkp4Mno3?=
- =?utf-8?B?MzEwQmdlSExrNkswcE9NK1N3eWRPOUc2TTh3VjU2U0xlNW5IU3YwVU05WGpq?=
- =?utf-8?B?aGY3MkRaRGhYeEdibUpJem1haEsvRnNuSlZuaWg0MGpwNjZTdk5HaHBRbjZv?=
- =?utf-8?B?SkhDV1FIUVgvODUxWHVJTi9FWUUvQXNENEZXVGtmdTN5REZHWjRFd3FCTXVx?=
- =?utf-8?B?b1pnOXBuRWdsR092TnQ2QmdhblNqb3JDSzYyNG4rRHIvbUNPcG4yQi9oZ21H?=
- =?utf-8?B?a2ZSMTlrZFNXVnkyMFRoN3l0Qzc0MWV1YlI0Z0RVSUduZWNDcDhyMHRDVjBT?=
- =?utf-8?B?T2JwRDU2OGo1TXlGak9LUU5WUno1TTc2TnFlTGVvZDk3d3kyQmJaeElRN2h3?=
- =?utf-8?B?VW1Sb2ZvMy8zSnZFQzBFNVhjaWg4N3JRb252STQrZTR0MjF1eDRvUUxtNG96?=
- =?utf-8?B?cmJ5cTZQaVJJUitZS3FQemtiRlJWeWsyV3pmU2xyWGZxTkxmWFBDRi9qaUtu?=
- =?utf-8?B?akNHRmxlWnVkSFExenBqSTNIZjhwT1RJOCt4bXRaOXlKb3M5Z0Q1VFlFWk9S?=
- =?utf-8?Q?gjBB2tQGu54JGbU4t8ZT7VQ=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <361C2EF375635C4892C19513D232089A@namprd19.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ =?us-ascii?Q?6rg4Kjo4TTfbhFIHkITX0esBDrxoNDG7ud2a/pJhBHYsclpZxlaTXQSJQXND?=
+ =?us-ascii?Q?whV4Msael0lm0tacy0uVTaYrlkT4PnrnjDyS4X5kTA8ex7v6zdzBoaefcbvi?=
+ =?us-ascii?Q?tXTkN3YhahcCyZXXgOqxxz9CeAdMA1Varlq/F6W8meh8rVQdu7HGFS0G0BD+?=
+ =?us-ascii?Q?etAAis4C7TKQMc++qMiSwlwW67T2WVPO60nRRfsZKvDMMNXmhLzu40X9jOOM?=
+ =?us-ascii?Q?JghgfY9OFbZWTOuYh6dc/4UpuGVLWwNBikDZQ0xdogjUvVVfIUTMnbhSmLj+?=
+ =?us-ascii?Q?3aAMntE3tezxOLUeG1dHv4oyzkM2xtKivjzGhATFRG5m7OalWxHSx1T3mtDE?=
+ =?us-ascii?Q?S2oz3QX16RIyebQpNI89Och8hmkgUfscbEmbK+FnlwRVX59PkA76uFk2wD/5?=
+ =?us-ascii?Q?SpvxVKq1EkBkStLMKJ/KLweE0GLFT7RuJG3R1jPwdjE11nFEv5WVCg49NQPP?=
+ =?us-ascii?Q?tQ/9mchK2P/4qazkWmvPAZNbLlPTvUOAFS8UoPA5md7fJrjaMYdbNZfstjmc?=
+ =?us-ascii?Q?nGssVqsXj4BorJqrHCIzIeW18iqpkpAab5C9bpA3pwVzsT30hJ3aHtMWFzbZ?=
+ =?us-ascii?Q?cJBp1fudKoqW1jHefL56fJwEbAwWBo8kMbKBvBcOSbg0j1DqahYsvnLuiXJV?=
+ =?us-ascii?Q?PifvBtvTpldwX3n4esLSxs7GD7zP6WKjfi6pLxOwDqAztV/rLIip8PpGrqZ0?=
+ =?us-ascii?Q?yywXd3wSCT2Bqp+R7WOGmvu0CPhg1ceIH42dEzNygrNQHY84NFw+sejRi2EE?=
+ =?us-ascii?Q?JYvB+DLvmKKMI60ithEguyWpfgFPBmgOcFjlaADPFmeDcVdA6WSvjW1xn99A?=
+ =?us-ascii?Q?9Hjy3YBmUcqtGH0yioFmrbZW0q+RVxUCl47n4itpwzYXGbNpOTueYhNkjQfW?=
+ =?us-ascii?Q?o5Pk9BEleezRNMN6g4VhEX9TxxrWtIILIjUlm+5J6FO4DelqMa1hD9dG8Be4?=
+ =?us-ascii?Q?mbxalL0tF4i3rvR/7Xmvk9EsXUO6dMOzJHvcXpOeherQligUHY+v4Jq8Le98?=
+ =?us-ascii?Q?hJ7SLi7G/NbX7tSVnltcoavgeDioRB7iZ8/xX7MPecCOqtvegcvOkNI8cXm/?=
+ =?us-ascii?Q?aOwTxuI3lmq99cPy+zpFPTbA4wSP6NGSbcQ6FUYdP4ra/CeasRbKY1DOmHS9?=
+ =?us-ascii?Q?bfuKD+nFXf5RkMzfCVIUsNeg+XOTJX9aI/NAzbLtaaArbR/qYEmR5zLaaIAC?=
+ =?us-ascii?Q?Mmky75Y1prfjNnpCzuuAwIjHS5wIMcCAxeBYfXyiSg275L9eqgSIlmHaayYq?=
+ =?us-ascii?Q?/JdYorphDHDmWLCAs8XWZAUfVxfO/Zv04sMT7jyLEywqq9erOiUbctspC0ee?=
+ =?us-ascii?Q?iVFUKXbvgaVo6INNKtd4cQDi56lOHFsLItAhE7/YbwL2Wy58jkNqYVCx4wh8?=
+ =?us-ascii?Q?YIdCk9mCKnuSkTasUyrpOgLBuwzUyT7fySs2Vqz5yv52/mVrlCoJX/lyVj2P?=
+ =?us-ascii?Q?oodMTuVLsKIdnTywGciFS4rlgTim3JVXjNjhhpxTOZZr7ZkFOkrVJTcloMhd?=
+ =?us-ascii?Q?frgb47R6p2oDQQ/p3+6up6+Nrgx5ngIYVU6BAdSx8AvkcIqjHRN6vZYkSCYY?=
+ =?us-ascii?Q?BS7fGUOEFgddjqnSrHxkhZUIAk1OJV6LuoZTik8c?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
- MZh4PWWvWtuZivvdKYhkSVtkfkKDBcjIBsacrzu/49nQAhvTM81x0SZOmDb2JFqldvUihP6+tqn7th7+jhaFw0IY9e3wxNo8jnd26aSTc81nis+CGjIkPXozbgJtzB9jPc3ZBNnx/4OK0pWbSAXOPcrmxIg/yZfrtUqlC5DI1OP1KtoIYmZQyQKra7wYAg9hfdCwNB5GyAg0BZALzaDk73/Kfemrdd4MpfyzNjkDRH0dnXMhYisYeujQKdUEENQ9qjZr8zLKFo7wAj62TVb0wYc+5SbihbaKPj8K/rsRpf+l5BTMTdC+9jAgx3ByRmjYd4CyytHlA+AtSrYs09LVfJ36556UmOuLu5NUphfytIS4lai+Br8i3bLApDUsxPSBzTXDSGiAhoiQ+Ix+kD3JzV2ExvNVRrm3ndq7QTWaIvoO1SKHWg5MZVjM6oKX564GPOT0zYQtCTXS6CAtWdkKC9+Ojh2ryEYXtNlvHtRMigCFWfpLnM6Y7jJ3DoAFWC6I6LoWVIX0+Mz2E44WHwZZGqJdxb1E+xwz874ilG1r2vkYloa7UKg2l2XO7wB3T0ETye1aFmB0nb/HU3p2n8rVRH0l/f0m2boNyvOjY6YkM06zYAqEPyr9pIPmI5whKN3jtaA4R6h3rDmQj6KWdXx/jQ==
+X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR19MB3864.namprd19.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d02c97cc-f5b7-4f4a-0f6c-08dc528a3665
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Apr 2024 20:27:55.1271
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR21MB1480.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97383581-7ba0-49f1-a9f2-08dc52a26841
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Apr 2024 23:21:06.6894
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 753b6e26-6fd3-43e6-8248-3f1735d59bb4
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: k/rM+rXy1nXRg4nkNSYSKL0VnrcHV954iChOYXGU/tUHao7Am73C8K1oAuQs+36WcYxetZOdCl0RJ+Nklh/0nA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR19MB4261
-X-OriginatorOrg: ddn.com
-X-BESS-ID: 1712012591-104050-6808-19928-1
-X-BESS-VER: 2019.3_20240329.1832
-X-BESS-Apparent-Source-IP: 104.47.59.169
-X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUioBkjpK+cVKVoZGxhZAVgZQMM3IIM0i1cAwLd
-	EwxcQk1TLVwsTI2BDITzJOS01JSVWqjQUA1fC8ekEAAAA=
-X-BESS-Outbound-Spam-Score: 0.40
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.255277 [from 
-	cloudscan11-185.us-east-2a.ess.aws.cudaops.com]
-	Rule breakdown below
-	 pts rule name              description
-	---- ---------------------- --------------------------------
-	0.40 BSF_SC0_SA085b         META: Custom Rule SA085b 
-	0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-X-BESS-Outbound-Spam-Status: SCORE=0.40 using account:ESS124931 scores of KILL_LEVEL=7.0 tests=BSF_SC0_SA085b, BSF_BESS_OUTBOUND
-X-BESS-BRTS-Status:1
+X-MS-Exchange-CrossTenant-userprincipalname: 4MUB80jWM1AiXb+aNYjrJOBPYLxQ2a05+qpcWmHVhwAif+q2HOmK8geeU+A8vkJw0HLHAjtA2sssRyswcEoNkQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR21MB3945
 
-T24gNC8xLzI0IDE2OjQzLCBBbWlyIEdvbGRzdGVpbiB3cm90ZToNCj4gDQo+Pg0KPj4gQ2FuIHlv
-dSBub3QgcmVhZC93cml0ZSB3aXRob3V0IGludGVyYWN0aW5nIHdpdGggdGhlIHNlcnZlcj8gT3Ig
-ZG8geW91DQo+PiBtZWFuIEZPUEVOX0RJUkVDVF9JTyBzZW5kcyBzb21lIGZpbGUgb3BzIHRvIHRo
-ZSBzZXJ2ZXIgZXZlbiBpbg0KPj4gcGFzc3Rocm91Z2ggbW9kZT8NCj4gDQo+IEZPUEVOX0RJUkVD
-VF9JTyBzZW5kcyB3cml0ZSgpIGFuZCByZWFkKCkgdG8gdGhlIHNlcnZlciBldmVuIGluDQo+IHBh
-c3N0aHJvdWdoIG1vZGUuDQo+IA0KPj4gQXQgdGhlIG1vbWVudCBJJ20gdGVtcHRlZCB0byBmb2xs
-b3cgdGhlIHNhbWUNCj4+IG1lY2hhbmljcyBwYXNzdGhyb3VnaCBpcyB1c2luZy4gVGhlIG9ubHkg
-ZXhjZXB0aW9uIHdvdWxkIGJlIHBvc3NpYmx5DQo+PiB0b3NzaW5nIGJhY2sgdG8gdGhlIHNlcnZl
-ciwgd2hpY2ggSSBtZW50aW9uZWQgYWJvdmUuIFRoYXQnZCBvbmx5DQo+PiBoYXBwZW4gZm9yLCBz
-YXksIHJlYWQsIGlmIHdlJ3JlIG5vdCB1bmRlciBGT1BFTl9ESVJFQ1RfSU8uIEkndmUgbm90DQo+
-PiBsb29rZWQgdG9vIGNsb3NlbHkgYXQgRk9QRU5fRElSRUNUX0lPLiBJbiBGdXNlIGJwZiB3ZSBj
-dXJyZW50bHkgaGF2ZQ0KPj4gYnBmIG1vZGUgdGFraW5nIHByaW9yaXR5LiBBcmUgdGhlcmUgYW55
-IGVtYWlsIHRocmVhZHMgSSBzaG91bGQgbG9vayBhdA0KPj4gZm9yIG1vcmUgYmFja2dyb3VuZCB0
-aGVyZT8NCj4gDQo+IE1heWJlIHRoaXMgcGF0Y2ggc2V0Og0KPiBodHRwczovL2xvcmUua2VybmVs
-Lm9yZy9saW51eC1mc2RldmVsLzIwMjQwMjA4MTcwNjAzLjIwNzg4NzEtMS1hbWlyNzNpbEBnbWFp
-bC5jb20vDQo+IA0KPiBCZXJuZCBhbmQgSSB3b3JrZWQgb24gaXQgdG9nZXRoZXIgYXMgYSBwcmVy
-ZXF1aXNpdGUgdG8gZnVzZSBwYXNzdGhyb3VnaC4NCj4gQmVucmQgaGFzIHNvbWUgZm9sbG93dXAg
-ZGlyZWN0X2lvIHJlLWZhY3RvcmluZyBwYXRjaGVzLg0KDQoNClRoZXkgYXJlIGluIHRoaXMgYnJh
-bmNoDQpodHRwczovL2dpdGh1Yi5jb20vYnNiZXJuZC9saW51eC9jb21taXRzL2Z1c2UtZGlvLXY1
-Lw0KDQpHb2luZyB0byByZWJhc2UgaXQgdG8gNi45IHRoaXMgd2VlayBhbmQgd2lsbCBzZW5kIGl0
-IG91dCB0aGVuLiBJIGhhZA0KYmVlbiByYXRoZXIgb2NjdXBpZWQgd2l0aCB3aXRoIGRkbiBpbnRl
-cm5hbCB3b3JrIGFuZCBkaWRuJ3QgaGF2ZSB0aGUNCnRpbWUgc2luY2UgRmVicnVhcnkuLi4NCg0K
-DQpUaGFua3MsDQpCZXJuZA0KDQo=
+
+
+> -----Original Message-----
+> From: Dexuan Cui <decui@microsoft.com>
+> Sent: Friday, March 29, 2024 8:12 PM
+> To: Haiyang Zhang <haiyangz@microsoft.com>; linux-hyperv@vger.kernel.org;
+> netdev@vger.kernel.org
+> Cc: stephen <stephen@networkplumber.org>; KY Srinivasan
+> <kys@microsoft.com>; Paul Rosswurm <paulros@microsoft.com>;
+> olaf@aepfle.de; vkuznets@redhat.com; davem@davemloft.net;
+> wei.liu@kernel.org; edumazet@google.com; kuba@kernel.org;
+> pabeni@redhat.com; leon@kernel.org; Long Li <longli@microsoft.com>;
+> ssengar@linux.microsoft.com; linux-rdma@vger.kernel.org;
+> daniel@iogearbox.net; john.fastabend@gmail.com; bpf@vger.kernel.org;
+> ast@kernel.org; sharmaajay@microsoft.com; hawk@kernel.org;
+> tglx@linutronix.de; shradhagupta@linux.microsoft.com; linux-
+> kernel@vger.kernel.org; stable@vger.kernel.org
+> Subject: RE: [PATCH net] net: mana: Fix Rx DMA datasize and
+> skb_over_panic
+>=20
+> > From: LKML haiyangz <lkmlhyz@microsoft.com> On Behalf Of Haiyang Zhang
+> > Sent: Friday, March 29, 2024 2:37 PM
+> > [...]
+> > mana_get_rxbuf_cfg() aligns the RX buffer's DMA datasize to be
+> > multiple of 64. So a packet slightly bigger than mtu+14, say 1536,
+> > can be received and cause skb_over_panic.
+> >
+> > Sample dmesg:
+> > [ 5325.237162] skbuff: skb_over_panic: text:ffffffffc043277a len:1536
+> > put:1536 head:ff1100018b517000 data:ff1100018b517100 tail:0x700
+> > end:0x6ea dev:<NULL>
+> > [ 5325.243689] ------------[ cut here ]------------
+> > [ 5325.245748] kernel BUG at net/core/skbuff.c:192!
+> > [ 5325.247838] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+> > [ 5325.258374] RIP: 0010:skb_panic+0x4f/0x60
+> > [ 5325.302941] Call Trace:
+> > [ 5325.304389]  <IRQ>
+> > [ 5325.315794]  ? skb_panic+0x4f/0x60
+> > [ 5325.317457]  ? asm_exc_invalid_op+0x1f/0x30
+> > [ 5325.319490]  ? skb_panic+0x4f/0x60
+> > [ 5325.321161]  skb_put+0x4e/0x50
+> > [ 5325.322670]  mana_poll+0x6fa/0xb50 [mana]
+> > [ 5325.324578]  __napi_poll+0x33/0x1e0
+> > [ 5325.326328]  net_rx_action+0x12e/0x280
+> >
+> > As discussed internally, this alignment is not necessary. To fix
+> > this bug, remove it from the code. So oversized packets will be
+> > marked as CQE_RX_TRUNCATED by NIC, and dropped.
+> >
+> > Cc: stable@vger.kernel.org
+> > Fixes: ca9c54d2d6a5 ("net: mana: Add a driver for Microsoft Azure
+> Network
+> > Adapter (MANA)")
+>=20
+> While the unnecessary alignment indeed first appeared in ca9c54d2d6a5
+> (Apr 2021), ca9c54d2d6a5 didn't cause any crash because the only
+> supported MTU size was 1500, and the RX buffer was a page (which is
+> big enough to hold an incoming packet of a size up to 1536 bytes), and
+> mana_rx_skb() created a big skb of 1 page (which is big enough to
+> hold the incoming packet); the only issue with ca9c54d2d6a5 was that
+> an incoming packet of 1515~1536 bytes (if such a packet was ever
+> received by the NIC) was still properly delivered to the upper layer
+> network stack, while ideally such a packet should be dropped by the
+> NIC driver as we would have received CQE_RX_TRUNCATED if
+> ca9c54d2d6a5 hadn't done the unnecessary alignment.
+>=20
+> So,  my understanding is that ca9c54d2d6a5 is imperfect
+> but it doesn't really cause any real issue.
+>=20
+> It looks like the real issue started in the commit (Apr 12 14:16:02 2023)
+> 2fbbd712baf1 ("net: mana: Enable RX path to handle various MTU sizes")
+> which introduces "rxq->alloc_size", which I think can be
+> smaller than rxq->datasize, and  is used in  mana_poll() --> ... ->
+> mana_build_skb(), which I think causes the crash because
+> the size of the allocated skb may not be able to hold a big
+> incoming packet.
+>=20
+> Later, the commit (Apr 12 14:16:03 2023)
+> 80f6215b450e ("net: mana: Add support for jumbo frame")
+> does code refactoring and introduces mana_get_rxbuf_cfg().
+>=20
+> I suggest the Fixes tag should be updated to:
+> Fixes: 2fbbd712baf1 ("net: mana: Enable RX path to handle various MTU
+> sizes")
+> , because if we used "Fixes: ca9c54d2d6a5", the distro vendors
+> would ask us: does this fix need to be backported to old kernels
+> that don't have 2fbbd712baf1? The fix can't apply cleanly there
+> and is not really needed there. The stable tree maintainers would
+> ask the same question.
+>=20
+> >  drivers/net/ethernet/microsoft/mana/mana_en.c | 2 +-
+> >  include/net/mana/mana.h                       | 1 -
+> >  2 files changed, 1 insertion(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c
+> > b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> > index 59287c6e6cee..d8af5e7e15b4 100644
+> > --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
+> > +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> > @@ -601,7 +601,7 @@ static void mana_get_rxbuf_cfg(int mtu, u32
+> > *datasize, u32 *alloc_size,
+> >
+> >  	*alloc_size =3D mtu + MANA_RXBUF_PAD + *headroom;
+> >
+> > -	*datasize =3D ALIGN(mtu + ETH_HLEN, MANA_RX_DATA_ALIGN);
+> > +	*datasize =3D mtu + ETH_HLEN;
+> >  }
+> >
+>=20
+> I suggest the Fixes tag should be updated. Otherwise the fix
+> looks good to me.
+
+Thanks for the suggestion. I actually thought about this before=20
+submission.
+I was worried about someone back ports the jumbo frame feature,=20
+they may not automatically know this patch should be backported=20
+too. Also, I suspect that a bigger than MTU packet may cause=20
+unexpected problem at NVA application.
+
+If anyone have questions on back porting, I can provide a back=20
+ported patch, which is just one line change.
+
+- Haiyang
+
