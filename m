@@ -1,293 +1,145 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FE1824A04;
-	Tue,  2 Apr 2024 06:38:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41CBB36AEF;
+	Tue,  2 Apr 2024 07:09:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712039938; cv=none; b=n68qTvVwibVTyQVnN4NKzGAfqwaowyf4zuNm7H1I3a+z12MhD0kBbMc9DaVMsAo8EDtU9I4rPL9z35LSXcTA1zGhXOgGKZEVBHHLJSF++eze7gIyi1ExV0dhmdWhNzIxaYh/2YUqxzEffXRkn5+nccn4BnBejAVTpFBuagr603I=
+	t=1712041784; cv=none; b=SgLjKhwhqPqA+OdDb2z4NkXl71x+0YNNeeOp5xOKL4aXQFSOJXjiXzaHotQSP4rbHThVyjxdGVouNbaNGGE4sE2V0GctqTb/8590VLQ/o3CIZ4SeVG7TMofTfkmPkd9Gv4E8dMkpi6ic6CE21Vs1KfXttGT9e1fMMQ95wSDdfvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712039938; c=relaxed/simple;
-	bh=dQ6UzsnbxvYjXDXrHLCAD2HM5t7PTpJkoPIVrOnan6o=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mYLK7JwVDP5ZcFHKjS9IxAXsJMHceFrIadaEwq5crycP7Qj7DEdIU6xTUl9QsgiNF/TK/bYfORs/m8IV43IDtX0+KvMuVqxpd+ZmDvu2B8qWySD5wqAFfVM2sMHw40vRyiNfZ/7z12/xd10Zcmzs8MVeM1JQDiu4KfdHlCKN9SQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dau+pp5+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712041784; c=relaxed/simple;
+	bh=VCUvCqRQ6NPxkleeuXpAuZ9rj+nemnrtawumWpPx3dQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lvbXn0l+qN82bkzdQxhnBrWUxmxJOZXTqT0SMP+kLn89ssXels7JO6o9T/TCVInStUpzLngqIVq0375mv4AxEOW5kWwMiaJ1HJSrs96nyEieayXa+mVBWM80VqdTFhlOOgJcMGnmpsZrM00AjP1J+ukxyAOXDfnDCI6AtPzef28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qqp5pwk3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dau+pp5+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFCEDC433B2;
-	Tue,  2 Apr 2024 06:38:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qqp5pwk3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C377FC433C7;
+	Tue,  2 Apr 2024 07:09:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712039937;
-	bh=dQ6UzsnbxvYjXDXrHLCAD2HM5t7PTpJkoPIVrOnan6o=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dau+pp5+acUl7vsQR72taWG/nzG4xii9ij+JwTB2Bm+E40wVMH4Z/lRO/Ee1dHOxE
-	 NyXqE/eCR/UNUHM50n6qyNnVFSH/yRR9Phek3ysmNDpYIwC5SpOygCkpigzXzMtbok
-	 EJylaJrN0JXe1PQAbgipTFti11M5VP1kpEsKP4qKrCcsPvZW/MxqgoXLfbj920PmJG
-	 GX1OowDz/YrqE1tO4MGR9rfif/CER2Zvl4sddJq+5zNhdHmde6f1Tr5v5ZzgY209Pp
-	 1r8spvKr4WL4vo5gI22ckK7jcsSbYTa7ud/K5Jm1joGNaZTZXMWTKirmTIvKP9+Mjb
-	 Yi69d9/IjO0HQ==
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	bpf@vger.kernel.org,
-	mptcp@lists.linux.dev
-Subject: [PATCH bpf-next 3/3] selftests/bpf: Export send_recv_data helper
-Date: Tue,  2 Apr 2024 14:38:29 +0800
-Message-Id: <5a1d3a5e2e5318c237a390f8480b51471ed7a488.1712039441.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <cover.1712039441.git.tanggeliang@kylinos.cn>
-References: <cover.1712039441.git.tanggeliang@kylinos.cn>
+	s=k20201202; t=1712041783;
+	bh=VCUvCqRQ6NPxkleeuXpAuZ9rj+nemnrtawumWpPx3dQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Qqp5pwk3FEsxLUFGnsCE3n/EcStsBfY+sZBuQym4gF1e38vx3Ng0JOcw2Kf9u/F+p
+	 da0xYD4rV22JU9094FawtUcGlE1axz50QNHJ/SZkMcvGyQug2/1dGCQa+win6ApMuK
+	 XXOHAk9KKhkOHzh68w9W1cMIpYy4olbYdE3hmuhBoJRfQioSa/Pw/CcbAFT9sYiibE
+	 oUz9w710sYKEYHb3NCJykZi6MNf35WfnXKh+6Q/EMifgqLStCcSbIPWrYuZP7IW/Ob
+	 Eg27h825+vpQtF7ILyUOELCtgHC355Rp9iF03TIRLTAMkqC87CWLFL7OXpEN0SQUXI
+	 ch1LM16B8oC8A==
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2d6eedf3e99so52463941fa.1;
+        Tue, 02 Apr 2024 00:09:43 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWH2o3XY678ZJEBGAqzWtReM5MUnwNUZpjls/CjcId5lFqJ2FvOpr5Frwg23mZxrVvFP9E+YFQfQRtYy3PVd0RUQWUVYSTCMWM09C/fC9Dx5+EsSCUu/TxJaJkw2MVpQ/7+4vl0tqgmTM/ua9gTcxqJGYsNbWwvyvJvmQMFbzWAXDkyNbEmihtIZuyVKENqcqa/7RJoD1nr2nZlmw==
+X-Gm-Message-State: AOJu0YzHiETgJhJwPcRSkVHEaqSRvqjXqPejfnv1CWDWiV93PbM6iJcv
+	8DYIFOzG587IS8yJ8tHMqHU/zYOLAsV96dF3emvfhjpTTdm645G+0SOWnR4KK1R2vi+ebgEmUWm
+	6oroGeNzaIl6ycKMq08VMtoKgJgE=
+X-Google-Smtp-Source: AGHT+IEJxdLFcHF2Vfoum8yX/aTPt8sXBMCbjPKCZxNFhiYr4O8ld0r65HW0+xfbNjd0hUcV3fTCQLfZXbZ4AtC8s04=
+X-Received: by 2002:a2e:9044:0:b0:2d6:c02a:6c37 with SMTP id
+ n4-20020a2e9044000000b002d6c02a6c37mr4719710ljg.7.1712041782180; Tue, 02 Apr
+ 2024 00:09:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240329093356.276289-5-ardb+git@google.com> <20240329093356.276289-8-ardb+git@google.com>
+ <CAEf4BzYyTjb9MKAD8nP52+9Nx=eNyWxAwfWDBEO881+YuH_XTQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzYyTjb9MKAD8nP52+9Nx=eNyWxAwfWDBEO881+YuH_XTQ@mail.gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Tue, 2 Apr 2024 10:09:30 +0300
+X-Gmail-Original-Message-ID: <CAMj1kXEJ+zr51XNx9rzXiOQXjBewq_EPW4+536eFvq9B=+kvTA@mail.gmail.com>
+Message-ID: <CAMj1kXEJ+zr51XNx9rzXiOQXjBewq_EPW4+536eFvq9B=+kvTA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] btf: Avoid weak external references
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
+	Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, linux-arch@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+On Fri, 29 Mar 2024 at 20:24, Andrii Nakryiko <andrii.nakryiko@gmail.com> w=
+rote:
+>
+> On Fri, Mar 29, 2024 at 2:35=E2=80=AFAM Ard Biesheuvel <ardb+git@google.c=
+om> wrote:
+> >
+> > From: Ard Biesheuvel <ardb@kernel.org>
+> >
+> > If the BTF code is enabled in the build configuration, the start/stop
+> > BTF markers are guaranteed to exist in the final link but not during th=
+e
+> > first linker pass.
+> >
+> > Avoid GOT based relocations to these markers in the final executable by
+> > providing preliminary definitions that will be used by the first linker
+> > pass, and superseded by the actual definitions in the subsequent ones.
+> >
+> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > ---
+> >  include/asm-generic/vmlinux.lds.h | 2 ++
+> >  kernel/bpf/btf.c                  | 4 ++--
+> >  2 files changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vm=
+linux.lds.h
+> > index e8449be62058..141bddb511ee 100644
+> > --- a/include/asm-generic/vmlinux.lds.h
+> > +++ b/include/asm-generic/vmlinux.lds.h
+> > @@ -456,6 +456,8 @@
+> >   * independent code.
+> >   */
+> >  #define PRELIMINARY_SYMBOL_DEFINITIONS                                =
+ \
+> > +       PROVIDE(__start_BTF =3D .);                                    =
+   \
+> > +       PROVIDE(__stop_BTF =3D .);                                     =
+   \
+>
+> should this be guarded by CONFIG_DEBUG_INFO_BTF condition?
+>
 
-This patch extracts the code to send and receive data into a new
-helper named send_recv_data() in network_helpers.c and export it
-in network_helpers.h.
+That shouldn't matter - the linker will not create the symbol unless
+an unsatisfied reference to it exists anywhere in the input.
 
-This helper will be used for MPTCP BPF selftests.
+> >         PROVIDE(kallsyms_addresses =3D .);                             =
+   \
+> >         PROVIDE(kallsyms_offsets =3D .);                               =
+   \
+> >         PROVIDE(kallsyms_names =3D .);                                 =
+   \
+> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> > index 90c4a32d89ff..46a56bf067a8 100644
+> > --- a/kernel/bpf/btf.c
+> > +++ b/kernel/bpf/btf.c
+> > @@ -5642,8 +5642,8 @@ static struct btf *btf_parse(const union bpf_attr=
+ *attr, bpfptr_t uattr, u32 uat
+> >         return ERR_PTR(err);
+> >  }
+> >
+> > -extern char __weak __start_BTF[];
+> > -extern char __weak __stop_BTF[];
+> > +extern char __start_BTF[];
+> > +extern char __stop_BTF[];
+>
+> kernel/bpf/sysfs_btf.c also defines __weak externs for these symbols,
+> you probably need to adjust that as well?
+>
 
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
----
- tools/testing/selftests/bpf/network_helpers.c | 86 +++++++++++++++++++
- tools/testing/selftests/bpf/network_helpers.h |  1 +
- .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 82 +-----------------
- 3 files changed, 88 insertions(+), 81 deletions(-)
+Yes, thanks for pointing that out.
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index f2f8f7388d7c..9878d8072e7f 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -506,3 +506,89 @@ int send_byte(int fd)
- 		return -1;
- 	return 0;
- }
-+
-+struct send_recv_arg {
-+	int		fd;
-+	uint32_t	bytes;
-+	int		stop;
-+};
-+
-+static void *send_recv_server(void *arg)
-+{
-+	struct send_recv_arg *a = (struct send_recv_arg *)arg;
-+	ssize_t nr_sent = 0, bytes = 0;
-+	char batch[1500];
-+	int err = 0, fd;
-+
-+	fd = accept(a->fd, NULL, NULL);
-+	while (fd == -1) {
-+		if (errno == EINTR)
-+			continue;
-+		err = -errno;
-+		goto done;
-+	}
-+
-+	if (settimeo(fd, 0)) {
-+		err = -errno;
-+		goto done;
-+	}
-+
-+	while (bytes < a->bytes && !READ_ONCE(a->stop)) {
-+		nr_sent = send(fd, &batch,
-+			       MIN(a->bytes - bytes, sizeof(batch)), 0);
-+		if (nr_sent == -1 && errno == EINTR)
-+			continue;
-+		if (nr_sent == -1) {
-+			err = -errno;
-+			break;
-+		}
-+		bytes += nr_sent;
-+	}
-+
-+	ASSERT_EQ(bytes, a->bytes, "send");
-+
-+done:
-+	if (fd >= 0)
-+		close(fd);
-+	if (err) {
-+		WRITE_ONCE(a->stop, 1);
-+		return ERR_PTR(err);
-+	}
-+	return NULL;
-+}
-+
-+void send_recv_data(int lfd, int fd, uint32_t total_bytes)
-+{
-+	ssize_t nr_recv = 0, bytes = 0;
-+	struct send_recv_arg arg = {
-+		.fd	= lfd,
-+		.bytes	= total_bytes,
-+	};
-+	pthread_t srv_thread;
-+	void *thread_ret;
-+	char batch[1500];
-+	int err;
-+
-+	WRITE_ONCE(arg.stop, 0);
-+
-+	err = pthread_create(&srv_thread, NULL, send_recv_server, (void *)&arg);
-+	if (!ASSERT_OK(err, "pthread_create"))
-+		return;
-+
-+	/* recv total_bytes */
-+	while (bytes < total_bytes && !READ_ONCE(arg.stop)) {
-+		nr_recv = recv(fd, &batch,
-+			       MIN(total_bytes - bytes, sizeof(batch)), 0);
-+		if (nr_recv == -1 && errno == EINTR)
-+			continue;
-+		if (nr_recv == -1)
-+			break;
-+		bytes += nr_recv;
-+	}
-+
-+	ASSERT_EQ(bytes, total_bytes, "recv");
-+
-+	WRITE_ONCE(arg.stop, 1);
-+	pthread_join(srv_thread, &thread_ret);
-+	ASSERT_OK(IS_ERR(thread_ret), "thread_ret");
-+}
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index d7ee2857093c..e66ed7b68c4d 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -72,6 +72,7 @@ struct nstoken;
- struct nstoken *open_netns(const char *name);
- void close_netns(struct nstoken *token);
- int send_byte(int fd);
-+void send_recv_data(int lfd, int fd, uint32_t total_bytes);
- 
- static __u16 csum_fold(__u32 csum)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-index a1f0a2b06489..3f822100c2b3 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-@@ -33,76 +33,15 @@ static int settcpca(int fd, const char *tcp_ca)
- 	return 0;
- }
- 
--struct send_recv_arg {
--	int		fd;
--	uint32_t	bytes;
--	int		stop;
--};
--
--static void *server(void *arg)
--{
--	struct send_recv_arg *a = (struct send_recv_arg *)arg;
--	ssize_t nr_sent = 0, bytes = 0;
--	char batch[1500];
--	int err = 0, fd;
--
--	fd = accept(a->fd, NULL, NULL);
--	while (fd == -1) {
--		if (errno == EINTR)
--			continue;
--		err = -errno;
--		goto done;
--	}
--
--	if (settimeo(fd, 0)) {
--		err = -errno;
--		goto done;
--	}
--
--	while (bytes < a->bytes && !READ_ONCE(a->stop)) {
--		nr_sent = send(fd, &batch,
--			       MIN(a->bytes - bytes, sizeof(batch)), 0);
--		if (nr_sent == -1 && errno == EINTR)
--			continue;
--		if (nr_sent == -1) {
--			err = -errno;
--			break;
--		}
--		bytes += nr_sent;
--	}
--
--	ASSERT_EQ(bytes, a->bytes, "send");
--
--done:
--	if (fd >= 0)
--		close(fd);
--	if (err) {
--		WRITE_ONCE(a->stop, 1);
--		return ERR_PTR(err);
--	}
--	return NULL;
--}
--
- static void do_test(const char *tcp_ca, const struct bpf_map *sk_stg_map)
- {
--	ssize_t nr_recv = 0, bytes = 0;
--	struct send_recv_arg arg = {
--		.bytes	= total_bytes,
--	};
- 	int lfd = -1, fd = -1;
--	pthread_t srv_thread;
--	void *thread_ret;
--	char batch[1500];
- 	int err;
- 
--	WRITE_ONCE(arg.stop, 0);
--
- 	lfd = start_server(AF_INET6, SOCK_STREAM, NULL, 0, 0);
- 	if (!ASSERT_NEQ(lfd, -1, "socket"))
- 		return;
- 
--	arg.fd = lfd;
--
- 	fd = socket(AF_INET6, SOCK_STREAM, 0);
- 	if (!ASSERT_NEQ(fd, -1, "socket")) {
- 		close(lfd);
-@@ -134,26 +73,7 @@ static void do_test(const char *tcp_ca, const struct bpf_map *sk_stg_map)
- 			goto done;
- 	}
- 
--	err = pthread_create(&srv_thread, NULL, server, (void *)&arg);
--	if (!ASSERT_OK(err, "pthread_create"))
--		goto done;
--
--	/* recv total_bytes */
--	while (bytes < total_bytes && !READ_ONCE(arg.stop)) {
--		nr_recv = recv(fd, &batch,
--			       MIN(total_bytes - bytes, sizeof(batch)), 0);
--		if (nr_recv == -1 && errno == EINTR)
--			continue;
--		if (nr_recv == -1)
--			break;
--		bytes += nr_recv;
--	}
--
--	ASSERT_EQ(bytes, total_bytes, "recv");
--
--	WRITE_ONCE(arg.stop, 1);
--	pthread_join(srv_thread, &thread_ret);
--	ASSERT_OK(IS_ERR(thread_ret), "thread_ret");
-+	send_recv_data(lfd, fd, total_bytes);
- 
- done:
- 	close(lfd);
--- 
-2.40.1
+> Other than that looks good to me:
+>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+>
 
+Thanks!
+
+>
+> >  extern struct btf *btf_vmlinux;
+> >
+> >  #define BPF_MAP_TYPE(_id, _ops)
+> > --
+> > 2.44.0.478.gd926399ef9-goog
+> >
+> >
