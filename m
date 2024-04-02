@@ -1,97 +1,92 @@
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C1E2556E
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 22:33:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25A1D22625
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 22:50:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712097208; cv=none; b=hwyaQyFlanl6ovsSk0pu4ql3+I9ajlHtuI1ABYcqtvnw5UrMIyTs8/Q96w/Q+ZNrBzD0yX8E7ZcxRFYM10xZl6Ik/gQHLdTs2NG3o/31ImYHvuPTW40zjTCs0Dq9w1EBsOwSed1UmOrYKDfGQO23HKpeI7nzokHgb2pbzdGN4zs=
+	t=1712098223; cv=none; b=iN5RxL8G3TY0Ms3rEgWcZaqBazsq1WmSgYmx5EnkCa7dRrF44tvYip9MD0+S2Z+c2hiwfUDOGhioo1DKwYJ0pY+h0MX5TtwStRSY5ef+2lBM3aCS3yNnp3Xro7ZafK+cSvVIQyi0XxlDnKd5xuLqKbXgQamBrfoVlVRBc+hHgm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712097208; c=relaxed/simple;
-	bh=kkzlSA66i26GYwqP48fW+uIkvk54teFui2Jrdf90kTM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BRDy7OjFyKLdXsrv0JIsckO4QPLw8onuuAh6jLoudpTXN74P5lrTFt2eWP09za7N5LeG1yLR6AOL8PWeyKsiz1iiD96IGeYRuBb63BoxkR1rPXrbrNAW6W/HlXWL74rpcfD49GyYzy2J92tK/RNnToiCkx+ua3nto9xYlsTwTXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZtpnuJTs; arc=none smtp.client-ip=95.215.58.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1712098223; c=relaxed/simple;
+	bh=NZ232OgPTMstbnp4qCSMDoVERFr6ZQUW3jQ7Qp7mjNE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LfN+6tHBHbOTr5k8Qup7PWYcwl/fJws01w9/GyDOSJqvdXw+KVUQpVy1iohzhKCUUDmoO5eQsq6uWosKcCkMnWABQrmmjpm5z+vipAL/OQQDr0gCWsYg8mnA2Pp6WxAMltKqi5qSD3c4ndFwz4nXpVDwZXXZpamRsgDeImyhSLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A6G11k8l; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZtpnuJTs"
-Message-ID: <e5a1261d-0366-4459-b78c-86557d6e1834@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1712097204;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8S9cgMSyZXFXQwkW18aRhug4biM7UCnBGh847SJ+7ak=;
-	b=ZtpnuJTsEoaGToEeRIPVsngQ6SP0HDjZo4AX3xGVWx57B+V9xFeemlcIC7Tr2v3wGnG1Q4
-	/yz+6FW6Hxuf5wf8AuXJkNGtdvU9VohoiDrFTFRtyg5A4YgwUwQbf0gj+7B66nNHcecRNP
-	8rCpXv387lfHd/Byk3qyJ4ggr26l6Nw=
-Date: Tue, 2 Apr 2024 15:33:18 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A6G11k8l"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4618C433C7;
+	Tue,  2 Apr 2024 22:50:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712098222;
+	bh=NZ232OgPTMstbnp4qCSMDoVERFr6ZQUW3jQ7Qp7mjNE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=A6G11k8lW66MayMZNYtbu33iXh2PgqmLFUulIDvxn9F7k0/WxrX/VOxc65oolpRCH
+	 ePKb+8j1a0GZnZu2sX5PLiZLS512NHp+RuZLYt0QYaWF+ei0Xnk2jI2OE202izWC5V
+	 0KDs5JM1P2FQoV1Ed9foS/ZpvSK0HqUFrTbl3O8eI5FJlRIFgecPeNW4WGVr7ZHUbd
+	 WdxSFsRjNqFB4ZMXlUuWqci430ZpaWVkMjuR63c8h+/npUUH4r8oY7oVcpMGO944qn
+	 EPfAtEpqyByiLZ18YsYkdGlhbVL3yU0/Q+63jmyiec7EvPcYD5G935QhmUNlJ0Jr9c
+	 m+CKmV65f1vdA==
+From: Andrii Nakryiko <andrii@kernel.org>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@kernel.org
+Cc: andrii@kernel.org,
+	kernel-team@meta.com,
+	syzbot+148110ee7cf72f39f33e@syzkaller.appspotmail.com
+Subject: [PATCH bpf-next 1/2] bpf: prevent r10 register from being marked as precise
+Date: Tue,  2 Apr 2024 15:50:19 -0700
+Message-ID: <20240402225020.2582397-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v1 bpf-next 4/8] selftests/bpf: Add recv_msg_from_client
- to network helpers
-To: Jordan Rife <jrife@google.com>
-Cc: linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
- Daan De Meyer <daan.j.demeyer@gmail.com>, bpf@vger.kernel.org
-References: <20240329191907.1808635-1-jrife@google.com>
- <20240329191907.1808635-5-jrife@google.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20240329191907.1808635-5-jrife@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-On 3/29/24 12:18 PM, Jordan Rife wrote:
-> +int recvmsg_from_client(int sockfd, struct sockaddr_storage *src_addr)
-> +{
-> +	struct timeval tv;
-> +	struct msghdr hdr;
-> +	struct iovec iov;
-> +	char data[64];
-> +	fd_set rfds;
-> +
-> +	FD_ZERO(&rfds);
-> +	FD_SET(sockfd, &rfds);
-> +
-> +	tv.tv_sec = 2;
-> +	tv.tv_usec = 0;
-> +
-> +	if (select(sockfd + 1, &rfds, NULL, NULL, &tv) <= 0 ||
+r10 is a special register that is not under BPF program's control and is
+always effectively precise. The rest of precision logic assumes that
+only r0-r9 SCALAR registers are marked as precise, so prevent r10 from
+being marked precise.
 
-The socket fd created by the helpers in network_helpers.c should be a blocking 
-socket and has a 3s default delay. select should not be needed. Try to stay with 
-the default. If the default turned out to be too flaky in the bpf CI in the 
-future, one default change is easier.
+This can happen due to signed cast instruction allowing to do something
+like `r0 = (s8)r10;`, which later, if r0 needs to be precise, would lead
+to an attempt to mark r10 as precise.
 
-> +	    !FD_ISSET(sockfd, &rfds))
-> +		return -1;
-> +
-> +	memset(&iov, 0, sizeof(iov));
-> +	iov.iov_base = data;
-> +	iov.iov_len = sizeof(data);
-> +
-> +	memset(&hdr, 0, sizeof(hdr));
-> +	hdr.msg_name = src_addr;
-> +	hdr.msg_namelen = sizeof(struct sockaddr_storage);
-> +	hdr.msg_iov = &iov;
-> +	hdr.msg_iovlen = 1;
-> +
-> +	return recvmsg(sockfd, &hdr, 0);
-> +}
+Prevent this with an extra check during instruction backtracking.
+
+Fixes: 8100928c8814 ("bpf: Support new sign-extension mov insns")
+Reported-by: syzbot+148110ee7cf72f39f33e@syzkaller.appspotmail.com
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ kernel/bpf/verifier.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index fcb62300f407..02361e2a2f4e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3615,7 +3615,8 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+ 				 * sreg needs precision before this insn
+ 				 */
+ 				bt_clear_reg(bt, dreg);
+-				bt_set_reg(bt, sreg);
++				if (sreg != BPF_REG_FP)
++					bt_set_reg(bt, sreg);
+ 			} else {
+ 				/* dreg = K
+ 				 * dreg needs precision after this insn.
+@@ -3631,7 +3632,8 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+ 				 * both dreg and sreg need precision
+ 				 * before this insn
+ 				 */
+-				bt_set_reg(bt, sreg);
++				if (sreg != BPF_REG_FP)
++					bt_set_reg(bt, sreg);
+ 			} /* else dreg += K
+ 			   * dreg still needs precision before this insn
+ 			   */
+-- 
+2.43.0
 
