@@ -1,94 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 707D31426F;
-	Tue,  2 Apr 2024 04:20:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F3817721
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 04:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712031627; cv=none; b=SVlaNjThMVVBkfV3NLrCB8t6QPCvuKSVgqBcW3NreAz54pnM0TkbJZcjpisDT9+CUq95A20UwEu5VzHYAQSIKmXzV0DhY8Au15k/X3E37ReUX1InUTJbaY8TIVzcWQ+abRdpB3MIqCbSBQynIBSix+3oJSwbKoK0XDdSo+lnS80=
+	t=1712032179; cv=none; b=Pys9WzVE2lj+mqxt75KxPGcvO1Ig0ooDP/LVhGNPCx4TkwVZx8o4zC3599/PGyy44h+dARlK4v9ExlSa/6rsfHwmz9blZ32JbMGLC3kEDsQS/eA02ZqfPdW3w0ViqcUhMAM2ay/65vN7QcqqGuLqKOIhxESmIBFoYVZWi8V8awQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712031627; c=relaxed/simple;
-	bh=vaCsj7gbd2rPFxIynoOdojDVOPNrn8BX8eepAklV8N8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=KDewrQ57nCG8N30qvjNjSC1hVX5YBK7DfEPmd1Z6yBezem8DxJ4iBaHn+3PItTVzBH87DzN6JhL1uQi1lb+H3+fKyPV3XdOYZ9HQwZstXSt5CSc5hrfb8AuqxSyXtsqkPAPEqhUWL76uduFFYkS/VHmEC8aoz1b31tyn53DgUNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y2xwB7vJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712032179; c=relaxed/simple;
+	bh=x6ck6pZJMzYWwY4L+lSoOQagLPVp0+Q3bGPk7fzUPEs=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=a37C7u2KK0Yr89vJfgzK0qYVSMeyuooGg8R0LsHfuOEc+PF4al9OqPAPFWLkbLLbRaZ9ObNJNai9anVnCiUbj/RQOm7N2q95Q7ajsEeDlWb6WMwGPKwhjEI3QJaVjtgm3MBRwjR2eCPaR8oIAnN6JVi9Lfsv7wa91YL2qyVNcG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MDeQ12wg; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y2xwB7vJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1DC6DC43394;
-	Tue,  2 Apr 2024 04:20:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712031627;
-	bh=vaCsj7gbd2rPFxIynoOdojDVOPNrn8BX8eepAklV8N8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Y2xwB7vJpgTI2JEOa13r3a3JNeskiCGDc2u3ZTio50LSRG2vm9wWUFklIY8E8Pd1V
-	 WT3wiMOs9KIWxD9gNklNWtgcyjTfWa5DVCxbz/BORHEPpXQ0jZpWW2tZfxBE5H1VWl
-	 vBqR0L42MrK1+zfhmVFSM7xDs7hC0zGIY+DN/GwdXnGuBg1Ysk4aQxP2qImEoC1VI0
-	 TL36qpaDf8OnmUpxk2cfQJ4of4WFA1JqFV/e0BbUAJ/Sr/rsMQTPd+aRZYEJR/VgkL
-	 YX8YByJ/guTbdJaaAVedr21ustNYRNcV+zp00pu/Xdjc2jmULeV1ydGpnHKR1DFdZo
-	 TpvrEWD81s+oA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0C8E9D8BD16;
-	Tue,  2 Apr 2024 04:20:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MDeQ12wg"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-5dcc4076c13so3022152a12.0
+        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 21:29:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712032178; x=1712636978; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sQNiTko5+6yC0DFKcQM3ZYntLjVNlk5HYjEM5GaTHe8=;
+        b=MDeQ12wgHGmXQHEayTrCshgMGRK75x9U053mx4xxZLFAnFC84SCY7MFFWbUDjQ1lAV
+         62jHEH2fRP5SDZa1axd72Zacg19EovSKqlDExUAJ4MCS5wKwnSYQr3jmr2quLTJAlXOB
+         66tEnHawKzhQOPYvfU8jfJMGBb7mPBT/8POR92EIUcH1HuDAftM1cBPukMx5xZYMnImH
+         NyqFAq4UyAxcR5DZ00pUy/GQawx23sQT8FWLvWkI2Vn8yGNm/k866i9vGZtTm2yVG/El
+         A0ama+yfF0UjVUtIwmJvvkXuTute0fsok6mGJKrwww+XtSoWwS+1uqbYJV0HCn7PZGAB
+         zmOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712032178; x=1712636978;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sQNiTko5+6yC0DFKcQM3ZYntLjVNlk5HYjEM5GaTHe8=;
+        b=idXCUhzzk/G3Rrc96h6BJSQOZSGg/cA5blVgNioDbVM+gXJfswC9l1AhlGSa3U0a9H
+         rj6tEpQK1EZHYamtP222+LyBkVPZpCmy6kKeRRP8tIu9ec5OlZVLqcBDI3pi0nPx1o4F
+         s4F99KXehM4qSe+gE5ynaEYyNXJhLw0XuKjGWnyYahxP/Nyl3eiJKKbUmE766SjQORf3
+         OuhhV2QxK2ffNXez5spYUaHuksXy1Bn42UcmzWcFCEqCPeszN09DISRPM1PqvOJjlmGb
+         PZ/oPMvWzgDMt1GMwAb6FXvKCIdWkaVukppIZ/t92qyvmEA5qmooBWhmsXpbQFR5XATo
+         3Fxw==
+X-Forwarded-Encrypted: i=1; AJvYcCU4TMPQeP+tNRW6+B1V2wRXP6kfYPxqE/EYlRZNfzGweT8i/jk8jJPrl1+SSQ7qnU5rbazCwiew9C9oNAjJUCDvUExu
+X-Gm-Message-State: AOJu0Yxw87wjfk7YOXRBIvzZ9MMOjMSObfixL3Yerrm4WaYKJ0qxM6v9
+	8cPqpDajFSfCdM5mcjqmNXRbl6NHhKIs3LysL63JkyhxBII0bRn6/kWiQ2N3
+X-Google-Smtp-Source: AGHT+IGAGhvtHlJwoGzI2d1lJsqxrsw7KL0w+nDKaXChEmVgLNiC+Xm+v+CiU2cLHFHz807Op8OZPw==
+X-Received: by 2002:a17:90a:f005:b0:29b:a345:620a with SMTP id bt5-20020a17090af00500b0029ba345620amr16451314pjb.20.1712032177513;
+        Mon, 01 Apr 2024 21:29:37 -0700 (PDT)
+Received: from localhost ([98.97.36.54])
+        by smtp.gmail.com with ESMTPSA id cq24-20020a17090af99800b002a23440cfd2sm3648299pjb.46.2024.04.01.21.29.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Apr 2024 21:29:37 -0700 (PDT)
+Date: Mon, 01 Apr 2024 21:29:36 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: Yonghong Song <yonghong.song@linux.dev>, 
+ bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ kernel-team@fb.com, 
+ Martin KaFai Lau <martin.lau@kernel.org>
+Message-ID: <660b89b056220_1a14020831@john.notmuch>
+In-Reply-To: <20240402025446.3215182-1-yonghong.song@linux.dev>
+References: <20240402025446.3215182-1-yonghong.song@linux.dev>
+Subject: RE: [PATCH bpf-next] selftests/bpf: Using llvm may_goto inline asm
+ for cond_break macro
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] mptcp: prevent BPF accessing lowat from a subflow socket.
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171203162704.30104.6455806082804107632.git-patchwork-notify@kernel.org>
-Date: Tue, 02 Apr 2024 04:20:27 +0000
-References: <d8cb7d8476d66cb0812a6e29cd1e626869d9d53e.1711738080.git.pabeni@redhat.com>
-In-Reply-To: <d8cb7d8476d66cb0812a6e29cd1e626869d9d53e.1711738080.git.pabeni@redhat.com>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, matttbe@kernel.org, martineau@kernel.org,
- geliang@kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, mptcp@lists.linux.dev, bpf@vger.kernel.org
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri, 29 Mar 2024 19:50:36 +0100 you wrote:
-> Alexei reported the following splat:
+Yonghong Song wrote:
+> Currently, cond_break macro uses bytes to encode the may_goto insn.
+> Patch [1] in llvm implemented may_goto insn in BPF backend.
+> Replace byte-level encoding with llvm inline asm for better usability.
+> Using llvm may_goto insn is controlled by macro __BPF_FEATURE_MAY_GOTO.
 > 
->  WARNING: CPU: 32 PID: 3276 at net/mptcp/subflow.c:1430 subflow_data_ready+0x147/0x1c0
->  Modules linked in: dummy bpf_testmod(O) [last unloaded: bpf_test_no_cfi(O)]
->  CPU: 32 PID: 3276 Comm: test_progs Tainted: GO       6.8.0-12873-g2c43c33bfd23
->  Call Trace:
->   <TASK>
->   mptcp_set_rcvlowat+0x79/0x1d0
->   sk_setsockopt+0x6c0/0x1540
->   __bpf_setsockopt+0x6f/0x90
->   bpf_sock_ops_setsockopt+0x3c/0x90
->   bpf_prog_509ce5db2c7f9981_bpf_test_sockopt_int+0xb4/0x11b
->   bpf_prog_dce07e362d941d2b_bpf_test_socket_sockopt+0x12b/0x132
->   bpf_prog_348c9b5faaf10092_skops_sockopt+0x954/0xe86
->   __cgroup_bpf_run_filter_sock_ops+0xbc/0x250
->   tcp_connect+0x879/0x1160
->   tcp_v6_connect+0x50c/0x870
->   mptcp_connect+0x129/0x280
->   __inet_stream_connect+0xce/0x370
->   inet_stream_connect+0x36/0x50
->   bpf_trampoline_6442491565+0x49/0xef
->   inet_stream_connect+0x5/0x50
->   __sys_connect+0x63/0x90
->   __x64_sys_connect+0x14/0x20
+>   [1] https://github.com/llvm/llvm-project/commit/0e0bfacff71859d1f9212205f8f873d47029d3fb
 > 
-> [...]
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> ---
+>  tools/testing/selftests/bpf/bpf_experimental.h | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+> index a5b9df38c162..3329ea080865 100644
+> --- a/tools/testing/selftests/bpf/bpf_experimental.h
+> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
+> @@ -326,6 +326,16 @@ l_true:												\
+>         })
+>  #endif
+>  
+> +#ifdef __BPF_FEATURE_MAY_GOTO
+> +#define cond_break					\
+> +	({ __label__ l_break, l_continue;		\
+> +	 asm volatile goto("may_goto %l[l_break]"	\
+> +		      :::: l_break);			\
+> +	goto l_continue;				\
+> +	l_break: break;					\
+> +	l_continue:;					\
+> +	})
+> +#else
+>  #define cond_break					\
+>  	({ __label__ l_break, l_continue;		\
+>  	 asm volatile goto("1:.byte 0xe5;			\
+> @@ -337,6 +347,7 @@ l_true:												\
+>  	l_break: break;					\
+>  	l_continue:;					\
+>  	})
+> +#endif
+>  
+>  #ifndef bpf_nop_mov
+>  #define bpf_nop_mov(var) \
+> -- 
+> 2.43.0
+> 
+> 
 
-Here is the summary with links:
-  - [net] mptcp: prevent BPF accessing lowat from a subflow socket.
-    https://git.kernel.org/netdev/net/c/fcf4692fa39e
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Acked-by: John Fastabend <john.fastabend@gmail.com>
