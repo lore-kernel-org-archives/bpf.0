@@ -1,90 +1,166 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B8815AAA9
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 17:57:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B2215AABA;
+	Tue,  2 Apr 2024 17:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712080637; cv=none; b=ZbhoeT9R4n+Nub9Nv9fLyq+o3WBquD5PfbzY/YYjL9BX/uJUo8zzG1HPmn13uv61vemLDl9QCeEwpD2smt1jLzF/bbiFp6sj+xqUxpBDNXHt4uA6wT6jh6XM4wd0yv/9tRzpGRGiwsoX0nnBbPgyfi6nqOS+vAbfe1d3H+RkaOc=
+	t=1712080728; cv=none; b=YNCD6oS/KB8esx8wtTailQnHp/TtMasd/bBl/umF+Q0l9mVPdwHrRIG6CSXKtEN+uw6zQxkqRwUNhJOzI6DvB5IuLqjk1riPMQD/NHw6tb5xrhMURVRC+gdJy6cJZtF59r5qXS22ZYaBVj1lXdliwF73NSNf2Zqv3HKBF2wVfNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712080637; c=relaxed/simple;
-	bh=yFcRLLpyOQW1rnm9mlDf1com3xrZssWLL1rJMfWcsxE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CJUrRQXUD5FDfSj8XVkwCafRYeZAnD+99a0oO/WSMfLqV+bVKrjbzf4CIOLBpjrQEL5b3BhgfTFuNbCTmI5qKJPkhXNkXKfvwuggAWQzTCdjiSLNyCSeE385aHmnevkMd9KL5UWDWScijYXP0kDWvGWaTOaLK4zTHZgWbzuxy5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o8hcIydY; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1712080728; c=relaxed/simple;
+	bh=CckikFIEdka9zckJdLB6X9WogvFT5kc+ADx3ZTqUgSw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p/HnpoHWaNRleN0Xz9XpckIvvBTDZz5ClB+WHb8n1qUTslstQ6hsj9h0AgFe8Hvlbr0BsSwZRSHGQv025OLgVYSzQmbrsbsh4F26B2Us81/5LAp0hhNFjQmN7CGnPta6CCl0dhz9bCrsHnUoGZSebBWF6aZkTVq5rG3izm6eNzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=er8760qY; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o8hcIydY"
-Message-ID: <007e30b4-31aa-41b0-9e19-f7e2a385773e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1712080631;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dTFgycdum/jOkWMjvVMiQFk5BSU3+QvQG08R75DKkSc=;
-	b=o8hcIydYcKPWTI3wHafVq0PR2HRKIHivdinqEiKzhcEiZ20J6uwgaDHXz/dFa3NWqlvSFx
-	W8ZjHlGxlMLVboe9fvKZOIbWffSTdhNF+gs7Et+2Q9selSFcTLw2oxHxVuZXUDiQFG9a4g
-	piu68YyFNlraNG5gLj/D0/znp+UX7xs=
-Date: Tue, 2 Apr 2024 10:57:03 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="er8760qY"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1e244c7cbf8so23258395ad.0;
+        Tue, 02 Apr 2024 10:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712080726; x=1712685526; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E+eeJaOo2zbz2WTbCF4Si6uwF5B92wp+mvI31Obgdqw=;
+        b=er8760qYfH0a5PhmgOhiseQXy7e6PZ4NpjCOWvntt0y4YG1ATppHrjIlmHD7K5lKXS
+         1HHfAyz/Xu2A5+ZP79V/JuAPdzeJRG8l2EzBI+vrOOapSzTU3rj8P3lFjg56Tl7HfcaM
+         3+cuViVlruX+4UZflTt3nN6wTxPAmfmnTd5YsEu9s58hac7jj+g1iLiwG0qYlqgcthU2
+         D4FS1MsElurmDuD3M5Mb4noO6bU3V5NXt84uGOx/yruecYQzQ3Wmrmwq5zXmB1WjzF27
+         ufnR76aQJKoZ+33m6u7bAlMi7lGVRlYyuW80kQlSVV8jZsK30xxfBFEubGdU/H+ksdDF
+         7tJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712080726; x=1712685526;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E+eeJaOo2zbz2WTbCF4Si6uwF5B92wp+mvI31Obgdqw=;
+        b=WoyBfM0Q77HRUPIGtLSbRQgG0uK1yCGVcrMwFlcyFhTUH53IxSwB3JeVJzMGEBencW
+         KOccZJKR/pzBKMHGXyrKy0daULX/i4FLTCmoUqbwobmxauafRHQT/iwBWXBmKaj5tGus
+         KwPgSlBbIGYsXh/pmX2q6/LDvMotCQ+JRg/xnypFoaWXpfBR9GdwQIXRtnXrGaktRU3c
+         8XQHVXE8j6XN34jNvKDqIr5hsiG/jX3fH61SLJyZQsh/0zb5pNHRyX7Sku89CLFCTTIz
+         o1dabC2yW1eJVtoHpY2JyCElbcqpRWBI0/zsUTHARt9lx+X0PMNg8NLaiemzouMy2YYM
+         fkSg==
+X-Forwarded-Encrypted: i=1; AJvYcCXTjDZCbqUrN3FdudjRaX2RGWei4GVOHXsUQBqqBUc2C7zmmKVK0Tvsafd5B0FxXh4zAhwSl214aidCWO+WlL4+B/O+jqatxhtXOcRZt6Nxpvi3b2FeXO5XFsj2GbXO5u3x
+X-Gm-Message-State: AOJu0YzW/M3sWR6UxfCYgJ7h0gPByIXgn5pdrb+2yH1gyQyWzoip4kVz
+	wNg47n31yrmFfajaPzu9f1SSQTn4xG0WDRRJsPRFu59412/kO5AK4J1AMtsN98LQDa7zsx5ZBz+
+	Icodn2LPS3tBoxTipkJHBU48bZak=
+X-Google-Smtp-Source: AGHT+IEok5isFVFKmsQdGq2BkvHNiNZArRXmmLtHuhQhirxy9paVnrknUWcindrLjLmMS4jDaxct0el+kIfHgvRll+Y=
+X-Received: by 2002:a17:902:f606:b0:1e2:88fd:c220 with SMTP id
+ n6-20020a170902f60600b001e288fdc220mr425236plg.44.1712080725946; Tue, 02 Apr
+ 2024 10:58:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v1 bpf-next 1/8] selftests/bpf: Introduce
- sock_addr_testmod
-Content-Language: en-US
-To: Jordan Rife <jrife@google.com>
-Cc: linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
- Daan De Meyer <daan.j.demeyer@gmail.com>, bpf@vger.kernel.org
-References: <20240329191907.1808635-1-jrife@google.com>
- <20240329191907.1808635-2-jrife@google.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20240329191907.1808635-2-jrife@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20240401073159.16668-1-andrea.righi@canonical.com> <20240401073159.16668-2-andrea.righi@canonical.com>
+In-Reply-To: <20240401073159.16668-2-andrea.righi@canonical.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 2 Apr 2024 10:58:33 -0700
+Message-ID: <CAEf4BzbJE-Y72VqYXCDfwRXjhknVK+GHYjRfxdajzAEwjUkwUg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] libbpf: ringbuf: allow to consume up to a certain
+ amount of items
+To: Andrea Righi <andrea.righi@canonical.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Vernet <void@manifault.com>, Tejun Heo <tj@kernel.org>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/29/24 12:18 PM, Jordan Rife wrote:
-> +static int do_sock_op(int op, struct sockaddr *addr, int addrlen)
+On Mon, Apr 1, 2024 at 12:32=E2=80=AFAM Andrea Righi <andrea.righi@canonica=
+l.com> wrote:
+>
+> In some cases, instead of always consuming all items from ring buffers
+> in a greedy way, we may want to consume up to a certain amount of items,
+> for example when we need to copy items from the BPF ring buffer to a
+> limited user buffer.
+>
+> This change allows to set an upper limit to the amount of items consumed
+> from one or more ring buffers.
+>
+> Link: https://lore.kernel.org/lkml/20240310154726.734289-1-andrea.righi@c=
+anonical.com/T
+> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+> ---
+>  tools/lib/bpf/ringbuf.c | 29 +++++++++++++++++------------
+>  1 file changed, 17 insertions(+), 12 deletions(-)
+>
+> diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
+> index aacb64278a01..81df535040d1 100644
+> --- a/tools/lib/bpf/ringbuf.c
+> +++ b/tools/lib/bpf/ringbuf.c
+> @@ -231,7 +231,7 @@ static inline int roundup_len(__u32 len)
+>         return (len + 7) / 8 * 8;
+>  }
+>
+> -static int64_t ringbuf_process_ring(struct ring *r)
+> +static int64_t ringbuf_process_ring(struct ring *r, int64_t max_items)
+>  {
+>         int *len_ptr, len, err;
+>         /* 64-bit to avoid overflow in case of extreme application behavi=
+or */
+> @@ -264,7 +264,14 @@ static int64_t ringbuf_process_ring(struct ring *r)
+>                                                           cons_pos);
+>                                         return err;
+>                                 }
+> -                               cnt++;
+> +                               if (++cnt >=3D max_items) {
+> +                                       /* update consumer pos and return=
+ the
+> +                                        * total amount of items consumed=
+.
+> +                                        */
+> +                                       smp_store_release(r->consumer_pos=
+,
+> +                                                         cons_pos);
 
-This function can be made as a new kfunc in bpf_testmod.c. The 
-sock_create_kern() could be moved to here also. Take a look at the 
-register_btf_kfunc_id_set() usage in bpf_testmod.c and how those registered 
-kfunc(s) can be called by the bpf prog in progs/*.
+Does this fit on a single line under 100 characters? If yes, please
+keep it as a single line
 
-If the do_kernel_{bind,connect,sendmsg} and the sock_create_kern need a 
-sleepable context, it will need to mark the kfunc KF_SLEEPABLE. The kfunc can be 
-registered to the BPF_PROG_TYPE_SYSCALL sleepable prog type. There are some 
-examples in progs/kfunc_call_test.c and how the "syscall" bpf prog can be run by 
-bpf_prog_test_run_opts().
+but actually it seems cleaner to keep cnt++ intact, let
+smp_store_release() below happen, and then check the exit condition.
+Were you afraid to do unnecessary checks on discarded samples? I
+wouldn't worry about that.
 
-The result (e.g. ensuring the addr and addrlen have not been changed) can be 
-checked in the bpf prog itself. Then the new sock_addr_testmod is not needed.
+> +                                       goto done;
+> +                               }
+>                         }
+>
+>                         smp_store_release(r->consumer_pos, cons_pos);
+> @@ -281,19 +288,18 @@ static int64_t ringbuf_process_ring(struct ring *r)
+>   */
+>  int ring_buffer__consume(struct ring_buffer *rb)
+>  {
+> -       int64_t err, res =3D 0;
+> +       int64_t err, res =3D 0, max_items =3D INT_MAX;
 
-> +{
-> +	switch (op) {
-> +	case BIND:
-> +		return do_kernel_bind(addr, addrlen);
-> +	case CONNECT:
-> +		return do_kernel_connect(addr, addrlen);
-> +	case SENDMSG:
-> +		return do_kernel_sendmsg(addr, addrlen);
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
+I'm wondering if it might be better to have a convention that zero
+means "no limit", which might allow the compiler to eliminate the
+condition in ringbuf_process_ring altogether due to constant
+propagation. WDYT?
 
+>         int i;
+>
+>         for (i =3D 0; i < rb->ring_cnt; i++) {
+>                 struct ring *ring =3D rb->rings[i];
+>
+> -               err =3D ringbuf_process_ring(ring);
+> +               err =3D ringbuf_process_ring(ring, max_items);
+>                 if (err < 0)
+>                         return libbpf_err(err);
+>                 res +=3D err;
+> +               max_items -=3D err;
+>         }
+> -       if (res > INT_MAX)
+> -               return INT_MAX;
+>         return res;
+>  }
+
+[...]
