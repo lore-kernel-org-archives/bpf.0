@@ -1,191 +1,106 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73B6A1E531
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 23:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 115AE1E531
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 23:27:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712100160; cv=none; b=i6QAOq8G1UmzHSJ2+DmeI7u0YTF5dq/oqZPsDuDrSNMduybzhjGZL92ftZd7oG0Z7H1StSn6iaJV26cXqS5dbzjYZe+oNHjdqkJQwtH78uT0vkHcc4WJzu7KxJFD+aeljHGrTXXmtYbJZ7TvOdWkEOKLZyMJwYOiigEq0AneFr0=
+	t=1712100431; cv=none; b=GjpmyBWozBSa0P/4NiQSdUStmOrLl6FGL3ZREpE/ji2GqsqX+fGK2BvmClp/ysTfHT+kRHMPibiFFbaTLFPaGofAQWCOQY4f4ag8wIg5j/Rg6eGc5MVA7raFrcrO6smNliOo0M+4MqVoGYPI5ngqLGzjK+M1syXFjoR4sg4gxFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712100160; c=relaxed/simple;
-	bh=f2Y2UyFRgV6IRbEXrwqUh838nP/Uv1K7YqPTC9HhOgg=;
+	s=arc-20240116; t=1712100431; c=relaxed/simple;
+	bh=UpMThfhjlRFAbHVO7m/eaPzD1dPRC/73GQwsakgyMoM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Cy6P7eq+XY56zH0pke0fKVish0CX0k6hW3rVwVfK5JQUfyQAvhXW9pxixE+8vjogA2EplPcXanN1XR9ARCcEBZbtBLc4r5e3QVQNGLXMKCEOjP8eGSoP6kacPZvT8fu7Enntayc06xPbDCMpe18D3UZI8695jRNssLFWLsrzDgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FyIW4GWf; arc=none smtp.client-ip=209.85.210.172
+	 To:Cc:Content-Type; b=D7HGjQlinOcNpZ+hnYqT7Keao0VecOksu1oMAlX5gJ94qQkmiYOwA75mbbZ33IORFE8qHVYOaBS80+iaeIUe0OKFzqLeSe6vZ0HBjwKdVwDo1/tPVy1CyTFeE8Nq5FLQG3JGdkZ+/UwV4RQwmIl92Hc20j+OI4jBI2RvBe7tSiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kofm4MSi; arc=none smtp.client-ip=209.85.215.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FyIW4GWf"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6e6bee809b8so5443948b3a.1
-        for <bpf@vger.kernel.org>; Tue, 02 Apr 2024 16:22:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kofm4MSi"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-5dc949f998fso3754941a12.3
+        for <bpf@vger.kernel.org>; Tue, 02 Apr 2024 16:27:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712100158; x=1712704958; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712100429; x=1712705229; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oy+aXs/fZMafeXSBVhJnEsX+j0urVXp+Og0PWOpUCas=;
-        b=FyIW4GWfJiXAv2iC6zX5wgSd7P4zynOvqxyXSsym+GIFXjipIGtBpacg/KTgG+G4SW
-         b87GV8nAYUpdEBEa6ujIxambbhS5K265LeamcR5/tK8xlgYn+Vu1gRkQeoW+iJspdkCd
-         ILWJOTYVW8H/RghPikZng5rNRwHOipsvcLfafM+5fejUqs+5C1vQ2GRsgiwT9zmNkuVt
-         sul/HoZOYHVq8kSNEQmDhbFoqH8R7VB3iFthAy4w1Ik/dMbOZGkRpwk3oljPCSNaSsi1
-         bUSlMm6wGCoOkJ1AU4LJ26OnEEPp489YBpCa3jidsCzrHZg3QTEIo7TGOj/LhfQ6LOrX
-         3azA==
+        bh=iIq9BxEaSUQFgsegGZTkY2dWGbTDHLG9N7CExY8AVvY=;
+        b=Kofm4MSiYPV4aPEBj2I+gu5JUa0ZQ6uvPPKs7eQOK7DUZHDPo2PzHrGhx9dNo3KI4V
+         Wguw0tKqo4JBxmqN5dBcUSCy4g2iQJBS28L6sQ/nyrChLgrAms3eTI2kCoA2QR/OrqPF
+         R5jQDrpkLKjt3g3IiRIUtLNddUJYJRXu2SSVs+hfHLdsqiuymvB9YT91AjnuBK5m1ADv
+         ajWD+cz+whBmPW8GDHUKJwwSkqDmlICjZYX8YgDCNbpj82+Hw4Yu/V0A/PJM6WjILeGV
+         8sIkW865QBRRywqzOMAGkskt53Imx1KpkdrmjJyipd3HGdY+dJ0V68r9zEz46UHpluBx
+         0Skw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712100158; x=1712704958;
+        d=1e100.net; s=20230601; t=1712100429; x=1712705229;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oy+aXs/fZMafeXSBVhJnEsX+j0urVXp+Og0PWOpUCas=;
-        b=ULXh4lDBH+qetnVOWM/ZbXj4vyVTV2R+pKCC2hA9kRtg2Es7yawETQ5t+KDLxXGn54
-         pmUawiOaROD4bK9yIKlPpBG3ePD5o4QURl2/UivT3N/PwdpzZdV/Wk7zsFZLJYFbaOoV
-         oT3ldCs7/kfVEGtmgCXGeMhnxA97RNQ1lX/Fu7YTqu7TyF9nXPsYmQwMwh5szIJEWkc+
-         aOUvK8TMHHrTkPKJJauqFt+ed1lboXIae/N2FIfiEmj+nfeSSTSDdkS5LotP9xvBi/+6
-         No3mOdD99XHky8fSGXZaVZpcBZ3gKMN+cE8nGpB0j6RK42vTyUd3IYnLQypRUFSKSG9d
-         Umew==
-X-Gm-Message-State: AOJu0Yy6uusomO168sfiy0DxA92C+Ynnv5NYKU9jCDwlfRwZxAjl4y8I
-	Bn2l0tXPJhkblPFIAzyuV9MfOkk1S1aIQ1h4KLj/7rOigvQAI5h0tQL+ox3ZjG5smxSRQfkejdy
-	KSjnfDYBsHrLMAqr0tu6/Sp6CKM4=
-X-Google-Smtp-Source: AGHT+IFcfrE8EBkTx1akU0S6nJM4TXZXgk3uFjiD6qEIBqzpuItiQTvQ4C5Qzf55bdM0ps3JL2nBQ8OMTTUciE3FlOI=
-X-Received: by 2002:a05:6a20:d705:b0:1a5:7979:3349 with SMTP id
- iz5-20020a056a20d70500b001a579793349mr16604699pzb.6.1712100157588; Tue, 02
- Apr 2024 16:22:37 -0700 (PDT)
+        bh=iIq9BxEaSUQFgsegGZTkY2dWGbTDHLG9N7CExY8AVvY=;
+        b=L4cwmkuFxyJMO5D4BaYPpybmYxj//Y+q4BQrtWxu8I/5tLv7eo9iMk2dvvf9g9OQI9
+         S/88AdLuX5vLbm/UAkCZJp76YYkjXz2BSo1KcVir1gAhHMpYFvOfLdUSuQGXWwmi1XbM
+         nbja2x/JGZtqtqwMPFsOFzhJEod9V+VIM4ftrxAbgVXOdLdKUlN9K7MPjavysLoLFHOZ
+         vg1irtZYyWb37Avoj7m/zCz1J+GkW1B/JyKJcMy39THi++cCYQko/0GiuKsXrAYEeyTH
+         ya1E29MP68dR1fXveBmhRJLh2a+egL1pA32o8WgEkUEK6aBdd29ZgTTTljX8Ixz19OOG
+         88hQ==
+X-Gm-Message-State: AOJu0YxaGNLe0I+Nb63Md1Lnq+8+pUP/n1SQ6IN6bVged07pZli7r1mp
+	icZ8BzU5xnQDRVWSPNI1+juXHY0Q8geVle2+Y8rK6JlIq7B7Z3S6g7ViDneFE4VmBnweAcNp/px
+	iauIGm2dBCWXvfXhhpLcGPMQmr5Q=
+X-Google-Smtp-Source: AGHT+IFBd7GOPiz9pGeExcouqvK/4OM/BVNdybRiV5xeC0b/cJPauDynkH5ysl0qtLk0C1CxVAxTHC3YOOmTIumnEVM=
+X-Received: by 2002:a17:90a:d4f:b0:29d:dd50:afe with SMTP id
+ 15-20020a17090a0d4f00b0029ddd500afemr11092936pju.30.1712100429320; Tue, 02
+ Apr 2024 16:27:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240402190542.757858-1-andrii@kernel.org> <20240402190542.757858-3-andrii@kernel.org>
-In-Reply-To: <20240402190542.757858-3-andrii@kernel.org>
+References: <20240402225020.2582397-1-andrii@kernel.org> <20240402225020.2582397-2-andrii@kernel.org>
+In-Reply-To: <20240402225020.2582397-2-andrii@kernel.org>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 2 Apr 2024 16:22:24 -0700
-Message-ID: <CAEf4BzZ_6hzWoniF+6jb6cOXK48EHNMH0ziZ1o26KW+Zo7OKyQ@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 2/2] bpf: inline bpf_get_branch_snapshot() helper
+Date: Tue, 2 Apr 2024 16:26:57 -0700
+Message-ID: <CAEf4Bza0QLa8m_iW4Rk_6+8tuJgvhF7gjk-p4HVHTRq2LJgPVg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: add fp-leaking precise
+ subprog result tests
 To: Andrii Nakryiko <andrii@kernel.org>
 Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	martin.lau@kernel.org, kernel-team@meta.com
+	martin.lau@kernel.org, kernel-team@meta.com, 
+	syzbot+148110ee7cf72f39f33e@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 2, 2024 at 12:05=E2=80=AFPM Andrii Nakryiko <andrii@kernel.org>=
- wrote:
+On Tue, Apr 2, 2024 at 3:50=E2=80=AFPM Andrii Nakryiko <andrii@kernel.org> =
+wrote:
 >
-> Inline bpf_get_branch_snapshot() helper using architecture-agnostic
-> inline BPF code which calls directly into underlying callback of
-> perf_snapshot_branch_stack static call. This callback is set early
-> during kernel initialization and is never updated or reset, so it's ok
-> to fetch actual implementation using static_call_query() and call
-> directly into it.
->
-> This change eliminates a full function call and saves one LBR entry
-> in PERF_SAMPLE_BRANCH_ANY LBR mode.
+> Add selftests validating that BPF verifier handles precision marking
+> for SCALAR registers derived from r10 (fp) register correctly.
 >
 > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 > ---
->  kernel/bpf/verifier.c | 55 +++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 55 insertions(+)
+>  .../bpf/progs/verifier_subprog_precision.c    | 86 +++++++++++++++++++
+>  1 file changed, 86 insertions(+)
 >
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index fcb62300f407..49789da56f4b 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -20157,6 +20157,61 @@ static int do_misc_fixups(struct bpf_verifier_en=
-v *env)
->                         goto next_insn;
->                 }
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_precision=
+.c b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
+> index 6f5d19665cf6..e1a8f107f0a7 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
+> @@ -76,6 +76,92 @@ __naked int subprog_result_precise(void)
+>         );
+>  }
 >
-> +               /* Implement bpf_get_branch_snapshot inline. */
-> +               if (prog->jit_requested && BITS_PER_LONG =3D=3D 64 &&
-> +                   insn->imm =3D=3D BPF_FUNC_get_branch_snapshot) {
-> +                       /* We are dealing with the following func protos:
-> +                        * u64 bpf_get_branch_snapshot(void *buf, u32 siz=
-e, u64 flags);
-> +                        * int perf_snapshot_branch_stack(struct perf_bra=
-nch_entry *entries, u32 cnt);
-> +                        */
-> +                       const u32 br_entry_size =3D sizeof(struct perf_br=
-anch_entry);
-> +
-> +                       /* struct perf_branch_entry is part of UAPI and i=
-s
-> +                        * used as an array element, so extremely unlikel=
-y to
-> +                        * ever grow or shrink
-> +                        */
-> +                       BUILD_BUG_ON(br_entry_size !=3D 24);
-> +
-> +                       /* if (unlikely(flags)) return -EINVAL */
-> +                       insn_buf[0] =3D BPF_JMP_IMM(BPF_JNE, BPF_REG_3, 0=
-, 7);
-> +
-> +                       /* Transform size (bytes) into number of entries =
-(cnt =3D size / 24).
-> +                        * But to avoid expensive division instruction, w=
-e implement
-> +                        * divide-by-3 through multiplication, followed b=
-y further
-> +                        * division by 8 through 3-bit right shift.
-> +                        * Refer to book "Hacker's Delight, 2nd ed." by H=
-enry S. Warren, Jr.,
-> +                        * p. 227, chapter "Unsigned Divison by 3" for de=
-tails and proofs.
-> +                        *
-> +                        * N / 3 <=3D> M * N / 2^33, where M =3D (2^33 + =
-1) / 3 =3D 0xaaaaaaab.
-> +                        */
-> +                       insn_buf[1] =3D BPF_MOV32_IMM(BPF_REG_0, 0xaaaaaa=
-ab);
-> +                       insn_buf[2] =3D BPF_ALU64_REG(BPF_REG_2, BPF_REG_=
-0, 0);
+> +__naked __noinline __used
+> +static unsigned long fp_leaking_subprog()
+> +{
+> +       asm volatile (
+> +               "r0 =3D (s8)r10;"
 
-Doh, this should be:
+Our CI's clang doesn't like this instruction. I guess I'll have to
+encode it in binary form :(
 
-insn_buf[2] =3D BPF_ALU64_REG(BPF_MUL, BPF_REG_2, BPF_REG_0);
-
-I'll wait a bit for any other feedback, will retest everything on real
-hardware again, and will submit v2 tomorrow.
-
-pw-bot: cr
-
-
-> +                       insn_buf[3] =3D BPF_ALU64_IMM(BPF_RSH, BPF_REG_2,=
- 36);
+> +               "exit;"
+> +       );
+> +}
 > +
-> +                       /* call perf_snapshot_branch_stack implementation=
- */
-> +                       insn_buf[4] =3D BPF_EMIT_CALL(static_call_query(p=
-erf_snapshot_branch_stack));
-> +                       /* if (entry_cnt =3D=3D 0) return -ENOENT */
-> +                       insn_buf[5] =3D BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0=
-, 4);
-> +                       /* return entry_cnt * sizeof(struct perf_branch_e=
-ntry) */
-> +                       insn_buf[6] =3D BPF_ALU32_IMM(BPF_MUL, BPF_REG_0,=
- br_entry_size);
-> +                       insn_buf[7] =3D BPF_JMP_A(3);
-> +                       /* return -EINVAL; */
-> +                       insn_buf[8] =3D BPF_MOV64_IMM(BPF_REG_0, -EINVAL)=
-;
-> +                       insn_buf[9] =3D BPF_JMP_A(1);
-> +                       /* return -ENOENT; */
-> +                       insn_buf[10] =3D BPF_MOV64_IMM(BPF_REG_0, -ENOENT=
-);
-> +                       cnt =3D 11;
-> +
-> +                       new_prog =3D bpf_patch_insn_data(env, i + delta, =
-insn_buf, cnt);
-> +                       if (!new_prog)
-> +                               return -ENOMEM;
-> +
-> +                       delta    +=3D cnt - 1;
-> +                       env->prog =3D prog =3D new_prog;
-> +                       insn      =3D new_prog->insnsi + i + delta;
-> +                       continue;
-> +               }
-> +
->                 /* Implement bpf_kptr_xchg inline */
->                 if (prog->jit_requested && BITS_PER_LONG =3D=3D 64 &&
->                     insn->imm =3D=3D BPF_FUNC_kptr_xchg &&
-> --
-> 2.43.0
->
+
+[...]
