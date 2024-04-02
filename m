@@ -1,128 +1,174 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074FCEAF0
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 01:44:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 805E4945A
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 01:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712022256; cv=none; b=AFdY8rr9X3mbmpd4rTJlh1K5hlJXL1krVOQS6p9bUZPsly+hHDp/de50jgUUpBReJGcXbMprmsH71f/VF2x+jz79VyYo/zoqHBIeaUVY7Byj2fT/KxBvukME3p4J5ar7ehRawdkn7fvxwwDps00ryv1FHBJDkyg6S0oKSPY51gc=
+	t=1712022443; cv=none; b=XdxrK+g0v87x9ALEGces18TdDrMhZPC7myPVqK4VitkbgkHOtZKn/nEtmjGFUTNfug8TlRABEYAAxMrwd2HEPne6/sweDLjRFgob5JmWdNpo1cY/WGReqnhmoZfOFVB9aJv2tLj9ex1ICK9Z150xOq3msb02ogDt6Z4XnmZjwy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712022256; c=relaxed/simple;
-	bh=gWi2pap83Nu2RXbgYvJUFaGhAa7pfpqpq9MKWf2/k6s=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=YYEQj+sttaTuAkM3XEbK64Iiq+jFneg/Et5XFAm58SsH5GAL4l+3ybTc92QKY9nZW5UurU7pmpeFsOwz/AlcWT7ON9bYQH6s5xtcWSaj+Ce8M4EPbdi/Wy+U1JkvB9wHU7ItjEsnnlJFBaqcxSz5gvwdMeL69aAGhm05HKAYHGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MCt2+ysT; arc=none smtp.client-ip=209.85.215.170
+	s=arc-20240116; t=1712022443; c=relaxed/simple;
+	bh=9yoTapFo28LvIVoUkYb1pfLeni8XGtJrZbEGFV3wSS8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sq7deueazuM3My9q9+fMqd6A4j3zoIzw9TUbFkDPB0sfbOGHV9O6hpL3yLcUsg/iEkXycm+um++ZMm5Tt95r/ATaxziAxyjUmW6NgUud4owCQaTecDtkWTYWLxqxzp+QRFNlytVxnVZYBTxJRVoL24TP8cu5rSsuU2LXsmXl43o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=APNir5gp; arc=none smtp.client-ip=209.85.219.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MCt2+ysT"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5e42b4bbfa4so2778548a12.1
-        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 18:44:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="APNir5gp"
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dccb1421bdeso4020695276.1
+        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 18:47:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712022254; x=1712627054; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1712022440; x=1712627240; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=y7MnAG8H57AtIjeLuv/6P9n3kOxg6ps8k5VuAlg5LWU=;
-        b=MCt2+ysTrd01OgJNfS5SnPh7gRqRtni4kv4ea5K4V/l2mRQFiBmgHJXW9Zhgbwu/8o
-         wLXFqjYxX+ZYJsWzvfN/jO83BnXA5wMuZzWKx/gdPIUhH8hcStVXyLSxBSqg8fSndXKd
-         yzddRQZur4VNTMSC+ryOKJV/ZYlPgchisrDgIe8OZ0/wlMqIwcXMu3lR4LZoGBDGrEg/
-         44e3e77g1/0413fhRn6MQyECIT5LjvPDMTiF5b+X2GrCZaGn/W5z6bmM3gv3uEaRV117
-         v/3UV4tzXO/dOr9D53UTVXKPO+D1GvJn4vz2K3KYAAmok1cR4uJlJi1gAqYel2CVJwoq
-         t+4g==
+        bh=RkXuv0TmTiF5gZCfqhSKP7XLEz1Th6XHZtsINndvrPo=;
+        b=APNir5gpL43nm+hQP7im58B1VPEa+arVpmwi6PWJa6Oq0m1WxId60U0Qj7YdxR8UEm
+         yop1YNYGgIhY6lU6PMAtBbOHedoKuF4630Cl2l3b8QO4OKLP0o3mrqPX8DWYaba1NAIG
+         9HVij1r+QXxAi61N+A1AF/24af3Yec69bR2jCCkh5IYy32UmGBqYk6/04d6CZya/yR1x
+         LWTTZ69gm5TKKqYdCJuOS2/svQlNO1tVOhcYE3aM5sOCHa64QlJk0w6qV0O4QFcQ+lUc
+         poO4QLNp2cSLhTsqhHDd3PYURcgpEWhwcuV6Jl4NukWYF6hRpOrkSjBylaX616jfCEvD
+         AO5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712022254; x=1712627054;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=y7MnAG8H57AtIjeLuv/6P9n3kOxg6ps8k5VuAlg5LWU=;
-        b=vcmxDF+ghn+/ncCqucu2UxB6VFhMR6k+hdXBHEjGBGWBiB5rFVFNeA1XM9mE5Kal/a
-         0ddgPlSnZQ8HOHnlxTgixyB2UoyWgE89RWF7DGhygm1DYRwRfLtrla3Yq/BnXYtPjTnO
-         TLJV1kAozBGSXU5Z28YH+5D8bxQC05Lq/4/voP+aSap/qrlDrthoeuH9/uOb/3Jkbqt1
-         dO3MPfnoN1ZrUmuAy4abpzA0vrslHB/rw+GLVv61xEI11qlY+M64BkwsMyj/Ma/CAlfO
-         s1Lai3tAIanjIG4nkxOyIE7zc3ESzAHSKVMgpaxcAaqM/H6CnHOfGTpBvloi6jFmIT0G
-         qIXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX8nTXTJkz30Col+a42LHCP0WdURSFtYNRMdWgnnjRfBKZGWqSW2oOb0RL0jGeLxp64vavU0r61OCvrgH+pB3prl/9m
-X-Gm-Message-State: AOJu0YxPBKe8nAJZ/FfxqAICgR0jUbWh7pBMRAqSz9oeVDPeaRUUnM2S
-	Op512QGS/gZAOepoaQKZs86YmkvZkyY2HuGeBAZEjEb0yE3IwX26
-X-Google-Smtp-Source: AGHT+IHisIdq0JZEgBa2vvMPyQ3JUFq2rUqLE7fHLGco6/r+66RSqB/T/MuneVOYpsGpS45ecGyabQ==
-X-Received: by 2002:a17:902:7847:b0:1e0:1bff:59e2 with SMTP id e7-20020a170902784700b001e01bff59e2mr11061082pln.39.1712022254154;
-        Mon, 01 Apr 2024 18:44:14 -0700 (PDT)
-Received: from localhost ([98.97.36.54])
-        by smtp.gmail.com with ESMTPSA id e6-20020a170902d38600b001ddce57bdbfsm9680402pld.308.2024.04.01.18.44.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Apr 2024 18:44:13 -0700 (PDT)
-Date: Mon, 01 Apr 2024 18:44:13 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- bpf@vger.kernel.org, 
- ast@kernel.org, 
- daniel@iogearbox.net, 
- martin.lau@kernel.org
-Cc: andrii@kernel.org, 
- kernel-team@meta.com
-Message-ID: <660b62ed3561d_8015208e4@john.notmuch>
-In-Reply-To: <20240401170713.2081368-1-andrii@kernel.org>
-References: <20240401170713.2081368-1-andrii@kernel.org>
-Subject: RE: [PATCH bpf-next] bpftool: use __typeof__() instead of typeof() in
- BPF skeleton
+        d=1e100.net; s=20230601; t=1712022440; x=1712627240;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RkXuv0TmTiF5gZCfqhSKP7XLEz1Th6XHZtsINndvrPo=;
+        b=Y2RocBFmmIepWWsozGQ0/W4vDuyvKg9X8Ly0kHKci7YZIuAQHiLXkS9wk+E8WIgW1O
+         B52IXlB9770SbmK7Rx/jAyWQhkIZadOmEsNCDoXVIJdFhabGoQ4L4VWF9hMT8QCVmA/l
+         yaKZJ7XK1k5GHie6fic2ybYPjaYg9E0YQqc+wEBkterYDwz//GSBEIZlsLlBKz2j8ZdD
+         YfRBUG2dftCsil/89GveTN+V/hcPy65Wqx7+sQmpvVQD14jtgxt/z92sTnocqSj+wFYP
+         9ZN4cN4c9lSGEUffS+BHWe4+vBDs7fA5dyo54zBNMXaeXmgwapczfYoKhzKV/LzQgewU
+         DklA==
+X-Forwarded-Encrypted: i=1; AJvYcCW8vAqdTwZJ9AAEaeBfHSdVsoFeHacY7ERY/ummGIOzI9WTxr/vZtpST8zB3apsIKIAgXcgMzroshzbSDFAEy1QDoOP
+X-Gm-Message-State: AOJu0Yx2/pzoZyUUlWZA13Oi68Uo9n/Vg0rUDbQUjZ8UyMNRbAM4iTSC
+	onpXkxnZPeWn2Vn0E057mF2OCOhpyK+orOuP6K/rBODmQXPTwVTWgypOw9/DHusijM5aVww0+6q
+	+cnwbMv70Imfi7WBxPSYu6aVVkgY=
+X-Google-Smtp-Source: AGHT+IHwf+HBSASwkS2h0YEHwpcGs8t2yAG8VkiwTLNqs371QXs5djfeevTvCa9NTPCbq4XculpUDRtjiMW3B6dUmBY=
+X-Received: by 2002:a25:5882:0:b0:dcf:3ef5:4d30 with SMTP id
+ m124-20020a255882000000b00dcf3ef54d30mr6196085ybb.17.1712022440463; Mon, 01
+ Apr 2024 18:47:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20240329184740.4084786-1-andrii@kernel.org> <20240329184740.4084786-2-andrii@kernel.org>
+ <660b5b8cc7162_801520889@john.notmuch>
+In-Reply-To: <660b5b8cc7162_801520889@john.notmuch>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 1 Apr 2024 18:47:07 -0700
+Message-ID: <CAEf4BzbywTmsNJvjCbU_5HWaHwq+J+A0vwf48h30f302POwa-A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/4] bpf: add internal-only per-CPU LDX instructions
+To: John Fastabend <john.fastabend@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, martin.lau@kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Andrii Nakryiko wrote:
-> When generated BPF skeleton header is included in C++ code base, some
-> compiler setups will emit warning about using language extensions due to
-> typeof() usage, resulting in something like:
-> 
->   error: extension used [-Werror,-Wlanguage-extension-token]
->   obj->struct_ops.empty_tcp_ca = (typeof(obj->struct_ops.empty_tcp_ca))
->                                   ^
-> 
-> It looks like __typeof__() is a preferred way to do typeof() with better
-> C++ compatibility behavior, so switch to that. With __typeof__() we get
-> no such warning.
-> 
-> Fixes: c2a0257c1edf ("bpftool: Cast pointers for shadow types explicitly.")
-> Fixes: 00389c58ffe9 ("bpftool: Add support for subskeletons")
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
->  tools/bpf/bpftool/gen.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-> index 786268f1a483..b3979ddc0189 100644
-> --- a/tools/bpf/bpftool/gen.c
-> +++ b/tools/bpf/bpftool/gen.c
-> @@ -386,7 +386,7 @@ static int codegen_subskel_datasecs(struct bpf_object *obj, const char *obj_name
->  			 */
->  			needs_typeof = btf_is_array(var) || btf_is_ptr_to_func_proto(btf, var);
->  			if (needs_typeof)
-> -				printf("typeof(");
-> +				printf("__typeof__(");
->  
->  			err = btf_dump__emit_type_decl(d, var_type_id, &opts);
->  			if (err)
-> @@ -1131,7 +1131,7 @@ static void gen_st_ops_shadow_init(struct btf *btf, struct bpf_object *obj)
->  			continue;
->  		codegen("\
->  			\n\
-> -				obj->struct_ops.%1$s = (typeof(obj->struct_ops.%1$s))\n\
-> +				obj->struct_ops.%1$s = (__typeof__(obj->struct_ops.%1$s))\n\
->  					bpf_map__initial_value(obj->maps.%1$s, NULL);\n\
->  			\n\
->  			", ident);
-> -- 
-> 2.43.0
-> 
-> 
+On Mon, Apr 1, 2024 at 6:12=E2=80=AFPM John Fastabend <john.fastabend@gmail=
+.com> wrote:
+>
+> Andrii Nakryiko wrote:
+> > Add BPF instructions for working with per-CPU data. These instructions
+> > are internal-only and users are not allowed to use them directly. They
+> > will only be used for internal inlining optimizations for now.
+> >
+> > Two different instructions are added. One, with BPF_MEM_PERCPU opcode,
+> > performs memory dereferencing of a per-CPU "address" (which is actually
+> > an offset). This one is useful when inlined logic needs to load data
+> > stored in per-CPU storage (bpf_get_smp_processor_id() is one such
+> > example).
+> >
+> > Another, with BPF_ADDR_PERCPU opcode, performs a resolution of a per-CP=
+U
+> > address (offset) stored in a register. This one is useful anywhere wher=
+e
+> > per-CPU data is not read, but rather is returned to user as just
+> > absolute raw memory pointer (useful in bpf_map_lookup_elem() helper
+> > inlinings, for example).
+> >
+> > BPF disassembler is also taught to recognize them to support dumping
+> > final BPF assembly code (non-JIT'ed version).
+> >
+> > Add arch-specific way for BPF JITs to mark support for this instruction=
+s.
+> >
+> > This patch also adds support for these instructions in x86-64 BPF JIT.
+> >
+> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > ---
+> >  arch/x86/net/bpf_jit_comp.c | 29 +++++++++++++++++++++++++++++
+> >  include/linux/filter.h      | 27 +++++++++++++++++++++++++++
+> >  kernel/bpf/core.c           |  5 +++++
+> >  kernel/bpf/disasm.c         | 33 ++++++++++++++++++++++++++-------
+> >  4 files changed, 87 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> > index 3b639d6f2f54..610bbedaae70 100644
+> > --- a/arch/x86/net/bpf_jit_comp.c
+> > +++ b/arch/x86/net/bpf_jit_comp.c
+> > @@ -1910,6 +1910,30 @@ st:                    if (is_imm8(insn->off))
+> >                       }
+> >                       break;
+> >
+> > +             /* internal-only per-cpu zero-extending memory load */
+> > +             case BPF_LDX | BPF_MEM_PERCPU | BPF_B:
+> > +             case BPF_LDX | BPF_MEM_PERCPU | BPF_H:
+> > +             case BPF_LDX | BPF_MEM_PERCPU | BPF_W:
+> > +             case BPF_LDX | BPF_MEM_PERCPU | BPF_DW:
+> > +                     insn_off =3D insn->off;
+> > +                     EMIT1(0x65); /* gs segment modifier */
+> > +                     emit_ldx(&prog, BPF_SIZE(insn->code), dst_reg, sr=
+c_reg, insn_off);
+> > +                     break;
+> > +
+> > +             /* internal-only load-effective-address-of per-cpu offset=
+ */
+> > +             case BPF_LDX | BPF_ADDR_PERCPU | BPF_DW: {
+> > +                     u32 off =3D (u32)(void *)&this_cpu_off;
+> > +
+> > +                     /* mov <dst>, <src> (if necessary) */
+> > +                     EMIT_mov(dst_reg, src_reg);
+> > +
+> > +                     /* add <dst>, gs:[<off>] */
+> > +                     EMIT2(0x65, add_1mod(0x48, dst_reg));
+> > +                     EMIT3(0x03, add_1reg(0x04, dst_reg), 0x25);
+> > +                     EMIT(off, 4);
+> > +
+> > +                     break;
+> > +             }
+> >               case BPF_STX | BPF_ATOMIC | BPF_W:
+> >               case BPF_STX | BPF_ATOMIC | BPF_DW:
+> >                       if (insn->imm =3D=3D (BPF_AND | BPF_FETCH) ||
+>
+> [..]
+>
+> > +/* Per-CPU zero-extending memory load (internal-only) */
+> > +#define BPF_LDX_MEM_PERCPU(SIZE, DST, SRC, OFF)                      \
+> > +     ((struct bpf_insn) {                                    \
+> > +             .code  =3D BPF_LDX | BPF_SIZE(SIZE) | BPF_MEM_PERCPU,\
+> > +             .dst_reg =3D DST,                                 \
+> > +             .src_reg =3D SRC,                                 \
+> > +             .off   =3D OFF,                                   \
+> > +             .imm   =3D 0 })
+> > +
+> > +/* Load effective address of a given per-CPU offset */
+> > +#define BPF_LDX_ADDR_PERCPU(DST, SRC, OFF)                   \
+>
+> Do you need OFF here? It seems the above is using &this_cpu_off.
 
-sure.
+Nope, I don't. I already changed it to BPF_MOV instruction with no
+off, as suggested by Alexei.
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+>
+> > +     ((struct bpf_insn) {                                    \
+> > +             .code  =3D BPF_LDX | BPF_DW | BPF_ADDR_PERCPU,    \
+> > +             .dst_reg =3D DST,                                 \
+> > +             .src_reg =3D SRC,                                 \
+> > +             .off   =3D OFF,                                   \
+> > +             .imm   =3D 0 })
+> > +
