@@ -1,146 +1,154 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98CC7159910
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 17:22:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3437F17582;
+	Tue,  2 Apr 2024 17:39:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712078554; cv=none; b=GKlIwCipZmjpRmQ3cSudhhRBNZcD7HHwBIGx3iBI4Fya1HrIEE9fcfkbaCGczStAXN6lW1d/WG9VTC/O12xEL8n52PPldzH6PZBLBvYDxS/rX6uz9DT+SHGByWY/dvFpUmBgdcJsf83cqA59g4Cn3CAoa0IpATNsGTU3yieKzzk=
+	t=1712079546; cv=none; b=kjAHJucMepUq61tjI1ZqWsKfhv3BMre2Ju3HxlbQt1GjvbKb7ddzuYhCrXGHfa/I4V3XOfneo5qL5ZG4aRLV2vxRlgMq8y304xU8CdsHQSw3+HnB1M2CdpWsYRTPmHx4hPr2Y6iteDR1/q8yQlBZv/bOuAa2Bc+5OgNn+daT5KI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712078554; c=relaxed/simple;
-	bh=SoajwR0DfrmN56AEjqNvoe8dLrC+clO2g3+8VFBVTmE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AKxSIMZCtZkv1rawP61kNvdG0zA/OlwwbfbrSORXHMB2ivMitMo9uEpDKqtQlurrcktFH2O9QsvS3tkyxAsVYVOrmn9WHP4T15wy651++R9Yicox24HnBynn5c2zrx5FG0tenqQPUNoi8BLvdgPAWCuspCQH+d53eqVaaSkwHw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JqfWjHbA; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712079546; c=relaxed/simple;
+	bh=iuUzdNaQSKYbJhisLenP0E9J+WcZmYbuya8DASpXt2s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S38gH699ud7fJi6leIoQyKhhnNZr6mTZOoeDZX7blJ6vZI/zJderesXNGm9b2Cc2a2Wd4AAufnagE/paHCb86ukNAGIQfrqFVhK0vf/3rwNoDz3EV0cWxjQiJfQdX90TCTVOxeb3vlV1s9Ax+yBmNTB992YLyIax80nw62S7+AY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tKVKUlw1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JqfWjHbA"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2a074187a42so4069739a91.0
-        for <bpf@vger.kernel.org>; Tue, 02 Apr 2024 10:22:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712078552; x=1712683352; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i3cPJ+qvlUi7HnMAr2QVq81R+L9lvT7uXAYucATccgM=;
-        b=JqfWjHbAlpD5C8WFvkS4nNNCegn8zsWgK6lo5oSOWn9KuvyRF0fVhfWyN6n7YDiIz7
-         0FiFdKJbkgpIh1+AUKsbHfA0iRljmUBDE5sg3cLlrBLkEYY9/PI2GJeS9wK7AAEGXLij
-         zsEaH3b5GfUuR4XeHKQPxPuKaU8yrF+2M7ocuiviyL/yL327xr8jNiL4EtwYBP4+ySVj
-         NUPhsLTTmDzWD6KMJzz6X11e7CqPA8BAqv4UYZtixipWsMD4ycFsPtyZc54Zr5Wyyeje
-         CVPTh4NPOR/v9z6AK48L6iPMwfFY1VfSUokL+AhXsp54WvOCEE00LzaRRzdrzO2fXdt3
-         L7NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712078552; x=1712683352;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i3cPJ+qvlUi7HnMAr2QVq81R+L9lvT7uXAYucATccgM=;
-        b=Fv5Uzwz7ful2Bzz1+zqd/DfCtgaE8Sl/wkizA7RFYykBRc59ZWte6HnBvtUgB2lvkg
-         5vH/gNyuqf8kNEnTYGTNrA9RdVDMqeC0CvKH0NTbv4JOh29C4vre6MqDo8BWbQrLcGtI
-         //hoYyzLKLepMfTdYrxBXqNw+KVNfnTDSHTsW+hjlw+tnwnLufHeieM3tS/M6MS1MIT4
-         kywMs/tdEzc45YPh9OQ9cgNlkwtwmgtwIxziNmj7XAJP7oL0rCacVPSSBIPpv4BtiuHT
-         ez+YNfRt0VZbHoNgftGIhkw+948hXQyQMDTSlOk9b5l8VuHe8/1p/BQXI2UHBvHjp6Kk
-         Tr3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW+H8E46Cw8ZI/J17qARpcjV/E78v2wpZgvICTCUPsVvZbpw17ESfe7LK9YldIpz5CKOKW/oUGvx+85flunWwF/dCKy
-X-Gm-Message-State: AOJu0YwTWczufLVOJ9Thevk0UJEGxgDlfYlgTTw7d7rIOuUhV6McWkqG
-	+wqQ0K/Z4Ct0lFGw2bro1DdG2kLvm5oeHxlbUadLcMGT4JEUZlSvSFvFDiRT3P9UE07u7hk3Y8G
-	zdxidKVb/86BkViZ36yLTKy4ctdc=
-X-Google-Smtp-Source: AGHT+IG8YEhr6hk58IRdLQwoLnXSaCDbvJdoFnkB0NY2HYQG+B10QWQUDu/00xvSlTr1kdIfjVTloJjDh4NQABXuagM=
-X-Received: by 2002:a17:90a:df15:b0:2a0:97f0:955e with SMTP id
- gp21-20020a17090adf1500b002a097f0955emr10675199pjb.37.1712078551753; Tue, 02
- Apr 2024 10:22:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tKVKUlw1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E4EFC433F1;
+	Tue,  2 Apr 2024 17:39:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712079545;
+	bh=iuUzdNaQSKYbJhisLenP0E9J+WcZmYbuya8DASpXt2s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tKVKUlw15t7FfFKLMMtxwRqwjPeFGT36YApX7IhVNk3b/q3ijsFahhBFtlje5u+No
+	 l2/U9B75nnNLyZ6U2sHgLyfwP69C7AnTfc2nvctjtN0kQfvXwG6zH27EKxgph1JuUV
+	 1lNGWeIaZ+PYxIDuAVSoSbGen5qcTP889I6D7552on12CgDSmX90EcD3o//b8ngv3l
+	 PmqNUInpu6ypYoHSUx5klqlwCUXyyRfEY6ttbU0SxI5lFnhCJ5svNDwU147MfiOXqV
+	 tcyuQdf+U/buPHlFGCD28ZWYSfgcpozRWVFkGuQ7gRsVE/H0BVKmmsPXrryHBBEaTb
+	 IwMWaZypB+Snw==
+Date: Tue, 2 Apr 2024 18:38:59 +0100
+From: Conor Dooley <conor@kernel.org>
+To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
+Cc: Pu Lehui <pulehui@huaweicloud.com>, Stefan O'Rear <sorear@fastmail.com>,
+	bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+	netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Manu Bretelle <chantr4@gmail.com>,
+	Pu Lehui <pulehui@huawei.com>
+Subject: Re: [PATCH bpf-next 2/5] riscv, bpf: Relax restrictions on Zbb
+ instructions
+Message-ID: <20240402-ample-preview-c84edb69db1b@spud>
+References: <20240328124916.293173-1-pulehui@huaweicloud.com>
+ <20240328124916.293173-3-pulehui@huaweicloud.com>
+ <3ed9fe94-2610-41eb-8a00-a9f37fcf2b1a@app.fastmail.com>
+ <20240328-ferocity-repose-c554f75a676c@spud>
+ <ed3debc9-f2a9-41fb-9cf9-dc6419de5c01@huaweicloud.com>
+ <87cyr7rgdn.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240331034154.16284-1-laoar.shao@gmail.com>
-In-Reply-To: <20240331034154.16284-1-laoar.shao@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 2 Apr 2024 10:22:19 -0700
-Message-ID: <CAEf4BzZnLNg9dKF1knkPohzP+4cw_4W9QhUuXQaNA88pGwiLLQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 0/2] bpf: Add a generic bits iterator
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com, 
-	haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="rDUw0N+1zEfzL5kD"
+Content-Disposition: inline
+In-Reply-To: <87cyr7rgdn.fsf@all.your.base.are.belong.to.us>
+
+
+--rDUw0N+1zEfzL5kD
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Mar 30, 2024 at 8:44=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> =
-wrote:
->
-> Three new kfuncs, namely bpf_iter_bits_{new,next,destroy}, have been
-> added for the new bpf_iter_bits functionality. These kfuncs enable the
-> iteration of the bits from a given address and a given number of bits.
->
-> - bpf_iter_bits_new
->   Initialize a new bits iterator for a given memory area. Due to the
->   limitation of bpf memalloc, the max number of bits to be iterated
->   over is (4096 * 8).
-> - bpf_iter_bits_next
->   Get the next bit in a bpf_iter_bits
-> - bpf_iter_bits_destroy
->   Destroy a bpf_iter_bits
->
-> The bits iterator can be used in any context and on any address.
->
-> Changes:
-> - v4->v5:
->   - Simplify test cases (Andrii)
+On Tue, Apr 02, 2024 at 04:25:24PM +0200, Bj=F6rn T=F6pel wrote:
+> Pu Lehui <pulehui@huaweicloud.com> writes:
+>=20
+> > On 2024/3/29 6:07, Conor Dooley wrote:
+> >> On Thu, Mar 28, 2024 at 03:34:31PM -0400, Stefan O'Rear wrote:
+> >>> On Thu, Mar 28, 2024, at 8:49 AM, Pu Lehui wrote:
+> >>>> From: Pu Lehui <pulehui@huawei.com>
+> >>>>
+> >>>> This patch relaxes the restrictions on the Zbb instructions. The har=
+dware
+> >>>> is capable of recognizing the Zbb instructions independently, elimin=
+ating
+> >>>> the need for reliance on kernel compile configurations.
+> >>>
+> >>> This doesn't make sense to me.
+> >>=20
+> >> It doesn't make sense to me either. Of course the hardware's capability
+> >> to understand an instruction is independent of whether or not a
+> >> toolchain is capable of actually emitting the instruction.
+> >>=20
+> >>> RISCV_ISA_ZBB is defined as:
+> >>>
+> >>>             Adds support to dynamically detect the presence of the ZBB
+> >>>             extension (basic bit manipulation) and enable its usage.
+> >>>
+> >>> In other words, RISCV_ISA_ZBB=3Dn should disable everything that atte=
+mpts
+> >>> to detect Zbb at runtime. It is mostly relevant for code size reducti=
+on,
+> >>> which is relevant for BPF since if RISCV_ISA_ZBB=3Dn all rvzbb_enable=
+d()
+> >>> checks can be constant-folded.
+> >
+> > Thanks for review. My initial thought was the same as yours, but after=
+=20
+> > discussions [0] and test verifications, the hardware can indeed=20
+> > recognize the zbb instruction even if the kernel has not enabled=20
+> > CONFIG_RISCV_ISA_ZBB. As Conor mentioned, we are just acting as a JIT t=
+o=20
+> > emit zbb instruction here. Maybe is_hw_zbb_capable() will be better?
+>=20
+> I still think Lehui's patch is correct; Building a kernel that can boot
+> on multiple platforms (w/ or w/o Zbb support) and not having Zbb insn in
+> the kernel proper, and iff Zbb is available at run-time the BPF JIT will
+> emit Zbb.
 
-hm... I think you oversimplified them :) Your negative tests are good,
-but there is now no "positive" test that shows that iterator functions
-properly. I'd suggest to add few positive tests (still within
-RUN_TESTS framework) using __retval (grep for other use cases using
-it) to check actual values.
+This sentence is -ENOPARSE to me, did you accidentally omit some words?
+Additionally he config option has nothing to do with building kernels that
+boot on multiple platforms, it only controls whether optimisations for Zbb
+are built so that if Zbb is detected they can be used.
 
-I think you need to validate that iterator works for:
+> For these kind of optimizations, (IMO) it's better to let the BPF JIT
+> decide at run-time.
 
-a) bit mask  smaller than 8 bytes (and also maybe number of bits that
-are not multiple of 8, e.g., have 20 bit bitmask, but set entire
-32-bit value to 1s, check that you get only 20 iterator next()
-returns)
+Why is bpf a different case to any other user in this regard?
+I think that the commit message is misleading and needs to be changed,
+because the point "the hardware is capable of recognising the Zbb
+instructions independently..." is completely unrelated to the purpose
+of the config option. Of course the hardware understanding the option
+has nothing to do with kernel configuration. The commit message needs to
+explain why bpf is a special case and is exempt from an=20
 
-b) a typical case of having 8-byte bit mask (you can have some
-irregular pattern of bits, like 0b1111000111001101, and calculate a
-sum of bit positions, returned for __retval check. This will catch
-endianness issues, if there are still any.
+I totally understand any point about bpf being different in terms of
+needing toolchain support, but IIRC it was I who pointed out up-thread.
+The part of the conversation that you're replying to here is about the
+semantics of the Kconfig option and the original patch never mentioned
+trying to avoid a dependency on toolchains at all, just kernel
+configurations. The toolchain requirements I don't think are even super
+hard to fulfill either - the last 3 versions of ld and lld all meet the
+criteria.
 
-c) another typical case where bit mask is > 8 bytes (same idea with
-position sum would work, but probably just counting number of bits
-would be enough)
 
-pw-bot: cr
+--rDUw0N+1zEfzL5kD
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> - v3->v4:
->   - Fix endianness error on s390x (Andrii)
->   - zero-initialize kit->bits_copy and zero out nr_bits (Andrii)
-> - v2->v3:
->   - Optimization for u64/u32 mask (Andrii)
-> - v1->v2:
->   - Simplify the CPU number verification code to avoid the failure on s39=
-0x
->     (Eduard)
-> - bpf: Add bpf_iter_cpumask
->   https://lwn.net/Articles/961104/
-> - bpf: Add new bpf helper bpf_for_each_cpu
->   https://lwn.net/Articles/939939/
->
-> Yafang Shao (2):
->   bpf: Add bits iterator
->   selftests/bpf: Add selftest for bits iter
->
->  kernel/bpf/helpers.c                          | 120 ++++++++++++++++++
->  .../selftests/bpf/prog_tests/verifier.c       |   2 +
->  .../selftests/bpf/progs/verifier_bits_iter.c  |  57 +++++++++
->  3 files changed, 179 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/progs/verifier_bits_iter.=
-c
->
-> --
-> 2.39.1
->
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZgxCswAKCRB4tDGHoIJi
+0mUNAP4xNbI++bzEaHK6ZDR1lMX+P5ARgZL9DZ1skHQEVLlnYAD9GL99/nj02IYH
+DN80f4mQlfeKWfcBAemilpEjnr5KugQ=
+=6qti
+-----END PGP SIGNATURE-----
+
+--rDUw0N+1zEfzL5kD--
