@@ -1,152 +1,171 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-io1-f73.google.com (mail-io1-f73.google.com [209.85.166.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E0C72260B;
-	Tue,  2 Apr 2024 23:40:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC4B45C5EE
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 23:52:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712101225; cv=none; b=T+L9i4q4VJdRnBal/vUBeQ4z7YNi4Ncb2xU3ZJxdvuLdsNw+nV7BF2xSgmMkYOrT7mXww99E3HgXLLmFkZW+m4FhNSuFwJ5CHA57/Wd3XgZfbzAmQjt7/Xg9UqlCyswADOIOO8H8vNUSTfdn7nDCndPJfzA37ojIfHqOEZrhgak=
+	t=1712101976; cv=none; b=MUtY40GRyjjYBgMqxo3Qa0V8wmSjpeXYzWB7Zmu9F1EgkNh/U+OnV66bpxs4ODXLLUsPbeVJHymMDdWGOoo398GG2yBV1htXk7pBREhqeDHJebgRVvTMLxmkUFVAOr7SMnvFtvbavXskrp2tR2XOCkVW12zRV0O9+/8zI7nT/kE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712101225; c=relaxed/simple;
-	bh=x6z872LQ9vBBcv0Ttum6VN6DVyYSl4z83zhLtUBuoJY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fjD+3+YuodI/vh2ZsFb+ciMZrj7lRKCK4pBDRqkMWvpmhbthXCnQGo+s6ptFztpxALHqDH6fJlirINkmzm3nUNlJCM8si4zKmptseIAiiV4YJS7h49uG0xTyi7B4wdcy0kLGJvP0y8zIEfKJkspIXZqjTykxVY6MVntQUDS8ch0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SvqZ6zcZ; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712101976; c=relaxed/simple;
+	bh=9LtQU8UiOsgDWvjTc1/6rw/QlwvMZqMAcV47wDqmoxI=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=I/XkJ+pqPxZow5BL1Za3Ucp66wa/cyZ3e6oSfhZGhQ3iGmabf3+QXsUC71UVmzJnwXzFky8aO2PsOP9iZmBORa1M/eJupfPN3RX8zbXJOgUM1a5uOg4W0L5s6xE5GzHKR+UxzdwD6sUjA/fkC85BPaC2VtkeeISjYP4WPZRsbYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oRz2Ao/X; arc=none smtp.client-ip=209.85.166.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SvqZ6zcZ"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-56df87057bbso1038781a12.3;
-        Tue, 02 Apr 2024 16:40:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oRz2Ao/X"
+Received: by mail-io1-f73.google.com with SMTP id ca18e2360f4ac-7cbf2ff0e33so564821339f.1
+        for <bpf@vger.kernel.org>; Tue, 02 Apr 2024 16:52:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712101222; x=1712706022; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=loPuGZvFw7w7LRVaWYgctsCo+62m5RzROUBjXyR2dwA=;
-        b=SvqZ6zcZBV9poNU5TXo/iUYMvOAd6m0NxFoKU+smi+NOA8dBR2lzD0oTfbVAhWJnQ6
-         ZPidP4TPSjAawSN+lVoacAFf0DJV9jRVZgXDCg0t405CZMIagz8D8mH96xl1my+k0Ml2
-         RFUcTGpWhhVcv1pLRInmKEIY5OX07s/axTF+kUr0jI57lCRM0NlcksXi0Eg55ktFFkDz
-         ggMhB2QEuD4vVyxoonQyB15eXShuu7GBiHjO30lphCIcLlyvwwJ6GlpHrEaCL8hKqpn8
-         BLpUjnRvKKp69QGXDSUK0CKS1YdiO79r3oRSEqcQMBN7/vW5RcCouzScRTDIbLl0axQq
-         Sc2g==
+        d=google.com; s=20230601; t=1712101974; x=1712706774; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Tvk0aVaJ4x37W0/x3VCM6LH3wJVHl8Qg2TqljtL5b2o=;
+        b=oRz2Ao/XoQ7glDcZCVLaAH99iMHnihwaiXmPLUjnpCJzsmrJj9QPLgP2RH/LqNS2V0
+         zJnvdXYjQG1dX+8VXDEK7UHbJvTmqUX/v0gm7XAlvrVLT91RmVfT/EMQGjpJJJZnUo9L
+         /6ZScogHwW9Ki2feNrKoMu1q5wBmASCw2lqCZTZiHBPLXetiQLdq8afsFjg2rN0ScgMi
+         cMaxEh+bXAP2mK2oi2VrewM9b1BVKFSceKO+tav6xS/xy0HGUIPlCD9LzapevdwZyINl
+         6Le4hRPF3mmO0c40jvMWcGzq2bxfJt2L0bS4s8QwLP7KVbePFsQISGOriRjIgUAUVcAY
+         zcRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712101222; x=1712706022;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=loPuGZvFw7w7LRVaWYgctsCo+62m5RzROUBjXyR2dwA=;
-        b=ZDzdVOphI7zOJQQP0yTj0bABUJ8EtKH3pt6JjZqeRm+HFao8oxQzu5kQwzfDi0e+ss
-         ney/5Vf4N2Bp0u4BskogxfmoSkWploHWZAh18lixDPczh/rEr5hb9/nh/E+/DrFCwPaG
-         3+G6/xioUwhRcH3f5srx+dk7dchywvpLmfs95M3hkNa4jxKYd0QZzESa9TxuOPfyMqEr
-         dtx7VwWC9QRm0/vSgcEEkoyW+mW2Zpay3CrLQP4ITUSdiT787s95X3lZCktpeL/6qe15
-         IZ7VF8i9L7CdGGpklxfqUMBXFYH+UW930hHKjRBOHLDcc5oSgZqNv4a/UKGIZFcfKnoE
-         +w7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUW2fSGgL0Z0rjQXjc/qVH+UA3bDw8xwpW9Jgth40HfdOoR0uVv3RnBIlCu+vNrCDLRGHoXK0vf27APE6g7B/Mh8+6b4kA3lsZftbwl5atQniwFyCppGfl0H86K
-X-Gm-Message-State: AOJu0Yyz4+ijXhF/v3UtHX8MeEhMm8abT0vf+nxyAEPFc2JKd/qD/JHT
-	rsdLgURI+1JCaW9A8Xmn1I6KNxex32S87WnMvPwOLpBGMTYvI07K
-X-Google-Smtp-Source: AGHT+IE4IvdVSybvfrO0pA7dyCkt2gquEU61qYsV7TNGj5+LUts+YXpDVQv9SuIOKyWehdTwysjT6Q==
-X-Received: by 2002:a17:906:e202:b0:a47:5182:3b83 with SMTP id gf2-20020a170906e20200b00a4751823b83mr7710360ejb.61.1712101222329;
-        Tue, 02 Apr 2024 16:40:22 -0700 (PDT)
-Received: from [192.168.100.206] ([89.28.99.140])
-        by smtp.gmail.com with ESMTPSA id gc9-20020a170906c8c900b00a4e440989f5sm5056824ejb.159.2024.04.02.16.40.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Apr 2024 16:40:21 -0700 (PDT)
-Message-ID: <f20d1e2a2f5fa10f29bf1fddbaf99c3f185e8530.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 0/5] Support local vmtest for riscv64
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, netdev@vger.kernel.org
-Cc: =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
- <song@kernel.org>, Yonghong Song <yhs@fb.com>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>,  Mykola Lysenko <mykolal@fb.com>, Manu Bretelle
- <chantr4@gmail.com>, Pu Lehui <pulehui@huawei.com>
-Date: Wed, 03 Apr 2024 02:40:19 +0300
-In-Reply-To: <52117f9c-b691-409f-ad2a-a25f53a9433d@huaweicloud.com>
-References: <20240328124916.293173-1-pulehui@huaweicloud.com>
-	 <32b3358903bf8ba408812a2636f39a275493eb91.camel@gmail.com>
-	 <e995a1f1-0b48-4ce3-a061-5cbe68beb6dd@huaweicloud.com>
-	 <f91237f311f183d57c4620bc2e6099df8aefccb0.camel@gmail.com>
-	 <52117f9c-b691-409f-ad2a-a25f53a9433d@huaweicloud.com>
-Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+        d=1e100.net; s=20230601; t=1712101974; x=1712706774;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Tvk0aVaJ4x37W0/x3VCM6LH3wJVHl8Qg2TqljtL5b2o=;
+        b=UrW/V2oqZ6mknicQJkPESWjigxTZnHyI9GJa4UFSYJ610/cJPoL+qum98FMkuZ6TwT
+         QrK8IPEIJ4BvUAfM8Jsg4RdygoH2Dg8MqA+5SYJubVSQUa9z5ACX1bqhjH3boeCdIxHy
+         cpXgrVKCnN8pjxtPYgo5kknMjLvxbF8ivaTlLuvXskVXhiUgHkde2EYRvgN3LKPLxo15
+         2DtCwfDPCZ4z2dkVzkk3xvsplUUC/KdCO+9Xv5NTS8VKsXV8eVV0k+9wVHceHC5xDEBT
+         23FGQkcnFsS7dULyFT6vr/V5gnzZv5mcZ3fawghRMW3UQPpDa0bbtkAoZZ9/PtU8jOmJ
+         UFmg==
+X-Gm-Message-State: AOJu0YzMkYPHlWfBUgWM6y1IFPNktzcEB7GjSqZ3PiCuYnsChT2GiQB3
+	nbUzIhlAXlrPGJmROVAYy/fU3SV5loVimjTmw0P/lueoF+xgi3OMeF5OYRDllKUv9RPtUnRhZ/T
+	xx97J71QrGIp+1tbuHUNCsQ==
+X-Google-Smtp-Source: AGHT+IHqfntMZvEh1IDSUP5f1hWGOYNSwBw+18ziFh0WsvD10M9EC1a4tUtqLDDJLrDg+I4iAyRRGaMZVfbPd0kinA==
+X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
+ (user=justinstitt job=sendgmr) by 2002:a05:6602:2c09:b0:7d0:3aa9:94db with
+ SMTP id w9-20020a0566022c0900b007d03aa994dbmr603145iov.3.1712101974132; Tue,
+ 02 Apr 2024 16:52:54 -0700 (PDT)
+Date: Tue, 02 Apr 2024 23:52:50 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAFGaDGYC/x3MywqDMBBG4VeRWXcghoiXV5EuavzTDi0xTEQq4
+ rsbXH6Lcw7KUEGmoTpIsUmWJRbUj4r85xXfYJmLyRrrjDOW86rRp52/0IgfTymwXxTs2c2d7dv QN6g7Kn1SBPnf7/F5nhfph1hDawAAAA==
+X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1712101973; l=2998;
+ i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
+ bh=9LtQU8UiOsgDWvjTc1/6rw/QlwvMZqMAcV47wDqmoxI=; b=9eawufW76cipSSrsORhJnGqUMNurLvEpfUyoII8eluIWnnZohNwLUI4Ga3x/2S39PDuLyAWM7
+ vhLFRLTK1VuAkgtgTTd42TrWoz+DfOiAW/9po4OuSCw0r10GMfSFmV4
+X-Mailer: b4 0.12.3
+Message-ID: <20240402-strncpy-kernel-bpf-core-c-v1-1-7cb07a426e78@google.com>
+Subject: [PATCH] bpf: replace deprecated strncpy with strscpy
+From: Justin Stitt <justinstitt@google.com>
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-hardening@vger.kernel.org, Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Sat, 2024-03-30 at 18:12 +0800, Pu Lehui wrote:
-[...]
+strncpy() is deprecated for use on NUL-terminated destination strings
+[1] and as such we should prefer more robust and less ambiguous string
+interfaces.
 
-> > Looks like I won't be able to test this patch-set, unless you have
-> > some writeup on how to create a riscv64 dev environment at hand.
-> > Sorry for the noise
->=20
-> Yeah, environmental issues are indeed a developer's nightmare. I will=20
-> try to do something for the newcomers of riscv64 bpf. At present, I have=
-=20
-> simply built a docker local vmtest environment [0] based on Bjorn's=20
-> riscv-cross-builder. We can directly run vmtest within this environment.=
-=20
-> Hopefully it will help.
->=20
-> Link: https://github.com/pulehui/riscv-cross-builder/tree/vmtest [0]
+bpf sym names get looked up and compared/cleaned with various string
+apis. This suggests they need to be NUL-terminated (strncpy() suggests
+this but does not guarantee it).
 
-Hi Pu,
+|	static int compare_symbol_name(const char *name, char *namebuf)
+|	{
+|		cleanup_symbol_name(namebuf);
+|		return strcmp(name, namebuf);
+|	}
 
-Thank you for sharing the docker file, I've managed to run the tests
-using it. In order to avoid creating files with root permissions I had
-to add the following lines at the end of the Dockerfile:
+|	static void cleanup_symbol_name(char *s)
+|	{
+|		...
+|		res = strstr(s, ".llvm.");
+|		...
+|	}
 
-+ RUN useradd --no-create-home --uid 1000 eddy
-+ RUN passwd -d eddy
-+ RUN echo 'eddy ALL=3D(ALL) NOPASSWD:ALL' >> /etc/sudoers
-+ # vmtest.sh does 'mount -o loop',
-+ # ensure there is a loop device in the container
-+ RUN mknod /dev/loop0 b 7 20
+Use strscpy() as this method guarantees NUL-termination on the
+destination buffer.
 
-Where 'eddy' is my local user with UID 1000.
-Probably this should be made more generic.
-I used the following command to start the container:
+This patch also replaces two uses of strncpy() used in log.c. These are
+simple replacements as postfix has been zero-initialized on the stack
+and has source arguments with a size less than the destination's size.
 
-docker run -ti -u 1000:1000 \
-    --rm -v <path-to-kernel-dir>:/workspace \
-    -v <path-to-rootfs-image-dir>:/rootfs \
-    --privileged ubuntu-vmtest:latest /bin/bash
+Note that this patch uses the new 2-argument version of strscpy
+introduced in Commit e6584c3964f2f ("string: Allow 2-argument
+strscpy()").
 
-Also, I had to add '-d /rootfs/bpf_selftests' option for vmtest.sh in
-order to avoid polluting user directory inside the container.
-Maybe OUTPUT_DIR for vmtest.sh should be mounted as a separate volume.
+Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
+Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
+Link: https://github.com/KSPP/linux/issues/90
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+Note: build-tested only.
 
-I agree with Daniel, it would be great to document all of this
-somewhere in the repo (or even scripted somehow).
+Found with: $ rg "strncpy\("
+---
+ kernel/bpf/core.c | 4 ++--
+ kernel/bpf/log.c  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Using the specified DENYLIST I get the following stats for test_progs:
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 696bc55de8e8..8c9078f4549c 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -747,7 +747,7 @@ const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
+ 		unsigned long symbol_start = ksym->start;
+ 		unsigned long symbol_end = ksym->end;
+ 
+-		strncpy(sym, ksym->name, KSYM_NAME_LEN);
++		strscpy(sym, ksym->name, KSYM_NAME_LEN);
+ 
+ 		ret = sym;
+ 		if (size)
+@@ -813,7 +813,7 @@ int bpf_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
+ 		if (it++ != symnum)
+ 			continue;
+ 
+-		strncpy(sym, ksym->name, KSYM_NAME_LEN);
++		strscpy(sym, ksym->name, KSYM_NAME_LEN);
+ 
+ 		*value = ksym->start;
+ 		*type  = BPF_SYM_ELF_TYPE;
+diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+index 2a243cf37c60..4bd8f17a9f24 100644
+--- a/kernel/bpf/log.c
++++ b/kernel/bpf/log.c
+@@ -467,9 +467,9 @@ const char *reg_type_str(struct bpf_verifier_env *env, enum bpf_reg_type type)
+ 
+ 	if (type & PTR_MAYBE_NULL) {
+ 		if (base_type(type) == PTR_TO_BTF_ID)
+-			strncpy(postfix, "or_null_", 16);
++			strscpy(postfix, "or_null_");
+ 		else
+-			strncpy(postfix, "_or_null", 16);
++			strscpy(postfix, "_or_null");
+ 	}
+ 
+ 	snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s",
 
-  #3/2     arena_htab/arena_htab_asm:FAIL
-  #3       arena_htab:FAIL
-  #95      get_branch_snapshot:FAIL
-  #172/1   perf_branches/perf_branches_hw:FAIL
-  #172     perf_branches:FAIL
-  #434/3   verifier_arena/basic_alloc3:FAIL
-  #434     verifier_arena:FAIL
-  Summary: 531/3581 PASSED, 64 SKIPPED, 4 FAILED
+---
+base-commit: 026e680b0a08a62b1d948e5a8ca78700bfac0e6e
+change-id: 20240402-strncpy-kernel-bpf-core-c-4d8297f95e18
 
-Tested-by: Eduard Zingerman <eddyz87@gmail.com>
+Best regards,
+--
+Justin Stitt <justinstitt@google.com>
 
-> PS: Since the current rootfs of riscv64 is not in the INDEX, I simply=20
-> modified vmtest.sh to support local rootfs.
-
-Could you please add this change to the patch-set?
-
-[...]
