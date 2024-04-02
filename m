@@ -1,75 +1,72 @@
-Received: from out203-205-251-72.mail.qq.com (out203-205-251-72.mail.qq.com [203.205.251.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7728414267
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 03:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.251.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20EC0DDBE
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 03:40:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712027351; cv=none; b=s8/GqXsqFslRSzeD1hViQbyTmtEUo2HNEX/TRGSY/SA6tcKmQlrr5Xm37NZprCa0RpS0rw5VCR1yB12Jx1KYuXjMtGqVVCyKQ3aLMGKWH7eCAozPUgQnz6hRs2wWi6fAFI06jrfJMM+RhxO0BRD5GhtBj+UXLZYh53jd5FYRe6w=
+	t=1712029257; cv=none; b=DCYpIYgNvmubgkTxbu/1BLSgzkbvpTpyQf8Fl70mfZ7IZv9lxcJCMfKaD+vCRmLt4jxhl9iZmXCFFMAxH4c2bJRhXAjrQT6hBd2h1fWcf4pfhTiPlFt0pFP3k0tRbaopXzf0uq3Ty4/fLlG0mW0rA2XxhnrW55i7WWhzZPd4294=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712027351; c=relaxed/simple;
-	bh=jq7gceLVPX+zUUkhBft5MXInIaSdwizfVP5WkNn2F2I=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=tt5aOPuQJHwgsWkPziPp7rE9/bnJVCxHrMg94ae9sVCVC//ijk3x+1KCpYt6bOkAVy/rtQDGZ+NF2HLj0nwh8ahzH+Kp8GmsIK2tYrOChhJYMo/gs2TFNHW1Iwl4bAI/9sXZk+AT7oDI4Djlrflz4C2SaKC/TKSlxcy2NeBHUnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=QyQLpEKr; arc=none smtp.client-ip=203.205.251.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	s=arc-20240116; t=1712029257; c=relaxed/simple;
+	bh=Sgh63qY1JfD8EdWXcI3hpU/Xo67ea599nAr0p4E7axw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CZGyNVhTGBG+2p1V9JV9q86mlFmkxNR4J7fn95339Sg/FjpCjcvqvNZ6gT6iyaNol+obL9Wq1UnksToBNXzlMgjYI717pVnlHnTNscRFUp28inITZgMk7AeU386RQTRJznB6tNmn4lWg3MFiZPY47dFlxLQEIOH+Lr1YMiijucI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=netflix.com; spf=pass smtp.mailfrom=netflix.com; dkim=pass (1024-bit key) header.d=netflix.com header.i=@netflix.com header.b=S1FDvp0T; arc=none smtp.client-ip=209.85.166.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=netflix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netflix.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="QyQLpEKr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1712027041; bh=f0et3YLWSIePPcZIcoiqWbK+lJdybPne5X9dc1FSB0Q=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=QyQLpEKr6ymwRVlMtzQpTnoVWszxP2UGL8XImHDRBdYlKoHquzhUaVPrGZSAmble0
-	 858pW1e/IpodSGG/BJZkhBoNefZG4/0WBAsAjs3W2e6EtpfOGgQN7scHiSarmne0xk
-	 C9hDGSvKKMnxSMrQpf6h3q4nfpi9Rx/bVrmgNspU=
-Received: from pek-lxu-l1.wrs.com ([111.198.228.153])
-	by newxmesmtplogicsvrszb9-1.qq.com (NewEsmtp) with SMTP
-	id F7B1269; Tue, 02 Apr 2024 11:03:55 +0800
-X-QQ-mid: xmsmtpt1712027035tl6wuhvyq
-Message-ID: <tencent_A4FA0DA89270DDAC5D8519424F9B0DB42507@qq.com>
-X-QQ-XMAILINFO: NDgMZBR9sMma0UugHJ1pNSaRgr38sPKTxRp/haZJnVNm9vIP2MTy5qQXnT4Kl9
-	 Bxylf2jnjlHZxRuO4spSyJJIUAI32a27hDt1d12XptYYjh1r6yN2WDBtL7lQSvX+gSUF7U5cox2T
-	 +ibjx3jonjUBt3JcJdgPAaRnQfkAuOqi0eeFn0k5VlTFtL/EEK1oaVaX3RtmGSPsjZlVexjSK8De
-	 4izbwYC4MBlVSFbUPsM1bjhBAHc5m5gBEakGMAFsZg0BFyf/xFGU6qFC8wFSthQ9lT6M7SErPm/A
-	 wZSNxQcTZM7yfqTosE94CgurG8ytN+iK9ADwpA4ouI9K6QSIevWDM6li4+16RAhpvKkM0ZSk4av5
-	 KVOWXksJniY4I+dnwtXuFajY7DJPZUPHpVCSIHRvGHvW5Clzjclnr3xVxH7ghJ34H/sJbx21TsWi
-	 qgBi7aCFftJ4EYYtyx+y6e0IeL702qI8yg/9IjLJP3GIVHj5hfb4O0LteEYLC3xtZpLaXyo4CQA4
-	 vh5bQ0kyvE/aWGiRvo92frVbIS6h4oSGo+pgnWWQdKeofgy3tRE7q60m0AGUb6GFwweCgrvUac8P
-	 w+liVGrPL2N6MK5kvkH0VXCvRVLhohNz/UYcwKqq1l5D81Hk+yxKchYp7wQPiLoI+aErZd3ONKsF
-	 qNv7r8ikBRwFAgeVrvr5/4dGSkg4Rt0y4xqu1Ay8UbwO3tDHeetiz85P/95xa0v5vLkWV5BKPhwn
-	 eGw2G1OpudxOYDmiC9izvt2xYuMzJY0xdVhTwRkSfPYXZ1pZxDqyvjKtxNwXovT2PbrM8qkXphcB
-	 MxiAh3hCOUL+3j0xqbAnK+/T2r2hJtvHy8lHOUt1EllGvA70CXrJnNPmA6as09hxmIz90a74Qn7i
-	 Xj1MT0Ket2oUtBzYkIIluzIPwRCZNTcgdMGzkhnQs3fhrAoib/MMDTLPCwJtnDEDPYHuRFPfyO9+
-	 /47o85sHyL/nORIBe654uxACky1r5p
-X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
-From: Edward Adam Davis <eadavis@qq.com>
-To: hawk@kernel.org
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	davem@davemloft.net,
-	eadavis@qq.com,
-	eddyz87@gmail.com,
-	haoluo@google.com,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	kuba@kernel.org,
+	dkim=pass (1024-bit key) header.d=netflix.com header.i=@netflix.com header.b="S1FDvp0T"
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-7cc01644f51so270767839f.2
+        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 20:40:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netflix.com; s=google; t=1712029255; x=1712634055; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uX8FY+yrv4e9F04J0bM9+L1yQ/5xwgRq+sJn0HZQg6k=;
+        b=S1FDvp0TCpC+mR3rNkqMxxSVnAr/kPdp7itzB5hejlT/qpveIMtQtN+9UpZ+zLYwCr
+         2bfVcnOqY86MxdHJp0vXR3Qr20BYzvyTXDv1F6f6ks4pRtb3XCxJZ9KUt/zzMsd5qL05
+         gP6r49eZ0GUehH62HRlR4taVmJcL3CJ4RK3i4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712029255; x=1712634055;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uX8FY+yrv4e9F04J0bM9+L1yQ/5xwgRq+sJn0HZQg6k=;
+        b=AvteRuEmzbVcc2ZEacOZlpUDRtRNnwI9WIoMypkxmkS2liCKiFe0soP5mkaMK0dvjg
+         d2sFe2MOEt4HLYNmJb9MUukYD6SW+khp6o3k6WgD1QDhq2gBF7Ge8f0q1mgcmNwZ+rqE
+         b0Y1uJSiImSO59N5bQ1LE5zhdWSlHdKN2xl8BWcw5ex8rr4D7b5zNQR4CDLWWGkCzeoE
+         t+p7bVJpLnxNE6MbtRP6E5HQyiBqkAggmC9JoY3CR7wO2fzkyfMaIKsyzL8wDJ5l+WYj
+         B2M7dV+MGOHebNADTSaac9nmHGf4cSqH7FsetqCdo+Y9iAFWBYF/up/V8xQqcc/x6MuP
+         F76Q==
+X-Gm-Message-State: AOJu0YwJRSAC0t2sahzZlpJmiA+cWD/XI2QO/1L4qyBcvrf7g2Xlodhd
+	DCEv8SYOsFbNeq8fJOCYyXpG38RPzOMdRHa7Q153K/TEX1CFHdUkIWUXdOD71zUGdDwUe51v3Bk
+	cdYY2UA==
+X-Google-Smtp-Source: AGHT+IEVZFp5NogyCjeODd2w7QwpYPWEJeno9InvtwF7nz44KJMu9yq9vyGYzyosKFmM88AZh0ZkRA==
+X-Received: by 2002:a05:6602:2741:b0:7d0:883d:ee02 with SMTP id b1-20020a056602274100b007d0883dee02mr13010287ioe.18.1712029255281;
+        Mon, 01 Apr 2024 20:40:55 -0700 (PDT)
+Received: from localhost ([2601:285:8700:8f20:4221:ce52:3081:c975])
+        by smtp.gmail.com with UTF8SMTPSA id r15-20020a6b5d0f000000b007d03f311753sm3195270iob.51.2024.04.01.20.40.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Apr 2024 20:40:54 -0700 (PDT)
+From: Jose Fernandez <josef@netflix.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	martin.lau@linux.dev,
-	netdev@vger.kernel.org,
-	sdf@google.com,
-	song@kernel.org,
-	syzbot+af9492708df9797198d6@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH] bpf: fix null ptr deref in dev_map_enqueue
-Date: Tue,  2 Apr 2024 11:03:56 +0800
-X-OQ-MSGID: <20240402030355.1789902-2-eadavis@qq.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <f45ad3e1-4433-422e-be28-17deaba4ade1@kernel.org>
-References: <f45ad3e1-4433-422e-be28-17deaba4ade1@kernel.org>
+	Jose Fernandez <josef@netflix.com>
+Subject: [PATCH bpf-next] bpf: Improve program stats run-time calculation
+Date: Mon,  1 Apr 2024 21:40:10 -0600
+Message-Id: <20240402034010.25060-1-josef@netflix.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,67 +75,72 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Mon, 1 Apr 2024 13:00:12 +0200, Jesper Dangaard Brouer wrote:
-> > [Fix]
-> > On the execution path of bpf_prog_test_run(), due to ri->map being NULL,
-> > ri->tgtvalue was not set correctly.
-> >
-> > Reported-and-tested-by: syzbot+af9492708df9797198d6@syzkaller.appspotmail.com
-> > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
-> > ---
-> >   kernel/bpf/devmap.c | 6 +++++-
-> >   1 file changed, 5 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-> > index 4e2cdbb5629f..ef20de14154a 100644
-> > --- a/kernel/bpf/devmap.c
-> > +++ b/kernel/bpf/devmap.c
-> > @@ -86,6 +86,7 @@ struct bpf_dtab {
-> >   static DEFINE_PER_CPU(struct list_head, dev_flush_list);
-> >   static DEFINE_SPINLOCK(dev_map_lock);
-> >   static LIST_HEAD(dev_map_list);
-> > +static bool is_valid_dst(struct bpf_dtab_netdev *obj, struct xdp_frame *xdpf);
-> >
-> >   static struct hlist_head *dev_map_create_hash(unsigned int entries,
-> >   					      int numa_node)
-> > @@ -536,7 +537,10 @@ int dev_xdp_enqueue(struct net_device *dev, struct xdp_frame *xdpf,
-> >   int dev_map_enqueue(struct bpf_dtab_netdev *dst, struct xdp_frame *xdpf,
-> >   		    struct net_device *dev_rx)
-> >   {
-> > -	struct net_device *dev = dst->dev;
-> > +	struct net_device *dev;
-> > +	if (!is_valid_dst(dst, xdpf))
-> 
-> This is overkill, because __xdp_enqueue() already contains most of the
-> checks in is_valid_dst().
-> 
-> Why not:
-> 
->   if (!dst)
-> 	return -EINVAL;
-This can work, but I think is_valid_dst() is better, as its internal inspection
-of dst is more thorough.
-> 
-> 
-> > +		return -EINVAL;
-> > +	dev = dst->dev;
-> >
-> >   	return __xdp_enqueue(dev, xdpf, dev_rx, dst->xdp_prog);
-> >   }
-> 
-> 
-> Is this fix pampering over another issue?
-> 
-> To repeat myself:
-> I think something is wrong in xdp_test_run_batch().
-> The `ri->tgt_value` is being set in __bpf_xdp_redirect_map(), but I
-> cannot see __bpf_xdp_redirect_map() being used in xdp_test_run_batch().
-As I mentioned earlier, because the value of "ri->map" is NULL, even if it can 
-be executed to __bpf_xdp_redirect_map(), it is meaningless because "ri->map" is
-used internally to set "ri->tgt_value".
-> 
-> Is this a case of XDP program returning XDP_REDIRECT without having
-> called the BPF helper for redirect?
+This patch improves the run-time calculation for program stats by
+capturing the duration as soon as possible after the program returns.
+Previously, the duration included u64_stats_t operations. While the
+instrumentation overhead is part of the total time spent when stats are
+enabled, distinguishing between the program's native execution time and
+the time spent due to instrumentation is crucial for accurate
+performance analysis. By making this change, the patch facilitates more
+precise optimization of BPF programs, enabling users to understand their
+performance in environments without stats enabled.
 
-Edward
+I used a virtualized environment to measure the run-time over one minute
+for a basic raw_tracepoint/sys_enter program, which just increments a
+local counter. Although the virtualization introduced some performance
+degradation that could affect the results, I observed approximately a
+16% decrease in average run-time reported by stats with this change
+(310 -> 260 nsec).
+
+Signed-off-by: Jose Fernandez <josef@netflix.com>
+---
+ include/linux/filter.h  | 5 ++++-
+ kernel/bpf/trampoline.c | 3 ++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 44934b968b57..2a8eb6fe2489 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -654,14 +654,17 @@ static __always_inline u32 __bpf_prog_run(const struct bpf_prog *prog,
+ 	cant_migrate();
+ 	if (static_branch_unlikely(&bpf_stats_enabled_key)) {
+ 		struct bpf_prog_stats *stats;
++		u64 duration;
+ 		u64 start = sched_clock();
+ 		unsigned long flags;
+ 
+ 		ret = dfunc(ctx, prog->insnsi, prog->bpf_func);
++
++		duration = sched_clock() - start;
+ 		stats = this_cpu_ptr(prog->stats);
+ 		flags = u64_stats_update_begin_irqsave(&stats->syncp);
+ 		u64_stats_inc(&stats->cnt);
+-		u64_stats_add(&stats->nsecs, sched_clock() - start);
++		u64_stats_add(&stats->nsecs, duration);
+ 		u64_stats_update_end_irqrestore(&stats->syncp, flags);
+ 	} else {
+ 		ret = dfunc(ctx, prog->insnsi, prog->bpf_func);
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index cc50607f8d8c..778453137b07 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -886,11 +886,12 @@ static void notrace update_prog_stats(struct bpf_prog *prog,
+ 	     */
+ 	    start > NO_START_TIME) {
+ 		unsigned long flags;
++		u64 duration = sched_clock() - start;
+ 
+ 		stats = this_cpu_ptr(prog->stats);
+ 		flags = u64_stats_update_begin_irqsave(&stats->syncp);
+ 		u64_stats_inc(&stats->cnt);
+-		u64_stats_add(&stats->nsecs, sched_clock() - start);
++		u64_stats_add(&stats->nsecs, duration);
+ 		u64_stats_update_end_irqrestore(&stats->syncp, flags);
+ 	}
+ }
+
+base-commit: 623bdd58be3727318d374f0052f9dfff1e87b854
+-- 
+2.34.1
 
