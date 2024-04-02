@@ -1,128 +1,132 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-176.mta0.migadu.com (out-176.mta0.migadu.com [91.218.175.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0781315B129
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 18:49:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD9C15AAAA
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 18:56:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712083784; cv=none; b=ZtODZ7rbPo5t8k1KTL0yxkkbugcN5Wz9//v93pZMbRzw6Lj0X12mRVy+sCzozKwN26kTrwU9ddtcJgN08pQKCwpgVJLY3eVufsQHM4KZ+A6hlGYZCYQfVXM0LhfF/Jju7GTjqZrkEYlr2tNGAc1PWiyyn5wvPJEzB6Z3kpqqdkE=
+	t=1712084189; cv=none; b=m8h2PZhi1/EcL/FQLCibligM2DHUZJ4sJX8fq2Z9uWrhsQZpzM8NqGfOP3vzhT7Sb74DlXcRoCbIR1fSMp/ceZioGWuJTpvsKFTDR6wfTyfF6eO+uvyle1dI+74aCLPloaij74WWM5DKbP6GFYrrb7gUmM52hKX4//fte3ivwCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712083784; c=relaxed/simple;
-	bh=weISqq2A6RI0H2LbwN7F+0X9UdQ8TvO+tJz9Kd/Hf90=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iR6ad6qBY4z/5y0DivnTmDg1UAqcJn14fM2HkxXiQj7DMeUzPgEqsc/45livGoV/TbGRJcC+h93lkPvt5Aex9LqjhE/MmGcZyd/i4llvw8JKYx8GQWx3gEtbMDCZJ7XLWj6jKR41jDWtujWOifJbATluw34ArDksmlzNNkeJyiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Wis1wMJZ; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1712084189; c=relaxed/simple;
+	bh=gKNlCx3HThapNXjWTL/QFKMAycc1MD7oliVbY3+AbOE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tHfQZF4Wvnex2t+4GMlfYK9K6+xQ5+rog0wWccMBChRpYdS4ae8vG0tolmFC/qnsp4jrv4pX35ePDjn/1rbRVadO2r/aaC8iQ+p/9MKeMjGtXK5vgoPteuNXLA78Vd1I2YyyXi+l/5ZhhbIHmabnkPl8zBMYll1FZvvS3NsPpn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h1epThm5; arc=none smtp.client-ip=91.218.175.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Wis1wMJZ"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1e28d7b03e9so9685ad.0
-        for <bpf@vger.kernel.org>; Tue, 02 Apr 2024 11:49:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712083782; x=1712688582; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=588W+WKWGCHDk22Ud5hS9stI2LC3FAq1GuSxHQ/M9as=;
-        b=Wis1wMJZR1p7IRF3wzWLzAY99c3OMVlVZ1BsD8n3dNZRnv2JH3OoM1UohlshGO673i
-         zNcss4wVhSFndY9Ed5t99BfPy4Q9h7GLrhjnxyD9dns8M23UDz2J7NWW4Nzs34aH5Ldq
-         Lyk4lsF2naiZDlWvvbPDCIZaqxMRRqVANJFQ7w2UYmjmY5Gbas9iYIgGScewVO8g3FZO
-         GLfZr5zjTzFtFIUoMYGp0RXoxI+KpnZ/kwt5qi/jG9L7MNfSwJU6crSWPpk3W7ivxlFh
-         YOn6nl9mdd4pslTDxLNtGw9r5/OvKZ5hSCBQDNjsp6u03lo9jWOaIPUkG4tOYUBzkfHX
-         OBjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712083782; x=1712688582;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=588W+WKWGCHDk22Ud5hS9stI2LC3FAq1GuSxHQ/M9as=;
-        b=d2lEzA/IbSTDuI8MbYzHm449IrZdeG8mS1Pn03LRlzKYtEPsNIRpM7Jee3aVVysjX8
-         e11UbbXC5q39Jly6gKegtxohmenJa9FB66VObI0gzSB6JC0+t6Z0aqgrkL0uAET4GoUq
-         tpakmzqg94RXRdCGHHk/Vcm2ZUqUDEfraqlJcSlP+hlHv5M7so0KPNjzoJr4UZfGaOox
-         JuIK1TdiZkAWmYXW09+0H5rEQPalje9ZF1b2CinCuQODxefL/IMJy5jnp1l3ddVuVwXw
-         n3NB+UojCQjiMM/c5gLNN7JP2txwF725Z0rMTbXqjaynCswJcDhjMp+FNkuLKo3Yv+BU
-         z/jg==
-X-Forwarded-Encrypted: i=1; AJvYcCXcOBr/kHmlzKKEuzzfSEik/VpmXbRRRtQY40RPkHCMEGi1XO8yk7Q97QOhhUMaCoUkSzgzprgYe2DDCGKw0J0KUOju
-X-Gm-Message-State: AOJu0YxAXSJNxNSljHAHCwUxQT8fAUY+qETyfRU8g5iAI7hDBaf36R5u
-	foKx5oJVKGbArIqQc2XM+iJ/c66GfmCYZBSIitrMOpkz3QhZx9QqpnwGonuOXTn7jzzSDBkj9x2
-	3tOli+4tldo5dUBDk+PiTjrK/ce9QWaohpWca
-X-Google-Smtp-Source: AGHT+IFqE+UQS0RbhVUDfvVWh1jxlaucrKVTE2OWHdxUHvFSzVEw8wbwfhObgRXrJ5KsEFLTxz8yLY320Q5s7zmUQM4=
-X-Received: by 2002:a17:902:f645:b0:1dd:8001:d239 with SMTP id
- m5-20020a170902f64500b001dd8001d239mr29669plg.14.1712083781959; Tue, 02 Apr
- 2024 11:49:41 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h1epThm5"
+Message-ID: <635a4cbc-0d7b-438b-8de6-6df1bec99539@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712084185;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=g3XnAHDVrQkIn4EHrviHIWervRc2u4AGdrqh05A1rSM=;
+	b=h1epThm5MxHsFuJVtu8B+D+RoVcBua/jWizW7Wj4MLKF15va+ho3JXvO67q/I72LbfyHxT
+	Y6bQ+YPqsLkqZjU3MP0XEFZQiqRe6NeVe6WQNpRhRnID6XjrLluNgGoS3/cHLEqy3X1IbG
+	AndRe9cDO9Cb+LJ+y9YtcGJRb8JJE1s=
+Date: Tue, 2 Apr 2024 11:56:19 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240402184543.898923-1-namhyung@kernel.org>
-In-Reply-To: <20240402184543.898923-1-namhyung@kernel.org>
-From: Ian Rogers <irogers@google.com>
-Date: Tue, 2 Apr 2024 11:49:28 -0700
-Message-ID: <CAP-5=fWh+nrZukmvANf0rmG_Fw11hMgm=dPkHCG79F+tdzsTvQ@mail.gmail.com>
-Subject: Re: [PATCH] perf lock contention: Add a missing NULL check
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Kan Liang <kan.liang@linux.intel.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, linux-perf-users@vger.kernel.org, 
-	Song Liu <song@kernel.org>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next v3 5/5] selftests/bpf: Add some tests with new
+ bpf_program__attach_sockmap() APIs
+Content-Language: en-GB
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Jakub Sitnicki
+ <jakub@cloudflare.com>, John Fastabend <john.fastabend@gmail.com>,
+ kernel-team@fb.com, Martin KaFai Lau <martin.lau@kernel.org>
+References: <20240326022153.656006-1-yonghong.song@linux.dev>
+ <20240326022219.657808-1-yonghong.song@linux.dev>
+ <2befbceb5be18eeee6f3376a1bf5b2d795beec53.camel@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <2befbceb5be18eeee6f3376a1bf5b2d795beec53.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Apr 2, 2024 at 11:45=E2=80=AFAM Namhyung Kim <namhyung@kernel.org> =
-wrote:
->
-> I got a report for a failure in BPF verifier on a recent kernel with
-> perf lock contention command.  It checks task->sighand->siglock without
-> checking if sighand is NULL or not.  Let's add one.
->
->   ; if (&curr->sighand->siglock =3D=3D (void *)lock)
->   265: (79) r1 =3D *(u64 *)(r0 +2624)     ; frame1: R0_w=3Dtrusted_ptr_ta=
-sk_struct(off=3D0,imm=3D0) R1_w=3Drcu_ptr_or_null_sighand_struct(off=3D0,im=
-m=3D0)
->   266: (b7) r2 =3D 0                      ; frame1: R2_w=3D0
->   267: (0f) r1 +=3D r2
->   R1 pointer arithmetic on rcu_ptr_or_null_ prohibited, null-check it fir=
-st
->   processed 164 insns (limit 1000000) max_states_per_insn 1 total_states =
-15 peak_states 15 mark_read 5
->   -- END PROG LOAD LOG --
->   libbpf: prog 'contention_end': failed to load: -13
->   libbpf: failed to load object 'lock_contention_bpf'
->   libbpf: failed to load BPF skeleton 'lock_contention_bpf': -13
->   Failed to load lock-contention BPF skeleton
->   lock contention BPF setup failed
->   lock contention did not detect any lock contention
->
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-Reviewed-by: Ian Rogers <irogers@google.com>
-
-Thanks,
-Ian
-
-> ---
->  tools/perf/util/bpf_skel/lock_contention.bpf.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On 4/2/24 6:17 AM, Eduard Zingerman wrote:
+> On Mon, 2024-03-25 at 19:22 -0700, Yonghong Song wrote:
+>> Add a few more tests in sockmap_basic.c and sockmap_listen.c to
+>> test bpf_link based APIs for SK_MSG and SK_SKB programs.
+>> Link attach/detach/update are all tested.
+>>
+>> All tests are passed.
+>>
+>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>> ---
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 >
-> diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/=
-util/bpf_skel/lock_contention.bpf.c
-> index fb54bd38e7d0..4e5914d7eeaa 100644
-> --- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> +++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> @@ -305,7 +305,7 @@ static inline __u32 check_lock_type(__u64 lock, __u32=
- flags)
->                 break;
->         case LCB_F_SPIN:  /* spinlock */
->                 curr =3D bpf_get_current_task_btf();
-> -               if (&curr->sighand->siglock =3D=3D (void *)lock)
-> +               if (curr->sighand && &curr->sighand->siglock =3D=3D (void=
- *)lock)
->                         return LCD_F_SIGHAND_LOCK;
->                 break;
->         default:
-> --
-> 2.44.0.478.gd926399ef9-goog
+> As far as I understand patch #1 there are several error conditions
+> that are not covered by these tests:
+> - update link using program with wrong expected attach type;
+> - bpf_program__attach_sockmap() _after_ bpf_prog_attach();
+> - creation of a second link between same prog and map
+>    (if I understand 'link && link != progs->msg_parser_link' checks in
+>     sock_map_link_lookup() correctly).
 >
+> Are these important enough to have a dedicated test?
+
+All these are missed. I can add them in the next revision.
+
+>
+> [...]
+>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+>> index 63fb2da7930a..b4b38f92b864 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+>> @@ -131,6 +131,40 @@ static void test_skmsg_helpers(enum bpf_map_type map_type)
+>>   	test_skmsg_load_helpers__destroy(skel);
+>>   }
+>>   
+>> +static void test_skmsg_helpers_with_link(enum bpf_map_type map_type)
+>> +{
+>> +	struct test_skmsg_load_helpers *skel;
+>> +	struct bpf_link *link, *link2;
+>> +	struct bpf_program *prog;
+>> +	int err, map;
+>> +
+>> +	skel = test_skmsg_load_helpers__open_and_load();
+>> +	if (!ASSERT_OK_PTR(skel, "test_skmsg_load_helpers__open_and_load"))
+>> +		return;
+>> +
+>> +	prog = skel->progs.prog_msg_verdict;
+>> +	map = bpf_map__fd(skel->maps.sock_map);
+>> +
+>> +	link = bpf_program__attach_sockmap(prog, map);
+>> +	if (!ASSERT_OK_PTR(link, "bpf_program__attach_sockmap"))
+>> +		goto out;
+>> +
+>> +	err = bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_MSG_VERDICT, 0);
+>> +	if (!ASSERT_ERR(err, "bpf_prog_attach"))
+>> +		goto out;
+>> +
+>> +	link2 = bpf_program__attach_sockmap(skel->progs.prog_msg_verdict_clone, map);
+>> +	if (!ASSERT_ERR_PTR(link2, "bpf_program__attach_sockmap"))
+>> +		goto out;
+> Nit: should bpf_link__detach(link2) be called before 'goto out' ?
+
+Yes, we should do this although it will auto detach when test_progs exists.
+
+>
+>> +
+>> +	err = bpf_link__update_program(link, skel->progs.prog_msg_verdict_clone);
+>> +	ASSERT_OK(err, "bpf_link__update_program");
+>> +
+>> +out:
+>> +	bpf_link__detach(link);
+>> +	test_skmsg_load_helpers__destroy(skel);
+>> +}
+>> +
+>>   static void test_sockmap_update(enum bpf_map_type map_type)
+>>   {
+>>   	int err, prog, src;
