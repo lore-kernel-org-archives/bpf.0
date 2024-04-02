@@ -1,143 +1,99 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB9A15B962;
-	Tue,  2 Apr 2024 19:40:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC69815B96D;
+	Tue,  2 Apr 2024 19:45:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712086826; cv=none; b=NTUw8Jf3MiC4/XQ8gmGmKDcam9AdebKMA99ij/L6nRqZFzVS4JACRm4Z70auQYMAb3T8RoJJKcF78oIaJO1bMy6xriKpx1teJf+SeRxHEDxK3d7AJRD5CTnb+6bvW0a25UE3qDG6K8Ei1at7c+tI38l4styMIJfaOwq9Gww3x/w=
+	t=1712087112; cv=none; b=n2adZTUyBOAQlRF0051efpj9KPj19ngk+QoGK5IYQM/Z+X+ppv1IF2QMSTH/T4ul2mXL2HlXFwz/hNKx9xbVZ/U3GlVaS1RO5LNVt/VUJtIYNcOhTAGIOQ3gDtX4/hE7Iv1lSbtPr9GXvsF+5B44xd/W+WeE5+LIe6MbWumgnsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712086826; c=relaxed/simple;
-	bh=w7hwgkzrUbZqiWKsRGTQDtzfq+Myzi8KNFzNsNgtgO0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W/Qy8f3vuGblxPdqqBuU/m53GpB4YLeCpm2+qhJ+ikujPS6hVmj5p1uXPJqJQiO1aWjc9+iTBLARKZmgU7uVWNxToAusOTjg3SeM94AO82NXsMLE3HScxkGxo1qrRdgnEuxLtz0DP4Xw+y9BmU5IaCK+uvtANujp49wMD57bfOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G+KpeLBV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712087112; c=relaxed/simple;
+	bh=OCkiz1fFVyxFYnxJmcfbd3VtR/LccfvnaYWq2AE25E4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uUuiEAVDGNOytrbFBA50Ss4LqNb/E3dhpeaR8xJez0tF0+QAGXkdaOJ7XXdU5+ElI7nPstqH/ElC6+tEo4yIbG76qB56RuyIdIaTS3mPFamlrdxgvx/J9H1vCQcHPUE+5ibUojpOV8XSlNRxzwnCSBgXUbwFIzexkTswwWSYYqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pq+Sa8v/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G+KpeLBV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED66BC433A6;
-	Tue,  2 Apr 2024 19:40:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pq+Sa8v/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8386C433C7;
+	Tue,  2 Apr 2024 19:45:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712086826;
-	bh=w7hwgkzrUbZqiWKsRGTQDtzfq+Myzi8KNFzNsNgtgO0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=G+KpeLBVUYfQfZp1yvN1Nk7P0uOif6M+IEaHUXR+MgdUi/0XEjC3UaEnVLQyOtdsy
-	 TIhXW690ZIl6y6emAjzg2LX69dXD27umnzTAF1PMFsjlgR4VgSRdhCWDCUKFYgR1te
-	 7XEpVWMWnBqaBJ37CIxfz3nuSEPAQ/NnGrqRiQ5keCx7sP+ROozwtFIuqKf2FWZ3y5
-	 XePv0iUKfzQ3qONEEEi8jXD1G4HR45oi84r3t7ecTPdTUj7+6ie8MIht/yRSqtrwGY
-	 O3IHZSQPjucBJgLfUA44OlJNrNkfD5x0Q0ahM3RcyPTjygwT6Y0lhVA3p2ILIgsRAl
-	 Ih4O7R9qK09tA==
+	s=k20201202; t=1712087112;
+	bh=OCkiz1fFVyxFYnxJmcfbd3VtR/LccfvnaYWq2AE25E4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pq+Sa8v/DZFRLpo5wOB3lzgRngffOG2bIbOh96A2ODu1+da25MmvhPBO34uhfsVsM
+	 yJYT2wB3bq4zAFqeC26/SdFNxlsH3wnJ8FoPydgNKfxWzlXXgJenzC0ZexzbT6uydI
+	 FKHfBZl2I6dqtw8+H3CetnSSgYIq2FcvwLmxw/eLuGBagSIEZwUoL4alZILofWacta
+	 8zIuY9GYp+C9VdfSEFSkoe+vTcZoiVD14HHSU/H5iZcGD8iVeuEQGDUxmHLYg/6cJZ
+	 MapXSCNQqzPtI9iFd63z3oDcz+caakNpuFSFrcx4lAaB7URl8tH86P52mQX7pZYjhA
+	 s2N6k8upcAA5w==
+Date: Tue, 2 Apr 2024 16:45:08 -0300
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: dwarves@vger.kernel.org
-Cc: Jiri Olsa <jolsa@kernel.org>,
-	Clark Williams <williams@redhat.com>,
-	Kate Carcia <kcarcia@redhat.com>,
-	bpf@vger.kernel.org,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Kui-Feng Lee <kuifeng@fb.com>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH 12/12] tests: Add a BTF reproducible generation test
-Date: Tue,  2 Apr 2024 16:39:45 -0300
-Message-ID: <20240402193945.17327-13-acme@kernel.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240402193945.17327-1-acme@kernel.org>
-References: <20240402193945.17327-1-acme@kernel.org>
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Ian Rogers <irogers@google.com>, Kan Liang <kan.liang@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+	linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH] perf lock contention: Add a missing NULL check
+Message-ID: <ZgxgRJdFlwfESwKF@x1>
+References: <20240402184543.898923-1-namhyung@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240402184543.898923-1-namhyung@kernel.org>
 
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
+On Tue, Apr 02, 2024 at 11:45:43AM -0700, Namhyung Kim wrote:
+> I got a report for a failure in BPF verifier on a recent kernel with
+> perf lock contention command.  It checks task->sighand->siglock without
+> checking if sighand is NULL or not.  Let's add one.
+> 
+>   ; if (&curr->sighand->siglock == (void *)lock)
+>   265: (79) r1 = *(u64 *)(r0 +2624)     ; frame1: R0_w=trusted_ptr_task_struct(off=0,imm=0) R1_w=rcu_ptr_or_null_sighand_struct(off=0,imm=0)
+>   266: (b7) r2 = 0                      ; frame1: R2_w=0
+>   267: (0f) r1 += r2
+>   R1 pointer arithmetic on rcu_ptr_or_null_ prohibited, null-check it first
+>   processed 164 insns (limit 1000000) max_states_per_insn 1 total_states 15 peak_states 15 mark_read 5
+>   -- END PROG LOAD LOG --
+>   libbpf: prog 'contention_end': failed to load: -13
+>   libbpf: failed to load object 'lock_contention_bpf'
+>   libbpf: failed to load BPF skeleton 'lock_contention_bpf': -13
+>   Failed to load lock-contention BPF skeleton
+>   lock contention BPF setup failed
+>   lock contention did not detect any lock contention
+> 
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-  $ time tests/reproducible_build.sh vmlinux
-  Parallel reproducible DWARF Loading/Serial BTF encoding: Ok
+Acked-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-  real  1m13.844s
-  user  3m3.601s
-  sys   0m9.049s
-  $
+Are you going to have this merged into perf-tools?
 
-If the number of threads started by pahole is different than what was
-requests via its -j command line option, it will fail as well as if the
-output of 'bpftool btf dump' differs from the BTF encoded totally
-serially to one of the detached BTF encoded using reproducible DWARF
-loading/BTF encoding.
+A Fixes: tag isn't perhaps needed as it worked in the past?
 
-Cc: Alan Maguire <alan.maguire@oracle.com>
-Cc: Kui-Feng Lee <kuifeng@fb.com>
-Cc: Thomas Weißschuh <linux@weissschuh.net>
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tests/reproducible_build.sh | 56 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100755 tests/reproducible_build.sh
+- Arnaldo
 
-diff --git a/tests/reproducible_build.sh b/tests/reproducible_build.sh
-new file mode 100755
-index 0000000000000000..9c72d548c2a21136
---- /dev/null
-+++ b/tests/reproducible_build.sh
-@@ -0,0 +1,56 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Test if BTF generated serially matches reproducible parallel DWARF loading + serial BTF encoding
-+# Arnaldo Carvalho de Melo <acme@redhat.com> (C) 2024-
-+
-+vmlinux=$1
-+outdir=$(mktemp -d /tmp/reproducible_build.sh.XXXXXX)
-+
-+echo -n "Parallel reproducible DWARF Loading/Serial BTF encoding: "
-+
-+test -n "$VERBOSE" && printf "\nserial encoding...\n"
-+
-+pahole --btf_encode_detached=$outdir/vmlinux.btf.serial $vmlinux
-+bpftool btf dump file $outdir/vmlinux.btf.serial > $outdir/bpftool.output.vmlinux.btf.serial
-+
-+nr_proc=$(getconf _NPROCESSORS_ONLN)
-+
-+for threads in $(seq $nr_proc) ; do
-+	test -n "$VERBOSE" && echo $threads threads encoding
-+	pahole -j$threads --reproducible_build --btf_encode_detached=$outdir/vmlinux.btf.parallel.reproducible $vmlinux &
-+	pahole=$!
-+	# HACK: Wait a bit for pahole to start its threads
-+	sleep 0.3s
-+	# PID part to remove ps output headers
-+	nr_threads_started=$(ps -L -C pahole | grep -v PID | wc -l)
-+
-+	if [ $threads -gt 1 ] ; then
-+		((nr_threads_started -= 1))
-+	fi
-+
-+	if [ $threads != $nr_threads_started ] ; then
-+		echo "ERROR: pahole asked to start $threads encoding threads, started $nr_threads_started"
-+		exit 1;
-+	fi
-+
-+	# ps -L -C pahole | grep -v PID | nl
-+	test -n "$VERBOSE" && echo $nr_threads_started threads started
-+	wait $pahole
-+	rm -f $outdir/bpftool.output.vmlinux.btf.parallel.reproducible
-+	bpftool btf dump file $outdir/vmlinux.btf.parallel.reproducible > $outdir/bpftool.output.vmlinux.btf.parallel.reproducible
-+	test -n "$VERBOSE" && echo "diff from serial encoding:"
-+	diff -u $outdir/bpftool.output.vmlinux.btf.serial $outdir/bpftool.output.vmlinux.btf.parallel.reproducible > $outdir/diff
-+	if [ -s $outdir/diff ] ; then
-+		echo "ERROR: BTF generated from DWARF in parallel is different from the one generated in serial!"
-+		exit 1
-+	fi
-+	test -n "$VERBOSE" && echo -----------------------------
-+done
-+
-+rm $outdir/*
-+rmdir $outdir
-+
-+echo "Ok"
-+
-+exit 0
--- 
-2.44.0
-
+> ---
+>  tools/perf/util/bpf_skel/lock_contention.bpf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> index fb54bd38e7d0..4e5914d7eeaa 100644
+> --- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> +++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> @@ -305,7 +305,7 @@ static inline __u32 check_lock_type(__u64 lock, __u32 flags)
+>  		break;
+>  	case LCB_F_SPIN:  /* spinlock */
+>  		curr = bpf_get_current_task_btf();
+> -		if (&curr->sighand->siglock == (void *)lock)
+> +		if (curr->sighand && &curr->sighand->siglock == (void *)lock)
+>  			return LCD_F_SIGHAND_LOCK;
+>  		break;
+>  	default:
+> -- 
+> 2.44.0.478.gd926399ef9-goog
