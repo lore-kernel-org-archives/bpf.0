@@ -1,82 +1,144 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out203-205-251-72.mail.qq.com (out203-205-251-72.mail.qq.com [203.205.251.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BB99111A3
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 02:55:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7728414267
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 03:09:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.251.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712026505; cv=none; b=hy+PmX4hQAVoqIkZX0QuZAhR7TirgfDbx3+FjhMB0xfSsnP1ixHKocj55EIL0BrIfN+ocGh0Xj1SV9atOCK2KB7yQK+7ceaVxSYBRAEZyNaABp+L3CUd5BCcXg+j28nyS3fB+syML4im8VRuhzYzm0WqX3/JqFlfpmQg3xLN1sw=
+	t=1712027351; cv=none; b=s8/GqXsqFslRSzeD1hViQbyTmtEUo2HNEX/TRGSY/SA6tcKmQlrr5Xm37NZprCa0RpS0rw5VCR1yB12Jx1KYuXjMtGqVVCyKQ3aLMGKWH7eCAozPUgQnz6hRs2wWi6fAFI06jrfJMM+RhxO0BRD5GhtBj+UXLZYh53jd5FYRe6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712026505; c=relaxed/simple;
-	bh=a0CwOPtMY5PCyjxZFTb4n0/chBY/Gw5BXa26WcHkIyc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CNP001gyB4axZ9EYBlCn9NimbyPQ94KC3X67PVrsiruxDaWie+5qN8S1pHtU0DooEtpC9oCrXAXbUKheuN2Leh3lVe7zV32QdzYhctkp8f92NNGBQBH4myAHtcUkny+/M4wCh7x7QKLFJPGZ02w1XZIVJ3Hf6LXnMFUsN4M/Wjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id EC61D289B9E1; Mon,  1 Apr 2024 19:54:46 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next] selftests/bpf: Using llvm may_goto inline asm for cond_break macro
-Date: Mon,  1 Apr 2024 19:54:46 -0700
-Message-ID: <20240402025446.3215182-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1712027351; c=relaxed/simple;
+	bh=jq7gceLVPX+zUUkhBft5MXInIaSdwizfVP5WkNn2F2I=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=tt5aOPuQJHwgsWkPziPp7rE9/bnJVCxHrMg94ae9sVCVC//ijk3x+1KCpYt6bOkAVy/rtQDGZ+NF2HLj0nwh8ahzH+Kp8GmsIK2tYrOChhJYMo/gs2TFNHW1Iwl4bAI/9sXZk+AT7oDI4Djlrflz4C2SaKC/TKSlxcy2NeBHUnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=QyQLpEKr; arc=none smtp.client-ip=203.205.251.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="QyQLpEKr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1712027041; bh=f0et3YLWSIePPcZIcoiqWbK+lJdybPne5X9dc1FSB0Q=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=QyQLpEKr6ymwRVlMtzQpTnoVWszxP2UGL8XImHDRBdYlKoHquzhUaVPrGZSAmble0
+	 858pW1e/IpodSGG/BJZkhBoNefZG4/0WBAsAjs3W2e6EtpfOGgQN7scHiSarmne0xk
+	 C9hDGSvKKMnxSMrQpf6h3q4nfpi9Rx/bVrmgNspU=
+Received: from pek-lxu-l1.wrs.com ([111.198.228.153])
+	by newxmesmtplogicsvrszb9-1.qq.com (NewEsmtp) with SMTP
+	id F7B1269; Tue, 02 Apr 2024 11:03:55 +0800
+X-QQ-mid: xmsmtpt1712027035tl6wuhvyq
+Message-ID: <tencent_A4FA0DA89270DDAC5D8519424F9B0DB42507@qq.com>
+X-QQ-XMAILINFO: NDgMZBR9sMma0UugHJ1pNSaRgr38sPKTxRp/haZJnVNm9vIP2MTy5qQXnT4Kl9
+	 Bxylf2jnjlHZxRuO4spSyJJIUAI32a27hDt1d12XptYYjh1r6yN2WDBtL7lQSvX+gSUF7U5cox2T
+	 +ibjx3jonjUBt3JcJdgPAaRnQfkAuOqi0eeFn0k5VlTFtL/EEK1oaVaX3RtmGSPsjZlVexjSK8De
+	 4izbwYC4MBlVSFbUPsM1bjhBAHc5m5gBEakGMAFsZg0BFyf/xFGU6qFC8wFSthQ9lT6M7SErPm/A
+	 wZSNxQcTZM7yfqTosE94CgurG8ytN+iK9ADwpA4ouI9K6QSIevWDM6li4+16RAhpvKkM0ZSk4av5
+	 KVOWXksJniY4I+dnwtXuFajY7DJPZUPHpVCSIHRvGHvW5Clzjclnr3xVxH7ghJ34H/sJbx21TsWi
+	 qgBi7aCFftJ4EYYtyx+y6e0IeL702qI8yg/9IjLJP3GIVHj5hfb4O0LteEYLC3xtZpLaXyo4CQA4
+	 vh5bQ0kyvE/aWGiRvo92frVbIS6h4oSGo+pgnWWQdKeofgy3tRE7q60m0AGUb6GFwweCgrvUac8P
+	 w+liVGrPL2N6MK5kvkH0VXCvRVLhohNz/UYcwKqq1l5D81Hk+yxKchYp7wQPiLoI+aErZd3ONKsF
+	 qNv7r8ikBRwFAgeVrvr5/4dGSkg4Rt0y4xqu1Ay8UbwO3tDHeetiz85P/95xa0v5vLkWV5BKPhwn
+	 eGw2G1OpudxOYDmiC9izvt2xYuMzJY0xdVhTwRkSfPYXZ1pZxDqyvjKtxNwXovT2PbrM8qkXphcB
+	 MxiAh3hCOUL+3j0xqbAnK+/T2r2hJtvHy8lHOUt1EllGvA70CXrJnNPmA6as09hxmIz90a74Qn7i
+	 Xj1MT0Ket2oUtBzYkIIluzIPwRCZNTcgdMGzkhnQs3fhrAoib/MMDTLPCwJtnDEDPYHuRFPfyO9+
+	 /47o85sHyL/nORIBe654uxACky1r5p
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+From: Edward Adam Davis <eadavis@qq.com>
+To: hawk@kernel.org
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	davem@davemloft.net,
+	eadavis@qq.com,
+	eddyz87@gmail.com,
+	haoluo@google.com,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	martin.lau@linux.dev,
+	netdev@vger.kernel.org,
+	sdf@google.com,
+	song@kernel.org,
+	syzbot+af9492708df9797198d6@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH] bpf: fix null ptr deref in dev_map_enqueue
+Date: Tue,  2 Apr 2024 11:03:56 +0800
+X-OQ-MSGID: <20240402030355.1789902-2-eadavis@qq.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <f45ad3e1-4433-422e-be28-17deaba4ade1@kernel.org>
+References: <f45ad3e1-4433-422e-be28-17deaba4ade1@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Currently, cond_break macro uses bytes to encode the may_goto insn.
-Patch [1] in llvm implemented may_goto insn in BPF backend.
-Replace byte-level encoding with llvm inline asm for better usability.
-Using llvm may_goto insn is controlled by macro __BPF_FEATURE_MAY_GOTO.
+On Mon, 1 Apr 2024 13:00:12 +0200, Jesper Dangaard Brouer wrote:
+> > [Fix]
+> > On the execution path of bpf_prog_test_run(), due to ri->map being NULL,
+> > ri->tgtvalue was not set correctly.
+> >
+> > Reported-and-tested-by: syzbot+af9492708df9797198d6@syzkaller.appspotmail.com
+> > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+> > ---
+> >   kernel/bpf/devmap.c | 6 +++++-
+> >   1 file changed, 5 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+> > index 4e2cdbb5629f..ef20de14154a 100644
+> > --- a/kernel/bpf/devmap.c
+> > +++ b/kernel/bpf/devmap.c
+> > @@ -86,6 +86,7 @@ struct bpf_dtab {
+> >   static DEFINE_PER_CPU(struct list_head, dev_flush_list);
+> >   static DEFINE_SPINLOCK(dev_map_lock);
+> >   static LIST_HEAD(dev_map_list);
+> > +static bool is_valid_dst(struct bpf_dtab_netdev *obj, struct xdp_frame *xdpf);
+> >
+> >   static struct hlist_head *dev_map_create_hash(unsigned int entries,
+> >   					      int numa_node)
+> > @@ -536,7 +537,10 @@ int dev_xdp_enqueue(struct net_device *dev, struct xdp_frame *xdpf,
+> >   int dev_map_enqueue(struct bpf_dtab_netdev *dst, struct xdp_frame *xdpf,
+> >   		    struct net_device *dev_rx)
+> >   {
+> > -	struct net_device *dev = dst->dev;
+> > +	struct net_device *dev;
+> > +	if (!is_valid_dst(dst, xdpf))
+> 
+> This is overkill, because __xdp_enqueue() already contains most of the
+> checks in is_valid_dst().
+> 
+> Why not:
+> 
+>   if (!dst)
+> 	return -EINVAL;
+This can work, but I think is_valid_dst() is better, as its internal inspection
+of dst is more thorough.
+> 
+> 
+> > +		return -EINVAL;
+> > +	dev = dst->dev;
+> >
+> >   	return __xdp_enqueue(dev, xdpf, dev_rx, dst->xdp_prog);
+> >   }
+> 
+> 
+> Is this fix pampering over another issue?
+> 
+> To repeat myself:
+> I think something is wrong in xdp_test_run_batch().
+> The `ri->tgt_value` is being set in __bpf_xdp_redirect_map(), but I
+> cannot see __bpf_xdp_redirect_map() being used in xdp_test_run_batch().
+As I mentioned earlier, because the value of "ri->map" is NULL, even if it can 
+be executed to __bpf_xdp_redirect_map(), it is meaningless because "ri->map" is
+used internally to set "ri->tgt_value".
+> 
+> Is this a case of XDP program returning XDP_REDIRECT without having
+> called the BPF helper for redirect?
 
-  [1] https://github.com/llvm/llvm-project/commit/0e0bfacff71859d1f921220=
-5f8f873d47029d3fb
-
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- tools/testing/selftests/bpf/bpf_experimental.h | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testi=
-ng/selftests/bpf/bpf_experimental.h
-index a5b9df38c162..3329ea080865 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -326,6 +326,16 @@ l_true:												\
-        })
- #endif
-=20
-+#ifdef __BPF_FEATURE_MAY_GOTO
-+#define cond_break					\
-+	({ __label__ l_break, l_continue;		\
-+	 asm volatile goto("may_goto %l[l_break]"	\
-+		      :::: l_break);			\
-+	goto l_continue;				\
-+	l_break: break;					\
-+	l_continue:;					\
-+	})
-+#else
- #define cond_break					\
- 	({ __label__ l_break, l_continue;		\
- 	 asm volatile goto("1:.byte 0xe5;			\
-@@ -337,6 +347,7 @@ l_true:												\
- 	l_break: break;					\
- 	l_continue:;					\
- 	})
-+#endif
-=20
- #ifndef bpf_nop_mov
- #define bpf_nop_mov(var) \
---=20
-2.43.0
+Edward
 
