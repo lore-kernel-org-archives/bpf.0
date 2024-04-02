@@ -1,170 +1,181 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11021007.outbound.protection.outlook.com [40.93.193.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E996FD0
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 01:12:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712020368; cv=none; b=CXdvxRDsGywonljVFtq06SklNILF5H87ZJ7626FIiW9zsnuwsNfzY4uiEyVatKNcZJmJ557exqpj3+iZLlx/Ue+rvWDwRJ6qUMP0ZnxKhmszyhd4vWu9k3thwU9+9P5EUcPwObYsqjLEs069dXE9ZCcD6kflu/IF7qAklH2QP+Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712020368; c=relaxed/simple;
-	bh=XNBAb+pGZSp/8Ro3wkoJN1m/XKCjSOXCWuKWiwZsjkE=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=I5v14OgTguJh1XhSyip8jSYfjEWGOAobFUCIG3fQdHXPZtelab50gDLqqxVNPYMcG01dO+XFvg8EzN4pIZY2IByfYLWUOUK25ko6UXYSlI51Tnxq7NgZI21i/tgaGOOTWdCF4yi0rtOpmDubfM/zDSaRS3F1qxmpNzAuavYy5WI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FF2tJEvt; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78AAF3201;
+	Tue,  2 Apr 2024 01:23:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.193.7
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712020994; cv=fail; b=XqoOL780H8XTexRoldL0MNIpu+1Z4PBVUEz8VGd+l559cXS0oDpalzpK0Az4Ptl47C9uh7rHIeEIg3j9NlPaoDcMvzA9TsO+cT1K3PtdsA0EIms+sZDdDE6XkOnfK1BBh4kPWVr4bsbFlqGWsR9wx07ZDo/WHUtzGxa8Cdsn8E0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712020994; c=relaxed/simple;
+	bh=jvohF1KZF2FVEQ5NrQ9XcahE6mtm+H3uD5pRgET/4rU=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=drx1g3hmsbpffMKMNR5efWe73YwwmtEKcrIu9VahTMEtlXcQmeZRxab50mnIsdENewDhmIL9LdYS14F52imcNJLiKMJb0mMSgX6ZREuX+mbC9PUEjvcY5iqQAbwhbhpyyfh1cDMxyy1j8Fyv9ZfIp4lSq8iQFV08xzaHItBq0Do=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com; spf=pass smtp.mailfrom=microsoft.com; dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b=jaFbhW/+; arc=fail smtp.client-ip=40.93.193.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FF2tJEvt"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1e0411c0a52so38339445ad.0
-        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 18:12:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712020366; x=1712625166; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GDwY3gk/nE+3/ILrXRW9p5JbNxi94KwSkUTEZPcbfx4=;
-        b=FF2tJEvtbU6QxjxZRaW4/lUJ598uUMwQxpYUNxaa/ncmOIL9VZKLMsMm5FnjgRk6+c
-         1k5qgca3RXKseO2qLS8+C8BjA6RhRpFPZn1Ts/FHDvI3uXgr5IfU8PiEBx5ubSvIRFgl
-         QDECmeQ1USx2cnOsoQMcjtgvqdY1pKsUFHCpI90xPXWbfPrcN3OrXEffMgcdanBvb8cR
-         W9vrWmZLqWNnHQ1V9sZTNDFaRjJMxWjYTUW3ziID3g7kYCglKJGtPEoSxOWOeSWUsuA+
-         5brkIkKq51x1T7aI1+ChwmAku760FD0crdaEGM6zuPbVPlbtdXTfvMb0Z/wpm8zbJImg
-         GqHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712020366; x=1712625166;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GDwY3gk/nE+3/ILrXRW9p5JbNxi94KwSkUTEZPcbfx4=;
-        b=ReRciimDgUXz6YFJD3HDNOBmvNnq5YCB1eAcYqXx7FrTclR+z5NWOKMd6T8xakRhCX
-         FKppTYgLcuorXicpjC91QtjnLgg5KuQi9L7Hd4EWH68TtRT06dvZ2+M35bQeu4skcmy1
-         xZimVAIczZJxfdOug+26GifP9MncYrEu+FFeZSDKd5c+kIUxhrFfUlG5GhsEQOyA8Jqz
-         AqK8bKJFEzIqz08ycnKxbDbsXEC6AxNMVFGDLzfejF67mY2JHEvESPzhjm1lqSiaUvF6
-         X5Eq9DLKImfg62qmKgG2ARDmRyws1J0s1e5x6j/t+Sq420IsUt/ODkMeV+vSq6r4hX3X
-         tCeg==
-X-Forwarded-Encrypted: i=1; AJvYcCUJMIOz/tug0YFuDlf1y4NR1SKvXD8RfydkNqd/QkyH8v8h/57YrRXNwwgvDqu6uPt7w7F6Ui6ERdtz8g1feISsEzor
-X-Gm-Message-State: AOJu0YwtQbbjPBwnTaQvL2/KjRSQyZOqRlATLLxX7bLLhykWswVZIec8
-	087KU8fJmUTpNUDas2SyOiZO3DhsV5bTuJnZd/NOwbKUc0ZF8bCO
-X-Google-Smtp-Source: AGHT+IGW/TxmS47KeivfkTJ70rQ0yMdM8Io1Hw9oqLcsw6lue2CSkfbBozpso7uXL7I75AUtNxEETQ==
-X-Received: by 2002:a17:903:110d:b0:1e0:e89f:fe26 with SMTP id n13-20020a170903110d00b001e0e89ffe26mr10869574plh.10.1712020366212;
-        Mon, 01 Apr 2024 18:12:46 -0700 (PDT)
-Received: from localhost ([98.97.36.54])
-        by smtp.gmail.com with ESMTPSA id h4-20020a170902704400b001e26e1e62f9sm219211plt.176.2024.04.01.18.12.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Apr 2024 18:12:45 -0700 (PDT)
-Date: Mon, 01 Apr 2024 18:12:44 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- bpf@vger.kernel.org, 
- ast@kernel.org, 
- daniel@iogearbox.net, 
- martin.lau@kernel.org
-Cc: andrii@kernel.org, 
- kernel-team@meta.com
-Message-ID: <660b5b8cc7162_801520889@john.notmuch>
-In-Reply-To: <20240329184740.4084786-2-andrii@kernel.org>
-References: <20240329184740.4084786-1-andrii@kernel.org>
- <20240329184740.4084786-2-andrii@kernel.org>
-Subject: RE: [PATCH bpf-next 1/4] bpf: add internal-only per-CPU LDX
- instructions
+	dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b="jaFbhW/+"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dAkeSHTqBFxIdkgjM9fClJLpAgqxEpsP5Q9anwc90IhMQkafGUO6dNKbL0n0kqX3KVZ5CYo6uWCLKmGEIR7QHrT15xw/saVBuwrfWvd184VVuO6eshwocmu+VQ9oQW85jyixK2gl/BVOM+Fb5veDoN7RkWurvUyD5y0zkn9L155UIAc3i+pChPW8EPTYRJB/eYCJRImU55Go06LusO6bWCnwuyN/QX0Xg1OtRPatMPfC4a+uDxuKupN6v+9JPu7NoGEsCTgG3Euy7t/pn+GPF+MzAsrFMVCIoRO1LnhAL2IavcfOLq7TLhYq3jGUZSgM0v1PTrXZX4WiuFUz+s01Cw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4JqC33zGfl6ZFNMpjHQXpdyqGqnLR0HtQABZvYYQN4o=;
+ b=kP/w6hYZsm9CQSVKb1brFGCcq5rht+ddu1kBPaHo4y2o8tCxNLeXyu3VuWkxAU8yq0Kabzhw4udW8/3bZKHj5b1c2ahYqBK5nG85lrpP4OxTB/FcMVVDTQLOCqrTemSlJXWOJAmF/ooFth3pLHGg382AcdiHhgaPZPyWm2J83ouBpwPoCO/gUaPUsx1x55EKOFDvsJCst0UbUpyeyYhuYBFOpVj1QAZ2utdOY93kUfEHuF5DD9IOLXgqVVbd7JvG6o9xaDhQ/OagRr8VKx05kj8Llh+C1flec8NzPmPLJP7Pi8RriCc80d1jYS/RKoinE7hP+YodeI4McmSFcbcgAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4JqC33zGfl6ZFNMpjHQXpdyqGqnLR0HtQABZvYYQN4o=;
+ b=jaFbhW/+98F1AIiKMtVV3UX85xbVTvmoPcsLAOHJiQEdiu2EgwGuqc10Lv97GSGTR6aSyyz6pUUh1Ar3nCq0RUeNZkG/Y5llPkECeEFSD5RKlW3sh/8+8zrUUjpbLL0mQszHcVyvgOHusVE/Wnw9eaUR60PoFd9YyxCw9KePLLM=
+Received: from CY5PR21MB3759.namprd21.prod.outlook.com (2603:10b6:930:c::10)
+ by SJ1PR21MB3531.namprd21.prod.outlook.com (2603:10b6:a03:451::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.7; Tue, 2 Apr
+ 2024 01:23:08 +0000
+Received: from CY5PR21MB3759.namprd21.prod.outlook.com
+ ([fe80::1c76:5d37:cef1:f135]) by CY5PR21MB3759.namprd21.prod.outlook.com
+ ([fe80::1c76:5d37:cef1:f135%5]) with mapi id 15.20.7472.002; Tue, 2 Apr 2024
+ 01:23:08 +0000
+From: Dexuan Cui <decui@microsoft.com>
+To: Haiyang Zhang <haiyangz@microsoft.com>, "linux-hyperv@vger.kernel.org"
+	<linux-hyperv@vger.kernel.org>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, Wei Hu <weh@microsoft.com>
+CC: stephen <stephen@networkplumber.org>, KY Srinivasan <kys@microsoft.com>,
+	Paul Rosswurm <paulros@microsoft.com>, "olaf@aepfle.de" <olaf@aepfle.de>,
+	"vkuznets@redhat.com" <vkuznets@redhat.com>, "davem@davemloft.net"
+	<davem@davemloft.net>, "wei.liu@kernel.org" <wei.liu@kernel.org>,
+	"edumazet@google.com" <edumazet@google.com>, "kuba@kernel.org"
+	<kuba@kernel.org>, "pabeni@redhat.com" <pabeni@redhat.com>, "leon@kernel.org"
+	<leon@kernel.org>, Long Li <longli@microsoft.com>,
+	"ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
+	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>, "john.fastabend@gmail.com"
+	<john.fastabend@gmail.com>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"ast@kernel.org" <ast@kernel.org>, "sharmaajay@microsoft.com"
+	<sharmaajay@microsoft.com>, "hawk@kernel.org" <hawk@kernel.org>,
+	"tglx@linutronix.de" <tglx@linutronix.de>, "shradhagupta@linux.microsoft.com"
+	<shradhagupta@linux.microsoft.com>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "stable@vger.kernel.org"
+	<stable@vger.kernel.org>
+Subject: RE: [PATCH net] net: mana: Fix Rx DMA datasize and skb_over_panic
+Thread-Topic: [PATCH net] net: mana: Fix Rx DMA datasize and skb_over_panic
+Thread-Index: AQHagiFTbDDISYHohEGBGDLC4qicc7FPUWYQgATA4gCAAB0LEA==
+Date: Tue, 2 Apr 2024 01:23:08 +0000
+Message-ID:
+ <CY5PR21MB37590FD539C1E380FBDC96B0BF3E2@CY5PR21MB3759.namprd21.prod.outlook.com>
+References: <1711748213-30517-1-git-send-email-haiyangz@microsoft.com>
+ <CY5PR21MB375904FD3437BA610E6BDBD1BF392@CY5PR21MB3759.namprd21.prod.outlook.com>
+ <CH2PR21MB1480E02C74E7BB5A52A71859CA3F2@CH2PR21MB1480.namprd21.prod.outlook.com>
+In-Reply-To:
+ <CH2PR21MB1480E02C74E7BB5A52A71859CA3F2@CH2PR21MB1480.namprd21.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=59ee9ed2-1d2f-476e-81a2-fdbc522a1f8e;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2024-03-29T22:45:42Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY5PR21MB3759:EE_|SJ1PR21MB3531:EE_
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ rmYcf8koOrW/LtdGzjbIzpHN5dODGqqAiko6MVdhhc7ISwTwH8AIAL6uMi1AQpqSXanP8K1cRGnxDPMxIye9oYUPzXLgVM/s3Fi7arAoXcBwlZ1FL3YBCqOjmSFIhY6THi4Tsw00RTNCbpPDesPUGd44/qE6yENp4v3XAENGgaXJo/oXFIsQSSSTE+h39AgAuhIFLLqSH9cAZ1fBLc5nq/btpQJa6WJLFo4n7uV4t0uc3ia2hKuKIF+/EgqFH/uxoYlaVhaoTXYa7EDVMwQmqjgvMNBT5BQrn8Z9ftb8ZogM1CaJcsMC0GQjRHPjf0im89SW3dbV/CX/wWW9yMHSqAH+DNwrDHpMiEb81IuzSm/y/UgVBL6CRYFYktKiVmrmqD3SeMmdmp77GP9qlmXDe4JhUcOp2gq6b7ie017wnnZT9UHTwts4LW9cBcQ3UQTAD5TbAvfgT5mVTNuHj7sjcjOdoiHonyRogf8h10cGGemjjXhQ4UQfMgVxYzkaLUlWrcdutSx359sk5vZrtndAap5p67QnqdV8l+n47PZcWV9rIvRJ5WC6ZQsKKa/mTW32IGNkqZSD0ah1ZFp7rYuoHAkR9a33lqE4s6oF+2pacqHiLSQbHq9uFrQZi7yZQJgc1Qix719UGxnPFBNCKF8dZnId4YUbyi2B9Q67ljAk4WY=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR21MB3759.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(7416005)(1800799015);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?9qDMiw16jGqW+pZssGLuu0BK2/fjEgH65CQ138X9ERXyJejxx+DRVqvwb4gl?=
+ =?us-ascii?Q?mS/zYWhCJbvAU6ZPqWfSwiJEwfMGM7BZ9qUFf7BCgI3OF68T5c7ypNfODVoi?=
+ =?us-ascii?Q?8iQQBUxOs9abIsCCXmedTF5vJ5+uje4DpoVc5KmpKWDSs8b/n9z91nvVtVZh?=
+ =?us-ascii?Q?AuaQZHxlpy3lQagKqDVEbYLDwHiFXUO80ctdOhLrOsE3nw8C/P7vQ9Z88I3C?=
+ =?us-ascii?Q?uFBPpMNreVcuzRD4v/zA0K61fDXJHZLB3coI9Qh/9i1IHtvT4SPBzsLajUzZ?=
+ =?us-ascii?Q?FRewa3ncnqnxjFjEm4vTBp9MI0Xb11oePn3jRiKHUKfodlqcHHLONlvE/Ka0?=
+ =?us-ascii?Q?vaecxOTlg7pIMBN/NHIhasl6YnTXQFXCrJqdYE1kQj1YHMU7KTP8K/Hkv76l?=
+ =?us-ascii?Q?GDWUcUHUmGma2N2IdTZA4L0SJsLJxN1E5QxalxsNlnBswy74As6xxkJsaVED?=
+ =?us-ascii?Q?6WvNsHC5+/jUdxv9KniXxuwpx5yjZPdSL0sbYr9ItE/9PSS5fD1QAW1AsYp/?=
+ =?us-ascii?Q?nFUjCaankfY+BxAHiFQeCL2CRWxBYBmtHn9kA98Ed6yO60rPOTJH2t5O9Avn?=
+ =?us-ascii?Q?FgdRYv/AyAScAbd16hrSONvw8sbyS9IV896ZpkLcXZkc8r+53JfzWd+7eTG2?=
+ =?us-ascii?Q?iVyMsOGCHU0Z0sWlar0z3fIFaodp6GBqIvAf8B1yL71hRYV8G0fY7Bzg+t5C?=
+ =?us-ascii?Q?uqhtDc3R5cHHlvsXTPADGyQXHi7phsytQqrKQmSO7alQ22TOIvPuRqfJNOg7?=
+ =?us-ascii?Q?UGLgNZyLfCc1FzCgPEMKr+9145nvcOcUsc7oDloqexQVurLziuKceRvzNOJ4?=
+ =?us-ascii?Q?iafUsIrm4A4GJyNyohkew/bwub2HW1mxd/4JW55Rdx1Ik+Yv3L7jZis/ASDx?=
+ =?us-ascii?Q?g32oBjPdylMR6RXrCg7ACdvTnhKRqzRO4rKeTVuP5i1WxrncXQa+rK7grbka?=
+ =?us-ascii?Q?M1LpJPqXKjxSThUiZNiTRrvszr2sjmVKQmH0jFoOVlycvumEOq2eIfc8BDRy?=
+ =?us-ascii?Q?ybbCNgcKzyq4Fkzg6Tu0Nd852vBxB2CHTwnjHnwFyloRiqNHg/M3S9207BTd?=
+ =?us-ascii?Q?hMaVnFqbqmMpJ5jZMGD1zs9NNUrYk2cW+jQ++oSgJwpYCk7OrHMgYsW4V2cP?=
+ =?us-ascii?Q?pB8KPMnmg5T+1OOTyS3Yv0im3SVB+ptm7VOfhalq56BPqMgrd3bipjq2RGNH?=
+ =?us-ascii?Q?5HxXzpuZM/kMirTKk3uDODrqGSup+pvNNmLsKTe3rD7GZ89eUbmDgJzBWBBW?=
+ =?us-ascii?Q?xGCql9/zYiQgrpWYZpomDQZqpYsKJoirOlWZEQFKGAFpYEITLc+jPk7PI23g?=
+ =?us-ascii?Q?roT+aNR32SjFl7G3Z9Q8xhH8nvgbDdZHxe6b2V0Y01VhiRCHq7WuqvxLx3Cy?=
+ =?us-ascii?Q?jM5GYQS8FaRzABGW77kvnCcaUR8RxbvaXzXkqTrOpWw3HUk/QibsRe0EzI+J?=
+ =?us-ascii?Q?Xr1RyNmA5daRH9fAZ27RZ8eQ4H5UEw7WGTlqPgHCjDdfB4gT+yGoQkIMyUGF?=
+ =?us-ascii?Q?a2BcvmbIJcShYUniBmmVzTuRyWAgHnVgQ1jiPxLNk2NU3DIipMFeGzCDcpNI?=
+ =?us-ascii?Q?Mqiz+R+JVRMUohq2MUI7/JHPQAK6ZFRepK5AGSWPI6K5zUBTDxys6LiYloK7?=
+ =?us-ascii?Q?S6TunUq7TBUW3Jy5WK2c2OYdBTsPBxQUwhvrHmSLXV4u?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR21MB3759.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d9b243c7-2c95-4e11-d78a-08dc52b3748d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Apr 2024 01:23:08.7586
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: G8PaH9kqDJHybj9lcuOBrt4nbdWB9SCIwJwa7exSRSMMEqApAC+PfzYmst7pDxJSo/qmgdo+m/fuK0cwH+XgDg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR21MB3531
 
-Andrii Nakryiko wrote:
-> Add BPF instructions for working with per-CPU data. These instructions
-> are internal-only and users are not allowed to use them directly. They
-> will only be used for internal inlining optimizations for now.
-> 
-> Two different instructions are added. One, with BPF_MEM_PERCPU opcode,
-> performs memory dereferencing of a per-CPU "address" (which is actually
-> an offset). This one is useful when inlined logic needs to load data
-> stored in per-CPU storage (bpf_get_smp_processor_id() is one such
-> example).
-> 
-> Another, with BPF_ADDR_PERCPU opcode, performs a resolution of a per-CPU
-> address (offset) stored in a register. This one is useful anywhere where
-> per-CPU data is not read, but rather is returned to user as just
-> absolute raw memory pointer (useful in bpf_map_lookup_elem() helper
-> inlinings, for example).
-> 
-> BPF disassembler is also taught to recognize them to support dumping
-> final BPF assembly code (non-JIT'ed version).
-> 
-> Add arch-specific way for BPF JITs to mark support for this instructions.
-> 
-> This patch also adds support for these instructions in x86-64 BPF JIT.
-> 
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
->  arch/x86/net/bpf_jit_comp.c | 29 +++++++++++++++++++++++++++++
->  include/linux/filter.h      | 27 +++++++++++++++++++++++++++
->  kernel/bpf/core.c           |  5 +++++
->  kernel/bpf/disasm.c         | 33 ++++++++++++++++++++++++++-------
->  4 files changed, 87 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index 3b639d6f2f54..610bbedaae70 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -1910,6 +1910,30 @@ st:			if (is_imm8(insn->off))
->  			}
->  			break;
->  
-> +		/* internal-only per-cpu zero-extending memory load */
-> +		case BPF_LDX | BPF_MEM_PERCPU | BPF_B:
-> +		case BPF_LDX | BPF_MEM_PERCPU | BPF_H:
-> +		case BPF_LDX | BPF_MEM_PERCPU | BPF_W:
-> +		case BPF_LDX | BPF_MEM_PERCPU | BPF_DW:
-> +			insn_off = insn->off;
-> +			EMIT1(0x65); /* gs segment modifier */
-> +			emit_ldx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn_off);
-> +			break;
-> +
-> +		/* internal-only load-effective-address-of per-cpu offset */
-> +		case BPF_LDX | BPF_ADDR_PERCPU | BPF_DW: {
-> +			u32 off = (u32)(void *)&this_cpu_off;
-> +
-> +			/* mov <dst>, <src> (if necessary) */
-> +			EMIT_mov(dst_reg, src_reg);
-> +
-> +			/* add <dst>, gs:[<off>] */
-> +			EMIT2(0x65, add_1mod(0x48, dst_reg));
-> +			EMIT3(0x03, add_1reg(0x04, dst_reg), 0x25);
-> +			EMIT(off, 4);
-> +
-> +			break;
-> +		}
->  		case BPF_STX | BPF_ATOMIC | BPF_W:
->  		case BPF_STX | BPF_ATOMIC | BPF_DW:
->  			if (insn->imm == (BPF_AND | BPF_FETCH) ||
+> From: Haiyang Zhang <haiyangz@microsoft.com>
+> Sent: Monday, April 1, 2024 4:21 PM
+> > [...]
+> > I suggest the Fixes tag should be updated. Otherwise the fix
+> > looks good to me.
+>=20
+> Thanks for the suggestion. I actually thought about this before
+> submission.
+> I was worried about someone back ports the jumbo frame feature,
+> they may not automatically know this patch should be backported
+> too.=20
 
-[..]
+The jumbo frame commit (2fbbd712baf1) depends on the MTU
+commit (2fbbd712baf1), so adding "Fixes: 2fbbd712baf1" (
+instead of "Fixes: ca9c54d2d6a5") might make it easier for people
+to notice and pick up this fix.
 
-> +/* Per-CPU zero-extending memory load (internal-only) */
-> +#define BPF_LDX_MEM_PERCPU(SIZE, DST, SRC, OFF)			\
-> +	((struct bpf_insn) {					\
-> +		.code  = BPF_LDX | BPF_SIZE(SIZE) | BPF_MEM_PERCPU,\
-> +		.dst_reg = DST,					\
-> +		.src_reg = SRC,					\
-> +		.off   = OFF,					\
-> +		.imm   = 0 })
-> +
-> +/* Load effective address of a given per-CPU offset */
-> +#define BPF_LDX_ADDR_PERCPU(DST, SRC, OFF)			\
+I'm OK if the patch remains as is. Just wanted to make  sure I
+understand the issue here.
 
-Do you need OFF here? It seems the above is using &this_cpu_off.
+> Also, I suspect that a bigger than MTU packet may cause
+> unexpected problem at NVA application.
 
-> +	((struct bpf_insn) {					\
-> +		.code  = BPF_LDX | BPF_DW | BPF_ADDR_PERCPU,	\
-> +		.dst_reg = DST,					\
-> +		.src_reg = SRC,					\
-> +		.off   = OFF,					\
-> +		.imm   = 0 })
-> +
+Good point. + Wei Hu, who can check the FreeBSD MANA driver and
+the DPDK MANA PMD. The code there may also need to be fixed.
+
+> If anyone have questions on back porting, I can provide a back
+> ported patch, which is just one line change.
+>=20
+> - Haiyang
+
+If the patch remains as is, gregkg will send us "failed to apply"
+emails for v6.1.y and v5.15.y and we'll need to make a backport
+for the 2 stable kernels.
+
+With "Fixes: 2fbbd712baf1", we won't receive the "failed to apply"
+emails.
+
+Thanks,
+Dexuan
+
