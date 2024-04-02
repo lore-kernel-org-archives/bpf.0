@@ -1,145 +1,182 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11021007.outbound.protection.outlook.com [40.93.193.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DD5413340D
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 15:48:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712072920; cv=none; b=DFcqfH4fTWgNUtYCWP4FRUVfZyl9pJit91Kv8j+9XT679ofX4Bi6uEHUHp+ufy+Km66W0HybU5d/nBh31CGTxmpoZQ7DPM3Ji18/IUR2+MpDBfLW0zHJ3zSoiZ95HOxY4pAnc/Yzjwms5Ajli7zueKzVy+g0j4+ZnvmVmr+OAMM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712072920; c=relaxed/simple;
-	bh=O6bId0/Lm+vyFwikPpOenylllWq6YC8LwINhz5ul1Xc=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=ZI4LJtDw+MsbCX4xKa4vkZNs+PBPdCDAtUa77m4PK3V9QqRDOYqe8SC19kMP30GLCNU0wKpMB8JAeDBQlHG+dOx4L4/e3iyd/fiYALZrZKbK/lL+DLiXr4KKn/bKnsiVwLzHF5lAxmNBFC2vTCPIq1E7taXCdkbsglb1xnfSzXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=eTOPENqO; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395E81339A2;
+	Tue,  2 Apr 2024 15:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.193.7
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712073555; cv=fail; b=eWINz68yPv+YZhOD6W9np2eqG1oIA/0/WLeVyEiVLYTVBw1ZdZdfISqhtNqY6xpKXnNIU9DnpoU2ZQPi73ASkMmA7c5GINRK3PaXIRSMEUDKRXrOgWMH2JeL2Bxf7p0IrRweNxybH+DfuzVMXYmxJrG2sCqitDkXypiDYS2PUC8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712073555; c=relaxed/simple;
+	bh=NeNaejfMC7iiF9gxlUZ93q1HNuWeqqwi3LPabF2hA8w=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=aTOT88HbovgKaOGk9Xjby5rYtWE3ptmE9FeVoAQKAgeLB9mR8udf+4un4PW7EFKOFNG3OpDbExeZbMzEV8aEgcg60sTsscWfhGgVuQWBojwymRlZZCnz70ZZR6fxwXdnxaiLm9Nn9amxzpby7i/n85ifc5VMnswDiBur2rixddE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com; spf=pass smtp.mailfrom=microsoft.com; dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b=Fg6+oBLF; arc=fail smtp.client-ip=40.93.193.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="eTOPENqO"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=eMuvWlkE68vkwqUqvG08lz+QcrEcF9ZixxATZL/4FK4=; b=eTOPENqO/goXLxCdE/ofLPxPvx
-	6COPijIwTUVOGL7I0nVAwGbhQabe3/Yc2PMruRP+v+608cZ6DnNpnM7AyYKzi2HqQQUCq5SWXPDX+
-	UcFWHpfyEJkE/pLPyqQJLMmEXhq7m9TLRkzSD9LanBV+iZ6BPFsOVYCPsO1EV//NSwFYgb2qGmTya
-	mbTTzXlLOuFBJGT/qc7dSkBY8Fjog/PaYFSUyX2J7ShqClgh5A60L0YuyGA+0I+c/JeIw/Ya1Vncp
-	t/CqaHbqsKjN3UeB0YWWpdthQJdbhTgSp2Q744NDC1xLeO33xJ6z9W16Twa0FKPH6VMwHfRy1GVD6
-	XsXIl+SQ==;
-Received: from sslproxy07.your-server.de ([78.47.199.104])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rrgNG-0000bL-W7; Tue, 02 Apr 2024 17:48:35 +0200
-Received: from [178.197.248.12] (helo=linux.home)
-	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rrgNG-000Kho-24;
-	Tue, 02 Apr 2024 17:48:34 +0200
-Subject: Re: [PATCH bpf-next] bpf: Optimize emit_mov_imm64().
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, martin.lau@kernel.org, eddyz87@gmail.com,
- kernel-team@fb.com
-References: <20240401233800.42737-1-alexei.starovoitov@gmail.com>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <ec622bce-eb17-e774-db03-7541a31661f4@iogearbox.net>
-Date: Tue, 2 Apr 2024 17:48:34 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b="Fg6+oBLF"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nnl5G1uFSDTO5rGLEt95GkxLnAqtZlWEr1NhGaphNx0iV5rEFoAHb+Rt1U9oKT9j5cleV6xjpUuVfb4QMgJ+rmC1WETWsBOB0m1sGfulNORamzz+iOluUvpgf8DC3uQdCHnzMZDlqPq9jahbga3zOE16nKIpHr3ttKxhFR8le7tEZ4Gd8H0l5WHlx6nTbYsPILU4w9wBg9N35aRD8PpA4Ba1A3Zu7EoUXvMsFpAJFO8PYJuacmyyd4GHuWMqnNebqFuTAw/Wo68q5FgJLGuoggFC1kqOMJDKarYNKViL85PUcsgRlRupyNSRtfPtlSL0SM9Crz2kET8oZVZYJseqOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QHcebN8JleKU4HvWwj3Sl4FbtCNDR4UzDQdk5N3ohYU=;
+ b=gLH44rmW+4my/nnTLewntQi4W0xjumEqFWeMlD5pwzvQVdi+IqsHLE1ZzpgZ4NrtHu2QToimaex1TYFU0A8o+cmQqXV4OLhaogjfb2m6SrjaoxsY3Mx4keS9uaLIQzVW32GEyFudnZevllsMdoU6Qavt2qVU1kP6m6nzzcb7zVYHo9HZRBUsjI5AXlWLxcuSFXRtkpBi+vOvS+3ibqzbeBrf8cRAh2RGK06wHL4eXkoiQTktVSaAIWnYQBPEO68gVHFbSLgg5xSH+ZmzES7sR29y6/BSHnGVbiQconZFlA8MAxU9X6BF1Gr7k7HdgZlCOr3AJRlHTH/h2PbF3BqJNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QHcebN8JleKU4HvWwj3Sl4FbtCNDR4UzDQdk5N3ohYU=;
+ b=Fg6+oBLFknQXV1SGvQsiyDR+orRXPxktdqFAp/QBVZHmAIqEBhgtDQ2FPwpsi8DlAtQPs5JUNrE+57OJCukUdGjoRPs2WO82OG8VzbJgCSfVPHl3MPr6TVXefOR+rjwq7jhok5BbAZt4MZeM+oZtqn6K6mV52lqHsdPJcbbvMu4=
+Received: from DM6PR21MB1481.namprd21.prod.outlook.com (2603:10b6:5:22f::8) by
+ PH0PR21MB1895.namprd21.prod.outlook.com (2603:10b6:510:1c::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7452.16; Tue, 2 Apr 2024 15:59:11 +0000
+Received: from DM6PR21MB1481.namprd21.prod.outlook.com
+ ([fe80::93ce:566b:57a1:bb4e]) by DM6PR21MB1481.namprd21.prod.outlook.com
+ ([fe80::93ce:566b:57a1:bb4e%4]) with mapi id 15.20.7472.007; Tue, 2 Apr 2024
+ 15:59:11 +0000
+From: Haiyang Zhang <haiyangz@microsoft.com>
+To: Jakub Kicinski <kuba@kernel.org>, Dexuan Cui <decui@microsoft.com>
+CC: "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, Wei Hu
+	<weh@microsoft.com>, stephen <stephen@networkplumber.org>, KY Srinivasan
+	<kys@microsoft.com>, Paul Rosswurm <paulros@microsoft.com>, "olaf@aepfle.de"
+	<olaf@aepfle.de>, "vkuznets@redhat.com" <vkuznets@redhat.com>,
+	"davem@davemloft.net" <davem@davemloft.net>, "wei.liu@kernel.org"
+	<wei.liu@kernel.org>, "edumazet@google.com" <edumazet@google.com>,
+	"pabeni@redhat.com" <pabeni@redhat.com>, "leon@kernel.org" <leon@kernel.org>,
+	Long Li <longli@microsoft.com>, "ssengar@linux.microsoft.com"
+	<ssengar@linux.microsoft.com>, "linux-rdma@vger.kernel.org"
+	<linux-rdma@vger.kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>,
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "bpf@vger.kernel.org"
+	<bpf@vger.kernel.org>, "ast@kernel.org" <ast@kernel.org>,
+	"sharmaajay@microsoft.com" <sharmaajay@microsoft.com>, "hawk@kernel.org"
+	<hawk@kernel.org>, "tglx@linutronix.de" <tglx@linutronix.de>,
+	"shradhagupta@linux.microsoft.com" <shradhagupta@linux.microsoft.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH net] net: mana: Fix Rx DMA datasize and skb_over_panic
+Thread-Topic: [PATCH net] net: mana: Fix Rx DMA datasize and skb_over_panic
+Thread-Index: AQHagiFTMR5ZlnaVikeExhfsF+DuY7FPaYIAgASmJ+CAACS3AIAAL1UAgADFKBA=
+Date: Tue, 2 Apr 2024 15:59:10 +0000
+Message-ID:
+ <DM6PR21MB1481D2981B497CB339D84CBBCA3E2@DM6PR21MB1481.namprd21.prod.outlook.com>
+References: <1711748213-30517-1-git-send-email-haiyangz@microsoft.com>
+	<CY5PR21MB375904FD3437BA610E6BDBD1BF392@CY5PR21MB3759.namprd21.prod.outlook.com>
+	<CH2PR21MB1480E02C74E7BB5A52A71859CA3F2@CH2PR21MB1480.namprd21.prod.outlook.com>
+	<CY5PR21MB37590FD539C1E380FBDC96B0BF3E2@CY5PR21MB3759.namprd21.prod.outlook.com>
+ <20240401211232.57b17081@kernel.org>
+In-Reply-To: <20240401211232.57b17081@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=7a53aba1-ff31-4942-97c5-083718b803d2;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2024-04-02T15:58:11Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR21MB1481:EE_|PH0PR21MB1895:EE_
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ 4noJW76wByI4bGQgenQ7ju6ZHDd+36JykCVsd8MCMMMZ1ATfv0AWoaYonq9PjCVdfc3aeU4OTh1X443erMMqk7Vz+ohAPdJDSoOn7VcHOy+dt5cn/AWj+y6jKtqm+NPtq8SGKngX0EH+R/WD1eIsXe85nyY75je1cvfD0NFkTqaMHpLCjQ5AoejBECGUAz4jiPlED2xTn445fQwPvVeDqbU60LbVZD9TpkniKGab+9++ti3YKngatQyeROGGzbZxsfgl3qY9bzKb1cQeAEl24mD85ORS67FOanJ+57wH1JE4VkDO1vLumKXsvzC+vw9ftNb6Vt898GNMkoUvkBKbMaO46cR0EWtDx7G91U5UUx7IvI3pEoPDK0GO+IYo91j9G73DsbXDI0a5AF36IX4BjpasJHtsPcA2JZlCzIQvSLO8Nxu60tlyoDXH2G3RqpSvvlOWHvx6C99AIF44S0XR/yjNmKHW/HH/wAT9etvl/WdhEmv3syxv50kehR+1sO9X7z3XeNzcWZUQXJ41Mkef+rd70D7qYVLooDRGAWoNxA096lCw8jeKfvruosDaOT6B8TKjepbmW0dSfbqjlgk1Abqd4RaSekGPd7sI0lrvSVZ6MVwSSA51kYJTZLTNOV+9ZK9owobWi8hYxfh3tXU9Sw==
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1481.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(7416005)(366007)(376005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?YiC2Z4s3wHbecuru4/m6dxVHXVIaFIrgoHoEvgj9krtlSvww2rJGJagZQn56?=
+ =?us-ascii?Q?JhgjzjCq4iZKSdyBrska3ub6G3kzRCjfx4ef2uhoOQkcS4Ale+gKKcwWxlRw?=
+ =?us-ascii?Q?OAVObSfgaKaN6z6OZ2Yfdayng66AJLiMyUdIK/PzmxOMHgVK3iIUYgSKACHv?=
+ =?us-ascii?Q?jsR+W2h3j4u+tPC2DhDZrTuQ8RrQxiYKIzNoBSBwnCZ0m2tgGO8Dl9/Fx08y?=
+ =?us-ascii?Q?4TPz/+tVmsVGF1nEHmpEb0Rj8oIQZNBkYm2vwfRqRJ4ptJgyyVEH1VVTagUo?=
+ =?us-ascii?Q?EgqLH8tGGqtTR1E2nKh3PRJiNk/6Z881RDBWRRtvNNRFX+tgFnmdRTkbbRWy?=
+ =?us-ascii?Q?FFDNaKiUnRXoNxdlfnkT/ZaYJZjnSSfng/HiqlkHjjTQ8siR5lpZczlczq8E?=
+ =?us-ascii?Q?TLBbElZBsYMEdqPryB54CisAYXVmm6l/QfXplonEe8KMS3tt5phTDowImBxL?=
+ =?us-ascii?Q?k1/M50WiazziHnMTegw6CDap+O+IddDrn2f4HB/wZeoTPCfFgdGpRwvkbOre?=
+ =?us-ascii?Q?4hDaEj5lEmomhSTDg54dFBEbdORXqnuMwRhOZRMoDCyPlvumpl+6a50pSDPX?=
+ =?us-ascii?Q?n+cWP88cN5mWvK4LjBKXT27GO4z1FuAkbqt5YaoNT6iFo39Ln9O6rzuT0PSj?=
+ =?us-ascii?Q?Z75snVvmH7gzgzbrFoGv2r0C3gQ37tqiYHkGWopFqodGjjs0CE7so7yoiui7?=
+ =?us-ascii?Q?M022mPBA4YQubr+4pJiqTPGXUSpMIGdaKOIrLwhJ84IkZm3nNYseVAv4u0H8?=
+ =?us-ascii?Q?BUJfWRFjRr6K8HwW50KMA4Rw1czdNNJrTxfsLJ6kCd6BIVTjQEtYLgcNRVYg?=
+ =?us-ascii?Q?3aPpdxGZnWb2iBduc4qQJtsVLpFIgWcLtAbywbEcbbeyXxwv/fwXgQPKOJ/M?=
+ =?us-ascii?Q?uYItGz25wRMT7ugV/kdBqAOZgP0/Zuzbv+u8XBa9eAsBMzzlOpqz4j3ddJHC?=
+ =?us-ascii?Q?1wG2anliXKjGD5WZkBRhjNtW0nZWpT/Z5UVcd1fAK7Gz4ZAhxRSuszOMqXnZ?=
+ =?us-ascii?Q?Fkr6FBCkSgl6h55kul822rKZyKc5aiEnRQprpd9LuaMOxAIKcnL6iK23xwYS?=
+ =?us-ascii?Q?uef7L0PYxbxfsefmLszQXDWNH2ZrWZzxcc2fznl0m2p4X4vsNS6K1EUvoLXx?=
+ =?us-ascii?Q?EFdlHq7k+pyWGeP16r0FyKk907ezLoDxE63U3wrB47LRarh08g6/eOQ42OC9?=
+ =?us-ascii?Q?DYmYdYj50iwYDk/wmw4vLO6XbOEuITF+AevhI19TMsB34vAULuURkFlz5xIJ?=
+ =?us-ascii?Q?5jEPfOwxW5+grMJsU7/rUUWABffUEwaTRRTYLpXjiG2CiX8yDjXN0x1PoFww?=
+ =?us-ascii?Q?VxixvmrCJ7S0EPTJK8daC5hFkPFa/m46RJ3WmLUnjBHgJb6soxGnfyC1ju4F?=
+ =?us-ascii?Q?f/RXgtzHF6UtNMY26nQcBZMQl7vhbhr5VCQmBo/wbAnSp3APXagfn/5444vJ?=
+ =?us-ascii?Q?eLUy+bYV/90/lGAElzLLlAdxcv9ZXsLaIOY6x9AIHxk5yhOAw3RNsHVgx25D?=
+ =?us-ascii?Q?hQ4lID7iTm8ZA9HubzT61u7d35nHsdYdJeBeAl/pnTJXQsYujNyNXnsV8nZm?=
+ =?us-ascii?Q?ybis8A63Fm2d/OwJ8r8MMWjTgQf+004XM57Rz9Z+?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240401233800.42737-1-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27233/Tue Apr  2 10:26:21 2024)
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1481.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04cc9c57-0634-40bc-b68f-08dc532dd60a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Apr 2024 15:59:10.8862
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tx39MD5Sa15a5jZuJs9NSNqLHaYF3H5zhORVWY4sDxXfO8oB6oXCbNOSUek9I1n5wFsxf6BN9KqrkzFNtml6eg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR21MB1895
 
-On 4/2/24 1:38 AM, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> Turned out that bpf prog callback addresses, bpf prog addresses
-> used in bpf_trampoline, and in other cases the 64-bit address
-> can be represented as sign extended 32-bit value.
-> According to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82339
-> "Skylake has 0.64c throughput for mov r64, imm64, vs. 0.25 for mov r32, imm32."
-> So use shorter encoding and faster instruction when possible.
-> 
-> Special care is needed in jit_subprogs(), since bpf_pseudo_func()
-> instruction cannot change its size during the last step of JIT.
-> 
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
->   arch/x86/net/bpf_jit_comp.c |  5 ++++-
->   kernel/bpf/verifier.c       | 13 ++++++++++---
->   2 files changed, 14 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index 3b639d6f2f54..47abddac6dc3 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -816,9 +816,10 @@ static void emit_mov_imm32(u8 **pprog, bool sign_propagate,
->   static void emit_mov_imm64(u8 **pprog, u32 dst_reg,
->   			   const u32 imm32_hi, const u32 imm32_lo)
->   {
-> +	u64 imm64 = ((u64)imm32_hi << 32) | (u32)imm32_lo;
->   	u8 *prog = *pprog;
->   
-> -	if (is_uimm32(((u64)imm32_hi << 32) | (u32)imm32_lo)) {
-> +	if (is_uimm32(imm64)) {
->   		/*
->   		 * For emitting plain u32, where sign bit must not be
->   		 * propagated LLVM tends to load imm64 over mov32
-> @@ -826,6 +827,8 @@ static void emit_mov_imm64(u8 **pprog, u32 dst_reg,
->   		 * 'mov %eax, imm32' instead.
->   		 */
->   		emit_mov_imm32(&prog, false, dst_reg, imm32_lo);
-> +	} else if (is_simm32(imm64)) {
-> +		emit_mov_imm32(&prog, true, dst_reg, imm32_lo);
->   	} else {
->   		/* movabsq rax, imm64 */
->   		EMIT2(add_1mod(0x48, dst_reg), add_1reg(0xB8, dst_reg));
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index edb650667f44..d4a338e7b5e7 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -19145,12 +19145,19 @@ static int jit_subprogs(struct bpf_verifier_env *env)
->   		env->insn_aux_data[i].call_imm = insn->imm;
->   		/* point imm to __bpf_call_base+1 from JITs point of view */
->   		insn->imm = 1;
-> -		if (bpf_pseudo_func(insn))
-> +		if (bpf_pseudo_func(insn)) {
-> +#if defined(MODULES_VADDR)
-> +			u64 addr = MODULES_VADDR;
-> +#else
-> +			u64 addr = VMALLOC_START;
-> +#endif
 
-Is this beneficial for all archs? It seems this patch is mainly targetting x86.
-Why not having a weak function like u64 bpf_jit_alloc_exec_start() which returns
-the MODULES_VADDR for x86, but leaves the rest as-is?
 
-For example, arm64 has MODULES_VADDR defined, but the allocator uses vmalloc
-range instead, see bpf_jit_alloc_exec() there, so this is a different pool and
-it's also not clear if this is better or worse wrt its imm encoding.
+> -----Original Message-----
+> From: Jakub Kicinski <kuba@kernel.org>
+> Sent: Tuesday, April 2, 2024 12:13 AM
+> To: Dexuan Cui <decui@microsoft.com>
+> Cc: Haiyang Zhang <haiyangz@microsoft.com>; linux-hyperv@vger.kernel.org;
+> netdev@vger.kernel.org; Wei Hu <weh@microsoft.com>; stephen
+> <stephen@networkplumber.org>; KY Srinivasan <kys@microsoft.com>; Paul
+> Rosswurm <paulros@microsoft.com>; olaf@aepfle.de; vkuznets@redhat.com;
+> davem@davemloft.net; wei.liu@kernel.org; edumazet@google.com;
+> pabeni@redhat.com; leon@kernel.org; Long Li <longli@microsoft.com>;
+> ssengar@linux.microsoft.com; linux-rdma@vger.kernel.org;
+> daniel@iogearbox.net; john.fastabend@gmail.com; bpf@vger.kernel.org;
+> ast@kernel.org; sharmaajay@microsoft.com; hawk@kernel.org;
+> tglx@linutronix.de; shradhagupta@linux.microsoft.com; linux-
+> kernel@vger.kernel.org; stable@vger.kernel.org
+> Subject: Re: [PATCH net] net: mana: Fix Rx DMA datasize and
+> skb_over_panic
+>=20
+> On Tue, 2 Apr 2024 01:23:08 +0000 Dexuan Cui wrote:
+> > > > I suggest the Fixes tag should be updated. Otherwise the fix
+> > > > looks good to me.
+> > >
+> > > Thanks for the suggestion. I actually thought about this before
+> > > submission.
+> > > I was worried about someone back ports the jumbo frame feature,
+> > > they may not automatically know this patch should be backported
+> > > too.
+> >
+> > The jumbo frame commit (2fbbd712baf1) depends on the MTU
+> > commit (2fbbd712baf1), so adding "Fixes: 2fbbd712baf1" (
+> > instead of "Fixes: ca9c54d2d6a5") might make it easier for people
+> > to notice and pick up this fix.
+> >
+> > I'm OK if the patch remains as is. Just wanted to make  sure I
+> > understand the issue here.
+>=20
+> Please update the tag to where the bug was actually first exposed.
 
->   			/* jit (e.g. x86_64) may emit fewer instructions
->   			 * if it learns a u32 imm is the same as a u64 imm.
-> -			 * Force a non zero here.
-> +			 * Set close enough to possible prog address.
->   			 */
-> -			insn[1].imm = 1;
-> +			insn[0].imm = (u32)addr;
-> +			insn[1].imm = addr >> 32;
-> +		}
->   	}
->   
->   	err = bpf_prog_alloc_jited_linfo(prog);
-> 
+Thank Dexuan and Jakub for the suggestions. I will update the tag.
+
+- Haiyang
 
