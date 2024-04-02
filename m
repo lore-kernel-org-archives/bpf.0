@@ -1,56 +1,56 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B759885262
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 15:26:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992C512F39B
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 15:27:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712071621; cv=none; b=Yv/AKv8PS9mv7KgmjXkXMOMl9fwrPk+GB1LmZKCKDIhm61anckYPz9QxWqccfKjoXN0ZkaLeE6fqIVV3oRhUb9771g1MwNjNs/bQAMl+5nOv5J3ar4Ph/PZn4p0VxbeXIU6WPx2mKo4ySBtXNzyRKr4Hoyrg6LZ/iY2zS9RQnUU=
+	t=1712071626; cv=none; b=jdcgW+j9BLzoJN6gNBOxbOaLib84yAnvrUmzUO8dVmAri75FNFyZY/RZ7RVLR8BobnEPQvdmcx3TiPN7ckqTWl+WxdMMnYtjAPq2nAM6HFERB9E4Ix8bD9fld6J9lAhXWVNlgFnGLfIyqNItC5bQT/KhNFD9dU52pRPzMaR4A5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712071621; c=relaxed/simple;
-	bh=LGGFOWmrueBRuNaW4RzxW7NvMmBml0s8qrnhyu9q+X8=;
+	s=arc-20240116; t=1712071626; c=relaxed/simple;
+	bh=JCKlhmpn3zg/wELFhcoNGC+oXfSg2D9zDMXcVo+BJxw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=olMVteN6mYIL12byn5Qof1gyvpYjE88EcHvvcmK3Eadh8YNcQNfa6quYan2uRfk46elBR06YElEU8917AIP5/+YqNzq2vCdfAzx9FhiJBAd8D6BaOOLpN/tudE8/8Z1+JnlBUEzY6sHfrkOK6k3X3XPd8C+iKzqluYNQTciDNJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kO9prndl; arc=none smtp.client-ip=209.85.214.172
+	 MIME-Version; b=UQUgrJNBPUD7GHCCHuB/wkGjZ4UViOMz/py0nLLECMo33+tyYfpebxKlPABPbgU0uSDHxH0IdvOIkObrEiSl8lfFZA9r+hg4NkRxDBpc8bji1tEY+mebD1cKyGxgEWfg/EA9HYH+Iw29lhwrOIyapZqscBbgJTTfqkE/azcGMr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KrKOB9Sf; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kO9prndl"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1e27fadbbe1so4559705ad.1
-        for <bpf@vger.kernel.org>; Tue, 02 Apr 2024 08:26:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KrKOB9Sf"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1e267238375so7850415ad.1
+        for <bpf@vger.kernel.org>; Tue, 02 Apr 2024 08:27:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712071618; x=1712676418; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712071622; x=1712676422; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=njL6tMjKCKCYbdPsByoqYXdZydiTsQ0eL5nfl/OaP44=;
-        b=kO9prndlbijN8pdnxFIOQYcbyTpXlH/nI7NloqpX8pFEEC/f00Wrw5uy0tH+iEw5Qh
-         foWlkBq4X4zVm4bUDq9r85uFQhXcMosDTqlTX0qqcqHatEYAR2coMOVwKUXjcEssukPa
-         nXDUDgdB8weeDgfTwjUEWX+w3VmvAuVTfW7OOM0vnEvkx/AYhupJjGKkFnoqL2a9Y+8Y
-         IZzUG8UC5HIri3ZVcoBI6dR9AaQO7oJaisPuqYjacKbDXAZiv2E5xod6CAr6tmuRJHmx
-         QAaNortfLDb8XvFi7Ph0fwVi/vqvek7tUWOYkPI0PlMjGG2KXw15VYAascRJZw6LNynj
-         A1lQ==
+        bh=Mdi2wi2UcMbPoXCezKfhkx7tGIpxhHBiP+Ib7Sg23k8=;
+        b=KrKOB9SfZ3JwBEA8ZFGfT1FqvfJpW4MI+VK2a4tJS/mnua5lTQMPbDslBFw0H4x5jp
+         GiTVp4VPNFcRMMVYhe/yNypoj+/kx6ah0VRRFAZ4YKy91pR9oPlWPMbgJhpxHOIJdcJZ
+         Srkek2Kk4guE36v47HegCONxZhNzJCTS8Slqb10ktClUjKKwOO3/2PMSYOUnZyJwUEID
+         NeCfDr3gbGcFbTOoTT4g9TeZ48S316ZB2prf3oyhWD5VBM+aXhgNh2l13tim9IiIPsed
+         tlPckOfWZYpuvPCesyfiG8GsLlcLLXkyBVDyexQZOXOgKoJfsXZkX2SeTVoWa5g2JTQ8
+         Dp4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712071618; x=1712676418;
+        d=1e100.net; s=20230601; t=1712071622; x=1712676422;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=njL6tMjKCKCYbdPsByoqYXdZydiTsQ0eL5nfl/OaP44=;
-        b=Iq0z5pb0TGXQH89OPIRnYocUnWHMnK+NRW751I6LRsDG6tVAxdv4lpXUiRKDJUsftB
-         hfjemj5dYr2IU4BBO2uqHdYeQK79meMTmXEiwUkujU72L2k0R6FLhnhlRFJufrCr6UD5
-         uSQP38LLHMGipl+oJ5rwyaXeHT2wO8ykn6VskIR/N5/doQgRdJHF+k5J8O+l/xBevSxQ
-         No0oQKJJXptD6RxSSnXZ5jEZrdnTYTwKgX5CEKywQG+qVpFfSxtgEngYs7pjLWRGll7W
-         QJqHoWDstwW6fIz2V1uJYRnQ5EZAGVp9KgmnhreA65j62qfWon9gRZAQAZnHA7VPTOjj
-         Al4g==
-X-Gm-Message-State: AOJu0YxTgifHmQ9ox1X6vTE/79aDcibgwwXG9x68ESfiEvX59BIttyVf
-	/g1waO6D+T0rncKBgHlZ8HIYijvD7u49LcitUaOP21i4YQp21wuMk9bB1Ka8
-X-Google-Smtp-Source: AGHT+IFPT6IRzm+CfIpXLUd1aSjlni/xgTl/5XPi1d/AlF/3m9EkF3jXZ1wqYx/gUfVLH1EcCZ9oEg==
-X-Received: by 2002:a17:902:6548:b0:1e2:7e04:3ab1 with SMTP id d8-20020a170902654800b001e27e043ab1mr1240512pln.33.1712071618461;
-        Tue, 02 Apr 2024 08:26:58 -0700 (PDT)
+        bh=Mdi2wi2UcMbPoXCezKfhkx7tGIpxhHBiP+Ib7Sg23k8=;
+        b=TPToFGu8VPxgVYEkWZBHnt14AhNWthxLgsa2VWxUPQjVPMmPIAIEvY9wfVjFKsFKSk
+         NghBIZ+MLcki4tkSfa0E00vk0gDvOfVjSAdyFtCTjf5tfY6/4MdqgmQ9WvlifAhgdkqJ
+         OWcNczfdezIIaS1e/9CAhDrVewdCHOrO7by1dIK8CD7htwRVtFjusm8MGETjpAgOArTL
+         jKl2MrbkgbL24qCjlsb2+OlAnT+wcIlxmG828XKFpKGF0k4EpuGVeXhUMCd/oZVWupqQ
+         gYMOMmGNXNO1M8yque0J02ZcOHo5yHJpAdCLnexsTFARp3jzIh5mlqrAAwzxsBEVZIBk
+         qSig==
+X-Gm-Message-State: AOJu0YzTPBpI8nwxYRFtLn0qO8AiGxkitVC4qRfYX+SOJaECRUvdEt/6
+	lpUAejgnt4a8GESp3jRseKgZ6bu1EBSUS7xILLwsxEqDa9cgiDFwNSrGDrKC
+X-Google-Smtp-Source: AGHT+IGvmYrp0zUA7ee3uqGy5/hxIxRl0gulqVKv3qMVBAnuPFdnj9zxcdA4LwBSBERsztPc3svuXQ==
+X-Received: by 2002:a17:903:230b:b0:1e0:c0b9:589e with SMTP id d11-20020a170903230b00b001e0c0b9589emr26308165plh.25.1712071622179;
+        Tue, 02 Apr 2024 08:27:02 -0700 (PDT)
 Received: from localhost.localdomain (bb116-14-181-187.singnet.com.sg. [116.14.181.187])
-        by smtp.gmail.com with ESMTPSA id ju2-20020a170903428200b001e0a08bbe49sm1640505plb.140.2024.04.02.08.26.55
+        by smtp.gmail.com with ESMTPSA id ju2-20020a170903428200b001e0a08bbe49sm1640505plb.140.2024.04.02.08.26.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Apr 2024 08:26:57 -0700 (PDT)
+        Tue, 02 Apr 2024 08:27:01 -0700 (PDT)
 From: Leon Hwang <hffilwlqm@gmail.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -62,9 +62,9 @@ Cc: ast@kernel.org,
 	hengqi.chen@gmail.com,
 	hffilwlqm@gmail.com,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v3 2/3] bpf, x64: Fix tailcall hierarchy
-Date: Tue,  2 Apr 2024 23:26:37 +0800
-Message-ID: <20240402152638.31377-3-hffilwlqm@gmail.com>
+Subject: [PATCH bpf-next v3 3/3] selftests/bpf: Add testcases for tailcall hierarchy fixing
+Date: Tue,  2 Apr 2024 23:26:38 +0800
+Message-ID: <20240402152638.31377-4-hffilwlqm@gmail.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240402152638.31377-1-hffilwlqm@gmail.com>
 References: <20240402152638.31377-1-hffilwlqm@gmail.com>
@@ -76,525 +76,632 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From commit ebf7d1f508a73871 ("bpf, x64: rework pro/epilogue and tailcall
-handling in JIT"), the tailcall on x64 works better than before.
+Add some test cases to confirm the tailcall hierarchy issue has been fixed.
 
-From commit e411901c0b775a3a ("bpf: allow for tailcalls in BPF subprograms
-for x64 JIT"), tailcall is able to run in BPF subprograms on x64.
+tools/testing/selftests/bpf/test_progs -t tailcalls
+311/18  tailcalls/tailcall_bpf2bpf_hierarchy_1:OK
+311/19  tailcalls/tailcall_bpf2bpf_hierarchy_fentry:OK
+311/20  tailcalls/tailcall_bpf2bpf_hierarchy_fexit:OK
+311/21  tailcalls/tailcall_bpf2bpf_hierarchy_fentry_fexit:OK
+311/22  tailcalls/tailcall_bpf2bpf_hierarchy_2:OK
+311/23  tailcalls/tailcall_bpf2bpf_hierarchy_3:OK
+311     tailcalls:OK
+Summary: 1/23 PASSED, 0 SKIPPED, 0 FAILED
 
-How about:
-
-1. More than 1 subprograms are called in a bpf program.
-2. The tailcalls in the subprograms call the bpf program.
-
-Because of missing tail_call_cnt back-propagation, a tailcall hierarchy
-comes up. And MAX_TAIL_CALL_CNT limit does not work for this case.
-
-Let's take a look into an example:
-
-\#include <linux/bpf.h>
-\#include <bpf/bpf_helpers.h>
-\#include "bpf_legacy.h"
-
-struct {
-	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-	__uint(max_entries, 1);
-	__uint(key_size, sizeof(__u32));
-	__uint(value_size, sizeof(__u32));
-} jmp_table SEC(".maps");
-
-int count = 0;
-
-static __noinline
-int subprog_tail(struct __sk_buff *skb)
-{
-	bpf_tail_call_static(skb, &jmp_table, 0);
-	return 0;
-}
-
-SEC("tc")
-int entry(struct __sk_buff *skb)
-{
-	volatile int ret = 1;
-
-	count++;
-	subprog_tail(skb); /* subprog call1 */
-	subprog_tail(skb); /* subprog call2 */
-
-	return ret;
-}
-
-char __license[] SEC("license") = "GPL";
-
-And the entry bpf prog is populated to the 0th slot of jmp_table. Then,
-what happens when entry bpf prog runs? The CPU will be stalled because
-of too many tailcalls, e.g. the test_progs failed to run on aarch64 and
-s390x because of "rcu: INFO: rcu_sched self-detected stall on CPU".
-
-So, if CPU does not stall because of too many tailcalls, how many
-tailcalls will be there for this case? And why MAX_TAIL_CALL_CNT limit
-does not work for this case?
-
-Let's step into some running steps.
-
-At the very first time when subprog_tail() is called, subprog_tail() does
-tailcall the entry bpf prog. Then, subprog_taill() is called at second time
-at the position subprog call1, and it tailcalls the entry bpf prog again.
-
-Then, again and again. At the very first time when MAX_TAIL_CALL_CNT limit
-works, subprog_tail() has been called for 34 times at the position subprog
-call1. And at this time, the tail_call_cnt is 33 in subprog_tail().
-
-Next, the 34th subprog_tail() returns to entry() because of
-MAX_TAIL_CALL_CNT limit.
-
-In entry(), the 34th entry(), at the time after the 34th subprog_tail() at
-the position subprog call1 finishes and before the 1st subprog_tail() at
-the position subprog call2 calls in entry(), what's the value of
-tail_call_cnt in entry()? It's 33.
-
-As we know, tail_all_cnt is pushed on the stack of entry(), and propagates
-to subprog_tail() by %rax from stack.
-
-Then, at the time when subprog_tail() at the position subprog call2 is
-called for its first time, tail_call_cnt 33 propagates to subprog_tail()
-by %rax. And the tailcall in subprog_tail() is aborted because of
-tail_call_cnt >= MAX_TAIL_CALL_CNT too.
-
-Then, subprog_tail() at the position subprog call2 ends, and the 34th
-entry() ends. And it returns to the 33rd subprog_tail() called from the
-position subprog call1. But wait, at this time, what's the value of
-tail_call_cnt under the stack of subprog_tail()? It's 33.
-
-Then, in the 33rd entry(), at the time after the 33th subprog_tail() at
-the position subprog call1 finishes and before the 2nd subprog_tail() at
-the position subprog call2 calls, what's the value of tail_call_cnt
-in current entry()? It's *32*. Why not 33?
-
-Before stepping into subprog_tail() at the position subprog call2 in 33rd
-entry(), like stopping the time machine, let's have a look at the stack
-memory:
-
-  |  STACK  |
-  +---------+ RBP  <-- current rbp
-  |   ret   | STACK of 33rd entry()
-  |   tcc   | its value is 32
-  +---------+ RSP  <-- current rsp
-  |   rip   | STACK of 34rd entry()
-  |   rbp   | reuse the STACK of 33rd subprog_tail() at the position
-  |   ret   |                                        subprog call1
-  |   tcc   | its value is 33
-  +---------+ rsp
-  |   rip   | STACK of 1st subprog_tail() at the position subprog call2
-  |   rbp   |
-  |   tcc   | its value is 33
-  +---------+ rsp
-
-Why not 33? It's because tail_call_cnt does not back-propagate from
-subprog_tail() to entry().
-
-Then, while stepping into subprog_tail() at the position subprog call2 in
-33rd entry():
-
-  |  STACK  |
-  +---------+
-  |   ret   | STACK of 33rd entry()
-  |   tcc   | its value is 32
-  |   rip   |
-  |   rbp   |
-  +---------+ RBP  <-- current rbp
-  |   tcc   | its value is 32; STACK of subprog_tail() at the position
-  +---------+ RSP  <-- current rsp                        subprog call2
-
-Then, while pausing after tailcalling in 2nd subprog_tail() at the position
-subprog call2:
-
-  |  STACK  |
-  +---------+
-  |   ret   | STACK of 33rd entry()
-  |   tcc   | its value is 32
-  |   rip   |
-  |   rbp   |
-  +---------+ RBP  <-- current rbp
-  |   tcc   | its value is 33; STACK of subprog_tail() at the position
-  +---------+ RSP  <-- current rsp                        subprog call2
-
-Note: what happens to tail_call_cnt:
-	/*
-	 * if (tail_call_cnt++ >= MAX_TAIL_CALL_CNT)
-	 *	goto out;
-	 */
-It's to check >= MAX_TAIL_CALL_CNT first and then increment tail_call_cnt.
-
-So, current tailcall is allowed to run.
-
-Then, entry() is tailcalled. And the stack memory status is:
-
-  |  STACK  |
-  +---------+
-  |   ret   | STACK of 33rd entry()
-  |   tcc   | its value is 32
-  |   rip   |
-  |   rbp   |
-  +---------+ RBP  <-- current rbp
-  |   ret   | STACK of 35th entry(); reuse STACK of subprog_tail() at the
-  |   tcc   | its value is 33                   the position subprog call2
-  +---------+ RSP  <-- current rsp
-
-So, the tailcalls in the 35th entry() will be aborted.
-
-And, ..., again and again.  :(
-
-And, I hope you have understood the reason why MAX_TAIL_CALL_CNT limit
-does not work for this case.
-
-And, how many tailcalls are there for this case if CPU does not stall?
-
-From top-down view, does it look like hierarchy layer and layer?
-
-I think it is a hierarchy layer model with 2+4+8+...+2**33 tailcalls. As a
-result, if CPU does not stall, there will be 2**34 - 2 = 17,179,869,182
-tailcalls. That's the guy making CPU stalled.
-
-What about there are N subprog_tail() in entry()? If CPU does not stall
-because of too many tailcalls, there will be almost N**34 tailcalls.
-
-As we learn about the issue, how does this patch resolve it?
-
-In this patch, it stores tail_call_cnt at task_struct. When a tailcall
-happens, the caller and callee bpf progs are in the same thread context,
-which means the current task_struct won't change after a tailcall.
-
-First, at the prologue of bpf prog, it initialise the tail_call_cnt at
-task_struct.
-
-Then, when a tailcall happens, it compares tail_call_cnt with
-MAX_TAIL_CALL_CNT, and then increments it.
-
-Additionally, in order to avoid touching other registers excluding %rax,
-it uses asm to handle tail_call_cnt at task_struct.
-
-As a result, the previous tailcall way can be removed totally, including
-
-1. "push rax" at prologue.
-2. load tail_call_cnt to rax before calling function.
-3. "pop rax" before jumping to tailcallee when tailcall.
-4. "push rax" and load tail_call_cnt to rax at trampoline.
-
-Fixes: ebf7d1f508a7 ("bpf, x64: rework pro/epilogue and tailcall handling in JIT")
-Fixes: e411901c0b77 ("bpf: allow for tailcalls in BPF subprograms for x64 JIT")
 Signed-off-by: Leon Hwang <hffilwlqm@gmail.com>
 ---
- arch/x86/net/bpf_jit_comp.c | 137 +++++++++++++++++++++---------------
- 1 file changed, 81 insertions(+), 56 deletions(-)
+ .../selftests/bpf/prog_tests/tailcalls.c      | 418 ++++++++++++++++++
+ .../bpf/progs/tailcall_bpf2bpf_hierarchy1.c   |  38 ++
+ .../bpf/progs/tailcall_bpf2bpf_hierarchy2.c   |  63 +++
+ .../bpf/progs/tailcall_bpf2bpf_hierarchy3.c   |  50 +++
+ 4 files changed, 569 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy3.c
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 3b639d6f2f54d..cd06e02e83b64 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -11,6 +11,7 @@
- #include <linux/bpf.h>
- #include <linux/memory.h>
- #include <linux/sort.h>
-+#include <linux/sched.h>
- #include <asm/extable.h>
- #include <asm/ftrace.h>
- #include <asm/set_memory.h>
-@@ -18,6 +19,8 @@
- #include <asm/text-patching.h>
- #include <asm/unwind.h>
- #include <asm/cfi.h>
-+#include <asm/current.h>
-+#include <asm/percpu.h>
- 
- static bool all_callee_regs_used[4] = {true, true, true, true};
- 
-@@ -273,7 +276,7 @@ struct jit_context {
- /* Number of bytes emit_patch() needs to generate instructions */
- #define X86_PATCH_SIZE		5
- /* Number of bytes that will be skipped on tailcall */
--#define X86_TAIL_CALL_OFFSET	(11 + ENDBR_INSN_SIZE)
-+#define X86_TAIL_CALL_OFFSET	(14 + ENDBR_INSN_SIZE)
- 
- static void push_r12(u8 **pprog)
- {
-@@ -403,6 +406,9 @@ static void emit_cfi(u8 **pprog, u32 hash)
- 	*pprog = prog;
+diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+index 59993fc9c0d7e..6b7baafb855af 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
++++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+@@ -1187,6 +1187,412 @@ static void test_tailcall_poke(void)
+ 	tailcall_poke__destroy(call);
  }
  
-+static int emit_call(u8 **pprog, void *func, void *ip);
-+static __used void bpf_tail_call_cnt_init(void);
-+
- /*
-  * Emit x86-64 prologue code for BPF program.
-  * bpf_tail_call helper will skip the first X86_TAIL_CALL_OFFSET bytes
-@@ -410,9 +416,9 @@ static void emit_cfi(u8 **pprog, u32 hash)
-  */
- static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf,
- 			  bool tail_call_reachable, bool is_subprog,
--			  bool is_exception_cb)
-+			  bool is_exception_cb, u8 *ip)
- {
--	u8 *prog = *pprog;
-+	u8 *prog = *pprog, *start = *pprog;
- 
- 	emit_cfi(&prog, is_subprog ? cfi_bpf_subprog_hash : cfi_bpf_hash);
- 	/* BPF trampoline can be made to work without these nops,
-@@ -421,13 +427,14 @@ static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf,
- 	emit_nops(&prog, X86_PATCH_SIZE);
- 	if (!ebpf_from_cbpf) {
- 		if (tail_call_reachable && !is_subprog)
--			/* When it's the entry of the whole tailcall context,
--			 * zeroing rax means initialising tail_call_cnt.
-+			/* Call bpf_tail_call_cnt_init to initilise
-+			 * tail_call_cnt.
- 			 */
--			EMIT2(0x31, 0xC0); /* xor eax, eax */
-+			emit_call(&prog, bpf_tail_call_cnt_init,
-+				  ip + (prog - start));
- 		else
- 			/* Keep the same instruction layout. */
--			EMIT2(0x66, 0x90); /* nop2 */
-+			emit_nops(&prog, X86_PATCH_SIZE);
- 	}
- 	/* Exception callback receives FP as third parameter */
- 	if (is_exception_cb) {
-@@ -452,8 +459,6 @@ static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf,
- 	/* sub rsp, rounded_stack_depth */
- 	if (stack_depth)
- 		EMIT3_off32(0x48, 0x81, 0xEC, round_up(stack_depth, 8));
--	if (tail_call_reachable)
--		EMIT1(0x50);         /* push rax */
- 	*pprog = prog;
- }
- 
-@@ -589,13 +594,61 @@ static void emit_return(u8 **pprog, u8 *ip)
- 	*pprog = prog;
- }
- 
-+static __used void bpf_tail_call_cnt_init(void)
++static void test_tailcall_hierarchy_count(const char *which, bool test_fentry,
++					  bool test_fexit)
 +{
-+	/* The following asm equals to
-+	 *
-+	 * u32 *tcc_ptr = &current->bpf_tail_call_cnt;
-+	 *
-+	 * *tcc_ptr = 0;
-+	 */
++	int err, map_fd, prog_fd, main_data_fd, fentry_data_fd, fexit_data_fd, i, val;
++	struct bpf_object *obj = NULL, *fentry_obj = NULL, *fexit_obj = NULL;
++	struct bpf_link *fentry_link = NULL, *fexit_link = NULL;
++	struct bpf_map *prog_array, *data_map;
++	struct bpf_program *prog;
++	char buff[128] = {};
 +
-+	asm volatile (
-+	    "addq " __percpu_arg(0) ", %1\n\t"
-+	    "addq %2, %1\n\t"
-+	    "movq (%1), %1\n\t"
-+	    "addq %3, %1\n\t"
-+	    "movl $0, (%1)\n\t"
-+	    :
-+	    : "m" (this_cpu_off), "r" (&pcpu_hot),
-+	      "i" (offsetof(struct pcpu_hot, current_task)),
-+	      "i" (offsetof(struct task_struct, bpf_tail_call_cnt))
-+	);
-+}
-+
-+static __used u32 *bpf_tail_call_cnt_ptr(void)
-+{
-+	u32 *tcc_ptr;
-+
-+	/* The following asm equals to
-+	 *
-+	 * u32 *tcc_ptr = &current->bpf_tail_call_cnt;
-+	 *
-+	 * return tcc_ptr;
-+	 */
-+
-+	asm volatile (
-+	    "addq " __percpu_arg(1) ", %2\n\t"
-+	    "addq %3, %2\n\t"
-+	    "movq (%2), %2\n\t"
-+	    "addq %4, %2\n\t"
-+	    "movq %2, %0\n\t"
-+	    : "=r" (tcc_ptr)
-+	    : "m" (this_cpu_off), "r" (&pcpu_hot),
-+	      "i" (offsetof(struct pcpu_hot, current_task)),
-+	      "i" (offsetof(struct task_struct, bpf_tail_call_cnt))
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		.data_in = buff,
++		.data_size_in = sizeof(buff),
++		.repeat = 1,
 +	);
 +
-+	return tcc_ptr;
++	err = bpf_prog_test_load(which, BPF_PROG_TYPE_SCHED_CLS, &obj,
++				 &prog_fd);
++	if (!ASSERT_OK(err, "load obj"))
++		return;
++
++	prog = bpf_object__find_program_by_name(obj, "entry");
++	if (!ASSERT_OK_PTR(prog, "find entry prog"))
++		goto out;
++
++	prog_fd = bpf_program__fd(prog);
++	if (!ASSERT_GE(prog_fd, 0, "prog_fd"))
++		goto out;
++
++	prog_array = bpf_object__find_map_by_name(obj, "jmp_table");
++	if (!ASSERT_OK_PTR(prog_array, "find jmp_table"))
++		goto out;
++
++	map_fd = bpf_map__fd(prog_array);
++	if (!ASSERT_GE(map_fd, 0, "map_fd"))
++		goto out;
++
++	i = 0;
++	err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
++	if (!ASSERT_OK(err, "update jmp_table"))
++		goto out;
++
++	if (test_fentry) {
++		fentry_obj = bpf_object__open_file("tailcall_bpf2bpf_fentry.bpf.o",
++						   NULL);
++		if (!ASSERT_OK_PTR(fentry_obj, "open fentry_obj file"))
++			goto out;
++
++		prog = bpf_object__find_program_by_name(fentry_obj, "fentry");
++		if (!ASSERT_OK_PTR(prog, "find fentry prog"))
++			goto out;
++
++		err = bpf_program__set_attach_target(prog, prog_fd,
++						     "subprog_tail");
++		if (!ASSERT_OK(err, "set_attach_target subprog_tail"))
++			goto out;
++
++		err = bpf_object__load(fentry_obj);
++		if (!ASSERT_OK(err, "load fentry_obj"))
++			goto out;
++
++		fentry_link = bpf_program__attach_trace(prog);
++		if (!ASSERT_OK_PTR(fentry_link, "attach_trace"))
++			goto out;
++	}
++
++	if (test_fexit) {
++		fexit_obj = bpf_object__open_file("tailcall_bpf2bpf_fexit.bpf.o",
++						  NULL);
++		if (!ASSERT_OK_PTR(fexit_obj, "open fexit_obj file"))
++			goto out;
++
++		prog = bpf_object__find_program_by_name(fexit_obj, "fexit");
++		if (!ASSERT_OK_PTR(prog, "find fexit prog"))
++			goto out;
++
++		err = bpf_program__set_attach_target(prog, prog_fd,
++						     "subprog_tail");
++		if (!ASSERT_OK(err, "set_attach_target subprog_tail"))
++			goto out;
++
++		err = bpf_object__load(fexit_obj);
++		if (!ASSERT_OK(err, "load fexit_obj"))
++			goto out;
++
++		fexit_link = bpf_program__attach_trace(prog);
++		if (!ASSERT_OK_PTR(fexit_link, "attach_trace"))
++			goto out;
++	}
++
++	err = bpf_prog_test_run_opts(prog_fd, &topts);
++	ASSERT_OK(err, "tailcall");
++	ASSERT_EQ(topts.retval, 1, "tailcall retval");
++
++	data_map = bpf_object__find_map_by_name(obj, ".bss");
++	if (!ASSERT_FALSE(!data_map || !bpf_map__is_internal(data_map),
++			  "find data_map"))
++		goto out;
++
++	main_data_fd = bpf_map__fd(data_map);
++	if (!ASSERT_GE(main_data_fd, 0, "main_data_fd"))
++		goto out;
++
++	i = 0;
++	err = bpf_map_lookup_elem(main_data_fd, &i, &val);
++	ASSERT_OK(err, "tailcall count");
++	ASSERT_EQ(val, 34, "tailcall count");
++
++	if (test_fentry) {
++		data_map = bpf_object__find_map_by_name(fentry_obj, ".bss");
++		if (!ASSERT_FALSE(!data_map || !bpf_map__is_internal(data_map),
++				  "find tailcall_bpf2bpf_fentry.bss map"))
++			goto out;
++
++		fentry_data_fd = bpf_map__fd(data_map);
++		if (!ASSERT_GE(fentry_data_fd, 0,
++				  "find tailcall_bpf2bpf_fentry.bss map fd"))
++			goto out;
++
++		i = 0;
++		err = bpf_map_lookup_elem(fentry_data_fd, &i, &val);
++		ASSERT_OK(err, "fentry count");
++		ASSERT_EQ(val, 68, "fentry count");
++	}
++
++	if (test_fexit) {
++		data_map = bpf_object__find_map_by_name(fexit_obj, ".bss");
++		if (!ASSERT_FALSE(!data_map || !bpf_map__is_internal(data_map),
++				  "find tailcall_bpf2bpf_fexit.bss map"))
++			goto out;
++
++		fexit_data_fd = bpf_map__fd(data_map);
++		if (!ASSERT_GE(fexit_data_fd, 0,
++				  "find tailcall_bpf2bpf_fexit.bss map fd"))
++			goto out;
++
++		i = 0;
++		err = bpf_map_lookup_elem(fexit_data_fd, &i, &val);
++		ASSERT_OK(err, "fexit count");
++		ASSERT_EQ(val, 68, "fexit count");
++	}
++
++	i = 0;
++	err = bpf_map_delete_elem(map_fd, &i);
++	if (!ASSERT_OK(err, "delete_elem from jmp_table"))
++		goto out;
++
++	err = bpf_prog_test_run_opts(prog_fd, &topts);
++	ASSERT_OK(err, "tailcall");
++	ASSERT_EQ(topts.retval, 1, "tailcall retval");
++
++	i = 0;
++	err = bpf_map_lookup_elem(main_data_fd, &i, &val);
++	ASSERT_OK(err, "tailcall count");
++	ASSERT_EQ(val, 35, "tailcall count");
++
++	if (test_fentry) {
++		i = 0;
++		err = bpf_map_lookup_elem(fentry_data_fd, &i, &val);
++		ASSERT_OK(err, "fentry count");
++		ASSERT_EQ(val, 70, "fentry count");
++	}
++
++	if (test_fexit) {
++		i = 0;
++		err = bpf_map_lookup_elem(fexit_data_fd, &i, &val);
++		ASSERT_OK(err, "fexit count");
++		ASSERT_EQ(val, 70, "fexit count");
++	}
++
++out:
++	bpf_link__destroy(fentry_link);
++	bpf_link__destroy(fexit_link);
++	bpf_object__close(fentry_obj);
++	bpf_object__close(fexit_obj);
++	bpf_object__close(obj);
 +}
 +
- /*
-  * Generate the following code:
-  *
-  * ... bpf_tail_call(void *ctx, struct bpf_array *array, u64 index) ...
-  *   if (index >= array->map.max_entries)
-  *     goto out;
-- *   if (tail_call_cnt++ >= MAX_TAIL_CALL_CNT)
-+ *   if ((*tcc_ptr)++ >= MAX_TAIL_CALL_CNT)
-  *     goto out;
-  *   prog = array->ptrs[index];
-  *   if (prog == NULL)
-@@ -608,7 +661,6 @@ static void emit_bpf_tail_call_indirect(struct bpf_prog *bpf_prog,
- 					u32 stack_depth, u8 *ip,
- 					struct jit_context *ctx)
- {
--	int tcc_off = -4 - round_up(stack_depth, 8);
- 	u8 *prog = *pprog, *start = *pprog;
- 	int offset;
- 
-@@ -630,16 +682,16 @@ static void emit_bpf_tail_call_indirect(struct bpf_prog *bpf_prog,
- 	EMIT2(X86_JBE, offset);                   /* jbe out */
- 
- 	/*
--	 * if (tail_call_cnt++ >= MAX_TAIL_CALL_CNT)
-+	 * if ((*tcc_ptr)++ >= MAX_TAIL_CALL_CNT)
- 	 *	goto out;
- 	 */
--	EMIT2_off32(0x8B, 0x85, tcc_off);         /* mov eax, dword ptr [rbp - tcc_off] */
--	EMIT3(0x83, 0xF8, MAX_TAIL_CALL_CNT);     /* cmp eax, MAX_TAIL_CALL_CNT */
-+	/* call bpf_tail_call_cnt_ptr */
-+	emit_call(&prog, bpf_tail_call_cnt_ptr, ip + (prog - start));
-+	EMIT3(0x83, 0x38, MAX_TAIL_CALL_CNT);     /* cmp dword ptr [rax], MAX_TAIL_CALL_CNT */
- 
- 	offset = ctx->tail_call_indirect_label - (prog + 2 - start);
- 	EMIT2(X86_JAE, offset);                   /* jae out */
--	EMIT3(0x83, 0xC0, 0x01);                  /* add eax, 1 */
--	EMIT2_off32(0x89, 0x85, tcc_off);         /* mov dword ptr [rbp - tcc_off], eax */
-+	EMIT2(0xFF, 0x00);                        /* inc dword ptr [rax] */
- 
- 	/* prog = array->ptrs[index]; */
- 	EMIT4_off32(0x48, 0x8B, 0x8C, 0xD6,       /* mov rcx, [rsi + rdx * 8 + offsetof(...)] */
-@@ -663,7 +715,6 @@ static void emit_bpf_tail_call_indirect(struct bpf_prog *bpf_prog,
- 			pop_r12(&prog);
- 	}
- 
--	EMIT1(0x58);                              /* pop rax */
- 	if (stack_depth)
- 		EMIT3_off32(0x48, 0x81, 0xC4,     /* add rsp, sd */
- 			    round_up(stack_depth, 8));
-@@ -691,21 +742,20 @@ static void emit_bpf_tail_call_direct(struct bpf_prog *bpf_prog,
- 				      bool *callee_regs_used, u32 stack_depth,
- 				      struct jit_context *ctx)
- {
--	int tcc_off = -4 - round_up(stack_depth, 8);
- 	u8 *prog = *pprog, *start = *pprog;
- 	int offset;
- 
- 	/*
--	 * if (tail_call_cnt++ >= MAX_TAIL_CALL_CNT)
-+	 * if ((*tcc_ptr)++ >= MAX_TAIL_CALL_CNT)
- 	 *	goto out;
- 	 */
--	EMIT2_off32(0x8B, 0x85, tcc_off);             /* mov eax, dword ptr [rbp - tcc_off] */
--	EMIT3(0x83, 0xF8, MAX_TAIL_CALL_CNT);         /* cmp eax, MAX_TAIL_CALL_CNT */
-+	/* call bpf_tail_call_cnt_ptr */
-+	emit_call(&prog, bpf_tail_call_cnt_ptr, ip);
-+	EMIT3(0x83, 0x38, MAX_TAIL_CALL_CNT);         /* cmp dword ptr [rax], MAX_TAIL_CALL_CNT */
- 
- 	offset = ctx->tail_call_direct_label - (prog + 2 - start);
- 	EMIT2(X86_JAE, offset);                       /* jae out */
--	EMIT3(0x83, 0xC0, 0x01);                      /* add eax, 1 */
--	EMIT2_off32(0x89, 0x85, tcc_off);             /* mov dword ptr [rbp - tcc_off], eax */
-+	EMIT2(0xFF, 0x00);                            /* inc dword ptr [rax] */
- 
- 	poke->tailcall_bypass = ip + (prog - start);
- 	poke->adj_off = X86_TAIL_CALL_OFFSET;
-@@ -724,7 +774,6 @@ static void emit_bpf_tail_call_direct(struct bpf_prog *bpf_prog,
- 			pop_r12(&prog);
- 	}
- 
--	EMIT1(0x58);                                  /* pop rax */
- 	if (stack_depth)
- 		EMIT3_off32(0x48, 0x81, 0xC4, round_up(stack_depth, 8));
- 
-@@ -1262,10 +1311,6 @@ static void emit_shiftx(u8 **pprog, u32 dst_reg, u8 src_reg, bool is64, u8 op)
- 
- #define INSN_SZ_DIFF (((addrs[i] - addrs[i - 1]) - (prog - temp)))
- 
--/* mov rax, qword ptr [rbp - rounded_stack_depth - 8] */
--#define RESTORE_TAIL_CALL_CNT(stack)				\
--	EMIT3_off32(0x48, 0x8B, 0x85, -round_up(stack, 8) - 8)
--
- static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image,
- 		  int oldproglen, struct jit_context *ctx, bool jmp_padding)
- {
-@@ -1293,7 +1338,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image
- 
- 	emit_prologue(&prog, bpf_prog->aux->stack_depth,
- 		      bpf_prog_was_classic(bpf_prog), tail_call_reachable,
--		      bpf_is_subprog(bpf_prog), bpf_prog->aux->exception_cb);
-+		      bpf_is_subprog(bpf_prog), bpf_prog->aux->exception_cb,
-+		      image);
- 	/* Exception callback will clobber callee regs for its own use, and
- 	 * restore the original callee regs from main prog's stack frame.
- 	 */
-@@ -1973,17 +2019,11 @@ st:			if (is_imm8(insn->off))
- 		case BPF_JMP | BPF_CALL: {
- 			int offs;
- 
-+			if (!imm32)
-+				return -EINVAL;
++/* test_tailcall_bpf2bpf_hierarchy_1 checks that the count value of the tail
++ * call limit enforcement matches with expectations when tailcalls are preceded
++ * with two bpf2bpf calls.
++ *
++ *              subprog --tailcall-> entry prog
++ * entry prog <
++ *              subprog --tailcall-> entry prog
++ */
++static void test_tailcall_bpf2bpf_hierarchy_1(void)
++{
++	test_tailcall_hierarchy_count("tailcall_bpf2bpf_hierarchy1.bpf.o",
++				      false, false);
++}
 +
- 			func = (u8 *) __bpf_call_base + imm32;
--			if (tail_call_reachable) {
--				RESTORE_TAIL_CALL_CNT(bpf_prog->aux->stack_depth);
--				if (!imm32)
--					return -EINVAL;
--				offs = 7 + x86_call_depth_emit_accounting(&prog, func);
--			} else {
--				if (!imm32)
--					return -EINVAL;
--				offs = x86_call_depth_emit_accounting(&prog, func);
--			}
-+			offs = x86_call_depth_emit_accounting(&prog, func);
- 			if (emit_call(&prog, func, image + addrs[i - 1] + offs))
- 				return -EINVAL;
- 			break;
-@@ -2773,7 +2813,6 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 	 *                     [ ...        ]
- 	 *                     [ stack_arg2 ]
- 	 * RBP - arg_stack_off [ stack_arg1 ]
--	 * RSP                 [ tail_call_cnt ] BPF_TRAMP_F_TAIL_CALL_CTX
- 	 */
- 
- 	/* room for return value of orig_call or fentry prog */
-@@ -2845,8 +2884,6 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 		/* sub rsp, stack_size */
- 		EMIT4(0x48, 0x83, 0xEC, stack_size);
- 	}
--	if (flags & BPF_TRAMP_F_TAIL_CALL_CTX)
--		EMIT1(0x50);		/* push rax */
- 	/* mov QWORD PTR [rbp - rbx_off], rbx */
- 	emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_6, -rbx_off);
- 
-@@ -2901,16 +2938,9 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 		restore_regs(m, &prog, regs_off);
- 		save_args(m, &prog, arg_stack_off, true);
- 
--		if (flags & BPF_TRAMP_F_TAIL_CALL_CTX) {
--			/* Before calling the original function, restore the
--			 * tail_call_cnt from stack to rax.
--			 */
--			RESTORE_TAIL_CALL_CNT(stack_size);
--		}
--
- 		if (flags & BPF_TRAMP_F_ORIG_STACK) {
--			emit_ldx(&prog, BPF_DW, BPF_REG_6, BPF_REG_FP, 8);
--			EMIT2(0xff, 0xd3); /* call *rbx */
-+			emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, 8);
-+			EMIT2(0xff, 0xd0); /* call *rax */
- 		} else {
- 			/* call original function */
- 			if (emit_rsb_call(&prog, orig_call, image + (prog - (u8 *)rw_image))) {
-@@ -2963,11 +2993,6 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 			ret = -EINVAL;
- 			goto cleanup;
- 		}
--	} else if (flags & BPF_TRAMP_F_TAIL_CALL_CTX) {
--		/* Before running the original function, restore the
--		 * tail_call_cnt from stack to rax.
--		 */
--		RESTORE_TAIL_CALL_CNT(stack_size);
- 	}
- 
- 	/* restore return value of orig_call or fentry prog back into RAX */
++/* test_tailcall_bpf2bpf_hierarchy_fentry checks that the count value of the
++ * tail call limit enforcement matches with expectations when tailcalls are
++ * preceded with two bpf2bpf calls, and the two subprogs are traced by fentry.
++ */
++static void test_tailcall_bpf2bpf_hierarchy_fentry(void)
++{
++	test_tailcall_hierarchy_count("tailcall_bpf2bpf_hierarchy1.bpf.o",
++				      true, false);
++}
++
++/* test_tailcall_bpf2bpf_hierarchy_fexit checks that the count value of the tail
++ * call limit enforcement matches with expectations when tailcalls are preceded
++ * with two bpf2bpf calls, and the two subprogs are traced by fexit.
++ */
++static void test_tailcall_bpf2bpf_hierarchy_fexit(void)
++{
++	test_tailcall_hierarchy_count("tailcall_bpf2bpf_hierarchy1.bpf.o",
++				      false, true);
++}
++
++/* test_tailcall_bpf2bpf_hierarchy_fentry_fexit checks that the count value of
++ * the tail call limit enforcement matches with expectations when tailcalls are
++ * preceded with two bpf2bpf calls, and the two subprogs are traced by both
++ * fentry and fexit.
++ */
++static void test_tailcall_bpf2bpf_hierarchy_fentry_fexit(void)
++{
++	test_tailcall_hierarchy_count("tailcall_bpf2bpf_hierarchy1.bpf.o",
++				      true, true);
++}
++
++/* test_tailcall_bpf2bpf_hierarchy_2 checks that the count value of the tail
++ * call limit enforcement matches with expectations:
++ *
++ *         subprog_tail0 --tailcall-> classifier_0 -> subprog_tail0
++ * entry <
++ *         subprog_tail1 --tailcall-> classifier_1 -> subprog_tail1
++ */
++static void test_tailcall_bpf2bpf_hierarchy_2(void)
++{
++	int err, map_fd, prog_fd, data_fd, main_fd, i, val[2];
++	struct bpf_map *prog_array, *data_map;
++	struct bpf_object *obj = NULL;
++	struct bpf_program *prog;
++	char buff[128] = {};
++
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		.data_in = buff,
++		.data_size_in = sizeof(buff),
++		.repeat = 1,
++	);
++
++	err = bpf_prog_test_load("tailcall_bpf2bpf_hierarchy2.bpf.o",
++				 BPF_PROG_TYPE_SCHED_CLS,
++				 &obj, &prog_fd);
++	if (!ASSERT_OK(err, "load obj"))
++		return;
++
++	prog = bpf_object__find_program_by_name(obj, "entry");
++	if (!ASSERT_OK_PTR(prog, "find entry prog"))
++		goto out;
++
++	main_fd = bpf_program__fd(prog);
++	if (!ASSERT_GE(main_fd, 0, "main_fd"))
++		goto out;
++
++	prog_array = bpf_object__find_map_by_name(obj, "jmp_table");
++	if (!ASSERT_OK_PTR(prog_array, "find jmp_table map"))
++		goto out;
++
++	map_fd = bpf_map__fd(prog_array);
++	if (!ASSERT_GE(map_fd, 0, "find jmp_table map fd"))
++		goto out;
++
++	prog = bpf_object__find_program_by_name(obj, "classifier_0");
++	if (!ASSERT_OK_PTR(prog, "find classifier_0 prog"))
++		goto out;
++
++	prog_fd = bpf_program__fd(prog);
++	if (!ASSERT_GE(prog_fd, 0, "find classifier_0 prog fd"))
++		goto out;
++
++	i = 0;
++	err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
++	if (!ASSERT_OK(err, "update jmp_table"))
++		goto out;
++
++	prog = bpf_object__find_program_by_name(obj, "classifier_1");
++	if (!ASSERT_OK_PTR(prog, "find classifier_1 prog"))
++		goto out;
++
++	prog_fd = bpf_program__fd(prog);
++	if (!ASSERT_GE(prog_fd, 0, "find classifier_1 prog fd"))
++		goto out;
++
++	i = 1;
++	err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
++	if (!ASSERT_OK(err, "update jmp_table"))
++		goto out;
++
++	err = bpf_prog_test_run_opts(main_fd, &topts);
++	ASSERT_OK(err, "tailcall");
++	ASSERT_EQ(topts.retval, 1, "tailcall retval");
++
++	data_map = bpf_object__find_map_by_name(obj, ".bss");
++	if (!ASSERT_FALSE(!data_map || !bpf_map__is_internal(data_map),
++			  "find .bss map"))
++		goto out;
++
++	data_fd = bpf_map__fd(data_map);
++	if (!ASSERT_GE(data_fd, 0, "find .bss map fd"))
++		goto out;
++
++	i = 0;
++	err = bpf_map_lookup_elem(data_fd, &i, &val);
++	ASSERT_OK(err, "tailcall counts");
++	ASSERT_EQ(val[0], 33, "tailcall count0");
++	ASSERT_EQ(val[1], 0, "tailcall count1");
++
++out:
++	bpf_object__close(obj);
++}
++
++/* test_tailcall_bpf2bpf_hierarchy_3 checks that the count value of the tail
++ * call limit enforcement matches with expectations:
++ *
++ *                                   subprog with jmp_table0 to classifier_0
++ * entry --tailcall-> classifier_0 <
++ *                                   subprog with jmp_table1 to classifier_0
++ */
++static void test_tailcall_bpf2bpf_hierarchy_3(void)
++{
++	int err, map_fd, prog_fd, data_fd, main_fd, i, val;
++	struct bpf_map *prog_array, *data_map;
++	struct bpf_object *obj = NULL;
++	struct bpf_program *prog;
++	char buff[128] = {};
++
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		.data_in = buff,
++		.data_size_in = sizeof(buff),
++		.repeat = 1,
++	);
++
++	err = bpf_prog_test_load("tailcall_bpf2bpf_hierarchy3.bpf.o",
++				 BPF_PROG_TYPE_SCHED_CLS,
++				 &obj, &prog_fd);
++	if (!ASSERT_OK(err, "load obj"))
++		return;
++
++	prog = bpf_object__find_program_by_name(obj, "entry");
++	if (!ASSERT_OK_PTR(prog, "find entry prog"))
++		goto out;
++
++	main_fd = bpf_program__fd(prog);
++	if (!ASSERT_GE(main_fd, 0, "main_fd"))
++		goto out;
++
++	prog_array = bpf_object__find_map_by_name(obj, "jmp_table0");
++	if (!ASSERT_OK_PTR(prog_array, "find jmp_table0 map"))
++		goto out;
++
++	map_fd = bpf_map__fd(prog_array);
++	if (!ASSERT_GE(map_fd, 0, "find jmp_table0 map fd"))
++		goto out;
++
++	prog = bpf_object__find_program_by_name(obj, "classifier_0");
++	if (!ASSERT_OK_PTR(prog, "find classifier_0 prog"))
++		goto out;
++
++	prog_fd = bpf_program__fd(prog);
++	if (!ASSERT_GE(prog_fd, 0, "find classifier_0 prog fd"))
++		goto out;
++
++	i = 0;
++	err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
++	if (!ASSERT_OK(err, "update jmp_table0"))
++		goto out;
++
++	prog_array = bpf_object__find_map_by_name(obj, "jmp_table1");
++	if (!ASSERT_OK_PTR(prog_array, "find jmp_table1 map"))
++		goto out;
++
++	map_fd = bpf_map__fd(prog_array);
++	if (!ASSERT_GE(map_fd, 0, "find jmp_table1 map fd"))
++		goto out;
++
++	i = 0;
++	err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
++	if (!ASSERT_OK(err, "update jmp_table1"))
++		goto out;
++
++	err = bpf_prog_test_run_opts(main_fd, &topts);
++	ASSERT_OK(err, "tailcall");
++	ASSERT_EQ(topts.retval, 1, "tailcall retval");
++
++	data_map = bpf_object__find_map_by_name(obj, ".bss");
++	if (!ASSERT_FALSE(!data_map || !bpf_map__is_internal(data_map),
++			  "find .bss map"))
++		goto out;
++
++	data_fd = bpf_map__fd(data_map);
++	if (!ASSERT_GE(data_fd, 0, "find .bss map fd"))
++		goto out;
++
++	i = 0;
++	err = bpf_map_lookup_elem(data_fd, &i, &val);
++	ASSERT_OK(err, "tailcall count");
++	ASSERT_EQ(val, 33, "tailcall count");
++
++out:
++	bpf_object__close(obj);
++}
++
+ void test_tailcalls(void)
+ {
+ 	if (test__start_subtest("tailcall_1"))
+@@ -1223,4 +1629,16 @@ void test_tailcalls(void)
+ 		test_tailcall_bpf2bpf_fentry_entry();
+ 	if (test__start_subtest("tailcall_poke"))
+ 		test_tailcall_poke();
++	if (test__start_subtest("tailcall_bpf2bpf_hierarchy_1"))
++		test_tailcall_bpf2bpf_hierarchy_1();
++	if (test__start_subtest("tailcall_bpf2bpf_hierarchy_fentry"))
++		test_tailcall_bpf2bpf_hierarchy_fentry();
++	if (test__start_subtest("tailcall_bpf2bpf_hierarchy_fexit"))
++		test_tailcall_bpf2bpf_hierarchy_fexit();
++	if (test__start_subtest("tailcall_bpf2bpf_hierarchy_fentry_fexit"))
++		test_tailcall_bpf2bpf_hierarchy_fentry_fexit();
++	if (test__start_subtest("tailcall_bpf2bpf_hierarchy_2"))
++		test_tailcall_bpf2bpf_hierarchy_2();
++	if (test__start_subtest("tailcall_bpf2bpf_hierarchy_3"))
++		test_tailcall_bpf2bpf_hierarchy_3();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c
+new file mode 100644
+index 0000000000000..375b486573395
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c
+@@ -0,0 +1,38 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_legacy.h"
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(max_entries, 1);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(__u32));
++} jmp_table SEC(".maps");
++
++int count = 0;
++
++static __noinline
++int subprog_tail(struct __sk_buff *skb)
++{
++	bpf_tail_call_static(skb, &jmp_table, 0);
++	return 0;
++}
++
++SEC("tc")
++int entry(struct __sk_buff *skb)
++{
++	int ret = 1;
++
++	if (count >= 100)
++		/* exit for abnormal case */
++		return count;
++
++	count++;
++	subprog_tail(skb);
++	subprog_tail(skb);
++
++	return ret;
++}
++
++char __license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c
+new file mode 100644
+index 0000000000000..4bf65d1c73d98
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c
+@@ -0,0 +1,63 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_legacy.h"
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(max_entries, 2);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(__u32));
++} jmp_table SEC(".maps");
++
++int count0 = 0;
++int count1 = 0;
++
++static __noinline
++int subprog_tail0(struct __sk_buff *skb)
++{
++	bpf_tail_call_static(skb, &jmp_table, 0);
++	return 0;
++}
++
++SEC("tc")
++int classifier_0(struct __sk_buff *skb)
++{
++	if (count0 >= 100)
++		/* exit for abnormal case */
++		return count0;
++
++	count0++;
++	subprog_tail0(skb);
++	return 0;
++}
++
++static __noinline
++int subprog_tail1(struct __sk_buff *skb)
++{
++	bpf_tail_call_static(skb, &jmp_table, 1);
++	return 0;
++}
++
++SEC("tc")
++int classifier_1(struct __sk_buff *skb)
++{
++	if (count1 >= 100)
++		/* exit for abnormal case */
++		return count1;
++
++	count1++;
++	subprog_tail1(skb);
++	return 0;
++}
++
++SEC("tc")
++int entry(struct __sk_buff *skb)
++{
++	subprog_tail0(skb);
++	subprog_tail1(skb);
++
++	return 1;
++}
++
++char __license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy3.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy3.c
+new file mode 100644
+index 0000000000000..68c69d4e97fc9
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy3.c
+@@ -0,0 +1,50 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_legacy.h"
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(max_entries, 1);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(__u32));
++} jmp_table0 SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(max_entries, 1);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(__u32));
++} jmp_table1 SEC(".maps");
++
++int count = 0;
++
++static __noinline
++int subprog_tail(struct __sk_buff *skb, void *jmp_table)
++{
++	bpf_tail_call_static(skb, jmp_table, 0);
++	return 0;
++}
++
++SEC("tc")
++int classifier_0(struct __sk_buff *skb)
++{
++	if (count >= 100)
++		/* exit for abnormal case */
++		return count;
++
++	count++;
++	subprog_tail(skb, &jmp_table0);
++	subprog_tail(skb, &jmp_table1);
++	return 1;
++}
++
++SEC("tc")
++int entry(struct __sk_buff *skb)
++{
++	bpf_tail_call_static(skb, &jmp_table0, 0);
++
++	return 0;
++}
++
++char __license[] SEC("license") = "GPL";
 -- 
 2.44.0
 
