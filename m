@@ -1,149 +1,147 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E4015990F;
-	Tue,  2 Apr 2024 17:16:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529A515A48B
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 17:22:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712078202; cv=none; b=KBe1BNEs+p8Utt7UMOp8o9wKunXLsxXXxMrtGtd2FNt1aIKwA6f4exP1Qv4QYg6/ZlpVQuMabfVUeqOBEgcwGvTld5ImhVXtMntLTODt75gEObO7YagF/ILl8UUcRnCAopMtNaeMZcOmi375UiyKXu6oauNh5x/f5IHIaTSFF4w=
+	t=1712078545; cv=none; b=OMYdPnlJbacJHOldhXxYVp2zrruSUcpjDrwoS8kceBhiCRfzJ05TgtCl6F6tbN6ogjkoBbKWUjA5FYhf1ZQTv9640JI9HuI7262zYdc0fL+mx3KZQAzXBLuWc2aDSRkrC9B0UEmTNJU0LoSHBUGXNIVrrIrI2zuyQIpm8Jn2+Rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712078202; c=relaxed/simple;
-	bh=pP519wusPUAXRys+Pm1fP6WiHUMTu+p8h8uiy+wJCy0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mhN2ioAM1ciUs4CDbPC5zygsxd3URYjQXuGoz17kk8MorneA35V05UY/BIZ0ItY+fpZQj54EL2Ax2oLat2m0BFIgLLiWIlwHrlyU8pZauhRg9Dp8qFU5nEd2lv9Cdc+G1L2DMVuPX1L9A2fE6KFjj7IE8IRY4zvlK9pljnRBMu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=HyDNeoUo; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="HyDNeoUo"
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 8637B34934;
-	Tue,  2 Apr 2024 17:16:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1712078198; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pP519wusPUAXRys+Pm1fP6WiHUMTu+p8h8uiy+wJCy0=;
-	b=HyDNeoUoZJkyHWwJ8XCspPVKQE0grsOAe6fIzOJfL6spCvd8yGbYzAefLUZLCRHZcjQuWZ
-	P21owtoIlNmvKSzoFThdyX2PRKtb7ph/zuDKnK7aTsZtPYc5WbgwGy/kozkVocQijFMnGr
-	KxxnZHv5eGwVoSboBVG4imEzEAx39Mk=
-Authentication-Results: smtp-out1.suse.de;
-	none
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 7240F13357;
-	Tue,  2 Apr 2024 17:16:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id vLDAG3Y9DGZiIgAAn2gu4w
-	(envelope-from <mkoutny@suse.com>); Tue, 02 Apr 2024 17:16:38 +0000
-Date: Tue, 2 Apr 2024 19:16:29 +0200
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Djalal Harouni <tixxdz@gmail.com>
-Cc: Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH bpf-next 0/3] bpf: freeze a task cgroup from bpf
-Message-ID: <ex2uipr54lb2odxwzwp22ycvlwplsy4mm3shx26hczo3mjtkvz@uuzyk6535prw>
-References: <20240327-ccb56fc7a6e80136db80876c@djalal>
- <20240327225334.58474-1-tixxdz@gmail.com>
+	s=arc-20240116; t=1712078545; c=relaxed/simple;
+	bh=LBktxRSJW6FqJOM/haOQ9aZlZaZ+M2+WyyYEVud4ees=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=WqOwGW+kLIsmqeLwqci8YDe/8wpNuZ21PbRmDpSosqSiW6rjuJBZRVm+wjJAYy6IJVGDhVK3H0NfB9cr4IMU+13q5GZRlhzwfTlfA7zZDEifMVYGJvfrVSS+MhpDo9B+TR443qwCRKWGvH7PqRQPqAdUwvd6K+5HrNPPMm5amdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7d096c4d64eso6250039f.1
+        for <bpf@vger.kernel.org>; Tue, 02 Apr 2024 10:22:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712078543; x=1712683343;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tyZ4y+RtmwUpbBCKI17zVFEJ/EY3alOUhTWMMfA+maA=;
+        b=eoNAjSep9Wqti1SeBNBDE5G8mmL4xGwalykNcHUUSPlKKL+bJuVvFi/l7osgLZKL9t
+         m6svOvTiHo/6bFIAlD8j+/eRjd8P9j6WDrWEIa9V48EO7AfswqteMEeSjZfq381DGSL4
+         ziqIJlZVKoWr/3VRkt7fzBWk8QGa3G+cACJjFrxpOxtxfkdZpt0TWZo666jfh5q4gaIE
+         /bdrJuSg/0H7NiXCYOrm9i//cJkd4ZeQuxVp1vdMxmtfBlzvMYoq8WQMjSH17lQmoh0z
+         wCEBTUpN/neWsaS4HE0C3vuFmh0IZAwJSoVuaV/2aCkWlpU/2BBZyl2KILYNBFWo6cRl
+         fhAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWqMZTi4etQev8d7EdsR5h46iNglyovQL7/siEuXDPckTwoIRzJNlmDIeWFZKVtJzTS2iuFqBEw1E41oNs0OItnTL6U
+X-Gm-Message-State: AOJu0YyAHOgbwcGkXtVSc8EMwEqQgY5aIvR6LrqzLscYEKBDc8hgzqG0
+	TpRu1sz5ChRLL+P1Hq9gZ/oHMHuQ9mVOz9uBmCN07PQslxQGrXInhwGM4Mz/+ql+qh6ivwlnYHT
+	D2dT32Tw5llizpRk33v4etMDaqtcud7UOGQD3XXVu/HAVuYPyP+w+4io=
+X-Google-Smtp-Source: AGHT+IE5sYOEGeW0Dq9TUU6KKmEsVku0KXM5A4AszSQ+g1aN9s9OafJG5FdmlE5Z9+ghoNOKg8Q5AHV20WrkTDprfIre4KzwBvME
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jy46jtmbnpyw2njk"
-Content-Disposition: inline
-In-Reply-To: <20240327225334.58474-1-tixxdz@gmail.com>
-X-Spam-Score: -2.01
-X-Spamd-Result: default: False [-2.01 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 BAYES_HAM(-0.62)[82.04%];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 TAGGED_RCPT(0.00)[];
-	 MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 NEURAL_HAM_SHORT(-0.19)[-0.971];
-	 RCPT_COUNT_TWELVE(0.00)[22];
-	 SIGNED_PGP(-2.00)[];
-	 FREEMAIL_TO(0.00)[gmail.com];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+,1:+,2:~];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 FREEMAIL_CC(0.00)[kernel.org,bytedance.com,cmpxchg.org,iogearbox.net,linux.dev,gmail.com,google.com,fb.com,vger.kernel.org];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[]
-X-Spam-Level: 
-X-Spam-Flag: NO
+X-Received: by 2002:a05:6602:2c84:b0:7d0:690c:6a01 with SMTP id
+ i4-20020a0566022c8400b007d0690c6a01mr5504iow.1.1712078543509; Tue, 02 Apr
+ 2024 10:22:23 -0700 (PDT)
+Date: Tue, 02 Apr 2024 10:22:23 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000069edc606152059d4@google.com>
+Subject: [syzbot] [bpf?] KMSAN: uninit-value in percpu_array_map_lookup_percpu_elem
+From: syzbot <syzbot+aca389a8a7da35c070ce@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@google.com, 
+	song@kernel.org, syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    39cd87c4eb2b Linux 6.9-rc2
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=13891cc5180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5112b3f484393436
+dashboard link: https://syzkaller.appspot.com/bug?extid=aca389a8a7da35c070ce
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11629a19180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=169e86e5180000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/dba7eac545d2/disk-39cd87c4.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ddf1c8e07b17/vmlinux-39cd87c4.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/808527761eab/bzImage-39cd87c4.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+aca389a8a7da35c070ce@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in percpu_array_map_lookup_percpu_elem+0x1cb/0x200 kernel/bpf/arraymap.c:257
+ percpu_array_map_lookup_percpu_elem+0x1cb/0x200 kernel/bpf/arraymap.c:257
+ ____bpf_map_lookup_percpu_elem kernel/bpf/helpers.c:133 [inline]
+ bpf_map_lookup_percpu_elem+0x67/0x90 kernel/bpf/helpers.c:130
+ ___bpf_prog_run+0x13fe/0xe0f0 kernel/bpf/core.c:1997
+ __bpf_prog_run288+0xb5/0xe0 kernel/bpf/core.c:2237
+ bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+ __bpf_prog_run include/linux/filter.h:657 [inline]
+ bpf_prog_run include/linux/filter.h:664 [inline]
+ __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+ bpf_trace_run8+0x1bd/0x3a0 kernel/trace/bpf_trace.c:2426
+ __bpf_trace_jbd2_handle_stats+0x51/0x70 include/trace/events/jbd2.h:210
+ trace_jbd2_handle_stats include/trace/events/jbd2.h:210 [inline]
+ jbd2_journal_stop+0x1157/0x12c0 fs/jbd2/transaction.c:1869
+ __ext4_journal_stop+0x115/0x310 fs/ext4/ext4_jbd2.c:134
+ ext4_do_writepages+0x1c3c/0x62e0 fs/ext4/inode.c:2692
+ ext4_writepages+0x312/0x830 fs/ext4/inode.c:2768
+ do_writepages+0x427/0xc30 mm/page-writeback.c:2612
+ __writeback_single_inode+0x10d/0x12c0 fs/fs-writeback.c:1650
+ writeback_sb_inodes+0xb48/0x1be0 fs/fs-writeback.c:1941
+ __writeback_inodes_wb+0x14c/0x440 fs/fs-writeback.c:2012
+ wb_writeback+0x4da/0xdf0 fs/fs-writeback.c:2119
+ wb_check_old_data_flush fs/fs-writeback.c:2223 [inline]
+ wb_do_writeback fs/fs-writeback.c:2276 [inline]
+ wb_workfn+0x110c/0x1940 fs/fs-writeback.c:2304
+ process_one_work kernel/workqueue.c:3254 [inline]
+ process_scheduled_works+0xa81/0x1bd0 kernel/workqueue.c:3335
+ worker_thread+0xea5/0x1560 kernel/workqueue.c:3416
+ kthread+0x3e2/0x540 kernel/kthread.c:388
+ ret_from_fork+0x6d/0x90 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:243
+
+Local variable stack created at:
+ __bpf_prog_run288+0x45/0xe0 kernel/bpf/core.c:2237
+ bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline]
+ __bpf_prog_run include/linux/filter.h:657 [inline]
+ bpf_prog_run include/linux/filter.h:664 [inline]
+ __bpf_trace_run kernel/trace/bpf_trace.c:2381 [inline]
+ bpf_trace_run8+0x1bd/0x3a0 kernel/trace/bpf_trace.c:2426
+
+CPU: 1 PID: 1070 Comm: kworker/u8:7 Not tainted 6.9.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/27/2024
+Workqueue: writeback wb_workfn (flush-8:0)
+=====================================================
 
 
---jy46jtmbnpyw2njk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Hello.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-On Wed, Mar 27, 2024 at 11:53:22PM +0100, Djalal Harouni <tixxdz@gmail.com> wrote:
-> ...
-> For some cases we want to freeze the cgroup of a task based on some
-> signals, doing so from bpf is better than user space which could be
-> too late.
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-Notice that freezer itself is not immediate -- tasks are frozen as if a
-signal (kill(2)) was delivered to them (i.e. returning to userspace).
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-What kind of signals (also kill?) are you talking about for
-illustration?
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-> Planned users of this feature are: tetragon and systemd when freezing
-> a cgroup hierarchy that could be a K8s pod, container, system service
-> or a user session.
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
-It sounds like the signals are related to a particular process. If so
-what is it good for to freeze unrelated processes in the same cgroup?
-
-I think those answers better clarify why this is needed.
-
-
-As for the generalization to any cgroup attribute (or kernfs). Can this
-be compared with sysctls -- I see there are helpers to intercept user
-writes but no helpers to affect sysctl values without an outer writer.
-What would justify different approaches between kernfs attributes and
-sysctls (direct writes vs modified writes)?
-
-
-Thanks,
-Michal
-
---jy46jtmbnpyw2njk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZgw9awAKCRAGvrMr/1gc
-jkx3AP9q4yObx2ZVhnJrJtyuNXurHxN0CyA34JgyPMSJk2fz8wD/eQvPgsUzvuGS
-lms51KfenKpEwlwmmEfvlZSNXVAU1Qw=
-=rjUz
------END PGP SIGNATURE-----
-
---jy46jtmbnpyw2njk--
+If you want to undo deduplication, reply with:
+#syz undup
