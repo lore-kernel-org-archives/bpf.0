@@ -1,83 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from boethin.uberspace.de (boethin.uberspace.de [185.26.156.96])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3B785286
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 14:00:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E8484FA9
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 14:01:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.26.156.96
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712066434; cv=none; b=u58BVCSCINE47Ee9sLL0CCuRm/vcU47jD4TNoKY/7uGmWr/Nb73FkPYMKyvxDEv0v478mP+LO06krdvsQf1vqsVbdmsNiVL+qKLnKtGKoe+A4DqGTUKGYSzXHzux82SYV8Nh9dItZ8RzRzK+Sx1chpgzhIbZR9fEvmY3q9fVy9Y=
+	t=1712066492; cv=none; b=BMc2pfJaxSdGL+OKeXA3HUC9k6fmH9SQcGsu+z7avk66M7eL2y245AwSB7lKkxCMFRv+ed3NFeVxvastO8a43NAjumjcvwBeQbmYweudCOG4gBeWaoRdlpi9BF3vzedIj9CHyUUeVC58LXjbnr73vJD22XKq19+iPlXI+EmvlGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712066434; c=relaxed/simple;
-	bh=b/kRgH4AOd6d12Loed08dq0ySRhB0ACldVR9DAogoJM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Cn6X/AygRQTLTKzOs+2+Sn8+DKgiwDdl4ohXBvN5cBG8Dw2SrlG+3pmCAtWYETAcroagAX1HXKHXRfexbpac0QSDnYIty0eMMNR/CWgwyEM36PCRfWgQ6P/3AB6nEVb7+oHu3aZ8oHrZ8InMU5vpmkdgm9yEAAHTR+ksUS+q7+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tbSdkgEB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712066492; c=relaxed/simple;
+	bh=KBKWO3K3hukulM+pTWKZcjCnizMwXPQI/t5LFC+V8ss=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=JmKwRink002ofhobPaelwHduz4FoCo3ZArlXKuH0mPJpL1S9M8JxplHJVWl7dkcbFDRiW0EhyeeyjmZVDYodbgWigtBw09WvuvrM6OGGPCXmSoMumrrRV3T5m4MBRaP2itDPxD1l7AGK+Vf0vG3l5AD5MUHFb8O4mIFgqOIn8FQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=aibor.de; spf=pass smtp.mailfrom=aibor.de; dkim=fail (0-bit key) header.d=aibor.de header.i=@aibor.de header.b=PrW2cJ1w reason="key not found in DNS"; arc=none smtp.client-ip=185.26.156.96
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=aibor.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aibor.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tbSdkgEB"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 65C6CC43390;
-	Tue,  2 Apr 2024 14:00:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712066433;
-	bh=b/kRgH4AOd6d12Loed08dq0ySRhB0ACldVR9DAogoJM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=tbSdkgEBdqs2lcjci1w1mjITPcahqCIoKF10HeJwKis75dNZ82yYl39/hkMv4RaNs
-	 YDsrVtidscfwoEnbIR42U0k4B2l8C2FSJ5s5VxzcA+k+y5U6BNqmSeUeEaaY9l8G13
-	 Vnvi13qlaNB5TI4AzrB1q+I8Txs2/WGLNTNRy5ZUtKCnlMe5q3o8t4npvjlP/B2IIZ
-	 ylP4ClkqaTMApxnL6v8TT/0X4MdsRJj3fmNls9K0a6A19n0ybpk/GV7HVjKxj1Zq8o
-	 Zcy5mV/P3Wfh9lgl2ZFXSl2pMaD9L5Zyihe2TnAv/t5zf2bmwDip5SVu7ik40lqUN4
-	 kEmSRraoJuStA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 431FDD9A155;
-	Tue,  2 Apr 2024 14:00:33 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=aibor.de header.i=@aibor.de header.b="PrW2cJ1w"
+Received: (qmail 32542 invoked by uid 990); 2 Apr 2024 13:54:44 -0000
+Authentication-Results: boethin.uberspace.de;
+	auth=pass (plain)
+Received: from unknown (HELO unkown) (::1)
+	by boethin.uberspace.de (Haraka/3.0.1) with ESMTPSA; Tue, 02 Apr 2024 15:54:44 +0200
+Date: Tue, 2 Apr 2024 15:54:43 +0200
+From: Tobias =?utf-8?B?QsO2aG0=?= <tobias@aibor.de>
+To: bpf@vger.kernel.org
+Subject: [PATCH] libbpf: use local bpf_helpers.h include
+Message-ID: <w36pchgaowqqzx3whsiu4ikp3lyniman2gc6fgi6n7w27tr2fm@25ijjwxxt67d>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 0/3] bpftool: Clean up indentation and formatting in
- docs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171206643326.31786.8261961089605909281.git-patchwork-notify@kernel.org>
-Date: Tue, 02 Apr 2024 14:00:33 +0000
-References: <20240331200346.29118-1-qmo@kernel.org>
-In-Reply-To: <20240331200346.29118-1-qmo@kernel.org>
-To: Quentin Monnet <qmo@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
- rameezrehman408@hotmail.com
+X-Rspamd-Bar: /
+X-Rspamd-Report: R_MIXED_CHARSET(0.555555) BAYES_HAM(-0.000348) MID_RHS_NOT_FQDN(0.5) MIME_GOOD(-0.1)
+X-Rspamd-Score: 0.955207
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=aibor.de; s=uberspace;
+	h=from:to:subject:date;
+	bh=KBKWO3K3hukulM+pTWKZcjCnizMwXPQI/t5LFC+V8ss=;
+	b=PrW2cJ1wJT3xcZjAjMx2YNLaEchRd4nzxyX7DHtEV9f3mkvXDvmGz+Y3jtu20zat4b/QSqZwZS
+	p+YzAOaFgph0j0f22tkLU6DmbJfnxa6vXnw5/WL06oqCsFgkyfpLRYgSnag+nNqs6kItOqDldQaI
+	QPWXs6LIyISTWrPLPTJZ70fCC9vLZDD6TIeuVkVKS9250MLtfUW8nD/clOycK0g2TWYa6t/Yj5uI
+	ZiuaiahArwPCXN+LP5jAuahvAi8OQfsRrYlFRlMH8jnexbJ10+3ArKgNB9DKPGNoaZ0jA7o8nSZo
+	vRoFx2dY7nqB6xiq2cU1pYU5FEAP4XnBQJPC56u3BluXs3qBSHOKZDqD5//MHFXiflXIYhme6Vtp
+	YCw/mz0jRcGpEFlzhbaICsXl7KoQ7LXNcgs9dG2kiBZoGyr9kBwn/rmKXcjCLBQ+ABauG74b1uId
+	e4amPyq5SBPp+EFjgSETxSWaEuTuIKKQFt0xppHDlMCmdFp8J//C2lwPCiy+UPlmzFz4VGNwQ44E
+	Wg5B7wIovRpa6y5adYd0y8sD89K/J21thI8S5FZyXoh15MSoK2TtBS5Sh3fGDgF2An5uUiwZLUKO
+	1Lhxdu9TC/UBx/F9mmi/YU6LRHjmZn7FgaNlmW6YN6YmngjNtW9O0EYEhiLt9qy4aLzqMnI0d7eZ
+	Q=
 
-Hello:
+Commit 688879fb0176c2933 ("libbpf: add bpf_core_cast() macro") added a
+bpf_helpers include in bpf_core_read.h as a system include. Usually, the
+includes of are local, though, like in bpf_tracing.h. This commit adjusts
+the include to be local as well.
 
-This series was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+Signed-off-by: Tobias Böhm <tobias@aibor.de>
+---
+ src/bpf_core_read.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Sun, 31 Mar 2024 21:03:43 +0100 you wrote:
-> The rST manual pages for bpftool would use a mix of tabs and spaces for
-> indentation. While this is the norm in C code, this is rather unusual
-> for rST documents, and over time we've seen many contributors use wrong
-> levels of indentation for documentation update. This series simplifies
-> the indentation in the rST files by removing some unnecessary levels of
-> indent, and by using spaces only for what remains.
-> 
-> [...]
+diff --git a/src/bpf_core_read.h b/src/bpf_core_read.h
+index 1ce738d..b5c7ce5 100644
+--- a/src/bpf_core_read.h
++++ b/src/bpf_core_read.h
+@@ -2,7 +2,7 @@
+ #ifndef __BPF_CORE_READ_H__
+ #define __BPF_CORE_READ_H__
 
-Here is the summary with links:
-  - [bpf-next,1/3] bpftool: Use simpler indentation in source rST for documentation
-    https://git.kernel.org/bpf/bpf-next/c/f7b685436421
-  - [bpf-next,2/3] bpftool: Remove useless emphasis on command description in man pages
-    https://git.kernel.org/bpf/bpf-next/c/ea379b3ccc2e
-  - [bpf-next,3/3] bpftool: Clean-up typos, punctuation, list formatting in docs
-    https://git.kernel.org/bpf/bpf-next/c/a70f5d840a56
+-#include <bpf/bpf_helpers.h>
++#include "bpf_helpers.h"
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+ /*
+  * enum bpf_field_info_kind is passed as a second argument into
 
+base-commit: 20ea95b4505c477af3b6ff6ce9d19cee868ddc5d
+--
+2.44.0
 
