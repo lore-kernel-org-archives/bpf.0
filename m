@@ -1,162 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FC886146;
-	Tue,  2 Apr 2024 14:18:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE56086253
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 14:19:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712067486; cv=none; b=dE9zQOaLyxbcYZ1m4bpk4R7A+VZGCSxu4m3Q46l4YzckkLOSW3AF927cdhFJTbMCA3vXTIDmwcurRGzeeR3TBTxHq4TwP6jaxEAhaZKTTF38j20o4KIb188SiKmwEfXDqqkVPU/OOJOETsWLfYh6TAnEf/q08exkPLfY2mz328A=
+	t=1712067585; cv=none; b=p75Uo7ZbgRj5M7GJqT13R8KdstNO+ZLaUFiByfE6IqnTbBCsocZEOj23tMIX0A0jNap0lHbFcWQmdUGowXXaqz3pFnBoW7TIyHCwunmHebbtkEVE8/izomIGMBFTAEnawxQ+u4PNUZkU6ro8L31DsMOWu2mLQ+dPguxt/6Ff19I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712067486; c=relaxed/simple;
-	bh=JXeMgDJf7NztdBYQwze7zpUZgNxk5FTdMBjGNHLcJyc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=B2Iuy2UTt3mMaFwLQv+JXSZ5YylfzILugMpDuV2OzFnoKSBQNypK2WEt79kmHVitn/x4shutQw6GZKMM+31L17KW7FqrIhd3JlSwRvM/ixgseWWrXEm/CXOC3/Bfj81M4BJyaHu6Y4RyWlx08yZr7yRFwnfQnJg+DzmiEuJgPlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dfVAw2iR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712067585; c=relaxed/simple;
+	bh=ni147LSy99ja5zJiEsiizkGiuRduQqR+DOhRpy5m1KM=;
+	h=Subject:To:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=MaoW53waTDxmscUMmIPjMlfepzmtbxsgmFTCPFtMg6sYedCgtNIyDgNp0xhtWUNYAFHfvVT2kW0Y3BVrYsUyxMWRuIkDaTTTVRyigaUWLRjVnQGzAHAFe3Lgj262Sojb3K7liHgx9XtdLkKg3Oy5Qlbda+wfFwEKYiEjAVnwBQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=chsOywMT; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dfVAw2iR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57FA2C433F1;
-	Tue,  2 Apr 2024 14:18:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712067485;
-	bh=JXeMgDJf7NztdBYQwze7zpUZgNxk5FTdMBjGNHLcJyc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=dfVAw2iRAvypeK/Zlw38Hf7kCcsuNwEhmQfBge96A/7PycL6UubyOuVvmKNRhslrZ
-	 oNMfs3i2an13hurYmIouOhXwU0P7YwaKep4CpvN9DQOtyYOXS6BZSwcsdI9SEJ6VzA
-	 J5WhBcosWO0m1/FPgwgQ4g5iwFvLaNkajPW7lBdqd+N+nu7hvFWMhPYBJZUM3RJ4KD
-	 9LXtsG9PhmP3zt1699OP/kxI+DGr59xUutBN6wJ6BNEDepT71pRFxMer7JyIZ/6vZh
-	 x0xWH8Nlw7f36+WcOiVt+7thgJjsCnDL3yrWnwaFMwUp/OxG3rfLNZe8aYzDY/t9pi
-	 LsntEkP/9ghMg==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Conor Dooley <conor.dooley@microchip.com>, Conor Dooley <conor@kernel.org>
-Cc: Stefan O'Rear <sorear@fastmail.com>, Pu Lehui <pulehui@huaweicloud.com>,
- bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
- netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
- <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh
- <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko
- <mykolal@fb.com>, Manu Bretelle <chantr4@gmail.com>, Pu Lehui
- <pulehui@huawei.com>
-Subject: Re: [PATCH bpf-next 2/5] riscv, bpf: Relax restrictions on Zbb
- instructions
-In-Reply-To: <20240329-linguini-uncured-380cb4cff61c@wendy>
-References: <20240328124916.293173-1-pulehui@huaweicloud.com>
- <20240328124916.293173-3-pulehui@huaweicloud.com>
- <3ed9fe94-2610-41eb-8a00-a9f37fcf2b1a@app.fastmail.com>
- <20240328-ferocity-repose-c554f75a676c@spud>
- <20240329-linguini-uncured-380cb4cff61c@wendy>
-Date: Tue, 02 Apr 2024 16:18:02 +0200
-Message-ID: <87il0zrgpx.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="chsOywMT"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+	Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=JNR4Xz6d9Q9AZ6x9zzQMblgnZtAzIRK8GCDMh16dxFg=; b=chsOywMT87XoYgLvP8r8XcUyAY
+	QfP9aLnhSabtqmBHBke9JWajZQ4FYsAuc2rFSshoVk42n9Vnc+0oDrQliuLpuE4iPw+dWc1c7If+H
+	2eEba0SSv4yr1WTlm3X7yKgLJG4hTnPmDUkoNWrXGpmwlERwOuCpg5nwYNp3h9bwPlgLYDSTrciht
+	33uzNPFnwPKdZj4aOAXDBA7dPtUXRlzvNvoQDwlBicEyykqUlxjynsxPklBOP7XoFtw/RsmnjMiyu
+	ib7GSr6U2hqqeQCqxQU13G8a+aTTivtVyr6DJiO+jUhBxZyO6Q9XjPsKkRYZj1qdRis0Vf28ZAsnl
+	uRDZLlpA==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1rrezA-000F0P-IL; Tue, 02 Apr 2024 16:19:36 +0200
+Received: from [178.197.248.12] (helo=linux.home)
+	by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1rrez9-000V68-Vs; Tue, 02 Apr 2024 16:19:36 +0200
+Subject: Re: [PATCH v3 bpf-next] bpf: add a verbose message if map limit is
+ reached
+To: Anton Protopopov <aspsk@isovalent.com>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ Stanislav Fomichev <sdf@google.com>, Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>,
+ bpf@vger.kernel.org
+References: <20240402073347.195920-1-aspsk@isovalent.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <48d8d527-efb6-08e7-7a87-654c4490f7ed@iogearbox.net>
+Date: Tue, 2 Apr 2024 16:19:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240402073347.195920-1-aspsk@isovalent.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27233/Tue Apr  2 10:26:21 2024)
 
-Conor Dooley <conor.dooley@microchip.com> writes:
+On 4/2/24 9:33 AM, Anton Protopopov wrote:
+> When more than 64 maps are used by a program and its subprograms the
+> verifier returns -E2BIG. Add a verbose message which highlights the
+> source of the error and also print the actual limit.
+> 
+> v1 -> v2:
+>    * make the message more clear (Alexey)
+> v2 -> v3:
+>    * fixed grammar (Anton)
+> 
+> Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
+> Acked-by: Yonghong Song <yonghong.song@linux.dev>
+> Acked-by: John Fastabend <john.fastabend@gmail.com>
+> ---
+>   kernel/bpf/verifier.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index edb650667f44..559526191ae7 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -18348,6 +18348,8 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
+>   			}
+>   
+>   			if (env->used_map_cnt >= MAX_USED_MAPS) {
+> +				verbose(env, "The total number of maps per program has reached the limit of %u\n",
+> +					MAX_USED_MAPS);
 
-> On Thu, Mar 28, 2024 at 10:07:23PM +0000, Conor Dooley wrote:
->
->> As I said on IRC to you earlier, I think the Kconfig options here are in
->> need of a bit of a spring cleaning - they should be modified to explain
->> their individual purposes, be that enabling optimisations in the kernel
->> or being required for userspace. I'll try to send a patch for that if
->> I remember tomorrow.
->
-> Something like this:
->
-> -- >8 --
-> commit 5125504beaedd669b082bf74b02003a77360670f
-> Author: Conor Dooley <conor.dooley@microchip.com>
-> Date:   Fri Mar 29 11:13:22 2024 +0000
->
->     RISC-V: clarify what some RISCV_ISA* config options do
->=20=20=20=20=20
->     During some discussion on IRC yesterday and on Pu's bpf patch [1]
->     I noticed that these RISCV_ISA* Kconfig options are not really clear
->     about their implications. Many of these options have no impact on what
->     userspace is allowed to do, for example an application can use Zbb
->     regardless of whether or not the kernel does. Change the help text to
->     try and clarify whether or not an option affects just the kernel, or
->     also userspace. None of these options actually control whether or not=
- an
->     extension is detected dynamically as that's done regardless of Kconfig
->     options, so drop any text that implies the option is required for
->     dynamic detection, rewording them as "do x when y is detected".
->=20=20=20=20=20
->     Link: https://lore.kernel.org/linux-riscv/20240328-ferocity-repose-c5=
-54f75a676c@spud/ [1]
->     Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->     ---
->     I did this based on top of Samuel's changes dropping the MMU
->     requurements just in case, but I don't think there's a conflict:
->     https://lore.kernel.org/linux-riscv/20240227003630.3634533-4-samuel.h=
-olland@sifive.com/
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index d8a777f59402..f327a8ac648f 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -501,8 +501,8 @@ config RISCV_ISA_SVNAPOT
->  	depends on RISCV_ALTERNATIVE
->  	default y
->  	help
-> -	  Allow kernel to detect the Svnapot ISA-extension dynamically at boot
-> -	  time and enable its usage.
-> +	  Add support for the Svnapot ISA-extension when it is detected by
-> +	  the kernel at boot.
->=20=20
->  	  The Svnapot extension is used to mark contiguous PTEs as a range
->  	  of contiguous virtual-to-physical translations for a naturally
-> @@ -520,9 +520,9 @@ config RISCV_ISA_SVPBMT
->  	depends on RISCV_ALTERNATIVE
->  	default y
->  	help
-> -	   Adds support to dynamically detect the presence of the Svpbmt
-> -	   ISA-extension (Supervisor-mode: page-based memory types) and
-> -	   enable its usage.
-> +	   Add support for the Svpbmt ISA-extension (Supervisor-mode:
-> +	   page-based memory types) when it is detected by the kernel at
-> +	   boot.
->=20=20
->  	   The memory type for a page contains a combination of attributes
->  	   that indicate the cacheability, idempotency, and ordering
-> @@ -541,14 +541,15 @@ config TOOLCHAIN_HAS_V
->  	depends on AS_HAS_OPTION_ARCH
->=20=20
->  config RISCV_ISA_V
-> -	bool "VECTOR extension support"
-> +	bool "Vector extension support"
->  	depends on TOOLCHAIN_HAS_V
->  	depends on FPU
->  	select DYNAMIC_SIGFRAME
->  	default y
->  	help
->  	  Say N here if you want to disable all vector related procedure
-> -	  in the kernel.
-> +	  in the kernel. Without this option enabled, neither the kernel nor
-> +	  userspace may use vector.
->=20=20
->  	  If you don't know what to do here, say Y.
->=20=20
-> @@ -606,8 +607,8 @@ config RISCV_ISA_ZBB
->  	depends on RISCV_ALTERNATIVE
->  	default y
->  	help
-> -	   Adds support to dynamically detect the presence of the ZBB
-> -	   extension (basic bit manipulation) and enable its usage.
-> +	   Add support for enabling optimisations in the kernel when the
+Btw, small nit, but might make sense to streamline capitalization across
+verbose() messages. Bit of a mix of small and capital letters right now
+in the verifier code. Either way, independent of this one.
 
-I don't care much, but "optimizations" here -- for consistency reasons!
-[1] ;-)
-
-Nice change!
-
-Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
-
-[1] https://lwn.net/Articles/636286/
+Cheers,
+Daniel
