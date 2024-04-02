@@ -1,58 +1,58 @@
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E84E18040
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 04:35:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4AE2581
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 04:41:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712032503; cv=none; b=RYsdmcrqBGJz6YL8QSAMKjyk5UF8NTgQyCIdQmbKZMwVYnCC1lamXgwP16Ury5scXVQSnt3M39dT3LN9PDlEATB2nyPOmxH2Da1dFplPNLgD3Z696XHBVaWyT67Wh7omkUaCDg0fEvtlfa4Gur0wT+iYR1+q9V04zVuoI9AAWv4=
+	t=1712032905; cv=none; b=SYDJSWIbid/ZITU2Aghx2Q7AM/bKCpMl6nW3Db4eCwa0LiO+WHs5ECX//USHUvLlZN4SjGZH+PAXaQQkJ2XNDNQPuVtDL9jTnGDy69cGmqsZ6eO5nB6pj2fHSz7ITgsMn7+F4oHLOknnkHxz9mEYGAe1z+9SiwVWAi+BP98rf7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712032503; c=relaxed/simple;
-	bh=HakP9ucsY44k0Z5vms/GDuf0YjLU1i1WvMCEuYtSLjI=;
+	s=arc-20240116; t=1712032905; c=relaxed/simple;
+	bh=rIak6zYrw4Id+aP9gIkUhm0e4bwdvpZqh+Mu/Oc9i74=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=tgQUi22Eg5G6yPFu2GS0OKLDGr2HHTfw95lfG2ET3RySQpeYwB+EyAs4DxnJpUeHTodpfcwvRYnwQz1SSE2e1emI9J7x4wiPlvO/xWs6h/KfFlb3NSSJ+fhQOdyYJqYPqOEtp3yf0CLc5WJF6AWSKv3N6u7b1G/LaS8h+Bp4Meg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IEbe0PkZ; arc=none smtp.client-ip=209.85.167.172
+	 Mime-Version:Content-Type; b=CuNoOTnFqCrSSUv/XiwtzmP+A42jXm3I9PfqbFLTtuQh8IPxRl74lSsVxHrTiMm1NTlpYtlKJXeQPdo5nCTsOPOq/tBvl12zAC8NLvq8h1tyxtuBNIS4D+hU51ttk+PiDop8E3mM2xFjnR8Q7H0ov/9nDGhfc+IVSxIUPcRfjhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ctn2oXmo; arc=none smtp.client-ip=209.85.215.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IEbe0PkZ"
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-3c4f55a1bd6so72201b6e.0
-        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 21:35:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ctn2oXmo"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-5e4613f2b56so3281978a12.1
+        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 21:41:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712032501; x=1712637301; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712032903; x=1712637703; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xWX8kuMPXdFDyZfMcll/UUblCrh8gZic7wBnI9WBgxo=;
-        b=IEbe0PkZyGupKUlpI2sNGkcFQuRnNT6ZDDGUaVC4mxsTC0ttG4Lgq5J89sD4qcl+ZB
-         nSBGZ3e3+a90QRAlLW9Io08JF2NZ0RMiKpxCrd+3hWnqoWULxPXuUy/wtiDb4D6XEXZ9
-         84vcfFXH+6O8dLb0Euu+DrzWESjoMKOn/hEdeJaiL7dB45JiybNJsrRYk8LwOcSk9FLh
-         VWUA7ZZmlo2i6HeQtbKOYtwr6CsfND3L+zLstPhvbKRhcLYteUtXQfhbaNKHVjyTZqAb
-         aa+d0jCKGRCjMHlllardANAGB/VczoRvDFVx72pn0p+1Y6MJDEJgML4mlwFx7zsgfHzP
-         i5ow==
+        bh=75NFK63v/HA7la/o9BnR/bO9wWDIVb5qK4vGe9xDFNI=;
+        b=ctn2oXmo8yf3CJljQ7yffsLzg1XF65fBj67+yzr8Kp+sNIQ5znGw8yI/4zFVmI5ztp
+         BIIrb7+LngDUw/VjVUKDJXT2+esNgNF7Y0FIgsXKH2UBwr+5bQTJ0yx0V4u3UoKq+HD8
+         v1CD4H/jjwkHqLRxDduVgZZCmC5qCkqRyZ6PJFR1XVIWquZAgf9O/MMLhk1/UfdzXPqB
+         I1hD9gspBX/+DZ52cbl2SPkMC1kNMYyHwZQZdWM8iWkHEGzd98p7OZm6WrVVTxkf9Xuz
+         QqkIq/iwIgirFJLYQGg2G79XqjHnUr8JPcdaNpS+S21vEO6N/aJmQ8uDk9pTM6MIsgd2
+         2Zqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712032501; x=1712637301;
+        d=1e100.net; s=20230601; t=1712032903; x=1712637703;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=xWX8kuMPXdFDyZfMcll/UUblCrh8gZic7wBnI9WBgxo=;
-        b=w4SEw/rfv3DfJGoDwhJ8tin6Q5HsWy1y6OFUjMx/rqVhGvxonGWzYhGismfjcwjaiY
-         vj0PwDz2+GgOmBIhL+TmCCd66q6ftPiSqTna7Uvch1iN3wKD/cgzh09Xy3gg42vsGuRt
-         c05rDA0p4cISzvLCnhFeqhbOoBG9rRUWs0OSG5auCQrXCL2VOKUYwQM0wDvk4URE4eLx
-         w4r9PPzS+A9vmKNJCCoZ4Txk6MKw3iJqSt6UOoigqH3E8l+q+t5jaTYkgkwFzrKkJU1+
-         /rt4NI0ay7SWgn5+Hxfbc/zVYcdRtr4zo4KsHFrVWX2yJAJvztDwaQ0lq44XQtb2wPlG
-         xDsg==
-X-Forwarded-Encrypted: i=1; AJvYcCWyWTTyrXVrgdAxP6ZwJoFhR7eVsZV9DmzSnDMRp3FNAKReuxZ0xBBbVVYQJldX70ujhdSHKPZcDN4GUCrhgzFWqhqh
-X-Gm-Message-State: AOJu0YxMpxIKSzlV3/04PcYVkoDgSgAXplW+scYSm7z8vsTnvxLk/+f6
-	RWeMiSdu43eFacBFjj9YwV1xcehufgQ5RGNSs1ptjjrmlYZImzXIAK0tBgef
-X-Google-Smtp-Source: AGHT+IEosB7rYwzlkeNb+bF12wvf0uGngY4g2qCycBs80a3PXBL2wooof6takw0ftw/HNx8XBqwKOw==
-X-Received: by 2002:a05:6808:318a:b0:3c1:7eac:a8a8 with SMTP id cd10-20020a056808318a00b003c17eaca8a8mr13498649oib.26.1712032501450;
-        Mon, 01 Apr 2024 21:35:01 -0700 (PDT)
+        bh=75NFK63v/HA7la/o9BnR/bO9wWDIVb5qK4vGe9xDFNI=;
+        b=SWeoem5nJ0Jq+9rZuQGBpKN1nUgp3m7P16k9zbMoRwG6xS5RktfRr3ZAozx26pv7ay
+         pQJMdu0NLbm0RIWETOn/Z5sAmn9BkSDLgNnHS2kAx9eb94Df+lHONJ8DPvuejVhhbyME
+         ffAuzhkh30Yol67YzpnC9MrqFgM/cfqhwH3BJnH2xefS1NtG3UPXBgJe+c08AMpGqUpI
+         J7Ik883uEb6NZ26LR6nsTcDN3wp4HyB6qzVXVLQH1KPZjNe3ubyrdHbNNPG8XUSXalWA
+         64I/4Ml1QGPw+yf6gQMt4kOJLqsSR4/lQQO8eCzc3sL2dsGLitNWuLoIcDwPn8dUG8wD
+         6qdw==
+X-Forwarded-Encrypted: i=1; AJvYcCXomCRyfYIXWxcGNlCx9l8yAg/7xzK3ufU0HPJA+s/Xi6Cat/AVPVLpadLVg0m13+1TOXSqNH74QMxmblWpbVHN+8b5
+X-Gm-Message-State: AOJu0Ywc6QpdAi7j0UGCkp1xR26JGlTxV/WwPBgWpEhzVSWaU5qa7syY
+	j862spGr7l8nz/HTOQ4bTA4U9U6M8cbDpyvnJE8tg51cAzVQhX1D
+X-Google-Smtp-Source: AGHT+IH839f1/iAyT/nCm+mWULClAduLCto9Hq60SseEXDFGoQPsrcSxpm4uy9YRVM0Gjvx9sV5PLA==
+X-Received: by 2002:a17:903:238e:b0:1e0:1174:6360 with SMTP id v14-20020a170903238e00b001e011746360mr13846182plh.14.1712032903119;
+        Mon, 01 Apr 2024 21:41:43 -0700 (PDT)
 Received: from localhost ([98.97.36.54])
-        by smtp.gmail.com with ESMTPSA id n16-20020aa79850000000b006e64ddfa71asm8985720pfq.170.2024.04.01.21.35.00
+        by smtp.gmail.com with ESMTPSA id i10-20020a17090332ca00b001e0937a77e8sm9834731plr.200.2024.04.01.21.41.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Apr 2024 21:35:01 -0700 (PDT)
-Date: Mon, 01 Apr 2024 21:35:00 -0700
+        Mon, 01 Apr 2024 21:41:42 -0700 (PDT)
+Date: Mon, 01 Apr 2024 21:41:41 -0700
 From: John Fastabend <john.fastabend@gmail.com>
 To: Andrii Nakryiko <andrii@kernel.org>, 
  bpf@vger.kernel.org, 
@@ -61,12 +61,12 @@ To: Andrii Nakryiko <andrii@kernel.org>,
  martin.lau@kernel.org
 Cc: andrii@kernel.org, 
  kernel-team@meta.com
-Message-ID: <660b8af433ed8_1a1402086c@john.notmuch>
-In-Reply-To: <20240402021307.1012571-2-andrii@kernel.org>
+Message-ID: <660b8c85c237a_1a1402084c@john.notmuch>
+In-Reply-To: <20240402021307.1012571-3-andrii@kernel.org>
 References: <20240402021307.1012571-1-andrii@kernel.org>
- <20240402021307.1012571-2-andrii@kernel.org>
-Subject: RE: [PATCH v2 bpf-next 1/4] bpf: add special internal-only MOV
- instruction to resolve per-CPU addrs
+ <20240402021307.1012571-3-andrii@kernel.org>
+Subject: RE: [PATCH v2 bpf-next 2/4] bpf: inline bpf_get_smp_processor_id()
+ helper
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,35 +78,52 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 7bit
 
 Andrii Nakryiko wrote:
-> Add a new BPF instruction for resolving absolute addresses of per-CPU
-> data from their per-CPU offsets. This instruction is internal-only and
-> users are not allowed to use them directly. They will only be used for
-> internal inlining optimizations for now between BPF verifier and BPF JITs.
-> 
-> We use a special BPF_MOV | BPF_ALU64 | BPF_X form with insn->off field
-> set to BPF_ADDR_PERCPU = -1. I used negative offset value to distinguish
-> them from positive ones used by user-exposed instructions.
-> 
-> Such instruction performs a resolution of a per-CPU offset stored in
-> a register to a valid kernel address which can be dereferenced. It is
-> useful in any use case where absolute address of a per-CPU data has to
-> be resolved (e.g., in inlining bpf_map_lookup_elem()).
-> 
-> BPF disassembler is also taught to recognize them to support dumping
-> final BPF assembly code (non-JIT'ed version).
-> 
-> Add arch-specific way for BPF JITs to mark support for this instructions.
-> 
-> This patch also adds support for these instructions in x86-64 BPF JIT.
+> If BPF JIT supports per-CPU MOV instruction, inline bpf_get_smp_processor_id()
+> to eliminate unnecessary function calls.
 > 
 > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 > ---
->  arch/x86/net/bpf_jit_comp.c | 16 ++++++++++++++++
->  include/linux/filter.h      | 20 ++++++++++++++++++++
->  kernel/bpf/core.c           |  5 +++++
->  kernel/bpf/disasm.c         | 14 ++++++++++++++
->  4 files changed, 55 insertions(+)
-
-LGTM
+>  kernel/bpf/verifier.c | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index edb650667f44..af0274b090bb 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -20072,6 +20072,30 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+>  			goto next_insn;
+>  		}
+>  
+> +#ifdef CONFIG_X86_64
+> +		/* Implement bpf_get_smp_processor_id() inline. */
+> +		if (insn->imm == BPF_FUNC_get_smp_processor_id &&
+> +		    prog->jit_requested && bpf_jit_supports_percpu_insn()) {
+> +			/* BPF_FUNC_get_smp_processor_id inlining is an
+> +			 * optimization, so if pcpu_hot.cpu_number is ever
+> +			 * changed in some incompatible and hard to support
+> +			 * way, it's fine to back out this inlining logic
+> +			 */
+> +			insn_buf[0] = BPF_MOV32_IMM(BPF_REG_0, (u32)(unsigned long)&pcpu_hot.cpu_number);
+> +			insn_buf[1] = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
+> +			insn_buf[2] = BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_0, 0);
+> +			cnt = 3;
+> +
+> +			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+> +			if (!new_prog)
+> +				return -ENOMEM;
+> +
+> +			delta    += cnt - 1;
+> +			env->prog = prog = new_prog;
+> +			insn      = new_prog->insnsi + i + delta;
+> +			goto next_insn;
+> +		}
+> +#endif
+>  		/* Implement bpf_get_func_arg inline. */
+>  		if (prog_type == BPF_PROG_TYPE_TRACING &&
+>  		    insn->imm == BPF_FUNC_get_func_arg) {
+> -- 
+> 2.43.0
+> 
+> 
 
 Acked-by: John Fastabend <john.fastabend@gmail.com>
