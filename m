@@ -1,225 +1,177 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 732895BAD7
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 21:40:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5088F15ADB1
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 21:43:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712094027; cv=none; b=QhQdTIDlj3C+9F73TJA1xmETyGOSeEhk7gsU9nNJ9Zg/DBXL9pzVxFXCKUhhPMoPvs4memctl5NcuLpnMAvm8bFYvYOTA37aV2ccvOCX5HzcvqkzN8pOhYLpR0pKAmqrYVAo5MKABghj2bJXsD1iTNMJVhm1uWmA64C71TKRQis=
+	t=1712094216; cv=none; b=uUytsViTqx4SO0DQnyc5ccrL8AL7tVuBBCIlz6rmV2fxcxtZhy8+DCEsgdI2bWv+IbEq3VQgotOIqreHjTApjuQ1/l1QtnLnUUDIv7LA4lDXhwgd2ZDhzJQAJC2dqgPunnH40n20mb36I588naO9A7DeXlZVqy1HS0cx9Pu5dxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712094027; c=relaxed/simple;
-	bh=pEvvwp2uF+BoaAPGzbRrw8FkMpC0RI9U/huBZlSJSAQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tJ6szpZfLGSIEJIaJsrcOGizRuqgLtnzhp9+/htRhm4OdQ7PKjSGpv7m0Y0IUTZs/k8KrUTQo9S+GYWKhMyocv83ANgZEy25HSkAH/7p4qpCEA1hgv4YGPBfELGadsesOL5I2vp50NyH5t4rDZi4F3vPNg6n/za+iBjvWQs8ge8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PfD7vPyM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712094216; c=relaxed/simple;
+	bh=3r920r3sy9ONvV4TZu5TnTf81AgbCvB0ASdhZe2r0D8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=tDC14op2VzkUUqW+JEokQhfdHTqDAf+Rr2ZLO+yvoprXF/E/IW4jJKvkz6qkjn9gURxS1P7gsGK6FPrHSnayeGQBMYHl+GkzCiKPZ4oeYqH6mOEUVhjUQs5Y5z//mL/x4v+jpq5OpgrZ6fXklTil0uxgNSDBhZDIaicPETUvQIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DSBI5n/K; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PfD7vPyM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C8DCC433F1;
-	Tue,  2 Apr 2024 21:40:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712094027;
-	bh=pEvvwp2uF+BoaAPGzbRrw8FkMpC0RI9U/huBZlSJSAQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PfD7vPyMi4ZRAYbY9DXWosj8AeoLyQil3iAEHYFuPulyF23CX70w2izAEmOBoTm5P
-	 Ztab41SdnUYCzFWXyVlRE1MSeeVw9t2am4Of4TukPmjXSZBT5oC1VLcfZTHtzoACo5
-	 S1AxHsgc7UNtWJgG0EsoM3IqRcPn01lKrQOeQtRO+IAuwHsoTWxtePNqrAHJalNPwS
-	 4jKHmlM8Wxf9WiNhmHrQ+V/V2rbWWjjaNw3JNKM+IAT8HZNJve0TC5iZCXZd3FWiIY
-	 ljs/A6XQE7dkIIBBPkChgC2ZiibMoXc9J+Yu6BO3GW+lqcEEKh7AjTjXuXwwYNxupV
-	 lg5sZd5mVjJxg==
-Message-ID: <45c72ae1-ab0d-439b-8237-80a38e15f571@kernel.org>
-Date: Tue, 2 Apr 2024 22:40:22 +0100
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DSBI5n/K"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712094214;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fVL0aLiqcK1KzUfmb79yjYH6UEgJji5kSbpVUcLouhk=;
+	b=DSBI5n/K5r7xBZpC4PQasdlcEdb4Q0vxQiJ5kk65WFxmzIUrDjpK/UMTQXc6eTU4QBpvcU
+	Bw/+MzmIUxlKTsHqSk060bo7nuFdbD3HDt0Hr6Sxz78H1loRRnn9VdIVhCHUkmUoID7S3X
+	GkQIuKVBiPuOnM89Vmv41jvV97/Ifbo=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-362-AKTbG7qBPGaPg6RMo_3dZw-1; Tue, 02 Apr 2024 17:43:33 -0400
+X-MC-Unique: AKTbG7qBPGaPg6RMo_3dZw-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-41558e670d5so1482075e9.1
+        for <bpf@vger.kernel.org>; Tue, 02 Apr 2024 14:43:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712094212; x=1712699012;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fVL0aLiqcK1KzUfmb79yjYH6UEgJji5kSbpVUcLouhk=;
+        b=uPLJv00LLWYzCKoQFZP2mHe4VbzTFaVOGcemt3QFxJIL6tDgjMSztQl7XYDDZxeXTc
+         Oxdb02NqQMzwXF2HlVU2pj6f+dA7EBzwSolx3IHpLbnTWmjiizM1p8u3qnrHNiKPDi+q
+         jUDquJkxwjp6RK0V7+3nK+tYg2QfrVRNa5ekX0XqzDPm97OiKhGz/uqZZq2WYLHZEcoh
+         5GF1I1GfvRpt9imPWmsEz6PRPvSQWHx++w7GT3/K0DqPJ3anEB85wWQr14G3fZ6glQ9W
+         hOZs9mynuZaDyvzWIasHdq/U5euaiv3iXFCaYjPV4K1MXadx6EK10H4culFidPFHrKOF
+         UKjg==
+X-Forwarded-Encrypted: i=1; AJvYcCWPozGK6E8EEaFmfTmWuL+i4r/EYqSLHsYRv3aglNlFo9vkqmH3Qw0pcketrx7DR7li6GJM/yOr1U9yGpaR5YbM92us
+X-Gm-Message-State: AOJu0YxS7GYRSu9S44+V5ohhpuJsuGoPM+WZ6jf0lUhK3Jno2oun0WcR
+	iGORWJ+TjBRgyT8ie0inTg8D3KlEJNdI35qX0yjh5+TU1LCrmCArXKgnDj/CuFc7fxoYuSc6UP1
+	N2RvxMQ2AWV/mH7kshXI34JOgexMjpWX1f5AcQe9WBB2OlzORKA==
+X-Received: by 2002:a05:600c:5198:b0:415:6e79:91dc with SMTP id fa24-20020a05600c519800b004156e7991dcmr593806wmb.15.1712094212057;
+        Tue, 02 Apr 2024 14:43:32 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG/ASZOCZD4KwlBc+fiI0YXbidwMFqieDhzHwYxi6KPCQ5cxE4ZJjXpRsZKcHCLucbIsfEU8Q==
+X-Received: by 2002:a05:600c:5198:b0:415:6e79:91dc with SMTP id fa24-20020a05600c519800b004156e7991dcmr593790wmb.15.1712094211655;
+        Tue, 02 Apr 2024 14:43:31 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id bg3-20020a05600c3c8300b0041481207b23sm19458402wmb.8.2024.04.02.14.43.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Apr 2024 14:43:31 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id D64CD11A2284; Tue,  2 Apr 2024 23:43:30 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Jamal Hadi Salim <jhs@mojatatu.com>, netdev@vger.kernel.org
+Cc: deb.chatterjee@intel.com, anjali.singhai@intel.com,
+ namrata.limaye@intel.com, tom@sipanda.io, mleitner@redhat.com,
+ Mahesh.Shirshyad@amd.com, Vipin.Jain@amd.com, tomasz.osinski@intel.com,
+ jiri@resnulli.us, xiyou.wangcong@gmail.com, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ vladbu@nvidia.com, horms@kernel.org, khalidm@nvidia.com,
+ daniel@iogearbox.net, victor@mojatatu.com, pctammela@mojatatu.com,
+ dan.daly@intel.com, andy.fingerhut@gmail.com, chris.sommers@keysight.com,
+ mattyk@nvidia.com, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v13  00/15] Introducing P4TC (series 1)
+In-Reply-To: <20240325142834.157411-1-jhs@mojatatu.com>
+References: <20240325142834.157411-1-jhs@mojatatu.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Tue, 02 Apr 2024 23:43:30 +0200
+Message-ID: <877chfmoe5.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH bpf-next v4] bpftool: Mount bpffs on provided dir instead
- of parent dir
-To: Sahil Siddiq <icegambit91@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Cc: martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org
-References: <20240401190407.20363-1-icegambit91@gmail.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20240401190407.20363-1-icegambit91@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 01/04/2024 20:04, Sahil Siddiq wrote:
-> When pinning programs/objects under PATH (eg: during "bpftool prog
-> loadall") the bpffs is mounted on the parent dir of PATH in the
-> following situations:
-> - the given dir exists but it is not bpffs.
-> - the given dir doesn't exist and the parent dir is not bpffs.
-> 
-> Mounting on the parent dir can also have the unintentional side-
-> effect of hiding other files located under the parent dir.
-> 
-> If the given dir exists but is not bpffs, then the bpffs should
-> be mounted on the given dir and not its parent dir.
-> 
-> Similarly, if the given dir doesn't exist and its parent dir is not
-> bpffs, then the given dir should be created and the bpffs should be
-> mounted on this new dir.
-> 
-> Link: https://lore.kernel.org/bpf/2da44d24-74ae-a564-1764-afccf395eeec@isovalent.com/T/#t
-> Closes: https://github.com/libbpf/bpftool/issues/100
-> Fixes: 2a36c26fe3b8 ("bpftool: Support bpffs mountpoint as pin path for prog loadall")
-> 
-> Changes since v1:
->  - Split "mount_bpffs_for_pin" into two functions.
->    This is done to improve maintainability and readability.
-> 
-> Changes since v2:
-> - mount_bpffs_for_pin: rename to "create_and_mount_bpffs_dir".
-> - mount_bpffs_given_file: rename to "mount_bpffs_given_file".
-> - create_and_mount_bpffs_dir:
->   - introduce "dir_exists" boolean.
->   - remove new dir if "mnt_fs" fails.
-> - improve error handling and error messages.
-> 
-> Changes since v3:
-> - Rectify function name.
-> - Improve error messages and formatting.
-> - mount_bpffs_for_file:
->   - Check if dir exists before block_mount check.
-> 
-> Signed-off-by: Sahil Siddiq <icegambit91@gmail.com>
+Jamal Hadi Salim <jhs@mojatatu.com> writes:
 
-Tested-by: Quentin Monnet <qmo@kernel.org>
-Reviewed-by: Quentin Monnet <qmo@kernel.org>
+> This is the first patchset of two. In this patch we are submitting 15 whi=
+ch
+> cover the minimal viable P4 PNA architecture.
+> Please, if you want to discuss a slightly tangential subject like offload=
+ or
+> even your politics then start another thread with a different subject lin=
+e.
+> The way you do it is to change the subject line to for example
+> "<Your New Subject here> (WAS: <original subject line here>)".
+>
+> In this cover letter i am restoring text i took out in V10 which stated "=
+our
+> requirements".
+>
+> Martin, please look at patch 14 again. The bpf selftests for kfuncs is
+> sloted for series 2. Paolo, please take a look at 1, 3, 6 for the changes
+> you suggested. Marcelo, because we made changes to patch 14, I have
+> removed your reviewed-by. Can you please take another look at that patch?
+>
+> __Description of these Patches__
+>
+> These Patches are constrained entirely within the TC domain with very tiny
+> changes made in patch 1-5. eBPF is used as an infrastructure component for
+> the software datapath and no changes are made to any eBPF code, only kfun=
+cs
+> are introduced in patch 14.
+>
+> Patch #1 adds infrastructure for per-netns P4 actions that can be created=
+ on
+> as need basis for the P4 program requirement. This patch makes a small
+> incision into act_api. Patches 2-4 are minimalist enablers for P4TC and h=
+ave
+> no effect on the classical tc action (example patch#2 just increases the =
+size
+> of the action names from 16->64B).
+> Patch 5 adds infrastructure support for preallocation of dynamic actions
+> needed for P4.
+>
+> The core P4TC code implements several P4 objects.
+> 1) Patch #6 introduces P4 data types which are consumed by the rest of the
+>    code
+> 2) Patch #7 introduces the templating API. i.e. CRUD commands for templat=
+es
+> 3) Patch #8 introduces the concept of templating Pipelines. i.e CRUD
+>    commands for P4 pipelines.
+> 4) Patch #9 introduces the action templates and associated CRUD commands.
+> 5) Patch #10 introduce the action runtime infrastructure.
+> 6) Patch #11 introduces the concept of P4 table templates and associated
+>    CRUD commands for tables.
+> 7) Patch #12 introduces runtime table entry infra and associated CU
+>    commands.
+> 8) Patch #13 introduces runtime table entry infra and associated RD
+>    commands.
+> 9) Patch #14 introduces interaction of eBPF to P4TC tables via kfunc.
+> 10) Patch #15 introduces the TC classifier P4 used at runtime.
+>
+> There are a few more patches not in this patchset that deal with externs,
+> test cases, etc.
 
-> ---
->  tools/bpf/bpftool/common.c     | 98 +++++++++++++++++++++++++++++-----
->  tools/bpf/bpftool/iter.c       |  2 +-
->  tools/bpf/bpftool/main.h       |  3 +-
->  tools/bpf/bpftool/prog.c       |  5 +-
->  tools/bpf/bpftool/struct_ops.c |  2 +-
->  5 files changed, 94 insertions(+), 16 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-> index cc6e6aae2447..56a5abbb1bf8 100644
-> --- a/tools/bpf/bpftool/common.c
-> +++ b/tools/bpf/bpftool/common.c
-> @@ -244,29 +244,103 @@ int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type)
->  	return fd;
->  }
->  
-> -int mount_bpffs_for_pin(const char *name, bool is_dir)
-> +int create_and_mount_bpffs_dir(const char *dir_name)
->  {
->  	char err_str[ERR_MAX_LEN];
-> -	char *file;
-> -	char *dir;
-> +	bool dir_exists;
->  	int err = 0;
->  
-> -	if (is_dir && is_bpffs(name))
-> +	if (is_bpffs(dir_name))
->  		return err;
->  
-> -	file = malloc(strlen(name) + 1);
-> -	if (!file) {
-> +	dir_exists = (access(dir_name, F_OK) == 0);
-> +
-> +	if (!dir_exists) {
-> +		char *temp_name;
-> +		char *parent_name;
-> +
-> +		temp_name = malloc(strlen(dir_name) + 1);
-> +		if (!temp_name) {
-> +			p_err("mem alloc failed");
-> +			return -1;
-> +		}
-> +
-> +		strcpy(temp_name, dir_name);
-> +		parent_name = dirname(temp_name);
-> +
-> +		if (is_bpffs(parent_name)) {
-> +			/* nothing to do if already mounted */
-> +			free(temp_name);
-> +			return err;
-> +		}
-> +
-> +		if (access(parent_name, F_OK) == -1) {
-> +			p_err("can't create dir '%s' to pin BPF object: parent dir '%s' doesn't exist",
-> +			      dir_name, parent_name);
-> +			free(temp_name);
-> +			return -1;
-> +		}
-> +
-> +		free(temp_name);
-> +	}
-> +
-> +	if (block_mount) {
-> +		p_err("no BPF file system found, not mounting it due to --nomount option");
-> +		return -1;
-> +	}
-> +
-> +	if (!dir_exists) {
-> +		err = mkdir(dir_name, 0700);
-> +		if (err) {
-> +			p_err("failed to create dir '%s': %s", dir_name, strerror(errno));
-> +			return err;
-> +		}
-> +	}
-> +
-> +	err = mnt_fs(dir_name, "bpf", err_str, ERR_MAX_LEN);
-> +	if (err) {
-> +		err_str[ERR_MAX_LEN - 1] = '\0';
-> +		p_err("can't mount BPF file system on given dir '%s': %s",
-> +		      dir_name, err_str);
-> +
-> +		if (!dir_exists)
-> +			rmdir(dir_name);
-> +	}
-> +
-> +	return err;
-> +}
-> +
-> +int mount_bpffs_for_file(const char *file_name)
-> +{
-> +	char err_str[ERR_MAX_LEN];
-> +	char *temp_name;
-> +	char *dir;
-> +	int err = 0;
-> +
-> +	if (access(file_name, F_OK) != -1) {
-> +		p_err("can't pin BPF object: path '%s' already exists", file_name);
-> +		return -1;
-> +	}
-> +
-> +	temp_name = malloc(strlen(file_name) + 1);
-> +	if (!temp_name) {
->  		p_err("mem alloc failed");
->  		return -1;
->  	}
->  
-> -	strcpy(file, name);
-> -	dir = dirname(file);
-> +	strcpy(temp_name, file_name);
-> +	dir = dirname(temp_name);
->  
->  	if (is_bpffs(dir))
->  		/* nothing to do if already mounted */
->  		goto out_free;
->  
-> +	if (access(dir, F_OK) == -1) {
-> +		p_err("can't pin BPF object: dir '%s' doesn't exist", dir);
-> +		free(temp_name);
-> +		return -1;
+Unfortunately I don't have the bandwidth to review these in details ATM,
+but I think it makes sense to have P4 be a conceptual entity in TC, and
+using eBPF as the infrastructure to execute the programs. So, on that
+conceptual level only:
 
-Or:
+Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 
-	p_err(...);
-	err = -1;
-	goto out_free;
+[...]
 
-to be more consistent with the other error paths. But that's fine, no
-need to respin for that.
+> To summarize in presence of eBPF: The debugging idea is probably still
+> alive.  One could dump, with proper tooling(bpftool for example), the
+> loaded eBPF code and be able to check for differences. But this is not the
+> interesting part.
+> The concept of going back from whats in the kernel to P4 is a lot more
+> difficult to implement mostly due to scoping of DSL vs general purpose. It
+> may be lost.  We have been discussing ways to use BTF and embedding
+> annotations in the eBPF code and binary but more thought is required and =
+we
+> welcome suggestions.
 
-Thanks a lot!
+One thought on this: I don't believe there's any strict requirement that
+the source lines in the "BTF lineinfo" information has to be C source
+code. So if the P4 compiler can relate the generated BPF instructions
+back to the original P4, couldn't it just embed the P4 program itself
+(in some suitable syntax) as the lineinfo?
+
+-Toke
+
