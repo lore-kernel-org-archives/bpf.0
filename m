@@ -1,223 +1,170 @@
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46DD218AE0
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 06:16:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE8AE219E0
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 06:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712038591; cv=none; b=fEOWJLDfKAkJTTm6BY5JqZfkcDTZEoovs9IkWmlNyygJhZZDOIaWaQtOiT7WCqMGW8jFGWmfHRF384JRAu2lF8WeVoJu4oNLNuCpl3fhJZJTSGZvbSDJaEJ7k9q/7Npl67JiRkfpPtg0Qm4VXnlGIpwUFxOVqa/MdhBgUHuMJdg=
+	t=1712039595; cv=none; b=FQqqK/10oo42fEk+bPpc+QztN3XvrK0mbWPgzT4yoIDxYIp+EfIiA0bxti3q4hGWJ72JDxO+cF/pLX8OQkeAnqfhnmct+7i/1k//aUtJJj9Er/31P947QELz73Nr8r/qx6O4vJ1T590Pgmyv20NDazRW1ou4pJYA3aHSq5HWqz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712038591; c=relaxed/simple;
-	bh=pDDmk4t1sfKF8HGn5yTDStiStx+QJQoplkh1gGW3lgM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uWYJ7oJkWEZeVbyJ0hVXXF7wESxiTI84KMQLzQBaVgA37GkOzwaPGtzE8kOwQX2R/GUG/YUahm8vEAAUBqm4+3kE7ydTsveyaSgMCFON+vSJiP2gekc2baGh+uTtZ6psQzoTguOU+9zmtANkgoiX/3OsGQdXXqsSK5HwuDQwa0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=TLXv1mTH; arc=none smtp.client-ip=115.124.30.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="TLXv1mTH"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1712038580; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=NGn6TCx4yWRBknlEx/9Kdk8Jr5tuiS7369aa5wt/5lk=;
-	b=TLXv1mTHwPM7woNXWm8SHBJ7YbKL2VmYAObO8lCma45NQxxB6BPLO1qkMqIbAKVq09m0gYCPJzTlABQ9uPP4FP0kcgMhlNxY0xoCqBQ2NflgKMke07ZvFKMTPlWljeWgYUvaP0eo9jYWuT5CDK7yMlFc74qU/8AKkP7AA0AAWlg=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R611e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=lulie@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0W3nGAL8_1712038578;
-Received: from localhost(mailfrom:lulie@linux.alibaba.com fp:SMTPD_---0W3nGAL8_1712038578)
-          by smtp.aliyun-inc.com;
-          Tue, 02 Apr 2024 14:16:19 +0800
-From: Philo Lu <lulie@linux.alibaba.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	mykolal@fb.com,
-	shuah@kernel.org,
-	xuanzhuo@linux.alibaba.com
-Subject: [PATCH bpf-next 3/3] selftests/bpf: add test for bpf_for_each_map_elem() with different maps
-Date: Tue,  2 Apr 2024 14:16:15 +0800
-Message-Id: <20240402061615.48894-4-lulie@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0.3.g01195cf9f
-In-Reply-To: <20240402061615.48894-1-lulie@linux.alibaba.com>
-References: <20240402061615.48894-1-lulie@linux.alibaba.com>
+	s=arc-20240116; t=1712039595; c=relaxed/simple;
+	bh=xuheQCybNadu8Z+Y3sPmXXSmjJ/5R0DaqQ1rSC9zoSs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LZp7N6HhQEz7VVeKZVtnsUlPbIVI0ihc9jCp2RdgS6vm81o5YikbcQz3S/U4wzX8D+h3m/E4AdzQkaq7Bh+69N+CbJtVnVoBSRKeDp1an9nz1q/rY37axMmtp24tXnmwW7CmjqfgOC7FHk6wu0lRhRdyVYdZRQZLik4HdKn9Vq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V7yjz2sVYz4f3kKH
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 14:32:55 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 975B11A0EAD
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 14:32:59 +0800 (CST)
+Received: from [10.67.109.184] (unknown [10.67.109.184])
+	by APP1 (Coremail) with SMTP id cCh0CgAXNQ6apgtmIQs+Iw--.38096S2;
+	Tue, 02 Apr 2024 14:32:59 +0800 (CST)
+Message-ID: <d81b6915-e469-4927-80b4-7987579f6656@huaweicloud.com>
+Date: Tue, 2 Apr 2024 14:32:58 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] selftests/bpf: Skip test when perf_event_open
+ returns EOPNOTSUPP
+Content-Language: en-US
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Pu Lehui <pulehui@huawei.com>
+References: <20240401123336.1124715-1-pulehui@huaweicloud.com>
+ <e4ff18ca-bf80-4209-a032-28916ed2feda@linux.dev>
+ <fd8503f0-d3b4-46a2-a078-ef65aa79f7b6@huaweicloud.com>
+ <bea168a3-23a5-46df-91a1-28b3abfa1fc2@linux.dev>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <bea168a3-23a5-46df-91a1-28b3abfa1fc2@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgAXNQ6apgtmIQs+Iw--.38096S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCw15Cr1xCw4fKry3Cw13twb_yoWruFW5p3
+	ykta4qkFyrtrn7tF12vr1UXrWYqr4Dtw4UGr15JF1UZr4DXryaqF42gF4YgFn5XrWrX345
+	Zr40qrn3ur1DAwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+	j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+	kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0E
+	wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+	80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
+	I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
+	k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+	1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-A test is added for bpf_for_each_map_elem() with either an arraymap or a
-hashmap.
-$ tools/testing/selftests/bpf/test_progs -t for_each
- #93/1    for_each/hash_map:OK
- #93/2    for_each/array_map:OK
- #93/3    for_each/write_map_key:OK
- #93/4    for_each/multi_maps:OK
- #93      for_each:OK
-Summary: 1/4 PASSED, 0 SKIPPED, 0 FAILED
 
-Signed-off-by: Philo Lu <lulie@linux.alibaba.com>
----
- .../selftests/bpf/prog_tests/for_each.c       | 67 +++++++++++++++++++
- .../selftests/bpf/progs/for_each_multi_maps.c | 49 ++++++++++++++
- 2 files changed, 116 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/for_each_multi_maps.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/for_each.c b/tools/testing/selftests/bpf/prog_tests/for_each.c
-index 8963f8a549f2..61c5e064f89c 100644
---- a/tools/testing/selftests/bpf/prog_tests/for_each.c
-+++ b/tools/testing/selftests/bpf/prog_tests/for_each.c
-@@ -5,6 +5,7 @@
- #include "for_each_hash_map_elem.skel.h"
- #include "for_each_array_map_elem.skel.h"
- #include "for_each_map_elem_write_key.skel.h"
-+#include "for_each_multi_maps.skel.h"
- 
- static unsigned int duration;
- 
-@@ -143,6 +144,70 @@ static void test_write_map_key(void)
- 		for_each_map_elem_write_key__destroy(skel);
- }
- 
-+static void test_multi_maps(void)
-+{
-+	struct for_each_multi_maps *skel;
-+	__u64 val, array_total, hash_total;
-+	__u32 key, max_entries;
-+	int i, err;
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.data_in = &pkt_v4,
-+		.data_size_in = sizeof(pkt_v4),
-+		.repeat = 1,
-+	);
-+
-+	skel = for_each_multi_maps__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "for_each_multi_maps__open_and_load"))
-+		return;
-+
-+	array_total = 0;
-+	/* left last element as empty */
-+	max_entries = bpf_map__max_entries(skel->maps.arraymap) - 1;
-+	for (i = 0; i < max_entries; i++) {
-+		key = i;
-+		val = i + 1;
-+		array_total += val;
-+		err = bpf_map__update_elem(skel->maps.arraymap, &key, sizeof(key),
-+					   &val, sizeof(val), BPF_ANY);
-+		if (!ASSERT_OK(err, "array_map_update"))
-+			goto out;
-+	}
-+
-+	hash_total = 0;
-+	max_entries = bpf_map__max_entries(skel->maps.hashmap) - 1;
-+	for (i = 0; i < max_entries; i++) {
-+		key = i + 100;
-+		val = i + 1;
-+		hash_total += val;
-+		err = bpf_map__update_elem(skel->maps.hashmap, &key, sizeof(key),
-+					   &val, sizeof(val), BPF_ANY);
-+		if (!ASSERT_OK(err, "hash_map_update"))
-+			goto out;
-+	}
-+
-+	skel->bss->data_output = 0;
-+	skel->bss->use_array = 1;
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_pkt_access), &topts);
-+	if (CHECK(err || topts.retval, "ipv4", "err %d errno %d retval %d\n",
-+		  err, errno, topts.retval))
-+		goto out;
-+
-+	ASSERT_EQ(skel->bss->data_output, array_total, "array output");
-+
-+	skel->bss->data_output = 0;
-+	skel->bss->use_array = 0;
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_pkt_access), &topts);
-+	if (CHECK(err || topts.retval, "ipv4", "err %d errno %d retval %d\n",
-+		  err, errno, topts.retval))
-+		goto out;
-+
-+	ASSERT_EQ(skel->bss->data_output, hash_total, "hash output");
-+
-+out:
-+	for_each_multi_maps__destroy(skel);
-+}
-+
- void test_for_each(void)
- {
- 	if (test__start_subtest("hash_map"))
-@@ -151,4 +216,6 @@ void test_for_each(void)
- 		test_array_map();
- 	if (test__start_subtest("write_map_key"))
- 		test_write_map_key();
-+	if (test__start_subtest("multi_maps"))
-+		test_multi_maps();
- }
-diff --git a/tools/testing/selftests/bpf/progs/for_each_multi_maps.c b/tools/testing/selftests/bpf/progs/for_each_multi_maps.c
-new file mode 100644
-index 000000000000..ff0bed7d4459
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/for_each_multi_maps.c
-@@ -0,0 +1,49 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 3);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} arraymap SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 5);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} hashmap SEC(".maps");
-+
-+struct callback_ctx {
-+	int output;
-+};
-+
-+u32 data_output = 0;
-+int use_array = 0;
-+
-+static __u64
-+check_map_elem(struct bpf_map *map, __u32 *key, __u64 *val,
-+	       struct callback_ctx *data)
-+{
-+	data->output += *val;
-+	return 0;
-+}
-+
-+SEC("tc")
-+int test_pkt_access(struct __sk_buff *skb)
-+{
-+	struct callback_ctx data;
-+
-+	data.output = 0;
-+	if (use_array)
-+		bpf_for_each_map_elem(&arraymap, check_map_elem, &data, 0);
-+	else
-+		bpf_for_each_map_elem(&hashmap, check_map_elem, &data, 0);
-+	data_output = data.output;
-+
-+	return 0;
-+}
--- 
-2.32.0.3.g01195cf9f
+On 2024/4/2 14:16, Yonghong Song wrote:
+> 
+> On 4/1/24 7:22 PM, Pu Lehui wrote:
+>>
+>>
+>> On 2024/4/1 23:29, Yonghong Song wrote:
+>>>
+>>> On 4/1/24 5:33 AM, Pu Lehui wrote:
+>>>> From: Pu Lehui <pulehui@huawei.com>
+>>>>
+>>>> For the bpf selftest, the semantics of perf_event_open returning ENOENT
+>>>> and EOPNOTSUPP imply that continuing the test is meaningless. Let’s 
+>>>> skip
+>>>> test when perf_event_open returns EOPNOTSUPP, which has already been
+>>>> skipped in other test cases.
+>>>
+>>> Could you explain when EOPNOTSUPP is returned for these two tests?
+>>> Is this riscv specific? If the EOPNOTSUPP is returned due to missing
+>>> config in tools/testing/selftests/bpf/config, we should add that to
+>>> ensure the test can execute properly.
+>>>
+>>
+>> Hello Yonghong, I tested on riscv but it is not unique to riscv. When 
+>> the perf driver does not support sampling events, perf_event_open will 
+>> return EOPNOTSUPP, that is, PERF_PMU_CAP_NO_INTERRUPT is set to the 
+>> pmu capabilities. This is no problem with riscv with sscofpmf 
+>> extension and sbi pmu driver. I found that PERF_PMU_CAP_NO_INTERRUPT 
+>> is set not only in the riscv-related perf driver. At the same time, it 
+>> is possible to return EOPNOTSUPP about PERF_PMU_CAP_AUX_OUTPUT on the 
+>> path of perf_event_open. I think it resonable to skip such use cases 
+>> for functions not supported by non-bpf modules, what do you think?
+> 
+> Thanks for explanation. I checked kernel/events/core.c and arch/x86/.... 
+> I agree that if hardware has capabilities PERF_PMU_CAP_NO_INTERRUPT
+> or PERF_PMU_CAP_AUX_OUTPUT, EOPNOTSUPP could be returned, although I 
+> think this should be extremely rare for x86 cpu's (probably only really 
+> old ones).
+> Several other arch's also have hardware which has capability 
+> PERF_PMU_CAP_NO_INTERRUPT, so may indeed hit this issue.
+> 
+> In bpf-next/arch/riscv, I didn't find usage of PERF_PMU_CAP_NO_INTERRUPT 
+> though.
+> 
+
+The riscv pmu driver is located in drivers/perf/riscv_pmu*. Sampling 
+events are not supported in legacy mode, nor in sbi mode without the 
+sscofpmf extension.
+
+> Your patch looks good to me. Since you hit the issue with riscv so 
+> please describe how EOPNOTSUPP could be returned in your test. It would 
+> be a good
+> justification for your patch.
+
+Alright, I will patch that in next version.
+
+> 
+>>
+>>>>
+>>>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>>>> ---
+>>>> tools/testing/selftests/bpf/prog_tests/send_signal.c | 2 +-
+>>>> .../testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c | 2 +-
+>>>>   2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/tools/testing/selftests/bpf/prog_tests/send_signal.c 
+>>>> b/tools/testing/selftests/bpf/prog_tests/send_signal.c
+>>>> index b15b343ebb6b..920aee41bd58 100644
+>>>> --- a/tools/testing/selftests/bpf/prog_tests/send_signal.c
+>>>> +++ b/tools/testing/selftests/bpf/prog_tests/send_signal.c
+>>>> @@ -179,7 +179,7 @@ static void test_send_signal_nmi(bool 
+>>>> signal_thread)
+>>>>       pmu_fd = syscall(__NR_perf_event_open, &attr, 0 /* pid */,
+>>>>                -1 /* cpu */, -1 /* group_fd */, 0 /* flags */);
+>>>>       if (pmu_fd == -1) {
+>>>> -        if (errno == ENOENT) {
+>>>> +        if (errno == ENOENT || errno == EOPNOTSUPP) {
+>>>>               printf("%s:SKIP:no PERF_COUNT_HW_CPU_CYCLES\n",
+>>>>                      __func__);
+>>>>               test__skip();
+>>>> diff --git 
+>>>> a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c 
+>>>> b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
+>>>> index 5db9eec24b5b..0832fd787457 100644
+>>>> --- a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
+>>>> +++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
+>>>> @@ -35,7 +35,7 @@ void test_stacktrace_build_id_nmi(void)
+>>>>       pmu_fd = syscall(__NR_perf_event_open, &attr, -1 /* pid */,
+>>>>                0 /* cpu 0 */, -1 /* group id */,
+>>>>                0 /* flags */);
+>>>> -    if (pmu_fd < 0 && errno == ENOENT) {
+>>>> +    if (pmu_fd < 0 && (errno == ENOENT || errno == EOPNOTSUPP)) {
+>>>>           printf("%s:SKIP:no PERF_COUNT_HW_CPU_CYCLES\n", __func__);
+>>>>           test__skip();
+>>>>           goto cleanup;
+>>
 
