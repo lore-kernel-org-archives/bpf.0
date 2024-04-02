@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6705E12C530;
-	Tue,  2 Apr 2024 14:40:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E5DE12C530
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 14:40:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712068827; cv=none; b=oeF/mSunae113M9K4H8NIticRdlRn+CNuCvZJDwQYF1XezTuGsPjvsFcaEiqxcxZGRQymZb/NpYImiuPVHw4cWvN27Ft0BCPWuQvDXRgznRYe1KkLxrX8SCQkImY0WQ3qEE17Zumndf7AA46QkezbHP2yrCQH9YnC8o4/2LtsHs=
+	t=1712068829; cv=none; b=Wvh7/9HF+y1Wyja1t1c6aOaIIDqfJopiH4lBcIObO0SlEuwt6HQNNdsvsBJ9EDGO/PMv7K3Hu1OzLZwMYqMmJ3MROXBPw/g4G8B7dD/4HG5hhPbUbus2ymVb+rDxBoE/2XuAS5ZPq1lpKoSIONdVUcm8BUDZHhsCHksdjACduhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712068827; c=relaxed/simple;
-	bh=62z4OFrlwRX2DwL5DO2N3sH9wxmXxzFHEPHn99UjBm4=;
+	s=arc-20240116; t=1712068829; c=relaxed/simple;
+	bh=2F1beY2islqh6MxEbROlVxLvsV8Miz1kGlCD7RStJOY=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=dcSPe04TivrX4CqQdK6rszocRPGyEJUEHli48ar5WFH2+2YjEgRpRMtAdR/5GjtQo9DAffZ5pKiXjz0xL/jBa3BjSGFUMNhhhb07i/wSP79sQ0YTF16YlrNYPkvJs3ZXKbeIw7K9/LvLxG7wUathngdO+ThifM327ZoTRgZWHSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NMq6MCQG; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=MVcnWpiungb1mCldDN264B2d3+bcVIjBYv6kX5Sx5OScH8/U52OW8dc9gpba0FUojS/filguSIUYsab4jP+Xy7f1PDnAPwFm/anTXloz9BQeBBhDNoMzOevM53rypJl8F3dQeiULUCpD2rwLHSA5mJmuidjpESqB+OOFtjFtsr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GoE6PPvt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NMq6MCQG"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2CCF4C433F1;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GoE6PPvt"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 756A9C43330;
 	Tue,  2 Apr 2024 14:40:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1712068827;
-	bh=62z4OFrlwRX2DwL5DO2N3sH9wxmXxzFHEPHn99UjBm4=;
+	bh=2F1beY2islqh6MxEbROlVxLvsV8Miz1kGlCD7RStJOY=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=NMq6MCQGMsPncy7vYRjTdEaKEbmQX+S7VLL5Nx6GXqFbaT2pj3edZXxa7GsHHaLMx
-	 rhf2BMA4lHWJyHC32OuQJchTJVB9djvD3Bi5rBH02mk+zNrCgw9eMPfphP0i5685+x
-	 d7DuMCXhXJWeJbpM0w9YGVT4FuivLU2aiBcUe3sBdRaB72xFF/fJdo9XgVOMrwLxPp
-	 ttpWq/ql5IKeqKta9xzRy0a+nKbXGzw/Z9hz/8ECft0Fs3R0/w6lZOEIcQeSjgsAPg
-	 2TklO+SZ6Y13tq4NoIaIW3Agtc2lnOeABfRcUBPISwuI5Zh88iJJ0hzoayE2f0Oz/N
-	 P6mMl0FVul83A==
+	b=GoE6PPvtpmKi0ZbqDtcLLZvDJj7AY1Oy0IrYo/NO1Tt83KAsl4ZHWj+V/w0PlVzEK
+	 KxHZDP1ZYyB+lNAX1nnKP+m21i/x/7ijr5CMfSRV8LJfhcb07y31gVAQRB93dMdOxc
+	 wpjmMlhU9tF6cVrhu2XYwHLgxdOaVDdbPC1+sbTM6MTJKOEyLfCOn6cexYPBedsAYG
+	 oYAa2zjgd+CNuti6/pzZlc9xGeMnlPFKI+2Os4kRZbhp6o3vPgNWaraRi0xg4mw20o
+	 xa2TPNzLpV22i3ooNFNYc0TSrpLcBz/UeDgRH+mPwDx+taxzwIneUf9SLn8NveMVhi
+	 47hdLg2aUOFHA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1D1D5D9A155;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 69225D9A155;
 	Tue,  2 Apr 2024 14:40:27 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -37,41 +37,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] bpf,
- sockmap: Prevent lock inversion deadlock in map delete elem
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Skip test when perf_event_open
+ returns EOPNOTSUPP
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171206882711.27281.12209723664828654389.git-patchwork-notify@kernel.org>
+ <171206882742.27281.12905125548526952131.git-patchwork-notify@kernel.org>
 Date: Tue, 02 Apr 2024 14:40:27 +0000
-References: <20240402104621.1050319-1-jakub@cloudflare.com>
-In-Reply-To: <20240402104621.1050319-1-jakub@cloudflare.com>
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, kernel-team@cloudflare.com,
- xrivendell7@gmail.com, samsun1006219@gmail.com,
- syzbot+bc922f476bd65abbd466@syzkaller.appspotmail.com,
- syzbot+d4066896495db380182e@syzkaller.appspotmail.com,
- john.fastabend@gmail.com, eadavis@qq.com, shung-hsi.yu@suse.com
+References: <20240402073029.1299085-1-pulehui@huaweicloud.com>
+In-Reply-To: <20240402073029.1299085-1-pulehui@huaweicloud.com>
+To: Pu Lehui <pulehui@huaweicloud.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+ pulehui@huawei.com
 
 Hello:
 
-This patch was applied to bpf/bpf.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Tue,  2 Apr 2024 12:46:21 +0200 you wrote:
-> syzkaller started using corpuses where a BPF tracing program deletes
-> elements from a sockmap/sockhash map. Because BPF tracing programs can be
-> invoked from any interrupt context, locks taken during a map_delete_elem
-> operation must be hardirq-safe. Otherwise a deadlock due to lock inversion
-> is possible, as reported by lockdep:
+On Tue,  2 Apr 2024 07:30:29 +0000 you wrote:
+> From: Pu Lehui <pulehui@huawei.com>
 > 
->        CPU0                    CPU1
+> When testing send_signal and stacktrace_build_id_nmi using the riscv sbi
+> pmu driver without the sscofpmf extension or the riscv legacy pmu
+> driver, they encountered failures as follows:
+> 
+>     test_send_signal_common:FAIL:perf_event_open unexpected perf_event_open: actual -1 < expected 0
+>     #272/3   send_signal/send_signal_nmi:FAIL
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf] bpf, sockmap: Prevent lock inversion deadlock in map delete elem
-    https://git.kernel.org/bpf/bpf/c/ff9105993240
+  - [bpf-next,v2] selftests/bpf: Skip test when perf_event_open returns EOPNOTSUPP
+    https://git.kernel.org/bpf/bpf-next/c/c186ed12a8ec
 
 You are awesome, thank you!
 -- 
