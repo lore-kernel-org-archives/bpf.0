@@ -1,181 +1,175 @@
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11021007.outbound.protection.outlook.com [40.93.193.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78AAF3201;
-	Tue,  2 Apr 2024 01:23:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.193.7
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712020994; cv=fail; b=XqoOL780H8XTexRoldL0MNIpu+1Z4PBVUEz8VGd+l559cXS0oDpalzpK0Az4Ptl47C9uh7rHIeEIg3j9NlPaoDcMvzA9TsO+cT1K3PtdsA0EIms+sZDdDE6XkOnfK1BBh4kPWVr4bsbFlqGWsR9wx07ZDo/WHUtzGxa8Cdsn8E0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712020994; c=relaxed/simple;
-	bh=jvohF1KZF2FVEQ5NrQ9XcahE6mtm+H3uD5pRgET/4rU=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=drx1g3hmsbpffMKMNR5efWe73YwwmtEKcrIu9VahTMEtlXcQmeZRxab50mnIsdENewDhmIL9LdYS14F52imcNJLiKMJb0mMSgX6ZREuX+mbC9PUEjvcY5iqQAbwhbhpyyfh1cDMxyy1j8Fyv9ZfIp4lSq8iQFV08xzaHItBq0Do=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com; spf=pass smtp.mailfrom=microsoft.com; dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b=jaFbhW/+; arc=fail smtp.client-ip=40.93.193.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microsoft.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2616FBA2D
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 01:43:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712022194; cv=none; b=VczawDo5fof8EQl/l1VVGWqz7j3edqXpIw43naApDnnGbBVemO/w4jnAhU7tBo9hog7rPpWWza+0/YcpFuuLqgWoMJ7oYwa8hIopF66uCvSc0oBv7lSBeMsFLvXdx+ZIwx/S8xsRV9obgK+a8TS1vcHB3Vspr+tvPKHU3wkDpiQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712022194; c=relaxed/simple;
+	bh=9lafj426yYoxdGJQQm8DP5OfR16+bP6HF3zltbZ5cY8=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=Et65whtfl8Kf3Hpzh4y5f4GhwYRQKAP1P661ueuXGdm5I1qHrO8J6jq/KIOe/wQ0yCckXXnEj7B0neL2l6JvjbxXyOg4dXOB2r0PI9vL4Qv9TsZdPBHeQyoAa3FTl7B/CvRLcGn/v+uY9U6KE62VXWtKT1dnxbMFfRRuqMM+xsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nJW+60AM; arc=none smtp.client-ip=209.85.210.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b="jaFbhW/+"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dAkeSHTqBFxIdkgjM9fClJLpAgqxEpsP5Q9anwc90IhMQkafGUO6dNKbL0n0kqX3KVZ5CYo6uWCLKmGEIR7QHrT15xw/saVBuwrfWvd184VVuO6eshwocmu+VQ9oQW85jyixK2gl/BVOM+Fb5veDoN7RkWurvUyD5y0zkn9L155UIAc3i+pChPW8EPTYRJB/eYCJRImU55Go06LusO6bWCnwuyN/QX0Xg1OtRPatMPfC4a+uDxuKupN6v+9JPu7NoGEsCTgG3Euy7t/pn+GPF+MzAsrFMVCIoRO1LnhAL2IavcfOLq7TLhYq3jGUZSgM0v1PTrXZX4WiuFUz+s01Cw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4JqC33zGfl6ZFNMpjHQXpdyqGqnLR0HtQABZvYYQN4o=;
- b=kP/w6hYZsm9CQSVKb1brFGCcq5rht+ddu1kBPaHo4y2o8tCxNLeXyu3VuWkxAU8yq0Kabzhw4udW8/3bZKHj5b1c2ahYqBK5nG85lrpP4OxTB/FcMVVDTQLOCqrTemSlJXWOJAmF/ooFth3pLHGg382AcdiHhgaPZPyWm2J83ouBpwPoCO/gUaPUsx1x55EKOFDvsJCst0UbUpyeyYhuYBFOpVj1QAZ2utdOY93kUfEHuF5DD9IOLXgqVVbd7JvG6o9xaDhQ/OagRr8VKx05kj8Llh+C1flec8NzPmPLJP7Pi8RriCc80d1jYS/RKoinE7hP+YodeI4McmSFcbcgAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4JqC33zGfl6ZFNMpjHQXpdyqGqnLR0HtQABZvYYQN4o=;
- b=jaFbhW/+98F1AIiKMtVV3UX85xbVTvmoPcsLAOHJiQEdiu2EgwGuqc10Lv97GSGTR6aSyyz6pUUh1Ar3nCq0RUeNZkG/Y5llPkECeEFSD5RKlW3sh/8+8zrUUjpbLL0mQszHcVyvgOHusVE/Wnw9eaUR60PoFd9YyxCw9KePLLM=
-Received: from CY5PR21MB3759.namprd21.prod.outlook.com (2603:10b6:930:c::10)
- by SJ1PR21MB3531.namprd21.prod.outlook.com (2603:10b6:a03:451::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.7; Tue, 2 Apr
- 2024 01:23:08 +0000
-Received: from CY5PR21MB3759.namprd21.prod.outlook.com
- ([fe80::1c76:5d37:cef1:f135]) by CY5PR21MB3759.namprd21.prod.outlook.com
- ([fe80::1c76:5d37:cef1:f135%5]) with mapi id 15.20.7472.002; Tue, 2 Apr 2024
- 01:23:08 +0000
-From: Dexuan Cui <decui@microsoft.com>
-To: Haiyang Zhang <haiyangz@microsoft.com>, "linux-hyperv@vger.kernel.org"
-	<linux-hyperv@vger.kernel.org>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, Wei Hu <weh@microsoft.com>
-CC: stephen <stephen@networkplumber.org>, KY Srinivasan <kys@microsoft.com>,
-	Paul Rosswurm <paulros@microsoft.com>, "olaf@aepfle.de" <olaf@aepfle.de>,
-	"vkuznets@redhat.com" <vkuznets@redhat.com>, "davem@davemloft.net"
-	<davem@davemloft.net>, "wei.liu@kernel.org" <wei.liu@kernel.org>,
-	"edumazet@google.com" <edumazet@google.com>, "kuba@kernel.org"
-	<kuba@kernel.org>, "pabeni@redhat.com" <pabeni@redhat.com>, "leon@kernel.org"
-	<leon@kernel.org>, Long Li <longli@microsoft.com>,
-	"ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
-	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-	"daniel@iogearbox.net" <daniel@iogearbox.net>, "john.fastabend@gmail.com"
-	<john.fastabend@gmail.com>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"ast@kernel.org" <ast@kernel.org>, "sharmaajay@microsoft.com"
-	<sharmaajay@microsoft.com>, "hawk@kernel.org" <hawk@kernel.org>,
-	"tglx@linutronix.de" <tglx@linutronix.de>, "shradhagupta@linux.microsoft.com"
-	<shradhagupta@linux.microsoft.com>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "stable@vger.kernel.org"
-	<stable@vger.kernel.org>
-Subject: RE: [PATCH net] net: mana: Fix Rx DMA datasize and skb_over_panic
-Thread-Topic: [PATCH net] net: mana: Fix Rx DMA datasize and skb_over_panic
-Thread-Index: AQHagiFTbDDISYHohEGBGDLC4qicc7FPUWYQgATA4gCAAB0LEA==
-Date: Tue, 2 Apr 2024 01:23:08 +0000
-Message-ID:
- <CY5PR21MB37590FD539C1E380FBDC96B0BF3E2@CY5PR21MB3759.namprd21.prod.outlook.com>
-References: <1711748213-30517-1-git-send-email-haiyangz@microsoft.com>
- <CY5PR21MB375904FD3437BA610E6BDBD1BF392@CY5PR21MB3759.namprd21.prod.outlook.com>
- <CH2PR21MB1480E02C74E7BB5A52A71859CA3F2@CH2PR21MB1480.namprd21.prod.outlook.com>
-In-Reply-To:
- <CH2PR21MB1480E02C74E7BB5A52A71859CA3F2@CH2PR21MB1480.namprd21.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=59ee9ed2-1d2f-476e-81a2-fdbc522a1f8e;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2024-03-29T22:45:42Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CY5PR21MB3759:EE_|SJ1PR21MB3531:EE_
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- rmYcf8koOrW/LtdGzjbIzpHN5dODGqqAiko6MVdhhc7ISwTwH8AIAL6uMi1AQpqSXanP8K1cRGnxDPMxIye9oYUPzXLgVM/s3Fi7arAoXcBwlZ1FL3YBCqOjmSFIhY6THi4Tsw00RTNCbpPDesPUGd44/qE6yENp4v3XAENGgaXJo/oXFIsQSSSTE+h39AgAuhIFLLqSH9cAZ1fBLc5nq/btpQJa6WJLFo4n7uV4t0uc3ia2hKuKIF+/EgqFH/uxoYlaVhaoTXYa7EDVMwQmqjgvMNBT5BQrn8Z9ftb8ZogM1CaJcsMC0GQjRHPjf0im89SW3dbV/CX/wWW9yMHSqAH+DNwrDHpMiEb81IuzSm/y/UgVBL6CRYFYktKiVmrmqD3SeMmdmp77GP9qlmXDe4JhUcOp2gq6b7ie017wnnZT9UHTwts4LW9cBcQ3UQTAD5TbAvfgT5mVTNuHj7sjcjOdoiHonyRogf8h10cGGemjjXhQ4UQfMgVxYzkaLUlWrcdutSx359sk5vZrtndAap5p67QnqdV8l+n47PZcWV9rIvRJ5WC6ZQsKKa/mTW32IGNkqZSD0ah1ZFp7rYuoHAkR9a33lqE4s6oF+2pacqHiLSQbHq9uFrQZi7yZQJgc1Qix719UGxnPFBNCKF8dZnId4YUbyi2B9Q67ljAk4WY=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR21MB3759.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(7416005)(1800799015);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?9qDMiw16jGqW+pZssGLuu0BK2/fjEgH65CQ138X9ERXyJejxx+DRVqvwb4gl?=
- =?us-ascii?Q?mS/zYWhCJbvAU6ZPqWfSwiJEwfMGM7BZ9qUFf7BCgI3OF68T5c7ypNfODVoi?=
- =?us-ascii?Q?8iQQBUxOs9abIsCCXmedTF5vJ5+uje4DpoVc5KmpKWDSs8b/n9z91nvVtVZh?=
- =?us-ascii?Q?AuaQZHxlpy3lQagKqDVEbYLDwHiFXUO80ctdOhLrOsE3nw8C/P7vQ9Z88I3C?=
- =?us-ascii?Q?uFBPpMNreVcuzRD4v/zA0K61fDXJHZLB3coI9Qh/9i1IHtvT4SPBzsLajUzZ?=
- =?us-ascii?Q?FRewa3ncnqnxjFjEm4vTBp9MI0Xb11oePn3jRiKHUKfodlqcHHLONlvE/Ka0?=
- =?us-ascii?Q?vaecxOTlg7pIMBN/NHIhasl6YnTXQFXCrJqdYE1kQj1YHMU7KTP8K/Hkv76l?=
- =?us-ascii?Q?GDWUcUHUmGma2N2IdTZA4L0SJsLJxN1E5QxalxsNlnBswy74As6xxkJsaVED?=
- =?us-ascii?Q?6WvNsHC5+/jUdxv9KniXxuwpx5yjZPdSL0sbYr9ItE/9PSS5fD1QAW1AsYp/?=
- =?us-ascii?Q?nFUjCaankfY+BxAHiFQeCL2CRWxBYBmtHn9kA98Ed6yO60rPOTJH2t5O9Avn?=
- =?us-ascii?Q?FgdRYv/AyAScAbd16hrSONvw8sbyS9IV896ZpkLcXZkc8r+53JfzWd+7eTG2?=
- =?us-ascii?Q?iVyMsOGCHU0Z0sWlar0z3fIFaodp6GBqIvAf8B1yL71hRYV8G0fY7Bzg+t5C?=
- =?us-ascii?Q?uqhtDc3R5cHHlvsXTPADGyQXHi7phsytQqrKQmSO7alQ22TOIvPuRqfJNOg7?=
- =?us-ascii?Q?UGLgNZyLfCc1FzCgPEMKr+9145nvcOcUsc7oDloqexQVurLziuKceRvzNOJ4?=
- =?us-ascii?Q?iafUsIrm4A4GJyNyohkew/bwub2HW1mxd/4JW55Rdx1Ik+Yv3L7jZis/ASDx?=
- =?us-ascii?Q?g32oBjPdylMR6RXrCg7ACdvTnhKRqzRO4rKeTVuP5i1WxrncXQa+rK7grbka?=
- =?us-ascii?Q?M1LpJPqXKjxSThUiZNiTRrvszr2sjmVKQmH0jFoOVlycvumEOq2eIfc8BDRy?=
- =?us-ascii?Q?ybbCNgcKzyq4Fkzg6Tu0Nd852vBxB2CHTwnjHnwFyloRiqNHg/M3S9207BTd?=
- =?us-ascii?Q?hMaVnFqbqmMpJ5jZMGD1zs9NNUrYk2cW+jQ++oSgJwpYCk7OrHMgYsW4V2cP?=
- =?us-ascii?Q?pB8KPMnmg5T+1OOTyS3Yv0im3SVB+ptm7VOfhalq56BPqMgrd3bipjq2RGNH?=
- =?us-ascii?Q?5HxXzpuZM/kMirTKk3uDODrqGSup+pvNNmLsKTe3rD7GZ89eUbmDgJzBWBBW?=
- =?us-ascii?Q?xGCql9/zYiQgrpWYZpomDQZqpYsKJoirOlWZEQFKGAFpYEITLc+jPk7PI23g?=
- =?us-ascii?Q?roT+aNR32SjFl7G3Z9Q8xhH8nvgbDdZHxe6b2V0Y01VhiRCHq7WuqvxLx3Cy?=
- =?us-ascii?Q?jM5GYQS8FaRzABGW77kvnCcaUR8RxbvaXzXkqTrOpWw3HUk/QibsRe0EzI+J?=
- =?us-ascii?Q?Xr1RyNmA5daRH9fAZ27RZ8eQ4H5UEw7WGTlqPgHCjDdfB4gT+yGoQkIMyUGF?=
- =?us-ascii?Q?a2BcvmbIJcShYUniBmmVzTuRyWAgHnVgQ1jiPxLNk2NU3DIipMFeGzCDcpNI?=
- =?us-ascii?Q?Mqiz+R+JVRMUohq2MUI7/JHPQAK6ZFRepK5AGSWPI6K5zUBTDxys6LiYloK7?=
- =?us-ascii?Q?S6TunUq7TBUW3Jy5WK2c2OYdBTsPBxQUwhvrHmSLXV4u?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nJW+60AM"
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-6e6d0bf038fso2344968a34.0
+        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 18:43:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712022192; x=1712626992; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JgF46DkrDWAF4rHUC9bnEai9bqS4en3KICvQe/n3UtU=;
+        b=nJW+60AMqwyznJwVOlRTj01DSEcPOJ2NrbApt1I+xqkaVWWTZHy3sWI4+fMhFz6Pfr
+         22HLr9P8Mnfieca/fbMImuEZjhlDfukxP0Avx2K55s4kW5r/z5E33yiNUa4sToIF6oxp
+         hpcwi790PNfZ5J6yes56Mdy9jH5gqJ2AdNoXffg3HEcLWYPVTXorrhZ3nwpL2uvoxAHi
+         tLMIGNELHzU8eG0fic2myYgHXyaYcp6V58YLDdJPWCWX4/B3ROrZ9vycyx+p30JjlrRn
+         l/KSPGodltFkMyAHpJxHw3iNiiOHfY12p2D8MJHrjzE7PQIzuRcSxMoXf05/QICoAIzy
+         1lnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712022192; x=1712626992;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JgF46DkrDWAF4rHUC9bnEai9bqS4en3KICvQe/n3UtU=;
+        b=GW9BXYu1L+0mnXRyi3F3//IderIf4I45uzVEnf85HauvBXYorfg3N/JIea+lK5XLZH
+         iVWy+ffgnxk/+VHWokc6tQChuGFw5MKPoFUno5dvqKIdeXLNpUBE6BnrrUJoiI7nd5Qm
+         VzjySz8l5ABBFV4Jkuwv2Qt6ij0wnaYe+SrABkvgLyXeZBBW6eNsajpUtQKN5oTIB75L
+         cCB2980iHZSYE35nf0m+KQerNkj0cqDoPHHJ8v5/YNZoVWqbKCB3eg/risfTv5vHv9io
+         YiUV1gw31+sMEATWBHDHaDckRl+KHiLPGlFroyIpuFrPdquZ8XF7g81Jdy3poKmq8gfl
+         MaxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUA93VMpvbNwxOUEhfskv3LM94Md1zx3s0jwL7OuSbu+jZmy1FMJQk96BBrPGzEkOSF4JuQvR9m5qoViGIWfZawmc1Y
+X-Gm-Message-State: AOJu0YxrtQDi5JIvrmr75smLXL/9evz2eR9hjtkeYBl4m4eqZfVIPjiM
+	Bm2UBueV0f3osP5iAAZgkkOFSOkSxHWaxTgkkq5m2p/a1GlwVbFQ4OfuHGtU
+X-Google-Smtp-Source: AGHT+IEZVed4uZBavwT+zLIFANUPP9oo+8Hqk2OriTE3Ly6JORNeJapcDDsVYYXEyoc6QupaeNHemA==
+X-Received: by 2002:a05:6870:4629:b0:221:8e01:4c6f with SMTP id z41-20020a056870462900b002218e014c6fmr13117346oao.36.1712022191995;
+        Mon, 01 Apr 2024 18:43:11 -0700 (PDT)
+Received: from localhost ([98.97.36.54])
+        by smtp.gmail.com with ESMTPSA id w25-20020aa78599000000b006e6b7124b33sm8515756pfn.209.2024.04.01.18.43.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Apr 2024 18:43:11 -0700 (PDT)
+Date: Mon, 01 Apr 2024 18:43:10 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: Kui-Feng Lee <thinker.li@gmail.com>, 
+ bpf@vger.kernel.org, 
+ ast@kernel.org, 
+ martin.lau@linux.dev, 
+ song@kernel.org, 
+ kernel-team@meta.com, 
+ andrii@kernel.org
+Cc: sinquersw@gmail.com, 
+ kuifeng@meta.com, 
+ Kui-Feng Lee <thinker.li@gmail.com>
+Message-ID: <660b62aed55f5_801520863@john.notmuch>
+In-Reply-To: <20240401223058.1503400-1-thinker.li@gmail.com>
+References: <20240401223058.1503400-1-thinker.li@gmail.com>
+Subject: RE: [PATCH bpf-next] selftests/bpf: Make sure libbpf doesn't enforce
+ the signature of a func pointer.
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR21MB3759.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d9b243c7-2c95-4e11-d78a-08dc52b3748d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Apr 2024 01:23:08.7586
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: G8PaH9kqDJHybj9lcuOBrt4nbdWB9SCIwJwa7exSRSMMEqApAC+PfzYmst7pDxJSo/qmgdo+m/fuK0cwH+XgDg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR21MB3531
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-> From: Haiyang Zhang <haiyangz@microsoft.com>
-> Sent: Monday, April 1, 2024 4:21 PM
-> > [...]
-> > I suggest the Fixes tag should be updated. Otherwise the fix
-> > looks good to me.
->=20
-> Thanks for the suggestion. I actually thought about this before
-> submission.
-> I was worried about someone back ports the jumbo frame feature,
-> they may not automatically know this patch should be backported
-> too.=20
+Kui-Feng Lee wrote:
+> The verifier in the kernel checks the signatures of struct_ops
+> operators. Libbpf should not verify it in order to allow flexibility in
+> loading different implementations of an operator with different signatures
+> to try to comply with the kernel, even if the signature defined in the BPF
+> programs does not match with the implementations and the kernel.
+> 
+> This feature enables user space applications to manage the variations
+> between different versions of the kernel by attempting various
+> implementations of an operator.
 
-The jumbo frame commit (2fbbd712baf1) depends on the MTU
-commit (2fbbd712baf1), so adding "Fixes: 2fbbd712baf1" (
-instead of "Fixes: ca9c54d2d6a5") might make it easier for people
-to notice and pick up this fix.
+What is the utility of this? I'm missing what difference it would be
+if libbpf rejected vs kernel rejecting it? For backwards compat the
+kernel will fail or libbpf might throw an error and user will have to
+fixup signature regardless right? Why not get the error as early as
+possible.
 
-I'm OK if the patch remains as is. Just wanted to make  sure I
-understand the issue here.
+> 
+> This is a follow-up of the commit c911fc61a7ce ("libbpf: Skip zeroed or
+> null fields if not found in the kernel type.")
+> 
+> Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
+> ---
+>  .../bpf/prog_tests/test_struct_ops_module.c   | 24 +++++++++++++++++++
+>  .../selftests/bpf/progs/struct_ops_module.c   | 13 ++++++++++
+>  2 files changed, 37 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+> index 098776d00ab4..7cf2b9ddd3e1 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+> @@ -138,11 +138,35 @@ static void test_struct_ops_not_zeroed(void)
+>  	struct_ops_module__destroy(skel);
+>  }
+>  
+> +/* The signature of an implementation might not match the signature of the
+> + * function pointer prototype defined in the BPF program. This mismatch
+> + * should be allowed as long as the behavior of the operator program
+> + * adheres to the signature in the kernel. Libbpf should not enforce the
+> + * signature; rather, let the kernel verifier handle the enforcement.
+> + */
+> +static void test_struct_ops_incompatible(void)
+> +{
+> +	struct struct_ops_module *skel;
+> +	struct bpf_link *link;
+> +
+> +	skel = struct_ops_module__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
+> +		return;
+> +
+> +	link = bpf_map__attach_struct_ops(skel->maps.testmod_incompatible);
+> +	if (ASSERT_OK_PTR(link, "attach_struct_ops"))
+> +		bpf_link__destroy(link);
+> +
+> +	struct_ops_module__destroy(skel);
+> +}
+> +
+>  void serial_test_struct_ops_module(void)
+>  {
+>  	if (test__start_subtest("test_struct_ops_load"))
+>  		test_struct_ops_load();
+>  	if (test__start_subtest("test_struct_ops_not_zeroed"))
+>  		test_struct_ops_not_zeroed();
+> +	if (test__start_subtest("test_struct_ops_incompatible"))
+> +		test_struct_ops_incompatible();
+>  }
+>  
+> diff --git a/tools/testing/selftests/bpf/progs/struct_ops_module.c b/tools/testing/selftests/bpf/progs/struct_ops_module.c
+> index 86e1e50c5531..63b065dae002 100644
+> --- a/tools/testing/selftests/bpf/progs/struct_ops_module.c
+> +++ b/tools/testing/selftests/bpf/progs/struct_ops_module.c
+> @@ -68,3 +68,16 @@ struct bpf_testmod_ops___zeroed testmod_zeroed = {
+>  	.test_1 = (void *)test_1,
+>  	.test_2 = (void *)test_2_v2,
+>  };
+> +
+> +struct bpf_testmod_ops___incompatible {
+> +	int (*test_1)(void);
+> +	void (*test_2)(int *a);
+> +	int data;
+> +};
+> +
+> +SEC(".struct_ops.link")
+> +struct bpf_testmod_ops___incompatible testmod_incompatible = {
+> +	.test_1 = (void *)test_1,
+> +	.test_2 = (void *)test_2,
+> +	.data = 3,
+> +};
+> -- 
+> 2.34.1
+> 
+> 
 
-> Also, I suspect that a bigger than MTU packet may cause
-> unexpected problem at NVA application.
-
-Good point. + Wei Hu, who can check the FreeBSD MANA driver and
-the DPDK MANA PMD. The code there may also need to be fixed.
-
-> If anyone have questions on back porting, I can provide a back
-> ported patch, which is just one line change.
->=20
-> - Haiyang
-
-If the patch remains as is, gregkg will send us "failed to apply"
-emails for v6.1.y and v5.15.y and we'll need to make a backport
-for the 2 stable kernels.
-
-With "Fixes: 2fbbd712baf1", we won't receive the "failed to apply"
-emails.
-
-Thanks,
-Dexuan
 
