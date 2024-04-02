@@ -1,136 +1,137 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C860F17756
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 05:04:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1763C17BBA
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 06:16:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712034287; cv=none; b=lfhGGlsg/jf30t/PqzNN8d7dx3Id6w2EPgiT37SJy/aBJc0en55d3wm4Z6R+njceSOO2Lu3pusk2Z/enTWvv9tZ1TjqtST8gMss0LuyxDy6JrdgVgYQDN2J3LRhhVjntbg2L+/X9gQq5JTiy1NwOQcDV2K8QXYyVuhq5QkEHe9k=
+	t=1712038584; cv=none; b=lX4gbEdhf8Uud365XxmYMsUNOFYVrh7931WtRqmo/4S4ooEOuxIMZbhmN8ffILU39oRWAqYpEYDK0jUJJEcpFtRZwz27FlVG3MRDsrawFhGIRatpOufrSZpmlDi9YnmyNYY5DTO1M7HZLllFgWHB6U4rmBGyjFtUfQ4vjyZ99Ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712034287; c=relaxed/simple;
-	bh=ATLaMEiRbO1gpmx8HNfohYikMQ+WpQKdyMpQHCCmgDc=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=S5R+H0wBw8VfqUtdDdx8ywX1tV1J9bYqLpMWAd+eX9Li0w7cbJKj7L+9Z5W8cCDxjZFAQjSzz+Gv/rxZLfKq0XtU9jcWAQMZCPU87tFTD6gOWH98F/pUkQgkptewU0datS8Rhy23C2y7ejKKgP/1EDsiksZZMoe5rb3ASXSdXOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IgXRgABF; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712038584; c=relaxed/simple;
+	bh=/xDSY7aAPA4ByTEhRjeRdQ+EP8j53/iXfpDzdq1wosI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gFiCNZrpOtoaDdukRq9XSe0uCOYV5mk/LMETpllpuWs8ewcCExE/IdL+6oY37Zl5REOL8T5IbVHwpIX/WM/tqvnV05f6TAohuRtlAoaQkHUw3Pv4YbISegm8QuXbDbP81a7WKXtIyCV4/ULi946itIULinpYyF6vKgMRXjnSZ1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NRScVCjP; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IgXRgABF"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1dee27acf7aso33432295ad.2
-        for <bpf@vger.kernel.org>; Mon, 01 Apr 2024 22:04:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712034285; x=1712639085; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DGYc4Db5jmOtNhipRofZSwWhF5ZTPrFyBf9rPN8/spw=;
-        b=IgXRgABFwd5ezRQFv8pBLp0tRYqrm63Dds5oiEn/lyZZeHxrVTuDW1CoZcAddmBYoB
-         QbbddY18M2COrOUx2YwzV7/1Q4v0s+Y5cyKjlVv0j8s+I28oKnHo3BG6km2YC7vvecyK
-         RpWJjIGeO11+V3Po9McC4oUv9X/Efg7Xuba8IpOpcJ8x5HmUi9Rr1rRP2B88IQcMmkQH
-         esHxVkDTeW3xCQj5KLUv25CN2ZqDiQ/IL2PRr/OqDhfU7E4ZtVYN80434ZLebXGWlrdd
-         Ui5I/RKJakVp7yUf8V9iuEgINnX/UnO0dajFKXPRkmP7qhWFLBTGSRAgM7clYjTrei8l
-         Siyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712034285; x=1712639085;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DGYc4Db5jmOtNhipRofZSwWhF5ZTPrFyBf9rPN8/spw=;
-        b=hNvpOC2dB9WrUJHQUW0Y9vk7RoduddJIP0b9IDUXs3Ghi/JuarC04R+dWSModla9vy
-         QuiCituFEnJYZ3a0+kZ9oa/L5glNlmFjjBvhTqEaVrdMrn+mIZGh8Knroqvk9BaJEkco
-         tcdrHJmBJqWxAoAE1C8x01twsvJ5Y5+69PgakqTT9SLkVnX24hXKiR2WBjiYq8Pp3oPD
-         m9EqVG7WBwnwdFdE963PoKBGyfk+4GjSCzQnuRtggE+wPnEHW6NPnCXmV34MuNqFnbzR
-         rh5gCXD2rFLB8zS8gb5y4x4cibNC8rvIjyyolQ0PKjN/2xlkFioQnbuPh7Pk5wNwi3mg
-         L+ew==
-X-Forwarded-Encrypted: i=1; AJvYcCXc5TNbkSBVjWYnDXdqRBD5N1q4W+7UZ9lLaw7SHy/tkA+IlBnxisyr/1yLiPV5ynC0HHhTLhgB8475SV4c3v/gW36N
-X-Gm-Message-State: AOJu0YwSuhOsO/0YYiPV6JZi+JVJN7AgIfCSVy4s9fp/dsqTmJ3fSndJ
-	AXV7NmRnJfna57dJ53OmNnq2dDf1/oYtIpzaFoGXN46ZbLZeKM88og/Hfy+E
-X-Google-Smtp-Source: AGHT+IEGMheQ6GIkHBtWsalqO6M7yAHgy2xxPTqYHv1fuX+Tuuv5ynGqwzRHIpjGdk326j9avXy6Fw==
-X-Received: by 2002:a17:902:bc86:b0:1e0:9a4a:72b5 with SMTP id bb6-20020a170902bc8600b001e09a4a72b5mr10622651plb.26.1712034285151;
-        Mon, 01 Apr 2024 22:04:45 -0700 (PDT)
-Received: from localhost ([98.97.36.54])
-        by smtp.gmail.com with ESMTPSA id 6-20020a170902c10600b001e0bcccc800sm9918356pli.35.2024.04.01.22.04.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Apr 2024 22:04:44 -0700 (PDT)
-Date: Mon, 01 Apr 2024 22:04:43 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- bpf@vger.kernel.org, 
- ast@kernel.org, 
- daniel@iogearbox.net, 
- martin.lau@kernel.org
-Cc: andrii@kernel.org, 
- kernel-team@meta.com
-Message-ID: <660b91ebeba17_1af772088f@john.notmuch>
-In-Reply-To: <20240402021307.1012571-5-andrii@kernel.org>
-References: <20240402021307.1012571-1-andrii@kernel.org>
- <20240402021307.1012571-5-andrii@kernel.org>
-Subject: RE: [PATCH v2 bpf-next 4/4] bpf: inline bpf_map_lookup_elem() helper
- for PERCPU_HASH map
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NRScVCjP"
+Message-ID: <bea168a3-23a5-46df-91a1-28b3abfa1fc2@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712038579;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qPCfL5fGTs85st+XgLfmtoiU03kXLEoERZ1kWDGEXPQ=;
+	b=NRScVCjPQuNUosvvV9o5TmSXErDjVHewrDv4GJhQ49B63JoT3XBzyqx0L7t8uv2IngPRAX
+	OcZWqWxeEAuvztUomBubMcyflj4T7EdKb7u3tpNJYrz4PzsBq1TokpTqTToYOK6cu6LbNv
+	gmVBuybNS3DjU9zXbt9oMDG9jfsFsII=
+Date: Mon, 1 Apr 2024 23:16:09 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
-
-Andrii Nakryiko wrote:
-> Using new per-CPU BPF instruction, partially inline
-> bpf_map_lookup_elem() helper for per-CPU hashmap BPF map. Just like for
-> normal HASH map, we still generate a call into __htab_map_lookup_elem(),
-> but after that we resolve per-CPU element address using a new
-> instruction, saving on extra functions calls.
-> 
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
->  kernel/bpf/hashtab.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index e81059faae63..83a9a74260e9 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -2308,6 +2308,26 @@ static void *htab_percpu_map_lookup_elem(struct bpf_map *map, void *key)
->  		return NULL;
->  }
->  
-> +/* inline bpf_map_lookup_elem() call for per-CPU hashmap */
-> +static int htab_percpu_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
-> +{
-> +	struct bpf_insn *insn = insn_buf;
-> +
-> +	if (!bpf_jit_supports_percpu_insn())
-> +		return -EOPNOTSUPP;
-> +
-> +	BUILD_BUG_ON(!__same_type(&__htab_map_lookup_elem,
-> +		     (void *(*)(struct bpf_map *map, void *key))NULL));
-> +	*insn++ = BPF_EMIT_CALL(__htab_map_lookup_elem);
-> +	*insn++ = BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 3);
-> +	*insn++ = BPF_ALU64_IMM(BPF_ADD, BPF_REG_0,
-> +				offsetof(struct htab_elem, key) + map->key_size);
-> +	*insn++ = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, 0);
-> +	*insn++ = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
-> +
-> +	return insn - insn_buf;
-> +}
-> +
->  static void *htab_percpu_map_lookup_percpu_elem(struct bpf_map *map, void *key, u32 cpu)
->  {
->  	struct htab_elem *l;
-> @@ -2436,6 +2456,7 @@ const struct bpf_map_ops htab_percpu_map_ops = {
->  	.map_free = htab_map_free,
->  	.map_get_next_key = htab_map_get_next_key,
->  	.map_lookup_elem = htab_percpu_map_lookup_elem,
-> +	.map_gen_lookup = htab_percpu_map_gen_lookup,
->  	.map_lookup_and_delete_elem = htab_percpu_map_lookup_and_delete_elem,
->  	.map_update_elem = htab_percpu_map_update_elem,
->  	.map_delete_elem = htab_map_delete_elem,
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next] selftests/bpf: Skip test when perf_event_open
+ returns EOPNOTSUPP
+To: Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Pu Lehui <pulehui@huawei.com>
+References: <20240401123336.1124715-1-pulehui@huaweicloud.com>
+ <e4ff18ca-bf80-4209-a032-28916ed2feda@linux.dev>
+ <fd8503f0-d3b4-46a2-a078-ef65aa79f7b6@huaweicloud.com>
+Content-Language: en-GB
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <fd8503f0-d3b4-46a2-a078-ef65aa79f7b6@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
-Thanks I'll test on Tetragon as well to see if we can see some perf improvement we have
-a few per cpu maps int here as well.
+On 4/1/24 7:22 PM, Pu Lehui wrote:
+>
+>
+> On 2024/4/1 23:29, Yonghong Song wrote:
+>>
+>> On 4/1/24 5:33 AM, Pu Lehui wrote:
+>>> From: Pu Lehui <pulehui@huawei.com>
+>>>
+>>> For the bpf selftest, the semantics of perf_event_open returning ENOENT
+>>> and EOPNOTSUPP imply that continuing the test is meaningless. Let’s 
+>>> skip
+>>> test when perf_event_open returns EOPNOTSUPP, which has already been
+>>> skipped in other test cases.
+>>
+>> Could you explain when EOPNOTSUPP is returned for these two tests?
+>> Is this riscv specific? If the EOPNOTSUPP is returned due to missing
+>> config in tools/testing/selftests/bpf/config, we should add that to
+>> ensure the test can execute properly.
+>>
+>
+> Hello Yonghong, I tested on riscv but it is not unique to riscv. When 
+> the perf driver does not support sampling events, perf_event_open will 
+> return EOPNOTSUPP, that is, PERF_PMU_CAP_NO_INTERRUPT is set to the 
+> pmu capabilities. This is no problem with riscv with sscofpmf 
+> extension and sbi pmu driver. I found that PERF_PMU_CAP_NO_INTERRUPT 
+> is set not only in the riscv-related perf driver. At the same time, it 
+> is possible to return EOPNOTSUPP about PERF_PMU_CAP_AUX_OUTPUT on the 
+> path of perf_event_open. I think it resonable to skip such use cases 
+> for functions not supported by non-bpf modules, what do you think?
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+Thanks for explanation. I checked kernel/events/core.c and arch/x86/.... I agree that if hardware has capabilities PERF_PMU_CAP_NO_INTERRUPT
+or PERF_PMU_CAP_AUX_OUTPUT, EOPNOTSUPP could be returned, although I think this should be extremely rare for x86 cpu's (probably only really old ones).
+Several other arch's also have hardware which has capability PERF_PMU_CAP_NO_INTERRUPT, so may indeed hit this issue.
+
+In bpf-next/arch/riscv, I didn't find usage of PERF_PMU_CAP_NO_INTERRUPT though.
+
+Your patch looks good to me. Since you hit the issue with riscv so please describe how EOPNOTSUPP could be returned in your test. It would be a good
+justification for your patch.
+
+>
+>>>
+>>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>>> ---
+>>> tools/testing/selftests/bpf/prog_tests/send_signal.c | 2 +-
+>>> .../testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c | 2 +-
+>>>   2 files changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/bpf/prog_tests/send_signal.c 
+>>> b/tools/testing/selftests/bpf/prog_tests/send_signal.c
+>>> index b15b343ebb6b..920aee41bd58 100644
+>>> --- a/tools/testing/selftests/bpf/prog_tests/send_signal.c
+>>> +++ b/tools/testing/selftests/bpf/prog_tests/send_signal.c
+>>> @@ -179,7 +179,7 @@ static void test_send_signal_nmi(bool 
+>>> signal_thread)
+>>>       pmu_fd = syscall(__NR_perf_event_open, &attr, 0 /* pid */,
+>>>                -1 /* cpu */, -1 /* group_fd */, 0 /* flags */);
+>>>       if (pmu_fd == -1) {
+>>> -        if (errno == ENOENT) {
+>>> +        if (errno == ENOENT || errno == EOPNOTSUPP) {
+>>>               printf("%s:SKIP:no PERF_COUNT_HW_CPU_CYCLES\n",
+>>>                      __func__);
+>>>               test__skip();
+>>> diff --git 
+>>> a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c 
+>>> b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
+>>> index 5db9eec24b5b..0832fd787457 100644
+>>> --- a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
+>>> +++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
+>>> @@ -35,7 +35,7 @@ void test_stacktrace_build_id_nmi(void)
+>>>       pmu_fd = syscall(__NR_perf_event_open, &attr, -1 /* pid */,
+>>>                0 /* cpu 0 */, -1 /* group id */,
+>>>                0 /* flags */);
+>>> -    if (pmu_fd < 0 && errno == ENOENT) {
+>>> +    if (pmu_fd < 0 && (errno == ENOENT || errno == EOPNOTSUPP)) {
+>>>           printf("%s:SKIP:no PERF_COUNT_HW_CPU_CYCLES\n", __func__);
+>>>           test__skip();
+>>>           goto cleanup;
+>
