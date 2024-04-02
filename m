@@ -1,93 +1,114 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8B414AD3F;
-	Tue,  2 Apr 2024 16:24:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03EA14B099
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 16:27:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712075075; cv=none; b=EraYS7DAV2CB/S4rhFxUhJvCOT+0JuxV0IO6WmZJ+uLiDHVNVD87H97Y9sNnM5v1Tk1XO58WsMvihQ6dCR2Wll2xTb8xRl1LmSy3K+g3KWsKQ+yM8dmbVIgqxrMSurQ977Bh7tsznC1IaEwfQwFkgKxBF00GTjrlfdDzebHqwYw=
+	t=1712075233; cv=none; b=C4mxxkQR/IL4KnmbjW3dQtzHtOzL0g29W76NHonTBGjjc3qBTrWdo/K5Ymw6Yeqdl67RZ5ykYRLQ9whzOOCMT/+AOLSo2hyTIxafPhV91AmBG6fOO9GA1AiDGvNHBTDloSVvUv7uROrGykW2Y7D4Fy8dVnhQqVD2uNuPc7pB0MU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712075075; c=relaxed/simple;
-	bh=T/1yoCsi4GP730fXqNiqoizjQuq13ZRUJPoJmfMP5kg=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=NBhkY1xy99x6wjXqsLW1sbRF4612pQqVubJxpm+AkRf+rz11Xpk9Nc6yZyibIcWIdjat1Z3tlFXKwWeLtNmZV3v1MCYTxleLRLCwDNE27RY/wVyKIdvL1xtqEWjW7IvG3BPfOe+ykL0zxZqDnIzcI/E6TeghgdaP87CjSuDdWl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=h3c5A5VJ; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1712075233; c=relaxed/simple;
+	bh=OJ78DJy+IFw0SBSPCgzgboE7h5k74uCy1cH1VRCRM+A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M6Mpe4gAV09A1utKScLV5RToTqo4ofao0fUXADrzK9J2DWtjUmxclwZNtbLrRayuodFc0CaiCJukcrsPIuvz1dQGVgWxnz9NweZazeb4mEHZY6l0nahxacaGpRJrlwyEEFfbnyfcLiY9BHorqvT48j75WIfqHysS1oL6yx2hIgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=agrwFT1u; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="h3c5A5VJ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=CyIVajsnrqIc9aPmFtNlh8ytag8an+QEap4fj/7NjHc=; b=h3c5A5VJAAgv6qoUjBFB4+v+xA
-	zM6zctkJmzQ3myEg1AcdGCislp6xYaCnF/M9CnmRRZdD40PstebrZhf2DPyzdTkwsAAYA7U57N+Xr
-	xM/bMzKwagk47WFPqXCpKAVOgEzvIp2HehrBcGBxzne1QO4/TSbzcnAhsx0Y4N6Hkjm1qYtYjyc4i
-	rDvdi4N5oNIrwn+ITgg+UQ38iYGk6deZMweqj0A/VlhqMOA5wLy1NfXmz5LGSK/bm1qNN9DKLdjB/
-	frOjcFCG2rOrwzsltny3/YZleAw00FsyNqdSEAnwExHYQTUt2JQ5NrtOE2FtbqefD7JYMMypG5CL5
-	xznMnodQ==;
-Received: from sslproxy07.your-server.de ([78.47.199.104])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rrgbX-0002E0-Kh; Tue, 02 Apr 2024 18:03:19 +0200
-Received: from [178.197.248.12] (helo=linux.home)
-	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rrgbW-0002En-1Y;
-	Tue, 02 Apr 2024 18:03:18 +0200
-Subject: Re: [PATCH bpf-next 2/5] riscv, bpf: Relax restrictions on Zbb
- instructions
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
- linux-riscv@lists.infradead.org, netdev@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Manu Bretelle <chantr4@gmail.com>, Pu Lehui <pulehui@huawei.com>
-References: <20240328124916.293173-1-pulehui@huaweicloud.com>
- <20240328124916.293173-3-pulehui@huaweicloud.com>
- <878r1vrga9.fsf@all.your.base.are.belong.to.us>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <5005fb56-086c-2aa7-e28b-83f0fc51f988@iogearbox.net>
-Date: Tue, 2 Apr 2024 18:03:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="agrwFT1u"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2a27ba3b1f3so269900a91.3
+        for <bpf@vger.kernel.org>; Tue, 02 Apr 2024 09:27:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712075231; x=1712680031; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OUcxN48L1uPnwKbwKrmZ+1qqXgmtQwJ0gF81NWHfHR8=;
+        b=agrwFT1uV91BmOUEskq/q3vFKuiwr076fFIyi1U/9cbYIvbZ+eEpBYM5gMa458qixa
+         ONZg5/wBPQoCiG4/1rssJHYiWgzi5lDNEzx+YgL2Bo8s8xYASbka6NjFSs+9HbVACz8Q
+         4aXr/BKe5wvkjr6d4NYjcUUCvUaNDnA9F/J1SqG/MML32+j47h5GtJ6Lmwm124rqU6NG
+         UdjD/tRX/kX/nUJbYGri5wMUwB2R/gWadZGtjvenjD30etKJ7I2BL29DLFCpPDpOLhkw
+         CHpB51pcRhHXmv9C5clTKgcrDjPWmQRxcaWsYGtxSjWct4RRkR9zbXo3uycCOB3dV1Mh
+         WuGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712075231; x=1712680031;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OUcxN48L1uPnwKbwKrmZ+1qqXgmtQwJ0gF81NWHfHR8=;
+        b=ORYrG0zXeM8P+6Hs/QyqGWygxAdQem0H8kLKf73Fa7YHkZIAN7cQR9QYQVZUymH7yN
+         tWbL4v5FM7Itp5FPU1Y/oFjO/L+Bl6IAwaElQS6QTYAyaAhjwayw2Cq6n1MHjFyMXVRe
+         NTz60n04OnVlCLf09sKT5Or7C7e2t9g2PXYRftq39zhp3rWWqZ43LmW+LxuvOo6ZntTq
+         5a/wC6Yoa0T1ij1rpbKpAE8Dc2D1Z5rcS2a15+i7wpmXlNoVFMO0/L6k8iMCd1v7wk/s
+         aYTnWXUeq7yeMivppT4hIkwM0otqZzd6rkMPA53syeijZXqgI01J+TlclYvA3rb/4fgo
+         RqhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW0yrVp/m8VfYPLNpoR3W+7HhDT4lvwWeHRTdD/NVBCoF44t5sFKanul1CsC9fyiv6BhWeZlfI2YKGbQgYCof/mqwfh
+X-Gm-Message-State: AOJu0YxDt9EIg790wQYHEfFxPRv4qj79z61THjogJyQqzHeTBBB5A7rG
+	vliWcG42e9kOvvwq+z0c/n4GlYhtO15SZ8Uv3C9ezaLNNJ/NF/p//gNvbCEKc2JlhY7mTxBlFNB
+	Hdeso94ehaqRCX+zj/WTMNV6iK6o=
+X-Google-Smtp-Source: AGHT+IGt7EYRN7lxDV0MQ+1QqKtFzKbQkcCbfaQbrKpCf8DQdVZO9F5smaIYhZE7S09Nzu+VSShYD3V8Pu2eVeKKi4Q=
+X-Received: by 2002:a17:90a:7e03:b0:299:5b95:cd7d with SMTP id
+ i3-20020a17090a7e0300b002995b95cd7dmr9610852pjl.45.1712075230967; Tue, 02 Apr
+ 2024 09:27:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <878r1vrga9.fsf@all.your.base.are.belong.to.us>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27233/Tue Apr  2 10:26:21 2024)
+References: <q5d5bgc6vty2fmaazd5e73efd6f5bhiru2le6fxn43vkw45bls@fhlw2s5ootdb>
+In-Reply-To: <q5d5bgc6vty2fmaazd5e73efd6f5bhiru2le6fxn43vkw45bls@fhlw2s5ootdb>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 2 Apr 2024 09:26:58 -0700
+Message-ID: <CAEf4Bzb5jicN61cBwch2gosA=taVX+Y65YSxOjeSLJMSPcQMMg@mail.gmail.com>
+Subject: Re: [PATCH v2] libbpf: use local bpf_helpers.h include
+To: =?UTF-8?B?VG9iaWFzIELDtmht?= <tobias@aibor.de>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/2/24 4:27 PM, Björn Töpel wrote:
-> Pu Lehui <pulehui@huaweicloud.com> writes:
->> From: Pu Lehui <pulehui@huawei.com>
->>
->> This patch relaxes the restrictions on the Zbb instructions. The hardware
->> is capable of recognizing the Zbb instructions independently, eliminating
->> the need for reliance on kernel compile configurations.
->>
->> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> 
-> Should this patch really be part of this series?
+On Tue, Apr 2, 2024 at 8:11=E2=80=AFAM Tobias B=C3=B6hm <tobias@aibor.de> w=
+rote:
+>
+> Commit 20d59ee55172fdf6 ("libbpf: add bpf_core_cast() macro") added a
+> bpf_helpers include in bpf_core_read.h as a system include. Usually, the
+> includes are local, though, like in bpf_tracing.h. This commit adjusts
+> the include to be local as well.
+>
+> Signed-off-by: Tobias B=C3=B6hm <tobias@aibor.de>
+> ---
+>
+> Sorry for the very wrong first version.
+>
+> Changes to v1:
+>   - The patch was based on the libbpf repo instead of the kernel repo.
+>   - The description referred to the commit of the wrong repo.
+>
+>  tools/lib/bpf/bpf_core_read.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.=
+h
+> index 1ce738d91..b5c7ce5c2 100644
+> --- a/tools/lib/bpf/bpf_core_read.h
+> +++ b/tools/lib/bpf/bpf_core_read.h
+> @@ -2,7 +2,7 @@
+>  #ifndef __BPF_CORE_READ_H__
+>  #define __BPF_CORE_READ_H__
+>
+> -#include <bpf/bpf_helpers.h>
+> +#include "bpf_helpers.h"
+>
 
-No, that should be submitted independently.
+Makes sense, I'll apply the patch. But I wanted to check if this is
+causing real issues in practice. Mostly to understand if I need 1.4.1
+release with this fix?
 
-Also, given Eduard's comment, it would be great if you could add the
-instructions to tools/testing/selftests/bpf/README.rst even if not in
-a perfect shape, but it would give developers a chance to get started.
-
-Thanks,
-Daniel
+>  /*
+>   * enum bpf_field_info_kind is passed as a second argument into
+>
+> base-commit: 026e680b0a08a62b1d948e5a8ca78700bfac0e6e
+> --
+> 2.44.0
+>
+>
