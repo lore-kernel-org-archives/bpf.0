@@ -1,101 +1,131 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E512582893;
-	Tue,  2 Apr 2024 14:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17E112BF1B;
+	Tue,  2 Apr 2024 14:09:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712066533; cv=none; b=lP6bOkWHPQnTs/6fIMWYPgCuinn1GEuFtSA9PnXh/eJ/FD+MJF1Xc9wSaNMHlct6bBJ2FU8pMfE+liFAEi7IpQA+vOwYuAyDfF0kpbGBkXCCliMu5wMO6sxm8+f7QCpm1F01TXrD5MX718ZS/ngqbpJtqTbnFzmYKEpY0aBxw5I=
+	t=1712066986; cv=none; b=VsthtT81RJem/avA7MeSlXucb+Z4WR+4FDNoZiVjvTvKOvfgBPAU0hE6TI/MftWNA6roi0QQJskdsRvLovmUj319qPLuJ7tgETKAEfbycz/g3anHdTkeM4TvWe7Qjac9TDjSSGDWIi7JLH8davt1p/xFRfhtdLTGG/TL5h7Ou6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712066533; c=relaxed/simple;
-	bh=MOhwCxMQctbQFU+axR1Gekz5rCSR4g5hpIDWONlTUOc=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=ohKxYHQDZPh8MqlZAaVFEMpb8E/oyUn7tndSGW8sSGmR+bdO+BxSXJUtR7TJydOhlmjewLDx8K8hRfenXMEO92sS/UflEAR++v6b75OjRydhV9V9JB6sH93h7fDiZBK7GqM0W52UlQ6vCGtkYJ/yh4W9ZVVOdMVb85zA0CTm9z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=CPtOGAR4; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1712066986; c=relaxed/simple;
+	bh=7tl7YgY+MKV1mJK0tEzWTAATtwUoG8kyzmnl3sQmnGA=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=chlC+XRsR+WAiEJ6CgLX5JDMuMx5ROTwE14fXKjP+NzR1mVuMKxquiSo4ZFy/0fVjriouSmrHT0sO/oo+M15IEHIXtpSSnUCmaWFJ4WAAUDZWY+p9VWitsrSHK5LkTfvGwAJKFk6wHr6XSX1RoyI7gJJ3U3a7YSTeB0jbnEm24U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PWY+gtZs; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="CPtOGAR4"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=sDKSBKctIHDpPvXzGMLCuAyCRKl5uTk+wKlRRmtyYU8=; b=CPtOGAR4IzTp1fXZss506ooEAh
-	61WURTi40li+u+jDmEa2wooqXUZTNEm1PkmZFeqN48swERppVnyqRhInsf3ExyJBJ7RemR1SSTvTL
-	I/WY6e/RbmANMoB7LMyiT0IyN+gQMNTOrR4NDfUgBA6XGKJzYeUu9gUpF1g+1yo1N8q68jQy9Yj4+
-	1Xb2oRGPbig7E5Ts0kZ7pgbpHE3VhvdBBgy19P3z56xnHqgJrD6372tlzjo32n7p/K+drreEMRYG1
-	SJsT02XTfZaeYZD1We0RtoOkIvudvKgIKO3yvKfUvmIVDeFYaUobxZiyZnDFtFYJR7EbceJ+HeYxv
-	+IREPgLQ==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rreiE-000C7B-Cn; Tue, 02 Apr 2024 16:02:06 +0200
-Received: from [178.197.248.12] (helo=linux.home)
-	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rreiD-00Er11-12;
-	Tue, 02 Apr 2024 16:02:05 +0200
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add testcase where 7th
- argment is struct
-To: Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
- linux-riscv@lists.infradead.org, netdev@vger.kernel.org
-Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Pu Lehui <pulehui@huawei.com>
-References: <20240331092405.822571-1-pulehui@huaweicloud.com>
- <20240331092405.822571-3-pulehui@huaweicloud.com>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <967f996f-f660-4615-696e-95c5db0542ad@iogearbox.net>
-Date: Tue, 2 Apr 2024 16:02:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PWY+gtZs"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6eaf9565e6bso1701048b3a.2;
+        Tue, 02 Apr 2024 07:09:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712066984; x=1712671784; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/yao6M8BZe8LPQTSQBWB5LPvC1cQXjIBVUMQ/S2AXRQ=;
+        b=PWY+gtZsVAA1DcBJHroz6N+/vo/C5GiLw5yllhUvudUiRmbm9uC1caPwqGOHtfAP6o
+         r38aoO4Jf1o+0TtuH084g6ERtkt7Ot3T1zHjSqwYT20DVmsdGLslgWR4T0pVnlw6u4uS
+         94IpP8cTglgjnjrGJDwOFBKh4dXeO2tWWtB0WI3pVDs76q9weoUzTF3r7d4a+56YZP9B
+         25WdsufdOz/EB+8GNqbOImqv8L1GA/kW+xNCy2rioGv299HZaShEJmp9rW92l5CiDwEy
+         muFZ/76nYJBQaP1rmr5fwgUvFrKCNtfAKJraHPb+MkNOo3qZhztImkxD1IsLTPIDInAk
+         ARFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712066984; x=1712671784;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/yao6M8BZe8LPQTSQBWB5LPvC1cQXjIBVUMQ/S2AXRQ=;
+        b=VNnKTKv3JWJuFn02tSEW/pJEJhtYJDJqa1mtYcBiVm0gQMaQ4eFlD3QEY7SFdbQzkZ
+         woOzvDOzHpBlre8v5NBLARv826yLPGCeYAmphLMS3jaWzHlpe+po1YIQmpnLW6Cyyfi9
+         9deMfhW/Fxa7R/QMHHmsQkm/ofx4y26a4NEMIaHMiPvDwSYJGcXynvUlPtQI5ThZ+cfy
+         0mMuNDHBKkT4dgWwgeTFMx9TsvxXfCSnysGs171xDb9YNym0dq6VhQv/eI9AtZE74Z4y
+         ctRCnGlhupcNEp2SUPA/voorrHCUIwa8cIaZTFHJTH8EyxYoJw56NNbk0L9+/Q6LCBdo
+         KQaw==
+X-Forwarded-Encrypted: i=1; AJvYcCVEltULL66K+SYjGPGD8UrMRIuCGiVarFk7X4I3qayDy0vp3N1nQphgEGT6LmTE030uEEmwaDbrJQqroFB7rn53rAd5
+X-Gm-Message-State: AOJu0YxZc1Y57NHJZ0RGJnPvLSeJ3/Muvjtze56yeO+N5qj1lo9vjZr1
+	QWmq8Zx18chdcOPOspVTHB5Pjc8RDr/t5OOZMRyi85WrkEN6IbvH
+X-Google-Smtp-Source: AGHT+IF2tGblpwSmVjYysthYWlwftyqFV6Z4Z0GvepkHJlYkEQODcyRSbo8LLmO+W+sk6sLfCnXAww==
+X-Received: by 2002:a05:6a21:6d8e:b0:1a5:6c73:74b9 with SMTP id wl14-20020a056a216d8e00b001a56c7374b9mr12511738pzb.48.1712066983898;
+        Tue, 02 Apr 2024 07:09:43 -0700 (PDT)
+Received: from localhost ([98.97.36.54])
+        by smtp.gmail.com with ESMTPSA id h17-20020a62b411000000b006e647059cccsm9828830pfn.33.2024.04.02.07.09.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Apr 2024 07:09:43 -0700 (PDT)
+Date: Tue, 02 Apr 2024 07:09:42 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: Jakub Sitnicki <jakub@cloudflare.com>, 
+ bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org, 
+ Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ kernel-team@cloudflare.com, 
+ xingwei lee <xrivendell7@gmail.com>, 
+ yue sun <samsun1006219@gmail.com>, 
+ syzbot+bc922f476bd65abbd466@syzkaller.appspotmail.com, 
+ syzbot+d4066896495db380182e@syzkaller.appspotmail.com, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Edward Adam Davis <eadavis@qq.com>, 
+ Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Message-ID: <660c11a6b3315_1cee208d3@john.notmuch>
+In-Reply-To: <20240402104621.1050319-1-jakub@cloudflare.com>
+References: <20240402104621.1050319-1-jakub@cloudflare.com>
+Subject: RE: [PATCH bpf] bpf, sockmap: Prevent lock inversion deadlock in map
+ delete elem
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <20240331092405.822571-3-pulehui@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27233/Tue Apr  2 10:26:21 2024)
 
-On 3/31/24 11:24 AM, Pu Lehui wrote:
-> From: Pu Lehui <pulehui@huawei.com>
+Jakub Sitnicki wrote:
+> syzkaller started using corpuses where a BPF tracing program deletes
+> elements from a sockmap/sockhash map. Because BPF tracing programs can be
+> invoked from any interrupt context, locks taken during a map_delete_elem
+> operation must be hardirq-safe. Otherwise a deadlock due to lock inversion
+> is possible, as reported by lockdep:
 > 
-> Add testcase where 7th argument is struct for architectures with 8
-> argument registers, and increase the complexity of the struct.
+>        CPU0                    CPU1
+>        ----                    ----
+>   lock(&htab->buckets[i].lock);
+>                                local_irq_disable();
+>                                lock(&host->lock);
+>                                lock(&htab->buckets[i].lock);
+>   <Interrupt>
+>     lock(&host->lock);
 > 
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> Locks in sockmap are hardirq-unsafe by design. We expects elements to be
+> deleted from sockmap/sockhash only in task (normal) context with interrupts
+> enabled, or in softirq context.
+> 
+> Detect when map_delete_elem operation is invoked from a context which is
+> _not_ hardirq-unsafe, that is interrupts are disabled, and bail out with an
+> error.
+> 
+> Note that map updates are not affected by this issue. BPF verifier does not
+> allow updating sockmap/sockhash from a BPF tracing program today.
+> 
+> Reported-by: xingwei lee <xrivendell7@gmail.com>
+> Reported-by: yue sun <samsun1006219@gmail.com>
+> Reported-by: syzbot+bc922f476bd65abbd466@syzkaller.appspotmail.com
+> Reported-and-tested-by: syzbot+d4066896495db380182e@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=d4066896495db380182e
+> Closes: https://syzkaller.appspot.com/bug?extid=bc922f476bd65abbd466
+> Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 > ---
->   .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 19 ++++++++++
->   .../selftests/bpf/prog_tests/tracing_struct.c | 13 +++++++
->   .../selftests/bpf/progs/tracing_struct.c      | 35 +++++++++++++++++++
->   3 files changed, 67 insertions(+)
+> Cc: John Fastabend <john.fastabend@gmail.com>
+> Cc: Edward Adam Davis <eadavis@qq.com>
+> Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+> ---
+>  net/core/sock_map.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-The last test from this patch fails BPF CI, ptal :
+Agree.
 
-https://github.com/kernel-patches/bpf/actions/runs/8497262674/job/23275690303
-https://github.com/kernel-patches/bpf/actions/runs/8497262674/job/23275690364
-
-Notice: Success: 519/3592, Skipped: 53, Failed: 1
-Error: #391 tracing_struct
-   Error: #391 tracing_struct
-   test_fentry:PASS:tracing_struct__open_and_load 0 nsec
-   libbpf: prog 'test_struct_arg_16': failed to attach: ERROR: strerror_r(-524)=22
-   libbpf: prog 'test_struct_arg_16': failed to auto-attach: -524
-   test_fentry:FAIL:tracing_struct__attach unexpected error: -524 (errno 524)
-Test Results:
-              bpftool: PASS
-           test_progs: FAIL (returned 1)
-Error: Process completed with exit code 1.
+Acked-by: John Fastabend <john.fastabend@gmail.com>
