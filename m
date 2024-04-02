@@ -1,29 +1,30 @@
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B8018E29
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 06:16:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0583117BBA
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 06:16:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712038588; cv=none; b=Dm/sFoOTf2h2sAkUc53919fyVLE9+Su5yWoXZfKt4mmBYXXLHhzombr5tYYu4UyyCsR+E8TUP9P72DTe59QXMoc//pyi8Q6ViI8Bc7S/daRS0v/B9gA6MHOju/zJaI4G506IwK5DQoR3XzTub0W/CD47ZYCIGoKNGXk49WiBKwc=
+	t=1712038589; cv=none; b=b3L9itaHCGrCW9m0rKz4LhMlAgUmzAmoq9neojMvKbiRaku6NrBKZV9pnT+HOqrB6gYsq9qkM+LSS94ZdCl9cyK6E0QKPJyKaznec3kQngALf4s5cZUAs3vTnEC3uh1+QUz8E3uz9PTqdHqikPC2XjRapInCGUsNgsUVeukAw70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712038588; c=relaxed/simple;
-	bh=GsocjRusLOSBgpyiEj6N+uxOdLxvbXVLa7t+3dE9fK0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JB7YhieaoqJTFcsIa+EnjuYJlGhS1GUv7xkGc5GgKCp9WDTUg+YjjdpwkKc5p6HSWqR8keCchSh+Uxtwbb8wSujFDgoX49vMeyPpW/HgViqAfRoUhNDpjuAFLpZtE63pjrdotqufyaV2XwEndh/7Bvzo+2A8NCXA9jtF1IzLUrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=D6b0+bIK; arc=none smtp.client-ip=115.124.30.132
+	s=arc-20240116; t=1712038589; c=relaxed/simple;
+	bh=0ecctPjGDvIqROT2UQPixeYUJ6OQ1u0HSdcNuh7Sfpc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=SK98pKhsdfru95aJwMmeObaaSnpyPgg5Sk4BegdRSyuDuXMNzfoAfFyp75FCd6RiRE9Rxtx028H8NyNYRx/03MTpQkBWZ+7wHNcQLx6p1xFGTDnwyynp0MGlWJ57hrWZZskPXMe55kmL9REWSglDlyd6NVUaCyUqeEfEgBvTOuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=QNTvF902; arc=none smtp.client-ip=115.124.30.97
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="D6b0+bIK"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="QNTvF902"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1712038576; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=eTIKFbnr5fF7XdNx+hkpCYMyLYnJY6js4goe5aOEOlM=;
-	b=D6b0+bIKXC9NsugGJqgaWT2DJKRAC4xca1JLzbt9C5LuT1Y7kIe57HYWjdwwbi0HTGSJa8pLWfQopvr+4IzfkBcG8ae3pgloSUYIoMSxLTDJggoSCB6wwSgSSJzxcu9U3BtNMkhV/8ZWYxoSf/1ug5xl6QA4nN4dhAeJp4W0GT4=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=lulie@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0W3nHHye_1712038575;
-Received: from localhost(mailfrom:lulie@linux.alibaba.com fp:SMTPD_---0W3nHHye_1712038575)
+	t=1712038579; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=plZ6MJwiiKtRP0JnX+6DkE1lVoIExLEEqxqWhNVdxYg=;
+	b=QNTvF902IcOIOOMZcbRIqwm4vYw8hOGnO4dLrByL1Ut2w83RBnyOzYH2DStatZspFgmTdtXSZfVBt2ZzRNxkDWphfM950xhkUWPsn0WDr24pWJTpc1lLdsl11k/eRvQFjnuLjMOIqZE/5I5MpO9o4GTvYbiA7Lrn/bCq55HgEs0=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=lulie@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0W3nHHzk_1712038577;
+Received: from localhost(mailfrom:lulie@linux.alibaba.com fp:SMTPD_---0W3nHHzk_1712038577)
           by smtp.aliyun-inc.com;
-          Tue, 02 Apr 2024 14:16:16 +0800
+          Tue, 02 Apr 2024 14:16:18 +0800
 From: Philo Lu <lulie@linux.alibaba.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -41,10 +42,12 @@ Cc: ast@kernel.org,
 	mykolal@fb.com,
 	shuah@kernel.org,
 	xuanzhuo@linux.alibaba.com
-Subject: [PATCH bpf-next 0/3] bpf: allow bpf_for_each_map_elem() helper with different input maps
-Date: Tue,  2 Apr 2024 14:16:12 +0800
-Message-Id: <20240402061615.48894-1-lulie@linux.alibaba.com>
+Subject: [PATCH bpf-next 2/3] bpf: allow invoking bpf_for_each_map_elem with different maps
+Date: Tue,  2 Apr 2024 14:16:14 +0800
+Message-Id: <20240402061615.48894-3-lulie@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
+In-Reply-To: <20240402061615.48894-1-lulie@linux.alibaba.com>
+References: <20240402061615.48894-1-lulie@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,51 +56,35 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, taking different maps within a single bpf_for_each_map_elem
-call is not allowed. For example the following codes cannot pass the
-verifier (with error "tail_call abusing map_ptr"):
-```
-static void test_by_pid(int pid)
-{
-	if (pid <= 100)
-		bpf_for_each_map_elem(&map1, map_elem_cb, NULL, 0);
-	else
-		bpf_for_each_map_elem(&map2, map_elem_cb, NULL, 0);
-}
-```
+Taking different maps within a single bpf_for_each_map_elem call is not
+allowed before, because from the second map,
+bpf_insn_aux_data->map_ptr_state will be marked as *poison*. In fact
+both map_ptr and state are needed to support this use case: map_ptr is
+used by set_map_elem_callback_state() while poison state is needed to
+determine whether to use direct call.
 
-This is because during bpf_for_each_map_elem verifying,
-bpf_insn_aux_data->map_ptr_state is expected as map_ptr (instead of poison
-state), which is then needed by set_map_elem_callback_state. However, as
-there are two different map ptr input, map_ptr_state is marked as
-BPF_MAP_PTR_POISON, and thus the second map_ptr would be lost.
-BPF_MAP_PTR_POISON is also needed by bpf_for_each_map_elem to skip
-retpoline optimization in do_misc_fixups(). Therefore, map_ptr_state and
-map_ptr are both needed for bpf_for_each_map_elem.
+Signed-off-by: Philo Lu <lulie@linux.alibaba.com>
+---
+ kernel/bpf/verifier.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-This patchset solves it by transform bpf_insn_aux_data->map_ptr_state as a
-new struct, storing poison/unpriv state and map pointer together without
-additional memory overhead. Then bpf_for_each_map_elem works well with
-different input maps. It also makes map_ptr_state logic clearer.
-
-A test case is added to selftest, which would fail to load without this
-patchset.
-
-Please review, thanks.
-
-Philo Lu (3):
-  bpf: store both map ptr and state in bpf_insn_aux_data
-  bpf: allow invoking bpf_for_each_map_elem with different maps
-  selftests/bpf: add test for bpf_for_each_map_elem() with different
-    maps
-
- include/linux/bpf_verifier.h                  |  9 ++-
- kernel/bpf/verifier.c                         | 42 +++++-------
- .../selftests/bpf/prog_tests/for_each.c       | 67 +++++++++++++++++++
- .../selftests/bpf/progs/for_each_multi_maps.c | 49 ++++++++++++++
- 4 files changed, 141 insertions(+), 26 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/for_each_multi_maps.c
-
---
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 515ac6165ab1..f0a33f7c2604 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9649,11 +9649,7 @@ static int set_map_elem_callback_state(struct bpf_verifier_env *env,
+ 	struct bpf_map *map;
+ 	int err;
+ 
+-	if (bpf_map_ptr_poisoned(insn_aux)) {
+-		verbose(env, "tail_call abusing map_ptr\n");
+-		return -EINVAL;
+-	}
+-
++	/* should not check poison */
+ 	map = insn_aux->map_ptr_state.map_ptr;
+ 	if (!map->ops->map_set_for_each_callback_args ||
+ 	    !map->ops->map_for_each_callback) {
+-- 
 2.32.0.3.g01195cf9f
 
