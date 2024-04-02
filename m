@@ -1,144 +1,153 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC1C15AAA6
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 17:46:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720DB175A1
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 17:50:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712079998; cv=none; b=XpRW4m8OLQLwKHDxhXjpKNCYZ/0CLehUThjMdQIEiE7PLL/s7Kd+fuiU/NEDm3/ZHZyYVDoK3HFSiWik5XEXDvWBwxwxF8eahTQ2KwGxcDI7tpsxZJMb+Ob5Z6uGgabTLmZRFLoG3u3xapTcKysNow4u7Gz4QbYV8hltBzVyYik=
+	t=1712080219; cv=none; b=nIWQe8nwbcae2IO/uCnQOKo6ArM6rjioy1iOv0h5/HKMDidHh24Nq27KAJXsqWxv6MrQk8gNyQm0tU6CLXpvnX8FKuDTDqz7KyPL/O0/hn62IEKcz/iG8ZdIkktUTVph42EBtIwEzypsFINZAazV6y90Eu0Wzi/pICgCTCArNoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712079998; c=relaxed/simple;
-	bh=6mi3pVAvD3Q4PM+OZ1GVCrMhMfiqrphwtAcgjan/OSI=;
+	s=arc-20240116; t=1712080219; c=relaxed/simple;
+	bh=E+hfCUJl4o05uCM7E/5AldGKLbn+ghUu+NWDxqztRWI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fLburIG9ZPp2uDzzyPULlG+WuMNGDBUnFaUzcMJis/h1YOV0519b3WU6oTAevDOY2tRMI8tmUlMEeEdS8vRI8UosBI6HhAB0P45S7Ste6WQ4vGswxwm5gljjburuaK2Qol3lMy9cGo1DrvT6MaGOMl+QUDmaGO2HosoLCekbrf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=moP5+1Xw; arc=none smtp.client-ip=209.85.214.174
+	 To:Cc:Content-Type; b=BhZSexvFcOsi+uUnuJWcmg1UeuH9TFIdoTNHNcoHy6Z8AG3COxNTOdGE5ZLnxSNAR2sPA+2K9N0gf/RTYUK1zSI3a8uLFElLBMOJzQ9E2Sih0iV6MgFlXz+4ZtDl30y2FYoNF+KbpywtlJXUJ77Tn/z76MLL3bRFt1LRllCIRzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ks6GSQq9; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="moP5+1Xw"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1e0878b76f3so1015955ad.0
-        for <bpf@vger.kernel.org>; Tue, 02 Apr 2024 10:46:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ks6GSQq9"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-5d81b08d6f2so4325281a12.0
+        for <bpf@vger.kernel.org>; Tue, 02 Apr 2024 10:50:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712079996; x=1712684796; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712080218; x=1712685018; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OpPh5IKM9rnUapg2pm24l/YbDoz9NLFl44TL+FMMvdc=;
-        b=moP5+1Xw1E6Arm390j0N3AGKrxHn44S0nqL+JNQGHWkqV/Tt3WosuhTlOuRsGAelnI
-         X31CaRyQwcgVhdx7hpkroDytPPdzxXqzz9jDjjNfD2stVpuzMSLd/8J8MSfI9NImrYtS
-         wu5MznT7Aev4TrnVTE8f0chTj/dxMKeW5qHOAcSDuXu+Ue/2kzG6VOK/ev47aO1pXCbu
-         CjRv/H5Wi1lEt2IIxRNs6wSIb+uolsqkqb0creczdu/+ol1mABTbXAp9cutw0ZNMjCXK
-         gbBD75zT1T9ICjvS6AzUdvoLg0m/Zy49STGkbohoTuTJ0YCOAokLUAT2lySE5cp7h0Yt
-         TKaQ==
+        bh=Zhe8PMh/BVRCwZKUKIJXRrVHdPLAQTbj8F0GoS8POWs=;
+        b=Ks6GSQq9hN9tVKtskwVqNEz6V+fox+cm8EQu8LdzTaJY97Zw+WollDDLh5J2j4JXyt
+         EVv+P1tDpr/NnmQB6xOkliI/7uN7zrVshJtAaPVaqB/I30uhM8sA/hm/eBmlDJRZoyXI
+         0xFzpAZjtACyEjui1Xf/jHGuBi07319yjebh0/uLC4/C8MzdvZoSQs7REOZogrUhHHMh
+         xyRM9jWGoynls1gz68QCGQxUvPWm0MWaMOnSLBY4WogcssJeZsg3IeLsdEsTGbkmHXHk
+         tdC6sRpyV84JANDoEiNZo17bE5z7RA8CFQAKMWiXqABP3vVssUU00fqnQ2tLbs+InpRm
+         k60g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712079996; x=1712684796;
+        d=1e100.net; s=20230601; t=1712080218; x=1712685018;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OpPh5IKM9rnUapg2pm24l/YbDoz9NLFl44TL+FMMvdc=;
-        b=g30VnSS/vaUDByCBQRzjUPXiuFx1fhQwZYdebV2PrSpXBYSWrINhVLzzogU0vQBqSH
-         Xh6CiACFVIBH74OizMXMP2k1aQOHZjG7tF/4zjEI53BVWT8rVzbhfRAyYNeYjKB2Hi88
-         QLlsPuvNmOeZIPl5yOK11p8MpX5soeP5gzoQGH4VureKR6RWoZcUEvYcHN/5WZQRSGZk
-         gPIcmKfkIMT7V9v5Q6drWX3YK+tojv+n80xml1+cwYOqUE8lw+/lX8YFTc+ZQS9BE0aV
-         y3OsjQ3Z9MPPJkF+M9TUEUmwwM7mMi9rmTPhyJSwcZ/NjYiNHxdFEIQbqOc/fp3LZJce
-         wrRw==
-X-Gm-Message-State: AOJu0Yz8kW1NP2Bkq4bGCVs1N3w9ZCbiVc47+ScHhQiygybIImz5QbGF
-	sYCgWj2QGvwR2JjfCVxblCRU5+M3Aa3snW2fz0XwKVbhiQVakrY7b0LBjO+rH6YM+JbBBDLcTkV
-	hqRAczXV2e6OqXiJfnz/8m6n5U9Y=
-X-Google-Smtp-Source: AGHT+IEIrCHuGWuJs6Tef8C6KdwOJr49GpUP/c4fi337HviYKlhxkDil6EUSvXdRQ7ZGcqFb8JE5WBZIj14daXn0KbA=
-X-Received: by 2002:a17:902:e747:b0:1e0:cea:257e with SMTP id
- p7-20020a170902e74700b001e00cea257emr334374plf.2.1712079996138; Tue, 02 Apr
- 2024 10:46:36 -0700 (PDT)
+        bh=Zhe8PMh/BVRCwZKUKIJXRrVHdPLAQTbj8F0GoS8POWs=;
+        b=Wziwi+nle91tffo122SsfzPyGkXDFMB7+lPpbT7st0Tzs5Vx6lttAL9pHVR1VsTkOO
+         dd5XcCRyfrrkmyQE103MSQ6GadVhbu2ngaNAnwBpiiA0ajDUR5AmVZs7unbsJQMacB5+
+         bmyUJ6X8z1cqfM/6lKn85diU3ALt1XZBKvo6hp+P1xQTPTL5x+7TuBUGQdgOwgm/aJYI
+         LvxyNotcxY1I9MRvVpioYRIUdJtkJ4deiW8YTnKCwQ+YVvWrYTsc8/c9RofRw+ysVZ/5
+         M+SMsqWhpIThxRxRAYRMoHxjBmh19c87p9HqbhONAuVeiyNYb/PL0rWLwYRHYjurK5+U
+         XYVA==
+X-Forwarded-Encrypted: i=1; AJvYcCVGoW8L9rxFw8xhv4W+T18iEtxN/21G+H1zKliu08Pe5/VRC62J+4ZJyGnC0FcdmZBrE4jCmTumhRVUGvioQjg9nZ9B
+X-Gm-Message-State: AOJu0YzNlAo6wMytr2N8SDZGJtNdzzTMGFy5aD3leQJN0ZsWGZxSg85Q
+	cDfG6so8Z/9NGv+Z4PpHQA7oke6TuXiuFYyzzIhV/8r3Ly/vvkAL3aLbqjUbRDp34b3ivWfros8
+	/zJ/mRFHptjdKB5cfSC9sVLs/U6E=
+X-Google-Smtp-Source: AGHT+IGQjQ263DermnFXrlynUvqKj6jHweN8XnDdbSU5pLKXuEdo+5A20OuNdKeRBNf4pOxU+oFzTg9cPV4WLNjaOUg=
+X-Received: by 2002:a17:90b:46c1:b0:2a2:5c6a:d1a2 with SMTP id
+ jx1-20020a17090b46c100b002a25c6ad1a2mr435401pjb.29.1712080217554; Tue, 02 Apr
+ 2024 10:50:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240326022153.656006-1-yonghong.song@linux.dev> <20240326022203.656793-1-yonghong.song@linux.dev>
-In-Reply-To: <20240326022203.656793-1-yonghong.song@linux.dev>
+References: <20240320122153.3622252-1-tao.lyu@epfl.ch>
+In-Reply-To: <20240320122153.3622252-1-tao.lyu@epfl.ch>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 2 Apr 2024 10:46:24 -0700
-Message-ID: <CAEf4BzZg3_D68dsb=SSasBewZ661rsZSusqoGtRQ6DDJUC-L4w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/5] libbpf: Add bpf_link support for BPF_PROG_TYPE_SOCKMAP
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com, 
-	Martin KaFai Lau <martin.lau@kernel.org>
+Date: Tue, 2 Apr 2024 10:50:05 -0700
+Message-ID: <CAEf4Bza98OQ-axH-o1xE4KA72Ga9bLwdDuWJS_irESbbxp1saA@mail.gmail.com>
+Subject: Re: [PATCH] Inaccurate rejection conditions
+To: Tao Lyu <tao.lyu@epfl.ch>
+Cc: andrii@kernel.org, yonghong.song@linux.dev, bpf@vger.kernel.org, 
+	sanidhya.kashyap@epfl.ch, mathias.payer@nebelwelt.net, 
+	meng.xu.cs@uwaterloo.ca
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 25, 2024 at 7:22=E2=80=AFPM Yonghong Song <yonghong.song@linux.=
-dev> wrote:
+On Wed, Mar 20, 2024 at 5:28=E2=80=AFAM Tao Lyu <tao.lyu@epfl.ch> wrote:
 >
-> Introduce a libbpf API function bpf_program__attach_sockmap()
-> which allow user to get a bpf_link for their corresponding programs.
->
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> Signed-off-by: Tao Lyu <tao.lyu@epfl.ch>
 > ---
->  tools/lib/bpf/libbpf.c   | 7 +++++++
->  tools/lib/bpf/libbpf.h   | 2 ++
->  tools/lib/bpf/libbpf.map | 1 +
->  3 files changed, 10 insertions(+)
+>  kernel/bpf/verifier.c | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 8eb2cd4ef288..e1bb9ba3d1a5 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -149,6 +149,7 @@ static const char * const link_type_name[] =3D {
->         [BPF_LINK_TYPE_TCX]                     =3D "tcx",
->         [BPF_LINK_TYPE_UPROBE_MULTI]            =3D "uprobe_multi",
->         [BPF_LINK_TYPE_NETKIT]                  =3D "netkit",
-> +       [BPF_LINK_TYPE_SOCKMAP]                 =3D "sockmap",
->  };
+> Hi,
 >
->  static const char * const map_type_name[] =3D {
-> @@ -12507,6 +12508,12 @@ bpf_program__attach_netns(const struct bpf_progr=
-am *prog, int netns_fd)
->         return bpf_program_attach_fd(prog, netns_fd, "netns", NULL);
->  }
+> I am sorry to bother you due to my confusion on constraints about stack w=
+rites.
 >
-> +struct bpf_link *
-> +bpf_program__attach_sockmap(const struct bpf_program *prog, int map_fd)
-> +{
-> +       return bpf_program_attach_fd(prog, map_fd, "sockmap", NULL);
-> +}
-> +
->  struct bpf_link *bpf_program__attach_xdp(const struct bpf_program *prog,=
- int ifindex)
->  {
->         /* target_fd/target_ifindex use the same field in LINK_CREATE */
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index f88ab50c0229..4c7ada03bf4f 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -795,6 +795,8 @@ bpf_program__attach_cgroup(const struct bpf_program *=
-prog, int cgroup_fd);
->  LIBBPF_API struct bpf_link *
->  bpf_program__attach_netns(const struct bpf_program *prog, int netns_fd);
->  LIBBPF_API struct bpf_link *
-> +bpf_program__attach_sockmap(const struct bpf_program *prog, int map_fd);
-> +LIBBPF_API struct bpf_link *
->  bpf_program__attach_xdp(const struct bpf_program *prog, int ifindex);
->  LIBBPF_API struct bpf_link *
->  bpf_program__attach_freplace(const struct bpf_program *prog,
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index 51732ecb1385..2e5c3429b974 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -411,6 +411,7 @@ LIBBPF_1.3.0 {
->  LIBBPF_1.4.0 {
->         global:
->                 bpf_program__attach_raw_tracepoint_opts;
-> +               bpf_program__attach_sockmap;
+> 1. When an instruction stores 64-bit values onto the stack with fixed off=
+set and BPF_CAP only,
+>    the verifier marks the stack slot type as STACK_SPILL, no matter wheth=
+er they are scalar or pointers.
+>
+> 2. Then, a store instruction with a **32-bit scalar value** on the same s=
+tack slot leads to a verification rejection.
+>    As it says, this might corrupt the stack pointer by asserting if the s=
+tack slot type is STACK_SPILL.
+>    However, even if the stack slot type is STACK_SPILL, it might store a =
+64-bit scalar and not a stack pointer.
+>    IMHO, this "issue" might originate from the incomplete conditions in t=
+he check_stack_write_fixed_off() function below.
+>    It only checks if the stack slot is a spilled register but forgets to =
+check if the spilled register type is a pointer.
+>
+>  4479 static int check_stack_write_fixed_off(struct bpf_verifier_env *env=
+,
+>  ...
+>  4494     if (!env->allow_ptr_leaks &&
+>  4495         is_spilled_reg(&state->stack[spi]) &&
+>  4496         size !=3D BPF_REG_SIZE) {
+>  4497         verbose(env, "attempt to corrupt spilled pointer on stack\n=
+");
+>  4498         return -EACCES;
+>  4499     }
+>  ...
+>  4600 }
+>
+> Below is an example bpf program, which stores a 64-bit and 32-bit immedia=
+te value on the same stack slot.
+> But the second one gets rejected due to the above.
+>
+> 0: R1=3Dctx() R10=3Dfp0
+> ; asm volatile ( @ repro.bpf.c:679
+> 0: (7a) *(u64 *)(r10 -8) =3D 1          ; R10=3Dfp0 fp-8_w=3D1
+> 1: (62) *(u32 *)(r10 -8) =3D 1
+> attempt to corrupt spilled pointer on stack
+> processed 2 insns (limit 1000000) max_states_per_insn 0 total_states 0 pe=
+ak_states 0 mark_read 0.
+>
+> If my understanding is correct, then we can apply the attached patch.
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index de7813947981..65f7eb315e9c 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -4493,6 +4493,7 @@ static int check_stack_write_fixed_off(struct bpf_v=
+erifier_env *env,
+>          */
+>         if (!env->allow_ptr_leaks &&
+>             is_spilled_reg(&state->stack[spi]) &&
+> +           state->stack[spi].spilled_ptr.type !=3D SCALAR_VALUE &&
 
-we are now in 1.5 development cycle, for next revision please put it
-into a new section
+I think it's possible to easily convert PTR_TO_MEM kind of register to
+SCALAR_VALUE through arithmetic operations, and so allowing to spill
+SCALAR_VALUE to stack is basically just as dangerous as spilling
+PTR_TO_MEM directly.
 
->                 bpf_raw_tracepoint_open_opts;
->                 bpf_token_create;
->                 btf__new_split;
+So it feels a bit dangerous to do this.
+
+pw-bot: cr
+
+>             size !=3D BPF_REG_SIZE) {
+>                 verbose(env, "attempt to corrupt spilled pointer on stack=
+\n");
+>                 return -EACCES;
 > --
-> 2.43.0
+> 2.25.1
 >
