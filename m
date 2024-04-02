@@ -1,134 +1,191 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3CB81E531
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 23:14:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73B6A1E531
+	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 23:22:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712099657; cv=none; b=JWhdp3yM8BT/CiwGRH+WydldrvEpG0QJ+U7Tv1TapcTQgq6/7IXd953Z5KGmM7IweKLxXtZQ0lE/SRS2fKvmQ5JgUX43cxmQ+zZlpC6LeXzU260zg6wjseuFf9qOtKEXdQLg/oSsuGqDbCFL7xGqBKwgE6pVwfrmRtMQNndT3Ws=
+	t=1712100160; cv=none; b=i6QAOq8G1UmzHSJ2+DmeI7u0YTF5dq/oqZPsDuDrSNMduybzhjGZL92ftZd7oG0Z7H1StSn6iaJV26cXqS5dbzjYZe+oNHjdqkJQwtH78uT0vkHcc4WJzu7KxJFD+aeljHGrTXXmtYbJZ7TvOdWkEOKLZyMJwYOiigEq0AneFr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712099657; c=relaxed/simple;
-	bh=O3GU0ImMOgJ4zCTROn++wcjJOQttinam+xM4irRp15Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TiWFnbu16h04eWVGdfSskUVw3izClrat7expQVF7qDdKtixLXBvzr+PuvIm/AObnX55hcT4qdZy5YgO4JI067TnMhwV/1bN0JtbFuNwJFuypmAPL4nsGoX11GwGkK8vLpe3MM7FXM7MNXZnBLR4Uhfal+pUuxXAHN0z+8d9S+1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rKUqR04r; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1712100160; c=relaxed/simple;
+	bh=f2Y2UyFRgV6IRbEXrwqUh838nP/Uv1K7YqPTC9HhOgg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Cy6P7eq+XY56zH0pke0fKVish0CX0k6hW3rVwVfK5JQUfyQAvhXW9pxixE+8vjogA2EplPcXanN1XR9ARCcEBZbtBLc4r5e3QVQNGLXMKCEOjP8eGSoP6kacPZvT8fu7Enntayc06xPbDCMpe18D3UZI8695jRNssLFWLsrzDgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FyIW4GWf; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rKUqR04r"
-Message-ID: <59c52263-edd2-4585-b4f0-28c8d92d572c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1712099652;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DsDOn4cgXYJbdNcryG8nZVgiiWs/27lyOYNlotPhh28=;
-	b=rKUqR04rZPve86OMI/qFw9AtOtWykNdWAVEqV6pgPLJRhJ+catFBQiOu1vcwrbagmOAZv/
-	ew0Epa+dO02Cj6qGG+gw7n7m9opvbfUIdWHa50oYUqxASe33q3a3+mjysDun3T4EGoGX11
-	8k2HAjNBiuEY5SMSjse2PyrRO45IaQA=
-Date: Tue, 2 Apr 2024 16:14:02 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FyIW4GWf"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6e6bee809b8so5443948b3a.1
+        for <bpf@vger.kernel.org>; Tue, 02 Apr 2024 16:22:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712100158; x=1712704958; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oy+aXs/fZMafeXSBVhJnEsX+j0urVXp+Og0PWOpUCas=;
+        b=FyIW4GWfJiXAv2iC6zX5wgSd7P4zynOvqxyXSsym+GIFXjipIGtBpacg/KTgG+G4SW
+         b87GV8nAYUpdEBEa6ujIxambbhS5K265LeamcR5/tK8xlgYn+Vu1gRkQeoW+iJspdkCd
+         ILWJOTYVW8H/RghPikZng5rNRwHOipsvcLfafM+5fejUqs+5C1vQ2GRsgiwT9zmNkuVt
+         sul/HoZOYHVq8kSNEQmDhbFoqH8R7VB3iFthAy4w1Ik/dMbOZGkRpwk3oljPCSNaSsi1
+         bUSlMm6wGCoOkJ1AU4LJ26OnEEPp489YBpCa3jidsCzrHZg3QTEIo7TGOj/LhfQ6LOrX
+         3azA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712100158; x=1712704958;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oy+aXs/fZMafeXSBVhJnEsX+j0urVXp+Og0PWOpUCas=;
+        b=ULXh4lDBH+qetnVOWM/ZbXj4vyVTV2R+pKCC2hA9kRtg2Es7yawETQ5t+KDLxXGn54
+         pmUawiOaROD4bK9yIKlPpBG3ePD5o4QURl2/UivT3N/PwdpzZdV/Wk7zsFZLJYFbaOoV
+         oT3ldCs7/kfVEGtmgCXGeMhnxA97RNQ1lX/Fu7YTqu7TyF9nXPsYmQwMwh5szIJEWkc+
+         aOUvK8TMHHrTkPKJJauqFt+ed1lboXIae/N2FIfiEmj+nfeSSTSDdkS5LotP9xvBi/+6
+         No3mOdD99XHky8fSGXZaVZpcBZ3gKMN+cE8nGpB0j6RK42vTyUd3IYnLQypRUFSKSG9d
+         Umew==
+X-Gm-Message-State: AOJu0Yy6uusomO168sfiy0DxA92C+Ynnv5NYKU9jCDwlfRwZxAjl4y8I
+	Bn2l0tXPJhkblPFIAzyuV9MfOkk1S1aIQ1h4KLj/7rOigvQAI5h0tQL+ox3ZjG5smxSRQfkejdy
+	KSjnfDYBsHrLMAqr0tu6/Sp6CKM4=
+X-Google-Smtp-Source: AGHT+IFcfrE8EBkTx1akU0S6nJM4TXZXgk3uFjiD6qEIBqzpuItiQTvQ4C5Qzf55bdM0ps3JL2nBQ8OMTTUciE3FlOI=
+X-Received: by 2002:a05:6a20:d705:b0:1a5:7979:3349 with SMTP id
+ iz5-20020a056a20d70500b001a579793349mr16604699pzb.6.1712100157588; Tue, 02
+ Apr 2024 16:22:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v1 bpf-next 5/8] selftests/bpf: Factor out load_path and
- defines from test_sock_addr
-To: Jordan Rife <jrife@google.com>
-Cc: linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
- Daan De Meyer <daan.j.demeyer@gmail.com>, bpf@vger.kernel.org
-References: <20240329191907.1808635-1-jrife@google.com>
- <20240329191907.1808635-6-jrife@google.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20240329191907.1808635-6-jrife@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20240402190542.757858-1-andrii@kernel.org> <20240402190542.757858-3-andrii@kernel.org>
+In-Reply-To: <20240402190542.757858-3-andrii@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 2 Apr 2024 16:22:24 -0700
+Message-ID: <CAEf4BzZ_6hzWoniF+6jb6cOXK48EHNMH0ziZ1o26KW+Zo7OKyQ@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 2/2] bpf: inline bpf_get_branch_snapshot() helper
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	martin.lau@kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/29/24 12:18 PM, Jordan Rife wrote:
-> diff --git a/tools/testing/selftests/bpf/sock_addr_helpers.c b/tools/testing/selftests/bpf/sock_addr_helpers.c
-> new file mode 100644
-> index 0000000000000..ff2eb09870f16
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/sock_addr_helpers.c
-> @@ -0,0 +1,46 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <unistd.h>
+On Tue, Apr 2, 2024 at 12:05=E2=80=AFPM Andrii Nakryiko <andrii@kernel.org>=
+ wrote:
+>
+> Inline bpf_get_branch_snapshot() helper using architecture-agnostic
+> inline BPF code which calls directly into underlying callback of
+> perf_snapshot_branch_stack static call. This callback is set early
+> during kernel initialization and is never updated or reset, so it's ok
+> to fetch actual implementation using static_call_query() and call
+> directly into it.
+>
+> This change eliminates a full function call and saves one LBR entry
+> in PERF_SAMPLE_BRANCH_ANY LBR mode.
+>
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  kernel/bpf/verifier.c | 55 +++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index fcb62300f407..49789da56f4b 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -20157,6 +20157,61 @@ static int do_misc_fixups(struct bpf_verifier_en=
+v *env)
+>                         goto next_insn;
+>                 }
+>
+> +               /* Implement bpf_get_branch_snapshot inline. */
+> +               if (prog->jit_requested && BITS_PER_LONG =3D=3D 64 &&
+> +                   insn->imm =3D=3D BPF_FUNC_get_branch_snapshot) {
+> +                       /* We are dealing with the following func protos:
+> +                        * u64 bpf_get_branch_snapshot(void *buf, u32 siz=
+e, u64 flags);
+> +                        * int perf_snapshot_branch_stack(struct perf_bra=
+nch_entry *entries, u32 cnt);
+> +                        */
+> +                       const u32 br_entry_size =3D sizeof(struct perf_br=
+anch_entry);
 > +
-> +#include <bpf/bpf.h>
-> +#include <bpf/libbpf.h>
+> +                       /* struct perf_branch_entry is part of UAPI and i=
+s
+> +                        * used as an array element, so extremely unlikel=
+y to
+> +                        * ever grow or shrink
+> +                        */
+> +                       BUILD_BUG_ON(br_entry_size !=3D 24);
 > +
-> +#include "cgroup_helpers.h"
-> +#include "sock_addr_helpers.h"
-> +#include "testing_helpers.h"
+> +                       /* if (unlikely(flags)) return -EINVAL */
+> +                       insn_buf[0] =3D BPF_JMP_IMM(BPF_JNE, BPF_REG_3, 0=
+, 7);
 > +
-> +int load_path(const char *path, enum bpf_attach_type attach_type,
-> +	      bool expect_reject)
-> +{
-> +	struct bpf_object *obj;
-> +	struct bpf_program *prog;
-> +	int err;
-> +
-> +	obj = bpf_object__open_file(path, NULL);
+> +                       /* Transform size (bytes) into number of entries =
+(cnt =3D size / 24).
+> +                        * But to avoid expensive division instruction, w=
+e implement
+> +                        * divide-by-3 through multiplication, followed b=
+y further
+> +                        * division by 8 through 3-bit right shift.
+> +                        * Refer to book "Hacker's Delight, 2nd ed." by H=
+enry S. Warren, Jr.,
+> +                        * p. 227, chapter "Unsigned Divison by 3" for de=
+tails and proofs.
+> +                        *
+> +                        * N / 3 <=3D> M * N / 2^33, where M =3D (2^33 + =
+1) / 3 =3D 0xaaaaaaab.
+> +                        */
+> +                       insn_buf[1] =3D BPF_MOV32_IMM(BPF_REG_0, 0xaaaaaa=
+ab);
+> +                       insn_buf[2] =3D BPF_ALU64_REG(BPF_REG_2, BPF_REG_=
+0, 0);
 
-Although it works, it is heading to the opposite direction by reusing things 
-from the older test_sock_addr.c.
+Doh, this should be:
 
-test_sock_addr.c should have been moved to the test_progs. It is not run by bpf 
-CI and bits get rotten [e.g. the bug fix in patch 8]. There is also old practice 
-like bpf_object__open_file() should have been replaced with the skeleton 
-__open_and_load() instead of refactoring it out to create new use cases.
+insn_buf[2] =3D BPF_ALU64_REG(BPF_MUL, BPF_REG_2, BPF_REG_0);
 
-The newer prog_tests/sock_addr.c was created when adding AF_UNIX support. It has 
-a very similar setup as the older test_sock_addr.c and the intention was to 
-finally retire test_sock_addr.c. e.g. It also has "load_fn loadfn" but is done 
-with skeleton, the program is also attached to cgroup...etc.
+I'll wait a bit for any other feedback, will retest everything on real
+hardware again, and will submit v2 tomorrow.
 
-Instead of adding a new sock_addr_kern.c in patch 7, it probably will be easier 
-to add the kernel socket tests into the existing prog_tests/sock_addr.c.
+pw-bot: cr
 
-Also setup the netns and veth in the prog_tests/sock_addr.c instead of calling 
-out the test_sock_addr.sh (which should also go away eventually), there are 
-examples in prog_tests/ (e.g. mptcp.c).
 
-> +	err = libbpf_get_error(obj);
-> +	if (err) {
-> +		log_err(">>> Opening BPF object (%s) error.\n", path);
-> +		return -1;
-> +	}
+> +                       insn_buf[3] =3D BPF_ALU64_IMM(BPF_RSH, BPF_REG_2,=
+ 36);
 > +
-> +	prog = bpf_object__next_program(obj, NULL);
-> +	if (!prog)
-> +		goto err_out;
+> +                       /* call perf_snapshot_branch_stack implementation=
+ */
+> +                       insn_buf[4] =3D BPF_EMIT_CALL(static_call_query(p=
+erf_snapshot_branch_stack));
+> +                       /* if (entry_cnt =3D=3D 0) return -ENOENT */
+> +                       insn_buf[5] =3D BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0=
+, 4);
+> +                       /* return entry_cnt * sizeof(struct perf_branch_e=
+ntry) */
+> +                       insn_buf[6] =3D BPF_ALU32_IMM(BPF_MUL, BPF_REG_0,=
+ br_entry_size);
+> +                       insn_buf[7] =3D BPF_JMP_A(3);
+> +                       /* return -EINVAL; */
+> +                       insn_buf[8] =3D BPF_MOV64_IMM(BPF_REG_0, -EINVAL)=
+;
+> +                       insn_buf[9] =3D BPF_JMP_A(1);
+> +                       /* return -ENOENT; */
+> +                       insn_buf[10] =3D BPF_MOV64_IMM(BPF_REG_0, -ENOENT=
+);
+> +                       cnt =3D 11;
 > +
-> +	bpf_program__set_type(prog, BPF_PROG_TYPE_CGROUP_SOCK_ADDR);
-> +	bpf_program__set_expected_attach_type(prog, attach_type);
-> +	bpf_program__set_flags(prog, testing_prog_flags());
+> +                       new_prog =3D bpf_patch_insn_data(env, i + delta, =
+insn_buf, cnt);
+> +                       if (!new_prog)
+> +                               return -ENOMEM;
 > +
-> +	err = bpf_object__load(obj);
-> +	if (err) {
-> +		if (!expect_reject)
-> +			log_err(">>> Loading program (%s) error.\n", path);
-> +		goto err_out;
-> +	}
+> +                       delta    +=3D cnt - 1;
+> +                       env->prog =3D prog =3D new_prog;
+> +                       insn      =3D new_prog->insnsi + i + delta;
+> +                       continue;
+> +               }
 > +
-> +	return bpf_program__fd(prog);
-> +err_out:
-> +	bpf_object__close(obj);
-> +	return -1;
-> +}
-
+>                 /* Implement bpf_kptr_xchg inline */
+>                 if (prog->jit_requested && BITS_PER_LONG =3D=3D 64 &&
+>                     insn->imm =3D=3D BPF_FUNC_kptr_xchg &&
+> --
+> 2.43.0
+>
