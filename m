@@ -1,131 +1,78 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17E112BF1B;
-	Tue,  2 Apr 2024 14:09:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DBF74262;
+	Tue,  2 Apr 2024 14:10:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712066986; cv=none; b=VsthtT81RJem/avA7MeSlXucb+Z4WR+4FDNoZiVjvTvKOvfgBPAU0hE6TI/MftWNA6roi0QQJskdsRvLovmUj319qPLuJ7tgETKAEfbycz/g3anHdTkeM4TvWe7Qjac9TDjSSGDWIi7JLH8davt1p/xFRfhtdLTGG/TL5h7Ou6Y=
+	t=1712067028; cv=none; b=I2DHBof16wX7+5GF+Jot3nwdpcA2CV81s+DWQWZzpVC6IY6GS/F262YfzFzw3+id4uzLNR8IlZ8JtG6Vog/lKMhsKwQ2X3xqisHo24s3nmp4MD4wjoDI3scWSwiQXhHMl0Kb5UixrliSZX1ktSYs/7lg8qMCTGJMgxBEr7ktCCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712066986; c=relaxed/simple;
-	bh=7tl7YgY+MKV1mJK0tEzWTAATtwUoG8kyzmnl3sQmnGA=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=chlC+XRsR+WAiEJ6CgLX5JDMuMx5ROTwE14fXKjP+NzR1mVuMKxquiSo4ZFy/0fVjriouSmrHT0sO/oo+M15IEHIXtpSSnUCmaWFJ4WAAUDZWY+p9VWitsrSHK5LkTfvGwAJKFk6wHr6XSX1RoyI7gJJ3U3a7YSTeB0jbnEm24U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PWY+gtZs; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712067028; c=relaxed/simple;
+	bh=6/gaVejmho+6gxtK4B1sWMwBKvhxjxSbV/MyNET8rRw=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=QfJK2BCkSNAGOi1vmVUc4pzr7OTgq5pDlN9DSK0apn4Qfms12aPSzeEcGFLTxIjrYwaX+EkYEn+gY3Z/Q/p3pK4YMIqRGa/6UQua1xTQhJ39gahaX1IdR62YvvbDhhMvKSR0FbGia+Q+bpBBNqFt3RzkPB4BM7k8H3oI2pZuSRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E9ejCqdl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PWY+gtZs"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6eaf9565e6bso1701048b3a.2;
-        Tue, 02 Apr 2024 07:09:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712066984; x=1712671784; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/yao6M8BZe8LPQTSQBWB5LPvC1cQXjIBVUMQ/S2AXRQ=;
-        b=PWY+gtZsVAA1DcBJHroz6N+/vo/C5GiLw5yllhUvudUiRmbm9uC1caPwqGOHtfAP6o
-         r38aoO4Jf1o+0TtuH084g6ERtkt7Ot3T1zHjSqwYT20DVmsdGLslgWR4T0pVnlw6u4uS
-         94IpP8cTglgjnjrGJDwOFBKh4dXeO2tWWtB0WI3pVDs76q9weoUzTF3r7d4a+56YZP9B
-         25WdsufdOz/EB+8GNqbOImqv8L1GA/kW+xNCy2rioGv299HZaShEJmp9rW92l5CiDwEy
-         muFZ/76nYJBQaP1rmr5fwgUvFrKCNtfAKJraHPb+MkNOo3qZhztImkxD1IsLTPIDInAk
-         ARFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712066984; x=1712671784;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/yao6M8BZe8LPQTSQBWB5LPvC1cQXjIBVUMQ/S2AXRQ=;
-        b=VNnKTKv3JWJuFn02tSEW/pJEJhtYJDJqa1mtYcBiVm0gQMaQ4eFlD3QEY7SFdbQzkZ
-         woOzvDOzHpBlre8v5NBLARv826yLPGCeYAmphLMS3jaWzHlpe+po1YIQmpnLW6Cyyfi9
-         9deMfhW/Fxa7R/QMHHmsQkm/ofx4y26a4NEMIaHMiPvDwSYJGcXynvUlPtQI5ThZ+cfy
-         0mMuNDHBKkT4dgWwgeTFMx9TsvxXfCSnysGs171xDb9YNym0dq6VhQv/eI9AtZE74Z4y
-         ctRCnGlhupcNEp2SUPA/voorrHCUIwa8cIaZTFHJTH8EyxYoJw56NNbk0L9+/Q6LCBdo
-         KQaw==
-X-Forwarded-Encrypted: i=1; AJvYcCVEltULL66K+SYjGPGD8UrMRIuCGiVarFk7X4I3qayDy0vp3N1nQphgEGT6LmTE030uEEmwaDbrJQqroFB7rn53rAd5
-X-Gm-Message-State: AOJu0YxZc1Y57NHJZ0RGJnPvLSeJ3/Muvjtze56yeO+N5qj1lo9vjZr1
-	QWmq8Zx18chdcOPOspVTHB5Pjc8RDr/t5OOZMRyi85WrkEN6IbvH
-X-Google-Smtp-Source: AGHT+IF2tGblpwSmVjYysthYWlwftyqFV6Z4Z0GvepkHJlYkEQODcyRSbo8LLmO+W+sk6sLfCnXAww==
-X-Received: by 2002:a05:6a21:6d8e:b0:1a5:6c73:74b9 with SMTP id wl14-20020a056a216d8e00b001a56c7374b9mr12511738pzb.48.1712066983898;
-        Tue, 02 Apr 2024 07:09:43 -0700 (PDT)
-Received: from localhost ([98.97.36.54])
-        by smtp.gmail.com with ESMTPSA id h17-20020a62b411000000b006e647059cccsm9828830pfn.33.2024.04.02.07.09.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Apr 2024 07:09:43 -0700 (PDT)
-Date: Tue, 02 Apr 2024 07:09:42 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: Jakub Sitnicki <jakub@cloudflare.com>, 
- bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org, 
- Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- kernel-team@cloudflare.com, 
- xingwei lee <xrivendell7@gmail.com>, 
- yue sun <samsun1006219@gmail.com>, 
- syzbot+bc922f476bd65abbd466@syzkaller.appspotmail.com, 
- syzbot+d4066896495db380182e@syzkaller.appspotmail.com, 
- John Fastabend <john.fastabend@gmail.com>, 
- Edward Adam Davis <eadavis@qq.com>, 
- Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Message-ID: <660c11a6b3315_1cee208d3@john.notmuch>
-In-Reply-To: <20240402104621.1050319-1-jakub@cloudflare.com>
-References: <20240402104621.1050319-1-jakub@cloudflare.com>
-Subject: RE: [PATCH bpf] bpf, sockmap: Prevent lock inversion deadlock in map
- delete elem
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E9ejCqdl"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9370DC433F1;
+	Tue,  2 Apr 2024 14:10:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712067027;
+	bh=6/gaVejmho+6gxtK4B1sWMwBKvhxjxSbV/MyNET8rRw=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=E9ejCqdlolfsY80nizbS0Awh8t/GWEyC6EIf3L+vmEsiLa/VuNWGZHEW4oULhqS4H
+	 pgmLIkUVnlOvgDNVdg08Kz4QwZuSYwGggIq+aimDZZ1lh0/6DZp6pbrDA70RZ7e25S
+	 60up/ZHuB+m3Tgnsjmy/nVIeUZ7rJfGebZceZ2SCSNshzHasHXRAVzfxXtTYQRyKr7
+	 Gnys4jEPmrhXMjRn2TcadPymvzcEBrurUBqvV4sEzUppwdESoCwNUf+sggwPyL9M80
+	 fCHasAtWfLsanxmPSrpCJieHVasJDzJ9E0hS0Eep+6BaP9fxriEeMRnWMptCcX022B
+	 svffvgz8rqdYw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 80279D9A158;
+	Tue,  2 Apr 2024 14:10:27 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] bpf: fix typo in uapi doc comments
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171206702752.6673.7807180542850602789.git-patchwork-notify@kernel.org>
+Date: Tue, 02 Apr 2024 14:10:27 +0000
+References: <20240329152900.398260-2-dlechner@baylibre.com>
+In-Reply-To: <20240329152900.398260-2-dlechner@baylibre.com>
+To: David Lechner <dlechner@baylibre.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+ linux-kernel@vger.kernel.org
 
-Jakub Sitnicki wrote:
-> syzkaller started using corpuses where a BPF tracing program deletes
-> elements from a sockmap/sockhash map. Because BPF tracing programs can be
-> invoked from any interrupt context, locks taken during a map_delete_elem
-> operation must be hardirq-safe. Otherwise a deadlock due to lock inversion
-> is possible, as reported by lockdep:
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Fri, 29 Mar 2024 10:28:46 -0500 you wrote:
+> In a few places in the bpf uapi headers, EOPNOTSUPP is missing a "P" in
+> the doc comments. This adds the missing "P".
 > 
->        CPU0                    CPU1
->        ----                    ----
->   lock(&htab->buckets[i].lock);
->                                local_irq_disable();
->                                lock(&host->lock);
->                                lock(&htab->buckets[i].lock);
->   <Interrupt>
->     lock(&host->lock);
-> 
-> Locks in sockmap are hardirq-unsafe by design. We expects elements to be
-> deleted from sockmap/sockhash only in task (normal) context with interrupts
-> enabled, or in softirq context.
-> 
-> Detect when map_delete_elem operation is invoked from a context which is
-> _not_ hardirq-unsafe, that is interrupts are disabled, and bail out with an
-> error.
-> 
-> Note that map updates are not affected by this issue. BPF verifier does not
-> allow updating sockmap/sockhash from a BPF tracing program today.
-> 
-> Reported-by: xingwei lee <xrivendell7@gmail.com>
-> Reported-by: yue sun <samsun1006219@gmail.com>
-> Reported-by: syzbot+bc922f476bd65abbd466@syzkaller.appspotmail.com
-> Reported-and-tested-by: syzbot+d4066896495db380182e@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=d4066896495db380182e
-> Closes: https://syzkaller.appspot.com/bug?extid=bc922f476bd65abbd466
-> Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
-> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+> Signed-off-by: David Lechner <dlechner@baylibre.com>
 > ---
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: Edward Adam Davis <eadavis@qq.com>
-> Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-> ---
->  net/core/sock_map.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  include/uapi/linux/bpf.h       | 4 ++--
+>  tools/include/uapi/linux/bpf.h | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Agree.
+Here is the summary with links:
+  - bpf: fix typo in uapi doc comments
+    https://git.kernel.org/bpf/bpf-next/c/ca4ddc26f8ac
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
