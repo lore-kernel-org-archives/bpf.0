@@ -1,204 +1,279 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A7317C98;
-	Wed,  3 Apr 2024 16:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712162158; cv=fail; b=EJZ7tdrUkwVx5NPhMvO6P32z7NDtcXBg2O12JG3BQORDKt5hAz9ST8vMhLkoBRbGwsjkPNw09FdFyjKF8EYvUSrM/3bdkr7JTNn24CGWWiUJAR7eWRaKVSqNSKm+2Q/l8tf8674EMD+zP6fB3f36du4WbuxpXp7YMI6DoWHucI8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712162158; c=relaxed/simple;
-	bh=mYpyaN9BqGR5bzP9VZdfTPohFVd+z4pFjVl+L9iibSU=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Mqn3IkG6QzDEmHU4HN/UKWah567h9hxK/k9KSxAwsyLXN3P9T0yhrJYYnITw5wdhWUtPT1+f8hZ1W+uBdpnonDnglKXHjMlUs2BEqE02rlh0CWkQCxf0lCCm1QL8mXyCJnSLsFZH+TAFW9vaiUKQfSHP/rt74GjG9WMbT/QPJNQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PnMJoPa2; arc=fail smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01AE914C58A
+	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 16:43:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712162635; cv=none; b=PONlRwebOoTGv+DxrUfXET1u+GMKpTy2zwPDJWB6YXsd6xLt40KIb2qJlU1MWIOEUb827kNa4muMN0Liqpye9C3p5Sv9IpSN9xSVcBaBbrJDVs/pr2Nly0K10MSBdiYZDd/kdeiEgIz9iClt/fm+GSa9l5N/KF6SD7ZEOX4/P6g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712162635; c=relaxed/simple;
+	bh=jACUHapW8PMfuuaXjoFQ1kdZAAiQjDy7YdWyxXFd0BE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FkR4bXzESrGXKu04/7cDfYuj3cetduRfkhCJHbKtMvFftRDO/5sp2hNGTA7kWMlhXVwIe89/IPbB1mA2vYC5sR2VynsGqS4vUv328zSoXfWUhpUkY0TD47Q3d3jSuTmRmAQEYBZO8l4qZL+MQdIRKjrGvdiVA78F0OcpMyotEL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BeslVzjP; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PnMJoPa2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712162157; x=1743698157;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=mYpyaN9BqGR5bzP9VZdfTPohFVd+z4pFjVl+L9iibSU=;
-  b=PnMJoPa2O+iYvJBZL1Z8MzatFJtQBq03/DHVmgQQep9F82mHnB+M6TgJ
-   opvAkWBx/QMLKTD7UhdPzl15R/cFKQXyA2s3a/mVzcNxCSYYFQrqCMi9q
-   yPEHGUwnn8sTHNyDkBTfXz4f0Sr5Aiq13xGQnL2IA5FYIplCWdR1iZWqs
-   gKf1xDGskQXN7ZPjTNeMEPve/7SgDEN4gZmXk51lH1nbpGvSw5Bx979bI
-   0Oy2b4e0dqlrTYG0VZBd4bRHnB5fVnoUOHESb5HmnS9IfPVdlNcy2w99a
-   k8wSglvpn6lFX4lkFjfcLgrTnUtPiiPEFVDudAKw00eDwTj19D8WGFhEv
-   g==;
-X-CSE-ConnectionGUID: Sn7A1Z9tRuaZAQqPdxkdHA==
-X-CSE-MsgGUID: Ae2BBASWRoqZemCg4XJ1pw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="7641560"
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="7641560"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 09:35:55 -0700
-X-CSE-ConnectionGUID: 5oitbbDhSfCOCGMnQnCyVA==
-X-CSE-MsgGUID: wzwlZm16Qt6xWu9lA38MXw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="22982003"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmviesa003.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 03 Apr 2024 09:35:55 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 3 Apr 2024 09:35:54 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 3 Apr 2024 09:35:54 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Wed, 3 Apr 2024 09:35:54 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.168)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Wed, 3 Apr 2024 09:35:53 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aSQCj6HB5MgI+NrZgze1YMjIScVNEkwso9+WM1bWz/UFYxnIhtjI9RaDirmNGLhB2b0jKUx5eSRZUf8gl1oLAKH2f36Af9SNQ8PUtZw5jZjB4bxJP/U6YanrE/HykIjCdNZR/PjFgCU6XPiDBX+xq81vpk7zDpCHFL3ns7BtHzsh4J/0G6Ut86QybsqFvRur5AzPicrhn+Irq/RR0jVqxGye3G95A5sAvUCKlZ7DzS28EoMA5N4rc3PFlAWkFoqACL2UDBvGb5EJUE/GWw9gmcysAgS+qa+gy/haMRxcOhZC2asklwNXoP1S4vV8MpWGM0MIjNQlH87IEPaYz/1A9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+v3byrtQFRM8lbsytoBcz4+mdx110lEaeVIZ4R2gVZI=;
- b=Tv8XJBYjWijfnK4Asr7eDil1zlxFKTTmKPAmICFpmUrkOjXFdqDvc4hvC+e+CVGp5TwZihRhEbSG4uoCCD/vQQAuTPDq01XSi8kdP8Axeb4FbADOl1+hMReunaI/MXVL03NP8KksqIQ3pdas8DgCGbLmziQRCZIqylD8t5MABV1QC3mBxeTfyYvNc235tj3kMPCh1ST5C3gOFUnV/v98ZNHwSF2g1o20cPeotQ3wlbIYjNEXJ/lZZYQQdhWgVqG/3DHP+hxLNj+yx2dQZ6HuCXZfu21aBeBCIkWCxhSDMJjXs81D9yr94Ndw4CDppr1qr1wtem5EITMU3r3zULxBaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
- by DS0PR11MB7629.namprd11.prod.outlook.com (2603:10b6:8:146::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.23; Wed, 3 Apr
- 2024 16:35:46 +0000
-Received: from DS0PR11MB8718.namprd11.prod.outlook.com
- ([fe80::654c:d66a:ec8e:45e9]) by DS0PR11MB8718.namprd11.prod.outlook.com
- ([fe80::654c:d66a:ec8e:45e9%6]) with mapi id 15.20.7452.019; Wed, 3 Apr 2024
- 16:35:46 +0000
-Message-ID: <2746b1d9-2e1f-4e66-89ed-19949a189a92@intel.com>
-Date: Wed, 3 Apr 2024 18:34:30 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 2/4] bpf: test_run: Use system page pool for
- XDP live frame mode
-To: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
-	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
-	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
-	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
-	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>, Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>, <bpf@vger.kernel.org>,
-	<netdev@vger.kernel.org>
-References: <20240220210342.40267-1-toke@redhat.com>
- <20240220210342.40267-3-toke@redhat.com>
-From: Alexander Lobakin <aleksander.lobakin@intel.com>
-Content-Language: en-US
-In-Reply-To: <20240220210342.40267-3-toke@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MI0P293CA0003.ITAP293.PROD.OUTLOOK.COM
- (2603:10a6:290:44::9) To DS0PR11MB8718.namprd11.prod.outlook.com
- (2603:10b6:8:1b9::20)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BeslVzjP"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-5ce9555d42eso59274a12.2
+        for <bpf@vger.kernel.org>; Wed, 03 Apr 2024 09:43:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712162633; x=1712767433; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BaZBsw+QRqEcUvheGyx7e+VMS3CvLvPjb0aHRd/qMPY=;
+        b=BeslVzjPue/iS15d6FXXZoDw6+0Fi/ezbq0UV+3ySs/tq5OpE1PMHl2ZrTtJPaLEOV
+         B84WAD3nsUVj/hMs0ABpngT5EaKBvgzUHchZw8fVbB08vXTkp73Vf6+ML3tY8NmxfcgH
+         pLWF5ZtWCO2iK5mSuG9wOVuzZjvnEU8ILi3Rnp89sqneIwaSs36rnEyoSISxKFhhve4E
+         HPXdpyBaKh9m1GXCEeO6MkEX7tq3s/Tta1blDg08neEbjl/0NH5vfJJyi7401tHfMruZ
+         xZPov8HHYhq6EIxIQZ5OyeMeyjo6LY+2z9WIFAGnjtyBpL3NGmCVUBojUThZMudCXOEI
+         a7Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712162633; x=1712767433;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BaZBsw+QRqEcUvheGyx7e+VMS3CvLvPjb0aHRd/qMPY=;
+        b=Q8czIEFk6jNNXt/z27t+8DTFtw0Lqgr0Ro+WmmxVVbSBgGgStknOS11jYLzDI5Ucrh
+         t/nqtcxyYx6mETC75Ri7do0TtfUvpBo4waGtCq86EJdHQ2clKSjKC2CxkHfA/tSlHopp
+         9rulNT3uXWHnlJX0+L1lmHtBrS6pvtlQbPtdvhD12pL7DsOfmRQIpg8px69BObUIsoRW
+         /9MoIs1PeDJPe0g1gZjh61cCLD1FNY2vQru6FgecXypsAVaTtgf8NB9zI3KAl8CVmsan
+         f6qQqzZqiQBgSb0JhxgEag340EVSrkyoA7rNx12/8Iw+qDwg+Tar3m9KqGPzUr8uGedx
+         +lOw==
+X-Gm-Message-State: AOJu0Yyo7AQVyArzN7bkpl6IA69MhHexA4mD34P3egcBY+wn/iNOdj9f
+	9Ps0TN+Om2MZaHRb2mxPX3vU62kSKgku33/C9eFnwvkJ0CgPKZL8CJ/B4mVQn11MTIih0/zYmOM
+	jTNAaU3CGGsSwpkLkBq1kBO1/8Ck=
+X-Google-Smtp-Source: AGHT+IEKR38dLUfMNk81bfyMxBpezuQrzhgCCMS/BFSPAD5OztoS0QE6T5jn1LhUxxiYaxY/BP3o1zSOrnL8Wqq7nik=
+X-Received: by 2002:a17:90a:fe0e:b0:2a2:50ef:ece2 with SMTP id
+ ck14-20020a17090afe0e00b002a250efece2mr55874pjb.17.1712162633179; Wed, 03 Apr
+ 2024 09:43:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|DS0PR11MB7629:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Trh4caSWFAUWs30fCUUT5zd6RjUm3zwVuht7i0bjyzxceOmCIY0KDlYJrY8JdpHYwKMRetYGP+UTWinhytzFIOzDTMw7c2UTZ+0i38+IiuRjJLCfFjCAeBL6cddv1Cewxwoo9jJcxloQFry2xs7WgZFk3heQLunegQOzRgr4gMkP/OQmhBV4+m0T/nuDNtLqZgI/QtxLUecxaqvNKpTSa7BeydmwEH2uuEigh53PeigsxOrouXVn/Pp1DzYrVkqrwyA/u1M3AuYP1MhLuFUt2Pvc2rHlYFuPfeeCL92M5bPTIlNOIl1GsJR+LNIXRPSpvyNkwaxzLr9SKP/nN03rr0kG/wG1vbzTAp/M+//r7QcjUvbNRfjhCE0jALS/CSiFQ1Ev0VcSqIY/LR/jl0i5YhQUtkRzSvvwBO5zCcxCjal/upBdpAsExhZjnfs+bXnDCfhWCULex/yfOdaxKmGNx2W55CV+ueg0g5qgJfZeJx7J3pywUpnyAbMrCvOiLQJHAmSB20W6XxDKi9JFihuJY15Y2SLzpeAnrJeaHeVmgyzhf3Mmp01taC1ioCJVSB+e0B1FjMKbvgy4JmGX0DqQYEr1Ap8HxTut98HSfFiovBjwpWmRsvwCh6JbnwJR16IpTPIx0il6rcq0bg6uw5ooQBty7yAxWiXhNuDcjKTIFV0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015)(7416005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RTYvZVV1STdlQS9iR203czFPYTM1L0N3OG4vUmVQRWFhL0tlS0hEcUlvbVhO?=
- =?utf-8?B?VkhHWW5JQVBSbkVBRENKTktyTzRoa1dMbElseXhDUERtK3NhSTVmZ3FERWFO?=
- =?utf-8?B?ajlaTGNySFlHeVdCTjNsSVZFWnZocFIySFpBT25aZUNxNU1IYnpIdFVpYnhy?=
- =?utf-8?B?NWlmeGNpWFl5UXNZa2dJdG1IT09RSHhtQlJIMk1KVXJ5TkEzU2xhcWRBYVUr?=
- =?utf-8?B?a0xvZGZwK0V3NGlDbysweDFueEg2Mmw0b1FoWVdLeHlhZytCYnJhNm1LMGFL?=
- =?utf-8?B?bVRzRHFzSVlxQkt4aUxaL3JzWUNUN0M3SUtDbkkzdVY5NzVTRzl4ZDBRTHBh?=
- =?utf-8?B?ckM3bkdTVHYxbUFQZzhTNTZpSmp0ZVM0bzUzNGJxVU9CQVF4c294ZWVPN0NU?=
- =?utf-8?B?Z3Y1ODdJTllwYmU5YTYvZ3k1ampjYllCL0VvdHFyemxoRGtQYjNZNG1zT0Js?=
- =?utf-8?B?RENwK1FodzFHWFlPM0VFWGF0Sm85SFIxRzNqWExDZFd5OWVNWEk0Unp5blk1?=
- =?utf-8?B?a3FscXpYVGZxcTFxVHpVdncrREo3em1NMzNiNnZDaFoyN1lieGsrTk5SaTBE?=
- =?utf-8?B?SUExQUY2YmNpMDZ0RUM4TEszNUxoS0JPNGgraVFiM0tpRWpzMWp5VUxINGpp?=
- =?utf-8?B?NkI5d1NrZkw5MTY3NDl3K0l2U1lLa3AvZ1FWM2hFYzJISmlMTlM4WVFuUXhj?=
- =?utf-8?B?MzJNeWcyVUx1SGdhaXBOU0hac0tmU1Joc0dJMFZmK242MlhVazlFT1hQUmtk?=
- =?utf-8?B?OWh1aEM0a0Z2NkRyZUJjdmZkZ1VpUFRLMzFIanVqOWNoWW1idnJaUUkwdVhM?=
- =?utf-8?B?T3NoV3RrVFRvVGJvWlFGYnZtUmROeXVXa1dlZ3kzS3BBRVN5RVRTRlM4WHFL?=
- =?utf-8?B?V1Y1bTh2OGZ1ak5pbThmVEF1by95VWwwSjJ2bjdpTWZrVkc3bWVZbzVlNk1x?=
- =?utf-8?B?eEhwdXdFcjV6QTNDVmJOMHAvZUx3cys4MjRwejJXd2RucXBBeFR0RVo0MVpJ?=
- =?utf-8?B?a1d3Ty84TXo3TThOcStwRTVTMjFqeXZYNGdtVGhKSnpuT1dnVFFqcHJkRDBa?=
- =?utf-8?B?NjU3WURrR3huYkJ0NXBLc3ZxYnE4aW9TeThDVEc5cUxaYXVJMVZhUkVhWW9I?=
- =?utf-8?B?aktOZFZLbXMxenh2bzRqVkZHdHBZVHBrNW85Q3E4NGRpVzJJcEVhcld5T1lT?=
- =?utf-8?B?dXRzV3lsaE01NVRhZ2VFMTd5d1JvbFpKNFB4NFBGVDhIeWtJbUJJejVFL2t6?=
- =?utf-8?B?UEdkT3RJOHVUWkkxSTMybWd3OC92VDR0bGh6dHUyVVBIM2ZlTC9aVnQ1K1Yw?=
- =?utf-8?B?NkJEMjlwSUhPajlWRmFDbnNIekJaaGpyMVduRk5PNzN6eHZaZlR6Zm9MNnU3?=
- =?utf-8?B?N0NpWnMvWmVVR1VlY1NwSGx1ODM0MjZvQmcwSXhzNThxdmxOVlpUWTIyVkJU?=
- =?utf-8?B?ZjB2R1hkQVZoWk9Fb2N5MzB4VEZjVGc1cm9tR1J6VzBvWVJCS1lzNnZGVGl3?=
- =?utf-8?B?YlpKbi9meGc2LzhPSEdWeHF5Y3ZzMm1xZ2FmTE9GaTdRRmhwV2ZDb1B6Wkpv?=
- =?utf-8?B?SnBCQ2J4dmN4YTM4Wlh5VXJlWDlPdzlKZkMxQTVvcElNL0l3WU1tS0FxbE1h?=
- =?utf-8?B?R1BScWhNZE9FMzNzcW1yRGtPVVFKaXhvci9QangzajAyNTJGeHlwNlMvZXEz?=
- =?utf-8?B?K3duNmw3aWQ4NkREaUdleDFnaVpxOHhKcndCSmNwUHpUOXFjZFh1dHI3OWpt?=
- =?utf-8?B?bXk4eGhheGRxSXp0RmxjZVhvdndBbURHTlBCd0NlQlhBbVhkR1lDdnJuMzhu?=
- =?utf-8?B?S1V6YXk0TVNWdTFPRUNiRXg5dlN5U3ZXY3F0ZEpWRHNzTGpOcVdNTEhwVVk0?=
- =?utf-8?B?VDdBWG9LZ1ZIb3I5anlZN2M1YjJUcy9qc2l5eUZMM3R5T2NyN3Z2VFFvYzFD?=
- =?utf-8?B?LzRSVWIyM3FwVGowYm44aDhyNlhhTHQ2aHR3UG9mY1gyRGdLYkR3bXhTcXlp?=
- =?utf-8?B?WGwrNzFCV2UzK3dUSWNFeGNqZFg1bDBiS2JmLytJajBsQVd3NEpYb3U3SDlV?=
- =?utf-8?B?Q0ZqMjhuSERtWEcwZ29DSTVCVGdtbzVDSnpHRUQrL3NlcXNJNFluT0dVZm5U?=
- =?utf-8?B?NXg2eE4rdkNXMzB3Q3lvWlVGVVIvUENlKzZsdXQ2SC9xWHBYVUgvenRMeFdx?=
- =?utf-8?B?a1E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2acf55d6-97a2-4275-908e-08dc53fc1ce9
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2024 16:35:46.4249
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IEgSiZxmrPgGq31/SyvjMilaxvMIgIxMkxSPViHCJuM23AvO0MADQiSqujabMThVPOaiFQ+Zdfve2WkhEO6iCD1hBPFzbc6+0oZb82GwDGY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7629
-X-OriginatorOrg: intel.com
+References: <20240326022153.656006-1-yonghong.song@linux.dev>
+ <20240326022158.656285-1-yonghong.song@linux.dev> <CAEf4BzbkcKFVEWaHSavbRi9+9VQMbqCgP36p9fzk6Hai2v2izA@mail.gmail.com>
+ <27046774-e3d6-40c2-b3e3-ae6e64ecd33b@linux.dev>
+In-Reply-To: <27046774-e3d6-40c2-b3e3-ae6e64ecd33b@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 3 Apr 2024 09:43:41 -0700
+Message-ID: <CAEf4BzaYh6q_0TUUARd8m0eK+5RBxWQJ8=-n84vdayPPh4Z61g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/5] bpf: Add bpf_link support for sk_msg and
+ sk_skb progs
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com, 
+	Martin KaFai Lau <martin.lau@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Toke Høiland-Jørgensen <toke@redhat.com>
-Date: Tue, 20 Feb 2024 22:03:39 +0100
+On Tue, Apr 2, 2024 at 6:08=E2=80=AFPM Yonghong Song <yonghong.song@linux.d=
+ev> wrote:
+>
+>
+> On 4/2/24 10:45 AM, Andrii Nakryiko wrote:
+> > On Mon, Mar 25, 2024 at 7:22=E2=80=AFPM Yonghong Song <yonghong.song@li=
+nux.dev> wrote:
+> >> Add bpf_link support for sk_msg and sk_skb programs. We have an
+> >> internal request to support bpf_link for sk_msg programs so user
+> >> space can have a uniform handling with bpf_link based libbpf
+> >> APIs. Using bpf_link based libbpf API also has a benefit which
+> >> makes system robust by decoupling prog life cycle and
+> >> attachment life cycle.
+> >>
+> >> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> >> ---
+> >>   include/linux/bpf.h            |   6 +
+> >>   include/linux/skmsg.h          |   4 +
+> >>   include/uapi/linux/bpf.h       |   5 +
+> >>   kernel/bpf/syscall.c           |   4 +
+> >>   net/core/sock_map.c            | 263 +++++++++++++++++++++++++++++++=
++-
+> >>   tools/include/uapi/linux/bpf.h |   5 +
+> >>   6 files changed, 279 insertions(+), 8 deletions(-)
+> >>
 
-> The BPF_TEST_RUN code in XDP live frame mode creates a new page pool
-> each time it is called and uses that to allocate the frames used for the
-> XDP run. This works well if the syscall is used with a high repetitions
-> number, as it allows for efficient page recycling. However, if used with
-> a small number of repetitions, the overhead of creating and tearing down
-> the page pool is significant, and can even lead to system stalls if the
-> syscall is called in a tight loop.
-> 
-> Now that we have a persistent system page pool instance, it becomes
-> pretty straight forward to change the test_run code to use it. The only
-> wrinkle is that we can no longer rely on a custom page init callback
-> from page_pool itself; instead, we change the test_run code to write a
-> random cookie value to the beginning of the page as an indicator that
-> the page has been initialised and can be re-used without copying the
-> initial data again.
-> 
-> The cookie is a random 128-bit value, which means the probability that
-> we will get accidental collisions (which would lead to recycling the
-> wrong page values and reading garbage) is on the order of 2^-128. This
-> is in the "won't happen before the heat death of the universe" range, so
-> this marking is safe for the intended usage.
-> 
-> Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-> Tested-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-> Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+[...]
 
-Hey,
+> >>          psock_set_prog(pprog, prog);
+> >> -       return 0;
+> >> +       if (link)
+> >> +               *plink =3D link;
+> >> +
+> >> +out:
+> >> +       mutex_unlock(&sockmap_prog_update_mutex);
+> > why this mutex is not per-sockmap?
+>
+> My thinking is the system probably won't have lots of sockmaps and
+> sockmap attach/detach/update_prog should not be that frequent. But
+> I could be wrong.
+>
 
-What's the status of this series, now that the window is open?
+That seems like an even more of an argument to keep mutex per sockmap.
+It won't add a lot of memory, but it is conceptually cleaner, as each
+sockmap instance (and corresponding links) are completely independent,
+even from a locking perspective.
 
-Thanks,
-Olek
+But I can't say I feel very strongly about this.
+
+> >
+> >> +       return ret;
+> >>   }
+> >>
+
+[...]
+
+> >
+> >> +
+> >> +static void sock_map_link_release(struct bpf_link *link)
+> >> +{
+> >> +       struct sockmap_link *sockmap_link =3D get_sockmap_link(link);
+> >> +
+> >> +       mutex_lock(&sockmap_link_mutex);
+> > similar to the above, why is this mutex not sockmap-specific? And I'd
+> > just combine sockmap_link_mutex and sockmap_prog_update_mutex in this
+> > case to keep it simple.
+>
+> This is to protect sockmap_link->map. They could share the same lock.
+> Let me double check...
+
+If you keep that global sockmap_prog_update_mutex then I'd probably
+reuse that one here for simplicity (and named it a bit more
+generically, "sockmap_mutex" or something like that, just like we have
+global "cgroup_mutex").
+
+[...]
+
+> >> +       if (old && link->prog !=3D old) {
+> > hm.. even if old matches link->prog, we should unset old and set new
+> > link (link overrides prog attachment, basically), it shouldn't matter
+> > if old =3D=3D link->prog, unless I'm missing something?
+>
+> In xdp link (net/core/dev.c), we have
+>
+>          cur_prog =3D dev_xdp_prog(dev, mode);
+>          /* can't replace attached prog with link */
+>          if (link && cur_prog) {
+>                  NL_SET_ERR_MSG(extack, "Can't replace active XDP
+> program with BPF link");
+>                  return -EBUSY;
+>          }
+>          if ((flags & XDP_FLAGS_REPLACE) && cur_prog !=3D old_prog) {
+>                  NL_SET_ERR_MSG(extack, "Active program does not match
+> expected");
+>                  return -EEXIST;
+>          }
+>
+> if flags has XDP_FLAGS_REPLACE, link saved prog must be equal to old_prog
+> in order to do prog update.
+> for sockmap prog update, in link_update (syscall.c), the only way
+> we can get a non-NULL old_prog is with the following:
+>
+>          if (flags & BPF_F_REPLACE) {
+>                  old_prog =3D bpf_prog_get(attr->link_update.old_prog_fd)=
+;
+>                  if (IS_ERR(old_prog)) {
+>                          ret =3D PTR_ERR(old_prog);
+>                          old_prog =3D NULL;
+>                          goto out_put_progs;
+>                  }
+>          } else if (attr->link_update.old_prog_fd) {
+>                  ret =3D -EINVAL;
+>                  goto out_put_progs;
+>          }
+> Basically, we have BPF_F_REPLACE here.
+> So similar to xdp link, I think we should check old_prog to
+> be equal to link->prog in order to do link update_prog.
+
+ah, ok, that's BPF_F_REPLACE case. See, it's confusing that we have
+this logic split between multiple places, in dev_xdp_attach() it's a
+bit more centralized.
+
+>
+> >
+> >> +               ret =3D -EINVAL;
+> >> +               goto out;
+> >> +       }
+
+[...]
+
+> >> +
+> >> +       ret =3D sock_map_prog_update(map, prog, NULL, &sockmap_link->l=
+ink, attach_type);
+> >> +       if (ret) {
+> >> +               bpf_link_cleanup(&link_primer);
+> >> +               goto out;
+> >> +       }
+> >> +
+> >> +       bpf_prog_inc(prog);
+> > if link was created successfully, it "inherits" prog's refcnt, so you
+> > shouldn't do another bpf_prog_inc()? generic link_create() logic puts
+> > prog only if this function returns error
+>
+> The reason I did this is due to
+>
+> static inline void psock_set_prog(struct bpf_prog **pprog,
+>                                    struct bpf_prog *prog)
+> {
+>          prog =3D xchg(pprog, prog);
+>          if (prog)
+>                  bpf_prog_put(prog);
+> }
+>
+> You can see when the prog is swapped due to link_update or prog_attach,
+> its reference count is decremented by 1. This is necessary for prog_attac=
+h,
+> but as you mentioned, indeed, it is not necessary for link-based approach=
+.
+> Let me see whether I can refactor code to make it easy not to increase
+> reference count of prog here.
+>
+
+ah, ok, its another sockmap-specific convention, np
+
+>
+> >
+> >> +
+> >> +       return bpf_link_settle(&link_primer);
+> >> +
+> >> +out:
+> >> +       bpf_map_put_with_uref(map);
+> >> +       return ret;
+> >> +}
+> >> +
+> >>   static int sock_map_iter_attach_target(struct bpf_prog *prog,
+> >>                                         union bpf_iter_link_info *linf=
+o,
+> >>                                         struct bpf_iter_aux_info *aux)
+> >> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux=
+/bpf.h
+> >> index 9585f5345353..31660c3ffc01 100644
+> >> --- a/tools/include/uapi/linux/bpf.h
+> >> +++ b/tools/include/uapi/linux/bpf.h
+> >> @@ -1135,6 +1135,7 @@ enum bpf_link_type {
+> >>          BPF_LINK_TYPE_TCX =3D 11,
+> >>          BPF_LINK_TYPE_UPROBE_MULTI =3D 12,
+> >>          BPF_LINK_TYPE_NETKIT =3D 13,
+> >> +       BPF_LINK_TYPE_SOCKMAP =3D 14,
+> >>          __MAX_BPF_LINK_TYPE,
+> >>   };
+> >>
+> >> @@ -6720,6 +6721,10 @@ struct bpf_link_info {
+> >>                          __u32 ifindex;
+> >>                          __u32 attach_type;
+> >>                  } netkit;
+> >> +               struct {
+> >> +                       __u32 map_id;
+> >> +                       __u32 attach_type;
+> >> +               } sockmap;
+> >>          };
+> >>   } __attribute__((aligned(8)));
+> >>
+> >> --
+> >> 2.43.0
+> >>
