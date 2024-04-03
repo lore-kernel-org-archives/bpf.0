@@ -1,248 +1,164 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A78D4158DDC;
-	Wed,  3 Apr 2024 17:18:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FF49154C12;
+	Wed,  3 Apr 2024 17:28:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712164703; cv=none; b=r1aPt8tWtjD6QDBtScUILZ1zIGLwybwOP42BHMsEz1MmczunzseZyCKXXD1n5uv+k3HUv9VYUyxA2QvEEuSLPZoxJ6PRx+nHjk7qsLPqDZiBgIh9BHZ7uZJuzsaST8eBsAAKR3hbgbxRJ++cc0h/58mArRN/SiUP00/1o9E9ANE=
+	t=1712165287; cv=none; b=TFOsEpHPHvMpsXSVOrzdJ3xGTcagVMBNbbDwbmjf+qVtNIX0VuATQVq3fneF066Qom8Xs5LS2t4j+H9tYTDnf8IotFc28fiFCSiiPEGQOg+qRqzm/2YA9t5d2gVpxJlGToWYeXoivbOjEGcAVkFxtmS2i0mp2UY4NwbU6EIEgD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712164703; c=relaxed/simple;
-	bh=wUJTvHNhUgsShBAX0wQ04BoRngDJpHcPGwjvnBoDrog=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sqgQrlNL/QnDeBoiMNosE6QDQJWKBs+87NjxGATDAjtwKxMSSUBa5TGW+8P2skEB8U4BeYa/DZPsuhw7CHZvv1oxatMP7GNgcW/sCrg1rc70wJVAyRdVai+dr9WLDWmriDwQIyMuBPjO39RIqQWkW+cJ9A0joXmZXHbw+ghcClk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p7XzH4wQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712165287; c=relaxed/simple;
+	bh=ev9qwjumkVBT21OJLnRxmj6j+tcZWLWc9gYIuhQP4YA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ia2opbuoxHt0lFkgWDWQ6GW72TwXxCw0yfeQSJ/LhG7sn01WZkrj8WZRUJRsE4888fMYzSyz3Ech/P1f6Gxg8GCCmQni6+lw8lB91KappKy7elE43A1OQAfDim+Rx3i92Q5ooTwIdQtz8KoPEYKbLRt0tvnVMBkb7I6ZXCcHAOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pJpsqN23; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p7XzH4wQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B531C43390;
-	Wed,  3 Apr 2024 17:18:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pJpsqN23"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25477C433F1;
+	Wed,  3 Apr 2024 17:27:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712164703;
-	bh=wUJTvHNhUgsShBAX0wQ04BoRngDJpHcPGwjvnBoDrog=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=p7XzH4wQiN+qqEDmdOXpEi06P2GPaN0ZtjeBhUBN21kFc5i5HurCq02iNsFMXf3KY
-	 Psrz6Nw3nugmdzFp3em5qwXy9c7JUg16xfJ3VQ1adRrnKYD4LLwpG8rdZmgXcgMfD3
-	 OnujIjOD8RaHFv+zZ7WkCAndcrb8L2oqQ2XpwD1sPyD+0Ibmrf6bhQSu0+XbbyM7VG
-	 q1q56Il48RryVr4x+ueB+QDsNs203+ZTN6kN9oS5ISrVAxl5GYEGcO6UYYe740Gp+3
-	 87eWIZ6Hin2REwIUu/a5nuhBr8rNSC36fMt8WZPkrZBAoLWYwc9n3Hc7WVra5dfb5l
-	 LEgiQjT/poOGg==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>,
-	Andrea Righi <andrea.righi@canonical.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 04/20] kernfs: RCU protect kernfs_nodes and avoid kernfs_idr_lock in kernfs_find_and_get_node_by_id()
-Date: Wed,  3 Apr 2024 13:17:45 -0400
-Message-ID: <20240403171815.342668-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240403171815.342668-1-sashal@kernel.org>
-References: <20240403171815.342668-1-sashal@kernel.org>
+	s=k20201202; t=1712165286;
+	bh=ev9qwjumkVBT21OJLnRxmj6j+tcZWLWc9gYIuhQP4YA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pJpsqN23a/bTPCDYI46/mddJ60857N8gxl0704dxwCHxM5gKzPHc731EgK6XTky8d
+	 UTSvCE/t886wLCwR1UtYWv7Xweb+uKowOagxSx/lUTLkXov7Dsf3h7EJVqcumDwZqs
+	 tOZb0mWrfqCf+8IONESe5080Pxu9nMjALf/FMnCDXF9xhUlL3R67eN2rH1I5mN6bzF
+	 1n8OJA3VkfjnGjVp4Z+o4CVz2zIgJ7Dmv0gNexlQEtkyGLrPexZxzjQpZtQ6ml5ppR
+	 mZhUqv9H4p4rGkxe60L9FXP3YjGI6r2+YWhPDeKU2GGU7vXAeDQM5+N6jWyDCaqmEM
+	 CqEUGy0nok9lw==
+Date: Wed, 3 Apr 2024 18:27:49 +0100
+From: Simon Horman <horms@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Ahern <dsahern@kernel.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	Amritha Nambiar <amritha.nambiar@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	Kaiyuan Zhang <kaiyuanz@google.com>,
+	Christian Brauner <brauner@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Florian Westphal <fw@strlen.de>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
+	Arseniy Krasnov <avkrasnov@salutedevices.com>,
+	Aleksander Lobakin <aleksander.lobakin@intel.com>,
+	Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Richard Gobert <richardbgobert@gmail.com>,
+	Sridhar Samudrala <sridhar.samudrala@intel.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Abel Wu <wuyun.abel@bytedance.com>,
+	Breno Leitao <leitao@debian.org>,
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Shailend Chand <shailend@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>, linux-mm@kvack.org,
+	Matthew Wilcox <willy@infradead.org>
+Subject: Re: [RFC PATCH net-next v8 06/14] page_pool: convert to use netmem
+Message-ID: <20240403172749.GP26556@kernel.org>
+References: <20240403002053.2376017-1-almasrymina@google.com>
+ <20240403002053.2376017-7-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.24
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240403002053.2376017-7-almasrymina@google.com>
 
-From: Tejun Heo <tj@kernel.org>
+On Tue, Apr 02, 2024 at 05:20:43PM -0700, Mina Almasry wrote:
+> Abstrace the memory type from the page_pool so we can later add support
+> for new memory types. Convert the page_pool to use the new netmem type
+> abstraction, rather than use struct page directly.
+> 
+> As of this patch the netmem type is a no-op abstraction: it's always a
+> struct page underneath. All the page pool internals are converted to
+> use struct netmem instead of struct page, and the page pool now exports
+> 2 APIs:
+> 
+> 1. The existing struct page API.
+> 2. The new struct netmem API.
+> 
+> Keeping the existing API is transitional; we do not want to refactor all
+> the current drivers using the page pool at once.
+> 
+> The netmem abstraction is currently a no-op. The page_pool uses
+> page_to_netmem() to convert allocated pages to netmem, and uses
+> netmem_to_page() to convert the netmem back to pages to pass to mm APIs,
+> 
+> Follow up patches to this series add non-paged netmem support to the
+> page_pool. This change is factored out on its own to limit the code
+> churn to this 1 patch, for ease of code review.
+> 
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
 
-[ Upstream commit 4207b556e62f0a8915afc5da4c5d5ad915a253a5 ]
+...
 
-The BPF helper bpf_cgroup_from_id() calls kernfs_find_and_get_node_by_id()
-which acquires kernfs_idr_lock, which is an non-raw non-IRQ-safe lock. This
-can lead to deadlocks as bpf_cgroup_from_id() can be called from any BPF
-programs including e.g. the ones that attach to functions which are holding
-the scheduler rq lock.
+> diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
 
-Consider the following BPF program:
+...
 
-  SEC("fentry/__set_cpus_allowed_ptr_locked")
-  int BPF_PROG(__set_cpus_allowed_ptr_locked, struct task_struct *p,
-	       struct affinity_context *affn_ctx, struct rq *rq, struct rq_flags *rf)
-  {
-	  struct cgroup *cgrp = bpf_cgroup_from_id(p->cgroups->dfl_cgrp->kn->id);
+> @@ -170,9 +172,10 @@ static inline void *page_pool_alloc_va(struct page_pool *pool,
+>  	struct page *page;
+>  
+>  	/* Mask off __GFP_HIGHMEM to ensure we can use page_address() */
+> -	page = page_pool_alloc(pool, &offset, size, gfp & ~__GFP_HIGHMEM);
+> +	page = netmem_to_page(
+> +		page_pool_alloc(pool, &offset, size, gfp & ~__GFP_HIGHMEM));
+>  	if (unlikely(!page))
+> -		return NULL;
+> +		return 0;
 
-	  if (cgrp) {
-		  bpf_printk("%d[%s] in %s", p->pid, p->comm, cgrp->kn->name);
-		  bpf_cgroup_release(cgrp);
-	  }
-	  return 0;
-  }
+Hi Mina,
 
-__set_cpus_allowed_ptr_locked() is called with rq lock held and the above
-BPF program calls bpf_cgroup_from_id() within leading to the following
-lockdep warning:
+This doesn't seem right, as the return type is a pointer rather than an
+integer.
 
-  =====================================================
-  WARNING: HARDIRQ-safe -> HARDIRQ-unsafe lock order detected
-  6.7.0-rc3-work-00053-g07124366a1d7-dirty #147 Not tainted
-  -----------------------------------------------------
-  repro/1620 [HC0[0]:SC0[0]:HE0:SE1] is trying to acquire:
-  ffffffff833b3688 (kernfs_idr_lock){+.+.}-{2:2}, at: kernfs_find_and_get_node_by_id+0x1e/0x70
+Flagged by Sparse.
 
-		and this task is already holding:
-  ffff888237ced698 (&rq->__lock){-.-.}-{2:2}, at: task_rq_lock+0x4e/0xf0
-  which would create a new lock dependency:
-   (&rq->__lock){-.-.}-{2:2} -> (kernfs_idr_lock){+.+.}-{2:2}
-  ...
-   Possible interrupt unsafe locking scenario:
-
-	 CPU0                    CPU1
-	 ----                    ----
-    lock(kernfs_idr_lock);
-				 local_irq_disable();
-				 lock(&rq->__lock);
-				 lock(kernfs_idr_lock);
-    <Interrupt>
-      lock(&rq->__lock);
-
-		 *** DEADLOCK ***
-  ...
-  Call Trace:
-   dump_stack_lvl+0x55/0x70
-   dump_stack+0x10/0x20
-   __lock_acquire+0x781/0x2a40
-   lock_acquire+0xbf/0x1f0
-   _raw_spin_lock+0x2f/0x40
-   kernfs_find_and_get_node_by_id+0x1e/0x70
-   cgroup_get_from_id+0x21/0x240
-   bpf_cgroup_from_id+0xe/0x20
-   bpf_prog_98652316e9337a5a___set_cpus_allowed_ptr_locked+0x96/0x11a
-   bpf_trampoline_6442545632+0x4f/0x1000
-   __set_cpus_allowed_ptr_locked+0x5/0x5a0
-   sched_setaffinity+0x1b3/0x290
-   __x64_sys_sched_setaffinity+0x4f/0x60
-   do_syscall_64+0x40/0xe0
-   entry_SYSCALL_64_after_hwframe+0x46/0x4e
-
-Let's fix it by protecting kernfs_node and kernfs_root with RCU and making
-kernfs_find_and_get_node_by_id() acquire rcu_read_lock() instead of
-kernfs_idr_lock.
-
-This adds an rcu_head to kernfs_node making it larger by 16 bytes on 64bit.
-Combined with the preceding rearrange patch, the net increase is 8 bytes.
-
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: Andrea Righi <andrea.righi@canonical.com>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Link: https://lore.kernel.org/r/20240109214828.252092-4-tj@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/kernfs/dir.c             | 31 ++++++++++++++++++++-----------
- fs/kernfs/kernfs-internal.h |  2 ++
- include/linux/kernfs.h      |  2 ++
- 3 files changed, 24 insertions(+), 11 deletions(-)
-
-diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
-index 62d39ecf0a466..2405aeb39b9a2 100644
---- a/fs/kernfs/dir.c
-+++ b/fs/kernfs/dir.c
-@@ -529,6 +529,20 @@ void kernfs_get(struct kernfs_node *kn)
- }
- EXPORT_SYMBOL_GPL(kernfs_get);
- 
-+static void kernfs_free_rcu(struct rcu_head *rcu)
-+{
-+	struct kernfs_node *kn = container_of(rcu, struct kernfs_node, rcu);
-+
-+	kfree_const(kn->name);
-+
-+	if (kn->iattr) {
-+		simple_xattrs_free(&kn->iattr->xattrs, NULL);
-+		kmem_cache_free(kernfs_iattrs_cache, kn->iattr);
-+	}
-+
-+	kmem_cache_free(kernfs_node_cache, kn);
-+}
-+
- /**
-  * kernfs_put - put a reference count on a kernfs_node
-  * @kn: the target kernfs_node
-@@ -557,16 +571,11 @@ void kernfs_put(struct kernfs_node *kn)
- 	if (kernfs_type(kn) == KERNFS_LINK)
- 		kernfs_put(kn->symlink.target_kn);
- 
--	kfree_const(kn->name);
--
--	if (kn->iattr) {
--		simple_xattrs_free(&kn->iattr->xattrs, NULL);
--		kmem_cache_free(kernfs_iattrs_cache, kn->iattr);
--	}
- 	spin_lock(&kernfs_idr_lock);
- 	idr_remove(&root->ino_idr, (u32)kernfs_ino(kn));
- 	spin_unlock(&kernfs_idr_lock);
--	kmem_cache_free(kernfs_node_cache, kn);
-+
-+	call_rcu(&kn->rcu, kernfs_free_rcu);
- 
- 	kn = parent;
- 	if (kn) {
-@@ -575,7 +584,7 @@ void kernfs_put(struct kernfs_node *kn)
- 	} else {
- 		/* just released the root kn, free @root too */
- 		idr_destroy(&root->ino_idr);
--		kfree(root);
-+		kfree_rcu(root, rcu);
- 	}
- }
- EXPORT_SYMBOL_GPL(kernfs_put);
-@@ -715,7 +724,7 @@ struct kernfs_node *kernfs_find_and_get_node_by_id(struct kernfs_root *root,
- 	ino_t ino = kernfs_id_ino(id);
- 	u32 gen = kernfs_id_gen(id);
- 
--	spin_lock(&kernfs_idr_lock);
-+	rcu_read_lock();
- 
- 	kn = idr_find(&root->ino_idr, (u32)ino);
- 	if (!kn)
-@@ -739,10 +748,10 @@ struct kernfs_node *kernfs_find_and_get_node_by_id(struct kernfs_root *root,
- 	if (unlikely(!__kernfs_active(kn) || !atomic_inc_not_zero(&kn->count)))
- 		goto err_unlock;
- 
--	spin_unlock(&kernfs_idr_lock);
-+	rcu_read_unlock();
- 	return kn;
- err_unlock:
--	spin_unlock(&kernfs_idr_lock);
-+	rcu_read_unlock();
- 	return NULL;
- }
- 
-diff --git a/fs/kernfs/kernfs-internal.h b/fs/kernfs/kernfs-internal.h
-index a9b854cdfdb5f..210dac7e9ee25 100644
---- a/fs/kernfs/kernfs-internal.h
-+++ b/fs/kernfs/kernfs-internal.h
-@@ -49,6 +49,8 @@ struct kernfs_root {
- 	struct rw_semaphore	kernfs_rwsem;
- 	struct rw_semaphore	kernfs_iattr_rwsem;
- 	struct rw_semaphore	kernfs_supers_rwsem;
-+
-+	struct rcu_head		rcu;
- };
- 
- /* +1 to avoid triggering overflow warning when negating it */
-diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
-index 2a36f3218b510..5a952d00ea159 100644
---- a/include/linux/kernfs.h
-+++ b/include/linux/kernfs.h
-@@ -223,6 +223,8 @@ struct kernfs_node {
- 	unsigned short		flags;
- 	umode_t			mode;
- 	struct kernfs_iattrs	*iattr;
-+
-+	struct rcu_head		rcu;
- };
- 
- /*
--- 
-2.43.0
-
+>  
+>  	return page_address(page) + offset;
+>  }
