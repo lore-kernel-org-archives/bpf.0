@@ -1,130 +1,143 @@
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 957AE143869;
-	Wed,  3 Apr 2024 15:50:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B0714D285;
+	Wed,  3 Apr 2024 16:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712159459; cv=none; b=Ek5lLN28xKZzXeIKqaFaA8MA87PxQ0HdVeDdc+nM0lnQJ7zZlDJIUVQjDsb1VIxw4DavW8D0nF05V8vPo8SpqQO9+hIUiOT0SsV5CbfAImeff3vv3FLsmdsgTe4VLjE3qcFnKeq7oU3kh6HVnw+x15WWsX7QnQ2ORlN2jGPMBsc=
+	t=1712160500; cv=none; b=LJ63jxwd6v7b91oK5e2beD6hPnhpkY5tkQu46GclVuukL0epkiIFmKvTylzCxdbdcwuCly3LAXR8DVY5RAbaFrIS4kU/NeMHO8DlnBwFAJed4A2vrNhMDMn0SpygDkkZUZPMl26JPnKEGszXFvN/Id13bPgTwyj3v+UQgbK23z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712159459; c=relaxed/simple;
-	bh=3XDlgrsSdW7Oxyc1K1LSiJ6gv8+2nsZ5w1BYvAORxhg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tQGuNsTYLs6UaFvG6wmhCCG86nGr90nWg5iD6YXHe1/2tzG02nBS5t3QjhEG9XLgzx4h76s4FyrN7MqwaExD6Z0v4cKnFelkiT1VkwuQc0Ltx/MihHPnGIxoZ+jDAbFKyTphcvKZ9WLvtzyfR+zpzBpLzFQqr8cSMAVicAjVzto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4V8q3B0zpDz4f3jJ5;
-	Wed,  3 Apr 2024 23:50:46 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id A5B281A0568;
-	Wed,  3 Apr 2024 23:50:52 +0800 (CST)
-Received: from [10.82.3.99] (unknown [10.82.3.99])
-	by APP1 (Coremail) with SMTP id cCh0CgDnAQvaeg1mi5PLIw--.46271S2;
-	Wed, 03 Apr 2024 23:50:52 +0800 (CST)
-Message-ID: <9bffde6f-ca7f-40d4-9b27-4e53ed274751@huaweicloud.com>
-Date: Wed, 3 Apr 2024 23:50:50 +0800
+	s=arc-20240116; t=1712160500; c=relaxed/simple;
+	bh=IqjH8ZsjjXcHWdkBguAM3YqmROLjZcQ6NsU/4jQD6gI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UO7imUCjOZlmWg96t14mzS+4VduDLWLA4YRS5EVmhSrkdcLiPW1Sh1ZaWBvZVdaCIE7mWXkF2LkzoMHDiwhP7vrQaeeBkUJR0qqoOGUYgSMpWSwsotMSRq3p3G8RdE+a46X9VG9n1XOdrS+hSOhFVxklVOR6gw7+lmUwKDVuGmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U9brMdbB; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U9brMdbB"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1e0878b76f3so9670575ad.0;
+        Wed, 03 Apr 2024 09:08:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712160498; x=1712765298; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pTovBIMigzMxozJjoOLniaoDgNINuOLPvVuUktpfkdo=;
+        b=U9brMdbBtIpFXuAaUAzc+xfDhWzerujWt1V6vRfsReSSk1ANA98VfSShwTOVft7ecw
+         ghC2B7pvRnBGwaBra4zHDiu5LI3SOExtHvrZGAF9ZQmflcX/J2YJ8PgYfI4vTP6C/O4O
+         f/fYnHQqcHh22VUoFcLPHDkavJE5BOAJ5el37NbvXeSJb16GWnp1s+XdwObb+hcR0Qo5
+         3s+gosQSM9Ey33hY+0qoo/X5osJRU3SqLBlRTV/Uj2Z/rNQPxf7tVkL3Lc5nzH1k1E+a
+         0zApEGli8c/MpjFn9IMTxAYqtJbQMs1JjGw9Dnqle1eh1j03OTaHFX/jefMxOJtSrPIB
+         NI4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712160498; x=1712765298;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pTovBIMigzMxozJjoOLniaoDgNINuOLPvVuUktpfkdo=;
+        b=ovAUfql9dmP95LyTTOI3Ghd+/RfhisAtKsw6irWO4wts7Etyra4bIl+9flwd18m1XH
+         kFDW2GGkwBjJ0ctWfLZvotfm9h4vJQsZivDd4hEwrTQEEAQ2ZwQE0Zi25V+5WRyqXy48
+         P9gQ3TfCQgppS3cNkMdKmqxxyXMYzzFxzvQLdpOFG8/XvB3Nzt5iTyDTMcCafM3eKH+C
+         OYH57cfggzqNttKhbuasUw2Vrusil2e5/IyP02QyeZ0pzGVF3cq0GSUYGfpwOdgGaJKn
+         a56x/KSX8UK7gEd1dcZDygXx/+j7LDM1N74/2D5coACsNqpPjlqJUBDV0PkEAVCHgmSJ
+         jmUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVj98e6jIW8VjsTT8yZXz0mha2KK7ejkqq6s6KyvNf4QDI6ykdeiwBIo28NaSA2Pg/QjonI6QFwRDFhLRCVbBoUh4zlaxksHXFPxb5DNHj3TpNKOWmrgwg34Nc1CDHS3y46
+X-Gm-Message-State: AOJu0YwapkgQ9yx2qIcpFYxoxX5Gc2tplHzLnel839eiseMDQJpV91oc
+	/Ur2ICrbgRc/ioxoGjCs9QnwHMrHLordqS4QpE4PuV8EQKGdF6ByBwzlAICrpRpvDvnfYg9UYdl
+	gVtYa7gOFHmP8MqE/z4gkgejLnifFVTDp
+X-Google-Smtp-Source: AGHT+IHuSUMdO6pjLJbvSTmow/ClVgPEQqkEXbtL28DUnlywZ0RXRnPF2GaO1+aK8oJNbPCtgglv5tnLFgZeYisBReM=
+X-Received: by 2002:a17:903:32c8:b0:1e0:b628:a752 with SMTP id
+ i8-20020a17090332c800b001e0b628a752mr4121467plr.7.1712160497829; Wed, 03 Apr
+ 2024 09:08:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Add testcase where 7th
- argment is struct
-Content-Language: en-US
-To: Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
- linux-riscv@lists.infradead.org, netdev@vger.kernel.org
-Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Pu Lehui <pulehui@huawei.com>
-References: <20240403072818.1462811-1-pulehui@huaweicloud.com>
- <20240403072818.1462811-3-pulehui@huaweicloud.com>
- <0f459fc1-1445-6e83-ace4-b2c42abfe884@iogearbox.net>
-From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <0f459fc1-1445-6e83-ace4-b2c42abfe884@iogearbox.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgDnAQvaeg1mi5PLIw--.46271S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXFy8urW5Aw4furW8Cw13CFg_yoW5AF4fpF
-	18Xw15Kry8Jr4fAr17JrWUXFWFvr4kXw1UJry7JF15Zr1DGr10qF1Igr4j9F15Jr4kGr1a
-	yw12qry5uryUXFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-	xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv
-	6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+References: <20240331041830.2806741-1-andrii@kernel.org> <Zgp+lYLOZU3OkO7w@gmail.com>
+ <CAEf4BzZEuDRt=dLN79uJ0EwQcxuxCp8LZx1ayNBsw82BytPTqg@mail.gmail.com> <Zg0N87sfBdB5Cydk@gmail.com>
+In-Reply-To: <Zg0N87sfBdB5Cydk@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 3 Apr 2024 09:08:05 -0700
+Message-ID: <CAEf4BzbGvhjwGCxQUt7fHrxdJbk00K6GnE_AjBEffDAak=7BaA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] perf/x86/amd: add LBR capture support outside of
+ hardware events
+To: Ingo Molnar <mingo@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, x86@kernel.org, peterz@infradead.org, 
+	mingo@redhat.com, tglx@linutronix.de, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, jolsa@kernel.org, song@kernel.org, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Apr 3, 2024 at 1:06=E2=80=AFAM Ingo Molnar <mingo@kernel.org> wrote=
+:
+>
+>
+> * Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+>
+> > On Mon, Apr 1, 2024 at 2:30=E2=80=AFAM Ingo Molnar <mingo@kernel.org> w=
+rote:
+> > >
+> > >
+> > > * Andrii Nakryiko <andrii@kernel.org> wrote:
+> > >
+> > > > Add AMD-specific implementation of perf_snapshot_branch_stack stati=
+c call that
+> > > > allows LBR capture from arbitrary points in the kernel. This is uti=
+lized by
+> > > > BPF programs. See patch #3 for all the details.
+> > > >
+> > > > Patches #1 and #2 are preparatory steps to ensure LBR freezing is c=
+ompletely
+> > > > inlined and have no branches, to minimize LBR snapshot contaminatio=
+n.
+> > > >
+> > > > Patch #4 removes an artificial restriction on perf events with LBR =
+enabled.
+> > > >
+> > > > Andrii Nakryiko (4):
+> > > >   perf/x86/amd: ensure amd_pmu_core_disable_all() is always inlined
+> > > >   perf/x86/amd: avoid taking branches before disabling LBR
+> > > >   perf/x86/amd: support capturing LBR from software events
+> > > >   perf/x86/amd: don't reject non-sampling events with configured LB=
+R
+> > > >
+> > > >  arch/x86/events/amd/core.c   | 37 ++++++++++++++++++++++++++++++++=
++++-
+> > > >  arch/x86/events/amd/lbr.c    | 11 +----------
+> > > >  arch/x86/events/perf_event.h | 11 +++++++++++
+> > > >  3 files changed, 48 insertions(+), 11 deletions(-)
+> > >
+> > > So there's a new conflict with patch #2, probably due to interaction
+> > > with this recent fix that is now upstream:
+> > >
+> > >    598c2fafc06f ("perf/x86/amd/lbr: Use freeze based on availability"=
+)
+> > >
+> > > I don't think it should change the logic of the snapshot feature
+> > > materially, X86_FEATURE_AMD_LBR_PMC_FREEZE should be orthogonal to it=
+,
+> > > as the LBR snapshot isn't taken from a PMI.
+> > >
+> >
+> > Yep, seems like there was a parallel change to related code in
+> > perf/urgent branch. And yes, you are right that it's orthogonal and
+> > doesn't regress anything as far as branching and whatnot (just
+> > retested everything on real hardware). So I've rebased my patches on
+> > top of perf/urgent, will send v5 momentarily.
+>
+> Thank you - it's now all in tip:perf/core and lined up for v6.10.
 
+Great, thank you!
 
-On 2024/4/3 22:40, Daniel Borkmann wrote:
-> On 4/3/24 9:28 AM, Pu Lehui wrote:
->> From: Pu Lehui <pulehui@huawei.com>
->>
->> Add testcase where 7th argument is struct for architectures with 8
->> argument registers, and increase the complexity of the struct.
->>
->> Signed-off-by: Pu Lehui <pulehui@huawei.com>
->> Acked-by: Björn Töpel <bjorn@kernel.org>
->> Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
->> ---
->>   tools/testing/selftests/bpf/DENYLIST.aarch64  |  1 +
->>   .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 19 ++++++++++
->>   .../selftests/bpf/prog_tests/tracing_struct.c | 13 +++++++
->>   .../selftests/bpf/progs/tracing_struct.c      | 35 +++++++++++++++++++
->>   4 files changed, 68 insertions(+)
->>
->> diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 
->> b/tools/testing/selftests/bpf/DENYLIST.aarch64
->> index d8ade15e2789..639ee3f5bc74 100644
->> --- a/tools/testing/selftests/bpf/DENYLIST.aarch64
->> +++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
->> @@ -6,6 +6,7 @@ kprobe_multi_test                                # 
->> needs CONFIG_FPROBE
->>   module_attach                                    # prog 
->> 'kprobe_multi': failed to auto-attach: -95
->>   fentry_test/fentry_many_args                     # 
->> fentry_many_args:FAIL:fentry_many_args_attach unexpected error: -524
->>   fexit_test/fexit_many_args                       # 
->> fexit_many_args:FAIL:fexit_many_args_attach unexpected error: -524
->> +tracing_struct                                   # 
->> test_fentry:FAIL:tracing_struct__attach unexpected error: -524
-> 
-> Do we need to blacklist the whole test given it had coverage on arm64
-> before.. perhaps this test here could be done as a new subtest and only
-> that one is listed for arm64?
-
-Yeah, I thought so at first, just like fexit_many_args of fentry/fexit, 
-but I found that the things struct_tracing does are all in the same 
-series, but the number or type of parameters are different, and the new 
-use case I added is the same in this way. And I found that the execution 
-logic of stract_tracing is relatively simple and clear, triggering all 
-hook points, executing all bpf programs, and asserting all parameters.
-Shall we need to slice them up?
-
-> 
->>   fill_link_info/kprobe_multi_link_info            # 
->> bpf_program__attach_kprobe_multi_opts unexpected error: -95
->>   fill_link_info/kretprobe_multi_link_info         # 
->> bpf_program__attach_kprobe_multi_opts unexpected error: -95
->>   fill_link_info/kprobe_multi_invalid_ubuff        # 
->> bpf_program__attach_kprobe_multi_opts unexpected error: -95
-> 
+>
+> > Sorry for an extra round on this.
+>
+> Not your doing really - just crossing patches.
+>
 > Thanks,
-> Daniel
-
+>
+>         Ingo
