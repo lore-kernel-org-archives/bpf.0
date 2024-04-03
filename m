@@ -1,117 +1,164 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424F3153BF0
-	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 18:56:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984691A5AC
+	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 18:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712170561; cv=none; b=F4gjz/9CIWfHNRy94bTRh16YNL16UIYkYObm+DO+/2ZmESQ97zqAumyD8wtUOOwrNTVgd1KqU/4ukUAaUNP6TfZvLkmONdU5tyN8WJlZPywIoteXZlStRoDgI+I3VDLsv6YFaFbNvUqcjPYFHm+iy+y6K6vhdncsdG2585SuUnM=
+	t=1712170744; cv=none; b=WJQWFPS+J3DpT1KMlOjKS1WumdBsxcFxwwLGjRgR9vlFK9OJfEj3BwVIcbGiTwjl1W0bf0EZK2/fEQoeApxvM1VL17yKq/yZ0mMbF3seZKyatSNygxm9P0pcZR7VlzmvLd5QQqA/jDXoHB43p3l06rGhzEpSuTCEZh76EENNTz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712170561; c=relaxed/simple;
-	bh=LNDmr1GQkcFH3eIArYUYce5JFSVbuRjTstSff0H6EHo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=edzOHn8uZWCcVGo96VwaCvFZEtwo/nlXdoZw/dfPAPuMTL+gW4+xubMp3WIbkWEt669KWxADiDlVX4W/1QNzhUfzWi3nMP+xXoCl5S3TOH4j7OXWD3NC9+1C0eCOb7YGAT37h4kR79drcsknmeixfwI5ZgZ4r8cLor9ISPiReJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WOMOLnT6; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712170744; c=relaxed/simple;
+	bh=W8vcQ4rr4fbPI/CCdvDoWGusSRHgAYihH+9oE/Urgss=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Gq65SS6ohOMP+mCxQHSxXlWGz3MlgW3AuIWNtiokr3OzQgjxHaYYs/djtPhHALwE9qDVk0DLewG9T6jInzSX2A+xr/PcGtlyw1T6ahzmc2/37o60WHv7Tb0o+F4GcdHgjylKOillA5/YMk+QMDSlyTS6A3qujfiB0Z7eLHgM4tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=polarsignals.com; spf=pass smtp.mailfrom=polarsignals.com; dkim=pass (2048-bit key) header.d=polarsignals.com header.i=@polarsignals.com header.b=JhoUiuhR; arc=none smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=polarsignals.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=polarsignals.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WOMOLnT6"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1e27c303573so891285ad.3
-        for <bpf@vger.kernel.org>; Wed, 03 Apr 2024 11:56:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=polarsignals.com header.i=@polarsignals.com header.b="JhoUiuhR"
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-432f05352f4so977431cf.3
+        for <bpf@vger.kernel.org>; Wed, 03 Apr 2024 11:59:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712170559; x=1712775359; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=miekgjP8tpUquwxBmLd06ucd5y9D2bGhtiuXTe3lFAk=;
-        b=WOMOLnT6RiHDQBY5vl0J63ScEliVP2eHdq7OUMGgqyEc94BKaCrPj3WFzLFBxUpcOW
-         NAlbAotHnBc/80atoqOGqjP7e00Is5XF6lNL/u4Lo9ZN60PbWCvm7m2m8w4Zr3aC9Z8J
-         M1/VxezipOdq1yfhkG3wVPqPSAK7tT2o2p6E52+5iTfEupQcXrogmeTrpBTq6TX72xIk
-         pp0QW7u1raR/zJQooO5JksEw9M3lm+QHxgsIHgRBbyTQjQbEx+HMKYsx46x04rDy4dVL
-         rOGuECfLnHVVRbnH1Ay9JPeV5n08/OZGLUDZa8YycYZ6W4A7KdX8CPQvGPNE0nStT2j2
-         H5gg==
+        d=polarsignals.com; s=google; t=1712170741; x=1712775541; darn=vger.kernel.org;
+        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=j8qtDl2R1iLfV/9xEZC4a2sC5uPK9iEhVvW4wgD5V3k=;
+        b=JhoUiuhRLxojSgVRXiwgcDBT7Gtq3Cn/HCQEBjGK1Oz42LQrOKPXg7Rcg50tgcvA37
+         wqutfhHfzPx9MSQSimEhLKHLQTjURqVSBKMj5vV/yRTNqDTcq4aU6XVOsc/HQYSQXMWA
+         zMlfq/lRj9iNZwQGmoFvGWU1xRnB49MbJTwvHfF+4ZCaTxyZWi22Wnfz6y+R1ABxu6vn
+         Di/wDE/eq9ZMq7iTFXzmCC2I+xRR35qFDHbCn7imJbe63PxNks8UJaD/fNPu5Ar4aGV8
+         +3kH3pcfSi6kW7j06+kQnNU+FuSBCBbQ73GWauLsv2xHsblzYVbdUsegG2cBrFM8k6F6
+         5Row==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712170559; x=1712775359;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=miekgjP8tpUquwxBmLd06ucd5y9D2bGhtiuXTe3lFAk=;
-        b=uTrE7OVotyPCsBcXScszdHNTLjFA0a5fHoopL1Kb7zC+WKuWCFeVp4vwb4qP/QegLa
-         RnuBxMpRugwSpNeZHA+AWkxNmV5MhTKSie/IPjvaPljpkeAuQVBqEe7Q9SmGyGwDSzGl
-         BCADy6/ArmrpGKjj+m9DDSeGfGTtTQBPCPYW0ZEQifR5DZhGfKUgjCJxk+r9dxmIUnaW
-         wMjPKxUNAfeQufUzyFw/j/G3a6RryiKPvAdT0QlrsIDjFywJ6H5Zp39H3nAV4j8xUXc7
-         B+SpwkPdY/eHyB4O7J2eLWrPZwWLRScwe+G4OAscz1daU59KkFl2jK0l+XnE6sAkCJ5I
-         w1kA==
-X-Gm-Message-State: AOJu0Yw8vxHjcRjRyBM8O1mPXNvzSx4vSmPOKuRp0DttrZknY7aBYY3g
-	7+BwrOspdsGM5x6LhQQyB0XHO9zPgh5JyFRtTGqrJGA8Q7hYAr4Hkw6TvZd/1fAyFpYabUX6pzx
-	nMUjms2Wfr2ji2IAp9M54sPCVRPf7p3WQ
-X-Google-Smtp-Source: AGHT+IF59ENtHFS1oeL27nPfp707qqGtYbhEb9Sjh/AXKeHmY82bOLtPToWPfR4vJVsYyppd4GVqniKNG2PCWeewXR0=
-X-Received: by 2002:a17:90b:364c:b0:2a0:4fe5:e4f3 with SMTP id
- nh12-20020a17090b364c00b002a04fe5e4f3mr408657pjb.2.1712170559477; Wed, 03 Apr
- 2024 11:55:59 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712170741; x=1712775541;
+        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j8qtDl2R1iLfV/9xEZC4a2sC5uPK9iEhVvW4wgD5V3k=;
+        b=jF0AjUfxaJhhZPHWJyx5JJ2JO+ZWjQlRQ+4Uk+3jzgYJWTqiR73ZI7Q9coU+qxuDOT
+         63LZhuQt2PEgcza1+U+UtgZaL+HB5ndo/le/TPhUiAZAbyyw7cydbX9E1uJp5TTGQeQS
+         +thVOmlkaPBhrYq6f0xVwzR4tUgPkMyBEmU8wf2BySJwQiVsQWGQko2ceC5RuxF/jw2u
+         AWLcOLP6zE1hHZVHWWis8uI72Ok79FpD5tXkJXdxjiwwFfSlM9xynlRgfvT1/XRoUIWJ
+         aP5xUKMRb5EilYyoIxLceKVGLEg3aBZ3h4xM6N9TtAr6cGuSc/6OhI9eNWBBaAt5N3no
+         3UjA==
+X-Gm-Message-State: AOJu0Yx3XopBT5O06nWNpVKM4VhpViaLe3H2TSocqJDb+qvpdzweDElk
+	ngyfwb+R1pWqbKJCr53ks1u283/xww9s2ADNrvWDgpzifJ6RoW6NBWZ25zE6/FUrvQltCdh2Eb5
+	CZec=
+X-Google-Smtp-Source: AGHT+IEfeWsVCqPuplH+C50rFHoFic7RW7cd1hWy+RSXho04niJmt67HqFe1+kBGJ9nKkq7TN7ENDw==
+X-Received: by 2002:ac8:7d8d:0:b0:431:5fad:ddbd with SMTP id c13-20020ac87d8d000000b004315fadddbdmr294797qtd.29.1712170741407;
+        Wed, 03 Apr 2024 11:59:01 -0700 (PDT)
+Received: from localhost (pool-173-56-0-190.nycmny.fios.verizon.net. [173.56.0.190])
+        by smtp.gmail.com with ESMTPSA id bq20-20020a05622a1c1400b004344cae29absm39960qtb.89.2024.04.03.11.59.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Apr 2024 11:59:01 -0700 (PDT)
+From: "Brennan Vincent" <brennan.vincent@polarsignals.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Andrii
+ Nakryiko <andrii@kernel.org>
+Subject: 10x regression in processed instructions after recent verifier change
+Date: Wed, 03 Apr 2024 14:59:00 -0400
+Message-ID: <874jci5l3f.fsf@taipei.mail-host-address-is-not-set>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAK3+h2zKF-RY-Hr0SCDNttktAhdjOzgP1jLgbH6wD7+ssL4rtA@mail.gmail.com>
- <CAEf4BzbjwTVUZ154ZqEVSQe-++a=B=SD5L7SRGPGH=N58tLJKA@mail.gmail.com> <CAK3+h2zAF-N9s=PO3eW4GJ86Ov14rBOAZFEDqYbSeFBnss_PyA@mail.gmail.com>
-In-Reply-To: <CAK3+h2zAF-N9s=PO3eW4GJ86Ov14rBOAZFEDqYbSeFBnss_PyA@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 3 Apr 2024 11:55:47 -0700
-Message-ID: <CAEf4BzbKz2xCK6jqVnzA4uWnZKx+UteNPcZ3zFtyYe885stnLA@mail.gmail.com>
-Subject: Re: [Question]: How to disable modules BTF independently?
-To: Vincent Li <vincent.mc.li@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Wed, Apr 3, 2024 at 11:34=E2=80=AFAM Vincent Li <vincent.mc.li@gmail.com=
-> wrote:
->
-> On Wed, Apr 3, 2024 at 10:56=E2=80=AFAM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Wed, Apr 3, 2024 at 10:06=E2=80=AFAM Vincent Li <vincent.mc.li@gmail=
-.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > Once I enabled the open source firewall IPfire kernel 6.6.15
-> > > DEBUG_INFO_BTF, the IPfire ISO image is increased from about 450MB to
-> > > about 1.5GB, I suspect because IPfire has many driver modules to
-> >
-> > BTF can't be that big. I think you just get all the DWARF for modules
-> > and vmlinux itself. DWARF is necessary to generate BTF during the
-> > build time, but it can be stripped out afterwards, leaving just (much
-> > smaller) BTF intact.
->
-> ok good to hear that :).  I am new to this, how to strip
-> kernel/modules DWARF after kernel/modules being built?
->
-> >
-> > > support as many hardware as possible, pahole generated BTF for all
-> > > these modules, that could increase the size of the ISO image, so I
-> > > wonder if I could disable modules BTF only but keep vmlinux BTF, or
-> > > maybe selectively enable BTF for some modules, but not other modules?
-> > >
-> > > I found this discussion [0] making DEBUG_INFO_BTF_MODULES selectable
-> > > independently. I am still not sure how to disable modules BTF, I trie=
-d
-> > > make menuconfig, still not obvious to me how to disable
-> > > DEBUG_INFO_BTF_MODULES
-> >
-> > I think CONFIG_DEBUG_INFO_BTF_MODULES=3Dn should work fine, but see
-> > above, I don't think the BTF is a problem here, it's not stripping out
-> > DWARF.
+Hello,
 
-strip -g ? I don't know how this is normally done in Linux distros.
+I am working on Parca, a continuous CPU time profiler which works by
+doing DWARF-based stack unwinding in an eBPF program. In 6.8 series
+kernels, our unwinder can no longer be loaded, as it exceeds the
+verifier's limit of 1M instructions processed.
 
-> >
-> > >
-> > > [0] https://lore.kernel.org/bpf/CAKH8qBu0ptKbMVvoMpgN2tyk84ZGvwuCJLje=
-sqw-_8QtSRLqpw@mail.gmail.com/T/#m73cee268387358ec645b665951feb931b294ec2d
-> > >
-> > > Thanks!
-> > >
+I was eventually able to get it working, so this is not exactly a
+support request, but rather a report of an issue that might affect other
+people.
+
+The issue is 100% reproducible and bisects to
+67420501e8681ae18f9f0ea0a69cd2f432100e70. Hacking the kernel a bit to
+increase the instructions processed limit, I found that it successfully
+verifies after ~3M instructions, whereas previously it took ~250k, so
+more than a 10x regression.
+
+In case it matters, I'm on arm64.
+
+I am not an expert on the internal details of the verifier, but I have a
+vague theory on what can be causing this behavior. Our unwinder has a
+few places where it needs to do binary search on an array, which look
+similar to this:
+
+#define MAX_UNWIND_INFO_BINARY_SEARCH_DEPTH 19
+#define MAX_UNWIND_TABLE_SIZE 250 * 1000
+
+static u64 find_offset_for_pc(stack_unwind_table_t *table, u64 pc, u64 left, u64 right) {
+    u64 found = BINARY_SEARCH_DEFAULT;
+
+    for (int i = 0; i < MAX_UNWIND_INFO_BINARY_SEARCH_DEPTH; i++) {
+        if (left >= right) {
+            LOG("\t.done");
+            return found;
+        }
+
+        u32 mid = (left + right) / 2;
+
+        // Appease the verifier.
+        if (mid < 0 || mid >= MAX_UNWIND_TABLE_SIZE) {
+            bump_unwind_error_should_never_happen();
+            return BINARY_SEARCH_SHOULD_NEVER_HAPPEN;
+        }
+
+        if (table->rows[mid].pc <= pc) {
+            found = mid;
+            left = mid + 1;
+        } else {
+            right = mid;
+        }
+    }
+    return BINARY_SEARCH_EXHAUSTED_ITERATIONS;
+}
+
+(For more examples see
+https://github.com/parca-dev/parca-agent/blob/main/bpf/unwinders/native.bpf.c
+.)
+
+Note that as I said, I'm not an expert on the verifier, so my theory
+could be totally wrong. Please assume I put qualifiers like "I
+think...", "I suspect...", etc. in the proper places in what
+follows.
+
+The commit in question made the verifier track the bounds of variables
+more precisely, which might allow it to verify more programs. This,
+however, has a downside which is that it causes an explosion in the
+state space. In previous versions of the kernel, we could just verify
+this snippet once because the verifier did not precisely track the
+bounds of `mid`. In the new version, we have different bounds for `mid`
+in the different branches of the main `if` statement, and the set of
+different bounds multiplies in size by 2 each time through the loop,
+causing this huge explosion.
+
+Now, if I intentionally confuse the verifier and prevent it from knowing
+the bounds of `mid`, e.g.:
+
+static u32 __attribute__((optnone)) scramble(u32 val) {
+        return val ^ 0xFFFFFFFF;
+}
+
+then, in the main binary search loop:
+
+        u32 mid = (left + right) / 2;
+        mid = scramble(scramble(mid));
+
+then the program verifies fine, as it did before the commit in question.
+
+I am not sure what, if anything, should be done about this in the kernel,
+as it seems there's a fundamental tradeoff between precision of the
+verifier and performance in terms of instructions processed.
+
+-- 
+Brennan (he/him)
+Staff Software Engineer | Polar Signals Inc.
+E: brennan.vincent@polarsignals.com
+W: umanwizard.com
+TZ: America/New_York
