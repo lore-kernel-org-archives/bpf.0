@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D7951DFCE;
-	Wed,  3 Apr 2024 13:51:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 069F1146D65;
+	Wed,  3 Apr 2024 13:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712152297; cv=none; b=W28tdk9X7Yv6pGHNMFa1W5PQeKu7zZdEGXcT+PGv4JbRvRYWOfEoFQx9MiG+wUEjGsHHl+HU+fcrS8K1yCDaq1JJjKxs/np0CD4lHuLdUsO278s4oYHV09gjS1hEYGGNe7lEopaUsqX0wwj3Kr2qC3CZXMXp//gytwGsVhPKIgU=
+	t=1712152364; cv=none; b=pTu402+XKkUd8fkiystqX0vQqDKsw0PrwncwpTGCVQHNyrFMpDH/VOzovtsTBs7vjFcP47Yh5Swfsiik7AD/4PRrnqe4I4s/UnZXgHPt9QY5VUSnaXMVOBLXOxDQiR33Pc7eCu/yxU8DTLrhRDsMZGs1wtXLpCeret+cyhF4gfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712152297; c=relaxed/simple;
-	bh=adB+gCRzpwfKmKZt8hDBaLfbB7JeLd5QVEHPOWq6fE8=;
+	s=arc-20240116; t=1712152364; c=relaxed/simple;
+	bh=mWBQPwG/E/872K2TDojgKs320pnEhF3QCpFeen/aKYk=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ArGIKCHcyqk5Bi40dxOReP/5gbv4Anh/ZmWGbVd+KvFRdhWlQ/Py7WHU7gdqHoBOz6DYo4mNPNwyjHkUWq4jNUtoIfdbqtrDHAjsID0DqbN3S6kuiJdGdldCoHzHmO+4/wqtjAOjiWvTMxXUojMvz6ILTgc1bRBFXodukXJrPSk=
+	 MIME-Version:Content-Type; b=ck8WduJtEWlJLwLO63PpNnry0OHTsklr7OOKP/6OgJILoshzjXjkMA36XLErO64nYp5u8soFtMVGVz4JkSTKduAHOvFqM+DR/v5PqjbFt48zM8pqy080HUJvtBFNdt5uDRp/2f7pWr6XM53iiUbWMudQ+LwU0Mh+/mWQZzMqu1s=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC838C433C7;
-	Wed,  3 Apr 2024 13:51:35 +0000 (UTC)
-Date: Wed, 3 Apr 2024 09:53:55 -0400
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9C85C433C7;
+	Wed,  3 Apr 2024 13:52:42 +0000 (UTC)
+Date: Wed, 3 Apr 2024 09:55:02 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Andrii Nakryiko
@@ -23,8 +23,8 @@ Cc: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Andrii Nakryiko
  <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>
 Subject: Re: [PATCH] ftrace: make extra rcu_is_watching() validation check
  optional
-Message-ID: <20240403095355.1a0e53dc@gandalf.local.home>
-In-Reply-To: <CAEf4BzahMFsdN8QvW6XiUk+3MzvLUjudXO5=qfhKBYfDvEgy5w@mail.gmail.com>
+Message-ID: <20240403095502.664e5ef9@gandalf.local.home>
+In-Reply-To: <CAEf4BzauQ2WKMjZdc9s0rBWa01BYbgwHN6aNDXQSHYia47pQ-w@mail.gmail.com>
 References: <20240322160323.2463329-1-andrii@kernel.org>
 	<20240325113848.32a70948d1cdb0fa76225690@kernel.org>
 	<20240325181338.39376089@gandalf.local.home>
@@ -38,6 +38,7 @@ References: <20240322160323.2463329-1-andrii@kernel.org>
 	<20240403094048.3a443fbeeed551f11c1970d8@kernel.org>
 	<20240402205459.297c4206@gandalf.local.home>
 	<CAEf4BzahMFsdN8QvW6XiUk+3MzvLUjudXO5=qfhKBYfDvEgy5w@mail.gmail.com>
+	<CAEf4BzauQ2WKMjZdc9s0rBWa01BYbgwHN6aNDXQSHYia47pQ-w@mail.gmail.com>
 X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -48,18 +49,27 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 2 Apr 2024 21:00:19 -0700
+On Tue, 2 Apr 2024 22:21:00 -0700
 Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 
-> I just noticed another rcu_is_watching() call, in rethook_try_get(),
-> which seems to be a similar and complementary validation check to the
-> one we are putting under CONFIG_FTRACE_VALIDATE_RCU_IS_WATCHING option
-> in this patch. It feels like both of them should be controlled by the
-> same settings. WDYT? Can I add CONFIG_FTRACE_VALIDATE_RCU_IS_WATCHING
-> guard around rcu_is_watching() check in rethook_try_get() as well?
+> > I just checked our fleet-wide production data for the last 24 hours.
+> > Within the kprobe/kretprobe code path (ftrace_trampoline and
+> > everything called from it), rcu_is_watching (both calls, see below)
+> > cause 0.484% CPU cycles usage, which isn't nothing. So definitely we'd
+> > prefer to be able to avoid that in production use cases.
+> >  
+> 
+> I just ran synthetic microbenchmark testing multi-kretprobe
+> throughput. We get (in millions of BPF kretprobe-multi program
+> invocations per second):
+>   - 5.568M/s as baseline;
+>   - 5.679M/s with changes in this patch (+2% throughput improvement);
+>   - 5.808M/s with disabling rcu_is_watching in rethook_try_get()
+> (+2.3% more vs just one of rcu_is_watching, and +4.3% vs baseline).
+> 
+> It's definitely noticeable.
 
-That is totally up to Masami. It may have even less overhead as I'm not
-sure how many times that gets called, and there may be more work to do than
-with function tracing.
+Ah, thanks for verifying (I should have read the thread before replying to
+the previous email).
 
 -- Steve
