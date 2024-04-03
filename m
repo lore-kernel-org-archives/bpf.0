@@ -1,27 +1,28 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6E359B4A;
-	Wed,  3 Apr 2024 07:27:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4451E59B61;
+	Wed,  3 Apr 2024 07:27:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712129229; cv=none; b=sRS11M1Mt9QZYTnb+Zz3DhKoqknBs5GLUYXjh39T3JwA+phpC4I6T3J1rRJOsGW3upjF9XX3Dg3o5tDa1Ju088rEabyLdtOcFT+i2eAMi1vvQt8YRzHrkJAwkN5w75ioHvNr+RK5N1JElKvBdW+jjWV+HiLGrkyeLuBYuil72Ig=
+	t=1712129229; cv=none; b=neskYaE34i43bT1B1lVK9ri/rnwPVTyCjVcBQ4Q0yEkeseTWH5RL8oTMq3q6RQ4B1zSqYDIwHyxHkFHRlrrNh/TuQBeGqiV8X20RTrpufDKhGIDL8KFtLNucnuy/W3wP32T32vXavPBhVK1ct7j4eJDzWvG6cvOvhRfBv4Z/exY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1712129229; c=relaxed/simple;
-	bh=L4rgKuVRSBngb0+Lrjuoo/eYL8Q5uNKypIFRw2Srb0M=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=LIIHcAdSHfzkGDJPTjQkv0UDWXyeW7YSoc/MpBqtXtgVQYsD+UqkKtfi/8c62yNdYaS2tVBdXSXLfiF1Lk8Gtb3TU36H2bPxeQNJBkjMcYgPmy2j6eh89FLLnpnteHHgSfrGQbM8KKTNdZ1bg8YonXouHfFdwVrWXA58Fqakvos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	bh=/GG5WpMh4Z1t4rQ8meR2jyBAOPGi1j17oKtTUGEvO0M=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HlSvH7t+rq+B/VdheSziigIq0t8TdL1XY3dvlckpwn4KZtNhfhKriYxqbYZPDPFgFqi4Jkxj9kiC3IhhK+EnWkgDug/L3Qk816iZY+L8H9uPD+uJNhlTKm2HWzil0+x5iZuSrV+x4tt9vngKzMcaMjuGja4/OXh3KPOYpfipMY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V8bsq4lnjz4f3nJS;
-	Wed,  3 Apr 2024 15:26:55 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4V8bss5N3dz4f3knm;
+	Wed,  3 Apr 2024 15:26:57 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 0B3F81A1025;
+	by mail.maildlp.com (Postfix) with ESMTP id 4345E1A016E;
 	Wed,  3 Apr 2024 15:27:04 +0800 (CST)
 Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP2 (Coremail) with SMTP id Syh0CgDnVQm9BA1mGuZmJA--.61978S2;
-	Wed, 03 Apr 2024 15:26:54 +0800 (CST)
+	by APP2 (Coremail) with SMTP id Syh0CgDnVQm9BA1mGuZmJA--.61978S4;
+	Wed, 03 Apr 2024 15:27:03 +0800 (CST)
 From: Pu Lehui <pulehui@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
@@ -42,10 +43,12 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
 	Pu Lehui <pulehui@huawei.com>,
 	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf-next v3 0/2] Add 12-argument support for RV64 bpf trampoline
-Date: Wed,  3 Apr 2024 07:28:16 +0000
-Message-Id: <20240403072818.1462811-1-pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Add testcase where 7th argment is struct
+Date: Wed,  3 Apr 2024 07:28:18 +0000
+Message-Id: <20240403072818.1462811-3-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240403072818.1462811-1-pulehui@huaweicloud.com>
+References: <20240403072818.1462811-1-pulehui@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,63 +57,186 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgDnVQm9BA1mGuZmJA--.61978S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF45KF1xuF4fXryktF4fXwb_yoW8Cw18pa
-	1xWw13uFn5KF42q347Ja1UuryFqr4rW345ur47J34FkayDtryYyr1I9ayYvw15Wr1ru3yI
-	y34a9F98uF1DZ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv014x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-	Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW8JVW3JwCI42IY6I8E87Iv67AKxVW8
-	JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUb
-	QVy7UUUUU==
+X-CM-TRANSID:Syh0CgDnVQm9BA1mGuZmJA--.61978S4
+X-Coremail-Antispam: 1UD129KBjvJXoW3GrWrKF18tr48tryDAw4fKrg_yoWxWrWrpa
+	4kXw1jyF4rJF4xWry7GF4UZr4S9rZ3Xr1UJFW7J3s0vry0q34kJF1xKF1jy3Z5G3y5uw1a
+	yayDKrZxCw4UJaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUP014x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
+	0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+	IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+	Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
+	xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
+	6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2
+	Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
+	Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJw
+	CI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUbdOz7UU
+	UUU==
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-This patch adds 12 function arguments support for riscv64 bpf
-trampoline. The current bpf trampoline supports <= sizeof(u64) bytes
-scalar arguments [0] and <= 16 bytes struct arguments [1]. Therefore, we
-focus on the situation where scalars are at most XLEN bits and
-aggregates whose total size does not exceed 2×XLEN bits in the riscv
-calling convention [2].
+From: Pu Lehui <pulehui@huawei.com>
 
-Link: https://elixir.bootlin.com/linux/v6.8/source/kernel/bpf/btf.c#L6184 [0]
-Link: https://elixir.bootlin.com/linux/v6.8/source/kernel/bpf/btf.c#L6769 [1]
-Link: https://github.com/riscv-non-isa/riscv-elf-psabi-doc/releases/download/draft-20230929-e5c800e661a53efe3c2678d71a306323b60eb13b/riscv-abi.pdf [2]
+Add testcase where 7th argument is struct for architectures with 8
+argument registers, and increase the complexity of the struct.
 
-v3:
-- Variable and macro name alignment:
-  nr_reg_args: number of args in reg
-  nr_stack_args: number of args on stack
-  RV_MAX_REG_ARGS: macro for riscv max args in reg
-
-v2: https://lore.kernel.org/all/20240403041710.1416369-1-pulehui@huaweicloud.com/
-- Add tracing_struct to DENYLIST.aarch64 while aarch64 does not yet support
-  bpf trampoline with more than 8 args.
-- Change the macro RV_MAX_ARG_REGS to RV_MAX_ARGS_REG to synchronize with
-  the variable definition below.
-- Add some comments for stk_arg_off and magic number of skip slots for loading
-  args on stack.
-
-v1: https://lore.kernel.org/all/20240331092405.822571-1-pulehui@huaweicloud.com/
-
-Pu Lehui (2):
-  riscv, bpf: Add 12-argument support for RV64 bpf trampoline
-  selftests/bpf: Add testcase where 7th argment is struct
-
- arch/riscv/net/bpf_jit_comp64.c               | 65 +++++++++++++------
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+Acked-by: Björn Töpel <bjorn@kernel.org>
+Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
+---
  tools/testing/selftests/bpf/DENYLIST.aarch64  |  1 +
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 19 ++++++
- .../selftests/bpf/prog_tests/tracing_struct.c | 13 ++++
- .../selftests/bpf/progs/tracing_struct.c      | 35 ++++++++++
- 5 files changed, 114 insertions(+), 19 deletions(-)
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 19 ++++++++++
+ .../selftests/bpf/prog_tests/tracing_struct.c | 13 +++++++
+ .../selftests/bpf/progs/tracing_struct.c      | 35 +++++++++++++++++++
+ 4 files changed, 68 insertions(+)
 
+diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 b/tools/testing/selftests/bpf/DENYLIST.aarch64
+index d8ade15e2789..639ee3f5bc74 100644
+--- a/tools/testing/selftests/bpf/DENYLIST.aarch64
++++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
+@@ -6,6 +6,7 @@ kprobe_multi_test                                # needs CONFIG_FPROBE
+ module_attach                                    # prog 'kprobe_multi': failed to auto-attach: -95
+ fentry_test/fentry_many_args                     # fentry_many_args:FAIL:fentry_many_args_attach unexpected error: -524
+ fexit_test/fexit_many_args                       # fexit_many_args:FAIL:fexit_many_args_attach unexpected error: -524
++tracing_struct                                   # test_fentry:FAIL:tracing_struct__attach unexpected error: -524
+ fill_link_info/kprobe_multi_link_info            # bpf_program__attach_kprobe_multi_opts unexpected error: -95
+ fill_link_info/kretprobe_multi_link_info         # bpf_program__attach_kprobe_multi_opts unexpected error: -95
+ fill_link_info/kprobe_multi_invalid_ubuff        # bpf_program__attach_kprobe_multi_opts unexpected error: -95
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+index 39ad96a18123..4973d9de10af 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+@@ -41,6 +41,13 @@ struct bpf_testmod_struct_arg_4 {
+ 	int b;
+ };
+ 
++struct bpf_testmod_struct_arg_5 {
++	char a;
++	short b;
++	int c;
++	long d;
++};
++
+ __bpf_hook_start();
+ 
+ noinline int
+@@ -98,6 +105,15 @@ bpf_testmod_test_struct_arg_8(u64 a, void *b, short c, int d, void *e,
+ 	return bpf_testmod_test_struct_arg_result;
+ }
+ 
++noinline int
++bpf_testmod_test_struct_arg_9(u64 a, void *b, short c, int d, void *e, char f,
++			      short g, struct bpf_testmod_struct_arg_5 h, long i)
++{
++	bpf_testmod_test_struct_arg_result = a + (long)b + c + d + (long)e +
++		f + g + h.a + h.b + h.c + h.d + i;
++	return bpf_testmod_test_struct_arg_result;
++}
++
+ noinline int
+ bpf_testmod_test_arg_ptr_to_struct(struct bpf_testmod_struct_arg_1 *a) {
+ 	bpf_testmod_test_struct_arg_result = a->a;
+@@ -254,6 +270,7 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+ 	struct bpf_testmod_struct_arg_2 struct_arg2 = {2, 3};
+ 	struct bpf_testmod_struct_arg_3 *struct_arg3;
+ 	struct bpf_testmod_struct_arg_4 struct_arg4 = {21, 22};
++	struct bpf_testmod_struct_arg_5 struct_arg5 = {23, 24, 25, 26};
+ 	int i = 1;
+ 
+ 	while (bpf_testmod_return_ptr(i))
+@@ -268,6 +285,8 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+ 					    (void *)20, struct_arg4);
+ 	(void)bpf_testmod_test_struct_arg_8(16, (void *)17, 18, 19,
+ 					    (void *)20, struct_arg4, 23);
++	(void)bpf_testmod_test_struct_arg_9(16, (void *)17, 18, 19, (void *)20,
++					    21, 22, struct_arg5, 27);
+ 
+ 	(void)bpf_testmod_test_arg_ptr_to_struct(&struct_arg1_2);
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+index fe0fb0c9849a..5a8eeb07a6ba 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
++++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+@@ -74,6 +74,19 @@ static void test_fentry(void)
+ 	ASSERT_EQ(skel->bss->t8_g, 23, "t8:g");
+ 	ASSERT_EQ(skel->bss->t8_ret, 156, "t8 ret");
+ 
++	ASSERT_EQ(skel->bss->t9_a, 16, "t9:a");
++	ASSERT_EQ(skel->bss->t9_b, 17, "t9:b");
++	ASSERT_EQ(skel->bss->t9_c, 18, "t9:c");
++	ASSERT_EQ(skel->bss->t9_d, 19, "t9:d");
++	ASSERT_EQ(skel->bss->t9_e, 20, "t9:e");
++	ASSERT_EQ(skel->bss->t9_f, 21, "t9:f");
++	ASSERT_EQ(skel->bss->t9_g, 22, "t9:f");
++	ASSERT_EQ(skel->bss->t9_h_a, 23, "t9:h.a");
++	ASSERT_EQ(skel->bss->t9_h_b, 24, "t9:h.b");
++	ASSERT_EQ(skel->bss->t9_h_c, 25, "t9:h.c");
++	ASSERT_EQ(skel->bss->t9_h_d, 26, "t9:h.d");
++	ASSERT_EQ(skel->bss->t9_i, 27, "t9:i");
++	ASSERT_EQ(skel->bss->t9_ret, 258, "t9 ret");
+ 	tracing_struct__detach(skel);
+ destroy_skel:
+ 	tracing_struct__destroy(skel);
+diff --git a/tools/testing/selftests/bpf/progs/tracing_struct.c b/tools/testing/selftests/bpf/progs/tracing_struct.c
+index 515daef3c84b..bfe96bab94c0 100644
+--- a/tools/testing/selftests/bpf/progs/tracing_struct.c
++++ b/tools/testing/selftests/bpf/progs/tracing_struct.c
+@@ -23,6 +23,13 @@ struct bpf_testmod_struct_arg_4 {
+ 	int b;
+ };
+ 
++struct bpf_testmod_struct_arg_5 {
++	char a;
++	short b;
++	int c;
++	long d;
++};
++
+ long t1_a_a, t1_a_b, t1_b, t1_c, t1_ret, t1_nregs;
+ __u64 t1_reg0, t1_reg1, t1_reg2, t1_reg3;
+ long t2_a, t2_b_a, t2_b_b, t2_c, t2_ret;
+@@ -32,6 +39,7 @@ long t5_ret;
+ int t6;
+ long t7_a, t7_b, t7_c, t7_d, t7_e, t7_f_a, t7_f_b, t7_ret;
+ long t8_a, t8_b, t8_c, t8_d, t8_e, t8_f_a, t8_f_b, t8_g, t8_ret;
++long t9_a, t9_b, t9_c, t9_d, t9_e, t9_f, t9_g, t9_h_a, t9_h_b, t9_h_c, t9_h_d, t9_i, t9_ret;
+ 
+ 
+ SEC("fentry/bpf_testmod_test_struct_arg_1")
+@@ -184,4 +192,31 @@ int BPF_PROG2(test_struct_arg_15, __u64, a, void *, b, short, c, int, d,
+ 	return 0;
+ }
+ 
++SEC("fentry/bpf_testmod_test_struct_arg_9")
++int BPF_PROG2(test_struct_arg_16, __u64, a, void *, b, short, c, int, d, void *, e,
++	      char, f, short, g, struct bpf_testmod_struct_arg_5, h, long, i)
++{
++	t9_a = a;
++	t9_b = (long)b;
++	t9_c = c;
++	t9_d = d;
++	t9_e = (long)e;
++	t9_f = f;
++	t9_g = g;
++	t9_h_a = h.a;
++	t9_h_b = h.b;
++	t9_h_c = h.c;
++	t9_h_d = h.d;
++	t9_i = i;
++	return 0;
++}
++
++SEC("fexit/bpf_testmod_test_struct_arg_9")
++int BPF_PROG2(test_struct_arg_17, __u64, a, void *, b, short, c, int, d, void *, e,
++	      char, f, short, g, struct bpf_testmod_struct_arg_5, h, long, i, int, ret)
++{
++	t9_ret = ret;
++	return 0;
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.34.1
 
