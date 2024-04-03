@@ -1,146 +1,87 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57680945A
-	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 02:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 348F91FA4
+	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 02:50:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712111798; cv=none; b=ubF0ZDXi3m1tXVr58cg50KQ38jZ7IDE6VmfRx6H3k4ZiFIUwObFTXLfjDUM+wg74ATbiYs81lNUxTDEpn/7RCc4McCC1qZzwLpCwIh+5N+p6MBwx+4tvp9JDainaCWUZFHvJb3v+JTsPgtCKSGFF+IVFBxxUWOvQzTZwWeA3U50=
+	t=1712112615; cv=none; b=QVOCM+evzF8IFlbSevl+l8rxLDFY70IwPr5Y+htRE8YLKOyQtOFGg/35ezOWcYENpjC+6nnHAD72tcELOR6lrRoghxddaUFFP5LF2W7wCKjlNEjzD+gedBZjMvpaqcU1WcdS5w2HLLpcpgfr1rFxMzpYm3SA62MkZsdi4fFLMWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712111798; c=relaxed/simple;
-	bh=v1FwLXD50NO9luX+AI1VLN7M8+i7rdVy2kSk3KTuBsg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dVuE5zxjWywIv/itw8mmwrHUveGLCv2foej0U0JBJrzHoHIJbau2KcOOrURHlDjLYjySi/HazM6Zcs9rSCAofPLTDXYEHp7sxTN+Oeaullk7tU/JQbECGGs7Hzst6WkHlV/pNXShUNylfsfKecc7VP3VpFgDtz4N8Hl1PKkOCHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=E5M+NuBA; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1712112615; c=relaxed/simple;
+	bh=ThoALAZ+4b5NoYvDizMBhILluvfgE883/n07j/5mT2w=;
+	h=From:Content-Type:Mime-Version:Subject:Message-Id:Date:To; b=E9IpC2rRi0q7t00bdYDnRW2XJR8Csun0aL7mvsZp0dr/T0Hw4QCcCL5VEz52zwV+Sf+zkasEXKUkCm5dvReud1FdAAOC/ZhrWpu7Wyl8yxAws0/cRfTzPwusQTQlcXbAarZwonxntUKS3zg9rBup6W4D17dmEhNZq2mdLsZzLHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=md39xUri; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="E5M+NuBA"
-Message-ID: <0ff5c7d0-d5c5-4b61-ba89-8e7f9f775935@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1712111792;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NfHvT/jVYTAVwJfVnK1fJm36xybc1LXtp2oO10me4iA=;
-	b=E5M+NuBAigl3MEzyNZp/UeTECwdAAUVoj//2JZ4JgM6nj5WVaHI3DkrE/gomqaVgObwVxK
-	YtdxhjJu4Bq6FLnD85jUSWtI6+W7GxFru1lAZHE+69LWvVmC6C+fhgxXRpNnXgr0oQ1s3w
-	f1V/Pofb9JlmRQDU9EzUP955YnZKJvw=
-Date: Tue, 2 Apr 2024 19:36:25 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="md39xUri"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6156483284fso1029087b3.0
+        for <bpf@vger.kernel.org>; Tue, 02 Apr 2024 19:50:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712112613; x=1712717413; darn=vger.kernel.org;
+        h=to:date:message-id:subject:mime-version:content-transfer-encoding
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=esQujNotzpB4+xsRiLk5kIgcIfES7Y96ccLY2u3mHDU=;
+        b=md39xUri/wrfp78vfgkkkAauY7/y8BXiPspZ82XsAKqbWkD2Lx7eUNqhTH349G7OL+
+         6Q2rGI1liEeSTHSr3lsoQaAsk011FVN8WSgyjGeKnJoIYSCY5vsIxFfUYvMFazifkdqb
+         U7l23msPt8eM6p2rj402fS6TAn/0BnV04rpeJIaRANxxwgIjjbWyCJ9FiSSjqobV2zKu
+         1tBTUdfNcSoyCWXLHcejGETl2WLdS7w59Jogsmt0PCkzLJgTfpBfgNaA8MxRhCE6iabz
+         UNy3VHULQTewoneh51cYc0364teOErnUC80Z6LkCEfqunbPpon1HqrmUDSD5LTBHo5Mt
+         vkTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712112613; x=1712717413;
+        h=to:date:message-id:subject:mime-version:content-transfer-encoding
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=esQujNotzpB4+xsRiLk5kIgcIfES7Y96ccLY2u3mHDU=;
+        b=WKAHy+RLBWUOJakkUbxZ20Nk5gjH0j/Nlm4LGiPuHZECbcn6vFCJ4vAY53XhCl/fye
+         GFdyiBoDU7gr7Rdtr48LnM9g8pU36TzlWfgMPN/CINC9m2cl9jqxdOD+vLHh+Tkjh7Xf
+         q/DwXCbV/cVExv0DAubixSGoO7vikUnwnW3YdcoHz2/t4osIFgEbxLdIT4vb9/b/q0ji
+         r5BisnPvidmYUnNxI+HkH9Ec8xLsaETL4emK5vaeObeELruSCS6OefQ2VA/sHekqt+NB
+         XPDOMUX8Q4nwtjVukfKjXrooNuG59xRmqY60XjOKAoU4RcTEb2wh/8Kg5QArk8vvUR+p
+         9M5g==
+X-Forwarded-Encrypted: i=1; AJvYcCVZWYXazOOWw4Ruca5kEA+4Z6W9QoITz2PGpfRfIEGVySxjIGiFoLBXp1h7RZYDba/WHvMn6DRXC5+MWmK3os2ED854
+X-Gm-Message-State: AOJu0YwThGWf5+Wq1vI5WBzICRGAWS8Vpd8Rya8iZ5TX+NvGCg5lDNbE
+	1AZs6oIga5R7iToWm1SnbWHc2pb4LF+D4Oc9LNjFF+foxYaZ7HP5OxbcCqfb
+X-Google-Smtp-Source: AGHT+IHkGRhGvl7332WDpIeqltIN/HxtoWtFo1Q82rZOK5S8YBpWI1IyY83BfJqK+4eh5RL9eSTquw==
+X-Received: by 2002:a0d:f9c5:0:b0:611:278d:fb80 with SMTP id j188-20020a0df9c5000000b00611278dfb80mr13731273ywf.8.1712112613171;
+        Tue, 02 Apr 2024 19:50:13 -0700 (PDT)
+Received: from smtpclient.apple (45-19-110-76.lightspeed.tukrga.sbcglobal.net. [45.19.110.76])
+        by smtp.gmail.com with ESMTPSA id t8-20020a0dea08000000b006145009cce6sm693712ywe.8.2024.04.02.19.50.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 02 Apr 2024 19:50:12 -0700 (PDT)
+From: Suresh Krishnan <suresh.krishnan@gmail.com>
+Content-Type: text/plain;
+	charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Move test_dev_cgroup to
- prog_tests
-Content-Language: en-GB
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc: kernel@collabora.com, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20240401123455.1377896-1-usama.anjum@collabora.com>
- <92e1cce6-5f26-4a49-86b6-81e1e80d1aaa@linux.dev>
- <cfecd6ea-8fa3-477f-bd32-4087aefee2af@collabora.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <cfecd6ea-8fa3-477f-bd32-4087aefee2af@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.700.6\))
+Subject: Provisional registration procedure
+Message-Id: <89A0EA46-36E7-4E01-BC91-D07307A2291C@gmail.com>
+Date: Tue, 2 Apr 2024 22:50:02 -0400
+To: bpf@ietf.org,
+ bpf <bpf@vger.kernel.org>
+X-Mailer: Apple Mail (2.3731.700.6)
 
+Hi all,
+  At the recently concluded IETF119 bpf WG meeting, I had asked a =
+question to Dave about the Provisional registrations for BPF instruction =
+conformance groups. Section 5.1 of draft-ietf-bpf-isa-01 talks about =
+Provisional registrations, but does not elaborate further. Specifically, =
+I think it would be good to cover the following cases
 
-On 4/2/24 8:16 AM, Muhammad Usama Anjum wrote:
-> Yonghong Song,
->
-> Thank you so much for replying. I was missing how to run pipeline manually.
-> Thanks a ton.
->
-> On 4/1/24 11:53 PM, Yonghong Song wrote:
->> On 4/1/24 5:34 AM, Muhammad Usama Anjum wrote:
->>> Move test_dev_cgroup.c to prog_tests/dev_cgroup.c to be able to run it
->>> with test_progs. Replace dev_cgroup.bpf.o with skel header file,
->>> dev_cgroup.skel.h and load program from it accourdingly.
->>>
->>>     ./test_progs -t dev_cgroup
->>>     mknod: /tmp/test_dev_cgroup_null: Operation not permitted
->>>     64+0 records in
->>>     64+0 records out
->>>     32768 bytes (33 kB, 32 KiB) copied, 0.000856684 s, 38.2 MB/s
->>>     dd: failed to open '/dev/full': Operation not permitted
->>>     dd: failed to open '/dev/random': Operation not permitted
->>>     #72     test_dev_cgroup:OK
->>>     Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
->>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->>> ---
->>> Changes since v2:
->>> - Replace test_dev_cgroup with serial_test_dev_cgroup as there is
->>>     probability that the test is racing against another cgroup test
->>> - Minor changes to the commit message above
->>>
->>> I've tested the patch with vmtest.sh on bpf-next/for-next and linux
->>> next. It is passing on both. Not sure why it was failed on BPFCI.
->>> Test run with vmtest.h:
->>> sudo LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh
->>> ./test_progs -t dev_cgroup
->>> ./test_progs -t dev_cgroup
->>> mknod: /tmp/test_dev_cgroup_null: Operation not permitted
->>> 64+0 records in
->>> 64+0 records out
->>> 32768 bytes (33 kB, 32 KiB) copied, 0.000403432 s, 81.2 MB/s
->>> dd: failed to open '/dev/full': Operation not permitted
->>> dd: failed to open '/dev/random': Operation not permitted
->>>    #69      dev_cgroup:OK
->>> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
->> The CI failure:
->>
->>
->> Error: #72 dev_cgroup
->> serial_test_dev_cgroup:PASS:skel_open_and_load 0 nsec
->> serial_test_dev_cgroup:PASS:cgroup_setup_and_join 0 nsec
->> serial_test_dev_cgroup:PASS:bpf_attach 0 nsec
->> serial_test_dev_cgroup:PASS:bpf_query 0 nsec
->> serial_test_dev_cgroup:PASS:bpf_query 0 nsec
->> serial_test_dev_cgroup:PASS:rm 0 nsec
->> serial_test_dev_cgroup:PASS:mknod 0 nsec
->> serial_test_dev_cgroup:PASS:rm 0 nsec
->> serial_test_dev_cgroup:PASS:rm 0 nsec
->> serial_test_dev_cgroup:FAIL:mknod unexpected mknod: actual 256 != expected 0
->> serial_test_dev_cgroup:PASS:rm 0 nsec
->> serial_test_dev_cgroup:PASS:dd 0 nsec
->> serial_test_dev_cgroup:PASS:dd 0 nsec
->> serial_test_dev_cgroup:PASS:dd 0 nsec
->>
->> (cgroup_helpers.c:353: errno: Device or resource busy) umount cgroup2
->>
->> The error code 256 means mknod execution has some issues. Maybe you need to
->> find specific errno to find out what is going on. I think you can do ci
->> on-demanding test to debug.
-> errno is 2 --> No such file or directory
->
-> Locally I'm unable to reproduce it until I don't remove
-> rm -f /tmp/test_dev_cgroup_zero such that the /tmp/test_dev_cgroup_zero
-> node is present before test execution. The error code is 256 with errno 2.
-> I'm debugging by placing system("ls /tmp 1>&2"); to find out which files
-> are already present in /tmp. But ls's output doesn't appear on the CI logs.
+* Do we allow conversions from Provisional to Permanent? If so how?
+* Do Provisional registrations timeout after a while if they are not =
+made Permanent?
+* How do we remove Provisional registrations? Are the codepoints freed =
+up?
 
-errno 2 means ENOENT.
- From mknod man page (https://linux.die.net/man/2/mknod), it means
-   A directory component in/pathname/  does not exist or is a dangling symbolic link.
+I have opened an issue on the issue tracker for this at =
+https://github.com/ietf-wg-bpf/ebpf-docs/issues/113 . Comments are =
+welcome and greatly appreciated.
 
-It means /tmp does not exist or a dangling symbolic link.
-It is indeed very strange. To make the test robust, maybe creating a temp
-directory with mkdtemp and use it as the path? The temp directory
-creation should be done before bpf prog attach.
-
->
->> https://www.kernel.org/doc/Documentation/bpf/bpf_devel_QA.rst
->>
+Thanks
+Suresh=
