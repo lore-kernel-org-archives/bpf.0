@@ -1,171 +1,112 @@
-Received: from mail-io1-f73.google.com (mail-io1-f73.google.com [209.85.166.73])
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC4B45C5EE
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 23:52:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4EB51870
+	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 00:05:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712101976; cv=none; b=MUtY40GRyjjYBgMqxo3Qa0V8wmSjpeXYzWB7Zmu9F1EgkNh/U+OnV66bpxs4ODXLLUsPbeVJHymMDdWGOoo398GG2yBV1htXk7pBREhqeDHJebgRVvTMLxmkUFVAOr7SMnvFtvbavXskrp2tR2XOCkVW12zRV0O9+/8zI7nT/kE=
+	t=1712102736; cv=none; b=G0r+DyAzHbgGg9yifrBl16c5A0iyGXjnJLgNKcArPHx4ajBnTxTfGeF/JcahPy0fiGeG5/zfkFjn1IQRsB6nGQHlMm+QDzYOZ48VPkkMo3Ah8XRGUHXWggaHyGDyjzHr7W5iouXMA8Z1xDA0JaM8PlWRPg/vsdxymzfsD+qSlk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712101976; c=relaxed/simple;
-	bh=9LtQU8UiOsgDWvjTc1/6rw/QlwvMZqMAcV47wDqmoxI=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=I/XkJ+pqPxZow5BL1Za3Ucp66wa/cyZ3e6oSfhZGhQ3iGmabf3+QXsUC71UVmzJnwXzFky8aO2PsOP9iZmBORa1M/eJupfPN3RX8zbXJOgUM1a5uOg4W0L5s6xE5GzHKR+UxzdwD6sUjA/fkC85BPaC2VtkeeISjYP4WPZRsbYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oRz2Ao/X; arc=none smtp.client-ip=209.85.166.73
+	s=arc-20240116; t=1712102736; c=relaxed/simple;
+	bh=RDMYY18P2NsSYIurbiIbP840Ysle6CNN0GbmZSlGRfo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=g6NumvnNNU+6pI2MLISATNQy0TCUXj6PQuF3GaR5xi4vPTpox53BvYT/N3V5m2st+/XAve0cC6gD4pOMTkE2RqrrqBl36BxAImh434MdgEo4WCQnTpCY4b2XkoBO2w0axhFjPU4gau+fVM9jdKBOMEp42DqYhtZV6ffaimKh0wY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pMQxbw1S; arc=none smtp.client-ip=209.85.219.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oRz2Ao/X"
-Received: by mail-io1-f73.google.com with SMTP id ca18e2360f4ac-7cbf2ff0e33so564821339f.1
-        for <bpf@vger.kernel.org>; Tue, 02 Apr 2024 16:52:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pMQxbw1S"
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6991e317e05so4023936d6.1
+        for <bpf@vger.kernel.org>; Tue, 02 Apr 2024 17:05:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712101974; x=1712706774; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Tvk0aVaJ4x37W0/x3VCM6LH3wJVHl8Qg2TqljtL5b2o=;
-        b=oRz2Ao/XoQ7glDcZCVLaAH99iMHnihwaiXmPLUjnpCJzsmrJj9QPLgP2RH/LqNS2V0
-         zJnvdXYjQG1dX+8VXDEK7UHbJvTmqUX/v0gm7XAlvrVLT91RmVfT/EMQGjpJJJZnUo9L
-         /6ZScogHwW9Ki2feNrKoMu1q5wBmASCw2lqCZTZiHBPLXetiQLdq8afsFjg2rN0ScgMi
-         cMaxEh+bXAP2mK2oi2VrewM9b1BVKFSceKO+tav6xS/xy0HGUIPlCD9LzapevdwZyINl
-         6Le4hRPF3mmO0c40jvMWcGzq2bxfJt2L0bS4s8QwLP7KVbePFsQISGOriRjIgUAUVcAY
-         zcRg==
+        d=google.com; s=20230601; t=1712102733; x=1712707533; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RDMYY18P2NsSYIurbiIbP840Ysle6CNN0GbmZSlGRfo=;
+        b=pMQxbw1SvbH4nwFpgHxLeLL2NtslguVTdUm5k1GaqmFnP5QeetMxCtJqiy+Nr+xwPS
+         ZFDvBU0dATPx0E/V7i2FXwtxSIURJIkX07j6tf5xgtmAKnKYsSGMHyv3ClZOe8aYFGUW
+         YUi71R79qqEuKJaEYTP8PjhknujDt2qlt9Ru271y5Zns8er2hFweD1bpquc0eLbHNwKf
+         harD7Q/Xb2Ep3zmSQAR9KoeTbYQ6HODmAMnkXSp+i+t81YDC7dzaTZSBo+S6ZpDSIOZ0
+         lqMGweCLwHH3dLZLzX5x1fHwHK6p4rH/qXDQ1EqxheMHhS3nE+SVBCwPICWQUlkNKUtZ
+         bnpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712101974; x=1712706774;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Tvk0aVaJ4x37W0/x3VCM6LH3wJVHl8Qg2TqljtL5b2o=;
-        b=UrW/V2oqZ6mknicQJkPESWjigxTZnHyI9GJa4UFSYJ610/cJPoL+qum98FMkuZ6TwT
-         QrK8IPEIJ4BvUAfM8Jsg4RdygoH2Dg8MqA+5SYJubVSQUa9z5ACX1bqhjH3boeCdIxHy
-         cpXgrVKCnN8pjxtPYgo5kknMjLvxbF8ivaTlLuvXskVXhiUgHkde2EYRvgN3LKPLxo15
-         2DtCwfDPCZ4z2dkVzkk3xvsplUUC/KdCO+9Xv5NTS8VKsXV8eVV0k+9wVHceHC5xDEBT
-         23FGQkcnFsS7dULyFT6vr/V5gnzZv5mcZ3fawghRMW3UQPpDa0bbtkAoZZ9/PtU8jOmJ
-         UFmg==
-X-Gm-Message-State: AOJu0YzMkYPHlWfBUgWM6y1IFPNktzcEB7GjSqZ3PiCuYnsChT2GiQB3
-	nbUzIhlAXlrPGJmROVAYy/fU3SV5loVimjTmw0P/lueoF+xgi3OMeF5OYRDllKUv9RPtUnRhZ/T
-	xx97J71QrGIp+1tbuHUNCsQ==
-X-Google-Smtp-Source: AGHT+IHqfntMZvEh1IDSUP5f1hWGOYNSwBw+18ziFh0WsvD10M9EC1a4tUtqLDDJLrDg+I4iAyRRGaMZVfbPd0kinA==
-X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a05:6602:2c09:b0:7d0:3aa9:94db with
- SMTP id w9-20020a0566022c0900b007d03aa994dbmr603145iov.3.1712101974132; Tue,
- 02 Apr 2024 16:52:54 -0700 (PDT)
-Date: Tue, 02 Apr 2024 23:52:50 +0000
+        d=1e100.net; s=20230601; t=1712102733; x=1712707533;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RDMYY18P2NsSYIurbiIbP840Ysle6CNN0GbmZSlGRfo=;
+        b=jg0kl8pJA5aZdanaG9lQQijXJ6J7bcp8CLPluRXJdU6vZ7KrpadL93lLnqkcBVyx31
+         1jyYNxW++i+4azNQ/vlrII6BqvIoWSzVBPXgJlzLpBu2LyVXtjbNnd8iXXeaYhcDIngr
+         dLaNx8l/6Kmi37xC144XTq4ccKqBfg10mzPMlaApR1l5ryU7t2ho4wEtnpenU7arTZS0
+         kFpdDkiGAysCrgpTCuDDibbeQVT8rhWPcg3g3qCXWP2Ae1WQhjCPHli87P5lnQe7snWY
+         krKjCqDwdazLsGS0iH0dbyRZQC6VeU1DUbgd+PlTyf4/WawmM8S8Cj7rnwiA4+UVf6Yb
+         6FQA==
+X-Forwarded-Encrypted: i=1; AJvYcCU1f/3G/qBVh7ylhxBfl032CSzWKRaj3F4Q4QQZGWomOwpsA/EXYPS6el9IaW9RkX1keL3h7oT8fwvowCQ3QhK7iENw
+X-Gm-Message-State: AOJu0YztBsArInPklekEihEMNF3zpNxtH4NKimPXJuyCFZtzsvbtq5a3
+	lA7wl0mrxA8UyAExnOhccrBDVfFO3RF3cNS514JSUJ6+YeXYnzrmskw/ygmOxJ+jiSr87LF4XdW
+	FiBFp0eyke/7idhLkjv88tzrNvflTV1QYOeyt
+X-Google-Smtp-Source: AGHT+IGypiqeNAIc9rEaIDvehU8Z+DZPGsok/ERp0AwYGK9F5oxxCPI4U6s30cz39L8i2hIPuXr2oSdiP8wgAKaUYeA=
+X-Received: by 2002:a05:6214:326:b0:699:11ba:888d with SMTP id
+ j6-20020a056214032600b0069911ba888dmr1736867qvu.30.1712102733505; Tue, 02 Apr
+ 2024 17:05:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAFGaDGYC/x3MywqDMBBG4VeRWXcghoiXV5EuavzTDi0xTEQq4
- rsbXH6Lcw7KUEGmoTpIsUmWJRbUj4r85xXfYJmLyRrrjDOW86rRp52/0IgfTymwXxTs2c2d7dv QN6g7Kn1SBPnf7/F5nhfph1hDawAAAA==
-X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1712101973; l=2998;
- i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=9LtQU8UiOsgDWvjTc1/6rw/QlwvMZqMAcV47wDqmoxI=; b=9eawufW76cipSSrsORhJnGqUMNurLvEpfUyoII8eluIWnnZohNwLUI4Ga3x/2S39PDuLyAWM7
- vhLFRLTK1VuAkgtgTTd42TrWoz+DfOiAW/9po4OuSCw0r10GMfSFmV4
-X-Mailer: b4 0.12.3
-Message-ID: <20240402-strncpy-kernel-bpf-core-c-v1-1-7cb07a426e78@google.com>
-Subject: [PATCH] bpf: replace deprecated strncpy with strscpy
-From: Justin Stitt <justinstitt@google.com>
-To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org, Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+References: <20240329191907.1808635-1-jrife@google.com> <20240329191907.1808635-6-jrife@google.com>
+ <59c52263-edd2-4585-b4f0-28c8d92d572c@linux.dev>
+In-Reply-To: <59c52263-edd2-4585-b4f0-28c8d92d572c@linux.dev>
+From: Jordan Rife <jrife@google.com>
+Date: Tue, 2 Apr 2024 17:05:18 -0700
+Message-ID: <CADKFtnRt=5r__PdpZ14mpJz1LfeaLQHjUJMHzCpWsMJ4m2rEjw@mail.gmail.com>
+Subject: Re: [PATCH v1 bpf-next 5/8] selftests/bpf: Factor out load_path and
+ defines from test_sock_addr
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Daan De Meyer <daan.j.demeyer@gmail.com>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-strncpy() is deprecated for use on NUL-terminated destination strings
-[1] and as such we should prefer more robust and less ambiguous string
-interfaces.
+> The newer prog_tests/sock_addr.c was created when adding AF_UNIX support. It has
+> a very similar setup as the older test_sock_addr.c and the intention was to
+> finally retire test_sock_addr.c. e.g. It also has "load_fn loadfn" but is done
+> with skeleton, the program is also attached to cgroup...etc.
 
-bpf sym names get looked up and compared/cleaned with various string
-apis. This suggests they need to be NUL-terminated (strncpy() suggests
-this but does not guarantee it).
+Thanks, I wasn't sure what the preferred direction would be here. I
+saw some discussion
+in the AF_UNIX support patch series about prog_tests being the
+preferred approach and
+there being plans to migrate the old test_sock_addr.c tests to the new format.
 
-|	static int compare_symbol_name(const char *name, char *namebuf)
-|	{
-|		cleanup_symbol_name(namebuf);
-|		return strcmp(name, namebuf);
-|	}
+I suspect the changes mentioned here (load done with skeleton, etc.)
+and helpers needed
+to support the tests in my patch series may also be helpful in
+retiring test_sock_addr.c.
 
-|	static void cleanup_symbol_name(char *s)
-|	{
-|		...
-|		res = strstr(s, ".llvm.");
-|		...
-|	}
+> Instead of adding a new sock_addr_kern.c in patch 7, it probably will be easier
+> to add the kernel socket tests into the existing prog_tests/sock_addr.c.
 
-Use strscpy() as this method guarantees NUL-termination on the
-destination buffer.
+Originally it felt awkward to try to merge these tests with
+prog_tests/sock_addr.c, because
+while the goals are similar the flow is different with
+loading/unloading a kernel module to
+drive socket operations. I'll revisit this and see if I can merge
+everything into
+prog_tests/sock_addr.c. Switching to kfuncs as mentioned earlier might
+make this simpler
+as well.
 
-This patch also replaces two uses of strncpy() used in log.c. These are
-simple replacements as postfix has been zero-initialized on the stack
-and has source arguments with a size less than the destination's size.
+> Also setup the netns and veth in the prog_tests/sock_addr.c instead of calling
+> out the test_sock_addr.sh (which should also go away eventually), there are
+> examples in prog_tests/ (e.g. mptcp.c).
 
-Note that this patch uses the new 2-argument version of strscpy
-introduced in Commit e6584c3964f2f ("string: Allow 2-argument
-strscpy()").
+Ack. Sure thing.
 
-Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
-Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
-Link: https://github.com/KSPP/linux/issues/90
-Cc: linux-hardening@vger.kernel.org
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
-Note: build-tested only.
-
-Found with: $ rg "strncpy\("
----
- kernel/bpf/core.c | 4 ++--
- kernel/bpf/log.c  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 696bc55de8e8..8c9078f4549c 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -747,7 +747,7 @@ const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		unsigned long symbol_start = ksym->start;
- 		unsigned long symbol_end = ksym->end;
- 
--		strncpy(sym, ksym->name, KSYM_NAME_LEN);
-+		strscpy(sym, ksym->name, KSYM_NAME_LEN);
- 
- 		ret = sym;
- 		if (size)
-@@ -813,7 +813,7 @@ int bpf_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
- 		if (it++ != symnum)
- 			continue;
- 
--		strncpy(sym, ksym->name, KSYM_NAME_LEN);
-+		strscpy(sym, ksym->name, KSYM_NAME_LEN);
- 
- 		*value = ksym->start;
- 		*type  = BPF_SYM_ELF_TYPE;
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index 2a243cf37c60..4bd8f17a9f24 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -467,9 +467,9 @@ const char *reg_type_str(struct bpf_verifier_env *env, enum bpf_reg_type type)
- 
- 	if (type & PTR_MAYBE_NULL) {
- 		if (base_type(type) == PTR_TO_BTF_ID)
--			strncpy(postfix, "or_null_", 16);
-+			strscpy(postfix, "or_null_");
- 		else
--			strncpy(postfix, "_or_null", 16);
-+			strscpy(postfix, "_or_null");
- 	}
- 
- 	snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s",
-
----
-base-commit: 026e680b0a08a62b1d948e5a8ca78700bfac0e6e
-change-id: 20240402-strncpy-kernel-bpf-core-c-4d8297f95e18
-
-Best regards,
---
-Justin Stitt <justinstitt@google.com>
-
+-Jordan
