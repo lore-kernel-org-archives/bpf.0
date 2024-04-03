@@ -1,30 +1,30 @@
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA79135A6A;
-	Wed,  3 Apr 2024 10:19:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B7D1482E1;
+	Wed,  3 Apr 2024 10:32:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712139556; cv=none; b=fhi+OVnPJc6jvT6uEcuFHl3dMPpP0qRREQ8okheA6+/AfXkFrc//NJ/0c/M5DqIMrvSuWo1afXd7++SbnQ9++lnYLLaeKiMLjLOwkBmf/C8627/N4CQk776++Yp0iG3V8xjUbLpnepsQX2hNRRucrs5I7YF6KeyCUwshoN4p36c=
+	t=1712140329; cv=none; b=Rey3cTEdrXRv6QQ1qz6TLt3APBqkAviPT9Cd+ABQwy3GVPpNeLoYcCHFUyHyCqLoH+/lX5LFfywVVrcrAwGUF9nNxhHGL5NYxLe/S6y3dxYSOGIK5PNTRo7ZQfM1RTSmP7e3XAZLk51Ro/w8KnVXdFb6GjTDEyxb9YZr0Fp3Ouk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712139556; c=relaxed/simple;
-	bh=SWSVwwsyo4TWr/7EXyrUvFnrNKU5MSXAB4wMT6gT+YM=;
+	s=arc-20240116; t=1712140329; c=relaxed/simple;
+	bh=AwY3Gsc9AV2Km7e7jnYZB1dUudZG7WwX8VIo6+1zDtQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=al1JXjLmW/LUbw5ZPjDL2hsEMgHm/+Y54MJMcLCFK1GPNoZIrMKh4ojNAS+ZlaJZAjhKjyBf/PZnPmw7u6LwdJAOkxu21PcmZBYgmQySMseXYEqziKIaau7ylteCB+LT9LfgikTB0j2alPO/3joaHXtJmrcWkVyAujQnmL7Cu3I=
+	 In-Reply-To:Content-Type; b=FGgf20dJ24iM82z1CImETS0RPbLj+kiytt8WpuNb0aqZ0ZeNGp7LWyl66L8GODqSqlVvTHuoF1jaVQoZBsM+r5dojeooyKM93h6HEAmlOM2SBk27Ymwdo1l3jbIuSgflwFGvZ1S18hz5p68P4sjNDWpoXvpkTBtWj50tAWupRU8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V8ghQ5gHnz4f3kKV;
-	Wed,  3 Apr 2024 18:19:02 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 0C46C1A0CB3;
-	Wed,  3 Apr 2024 18:19:07 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V8gzL2CTFz4f3lXK;
+	Wed,  3 Apr 2024 18:31:58 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id 86A451A016E;
+	Wed,  3 Apr 2024 18:32:02 +0800 (CST)
 Received: from [10.67.109.184] (unknown [10.67.109.184])
-	by APP4 (Coremail) with SMTP id gCh0CgCn+GoZLQ1mRk5QJA--.18103S2;
-	Wed, 03 Apr 2024 18:19:06 +0800 (CST)
-Message-ID: <bb6e839e-c840-4374-8014-5493cad45bdc@huaweicloud.com>
-Date: Wed, 3 Apr 2024 18:19:05 +0800
+	by APP2 (Coremail) with SMTP id Syh0CgAXOg0fMA1m63l0JA--.50696S2;
+	Wed, 03 Apr 2024 18:32:00 +0800 (CST)
+Message-ID: <6feb3403-4214-4143-b0bc-c95daf8eea2b@huaweicloud.com>
+Date: Wed, 3 Apr 2024 18:31:59 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -32,35 +32,37 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/5] riscv, bpf: Relax restrictions on Zbb
- instructions
+Subject: Re: [PATCH bpf-next 0/5] Support local vmtest for riscv64
 Content-Language: en-US
-To: Daniel Borkmann <daniel@iogearbox.net>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
- netdev@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Manu Bretelle <chantr4@gmail.com>, Pu Lehui <pulehui@huawei.com>
+To: Eduard Zingerman <eddyz87@gmail.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+ linux-riscv@lists.infradead.org, netdev@vger.kernel.org
+Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Manu Bretelle <chantr4@gmail.com>,
+ Pu Lehui <pulehui@huawei.com>
 References: <20240328124916.293173-1-pulehui@huaweicloud.com>
- <20240328124916.293173-3-pulehui@huaweicloud.com>
- <878r1vrga9.fsf@all.your.base.are.belong.to.us>
- <5005fb56-086c-2aa7-e28b-83f0fc51f988@iogearbox.net>
+ <32b3358903bf8ba408812a2636f39a275493eb91.camel@gmail.com>
+ <e995a1f1-0b48-4ce3-a061-5cbe68beb6dd@huaweicloud.com>
+ <f91237f311f183d57c4620bc2e6099df8aefccb0.camel@gmail.com>
+ <52117f9c-b691-409f-ad2a-a25f53a9433d@huaweicloud.com>
+ <f20d1e2a2f5fa10f29bf1fddbaf99c3f185e8530.camel@gmail.com>
 From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <5005fb56-086c-2aa7-e28b-83f0fc51f988@iogearbox.net>
+In-Reply-To: <f20d1e2a2f5fa10f29bf1fddbaf99c3f185e8530.camel@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCn+GoZLQ1mRk5QJA--.18103S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7GrWUGrWUJry7tF4xKF18Grg_yoWktwcE9r
-	Z2yr92vw4rA3Z2y3Z3Cr15Wr4DGr4xGFy8AF10qr98Xwn3Xa1kCan8Xr1fCa13X3yxJr9x
-	Kan0qF4ayr1agjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUb7AYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-	67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:Syh0CgAXOg0fMA1m63l0JA--.50696S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxurW5Zw1xXF48tFW3Xw4rGrg_yoW5Ar1kpF
+	47CF1Ivr1DJrn8twsFya4YyFWFvrZ5GF13Z3ykJ340yF909rWIgFsakFW5ZFZruryqq3yY
+	v3y2vrWYy3ZrtaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
 	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
 	x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
 	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
@@ -73,36 +75,86 @@ X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
 
 
-On 2024/4/3 0:03, Daniel Borkmann wrote:
-> On 4/2/24 4:27 PM, Björn Töpel wrote:
->> Pu Lehui <pulehui@huaweicloud.com> writes:
->>> From: Pu Lehui <pulehui@huawei.com>
->>>
->>> This patch relaxes the restrictions on the Zbb instructions. The 
->>> hardware
->>> is capable of recognizing the Zbb instructions independently, 
->>> eliminating
->>> the need for reliance on kernel compile configurations.
->>>
->>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+On 2024/4/3 7:40, Eduard Zingerman wrote:
+> On Sat, 2024-03-30 at 18:12 +0800, Pu Lehui wrote:
+> [...]
+> 
+>>> Looks like I won't be able to test this patch-set, unless you have
+>>> some writeup on how to create a riscv64 dev environment at hand.
+>>> Sorry for the noise
 >>
->> Should this patch really be part of this series?
+>> Yeah, environmental issues are indeed a developer's nightmare. I will
+>> try to do something for the newcomers of riscv64 bpf. At present, I have
+>> simply built a docker local vmtest environment [0] based on Bjorn's
+>> riscv-cross-builder. We can directly run vmtest within this environment.
+>> Hopefully it will help.
+>>
+>> Link: https://github.com/pulehui/riscv-cross-builder/tree/vmtest [0]
 > 
-> No, that should be submitted independently.
+> Hi Pu,
 > 
-
-My initial thought was that I didn't enable CONFIG_RISCV_ISA_ZBB in 
-config.riscv64, so I should loosen this restriction to enable zbb 
-optimization. It could not be part of this series.
-
-By the way, after reading what Conor and Björn said, I think we should 
-align with kernel sematic, that is, emit zbb when CONFIG_RISCV_ISA_ZBB 
-is enabled and so that if Zbb is detected they can be used.
-
-> Also, given Eduard's comment, it would be great if you could add the
-> instructions to tools/testing/selftests/bpf/README.rst even if not in
-> a perfect shape, but it would give developers a chance to get started.
+> Thank you for sharing the docker file, I've managed to run the tests
+> using it. In order to avoid creating files with root permissions I had
+> to add the following lines at the end of the Dockerfile:
 > 
-> Thanks,
-> Daniel
+> + RUN useradd --no-create-home --uid 1000 eddy
+> + RUN passwd -d eddy
+> + RUN echo 'eddy ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+> + # vmtest.sh does 'mount -o loop',
+> + # ensure there is a loop device in the container
+> + RUN mknod /dev/loop0 b 7 20
+> 
+> Where 'eddy' is my local user with UID 1000.
+> Probably this should be made more generic.
+> I used the following command to start the container:
+> 
+> docker run -ti -u 1000:1000 \
+>      --rm -v <path-to-kernel-dir>:/workspace \
+>      -v <path-to-rootfs-image-dir>:/rootfs \
+>      --privileged ubuntu-vmtest:latest /bin/bash
+> 
+> Also, I had to add '-d /rootfs/bpf_selftests' option for vmtest.sh in
+> order to avoid polluting user directory inside the container.
+> Maybe OUTPUT_DIR for vmtest.sh should be mounted as a separate volume.
+> 
+> I agree with Daniel, it would be great to document all of this
+
+Forgot to reply to this in my last email. It my pleasure to do this.
+
+> somewhere in the repo (or even scripted somehow).
+> 
+> Using the specified DENYLIST I get the following stats for test_progs:
+> 
+>    #3/2     arena_htab/arena_htab_asm:FAIL
+>    #3       arena_htab:FAIL
+
+Puranjay has submitted to riscv bpf arena and will be merged soon. So I 
+didn't add it to DENYLIST.riscv64.
+
+https://lore.kernel.org/bpf/20240326224943.86912-1-puranjay12@gmail.com/
+
+>    #95      get_branch_snapshot:FAIL
+>    #172/1   perf_branches/perf_branches_hw:FAIL
+>    #172     perf_branches:FAIL
+
+riscv sbi pmu driver not support branch sampling yet.  The following 
+patch should be used for better regression.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/commit/?id=ea6873118493
+
+>    #434/3   verifier_arena/basic_alloc3:FAIL
+>    #434     verifier_arena:FAIL
+>    Summary: 531/3581 PASSED, 64 SKIPPED, 4 FAILED
+> 
+> Tested-by: Eduard Zingerman <eddyz87@gmail.com>
+> 
+>> PS: Since the current rootfs of riscv64 is not in the INDEX, I simply
+>> modified vmtest.sh to support local rootfs.
+> 
+> Could you please add this change to the patch-set?
+
+yep, will try to make it more convenient.
+
+> 
+> [...]
 
