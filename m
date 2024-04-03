@@ -1,144 +1,236 @@
 Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6899815686D
-	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 21:46:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D12A15099C
+	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 22:01:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712180783; cv=none; b=r/JUgC+gHtOis3XAv/EkLf41Y04gLxMbaNDL3U7gs09JHM4276Zl77wihP45hcfn71nzmlfbARMikDhnbP92EPsQUy10AodE/DiCST+KsYzYBZqHLzfByCE1vefZgJtS18z+qsL9RQ1a4ZMtclkmHGY7jdbzyBRSBFLCcHXzA+o=
+	t=1712181663; cv=none; b=lKBFVr04eUzYf76oCmufX9tmS7Wvyex/5MQPVVdSZ1tiWBIgZezY2OUSZzh9sF0SSHf4WthrJWB9Q69ITGnE1JABYWQesoJGECf4FwLQUa1eAG6kAFtJwgFJlfScpIBhORlyFudRUODVelFwYw+IgxxRh5GsIuNPjuLaKYFgExY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712180783; c=relaxed/simple;
-	bh=W8pe94i52/FAy/6CVTO2eatvvocArHrO+ddtF9UkS1A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=izHCuUhSIWIYdqGTw6q38rrNrb5czSFcjtr7V0kNobAgzgDgCQQusHlISZRb10WEjpMgVwm4zvWDDKzchf4UBFbGr7zmV1C+/KdCUjyL/CRnSMrKvNphdLBAr2rfeZBQnBFiNuoAzj+YYkylQZ9giunaJtAS12ADbo7l1QcpzTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DhAhK6n1; arc=none smtp.client-ip=209.85.210.181
+	s=arc-20240116; t=1712181663; c=relaxed/simple;
+	bh=pBj+vj0qe37L+5V1lxI3yUZXk/AGmqm3rAfrzBbYm80=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=FQyqDxv7rU8tQzMoc4jmO/bFerH0r7RkEs40ZDrcnH9j6rokmH2/nC8027bujnyqUNUar7w98LDUmPQdpOjv1s9IIOCaelLqmEBkhdfUtPY0FjoeKbdGlJrucZ2LL/q5lzUXRUDPj53wWppfDWOOG1uqqzV3ZvR8mG53BAegTZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gyfOFHUC; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DhAhK6n1"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6e6fb9a494aso289041b3a.0
-        for <bpf@vger.kernel.org>; Wed, 03 Apr 2024 14:46:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gyfOFHUC"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6e709e0c123so262367b3a.1
+        for <bpf@vger.kernel.org>; Wed, 03 Apr 2024 15:01:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712180782; x=1712785582; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1712181661; x=1712786461; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U8a7JLMR9APXxT95h5CkO9ig701fknsfFfdRvjJcnfg=;
-        b=DhAhK6n1lcHXqJDmBX9V5XIxcItbRsb9mkHTWrFsGIgxacrrDVQU5atw2tCgd21AL9
-         8rd/ngLHEA3X84F2z9Urz16YDDCaELR1v3sBVz1MpCGgTJW6U8bx4pJLwPxKrkWLivgd
-         ST0uh5rUaZUZvMZEfbw3W3DtTbC/tPO7O2bPs7FxSOr8n90ZIzLm6zHkAbB7y+mu8GY7
-         RuplkMbaENH4r1133KvzI4nIlu9OZRfD/MDVioBEgTVFXA3D07aBfvp3gW8wZsoM+8Db
-         k/nDZR4xz4Jdd/Kv4mdIjSjU1BC+NFJ+lAn4suqq0SUmXQaf535g+9IPaZGjRR4PN/lG
-         RzUw==
+        bh=yFNgWJwm25apMH0YDKE2mUhHRmJOi59ALD4ncX3hvUo=;
+        b=gyfOFHUCx440MqBa0ci83f6KqJ+YLYXpeurLhctS1MmFZGbOwIocSHzPHNvXJUDjCv
+         ltieezd2MZL/cNIv3EMd1EsVUHWLQRNbXRhdCnwaOvGMUpswRStyChrhz9D3/HsQNF+3
+         9WmVvT8SShTNucUKw7nRz5prRpBTKzxLfhQdA64zjqnYbcbEt5ETKwRb6w0hPLtE/M19
+         IsO22YJyq5YlTKAqdJOBeqBulvdnbZW9KT0gYTc5XG6YxdZ1YaeGkp5L5lpFsZBfdNR1
+         5Nu2AONl8UMXyLAahQ/Cr2jMXkOj49tFeC/Fy9esDq8j6EjSJBmWNlYqJ9Z4hKC/6RiX
+         3vYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712180782; x=1712785582;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U8a7JLMR9APXxT95h5CkO9ig701fknsfFfdRvjJcnfg=;
-        b=CdYojhYBBOUwxsakmCCP39gGTp2qbRZnHmhI52fUBM0dv3K6eaL9vd6F8WF1Wm7qNM
-         Q3uoaRdARjn5fyPXmTozooBYdz1XtDm0ntBf50fvSjTI8Sv85Z37E/m9a8ZaO/Hq7aPc
-         VCstN+p6eX5zPCWfrkxoKmOP8+k2Dcxm9Vegzw6xZwJcfZeIpmNeLaQibrqMBWQZ6Hd/
-         ehWwOgbLV2tyJ98oFP9IoJx+xVd9l3OUj+LBA6najm7tTLE29AY93neINR2Tskmq2ken
-         bfJ2T37d9YWBU/1Stid8XiYuS47ku5bwp3OxK7OLlyYfe9yAELt80XjwRgSK2CyGkTsH
-         DFlw==
-X-Forwarded-Encrypted: i=1; AJvYcCUUHhN7fnUYlP+1SY4bLI0+mwA3ztaepWhN20+/gOdW8u+OZHvRAzw28l4Vjrw0ScAKWnIU3Mo3e2i2FieqNKTeRAkk
-X-Gm-Message-State: AOJu0YzHddzMt25+izbWozVzaGGI2vmjqlNrQioIvmCtaNVAaJ1X3tsg
-	5YIGdKrehsmK6SvZgu1pboZnmpsmWQ/CR3FfX0n8bE6fSTEoEcgT3fEJltFlo/EVnYvWwQzVbuc
-	errEJ8kUeZ7SQPlUw0+V9Ug7WuQE=
-X-Google-Smtp-Source: AGHT+IE9tDkq6NcQuhzeeZNvGCXbdz+YeyQZAm3Bw5TV/MwWCeDPAfOX5LXEovwwD59Fos4ZK/7yrnH1UAiO2bH3NMU=
-X-Received: by 2002:a05:6a20:9184:b0:1a5:6c53:b1f4 with SMTP id
- v4-20020a056a20918400b001a56c53b1f4mr959938pzd.39.1712180781599; Wed, 03 Apr
- 2024 14:46:21 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712181661; x=1712786461;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yFNgWJwm25apMH0YDKE2mUhHRmJOi59ALD4ncX3hvUo=;
+        b=IN+Fx4yGMfDSQJOalbB5OsCIhzz3euVKBg05t1M1AQ1X3PQC061gKkfLmO3f0OfQs6
+         f01rsuAhan8pLmJI0bMXVuI98N8W8WtxSkzvg/TvNXw4QBGideSGFLpR/gqDmtOyHn19
+         kzSX0xdNZd/h5NxgIKBKRNiFYv9ZVhp3zbs1hl1cmbNGlksDncGmQaA9PV+tWlHzzgBU
+         pelBBNbLCKJopgxIrtIZaTsEjtTmZ1D/E+zyP06MtaQh28VdDZr4WY8hzDvHjrVKZ0z1
+         uMsPJT1g0aOlkCd6FGWhv0F/ZGjTTfgApCMy5wEiwMjumc+qGge4gxGKNBMEqrPD+3eE
+         e0Ng==
+X-Forwarded-Encrypted: i=1; AJvYcCU0m77Ywsrbhk0BOHr03+JJWJKm4sznZI4KATzhmcEMryHS0rsH02IDRD4YC6XCB3Tftt7EeUybN2rVTY2UUOw66kAD
+X-Gm-Message-State: AOJu0YyVSy8VjUOQB9DqtmPh0cUGPy5gMV4GpNBXuHp1Dct5eYx/DTdJ
+	b78ir4V8ur02CwWU8SJXNbmvNjJANE70aC8kTJlwh0LJEEZC04b1
+X-Google-Smtp-Source: AGHT+IG1EvvAhksLIQY0JOP7aUndFfk/j08xjf8P7P4BXXSvzWnsToziZy8oslsHwYMu+khPFtHF5g==
+X-Received: by 2002:a05:6a00:2351:b0:6ea:c634:ca0f with SMTP id j17-20020a056a00235100b006eac634ca0fmr836256pfj.21.1712181661302;
+        Wed, 03 Apr 2024 15:01:01 -0700 (PDT)
+Received: from localhost ([98.97.36.54])
+        by smtp.gmail.com with ESMTPSA id u25-20020aa78499000000b006e6c856c0f3sm12324621pfn.188.2024.04.03.15.01.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Apr 2024 15:01:00 -0700 (PDT)
+Date: Wed, 03 Apr 2024 15:01:00 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
+ John Fastabend <john.fastabend@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, 
+ bpf@vger.kernel.org, 
+ ast@kernel.org, 
+ daniel@iogearbox.net, 
+ martin.lau@kernel.org, 
+ kernel-team@meta.com
+Message-ID: <660dd19c1a43a_21448208d8@john.notmuch>
+In-Reply-To: <CAEf4BzaEJjosWJFVZw=vKy+rK2VxB6DsB2pHbsz-3ME7Gn0t2g@mail.gmail.com>
+References: <20240402021307.1012571-1-andrii@kernel.org>
+ <660b9038bde52_1af77208d3@john.notmuch>
+ <CAEf4BzaEJjosWJFVZw=vKy+rK2VxB6DsB2pHbsz-3ME7Gn0t2g@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 0/4] Add internal-only BPF per-CPU instruction
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240403202409.2615469-1-tao.lyu@epfl.ch> <660dcccad5d07_21448208ee@john.notmuch>
-In-Reply-To: <660dcccad5d07_21448208ee@john.notmuch>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 3 Apr 2024 14:46:07 -0700
-Message-ID: <CAEf4BzZL6dCZx8Mve1RYXRJ1JeA6xqZeYN0V4Jfr9Xg04vAZrg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Fix verifier error due to narrower scalar
- spill onto 64-bit spilled scalar slots
-To: John Fastabend <john.fastabend@gmail.com>
-Cc: Tao Lyu <tao.lyu@epfl.ch>, bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org, 
-	sanidhya.kashyap@epfl.ch, mathias.payer@nebelwelt.net, 
-	meng.xu.cs@uwaterloo.ca
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 3, 2024 at 2:40=E2=80=AFPM John Fastabend <john.fastabend@gmail=
-.com> wrote:
->
-> Tao Lyu wrote:
-> > The verifier previously aimed to reject partial overwrite on an 8-byte =
-stack slot
-> > that contains a spilled pointer.
-> > However, it rejects all partial stack overwrites
-> > as long as the targeted stack slot is a spilled register,
-> > because it does not check if the stack slot is a spilled pointer.
+Andrii Nakryiko wrote:
+> On Mon, Apr 1, 2024 at 9:57=E2=80=AFPM John Fastabend <john.fastabend@g=
+mail.com> wrote:
 > >
-> > Finally, incomplete checks will result in the rejection of valid progra=
-ms,
-> > which spill narrower scalar values onto scalar slots, as shown below.
-> >
-> > 0: R1=3Dctx() R10=3Dfp0
-> > ; asm volatile ( @ repro.bpf.c:679
-> > 0: (7a) *(u64 *)(r10 -8) =3D 1          ; R10=3Dfp0 fp-8_w=3D1
-> > 1: (62) *(u32 *)(r10 -8) =3D 1
-> > attempt to corrupt spilled pointer on stack
-> > processed 2 insns (limit 1000000) max_states_per_insn 0 total_states 0 =
-peak_states 0 mark_read 0.
-> >
-> > The issue is fixed by adding a check on the spilled register type of ta=
-rgeted slots.
-> >
-> > Fixes: ab125ed3ec1c ("bpf: fix check for attempt to corrupt spilled poi=
-nter")
-> > Signed-off-by: Tao Lyu <tao.lyu@epfl.ch>
-> > ---
->
-> A test case would be nice.
+> > Andrii Nakryiko wrote:
+> > > Add a new BPF instruction for resolving per-CPU memory addresses.
+> > >
+> > > New instruction is a special form of BPF_ALU64 | BPF_MOV | BPF_DW, =
+with
+> > > insns->off set to BPF_ADDR_PERCPU (=3D=3D -1). It resolves provided=
+ per-CPU offset
+> > > to an absolute address where per-CPU data resides for "this" CPU.
+> > >
+> > > This patch set implements support for it in x86-64 BPF JIT only.
+> > >
+> > > Using the new instruction, we also implement inlining for three cas=
+es:
+> > >   - bpf_get_smp_processor_id(), which allows to avoid unnecessary t=
+rivial
+> > >     function call, saving a bit of performance and also not polluti=
+ng LBR
+> > >     records with unnecessary function call/return records;
+> > >   - PERCPU_ARRAY's bpf_map_lookup_elem() is completely inlined, bri=
+nging its
+> > >     performance to implementing per-CPU data structures using globa=
+l variables
+> > >     in BPF (which is an awesome improvement, see benchmarks below);=
 
-+1, please see progs/verifier_spill_fill.c, seems like a logical place
-
->
-> >  kernel/bpf/verifier.c | 1 +
-> >  1 file changed, 1 insertion(+)
+> > >   - PERCPU_HASH's bpf_map_lookup_elem() is partially inlined, just =
+like the
+> > >     same for non-PERCPU HASH map; this still saves a bit of overhea=
+d.
+> > >
+> > > To validate performance benefits, I hacked together a tiny benchmar=
+k doing
+> > > only bpf_map_lookup_elem() and incrementing the value by 1 for PERC=
+PU_ARRAY
+> > > (arr-inc benchmark below) and PERCPU_HASH (hash-inc benchmark below=
+) maps. To
+> > > establish a baseline, I also implemented logic similar to PERCPU_AR=
+RAY based
+> > > on global variable array using bpf_get_smp_processor_id() to index =
+array for
+> > > current CPU (glob-arr-inc benchmark below).
+> > >
+> > > BEFORE
+> > > =3D=3D=3D=3D=3D=3D
+> > > glob-arr-inc   :  163.685 =C2=B1 0.092M/s
+> > > arr-inc        :  138.096 =C2=B1 0.160M/s
+> > > hash-inc       :   66.855 =C2=B1 0.123M/s
+> > >
+> > > AFTER
+> > > =3D=3D=3D=3D=3D
+> > > glob-arr-inc   :  173.921 =C2=B1 0.039M/s (+6%)
+> > > arr-inc        :  170.729 =C2=B1 0.210M/s (+23.7%)
+> > > hash-inc       :   68.673 =C2=B1 0.070M/s (+2.7%)
+> > >
+> > > As can be seen, PERCPU_HASH gets a modest +2.7% improvement, while =
+global
+> > > array-based gets a nice +6% due to inlining of bpf_get_smp_processo=
+r_id().
+> > >
+> > > But what's really important is that arr-inc benchmark basically cat=
+ches up
+> > > with glob-arr-inc, resulting in +23.7% improvement. This means that=
+ in
+> > > practice it won't be necessary to avoid PERCPU_ARRAY anymore if per=
+formance is
+> > > critical (e.g., high-frequent stats collection, which is often a pr=
+actical use
+> > > for PERCPU_ARRAY today).
 > >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 17c06f1505e4..3064ba7c140f 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -4493,6 +4493,7 @@ static int check_stack_write_fixed_off(struct bpf=
-_verifier_env *env,
-> >        */
-> >       if (!env->allow_ptr_leaks &&
-> >           is_spilled_reg(&state->stack[spi]) &&
-> > +         state->stack[spi].spilled_ptr.type !=3D SCALAR_VALUE &&
-> >           size !=3D BPF_REG_SIZE) {
->
-> Might be worth a helper we have is_spilled_reg and is_spilled_scalar_reg
-> maybe a is_spilled_not_scalar_reg() is nice. Perhaps Andrii has a style
-> opinion. Or,
->
->  is_spilled_reg(...) && !is_spilled_scalar_reg(...)
+> > Out of curiousity did we consider exposing this instruction outside i=
+nternal
+> > inlining? It seems it would help compiler some to not believe its doi=
+ng a
+> > function call.
+> =
 
-yeah, I'd probably go with this, definitely not "is_spilled_not_scalar_reg"=
- :)
+> We decided to start as internal-only to try it out and get inlining
+> benefits, without being stuck in a longer discussion to define the
+> exact user-visible semantics, guarantees, etc. Given this instruction
+> calculates memory addresses that are meant to be dereferenced
+> directly, we'd need to be careful to make sure all the safety aspects
+> are carefully considered.
+> =
 
->
-> Not sure I like that any better than whats there in patch though.
->
-> >               verbose(env, "attempt to corrupt spilled pointer on stack=
-\n");
-> >               return -EACCES;
-> > --
-> > 2.25.1
+> Though you reminded me that we should probably also implement inlining
+> of bpf_this_cpu_ptr() and maybe even bpf_per_cpu_ptr() (I'll need to
+> double-check how arbitrary CPU address is calculated). Maybe as a
+> follow up.
+> =
+
+> >
+> > We could do some runtime rewrites to find the address for global vars=
+ for
+> > example.
+> >
+> > FWIW I don't think one should block this necessarily perhaps as follo=
+w up?
+> > Or at least worth considering if I didn't miss some reason its not
+> > plausible.
+> =
+
+> No blocker in principle, but certainly we'd need to be more careful if
+> we expose the instruction to users.
+
+All sounds good that was my understanding as well.
+
+I see it got merged but for what its worth I went through and ran some
+of this and rest of patches lgtm,
+
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+Tested-by: John Fastabend <john.fastabend@gmail.com>
+
+> =
+
+> >
+> > >
+> > > v1->v2:
+> > >   - use BPF_ALU64 | BPF_MOV instruction instead of LDX (Alexei);
+> > >   - dropped the direct per-CPU memory read instruction, it can alwa=
+ys be added
+> > >     back, if necessary;
+> > >   - guarded bpf_get_smp_processor_id() behind x86-64 check (Alexei)=
+;
+> > >   - switched all per-cpu addr casts to (unsigned long) to avoid spa=
+rse
+> > >     warnings.
+> > >
+> > > Andrii Nakryiko (4):
+> > >   bpf: add special internal-only MOV instruction to resolve per-CPU=
+
+> > >     addrs
+> > >   bpf: inline bpf_get_smp_processor_id() helper
+> > >   bpf: inline bpf_map_lookup_elem() for PERCPU_ARRAY maps
+> > >   bpf: inline bpf_map_lookup_elem() helper for PERCPU_HASH map
+> > >
+> > >  arch/x86/net/bpf_jit_comp.c | 16 ++++++++++++++++
+> > >  include/linux/filter.h      | 20 ++++++++++++++++++++
+> > >  kernel/bpf/arraymap.c       | 33 +++++++++++++++++++++++++++++++++=
+
+> > >  kernel/bpf/core.c           |  5 +++++
+> > >  kernel/bpf/disasm.c         | 14 ++++++++++++++
+> > >  kernel/bpf/hashtab.c        | 21 +++++++++++++++++++++
+> > >  kernel/bpf/verifier.c       | 24 ++++++++++++++++++++++++
+> > >  7 files changed, 133 insertions(+)
+> > >
+> > > --
+> > > 2.43.0
+> > >
+> > >
 > >
 > >
->
->
+
+
