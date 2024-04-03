@@ -1,80 +1,203 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7F961553B3
-	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 20:08:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22489155A32
+	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 20:09:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712174918; cv=none; b=rNrp3QIFwA1oK5R5QHscxTek65vWgEBCJr6SIs3JJGw1xOp6bLXM98WKZgPGHxjdewWwweDHGwZAwEnegEk4DFrpYVGCqoQIhp31OD87Zyadq8xGtPfBa53oGhm8uPA4iIsAaFwVGf4N1xjZyFnnQAMpkIjLMqA8grAiavYWIp4=
+	t=1712174969; cv=none; b=lMTtrTGVy2evO7xFHAxHBigJMVdzPcPJJnfnFzu8sAH3LHkBfa6OhZBTCG96+Ik9gB3PBWjPZQoYie0ypoqcqwCHTE71Y6+I230/wBsbtMWh61di3xFcPFuTf4RE0azCOP1EOZOWQSOXiwfjr/YQk9slh0OAt8BmZiEaasXiqAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712174918; c=relaxed/simple;
-	bh=TM/Ol5Aenz4QqCvR+toVIxKjxHZCfJPJKQv7TNh80Do=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LNWCe4Fti6IsvkPjOGA4mi7GMxc8/cXJPv+6FcRAYSzrffFQuurhJzvDIjii5/YcXzd5EE5F7q86Tl3ALw97oXdhdJf9nyd8ceqL23zJiqA0IPEEcBGNRojPOZbdnw1HNvuLCl0jUq94ZiuEwO/KcJh46cPKDs1VLitro9L7dSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FH2PNL1s; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712174969; c=relaxed/simple;
+	bh=jAhTMnavr1/dQPVNh1efFzR1e9Bc9KH2ixvHqT+JRto=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Ao8SRX51PBmGioju764NbzJmDl6jjQg9RcJOWt0q8N8nVD4rEe20xj7//8Mn5ju/oQPJT3joGTeli5ay47TkziQu+vbclflguLNMDeyv1VL47Ue2ElDZn6XGtwt4pSUgWNAzQFtIKLvrh1byXVLIdaP3/CjMRjv+S+PS46zfdHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=polarsignals.com; spf=pass smtp.mailfrom=polarsignals.com; dkim=pass (2048-bit key) header.d=polarsignals.com header.i=@polarsignals.com header.b=VG0+DJr4; arc=none smtp.client-ip=209.85.210.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=polarsignals.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=polarsignals.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FH2PNL1s"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-415446af364so8447495e9.0
-        for <bpf@vger.kernel.org>; Wed, 03 Apr 2024 13:08:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=polarsignals.com header.i=@polarsignals.com header.b="VG0+DJr4"
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-6e675181ceaso166693a34.2
+        for <bpf@vger.kernel.org>; Wed, 03 Apr 2024 13:09:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712174915; x=1712779715; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TM/Ol5Aenz4QqCvR+toVIxKjxHZCfJPJKQv7TNh80Do=;
-        b=FH2PNL1s0IPWgb/7bBONTuEPd/o94gXckZpH2PtqHuvDPVCtSIPobPTVuZgKS/T1SP
-         j8cpQdmXTaGUYIQlcd8H6xSDkrYWaKtagAnXf2LWdfvgv8BiJ3/IVM0jPPhOYHL529mM
-         1nLPWPLyjmFW9CbYl5KjXEMa4KXWZe36OesLZPPHgveOmBgvHh9N5/e4PNb5mnvFHPyM
-         E58hoUi83yAyhnOjuRTEeWuUbT6+SivVSnLmiJkLwM/PnoFDtFMY31UrzYVuztDc9Oho
-         FChxEHzEK0WmER7v3Xk/AGTEIsaJ9MFwkweTktWB4QW3c+R0iMp9GWkF8u+nhzsbkfEZ
-         yfCg==
+        d=polarsignals.com; s=google; t=1712174967; x=1712779767; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7wiFa75/1RCLjDFXJq4yNlFfeCVOco365AD5pJROc9Y=;
+        b=VG0+DJr4LivxEWyWDucbDPWUiO8DBaPHCuVr22qs3yfpYLrHJ+qa83AB4kYUmCQXvE
+         8zDvEbuMspM4VLsTFwTFRB9d+VbF0LQwnXgbZOxqIuu2ZgUwoMOIFYmUyDtGFci+3RYh
+         PhPtxLOrvV/6wplNTkcjWi/xASHcQHcHEhtYEsaNTbvb3YL+qJGSE7sMxj7RXXMGJzrg
+         i42jsm7PT++CNFDv/6xlZnAYZYT0/VcHEdRvczwZ/heHHIQhCEYxzqaoj+R+nMmTQJtW
+         wkh8kX8TKE8c34HZUHmWAOifSMrvNfdONHh4U3KKsdiMH0i1j8HhQ+jSwViKhO97ukp8
+         Yd0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712174915; x=1712779715;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1712174967; x=1712779767;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TM/Ol5Aenz4QqCvR+toVIxKjxHZCfJPJKQv7TNh80Do=;
-        b=dIdiw3wjrIJiAjX/ZufecvMqoCl/H9FEY3fzaJ9q3OwyY8mataqe0eBgYDOcjKXyay
-         O+O9aM9ZHoCZ/hhZgei8rUUcZYeSKxTgEj+vNf7EAQMNmtdhNfbBgAezhpqKt373YCGG
-         LklaflGyRB4x4d9sF96MtJ1NF088C0pL4S9d0pL7oYKRU1BlO+YTpj/Q32sVno2X6Thn
-         2ocWqWOzJE8iuwvPCN10T8Z0yVvBZ1qunpSbuNitCZZCSdlIR7ajfiPS4nj/V/JW7k+X
-         wjRZ/gW9mID4LzE7Bu7hFJnV7fzc2e40zK7ZTprRcdRQAP8E2raAPZlNxsRilH5IDeMO
-         Tiwg==
-X-Gm-Message-State: AOJu0YyWtfIlkUL4DvEenuzy5fl+b1DR5aI3WK4Uf6TpOmZP6AzF5wkF
-	SUUp3LWeZJduTja7g2oE//JQ2J1Bz/uZ+QcogOOUqUavQkqXBqOQ8VDO3Sf+66iBf+uK9RdB4Hm
-	GLHLVKZBIZ2XTVnL1mGMJbZRyiA0=
-X-Google-Smtp-Source: AGHT+IGCAiyNkyn0+lL3QOX23t2X4cc6aLYpSr1URcKm0B8n3Hr+WsQBmXpkVYntMfuytisBezAigfAuHCd+rWEivmM=
-X-Received: by 2002:a5d:66d1:0:b0:343:67c2:aa46 with SMTP id
- k17-20020a5d66d1000000b0034367c2aa46mr3055773wrw.34.1712174914891; Wed, 03
- Apr 2024 13:08:34 -0700 (PDT)
+        bh=7wiFa75/1RCLjDFXJq4yNlFfeCVOco365AD5pJROc9Y=;
+        b=GMqLts/eR8hH3fKO47rzwz106jdawMRx2BEr9sv8MaQT/udzmvW/TFtrlE2l8juZH6
+         by6oGEG68gtEhZs7Zm47t446QM8X7KE2pUbNtCnsDs2HBLDSJFa4yMx7+CP5TN7DbHx/
+         XqaIUE8h2AfP2CuD5NXpg9UivFDcQ7AEA2nCYwsUZ65CMF2WQlT6FXuyGGErVS/AYb9N
+         JkzAoBT+JnNQarQK6yK4IXawYYrzFtOSyNTyF0GHRag2srjYUPfLX142qnAj6uNuJQ/O
+         HHYdJ9qznqJ/KdN9HTIQjt96gU/E7+i8ODKPkhYHECkdx8EDMaMagmEycP3K5BokaJgy
+         43Qg==
+X-Gm-Message-State: AOJu0YzeoUn0Nxl4f7Fzq3dEKDvHna9MvMP+D5C7fG2c2otyGn82Jpyt
+	ChjJgG47P5f5I5ZQRhaPYlp36oshsI6oBQqHwhnvYPHXKWhOoxW2la05y12Wdl8=
+X-Google-Smtp-Source: AGHT+IGCrdXXpvjSjF/B38i6HuwSjWt1NhgpeUzYPeIczoruW1Q7r82fz5DPkigBHxLg/o5vsL9dxg==
+X-Received: by 2002:a05:6830:44a:b0:6e8:9b1a:6bc2 with SMTP id d10-20020a056830044a00b006e89b1a6bc2mr336569otc.20.1712174967075;
+        Wed, 03 Apr 2024 13:09:27 -0700 (PDT)
+Received: from localhost (pool-173-56-0-190.nycmny.fios.verizon.net. [173.56.0.190])
+        by smtp.gmail.com with ESMTPSA id f9-20020a0562141d2900b0069904ba6522sm3718900qvd.136.2024.04.03.13.09.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Apr 2024 13:09:26 -0700 (PDT)
+From: "Brennan Vincent" <brennan.vincent@polarsignals.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, John Fastabend
+ <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: 10x regression in processed instructions after recent verifier
+ change
+In-Reply-To: <CAEf4BzYN-seVkwb0ddGce0EAMWs3kYq1LtpUMmRz6cBtvOXLrw@mail.gmail.com>
+References: <874jci5l3f.fsf@taipei.mail-host-address-is-not-set>
+ <CAEf4BzYN-seVkwb0ddGce0EAMWs3kYq1LtpUMmRz6cBtvOXLrw@mail.gmail.com>
+Date: Wed, 03 Apr 2024 16:09:26 -0400
+Message-ID: <871q7m5hu1.fsf@taipei.mail-host-address-is-not-set>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <874jci5l3f.fsf@taipei.mail-host-address-is-not-set>
-In-Reply-To: <874jci5l3f.fsf@taipei.mail-host-address-is-not-set>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 3 Apr 2024 13:08:23 -0700
-Message-ID: <CAADnVQJ4dYRpNRuoYh8Bo_kW+cwuWWxcfPo7jruViGMj=U15bQ@mail.gmail.com>
-Subject: Re: 10x regression in processed instructions after recent verifier change
-To: Brennan Vincent <brennan.vincent@polarsignals.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 3, 2024 at 11:59=E2=80=AFAM Brennan Vincent
-<brennan.vincent@polarsignals.com> wrote:
->
-> I am not sure what, if anything, should be done about this in the kernel,
-> as it seems there's a fundamental tradeoff between precision of the
-> verifier and performance in terms of instructions processed.
+Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
 
-To avoid such surprises in the future it's best to contribute
-your bpf programs as selftests.
-Then future verifier changes will be tested against them.
+> On Wed, Apr 3, 2024 at 11:59=E2=80=AFAM Brennan Vincent
+> <brennan.vincent@polarsignals.com> wrote:
+>>
+>> Hello,
+>>
+>> I am working on Parca, a continuous CPU time profiler which works by
+>> doing DWARF-based stack unwinding in an eBPF program. In 6.8 series
+>> kernels, our unwinder can no longer be loaded, as it exceeds the
+>> verifier's limit of 1M instructions processed.
+>>
+>> I was eventually able to get it working, so this is not exactly a
+>> support request, but rather a report of an issue that might affect other
+>> people.
+>>
+>> The issue is 100% reproducible and bisects to
+>> 67420501e8681ae18f9f0ea0a69cd2f432100e70. Hacking the kernel a bit to
+>> increase the instructions processed limit, I found that it successfully
+>> verifies after ~3M instructions, whereas previously it took ~250k, so
+>> more than a 10x regression.
+>>
+>> In case it matters, I'm on arm64.
+>>
+>> I am not an expert on the internal details of the verifier, but I have a
+>> vague theory on what can be causing this behavior. Our unwinder has a
+>> few places where it needs to do binary search on an array, which look
+>> similar to this:
+>>
+>> #define MAX_UNWIND_INFO_BINARY_SEARCH_DEPTH 19
+>> #define MAX_UNWIND_TABLE_SIZE 250 * 1000
+>>
+>> static u64 find_offset_for_pc(stack_unwind_table_t *table, u64 pc, u64 l=
+eft, u64 right) {
+>>     u64 found =3D BINARY_SEARCH_DEFAULT;
+>>
+>>     for (int i =3D 0; i < MAX_UNWIND_INFO_BINARY_SEARCH_DEPTH; i++) {
+>>         if (left >=3D right) {
+>>             LOG("\t.done");
+>>             return found;
+>>         }
+>>
+>>         u32 mid =3D (left + right) / 2;
+>>
+>>         // Appease the verifier.
+>>         if (mid < 0 || mid >=3D MAX_UNWIND_TABLE_SIZE) {
+>>             bump_unwind_error_should_never_happen();
+>>             return BINARY_SEARCH_SHOULD_NEVER_HAPPEN;
+>>         }
+>>
+>>         if (table->rows[mid].pc <=3D pc) {
+>>             found =3D mid;
+>>             left =3D mid + 1;
+>>         } else {
+>>             right =3D mid;
+>>         }
+>>     }
+>>     return BINARY_SEARCH_EXHAUSTED_ITERATIONS;
+>> }
+>>
+>> (For more examples see
+>> https://github.com/parca-dev/parca-agent/blob/main/bpf/unwinders/native.=
+bpf.c
+>> .)
+>>
+>> Note that as I said, I'm not an expert on the verifier, so my theory
+>> could be totally wrong. Please assume I put qualifiers like "I
+>> think...", "I suspect...", etc. in the proper places in what
+>> follows.
+>>
+>> The commit in question made the verifier track the bounds of variables
+>> more precisely, which might allow it to verify more programs. This,
+>> however, has a downside which is that it causes an explosion in the
+>> state space. In previous versions of the kernel, we could just verify
+>> this snippet once because the verifier did not precisely track the
+>> bounds of `mid`. In the new version, we have different bounds for `mid`
+>> in the different branches of the main `if` statement, and the set of
+>> different bounds multiplies in size by 2 each time through the loop,
+>> causing this huge explosion.
+>>
+>> Now, if I intentionally confuse the verifier and prevent it from knowing
+>> the bounds of `mid`, e.g.:
+>>
+>> static u32 __attribute__((optnone)) scramble(u32 val) {
+>>         return val ^ 0xFFFFFFFF;
+>> }
+>>
+>> then, in the main binary search loop:
+>>
+>>         u32 mid =3D (left + right) / 2;
+>>         mid =3D scramble(scramble(mid));
+>>
+>> then the program verifies fine, as it did before the commit in question.
+>
+> Yep, I think your analysis is correct, and your obfuscation workaround
+> is "sane" :)
+>
+> Having said that, I think it would benefit your BPF programs from
+> thinking a bit more carefully about scaling your BPF verification
+> process by using various features and techniques that keep
+> verification complexity more bounded.
+>
+> Specifically, I think you can benefit from making find_offset_for_pc a
+> global function, in which case it will be validated just once,
+> separately, and then not re-validated.
+>
+> Also, if you can rely on that, using bpf_for() loops (based on
+> open-coded iterators) or bpf_loop() helper would also help minimize
+> verification complexity of your loops.
+
+Thanks. I'll look into all those suggestions.
+
+>>
+>> I am not sure what, if anything, should be done about this in the kernel,
+>> as it seems there's a fundamental tradeoff between precision of the
+>> verifier and performance in terms of instructions processed.
+>>
+>> --
+>> Brennan (he/him)
+>> Staff Software Engineer | Polar Signals Inc.
+>> E: brennan.vincent@polarsignals.com
+>> W: umanwizard.com
+>> TZ: America/New_York
+--=20
+Brennan (he/him)
+Staff Software Engineer | Polar Signals Inc.
+E: brennan.vincent@polarsignals.com
+W: www.umanwizard.com
+TZ: America/New_York
