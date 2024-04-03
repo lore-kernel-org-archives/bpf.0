@@ -1,437 +1,93 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01BAB148FE4;
-	Wed,  3 Apr 2024 14:09:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14365148FF5;
+	Wed,  3 Apr 2024 14:20:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712153385; cv=none; b=CTWh/Zok7hzkjPal3XmOXCsiZOYxq2VBjO/UpciVX68Ymd0nqyBoJfzvOv0eH26l3I/4FkgVdklUdZlREZfenlWBmCOCHc1vICG41U4FUGP4YKtlwnsTyuLlerMAX+xmXt54OEjJ8G++iYgLIVFirMA+0UnMYoq27/nl/8cDu18=
+	t=1712154030; cv=none; b=GquriMBpLAr2I9LKULywDQmrHhiLNSwb9tW/lbHEJfxRZjnLJ3Dv99LvfzjL/aHmeajWO2L/oJX+UJuKIYLESK/Y79R0Nc3n1LX3R92DXFHF0hIpr6UXVqiTW4fvRiElTjllaoIUzuQH0O0PDXiKAboBy8g0UGihMCY9ScJX0iQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712153385; c=relaxed/simple;
-	bh=OIt0KeeSkk519MenSOAg23Poe54usewFuAJi3SZsn9M=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=iDI+an+HV2rPgVJG265cfKIBmR2UG+ADCIy3/JxrOakK2P1PaKn83vLYH7vWq3uH/Vk4gZpLyKXMEpHBOR347+sLK1bztvGVlwNICNE8oVE/mQJgDqA1LOtwCcbv8zuG46uF9q8TPXRJBLPh32sH/Bg5XtrTMSaXPnkJPefrSfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qLCpEqs/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712154030; c=relaxed/simple;
+	bh=Ur+vOFJmzpEfXxoh+VrFj3KA2v/03Irt0g71jewvQsg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=HmRoO24DOSR7mihNDFGXePDtJzM15OoiHe1TIANBx7e146hhzNHSf3m/gMNjqr4QD7fZrDz1BPjhF5l31U5YycAJ4412x8sEEQqJIBH1tvI98ljlPA7HwXwBFsvLmkLZUVTe3tqOCh1qkQ4f9PD7PYb0F4nuvblgg5vS/K82SnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ot9UQ/gL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qLCpEqs/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8C91C433F1;
-	Wed,  3 Apr 2024 14:09:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ot9UQ/gL"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9CE3FC43390;
+	Wed,  3 Apr 2024 14:20:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712153384;
-	bh=OIt0KeeSkk519MenSOAg23Poe54usewFuAJi3SZsn9M=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=qLCpEqs/aXbOXWVw6PIYOQ8EDB6vfyMK+CgGwUi+LndwtzSKDiWGf/zEuzJpOmWZn
-	 gqJCiaBft6f1X2vDNca9m41AiVBDhEEk09+ID3QWCNSHhcXJgB/8f6GaDdG0R4vvZi
-	 htp9KFBMsB+AldFOgjkzI94OQPRsElx+jeAzcpRarVPFlp5aBXcUIYI/GonDhpfaf2
-	 ZhRNFia3PTjW0SMRay/F9QU7Pq1kSNIOBlpFDfDrDbmo6uIXfFVKdsnYkBYehmSQXY
-	 doZDb+PZW6tDhHd7uVqO2871E5kBOfQLQOJqjJv3shDTbyj5ECBbFqcnQu4sS3Mz5D
-	 /o9QBwyR4JLIw==
-Date: Wed, 3 Apr 2024 23:09:37 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Oleg Nesterov <oleg@redhat.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org, Song Liu <songliubraving@fb.com>, Yonghong Song
- <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, Peter Zijlstra
- <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>,
- "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
-Subject: Re: [PATCHv2 1/3] uprobe: Add uretprobe syscall to speed up return
- probe
-Message-Id: <20240403230937.c3bd47ee47c102cd89713ee8@kernel.org>
-In-Reply-To: <Zg0lvUIB4WdRUGw_@krava>
-References: <20240402093302.2416467-1-jolsa@kernel.org>
-	<20240402093302.2416467-2-jolsa@kernel.org>
-	<20240403100708.233575a8ac2a5bac2192d180@kernel.org>
-	<Zg0lvUIB4WdRUGw_@krava>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=k20201202; t=1712154029;
+	bh=Ur+vOFJmzpEfXxoh+VrFj3KA2v/03Irt0g71jewvQsg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=ot9UQ/gLyy84yq0PB9Yp0SpdH4SJSrnF20dUhghc/N2qDtQRKkX+dJmoI2PbD1FRI
+	 EqEL+rDe+DTNQhJzDjMHtpPDkCGjVlt8qTC2n4Dpjr5szde97PjJxvl272o4q+m/BU
+	 j3TqoMytl9/2kzfFEyubsbQ6Ry+qWhn5r7eUWe+292FbZ20lwS/+BFIhCsQIM63IhR
+	 jUjLMQeUyj16AO32v89+f125E1tpWpqqjrrsb/+5Pea+7RMmQfWd0b+wJzRSFuoc4x
+	 2E/21wNo+KjozqLvEKCTH5gb+/6LbHFjAJJm0ZJeNK0bcMNoa86MyG7alN0kqZXwix
+	 T3wQlSU04z+xw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8EA3FD84BB4;
+	Wed,  3 Apr 2024 14:20:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v3 0/7] Selftests/xsk: Test with maximum and minimum
+ HW ring size configurations
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171215402958.3229.14901300049067345284.git-patchwork-notify@kernel.org>
+Date: Wed, 03 Apr 2024 14:20:29 +0000
+References: <20240402114529.545475-1-tushar.vyavahare@intel.com>
+In-Reply-To: <20240402114529.545475-1-tushar.vyavahare@intel.com>
+To: Tushar Vyavahare <tushar.vyavahare@intel.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn@kernel.org,
+ magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
+ jonathan.lemon@gmail.com, davem@davemloft.net, kuba@kernel.org,
+ pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+ tirthendu.sarkar@intel.com
 
-On Wed, 3 Apr 2024 11:47:41 +0200
-Jiri Olsa <olsajiri@gmail.com> wrote:
+Hello:
 
-> On Wed, Apr 03, 2024 at 10:07:08AM +0900, Masami Hiramatsu wrote:
-> > Hi Jiri,
-> > 
-> > On Tue,  2 Apr 2024 11:33:00 +0200
-> > Jiri Olsa <jolsa@kernel.org> wrote:
-> > 
-> > > Adding uretprobe syscall instead of trap to speed up return probe.
-> > 
-> > This is interesting approach. But I doubt we need to add additional
-> > syscall just for this purpose. Can't we use another syscall or ioctl?
+This series was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Tue,  2 Apr 2024 11:45:22 +0000 you wrote:
+> Please find enclosed a patch set that introduces enhancements and new test
+> cases to the selftests/xsk framework. These test the robustness and
+> reliability of AF_XDP across both minimal and maximal ring size
+> configurations.
 > 
-> so the plan is to optimize entry uprobe in a similar way and given
-> the syscall is not a scarce resource I wanted to add another syscall
-> for that one as well
+> While running these tests, a bug [1] was identified when the batch size is
+> roughly the same as the NIC ring size. This has now been addressed by
+> Maciej's fix.
 > 
-> tbh I'm not sure sure which syscall or ioctl to reuse for this, it's
-> possible to do that, the trampoline will just have to save one or
-> more additional registers, but adding new syscall seems cleaner to me
+> [...]
 
-Hmm, I think a similar syscall is ptrace? prctl may also be a candidate.
+Here is the summary with links:
+  - [bpf-next,v3,1/7] tools/include/uapi/linux/ethtool.h
+    https://git.kernel.org/bpf/bpf-next/c/7effe3fdc049
+  - [bpf-next,v3,2/7] selftests/xsk: make batch size variable
+    https://git.kernel.org/bpf/bpf-next/c/c3bd015090f2
+  - [bpf-next,v3,3/7] selftests/bpf: implement get_hw_ring_size function to retrieve current and max interface size
+    https://git.kernel.org/bpf/bpf-next/c/90a695c3d31e
+  - [bpf-next,v3,4/7] selftests/bpf: implement set_hw_ring_size function to configure interface ring size
+    https://git.kernel.org/bpf/bpf-next/c/bee3a7b07624
+  - [bpf-next,v3,5/7] selftests/xsk: introduce set_ring_size function with a retry mechanism for handling AF_XDP socket closures
+    https://git.kernel.org/bpf/bpf-next/c/776021e07fd0
+  - [bpf-next,v3,6/7] selftests/xsk: test AF_XDP functionality under minimal ring configurations
+    https://git.kernel.org/bpf/bpf-next/c/c4f960539fae
+  - [bpf-next,v3,7/7] selftests/xsk: add new test case for AF_XDP under max ring sizes
+    https://git.kernel.org/bpf/bpf-next/c/c53908b254fc
 
-> 
-> > 
-> > Also, we should run syzkaller on this syscall. And if uretprobe is
-> 
-> right, I'll check on syzkaller
-> 
-> > set in the user function, what happen if the user function directly
-> > calls this syscall? (maybe it consumes shadow stack?)
-> 
-> the process should receive SIGILL if there's no pending uretprobe for
-> the current task, or it will trigger uretprobe if there's one pending
-
-No, that is too aggressive and not safe. Since the syscall is exposed to
-user program, it should return appropriate error code instead of SIGILL.
-
-> 
-> but we could limit the syscall to be executed just from the trampoline,
-> that should prevent all the user space use cases, I'll do that in next
-> version and add more tests for that
-
-Why not limit? :) The uprobe_handle_trampoline() expects it is called
-only from the trampoline, so it is natural to check the caller address.
-(and uprobe should know where is the trampoline)
-
-Since the syscall is always exposed to the user program, it should
-- Do nothing and return an error unless it is properly called.
-- check the prerequisites for operation strictly.
-I concern that new system calls introduce vulnerabilities.
-
-Thank you,
-
-
-> 
-> thanks,
-> jirka
-> 
-> 
-> > 
-> > Thank you,
-> > 
-> > > 
-> > > At the moment the uretprobe setup/path is:
-> > > 
-> > >   - install entry uprobe
-> > > 
-> > >   - when the uprobe is hit, it overwrites probed function's return address
-> > >     on stack with address of the trampoline that contains breakpoint
-> > >     instruction
-> > > 
-> > >   - the breakpoint trap code handles the uretprobe consumers execution and
-> > >     jumps back to original return address
-> > > 
-> > > This patch replaces the above trampoline's breakpoint instruction with new
-> > > ureprobe syscall call. This syscall does exactly the same job as the trap
-> > > with some more extra work:
-> > > 
-> > >   - syscall trampoline must save original value for rax/r11/rcx registers
-> > >     on stack - rax is set to syscall number and r11/rcx are changed and
-> > >     used by syscall instruction
-> > > 
-> > >   - the syscall code reads the original values of those registers and
-> > >     restore those values in task's pt_regs area
-> > > 
-> > > Even with the extra registers handling code the having uretprobes handled
-> > > by syscalls shows speed improvement.
-> > > 
-> > >   On Intel (11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz)
-> > > 
-> > >   current:
-> > > 
-> > >     base           :   15.888 ± 0.033M/s
-> > >     uprobe-nop     :    3.016 ± 0.000M/s
-> > >     uprobe-push    :    2.832 ± 0.005M/s
-> > >     uprobe-ret     :    1.104 ± 0.000M/s
-> > >     uretprobe-nop  :    1.487 ± 0.000M/s
-> > >     uretprobe-push :    1.456 ± 0.000M/s
-> > >     uretprobe-ret  :    0.816 ± 0.001M/s
-> > > 
-> > >   with the fix:
-> > > 
-> > >     base           :   15.116 ± 0.045M/s
-> > >     uprobe-nop     :    3.001 ± 0.045M/s
-> > >     uprobe-push    :    2.831 ± 0.004M/s
-> > >     uprobe-ret     :    1.102 ± 0.001M/s
-> > >     uretprobe-nop  :    1.969 ± 0.001M/s  < 32% speedup
-> > >     uretprobe-push :    1.905 ± 0.004M/s  < 30% speedup
-> > >     uretprobe-ret  :    0.933 ± 0.002M/s  < 14% speedup
-> > > 
-> > >   On Amd (AMD Ryzen 7 5700U)
-> > > 
-> > >   current:
-> > > 
-> > >     base           :    5.105 ± 0.003M/s
-> > >     uprobe-nop     :    1.552 ± 0.002M/s
-> > >     uprobe-push    :    1.408 ± 0.003M/s
-> > >     uprobe-ret     :    0.827 ± 0.001M/s
-> > >     uretprobe-nop  :    0.779 ± 0.001M/s
-> > >     uretprobe-push :    0.750 ± 0.001M/s
-> > >     uretprobe-ret  :    0.539 ± 0.001M/s
-> > > 
-> > >   with the fix:
-> > > 
-> > >     base           :    5.119 ± 0.002M/s
-> > >     uprobe-nop     :    1.523 ± 0.003M/s
-> > >     uprobe-push    :    1.384 ± 0.003M/s
-> > >     uprobe-ret     :    0.826 ± 0.002M/s
-> > >     uretprobe-nop  :    0.866 ± 0.002M/s  < 11% speedup
-> > >     uretprobe-push :    0.826 ± 0.002M/s  < 10% speedup
-> > >     uretprobe-ret  :    0.581 ± 0.001M/s  <  7% speedup
-> > > 
-> > > Reviewed-by: Oleg Nesterov <oleg@redhat.com>
-> > > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> > > Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> > > Signed-off-by: Oleg Nesterov <oleg@redhat.com>
-> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > ---
-> > >  arch/x86/entry/syscalls/syscall_64.tbl |  1 +
-> > >  arch/x86/kernel/uprobes.c              | 83 ++++++++++++++++++++++++++
-> > >  include/linux/syscalls.h               |  2 +
-> > >  include/linux/uprobes.h                |  2 +
-> > >  include/uapi/asm-generic/unistd.h      |  5 +-
-> > >  kernel/events/uprobes.c                | 18 ++++--
-> > >  kernel/sys_ni.c                        |  2 +
-> > >  7 files changed, 108 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-> > > index 7e8d46f4147f..af0a33ab06ee 100644
-> > > --- a/arch/x86/entry/syscalls/syscall_64.tbl
-> > > +++ b/arch/x86/entry/syscalls/syscall_64.tbl
-> > > @@ -383,6 +383,7 @@
-> > >  459	common	lsm_get_self_attr	sys_lsm_get_self_attr
-> > >  460	common	lsm_set_self_attr	sys_lsm_set_self_attr
-> > >  461	common	lsm_list_modules	sys_lsm_list_modules
-> > > +462	64	uretprobe		sys_uretprobe
-> > >  
-> > >  #
-> > >  # Due to a historical design error, certain syscalls are numbered differently
-> > > diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
-> > > index 6c07f6daaa22..6fc5d16f6c17 100644
-> > > --- a/arch/x86/kernel/uprobes.c
-> > > +++ b/arch/x86/kernel/uprobes.c
-> > > @@ -12,6 +12,7 @@
-> > >  #include <linux/ptrace.h>
-> > >  #include <linux/uprobes.h>
-> > >  #include <linux/uaccess.h>
-> > > +#include <linux/syscalls.h>
-> > >  
-> > >  #include <linux/kdebug.h>
-> > >  #include <asm/processor.h>
-> > > @@ -308,6 +309,88 @@ static int uprobe_init_insn(struct arch_uprobe *auprobe, struct insn *insn, bool
-> > >  }
-> > >  
-> > >  #ifdef CONFIG_X86_64
-> > > +
-> > > +asm (
-> > > +	".pushsection .rodata\n"
-> > > +	".global uretprobe_syscall_entry\n"
-> > > +	"uretprobe_syscall_entry:\n"
-> > > +	"pushq %rax\n"
-> > > +	"pushq %rcx\n"
-> > > +	"pushq %r11\n"
-> > > +	"movq $" __stringify(__NR_uretprobe) ", %rax\n"
-> > > +	"syscall\n"
-> > > +	"popq %r11\n"
-> > > +	"popq %rcx\n"
-> > > +
-> > > +	/* The uretprobe syscall replaces stored %rax value with final
-> > > +	 * return address, so we don't restore %rax in here and just
-> > > +	 * call ret.
-> > > +	 */
-> > > +	"retq\n"
-> > > +	".global uretprobe_syscall_end\n"
-> > > +	"uretprobe_syscall_end:\n"
-> > > +	".popsection\n"
-> > > +);
-> > > +
-> > > +extern u8 uretprobe_syscall_entry[];
-> > > +extern u8 uretprobe_syscall_end[];
-> > > +
-> > > +void *arch_uprobe_trampoline(unsigned long *psize)
-> > > +{
-> > > +	*psize = uretprobe_syscall_end - uretprobe_syscall_entry;
-> > > +	return uretprobe_syscall_entry;
-> > > +}
-> > > +
-> > > +SYSCALL_DEFINE0(uretprobe)
-> > > +{
-> > > +	struct pt_regs *regs = task_pt_regs(current);
-> > > +	unsigned long err, ip, sp, r11_cx_ax[3];
-> > > +
-> > > +	err = copy_from_user(r11_cx_ax, (void __user *)regs->sp, sizeof(r11_cx_ax));
-> > > +	WARN_ON_ONCE(err);
-> > > +
-> > > +	/* expose the "right" values of r11/cx/ax/sp to uprobe_consumer/s */
-> > > +	regs->r11 = r11_cx_ax[0];
-> > > +	regs->cx  = r11_cx_ax[1];
-> > > +	regs->ax  = r11_cx_ax[2];
-> > > +	regs->sp += sizeof(r11_cx_ax);
-> > > +	regs->orig_ax = -1;
-> > > +
-> > > +	ip = regs->ip;
-> > > +	sp = regs->sp;
-> > > +
-> > > +	uprobe_handle_trampoline(regs);
-> > > +
-> > > +	/*
-> > > +	 * uprobe_consumer has changed sp, we can do nothing,
-> > > +	 * just return via iret
-> > > +	 */
-> > > +	if (regs->sp != sp)
-> > > +		return regs->ax;
-> > > +	regs->sp -= sizeof(r11_cx_ax);
-> > > +
-> > > +	/* for the case uprobe_consumer has changed r11/cx */
-> > > +	r11_cx_ax[0] = regs->r11;
-> > > +	r11_cx_ax[1] = regs->cx;
-> > > +
-> > > +	/*
-> > > +	 * ax register is passed through as return value, so we can use
-> > > +	 * its space on stack for ip value and jump to it through the
-> > > +	 * trampoline's ret instruction
-> > > +	 */
-> > > +	r11_cx_ax[2] = regs->ip;
-> > > +	regs->ip = ip;
-> > > +
-> > > +	err = copy_to_user((void __user *)regs->sp, r11_cx_ax, sizeof(r11_cx_ax));
-> > > +	WARN_ON_ONCE(err);
-> > > +
-> > > +	/* ensure sysret, see do_syscall_64() */
-> > > +	regs->r11 = regs->flags;
-> > > +	regs->cx  = regs->ip;
-> > > +
-> > > +	return regs->ax;
-> > > +}
-> > > +
-> > >  /*
-> > >   * If arch_uprobe->insn doesn't use rip-relative addressing, return
-> > >   * immediately.  Otherwise, rewrite the instruction so that it accesses
-> > > diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-> > > index 77eb9b0e7685..db150794f89d 100644
-> > > --- a/include/linux/syscalls.h
-> > > +++ b/include/linux/syscalls.h
-> > > @@ -972,6 +972,8 @@ asmlinkage long sys_lsm_list_modules(u64 *ids, size_t *size, u32 flags);
-> > >  /* x86 */
-> > >  asmlinkage long sys_ioperm(unsigned long from, unsigned long num, int on);
-> > >  
-> > > +asmlinkage long sys_uretprobe(void);
-> > > +
-> > >  /* pciconfig: alpha, arm, arm64, ia64, sparc */
-> > >  asmlinkage long sys_pciconfig_read(unsigned long bus, unsigned long dfn,
-> > >  				unsigned long off, unsigned long len,
-> > > diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
-> > > index f46e0ca0169c..a490146ad89d 100644
-> > > --- a/include/linux/uprobes.h
-> > > +++ b/include/linux/uprobes.h
-> > > @@ -138,6 +138,8 @@ extern bool arch_uretprobe_is_alive(struct return_instance *ret, enum rp_check c
-> > >  extern bool arch_uprobe_ignore(struct arch_uprobe *aup, struct pt_regs *regs);
-> > >  extern void arch_uprobe_copy_ixol(struct page *page, unsigned long vaddr,
-> > >  					 void *src, unsigned long len);
-> > > +extern void uprobe_handle_trampoline(struct pt_regs *regs);
-> > > +extern void *arch_uprobe_trampoline(unsigned long *psize);
-> > >  #else /* !CONFIG_UPROBES */
-> > >  struct uprobes_state {
-> > >  };
-> > > diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-> > > index 75f00965ab15..8a747cd1d735 100644
-> > > --- a/include/uapi/asm-generic/unistd.h
-> > > +++ b/include/uapi/asm-generic/unistd.h
-> > > @@ -842,8 +842,11 @@ __SYSCALL(__NR_lsm_set_self_attr, sys_lsm_set_self_attr)
-> > >  #define __NR_lsm_list_modules 461
-> > >  __SYSCALL(__NR_lsm_list_modules, sys_lsm_list_modules)
-> > >  
-> > > +#define __NR_uretprobe 462
-> > > +__SYSCALL(__NR_uretprobe, sys_uretprobe)
-> > > +
-> > >  #undef __NR_syscalls
-> > > -#define __NR_syscalls 462
-> > > +#define __NR_syscalls 463
-> > >  
-> > >  /*
-> > >   * 32 bit systems traditionally used different
-> > > diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-> > > index 929e98c62965..90395b16bde0 100644
-> > > --- a/kernel/events/uprobes.c
-> > > +++ b/kernel/events/uprobes.c
-> > > @@ -1474,11 +1474,20 @@ static int xol_add_vma(struct mm_struct *mm, struct xol_area *area)
-> > >  	return ret;
-> > >  }
-> > >  
-> > > +void * __weak arch_uprobe_trampoline(unsigned long *psize)
-> > > +{
-> > > +	static uprobe_opcode_t insn = UPROBE_SWBP_INSN;
-> > > +
-> > > +	*psize = UPROBE_SWBP_INSN_SIZE;
-> > > +	return &insn;
-> > > +}
-> > > +
-> > >  static struct xol_area *__create_xol_area(unsigned long vaddr)
-> > >  {
-> > >  	struct mm_struct *mm = current->mm;
-> > > -	uprobe_opcode_t insn = UPROBE_SWBP_INSN;
-> > > +	unsigned long insns_size;
-> > >  	struct xol_area *area;
-> > > +	void *insns;
-> > >  
-> > >  	area = kmalloc(sizeof(*area), GFP_KERNEL);
-> > >  	if (unlikely(!area))
-> > > @@ -1502,7 +1511,8 @@ static struct xol_area *__create_xol_area(unsigned long vaddr)
-> > >  	/* Reserve the 1st slot for get_trampoline_vaddr() */
-> > >  	set_bit(0, area->bitmap);
-> > >  	atomic_set(&area->slot_count, 1);
-> > > -	arch_uprobe_copy_ixol(area->pages[0], 0, &insn, UPROBE_SWBP_INSN_SIZE);
-> > > +	insns = arch_uprobe_trampoline(&insns_size);
-> > > +	arch_uprobe_copy_ixol(area->pages[0], 0, insns, insns_size);
-> > >  
-> > >  	if (!xol_add_vma(mm, area))
-> > >  		return area;
-> > > @@ -2123,7 +2133,7 @@ static struct return_instance *find_next_ret_chain(struct return_instance *ri)
-> > >  	return ri;
-> > >  }
-> > >  
-> > > -static void handle_trampoline(struct pt_regs *regs)
-> > > +void uprobe_handle_trampoline(struct pt_regs *regs)
-> > >  {
-> > >  	struct uprobe_task *utask;
-> > >  	struct return_instance *ri, *next;
-> > > @@ -2188,7 +2198,7 @@ static void handle_swbp(struct pt_regs *regs)
-> > >  
-> > >  	bp_vaddr = uprobe_get_swbp_addr(regs);
-> > >  	if (bp_vaddr == get_trampoline_vaddr())
-> > > -		return handle_trampoline(regs);
-> > > +		return uprobe_handle_trampoline(regs);
-> > >  
-> > >  	uprobe = find_active_uprobe(bp_vaddr, &is_swbp);
-> > >  	if (!uprobe) {
-> > > diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
-> > > index faad00cce269..be6195e0d078 100644
-> > > --- a/kernel/sys_ni.c
-> > > +++ b/kernel/sys_ni.c
-> > > @@ -391,3 +391,5 @@ COND_SYSCALL(setuid16);
-> > >  
-> > >  /* restartable sequence */
-> > >  COND_SYSCALL(rseq);
-> > > +
-> > > +COND_SYSCALL(uretprobe);
-> > > -- 
-> > > 2.44.0
-> > > 
-> > 
-> > 
-> > -- 
-> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-
+You are awesome, thank you!
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
