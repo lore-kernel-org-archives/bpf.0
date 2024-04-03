@@ -1,181 +1,109 @@
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09E01B950;
-	Wed,  3 Apr 2024 03:07:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4741BF5C;
+	Wed,  3 Apr 2024 03:24:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712113649; cv=none; b=b+e5vIlpE/a5dl4FjhxbV2nPf1tqQuRW2h+yqeCqmgb7XzN7fwpd3UxOSdIK3z16Xm6m9G273ylnHJ9umsR9zMNjMLkEDhlHk3daLfrFNE1uucIxtcSMOI30b7nWOV6oCslqr2fPwPBrnd0jTSvre0+bXZpt1xqdl3MQMW3FRO4=
+	t=1712114688; cv=none; b=NE5zlEFLB3wXjlYhvJxGrcJy2U5PRL/en0109QSXPqtOVA3TyvG/UAQFVr+yJ+AaYGeLUUDbh52vWtbesc5mXuVI7bH2Sgd8lbWOC3NqzYtAAl/q7t/kYmWPTGhLeco34YJt5rEeyWW1kDEqqx1E6tbwjaJcy+aUdGOz9nglIDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712113649; c=relaxed/simple;
-	bh=ROtb/TdhEhS14cmCDYhPnEoNJ0jX0mNNsCCUwMkC5ks=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XcteU3FEEj2phViZHqXmQCJfBK9DsewYTggSaLHB+WwyOJevjxVS85F9Y32dZOvI/8q1JtYNl/8MVT1VRI7P9izTXriUyOAElqZbKC2gVx0jkfLdEeu8U8ZiiCASt21jxAfhI7ZZZnu3+jhASjsUrWl/fppiZ876i//A5qXkrMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=Y8m7nmA3; arc=none smtp.client-ip=67.231.156.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="Y8m7nmA3"
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 432K39iQ029137;
-	Tue, 2 Apr 2024 20:06:51 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=pfpt0220; bh=cIxSFpufY5nRKyMlIffzzC
-	ralxEiy0TVlswlh++OQgg=; b=Y8m7nmA30w8NYNhiX4YIbCGNGlGZX7dT/8zPJv
-	HlIxSC+6YMvHY21sG5K/WUMfk4V0GdHxba7suvb+SEIHVp3WY+s5BXMLo9KG/s8u
-	mHmnkUyrhTxGHoPLOFUYCaVJJ6nZ4F7q6CLGmCERuXheUKkO202W8HOrFh4owbAV
-	AbV9Db6FzRW0MiP6yruMsD5gxz2bBygAZzpkJaJaQOS6aVlCiOSRY1aYjzjlF3E4
-	Rs9KjqOA0OX2ulNkcVLM6pC+QKUap67aLihgPW69+jx4m5d1kSCR00rZtXs8wptT
-	guwL1M6SCfKq10J/1rFt91BJ+Ez1g+1obP+hbdbT35k4BTLw==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3x809fx510-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 02 Apr 2024 20:06:51 -0700 (PDT)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Tue, 2 Apr 2024 20:06:49 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Tue, 2 Apr 2024 20:06:49 -0700
-Received: from maili.marvell.com (unknown [10.28.36.165])
-	by maili.marvell.com (Postfix) with SMTP id 134265B694C;
-	Tue,  2 Apr 2024 20:06:43 -0700 (PDT)
-Date: Wed, 3 Apr 2024 08:36:42 +0530
-From: Ratheesh Kannoth <rkannoth@marvell.com>
-To: Justin Stitt <justinstitt@google.com>
-CC: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann
-	<daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii
- Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Eduard
- Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-        Yonghong Song
-	<yonghong.song@linux.dev>,
-        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
-	<sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers
-	<ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
-        <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH] bpf: replace deprecated strncpy with strscpy
-Message-ID: <20240403030642.GA1652044@maili.marvell.com>
-References: <20240402-strncpy-kernel-bpf-core-c-v1-1-7cb07a426e78@google.com>
+	s=arc-20240116; t=1712114688; c=relaxed/simple;
+	bh=A94+6bWLEorCLEX2BhGEGxlfRcLWmEelHOFm+jGI7to=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=md2830YllWX+moVlXT30yHhfPWHc7604BVHzbe9KGkgBij5o++UTKs5jPwaZu8wloIFcPjQokgtrin0C/+dDNAIj52RdPvNRWljuI88aDP+2RG0igYWN2aji2SlMx+d6rSfuIAXy+B2fd1T+MmSVvL90bccOrH0yyCp2KdRUfIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4V8VV54Krlz4f3khf;
+	Wed,  3 Apr 2024 11:24:29 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 1D70B1A0175;
+	Wed,  3 Apr 2024 11:24:36 +0800 (CST)
+Received: from [10.67.109.184] (unknown [10.67.109.184])
+	by APP1 (Coremail) with SMTP id cCh0CgAnRQ7yywxmOR2WIw--.30244S2;
+	Wed, 03 Apr 2024 11:24:35 +0800 (CST)
+Message-ID: <0626619d-5950-497e-aa67-a13cede9b300@huaweicloud.com>
+Date: Wed, 3 Apr 2024 11:24:34 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240402-strncpy-kernel-bpf-core-c-v1-1-7cb07a426e78@google.com>
-X-Proofpoint-GUID: QmRE6pvh5nsQpJLoK1ntZVKZA9QB3BtZ
-X-Proofpoint-ORIG-GUID: QmRE6pvh5nsQpJLoK1ntZVKZA9QB3BtZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-03_02,2024-04-01_01,2023-05-22_02
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add testcase where 7th
+ argment is struct
+Content-Language: en-US
+To: Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+ linux-riscv@lists.infradead.org, netdev@vger.kernel.org
+Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Pu Lehui <pulehui@huawei.com>
+References: <20240331092405.822571-1-pulehui@huaweicloud.com>
+ <20240331092405.822571-3-pulehui@huaweicloud.com>
+ <967f996f-f660-4615-696e-95c5db0542ad@iogearbox.net>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <967f996f-f660-4615-696e-95c5db0542ad@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgAnRQ7yywxmOR2WIw--.30244S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tw4xJr4UAr47XF4rGF4DArb_yoW8Wr4rpa
+	yxu34Y9rW8Xrs7Xry3AF4UZrW3JrWkWw1UZryxJayFvFyjgFyYgF40gw4Y9rn8Jrs3uw1a
+	yF4jq3y5uw4DZF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+	7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+	Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+	6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+	AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+	6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-On 2024-04-03 at 05:22:50, Justin Stitt (justinstitt@google.com) wrote:
-> strncpy() is deprecated for use on NUL-terminated destination strings
-> [1] and as such we should prefer more robust and less ambiguous string
-> interfaces.
->
-> bpf sym names get looked up and compared/cleaned with various string
-> apis. This suggests they need to be NUL-terminated (strncpy() suggests
-> this but does not guarantee it).
->
-> |	static int compare_symbol_name(const char *name, char *namebuf)
-> |	{
-> |		cleanup_symbol_name(namebuf);
-> |		return strcmp(name, namebuf);
-> |	}
->
-> |	static void cleanup_symbol_name(char *s)
-> |	{
-> |		...
-> |		res = strstr(s, ".llvm.");
-> |		...
-> |	}
->
-> Use strscpy() as this method guarantees NUL-termination on the
-> destination buffer.
->
-> This patch also replaces two uses of strncpy() used in log.c. These are
-> simple replacements as postfix has been zero-initialized on the stack
-> and has source arguments with a size less than the destination's size.
->
-> Note that this patch uses the new 2-argument version of strscpy
-> introduced in Commit e6584c3964f2f ("string: Allow 2-argument
-> strscpy()").
->
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
-> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
-> Link: https://github.com/KSPP/linux/issues/90
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
-> Note: build-tested only.
->
-> Found with: $ rg "strncpy\("
-> ---
->  kernel/bpf/core.c | 4 ++--
->  kernel/bpf/log.c  | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 696bc55de8e8..8c9078f4549c 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -747,7 +747,7 @@ const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
->  		unsigned long symbol_start = ksym->start;
->  		unsigned long symbol_end = ksym->end;
->
-> -		strncpy(sym, ksym->name, KSYM_NAME_LEN);
-> +		strscpy(sym, ksym->name, KSYM_NAME_LEN);
-You dont have to check return value of strscpy for errors ?
 
->
->  		ret = sym;
->  		if (size)
-> @@ -813,7 +813,7 @@ int bpf_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
->  		if (it++ != symnum)
->  			continue;
->
-> -		strncpy(sym, ksym->name, KSYM_NAME_LEN);
-> +		strscpy(sym, ksym->name, KSYM_NAME_LEN);
->
->  		*value = ksym->start;
->  		*type  = BPF_SYM_ELF_TYPE;
-> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-> index 2a243cf37c60..4bd8f17a9f24 100644
-> --- a/kernel/bpf/log.c
-> +++ b/kernel/bpf/log.c
-> @@ -467,9 +467,9 @@ const char *reg_type_str(struct bpf_verifier_env *env, enum bpf_reg_type type)
->
->  	if (type & PTR_MAYBE_NULL) {
->  		if (base_type(type) == PTR_TO_BTF_ID)
-> -			strncpy(postfix, "or_null_", 16);
-> +			strscpy(postfix, "or_null_");
->  		else
-> -			strncpy(postfix, "_or_null", 16);
-> +			strscpy(postfix, "_or_null");
->  	}
->
->  	snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s",
->
-> ---
-> base-commit: 026e680b0a08a62b1d948e5a8ca78700bfac0e6e
-> change-id: 20240402-strncpy-kernel-bpf-core-c-4d8297f95e18
->
-> Best regards,
-> --
-> Justin Stitt <justinstitt@google.com>
->
+On 2024/4/2 22:02, Daniel Borkmann wrote:
+> On 3/31/24 11:24 AM, Pu Lehui wrote:
+>> From: Pu Lehui <pulehui@huawei.com>
+>>
+>> Add testcase where 7th argument is struct for architectures with 8
+>> argument registers, and increase the complexity of the struct.
+>>
+>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>> ---
+>>   .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 19 ++++++++++
+>>   .../selftests/bpf/prog_tests/tracing_struct.c | 13 +++++++
+>>   .../selftests/bpf/progs/tracing_struct.c      | 35 +++++++++++++++++++
+>>   3 files changed, 67 insertions(+)
+> 
+> The last test from this patch fails BPF CI, ptal :
+> 
+> https://github.com/kernel-patches/bpf/actions/runs/8497262674/job/23275690303
+> https://github.com/kernel-patches/bpf/actions/runs/8497262674/job/23275690364
+> 
+> Notice: Success: 519/3592, Skipped: 53, Failed: 1
+> Error: #391 tracing_struct
+>    Error: #391 tracing_struct
+>    test_fentry:PASS:tracing_struct__open_and_load 0 nsec
+>    libbpf: prog 'test_struct_arg_16': failed to attach: ERROR: 
+> strerror_r(-524)=22
+>    libbpf: prog 'test_struct_arg_16': failed to auto-attach: -524
+>    test_fentry:FAIL:tracing_struct__attach unexpected error: -524 (errno 
+> 524)
+> Test Results:
+>               bpftool: PASS
+>            test_progs: FAIL (returned 1)
+> Error: Process completed with exit code 1.
+
+Thanks for your reminder. aarch64 does not yet support bpf trampoline 
+with more than 8 parameters. I will add tracing_struct to DENYLIST.aarch64.
+
