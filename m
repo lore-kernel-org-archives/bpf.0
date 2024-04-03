@@ -1,56 +1,63 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814E45D731;
-	Wed,  3 Apr 2024 09:24:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90FDF5D731;
+	Wed,  3 Apr 2024 09:24:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712136258; cv=none; b=tJ5Hb2YWZzLi7r8Z9kd+VglcLFI3rk6ORiqNRFa04zPJlil1QWTT0GlIBI15YY8J26MrW5PHqjeIvdeGI6fp0vslAzdzkEK+ZBfMnKXKT1fSJjAMcYmQ8/SsORPEe94m7vNm37fBF4OHHHWnzmXFHHlsvySEHV7wT0ik/REMt2A=
+	t=1712136264; cv=none; b=Hwm8cI1KvzxGsTCIEwr+m2hJfiqrGc3V3BuT2KpYdf6qwkDKbnFx/phAEwkWzUtvS0N/0AM57PL6W0n/C0CdF7vTlswFXrhW1de/lWmpy38jzR5cY9OxxbPxz7gsKKgXkvs+TnL6xG/mbDceHxNpPA56hRccdlu7wIz2Mw5SrLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712136258; c=relaxed/simple;
-	bh=3al6tDwI5lYdDTOMG5dHRvUWH7Kdpwnyp2UDmKmWL6w=;
+	s=arc-20240116; t=1712136264; c=relaxed/simple;
+	bh=0cDN5paAb9txvyHF2D6Fb3OsMALbEquEDwtlMVuufaw=;
 	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=GQ5LhfI6vgQMONGgVNE+MPfzvQl712OuPW3PHnQwBdummFbrENGT3eFLqWh12WkWpXou2TOuBc878j7cAhrTRnzPseqDIiqJjdbCamRn6jgFetgbeplo928bJ8fH4ZiL2H0WNSy3qgK50nH9NwFzQ0ib/lDkSodQYc4SLbxrtwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=OXXcioEY; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=iSt1dh3LkXW17yc0DXxl8tdYni45i1z96uTEL8EInVgpd/OGBEy/+KSP+ydh5Dfk6DVdw+PixYgZK54xk92LP+HvyrwYf+vEdyuB70h4Hnm8JlIYfrzp74AEsBiiylU/M2fWAqscA0RZlk5PCmX8Kok3h5kwc57SFbK4geWoNCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=ks6bfl1S; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="OXXcioEY"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="ks6bfl1S"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=fFNSyki+Dgz7V/b1k4oyzhBUT89XBpD9mCte8VdggJ4=; b=OXXcioEYxBmZIcDa+w1dKhpXxa
-	FtRL+g2c5eaj86MogF9DeEPpfGlAcGjCm2Vsi/NqeoBE9w73r301LM1Gg1ikoyjXeKkLBqJeEq1fv
-	OIIiR9kYfaTdzGaUAbeGnkM1RmdMIGeVOFelkI0VRQ9sY9QaxrBLXKDAOamckFfK8cBHrOcb60bAF
-	28FD5HfJBkM80lc0J7e4u4IlNL6QBmWvkBptT1b6JFkgw2Rc8n8R85/gGjb7bhBqwB7IHVlp1JgDm
-	MdRdUeXNHOsrRWx8JAhRebrfqSI72bc2Q1Qh2+q5+dF7QtJFg68Wb/NEK1P0AsLSOq9fqhq2d8iGV
-	IYNfxEtg==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
+	bh=QW5ivH3/dmP4FXPLr8uU5HynTRDSV6aSkAQOv6EMSuM=; b=ks6bfl1SB3SaYK7dT92dY4wcbE
+	PxzFIM7ZOVGy5WW0+rnesRw/P2mODbnWhM69A4MDCGzcokplJ7AJa/TUZduzpN/SZAShCMWPjZeUx
+	mOlUx+d+q50Mbo69qRmZ3V21qtq6yT3SzCUNn+4NzykGLoXqHHO/IhnjfBkeJ8McPLZeJrNixF6NH
+	FReb3xdoMcQMGMGYtbA/Fn8u7mOLy3p2VTuy1+fg0S/Qg4+wTfbgjwwI1Yb8RnFuKSo/ab6L8pkbP
+	q72ER+1bHVDAZQKopKUTO+NcrTTNxmA7QzR/Q2mQErbX2rkXvtArV3tM8o2UFPig9MT7kPb5ewDh+
+	AFqQsEdQ==;
+Received: from sslproxy07.your-server.de ([78.47.199.104])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1rrwY7-0009g5-O2; Wed, 03 Apr 2024 11:04:51 +0200
+	id 1rrw9S-0006HI-Tv; Wed, 03 Apr 2024 10:39:22 +0200
 Received: from [178.197.248.12] (helo=linux.home)
-	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1rrwY7-000CJ1-0b;
-	Wed, 03 Apr 2024 11:04:51 +0200
-Subject: Re: [PATCH RESEND bpf v2 0/2] x86/bpf: Fixes for the BPF JIT with
- retbleed=stuff
-To: Ingo Molnar <mingo@kernel.org>, Uros Bizjak <ubizjak@gmail.com>
-Cc: patchwork-bot+netdevbpf@kernel.org, ast@kernel.org, x86@kernel.org,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240401185821.224068-1-ubizjak@gmail.com>
- <171203102833.24910.7566029980709800852.git-patchwork-notify@kernel.org>
- <Zg0EtEkIIA45cuPT@gmail.com>
- <CAFULd4Z0RmiWu4Kf0YFBMqA7YFMd65f3J760Do8-h83zWCx9oA@mail.gmail.com>
- <Zg0Mvb6kkHceEENb@gmail.com>
+	id 1rrw9R-000PYM-2O;
+	Wed, 03 Apr 2024 10:39:21 +0200
+Subject: Re: [PATCH v2 bpf-next] bpf: Fix latent unsoundness in and/or/xor
+ value tracking
+To: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
+ ast@kernel.org
+Cc: harishankar.vishwanathan@rutgers.edu, paul@isovalent.com,
+ Matan Shachnai <m.shachnai@rutgers.edu>,
+ Srinivas Narayana <srinivas.narayana@rutgers.edu>,
+ Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Edward Cree <ecree@solarflare.com>, "David S. Miller" <davem@davemloft.net>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240402212039.51815-1-harishankar.vishwanathan@gmail.com>
 From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <504a2e70-3bd5-a9f0-60ec-49c4b17566ae@iogearbox.net>
-Date: Wed, 3 Apr 2024 11:04:50 +0200
+Message-ID: <82892691-a48f-ad06-7005-5bbd7d0757eb@iogearbox.net>
+Date: Wed, 3 Apr 2024 10:39:20 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 Precedence: bulk
@@ -59,30 +66,53 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <Zg0Mvb6kkHceEENb@gmail.com>
+In-Reply-To: <20240402212039.51815-1-harishankar.vishwanathan@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27234/Wed Apr  3 10:25:27 2024)
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27233/Tue Apr  2 10:26:21 2024)
 
-On 4/3/24 10:01 AM, Ingo Molnar wrote:
-> * Uros Bizjak <ubizjak@gmail.com> wrote:
-> 
->>>> Here is the summary with links:
->>>>    - [RESEND,bpf,v2,1/2] x86/bpf: Fix IP after emitting call depth accounting
->>>>      https://git.kernel.org/bpf/bpf/c/9d98aa088386
->>>>    - [RESEND,bpf,v2,2/2] x86/bpf: Fix IP for relocating call depth accounting
->>>>      https://git.kernel.org/bpf/bpf/c/6a537453000a
->>>
->>> Just wondering, which kernel version is this targeted for?
->>
->> The whole series is intended for the current mainline (v6.9), this is
->> why it is developed against the bpf (*not* bpf-next) branch.
-> 
-> I see - so bpf.git:master are current-mainline BPF fixes - that's perfect.
+On 4/2/24 11:20 PM, Harishankar Vishwanathan wrote:
+[...]
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index fcb62300f407..a7404a7d690f 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -13326,23 +13326,21 @@ static void scalar32_min_max_and(struct bpf_reg_state *dst_reg,
+>   		return;
+>   	}
+>   
+> -	/* We get our minimum from the var_off, since that's inherently
+> +	/* We get our minimum from the var32_off, since that's inherently
+>   	 * bitwise.  Our maximum is the minimum of the operands' maxima.
+>   	 */
+>   	dst_reg->u32_min_value = var32_off.value;
+>   	dst_reg->u32_max_value = min(dst_reg->u32_max_value, umax_val);
+> -	if (dst_reg->s32_min_value < 0 || smin_val < 0) {
 
-Yes, correct, that is for mainline (v6.9).
+The smin_val is now unused, triggering the following warnings :
+
+../kernel/bpf/verifier.c:13321:6: warning: unused variable 'smin_val' [-Wunused-variable]
+  13321 |         s32 smin_val = src_reg->s32_min_value;
+        |             ^~~~~~~~
+../kernel/bpf/verifier.c:13352:6: warning: unused variable 'smin_val' [-Wunused-variable]
+  13352 |         s64 smin_val = src_reg->smin_value;
+        |             ^~~~~~~~
+../kernel/bpf/verifier.c:13386:6: warning: unused variable 'smin_val' [-Wunused-variable]
+  13386 |         s32 smin_val = src_reg->s32_min_value;
+        |             ^~~~~~~~
+../kernel/bpf/verifier.c:13417:6: warning: unused variable 'smin_val' [-Wunused-variable]
+  13417 |         s64 smin_val = src_reg->smin_value;
+        |             ^~~~~~~~
+../kernel/bpf/verifier.c:13451:6: warning: unused variable 'smin_val' [-Wunused-variable]
+  13451 |         s32 smin_val = src_reg->s32_min_value;
+        |             ^~~~~~~~
+../kernel/bpf/verifier.c:13479:6: warning: unused variable 'smin_val' [-Wunused-variable]
+  13479 |         s64 smin_val = src_reg->smin_value;
+        |             ^~~~~~~~
+
+Removing these builds fine then, please follow-up with a v3.
 
 Thanks,
 Daniel
