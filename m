@@ -1,81 +1,253 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F978148FE8;
-	Wed,  3 Apr 2024 15:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FFB149E18
+	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 15:23:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712157034; cv=none; b=ZkFPM3GbS2aEDUMZVgwDNc5I21yIwgNo988z7iAQPv7ZFA+gm6JFbdBRrpb5b3KxNf7DWMAwY3RyQxKTa0dgqltW5riYKfm76BpFuifMK2psdTidmqt4H2gBPSdoCuhl2qvcyTL+F48KzwQksCe70JlL2brqpH6YcXiJ2PqE78w=
+	t=1712157791; cv=none; b=u4ioYUcaG4wKfUPT7LdLfbFMR+poRtiQwuGJ9gswpAiCg8S13JeClyuup2CgZakNE17fKBW8TQqAI7wngv0Gj8XF5YdQzOSnlu4PrmmHmR49PjMqdSWQrxQs/G/VT2OPitYmnlrctyeKXnIqefsNNa9iGolBtuhWvXXDvSvs7hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712157034; c=relaxed/simple;
-	bh=WDB90lsQ+FtQ63dHj01GVdGl3xWCx02Ocehnjixv9AA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=de1NovAzNHHh+nof5ZD2L3kqcyoiyy065gCxdRedaRoWL4sqyJnENdgvft21zFgAaOHkuSKWibgaJkGAK7gzTJNgPp4dGiI5b2JA6f3iB6/clYvopmF9YEpmJb4ZkoJ+kdCEVEV8DDed4Vz/aDaL1zv+AIEDwAM1UJWkMpnV6+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pD93qTpP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712157791; c=relaxed/simple;
+	bh=tyLqH1ACbJl9nyTp+H40Y9XnsGKfubW1WRm3FI5EeoM=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=AaKzrHvdNEpxTvFreRk2Kz2cE1Rl1UFPwlkYiz8LHsXMw5GYANvdlnTbFCxeFazZA8DZWFFUlolOOJS34PtzzavfeG2XILAV8e2htvIbTfGn50+uvYnUi3cUMBocq3vwmm5Ot51yQsk0uiJSDuqgPzG4VrC1jv1puIvSTsVoqtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=jS1xCRgj; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pD93qTpP"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 12AF2C433C7;
-	Wed,  3 Apr 2024 15:10:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712157034;
-	bh=WDB90lsQ+FtQ63dHj01GVdGl3xWCx02Ocehnjixv9AA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=pD93qTpPUFNy00aVlUnbMvuHXfReOxlI98BoBE9BjAN4I48nW0+0E/p8ZDsj4JnGG
-	 JQG9ZlIolRP8t9gXDc203LtOYFyvyvoxacwNSsSgLdd3R0bAWJBVu/DyNMsuuTzxZ0
-	 71Pm6Fas6QRk+QFm88NSUEHyEeCBXq6L4L64M1R3lCU3F5EXKWMqRgxM9ps2LpQpYy
-	 4xjJ06fRf6WJnC5qKzoF7/AVIO+pxCiwe9BGNK/OpPp0xuNR+g31pPluftUcvwXAHQ
-	 HIDhbWtnfoSLy80j2fzF4HSi8aXndkWsL5AYLs4TEI/Mmtjwcq2rHjpRQxsqFoJPQA
-	 bj610jIsnrxtw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 06CA8D84BB3;
-	Wed,  3 Apr 2024 15:10:34 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="jS1xCRgj"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=F5MoDwuiLxTTshyTzKl6wngLZsix8Vdc2CBBCfABN80=; b=jS1xCRgjJOM1sAt9wzOVEFwBlb
+	cuCknlKBDXiL99//tavDkewwjODKyIwVKbQH8fVJTgK0942higDie95AId07SMdksKQJfRpQgTMsw
+	8tS3K5RMOsSWFTvBINZSygZF2bFfJbRd5529inB/c6gpH5oViuis471ExnL6VX8zD/ifHw7OQsgDg
+	B3um7OURtp98US8Af4qccygMxpYSmQcqGDYHr0Xa6LP6lEO7L6FlPFYJKd/sjYmfmhNZhsdpVbvto
+	9xb8rkwXR5fOTua7HD2EOD4s9gUUpywudwKv8UYOGVYDwIW4HzX7Q6G3wYr/orNv6v4xp6KwqV3n0
+	tYqxNHOA==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1rs2S8-0003cS-94; Wed, 03 Apr 2024 17:23:04 +0200
+Received: from [178.197.248.12] (helo=linux.home)
+	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1rs2S7-004kfx-1B;
+	Wed, 03 Apr 2024 17:23:03 +0200
+Subject: Re: [PATCH bpf-next v4] bpftool: Mount bpffs on provided dir instead
+ of parent dir
+To: Quentin Monnet <qmo@kernel.org>, Sahil Siddiq <icegambit91@gmail.com>,
+ ast@kernel.org, andrii@kernel.org
+Cc: martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org
+References: <20240401190407.20363-1-icegambit91@gmail.com>
+ <45c72ae1-ab0d-439b-8237-80a38e15f571@kernel.org>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <092b49b2-ca2d-117f-1fa1-dac8c713a9d2@iogearbox.net>
+Date: Wed, 3 Apr 2024 17:23:02 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bpf: replace deprecated strncpy with strscpy
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171215703402.3781.6443239149248197570.git-patchwork-notify@kernel.org>
-Date: Wed, 03 Apr 2024 15:10:34 +0000
-References: <20240402-strncpy-kernel-bpf-core-c-v1-1-7cb07a426e78@google.com>
-In-Reply-To: <20240402-strncpy-kernel-bpf-core-c-v1-1-7cb07a426e78@google.com>
-To: Justin Stitt <justinstitt@google.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com,
- haoluo@google.com, jolsa@kernel.org, nathan@kernel.org,
- ndesaulniers@google.com, morbo@google.com, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-hardening@vger.kernel.org
+In-Reply-To: <45c72ae1-ab0d-439b-8237-80a38e15f571@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27234/Wed Apr  3 10:25:27 2024)
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
-
-On Tue, 02 Apr 2024 23:52:50 +0000 you wrote:
-> strncpy() is deprecated for use on NUL-terminated destination strings
-> [1] and as such we should prefer more robust and less ambiguous string
-> interfaces.
+On 4/2/24 11:40 PM, Quentin Monnet wrote:
+> On 01/04/2024 20:04, Sahil Siddiq wrote:
+>> When pinning programs/objects under PATH (eg: during "bpftool prog
+>> loadall") the bpffs is mounted on the parent dir of PATH in the
+>> following situations:
+>> - the given dir exists but it is not bpffs.
+>> - the given dir doesn't exist and the parent dir is not bpffs.
+>>
+>> Mounting on the parent dir can also have the unintentional side-
+>> effect of hiding other files located under the parent dir.
+>>
+>> If the given dir exists but is not bpffs, then the bpffs should
+>> be mounted on the given dir and not its parent dir.
+>>
+>> Similarly, if the given dir doesn't exist and its parent dir is not
+>> bpffs, then the given dir should be created and the bpffs should be
+>> mounted on this new dir.
+>>
+>> Link: https://lore.kernel.org/bpf/2da44d24-74ae-a564-1764-afccf395eeec@isovalent.com/T/#t
+>> Closes: https://github.com/libbpf/bpftool/issues/100
+>> Fixes: 2a36c26fe3b8 ("bpftool: Support bpffs mountpoint as pin path for prog loadall")
+>>
+>> Changes since v1:
+>>   - Split "mount_bpffs_for_pin" into two functions.
+>>     This is done to improve maintainability and readability.
+>>
+>> Changes since v2:
+>> - mount_bpffs_for_pin: rename to "create_and_mount_bpffs_dir".
+>> - mount_bpffs_given_file: rename to "mount_bpffs_given_file".
+>> - create_and_mount_bpffs_dir:
+>>    - introduce "dir_exists" boolean.
+>>    - remove new dir if "mnt_fs" fails.
+>> - improve error handling and error messages.
+>>
+>> Changes since v3:
+>> - Rectify function name.
+>> - Improve error messages and formatting.
+>> - mount_bpffs_for_file:
+>>    - Check if dir exists before block_mount check.
+>>
+>> Signed-off-by: Sahil Siddiq <icegambit91@gmail.com>
 > 
-> bpf sym names get looked up and compared/cleaned with various string
-> apis. This suggests they need to be NUL-terminated (strncpy() suggests
-> this but does not guarantee it).
+> Tested-by: Quentin Monnet <qmo@kernel.org>
+> Reviewed-by: Quentin Monnet <qmo@kernel.org>
 > 
-> [...]
+>> ---
+>>   tools/bpf/bpftool/common.c     | 98 +++++++++++++++++++++++++++++-----
+>>   tools/bpf/bpftool/iter.c       |  2 +-
+>>   tools/bpf/bpftool/main.h       |  3 +-
+>>   tools/bpf/bpftool/prog.c       |  5 +-
+>>   tools/bpf/bpftool/struct_ops.c |  2 +-
+>>   5 files changed, 94 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
+>> index cc6e6aae2447..56a5abbb1bf8 100644
+>> --- a/tools/bpf/bpftool/common.c
+>> +++ b/tools/bpf/bpftool/common.c
+>> @@ -244,29 +244,103 @@ int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type)
+>>   	return fd;
+>>   }
+>>   
+>> -int mount_bpffs_for_pin(const char *name, bool is_dir)
+>> +int create_and_mount_bpffs_dir(const char *dir_name)
+>>   {
+>>   	char err_str[ERR_MAX_LEN];
+>> -	char *file;
+>> -	char *dir;
+>> +	bool dir_exists;
+>>   	int err = 0;
+>>   
+>> -	if (is_dir && is_bpffs(name))
+>> +	if (is_bpffs(dir_name))
+>>   		return err;
+>>   
+>> -	file = malloc(strlen(name) + 1);
+>> -	if (!file) {
+>> +	dir_exists = (access(dir_name, F_OK) == 0);
 
-Here is the summary with links:
-  - bpf: replace deprecated strncpy with strscpy
-    https://git.kernel.org/bpf/bpf-next/c/2e114248e086
+nit: No need for extra ().
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+>> +	if (!dir_exists) {
+>> +		char *temp_name;
+>> +		char *parent_name;
+>> +
+>> +		temp_name = malloc(strlen(dir_name) + 1);
+>> +		if (!temp_name) {
+>> +			p_err("mem alloc failed");
+>> +			return -1;
+>> +		}
+>> +
+>> +		strcpy(temp_name, dir_name);
 
+strdup() ?
 
+>> +		parent_name = dirname(temp_name);
+>> +
+>> +		if (is_bpffs(parent_name)) {
+>> +			/* nothing to do if already mounted */
+>> +			free(temp_name);
+>> +			return err;
+>> +		}
+>> +
+>> +		if (access(parent_name, F_OK) == -1) {
+>> +			p_err("can't create dir '%s' to pin BPF object: parent dir '%s' doesn't exist",
+>> +			      dir_name, parent_name);
+>> +			free(temp_name);
+>> +			return -1;
+>> +		}
+>> +
+>> +		free(temp_name);
+>> +	}
+>> +
+>> +	if (block_mount) {
+>> +		p_err("no BPF file system found, not mounting it due to --nomount option");
+>> +		return -1;
+>> +	}
+>> +
+>> +	if (!dir_exists) {
+>> +		err = mkdir(dir_name, 0700);
+
+nit: S_IRWXU
+
+>> +		if (err) {
+>> +			p_err("failed to create dir '%s': %s", dir_name, strerror(errno));
+>> +			return err;
+>> +		}
+>> +	}
+>> +
+>> +	err = mnt_fs(dir_name, "bpf", err_str, ERR_MAX_LEN);
+>> +	if (err) {
+>> +		err_str[ERR_MAX_LEN - 1] = '\0';
+>> +		p_err("can't mount BPF file system on given dir '%s': %s",
+>> +		      dir_name, err_str);
+>> +
+>> +		if (!dir_exists)
+>> +			rmdir(dir_name);
+>> +	}
+>> +
+>> +	return err;
+>> +}
+>> +
+>> +int mount_bpffs_for_file(const char *file_name)
+>> +{
+>> +	char err_str[ERR_MAX_LEN];
+>> +	char *temp_name;
+>> +	char *dir;
+>> +	int err = 0;
+>> +
+>> +	if (access(file_name, F_OK) != -1) {
+>> +		p_err("can't pin BPF object: path '%s' already exists", file_name);
+>> +		return -1;
+>> +	}
+>> +
+>> +	temp_name = malloc(strlen(file_name) + 1);
+>> +	if (!temp_name) {
+>>   		p_err("mem alloc failed");
+>>   		return -1;
+>>   	}
+>>   
+>> -	strcpy(file, name);
+>> -	dir = dirname(file);
+>> +	strcpy(temp_name, file_name);
+
+strdup()
+
+>> +	dir = dirname(temp_name);
+>>   
+>>   	if (is_bpffs(dir))
+>>   		/* nothing to do if already mounted */
+>>   		goto out_free;
+>>   
+>> +	if (access(dir, F_OK) == -1) {
+>> +		p_err("can't pin BPF object: dir '%s' doesn't exist", dir);
+>> +		free(temp_name);
+>> +		return -1;
+> 
+> Or:
+> 
+> 	p_err(...);
+> 	err = -1;
+> 	goto out_free;
+> 
+> to be more consistent with the other error paths. But that's fine, no
+> need to respin for that.
+
++1, pls fix.
