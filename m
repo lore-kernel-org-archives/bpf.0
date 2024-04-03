@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71DF3152DE7;
-	Wed,  3 Apr 2024 17:17:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A78D4158DDC;
+	Wed,  3 Apr 2024 17:18:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712164626; cv=none; b=gVPCsyKBq55hEPGYe/MYx/+6brHkKAX9MXZtjiFsUm6tVC1cCdOFWKMHXF7OsKuhNNzSNLhES7b8D8Il2AZVDmIypmA8pcVAVwcGce4L8Z9py29apKo0lpHFnimObYnUNd2lYer4u02PMscqSMCFjuwU2TYVyRpmTb5hEOuqGcs=
+	t=1712164703; cv=none; b=r1aPt8tWtjD6QDBtScUILZ1zIGLwybwOP42BHMsEz1MmczunzseZyCKXXD1n5uv+k3HUv9VYUyxA2QvEEuSLPZoxJ6PRx+nHjk7qsLPqDZiBgIh9BHZ7uZJuzsaST8eBsAAKR3hbgbxRJ++cc0h/58mArRN/SiUP00/1o9E9ANE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712164626; c=relaxed/simple;
-	bh=H3xOa9xqZcstwrIpXJpzBcYIwiJ7WDy4DtKMGrPqAnM=;
+	s=arc-20240116; t=1712164703; c=relaxed/simple;
+	bh=wUJTvHNhUgsShBAX0wQ04BoRngDJpHcPGwjvnBoDrog=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Aa5n7vUpTEYHYgv3ThIJpRtWY3jbveEytnOPeMuyRK0tIQVv59N3eWm1yL2zc5+cfu47tK/TZPGK8Cx6rZeEWYT3L8KKZqJyv2q/t+VZlK1LWcQ+wK8RK/Za+ShSoSm0Sl5dquA6d7PwV4ltUHUIF7Ecs+QxcYZRby+42U9S46U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KgBvv5ka; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=sqgQrlNL/QnDeBoiMNosE6QDQJWKBs+87NjxGATDAjtwKxMSSUBa5TGW+8P2skEB8U4BeYa/DZPsuhw7CHZvv1oxatMP7GNgcW/sCrg1rc70wJVAyRdVai+dr9WLDWmriDwQIyMuBPjO39RIqQWkW+cJ9A0joXmZXHbw+ghcClk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p7XzH4wQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KgBvv5ka"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24193C43390;
-	Wed,  3 Apr 2024 17:17:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p7XzH4wQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B531C43390;
+	Wed,  3 Apr 2024 17:18:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712164626;
-	bh=H3xOa9xqZcstwrIpXJpzBcYIwiJ7WDy4DtKMGrPqAnM=;
+	s=k20201202; t=1712164703;
+	bh=wUJTvHNhUgsShBAX0wQ04BoRngDJpHcPGwjvnBoDrog=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KgBvv5kaSYwkx7svuiSIC4vJnf2Zd08GMSHS+h+CSpK09hKj4WLWfLsMQ+rgFjfpV
-	 wKoRDYufRcYkncT//3ApNC/xsPMYzuMh3ICN0rs8fLeEvnwXcZ7iBGqFfOkBKOzxGl
-	 EuVrK9r+UDuKtuFq8zSBhGL8Fi2HhMD9kt+/vrH8ir2ypayiG660lW/37091oOFrXL
-	 LRpB6r2E2G1gW7Wv+xjb7Cg5FEnQYIWxchpImOnLuxAJ/bL9djLP5ow8mM7HS19uSD
-	 330IxLUQPSSFH99CA2PC07jNuiByowe1QtjCbckX+q7cYfWJHPbPTXP9MvL1zM/q82
-	 UeQGv7rZYLFxA==
+	b=p7XzH4wQiN+qqEDmdOXpEi06P2GPaN0ZtjeBhUBN21kFc5i5HurCq02iNsFMXf3KY
+	 Psrz6Nw3nugmdzFp3em5qwXy9c7JUg16xfJ3VQ1adRrnKYD4LLwpG8rdZmgXcgMfD3
+	 OnujIjOD8RaHFv+zZ7WkCAndcrb8L2oqQ2XpwD1sPyD+0Ibmrf6bhQSu0+XbbyM7VG
+	 q1q56Il48RryVr4x+ueB+QDsNs203+ZTN6kN9oS5ISrVAxl5GYEGcO6UYYe740Gp+3
+	 87eWIZ6Hin2REwIUu/a5nuhBr8rNSC36fMt8WZPkrZBAoLWYwc9n3Hc7WVra5dfb5l
+	 LEgiQjT/poOGg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -35,12 +35,12 @@ Cc: Tejun Heo <tj@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
 	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.8 05/28] kernfs: RCU protect kernfs_nodes and avoid kernfs_idr_lock in kernfs_find_and_get_node_by_id()
-Date: Wed,  3 Apr 2024 13:16:07 -0400
-Message-ID: <20240403171656.335224-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 04/20] kernfs: RCU protect kernfs_nodes and avoid kernfs_idr_lock in kernfs_find_and_get_node_by_id()
+Date: Wed,  3 Apr 2024 13:17:45 -0400
+Message-ID: <20240403171815.342668-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240403171656.335224-1-sashal@kernel.org>
-References: <20240403171656.335224-1-sashal@kernel.org>
+In-Reply-To: <20240403171815.342668-1-sashal@kernel.org>
+References: <20240403171815.342668-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.8.3
+X-stable-base: Linux 6.6.24
 Content-Transfer-Encoding: 8bit
 
 From: Tejun Heo <tj@kernel.org>
@@ -143,7 +143,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 24 insertions(+), 11 deletions(-)
 
 diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
-index bce1d7ac95caa..458519e416fe7 100644
+index 62d39ecf0a466..2405aeb39b9a2 100644
 --- a/fs/kernfs/dir.c
 +++ b/fs/kernfs/dir.c
 @@ -529,6 +529,20 @@ void kernfs_get(struct kernfs_node *kn)
@@ -218,7 +218,7 @@ index bce1d7ac95caa..458519e416fe7 100644
  }
  
 diff --git a/fs/kernfs/kernfs-internal.h b/fs/kernfs/kernfs-internal.h
-index 237f2764b9412..b42ee6547cdc1 100644
+index a9b854cdfdb5f..210dac7e9ee25 100644
 --- a/fs/kernfs/kernfs-internal.h
 +++ b/fs/kernfs/kernfs-internal.h
 @@ -49,6 +49,8 @@ struct kernfs_root {
@@ -231,7 +231,7 @@ index 237f2764b9412..b42ee6547cdc1 100644
  
  /* +1 to avoid triggering overflow warning when negating it */
 diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
-index 99aaa050ccb76..e857a150babc6 100644
+index 2a36f3218b510..5a952d00ea159 100644
 --- a/include/linux/kernfs.h
 +++ b/include/linux/kernfs.h
 @@ -223,6 +223,8 @@ struct kernfs_node {
