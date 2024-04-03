@@ -1,137 +1,181 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 089B51B946
-	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 02:58:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09E01B950;
+	Wed,  3 Apr 2024 03:07:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712113099; cv=none; b=eGiDcOYeWEw/t+DwLHqniusw4NDteaLt5HAN6r+z7u9D4e66av89pHgJHIEGPCK4yxClHuBOYVHvuH84a3PW2pDxyHw8ugwLq0xQWY8qbN/BXNsfuyQcLrTKN+X+Tiysll03kuolW65qJvMfpKhftNnCtDjGNfNC8m/BPLDlWmc=
+	t=1712113649; cv=none; b=b+e5vIlpE/a5dl4FjhxbV2nPf1tqQuRW2h+yqeCqmgb7XzN7fwpd3UxOSdIK3z16Xm6m9G273ylnHJ9umsR9zMNjMLkEDhlHk3daLfrFNE1uucIxtcSMOI30b7nWOV6oCslqr2fPwPBrnd0jTSvre0+bXZpt1xqdl3MQMW3FRO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712113099; c=relaxed/simple;
-	bh=yVDHwItCqvQ6h4Dh5f6TDY+D+90Zty5vzz/BeQm88YI=;
-	h=From:Mime-Version:Message-Id:Date:To:Subject:Content-Type; b=ZBIv8HPBganeo0N3CJC9QHdI0U8/ESzqqaPReP73e56L0v4krg/dncqT8bg+xs82XOJwTksghEsU6pMCsnSGzPIkGkB1dBLWVXVXndXZMZiTboRSNSnQozNsURWg9QNgNT4aNqJRgyBI4X5Hldt2bTk35ZISDuo6FMIc8pxQ7mI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=CP384dJY; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=CP384dJY; dkim=fail (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iCG5OS9P reason="signature verification failed"; arc=none smtp.client-ip=50.223.129.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	s=arc-20240116; t=1712113649; c=relaxed/simple;
+	bh=ROtb/TdhEhS14cmCDYhPnEoNJ0jX0mNNsCCUwMkC5ks=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XcteU3FEEj2phViZHqXmQCJfBK9DsewYTggSaLHB+WwyOJevjxVS85F9Y32dZOvI/8q1JtYNl/8MVT1VRI7P9izTXriUyOAElqZbKC2gVx0jkfLdEeu8U8ZiiCASt21jxAfhI7ZZZnu3+jhASjsUrWl/fppiZ876i//A5qXkrMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=Y8m7nmA3; arc=none smtp.client-ip=67.231.156.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="CP384dJY";
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="CP384dJY";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iCG5OS9P"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 269BDC151536
-	for <bpf@vger.kernel.org>; Tue,  2 Apr 2024 19:50:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1712112620; bh=yVDHwItCqvQ6h4Dh5f6TDY+D+90Zty5vzz/BeQm88YI=;
-	h=From:Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe;
-	b=CP384dJYCGm2rRA1odBqBwE/lptcfmg6UGKvGXVecojbHIPuPkipoAKffXtpV3Zwr
-	 SDsm7khudMf/J2V1T3XqcLwOecVh/JUgMEJWUgY4B2AYMFJ1cufhIt1t3Yka9VDnD9
-	 j1hWamW7VQ+Nv4ifwaTRGgXT1CFXyL6ug0dm0Gd4=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Tue Apr  2 19:50:20 2024
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 04D6EC14F703;
-	Tue,  2 Apr 2024 19:50:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1712112620; bh=yVDHwItCqvQ6h4Dh5f6TDY+D+90Zty5vzz/BeQm88YI=;
-	h=From:Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe;
-	b=CP384dJYCGm2rRA1odBqBwE/lptcfmg6UGKvGXVecojbHIPuPkipoAKffXtpV3Zwr
-	 SDsm7khudMf/J2V1T3XqcLwOecVh/JUgMEJWUgY4B2AYMFJ1cufhIt1t3Yka9VDnD9
-	 j1hWamW7VQ+Nv4ifwaTRGgXT1CFXyL6ug0dm0Gd4=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 222A2C14F6F4
- for <bpf@ietfa.amsl.com>; Tue,  2 Apr 2024 19:50:19 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -2.098
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=gmail.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YoQ1bihIMaIY for <bpf@ietfa.amsl.com>;
- Tue,  2 Apr 2024 19:50:14 -0700 (PDT)
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com
- [IPv6:2607:f8b0:4864:20::1134])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id D5360C14F703
- for <bpf@ietf.org>; Tue,  2 Apr 2024 19:50:14 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id
- 00721157ae682-615038fc5baso22365477b3.3
- for <bpf@ietf.org>; Tue, 02 Apr 2024 19:50:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1712112613; x=1712717413; darn=ietf.org;
- h=to:date:message-id:subject:mime-version:content-transfer-encoding
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=esQujNotzpB4+xsRiLk5kIgcIfES7Y96ccLY2u3mHDU=;
- b=iCG5OS9PkRkcabzTe/vyDaectIJO897vXboB1uQCntGzrJNZfI7m/jlFCnZwGflr+F
- 08FmAmiu1auPFdZGTmpEky43D6aCC7wJ/Pce9F6dFBHpTl5rl6AR+4eR/TVtjk+wW7kZ
- TgtFcFKWvFFSlYru4P1xTnteb/EuH0RI4IdYTXSn7+VptQiS1pgsLthhSJYhXXtkqbdZ
- ymHWi9g8b8R8+jM596x5iDAIVBlf3K0uJN2FglKfJfcx2KOAg3jZ81R+T4nvl8tQ5rI/
- cmzYsbhA7NWOzan2rKqi4uGegovgEmKD4CJhwPfYVDeqYJgQ7QqEBILfa2agLO/Ji2MG
- 56Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712112613; x=1712717413;
- h=to:date:message-id:subject:mime-version:content-transfer-encoding
- :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=esQujNotzpB4+xsRiLk5kIgcIfES7Y96ccLY2u3mHDU=;
- b=CuDBuEyP2PdY6mvnxm2l20Ga9yj1ZJ8y+KyaVuUlejfkJf/O6mI0yzpUwsc9WT2BaC
- G4iztUJheQuVZBPzM5oMTb1TVrRFDtGNWRS6AjoBBNnCf8fFyRzztAJ58iNUxBJHkdpS
- AufXiN3j8VGKAWejOO2JmHyyW56scTi0nwfEriZqWN78JF4+gGysWn7ws6PixnCUxqQv
- ag+FmSoSgTTSvg9k2AkHu8KZSO88hDGy9NfL0tTQkkHA8w3m77zvi/+QjFSmwpHImhiX
- L1FQYDA7nnZmlimByOfMq9nemYRxvh89V7G9Jl73lcIag/H+3XKT6AnH+35/G+x5G6Qm
- U28A==
-X-Gm-Message-State: AOJu0YzoEllZpV1Rn5fjT3tsPYCjMUk1CtnQr5hRRxHQ5tmhXG+FP7TL
- L9170IUlX2YmfULelvQ6qS/jeXpp4c6CajnshT6dNmPRAaGQgtNN8OKWk1vc
-X-Google-Smtp-Source: AGHT+IHkGRhGvl7332WDpIeqltIN/HxtoWtFo1Q82rZOK5S8YBpWI1IyY83BfJqK+4eh5RL9eSTquw==
-X-Received: by 2002:a0d:f9c5:0:b0:611:278d:fb80 with SMTP id
- j188-20020a0df9c5000000b00611278dfb80mr13731273ywf.8.1712112613171; 
- Tue, 02 Apr 2024 19:50:13 -0700 (PDT)
-Received: from smtpclient.apple (45-19-110-76.lightspeed.tukrga.sbcglobal.net.
- [45.19.110.76]) by smtp.gmail.com with ESMTPSA id
- t8-20020a0dea08000000b006145009cce6sm693712ywe.8.2024.04.02.19.50.12
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Tue, 02 Apr 2024 19:50:12 -0700 (PDT)
-From: Suresh Krishnan <suresh.krishnan@gmail.com>
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="Y8m7nmA3"
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 432K39iQ029137;
+	Tue, 2 Apr 2024 20:06:51 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=pfpt0220; bh=cIxSFpufY5nRKyMlIffzzC
+	ralxEiy0TVlswlh++OQgg=; b=Y8m7nmA30w8NYNhiX4YIbCGNGlGZX7dT/8zPJv
+	HlIxSC+6YMvHY21sG5K/WUMfk4V0GdHxba7suvb+SEIHVp3WY+s5BXMLo9KG/s8u
+	mHmnkUyrhTxGHoPLOFUYCaVJJ6nZ4F7q6CLGmCERuXheUKkO202W8HOrFh4owbAV
+	AbV9Db6FzRW0MiP6yruMsD5gxz2bBygAZzpkJaJaQOS6aVlCiOSRY1aYjzjlF3E4
+	Rs9KjqOA0OX2ulNkcVLM6pC+QKUap67aLihgPW69+jx4m5d1kSCR00rZtXs8wptT
+	guwL1M6SCfKq10J/1rFt91BJ+Ez1g+1obP+hbdbT35k4BTLw==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3x809fx510-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 02 Apr 2024 20:06:51 -0700 (PDT)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Tue, 2 Apr 2024 20:06:49 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
+ Transport; Tue, 2 Apr 2024 20:06:49 -0700
+Received: from maili.marvell.com (unknown [10.28.36.165])
+	by maili.marvell.com (Postfix) with SMTP id 134265B694C;
+	Tue,  2 Apr 2024 20:06:43 -0700 (PDT)
+Date: Wed, 3 Apr 2024 08:36:42 +0530
+From: Ratheesh Kannoth <rkannoth@marvell.com>
+To: Justin Stitt <justinstitt@google.com>
+CC: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann
+	<daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii
+ Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Eduard
+ Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+        Yonghong Song
+	<yonghong.song@linux.dev>,
+        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
+	<sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers
+	<ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+        <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH] bpf: replace deprecated strncpy with strscpy
+Message-ID: <20240403030642.GA1652044@maili.marvell.com>
+References: <20240402-strncpy-kernel-bpf-core-c-v1-1-7cb07a426e78@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.700.6\))
-Message-ID: <89A0EA46-36E7-4E01-BC91-D07307A2291C@gmail.com>
-Date: Tue, 2 Apr 2024 22:50:02 -0400
-To: bpf@ietf.org,
- bpf <bpf@vger.kernel.org>
-X-Mailer: Apple Mail (2.3731.700.6)
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/9VIPvmEpNYBrNN8ef2UMsKp2n1Q>
-Subject: [Bpf] Provisional registration procedure
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-Message-ID: <20240403025002.BkmUUPmWXIKrN85gz5ZIT0Ac4lLD1IKjlYE6kFWdt7A@z>
+Content-Disposition: inline
+In-Reply-To: <20240402-strncpy-kernel-bpf-core-c-v1-1-7cb07a426e78@google.com>
+X-Proofpoint-GUID: QmRE6pvh5nsQpJLoK1ntZVKZA9QB3BtZ
+X-Proofpoint-ORIG-GUID: QmRE6pvh5nsQpJLoK1ntZVKZA9QB3BtZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-03_02,2024-04-01_01,2023-05-22_02
 
-Hi all,
-  At the recently concluded IETF119 bpf WG meeting, I had asked a question to Dave about the Provisional registrations for BPF instruction conformance groups. Section 5.1 of draft-ietf-bpf-isa-01 talks about Provisional registrations, but does not elaborate further. Specifically, I think it would be good to cover the following cases
+On 2024-04-03 at 05:22:50, Justin Stitt (justinstitt@google.com) wrote:
+> strncpy() is deprecated for use on NUL-terminated destination strings
+> [1] and as such we should prefer more robust and less ambiguous string
+> interfaces.
+>
+> bpf sym names get looked up and compared/cleaned with various string
+> apis. This suggests they need to be NUL-terminated (strncpy() suggests
+> this but does not guarantee it).
+>
+> |	static int compare_symbol_name(const char *name, char *namebuf)
+> |	{
+> |		cleanup_symbol_name(namebuf);
+> |		return strcmp(name, namebuf);
+> |	}
+>
+> |	static void cleanup_symbol_name(char *s)
+> |	{
+> |		...
+> |		res = strstr(s, ".llvm.");
+> |		...
+> |	}
+>
+> Use strscpy() as this method guarantees NUL-termination on the
+> destination buffer.
+>
+> This patch also replaces two uses of strncpy() used in log.c. These are
+> simple replacements as postfix has been zero-initialized on the stack
+> and has source arguments with a size less than the destination's size.
+>
+> Note that this patch uses the new 2-argument version of strscpy
+> introduced in Commit e6584c3964f2f ("string: Allow 2-argument
+> strscpy()").
+>
+> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
+> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
+> Link: https://github.com/KSPP/linux/issues/90
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> ---
+> Note: build-tested only.
+>
+> Found with: $ rg "strncpy\("
+> ---
+>  kernel/bpf/core.c | 4 ++--
+>  kernel/bpf/log.c  | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 696bc55de8e8..8c9078f4549c 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -747,7 +747,7 @@ const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
+>  		unsigned long symbol_start = ksym->start;
+>  		unsigned long symbol_end = ksym->end;
+>
+> -		strncpy(sym, ksym->name, KSYM_NAME_LEN);
+> +		strscpy(sym, ksym->name, KSYM_NAME_LEN);
+You dont have to check return value of strscpy for errors ?
 
-* Do we allow conversions from Provisional to Permanent? If so how?
-* Do Provisional registrations timeout after a while if they are not made Permanent?
-* How do we remove Provisional registrations? Are the codepoints freed up?
-
-I have opened an issue on the issue tracker for this at https://github.com/ietf-wg-bpf/ebpf-docs/issues/113 . Comments are welcome and greatly appreciated.
-
-Thanks
-Suresh
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
+>
+>  		ret = sym;
+>  		if (size)
+> @@ -813,7 +813,7 @@ int bpf_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
+>  		if (it++ != symnum)
+>  			continue;
+>
+> -		strncpy(sym, ksym->name, KSYM_NAME_LEN);
+> +		strscpy(sym, ksym->name, KSYM_NAME_LEN);
+>
+>  		*value = ksym->start;
+>  		*type  = BPF_SYM_ELF_TYPE;
+> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+> index 2a243cf37c60..4bd8f17a9f24 100644
+> --- a/kernel/bpf/log.c
+> +++ b/kernel/bpf/log.c
+> @@ -467,9 +467,9 @@ const char *reg_type_str(struct bpf_verifier_env *env, enum bpf_reg_type type)
+>
+>  	if (type & PTR_MAYBE_NULL) {
+>  		if (base_type(type) == PTR_TO_BTF_ID)
+> -			strncpy(postfix, "or_null_", 16);
+> +			strscpy(postfix, "or_null_");
+>  		else
+> -			strncpy(postfix, "_or_null", 16);
+> +			strscpy(postfix, "_or_null");
+>  	}
+>
+>  	snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s",
+>
+> ---
+> base-commit: 026e680b0a08a62b1d948e5a8ca78700bfac0e6e
+> change-id: 20240402-strncpy-kernel-bpf-core-c-4d8297f95e18
+>
+> Best regards,
+> --
+> Justin Stitt <justinstitt@google.com>
+>
