@@ -1,87 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-175.mta0.migadu.com (out-175.mta0.migadu.com [91.218.175.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93BE2155A46;
-	Wed,  3 Apr 2024 22:03:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B840B138494
+	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 22:09:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712181815; cv=none; b=a6sw7oE931HfPAmFNEjz003+pzydFW+zFq152LGz2fwVYeT8H375DK8gLd9dq9imqHChWQwRRVm5FwK47g2yydSUvEHZ/+PsU9NXuOiCLJZPHq6JiPShnSNPrnr5iMbZfCj7SZyaJx+Mi2ZN3hAQmGnsiOnviHScICMqYWIpy+w=
+	t=1712182154; cv=none; b=FAsAVvcJqYGXuySwDZSPfVGoSRJywVIE30fWOTrIIbBM1yaMIhHKX7wBrFSX9YUMNri0Rv0IvAW9Nosf2cfGze80VmnbaCW51NBW4jbc+/odz5WkLMxXXmnVqdrZzRljrzFdAX5Kk1g7BMe5ohT5Qhw0jAfBBYx3vgwOcl86zfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712181815; c=relaxed/simple;
-	bh=n3Q8pcct6u1puk940GRaHLodcqgH7KSOUMdJGkXoHcs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QFUHB+QDedFz02JG8804juvIBAJaAC0qX60jM/21aEA+8YR3lfyolDGVsXzJcOx51YpqBsYkrgFFsgjoJga5csXPknzRJga/6qfWV/+ptrnn8Rs7PmMS/xBLFqry3F7zZG1GX0P5IDusPAC5EkCqcaL1WmpWfRtIyaLGBw0yV84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kMiZaEW9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712182154; c=relaxed/simple;
+	bh=FpHPjv0qIcd4vDdHXrn3+DHWPPEl7ptGp3fvQDOeXbU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LPnvYWYCWwwWMEhD+9FgB0hTKPy5i5HOBtP1aV5RvPCMmsBMGRJ0jpoorCSYRWn0pq0RafXj1ENVi6NW1+bwvjSLazjDXkbsPzPJKOtQMHFtxYA93LxQfAg770S5hf+ORpSS2RW3iXoLtyZ4daeFjr/MIXN/eVQKeQazYmwI1xQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=u769mNG4; arc=none smtp.client-ip=91.218.175.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kMiZaEW9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4529BC433F1;
-	Wed,  3 Apr 2024 22:03:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712181815;
-	bh=n3Q8pcct6u1puk940GRaHLodcqgH7KSOUMdJGkXoHcs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kMiZaEW9if+NKbiFuyVUgKfHehLr0akVWn5G0Wc0cDWVBeHQVAv2ZU05VYO8gZzC7
-	 vYj8GNMipIJgdyjEwwQqdaHEQD3G71HoVNxurc5DoXuiBP70m1bmzj/fIfxbzALX0z
-	 OvJkS9qblmGRYB9PNMMQNG93P73oNRE75ywCTq15fDVKJI5mrs4ie2EY6AjqJL8jMt
-	 u0zow5tL9IcITwRzLgfsEWYC8tZWXo4yY6XcXrd4UQP4MLnlqCo4sqUlzzj6pTPKRC
-	 6jZlc7SHN+EOyc6dVmCHrVbBo2EhuCn39mAtP3TPKYGom/RuzW3cBYtWY6eeP0YOgC
-	 RBNczoDnlMKjA==
-From: Andrii Nakryiko <andrii@kernel.org>
-To: linux-trace-kernel@vger.kernel.org,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org
-Cc: bpf@vger.kernel.org,
-	jolsa@kernel.org,
-	Andrii Nakryiko <andrii@kernel.org>,
-	"Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH v3 2/2] rethook: honor CONFIG_FTRACE_VALIDATE_RCU_IS_WATCHING in rethook_try_get()
-Date: Wed,  3 Apr 2024 15:03:28 -0700
-Message-ID: <20240403220328.455786-2-andrii@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240403220328.455786-1-andrii@kernel.org>
-References: <20240403220328.455786-1-andrii@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="u769mNG4"
+Message-ID: <e49ccf43-ae90-4df1-bc10-5ee180ec47ec@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712182150;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oprPbI5wOD8JwZb3qLbOe/m4jL9fo1Bz0dDSO1rtpPs=;
+	b=u769mNG4+qN4XNPvsopUn7s2uQPwU7aVbaJ1X9NRtAD2AnGCDfkPDsbYj2Y83Uk7CrGMDh
+	EDtzMzoU+6klGiIxffBJBGq480ZK8DCMAAd5nUpelMvj1FqCBj8YNQhPq1kySCVRH5NX8f
+	rxk8uiIPErEKlOZzXk/KlEmjyz25hgw=
+Date: Wed, 3 Apr 2024 15:09:02 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: run bpf prog w/o sockmap [was: bpf: Add bpf_link support for sk_msg
+ and sk_skb progs]
+To: John Fastabend <john.fastabend@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jakub Sitnicki <jakub@cloudflare.com>, kernel-team@fb.com,
+ Martin KaFai Lau <martin.lau@kernel.org>,
+ Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+ Yonghong Song <yonghong.song@linux.dev>
+References: <20240326022153.656006-1-yonghong.song@linux.dev>
+ <20240326022158.656285-1-yonghong.song@linux.dev>
+ <CAEf4BzbkcKFVEWaHSavbRi9+9VQMbqCgP36p9fzk6Hai2v2izA@mail.gmail.com>
+ <27046774-e3d6-40c2-b3e3-ae6e64ecd33b@linux.dev>
+ <CAEf4BzaYh6q_0TUUARd8m0eK+5RBxWQJ8=-n84vdayPPh4Z61g@mail.gmail.com>
+ <660d964a1444b_1cf6b20885@john.notmuch>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <660d964a1444b_1cf6b20885@john.notmuch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Take into account CONFIG_FTRACE_VALIDATE_RCU_IS_WATCHING when validating
-that RCU is watching when trying to setup rethooko on a function entry.
+On 4/3/24 10:47 AM, John Fastabend wrote:
+> on my todo list, I want
+> to just remove the map notion and bind progs to socks directly.
 
-This further (in addition to improvements in the previous patch)
-improves BPF multi-kretprobe (which rely on rethook) runtime throughput
-by 2.3%, according to BPF benchmarks ([0]).
+Run the bpf prog without the sockmap? +1, it would be nice.
 
-  [0] https://lore.kernel.org/bpf/CAEf4BzauQ2WKMjZdc9s0rBWa01BYbgwHN6aNDXQSHYia47pQ-w@mail.gmail.com/
+> but other than quick hacks I've never built such a thing nor ran it 
+> in production. 
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/trace/rethook.c | 2 ++
- 1 file changed, 2 insertions(+)
+How do you see the interface will look like (e.g. attaching the bpf prog to a sk) ?
 
-diff --git a/kernel/trace/rethook.c b/kernel/trace/rethook.c
-index fa03094e9e69..15b8aa4048d9 100644
---- a/kernel/trace/rethook.c
-+++ b/kernel/trace/rethook.c
-@@ -166,6 +166,7 @@ struct rethook_node *rethook_try_get(struct rethook *rh)
- 	if (unlikely(!handler))
- 		return NULL;
- 
-+#ifdef CONFIG_FTRACE_VALIDATE_RCU_IS_WATCHING
- 	/*
- 	 * This expects the caller will set up a rethook on a function entry.
- 	 * When the function returns, the rethook will eventually be reclaimed
-@@ -174,6 +175,7 @@ struct rethook_node *rethook_try_get(struct rethook *rh)
- 	 */
- 	if (unlikely(!rcu_is_watching()))
- 		return NULL;
-+#endif
- 
- 	return (struct rethook_node *)objpool_pop(&rh->pool);
- }
--- 
-2.43.0
+It will be nice if the whole function (e.g. sk->sk_data_ready or may be some of 
+the sk->sk_prot) can be implemented completely in bpf. I don't have a concrete 
+use case for now but I think it will be powerful.
+
+[ It is orthogonal to what Yonghong is doing, so the title changed ]
 
