@@ -1,438 +1,153 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 104411350DB;
-	Wed,  3 Apr 2024 09:47:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6019D13D61B;
+	Wed,  3 Apr 2024 10:05:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712137668; cv=none; b=EArk5LpxV759QRJgy7tXRkXoo200mVmuK53AooLcakRCjriYfBgkG4NEhTPlMmp5u3tIEGnRQRjHKmqtlMChrIEtxHweunYf7nAVSRFOuVuFN3VXEH/lLY/GyUV6sW4gr5HU+pIrnQ8v5mMPN/4/R/Ubihpk1Hkx1QIACPWBO3k=
+	t=1712138746; cv=none; b=H8fDLAQI9Q/yhylsZnYQRO24lJKph6PRZHUoGINi8EeVHSlpJbDzkW+3g7p2J7j2I6XLjx2ZImqJx9NUJrhpGXY4gpUnCQiG+vyD02G5IWwSzuoX8h0mNRnQFe292ZRW2bpWC+2xis84dBzy1RJocMECGzJf47jQBJI8XlR6FtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712137668; c=relaxed/simple;
-	bh=W0JLyRDXs24sba2ie0SEYZ/EvbHFfoCIW3p6pJcOcc8=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KFaOcwNgNbhvov8Q++slIfhLpTQ+Zg3g4hS+/E0I5Z5KuF1zquWHwWIdIFPIx3tLWulMfY97YLVcC0eZxsgIT2fi7E5kXUgUm02Phid8D+cVjkECO7UMH8BU25Q+Z1WgWyjy0kMPm8tny2xYKJE8l8DHdms1WAOKGQMzGE678lg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yv1meC8P; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yv1meC8P"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4162514dc22so1428925e9.2;
-        Wed, 03 Apr 2024 02:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712137664; x=1712742464; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3E3RqHKLhlU8hp32vkug6HVrDyo1wUIX1ktK1zdtxk8=;
-        b=Yv1meC8Pxlbv7HGkRuXY4jwpBbSDtJGXR5d4Y9Z/9sk8JrB9mtBFl5wfuJ/h2v1Hnr
-         V/HDPR+PxtN+udurS6/QK0OziMDwGB1mC80PJgusFtSZkIDmhJf7sbJLOnYm1pr/wAji
-         3YJQeLfaiBYuR9mJD9Ax7gdTH4GLJqcwfZzQokRTYKrXJTMFG2ZnJFJ0ECs7YFh9FtaH
-         2X/USD6PnT/Z3k6BPvYjwk0kPDjyX9rxR5bbNrq1CqvQiPDV+JEoZ7Qq/Qlkg7rzY8K5
-         xqBuOZaGHtM+G2md/qfEs74H39T7+ObSJIsoTnoL2JSnEG+9YgFr0AnqC4Cvy4duX0u5
-         yxQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712137664; x=1712742464;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3E3RqHKLhlU8hp32vkug6HVrDyo1wUIX1ktK1zdtxk8=;
-        b=q7RvIFKGZ0/QMC0xMNSkdYg+yqAPpa8/MOCGok35kpQCL2KoVLOiR//UO/2GlaU41u
-         +67KjqMf8kQyjcuWJ1vtZ/PJBmicCe/a/DeppwbF+12xSGPJcNAhbAZuiuRVSLWKGuK4
-         QVxkPB0P5LFdPIh/ZPNim8JmQeQtvH0jMUJc6aeSfPMALEp9G60fqyl4fRHOlISx6yxp
-         vara/mrj9xmM3HokG0YSCA4xM/8nhN4bVHYtb+wZQ8bsXgkD0HcxQYH7VbR3ul3Ij1eS
-         vykAGKgaW+YF+PM+8haajA+VHCnrCbGlSis1L8BHY8NzE2VFBUrJwGQz5zpkxBZWip8t
-         UNAA==
-X-Forwarded-Encrypted: i=1; AJvYcCV5DPPtmNf7OrbHtO8DmHtgm+lbFFJr0DG3ocUSoweGuzQ4Bqli59e8LDxCkHs+bG4I0uDYHCqiQ1RSuyhqvU8hjhl1jtE/3KdakeN5EOvHevkq0Okufrasn1tlOZhV7JU62EErHcMb3kzR7KV+PRTA5cs8XyXDXPOyqPOaBWgPLVomc6k6
-X-Gm-Message-State: AOJu0YwP8LwwzzBUfD5bAtKNXTyyyL6qyka6XoxV74hFrLU8YYn9SjfL
-	5afBeSbJV9ml22IALodOPUipohusKqOFI4dgdFhR/Q6o9+WymST1
-X-Google-Smtp-Source: AGHT+IGgSS4G/na8UzgAlgabXQYUN7OGdx97M5hvhWJEXEB+dTZnsZb3ui79WU1v00h7oIgJENf2CA==
-X-Received: by 2002:a7b:c396:0:b0:415:5492:5356 with SMTP id s22-20020a7bc396000000b0041554925356mr3584176wmj.11.1712137664009;
-        Wed, 03 Apr 2024 02:47:44 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id u22-20020a05600c139600b00414906f1ea1sm20862273wmf.17.2024.04.03.02.47.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Apr 2024 02:47:43 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 3 Apr 2024 11:47:41 +0200
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Oleg Nesterov <oleg@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
-Subject: Re: [PATCHv2 1/3] uprobe: Add uretprobe syscall to speed up return
- probe
-Message-ID: <Zg0lvUIB4WdRUGw_@krava>
-References: <20240402093302.2416467-1-jolsa@kernel.org>
- <20240402093302.2416467-2-jolsa@kernel.org>
- <20240403100708.233575a8ac2a5bac2192d180@kernel.org>
+	s=arc-20240116; t=1712138746; c=relaxed/simple;
+	bh=olgsQH1bTYPGG9AtE4GyA/NCpvsSuDDkBqeFOxiuFj8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tGKlibfaPsNPbwEn+J1gSbtYoY3jIWr0M2ddhux0D05nwcacx/Xbbc8cMbbPzeGGAruSZybTqZBRmMNUYJElyRUE7TTn1r25qys5Is9dBbimkivmwJ0jj9158bwgHLsJyZgz+nczl47JF7o3g9PKzAfySXa5TKi+aqqAFp+gHIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V8gNv4TDxz4f3lXX;
+	Wed,  3 Apr 2024 18:05:35 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id D3EFD1A0172;
+	Wed,  3 Apr 2024 18:05:39 +0800 (CST)
+Received: from [10.67.109.184] (unknown [10.67.109.184])
+	by APP4 (Coremail) with SMTP id gCh0CgD3R2ryKQ1m0FhPJA--.17610S2;
+	Wed, 03 Apr 2024 18:05:39 +0800 (CST)
+Message-ID: <d6eae62b-60fd-4f3c-92e4-7ea5f1c4fc68@huaweicloud.com>
+Date: Wed, 3 Apr 2024 18:05:38 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/5] riscv, bpf: Relax restrictions on Zbb
+ instructions
+Content-Language: en-US
+To: Conor Dooley <conor@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>
+Cc: Stefan O'Rear <sorear@fastmail.com>, bpf@vger.kernel.org,
+ linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Manu Bretelle <chantr4@gmail.com>, Pu Lehui <pulehui@huawei.com>
+References: <20240328124916.293173-1-pulehui@huaweicloud.com>
+ <20240328124916.293173-3-pulehui@huaweicloud.com>
+ <3ed9fe94-2610-41eb-8a00-a9f37fcf2b1a@app.fastmail.com>
+ <20240328-ferocity-repose-c554f75a676c@spud>
+ <ed3debc9-f2a9-41fb-9cf9-dc6419de5c01@huaweicloud.com>
+ <87cyr7rgdn.fsf@all.your.base.are.belong.to.us>
+ <20240402-ample-preview-c84edb69db1b@spud>
+ <871q7nr3mq.fsf@all.your.base.are.belong.to.us>
+ <20240403-gander-parting-a47c56401716@spud>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <20240403-gander-parting-a47c56401716@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240403100708.233575a8ac2a5bac2192d180@kernel.org>
+X-CM-TRANSID:gCh0CgD3R2ryKQ1m0FhPJA--.17610S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxur17Aw43Cw47GF15Xr15twb_yoW5Ar13pa
+	95KF4Ika1DJr12y3sFyr48WrySvr1rCF45Grn8Gry8Awn8XF1xKrW2gr15CF97urZ7Kw1a
+	vr48Jry2y3Z0yaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+	7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+	Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+	6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+	AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv
+	6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-On Wed, Apr 03, 2024 at 10:07:08AM +0900, Masami Hiramatsu wrote:
-> Hi Jiri,
+
+On 2024/4/3 9:20, Conor Dooley wrote:
+> On Tue, Apr 02, 2024 at 09:00:45PM +0200, Bjรถrn Tรถpel wrote:
 > 
-> On Tue,  2 Apr 2024 11:33:00 +0200
-> Jiri Olsa <jolsa@kernel.org> wrote:
+>>>> I still think Lehui's patch is correct; Building a kernel that can boot
+>>>> on multiple platforms (w/ or w/o Zbb support) and not having Zbb insn in
+>>>> the kernel proper, and iff Zbb is available at run-time the BPF JIT will
+>>>> emit Zbb.
+>>>
+>>> This sentence is -ENOPARSE to me, did you accidentally omit some words?
+>>> Additionally he config option has nothing to do with building kernels that
+>>> boot on multiple platforms, it only controls whether optimisations for Zbb
+>>> are built so that if Zbb is detected they can be used.
+>>
+>> Ugh, sorry about that! I'm probably confused myself.
 > 
-> > Adding uretprobe syscall instead of trap to speed up return probe.
+> Reading this back, I a bunch of words too, so no worries...
 > 
-> This is interesting approach. But I doubt we need to add additional
-> syscall just for this purpose. Can't we use another syscall or ioctl?
-
-so the plan is to optimize entry uprobe in a similar way and given
-the syscall is not a scarce resource I wanted to add another syscall
-for that one as well
-
-tbh I'm not sure sure which syscall or ioctl to reuse for this, it's
-possible to do that, the trampoline will just have to save one or
-more additional registers, but adding new syscall seems cleaner to me
-
+>>>> For these kind of optimizations, (IMO) it's better to let the BPF JIT
+>>>> decide at run-time.
+>>>
+>>> Why is bpf a different case to any other user in this regard?
+>>> I think that the commit message is misleading and needs to be changed,
+>>> because the point "the hardware is capable of recognising the Zbb
+>>> instructions independently..." is completely unrelated to the purpose
+>>> of the config option. Of course the hardware understanding the option
 > 
-> Also, we should run syzkaller on this syscall. And if uretprobe is
-
-right, I'll check on syzkaller
-
-> set in the user function, what happen if the user function directly
-> calls this syscall? (maybe it consumes shadow stack?)
-
-the process should receive SIGILL if there's no pending uretprobe for
-the current task, or it will trigger uretprobe if there's one pending
-
-but we could limit the syscall to be executed just from the trampoline,
-that should prevent all the user space use cases, I'll do that in next
-version and add more tests for that
-
-thanks,
-jirka
-
-
+> This should have been "understanding the instructions"...
 > 
-> Thank you,
+>>> has nothing to do with kernel configuration. The commit message needs to
+>>> explain why bpf is a special case and is exempt from an
 > 
-> > 
-> > At the moment the uretprobe setup/path is:
-> > 
-> >   - install entry uprobe
-> > 
-> >   - when the uprobe is hit, it overwrites probed function's return address
-> >     on stack with address of the trampoline that contains breakpoint
-> >     instruction
-> > 
-> >   - the breakpoint trap code handles the uretprobe consumers execution and
-> >     jumps back to original return address
-> > 
-> > This patch replaces the above trampoline's breakpoint instruction with new
-> > ureprobe syscall call. This syscall does exactly the same job as the trap
-> > with some more extra work:
-> > 
-> >   - syscall trampoline must save original value for rax/r11/rcx registers
-> >     on stack - rax is set to syscall number and r11/rcx are changed and
-> >     used by syscall instruction
-> > 
-> >   - the syscall code reads the original values of those registers and
-> >     restore those values in task's pt_regs area
-> > 
-> > Even with the extra registers handling code the having uretprobes handled
-> > by syscalls shows speed improvement.
-> > 
-> >   On Intel (11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz)
-> > 
-> >   current:
-> > 
-> >     base           :   15.888 ฑ 0.033M/s
-> >     uprobe-nop     :    3.016 ฑ 0.000M/s
-> >     uprobe-push    :    2.832 ฑ 0.005M/s
-> >     uprobe-ret     :    1.104 ฑ 0.000M/s
-> >     uretprobe-nop  :    1.487 ฑ 0.000M/s
-> >     uretprobe-push :    1.456 ฑ 0.000M/s
-> >     uretprobe-ret  :    0.816 ฑ 0.001M/s
-> > 
-> >   with the fix:
-> > 
-> >     base           :   15.116 ฑ 0.045M/s
-> >     uprobe-nop     :    3.001 ฑ 0.045M/s
-> >     uprobe-push    :    2.831 ฑ 0.004M/s
-> >     uprobe-ret     :    1.102 ฑ 0.001M/s
-> >     uretprobe-nop  :    1.969 ฑ 0.001M/s  < 32% speedup
-> >     uretprobe-push :    1.905 ฑ 0.004M/s  < 30% speedup
-> >     uretprobe-ret  :    0.933 ฑ 0.002M/s  < 14% speedup
-> > 
-> >   On Amd (AMD Ryzen 7 5700U)
-> > 
-> >   current:
-> > 
-> >     base           :    5.105 ฑ 0.003M/s
-> >     uprobe-nop     :    1.552 ฑ 0.002M/s
-> >     uprobe-push    :    1.408 ฑ 0.003M/s
-> >     uprobe-ret     :    0.827 ฑ 0.001M/s
-> >     uretprobe-nop  :    0.779 ฑ 0.001M/s
-> >     uretprobe-push :    0.750 ฑ 0.001M/s
-> >     uretprobe-ret  :    0.539 ฑ 0.001M/s
-> > 
-> >   with the fix:
-> > 
-> >     base           :    5.119 ฑ 0.002M/s
-> >     uprobe-nop     :    1.523 ฑ 0.003M/s
-> >     uprobe-push    :    1.384 ฑ 0.003M/s
-> >     uprobe-ret     :    0.826 ฑ 0.002M/s
-> >     uretprobe-nop  :    0.866 ฑ 0.002M/s  < 11% speedup
-> >     uretprobe-push :    0.826 ฑ 0.002M/s  < 10% speedup
-> >     uretprobe-ret  :    0.581 ฑ 0.001M/s  <  7% speedup
-> > 
-> > Reviewed-by: Oleg Nesterov <oleg@redhat.com>
-> > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> > Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> > Signed-off-by: Oleg Nesterov <oleg@redhat.com>
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  arch/x86/entry/syscalls/syscall_64.tbl |  1 +
-> >  arch/x86/kernel/uprobes.c              | 83 ++++++++++++++++++++++++++
-> >  include/linux/syscalls.h               |  2 +
-> >  include/linux/uprobes.h                |  2 +
-> >  include/uapi/asm-generic/unistd.h      |  5 +-
-> >  kernel/events/uprobes.c                | 18 ++++--
-> >  kernel/sys_ni.c                        |  2 +
-> >  7 files changed, 108 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-> > index 7e8d46f4147f..af0a33ab06ee 100644
-> > --- a/arch/x86/entry/syscalls/syscall_64.tbl
-> > +++ b/arch/x86/entry/syscalls/syscall_64.tbl
-> > @@ -383,6 +383,7 @@
-> >  459	common	lsm_get_self_attr	sys_lsm_get_self_attr
-> >  460	common	lsm_set_self_attr	sys_lsm_set_self_attr
-> >  461	common	lsm_list_modules	sys_lsm_list_modules
-> > +462	64	uretprobe		sys_uretprobe
-> >  
-> >  #
-> >  # Due to a historical design error, certain syscalls are numbered differently
-> > diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
-> > index 6c07f6daaa22..6fc5d16f6c17 100644
-> > --- a/arch/x86/kernel/uprobes.c
-> > +++ b/arch/x86/kernel/uprobes.c
-> > @@ -12,6 +12,7 @@
-> >  #include <linux/ptrace.h>
-> >  #include <linux/uprobes.h>
-> >  #include <linux/uaccess.h>
-> > +#include <linux/syscalls.h>
-> >  
-> >  #include <linux/kdebug.h>
-> >  #include <asm/processor.h>
-> > @@ -308,6 +309,88 @@ static int uprobe_init_insn(struct arch_uprobe *auprobe, struct insn *insn, bool
-> >  }
-> >  
-> >  #ifdef CONFIG_X86_64
-> > +
-> > +asm (
-> > +	".pushsection .rodata\n"
-> > +	".global uretprobe_syscall_entry\n"
-> > +	"uretprobe_syscall_entry:\n"
-> > +	"pushq %rax\n"
-> > +	"pushq %rcx\n"
-> > +	"pushq %r11\n"
-> > +	"movq $" __stringify(__NR_uretprobe) ", %rax\n"
-> > +	"syscall\n"
-> > +	"popq %r11\n"
-> > +	"popq %rcx\n"
-> > +
-> > +	/* The uretprobe syscall replaces stored %rax value with final
-> > +	 * return address, so we don't restore %rax in here and just
-> > +	 * call ret.
-> > +	 */
-> > +	"retq\n"
-> > +	".global uretprobe_syscall_end\n"
-> > +	"uretprobe_syscall_end:\n"
-> > +	".popsection\n"
-> > +);
-> > +
-> > +extern u8 uretprobe_syscall_entry[];
-> > +extern u8 uretprobe_syscall_end[];
-> > +
-> > +void *arch_uprobe_trampoline(unsigned long *psize)
-> > +{
-> > +	*psize = uretprobe_syscall_end - uretprobe_syscall_entry;
-> > +	return uretprobe_syscall_entry;
-> > +}
-> > +
-> > +SYSCALL_DEFINE0(uretprobe)
-> > +{
-> > +	struct pt_regs *regs = task_pt_regs(current);
-> > +	unsigned long err, ip, sp, r11_cx_ax[3];
-> > +
-> > +	err = copy_from_user(r11_cx_ax, (void __user *)regs->sp, sizeof(r11_cx_ax));
-> > +	WARN_ON_ONCE(err);
-> > +
-> > +	/* expose the "right" values of r11/cx/ax/sp to uprobe_consumer/s */
-> > +	regs->r11 = r11_cx_ax[0];
-> > +	regs->cx  = r11_cx_ax[1];
-> > +	regs->ax  = r11_cx_ax[2];
-> > +	regs->sp += sizeof(r11_cx_ax);
-> > +	regs->orig_ax = -1;
-> > +
-> > +	ip = regs->ip;
-> > +	sp = regs->sp;
-> > +
-> > +	uprobe_handle_trampoline(regs);
-> > +
-> > +	/*
-> > +	 * uprobe_consumer has changed sp, we can do nothing,
-> > +	 * just return via iret
-> > +	 */
-> > +	if (regs->sp != sp)
-> > +		return regs->ax;
-> > +	regs->sp -= sizeof(r11_cx_ax);
-> > +
-> > +	/* for the case uprobe_consumer has changed r11/cx */
-> > +	r11_cx_ax[0] = regs->r11;
-> > +	r11_cx_ax[1] = regs->cx;
-> > +
-> > +	/*
-> > +	 * ax register is passed through as return value, so we can use
-> > +	 * its space on stack for ip value and jump to it through the
-> > +	 * trampoline's ret instruction
-> > +	 */
-> > +	r11_cx_ax[2] = regs->ip;
-> > +	regs->ip = ip;
-> > +
-> > +	err = copy_to_user((void __user *)regs->sp, r11_cx_ax, sizeof(r11_cx_ax));
-> > +	WARN_ON_ONCE(err);
-> > +
-> > +	/* ensure sysret, see do_syscall_64() */
-> > +	regs->r11 = regs->flags;
-> > +	regs->cx  = regs->ip;
-> > +
-> > +	return regs->ax;
-> > +}
-> > +
-> >  /*
-> >   * If arch_uprobe->insn doesn't use rip-relative addressing, return
-> >   * immediately.  Otherwise, rewrite the instruction so that it accesses
-> > diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-> > index 77eb9b0e7685..db150794f89d 100644
-> > --- a/include/linux/syscalls.h
-> > +++ b/include/linux/syscalls.h
-> > @@ -972,6 +972,8 @@ asmlinkage long sys_lsm_list_modules(u64 *ids, size_t *size, u32 flags);
-> >  /* x86 */
-> >  asmlinkage long sys_ioperm(unsigned long from, unsigned long num, int on);
-> >  
-> > +asmlinkage long sys_uretprobe(void);
-> > +
-> >  /* pciconfig: alpha, arm, arm64, ia64, sparc */
-> >  asmlinkage long sys_pciconfig_read(unsigned long bus, unsigned long dfn,
-> >  				unsigned long off, unsigned long len,
-> > diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
-> > index f46e0ca0169c..a490146ad89d 100644
-> > --- a/include/linux/uprobes.h
-> > +++ b/include/linux/uprobes.h
-> > @@ -138,6 +138,8 @@ extern bool arch_uretprobe_is_alive(struct return_instance *ret, enum rp_check c
-> >  extern bool arch_uprobe_ignore(struct arch_uprobe *aup, struct pt_regs *regs);
-> >  extern void arch_uprobe_copy_ixol(struct page *page, unsigned long vaddr,
-> >  					 void *src, unsigned long len);
-> > +extern void uprobe_handle_trampoline(struct pt_regs *regs);
-> > +extern void *arch_uprobe_trampoline(unsigned long *psize);
-> >  #else /* !CONFIG_UPROBES */
-> >  struct uprobes_state {
-> >  };
-> > diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-> > index 75f00965ab15..8a747cd1d735 100644
-> > --- a/include/uapi/asm-generic/unistd.h
-> > +++ b/include/uapi/asm-generic/unistd.h
-> > @@ -842,8 +842,11 @@ __SYSCALL(__NR_lsm_set_self_attr, sys_lsm_set_self_attr)
-> >  #define __NR_lsm_list_modules 461
-> >  __SYSCALL(__NR_lsm_list_modules, sys_lsm_list_modules)
-> >  
-> > +#define __NR_uretprobe 462
-> > +__SYSCALL(__NR_uretprobe, sys_uretprobe)
-> > +
-> >  #undef __NR_syscalls
-> > -#define __NR_syscalls 462
-> > +#define __NR_syscalls 463
-> >  
-> >  /*
-> >   * 32 bit systems traditionally used different
-> > diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-> > index 929e98c62965..90395b16bde0 100644
-> > --- a/kernel/events/uprobes.c
-> > +++ b/kernel/events/uprobes.c
-> > @@ -1474,11 +1474,20 @@ static int xol_add_vma(struct mm_struct *mm, struct xol_area *area)
-> >  	return ret;
-> >  }
-> >  
-> > +void * __weak arch_uprobe_trampoline(unsigned long *psize)
-> > +{
-> > +	static uprobe_opcode_t insn = UPROBE_SWBP_INSN;
-> > +
-> > +	*psize = UPROBE_SWBP_INSN_SIZE;
-> > +	return &insn;
-> > +}
-> > +
-> >  static struct xol_area *__create_xol_area(unsigned long vaddr)
-> >  {
-> >  	struct mm_struct *mm = current->mm;
-> > -	uprobe_opcode_t insn = UPROBE_SWBP_INSN;
-> > +	unsigned long insns_size;
-> >  	struct xol_area *area;
-> > +	void *insns;
-> >  
-> >  	area = kmalloc(sizeof(*area), GFP_KERNEL);
-> >  	if (unlikely(!area))
-> > @@ -1502,7 +1511,8 @@ static struct xol_area *__create_xol_area(unsigned long vaddr)
-> >  	/* Reserve the 1st slot for get_trampoline_vaddr() */
-> >  	set_bit(0, area->bitmap);
-> >  	atomic_set(&area->slot_count, 1);
-> > -	arch_uprobe_copy_ixol(area->pages[0], 0, &insn, UPROBE_SWBP_INSN_SIZE);
-> > +	insns = arch_uprobe_trampoline(&insns_size);
-> > +	arch_uprobe_copy_ixol(area->pages[0], 0, insns, insns_size);
-> >  
-> >  	if (!xol_add_vma(mm, area))
-> >  		return area;
-> > @@ -2123,7 +2133,7 @@ static struct return_instance *find_next_ret_chain(struct return_instance *ri)
-> >  	return ri;
-> >  }
-> >  
-> > -static void handle_trampoline(struct pt_regs *regs)
-> > +void uprobe_handle_trampoline(struct pt_regs *regs)
-> >  {
-> >  	struct uprobe_task *utask;
-> >  	struct return_instance *ri, *next;
-> > @@ -2188,7 +2198,7 @@ static void handle_swbp(struct pt_regs *regs)
-> >  
-> >  	bp_vaddr = uprobe_get_swbp_addr(regs);
-> >  	if (bp_vaddr == get_trampoline_vaddr())
-> > -		return handle_trampoline(regs);
-> > +		return uprobe_handle_trampoline(regs);
-> >  
-> >  	uprobe = find_active_uprobe(bp_vaddr, &is_swbp);
-> >  	if (!uprobe) {
-> > diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
-> > index faad00cce269..be6195e0d078 100644
-> > --- a/kernel/sys_ni.c
-> > +++ b/kernel/sys_ni.c
-> > @@ -391,3 +391,5 @@ COND_SYSCALL(setuid16);
-> >  
-> >  /* restartable sequence */
-> >  COND_SYSCALL(rseq);
-> > +
-> > +COND_SYSCALL(uretprobe);
-> > -- 
-> > 2.44.0
-> > 
+> And this s/from an//...
 > 
+>>> I totally understand any point about bpf being different in terms of
+>>> needing toolchain support, but IIRC it was I who pointed out up-thread.
 > 
-> -- 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> And "pointed that out".
+> 
+> I always make a mess of these emails that I re-write several times :)
+> 
+>>> The part of the conversation that you're replying to here is about the
+>>> semantics of the Kconfig option and the original patch never mentioned
+>>> trying to avoid a dependency on toolchains at all, just kernel
+>>> configurations. The toolchain requirements I don't think are even super
+>>> hard to fulfill either - the last 3 versions of ld and lld all meet the
+>>> criteria.
+>>
+>> Thanks for making it more clear, and I agree that the toolchain
+>> requirements are not hard to fulfull.
+>>
+>> My view has been that "BPF is like userland", but I realize now that's
+>> odd.
+> 
+> Yeah, I can understand that perspective, but it does seem rather odd to
+> someone that isn't a bpf-ist.
+> 
+>> Let's make BPF similar to the rest of the RV kernel. If ZBB=n, then
+>> the BPF JIT doesn't know about emitting Zbb.
+> 
+
+Hi Conor and Bjรถrn,
+
+Thanks for your explanation. I totally agree with what you said, 
+"CONFIG_RISCV_ISA_ZBB only controls whether optimizations for Zbb are 
+built so that if Zbb is detected they can be used.".
+
+Since the instructions emited by bpf jit are in kernel space, they 
+should indeed be aligned in this regard.
+
+PS: It's a bit difficult to understand this,๐… if I'm wrong please don't 
+hesitate to tell me.
+
