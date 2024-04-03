@@ -1,121 +1,174 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1937B152DE8
-	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 18:14:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2F7152DE7
+	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 18:16:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712168063; cv=none; b=FL0/Z3LuiMAlT0AB8Hj+sxuhDrTfPiA0/5t/m9bmqGlQw9khX3b2LNp06PwOZvppaKZRdMYqNEZsrSLzU3on4xAd/kslzzFq9Us8qZUQ9LSpiuZo5BPTS0utRWlLOkMt/ZgrUWVNkmQdWsjFtjCpEIlJ5sGqvDSpCvVPFRsJh60=
+	t=1712168173; cv=none; b=PdKMrcWMUcL/QcmrvUFxwlW5R+KB4HE6T26mq87WjBNtNMIj6uhXKHNKDkCfv/stTZHI2pLXjfWlCMXcDzid8OUxxZ81O9eejXVeQeXJaY9dv089FmGA/D35z1RdhMeaQB1H2FJxTFgEunpZ5TlPkXX1+iNd7n+bx9OwLizxA9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712168063; c=relaxed/simple;
-	bh=upaqSdVcVS679ouGxNomw5QnWepowZp7MDSv1IZgkJA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AJuBPcBizB++RKUX9LZliqSz8Yikg4hqrVtTU9WERkXQ1+8uISHKfsCMpMCq1RI2EmXyXrL4+w7oLHs1d0hnesGVHGkJ016gx/pC8gx8snyhDTHxQbs15vFxZ/tM/HwG+M2YKpL+8UlSaOuxsxNyTaAIS4lAzGE17gy5V4aPMjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eR9b4Rfj; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1712168173; c=relaxed/simple;
+	bh=9e5yHmxMzlQKCThGo3pSqzpK0TqTf2az6I1GePU4v1A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BYU232GLQUpYuCteGNHIPt0wrU1uXcK0u6WvZZosOUv/biSPY0bL4te1bpRrxnL8WSnngk7qb6QJ42l1oOJCawMxEIDVbIUj6ErxiQCoyJgpc8MwLaUhyCDuDyGT78DpBNAscKc+CYGb7xULZ4tiytqVgASz98nxHt7AF6h+b2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.166.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eR9b4Rfj"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-41624fe40b2so1110195e9.1
-        for <bpf@vger.kernel.org>; Wed, 03 Apr 2024 11:14:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712168060; x=1712772860; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y/EDEJLM4NywAdaEzLThrdNCPCKbyQv/M+95Unv9u8I=;
-        b=eR9b4RfjlM1iZnxtAoiFzqe5bpB7wSa3akLqG/SQTy1Qt8z850IF5XCMsANf7uUhKK
-         /4eqhQUm84gtZW75wHIlLv1MVrmEHwAFJCW6eJFXK2+dlw7hZEm/8fLvBD9UuNCHGr3W
-         ydlhigyYeE0iEnthgJZTl8WISV5CFJCyltXhzd4jO/GtlhlvM09/UOT0a7aKcwc+J88P
-         X09qKya9U860dqJaRak+scIdhFnJlW359x/imNsQk2fUAFUzRlCaLxIQHG6UW9/Kiaql
-         mnZYRF+zZPYFpaMZ/0VkynUsTOMv93aKK0eG64P0BE2yvg/PuGoZqx0kILq3HMPNyhYz
-         FWpA==
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-7c8dd755793so6075339f.0
+        for <bpf@vger.kernel.org>; Wed, 03 Apr 2024 11:16:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712168060; x=1712772860;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1712168170; x=1712772970;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=y/EDEJLM4NywAdaEzLThrdNCPCKbyQv/M+95Unv9u8I=;
-        b=Kejagn2+TqLnQg+Yzhn54dpuMRcLrwW9/Om0HwCujrGu5OXXFJPupG2cWxjImvY4eO
-         C3h9T+zy3GMUaK8W9O3T8/SfC0NrN4L9yZiq5IkCBfFMcC17iw6zqBotm0IEm2Q3/KTu
-         IC+R2TaddXIbS+R+eeY7zsVmi8knMe9bzd2wZtHqEqo06+2u5pgtMJ9ef/DrBreMMogD
-         AfBl+F6MHzMgRW3wYnpR5jWu1Dg/5xi6O+I+2WncSOrSBwwNp9VK+MIfxDAnq6lDlTmA
-         o9E/huMhrBul8KWlmL/isVoFGKB0zq58yYKd+vHvEFP+xeTEFv26lwHo1Mhayp8qEWpQ
-         NmBg==
-X-Forwarded-Encrypted: i=1; AJvYcCV3ECh84yLOUZAuraHbAIVn5snWPApMPBM4th1lJHf+5/tuZMIbC0nVtLjvfWH2BPjQIARvf6AaLkWiGN7c+s2AMMLa
-X-Gm-Message-State: AOJu0Ywusl8Z73Fh7nnGZm6MjQT/AA7Z4GkgHqHP2HVzWzy9WWslSflt
-	UXaEUSFjR7FWa+r87bPEJVbdEQSnulto6gN6eZwf8Jf/UgCO8Ij6ZewEC05dsC2OFXwMBy3QUta
-	1yBWa8VTnLNx513gBXR/IFhxZdaM=
-X-Google-Smtp-Source: AGHT+IF7UafD0dgyBmC2TI6SRvVQk0Rbx+pqAg72CVtK+2aib8rYRPqWkgMGXlYZnYZEY4fHb8dabTtHd5ZxiNNEcIY=
-X-Received: by 2002:a7b:cbd1:0:b0:414:9538:7da7 with SMTP id
- n17-20020a7bcbd1000000b0041495387da7mr344643wmi.23.1712168060311; Wed, 03 Apr
- 2024 11:14:20 -0700 (PDT)
+        bh=+8Ps8W7ruMBeIYslHjVNrxzyqmX81txJxIlFRlmu2EY=;
+        b=huEJ7OXkbALkhohNh11Fy7xKaJIQy2CW8DsUFNtk6nTwWqnh0tu2yu+LOLR66kvn/I
+         mUD819ungswPtBpmPpTPUI5Otz7kuW2n2nYmwhRAg3scf4517MeALfWBtaCyQ8meOoaO
+         3bwIHFZbiVDLpEt7Vmm+QG4DV6YWf+5YGuBOJcyyOfoWUOHdAeSsyRcgqc0qyiB1c4ng
+         cZ8pwUyr4hxtw8fS49eZ+RQtSj6fKZCmubZ0/c/wlfTaz/HE+j8Cymq5DRM7hwzPyxFy
+         Hj95dayAfnRS3skqOo707Wg/1iPIPasLSolAokr+7o/yFOWTgjMD45bbybpoA1JDLyDq
+         kajw==
+X-Forwarded-Encrypted: i=1; AJvYcCWfEWSnc85TFcnTtwdz9ipIMyexBKI8je8gS7NuG+hoYykPnpv3VvtFtMCBt+4p6Rc8yI6OeG40EtI9Yc1W3cVY2Rhy
+X-Gm-Message-State: AOJu0YwbpmhVYB6gATFtjVhcSL8WgkjD+VraVm+IL9vxdnL3W/NmXtEK
+	sq/4nEAP5sRVRzIL6sAoBXkwC9yMajPULi5aT4nvl5KIsKMPy83HnuJPvXTx
+X-Google-Smtp-Source: AGHT+IEzbAgf9GS7pYefvOAhUzGOPi9cWkA6FmaVK36St6jNp9UTmoUwj4N5iiRKvL+lQZPucu6rtA==
+X-Received: by 2002:a05:6e02:3683:b0:366:bcbd:ed84 with SMTP id cj3-20020a056e02368300b00366bcbded84mr620807ilb.15.1712168170434;
+        Wed, 03 Apr 2024 11:16:10 -0700 (PDT)
+Received: from maniforge (c-76-136-75-40.hsd1.il.comcast.net. [76.136.75.40])
+        by smtp.gmail.com with ESMTPSA id i15-20020a056e02152f00b00368825f7a15sm4010350ilu.72.2024.04.03.11.16.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Apr 2024 11:16:10 -0700 (PDT)
+Date: Wed, 3 Apr 2024 13:16:08 -0500
+From: David Vernet <void@manifault.com>
+To: Suresh Krishnan <suresh.krishnan@gmail.com>
+Cc: bpf@ietf.org, bpf <bpf@vger.kernel.org>
+Subject: Re: Provisional registration procedure
+Message-ID: <20240403181608.GF2250@maniforge>
+References: <89A0EA46-36E7-4E01-BC91-D07307A2291C@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240402021307.1012571-1-andrii@kernel.org> <CAADnVQLDBhypHuyS4UXnsMYGP7xCLWGBB9jdXuiqG+ddoX95Mw@mail.gmail.com>
- <CAEf4BzZdJnR+crpz2QWODPOxi3VHazyBAY7EH-EyL_fQgNXA1g@mail.gmail.com>
-In-Reply-To: <CAEf4BzZdJnR+crpz2QWODPOxi3VHazyBAY7EH-EyL_fQgNXA1g@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 3 Apr 2024 11:14:09 -0700
-Message-ID: <CAADnVQKXkk1sQSG7VSXK9Ya6sTK4RVzZQW0eK9j0rNtchbGBYA@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 0/4] Add internal-only BPF per-CPU instruction
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="jTilkmgf0kWnvbB+"
+Content-Disposition: inline
+In-Reply-To: <89A0EA46-36E7-4E01-BC91-D07307A2291C@gmail.com>
+User-Agent: Mutt/2.2.13 (2024-03-09)
+
+
+--jTilkmgf0kWnvbB+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 3, 2024 at 11:04=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Wed, Apr 3, 2024 at 10:41=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Mon, Apr 1, 2024 at 7:13=E2=80=AFPM Andrii Nakryiko <andrii@kernel.o=
-rg> wrote:
-> > >
-> > > Add a new BPF instruction for resolving per-CPU memory addresses.
-> > >
-> > > New instruction is a special form of BPF_ALU64 | BPF_MOV | BPF_DW, wi=
-th
-> > > insns->off set to BPF_ADDR_PERCPU (=3D=3D -1). It resolves provided p=
-er-CPU offset
-> > > to an absolute address where per-CPU data resides for "this" CPU.
-> >
-> > Fixed the typo s/BPF_DW/BPF_X/ while applying.
->
-> Oops, thanks!
->
-> >
-> > I'm still a bit worried that there is no BUILD_BUG_ON
->
-> BUILD_BUG_ON is problematic, because those gen_lookup callbacks are
-> compiled on 32-bit arches just fine (just not used). I'm totally fine
-> adding extra checks as a follow up. Let's just agree on some
-> consistent approach her?
->
-> See [0] for the verifier check I mentioned. I can
->
-> a) add #ifdef guards around all current gen_lookup callbacks to only
-> build them on 64-bit arches
->
-> or
->
-> b) add runtime checks inside get_lookup to return -EOPNOTSUPP if
-> architecture isn't 64-bit.
->
-> I don't particularly care which one, I care that it's done for all
-> callbacks if we are doing this. Please let me know your preference.
->
->   [0] https://github.com/torvalds/linux/blob/master/kernel/bpf/verifier.c=
-#L19942-L19946
+On Tue, Apr 02, 2024 at 10:50:02PM -0400, Suresh Krishnan wrote:
+> Hi all,
 
-Ahh. BITS_PER_LONG =3D=3D 64 check is for a different reason,
-but that works. It won't be lifted any time soon,
-so not worried any more about that assumption inside gen_lookup.
-Let's keep things as-is.
+Hi Suresh,
+
+Thanks for reading over the document.
+
+> At the recently concluded IETF119 bpf WG meeting, I had asked a
+> question to Dave about the Provisional registrations for BPF
+> instruction conformance groups. Section 5.1 of draft-ietf-bpf-isa-01
+> talks about Provisional registrations, but does not elaborate
+> further. Specifically, I think it would be good to cover the
+> following cases
+>=20
+> * Do we allow conversions from Provisional to Permanent? If so how?
+
+Would you mind please pointing to examples of other RFCs we can look at
+to see how this is typically specified? My assumption was that we would
+just initiate a standards action or IESG review to change the state from
+Provisional to Permanent (meaning, that it was sufficient to simply
+define the registration policies for Permanent and Provisional), but it
+sounds like we need to be more explicit in our language. It seems that
+RFC8126 section 4.13 doesn't specify a standard method for converting
+between states:
+
+4.13.  Provisional Registrations
+
+   Some existing registries have policies that allow provisional
+   registration: see URI Schemes [RFC7595] and Email Header Fields
+   [RFC3864].  Registrations that are designated as provisional are
+   usually defined as being more readily created, changed, reassigned,
+   moved to another status, or removed entirely.  URI Schemes, for
+   example, allow provisional registrations to be made with incomplete
+   information.
+
+   Allowing provisional registration ensures that the primary goal of
+   maintaining a registry -- avoiding collisions between incompatible
+   semantics -- is achieved without the side effect of "endorsing" the
+   protocol mechanism the provisional value is used for.  Provisional
+   registrations for codepoints that are ultimately standardized can be
+   promoted to permanent status.  The criteria that are defined for
+   converting a provisional registration to permanent will likely be
+   more strict than those that allowed the provisional registration.
+
+   If your registry does not have a practical limit on codepoints,
+   perhaps adding the option for provisional registrations might be
+   right for that registry as well.
+
+Hmm, and looking at RFC 7595 [0] section 7.3 Change Control as a
+possible xample, it specifies the following:
+
+7.3.  Change Control
+
+   Registrations can be updated in the registry by the same mechanism as
+   required for an initial registration.  In cases where the original
+   definition of the scheme is contained in an IESG-approved document,
+   update of the specification also requires IESG approval.
+
+   'Provisional' registrations can be updated by the original registrant
+   or anyone designated by the original registrant.  In addition, the
+   IESG can reassign responsibility for a 'provisional' registration
+   scheme or can request specific changes to a scheme registration.
+   This will enable changes to be made to schemes where the original
+   registrant is out of contact or unwilling or unable to make changes.
+
+   Transition from 'provisional' to 'permanent' status can be requested
+   and approved in the same manner as a new 'permanent' registration.
+   Transition from 'permanent' to 'historical' status requires IESG
+   approval.  Transition from 'provisional' to 'historical' can be
+   requested by anyone authorized to update the 'provisional'
+   registration.
+
+[0]: https://www.rfc-editor.org/rfc/rfc7595#page-9
+
+Dave, what do you think? I guess we should add a paragraph(s) explaining
+the processes for this state machine?
+
+> * Do Provisional registrations timeout after a while if they are not
+>   made Permanent?
+
+Dave? I'm not sure if this has been discussed or what the norm would be.
+
+> * How do we remove Provisional registrations? Are the codepoints freed up?
+
+Also not sure if this has been discussed or what the norm should be.
+
+>=20
+> I have opened an issue on the issue tracker for this at
+> https://github.com/ietf-wg-bpf/ebpf-docs/issues/113 . Comments are
+> welcome and greatly appreciated.
+
+Ack, thanks. Whatever we decide, we'll update the GitHub issue
+accordingly.
+
+Thanks,
+David
+
+--jTilkmgf0kWnvbB+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQRBxU1So5MTLwphjdFZ5LhpZcTzZAUCZg2c6AAKCRBZ5LhpZcTz
+ZBVxAQCbx9+gYxTWcVmAwpJhPdxLRnQgmOnkf6ZNVidz0q425AD/cISChjz3gyzg
+IHaNUJdHkL+tipBJQ3/XqNn2EAqJbQc=
+=7+7i
+-----END PGP SIGNATURE-----
+
+--jTilkmgf0kWnvbB+--
