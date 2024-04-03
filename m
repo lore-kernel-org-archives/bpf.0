@@ -1,253 +1,130 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FFB149E18
-	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 15:23:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 957AE143869;
+	Wed,  3 Apr 2024 15:50:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712157791; cv=none; b=u4ioYUcaG4wKfUPT7LdLfbFMR+poRtiQwuGJ9gswpAiCg8S13JeClyuup2CgZakNE17fKBW8TQqAI7wngv0Gj8XF5YdQzOSnlu4PrmmHmR49PjMqdSWQrxQs/G/VT2OPitYmnlrctyeKXnIqefsNNa9iGolBtuhWvXXDvSvs7hg=
+	t=1712159459; cv=none; b=Ek5lLN28xKZzXeIKqaFaA8MA87PxQ0HdVeDdc+nM0lnQJ7zZlDJIUVQjDsb1VIxw4DavW8D0nF05V8vPo8SpqQO9+hIUiOT0SsV5CbfAImeff3vv3FLsmdsgTe4VLjE3qcFnKeq7oU3kh6HVnw+x15WWsX7QnQ2ORlN2jGPMBsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712157791; c=relaxed/simple;
-	bh=tyLqH1ACbJl9nyTp+H40Y9XnsGKfubW1WRm3FI5EeoM=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=AaKzrHvdNEpxTvFreRk2Kz2cE1Rl1UFPwlkYiz8LHsXMw5GYANvdlnTbFCxeFazZA8DZWFFUlolOOJS34PtzzavfeG2XILAV8e2htvIbTfGn50+uvYnUi3cUMBocq3vwmm5Ot51yQsk0uiJSDuqgPzG4VrC1jv1puIvSTsVoqtA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=jS1xCRgj; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="jS1xCRgj"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=F5MoDwuiLxTTshyTzKl6wngLZsix8Vdc2CBBCfABN80=; b=jS1xCRgjJOM1sAt9wzOVEFwBlb
-	cuCknlKBDXiL99//tavDkewwjODKyIwVKbQH8fVJTgK0942higDie95AId07SMdksKQJfRpQgTMsw
-	8tS3K5RMOsSWFTvBINZSygZF2bFfJbRd5529inB/c6gpH5oViuis471ExnL6VX8zD/ifHw7OQsgDg
-	B3um7OURtp98US8Af4qccygMxpYSmQcqGDYHr0Xa6LP6lEO7L6FlPFYJKd/sjYmfmhNZhsdpVbvto
-	9xb8rkwXR5fOTua7HD2EOD4s9gUUpywudwKv8UYOGVYDwIW4HzX7Q6G3wYr/orNv6v4xp6KwqV3n0
-	tYqxNHOA==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rs2S8-0003cS-94; Wed, 03 Apr 2024 17:23:04 +0200
-Received: from [178.197.248.12] (helo=linux.home)
-	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rs2S7-004kfx-1B;
-	Wed, 03 Apr 2024 17:23:03 +0200
-Subject: Re: [PATCH bpf-next v4] bpftool: Mount bpffs on provided dir instead
- of parent dir
-To: Quentin Monnet <qmo@kernel.org>, Sahil Siddiq <icegambit91@gmail.com>,
- ast@kernel.org, andrii@kernel.org
-Cc: martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org
-References: <20240401190407.20363-1-icegambit91@gmail.com>
- <45c72ae1-ab0d-439b-8237-80a38e15f571@kernel.org>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <092b49b2-ca2d-117f-1fa1-dac8c713a9d2@iogearbox.net>
-Date: Wed, 3 Apr 2024 17:23:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	s=arc-20240116; t=1712159459; c=relaxed/simple;
+	bh=3XDlgrsSdW7Oxyc1K1LSiJ6gv8+2nsZ5w1BYvAORxhg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tQGuNsTYLs6UaFvG6wmhCCG86nGr90nWg5iD6YXHe1/2tzG02nBS5t3QjhEG9XLgzx4h76s4FyrN7MqwaExD6Z0v4cKnFelkiT1VkwuQc0Ltx/MihHPnGIxoZ+jDAbFKyTphcvKZ9WLvtzyfR+zpzBpLzFQqr8cSMAVicAjVzto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4V8q3B0zpDz4f3jJ5;
+	Wed,  3 Apr 2024 23:50:46 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id A5B281A0568;
+	Wed,  3 Apr 2024 23:50:52 +0800 (CST)
+Received: from [10.82.3.99] (unknown [10.82.3.99])
+	by APP1 (Coremail) with SMTP id cCh0CgDnAQvaeg1mi5PLIw--.46271S2;
+	Wed, 03 Apr 2024 23:50:52 +0800 (CST)
+Message-ID: <9bffde6f-ca7f-40d4-9b27-4e53ed274751@huaweicloud.com>
+Date: Wed, 3 Apr 2024 23:50:50 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <45c72ae1-ab0d-439b-8237-80a38e15f571@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Add testcase where 7th
+ argment is struct
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27234/Wed Apr  3 10:25:27 2024)
+To: Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+ linux-riscv@lists.infradead.org, netdev@vger.kernel.org
+Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Pu Lehui <pulehui@huawei.com>
+References: <20240403072818.1462811-1-pulehui@huaweicloud.com>
+ <20240403072818.1462811-3-pulehui@huaweicloud.com>
+ <0f459fc1-1445-6e83-ace4-b2c42abfe884@iogearbox.net>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <0f459fc1-1445-6e83-ace4-b2c42abfe884@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgDnAQvaeg1mi5PLIw--.46271S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXFy8urW5Aw4furW8Cw13CFg_yoW5AF4fpF
+	18Xw15Kry8Jr4fAr17JrWUXFWFvr4kXw1UJry7JF15Zr1DGr10qF1Igr4j9F15Jr4kGr1a
+	yw12qry5uryUXFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv
+	6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-On 4/2/24 11:40 PM, Quentin Monnet wrote:
-> On 01/04/2024 20:04, Sahil Siddiq wrote:
->> When pinning programs/objects under PATH (eg: during "bpftool prog
->> loadall") the bpffs is mounted on the parent dir of PATH in the
->> following situations:
->> - the given dir exists but it is not bpffs.
->> - the given dir doesn't exist and the parent dir is not bpffs.
+
+
+On 2024/4/3 22:40, Daniel Borkmann wrote:
+> On 4/3/24 9:28 AM, Pu Lehui wrote:
+>> From: Pu Lehui <pulehui@huawei.com>
 >>
->> Mounting on the parent dir can also have the unintentional side-
->> effect of hiding other files located under the parent dir.
+>> Add testcase where 7th argument is struct for architectures with 8
+>> argument registers, and increase the complexity of the struct.
 >>
->> If the given dir exists but is not bpffs, then the bpffs should
->> be mounted on the given dir and not its parent dir.
->>
->> Similarly, if the given dir doesn't exist and its parent dir is not
->> bpffs, then the given dir should be created and the bpffs should be
->> mounted on this new dir.
->>
->> Link: https://lore.kernel.org/bpf/2da44d24-74ae-a564-1764-afccf395eeec@isovalent.com/T/#t
->> Closes: https://github.com/libbpf/bpftool/issues/100
->> Fixes: 2a36c26fe3b8 ("bpftool: Support bpffs mountpoint as pin path for prog loadall")
->>
->> Changes since v1:
->>   - Split "mount_bpffs_for_pin" into two functions.
->>     This is done to improve maintainability and readability.
->>
->> Changes since v2:
->> - mount_bpffs_for_pin: rename to "create_and_mount_bpffs_dir".
->> - mount_bpffs_given_file: rename to "mount_bpffs_given_file".
->> - create_and_mount_bpffs_dir:
->>    - introduce "dir_exists" boolean.
->>    - remove new dir if "mnt_fs" fails.
->> - improve error handling and error messages.
->>
->> Changes since v3:
->> - Rectify function name.
->> - Improve error messages and formatting.
->> - mount_bpffs_for_file:
->>    - Check if dir exists before block_mount check.
->>
->> Signed-off-by: Sahil Siddiq <icegambit91@gmail.com>
-> 
-> Tested-by: Quentin Monnet <qmo@kernel.org>
-> Reviewed-by: Quentin Monnet <qmo@kernel.org>
-> 
+>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>> Acked-by: Björn Töpel <bjorn@kernel.org>
+>> Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
 >> ---
->>   tools/bpf/bpftool/common.c     | 98 +++++++++++++++++++++++++++++-----
->>   tools/bpf/bpftool/iter.c       |  2 +-
->>   tools/bpf/bpftool/main.h       |  3 +-
->>   tools/bpf/bpftool/prog.c       |  5 +-
->>   tools/bpf/bpftool/struct_ops.c |  2 +-
->>   5 files changed, 94 insertions(+), 16 deletions(-)
+>>   tools/testing/selftests/bpf/DENYLIST.aarch64  |  1 +
+>>   .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 19 ++++++++++
+>>   .../selftests/bpf/prog_tests/tracing_struct.c | 13 +++++++
+>>   .../selftests/bpf/progs/tracing_struct.c      | 35 +++++++++++++++++++
+>>   4 files changed, 68 insertions(+)
 >>
->> diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
->> index cc6e6aae2447..56a5abbb1bf8 100644
->> --- a/tools/bpf/bpftool/common.c
->> +++ b/tools/bpf/bpftool/common.c
->> @@ -244,29 +244,103 @@ int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type)
->>   	return fd;
->>   }
->>   
->> -int mount_bpffs_for_pin(const char *name, bool is_dir)
->> +int create_and_mount_bpffs_dir(const char *dir_name)
->>   {
->>   	char err_str[ERR_MAX_LEN];
->> -	char *file;
->> -	char *dir;
->> +	bool dir_exists;
->>   	int err = 0;
->>   
->> -	if (is_dir && is_bpffs(name))
->> +	if (is_bpffs(dir_name))
->>   		return err;
->>   
->> -	file = malloc(strlen(name) + 1);
->> -	if (!file) {
->> +	dir_exists = (access(dir_name, F_OK) == 0);
-
-nit: No need for extra ().
-
->> +	if (!dir_exists) {
->> +		char *temp_name;
->> +		char *parent_name;
->> +
->> +		temp_name = malloc(strlen(dir_name) + 1);
->> +		if (!temp_name) {
->> +			p_err("mem alloc failed");
->> +			return -1;
->> +		}
->> +
->> +		strcpy(temp_name, dir_name);
-
-strdup() ?
-
->> +		parent_name = dirname(temp_name);
->> +
->> +		if (is_bpffs(parent_name)) {
->> +			/* nothing to do if already mounted */
->> +			free(temp_name);
->> +			return err;
->> +		}
->> +
->> +		if (access(parent_name, F_OK) == -1) {
->> +			p_err("can't create dir '%s' to pin BPF object: parent dir '%s' doesn't exist",
->> +			      dir_name, parent_name);
->> +			free(temp_name);
->> +			return -1;
->> +		}
->> +
->> +		free(temp_name);
->> +	}
->> +
->> +	if (block_mount) {
->> +		p_err("no BPF file system found, not mounting it due to --nomount option");
->> +		return -1;
->> +	}
->> +
->> +	if (!dir_exists) {
->> +		err = mkdir(dir_name, 0700);
-
-nit: S_IRWXU
-
->> +		if (err) {
->> +			p_err("failed to create dir '%s': %s", dir_name, strerror(errno));
->> +			return err;
->> +		}
->> +	}
->> +
->> +	err = mnt_fs(dir_name, "bpf", err_str, ERR_MAX_LEN);
->> +	if (err) {
->> +		err_str[ERR_MAX_LEN - 1] = '\0';
->> +		p_err("can't mount BPF file system on given dir '%s': %s",
->> +		      dir_name, err_str);
->> +
->> +		if (!dir_exists)
->> +			rmdir(dir_name);
->> +	}
->> +
->> +	return err;
->> +}
->> +
->> +int mount_bpffs_for_file(const char *file_name)
->> +{
->> +	char err_str[ERR_MAX_LEN];
->> +	char *temp_name;
->> +	char *dir;
->> +	int err = 0;
->> +
->> +	if (access(file_name, F_OK) != -1) {
->> +		p_err("can't pin BPF object: path '%s' already exists", file_name);
->> +		return -1;
->> +	}
->> +
->> +	temp_name = malloc(strlen(file_name) + 1);
->> +	if (!temp_name) {
->>   		p_err("mem alloc failed");
->>   		return -1;
->>   	}
->>   
->> -	strcpy(file, name);
->> -	dir = dirname(file);
->> +	strcpy(temp_name, file_name);
-
-strdup()
-
->> +	dir = dirname(temp_name);
->>   
->>   	if (is_bpffs(dir))
->>   		/* nothing to do if already mounted */
->>   		goto out_free;
->>   
->> +	if (access(dir, F_OK) == -1) {
->> +		p_err("can't pin BPF object: dir '%s' doesn't exist", dir);
->> +		free(temp_name);
->> +		return -1;
+>> diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 
+>> b/tools/testing/selftests/bpf/DENYLIST.aarch64
+>> index d8ade15e2789..639ee3f5bc74 100644
+>> --- a/tools/testing/selftests/bpf/DENYLIST.aarch64
+>> +++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
+>> @@ -6,6 +6,7 @@ kprobe_multi_test                                # 
+>> needs CONFIG_FPROBE
+>>   module_attach                                    # prog 
+>> 'kprobe_multi': failed to auto-attach: -95
+>>   fentry_test/fentry_many_args                     # 
+>> fentry_many_args:FAIL:fentry_many_args_attach unexpected error: -524
+>>   fexit_test/fexit_many_args                       # 
+>> fexit_many_args:FAIL:fexit_many_args_attach unexpected error: -524
+>> +tracing_struct                                   # 
+>> test_fentry:FAIL:tracing_struct__attach unexpected error: -524
 > 
-> Or:
-> 
-> 	p_err(...);
-> 	err = -1;
-> 	goto out_free;
-> 
-> to be more consistent with the other error paths. But that's fine, no
-> need to respin for that.
+> Do we need to blacklist the whole test given it had coverage on arm64
+> before.. perhaps this test here could be done as a new subtest and only
+> that one is listed for arm64?
 
-+1, pls fix.
+Yeah, I thought so at first, just like fexit_many_args of fentry/fexit, 
+but I found that the things struct_tracing does are all in the same 
+series, but the number or type of parameters are different, and the new 
+use case I added is the same in this way. And I found that the execution 
+logic of stract_tracing is relatively simple and clear, triggering all 
+hook points, executing all bpf programs, and asserting all parameters.
+Shall we need to slice them up?
+
+> 
+>>   fill_link_info/kprobe_multi_link_info            # 
+>> bpf_program__attach_kprobe_multi_opts unexpected error: -95
+>>   fill_link_info/kretprobe_multi_link_info         # 
+>> bpf_program__attach_kprobe_multi_opts unexpected error: -95
+>>   fill_link_info/kprobe_multi_invalid_ubuff        # 
+>> bpf_program__attach_kprobe_multi_opts unexpected error: -95
+> 
+> Thanks,
+> Daniel
+
