@@ -1,181 +1,204 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B9763C8
-	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 16:30:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712161833; cv=none; b=pcRietczsn4ORzfnaogvvxkFawx3/eSrTRFBAeha+0lkz+u8JALJv08Ag4HFnfvBoeQ3a86jUYLHjUn51a0qUGl86pgus3wB5c1gwWjxWMfT7DQpWHZ2EgiMYpZectZz2UmuX3zNzvx6sdAnqWT3Epp+1LpMR/aJejvKk9euhlk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712161833; c=relaxed/simple;
-	bh=/mGw95D8mmZbDDvt1A8fU8uVFPAUWjUpgWk/jKjgAPg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GuqVKvsSdmgtGua6HWPTM6zBaVJU4DtY9T05dcQa5Wi8JGJxlKOBTXtNQF0mFFhxU7pfTfmATyKnTkcWuKYgKRK5ASk7UkMe6gKzq67a/mfzdzQP/Zvm4uSBNtLjUyvLwLYHOZJ6448A+4Wum/Dh0zYG5pRzx4FGUPnGVg0LwHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QzNR0u/c; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A7317C98;
+	Wed,  3 Apr 2024 16:35:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712162158; cv=fail; b=EJZ7tdrUkwVx5NPhMvO6P32z7NDtcXBg2O12JG3BQORDKt5hAz9ST8vMhLkoBRbGwsjkPNw09FdFyjKF8EYvUSrM/3bdkr7JTNn24CGWWiUJAR7eWRaKVSqNSKm+2Q/l8tf8674EMD+zP6fB3f36du4WbuxpXp7YMI6DoWHucI8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712162158; c=relaxed/simple;
+	bh=mYpyaN9BqGR5bzP9VZdfTPohFVd+z4pFjVl+L9iibSU=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Mqn3IkG6QzDEmHU4HN/UKWah567h9hxK/k9KSxAwsyLXN3P9T0yhrJYYnITw5wdhWUtPT1+f8hZ1W+uBdpnonDnglKXHjMlUs2BEqE02rlh0CWkQCxf0lCCm1QL8mXyCJnSLsFZH+TAFW9vaiUKQfSHP/rt74GjG9WMbT/QPJNQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PnMJoPa2; arc=fail smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QzNR0u/c"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-5e8470c1cb7so44210a12.2
-        for <bpf@vger.kernel.org>; Wed, 03 Apr 2024 09:30:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712161831; x=1712766631; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dJ9lmWN5498PANPQWqgWPqswbHG0Gi6uEOnOeNXw4w8=;
-        b=QzNR0u/cpdmDQ/6MUcHXkmyvLKYBFO+iEnTRYDPYteKVLzaLPKCRyXbq2DHU4mTH8L
-         KaF8MiGfYvqMIPwUJmx5wHTB6UYDghn3WAXw2VMlLorophUnmhBP8Qu/Yd4L3Pyi/i7d
-         dTLBBBgguDPO8XfBXLN+r7kVbVhzvjFJYlU/oj0ubTi4qLDb4u2DkECvbnpW9y3I3Vlb
-         IXjhHCIAxtS5DMWnZHUn5Flfll53QCoFggB0F6g6dOMS+oy+ETYeO5BFs0WH/Oz0fJtD
-         MIigTf9TxVtuKakxcSgI7IG/gtnhLPBQ5ZEuXnQDVQ3H440HbTUsRrwCyPY565Av83iX
-         kx6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712161831; x=1712766631;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dJ9lmWN5498PANPQWqgWPqswbHG0Gi6uEOnOeNXw4w8=;
-        b=BHnV65WPS90g5oeIruny/K1gCPhOhY6OaZlf8HaGLz8qSbBOyhwEey0+ckM05YVw4U
-         4xrwVDBz+ReIccjr8hZzT4y0Y+Oe7d79WkyRMCAcDcdrmknDA+x4lhaMGlOsi1maoFB+
-         mp5QzVXEhlxzx9FXuxwmHQnguKtxB/7EN9hpvTQf6rr52M5wcORYD8d8UX1hNXHQsDfa
-         Vl2v7VeeVsqPijGHbW3mv0A3V6JRrM0uqfNstM/h5K0A1iYlbL9zn1LuNlAWFFtHghJA
-         y3hxwMRzPI5OSyeC7PTjdiJCjXHoI1/nRuVOP9HwQHvrypqkyq7T/lq43bZa1hC4hhJZ
-         kALg==
-X-Forwarded-Encrypted: i=1; AJvYcCVfTG095jFmomDVJ+HctAqthem4AIPSElGSY16ngCOeLES1tQlAwMXvyL0mAnhykcnanqyqlPVarzwAHtAj0VzqUhtG
-X-Gm-Message-State: AOJu0Yz4RtRIQQPU/h115ZYBAnzWC1pB9ddHNvfEP1ycF5t0kN0jyhWR
-	JHFiOkit38gJ9TJQb39fedU+jy50C7Oq6SW9fUvm5FC9QBzRASnIWc/V9DVUu1AFcY/4Mf0Xcoh
-	k6aeYRKVQkUo+nojQR7srlDbCNIU=
-X-Google-Smtp-Source: AGHT+IE1adPl3Iy0Pc5Ubf9qxoR6LZZzTxtv6hiaK0u3sjmQqyXgPyVAHkKpyTX8PwMJGjn5OvQIo5075XgYHdVQH+8=
-X-Received: by 2002:a17:90a:b10f:b0:29b:b3fa:b7a5 with SMTP id
- z15-20020a17090ab10f00b0029bb3fab7a5mr25951pjq.7.1712161830856; Wed, 03 Apr
- 2024 09:30:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PnMJoPa2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712162157; x=1743698157;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=mYpyaN9BqGR5bzP9VZdfTPohFVd+z4pFjVl+L9iibSU=;
+  b=PnMJoPa2O+iYvJBZL1Z8MzatFJtQBq03/DHVmgQQep9F82mHnB+M6TgJ
+   opvAkWBx/QMLKTD7UhdPzl15R/cFKQXyA2s3a/mVzcNxCSYYFQrqCMi9q
+   yPEHGUwnn8sTHNyDkBTfXz4f0Sr5Aiq13xGQnL2IA5FYIplCWdR1iZWqs
+   gKf1xDGskQXN7ZPjTNeMEPve/7SgDEN4gZmXk51lH1nbpGvSw5Bx979bI
+   0Oy2b4e0dqlrTYG0VZBd4bRHnB5fVnoUOHESb5HmnS9IfPVdlNcy2w99a
+   k8wSglvpn6lFX4lkFjfcLgrTnUtPiiPEFVDudAKw00eDwTj19D8WGFhEv
+   g==;
+X-CSE-ConnectionGUID: Sn7A1Z9tRuaZAQqPdxkdHA==
+X-CSE-MsgGUID: Ae2BBASWRoqZemCg4XJ1pw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="7641560"
+X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
+   d="scan'208";a="7641560"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 09:35:55 -0700
+X-CSE-ConnectionGUID: 5oitbbDhSfCOCGMnQnCyVA==
+X-CSE-MsgGUID: wzwlZm16Qt6xWu9lA38MXw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
+   d="scan'208";a="22982003"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmviesa003.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 03 Apr 2024 09:35:55 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 3 Apr 2024 09:35:54 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 3 Apr 2024 09:35:54 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Wed, 3 Apr 2024 09:35:54 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.168)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Wed, 3 Apr 2024 09:35:53 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aSQCj6HB5MgI+NrZgze1YMjIScVNEkwso9+WM1bWz/UFYxnIhtjI9RaDirmNGLhB2b0jKUx5eSRZUf8gl1oLAKH2f36Af9SNQ8PUtZw5jZjB4bxJP/U6YanrE/HykIjCdNZR/PjFgCU6XPiDBX+xq81vpk7zDpCHFL3ns7BtHzsh4J/0G6Ut86QybsqFvRur5AzPicrhn+Irq/RR0jVqxGye3G95A5sAvUCKlZ7DzS28EoMA5N4rc3PFlAWkFoqACL2UDBvGb5EJUE/GWw9gmcysAgS+qa+gy/haMRxcOhZC2asklwNXoP1S4vV8MpWGM0MIjNQlH87IEPaYz/1A9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+v3byrtQFRM8lbsytoBcz4+mdx110lEaeVIZ4R2gVZI=;
+ b=Tv8XJBYjWijfnK4Asr7eDil1zlxFKTTmKPAmICFpmUrkOjXFdqDvc4hvC+e+CVGp5TwZihRhEbSG4uoCCD/vQQAuTPDq01XSi8kdP8Axeb4FbADOl1+hMReunaI/MXVL03NP8KksqIQ3pdas8DgCGbLmziQRCZIqylD8t5MABV1QC3mBxeTfyYvNc235tj3kMPCh1ST5C3gOFUnV/v98ZNHwSF2g1o20cPeotQ3wlbIYjNEXJ/lZZYQQdhWgVqG/3DHP+hxLNj+yx2dQZ6HuCXZfu21aBeBCIkWCxhSDMJjXs81D9yr94Ndw4CDppr1qr1wtem5EITMU3r3zULxBaA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
+ by DS0PR11MB7629.namprd11.prod.outlook.com (2603:10b6:8:146::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.23; Wed, 3 Apr
+ 2024 16:35:46 +0000
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::654c:d66a:ec8e:45e9]) by DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::654c:d66a:ec8e:45e9%6]) with mapi id 15.20.7452.019; Wed, 3 Apr 2024
+ 16:35:46 +0000
+Message-ID: <2746b1d9-2e1f-4e66-89ed-19949a189a92@intel.com>
+Date: Wed, 3 Apr 2024 18:34:30 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 2/4] bpf: test_run: Use system page pool for
+ XDP live frame mode
+To: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
+	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>, Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>, <bpf@vger.kernel.org>,
+	<netdev@vger.kernel.org>
+References: <20240220210342.40267-1-toke@redhat.com>
+ <20240220210342.40267-3-toke@redhat.com>
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+Content-Language: en-US
+In-Reply-To: <20240220210342.40267-3-toke@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MI0P293CA0003.ITAP293.PROD.OUTLOOK.COM
+ (2603:10a6:290:44::9) To DS0PR11MB8718.namprd11.prod.outlook.com
+ (2603:10b6:8:1b9::20)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240320122153.3622252-1-tao.lyu@epfl.ch> <CAEf4Bza98OQ-axH-o1xE4KA72Ga9bLwdDuWJS_irESbbxp1saA@mail.gmail.com>
- <cae53ceb455c415fa2c4b10ec0a74df3@epfl.ch>
-In-Reply-To: <cae53ceb455c415fa2c4b10ec0a74df3@epfl.ch>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 3 Apr 2024 09:30:18 -0700
-Message-ID: <CAEf4Bza-PsJ69uhFFPB7HtyD-W4peZnF6qfX_069Rzzvvt8iZg@mail.gmail.com>
-Subject: Re: [PATCH] Inaccurate rejection conditions
-To: Tao Lyu <tao.lyu@epfl.ch>
-Cc: "andrii@kernel.org" <andrii@kernel.org>, "yonghong.song@linux.dev" <yonghong.song@linux.dev>, 
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, Sanidhya Kashyap <sanidhya.kashyap@epfl.ch>, 
-	"mathias.payer@nebelwelt.net" <mathias.payer@nebelwelt.net>, 
-	"meng.xu.cs@uwaterloo.ca" <meng.xu.cs@uwaterloo.ca>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|DS0PR11MB7629:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Trh4caSWFAUWs30fCUUT5zd6RjUm3zwVuht7i0bjyzxceOmCIY0KDlYJrY8JdpHYwKMRetYGP+UTWinhytzFIOzDTMw7c2UTZ+0i38+IiuRjJLCfFjCAeBL6cddv1Cewxwoo9jJcxloQFry2xs7WgZFk3heQLunegQOzRgr4gMkP/OQmhBV4+m0T/nuDNtLqZgI/QtxLUecxaqvNKpTSa7BeydmwEH2uuEigh53PeigsxOrouXVn/Pp1DzYrVkqrwyA/u1M3AuYP1MhLuFUt2Pvc2rHlYFuPfeeCL92M5bPTIlNOIl1GsJR+LNIXRPSpvyNkwaxzLr9SKP/nN03rr0kG/wG1vbzTAp/M+//r7QcjUvbNRfjhCE0jALS/CSiFQ1Ev0VcSqIY/LR/jl0i5YhQUtkRzSvvwBO5zCcxCjal/upBdpAsExhZjnfs+bXnDCfhWCULex/yfOdaxKmGNx2W55CV+ueg0g5qgJfZeJx7J3pywUpnyAbMrCvOiLQJHAmSB20W6XxDKi9JFihuJY15Y2SLzpeAnrJeaHeVmgyzhf3Mmp01taC1ioCJVSB+e0B1FjMKbvgy4JmGX0DqQYEr1Ap8HxTut98HSfFiovBjwpWmRsvwCh6JbnwJR16IpTPIx0il6rcq0bg6uw5ooQBty7yAxWiXhNuDcjKTIFV0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015)(7416005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RTYvZVV1STdlQS9iR203czFPYTM1L0N3OG4vUmVQRWFhL0tlS0hEcUlvbVhO?=
+ =?utf-8?B?VkhHWW5JQVBSbkVBRENKTktyTzRoa1dMbElseXhDUERtK3NhSTVmZ3FERWFO?=
+ =?utf-8?B?ajlaTGNySFlHeVdCTjNsSVZFWnZocFIySFpBT25aZUNxNU1IYnpIdFVpYnhy?=
+ =?utf-8?B?NWlmeGNpWFl5UXNZa2dJdG1IT09RSHhtQlJIMk1KVXJ5TkEzU2xhcWRBYVUr?=
+ =?utf-8?B?a0xvZGZwK0V3NGlDbysweDFueEg2Mmw0b1FoWVdLeHlhZytCYnJhNm1LMGFL?=
+ =?utf-8?B?bVRzRHFzSVlxQkt4aUxaL3JzWUNUN0M3SUtDbkkzdVY5NzVTRzl4ZDBRTHBh?=
+ =?utf-8?B?ckM3bkdTVHYxbUFQZzhTNTZpSmp0ZVM0bzUzNGJxVU9CQVF4c294ZWVPN0NU?=
+ =?utf-8?B?Z3Y1ODdJTllwYmU5YTYvZ3k1ampjYllCL0VvdHFyemxoRGtQYjNZNG1zT0Js?=
+ =?utf-8?B?RENwK1FodzFHWFlPM0VFWGF0Sm85SFIxRzNqWExDZFd5OWVNWEk0Unp5blk1?=
+ =?utf-8?B?a3FscXpYVGZxcTFxVHpVdncrREo3em1NMzNiNnZDaFoyN1lieGsrTk5SaTBE?=
+ =?utf-8?B?SUExQUY2YmNpMDZ0RUM4TEszNUxoS0JPNGgraVFiM0tpRWpzMWp5VUxINGpp?=
+ =?utf-8?B?NkI5d1NrZkw5MTY3NDl3K0l2U1lLa3AvZ1FWM2hFYzJISmlMTlM4WVFuUXhj?=
+ =?utf-8?B?MzJNeWcyVUx1SGdhaXBOU0hac0tmU1Joc0dJMFZmK242MlhVazlFT1hQUmtk?=
+ =?utf-8?B?OWh1aEM0a0Z2NkRyZUJjdmZkZ1VpUFRLMzFIanVqOWNoWW1idnJaUUkwdVhM?=
+ =?utf-8?B?T3NoV3RrVFRvVGJvWlFGYnZtUmROeXVXa1dlZ3kzS3BBRVN5RVRTRlM4WHFL?=
+ =?utf-8?B?V1Y1bTh2OGZ1ak5pbThmVEF1by95VWwwSjJ2bjdpTWZrVkc3bWVZbzVlNk1x?=
+ =?utf-8?B?eEhwdXdFcjV6QTNDVmJOMHAvZUx3cys4MjRwejJXd2RucXBBeFR0RVo0MVpJ?=
+ =?utf-8?B?a1d3Ty84TXo3TThOcStwRTVTMjFqeXZYNGdtVGhKSnpuT1dnVFFqcHJkRDBa?=
+ =?utf-8?B?NjU3WURrR3huYkJ0NXBLc3ZxYnE4aW9TeThDVEc5cUxaYXVJMVZhUkVhWW9I?=
+ =?utf-8?B?aktOZFZLbXMxenh2bzRqVkZHdHBZVHBrNW85Q3E4NGRpVzJJcEVhcld5T1lT?=
+ =?utf-8?B?dXRzV3lsaE01NVRhZ2VFMTd5d1JvbFpKNFB4NFBGVDhIeWtJbUJJejVFL2t6?=
+ =?utf-8?B?UEdkT3RJOHVUWkkxSTMybWd3OC92VDR0bGh6dHUyVVBIM2ZlTC9aVnQ1K1Yw?=
+ =?utf-8?B?NkJEMjlwSUhPajlWRmFDbnNIekJaaGpyMVduRk5PNzN6eHZaZlR6Zm9MNnU3?=
+ =?utf-8?B?N0NpWnMvWmVVR1VlY1NwSGx1ODM0MjZvQmcwSXhzNThxdmxOVlpUWTIyVkJU?=
+ =?utf-8?B?ZjB2R1hkQVZoWk9Fb2N5MzB4VEZjVGc1cm9tR1J6VzBvWVJCS1lzNnZGVGl3?=
+ =?utf-8?B?YlpKbi9meGc2LzhPSEdWeHF5Y3ZzMm1xZ2FmTE9GaTdRRmhwV2ZDb1B6Wkpv?=
+ =?utf-8?B?SnBCQ2J4dmN4YTM4Wlh5VXJlWDlPdzlKZkMxQTVvcElNL0l3WU1tS0FxbE1h?=
+ =?utf-8?B?R1BScWhNZE9FMzNzcW1yRGtPVVFKaXhvci9QangzajAyNTJGeHlwNlMvZXEz?=
+ =?utf-8?B?K3duNmw3aWQ4NkREaUdleDFnaVpxOHhKcndCSmNwUHpUOXFjZFh1dHI3OWpt?=
+ =?utf-8?B?bXk4eGhheGRxSXp0RmxjZVhvdndBbURHTlBCd0NlQlhBbVhkR1lDdnJuMzhu?=
+ =?utf-8?B?S1V6YXk0TVNWdTFPRUNiRXg5dlN5U3ZXY3F0ZEpWRHNzTGpOcVdNTEhwVVk0?=
+ =?utf-8?B?VDdBWG9LZ1ZIb3I5anlZN2M1YjJUcy9qc2l5eUZMM3R5T2NyN3Z2VFFvYzFD?=
+ =?utf-8?B?LzRSVWIyM3FwVGowYm44aDhyNlhhTHQ2aHR3UG9mY1gyRGdLYkR3bXhTcXlp?=
+ =?utf-8?B?WGwrNzFCV2UzK3dUSWNFeGNqZFg1bDBiS2JmLytJajBsQVd3NEpYb3U3SDlV?=
+ =?utf-8?B?Q0ZqMjhuSERtWEcwZ29DSTVCVGdtbzVDSnpHRUQrL3NlcXNJNFluT0dVZm5U?=
+ =?utf-8?B?NXg2eE4rdkNXMzB3Q3lvWlVGVVIvUENlKzZsdXQ2SC9xWHBYVUgvenRMeFdx?=
+ =?utf-8?B?a1E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2acf55d6-97a2-4275-908e-08dc53fc1ce9
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2024 16:35:46.4249
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IEgSiZxmrPgGq31/SyvjMilaxvMIgIxMkxSPViHCJuM23AvO0MADQiSqujabMThVPOaiFQ+Zdfve2WkhEO6iCD1hBPFzbc6+0oZb82GwDGY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7629
+X-OriginatorOrg: intel.com
 
-On Tue, Apr 2, 2024 at 12:05=E2=80=AFPM Tao Lyu <tao.lyu@epfl.ch> wrote:
->
-> >>
-> >> Signed-off-by: Tao Lyu <tao.lyu@epfl.ch>
-> >> ---
-> >>  kernel/bpf/verifier.c | 1 +
-> >>  1 file changed, 1 insertion(+)
-> >>
-> >> Hi,
-> >>
-> >> I am sorry to bother you due to my confusion on constraints about stac=
-k writes.
-> >>
-> >> 1. When an instruction stores 64-bit values onto the stack with fixed =
-offset and BPF_CAP only,
-> >>    the verifier marks the stack slot type as STACK_SPILL, no matter wh=
-ether they are scalar or pointers.
-> >>
-> >> 2. Then, a store instruction with a **32-bit scalar value** on the sam=
-e stack slot leads to a verification rejection.
-> >>    As it says, this might corrupt the stack pointer by asserting if th=
-e stack slot type is STACK_SPILL.
-> >>    However, even if the stack slot type is STACK_SPILL, it might store=
- a 64-bit scalar and not a stack pointer.
-> >>    IMHO, this "issue" might originate from the incomplete conditions i=
-n the check_stack_write_fixed_off() function below.
-> >>    It only checks if the stack slot is a spilled register but forgets =
-to check if the spilled register type is a pointer.
-> >>
-> >>  4479 static int check_stack_write_fixed_off(struct bpf_verifier_env *=
-env,
-> >>  ...
-> >>  4494     if (!env->allow_ptr_leaks &&
-> >>  4495         is_spilled_reg(&state->stack[spi]) &&
-> >>  4496         size !=3D BPF_REG_SIZE) {
-> >>  4497         verbose(env, "attempt to corrupt spilled pointer on stac=
-k\n");
-> >>  4498         return -EACCES;
-> >>  4499     }
-> >>  ...
-> >>  4600 }
-> >>
-> >> Below is an example bpf program, which stores a 64-bit and 32-bit imme=
-diate value on the same stack slot.
-> >> But the second one gets rejected due to the above.
-> >>
-> >> 0: R1=3Dctx() R10=3Dfp0
-> >> ; asm volatile ( @ repro.bpf.c:679
-> >> 0: (7a) *(u64 *)(r10 -8) =3D 1          ; R10=3Dfp0 fp-8_w=3D1
-> >> 1: (62) *(u32 *)(r10 -8) =3D 1
-> >> attempt to corrupt spilled pointer on stack
-> >> processed 2 insns (limit 1000000) max_states_per_insn 0 total_states 0=
- peak_states 0 mark_read 0.
-> >>
-> >> If my understanding is correct, then we can apply the attached patch.
-> >>
-> >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> >> index de7813947981..65f7eb315e9c 100644
-> >> --- a/kernel/bpf/verifier.c
-> >> +++ b/kernel/bpf/verifier.c
-> >> @@ -4493,6 +4493,7 @@ static int check_stack_write_fixed_off(struct bp=
-f_verifier_env *env,
-> >>          */
-> >>         if (!env->allow_ptr_leaks &&
-> >>             is_spilled_reg(&state->stack[spi]) &&
-> >> +           state->stack[spi].spilled_ptr.type !=3D SCALAR_VALUE &&
-> >
-> > I think it's possible to easily convert PTR_TO_MEM kind of register to
-> > SCALAR_VALUE through arithmetic operations, and so allowing to spill
-> > SCALAR_VALUE to stack is basically just as dangerous as spilling
-> > PTR_TO_MEM directly.
-> >
-> > So it feels a bit dangerous to do this.
->
-> Hi Andrii, thanks for the reply.
->
-> I think you might misunderstand this issue.
-> Let me rephrase it below:
->
-> ** The verifier should allow partially overwriting an 8-byte stack slot
-> that contains a spilled scalar instead of rejecting it,
-> as the example shows below.**
->
-> 0: R1=3Dctx() R10=3Dfp0
-> ; asm volatile ( @ repro.bpf.c:679
-> 0: (7a) *(u64 *)(r10 -8) =3D 1          ; R10=3Dfp0 fp-8_w=3D1
-> 1: (62) *(u32 *)(r10 -8) =3D 1
-> attempt to corrupt spilled pointer on stack
->
-> In this case, it's about overwriting a spill of a 64-bit scalar
-> with another scalar with a smaller size (e.g., 32-bit).
-> Pointers are not related to this IIUC.
->
+From: Toke Høiland-Jørgensen <toke@redhat.com>
+Date: Tue, 20 Feb 2024 22:03:39 +0100
 
-Ah, you are right, I misunderstood the use case. From my perspective
-what you propose makes sense. Please prepare an official patch with a
-proper commit message and send it again to bpf@vger.kernel.org.
+> The BPF_TEST_RUN code in XDP live frame mode creates a new page pool
+> each time it is called and uses that to allocate the frames used for the
+> XDP run. This works well if the syscall is used with a high repetitions
+> number, as it allows for efficient page recycling. However, if used with
+> a small number of repetitions, the overhead of creating and tearing down
+> the page pool is significant, and can even lead to system stalls if the
+> syscall is called in a tight loop.
+> 
+> Now that we have a persistent system page pool instance, it becomes
+> pretty straight forward to change the test_run code to use it. The only
+> wrinkle is that we can no longer rely on a custom page init callback
+> from page_pool itself; instead, we change the test_run code to write a
+> random cookie value to the beginning of the page as an indicator that
+> the page has been initialised and can be re-used without copying the
+> initial data again.
+> 
+> The cookie is a random 128-bit value, which means the probability that
+> we will get accidental collisions (which would lead to recycling the
+> wrong page values and reading garbage) is on the order of 2^-128. This
+> is in the "won't happen before the heat death of the universe" range, so
+> this marking is safe for the intended usage.
+> 
+> Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+> Tested-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+> Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 
-> Thanks for your time again.
->
-> >
-> >>             size !=3D BPF_REG_SIZE) {
-> >>                 verbose(env, "attempt to corrupt spilled pointer on st=
-ack\n");
-> >>                 return -EACCES;
-> >> --
-> >> 2.25.1
-> >>
+Hey,
+
+What's the status of this series, now that the window is open?
+
+Thanks,
+Olek
