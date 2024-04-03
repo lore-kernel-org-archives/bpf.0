@@ -1,108 +1,109 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863AD433C6;
-	Wed,  3 Apr 2024 14:40:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600E3433A8
+	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 14:51:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712155245; cv=none; b=R7OEWLl+JIjnAfcVjP77MqhKTRc4d1tSZ+EcYGfhms6XLvtEyS8oDp9Xt2UqIKaASzGZMvFE0PxMngZ5kS3OgBJFhBSNHbDoKs7Y07l/zyEjZiu5zgqd0iMLW2qox0Kpiam5ccJxPVSk3dd0TV0Vbmqlg1cZ8Q5v4WkmvOP3zyo=
+	t=1712155865; cv=none; b=IrXQ50dc+tOeQYxSR+j6uam2T4r/geGghQNOVL+Ogf4yAvW1Q5Rt/pQNY1BqCJY9tw92JuosHSHs0gavOOxUFL0ESQCflH7mvPe7myPUfn9EqNNyCwhgXUyuHrtBIUc3JOvGtf4Yvsrnoyh50g3Iqq+iL09sw9EhzCl/Dk3adpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712155245; c=relaxed/simple;
-	bh=rT8sHi1P6vKvW4jge+5i6dqA062uBbrUeQnCV3IwOqg=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=gE6qzQE1e08Cj3okd+U/OegW7Fo5vgc131+DfAH2u9s4mNFGdp55J21XeWz7GoeYyctJE8qKCPyZw4fT/ZJB8fVsDUWRQ6py/To5/uDqLmwOWoXC4UTTOstON7N/QHErA/x90k6F2X2fDzFtQhuvbOqsKhX3NfxZipvX5tiqrG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=IPdAwJab; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1712155865; c=relaxed/simple;
+	bh=92SXfEvrtPp+vOlUAxFGaSiGP4/h7INh9sOZhfYOXOs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WWVmrjXV4XkKpYYUBqAf/RF/w7EkKEieiKTAncQKEU8IoigsNk189WoTiF9dzHDc1FALaIwcHT3vh2k7cbwpG08HdLgpXAso2d3bQLpAPaiyM2baiAWugRINMjynJ/8U9eXHTmJ8onZ1ajKsiMjUNRK6g+j4YLZr0pZOOCP3raQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=X+PGu/D8; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="IPdAwJab"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=uicBnio8bSF9DNnpycUBJL1Q+Lal4LWdPwlItPeKwW8=; b=IPdAwJabygxRsrSF9Q+IWM4qvL
-	DkEc3QUZnw0Hfp0paVdxSRdz/YF3XvHnIx5vZDQ6VEbqjmKXWScvLYOh18FCMfIcwdV0UeKhOKTAO
-	rWgyf9XmSmOEx75/T5fAFJbfgNkuqPzeS2rwzc19BsbboL2qler/bq8/4GkWjfqWUuVgH+Mkshx/r
-	ouABhQnMmViDhug5/DN1P10PAUO0I7Lj0KoBEp8u8PDGdYDFTC4FFd1EAIXEtr4/z1ggbMfeIiXoo
-	vRpclL+AtnZsqgunSl3N5KMB3iQ3mBoUbR8jGN8Pdyre7mvKCR7QPY1GDUgkRtUbAeGrhXO9do2e3
-	mTnKXw2g==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rs1n6-000Oqk-CH; Wed, 03 Apr 2024 16:40:40 +0200
-Received: from [178.197.248.12] (helo=linux.home)
-	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rs1n5-001zbP-0p;
-	Wed, 03 Apr 2024 16:40:39 +0200
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Add testcase where 7th
- argment is struct
-To: Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
- linux-riscv@lists.infradead.org, netdev@vger.kernel.org
-Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Pu Lehui <pulehui@huawei.com>
-References: <20240403072818.1462811-1-pulehui@huaweicloud.com>
- <20240403072818.1462811-3-pulehui@huaweicloud.com>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <0f459fc1-1445-6e83-ace4-b2c42abfe884@iogearbox.net>
-Date: Wed, 3 Apr 2024 16:40:38 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X+PGu/D8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712155863;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=92SXfEvrtPp+vOlUAxFGaSiGP4/h7INh9sOZhfYOXOs=;
+	b=X+PGu/D8kf4b96u/jOKK9cp3QaARr7I/Ox2gCcanqizSo9QpDyUcKYyHtPJhU95hHAWTJD
+	q0d5qjM375TaKdda87li8MjesSGtHnwC8AHRoCH2/03DgywsSjVQlL6I4Kdkkvj5q2rwbt
+	u4Ml0DTtZg0cNnaelIn4WhoGDgf9mbA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-349-cqVAc2OTMwiuhbvn4k-66Q-1; Wed, 03 Apr 2024 10:50:59 -0400
+X-MC-Unique: cqVAc2OTMwiuhbvn4k-66Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A1F9B101A521;
+	Wed,  3 Apr 2024 14:50:58 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.49])
+	by smtp.corp.redhat.com (Postfix) with SMTP id 4928237FC;
+	Wed,  3 Apr 2024 14:50:55 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Wed,  3 Apr 2024 16:49:34 +0200 (CEST)
+Date: Wed, 3 Apr 2024 16:49:10 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
+Subject: Re: [PATCHv2 1/3] uprobe: Add uretprobe syscall to speed up return
+ probe
+Message-ID: <20240403144910.GB31764@redhat.com>
+References: <20240402093302.2416467-1-jolsa@kernel.org>
+ <20240402093302.2416467-2-jolsa@kernel.org>
+ <20240403100708.233575a8ac2a5bac2192d180@kernel.org>
+ <Zg0lvUIB4WdRUGw_@krava>
+ <20240403230937.c3bd47ee47c102cd89713ee8@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240403072818.1462811-3-pulehui@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27234/Wed Apr  3 10:25:27 2024)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240403230937.c3bd47ee47c102cd89713ee8@kernel.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
 
-On 4/3/24 9:28 AM, Pu Lehui wrote:
-> From: Pu Lehui <pulehui@huawei.com>
-> 
-> Add testcase where 7th argument is struct for architectures with 8
-> argument registers, and increase the complexity of the struct.
-> 
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> Acked-by: Björn Töpel <bjorn@kernel.org>
-> Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
-> ---
->   tools/testing/selftests/bpf/DENYLIST.aarch64  |  1 +
->   .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 19 ++++++++++
->   .../selftests/bpf/prog_tests/tracing_struct.c | 13 +++++++
->   .../selftests/bpf/progs/tracing_struct.c      | 35 +++++++++++++++++++
->   4 files changed, 68 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 b/tools/testing/selftests/bpf/DENYLIST.aarch64
-> index d8ade15e2789..639ee3f5bc74 100644
-> --- a/tools/testing/selftests/bpf/DENYLIST.aarch64
-> +++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
-> @@ -6,6 +6,7 @@ kprobe_multi_test                                # needs CONFIG_FPROBE
->   module_attach                                    # prog 'kprobe_multi': failed to auto-attach: -95
->   fentry_test/fentry_many_args                     # fentry_many_args:FAIL:fentry_many_args_attach unexpected error: -524
->   fexit_test/fexit_many_args                       # fexit_many_args:FAIL:fexit_many_args_attach unexpected error: -524
-> +tracing_struct                                   # test_fentry:FAIL:tracing_struct__attach unexpected error: -524
+Again, I leave this to you and Jiri, but
 
-Do we need to blacklist the whole test given it had coverage on arm64
-before.. perhaps this test here could be done as a new subtest and only
-that one is listed for arm64?
+On 04/03, Masami Hiramatsu wrote:
+>
+> On Wed, 3 Apr 2024 11:47:41 +0200
+> > > set in the user function, what happen if the user function directly
+> > > calls this syscall? (maybe it consumes shadow stack?)
+> >
+> > the process should receive SIGILL if there's no pending uretprobe for
+> > the current task, or it will trigger uretprobe if there's one pending
+>
+> No, that is too aggressive and not safe. Since the syscall is exposed to
+> user program, it should return appropriate error code instead of SIGILL.
 
->   fill_link_info/kprobe_multi_link_info            # bpf_program__attach_kprobe_multi_opts unexpected error: -95
->   fill_link_info/kretprobe_multi_link_info         # bpf_program__attach_kprobe_multi_opts unexpected error: -95
->   fill_link_info/kprobe_multi_invalid_ubuff        # bpf_program__attach_kprobe_multi_opts unexpected error: -95
+...
 
-Thanks,
-Daniel
+> Since the syscall is always exposed to the user program, it should
+> - Do nothing and return an error unless it is properly called.
+> - check the prerequisites for operation strictly.
+
+We have sys_munmap(). should it check if the caller is going to unmap
+the code region which contains regs->ip and do nothing?
+
+I don't think it should. Userspace should blame itself, SIGSEGV is not
+"too aggressive" in this case.
+
+> I concern that new system calls introduce vulnerabilities.
+
+Yes, we need to ensure that sys_uretprobe() can only damage the malicious
+caller and nothing else.
+
+Oleg.
+
