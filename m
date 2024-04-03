@@ -1,181 +1,91 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp5.epfl.ch (smtp5.epfl.ch [128.178.224.8])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17919155301;
-	Wed,  3 Apr 2024 20:20:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9CC7155720
+	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 20:24:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.178.224.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712175636; cv=none; b=kxz8fJhLpdPtQaXZtJtEBFJ50egrrKqshYSsH9/zOjyGiBrJ+XwbxYY1jO3jSib5NWur/Xvho04fCxoTBatWtlK8tOwyOyniynmih4ifrD1lLHywFfDWuaEBAEqWbn5nfjrTASeiWaXBmfOTo2gdBUv6tFNbzXAFPV1Z7v2E6K8=
+	t=1712175873; cv=none; b=tfBlkf2Cj5Ho9XP2WTmJqJVBJw6fyM/5tTJiKwhHTx5JqoXIYaq8BS2lVCY2zsUg7gzRXP7paED2R2B4J+BqcXpex9egeZuOSzNyNn7xZV16e1He+5rSx3zVz+pNbHDtArIZNaNPRFXrsWHbhr/RmVllZ2EGnKrnS8wQ8T/biv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712175636; c=relaxed/simple;
-	bh=26L3z7JQ8dnYb3HamKTUiPsI0IDXBzLWXv1MUH5FMeE=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=GlPyHSdqPVHv65fxjBK6Zr8OEHH2NA2VxXPb9CrmSYLTcZWmsBxNgLprb+8//Q1Ald3I/7k9DNqvJP7t2VKoHcc3RrVhNfZPlVwJ6nWdEebTjkMtdSpOr9s99sjdJc0YzjcmOLrGT6aCklxiZ/yoxB4nhrtMjSM4WT8OPp6XggI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ExZBYS5D; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712175873; c=relaxed/simple;
+	bh=lu4FdED6eu2h6JkIoCmHYAYfoNNabPDmQD171tm77Uw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QQ2P7+7i7j+NgYWBkV4n9R2kDVGqywwTBVJRr9PNFK93ah3POSMLMc60wWS+jpMcrZb/+0lFhF6kEjHp9R4B2S23AnUo9LqQ7LWv1sggEARLEWh/28/+W3qCUCOWHnozGc/svvkABhWqZXfR3Wuxb6Xgf0SERhBWk5HzUV4eCwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=epfl.ch; spf=pass smtp.mailfrom=epfl.ch; dkim=pass (1024-bit key) header.d=epfl.ch header.i=@epfl.ch header.b=fQTgilWQ; arc=none smtp.client-ip=128.178.224.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=epfl.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=epfl.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ExZBYS5D"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6e6c0098328so188223b3a.3;
-        Wed, 03 Apr 2024 13:20:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712175634; x=1712780434; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/BqhsT1/7MwxMx0TbAKW2MQtEH2uBz2kntJlFvDK9Wo=;
-        b=ExZBYS5D43vC8DSoWJSKndqh+WcPtj/fbJUQqC940C1psqPXYq79rHOtxcv+/Tub0t
-         9F0/V5xuCSyBF3zpjKlw+qGU3M7smxsWVvPd9w1lOC2ehpCdbfzrwi+pD38SvWjqvP88
-         FhfNyoedI7+7QxRiFknsfyzBCzAo3uJSJ9P7HOgPE0jSsC/O8J7WMtrlJPAI08FnTwOn
-         BwNcN3Hw82lcoi24cxeXHAeLmMt1gnk2P/ozcAVPEn7RPtMiPa/rcIihPvDAc9RDI5EL
-         pec4NFV3uq+WyKY+eKkHiAdXL9stOuSp46iD6VeY4JzThOiVCrNNSn3B/NHuhlaSK8lx
-         JUog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712175634; x=1712780434;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/BqhsT1/7MwxMx0TbAKW2MQtEH2uBz2kntJlFvDK9Wo=;
-        b=E6zlCcnTQrYf23e4kWxstuzpaKgLExbGz05JVSea3nLbynMs3FqZkfQTf8G4cU8yp9
-         fxu0/nP0SRUhVxgJt3+FK2KrovPZBHMHguMhsyeLW4dYnRFKvs5FYT2gVuaVBtLPKFtt
-         XIa10cxsIRpEib+o3F/ziIfg0koMv5WhG8Kcc2rRvVdunOfmLyDPppFNDKRKgcodPSpk
-         /2pUCuAcUdJzhOqOziVMhA/YSew4yw0kxTvevSUwDxBGoh/9tOiHBsy2UHj4C7dfOaNK
-         gWCfQqiyCkzlG44yzez4i35PVY/jEC1nPAkqO5lVRB07Hs8U49AEsYwPpHoi/I2Ef8xo
-         V4vg==
-X-Forwarded-Encrypted: i=1; AJvYcCWazh6Wrl1+tIl0z7FnY7vWZdWzJy20cUmdbCeMobcd46VDmj0E5M0brF2FOtlrOzI8yofB041iEVS62xIPdjPwsFgDIK2Yen8DsLbnWgQmeTWA88NXrTZ4eVmc
-X-Gm-Message-State: AOJu0YyzOjwn0SqrwdDL88dbirmH8qPGw6LksepeLwNG1i3kuz+mfgfk
-	an8XtPXFsFNeRiecfGZEpBP0iThJcvXny+T7xa+V2Oa2DTFzJSZM
-X-Google-Smtp-Source: AGHT+IHy8T3UBcyrK7Dk9GsYXOkUPzPUMI9LABC1YiucZ8Nyr82wfK8Bt2GY7dfxnsj5h9BWGiaROA==
-X-Received: by 2002:a05:6a00:aca:b0:6ea:c2a2:5648 with SMTP id c10-20020a056a000aca00b006eac2a25648mr762174pfl.3.1712175634194;
-        Wed, 03 Apr 2024 13:20:34 -0700 (PDT)
-Received: from localhost ([98.97.36.54])
-        by smtp.gmail.com with ESMTPSA id d9-20020a62f809000000b006eb0027f2b8sm7902856pfh.9.2024.04.03.13.20.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Apr 2024 13:20:33 -0700 (PDT)
-Date: Wed, 03 Apr 2024 13:20:32 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>
-Cc: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
- Alexander Lobakin <aleksander.lobakin@intel.com>, 
- netdev@vger.kernel.org, 
- bpf@vger.kernel.org
-Message-ID: <660dba106f0ed_1cf6b208ad@john.notmuch>
-In-Reply-To: <20240220210342.40267-2-toke@redhat.com>
-References: <20240220210342.40267-1-toke@redhat.com>
- <20240220210342.40267-2-toke@redhat.com>
-Subject: RE: [PATCH net-next v2 1/4] net: Register system page pool as an XDP
- memory model
+	dkim=pass (1024-bit key) header.d=epfl.ch header.i=@epfl.ch header.b="fQTgilWQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=epfl.ch;
+      s=epfl; t=1712175861;
+      h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Content-Type;
+      bh=lu4FdED6eu2h6JkIoCmHYAYfoNNabPDmQD171tm77Uw=;
+      b=fQTgilWQ8ZX8XHCAub+GEgK66OO60t2uJtDebzKiYnjmCA139QDbjUl4Z41XeP+hH
+        ih8xhFTOm9DZPf0fBpPdp8HQUlGuH0+FMEjsU6MHebwUHsHQcCefQ/qhnubHfI8yV
+        Wun96ZFkshlnOUxlTc/L1fyHtuSY6/hpaZu7Dpgx8=
+Received: (qmail 16817 invoked by uid 107); 3 Apr 2024 20:24:21 -0000
+Received: from ax-snat-224-178.epfl.ch (HELO ewa07.intranet.epfl.ch) (192.168.224.178) (TLS, ECDHE-RSA-AES256-GCM-SHA384 (P-256 curve) cipher)
+  by mail.epfl.ch (AngelmatoPhylax SMTP proxy) with ESMTPS; Wed, 03 Apr 2024 22:24:21 +0200
+X-EPFL-Auth: 45zYhocep5rbeW+zLyH4JSTOawYeqiNA2wtqWKld77HYWHtmxus=
+Received: from rs3labsrv2.iccluster.epfl.ch (10.90.46.62) by
+ ewa07.intranet.epfl.ch (128.178.224.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Wed, 3 Apr 2024 22:24:21 +0200
+From: Tao Lyu <tao.lyu@epfl.ch>
+To: <bpf@vger.kernel.org>, <andrii@kernel.org>
+CC: <ast@kernel.org>, <sanidhya.kashyap@epfl.ch>,
+	<mathias.payer@nebelwelt.net>, <meng.xu.cs@uwaterloo.ca>, Tao Lyu
+	<tao.lyu@epfl.ch>
+Subject: [PATCH bpf-next] bpf: Fix verifier error due to narrower scalar spill onto 64-bit spilled scalar slots
+Date: Wed, 3 Apr 2024 22:24:09 +0200
+Message-ID: <20240403202409.2615469-1-tao.lyu@epfl.ch>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: ewa09.intranet.epfl.ch (128.178.224.180) To
+ ewa07.intranet.epfl.ch (128.178.224.178)
 
-Toke H=C3=B8iland-J=C3=B8rgensen wrote:
-> To make the system page pool usable as a source for allocating XDP
-> frames, we need to register it with xdp_reg_mem_model(), so that page
-> return works correctly. This is done in preparation for using the syste=
-m
-> page pool for the XDP live frame mode in BPF_TEST_RUN; for the same
-> reason, make the per-cpu variable non-static so we can access it from
-> the test_run code as well.
-> =
+The verifier previously aimed to reject partial overwrite on an 8-byte stack slot
+that contains a spilled pointer.
+However, it rejects all partial stack overwrites
+as long as the targeted stack slot is a spilled register,
+because it does not check if the stack slot is a spilled pointer.
 
-> Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-> Tested-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> ---
->  include/linux/netdevice.h |  1 +
->  net/core/dev.c            | 13 ++++++++++++-
->  2 files changed, 13 insertions(+), 1 deletion(-)
-> =
+Finally, incomplete checks will result in the rejection of valid programs,
+which spill narrower scalar values onto scalar slots, as shown below.
 
-> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> index c541550b0e6e..e1dfdf0c4075 100644
-> --- a/include/linux/netdevice.h
-> +++ b/include/linux/netdevice.h
-> @@ -3345,6 +3345,7 @@ static inline void input_queue_tail_incr_save(str=
-uct softnet_data *sd,
->  }
->  =
+0: R1=ctx() R10=fp0
+; asm volatile ( @ repro.bpf.c:679
+0: (7a) *(u64 *)(r10 -8) = 1          ; R10=fp0 fp-8_w=1
+1: (62) *(u32 *)(r10 -8) = 1
+attempt to corrupt spilled pointer on stack
+processed 2 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0.
 
->  DECLARE_PER_CPU_ALIGNED(struct softnet_data, softnet_data);
-> +DECLARE_PER_CPU_ALIGNED(struct page_pool *, system_page_pool);
->  =
+The issue is fixed by adding a check on the spilled register type of targeted slots.
 
->  static inline int dev_recursion_level(void)
->  {
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index d8dd293a7a27..cdb916a647e7 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -428,7 +428,7 @@ EXPORT_PER_CPU_SYMBOL(softnet_data);
->   * PP consumers must pay attention to run APIs in the appropriate cont=
-ext
->   * (e.g. NAPI context).
->   */
-> -static DEFINE_PER_CPU_ALIGNED(struct page_pool *, system_page_pool);
-> +DEFINE_PER_CPU_ALIGNED(struct page_pool *, system_page_pool);
->  =
+Fixes: ab125ed3ec1c ("bpf: fix check for attempt to corrupt spilled pointer")
+Signed-off-by: Tao Lyu <tao.lyu@epfl.ch>
+---
+ kernel/bpf/verifier.c | 1 +
+ 1 file changed, 1 insertion(+)
 
->  #ifdef CONFIG_LOCKDEP
->  /*
-> @@ -11739,12 +11739,20 @@ static int net_page_pool_create(int cpuid)
->  		.pool_size =3D SYSTEM_PERCPU_PAGE_POOL_SIZE,
->  		.nid =3D NUMA_NO_NODE,
->  	};
-> +	struct xdp_mem_info info;
->  	struct page_pool *pp_ptr;
-> +	int err;
->  =
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 17c06f1505e4..3064ba7c140f 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4493,6 +4493,7 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 	 */
+ 	if (!env->allow_ptr_leaks &&
+ 	    is_spilled_reg(&state->stack[spi]) &&
++	    state->stack[spi].spilled_ptr.type != SCALAR_VALUE &&
+ 	    size != BPF_REG_SIZE) {
+ 		verbose(env, "attempt to corrupt spilled pointer on stack\n");
+ 		return -EACCES;
+-- 
+2.25.1
 
->  	pp_ptr =3D page_pool_create_percpu(&page_pool_params, cpuid);
->  	if (IS_ERR(pp_ptr))
->  		return -ENOMEM;
->  =
-
-> +	err =3D xdp_reg_mem_model(&info, MEM_TYPE_PAGE_POOL, pp_ptr);
-> +	if (err) {
-> +		page_pool_destroy(pp_ptr);
-> +		return err;
-> +	}
-> +
->  	per_cpu(system_page_pool, cpuid) =3D pp_ptr;
->  #endif
->  	return 0;
-> @@ -11834,12 +11842,15 @@ static int __init net_dev_init(void)
->  out:
->  	if (rc < 0) {
->  		for_each_possible_cpu(i) {
-> +			struct xdp_mem_info mem =3D { .type =3D MEM_TYPE_PAGE_POOL };
->  			struct page_pool *pp_ptr;
->  =
-
->  			pp_ptr =3D per_cpu(system_page_pool, i);
->  			if (!pp_ptr)
->  				continue;
->  =
-
-> +			mem.id =3D pp_ptr->xdp_mem_id;
-> +			xdp_unreg_mem_model(&mem);
-
-Take it or leave it, a net_page_pool_destroy(int cpuid) would be
-symmetric here.
-
->  			page_pool_destroy(pp_ptr);
->  			per_cpu(system_page_pool, i) =3D NULL;
->  		}
-
-Acked-by: John Fastabend <john.fastabend@gmail.com>=
