@@ -1,185 +1,114 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7386E152E01
-	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 17:51:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00CC1534F3
+	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 17:53:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712166694; cv=none; b=BlTrnkNASEKUVqsE3Z9FP4M8JH9nbEmV6e5SRBlsEE8rB8yMXcrFleOoSDzc/bz+LmqobKiWhOxDbOx7v/ihT3x1l1vM1uXUi4/pA0iNtD1lyYzu8F4roroz/mB0C9c0XTCNXxAu1aGpsjBfIHfQaZljTt8ciLPPbLHTJWcUxKg=
+	t=1712166786; cv=none; b=JTEXEVxtWAf1PqjUAEWENHnk/DkHEDm4+K4z7u61Zu4i7Nm3iEzih2wWS9HV8J0lkOuSmPSggJCvD4TN0bhScrnnCRjPPocSiUp6HN7KeGKRAyXmua7cZfJ1Yd4eJ/fgic9Z0MtT/Gv+DnPBgctLNf5+1aDkY4F2vav5TTss+Jw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712166694; c=relaxed/simple;
-	bh=0IIJpog3SkpieXnqH+mGUepKsW36O6vEzRbYtUS0iW0=;
+	s=arc-20240116; t=1712166786; c=relaxed/simple;
+	bh=v/IJJ6tZEIc75+htaAwSMLJTmPgncPpjch7colQ47Lw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IY/xr+fd3NSe6x7N+0cxWzddo7qRT2lPMgC3umY2d6j31IZNj7/Lr3sdgPXN+mml+s241fLn4s7araoEuw2uEkPunYqx70L9yDetPeqgsepYgm+kEgfc2/xQpdBP1JKC+Jz0gB4MTFq5jKZLkrZHVq3fQLD2rj3q4v+zVkAM+jI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NNWW3KkX; arc=none smtp.client-ip=209.85.221.53
+	 To:Cc:Content-Type; b=SSh7Err3zZMFKHp+GFv+3vRPfUjp23GjpKrNfe6z7DP301PZRJ9cjMXquzWyhzo4pKvo364CeXk/SFhonC73gmwty4OgAK6wBh/MXuSzaPKQjJ9mv69xhpym4sNsLSBgjPy+j9C5Wv6xhHl2bnN2JXd21Hukdgp/czGJP0rEu20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lg5Q3iaH; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NNWW3KkX"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-343aa6ae9e8so48782f8f.0
-        for <bpf@vger.kernel.org>; Wed, 03 Apr 2024 10:51:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lg5Q3iaH"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-53fa455cd94so132522a12.2
+        for <bpf@vger.kernel.org>; Wed, 03 Apr 2024 10:53:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712166690; x=1712771490; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712166784; x=1712771584; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qVYJZl0jx5WwJ2dsoFApCfG3A3osVHI1r+vbO/MaGG0=;
-        b=NNWW3KkXQdILdNDr/mU0pgJcB6ljHMSvRmLR9ZCtXFfqXbisciHSZkZFGbgz2CNN+F
-         mRaIKW/dKhE7RXI8gt33T9gsE4bHtbavjTBdTlyYMo0zS7Nt3euv1ExMqeM/9vsATJv9
-         ndi5DWDVcZwSbXHywO76WaABX5ZR1oCGyagKzILbbluWZG+fChmqGXQOkOLj53iGIgY3
-         ytbtjkkxmAuyDwDxtHF2Jn1SwxuSy8Cue6kMP+bF9cf6nk8ZB+FRQvBp2Uf7Cr6Oxj+T
-         khSFxINITI8bBpLSsbqi3nj4BHpGdYwX8qJKi5tkPJj4dIaJAiR70hyrJB+Q3Rls4SDm
-         c8eQ==
+        bh=88UQBVIiLM0n5lapjWmYWQ0JM12kq12npB7UXuIYA8s=;
+        b=lg5Q3iaH0nF4DY9/ECj+BuhF1EC1U80wNq+gIrj8KHjO3vtdoPRKboH8A5U1bSEI1i
+         4E1yjloFiMCMbqv82oUplKnHAzAULcEkFzcJ6x+eUy3Ae5TkBYFUOHMGBYULUdTu46Px
+         uDOUWiAPXZh5nBccGq2PLGsOrB+GuDkUVHFn4ZxcDWJPreZtlcykHu4oWHAv2/z1DM4j
+         jvKOmYtNIfWMuKSrXGyz0SzlMx8a6YhWBF8ZrMQceMssrDoGyhRlhJYmMo9AFpxIV42I
+         i1LrsIiH6+V8GYP0RzNuikCYfN0t/4foMa9uNiOvpm57L0gGg2zooVmWgnhyiaNi1s3P
+         vpUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712166690; x=1712771490;
+        d=1e100.net; s=20230601; t=1712166784; x=1712771584;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qVYJZl0jx5WwJ2dsoFApCfG3A3osVHI1r+vbO/MaGG0=;
-        b=qkimhM2bkQSMFQ9gYMko45vNa0NUFP00mnGT19/YudAd/afkU9Scu2Huz0K7/OZocM
-         cKA4+X+j0bGq2RMlGdAv5wLDQXtgK4355K/z/PqD7Eqo/BsoHMRiH8SrAaP2HcIT2nHI
-         uoUwU9NiieOzBMZQXB/Ac3unFPdggjgqpHIKAyCYMnF617I7tjO2fN3gJqvkjjFXxAUU
-         TLKPz6kL6wH4AGAe+BbVxCBTBjaQaSEURRPSsGU/GlyMAkFR6c77OlwysFjPJVCSIsxA
-         Y8G0cbLzqqdBqP6+X6GFtCjTQOXxbqwJLhtghEUdd2ImCWxP8rAxxHdAYMVRfhVjuonu
-         GNgQ==
-X-Gm-Message-State: AOJu0YxCy20b8NWRCckElmvPWTFyQL0ZrnK9NgIWi6qL1lSbQ6BMJJF1
-	66+u74HBm3QIG9sYnUn1CqIbInpp/g549yseqZpBsFsNcZ+z6USXsyhHF0XQuwkoDd2w1P+IwZq
-	qkJK3jfETD+g1dFQ2791a+l/m0+Y=
-X-Google-Smtp-Source: AGHT+IG44IPHnvgWdI/vWXOG3oOzpxaLjArGOZd2EHaD85MtbtR9mmoGgiMaZz4BKEP/Go1ke8h/A7pXNHc/z98RaYk=
-X-Received: by 2002:adf:e404:0:b0:343:9c77:9381 with SMTP id
- g4-20020adfe404000000b003439c779381mr111740wrm.50.1712166689584; Wed, 03 Apr
- 2024 10:51:29 -0700 (PDT)
+        bh=88UQBVIiLM0n5lapjWmYWQ0JM12kq12npB7UXuIYA8s=;
+        b=d7ullAtjQOqWnYEUqE9WRxcH9IHMut+kyTXqgXDo8TvhorkK2cM72+BV+/py1cIHFy
+         MUnTLktkB2bdFyFnz3vnDOC3+CBBJZ0ydXJmNbOtJJ2Go7Z8bvBTanH6bF69kVYKd7Pq
+         BfPLWfcneT8SQKlugOkD4VEBl2r2WfsSQK3IkUYw1Kh81TZVFdzPY1+Lb83R7LdCLcfb
+         CW2bO8Kn6yGrwrHhzeq+t5eozek+k8kl8ydCSDfqR6GZZhQWGbVZSdrIVaI4OlTZL+t8
+         dNuAQJa2ybAesBIrTEvbRdcuFooUuRv1/upv1mF7c31fVgsjiQLEWDGuSBsRiQDa9r5L
+         5ycg==
+X-Forwarded-Encrypted: i=1; AJvYcCXmFj+GsB2t4OcI7llposuMc+WfmIwdvvg8c31jXf92uZoo4wyHl1vTRPkXDU/o+N2vUKQ3B/avgsX20cLSl3U5JYSu
+X-Gm-Message-State: AOJu0YzvIbgyjawtCTXYJ5R2OukbgajPKpUA21WxNB6eIPU8b9nU663V
+	0eFp84pZJSu9UVBy3Thwu7LSTlYKU7IKyv4W0s5LbHRayxMiZmjYhD1xYy/RJI8jJ0bJU8JcYvR
+	iTgyuRwoS081nxATROauscGBUzBc=
+X-Google-Smtp-Source: AGHT+IEg5Z1v3OnWQkZQs7qBEptvSsKfIN+7ZduvrRtI5yAuZWearPVlaQoHTE1Esnq9Ubug+9RH1o0f0cRmGFf0YB4=
+X-Received: by 2002:a17:90a:c092:b0:2a2:b3a1:abc3 with SMTP id
+ o18-20020a17090ac09200b002a2b3a1abc3mr264065pjs.6.1712166784034; Wed, 03 Apr
+ 2024 10:53:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240402190542.757858-1-andrii@kernel.org> <20240402190542.757858-3-andrii@kernel.org>
-In-Reply-To: <20240402190542.757858-3-andrii@kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 3 Apr 2024 10:51:18 -0700
-Message-ID: <CAADnVQJoyFoU53eSqC4OtfbnEO7CS=TCSPKpW=vJB4qY5QJJdg@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 2/2] bpf: inline bpf_get_branch_snapshot() helper
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Kernel Team <kernel-team@meta.com>
+References: <20240403123303.1452184-1-aspsk@isovalent.com> <db09243e-c313-f26c-a10d-ab1ef41d2ac5@iogearbox.net>
+In-Reply-To: <db09243e-c313-f26c-a10d-ab1ef41d2ac5@iogearbox.net>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 3 Apr 2024 10:52:52 -0700
+Message-ID: <CAEf4BzZ=DXNKDFPzRv8JWmuKd+zmuHxDC+4qaJtHakh2SWensQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: pack struct bpf_fib_lookup
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Anton Protopopov <aspsk@isovalent.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Naresh Kamboju <naresh.kamboju@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 2, 2024 at 12:05=E2=80=AFPM Andrii Nakryiko <andrii@kernel.org>=
- wrote:
+On Wed, Apr 3, 2024 at 6:14=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.ne=
+t> wrote:
 >
-> Inline bpf_get_branch_snapshot() helper using architecture-agnostic
-> inline BPF code which calls directly into underlying callback of
-> perf_snapshot_branch_stack static call. This callback is set early
-> during kernel initialization and is never updated or reset, so it's ok
-> to fetch actual implementation using static_call_query() and call
-> directly into it.
+> On 4/3/24 2:33 PM, Anton Protopopov wrote:
+> > The struct bpf_fib_lookup is supposed to be of size 64. A recent commit
+> > 59b418c7063d ("bpf: Add a check for struct bpf_fib_lookup size") added
+> > a static assertion to check this property so that future changes to the
+> > structure will not accidentally break this assumption.
+> >
+> > As it immediately turned out, on some 32-bit arm systems, when AEABI=3D=
+n,
+> > the total size of the structure was equal to 68, see [1]. This happened
+> > because the bpf_fib_lookup structure contains a union of two 16-bit
+> > fields:
+> >
+> >      union {
+> >              __u16 tot_len;
+> >              __u16 mtu_result;
+> >      };
+> >
+> > which was supposed to compile to a 16-bit-aligned 16-bit field. On the
+> > aforementioned setups it was instead both aligned and padded to 32-bits=
+.
+> >
+> > Declare this inner union as __attribute__((packed, aligned(2))) such
+> > that it always is of size 2 and is aligned to 16 bits.
+> >
+> >    [1] https://lore.kernel.org/all/CA+G9fYtsoP51f-oP_Sp5MOq-Ffv8La2RztN=
+pwvE6+R1VtFiLrw@mail.gmail.com/#t
+> >
+> > Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
 >
-> This change eliminates a full function call and saves one LBR entry
-> in PERF_SAMPLE_BRANCH_ANY LBR mode.
->
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
->  kernel/bpf/verifier.c | 55 +++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 55 insertions(+)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index fcb62300f407..49789da56f4b 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -20157,6 +20157,61 @@ static int do_misc_fixups(struct bpf_verifier_en=
-v *env)
->                         goto next_insn;
->                 }
->
-> +               /* Implement bpf_get_branch_snapshot inline. */
-> +               if (prog->jit_requested && BITS_PER_LONG =3D=3D 64 &&
-> +                   insn->imm =3D=3D BPF_FUNC_get_branch_snapshot) {
-> +                       /* We are dealing with the following func protos:
-> +                        * u64 bpf_get_branch_snapshot(void *buf, u32 siz=
-e, u64 flags);
-> +                        * int perf_snapshot_branch_stack(struct perf_bra=
-nch_entry *entries, u32 cnt);
-> +                        */
-> +                       const u32 br_entry_size =3D sizeof(struct perf_br=
-anch_entry);
-> +
-> +                       /* struct perf_branch_entry is part of UAPI and i=
-s
-> +                        * used as an array element, so extremely unlikel=
-y to
-> +                        * ever grow or shrink
-> +                        */
-> +                       BUILD_BUG_ON(br_entry_size !=3D 24);
-> +
-> +                       /* if (unlikely(flags)) return -EINVAL */
-> +                       insn_buf[0] =3D BPF_JMP_IMM(BPF_JNE, BPF_REG_3, 0=
-, 7);
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Acked-by: Daniel Borkmann <daniel@iogearbox.net>
 
-optimizing this out with is_reg_const(R3) is probably overkill?
-Just mentioning in case you need to skip this branch.
+Let's continue the tag fest :) Also fixes tag:
 
-> +
-> +                       /* Transform size (bytes) into number of entries =
-(cnt =3D size / 24).
-> +                        * But to avoid expensive division instruction, w=
-e implement
-> +                        * divide-by-3 through multiplication, followed b=
-y further
-> +                        * division by 8 through 3-bit right shift.
-> +                        * Refer to book "Hacker's Delight, 2nd ed." by H=
-enry S. Warren, Jr.,
-> +                        * p. 227, chapter "Unsigned Divison by 3" for de=
-tails and proofs.
-> +                        *
-> +                        * N / 3 <=3D> M * N / 2^33, where M =3D (2^33 + =
-1) / 3 =3D 0xaaaaaaab.
-> +                        */
-> +                       insn_buf[1] =3D BPF_MOV32_IMM(BPF_REG_0, 0xaaaaaa=
-ab);
-> +                       insn_buf[2] =3D BPF_ALU64_REG(BPF_REG_2, BPF_REG_=
-0, 0);
-> +                       insn_buf[3] =3D BPF_ALU64_IMM(BPF_RSH, BPF_REG_2,=
- 36);
-> +
-> +                       /* call perf_snapshot_branch_stack implementation=
- */
-> +                       insn_buf[4] =3D BPF_EMIT_CALL(static_call_query(p=
-erf_snapshot_branch_stack));
-> +                       /* if (entry_cnt =3D=3D 0) return -ENOENT */
-> +                       insn_buf[5] =3D BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0=
-, 4);
-> +                       /* return entry_cnt * sizeof(struct perf_branch_e=
-ntry) */
-> +                       insn_buf[6] =3D BPF_ALU32_IMM(BPF_MUL, BPF_REG_0,=
- br_entry_size);
-> +                       insn_buf[7] =3D BPF_JMP_A(3);
-> +                       /* return -EINVAL; */
-> +                       insn_buf[8] =3D BPF_MOV64_IMM(BPF_REG_0, -EINVAL)=
-;
-> +                       insn_buf[9] =3D BPF_JMP_A(1);
-> +                       /* return -ENOENT; */
-> +                       insn_buf[10] =3D BPF_MOV64_IMM(BPF_REG_0, -ENOENT=
-);
-> +                       cnt =3D 11;
-> +
-> +                       new_prog =3D bpf_patch_insn_data(env, i + delta, =
-insn_buf, cnt);
-> +                       if (!new_prog)
-> +                               return -ENOMEM;
-> +
-> +                       delta    +=3D cnt - 1;
-> +                       env->prog =3D prog =3D new_prog;
-> +                       insn      =3D new_prog->insnsi + i + delta;
-> +                       continue;
-> +               }
-> +
->                 /* Implement bpf_kptr_xchg inline */
->                 if (prog->jit_requested && BITS_PER_LONG =3D=3D 64 &&
->                     insn->imm =3D=3D BPF_FUNC_kptr_xchg &&
-> --
-> 2.43.0
->
+Fixes: e1850ea9bd9e ("bpf: bpf_fib_lookup return MTU value as output
+when looked up")
+
+Should this also go through the bpf tree instead of bpf-next?
