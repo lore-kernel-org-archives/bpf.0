@@ -1,221 +1,110 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC9F0153511;
-	Wed,  3 Apr 2024 18:19:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DDA5482DA
+	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 18:34:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712168389; cv=none; b=rYxLESTyawr9KtdWcw3ApTghQM7W6gJ2c9SB59te+blq6j+HV+rV+dHM7NCQ1wzYocYXrxcnJYbcU0ZrYYXgu1t+Rx2APR/+LBeM9oLHi6ZeQs6sPVaNYQ0Qk0xJXGRwHyZ/wfcqHnYUyx9iI43OLszn5dXNoUJXhIghcqC4kJM=
+	t=1712169252; cv=none; b=LuqUyQivyonJ73daGZnSa2O2Ni2WCp659lVO1NFuPzhz+eZCPix3b4GrDC/HHJDbv086LHn7Icip4q9TZeQELpsQle3ID08Jik7OtdIsMupE8V8Y8QwZINkFEYiKVlKfN8RdTW/C+ZJZ56KuVk6xWaODy1SU+mGgsPpMOO381jU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712168389; c=relaxed/simple;
-	bh=mJ5BSIxZ0+2uFrYSCW87YYS2UquT7i2UiMYxOObMnkA=;
+	s=arc-20240116; t=1712169252; c=relaxed/simple;
+	bh=ee97qXnkLil9SMbWt0YjdKE+e9gOL3tefzisTFPRrkA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bHNhta6Jf0kv7MzyXaT/wNigAE4t8M2DJsOj/kVjycZv7m0t7iDLORB57GkApcWGTcNJSJJJHrXws/qN4XW6IBGMl2qCsb+4jt0M4FkisgqMxxcZ2B8VYlINEx+NKYkVDf0u5I3A+9JpogKi3nvgHSZFBfpn+miJSBxz/tOxs8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XtfEMG34; arc=none smtp.client-ip=209.85.215.181
+	 To:Cc:Content-Type; b=qPEXO5uCYcLYTYpG9ytIVKaBa9fpQMEPXSXkg1tx77yNdYVaL7EP6SY2a66nL6eNhxJmbHK+e+gCGkIY4YDOeiSkXExOLGgFoSKJDmQHnrd7+0+w9Lf43TTlriDxu9QL2irq+FjQtA929a8RhlY+VoiPMWe7I4iLbpa4EfY6CM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ac/ykCsK; arc=none smtp.client-ip=209.85.167.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XtfEMG34"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-5cddfe0cb64so150504a12.0;
-        Wed, 03 Apr 2024 11:19:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ac/ykCsK"
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3c4f23f3eeaso24254b6e.1
+        for <bpf@vger.kernel.org>; Wed, 03 Apr 2024 11:34:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712168387; x=1712773187; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712169250; x=1712774050; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zSMhmZfdMqQ3LaPuP+97PmbA0PsZfnf6Q7+3E2Mb+6A=;
-        b=XtfEMG349+YDmnTp3p24XZ7zxZclsloyr1hYccuonaxrnh/vNlOI58Kzlwvf9mYIHF
-         UOS9clW5OJLi5QUCFvzebUotixqszmroQNakgLqSM5Gs4mqA6x+65sg173VP/P1HBnVl
-         tW+q86FTwGpF4Strqu3U/LZO0qw2LQXWLZDGWEq8RiI6C+l6GgGDt64DvlO6PZkHXPxw
-         vqonl0vMD+18ya2yYvYxGXEuDtsdMdp9fYB5Z9oqQoVAS3UO1F99lA50AAMto2omB9he
-         nysfcYdTFxhvsHNhPNEdo1fbchGy11sTZsC23oA+ilrqYILfGt+EtKt+veZCbOB9ATcl
-         o81g==
+        bh=mczpwjE+Cm7aUFs+ZgjFzL+9l5sheLPG+sUGY5/o+iI=;
+        b=ac/ykCsK+jPhIfmPTB4+zmZilBMtb6vPMc+y+vdja7gp4qKRmapCazkrn+lAy9iNrC
+         CIkh3Nf8MsJVvGMVPNur53QH1ia1q/Qh6q6VvrHJpoFpb0x2xzzdkUkIz4fWQBrnRaYd
+         qlBO8w82eIpVofEJGsXqyb7BOw/uIZK0I7xYGt3Cj/iwg/VlOhr7HOPNk3ji7v6Bx2/p
+         RtTNkY6h3b29IcASBZw+fceo1xqLk2IXYF87zZ5faUSG9zihz66X5TReUx7QwVnraIdd
+         7Jh/4cybfDHJ+4Jsb5C+IZmwgXI2k6MMdgXUDr6FAi+sMD/MhxH0AicKNxgEqb/7Mhe1
+         IlcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712168387; x=1712773187;
+        d=1e100.net; s=20230601; t=1712169250; x=1712774050;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zSMhmZfdMqQ3LaPuP+97PmbA0PsZfnf6Q7+3E2Mb+6A=;
-        b=BTxsOxRNNN+rr79omxYkXOTqm9375T0XeWwv3cNzMqjTqPyQjCTiKOyYqktolIkLz2
-         xjTbJ7tkYqABCZH008xQ2lNGzUhysDh7ZLOGF5p2z5Wwn2z/yqdt4jpyk9Gwx7Nfr8Gz
-         JfZbkz50+Fs1dkQ82sg5NUrNB5ja+HlI6cERkygbbMZRWf94ELxosMg3Nk294oLjBA+d
-         LS20Ekdcd94EalCa3ylyvRzg8WARHPkxdid8turduViA+yXcE88YO72G8tdEOAoC5RCH
-         DjCtsAZsZ/0DhxjKhBopj39A50jmcOHc18e24Z9wAr16o7Br8JIX3qo4/mPZs1iX242N
-         vHmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV7OnEgdKxUYAV+sXjiV5rL5joQEGyc5KooxZZrEZ6IUrqTun1/6Tg/36bjiR9OUkpdhCc7Oe4o2z3HnSBvIOJFnCKA
-X-Gm-Message-State: AOJu0YzZZ/aOkzT67c6+fQ3S8e4rk4X/Vu8vrKUIbkPFjDHcyEw+GCC8
-	xaicm5cCkFTFqoFHr8OrAn2lB79diZMrFR7ETf9XcDDgKjyAG7jMxsVhX3TO8UojyOmjdITA+vI
-	C9IB8m6mGP3tsXkCx7qRe1flaYm4=
-X-Google-Smtp-Source: AGHT+IF53qOazJIi76k3j2G0aZ+UxcYFNoGT9ecF6ATC46GPVCkVy5rnDzYabwXV6GSRVcBEzihXSA7qC0ocPuH5m3A=
-X-Received: by 2002:a05:6a20:a125:b0:1a7:2e6f:e5d3 with SMTP id
- q37-20020a056a20a12500b001a72e6fe5d3mr571123pzk.3.1712168387154; Wed, 03 Apr
- 2024 11:19:47 -0700 (PDT)
+        bh=mczpwjE+Cm7aUFs+ZgjFzL+9l5sheLPG+sUGY5/o+iI=;
+        b=El1ywXgkLYxDac7KpZ3iyrQItJsFUtWxPyoL9DA5VkUpomz3cj6T/ohLQyqzJyZOdn
+         W5SOeBKUpQS29c1p39nPLeQkAvXgpmohge4eoo82VWGXfSdqqAVK4YO4C9oO+/uW+ltf
+         6pMzSADCjtALUWMo0fVgf38/PLbJzfLIq6ET9omiAWROsiFdWkIilWuPngZJKmgADTXs
+         lTLkQBJ6WJSDvQLMyXP15+gboHGDjJaX0JhiA+YpvKu9ILHTW4Gvn0W/hTsLBcDM0M7u
+         zCrz/+to7CqVRl7/zVc7yY1+uPfOQNYD3GGWT9/mICWXTrgkAZ82dvpwKlIyvW655PZ9
+         fBvg==
+X-Gm-Message-State: AOJu0Yylewr5KWp9l01wFlBs4xf2/PazkOLagdfTMkaTrWkXKjHPmL10
+	Ho/f/I3gYWdHd2wk/YAJ+z/xNvwkBHlBm8mzPnalxGu4r5bjxszYuEdnVH8ZDechrG1iA+5EuPB
+	HcKFoiaktEgZk8qzLNeX/oxZeppgk52DA
+X-Google-Smtp-Source: AGHT+IHIw2h1OP2Pp1u0/WxqHGATOSOVmJKQf9uYAHLE2YYx/OI57pRSpaOAPAD1SgcO/JMgvtPPxiLnfAZPZgpegw8=
+X-Received: by 2002:a05:6808:120b:b0:3c5:d2fb:ed8a with SMTP id
+ a11-20020a056808120b00b003c5d2fbed8amr313396oil.35.1712169250500; Wed, 03 Apr
+ 2024 11:34:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240402193945.17327-1-acme@kernel.org> <20240402193945.17327-3-acme@kernel.org>
-In-Reply-To: <20240402193945.17327-3-acme@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 3 Apr 2024 11:19:33 -0700
-Message-ID: <CAEf4Bza1BG+f__D4fvDvZueGxL0yrMuVu6LZQmNyme584L7r4w@mail.gmail.com>
-Subject: Re: [PATCH 02/12] pahole: Disable BTF multithreaded encoded when
- doing reproducible builds
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: dwarves@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>, 
-	Clark Williams <williams@redhat.com>, Kate Carcia <kcarcia@redhat.com>, bpf@vger.kernel.org, 
-	Arnaldo Carvalho de Melo <acme@redhat.com>, Alan Maguire <alan.maguire@oracle.com>, Kui-Feng Lee <kuifeng@fb.com>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+References: <CAK3+h2zKF-RY-Hr0SCDNttktAhdjOzgP1jLgbH6wD7+ssL4rtA@mail.gmail.com>
+ <CAEf4BzbjwTVUZ154ZqEVSQe-++a=B=SD5L7SRGPGH=N58tLJKA@mail.gmail.com>
+In-Reply-To: <CAEf4BzbjwTVUZ154ZqEVSQe-++a=B=SD5L7SRGPGH=N58tLJKA@mail.gmail.com>
+From: Vincent Li <vincent.mc.li@gmail.com>
+Date: Wed, 3 Apr 2024 11:33:59 -0700
+Message-ID: <CAK3+h2zAF-N9s=PO3eW4GJ86Ov14rBOAZFEDqYbSeFBnss_PyA@mail.gmail.com>
+Subject: Re: [Question]: How to disable modules BTF independently?
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 2, 2024 at 12:40=E2=80=AFPM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
+On Wed, Apr 3, 2024 at 10:56=E2=80=AFAM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> From: Arnaldo Carvalho de Melo <acme@redhat.com>
+> On Wed, Apr 3, 2024 at 10:06=E2=80=AFAM Vincent Li <vincent.mc.li@gmail.c=
+om> wrote:
+> >
+> > Hi,
+> >
+> > Once I enabled the open source firewall IPfire kernel 6.6.15
+> > DEBUG_INFO_BTF, the IPfire ISO image is increased from about 450MB to
+> > about 1.5GB, I suspect because IPfire has many driver modules to
 >
-> Reproducible builds need to produce BTF that have the same ids, which is
-> not possible at the moment to do in parallel with libbpf, so serialize
-> the encoding.
->
-> The next patches will also make sure that DWARF while being read in
-> parallel into internal representation for later BTF encoding has its CU
-> (Compile Units) fed to the BTF encoder in the same order as it is in the
-> DWARF file, this way we'll produce the same BTF output no matter how
-> many threads are used to read BTF.
->
-> Then we'll make sure we have tests in place that compare the output of
-> parallel BTF encoding (well, just the DWARF loading part, maybe the BTF
-> in the future), i.e. when using 'pahole -j' with the one obtained when
-> doing single threaded encoding.
->
-> Testing it on a:
->
->   # grep -m1 "model name" /proc/cpuinfo
->   model name    : 13th Gen Intel(R) Core(TM) i7-1365U
->   ~#
->
-> I.e. 2 performance cores (4 threads) + 8 efficiency cores.
->
-> From:
->
->   $ perf stat -r5 pahole -j --btf_encode_detached=3Dvmlinux.btf.parallel =
-vmlinux
->
->    Performance counter stats for 'pahole -j --btf_encode_detached=3Dvmlin=
-ux.btf.parallel vmlinux' (5 runs):
->
->          17,187.27 msec task-clock:u       #    6.153 CPUs utilized   ( +=
--  0.34% )
->   <SNIP>
->             2.7931 +- 0.0336 seconds time elapsed  ( +-  1.20% )
->
->   $
->
-> To:
->
->   $ perf stat -r5 pahole -j --reproducible_build --btf_encode_detached=3D=
-vmlinux.btf.parallel.reproducible_build vmlinux
->
->    Performance counter stats for 'pahole -j --reproducible_build --btf_en=
-code_detached=3Dvmlinux.btf.parallel.reproducible_build vmlinux' (5 runs):
->
->          14,654.06 msec task-clock:u       #    3.507 CPUs utilized   ( +=
--  0.45% )
->   <SNIP>
->             4.1787 +- 0.0344 seconds time elapsed  ( +-  0.82% )
->
->   $
->
-> Which is still a nice improvement over doing it completely serially:
->
->   $ perf stat -r5 pahole --btf_encode_detached=3Dvmlinux.btf.serial vmlin=
-ux
->
->    Performance counter stats for 'pahole --btf_encode_detached=3Dvmlinux.=
-btf.serial vmlinux' (5 runs):
->
->           7,506.93 msec task-clock:u       #    1.000 CPUs utilized   ( +=
--  0.13% )
->   <SNIP>
->             7.5106 +- 0.0115 seconds time elapsed  ( +-  0.15% )
->
->   $
->
->   $ pahole vmlinux.btf.parallel > /tmp/parallel
->   $ pahole vmlinux.btf.parallel.reproducible_build > /tmp/parallel.reprod=
-ucible_build
->   $ diff -u /tmp/parallel /tmp/parallel.reproducible_build | wc -l
->   269920
->   $ pahole --sort vmlinux.btf.parallel > /tmp/parallel.sorted
->   $ pahole --sort vmlinux.btf.parallel.reproducible_build > /tmp/parallel=
-.reproducible_build.sorted
->   $ diff -u /tmp/parallel.sorted /tmp/parallel.reproducible_build.sorted =
-| wc -l
->   0
->   $
->
-> The BTF ids continue to be undeterministic, as we need to process the
-> CUs (compile unites) in the same order that they are on vmlinux:
->
->   $ bpftool btf dump file vmlinux.btf.serial > btfdump.serial
->   $ bpftool btf dump file vmlinux.btf.parallel.reproducible_build > btfdu=
-mp.parallel.reproducible_build
->   $ bpftool btf dump file vmlinux.btf.parallel > btfdump.parallel
->   $ diff -u btfdump.serial btfdump.parallel | wc -l
->   624144
->   $ diff -u btfdump.serial btfdump.parallel.reproducible_build | wc -l
->   594622
->   $ diff -u btfdump.parallel.reproducible_build btfdump.parallel | wc -l
->   623355
->   $
->
-> The BTF ids don't match, we'll get them to match at the end of this
-> patch series:
->
->   $ tail -5 btfdump.serial
->         type_id=3D127124 offset=3D219200 size=3D40 (VAR 'rt6_uncached_lis=
-t')
->         type_id=3D11760 offset=3D221184 size=3D64 (VAR 'vmw_steal_time')
->         type_id=3D13533 offset=3D221248 size=3D8 (VAR 'kvm_apic_eoi')
->         type_id=3D13532 offset=3D221312 size=3D64 (VAR 'steal_time')
->         type_id=3D13531 offset=3D221376 size=3D68 (VAR 'apf_reason')
->   $ tail -5 btfdump.parallel.reproducible_build
->         type_id=3D113812 offset=3D219200 size=3D40 (VAR 'rt6_uncached_lis=
-t')
->         type_id=3D87979 offset=3D221184 size=3D64 (VAR 'vmw_steal_time')
->         type_id=3D127391 offset=3D221248 size=3D8 (VAR 'kvm_apic_eoi')
->         type_id=3D127390 offset=3D221312 size=3D64 (VAR 'steal_time')
->         type_id=3D127389 offset=3D221376 size=3D68 (VAR 'apf_reason')
->   $
->
-> Now to make it process the CUs in order, that should get everything
-> straight without hopefully not degrading it further too much.
->
-> Cc: Alan Maguire <alan.maguire@oracle.com>
-> Cc: Kui-Feng Lee <kuifeng@fb.com>
-> Cc: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> ---
->  pahole.c | 25 ++++++++++++++++++++++---
->  1 file changed, 22 insertions(+), 3 deletions(-)
->
+> BTF can't be that big. I think you just get all the DWARF for modules
+> and vmlinux itself. DWARF is necessary to generate BTF during the
+> build time, but it can be stripped out afterwards, leaving just (much
+> smaller) BTF intact.
 
-We can still produce per-thread smaller BTFs in parallel, that won't
-hurt reproducibility. You only need to concatenate them in
-reproducible order at the very end.
+ok good to hear that :).  I am new to this, how to strip
+kernel/modules DWARF after kernel/modules being built?
 
-Or maybe it's already working like this, not sure, I'm a bit rusty in
-pahole internals nowadays, sorry :)
-
-> diff --git a/pahole.c b/pahole.c
-> index 96e153432fa212a5..fcb4360f11debeb9 100644
-> --- a/pahole.c
-> +++ b/pahole.c
-> @@ -3173,6 +3173,14 @@ struct thread_data {
->         struct btf_encoder *encoder;
->  };
-
-[...]
+>
+> > support as many hardware as possible, pahole generated BTF for all
+> > these modules, that could increase the size of the ISO image, so I
+> > wonder if I could disable modules BTF only but keep vmlinux BTF, or
+> > maybe selectively enable BTF for some modules, but not other modules?
+> >
+> > I found this discussion [0] making DEBUG_INFO_BTF_MODULES selectable
+> > independently. I am still not sure how to disable modules BTF, I tried
+> > make menuconfig, still not obvious to me how to disable
+> > DEBUG_INFO_BTF_MODULES
+>
+> I think CONFIG_DEBUG_INFO_BTF_MODULES=3Dn should work fine, but see
+> above, I don't think the BTF is a problem here, it's not stripping out
+> DWARF.
+>
+> >
+> > [0] https://lore.kernel.org/bpf/CAKH8qBu0ptKbMVvoMpgN2tyk84ZGvwuCJLjesq=
+w-_8QtSRLqpw@mail.gmail.com/T/#m73cee268387358ec645b665951feb931b294ec2d
+> >
+> > Thanks!
+> >
