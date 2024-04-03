@@ -1,149 +1,242 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C43F2F24;
-	Wed,  3 Apr 2024 04:00:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF1240BEE;
+	Wed,  3 Apr 2024 04:15:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712116833; cv=none; b=LN5PfYCtjOYbR4dgIBPWFFxpxQlHqaDmLvln2UEtYatnGAvpYCSU/5xXC7zioOxLTQtxCOeehAucz9CpE9jTyZiQVI1KLpb9gVAgRRkVIT1oPoK2O+EsGNcm59a8LaiZambiUMHJfAKl0XcvLBNTYOUJ5eEKSKHToi3ZaTDd2TI=
+	t=1712117752; cv=none; b=bxkCBkdFlR5ZbtxjZBHEMt9Q8Z6+eiNmxXqo68XrOIfS6ScEHB2kyQMYtygnky6wBJqNGncICYYCBFcwr9SYCIcRehslkYkWg4kVbfW7wShmE9lLhpBIrUG2WWF+SFHK8W7Yg5o6H1wJCooonQFCb5K6QRPCHw2NrxdZ9SZgjqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712116833; c=relaxed/simple;
-	bh=LTUZz+D5/JTV6pG16XzjSYofsaQ8i6U0m9/Lg6KUPcY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UMs5izMmUxfAT0u7EKT55KH4EZA7GMxhAJg5uSI6XkeJl3d5FnKuc6gd/kEILShK+hguEgdKvgEEGgm6+pZesb1qUXoPJDLfLX8O/3fla/SxGSQzqwZ7UnGU05elmSCO4XX0oA1FpHwaJy3EAIiWpE2nFsiTeU5IKWSNrRgXivk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z8P20mHg; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z8P20mHg"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5d8ddbac4fbso4628989a12.0;
-        Tue, 02 Apr 2024 21:00:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712116831; x=1712721631; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ViRR7Pspb50mOxXm1sIKfzjFhEGldeN4t8fEXfZuz2s=;
-        b=Z8P20mHgFQ75nxG02JcsgwpSPjiJTYQ3LISPVs4s4mFxtmlg6uMfQ1I3ClZnC+DTVs
-         vT73x0ChxPkguPGS5RNzqoA7LC/acEmXn+aCsqmOZcMsZuLOFQ8NV5b6mUqM+tSSnPvD
-         +r0YcZ7FGR53xoGlVXWsDfeLiXVQwqDgNxhzgOFesv+dt6wS/t0zk0DYjUxmKRE9WejD
-         Ovft1hZTaqjmqRTaRetN3MiiGl6wOv6wMgOS4LRqoxXaqoeLr0y0mSBy/G/exrDCxXDh
-         XxTDS7nbpPCRlMthH9Y3goDmCEz6t3u70tVm+R00mxqDqEG9y89T942jJq9dG+K/GpOP
-         QRfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712116831; x=1712721631;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ViRR7Pspb50mOxXm1sIKfzjFhEGldeN4t8fEXfZuz2s=;
-        b=kKJC04OSA/dwOqURl2f03rlQdDAz/SXwl4cakZwoW5k7YJx1Hbf2fzlz2BU/B9t1/v
-         gDEJw/Sc1TMpjEhLMFOa1CF+Wgw0g6RlqqKZDSjI4/Pm/ZGrKq3jqHSeH4x4wO+4eMnX
-         pELKM1nwpYk4Ot415SZIdaDarLuN872TkxTKUVwFpbBbqj6QT6/+/GFc98ls+zp7pHS4
-         0huCY5xWquS9O0JlZAMeeUXnv9n5jdDQbJHPPZtI2ON8fERqBr6aWUsFThKZgLF43FWq
-         iGluxEfexKg4CbJ0QUVUITALHENu2K3jrQ736etsU6SSX+VDKCF+UC6zRfqLs72qhtu2
-         Lp4g==
-X-Forwarded-Encrypted: i=1; AJvYcCU3bnGoXUcNNOmHYeIAXGwT0af5Da2EGP2K04g+IPeWQqdBd8M9wzPEgbpPnzOSE0VRdWA1/qoV7bPoKFFpUit7jW2tRrbWKjsI2Z+qqazo6Vk0DXZt6KRlS7VjZKDJ4tOaYSJOsjHm
-X-Gm-Message-State: AOJu0Yz0USb2zwwRZ1koiIbJpY6mwAPS730Q5TE/23YY6WAPlcu3DwWo
-	K1WeEUJrbV98kXSJn3lVQbwzH9rtPnAA7fs+4DkO9rwDUDoymHFQC9jhgbEWt2vTNlS4zpmFg8X
-	QzDQMy0QTDqRS8Xx3ET913FhPmbs=
-X-Google-Smtp-Source: AGHT+IFRsJRdfA6rMVHDcIWMdVF7SBTsB8YzdSQryfE+uABcoF0bkSYiHC6ldfTN6GLCizDHtvdNNH0I+v7V7i0vUiE=
-X-Received: by 2002:a05:6a20:3ca8:b0:1a3:3fbd:f859 with SMTP id
- b40-20020a056a203ca800b001a33fbdf859mr19759408pzj.2.1712116831548; Tue, 02
- Apr 2024 21:00:31 -0700 (PDT)
+	s=arc-20240116; t=1712117752; c=relaxed/simple;
+	bh=/GG5WpMh4Z1t4rQ8meR2jyBAOPGi1j17oKtTUGEvO0M=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=u+fySj8DNIuV0mZSPUOHLpwnS5jK29ojiKXqqXIDa7N6f1I0ZwWFHcBGxnjqu7N4upwg83ZWL5FjSFRhzqQXOUvxrqRU8t+Ahystq0B7dpXHmwXFbVvfCchuloOzw2VWR+xNOIxdE2ocex7Ji9xUgxZv/snQnvtHxC7yQSzOKT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V8WdB5xpBz4f3kKl;
+	Wed,  3 Apr 2024 12:15:42 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 0FF081A0568;
+	Wed,  3 Apr 2024 12:15:47 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP1 (Coremail) with SMTP id cCh0CgB3lA3y1wxmBsSZIw--.36823S4;
+	Wed, 03 Apr 2024 12:15:46 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	netdev@vger.kernel.org
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Pu Lehui <pulehui@huawei.com>,
+	Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add testcase where 7th argment is struct
+Date: Wed,  3 Apr 2024 04:17:10 +0000
+Message-Id: <20240403041710.1416369-3-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240403041710.1416369-1-pulehui@huaweicloud.com>
+References: <20240403041710.1416369-1-pulehui@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322160323.2463329-1-andrii@kernel.org> <20240325113848.32a70948d1cdb0fa76225690@kernel.org>
- <20240325181338.39376089@gandalf.local.home> <CAEf4BzazyWqLRmruj6XPXMYSYrrFPRAJRizWGhKtTt9A8zWE3A@mail.gmail.com>
- <20240326150121.68e9db8a@gandalf.local.home> <20240401202552.470d845bd79c841b9158fb56@kernel.org>
- <20240401120918.67cc3191@gandalf.local.home> <20240402093839.7de89341138748f743ae896d@kernel.org>
- <CAEf4BzaGWEKnntoD2KLhVORGZ0ATq_TqhPBQnbbWQCeCM2EteA@mail.gmail.com>
- <20240401224733.7a9bcbb6@gandalf.local.home> <20240403094048.3a443fbeeed551f11c1970d8@kernel.org>
- <20240402205459.297c4206@gandalf.local.home>
-In-Reply-To: <20240402205459.297c4206@gandalf.local.home>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 2 Apr 2024 21:00:19 -0700
-Message-ID: <CAEf4BzahMFsdN8QvW6XiUk+3MzvLUjudXO5=qfhKBYfDvEgy5w@mail.gmail.com>
-Subject: Re: [PATCH] ftrace: make extra rcu_is_watching() validation check optional
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, jolsa@kernel.org, 
-	"Paul E . McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgB3lA3y1wxmBsSZIw--.36823S4
+X-Coremail-Antispam: 1UD129KBjvJXoW3GrWrKF18tr48tryDAw4fKrg_yoWxWrWrpa
+	4kXw1jyF4rJF4xWry7GF4UZr4S9rZ3Xr1UJFW7J3s0vry0q34kJF1xKF1jy3Z5G3y5uw1a
+	yayDKrZxCw4UJaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPj14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
+	0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+	IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+	Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
+	xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
+	6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2
+	Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
+	Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8Jw
+	CI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUFrcTDUUU
+	U
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-On Tue, Apr 2, 2024 at 5:52=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org>=
- wrote:
->
-> On Wed, 3 Apr 2024 09:40:48 +0900
-> Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
->
-> > OK, for me, this last sentence is preferred for the help message. That =
-explains
-> > what this is for.
-> >
-> >         All callbacks that attach to the function tracing have some sor=
-t
-> >         of protection against recursion. This option is only to verify =
-that
-> >=E3=80=80       ftrace (and other users of ftrace_test_recursion_trylock=
-()) are not
-> >         called outside of RCU, as if they are, it can cause a race.
-> >         But it also has a noticeable overhead when enabled.
+From: Pu Lehui <pulehui@huawei.com>
 
-Sounds good to me, I can add this to the description of the Kconfig option.
+Add testcase where 7th argument is struct for architectures with 8
+argument registers, and increase the complexity of the struct.
 
-> >
-> > BTW, how much overhead does this introduce? and the race case a kernel =
-crash?
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+Acked-by: Björn Töpel <bjorn@kernel.org>
+Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
+---
+ tools/testing/selftests/bpf/DENYLIST.aarch64  |  1 +
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 19 ++++++++++
+ .../selftests/bpf/prog_tests/tracing_struct.c | 13 +++++++
+ .../selftests/bpf/progs/tracing_struct.c      | 35 +++++++++++++++++++
+ 4 files changed, 68 insertions(+)
 
-I just checked our fleet-wide production data for the last 24 hours.
-Within the kprobe/kretprobe code path (ftrace_trampoline and
-everything called from it), rcu_is_watching (both calls, see below)
-cause 0.484% CPU cycles usage, which isn't nothing. So definitely we'd
-prefer to be able to avoid that in production use cases.
+diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 b/tools/testing/selftests/bpf/DENYLIST.aarch64
+index d8ade15e2789..639ee3f5bc74 100644
+--- a/tools/testing/selftests/bpf/DENYLIST.aarch64
++++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
+@@ -6,6 +6,7 @@ kprobe_multi_test                                # needs CONFIG_FPROBE
+ module_attach                                    # prog 'kprobe_multi': failed to auto-attach: -95
+ fentry_test/fentry_many_args                     # fentry_many_args:FAIL:fentry_many_args_attach unexpected error: -524
+ fexit_test/fexit_many_args                       # fexit_many_args:FAIL:fexit_many_args_attach unexpected error: -524
++tracing_struct                                   # test_fentry:FAIL:tracing_struct__attach unexpected error: -524
+ fill_link_info/kprobe_multi_link_info            # bpf_program__attach_kprobe_multi_opts unexpected error: -95
+ fill_link_info/kretprobe_multi_link_info         # bpf_program__attach_kprobe_multi_opts unexpected error: -95
+ fill_link_info/kprobe_multi_invalid_ubuff        # bpf_program__attach_kprobe_multi_opts unexpected error: -95
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+index 39ad96a18123..4973d9de10af 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+@@ -41,6 +41,13 @@ struct bpf_testmod_struct_arg_4 {
+ 	int b;
+ };
+ 
++struct bpf_testmod_struct_arg_5 {
++	char a;
++	short b;
++	int c;
++	long d;
++};
++
+ __bpf_hook_start();
+ 
+ noinline int
+@@ -98,6 +105,15 @@ bpf_testmod_test_struct_arg_8(u64 a, void *b, short c, int d, void *e,
+ 	return bpf_testmod_test_struct_arg_result;
+ }
+ 
++noinline int
++bpf_testmod_test_struct_arg_9(u64 a, void *b, short c, int d, void *e, char f,
++			      short g, struct bpf_testmod_struct_arg_5 h, long i)
++{
++	bpf_testmod_test_struct_arg_result = a + (long)b + c + d + (long)e +
++		f + g + h.a + h.b + h.c + h.d + i;
++	return bpf_testmod_test_struct_arg_result;
++}
++
+ noinline int
+ bpf_testmod_test_arg_ptr_to_struct(struct bpf_testmod_struct_arg_1 *a) {
+ 	bpf_testmod_test_struct_arg_result = a->a;
+@@ -254,6 +270,7 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+ 	struct bpf_testmod_struct_arg_2 struct_arg2 = {2, 3};
+ 	struct bpf_testmod_struct_arg_3 *struct_arg3;
+ 	struct bpf_testmod_struct_arg_4 struct_arg4 = {21, 22};
++	struct bpf_testmod_struct_arg_5 struct_arg5 = {23, 24, 25, 26};
+ 	int i = 1;
+ 
+ 	while (bpf_testmod_return_ptr(i))
+@@ -268,6 +285,8 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+ 					    (void *)20, struct_arg4);
+ 	(void)bpf_testmod_test_struct_arg_8(16, (void *)17, 18, 19,
+ 					    (void *)20, struct_arg4, 23);
++	(void)bpf_testmod_test_struct_arg_9(16, (void *)17, 18, 19, (void *)20,
++					    21, 22, struct_arg5, 27);
+ 
+ 	(void)bpf_testmod_test_arg_ptr_to_struct(&struct_arg1_2);
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+index fe0fb0c9849a..5a8eeb07a6ba 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
++++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+@@ -74,6 +74,19 @@ static void test_fentry(void)
+ 	ASSERT_EQ(skel->bss->t8_g, 23, "t8:g");
+ 	ASSERT_EQ(skel->bss->t8_ret, 156, "t8 ret");
+ 
++	ASSERT_EQ(skel->bss->t9_a, 16, "t9:a");
++	ASSERT_EQ(skel->bss->t9_b, 17, "t9:b");
++	ASSERT_EQ(skel->bss->t9_c, 18, "t9:c");
++	ASSERT_EQ(skel->bss->t9_d, 19, "t9:d");
++	ASSERT_EQ(skel->bss->t9_e, 20, "t9:e");
++	ASSERT_EQ(skel->bss->t9_f, 21, "t9:f");
++	ASSERT_EQ(skel->bss->t9_g, 22, "t9:f");
++	ASSERT_EQ(skel->bss->t9_h_a, 23, "t9:h.a");
++	ASSERT_EQ(skel->bss->t9_h_b, 24, "t9:h.b");
++	ASSERT_EQ(skel->bss->t9_h_c, 25, "t9:h.c");
++	ASSERT_EQ(skel->bss->t9_h_d, 26, "t9:h.d");
++	ASSERT_EQ(skel->bss->t9_i, 27, "t9:i");
++	ASSERT_EQ(skel->bss->t9_ret, 258, "t9 ret");
+ 	tracing_struct__detach(skel);
+ destroy_skel:
+ 	tracing_struct__destroy(skel);
+diff --git a/tools/testing/selftests/bpf/progs/tracing_struct.c b/tools/testing/selftests/bpf/progs/tracing_struct.c
+index 515daef3c84b..bfe96bab94c0 100644
+--- a/tools/testing/selftests/bpf/progs/tracing_struct.c
++++ b/tools/testing/selftests/bpf/progs/tracing_struct.c
+@@ -23,6 +23,13 @@ struct bpf_testmod_struct_arg_4 {
+ 	int b;
+ };
+ 
++struct bpf_testmod_struct_arg_5 {
++	char a;
++	short b;
++	int c;
++	long d;
++};
++
+ long t1_a_a, t1_a_b, t1_b, t1_c, t1_ret, t1_nregs;
+ __u64 t1_reg0, t1_reg1, t1_reg2, t1_reg3;
+ long t2_a, t2_b_a, t2_b_b, t2_c, t2_ret;
+@@ -32,6 +39,7 @@ long t5_ret;
+ int t6;
+ long t7_a, t7_b, t7_c, t7_d, t7_e, t7_f_a, t7_f_b, t7_ret;
+ long t8_a, t8_b, t8_c, t8_d, t8_e, t8_f_a, t8_f_b, t8_g, t8_ret;
++long t9_a, t9_b, t9_c, t9_d, t9_e, t9_f, t9_g, t9_h_a, t9_h_b, t9_h_c, t9_h_d, t9_i, t9_ret;
+ 
+ 
+ SEC("fentry/bpf_testmod_test_struct_arg_1")
+@@ -184,4 +192,31 @@ int BPF_PROG2(test_struct_arg_15, __u64, a, void *, b, short, c, int, d,
+ 	return 0;
+ }
+ 
++SEC("fentry/bpf_testmod_test_struct_arg_9")
++int BPF_PROG2(test_struct_arg_16, __u64, a, void *, b, short, c, int, d, void *, e,
++	      char, f, short, g, struct bpf_testmod_struct_arg_5, h, long, i)
++{
++	t9_a = a;
++	t9_b = (long)b;
++	t9_c = c;
++	t9_d = d;
++	t9_e = (long)e;
++	t9_f = f;
++	t9_g = g;
++	t9_h_a = h.a;
++	t9_h_b = h.b;
++	t9_h_c = h.c;
++	t9_h_d = h.d;
++	t9_i = i;
++	return 0;
++}
++
++SEC("fexit/bpf_testmod_test_struct_arg_9")
++int BPF_PROG2(test_struct_arg_17, __u64, a, void *, b, short, c, int, d, void *, e,
++	      char, f, short, g, struct bpf_testmod_struct_arg_5, h, long, i, int, ret)
++{
++	t9_ret = ret;
++	return 0;
++}
++
+ char _license[] SEC("license") = "GPL";
+-- 
+2.34.1
 
-> > or just messed up the ftrace buffer?
->
-> There's a hypothetical race where it can cause a use after free.
->
-> That is, after you shutdown ftrace, you need to call synchronize_rcu_task=
-s(),
-> which requires RCU to be watching. There's a theoretical case where that
-> task calls the trampoline and misses the synchronization. Note, these
-> locations are with preemption disabled, as rcu is always watching when
-> preemption is enabled. Thus it would be extremely fast where as the
-> synchronize_rcu_tasks() is rather slow.
->
-> We also have synchronize_rcu_tasks_rude() which would actually keep the
-> trace from happening, as it would schedule on each CPU forcing all CPUs t=
-o
-> have RCU watching.
->
-> I have never heard of this race being hit. I guess it could happen on a V=
-M
-> where a vCPU gets preempted at the right moment for a long time and the
-> other CPUs synchronize.
->
-> But like lockdep, where deadlocks can crash the kernel, we don't enable i=
-t
-> for production.
->
-> The overhead is another function call within the function tracer. I had
-> numbers before, but I guess I could run tests again and get new numbers.
->
-
-I just noticed another rcu_is_watching() call, in rethook_try_get(),
-which seems to be a similar and complementary validation check to the
-one we are putting under CONFIG_FTRACE_VALIDATE_RCU_IS_WATCHING option
-in this patch. It feels like both of them should be controlled by the
-same settings. WDYT? Can I add CONFIG_FTRACE_VALIDATE_RCU_IS_WATCHING
-guard around rcu_is_watching() check in rethook_try_get() as well?
-
-
-> Thanks,
->
-> -- Steve
